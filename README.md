@@ -1,8 +1,15 @@
 # KI-LEAD
 
-Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. Die App läuft vollständig auf dem Gerät (iPad, iPhone, Android, Browser). Netzverbindungen gibt es nur zu den KI-Schnittstellen von Anthropic oder OpenAI, und das erst ab Meilenstein 2.
+Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. Die App läuft vollständig auf dem Gerät (iPad, iPhone, Android, Browser). Netzverbindungen gibt es nur zu den KI-Schnittstellen von Anthropic (seit Meilenstein 2) und später OpenAI (Meilenstein 4).
 
-**Stand: Meilenstein 1 (Web-Kern ohne KI).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben.
+**Stand: Meilenstein 2 (KI-Erfassung).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben. Neu ist die gestufte KI-Erfassung:
+
+1. **Auftrag und Material:** Sachverhalt, Stichworte, URLs, Dateien (TXT, MD, JSON, DOCX, PDF); eine Meldung als JSON gilt als Vormeldung zur Fortschreibung.
+2. **S1 Gegenstand bestätigen:** Ein kleines Modell schlägt Gliederung, Ereignisarten und SOPs vor; die Person bestätigt oder korrigiert.
+3. **S2 Recherche und Entwurf:** Ein mittleres Modell recherchiert mit Websuche und Seitenabruf nach den gewählten SOPs und schreibt den Entwurf.
+4. **S3 Prüfung:** Die App prüft gegen das Schema und lässt Fehler höchstens zweimal ohne neue Recherche korrigieren. Der Entwurf geht in die Meldungsmaske; Freigabe bleibt Sache der Person.
+
+Jeder Lauf wird mit Prompts, Antworten, Token, Kosten und Dauer protokolliert und lässt sich als JSON exportieren. Für die KI-Erfassung braucht man einen eigenen API-Schlüssel von Anthropic (Einstellungen). Er bleibt im Browser des Geräts und geht nur an api.anthropic.com.
 
 ## Abgrenzung
 
@@ -37,7 +44,7 @@ Voraussetzung ist Node.js 22.
 ```
 npm install
 npm run dev        # Entwicklungsserver
-npm test           # Tests (Kern, Profile, Übungsdaten, Referenzvergleich mit Ajv)
+npm test           # Tests (Kern, Profile, Übungsdaten, Referenzvergleich mit Ajv, Anbieter und Pipeline mit Attrappe)
 npm run build      # Produktionsbuild nach dist/
 ```
 
@@ -65,6 +72,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.1) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.2) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

@@ -388,6 +388,7 @@ textarea {
 }
 
 input[type="text"],
+input[type="password"],
 input[type="date"],
 input[type="datetime-local"],
 input[type="number"],
@@ -1091,5 +1092,301 @@ textarea {
 
   .segment {
     padding: 0.45rem 0.65rem;
+  }
+}
+
+/* ── KI-Erfassung und Einstellungen ───────────────── */
+
+.knopf:disabled,
+.knopf:disabled:hover {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--flaeche);
+}
+
+.knopf.primaer:disabled {
+  background: var(--amt);
+}
+
+.gruppe-spalten-zwei {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0 1.25rem;
+}
+
+.materialliste {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.materialliste li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.material-name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.material-meta {
+  color: var(--tinte-leise);
+  font-size: 0.85rem;
+}
+
+.materialliste .knopf {
+  margin-left: auto;
+}
+
+.bestaetigung {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--amt);
+  border-radius: var(--r-klein);
+  background: var(--amt-zart);
+  cursor: pointer;
+}
+
+.bestaetigung input {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  margin-top: 0.15rem;
+  accent-color: var(--amt);
+}
+
+.laufanzeige {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.puls {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--amt);
+  animation: puls 1.4s ease-in-out infinite;
+}
+
+@keyframes puls {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+.ereignisse {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  background: var(--papier);
+  font-size: 0.9rem;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.ereignisse li {
+  padding: 0.2rem 0;
+  overflow-wrap: anywhere;
+}
+
+.ereignisse time {
+  color: var(--tinte-leise);
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.5rem;
+}
+
+.ki-abschnitt {
+  margin: 1.25rem 0 0;
+}
+
+.ki-abschnitt h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+}
+
+details.ki-abschnitt summary,
+.frueher summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.35rem 0;
+}
+
+.kurzantwort {
+  white-space: pre-wrap;
+  margin: 0;
+  max-width: 78ch;
+  line-height: 1.6;
+}
+
+.fundstellen {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.fundstellen li {
+  margin: 0.25rem 0;
+  overflow-wrap: anywhere;
+}
+
+.fundstellen a {
+  color: var(--amt);
+}
+
+.frueher {
+  margin-top: 1.5rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+.tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.tabelle th,
+.tabelle td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.tabelle th {
+  color: var(--tinte-leise);
+  font-weight: 700;
+  border-bottom-color: var(--linie);
+}
+
+.tabelle-aktionen {
+  white-space: nowrap;
+}
+
+.tabelle-aktionen .knopf {
+  margin-right: 0.25rem;
+}
+
+.tabelle-formular td {
+  vertical-align: middle;
+}
+
+.abschnitt-einzeln {
+  margin-bottom: 1rem;
+  max-width: 60rem;
+}
+
+.abschnitt-einzeln a {
+  color: var(--amt);
+}
+
+.schluessel-zeile {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  max-width: 34rem;
+}
+
+.schluessel-zeile input {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.ki .schritt {
+  cursor: default;
+}
+
+@media (max-width: 860px) {
+  .hauptnav {
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+  }
+
+  .nav {
+    white-space: nowrap;
+  }
+
+  .tabelle {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+.marke-name {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .kopf {
+    flex-wrap: wrap;
+    row-gap: 0.35rem;
+  }
+
+  .hauptnav {
+    order: 3;
+    width: 100%;
+    margin: 0 -0.4rem;
+  }
+
+  .profil-chip {
+    display: inline-block;
+    margin-left: auto;
+    max-width: 55vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabelle.tabelle-formular {
+    display: block;
+    overflow: visible;
+  }
+
+  .tabelle-formular thead {
+    display: none;
+  }
+
+  .tabelle-formular tbody,
+  .tabelle-formular tr,
+  .tabelle-formular td {
+    display: block;
+    width: 100%;
+  }
+
+  .tabelle-formular tr {
+    padding: 0.5rem 0 0.75rem;
+    border-bottom: 1px solid var(--linie-zart);
+  }
+
+  .tabelle-formular td {
+    border: none;
+    padding: 0.2rem 0;
   }
 }

@@ -173,13 +173,15 @@ Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-
 
 | Stufe | Inhalt | Ausführung | Ergebnis |
 |---|---|---|---|
-| **S0 Vorverarbeitung** | Text aus DOCX (mammoth), PDF (pdf.js), TXT/MD lesen. JSON prüfen: Ist es eine Meldung? Dann Fortschreibung (A.8.1) oder Wechsel in Modus B anbieten. | lokal | Eingangsmaterial |
-| **S1 Gegenstand & SOP-Auswahl** | Sachverhalt, Stichtag, deutscher bzw. Referenzraum-Bezug, Horizont (A.1). Ereignisarten aus dem Katalog, SOPs inkl. Mischlage und Abgrenzung (Prompt §2). | KI, kleines Modell | strukturierter Vorschlag; **Person bestätigt oder ändert** |
-| **S2 Recherche & Entwurf** | Recherche nach den Bausteinen R1–R6 der gewählten SOPs. Entwurf aller Felder, Radar Achse für Achse, Quellenverzeichnis. | KI, mittleres Modell, Websuche | JSON-Entwurf und Kurzantwort |
-| **S3 Prüfung & Reparatur** | Schemaprüfung (Ajv, 2020-12), Quellenprüfung, Kennsätze und Ausfüllhinweise. Bei Schemafehlern höchstens zwei Reparaturaufrufe ohne neue Recherche. | lokal und KI | geprüfter Entwurf mit Prüfbericht |
+| **S0 Vorverarbeitung** | TXT/MD lesen, Text aus DOCX (eigener Leser für word/document.xml) ziehen, PDF unverändert als Dokument an das Modell geben. JSON prüfen: Ist es eine Meldung des Profils, gilt sie als Vormeldung zur Fortschreibung (A.8). URLs stehen im Nutzertext, damit das Abrufwerkzeug sie verwenden darf. | lokal | Eingangsmaterial |
+| **S1 Gegenstand & SOP-Auswahl** | Sachverhalt, Stichtag, Referenzraum-Bezug, Horizont (A.1). Ereignisarten aus dem Katalog, SOPs inkl. Mischlage und Abgrenzung. Strukturierte Ausgabe (`output_config.format`) mit Enums aus Schema und SOP-Katalog. | KI, kleines Modell | strukturierter Vorschlag; **Person bestätigt oder ändert** |
+| **S2 Recherche & Entwurf** | Recherche nach den Bausteinen R1–R6 der gewählten SOPs mit Websuche und Seitenabruf. Entwurf aller Felder, Radar Achse für Achse, Quellenverzeichnis. Ausgabe als Kurzantwort plus JSON-Codeblock (Ausgabevertrag der App), weil die strukturierte Ausgabe der API Schlüsselwörter wie `minLength` oder `if/then` nicht trägt. | KI, mittleres Modell, Websuche | JSON-Entwurf und Kurzantwort |
+| **S3 Prüfung & Reparatur** | Die App setzt Schemakennung, Status „Entwurf“, Profilvariablen und `_entstehung`. Danach Schemaprüfung (eigener Prüfer, 2020-12), Quellenprüfung, Kennsätze und Ausfüllhinweise. Bei Schemafehlern höchstens zwei Reparaturaufrufe ohne Werkzeuge und ohne neue Recherche. | lokal und KI | geprüfter Entwurf mit Prüfbericht |
 | **S4 Redaktion & Freigabe** | Formular aus Schema und `ui.json` (Radar, Mehrfachauswahl, Quellen-Editor). Das Feld `_entstehung` wird automatisch gefüllt und bleibt erhalten. Export als JSON/PDF sowie als „Management Summary“ (Klartext ohne Quellenverweise, zum Kopieren). | lokal | Meldung (Entwurf/final) |
 
-Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens und Dauer im Laufprotokoll gespeichert. Ein Lauf lässt sich ab jeder Stufe neu starten.
+Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufprotokoll gespeichert (PDF-Inhalte nur als Verweis). Schlägt S2 fehl, lässt sich S2 mit dem bestätigten Gegenstand erneut starten.
+
+**Umsetzung M2 (Stand 17.10.2026):** Anthropic Messages API mit Streaming (SSE), Fortsetzung bei `pause_turn`, Wiederholung bei Überlastung, Websuche `web_search_20250305` (lokalisiert, Höchstzahl einstellbar), Seitenabruf `web_fetch_20250910`, Prompt-Caching für Profilgrundlagen und SOP-Block, Aufwand (`effort`) je Stufe. Vorgaben: S1 claude-haiku-5-5 (mittel), S2 claude-sonnet-5-5 (hoch), S3 claude-sonnet-5-5 (niedrig); das Profil kann andere Modelle vorgeben, die Einstellungen überschreiben beides.
 
 ### 5.2 Modul „Lagebild“ (Modus B)
 
@@ -205,7 +207,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.1 · Profil <id> <version> · Lauf <lauf-id>“. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.2 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -217,12 +219,12 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 | UI | React (verbreitet, gut für KI-gestützte Entwicklung) |
 | Native Hülle | Capacitor (iOS, Android); dieselbe Web-App als PWA |
 | Schema | eigener, interpretierender Prüfer für Draft 2020-12 ohne Codeerzeugung (läuft unter strenger Content-Security-Policy); Ajv dient in den Tests als Referenz |
-| Dokumente | pdf.js, mammoth.js; jsPDF und autotable gebündelt |
+| Dokumente | DOCX-Text über JSZip, PDF direkt an das Modell; jsPDF und autotable für den Export |
 | Speicher | Capacitor Filesystem (Meldungen und Profile als Dateien, transparent und exportierbar), Index in IndexedDB |
-| Geheimnisse | Keychain bzw. Keystore über ein Secure-Storage-Plugin |
-| HTTP | nativ über CapacitorHttp (keine CORS-Grenzen); in der PWA direkter Browserzugriff, soweit vom Anbieter zugelassen |
+| Geheimnisse | Keychain bzw. Keystore über ein Secure-Storage-Plugin (ab M5); bis dahin IndexedDB des Browsers mit Warnhinweis |
+| HTTP | im Browser direkt über `fetch` mit dem Kopf `anthropic-dangerous-direct-browser-access`; nativ später über CapacitorHttp |
 
-**Anbieter-Abstraktion:** Eine gemeinsame Schnittstelle `LlmProvider` deckt Nachrichten, Werkzeuge (Websuche, URL-Abruf), strukturierte Ausgabe und Token-Zählung ab. Es gibt zwei Implementierungen: Anthropic Messages API und OpenAI Responses API. Die Profilinhalte (Anweisung, Teil A, SOPs, Kodierleitfaden, Schema) stehen am Anfang des Prompts und werden gecacht. Der Auftrag und das Material stehen am Ende.
+**Anbieter-Abstraktion:** Eine gemeinsame Schnittstelle `LlmAnbieter` (`src/anbieter/typen.ts`) deckt Nachrichten, Werkzeuge (Websuche, URL-Abruf), strukturierte Ausgabe und Token-Zählung ab. Es gibt zwei Implementierungen: Anthropic Messages API und OpenAI Responses API. Die Profilinhalte (Anweisung, Teil A, SOPs, Kodierleitfaden, Schema) stehen am Anfang des Prompts und werden gecacht. Der Auftrag und das Material stehen am Ende.
 
 **Code-Struktur (Vorschlag):**
 

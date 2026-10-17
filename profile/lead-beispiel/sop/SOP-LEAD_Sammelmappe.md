@@ -37,7 +37,7 @@ Diese Mappe enthält je Ereignisart des Katalogs eine Standardvorgehensweise (SO
 1. **Gegenstand klären:** Konkreten Sachverhalt, Stichtag, deutschen Wirkungs- bzw. Relevanzbezug und Betrachtungshorizont benennen, bevor recherchiert wird. Die Lagebild-Perspektive ist wöchentlich und mittel- bis langfristig; akute Stunden-Lagen bedienen kontinuierliche und tägliche Lageprodukte.
 2. **Mehrfachzuordnung:** Ein Ereignis kann mehrere Ereignisarten berühren (Mehrfachauswahl `art`). Dann alle zutreffenden SOPs heranziehen – typisch sind Ursache-SOP plus Folge-SOP (z. B. Wintersturm → Stromausfall). Denselben Sachverhalt nicht doppelt zählen.
 3. **Anlass ≠ Relevanz:** Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz. Es gibt keine automatischen Aufnahmeschwellen.
-4. **Rolle der Koordinierungsstelle:** Die Koordinierungsstelle bewertet und empfiehlt im Rahmen seiner Koordinationsrolle, ohne Weisungsbefugnis und ohne operative Zuständigkeit. Empfehlungen richten sich an zuständige Stellen; bestehende Maßnahmen und Empfehlungen der Koordinierungsstelle werden getrennt dargestellt.
+4. **Rolle der Koordinierungsstelle:** Die Koordinierungsstelle bewertet und empfiehlt im Rahmen ihrer Koordinationsrolle, ohne Weisungsbefugnis und ohne operative Zuständigkeit. Empfehlungen richten sich an zuständige Stellen; bestehende Maßnahmen und Empfehlungen der Koordinierungsstelle werden getrennt dargestellt.
 5. **Sachlichkeit:** Keine Dramatisierung, keine Spekulation über Ursachen, Täter oder Motive, keine Zuschreibungen an Personengruppen. Glaubwürdigkeit entsteht über Verifizierbarkeit.
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)

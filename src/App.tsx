@@ -15,6 +15,9 @@ import {
 } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
 import { ProfileAnsicht } from "./ui/Profile";
+import { KiErfassung } from "./ui/KiErfassung";
+import { EinstellungenAnsicht } from "./ui/Einstellungen";
+import { einstellungenLesen, einstellungenSchreiben, schluesselLesen, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -25,7 +28,7 @@ export interface ProfilEintrag {
   befunde: Befund[];
 }
 
-type Ansicht = "meldung" | "profile";
+type Ansicht = "meldung" | "ki" | "profile" | "einstellungen";
 
 function neueMeldung(p: Profil): Meldung {
   const d = leererWert(p.schema, p.schema) as Meldung;
@@ -49,8 +52,31 @@ export default function App() {
   const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
   const [gesichert, setGesichert] = useState<string>();
   const timer = useRef<number>();
+  const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
+  const [schluessel, setSchluesselRoh] = useState("");
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
+
+  useEffect(() => {
+    einstellungenLesen().then(setEinstellungenRoh);
+    schluesselLesen().then(setSchluesselRoh);
+  }, []);
+
+  const setEinstellungen = (e: Einstellungen) => {
+    setEinstellungenRoh(e);
+    einstellungenSchreiben(e);
+  };
+
+  const setSchluessel = (s: string) => {
+    setSchluesselRoh(s);
+    schluesselSchreiben(s);
+  };
+
+  const kiUebernehmen = (m: Meldung) => {
+    if (!confirm("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+    setMeldung(m);
+    setAnsicht("meldung");
+  };
 
   useEffect(() => {
     (async () => {
@@ -137,8 +163,14 @@ export default function App() {
           <button type="button" className={ansicht === "meldung" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("meldung")}>
             Meldung
           </button>
+          <button type="button" className={ansicht === "ki" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("ki")}>
+            KI-Erfassung
+          </button>
           <button type="button" className={ansicht === "profile" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("profile")}>
             Profile
+          </button>
+          <button type="button" className={ansicht === "einstellungen" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("einstellungen")}>
+            Einstellungen
           </button>
         </nav>
         {profil && (
@@ -164,11 +196,35 @@ export default function App() {
             zwischenstand={gesichert}
           />
         )}
-        {ansicht === "meldung" && !profil && profile.length > 0 && (
+        {profil && (
+          <div hidden={ansicht !== "ki"}>
+            <KiErfassung
+              key={profil.hash}
+              profil={profil}
+              einstellungen={einstellungen}
+              schluessel={schluessel}
+              zuEinstellungen={() => setAnsicht("einstellungen")}
+              uebernehmen={kiUebernehmen}
+            />
+          </div>
+        )}
+        {ansicht === "einstellungen" && (
+          <EinstellungenAnsicht
+            profil={profil}
+            einstellungen={einstellungen}
+            setEinstellungen={setEinstellungen}
+            schluessel={schluessel}
+            setSchluessel={setSchluessel}
+          />
+        )}
+        {(ansicht === "meldung" || ansicht === "ki") && !profil && profile.length > 0 && (
           <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
         )}
       </main>
-      <footer className="fuss">KI-LEAD 0.1. Alle Daten bleiben auf diesem Gerät. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.</footer>
+      <footer className="fuss">
+        KI-LEAD 0.2. Daten bleiben auf diesem Gerät; nur die KI-Erfassung sendet Auftrag und Material an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC
+        BY 4.0.
+      </footer>
     </div>
   );
 }

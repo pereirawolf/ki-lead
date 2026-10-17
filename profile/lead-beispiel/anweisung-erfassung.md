@@ -44,7 +44,7 @@ Rangfolge bei Widersprüchen:
 5. diese Anweisung
 6. Beispiel-JSON
 
-Leerwerte (Schema v4):
+Leerwerte (Beispielschema):
 - `beurteilung` und `tendenz`: leerer String `""` (Option „keine Angabe“), nie `null`.
 - `lagenradar.d1` … `d8`: `null`, nie `0` als Ersatz, nie eine Zeichenkette, **nie „U“**.
 - Text- und Datumsfelder: `""`. Datum `JJJJ-MM-TT`, `meldezeitpunkt` `JJJJ-MM-TTThh:mm`.
