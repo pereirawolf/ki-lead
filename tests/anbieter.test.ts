@@ -171,3 +171,50 @@ describe("Abruffehler", () => {
     expect(b.tools[0]).toMatchObject({ type: "web_fetch_20250910", max_content_tokens: 15000 });
   });
 });
+
+describe("Verbindungsabbruch", () => {
+  function abbrechenderStrom(text: string): Response {
+    let gesendet = false;
+    const strom = new ReadableStream({
+      pull(c) {
+        if (!gesendet) {
+          gesendet = true;
+          c.enqueue(new TextEncoder().encode(text));
+        } else c.error(new TypeError("Load failed"));
+      },
+    });
+    return new Response(strom, { status: 200 });
+  }
+  // Suche mit Ergebnis vollständig, dann reißt die Verbindung im Text ab
+  const BIS_ERGEBNIS = sse(RECHERCHE.slice(0, 7)) + sse([RECHERCHE[7], RECHERCHE[8]]);
+
+  it("setzt nach Abbruch mit vollständigem Suchergebnis fort", async () => {
+    const koerper: any[] = [];
+    let n = 0;
+    const fortschritt: string[] = [];
+    const a = new AnthropicAnbieter("k", "https://api.test", (async (_u: any, init: any) => {
+      koerper.push(JSON.parse(init.body));
+      if (n++ === 0) return abbrechenderStrom(BIS_ERGEBNIS);
+      const fortsetzung = [RECHERCHE[0], ...RECHERCHE.slice(7).map((e: any) => ("index" in e ? { ...e, index: e.index - 2 } : e))];
+      return stromAntwort(sse(fortsetzung));
+    }) as any);
+    const r = await a.senden({ ...anfrage, fortschritt: (f) => f.art === "wiederholung" && fortschritt.push(f.grund) });
+    expect(koerper).toHaveLength(2);
+    expect(koerper[1].messages[1].role).toBe("assistant");
+    // halber Textblock ist nicht dabei, Suche und Ergebnis schon
+    expect(koerper[1].messages[1].content.map((b: any) => b.type)).toEqual(["server_tool_use", "web_search_tool_result"]);
+    expect(r.text).toBe("Kernaussage: Lage stabil.");
+    expect(fortschritt[0]).toMatch(/fortgesetzt/);
+  });
+
+  it("stellt die Anfrage ohne verwertbare Teilantwort neu und gibt nach drei Abbrüchen auf", async () => {
+    const koerper: any[] = [];
+    const a = new AnthropicAnbieter("k", "https://api.test", (async (_u: any, init: any) => {
+      koerper.push(JSON.parse(init.body));
+      return abbrechenderStrom(sse(RECHERCHE.slice(0, 3)));
+    }) as any);
+    await expect(a.senden(anfrage)).rejects.toThrow(/Verbindung zum Anbieter ist während der Antwort abgerissen/);
+    expect(koerper).toHaveLength(3);
+    expect(koerper.every((k) => k.messages.length === 1)).toBe(true);
+  });
+});

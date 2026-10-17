@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnthropicAnbieter } from "../anbieter/anthropic";
 import { formatUsd } from "../anbieter/preise";
+import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
+import { useWachhalten } from "./wachhalten";
 import type { Fortschritt } from "../anbieter/typen";
 import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
@@ -97,6 +99,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     neuLaden();
   }, [profil]);
 
+  const hintergrund = useWachhalten(laeuft);
+
   useEffect(() => {
     if (!laeuft) return;
     const t = window.setInterval(() => setJetzt(Date.now()), 1000);
@@ -157,7 +161,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const fehlerBehandeln = async (l: Lauf, e: any) => {
     const abgebrochen = e?.name === "AbortError";
     l.status = abgebrochen ? "abgebrochen" : "fehler";
-    l.fehler = abgebrochen ? "Von der Person abgebrochen." : String(e?.message || e);
+    const s = Math.round(hintergrund.current / 1000);
+    const zusatz = s > 0 ? ` Die Seite war während des Laufs ${s} s im Hintergrund oder gesperrt.` : "";
+    l.fehler = abgebrochen ? "Von der Person abgebrochen." : (istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e)) + zusatz;
     setLauf({ ...l });
     await laufSpeichern(l);
     setFehler(l.fehler);
@@ -409,7 +415,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               <p className="einleitung">
                 {phase === "s1"
                   ? "Die KI ordnet den Auftrag ein. Das dauert meist unter einer Minute."
-                  : "Die KI recherchiert und schreibt den Entwurf. Das dauert meist zwei bis sechs Minuten. Bitte die App geöffnet lassen."}
+                  : "Die KI recherchiert und schreibt den Entwurf. Das dauert meist zwei bis sechs Minuten. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach."}
               </p>
               <div className="laufanzeige">
                 <span className="puls" aria-hidden="true" />

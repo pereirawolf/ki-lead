@@ -58,6 +58,7 @@ export class NachrichtenSammler {
   modell = "";
   stopGrund = "";
   private bloecke: any[] = [];
+  private fertig = new Set<number>();
   private json = new Map<number, string>();
   private textZeichen = 0;
   nutzung = {
@@ -123,6 +124,7 @@ export class NachrichtenSammler {
         break;
       }
       case "content_block_stop": {
+        this.fertig.add(d.index);
         const b = this.bloecke[d.index];
         if (!b) break;
         if (this.json.has(d.index)) {
@@ -149,6 +151,17 @@ export class NachrichtenSammler {
       case "error":
         throw new AnbieterFehler(fehlerText(d.error?.type, d.error?.message), undefined, d.error?.type);
     }
+  }
+
+  /**
+   * Vollständig empfangene Blöcke nach einem Verbindungsabbruch. Werkzeugaufrufe ohne zugehöriges
+   * Ergebnis werden verworfen, damit die Teilantwort als Fortsetzung zurückgeschickt werden kann.
+   */
+  teil(): ZusammengesetzteNachricht {
+    const fertige = this.bloecke.filter((b, i) => b && this.fertig.has(i));
+    const ergebnisIds = new Set(fertige.filter((b) => typeof b.tool_use_id === "string").map((b) => b.tool_use_id));
+    const inhalt = fertige.filter((b) => b.type !== "server_tool_use" || ergebnisIds.has(b.id));
+    return { modell: this.modell, inhalt, stopGrund: "abgebrochen", nutzung: { ...this.nutzung } };
   }
 
   ergebnis(): ZusammengesetzteNachricht {

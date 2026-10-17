@@ -104,11 +104,22 @@ export class AnbieterFehler extends Error {
     message: string,
     public status?: number,
     public art?: string,
+    /** Bis zum Fehler empfangene Inhaltsblöcke (für das Laufprotokoll) */
+    public teilinhalt?: any[],
   ) {
     super(message);
     this.name = "AnbieterFehler";
   }
 }
+
+/** Typische Meldungen der Browser, wenn eine Verbindung mitten im Strom abreißt. */
+export function istVerbindungsabbruch(e: unknown): boolean {
+  const m = String((e as any)?.message || e || "");
+  return (e as any)?.name === "TypeError" || /load failed|failed to fetch|networkerror|network error|network connection was lost|terminated/i.test(m);
+}
+
+export const TEXT_VERBINDUNGSABBRUCH =
+  "Die Verbindung zum Anbieter ist während der Antwort abgerissen. Häufige Ursachen: gesperrter Bildschirm, Wechsel in eine andere App oder ein Netzwechsel (WLAN/Mobilfunk). Bitte das Gerät während des Laufs entsperrt und die Seite im Vordergrund lassen.";
 
 export function leereNutzung(): Nutzung {
   return { eingabe: 0, ausgabe: 0, cacheSchreiben: 0, cacheLesen: 0, websuchen: 0, abrufe: 0 };

@@ -56,6 +56,9 @@ async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise
     return a;
   } catch (e: any) {
     eintrag.fehler = e?.name === "AbortError" ? "abgebrochen" : String(e?.message || e);
+    if (Array.isArray(e?.teilinhalt) && e.teilinhalt.length) {
+      eintrag.antwort = { text: "", inhalt: e.teilinhalt, stopGrund: "abgebrochen", runden: 0 };
+    }
     throw e;
   } finally {
     eintrag.ende = new Date().toISOString();

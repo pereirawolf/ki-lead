@@ -18,7 +18,20 @@ import {
   type LlmAntwort,
   type Nutzung,
   type Zitat,
+  TEXT_VERBINDUNGSABBRUCH,
 } from "./typen";
+import type { ZusammengesetzteNachricht } from "./strom";
+
+/** Verbindung riss mitten im Strom ab; enthält die bis dahin vollständigen Blöcke. */
+export class StromAbbruch extends Error {
+  constructor(
+    public teil: ZusammengesetzteNachricht,
+    public ursache: unknown,
+  ) {
+    super(String((ursache as any)?.message || ursache));
+    this.name = "StromAbbruch";
+  }
+}
 
 export const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const MAX_FORTSETZUNGEN = 6;
@@ -173,12 +186,21 @@ export class AnthropicAnbieter implements LlmAnbieter {
       const sammler = new NachrichtenSammler(a.fortschritt);
       const leser = new SseLeser();
       const reader = antwort.body!.pipeThrough(new TextDecoderStream()).getReader();
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        for (const ev of leser.lies(value)) sammler.verarbeite(ev);
+      try {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          for (const ev of leser.lies(value)) sammler.verarbeite(ev);
+        }
+      } catch (e: any) {
+        if (e?.name === "AbortError" || a.signal?.aborted) throw e;
+        if (e instanceof AnbieterFehler) throw e;
+        throw new StromAbbruch(sammler.teil(), e);
       }
-      return sammler.ergebnis();
+      const erg = sammler.ergebnis();
+      // Strom endete ohne message_stop/stop_reason: ebenfalls als Abbruch behandeln
+      if (!erg.stopGrund) throw new StromAbbruch(sammler.teil(), new Error("Strom ohne Abschluss beendet"));
+      return erg;
     }
   }
 
@@ -190,9 +212,48 @@ export class AnthropicAnbieter implements LlmAnbieter {
     const alleBloecke: any[] = [];
     let letzte: ReturnType<NachrichtenSammler["ergebnis"]> | undefined;
     let runden = 0;
+    let abbrueche = 0;
+    let fortsetzungNachAbbruch = false;
+    const anfangsNachrichten = nachrichten;
     for (;;) {
       runden++;
-      letzte = await this.eineRunde(a, nachrichten);
+      try {
+        letzte = await this.eineRunde(a, nachrichten);
+      } catch (e: any) {
+        // Abgerissene Verbindung: Teilantwort fortsetzen, sonst Anfrage neu stellen (je höchstens zweimal)
+        const ersterFehlerDerFortsetzung = fortsetzungNachAbbruch && e instanceof AnbieterFehler && e.status === 400;
+        if (!(e instanceof StromAbbruch) && !ersterFehlerDerFortsetzung) throw e;
+        if (++abbrueche > 2) {
+          const teil = e instanceof StromAbbruch ? [...alleBloecke, ...e.teil.inhalt] : alleBloecke;
+          throw new AnbieterFehler(TEXT_VERBINDUNGSABBRUCH, 0, "verbindung", teil);
+        }
+        if (e instanceof StromAbbruch) {
+          const n = nutzungAus(e.teil.nutzung);
+          gesamt = addiereNutzung(gesamt, n);
+          const k = kostenAnfrage(a.modell, n);
+          kosten = kosten === null || k === null ? null : kosten + k;
+          const hatErgebnisse = e.teil.inhalt.some((b) => typeof b.tool_use_id === "string");
+          if (hatErgebnisse) {
+            a.fortschritt?.({ art: "wiederholung", grund: "Verbindung unterbrochen; die Recherche wird fortgesetzt.", warteMs: 1500 });
+            await warte(1500, a.signal);
+            alleBloecke.push(...e.teil.inhalt);
+            const vorher = nachrichten[nachrichten.length - 1];
+            nachrichten =
+              vorher?.role === "assistant"
+                ? [...nachrichten.slice(0, -1), { role: "assistant", content: [...(vorher.content as any[]), ...e.teil.inhalt] }]
+                : [...nachrichten, { role: "assistant", content: e.teil.inhalt }];
+            fortsetzungNachAbbruch = true;
+            continue;
+          }
+        }
+        // Ohne verwertbare Teilantwort (oder Fortsetzung abgelehnt): von vorn
+        a.fortschritt?.({ art: "wiederholung", grund: "Verbindung unterbrochen; die Anfrage wird neu gestellt.", warteMs: 1500 });
+        await warte(1500, a.signal);
+        alleBloecke.length = 0;
+        nachrichten = anfangsNachrichten;
+        fortsetzungNachAbbruch = false;
+        continue;
+      }
       const n = nutzungAus(letzte.nutzung);
       gesamt = addiereNutzung(gesamt, n);
       const k = kostenAnfrage(a.modell, n);

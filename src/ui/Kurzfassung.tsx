@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { get, set } from "idb-keyval";
 import { AnthropicAnbieter } from "../anbieter/anthropic";
 import { formatUsd } from "../anbieter/preise";
+import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
+import { useWachhalten } from "./wachhalten";
 import { dateiname, managementSummary } from "../kern/ausgabe";
 import type { Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
@@ -51,6 +53,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
   const abbruch = useRef<AbortController | null>(null);
+  useWachhalten(laeuft);
   const auszug = useMemo(() => managementSummary(meldung, profil), [meldung, profil]);
 
   useEffect(() => {
@@ -69,7 +72,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
       setGespeichert(g);
       await set(schluesselIdb, g);
     } catch (e: any) {
-      setFehler(e?.name === "AbortError" ? "Abgebrochen." : String(e?.message || e));
+      setFehler(e?.name === "AbortError" ? "Abgebrochen." : istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e));
     } finally {
       setLaeuft(false);
     }
