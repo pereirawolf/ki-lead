@@ -11,6 +11,8 @@ export interface Einstellungen {
   aufwand: Record<Rolle, Aufwand>;
   websucheMax: number;
   abrufMax: number;
+  /** Höchstlänge je abgerufener Seite (Token); begrenzt Kosten bei sehr langen Seiten */
+  abrufMaxTokens: number;
   /** ISO-Ländercode für die Lokalisierung der Websuche */
   suchland: string;
   maxTokensErfassung: number;
@@ -29,6 +31,7 @@ export const STANDARD: Einstellungen = {
   aufwand: { vorverarbeitung: "medium", erfassung: "high", reparatur: "low" },
   websucheMax: 15,
   abrufMax: 10,
+  abrufMaxTokens: 15000,
   suchland: "DE",
   maxTokensErfassung: 64000,
 };

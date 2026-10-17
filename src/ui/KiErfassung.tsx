@@ -44,6 +44,18 @@ function groesse(b: number): string {
   return b < 1024 ? `${b} B` : b < 1024 * 1024 ? `${Math.round(b / 1024)} KB` : `${(b / 1024 / 1024).toFixed(1).replace(".", ",")} MB`;
 }
 
+const ABRUF_FEHLER: Record<string, string> = {
+  url_not_allowed: "Abruf von der Seite oder vom Anbieter gesperrt",
+  url_not_accessible: "Seite nicht erreichbar",
+  url_not_in_prior_context: "URL nicht aus Auftrag oder Suche",
+  unsupported_content_type: "Inhaltstyp nicht unterstützt",
+  max_uses_exceeded: "Höchstzahl der Abrufe erreicht",
+  too_many_requests: "zu viele Anfragen",
+  url_too_long: "URL zu lang",
+  invalid_tool_input: "ungültige Adresse",
+  unavailable: "Dienst vorübergehend nicht verfügbar",
+};
+
 const STATUS_TEXT: Record<Lauf["status"], string> = {
   s1: "S1 läuft",
   bestaetigen: "wartet auf Bestätigung",
@@ -633,6 +645,23 @@ function Ergebnis({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {e?.abrufFehler && e.abrufFehler.length > 0 && (
+        <div className="ki-abschnitt">
+          <h3>Nicht abrufbare Seiten</h3>
+          <ul className="befunde">
+            {e.abrufFehler.map((f, i) => (
+              <li key={i} className={`befund ${lauf.auftrag.urls.includes(f.url) ? "befund-warnung" : "befund-hinweis"}`}>
+                <span className="befund-stufe">{lauf.auftrag.urls.includes(f.url) ? "Deine URL" : "Hinweis"}</span> {f.url} ({ABRUF_FEHLER[f.code] || f.code})
+              </li>
+            ))}
+          </ul>
+          <p className="hinweis">
+            Manche Seiten sperren den Abruf durch KI-Dienste. Speichere die Seite im Browser als PDF oder kopiere den Text in die Stichworte und starte einen
+            neuen Auftrag.
+          </p>
         </div>
       )}
 

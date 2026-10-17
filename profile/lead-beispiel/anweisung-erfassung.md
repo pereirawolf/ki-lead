@@ -123,7 +123,7 @@ Ordne jeder Quelle genau eine **Kategorie** zu (Kodierleitfaden Abschnitt 5). Di
 
 Weicht eine niedriger eingestufte von einer höher eingestuften Quelle ab, gilt grundsätzlich die höher eingestufte. Ausnahme: Die niedriger eingestufte Quelle besitzt für die konkrete Aussage die überlegene fachliche Kompetenz, etwa ein Betreiber für den eigenen Störungsstand. Dann nenne beide und begründe die Abweichung. Ungeklärte Widersprüche zwischen gleichrangigen Quellen bleiben mit beiden Werten sichtbar. Die Kategorie ersetzt nicht die Prüfung, ob die Quelle die Aussage trägt.
 
-Stelle eigene Schlussfolgerungen als **{{profil.meldende_stelle}}-Einschätzung**, hypothetische Verläufe als **Szenario** und nicht verifizierte Angaben als solche dar.
+Stelle eigene Schlussfolgerungen als **Einschätzung ({{profil.kurzname}})**, hypothetische Verläufe als **Szenario** und nicht verifizierte Angaben als solche dar.
 
 **Redaktionsmaßstab:** Richtwerte sind:
 - für die vier Analysefelder zusammen 2.500–4.500 Zeichen,

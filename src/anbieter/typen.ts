@@ -23,7 +23,7 @@ export interface Werkzeuge {
   /** Websuche beim Anbieter */
   websuche?: { maxUses: number; land?: string; zeitzone?: string };
   /** Abruf von URLs, die im Auftrag genannt sind oder aus der Suche stammen */
-  abruf?: { maxUses: number };
+  abruf?: { maxUses: number; /** Höchstlänge je abgerufener Seite in Token */ maxTokens?: number };
 }
 
 export type Fortschritt =
@@ -68,6 +68,11 @@ export interface Fundstelle {
   stand?: string;
 }
 
+export interface AbrufFehler {
+  url: string;
+  code: string;
+}
+
 export interface LlmAntwort {
   modell: string;
   /** Zusammengesetzter Antworttext */
@@ -78,6 +83,8 @@ export interface LlmAntwort {
   fundstellen: Fundstelle[];
   suchen: string[];
   abrufe: string[];
+  /** Seitenabrufe, die der Anbieter verweigert oder nicht geschafft hat */
+  abrufFehler: AbrufFehler[];
   nutzung: Nutzung;
   /** Kosten in USD, soweit Preise bekannt */
   kostenUsd: number | null;

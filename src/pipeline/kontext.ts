@@ -60,7 +60,7 @@ export function sopBlock(profil: Profil, ids: string[]): string {
 
 export const AUSGABEVERTRAG = `## Ausgabeformat (von der App vorgegeben)
 
-Gib zuerst die Kurzantwort als Fließtext aus (höchstens acht Sätze, ohne Überschrift). Gib danach genau einen Codeblock mit der vollständigen Meldung aus: Er beginnt mit \`\`\`json und endet mit \`\`\`. Der Codeblock enthält ausschließlich das JSON-Objekt, ohne Kommentare. Nach dem Codeblock folgt kein weiterer Text.
+Gib zuerst die Kurzantwort als Fließtext aus (höchstens acht Sätze, ohne Überschrift; Einzelheiten gehören in die Meldung, nicht in die Kurzantwort). Gib danach genau einen Codeblock mit der vollständigen Meldung aus: Er beginnt mit \`\`\`json und endet mit \`\`\`. Der Codeblock enthält ausschließlich das JSON-Objekt, ohne Kommentare. Nach dem Codeblock folgt kein weiterer Text.
 
 Für das Quellenverzeichnis verwendest du nur Fundstellen aus deiner Websuche, aus abgerufenen Seiten und aus dem Eingangsmaterial. Erfinde keine URLs. Die App prüft das Ergebnis gegen das Schema und legt es der Person zur Prüfung und Freigabe vor.`;
 
@@ -96,7 +96,13 @@ export function anweisungErfassung(profil: Profil, auftrag: AuftragsText, jetzt:
   const text = roh || "# Arbeitsanweisung\n\nErstelle eine Meldung nach dem beigefügten Schema.\n\n{{app.ausgabevertrag}}";
   const mitVertrag = text.includes("{{app.ausgabevertrag}}") ? text : `${text}\n\n{{app.ausgabevertrag}}`;
   return ersetzePlatzhalter(mitVertrag, {
-    profil: { ...profil.manifest.variablen, referenzraum: profil.manifest.referenzraum, ebene: profil.manifest.ebene, name: profil.manifest.name },
+    profil: {
+      kurzname: profil.manifest.variablen.meldende_stelle,
+      ...profil.manifest.variablen,
+      referenzraum: profil.manifest.referenzraum,
+      ebene: profil.manifest.ebene,
+      name: profil.manifest.name,
+    },
     auftrag: auftrag as unknown as Record<string, string>,
     app: { ausgabevertrag: AUSGABEVERTRAG },
     jetzt,
@@ -145,7 +151,7 @@ export function s1System(profil: Profil): string {
     .join("\n");
   return `Du bist Stufe S1 einer gestuften Lageerfassung nach der LEAD-Systematik (Lageerfassung, -auswertung, -darstellung).
 
-Deine Aufgabe ist allein die Klärung des Gegenstands vor der Recherche (SOP-LEAD A.1): konkreter Sachverhalt, Stichtag, Bezug zum Referenzraum, Betrachtungshorizont, Gliederung in Sachverhalte, Ereignisarten aus dem Katalog und passende SOPs (Mischlage: Ursache- und Folge-SOP; Abgrenzung beachten; „Sonstiges“ nur, wenn nichts passt). Du recherchierst nicht und bewertest nicht. Die Person bestätigt oder korrigiert deinen Vorschlag.
+Deine Aufgabe ist allein die Klärung des Gegenstands vor der Recherche (SOP-LEAD A.1): konkreter Sachverhalt, Stichtag, Bezug zum Referenzraum, Betrachtungshorizont, Gliederung in Sachverhalte, Ereignisarten aus dem Katalog und passende SOPs (Mischlage: Ursache- und Folge-SOP; Abgrenzung beachten; „Sonstiges“ nur, wenn nichts passt). Du recherchierst nicht und bewertest nicht. Die Person bestätigt oder korrigiert deinen Vorschlag. Genannte URLs ruft erst Stufe S2 ab; bezeichne sie deshalb nicht als „nicht abrufbar“, sondern leite den Gegenstand aus Auftrag, URL-Pfad und Material ab.
 
 Profil: ${m.name}. Ebene: ${m.ebene || "–"}. Referenzraum: ${m.referenzraum || "–"}. Meldende Stelle: ${m.variablen.meldende_stelle || "–"}.
 

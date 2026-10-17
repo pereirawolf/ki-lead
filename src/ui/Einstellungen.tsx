@@ -181,6 +181,18 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
             <input type="number" min={0} max={50} value={e.abrufMax} onChange={(ev) => setze({ abrufMax: Math.max(0, Number(ev.target.value) || 0) })} />
           </label>
           <label className="feld">
+            <span className="feld-label">Höchstlänge je abgerufener Seite (Token)</span>
+            <input
+              type="number"
+              min={0}
+              max={100000}
+              step={1000}
+              value={e.abrufMaxTokens}
+              onChange={(ev) => setze({ abrufMaxTokens: Math.max(0, Number(ev.target.value) || 0) })}
+            />
+            <span className="hinweis">Kürzt sehr lange Seiten (Navigation, Tabellen) und senkt so die Kosten. 0: ohne Grenze.</span>
+          </label>
+          <label className="feld">
             <span className="feld-label">Land für die Websuche</span>
             <input type="text" maxLength={2} value={e.suchland} onChange={(ev) => setze({ suchland: ev.target.value.toUpperCase() })} />
             <span className="hinweis">Zweistelliger Ländercode, z. B. DE, AT, CH. Leer: keine Lokalisierung.</span>

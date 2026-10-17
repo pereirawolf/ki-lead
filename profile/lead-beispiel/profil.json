@@ -11,6 +11,7 @@
   "variablen": {
     "land": "Bund",
     "meldende_stelle": "Koordinierungsstelle (Beispiel)",
+    "kurzname": "Koordinierungsstelle",
     "zeitzone": "Europe/Berlin",
     "meldetakt": "wöchentlich",
     "lageprodukt": "übergreifende Lagebild"

@@ -158,3 +158,16 @@ describe("Preise", () => {
     expect(kostenAnfrage("unbekannt", n)).toBeNull();
   });
 });
+
+describe("Abruffehler", () => {
+  it("ordnet verweigerte Abrufe ihrer URL zu und begrenzt die Seitenlänge", async () => {
+    const { auswerten } = await import("../src/anbieter/anthropic");
+    const a = auswerten([
+      { type: "server_tool_use", id: "f1", name: "web_fetch", input: { url: "https://www.ndr.de/x.html" } },
+      { type: "web_fetch_tool_result", tool_use_id: "f1", content: { type: "web_fetch_tool_result_error", error_code: "url_not_allowed" } },
+    ]);
+    expect(a.abrufFehler).toEqual([{ url: "https://www.ndr.de/x.html", code: "url_not_allowed" }]);
+    const b = anfrageKoerper({ ...anfrage, werkzeuge: { abruf: { maxUses: 3, maxTokens: 15000 } } });
+    expect(b.tools[0]).toMatchObject({ type: "web_fetch_20250910", max_content_tokens: 15000 });
+  });
+});

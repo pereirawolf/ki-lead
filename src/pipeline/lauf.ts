@@ -2,7 +2,7 @@
 // vollständigen Prompts, Rohantworten, Token, Kosten und Dauer je Stufe. Exportierbar als JSON.
 
 import { del, entries, get, set } from "idb-keyval";
-import type { Fundstelle, Nutzung } from "../anbieter/typen";
+import type { AbrufFehler, Fundstelle, Nutzung } from "../anbieter/typen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
 export const APP_KENNUNG = "KI-LEAD 0.2";
@@ -69,6 +69,7 @@ export interface Lauf {
     befunde: Befund[];
     fundstellen: Fundstelle[];
     suchen: string[];
+    abrufFehler?: AbrufFehler[];
     schemakonform: boolean;
   };
   kostenUsd: number | null;

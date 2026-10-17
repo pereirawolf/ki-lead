@@ -22,6 +22,7 @@ function antwort(text: string, extra: Partial<LlmAntwort> = {}): LlmAntwort {
     fundstellen: [],
     suchen: [],
     abrufe: [],
+    abrufFehler: [],
     nutzung: { ...leereNutzung(), eingabe: 100, ausgabe: 50 },
     kostenUsd: 0.01,
     stopGrund: "end_turn",

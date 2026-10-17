@@ -204,7 +204,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     nachrichten: [{ role: "user", content: inhalt }],
     werkzeuge: {
       websuche: e.websucheMax > 0 ? { maxUses: e.websucheMax, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
-      abruf: e.abrufMax > 0 ? { maxUses: e.abrufMax } : undefined,
+      abruf: e.abrufMax > 0 ? { maxUses: e.abrufMax, maxTokens: e.abrufMaxTokens || undefined } : undefined,
     },
   });
 
@@ -257,7 +257,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
   k.lauf.ergebnis = meldung
-    ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, schemakonform: schemaBefunde.length === 0 }
+    ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, abrufFehler: a.abrufFehler, schemakonform: schemaBefunde.length === 0 }
     : undefined;
   k.lauf.status = meldung ? "fertig" : "fehler";
   if (!meldung) k.lauf.fehler = schemaBefunde.map((b) => b.text).join(" ");

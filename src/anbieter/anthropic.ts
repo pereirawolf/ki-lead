@@ -11,6 +11,7 @@ import {
   AnbieterFehler,
   addiereNutzung,
   leereNutzung,
+  type AbrufFehler,
   type Fundstelle,
   type LlmAnbieter,
   type LlmAnfrage,
@@ -43,7 +44,13 @@ export function anfrageKoerper(a: LlmAnfrage, nachrichten = a.nachrichten): Reco
         : {}),
     });
   }
-  if (a.werkzeuge?.abruf) tools.push({ type: "web_fetch_20250910", name: "web_fetch", max_uses: a.werkzeuge.abruf.maxUses });
+  if (a.werkzeuge?.abruf)
+    tools.push({
+      type: "web_fetch_20250910",
+      name: "web_fetch",
+      max_uses: a.werkzeuge.abruf.maxUses,
+      ...(a.werkzeuge.abruf.maxTokens ? { max_content_tokens: a.werkzeuge.abruf.maxTokens } : {}),
+    });
   if (tools.length) body.tools = tools;
   const oc: Record<string, any> = {};
   if (a.aufwand) oc.effort = a.aufwand;
@@ -64,27 +71,41 @@ function nutzungAus(u: ReturnType<NachrichtenSammler["ergebnis"]>["nutzung"]): N
 }
 
 /** Text, Zitate, Fundstellen und Werkzeugaufrufe aus allen Inhaltsblöcken. */
-export function auswerten(bloecke: any[]): { text: string; zitate: Zitat[]; fundstellen: Fundstelle[]; suchen: string[]; abrufe: string[] } {
+export function auswerten(bloecke: any[]): {
+  text: string;
+  zitate: Zitat[];
+  fundstellen: Fundstelle[];
+  suchen: string[];
+  abrufe: string[];
+  abrufFehler: AbrufFehler[];
+} {
   let text = "";
   const zitate: Zitat[] = [];
   const fund = new Map<string, Fundstelle>();
   const suchen: string[] = [];
   const abrufe: string[] = [];
+  const abrufFehler: AbrufFehler[] = [];
+  const urlZuId = new Map<string, string>();
   for (const b of bloecke) {
     if (b.type === "text") {
       text += b.text || "";
       for (const c of b.citations || []) if (c?.url) zitate.push({ url: c.url, titel: c.title || c.url, text: c.cited_text });
     } else if (b.type === "server_tool_use") {
       if (b.name === "web_search" && b.input?.query) suchen.push(String(b.input.query));
-      if (b.name === "web_fetch" && b.input?.url) abrufe.push(String(b.input.url));
+      if (b.name === "web_fetch" && b.input?.url) {
+        abrufe.push(String(b.input.url));
+        urlZuId.set(b.id, String(b.input.url));
+      }
     } else if (b.type === "web_search_tool_result" && Array.isArray(b.content)) {
       for (const r of b.content) if (r?.url && !fund.has(r.url)) fund.set(r.url, { url: r.url, titel: r.title || r.url, stand: r.page_age || undefined });
+    } else if (b.type === "web_fetch_tool_result" && b.content?.error_code) {
+      abrufFehler.push({ url: urlZuId.get(b.tool_use_id) || "(unbekannt)", code: String(b.content.error_code) });
     } else if (b.type === "web_fetch_tool_result" && b.content?.url) {
       const u = b.content.url;
       if (!fund.has(u)) fund.set(u, { url: u, titel: b.content.content?.title || u, stand: b.content.retrieved_at });
     }
   }
-  return { text, zitate, fundstellen: [...fund.values()], suchen, abrufe };
+  return { text, zitate, fundstellen: [...fund.values()], suchen, abrufe, abrufFehler };
 }
 
 const warte = (ms: number, signal?: AbortSignal) =>
