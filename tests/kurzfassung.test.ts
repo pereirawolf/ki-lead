@@ -9,6 +9,8 @@ import {
   kurzfassungErstellen,
   kurzfassungSchema,
   meldungFuerKurzfassung,
+  fruehesteFrist,
+  woerter,
 } from "../src/pipeline/kurzfassung";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage } from "../src/anbieter/typen";
 
@@ -51,14 +53,10 @@ describe("Management Summary", () => {
       "Abhängigkeiten & Interdependenzen",
     ]);
     const s: any = kurzfassungSchema(p!);
-    expect(s.properties.sachverhalte.items.required).toEqual([
-      "titel",
-      "lage_ereignis",
-      "risiken_auswirkungen",
-      "massnahmen_empfehlungen",
-      "abhaengigkeiten_interdependenzen",
-    ]);
+    expect(s.required).toEqual(["kernaussage", "abschnitte", "kurztitel"]);
+    expect(s.properties.abschnitte.required).toEqual(["lage_ereignis", "risiken_auswirkungen", "massnahmen_empfehlungen", "abhaengigkeiten_interdependenzen"]);
     expect(kurzfassungAnweisung(p!)).not.toMatch(/\{\{|\[nicht angegeben\]/);
+    expect(kurzfassungAnweisung(p!)).toContain("einer einzigen, konsolidierten Gesamtfassung");
   });
 
   it("entfernt Quellenverweise und URLs", () => {
@@ -76,29 +74,43 @@ describe("Management Summary", () => {
     expect(fingerabdruck(meldungFuerKurzfassung(b, p!))).not.toBe(a);
   });
 
-  it("baut den Klartext mit fester Kopfzeile, Beurteilung und Tendenz", async () => {
+  it("baut eine konsolidierte Leitungsfassung mit Beurteilungen und frühester Frist", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    const absatz = (t: string) => ({
-      titel: t,
-      lage_ereignis: "Kernaussage [Q2].",
-      risiken_auswirkungen: "Risiko.",
-      massnahmen_empfehlungen: "Maßnahme.",
-      abhaengigkeiten_interdependenzen: "Kopplung.",
-    });
-    const att = attrappe(JSON.stringify({ sachverhalte: [absatz("A"), absatz("B")] }));
+    const antwortJson = {
+      kernaussage: "Rund 10.000 Menschen sind ohne Strom; die Notstrompuffer reichen nur mit Nachbetankung [Q2].",
+      abschnitte: {
+        lage_ereignis: "Im Landkreis Sonneberg fehlt Strom. Die Wiederversorgung ist für den 16.10.2026 angekündigt.",
+        risiken_auswirkungen: "Pflege und Wasser hängen am Notstrom.",
+        massnahmen_empfehlungen: "Der Landkreis sollte die Nachbetankung bis 15.10.2026, 12:00 Uhr bestätigen.",
+        abhaengigkeiten_interdependenzen: "Strom koppelt an Notruf, Pflege und Trinkwasser.",
+      },
+      kurztitel: ["Sturmschäden Thüringer Wald", "Stromausfall Sonneberg"],
+    };
+    const att = attrappe(JSON.stringify(antwortJson));
     const k = await kurzfassungErstellen(p!, th, att, STANDARD);
     expect(att.anfragen[0].jsonSchema).toBeTruthy();
     expect(att.anfragen[0].werkzeuge).toBeUndefined();
     expect(String(att.anfragen[0].nachrichten[0].content)).not.toContain('"quellen"');
-    expect(k.text).toMatch(/^Management Summary – Thüringer Ministerium/);
-    expect(k.text).toContain("1. ");
-    expect(k.text).toContain(`Beurteilung: ${th.sachverhalte[0].sofort.beurteilung}`);
-    expect(k.text).toContain("Risiken & Auswirkungen\nRisiko.");
+    const zeilen = k.text.split("\n");
+    expect(zeilen[0]).toMatch(/^Management Summary – Thüringer Ministerium/);
+    expect(zeilen[2]).toBe("Rund 10.000 Menschen sind ohne Strom; die Notstrompuffer reichen nur mit Nachbetankung.");
+    expect(k.text).toContain(`• Sturmschäden Thüringer Wald: ${th.sachverhalte[0].sofort.beurteilung}, ${th.sachverhalte[0].sofort.tendenz}`);
+    expect(k.text).toContain(`• Stromausfall Sonneberg: ${th.sachverhalte[1].sofort.beurteilung}`);
+    expect(k.text).toContain("Risiken & Auswirkungen: Pflege und Wasser hängen am Notstrom.");
+    expect(k.text).toMatch(/\nHandlungsrelevant bis: \d{2}\.\d{2}\.\d{4}/);
     expect(k.text).not.toMatch(/\[Q/);
     expect(k.hinweise.join(" ")).toMatch(/Quellenverweise/);
-    expect(k.eintrag.kostenUsd).toBe(0.02);
+    expect(woerter(k.text)).toBeLessThan(160);
 
-    const zuWenig = await kurzfassungErstellen(p!, th, attrappe(JSON.stringify({ sachverhalte: [absatz("A")] })), STANDARD);
-    expect(zuWenig.hinweise.join(" ")).toMatch(/2 Sachverhalt/);
+    const lang = { ...antwortJson, kurztitel: ["A"], abschnitte: { ...antwortJson.abschnitte, lage_ereignis: "Eins. Zwei. Drei." } };
+    const z = await kurzfassungErstellen(p!, th, attrappe(JSON.stringify(lang)), STANDARD);
+    expect(z.hinweise.join(" ")).toMatch(/mehr als 2 Sätzen/);
+    expect(z.hinweise.join(" ")).toMatch(/2 Sachverhalt/);
+  });
+
+  it("findet die früheste Frist", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(fruehesteFrist(th, p!)).toMatch(/^Handlungsrelevant bis: /);
+    expect(fruehesteFrist({ ...th, sachverhalte: [] }, p!)).toBe("");
   });
 });

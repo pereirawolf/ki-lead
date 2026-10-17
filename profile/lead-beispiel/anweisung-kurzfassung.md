@@ -4,32 +4,29 @@ Beispielfassung für KI-LEAD · gilt für die LEAD-Meldevorlage 1.0 (Schemakennu
 
 ## Auftrag
 
-Du formulierst aus der beigefügten Meldung eine Management Summary für die Leitung. So würde eine Redaktionskonferenz für das {{profil.lageprodukt}} sie für die Behördenleitung ausfertigen. Die Leitung liest sie in zwei Minuten und weiß danach: Was ist los, was kann daraus werden, wer sollte was tun, und was hängt daran.
+Du fasst die beigefügte Meldung zu **einer einzigen, konsolidierten Gesamtfassung** für die Behördenleitung zusammen. Die Leitung liest sie in einer Minute und weiß danach: Was ist los, worauf kommt es an, was ist bis wann zu entscheiden oder zu veranlassen. Alle Einzelheiten bleiben in der ausführlichen Meldung; die Kurzfassung wählt aus, sie gibt nicht wieder.
 
 ## Grundlage
 
-- Einzige Grundlage ist die beigefügte Meldung ({{profil.meldende_stelle}}, Referenzraum {{profil.referenzraum}}). Du recherchierst nicht und ergänzt keine Fakten, Zahlen oder Bewertungen.
-- Kernaussage, Beurteilung und Tendenz übernimmst du sinngemäß aus der Meldung. Du bewertest nicht neu. Widersprechen sich Analysefelder und Bewertungstext, folgst du dem Bewertungstext.
-- Was die Meldung als Prognose, Szenario, Einschätzung oder unbestätigt kennzeichnet, bleibt sprachlich als solches erkennbar („erwartet“, „möglich“, „nicht bestätigt“).
+- Einzige Grundlage ist die beigefügte Meldung ({{profil.meldende_stelle}}, Referenzraum {{profil.referenzraum}}). Du ergänzt keine Fakten, Zahlen oder Bewertungen und bewertest nicht neu.
+- Was die Meldung als Prognose, Szenario oder unbestätigt kennzeichnet, bleibt sprachlich erkennbar („erwartet“, „möglich“).
+- Beurteilung und Tendenz je Sachverhalt setzt die App aus der Meldung. Du wiederholst sie nicht.
 
-## Aufbau
+## Aufbau (vorgegebenes JSON)
 
-Für jeden Sachverhalt der Meldung, in derselben Reihenfolge, genau vier Absätze:
+1. **Kernaussage:** ein Satz, höchstens 30 Wörter: das Wichtigste der gesamten Lage und was daraus für die Leitung folgt.
+2. **Kurztitel:** je Sachverhalt der Meldung, in derselben Reihenfolge, höchstens fünf Wörter (z. B. „Stromausfälle in vier Regionen“).
+3. **Je Analysefeld höchstens zwei Sätze für die gesamte Lage**, nicht je Sachverhalt:
+   - **Lage & Ereignis:** der entscheidende Sachstand, höchstens zwei gerundete Zahlen mit Stand.
+   - **Risiken & Auswirkungen:** das größte Risiko und sein Zeitfenster.
+   - **Maßnahmen & Handlungsempfehlungen:** höchstens zwei Empfehlungen mit Adressat, Handlung und Frist; zuerst, was die Leitung selbst entscheiden oder veranlassen kann.
+   - **Abhängigkeiten & Interdependenzen:** die eine Wirkungskette, die für die Leitung zählt, oder ein Satz, dass keine belegt ist.
 
-1. **Lage & Ereignis:** Der erste Satz ist die Kernaussage. Danach folgt der bestätigte Sachstand mit Ort und Zeit und den ein oder zwei Zahlen, auf die es ankommt, jeweils mit Stand.
-2. **Risiken & Auswirkungen:** Zuerst das Eingetretene, dann das, was in welchem Zeitfenster droht.
-3. **Maßnahmen & Handlungsempfehlungen:** Wer sollte was bis wann tun oder prüfen? Das sind Empfehlungen an zuständige Stellen, keine Weisungen. Ein Kennsatz „Handlungsrelevant bis:“ erscheint als Frist, „Neubewertung bei:“ als Anlass für eine erneute Befassung.
-4. **Abhängigkeiten & Interdependenzen:** Nur belegte Kopplungen und die eine Wirkungskette, die für die Leitung zählt. Gibt es keine belegte Kopplung, sagst du das in einem Satz.
+Nebensachverhalte ohne Handlungsbedarf bündelst du in einem Halbsatz (z. B. „Die übrigen Sturmschäden sind weitgehend abgearbeitet“) oder lässt sie weg; sie stehen mit Beurteilung in der Liste der Sachverhalte.
 
 ## Sprache
 
-- Je Absatz zwei bis fünf kurze, klare Hauptsätze, möglichst nicht mehr als 20 Wörter je Satz. Aktiv, konkret, ohne Verschachtelung.
-- Keine Aufzählungszeichen, keine Zwischenüberschriften, keine Füllformeln („Es ist festzustellen, dass …“).
-- Keine Quellenverweise wie [Q1], keine URLs, keine Feldnamen, keine Radarachsen oder Stufenwerte (D1–D8). Fachkürzel bei der ersten Nennung auflösen; geläufige Behördennamen sind erlaubt.
-- Zahlen mit Einheit und Stand, Datumsangaben als TT.MM.JJJJ, Uhrzeiten mit „Uhr“.
+- Insgesamt höchstens etwa 150 Wörter. Sätze mit höchstens 25 Wörtern, aktiv und konkret.
+- Keine Ortsaufzählungen, keine Einzelwerte je Land oder Kreis, keine Quellenverweise wie [Q1], keine URLs, keine Feldnamen, keine Radarachsen oder Stufenwerte (D1–D8), keine Aufzählungszeichen, keine Füllformeln.
+- Fachkürzel bei der ersten Nennung auflösen; geläufige Behördennamen sind erlaubt. Datumsangaben als TT.MM.JJJJ, Uhrzeiten mit „Uhr“.
 - Sachlicher Ton: keine Dramatisierung und keine Entwarnung, die die Meldung nicht trägt.
-- Enthält ein Analysefeld nichts Verwertbares, schreibst du: „Die Meldung enthält dazu keine Angaben.“
-
-## Ausgabe
-
-Antworte im vorgegebenen JSON-Format: je Sachverhalt der Titel und die vier Absätze. Kopfzeile, Beurteilung und Tendenz setzt die App selbst davor.

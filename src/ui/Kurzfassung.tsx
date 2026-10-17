@@ -86,8 +86,8 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
     <section className="kurzfassung" aria-labelledby="kurzfassung-titel">
       <h3 id="kurzfassung-titel">{titel}</h3>
       <p className="hinweis">
-        Absätze je Sachverhalt zu den Analysefeldern, in kurzen Sätzen für die Leitung und ohne Quellenverweise. Die KI formuliert nur aus der Meldung; sie
-        recherchiert nicht und bewertet nicht neu.
+        Eine konsolidierte Fassung für die Behördenleitung, lesbar in einer Minute: Kernaussage, Beurteilung je Sachverhalt, je Analysefeld höchstens zwei Sätze
+        und die früheste Frist. Die KI formuliert nur aus der Meldung; Einzelheiten bleiben in der ausführlichen Meldung.
       </p>
 
       {kf ? (
