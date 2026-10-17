@@ -13,6 +13,7 @@ Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es
 | Kodierleitfaden | ja | Markdown |
 | SOP-Dateien | nein | Sammelmappe mit Ankern oder Einzel-SOPs |
 | Kontakte | nein | Stellen und Erinnerungstext für den Meldestatus |
+| Beispiele | nein | Ordner mit Beispielmeldungen (z. B. einer fiktiven Lage), im Lagebild per Knopf ladbar |
 
 Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nicht eingecheckt. Dort stehen echte Adressen.
 
@@ -38,6 +39,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "sop": { "dateien": ["sop/sammelmappe.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
+  "beispiele": [{ "titel": "Übungslage (FIKTIV)", "ordner": "beispiele/uebung", "hinweis": "Erfundene Lage" }],
   "modelle": { "vorverarbeitung": "claude-haiku-5-5", "erfassung": "claude-sonnet-5-5", "verdichtung": "claude-opus-5-5" }
 }
 ```
@@ -45,6 +47,19 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `variablen`: Werte, die in neuen Meldungen vorbelegt werden, wenn das Schema ein gleichnamiges Feld der obersten Ebene hat, und die als `{{profil.<name>}}` in Arbeitsanweisungen zur Verfügung stehen. Zusätzlich gibt es `{{profil.referenzraum}}`, `{{profil.ebene}}` und `{{profil.name}}`.
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
+- `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
+
+### `kontakte.json`
+
+```json
+{
+  "format": "lead-kontakte/1",
+  "stellen": [{ "name": "Hessen", "feld": "land", "email": "lage@beispiel.invalid" }],
+  "erinnerung": { "betreff": "Erinnerung: {name}", "text": "… liegt noch keine Meldung aus {name} vor …" }
+}
+```
+
+Eine Meldung zählt im Meldestatus für eine Stelle, wenn ihr Feld `feld` genau den Wert `name` hat. `{name}` wird im Erinnerungstext ersetzt.
 
 ## Darstellungsdatei
 
@@ -95,7 +110,9 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 | `sv_beurteilung`, `sv_tendenz`, `sv_bewertung_text` | Bewertung und Kennsätze |
 | `sv_radar` | Radar des Sachverhalts |
 | `sv_textfelder`, `sv_analysefelder` | Texte mit Quellenverweisen bzw. Analysefelder der Kurzfassung |
-| `beurteilung_hoch`, `tendenz_entspannung` | Werte für Redaktionshinweise |
+| `beurteilung_hoch`, `tendenz_entspannung`, `tendenz_verschaerfung` | Werte für Kennzahlen und Redaktionshinweise; ohne `tendenz_verschaerfung` gilt der letzte Wert der Aufzählung |
+
+Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteigende Schwere: Das Lagebild sortiert danach und färbt die höchste Stufe rot, die zweithöchste orange, die dritthöchste gelb.
 
 ### Weitere Abschnitte
 
@@ -103,6 +120,7 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 - `quellen`: Kategorien mit Erläuterung, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`).
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
+- `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
 
 ## Arbeitsanweisungen
 

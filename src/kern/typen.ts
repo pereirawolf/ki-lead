@@ -36,6 +36,8 @@ export interface ProfilManifest {
   kodierleitfaden?: string;
   kontakte?: string;
   modelle?: Record<string, string>;
+  /** Beispieldatensätze im Paket, z. B. eine fiktive Lage zum Ausprobieren des Lagebilds */
+  beispiele?: { titel: string; ordner: string; hinweis?: string }[];
 }
 
 export type Widget = "text" | "text_lang" | "datum" | "datumzeit" | "auswahl" | "radio" | "mehrfachauswahl" | "radar" | "quellen";
@@ -103,6 +105,21 @@ export interface Rollen {
   sv_analysefelder?: string[];
   beurteilung_hoch?: string[];
   tendenz_entspannung?: string;
+  /** Tendenzwert für eine Verschärfung; ohne Angabe gilt der letzte Wert der Aufzählung im Schema */
+  tendenz_verschaerfung?: string;
+}
+
+export type LagebildVerweis = "zeitfenster" | "zusammenhang" | "fortschreibung" | "kernaussage" | "quellen" | "rueckblick";
+
+/** Einstellungen des Moduls Lagebild (Zusammenführung mehrerer Meldungen). */
+export interface LagebildKonfig {
+  titel?: string;
+  /** Bezeichnung des nächsten Lageprodukts, z. B. „Nächste Lagebild-Ausgabe“ */
+  ausgabe_label?: string;
+  /** Abstand der nächsten Ausgabe in Tagen (Vorbelegung im Redaktionscheck) */
+  ausgabe_tage?: number;
+  /** Fundstellen in der SOP je Prüfabschnitt, z. B. „SOP-LEAD A.7.3“ */
+  verweise?: Partial<Record<LagebildVerweis, string>>;
 }
 
 export interface QuellenKonfig {
@@ -125,6 +142,7 @@ export interface UiKonfig {
   quellen?: QuellenKonfig;
   dateiname?: string;
   kurzfassung?: { titel: string; kopf: string; kennsaetze?: string[] };
+  lagebild?: LagebildKonfig;
 }
 
 export interface Sop {

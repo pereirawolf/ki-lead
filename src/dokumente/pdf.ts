@@ -46,23 +46,10 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: st
   out.push([label, text]);
 }
 
-export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blob {
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
+/** Zeichnet eine Meldung (Kopf, Sachverhalte, Quellen, Entstehung) ab startY und liefert die Endposition. */
+function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number, kopfTitel = "Meldung", zusatz: string[][] = []): number {
   const ui = profil.ui;
   const r = ui.rollen;
-  doc.setFontSize(14);
-  doc.setTextColor(...BLAU);
-  doc.text(`${ui.titel}`, 14, 16);
-  doc.setFontSize(9);
-  doc.setTextColor(90, 100, 110);
-  doc.text(`${profil.manifest.name} · Profilversion ${profil.manifest.version} · Schema ${profil.manifest.meldung.schema_id}`, 14, 22);
-  if (entwurf) {
-    doc.setFontSize(42);
-    doc.setTextColor(225, 228, 232);
-    doc.text("ENTWURF", 105, 150, { angle: 45, align: "center" });
-  }
-  doc.setTextColor(20, 20, 20);
-
   const wurzel = aufloesen(profil.schema, profil.schema);
   const kopf: string[][] = [];
   for (const key of Object.keys(wurzel.properties || {})) {
@@ -70,9 +57,10 @@ export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blo
     if (d[key] === undefined) continue;
     zeilen(profil, wurzel.properties[key], d[key], [key], kopf);
   }
+  kopf.push(...zusatz);
   autoTable(doc, {
-    startY: 27,
-    head: [["Meldung", ""]],
+    startY,
+    head: [[kopfTitel, ""]],
     body: kopf,
     theme: "grid",
     headStyles: { fillColor: BLAU },
@@ -120,12 +108,67 @@ export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blo
       columnStyles: { 0: { cellWidth: 30, fontStyle: "bold" } },
     });
   }
+  return (doc as any).lastAutoTable.finalY;
+}
+
+function seitenfuss(doc: jsPDF, text: string) {
   const seiten = doc.getNumberOfPages();
   for (let s = 1; s <= seiten; s++) {
     doc.setPage(s);
     doc.setFontSize(7.5);
     doc.setTextColor(120, 128, 136);
-    doc.text(`Erstellt mit KI-LEAD · Seite ${s} von ${seiten}`, 14, 290);
+    doc.text(`${text} · Seite ${s} von ${seiten}`, 14, 290);
   }
+}
+
+export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blob {
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const ui = profil.ui;
+  doc.setFontSize(14);
+  doc.setTextColor(...BLAU);
+  doc.text(`${ui.titel}`, 14, 16);
+  doc.setFontSize(9);
+  doc.setTextColor(90, 100, 110);
+  doc.text(`${profil.manifest.name} · Profilversion ${profil.manifest.version} · Schema ${profil.manifest.meldung.schema_id}`, 14, 22);
+  if (entwurf) {
+    doc.setFontSize(42);
+    doc.setTextColor(225, 228, 232);
+    doc.text("ENTWURF", 105, 150, { angle: 45, align: "center" });
+  }
+  doc.setTextColor(20, 20, 20);
+  meldungZeichnen(doc, d, profil, 27);
+  seitenfuss(doc, "Erstellt mit KI-LEAD");
+  return doc.output("blob");
+}
+
+export interface LagebildPdfMeldung {
+  daten: Meldung;
+  titel: string;
+  zusatz: string[][];
+}
+
+/** Zusammenstellung mehrerer Meldungen: Übersicht der Sachverhalte, danach jede Meldung vollständig. */
+export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string[][], meldungen: LagebildPdfMeldung[], stand: string): Blob {
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  doc.setFontSize(14);
+  doc.setTextColor(...BLAU);
+  doc.text(titel, 14, 16);
+  doc.setFontSize(9);
+  doc.setTextColor(90, 100, 110);
+  doc.text(`${profil.manifest.name} · Schema ${profil.manifest.meldung.schema_id} · ${meldungen.length} Meldung(en) · Stand ${stand}`, 14, 22);
+  doc.setTextColor(20, 20, 20);
+  autoTable(doc, {
+    startY: 27,
+    head: [uebersicht[0]],
+    body: uebersicht.slice(1),
+    theme: "grid",
+    headStyles: { fillColor: BLAU },
+    styles: { fontSize: 8, cellPadding: 1.6, overflow: "linebreak", valign: "top" },
+  });
+  meldungen.forEach((m) => {
+    doc.addPage();
+    meldungZeichnen(doc, m.daten, profil, 16, m.titel, m.zusatz);
+  });
+  seitenfuss(doc, `${titel} · erstellt mit KI-LEAD`);
   return doc.output("blob");
 }

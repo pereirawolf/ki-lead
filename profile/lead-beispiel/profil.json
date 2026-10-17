@@ -36,6 +36,13 @@
   },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
+  "beispiele": [
+    {
+      "titel": "Orkantief „Ilka“ (FIKTIV)",
+      "ordner": "beispiele/orkantief-ilka",
+      "hinweis": "Erfundene Lage mit sechs Ländermeldungen und der verdichteten Meldung einer Koordinierungsstelle; keine Meldung stammt von den genannten Stellen."
+    }
+  ],
   "modelle": {
     "vorverarbeitung": "claude-haiku-5-5",
     "erfassung": "claude-sonnet-5-5",

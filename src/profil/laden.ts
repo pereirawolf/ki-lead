@@ -158,6 +158,11 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   if (!manifest.sop)
     befunde.push({ stufe: "hinweis", text: "Das Profil enthält keine SOP. Die KI arbeitet dann nur nach Arbeitsanweisung und Kodierleitfaden." });
 
+  for (const b of manifest.beispiele || []) {
+    const praefix = b.ordner.replace(/^\.?\/*/, "").replace(/\/?$/, "/");
+    if (!Object.keys(dateien).some((p) => p.startsWith(praefix) && p.toLowerCase().endsWith(".json")))
+      befunde.push({ stufe: "warnung", text: `Beispiel „${b.titel}“: Im Ordner ${b.ordner} liegen keine JSON-Dateien.` });
+  }
   let kontakte: Kontakte | undefined;
   if (manifest.kontakte) {
     const lokal = manifest.kontakte.replace(/\.json$/, ".lokal.json");

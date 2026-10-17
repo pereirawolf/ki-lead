@@ -2,7 +2,11 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. Die App läuft vollständig auf dem Gerät (iPad, iPhone, Android, Browser). Netzverbindungen gibt es nur zu den KI-Schnittstellen von Anthropic (seit Meilenstein 2) und später OpenAI (Meilenstein 4).
 
-**Stand: Meilenstein 2 (KI-Erfassung).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben. Neu ist die gestufte KI-Erfassung:
+**Stand: Meilenstein 3 (Lagebild).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben, mit KI-Unterstützung erstellen und im Modul Lagebild zusammenführen.
+
+**Lagebild (M3):** Mehrere Meldungen (JSON-Dateien oder ZIP-Archive) werden nach dem Profil migriert und gegen das Schema geprüft; Meldungen in fremdem Schema werden erkannt und für die KI-Verdichtung vorgehalten. Ansichten: Übersicht mit Kennzahlen, Meldestatus aus `kontakte.json` (mit Erinnerungsmail) und Verteilungen; Meldungen; Sachverhalte nach Schwere; Lagenradar je Sachverhalt, bewusst ohne Mittelwert; Rohtabelle. Der **Redaktionscheck** prüft nach SOP-LEAD A.3 bis A.8: Zeitfenster „Handlungsrelevant bis:“ gegen die nächste Ausgabe, Zusammenhang und abweichende Bewertungen gleicher Ereignisarten mit Textbaustein, Fortschreibung, Nachlauf, Abschluss und mehrfache Meldungen derselben Stelle, fehlende Kernaussagen bei hoher Beurteilung, Quellen, Schema und Status. Ausgabe als Kopiervorlage für Word (Tabelle mit Radarbild), CSV (Semikolon, für Tabellenkalkulation in deutscher Einstellung) und PDF. Ein Knopf übergibt alle Meldungen an die KI-Erfassung zur Verdichtung. Das Beispielprofil bringt die fiktive Lage „Ilka“ zum Ausprobieren mit.
+
+Die gestufte KI-Erfassung (M2):
 
 1. **Auftrag und Material:** Sachverhalt, Stichworte, URLs, Dateien (TXT, MD, JSON, DOCX, PDF); eine Meldung als JSON gilt als Vormeldung zur Fortschreibung.
 2. **S1 Gegenstand bestätigen:** Ein kleines Modell schlägt Gliederung, Ereignisarten und SOPs vor; die Person bestätigt oder korrigiert.
@@ -54,7 +58,7 @@ npm run build      # Produktionsbuild nach dist/
 
 Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter einer strengen Content-Security-Policy. Die Tests vergleichen ihr Urteil mit Ajv als Referenz.
 
-Testdaten: Im Ordner `tests/daten/orkantief-ilka` liegt der **fiktive** Datensatz Orkantief „Ilka“ mit sechs Ländermeldungen und der daraus verdichteten Meldung einer Koordinierungsstelle. Die Lage ist erfunden; keine Meldung stammt von den darin genannten Stellen (siehe `LIESMICH.md` dort). Eigene Testdaten unter `privat/testdaten/<satz>/` prüft `npm test` mit, wenn dort eine Datei `profil.txt` den Profilordner nennt.
+Testdaten: Im Ordner `profile/lead-beispiel/beispiele/orkantief-ilka` liegt der **fiktive** Datensatz Orkantief „Ilka“ mit sechs Ländermeldungen und der daraus verdichteten Meldung einer Koordinierungsstelle. Die Lage ist erfunden; keine Meldung stammt von den darin genannten Stellen (siehe `LIESMICH.md` dort). In der App lädt man ihn im Lagebild mit „Beispiel laden“. Eigene Testdaten unter `privat/testdaten/<satz>/` prüft `npm test` mit, wenn dort eine Datei `profil.txt` den Profilordner nennt.
 
 ## Fahrplan
 
@@ -76,6 +80,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.2) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.3) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

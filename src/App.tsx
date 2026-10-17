@@ -17,6 +17,7 @@ import { MeldungAnsicht } from "./ui/Meldung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
+import { LagebildAnsicht } from "./ui/Lagebild";
 import { einstellungenLesen, einstellungenSchreiben, schluesselLesen, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 
 export interface ProfilEintrag {
@@ -28,7 +29,7 @@ export interface ProfilEintrag {
   befunde: Befund[];
 }
 
-type Ansicht = "meldung" | "ki" | "profile" | "einstellungen";
+type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen";
 
 function neueMeldung(p: Profil): Meldung {
   const d = leererWert(p.schema, p.schema) as Meldung;
@@ -54,6 +55,7 @@ export default function App() {
   const timer = useRef<number>();
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState("");
+  const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: { name: string; text: string }[] } | null>(null);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
 
@@ -76,6 +78,17 @@ export default function App() {
     if (!confirm("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
     setMeldung(m);
     setAnsicht("meldung");
+  };
+
+  const lagebildOeffnen = (m: Meldung) => {
+    if (!confirm("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+    setMeldung(m);
+    setAnsicht("meldung");
+  };
+
+  const anKiUebergeben = (dateien: { name: string; text: string }[]) => {
+    setKiUebergabe((alt) => ({ nr: (alt?.nr || 0) + 1, dateien }));
+    setAnsicht("ki");
   };
 
   useEffect(() => {
@@ -166,6 +179,9 @@ export default function App() {
           <button type="button" className={ansicht === "ki" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("ki")}>
             KI-Erfassung
           </button>
+          <button type="button" className={ansicht === "lagebild" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("lagebild")}>
+            {profil?.ui.lagebild?.titel || "Lagebild"}
+          </button>
           <button type="button" className={ansicht === "profile" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("profile")}>
             Profile
           </button>
@@ -206,9 +222,11 @@ export default function App() {
               schluessel={schluessel}
               zuEinstellungen={() => setAnsicht("einstellungen")}
               uebernehmen={kiUebernehmen}
+              uebergabe={kiUebergabe}
             />
           </div>
         )}
+        {ansicht === "lagebild" && profil && <LagebildAnsicht key={profil.hash} profil={profil} uebergeben={anKiUebergeben} oeffnen={lagebildOeffnen} />}
         {ansicht === "einstellungen" && (
           <EinstellungenAnsicht
             profil={profil}
@@ -218,12 +236,12 @@ export default function App() {
             setSchluessel={setSchluessel}
           />
         )}
-        {(ansicht === "meldung" || ansicht === "ki") && !profil && profile.length > 0 && (
+        {(ansicht === "meldung" || ansicht === "ki" || ansicht === "lagebild") && !profil && profile.length > 0 && (
           <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.2. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.
+        KI-LEAD 0.3. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>
   );

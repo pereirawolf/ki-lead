@@ -57,6 +57,19 @@ export async function zwischenstandLoeschen(profilId: string): Promise<void> {
   await del("entwurf:" + profilId);
 }
 
+export interface LagebildStand {
+  dateien: { name: string; text: string; importiertAm: string }[];
+  naechsteAusgabe?: string;
+}
+
+export async function lagebildLesen(profilId: string): Promise<LagebildStand | undefined> {
+  return get<LagebildStand>("lagebild:" + profilId);
+}
+
+export async function lagebildSchreiben(profilId: string, stand: LagebildStand): Promise<void> {
+  await set("lagebild:" + profilId, stand);
+}
+
 /** Datei an den Nutzer übergeben (Browser: Download; in der App später: Teilen-Menü). */
 export function dateiAnbieten(inhalt: BlobPart, dateiname: string, typ: string): void {
   const blob = inhalt instanceof Blob ? inhalt : new Blob([inhalt], { type: typ });

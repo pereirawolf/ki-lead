@@ -21,6 +21,8 @@ interface Props {
   schluessel: string;
   zuEinstellungen: () => void;
   uebernehmen: (m: Meldung) => void;
+  /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
+  uebergabe?: { nr: number; dateien: { name: string; text: string }[] } | null;
 }
 
 type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
@@ -68,7 +70,7 @@ const STATUS_TEXT: Record<Lauf["status"], string> = {
   abgebrochen: "abgebrochen",
 };
 
-export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen }: Props) {
+export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
@@ -110,7 +112,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     return () => window.clearInterval(t);
   }, [laeuft]);
 
-  const dateienHinzufuegen = async (liste: FileList | null) => {
+  const dateienHinzufuegen = async (liste: FileList | File[] | null) => {
     if (!liste) return;
     const neu: Material[] = [];
     const fehlerListe: string[] = [];
@@ -221,6 +223,24 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       )
     )
       return;
+    leeren();
+  };
+
+  // Übergabe aus dem Lagebild: Meldungen als Material, bei abgeschlossenem Lauf mit neuer Erfassung
+  useEffect(() => {
+    if (!uebergabe?.dateien.length) return;
+    if (laeuft) {
+      setDateiFehler(["Die Meldungen aus dem Lagebild wurden nicht übernommen, weil gerade ein Lauf läuft. Nach dem Lauf erneut übergeben."]);
+      return;
+    }
+    if (phase !== "auftrag") leeren();
+    const dateien = uebergabe.dateien.map((d) => new File([d.text], d.name, { type: "application/json" }));
+    dateienHinzufuegen(dateien);
+    setSachverhalt((alt) => alt || `Lagebild aus ${dateien.length} Meldungen verdichten`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uebergabe?.nr]);
+
+  function leeren() {
     setPhase("auftrag");
     setLauf(null);
     setVorschlag(null);
@@ -237,7 +257,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setDatenOk(false);
     setUhrzeit("");
     setWebsucheWahl(null);
-  };
+  }
 
   const protokollExport = (l: Lauf) => dateiAnbieten(JSON.stringify(l, null, 2), `KI-LEAD_Lauf_${l.id}.json`, "application/json");
 

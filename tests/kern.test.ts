@@ -7,7 +7,7 @@ import { ausfuellHinweise, kennsatz, pflichtHinweise } from "../src/kern/kennsae
 import { dateiname, managementSummary } from "../src/kern/ausgabe";
 import { pfadBezeichnung } from "../src/kern/ui";
 
-const ilka = jsonDateien("daten/orkantief-ilka");
+const ilka = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka");
 
 describe("Fiktiver Datensatz Orkantief „Ilka“", () => {
   it("liegt vollständig vor", () => {

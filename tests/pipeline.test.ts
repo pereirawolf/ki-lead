@@ -10,7 +10,7 @@ import { leereNutzung, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from
 import { pruefeRoh } from "../src/kern/validierung";
 import JSZip from "jszip";
 
-const ilka = jsonDateien("daten/orkantief-ilka");
+const ilka = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka");
 const he = ilka.find((x) => x.name.includes("_HE_"))!.daten;
 
 function antwort(text: string, extra: Partial<LlmAntwort> = {}): LlmAntwort {

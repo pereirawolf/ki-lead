@@ -1459,3 +1459,624 @@ details.ki-abschnitt summary,
   flex: 2 1 0;
   min-width: 0;
 }
+
+/* ── Lagebild ─────────────────────────────────────── */
+.lb-ablage {
+  border: 2px dashed var(--linie);
+  border-radius: var(--r-mittel);
+  background: var(--flaeche);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.lb-ablage-aktiv {
+  border-color: var(--amt);
+  background: var(--amt-zart);
+}
+
+.lb-ablage p {
+  margin: 0 0 0.5rem;
+}
+
+.lb-ablage .hinweis {
+  margin: 0.6rem 0 0;
+}
+
+.lb-leiste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.lb-zahl {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lb-dateien {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.lb-dateien li {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  background: var(--flaeche);
+  padding: 0.2rem 0.3rem 0.2rem 0.75rem;
+  font-size: 0.82rem;
+  max-width: 100%;
+}
+
+.lb-datei-name {
+  overflow-wrap: anywhere;
+}
+
+.lb-x {
+  border: none;
+  background: transparent;
+  color: var(--kritisch);
+  font-size: 1.1rem;
+  line-height: 1;
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.lb-x:hover {
+  background: var(--kritisch-zart);
+}
+
+.lb-marke {
+  display: inline-block;
+  border-radius: var(--r-klein);
+  padding: 0.05rem 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.lb-marke.lb-rot {
+  color: var(--kritisch);
+  background: var(--kritisch-zart);
+}
+.lb-marke.lb-orange {
+  color: var(--erheblich);
+  background: var(--erheblich-zart);
+}
+.lb-marke.lb-gelb {
+  color: var(--gering);
+  background: var(--gering-zart);
+}
+.lb-marke.lb-gruen {
+  color: var(--ok);
+  background: var(--ok-zart);
+}
+.lb-marke.lb-grau {
+  color: var(--tinte-leise);
+  background: var(--papier);
+}
+.lb-marke.lb-amt {
+  color: var(--amt);
+  background: var(--amt-zart);
+}
+
+.lb-svmarken,
+.lb-marken {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lb-reiter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+}
+
+.lb-reiter .segment {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  font: inherit;
+  color: var(--tinte);
+  gap: 0.4rem;
+}
+
+.lb-reiter .segment.aktiv {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--flaeche);
+  font-weight: 700;
+}
+
+.lb-zaehler {
+  display: inline-block;
+  min-width: 1.4rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--erheblich);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.lb-kennzahlen {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.lb-kennzahl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--amt);
+  border-radius: var(--r-mittel);
+  padding: 0.7rem 0.9rem;
+}
+
+button.lb-kennzahl {
+  cursor: pointer;
+}
+
+button.lb-kennzahl:hover {
+  background: var(--amt-zart);
+}
+
+.lb-kennzahl b {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.lb-kennzahl span {
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-rand-rot {
+  border-left-color: var(--kritisch) !important;
+}
+.lb-rand-orange {
+  border-left-color: var(--erheblich) !important;
+}
+.lb-rand-gelb {
+  border-left-color: var(--gering) !important;
+}
+.lb-rand-gruen {
+  border-left-color: var(--ok) !important;
+}
+.lb-rand-grau {
+  border-left-color: var(--linie) !important;
+}
+
+.lb-status {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.4rem;
+}
+
+.lb-status li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.35rem 0.6rem;
+  min-height: 44px;
+}
+
+.lb-status-zeichen {
+  font-weight: 700;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.lb-status-da .lb-status-zeichen {
+  color: var(--ok);
+}
+
+.lb-status-offen .lb-status-zeichen {
+  color: var(--tinte-leise);
+}
+
+.lb-status-name {
+  flex: 1;
+  font-weight: 700;
+}
+
+.lb-status-offen .lb-status-name {
+  font-weight: 400;
+  color: var(--tinte-leise);
+}
+
+.lb-status-zahl {
+  font-size: 0.78rem;
+  color: var(--tinte-leise);
+}
+
+a.knopf {
+  text-decoration: none;
+}
+
+.lb-verteilungen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.75rem;
+}
+
+.lb-balken {
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem;
+}
+
+.lb-balken h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lb-balken-zeile {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) 1fr 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.lb-balken-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-balken-spur {
+  height: 0.9rem;
+  background: var(--papier);
+  border-radius: var(--r-klein);
+  overflow: hidden;
+}
+
+.lb-balken-wert {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-klein);
+}
+
+.lb-balken-wert.lb-rot {
+  background: var(--kritisch);
+}
+.lb-balken-wert.lb-orange {
+  background: var(--erheblich);
+}
+.lb-balken-wert.lb-gelb {
+  background: var(--gering);
+}
+.lb-balken-wert.lb-gruen {
+  background: var(--ok);
+}
+.lb-balken-wert.lb-grau {
+  background: var(--linie);
+}
+.lb-balken-wert.lb-amt {
+  background: var(--amt);
+}
+
+.lb-balken-zahl {
+  text-align: right;
+  font-weight: 700;
+}
+
+.lb-karten {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.8rem;
+}
+
+.lb-karte {
+  display: flex;
+  flex-direction: column;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  overflow: hidden;
+}
+
+.lb-karte header {
+  background: var(--amt);
+  color: var(--flaeche);
+  padding: 0.6rem 0.9rem;
+}
+
+.lb-karte header .lb-karte-meta {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.lb-karte-titel {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lb-karte-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  overflow-wrap: anywhere;
+}
+
+.lb-karte-inhalt {
+  padding: 0.7rem 0.9rem;
+  flex: 1;
+}
+
+.lb-karte footer {
+  padding: 0 0.9rem 0.7rem;
+}
+
+.lb-sv {
+  border-left: 4px solid var(--linie);
+  background: var(--papier);
+  border-radius: 0 var(--r-klein) var(--r-klein) 0;
+  padding: 0.4rem 0.6rem;
+  margin: 0.5rem 0;
+}
+
+.lb-sv-titel {
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.lb-radar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.lb-achsen {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.lb-rahmen {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+}
+
+.lb-tabelle {
+  margin: 0;
+  min-width: 720px;
+}
+
+.lb-tabelle.lb-klein {
+  min-width: 0;
+  font-size: 0.82rem;
+}
+
+.lb-lang {
+  white-space: pre-line;
+  min-width: 14rem;
+  max-width: 28rem;
+}
+
+.lb-redaktion .abschnitt {
+  margin-top: 1.4rem;
+}
+
+.lb-verweis {
+  font-weight: 400;
+  color: var(--tinte-leise);
+  font-size: 0.85em;
+}
+
+.lb-ausgabe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem;
+}
+
+.lb-ausgabe > span:first-child {
+  font-weight: 700;
+}
+
+.lb-punkt {
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-left: 4px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.lb-punkt-warn {
+  border-left-color: var(--erheblich);
+}
+.lb-punkt-alert {
+  border-left-color: var(--kritisch);
+}
+.lb-punkt-ok {
+  border-left-color: var(--ok);
+}
+.lb-punkt-info {
+  border-left-color: var(--amt);
+}
+
+.lb-punkt-titel {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.lb-punkt-text {
+  margin-top: 0.3rem;
+  white-space: pre-line;
+  font-size: 0.9rem;
+}
+
+.lb-punkt-text .lb-rahmen {
+  white-space: normal;
+}
+
+.lb-flag {
+  display: inline-block;
+  border-radius: var(--r-klein);
+  padding: 0.05rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lb-flag-warn {
+  background: var(--erheblich-zart);
+  color: var(--erheblich);
+}
+.lb-flag-alert {
+  background: var(--kritisch-zart);
+  color: var(--kritisch);
+}
+.lb-flag-ok {
+  background: var(--ok-zart);
+  color: var(--ok);
+}
+.lb-flag-info {
+  background: var(--amt-zart);
+  color: var(--amt);
+}
+
+.lb-baustein {
+  border: 1px dashed var(--linie);
+  border-radius: var(--r-klein);
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.5rem;
+  white-space: normal;
+}
+
+.lb-baustein p {
+  margin: 0.3rem 0 0;
+}
+
+.lb-baustein-kopf,
+.lb-vorlage-kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lb-vorlage {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.lb-vorlage-kopf {
+  background: var(--papier);
+  border-bottom: 1px solid var(--linie);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+/* Die Kopiervorlage zeigt das, was in Word ankommt: immer hell */
+.lb-vorlage-inhalt {
+  background: #fff;
+  color: #000;
+  padding: 0.75rem;
+  overflow-x: auto;
+}
+
+.lb-kopiert {
+  border-color: var(--ok) !important;
+  color: var(--ok) !important;
+}
+
+@media (max-width: 600px) {
+  .lb-kennzahlen {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lb-karten,
+  .lb-verteilungen {
+    grid-template-columns: 1fr;
+  }
+  .lb-balken-zeile {
+    grid-template-columns: minmax(0, 8rem) 1fr 2rem;
+  }
+}
+
+@media print {
+  .lb-ablage,
+  .lb-leiste,
+  .lb-dateien,
+  .lb-reiter,
+  .kopf,
+  .hinweisband,
+  .fuss {
+    display: none !important;
+  }
+}
+
+.lb-dateiliste {
+  margin: 0 0 1rem;
+}
+
+.lb-dateiliste summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--tinte-leise);
+  font-weight: 700;
+}
+
+.lb-dateiliste .lb-dateien li {
+  border-radius: var(--r-mittel);
+}
+
+.lb-dateiliste summary::before {
+  content: "▸";
+  margin-right: 0.4rem;
+}
+
+.lb-dateiliste[open] summary::before {
+  content: "▾";
+}

@@ -14,7 +14,7 @@ import {
 } from "../src/pipeline/kurzfassung";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage } from "../src/anbieter/typen";
 
-const ilka = jsonDateien("daten/orkantief-ilka");
+const ilka = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka");
 const th = ilka.find((x) => x.name.includes("_TH_"))!.daten; // zwei Sachverhalte
 
 function attrappe(text: string): LlmAnbieter & { anfragen: LlmAnfrage[] } {

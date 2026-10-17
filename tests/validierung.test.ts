@@ -4,7 +4,7 @@ import { jsonDateien, profil } from "./hilfen";
 import { pruefeRoh, schemaFehler } from "../src/kern/validierung";
 
 // Referenzvergleich: Der eval-freie Prüfer der App muss bei allen Varianten dasselbe Urteil fällen wie Ajv.
-const ilka = jsonDateien("daten/orkantief-ilka");
+const ilka = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka");
 
 function varianten(d: any): any[] {
   const k = () => JSON.parse(JSON.stringify(d));

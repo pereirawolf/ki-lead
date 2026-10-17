@@ -322,7 +322,8 @@
       "erheblich",
       "kritisch"
     ],
-    "tendenz_entspannung": "Entspannung"
+    "tendenz_entspannung": "Entspannung",
+    "tendenz_verschaerfung": "Verschärfung"
   },
   "kennsaetze": {
     "neubewertung": "Neubewertung bei:",
@@ -340,6 +341,19 @@
     },
     "rangfolge_hinweis": "Rangfolge bei widersprüchlichen Angaben: A vor W vor M vor P – außer die niedriger eingestufte Quelle ist für die konkrete Aussage fachlich kompetenter (z. B. Betreiber für den eigenen Störungsstand); dann beide nennen und die Abweichung begründen (Kodierleitfaden Abschnitt 5).",
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]"
+  },
+  "lagebild": {
+    "titel": "Lagebild",
+    "ausgabe_label": "Nächste Lagebild-Ausgabe",
+    "ausgabe_tage": 7,
+    "verweise": {
+      "zeitfenster": "SOP-LEAD A.5 Nr. 2, A.7.3",
+      "zusammenhang": "SOP-LEAD A.7.1, A.7.2",
+      "fortschreibung": "SOP-LEAD A.7.1, A.8.1, A.8.2",
+      "kernaussage": "SOP-LEAD A.4, A.5",
+      "quellen": "SOP-LEAD A.3, A.4",
+      "rueckblick": "SOP-LEAD A.8.3"
+    }
   },
   "dateiname": "LEAD-Meldung_{land}_{meldende_stelle}_{meldezeitpunkt}",
   "kurzfassung": {
