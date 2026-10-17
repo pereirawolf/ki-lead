@@ -13,6 +13,8 @@ export interface Auftrag {
   urls: string[];
   stichtag: string;
   prueffrage: string;
+  /** Websuche und Seitenabruf erlauben (Standard: ja; bei Verdichtung: nein) */
+  websuche?: boolean;
 }
 
 export interface S1Sachverhalt {
@@ -20,11 +22,15 @@ export interface S1Sachverhalt {
   ereignisarten: string[];
   sops: string[];
   begruendung: string;
+  /** Bei Verdichtung: zugeordnete Eingangsmeldungen (Dateinamen) */
+  eingangsmeldungen?: string[];
 }
 
 export interface S1Vorschlag {
   gegenstand: string;
   stichtag: string;
+  /** Meldezeitpunkt t0 der eigenen Meldung (JJJJ-MM-TTThh:mm) */
+  meldezeitpunkt?: string;
   referenzbezug: string;
   horizont: string;
   sachverhalte: S1Sachverhalt[];

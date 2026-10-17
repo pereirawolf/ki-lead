@@ -5,7 +5,7 @@ import { neuerLauf, type Lauf } from "../src/pipeline/lauf";
 import { stufe1, stufe2und3, type Kontext } from "../src/pipeline/stufen";
 import { zerlegeAntwort } from "../src/pipeline/json";
 import { ereignisarten, s1Schema, sopsFuerArten, anweisungErfassung, anwendungsbereich, fachSops } from "../src/pipeline/kontext";
-import { materialBloecke, docxText, urlsAusText, type Material } from "../src/pipeline/material";
+import { materialBloecke, docxText, urlsAusText, dateiLesen, juengsterEingang, type Material } from "../src/pipeline/material";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "../src/anbieter/typen";
 import { pruefeRoh } from "../src/kern/validierung";
 import JSZip from "jszip";
@@ -205,5 +205,48 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     expect(JSON.stringify(k.lauf.stufen[0].anfrage)).not.toContain("A".repeat(3000));
     expect(JSON.stringify(k.lauf.stufen[0].anfrage)).toContain("nicht im Protokoll");
     expect(k.lauf.kostenUsd).toBeCloseTo(0.01);
+  });
+});
+
+describe("Verdichtung von Eingangsmeldungen", () => {
+  it("erkennt Meldungen anderer Stellen als Eingang und die eigene als Vormeldung", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const th = ilka.find((x) => x.name.includes("_TH_"))!;
+    const datei = new File([JSON.stringify(th.daten)], th.name, { type: "application/json" });
+    const m = await dateiLesen(datei, p!);
+    expect(m.art).toBe("eingang");
+    expect(m.eingang).toMatchObject({ land: "Thüringen", zeitpunkt: "2026-10-14T10:30", sachverhalte: 2 });
+    const eigen = { ...th.daten, meldende_stelle: "Koordinierungsstelle (Beispiel)" };
+    const v = await dateiLesen(new File([JSON.stringify(eigen)], "eigen.json"), p!);
+    expect(v.art).toBe("meldung");
+    expect(juengsterEingang([m, { ...m, eingang: { ...m.eingang!, zeitpunkt: "2026-10-14T11:00" } }])).toBe("2026-10-14T11:00");
+  });
+
+  it("verdichtet ohne Websuche, mit t0 aus den Eingängen und verbindlicher Gliederung", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const eingaenge: Material[] = [];
+    for (const x of ilka.filter((x) => !x.name.includes("_Bund_"))) eingaenge.push(await dateiLesen(new File([JSON.stringify(x.daten)], x.name), p!));
+    const ohneT0 = {
+      ...VORSCHLAG,
+      meldezeitpunkt: "",
+      sachverhalte: [{ ...VORSCHLAG.sachverhalte[0], eingangsmeldungen: [eingaenge[0].name, "unbekannt.json"] }],
+    };
+    const bund = structuredClone(ilka.find((x) => x.name.includes("_Bund_"))!.daten);
+    const att = new Attrappe([antwort(JSON.stringify(ohneT0)), antwort("Kurz.\n```json\n" + JSON.stringify(bund) + "\n```")]);
+    const { k } = await kontext(att, eingaenge);
+    k.lauf.auftrag.websuche = false;
+    const v = await stufe1(k);
+    expect(att.anfragen[0].system[0].text).toContain("Verdichtung von Eingangsmeldungen");
+    expect((att.anfragen[0].jsonSchema as any).properties.sachverhalte.items.properties.eingangsmeldungen.items.enum).toHaveLength(6);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T11:00");
+    expect(v.sachverhalte[0].eingangsmeldungen).toEqual([eingaenge[0].name]);
+    const e = await stufe2und3(k, v);
+    const s2 = att.anfragen[1];
+    expect(s2.werkzeuge).toBeUndefined();
+    expect(s2.system).toHaveLength(4);
+    expect(s2.system[3].text).toContain("Referenzraum wechselt");
+    expect(JSON.stringify(s2.nachrichten)).toContain("genau 1 Sachverhalt");
+    expect(e.meldung!.meldezeitpunkt).toBe("2026-10-14T11:00");
+    expect(k.lauf.ergebnis!.befunde.some((b) => /bestätigt waren 1/.test(b.text))).toBe(false);
   });
 });

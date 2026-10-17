@@ -78,6 +78,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [material, setMaterial] = useState<Material[]>([]);
   const [dateiFehler, setDateiFehler] = useState<string[]>([]);
   const [datenOk, setDatenOk] = useState(false);
+  /** null = automatisch (aus bei Verdichtung, sonst an) */
+  const [websucheWahl, setWebsucheWahl] = useState<boolean | null>(null);
   const [lauf, setLauf] = useState<Lauf | null>(null);
   const [vorschlag, setVorschlag] = useState<S1Vorschlag | null>(null);
   const [protokoll, setProtokoll] = useState<{ zeit: number; text: string }[]>([]);
@@ -174,7 +176,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setFehler(null);
     const l = neuerLauf(
       profil,
-      { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage },
+      { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage, websuche },
       material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash })),
     );
     setLauf(l);
@@ -232,6 +234,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setMaterial([]);
     setDateiFehler([]);
     setDatenOk(false);
+    setWebsucheWahl(null);
   };
 
   const protokollExport = (l: Lauf) => dateiAnbieten(JSON.stringify(l, null, 2), `KI-LEAD_Lauf_${l.id}.json`, "application/json");
@@ -253,6 +256,27 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   };
 
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
+  const eingaenge = material.filter((m) => m.art === "eingang");
+  const verdichtung = eingaenge.length > 0;
+  const websuche = websucheWahl ?? !verdichtung;
+  const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
+
+  const zusammenfuehren = (i: number) => {
+    if (!vorschlag || i < 1) return;
+    const a = vorschlag.sachverhalte[i - 1];
+    const b = vorschlag.sachverhalte[i];
+    const vereint = {
+      titel: [a.titel, b.titel].filter(Boolean).join(" / "),
+      ereignisarten: [...new Set([...a.ereignisarten, ...b.ereignisarten])],
+      sops: [...new Set([...a.sops, ...b.sops])],
+      begruendung: [a.begruendung, b.begruendung].filter(Boolean).join(" "),
+      ...(a.eingangsmeldungen || b.eingangsmeldungen
+        ? { eingangsmeldungen: [...new Set([...(a.eingangsmeldungen || []), ...(b.eingangsmeldungen || [])])] }
+        : {}),
+    };
+    setVorschlag({ ...vorschlag, sachverhalte: [...vorschlag.sachverhalte.slice(0, i - 1), vereint, ...vorschlag.sachverhalte.slice(i + 1)] });
+  };
+
   const kannStarten = !!schluessel && datenOk && (sachverhalt.trim() || stichworte.trim() || urls.gueltig.length || material.length);
 
   return (
@@ -383,6 +407,26 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <input type="text" value={prueffrage} onChange={(e) => setPrueffrage(e.target.value)} />
                 </label>
               </div>
+              {verdichtung && (
+                <div className="kasten kasten-info" role="status">
+                  <h3>Verdichtung</h3>
+                  <p>
+                    {eingaenge.length} Eingangsmeldung{eingaenge.length === 1 ? "" : "en"} anderer Stellen erkannt. Die KI verdichtet sie zu einer eigenen
+                    Meldung mit möglichst wenigen Sachverhalten (SOP-LEAD A.7). Diese Funktion ist vorläufig; die vollständige Verdichtung folgt mit Meilenstein
+                    4.
+                  </p>
+                </div>
+              )}
+              <label className="schalter">
+                <input type="checkbox" checked={websuche} onChange={(e) => setWebsucheWahl(e.target.checked)} />
+                <span>
+                  Websuche und Seitenabruf erlauben
+                  <span className="hinweis">
+                    {" "}
+                    {verdichtung ? "Bei Verdichtung standardmäßig aus, z. B. für fiktive Übungslagen." : "Ohne Haken arbeitet die KI nur mit dem Material."}
+                  </span>
+                </span>
+              </label>
               <label className="bestaetigung">
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
@@ -391,8 +435,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </span>
               </label>
               <p className="hinweis">
-                S1 mit {modellFuer("vorverarbeitung", einstellungen, profil)}, S2 mit {modellFuer("erfassung", einstellungen, profil)} und bis zu{" "}
-                {einstellungen.websucheMax} Websuchen. Ein Lauf kostet je nach Umfang meist einige Cent bis etwa einen US-Dollar.
+                S1 mit {modellFuer("vorverarbeitung", einstellungen, profil)}, S2 mit {modellFuer("erfassung", einstellungen, profil)}
+                {websuche ? ` und bis zu ${einstellungen.websucheMax} Websuchen` : " ohne Websuche"}. Ein Lauf kostet je nach Umfang meist einige Cent bis etwa
+                einen US-Dollar.
               </p>
               <div className="schritt-nav">
                 <span />
@@ -465,6 +510,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <input type="date" value={vorschlag.stichtag} onChange={(e) => setVorschlag({ ...vorschlag, stichtag: e.target.value })} />
                 </label>
                 <label className="feld">
+                  <span className="feld-label">Meldezeitpunkt (t0)</span>
+                  <input
+                    type="datetime-local"
+                    value={vorschlag.meldezeitpunkt || ""}
+                    onChange={(e) => setVorschlag({ ...vorschlag, meldezeitpunkt: e.target.value })}
+                  />
+                  <span className="hinweis">Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.</span>
+                </label>
+                <label className="feld">
                   <span className="feld-label">Betrachtungshorizont</span>
                   <input type="text" value={vorschlag.horizont} onChange={(e) => setVorschlag({ ...vorschlag, horizont: e.target.value })} />
                 </label>
@@ -478,6 +532,19 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <input type="text" value={vorschlag.prueffrage} onChange={(e) => setVorschlag({ ...vorschlag, prueffrage: e.target.value })} />
               </label>
 
+              {verdichtung && vorschlag.sachverhalte.length > 3 && (
+                <div className="kasten kasten-hinweis" role="status">
+                  <p>
+                    {vorschlag.sachverhalte.length} Sachverhalte bei einer Verdichtung: Prüfe, ob mehrere Meldungen dasselbe Ereignis beschreiben und sich
+                    zusammenführen lassen (SOP-LEAD A.7.1).
+                  </p>
+                </div>
+              )}
+              {nichtZugeordnet.length > 0 && (
+                <div className="kasten kasten-hinweis" role="status">
+                  <p>Keinem Sachverhalt zugeordnet: {nichtZugeordnet.map((m) => m.eingang?.land || m.name).join(", ")}.</p>
+                </div>
+              )}
               <div className="liste">
                 {vorschlag.sachverhalte.map((s, i) => (
                   <div key={i} className="element">
@@ -485,21 +552,54 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       <h3>
                         <span className="element-nr">Sachverhalt {i + 1}</span>
                       </h3>
-                      {vorschlag.sachverhalte.length > 1 && (
-                        <button
-                          type="button"
-                          className="knopf leise klein"
-                          onClick={() => setVorschlag({ ...vorschlag, sachverhalte: vorschlag.sachverhalte.filter((_, j) => j !== i) })}
-                        >
-                          Entfernen
-                        </button>
-                      )}
+                      <div className="aktionen">
+                        {i > 0 && (
+                          <button type="button" className="knopf leise klein" onClick={() => zusammenfuehren(i)}>
+                            Mit Sachverhalt {i} zusammenführen
+                          </button>
+                        )}
+                        {vorschlag.sachverhalte.length > 1 && (
+                          <button
+                            type="button"
+                            className="knopf leise klein"
+                            onClick={() => setVorschlag({ ...vorschlag, sachverhalte: vorschlag.sachverhalte.filter((_, j) => j !== i) })}
+                          >
+                            Entfernen
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <label className="feld">
                       <span className="feld-label">Titel</span>
                       <input type="text" value={s.titel} onChange={(e) => setzeSv(i, { titel: e.target.value })} />
                     </label>
                     {s.begruendung && <p className="hinweis">Begründung S1: {s.begruendung}</p>}
+                    {verdichtung && (
+                      <fieldset className="feld">
+                        <legend className="feld-label">Eingangsmeldungen</legend>
+                        <div className="mehrfach">
+                          {eingaenge.map((m) => {
+                            const an = !!s.eingangsmeldungen?.includes(m.name);
+                            return (
+                              <label key={m.id} className={an ? "chip an" : "chip"} title={m.name}>
+                                <input
+                                  type="checkbox"
+                                  checked={an}
+                                  onChange={() =>
+                                    setzeSv(i, {
+                                      eingangsmeldungen: an
+                                        ? (s.eingangsmeldungen || []).filter((x) => x !== m.name)
+                                        : [...(s.eingangsmeldungen || []), m.name],
+                                    })
+                                  }
+                                />
+                                {[m.eingang?.land, m.eingang?.zeitpunkt?.slice(11, 16)].filter(Boolean).join(" ") || m.name}
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </fieldset>
+                    )}
                     <fieldset className="feld">
                       <legend className="feld-label">Ereignisarten</legend>
                       <div className="mehrfach">
@@ -541,7 +641,10 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </button>
               </div>
               <p className="hinweis">
-                Kosten S1: {formatUsd(lauf?.kostenUsd)}. S2 recherchiert mit bis zu {einstellungen.websucheMax} Websuchen.
+                Kosten S1: {formatUsd(lauf?.kostenUsd)}.{" "}
+                {lauf?.auftrag.websuche === false
+                  ? "S2 arbeitet ohne Websuche nur mit dem Material."
+                  : `S2 recherchiert mit bis zu ${einstellungen.websucheMax} Websuchen.`}
               </p>
               <div className="schritt-nav">
                 <button type="button" className="knopf leise" onClick={() => setPhase("auftrag")}>

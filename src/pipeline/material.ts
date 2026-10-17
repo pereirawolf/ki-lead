@@ -6,7 +6,8 @@ import JSZip from "jszip";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
 
-export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "docx" | "pdf";
+/** meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung) */
+export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "eingang" | "docx" | "pdf";
 
 export interface Material {
   id: string;
@@ -19,6 +20,7 @@ export interface Material {
   /** Nur PDF: Base64-Inhalt */
   base64?: string;
   meldung?: Meldung;
+  eingang?: EingangsInfo;
   hinweis?: string;
 }
 
@@ -78,6 +80,36 @@ export function istMeldung(obj: unknown, profil: Profil): boolean {
   return bekannt.includes(kennung);
 }
 
+export interface EingangsInfo {
+  stelle: string;
+  land: string;
+  zeitpunkt: string;
+  sachverhalte: number;
+  schema: string;
+}
+
+/**
+ * Erkennt Meldungen auch fremder Schemata an ihrer Grundform: Liste von Sachverhalten plus
+ * meldende Stelle oder Land. So lassen sich Meldungen anderer Ebenen verdichten (rekursives Prinzip).
+ */
+export function eingangsInfo(obj: unknown, profil: Profil): EingangsInfo | null {
+  if (!obj || typeof obj !== "object" || Array.isArray(obj)) return null;
+  const o = obj as Record<string, any>;
+  const r = profil.ui.rollen;
+  const svs = o[r.sachverhalte] ?? o.sachverhalte;
+  if (!Array.isArray(svs) || !svs.length || typeof svs[0] !== "object") return null;
+  const stelle = String(o[r.meldende_stelle || "meldende_stelle"] ?? o.meldende_stelle ?? "");
+  const land = String(o[r.land || "land"] ?? o.land ?? "");
+  if (!stelle && !land) return null;
+  return {
+    stelle,
+    land,
+    zeitpunkt: String(o[r.meldezeitpunkt || "meldezeitpunkt"] ?? o.meldezeitpunkt ?? ""),
+    sachverhalte: svs.length,
+    schema: String(o[r.schema_feld] ?? o.schema ?? ""),
+  };
+}
+
 function kuerzen(text: string): { text: string; hinweis?: string } {
   if (text.length <= MAX_TEXT_ZEICHEN) return { text };
   return { text: text.slice(0, MAX_TEXT_ZEICHEN), hinweis: `Auf ${MAX_TEXT_ZEICHEN.toLocaleString("de-DE")} Zeichen gekürzt.` };
@@ -105,8 +137,28 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
     } catch {
       throw new Error(`${name}: kein gültiges JSON.`);
     }
-    if (istMeldung(obj, profil)) {
-      return { ...basis, art: "meldung", meldung: obj as Meldung, text: JSON.stringify(obj, null, 2), hinweis: "Als Vormeldung erkannt (Fortschreibung)." };
+    const info = eingangsInfo(obj, profil);
+    const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
+    if (istMeldung(obj, profil) && (!info || !info.stelle || info.stelle === eigeneStelle)) {
+      return {
+        ...basis,
+        art: "meldung",
+        meldung: obj as Meldung,
+        text: JSON.stringify(obj, null, 2),
+        hinweis: "Als eigene Vormeldung erkannt (Fortschreibung).",
+      };
+    }
+    if (info) {
+      const wer = [info.land, info.stelle].filter(Boolean).join(", ");
+      const wann = info.zeitpunkt ? `, Stand ${info.zeitpunkt.replace("T", " ")}` : "";
+      return {
+        ...basis,
+        art: "eingang",
+        meldung: obj as Meldung,
+        eingang: info,
+        text: JSON.stringify(obj, null, 2),
+        hinweis: `Eingangsmeldung: ${wer}${wann}, ${info.sachverhalte} Sachverhalt${info.sachverhalte === 1 ? "" : "e"}.`,
+      };
     }
     return { ...basis, art: "json", ...kuerzen(JSON.stringify(obj, null, 2)) };
   }
@@ -149,8 +201,11 @@ export function materialBloecke(material: Material[], urls: string[], stichworte
   if (urls.length) teile.push(`<urls hinweis="Bitte abrufen und auswerten">\n${urls.join("\n")}\n</urls>`);
   for (const m of material) {
     if (m.art === "pdf") continue;
-    const art = m.art === "meldung" ? "vormeldung" : m.art;
-    teile.push(`<material name="${escapeAttr(m.name)}" art="${art}">\n${m.text || ""}\n</material>`);
+    const art = m.art === "meldung" ? "vormeldung" : m.art === "eingang" ? "eingangsmeldung" : m.art;
+    const zusatz = m.eingang
+      ? ` stelle="${escapeAttr([m.eingang.land, m.eingang.stelle].filter(Boolean).join(", "))}" meldezeitpunkt="${escapeAttr(m.eingang.zeitpunkt)}"`
+      : "";
+    teile.push(`<material name="${escapeAttr(m.name)}" art="${art}"${zusatz}>\n${m.text || ""}\n</material>`);
   }
   if (teile.length) bloecke.push({ type: "text", text: teile.join("\n\n") });
   for (const m of material) {
@@ -165,6 +220,27 @@ export function materialUebersicht(material: Material[], urls: string[], stichwo
   const t: string[] = [];
   if (stichworte.trim()) t.push("Stichworte der anfragenden Person");
   for (const u of urls) t.push(u);
-  for (const m of material) t.push(`${m.name} (${m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()})`);
+  for (const m of material)
+    t.push(
+      m.eingang
+        ? `Eingangsmeldung ${[m.eingang.land, m.eingang.stelle].filter(Boolean).join(", ")}${m.eingang.zeitpunkt ? ` (${m.eingang.zeitpunkt.replace("T", " ")})` : ""}`
+        : `${m.name} (${m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()})`,
+    );
   return t.length ? t.join("; ") : "keine; eigene Recherche in offenen Quellen";
+}
+
+/** Jüngster Meldezeitpunkt der Eingangsmeldungen (JJJJ-MM-TTThh:mm) oder leer. */
+export function juengsterEingang(material: Material[]): string {
+  return (
+    material
+      .map((m) => m.eingang?.zeitpunkt || "")
+      .filter((z) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(z))
+      .map((z) => z.slice(0, 16))
+      .sort()
+      .pop() || ""
+  );
+}
+
+export function istVerdichtung(material: Material[]): boolean {
+  return material.some((m) => m.art === "eingang");
 }

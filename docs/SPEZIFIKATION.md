@@ -256,7 +256,7 @@ privat/        eigene Profile und Testdaten, nicht eingecheckt
 | **M1** | Web-Kern: Profil laden, Formular aus Schema und UI, Prüfung, Import/Export – ohne KI | Fiktiven Datensatz „Ilka“ (sieben Meldungen) laden, ohne Befund prüfen und unverändert wieder exportieren; ein zweites Profil mit anderem Schema darstellen |
 | **M2** | KI-Pipeline Modus A (S0–S4), Anthropic | Drei fiktive Lagen erzeugen schemakonforme Entwürfe mit vollständigem Laufprotokoll |
 | **M3** | Modul Lagebild: Aggregation und Redaktionscheck | Meldestatus, Sachverhalte, Radar je Sachverhalt, Redaktionscheck und Exporte |
-| **M4** | KI-Verdichtung Modus B; OpenAI-Anbieter | Verdichtung der sechs fiktiven Ländermeldungen „Ilka“ zu einer Meldung der Koordinierungsstelle; Vergleich mit der vorhandenen Redaktionsfassung |
+| **M4** | KI-Verdichtung Modus B (vorläufige Fassung seit M2: Erkennung von Eingangsmeldungen, Gliederung nach Sachverhalten mit Zuordnung, t0, Zusatzanweisung A.7); OpenAI-Anbieter | Verdichtung der sechs fiktiven Ländermeldungen „Ilka“ zu einer Meldung der Koordinierungsstelle; Vergleich mit der vorhandenen Redaktionsfassung |
 | **M5** | Capacitor-Builds: iOS (TestFlight), Android (APK), PWA (pereirawolf.de) | Installation und Offline-Betrieb auf iPad, iPhone und Android-Emulator |
 | **M6** | Release 0.1 mit Zenodo-DOI (GitHub-Integration, Metadaten aus CITATION.cff); Erprobung im Testkreis | Release veröffentlicht, Rückmeldungen ausgewertet |
 

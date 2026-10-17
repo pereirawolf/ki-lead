@@ -9,6 +9,8 @@ Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lag
 3. **S2 Recherche und Entwurf:** Ein mittleres Modell recherchiert mit Websuche und Seitenabruf nach den gewählten SOPs und schreibt den Entwurf.
 4. **S3 Prüfung:** Die App prüft gegen das Schema und lässt Fehler höchstens zweimal ohne neue Recherche korrigieren. Der Entwurf geht in die Meldungsmaske; Freigabe bleibt Sache der Person.
 
+**Verdichtung (vorläufig):** Erkennt die App unter den Dateien Meldungen anderer Stellen, auch in fremdem Schema, verdichtet sie diese zu einer eigenen Meldung: S1 gliedert nach Sachverhalten statt nach Stellen, ordnet die Eingangsmeldungen zu und schlägt den Meldezeitpunkt t0 vor; S2 kodiert das Radar für den eigenen Referenzraum neu (SOP-LEAD A.7). Die Websuche ist dabei standardmäßig aus. Die vollständige Verdichtung folgt mit Meilenstein 4.
+
 **Management Summary:** Im Schritt „Prüfen & Exportieren“ formuliert die KI aus der fertigen Meldung je Sachverhalt kurze Absätze für die Leitung (Lage & Ereignis, Risiken & Auswirkungen, Maßnahmen & Handlungsempfehlungen, Abhängigkeiten & Interdependenzen), ohne Quellenverweise und ohne neue Recherche. Die Abschnitte folgen den Analysefeldern des Profils, die Arbeitsanweisung steht in `anweisung-kurzfassung.md`. Ohne KI gibt es weiterhin einen Feldauszug als Klartext.
 
 Jeder Lauf wird mit Prompts, Antworten, Token, Kosten und Dauer protokolliert und lässt sich als JSON exportieren. Für die KI-Erfassung braucht man einen eigenen API-Schlüssel von Anthropic (Einstellungen). Er bleibt im Browser des Geräts und geht nur an api.anthropic.com.

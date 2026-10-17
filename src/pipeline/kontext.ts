@@ -78,7 +78,8 @@ export function auftragAusBestaetigung(b: S1Vorschlag, profil: Profil, ausgangsq
       const sops = fachSops(profil)
         .filter((x) => s.sops.includes(x.id))
         .map(sopKennung);
-      return `Sachverhalt ${i + 1} „${s.titel}“: ${s.ereignisarten.join(", ") || "offen"}${sops.length ? ` (${sops.join(", ")})` : ""}`;
+      const eingang = s.eingangsmeldungen?.length ? `; Eingangsmeldungen: ${s.eingangsmeldungen.join(", ")}` : "";
+      return `Sachverhalt ${i + 1} „${s.titel}“: ${s.ereignisarten.join(", ") || "offen"}${sops.length ? ` (${sops.join(", ")})` : ""}${eingang}`;
     })
     .join("; ");
   return {
@@ -110,17 +111,22 @@ export function anweisungErfassung(profil: Profil, auftrag: AuftragsText, jetzt:
 }
 
 /** JSON-Schema für die strukturierte Antwort der Stufe S1 (nur von der API unterstützte Schlüsselwörter). */
-export function s1Schema(profil: Profil): object {
+export function s1Schema(profil: Profil, eingaenge: string[] = []): object {
   const arten = ereignisarten(profil);
   const sops = fachSops(profil).map((s) => s.id);
   const liste = (werte: string[]) => (werte.length ? { type: "array", items: { type: "string", enum: werte } } : { type: "array", items: { type: "string" } });
   return {
     type: "object",
     additionalProperties: false,
-    required: ["gegenstand", "stichtag", "referenzbezug", "horizont", "sachverhalte", "prueffrage", "hinweise"],
+    required: ["gegenstand", "stichtag", "meldezeitpunkt", "referenzbezug", "horizont", "sachverhalte", "prueffrage", "hinweise"],
     properties: {
       gegenstand: { type: "string", description: "Konkreter Sachverhalt und Erkenntnisinteresse in ein bis drei Sätzen" },
       stichtag: { type: "string", description: "Stichtag im Format JJJJ-MM-TT" },
+      meldezeitpunkt: {
+        type: "string",
+        description:
+          "Meldezeitpunkt t0 der eigenen Meldung im Format JJJJ-MM-TTThh:mm. Liegt das Material zeitlich geschlossen deutlich vor dem Stichtag (Übung, Rückblick, Eingangsmeldungen eines Tages), wähle einen Zeitpunkt kurz nach dem jüngsten Datenstand des Materials, nicht den aktuellen Zeitpunkt.",
+      },
       referenzbezug: { type: "string", description: "Wirkungs- bzw. Relevanzbezug zum Referenzraum" },
       horizont: { type: "string", description: "Betrachtungshorizont" },
       sachverhalte: {
@@ -129,11 +135,14 @@ export function s1Schema(profil: Profil): object {
         items: {
           type: "object",
           additionalProperties: false,
-          required: ["titel", "ereignisarten", "sops", "begruendung"],
+          required: ["titel", "ereignisarten", "sops", "begruendung", ...(eingaenge.length ? ["eingangsmeldungen"] : [])],
           properties: {
             titel: { type: "string" },
             ereignisarten: liste(arten),
             sops: liste(sops),
+            ...(eingaenge.length
+              ? { eingangsmeldungen: { ...liste(eingaenge), description: "Dateinamen der Eingangsmeldungen, die in diesen Sachverhalt eingehen" } }
+              : {}),
             begruendung: { type: "string", description: "Kurze Begründung der Zuordnung, Mischlage und Abgrenzung" },
           },
         },
@@ -144,7 +153,17 @@ export function s1Schema(profil: Profil): object {
   };
 }
 
-export function s1System(profil: Profil): string {
+export const VERDICHTUNG_S1 = `# Verdichtung von Eingangsmeldungen (SOP-LEAD A.7)
+
+Das Material enthält Meldungen anderer Stellen (Eingangsmeldungen). Daraus entsteht eine eigene Meldung für den eigenen Referenzraum. Gliedere nach Sachverhalten, nicht nach meldenden Stellen:
+
+- Beschreiben mehrere Meldungen dasselbe Ereignis oder dieselbe Ursache-Folge-Lage (z. B. ein Sturmtief mit Stromausfällen in mehreren Ländern), ist das **ein** Sachverhalt. Die Länder oder Stellen erscheinen darin als Teilräume (A.7.1).
+- Einen weiteren Sachverhalt bildest du nur für eine eigenständige Lage mit eigener Wirkungskette und eigener Relevanz für den Referenzraum, nicht für jede meldende Stelle.
+- Ziel ist die kleinste fachlich vertretbare Zahl von Sachverhalten, in der Regel einer bis drei. Begründe jede Trennung.
+- Ordne jedem Sachverhalt die Eingangsmeldungen zu, die in ihn eingehen. Jede Eingangsmeldung muss mindestens einem Sachverhalt zugeordnet sein.
+- Der Meldezeitpunkt t0 liegt kurz nach dem jüngsten Meldezeitpunkt der Eingangsmeldungen, sofern der Auftrag nichts anderes vorgibt.`;
+
+export function s1System(profil: Profil, verdichtung = false): string {
   const m = profil.manifest;
   const katalog = fachSops(profil)
     .map((s) => `- ${s.id}: ${sopKennung(s)}${s.art_vorschlag?.length ? ` – Ereignisart(en): ${s.art_vorschlag.join(", ")}` : ""}`)
@@ -160,7 +179,7 @@ Katalog der Ereignisarten: ${ereignisarten(profil).join(" · ") || "frei"}
 SOP-Katalog (Kennung: Bezeichnung):
 ${katalog || "keine SOPs im Profil"}
 
-Antworte ausschließlich im vorgegebenen JSON-Format. Schreibe auf Deutsch.
+Antworte ausschließlich im vorgegebenen JSON-Format. Schreibe auf Deutsch.${verdichtung ? `\n\n${VERDICHTUNG_S1}` : ""}
 
 ${gemeinsameSops(profil)
   .map((s) => `# ${s.titel}\n\n${s.text}`)
@@ -178,4 +197,24 @@ export function anwendungsbereich(text: string): string {
   const m = text.match(/^###\s+1\.[^\n]*\n([\s\S]*?)(?=^###\s)/m);
   if (m) return m[1].trim();
   return text.slice(0, 1500);
+}
+
+export const VERDICHTUNG_S2 = `## Zusatz der App: Verdichtung von Eingangsmeldungen (Modus B, vorläufig)
+
+Das Eingangsmaterial enthält Meldungen anderer Stellen. Du verdichtest sie zu einer eigenen Meldung der meldenden Stelle für ihren Referenzraum. Es gilt SOP-LEAD Teil A.7, zusätzlich:
+
+1. **Gliederung:** Die bestätigte Gliederung ist verbindlich: genau so viele Sachverhalte, in dieser Reihenfolge, mit den zugeordneten Eingangsmeldungen. Länder oder Stellen erscheinen innerhalb eines Sachverhalts als Teilräume, nicht als eigene Sachverhalte.
+2. **Referenzraum wechselt:** Kodiere das Lagenradar für den eigenen Referenzraum neu. Werte der Eingangsmeldungen übernimmst du nicht und mittelst sie nicht; es gibt keinen Gesamtscore. Die Werte der Eingänge dürfen als Belege für die eigene Kodierung dienen.
+3. **Bezugszeitpunkt:** t0 ist der vorgegebene Meldezeitpunkt. Die Eingangsmeldungen sind der Ist-Stand zu ihrem jeweiligen Meldezeitpunkt; liegt dieser vor t0, nennst du den Datenstand, statt die Lage für offen zu erklären.
+4. **Zusammenhang (A.7.1):** Denselben Befund aus mehreren Meldungen stellst du einmal dar. Die Zahl der Meldungen belegt keine Verschärfung.
+5. **Abweichende Bewertungen (A.7.2)** bleiben nebeneinander stehen, mit Urheber und tragendem Grund, im Kennsatz „Abweichende Bewertung:“.
+6. **Quellen:** Jede Eingangsmeldung ist eine Quelle der Kategorie A im Quellenverzeichnis (meldende Stelle, Meldezeitpunkt, Hinweis „Eingangsmeldung“). Primärquellen der Eingänge führst du nur, wenn du sie selbst geprüft hast.
+7. **Zeitkritische Weitergabe (A.7.3):** Kennsätze „Handlungsrelevant bis:“ der Eingänge, die vor der nächsten eigenen Ausgabe liegen, hebst du im Bewertungstext hervor.`;
+
+export function verdichtungsAnweisung(profil: Profil): string {
+  const pfad = profil.manifest.anweisungen?.verdichtung;
+  const roh = (pfad && profil.dateien[pfad]) || VERDICHTUNG_S2;
+  return ersetzePlatzhalter(roh, {
+    profil: { kurzname: profil.manifest.variablen.meldende_stelle, ...profil.manifest.variablen, referenzraum: profil.manifest.referenzraum },
+  }).text;
 }

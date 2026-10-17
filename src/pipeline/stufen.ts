@@ -11,9 +11,10 @@ import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
-import { anweisungErfassung, auftragAusBestaetigung, fachSops, profilGrundlagen, s1Schema, s1System, sopBlock } from "./kontext";
+import { anweisungErfassung, auftragAusBestaetigung, fachSops, profilGrundlagen, s1Schema, s1System, sopBlock, verdichtungsAnweisung } from "./kontext";
 import { kostenSumme, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
-import { materialBloecke, materialUebersicht, type Material } from "./material";
+import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
+import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
 
 export const MAX_REPARATUREN = 2;
@@ -92,9 +93,12 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
     modell: modellFuer("vorverarbeitung", k.einstellungen, k.profil),
     aufwand: k.einstellungen.aufwand.vorverarbeitung,
     maxTokens: 8000,
-    system: [{ text: s1System(k.profil), cache: true }],
+    system: [{ text: s1System(k.profil, istVerdichtung(k.material)), cache: true }],
     nachrichten: [{ role: "user", content: inhalt }],
-    jsonSchema: s1Schema(k.profil),
+    jsonSchema: s1Schema(
+      k.profil,
+      k.material.filter((m) => m.art === "eingang").map((m) => m.name),
+    ),
   });
   const z = zerlegeAntwort(a.text);
   if (!z.json || typeof z.json !== "object") throw new Error(`Stufe S1 lieferte kein auswertbares Ergebnis. ${z.fehler || ""}`.trim());
@@ -107,9 +111,14 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
 
 function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const ids = new Set(fachSops(k.profil).map((s) => s.id));
+  const eingaenge = new Set(k.material.filter((m) => m.art === "eingang").map((m) => m.name));
+  const t0 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "")
+    ? v.meldezeitpunkt!.slice(0, 16)
+    : juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
   return {
     gegenstand: String(v.gegenstand || ""),
     stichtag: /^\d{4}-\d{2}-\d{2}$/.test(v.stichtag || "") ? v.stichtag : k.lauf.auftrag.stichtag,
+    meldezeitpunkt: t0,
     referenzbezug: String(v.referenzbezug || ""),
     horizont: String(v.horizont || ""),
     sachverhalte: (Array.isArray(v.sachverhalte) && v.sachverhalte.length ? v.sachverhalte : [{ titel: "", ereignisarten: [], sops: [], begruendung: "" }]).map(
@@ -118,6 +127,9 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
         ereignisarten: Array.isArray(s.ereignisarten) ? s.ereignisarten.map(String) : [],
         sops: Array.isArray(s.sops) ? s.sops.map(String).filter((x) => ids.has(x)) : [],
         begruendung: String(s.begruendung || ""),
+        ...(eingaenge.size
+          ? { eingangsmeldungen: Array.isArray(s.eingangsmeldungen) ? s.eingangsmeldungen.map(String).filter((x) => eingaenge.has(x)) : [] }
+          : {}),
       }),
     ),
     prueffrage: String(v.prueffrage || ""),
@@ -139,7 +151,9 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string): Meldun
   for (const [key, wert] of Object.entries(p.manifest.variablen)) {
     if (key in props && (d[key] === undefined || d[key] === "")) d[key] = wert;
   }
-  if (r.meldezeitpunkt && !d[r.meldezeitpunkt]) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const t0 = k.lauf.bestaetigt?.meldezeitpunkt;
+  if (r.meldezeitpunkt && t0) d[r.meldezeitpunkt] = t0;
+  else if (r.meldezeitpunkt && !d[r.meldezeitpunkt]) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
   if (r.entstehung_feld && props[r.entstehung_feld]) {
     const def = aufloesen(props[r.entstehung_feld], p.schema);
     const erlaubt = def?.properties || {};
@@ -187,28 +201,44 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const sopIds = [...new Set(bestaetigt.sachverhalte.flatMap((s) => s.sops))];
   const ausgang = materialUebersicht(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte);
   const auftrag = auftragAusBestaetigung(bestaetigt, p, ausgang);
-  const jetzt = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const t0 = bestaetigt.meldezeitpunkt || jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
   const erfassungsModell = modellFuer("erfassung", e, p);
+  const verdichtung = istVerdichtung(k.material);
+  const recherche = k.lauf.auftrag.websuche !== false;
+  const n = bestaetigt.sachverhalte.length;
 
   const inhalt = [
     ...materialBloecke(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte),
     {
       type: "text",
-      text: `Erstelle jetzt die Meldung nach der Arbeitsanweisung. Bestätigte Gliederung: ${auftrag.ereignisarten}. Stichtag: ${auftrag.stichtag}.${
-        k.material.some((m) => m.art === "meldung") ? " Eine Vormeldung liegt bei; schreibe sie nach SOP-LEAD A.8 fort." : ""
-      }`,
+      text: [
+        `Erstelle jetzt die Meldung nach der Arbeitsanweisung${verdichtung ? " und dem Zusatz zur Verdichtung" : ""}.`,
+        `Bestätigte Gliederung (verbindlich, genau ${n} Sachverhalt${n === 1 ? "" : "e"} in dieser Reihenfolge): ${auftrag.ereignisarten}.`,
+        `Meldezeitpunkt t0: ${t0.replace("T", " ")} (${p.manifest.variablen.zeitzone || "Europe/Berlin"}). Stichtag: ${auftrag.stichtag}.`,
+        k.material.some((m) => m.art === "meldung") ? "Eine eigene Vormeldung liegt bei; schreibe sie nach SOP-LEAD A.8 fort." : "",
+        recherche ? "" : "Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet; arbeite nur mit dem Material.",
+      ]
+        .filter(Boolean)
+        .join("\n"),
     },
   ];
   const a = await aufrufen(k, "S2 Recherche und Entwurf", {
     modell: erfassungsModell,
     aufwand: e.aufwand.erfassung,
     maxTokens: e.maxTokensErfassung,
-    system: [{ text: profilGrundlagen(p), cache: true }, { text: sopBlock(p, sopIds), cache: true }, { text: anweisungErfassung(p, auftrag, jetzt) }],
+    system: [
+      { text: profilGrundlagen(p), cache: true },
+      { text: sopBlock(p, sopIds), cache: true },
+      { text: anweisungErfassung(p, auftrag, t0) },
+      ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
+    ],
     nachrichten: [{ role: "user", content: inhalt }],
-    werkzeuge: {
-      websuche: e.websucheMax > 0 ? { maxUses: e.websucheMax, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
-      abruf: e.abrufMax > 0 ? { maxUses: e.abrufMax, maxTokens: e.abrufMaxTokens || undefined } : undefined,
-    },
+    werkzeuge: !recherche
+      ? undefined
+      : {
+          websuche: e.websucheMax > 0 ? { maxUses: e.websucheMax, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
+          abruf: e.abrufMax > 0 ? { maxUses: e.abrufMax, maxTokens: e.abrufMaxTokens || undefined } : undefined,
+        },
   });
 
   let z = zerlegeAntwort(a.text);
@@ -259,6 +289,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   }
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
+  const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
+  if (meldung && svAnzahl !== n)
+    befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });
   k.lauf.ergebnis = meldung
     ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, abrufFehler: a.abrufFehler, schemakonform: schemaBefunde.length === 0 }
     : undefined;
