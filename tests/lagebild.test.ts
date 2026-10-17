@@ -191,7 +191,9 @@ describe("Lagebild: Ausgabe", () => {
     const boese = { ...sv, bezeichnung: '<img src=x onerror="alert(1)">' };
     expect(kopiervorlageHtml(boese, p)).not.toContain("<img src=x");
     // Ohne Radarbild bleibt die Legende
-    expect(kopiervorlageHtml(sv, p)).toMatch(/D1: \d/);
+    const ohneBild = kopiervorlageHtml(sv, p);
+    expect(ohneBild).toMatch(/D1 Räumliche Auswirkung \/ Impact-Raum: \d – [^<]+<br>D2 Personelle Direktbetroffenheit: /);
+    expect(ohneBild).not.toMatch(/D1: \d/);
   });
 
   test("schlankes Musterprofil ohne Tendenz und Land", () => {
@@ -211,4 +213,16 @@ describe("Lagebild: Ausgabe", () => {
     expect(rohtabelle(e, muster)).toHaveLength(2);
     expect(kopiervorlageHtml(alleSachverhalte(e, muster)[0], muster)).toContain("Brand Lagerhalle");
   });
+});
+
+test("Radarwerte als Klartext mit Achsen- und Stufenbezeichnung", async () => {
+  const { radarZeilen } = await import("../src/kern/ui");
+  const def = {
+    max: 2,
+    achsen: [
+      { key: "d1", label: "D1 Raum", stufen: ["lokal", "regional", "landesweit"] },
+      { key: "d2", label: "D2 Personen", stufen: ["wenige", "viele", "sehr viele"] },
+    ],
+  };
+  expect(radarZeilen(def, { d1: 2, d2: null })).toEqual(["D1 Raum: 2 – landesweit", "D2 Personen: offen"]);
 });

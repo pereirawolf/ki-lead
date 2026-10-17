@@ -2,7 +2,7 @@
 
 import { aufloesen } from "../kern/schema";
 import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, radarFuer } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
 import type { Profil, RadarDef } from "../kern/typen";
@@ -161,12 +161,11 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     const def = radarFuer(ui, f);
     if (def) {
       const wert = holeWert(s.sv, r.sv_radar);
-      const kurz = (l: string) => l.match(/^(D\d+)\b/)?.[1] ?? l;
       const gesetzt = def.achsen.some((a) => Number.isInteger(wert?.[a.key]));
-      const legende = def.achsen.map((a) => `${html(kurz(a.label))}: ${Number.isInteger(wert?.[a.key]) ? wert[a.key] : "–"}`).join(" &nbsp;·&nbsp; ");
+      const legende = radarZeilen(def, wert).map(html).join("<br>");
       const bild = gesetzt && radarBild ? radarBild(def, wert) : null;
       const inhalt = gesetzt
-        ? `${bild ? `<img src="${bild}" width="170" height="170" style="display:block;margin-bottom:4px;" alt="${html(f.label || "Radar")}">` : ""}<span style="font-size:8pt;">${legende}</span>`
+        ? `${bild ? `<img src="${bild}" width="170" height="170" style="display:block;margin-bottom:4px;" alt="${html(f.label || "Radar")}">` : ""}<span style="font-size:8.5pt;">${legende}</span>`
         : "keine Angaben";
       zeile(f.label || "Radar", inhalt);
     }

@@ -4,7 +4,7 @@ import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { aufloesen } from "../kern/schema";
 import { holeWert, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import type { Meldung, Profil } from "../kern/typen";
@@ -20,12 +20,7 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: st
   const label = (typeof segs[1] === "number" ? teile.slice(1) : teile).join(" › ") || bezeichnung(profil.ui, gen);
   if (f.widget === "radar") {
     const radar = radarFuer(profil.ui, f);
-    const text = (radar?.achsen || [])
-      .map((a) => {
-        const v = wert?.[a.key];
-        return `${a.label}: ${Number.isInteger(v) ? `${v} – ${a.stufen[v] ?? ""}` : "offen"}`;
-      })
-      .join("\n");
+    const text = radar ? radarZeilen(radar, wert).join("\n") : "";
     out.push([label, text]);
     return;
   }

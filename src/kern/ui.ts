@@ -56,6 +56,14 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
   return teile.join(" › ");
 }
 
+/** Radarwerte als Klartext je Achse: „D1 Räumliche Auswirkung: 4 – landesweit“, offene Achsen als „offen“. */
+export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undefined): string[] {
+  return def.achsen.map((a) => {
+    const v = wert?.[a.key];
+    return `${a.label}: ${Number.isInteger(v) ? `${v}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}`;
+  });
+}
+
 export function istAusgeblendet(ui: UiKonfig, feld: string): boolean {
   return (ui.ausblenden || []).includes(feld);
 }

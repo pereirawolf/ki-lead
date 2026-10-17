@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, radarFuer } from "../kern/ui";
+import { bezeichnung, feldUi, radarFuer, radarZeilen } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE, jetztLokal } from "../kern/ausgabe";
 import { kennsatz } from "../kern/kennsaetze";
@@ -630,10 +630,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                         <div className="lb-karte-inhalt lb-radar">
                           {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={170} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}
                           <ul className="lb-achsen">
-                            {radarDef.achsen.map((a) => (
-                              <li key={a.key}>
-                                {a.label}: <strong>{Number.isInteger(wert?.[a.key]) ? `${wert[a.key]} (${a.stufen[wert[a.key]] ?? ""})` : "offen"}</strong>
-                              </li>
+                            {radarZeilen(radarDef, wert).map((z) => (
+                              <li key={z}>{z}</li>
                             ))}
                           </ul>
                         </div>
