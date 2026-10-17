@@ -182,7 +182,7 @@ Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-
 
 Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufprotokoll gespeichert (PDF-Inhalte nur als Verweis). Schlägt S2 fehl, lässt sich S2 mit dem bestätigten Gegenstand erneut starten.
 
-**Umsetzung M2 (Stand 17.10.2026):** Anthropic Messages API mit Streaming (SSE), Fortsetzung bei `pause_turn`, Wiederholung bei Überlastung, Websuche `web_search_20250305` (lokalisiert, Höchstzahl einstellbar), Seitenabruf `web_fetch_20250910`, Prompt-Caching für Profilgrundlagen und SOP-Block, Aufwand (`effort`) je Stufe. Vorgaben: S1 claude-haiku-5-5 (mittel), S2 claude-sonnet-5-5 (hoch), S3 claude-sonnet-5-5 (niedrig); das Profil kann andere Modelle vorgeben, die Einstellungen überschreiben beides.
+**Umsetzung M2 (Stand 17.10.2026):** Anthropic Messages API mit Streaming (SSE), Fortsetzung bei `pause_turn`, Wiederholung bei Überlastung, Websuche `web_search_20250305` (lokalisiert, Höchstzahl einstellbar), Seitenabruf `web_fetch_20250910`, Prompt-Caching für Profilgrundlagen und SOP-Block, Aufwand (`effort`) je Stufe. Vorgaben: S1 claude-haiku-5-5 (mittel), S2 claude-sonnet-5-5 (mittel, bis 128 000 Ausgabetoken; bei Abschneiden folgt eine Vervollständigung ohne Recherche), S3 claude-sonnet-5-5 (niedrig); das Profil kann andere Modelle vorgeben, die Einstellungen überschreiben beides.
 
 ### 5.2 Modul „Lagebild“ (Modus B)
 

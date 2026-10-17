@@ -30,6 +30,8 @@ function ausgeglichen(text: string, start: number): string | undefined {
   return undefined;
 }
 
+const ohneZaun = (t: string) => t.replace(/```(?:json|JSON)?\s*$/, "").trim();
+
 export function zerlegeAntwort(text: string): Zerlegung {
   const bloecke = [...text.matchAll(/```(?:json|JSON)?\s*\n([\s\S]*?)\n?```/g)];
   // Den letzten Codeblock nehmen, der mit { beginnt
@@ -48,14 +50,14 @@ export function zerlegeAntwort(text: string): Zerlegung {
   if (start >= 0) {
     const kandidat = ausgeglichen(text, start);
     if (kandidat) {
-      const kurz = (text.slice(0, start) + text.slice(start + kandidat.length)).trim();
+      const kurz = ohneZaun(text.slice(0, start) + text.slice(start + kandidat.length));
       try {
         return { kurzantwort: kurz, json: JSON.parse(kandidat), jsonText: kandidat };
       } catch (e: any) {
         return { kurzantwort: kurz, jsonText: kandidat, fehler: `JSON nicht lesbar: ${e.message}` };
       }
     }
-    return { kurzantwort: text.slice(0, start).trim(), jsonText: text.slice(start), fehler: "JSON unvollständig (Antwort abgeschnitten?)." };
+    return { kurzantwort: ohneZaun(text.slice(0, start)), jsonText: text.slice(start), fehler: "JSON unvollständig (Antwort abgeschnitten?)." };
   }
   return { kurzantwort: text.trim(), fehler: "Die Antwort enthält keinen JSON-Block." };
 }

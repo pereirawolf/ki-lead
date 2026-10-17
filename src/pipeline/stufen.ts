@@ -75,6 +75,7 @@ function auftragsText(k: Kontext): string {
   return [
     `Sachverhalt und Erkenntnisinteresse: ${a.sachverhalt.trim() || "(nicht angegeben, aus dem Material ableiten)"}`,
     `Meldestichtag: ${a.stichtag}`,
+    a.meldezeitpunkt ? `Meldezeitpunkt t0 (vorgegeben): ${a.meldezeitpunkt.replace("T", " ")}` : "",
     `Besondere Prüffrage: ${a.prueffrage.trim() || "keine"}`,
     `Aktueller Zeitpunkt (${k.profil.manifest.variablen.zeitzone || "Europe/Berlin"}): ${jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date())}`,
   ].join("\n");
@@ -112,9 +113,11 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
 function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const ids = new Set(fachSops(k.profil).map((s) => s.id));
   const eingaenge = new Set(k.material.filter((m) => m.art === "eingang").map((m) => m.name));
-  const t0 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "")
-    ? v.meldezeitpunkt!.slice(0, 16)
-    : juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const t0 = k.lauf.auftrag.meldezeitpunkt
+    ? k.lauf.auftrag.meldezeitpunkt
+    : /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "")
+      ? v.meldezeitpunkt!.slice(0, 16)
+      : juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
   return {
     gegenstand: String(v.gegenstand || ""),
     stichtag: /^\d{4}-\d{2}-\d{2}$/.test(v.stichtag || "") ? v.stichtag : k.lauf.auftrag.stichtag,
@@ -222,16 +225,17 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
         .join("\n"),
     },
   ];
+  const systemS2 = [
+    { text: profilGrundlagen(p), cache: true },
+    { text: sopBlock(p, sopIds), cache: true },
+    { text: anweisungErfassung(p, auftrag, t0) },
+    ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
+  ];
   const a = await aufrufen(k, "S2 Recherche und Entwurf", {
     modell: erfassungsModell,
     aufwand: e.aufwand.erfassung,
     maxTokens: e.maxTokensErfassung,
-    system: [
-      { text: profilGrundlagen(p), cache: true },
-      { text: sopBlock(p, sopIds), cache: true },
-      { text: anweisungErfassung(p, auftrag, t0) },
-      ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
-    ],
+    system: systemS2,
     nachrichten: [{ role: "user", content: inhalt }],
     werkzeuge: !recherche
       ? undefined
@@ -245,7 +249,36 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const kurzantwort = z.kurzantwort;
   let modell = a.modell;
   const s2 = k.lauf.stufen[k.lauf.stufen.length - 1];
-  if (a.stopGrund === "max_tokens") s2.notiz = "Antwort an der Token-Grenze abgeschnitten. In den Einstellungen die Höchstzahl der Ausgabetoken erhöhen.";
+  if (a.stopGrund === "max_tokens" && z.json === undefined) {
+    // Abgeschnitten (meist durch langes Nachdenken): Meldung ohne Recherche vervollständigen lassen.
+    s2.notiz = "Antwort an der Token-Grenze abgeschnitten; die App hat die Meldung in einem zweiten Schritt vervollständigen lassen.";
+    const v = await aufrufen(k, "S3 Vervollständigung", {
+      modell: erfassungsModell,
+      aufwand: "low",
+      maxTokens: e.maxTokensErfassung,
+      system: [
+        ...systemS2,
+        {
+          text: "## Vervollständigung (von der App)\n\nDein vorheriger Entwurf wurde an der Längengrenze abgeschnitten. Gib jetzt ausschließlich die vollständige Meldung als einen JSON-Codeblock aus, ohne Kurzantwort. Übernimm die bereits geschriebenen Inhalte, ergänze die fehlenden Teile nach denselben Regeln und nur aus dem Material. Recherchiere nicht neu und denke knapp.",
+        },
+      ],
+      nachrichten: [
+        {
+          role: "user",
+          content: [
+            ...materialBloecke(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte),
+            {
+              type: "text",
+              text: `Bestätigte Gliederung: ${auftrag.ereignisarten}. Meldezeitpunkt t0: ${t0.replace("T", " ")}.\n\nAbgeschnittener Entwurf:\n\n${a.text}`,
+            },
+          ],
+        },
+      ],
+    });
+    z = { ...zerlegeAntwort(v.text), kurzantwort: z.kurzantwort };
+    modell = v.modell;
+    if (v.stopGrund === "max_tokens") k.lauf.stufen[k.lauf.stufen.length - 1].notiz = "Auch die Vervollständigung wurde abgeschnitten.";
+  } else if (a.stopGrund === "max_tokens") s2.notiz = "Antwort an der Token-Grenze abgeschnitten.";
 
   k.lauf.status = "s3";
   let meldung: Meldung | undefined;
@@ -266,7 +299,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     eintrag.befunde = schemaBefunde.map((b) => b.text);
     await k.aktualisiert(k.lauf);
     if (!schemaBefunde.length || runde >= MAX_REPARATUREN) break;
-    if (z.json === undefined && a.stopGrund === "max_tokens") break; // abgeschnitten: Reparatur kann Inhalte nicht herstellen
+    if (z.json === undefined && /unvollständig/.test(z.fehler || "")) break; // weiterhin abgeschnitten: Reparatur hilft nicht
 
     const entwurf = z.json !== undefined ? JSON.stringify(z.json, null, 1) : z.jsonText || "";
     const r = await aufrufen(k, `S3 Reparatur ${runde + 1}`, {

@@ -250,3 +250,32 @@ describe("Verdichtung von Eingangsmeldungen", () => {
     expect(k.lauf.ergebnis!.befunde.some((b) => /bestätigt waren 1/.test(b.text))).toBe(false);
   });
 });
+
+describe("Abgeschnittene Antworten und t0", () => {
+  it("vervollständigt eine an der Token-Grenze abgeschnittene Meldung ohne neue Recherche", async () => {
+    const ganz = JSON.stringify(he);
+    const att = new Attrappe([antwort("Kurzantwort.\n\n```json\n" + ganz.slice(0, 2000), { stopGrund: "max_tokens" }), antwort("```json\n" + ganz + "\n```")]);
+    const { k } = await kontext(att);
+    k.lauf.auftrag.meldezeitpunkt = "2026-10-14T14:00";
+    const e = await stufe2und3(k, { ...VORSCHLAG, meldezeitpunkt: "2026-10-14T14:00" } as any);
+    expect(att.anfragen).toHaveLength(2);
+    const v = att.anfragen[1];
+    expect(v.werkzeuge).toBeUndefined();
+    expect(v.aufwand).toBe("low");
+    expect(v.system[v.system.length - 1].text).toContain("Vervollständigung");
+    expect(JSON.stringify(v.nachrichten)).toContain("Abgeschnittener Entwurf");
+    expect(e.schemaBefunde).toEqual([]);
+    expect(e.kurzantwort).toBe("Kurzantwort.");
+    expect(e.meldung!.meldezeitpunkt).toBe("2026-10-14T14:00");
+    expect(k.lauf.stufen.map((s) => s.stufe)).toEqual(["S2 Recherche und Entwurf", "S3 Vervollständigung"]);
+  });
+
+  it("übernimmt einen im Auftrag vorgegebenen t0 in S1", async () => {
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-18T09:00" }))]);
+    const { k } = await kontext(att);
+    k.lauf.auftrag.meldezeitpunkt = "2026-10-14T14:00";
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T14:00");
+    expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain("Meldezeitpunkt t0 (vorgegeben): 2026-10-14 14:00");
+  });
+});

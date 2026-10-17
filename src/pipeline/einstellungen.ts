@@ -16,6 +16,8 @@ export interface Einstellungen {
   /** ISO-Ländercode für die Lokalisierung der Websuche */
   suchland: string;
   maxTokensErfassung: number;
+  /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
+  fassung?: number;
 }
 
 export const APP_MODELLE: Record<Rolle, string> = {
@@ -29,12 +31,13 @@ export const MODELL_AUSWAHL = ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-
 
 export const STANDARD: Einstellungen = {
   modelle: { vorverarbeitung: "", erfassung: "", reparatur: "", kurzfassung: "" },
-  aufwand: { vorverarbeitung: "medium", erfassung: "high", reparatur: "low", kurzfassung: "medium" },
+  aufwand: { vorverarbeitung: "medium", erfassung: "medium", reparatur: "low", kurzfassung: "medium" },
   websucheMax: 15,
   abrufMax: 10,
   abrufMaxTokens: 15000,
   suchland: "DE",
-  maxTokensErfassung: 64000,
+  maxTokensErfassung: 128000,
+  fassung: 2,
 };
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
@@ -43,6 +46,13 @@ export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): stri
 
 export async function einstellungenLesen(): Promise<Einstellungen> {
   const g = (await get("einstellungen")) as Partial<Einstellungen> | undefined;
+  // Fassung 1 → 2: S2 brauchte bei hohem Aufwand bis zu 60 000 Token zum Nachdenken und brach an
+  // der alten Grenze von 64 000 Ausgabetoken ab. Alte Vorgaben werden daher angehoben.
+  if (g && !g.fassung) {
+    if (g.maxTokensErfassung === 64000) g.maxTokensErfassung = 128000;
+    if (g.aufwand?.erfassung === "high") g.aufwand = { ...g.aufwand, erfassung: "medium" };
+    g.fassung = 2;
+  }
   return {
     ...STANDARD,
     ...g,

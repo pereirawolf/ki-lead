@@ -390,6 +390,7 @@ textarea {
 input[type="text"],
 input[type="password"],
 input[type="date"],
+input[type="time"],
 input[type="datetime-local"],
 input[type="number"],
 select,
@@ -1442,4 +1443,19 @@ details.ki-abschnitt summary,
 
 .element-kopf .aktionen {
   margin-left: auto;
+}
+
+.datum-zeit {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.datum-zeit input[type="date"] {
+  flex: 3 1 0;
+  min-width: 0;
+}
+
+.datum-zeit input[type="time"] {
+  flex: 2 1 0;
+  min-width: 0;
 }

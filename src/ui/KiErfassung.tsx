@@ -78,6 +78,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [material, setMaterial] = useState<Material[]>([]);
   const [dateiFehler, setDateiFehler] = useState<string[]>([]);
   const [datenOk, setDatenOk] = useState(false);
+  const [uhrzeit, setUhrzeit] = useState("");
   /** null = automatisch (aus bei Verdichtung, sonst an) */
   const [websucheWahl, setWebsucheWahl] = useState<boolean | null>(null);
   const [lauf, setLauf] = useState<Lauf | null>(null);
@@ -176,7 +177,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setFehler(null);
     const l = neuerLauf(
       profil,
-      { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage, websuche },
+      { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage, websuche, ...(uhrzeit ? { meldezeitpunkt: `${stichtag}T${uhrzeit}` } : {}) },
       material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash })),
     );
     setLauf(l);
@@ -234,6 +235,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setMaterial([]);
     setDateiFehler([]);
     setDatenOk(false);
+    setUhrzeit("");
     setWebsucheWahl(null);
   };
 
@@ -398,10 +400,18 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 )}
               </div>
               <div className="gruppe-spalten-zwei">
-                <label className="feld">
-                  <span className="feld-label">Meldestichtag</span>
-                  <input type="date" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
-                </label>
+                <div className="feld">
+                  <span className="feld-label" id="t0-auftrag">
+                    Meldezeitpunkt (t0)
+                  </span>
+                  <div className="datum-zeit" role="group" aria-labelledby="t0-auftrag">
+                    <input type="date" aria-label="Meldestichtag" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
+                    <input type="time" aria-label="Uhrzeit t0" value={uhrzeit} onChange={(e) => setUhrzeit(e.target.value)} />
+                  </div>
+                  <span className="hinweis">
+                    Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand).
+                  </span>
+                </div>
                 <label className="feld">
                   <span className="feld-label">Besondere Prüffrage (optional)</span>
                   <input type="text" value={prueffrage} onChange={(e) => setPrueffrage(e.target.value)} />
@@ -511,11 +521,27 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </label>
                 <label className="feld">
                   <span className="feld-label">Meldezeitpunkt (t0)</span>
-                  <input
-                    type="datetime-local"
-                    value={vorschlag.meldezeitpunkt || ""}
-                    onChange={(e) => setVorschlag({ ...vorschlag, meldezeitpunkt: e.target.value })}
-                  />
+                  <div className="datum-zeit">
+                    <input
+                      type="date"
+                      aria-label="Datum t0"
+                      value={(vorschlag.meldezeitpunkt || "").slice(0, 10)}
+                      onChange={(e) =>
+                        setVorschlag({ ...vorschlag, meldezeitpunkt: `${e.target.value}T${(vorschlag.meldezeitpunkt || "").slice(11, 16) || "12:00"}` })
+                      }
+                    />
+                    <input
+                      type="time"
+                      aria-label="Uhrzeit t0"
+                      value={(vorschlag.meldezeitpunkt || "").slice(11, 16)}
+                      onChange={(e) =>
+                        setVorschlag({
+                          ...vorschlag,
+                          meldezeitpunkt: `${(vorschlag.meldezeitpunkt || "").slice(0, 10) || vorschlag.stichtag}T${e.target.value}`,
+                        })
+                      }
+                    />
+                  </div>
                   <span className="hinweis">Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.</span>
                 </label>
                 <label className="feld">

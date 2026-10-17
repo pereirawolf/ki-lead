@@ -15,6 +15,8 @@ export interface Auftrag {
   prueffrage: string;
   /** Websuche und Seitenabruf erlauben (Standard: ja; bei Verdichtung: nein) */
   websuche?: boolean;
+  /** Vorgegebener Meldezeitpunkt t0 (JJJJ-MM-TTThh:mm), sonst schlägt S1 ihn vor */
+  meldezeitpunkt?: string;
 }
 
 export interface S1Sachverhalt {
