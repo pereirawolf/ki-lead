@@ -34,7 +34,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
     "eingang_schema_ids": ["LEAD-Meldung-v1"]
   },
   "migrationen": [{ "von": "Alt-v1", "setze": { "schema": "Neu-v2" }, "ergaenze": { "quellen": "" }, "hinweis": "Altformat überführt." }],
-  "anweisungen": { "erfassung": "anweisung-erfassung.md", "verdichtung": "anweisung-verdichtung.md" },
+  "anweisungen": { "erfassung": "anweisung-erfassung.md", "kurzfassung": "anweisung-kurzfassung.md" },
   "sop": { "dateien": ["sop/sammelmappe.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
@@ -107,6 +107,14 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 ## Arbeitsanweisungen
 
 Markdown mit Platzhaltern: `{{profil.*}}`, `{{auftrag.*}}` (Sachverhalt, Ausgangsquellen, Stichtag, Prüffrage, Ereignisarten), `{{jetzt}}` und `{{app.ausgabevertrag}}`. Den Ausgabevertrag setzt die App ein. Er beschreibt, in welcher technischen Form die KI antworten soll.
+
+| Schlüssel in `anweisungen` | Verwendung |
+|---|---|
+| `erfassung` (Pflicht) | Modus A, Stufe S2 Recherche und Entwurf |
+| `kurzfassung` (optional) | Management Summary aus der fertigen Meldung; ohne Datei nutzt die App eine knappe Standardanweisung. Die Absätze folgen `rollen.sv_analysefelder`. |
+| `verdichtung` (geplant) | Modus B, Verdichtung mehrerer Meldungen |
+
+Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. B. „Einschätzung (Koordinierungsstelle)“. Fehlt sie, setzt die App `meldende_stelle` ein.
 
 ## SOP-Dateien
 

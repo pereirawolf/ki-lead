@@ -1390,3 +1390,32 @@ details.ki-abschnitt summary,
     padding: 0.2rem 0;
   }
 }
+
+.kurzfassung {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.kurzfassung > h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.kurzfassung .aktionen {
+  margin-top: 0.75rem;
+}
+
+.kurzfassung-text {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.9rem 1rem;
+  margin: 0.75rem 0 0.4rem;
+  max-width: 80ch;
+  overflow-wrap: anywhere;
+}

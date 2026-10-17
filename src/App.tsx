@@ -194,6 +194,7 @@ export default function App() {
             setMeldung={setMeldung}
             neu={() => setMeldung(neueMeldung(profil))}
             zwischenstand={gesichert}
+            ki={{ schluessel, einstellungen }}
           />
         )}
         {profil && (
@@ -222,8 +223,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.2. Daten bleiben auf diesem Gerät; nur die KI-Erfassung sendet Auftrag und Material an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC
-        BY 4.0.
+        KI-LEAD 0.2. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>
   );

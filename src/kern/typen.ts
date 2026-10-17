@@ -31,7 +31,7 @@ export interface ProfilManifest {
     eingang_schema_ids?: string[];
   };
   migrationen?: Migration[];
-  anweisungen?: { erfassung?: string; verdichtung?: string };
+  anweisungen?: { erfassung?: string; verdichtung?: string; kurzfassung?: string };
   sop?: { dateien: string[]; teil_gemeinsam?: string };
   kodierleitfaden?: string;
   kontakte?: string;

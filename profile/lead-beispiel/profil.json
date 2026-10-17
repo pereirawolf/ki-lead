@@ -25,7 +25,8 @@
     ]
   },
   "anweisungen": {
-    "erfassung": "anweisung-erfassung.md"
+    "erfassung": "anweisung-erfassung.md",
+    "kurzfassung": "anweisung-kurzfassung.md"
   },
   "sop": {
     "dateien": [

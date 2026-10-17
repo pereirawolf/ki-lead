@@ -19,6 +19,7 @@ const ROLLEN: { id: Rolle; titel: string; text: string }[] = [
   { id: "vorverarbeitung", titel: "S1 Gegenstand und SOP-Auswahl", text: "Kurze Einordnung ohne Recherche" },
   { id: "erfassung", titel: "S2 Recherche und Entwurf", text: "Websuche, Abruf, Entwurf der Meldung" },
   { id: "reparatur", titel: "S3 Reparatur", text: "Korrektur von Schemafehlern ohne neue Recherche" },
+  { id: "kurzfassung", titel: "Management Summary", text: "Absätze für die Leitung aus der fertigen Meldung" },
 ];
 
 const AUFWAND: { id: Aufwand; titel: string }[] = [

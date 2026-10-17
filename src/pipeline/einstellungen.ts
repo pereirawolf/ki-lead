@@ -4,7 +4,7 @@ import { del, get, set } from "idb-keyval";
 import type { Aufwand } from "../anbieter/typen";
 import type { Profil } from "../kern/typen";
 
-export type Rolle = "vorverarbeitung" | "erfassung" | "reparatur";
+export type Rolle = "vorverarbeitung" | "erfassung" | "reparatur" | "kurzfassung";
 
 export interface Einstellungen {
   modelle: Record<Rolle, string>;
@@ -22,13 +22,14 @@ export const APP_MODELLE: Record<Rolle, string> = {
   vorverarbeitung: "claude-haiku-5-5",
   erfassung: "claude-sonnet-5-5",
   reparatur: "claude-sonnet-5-5",
+  kurzfassung: "claude-sonnet-5-5",
 };
 
 export const MODELL_AUSWAHL = ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1"];
 
 export const STANDARD: Einstellungen = {
-  modelle: { vorverarbeitung: "", erfassung: "", reparatur: "" },
-  aufwand: { vorverarbeitung: "medium", erfassung: "high", reparatur: "low" },
+  modelle: { vorverarbeitung: "", erfassung: "", reparatur: "", kurzfassung: "" },
+  aufwand: { vorverarbeitung: "medium", erfassung: "high", reparatur: "low", kurzfassung: "medium" },
   websucheMax: 15,
   abrufMax: 10,
   abrufMaxTokens: 15000,

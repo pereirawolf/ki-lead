@@ -84,6 +84,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 - **Mit Akutereignis:** Kodiert wird die Ebene, die Bewältigung oder Koordination tatsächlich steuert (z. B. Kreis als untere Katastrophenschutzbehörde = 2; Land bei landesweiter Koordinierung = 4).
 - **Ohne Akutereignis (Vorsorge-, Beobachtungs-, Frühwarnsachverhalt):** Eine **strukturelle Zurechnung** ist zulässig, wenn ein konkreter Gegenstand benennbar ist, nämlich eine bestimmte Fach-, Regulierungs- oder Vorsorgeaufgabe, und die zuständige Ebene belegt ist. Dann wird diese Ebene kodiert, und der Bewertungstext erhält die Kennzeichnung „D3 strukturell: [Aufgabe], [Stelle]“.
 - **Offen:** wenn auch die strukturelle Zuständigkeit für einen konkreten Gegenstand nicht belegbar ist. Eine fiktive Bündelung bei der Koordinierungsstelle ist ausgeschlossen. Die Koordinierungsstelle ist keine Zurechnungsebene.
+- **Vorsorge vor einem Akutereignis:** Belegte Vorsorgemaßnahmen einer Stelle vor dem Eintritt (z. B. Sandsackausgabe, Sperrung, öffentliche Warnung), über die öffentlich berichtet wird, gelten als beobachtbare Zurechnung. Kodiert wird die Ebene der vorsorgenden Stelle (z. B. Stadt oder Gemeinde = 1). Der Bewertungstext nennt Maßnahme und Stelle („D3 Vorsorge: [Maßnahme], [Stelle]“).
 - **Nicht:** Zuständigkeitsprüfung im Rechtssinn. D3 beschreibt die beobachtbare Zurechnung.
 
 
@@ -116,6 +117,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 - **Festlegung:** D7 bewertet ausschließlich die Informationslage der befassten Stellen, also ob zuständige Stellen und Primärquellen zentrale Lagefragen beantworten. Die Kommunikationslage der Bevölkerung wird in „Risiken & Auswirkungen“ und bei D6 dargestellt.
 - **Erhöhte Stufe**, wenn für zentrale Fragen keine recherchierbaren Primärquellen bestehen, zuständige Stellen widersprüchlich oder verzögert informieren oder Meldewege gestört sind.
 - **Keine erhöhte Stufe** wegen eigener Recherchegrenzen in der verfügbaren Zeit oder wegen unterschiedlicher Bewertungen derselben Informationen (SOP-LEAD A.7.2).
+- **Widersprüchliche Vorhersagen:** Weichen Vorhersagen fachlich maßgeblicher Stellen für zentrale Lagefragen voneinander ab (z. B. Wasserstandsmodelle zweier Dienste), ist D7 = 1. Ist die Vorhersagelage eindeutig und übereinstimmend, ist D7 = 0.
 - **Stufe 0** („stabil/hoch verlässlich“), wenn zuständige Stellen aktuell, konsistent und überprüfbar informieren.
 
 
@@ -194,6 +196,8 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Landesweit zusammengezogene Kräfte im Einsatz, Hilfe aus Nachbarstaat nur zugesagt | D4 = 4 | Zusage zählt nicht; maßgeblich ist die Herkunft der eingesetzten Kräfte |
 | Netzbetreiber nennt widersprüchliche Wiederversorgungszeiten, Land meldet verzögert | D7 = 2 oder 3 nach Belegen | Informationslage der Befassung eingeschränkt |
 | Mobilfunk im Schadensgebiet ausgefallen, Lagezentrum gut informiert | D7 niedrig, D6 erfasst TK-Kopplung | Bevölkerungskommunikation gehört zu D6 und Text |
+| Sturmflut erwartet; Stadt gibt vor dem Scheitel Sandsäcke aus, Medien berichten darüber | D3 = 1 | Vorsorge vor dem Akutereignis ist beobachtbare Zurechnung (Kommune) |
+| Wasserstandsvorhersagen zweier Dienste weichen deutlich voneinander ab | D7 = 1 | widersprüchliche Vorhersagen; bei übereinstimmender Vorhersage D7 = 0 |
 
 ---
 

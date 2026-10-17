@@ -9,6 +9,7 @@ import { quellenHinweise } from "../kern/quellen";
 import type { Meldung as MeldungTyp, Profil } from "../kern/typen";
 import { Feld } from "./Feld";
 import { Pruefen } from "./Pruefen";
+import type { KiZugang } from "./Kurzfassung";
 
 interface Props {
   profil: Profil;
@@ -16,9 +17,10 @@ interface Props {
   setMeldung: (m: MeldungTyp) => void;
   neu: () => void;
   zwischenstand?: string;
+  ki?: KiZugang;
 }
 
-export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand }: Props) {
+export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand, ki }: Props) {
   const ui = profil.ui;
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
@@ -130,7 +132,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand
             const segs = teilePfad(feld);
             return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
           })}
-          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
+          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" ki={ki} />}
           <div className="schritt-nav">
             {schritt > 0 ? (
               <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>

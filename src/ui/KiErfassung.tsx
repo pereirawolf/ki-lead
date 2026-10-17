@@ -203,12 +203,29 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     neuLaden();
   };
 
-  const neuerAuftrag = () => {
+  const neueErfassung = () => {
+    const etwasDa = sachverhalt || stichworte || urlText || prueffrage || material.length || lauf;
+    if (
+      etwasDa &&
+      !confirm(
+        "Neue KI-Erfassung beginnen? Auftrag, Material und der angezeigte Lauf werden geleert. Gespeicherte Läufe bleiben unter „Frühere Läufe“ erhalten.",
+      )
+    )
+      return;
     setPhase("auftrag");
     setLauf(null);
     setVorschlag(null);
     setFehler(null);
     setProtokoll([]);
+    setZeichen(0);
+    setSachverhalt("");
+    setStichworte("");
+    setUrlText("");
+    setStichtag(heute());
+    setPrueffrage("");
+    setMaterial([]);
+    setDateiFehler([]);
+    setDatenOk(false);
   };
 
   const protokollExport = (l: Lauf) => dateiAnbieten(JSON.stringify(l, null, 2), `KI-LEAD_Lauf_${l.id}.json`, "application/json");
@@ -242,10 +259,10 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
             prüfst und freigibst.
           </p>
         </div>
-        {lauf && phase !== "auftrag" && !laeuft && (
+        {!laeuft && (
           <div className="werkzeugleiste-knoepfe">
-            <button type="button" className="knopf leise" onClick={neuerAuftrag}>
-              Neuer Auftrag
+            <button type="button" className="knopf leise" onClick={neueErfassung}>
+              Neue KI-Erfassung
             </button>
           </div>
         )}

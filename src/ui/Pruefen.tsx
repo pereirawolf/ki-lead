@@ -1,9 +1,10 @@
 // Schritt „Prüfen & Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe.
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
-import { dateiname, managementSummary } from "../kern/ausgabe";
+import { dateiname } from "../kern/ausgabe";
+import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { holeWert } from "../kern/pfad";
 import { feldUi, radarFuer } from "../kern/ui";
 import { sachverhalte } from "../kern/quellen";
@@ -26,9 +27,8 @@ function Liste({ titel, eintraege, art }: { titel: string; eintraege: string[]; 
   );
 }
 
-export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Meldung; teil: "pruefung" | "ausgabe" }) {
+export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung: Meldung; teil: "pruefung" | "ausgabe"; ki?: KiZugang }) {
   const r = profil.ui.rollen;
-  const [kopiert, setKopiert] = useState(false);
   const alsFinal = useMemo(() => ({ ...meldung, [r.status_feld]: r.status_final }), [meldung, r]);
   const schemaBefunde = useMemo(() => pruefeGegenSchema(profil.schema, alsFinal, profil.ui), [profil, alsFinal]);
   const pflicht = useMemo(() => pflichtHinweise(meldung, profil.ui), [profil, meldung]);
@@ -53,16 +53,6 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final) + ".pdf", "application/pdf");
   };
-  const summary = managementSummary(meldung, profil);
-  const kopieren = async () => {
-    try {
-      await navigator.clipboard.writeText(summary);
-      setKopiert(true);
-      setTimeout(() => setKopiert(false), 2000);
-    } catch {
-      alert("Die Zwischenablage ist hier nicht verfügbar. Bitte die Textdatei speichern.");
-    }
-  };
   const text = (b: Befund[]) => b.map((x) => x.text);
 
   if (teil === "ausgabe")
@@ -84,22 +74,7 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
           </button>
         </div>
 
-        <details className="summary">
-          <summary>{profil.ui.kurzfassung?.titel || "Management Summary"} (Klartext ohne Quellenverweise)</summary>
-          <pre>{summary}</pre>
-          <div className="aktionen">
-            <button type="button" className="knopf" onClick={kopieren}>
-              {kopiert ? "Kopiert" : "Text kopieren"}
-            </button>
-            <button
-              type="button"
-              className="knopf leise"
-              onClick={() => dateiAnbieten(summary, dateiname(meldung, profil, false) + "_Summary.txt", "text/plain;charset=utf-8")}
-            >
-              Als TXT speichern
-            </button>
-          </div>
-        </details>
+        <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} />
       </div>
     );
   return (
