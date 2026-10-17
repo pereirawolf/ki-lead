@@ -1,0 +1,50 @@
+# Abhängigkeiten und Build
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+.vite/
+coverage/
+
+# Capacitor – native Projekte (Build-Artefakte)
+ios/App/Pods/
+ios/App/build/
+ios/App/App/public/
+ios/DerivedData/
+android/.gradle/
+android/build/
+android/app/build/
+android/app/src/main/assets/public/
+android/local.properties
+android/captures/
+*.apk
+*.aab
+*.ipa
+
+# Xcode / Android Studio
+xcuserdata/
+*.xcuserstate
+.idea/
+*.iml
+
+# Editor und System
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+
+# Geheimnisse und lokale Einstellungen – niemals einchecken
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Lokale, nicht öffentliche Profilergänzungen (z. B. echte Kontaktadressen)
+profile/**/*.lokal.json
+privat/

@@ -1,0 +1,28 @@
+// Mit der App ausgelieferte Profile, beim Build eingebettet:
+// - profile/            öffentliche Beispielprofile aus dem Repository
+// - privat/profile/     eigene, nicht eingecheckte Profile (Ordner ist per .gitignore ausgeschlossen).
+//   Im Entwicklungsserver immer dabei; im Produktionsbuild nur mit KI_LEAD_PRIVAT=1,
+//   damit ein veröffentlichter Build keine privaten Inhalte enthält.
+
+declare const __KI_LEAD_PRIVAT__: boolean;
+
+const oeffentlich = import.meta.glob("/profile/**/*.{json,md}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+const privat = __KI_LEAD_PRIVAT__
+  ? (import.meta.glob("/privat/profile/**/*.{json,md}", { query: "?raw", import: "default", eager: true }) as Record<string, string>)
+  : {};
+
+export interface EingebautesProfil {
+  ordner: string;
+  dateien: Record<string, string>;
+}
+
+export function eingebauteProfile(): EingebautesProfil[] {
+  const nachOrdner = new Map<string, Record<string, string>>();
+  for (const [pfad, text] of Object.entries({ ...oeffentlich, ...privat })) {
+    const m = pfad.match(/^\/(?:privat\/)?profile\/([^/]+)\/(.+)$/);
+    if (!m) continue;
+    if (!nachOrdner.has(m[1])) nachOrdner.set(m[1], {});
+    nachOrdner.get(m[1])![m[2]] = text;
+  }
+  return [...nachOrdner.entries()].map(([ordner, dateien]) => ({ ordner, dateien }));
+}

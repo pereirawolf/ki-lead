@@ -1,0 +1,59 @@
+{
+  "format": "lead-ui/1",
+  "titel": "Lagemeldung (Muster)",
+  "untertitel": "Schlankes Beispiel für ein eigenes Profil",
+  "ausblenden": ["schema", "_status", "_entstehung"],
+  "schritte": [
+    { "id": "meta", "titel": "Kopf", "felder": ["meldende_stelle", "meldezeitpunkt"] },
+    { "id": "sachverhalte", "titel": "Sachverhalte", "felder": ["sachverhalte"] },
+    { "id": "quellen", "titel": "Quellen", "felder": ["quellen"] },
+    { "id": "pruefen", "titel": "Prüfen & Exportieren", "felder": [], "pruefung": true }
+  ],
+  "felder": {
+    "meldende_stelle": { "label": "Meldende Stelle", "pflicht": true },
+    "meldezeitpunkt": { "label": "Meldezeitpunkt", "widget": "datumzeit", "pflicht": true },
+    "quellen": { "label": "Quellen", "widget": "quellen", "zeilen": 8 },
+    "sachverhalte": { "label": "Sachverhalte", "element_label": "Sachverhalt", "titel_feld": "bezeichnung", "hinzufuegen": "Sachverhalt hinzufügen" },
+    "sachverhalte[].bezeichnung": { "label": "Bezeichnung", "pflicht": true },
+    "sachverhalte[].art": { "label": "Art", "widget": "mehrfachauswahl" },
+    "sachverhalte[].lage": { "label": "Lage", "widget": "text_lang" },
+    "sachverhalte[].bewertung": { "label": "Bewertung", "widget": "radio", "leer_label": "keine Angabe" },
+    "sachverhalte[].bewertung_text": { "label": "Begründung", "widget": "text_lang" },
+    "sachverhalte[].radar": { "label": "Lageprofil", "widget": "radar", "radar": "profil" }
+  },
+  "radare": {
+    "profil": {
+      "max": 3,
+      "achsen": [
+        { "key": "raum", "label": "Raum", "stufen": ["punktuell", "Abschnitt", "mehrere Abschnitte", "gesamte Einsatzstelle"] },
+        { "key": "personen", "label": "Betroffene Personen", "stufen": ["unter 10", "10–99", "100–999", "1.000 oder mehr"] },
+        { "key": "dynamik", "label": "Dynamik", "stufen": ["stabil", "gering", "hoch", "chaotisch"] }
+      ]
+    }
+  },
+  "rollen": {
+    "schema_feld": "schema",
+    "status_feld": "_status",
+    "status_entwurf": "Entwurf",
+    "status_final": "final",
+    "entstehung_feld": "_entstehung",
+    "meldende_stelle": "meldende_stelle",
+    "meldezeitpunkt": "meldezeitpunkt",
+    "quellen": "quellen",
+    "sachverhalte": "sachverhalte",
+    "sv_bezeichnung": "bezeichnung",
+    "sv_art": "art",
+    "sv_beurteilung": "bewertung",
+    "sv_bewertung_text": "bewertung_text",
+    "sv_radar": "radar",
+    "sv_textfelder": ["lage", "bewertung_text"],
+    "sv_analysefelder": ["lage"],
+    "beurteilung_hoch": ["erheblich", "kritisch"]
+  },
+  "kennsaetze": { "neubewertung": "Neubewertung bei:" },
+  "quellen": {
+    "kategorien": { "A": "amtlich", "W": "wissenschaftlich", "M": "Medien", "P": "privat/wirtschaftlich" },
+    "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]"
+  },
+  "dateiname": "Lagemeldung_{meldende_stelle}_{meldezeitpunkt}"
+}

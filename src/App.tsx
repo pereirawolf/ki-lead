@@ -1,0 +1,174 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ladeProfil } from "./profil/laden";
+import { eingebauteProfile } from "./profil/eingebaut";
+import { leererWert } from "./kern/schema";
+import { jetztLokal } from "./kern/ausgabe";
+import type { Befund, Meldung, Profil } from "./kern/typen";
+import {
+  aktivesProfilLesen,
+  aktivesProfilSetzen,
+  profileLaden,
+  profilLoeschen,
+  profilSpeichern,
+  zwischenstandLesen,
+  zwischenstandSchreiben,
+} from "./speicher/speicher";
+import { MeldungAnsicht } from "./ui/Meldung";
+import { ProfileAnsicht } from "./ui/Profile";
+
+export interface ProfilEintrag {
+  schluessel: string;
+  quelle: "eingebaut" | "importiert";
+  dateien: Record<string, string>;
+  importiertAm?: string;
+  profil: Profil | null;
+  befunde: Befund[];
+}
+
+type Ansicht = "meldung" | "profile";
+
+function neueMeldung(p: Profil): Meldung {
+  const d = leererWert(p.schema, p.schema) as Meldung;
+  const r = p.ui.rollen;
+  d[r.status_feld] = r.status_entwurf;
+  const props = p.schema.properties || {};
+  for (const [k, v] of Object.entries(p.manifest.variablen)) if (k in props && k in d) d[k] = v;
+  if (r.meldezeitpunkt && r.meldezeitpunkt in d) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone);
+  const liste = d[r.sachverhalte];
+  if (Array.isArray(liste) && liste.length === 0) {
+    const el = leererWert(p.schema.properties?.[r.sachverhalte]?.items, p.schema);
+    d[r.sachverhalte] = [el];
+  }
+  return d;
+}
+
+export default function App() {
+  const [profile, setProfile] = useState<ProfilEintrag[]>([]);
+  const [aktiv, setAktiv] = useState<string>();
+  const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
+  const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
+  const [gesichert, setGesichert] = useState<string>();
+  const timer = useRef<number>();
+
+  const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
+
+  useEffect(() => {
+    (async () => {
+      const eintraege: ProfilEintrag[] = [];
+      for (const e of eingebauteProfile()) {
+        const erg = await ladeProfil(e.dateien);
+        eintraege.push({ schluessel: e.ordner, quelle: "eingebaut", dateien: e.dateien, profil: erg.profil, befunde: erg.befunde });
+      }
+      for (const g of await profileLaden()) {
+        const erg = await ladeProfil(g.dateien);
+        eintraege.push({
+          schluessel: g.schluessel,
+          quelle: "importiert",
+          dateien: g.dateien,
+          importiertAm: g.importiertAm,
+          profil: erg.profil,
+          befunde: erg.befunde,
+        });
+      }
+      setProfile(eintraege);
+      const gemerkt = await aktivesProfilLesen();
+      const start = eintraege.find((e) => e.schluessel === gemerkt && e.profil) || eintraege.find((e) => e.profil);
+      if (start) setAktiv(start.schluessel);
+    })();
+  }, []);
+
+  // Beim Profilwechsel: Zwischenstand laden oder neue Meldung anlegen
+  useEffect(() => {
+    if (!profil) return;
+    (async () => {
+      const z = await zwischenstandLesen(profil.manifest.id);
+      setMeldungRoh(z?.daten ?? neueMeldung(profil));
+      setGesichert(z ? new Date(z.gespeichertAm).toLocaleString("de-DE") : undefined);
+    })();
+  }, [profil]);
+
+  const setMeldung = useCallback(
+    (m: Meldung) => {
+      setMeldungRoh(m);
+      if (!profil) return;
+      window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(async () => {
+        const jetzt = new Date();
+        await zwischenstandSchreiben(profil.manifest.id, { gespeichertAm: jetzt.toISOString(), daten: m });
+        setGesichert(jetzt.toLocaleString("de-DE"));
+      }, 1200);
+    },
+    [profil],
+  );
+
+  const aktivieren = async (schluessel: string) => {
+    setAktiv(schluessel);
+    await aktivesProfilSetzen(schluessel);
+    setAnsicht("meldung");
+  };
+
+  const importieren = async (dateien: Record<string, string>) => {
+    const erg = await ladeProfil(dateien);
+    if (!erg.profil) return { ok: false, befunde: erg.befunde };
+    const schluessel = `${erg.profil.manifest.id}@${erg.profil.manifest.version}`;
+    const importiertAm = new Date().toISOString();
+    await profilSpeichern({ schluessel, quelle: "importiert", dateien: erg.profil.dateien, importiertAm });
+    setProfile((alt) => [
+      ...alt.filter((p) => p.schluessel !== schluessel),
+      { schluessel, quelle: "importiert", dateien: erg.profil!.dateien, importiertAm, profil: erg.profil, befunde: erg.befunde },
+    ]);
+    return { ok: true, befunde: erg.befunde };
+  };
+
+  const loeschen = async (schluessel: string) => {
+    await profilLoeschen(schluessel);
+    setProfile((alt) => alt.filter((p) => p.schluessel !== schluessel));
+    if (aktiv === schluessel) setAktiv(profile.find((p) => p.profil && p.schluessel !== schluessel)?.schluessel);
+  };
+
+  return (
+    <div className="app">
+      <header className="kopf">
+        <div className="marke">
+          <span className="marke-name">KI-LEAD</span>
+          <span className="marke-zusatz">Demonstrator</span>
+        </div>
+        <nav className="hauptnav" aria-label="Bereiche">
+          <button type="button" className={ansicht === "meldung" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("meldung")}>
+            Meldung
+          </button>
+          <button type="button" className={ansicht === "profile" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("profile")}>
+            Profile
+          </button>
+        </nav>
+        {profil && (
+          <button type="button" className="profil-chip" onClick={() => setAnsicht("profile")} title="Profil wechseln">
+            {profil.manifest.name}
+          </button>
+        )}
+      </header>
+
+      <div className="hinweisband" role="note">
+        Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
+      </div>
+
+      <main className="inhalt">
+        {ansicht === "profile" && <ProfileAnsicht profile={profile} aktiv={aktiv} aktivieren={aktivieren} importieren={importieren} loeschen={loeschen} />}
+        {ansicht === "meldung" && profil && meldung && (
+          <MeldungAnsicht
+            key={profil.hash}
+            profil={profil}
+            meldung={meldung}
+            setMeldung={setMeldung}
+            neu={() => setMeldung(neueMeldung(profil))}
+            zwischenstand={gesichert}
+          />
+        )}
+        {ansicht === "meldung" && !profil && profile.length > 0 && (
+          <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
+        )}
+      </main>
+      <footer className="fuss">KI-LEAD 0.1. Alle Daten bleiben auf diesem Gerät. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.</footer>
+    </div>
+  );
+}

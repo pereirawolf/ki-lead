@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Muster-LEAD-Meldung-v1.schema.json",
+  "title": "Muster – LEAD-Meldung v1",
+  "type": "object",
+  "required": ["schema", "_status", "meldende_stelle", "meldezeitpunkt", "quellen", "sachverhalte"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "Muster-LEAD-Meldung-v1" },
+    "_status": { "enum": ["Entwurf", "final"] },
+    "_entstehung": {
+      "type": "object",
+      "required": ["verfahren"],
+      "additionalProperties": false,
+      "properties": {
+        "verfahren": { "enum": ["manuell", "KI-Entwurf"] },
+        "werkzeug": { "type": "string" },
+        "modell": { "type": "string" },
+        "sop": { "type": "array", "items": { "type": "string" } },
+        "kodierleitfaden": { "type": "string" },
+        "erstellt": { "type": "string" }
+      }
+    },
+    "meldende_stelle": { "type": "string" },
+    "meldezeitpunkt": { "type": "string", "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$" },
+    "quellen": { "type": "string" },
+    "sachverhalte": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["bezeichnung", "art", "lage", "bewertung", "radar"],
+        "additionalProperties": false,
+        "properties": {
+          "bezeichnung": { "type": "string" },
+          "art": { "type": "array", "uniqueItems": true, "items": { "enum": ["Brand", "Technische Hilfe", "Unwetter", "Versorgungsstörung", "Sonstiges"] } },
+          "lage": { "type": "string" },
+          "bewertung": { "enum": ["", "geringfügig", "erheblich", "kritisch"] },
+          "bewertung_text": { "type": "string" },
+          "radar": {
+            "type": "object",
+            "required": ["raum", "personen", "dynamik"],
+            "additionalProperties": false,
+            "properties": {
+              "raum": { "type": ["integer", "null"], "minimum": 0, "maximum": 3 },
+              "personen": { "type": ["integer", "null"], "minimum": 0, "maximum": 3 },
+              "dynamik": { "type": ["integer", "null"], "minimum": 0, "maximum": 3 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

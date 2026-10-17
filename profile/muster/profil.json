@@ -1,0 +1,30 @@
+{
+  "format": "lead-profil/1",
+  "id": "muster.einsatzstelle",
+  "name": "Musterprofil – Einsatzstelle (leer)",
+  "beschreibung": "Leeres Musterprofil als Ausgangspunkt für eigene Organisationen. Zeigt den Mindestumfang eines Profilpakets mit eigenem, schlankem Schema ohne Länderliste und ohne Freigabeblock.",
+  "version": "0.1.0",
+  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
+  "lizenz": "CC-BY-4.0",
+  "ebene": "Einsatzstelle",
+  "referenzraum": "Einsatzabschnitt",
+  "variablen": {
+    "meldende_stelle": "Einsatzleitung (Muster)",
+    "zeitzone": "Europe/Berlin",
+    "meldetakt": "nach Lageentwicklung",
+    "lageprodukt": "Lagemeldung der Einsatzstelle"
+  },
+  "meldung": {
+    "schema": "meldung.schema.json",
+    "ui": "meldung.ui.json",
+    "schema_id": "Muster-LEAD-Meldung-v1",
+    "eingang_schema_ids": ["Muster-LEAD-Meldung-v1"]
+  },
+  "anweisungen": { "erfassung": "anweisung-erfassung.md" },
+  "kodierleitfaden": "kodierleitfaden.md",
+  "modelle": {
+    "vorverarbeitung": "claude-haiku-5-5",
+    "erfassung": "claude-sonnet-5-5",
+    "verdichtung": "claude-opus-5-5"
+  }
+}

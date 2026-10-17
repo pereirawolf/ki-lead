@@ -1,0 +1,1095 @@
+/* KI-LEAD – Arbeitsmittel für Lagemeldungen.
+   Leitbild: Lagekartenpapier und Behördenblau. Kräftig ist nur das Lagenradar;
+   Signalfarben tragen ausschließlich die Bewertung (geringfügig/erheblich/kritisch). */
+
+:root {
+  --papier: #eef1ee;
+  --flaeche: #ffffff;
+  --tinte: #18263a;
+  --tinte-leise: #556270;
+  --linie: #c5cec9;
+  --linie-zart: #dde3df;
+  --amt: #1f4f82;
+  --amt-tief: #163b63;
+  --amt-zart: #e1eaf4;
+  --gering: #9a6f00;
+  --gering-zart: #fbf3d9;
+  --erheblich: #c25a07;
+  --erheblich-zart: #fdebdc;
+  --kritisch: #b3261e;
+  --kritisch-zart: #fbe4e2;
+  --ok: #2e6b3e;
+  --ok-zart: #e3f1e6;
+  --radar-ring: #b9c6c0;
+  --radar-flaeche: rgba(31, 79, 130, 0.2);
+  --schatten: 0 1px 0 rgba(24, 38, 58, 0.06);
+  --schrift: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-klein: 4px;
+  --r-mittel: 8px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papier: #0f1620;
+    --flaeche: #16202b;
+    --tinte: #e4eaf0;
+    --tinte-leise: #9aa8b5;
+    --linie: #2f3d4b;
+    --linie-zart: #243140;
+    --amt: #86b3e6;
+    --amt-tief: #b4cff0;
+    --amt-zart: #1b2c40;
+    --gering: #e2b53a;
+    --gering-zart: #2c2614;
+    --erheblich: #f0954a;
+    --erheblich-zart: #33210f;
+    --kritisch: #f07a72;
+    --kritisch-zart: #361615;
+    --ok: #7fc28f;
+    --ok-zart: #15291b;
+    --radar-ring: #34465a;
+    --radar-flaeche: rgba(134, 179, 230, 0.25);
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--tinte);
+  font-family: var(--schrift);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--amt);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── Rahmen ───────────────────────────────────────── */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.kopf {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: calc(0.6rem + env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.6rem max(1rem, env(safe-area-inset-left));
+  background: var(--flaeche);
+  border-bottom: 4px solid var(--amt);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.marke {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.marke-name {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  color: var(--amt-tief);
+}
+
+.marke-zusatz {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+}
+
+.hauptnav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav {
+  background: none;
+  border: none;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-klein);
+  cursor: pointer;
+  color: var(--tinte-leise);
+  font-weight: 700;
+}
+
+.nav.aktiv {
+  color: var(--amt-tief);
+  background: var(--amt-zart);
+}
+
+.profil-chip {
+  margin-left: auto;
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid var(--linie);
+  background: var(--papier);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.hinweisband {
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+  color: var(--tinte-leise);
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.inhalt {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.25rem max(1rem, env(safe-area-inset-right)) 3rem max(1rem, env(safe-area-inset-left));
+}
+
+.fuss {
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  text-align: center;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* ── Werkzeugleiste ───────────────────────────────── */
+
+.werkzeugleiste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.werkzeugleiste h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.werkzeugleiste-text p {
+  margin: 0.2rem 0 0;
+  color: var(--tinte-leise);
+  max-width: 62ch;
+}
+
+.werkzeugleiste-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.zwischenstand {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: -0.5rem 0 1rem;
+}
+
+/* ── Knöpfe ───────────────────────────────────────── */
+
+.knopf {
+  border: 1px solid var(--amt);
+  background: var(--flaeche);
+  color: var(--amt-tief);
+  border-radius: var(--r-klein);
+  padding: 0.55rem 1rem;
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.knopf:hover {
+  background: var(--amt-zart);
+}
+
+.knopf.primaer {
+  background: var(--amt);
+  color: var(--flaeche);
+}
+
+.knopf.primaer:hover {
+  background: var(--amt-tief);
+}
+
+.knopf.leise {
+  border-color: transparent;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.knopf.leise:hover {
+  background: var(--amt-zart);
+}
+
+.knopf.klein {
+  min-height: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* ── Arbeitsbereich mit Schritten ─────────────────── */
+
+.arbeitsbereich {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.schritte ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: sticky;
+  top: 5rem;
+  border-left: 2px solid var(--linie);
+}
+
+.schritt {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.6rem 0.75rem;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  color: var(--tinte-leise);
+}
+
+.schritt-nr {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--linie);
+  font-weight: 700;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.schritt-zahl {
+  margin-left: auto;
+  font-size: 0.8rem;
+  background: var(--linie-zart);
+  border-radius: 999px;
+  padding: 0 0.5rem;
+}
+
+.schritt.erledigt .schritt-nr {
+  border-color: var(--amt);
+  color: var(--amt);
+}
+
+.schritt.aktiv {
+  border-left-color: var(--amt);
+  color: var(--tinte);
+  font-weight: 700;
+}
+
+.schritt.aktiv .schritt-nr {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--flaeche);
+}
+
+.schritt-inhalt {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 1.25rem 1.5rem 1.5rem;
+  box-shadow: var(--schatten);
+}
+
+.schritt-inhalt > h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+}
+
+.einleitung {
+  color: var(--tinte-leise);
+  max-width: 72ch;
+  margin-top: 0;
+}
+
+.schritt-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+/* ── Felder ───────────────────────────────────────── */
+
+.feld {
+  margin: 0 0 1.1rem;
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.feld-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  padding: 0;
+}
+
+.feld-label.pflicht::after {
+  content: " (Pflicht für finale Meldung)";
+  font-weight: 400;
+  color: var(--tinte-leise);
+  font-size: 0.8rem;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  padding: 0.6rem 0.7rem;
+  min-height: 44px;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.55;
+  max-width: 100%;
+}
+
+.feld-lang textarea {
+  min-height: 8rem;
+}
+
+.hinweis {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: 0.3rem 0 0;
+  max-width: 78ch;
+}
+
+.gruppe {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.75rem 1rem 0.25rem;
+  margin: 0 0 1.1rem;
+  min-width: 0;
+}
+
+.gruppe > legend {
+  font-weight: 700;
+  padding: 0 0.4rem;
+  color: var(--amt-tief);
+}
+
+.gruppe-zeile .gruppe-inhalt,
+.gruppe-spalten .gruppe-inhalt {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0 1rem;
+}
+
+.gruppe-spalten .gruppe {
+  margin-bottom: 0.75rem;
+}
+
+/* Mehrfachauswahl als Chips */
+.mehrfach {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  min-height: 40px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  background: var(--flaeche);
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip.an {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--flaeche);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--amt);
+  outline-offset: 2px;
+}
+
+/* Einfachauswahl als Segmente */
+.segmente {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  overflow: hidden;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.segment {
+  position: relative;
+  padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  border-right: 1px solid var(--linie);
+  background: var(--flaeche);
+}
+
+.segment:last-child {
+  border-right: none;
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segment:has(input:focus-visible) {
+  outline: 3px solid var(--amt);
+  outline-offset: -3px;
+}
+
+.segment.an {
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  font-weight: 700;
+}
+
+.segment.an.wert-geringfügig {
+  background: var(--gering-zart);
+  color: var(--gering);
+}
+
+.segment.an.wert-erheblich {
+  background: var(--erheblich-zart);
+  color: var(--erheblich);
+}
+
+.segment.an.wert-kritisch,
+.segment.an.wert-verschärfung {
+  background: var(--kritisch-zart);
+  color: var(--kritisch);
+}
+
+.segment.an.wert-entspannung {
+  background: var(--ok-zart);
+  color: var(--ok);
+}
+
+/* ── Listenelemente (Sachverhalte) ────────────────── */
+
+.liste {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.element {
+  border: 1px solid var(--linie);
+  border-left: 6px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.25rem 1.1rem 0.5rem;
+  background: var(--flaeche);
+}
+
+.element.stufe-geringfügig {
+  border-left-color: var(--gering);
+}
+
+.element.stufe-erheblich {
+  border-left-color: var(--erheblich);
+}
+
+.element.stufe-kritisch {
+  border-left-color: var(--kritisch);
+}
+
+.element-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.element-kopf h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.element-nr {
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  font-weight: 400;
+  margin: 0;
+}
+
+.element-titel {
+  font-weight: 700;
+}
+
+.leer {
+  color: var(--tinte-leise);
+}
+
+/* ── Lagenradar ───────────────────────────────────── */
+
+.radar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.radar-grafik {
+  position: sticky;
+  top: 6rem;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--radar-ring);
+  stroke-width: 1;
+}
+
+.radar-ring-aussen {
+  stroke-width: 1.5;
+}
+
+.radar-achse {
+  stroke: var(--radar-ring);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.radar-beschriftung {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--tinte-leise);
+}
+
+.radar-flaeche {
+  fill: var(--radar-flaeche);
+  stroke: var(--amt);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.radar-punkt {
+  fill: var(--amt);
+  stroke: var(--flaeche);
+  stroke-width: 1.5;
+}
+
+.radar-punkt-offen {
+  fill: var(--flaeche);
+  stroke: var(--tinte-leise);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 2;
+}
+
+.radar-achsen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.radar-achse-wahl {
+  border: none;
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  border-bottom: 1px solid var(--linie-zart);
+  min-width: 0;
+}
+
+.radar-achse-wahl legend {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0;
+  margin-bottom: 0.3rem;
+}
+
+.stufen {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, auto) repeat(7, minmax(0, 2.6rem));
+  gap: 0.25rem;
+  max-width: 24rem;
+}
+
+.stufe {
+  min-width: 0;
+  min-height: 40px;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.stufe.aktiv {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--flaeche);
+}
+
+.stufe-offen {
+  padding: 0 0.6rem;
+  font-weight: 400;
+  border-style: dashed;
+}
+
+.stufe-offen.aktiv {
+  background: var(--papier);
+  border-color: var(--tinte-leise);
+  color: var(--tinte);
+  font-weight: 700;
+}
+
+.stufentext {
+  font-size: 0.85rem;
+  color: var(--amt-tief);
+  margin-top: 0.25rem;
+  min-height: 1.3em;
+}
+
+/* ── Quellen ──────────────────────────────────────── */
+
+.kategorien {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 0.75rem;
+}
+
+.kategorien div {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.kategorien dt {
+  font-weight: 700;
+  text-align: center;
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  border-radius: var(--r-klein);
+  height: fit-content;
+}
+
+.kategorien dd {
+  margin: 0;
+}
+
+.quellen-text {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  min-height: 14rem;
+}
+
+/* ── Prüfen ───────────────────────────────────────── */
+
+.kasten {
+  border: 1px solid var(--linie);
+  border-left-width: 5px;
+  border-radius: var(--r-mittel);
+  padding: 0.75rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--flaeche);
+}
+
+.kasten h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.kasten p {
+  margin: 0.2rem 0;
+}
+
+.kasten ul {
+  margin: 0.25rem 0 0.25rem;
+  padding-left: 1.2rem;
+}
+
+.kasten li {
+  margin: 0.15rem 0;
+}
+
+.kasten-ok {
+  border-left-color: var(--ok);
+  background: var(--ok-zart);
+}
+
+.kasten-fehler {
+  border-left-color: var(--kritisch);
+  background: var(--kritisch-zart);
+}
+
+.kasten-hinweis {
+  border-left-color: var(--gering);
+}
+
+.kasten-info {
+  border-left-color: var(--amt);
+  background: var(--amt-zart);
+}
+
+.abschnitt {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.uebersicht {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 0.75rem;
+}
+
+.zeile-sv {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--linie);
+  border-left: 6px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 0.75rem;
+}
+
+.zeile-sv.stufe-geringfügig {
+  border-left-color: var(--gering);
+}
+
+.zeile-sv.stufe-erheblich {
+  border-left-color: var(--erheblich);
+}
+
+.zeile-sv.stufe-kritisch {
+  border-left-color: var(--kritisch);
+}
+
+.zeile-sv svg {
+  flex: none;
+}
+
+.zeile-titel {
+  font-weight: 700;
+  margin: 0.1rem 0 0.4rem;
+}
+
+.zeile-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.status {
+  font-size: 0.85rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  padding: 0.05rem 0.6rem;
+}
+
+.aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.summary {
+  margin-top: 1.25rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 1rem;
+}
+
+.summary summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 32px;
+}
+
+.summary pre {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.92rem;
+  max-width: 78ch;
+  line-height: 1.55;
+}
+
+.fehlertext {
+  color: var(--kritisch);
+}
+
+/* ── Profile ──────────────────────────────────────── */
+
+.profilliste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
+  gap: 1rem;
+}
+
+.profil {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-top: 5px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 1rem 1.25rem;
+}
+
+.profil.aktiv {
+  border-top-color: var(--amt);
+}
+
+.profil h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.profil-meta {
+  margin: 0.1rem 0 0.5rem;
+  color: var(--tinte-leise);
+  font-size: 0.88rem;
+}
+
+.profil-daten {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.profil-daten dt {
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+}
+
+.profil-daten dd {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.hash {
+  font-variant-numeric: tabular-nums;
+}
+
+.profil details {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.profil summary {
+  cursor: pointer;
+  color: var(--amt-tief);
+  font-weight: 700;
+}
+
+.befunde {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.befund {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--linie-zart);
+  font-size: 0.9rem;
+}
+
+.befund-stufe {
+  font-weight: 700;
+}
+
+.befund-fehler .befund-stufe {
+  color: var(--kritisch);
+}
+
+.befund-warnung .befund-stufe {
+  color: var(--erheblich);
+}
+
+.befund-hinweis .befund-stufe {
+  color: var(--tinte-leise);
+}
+
+.befund-ok {
+  color: var(--ok);
+}
+
+.dateiliste {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  columns: 2 14rem;
+}
+
+.aktiv-marke {
+  font-weight: 700;
+  color: var(--amt-tief);
+  padding: 0 0.5rem;
+}
+
+/* ── Schmale Bildschirme (iPhone) ─────────────────── */
+
+@media (max-width: 860px) {
+  body {
+    font-size: 16px;
+  }
+
+  .arbeitsbereich {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .schritte ol {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    border-left: none;
+    border-bottom: 2px solid var(--linie);
+    scrollbar-width: none;
+  }
+
+  .schritt {
+    white-space: nowrap;
+    margin-left: 0;
+    margin-bottom: -2px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+
+  .schritt.aktiv {
+    border-bottom-color: var(--amt);
+  }
+
+  .schritt-inhalt {
+    padding: 0.9rem 0.75rem;
+  }
+
+  .element {
+    padding: 0.25rem 0.7rem 0.5rem;
+    border-left-width: 5px;
+  }
+
+  .gruppe {
+    padding: 0.5rem 0.6rem 0.1rem;
+  }
+
+  .stufen {
+    gap: 0.2rem;
+  }
+
+  .stufe-offen {
+    padding: 0 0.3rem;
+    font-size: 0.85rem;
+  }
+
+  .radar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .radar-grafik {
+    position: static;
+    justify-self: center;
+  }
+
+  .marke-zusatz {
+    display: none;
+  }
+
+  .profil-chip {
+    max-width: 34vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .kopf {
+    gap: 0.5rem;
+  }
+
+  .nav {
+    padding: 0.4rem 0.55rem;
+  }
+
+  .profil-chip {
+    display: none;
+  }
+
+  .segment {
+    padding: 0.45rem 0.65rem;
+  }
+}

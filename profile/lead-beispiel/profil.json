@@ -1,0 +1,42 @@
+{
+  "format": "lead-profil/1",
+  "id": "lead.beispiel.koordinierungsstelle",
+  "name": "LEAD-Beispiel – Koordinierungsstelle",
+  "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
+  "version": "1.0.0",
+  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
+  "lizenz": "CC-BY-4.0",
+  "ebene": "Bund",
+  "referenzraum": "Bevölkerungsschutz in Deutschland",
+  "variablen": {
+    "land": "Bund",
+    "meldende_stelle": "Koordinierungsstelle (Beispiel)",
+    "zeitzone": "Europe/Berlin",
+    "meldetakt": "wöchentlich",
+    "lageprodukt": "übergreifende Lagebild"
+  },
+  "meldung": {
+    "schema": "meldung.schema.json",
+    "ui": "meldung.ui.json",
+    "schema_id": "LEAD-Meldung-v1",
+    "eingang_schema_ids": [
+      "LEAD-Meldung-v1"
+    ]
+  },
+  "anweisungen": {
+    "erfassung": "anweisung-erfassung.md"
+  },
+  "sop": {
+    "dateien": [
+      "sop/SOP-LEAD_Sammelmappe.md"
+    ],
+    "teil_gemeinsam": "teil-a"
+  },
+  "kodierleitfaden": "kodierleitfaden.md",
+  "kontakte": "kontakte.json",
+  "modelle": {
+    "vorverarbeitung": "claude-haiku-5-5",
+    "erfassung": "claude-sonnet-5-5",
+    "verdichtung": "claude-opus-5-5"
+  }
+}

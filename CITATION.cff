@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Wenn Sie KI-LEAD verwenden, zitieren Sie es bitte wie unten angegeben."
+type: software
+title: "KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung"
+abstract: >-
+  Organisationsneutraler Forschungsdemonstrator für die KI-gestützte Anwendung der
+  LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz.
+  Die App läuft auf dem Gerät; organisationsspezifische Regeln stecken in austauschbaren
+  Profilpaketen (Schema, Darstellung, Arbeitsanweisung, SOP, Kodierleitfaden).
+authors:
+  - given-names: Heiko
+    family-names: Pereira Wolf
+    orcid: "https://orcid.org/0009-0004-0014-7616"
+    website: "https://www.pereirawolf.de"
+version: 0.1.0
+license: EUPL-1.2
+repository-code: "https://github.com/pereirawolf/ki-lead"
+keywords:
+  - Bevölkerungsschutz
+  - Lagebild
+  - Lagemeldung
+  - LEAD
+  - Lagenradar
+  - künstliche Intelligenz
+  - Forschungsdemonstrator

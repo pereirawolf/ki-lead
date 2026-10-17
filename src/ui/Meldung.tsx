@@ -1,0 +1,152 @@
+// Meldungsmaske: Schritte aus der Darstellungsdatei, Formular aus dem Schema.
+
+import { useRef, useState } from "react";
+import { unterSchema } from "../kern/schema";
+import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
+import { migriere } from "../kern/migration";
+import { pruefeGegenSchema } from "../kern/validierung";
+import { quellenHinweise } from "../kern/quellen";
+import type { Meldung as MeldungTyp, Profil } from "../kern/typen";
+import { Feld } from "./Feld";
+import { Pruefen } from "./Pruefen";
+
+interface Props {
+  profil: Profil;
+  meldung: MeldungTyp;
+  setMeldung: (m: MeldungTyp) => void;
+  neu: () => void;
+  zwischenstand?: string;
+}
+
+export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand }: Props) {
+  const ui = profil.ui;
+  const [schritt, setSchritt] = useState(0);
+  const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
+  const dateiRef = useRef<HTMLInputElement>(null);
+  const aktuell = ui.schritte[schritt];
+
+  const setze = (segs: Segment[], wert: unknown) => setMeldung(mitWert(meldung, segs, wert));
+
+  const oeffnen = async (datei: File) => {
+    let roh: unknown;
+    try {
+      roh = JSON.parse(await datei.text());
+    } catch {
+      setMeldungen({ art: "fehler", zeilen: [`${datei.name} ist keine gültige JSON-Datei.`] });
+      return;
+    }
+    const mig = migriere(roh, profil);
+    const d = mig.daten;
+    if (!d[ui.rollen.status_feld]) d[ui.rollen.status_feld] = ui.rollen.status_entwurf;
+    const schema = pruefeGegenSchema(profil.schema, d, ui);
+    const quellen = quellenHinweise(d, ui).filter((b) => b.stufe === "warnung");
+    setMeldung(d);
+    setSchritt(0);
+    const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
+    if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${ui.schritte[ui.schritte.length - 1].titel}“.`);
+    else zeilen.push("Schemaprüfung ohne Befund.");
+    if (quellen.length) zeilen.push(`Quellen: ${quellen.length} Hinweis(e).`);
+    setMeldungen({ art: !mig.bekannt || schema.length ? "hinweis" : "ok", zeilen });
+  };
+
+  const anzahlSv = (holeWert(meldung, ui.rollen.sachverhalte) || []).length;
+
+  return (
+    <div className="meldung">
+      <div className="werkzeugleiste">
+        <div className="werkzeugleiste-text">
+          <h1>{ui.titel}</h1>
+          {ui.untertitel && <p>{ui.untertitel}</p>}
+        </div>
+        <div className="werkzeugleiste-knoepfe">
+          <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>
+            Meldung öffnen
+          </button>
+          <button
+            type="button"
+            className="knopf leise"
+            onClick={() => {
+              if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
+                neu();
+                setSchritt(0);
+                setMeldungen(null);
+              }
+            }}
+          >
+            Neue Meldung
+          </button>
+          <input
+            ref={dateiRef}
+            type="file"
+            accept="application/json,.json"
+            hidden
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) oeffnen(f);
+              e.target.value = "";
+            }}
+          />
+        </div>
+      </div>
+      {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
+      {meldungen && (
+        <div className={`kasten kasten-${meldungen.art}`} role="status">
+          <ul>
+            {meldungen.zeilen.map((z, i) => (
+              <li key={i}>{z}</li>
+            ))}
+          </ul>
+          <button type="button" className="knopf leise klein" onClick={() => setMeldungen(null)}>
+            Ausblenden
+          </button>
+        </div>
+      )}
+
+      <div className="arbeitsbereich">
+        <nav className="schritte" aria-label="Schritte">
+          <ol>
+            {ui.schritte.map((s, i) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
+                  aria-current={i === schritt ? "step" : undefined}
+                  onClick={() => setSchritt(i)}
+                >
+                  <span className="schritt-nr">{i + 1}</span>
+                  <span className="schritt-titel">{s.titel}</span>
+                  {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <section className="schritt-inhalt" aria-labelledby="schritt-titel">
+          <h2 id="schritt-titel">{aktuell.titel}</h2>
+          {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
+          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" />}
+          {aktuell.felder.map((feld) => {
+            const segs = teilePfad(feld);
+            return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
+          })}
+          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
+          <div className="schritt-nav">
+            {schritt > 0 ? (
+              <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
+                Zurück: {ui.schritte[schritt - 1].titel}
+              </button>
+            ) : (
+              <span />
+            )}
+            {schritt < ui.schritte.length - 1 && (
+              <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
+                Weiter: {ui.schritte[schritt + 1].titel}
+              </button>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
