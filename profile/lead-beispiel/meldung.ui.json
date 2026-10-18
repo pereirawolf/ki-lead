@@ -151,7 +151,7 @@
       "hinweis": "0–6 je Dimension, optional – einzelne Dimensionen können leer bleiben (offen statt geschätzt)."
     },
     "freigabe": {
-      "label": "Freigabe",
+      "label": "Freigabe & Versand",
       "layout": "spalten"
     },
     "freigabe.erfassung": {
@@ -305,6 +305,7 @@
     "sv_bewertung_text": "sofort.bewertung_text",
     "sv_massnahmen": "analyse.massnahmen_empfehlungen",
     "sv_radar": "sofort.lagenradar",
+    "freigabe": "freigabe",
     "sv_textfelder": [
       "analyse.lage_ereignis",
       "analyse.risiken_auswirkungen",
@@ -354,6 +355,10 @@
       "quellen": "SOP-LEAD A.3, A.4",
       "rueckblick": "SOP-LEAD A.8.3"
     }
+  },
+  "bewertung_gliederung": {
+    "absatz": ["Kernaussage:", "Referenzraum:", "Beurteilung „", "Tendenz „", "D1 (=|offen|ist)", "(Keine )?Achsendivergenz", "Einschätzung \\("],
+    "zeile": ["D[2-9] (=|offen|ist)"]
   },
   "dateiname": "LEAD-Meldung_{land}_{meldende_stelle}_{meldezeitpunkt}",
   "kurzfassung": {

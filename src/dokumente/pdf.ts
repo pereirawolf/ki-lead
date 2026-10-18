@@ -7,6 +7,7 @@ import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
+import { gliedereBewertung } from "../kern/kennsaetze";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
 
 const BLAU: [number, number, number] = [31, 79, 130];
@@ -80,6 +81,14 @@ export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, un
   doc.setTextColor(20, 20, 20);
 }
 
+/** Neue Seite, wenn ab y weniger als „noetig“ mm Platz bleiben (verhindert verwaiste Überschriften). */
+function platz(doc: jsPDF, y: number, noetig: number): number {
+  const unten = doc.internal.pageSize.getHeight() - 16;
+  if (y + noetig <= unten) return y;
+  doc.addPage();
+  return 16;
+}
+
 /** Zeichenhaken für autoTable: Radargrafik links in der Wertzelle */
 function radarHaken(doc: jsPDF) {
   return (data: any) => {
@@ -125,7 +134,55 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
   }
   let text = wert === null || wert === undefined || wert === "" ? "–" : String(wert);
   if (f.widget === "datum" || f.widget === "datumzeit") text = datumDE(text) || "–";
+  const r = profil.ui.rollen;
+  if (r.sv_bewertung_text && gen === `${r.sachverhalte}[].${r.sv_bewertung_text}`) text = gliedereBewertung(text, profil.ui);
   out.push([label, text]);
+}
+
+/**
+ * Freigabeblock als Matrix (Zeilen: Erfassung, Freigabe, Versand; Spalten: Name, Datum, Handzeichen), wenn alle
+ * Unterfelder Objekte mit denselben Feldern sind; sonst als Liste. Leere Felder bleiben zum Ausfüllen frei.
+ */
+function freigabeZeichnen(doc: jsPDF, profil: Profil, d: Meldung, startY: number) {
+  const ui = profil.ui;
+  const feld = ui.rollen.freigabe!;
+  const k = aufloesen(aufloesen(profil.schema, profil.schema).properties?.[feld], profil.schema);
+  const wert = d[feld];
+  const kinder = Object.keys(k?.properties || {});
+  const teile = kinder.map((c) => aufloesen(k.properties[c], profil.schema));
+  const spalten = teile[0]?.properties ? Object.keys(teile[0].properties) : [];
+  const matrix = kinder.length > 0 && spalten.length > 0 && teile.every((t) => t?.properties && Object.keys(t.properties).join("|") === spalten.join("|"));
+  const titel = bezeichnung(ui, feld);
+  if (matrix) {
+    const wertText = (c: string, s: string) => {
+      const v = wert?.[c]?.[s];
+      if (v === null || v === undefined || v === "") return "";
+      const f = feldUi(ui, `${feld}.${c}.${s}`);
+      return f.widget === "datum" || f.widget === "datumzeit" ? datumDE(v) : String(v);
+    };
+    autoTable(doc, {
+      startY,
+      head: [[titel, ...spalten.map((s) => bezeichnung(ui, `${feld}.${kinder[0]}.${s}`))]],
+      body: kinder.map((c) => [bezeichnung(ui, `${feld}.${c}`), ...spalten.map((s) => wertText(c, s))]),
+      theme: "grid",
+      headStyles: { fillColor: BLAU },
+      styles: { fontSize: 8.5, cellPadding: 1.8, minCellHeight: 9, valign: "middle" },
+      columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+      rowPageBreak: "avoid",
+    });
+    return;
+  }
+  const body: Zelle[][] = [];
+  zeilen(profil, k, wert, [feld], body);
+  autoTable(doc, {
+    startY,
+    head: [[{ content: titel, colSpan: 2 }]],
+    body,
+    theme: "grid",
+    headStyles: { fillColor: BLAU },
+    styles: { fontSize: 8.5, cellPadding: 1.8 },
+    columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+  });
 }
 
 /** Zeichnet eine Meldung (Kopf, Sachverhalte, Quellen, Entstehung) ab startY und liefert die Endposition. */
@@ -135,7 +192,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   const wurzel = aufloesen(profil.schema, profil.schema);
   const kopf: Zelle[][] = [];
   for (const key of Object.keys(wurzel.properties || {})) {
-    if (key === r.sachverhalte || key === r.quellen || istAusgeblendet(ui, key)) continue;
+    if (key === r.sachverhalte || key === r.quellen || key === r.freigabe || istAusgeblendet(ui, key)) continue;
     if (d[key] === undefined) continue;
     zeilen(profil, wurzel.properties[key], d[key], [key], kopf);
   }
@@ -159,7 +216,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     zeilen(profil, elementSchema, sv, [r.sachverhalte, i], body);
     const titel = r.sv_bezeichnung ? holeWert(sv, r.sv_bezeichnung) : "";
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 6,
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 30),
       head: [[{ content: `${elementName} ${i + 1}${titel ? ": " + titel : ""}`, colSpan: 2 }]],
       body,
       theme: "grid",
@@ -173,7 +230,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
 
   if (r.quellen && String(holeWert(d, r.quellen) || "").trim()) {
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 6,
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
       head: [[bezeichnung(ui, r.quellen)]],
       body: [[String(holeWert(d, r.quellen))]],
       theme: "grid",
@@ -181,10 +238,12 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
       styles: { fontSize: 7.5, cellPadding: 1.8 },
     });
   }
+  // Freigabe & Versand als eigener Block am Ende, vor der Entstehungszeile
+  if (r.freigabe && d[r.freigabe] !== undefined) freigabeZeichnen(doc, profil, d, platz(doc, (doc as any).lastAutoTable.finalY + 6, 42));
   const ent = r.entstehung_feld ? d[r.entstehung_feld] : undefined;
   if (ent) {
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 4,
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 4, 14),
       body: [
         ["Entstehung", [ent.verfahren, ent.werkzeug, ent.modell, (ent.sop || []).join("; "), ent.kodierleitfaden, ent.erstellt].filter(Boolean).join(" · ")],
       ],

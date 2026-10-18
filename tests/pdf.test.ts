@@ -21,3 +21,30 @@ describe("PDF mit Lagenradar", () => {
     expect(() => radarZeichnen(doc, def, undefined, 10, 10, 50)).not.toThrow();
   });
 });
+
+describe("Freigabe am Ende und gegliederter Bewertungstext", () => {
+  it("setzt Freigabe & Versand zwischen Quellen und Entstehung, nicht in den Kopf", async () => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const bund = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka").find((x) => x.name.includes("_Bund_"))!.daten;
+    const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(bund, p, false).arrayBuffer()));
+    const pos = (s: string) => roh.indexOf(`(${s}`);
+    expect(roh).not.toContain("Freigabe › Erfassung");
+    expect(pos("Quellen & Referenzen")).toBeGreaterThan(0);
+    expect(pos("Freigabe & Versand")).toBeGreaterThan(pos("Quellen & Referenzen"));
+    expect(pos("Entstehung")).toBeGreaterThan(pos("Freigabe & Versand"));
+    expect(pos("Handzeichen")).toBeGreaterThan(pos("Freigabe & Versand"));
+  });
+  it("gliedert Abschnitte des Bewertungstexts mit Zeilen und Absätzen", async () => {
+    const { gliedereBewertung } = await import("../src/kern/kennsaetze");
+    const p = (await profil("lead-beispiel")).profil!;
+    const t =
+      "Kernaussage: A ist los.\nReferenzraum: Bund; t0 = 18.10.2026. Beurteilung „erheblich“: weil. Tendenz „Entspannung“: weil [Q1]. D1 = 2, weil. D2 = offen: fehlt.\nKeine Achsendivergenzen. Neubewertung bei: X Handlungsrelevant bis: 19.10.2026";
+    expect(gliedereBewertung(t, p.ui)).toBe(
+      "Kernaussage: A ist los.\n\nReferenzraum: Bund; t0 = 18.10.2026.\n\nBeurteilung „erheblich“: weil.\n\nTendenz „Entspannung“: weil [Q1].\n\nD1 = 2, weil.\nD2 = offen: fehlt.\n\nKeine Achsendivergenzen.\n\nNeubewertung bei: X Handlungsrelevant bis: 19.10.2026",
+    );
+    // Ohne Konfiguration bleibt der Text bis auf Kennsätze unverändert
+    expect(gliedereBewertung("Satz eins. Beurteilung „x“: y.", { ...p.ui, bewertung_gliederung: undefined, kennsaetze: {} })).toBe(
+      "Satz eins. Beurteilung „x“: y.",
+    );
+  });
+});

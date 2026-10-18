@@ -18,7 +18,16 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.0 | a6ed060 |
 | 0.4.1 | 1704922 |
 | 0.4.2 | 9f8ae9f |
-| 0.4.3 | Commit „PDF mit Lagenradar als Grafik; 0.4.3“ |
+| 0.4.3 | 9f8dca1 |
+| 0.4.4 | Commit „PDF: Freigabe & Versand am Ende, gegliederter Bewertungstext; 0.4.4“ |
+
+## [0.4.4] – 18.10.2026
+
+### Geändert
+
+- PDF: Der Freigabeblock steht nicht mehr im Kopf „Meldung“, sondern als eigener Block „Freigabe & Versand“ am Ende zwischen „Quellen & Referenzen“ und „Entstehung“, als Tabelle mit Zeilen Erfassung, Freigabe, Versand und Spalten Name, Datum, Handzeichen; leere Felder bleiben zum Ausfüllen frei. Gesteuert über die neue Rolle `freigabe` der Darstellungsdatei.
+- PDF, Kopiervorlage und Sachverhaltstabelle im Lagebild gliedern den Bewertungstext: Kernaussage, Referenzraum, Beurteilung, Tendenz, Achsenbegründungen und Kennsätze („Neubewertung bei:“, „Handlungsrelevant bis:“ …) beginnen auf eigener Zeile oder mit Leerzeile. Die Satzanfänge kommen aus der Darstellungsdatei (`bewertung_gliederung`); gespeicherte Meldungen bleiben unverändert.
+- PDF: Abschnittsüberschriften stehen nicht mehr allein am Seitenende.
 
 ## [0.4.3] – 18.10.2026
 
@@ -118,7 +127,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...main
+[0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...main
+[0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...9f8dca1
 [0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...9f8ae9f
 [0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...1704922
 [0.4.0]: https://github.com/pereirawolf/ki-lead/compare/3146797...a6ed060

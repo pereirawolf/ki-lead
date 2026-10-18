@@ -45,7 +45,7 @@ describe("Schemaprüfung", () => {
 
   it("bezeichnet Freigabefelder über Platzhalter-Muster", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(pfadBezeichnung(p!.ui, "/freigabe/versand/hz")).toBe("Freigabe › Versand › Handzeichen");
+    expect(pfadBezeichnung(p!.ui, "/freigabe/versand/hz")).toBe("Freigabe & Versand › Versand › Handzeichen");
   });
 });
 

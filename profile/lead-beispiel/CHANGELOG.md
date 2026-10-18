@@ -6,6 +6,12 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.2.0 – 18.10.2026
+
+### Darstellung
+
+- Darstellungsdatei: Rolle `freigabe` (Freigabeblock in PDF-Ausgaben am Ende); Bezeichnung des Feldes „Freigabe & Versand“ statt „Freigabe“; Abschnitt `bewertung_gliederung` für die Gliederung des Bewertungstexts in Ausgaben (Kernaussage, Referenzraum, Beurteilung, Tendenz, Achsen D1–D8, Achsendivergenz, Einschätzung). Fachliche Regeln unverändert.
+
 ## 1.1.0 – 18.10.2026
 
 ### Fachliche Regeln

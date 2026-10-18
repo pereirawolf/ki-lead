@@ -92,3 +92,41 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   quellenHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: "Quellen: " + b.text }));
   return out;
 }
+
+function rx(quelle: string): RegExp | null {
+  try {
+    return new RegExp(quelle, "u");
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Gliedert einen Bewertungstext für Ausgaben (PDF, Kopiervorlage, Tabellen): Abschnitte wie „Kernaussage“,
+ * „Referenzraum“, Beurteilung, Tendenz, Achsenbegründungen und Kennsätze beginnen auf eigener Zeile bzw.
+ * mit Leerzeile. Satzanfänge kommen aus der Darstellungsdatei (bewertung_gliederung). Der Inhalt bleibt
+ * unverändert; nur Zeilenumbrüche werden ergänzt. Gespeicherte Meldungen werden nicht verändert.
+ */
+export function gliedereBewertung(text: unknown, ui: UiKonfig): string {
+  let t = String(text ?? "").replace(/\r\n?/g, "\n");
+  if (!t.trim()) return t;
+  const g = ui.bewertung_gliederung || {};
+  const ks = Object.values(ui.kennsaetze || {}).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const absatz = (g.absatz || []).map(rx).filter(Boolean) as RegExp[];
+  const zeile = [...(g.zeile || []), ...ks].map(rx).filter(Boolean) as RegExp[];
+  const alle = [...absatz.map((r) => ({ r, art: "absatz" as const })), ...zeile.map((r) => ({ r, art: "zeile" as const }))];
+  // 1. Satzanfänge mitten in einer Zeile: nach Satzende (. ; ! ? ) ] “) einen Umbruch setzen
+  for (const { r, art } of alle) {
+    const muster = new RegExp(`([.;!?)\\]“"])[ \\t]+(?=${r.source})`, "gu");
+    t = t.replace(muster, art === "absatz" ? "$1\n\n" : "$1\n");
+  }
+  // 2. Absatzanfänge am Zeilenanfang: Leerzeile davor
+  for (const r of absatz) t = t.replace(new RegExp(`([^\\n])\\n(?=${r.source})`, "gu"), "$1\n\n");
+  // 3. Der erste Kennsatz eröffnet einen eigenen Absatz
+  const kRx = ks.length ? new RegExp(`\\n(?=(${ks.join("|")}))`, "u") : null;
+  if (kRx) {
+    const m = kRx.exec(t);
+    if (m && t[m.index - 1] !== "\n") t = t.slice(0, m.index) + "\n" + t.slice(m.index);
+  }
+  return t.replace(/\n{3,}/g, "\n\n").trim();
+}

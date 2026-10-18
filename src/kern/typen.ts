@@ -89,6 +89,8 @@ export interface Rollen {
   status_entwurf: string;
   status_final: string;
   entstehung_feld?: string;
+  /** Freigabeblock (Zeichnungen); in Ausgaben als eigener Block am Ende */
+  freigabe?: string;
   land?: string;
   meldende_stelle?: string;
   meldezeitpunkt?: string;
@@ -145,6 +147,11 @@ export interface UiKonfig {
   dateiname?: string;
   kurzfassung?: { titel: string; kopf: string; kennsaetze?: string[] };
   lagebild?: LagebildKonfig;
+  /**
+   * Gliederung des Bewertungstexts in Ausgaben (PDF, Kopiervorlage): Satzanfänge als reguläre Ausdrücke.
+   * „absatz“ beginnt einen neuen Absatz (Leerzeile), „zeile“ eine neue Zeile. Kennsätze gliedert die App selbst.
+   */
+  bewertung_gliederung?: { absatz?: string[]; zeile?: string[] };
 }
 
 export interface Sop {

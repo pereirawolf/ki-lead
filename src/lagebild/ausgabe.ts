@@ -5,6 +5,7 @@ import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
+import { gliedereBewertung } from "../kern/kennsaetze";
 import type { Profil, RadarDef } from "../kern/typen";
 import { absender, farbeBeurteilung, farbeTendenz, stelleVon, zeitpunktVon, type Farbe, type LagebildEintrag, type SvEintrag } from "./lagebild";
 
@@ -158,7 +159,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
       .filter(Boolean)
       .map((p) => bezeichnung(ui, `${sv}.${p}`))
       .join(" & ");
-    const text = s.bewertungText.trim() ? `${teile.length ? "<br>" : ""}${html(s.bewertungText)}` : "";
+    const text = s.bewertungText.trim() ? `${teile.length ? "<br><br>" : ""}${html(gliedereBewertung(s.bewertungText, ui))}` : "";
     zeile(label || bezeichnung(ui, `${sv}.${r.sv_bewertung_text}`), teile.join(" &nbsp;/&nbsp; ") + text);
   }
 
@@ -199,6 +200,6 @@ export function kopiervorlageText(s: SvEintrag, profil: Profil): string {
   const z: string[] = [absender(s.eintrag, profil), s.bezeichnung || "(ohne Bezeichnung)"];
   for (const feld of r.sv_analysefelder || []) z.push("", bezeichnung(ui, `${r.sachverhalte}[].${feld}`), String(holeWert(s.sv, feld) || "–"));
   const bt = [s.beurteilung, s.tendenz].filter(Boolean).join(" / ");
-  if (bt || s.bewertungText) z.push("", bt, s.bewertungText);
+  if (bt || s.bewertungText) z.push("", bt, gliedereBewertung(s.bewertungText, ui));
   return z.join("\n").trim();
 }

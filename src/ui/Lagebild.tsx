@@ -6,7 +6,7 @@ import { holeWert } from "../kern/pfad";
 import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarZeilen } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE, jetztLokal } from "../kern/ausgabe";
-import { kennsatz } from "../kern/kennsaetze";
+import { gliedereBewertung, kennsatz } from "../kern/kennsaetze";
 import {
   absender,
   alleSachverhalte,
@@ -708,7 +708,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                         {r.sv_ort && <td>{s.ort || "–"}</td>}
                         {r.sv_eintritt && <td>{datumDE(s.eintritt) || "–"}</td>}
                         <td>{svMarken(s)}</td>
-                        {r.sv_bewertung_text && <td className="lb-lang">{s.bewertungText || "–"}</td>}
+                        {r.sv_bewertung_text && <td className="lb-lang">{gliedereBewertung(s.bewertungText, ui) || "–"}</td>}
                         {(r.sv_analysefelder || []).map((f) => (
                           <td key={f} className="lb-lang">
                             {String(holeWert(s.sv, f) || "–")}
