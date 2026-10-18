@@ -141,7 +141,11 @@ export function saetze(t: string): string[] {
     .filter(Boolean);
 }
 
-/** Klartext der Leitungsfassung: Kopf, Kernaussage, Sachverhalte mit Beurteilung, Abschnitte, Frist. */
+/**
+ * Klartext der Leitungsfassung: Kopf, Kernaussage, eigene Zeile „Bewertung & Tendenz“ (bei einem Sachverhalt
+ * mit den Werten in der Zeile, bei mehreren je Sachverhalt eine Zeile mit Kurztitel), Abschnitte je Analysefeld,
+ * Frist. Alle Abschnitte sind durch Leerzeilen getrennt.
+ */
 export function kurzfassungText(d: Meldung, profil: Profil, k: KurzfassungStruktur): string {
   const ui = profil.ui;
   const r = ui.rollen;
@@ -150,17 +154,21 @@ export function kurzfassungText(d: Meldung, profil: Profil, k: KurzfassungStrukt
   const stand = r.meldezeitpunkt ? datumDE(holeWert(d, r.meldezeitpunkt)) : "";
   const zeilen = [`${titel}${stelle ? ` – ${stelle}` : ""}${stand ? `, Stand ${stand}` : ""}`, "", k.kernaussage];
   const svs = sachverhalte(d, ui);
-  if (svs.length) {
+  const rollen = [r.sv_beurteilung, r.sv_tendenz].filter(Boolean) as string[];
+  if (svs.length && rollen.length) {
+    const label = rollen.map((p) => ui.felder[`${r.sachverhalte}[].${p}`]?.label || p.split(".").pop()).join(" & ");
+    const werte = (sv: Meldung) => rollen.map((p) => String(holeWert(sv, p) || "keine Angabe")).join(", ");
     zeilen.push("");
-    svs.forEach((sv, i) => {
-      const name = k.kurztitel[i] || (r.sv_bezeichnung && holeWert(sv, r.sv_bezeichnung)) || `Sachverhalt ${i + 1}`;
-      const b = (r.sv_beurteilung && holeWert(sv, r.sv_beurteilung)) || "keine Angabe";
-      const t = (r.sv_tendenz && holeWert(sv, r.sv_tendenz)) || "keine Angabe";
-      zeilen.push(`• ${name}: ${b}, ${t}`);
-    });
+    if (svs.length === 1) zeilen.push(`${label}: ${werte(svs[0])}`);
+    else {
+      zeilen.push(`${label}:`);
+      svs.forEach((sv, i) => {
+        const name = k.kurztitel[i] || (r.sv_bezeichnung && holeWert(sv, r.sv_bezeichnung)) || `Sachverhalt ${i + 1}`;
+        zeilen.push(`• ${name}: ${werte(sv)}`);
+      });
+    }
   }
-  zeilen.push("");
-  for (const a of abschnitte(profil)) zeilen.push(`${a.label}: ${k.abschnitte[a.schluessel] || "Keine Angaben."}`);
+  for (const a of abschnitte(profil)) zeilen.push("", `${a.label}: ${k.abschnitte[a.schluessel] || "Keine Angaben."}`);
   const frist = fruehesteFrist(d, profil);
   if (frist) zeilen.push("", frist);
   return zeilen.join("\n") + "\n";

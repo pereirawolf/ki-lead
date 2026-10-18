@@ -21,7 +21,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.3 | 9f8dca1 |
 | 0.4.4 | 68ff2da |
 | 0.4.5 | ea3a8a3 |
-| 0.4.6 | Commit „Management Summary leeren und per Knopf erstellen; 0.4.6“ |
+| 0.4.6 | 6636068 |
+| 0.4.7 | Commit „Management Summary: Bewertung & Tendenz als eigene Zeile, Leerzeilen; 0.4.7“ |
+
+## [0.4.7] – 18.10.2026
+
+### Geändert
+
+- Management Summary: Beurteilung und Tendenz stehen in einer eigenen Zeile „Bewertung & Tendenz: geringfügig, Entspannung“ statt hinter dem Kurztitel des Sachverhalts; die Bezeichnung kommt aus den Feldbezeichnungen des Profils. Bei mehreren Sachverhalten folgt unter „Bewertung & Tendenz:“ je Sachverhalt eine Zeile mit Kurztitel, Beurteilung und Tendenz.
+- Management Summary: Alle Abschnitte („Lage & Ereignis:“, „Risiken & Auswirkungen:“ …) sind durch Leerzeilen getrennt. Bereits erstellte Fassungen behalten ihre Form, bis sie neu erstellt werden.
 
 ## [0.4.6] – 18.10.2026
 
@@ -144,7 +152,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...main
+[0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...main
+[0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...6636068
 [0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...ea3a8a3
 [0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...68ff2da
 [0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...9f8dca1

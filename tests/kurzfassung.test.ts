@@ -97,6 +97,9 @@ describe("Management Summary", () => {
     expect(k.text).toContain(`• Sturmschäden Thüringer Wald: ${th.sachverhalte[0].sofort.beurteilung}, ${th.sachverhalte[0].sofort.tendenz}`);
     expect(k.text).toContain(`• Stromausfall Sonneberg: ${th.sachverhalte[1].sofort.beurteilung}`);
     expect(k.text).toContain("Risiken & Auswirkungen: Pflege und Wasser hängen am Notstrom.");
+    // Eigene Zeile „Bewertung & Tendenz“, Abschnitte durch Leerzeilen getrennt
+    expect(k.text).toContain("\n\nBewertung & Tendenz:\n• Sturmschäden");
+    expect(k.text).toMatch(/\n\nLage & Ereignis: .*\n\nRisiken & Auswirkungen: /);
     expect(k.text).toMatch(/\nHandlungsrelevant bis: \d{2}\.\d{2}\.\d{4}/);
     expect(k.text).not.toMatch(/\[Q/);
     expect(k.hinweise.join(" ")).toMatch(/Quellenverweise/);
@@ -106,6 +109,21 @@ describe("Management Summary", () => {
     const z = await kurzfassungErstellen(p!, th, attrappe(JSON.stringify(lang)), STANDARD);
     expect(z.hinweise.join(" ")).toMatch(/mehr als 2 Sätzen/);
     expect(z.hinweise.join(" ")).toMatch(/2 Sachverhalt/);
+  });
+
+  it("weist Bewertung & Tendenz bei einem Sachverhalt in einer eigenen Zeile aus", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
+    const antwort = {
+      kernaussage: "K.",
+      abschnitte: { lage_ereignis: "L.", risiken_auswirkungen: "R.", massnahmen_empfehlungen: "M.", abhaengigkeiten_interdependenzen: "A." },
+      kurztitel: ["Stromausfall Sonneberg"],
+    };
+    const k = await kurzfassungErstellen(p!, eins, attrappe(JSON.stringify(antwort)), STANDARD);
+    const sv = th.sachverhalte[1].sofort;
+    expect(k.text).toContain(`K.\n\nBewertung & Tendenz: ${sv.beurteilung}, ${sv.tendenz}\n\nLage & Ereignis: L.\n\nRisiken & Auswirkungen: R.\n\nMaßnahmen`);
+    expect(k.text).not.toContain("•");
+    expect(k.text).not.toContain("Stromausfall Sonneberg:");
   });
 
   it("findet die früheste Frist", async () => {
