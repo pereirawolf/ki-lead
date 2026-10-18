@@ -16,11 +16,13 @@ interface Props {
   meldung: MeldungTyp;
   setMeldung: (m: MeldungTyp) => void;
   neu: () => void;
+  /** Wird aufgerufen, wenn eine geöffnete Datei die Meldung in der Maske ersetzt. */
+  ersetzt?: () => void;
   zwischenstand?: string;
   ki?: KiZugang;
 }
 
-export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand, ki }: Props) {
+export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzt, zwischenstand, ki }: Props) {
   const ui = profil.ui;
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
@@ -61,6 +63,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand
     }
     const quellen = quellenHinweise(d, ui).filter((b) => b.stufe === "warnung");
     setMeldung(d);
+    ersetzt?.();
     setSchritt(0);
     const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
     if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${ui.schritte[ui.schritte.length - 1].titel}“.`);

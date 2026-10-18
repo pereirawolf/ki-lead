@@ -16,6 +16,7 @@ import {
   zwischenstandSchreiben,
 } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
+import { kurzfassungLeeren } from "./ui/Kurzfassung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
@@ -82,19 +83,27 @@ export default function App() {
     schluesselSchreiben(wert, id);
   };
 
+  /** Meldung in der Maske durch eine andere ersetzen; die Management Summary der alten Meldung wird geleert. */
+  const meldungErsetzen = (m: Meldung) => {
+    setMeldung(m);
+    if (profil) kurzfassungLeeren(profil.manifest.id);
+  };
+
   const kiUebernehmen = (m: Meldung) => {
     if (!confirm("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
-    setMeldung(m);
+    meldungErsetzen(m);
     setAnsicht("meldung");
   };
 
   const lagebildOeffnen = (m: Meldung) => {
     if (!confirm("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
-    setMeldung(m);
+    meldungErsetzen(m);
     setAnsicht("meldung");
   };
 
   const anKiUebergeben = (dateien: UebergabeMeldung[]) => {
+    // Aus der Verdichtung entsteht eine neue Meldung: die bisherige Management Summary gilt nicht mehr
+    if (profil) kurzfassungLeeren(profil.manifest.id);
     setKiUebergabe((alt) => ({ nr: (alt?.nr || 0) + 1, dateien }));
     setAnsicht("ki");
   };
@@ -283,7 +292,7 @@ export default function App() {
           <Fehlergrenze
             schluessel={profil.hash}
             sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", "KI-LEAD_Meldung_Sicherung.json", "application/json")}
-            zuruecksetzen={() => setMeldung(neueMeldung(profil))}
+            zuruecksetzen={() => meldungErsetzen(neueMeldung(profil))}
             zuruecksetzenText="Neue Meldung beginnen"
           >
             <MeldungAnsicht
@@ -291,7 +300,8 @@ export default function App() {
               profil={profil}
               meldung={meldung}
               setMeldung={setMeldung}
-              neu={() => setMeldung(neueMeldung(profil))}
+              neu={() => meldungErsetzen(neueMeldung(profil))}
+              ersetzt={() => kurzfassungLeeren(profil.manifest.id)}
               zwischenstand={gesichert}
               ki={{ schluessel, einstellungen }}
             />
@@ -329,7 +339,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.5. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.6. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

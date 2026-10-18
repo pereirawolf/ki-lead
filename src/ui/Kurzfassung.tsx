@@ -1,9 +1,12 @@
 // Management Summary im Schritt „Prüfen & Exportieren“: KI-Fassung für die Leitung
 // (gespeichert je Profil, mit Hinweis, wenn die Meldung sich seither geändert hat) und
 // der bisherige Feldauszug ohne Quellenverweise als Rückfallebene ohne KI.
+// Die Fassung wird nur auf Knopfdruck erstellt. Sie wird geleert, wenn die Meldung in der Maske durch eine
+// andere ersetzt wird (neue Meldung, Meldung öffnen, Übernahme eines KI-Entwurfs) und bei der Übergabe von
+// Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { get, set } from "idb-keyval";
+import { del, get, set } from "idb-keyval";
 import { anbieterVon, ANBIETER_NAME, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
@@ -17,6 +20,15 @@ import { fingerabdruck, kurzfassungErstellen, meldungFuerKurzfassung, type Kurzf
 export interface KiZugang {
   schluessel: Schluessel;
   einstellungen: Einstellungen;
+}
+
+const EREIGNIS_GELEERT = "ki-lead:kurzfassung-geleert";
+const idbSchluessel = (profilId: string) => `kurzfassung:${profilId}`;
+
+/** Gespeicherte Management Summary eines Profils leeren und eine geöffnete Anzeige benachrichtigen. */
+export async function kurzfassungLeeren(profilId: string): Promise<void> {
+  await del(idbSchluessel(profilId)).catch(() => undefined);
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(EREIGNIS_GELEERT, { detail: profilId }));
 }
 
 interface Gespeichert {
@@ -47,7 +59,7 @@ function Kopieren({ text }: { text: string }) {
 
 export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; meldung: Meldung; ki?: KiZugang }) {
   const titel = profil.ui.kurzfassung?.titel || "Management Summary";
-  const schluesselIdb = `kurzfassung:${profil.manifest.id}`;
+  const schluesselIdb = idbSchluessel(profil.manifest.id);
   const fp = useMemo(() => fingerabdruck(meldungFuerKurzfassung(meldung, profil)), [meldung, profil]);
   const [gespeichert, setGespeichert] = useState<Gespeichert | null>(null);
   const [laeuft, setLaeuft] = useState(false);
@@ -59,8 +71,28 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
   const auszug = useMemo(() => managementSummary(meldung, profil), [meldung, profil]);
 
   useEffect(() => {
-    get(schluesselIdb).then((g) => setGespeichert((g as Gespeichert) || null));
-  }, [schluesselIdb]);
+    let gueltig = true;
+    get(schluesselIdb).then((g) => gueltig && setGespeichert((g as Gespeichert) || null));
+    const geleert = (e: Event) => {
+      if ((e as CustomEvent).detail !== profil.manifest.id) return;
+      abbruch.current?.abort();
+      setGespeichert(null);
+      setFehler(null);
+    };
+    window.addEventListener(EREIGNIS_GELEERT, geleert);
+    return () => {
+      gueltig = false;
+      window.removeEventListener(EREIGNIS_GELEERT, geleert);
+    };
+  }, [schluesselIdb, profil.manifest.id]);
+
+  const leeren = async () => {
+    if (
+      !confirm(`${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`)
+    )
+      return;
+    await kurzfassungLeeren(profil.manifest.id);
+  };
 
   const kfModell = ki ? modellFuer("kurzfassung", ki.einstellungen, profil) : "";
   const hatSchluessel = !!ki && !!ki.schluessel[anbieterVon(kfModell)];
@@ -101,7 +133,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
         <>
           {veraltet && (
             <div className="kasten kasten-hinweis" role="status">
-              <p>Die Meldung wurde seit dieser Fassung geändert. Bitte neu erstellen, bevor du sie weitergibst.</p>
+              <p>Die Meldung wurde seit dieser Fassung geändert. Bitte „{titel} erstellen“ wählen, bevor du sie weitergibst.</p>
             </div>
           )}
           {kf.hinweise.length > 0 && (
@@ -144,6 +176,11 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
             >
               Protokoll
             </button>
+            {!laeuft && (
+              <button type="button" className="knopf leise" onClick={leeren}>
+                Leeren
+              </button>
+            )}
           </div>
         </>
       ) : null}
@@ -159,7 +196,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
           laeuft ? (
             <>
               <span className="laufanzeige">
-                <span className="puls" aria-hidden="true" /> Wird formuliert …
+                <span className="puls" aria-hidden="true" /> {titel} wird erstellt …
               </span>
               <button type="button" className="knopf leise" onClick={() => abbruch.current?.abort()}>
                 Abbrechen
@@ -167,7 +204,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
             </>
           ) : (
             <button type="button" className={kf && !veraltet ? "knopf" : "knopf primaer"} onClick={erstellen}>
-              {kf ? "Neu formulieren" : "Mit KI formulieren"}
+              {titel} erstellen
             </button>
           )
         ) : (

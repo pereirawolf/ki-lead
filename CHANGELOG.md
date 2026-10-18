@@ -20,7 +20,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.2 | 9f8ae9f |
 | 0.4.3 | 9f8dca1 |
 | 0.4.4 | 68ff2da |
-| 0.4.5 | Commit „Gegliederte Analysefelder in PDF, Kopiervorlage und Lagebild; 0.4.5“ |
+| 0.4.5 | ea3a8a3 |
+| 0.4.6 | Commit „Management Summary leeren und per Knopf erstellen; 0.4.6“ |
+
+## [0.4.6] – 18.10.2026
+
+### Geändert
+
+- Management Summary: Der Knopf heißt „Management Summary erstellen“ (bisher „Mit KI formulieren“ bzw. „Neu formulieren“); die Bezeichnung folgt dem Titel aus dem Profil. Die Fassung entsteht nur auf Knopfdruck.
+- Management Summary: neuer Knopf „Leeren“ (mit Rückfrage). Automatisch geleert wird die Fassung, wenn die Meldung in der Maske durch eine andere ersetzt wird (Neue Meldung, Meldung öffnen, Übernahme eines KI-Entwurfs, Übernahme einer Meldung aus dem Lagebild, Neubeginn nach einem Fehler) und wenn Meldungen aus dem Lagebild an die KI-Verdichtung übergeben werden. Bearbeitungen der geöffneten Meldung leeren sie nicht; dann bleibt der Hinweis, dass die Fassung veraltet ist.
 
 ## [0.4.5] – 18.10.2026
 
@@ -136,7 +144,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...main
+[0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...main
+[0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...ea3a8a3
 [0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...68ff2da
 [0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...9f8dca1
 [0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...9f8ae9f
