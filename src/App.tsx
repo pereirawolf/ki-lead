@@ -18,7 +18,8 @@ import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
-import { einstellungenLesen, einstellungenSchreiben, schluesselLesen, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
+import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
+import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -54,14 +55,14 @@ export default function App() {
   const [gesichert, setGesichert] = useState<string>();
   const timer = useRef<number>();
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
-  const [schluessel, setSchluesselRoh] = useState("");
+  const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
   const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: { name: string; text: string }[] } | null>(null);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
 
   useEffect(() => {
     einstellungenLesen().then(setEinstellungenRoh);
-    schluesselLesen().then(setSchluesselRoh);
+    alleSchluesselLesen().then(setSchluesselRoh);
   }, []);
 
   const setEinstellungen = (e: Einstellungen) => {
@@ -69,9 +70,9 @@ export default function App() {
     einstellungenSchreiben(e);
   };
 
-  const setSchluessel = (s: string) => {
-    setSchluesselRoh(s);
-    schluesselSchreiben(s);
+  const setSchluessel = (id: AnbieterId, wert: string) => {
+    setSchluesselRoh((alt) => ({ ...alt, [id]: wert }));
+    schluesselSchreiben(wert, id);
   };
 
   const kiUebernehmen = (m: Meldung) => {
@@ -241,7 +242,8 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.3. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an Anthropic. Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0.
+        KI-LEAD 0.4. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>
   );

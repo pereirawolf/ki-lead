@@ -130,7 +130,9 @@ Markdown mit Platzhaltern: `{{profil.*}}`, `{{auftrag.*}}` (Sachverhalt, Ausgang
 |---|---|
 | `erfassung` (Pflicht) | Modus A, Stufe S2 Recherche und Entwurf |
 | `kurzfassung` (optional) | Management Summary aus der fertigen Meldung; ohne Datei nutzt die App eine knappe Standardanweisung. Die Absätze folgen `rollen.sv_analysefelder`. |
-| `verdichtung` (geplant) | Modus B, Verdichtung mehrerer Meldungen |
+| `verdichtung` (optional) | Modus B: ergänzt die Erfassungsanweisung, sobald Eingangsmeldungen anderer Stellen im Material liegen; ohne Datei nutzt die App eine knappe Standardfassung |
+
+Modelle je Rolle (`modelle`): `vorverarbeitung` (S1), `erfassung` (S2), `verdichtung` (S2 bei Verdichtung), `reparatur` (S3), `kurzfassung`. Erlaubt sind Kennungen von Anthropic (`claude-…`) und OpenAI (`gpt-…`); die App wählt den Anbieter nach der Kennung. Die Einstellungen auf dem Gerät gehen vor.
 
 Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. B. „Einschätzung (Koordinierungsstelle)“. Fehlt sie, setzt die App `meldende_stelle` ein.
 

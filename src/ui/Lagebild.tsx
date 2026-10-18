@@ -198,17 +198,18 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     if (confirm(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`)) setDateien([]);
   };
 
+  const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
-  const anKi = () => {
-    const liste = eintraege.map(dateiZu).filter(Boolean) as LagebildDatei[];
+  const [uebergabeWahl, setUebergabeWahl] = useState<Set<string> | null>(null);
+  const anKi = () => setUebergabeWahl(new Set(eintraege.filter((e) => !(eigeneStelle && stelleVon(e, profil).startsWith(eigeneStelle))).map((e) => e.id)));
+  const uebergabeStarten = () => {
+    const liste = eintraege
+      .filter((e) => uebergabeWahl?.has(e.id))
+      .map(dateiZu)
+      .filter(Boolean) as LagebildDatei[];
     if (!liste.length) return;
-    if (
-      !confirm(
-        `${liste.length} Meldung(en) an die KI-Erfassung übergeben? Dort werden sie als Material einer Verdichtung geführt; vor dem Lauf lassen sich einzelne wieder entfernen.`,
-      )
-    )
-      return;
+    setUebergabeWahl(null);
     uebergeben(liste);
   };
 
@@ -245,7 +246,6 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     );
   };
 
-  const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
   const marken = (e: LagebildEintrag) => (
     <>
       {e.fremd ? (
@@ -364,6 +364,45 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
               </button>
             </div>
           </div>
+          {uebergabeWahl && (
+            <div className="kasten kasten-info lb-uebergabe">
+              <h3>An die KI-Verdichtung übergeben</h3>
+              <p>
+                Ausgewählte Meldungen gehen als Material in die KI-Erfassung. Meldungen anderer Stellen werden verdichtet; eine eigene Meldung gilt dort als
+                Vormeldung und wird fortgeschrieben. Für einen Vergleich mit einer vorhandenen eigenen Fassung diese hier abwählen.
+              </p>
+              <ul className="lb-auswahl">
+                {eintraege.map((e) => (
+                  <li key={e.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={uebergabeWahl.has(e.id)}
+                        onChange={(ev) => {
+                          const neu = new Set(uebergabeWahl);
+                          if (ev.target.checked) neu.add(e.id);
+                          else neu.delete(e.id);
+                          setUebergabeWahl(neu);
+                        }}
+                      />
+                      <span>
+                        {absender(e, profil)} <span className="material-meta">({datumDE(zeitpunktVon(e, profil)) || e.name})</span>
+                      </span>
+                      {marken(e)}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <div className="aktionen">
+                <button type="button" className="knopf primaer" disabled={!uebergabeWahl.size} onClick={uebergabeStarten}>
+                  {uebergabeWahl.size} Meldung{uebergabeWahl.size === 1 ? "" : "en"} übergeben
+                </button>
+                <button type="button" className="knopf leise" onClick={() => setUebergabeWahl(null)}>
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          )}
           <details className="lb-dateiliste" open={eintraege.length <= 4}>
             <summary>
               Dateien ({eintraege.length}){kz.schemaAbweichungen ? ` · ${kz.schemaAbweichungen} mit Schemaabweichung` : ""}

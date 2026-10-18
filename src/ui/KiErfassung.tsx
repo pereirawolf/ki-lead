@@ -1,7 +1,7 @@
 // KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnthropicAnbieter } from "../anbieter/anthropic";
+import { ANBIETER_NAME, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -9,16 +9,17 @@ import type { Fortschritt } from "../anbieter/typen";
 import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
 import { dateiAnbieten } from "../speicher/speicher";
-import { modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { VergleichKasten } from "./Vergleich";
+import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
 import { ereignisarten, fachSops, sopsFuerArten } from "../pipeline/kontext";
 import { laeufeLaden, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
-import { dateiLesen, urlsAusText, type Material } from "../pipeline/material";
+import { dateiLesen, istVerdichtung, urlsAusText, type Material } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 
 interface Props {
   profil: Profil;
   einstellungen: Einstellungen;
-  schluessel: string;
+  schluessel: Schluessel;
   zuEinstellungen: () => void;
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
@@ -150,7 +151,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     abbruch.current = ctrl;
     return {
       profil,
-      anbieter: new AnthropicAnbieter(schluessel),
+      anbieter: new Verteiler(schluessel),
       einstellungen,
       lauf: l,
       material,
@@ -299,7 +300,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setVorschlag({ ...vorschlag, sachverhalte: [...vorschlag.sachverhalte.slice(0, i - 1), vereint, ...vorschlag.sachverhalte.slice(i + 1)] });
   };
 
-  const kannStarten = !!schluessel && datenOk && (sachverhalt.trim() || stichworte.trim() || urls.gueltig.length || material.length);
+  const fehlend = fehlendeSchluessel(laufModelle(einstellungen, profil, istVerdichtung(material)), schluessel);
+  const kannStarten = !fehlend.length && datenOk && (sachverhalt.trim() || stichworte.trim() || urls.gueltig.length || material.length);
 
   return (
     <div className="ki">
@@ -320,9 +322,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
         )}
       </div>
 
-      {!schluessel && (
+      {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
-          <p>Für die KI-Erfassung brauchst du einen eigenen API-Schlüssel von Anthropic.</p>
+          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")}.</p>
           <button type="button" className="knopf klein" onClick={zuEinstellungen}>
             Zu den Einstellungen
           </button>
@@ -460,12 +462,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               <label className="bestaetigung">
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
-                  Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an
-                  Anthropic.
+                  Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an{" "}
+                  {[...new Set(laufModelle(einstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
                 </span>
               </label>
               <p className="hinweis">
-                S1 mit {modellFuer("vorverarbeitung", einstellungen, profil)}, S2 mit {modellFuer("erfassung", einstellungen, profil)}
+                S1 mit {modellFuer("vorverarbeitung", einstellungen, profil)}, S2 mit{" "}
+                {modellFuer(verdichtung ? "verdichtung" : "erfassung", einstellungen, profil)}
                 {websuche ? ` und bis zu ${einstellungen.websucheMax} Websuchen` : " ohne Websuche"}. Ein Lauf kostet je nach Umfang meist einige Cent bis etwa
                 einen US-Dollar.
               </p>
@@ -697,7 +700,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   Zurück zum Auftrag
                 </button>
                 <button type="button" className="knopf primaer" onClick={s2Starten} disabled={!vorschlag.sachverhalte.length}>
-                  Bestätigen und recherchieren (S2)
+                  {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
                 </button>
               </div>
             </>
@@ -705,6 +708,11 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
           {phase === "ergebnis" && lauf && (
             <Ergebnis
+              profil={profil}
+              aendern={async (l) => {
+                setLauf(l);
+                await laufSpeichern(l);
+              }}
               lauf={lauf}
               fehler={fehler}
               uebernehmen={uebernehmen}
@@ -768,12 +776,16 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 }
 
 function Ergebnis({
+  profil,
+  aendern,
   lauf,
   fehler,
   uebernehmen,
   exportieren,
   erneut,
 }: {
+  profil: Profil;
+  aendern: (l: Lauf) => void;
   lauf: Lauf;
   fehler: string | null;
   uebernehmen: (m: Meldung) => void;
@@ -855,6 +867,16 @@ function Ergebnis({
             ))}
           </ul>
         </details>
+      )}
+
+      {e && (
+        <VergleichKasten
+          profil={profil}
+          meldung={e.meldung}
+          laufId={lauf.id}
+          gespeichert={lauf.vergleich}
+          speichern={(v) => aendern({ ...lauf, vergleich: v })}
+        />
       )}
 
       <details className="ki-abschnitt">

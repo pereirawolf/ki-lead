@@ -2080,3 +2080,87 @@ a.knopf {
 .lb-dateiliste[open] summary::before {
   content: "▾";
 }
+
+.lb-auswahl {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.lb-auswahl label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+
+.lb-auswahl input {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* ── Vergleich mit Referenzfassung ────────────────── */
+.vg-kennzahlen {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+}
+
+.vg-paar {
+  border-top: 1px solid var(--linie-zart);
+  padding-top: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.vg-titel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+
+.vg-achsen td,
+.vg-achsen th {
+  text-align: center;
+}
+
+.vg-achsen tbody th {
+  text-align: left;
+}
+
+.vg-diff {
+  display: inline-block;
+  min-width: 1.8rem;
+  border-radius: var(--r-klein);
+  font-weight: 700;
+}
+
+.vg-gleich {
+  background: var(--ok-zart);
+  color: var(--ok);
+}
+
+.vg-nah {
+  background: var(--gering-zart);
+  color: var(--gering);
+}
+
+.vg-weit {
+  background: var(--kritisch-zart);
+  color: var(--kritisch);
+}
+
+.vg-offen {
+  color: var(--tinte-leise);
+}
+
+@media (max-width: 600px) {
+  .vg-titel {
+    grid-template-columns: 1fr;
+  }
+}

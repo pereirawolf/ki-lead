@@ -139,7 +139,7 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
     }
     const info = eingangsInfo(obj, profil);
     const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
-    if (istMeldung(obj, profil) && (!info || !info.stelle || info.stelle === eigeneStelle)) {
+    if (istMeldung(obj, profil) && (!info || !info.stelle || (!!eigeneStelle && info.stelle.startsWith(eigeneStelle)))) {
       return {
         ...basis,
         art: "meldung",

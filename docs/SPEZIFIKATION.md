@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.3 vom 18.10.2026, Heiko Pereira Wolf
+Fassung 0.4 vom 18.10.2026, Heiko Pereira Wolf
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -190,6 +190,8 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 - **Ansichten:** Dashboard mit Meldestatus aus `kontakte.json`, Meldungen, Sachverhalte, Lagenradar je Sachverhalt (ohne Mittelwert), Rohtabelle, Redaktionscheck (A.3/A.4/A.7/A.8) und Kopiervorlage für Word.
 - **Export:** PDF, CSV, Kopiervorlage.
 
+**Umsetzung M4 (Stand 18.10.2026):** Übergabe aus dem Lagebild mit Auswahl (eigene Meldungen vorab abgewählt, ausgewählt als Vormeldung). Rolle „verdichtung“ mit eigenem Modell und Aufwand für S2, Arbeitsanweisung `anweisungen.verdichtung` aus dem Profil. Vor S1 und S2 erzeugt die App „Vermerke aus dem Redaktionscheck“ der Eingangsmeldungen (gleiche Logik wie das Lagebild, bezogen auf t0 und die nächste Ausgabe) und gibt sie als Arbeitshilfe mit. Nach S3 prüft sie, ob jede Eingangsmeldung im Quellenverzeichnis erkennbar ist. Vergleich mit einer Referenzfassung im Ergebnis (Zuordnung der Sachverhalte nach Ähnlichkeit, Kennzahlen je Achse ohne Gesamtwert), gespeichert im Laufprotokoll (`vergleich`), Export als CSV/JSON. OpenAI-Anbieter über die Responses API (Streaming, `web_search` mit `max_tool_calls`, Structured Outputs mit strengem Schema, `reasoning.effort`, `store: false`, PDF als `input_file`); Modelle gpt-6-luna, gpt-6.1-sol, gpt-6-astra; Auswahl des Anbieters nach Modellkennung, Schlüssel je Anbieter.
+
 **Umsetzung M3 (Stand 18.10.2026):** Ansicht „Lagebild“ (Name aus `ui.lagebild.titel`). Einlesen von JSON-Dateien und ZIP-Archiven; gleiche Dateiinhalte nur einmal; Migration und Schemaprüfung je Datei; Meldungen fremder Schemata werden an ihrer Grundform (Sachverhaltsliste plus Stelle oder Land) erkannt, bleiben aus den Auswertungen heraus und lassen sich an die KI-Erfassung übergeben. Der Stand wird je Profil im Gerät gespeichert. Übersicht mit Kennzahlen (Stufen aus `beurteilung_hoch`, Tendenz aus `tendenz_verschaerfung`), Meldestatus nach `kontakte.json` mit mailto-Erinnerung, Verteilungen. Redaktionscheck in fünf Abschnitten (Zeitfenster gegen die nächste Ausgabe; Zusammenhang und abweichende Bewertungen je Ereignisart mit Textbaustein A.7.2; Fortschreibung, Nachlauf, Abschluss und mehrere Meldungen derselben Stelle; Kernaussage bei hoher Beurteilung; Quellen, Schema, Status), Fundstellen aus `ui.lagebild.verweise`. Rohtabelle und CSV generisch aus dem Schema (eine Zeile je Sachverhalt, eine Spalte je Radarachse). Kopiervorlage als Word-kompatibles HTML mit Farbquadraten und Radar als PNG. PDF mit Übersicht nach Schwere und allen Meldungen. Jede Meldung lässt sich in der Maske öffnen. Beispieldatensätze kommen aus dem Profil (`beispiele`).
 - **KI-Verdichtung:**
   1. Die KI schlägt eine Gruppierung nach Sachverhalten vor (A.7.1). Die Person bestätigt oder korrigiert die Zuordnung.
@@ -210,7 +212,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.3 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 

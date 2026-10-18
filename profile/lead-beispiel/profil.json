@@ -26,7 +26,8 @@
   },
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md",
-    "kurzfassung": "anweisung-kurzfassung.md"
+    "kurzfassung": "anweisung-kurzfassung.md",
+    "verdichtung": "anweisung-verdichtung.md"
   },
   "sop": {
     "dateien": [

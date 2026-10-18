@@ -4,7 +4,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { get, set } from "idb-keyval";
-import { AnthropicAnbieter } from "../anbieter/anthropic";
+import { anbieterVon, ANBIETER_NAME, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -15,7 +15,7 @@ import { modellFuer, type Einstellungen } from "../pipeline/einstellungen";
 import { fingerabdruck, kurzfassungErstellen, meldungFuerKurzfassung, type Kurzfassung } from "../pipeline/kurzfassung";
 
 export interface KiZugang {
-  schluessel: string;
+  schluessel: Schluessel;
   einstellungen: Einstellungen;
 }
 
@@ -60,14 +60,17 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
     get(schluesselIdb).then((g) => setGespeichert((g as Gespeichert) || null));
   }, [schluesselIdb]);
 
+  const kfModell = ki ? modellFuer("kurzfassung", ki.einstellungen, profil) : "";
+  const hatSchluessel = !!ki && !!ki.schluessel[anbieterVon(kfModell)];
+
   const erstellen = async () => {
-    if (!ki?.schluessel) return;
+    if (!hatSchluessel) return;
     setFehler(null);
     setLaeuft(true);
     const ctrl = new AbortController();
     abbruch.current = ctrl;
     try {
-      const k = await kurzfassungErstellen(profil, meldung, new AnthropicAnbieter(ki.schluessel), ki.einstellungen, ctrl.signal);
+      const k = await kurzfassungErstellen(profil, meldung, new Verteiler(ki!.schluessel), ki.einstellungen, ctrl.signal);
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
       await set(schluesselIdb, g);
@@ -148,7 +151,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
       )}
 
       <div className="aktionen">
-        {ki?.schluessel ? (
+        {hatSchluessel ? (
           laeuft ? (
             <>
               <span className="laufanzeige">
@@ -164,9 +167,9 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
             </button>
           )
         ) : (
-          <span className="hinweis">Für die KI-Fassung unter „Einstellungen“ einen API-Schlüssel hinterlegen.</span>
+          <span className="hinweis">Für die KI-Fassung unter „Einstellungen“ einen API-Schlüssel für {ANBIETER_NAME[anbieterVon(kfModell)]} hinterlegen.</span>
         )}
-        {ki?.schluessel && !laeuft && <span className="material-meta">Modell: {modellFuer("kurzfassung", ki.einstellungen, profil)}</span>}
+        {hatSchluessel && !laeuft && <span className="material-meta">Modell: {kfModell}</span>}
       </div>
 
       <details className="summary">

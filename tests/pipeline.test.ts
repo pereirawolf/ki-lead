@@ -1,3 +1,4 @@
+import { fehlendeEingangsquellen } from "../src/pipeline/vermerke";
 import { describe, expect, it } from "vitest";
 import { jsonDateien, profil } from "./hilfen";
 import { STANDARD } from "../src/pipeline/einstellungen";
@@ -243,11 +244,19 @@ describe("Verdichtung von Eingangsmeldungen", () => {
     const e = await stufe2und3(k, v);
     const s2 = att.anfragen[1];
     expect(s2.werkzeuge).toBeUndefined();
-    expect(s2.system).toHaveLength(4);
+    expect(s2.system).toHaveLength(5);
     expect(s2.system[3].text).toContain("Referenzraum wechselt");
+    expect(s2.modell).toBe("claude-opus-5-5"); // Rolle „verdichtung“ aus dem Profil
+    expect(k.lauf.stufen.find((x) => x.stufe === "S2 Verdichtung")).toBeTruthy();
+    // Redaktionsvermerke der App aus dem Lagebild-Check
+    expect(s2.system[4].text).toContain("Vermerke der App aus dem Redaktionscheck");
+    expect(s2.system[4].text).toMatch(/Stromausfall \/ Blackout: .*→ Bewertungen weichen ab/);
+    expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain("Vermerke der App");
     expect(JSON.stringify(s2.nachrichten)).toContain("genau 1 Sachverhalt");
     expect(e.meldung!.meldezeitpunkt).toBe("2026-10-14T11:00");
     expect(k.lauf.ergebnis!.befunde.some((b) => /bestätigt waren 1/.test(b.text))).toBe(false);
+    expect(k.lauf.ergebnis!.befunde.some((b) => /Im Quellenverzeichnis nicht erkennbar/.test(b.text))).toBe(false);
+    expect(fehlendeEingangsquellen(eingaenge, { ...bund, quellen: "[Q1] A – Hessisches Ministerium des Innern (FIKTIV)" }, p!)).toHaveLength(5);
   });
 });
 

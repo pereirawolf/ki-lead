@@ -1,8 +1,14 @@
 # KI-LEAD
 
-Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. Die App läuft vollständig auf dem Gerät (iPad, iPhone, Android, Browser). Netzverbindungen gibt es nur zu den KI-Schnittstellen von Anthropic (seit Meilenstein 2) und später OpenAI (Meilenstein 4).
+Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. Die App läuft vollständig auf dem Gerät (iPad, iPhone, Android, Browser). Netzverbindungen gibt es nur zu den KI-Schnittstellen von Anthropic und OpenAI, und nur, wenn man eine KI-Funktion startet.
 
-**Stand: Meilenstein 3 (Lagebild).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben, mit KI-Unterstützung erstellen und im Modul Lagebild zusammenführen.
+**Stand: Meilenstein 4 (Verdichtung, zwei Anbieter).** Meldungen lassen sich nach einem hinterlegten Profil erfassen, öffnen, prüfen und als JSON, PDF oder Klartext-Kurzfassung ausgeben, mit KI-Unterstützung erstellen, im Modul Lagebild zusammenführen und zur Meldung der nächsten Ebene verdichten.
+
+**Verdichtung (M4):** Aus dem Lagebild übergibt man ausgewählte Meldungen an die KI-Erfassung (eigene Meldungen sind abgewählt; ausgewählt gelten sie als Vormeldung zur Fortschreibung). S1 gliedert nach Sachverhalten statt nach Stellen, ordnet die Eingangsmeldungen zu und schlägt den Meldezeitpunkt t0 vor. Vor dem Lauf wertet die App die Eingangsmeldungen mit dem Redaktionscheck aus und gibt die Vermerke mit (Zeitfenster gegen die nächste Ausgabe, abweichende Bewertungen gleicher Ereignisarten, Mehrfachmeldungen, Nachlauf, Abschluss). S2 verdichtet nach der Arbeitsanweisung `anweisung-verdichtung.md` des Profils mit eigenem Modell (Rolle „Verdichtung“): Radar neu für den eigenen Referenzraum, abweichende Bewertungen nebeneinander, Eingangsmeldungen als A-Quellen; die App prüft, ob jede Eingangsmeldung im Quellenverzeichnis steht. Die Websuche ist dabei standardmäßig aus.
+
+**Vergleich mit einer Referenzfassung:** Im Ergebnis eines Laufs lässt sich eine vorhandene Fassung desselben Profils laden, etwa die Redaktionsfassung. Die App ordnet die Sachverhalte einander zu und zeigt Übereinstimmung bei Beurteilung, Tendenz und Ereignisarten sowie je Radarachse (gleich, höchstens eine Stufe Abstand, mittlere Abweichung, einseitig offen), ohne Gesamtwert. Der Vergleich wird im Laufprotokoll gespeichert und lässt sich als CSV oder JSON ausgeben.
+
+**Zwei Anbieter:** Je Stufe lässt sich ein Modell von Anthropic (Claude) oder OpenAI (GPT-6-Familie über die Responses API) wählen; die App nimmt den passenden Schlüssel. Bei OpenAI öffnet die Websuche Seiten selbst, ein eigenes Abrufwerkzeug gibt es dort nicht; Antworten werden mit `store: false` angefordert.
 
 **Lagebild (M3):** Mehrere Meldungen (JSON-Dateien oder ZIP-Archive) werden nach dem Profil migriert und gegen das Schema geprüft; Meldungen in fremdem Schema werden erkannt und für die KI-Verdichtung vorgehalten. Ansichten: Übersicht mit Kennzahlen, Meldestatus aus `kontakte.json` (mit Erinnerungsmail) und Verteilungen; Meldungen; Sachverhalte nach Schwere; Lagenradar je Sachverhalt, bewusst ohne Mittelwert; Rohtabelle. Der **Redaktionscheck** prüft nach SOP-LEAD A.3 bis A.8: Zeitfenster „Handlungsrelevant bis:“ gegen die nächste Ausgabe, Zusammenhang und abweichende Bewertungen gleicher Ereignisarten mit Textbaustein, Fortschreibung, Nachlauf, Abschluss und mehrfache Meldungen derselben Stelle, fehlende Kernaussagen bei hoher Beurteilung, Quellen, Schema und Status. Ausgabe als Kopiervorlage für Word (Tabelle mit Radarbild), CSV (Semikolon, für Tabellenkalkulation in deutscher Einstellung) und PDF. Ein Knopf übergibt alle Meldungen an die KI-Erfassung zur Verdichtung. Das Beispielprofil bringt die fiktive Lage „Ilka“ zum Ausprobieren mit.
 
@@ -13,11 +19,9 @@ Die gestufte KI-Erfassung (M2):
 3. **S2 Recherche und Entwurf:** Ein mittleres Modell recherchiert mit Websuche und Seitenabruf nach den gewählten SOPs und schreibt den Entwurf.
 4. **S3 Prüfung:** Die App prüft gegen das Schema und lässt Fehler höchstens zweimal ohne neue Recherche korrigieren. Der Entwurf geht in die Meldungsmaske; Freigabe bleibt Sache der Person.
 
-**Verdichtung (vorläufig):** Erkennt die App unter den Dateien Meldungen anderer Stellen, auch in fremdem Schema, verdichtet sie diese zu einer eigenen Meldung: S1 gliedert nach Sachverhalten statt nach Stellen, ordnet die Eingangsmeldungen zu und schlägt den Meldezeitpunkt t0 vor; S2 kodiert das Radar für den eigenen Referenzraum neu (SOP-LEAD A.7). Die Websuche ist dabei standardmäßig aus. Die vollständige Verdichtung folgt mit Meilenstein 4.
-
 **Management Summary:** Im Schritt „Prüfen & Exportieren“ fasst die KI die fertige Meldung zu einer einzigen Fassung für die Behördenleitung zusammen, lesbar in einer Minute: Kernaussage in einem Satz, je Sachverhalt ein Kurztitel mit Beurteilung und Tendenz, je Analysefeld höchstens zwei Sätze für die gesamte Lage und die früheste Frist. Beurteilung, Tendenz und Frist setzt die App aus der Meldung; sie entfernt Quellenverweise und weist auf zu lange Fassungen hin. Die Arbeitsanweisung steht in `anweisung-kurzfassung.md`. Ohne KI gibt es weiterhin einen Feldauszug als Klartext.
 
-Jeder Lauf wird mit Prompts, Antworten, Token, Kosten und Dauer protokolliert und lässt sich als JSON exportieren. Für die KI-Erfassung braucht man einen eigenen API-Schlüssel von Anthropic (Einstellungen). Er bleibt im Browser des Geräts und geht nur an api.anthropic.com.
+Jeder Lauf wird mit Prompts, Antworten, Token, Kosten und Dauer protokolliert und lässt sich als JSON exportieren. Für die KI-Funktionen braucht man einen eigenen API-Schlüssel von Anthropic oder OpenAI (Einstellungen). Er bleibt im Browser des Geräts und geht nur an die Schnittstelle des jeweiligen Anbieters.
 
 ## Abgrenzung
 
@@ -80,6 +84,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.3) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

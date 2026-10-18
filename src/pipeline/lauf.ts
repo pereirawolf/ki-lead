@@ -1,11 +1,12 @@
 // Laufprotokoll: Jeder KI-Lauf ist eine eigene Entität mit Profilbezug (ID, Version, Hash),
 // vollständigen Prompts, Rohantworten, Token, Kosten und Dauer je Stufe. Exportierbar als JSON.
 
+import type { GespeicherterVergleich } from "./vergleich";
 import { del, entries, get, set } from "idb-keyval";
 import type { AbrufFehler, Fundstelle, Nutzung } from "../anbieter/typen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.3";
+export const APP_KENNUNG = "KI-LEAD 0.4";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -82,6 +83,8 @@ export interface Lauf {
   };
   kostenUsd: number | null;
   fehler?: string;
+  /** Vergleich des Ergebnisses mit einer Referenzfassung (Abnahme, Forschung) */
+  vergleich?: GespeicherterVergleich;
 }
 
 export function laufId(d = new Date()): string {

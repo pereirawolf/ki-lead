@@ -16,6 +16,7 @@ import { kostenSumme, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintra
 import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
 import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
+import { fehlendeEingangsquellen, redaktionsvermerke } from "./vermerke";
 
 export const MAX_REPARATUREN = 2;
 
@@ -85,16 +86,25 @@ function auftragsText(k: Kontext): string {
 
 export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
   k.lauf.status = "s1";
+  const verdichtung = istVerdichtung(k.material);
+  const vermerke = verdichtung
+    ? redaktionsvermerke(
+        k.material,
+        k.profil,
+        k.lauf.auftrag.meldezeitpunkt || juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date()),
+      )
+    : "";
   const inhalt = [
     { type: "text", text: `# Auftrag\n\n${auftragsText(k)}` },
     ...materialBloecke(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte),
+    ...(vermerke ? [{ type: "text", text: vermerke }] : []),
     { type: "text", text: "Kläre jetzt den Gegenstand und schlage Gliederung, Ereignisarten und SOPs vor." },
   ];
   const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
     modell: modellFuer("vorverarbeitung", k.einstellungen, k.profil),
     aufwand: k.einstellungen.aufwand.vorverarbeitung,
     maxTokens: 8000,
-    system: [{ text: s1System(k.profil, istVerdichtung(k.material)), cache: true }],
+    system: [{ text: s1System(k.profil, verdichtung), cache: true }],
     nachrichten: [{ role: "user", content: inhalt }],
     jsonSchema: s1Schema(
       k.profil,
@@ -205,8 +215,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const ausgang = materialUebersicht(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte);
   const auftrag = auftragAusBestaetigung(bestaetigt, p, ausgang);
   const t0 = bestaetigt.meldezeitpunkt || jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
-  const erfassungsModell = modellFuer("erfassung", e, p);
   const verdichtung = istVerdichtung(k.material);
+  const rolleS2 = verdichtung ? "verdichtung" : "erfassung";
+  const erfassungsModell = modellFuer(rolleS2, e, p);
   const recherche = k.lauf.auftrag.websuche !== false;
   const n = bestaetigt.sachverhalte.length;
 
@@ -231,9 +242,11 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     { text: anweisungErfassung(p, auftrag, t0) },
     ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
   ];
-  const a = await aufrufen(k, "S2 Recherche und Entwurf", {
+  const vermerke = verdichtung ? redaktionsvermerke(k.material, p, t0) : "";
+  if (vermerke) systemS2.push({ text: vermerke });
+  const a = await aufrufen(k, verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf", {
     modell: erfassungsModell,
-    aufwand: e.aufwand.erfassung,
+    aufwand: e.aufwand[rolleS2],
     maxTokens: e.maxTokensErfassung,
     system: systemS2,
     nachrichten: [{ role: "user", content: inhalt }],
@@ -323,6 +336,11 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
+  if (meldung && verdichtung) {
+    const fehlen = fehlendeEingangsquellen(k.material, meldung, p);
+    if (fehlen.length)
+      befunde.unshift({ stufe: "warnung", text: `Im Quellenverzeichnis nicht erkennbar (Eingangsmeldung als A-Quelle, SOP-LEAD A.7): ${fehlen.join("; ")}.` });
+  }
   if (meldung && svAnzahl !== n)
     befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });
   k.lauf.ergebnis = meldung
