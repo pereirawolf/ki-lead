@@ -24,6 +24,8 @@ export interface ProfilManifest {
   ebene?: string;
   referenzraum?: string;
   variablen: Record<string, string>;
+  /** Weitere Bezeichnungen, unter denen die eigene Stelle meldet (exakter Vergleich nach Normalisierung) */
+  eigene_stellen?: string[];
   meldung: {
     schema: string;
     ui: string;

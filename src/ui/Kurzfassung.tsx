@@ -53,6 +53,8 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
   const abbruch = useRef<AbortController | null>(null);
+  // Laufende Anfrage beim Verlassen (z. B. Profilwechsel) kontrolliert abbrechen
+  useEffect(() => () => abbruch.current?.abort(), []);
   useWachhalten(laeuft);
   const auszug = useMemo(() => managementSummary(meldung, profil), [meldung, profil]);
 
@@ -73,7 +75,9 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
       const k = await kurzfassungErstellen(profil, meldung, new Verteiler(ki!.schluessel), ki.einstellungen, ctrl.signal);
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
-      await set(schluesselIdb, g);
+      await set(schluesselIdb, g).catch(() =>
+        setFehler("Die Fassung wurde erstellt, konnte aber nicht im Gerät gespeichert werden. Bitte kopieren oder als TXT sichern."),
+      );
     } catch (e: any) {
       setFehler(e?.name === "AbortError" ? "Abgebrochen." : istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e));
     } finally {

@@ -14,7 +14,12 @@ export class SseLeser {
   private puffer = "";
 
   lies(chunk: string): SseEreignis[] {
-    this.puffer += chunk.replace(/\r\n/g, "\n");
+    // Zeilenenden über Chunk-Grenzen hinweg normalisieren: Ein CR am Ende kann zu einem CRLF gehören,
+    // dessen LF erst im nächsten Chunk kommt; es bleibt bis dahin im Puffer.
+    let text = (this.puffer + chunk).replace(/\r\n/g, "\n");
+    const offenesCr = text.endsWith("\r");
+    if (offenesCr) text = text.slice(0, -1);
+    this.puffer = text.replace(/\r/g, "\n");
     const out: SseEreignis[] = [];
     let i: number;
     while ((i = this.puffer.indexOf("\n\n")) >= 0) {
@@ -36,6 +41,7 @@ export class SseLeser {
       }
       out.push({ event, data });
     }
+    if (offenesCr) this.puffer += "\r";
     return out;
   }
 }

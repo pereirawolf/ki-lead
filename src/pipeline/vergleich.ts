@@ -50,9 +50,12 @@ export interface AchsenStatistik {
 export interface Vergleich {
   paare: SvPaar[];
   achsen: AchsenStatistik[];
-  beurteilung: { n: number; gleich: number };
-  tendenz: { n: number; gleich: number };
-  arten: { n: number; gleich: number };
+  /** n: Paare mit Angabe auf beiden Seiten; fehlend: Paare, in denen mindestens eine Seite leer ist */
+  beurteilung: { n: number; gleich: number; fehlend: number };
+  tendenz: { n: number; gleich: number; fehlend: number };
+  arten: { n: number; gleich: number; fehlend: number };
+  zugeordnet: number;
+  ohneGegenstueck: number;
 }
 
 const STOPP = new Set([
@@ -125,32 +128,54 @@ function merkmal(s: SvKurz, sv: any, profil: Profil): Set<string> {
 }
 
 /** Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten und Ort einander zu (gierig, eins zu eins). */
-export function zuordnen(ki: Meldung, ref: Meldung, profil: Profil): { ki?: SvKurz; ref?: SvKurz; aehnlichkeit: number }[] {
+export const MIN_AEHNLICHKEIT = 0.08;
+
+export const VERGLEICH_VERFAHREN = "ki-lead-vergleich/2";
+
+export interface Zuordnung {
+  ki: number;
+  ref: number;
+}
+
+/**
+ * Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten und Ort einander zu (gierig, eins zu eins,
+ * Mindestähnlichkeit auch bei nur einem Sachverhalt je Seite). Eine manuelle Zuordnung geht vor.
+ */
+export function zuordnen(ki: Meldung, ref: Meldung, profil: Profil, manuell?: Zuordnung[]): { ki?: SvKurz; ref?: SvKurz; aehnlichkeit: number }[] {
   const a = kurz(ki, profil);
   const b = kurz(ref, profil);
   const sva = sachverhalte(ki, profil.ui);
   const svb = sachverhalte(ref, profil.ui);
-  if (a.length === 1 && b.length === 1) return [{ ki: a[0], ref: b[0], aehnlichkeit: jaccard(merkmal(a[0], sva[0], profil), merkmal(b[0], svb[0], profil)) }];
-  const kandidaten: { i: number; j: number; w: number }[] = [];
-  a.forEach((x, i) => b.forEach((y, j) => kandidaten.push({ i, j, w: jaccard(merkmal(x, sva[i], profil), merkmal(y, svb[j], profil)) })));
-  kandidaten.sort((x, y) => y.w - x.w);
+  const w = (i: number, j: number) => jaccard(merkmal(a[i], sva[i], profil), merkmal(b[j], svb[j], profil));
   const belegtA = new Set<number>();
   const belegtB = new Set<number>();
   const paare: { ki?: SvKurz; ref?: SvKurz; aehnlichkeit: number }[] = [];
-  for (const k of kandidaten) {
-    if (k.w < 0.08 || belegtA.has(k.i) || belegtB.has(k.j)) continue;
-    belegtA.add(k.i);
-    belegtB.add(k.j);
-    paare.push({ ki: a[k.i], ref: b[k.j], aehnlichkeit: k.w });
+  if (manuell) {
+    for (const z of manuell) {
+      if (!a[z.ki] || !b[z.ref] || belegtA.has(z.ki) || belegtB.has(z.ref)) continue;
+      belegtA.add(z.ki);
+      belegtB.add(z.ref);
+      paare.push({ ki: a[z.ki], ref: b[z.ref], aehnlichkeit: w(z.ki, z.ref) });
+    }
+  } else {
+    const kandidaten: { i: number; j: number; w: number }[] = [];
+    a.forEach((_, i) => b.forEach((_, j) => kandidaten.push({ i, j, w: w(i, j) })));
+    kandidaten.sort((x, y) => y.w - x.w);
+    for (const k of kandidaten) {
+      if (k.w < MIN_AEHNLICHKEIT || belegtA.has(k.i) || belegtB.has(k.j)) continue;
+      belegtA.add(k.i);
+      belegtB.add(k.j);
+      paare.push({ ki: a[k.i], ref: b[k.j], aehnlichkeit: k.w });
+    }
   }
   a.forEach((x, i) => !belegtA.has(i) && paare.push({ ki: x, aehnlichkeit: 0 }));
   b.forEach((y, j) => !belegtB.has(j) && paare.push({ ref: y, aehnlichkeit: 0 }));
   return paare.sort((x, y) => (x.ki?.index ?? 99) - (y.ki?.index ?? 99) || (x.ref?.index ?? 99) - (y.ref?.index ?? 99));
 }
 
-export function vergleiche(ki: Meldung, ref: Meldung, profil: Profil): Vergleich {
+export function vergleiche(ki: Meldung, ref: Meldung, profil: Profil, manuell?: Zuordnung[]): Vergleich {
   const def = radarDef(profil);
-  const paare: SvPaar[] = zuordnen(ki, ref, profil).map((p) => ({
+  const paare: SvPaar[] = zuordnen(ki, ref, profil, manuell).map((p) => ({
     ...p,
     achsen: (def?.achsen || []).map((a) => {
       const x = p.ki?.radar[a.key] ?? null;
@@ -173,19 +198,48 @@ export function vergleiche(ki: Meldung, ref: Meldung, profil: Profil): Vergleich
     };
   });
   const gleichMenge = (x: string[], y: string[]) => x.length === y.length && x.every((v) => y.includes(v));
+  // Nur beidseitig vorhandene Werte zählen; fehlende Angaben stehen gesondert
+  const kennzahl = (wert: (s: SvKurz) => string | string[]) => {
+    const da = (x: string | string[]) => (Array.isArray(x) ? x.length > 0 : !!x);
+    const beide = voll.filter((p) => da(wert(p.ki!)) && da(wert(p.ref!)));
+    return {
+      n: beide.length,
+      gleich: beide.filter((p) => {
+        const x = wert(p.ki!);
+        const y = wert(p.ref!);
+        return Array.isArray(x) ? gleichMenge(x, y as string[]) : x === y;
+      }).length,
+      fehlend: voll.length - beide.length,
+    };
+  };
   return {
     paare,
     achsen,
-    beurteilung: { n: voll.length, gleich: voll.filter((p) => p.ki!.beurteilung === p.ref!.beurteilung).length },
-    tendenz: { n: voll.length, gleich: voll.filter((p) => p.ki!.tendenz === p.ref!.tendenz).length },
-    arten: { n: voll.length, gleich: voll.filter((p) => gleichMenge(p.ki!.arten, p.ref!.arten)).length },
+    beurteilung: kennzahl((s) => s.beurteilung),
+    tendenz: kennzahl((s) => s.tendenz),
+    arten: kennzahl((s) => s.arten),
+    zugeordnet: voll.length,
+    ohneGegenstueck: paare.length - voll.length,
   };
 }
 
 export interface GespeicherterVergleich {
+  /** Dateiname der Referenzfassung */
   referenz: string;
+  /** SHA-256 des Dateiinhalts der Referenzfassung */
+  referenzHash?: string;
+  /** Referenzfassung nach Migration, damit sich die Zuordnung später ändern und der Vergleich nachvollziehen lässt */
+  referenzDaten?: Meldung;
+  verfahren?: string;
+  /** true, wenn die Zuordnung von Hand geändert wurde */
+  manuell?: boolean;
+  zuordnung?: Zuordnung[];
   erstellt: string;
   ergebnis: Vergleich;
+}
+
+export function zuordnungAus(v: Vergleich): Zuordnung[] {
+  return v.paare.filter((p) => p.ki && p.ref).map((p) => ({ ki: p.ki!.index, ref: p.ref!.index }));
 }
 
 /** Tabelle für CSV: eine Zeile je Paar und Achse. */

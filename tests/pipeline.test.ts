@@ -1,4 +1,4 @@
-import { fehlendeEingangsquellen } from "../src/pipeline/vermerke";
+import { eingangsquellenPruefen } from "../src/pipeline/vermerke";
 import { describe, expect, it } from "vitest";
 import { jsonDateien, profil } from "./hilfen";
 import { STANDARD } from "../src/pipeline/einstellungen";
@@ -255,8 +255,8 @@ describe("Verdichtung von Eingangsmeldungen", () => {
     expect(JSON.stringify(s2.nachrichten)).toContain("genau 1 Sachverhalt");
     expect(e.meldung!.meldezeitpunkt).toBe("2026-10-14T11:00");
     expect(k.lauf.ergebnis!.befunde.some((b) => /bestätigt waren 1/.test(b.text))).toBe(false);
-    expect(k.lauf.ergebnis!.befunde.some((b) => /Im Quellenverzeichnis nicht erkennbar/.test(b.text))).toBe(false);
-    expect(fehlendeEingangsquellen(eingaenge, { ...bund, quellen: "[Q1] A – Hessisches Ministerium des Innern (FIKTIV)" }, p!)).toHaveLength(5);
+    expect(eingangsquellenPruefen(eingaenge, e.meldung!, p!).map((x) => x.status)).toEqual(Array(6).fill("nachgewiesen"));
+    expect(k.lauf.ergebnis!.befunde.some((b) => /Quellenverzeichnis/.test(b.text))).toBe(false);
   });
 });
 
@@ -286,5 +286,96 @@ describe("Abgeschnittene Antworten und t0", () => {
     const v = await stufe1(k);
     expect(v.meldezeitpunkt).toBe("2026-10-14T14:00");
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain("Meldezeitpunkt t0 (vorgegeben): 2026-10-14 14:00");
+  });
+});
+
+describe("Quellenprüfung der Eingangsmeldungen", () => {
+  const ein = (name: string, stelle: string, zeitpunkt = "2026-10-14T10:00", land = ""): Material => ({
+    id: name,
+    art: "eingang",
+    name,
+    groesse: 1,
+    hash: name,
+    eingang: { stelle, land, zeitpunkt, sachverhalte: 1, schema: "x" },
+  });
+  it("verlangt je Eingang einen eigenen A-Eintrag und unterscheidet ähnliche Stellen", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const nord = ein("n.json", "Lagezentrum (Nord)");
+    const sued = ein("s.json", "Lagezentrum (Süd)");
+    const z = eingangsquellenPruefen([nord, sued], { quellen: "[Q1] M – Lagezentrum (Nord) (14.10.2026): Lagemeldung" }, p!);
+    expect(z.map((x) => x.status)).toEqual(["kategorie", "fehlt"]);
+    const ok = eingangsquellenPruefen([nord, sued], { quellen: "[Q1] A – Lagezentrum (Nord): Lagemeldung\n[Q2] A – Lagezentrum (Süd): Lagemeldung" }, p!);
+    expect(ok.map((x) => [x.status, x.eintrag])).toEqual([
+      ["nachgewiesen", 1],
+      ["nachgewiesen", 2],
+    ]);
+  });
+  it("trennt zwei Zeitstände derselben Stelle über die Uhrzeit", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const frueh = ein("a.json", "Lagezentrum X", "2026-10-14T08:00");
+    const spaet = ein("b.json", "Lagezentrum X", "2026-10-14T12:00");
+    const nurEiner = eingangsquellenPruefen([frueh, spaet], { quellen: "[Q1] A – Lagezentrum X (14.10.2026): Lagemeldung" }, p!);
+    expect(nurEiner.map((x) => x.status)).toEqual(["unsicher", "fehlt"]);
+    const beide = eingangsquellenPruefen(
+      [frueh, spaet],
+      { quellen: "[Q1] A – Lagezentrum X: Lagemeldung 08:00 Uhr\n[Q2] A – Lagezentrum X: Lagemeldung 12:00 Uhr" },
+      p!,
+    );
+    expect(beide.map((x) => x.status)).toEqual(["nachgewiesen", "nachgewiesen"]);
+  });
+});
+
+describe("Gleichnamige Dateien", () => {
+  it("erhalten im Material eindeutige Namen, gleiche Inhalte entfallen", async () => {
+    const { materialErgaenzen } = await import("../src/pipeline/material");
+    const m = (name: string, hash: string): Material => ({ id: hash, art: "eingang", name, groesse: 1, hash });
+    const erg = materialErgaenzen([m("meldung.json", "a")], [m("meldung.json", "b"), m("meldung.json", "a"), m("meldung.json", "c")]);
+    expect(erg.map((x) => x.name)).toEqual(["meldung.json", "meldung (2).json", "meldung (3).json"]);
+  });
+  it("behält beim ZIP-Import den Pfad im Archiv", async () => {
+    const JSZip = (await import("jszip")).default;
+    const { dateienAusAuswahl } = await import("../src/lagebild/lagebild");
+    const zip = new JSZip();
+    zip.file("Nord/meldung.json", "{}");
+    zip.file("Sued/meldung.json", '{"a":1}');
+    const blob = await zip.generateAsync({ type: "blob" });
+    const { dateien } = await dateienAusAuswahl([new File([blob], "eingang.zip")]);
+    expect(dateien.map((d) => d.name).sort()).toEqual(["eingang/Nord/meldung.json", "eingang/Sued/meldung.json"]);
+  });
+});
+
+describe("Meldungsidentität (F03) und eigene Stelle (F07)", () => {
+  it("setzt Land und meldende Stelle eines KI-Entwurfs auf die eigene Stelle und meldet die Korrektur", async () => {
+    const { nachbearbeiten } = await import("../src/pipeline/stufen");
+    const { k } = await kontext(new Attrappe([]));
+    const korrekturen: string[] = [];
+    const m = nachbearbeiten(structuredClone(he), k, "x", korrekturen);
+    expect(m.land).toBe("Bund");
+    expect(m.meldende_stelle).toBe("Koordinierungsstelle (Beispiel)");
+    expect(korrekturen).toHaveLength(2);
+    expect(korrekturen[0]).toMatch(/^land: „Hessen“ → „Bund“/);
+    const alias = nachbearbeiten(
+      { ...structuredClone(he), land: "Bund", meldende_stelle: "Koordinierungsstelle (Beispiel) – Redaktionskonferenz" },
+      k,
+      "x",
+      ((korrekturen.length = 0), korrekturen),
+    );
+    expect(alias.meldende_stelle).toBe("Koordinierungsstelle (Beispiel) – Redaktionskonferenz");
+    expect(korrekturen).toEqual([]);
+  });
+  it("erkennt die eigene Stelle nur exakt oder über hinterlegte Aliasnamen", async () => {
+    const { istEigeneStelle } = await import("../src/kern/ui");
+    const { profil: p } = await profil("lead-beispiel");
+    const m = p!.manifest;
+    expect(istEigeneStelle("Koordinierungsstelle (Beispiel)", m)).toBe(true);
+    expect(istEigeneStelle("  koordinierungsstelle   (beispiel) ", m)).toBe(true);
+    expect(istEigeneStelle("Koordinierungsstelle (Beispiel) – Redaktionskonferenz", m)).toBe(true); // Alias
+    expect(istEigeneStelle("Koordinierungsstelle (Beispiel) Außenstelle", m)).toBe(false);
+    const fremd = { ...structuredClone(he), meldende_stelle: "Koordinierungsstelle (Beispiel) Außenstelle", land: "Bund" };
+    const mat = await dateiLesen(new File([JSON.stringify(fremd)], "a.json"), p!);
+    expect(mat.art).toBe("eingang");
+    const { umklassifizieren } = await import("../src/pipeline/material");
+    expect(umklassifizieren(mat, p!).art).toBe("meldung");
+    expect(umklassifizieren(umklassifizieren(mat, p!), p!).art).toBe("eingang");
   });
 });

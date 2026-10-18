@@ -91,7 +91,13 @@ export function rohtabelle(eintraege: LagebildEintrag[], profil: Profil): string
 
 /** CSV mit Semikolon (Tabellenkalkulation in deutscher Einstellung), BOM und CRLF. */
 export function alsCsv(zeilen: string[][]): string {
-  const q = (s: string) => (/[;"\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
+  // Schutz vor Formelinterpretation in Tabellenprogrammen: Textzellen, die mit =, +, -, @, Tab oder CR
+  // beginnen, erhalten ein vorangestelltes Apostroph; reine Zahlen (auch negative) bleiben unverändert.
+  const sicher = (s: string) => (/^[=+\-@\t\r]/.test(s) && !/^[+-]?\d+([.,]\d+)?$/.test(s) ? `'${s}` : s);
+  const q = (roh: string) => {
+    const s = sicher(roh);
+    return /[;"\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
   return "﻿" + zeilen.map((z) => z.map(q).join(";")).join("\r\n") + "\r\n";
 }
 

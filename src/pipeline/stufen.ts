@@ -16,7 +16,8 @@ import { kostenSumme, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintra
 import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
 import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
-import { fehlendeEingangsquellen, redaktionsvermerke } from "./vermerke";
+import { istEigeneStelle } from "../kern/ui";
+import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
 
 export const MAX_REPARATUREN = 2;
 
@@ -153,7 +154,16 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
 // ── S2 und S3 ──────────────────────────────────────────────────────────────────
 
 /** Feste Felder setzen, die die App verantwortet (Schemakennung, Status, Herkunft, Variablen). */
-export function nachbearbeiten(roh: unknown, k: Kontext, modell: string): Meldung {
+/**
+ * Felder, die die eigene Meldungsidentität bilden (Land, meldende Stelle). Sie werden aus dem Profil
+ * gesetzt, nicht nur ergänzt: Ein KI-Entwurf darf nicht unter dem Absender einer Eingangsmeldung stehen.
+ */
+function identitaetsFelder(p: Profil): string[] {
+  const r = p.ui.rollen;
+  return [r.land, r.meldende_stelle].filter((f): f is string => !!f && !!p.manifest.variablen[f]);
+}
+
+export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekturen: string[] = []): Meldung {
   if (!roh || typeof roh !== "object" || Array.isArray(roh)) throw new Error("Das Ergebnis ist kein JSON-Objekt.");
   const p = k.profil;
   const r = p.ui.rollen;
@@ -161,8 +171,15 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string): Meldun
   const props = p.schema.properties || {};
   d[r.schema_feld] = aufloesen(props[r.schema_feld], p.schema)?.const ?? p.manifest.meldung.schema_id;
   d[r.status_feld] = r.status_entwurf;
+  const identitaet = identitaetsFelder(p);
   for (const [key, wert] of Object.entries(p.manifest.variablen)) {
-    if (key in props && (d[key] === undefined || d[key] === "")) d[key] = wert;
+    if (!(key in props)) continue;
+    if (identitaet.includes(key)) {
+      // Hinterlegte Aliasnamen der eigenen Stelle bleiben stehen
+      if (key === p.ui.rollen.meldende_stelle && istEigeneStelle(d[key], p.manifest)) continue;
+      if (d[key] !== undefined && d[key] !== "" && d[key] !== wert) korrekturen.push(`${key}: „${String(d[key])}“ → „${wert}“`);
+      d[key] = wert;
+    } else if (d[key] === undefined || d[key] === "") d[key] = wert;
   }
   const t0 = k.lauf.bestaetigt?.meldezeitpunkt;
   if (r.meldezeitpunkt && t0) d[r.meldezeitpunkt] = t0;
@@ -296,10 +313,12 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   k.lauf.status = "s3";
   let meldung: Meldung | undefined;
   let schemaBefunde: SchemaBefund[] = [];
+  let korrekturen: string[] = [];
   for (let runde = 0; ; runde++) {
     if (z.json !== undefined) {
       try {
-        meldung = nachbearbeiten(z.json, k, modell);
+        korrekturen = [];
+        meldung = nachbearbeiten(z.json, k, modell, korrekturen);
         schemaBefunde = pruefeGegenSchema(p.schema, meldung, p.ui);
       } catch (err: any) {
         meldung = undefined;
@@ -336,10 +355,23 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
+  if (meldung && korrekturen.length)
+    befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });
   if (meldung && verdichtung) {
-    const fehlen = fehlendeEingangsquellen(k.material, meldung, p);
-    if (fehlen.length)
-      befunde.unshift({ stufe: "warnung", text: `Im Quellenverzeichnis nicht erkennbar (Eingangsmeldung als A-Quelle, SOP-LEAD A.7): ${fehlen.join("; ")}.` });
+    const z = eingangsquellenPruefen(k.material, meldung, p);
+    const liste = (st: string) => z.filter((x) => x.status === st).map((x) => `${x.stelle}${x.eintrag ? ` [Q${x.eintrag}]` : ""}`);
+    if (liste("fehlt").length)
+      befunde.unshift({
+        stufe: "warnung",
+        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (A-Quelle, SOP-LEAD A.7): ${liste("fehlt").join("; ")}.`,
+      });
+    if (liste("kategorie").length)
+      befunde.unshift({ stufe: "warnung", text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}.` });
+    if (liste("unsicher").length)
+      befunde.unshift({
+        stufe: "hinweis",
+        text: `Zuordnung zum Quellenverzeichnis unsicher (Stelle oder Zeitstand nicht eindeutig genannt): ${liste("unsicher").join("; ")}.`,
+      });
   }
   if (meldung && svAnzahl !== n)
     befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });

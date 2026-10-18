@@ -62,3 +62,27 @@ describe("Musterprofil", () => {
     expect(pruefeGegenSchema(p!.schema, leer, p!.ui)).toEqual([]);
   });
 });
+
+describe("Strukturprüfung der Darstellungsdatei", async () => {
+  const { leseOrdner } = await import("./hilfen");
+  const { join } = await import("node:path");
+  const { ladeProfil } = await import("../src/profil/laden");
+  const mit = async (aendern: (ui: any) => void) => {
+    const d = leseOrdner(join(__dirname, "..", "profile", "muster"));
+    const ui = JSON.parse(d["meldung.ui.json"]);
+    aendern(ui);
+    d["meldung.ui.json"] = JSON.stringify(ui);
+    return ladeProfil(d);
+  };
+  it.each([
+    ["leere Schritte", (ui: any) => (ui.schritte = [])],
+    ["fehlende Rolle", (ui: any) => delete ui.rollen.sachverhalte],
+    ["falsch typisierte Rolle", (ui: any) => (ui.rollen.sv_analysefelder = "lage")],
+    ["Radar ohne max", (ui: any) => ((Object.values(ui.radare)[0] as any).max = "6")],
+    ["Felder kein Objekt", (ui: any) => (ui.felder = [])],
+  ])("%s verhindert die Aktivierung mit verständlichem Fehler", async (_, aendern) => {
+    const erg = await mit(aendern);
+    expect(erg.profil).toBeNull();
+    expect(erg.befunde.some((b) => b.stufe === "fehler" && b.text.startsWith("Darstellungsdatei:"))).toBe(true);
+  });
+});

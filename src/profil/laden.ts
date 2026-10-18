@@ -52,6 +52,78 @@ export function normalisiereDateien(dateien: Record<string, string>): Record<str
   return out;
 }
 
+const istText = (v: unknown) => typeof v === "string";
+const istObjekt = (v: unknown) => !!v && typeof v === "object" && !Array.isArray(v);
+const textListe = (v: unknown) => Array.isArray(v) && v.every(istText);
+
+/**
+ * Strukturprüfung der Darstellungsdatei: Was die App zum Arbeiten braucht, muss vorhanden und richtig
+ * typisiert sein. Fehler verhindern die Aktivierung des Profils, statt die Oberfläche später abstürzen zu lassen.
+ */
+export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
+  const vorher = befunde.length;
+  const fehler = (text: string) => befunde.push({ stufe: "fehler", text: `Darstellungsdatei: ${text}` });
+  if (!istObjekt(ui)) {
+    fehler("kein JSON-Objekt.");
+    return false;
+  }
+  if (!Array.isArray(ui.schritte) || ui.schritte.length === 0) fehler("„schritte“ braucht mindestens einen Bearbeitungsschritt.");
+  else
+    ui.schritte.forEach((s: any, i: number) => {
+      if (!istObjekt(s) || !istText(s.id) || !istText(s.titel) || !textListe(s.felder))
+        fehler(`Schritt ${i + 1} braucht „id“, „titel“ (Text) und „felder“ (Liste von Feldnamen).`);
+    });
+  if (!istObjekt(ui.felder)) fehler("„felder“ fehlt oder ist kein Objekt.");
+  else
+    for (const [pfad, f] of Object.entries(ui.felder)) {
+      if (!istObjekt(f)) fehler(`Feld „${pfad}“: Einstellungen müssen ein Objekt sein.`);
+      else if ((f as any).label !== undefined && !istText((f as any).label)) fehler(`Feld „${pfad}“: „label“ muss Text sein.`);
+    }
+  const r = ui.rollen;
+  if (!istObjekt(r)) fehler("Abschnitt „rollen“ fehlt.");
+  else {
+    for (const k of ["schema_feld", "status_feld", "status_entwurf", "status_final", "sachverhalte"])
+      if (!istText(r[k]) || !r[k]) fehler(`Rolle „${k}“ fehlt oder ist kein Text.`);
+    for (const [k, v] of Object.entries(r)) {
+      if (["sv_textfelder", "sv_analysefelder", "beurteilung_hoch"].includes(k)) {
+        if (!textListe(v)) fehler(`Rolle „${k}“ muss eine Liste von Texten sein.`);
+      } else if (!istText(v)) fehler(`Rolle „${k}“ muss Text sein.`);
+    }
+  }
+  if (ui.radare !== undefined) {
+    if (!istObjekt(ui.radare)) fehler("„radare“ muss ein Objekt sein.");
+    else
+      for (const [name, rd] of Object.entries<any>(ui.radare)) {
+        if (!istObjekt(rd) || !Number.isInteger(rd.max) || rd.max < 1) fehler(`Radar „${name}“: „max“ muss eine ganze Zahl ab 1 sein.`);
+        else if (!Array.isArray(rd.achsen) || !rd.achsen.length) fehler(`Radar „${name}“: „achsen“ fehlen.`);
+        else
+          rd.achsen.forEach((a: any, i: number) => {
+            if (!istObjekt(a) || !istText(a.key) || !istText(a.label) || !textListe(a.stufen))
+              fehler(`Radar „${name}“, Achse ${i + 1}: „key“, „label“ und „stufen“ erforderlich.`);
+          });
+      }
+  }
+  if (ui.kennsaetze !== undefined && (!istObjekt(ui.kennsaetze) || !Object.values(ui.kennsaetze).every(istText)))
+    fehler("„kennsaetze“ muss ein Objekt mit Texten sein.");
+  if (ui.lagebild !== undefined) {
+    if (!istObjekt(ui.lagebild)) fehler("„lagebild“ muss ein Objekt sein.");
+    else if (ui.lagebild.ausgabe_tage !== undefined && !(Number.isInteger(ui.lagebild.ausgabe_tage) && ui.lagebild.ausgabe_tage >= 0))
+      fehler("„lagebild.ausgabe_tage“ muss eine ganze Zahl ab 0 sein.");
+  }
+  return befunde.length === vorher;
+}
+
+function pruefeManifestStruktur(m: any, befunde: Befund[]) {
+  const fehler = (text: string) => befunde.push({ stufe: "fehler", text: `profil.json: ${text}` });
+  if (m.variablen !== undefined && (!istObjekt(m.variablen) || !Object.values(m.variablen).every(istText)))
+    fehler("„variablen“ muss ein Objekt mit Texten sein.");
+  if (m.eigene_stellen !== undefined && !textListe(m.eigene_stellen)) fehler("„eigene_stellen“ muss eine Liste von Texten sein.");
+  if (m.beispiele !== undefined && !(Array.isArray(m.beispiele) && m.beispiele.every((b: any) => istObjekt(b) && istText(b.titel) && istText(b.ordner))))
+    fehler("„beispiele“ braucht je Eintrag „titel“ und „ordner“.");
+  if (m.modelle !== undefined && (!istObjekt(m.modelle) || !Object.values(m.modelle).every(istText)))
+    fehler("„modelle“ muss ein Objekt mit Modellkennungen sein.");
+}
+
 function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
   for (const pfad of Object.keys(ui.felder || {})) {
     if (pfad.includes("*")) continue;
@@ -115,6 +187,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     befunde.push({ stufe: "fehler", text: "profil.json: Abschnitt „meldung“ mit „schema“ und „ui“ fehlt." });
     return { profil: null, befunde };
   }
+  pruefeManifestStruktur(manifest, befunde);
   manifest.variablen = manifest.variablen || {};
 
   const schema = jsonLesen(dateien, manifest.meldung.schema, befunde, true);
@@ -127,7 +200,8 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
       befunde.push({ stufe: "warnung", text: `Schemakennung im Schema („${kennung}“) weicht von profil.json („${manifest.meldung.schema_id}“) ab.` });
     if (!manifest.meldung.schema_id && kennung) manifest.meldung.schema_id = kennung;
   }
-  if (schema && ui) pruefeUiGegenSchema(ui, schema, befunde);
+  const uiOk = ui ? pruefeUiStruktur(ui, befunde) : false;
+  if (schema && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });
@@ -167,8 +241,16 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   if (manifest.kontakte) {
     const lokal = manifest.kontakte.replace(/\.json$/, ".lokal.json");
     kontakte = jsonLesen(dateien, dateien[lokal] !== undefined ? lokal : manifest.kontakte, befunde, false);
+    const ok =
+      istObjekt(kontakte) &&
+      Array.isArray(kontakte!.stellen) &&
+      kontakte!.stellen.every((s: any) => istObjekt(s) && istText(s.name) && istText(s.feld) && (s.email === undefined || istText(s.email)));
+    if (kontakte !== undefined && !ok) {
+      befunde.push({ stufe: "warnung", text: "Kontakte: „stellen“ braucht je Eintrag „name“ und „feld“ (Text); der Meldestatus entfällt." });
+      kontakte = undefined;
+    }
   }
-  if (ui && manifest.kodierleitfaden) pruefeStufentexte(ui, dateien[manifest.kodierleitfaden], befunde);
+  if (ui && uiOk && manifest.kodierleitfaden) pruefeStufentexte(ui, dateien[manifest.kodierleitfaden], befunde);
 
   if (befunde.some((b) => b.stufe === "fehler") || !schema || !ui) return { profil: null, befunde };
   const hash = await profilHash(dateien);

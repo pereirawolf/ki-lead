@@ -2,6 +2,7 @@
 // Text (TXT, MD), JSON (Meldung oder sonstiges), DOCX (Text aus word/document.xml), PDF (als Dokument
 // an das Modell, das PDFs selbst liest), Stichworte und URLs (Abruf übernimmt das Modell).
 
+import { istEigeneStelle } from "../kern/ui";
 import JSZip from "jszip";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
@@ -25,6 +26,7 @@ export interface Material {
 }
 
 const MAX_PDF_BYTES = 30 * 1024 * 1024;
+const MAX_DATEI_BYTES = 20 * 1024 * 1024;
 const MAX_TEXT_ZEICHEN = 400_000;
 
 async function sha256Bytes(daten: ArrayBuffer): Promise<string> {
@@ -110,16 +112,54 @@ export function eingangsInfo(obj: unknown, profil: Profil): EingangsInfo | null 
   };
 }
 
+/**
+ * Neues Material mit eindeutigen Namen: Die Namen dienen der KI als Kennung (Zuordnung der Eingangsmeldungen),
+ * deshalb erhalten gleichnamige Dateien mit anderem Inhalt einen Zusatz „(2)“, „(3)“ …; gleiche Inhalte entfallen.
+ */
+export function materialErgaenzen(alt: Material[], neu: Material[]): Material[] {
+  const out = [...alt];
+  for (const n of neu) {
+    if (out.some((a) => a.hash === n.hash)) continue;
+    let name = n.name;
+    for (let i = 2; out.some((a) => a.name === name); i++) name = n.name.replace(/(\.[^.\/]+)?$/, ` (${i})$1`);
+    out.push(name === n.name ? n : { ...n, name });
+  }
+  return out;
+}
+
+/** Korrektur der automatischen Einordnung: Vormeldung ↔ Eingangsmeldung (nur Meldungen mit erkennbarer Struktur). */
+export function umklassifizieren(m: Material, profil: Profil): Material {
+  if (!m.meldung) return m;
+  if (m.art === "meldung") {
+    const info = eingangsInfo(m.meldung, profil);
+    if (!info) return m;
+    return {
+      ...m,
+      art: "eingang",
+      eingang: info,
+      hinweis: `Als Eingangsmeldung behandelt (von Hand): ${[info.land, info.stelle].filter(Boolean).join(", ")}.`,
+    };
+  }
+  if (m.art === "eingang" && istMeldung(m.meldung, profil)) {
+    const { eingang: _e, ...rest } = m;
+    return { ...rest, art: "meldung", hinweis: "Als eigene Vormeldung behandelt (von Hand, Fortschreibung)." };
+  }
+  return m;
+}
+
 function kuerzen(text: string): { text: string; hinweis?: string } {
   if (text.length <= MAX_TEXT_ZEICHEN) return { text };
   return { text: text.slice(0, MAX_TEXT_ZEICHEN), hinweis: `Auf ${MAX_TEXT_ZEICHEN.toLocaleString("de-DE")} Zeichen gekürzt.` };
 }
 
 export async function dateiLesen(datei: File, profil: Profil): Promise<Material> {
-  const daten = await datei.arrayBuffer();
-  const hash = await sha256Bytes(daten);
   const name = datei.name;
   const endung = name.toLowerCase().split(".").pop() || "";
+  // Größen vor dem Einlesen prüfen
+  if ((endung === "pdf" || datei.type === "application/pdf") && datei.size > MAX_PDF_BYTES) throw new Error(`${name}: PDF ist größer als 30 MB.`);
+  if (endung !== "pdf" && datei.size > MAX_DATEI_BYTES) throw new Error(`${name}: Datei ist größer als 20 MB.`);
+  const daten = await datei.arrayBuffer();
+  const hash = await sha256Bytes(daten);
   const basis = { id: neueId(), name, groesse: datei.size, hash };
   if (endung === "pdf" || datei.type === "application/pdf") {
     if (datei.size > MAX_PDF_BYTES) throw new Error(`${name}: PDF ist größer als 30 MB.`);
@@ -138,8 +178,7 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
       throw new Error(`${name}: kein gültiges JSON.`);
     }
     const info = eingangsInfo(obj, profil);
-    const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
-    if (istMeldung(obj, profil) && (!info || !info.stelle || (!!eigeneStelle && info.stelle.startsWith(eigeneStelle)))) {
+    if (istMeldung(obj, profil) && (!info || !info.stelle || istEigeneStelle(info.stelle, profil.manifest))) {
       return {
         ...basis,
         art: "meldung",

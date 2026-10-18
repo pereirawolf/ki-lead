@@ -10,7 +10,7 @@ interface Props {
   profile: ProfilEintrag[];
   aktiv?: string;
   aktivieren: (schluessel: string) => void;
-  importieren: (dateien: Record<string, string>) => Promise<{ ok: boolean; befunde: Befund[] }>;
+  importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<{ ok: boolean; befunde: Befund[]; konflikt?: boolean }>;
   loeschen: (schluessel: string) => void;
 }
 
@@ -36,7 +36,13 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
     if (!liste || !liste.length) return;
     try {
       const dateien = await ausDateiliste(liste);
-      setBericht(await importieren(dateien));
+      let erg = await importieren(dateien);
+      if (
+        erg.konflikt &&
+        confirm(`${erg.befunde[0]?.text}\n\nTrotzdem ersetzen? Der bisherige Stand wird im Gerät archiviert, damit ältere Läufe nachvollziehbar bleiben.`)
+      )
+        erg = await importieren(dateien, true);
+      setBericht(erg);
     } catch (e) {
       setBericht({ ok: false, befunde: [{ stufe: "fehler", text: `Das Paket konnte nicht gelesen werden: ${(e as Error).message}` }] });
     }

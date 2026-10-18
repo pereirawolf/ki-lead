@@ -13,7 +13,7 @@ import { VergleichKasten } from "./Vergleich";
 import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
 import { ereignisarten, fachSops, sopsFuerArten } from "../pipeline/kontext";
 import { laeufeLaden, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
-import { dateiLesen, istVerdichtung, urlsAusText, type Material } from "../pipeline/material";
+import { dateiLesen, istMeldung, istVerdichtung, materialErgaenzen, umklassifizieren, urlsAusText, type Material } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 
 interface Props {
@@ -93,6 +93,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [jetzt, setJetzt] = useState(Date.now());
   const [laeufe, setLaeufe] = useState<Lauf[]>([]);
   const abbruch = useRef<AbortController | null>(null);
+  // Laufende Anfrage beim Verlassen (Profilwechsel) kontrolliert abbrechen; der Lauf bleibt als abgebrochen protokolliert
+  useEffect(() => () => abbruch.current?.abort(), []);
   const dateiRef = useRef<HTMLInputElement>(null);
 
   const arten = useMemo(() => ereignisarten(profil), [profil]);
@@ -124,7 +126,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
         fehlerListe.push((e as Error).message);
       }
     }
-    setMaterial((alt) => [...alt, ...neu.filter((n) => !alt.some((a) => a.hash === n.hash))]);
+    setMaterial((alt) => materialErgaenzen(alt, neu));
     setDateiFehler(fehlerListe);
   };
 
@@ -235,7 +237,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       return;
     }
     if (phase !== "auftrag") leeren();
-    const dateien = uebergabe.dateien.map((d) => new File([d.text], d.name, { type: "application/json" }));
+    // Pfade aus ZIP-Archiven bleiben als Namensteil erhalten („Nord › meldung.json“)
+    const dateien = uebergabe.dateien.map((d) => new File([d.text], d.name.replace(/\//g, " › "), { type: "application/json" }));
     dateienHinzufuegen(dateien);
     setSachverhalt((alt) => alt || `Lagebild aus ${dateien.length} Meldungen verdichten`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -413,6 +416,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                           {m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()} · {groesse(m.groesse)}
                           {m.hinweis ? ` · ${m.hinweis}` : ""}
                         </span>
+                        {(m.art === "meldung" || (m.art === "eingang" && m.meldung && istMeldung(m.meldung, profil))) && (
+                          <button
+                            type="button"
+                            className="knopf leise klein"
+                            onClick={() => setMaterial((a) => a.map((x) => (x.id === m.id ? umklassifizieren(x, profil) : x)))}
+                          >
+                            {m.art === "meldung" ? "Als Eingang behandeln" : "Als Vormeldung behandeln"}
+                          </button>
+                        )}
                         <button type="button" className="knopf leise klein" onClick={() => setMaterial((a) => a.filter((x) => x.id !== m.id))}>
                           Entfernen
                         </button>

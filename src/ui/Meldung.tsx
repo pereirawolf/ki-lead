@@ -37,10 +37,28 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, zwischenstand
       setMeldungen({ art: "fehler", zeilen: [`${datei.name} ist keine gültige JSON-Datei.`] });
       return;
     }
+    if (!roh || typeof roh !== "object" || Array.isArray(roh)) {
+      setMeldungen({ art: "fehler", zeilen: [`${datei.name} enthält keine Meldung (erwartet ein JSON-Objekt).`] });
+      return;
+    }
     const mig = migriere(roh, profil);
     const d = mig.daten;
     if (!d[ui.rollen.status_feld]) d[ui.rollen.status_feld] = ui.rollen.status_entwurf;
     const schema = pruefeGegenSchema(profil.schema, d, ui);
+    // Falsche Datentypen (Objekt statt Text, Text statt Liste …) erst nach Rückfrage in die Maske übernehmen
+    const typfehler = schema.filter((b) => b.keyword === "type");
+    if (typfehler.length) {
+      const beispiele = typfehler
+        .slice(0, 5)
+        .map((b) => `• ${b.text}`)
+        .join("\n");
+      if (
+        !confirm(
+          `${datei.name} enthält ${typfehler.length} Feld(er) mit falschem Datentyp:\n${beispiele}${typfehler.length > 5 ? "\n…" : ""}\n\nTrotzdem in die Maske übernehmen? Betroffene Felder werden leer angezeigt; die Meldung muss korrigiert werden.`,
+        )
+      )
+        return;
+    }
     const quellen = quellenHinweise(d, ui).filter((b) => b.stufe === "warnung");
     setMeldung(d);
     setSchritt(0);

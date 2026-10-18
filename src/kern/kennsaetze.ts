@@ -15,11 +15,21 @@ export function kennsatz(text: unknown, prefix: string | undefined): string | nu
   return hit ? hit.trim().slice(prefix.length).trim() : null;
 }
 
+/**
+ * Datum „TT.MM.JJJJ“ mit optionaler Uhrzeit „hh:mm“ (lokale Zeit des Geräts; die Profile nutzen
+ * Europe/Berlin). Ohne Uhrzeit gilt 23:59. Ungültige Angaben (31.02., Monat 13, 25:99) ergeben null,
+ * statt stillschweigend umgerechnet zu werden.
+ */
 export function parseDatumDE(s: unknown): Date | null {
   const m = String(s || "").match(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/);
   if (!m) return null;
-  const d = new Date(+m[3], +m[2] - 1, +m[1], m[4] ? +m[4] : 23, m[5] ? +m[5] : 59);
-  return isNaN(d.getTime()) ? null : d;
+  const [tag, monat, jahr] = [+m[1], +m[2], +m[3]];
+  const stunde = m[4] ? +m[4] : 23;
+  const minute = m[5] ? +m[5] : 59;
+  if (monat < 1 || monat > 12 || tag < 1 || stunde > 23 || minute > 59) return null;
+  const d = new Date(jahr, monat - 1, tag, stunde, minute);
+  if (isNaN(d.getTime()) || d.getFullYear() !== jahr || d.getMonth() !== monat - 1 || d.getDate() !== tag) return null;
+  return d;
 }
 
 function leer(v: unknown): boolean {

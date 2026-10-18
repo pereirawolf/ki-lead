@@ -67,3 +67,30 @@ export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undef
 export function istAusgeblendet(ui: UiKonfig, feld: string): boolean {
   return (ui.ausblenden || []).includes(feld);
 }
+
+function normalStelle(s: unknown): string {
+  return String(s ?? "")
+    .normalize("NFC")
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * Gehört eine meldende Stelle zur eigenen Stelle des Profils? Exakter Vergleich nach Normalisierung
+ * (Groß-/Kleinschreibung, Leerraum, Gedankenstriche) mit der Profilvariable und den Aliasnamen
+ * in „eigene_stellen“; ein bloßer gleicher Namensanfang genügt nicht.
+ */
+export function istEigeneStelle(stelle: unknown, manifest: { variablen: Record<string, string>; eigene_stellen?: string[] }): boolean {
+  const n = normalStelle(stelle);
+  if (!n) return false;
+  return [manifest.variablen.meldende_stelle, ...(manifest.eigene_stellen || [])].some((x) => !!x && normalStelle(x) === n);
+}
+
+/** Sichere Anzeige eines Werts als Text: Objekte und Listen aus fehlerhaften Dateien bringen die Oberfläche nicht zum Absturz. */
+export function alsText(v: unknown): string {
+  if (typeof v === "string") return v;
+  if (typeof v === "number" || typeof v === "boolean") return String(v);
+  return "";
+}

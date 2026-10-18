@@ -86,8 +86,18 @@ function kurz(v: unknown): string {
   return s.length > 40 ? s.slice(0, 40) + "…" : s;
 }
 
-function gleich(a: unknown, b: unknown): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
+/** Strukturelle JSON-Gleichheit: Reihenfolge der Objektschlüssel egal, Reihenfolge in Arrays nicht. */
+export function gleich(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (typeof a !== typeof b || a === null || b === null || typeof a !== "object") return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) {
+    const bb = b as unknown[];
+    return a.length === bb.length && a.every((x, i) => gleich(x, bb[i]));
+  }
+  const ka = Object.keys(a as object);
+  const kb = Object.keys(b as object);
+  return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && gleich((a as any)[k], (b as any)[k]));
 }
 
 function zeiger(pfad: string, teil: string | number): string {
@@ -118,7 +128,8 @@ class Pruefer {
       }
       if (ziel === undefined) throw new Error(`Verweis nicht auflösbar: ${k.$ref}`);
       const { $ref: _r, ...rest } = k;
-      k = Object.keys(rest).length ? { allOf: [ziel], ...rest } : ziel;
+      // Geschwisterbedingungen neben $ref gelten zusätzlich; ein eigenes allOf wird ergänzt, nicht ersetzt
+      k = Object.keys(rest).length ? { ...rest, allOf: [ziel, ...(Array.isArray(rest.allOf) ? rest.allOf : [])] } : ziel;
     }
     return k;
   }
@@ -130,6 +141,12 @@ class Pruefer {
       return;
     }
     const s = this.aufloesen(schema);
+    // Verweise können auf boolesche Schemata zeigen
+    if (s === true || s === undefined) return;
+    if (s === false) {
+      out.push({ pfad, keyword: "false", text: "Wert ist hier nicht zulässig" });
+      return;
+    }
     if (s.type !== undefined) {
       const ts: string[] = [].concat(s.type);
       if (!ts.some((t) => typPasst(v, t))) {
@@ -161,12 +178,9 @@ class Pruefer {
       if (s.minItems !== undefined && v.length < s.minItems) out.push({ pfad, keyword: "minItems", text: `mindestens ${s.minItems} Eintrag erforderlich` });
       if (s.maxItems !== undefined && v.length > s.maxItems) out.push({ pfad, keyword: "maxItems", text: `höchstens ${s.maxItems} Einträge zulässig` });
       if (s.uniqueItems) {
-        const gesehen = new Set<string>();
-        for (const x of v) {
-          const k = JSON.stringify(x);
-          if (gesehen.has(k)) out.push({ pfad, keyword: "uniqueItems", text: `doppelter Eintrag „${kurz(x)}“` });
-          gesehen.add(k);
-        }
+        v.forEach((x, i) => {
+          if (v.slice(0, i).some((y) => gleich(x, y))) out.push({ pfad, keyword: "uniqueItems", text: `doppelter Eintrag „${kurz(x)}“` });
+        });
       }
       const prefix: any[] = Array.isArray(s.prefixItems) ? s.prefixItems : [];
       v.forEach((x, i) => {

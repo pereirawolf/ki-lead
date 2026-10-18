@@ -3,6 +3,7 @@
 // ersetzen keine fachliche Prüfung; sie sorgen dafür, dass nichts Prüfbares übersehen wird.
 
 import { datumDE } from "../kern/ausgabe";
+import { parseQuellen } from "../kern/quellen";
 import { holeWert } from "../kern/pfad";
 import type { Meldung, Profil } from "../kern/typen";
 import { absender, einlesen, svKennung, zeitpunktVon, type LagebildDatei } from "../lagebild/lagebild";
@@ -89,20 +90,72 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
     .trim();
 }
 
-/** Eingangsmeldungen, die im Quellenverzeichnis der verdichteten Meldung nicht erkennbar vorkommen. */
-export function fehlendeEingangsquellen(material: Material[], meldung: Meldung, profil: Profil): string[] {
+export interface QuellenZuordnung {
+  /** Dateiname der Eingangsmeldung */
+  material: string;
+  stelle: string;
+  /** nachgewiesen: eindeutiger A-Eintrag; kategorie: Eintrag vorhanden, aber nicht Kategorie A; unsicher: nur schwacher Treffer; fehlt: kein Eintrag */
+  status: "nachgewiesen" | "kategorie" | "unsicher" | "fehlt";
+  eintrag?: number;
+}
+
+const normal = (s: unknown) =>
+  String(s ?? "")
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
+
+/**
+ * Ordnet jeder Eingangsmeldung höchstens einen eigenen Eintrag im Quellenverzeichnis zu (eins zu eins).
+ * Nachweis ist der vollständige Stellenname oder Land plus Kern des Stellennamens; melden mehrere
+ * Eingänge unter derselben Stelle, muss der Eintrag zusätzlich die Uhrzeit des Meldezeitpunkts nennen.
+ * Bloße Teiltreffer gelten nur als „unsicher“; ein Eintrag außerhalb der Kategorie A als „kategorie“.
+ */
+export function eingangsquellenPruefen(material: Material[], meldung: Meldung, profil: Profil): QuellenZuordnung[] {
   const rolle = profil.ui.rollen.quellen;
-  if (!rolle) return [];
-  const quellen = String(holeWert(meldung, rolle) || "").toLowerCase();
-  const normal = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
-  return material
-    .filter((m) => m.art === "eingang" && m.eingang)
-    .filter((m) => {
-      const stelle = normal(m.eingang!.stelle || "");
-      const kern = stelle.split(/[,–(]/)[0].trim();
-      const land = normal(m.eingang!.land || "");
-      const treffer = (kern.length >= 6 && quellen.includes(kern)) || (land.length >= 3 && quellen.includes(land));
-      return !treffer;
-    })
-    .map((m) => [m.eingang!.land, m.eingang!.stelle].filter(Boolean).join(", ") || m.name);
+  const eingaenge = material.filter((m) => m.art === "eingang" && m.eingang);
+  if (!rolle || !eingaenge.length) return [];
+  const eintraege = parseQuellen(holeWert(meldung, rolle)).map((e) => ({ ...e, norm: normal(e.text) }));
+  const id = (m: Material) => {
+    const stelle = normal(m.eingang!.stelle);
+    return {
+      stelle,
+      kern: stelle.split(/[,(]| - /)[0].trim(),
+      land: normal(m.eingang!.land),
+      zeit: (m.eingang!.zeitpunkt.match(/T(\d{2}:\d{2})/) || [])[1] || "",
+    };
+  };
+  const ids = eingaenge.map(id);
+  const zaehle = (f: (x: ReturnType<typeof id>) => string, wert: string) => ids.filter((x) => f(x) === wert).length;
+  const paare: { i: number; j: number; punkte: number }[] = [];
+  ids.forEach((x, i) => {
+    eintraege.forEach((e, j) => {
+      let punkte = 0;
+      if (x.stelle && e.norm.includes(x.stelle)) punkte = 3;
+      else if (x.land && x.kern.length >= 6 && e.norm.includes(x.land) && e.norm.includes(x.kern)) punkte = 2;
+      else if (x.kern.length >= 10 && zaehle((y) => y.kern, x.kern) === 1 && e.norm.includes(x.kern)) punkte = 1;
+      else if (x.land.length >= 3 && zaehle((y) => y.land, x.land) === 1 && e.norm.includes(x.land)) punkte = 1;
+      // Mehrere Meldungen derselben Stelle: Zeitstand muss den Eintrag unterscheiden
+      if (punkte >= 2 && zaehle((y) => y.stelle, x.stelle) > 1 && !(x.zeit && e.norm.includes(x.zeit))) punkte = 1;
+      if (punkte) paare.push({ i, j, punkte: punkte + (e.code === "A" ? 0.5 : 0) });
+    });
+  });
+  paare.sort((a, b) => b.punkte - a.punkte);
+  const belegtI = new Map<number, { j: number; punkte: number }>();
+  const belegtJ = new Set<number>();
+  for (const p of paare) {
+    if (belegtI.has(p.i) || belegtJ.has(p.j)) continue;
+    belegtI.set(p.i, p);
+    belegtJ.add(p.j);
+  }
+  return eingaenge.map((m, i) => {
+    const treffer = belegtI.get(i);
+    const stelle = [m.eingang!.land, m.eingang!.stelle].filter(Boolean).join(", ") || m.name;
+    if (!treffer) return { material: m.name, stelle, status: "fehlt" };
+    const e = eintraege[treffer.j];
+    const status = Math.floor(treffer.punkte) < 2 ? "unsicher" : e.code === "A" ? "nachgewiesen" : "kategorie";
+    return { material: m.name, stelle, status, eintrag: e.nr };
+  });
 }

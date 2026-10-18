@@ -11,7 +11,7 @@ describe("Vergleich mit Referenzfassung", () => {
   it("gleiche Fassung: volle Übereinstimmung je Achse", () => {
     const v = vergleiche(bund, structuredClone(bund), p);
     expect(v.paare).toHaveLength(1);
-    expect(v.beurteilung).toEqual({ n: 1, gleich: 1 });
+    expect(v.beurteilung).toEqual({ n: 1, gleich: 1, fehlend: 0 });
     expect(v.achsen).toHaveLength(8);
     expect(v.achsen.every((a) => a.gleich === a.n && a.mittel === 0)).toBe(true);
   });
@@ -44,5 +44,27 @@ describe("Vergleich mit Referenzfassung", () => {
     const z2 = zuordnen(th, nurEiner, p);
     expect(z2.filter((x) => x.ki && x.ref)).toHaveLength(1);
     expect(z2.filter((x) => !x.ref)).toHaveLength(1);
+  });
+
+  it("bildet bei fremden Einzelsachverhalten kein Paar und zählt leere Bewertungen nicht als Übereinstimmung", () => {
+    const m = (titel: string, b = "") => ({
+      sachverhalte: [{ bezeichnung: titel, art: [], ort: "", sofort: { beurteilung: b, tendenz: "", lagenradar: {} }, analyse: {} }],
+    });
+    const v = vergleiche(m("Waldbrand im Harz"), m("Cyberangriff auf Kommunalverwaltung"), p);
+    expect(v.zugeordnet).toBe(0);
+    expect(v.ohneGegenstueck).toBe(2);
+    expect(v.beurteilung).toEqual({ n: 0, gleich: 0, fehlend: 0 });
+    // manuell zugeordnet: leere Bewertungen bleiben n = 0 und werden als fehlend ausgewiesen
+    const hand = vergleiche(m("Waldbrand im Harz"), m("Cyberangriff auf Kommunalverwaltung"), p, [{ ki: 0, ref: 0 }]);
+    expect(hand.zugeordnet).toBe(1);
+    expect(hand.beurteilung).toEqual({ n: 0, gleich: 0, fehlend: 1 });
+    const halb = vergleiche(m("Waldbrand im Harz", "erheblich"), m("Waldbrand im Harz"), p);
+    expect(halb.beurteilung).toEqual({ n: 0, gleich: 0, fehlend: 1 });
+  });
+
+  it("übernimmt eine manuelle Zuordnung statt der automatischen", () => {
+    const z = zuordnen(th, th, p, [{ ki: 0, ref: 1 }]);
+    expect(z.filter((x) => x.ki && x.ref).map((x) => [x.ki!.index, x.ref!.index])).toEqual([[0, 1]]);
+    expect(z).toHaveLength(3);
   });
 });

@@ -3,7 +3,10 @@
 import { useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { migriere } from "../kern/migration";
-import { vergleiche, vergleichTabelle, type GespeicherterVergleich } from "../pipeline/vergleich";
+import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type GespeicherterVergleich, type Zuordnung } from "../pipeline/vergleich";
+import { sachverhalte } from "../kern/quellen";
+import { holeWert } from "../kern/pfad";
+import { sha256 } from "../profil/laden";
 import { alsCsv } from "../lagebild/ausgabe";
 import { dateiAnbieten } from "../speicher/speicher";
 
@@ -31,18 +34,47 @@ export function VergleichKasten({
   const [fehler, setFehler] = useState<string | null>(null);
   const eingabe = useRef<HTMLInputElement>(null);
   const v = gespeichert?.ergebnis;
+  const refDaten = gespeichert?.referenzDaten;
+  const r = profil.ui.rollen;
+  const refTitel = refDaten
+    ? sachverhalte(refDaten, profil.ui).map(
+        (sv, j) => `${j + 1}: ${String((r.sv_bezeichnung && holeWert(sv, r.sv_bezeichnung)) || "ohne Bezeichnung").slice(0, 70)}`,
+      )
+    : [];
+
+  /** Zuordnung eines Entwurf-Sachverhalts von Hand ändern (j = null: keine Zuordnung). */
+  const umordnen = (ki: number, j: number | null) => {
+    if (!gespeichert || !refDaten) return;
+    const alt = gespeichert.zuordnung || zuordnungAus(gespeichert.ergebnis);
+    const neu: Zuordnung[] = alt.filter((z) => z.ki !== ki && z.ref !== j);
+    if (j !== null) neu.push({ ki, ref: j });
+    const ergebnis = vergleiche(meldung, refDaten, profil, neu);
+    speichern({ ...gespeichert, manuell: true, zuordnung: neu, ergebnis, erstellt: new Date().toISOString() });
+  };
 
   const laden = async (f: File | undefined) => {
     if (!f) return;
     setFehler(null);
     try {
-      const roh = JSON.parse(await f.text());
+      const text = await f.text();
+      const roh = JSON.parse(text);
+      if (!roh || typeof roh !== "object" || Array.isArray(roh)) throw new Error("keine Meldung (erwartet ein JSON-Objekt)");
       const mig = migriere(roh, profil);
       if (!mig.bekannt) {
         setFehler(`${f.name}: ${mig.hinweise.join(" ")}`);
         return;
       }
-      speichern({ referenz: f.name, erstellt: new Date().toISOString(), ergebnis: vergleiche(meldung, mig.daten, profil) });
+      const ergebnis = vergleiche(meldung, mig.daten, profil);
+      speichern({
+        referenz: f.name,
+        referenzHash: await sha256(text),
+        referenzDaten: mig.daten,
+        verfahren: VERGLEICH_VERFAHREN,
+        manuell: false,
+        zuordnung: zuordnungAus(ergebnis),
+        erstellt: new Date().toISOString(),
+        ergebnis,
+      });
     } catch (e) {
       setFehler(`${f.name}: ${(e as Error).message}`);
     }
@@ -90,16 +122,15 @@ export function VergleichKasten({
             <li>
               Zugeordnete Sachverhalte: <strong>{v.paare.filter((p) => p.ki && p.ref).length}</strong>
               {v.paare.some((p) => !p.ki || !p.ref) && <> (ohne Gegenstück: {v.paare.filter((p) => !p.ki || !p.ref).length})</>}
+              {gespeichert?.manuell && <> · Zuordnung von Hand geändert</>}
             </li>
-            <li>
-              Beurteilung gleich: <strong>{anteil(v.beurteilung.gleich, v.beurteilung.n)}</strong>
-            </li>
-            <li>
-              Tendenz gleich: <strong>{anteil(v.tendenz.gleich, v.tendenz.n)}</strong>
-            </li>
-            <li>
-              Ereignisarten gleich: <strong>{anteil(v.arten.gleich, v.arten.n)}</strong>
-            </li>
+            {(["beurteilung", "tendenz", "arten"] as const).map((k) => (
+              <li key={k}>
+                {k === "beurteilung" ? "Beurteilung" : k === "tendenz" ? "Tendenz" : "Ereignisarten"} gleich:{" "}
+                <strong>{anteil(v[k]?.gleich ?? 0, v[k]?.n ?? 0)}</strong>
+                {v[k]?.fehlend ? <span className="material-meta"> ({v[k].fehlend}× auf einer Seite leer)</span> : null}
+              </li>
+            ))}
           </ul>
 
           {v.achsen.length > 0 && (
@@ -133,6 +164,22 @@ export function VergleichKasten({
 
           {v.paare.map((p, i) => (
             <div key={i} className="vg-paar">
+              {p.ki && refDaten && (
+                <label className="vg-wahl">
+                  <span className="material-meta">Zuordnung Entwurf {p.ki.index + 1} →</span>
+                  <select
+                    value={p.ref ? String(p.ref.index) : ""}
+                    onChange={(e) => umordnen(p.ki!.index, e.target.value === "" ? null : Number(e.target.value))}
+                  >
+                    <option value="">keine Zuordnung</option>
+                    {refTitel.map((t, j) => (
+                      <option key={j} value={j}>
+                        Referenz {t}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
               <p className="vg-titel">
                 <span>
                   <span className="material-meta">Entwurf:</span> {p.ki ? p.ki.bezeichnung || `Sachverhalt ${p.ki.index + 1}` : "kein Gegenstück"}

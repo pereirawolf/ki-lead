@@ -27,6 +27,11 @@ export async function profilSpeichern(p: GespeichertesProfil): Promise<void> {
   await set(P + p.schluessel, p);
 }
 
+/** Ersetzte Profilstände bleiben unter ID@Version#Hash erhalten (Nachvollziehbarkeit älterer Läufe). */
+export async function profilArchivieren(schluessel: string, hash: string, dateien: Record<string, string>): Promise<void> {
+  await set(`profilarchiv:${schluessel}#${hash}`, { schluessel, hash, dateien, archiviertAm: new Date().toISOString() });
+}
+
 export async function profilLoeschen(schluessel: string): Promise<void> {
   await del(P + schluessel);
 }
@@ -43,6 +48,9 @@ export interface Zwischenstand {
   gespeichertAm: string;
   daten: Meldung;
   dateiname?: string;
+  /** Profilstand, unter dem der Zwischenstand entstand */
+  profilVersion?: string;
+  profilHash?: string;
 }
 
 export async function zwischenstandLesen(profilId: string): Promise<Zwischenstand | undefined> {

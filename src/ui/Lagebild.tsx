@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, radarFuer, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarZeilen } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE, jetztLokal } from "../kern/ausgabe";
 import { kennsatz } from "../kern/kennsaetze";
@@ -150,6 +150,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const [importFehler, setImportFehler] = useState<LagebildFehler[]>([]);
   const [geladen, setGeladen] = useState(false);
   const [ziehen, setZiehen] = useState(false);
+  const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const eingabe = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -161,7 +162,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   }, [profil.manifest.id]);
 
   useEffect(() => {
-    if (geladen) lagebildSchreiben(profil.manifest.id, { dateien, naechsteAusgabe: ausgabe });
+    if (geladen)
+      lagebildSchreiben(profil.manifest.id, { dateien, naechsteAusgabe: ausgabe })
+        .then(() => setSpeicherFehler(null))
+        .catch((e) => setSpeicherFehler(`Der Stand des Lagebilds konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}).`));
   }, [dateien, ausgabe, geladen, profil.manifest.id]);
 
   const { eintraege, fehler: lesefehler } = useMemo(() => einlesen(dateien, profil), [dateien, profil]);
@@ -198,11 +202,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     if (confirm(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`)) setDateien([]);
   };
 
-  const eigeneStelle = profil.manifest.variablen.meldende_stelle || "";
+  const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
   const [uebergabeWahl, setUebergabeWahl] = useState<Set<string> | null>(null);
-  const anKi = () => setUebergabeWahl(new Set(eintraege.filter((e) => !(eigeneStelle && stelleVon(e, profil).startsWith(eigeneStelle))).map((e) => e.id)));
+  const anKi = () => setUebergabeWahl(new Set(eintraege.filter((e) => !eigen(e)).map((e) => e.id)));
   const uebergabeStarten = () => {
     const liste = eintraege
       .filter((e) => uebergabeWahl?.has(e.id))
@@ -256,7 +260,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
         <Marke farbe="gruen">Schema ✓</Marke>
       )}
       {e.hinweise.length > 0 && <Marke farbe="orange">migriert</Marke>}
-      {!e.fremd && eigeneStelle && stelleVon(e, profil).startsWith(eigeneStelle) && <Marke farbe="amt">eigene Meldung</Marke>}
+      {eigen(e) && <Marke farbe="amt">eigene Meldung</Marke>}
       {!e.fremd && statusVon(e, profil) === r.status_entwurf && <Marke farbe="gelb">{r.status_entwurf}</Marke>}
       {r.entstehung_feld && holeWert(e.daten, [r.entstehung_feld, "verfahren"]) === "KI-Entwurf" && <Marke farbe="grau">KI-Entwurf</Marke>}
     </>
@@ -326,6 +330,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
           Schema werden erkannt, aber nur für die KI-Verdichtung vorgehalten. Gleiche Dateiinhalte werden nur einmal geführt.
         </p>
       </section>
+
+      {speicherFehler && (
+        <div className="kasten kasten-fehler" role="alert">
+          <p>{speicherFehler}</p>
+        </div>
+      )}
 
       {fehlerListe.length > 0 && (
         <div className="kasten kasten-fehler">

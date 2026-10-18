@@ -6,7 +6,7 @@ import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
 import { dateiname } from "../kern/ausgabe";
 import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { holeWert } from "../kern/pfad";
-import { feldUi, radarFuer } from "../kern/ui";
+import { alsText, feldUi, radarFuer } from "../kern/ui";
 import { sachverhalte } from "../kern/quellen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
@@ -39,17 +39,20 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
   const radarDef = radarFeld ? radarFuer(profil.ui, radarFeld) : undefined;
   const elementName = feldUi(profil.ui, r.sachverhalte).element_label || "Eintrag";
 
+  /** Gemeinsame Freigabeprüfung für finale JSON- und PDF-Ausgaben */
+  const finalFreigeben = (final: boolean): boolean =>
+    !final ||
+    !schemaBefunde.length ||
+    confirm(
+      `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft.\n\nTrotzdem final ausgeben?`,
+    );
   const exportiere = (final: boolean) => {
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
-    if (final && schemaBefunde.length) {
-      const ok = confirm(
-        `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so exportierte Datei wird beim Einlesen als fehlerhaft markiert.\n\nTrotzdem final exportieren?`,
-      );
-      if (!ok) return;
-    }
+    if (!finalFreigeben(final)) return;
     dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final) + ".json", "application/json");
   };
   const pdf = (final: boolean) => {
+    if (!finalFreigeben(final)) return;
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final) + ".pdf", "application/pdf");
   };
@@ -117,7 +120,7 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
                 <p className="element-nr">
                   {elementName} {i + 1}
                 </p>
-                <p className="zeile-titel">{(r.sv_bezeichnung && holeWert(sv, r.sv_bezeichnung)) || "ohne Bezeichnung"}</p>
+                <p className="zeile-titel">{(r.sv_bezeichnung && alsText(holeWert(sv, r.sv_bezeichnung))) || "ohne Bezeichnung"}</p>
                 <p className="zeile-status">
                   <span className="status">{b || "keine Bewertung"}</span>
                   {r.sv_tendenz && <span className="status">{t || "keine Tendenz"}</span>}

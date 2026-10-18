@@ -104,20 +104,48 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
 const IGNORIEREN = /(^|\/)(__MACOSX|\.)/;
 
 /** Dateiauswahl oder Ablage: JSON-Dateien direkt, ZIP-Archive mit ihren JSON-Dateien. */
+export const GRENZEN = { dateien: 500, bytesJeDatei: 20 * 1024 * 1024, bytesGesamt: 100 * 1024 * 1024 };
+
 export async function dateienAusAuswahl(liste: File[]): Promise<{ dateien: LagebildDatei[]; fehler: LagebildFehler[] }> {
   const dateien: LagebildDatei[] = [];
   const fehler: LagebildFehler[] = [];
   const jetzt = new Date().toISOString();
+  let gesamt = 0;
+  // Grenzen vor der Verarbeitung: Anzahl, Größe je Datei und entpackte Gesamtgröße
+  const passt = (name: string, bytes: number): boolean => {
+    if (dateien.length >= GRENZEN.dateien) {
+      fehler.push({ name, text: `mehr als ${GRENZEN.dateien} Dateien; der Rest wird nicht eingelesen` });
+      return false;
+    }
+    if (bytes > GRENZEN.bytesJeDatei) {
+      fehler.push({ name, text: "größer als 20 MB" });
+      return false;
+    }
+    if (gesamt + bytes > GRENZEN.bytesGesamt) {
+      fehler.push({ name, text: "Gesamtgröße über 100 MB; nicht eingelesen" });
+      return false;
+    }
+    gesamt += bytes;
+    return true;
+  };
   for (const f of liste) {
     const endung = f.name.toLowerCase().split(".").pop();
     if (endung === "json") {
-      dateien.push({ name: f.name, text: await f.text(), importiertAm: jetzt });
+      if (passt(f.name, f.size)) dateien.push({ name: f.name, text: await f.text(), importiertAm: jetzt });
     } else if (endung === "zip") {
       try {
         const zip = await JSZip.loadAsync(await f.arrayBuffer());
         const json = Object.values(zip.files).filter((z) => !z.dir && /\.json$/i.test(z.name) && !IGNORIEREN.test(z.name));
         if (!json.length) fehler.push({ name: f.name, text: "das Archiv enthält keine JSON-Dateien" });
-        for (const z of json) dateien.push({ name: z.name.split("/").pop() || z.name, text: await z.async("string"), importiertAm: jetzt });
+        // Vollständigen Pfad im Archiv behalten: Nord/meldung.json und Sued/meldung.json bleiben unterscheidbar
+        for (const z of json) {
+          const name = `${f.name.replace(/\.zip$/i, "")}/${z.name}`;
+          const entpackt = Number((z as any)._data?.uncompressedSize) || 0;
+          if (!passt(name, entpackt)) continue;
+          const text = await z.async("string");
+          if (!entpackt && !passt(name, text.length)) continue;
+          dateien.push({ name, text, importiertAm: jetzt });
+        }
       } catch (e) {
         fehler.push({ name: f.name, text: `ZIP nicht lesbar (${(e as Error).message})` });
       }

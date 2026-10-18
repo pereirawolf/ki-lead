@@ -6,10 +6,12 @@ import { jetztLokal } from "./kern/ausgabe";
 import type { Befund, Meldung, Profil } from "./kern/typen";
 import {
   aktivesProfilLesen,
+  dateiAnbieten,
   aktivesProfilSetzen,
   profileLaden,
   profilLoeschen,
   profilSpeichern,
+  profilArchivieren,
   zwischenstandLesen,
   zwischenstandSchreiben,
 } from "./speicher/speicher";
@@ -18,6 +20,7 @@ import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
+import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
 
@@ -53,7 +56,10 @@ export default function App() {
   const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
   const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
   const [gesichert, setGesichert] = useState<string>();
-  const timer = useRef<number>();
+  /** Ausstehende Speicherungen je Profil (Entprellung), damit ein Profilwechsel nichts verliert */
+  const ausstehend = useRef(new Map<string, { daten: Meldung; timer: number }>());
+  const aktivesProfilId = useRef<string>();
+  const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
   const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: { name: string; text: string }[] } | null>(null);
@@ -117,28 +123,75 @@ export default function App() {
     })();
   }, []);
 
-  // Beim Profilwechsel: Zwischenstand laden oder neue Meldung anlegen
+  const schreiben = useCallback(async (id: string, p: Profil, daten: Meldung) => {
+    const jetzt = new Date();
+    try {
+      await zwischenstandSchreiben(id, { gespeichertAm: jetzt.toISOString(), daten, profilVersion: p.manifest.version, profilHash: p.hash });
+      if (aktivesProfilId.current === id) setGesichert(jetzt.toLocaleString("de-DE"));
+      setSpeicherFehler(null);
+    } catch (e) {
+      setSpeicherFehler(
+        `Der Zwischenstand konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}). Bitte die Meldung als JSON sichern.`,
+      );
+    }
+  }, []);
+
+  /** Alle ausstehenden Speicherungen sofort schreiben (Profilwechsel, Seite wird verlassen). */
+  const ausstehendSchreiben = useCallback(() => {
+    for (const [id, a] of ausstehend.current) {
+      window.clearTimeout(a.timer);
+      const p = profile.find((x) => x.profil?.manifest.id === id)?.profil;
+      if (p) schreiben(id, p, a.daten);
+    }
+    ausstehend.current.clear();
+  }, [profile, schreiben]);
+
+  useEffect(() => {
+    const weg = () => ausstehendSchreiben();
+    const sichtbar = () => document.visibilityState === "hidden" && ausstehendSchreiben();
+    window.addEventListener("pagehide", weg);
+    document.addEventListener("visibilitychange", sichtbar);
+    return () => {
+      window.removeEventListener("pagehide", weg);
+      document.removeEventListener("visibilitychange", sichtbar);
+    };
+  }, [ausstehendSchreiben]);
+
+  // Beim Profilwechsel: ausstehende Speicherungen schreiben, dann Zwischenstand laden oder neue Meldung anlegen.
+  // Verspätete Ergebnisse eines vorher aktiven Profils werden verworfen.
   useEffect(() => {
     if (!profil) return;
+    ausstehendSchreiben();
+    aktivesProfilId.current = profil.manifest.id;
+    let gueltig = true;
+    setMeldungRoh(null);
     (async () => {
       const z = await zwischenstandLesen(profil.manifest.id);
+      if (!gueltig) return;
       setMeldungRoh(z?.daten ?? neueMeldung(profil));
-      setGesichert(z ? new Date(z.gespeichertAm).toLocaleString("de-DE") : undefined);
+      const anderer = z?.profilVersion && z.profilVersion !== profil.manifest.version ? ` (angelegt mit Profilversion ${z.profilVersion}, bitte prüfen)` : "";
+      setGesichert(z ? new Date(z.gespeichertAm).toLocaleString("de-DE") + anderer : undefined);
     })();
+    return () => {
+      gueltig = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profil]);
 
   const setMeldung = useCallback(
     (m: Meldung) => {
       setMeldungRoh(m);
       if (!profil) return;
-      window.clearTimeout(timer.current);
-      timer.current = window.setTimeout(async () => {
-        const jetzt = new Date();
-        await zwischenstandSchreiben(profil.manifest.id, { gespeichertAm: jetzt.toISOString(), daten: m });
-        setGesichert(jetzt.toLocaleString("de-DE"));
+      const id = profil.manifest.id;
+      const alt = ausstehend.current.get(id);
+      if (alt) window.clearTimeout(alt.timer);
+      const timer = window.setTimeout(() => {
+        ausstehend.current.delete(id);
+        schreiben(id, profil, m);
       }, 1200);
+      ausstehend.current.set(id, { daten: m, timer });
     },
-    [profil],
+    [profil, schreiben],
   );
 
   const aktivieren = async (schluessel: string) => {
@@ -147,10 +200,26 @@ export default function App() {
     setAnsicht("meldung");
   };
 
-  const importieren = async (dateien: Record<string, string>) => {
+  const importieren = async (dateien: Record<string, string>, ersetzen = false) => {
     const erg = await ladeProfil(dateien);
     if (!erg.profil) return { ok: false, befunde: erg.befunde };
     const schluessel = `${erg.profil.manifest.id}@${erg.profil.manifest.version}`;
+    // Gleiche ID und Version mit anderem Inhalt: Konflikt melden, beim Ersetzen den alten Stand archivieren
+    const vorhanden = profile.find((p) => p.schluessel === schluessel || (p.profil && `${p.profil.manifest.id}@${p.profil.manifest.version}` === schluessel));
+    if (vorhanden?.profil && vorhanden.profil.hash !== erg.profil.hash) {
+      if (!ersetzen || vorhanden.quelle === "eingebaut")
+        return {
+          ok: false,
+          konflikt: vorhanden.quelle !== "eingebaut",
+          befunde: [
+            {
+              stufe: "fehler" as const,
+              text: `Profil ${erg.profil.manifest.id} in Version ${erg.profil.manifest.version} ist bereits mit anderem Inhalt vorhanden. Für geänderte Inhalte bitte die Versionsnummer im Manifest erhöhen.`,
+            },
+          ],
+        };
+      await profilArchivieren(vorhanden.schluessel, vorhanden.profil.hash, vorhanden.dateien);
+    }
     const importiertAm = new Date().toISOString();
     await profilSpeichern({ schluessel, quelle: "importiert", dateien: erg.profil.dateien, importiertAm });
     setProfile((alt) => [
@@ -201,18 +270,31 @@ export default function App() {
         Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
       </div>
 
+      {speicherFehler && (
+        <div className="kasten kasten-fehler speicherfehler" role="alert">
+          <p>{speicherFehler}</p>
+        </div>
+      )}
+
       <main className="inhalt">
         {ansicht === "profile" && <ProfileAnsicht profile={profile} aktiv={aktiv} aktivieren={aktivieren} importieren={importieren} loeschen={loeschen} />}
         {ansicht === "meldung" && profil && meldung && (
-          <MeldungAnsicht
-            key={profil.hash}
-            profil={profil}
-            meldung={meldung}
-            setMeldung={setMeldung}
-            neu={() => setMeldung(neueMeldung(profil))}
-            zwischenstand={gesichert}
-            ki={{ schluessel, einstellungen }}
-          />
+          <Fehlergrenze
+            schluessel={profil.hash}
+            sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", "KI-LEAD_Meldung_Sicherung.json", "application/json")}
+            zuruecksetzen={() => setMeldung(neueMeldung(profil))}
+            zuruecksetzenText="Neue Meldung beginnen"
+          >
+            <MeldungAnsicht
+              key={profil.hash}
+              profil={profil}
+              meldung={meldung}
+              setMeldung={setMeldung}
+              neu={() => setMeldung(neueMeldung(profil))}
+              zwischenstand={gesichert}
+              ki={{ schluessel, einstellungen }}
+            />
+          </Fehlergrenze>
         )}
         {profil && (
           <div hidden={ansicht !== "ki"}>
@@ -227,7 +309,11 @@ export default function App() {
             />
           </div>
         )}
-        {ansicht === "lagebild" && profil && <LagebildAnsicht key={profil.hash} profil={profil} uebergeben={anKiUebergeben} oeffnen={lagebildOeffnen} />}
+        {ansicht === "lagebild" && profil && (
+          <Fehlergrenze schluessel={profil.hash}>
+            <LagebildAnsicht key={profil.hash} profil={profil} uebergeben={anKiUebergeben} oeffnen={lagebildOeffnen} />
+          </Fehlergrenze>
+        )}
         {ansicht === "einstellungen" && (
           <EinstellungenAnsicht
             profil={profil}

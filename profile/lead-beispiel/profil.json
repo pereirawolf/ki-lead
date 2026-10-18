@@ -16,6 +16,7 @@
     "meldetakt": "wöchentlich",
     "lageprodukt": "übergreifende Lagebild"
   },
+  "eigene_stellen": ["Koordinierungsstelle (Beispiel) – Redaktionskonferenz"],
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",

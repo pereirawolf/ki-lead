@@ -47,6 +47,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `variablen`: Werte, die in neuen Meldungen vorbelegt werden, wenn das Schema ein gleichnamiges Feld der obersten Ebene hat, und die als `{{profil.<name>}}` in Arbeitsanweisungen zur Verfügung stehen. Zusätzlich gibt es `{{profil.referenzraum}}`, `{{profil.ebene}}` und `{{profil.name}}`.
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
+- `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
 - `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
 
 ### `kontakte.json`
@@ -141,6 +142,9 @@ Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. 
 Eine Sammelmappe wird an HTML-Ankern (`<a id="sop-01"></a>`) zerlegt. Ohne Anker gilt eine Datei als eine SOP. Aus dem YAML-Block oder Frontmatter liest die App `lageart`, `art_vorschlag` und `version`. Der in `teil_gemeinsam` genannte Abschnitt geht jeder KI-Anfrage mit.
 
 ## Prüfung beim Import
+
+Die App prüft die Struktur von Manifest, Darstellungsdatei und Kontakten (u. a. mindestens ein Bearbeitungsschritt, Pflichtrollen als Text, Radare mit ganzzahligem `max` und vollständigen Achsen). Fehler verhindern die Aktivierung. Ein Paket mit gleicher ID und Version, aber anderem Inhalt gilt als Versionskonflikt; ersetzt man es trotzdem, bleibt der alte Stand im Gerät archiviert. Für geänderte Inhalte daher die Version erhöhen.
+
 
 Die App meldet Fehler (Profil nicht verwendbar), Warnungen und Hinweise. Geprüft werden unter anderem: Pflichtdateien, gültiges JSON, verwendbares Schema, Felder und Rollen der Darstellungsdatei, Anzahl der Stufentexte, Platzhalter ohne Profilvariable, Erkennbarkeit des gemeinsamen SOP-Teils und die Übereinstimmung der Stufentexte mit dem Kodierleitfaden.
 

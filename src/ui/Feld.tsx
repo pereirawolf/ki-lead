@@ -3,7 +3,7 @@
 import { useId } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, type Segment } from "../kern/pfad";
-import { feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
+import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
 import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
@@ -137,14 +137,50 @@ export function Feld(props: FeldProps) {
         <label className={f.pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
           {label}
         </label>
-        <select id={id} value={wert === null || wert === undefined ? "" : String(wert)} onChange={(ev) => setze(segs, ev.target.value)}>
-          {hatLeer && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
-          {optionen.map((opt) => (
-            <option key={String(opt)} value={String(opt)}>
+        {/* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */}
+        <select
+          id={id}
+          value={optionen.findIndex((o) => o === wert) >= 0 ? String(optionen.findIndex((o) => o === wert)) : ""}
+          onChange={(ev) => setze(segs, ev.target.value === "" ? (e.includes("") ? "" : null) : optionen[Number(ev.target.value)])}
+        >
+          {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
+          {optionen.map((opt, i) => (
+            <option key={String(opt)} value={String(i)}>
               {String(opt)}
             </option>
           ))}
         </select>
+        <Hinweis text={f.hinweis} />
+      </div>
+    );
+  }
+
+  if (t.includes("boolean")) {
+    if (t.includes("null")) {
+      return (
+        <div className="feld">
+          <label className="feld-label" htmlFor={id}>
+            {label}
+          </label>
+          <select
+            id={id}
+            value={wert === true ? "ja" : wert === false ? "nein" : ""}
+            onChange={(ev) => setze(segs, ev.target.value === "" ? null : ev.target.value === "ja")}
+          >
+            <option value="">{f.leer_label || "keine Angabe"}</option>
+            <option value="ja">ja</option>
+            <option value="nein">nein</option>
+          </select>
+          <Hinweis text={f.hinweis} />
+        </div>
+      );
+    }
+    return (
+      <div className="feld">
+        <label className="schalter" htmlFor={id}>
+          <input id={id} type="checkbox" checked={wert === true} onChange={(ev) => setze(segs, ev.target.checked)} />
+          <span>{label}</span>
+        </label>
         <Hinweis text={f.hinweis} />
       </div>
     );
@@ -171,7 +207,7 @@ export function Feld(props: FeldProps) {
   const widget = f.widget || "text";
   const gemeinsam = {
     id,
-    value: wert ?? "",
+    value: typeof wert === "string" ? wert : alsText(wert),
     placeholder: f.platzhalter,
     onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value),
   };
@@ -205,7 +241,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
 
   const hinzufuegen = () => setze(segs, [...liste, leererWert(k.items, profil.schema)]);
   const entfernen = (i: number) => {
-    const titel = f.titel_feld ? holeWert(liste[i], f.titel_feld) : "";
+    const titel = f.titel_feld ? alsText(holeWert(liste[i], f.titel_feld)) : "";
     if (!confirm(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`)) return;
     setze(
       segs,
@@ -216,7 +252,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
     <div className="liste">
       {liste.length === 0 && <p className="leer">Noch kein {elementName} erfasst.</p>}
       {liste.map((el, i) => {
-        const titel = f.titel_feld ? holeWert(el, f.titel_feld) : "";
+        const titel = f.titel_feld ? alsText(holeWert(el, f.titel_feld)) : "";
         const beurteilung = istSachverhalte && r.sv_beurteilung ? String(holeWert(el, r.sv_beurteilung) || "") : "";
         return (
           <section key={i} className={`element stufe-${beurteilung.toLowerCase().replace(/[^a-zäöüß]/g, "") || "leer"}`} aria-label={`${elementName} ${i + 1}`}>
