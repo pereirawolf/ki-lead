@@ -7,7 +7,7 @@ import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
-import { gliedereBewertung } from "../kern/kennsaetze";
+import { gliedereFeld } from "../kern/kennsaetze";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
 
 const BLAU: [number, number, number] = [31, 79, 130];
@@ -134,8 +134,7 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
   }
   let text = wert === null || wert === undefined || wert === "" ? "–" : String(wert);
   if (f.widget === "datum" || f.widget === "datumzeit") text = datumDE(text) || "–";
-  const r = profil.ui.rollen;
-  if (r.sv_bewertung_text && gen === `${r.sachverhalte}[].${r.sv_bewertung_text}`) text = gliedereBewertung(text, profil.ui);
+  if (text !== "–") text = gliedereFeld(gen, text, profil.ui);
   out.push([label, text]);
 }
 

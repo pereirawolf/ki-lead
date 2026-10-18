@@ -133,6 +133,14 @@ export interface QuellenKonfig {
   vorlage?: string;
 }
 
+/** Satzanfänge (reguläre Ausdrücke), vor denen Ausgaben einen Absatz bzw. eine neue Zeile beginnen. */
+export interface TextGliederung {
+  absatz?: string[];
+  zeile?: string[];
+  /** Kurze Aspektbegriffe mit Doppelpunkt (bis zu so vielen Wörtern) beginnen einen Absatz; 0 oder fehlend: aus. */
+  kurzlabel?: number;
+}
+
 export interface UiKonfig {
   format: string;
   titel: string;
@@ -151,7 +159,10 @@ export interface UiKonfig {
    * Gliederung des Bewertungstexts in Ausgaben (PDF, Kopiervorlage): Satzanfänge als reguläre Ausdrücke.
    * „absatz“ beginnt einen neuen Absatz (Leerzeile), „zeile“ eine neue Zeile. Kennsätze gliedert die App selbst.
    */
-  bewertung_gliederung?: { absatz?: string[]; zeile?: string[] };
+  /** Gliederung des Bewertungstexts in Ausgaben. */
+  bewertung_gliederung?: TextGliederung;
+  /** Gliederung der Analysefelder (Rolle sv_analysefelder) in Ausgaben. */
+  analyse_gliederung?: TextGliederung;
 }
 
 export interface Sop {

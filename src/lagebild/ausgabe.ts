@@ -5,7 +5,7 @@ import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
-import { gliedereBewertung } from "../kern/kennsaetze";
+import { gliedereAnalyse, gliedereBewertung } from "../kern/kennsaetze";
 import type { Profil, RadarDef } from "../kern/typen";
 import { absender, farbeBeurteilung, farbeTendenz, stelleVon, zeitpunktVon, type Farbe, type LagebildEintrag, type SvEintrag } from "./lagebild";
 
@@ -149,7 +149,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
   ].join("");
   zeilen.push(`<tr><td colspan="2" style="${S.titel}"><b>${html(s.bezeichnung || "(ohne Bezeichnung)")}</b>${zusatz}</td></tr>`);
 
-  for (const feld of r.sv_analysefelder || []) zeile(bezeichnung(ui, `${sv}.${feld}`), html(holeWert(s.sv, feld) || "–"));
+  for (const feld of r.sv_analysefelder || []) zeile(bezeichnung(ui, `${sv}.${feld}`), html(gliedereAnalyse(holeWert(s.sv, feld), ui) || "–"));
 
   if (r.sv_beurteilung || r.sv_tendenz || r.sv_bewertung_text) {
     const teile: string[] = [];
@@ -198,7 +198,7 @@ export function kopiervorlageText(s: SvEintrag, profil: Profil): string {
   const ui = profil.ui;
   const r = ui.rollen;
   const z: string[] = [absender(s.eintrag, profil), s.bezeichnung || "(ohne Bezeichnung)"];
-  for (const feld of r.sv_analysefelder || []) z.push("", bezeichnung(ui, `${r.sachverhalte}[].${feld}`), String(holeWert(s.sv, feld) || "–"));
+  for (const feld of r.sv_analysefelder || []) z.push("", bezeichnung(ui, `${r.sachverhalte}[].${feld}`), gliedereAnalyse(holeWert(s.sv, feld), ui) || "–");
   const bt = [s.beurteilung, s.tendenz].filter(Boolean).join(" / ");
   if (bt || s.bewertungText) z.push("", bt, gliedereBewertung(s.bewertungText, ui));
   return z.join("\n").trim();

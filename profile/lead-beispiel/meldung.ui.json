@@ -359,7 +359,29 @@
   "bewertung_gliederung": {
     "absatz": ["Kernaussage:", "Referenzraum:", "Beurteilung „", "Tendenz „", "D1 (=|offen|ist)", "(Keine )?Achsendivergenz", "Einschätzung \\("],
     "zeile": ["D[2-9] (=|offen|ist)"]
+  },  "analyse_gliederung": {
+    "absatz": [
+      "Kernaussage:",
+      "Bestätigt ist",
+      "Einordnung „",
+      "Eingetretene Wirkungen",
+      "Belegte (Wirkungen?|Kopplungen)",
+      "Belegt:",
+      "Nicht belegt",
+      "(Mögliche|Plausible|Denkbare) (Entwicklungen|Folgen|Wirkungen)",
+      "Möglich, (aber )?nicht belegt",
+      "Szenario:",
+      "Einschätzung( \\(| der | von )",
+      "Bestehende Maßnahmen",
+      "Prüf- und Abstimmungsbedarf",
+      "Abstimmungen ",
+      "Wirkungskette( \\d+)?:",
+      "Länderübergreifend"
+    ],
+    "zeile": ["\\(\\d+\\) ", "Empfehlung \\d+:", "(Erstens|Zweitens|Drittens|Viertens|Fünftens|Sechstens),"],
+    "kurzlabel": 3
   },
+
   "dateiname": "LEAD-Meldung_{land}_{meldende_stelle}_{meldezeitpunkt}",
   "kurzfassung": {
     "titel": "Management Summary",

@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.4 vom 18.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.5 vom 18.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -214,7 +214,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.4 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.5 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -290,4 +290,5 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.2 | 18.10.2026 | Rollenwahl je Meldung bei der Übergabe an die Verdichtung (Abschnitt 5.2, Umsetzung M4) |
 | 0.4.3 | 18.10.2026 | PDF-Ausgaben enthalten das Lagenradar als Grafik neben den Achsenwerten |
 | 0.4.4 | 18.10.2026 | PDF: Block „Freigabe & Versand“ am Ende; gegliederter Bewertungstext in PDF, Kopiervorlage und Lagebild-Tabelle |
+| 0.4.5 | 18.10.2026 | Gegliederte Analysefelder in PDF, Kopiervorlage und Lagebild-Tabelle (Schlüsselsätze, Aufzählungen, kurze Aspektbegriffe) |
 

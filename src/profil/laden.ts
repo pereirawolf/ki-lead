@@ -110,6 +110,27 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
     else if (ui.lagebild.ausgabe_tage !== undefined && !(Number.isInteger(ui.lagebild.ausgabe_tage) && ui.lagebild.ausgabe_tage >= 0))
       fehler("„lagebild.ausgabe_tage“ muss eine ganze Zahl ab 0 sein.");
   }
+  for (const name of ["bewertung_gliederung", "analyse_gliederung"]) {
+    const g = ui[name];
+    if (g === undefined) continue;
+    if (!istObjekt(g)) {
+      fehler(`„${name}“ muss ein Objekt sein.`);
+      continue;
+    }
+    for (const art of ["absatz", "zeile"]) {
+      if (g[art] === undefined) continue;
+      if (!textListe(g[art])) fehler(`„${name}.${art}“ muss eine Liste von Texten sein.`);
+      else
+        for (const q of g[art])
+          try {
+            new RegExp(q, "u");
+          } catch {
+            fehler(`„${name}.${art}“: „${q}“ ist kein gültiger regulärer Ausdruck.`);
+          }
+    }
+    if (g.kurzlabel !== undefined && !(Number.isInteger(g.kurzlabel) && g.kurzlabel >= 0 && g.kurzlabel <= 8))
+      fehler(`„${name}.kurzlabel“ muss eine ganze Zahl von 0 bis 8 sein.`);
+  }
   return befunde.length === vorher;
 }
 

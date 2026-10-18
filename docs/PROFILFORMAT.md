@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.5 vom 18.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.6 vom 18.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -125,6 +125,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
+- `analyse_gliederung`: dasselbe für die Analysefelder (Rolle `sv_analysefelder`). Ein Umbruch entsteht nur nach einem Satzende (`. ; ! ? ) ] “`), bei `zeile` auch nach einem Doppelpunkt, damit eine Aufzählung „Prüfbedarf: (1) … (2) …“ untereinander steht. Mit `kurzlabel: n` beginnt zusätzlich jeder kurze Aspektbegriff aus höchstens n Wörtern mit Doppelpunkt eine neue Zeile („Strom:“, „Verkehr → Versorgung:“, „Land (Behörde):“); Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Begriff. `kurzlabel` gilt auch in `bewertung_gliederung`, Werte 0 bis 8, 0 oder fehlend schaltet es ab. Beispiel: `{ "absatz": ["Szenario:", "Einordnung „"], "zeile": ["\\(\\d+\\) "], "kurzlabel": 3 }`. Die Gliederung betrifft nur Ausgaben (PDF, Kopiervorlage, Lagebild-Tabelle), nie die gespeicherte Meldung.
 - `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
 
 ## Arbeitsanweisungen
@@ -171,5 +172,6 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.1 | 17.10.2026 | `anweisungen.kurzfassung` (Management Summary) beschrieben; Variable `kurzname`; Tabelle der Anweisungsschlüssel |
 | 1.2 | 18.10.2026 | Darstellungsdatei: `lagebild` und Rolle `tendenz_verschaerfung`; Reihenfolge der Beurteilungsstufen als Schwere; Manifest: `beispiele`; Aufbau von `kontakte.json` |
 | 1.3 | 18.10.2026 | `anweisungen.verdichtung` in Gebrauch (bisher „geplant“); Modellrollen einschließlich `verdichtung`, Modellkennungen von Anthropic und OpenAI |
-| 1.5 | 18.10.2026 | Rolle `freigabe`; Abschnitt `bewertung_gliederung` |
 | 1.4 | 18.10.2026 | Manifest: `eigene_stellen`; Strukturprüfung beim Import (Fehler verhindern die Aktivierung); Versionskonflikt bei gleicher Version mit anderem Inhalt; Abschnitt „Versionierung und Änderungsverlauf eines Profils“; Prüfsumme wird im Laufprotokoll geführt |
+| 1.5 | 18.10.2026 | Rolle `freigabe`; Abschnitt `bewertung_gliederung` |
+| 1.6 | 18.10.2026 | Abschnitt `analyse_gliederung`; Option `kurzlabel`; Prüfung beider Gliederungsabschnitte beim Import. Reihenfolge der Zeilen 1.4 und 1.5 in dieser Tabelle berichtigt |

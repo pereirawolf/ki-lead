@@ -19,7 +19,16 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.1 | 1704922 |
 | 0.4.2 | 9f8ae9f |
 | 0.4.3 | 9f8dca1 |
-| 0.4.4 | Commit „PDF: Freigabe & Versand am Ende, gegliederter Bewertungstext; 0.4.4“ |
+| 0.4.4 | 68ff2da |
+| 0.4.5 | Commit „Gegliederte Analysefelder in PDF, Kopiervorlage und Lagebild; 0.4.5“ |
+
+## [0.4.5] – 18.10.2026
+
+### Geändert
+
+- PDF, Kopiervorlage (HTML und Klartext) und Sachverhaltstabelle im Lagebild gliedern jetzt auch die Analysefelder (Lage & Ereignis, Risiken & Auswirkungen, Maßnahmen & Handlungsempfehlungen, Abhängigkeiten & Interdependenzen). Schlüsselsätze, die einen neuen Aspekt einleiten („Bestätigt ist …“, „Einordnung „…“:“, „Nicht belegt …“, „Mögliche Entwicklungen …“, „Szenario:“, „Belegte Kopplungen:“, „Möglich, aber nicht belegt …“, „Prüf- und Abstimmungsbedarf:“ …), beginnen mit Leerzeile; Aufzählungen („(1) …“, „Empfehlung 1:“, „Erstens, …“) und kurze Aspektbegriffe mit Doppelpunkt („Strom:“, „Verkehr → Versorgung:“, „Puffer:“) auf neuer Zeile. Die Satzanfänge kommen aus der Darstellungsdatei (neuer Abschnitt `analyse_gliederung`); gespeicherte Meldungen bleiben unverändert. Rückmeldung aus einem echten Lauf.
+- Die Gliederung kennt die Option `kurzlabel` (höchstens so viele Wörter vor dem Doppelpunkt). Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Aspektbegriff, Uhrzeiten und Daten lösen keinen Umbruch aus.
+- Profilimport prüft `bewertung_gliederung` und `analyse_gliederung`: Listen von Texten, gültige reguläre Ausdrücke, `kurzlabel` von 0 bis 8.
 
 ## [0.4.4] – 18.10.2026
 
@@ -127,7 +136,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...main
+[0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...main
+[0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...68ff2da
 [0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...9f8dca1
 [0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...9f8ae9f
 [0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...1704922

@@ -80,6 +80,8 @@ describe("Strukturprüfung der Darstellungsdatei", async () => {
     ["falsch typisierte Rolle", (ui: any) => (ui.rollen.sv_analysefelder = "lage")],
     ["Radar ohne max", (ui: any) => ((Object.values(ui.radare)[0] as any).max = "6")],
     ["Felder kein Objekt", (ui: any) => (ui.felder = [])],
+    ["ungültiger Ausdruck in der Gliederung", (ui: any) => (ui.analyse_gliederung = { absatz: ["Szenario („"] })],
+    ["Gliederung mit falschem kurzlabel", (ui: any) => (ui.bewertung_gliederung = { kurzlabel: 12 })],
   ])("%s verhindert die Aktivierung mit verständlichem Fehler", async (_, aendern) => {
     const erg = await mit(aendern);
     expect(erg.profil).toBeNull();

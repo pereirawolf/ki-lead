@@ -48,3 +48,39 @@ describe("Freigabe am Ende und gegliederter Bewertungstext", () => {
     );
   });
 });
+
+describe("Gegliederte Analysefelder", () => {
+  it("setzt Absätze vor Schlüsselsätzen und Zeilen vor Aufzählungen und kurzen Aspektbegriffen", async () => {
+    const { gliedereAnalyse, gliedereFeld } = await import("../src/kern/kennsaetze");
+    const p = (await profil("lead-beispiel")).profil!;
+    const t =
+      "Kernaussage: A brennt. Bestätigt ist nach [Q1] (Stand 18.10.2026, 08:22 Uhr): Feuer um 02:28 Uhr. Strom: rund 300 Anschlüsse. Verkehr → Versorgung: frei [Q2]. " +
+      "Einordnung „Sonstiges“: kein Katalogwert. Mögliche Entwicklungen (Annahmen): Rauch. Prüf- und Abstimmungsbedarf: (1) Landkreis: prüfen. (2) Land: klären. " +
+      "Abstimmungen haben nicht stattgefunden.";
+    expect(gliedereAnalyse(t, p.ui)).toBe(
+      "Kernaussage: A brennt.\n\nBestätigt ist nach [Q1] (Stand 18.10.2026, 08:22 Uhr): Feuer um 02:28 Uhr.\nStrom: rund 300 Anschlüsse.\nVerkehr → Versorgung: frei [Q2].\n\n" +
+        "Einordnung „Sonstiges“: kein Katalogwert.\n\nMögliche Entwicklungen (Annahmen): Rauch.\n\nPrüf- und Abstimmungsbedarf:\n(1) Landkreis: prüfen.\n(2) Land: klären.\n\n" +
+        "Abstimmungen haben nicht stattgefunden.",
+    );
+    // Ordnungszahlen bleiben bei ihrem Aspektbegriff; lange Satzteile vor einem Doppelpunkt sind kein Aspektbegriff
+    expect(gliedereAnalyse("1. Land (Behörde): prüfen. Weg: bestehende Kanäle.\n2. Bund: klären. Sechs Länder haben gemeldet: A, B.", p.ui)).toBe(
+      "1. Land (Behörde): prüfen.\nWeg: bestehende Kanäle.\n2. Bund: klären. Sechs Länder haben gemeldet: A, B.",
+    );
+    // Zuordnung über den Feldpfad: Analysefelder ja, andere Felder nein; ohne Konfiguration unverändert
+    expect(gliedereFeld("sachverhalte[].analyse.lage_ereignis", "X. Szenario: Y.", p.ui)).toBe("X.\n\nSzenario: Y.");
+    expect(gliedereFeld("sachverhalte[].bezeichnung", "X. Szenario: Y.", p.ui)).toBe("X. Szenario: Y.");
+    expect(gliedereAnalyse("X. Szenario: Y.", { ...p.ui, analyse_gliederung: undefined })).toBe("X. Szenario: Y.");
+  });
+  it("übernimmt die Gliederung in Kopiervorlage und PDF", async () => {
+    const { kopiervorlageHtml, kopiervorlageText } = await import("../src/lagebild/ausgabe");
+    const p = (await profil("lead-beispiel")).profil!;
+    const he = jsonDateien("../profile/lead-beispiel/beispiele/orkantief-ilka").find((x) => x.name.includes("_HE_"))!.daten;
+    const sv = he.sachverhalte[0];
+    const eintrag = { id: "x", name: "he.json", daten: he, hinweise: [], schema: [] } as any;
+    const s = { eintrag, index: 0, sv, bezeichnung: "B", arten: [], ort: "", eintritt: "", beurteilung: "", tendenz: "", bewertungText: "" } as any;
+    expect(kopiervorlageText(s, p)).toContain("Prüf- und Abstimmungsbedarf:\n(1) Landkreis Fulda:");
+    expect(kopiervorlageHtml(s, p)).toContain("Prüf- und Abstimmungsbedarf:<br>(1) Landkreis Fulda:");
+    const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(he, p, false).arrayBuffer()));
+    expect(roh).toMatch(/\(Pr.f- und Abstimmungsbedarf:\) Tj/);
+  });
+});

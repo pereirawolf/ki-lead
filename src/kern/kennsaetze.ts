@@ -3,7 +3,7 @@
 import { holeWert } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
 import { feldUi } from "./ui";
-import type { Befund, Meldung, UiKonfig } from "./typen";
+import type { Befund, Meldung, TextGliederung, UiKonfig } from "./typen";
 
 export const DATUM_RE = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/;
 
@@ -102,22 +102,47 @@ function rx(quelle: string): RegExp | null {
 }
 
 /**
- * Gliedert einen Bewertungstext für Ausgaben (PDF, Kopiervorlage, Tabellen): Abschnitte wie „Kernaussage“,
- * „Referenzraum“, Beurteilung, Tendenz, Achsenbegründungen und Kennsätze beginnen auf eigener Zeile bzw.
- * mit Leerzeile. Satzanfänge kommen aus der Darstellungsdatei (bewertung_gliederung). Der Inhalt bleibt
- * unverändert; nur Zeilenumbrüche werden ergänzt. Gespeicherte Meldungen werden nicht verändert.
+ * Satzende vor einem Gliederungsanfang: . ; ! ? ) ] “ " – vor Zeilenanfängen zusätzlich der Doppelpunkt
+ * (Aufzählung nach „Prüfbedarf:“); vor kurzen Aspektbegriffen weder „)“ noch der Punkt einer Ordnungszahl,
+ * damit „(1) Landkreis: …“ und „1. Land: …“ zusammenbleiben.
  */
-export function gliedereBewertung(text: unknown, ui: UiKonfig): string {
+const ENDE_ABSATZ = `[.;!?)\\]“"]`;
+const ENDE_ZEILE = `[.;:!?)\\]“"]`;
+const ENDE_KURZ = `(?<!(?:^|\\n|[ (])\\d{1,3})[.;!?\\]“"]`;
+
+/**
+ * Kurzer Aspektbegriff mit Doppelpunkt am Satzanfang („Strom:“, „Verkehr → Versorgung:“, „Weg:“,
+ * „Land (Behörde):“): höchstens n Wörter, das erste großgeschrieben, optional ein Klammerzusatz.
+ */
+function kurzlabelQuelle(n: number): string {
+  const wort = "[\\p{L}\\d][\\p{L}\\d\\-/]*";
+  return `\\p{Lu}[\\p{L}\\d\\-/]*(?:[ ]+(?:→[ ]+)?${wort}){0,${n - 1}}(?:[ ]+\\([^()\\n]{1,40}\\))?:(?=[ \\n])`;
+}
+
+/**
+ * Gliedert einen Freitext für Ausgaben (PDF, Kopiervorlage, Tabellen): Satzanfänge aus `absatz` beginnen mit
+ * Leerzeile, solche aus `zeile` auf neuer Zeile (auch direkt nach einem Doppelpunkt, etwa Aufzählungen „(1) …“).
+ * Mit `kurzlabel` (Anzahl Wörter) beginnt zusätzlich jeder kurze Aspektbegriff mit Doppelpunkt eine neue Zeile.
+ * Kennsätze stehen auf eigener Zeile, der erste eröffnet einen Absatz. Der Inhalt bleibt unverändert; nur
+ * Zeilenumbrüche werden ergänzt. Gespeicherte Meldungen werden nicht verändert.
+ */
+export function gliedere(text: unknown, g: TextGliederung | undefined, kennsaetze: string[] = []): string {
   let t = String(text ?? "").replace(/\r\n?/g, "\n");
   if (!t.trim()) return t;
-  const g = ui.bewertung_gliederung || {};
-  const ks = Object.values(ui.kennsaetze || {}).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  g = g || {};
+  const ks = kennsaetze.filter(Boolean).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   const absatz = (g.absatz || []).map(rx).filter(Boolean) as RegExp[];
   const zeile = [...(g.zeile || []), ...ks].map(rx).filter(Boolean) as RegExp[];
-  const alle = [...absatz.map((r) => ({ r, art: "absatz" as const })), ...zeile.map((r) => ({ r, art: "zeile" as const }))];
-  // 1. Satzanfänge mitten in einer Zeile: nach Satzende (. ; ! ? ) ] “) einen Umbruch setzen
+  const kurz = Number.isInteger(g.kurzlabel) && g.kurzlabel! > 0 ? rx(kurzlabelQuelle(Math.min(g.kurzlabel!, 8))) : null;
+  const alle = [
+    ...absatz.map((r) => ({ r, art: "absatz" as const })),
+    ...zeile.map((r) => ({ r, art: "zeile" as const })),
+    ...(kurz ? [{ r: kurz, art: "kurz" as const }] : []),
+  ];
+  const ende = { absatz: ENDE_ABSATZ, zeile: ENDE_ZEILE, kurz: ENDE_KURZ };
+  // 1. Gliederungsanfänge mitten in einer Zeile: nach Satzende einen Umbruch setzen
   for (const { r, art } of alle) {
-    const muster = new RegExp(`([.;!?)\\]“"])[ \\t]+(?=${r.source})`, "gu");
+    const muster = new RegExp(`(${ende[art]})[ \\t]+(?=${r.source})`, "gu");
     t = t.replace(muster, art === "absatz" ? "$1\n\n" : "$1\n");
   }
   // 2. Absatzanfänge am Zeilenanfang: Leerzeile davor
@@ -129,4 +154,26 @@ export function gliedereBewertung(text: unknown, ui: UiKonfig): string {
     if (m && t[m.index - 1] !== "\n") t = t.slice(0, m.index) + "\n" + t.slice(m.index);
   }
   return t.replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/** Bewertungstext gliedern: Kernaussage, Referenzraum, Beurteilung, Tendenz, Achsen, Kennsätze (bewertung_gliederung). */
+export function gliedereBewertung(text: unknown, ui: UiKonfig): string {
+  return gliedere(text, ui.bewertung_gliederung, Object.values(ui.kennsaetze || {}));
+}
+
+/** Analysefeld gliedern: Schlüsselsätze, die einen neuen Aspekt einleiten (analyse_gliederung). */
+export function gliedereAnalyse(text: unknown, ui: UiKonfig): string {
+  return gliedere(text, ui.analyse_gliederung);
+}
+
+/**
+ * Gliederung nach Feldpfad: `pfad` ist der Profilpfad („sachverhalte[].analyse.lage_ereignis“) oder der Pfad
+ * innerhalb eines Sachverhalts („analyse.lage_ereignis“). Andere Felder bleiben unverändert.
+ */
+export function gliedereFeld(pfad: string, text: string, ui: UiKonfig): string {
+  const r = ui.rollen;
+  const p = r.sachverhalte && pfad.startsWith(`${r.sachverhalte}[].`) ? pfad.slice(r.sachverhalte.length + 3) : pfad;
+  if (r.sv_bewertung_text && p === r.sv_bewertung_text) return gliedereBewertung(text, ui);
+  if ((r.sv_analysefelder || []).includes(p)) return gliedereAnalyse(text, ui);
+  return text;
 }
