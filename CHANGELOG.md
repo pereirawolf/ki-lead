@@ -17,7 +17,18 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.3.0 | 3146797 |
 | 0.4.0 | a6ed060 |
 | 0.4.1 | 1704922 |
-| 0.4.2 | Commit „Rollenwahl bei der Übergabe an die KI-Verdichtung; 0.4.2“ |
+| 0.4.2 | 9f8ae9f |
+| 0.4.3 | Commit „PDF mit Lagenradar als Grafik; 0.4.3“ |
+
+## [0.4.3] – 18.10.2026
+
+### Behoben
+
+- PDF-Ausgabe (Meldung und Lagebild): Das Lagenradar erscheint wieder als Grafik, als Vektorzeichnung links neben den Achsenwerten. Offene Achsen sind als hohle Punkte erkennbar, nicht als Stufe 0. Rückmeldung aus einem echten Lauf.
+
+### Geändert
+
+- PDF: Die Überschrift eines Sachverhalts läuft über die ganze Tabellenbreite; die Radarzeile wird nicht über einen Seitenumbruch geteilt.
 
 ## [0.4.2] – 18.10.2026
 
@@ -107,7 +118,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...main
+[0.4.3]: https://github.com/pereirawolf/ki-lead/compare/9f8ae9f...main
+[0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...9f8ae9f
 [0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...1704922
 [0.4.0]: https://github.com/pereirawolf/ki-lead/compare/3146797...a6ed060
 [0.3.0]: https://github.com/pereirawolf/ki-lead/compare/8cb1dce...3146797

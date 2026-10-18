@@ -7,11 +7,89 @@ import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
-import type { Meldung, Profil } from "../kern/typen";
+import type { Meldung, Profil, RadarDef } from "../kern/typen";
 
 const BLAU: [number, number, number] = [31, 79, 130];
 
-function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: string[][]) {
+/** Zelle einer PDF-Tabelle; Radarzellen tragen Definition und Werte für die Grafik. */
+type Zelle = string | { content: string; styles?: Record<string, unknown>; radar?: { def: RadarDef; wert: Record<string, unknown> | undefined } };
+
+/** Größe der Radargrafik in mm und Breite des Bereichs links vom Text */
+const RADAR_MM = 56;
+const RADAR_RAND = RADAR_MM + 6;
+
+/**
+ * Zeichnet das Lagenradar als Vektorgrafik: Ringe je Stufe, Achsen mit Kurzbezeichnung, Fläche der
+ * gesetzten Werte. Offene Achsen (null) erscheinen als hohler Punkt im Zentrum, nicht als Stufe 0.
+ */
+export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, unknown> | undefined, x: number, y: number, groesse: number) {
+  const n = def.achsen.length;
+  if (!n) return;
+  const cx = x + groesse / 2;
+  const cy = y + groesse / 2;
+  const rMax = groesse * 0.36;
+  const punkt = (i: number, r: number): [number, number] => {
+    const w = (Math.PI * 2 * i) / n - Math.PI / 2;
+    return [cx + r * Math.cos(w), cy + r * Math.sin(w)];
+  };
+  const vieleck = (radien: number[], stil: "S" | "F" | "FD") => {
+    const pts = radien.map((r, i) => punkt(i, r));
+    const wege = pts.slice(1).map((p, i) => [p[0] - pts[i][0], p[1] - pts[i][1]]);
+    doc.lines(wege, pts[0][0], pts[0][1], [1, 1], stil, true);
+  };
+  doc.setLineWidth(0.2);
+  for (let s = 1; s <= def.max; s++) {
+    doc.setDrawColor(s === def.max ? 160 : 205, s === def.max ? 176 : 214, s === def.max ? 168 : 209);
+    vieleck(
+      def.achsen.map(() => (rMax * s) / def.max),
+      "S",
+    );
+  }
+  doc.setDrawColor(190, 200, 195);
+  doc.setFontSize(7);
+  doc.setTextColor(85, 98, 112);
+  def.achsen.forEach((a, i) => {
+    const [ax, ay] = punkt(i, rMax);
+    doc.line(cx, cy, ax, ay);
+    const [lx, ly] = punkt(i, rMax + 4.2);
+    doc.text(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0], lx, ly, { align: "center", baseline: "middle" });
+  });
+  const werte = def.achsen.map((a) => (Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null));
+  if (werte.some((v) => v !== null)) {
+    doc.setFillColor(214, 226, 238);
+    doc.setDrawColor(...BLAU);
+    doc.setLineWidth(0.5);
+    vieleck(
+      werte.map((v) => (rMax * (v ?? 0)) / def.max),
+      "FD",
+    );
+  }
+  werte.forEach((v, i) => {
+    const [px, py] = punkt(i, (rMax * (v ?? 0)) / def.max);
+    if (v === null) {
+      doc.setDrawColor(150, 160, 155);
+      doc.setFillColor(255, 255, 255);
+      doc.setLineWidth(0.3);
+      doc.circle(px, py, 0.9, "FD");
+    } else {
+      doc.setFillColor(...BLAU);
+      doc.circle(px, py, 0.9, "F");
+    }
+  });
+  doc.setLineWidth(0.2);
+  doc.setTextColor(20, 20, 20);
+}
+
+/** Zeichenhaken für autoTable: Radargrafik links in der Wertzelle */
+function radarHaken(doc: jsPDF) {
+  return (data: any) => {
+    const roh = data.cell?.raw;
+    if (data.section !== "body" || !roh || typeof roh !== "object" || !roh.radar) return;
+    radarZeichnen(doc, roh.radar.def, roh.radar.wert, data.cell.x + 2, data.cell.y + 2, RADAR_MM);
+  };
+}
+
+function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Zelle[][]) {
   const k = aufloesen(knoten, profil.schema);
   const gen = generischerPfad(segs);
   const f = feldUi(profil.ui, gen);
@@ -21,7 +99,16 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: st
   if (f.widget === "radar") {
     const radar = radarFuer(profil.ui, f);
     const text = radar ? radarZeilen(radar, wert).join("\n") : "";
-    out.push([label, text]);
+    out.push([
+      label,
+      radar
+        ? {
+            content: text,
+            radar: { def: radar, wert },
+            styles: { minCellHeight: RADAR_MM + 4, cellPadding: { top: 2, right: 1.8, bottom: 2, left: RADAR_RAND }, valign: "middle" },
+          }
+        : text,
+    ]);
     return;
   }
   if (k?.type === "object" || k?.properties) {
@@ -46,7 +133,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   const ui = profil.ui;
   const r = ui.rollen;
   const wurzel = aufloesen(profil.schema, profil.schema);
-  const kopf: string[][] = [];
+  const kopf: Zelle[][] = [];
   for (const key of Object.keys(wurzel.properties || {})) {
     if (key === r.sachverhalte || key === r.quellen || istAusgeblendet(ui, key)) continue;
     if (d[key] === undefined) continue;
@@ -55,29 +142,32 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   kopf.push(...zusatz);
   autoTable(doc, {
     startY,
-    head: [[kopfTitel, ""]],
+    head: [[{ content: kopfTitel, colSpan: 2 }]],
     body: kopf,
     theme: "grid",
     headStyles: { fillColor: BLAU },
     styles: { fontSize: 8.5, cellPadding: 1.8 },
     columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+    didDrawCell: radarHaken(doc),
   });
 
   const liste = holeWert(d, r.sachverhalte) || [];
   const elementSchema = aufloesen(wurzel.properties?.[r.sachverhalte]?.items, profil.schema);
   const elementName = feldUi(ui, r.sachverhalte).element_label || "Eintrag";
   liste.forEach((sv: any, i: number) => {
-    const body: string[][] = [];
+    const body: Zelle[][] = [];
     zeilen(profil, elementSchema, sv, [r.sachverhalte, i], body);
     const titel = r.sv_bezeichnung ? holeWert(sv, r.sv_bezeichnung) : "";
     autoTable(doc, {
       startY: (doc as any).lastAutoTable.finalY + 6,
-      head: [[`${elementName} ${i + 1}${titel ? ": " + titel : ""}`, ""]],
+      head: [[{ content: `${elementName} ${i + 1}${titel ? ": " + titel : ""}`, colSpan: 2 }]],
       body,
       theme: "grid",
       headStyles: { fillColor: BLAU },
       styles: { fontSize: 8, cellPadding: 1.8, overflow: "linebreak", valign: "top" },
       columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+      rowPageBreak: "avoid",
+      didDrawCell: radarHaken(doc),
     });
   });
 
