@@ -37,12 +37,13 @@ import { redaktionscheck, type Klasse } from "../lagebild/redaktion";
 import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import { lagebildAlsPdf } from "../dokumente/pdf";
+import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";
 import { RadarGrafik } from "./Radar";
 import { radarPng } from "./radarBild";
 
 interface Props {
   profil: Profil;
-  uebergeben: (dateien: LagebildDatei[]) => void;
+  uebergeben: (dateien: UebergabeMeldung[]) => void;
   oeffnen: (m: Meldung) => void;
 }
 
@@ -205,13 +206,30 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
+  // Übergabedialog: Auswahl je Meldung und ihre Rolle im KI-Auftrag (Eingang oder eigene Vormeldung).
+  // Die Rolle bleibt beim Ab- und Wiederanwählen erhalten und ändert die Originalmeldung nicht.
   const [uebergabeWahl, setUebergabeWahl] = useState<Set<string> | null>(null);
-  const anKi = () => setUebergabeWahl(new Set(eintraege.filter((e) => !eigen(e)).map((e) => e.id)));
+  const [rollen, setRollen] = useState<Map<string, MeldungsRolle>>(new Map());
+  const optionen = (e: LagebildEintrag) => moeglicheRollen(e.daten, profil);
+  const vorschlag = (e: LagebildEintrag): MeldungsRolle => {
+    const o = optionen(e);
+    if (eigen(e) && o.meldung.moeglich) return "meldung";
+    return o.eingang.moeglich ? "eingang" : "meldung";
+  };
+  const rolleVon = (e: LagebildEintrag): MeldungsRolle => rollen.get(e.id) ?? vorschlag(e);
+  const anKi = () => {
+    setRollen(new Map(eintraege.map((e) => [e.id, vorschlag(e)])));
+    setUebergabeWahl(new Set(eintraege.filter((e) => !eigen(e)).map((e) => e.id)));
+  };
+  const gewaehlt = eintraege.filter((e) => uebergabeWahl?.has(e.id));
+  const anzahlEingang = gewaehlt.filter((e) => rolleVon(e) === "eingang").length;
+  const anzahlVormeldung = gewaehlt.length - anzahlEingang;
   const uebergabeStarten = () => {
-    const liste = eintraege
-      .filter((e) => uebergabeWahl?.has(e.id))
-      .map(dateiZu)
-      .filter(Boolean) as LagebildDatei[];
+    const liste: UebergabeMeldung[] = [];
+    for (const e of gewaehlt) {
+      const d = dateiZu(e);
+      if (d) liste.push({ id: e.id, name: d.name, text: d.text, rolle: rolleVon(e) });
+    }
     if (!liste.length) return;
     setUebergabeWahl(null);
     uebergeben(liste);
@@ -375,37 +393,83 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
             </div>
           </div>
           {uebergabeWahl && (
-            <div className="kasten kasten-info lb-uebergabe">
-              <h3>An die KI-Verdichtung übergeben</h3>
+            <div className="kasten kasten-info lb-uebergabe" role="dialog" aria-labelledby="uebergabe-titel">
+              <h3 id="uebergabe-titel">An die KI-Verdichtung übergeben</h3>
               <p>
-                Ausgewählte Meldungen gehen als Material in die KI-Erfassung. Meldungen anderer Stellen werden verdichtet; eine eigene Meldung gilt dort als
-                Vormeldung und wird fortgeschrieben. Für einen Vergleich mit einer vorhandenen eigenen Fassung diese hier abwählen.
+                Wähle die Meldungen und ihre Rolle für den KI-Auftrag. <strong>Eingänge</strong> liefern Informationen für die Verdichtung. Eine{" "}
+                <strong>Vormeldung</strong> bildet den Ausgangspunkt für die Fortschreibung. Die Rolle gilt nur für diesen Auftrag; die Meldungen selbst bleiben
+                unverändert.
+              </p>
+              <p className="hinweis">
+                Eine eigene Fassung, die nur zum späteren Vergleich dienen soll, hier abwählen. Du kannst sie nach dem KI-Lauf als Referenzfassung laden.
               </p>
               <ul className="lb-auswahl">
-                {eintraege.map((e) => (
-                  <li key={e.id}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={uebergabeWahl.has(e.id)}
-                        onChange={(ev) => {
-                          const neu = new Set(uebergabeWahl);
-                          if (ev.target.checked) neu.add(e.id);
-                          else neu.delete(e.id);
-                          setUebergabeWahl(neu);
-                        }}
-                      />
-                      <span>
-                        {absender(e, profil)} <span className="material-meta">({datumDE(zeitpunktVon(e, profil)) || e.name})</span>
-                      </span>
-                      {marken(e)}
-                    </label>
-                  </li>
-                ))}
+                {eintraege.map((e) => {
+                  const an = uebergabeWahl.has(e.id);
+                  const o = optionen(e);
+                  const r = rolleVon(e);
+                  const name = `${absender(e, profil)} (${datumDE(zeitpunktVon(e, profil)) || e.name})`;
+                  return (
+                    <li key={e.id} className={an ? "lb-auswahl-an" : undefined}>
+                      <label className="lb-auswahl-kopf">
+                        <input
+                          type="checkbox"
+                          checked={an}
+                          onChange={(ev) => {
+                            const neu = new Set(uebergabeWahl);
+                            if (ev.target.checked) neu.add(e.id);
+                            else neu.delete(e.id);
+                            setUebergabeWahl(neu);
+                          }}
+                        />
+                        <span className="lb-auswahl-text">
+                          <span>
+                            {absender(e, profil)} <span className="material-meta">({datumDE(zeitpunktVon(e, profil)) || e.name})</span>
+                          </span>
+                          <span className="lb-marken">{marken(e)}</span>
+                        </span>
+                      </label>
+                      <fieldset className="lb-rolle" disabled={!an}>
+                        <legend className="unsichtbar">Rolle für {name}</legend>
+                        {(["eingang", "meldung"] as MeldungsRolle[]).map((wert) => (
+                          <label key={wert} className={`lb-rolle-option${r === wert ? " aktiv" : ""}${o[wert].moeglich ? "" : " gesperrt"}`}>
+                            <input
+                              type="radio"
+                              name={`rolle-${e.id}`}
+                              value={wert}
+                              checked={r === wert}
+                              disabled={!an || !o[wert].moeglich}
+                              onChange={() => setRollen(new Map(rollen).set(e.id, wert))}
+                            />
+                            <span>
+                              <strong>{wert === "eingang" ? "Als Eingang behandeln" : "Als Vormeldung behandeln"}</strong>
+                              <span className="material-meta">
+                                {o[wert].moeglich
+                                  ? wert === "eingang"
+                                    ? "als Informationsgrundlage für die eigene Meldung auswerten und verdichten"
+                                    : "diese bisherige eigene Meldung anhand neuer Informationen fortschreiben"
+                                  : `nicht möglich: ${o[wert].grund}`}
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                      </fieldset>
+                    </li>
+                  );
+                })}
               </ul>
+              <p className="lb-uebergabe-summe" aria-live="polite">
+                {gewaehlt.length
+                  ? `${anzahlEingang} ${anzahlEingang === 1 ? "Eingang" : "Eingänge"}, ${anzahlVormeldung} Vormeldung${anzahlVormeldung === 1 ? "" : "en"}.`
+                  : "Keine Meldung ausgewählt."}
+                {anzahlVormeldung > 1 ? " Mehr als eine Vormeldung: Fortgeschrieben wird in der Regel nur die jüngste; bitte prüfen." : ""}
+                {anzahlVormeldung > 0 && anzahlEingang === 0
+                  ? " Ohne Eingang wird nicht verdichtet, sondern die Vormeldung fortgeschrieben (Erfassung mit Recherche)."
+                  : ""}
+              </p>
               <div className="aktionen">
-                <button type="button" className="knopf primaer" disabled={!uebergabeWahl.size} onClick={uebergabeStarten}>
-                  {uebergabeWahl.size} Meldung{uebergabeWahl.size === 1 ? "" : "en"} übergeben
+                <button type="button" className="knopf primaer" disabled={!gewaehlt.length} onClick={uebergabeStarten}>
+                  {gewaehlt.length} Meldung{gewaehlt.length === 1 ? "" : "en"} übergeben
                 </button>
                 <button type="button" className="knopf leise" onClick={() => setUebergabeWahl(null)}>
                   Abbrechen

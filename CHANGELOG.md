@@ -1,6 +1,6 @@
 # Änderungsverlauf KI-LEAD
 
-Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die Form folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die Versionsnummern folgen [Semantic Versioning](https://semver.org/lang/de/): Vor Version 1.0 kann jede zweite Stelle (0.x) Änderungen am Verhalten bringen; die dritte Stelle steht für Korrekturen.
+Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die Form folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die Versionsnummern folgen [Semantic Versioning](https://semver.org/lang/de/): Vor Version 1.0 steht die zweite Stelle (0.x) für einen Meilenstein und kann Änderungen am Verhalten bringen; die dritte Stelle steht für Korrekturen und kleinere Ergänzungen innerhalb eines Meilensteins.
 
 Änderungen an Spezifikation, Profilformat und Profilinhalten haben eigene Verläufe:
 
@@ -16,7 +16,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.2.0 | 8cb1dce |
 | 0.3.0 | 3146797 |
 | 0.4.0 | a6ed060 |
-| 0.4.1 | Commit „Änderungsverläufe für App, Spezifikation, Profilformat und Profile; 0.4.1“ |
+| 0.4.1 | 1704922 |
+| 0.4.2 | Commit „Rollenwahl bei der Übergabe an die KI-Verdichtung; 0.4.2“ |
+
+## [0.4.2] – 18.10.2026
+
+### Neu
+
+- Rollenwahl bei der Übergabe an die KI-Verdichtung: Im Übergabedialog des Lagebilds wählt man je ausgewählter Meldung „Als Eingang behandeln“ (wird verdichtet) oder „Als Vormeldung behandeln“ (wird fortgeschrieben). Vorschlag aus der Erkennung der eigenen Stelle; nicht mögliche Rollen sind gesperrt und begründet (z. B. fremdes Schema nur als Eingang). Die Rolle bleibt beim Ab- und Wiederanwählen erhalten, gilt nur für den Auftrag und ändert die Originalmeldung nicht. Zusammenfassung mit Hinweisen bei mehreren Vormeldungen oder ohne Eingang; bedienbar per Tastatur und Screenreader (Optionsfelder je Meldung mit Gruppenbeschriftung).
+- Die gewählte Rolle wird verbindlich in die KI-Erfassung übernommen, dort als „Rolle festgelegt“ bzw. „automatisch erkannt“ angezeigt, bleibt korrigierbar und wird im Laufprotokoll je Material festgehalten (`rolleGewaehlt`).
 
 ## [0.4.1] – 18.10.2026
 
@@ -99,7 +107,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...main
+[0.4.2]: https://github.com/pereirawolf/ki-lead/compare/1704922...main
+[0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...1704922
 [0.4.0]: https://github.com/pereirawolf/ki-lead/compare/3146797...a6ed060
 [0.3.0]: https://github.com/pereirawolf/ki-lead/compare/8cb1dce...3146797
 [0.2.0]: https://github.com/pereirawolf/ki-lead/compare/6bfa6fe...8cb1dce

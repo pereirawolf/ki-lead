@@ -379,3 +379,35 @@ describe("Meldungsidentität (F03) und eigene Stelle (F07)", () => {
     expect(umklassifizieren(umklassifizieren(mat, p!), p!).art).toBe("eingang");
   });
 });
+
+describe("Rollenwahl bei der Übergabe", () => {
+  it("setzt die gewählte Rolle verbindlich und begründet unmögliche Rollen", async () => {
+    const { rolleSetzen, moeglicheRollen } = await import("../src/pipeline/material");
+    const { profil: p } = await profil("lead-beispiel");
+    const bund = ilka.find((x) => x.name.includes("_Bund_"))!.daten;
+    const eigen = await dateiLesen(new File([JSON.stringify(bund)], "bund.json"), p!);
+    expect(eigen.art).toBe("meldung"); // Alias der eigenen Stelle
+    const alsEingang = rolleSetzen(eigen, "eingang", p!);
+    expect(alsEingang).toMatchObject({ art: "eingang", rolleGewaehlt: true });
+    expect(alsEingang.meldung).toBe(eigen.meldung); // Original unverändert
+    const land = await dateiLesen(new File([JSON.stringify(he)], "he.json"), p!);
+    expect(rolleSetzen(land, "meldung", p!)).toMatchObject({ art: "meldung", rolleGewaehlt: true });
+    expect(rolleSetzen(land, "eingang", p!)).toMatchObject({ art: "eingang", rolleGewaehlt: true });
+    // Fremdes Schema: nur als Eingang
+    const fremd = { schema: "Andere-v3", meldende_stelle: "Lagezentrum X", sachverhalte: [{ titel: "A" }] };
+    expect(moeglicheRollen(fremd, p!)).toEqual({ eingang: { moeglich: true }, meldung: { moeglich: false, grund: "Schema passt nicht zum aktiven Profil" } });
+    const fm = await dateiLesen(new File([JSON.stringify(fremd)], "f.json"), p!);
+    const versucht = rolleSetzen(fm, "meldung", p!);
+    expect(versucht.art).toBe("eingang");
+    expect(versucht.hinweis).toMatch(/Gewählte Rolle nicht möglich \(Schema passt nicht/);
+  });
+  it("protokolliert gewählte Rollen im Lauf", async () => {
+    const { rolleSetzen } = await import("../src/pipeline/material");
+    const { profil: p } = await profil("lead-beispiel");
+    const land = rolleSetzen(await dateiLesen(new File([JSON.stringify(he)], "he.json"), p!), "eingang", p!);
+    const l = neuerLauf(p!, { sachverhalt: "x", stichworte: "", urls: [], stichtag: "2026-10-14", prueffrage: "" }, [
+      { name: land.name, art: land.art, groesse: land.groesse, hash: land.hash, rolleGewaehlt: land.rolleGewaehlt },
+    ]);
+    expect(l.material[0]).toMatchObject({ art: "eingang", rolleGewaehlt: true });
+  });
+});

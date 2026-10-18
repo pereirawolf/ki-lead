@@ -23,6 +23,30 @@ export interface Material {
   meldung?: Meldung;
   eingang?: EingangsInfo;
   hinweis?: string;
+  /** true, wenn die Rolle (Eingang/Vormeldung) von der Person gewählt wurde statt automatisch erkannt */
+  rolleGewaehlt?: boolean;
+}
+
+/** Rolle einer Meldung im KI-Auftrag: Eingang (wird verdichtet) oder eigene Vormeldung (wird fortgeschrieben). */
+export type MeldungsRolle = "eingang" | "meldung";
+
+/** Eine Meldung, die das Lagebild an die KI-Erfassung übergibt, mit ausdrücklich gewählter Rolle. */
+export interface UebergabeMeldung {
+  /** Stabile Kennung aus dem Lagebild (Inhaltskennung) */
+  id: string;
+  name: string;
+  text: string;
+  rolle: MeldungsRolle;
+}
+
+/** Welche Rollen für eine Meldung möglich sind, mit Begründung für die nicht möglichen. */
+export function moeglicheRollen(obj: unknown, profil: Profil): Record<MeldungsRolle, { moeglich: boolean; grund?: string }> {
+  const eingang = !!eingangsInfo(obj, profil);
+  const meldung = istMeldung(obj, profil);
+  return {
+    eingang: eingang ? { moeglich: true } : { moeglich: false, grund: "keine erkennbare Stelle oder Liste von Sachverhalten" },
+    meldung: meldung ? { moeglich: true } : { moeglich: false, grund: "Schema passt nicht zum aktiven Profil" },
+  };
 }
 
 const MAX_PDF_BYTES = 30 * 1024 * 1024;
@@ -127,6 +151,25 @@ export function materialErgaenzen(alt: Material[], neu: Material[]): Material[] 
   return out;
 }
 
+/**
+ * Setzt die ausdrücklich gewählte Rolle; sie geht der automatischen Erkennung vor. Ist die Rolle für die
+ * Meldung nicht möglich, bleibt die erkannte Rolle und ein Hinweis erklärt den Grund.
+ */
+export function rolleSetzen(m: Material, rolle: MeldungsRolle, profil: Profil): Material {
+  if (!m.meldung || (m.art !== "eingang" && m.art !== "meldung")) return m;
+  const umgestellt = m.art === rolle ? m : umklassifizieren(m, profil);
+  if (umgestellt.art !== rolle) {
+    const grund = moeglicheRollen(m.meldung, profil)[rolle].grund;
+    return { ...m, hinweis: `${m.hinweis || ""} Gewählte Rolle nicht möglich (${grund}).`.trim() };
+  }
+  const wer = umgestellt.eingang ? [umgestellt.eingang.land, umgestellt.eingang.stelle].filter(Boolean).join(", ") : "";
+  return {
+    ...umgestellt,
+    rolleGewaehlt: true,
+    hinweis: rolle === "eingang" ? `Eingangsmeldung${wer ? `: ${wer}` : ""} (Rolle gewählt).` : "Eigene Vormeldung zur Fortschreibung (Rolle gewählt).",
+  };
+}
+
 /** Korrektur der automatischen Einordnung: Vormeldung ↔ Eingangsmeldung (nur Meldungen mit erkennbarer Struktur). */
 export function umklassifizieren(m: Material, profil: Profil): Material {
   if (!m.meldung) return m;
@@ -142,7 +185,7 @@ export function umklassifizieren(m: Material, profil: Profil): Material {
   }
   if (m.art === "eingang" && istMeldung(m.meldung, profil)) {
     const { eingang: _e, ...rest } = m;
-    return { ...rest, art: "meldung", hinweis: "Als eigene Vormeldung behandelt (von Hand, Fortschreibung)." };
+    return { ...rest, art: "meldung", rolleGewaehlt: true, hinweis: "Als eigene Vormeldung behandelt (von Hand, Fortschreibung)." };
   }
   return m;
 }

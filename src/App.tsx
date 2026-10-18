@@ -20,6 +20,7 @@ import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
+import type { UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
@@ -62,7 +63,7 @@ export default function App() {
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
-  const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: { name: string; text: string }[] } | null>(null);
+  const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: UebergabeMeldung[] } | null>(null);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
 
@@ -93,7 +94,7 @@ export default function App() {
     setAnsicht("meldung");
   };
 
-  const anKiUebergeben = (dateien: { name: string; text: string }[]) => {
+  const anKiUebergeben = (dateien: UebergabeMeldung[]) => {
     setKiUebergabe((alt) => ({ nr: (alt?.nr || 0) + 1, dateien }));
     setAnsicht("ki");
   };
@@ -328,7 +329,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.1. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.2. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

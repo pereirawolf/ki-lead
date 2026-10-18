@@ -6,7 +6,7 @@ import { del, entries, get, set } from "idb-keyval";
 import type { AbrufFehler, Fundstelle, Nutzung } from "../anbieter/typen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.4.1";
+export const APP_KENNUNG = "KI-LEAD 0.4.2";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -68,7 +68,8 @@ export interface Lauf {
   aktualisiert: string;
   status: LaufStatus;
   auftrag: Auftrag;
-  material: { name: string; art: string; groesse: number; hash: string }[];
+  /** Material des Laufs; bei Meldungen die tatsächlich verwendete Rolle (art) und ob sie gewählt oder erkannt wurde */
+  material: { name: string; art: string; groesse: number; hash: string; rolleGewaehlt?: boolean }[];
   vorschlag?: S1Vorschlag;
   bestaetigt?: S1Vorschlag;
   stufen: StufenEintrag[];

@@ -2181,3 +2181,88 @@ a.knopf {
   margin: 0.75rem auto 0;
   max-width: 1200px;
 }
+
+.unsichtbar {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lb-auswahl li {
+  border-top: 1px solid var(--linie-zart);
+  padding: 0.4rem 0;
+}
+
+.lb-auswahl li:not(.lb-auswahl-an) .lb-rolle {
+  opacity: 0.55;
+}
+
+.lb-rolle {
+  border: none;
+  margin: 0 0 0.3rem 1.7rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.4rem;
+}
+
+.lb-auswahl .lb-rolle-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-height: 44px;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.45rem 0.6rem;
+  background: var(--flaeche);
+  cursor: pointer;
+}
+
+.lb-rolle-option > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.lb-rolle-option.aktiv {
+  border: 2px solid var(--amt);
+  background: var(--amt-zart);
+}
+
+.lb-rolle-option.gesperrt {
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+.lb-rolle-option:has(input:focus-visible) {
+  outline: 3px solid var(--amt);
+  outline-offset: 2px;
+}
+
+.lb-uebergabe-summe {
+  font-weight: 700;
+}
+
+.lb-auswahl .lb-auswahl-kopf {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.lb-auswahl-kopf input {
+  margin-top: 0.15rem;
+  flex: none;
+}
+
+.lb-auswahl-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}

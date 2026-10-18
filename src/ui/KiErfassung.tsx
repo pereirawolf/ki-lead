@@ -13,7 +13,17 @@ import { VergleichKasten } from "./Vergleich";
 import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
 import { ereignisarten, fachSops, sopsFuerArten } from "../pipeline/kontext";
 import { laeufeLaden, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
-import { dateiLesen, istMeldung, istVerdichtung, materialErgaenzen, umklassifizieren, urlsAusText, type Material } from "../pipeline/material";
+import {
+  dateiLesen,
+  istMeldung,
+  istVerdichtung,
+  materialErgaenzen,
+  rolleSetzen,
+  umklassifizieren,
+  urlsAusText,
+  type Material,
+  type UebergabeMeldung,
+} from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 
 interface Props {
@@ -23,7 +33,7 @@ interface Props {
   zuEinstellungen: () => void;
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
-  uebergabe?: { nr: number; dateien: { name: string; text: string }[] } | null;
+  uebergabe?: { nr: number; dateien: UebergabeMeldung[] } | null;
 }
 
 type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
@@ -183,7 +193,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     const l = neuerLauf(
       profil,
       { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage, websuche, ...(uhrzeit ? { meldezeitpunkt: `${stichtag}T${uhrzeit}` } : {}) },
-      material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash })),
+      material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash, ...(m.rolleGewaehlt ? { rolleGewaehlt: true } : {}) })),
     );
     setLauf(l);
     setProtokoll([]);
@@ -237,10 +247,26 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       return;
     }
     if (phase !== "auftrag") leeren();
-    // Pfade aus ZIP-Archiven bleiben als Namensteil erhalten („Nord › meldung.json“)
-    const dateien = uebergabe.dateien.map((d) => new File([d.text], d.name.replace(/\//g, " › "), { type: "application/json" }));
-    dateienHinzufuegen(dateien);
-    setSachverhalt((alt) => alt || `Lagebild aus ${dateien.length} Meldungen verdichten`);
+    // Rolle aus dem Übergabedialog verbindlich setzen; sie geht der automatischen Erkennung vor.
+    // Pfade aus ZIP-Archiven bleiben als Namensteil erhalten („Nord › meldung.json“).
+    (async () => {
+      const neu: Material[] = [];
+      const fehlerListe: string[] = [];
+      for (const d of uebergabe.dateien) {
+        try {
+          const m = await dateiLesen(new File([d.text], d.name.replace(/\//g, " › "), { type: "application/json" }), profil);
+          neu.push(rolleSetzen(m, d.rolle, profil));
+        } catch (e) {
+          fehlerListe.push((e as Error).message);
+        }
+      }
+      setMaterial((alt) => materialErgaenzen(alt, neu));
+      setDateiFehler(fehlerListe);
+    })();
+    const eingaengeN = uebergabe.dateien.filter((d) => d.rolle === "eingang").length;
+    setSachverhalt(
+      (alt) => alt || (eingaengeN ? `Lagebild aus ${eingaengeN} Eingangsmeldung${eingaengeN === 1 ? "" : "en"} verdichten` : "Eigene Meldung fortschreiben"),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uebergabe?.nr]);
 
@@ -413,7 +439,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       <li key={m.id}>
                         <span className="material-name">{m.name}</span>
                         <span className="material-meta">
-                          {m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()} · {groesse(m.groesse)}
+                          {m.art === "meldung" ? "Vormeldung" : m.art === "eingang" ? "Eingang" : m.art.toUpperCase()}
+                          {m.art === "meldung" || m.art === "eingang" ? (m.rolleGewaehlt ? " (Rolle festgelegt)" : " (automatisch erkannt)") : ""} ·{" "}
+                          {groesse(m.groesse)}
                           {m.hinweis ? ` · ${m.hinweis}` : ""}
                         </span>
                         {(m.art === "meldung" || (m.art === "eingang" && m.meldung && istMeldung(m.meldung, profil))) && (
