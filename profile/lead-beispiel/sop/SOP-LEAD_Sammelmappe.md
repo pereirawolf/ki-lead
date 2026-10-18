@@ -1,6 +1,6 @@
 # SOP-LEAD – Sammelmappe der 17 Ereignisarten (Beispielfassung)
 
-Beispielfassung für KI-LEAD, abgeleitet aus der Arbeitsfassung SOP-LEAD v0.4 · bezogen auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`) und den Kodierleitfaden LEAD in der Beispielfassung
+Beispielfassung für KI-LEAD · Fassung 1.0.1 vom 17.10.2026 · abgeleitet aus der Arbeitsfassung SOP-LEAD v0.4 · bezogen auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`) und den Kodierleitfaden LEAD in der Beispielfassung
 
 Diese Mappe enthält je Ereignisart des Katalogs eine Standardvorgehensweise (SOP) nach dem LEAD-Schema. Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP; die SOPs in Teil B verweisen darauf. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 

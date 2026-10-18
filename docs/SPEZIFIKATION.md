@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4 vom 18.10.2026, Heiko Pereira Wolf
+Fassung 0.4.1 vom 18.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -214,7 +214,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.1 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -269,8 +269,22 @@ privat/        eigene Profile und Testdaten, nicht eingecheckt
 ## 10. Offene Punkte
 
 1. **Namensabgrenzung:** Zu klären ist, ob die ausdrückliche Abgrenzung im README genügt oder ein Zusatz („KI-LEAD Demonstrator“) hilft.
-2. **Quellen bei Verdichtung:** Werden nur die Eingangsmeldungen als Quellen geführt, oder werden deren zentrale Primärquellen durchgereicht?
+2. **Quellen bei Verdichtung:** Vorläufig festgelegt (Arbeitsanweisung Verdichtung 1.0): Jede Eingangsmeldung ist eine A-Quelle; Primärquellen der Eingänge werden nur geführt, wenn sie selbst geprüft wurden. Offen ist, ob sich das in der Erprobung bewährt.
 3. **`land`-Enum auf unteren Ebenen:** Für Kreis oder Einsatzstelle trägt `land` das Bundesland, `meldende_stelle` die Stelle. Zu prüfen ist, ob das für alle Ebenen genügt oder ob eine Ebene ein eigenes Schema braucht.
 4. **Schema-Kompatibilität zwischen Ebenen:** Verwenden zwei Ebenen unterschiedliche Profilversionen, braucht die App eine Migrationsregel. Das Profilformat sieht dafür Migrationsregeln im Manifest vor.
-5. **Arbeitsanweisung Modus B** ist neu zu schreiben (Abschnitt 4.4).
+5. **Arbeitsanweisung Modus B:** Fassung 1.0 im Beispielprofil seit 18.10.2026 (`anweisung-verdichtung.md`); Bewährung in der Abnahme M4 offen.
 6. **Kosten und Laufzeiten** je Stufe im Pilot messen; danach die Modell-Voreinstellungen anpassen.
+
+## 11. Änderungsverlauf
+
+Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gilt; Korrekturen der Spezifikation ohne neue App-Funktion erhalten eine dritte Stelle.
+
+| Fassung | Datum | Änderung |
+|---|---|---|
+| 0.1 | vor dem 17.10.2026 | Projektentwurf außerhalb des Repositorys |
+| 0.2 | 17.10.2026 | Erste Fassung im Repository: Ziel, Grundsätze, Profilformat, Modus A (S0–S4), Modul Lagebild, Forschungsfunktionen, Architektur, Datenschutz, Meilensteine |
+| 0.2 (fortgeschrieben) | 17.–18.10.2026 | Ohne neue Fassungsnummer ergänzt: Umsetzung M2 (Anbieter, Vorgaben, Laufprotokoll), Zeile Management Summary, vorläufige Verdichtung, t0, Vervollständigung bei Abschneiden, konsolidierte Leitungsfassung |
+| 0.3 | 18.10.2026 | Umsetzung M3 (Lagebild, Redaktionscheck, Ausgaben) |
+| 0.4 | 18.10.2026 | Umsetzung M4 (Verdichtung mit Redaktionsvermerken, Vergleich mit Referenzfassung, OpenAI) |
+| 0.4.1 | 18.10.2026 | Nacharbeiten nach Code-Review; offene Punkte 2 und 5 fortgeschrieben; Änderungsverlauf und Verweis auf CHANGELOG.md eingeführt |
+

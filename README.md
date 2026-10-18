@@ -64,6 +64,10 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 Testdaten: Im Ordner `profile/lead-beispiel/beispiele/orkantief-ilka` liegt der **fiktive** Datensatz Orkantief „Ilka“ mit sechs Ländermeldungen und der daraus verdichteten Meldung einer Koordinierungsstelle. Die Lage ist erfunden; keine Meldung stammt von den darin genannten Stellen (siehe `LIESMICH.md` dort). In der App lädt man ihn im Lagebild mit „Beispiel laden“. Eigene Testdaten unter `privat/testdaten/<satz>/` prüft `npm test` mit, wenn dort eine Datei `profil.txt` den Profilordner nennt.
 
+## Versionen und Änderungen
+
+Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md) sowie in der Datei `CHANGELOG.md` jedes Profils. Jede Änderung wird im selben Commit dort eingetragen; jede App-Version hat ein Git-Tag `vX.Y.Z`. Profile tragen eine eigene Version; zusätzlich hält das Laufprotokoll jedes KI-Laufs die Prüfsumme des verwendeten Profilstands fest.
+
 ## Fahrplan
 
 | Meilenstein | Inhalt |
@@ -84,6 +88,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.1) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

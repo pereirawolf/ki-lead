@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe und den Kodierleitfaden LEAD in der Beispielfassung
+Beispielfassung für KI-LEAD · Fassung 1.1 vom 17.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe und den Kodierleitfaden LEAD in der Beispielfassung
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ein thematisch passendes Beispiel-JSON dient nur als Stilbeispiel, nie als Beleg, Skalenquelle oder Vorgabe für die Bewertung. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
 

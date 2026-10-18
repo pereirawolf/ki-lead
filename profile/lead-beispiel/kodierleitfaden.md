@@ -1,6 +1,6 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD, abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe (Beispielfassung) und die Arbeitsanweisung Erfassung
+Beispielfassung für KI-LEAD · Fassung 1.1 vom 17.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe (Beispielfassung) und die Arbeitsanweisung Erfassung
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
@@ -204,3 +204,11 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 ## 8. Pflege
 
 Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei und Arbeitsanweisung gemeinsam fortgeschrieben, damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
+
+**Änderungsprotokoll:**
+
+| Fassung | Datum | Änderung |
+|---|---|---|
+| 1.0 | 17.10.2026 | Beispielfassung, abgeleitet aus der Arbeitsfassung v0.4 |
+| 1.0.1 | 17.10.2026 | Autorenname im Zitat des Lagenradars korrigiert |
+| 1.1 | 17.10.2026 | D3: berichtete Vorsorge vor dem Akutereignis als Zurechnung (Ebene der vorsorgenden Stelle); D7: widersprüchliche Vorhersagen = 1, eindeutige Lage = 0; zwei Kurzbeispiele |

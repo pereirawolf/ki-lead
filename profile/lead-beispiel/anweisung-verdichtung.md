@@ -1,6 +1,6 @@
 # Arbeitsanweisung Verdichtung (Modus B)
 
-Beispielfassung für KI-LEAD · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`) · ergänzt die Arbeitsanweisung Erfassung
+Beispielfassung für KI-LEAD · Fassung 1.0 vom 18.10.2026 · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`) · ergänzt die Arbeitsanweisung Erfassung
 
 ## Auftrag
 

@@ -1,5 +1,7 @@
 # Profilformat `lead-profil/1`
 
+Beschreibung Fassung 1.4 vom 18.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
 ## Dateien
@@ -148,4 +150,23 @@ Die App prüft die Struktur von Manifest, Darstellungsdatei und Kontakten (u. a.
 
 Die App meldet Fehler (Profil nicht verwendbar), Warnungen und Hinweise. Geprüft werden unter anderem: Pflichtdateien, gültiges JSON, verwendbares Schema, Felder und Rollen der Darstellungsdatei, Anzahl der Stufentexte, Platzhalter ohne Profilvariable, Erkennbarkeit des gemeinsamen SOP-Teils und die Übereinstimmung der Stufentexte mit dem Kodierleitfaden.
 
-Jede Profilversion erhält eine Prüfsumme (SHA-256 über alle Dateien). Sie wird später mit jedem KI-Lauf protokolliert, damit jedes Ergebnis seiner Regelgrundlage zugeordnet bleibt.
+Jede Profilversion erhält eine Prüfsumme (SHA-256 über alle Dateien). Sie wird mit jedem KI-Lauf protokolliert, damit jedes Ergebnis seiner Regelgrundlage zugeordnet bleibt.
+
+## Versionierung und Änderungsverlauf eines Profils
+
+- `version` im Manifest folgt Semantic Versioning: erste Stelle bei inkompatiblen Schemaänderungen (Meldungen brauchen eine Migration), zweite bei neuen Inhalten oder geänderten Regeln, dritte bei Korrekturen ohne fachliche Wirkung. Geänderte Inhalte erhalten immer eine neue Version.
+- Jedes Dokument (Arbeitsanweisungen, SOP, Kodierleitfaden) nennt im Kopf seine Fassung und deren Datum.
+- Eine Datei `CHANGELOG.md` im Paket führt die Änderungen je Profilversion, mit Datum und Bezug auf die betroffenen Dokumente. Fachliche Festlegungen (z. B. Kodierregeln) stehen zusätzlich im Änderungsprotokoll des jeweiligen Dokuments.
+- `CHANGELOG.md` wird nicht an KI-Modelle übergeben.
+
+## Änderungsverlauf
+
+Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwärtsverträglich. Ältere Pakete bleiben gültig, sofern sie die Strukturprüfung bestehen.
+
+| Fassung | Datum | Änderung |
+|---|---|---|
+| 1.0 | 17.10.2026 | Erstfassung: Manifest, Schema, Darstellungsdatei mit Rollen, Kennsätzen und Quellenkategorien, Arbeitsanweisungen mit Platzhaltern, SOP-Dateien, Kodierleitfaden, Kontakte, Migrationen |
+| 1.1 | 17.10.2026 | `anweisungen.kurzfassung` (Management Summary) beschrieben; Variable `kurzname`; Tabelle der Anweisungsschlüssel |
+| 1.2 | 18.10.2026 | Darstellungsdatei: `lagebild` und Rolle `tendenz_verschaerfung`; Reihenfolge der Beurteilungsstufen als Schwere; Manifest: `beispiele`; Aufbau von `kontakte.json` |
+| 1.3 | 18.10.2026 | `anweisungen.verdichtung` in Gebrauch (bisher „geplant“); Modellrollen einschließlich `verdichtung`, Modellkennungen von Anthropic und OpenAI |
+| 1.4 | 18.10.2026 | Manifest: `eigene_stellen`; Strukturprüfung beim Import (Fehler verhindern die Aktivierung); Versionskonflikt bei gleicher Version mit anderem Inhalt; Abschnitt „Versionierung und Änderungsverlauf eines Profils“; Prüfsumme wird im Laufprotokoll geführt |
