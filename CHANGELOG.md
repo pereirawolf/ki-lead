@@ -8,7 +8,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 - Profilformat: [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md), Abschnitt „Änderungsverlauf“
 - Profile: `CHANGELOG.md` im jeweiligen Profilordner, z. B. [profile/lead-beispiel/CHANGELOG.md](profile/lead-beispiel/CHANGELOG.md)
 
-**Vorgehen:** Jede Änderung wird im selben Commit im zutreffenden Verlauf eingetragen. Jede Version erhält ein Git-Tag `vX.Y.Z`. Die Tags `v0.1.0` bis `v0.4.0` wurden am 18.10.2026 nachträglich auf den jeweils letzten Stand der Version gesetzt. Stände, die zwischen zwei Versionen ohne eigene Nummer veröffentlicht wurden, stehen bei der Version, unter der sie liefen, als „Nachtrag“ mit Datum und Commit.
+**Vorgehen:** Jede Änderung wird im selben Commit im zutreffenden Verlauf eingetragen. Stände, die zwischen zwei Versionen ohne eigene Nummer veröffentlicht wurden, stehen bei der Version, unter der sie liefen, als „Nachtrag“ mit Datum und Commit. Jede Version entspricht einem Commit (letzter Stand der Version); Git-Tags `vX.Y.Z` folgen spätestens mit dem ersten Release:
+
+| Version | Commit |
+|---|---|
+| 0.1.0 | 6bfa6fe |
+| 0.2.0 | 8cb1dce |
+| 0.3.0 | 3146797 |
+| 0.4.0 | a6ed060 |
+| 0.4.1 | Commit „Änderungsverläufe für App, Spezifikation, Profilformat und Profile; 0.4.1“ |
 
 ## [0.4.1] – 18.10.2026
 
@@ -91,8 +99,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.1]: https://github.com/pereirawolf/ki-lead/compare/v0.4.0...v0.4.1
-[0.4.0]: https://github.com/pereirawolf/ki-lead/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/pereirawolf/ki-lead/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/pereirawolf/ki-lead/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/pereirawolf/ki-lead/tree/v0.1.0
+[0.4.1]: https://github.com/pereirawolf/ki-lead/compare/a6ed060...main
+[0.4.0]: https://github.com/pereirawolf/ki-lead/compare/3146797...a6ed060
+[0.3.0]: https://github.com/pereirawolf/ki-lead/compare/8cb1dce...3146797
+[0.2.0]: https://github.com/pereirawolf/ki-lead/compare/6bfa6fe...8cb1dce
+[0.1.0]: https://github.com/pereirawolf/ki-lead/tree/6bfa6fe

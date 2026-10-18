@@ -66,7 +66,7 @@ Testdaten: Im Ordner `profile/lead-beispiel/beispiele/orkantief-ilka` liegt der 
 
 ## Versionen und Änderungen
 
-Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md) sowie in der Datei `CHANGELOG.md` jedes Profils. Jede Änderung wird im selben Commit dort eingetragen; jede App-Version hat ein Git-Tag `vX.Y.Z`. Profile tragen eine eigene Version; zusätzlich hält das Laufprotokoll jedes KI-Laufs die Prüfsumme des verwendeten Profilstands fest.
+Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md) sowie in der Datei `CHANGELOG.md` jedes Profils. Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Profile tragen eine eigene Version; zusätzlich hält das Laufprotokoll jedes KI-Laufs die Prüfsumme des verwendeten Profilstands fest.
 
 ## Fahrplan
 
