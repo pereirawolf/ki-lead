@@ -59,7 +59,7 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
     r.vermerkt.map((x) => `${svKennung(x.sv, profil)}: ${x.text}`),
   );
   liste(
-    "Mehrere Meldungen derselben Stelle (die jüngste gilt; nicht doppelt zählen)",
+    "Meldungsreihen derselben Stelle (eine jüngere Fassung ersetzt ältere Angaben nur, soweit sie denselben Gegenstand aktualisiert, berichtigt oder aufhebt; nicht doppelt zählen)",
     r.mehrfach.map((m) => `${m.stelle}: ${m.eintraege.map((e) => `${e.name} (${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"})`).join(", ")}`),
   );
   liste(
@@ -111,7 +111,8 @@ const normal = (s: unknown) =>
  * Ordnet jeder Eingangsmeldung höchstens einen eigenen Eintrag im Quellenverzeichnis zu (eins zu eins).
  * Nachweis ist der vollständige Stellenname oder Land plus Kern des Stellennamens; melden mehrere
  * Eingänge unter derselben Stelle, muss der Eintrag zusätzlich die Uhrzeit des Meldezeitpunkts nennen.
- * Bloße Teiltreffer gelten nur als „unsicher“; ein Eintrag außerhalb der Kategorie A als „kategorie“.
+ * Bloße Teiltreffer gelten nur als „unsicher“; ein Eintrag außerhalb der Kategorie A als „kategorie“ (zulässig
+ * nur bei nichtbehördlichen meldenden Stellen; die Rolle prüft die Person).
  */
 export function eingangsquellenPruefen(material: Material[], meldung: Meldung, profil: Profil): QuellenZuordnung[] {
   const rolle = profil.ui.rollen.quellen;

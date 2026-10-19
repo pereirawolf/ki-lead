@@ -8,6 +8,31 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.5.0 – 19.10.2026
+
+Grundlage: Prüfung des Fachreviews der Arbeitsanweisungen vom 19.10.2026; Kennungen in eckigen Klammern (G = gemeinsam, E = Erfassung, V = Verdichtung, K = Kurzfassung, X = Streichung, O = ergänzende Vorschläge der Prüfung).
+
+### SOP-Sammelmappe
+
+- Das Manifest bindet weiterhin `sop/SOP-LEAD_Sammelmappe_v2.0.md` ein, jetzt in **Fassung 2.0.1** (Gültigkeitsstand, Maßnahmenstatus, Kennsatzformat); Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+
+### Arbeitsanweisungen
+
+- **Erfassung Fassung 1.3:** Abschnitt „Arbeitsprodukte, Material und Arbeitsmodus“ mit den drei Arbeitsprodukten [G01], Material als Datum statt Anweisung und Vorrang der bestätigten Rolle [G03], den Modi „Recherche erlaubt“, „nur Material“ und „Recherche gescheitert“ [E02] und drei Zeitmodi [E05]. Rollenprofil aus den neuen Profilvariablen `rollenprofil` und `rolle_beschreibung` statt fester Koordinierungsstellen-Sätze; Satz „weder eine Meldung eines Landes“ ersetzt [E01]. Recherchebausteine nach Anwendbarkeit (nicht anwendbar, nicht belegbar, nicht zugänglich) statt „Bearbeite jeden Baustein“ [E03]. Abweichung von S1, nicht beigefügte SOPs und fehlende Grundlagen geregelt [E04]. `eintritt` bleibt bei schleichenden Trends leer [E06, X01]. Zugriffsdatum nur aus tatsächlicher Einsicht oder Metadaten, keine Kategorienmischung als Beleganforderung [E07, X02]. Maßnahmenstatus um „angefordert“ und „wirksam“ ergänzt, Empfehlungen ohne Anordnungsstil [E08]. Kein erzwungener Inhalt ohne tragfähigen Gegenstand [E09]. „Keine schemafremden Felder“, Beispielwerte in `_entstehung` nicht ungeprüft übernehmen, Quellenprüfung einschließlich Bereichsverweisen [E10]. Achsenregeln nur noch als Stolperstellen mit Verweis auf den Kodierleitfaden [G05, X08]. Kennsatzformat „Handlungsrelevant bis: TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung; Grundlage: Quelle“ [O05]. Redaktionsmaßstab: Querschnittsprüfungen und Bausteine erzeugen nur Text bei Relevanz [O11]. Kurzantwort mit Arbeits- und Zeitmodus und S1-Abweichungen.
+- **Verdichtung Fassung 2.0** (vollständig neu gefasst): Geltungstabelle der Erfassungsabschnitte [G02]; Material und Rollen [G03]; 14 Regeln, darunter Gliederung mit sichtbarem Korrekturbedarf [V05], Neukodierung ohne Eingangscodes als Beleg [V02], Zeitbezug und Fortgeltung [V01, X04], Zählen und Addieren mit Mindestwert nach Kodierleitfaden 1.2 statt „Untergrenze“ [V03, G05], Meldungsreihen statt „die jüngste gilt“ [V04, X05], Quellenketten und Faktenwidersprüche [V07], alle offenen und überfälligen Fristen [V06], Mehrfachlagen und Querschnittsprüfungen [O03], Teilabschluss [V08], Fortschreibung mit Änderungsart [V08], Quellenkategorie nach Rolle der meldenden Stelle [G04, X06]; eigene Kurzantwort der Verdichtung [O02] mit „Dringend prüfen:“ bei akuter Gefahr [O04].
+- **Kurzfassung Fassung 2.1:** Auswahl ohne Änderung der Aussagen [G01]; Status, Nichtwissen und Widersprüche bleiben erkennbar [K05, K07]; Risiko und Wirkungskette als Regelfall statt starrer Grenze [K01, X07]; Runden ohne Verlust von Mindestwerten und Schwellen [K03]; keine erfundenen Adressaten oder Fristen [K04]; sprechende Herkunft über die Herkunftsliste der App [K06, O08]; abweichende Bewertung und Abschluss bei Entscheidungsrelevanz [O07]; Zielwert 150 Wörter mit Toleranz bis 180, abgestimmt mit der App [K02]; genau ein Kurztitel je Sachverhalt, Ausgabe nur als JSON [K10]; Entwurfsvermerk und Fristen setzt die App [K08, K09].
+- Alle drei Anweisungen nennen im Kopf die abgestimmten Fassungen von SOP-Sammelmappe, Kodierleitfaden und den jeweils anderen Anweisungen [O09].
+
+### Manifest und Darstellung
+
+- `profil.json`: Version 1.5.0; neue Variablen `rollenprofil` („übergreifende Redaktion“) und `rolle_beschreibung` [E01].
+- Darstellungsdatei: Maßnahmenstatus mit „angefordert“ und „wirksam“, Kennsatzformat im Hinweis zum Bewertungstext [E08, O05].
+
+### Offen
+
+- **Informationsschutz:** Regeln zu Verschlusssachen, personenbezogenen Daten und zur Übergabe behördeninterner Lageinformationen an externe KI-Dienste fehlen weiterhin; zu entscheiden ist, ob sie in die Arbeitsanweisungen oder in eine Betriebsregel außerhalb des Profils gehören.
+- **Prüffallsammlung:** Die Prüffälle T01–T33 des Fachreviews sind noch nicht als Datei im Profil abgelegt [O10]; die App-Anteile sind durch Tests abgedeckt.
+
 ## 1.4.0 – 19.10.2026
 
 ### SOP-Sammelmappe

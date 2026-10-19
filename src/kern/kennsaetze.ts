@@ -15,6 +15,15 @@ export function kennsatz(text: unknown, prefix: string | undefined): string | nu
   return hit ? hit.trim().slice(prefix.length).trim() : null;
 }
 
+/** Alle Zeilen mit diesem Kennsatz (ohne den Satzanfang), in der Reihenfolge des Texts. */
+export function kennsaetzeAlle(text: unknown, prefix: string | undefined): string[] {
+  if (!prefix) return [];
+  return String(text || "")
+    .split(/\r?\n/)
+    .filter((l) => l.trim().toLowerCase().startsWith(prefix.toLowerCase()))
+    .map((l) => l.trim().slice(prefix.length).trim());
+}
+
 /**
  * Datum „TT.MM.JJJJ“ mit optionaler Uhrzeit „hh:mm“ (lokale Zeit des Geräts; die Profile nutzen
  * Europe/Berlin). Ohne Uhrzeit gilt 23:59. Ungültige Angaben (31.02., Monat 13, 25:99) ergeben null,

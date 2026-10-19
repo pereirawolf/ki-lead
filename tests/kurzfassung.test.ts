@@ -10,6 +10,11 @@ import {
   kurzfassungSchema,
   meldungFuerKurzfassung,
   fruehesteFrist,
+  fristen,
+  fristenText,
+  GRENZEN,
+  herkunftsliste,
+  kurzfassungText,
   woerter,
 } from "../src/pipeline/kurzfassung";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage } from "../src/anbieter/typen";
@@ -124,6 +129,59 @@ describe("Management Summary", () => {
     expect(k.text).toContain(`K.\n\nBewertung & Tendenz: ${sv.beurteilung}, ${sv.tendenz}\n\nLage & Ereignis: L.\n\nRisiken & Auswirkungen: R.\n\nMaßnahmen`);
     expect(k.text).not.toContain("•");
     expect(k.text).not.toContain("Stromausfall Sonneberg:");
+  });
+
+  it("übernimmt alle Fristen vollständig, früheste zuerst, und kennzeichnet überfällige", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m.meldezeitpunkt = "2026-10-14T10:30";
+    m.sachverhalte[0].sofort.bewertung_text =
+      "Kernaussage.\nHandlungsrelevant bis: 16.10.2026 09:00 – Freigabe Landesstraßen, Straßenbauamt – nur falls Nachsturm ausbleibt; Grundlage: Lagemeldung [Q2]";
+    m.sachverhalte[1].sofort.bewertung_text =
+      "Kernaussage.\nHandlungsrelevant bis: 15.10.2026 12:00 – Nachbetankung Pflegeheime, Landkreis (Puffer bis 20:00 Uhr); Grundlage: Landratsamt [Q3]\nHandlungsrelevant bis: 14.10.2026 08:00 – Rückmeldung Notruf, Leitstelle\nHandlungsrelevant bis: 17.10.2026 – Abschlussbericht";
+    const f = fristen(m, p!);
+    expect(f.map((x) => x.text)).toEqual([
+      "14.10.2026 08:00 – Rückmeldung Notruf, Leitstelle",
+      "15.10.2026 12:00 – Nachbetankung Pflegeheime, Landkreis (Puffer bis 20:00 Uhr)",
+      "16.10.2026 09:00 – Freigabe Landesstraßen, Straßenbauamt – nur falls Nachsturm ausbleibt",
+      "17.10.2026 – Abschlussbericht",
+    ]);
+    expect(f.map((x) => x.ueberfaellig)).toEqual([true, false, false, false]);
+    const text = fristenText(m, p!);
+    expect(text.split("\n")[0]).toBe("Handlungsrelevant bis:");
+    expect(text).toContain("• 14.10.2026 08:00 – Rückmeldung Notruf, Leitstelle – vor dem Meldestand abgelaufen; Erledigung prüfen");
+    expect(text).toContain("(Puffer bis 20:00 Uhr)");
+    expect(text).toContain("nur falls Nachsturm ausbleibt");
+    expect(text).toContain(`• weitere 1 Frist(en) in der Meldung`);
+    expect(text.split("\n").filter((z) => z.startsWith("• ")).length).toBe(GRENZEN.fristenMax + 1);
+    expect(text).not.toMatch(/Grundlage|\[Q/);
+  });
+
+  it("kennzeichnet Entwürfe im Kopf und verschiebt Kurztitel bei falscher Anzahl nicht", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m._status = "Entwurf";
+    const k = { kernaussage: "K.", abschnitte: {}, kurztitel: ["Nur ein Titel"] };
+    const text = kurzfassungText(m, p!, k);
+    expect(text.split("\n")[0]).toMatch(/· ENTWURF – Meldung nicht freigegeben$/);
+    expect(text).not.toContain("Nur ein Titel");
+    expect(text).toContain(`• ${m.sachverhalte[1].bezeichnung.slice(0, 20)}`);
+    expect(kurzfassungText(th, p!, k).split("\n")[0]).not.toMatch(/ENTWURF/);
+  });
+
+  it("gibt der KI eine Herkunftsliste ohne URLs mit und hält die Richtwerte konsistent", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const ni = ilka.find((x) => x.name.includes("_NI_"))!.daten;
+    const h = herkunftsliste(ni, p!);
+    expect(h).toContain("[Q4] B – Verteilnetzbetreiber Netzgebiet Harz");
+    expect(h.join(" ")).not.toMatch(/https?:|Zugriff/);
+    const att = attrappe(JSON.stringify({ kernaussage: "K.", abschnitte: {}, kurztitel: [] }));
+    await kurzfassungErstellen(p!, ni, att, STANDARD);
+    expect(String(att.anfragen[0].nachrichten[0].content)).toContain("Herkunft der Angaben");
+    const a = kurzfassungAnweisung(p!);
+    expect(a).toContain(`rund ${GRENZEN.woerterZiel} Wörter`);
+    expect(a).toContain(`Bis ${GRENZEN.woerterGesamt} Wörter`);
+    expect(a).toContain(`mehr als ${GRENZEN.woerterSatzHinweis} Wörtern`);
   });
 
   it("findet die früheste Frist", async () => {

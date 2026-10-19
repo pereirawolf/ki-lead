@@ -10,8 +10,18 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei | Fassung | Status |
 |---|---|---|
-| `SOP-LEAD_Sammelmappe_v2.0.md` | 2.0 vom 19.10.2026 | gültig; im Manifest `profil.json` unter `sop.dateien` eingebunden |
+| `SOP-LEAD_Sammelmappe_v2.0.md` | 2.0.1 vom 19.10.2026 | gültig (Dateiname bleibt bis zur nächsten Hauptfassung); im Manifest `profil.json` unter `sop.dateien` eingebunden |
 | `SOP-LEAD_Sammelmappe.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`); von der App nicht mehr gelesen |
+
+## [2.0.1] – 19.10.2026
+
+Abstimmung mit den neu gefassten Arbeitsanweisungen (Prüfung des Fachreviews der Arbeitsanweisungen vom 19.10.2026).
+
+### Geändert
+
+- **Gültigkeitsstand (Teil A):** Arbeitsanweisungen Erfassung 1.3, Verdichtung 2.0 und Kurzfassung 2.1, Darstellungsdatei mit Profilversion 1.5.0; der Vermerk „Angleichung an Kodierleitfaden 1.2 ausstehend“ zur Verdichtung entfällt.
+- **A.4 Maßnahmenstatus:** um „angefordert“ und „wirksam (Wirkung belegt)“ ergänzt; eine angekündigte oder umgesetzte Maßnahme ist nicht schon wirksam [E08].
+- **A.4 Kennsatz `Handlungsrelevant bis:`:** festes Format „TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung; Grundlage: Quelle“, je Sachverhalt eine Zeile, früheste Frist zuerst; Beispiel in der Kennsatztabelle angepasst. Redaktionscheck und Management Summary werten Datum, Uhrzeit und Bedingung aus [O05].
 
 ## [2.0] – 19.10.2026
 
