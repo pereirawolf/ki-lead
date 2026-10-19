@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.9 vom 19.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.10 vom 19.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -97,7 +97,7 @@ lead-beispiel.leadprofil/
     "erfassung": "anweisung-erfassung.md",
     "verdichtung": "anweisung-verdichtung.md"
   },
-  "sop": { "dateien": ["sop/SOP-LEAD_Sammelmappe_v2.0.md"], "teil_gemeinsam": "teil-a" },
+  "sop": { "dateien": ["sop/A_Gemeinsame-Regeln.md", "sop/teil-b/B01_unwetter-sturm.md", "…", "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
   "modelle": {
@@ -215,7 +215,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.9 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“); SOP-Kennungen in `sop` gleicht sie mit dem Profil ab (gültige Fassung, nur in S1 bestätigte SOPs). Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.10 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“); SOP-Kennungen in `sop` gleicht sie mit dem Profil ab (gültige Fassung, nur in S1 bestätigte SOPs). Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -296,4 +296,5 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.7 | 18.10.2026 | Management Summary: eigene Zeile „Bewertung & Tendenz“, Abschnitte durch Leerzeilen getrennt (Abschnitt 5) |
 | 0.4.8 | 19.10.2026 | Quellenkategorien mit Rangfolge (`quellen.rangfolge`) im Profilbeispiel; Beispielprofil mit Betreiberkategorie B (A > B > W > M > P) und SOP-Sammelmappe 2.0 mit Bausteinen (Abschnitt 4) |
 | 0.4.9 | 19.10.2026 | Modus-B-Regeln zu Fortgeltung, Zählen, Meldungsreihen und Quellenkategorie nach Rolle (Abschnitt 3); Management Summary mit allen Fristen, Entwurfsvermerk und Herkunftsliste (Abschnitt 5); `_entstehung` mit Kodierleitfaden-Fassung aus dem Profil (Abschnitt 6) |
+| 0.4.10 | 19.10.2026 | SOP-Dateien je Abschnitt mit Kennungen B01–B17 und C01–C17; frühere IDs und Kennungen als Alias; Importprüfungen auf Text vor dem ersten Anker und doppelte IDs (Abschnitt 4) |
 

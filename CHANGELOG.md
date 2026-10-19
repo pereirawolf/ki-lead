@@ -24,7 +24,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.6 | 6636068 |
 | 0.4.7 | 89bfa77 |
 | 0.4.8 | Commit „SOP-LEAD 2.0: Befunde der unabhängigen Prüfung eingearbeitet“ |
-| 0.4.9 | Commit „Arbeitsanweisungen nach Fachreview; 0.4.9“ |
+| 0.4.9 | 99403c0 |
+| 0.4.10 | Commit „SOP-LEAD 3.0: Einzeldateien und einheitliche Nummerierung; 0.4.10“ |
+
+## [0.4.10] – 19.10.2026
+
+Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“ (Kennungen S01–S12), abgeglichen mit dem Strukturvorschlag v2.1 und dessen Register (Abgleich „SOP-LEAD_Strukturabgleich_v2.1_PR4_2026-10-19“), freigegeben am 19.10.2026.
+
+### Neu
+
+- SOP-Abschnitte können eine Kennung im Kopf führen (`kennung`, z. B. „B08“); sie geht der Nummer in der Überschrift vor und bildet die Kennung „SOP-LEAD B08 … v2.0.1“ [S02, S07].
+- Frühere IDs (`bisherige_ids`) und Kennungen (`bisherige_kennung`) im Kopf eines Abschnitts: Die App bildet frühere IDs in gespeicherten Läufen (Stufe S1 und S2) und frühere Kennungen in `_entstehung.sop` auf die aktuellen ab [S09].
+- Lesefassung: `npm run sop:lesefassung` erzeugt aus den SOP-Einzeldateien eines Profils `sop/SOP-LEAD_Sammelmappe_Lesefassung.md` (Inhaltsverzeichnis, Teilüberschriften, Leseblöcke); ein Test prüft mit `--check`, dass sie aktuell ist.
+- Importprüfungen: Warnung bei Text vor dem ersten Anker einer SOP-Datei (wurde bisher stillschweigend verworfen), Fehler bei doppelter SOP-ID über alle Dateien, Warnung bei doppelter Kennung und bei einem Alias, der eine vorhandene ID verdeckt [S10].
+
+### Geändert
+
+- Beispielprofil 1.6.0 mit SOP-LEAD-Sammelmappe 3.0: Teil A und je SOP bzw. Baustein eine Datei (35 Dateien unter `sop/teil-b/` und `sop/teil-c/`), Kennungen B01–B17 und C01–C17 in vier Leseblöcken nach Register v2.1, einheitliches Abschnittsschema, erzeugte Lesefassung; Arbeitsanweisungen redaktionell angepasst. Einzelheiten im Profilverlauf und im SOP-Verlauf. Profilformat 1.8, Spezifikation 0.4.10.
 
 ## [0.4.9] – 19.10.2026
 
@@ -185,7 +201,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.9]: https://github.com/pereirawolf/ki-lead/compare/40cd5a9...main
+[0.4.10]: https://github.com/pereirawolf/ki-lead/compare/99403c0...main
+[0.4.9]: https://github.com/pereirawolf/ki-lead/compare/40cd5a9...99403c0
 [0.4.8]: https://github.com/pereirawolf/ki-lead/compare/89bfa77...40cd5a9
 [0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...89bfa77
 [0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...6636068

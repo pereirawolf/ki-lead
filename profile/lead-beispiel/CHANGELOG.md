@@ -8,6 +8,24 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.6.0 – 19.10.2026
+
+Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“, freigegeben am 19.10.2026. Nur Struktur, keine fachlichen Änderungen.
+
+### SOP-Sammelmappe
+
+- Das Manifest bindet die SOP-LEAD-Sammelmappe **Fassung 3.0** ein: `sop/A_Gemeinsame-Regeln.md`, `sop/teil-b/B01_…` bis `B17_…` und `sop/teil-c/C01_…` bis `C17_…` (35 Dateien in Katalog- bzw. Registerreihenfolge). Erzeugte Lesefassung `sop/SOP-LEAD_Sammelmappe_Lesefassung.md`. Übersicht und Konkordanz in `sop/README.md`, frühere Fassungen unter `sop/archiv/`. Einzelheiten ausschließlich in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+
+### Arbeitsanweisungen
+
+- **Erfassung 1.3.1** (redaktionell): Kennungen B01–B17 und C01–C17, „Prüffragen“ statt „Recherchebausteine“, Beispiel in `_entstehung` mit „SOP-LEAD B01 … v2.0.1“; Bezug auf Sammelmappe 3.0.
+- **Verdichtung 2.0.1** und **Kurzfassung 2.1.1** (redaktionell): Bezug auf Sammelmappe 3.0 und die neuen Fassungen; „Prüffragen“.
+
+### Manifest und Beispiele
+
+- `profil.json`: Version 1.6.0; `sop.dateien` mit 35 Einträgen.
+- Datensatz Orkantief „Ilka“ (FIKTIV): unverändert. Die Angaben in `_entstehung.sop` („SOP-LEAD 01 Unwetter / Sturm v2.0“) sind historische Herkunftsangaben und werden nicht umgeschrieben; die App bildet sie über `bisherige_kennung` auf die aktuellen Kennungen ab.
+
 ## 1.5.0 – 19.10.2026
 
 Grundlage: Prüfung des Fachreviews der Arbeitsanweisungen vom 19.10.2026; Kennungen in eckigen Klammern (G = gemeinsam, E = Erfassung, V = Verdichtung, K = Kurzfassung, X = Streichung, O = ergänzende Vorschläge der Prüfung).

@@ -11,7 +11,17 @@ import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
-import { anweisungErfassung, auftragAusBestaetigung, fachSops, profilGrundlagen, s1Schema, s1System, sopBlock, verdichtungsAnweisung } from "./kontext";
+import {
+  anweisungErfassung,
+  auftragAusBestaetigung,
+  fachSops,
+  profilGrundlagen,
+  s1Schema,
+  s1System,
+  sopBlock,
+  sopIdsAufloesen,
+  verdichtungsAnweisung,
+} from "./kontext";
 import { kostenSumme, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
 import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
 import { holeWert } from "../kern/pfad";
@@ -139,7 +149,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
       (s) => ({
         titel: String(s.titel || ""),
         ereignisarten: Array.isArray(s.ereignisarten) ? s.ereignisarten.map(String) : [],
-        sops: Array.isArray(s.sops) ? s.sops.map(String).filter((x) => ids.has(x)) : [],
+        sops: Array.isArray(s.sops) ? sopIdsAufloesen(k.profil, s.sops.map(String)).filter((x) => ids.has(x)) : [],
         begruendung: String(s.begruendung || ""),
         ...(eingaenge.size
           ? { eingangsmeldungen: Array.isArray(s.eingangsmeldungen) ? s.eingangsmeldungen.map(String).filter((x) => eingaenge.has(x)) : [] }
@@ -193,7 +203,12 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekt
     if ("werkzeug" in erlaubt) e.werkzeug = `${k.lauf.app} · Profil ${p.manifest.id} ${p.manifest.version} · Lauf ${k.lauf.id}`;
     if ("modell" in erlaubt) e.modell = modell;
     if ("erstellt" in erlaubt) e.erstellt = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
-    const ids = new Set((k.lauf.bestaetigt?.sachverhalte || []).flatMap((s) => s.sops));
+    const ids = new Set(
+      sopIdsAufloesen(
+        p,
+        (k.lauf.bestaetigt?.sachverhalte || []).flatMap((s) => s.sops),
+      ),
+    );
     if ("sop" in erlaubt && !Array.isArray(e.sop)) {
       e.sop = fachSops(p)
         .filter((s) => ids.has(s.id))
@@ -228,7 +243,10 @@ export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt: 
   const out: string[] = [];
   for (const eintrag of liste) {
     const nr = String(eintrag ?? "").match(/SOP-LEAD\s+([A-Z]?\d{1,2})\b/i)?.[1];
-    const sop = nr ? fachSops(p).find((s) => s.nummer && norm(s.nummer) === norm(nr)) : undefined;
+    // aktuelle Kennung (B08, C07) vor früherer (08, N05)
+    const sop = nr
+      ? fachSops(p).find((s) => s.nummer && norm(s.nummer) === norm(nr)) || fachSops(p).find((s) => s.bisherigeKennung && norm(s.bisherigeKennung) === norm(nr))
+      : undefined;
     if (!sop || (beigefuegt.size && !beigefuegt.has(sop.id))) continue;
     const kennung = sopKennung(sop);
     if (!out.includes(kennung)) out.push(kennung);
@@ -256,6 +274,8 @@ export interface S2Ergebnis {
 export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S2Ergebnis> {
   const p = k.profil;
   const e = k.einstellungen;
+  // Frühere SOP-IDs aus gespeicherten Läufen (z. B. „sop-08“) auf die aktuellen abbilden
+  bestaetigt = { ...bestaetigt, sachverhalte: bestaetigt.sachverhalte.map((s) => ({ ...s, sops: sopIdsAufloesen(p, s.sops) })) };
   k.lauf.bestaetigt = bestaetigt;
   k.lauf.status = "s2";
   await k.aktualisiert(k.lauf);

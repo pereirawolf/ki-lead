@@ -4,7 +4,7 @@ import { jsonDateien, profil } from "./hilfen";
 import { STANDARD } from "../src/pipeline/einstellungen";
 import { neuerLauf, type Lauf } from "../src/pipeline/lauf";
 import { kodierleitfadenKennung, sopKennungenAbgleichen, stufe1, stufe2und3, type Kontext } from "../src/pipeline/stufen";
-import { verdichtungsAnweisung, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
+import { sopIdsAufloesen, verdichtungsAnweisung, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
 import { zerlegeAntwort } from "../src/pipeline/json";
 import { ereignisarten, s1Schema, sopsFuerArten, anweisungErfassung, anwendungsbereich, fachSops } from "../src/pipeline/kontext";
 import { materialBloecke, docxText, urlsAusText, dateiLesen, juengsterEingang, type Material } from "../src/pipeline/material";
@@ -86,7 +86,7 @@ describe("Kontext aus dem Profil", () => {
     const arten = ereignisarten(p!);
     expect(arten).toHaveLength(17);
     expect(arten).toContain("Stromausfall / Blackout");
-    expect(sopsFuerArten(p!, ["Unwetter / Sturm", "Stromausfall / Blackout"])).toEqual(["sop-01", "sop-08"]);
+    expect(sopsFuerArten(p!, ["Unwetter / Sturm", "Stromausfall / Blackout"])).toEqual(["b01", "b08"]);
     const schema: any = s1Schema(p!);
     expect(schema.properties.sachverhalte.items.properties.sops.items.enum).toHaveLength(34); // 17 Ereignis-SOPs und 17 Bausteine aus Teil C
     expect(anwendungsbereich(fachSops(p!)[0].text)).not.toMatch(/^###/);
@@ -107,13 +107,26 @@ describe("Kontext aus dem Profil", () => {
   it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
     const { profil: p } = await profil("lead-beispiel");
     expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.2");
-    const liste = ["SOP-LEAD 01 Unwetter / Sturm v0.4", "SOP-LEAD 99 Erfunden v1.0", "SOP-LEAD N02 irgendwas", "SOP-LEAD 1 Unwetter / Sturm"];
+    // frühere Kennungen (01, N02) und aktuelle (B08) werden auf die gültige Kennung abgebildet
+    const liste = [
+      "SOP-LEAD 01 Unwetter / Sturm v0.4",
+      "SOP-LEAD 99 Erfunden v1.0",
+      "SOP-LEAD N02 irgendwas",
+      "SOP-LEAD 1 Unwetter / Sturm",
+      "SOP-LEAD B08 Strom",
+    ];
     expect(sopKennungenAbgleichen(liste, p!, new Set())).toEqual([
-      "SOP-LEAD 01 Unwetter / Sturm v2.0",
-      "SOP-LEAD N02 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0",
+      "SOP-LEAD B01 Unwetter / Sturm v2.0.1",
+      "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1",
+      "SOP-LEAD B08 Stromausfall / Blackout v2.0.1",
     ]);
     // Nicht in S1 bestätigte (nicht beigefügte) SOPs entfallen
-    expect(sopKennungenAbgleichen(liste, p!, new Set(["sop-01"]))).toEqual(["SOP-LEAD 01 Unwetter / Sturm v2.0"]);
+    expect(sopKennungenAbgleichen(liste, p!, new Set(["b01"]))).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.0.1"]);
+  });
+
+  it("löst frühere SOP-IDs gespeicherter Läufe auf", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(sopIdsAufloesen(p!, ["sop-08", "baustein-n05", "b08", "c99", "baustein-n14"])).toEqual(["b08", "c12"]);
   });
 
   it("Verdichtung: Profilanweisung ohne offene Platzhalter, Ersatzfassung ohne Altregeln", async () => {
@@ -164,7 +177,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     const v = await stufe1(k);
     expect(att.anfragen[0].jsonSchema).toBeTruthy();
     expect(att.anfragen[0].modell).toBe("claude-haiku-5-5");
-    expect(v.sachverhalte[0].sops).toEqual(["sop-01"]); // unbekannte Kennung entfernt
+    expect(v.sachverhalte[0].sops).toEqual(["b01"]); // frühere ID „sop-01“ aufgelöst, unbekannte Kennung entfernt
     expect(k.lauf.status).toBe("bestaetigen");
     expect(k.lauf.stufen[0].anfrage?.system[0]).toContain("Katalog der Ereignisarten");
   });
@@ -187,7 +200,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     expect(e.meldung!._status).toBe("Entwurf");
     expect(e.meldung!._entstehung.verfahren).toBe("KI-Entwurf");
     expect(e.meldung!._entstehung.werkzeug).toContain(k.lauf.id);
-    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD 01 Unwetter / Sturm v2.0"]);
+    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.0.1"]);
     expect(e.kurzantwort).toBe("Kernaussage: Folgen weitgehend behoben.");
     expect(k.lauf.status).toBe("fertig");
     expect(k.lauf.ergebnis?.schemakonform).toBe(true);
@@ -195,7 +208,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     const anf = att.anfragen[0];
     expect(anf.werkzeuge?.websuche?.maxUses).toBe(15);
     expect(anf.system[0].cache).toBe(true);
-    expect(anf.system[1].text).toContain("SOP-LEAD 01 Unwetter / Sturm");
+    expect(anf.system[1].text).toContain("SOP-LEAD B01 Unwetter / Sturm");
     expect(anf.system[2].text).toContain("Ausgabeformat (von der App vorgegeben)");
     expect(protokolle.length).toBeGreaterThan(2);
   });

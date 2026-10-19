@@ -4,7 +4,7 @@ import { schemaFehler } from "../kern/validierung";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
-import { zerlegeSops } from "./sop";
+import { textVorErstemAnker, zerlegeSops } from "./sop";
 import { platzhalterIn } from "./platzhalter";
 
 export interface LadeErgebnis {
@@ -271,8 +271,24 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
       befunde.push({ stufe: "warnung", text: `SOP-Datei fehlt: ${pfad}` });
       continue;
     }
+    if (textVorErstemAnker(text))
+      befunde.push({ stufe: "warnung", text: `SOP-Datei ${pfad}: Text vor dem ersten Anker wird nicht verwendet (geht keiner KI-Anfrage mit).` });
     sops.push(...zerlegeSops(text, pfad, manifest.sop?.teil_gemeinsam));
   }
+  const ids = new Map<string, string>();
+  for (const s of sops) {
+    if (ids.has(s.id)) befunde.push({ stufe: "fehler", text: `SOP-Kennung „${s.id}“ kommt mehrfach vor (${ids.get(s.id)} und ${s.datei}).` });
+    else ids.set(s.id, s.datei);
+  }
+  const nummern = new Map<string, string>();
+  for (const s of sops.filter((x) => x.nummer)) {
+    if (nummern.has(s.nummer!))
+      befunde.push({ stufe: "warnung", text: `SOP-Nummer „${s.nummer}“ kommt mehrfach vor (${nummern.get(s.nummer!)} und ${s.id}).` });
+    else nummern.set(s.nummer!, s.id);
+  }
+  for (const s of sops)
+    for (const a of s.alias || [])
+      if (ids.has(a)) befunde.push({ stufe: "warnung", text: `Frühere Kennung „${a}“ von ${s.id} verdeckt einen vorhandenen Abschnitt.` });
   if (manifest.sop?.teil_gemeinsam && !sops.some((s) => s.gemeinsam))
     befunde.push({ stufe: "warnung", text: `Gemeinsamer Teil „${manifest.sop.teil_gemeinsam}“ wurde in den SOP-Dateien nicht gefunden.` });
   if (!manifest.sop)
