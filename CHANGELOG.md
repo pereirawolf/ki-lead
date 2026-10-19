@@ -25,7 +25,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.7 | 89bfa77 |
 | 0.4.8 | Commit „SOP-LEAD 2.0: Befunde der unabhängigen Prüfung eingearbeitet“ |
 | 0.4.9 | 99403c0 |
-| 0.4.10 | Commit „SOP-LEAD 3.0: Einzeldateien und einheitliche Nummerierung; 0.4.10“ |
+| 0.4.10 | d9cf1d4 (Nachtrag vom 20.10.2026: Commit „README nach Review überarbeitet“) |
 
 ## [0.4.10] – 19.10.2026
 
@@ -41,6 +41,10 @@ Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19�
 ### Geändert
 
 - Beispielprofil 1.6.0 mit SOP-LEAD-Sammelmappe 3.0: Teil A und je SOP bzw. Baustein eine Datei (35 Dateien unter `sop/teil-b/` und `sop/teil-c/`), Kennungen B01–B17 und C01–C17 in vier Leseblöcken nach Register v2.1, einheitliches Abschnittsschema, erzeugte Lesefassung; Arbeitsanweisungen redaktionell angepasst. Einzelheiten im Profilverlauf und im SOP-Verlauf. Profilformat 1.8, Spezifikation 0.4.10.
+
+### Nachtrag vom 20.10.2026 (Commit „README nach Review überarbeitet“, ohne neue Versionsnummer)
+
+- README nach dem Review „KI-LEAD_README_Review_2026-10-20“ und dessen konsolidierter Prüfung überarbeitet: Zweck mit drei Arbeitsprodukten, Schnellstart ohne KI, kompakte Funktionsübersicht mit Reichweite der Prüfungen, eigener Abschnitt zur Datenverarbeitung (Übermittlung an den KI-Anbieter, Websuche und Seitenabruf beim Anbieter), Wegweiser zu den maßgeblichen Dokumenten, SOP-Sammelmappe mit Teil A, B01–B17 und C01–C17, Pflegehinweise zu SOP-Einzeldateien und Lesefassung, Auslöser der Prüfung wie im Workflow, Fahrplan mit Stand. Berichtigt: Eingangsmeldungen nicht mehr pauschal als A-Quellen, JSON-Meldungen nicht mehr stets als Vormeldung, Websuche in S2 optional, „Release 0.1“ entfällt. Keine Änderung an App-, Profil- oder SOP-Fassungen.
 
 ## [0.4.9] – 19.10.2026
 
