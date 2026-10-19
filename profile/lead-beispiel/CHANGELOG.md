@@ -20,13 +20,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 - **Kodierleitfaden Fassung 1.2** (19.10.2026): Abschnitt 5 „Quellenkategorien A/B/W/M/P“ mit Zuordnungsregeln, neu gefasster Unabhängigkeitsregel (unterschiedliche Kategorien sind kein Unabhängigkeitsnachweis; ein zuständiger Primärbeleg kann tragfähig sein) und Bestätigungsgrad. Gemeinsam mit SOP-Teil A fortgeschrieben: Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung (ersetzt die Untergrenzenregel); Grundregel 7 mit D5 als Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen und mit Regel zur Sonderbeschaffung; D7 ohne die pauschale Vorhersageregel aus Fassung 1.1, dafür mit fachlich erheblichen Lücken; D8 belegt stabiler Verlauf = 0; vier neue Kurzbeispiele, das Beispiel zu abweichenden Vorhersagen neu gefasst.
 - **Arbeitsanweisung Erfassung Fassung 1.2** (19.10.2026): Quellentabelle A/B/W/M/P mit Rollen- und Prioritätsregeln; Bausteine aus Teil C; frühe Befassung; Maßnahmenstatus und adressierte Empfehlungen; Kodierhinweise zu Bandbreite, Mindestwert, D4, D5, D7, D8 wie im Kodierleitfaden 1.2; Beispielkennungen „v2.0“ und „Kodierleitfaden LEAD 1.2“.
 
+- **Nachträge aus der unabhängigen Prüfung der SOP 2.0** (vor Freigabe, ohne neue Fassungsnummern): Kodierleitfaden 1.2 mit Rangfolge einschließlich der Bausteine aus Teil C, Belegregel statt Vorsichtsregel bei zwei passenden Stufen und drei fiktiven Zuordnungsbeispielen zu den Quellenkategorien; Arbeitsanweisung Erfassung 1.2 mit derselben Belegregel, „D3 Vorsorge“, Sonderbeschaffung bei D4, Inhaltsgerüsten als Prüfhinweis und dem Satzanfang „Dringend prüfen:“ für akute Gefahren in der Kurzantwort.
+
 ### Darstellung
 
+- Darstellungsdatei: Hinweis zu „Maßnahmen & Handlungsempfehlungen“ nach SOP-LEAD A.4 (Maßnahmenstatus, adressierte Empfehlungen, Rollenprofil) statt „Keine Meldung eigener Einsatzmaßnahmen“; Untertitel „keine gesonderte Maßnahmenmeldung“; Hinweis zum Bewertungstext nennt alle fünf Kennsätze und das Format TT.MM.JJJJ HH:MM.
 - Darstellungsdatei: Kategorie `B` und neu abgegrenzte Erläuterungen zu A, W, M und P; neue Angabe `quellen.rangfolge` (`["A", "B", "W", "M", "P"]`); neu gefasster `rangfolge_hinweis`; Feldhinweis nennt die zulässigen Kategorien.
 
 ### Beispiele
 
-- Datensatz Orkantief „Ilka“ (FIKTIV): 15 Quelleneinträge einzeln geprüft und von P auf B umgestuft (Verteilnetz-, Mobilfunk-, Bahninfrastruktur-, Flughafen- und Wasserversorgungsbetreiber zum eigenen Betrieb). Der Einsatzbericht der Bergwacht Harz bleibt P, weil er eine Tätigkeit beschreibt und keine Angabe zu einer selbst betriebenen Einrichtung ist. Sonst keine inhaltlichen Änderungen.
+- Datensatz Orkantief „Ilka“ (FIKTIV): 15 Quelleneinträge einzeln geprüft und von P auf B umgestuft (Verteilnetz-, Mobilfunk-, Bahninfrastruktur-, Flughafen- und Wasserversorgungsbetreiber zum eigenen Betrieb). Kodierbegründungen und `_entstehung` auf SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen: Hochrechnung im Oberharz (NI) mit Bandbreite statt „Untergrenze“, Mindestwert für Südwestfalen (NW), Bundesmeldung mit gezählter Mindestzahl (mindestens 20.700, zusammen rund 29.000) statt einer Summe aus gezählten und umgerechneten Werten. Der Einsatzbericht der Bergwacht Harz bleibt P, weil er eine Tätigkeit beschreibt und keine Angabe zu einer selbst betriebenen Einrichtung ist. Sonst keine inhaltlichen Änderungen.
 
 ## 1.3.0 – 18.10.2026
 

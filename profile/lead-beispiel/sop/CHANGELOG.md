@@ -20,7 +20,7 @@ Konsolidierte Fassung auf Grundlage des fachlichen Änderungsprogramms „SOP-LE
 ### Neu
 
 - **Teil C – Themen- und Querschnittsbausteine** (je Status „Inhaltsgerüst“, Version 1.0), keine eigenen Ereignisarten; Zuordnung über `art_zuordnung` statt `art_vorschlag`, damit die App sie nicht automatisch zu einer Ereignisart hinzufügt: N01 Radiologische / nukleare Lage [N01] · N02 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit [N02] · N03 Evakuierung, Schutzunterbringung und Betreuung [N03] · N04 Nichtinfektiöse medizinische Versorgungslage und MANV-Folgen [N04] · N05 Kraftstoff- und Wärmeversorgung [N05] · N06 Verkehr, Transport und kritische Logistik [N06] · N07 Lebensmittelversorgung [N07] · N08 Abwasser, Sanitärhygiene und kritische Entsorgung [N08] · N09 Massenbewegungen, Bodenversagen und Gebäudeeinsturz [N09] · N10 Tierseuchen und zoonotische Expositionslagen [N10] · N11 Infektionslagen: Auslandsausbruch und lokale Häufung [N11] · N12 Arzneimittel und kritisches medizinisches Material [N12] · N13 Zivile Verteidigung: zivile Schutz- und Versorgungsfolgen [N13] · N15 Weltraumwetter und Störungen von Navigation und Zeitreferenz [N15] · N16 Großunfall und überörtliche Unfallfolgen [N16] · N17 Kampfmittelfund mit Räumung oder Versorgungsauswirkung [N17] · N18 Vulkanasche [N18].
-- **Gültigkeitsstand** (Kompatibilitätsmatrix) im Kopf der Mappe [A17].
+- **Gültigkeitsstand** (Kompatibilitätsmatrix mit Pflegeverantwortung und nächster Prüfung, einschließlich aller drei Arbeitsanweisungen) am Anfang von Teil A, damit er jeder KI-Anfrage beiliegt [A17].
 - **A.1 Nr. 4 Rollenprofil** „übergreifende Redaktion“ und „zuständige meldende Stelle“ [A02]; **Nr. 6 Auslandsbezug** [A20]; **Nr. 7 Aufbau und Bausteine**; Tabelle typischer Ursache-Folge-Routen als Prüfhinweis in Nr. 2 [A20].
 - **A.3 Zeitbezug und Quellenfrische, Bestätigungsgrad** [A05], **Zählregeln** [A12], **Quellenkategorie B (Betreiber)** mit Priorität A > B > W > M > P und Zuordnungsregeln [A04, Quellenmodell], Rechercheeinstiege „Lagemeldungen“ und „Betreibermeldungen“ statt 48-fach wiederholter Quellenformeln [A22].
 - **A.5 Fachliche Prüfung und Freigabe** einschließlich Regeln für KI-gestützte Entwürfe [A09].
@@ -75,8 +75,37 @@ Wo das Änderungsprogramm eine Entscheidung offenließ oder die Umsetzung Folgen
 5. **Kodierregeln gemeinsam fortgeschrieben:** Weil der Kodierleitfaden Teil A im Rang vorgeht, sind A03, A13, A14 und A15 zugleich im Kodierleitfaden 1.2 und in der Arbeitsanweisung Erfassung 1.2 umgesetzt (siehe Profilverlauf). Die D7-Festlegung aus Kodierleitfaden 1.1 („widersprüchliche Vorhersagen = 1“) ist damit ersetzt.
 6. **Keine QB-Kürzel:** Statt „QB-L/QB-B“ heißen die Rechercheeinstiege „Lagemeldungen“ und „Betreibermeldungen“, um Verwechslungen mit der Quellenkategorie B auszuschließen [A22].
 7. **Pflegeverantwortung:** In der Beispielfassung ist der Herausgeber eingetragen; eine übernehmende Stelle ersetzt ihn durch die eigene Funktion.
-8. **Prüftermine:** SOP 06 (fällig Oktober 2026) und SOP 09 (überfällig seit September 2026) wurden mit dieser Fassung inhaltlich überarbeitet; nächste Prüfung 01.10.2027 bzw. 01.09.2027. Die Rechercheeinstiege selbst wurden nicht erneut geprüft (A.6).
+8. **Prüftermine:** SOP 06 (fällig Oktober 2026) wurde mit dieser Fassung inhaltlich überarbeitet; nächste Prüfung 01.10.2027. SOP 09 wurde ebenfalls überarbeitet, die vor jeder Heizperiode verlangte amtliche Prüfung des Rechtsrahmens für 2026/27 ist aber nicht dokumentiert; der Termin wird deshalb nicht verschoben, sondern auf 31.10.2026 gesetzt und die Prüfung als überfällig ausgewiesen (A.10.2). Die Rechercheeinstiege selbst wurden nicht erneut geprüft (A.6).
 9. **Katalog unverändert:** Umbenennungen (z. B. „Wald- und Vegetationsbrand“, neutrale Bezeichnung der Migrationslage) sind als offene Punkte in SOP 03 und SOP 13 vorgemerkt und erfordern eine gesonderte Schemaänderung mit Migration (A.10.4).
+
+10. **Zwei passende Stufen:** Die Regel „bei zwei passenden Stufen die niedrigere“ bleibt, ist aber als Belegregel gefasst: Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere nicht vollständig, gilt die niedrigere. Ausdrücklich keine Vorsichtsregel (Begründung zu A03). Gleichlautend in Kodierleitfaden 1.2 (Grundregel 6, Prüfschritt 3) und Arbeitsanweisung Erfassung 1.2.
+11. **Bausteine im Status „Inhaltsgerüst“:** Sie bleiben in Stufe S1 auswählbar, ergänzen die Dach-SOP aber nur als Prüfhinweise; bei Widerspruch gilt die Dach-SOP. Den Detailvorrang erhält ein Baustein erst mit fachlicher Freigabe, Prüfauslöser ebenfalls (A.1 Nr. 7, A.10.2).
+12. **Monitoring (A22):** Das beobachtete Signal steht in der SOP. Verantwortliche Funktion, Prüfanlass und erwartete Folgeentscheidung hängen von der Organisation der übernehmenden Stelle ab und werden deshalb dort festgelegt (A.10.1); die Beispielfassung erfindet keine Zuständigkeiten.
+13. **Umfang von Teil A:** Teil A ist von rund 17 KB auf rund 42 KB gewachsen und geht jeder Anfrage mit. Das ist bewusst entschieden: Die gemeinsamen Regeln stehen nur noch einmal, und der feste Anteil der Anfrage lässt sich beim Anbieter zwischenspeichern. Erneut zu prüfen, wenn Teil A weiter wächst.
+
+### Nachträge aus der unabhängigen Prüfung (19.10.2026, vor Freigabe)
+
+Eine von der Konsolidierung unabhängige Prüfung der Fassung 2.0 gegen das Änderungsprogramm, die Fassung 1.0.1 und den Code ergab folgende Korrekturen; sie sind Teil der Fassung 2.0:
+
+- **Gültigkeitsstand** vom Kopf der Mappe an den Anfang von Teil A verschoben: Der Parser verwirft Text vor dem ersten Anker, die KI erhielt ihn bisher nicht [A17].
+- **A.1 Nr. 1:** akute Gefahr wird auch in der Erfassung sofort gekennzeichnet, der Meldeweg nach A.7.3 geprüft [A08].
+- **A.1 Nr. 7:** Inhaltsgerüste nur als Prüfhinweise, Vorrang erst mit Freigabe (Prüfentscheidung 11); `art_zuordnung` nur mit Katalogwerten.
+- **A.2:** Belegregel bei zwei passenden Stufen (Prüfentscheidung 10); D3-Funktionen an den Kodierleitfaden angeglichen (Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung).
+- **A.3:** Beiträge in sozialen Medien ungeklärter Identität ausdrücklich P (wie Kodierleitfaden und Darstellungsdatei).
+- **A.4:** Satz „`art_vorschlag` ist Startpunkt, keine Checkliste“ wieder aufgenommen (stand in Fassung 1.0.1 in allen 17 SOPs).
+- **A.9.3:** Warnkette fachlich berichtigt: MoWaS ist das zentrale Auslösesystem für die angeschlossenen Warnmultiplikatoren (Warn-Apps, Warnportal, Rundfunk, Cell Broadcast, angebundene Sirenen); örtliche Wege bestehen daneben [A18].
+- **A.10.2:** Prüfauslöser je SOP, für Bausteine mit der Freigabe.
+- **Teil C, alle Bausteine:** `art_zuordnung` enthält nur exakte Katalogwerte; Bedingungen stehen im neuen YAML-Feld `art_hinweis`.
+- **N01:** D1/D2 nicht nach angeordnetem Maßnahmenraum, sondern nach belegtem Wirkungsraum bzw. gezählten Betroffenen (Widerspruch zu R4 und Kodierleitfaden D1/D2 behoben).
+- **N04:** Träger des Rettungsdienstes (in der Regel Kreise und kreisfreie Städte) sind A, Leistungserbringer B.
+- **N13:** D3 nach tatsächlich steuernder Ebene; Zivilschutz wird überwiegend von Ländern und Kommunen im Auftrag des Bundes ausgeführt.
+- **SOP 02:** Durchnässung als fachbehördlich zu bewertender Indikator der Deichsicherheit wieder aufgenommen (entfiel mit 2.0 ohne Begründung); Deichverbände bei D3 genannt.
+- **SOP 05:** „Bausteine R1–R4“ in „Recherchezeilen“ umbenannt (Verwechslung mit Teil C).
+- **SOP 09:** D8-Formulierung an A.2 angeglichen („ergibt D8 = 0“); Rechtsrahmenprüfung als überfällig ausgewiesen (Prüfentscheidung 8).
+- **SOP 11:** Stufe 0 bei D2 nach beiden Bedingungen der D2-Nullregel.
+- **A.1 Nr. 2:** fehlende Leerzeile nach der Routentabelle ergänzt.
+
+Begleitend im Profil (siehe Profilverlauf): Darstellungsdatei (Maßnahmenhinweis nach A.4, fünfter Kennsatz), Kodierleitfaden 1.2 (Rangfolge mit Teil C, Belegregel, Zuordnungsbeispiele), Arbeitsanweisung Erfassung 1.2 (D3 Vorsorge, D4 Sonderbeschaffung, Kurzantwort) und die Kodierbegründungen des Beispieldatensatzes.
 
 ### Prüfstand Rechtslage (nur Kontext, keine SOP-Regel)
 
@@ -85,6 +114,7 @@ Nach den amtlichen Quellen des Änderungsprogramms (Abruf 19.10.2026, hier nicht
 ### Offene Fachfragen
 
 - **Informationsschutz:** Regeln zu Verschlusssachen, personenbezogenen Daten und zur Übergabe behördeninterner Lageinformationen an externe KI-Dienste sind nicht aufgenommen; das Änderungsprogramm hat diesen Vorschlag gemäß seiner Umfangsvorgabe ausgeklammert. Entscheidung ausstehend (vgl. SOP 14, SOP 16 und N13, jeweils offener Punkt zu eingestuften Informationen).
+- **SOP 09 Rechtsrahmen (überfällig):** Notfallplan Gas, EnSiG und EU-Gasversorgungssicherheitsverordnung für die Heizperiode 2026/27 amtlich prüfen und das Ergebnis hier vermerken.
 - **Bausteine Teil C:** Alle 17 Bausteine sind Inhaltsgerüste; Quellen, Zuständigkeiten und organisationsspezifische Verfahren sind vor Verwendung fachlich zu konkretisieren.
 - **Rechercheeinstiege:** Die mit Fassung 2.0 neu genannten Einstiege sind vor Erstverwendung zu prüfen (A.6).
 - **Beispielsammlung:** Eine separat belegte Sammlung reproduzierbar kodierter historischer Lagen (Ersatz für den entfernten Verweis in SOP 08) ist noch nicht angelegt.

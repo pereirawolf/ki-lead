@@ -4,15 +4,7 @@ Beispielfassung für KI-LEAD · Fassung 2.0 vom 19.10.2026 · Nachfolger der Fas
 
 Diese Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Standardvorgehensweise (SOP) nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
-**Gültigkeitsstand.** Die Bestandteile haben eigene Fassungen; gültig ist nur das folgende abgestimmte Paket. Die Ableitung aus der Arbeitsfassung SOP-LEAD v0.4 ist ein Herkunftshinweis, keine geltende Fassung.
-
-| Bestandteil | Fassung | Stand |
-|---|---|---|
-| SOP-LEAD-Sammelmappe (diese Datei) | 2.0 | 19.10.2026 |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.2 | 19.10.2026 |
-| Darstellungsdatei `meldung.ui.json` | Profilversion 1.4.0 | 19.10.2026 |
-| Arbeitsanweisung Erfassung | 1.2 | 19.10.2026 |
-| Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.0) | unverändert |
+**Gültigkeitsstand:** am Anfang von Teil A, damit er jeder KI-Anfrage beiliegt.
 
 ## Inhaltsverzeichnis
 
@@ -62,9 +54,22 @@ Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbet
 
 ## Teil A – Gemeinsame Regeln
 
+**Gültigkeitsstand.** Die Bestandteile haben eigene Fassungen; gültig ist nur das folgende abgestimmte Paket. Die Ableitung aus der Arbeitsfassung SOP-LEAD v0.4 ist ein Herkunftshinweis, keine geltende Fassung. Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbetrieb und Kalibrierung (P01, P02) sind Redaktionsregeln dieses Teils (A.7.4, A.7.5, A.10.3), keine Bausteine.
+
+| Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
+|---|---|---|---|---|
+| SOP-LEAD-Sammelmappe (diese Datei) | 2.0 | 19.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.2 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.4.0 | 19.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.2 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Verdichtung | 1.0 | 18.10.2026 | Herausgeber der Beispielfassung | Angleichung an Kodierleitfaden 1.2 ausstehend (Zählregeln, Mindestwert) |
+| Arbeitsanweisung Kurzfassung | 2.0 | 18.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
+| Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.0) | unverändert | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
+
 ### A.1 Anwendung
 
 1. **Gegenstand klären:** Konkreten Sachverhalt, Stichtag, deutschen Wirkungs- bzw. Relevanzbezug und Betrachtungshorizont benennen, bevor recherchiert wird. Die Lagebild-Perspektive ist wöchentlich und mittel- bis langfristig; akute Stunden-Lagen bedienen kontinuierliche und tägliche Lageprodukte.
+   **Akute Gefahr:** Enthält das Material Hinweise auf unmittelbar drohende erhebliche Schäden, wird das unabhängig vom Lagebild-Horizont sofort sichtbar gekennzeichnet und der zuständige Melde- oder Alarmierungsweg nach A.7.3 geprüft; die Bearbeitung wartet damit nicht auf die vollständige Meldung.
    **Frühe Befassung:** Auch ohne eingetretenen Schaden kann eine Befassung erforderlich sein, wenn eine fachlich begründete Entwicklung im Betrachtungszeitraum konkrete Schutzgüter, kritische Dienstleistungen oder gemeinsame Bewältigungskapazitäten berühren kann und ein benennbarer Informations-, Vorbereitungs- oder Abstimmungsbedarf besteht. Warnung, Prognose und bestätigte Wirkung werden getrennt dargestellt. Ohne Wirkungsnachweis bleiben die einschlägigen Ist-Achsen offen; die Meldung ist trotzdem zulässig. Eine beliebige Warnung löst keine automatische Aufnahme aus (Nr. 3).
 2. **Mehrfachzuordnung:** Ein Ereignis kann mehrere Ereignisarten berühren (Mehrfachauswahl `art`). Dann alle zutreffenden SOPs heranziehen – typisch sind Ursache-SOP plus Folge-SOP (z. B. Wintersturm → Stromausfall). Denselben Sachverhalt nicht doppelt zählen. Ursache-Folge-Routen sind Recherchehinweise: Eine Folge-SOP oder ein Baustein wird herangezogen, sobald eine Wirkung belegt oder fachlich begründet zu erwarten ist; es gibt keine automatische Kaskade.
 
@@ -82,6 +87,7 @@ Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbet
    | 11 Gesundheitliche Lage / Epidemie | N04, N11, N12, N10 |
    | 15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (08–12), N02 |
    | 16 Sabotage / Anschlag | die Sektor-SOP der Folge (08–12), N16, N03 |
+
 3. **Anlass ≠ Relevanz:** Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz. Es gibt keine automatischen Aufnahmeschwellen. Das gilt für alle Befassungsanlässe in Teil B und Teil C.
 4. **Rollenprofil:** Vor der Anwendung wird das Rollenprofil festgelegt.
    - **Übergreifende Redaktion** (in dieser Beispielfassung: die Koordinierungsstelle): bewertet und empfiehlt im zugewiesenen Koordinationsauftrag, ohne Weisungsbefugnis und ohne operative Zuständigkeit. Empfehlungen richten sich an zuständige Stellen.
@@ -90,7 +96,7 @@ Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbet
    In beiden Profilen werden Empfehlungen, Entscheidungen und Umsetzung getrennt dargestellt (A.4). Befugnisse ergeben sich aus dem jeweiligen Auftrag und den geltenden Regelungen, nicht aus dieser SOP.
 5. **Sachlichkeit:** Keine Dramatisierung, keine Spekulation über Ursachen, Täter oder Motive, keine Zuschreibungen an Personengruppen. Beobachtete Lage, prognostizierte Entwicklung und Maßnahme sind sprachlich unterscheidbar. Glaubwürdigkeit entsteht über Verifizierbarkeit. Umgang mit Falsch- und Desinformation: A.9.5.
 6. **Auslandsbezug:** Für Auslandsereignisse den konkreten Deutschlandbezug ausweisen: unmittelbare grenzüberschreitende Wirkung, Auswirkungen auf Personen oder Einrichtungen mit Deutschlandbezug, kritische Liefer- oder Verkehrsbeziehungen oder konkret angeforderte bzw. geleistete Hilfe. Diese Gegenstände werden getrennt behandelt, und je Gegenstand wird der bewertete Referenzraum festgehalten. Ausländische Schäden, Fallzahlen oder Mobilisierung werden nicht in deutsche Radarwerte übertragen (Kodierleitfaden D2, D8).
-7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet (Angabe `art_zuordnung` im Kopf des Bausteins), vertiefen die Dach-SOP und gehen ihr im Detail vor; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. Bausteine mit dem Status „Inhaltsgerüst“ sind vor der Verwendung fachlich und organisatorisch zu konkretisieren. Ihre Prüffragen sind Recherchehinweise, kein auszufüllendes Formular.
+7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet (Angabe `art_zuordnung` im Kopf des Bausteins), vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor. Bausteine mit dem Status „Inhaltsgerüst“ (in dieser Beispielfassung alle) ergänzen die Dach-SOP nur als Prüfhinweise; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. `art_zuordnung` nennt nur Katalogwerte; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“ des Bausteins.
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
@@ -99,8 +105,8 @@ Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbet
 - **Stufe 0 ist eine inhaltliche Stufe, kein Leerwert.** D2 = 0 bedeutet laut Vorlage **„unter 10 Personen“**, nicht „null Personen“: fünf nachweislich direkt Betroffene gehören zur Stufe 0. Stufe 0 setzt eine belegte Angabe voraus; fehlende Daten ergeben keinen Wert 0. **D2-Nullregel:** 0 nur bei (a) belegter Zahl von 1–9 direkt Betroffenen oder (b) belegtem Nullbefund einer aktiv laufenden, einschlägigen Erhebung mit definierter Grundgesamtheit; sonst offen (Kodierleitfaden Abschnitt 3). Entsprechend bedeuten D1 = 0 „punktuell/kleinflächig“, D3 = 0 „Betreiber“, D4 = 0 „keine externe Hilfe“, D5 = 0 „unter 6 Stunden“, D6 = 0 „keine KRITIS-Bezüge“, D7 = 0 „stabil/hoch verlässlich“, D8 = 0 „stabil“. Maßgeblich sind die Stufentexte der Darstellungsdatei.
 - **Offenlassen statt schätzen:** Unbelegte Achsen bleiben leer (`null`). Offen ist Information, keine Lücke.
 - **Kein Gesamtscore:** Keine Summe, kein Mittelwert, keine Rangfolge zwischen Sachverhalten. Die Divergenz zwischen Achsen ist der eigentliche Erkenntnisgewinn.
-- **Keine unbelegte Präzision:** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Passen bei derselben Beleglage zwei Stufentexte, gilt die niedrigere; die Grenze wird benannt. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb derselben Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen; die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt. Die Beurteilung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.
-- **D3 (Zurechnung):** Die bewertete Funktion benennen (Betreiber, Gefahrenabwehr, Fachaufsicht, Ermittlung). D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. **Ohne Akutereignis** ist eine strukturelle Zurechnung zulässig, wenn ein konkreter Gegenstand (Fach-, Regulierungs- oder Vorsorgeaufgabe) und die zuständige Ebene belegt sind; Kennzeichnung im Bewertungstext „D3 strukturell: …“. Belegte Vorsorge einer Stelle vor dem Akutereignis: „D3 Vorsorge: …“ (Kodierleitfaden). Sonst offen. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
+- **Keine unbelegte Präzision:** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere Stufe nicht vollständig, gilt die niedrigere, und die Grenze wird benannt. Das ist keine Vorsichtsregel: Eine Stufe ist nicht deshalb richtig, weil sie niedriger ist. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb derselben Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen; die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt. Die Beurteilung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.
+- **D3 (Zurechnung):** Die bewertete Funktion benennen (Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung). D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. **Ohne Akutereignis** ist eine strukturelle Zurechnung zulässig, wenn ein konkreter Gegenstand (Fach-, Regulierungs- oder Vorsorgeaufgabe) und die zuständige Ebene belegt sind; Kennzeichnung im Bewertungstext „D3 strukturell: …“. Belegte Vorsorge einer Stelle vor dem Akutereignis: „D3 Vorsorge: …“ (Kodierleitfaden). Sonst offen. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
 - **D4 (Mobilisierung):** Maßgeblich ist der Herkunftsraum der für diese Befassung tatsächlich eingesetzten, ereignisbezogenen externen Unterstützung, nicht bereitstehende oder zugesagte Kapazität. Reguläre Warenlieferungen oder der ausländische Herstellungsort eines Geräts belegen keine internationale Mobilisierung; eine ereignisbezogene Sonderbeschaffung zählt nur, wenn sie als Unterstützungsleistung für diese Lage belegt und im Text begründet ist. D4 beschreibt die Herkunft, nicht, ob die Hilfe ausreicht (Bedarfsdeckung: A.9.1).
 - **D5 (Zielzustand):** D5 ist die zum Bewertungszeitpunkt t0 fachlich prognostizierte Restdauer bis zum ausdrücklich benannten Zielzustand (z. B. Gefahrenabwehr beendet, Versorgung wiederhergestellt, Freigabe erteilt) und bildet die definierte Ausnahme zur reinen Ist-Kodierung. Prognosegeber, Ausgabestand und Unsicherheit angeben. Notbetrieb, Wiederherstellung der kritischen Dienstleistung und vollständige Folgenbeseitigung getrennt beschreiben; bei mehreren Zielzuständen den für D5 gewählten begründen. Bereits verstrichene Ereignisdauer zählt nicht. Ohne tragfähige Prognose offen.
 - **D6 (KRITIS):** Nach belegten Kopplungen der konkreten Lage kodieren, nicht nach der Sektorzugehörigkeit oder einer Liste denkbarer Folgen. Die KRITIS-Prüfung ist Pflichtbestandteil jeder Auswertung. Bei einer bewertungsrelevanten Folgekette im Feld „Abhängigkeiten & Interdependenzen“ die entscheidende Verbindung benennen (**Wirkungskette**): Welche beeinträchtigte Funktion wirkt über welche Abhängigkeit, unter welcher Bedingung, auf welchen weiteren Bereich? Überbrückende Puffer (Notstrom, Vorräte, Speicher, Personal, Ausweichweg) und ihre voraussichtliche Reichweite angeben, soweit belegt. Mögliche Folgeschritte als **Szenario** kennzeichnen; sie verändern die Ist-Kodierung nicht. D6 steigt nicht allein mit der vergangenen Ausfalldauer.
@@ -125,7 +131,7 @@ Für jeden übernommenen Befund: Beobachtung und fachliche Einordnung getrennt �
 | **B** | Betreiber: originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft (z. B. Netzbetreiber, Wasserversorger, Verkehrsunternehmen, Krankenhausträger) |
 | **W** | wissenschaftlich: Forschungseinrichtungen und wissenschaftliche Veröffentlichungen und Datensätze in ihrer fachwissenschaftlichen Rolle; Preprints kennzeichnen |
 | **M** | Medien: redaktionelle Berichte und journalistische Veröffentlichungen, Agenturen (bis v0.3: „J“) |
-| **P** | sonstige private Quellen: Verbände, NGOs, persönliche Angaben, Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist |
+| **P** | sonstige private Quellen: Verbände, NGOs, persönliche Angaben, Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; Beiträge in sozialen Medien ungeklärter Identität |
 
 *Zuordnung:* Die konkrete Rolle entscheidet, nicht Eigentumsform oder Veröffentlichungskanal. Eine kommunale Betreiber-Störungsmeldung ist B, eine behördliche Anordnung A. Eine Hilfsorganisation ist bei Angaben über ihre selbst betriebene Einrichtung B, eine allgemeine Verbandsposition bleibt P. Ein authentischer Behördenbeitrag in sozialen Medien bleibt A, ein Betreiberbeitrag B; ungeklärte Identität und ungeklärter Aussagegehalt werden ausdrücklich vermerkt. Ein Medienbericht mit Betreiberzitat bleibt M, mit dem Betreiber als Ursprungsquelle im Text; erst eine tatsächlich eingesehene Betreiberveröffentlichung erhält einen eigenen B-Eintrag. Bei gemischten Rollen die verwendete Aussage und ihre Herkunft kennzeichnen. Bestehende Quelleneinträge werden nicht automatisch umgestuft, sondern einzeln geprüft.
 
@@ -154,7 +160,7 @@ Format: `[Q1] A – Herausgeber (TT.MM.JJJJ): Titel. Online abrufbar unter: URL 
 - Offene Radarwerte = `null` (nicht `0`, nicht Zeichenkette, kein „U“). Keine neuen JSON-Felder ohne Schemaänderung.
 - Schema: Schemakennung `LEAD-Meldung-v1`; Struktur und Werte werden technisch gegen `meldung.schema.json` geprüft (beim Prüfen, beim Import und in der Lagebild-Zusammenfassung). Eine erfolgreiche Schemaprüfung bestätigt nur Struktur und zulässige Werte, nicht den Inhalt (A.5).
 - Entstehung: KI-gestützte Entwürfe tragen das optionale Feld `_entstehung` (Verfahren „KI-Entwurf“, Arbeitsanweisung, Modell, angewandte SOPs und Bausteine, Kodierleitfaden, Erstellungszeitpunkt). Es bleibt bei der weiteren Bearbeitung erhalten und ist ein Herkunftsnachweis, keine Freigabe.
-- `art` nur aus dem Katalog des Schemas wählen; Bausteine aus Teil C unter ihrer `art_zuordnung` führen; `eintritt`, `ort`, `bezeichnung` fallbezogen füllen.
+- `art` nur aus dem Katalog des Schemas wählen; `art_vorschlag` einer SOP ist Startpunkt, keine Checkliste. Bausteine aus Teil C unter ihrer `art_zuordnung` führen; `eintritt`, `ort`, `bezeichnung` fallbezogen füllen.
 
 **Kennsätze.** Für wiederkehrende Angaben gelten feste Satzanfänge am Ende von `sofort.bewertung_text`, jeweils in eigener Zeile. Sie sind keine Pflichtangaben und keine neuen Felder; sie werden nur gesetzt, wenn der Inhalt vorliegt. Die Lagebild-Zusammenfassung wertet sie im Redaktionscheck aus.
 
@@ -239,7 +245,7 @@ Die folgenden Prüfungen sind eine kurze Relevanzprüfung für jede Lage, kein V
 
 **A.9.2 Besondere Bedarfe und Zugänglichkeit.** Wer kann Warnung, Schutzort, Transport, Ersatzversorgung oder medizinisch-pflegerische Hilfe nicht selbstständig erreichen oder nutzen? Barrieren, häusliche Versorgung und Abhängigkeit von Hilfsmitteln (z. B. Strom für Beatmung oder Dialyse) berücksichtigen; bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung. Bei Freiluftveranstaltungen, Campingplätzen und anderen exponierten Gruppen Warnvorlauf, Erreichbarkeit und tatsächliche Schutzmöglichkeiten erfassen. Nur verfügbare aggregierte Angaben verwenden; Gruppen nicht allein aufgrund von Alter, Behinderung oder Herkunft als betroffen zählen. Bedarf, erreichbare Hilfe und verbleibende Lücke benennen.
 
-**A.9.3 Warnlage und Erreichbarkeit.** Ist eine amtliche Warnung, Entwarnung oder eine konkrete Warnlücke für die Beurteilung relevant? Falls ja: herausgebende Stelle, Geltungsgebiet, Zeitstand, Kernaussage, angesprochene Personen, verwendete Kanäle und belegte Erreichbarkeitsprobleme erfassen. Den Unterschied zwischen ausgelöster, übertragener und tatsächlich wahrgenommener Warnung erhalten. Das Modulare Warnsystem (MoWaS) mit Warn-Apps und Warnportal ist ein wichtiger Weg, bildet aber nicht die gesamte Warnkette ab (u. a. Cell Broadcast, Sirenen, Rundfunk, örtliche Durchsagen). Handlungsanweisungen nur mit eindeutigem Ursprung und Geltungsstand wiedergeben. Ausfälle von Warnkanälen gehören in den Text und zu D6 (A.2 D7); vertiefend Baustein N02.
+**A.9.3 Warnlage und Erreichbarkeit.** Ist eine amtliche Warnung, Entwarnung oder eine konkrete Warnlücke für die Beurteilung relevant? Falls ja: herausgebende Stelle, Geltungsgebiet, Zeitstand, Kernaussage, angesprochene Personen, verwendete Kanäle und belegte Erreichbarkeitsprobleme erfassen. Den Unterschied zwischen ausgelöster, übertragener und tatsächlich wahrgenommener Warnung erhalten. Das Modulare Warnsystem (MoWaS) ist das zentrale Auslösesystem für die angeschlossenen Warnmultiplikatoren (u. a. Warn-Apps, Warnportal, Rundfunk, Cell Broadcast und angebundene Sirenen); daneben bestehen örtliche Wege (z. B. Lautsprecherdurchsagen, nicht angebundene Sirenen). Eine Auslösung über MoWaS belegt noch nicht die Übertragung über jeden Kanal. Handlungsanweisungen nur mit eindeutigem Ursprung und Geltungsstand wiedergeben. Ausfälle von Warnkanälen gehören in den Text und zu D6 (A.2 D7); vertiefend Baustein N02.
 
 **A.9.4 Lagefeststellungen und tatsächlich wirksame Hilfe.** Formale Lagefeststellungen (z. B. Feststellung des Katastrophenfalls oder einer vergleichbaren Lage nach Landesrecht) werden mit zuständiger Stelle, Gebiet, Zeitpunkt und der belegten Bezeichnung des jeweiligen Landes erfasst; Begriffe werden nicht über Ländergrenzen gleichgesetzt. Feststellung und Aufhebung können Befassungsanlass sein, sind aber kein notwendiges Kriterium für Aufnahme oder Schweregrad einer Meldung. Unterstützung wird nach tatsächlich eingesetzten Fähigkeiten und Bezugsraum beschrieben; Anforderung, Bewilligung und Einsatz bleiben getrennt. Weder jeder THW-Einsatz noch jede überörtliche Hilfe ist ohne Prüfung einem bestimmten rechtlichen Hilfeinstrument zuzuordnen. Rechtsgrundlagen nur mit aktuellem amtlichem Beleg benennen; keine eigene Rechtsentscheidung durch die KI.
 
@@ -249,7 +255,7 @@ Die folgenden Prüfungen sind eine kurze Relevanzprüfung für jede Lage, kein V
 
 **A.10.1 Aufbau.** Allgemeine Kodier-, Quellen-, Weitergabe- und Fortschreibungsregeln werden nur in Teil A gepflegt. Jede SOP und jeder Baustein nennt ihre Abweichungen, Prüffragen und Stolperstellen und verweist auf Teil A; wird eine SOP einzeln weitergegeben, muss Teil A verfügbar sein. Befassungsanlässe vom Typ „Monitoring“ nennen das beobachtete Signal; die übernehmende Stelle legt verantwortliche Funktion, Prüfanlass und erwartete Folgeentscheidung fest.
 
-**A.10.2 Gültigkeit und Pflege.** Die Bestandteile tragen eigene Fassungen; das gültige Paket steht im Gültigkeitsstand am Anfang dieser Mappe. Je SOP und Baustein sind eine fachlich verantwortliche Funktion (`pflegeverantwortlich`), ein nächstes Prüfdatum im Format TT.MM.JJJJ (`naechste_pruefung_faellig`) und anlassbezogene Prüfauslöser (`pruefausloeser`) festgelegt. In dieser Beispielfassung ist der Herausgeber der Beispielfassung eingetragen; eine übernehmende Stelle ersetzt ihn durch die eigene Funktion. Überfällige Termine werden sachlich geprüft und mit Ergebnis aktualisiert, nicht bloß verschoben. Jede Änderung wird im Änderungsverlauf der SOP-Mappe (`CHANGELOG.md` dieses Ordners) mit Datum, Review- bzw. Anlasskennung und Erledigungsnachweis eingetragen. Fachänderungen dürfen Kodierdefinitionen nicht stillschweigend überschreiben: Änderungen an Achsenregeln oder Quellenkategorien werden gemeinsam in Kodierleitfaden, Darstellungsdatei, Teil A und Arbeitsanweisung fortgeschrieben.
+**A.10.2 Gültigkeit und Pflege.** Die Bestandteile tragen eigene Fassungen; das gültige Paket steht im Gültigkeitsstand am Anfang von Teil A. Je SOP und Baustein sind eine fachlich verantwortliche Funktion (`pflegeverantwortlich`) und ein nächstes Prüfdatum im Format TT.MM.JJJJ (`naechste_pruefung_faellig`) festgelegt, je SOP zusätzlich anlassbezogene Prüfauslöser (`pruefausloeser`); Bausteine erhalten Prüfauslöser mit ihrer fachlichen Freigabe. In dieser Beispielfassung ist der Herausgeber der Beispielfassung eingetragen; eine übernehmende Stelle ersetzt ihn durch die eigene Funktion. Überfällige Termine werden sachlich geprüft und mit Ergebnis aktualisiert, nicht bloß verschoben. Jede Änderung wird im Änderungsverlauf der SOP-Mappe (`CHANGELOG.md` dieses Ordners) mit Datum, Review- bzw. Anlasskennung und Erledigungsnachweis eingetragen. Fachänderungen dürfen Kodierdefinitionen nicht stillschweigend überschreiben: Änderungen an Achsenregeln oder Quellenkategorien werden gemeinsam in Kodierleitfaden, Darstellungsdatei, Teil A und Arbeitsanweisung fortgeschrieben.
 
 **A.10.3 Kalibrierung und Übung der Radarkodierung.** Anlässe: neue oder geänderte Kodierregel, wiederkehrende Abweichungen zwischen Bearbeitenden, regelmäßig vereinbarte Qualitätssichtung. Vorgehen: dokumentierte Beispiellagen werden unabhängig je Achse beurteilt; Abweichungen werden auf unklare Begriffe oder Referenzräume zurückgeführt; betroffene Beispiele in Kodierleitfaden und SOP werden gemeinsam angepasst; die Änderung wird nachvollziehbar dokumentiert. Hohe Übereinstimmung allein belegt keine fachliche Richtigkeit. Der Aufwand bleibt risikogerecht; eine wissenschaftliche Vollstudie ist nicht verpflichtend. Historische Lagenradar-Profile dienen nur als nachvollziehbar belegte Kalibrierbeispiele, nicht als Vorgabewerte für aktuelle Fälle.
 
@@ -354,7 +360,7 @@ pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellu
 | R1 | Welche Pegel, Vorhersagen und Einzugsgebiete sind maßgeblich? | [Länderübergreifendes Hochwasserportal](https://hochwasserzentralen.de/), Landeshochwasserzentralen, PEGELONLINE (WSV); pegel- und produktabhängig | L; D1/D8 | Pegel nur mit Station, Zeit und Bezugssystem; Meldestufen immer mit Land, Pegel und Bedeutung angeben. Pegelstände, Abfluss und Wiederkehrintervalle sind ohne Bezugsbedingungen nicht bundesweit vergleichbar. |
 | R2 | Besteht eine Sturmflutlage? | BSH, Wasserstandsvorhersage und Sturmflutwarndienst | L/R | Tidebedingte Scheitelzeiten genau angeben. |
 | R3 | Welche Überflutungsflächen und Evakuierungen sind bestätigt? | Lagemeldungen (A.3); ggf. Copernicus EMS Rapid Mapping | L/R; D1/D2 | Warn-, Evakuierungs- und überflutete Fläche trennen; Evakuierte ≠ Betroffene. Bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung prüfen (A.9.2, N03). |
-| R4 | Wie ist der Zustand von Deichen, Talsperren und Rückhaltebecken? | Länder-Hochwasserberichte, Deichverbände, Talsperrenbetreiber und -aufsicht | R; D8 | Zustand nur nach zuständiger Fachbewertung darstellen. Deichverteidigung und vorsorglicher Kräfteeinsatz belegen allein keine Verschärfung. |
+| R4 | Wie ist der Zustand von Deichen, Talsperren und Rückhaltebecken? | Länder-Hochwasserberichte, Deichverbände, Talsperrenbetreiber und -aufsicht | R; D8 | Zustand nur nach zuständiger Fachbewertung darstellen. Deichverteidigung und vorsorglicher Kräfteeinsatz belegen allein keine Verschärfung. Durchnässung und Dauer der Einstaubelastung sind fachbehördlich zu bewertende Indikatoren der Deichsicherheit (`Neubewertung bei:`). |
 | R5 | Welche Anlagen und Versorgungsfunktionen sind betroffen (Strom, Wassergewinnung, Kläranlagen, Kanalnetz)? | Betreibermeldungen (A.3) | R/I; D6 | Lage im Gefahrengebiet oder vorsorgliche Abschaltung belegt keinen Ausfall; Abwasserfolgen mit N08 vertiefen. |
 | R6 | Treten wassergefährdende Stoffe aus (z. B. Heizöl)? | Umwelt- und Wasserbehörden; Lagemeldungen (A.3) | R/I; D6 | Kontamination nur nach Fachbewertung; zusätzlich SOP 07 prüfen. |
 | R7 | Welche Hilfe ist eingesetzt, welche Rückkehrbedingungen gelten? | Lagemeldungen (A.3); THW, Bundeswehr (Amtshilfe) | M; D4/D5 | Anforderung, Zusage und Einsatz sind verschiedene Zustände; sinkender Pegel bedeutet nicht Nutzbarkeit. |
@@ -365,7 +371,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **Vor Eintritt:** Vorhersage, Vorlaufzeit, kritische Zugänge und Zustand der Schutzanlagen prüfen; Ist-Achsen ohne Wirkungsnachweis offen lassen (A.1 Nr. 1).
 - **D1:** Nach tatsächlichem Überflutungs- und Einsatzraum kodieren, nicht nach Flusslänge mit Warnung oder Zahl berührter Länder.
-- **D3:** Deich- und Gefahrenabwehrpflichten liegen bei Ländern/Kommunen; Bundesstellen (BfG, WSV) sind überwiegend fachlich bzw. für Bundeswasserstraßen zuständig.
+- **D3:** Deich- und Gefahrenabwehrpflichten liegen nach Landesrecht bei Ländern, Kommunen und Deichverbänden; Bundesstellen (BfG, WSV) sind überwiegend fachlich bzw. für Bundeswasserstraßen zuständig.
 - **D5:** Pegelrückgang, sichere Rückkehr und Wiederaufbau sind verschiedene Zielzustände – gemeinten benennen.
 - **D8:** Vorsorglicher Kräfteeinsatz ist keine beobachtete Verschlechterung; maßgeblich sind Pegelverlauf, Ausuferung und Schadensentwicklung.
 
@@ -542,8 +548,8 @@ pruefausloeser: "vor jeder Hitzesaison; Rückblick nach A.8.3; Änderung von Kod
 **Umfasst / grenzt ab von:** Hitzeperioden mit Gesundheitsfolgen sowie mehrmonatige Trockenheit, sinkende Grund- und Oberflächenwasserstände und Niedrigwasser – auch ohne akute Hitzewelle. Einschränkungen der Trinkwasserversorgung zusätzlich mit SOP 10. Beispiel dafür: Hitze mit geschätzter Übersterblichkeit und regionalen Entnahmeverboten; anhaltendes Niedrigwasser mit Transporteinschränkungen. Beispiel dagegen: Rohrbruch ohne Wetterbezug (SOP 10).
 
 **Teilprofile:** Die SOP arbeitet mit zwei Teilprofilen unter derselben Ereignisart, weil Bezugsräume, Zeitverzug und Entspannungsindikatoren verschieden sind:
-- **5a Hitzeperiode:** Dauer, nächtliche Entlastung, fachlich bestätigte Gesundheitsbelastung, Hitzeschutz und Funktionsfähigkeit ambulanter, stationärer und häuslicher Versorgung (Bausteine R1–R4).
-- **5b Trockenheit/Niedrigwasser:** meteorologische und Bodenindikatoren getrennt von Grundwasser, Rohwasser, Wasserbereitstellung, Kühlwasser, Abladetiefe und tatsächlicher Transportleistung (Bausteine R5–R8).
+- **5a Hitzeperiode:** Dauer, nächtliche Entlastung, fachlich bestätigte Gesundheitsbelastung, Hitzeschutz und Funktionsfähigkeit ambulanter, stationärer und häuslicher Versorgung (Recherchezeilen R1–R4).
+- **5b Trockenheit/Niedrigwasser:** meteorologische und Bodenindikatoren getrennt von Grundwasser, Rohwasser, Wasserbereitstellung, Kühlwasser, Abladetiefe und tatsächlicher Transportleistung (Recherchezeilen R5–R8).
 
 Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewertet.
 
@@ -799,7 +805,7 @@ version: "2.0"
 stand: "19.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
-naechste_pruefung_faellig: "01.09.2027"
+naechste_pruefung_faellig: "31.10.2026"
 pruefausloeser: "vor jeder Heizperiode (Rechtsrahmen und amtliche Stufe prüfen); Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 ```
 
@@ -826,7 +832,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D2:** Haushalts- und Wärmeebene ist populationsrelevant, nicht die Marktebene; aus einer Stufenausrufung nicht auf D2 schließen.
 - **D3:** Zurechnung ist stufenabhängig (Marktakteure, Netzbetreiber, BNetzA als Bundeslastverteiler in der Notfallstufe, Länder) – im Text begründen.
-- **D8:** D8 bildet die belegten Änderungen im zurückliegenden Beobachtungszeitraum ab. Ein stabiler Verlauf kann D8 = 0 rechtfertigen, auch wenn die Versorgung angespannt ist. Kälteeinbruch, technische Störung und auslaufende Reserven werden als bedingte Risiken bzw. fachliche Prognose in „Risiken & Auswirkungen“ und im Kennsatz `Neubewertung bei:` beschrieben.
+- **D8:** D8 bildet die belegten Änderungen im zurückliegenden Beobachtungszeitraum ab. Ein belegt stabiler Verlauf ergibt D8 = 0, auch wenn die Versorgung angespannt ist. Kälteeinbruch, technische Störung und auslaufende Reserven werden als bedingte Risiken bzw. fachliche Prognose in „Risiken & Auswirkungen“ und im Kennsatz `Neubewertung bei:` beschrieben.
 
 **Beurteilung/Tendenz:** Eine Frühwarnstufe begründet für sich keine erhebliche Lage; maßgeblich sind belegte oder konkret prognostizierte Folgen für die Bevölkerung. Preisentlastung, Speicheranstieg und Verbesserung der Versorgung sind verschiedene Befunde. Stabilität ist keine Entwarnung, aber ein möglicher tatsächlicher Zustand.
 
@@ -847,7 +853,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BNetzA · Bundesministerium für Wirtschaft und Energie · Fernleitungs- und Verteilnetzbetreiber · Fernwärmebetreiber · Energieaufsicht und Katastrophenschutz der Länder
 
-**Inhaltlich offene Punkte:** Rechtsrahmen (Notfallplan Gas, EnSiG, EU-Gasversorgungssicherheitsverordnung) vor jeder Heizperiode amtlich prüfen und Ergebnis im Änderungsverlauf vermerken.
+**Inhaltlich offene Punkte:** Rechtsrahmen (Notfallplan Gas, EnSiG, EU-Gasversorgungssicherheitsverordnung) vor jeder Heizperiode amtlich prüfen und Ergebnis im Änderungsverlauf vermerken. **Überfällig:** Die Prüfung für die Heizperiode 2026/27 ist nicht dokumentiert; sie ist vor der nächsten Verwendung dieser SOP nachzuholen. Bis dahin werden Rechtsrahmen und Krisenstufen ausschließlich aus aktuellen amtlichen Quellen übernommen (A.6).
 
 ---
 
@@ -955,7 +961,7 @@ pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellu
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
-- **D2:** Welche direkt Betroffenen deckt die Datengrundlage ab? Kontakte, Fälle und Versorgungsbetroffene nicht addieren; Stufe 0 (<10) nur mit belegter Zahl.
+- **D2:** Welche direkt Betroffenen deckt die Datengrundlage ab? Kontakte, Fälle und Versorgungsbetroffene nicht addieren; Stufe 0 (<10) nur nach der D2-Nullregel (A.2): belegte Zahl von 1–9 direkt Betroffenen oder belegter Nullbefund einer laufenden, einschlägigen Surveillance.
 - **D5:** Ausbruchskontrolle, Versorgungsentlastung und Regelbetrieb sind verschiedene Zielzustände.
 - **D8:** Ändert sich das Geschehen oder nur Test- und Meldepraxis?
 
@@ -1376,7 +1382,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 ```yaml
 bausteintyp: "Themenbaustein (eigenständige Fach-SOP)"
 lageart: "Radiologische / nukleare Lage (Ereignis, Verdacht oder Freisetzung im In- und Ausland mit Deutschlandbezug)"
-art_zuordnung: ["Sonstiges", "KRITIS-Ausfall (nur bei belegtem Funktionsbezug)", "weitere zutreffende Folgenarten"]
+art_zuordnung: ["Sonstiges", "KRITIS-Ausfall"]
+art_hinweis: "„KRITIS-Ausfall“ nur bei belegtem Funktionsbezug; weitere zutreffende Folgenarten ergänzen"
 anschluss: "SOP 07, SOP 17"
 zweck: "Erfassung und Verdichtung radiologischer Lagen im Anschluss an das maßgebliche radiologische Lagebild, ohne eigene Dosismodellierung oder Schutzempfehlung."
 version: "1.0"
@@ -1407,7 +1414,7 @@ naechste_pruefung_faellig: "31.03.2027"
 
 ### 3. Auswertung: Hinweise
 
-- **D1/D2:** nach belegter Wirkung bzw. angeordnetem Maßnahmenraum mit ausdrücklicher Kennzeichnung, nicht nach Entfernung zur Anlage oder Warnradius.
+- **D1/D2:** D1 nach belegtem Wirkungsraum bzw. tatsächlich umgesetzter Maßnahme (z. B. durchgeführte Evakuierung, nachgewiesene Kontamination); D2 nur nach gezählten oder amtlich gemeldeten Betroffenen. Ein angeordneter Maßnahmenraum, die Entfernung zur Anlage oder ein Warnradius tragen allein keinen Wert.
 - **D3:** Betrieb, Aufsicht und Katastrophenschutz getrennt; bewertete Funktion nennen.
 - **D5:** Zielzustand je Maßnahme benennen (z. B. Aufhebung einer Aufenthaltsempfehlung, Freigabe von Lebensmitteln).
 - **D7:** nur entscheidungsrelevante Lücken der Lageinformation, nicht die Komplexität der Fachfrage.
@@ -1431,7 +1438,8 @@ Nach SOP 07 bzw. SOP 17; zusätzlich Ausgabestand des radiologischen Lagebilds, 
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk oder Warnmitteln"
-art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall (nur bei entsprechend belegtem Vorfall)"]
+art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
+art_hinweis: "„Cyberangriff / IT-Sicherheitsvorfall“ nur bei entsprechend belegtem Vorfall"
 anschluss: "SOP 12, SOP 15, A.9.3"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
 version: "1.0"
@@ -1485,7 +1493,8 @@ Nach SOP 12; je Funktion (Notruf, Leitstelle, BOS-Funk, Warnung, Telefonie/Daten
 ```yaml
 bausteintyp: "Querschnittsbaustein"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
-art_zuordnung: ["Ursachenart des Ereignisses", "Migrationslage (nur bei Flucht- bzw. Aufnahmezusammenhang)", "Sonstiges (falls kein passender Ursachenwert)"]
+art_zuordnung: ["Migrationslage", "Sonstiges"]
+art_hinweis: "vorrangig die Ereignisart der Ursache; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
 anschluss: "A.5, A.9.1, A.9.2, SOP 13"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
 version: "1.0"
@@ -1539,7 +1548,8 @@ Nach der Dach-SOP; Schutzmaßnahme, betroffene Gruppen, Unterkunft und Rückkehr
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Missverhältnis zwischen medizinischem Bedarf und einsetzbaren präklinischen bzw. klinischen Fähigkeiten; Ausfall von Klinik-, Pflege-, Dialyse- oder Rettungsdienstfunktionen; MANV-Folgen"
-art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall (bei entsprechendem Funktionsausfall)"]
+art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
+art_hinweis: "„KRITIS-Ausfall“ bei entsprechendem Funktionsausfall"
 anschluss: "SOP 11, N16"
 zweck: "Erfassung nutzbarer medizinischer Leistung und des Ausfalls der Regelversorgung unabhängig von Infektionsgeschehen."
 version: "1.0"
@@ -1562,7 +1572,7 @@ naechste_pruefung_faellig: "31.03.2027"
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welcher Bedarf ist nach Fachmeldung nicht mehr regelhaft abdeckbar? | Lagemeldungen (A.3); Gesundheitsbehörden; [BBK: MANV](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Sanitaetsdienst/MANV/manv_node.html) (Hintergrund) | L/R; D2 | Sichtungskategorien nur für tatsächlich gesichtete Patientinnen und Patienten verwenden, nicht für Vermisste. |
-| R2 | Welche Behandlung, Transport- oder Pflegeleistung ist tatsächlich verfügbar, personell betrieben und zugänglich? | Krankenhausträger und Rettungsdienstträger (B); Kapazitätsnachweise der Länder | R/M; D6 | Nominale Betten und freie Meldekapazitäten sind nicht gleichbedeutend mit nutzbarer Leistung. |
+| R2 | Welche Behandlung, Transport- oder Pflegeleistung ist tatsächlich verfügbar, personell betrieben und zugänglich? | Krankenhausträger und Leistungserbringer im Rettungsdienst (B); Träger des Rettungsdienstes, in der Regel Kreise und kreisfreie Städte (A); Kapazitätsnachweise der Länder | R/M; D6 | Nominale Betten und freie Meldekapazitäten sind nicht gleichbedeutend mit nutzbarer Leistung. |
 | R3 | Welche Auswirkungen hat die Lage auf die übrige Versorgung? | Lagemeldungen (A.3) | R; D6 | Verdrängte Regelversorgung ausdrücklich prüfen. |
 | R4 | Welche Zuführung, Verlegung und Notbetriebsleistung sind bestätigt, was ist nur angeboten? | Lagemeldungen (A.3); GMLZ | M; D4 | Angebot ≠ Zusage ≠ wirksame Verlegung. |
 | R5 | Welche länger anhaltenden Engpässe bei Personal, Material, Energie oder Transport bestehen? | Betreibermeldungen (A.3); Lagemeldungen (A.3) | R/I; D6 | Material nach N12, Energie nach SOP 08 bzw. N05. |
@@ -1593,7 +1603,8 @@ Nach SOP 11; Bedarf, verfügbare Leistung und verbleibende Lücke getrennt (A.9.
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Störung der Kraftstoffversorgung (Einsatz, Notstrom, Mobilität) und der Wärmeversorgung unabhängig vom Gas"
-art_zuordnung: ["KRITIS-Ausfall", "Gasversorgungsengpass (nur bei Gasbezug)", "Stromausfall / Blackout (bei tatsächlich eingetretenem Stromausfall)"]
+art_zuordnung: ["KRITIS-Ausfall", "Gasversorgungsengpass", "Stromausfall / Blackout"]
+art_hinweis: "„Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall"
 anschluss: "SOP 08, SOP 09, SOP 12"
 zweck: "Eigener Recherchepfad für Logistik und reale Abgabe von Kraftstoff und für verfügbare Wärmeleistung."
 version: "1.0"
@@ -1646,7 +1657,8 @@ Nach der Dach-SOP; Bedarf, nutzbarer Bestand, Abgabe und Lücke getrennt.
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Ausfall oder deutliche Minderung kritischer Verkehrs- und Logistikleistung"
-art_zuordnung: ["KRITIS-Ausfall", "Ursachenart zusätzlich nach belegtem Sachverhalt"]
+art_zuordnung: ["KRITIS-Ausfall"]
+art_hinweis: "Ereignisart der Ursache zusätzlich nach belegtem Sachverhalt"
 anschluss: "SOP 12"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
 version: "1.0"
@@ -1700,7 +1712,8 @@ Nach SOP 12; ausgefallene Leistung, nutzbare Ausweichwege und Versorgungsfolgen 
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Störung lebenswichtiger Lebensmittelversorgung (Produktion, Verteilung, Kühlung, Abgabe)"
-art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie (nur bei einschlägigen gesundheitlichen Folgen)"]
+art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
+art_hinweis: "„Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen"
 anschluss: "SOP 12"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
 version: "1.0"
@@ -1753,7 +1766,8 @@ Nach SOP 12; Bedarf, nutzbarer Bestand, Ersatzabgabe und Lücke getrennt (A.9.1)
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Ausfall von Abwassertransport oder -behandlung, nicht nutzbare Sanitärversorgung, kritischer Entsorgungsrückstau"
-art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung (nur bei tatsächlichem Trinkwasserbezug)"]
+art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung"]
+art_hinweis: "„Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug"
 anschluss: "SOP 10, SOP 12"
 zweck: "Erfassung von Entwässerungs-, Sanitär- und hygienisch relevanten Entsorgungsfolgen."
 version: "1.0"
@@ -1806,7 +1820,8 @@ Nach SOP 12 bzw. SOP 10; Funktion, Hygienefolgen, Ersatzlösung und Freigabe get
 ```yaml
 bausteintyp: "Themenbaustein"
 lageart: "Hangrutschung, Felssturz, Erdfall, Tagesbruch, Bergsenkung und erheblicher nichtseismischer Einsturz von Gebäuden oder Bauwerken"
-art_zuordnung: ["Sonstiges", "Hochwasser / Überschwemmung oder Erdbeben (nur bei entsprechendem Zusammenhang)", "KRITIS-Ausfall (bei belegter Folge)"]
+art_zuordnung: ["Sonstiges", "Hochwasser / Überschwemmung", "Erdbeben", "KRITIS-Ausfall"]
+art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge"
 anschluss: "SOP 04, SOP 17, N16"
 zweck: "Eigene Fachrecherche für nichtseismische Massenbewegungen und Bauwerksversagen."
 version: "1.0"
@@ -1859,7 +1874,8 @@ Nach SOP 17 bzw. Dach-SOP; Mechanismus, Wirkung und Fachbewertung getrennt.
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Tierseuchen mit Unterstützungs-, Entsorgungs- oder Versorgungsbezug und Lagen mit belegter humaner Exposition"
-art_zuordnung: ["Gesundheitliche Lage / Epidemie (mit ausdrücklich benanntem Tiergesundheitsbezug)", "Sonstiges (falls das Fachprofil die Art auf Humangesundheit beschränkt)", "KRITIS-Ausfall (nur bei belegtem Funktionsausfall)"]
+art_zuordnung: ["Gesundheitliche Lage / Epidemie", "Sonstiges", "KRITIS-Ausfall"]
+art_hinweis: "„Gesundheitliche Lage / Epidemie“ mit ausdrücklich benanntem Tiergesundheitsbezug; „Sonstiges“, falls das Fachprofil die Art auf Humangesundheit beschränkt; „KRITIS-Ausfall“ nur bei belegtem Funktionsausfall"
 anschluss: "SOP 11"
 zweck: "Getrennte Erfassung von veterinärfachlicher Lage, humaner Exposition, Kapazitätsbindung und Versorgungsfolgen."
 version: "1.0"
@@ -1965,7 +1981,8 @@ Nach SOP 11; Auslandsprofil und lokales Profil nicht in einem Text vermischen.
 ```yaml
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lageart: "Engpässe bei Arzneimitteln und kritischem medizinischem Material mit relevanten Versorgungsfolgen"
-art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall (bei belegtem Dienstleistungsausfall)"]
+art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Dienstleistungsausfall"
 anschluss: "SOP 11, SOP 17"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
 version: "1.0"
@@ -2018,7 +2035,8 @@ Nach SOP 11; Lieferproblem, Verfügbarkeit vor Ort und Versorgungslücke getrenn
 ```yaml
 bausteintyp: "Querschnittsbaustein"
 lageart: "Zivile Schutz-, Versorgungs- und Verwaltungsfolgen im Kontext der zivilen Verteidigung"
-art_zuordnung: ["Sonstiges (als begründetes Dach für eine noch nicht abgebildete Ursache)", "vorhandene Folgenarten passend ergänzen"]
+art_zuordnung: ["Sonstiges"]
+art_hinweis: "„Sonstiges“ als begründetes Dach für eine noch nicht abgebildete Ursache; vorhandene Folgenarten passend ergänzen"
 anschluss: "A.1, SOP 14, SOP 15, SOP 16"
 zweck: "Gemeinsamer Betrachtungsrahmen für Folgen von Waffeneinwirkung, längerfristigem Schutzbedarf, eingeschränkter staatlicher Handlungsfähigkeit und gleichzeitiger Beanspruchung ziviler Fähigkeiten – ausschließlich ziviler Wirkungsbezug."
 version: "1.0"
@@ -2049,7 +2067,7 @@ naechste_pruefung_faellig: "31.03.2027"
 
 ### 3. Auswertung: Hinweise
 
-- **D3:** Bund (Zivilschutz) und Länder (Katastrophenschutz) je Aspekt begründen.
+- **D3:** nach der Ebene kodieren, die den bewerteten Aspekt tatsächlich steuert. Zivilschutzaufgaben werden überwiegend von Ländern und Kommunen im Auftrag des Bundes ausgeführt; Bundesstellen (z. B. BBK, THW) sind daneben unmittelbar tätig. Die Gesetzgebungs- und Finanzierungszuständigkeit des Bundes bestimmt D3 nicht.
 - **D6:** nur belegte Kopplungen, keine Bedrohungsszenarien als Ist-Wert.
 - **D8:** beobachtete Lageänderung, nicht Intensität der Berichterstattung.
 
@@ -2072,7 +2090,8 @@ Nach der jeweiligen Dach-SOP; ziviler Wirkungsbezug, betroffene Funktion und Abs
 ```yaml
 bausteintyp: "Themenbaustein"
 lageart: "Weltraumwetter mit konkretem deutschem Funktionsbezug; Navigations-, Zeitreferenz-, Funk- oder Netzstörungen"
-art_zuordnung: ["Sonstiges (bei Frühwarnung)", "KRITIS-Ausfall oder Stromausfall / Blackout (nur bei entsprechendem Wirkungseintritt)"]
+art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
+art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
 anschluss: "SOP 17, SOP 08, SOP 12"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
 version: "1.0"
@@ -2125,7 +2144,8 @@ Nach SOP 17; Warnung, gemessene Wirkung und Szenario getrennt.
 ```yaml
 bausteintyp: "Themenbaustein"
 lageart: "Größerer Verkehrs-, Industrie- oder Veranstaltungsunfall, Gedränge, mit relevantem Hilfebedarf"
-art_zuordnung: ["Sonstiges", "einschlägige bestehende Folgenarten ergänzen"]
+art_zuordnung: ["Sonstiges"]
+art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "SOP 11, SOP 12, SOP 14, SOP 17; N03, N04, N09"
 zweck: "Erfassung überörtlicher medizinischer, Betreuungs- und Verkehrsfolgen größerer Unfälle."
 version: "1.0"
@@ -2176,7 +2196,8 @@ Nach der Dach-SOP; Unfallgeschehen, medizinische Lage, Betreuung und Verkehrsfol
 ```yaml
 bausteintyp: "Themenbaustein"
 lageart: "Bestätigter Kampfmittelfund mit großräumiger oder kapazitätskritischer Räumung"
-art_zuordnung: ["Sonstiges", "einschlägige bestehende Folgenarten ergänzen"]
+art_zuordnung: ["Sonstiges"]
+art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "SOP 14, SOP 17, N03"
 zweck: "Erfassung von Räumungs-, Verlegungs- und Versorgungsfolgen bei Kampfmittelfunden."
 version: "1.0"
@@ -2227,7 +2248,8 @@ Nach SOP 17; Räumung, Verlegung, Versorgungsfolgen und Rückkehr getrennt.
 ```yaml
 bausteintyp: "Themenbaustein"
 lageart: "Amtlich bzw. fachlich bestätigte Aschelage mit Bezug zu Luftverkehr, Gesundheit oder kritischer Logistik"
-art_zuordnung: ["Sonstiges", "einschlägige bestehende Folgenarten ergänzen"]
+art_zuordnung: ["Sonstiges"]
+art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "SOP 04, SOP 12, SOP 17, N06"
 zweck: "Erfassung von Verkehrs- und Versorgungsfolgen einer Vulkanaschelage."
 version: "1.0"

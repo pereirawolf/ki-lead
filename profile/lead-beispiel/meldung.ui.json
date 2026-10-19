@@ -1,7 +1,7 @@
 {
   "format": "lead-ui/1",
   "titel": "LEAD-Meldevorlage",
-  "untertitel": "Meldung von Ereignissen/Sachverhalten (ohne Maßnahmen-Meldung)",
+  "untertitel": "Meldung von Ereignissen/Sachverhalten (keine gesonderte Maßnahmenmeldung)",
   "ausblenden": [
     "schema",
     "_status",
@@ -118,7 +118,7 @@
     "sachverhalte[].analyse.massnahmen_empfehlungen": {
       "label": "Maßnahmen & Handlungsempfehlungen",
       "widget": "text_lang",
-      "hinweis": "Wer (Land, Bundesressort, Fachaufsicht, Nachbarland) sollte auf dieser Grundlage was prüfen oder entscheiden? Keine Meldung eigener Einsatzmaßnahmen."
+      "hinweis": "Bestehende Maßnahmen mit Status (geplant, angeordnet, begonnen, umgesetzt, beendet), verantwortlicher Stelle und Stand; getrennt davon Empfehlungen: Wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht) sollte bis wann was prüfen oder entscheiden, aus welchem Anlass und aufgrund welcher belegten Lücke? Eigene Maßnahmen nur im tatsächlichen Auftrag (Rollenprofil, SOP-LEAD A.1 Nr. 4)."
     },
     "sachverhalte[].analyse.abhaengigkeiten_interdependenzen": {
       "label": "Abhängigkeiten & Interdependenzen",
@@ -142,7 +142,7 @@
       "label": "Bewertung & Tendenz",
       "widget": "text_lang",
       "platzhalter": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz – und warum jetzt?",
-      "hinweis": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich für zuständige Stellen? Danach Bewertung und Tendenz begründen (Bezugsraum, Zeitraum). Optional, jeweils in eigener Zeile am Ende: Neubewertung bei: … · Handlungsrelevant bis: TT.MM.JJJJ … · Änderung zur Vormeldung: … · Abschluss im Lagebild: …"
+      "hinweis": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich für zuständige Stellen? Danach Bewertung und Tendenz begründen (Bezugsraum, Zeitraum). Optional, jeweils in eigener Zeile am Ende: Neubewertung bei: … · Handlungsrelevant bis: TT.MM.JJJJ HH:MM … · Änderung zur Vormeldung: … · Abweichende Bewertung: … · Abschluss im Lagebild: …"
     },
     "sachverhalte[].sofort.lagenradar": {
       "label": "Lagenradar",

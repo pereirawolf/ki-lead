@@ -4,7 +4,7 @@ Beispielfassung für KI-LEAD · Fassung 1.2 vom 19.10.2026 · abgeleitet aus der
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
-**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP, (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
+**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
 ---
 
@@ -15,7 +15,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 3. **Höhere Zahl = stärkere, bedeutsamere oder ungünstigere Ausprägung.** Die Bedeutung einer Stufe ergibt sich ausschließlich aus dem Stufentext (Abschnitt 2).
 4. **Stufe 0 ist eine inhaltliche Aussage, kein Leerwert.** Sie braucht einen Beleg wie jede andere Stufe.
 5. **Offen statt geschätzt.** Fehlt ein Bezugsgegenstand oder ein tragfähiger Beleg, bleibt die Achse offen: in der Eingabemaske „keine Angabe“, im JSON `null`. Ein selbst erfundener Code wie „U“ ist unzulässig. Offen ist eine Information, keine Lücke.
-6. **Keine unbelegte Präzision.** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Passen bei derselben Beleglage zwei Stufen, gilt die niedrigere; die Grenze wird im Bewertungstext benannt. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb einer Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen und die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt.
+6. **Keine unbelegte Präzision.** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere Stufe nicht vollständig, gilt die niedrigere, und die Grenze wird im Bewertungstext benannt. Das ist keine Vorsichtsregel: Eine Stufe ist nicht deshalb richtig, weil sie niedriger ist. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb einer Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen und die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt.
 7. **Keine Zukunft im Ist-Wert – mit einer definierten Ausnahme.** Erwartete Entwicklungen gehören in „Risiken & Auswirkungen“ und in den Kennsatz `Neubewertung bei:`, nicht in die Radarwerte. Ausnahme ist D5: Es kodiert die zu t0 fachlich prognostizierte Restdauer bis zum benannten Zielzustand (Abschnitt 3, D5).
 8. **Kein Gesamtscore.** Keine Summe, kein Mittelwert, keine Rangfolge zwischen Sachverhalten. Die Divergenz zwischen den Achsen ist der Erkenntnisgewinn.
 9. **Begründungsmuster.** Jeder gesetzte Wert wird im Bewertungstext oder in den Analysefeldern so begründet:
@@ -27,7 +27,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 1. Gibt es für diese Achse einen **Bezugsgegenstand** im Referenzraum (eine Fläche, eine Personengruppe, eine steuernde Stelle, eine Unterstützungsleistung, einen Zielzustand, eine Kopplung, eine Lageinformation, eine beobachtete Veränderung)? – Nein: **offen**.
 2. Gibt es einen **Beleg** zu diesem Gegenstand? – Nein: **offen**.
-3. Welche **Stufe** trägt der Beleg nach dem Stufentext? – Bei zwei passenden Stufen: die **niedrigere**; bei einer Schätzbandbreite über eine Stufengrenze: **offen** (Grundregel 6).
+3. Welche **Stufe** trägt der Beleg nach dem Stufentext? – Trägt der Beleg die höhere Stufe nicht vollständig: die **niedrigere**; bei einer Schätzbandbreite über eine Stufengrenze: **offen**, außer bei einer bestätigten Mindestzahl (Mindestkodierung, Grundregel 6).
 4. **Grenze zur Nachbarstufe** benennen.
 
 ---
@@ -168,6 +168,14 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 
 **Ungeklärte Widersprüche** bleiben mit beiden Werten und Quellen sichtbar und werden nicht festgelegt.
 
+**Zuordnungsbeispiele (fiktiv):**
+
+| Aussage | Kategorie | Prüfhinweis |
+|---|---|---|
+| Stadtwerke: 80 Prozent der ausgefallenen Anschlüsse wieder versorgt | B | Zeitstand, Bezugsgebiet und Nenner prüfen; Anschlüsse nicht in Personen umetikettieren. |
+| Gesundheitsamt: Abkochgebot gilt weiterhin | A | Geltungsbereich und aktuelle Fassung prüfen; die technische Reparatur hebt die Anordnung nicht auf. |
+| Zeitung berichtet über denselben Stadtwerke-Stand | M | keine zweite unabhängige Bestätigung des Wiederherstellungsstands. |
+
 **Unabhängigkeit:** Die Kategorie allein beweist keine Aussage. Mehrere Übernahmen oder Weiterverbreitungen derselben Ursprungsangabe sind keine unabhängigen Bestätigungen; unterschiedliche Kategorien sind kein Unabhängigkeitsnachweis. Die Kernaussage stützt sich nach Möglichkeit auf voneinander unabhängige Ursprungsquellen; ein einzelner zuständiger Primärbeleg kann tragfähig sein, wenn er die Aussage unmittelbar trägt. Fehlt eine unabhängige Bestätigung, wird das offen benannt.
 
 **Bestätigungsgrad:** Unabhängig von der Kategorie wird für zentrale Aussagen angegeben, ob sie *bestätigt*, *vorläufige Eigenangabe*, *indirekt berichtet* oder *widersprüchlich* sind (SOP-LEAD A.3).
@@ -231,4 +239,4 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.0 | 17.10.2026 | Beispielfassung, abgeleitet aus der Arbeitsfassung v0.4 |
 | 1.0.1 | 17.10.2026 | Autorenname im Zitat des Lagenradars korrigiert |
 | 1.1 | 17.10.2026 | D3: berichtete Vorsorge vor dem Akutereignis als Zurechnung (Ebene der vorsorgenden Stelle); D7: widersprüchliche Vorhersagen = 1, eindeutige Lage = 0; zwei Kurzbeispiele |
-| 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0 |
+| 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien |
