@@ -23,6 +23,21 @@ export function fachSops(profil: Profil): Sop[] {
   return profil.sops.filter((s) => !s.gemeinsam);
 }
 
+/**
+ * Löst eine SOP-ID auf: aktuelle ID unverändert, frühere ID (`bisherige_ids`, z. B. „sop-08“) zur aktuellen;
+ * unbekannte IDs ergeben undefined. So bleiben gespeicherte Läufe nach einer Umnummerierung lesbar.
+ */
+export function sopIdAufloesen(profil: Profil, id: string): string | undefined {
+  const fach = fachSops(profil);
+  if (fach.some((s) => s.id === id)) return id;
+  return fach.find((s) => s.alias?.includes(id))?.id;
+}
+
+/** Löst eine Liste von SOP-IDs auf (ohne Dubletten, unbekannte entfallen). */
+export function sopIdsAufloesen(profil: Profil, ids: string[]): string[] {
+  return [...new Set(ids.map((x) => sopIdAufloesen(profil, x)).filter((x): x is string => !!x))];
+}
+
 export function gemeinsameSops(profil: Profil): Sop[] {
   return profil.sops.filter((s) => s.gemeinsam);
 }

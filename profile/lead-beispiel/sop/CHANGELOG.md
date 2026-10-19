@@ -4,14 +4,56 @@
 
 Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleitfaden, Darstellungsdatei, Arbeitsanweisungen, Schema und Beispielen stehen im Profilverlauf [`../CHANGELOG.md`](../CHANGELOG.md), Änderungen der App im [App-Verlauf](../../../CHANGELOG.md).
 
-**Versionierung:** Die Sammelmappe trägt eine eigene Fassung (erste Stelle: geänderte Struktur oder Kodier- bzw. Quellenregeln; zweite Stelle: neue oder geänderte fachliche Inhalte; dritte Stelle: redaktionelle Korrekturen). Einzelne SOPs und Bausteine tragen im YAML-Kopf `version` und `stand`. Welche Fassungen von Sammelmappe, Kodierleitfaden, Darstellungsdatei, Arbeitsanweisung und Schema zusammengehören, steht im Gültigkeitsstand am Anfang der Sammelmappe.
+**Versionierung:** Die Sammelmappe trägt eine eigene Fassung (erste Stelle: geänderte Struktur oder Kodier- bzw. Quellenregeln; zweite Stelle: neue oder geänderte fachliche Inhalte; dritte Stelle: redaktionelle Korrekturen). Einzelne SOPs und Bausteine tragen im YAML-Kopf `version` und `stand`. Welche Fassungen von Sammelmappe, Kodierleitfaden, Darstellungsdatei, Arbeitsanweisung und Schema zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A.
 
-**Dateien in diesem Ordner:**
+**Dateien in diesem Ordner:** Übersicht aller SOPs und Bausteine mit Fassung und Konkordanz in [`README.md`](README.md). Die App liest nur die in `profil.json` unter `sop.dateien` genannten Dateien.
 
-| Datei | Fassung | Status |
+| Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `SOP-LEAD_Sammelmappe_v2.0.md` | 2.0.1 vom 19.10.2026 | gültig (Dateiname bleibt bis zur nächsten Hauptfassung); im Manifest `profil.json` unter `sop.dateien` eingebunden |
-| `SOP-LEAD_Sammelmappe.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`); von der App nicht mehr gelesen |
+| `A_gemeinsame-regeln.md`, `B/`, `C/` | 3.0 vom 19.10.2026 | gültig; 35 Dateien im Manifest |
+| `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
+| `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
+
+**Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README.
+
+## [3.0] – 19.10.2026
+
+Strukturfassung nach dem freigegebenen Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“ (Kennungen S01–S12). **Keine fachlichen Änderungen:** Die Texte aller Abschnitte sind wortgleich übernommen; geändert sind Dateischnitt, Überschriften, Kopfdaten, Prüffragen-IDs und Querverweise. Erste Stelle nach der Versionierungsregel (geänderte Struktur).
+
+### Geändert
+
+- **Dateischnitt [S01]:** Teil A in `A_gemeinsame-regeln.md`, jede SOP und jeder Baustein in einer eigenen Datei, die mit ihrem Anker beginnt; Übersicht und Konkordanz in `README.md` (ersetzt Mappenkopf und Inhaltsverzeichnis, die vor dem ersten Anker standen und die KI nie erreichten) [S11].
+- **Kennungen [S02, S03]:** Teil B B01–B17 (Zahl wie bisher, Reihenfolge des Ereigniskatalogs); Teil C lückenlos C01–C17 in vier Gruppen statt der Review-Kennungen N01–N18 mit Lücke N14: Ereignisbausteine C01–C06, Versorgungsbausteine C07–C11, Gesundheitsbausteine C12–C15, Querschnittsbausteine C16–C17. Technische IDs `b01`–`b17`, `c01`–`c17`; Teil A bleibt `teil-a`.
+- **Abschnittsschema [S04]:** in allen 34 Abschnitten „1. Anwendungsbereich und Befassungsanlässe“, „2. Erfassung: Prüffragen“, „3. Auswertung: Prüfpunkte“, „4. Darstellung“, „5. Ansprechstellen und Pflege“; Satzanfang „Offene Punkte“ statt „Inhaltlich offene Punkte“.
+- **Prüffragen [S05, S06]:** Begriff „Prüffragen“ statt „Recherchebausteine“ bzw. „Recherchezeilen“; IDs nur „R1“ ff.; Teilprofile als Zwischenüberschriften mit eigener Tabelle (B05: Teilprofil 5a R1–R4, 5b R5–R8; C13: Auslandsprofil R1–R2, lokales Profil R3–R4, beide Profile R5–R6); Zitierweise „B05-R3“.
+- **Kopfdaten [S07]:** einheitliche Schlüsselfolge mit `kennung`, `typ` (Ereignis-SOP, Ereignisbaustein, Versorgungsbaustein, Gesundheitsbaustein, Querschnittsbaustein), `bisherige_kennung` und `bisherige_ids`; `bausteintyp` entfällt; Teil B mit `status: "Beispielfassung"`. Fassungen redaktionell: SOPs 2.0 → 2.0.1, Bausteine 1.0 → 1.0.1.
+- **Querverweise [S08]:** alle Verweise „SOP 07“, „N06“ und die Routentabelle in A.1 Nr. 2 auf B- und C-Kennungen umgestellt (Ausnahme: Review-Kennung N14 im Gültigkeitsstand).
+- **Teil A:** Gültigkeitsstand (Sammelmappe 3.0, Profil 1.6.0, Arbeitsanweisungen 1.3.1, 2.0.1, 2.1.1); A.10.1 um Gliederung und Kennungen ergänzt; A.8.3 nennt „Offene Punkte“.
+- **Archiv [S12]:** Fassungen 1.0.1 und 2.0.1 unverändert unter `archiv/`; aktive Dateinamen ohne Versionsnummer.
+
+### Konkordanz Teil C
+
+| bisher | neu | Gruppe |
+|---|---|---|
+| N01 | C01 | Ereignisbaustein |
+| N09 | C02 | Ereignisbaustein |
+| N15 | C03 | Ereignisbaustein |
+| N16 | C04 | Ereignisbaustein |
+| N17 | C05 | Ereignisbaustein |
+| N18 | C06 | Ereignisbaustein |
+| N02 | C07 | Versorgungsbaustein |
+| N05 | C08 | Versorgungsbaustein |
+| N06 | C09 | Versorgungsbaustein |
+| N07 | C10 | Versorgungsbaustein |
+| N08 | C11 | Versorgungsbaustein |
+| N04 | C12 | Gesundheitsbaustein |
+| N11 | C13 | Gesundheitsbaustein |
+| N10 | C14 | Gesundheitsbaustein |
+| N12 | C15 | Gesundheitsbaustein |
+| N03 | C16 | Querschnittsbaustein |
+| N13 | C17 | Querschnittsbaustein |
+
+Teil B: 01–17 → B01–B17 (gleiche Zahl).
 
 ## [2.0.1] – 19.10.2026
 

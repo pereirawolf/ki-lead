@@ -3,7 +3,7 @@
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
   "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Bund",
@@ -18,7 +18,9 @@
     "rollenprofil": "übergreifende Redaktion",
     "rolle_beschreibung": "Die meldende Stelle (Koordinierungsstelle (Beispiel)) ist eine Koordinierungsstelle zwischen föderalen Ebenen im Bevölkerungsschutz, keine zusätzliche Entscheidungsebene. Sie hat keine Weisungsbefugnis und keine eigene operative Einsatzzuständigkeit. Sie führt Meldungen mehrerer Stellen zusammen und ermöglicht systematischen Wissenstransfer, ohne bestehende Zuständigkeiten zu ersetzen; ihre Empfehlungen richten sich an die zuständigen Stellen."
   },
-  "eigene_stellen": ["Koordinierungsstelle (Beispiel) – Redaktionskonferenz"],
+  "eigene_stellen": [
+    "Koordinierungsstelle (Beispiel) – Redaktionskonferenz"
+  ],
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
@@ -34,7 +36,41 @@
   },
   "sop": {
     "dateien": [
-      "sop/SOP-LEAD_Sammelmappe_v2.0.md"
+      "sop/A_gemeinsame-regeln.md",
+      "sop/B/B01_unwetter-sturm.md",
+      "sop/B/B02_hochwasser-ueberschwemmung.md",
+      "sop/B/B03_waldbrand.md",
+      "sop/B/B04_erdbeben.md",
+      "sop/B/B05_extremhitze-duerre.md",
+      "sop/B/B06_wintersturm-schnee-eis.md",
+      "sop/B/B07_industrieunfall-chemieunfall.md",
+      "sop/B/B08_stromausfall-blackout.md",
+      "sop/B/B09_gasversorgungsengpass.md",
+      "sop/B/B10_trinkwasserversorgung.md",
+      "sop/B/B11_gesundheitliche-lage-epidemie.md",
+      "sop/B/B12_kritis-ausfall.md",
+      "sop/B/B13_migrationslage.md",
+      "sop/B/B14_sicherheitslage.md",
+      "sop/B/B15_cyberangriff-it-sicherheitsvorfall.md",
+      "sop/B/B16_sabotage-anschlag-terrorismus.md",
+      "sop/B/B17_sonstiges.md",
+      "sop/C/C01_radiologische-nukleare-lage.md",
+      "sop/C/C02_massenbewegungen-bodenversagen.md",
+      "sop/C/C03_weltraumwetter-und-stoerungen.md",
+      "sop/C/C04_grossunfall-und-ueberoertliche.md",
+      "sop/C/C05_kampfmittelfund-mit-raeumung.md",
+      "sop/C/C06_vulkanasche-mit-deutschland.md",
+      "sop/C/C07_telekommunikation-notruf-bos.md",
+      "sop/C/C08_kraftstoff-und-waermeversorgung.md",
+      "sop/C/C09_verkehr-transport-und-kritische-logistik.md",
+      "sop/C/C10_lebensmittelversorgung.md",
+      "sop/C/C11_abwasser-sanitaerhygiene-und-kritische.md",
+      "sop/C/C12_nichtinfektioese-medizinische.md",
+      "sop/C/C13_infektionslagen-auslandsausbruch.md",
+      "sop/C/C14_tierseuchen-und-zoonotische.md",
+      "sop/C/C15_arzneimittel-und-kritisches.md",
+      "sop/C/C16_evakuierung-schutzunterbringung.md",
+      "sop/C/C17_zivile-verteidigung-zivile-schutz.md"
     ],
     "teil_gemeinsam": "teil-a"
   },

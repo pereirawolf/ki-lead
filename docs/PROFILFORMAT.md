@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.7 vom 19.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.8 vom 19.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -144,7 +144,19 @@ Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. 
 
 ## SOP-Dateien
 
-Eine Sammelmappe wird an HTML-Ankern (`<a id="sop-01"></a>`) zerlegt. Ohne Anker gilt eine Datei als eine SOP. Aus dem YAML-Block oder Frontmatter liest die App `lageart`, `art_vorschlag` und `version`. Der in `teil_gemeinsam` genannte Abschnitt geht jeder KI-Anfrage mit. Abschnitte ohne `art_vorschlag` (z. B. Themen- und Querschnittsbausteine mit Titel „N01. Baustein LEAD: …“) erscheinen im SOP-Katalog der Stufe S1, werden beim Wählen einer Ereignisart aber nicht automatisch hinzugefügt. Die Kennung im Laufprotokoll lautet dann z. B. „SOP-LEAD N01 … v1.0“. Nicht im Manifest genannte SOP-Dateien (z. B. archivierte Vorfassungen) liest die App nicht als SOP.
+`sop.dateien` nennt die SOP-Dateien in der Reihenfolge, in der sie im SOP-Katalog der Stufe S1 erscheinen. Eine Datei kann einen Abschnitt (empfohlen: eine Datei je SOP bzw. Baustein) oder mehrere enthalten. Jeder Abschnitt beginnt mit einem HTML-Anker (`<a id="b01"></a>`); die ID muss über alle Dateien eindeutig sein. Text vor dem ersten Anker einer Datei wird nicht verwendet; die App warnt beim Import. Ohne Anker gilt eine Datei als eine SOP (ID = Dateiname). Der in `teil_gemeinsam` genannte Abschnitt geht jeder KI-Anfrage mit.
+
+Aus dem YAML-Block oder Frontmatter liest die App:
+
+| Schlüssel | Verwendung |
+|---|---|
+| `kennung` | Kennung im Laufprotokoll und in `_entstehung.sop`, z. B. „B08“ → „SOP-LEAD B08 Stromausfall / Blackout v2.0.1“; fehlt sie, gilt die Nummer am Anfang der Überschrift („B08. SOP LEAD: …“) |
+| `lageart`, `version` | Anzeige und Kennung |
+| `art_vorschlag` | Ereignisarten, bei deren Wahl die App die SOP in S1 vorschlägt; Abschnitte ohne `art_vorschlag` (Bausteine) erscheinen im Katalog, werden aber nicht automatisch hinzugefügt |
+| `bisherige_ids` | frühere IDs (z. B. `sop-08`); die App bildet sie in gespeicherten Läufen auf die aktuelle ID ab |
+| `bisherige_kennung` | frühere Kennung (z. B. „08“, „N05“); die App erkennt sie in `_entstehung.sop` des Modells und schreibt die aktuelle Kennung |
+
+Weitere Schlüssel (z. B. `typ`, `status`, `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`) liest die App nicht als SOP. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
 
 ## Prüfung beim Import
 
@@ -176,3 +188,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.5 | 18.10.2026 | Rolle `freigabe`; Abschnitt `bewertung_gliederung` |
 | 1.6 | 18.10.2026 | Abschnitt `analyse_gliederung`; Option `kurzlabel`; Prüfung beider Gliederungsabschnitte beim Import. Reihenfolge der Zeilen 1.4 und 1.5 in dieser Tabelle berichtigt |
 | 1.7 | 19.10.2026 | Darstellungsdatei: `quellen.rangfolge` (Quellenpriorität) und Strukturprüfung des Abschnitts `quellen`; SOP-Abschnitte ohne `art_vorschlag` (Bausteine) und Kennung „SOP-LEAD N01 …“ |
+| 1.8 | 19.10.2026 | SOP-Dateien: eine Datei je Abschnitt, Reihenfolge von `sop.dateien`, Kopfschlüssel `kennung`, `bisherige_ids`, `bisherige_kennung`; Importprüfungen auf Text vor dem ersten Anker und doppelte IDs |

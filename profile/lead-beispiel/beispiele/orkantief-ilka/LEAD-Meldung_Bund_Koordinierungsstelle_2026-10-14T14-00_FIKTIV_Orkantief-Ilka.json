@@ -3,9 +3,9 @@
   "_status": "final",
   "_entstehung": {
     "verfahren": "KI-Entwurf",
-    "werkzeug": "Redaktion Koordinierungsstelle: Zusammenführung von Ländermeldungen nach SOP-LEAD Teil A.7 (Testdatensatz); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen",
+    "werkzeug": "Redaktion Koordinierungsstelle: Zusammenführung von Ländermeldungen nach SOP-LEAD Teil A.7 (Testdatensatz); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen; SOP-Kennungen nach Fassung 3.0",
     "modell": "Claude Opus 5.5",
-    "sop": ["SOP-LEAD 01 Unwetter / Sturm v2.0", "SOP-LEAD 08 Stromausfall / Blackout v2.0", "SOP-LEAD 12 KRITIS-Ausfall v2.0"],
+    "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1", "SOP-LEAD B12 KRITIS-Ausfall v2.0.1"],
     "kodierleitfaden": "LEAD v2.0",
     "erstellt": "2026-10-14T21:05"
   },

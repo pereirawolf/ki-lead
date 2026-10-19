@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.3 vom 19.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 2.0.1 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0 und der Arbeitsanweisung Kurzfassung 2.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.3.1 vom 19.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 3.0 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0.1 und der Arbeitsanweisung Kurzfassung 2.1.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs und Bausteine, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ein thematisch passendes Beispiel-JSON dient nur als Stilbeispiel, nie als Beleg, Skalenquelle oder Vorgabe für die Bewertung. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
 
@@ -73,24 +73,24 @@ Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichung
 ## 2. SOP-Auswahl und -Anwendung
 
 1. **Gegenstand klären (SOP-LEAD A.1 Nr. 1).** Benenne vor der Recherche den konkreten Sachverhalt, den Stichtag, den Wirkungs- bzw. Relevanzbezug zum Referenzraum und den Betrachtungshorizont. Die Lagebild-Perspektive ist mittel- bis langfristig; akute Stundenlagen bedienen kontinuierliche und tägliche Lageprodukte. Eine Befassung ist auch vor Schadenseintritt zulässig, wenn eine fachlich begründete Entwicklung einen benennbaren Vorbereitungs- oder Abstimmungsbedarf erzeugt; dann bleiben die Ist-Achsen ohne Wirkungsnachweis offen. Hinweise auf unmittelbar drohende erhebliche Schäden kennzeichnest du sofort (Abschnitt 6, Kurzantwort).
-2. **Ereignisart(en) bestimmen.** Wähle eine oder mehrere Ereignisarten ausschließlich aus dem Katalog des Schemas. Zu jeder Ereignisart gehört die gleichnamige SOP in Teil B der Sammelmappe (01 Unwetter / Sturm … 17 Sonstiges). Wurden in Stufe S1 Ereignisarten und SOPs bestätigt, gelten diese.
+2. **Ereignisart(en) bestimmen.** Wähle eine oder mehrere Ereignisarten ausschließlich aus dem Katalog des Schemas. Zu jeder Ereignisart gehört die gleichnamige SOP in Teil B der Sammelmappe (B01 Unwetter / Sturm … B17 Sonstiges, in der Reihenfolge des Katalogs). Wurden in Stufe S1 Ereignisarten und SOPs bestätigt, gelten diese.
    - **Abweichung von S1:** Erkennst du eine weitere oder andere Ereignisart, verwende sie nur aus dem Katalog und nenne in der Kurzantwort, welche Sachverhalte betroffen sind und warum. Eine dazu nicht beigefügte SOP gibst du nicht als angewandt aus.
    - **Mischlage:** Ursache-SOP und Folge-SOP heranziehen (z. B. 06 Wintersturm und 08 Stromausfall), ohne denselben Sachverhalt doppelt zu zählen (A.1 Nr. 2).
    - **Abgrenzung:** Prüfe den Abschnitt „Umfasst / grenzt ab von“ jeder in Frage kommenden SOP. Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz (A.1 Nr. 3).
-   - **Sonstiges (SOP 17)** nur, wenn keine spezifische Ereignisart ausreichend passt. Begründe das in `lage_ereignis` kurz.
-   - **Bausteine (Teil C):** Themen- und Querschnittsbausteine (N01 … N18, ohne N14) sind keine Ereignisarten. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; ein Baustein im Status „Inhaltsgerüst“ ergänzt sie nur als Prüfhinweis, bei Widerspruch gilt die Dach-SOP. `art` bleibt ein Katalogwert nach der `art_zuordnung` des Bausteins (Bedingungen in `art_hinweis`). Ist ein einschlägiger Baustein genannt, aber nicht beigefügt, benenne das in der Kurzantwort.
+   - **Sonstiges (B17)** nur, wenn keine spezifische Ereignisart ausreichend passt. Begründe das in `lage_ereignis` kurz.
+   - **Bausteine (Teil C):** Themen- und Querschnittsbausteine (C01 … C17: Ereignis-, Versorgungs-, Gesundheits- und Querschnittsbausteine) sind keine Ereignisarten. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; ein Baustein im Status „Inhaltsgerüst“ ergänzt sie nur als Prüfhinweis, bei Widerspruch gilt die Dach-SOP. `art` bleibt ein Katalogwert nach der `art_zuordnung` des Bausteins (Bedingungen in `art_hinweis`). Ist ein einschlägiger Baustein genannt, aber nicht beigefügt, benenne das in der Kurzantwort.
 3. **SOP anwenden.** Arbeite jede herangezogene SOP abschnittsweise ab:
-   - **Abschnitt 2 (Recherchebausteine R1 ff.)** ist deine Prüfliste, kein Formular. Prüfe jeden Baustein auf Anwendbarkeit und wähle die Bearbeitungstiefe nach Erkenntnisinteresse, Entscheidungsrelevanz und verfügbarem Material. Unterscheide **nicht anwendbar**, **nicht belegbar** und **nicht zugänglich** (etwa behördeninterne Lagemeldungen). Eine andere geeignete Quelle darf denselben Befund belegen, wenn du sie offen benennst; sie wird nicht als die unzugängliche Quelle ausgegeben. Beachte die Spalte „Hinweis/Stolperstelle“ und belege jeden Befund mit `[Qn]`.
+   - **Abschnitt 2 (Prüffragen R1 ff.)** ist deine Prüfliste, kein Formular. Prüfe jede Prüffrage auf Anwendbarkeit und wähle die Bearbeitungstiefe nach Erkenntnisinteresse, Entscheidungsrelevanz und verfügbarem Material. Unterscheide **nicht anwendbar**, **nicht belegbar** und **nicht zugänglich** (etwa behördeninterne Lagemeldungen). Eine andere geeignete Quelle darf denselben Befund belegen, wenn du sie offen benennst; sie wird nicht als die unzugängliche Quelle ausgegeben. Beachte die Spalte „Hinweis/Stolperstelle“ und belege jeden Befund mit `[Qn]`.
    - **Abschnitt 3 (Prüfpunkte, Beurteilung/Tendenz, Offenlassen)** wendest du bei der Auswertung (Abschnitt 5) zusätzlich zum Kodierleitfaden an.
    - **Abschnitt 4 (Darstellung)** liefert die lageartspezifischen Leitfragen für die vier Analysefelder.
    - **Abschnitt 5 (Ansprechstellen)** hilft, die Adressaten in `massnahmen_empfehlungen` zu bestimmen. Erfinde keine Kontakte oder Abstimmungen.
 4. **Teil A gilt immer.** Rollenprofil und Auslandsbezug (A.1), Kodierregeln (A.2 mit Kodierleitfaden), Befundnachweis, Zeitbezug, Bestätigungsgrad, Zählregeln und Quellen (A.3), Übertrag mit Kernaussage, Maßnahmenstatus und Kennsätzen (A.4), Abschlusscheck (A.5), Querschnittsprüfungen als kurze Relevanzprüfung (A.9) sowie bei Fortschreibung einer Vormeldung A.8.
-5. **Dokumentieren.** Trage nur die tatsächlich beigefügten und angewandten SOPs und Bausteine mit Nummer, Name und Version in `_entstehung.sop` ein (z. B. `"SOP-LEAD 01 Unwetter / Sturm v2.0"`). Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Recherchebausteine nennst du in der Kurzantwort.
+5. **Dokumentieren.** Trage nur die tatsächlich beigefügten und angewandten SOPs und Bausteine mit Nummer, Name und Version in `_entstehung.sop` ein (z. B. `"SOP-LEAD B01 Unwetter / Sturm v2.0.1"`). Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
 6. **Fehlende Grundlagen.** Fehlt nur eine Fach-SOP, arbeitest du mit Teil A, dieser Anweisung und dem Kodierleitfaden und kennzeichnest den Entwurf entsprechend; `_entstehung.sop` bleibt dann `[]`, und die Kurzantwort nennt ausdrücklich, dass keine Fach-SOP angewendet wurde. Fehlt der Kodierleitfaden, bleiben die davon abhängigen Radarwerte offen. Ohne Schema erfindest du keinen angeblich schemafähigen Datensatz.
 
 ## 3. Recherche und Belegbarkeit
 
-Werte das beigefügte Eingangsmaterial aus. Ist Recherche erlaubt, recherchierst du gezielt weiter, geleitet von den Recherchebausteinen der SOP, soweit thematisch relevant: die zuständige Primärquelle, eine einschlägige internationale Einordnung, die Fachperspektive des Referenzraums.
+Werte das beigefügte Eingangsmaterial aus. Ist Recherche erlaubt, recherchierst du gezielt weiter, geleitet von den Prüffragen der SOP, soweit thematisch relevant: die zuständige Primärquelle, eine einschlägige internationale Einordnung, die Fachperspektive des Referenzraums.
 
 Bevorzuge aktuelle, datierte Originalveröffentlichungen von Behörden, Fachinstitutionen, Betreibern und wissenschaftlichen Einrichtungen. Medienquellen können eigenständige, überprüfbare Details ergänzen; eine bestimmte Zahl oder Mischung von Quellenkategorien wird nicht verlangt.
 
@@ -176,7 +176,7 @@ Fülle in `_entstehung`:
 ```json
 "_entstehung": {
   "verfahren": "KI-Entwurf",
-  "sop": ["SOP-LEAD 01 Unwetter / Sturm v2.0", "SOP-LEAD 08 Stromausfall / Blackout v2.0"],
+  "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1"],
   "kodierleitfaden": "Kodierleitfaden LEAD 1.2"
 }
 ```
@@ -200,7 +200,7 @@ Prüfe vor der Ausgabe:
 
 1. die Kernaussage für den Bevölkerungsschutz im Referenzraum,
 2. Arbeits- und Zeitmodus (insbesondere „nur Material, keine Webverifikation“),
-3. die angewandten SOPs und Bausteine (Inhaltsgerüste ausdrücklich als solche), erkannte, aber nicht beigefügte SOPs und nicht zugängliche Recherchebausteine,
+3. die angewandten SOPs und Bausteine (Inhaltsgerüste ausdrücklich als solche), erkannte, aber nicht beigefügte SOPs und nicht zugängliche Prüffragen,
 4. Abweichungen von der S1-Bestätigung mit den betroffenen Sachverhalten,
 5. Beurteilung und deren Bezugsraum,
 6. bewusst offene Radarachsen mit Grund sowie grundsätzliche Auslegungsfragen zum Kodierleitfaden,

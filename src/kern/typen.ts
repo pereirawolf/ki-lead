@@ -169,10 +169,15 @@ export interface UiKonfig {
 }
 
 export interface Sop {
-  /** Anker bzw. abgeleitete Kennung, z. B. „sop-01“ oder „teil-a“ */
+  /** Anker bzw. abgeleitete Kennung, z. B. „b01“ oder „teil-a“ */
   id: string;
   titel: string;
+  /** Kennung ohne Präfix „SOP-LEAD“, z. B. „B08“ oder „C07“ (aus `kennung` im Kopf, sonst aus dem Titel) */
   nummer?: string;
+  /** frühere technische IDs (`bisherige_ids`), z. B. „sop-08“; gespeicherte Läufe werden darüber aufgelöst */
+  alias?: string[];
+  /** frühere Kennung (`bisherige_kennung`), z. B. „08“ oder „N05“ */
+  bisherigeKennung?: string;
   lageart?: string;
   art_vorschlag?: string[];
   version?: string;
