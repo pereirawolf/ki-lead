@@ -1,6 +1,6 @@
 # SOP-LEAD – Sammelmappe der 17 Ereignisarten mit Themen- und Querschnittsbausteinen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 2.0 vom 19.10.2026 · Nachfolger der Fassung 1.0.1 vom 17.10.2026 (Datei `SOP-LEAD_Sammelmappe.md`, unverändert archiviert) · Änderungen im Änderungsverlauf `CHANGELOG.md` dieses Ordners
+Beispielfassung für KI-LEAD · Fassung 2.0.1 vom 19.10.2026 · Nachfolger der Fassung 1.0.1 vom 17.10.2026 (Datei `SOP-LEAD_Sammelmappe.md`, unverändert archiviert) · Änderungen im Änderungsverlauf `CHANGELOG.md` dieses Ordners
 
 Diese Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Standardvorgehensweise (SOP) nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -58,12 +58,12 @@ Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbet
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (diese Datei) | 2.0 | 19.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (diese Datei) | 2.0.1 | 19.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
-| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.4.0 | 19.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.2 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
-| Arbeitsanweisung Verdichtung | 1.0 | 18.10.2026 | Herausgeber der Beispielfassung | Angleichung an Kodierleitfaden 1.2 ausstehend (Zählregeln, Mindestwert) |
-| Arbeitsanweisung Kurzfassung | 2.0 | 18.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.5.0 | 19.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.3 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Verdichtung | 2.0 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Kurzfassung | 2.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.0) | unverändert | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
 
 ### A.1 Anwendung
@@ -154,7 +154,7 @@ Format: `[Q1] A – Herausgeber (TT.MM.JJJJ): Titel. Online abrufbar unter: URL 
 - Quellen: `quellen` auf Meldungsebene, gemeinsam für alle Ereignisse/Sachverhalte der Meldung (A.3).
 - `sofort.bewertung_text` beginnt mit der **Kernaussage**: Was bedeutet der Sachverhalt für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich daraus für zuständige Stellen? Danach erläutert er Beurteilung, Tendenz (mit Bezugsraum und Zeitraum), wesentliche Achsendivergenzen, offene Achsen und Indikatoren für eine Neubewertung. Belegverweise stehen in den Analysetexten.
 - `analyse.massnahmen_empfehlungen` trennt bestehende Maßnahmen und Empfehlungen:
-  - **Maßnahmen** werden als geplant, angeordnet, begonnen, umgesetzt oder beendet gekennzeichnet, jeweils mit verantwortlicher Stelle und Stand. Eigene Maßnahmen der meldenden Stelle werden nur im tatsächlichen Auftrag berichtet (Rollenprofil A.1 Nr. 4); die übergreifende Redaktion meldet keine eigenen Einsatzmaßnahmen.
+  - **Maßnahmen** werden als geplant, angefordert, angeordnet, begonnen, umgesetzt, wirksam (Wirkung belegt) oder beendet gekennzeichnet, jeweils mit verantwortlicher Stelle und Stand. Eine angekündigte oder umgesetzte Maßnahme ist nicht schon wirksam. Eigene Maßnahmen der meldenden Stelle werden nur im tatsächlichen Auftrag berichtet (Rollenprofil A.1 Nr. 4); die übergreifende Redaktion meldet keine eigenen Einsatzmaßnahmen.
   - **Empfehlungen** benennen, wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht) bis wann was prüfen oder entscheiden sollte, aus welchem Anlass und aufgrund welcher belegten Lücke. Bestehende Maßnahmen werden nicht als eigene Empfehlung ausgegeben.
 - `sofort.beurteilung` (`geringfügig` / `erheblich` / `kritisch`) und `sofort.tendenz` (`Entspannung` / `Stabilisierung` / `Verschärfung`) unabhängig vom höchsten Radarwert begründen. Nachgewiesene Teilverbesserungen können eine begründete Teilentspannung tragen; fortbestehende Einschränkungen bleiben ausdrücklich sichtbar. „Keine Angabe“ = leerer String `""`.
 - Offene Radarwerte = `null` (nicht `0`, nicht Zeichenkette, kein „U“). Keine neuen JSON-Felder ohne Schemaänderung.
@@ -167,12 +167,12 @@ Format: `[Q1] A – Herausgeber (TT.MM.JJJJ): Titel. Online abrufbar unter: URL 
 | Kennsatz | Wann | Beispiel |
 |---|---|---|
 | `Neubewertung bei:` | Indikatoren, die die Bewertung ändern würden | „Neubewertung bei: Pegel Dresden über 6 m; erste Ausfälle der Trinkwasserversorgung“ |
-| `Handlungsrelevant bis:` | nur bei zeitgebundenem Prüf-, Abstimmungs- oder Vorbereitungsbedarf (A.5) | „Handlungsrelevant bis: 09.10.2026 12:00 (Beginn Sturmflutscheitel); Grundlage: BSH-Vorhersage“ |
+| `Handlungsrelevant bis:` | nur bei zeitgebundenem Prüf-, Abstimmungs- oder Vorbereitungsbedarf (A.5) | „Handlungsrelevant bis: 09.10.2026 12:00 – Abstimmung der Deichverteidigung, Küstenkreise – vor Beginn des Sturmflutscheitels; Grundlage: BSH-Vorhersage“ |
 | `Änderung zur Vormeldung:` | bei Fortschreibung desselben Sachverhalts (A.8.1) | „Änderung zur Vormeldung: Notstromreserve Klinikum von 72 h auf 24 h gesunken“ |
 | `Abweichende Bewertung:` | eine andere Stelle bewertet denselben Sachverhalt erkennbar anders (A.7.2) | „Abweichende Bewertung: Land X ‚kritisch‘ (landesweiter Bezugsraum) – hier ‚erheblich‘ (bundesweiter Bezugsraum)“ |
 | `Abschluss im Lagebild:` | letzte Nennung eines Sachverhalts (A.8.2) | „Abschluss im Lagebild: Ereignis beendet seit 05.10.2026; offen bleiben: Trinkwasserfreigabe in zwei Ortsteilen; Nachsorge bei: Gesundheitsamt Y“ |
 
-Datumsangaben im Kennsatz `Handlungsrelevant bis:` als TT.MM.JJJJ (optional mit Uhrzeit), damit der Redaktionscheck sie erkennt.
+Format des Kennsatzes `Handlungsrelevant bis:`: `TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle`, je Sachverhalt eine Zeile, mehrere unabhängige Fristen in derselben Zeile mit der frühesten zuerst; ohne belegte Uhrzeit entfällt `HH:MM`. Redaktionscheck und Management Summary werten Datum, Uhrzeit und Bedingung aus.
 
 ### A.5 Abschlusscheck (für jede Meldung)
 

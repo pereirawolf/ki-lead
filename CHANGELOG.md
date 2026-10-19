@@ -23,7 +23,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.5 | ea3a8a3 |
 | 0.4.6 | 6636068 |
 | 0.4.7 | 89bfa77 |
-| 0.4.8 | Commit „SOP-LEAD 2.0 und Quellenkategorie B; 0.4.8“ |
+| 0.4.8 | Commit „SOP-LEAD 2.0: Befunde der unabhängigen Prüfung eingearbeitet“ |
+| 0.4.9 | Commit „Arbeitsanweisungen nach Fachreview; 0.4.9“ |
+
+## [0.4.9] – 19.10.2026
+
+Grundlage: Prüfung des Fachreviews der drei Arbeitsanweisungen vom 19.10.2026 (Prüfbericht „KI-LEAD_Arbeitsanweisungen_Pruefung_und_Vorschlaege_2026-10-19“); Kennungen in eckigen Klammern.
+
+### Neu
+
+- Management Summary: alle Fristen aus den Kennsätzen „Handlungsrelevant bis:“ aller Sachverhalte (jede Zeile, nicht nur die erste), früheste zuerst, höchstens drei; der Kennsatz bleibt bis zum Zeilenende erhalten (bisher Kürzung an der ersten Klammer oder dem ersten Semikolon, wodurch Bedingungen verloren gingen); nur Quellenmarker und „Grundlage: …“ entfallen. Fristen vor dem Meldezeitpunkt werden als „vor dem Meldestand abgelaufen; Erledigung prüfen“ gekennzeichnet [K09, V06].
+- Management Summary: Kopfzeile mit „ENTWURF – Meldung nicht freigegeben“, solange die Meldung nicht final ist [K08].
+- Management Summary: Herkunftsliste der Quellen (Nummer, Kategorie, Herausgeber, ohne Titel und URL) als Teil der Anfrage, damit die KI sprechend zuordnen kann („laut Netzbetreiber“) [K06].
+- `_entstehung`: Die App setzt `kodierleitfaden` aus dem Kopf des Kodierleitfadens im Profil und gleicht die SOP-Kennungen des Modells mit dem Profil ab (gültige Fassung; nicht beigefügte oder unbekannte SOPs entfallen) [E10].
+
+### Geändert
+
+- Management Summary: Kurztitel werden nur bei passender Anzahl verwendet; sonst stehen die Bezeichnungen der Meldung (bisher verschobene Zuordnung) [K10]. Richtwerte mit der Arbeitsanweisung abgestimmt: Zielwert 150 Wörter, Hinweis ab 180; Sätze möglichst 25 Wörter, Hinweis ab 30 [K02]. Ersatzanweisung ohne Profilanweisung an die neuen Regeln angeglichen [G02].
+- Verdichtung: Ersatzanweisung `VERDICHTUNG_S2` ohne die Regeln „Werte der Eingänge dürfen als Belege dienen“ und „Jede Eingangsmeldung ist Kategorie A“; mit Fortgeltung, Zählregeln und Meldungsreihen [G02, V01–V04, X06]. Redaktionsvermerk „Meldungsreihen derselben Stelle“ statt „die jüngste gilt“ [V04]. Warnung zur Quellenkategorie einer Eingangsmeldung erläutert, dass Nicht-A nur bei nichtbehördlichen Stellen zulässig ist [X06].
+- S2-Auftrag: Korrekturbedarf an der bestätigten Gliederung wird in der Kurzantwort benannt, ohne still umzuordnen [V05].
+- Beispielprofil 1.5.0 mit Arbeitsanweisungen Erfassung 1.3, Verdichtung 2.0 und Kurzfassung 2.1 sowie SOP-LEAD-Sammelmappe 2.0.1; Einzelheiten im Profilverlauf. Spezifikation 0.4.9.
 
 ## [0.4.8] – 19.10.2026
 
@@ -166,7 +185,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.8]: https://github.com/pereirawolf/ki-lead/compare/89bfa77...main
+[0.4.9]: https://github.com/pereirawolf/ki-lead/compare/40cd5a9...main
+[0.4.8]: https://github.com/pereirawolf/ki-lead/compare/89bfa77...40cd5a9
 [0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...89bfa77
 [0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...6636068
 [0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...ea3a8a3

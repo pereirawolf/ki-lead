@@ -3,7 +3,7 @@
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
   "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Bund",
@@ -14,7 +14,9 @@
     "kurzname": "Koordinierungsstelle",
     "zeitzone": "Europe/Berlin",
     "meldetakt": "wöchentlich",
-    "lageprodukt": "übergreifende Lagebild"
+    "lageprodukt": "übergreifende Lagebild",
+    "rollenprofil": "übergreifende Redaktion",
+    "rolle_beschreibung": "Die meldende Stelle (Koordinierungsstelle (Beispiel)) ist eine Koordinierungsstelle zwischen föderalen Ebenen im Bevölkerungsschutz, keine zusätzliche Entscheidungsebene. Sie hat keine Weisungsbefugnis und keine eigene operative Einsatzzuständigkeit. Sie führt Meldungen mehrerer Stellen zusammen und ermöglicht systematischen Wissenstransfer, ohne bestehende Zuständigkeiten zu ersetzen; ihre Empfehlungen richten sich an die zuständigen Stellen."
   },
   "eigene_stellen": ["Koordinierungsstelle (Beispiel) – Redaktionskonferenz"],
   "meldung": {

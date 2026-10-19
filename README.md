@@ -19,7 +19,7 @@ Die gestufte KI-Erfassung (M2):
 3. **S2 Recherche und Entwurf:** Ein mittleres Modell recherchiert mit Websuche und Seitenabruf nach den gewählten SOPs und schreibt den Entwurf.
 4. **S3 Prüfung:** Die App prüft gegen das Schema und lässt Fehler höchstens zweimal ohne neue Recherche korrigieren. Der Entwurf geht in die Meldungsmaske; Freigabe bleibt Sache der Person.
 
-**Management Summary:** Im Schritt „Prüfen & Exportieren“ fasst die KI die fertige Meldung zu einer einzigen Fassung für die Behördenleitung zusammen, lesbar in einer Minute: Kernaussage in einem Satz, je Sachverhalt ein Kurztitel mit Beurteilung und Tendenz, je Analysefeld höchstens zwei Sätze für die gesamte Lage und die früheste Frist. Beurteilung, Tendenz und Frist setzt die App aus der Meldung; sie entfernt Quellenverweise und weist auf zu lange Fassungen hin. Die Arbeitsanweisung steht in `anweisung-kurzfassung.md`. Ohne KI gibt es weiterhin einen Feldauszug als Klartext.
+**Management Summary:** Im Schritt „Prüfen & Exportieren“ fasst die KI die fertige Meldung zu einer einzigen Fassung für die Behördenleitung zusammen, lesbar in einer Minute: Kernaussage in einem Satz, je Sachverhalt ein Kurztitel mit Beurteilung und Tendenz, je Analysefeld höchstens zwei Sätze für die gesamte Lage und die Fristen aus den Kennsätzen „Handlungsrelevant bis:“ (früheste zuerst, überfällige gekennzeichnet). Kopfzeile mit Entwurfsvermerk, Beurteilung, Tendenz und Fristen setzt die App aus der Meldung; sie entfernt Quellenverweise und weist auf zu lange Fassungen hin. Die Arbeitsanweisung steht in `anweisung-kurzfassung.md`. Ohne KI gibt es weiterhin einen Feldauszug als Klartext.
 
 Jeder Lauf wird mit Prompts, Antworten, Token, Kosten und Dauer protokolliert und lässt sich als JSON exportieren. Für die KI-Funktionen braucht man einen eigenen API-Schlüssel von Anthropic oder OpenAI (Einstellungen). Er bleibt im Browser des Geräts und geht nur an die Schnittstelle des jeweiligen Anbieters.
 
@@ -88,6 +88,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.8) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.9) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

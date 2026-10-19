@@ -193,15 +193,47 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekt
     if ("werkzeug" in erlaubt) e.werkzeug = `${k.lauf.app} · Profil ${p.manifest.id} ${p.manifest.version} · Lauf ${k.lauf.id}`;
     if ("modell" in erlaubt) e.modell = modell;
     if ("erstellt" in erlaubt) e.erstellt = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+    const ids = new Set((k.lauf.bestaetigt?.sachverhalte || []).flatMap((s) => s.sops));
     if ("sop" in erlaubt && !Array.isArray(e.sop)) {
-      const ids = new Set((k.lauf.bestaetigt?.sachverhalte || []).flatMap((s) => s.sops));
       e.sop = fachSops(p)
         .filter((s) => ids.has(s.id))
         .map(sopKennung);
-    }
+    } else if ("sop" in erlaubt && Array.isArray(e.sop)) e.sop = sopKennungenAbgleichen(e.sop, p, ids);
+    const kl = kodierleitfadenKennung(p);
+    if ("kodierleitfaden" in erlaubt && kl) e.kodierleitfaden = kl;
     d[r.entstehung_feld] = e;
   }
   return d;
+}
+
+/**
+ * Kennung des Kodierleitfadens aus seinem Kopf: Titel bis zum Gedankenstrich und „Fassung x.y“,
+ * z. B. „Kodierleitfaden LEAD 1.2“. Ohne erkennbare Fassung: undefined (der Eintrag des Modells bleibt).
+ */
+export function kodierleitfadenKennung(p: Profil): string | undefined {
+  const pfad = p.manifest.kodierleitfaden;
+  const text = pfad ? p.dateien[pfad] : "";
+  if (!text) return undefined;
+  const titel = (text.match(/^#\s+(.+)$/m)?.[1] || "").split(/\s+[–-]\s+/)[0].trim();
+  const fassung = text.slice(0, 800).match(/Fassung\s+(\d+(?:\.\d+)*)/)?.[1];
+  return titel && fassung ? `${titel} ${fassung}` : undefined;
+}
+
+/**
+ * Gleicht die vom Modell genannten SOP-Kennungen mit dem Profil ab: bekannte Nummern erhalten die Kennung
+ * mit gültiger Fassung; nicht beigefügte (in S1 nicht bestätigte) oder unbekannte Einträge entfallen.
+ */
+export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt: Set<string>): string[] {
+  const norm = (n: string) => n.toUpperCase().padStart(2, "0");
+  const out: string[] = [];
+  for (const eintrag of liste) {
+    const nr = String(eintrag ?? "").match(/SOP-LEAD\s+([A-Z]?\d{1,2})\b/i)?.[1];
+    const sop = nr ? fachSops(p).find((s) => s.nummer && norm(s.nummer) === norm(nr)) : undefined;
+    if (!sop || (beigefuegt.size && !beigefuegt.has(sop.id))) continue;
+    const kennung = sopKennung(sop);
+    if (!out.includes(kennung)) out.push(kennung);
+  }
+  return out;
 }
 
 function reparaturSystem(p: Profil): string {
@@ -244,7 +276,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       type: "text",
       text: [
         `Erstelle jetzt die Meldung nach der Arbeitsanweisung${verdichtung ? " und dem Zusatz zur Verdichtung" : ""}.`,
-        `Bestätigte Gliederung (verbindlich, genau ${n} Sachverhalt${n === 1 ? "" : "e"} in dieser Reihenfolge): ${auftrag.ereignisarten}.`,
+        `Bestätigte Gliederung (verbindlich, genau ${n} Sachverhalt${n === 1 ? "" : "e"} in dieser Reihenfolge): ${auftrag.ereignisarten}. Hältst du den Zuschnitt fachlich für korrekturbedürftig, behältst du ihn bei und benennst den Bedarf mit den betroffenen Sachverhalten in der Kurzantwort.`,
         `Meldezeitpunkt t0: ${t0.replace("T", " ")} (${p.manifest.variablen.zeitzone || "Europe/Berlin"}). Stichtag: ${auftrag.stichtag}.`,
         k.material.some((m) => m.art === "meldung") ? "Eine eigene Vormeldung liegt bei; schreibe sie nach SOP-LEAD A.8 fort." : "",
         recherche ? "" : "Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet; arbeite nur mit dem Material.",
@@ -363,10 +395,13 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     if (liste("fehlt").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (A-Quelle, SOP-LEAD A.7): ${liste("fehlt").join("; ")}.`,
+        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (SOP-LEAD A.7; Kategorie nach der Rolle der meldenden Stelle, bei Behörden A): ${liste("fehlt").join("; ")}.`,
       });
     if (liste("kategorie").length)
-      befunde.unshift({ stufe: "warnung", text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}.` });
+      befunde.unshift({
+        stufe: "warnung",
+        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist (dann B oder P nach ihrer Rolle, Kodierleitfaden Abschnitt 5).`,
+      });
     if (liste("unsicher").length)
       befunde.unshift({
         stufe: "hinweis",
