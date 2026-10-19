@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { jsonDateien, profil } from "./hilfen";
 import { STANDARD } from "../src/pipeline/einstellungen";
 import { neuerLauf, type Lauf } from "../src/pipeline/lauf";
-import { stufe1, stufe2und3, type Kontext } from "../src/pipeline/stufen";
+import { kodierleitfadenKennung, sopKennungenAbgleichen, stufe1, stufe2und3, type Kontext } from "../src/pipeline/stufen";
+import { verdichtungsAnweisung, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
 import { zerlegeAntwort } from "../src/pipeline/json";
 import { ereignisarten, s1Schema, sopsFuerArten, anweisungErfassung, anwendungsbereich, fachSops } from "../src/pipeline/kontext";
 import { materialBloecke, docxText, urlsAusText, dateiLesen, juengsterEingang, type Material } from "../src/pipeline/material";
@@ -100,6 +101,29 @@ describe("Kontext aus dem Profil", () => {
     );
     expect(t).not.toMatch(/\{\{|\[nicht angegeben\]/);
     expect(t).toContain("Ausgabeformat (von der App vorgegeben)");
+    expect(t).toContain("Rollenprofil (SOP-LEAD A.1 Nr. 4): übergreifende Redaktion");
+  });
+
+  it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.2");
+    const liste = ["SOP-LEAD 01 Unwetter / Sturm v0.4", "SOP-LEAD 99 Erfunden v1.0", "SOP-LEAD N02 irgendwas", "SOP-LEAD 1 Unwetter / Sturm"];
+    expect(sopKennungenAbgleichen(liste, p!, new Set())).toEqual([
+      "SOP-LEAD 01 Unwetter / Sturm v2.0",
+      "SOP-LEAD N02 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0",
+    ]);
+    // Nicht in S1 bestätigte (nicht beigefügte) SOPs entfallen
+    expect(sopKennungenAbgleichen(liste, p!, new Set(["sop-01"]))).toEqual(["SOP-LEAD 01 Unwetter / Sturm v2.0"]);
+  });
+
+  it("Verdichtung: Profilanweisung ohne offene Platzhalter, Ersatzfassung ohne Altregeln", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const v = verdichtungsAnweisung(p!);
+    expect(v).not.toMatch(/\{\{|\[nicht angegeben\]/);
+    expect(v).toContain("Fassung 2.0");
+    for (const text of [v, VERDICHTUNG_S2]) {
+      expect(text).not.toMatch(/gilt die jüngste|Jede Eingangsmeldung ist eine Quelle der Kategorie A|dürfen als Belege dienen|Untergrenze/);
+    }
   });
 });
 
