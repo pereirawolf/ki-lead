@@ -84,6 +84,20 @@ export function quellenFuerSachverhalt(quellenText: unknown, sv: any, ui: UiKonf
   return hit.length ? hit : null;
 }
 
+/** Kategorien in der Reihenfolge der Quellenpriorität des Profils; nicht genannte Kategorien folgen in Dateireihenfolge. */
+export function kategorienGeordnet(ui: UiKonfig): [string, string][] {
+  const kategorien = ui.quellen?.kategorien || {};
+  const rang = (ui.quellen?.rangfolge || []).filter((c) => c in kategorien);
+  const rest = Object.keys(kategorien).filter((c) => !rang.includes(c));
+  return [...rang, ...rest].map((c) => [c, kategorien[c]]);
+}
+
+/** Lesbare Quellenpriorität, z. B. „A > B > W > M > P“; leer, wenn das Profil keine Rangfolge angibt. */
+export function rangfolgeText(ui: UiKonfig): string {
+  const kategorien = ui.quellen?.kategorien || {};
+  return (ui.quellen?.rangfolge || []).filter((c) => c in kategorien).join(" > ");
+}
+
 export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   const out: Befund[] = [];
   const rolle = ui.rollen.quellen;
@@ -116,7 +130,12 @@ export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     gesehen.add(e.nr);
     if (alt[e.code]) out.push({ stufe: "warnung", text: `[Q${e.nr}]: Kategorie „${e.code}“ (alt) – jetzt „${alt[e.code]}“.` });
     else if (Object.keys(kategorien).length && !kategorien[e.code])
-      out.push({ stufe: "warnung", text: `[Q${e.nr}]: Kategorie fehlt oder ungültig (${Object.keys(kategorien).join(", ")}).` });
+      out.push({
+        stufe: "warnung",
+        text: `[Q${e.nr}]: Kategorie fehlt oder ungültig (${kategorienGeordnet(ui)
+          .map(([c]) => c)
+          .join(", ")}).`,
+      });
     if (!/(Zugriff|Abruf)/i.test(e.text)) out.push({ stufe: "hinweis", text: `[Q${e.nr}]: Zugriffsdatum fehlt („[Zugriff: TT.MM.JJJJ]“).` });
     if (refsAll.size && !refsAll.has(e.nr)) out.push({ stufe: "hinweis", text: `[Q${e.nr}] wird im Text nicht zitiert.` });
   });

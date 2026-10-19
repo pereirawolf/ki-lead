@@ -52,7 +52,8 @@
   },
   "kennsaetze": { "neubewertung": "Neubewertung bei:" },
   "quellen": {
-    "kategorien": { "A": "amtlich", "W": "wissenschaftlich", "M": "Medien", "P": "privat/wirtschaftlich" },
+    "kategorien": { "A": "amtlich", "B": "Betreiber (Angaben zum eigenen Betrieb)", "W": "wissenschaftlich", "M": "Medien", "P": "sonstige private Quellen" },
+    "rangfolge": ["A", "B", "W", "M", "P"],
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]"
   },
   "dateiname": "Lagemeldung_{meldende_stelle}_{meldezeitpunkt}"

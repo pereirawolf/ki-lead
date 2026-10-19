@@ -127,7 +127,10 @@ export interface LagebildKonfig {
 }
 
 export interface QuellenKonfig {
+  /** Quellenkategorien (Kennbuchstabe A–Z → Erläuterung), z. B. A/B/W/M/P */
   kategorien: Record<string, string>;
+  /** Quellenpriorität bei Widersprüchen, höchste zuerst, z. B. ["A", "B", "W", "M", "P"]; nennt jede Kategorie genau einmal */
+  rangfolge?: string[];
   rangfolge_hinweis?: string;
   altkategorien?: Record<string, string>;
   vorlage?: string;

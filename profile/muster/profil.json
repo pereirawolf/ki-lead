@@ -3,7 +3,7 @@
   "id": "muster.einsatzstelle",
   "name": "Musterprofil – Einsatzstelle (leer)",
   "beschreibung": "Leeres Musterprofil als Ausgangspunkt für eigene Organisationen. Zeigt den Mindestumfang eines Profilpakets mit eigenem, schlankem Schema ohne Länderliste und ohne Freigabeblock.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Einsatzstelle",

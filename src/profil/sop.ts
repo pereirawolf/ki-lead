@@ -25,7 +25,8 @@ function titelVon(text: string): string {
 function baueSop(id: string, text: string, datei: string, gemeinsamId?: string): Sop {
   const kopf = yamlKopf(text);
   const titel = titelVon(text) || id;
-  const nr = titel.match(/^(\d{1,2})\./)?.[1];
+  // Nummer: „08. SOP LEAD: …“ (Ereignis-SOP) oder „N01. Baustein LEAD: …“ (Themen- bzw. Querschnittsbaustein)
+  const nr = titel.match(/^([A-Z]?\d{1,2})\./)?.[1];
   return {
     id,
     titel,
@@ -64,8 +65,8 @@ export function zerlegeSops(text: string, datei: string, gemeinsamId?: string): 
   return [baueSop(id, text, datei, gemeinsamId)];
 }
 
-/** Kurzbezeichnung zum Eintrag in _entstehung.sop, z. B. „SOP-LEAD 01 Unwetter / Sturm v0.4“. */
+/** Kurzbezeichnung zum Eintrag in _entstehung.sop, z. B. „SOP-LEAD 01 Unwetter / Sturm v2.0“ oder „SOP-LEAD N02 Telekommunikation … v1.0“. */
 export function sopKennung(sop: Sop): string {
-  const name = sop.titel.replace(/^\d+\.\s*SOP LEAD:\s*/i, "").trim();
+  const name = sop.titel.replace(/^[A-Z]?\d+\.\s*(?:SOP|Baustein) LEAD:\s*/i, "").trim();
   return `SOP-LEAD ${sop.nummer ? sop.nummer.padStart(2, "0") + " " : ""}${name}${sop.version ? " v" + sop.version : ""}`;
 }

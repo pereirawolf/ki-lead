@@ -88,6 +88,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.7) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.8) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

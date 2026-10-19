@@ -22,7 +22,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.4 | 68ff2da |
 | 0.4.5 | ea3a8a3 |
 | 0.4.6 | 6636068 |
-| 0.4.7 | Commit „Management Summary: Bewertung & Tendenz als eigene Zeile, Leerzeilen; 0.4.7“ |
+| 0.4.7 | 89bfa77 |
+| 0.4.8 | Commit „SOP-LEAD 2.0 und Quellenkategorie B; 0.4.8“ |
+
+## [0.4.8] – 19.10.2026
+
+### Neu
+
+- Quellenkategorien mit Rangfolge: Die Darstellungsdatei kann unter `quellen.rangfolge` die Quellenpriorität angeben (höchste zuerst, z. B. `["A", "B", "W", "M", "P"]`). Das Quellenfeld zeigt die Kategorien in dieser Reihenfolge und darüber die Zeile „Quellenpriorität: A > B > W > M > P“; die Meldung zu fehlenden oder ungültigen Kategorien nennt die zulässigen Kategorien in derselben Reihenfolge. Fehlt `rangfolge`, bleibt es bei der Reihenfolge der Datei.
+- Profilimport prüft den Abschnitt `quellen`: Kategorien als Objekt mit Erläuterungen, Kennungen aus je einem Großbuchstaben, `rangfolge` nennt jede Kategorie genau einmal und keine unbekannte; Verstöße verhindern die Aktivierung mit verständlichem Fehler.
+- SOP-Bausteine: Abschnitte mit Titel „N01. Baustein LEAD: …“ erhalten die Kennung „SOP-LEAD N01 … v1.0“ (bisher nur „NN. SOP LEAD: …“). Abschnitte ohne `art_vorschlag` erscheinen im SOP-Katalog der Stufe S1, werden beim Wählen einer Ereignisart aber nicht automatisch ergänzt.
+
+### Geändert
+
+- Beispielprofil 1.4.0 mit Quellenkategorie B (Betreiber) und Priorität A > B > W > M > P, Kodierleitfaden 1.2, Arbeitsanweisung Erfassung 1.2 und SOP-LEAD-Sammelmappe 2.0 mit 17 Themen- und Querschnittsbausteinen; Musterprofil 0.2.0 mit Kategorie B. Einzelheiten: [profile/lead-beispiel/CHANGELOG.md](profile/lead-beispiel/CHANGELOG.md), SOP-Änderungen ausschließlich in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md).
+- Profilformat 1.7 (Abschnitt `quellen.rangfolge`, SOP-Bausteine) und Spezifikation 0.4.8.
 
 ## [0.4.7] – 18.10.2026
 
@@ -152,7 +166,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...main
+[0.4.8]: https://github.com/pereirawolf/ki-lead/compare/89bfa77...main
+[0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...89bfa77
 [0.4.6]: https://github.com/pereirawolf/ki-lead/compare/ea3a8a3...6636068
 [0.4.5]: https://github.com/pereirawolf/ki-lead/compare/68ff2da...ea3a8a3
 [0.4.4]: https://github.com/pereirawolf/ki-lead/compare/9f8dca1...68ff2da

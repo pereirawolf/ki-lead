@@ -4,7 +4,29 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Versionierung:** Die Profilversion in `profil.json` folgt Semantic Versioning. Die erste Stelle ändert sich bei inkompatiblen Schemaänderungen (Meldungen müssen migriert werden), die zweite bei neuen Inhalten oder geänderten Regeln, die dritte bei sprachlichen Korrekturen ohne fachliche Wirkung. Jedes Dokument trägt im Kopf zusätzlich seine eigene Fassung. Jede Profilversion hat außerdem eine Prüfsumme (SHA-256 über alle Dateien), die die App mit jedem KI-Lauf protokolliert; sie unterscheidet auch Stände, die versehentlich ohne neue Versionsnummer veröffentlicht wurden.
 
+**SOP-Änderungen:** Ab Profilversion 1.4.0 stehen Änderungen an der SOP-Sammelmappe ausschließlich im eigenen Verlauf [`sop/CHANGELOG.md`](sop/CHANGELOG.md). Dieser Verlauf nennt dann nur, welche Fassung der Sammelmappe das Profil einbindet.
+
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
+
+## 1.4.0 – 19.10.2026
+
+### SOP-Sammelmappe
+
+- Das Manifest bindet die SOP-LEAD-Sammelmappe **Fassung 2.0** ein (`sop/SOP-LEAD_Sammelmappe_v2.0.md`, mit Bausteinen in Teil C). Die bisherige Datei `sop/SOP-LEAD_Sammelmappe.md` (Fassung 1.0.1) bleibt unverändert im Ordner und wird nicht mehr geladen. Inhaltliche Änderungen: [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+
+### Fachliche Regeln
+
+- **Quellenkategorie B (Betreiber):** Kategorien A/B/W/M/P mit der Quellenpriorität A > B > W > M > P. B steht für originäre Angaben eines Betreibers zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung, unabhängig von der Trägerschaft; P umfasst nur noch sonstige private Quellen, deren Aussage keine Betreiberangabe ist. Die Kategorie kennzeichnet Herkunft bzw. Rolle für die verwendete Aussage; unterschiedliche Aussagegegenstände (Gefahrenlage der Behörde, Wiederherstellungsstand des Betreibers) sind kein Widerspruch. Bisherige Kompetenzausnahme „Betreiber für den eigenen Störungsstand“ ist darin aufgegangen.
+- **Kodierleitfaden Fassung 1.2** (19.10.2026): Abschnitt 5 „Quellenkategorien A/B/W/M/P“ mit Zuordnungsregeln, neu gefasster Unabhängigkeitsregel (unterschiedliche Kategorien sind kein Unabhängigkeitsnachweis; ein zuständiger Primärbeleg kann tragfähig sein) und Bestätigungsgrad. Gemeinsam mit SOP-Teil A fortgeschrieben: Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung (ersetzt die Untergrenzenregel); Grundregel 7 mit D5 als Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen und mit Regel zur Sonderbeschaffung; D7 ohne die pauschale Vorhersageregel aus Fassung 1.1, dafür mit fachlich erheblichen Lücken; D8 belegt stabiler Verlauf = 0; vier neue Kurzbeispiele, das Beispiel zu abweichenden Vorhersagen neu gefasst.
+- **Arbeitsanweisung Erfassung Fassung 1.2** (19.10.2026): Quellentabelle A/B/W/M/P mit Rollen- und Prioritätsregeln; Bausteine aus Teil C; frühe Befassung; Maßnahmenstatus und adressierte Empfehlungen; Kodierhinweise zu Bandbreite, Mindestwert, D4, D5, D7, D8 wie im Kodierleitfaden 1.2; Beispielkennungen „v2.0“ und „Kodierleitfaden LEAD 1.2“.
+
+### Darstellung
+
+- Darstellungsdatei: Kategorie `B` und neu abgegrenzte Erläuterungen zu A, W, M und P; neue Angabe `quellen.rangfolge` (`["A", "B", "W", "M", "P"]`); neu gefasster `rangfolge_hinweis`; Feldhinweis nennt die zulässigen Kategorien.
+
+### Beispiele
+
+- Datensatz Orkantief „Ilka“ (FIKTIV): 15 Quelleneinträge einzeln geprüft und von P auf B umgestuft (Verteilnetz-, Mobilfunk-, Bahninfrastruktur-, Flughafen- und Wasserversorgungsbetreiber zum eigenen Betrieb). Der Einsatzbericht der Bergwacht Harz bleibt P, weil er eine Tätigkeit beschreibt und keine Angabe zu einer selbst betriebenen Einrichtung ist. Sonst keine inhaltlichen Änderungen.
 
 ## 1.3.0 – 18.10.2026
 

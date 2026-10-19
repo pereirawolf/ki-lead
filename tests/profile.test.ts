@@ -12,7 +12,7 @@ describe("Beispielprofil LEAD", () => {
     expect(befunde.filter((b) => b.stufe !== "hinweis")).toEqual([]);
   });
 
-  it("zerlegt die Sammelmappe in Teil A und 17 SOPs", async () => {
+  it("zerlegt die Sammelmappe in Teil A, 17 SOPs und Bausteine", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const ids = p!.sops.map((s) => s.id);
     expect(ids).toContain("teil-a");
@@ -21,7 +21,25 @@ describe("Beispielprofil LEAD", () => {
     expect(teilA.gemeinsam).toBe(true);
     const sop08 = p!.sops.find((s) => s.id === "sop-08")!;
     expect(sop08.art_vorschlag).toEqual(["Stromausfall / Blackout"]);
-    expect(sopKennung(sop08)).toBe("SOP-LEAD 08 Stromausfall / Blackout v0.4");
+    expect(sopKennung(sop08)).toBe("SOP-LEAD 08 Stromausfall / Blackout v2.0");
+  });
+
+  it("führt Bausteine aus Teil C ohne eigene Ereignisart", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const bausteine = p!.sops.filter((s) => s.id.startsWith("baustein-"));
+    expect(bausteine.length).toBeGreaterThanOrEqual(17);
+    // Bausteine werden nicht automatisch über eine Ereignisart vorgeschlagen
+    expect(bausteine.every((s) => !s.art_vorschlag)).toBe(true);
+    const n02 = bausteine.find((s) => s.id === "baustein-n02")!;
+    expect(n02.nummer).toBe("N02");
+    expect(sopKennung(n02)).toBe("SOP-LEAD N02 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0");
+  });
+
+  it("kennt die Quellenkategorien A/B/W/M/P in dieser Rangfolge", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(p!.ui.quellen!.rangfolge).toEqual(["A", "B", "W", "M", "P"]);
+    expect(Object.keys(p!.ui.quellen!.kategorien).sort()).toEqual(["A", "B", "M", "P", "W"]);
+    expect(p!.dateien["kodierleitfaden.md"]).toContain("## 5. Quellenkategorien A/B/W/M/P");
   });
 
   it("jede Ereignisart des Schemas hat eine SOP", async () => {
@@ -82,6 +100,10 @@ describe("Strukturprüfung der Darstellungsdatei", async () => {
     ["Felder kein Objekt", (ui: any) => (ui.felder = [])],
     ["ungültiger Ausdruck in der Gliederung", (ui: any) => (ui.analyse_gliederung = { absatz: ["Szenario („"] })],
     ["Gliederung mit falschem kurzlabel", (ui: any) => (ui.bewertung_gliederung = { kurzlabel: 12 })],
+    ["Quellenkategorie mit mehreren Buchstaben", (ui: any) => (ui.quellen.kategorien.AB = "x")],
+    ["Rangfolge mit unbekannter Kategorie", (ui: any) => (ui.quellen.rangfolge = ["A", "B", "W", "M", "P", "X"])],
+    ["Rangfolge ohne alle Kategorien", (ui: any) => (ui.quellen.rangfolge = ["A", "W"])],
+    ["Rangfolge mit doppelter Kategorie", (ui: any) => (ui.quellen.rangfolge = ["A", "A", "B", "W", "M", "P"])],
   ])("%s verhindert die Aktivierung mit verständlichem Fehler", async (_, aendern) => {
     const erg = await mit(aendern);
     expect(erg.profil).toBeNull();
