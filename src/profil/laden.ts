@@ -110,6 +110,31 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
     else if (ui.lagebild.ausgabe_tage !== undefined && !(Number.isInteger(ui.lagebild.ausgabe_tage) && ui.lagebild.ausgabe_tage >= 0))
       fehler("„lagebild.ausgabe_tage“ muss eine ganze Zahl ab 0 sein.");
   }
+  if (ui.quellen !== undefined) {
+    const q = ui.quellen;
+    if (!istObjekt(q)) fehler("„quellen“ muss ein Objekt sein.");
+    else {
+      const codes = istObjekt(q.kategorien) ? Object.keys(q.kategorien) : [];
+      if (!istObjekt(q.kategorien) || !Object.values(q.kategorien).every(istText))
+        fehler("„quellen.kategorien“ muss ein Objekt mit Erläuterungen (Text) sein.");
+      else if (codes.some((c) => !/^[A-Z]$/.test(c)))
+        fehler(`„quellen.kategorien“: Kennungen müssen einzelne Großbuchstaben sein (${codes.filter((c) => !/^[A-Z]$/.test(c)).join(", ")}).`);
+      if (q.altkategorien !== undefined && (!istObjekt(q.altkategorien) || !Object.values(q.altkategorien).every(istText)))
+        fehler("„quellen.altkategorien“ muss ein Objekt mit Texten sein.");
+      for (const k of ["rangfolge_hinweis", "vorlage"]) if (q[k] !== undefined && !istText(q[k])) fehler(`„quellen.${k}“ muss Text sein.`);
+      if (q.rangfolge !== undefined) {
+        if (!textListe(q.rangfolge)) fehler("„quellen.rangfolge“ muss eine Liste von Kategorien sein.");
+        else {
+          const unbekannt = q.rangfolge.filter((c: string) => !codes.includes(c));
+          const doppelt = q.rangfolge.filter((c: string, i: number) => q.rangfolge.indexOf(c) !== i);
+          const fehlend = codes.filter((c) => !q.rangfolge.includes(c));
+          if (unbekannt.length) fehler(`„quellen.rangfolge“ nennt unbekannte Kategorien: ${unbekannt.join(", ")}.`);
+          if (doppelt.length) fehler(`„quellen.rangfolge“ nennt Kategorien mehrfach: ${[...new Set(doppelt)].join(", ")}.`);
+          if (fehlend.length) fehler(`„quellen.rangfolge“ muss jede Kategorie genau einmal nennen; es fehlen: ${fehlend.join(", ")}.`);
+        }
+      }
+    }
+  }
   for (const name of ["bewertung_gliederung", "analyse_gliederung"]) {
     const g = ui[name];
     if (g === undefined) continue;

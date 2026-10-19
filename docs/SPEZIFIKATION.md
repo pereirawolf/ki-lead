@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.7 vom 18.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.8 vom 19.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -97,7 +97,7 @@ lead-beispiel.leadprofil/
     "erfassung": "anweisung-erfassung.md",
     "verdichtung": "anweisung-verdichtung.md"
   },
-  "sop": { "dateien": ["sop/SOP-LEAD_Sammelmappe.md"], "teil_gemeinsam": "teil-a" },
+  "sop": { "dateien": ["sop/SOP-LEAD_Sammelmappe_v2.0.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
   "modelle": {
@@ -133,7 +133,8 @@ Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt au
                  "Abweichende Bewertung:", "Abschluss im Lagebild:"],
   "quellen": {
     "feld": "quellen",
-    "kategorien": { "A": "amtlich/zwischenstaatlich", "W": "wissenschaftlich", "M": "Medien", "P": "privat/wirtschaftlich" }
+    "kategorien": { "A": "amtlich/zwischenstaatlich", "B": "Betreiber", "W": "wissenschaftlich", "M": "Medien", "P": "sonstige private Quellen" },
+    "rangfolge": ["A", "B", "W", "M", "P"]
   },
   "status_feld": "_status",
   "entstehung_feld": "_entstehung",
@@ -175,7 +176,7 @@ Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-
 |---|---|---|---|
 | **S0 Vorverarbeitung** | TXT/MD lesen, Text aus DOCX (eigener Leser für word/document.xml) ziehen, PDF unverändert als Dokument an das Modell geben. JSON prüfen: Ist es eine Meldung des Profils, gilt sie als Vormeldung zur Fortschreibung (A.8). URLs stehen im Nutzertext, damit das Abrufwerkzeug sie verwenden darf. | lokal | Eingangsmaterial |
 | **S1 Gegenstand & SOP-Auswahl** | Sachverhalt, Stichtag, Referenzraum-Bezug, Horizont (A.1). Ereignisarten aus dem Katalog, SOPs inkl. Mischlage und Abgrenzung. Strukturierte Ausgabe (`output_config.format`) mit Enums aus Schema und SOP-Katalog. | KI, kleines Modell | strukturierter Vorschlag; **Person bestätigt oder ändert** |
-| **S2 Recherche & Entwurf** | Recherche nach den Bausteinen R1–R6 der gewählten SOPs mit Websuche und Seitenabruf. Entwurf aller Felder, Radar Achse für Achse, Quellenverzeichnis. Ausgabe als Kurzantwort plus JSON-Codeblock (Ausgabevertrag der App), weil die strukturierte Ausgabe der API Schlüsselwörter wie `minLength` oder `if/then` nicht trägt. | KI, mittleres Modell, Websuche | JSON-Entwurf und Kurzantwort |
+| **S2 Recherche & Entwurf** | Recherche nach den Bausteinen R1 ff. der gewählten SOPs und Bausteine mit Websuche und Seitenabruf. Entwurf aller Felder, Radar Achse für Achse, Quellenverzeichnis. Ausgabe als Kurzantwort plus JSON-Codeblock (Ausgabevertrag der App), weil die strukturierte Ausgabe der API Schlüsselwörter wie `minLength` oder `if/then` nicht trägt. | KI, mittleres Modell, Websuche | JSON-Entwurf und Kurzantwort |
 | **S3 Prüfung & Reparatur** | Die App setzt Schemakennung, Status „Entwurf“, Profilvariablen und `_entstehung`. Danach Schemaprüfung (eigener Prüfer, 2020-12), Quellenprüfung, Kennsätze und Ausfüllhinweise. Bei Schemafehlern höchstens zwei Reparaturaufrufe ohne Werkzeuge und ohne neue Recherche. | lokal und KI | geprüfter Entwurf mit Prüfbericht |
 | **S4 Redaktion & Freigabe** | Formular aus Schema und `ui.json` (Radar, Mehrfachauswahl, Quellen-Editor). Das Feld `_entstehung` wird automatisch gefüllt und bleibt erhalten. Export als JSON/PDF. | lokal | Meldung (Entwurf/final) |
 | **Management Summary** | Eine konsolidierte Fassung der fertigen Meldung für die Behördenleitung (Richtwert höchstens 150 bis 180 Wörter): Kernaussage in einem Satz, eigene Zeile „Bewertung & Tendenz“ mit den Werten aus der Meldung (bei mehreren Sachverhalten darunter je Sachverhalt ein Kurztitel mit Beurteilung und Tendenz), je Analysefeld des Profils höchstens zwei Sätze für die gesamte Lage, früheste Frist aus den Kennsätzen „Handlungsrelevant bis:“. Ohne Recherche und ohne Neubewertung; Arbeitsanweisung `anweisungen.kurzfassung`, strukturierte Ausgabe; die App prüft Länge und Satzzahl. Die Fassung entsteht nur auf Knopfdruck („Management Summary erstellen“), wird je Profil gespeichert und als veraltet markiert, sobald sich der Inhalt der Meldung ändert. Sie lässt sich von Hand leeren und wird automatisch geleert, wenn die Meldung in der Maske durch eine andere ersetzt wird (neue Meldung, Meldung öffnen, Übernahme eines KI-Entwurfs oder einer Meldung aus dem Lagebild) und wenn Meldungen an die KI-Verdichtung übergeben werden. Die Abschnitte der Fassung sind durch Leerzeilen getrennt. Ohne KI: Feldauszug als Klartext. | KI, mittleres Modell | Klartext zum Kopieren, TXT, Protokoll |
@@ -214,7 +215,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.7 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.8 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -293,4 +294,5 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.5 | 18.10.2026 | Gegliederte Analysefelder in PDF, Kopiervorlage und Lagebild-Tabelle (Schlüsselsätze, Aufzählungen, kurze Aspektbegriffe) |
 | 0.4.6 | 18.10.2026 | Management Summary: Erstellung nur auf Knopfdruck, Leeren von Hand und automatisch bei neuer oder ersetzter Meldung und bei Übergabe an die Verdichtung (Abschnitt 5) |
 | 0.4.7 | 18.10.2026 | Management Summary: eigene Zeile „Bewertung & Tendenz“, Abschnitte durch Leerzeilen getrennt (Abschnitt 5) |
+| 0.4.8 | 19.10.2026 | Quellenkategorien mit Rangfolge (`quellen.rangfolge`) im Profilbeispiel; Beispielprofil mit Betreiberkategorie B (A > B > W > M > P) und SOP-Sammelmappe 2.0 mit Bausteinen (Abschnitt 4) |
 

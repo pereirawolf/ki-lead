@@ -3,10 +3,10 @@
   "_status": "final",
   "_entstehung": {
     "verfahren": "KI-Entwurf",
-    "werkzeug": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive)",
+    "werkzeug": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen",
     "modell": "Claude Opus 5.5",
-    "sop": ["SOP-LEAD 01 Unwetter / Sturm v0.4"],
-    "kodierleitfaden": "LEAD v0.4",
+    "sop": ["SOP-LEAD 01 Unwetter / Sturm v2.0"],
+    "kodierleitfaden": "LEAD v2.0",
     "erstellt": "2026-10-14T20:15"
   },
   "land": "Sachsen-Anhalt",
@@ -16,7 +16,7 @@
     "von": "2026-10-13",
     "bis": "2026-10-14"
   },
-  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Sachsen-Anhalt, Orkantief „Ilka“, Ausgabe 13:15 (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Lagezentrum des Ministeriums für Inneres und Sport Sachsen-Anhalt (14.10.2026): Lageübersicht Sturm (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 09:00\n[Q3] A – Landkreis Harz (14.10.2026): Lagemeldung Nr. 2 (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q4] P – Bergwacht Harz (14.10.2026): Einsatzbericht Brockengebiet (FIKTIV) [Zugriff: 14.10.2026]\n[Q5] P – Harzer Schmalspurbahnen (14.10.2026): Betriebsinformation (FIKTIV) [Zugriff: 14.10.2026]\n[Q6] P – Verteilnetzbetreiber Netzgebiet Harz Ost (14.10.2026): Störungsübersicht (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30",
+  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Sachsen-Anhalt, Orkantief „Ilka“, Ausgabe 13:15 (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Lagezentrum des Ministeriums für Inneres und Sport Sachsen-Anhalt (14.10.2026): Lageübersicht Sturm (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 09:00\n[Q3] A – Landkreis Harz (14.10.2026): Lagemeldung Nr. 2 (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q4] P – Bergwacht Harz (14.10.2026): Einsatzbericht Brockengebiet (FIKTIV) [Zugriff: 14.10.2026]\n[Q5] B – Harzer Schmalspurbahnen (14.10.2026): Betriebsinformation (FIKTIV) [Zugriff: 14.10.2026]\n[Q6] B – Verteilnetzbetreiber Netzgebiet Harz Ost (14.10.2026): Störungsübersicht (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30",
   "sachverhalte": [
     {
       "eintritt": "2026-10-13",

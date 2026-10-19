@@ -87,7 +87,7 @@ describe("Kontext aus dem Profil", () => {
     expect(arten).toContain("Stromausfall / Blackout");
     expect(sopsFuerArten(p!, ["Unwetter / Sturm", "Stromausfall / Blackout"])).toEqual(["sop-01", "sop-08"]);
     const schema: any = s1Schema(p!);
-    expect(schema.properties.sachverhalte.items.properties.sops.items.enum).toHaveLength(17);
+    expect(schema.properties.sachverhalte.items.properties.sops.items.enum).toHaveLength(34); // 17 Ereignis-SOPs und 17 Bausteine aus Teil C
     expect(anwendungsbereich(fachSops(p!)[0].text)).not.toMatch(/^###/);
   });
 
@@ -163,7 +163,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     expect(e.meldung!._status).toBe("Entwurf");
     expect(e.meldung!._entstehung.verfahren).toBe("KI-Entwurf");
     expect(e.meldung!._entstehung.werkzeug).toContain(k.lauf.id);
-    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD 01 Unwetter / Sturm v0.4"]);
+    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD 01 Unwetter / Sturm v2.0"]);
     expect(e.kurzantwort).toBe("Kernaussage: Folgen weitgehend behoben.");
     expect(k.lauf.status).toBe("fertig");
     expect(k.lauf.ergebnis?.schemakonform).toBe(true);

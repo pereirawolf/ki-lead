@@ -3,10 +3,10 @@
   "_status": "final",
   "_entstehung": {
     "verfahren": "KI-Entwurf",
-    "werkzeug": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive)",
+    "werkzeug": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen",
     "modell": "Claude Opus 5.5",
-    "sop": ["SOP-LEAD 01 Unwetter / Sturm v0.4", "SOP-LEAD 08 Stromausfall / Blackout v0.4"],
-    "kodierleitfaden": "LEAD v0.4",
+    "sop": ["SOP-LEAD 01 Unwetter / Sturm v2.0", "SOP-LEAD 08 Stromausfall / Blackout v2.0"],
+    "kodierleitfaden": "LEAD v2.0",
     "erstellt": "2026-10-14T20:15"
   },
   "land": "Hessen",
@@ -16,7 +16,7 @@
     "von": "2026-10-13",
     "bis": "2026-10-14"
   },
-  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Hessen, Orkantief „Ilka“, Ausgabe 12:10 (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Lagezentrum der Hessischen Landesregierung (14.10.2026): Lageübersicht Sturm 13./14.10. (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q3] A – Stadt Frankfurt am Main, Branddirektion (14.10.2026): Abschlussmeldung Betreuung gestrandeter Reisender (behördenintern, FIKTIV) [Zugriff: 14.10.2026]\n[Q4] P – Verteilnetzbetreiber Netzgebiet Osthessen (14.10.2026): Störungsübersicht (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30\n[Q5] P – DB InfraGO, Regionalbereich Mitte (14.10.2026): Betriebslage Schnellfahrstrecken Köln–Rhein/Main und Hannover–Würzburg (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q6] P – Flughafenbetreiber Frankfurt (14.10.2026): Verkehrsinformation (FIKTIV) [Zugriff: 14.10.2026]\n[Q7] A – Landkreis Fulda (14.10.2026): Lagemeldung Nr. 3 (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 07:00",
+  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Hessen, Orkantief „Ilka“, Ausgabe 12:10 (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Lagezentrum der Hessischen Landesregierung (14.10.2026): Lageübersicht Sturm 13./14.10. (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q3] A – Stadt Frankfurt am Main, Branddirektion (14.10.2026): Abschlussmeldung Betreuung gestrandeter Reisender (behördenintern, FIKTIV) [Zugriff: 14.10.2026]\n[Q4] B – Verteilnetzbetreiber Netzgebiet Osthessen (14.10.2026): Störungsübersicht (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30\n[Q5] B – DB InfraGO, Regionalbereich Mitte (14.10.2026): Betriebslage Schnellfahrstrecken Köln–Rhein/Main und Hannover–Würzburg (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q6] B – Flughafenbetreiber Frankfurt (14.10.2026): Verkehrsinformation (FIKTIV) [Zugriff: 14.10.2026]\n[Q7] A – Landkreis Fulda (14.10.2026): Lagemeldung Nr. 3 (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 07:00",
   "sachverhalte": [
     {
       "eintritt": "2026-10-13",

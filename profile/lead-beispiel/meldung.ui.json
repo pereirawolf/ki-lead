@@ -1,7 +1,7 @@
 {
   "format": "lead-ui/1",
   "titel": "LEAD-Meldevorlage",
-  "untertitel": "Meldung von Ereignissen/Sachverhalten (ohne Maßnahmen-Meldung)",
+  "untertitel": "Meldung von Ereignissen/Sachverhalten (keine gesonderte Maßnahmenmeldung)",
   "ausblenden": [
     "schema",
     "_status",
@@ -76,7 +76,7 @@
       "label": "Quellen & Referenzen",
       "widget": "quellen",
       "zeilen": 12,
-      "hinweis": "Format je Eintrag: [Qn] Kategorie – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ] · optional „Datenstand: TT.MM.JJJJ“ · Bezahlschranke mit „(Paywall)“ kennzeichnen · nicht ausgewertete Quellen als „nicht ausgewertet“ markieren."
+      "hinweis": "Format je Eintrag: [Qn] Kategorie (A, B, W, M oder P) – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ] · optional „Datenstand: TT.MM.JJJJ“ · Bezahlschranke mit „(Paywall)“ kennzeichnen · nicht ausgewertete Quellen als „nicht ausgewertet“ markieren."
     },
     "sachverhalte": {
       "label": "Ereignisse/Sachverhalte",
@@ -118,7 +118,7 @@
     "sachverhalte[].analyse.massnahmen_empfehlungen": {
       "label": "Maßnahmen & Handlungsempfehlungen",
       "widget": "text_lang",
-      "hinweis": "Wer (Land, Bundesressort, Fachaufsicht, Nachbarland) sollte auf dieser Grundlage was prüfen oder entscheiden? Keine Meldung eigener Einsatzmaßnahmen."
+      "hinweis": "Bestehende Maßnahmen mit Status (geplant, angeordnet, begonnen, umgesetzt, beendet), verantwortlicher Stelle und Stand; getrennt davon Empfehlungen: Wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht) sollte bis wann was prüfen oder entscheiden, aus welchem Anlass und aufgrund welcher belegten Lücke? Eigene Maßnahmen nur im tatsächlichen Auftrag (Rollenprofil, SOP-LEAD A.1 Nr. 4)."
     },
     "sachverhalte[].analyse.abhaengigkeiten_interdependenzen": {
       "label": "Abhängigkeiten & Interdependenzen",
@@ -142,7 +142,7 @@
       "label": "Bewertung & Tendenz",
       "widget": "text_lang",
       "platzhalter": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz – und warum jetzt?",
-      "hinweis": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich für zuständige Stellen? Danach Bewertung und Tendenz begründen (Bezugsraum, Zeitraum). Optional, jeweils in eigener Zeile am Ende: Neubewertung bei: … · Handlungsrelevant bis: TT.MM.JJJJ … · Änderung zur Vormeldung: … · Abschluss im Lagebild: …"
+      "hinweis": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich für zuständige Stellen? Danach Bewertung und Tendenz begründen (Bezugsraum, Zeitraum). Optional, jeweils in eigener Zeile am Ende: Neubewertung bei: … · Handlungsrelevant bis: TT.MM.JJJJ HH:MM … · Änderung zur Vormeldung: … · Abweichende Bewertung: … · Abschluss im Lagebild: …"
     },
     "sachverhalte[].sofort.lagenradar": {
       "label": "Lagenradar",
@@ -335,12 +335,14 @@
   },
   "quellen": {
     "kategorien": {
-      "A": "amtlich/zwischenstaatlich – Behörden von Bund, Ländern und Kommunen, EU, internationale Organisationen; auch behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes)",
-      "W": "wissenschaftlich – Forschungseinrichtungen, Fachpublikationen, wissenschaftliche Datensätze; Preprints als solche kennzeichnen",
-      "M": "Medien – Redaktionen mit eigener Recherche, Nachrichtenagenturen",
-      "P": "privat/wirtschaftlich – Unternehmen und Betreiber, Verbände, NGOs, Hilfsorganisationen (Eigenangaben), Beiträge in sozialen Medien"
+      "A": "amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle (Bund, Länder, Kommunen, EU, internationale Organisationen); auch behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes); authentische Behördenbeiträge in sozialen Medien",
+      "B": "Betreiber – originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft (z. B. Netzbetreiber, Wasserversorger, Verkehrsunternehmen, Krankenhausträger; Hilfsorganisation zu ihrer selbst betriebenen Einrichtung)",
+      "W": "wissenschaftlich – Forschungseinrichtungen, wissenschaftliche Veröffentlichungen und Datensätze in ihrer fachwissenschaftlichen Rolle; Preprints als solche kennzeichnen",
+      "M": "Medien – redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen (auch mit Betreiberzitat)",
+      "P": "sonstige private Quellen – Verbände, NGOs, persönliche Angaben und Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; Beiträge in sozialen Medien ungeklärter Identität"
     },
-    "rangfolge_hinweis": "Rangfolge bei widersprüchlichen Angaben: A vor W vor M vor P – außer die niedriger eingestufte Quelle ist für die konkrete Aussage fachlich kompetenter (z. B. Betreiber für den eigenen Störungsstand); dann beide nennen und die Abweichung begründen (Kodierleitfaden Abschnitt 5).",
+    "rangfolge": ["A", "B", "W", "M", "P"],
+    "rangfolge_hinweis": "Quellenpriorität bei Widersprüchen zu demselben Sachverhalt: A > B > W > M > P. Vorher Zeitstand, räumlichen Bezug, unmittelbare Sachkenntnis und fachliche Zuständigkeit prüfen; eine begründete Abweichung wegen einschlägigerer oder aktuellerer Erkenntnisse ausdrücklich dokumentieren. Unterschiedliche Aussagegegenstände sind kein Widerspruch (Behörde: Gefahrenlage; Betreiber: technischer Wiederherstellungsstand). Die Kategorie allein beweist keine Aussage; Weiterverbreitungen derselben Ursprungsangabe sind keine unabhängigen Bestätigungen (Kodierleitfaden Abschnitt 5).",
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]"
   },
   "lagebild": {

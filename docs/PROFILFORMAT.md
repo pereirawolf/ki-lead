@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.6 vom 18.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.7 vom 19.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -121,7 +121,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 ### Weitere Abschnitte
 
 - `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt.
-- `quellen`: Kategorien mit Erläuterung, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`).
+- `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge.
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
@@ -144,7 +144,7 @@ Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. 
 
 ## SOP-Dateien
 
-Eine Sammelmappe wird an HTML-Ankern (`<a id="sop-01"></a>`) zerlegt. Ohne Anker gilt eine Datei als eine SOP. Aus dem YAML-Block oder Frontmatter liest die App `lageart`, `art_vorschlag` und `version`. Der in `teil_gemeinsam` genannte Abschnitt geht jeder KI-Anfrage mit.
+Eine Sammelmappe wird an HTML-Ankern (`<a id="sop-01"></a>`) zerlegt. Ohne Anker gilt eine Datei als eine SOP. Aus dem YAML-Block oder Frontmatter liest die App `lageart`, `art_vorschlag` und `version`. Der in `teil_gemeinsam` genannte Abschnitt geht jeder KI-Anfrage mit. Abschnitte ohne `art_vorschlag` (z. B. Themen- und Querschnittsbausteine mit Titel „N01. Baustein LEAD: …“) erscheinen im SOP-Katalog der Stufe S1, werden beim Wählen einer Ereignisart aber nicht automatisch hinzugefügt. Die Kennung im Laufprotokoll lautet dann z. B. „SOP-LEAD N01 … v1.0“. Nicht im Manifest genannte SOP-Dateien (z. B. archivierte Vorfassungen) liest die App nicht als SOP.
 
 ## Prüfung beim Import
 
@@ -175,3 +175,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.4 | 18.10.2026 | Manifest: `eigene_stellen`; Strukturprüfung beim Import (Fehler verhindern die Aktivierung); Versionskonflikt bei gleicher Version mit anderem Inhalt; Abschnitt „Versionierung und Änderungsverlauf eines Profils“; Prüfsumme wird im Laufprotokoll geführt |
 | 1.5 | 18.10.2026 | Rolle `freigabe`; Abschnitt `bewertung_gliederung` |
 | 1.6 | 18.10.2026 | Abschnitt `analyse_gliederung`; Option `kurzlabel`; Prüfung beider Gliederungsabschnitte beim Import. Reihenfolge der Zeilen 1.4 und 1.5 in dieser Tabelle berichtigt |
+| 1.7 | 19.10.2026 | Darstellungsdatei: `quellen.rangfolge` (Quellenpriorität) und Strukturprüfung des Abschnitts `quellen`; SOP-Abschnitte ohne `art_vorschlag` (Bausteine) und Kennung „SOP-LEAD N01 …“ |

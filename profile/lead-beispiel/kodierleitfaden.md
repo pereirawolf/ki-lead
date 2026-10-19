@@ -1,10 +1,10 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD · Fassung 1.1 vom 17.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe (Beispielfassung) und die Arbeitsanweisung Erfassung
+Beispielfassung für KI-LEAD · Fassung 1.2 vom 19.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung Fassung 1.2
 
-Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
+Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
-**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP, (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
+**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
 ---
 
@@ -15,8 +15,8 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 3. **Höhere Zahl = stärkere, bedeutsamere oder ungünstigere Ausprägung.** Die Bedeutung einer Stufe ergibt sich ausschließlich aus dem Stufentext (Abschnitt 2).
 4. **Stufe 0 ist eine inhaltliche Aussage, kein Leerwert.** Sie braucht einen Beleg wie jede andere Stufe.
 5. **Offen statt geschätzt.** Fehlt ein Bezugsgegenstand oder ein tragfähiger Beleg, bleibt die Achse offen: in der Eingabemaske „keine Angabe“, im JSON `null`. Ein selbst erfundener Code wie „U“ ist unzulässig. Offen ist eine Information, keine Lücke.
-6. **Konservativ einstufen.** Passen zwei Stufen belegbar, gilt die niedrigere; die Grenze wird im Bewertungstext benannt. Modellschätzungen werden nicht über ihre Untergrenze hinaus kodiert.
-7. **Keine Zukunft im Ist-Wert.** Erwartete Entwicklungen gehören in „Risiken & Auswirkungen“ und in den Kennsatz `Neubewertung bei:`, nicht in die Radarwerte.
+6. **Keine unbelegte Präzision.** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere Stufe nicht vollständig, gilt die niedrigere, und die Grenze wird im Bewertungstext benannt. Das ist keine Vorsichtsregel: Eine Stufe ist nicht deshalb richtig, weil sie niedriger ist. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb einer Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen und die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt.
+7. **Keine Zukunft im Ist-Wert – mit einer definierten Ausnahme.** Erwartete Entwicklungen gehören in „Risiken & Auswirkungen“ und in den Kennsatz `Neubewertung bei:`, nicht in die Radarwerte. Ausnahme ist D5: Es kodiert die zu t0 fachlich prognostizierte Restdauer bis zum benannten Zielzustand (Abschnitt 3, D5).
 8. **Kein Gesamtscore.** Keine Summe, kein Mittelwert, keine Rangfolge zwischen Sachverhalten. Die Divergenz zwischen den Achsen ist der Erkenntnisgewinn.
 9. **Begründungsmuster.** Jeder gesetzte Wert wird im Bewertungstext oder in den Analysefeldern so begründet:
    „D[n] = [Wert], weil [konkreter Indikator] laut [Q-Verweis, Datenstand] für [Raum/Zeitpunkt]; Abgrenzung zur Nachbarstufe: [Kriterium].“
@@ -27,7 +27,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 1. Gibt es für diese Achse einen **Bezugsgegenstand** im Referenzraum (eine Fläche, eine Personengruppe, eine steuernde Stelle, eine Unterstützungsleistung, einen Zielzustand, eine Kopplung, eine Lageinformation, eine beobachtete Veränderung)? – Nein: **offen**.
 2. Gibt es einen **Beleg** zu diesem Gegenstand? – Nein: **offen**.
-3. Welche **Stufe** trägt der Beleg nach dem Stufentext? – Bei zwei passenden Stufen: die **niedrigere**.
+3. Welche **Stufe** trägt der Beleg nach dem Stufentext? – Trägt der Beleg die höhere Stufe nicht vollständig: die **niedrigere**; bei einer Schätzbandbreite über eine Stufengrenze: **offen**, außer bei einer bestätigten Mindestzahl (Mindestkodierung, Grundregel 6).
 4. **Grenze zur Nachbarstufe** benennen.
 
 ---
@@ -73,14 +73,14 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
   - (a) eine belegte Zahl von 1 bis 9 direkt Betroffenen, oder
   - (b) ein Nullbefund aus einer aktiv laufenden, für den Sachverhalt einschlägigen Erhebung mit definierter Grundgesamtheit (Surveillance, Meldepflicht, Fallregister, Lagemeldung mit ausdrücklicher Fehlanzeige).
 - **Offen:** wenn weder (a) noch (b) belegt ist, auch wenn eine Zahl von null plausibel erscheint. Unterschieden wird damit „belegte Kleinzahl oder belegte Null“ (0) von „keine beobachtbare Grundgesamtheit“ (offen).
-- **Umrechnungen:** Anschlüsse, Haushalte oder Megawatt sind keine Personen. Eine Umrechnung ist nur mit offengelegtem Faktor und Quelle zulässig; dann gilt die Untergrenze.
+- **Umrechnungen:** Anschlüsse, Haushalte oder Megawatt sind keine Personen. Eine Umrechnung ist nur mit offengelegtem Faktor, passendem Gebiet, Datum und Quelle zulässig; die Bandbreite wird angegeben und nach Grundregel 6 kodiert. Einwohnerzahlen sind Plausibilitätsbezug, keine allgemeine Obergrenze.
 - **Auslandslagen:** Ausländische Fallzahlen werden nicht auf D2 übertragen. Für Deutschland gilt die deutsche Betroffenheit.
 
 
 ### D3 Verantwortungszurechnung / Zurechnungszentrum
 
 - **Kodierfrage:** Welche Ebene steuert oder trägt die bewertete Funktion zu t0?
-- **Bewertete Funktion benennen:** Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum.
+- **Bewertete Funktion benennen:** Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
 - **Mit Akutereignis:** Kodiert wird die Ebene, die Bewältigung oder Koordination tatsächlich steuert (z. B. Kreis als untere Katastrophenschutzbehörde = 2; Land bei landesweiter Koordinierung = 4).
 - **Ohne Akutereignis (Vorsorge-, Beobachtungs-, Frühwarnsachverhalt):** Eine **strukturelle Zurechnung** ist zulässig, wenn ein konkreter Gegenstand benennbar ist, nämlich eine bestimmte Fach-, Regulierungs- oder Vorsorgeaufgabe, und die zuständige Ebene belegt ist. Dann wird diese Ebene kodiert, und der Bewertungstext erhält die Kennzeichnung „D3 strukturell: [Aufgabe], [Stelle]“.
 - **Offen:** wenn auch die strukturelle Zuständigkeit für einen konkreten Gegenstand nicht belegbar ist. Eine fiktive Bündelung bei der Koordinierungsstelle ist ausgeschlossen. Die Koordinierungsstelle ist keine Zurechnungsebene.
@@ -90,15 +90,17 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 ### D4 Unterstützungsreichweite / Mobilisierung
 
-- **Kodierfrage:** Aus welchem Raum stammt die tatsächlich eingesetzte externe Unterstützung zu t0?
-- Maßgeblich ist der **Herkunftsraum**, nicht Menge, Wert oder Organisationsform. Grenzüberschreitende Hilfe oder Beschaffung ist „international“, auch über ein deutsches Unternehmen.
-- **Nicht:** Bereitschaft, Zusage, Anforderung ohne Einsatz, historische Unterstützung.
+- **Kodierfrage:** Aus welchem Raum stammt die für diese Befassung tatsächlich eingesetzte, ereignisbezogene externe Unterstützung zu t0?
+- Maßgeblich ist der **Herkunftsraum**, nicht Menge, Wert oder Organisationsform. Grenzüberschreitend tatsächlich eingesetzte Hilfe ist „international“. Eine ereignisbezogene Sonderbeschaffung aus dem Ausland zählt nur, wenn sie als Unterstützungsleistung für diese Lage belegt und im Text begründet ist.
+- **Nicht:** Bereitschaft, Zusage, Anforderung ohne Einsatz, historische Unterstützung, reguläre Warenlieferungen, ausländischer Herstellungsort eines Geräts.
+- D4 beschreibt die Herkunft, nicht, ob die Hilfe ausreicht (Bedarfsdeckung: SOP-LEAD A.9.1).
 - **Stufe 0** („keine externe Hilfe“) nur mit Beleg, dass die Lage ohne externe Unterstützung bewältigt wird.
 
 ### D5 Zeit bis Zielzustand / Übergangsdauer
 
 - **Kodierfrage:** Wie lange dauert es voraussichtlich ab t0, bis der benannte Zielzustand erreicht ist?
-- **Zielzustand ausdrücklich benennen** (z. B. Gefahrenabwehr beendet, Versorgung wiederhergestellt, Freigabe erteilt). Wetterende oder technische Wiederversorgung sind nicht automatisch der Zielzustand.
+- D5 ist die zu t0 fachlich prognostizierte **Restdauer** und damit die definierte Ausnahme zur reinen Ist-Kodierung (Grundregel 7). Prognosegeber, Ausgabestand und Unsicherheit werden angegeben; bereits verstrichene Ereignisdauer zählt nicht.
+- **Zielzustand ausdrücklich benennen** (z. B. Gefahrenabwehr beendet, Versorgung wiederhergestellt, Freigabe erteilt). Wetterende oder technische Wiederversorgung sind nicht automatisch der Zielzustand. Notbetrieb, Wiederherstellung der kritischen Dienstleistung und vollständige Folgenbeseitigung werden getrennt beschrieben; bei mehreren Zielzuständen wird der für D5 gewählte begründet.
 - Grundlage ist eine belegte Prognose der zuständigen Stelle oder des Betreibers.
 - **Offen:** ohne Zielzustand oder ohne belastbare Prognose, bei unbestimmten Trends.
 - D5 ist **keine Dringlichkeitsskala**. Zeitkritischer Handlungsbedarf steht im Kennsatz `Handlungsrelevant bis:`.
@@ -115,9 +117,9 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 - **Kodierfrage:** Wie verfügbar, verlässlich und widerspruchsfrei ist die **Lageinformation der Befassung** zu t0?
 - **Festlegung:** D7 bewertet ausschließlich die Informationslage der befassten Stellen, also ob zuständige Stellen und Primärquellen zentrale Lagefragen beantworten. Die Kommunikationslage der Bevölkerung wird in „Risiken & Auswirkungen“ und bei D6 dargestellt.
-- **Erhöhte Stufe**, wenn für zentrale Fragen keine recherchierbaren Primärquellen bestehen, zuständige Stellen widersprüchlich oder verzögert informieren oder Meldewege gestört sind.
+- **Erhöhte Stufe**, wenn für zentrale Fragen keine recherchierbaren Primärquellen bestehen, zuständige Stellen widersprüchlich oder verzögert informieren, Meldewege gestört sind oder fachlich erhebliche Lücken bzw. Widersprüche zu Leistungsgrad, Integrität, Stoffidentität oder Wiederanlauf bestehen, soweit sie die Befassung tatsächlich betreffen. Ein technischer Kommunikationsausfall ist keine Voraussetzung. Fehlende Veröffentlichungen sind nicht automatisch ein Kommunikationsausfall; bleiben zentrale Bevölkerungsschutzfragen tatsächlich ungeklärt, wird die Lücke nach ihrer Entscheidungsrelevanz abgebildet.
 - **Keine erhöhte Stufe** wegen eigener Recherchegrenzen in der verfügbaren Zeit oder wegen unterschiedlicher Bewertungen derselben Informationen (SOP-LEAD A.7.2).
-- **Widersprüchliche Vorhersagen:** Weichen Vorhersagen fachlich maßgeblicher Stellen für zentrale Lagefragen voneinander ab (z. B. Wasserstandsmodelle zweier Dienste), ist D7 = 1. Ist die Vorhersagelage eindeutig und übereinstimmend, ist D7 = 0.
+- **Abweichende Vorhersagen:** Weichen Vorhersagen fachlich maßgeblicher Stellen voneinander ab (z. B. Wasserstandsmodelle zweier Dienste), werden sie zunächst nach Bezugsraum, Gültigkeitszeit, Methodik und Unsicherheit verglichen. Unterschiedliche Modelle allein legen keine feste Stufe fest; D7 richtet sich nach den gesamten relevanten Informationsdefiziten der Befassung und den Stufentexten. Übereinstimmende Vorhersagen rechtfertigen D7 = 0 nur, wenn die übrige zentrale Lageinformation ebenfalls aktuell und tragfähig ist.
 - **Stufe 0** („stabil/hoch verlässlich“), wenn zuständige Stellen aktuell, konsistent und überprüfbar informieren.
 
 
@@ -125,6 +127,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 - **Kodierfrage:** Wie stark hat sich die Lage im Referenzraum im zurückliegenden Beobachtungszeitraum tatsächlich verändert?
 - Bewertet werden beobachtete Änderungen, nicht die Zahl eingehender Meldungen und nicht latente Folgerisiken.
+- Ein belegt stabiler Verlauf ergibt D8 = 0, auch wenn die Versorgung angespannt ist; offen bleibt D8 nur bei unzureichender Beobachtungsbasis. Bedingte Kipprisiken gehören in „Risiken & Auswirkungen“ und in den Kennsatz `Neubewertung bei:`.
 - Internationale Veränderungen bei Auslandslagen werden als Frühwarnindikator im Text ausgewiesen, nicht als deutsche Dynamik.
 - D8 ist **nicht die Tendenz**. Eine Lage kann sehr dynamisch sein und sich zugleich entspannen.
 
@@ -138,30 +141,50 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 ---
 
-## 5. Quellenkategorien A/W/M/P
+## 5. Quellenkategorien A/B/W/M/P
 
-Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie. Die Kategorie bestimmt die Standardgewichtung bei widersprüchlichen Angaben.
+Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie. Die Buchstaben kennzeichnen die Herkunft bzw. Rolle der Quelle für die verwendete Aussage; ihre Reihenfolge ist die Quellenpriorität bei widersprüchlichen Angaben.
 
 | Kategorie | Bedeutung | Beispiele |
 |---|---|---|
-| **A** | amtlich/zwischenstaatlich | Bundes-, Landes- und Kommunalbehörden, Bundesoberbehörden, EU, WHO, ECDC; behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes) |
-| **W** | wissenschaftlich | Forschungseinrichtungen, begutachtete Fachpublikationen, wissenschaftliche Datensätze; Preprints mit Kennzeichnung „Preprint“ |
-| **M** | Medien | Redaktionen mit eigener Recherche, Nachrichtenagenturen |
-| **P** | privat/wirtschaftlich | Unternehmen und Betreiber, Verbände, NGOs, Hilfsorganisationen (Eigenangaben), Beiträge in sozialen Medien (Behördenkonten = A) |
+| **A** | amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle | Bundes-, Landes- und Kommunalbehörden, Bundesoberbehörden, EU, WHO, ECDC; behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes); authentische Behördenkonten in sozialen Medien |
+| **B** | Betreiber – originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft | Netzbetreiber, Wasserversorger, Stadtwerke, Verkehrs- und Infrastrukturunternehmen, Krankenhausträger; Hilfsorganisation zu ihrer selbst betriebenen Einrichtung; authentische Betreiberkonten in sozialen Medien |
+| **W** | wissenschaftlich – in fachwissenschaftlicher Rolle | Forschungseinrichtungen, begutachtete Fachpublikationen, wissenschaftliche Datensätze; Preprints mit Kennzeichnung „Preprint“ |
+| **M** | Medien | redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen; auch Berichte mit Betreiber- oder Behördenzitat |
+| **P** | sonstige private Quellen | Verbände, NGOs, persönliche Angaben, Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; allgemeine Positionen von Hilfsorganisationen; Beiträge in sozialen Medien ungeklärter Identität |
 
-**Rangfolge:** A vor W vor M vor P. Weicht eine niedriger eingestufte von einer höher eingestuften Quelle ab, gilt grundsätzlich die höher eingestufte.
+**Quellenpriorität:** A > B > W > M > P. Bei Widersprüchen zu demselben Sachverhalt gilt die Priorität. Vor dem Vergleich werden Zeitstand, räumlicher Bezug, unmittelbare Sachkenntnis und fachliche Zuständigkeit geprüft. Eine begründete Abweichung wegen einschlägigerer oder aktuellerer Erkenntnisse wird ausdrücklich dokumentiert; beide Quellen werden genannt.
 
-**Kompetenzausnahme:** Besitzt die niedriger eingestufte Quelle für die konkrete Aussage die überlegene fachliche Kompetenz (z. B. Betreiber für den eigenen Störungs- und Wiederversorgungsstand, Studie für ihre eigenen Primärdaten, Hilfsorganisation für ihre eigenen Tätigkeiten), gilt sie für diese Aussage. Beide Quellen werden genannt und die Abweichung von der Rangfolge im Text begründet.
+**Unterschiedliche Aussagegegenstände sind kein Widerspruch:** Eine Behörde bewertet etwa die Gefahrenlage, ein Netzbetreiber meldet den technischen Wiederherstellungsstand. Beide Aussagen stehen nebeneinander.
 
-**Ungeklärte Widersprüche** zwischen gleichrangigen Quellen: beide Werte mit Quelle nennen, nicht festlegen.
+**Zuordnungsregeln:**
 
-**Unabhängigkeit:** Mehrere Übernahmen derselben Meldung sind keine unabhängige Bestätigung. Die Kernaussage stützt sich nach Möglichkeit auf zwei unabhängige Quellen unterschiedlicher Kategorie. Gelingt das nicht, wird es offen benannt.
+- Die konkrete Rolle entscheidet, nicht Eigentumsform oder Veröffentlichungskanal. Eine kommunale Betreiber-Störungsmeldung ist B, eine behördliche Anordnung A.
+- Eine Hilfsorganisation ist bei Angaben über ihre selbst betriebene Einrichtung B; eine allgemeine Verbandsposition bleibt P.
+- Ein authentischer Behördenbeitrag in sozialen Medien bleibt A, ein Betreiberbeitrag B. Ungeklärte Identität und ungeklärter Aussagegehalt werden ausdrücklich vermerkt.
+- Ein Medienbericht mit Betreiberzitat bleibt M; der Betreiber wird im Text als Ursprungsquelle genannt. Erst eine tatsächlich eingesehene Betreiberveröffentlichung erhält einen eigenen B-Eintrag.
+- Bei gemischten Rollen werden die verwendete Aussage und ihre Herkunft gekennzeichnet. Mehrere Auszüge desselben Dokuments sind nicht voneinander unabhängig.
+- Bestehende Einträge der Kategorie P werden nicht automatisch zu B umgestuft, sondern einzeln geprüft.
+
+**Ungeklärte Widersprüche** bleiben mit beiden Werten und Quellen sichtbar und werden nicht festgelegt.
+
+**Zuordnungsbeispiele (fiktiv):**
+
+| Aussage | Kategorie | Prüfhinweis |
+|---|---|---|
+| Stadtwerke: 80 Prozent der ausgefallenen Anschlüsse wieder versorgt | B | Zeitstand, Bezugsgebiet und Nenner prüfen; Anschlüsse nicht in Personen umetikettieren. |
+| Gesundheitsamt: Abkochgebot gilt weiterhin | A | Geltungsbereich und aktuelle Fassung prüfen; die technische Reparatur hebt die Anordnung nicht auf. |
+| Zeitung berichtet über denselben Stadtwerke-Stand | M | keine zweite unabhängige Bestätigung des Wiederherstellungsstands. |
+
+**Unabhängigkeit:** Die Kategorie allein beweist keine Aussage. Mehrere Übernahmen oder Weiterverbreitungen derselben Ursprungsangabe sind keine unabhängigen Bestätigungen; unterschiedliche Kategorien sind kein Unabhängigkeitsnachweis. Die Kernaussage stützt sich nach Möglichkeit auf voneinander unabhängige Ursprungsquellen; ein einzelner zuständiger Primärbeleg kann tragfähig sein, wenn er die Aussage unmittelbar trägt. Fehlt eine unabhängige Bestätigung, wird das offen benannt.
+
+**Bestätigungsgrad:** Unabhängig von der Kategorie wird für zentrale Aussagen angegeben, ob sie *bestätigt*, *vorläufige Eigenangabe*, *indirekt berichtet* oder *widersprüchlich* sind (SOP-LEAD A.3).
 
 **Format im Feld „Quellen & Referenzen“** (ein Eintrag je Quelle, nummeriert in der Reihenfolge der ersten Nennung, Folgezeilen gehören zum vorherigen Eintrag):
 
 ```
 [Q1] A – Herausgeber (TT.MM.JJJJ): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ]
-[Q2] P – Netzbetreiber Y (09.10.2026): Störungsmeldung. Online abrufbar unter: https://… [Zugriff: 09.10.2026]. Datenstand: 09.10.2026, 12:00
+[Q2] B – Netzbetreiber Y (09.10.2026): Störungsmeldung. Online abrufbar unter: https://… [Zugriff: 09.10.2026]. Datenstand: 09.10.2026, 12:00
 [Q3] A – Lagezentrum Land X (09.10.2026): Lagemeldung Nr. 12 (behördenintern) [Zugriff: 09.10.2026]
 [Q4] M – Redaktion Z (08.10.2026): Titel. Online abrufbar unter: https://… (Paywall) [Zugriff: 09.10.2026]
 ```
@@ -197,7 +220,11 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Netzbetreiber nennt widersprüchliche Wiederversorgungszeiten, Land meldet verzögert | D7 = 2 oder 3 nach Belegen | Informationslage der Befassung eingeschränkt |
 | Mobilfunk im Schadensgebiet ausgefallen, Lagezentrum gut informiert | D7 niedrig, D6 erfasst TK-Kopplung | Bevölkerungskommunikation gehört zu D6 und Text |
 | Sturmflut erwartet; Stadt gibt vor dem Scheitel Sandsäcke aus, Medien berichten darüber | D3 = 1 | Vorsorge vor dem Akutereignis ist beobachtbare Zurechnung (Kommune) |
-| Wasserstandsvorhersagen zweier Dienste weichen deutlich voneinander ab | D7 = 1 | widersprüchliche Vorhersagen; bei übereinstimmender Vorhersage D7 = 0 |
+| Wasserstandsvorhersagen zweier Dienste weichen deutlich voneinander ab | D7 nach Entscheidungsrelevanz, keine feste Stufe | zuerst Bezugsraum, Gültigkeitszeit, Methodik und Unsicherheit vergleichen; übereinstimmende Vorhersagen tragen D7 = 0 nur bei sonst aktueller und tragfähiger Lageinformation |
+| Hochrechnung 800–1.400 Personen ohne Wasserversorgung (Haushalte × Faktor) | D2 offen; Bandbreite im Text | Bandbreite schneidet die Grenze zwischen Stufe 2 und 3 (Grundregel 6) |
+| Mindestens 1.200 Evakuierte registriert, Zählung läuft | D2 = 3 (Mindestwert) | bestätigte Mindestzahl, im Text als Mindestwert gekennzeichnet |
+| Ersatzteil eines ausländischen Herstellers über den regulären Großhandel geliefert | D4 nicht „international“ | reguläre Lieferung ist keine ereignisbezogene Mobilisierung |
+| Gasversorgung angespannt, Lage seit zwei Wochen unverändert belegt | D8 = 0 | belegt stabiler Verlauf; Kipprisiken in Risiken und `Neubewertung bei:` |
 
 ---
 
@@ -212,3 +239,4 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.0 | 17.10.2026 | Beispielfassung, abgeleitet aus der Arbeitsfassung v0.4 |
 | 1.0.1 | 17.10.2026 | Autorenname im Zitat des Lagenradars korrigiert |
 | 1.1 | 17.10.2026 | D3: berichtete Vorsorge vor dem Akutereignis als Zurechnung (Ebene der vorsorgenden Stelle); D7: widersprüchliche Vorhersagen = 1, eindeutige Lage = 0; zwei Kurzbeispiele |
+| 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien |

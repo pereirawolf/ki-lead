@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { jsonDateien, profil } from "./hilfen";
 import { pruefeGegenSchema } from "../src/kern/validierung";
 import { migriere } from "../src/kern/migration";
-import { parseQuellen, quellenHinweise, verweise } from "../src/kern/quellen";
+import { kategorienGeordnet, parseQuellen, quellenHinweise, rangfolgeText, verweise } from "../src/kern/quellen";
 import { ausfuellHinweise, kennsatz, pflichtHinweise } from "../src/kern/kennsaetze";
 import { dateiname, managementSummary } from "../src/kern/ausgabe";
 import { pfadBezeichnung } from "../src/kern/ui";
@@ -93,6 +93,23 @@ describe("Quellen und Kennsätze", () => {
       .join("\n");
     expect(texte).toMatch(/\[Q1\]: Kategorie fehlt oder ungültig/);
     expect(texte).toMatch(/Zugriffsdatum fehlt/);
+  });
+
+  it("akzeptiert Betreiberquellen (B) und ordnet Kategorien nach der Rangfolge", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const d = JSON.parse(JSON.stringify(ilka[0].daten));
+    d.quellen = "[Q1] B – Stadtwerke X (14.10.2026): Störungsmeldung [Zugriff: 14.10.2026]";
+    const texte = quellenHinweise(d, p!.ui)
+      .map((b) => b.text)
+      .join("\n");
+    expect(texte).not.toMatch(/Kategorie fehlt oder ungültig/);
+    expect(kategorienGeordnet(p!.ui).map(([c]) => c)).toEqual(["A", "B", "W", "M", "P"]);
+    expect(rangfolgeText(p!.ui)).toBe("A > B > W > M > P");
+    d.quellen = "[Q1] X – Unbekannt (14.10.2026): Titel [Zugriff: 14.10.2026]";
+    const fehler = quellenHinweise(d, p!.ui)
+      .map((b) => b.text)
+      .join("\n");
+    expect(fehler).toContain("Kategorie fehlt oder ungültig (A, B, W, M, P)");
   });
 
   it("liest Kennsätze", () => {
