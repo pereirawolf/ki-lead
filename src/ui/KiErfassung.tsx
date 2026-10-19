@@ -11,7 +11,7 @@ import { sopKennung } from "../profil/sop";
 import { dateiAnbieten } from "../speicher/speicher";
 import { VergleichKasten } from "./Vergleich";
 import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
-import { ereignisarten, fachSops, sopsFuerArten } from "../pipeline/kontext";
+import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
 import { laeufeLaden, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
 import {
   dateiLesen,
@@ -109,6 +109,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
   const arten = useMemo(() => ereignisarten(profil), [profil]);
   const sops = useMemo(() => fachSops(profil), [profil]);
+  const sopGliederung = useMemo(() => sopGruppen(profil), [profil]);
   const urls = urlsAusText(urlText);
   const laeuft = phase === "s1" || phase === "s2";
 
@@ -300,11 +301,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const artUmschalten = (i: number, art: string) => {
     if (!vorschlag) return;
     const s = vorschlag.sachverhalte[i];
-    const an = !s.ereignisarten.includes(art);
-    const neueArten = an ? [...s.ereignisarten, art] : s.ereignisarten.filter((a) => a !== art);
-    const passend = sopsFuerArten(profil, [art]);
-    const neueSops = an ? [...new Set([...s.sops, ...passend])] : s.sops.filter((x) => !passend.includes(x) || sopsFuerArten(profil, neueArten).includes(x));
-    setzeSv(i, { ereignisarten: neueArten, sops: neueSops });
+    const neu = sopsNachArtwechsel(profil, s.sops, s.ereignisarten, art);
+    setzeSv(i, { ereignisarten: neu.arten, sops: neu.sops });
   };
 
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
@@ -701,19 +699,43 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       </div>
                     </fieldset>
                     <fieldset className="feld">
-                      <legend className="feld-label">SOPs für die Recherche</legend>
-                      <div className="mehrfach">
-                        {sops.map((x) => (
-                          <label key={x.id} className={s.sops.includes(x.id) ? "chip an" : "chip"}>
-                            <input
-                              type="checkbox"
-                              checked={s.sops.includes(x.id)}
-                              onChange={() => setzeSv(i, { sops: s.sops.includes(x.id) ? s.sops.filter((y) => y !== x.id) : [...s.sops, x.id] })}
-                            />
-                            {sopKennung(x).replace(/^SOP-LEAD /, "")}
-                          </label>
-                        ))}
-                      </div>
+                      <legend className="feld-label">SOPs und Bausteine für diesen Sachverhalt</legend>
+                      <p className="hinweis">
+                        Die gewählten Abschnitte gehen mit vollem Text an die KI; Teil A (gemeinsame Regeln) geht immer mit. Bausteine im Status „Inhaltsgerüst“
+                        ergänzen die Dach-SOP nur als Prüfhinweise.
+                      </p>
+                      {sopGliederung.map((g) => (
+                        <div key={g.titel} className="sop-gruppe">
+                          <p className="sop-gruppe-titel">{g.titel}</p>
+                          <div className="mehrfach">
+                            {g.sops.map((x) => (
+                              <label key={x.id} className={s.sops.includes(x.id) ? "chip an" : "chip"} title={x.lageart || undefined}>
+                                <input
+                                  type="checkbox"
+                                  checked={s.sops.includes(x.id)}
+                                  onChange={() => setzeSv(i, { sops: s.sops.includes(x.id) ? s.sops.filter((y) => y !== x.id) : [...s.sops, x.id] })}
+                                />
+                                {sopKennung(x).replace(/^SOP-LEAD /, "")}
+                                {istInhaltsgeruest(x) && <span className="sop-status">Inhaltsgerüst</span>}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                      {s.sops.length > 0 && (
+                        <details className="sop-details">
+                          <summary>Anwendungsbereich der gewählten SOPs und Bausteine ({s.sops.length})</summary>
+                          {sops
+                            .filter((x) => s.sops.includes(x.id))
+                            .map((x) => (
+                              <div key={x.id} className="sop-auszug">
+                                <strong>{sopKennung(x).replace(/^SOP-LEAD /, "")}</strong>
+                                {x.status && <p className="hinweis">Status: {x.status}</p>}
+                                <pre>{anwendungsbereich(x.text)}</pre>
+                              </div>
+                            ))}
+                        </details>
+                      )}
                     </fieldset>
                   </div>
                 ))}

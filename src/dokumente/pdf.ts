@@ -244,7 +244,19 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     autoTable(doc, {
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 4, 14),
       body: [
-        ["Entstehung", [ent.verfahren, ent.werkzeug, ent.modell, (ent.sop || []).join("; "), ent.kodierleitfaden, ent.erstellt].filter(Boolean).join(" · ")],
+        [
+          "Entstehung",
+          [
+            ent.verfahren,
+            ent.werkzeug,
+            ent.modell,
+            Array.isArray(ent.sop) && ent.sop.length ? `Beigefügte SOP: ${ent.sop.join("; ")}` : "",
+            ent.kodierleitfaden,
+            ent.erstellt,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+        ],
       ],
       theme: "grid",
       styles: { fontSize: 7.5 },

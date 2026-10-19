@@ -1,7 +1,9 @@
 // Profilverwaltung: eingebaute und importierte Profilpakete, Prüfbericht, Aktivieren, Export.
 
 import { useRef, useState } from "react";
-import type { Befund } from "../kern/typen";
+import type { Befund, Profil } from "../kern/typen";
+import { fachSops, gemeinsameSops, istBaustein, istInhaltsgeruest, sopGruppen } from "../pipeline/kontext";
+import { sopKennung } from "../profil/sop";
 import type { ProfilEintrag } from "../App";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
@@ -12,6 +14,47 @@ interface Props {
   aktivieren: (schluessel: string) => void;
   importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<{ ok: boolean; befunde: Befund[]; konflikt?: boolean }>;
   loeschen: (schluessel: string) => void;
+}
+
+/** Anzahl der fachlichen Abschnitte, getrennt nach Dach-SOPs und ergänzenden Bausteinen. */
+function sopAnzahl(profil: Profil): string {
+  const fach = fachSops(profil);
+  if (!fach.length) return "keine";
+  const bausteine = fach.filter(istBaustein).length;
+  const dach = fach.length - bausteine;
+  return bausteine ? `${dach} SOP${dach === 1 ? "" : "s"}, ${bausteine} Baustein${bausteine === 1 ? "" : "e"}` : `${dach}`;
+}
+
+/**
+ * SOP-Katalog als Lesehilfe: gemeinsame Regeln, Dach-SOPs und Bausteine mit vollem Text. Reines Lesen; es
+ * verändert keine Meldung und keinen Nachweis in `_entstehung`.
+ */
+function SopKatalog({ profil }: { profil: Profil }) {
+  const gemeinsam = gemeinsameSops(profil);
+  const gruppen = sopGruppen(profil);
+  if (!gemeinsam.length && !gruppen.length) return null;
+  const eintrag = (s: Profil["sops"][number], titel: string) => (
+    <details key={s.id}>
+      <summary>
+        {titel}
+        {istInhaltsgeruest(s) && <span className="sop-status">Inhaltsgerüst</span>}
+      </summary>
+      <pre>{s.text}</pre>
+    </details>
+  );
+  return (
+    <details className="sop-katalog">
+      <summary>SOP-Katalog lesen</summary>
+      <p className="hinweis">Zum Nachlesen ohne KI. Das Öffnen verändert keine Meldung und keinen Nachweis.</p>
+      {gemeinsam.map((s) => eintrag(s, s.titel))}
+      {gruppen.map((g) => (
+        <div key={g.titel} className="sop-gruppe">
+          <p className="sop-gruppe-titel">{g.titel}</p>
+          {g.sops.map((s) => eintrag(s, sopKennung(s).replace(/^SOP-LEAD /, "")))}
+        </div>
+      ))}
+    </details>
+  );
 }
 
 function Befunde({ befunde }: { befunde: Befund[] }) {
@@ -132,7 +175,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   </div>
                   <div>
                     <dt>SOP</dt>
-                    <dd>{p.profil.sops.filter((s) => !s.id.startsWith("teil-")).length || "keine"}</dd>
+                    <dd>{sopAnzahl(p.profil)}</dd>
                   </div>
                   <div>
                     <dt>Prüfsumme</dt>
@@ -142,6 +185,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   </div>
                 </dl>
               )}
+              {p.profil && <SopKatalog profil={p.profil} />}
               <details>
                 <summary>Prüfbericht und Dateien</summary>
                 <Befunde befunde={p.befunde} />

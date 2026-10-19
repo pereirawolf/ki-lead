@@ -89,7 +89,11 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
           {ent.werkzeug && <p>Werkzeug: {ent.werkzeug}</p>}
           {ent.modell && <p>Modell: {ent.modell}</p>}
           {ent.erstellt && <p>Erstellt: {ent.erstellt}</p>}
-          {Array.isArray(ent.sop) && ent.sop.length > 0 && <p>Angewandte SOP: {ent.sop.join("; ")}</p>}
+          {Array.isArray(ent.sop) ? (
+            <p>Beigefügte SOP und Bausteine (KI-Kontext, Teil A gilt immer): {ent.sop.length ? ent.sop.join("; ") : "keine"}</p>
+          ) : (
+            ent.verfahren === "KI-Entwurf" && <p>Beigefügte SOP und Bausteine: nicht dokumentiert</p>
+          )}
           {ent.kodierleitfaden && <p>Kodierleitfaden: {ent.kodierleitfaden}</p>}
           <p className="hinweis">
             Ein KI-Entwurf bleibt als solcher gekennzeichnet, auch nach Bearbeitung. Fachliche Prüfung und Freigabe erfolgen über den Freigabeblock.

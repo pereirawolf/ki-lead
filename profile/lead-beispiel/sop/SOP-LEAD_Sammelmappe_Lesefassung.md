@@ -58,10 +58,10 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.0 | 19.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.0.1 | 20.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
-| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.6.0 | 19.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.3.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.6.1 | 20.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.3.2 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.0.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.1.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.0) | unverändert | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
@@ -159,7 +159,7 @@ Format: `[Q1] A – Herausgeber (TT.MM.JJJJ): Titel. Online abrufbar unter: URL 
 - `sofort.beurteilung` (`geringfügig` / `erheblich` / `kritisch`) und `sofort.tendenz` (`Entspannung` / `Stabilisierung` / `Verschärfung`) unabhängig vom höchsten Radarwert begründen. Nachgewiesene Teilverbesserungen können eine begründete Teilentspannung tragen; fortbestehende Einschränkungen bleiben ausdrücklich sichtbar. „Keine Angabe“ = leerer String `""`.
 - Offene Radarwerte = `null` (nicht `0`, nicht Zeichenkette, kein „U“). Keine neuen JSON-Felder ohne Schemaänderung.
 - Schema: Schemakennung `LEAD-Meldung-v1`; Struktur und Werte werden technisch gegen `meldung.schema.json` geprüft (beim Prüfen, beim Import und in der Lagebild-Zusammenfassung). Eine erfolgreiche Schemaprüfung bestätigt nur Struktur und zulässige Werte, nicht den Inhalt (A.5).
-- Entstehung: KI-gestützte Entwürfe tragen das optionale Feld `_entstehung` (Verfahren „KI-Entwurf“, Arbeitsanweisung, Modell, angewandte SOPs und Bausteine, Kodierleitfaden, Erstellungszeitpunkt). Es bleibt bei der weiteren Bearbeitung erhalten und ist ein Herkunftsnachweis, keine Freigabe.
+- Entstehung: KI-gestützte Entwürfe tragen das optionale Feld `_entstehung` (Verfahren „KI-Entwurf“, Arbeitsanweisung, Modell, beigefügte SOPs und Bausteine, Kodierleitfaden, Erstellungszeitpunkt). Die beigefügten SOPs und Bausteine setzt die App aus der tatsächlich zusammengestellten Anfrage; das belegt den Kontext, nicht schon die fachliche Anwendung. Es bleibt bei der weiteren Bearbeitung erhalten und ist ein Herkunftsnachweis, keine Freigabe.
 - `art` nur aus dem Katalog des Schemas wählen; `art_vorschlag` einer SOP ist Startpunkt, keine Checkliste. Bausteine aus Teil C unter ihrer `art_zuordnung` führen; `eintritt`, `ort`, `bezeichnung` fallbezogen füllen.
 
 **Kennsätze.** Für wiederkehrende Angaben gelten feste Satzanfänge am Ende von `sofort.bewertung_text`, jeweils in eigener Zeile. Sie sind keine Pflichtangaben und keine neuen Felder; sie werden nur gesetzt, wenn der Inhalt vorliegt. Die Lagebild-Zusammenfassung wertet sie im Redaktionscheck aus.

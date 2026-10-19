@@ -34,7 +34,7 @@ import {
   type SvEintrag,
 } from "../lagebild/lagebild";
 import { redaktionscheck, type Klasse } from "../lagebild/redaktion";
-import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle } from "../lagebild/ausgabe";
+import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import { lagebildAlsPdf } from "../dokumente/pdf";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";
@@ -283,6 +283,50 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
       {r.entstehung_feld && holeWert(e.daten, [r.entstehung_feld, "verfahren"]) === "KI-Entwurf" && <Marke farbe="grau">KI-Entwurf</Marke>}
     </>
   );
+
+  // Entstehung der Meldung, so wie gespeichert; die SOP-Angaben gelten für die ganze Meldung
+  const entstehungBlock = (e: LagebildEintrag) => {
+    const ent = r.entstehung_feld ? holeWert(e.daten, r.entstehung_feld) : undefined;
+    if (!ent || typeof ent !== "object") return null;
+    const sop = sopNachweis(ent);
+    return (
+      <details className="lb-entstehung">
+        <summary>Entstehung{sop ? ` · SOP: ${Array.isArray(ent.sop) ? ent.sop.length : "–"}` : ""}</summary>
+        <dl>
+          {ent.verfahren && (
+            <>
+              <dt>Verfahren</dt>
+              <dd>{String(ent.verfahren)}</dd>
+            </>
+          )}
+          {ent.modell && (
+            <>
+              <dt>Modell</dt>
+              <dd>{String(ent.modell)}</dd>
+            </>
+          )}
+          {sop && (
+            <>
+              <dt>SOP und Bausteine (für die ganze Meldung)</dt>
+              <dd>{sop}</dd>
+            </>
+          )}
+          {ent.kodierleitfaden && (
+            <>
+              <dt>Kodierleitfaden</dt>
+              <dd>{String(ent.kodierleitfaden)}</dd>
+            </>
+          )}
+          {ent.erstellt && (
+            <>
+              <dt>Erstellt</dt>
+              <dd>{String(ent.erstellt)}</dd>
+            </>
+          )}
+        </dl>
+      </details>
+    );
+  };
 
   const svMarken = (s: SvEintrag) => (
     <span className="lb-svmarken">
@@ -655,6 +699,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                               {h}
                             </p>
                           ))}
+                          {entstehungBlock(e)}
                         </>
                       )}
                     </div>

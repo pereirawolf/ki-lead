@@ -38,6 +38,53 @@ export function sopIdsAufloesen(profil: Profil, ids: string[]): string[] {
   return [...new Set(ids.map((x) => sopIdAufloesen(profil, x)).filter((x): x is string => !!x))];
 }
 
+/** Ergänzender Baustein (keine Dach-SOP einer Ereignisart): Typ aus dem Kopf, sonst fehlender `art_vorschlag`. */
+export function istBaustein(s: Sop): boolean {
+  if (s.typ) return !/^dach-sop$/i.test(s.typ.trim());
+  return !s.art_vorschlag?.length;
+}
+
+/** Abschnitt im Status „Inhaltsgerüst“ (ergänzt die Dach-SOP nur als Prüfhinweis, SOP-LEAD A.1 Nr. 7). */
+export function istInhaltsgeruest(s: Sop): boolean {
+  return /^inhaltsger(ü|ue)st/i.test(s.status || "");
+}
+
+export interface SopGruppe {
+  titel: string;
+  sops: Sop[];
+}
+
+/**
+ * Gliedert die fachlichen SOPs für Auswahl und Katalog: zuerst die Dach-SOPs, dann die Bausteine nach Leseblock
+ * (in Reihenfolge des Manifests). Profile ohne Kopfangaben ergeben eine neutrale Gruppe je Art.
+ */
+export function sopGruppen(profil: Profil): SopGruppe[] {
+  const dach = fachSops(profil).filter((s) => !istBaustein(s));
+  const bausteine = fachSops(profil).filter(istBaustein);
+  const gruppen: SopGruppe[] = [];
+  if (dach.length) gruppen.push({ titel: bausteine.length ? "Dach-SOPs je Ereignisart" : "SOPs", sops: dach });
+  const nachBlock = new Map<string, Sop[]>();
+  for (const s of bausteine) {
+    const t = s.lesegruppe ? `Ergänzende Bausteine: ${s.lesegruppe}` : "Ergänzende Bausteine";
+    if (!nachBlock.has(t)) nachBlock.set(t, []);
+    nachBlock.get(t)!.push(s);
+  }
+  for (const [titel, sops] of nachBlock) gruppen.push({ titel, sops });
+  return gruppen;
+}
+
+/**
+ * SOP-Auswahl nach dem Umschalten einer Ereignisart: Beim Einschalten kommen die passenden Dach-SOPs hinzu, beim
+ * Ausschalten entfallen nur Dach-SOPs, die keine verbleibende Ereignisart mehr trägt. Bausteine bleiben stehen.
+ */
+export function sopsNachArtwechsel(profil: Profil, sops: string[], arten: string[], art: string): { arten: string[]; sops: string[] } {
+  const an = !arten.includes(art);
+  const neueArten = an ? [...arten, art] : arten.filter((a) => a !== art);
+  const passend = sopsFuerArten(profil, [art]);
+  const neueSops = an ? [...new Set([...sops, ...passend])] : sops.filter((x) => !passend.includes(x) || sopsFuerArten(profil, neueArten).includes(x));
+  return { arten: neueArten, sops: neueSops };
+}
+
 export function gemeinsameSops(profil: Profil): Sop[] {
   return profil.sops.filter((s) => s.gemeinsam);
 }

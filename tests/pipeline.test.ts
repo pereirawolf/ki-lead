@@ -115,7 +115,7 @@ describe("Kontext aus dem Profil", () => {
       "SOP-LEAD 1 Unwetter / Sturm",
       "SOP-LEAD B08 Strom",
     ];
-    expect(sopKennungenAbgleichen(liste, p!, new Set())).toEqual([
+    expect(sopKennungenAbgleichen(liste, p!)).toEqual([
       "SOP-LEAD B01 Unwetter / Sturm v2.0.1",
       "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1",
       "SOP-LEAD B08 Stromausfall / Blackout v2.0.1",

@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.8 vom 19.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.9 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -154,9 +154,12 @@ Aus dem YAML-Block oder Frontmatter liest die App:
 | `lageart`, `version` | Anzeige und Kennung |
 | `art_vorschlag` | Ereignisarten, bei deren Wahl die App die SOP in S1 vorschlägt; Abschnitte ohne `art_vorschlag` (Bausteine) erscheinen im Katalog, werden aber nicht automatisch hinzugefügt |
 | `bisherige_ids` | frühere IDs (z. B. `sop-08`); die App bildet sie in gespeicherten Läufen auf die aktuelle ID ab |
-| `bisherige_kennung` | frühere Kennung (z. B. „08“, „N05“); die App erkennt sie in `_entstehung.sop` des Modells und schreibt die aktuelle Kennung |
+| `bisherige_kennung` | frühere Kennung (z. B. „08“, „N05“); die App erkennt sie in der SOP-Angabe des Modells beim Abgleich |
+| `typ` | „Dach-SOP“ oder ein Bausteintyp (z. B. „Themenbaustein“, „Querschnittsbaustein“); gliedert Auswahl und Katalog in Dach-SOPs und ergänzende Bausteine (ohne `typ`: Abschnitte ohne `art_vorschlag` gelten als Bausteine) |
+| `lesegruppe` | Leseblock der Bausteine in Auswahl und Katalog (nur Navigation) |
+| `status` | Bearbeitungsstand; beginnt er mit „Inhaltsgerüst“, zeigt die App eine entsprechende Marke |
 
-Weitere Schlüssel (z. B. `typ`, `lesegruppe`, `status`, `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
+Weitere Schlüssel (z. B. `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Mitgelieferte Profile bettet die App ohne `sop/archiv/`, Lesefassung und `sop/README.md` ein. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
 
 ## Prüfung beim Import
 
@@ -189,3 +192,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.6 | 18.10.2026 | Abschnitt `analyse_gliederung`; Option `kurzlabel`; Prüfung beider Gliederungsabschnitte beim Import. Reihenfolge der Zeilen 1.4 und 1.5 in dieser Tabelle berichtigt |
 | 1.7 | 19.10.2026 | Darstellungsdatei: `quellen.rangfolge` (Quellenpriorität) und Strukturprüfung des Abschnitts `quellen`; SOP-Abschnitte ohne `art_vorschlag` (Bausteine) und Kennung „SOP-LEAD N01 …“ |
 | 1.8 | 19.10.2026 | SOP-Dateien: eine Datei je Abschnitt, Reihenfolge von `sop.dateien`, Kopfschlüssel `kennung`, `bisherige_ids`, `bisherige_kennung`; Importprüfungen auf Text vor dem ersten Anker und doppelte IDs |
+| 1.9 | 20.10.2026 | SOP-Kopfschlüssel `typ`, `lesegruppe`, `status` werden ausgewertet (Gliederung der Auswahl, Marke „Inhaltsgerüst“); eingebettete Profile ohne Archiv, Lesefassung und SOP-Übersicht |
