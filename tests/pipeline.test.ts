@@ -117,7 +117,7 @@ describe("Kontext aus dem Profil", () => {
     ];
     expect(sopKennungenAbgleichen(liste, p!, new Set())).toEqual([
       "SOP-LEAD B01 Unwetter / Sturm v2.0.1",
-      "SOP-LEAD C07 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1",
+      "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1",
       "SOP-LEAD B08 Stromausfall / Blackout v2.0.1",
     ]);
     // Nicht in S1 bestätigte (nicht beigefügte) SOPs entfallen
@@ -126,7 +126,7 @@ describe("Kontext aus dem Profil", () => {
 
   it("löst frühere SOP-IDs gespeicherter Läufe auf", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(sopIdsAufloesen(p!, ["sop-08", "baustein-n05", "b08", "c99", "baustein-n14"])).toEqual(["b08", "c08"]);
+    expect(sopIdsAufloesen(p!, ["sop-08", "baustein-n05", "b08", "c99", "baustein-n14"])).toEqual(["b08", "c12"]);
   });
 
   it("Verdichtung: Profilanweisung ohne offene Platzhalter, Ersatzfassung ohne Altregeln", async () => {

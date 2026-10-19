@@ -74,7 +74,7 @@ export function zerlegeSops(text: string, datei: string, gemeinsamId?: string): 
   return [baueSop(id, text, datei, gemeinsamId)];
 }
 
-/** Kurzbezeichnung zum Eintrag in _entstehung.sop, z. B. „SOP-LEAD B01 Unwetter / Sturm v2.0.1“ oder „SOP-LEAD C07 Telekommunikation … v1.0.1“. */
+/** Kurzbezeichnung zum Eintrag in _entstehung.sop, z. B. „SOP-LEAD B01 Unwetter / Sturm v2.0.1“ oder „SOP-LEAD C11 Telekommunikation … v1.0.1“. */
 export function sopKennung(sop: Sop): string {
   const name = sop.titel.replace(/^[A-Z]?\d+\.\s*(?:SOP|Baustein) LEAD:\s*/i, "").trim();
   return `SOP-LEAD ${sop.nummer ? sop.nummer.padStart(2, "0") + " " : ""}${name}${sop.version ? " v" + sop.version : ""}`;

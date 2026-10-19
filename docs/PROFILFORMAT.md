@@ -156,7 +156,7 @@ Aus dem YAML-Block oder Frontmatter liest die App:
 | `bisherige_ids` | frühere IDs (z. B. `sop-08`); die App bildet sie in gespeicherten Läufen auf die aktuelle ID ab |
 | `bisherige_kennung` | frühere Kennung (z. B. „08“, „N05“); die App erkennt sie in `_entstehung.sop` des Modells und schreibt die aktuelle Kennung |
 
-Weitere Schlüssel (z. B. `typ`, `status`, `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`) liest die App nicht als SOP. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
+Weitere Schlüssel (z. B. `typ`, `lesegruppe`, `status`, `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
 
 ## Prüfung beim Import
 

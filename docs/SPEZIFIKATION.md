@@ -97,7 +97,7 @@ lead-beispiel.leadprofil/
     "erfassung": "anweisung-erfassung.md",
     "verdichtung": "anweisung-verdichtung.md"
   },
-  "sop": { "dateien": ["sop/A_gemeinsame-regeln.md", "sop/B/B01_unwetter-sturm.md", "…", "sop/C/C17_zivile-verteidigung-zivile-schutz.md"], "teil_gemeinsam": "teil-a" },
+  "sop": { "dateien": ["sop/A_Gemeinsame-Regeln.md", "sop/teil-b/B01_unwetter-sturm.md", "…", "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
   "modelle": {

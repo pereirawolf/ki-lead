@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { leseOrdner, profil } from "./hilfen";
 import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { ladeProfil } from "../src/profil/laden";
 import { sopKennung } from "../src/profil/sop";
 import { ersetzePlatzhalter } from "../src/profil/platzhalter";
@@ -61,15 +63,30 @@ describe("Beispielprofil LEAD", () => {
     expect(bausteine.map((s) => s.nummer)).toEqual(Array.from({ length: 17 }, (_, i) => `C${String(i + 1).padStart(2, "0")}`));
     // Bausteine werden nicht automatisch über eine Ereignisart vorgeschlagen
     expect(bausteine.every((s) => !s.art_vorschlag)).toBe(true);
-    const c07 = bausteine.find((s) => s.id === "c07")!;
-    expect(c07.bisherigeKennung).toBe("N02");
-    expect(c07.alias).toEqual(["baustein-n02"]);
-    expect(sopKennung(c07)).toBe("SOP-LEAD C07 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1");
+    const c11 = bausteine.find((s) => s.id === "c11")!;
+    expect(c11.bisherigeKennung).toBe("N02");
+    expect(c11.alias).toEqual(["baustein-n02"]);
+    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1");
+    // N13 → C17, N03 → C16 (Register v2.1)
+    expect(bausteine.find((s) => s.id === "c17")!.bisherigeKennung).toBe("N13");
+    expect(bausteine.find((s) => s.id === "c16")!.bisherigeKennung).toBe("N03");
+  });
+
+  it("Lesefassung und README passen zu den Einzeldateien", async () => {
+    const wurzel = join(__dirname, "..");
+    // wirft, wenn die Lesefassung nicht dem Stand der Einzeldateien entspricht
+    execFileSync("node", ["scripts/sop-lesefassung.mjs", "profile/lead-beispiel", "--check"], { cwd: wurzel, stdio: "pipe" });
+    const { profil: p } = await profil("lead-beispiel");
+    const readme = readFileSync(join(wurzel, "profile/lead-beispiel/sop/README.md"), "utf-8");
+    for (const s of p!.sops.filter((x) => !x.gemeinsam)) {
+      expect(readme, s.id).toContain(`| ${s.nummer} | `);
+      expect(readme, s.id).toContain(s.datei.replace(/^sop\//, ""));
+    }
   });
 
   it("meldet Text vor dem ersten Anker und doppelte SOP-Kennungen", async () => {
     const dateien = leseOrdner(join(__dirname, "..", "profile", "lead-beispiel"));
-    const b08 = "sop/B/B08_stromausfall-blackout.md";
+    const b08 = "sop/teil-b/B08_stromausfall-blackout.md";
     dateien[b08] = "Vorwort, das nie eine KI-Anfrage erreicht.\n\n" + dateien[b08];
     const mitVorwort = await ladeProfil(dateien);
     expect(mitVorwort.profil).not.toBeNull();

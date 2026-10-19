@@ -14,7 +14,7 @@ Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19�
 
 ### SOP-Sammelmappe
 
-- Das Manifest bindet die SOP-LEAD-Sammelmappe **Fassung 3.0** ein: `sop/A_gemeinsame-regeln.md`, `sop/B/B01_…` bis `B17_…` und `sop/C/C01_…` bis `C17_…` (35 Dateien in Katalogreihenfolge). Übersicht und Konkordanz in `sop/README.md`, frühere Fassungen unter `sop/archiv/`. Einzelheiten ausschließlich in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Das Manifest bindet die SOP-LEAD-Sammelmappe **Fassung 3.0** ein: `sop/A_Gemeinsame-Regeln.md`, `sop/teil-b/B01_…` bis `B17_…` und `sop/teil-c/C01_…` bis `C17_…` (35 Dateien in Katalog- bzw. Registerreihenfolge). Erzeugte Lesefassung `sop/SOP-LEAD_Sammelmappe_Lesefassung.md`. Übersicht und Konkordanz in `sop/README.md`, frühere Fassungen unter `sop/archiv/`. Einzelheiten ausschließlich in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
 
 ### Arbeitsanweisungen
 
@@ -24,7 +24,7 @@ Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19�
 ### Manifest und Beispiele
 
 - `profil.json`: Version 1.6.0; `sop.dateien` mit 35 Einträgen.
-- Datensatz Orkantief „Ilka“ (FIKTIV): `_entstehung.sop` mit den neuen Kennungen („SOP-LEAD B01 Unwetter / Sturm v2.0.1“ usw.).
+- Datensatz Orkantief „Ilka“ (FIKTIV): unverändert. Die Angaben in `_entstehung.sop` („SOP-LEAD 01 Unwetter / Sturm v2.0“) sind historische Herkunftsangaben und werden nicht umgeschrieben; die App bildet sie über `bisherige_kennung` auf die aktuellen Kennungen ab.
 
 ## 1.5.0 – 19.10.2026
 

@@ -10,48 +10,50 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_gemeinsame-regeln.md`, `B/`, `C/` | 3.0 vom 19.10.2026 | gültig; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.0 vom 19.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
-**Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README.
+**Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
 
 ## [3.0] – 19.10.2026
 
-Strukturfassung nach dem freigegebenen Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“ (Kennungen S01–S12). **Keine fachlichen Änderungen:** Die Texte aller Abschnitte sind wortgleich übernommen; geändert sind Dateischnitt, Überschriften, Kopfdaten, Prüffragen-IDs und Querverweise. Erste Stelle nach der Versionierungsregel (geänderte Struktur).
+Strukturfassung nach dem Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“ (S01–S12), abgeglichen mit dem Strukturvorschlag v2.1 (Register mit 34 Einheiten), freigegeben am 19.10.2026. **Keine fachlichen Änderungen:** Die Texte aller 34 Abschnitte sind wortgleich übernommen (per Skript geprüft, einschließlich der Zuordnung jedes Querverweises); geändert sind Dateischnitt, Überschriften, Kopfdaten, Prüffragen-IDs und Querverweise. Erste Stelle nach der Versionierungsregel (geänderte Struktur); der Vorschlag v2.1 nannte 2.1.
 
 ### Geändert
 
-- **Dateischnitt [S01]:** Teil A in `A_gemeinsame-regeln.md`, jede SOP und jeder Baustein in einer eigenen Datei, die mit ihrem Anker beginnt; Übersicht und Konkordanz in `README.md` (ersetzt Mappenkopf und Inhaltsverzeichnis, die vor dem ersten Anker standen und die KI nie erreichten) [S11].
-- **Kennungen [S02, S03]:** Teil B B01–B17 (Zahl wie bisher, Reihenfolge des Ereigniskatalogs); Teil C lückenlos C01–C17 in vier Gruppen statt der Review-Kennungen N01–N18 mit Lücke N14: Ereignisbausteine C01–C06, Versorgungsbausteine C07–C11, Gesundheitsbausteine C12–C15, Querschnittsbausteine C16–C17. Technische IDs `b01`–`b17`, `c01`–`c17`; Teil A bleibt `teil-a`.
-- **Abschnittsschema [S04]:** in allen 34 Abschnitten „1. Anwendungsbereich und Befassungsanlässe“, „2. Erfassung: Prüffragen“, „3. Auswertung: Prüfpunkte“, „4. Darstellung“, „5. Ansprechstellen und Pflege“; Satzanfang „Offene Punkte“ statt „Inhaltlich offene Punkte“.
-- **Prüffragen [S05, S06]:** Begriff „Prüffragen“ statt „Recherchebausteine“ bzw. „Recherchezeilen“; IDs nur „R1“ ff.; Teilprofile als Zwischenüberschriften mit eigener Tabelle (B05: Teilprofil 5a R1–R4, 5b R5–R8; C13: Auslandsprofil R1–R2, lokales Profil R3–R4, beide Profile R5–R6); Zitierweise „B05-R3“.
-- **Kopfdaten [S07]:** einheitliche Schlüsselfolge mit `kennung`, `typ` (Ereignis-SOP, Ereignisbaustein, Versorgungsbaustein, Gesundheitsbaustein, Querschnittsbaustein), `bisherige_kennung` und `bisherige_ids`; `bausteintyp` entfällt; Teil B mit `status: "Beispielfassung"`. Fassungen redaktionell: SOPs 2.0 → 2.0.1, Bausteine 1.0 → 1.0.1.
-- **Querverweise [S08]:** alle Verweise „SOP 07“, „N06“ und die Routentabelle in A.1 Nr. 2 auf B- und C-Kennungen umgestellt (Ausnahme: Review-Kennung N14 im Gültigkeitsstand).
-- **Teil A:** Gültigkeitsstand (Sammelmappe 3.0, Profil 1.6.0, Arbeitsanweisungen 1.3.1, 2.0.1, 2.1.1); A.10.1 um Gliederung und Kennungen ergänzt; A.8.3 nennt „Offene Punkte“.
-- **Archiv [S12]:** Fassungen 1.0.1 und 2.0.1 unverändert unter `archiv/`; aktive Dateinamen ohne Versionsnummer.
+- **Dateischnitt:** Teil A in `A_Gemeinsame-Regeln.md`, die Dach-SOPs in `teil-b/`, die Bausteine in `teil-c/`, je eine Datei mit genau einem Anker am Anfang. Pflegequelle sind die Einzeldateien; die Lesefassung wird daraus erzeugt. Übersicht und Konkordanz in `README.md` (ersetzt Mappenkopf und Inhaltsverzeichnis, die vor dem ersten Anker standen und die KI nie erreichten).
+- **Kennungen:** Teil B B01–B17 (Zahl wie bisher, Reihenfolge des Ereigniskatalogs); Teil C lückenlos C01–C17 nach Register v2.1 statt der Review-Kennungen N01–N18 mit Lücke N14. Leseblöcke (nur Navigation): Besondere Ereignis- und Gefahrenlagen C01–C06, Gesundheit und medizinische Versorgung C07–C10, Versorgung, Kommunikation und Logistik C11–C15, Lageübergreifende Querschnitte C16–C17. Technische IDs `b01`–`b17`, `c01`–`c17` mit den früheren IDs in `bisherige_ids`; Teil A bleibt `teil-a`.
+- **Feste Kennungen (A.10.1):** keine Neunummerierung nach Fassung 3.0; neue Einheiten erhalten die nächste freie Nummer (B18, C18), stillgelegte Kennungen werden nicht wieder belegt.
+- **Abschnittsschema:** in allen 34 Abschnitten „1. Anwendungsbereich und Befassungsanlässe“, „2. Erfassung: Prüffragen“, „3. Auswertung: Prüfpunkte“, „4. Darstellung“, „5. Ansprechstellen und Pflege“; Satzanfang „Offene Punkte“ statt „Inhaltlich offene Punkte“. Abschnitt 5 heißt nicht „Pflege und Zuständigkeit“ (v2.1), weil er Ansprechstellen und offene Punkte enthält und „Zuständigkeit“ mit D3 und A.1 Nr. 4 verwechselt würde.
+- **Prüffragen:** Begriff „Prüffragen“ statt „Recherchebausteine“ bzw. „Recherchezeilen“; IDs nur „R1“ ff.; Teilprofile als Zwischenüberschriften mit eigener Tabelle (B05: Teilprofil 5a R1–R4, 5b R5–R8; C07: Auslandsprofil R1–R2, lokales Profil R3–R4, beide Profile R5–R6). Zitierweise „C17, Abschnitt 3“ und „C17/R2“.
+- **Kopfdaten:** einheitliche Schlüsselfolge mit `kennung`, `typ` (Dach-SOP, Themenbaustein, Querschnittsbaustein), `bausteintyp` (Bestand, wortgleich), `lesegruppe`, `bisherige_kennung` und `bisherige_ids`; Teil B mit `status: "Beispielfassung"`. Fassungen redaktionell: SOPs 2.0 → 2.0.1, Bausteine 1.0 → 1.0.1.
+- **Querverweise:** alle Verweise „SOP 07“, „N06“ und die Routentabelle in A.1 Nr. 2 auf B- und C-Kennungen umgestellt (Ausnahme: Review-Kennung N14 im Gültigkeitsstand).
+- **Teil A:** Gültigkeitsstand (Sammelmappe 3.0, Profil 1.6.0, Arbeitsanweisungen 1.3.1, 2.0.1, 2.1.1); A.10.1 um Gliederung, Leseblöcke, Zitierweise und feste Kennungen ergänzt; A.8.3 nennt „Offene Punkte“.
+- **Archiv:** Fassungen 1.0.1 und 2.0.1 unverändert unter `archiv/`; aktive Dateinamen ohne Versionsnummer.
 
 ### Konkordanz Teil C
 
-| bisher | neu | Gruppe |
-|---|---|---|
-| N01 | C01 | Ereignisbaustein |
-| N09 | C02 | Ereignisbaustein |
-| N15 | C03 | Ereignisbaustein |
-| N16 | C04 | Ereignisbaustein |
-| N17 | C05 | Ereignisbaustein |
-| N18 | C06 | Ereignisbaustein |
-| N02 | C07 | Versorgungsbaustein |
-| N05 | C08 | Versorgungsbaustein |
-| N06 | C09 | Versorgungsbaustein |
-| N07 | C10 | Versorgungsbaustein |
-| N08 | C11 | Versorgungsbaustein |
-| N04 | C12 | Gesundheitsbaustein |
-| N11 | C13 | Gesundheitsbaustein |
-| N10 | C14 | Gesundheitsbaustein |
-| N12 | C15 | Gesundheitsbaustein |
-| N03 | C16 | Querschnittsbaustein |
-| N13 | C17 | Querschnittsbaustein |
+| bisher | neu | Typ | Leseblock |
+|---|---|---|---|
+| N01 | C01 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N09 | C02 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N15 | C03 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N18 | C04 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N16 | C05 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N17 | C06 | Themenbaustein | Besondere Ereignis- und Gefahrenlagen |
+| N11 | C07 | Themenbaustein | Gesundheit und medizinische Versorgung |
+| N10 | C08 | Themenbaustein | Gesundheit und medizinische Versorgung |
+| N04 | C09 | Themenbaustein | Gesundheit und medizinische Versorgung |
+| N12 | C10 | Themenbaustein | Gesundheit und medizinische Versorgung |
+| N02 | C11 | Themenbaustein | Versorgung, Kommunikation und Logistik |
+| N05 | C12 | Themenbaustein | Versorgung, Kommunikation und Logistik |
+| N06 | C13 | Themenbaustein | Versorgung, Kommunikation und Logistik |
+| N07 | C14 | Themenbaustein | Versorgung, Kommunikation und Logistik |
+| N08 | C15 | Themenbaustein | Versorgung, Kommunikation und Logistik |
+| N03 | C16 | Querschnittsbaustein | Lageübergreifende Querschnitte |
+| N13 | C17 | Querschnittsbaustein | Lageübergreifende Querschnitte |
 
 Teil B: 01–17 → B01–B17 (gleiche Zahl).
 
