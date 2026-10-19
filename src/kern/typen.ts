@@ -181,6 +181,12 @@ export interface Sop {
   lageart?: string;
   art_vorschlag?: string[];
   version?: string;
+  /** Art des Abschnitts aus dem Kopf, z. B. „Dach-SOP“, „Themenbaustein“, „Querschnittsbaustein“ */
+  typ?: string;
+  /** Leseblock zur Gliederung der Auswahl (nur Navigation) */
+  lesegruppe?: string;
+  /** Bearbeitungsstand aus dem Kopf, z. B. „Inhaltsgerüst – …“ */
+  status?: string;
   datei: string;
   text: string;
   gemeinsam: boolean;

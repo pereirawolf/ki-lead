@@ -25,7 +25,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.7 | 89bfa77 |
 | 0.4.8 | Commit „SOP-LEAD 2.0: Befunde der unabhängigen Prüfung eingearbeitet“ |
 | 0.4.9 | 99403c0 |
-| 0.4.10 | d9cf1d4 (Nachtrag vom 20.10.2026: Commit „README nach Review überarbeitet“) |
+| 0.4.10 | 90ab407 (Nachtrag vom 20.10.2026: README) |
+| 0.4.11 | Commit „SOP-Integration: Nachweis, gegliederte Auswahl, Lagebild, Katalog; 0.4.11“ |
+
+## [0.4.11] – 20.10.2026
+
+Grundlage: Prüfung „KI-LEAD_SOP_Codepruefung_2026-10-20“ und konsolidierter Vorschlag „KI-LEAD_SOP_Integration_Vorschlag_konsolidiert_2026-10-20“ (Kennungen SOP-CODE-01 bis -09; Entscheidungen E1 und E2 wie empfohlen).
+
+### Behoben
+
+- SOP-Nachweis: Bei leerer bestätigter Auswahl übernahm die App vom Modell behauptete SOPs; `sopKennungenAbgleichen` filtert jetzt bei jeder übergebenen Menge, auch einer leeren, und normalisiert nur ohne Menge [SOP-CODE-01].
+- SOP-Nachweis hing vom Antwortformat des Modells ab (fehlende Angabe: alle gewählten; leere Liste: keine; Teilmenge: ohne Hinweis). `_entstehung.sop` enthält jetzt immer die tatsächlich beigefügten SOPs und Bausteine aus der zusammengestellten Anfrage. Die Angabe des Modells zur Anwendung wird damit verglichen; fehlende Angabe, nicht beigefügte oder unbekannte Kennungen und nicht als angewandt genannte Abschnitte erscheinen als Prüfhinweis „SOP-Nachweis: …“. Kein neues Schemafeld [SOP-CODE-02, E1].
+
+### Neu
+
+- KI-Erfassung, Schritt „Gegenstand bestätigen“: Auswahl „SOPs und Bausteine für diesen Sachverhalt“ gegliedert in Dach-SOPs und die Leseblöcke der Bausteine, Marke „Inhaltsgerüst“, Hinweis, dass Teil A immer mitgeht, und aufklappbarer Anwendungsbereich der gewählten Abschnitte. Der Parser übernimmt `typ`, `lesegruppe` und `status` aus dem Kopf; Profile ohne diese Angaben erscheinen in einer neutralen Gruppe [SOP-CODE-03].
+- Lagebild: aufklappbare Entstehung je Meldungskarte (Verfahren, Modell, SOP und Bausteine, Kodierleitfaden, Erstellt), Angaben wie gespeichert; Rohtabelle und CSV mit Spalte „SOP (Entstehung)“ („keine“ bzw. „nicht dokumentiert“ bei fehlender Angabe eines KI-Entwurfs) [SOP-CODE-04].
+- Profile: „SOP-Katalog lesen“ mit gemeinsamen Regeln, Dach-SOPs und Bausteinen im Volltext, ohne KI und ohne Wirkung auf Meldungen; Anzahl getrennt nach SOPs und Bausteinen [SOP-CODE-03, SOP-CODE-06, E2].
+- Tests: jede der 34 Einheiten der SOP-Übersicht einzeln (geladen, S1-Schema und -Katalog, S2-Block, Gruppe, Status), Grenzfälle des Nachweises, frühere Kennungen, Ereigniswechsel lässt Bausteine stehen, CSV-Spalte [SOP-CODE-07].
+
+### Geändert
+
+- Prüfansicht und PDF: „Beigefügte SOP und Bausteine (KI-Kontext)“ statt „Angewandte SOP“; „nicht dokumentiert“ bei KI-Entwürfen ohne Angabe [SOP-CODE-02].
+- Eingebettete Profile ohne `sop/archiv/`, erzeugte Lesefassung und SOP-Übersicht; Haupt-JavaScript von 1,92 MB auf 1,38 MB [SOP-CODE-09].
+- Ereigniswechsel in der SOP-Auswahl als prüfbare Funktion `sopsNachArtwechsel`.
+- Beispielprofil 1.6.1 (Erfassung 1.3.2, Sammelmappe 3.0.1); Spezifikation 0.4.11, Profilformat 1.9.
 
 ## [0.4.10] – 19.10.2026
 
@@ -205,7 +229,8 @@ Korrekturen nach einem unabhängigen Code-Review (Befunde F01–F15) und Einfüh
 
 - Autorenname im Kodierleitfaden des Beispielprofils korrigiert.
 
-[0.4.10]: https://github.com/pereirawolf/ki-lead/compare/99403c0...main
+[0.4.11]: https://github.com/pereirawolf/ki-lead/compare/90ab407...main
+[0.4.10]: https://github.com/pereirawolf/ki-lead/compare/99403c0...90ab407
 [0.4.9]: https://github.com/pereirawolf/ki-lead/compare/40cd5a9...99403c0
 [0.4.8]: https://github.com/pereirawolf/ki-lead/compare/89bfa77...40cd5a9
 [0.4.7]: https://github.com/pereirawolf/ki-lead/compare/6636068...89bfa77

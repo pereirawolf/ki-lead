@@ -2266,3 +2266,75 @@ a.knopf {
   flex-direction: column;
   gap: 0.25rem;
 }
+
+/* SOP-Auswahl und SOP-Katalog: Gliederung nach Dach-SOPs und Bausteinen */
+.sop-gruppe {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.sop-gruppe-titel {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+.sop-status {
+  margin-left: 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: var(--r-klein);
+  padding: 0 0.3rem;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.sop-details,
+.sop-katalog details {
+  margin-top: 0.5rem;
+}
+
+.sop-details summary,
+.sop-katalog summary {
+  cursor: pointer;
+  color: var(--amt-tief);
+  font-weight: 700;
+  min-height: 32px;
+}
+
+.sop-auszug {
+  margin: 0.6rem 0;
+}
+
+.sop-auszug pre,
+.sop-katalog pre {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.9rem;
+  max-width: 78ch;
+  line-height: 1.5;
+  margin: 0.3rem 0 0;
+}
+
+.lb-entstehung {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.lb-entstehung summary {
+  cursor: pointer;
+  color: var(--amt-tief);
+  font-weight: 700;
+}
+
+.lb-entstehung dl {
+  margin: 0.3rem 0 0;
+}
+
+.lb-entstehung dt {
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+.lb-entstehung dd {
+  margin: 0 0 0.3rem;
+}

@@ -6,9 +6,17 @@
 
 declare const __KI_LEAD_PRIVAT__: boolean;
 
-const oeffentlich = import.meta.glob("/profile/**/*.{json,md}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+// Nicht eingebettet: archivierte SOP-Fassungen, die erzeugte Lesefassung und die SOP-Übersicht. Die App liest sie nie
+// als SOP (maßgeblich ist sop.dateien im Manifest); sie würden nur Ladezeit und Profilprüfsumme vergrößern.
+const oeffentlich = import.meta.glob(
+  ["/profile/**/*.{json,md}", "!/profile/**/sop/archiv/**", "!/profile/**/sop/*_Lesefassung.md", "!/profile/**/sop/README.md"],
+  { query: "?raw", import: "default", eager: true },
+) as Record<string, string>;
 const privat = __KI_LEAD_PRIVAT__
-  ? (import.meta.glob("/privat/profile/**/*.{json,md}", { query: "?raw", import: "default", eager: true }) as Record<string, string>)
+  ? (import.meta.glob(
+      ["/privat/profile/**/*.{json,md}", "!/privat/profile/**/sop/archiv/**", "!/privat/profile/**/sop/*_Lesefassung.md", "!/privat/profile/**/sop/README.md"],
+      { query: "?raw", import: "default", eager: true },
+    ) as Record<string, string>)
   : {};
 
 export interface EingebautesProfil {

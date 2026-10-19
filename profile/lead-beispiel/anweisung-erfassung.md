@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.3.1 vom 19.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 3.0 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0.1 und der Arbeitsanweisung Kurzfassung 2.1.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.3.2 vom 20.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 3.0.1 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0.1 und der Arbeitsanweisung Kurzfassung 2.1.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs und Bausteine, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ein thematisch passendes Beispiel-JSON dient nur als Stilbeispiel, nie als Beleg, Skalenquelle oder Vorgabe für die Bewertung. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
 
@@ -85,7 +85,7 @@ Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichung
    - **Abschnitt 4 (Darstellung)** liefert die lageartspezifischen Leitfragen für die vier Analysefelder.
    - **Abschnitt 5 (Ansprechstellen)** hilft, die Adressaten in `massnahmen_empfehlungen` zu bestimmen. Erfinde keine Kontakte oder Abstimmungen.
 4. **Teil A gilt immer.** Rollenprofil und Auslandsbezug (A.1), Kodierregeln (A.2 mit Kodierleitfaden), Befundnachweis, Zeitbezug, Bestätigungsgrad, Zählregeln und Quellen (A.3), Übertrag mit Kernaussage, Maßnahmenstatus und Kennsätzen (A.4), Abschlusscheck (A.5), Querschnittsprüfungen als kurze Relevanzprüfung (A.9) sowie bei Fortschreibung einer Vormeldung A.8.
-5. **Dokumentieren.** Trage nur die tatsächlich beigefügten und angewandten SOPs und Bausteine mit Nummer, Name und Version in `_entstehung.sop` ein (z. B. `"SOP-LEAD B01 Unwetter / Sturm v2.0.1"`). Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
+5. **Dokumentieren.** Nenne in `_entstehung.sop` die beigefügten SOPs und Bausteine, die du tatsächlich angewandt hast, mit Nummer, Name und Version (z. B. `"SOP-LEAD B01 Unwetter / Sturm v2.0.1"`). Die App führt im Nachweis der Meldung die tatsächlich beigefügten SOPs und Bausteine und vergleicht deine Angabe damit; Abweichungen erscheinen als Prüfhinweis. Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
 6. **Fehlende Grundlagen.** Fehlt nur eine Fach-SOP, arbeitest du mit Teil A, dieser Anweisung und dem Kodierleitfaden und kennzeichnest den Entwurf entsprechend; `_entstehung.sop` bleibt dann `[]`, und die Kurzantwort nennt ausdrücklich, dass keine Fach-SOP angewendet wurde. Fehlt der Kodierleitfaden, bleiben die davon abhängigen Radarwerte offen. Ohne Schema erfindest du keinen angeblich schemafähigen Datensatz.
 
 ## 3. Recherche und Belegbarkeit
@@ -181,7 +181,7 @@ Fülle in `_entstehung`:
 }
 ```
 
-Die Werte sind Beispiele: Nenne die tatsächlich verwendeten Fassungen laut Kopf der beigefügten Dokumente und übernimm Beispielwerte nie ungeprüft. Die Einträge `werkzeug`, `modell` und `erstellt` setzt die App; sie gleicht außerdem `kodierleitfaden` und die SOP-Kennungen mit dem Profil ab.
+Die Werte sind Beispiele: Nenne die tatsächlich verwendeten Fassungen laut Kopf der beigefügten Dokumente und übernimm Beispielwerte nie ungeprüft. Die Einträge `werkzeug`, `modell` und `erstellt` setzt die App; sie setzt außerdem `kodierleitfaden` aus dem Profil und führt in `sop` die beigefügten SOPs und Bausteine (deine Angabe dient dem Abgleich).
 
 Prüfe vor der Ausgabe:
 - **Struktur:** Jedes `art`-Element ist eine exakte Katalogoption. Alle Schlüssel, Datentypen, Auswahlwerte und Radarwerte entsprechen dem Schema; es gibt keine schemafremden Felder. Daten sind logisch und im ISO-Format. Die Freigabefelder sind leer, `_status` ist „Entwurf“.

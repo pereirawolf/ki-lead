@@ -173,7 +173,7 @@ function identitaetsFelder(p: Profil): string[] {
   return [r.land, r.meldende_stelle].filter((f): f is string => !!f && !!p.manifest.variablen[f]);
 }
 
-export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekturen: string[] = []): Meldung {
+export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekturen: string[] = [], sopHinweise: string[] = []): Meldung {
   if (!roh || typeof roh !== "object" || Array.isArray(roh)) throw new Error("Das Ergebnis ist kein JSON-Objekt.");
   const p = k.profil;
   const r = p.ui.rollen;
@@ -209,11 +209,19 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekt
         (k.lauf.bestaetigt?.sachverhalte || []).flatMap((s) => s.sops),
       ),
     );
-    if ("sop" in erlaubt && !Array.isArray(e.sop)) {
-      e.sop = fachSops(p)
-        .filter((s) => ids.has(s.id))
-        .map(sopKennung);
-    } else if ("sop" in erlaubt && Array.isArray(e.sop)) e.sop = sopKennungenAbgleichen(e.sop, p, ids);
+    if ("sop" in erlaubt) {
+      // Nachweis = tatsächlich beigefügte SOPs und Bausteine (aus der zusammengestellten Anfrage), unabhängig vom
+      // Antwortformat des Modells. Die Angabe des Modells zur Anwendung wird nur verglichen.
+      const beigefuegt = fachSops(p).filter((s) => ids.has(s.id));
+      sopHinweise.push(
+        ...sopAngabeVergleichen(
+          e.sop,
+          p,
+          beigefuegt.map((s) => s.id),
+        ),
+      );
+      e.sop = beigefuegt.map(sopKennung);
+    }
     const kl = kodierleitfadenKennung(p);
     if ("kodierleitfaden" in erlaubt && kl) e.kodierleitfaden = kl;
     d[r.entstehung_feld] = e;
@@ -235,10 +243,33 @@ export function kodierleitfadenKennung(p: Profil): string | undefined {
 }
 
 /**
- * Gleicht die vom Modell genannten SOP-Kennungen mit dem Profil ab: bekannte Nummern erhalten die Kennung
- * mit gültiger Fassung; nicht beigefügte (in S1 nicht bestätigte) oder unbekannte Einträge entfallen.
+ * Vergleicht die Angabe des Modells in `_entstehung.sop` mit den beigefügten SOPs und liefert Prüfhinweise:
+ * fehlende Angabe, nicht beigefügte oder unbekannte Einträge, beigefügte, aber nicht als angewandt genannte.
  */
-export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt: Set<string>): string[] {
+export function sopAngabeVergleichen(angabe: unknown, p: Profil, beigefuegtIds: string[]): string[] {
+  const beigefuegt = fachSops(p).filter((s) => beigefuegtIds.includes(s.id));
+  const kennung = (id: string) => sopKennung(fachSops(p).find((s) => s.id === id)!);
+  if (!Array.isArray(angabe)) return beigefuegt.length ? ["Die KI hat nicht angegeben, welche der beigefügten SOPs und Bausteine sie angewandt hat."] : [];
+  const genannt = sopKennungenAbgleichen(angabe, p);
+  const unbekannt = angabe.filter((x) => !sopKennungenAbgleichen([x], p).length).map(String);
+  const genanntIds = fachSops(p)
+    .filter((s) => genannt.includes(sopKennung(s)))
+    .map((s) => s.id);
+  const h: string[] = [];
+  const fremd = genanntIds.filter((id) => !beigefuegtIds.includes(id));
+  if (fremd.length) h.push(`Die KI nennt SOPs als angewandt, die nicht beigefügt waren (verworfen): ${fremd.map(kennung).join("; ")}.`);
+  if (unbekannt.length) h.push(`Die KI nennt unbekannte SOP-Kennungen (verworfen): ${unbekannt.join("; ")}.`);
+  const nicht = beigefuegt.filter((s) => !genanntIds.includes(s.id));
+  if (nicht.length) h.push(`Beigefügt, von der KI aber nicht als angewandt genannt: ${nicht.map(sopKennung).join("; ")}.`);
+  return h;
+}
+
+/**
+ * Gleicht die vom Modell genannten SOP-Kennungen mit dem Profil ab: bekannte Nummern (auch frühere) erhalten die
+ * Kennung mit gültiger Fassung; unbekannte Einträge entfallen. Mit `beigefuegt` entfallen außerdem alle nicht
+ * beigefügten SOPs – auch bei leerer Menge (dann bleibt nichts). Ohne `beigefuegt` wird nur normalisiert.
+ */
+export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt?: Set<string>): string[] {
   const norm = (n: string) => n.toUpperCase().padStart(2, "0");
   const out: string[] = [];
   for (const eintrag of liste) {
@@ -247,7 +278,7 @@ export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt: 
     const sop = nr
       ? fachSops(p).find((s) => s.nummer && norm(s.nummer) === norm(nr)) || fachSops(p).find((s) => s.bisherigeKennung && norm(s.bisherigeKennung) === norm(nr))
       : undefined;
-    if (!sop || (beigefuegt.size && !beigefuegt.has(sop.id))) continue;
+    if (!sop || (beigefuegt && !beigefuegt.has(sop.id))) continue;
     const kennung = sopKennung(sop);
     if (!out.includes(kennung)) out.push(kennung);
   }
@@ -366,11 +397,13 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   let meldung: Meldung | undefined;
   let schemaBefunde: SchemaBefund[] = [];
   let korrekturen: string[] = [];
+  let sopHinweise: string[] = [];
   for (let runde = 0; ; runde++) {
     if (z.json !== undefined) {
       try {
         korrekturen = [];
-        meldung = nachbearbeiten(z.json, k, modell, korrekturen);
+        sopHinweise = [];
+        meldung = nachbearbeiten(z.json, k, modell, korrekturen, sopHinweise);
         schemaBefunde = pruefeGegenSchema(p.schema, meldung, p.ui);
       } catch (err: any) {
         meldung = undefined;
@@ -409,6 +442,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
   if (meldung && korrekturen.length)
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });
+  // Nachweis „beigefügte SOPs“ setzt die App; Abweichungen der KI-Angabe zur Anwendung als Prüfhinweis
+  if (meldung) for (const t of sopHinweise) befunde.push({ stufe: "hinweis", text: `SOP-Nachweis: ${t}` });
   if (meldung && verdichtung) {
     const z = eingangsquellenPruefen(k.material, meldung, p);
     const liste = (st: string) => z.filter((x) => x.status === st).map((x) => `${x.stelle}${x.eintrag ? ` [Q${x.eintrag}]` : ""}`);

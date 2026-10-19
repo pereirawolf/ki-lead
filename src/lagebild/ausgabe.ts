@@ -49,6 +49,17 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
   out.push({ titel: titel.join(" › "), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
 }
 
+/**
+ * SOP-Angabe aus `_entstehung` als Text, so wie gespeichert (historische Kennungen bleiben unverändert).
+ * Leere Liste: „keine“; ohne Angabe bei einem KI-Entwurf: „nicht dokumentiert“; sonst leer.
+ */
+export function sopNachweis(entstehung: unknown): string {
+  const e = entstehung && typeof entstehung === "object" ? (entstehung as Record<string, unknown>) : undefined;
+  if (!e) return "";
+  if (Array.isArray(e.sop)) return e.sop.length ? e.sop.map(String).join("; ") : "keine";
+  return e.verfahren === "KI-Entwurf" ? "nicht dokumentiert" : "";
+}
+
 /** Spalten der Rohtabelle: Datei, Meldungsfelder, Status, Sachverhaltsfelder, Quellen, Schemaprüfung. */
 export function spalten(profil: Profil): Spalte[] {
   const r = profil.ui.rollen;
@@ -67,7 +78,12 @@ export function spalten(profil: Profil): Spalte[] {
     { titel: "Datei", wert: (e) => e.name },
     ...kopf,
     { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)) },
-    ...(r.entstehung_feld ? [{ titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])) }] : []),
+    ...(r.entstehung_feld
+      ? [
+          { titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])) },
+          { titel: "SOP (Entstehung)", wert: (e: LagebildEintrag) => sopNachweis(holeWert(e.daten, r.entstehung_feld!)) },
+        ]
+      : []),
     ...sv,
     ...(r.quellen ? [{ titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, r.quellen!)) }] : []),
     {

@@ -8,6 +8,14 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.6.1 – 20.10.2026
+
+Grundlage: Vorschlag „KI-LEAD_SOP_Integration_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen E1 und E2 wie empfohlen).
+
+- **SOP-Sammelmappe 3.0.1** (redaktionell; Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md)).
+- **Arbeitsanweisung Erfassung 1.3.2** (redaktionell): `_entstehung.sop` nennt die angewandten unter den beigefügten SOPs; die App führt im Nachweis die beigefügten und weist Abweichungen als Prüfhinweis aus.
+- In die App eingebettet werden nur noch die Dateien, die sie liest: `sop/archiv/`, die erzeugte Lesefassung und `sop/README.md` bleiben im Repository, aber außerhalb des Builds. Dadurch ändert sich die Prüfsumme des mitgelieferten Profils.
+
 ## 1.6.0 – 19.10.2026
 
 Grundlage: Strukturvorschlag „SOP-LEAD_Strukturvorschlag_Teil-B-C_2026-10-19“, freigegeben am 19.10.2026. Nur Struktur, keine fachlichen Änderungen.
