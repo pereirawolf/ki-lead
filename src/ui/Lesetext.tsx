@@ -3,10 +3,11 @@
 // http(s)-Links führen nach außen. Relative Links öffnen den passenden Eintrag im selben Paket. Der Renderer wird erst
 // beim ersten Öffnen nachgeladen.
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { MarkdownIt } from "markdown-it";
 import type { Profil } from "../kern/typen";
-import { linkZiel, type LinkZiel } from "../profil/lesen";
+import { inhaltsverzeichnis, linkZiel, type LinkZiel } from "../profil/lesen";
+import { dateiAnbieten } from "../speicher/speicher";
 
 interface LeseUmgebung {
   von: string;
@@ -51,7 +52,11 @@ function ladeRenderer(): Promise<MarkdownIt> {
   return renderer;
 }
 
-/** Markdown als HTML; Tabellen in einem waagerecht scrollbaren Rahmen, Platzhalter `{{name}}` hervorgehoben. */
+/**
+ * Markdown als HTML; Tabellen in einem waagerecht scrollbaren Rahmen. Platzhalter der Arbeitsanweisungen
+ * (`{{profil.referenzraum}}`, `{{auftrag.sachverhalt}}`, `{{app.ausgabevertrag}}`, `{{jetzt}}`; Syntax wie
+ * `platzhalterIn`) werden hervorgehoben, aber nicht ersetzt.
+ */
 export async function lesetextHtml(text: string, von: string, profil: Profil): Promise<string> {
   const md = await ladeRenderer();
   const umgebung: LeseUmgebung = { von, profil, stapel: [] };
@@ -59,7 +64,7 @@ export async function lesetextHtml(text: string, von: string, profil: Profil): P
   return html
     .replace(/<table>/g, '<div class="tabelle-rahmen"><table>')
     .replace(/<\/table>/g, "</table></div>")
-    .replace(/>([^<]+)</g, (_m: string, t: string) => ">" + t.replace(/\{\{([A-Za-z0-9_]+)\}\}/g, '<span class="platzhalter">{{$1}}</span>') + "<");
+    .replace(/>([^<]+)</g, (_m: string, t: string) => ">" + t.replace(/\{\{\s*[a-z]+(?:\.[a-z_]+)?\s*\}\}/gi, '<span class="platzhalter">$&</span>') + "<");
 }
 
 interface Props {
@@ -69,12 +74,19 @@ interface Props {
   profil: Profil;
   /** Aufruf bei einem Link auf einen Eintrag im selben Paket („sop:b08“ bzw. „dokument:sop/CHANGELOG.md“) */
   oeffnen: (ziel: string) => void;
+  /** Originaltext und Dateiname für Quelltext und Download (Standard: der dargestellte Text) */
+  original?: { text: string; dateiname: string };
 }
 
-export function Lesetext({ text, von, profil, oeffnen }: Props) {
+/** Mindestzahl an Überschriften (Ebenen 2 und 3), ab der ein Inhaltsverzeichnis erscheint. */
+export const INHALT_AB = 4;
+
+export function Lesetext({ text, von, profil, oeffnen, original }: Props) {
   const [html, setHtml] = useState<string | null>(null);
   const [fehler, setFehler] = useState(false);
   const [quelltext, setQuelltext] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+  const inhalt = useMemo(() => inhaltsverzeichnis(text), [text]);
   useEffect(() => {
     let gueltig = true;
     lesetextHtml(text, von, profil).then(
@@ -86,17 +98,49 @@ export function Lesetext({ text, von, profil, oeffnen }: Props) {
     };
   }, [text, von, profil]);
 
+  const springen = (index: number) => {
+    const ziel = textRef.current?.querySelectorAll("h2, h3")[index] as HTMLElement | undefined;
+    if (!ziel) return;
+    ziel.setAttribute("tabindex", "-1");
+    ziel.scrollIntoView({ block: "start", behavior: "smooth" });
+    ziel.focus({ preventScroll: true });
+  };
+  const roh = original?.text ?? text;
+  const lesbar = !quelltext && !fehler && html !== null;
+
   return (
     <div className="lesetext-rahmen">
-      <button type="button" className="knopf leise klein" aria-pressed={quelltext} onClick={() => setQuelltext((q) => !q)}>
-        {quelltext ? "Lesefassung anzeigen" : "Quelltext anzeigen"}
-      </button>
+      <div className="lesetext-werkzeuge">
+        <button type="button" className="knopf leise klein" aria-pressed={quelltext} onClick={() => setQuelltext((q) => !q)}>
+          {quelltext ? "Lesefassung anzeigen" : "Quelltext anzeigen"}
+        </button>
+        {original && (
+          <button type="button" className="knopf leise klein" onClick={() => dateiAnbieten(original.text, original.dateiname, "text/markdown")}>
+            Originaldatei herunterladen
+          </button>
+        )}
+      </div>
+      {lesbar && inhalt.length >= INHALT_AB && (
+        <details className="lese-inhalt">
+          <summary>Inhalt ({inhalt.length} Abschnitte)</summary>
+          <ol>
+            {inhalt.map((e) => (
+              <li key={e.index} className={e.ebene === 3 ? "lese-inhalt-unter" : undefined}>
+                <button type="button" className="lese-inhalt-sprung" onClick={() => springen(e.index)}>
+                  {e.titel}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
       {quelltext || fehler ? (
-        <pre className="quelltext">{text}</pre>
+        <pre className="quelltext">{roh}</pre>
       ) : html === null ? (
         <p className="hinweis">Wird aufbereitet …</p>
       ) : (
         <div
+          ref={textRef}
           className="lesetext"
           onClick={(e) => {
             const a = (e.target as HTMLElement).closest("a[data-ziel]");

@@ -27,7 +27,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.9 | 99403c0 |
 | 0.4.10 | 90ab407 (Nachtrag vom 20.10.2026: README) |
 | 0.4.11 | 706be47 |
-| 0.4.12 | Commit „SOP-LEAD C01 1.1.0: Referenzszenarien ANoPl-Bund; Sammelmappe 3.1.0, Profil 1.7.0“ (Nachtrag vom 20.10.2026: Beispielprofil 1.7.0, ohne Änderung der App; Stand der Version selbst: 3d58abf) |
+| 0.4.12 | ef5280b (Nachtrag vom 20.10.2026: Beispielprofil 1.7.0, ohne Änderung der App; Stand der Version selbst: 3d58abf) |
+| 0.4.13 | Commit „Arbeitsanweisungen und Kodierleitfaden unter Profile; 0.4.13“ |
+
+## [0.4.13] – 20.10.2026
+
+Grundlage: Prüfung „KI-LEAD_Profil_Arbeitsgrundlagen_2026-10-20“ und konsolidierter Vorschlag „KI-LEAD_Arbeitsgrundlagen_Vorschlag_konsolidiert_2026-10-20“ (PROFIL-DOK-01 bis -10; Entscheidungen E1–E4 wie empfohlen).
+
+### Behoben
+
+- Platzhalter in Arbeitsanweisungen wurden im Lesetext nicht hervorgehoben: Erkannt wurden nur Namen ohne Punkt. Jetzt gilt dieselbe Syntax wie beim Einsetzen (`{{profil.…}}`, `{{auftrag.…}}`, `{{app.…}}`, `{{jetzt}}`) [PROFIL-DOK-06].
+- „Quelltext anzeigen“ zeigte bei SOPs den aufbereiteten Ausschnitt ohne Kopf; jetzt erscheint die unveränderte Datei des Pakets [PROFIL-DOK-04].
+
+### Neu
+
+- Profile: eigener Bereich „Arbeitsanweisungen und Kodierleitfaden“ vor dem SOP-Katalog. Er enthält Erfassung, Verdichtung, Kurzfassung und Kodierleitfaden, jeweils mit Zwecksatz und Tag der eigenen Fassung aus dem Kopf des Dokuments („Fassung nicht angegeben“ ohne erkennbare Angabe) [PROFIL-DOK-01 bis -03, E1].
+- Fehlen Verdichtung oder Kurzfassung im Profil, zeigt die Zeile die Standardfassung der App, die dann an die KI geht, gekennzeichnet als „kein Bestandteil des Profils“ [PROFIL-DOK-08, E2].
+- Geöffnete Dokumente: Kopfzeile mit Datei, Fassung, Stand, Profil und Profilversion; Hinweis zu Platzhaltern; Inhaltsverzeichnis für alle Lesetexte ab vier Überschriften, auch für Teil A und die SOPs, mit Sprung innerhalb des Texts; „Originaldatei herunterladen“ [PROFIL-DOK-05, -07, -10, E3, E4].
+- Tests: Arbeitsgrundlagen beider Profile, Fassungserkennung (zitierte Fremdfassungen zählen nicht), Standardfassungen, Inhaltsverzeichnis in Übereinstimmung mit dem gerenderten Text, Platzhalter mit Punkt.
+
+### Geändert
+
+- „Dokumentation lesen“ enthält nur noch Übersichten und Änderungsverläufe und steht nach dem SOP-Katalog; die SOP-Übersicht trägt das Tag der Sammelmappen-Fassung.
+- Spezifikation 0.4.13, Profilformat 1.11.
 
 ## [0.4.12] – 20.10.2026
 

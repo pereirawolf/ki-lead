@@ -3,7 +3,8 @@
 // weiterhin `sopKennung` (src/profil/sop.ts).
 
 import type { Profil, Sop } from "../kern/typen";
-import { fachSops, istBaustein, istInhaltsgeruest } from "../pipeline/kontext";
+import { fachSops, istBaustein, istInhaltsgeruest, VERDICHTUNG_S2 } from "../pipeline/kontext";
+import { STANDARD_ANWEISUNG } from "../pipeline/kurzfassung";
 import { yamlKopf } from "./sop";
 
 export interface SopAnzeige {
@@ -82,37 +83,122 @@ export interface Lesedokument {
   pfad: string;
   titel: string;
   gruppe: string;
+  /** Text des Dokuments (aus dem Paket bzw. bei Standardfassungen aus der App) */
+  text: string;
+  /** „paket“: Datei des geladenen Profils; „app“: eingebaute Standardfassung, die die App bei fehlender Datei verwendet */
+  quelle: "paket" | "app";
+  rolle?: "erfassung" | "verdichtung" | "kurzfassung" | "kodierleitfaden";
+  /** kurzer Zwecksatz (nur Arbeitsgrundlagen) */
+  zweck?: string;
+  /** eigene Fassung und Stand aus dem ersten Absatz nach der Überschrift */
+  version?: string;
+  stand?: string;
 }
 
 /**
- * Lesedokumente des geladenen Pakets in fester Reihenfolge, nur soweit vorhanden: Übersicht und Änderungsverlauf
- * der SOP-Sammlung (`sop/`), Beschreibung und Änderungsverlauf des Profils, Arbeitsanweisungen und Kodierleitfaden
- * laut Manifest. Sie dienen nur dem Lesen; `CHANGELOG.md` und `README.md` gehen nicht an die KI.
+ * Eigene Fassung eines Dokuments: erstes „Fassung X“ (optional „vom TT.MM.JJJJ“) im ersten Absatz nach der ersten
+ * Überschrift. Später zitierte Fassungen anderer Dokumente zählen nicht.
+ */
+export function dokumentFassung(text: string): { version?: string; stand?: string } {
+  const zeilen = text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "").split(/\r?\n/);
+  const h = zeilen.findIndex((z) => /^#\s+\S/.test(z));
+  if (h < 0) return {};
+  const absatz: string[] = [];
+  for (const z of zeilen.slice(h + 1)) {
+    if (!z.trim()) {
+      if (absatz.length) break;
+      continue;
+    }
+    if (/^#/.test(z)) break;
+    absatz.push(z);
+  }
+  const m = absatz.join(" ").match(/Fassung\s+(\d+(?:\.\d+)*)(?:\s+vom\s+(\d{2}\.\d{2}\.\d{4}))?/);
+  return m ? { version: m[1], ...(m[2] ? { stand: m[2] } : {}) } : {};
+}
+
+function dokument(pfad: string, titel: string, gruppe: string, text: string, quelle: "paket" | "app", extra: Partial<Lesedokument> = {}): Lesedokument {
+  return { pfad, titel, gruppe, text, quelle, ...(quelle === "paket" ? dokumentFassung(text) : {}), ...extra };
+}
+
+const GRUPPE_ARBEIT = "Arbeitsanweisungen und Kodierleitfaden";
+
+/**
+ * Die vier Arbeitsgrundlagen in fester Reihenfolge: Erfassung, Verdichtung, Kurzfassung, Kodierleitfaden. Pfade aus
+ * dem Manifest, Text aus dem geladenen Paket. Fehlt einem Profil die Verdichtung oder die Kurzfassung (nicht im
+ * Manifest oder Datei fehlt), verwendet die App ihre eingebaute Standardfassung; diese erscheint gekennzeichnet.
+ */
+export function arbeitsgrundlagen(profil: Profil): Lesedokument[] {
+  const m = profil.manifest;
+  const text = (pfad?: string) => (pfad && typeof profil.dateien[pfad] === "string" ? profil.dateien[pfad] : undefined);
+  const out: Lesedokument[] = [];
+  const erf = text(m.anweisungen?.erfassung);
+  if (erf !== undefined)
+    out.push(
+      dokument(m.anweisungen!.erfassung!, "Erfassung", GRUPPE_ARBEIT, erf, "paket", {
+        rolle: "erfassung",
+        zweck: "Meldungsentwurf aus Material und gegebenenfalls Recherche",
+      }),
+    );
+  const ver = text(m.anweisungen?.verdichtung);
+  const verZweck = "eigene Meldung aus Eingangsmeldungen für den Referenzraum";
+  out.push(
+    ver !== undefined
+      ? dokument(m.anweisungen!.verdichtung!, "Verdichtung", GRUPPE_ARBEIT, ver, "paket", { rolle: "verdichtung", zweck: verZweck })
+      : dokument("app:verdichtung", "Verdichtung", GRUPPE_ARBEIT, VERDICHTUNG_S2, "app", { rolle: "verdichtung", zweck: verZweck }),
+  );
+  const kurz = text(m.anweisungen?.kurzfassung);
+  const kurzZweck = "vorhandene Meldung für die Leitung verdichten";
+  out.push(
+    kurz !== undefined
+      ? dokument(m.anweisungen!.kurzfassung!, "Kurzfassung (Management Summary)", GRUPPE_ARBEIT, kurz, "paket", { rolle: "kurzfassung", zweck: kurzZweck })
+      : dokument("app:kurzfassung", "Kurzfassung (Management Summary)", GRUPPE_ARBEIT, STANDARD_ANWEISUNG, "app", { rolle: "kurzfassung", zweck: kurzZweck }),
+  );
+  const kl = text(m.kodierleitfaden);
+  if (kl !== undefined)
+    out.push(
+      dokument(m.kodierleitfaden!, "Kodierleitfaden", GRUPPE_ARBEIT, kl, "paket", {
+        rolle: "kodierleitfaden",
+        zweck: "Lagenradar D1–D8, Beurteilung und Tendenz, Quellenkategorien",
+      }),
+    );
+  return out;
+}
+
+/**
+ * Übrige Lesedokumente des geladenen Pakets in fester Reihenfolge, nur soweit vorhanden: Übersicht und
+ * Änderungsverlauf der SOP-Sammlung (`sop/`), Beschreibung und Änderungsverlauf des Profils. Sie dienen nur dem Lesen;
+ * `CHANGELOG.md` und `README.md` gehen nicht an die KI.
  */
 export function lesedokumente(profil: Profil): Lesedokument[] {
-  const m = profil.manifest;
-  const kandidaten: Lesedokument[] = [
-    { pfad: "sop/README.md", titel: "Übersicht", gruppe: "SOP-Sammlung" },
-    { pfad: "sop/CHANGELOG.md", titel: "Änderungsverlauf", gruppe: "SOP-Sammlung" },
-    { pfad: "README.md", titel: "Beschreibung", gruppe: "Profil" },
-    { pfad: "CHANGELOG.md", titel: "Änderungsverlauf", gruppe: "Profil" },
-    ...(m.anweisungen?.erfassung
-      ? [{ pfad: m.anweisungen.erfassung, titel: "Arbeitsanweisung Erfassung", gruppe: "Arbeitsanweisungen und Kodierleitfaden" }]
-      : []),
-    ...(m.anweisungen?.verdichtung
-      ? [{ pfad: m.anweisungen.verdichtung, titel: "Arbeitsanweisung Verdichtung", gruppe: "Arbeitsanweisungen und Kodierleitfaden" }]
-      : []),
-    ...(m.anweisungen?.kurzfassung
-      ? [{ pfad: m.anweisungen.kurzfassung, titel: "Arbeitsanweisung Kurzfassung", gruppe: "Arbeitsanweisungen und Kodierleitfaden" }]
-      : []),
-    ...(m.kodierleitfaden ? [{ pfad: m.kodierleitfaden, titel: "Kodierleitfaden", gruppe: "Arbeitsanweisungen und Kodierleitfaden" }] : []),
+  const kandidaten: [string, string, string][] = [
+    ["sop/README.md", "Übersicht", "SOP-Sammlung"],
+    ["sop/CHANGELOG.md", "Änderungsverlauf", "SOP-Sammlung"],
+    ["README.md", "Beschreibung", "Profil"],
+    ["CHANGELOG.md", "Änderungsverlauf", "Profil"],
   ];
-  const gesehen = new Set<string>();
-  return kandidaten.filter((d) => {
-    if (gesehen.has(d.pfad) || typeof profil.dateien[d.pfad] !== "string") return false;
-    gesehen.add(d.pfad);
-    return true;
-  });
+  return kandidaten
+    .filter(([pfad]) => typeof profil.dateien[pfad] === "string")
+    .map(([pfad, titel, gruppe]) => dokument(pfad, titel, gruppe, profil.dateien[pfad], "paket"));
+}
+
+export interface InhaltsEintrag {
+  ebene: 2 | 3;
+  titel: string;
+  /** laufende Nummer unter den Überschriften der Ebenen 2 und 3 im gerenderten Text */
+  index: number;
+}
+
+/** Überschriften der Ebenen 2 und 3 außerhalb von Codeblöcken, in Reihenfolge (für ein Inhaltsverzeichnis). */
+export function inhaltsverzeichnis(text: string): InhaltsEintrag[] {
+  const out: InhaltsEintrag[] = [];
+  let code = false;
+  for (const z of text.split(/\r?\n/)) {
+    if (/^\s*(```|~~~)/.test(z)) code = !code;
+    if (code) continue;
+    const m = z.match(/^(#{2,3})\s+(.+?)\s*#*\s*$/);
+    if (m) out.push({ ebene: m[1].length as 2 | 3, titel: m[2].replace(/[*_`]/g, ""), index: out.length });
+  }
+  return out;
 }
 
 export type LinkZiel =
@@ -156,7 +242,7 @@ export function linkZiel(href: string, von: string, profil: Profil): LinkZiel {
   }
   const sop = profil.sops.find((s) => s.datei === pfad);
   if (sop) return { art: "sop", id: sop.id };
-  if (lesedokumente(profil).some((d) => d.pfad === pfad)) return { art: "dokument", pfad };
+  if ([...lesedokumente(profil), ...arbeitsgrundlagen(profil)].some((d) => d.quelle === "paket" && d.pfad === pfad)) return { art: "dokument", pfad };
   return { art: "fehlt", pfad };
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "ki-lead",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "description": "KI-LEAD – Forschungsdemonstrator für die LEAD-Systematik (Lageerfassung, -auswertung und -darstellung)",
   "scripts": {
     "dev": "vite",
