@@ -52,9 +52,12 @@ function versatz(d: Date, zone: string): number {
  * Absoluter Zeitpunkt einer Wanduhrzeit in der Zone. Bei doppelt vorkommender Stunde (Ende der Sommerzeit) gilt
  * die frühere, eine ausgefallene Stunde (Beginn der Sommerzeit) wird um den Sprung nach vorn verschoben.
  */
-export function zeitpunktInZone(jahr: number, monat: number, tag: number, stunde: number, minute: number, zone: string): Date {
+export function zeitpunktInZone(jahrRoh: number, monatRoh: number, tagRoh: number, stundeRoh: number, minuteRoh: number, zone: string): Date {
   const z = zoneOder(zone);
-  const naiv = Date.UTC(jahr, monat - 1, tag, stunde, minute);
+  // Überläufe (Tag 32, Stunde 24) erst normalisieren, dann mit der Wanduhr vergleichen
+  const naiv = Date.UTC(jahrRoh, monatRoh - 1, tagRoh, stundeRoh, minuteRoh);
+  const n = new Date(naiv);
+  const [jahr, monat, tag, stunde, minute] = [n.getUTCFullYear(), n.getUTCMonth() + 1, n.getUTCDate(), n.getUTCHours(), n.getUTCMinutes()];
   // Zwei Kandidaten mit den Versätzen kurz vor und nach dem Zeitpunkt; der frühere passende gewinnt.
   const kandidaten = [versatz(new Date(naiv - 864e5), z), versatz(new Date(naiv + 864e5), z)]
     .map((v) => new Date(naiv - v * 60000))
@@ -72,6 +75,10 @@ export function zeitpunktInZone(jahr: number, monat: number, tag: number, stunde
 export function isoLokalZuZeitpunkt(s: string, zone: string): { datum: Date; mitUhrzeit: boolean } | null {
   const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
   if (!m) return null;
+  // Ungültige Kalendertage („2026-02-31“) und Uhrzeiten nicht still umrechnen
+  const probe = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+  if (probe.getUTCMonth() !== +m[2] - 1 || probe.getUTCDate() !== +m[3]) return null;
+  if (m[4] !== undefined && (+m[4] > 23 || +m[5] > 59)) return null;
   const mitUhrzeit = m[4] !== undefined;
   return { datum: zeitpunktInZone(+m[1], +m[2], +m[3], mitUhrzeit ? +m[4] : 0, mitUhrzeit ? +m[5] : 0, zone), mitUhrzeit };
 }

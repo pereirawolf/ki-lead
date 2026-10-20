@@ -243,6 +243,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   useEffect(() => {
     if (stichtag) return;
     const tick = () => setUhr(Date.now());
+    tick(); // beim Zurückschalten auf „jetzt“ sofort den aktuellen Zeitpunkt verwenden
     const t = window.setInterval(tick, 30_000);
     const sichtbar = () => document.visibilityState === "visible" && tick();
     document.addEventListener("visibilitychange", sichtbar);
@@ -262,6 +263,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const ausgabeWert = ausgabeZeit ? `${ausgabe}T${ausgabeZeit}` : ausgabe;
   const pruefJetzt = useMemo(() => (stichtag ? isoLokalZuZeitpunkt(stichtag, zone)?.datum : undefined) ?? new Date(uhr), [stichtag, zone, uhr]);
   const red = useMemo(() => redaktionscheck(eintraege, profil, ausgabeWert, pruefJetzt), [eintraege, profil, ausgabeWert, pruefJetzt]);
+  /** Ganze Tage, die ein gesetzter Stichtag hinter der Geräteuhr liegt */
+  const stichtagAlter = stichtag ? Math.floor((uhr - red.stand.jetzt.getTime()) / 864e5) : 0;
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
 
   const radarFeld = r.sv_radar ? feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
@@ -335,10 +338,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     ziel?.scrollIntoView?.({ behavior: "smooth", block: "center" });
     ziel?.focus?.({ preventScroll: true });
   }, [reiter, markiert]);
-  const zurMeldung = (id: string) => (
+  const zurMeldung = (id: string, bezug?: string) => (
     <button
       type="button"
       className="knopf leise klein lb-zur-meldung"
+      aria-label={`Meldung in der Liste zeigen: ${bezug || dateien.find((d) => inhaltsKennung(d.text) === id)?.name || id}`}
       onClick={() => {
         setMarkiert(id);
         setReiter("meldungen");
@@ -694,6 +698,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
               >
                 {t.titel}
                 {t.id === "redaktion" && red.anzahl > 0 && <span className="lb-zaehler">{red.anzahl}</span>}
+                {t.id === "redaktion" && stichtag && <span className="lb-stichtag-marke"> · Stichtag</span>}
               </button>
             ))}
           </nav>
@@ -1008,7 +1013,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                     <input type="radio" name="lb-pruefstand" checked={!stichtag} onChange={() => setStichtag("")} /> jetzt (laufend aktualisiert)
                   </label>
                   <label className="lb-wahl">
-                    <input type="radio" name="lb-pruefstand" checked={!!stichtag} onChange={() => setStichtag(jetztLokal(zone, new Date(uhr)))} /> Stichtag
+                    <input type="radio" name="lb-pruefstand" checked={!!stichtag} onChange={() => setStichtag(jetztLokal(zone, new Date()))} /> Stichtag
                   </label>
                   {stichtag && (
                     <input
@@ -1024,8 +1029,21 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                 </fieldset>
               </div>
 
-              <div className="lb-red-uebersicht" role="status">
-                <p>
+              {stichtag && (
+                <div className="kasten kasten-hinweis lb-stichtag-hinweis" role="note">
+                  <p>
+                    Stichtag aktiv: geprüft für {zeitpunktDE(red.stand.jetzt, zone)}
+                    {stichtagAlter > 0 ? `, ${stichtagAlter} Tag${stichtagAlter === 1 ? "" : "e"} zurück` : ""}. Fristen werden nicht mit der Uhr
+                    fortgeschrieben.
+                  </p>
+                  <button type="button" className="knopf klein" onClick={() => setStichtag("")}>
+                    Auf „jetzt“ umstellen
+                  </button>
+                </div>
+              )}
+
+              <div className="lb-red-uebersicht">
+                <p role="status">
                   <strong>{red.uebersicht.zeitkritisch}</strong> zeitkritisch · <strong>{red.uebersicht.zuKlaeren}</strong> zu klären ·{" "}
                   <strong>{red.uebersicht.info}</strong> Information{red.uebersicht.info === 1 ? "" : "en"}
                   <span className="hinweis"> (gezählt wird jeder Befund einzeln: je Frist, Gruppe, Sachverhalt oder Meldung)</span>
@@ -1068,7 +1086,13 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                   <p className="leer">Kein Sachverhalt mit diesem Kennsatz.</p>
                 ) : (
                   red.zeit.map((z, i) => (
-                    <Punkt key={i} klasse={z.klasse} marke={z.status} titel={svKennung(z.sv, profil)} aktion={zurMeldung(z.sv.eintrag.id)}>
+                    <Punkt
+                      key={i}
+                      klasse={z.klasse}
+                      marke={z.status}
+                      titel={svKennung(z.sv, profil)}
+                      aktion={zurMeldung(z.sv.eintrag.id, svKennung(z.sv, profil))}
+                    >
                       {ks.handlungsrelevant} {z.text}
                       {z.datum ? `\nGewertet: ${zeitpunktDE(z.datum, zone)}${z.genauigkeit === "tag" ? " (ohne Uhrzeit: Tagesende angenommen)" : ""}` : ""}
                       {z.hinweis ? `\n${z.hinweis}` : ""}
@@ -1165,7 +1189,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                     klasse="warn"
                     marke={x.art === "leer" ? "Kennsatz ohne Inhalt" : "Kennsatz ohne Aussage"}
                     titel={svKennung(x.sv, profil)}
-                    aktion={zurMeldung(x.sv.eintrag.id)}
+                    aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}
                   >
                     {x.kennsatz} – {x.text}
                   </Punkt>
@@ -1176,7 +1200,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                     klasse="warn"
                     marke="Nachlauf prüfen"
                     titel={svKennung(s, profil)}
-                    aktion={zurMeldung(s.eintrag.id)}
+                    aktion={zurMeldung(s.eintrag.id, svKennung(s, profil))}
                   >
                     {lTendenz} „{s.tendenz}“ ohne Abschlussvermerk. Ist der Zielzustand erreicht, bestehen Folgewirkungen fort?
                     {ks.abschluss
@@ -1214,7 +1238,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                   <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
                 ) : (
                   red.kern.map((x, i) => (
-                    <Punkt key={i} klasse="warn" titel={svKennung(x.sv, profil)} aktion={zurMeldung(x.sv.eintrag.id)}>
+                    <Punkt key={i} klasse="warn" titel={svKennung(x.sv, profil)} aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}>
                       {x.fehlt.join(" · ")} – ggf. bei der meldenden Stelle nachfragen oder in der eigenen Fassung ergänzen.
                     </Punkt>
                   ))

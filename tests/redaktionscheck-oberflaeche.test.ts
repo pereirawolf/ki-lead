@@ -107,6 +107,8 @@ it("RC02: ein Stichtag hält die Einstufung fest und wird gespeichert", async ()
   });
   expect(redaktion()).toContain("vor der nächsten Ausgabe");
   expect(redaktion()).toContain("fester Stichtag");
+  expect(redaktion()).toContain("Stichtag aktiv");
+  expect(document.querySelector(".lb-stichtag-marke")).toBeTruthy();
   expect(db.werte.get("lagebild:" + p.manifest.id).pruefstand).toBe("2026-10-20T08:00");
 });
 

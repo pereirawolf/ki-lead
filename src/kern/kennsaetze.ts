@@ -35,8 +35,10 @@ export interface Frist {
 }
 
 const UHRZEIT_NACH_DATUM = [
-  // „12:00“, „12.00“, „, 12:00“, „um 12:00 Uhr“, „gegen 12.00 Uhr“
-  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2})[:.](\d{2})(?!\d)(?:\s*Uhr\b)?/i,
+  // „12:00“, „, 12:00“, „um 12:00 Uhr“
+  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2}):(\d{2})(?!\d)(?:\s*Uhr\b)?/i,
+  // „12.00 Uhr“ nur mit „Uhr“: ohne wäre „21.10.2026, 21.10.“ oder „10.15 Euro“ nicht von einer Uhrzeit zu unterscheiden
+  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2})\.(\d{2})\s*Uhr\b/i,
   // „um 12 Uhr“, „12 Uhr“
   /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2})\s*Uhr\b/i,
 ];
@@ -62,13 +64,16 @@ export function leseFrist(s: unknown, zeitzone?: string): Frist {
     stunde = +zeit[1];
     minute = zeit[2] !== undefined ? +zeit[2] : 0;
     genauigkeit = "minute";
-  } else if (/^[^\n]{0,24}?\b\d{1,2}(?:[:.]\d{2}\b|\s*Uhr\b)/i.test(rest.split(/\b\d{1,2}\.\d{1,2}\.\d{4}\b/)[0])) {
+  } else if (/^[^\n]{0,24}?\b\d{1,2}(?::\d{2}\b|(?:\.\d{2})?\s*Uhr\b)/i.test(rest.split(/\b\d{1,2}\.\d{1,2}\.\d{4}\b/)[0])) {
     hinweis = "Uhrzeit nicht eindeutig zuzuordnen; gewertet wird das Tagesende (23:59).";
   }
-  if (monat < 1 || monat > 12 || tag < 1 || stunde > 23 || minute > 59) return { datum: null, genauigkeit };
+  // „24 Uhr“ / „24:00“ ist das Tagesende: 0 Uhr des Folgetags
+  const tagesende = stunde === 24 && minute === 0;
+  if (monat < 1 || monat > 12 || tag < 1 || (stunde > 23 && !tagesende) || minute > 59) return { datum: null, genauigkeit };
   const probe = new Date(Date.UTC(jahr, monat - 1, tag));
   if (probe.getUTCFullYear() !== jahr || probe.getUTCMonth() !== monat - 1 || probe.getUTCDate() !== tag) return { datum: null, genauigkeit };
-  const datum = zeitzone ? zeitpunktInZone(jahr, monat, tag, stunde, minute, zeitzone) : new Date(jahr, monat - 1, tag, stunde, minute);
+  const [t, h] = tagesende ? [tag + 1, 0] : [tag, stunde];
+  const datum = zeitzone ? zeitpunktInZone(jahr, monat, t, h, minute, zeitzone) : new Date(jahr, monat - 1, t, h, minute);
   return { datum, genauigkeit, ...(hinweis ? { hinweis } : {}) };
 }
 

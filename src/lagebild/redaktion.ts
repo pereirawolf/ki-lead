@@ -71,7 +71,8 @@ export interface Pruefstand {
   /** Zeitpunkt, auf den sich Fristen beziehen */
   jetzt: Date;
   /** Beginn der nächsten Ausgabe; ohne Uhrzeit der Tagesbeginn */
-  ausgabe: Date;
+  /** null, wenn die Angabe nicht lesbar ist */
+  ausgabe: Date | null;
   ausgabeMitUhrzeit: boolean;
   zeitzone: string;
 }
@@ -111,7 +112,7 @@ export interface Redaktion {
 }
 
 /** Kurze Antworten, die keinen Abschluss aussagen („Abschluss im Lagebild: nein“) */
-const OFFEN = /^(nein|offen|noch offen|noch nicht|unklar|ausstehend|tbd|k\.\s?a\.|\?|–|-)(?=$|[\s.,;:!?)])/i;
+const OFFEN = /^(nein|offen|noch offen|noch nicht|nicht abgeschlossen|nicht beendet|kein abschluss|unklar|ausstehend|tbd|k\.\s?a\.|\?|–|-)(?=$|[\s.,;:!?)])/i;
 
 /** Textbaustein nach A.7.2: Bewertungen nebeneinander, mit Urheber, Sachverhalt, Stand und Platz für den tragenden Grund. */
 export function abweichungsBaustein(liste: SvEintrag[], profil: Profil): string {
@@ -129,13 +130,11 @@ export function abweichungsBaustein(liste: SvEintrag[], profil: Profil): string 
  * Nächste Ausgabe als „JJJJ-MM-TT“ oder „JJJJ-MM-TTThh:mm“ (Wanduhrzeit der Profilzeitzone) oder als Zeitpunkt.
  * Ohne Uhrzeit reicht der Ausgabetag von beginn bis ende.
  */
-function ausgabeAufloesen(a: string | Date, zone: string): { beginn: Date; ende: Date; mitUhrzeit: boolean } {
-  if (a instanceof Date) return { beginn: a, ende: a, mitUhrzeit: true };
+function ausgabeAufloesen(a: string | Date, zone: string): { beginn: Date; ende: Date; mitUhrzeit: boolean } | null {
+  if (a instanceof Date) return isNaN(a.getTime()) ? null : { beginn: a, ende: a, mitUhrzeit: true };
   const z = isoLokalZuZeitpunkt(a, zone);
-  if (!z) {
-    const jetzt = new Date();
-    return { beginn: jetzt, ende: jetzt, mitUhrzeit: true };
-  }
+  // Nicht lesbare Ausgabe: keine Ersatzzeit, sonst gälte jede künftige Frist still als unkritisch
+  if (!z) return null;
   if (z.mitUhrzeit) return { beginn: z.datum, ende: z.datum, mitUhrzeit: true };
   const [j, m, t] = a.slice(0, 10).split("-").map(Number);
   return { beginn: z.datum, ende: zeitpunktInZone(j, m, t + 1, 0, 0, zone), mitUhrzeit: false };
@@ -146,12 +145,13 @@ function fristEinstufen(
   datum: Date | null,
   genauigkeit: "minute" | "tag",
   jetzt: Date,
-  aus: { beginn: Date; ende: Date; mitUhrzeit: boolean },
+  aus: { beginn: Date; ende: Date; mitUhrzeit: boolean } | null,
   zone: string,
 ): [string, Klasse] {
   if (!datum) return ["Datum nicht erkennbar (TT.MM.JJJJ)", "warn"];
   const t = datum.getTime();
   if (t <= jetzt.getTime()) return ["Zeitfenster abgelaufen – Aktualität prüfen", "warn"];
+  if (!aus) return ["nächste Ausgabe nicht lesbar – Einstufung offen", "warn"];
   if (t < aus.beginn.getTime()) return ["vor der nächsten Ausgabe – frühere Weitergabe prüfen", "alert"];
   if (aus.mitUhrzeit && t === aus.beginn.getTime()) return ["zeitgleich mit der nächsten Ausgabe – Weitergabe vorher prüfen", "alert"];
   if (!aus.mitUhrzeit && t < aus.ende.getTime()) return ["am Tag der nächsten Ausgabe; deren Uhrzeit ist nicht angegeben – Reihenfolge klären", "warn"];
@@ -229,18 +229,24 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   const nachlauf: SvEintrag[] = [];
   const abschluss: Redaktion["abschluss"] = [];
   const aenderung: Redaktion["aenderung"] = [];
+  /** Sachverhalte mit Abschlusskennsatz (auch leer/offen): Die Nachlauffrage steckt dann im Befund dazu */
+  const abschlussZeile = new Set<SvEintrag>();
+  /** Sachverhalte mit inhaltlichem Abschluss: keine Vollständigkeitsprüfung mehr */
   const abgeschlossen = new Set<SvEintrag>();
   for (const sv of svs) {
     const abs = ks.abschluss ? kennsatz(sv.bewertungText, ks.abschluss) : null;
     if (abs !== null && ks.abschluss) {
-      if (!abs) marker.push({ sv, kennsatz: ks.abschluss, art: "leer", text: "Abschlusskennsatz ohne Inhalt – kein Abschluss erkennbar" });
-      else if (OFFEN.test(abs)) marker.push({ sv, kennsatz: ks.abschluss, art: "offen", text: `„${abs}“ – kein Abschluss ausgesagt` });
+      // Bei Tendenz Entspannung schließt der Markerbefund die Nachlauffrage ein (ein Befund, nicht zwei)
+      const nachlaufZusatz = entspannung && sv.tendenz === entspannung ? `; Tendenz „${entspannung}“ – Nachlauf prüfen` : "";
+      if (!abs) marker.push({ sv, kennsatz: ks.abschluss, art: "leer", text: `Abschlusskennsatz ohne Inhalt – kein Abschluss erkennbar${nachlaufZusatz}` });
+      else if (OFFEN.test(abs)) marker.push({ sv, kennsatz: ks.abschluss, art: "offen", text: `„${abs}“ – kein Abschluss ausgesagt${nachlaufZusatz}` });
       else {
         abschluss.push({ sv, text: abs, rueckblick: hochSet.has(sv.beurteilung) });
         abgeschlossen.add(sv);
       }
+      abschlussZeile.add(sv);
     }
-    if (!abgeschlossen.has(sv) && entspannung && sv.tendenz === entspannung) nachlauf.push(sv);
+    if (!abschlussZeile.has(sv) && entspannung && sv.tendenz === entspannung) nachlauf.push(sv);
     const aen = ks.aenderung ? kennsatz(sv.bewertungText, ks.aenderung) : null;
     if (aen !== null && ks.aenderung) {
       if (aen) aenderung.push({ sv, text: aen });
@@ -292,6 +298,7 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   // Abdeckung: welche Regeln mangels Profilangabe nicht laufen
   const nichtKonfiguriert: string[] = [];
   if (!ks.handlungsrelevant) nichtKonfiguriert.push("Zeitfenster: kein Kennsatz „Handlungsrelevant bis“ im Profil");
+  else if (!aus) nichtKonfiguriert.push("Zeitfenster: nächste Ausgabe nicht lesbar – Fristen nur gegen den Prüfzeitpunkt eingestuft");
   if (!r.sv_beurteilung) nichtKonfiguriert.push("Abweichende Bewertungen: keine Beurteilung im Profil");
   if (!ks.abschluss) nichtKonfiguriert.push("Abschluss: kein Abschlusskennsatz im Profil");
   if (!entspannung) nichtKonfiguriert.push("Nachlauf: keine Tendenz „Entspannung“ im Profil");
@@ -326,7 +333,7 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     abschluss.length;
 
   return {
-    stand: { jetzt, ausgabe: aus.beginn, ausgabeMitUhrzeit: aus.mitUhrzeit, zeitzone: zone },
+    stand: { jetzt, ausgabe: aus?.beginn ?? null, ausgabeMitUhrzeit: aus?.mitUhrzeit ?? false, zeitzone: zone },
     zeit,
     gruppen,
     vermerkt,
@@ -433,9 +440,11 @@ export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], 
     profil: { id: profil.manifest.id, version: profil.manifest.version, pruefsumme: profil.hash },
     pruefstand: {
       geprueft_fuer: zeitpunktDE(red.stand.jetzt, zone),
-      naechste_ausgabe: red.stand.ausgabeMitUhrzeit
-        ? zeitpunktDE(red.stand.ausgabe, zone)
-        : `${zeitpunktDE(red.stand.ausgabe, zone).slice(0, 10)} (Uhrzeit offen)`,
+      naechste_ausgabe: !red.stand.ausgabe
+        ? "nicht lesbar"
+        : red.stand.ausgabeMitUhrzeit
+          ? zeitpunktDE(red.stand.ausgabe, zone)
+          : `${zeitpunktDE(red.stand.ausgabe, zone).slice(0, 10)} (Uhrzeit offen)`,
       zeitzone: zone,
     },
     abdeckung: red.abdeckung,

@@ -62,6 +62,18 @@ describe("RC03: Uhrzeiten in Fristen", () => {
   it("ungültige Uhrzeiten bleiben ungültig", () => {
     expect(parseDatumDE("21.10.2026 um 25:00 Uhr", "Europe/Berlin")).toBeNull();
   });
+
+  it("ein Folgedatum oder ein Betrag wird nicht als Uhrzeit gelesen", () => {
+    expect(leseFrist("20.10.2026, 21.10.2026 Folgetermin", "Europe/Berlin")).toMatchObject({ genauigkeit: "tag" });
+    expect(leseFrist("20.10.2026 10.15 Euro", "Europe/Berlin").genauigkeit).toBe("tag");
+    expect(leseFrist("20.10.2026 10.15 Uhr", "Europe/Berlin").datum?.toISOString()).toBe("2026-10-20T08:15:00.000Z");
+  });
+
+  it("„24 Uhr“ ist das Tagesende", () => {
+    for (const s of ["20.10.2026 24 Uhr", "20.10.2026 24:00"])
+      expect(leseFrist(s, "Europe/Berlin")).toMatchObject({ genauigkeit: "minute", datum: new Date("2026-10-20T22:00:00.000Z") });
+    expect(parseDatumDE("20.10.2026 24:30", "Europe/Berlin")).toBeNull();
+  });
 });
 
 describe("RC08: Zeitzone des Profils statt Gerätezeit", () => {
@@ -72,6 +84,14 @@ describe("RC08: Zeitzone des Profils statt Gerätezeit", () => {
       execFileSync(process.execPath, ["--experimental-strip-types", "--no-warnings", "-e", code], { env: { ...process.env, TZ: tz }, encoding: "utf8" }).trim();
     expect(lauf("Europe/Berlin")).toBe("2026-10-21T10:00:00.000Z");
     expect(lauf("America/New_York")).toBe("2026-10-21T10:00:00.000Z");
+  });
+
+  it("Tagesüberlauf am Monatsende auch an einem Umstellungssonntag", () => {
+    expect(zeitpunktInZone(2027, 10, 32, 0, 0, "Europe/Berlin").toISOString()).toBe("2027-10-31T23:00:00.000Z");
+    expect(zeitpunktInZone(2030, 3, 32, 0, 0, "Europe/Berlin").toISOString()).toBe("2030-03-31T22:00:00.000Z");
+    // Ausgabe am 31.10.2027 ohne Uhrzeit: Eine Frist um 23:30 liegt am Ausgabetag
+    const e = eintrag("a", "Handlungsrelevant bis: 31.10.2027 23:30");
+    expect(check([e], "2027-10-31", zeitpunktInZone(2027, 10, 30, 12, 0, "Europe/Berlin")).zeit[0].klasse).toBe("warn");
   });
 
   it("Sommerzeitwechsel: doppelte Stunde nimmt die frühere, ausgefallene wird vorgeschoben", () => {
@@ -113,10 +133,17 @@ describe("RC02, RV01: Prüfzeitpunkt und nächste Ausgabe mit Uhrzeit", () => {
     expect([z.klasse, z.status]).toEqual(["ok", "nach der nächsten Ausgabe – aus dieser Frist kein Anlass für eine frühere Weitergabe"]);
   });
 
+  it("eine nicht lesbare Ausgabe ergibt keine stille Entwarnung", () => {
+    const r = check([frist("30.10.2026 12:00")], "2026-02-31");
+    expect(r.stand.ausgabe).toBeNull();
+    expect(r.zeit[0]).toMatchObject({ klasse: "warn", status: "nächste Ausgabe nicht lesbar – Einstufung offen" });
+    expect(r.abdeckung.nichtKonfiguriert.join(" ")).toMatch(/nächste Ausgabe nicht lesbar/);
+  });
+
   it("der Prüfstand nennt Zeitpunkte und Zeitzone", () => {
     const r = check([frist("30.10.2026 12:00")], "2026-10-23");
     expect(r.stand).toMatchObject({ ausgabeMitUhrzeit: false, zeitzone: "Europe/Berlin" });
-    expect(r.stand.ausgabe.toISOString()).toBe("2026-10-22T22:00:00.000Z");
+    expect(r.stand.ausgabe?.toISOString()).toBe("2026-10-22T22:00:00.000Z");
   });
 });
 
@@ -127,14 +154,19 @@ describe("RC04: leere oder offene Kennsätze", () => {
     const r = check([e]);
     expect(r.abschluss).toEqual([]);
     expect(r.marker.map((m) => m.art)).toEqual(["leer"]);
-    expect(r.nachlauf).toHaveLength(1);
+    // ein Befund statt zwei: die Nachlauffrage steht im Markerbefund
+    expect(r.marker[0].text).toMatch(/Nachlauf prüfen/);
+    expect(r.nachlauf).toEqual([]);
     expect(r.kern[0].fehlt).toContain("keine Angaben in „Maßnahmen & Handlungsempfehlungen“");
   });
 
-  it("„Abschluss im Lagebild: nein“ gilt nicht als Abschluss", () => {
-    const r = check([eintrag("a", "Abschluss im Lagebild: nein", "kritisch")]);
+  it.each(["nein", "offen", "nicht abgeschlossen", "kein Abschluss, Lage dauert an"])("„Abschluss im Lagebild: %s“ gilt nicht als Abschluss", (t) => {
+    const e = eintrag("a", `Abschluss im Lagebild: ${t}`, "kritisch");
+    e.daten.sachverhalte[0].analyse.massnahmen_empfehlungen = "";
+    const r = check([e]);
     expect(r.abschluss).toEqual([]);
     expect(r.marker[0]).toMatchObject({ art: "offen" });
+    expect(r.kern).toHaveLength(1);
   });
 
   it("ein inhaltlicher Abschluss bleibt Abschluss", () => {
