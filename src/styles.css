@@ -2037,6 +2037,88 @@ a.knopf {
   font-weight: 700;
 }
 
+.lb-ausgabe legend {
+  font-weight: 700;
+  padding: 0 0.2rem;
+}
+
+fieldset.lb-ausgabe {
+  margin: 0;
+  min-width: 0;
+}
+
+.lb-pruefstand {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.lb-wahl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.lb-red-uebersicht {
+  background: var(--flaeche);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem;
+}
+
+.lb-red-uebersicht p {
+  margin: 0.2rem 0;
+}
+
+.lb-red-uebersicht ul {
+  margin: 0.3rem 0;
+  padding-left: 1.2rem;
+}
+
+.lb-red-sprung {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.lb-abschnitt:focus {
+  outline: none;
+}
+
+.lb-abschnitt:focus-visible,
+.lb-karte:focus-visible {
+  outline: 2px solid var(--amt);
+  outline-offset: 2px;
+}
+
+.lb-zur-meldung {
+  margin-top: 0.4rem;
+}
+
+.lb-karte-markiert {
+  box-shadow: 0 0 0 3px var(--amt);
+}
+
+.lb-mehr summary {
+  cursor: pointer;
+  margin-top: 0.3rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .lb-punkt {
   background: var(--flaeche);
   border: 1px solid var(--linie-zart);
@@ -2746,4 +2828,11 @@ a.knopf {
   .lese-inhalt-sprung {
     min-height: 44px;
   }
+}
+
+.lb-pruefstand input[type="date"],
+.lb-pruefstand input[type="time"],
+.lb-pruefstand input[type="datetime-local"] {
+  width: auto;
+  flex: 1 1 9rem;
 }

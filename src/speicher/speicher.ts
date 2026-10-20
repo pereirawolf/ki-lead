@@ -67,7 +67,10 @@ export async function zwischenstandLoeschen(profilId: string): Promise<void> {
 
 export interface LagebildStand {
   dateien: { name: string; text: string; importiertAm: string }[];
+  /** „JJJJ-MM-TT“ oder mit Uhrzeit „JJJJ-MM-TTThh:mm“ (Wanduhrzeit der Profilzeitzone) */
   naechsteAusgabe?: string;
+  /** Stichtag des Redaktionschecks „JJJJ-MM-TTThh:mm“; fehlt: Echtzeit */
+  pruefstand?: string;
 }
 
 export async function lagebildLesen(profilId: string): Promise<LagebildStand | undefined> {

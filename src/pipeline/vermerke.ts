@@ -8,11 +8,13 @@ import { holeWert } from "../kern/pfad";
 import type { Meldung, Profil } from "../kern/typen";
 import { absender, einlesen, svKennung, zeitpunktVon, type LagebildDatei } from "../lagebild/lagebild";
 import { redaktionscheck } from "../lagebild/redaktion";
+import { tagInZone, zeitpunktInZone, zoneOder } from "../kern/zeit";
 import type { Material } from "./material";
 
-function datumAus(t0: string): Date {
+/** t0 („JJJJ-MM-TT[Thh:mm]“, Wanduhrzeit der Profilzeitzone) als Zeitpunkt; ohne Uhrzeit 12:00. */
+function datumAus(t0: string, zone: string): Date {
   const m = t0.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
-  return m ? new Date(+m[1], +m[2] - 1, +m[3], m[4] ? +m[4] : 12, m[5] ? +m[5] : 0) : new Date();
+  return m ? zeitpunktInZone(+m[1], +m[2], +m[3], m[4] ? +m[4] : 12, m[5] ? +m[5] : 0, zone) : new Date();
 }
 
 function alsDateien(material: Material[]): LagebildDatei[] {
@@ -26,9 +28,12 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
   const { eintraege } = einlesen(alsDateien(material), profil);
   const eigene = eintraege.filter((e) => !e.fremd);
   if (!eigene.length) return "";
-  const jetzt = datumAus(t0);
+  const zone = zoneOder(profil.manifest.variablen?.zeitzone);
+  const jetzt = datumAus(t0, zone);
   const tage = profil.ui.lagebild?.ausgabe_tage ?? 7;
-  const ausgabe = new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate() + tage);
+  // Nächste Ausgabe als Kalendertag (ohne Uhrzeit) in der Profilzeitzone
+  const [j, mo, t] = tagInZone(jetzt, zone).split("-").map(Number);
+  const ausgabe = tagInZone(zeitpunktInZone(j, mo, t + tage, 12, 0, zone), zone);
   const r = redaktionscheck(eintraege, profil, ausgabe, jetzt);
   const ks = profil.ui.kennsaetze || {};
   const z: string[] = [];
@@ -44,14 +49,14 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
     ),
   );
   liste(
-    `Zeitfenster „${ks.handlungsrelevant || "Handlungsrelevant bis:"}“ (bezogen auf t0 und die nächste Ausgabe am ${datumDE(ausgabe.toISOString().slice(0, 10))})`,
-    r.zeit.map((x) => `${svKennung(x.sv, profil)}: ${x.text} → ${x.status}`),
+    `Zeitfenster „${ks.handlungsrelevant || "Handlungsrelevant bis:"}“ (bezogen auf t0 und die nächste Ausgabe am ${datumDE(ausgabe)}, Uhrzeit offen)`,
+    r.zeit.map((x) => `${svKennung(x.sv, profil)}: ${x.text} → ${x.status}${x.hinweis ? ` (${x.hinweis})` : ""}`),
   );
   liste(
     "Gleiche Ereignisart in mehreren Meldungen (Zusammenhang prüfen; gleiche Art heißt nicht gleicher Sachverhalt)",
     r.gruppen.map(
       (g) =>
-        `${g.art}: ${g.liste.map((s) => `${absender(s.eintrag, profil)} „${s.beurteilung || "keine Angabe"}“${s.tendenz ? `/${s.tendenz}` : ""}`).join("; ")}${g.abweichend ? " → Bewertungen weichen ab" : ""}`,
+        `${g.art}: ${g.liste.map((s) => `${absender(s.eintrag, profil)} „${s.beurteilung || "keine Angabe"}“${s.tendenz ? `/${s.tendenz}` : ""}`).join("; ")}${g.abweichend ? " → Bewertungen weichen ab" : ""}${g.tendenzGegenlaeufig ? " → Tendenzen gegenläufig" : ""}`,
     ),
   );
   liste(
@@ -69,6 +74,10 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
   liste(
     `Abschluss vermerkt („${ks.abschluss || "Abschluss"}“)`,
     r.abschluss.map((x) => `${svKennung(x.sv, profil)}: ${x.text}`),
+  );
+  liste(
+    "Kennsätze ohne Inhalt oder ohne Aussage (nicht als Abschluss oder Vermerk werten)",
+    r.marker.map((x) => `${svKennung(x.sv, profil)}: „${x.kennsatz}“ – ${x.text}`),
   );
   liste(
     "Hohe Beurteilung mit Lücken in der Eingangsmeldung",

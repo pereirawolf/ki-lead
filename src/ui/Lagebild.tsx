@@ -33,7 +33,9 @@ import {
   type LagebildFehler,
   type SvEintrag,
 } from "../lagebild/lagebild";
-import { redaktionscheck, type Klasse } from "../lagebild/redaktion";
+import { ABSCHNITTE, redaktionsbericht, redaktionscheck, type Klasse } from "../lagebild/redaktion";
+import { isoLokalZuZeitpunkt, zeitpunktDE, zoneOder } from "../kern/zeit";
+import { APP_KENNUNG } from "../pipeline/lauf";
 import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";
@@ -118,9 +120,9 @@ function KopierKnopf({ html, text, titel = "Kopieren" }: { html: string; text: s
   );
 }
 
-function Abschnitt({ nr, titel, verweis, children }: { nr: number; titel: string; verweis?: string; children: ReactNode }) {
+function Abschnitt({ nr, id, titel, verweis, children }: { nr: number; id?: string; titel: string; verweis?: string; children: ReactNode }) {
   return (
-    <section className="lb-abschnitt">
+    <section className="lb-abschnitt" id={id} tabIndex={-1}>
       <h3 className="abschnitt">
         {nr} · {titel}
         {verweis && <span className="lb-verweis"> ({verweis})</span>}
@@ -130,12 +132,35 @@ function Abschnitt({ nr, titel, verweis, children }: { nr: number; titel: string
   );
 }
 
-function Punkt({ klasse, marke, titel, children }: { klasse: Klasse | ""; marke?: string; titel: string; children?: ReactNode }) {
+const EINSTUFUNG: Record<Klasse, string> = { alert: "zeitkritisch", warn: "zu klären", info: "Information", ok: "ohne Befund" };
+
+function Punkt({
+  klasse,
+  einstufung,
+  marke,
+  titel,
+  aktion,
+  children,
+}: {
+  klasse: Klasse | "";
+  /** Text der Einstufung für Screenreader, wenn er von der Farbklasse abweicht */
+  einstufung?: string;
+  marke?: string;
+  titel: string;
+  aktion?: ReactNode;
+  children?: ReactNode;
+}) {
   return (
     <div className={`lb-punkt lb-punkt-${klasse || "leer"}`}>
-      {marke && <span className={`lb-flag lb-flag-${klasse || "info"}`}>{marke}</span>}
+      {marke && (
+        <span className={`lb-flag lb-flag-${klasse || "info"}`}>
+          {klasse && <span className="sr-only">{einstufung || EINSTUFUNG[klasse]}: </span>}
+          {marke}
+        </span>
+      )}
       <p className="lb-punkt-titel">{titel}</p>
       {children && <div className="lb-punkt-text">{children}</div>}
+      {aktion}
     </div>
   );
 }
@@ -159,6 +184,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const titel = lb.titel || "Lagebild";
   const [dateien, setDateien] = useState<LagebildDatei[]>([]);
   const [ausgabe, setAusgabe] = useState(inTagen(lb.ausgabe_tage ?? 7));
+  /** Uhrzeit der nächsten Ausgabe „hh:mm“; leer = nicht angegeben */
+  const [ausgabeZeit, setAusgabeZeit] = useState("");
+  /** Stichtag des Redaktionschecks „JJJJ-MM-TTThh:mm“; leer = Echtzeit */
+  const [stichtag, setStichtag] = useState("");
+  /** Geräteuhr für den Echtzeitmodus; wird laufend und bei Rückkehr in den Vordergrund erneuert */
+  const [uhr, setUhr] = useState(() => Date.now());
   const [reiter, setReiter] = useState<Reiter>("uebersicht");
   const [importFehler, setImportFehler] = useState<LagebildFehler[]>([]);
   const [geladen, setGeladen] = useState(false);
@@ -181,7 +212,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
           const gespeichert = s.dateien;
           setDateien((neu) => zusammenfuehren(gespeichert, neu));
         }
-        if (s?.naechsteAusgabe) setAusgabe(s.naechsteAusgabe);
+        if (s?.naechsteAusgabe) {
+          const [tag, zeit] = s.naechsteAusgabe.split("T");
+          setAusgabe(tag);
+          setAusgabeZeit(zeit || "");
+        }
+        if (s?.pruefstand) setStichtag(s.pruefstand);
         setGeladen(true);
       })
       .catch((e) => {
@@ -197,17 +233,35 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
 
   useEffect(() => {
     if (geladen)
-      lagebildSchreiben(profil.manifest.id, { dateien, naechsteAusgabe: ausgabe })
+      lagebildSchreiben(profil.manifest.id, { dateien, naechsteAusgabe: ausgabeWert, ...(stichtag ? { pruefstand: stichtag } : {}) })
         .then(() => setSpeicherFehler(null))
         .catch((e) => setSpeicherFehler(`Der Stand des Lagebilds konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}).`));
-  }, [dateien, ausgabe, geladen, profil.manifest.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateien, ausgabe, ausgabeZeit, stichtag, geladen, profil.manifest.id]);
+
+  // Echtzeitmodus: Fristen werden mit fortschreitender Zeit neu eingestuft (alle 30 s und bei Rückkehr zur Seite)
+  useEffect(() => {
+    if (stichtag) return;
+    const tick = () => setUhr(Date.now());
+    const t = window.setInterval(tick, 30_000);
+    const sichtbar = () => document.visibilityState === "visible" && tick();
+    document.addEventListener("visibilitychange", sichtbar);
+    window.addEventListener("focus", tick);
+    return () => {
+      window.clearInterval(t);
+      document.removeEventListener("visibilitychange", sichtbar);
+      window.removeEventListener("focus", tick);
+    };
+  }, [stichtag]);
 
   const { eintraege, fehler: lesefehler } = useMemo(() => einlesen(dateien, profil), [dateien, profil]);
   const svs = useMemo(() => alleSachverhalte(eintraege, profil), [eintraege, profil]);
   const kz = useMemo(() => kennzahlen(eintraege, profil), [eintraege, profil]);
   const status = useMemo(() => meldestatus(eintraege, profil), [eintraege, profil]);
-  const ausgabeDatum = useMemo(() => new Date(`${ausgabe}T00:00`), [ausgabe]);
-  const red = useMemo(() => redaktionscheck(eintraege, profil, ausgabeDatum), [eintraege, profil, ausgabeDatum]);
+  const zone = zoneOder(profil.manifest.variablen?.zeitzone);
+  const ausgabeWert = ausgabeZeit ? `${ausgabe}T${ausgabeZeit}` : ausgabe;
+  const pruefJetzt = useMemo(() => (stichtag ? isoLokalZuZeitpunkt(stichtag, zone)?.datum : undefined) ?? new Date(uhr), [stichtag, zone, uhr]);
+  const red = useMemo(() => redaktionscheck(eintraege, profil, ausgabeWert, pruefJetzt), [eintraege, profil, ausgabeWert, pruefJetzt]);
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
 
   const radarFeld = r.sv_radar ? feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
@@ -263,6 +317,45 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     if (!liste.length) return;
     setUebergabeWahl(null);
     uebergeben(liste);
+  };
+
+  // Sprung zu einem Abschnitt des Redaktionschecks: Fokus auf den Abschnitt, damit Tastatur und Screenreader folgen
+  const springeZu = (e: { preventDefault: () => void }, id: string) => {
+    e.preventDefault();
+    const ziel = document.getElementById(id);
+    ziel?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    ziel?.focus?.({ preventScroll: true });
+  };
+
+  // Vom Befund zur Meldung in der Liste „Meldungen“ (nur lesen; die Meldungsmaske bleibt unberührt)
+  const [markiert, setMarkiert] = useState<string | null>(null);
+  useEffect(() => {
+    if (reiter !== "meldungen" || !markiert) return;
+    const ziel = document.getElementById(`lb-meldung-${markiert}`);
+    ziel?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+    ziel?.focus?.({ preventScroll: true });
+  }, [reiter, markiert]);
+  const zurMeldung = (id: string) => (
+    <button
+      type="button"
+      className="knopf leise klein lb-zur-meldung"
+      onClick={() => {
+        setMarkiert(id);
+        setReiter("meldungen");
+      }}
+    >
+      Meldung in der Liste zeigen
+    </button>
+  );
+
+  const berichtSpeichern = (art: "txt" | "json") => {
+    const b = redaktionsbericht(red, eintraege, profil, APP_KENNUNG);
+    const tag = jetztLokal(zone).slice(0, 16).replace(/:/g, "-");
+    dateiAnbieten(
+      art === "json" ? b.json : b.text,
+      `Redaktionsbericht_${titel}_${tag}.${art}`,
+      art === "json" ? "application/json" : "text/plain;charset=utf-8",
+    );
   };
 
   const csv = () =>
@@ -475,10 +568,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
             </p>
             <div className="werkzeugleiste-knoepfe">
               <button type="button" className="knopf" onClick={pdf} onPointerEnter={pdfVorladen} onFocus={pdfVorladen} disabled={!kz.meldungen}>
-                PDF
+                Lagebild als PDF
               </button>
               <button type="button" className="knopf" onClick={csv} disabled={!kz.meldungen}>
-                CSV
+                Rohtabelle als CSV
               </button>
               <button type="button" className="knopf primaer" onClick={anKi}>
                 An KI-Verdichtung übergeben
@@ -719,7 +812,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                 const eigene = svs.filter((s) => s.eintrag.id === e.id);
                 const nQuellen = r.quellen ? parseQuellen(holeWert(e.daten, r.quellen)).length : 0;
                 return (
-                  <article key={e.id} className="lb-karte">
+                  <article key={e.id} id={`lb-meldung-${e.id}`} tabIndex={-1} className={markiert === e.id ? "lb-karte lb-karte-markiert" : "lb-karte"}>
                     <header>
                       <p className="lb-karte-titel">{absender(e, profil)}</p>
                       <p className="lb-karte-meta">
@@ -886,53 +979,140 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
             <div className="lb-redaktion">
               <p className="hinweis">
                 Der Redaktionscheck wertet nur vorhandene Felder und die Kennsätze aus und ersetzt nicht die fachliche Prüfung: Gleiche Ereignisart heißt nicht
-                gleicher Sachverhalt, und die Zahl der Meldungen belegt keine Verschärfung.
+                gleicher Sachverhalt, und die Zahl der Meldungen belegt keine Verschärfung. Ein Abschnitt ohne Befund heißt nur, dass dessen automatische Regeln
+                nichts gefunden haben.
               </p>
-              <label className="lb-ausgabe">
-                <span>{lb.ausgabe_label || "Nächste Ausgabe"}</span>
-                <input type="date" value={ausgabe} onChange={(e) => e.target.value && setAusgabe(e.target.value)} />
-                <span className="hinweis">Maßstab für die zeitkritische Weitergabe</span>
-              </label>
 
-              <Abschnitt nr={1} titel={`Zeitfenster „${ks.handlungsrelevant || "Handlungsrelevant bis:"}“`} verweis={v.zeitfenster}>
+              <div className="lb-pruefstand">
+                <fieldset className="lb-ausgabe">
+                  <legend>{lb.ausgabe_label || "Nächste Ausgabe"}</legend>
+                  <input
+                    type="date"
+                    aria-label={`${lb.ausgabe_label || "Nächste Ausgabe"}: Datum`}
+                    value={ausgabe}
+                    onChange={(e) => e.target.value && setAusgabe(e.target.value)}
+                  />
+                  <input
+                    type="time"
+                    aria-label={`${lb.ausgabe_label || "Nächste Ausgabe"}: Uhrzeit (optional)`}
+                    value={ausgabeZeit}
+                    onChange={(e) => setAusgabeZeit(e.target.value)}
+                  />
+                  <span className="hinweis">
+                    Maßstab für die zeitkritische Weitergabe{ausgabeZeit ? "" : ". Ohne Uhrzeit gelten Fristen am Ausgabetag als zu klären."}
+                  </span>
+                </fieldset>
+                <fieldset className="lb-ausgabe">
+                  <legend>Geprüft für</legend>
+                  <label className="lb-wahl">
+                    <input type="radio" name="lb-pruefstand" checked={!stichtag} onChange={() => setStichtag("")} /> jetzt (laufend aktualisiert)
+                  </label>
+                  <label className="lb-wahl">
+                    <input type="radio" name="lb-pruefstand" checked={!!stichtag} onChange={() => setStichtag(jetztLokal(zone, new Date(uhr)))} /> Stichtag
+                  </label>
+                  {stichtag && (
+                    <input
+                      type="datetime-local"
+                      aria-label="Stichtag des Redaktionschecks"
+                      value={stichtag}
+                      onChange={(e) => e.target.value && setStichtag(e.target.value)}
+                    />
+                  )}
+                  <span className="hinweis">
+                    Stand {zeitpunktDE(red.stand.jetzt, zone)} ({zone}){stichtag ? " – fester Stichtag, z. B. für Übungen oder rückblickende Prüfung" : ""}
+                  </span>
+                </fieldset>
+              </div>
+
+              <div className="lb-red-uebersicht" role="status">
+                <p>
+                  <strong>{red.uebersicht.zeitkritisch}</strong> zeitkritisch · <strong>{red.uebersicht.zuKlaeren}</strong> zu klären ·{" "}
+                  <strong>{red.uebersicht.info}</strong> Information{red.uebersicht.info === 1 ? "" : "en"}
+                  <span className="hinweis"> (gezählt wird jeder Befund einzeln: je Frist, Gruppe, Sachverhalt oder Meldung)</span>
+                </p>
+                <p className="hinweis">
+                  Ausgewertet: {red.abdeckung.meldungen} Meldung{red.abdeckung.meldungen === 1 ? "" : "en"} nach dem Schema des Profils
+                  {red.abdeckung.fremd ? `; ${red.abdeckung.fremd} in fremdem Schema nicht ausgewertet` : ""}.
+                </p>
+                {(red.abdeckung.nichtKonfiguriert.length > 0 || red.abdeckung.hinweise.length > 0) && (
+                  <ul className="hinweis">
+                    {red.abdeckung.nichtKonfiguriert.map((x) => (
+                      <li key={x}>Nicht geprüft – {x}</li>
+                    ))}
+                    {red.abdeckung.hinweise.map((x) => (
+                      <li key={x}>{x}</li>
+                    ))}
+                  </ul>
+                )}
+                <nav className="lb-red-sprung" aria-label="Abschnitte des Redaktionschecks">
+                  {ABSCHNITTE.map((t, i) => (
+                    <a key={t} href={`#lb-red-${i + 1}`} onClick={(e) => springeZu(e, `lb-red-${i + 1}`)}>
+                      {i + 1} {t} ({red.abschnitte[i]})
+                    </a>
+                  ))}
+                </nav>
+                <div className="aktionen">
+                  <button type="button" className="knopf klein" onClick={() => berichtSpeichern("txt")}>
+                    Redaktionsbericht (TXT)
+                  </button>
+                  <button type="button" className="knopf klein" onClick={() => berichtSpeichern("json")}>
+                    Redaktionsbericht (JSON)
+                  </button>
+                </div>
+              </div>
+
+              <Abschnitt nr={1} id="lb-red-1" titel={`Zeitfenster „${ks.handlungsrelevant || "Handlungsrelevant bis:"}“`} verweis={v.zeitfenster}>
                 {!ks.handlungsrelevant ? (
-                  <p className="leer">Das Profil definiert keinen Kennsatz für Zeitfenster.</p>
+                  <p className="leer">Nicht geprüft: Das Profil definiert keinen Kennsatz für Zeitfenster.</p>
                 ) : red.zeit.length === 0 ? (
                   <p className="leer">Kein Sachverhalt mit diesem Kennsatz.</p>
                 ) : (
                   red.zeit.map((z, i) => (
-                    <Punkt key={i} klasse={z.klasse} marke={z.status} titel={svKennung(z.sv, profil)}>
+                    <Punkt key={i} klasse={z.klasse} marke={z.status} titel={svKennung(z.sv, profil)} aktion={zurMeldung(z.sv.eintrag.id)}>
                       {ks.handlungsrelevant} {z.text}
+                      {z.datum ? `\nGewertet: ${zeitpunktDE(z.datum, zone)}${z.genauigkeit === "tag" ? " (ohne Uhrzeit: Tagesende angenommen)" : ""}` : ""}
+                      {z.hinweis ? `\n${z.hinweis}` : ""}
                     </Punkt>
                   ))
                 )}
               </Abschnitt>
 
-              <Abschnitt nr={2} titel="Zusammenhang und abweichende Bewertungen" verweis={v.zusammenhang}>
+              <Abschnitt nr={2} id="lb-red-2" titel="Zusammenhang und abweichende Bewertungen" verweis={v.zusammenhang}>
                 {red.gruppen.length === 0 ? (
                   <p className="leer">Keine Ereignisart wird in mehr als einer Meldung genannt.</p>
                 ) : (
                   red.gruppen.map((g) => (
                     <Punkt
                       key={g.art}
-                      klasse={g.abweichend ? "warn" : "info"}
-                      marke={g.abweichend ? "Bewertungen weichen ab – falls derselbe Sachverhalt: nebeneinander darstellen" : "Zusammenhang prüfen"}
-                      titel={`${g.art}: ${g.liste.length} Sachverhalte aus ${g.meldungen} Meldungen${g.tendenzAbweichend ? " · Tendenzen gegenläufig" : ""}`}
+                      klasse={g.abweichend || g.tendenzGegenlaeufig ? "warn" : "info"}
+                      marke={
+                        g.abweichend
+                          ? "Bewertungen weichen ab – falls derselbe Sachverhalt: nebeneinander darstellen"
+                          : g.tendenzGegenlaeufig
+                            ? "Tendenzen gegenläufig – falls derselbe Sachverhalt: klären"
+                            : "Möglicher Zusammenhang – prüfen"
+                      }
+                      titel={`${g.art}: ${g.liste.length} Sachverhalte aus ${g.meldungen} Meldungen${g.tendenzGegenlaeufig ? " · Tendenzen gegenläufig" : g.tendenzAbweichend ? " · Tendenzen unterschiedlich" : ""}`}
                     >
                       <div className="lb-rahmen">
                         <table className="tabelle lb-tabelle lb-klein">
                           <thead>
                             <tr>
                               <th>Meldung</th>
+                              <th>Stand</th>
                               <th>Sachverhalt</th>
                               {r.sv_ort && <th>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`)}</th>}
-                              <th>{lBeurteilung}</th>
+                              <th>
+                                {lBeurteilung}
+                                {r.sv_tendenz ? ` / ${lTendenz}` : ""}
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             {g.liste.map((s) => (
                               <tr key={`${s.eintrag.id}-${s.index}`}>
                                 <td>{absender(s.eintrag, profil)}</td>
+                                <td>{datumDE(zeitpunktVon(s.eintrag, profil)) || "–"}</td>
                                 <td>{s.bezeichnung || "–"}</td>
                                 {r.sv_ort && <td>{s.ort || "–"}</td>}
                                 <td>{svMarken(s)}</td>
@@ -944,9 +1124,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                       {g.baustein && (
                         <div className="lb-baustein">
                           <div className="lb-baustein-kopf">
-                            <strong>Textbaustein</strong>
+                            <strong>Textbaustein (Entwurf)</strong>
                             <KopierKnopf html={`<p style="font-family:Arial,sans-serif;font-size:10pt;">${esc(g.baustein)}</p>`} text={g.baustein} />
                           </div>
+                          <p className="hinweis">
+                            Nur verwenden, wenn es sich um denselben Sachverhalt handelt; Platzhalter in eckigen Klammern fachlich füllen.
+                          </p>
                           <p>{g.baustein}</p>
                         </div>
                       )}
@@ -965,16 +1148,36 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                 )}
               </Abschnitt>
 
-              <Abschnitt nr={3} titel="Fortschreibung, Nachlauf und Abschluss" verweis={v.fortschreibung}>
-                {!red.nachlauf.length && !red.abschluss.length && !red.aenderung.length && !red.mehrfach.length && <p className="leer">Keine Hinweise.</p>}
+              <Abschnitt nr={3} id="lb-red-3" titel="Fortschreibung, Nachlauf und Abschluss" verweis={v.fortschreibung}>
+                {!red.nachlauf.length && !red.abschluss.length && !red.aenderung.length && !red.mehrfach.length && !red.marker.length && (
+                  <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
+                )}
                 {red.mehrfach.map((m) => (
-                  <Punkt key={m.stelle} klasse="warn" marke="Mehrere Meldungen derselben Stelle" titel={m.stelle}>
+                  <Punkt key={m.stelle} klasse="warn" marke="Mehrere Meldungen derselben Stelle" titel={m.stelle} aktion={zurMeldung(m.eintraege[0].id)}>
                     {m.eintraege.map((e) => `${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"} – ${e.name}`).join("\n")}
-                    {"\n"}Fortschreibung? Dann gilt die jüngste Meldung; denselben Sachverhalt nicht doppelt zählen.
+                    {"\n"}Fortschreibung? Eine jüngere Meldung ersetzt ältere Angaben nur, soweit sie denselben Gegenstand aktualisiert, berichtigt oder
+                    aufhebt. Denselben Sachverhalt nicht doppelt zählen; eigenständige Lagen derselben Stelle bleiben nebeneinander gültig.
+                  </Punkt>
+                ))}
+                {red.marker.map((x) => (
+                  <Punkt
+                    key={`k-${x.sv.eintrag.id}-${x.sv.index}-${x.kennsatz}`}
+                    klasse="warn"
+                    marke={x.art === "leer" ? "Kennsatz ohne Inhalt" : "Kennsatz ohne Aussage"}
+                    titel={svKennung(x.sv, profil)}
+                    aktion={zurMeldung(x.sv.eintrag.id)}
+                  >
+                    {x.kennsatz} – {x.text}
                   </Punkt>
                 ))}
                 {red.nachlauf.map((s) => (
-                  <Punkt key={`n-${s.eintrag.id}-${s.index}`} klasse="warn" marke="Nachlauf prüfen" titel={svKennung(s, profil)}>
+                  <Punkt
+                    key={`n-${s.eintrag.id}-${s.index}`}
+                    klasse="warn"
+                    marke="Nachlauf prüfen"
+                    titel={svKennung(s, profil)}
+                    aktion={zurMeldung(s.eintrag.id)}
+                  >
                     {lTendenz} „{s.tendenz}“ ohne Abschlussvermerk. Ist der Zielzustand erreicht, bestehen Folgewirkungen fort?
                     {ks.abschluss
                       ? ` Falls abgeschlossen: „${ks.abschluss}“ mit offenen Punkten und Stelle für die Nachsorge; sonst Stand des Wiederanlaufs nennen.`
@@ -996,28 +1199,43 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
 
               <Abschnitt
                 nr={4}
-                titel={`Kernaussage und Anschlussfähigkeit bei ${(r.beurteilung_hoch || []).map((b) => `„${b}“`).join(" / ") || "hoher Beurteilung"}`}
+                id="lb-red-4"
+                titel={`Formale Vollständigkeit bei ${red.hoch.stufen.map((b) => `„${b}“`).join(" / ") || "hoher Beurteilung"}`}
                 verweis={v.kernaussage}
               >
-                {red.kern.length === 0 ? (
-                  <p className="leer">Keine Hinweise.</p>
+                <p className="hinweis">
+                  Geprüft wird, ob Bewertungstext{ks.neubewertung ? `, Kennsatz „${ks.neubewertung}“` : ""}
+                  {r.sv_massnahmen ? " und Maßnahmen" : ""} vorhanden sind – nicht, ob die Kernaussage fachlich trägt.
+                  {red.hoch.abgeleitet && red.hoch.stufen.length ? " Die Stufen sind aus dem Schema abgeleitet; das Profil nennt keine." : ""}
+                </p>
+                {!red.hoch.stufen.length ? (
+                  <p className="leer">Nicht geprüft: Keine hohen Beurteilungsstufen bestimmbar.</p>
+                ) : red.kern.length === 0 ? (
+                  <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
                 ) : (
                   red.kern.map((x, i) => (
-                    <Punkt key={i} klasse="warn" titel={svKennung(x.sv, profil)}>
+                    <Punkt key={i} klasse="warn" titel={svKennung(x.sv, profil)} aktion={zurMeldung(x.sv.eintrag.id)}>
                       {x.fehlt.join(" · ")} – ggf. bei der meldenden Stelle nachfragen oder in der eigenen Fassung ergänzen.
                     </Punkt>
                   ))
                 )}
               </Abschnitt>
 
-              <Abschnitt nr={5} titel="Quellen, Schema und Status" verweis={v.quellen}>
+              <Abschnitt nr={5} id="lb-red-5" titel="Quellen, Schema und Status" verweis={v.quellen}>
                 {red.quellen.length === 0 ? (
-                  <p className="leer">Alle Meldungen bestehen die Schemaprüfung; Quellenverzeichnisse und Verweise ohne Warnhinweis.</p>
+                  <p className="leer">
+                    {red.abdeckung.meldungen
+                      ? r.quellen
+                        ? "Alle ausgewerteten Meldungen bestehen die Schemaprüfung; Quellenverzeichnisse und Verweise ohne Warnhinweis."
+                        : "Alle ausgewerteten Meldungen bestehen die Schemaprüfung. Quellen werden mangels Profilangabe nicht geprüft."
+                      : "Keine Meldung nach dem Schema des Profils geladen."}
+                  </p>
                 ) : (
                   red.quellen.map((q) => (
                     <Punkt
                       key={q.eintrag.id}
                       klasse={q.klasse}
+                      einstufung={q.klasse === "info" ? undefined : "zu klären"}
                       marke={
                         q.eintrag.fremd
                           ? "fremdes Schema"
@@ -1028,8 +1246,15 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                               : "Hinweis"
                       }
                       titel={`${absender(q.eintrag, profil)} · ${q.eintrag.name}`}
+                      aktion={zurMeldung(q.eintrag.id)}
                     >
-                      {q.zeilen.join("\n")}
+                      {q.zeilen.slice(0, 8).join("\n")}
+                      {q.zeilen.length > 8 && (
+                        <details className="lb-mehr">
+                          <summary>{q.zeilen.length - 8} weitere</summary>
+                          {q.zeilen.slice(8).join("\n")}
+                        </details>
+                      )}
                     </Punkt>
                   ))
                 )}
