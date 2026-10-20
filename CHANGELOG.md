@@ -35,7 +35,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
 | 0.4.19 | letzter Commit des Pull Requests „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
-| 0.4.20 | letzter Commit des Pull Requests „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“ |
+| 0.4.20 | letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“ |
 
 ## [0.4.20] – 20.10.2026
 
