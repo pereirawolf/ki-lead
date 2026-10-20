@@ -1,0 +1,112 @@
+// Lesekomponente für SOPs und Lesedokumente eines Profils: Markdown als Text mit Überschriften, Listen und Tabellen.
+// Rohes HTML im Markdown wird nicht ausgeführt (markdown-it mit `html: false`), Bilder werden nicht geladen, nur
+// http(s)-Links führen nach außen. Relative Links öffnen den passenden Eintrag im selben Paket. Der Renderer wird erst
+// beim ersten Öffnen nachgeladen.
+
+import { useEffect, useState } from "react";
+import type { MarkdownIt } from "markdown-it";
+import type { Profil } from "../kern/typen";
+import { linkZiel, type LinkZiel } from "../profil/lesen";
+
+interface LeseUmgebung {
+  von: string;
+  profil: Profil;
+  stapel: LinkZiel[];
+}
+
+let renderer: Promise<MarkdownIt> | null = null;
+
+function ladeRenderer(): Promise<MarkdownIt> {
+  if (!renderer)
+    renderer = import("markdown-it").then(({ default: Md }) => {
+      const md = new Md({ html: false, linkify: false, typographer: false });
+      md.disable(["image"]);
+      const standard = (tokens: any[], idx: number, opt: any, _env: any, self: any) => self.renderToken(tokens, idx, opt);
+      md.renderer.rules.link_open = (tokens, idx, opt, roh, self) => {
+        const env = roh as unknown as LeseUmgebung;
+        const t = tokens[idx];
+        const ziel: LinkZiel = linkZiel(String(t.attrGet("href") ?? ""), env.von, env.profil);
+        env.stapel.push(ziel);
+        if (ziel.art === "extern") {
+          t.attrSet("target", "_blank");
+          t.attrSet("rel", "noopener noreferrer");
+          return standard(tokens, idx, opt, env, self);
+        }
+        if (ziel.art === "sop" || ziel.art === "dokument") {
+          t.attrSet("href", "#");
+          t.attrSet("data-ziel", ziel.art === "sop" ? `sop:${ziel.id}` : `dokument:${ziel.pfad}`);
+          return standard(tokens, idx, opt, env, self);
+        }
+        return '<span class="link-fehlt">';
+      };
+      md.renderer.rules.link_close = (tokens, idx, opt, roh, self) => {
+        const env = roh as unknown as LeseUmgebung;
+        const ziel: LinkZiel | undefined = env.stapel.pop();
+        if (ziel && (ziel.art === "fehlt" || ziel.art === "ungueltig"))
+          return ziel.art === "fehlt" ? ' <span class="link-hinweis">(nicht im Paket)</span></span>' : "</span>";
+        return standard(tokens, idx, opt, env, self);
+      };
+      return md;
+    });
+  return renderer;
+}
+
+/** Markdown als HTML; Tabellen in einem waagerecht scrollbaren Rahmen, Platzhalter `{{name}}` hervorgehoben. */
+export async function lesetextHtml(text: string, von: string, profil: Profil): Promise<string> {
+  const md = await ladeRenderer();
+  const umgebung: LeseUmgebung = { von, profil, stapel: [] };
+  const html = md.render(text, umgebung as unknown as Parameters<MarkdownIt["render"]>[1]);
+  return html
+    .replace(/<table>/g, '<div class="tabelle-rahmen"><table>')
+    .replace(/<\/table>/g, "</table></div>")
+    .replace(/>([^<]+)</g, (_m: string, t: string) => ">" + t.replace(/\{\{([A-Za-z0-9_]+)\}\}/g, '<span class="platzhalter">{{$1}}</span>') + "<");
+}
+
+interface Props {
+  text: string;
+  /** Pfad der Datei im Paket, gegen den relative Links aufgelöst werden */
+  von: string;
+  profil: Profil;
+  /** Aufruf bei einem Link auf einen Eintrag im selben Paket („sop:b08“ bzw. „dokument:sop/CHANGELOG.md“) */
+  oeffnen: (ziel: string) => void;
+}
+
+export function Lesetext({ text, von, profil, oeffnen }: Props) {
+  const [html, setHtml] = useState<string | null>(null);
+  const [fehler, setFehler] = useState(false);
+  const [quelltext, setQuelltext] = useState(false);
+  useEffect(() => {
+    let gueltig = true;
+    lesetextHtml(text, von, profil).then(
+      (h) => gueltig && setHtml(h),
+      () => gueltig && setFehler(true),
+    );
+    return () => {
+      gueltig = false;
+    };
+  }, [text, von, profil]);
+
+  return (
+    <div className="lesetext-rahmen">
+      <button type="button" className="knopf leise klein" aria-pressed={quelltext} onClick={() => setQuelltext((q) => !q)}>
+        {quelltext ? "Lesefassung anzeigen" : "Quelltext anzeigen"}
+      </button>
+      {quelltext || fehler ? (
+        <pre className="quelltext">{text}</pre>
+      ) : html === null ? (
+        <p className="hinweis">Wird aufbereitet …</p>
+      ) : (
+        <div
+          className="lesetext"
+          onClick={(e) => {
+            const a = (e.target as HTMLElement).closest("a[data-ziel]");
+            if (!a) return;
+            e.preventDefault();
+            oeffnen(a.getAttribute("data-ziel") || "");
+          }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
+    </div>
+  );
+}

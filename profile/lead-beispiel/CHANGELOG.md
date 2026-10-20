@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.6.2 – 20.10.2026
+
+Grundlage: Vorschlag „KI-LEAD_Profile_Ergonomie_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen D1–D6 wie empfohlen). Fachlich unverändert.
+
+- `sop/README.md` ist wieder in die App eingebettet; die Profilansicht zeigt sie als Lesedokument (nicht als SOP). Dadurch ändert sich die Prüfsumme des mitgelieferten Profils. Ohne neue Profilversion würde ein exportiertes 1.6.1-Paket beim Import als Versionskonflikt abgelehnt.
+- `sop/README.md` (redaktionell): Hinweis, dass die App die Übersicht als Lesedokument zeigt. SOP-Sammelmappe bleibt Fassung 3.0.1; Teil A und alle SOP- und Bausteindateien sind unverändert. Die Darstellungsdatei bleibt auf dem Stand der Profilversion 1.6.1, wie im Gültigkeitsstand von Teil A angegeben.
+
 ## 1.6.1 – 20.10.2026
 
 Grundlage: Vorschlag „KI-LEAD_SOP_Integration_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen E1 und E2 wie empfohlen).

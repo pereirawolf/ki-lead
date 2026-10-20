@@ -1,59 +1,264 @@
 // Profilverwaltung: eingebaute und importierte Profilpakete, Prüfbericht, Aktivieren, Export.
+// Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
+// Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
 
-import { useRef, useState } from "react";
-import type { Befund, Profil } from "../kern/typen";
-import { fachSops, gemeinsameSops, istBaustein, istInhaltsgeruest, sopGruppen } from "../pipeline/kontext";
-import { sopKennung } from "../profil/sop";
+import { useId, useMemo, useRef, useState, type ReactNode } from "react";
+import type { Befund, Profil, Sop } from "../kern/typen";
+import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
+import { domId, gruppenHinweis, lesedokumente, sopAnzahl, sopAnzeige, sopLesetext, sopSteckbrief, sopSuche } from "../profil/lesen";
 import type { ProfilEintrag } from "../App";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
+import { Lesetext } from "./Lesetext";
+
+export interface ImportErgebnis {
+  ok: boolean;
+  befunde: Befund[];
+  konflikt?: boolean;
+  /** Schlüssel, Name und Version des importierten Profils */
+  schluessel?: string;
+  name?: string;
+  version?: string;
+}
 
 interface Props {
   profile: ProfilEintrag[];
   aktiv?: string;
   aktivieren: (schluessel: string) => void;
-  importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<{ ok: boolean; befunde: Befund[]; konflikt?: boolean }>;
+  importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<ImportErgebnis>;
   loeschen: (schluessel: string) => void;
 }
 
-/** Anzahl der fachlichen Abschnitte, getrennt nach Dach-SOPs und ergänzenden Bausteinen. */
-function sopAnzahl(profil: Profil): string {
-  const fach = fachSops(profil);
-  if (!fach.length) return "keine";
-  const bausteine = fach.filter(istBaustein).length;
-  const dach = fach.length - bausteine;
-  return bausteine ? `${dach} SOP${dach === 1 ? "" : "s"}, ${bausteine} Baustein${bausteine === 1 ? "" : "e"}` : `${dach}`;
+/** Öffnet ein Aufklappelement samt umgebenden Bereichen, scrollt es in den Blick und setzt den Fokus auf den Titel. */
+function bereichOeffnen(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  for (let p: HTMLElement | null = el; p; p = p.parentElement) if (p instanceof HTMLDetailsElement) p.open = true;
+  const summary = el.querySelector(":scope > summary") as HTMLElement | null;
+  (summary || el).scrollIntoView({ block: "start", behavior: "smooth" });
+  summary?.focus({ preventScroll: true });
+}
+
+interface AufklappProps {
+  id: string;
+  titel: ReactNode;
+  tag?: string;
+  klasse?: string;
+  /** Inhalt erst beim ersten Öffnen aufbauen (lange Texte) */
+  children: () => ReactNode;
+  /** „Schließen“ am Ende des geöffneten Inhalts */
+  schliessen?: boolean;
+}
+
+/** Natives details/summary; der Inhalt entsteht erst beim ersten Öffnen und bleibt danach erhalten. */
+function Aufklapp({ id, titel, tag, klasse, children, schliessen }: AufklappProps) {
+  const [geoeffnet, setGeoeffnet] = useState(false);
+  const ref = useRef<HTMLDetailsElement>(null);
+  return (
+    <details id={id} ref={ref} className={klasse} onToggle={(e) => (e.currentTarget as HTMLDetailsElement).open && setGeoeffnet(true)}>
+      <summary>
+        <span className="aufklapp-titel">{titel}</span>
+        {tag && (
+          <>
+            {" "}
+            <span className="sop-version">{tag}</span>
+          </>
+        )}
+      </summary>
+      {geoeffnet && (
+        <div className="aufklapp-inhalt">
+          {children()}
+          {schliessen && (
+            <button
+              type="button"
+              className="knopf leise klein aufklapp-schliessen"
+              onClick={() => {
+                const d = ref.current;
+                if (!d) return;
+                d.open = false;
+                const s = d.querySelector(":scope > summary") as HTMLElement | null;
+                s?.focus({ preventScroll: true });
+                s?.scrollIntoView({ block: "nearest" });
+              }}
+            >
+              Schließen
+            </button>
+          )}
+        </div>
+      )}
+    </details>
+  );
+}
+
+function zielOeffner(praefix: string) {
+  return (ziel: string) => {
+    const [art, ...rest] = ziel.split(":");
+    const wert = rest.join(":");
+    bereichOeffnen(art === "sop" ? domId(praefix, "sop", wert) : domId(praefix, "dok", wert));
+  };
+}
+
+function Steckbrief({ sop }: { sop: Sop }) {
+  const angaben = sopSteckbrief(sop);
+  if (!angaben.length) return null;
+  return (
+    <dl className="steckbrief">
+      {angaben.map((a) => (
+        <div key={a.label}>
+          <dt>{a.label}</dt>
+          <dd>{a.wert}</dd>
+        </div>
+      ))}
+    </dl>
+  );
 }
 
 /**
- * SOP-Katalog als Lesehilfe: gemeinsame Regeln, Dach-SOPs und Bausteine mit vollem Text. Reines Lesen; es
- * verändert keine Meldung und keinen Nachweis in `_entstehung`.
+ * SOP-Katalog als Lesehilfe: gemeinsame Regeln, Dach-SOPs und Bausteine mit Steckbrief und Lesetext, mit Suche.
+ * Reines Lesen; es verändert keine Meldung und keinen Nachweis in `_entstehung`.
  */
-function SopKatalog({ profil }: { profil: Profil }) {
+function SopKatalog({ profil, praefix }: { profil: Profil; praefix: string }) {
+  const [begriff, setBegriff] = useState("");
+  const [imText, setImText] = useState(false);
+  const katalogRef = useRef<HTMLDivElement>(null);
+  const suchId = useId();
   const gemeinsam = gemeinsameSops(profil);
-  const gruppen = sopGruppen(profil);
+  const gruppen = useMemo(() => sopGruppen(profil), [profil]);
+  const treffer = useMemo(() => sopSuche(profil, begriff, imText), [profil, begriff, imText]);
   if (!gemeinsam.length && !gruppen.length) return null;
-  const eintrag = (s: Profil["sops"][number], titel: string) => (
-    <details key={s.id}>
-      <summary>
-        {titel}
-        {istInhaltsgeruest(s) && <span className="sop-status">Inhaltsgerüst</span>}
-      </summary>
-      <pre>{s.text}</pre>
+  const gesamt = profil.sops.length;
+  const oeffnen = zielOeffner(praefix);
+
+  const eintrag = (s: Sop) => {
+    const a = sopAnzeige(s);
+    return (
+      <div key={s.id} hidden={!treffer.has(s.id)}>
+        <Aufklapp id={domId(praefix, "sop", s.id)} klasse="lese" titel={a.kennung ? `${a.kennung} ${a.name}` : a.name} tag={a.tag} schliessen>
+          {() => (
+            <>
+              <Steckbrief sop={s} />
+              <Lesetext text={sopLesetext(s)} von={s.datei} profil={profil} oeffnen={oeffnen} />
+            </>
+          )}
+        </Aufklapp>
+      </div>
+    );
+  };
+
+  return (
+    <details className="sop-katalog" id={domId(praefix, "katalog")}>
+      <summary>SOP-Katalog lesen</summary>
+      <div ref={katalogRef}>
+        <p className="hinweis">Zum Nachlesen ohne KI. Öffnen und Suchen verändern keine Meldung, keinen Nachweis und kein aktives Profil.</p>
+        <div className="katalog-werkzeuge">
+          <label htmlFor={suchId} className="katalog-suche">
+            <span>Suchen</span>
+            <input
+              id={suchId}
+              type="search"
+              value={begriff}
+              placeholder="Kennung oder Name, z. B. C11, N02, Telekommunikation"
+              onChange={(e) => setBegriff(e.target.value)}
+            />
+          </label>
+          <label className="katalog-option">
+            <input type="checkbox" checked={imText} onChange={(e) => setImText(e.target.checked)} /> auch im Text
+          </label>
+          <button
+            type="button"
+            className="knopf leise klein"
+            onClick={() => katalogRef.current?.querySelectorAll("details[open]").forEach((d) => ((d as HTMLDetailsElement).open = false))}
+          >
+            Alle schließen
+          </button>
+        </div>
+        <p className="katalog-treffer" aria-live="polite">
+          {begriff.trim() ? (
+            <>
+              {treffer.size ? `${treffer.size} von ${gesamt} Einträgen` : "Kein Eintrag passt zur Suche."}{" "}
+              <button type="button" className="knopf leise klein" onClick={() => setBegriff("")}>
+                Suche zurücksetzen
+              </button>
+            </>
+          ) : (
+            `${gesamt} Einträge`
+          )}
+        </p>
+        {gemeinsam.map(eintrag)}
+        {gruppen.map((g) => {
+          const hinweis = gruppenHinweis(g.sops);
+          return (
+            <div key={g.titel} className="sop-gruppe" hidden={!g.sops.some((s) => treffer.has(s.id))}>
+              <p className="sop-gruppe-titel">
+                {g.titel}
+                {hinweis && <span className="sop-gruppe-hinweis"> · {hinweis}</span>}
+              </p>
+              {g.sops.map(eintrag)}
+            </div>
+          );
+        })}
+      </div>
     </details>
   );
+}
+
+/** Lesedokumente des Pakets (README, Änderungsverläufe, Arbeitsanweisungen, Kodierleitfaden), nur soweit vorhanden. */
+function Dokumentation({ profil, praefix }: { profil: Profil; praefix: string }) {
+  const doks = lesedokumente(profil);
+  if (!doks.length) return null;
+  const gruppen = [...new Set(doks.map((d) => d.gruppe))];
+  const oeffnen = zielOeffner(praefix);
   return (
-    <details className="sop-katalog">
-      <summary>SOP-Katalog lesen</summary>
-      <p className="hinweis">Zum Nachlesen ohne KI. Das Öffnen verändert keine Meldung und keinen Nachweis.</p>
-      {gemeinsam.map((s) => eintrag(s, s.titel))}
+    <details className="sop-katalog profil-doku" id={domId(praefix, "doku")}>
+      <summary>Dokumentation lesen</summary>
+      <p className="hinweis">Aus dem geladenen Paket; passt damit zu Profilversion und Prüfsumme.</p>
       {gruppen.map((g) => (
-        <div key={g.titel} className="sop-gruppe">
-          <p className="sop-gruppe-titel">{g.titel}</p>
-          {g.sops.map((s) => eintrag(s, sopKennung(s).replace(/^SOP-LEAD /, "")))}
+        <div key={g} className="sop-gruppe">
+          <p className="sop-gruppe-titel">{g}</p>
+          {doks
+            .filter((d) => d.gruppe === g)
+            .map((d) => (
+              <Aufklapp key={d.pfad} id={domId(praefix, "dok", d.pfad)} klasse="lese" titel={d.titel} schliessen>
+                {() => <Lesetext text={profil.dateien[d.pfad]} von={d.pfad} profil={profil} oeffnen={oeffnen} />}
+              </Aufklapp>
+            ))}
         </div>
       ))}
     </details>
+  );
+}
+
+function Pruefsumme({ hash }: { hash: string }) {
+  const [voll, setVoll] = useState(false);
+  const [status, setStatus] = useState("");
+  return (
+    <dd className="pruefsumme">
+      <code className="hash" title={hash}>
+        {hash.slice(0, 12)}
+      </code>{" "}
+      <button
+        type="button"
+        className="knopf leise klein"
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(hash);
+            setStatus("Prüfsumme kopiert.");
+          } catch {
+            setVoll(true);
+            setStatus("Kopieren nicht möglich; bitte den Wert markieren.");
+          }
+        }}
+      >
+        Kopieren
+      </button>{" "}
+      <button type="button" className="knopf leise klein" aria-expanded={voll} onClick={() => setVoll((v) => !v)}>
+        {voll ? "Kurz anzeigen" : "Vollständig anzeigen"}
+      </button>
+      {voll && <code className="hash-voll">{hash}</code>}
+      <span className="pruefsumme-status" aria-live="polite">
+        {status}
+      </span>
+    </dd>
   );
 }
 
@@ -70,10 +275,21 @@ function Befunde({ befunde }: { befunde: Befund[] }) {
   );
 }
 
+/** „1 Fehler, 2 Warnungen“; leer ohne Fehler und Warnungen. */
+function befundZahl(befunde: Befund[]): string {
+  const f = befunde.filter((b) => b.stufe === "fehler").length;
+  const w = befunde.filter((b) => b.stufe === "warnung").length;
+  return [f ? `${f} Fehler` : "", w ? `${w} Warnung${w === 1 ? "" : "en"}` : ""].filter(Boolean).join(", ");
+}
+
+function herkunft(p: ProfilEintrag): string {
+  return p.quelle === "eingebaut" ? "Mitgeliefert" : `Importiert${p.importiertAm ? " am " + new Date(p.importiertAm).toLocaleDateString("de-DE") : ""}`;
+}
+
 export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loeschen }: Props) {
   const zipRef = useRef<HTMLInputElement>(null);
   const ordnerRef = useRef<HTMLInputElement>(null);
-  const [bericht, setBericht] = useState<{ ok: boolean; befunde: Befund[] } | null>(null);
+  const [bericht, setBericht] = useState<ImportErgebnis | null>(null);
 
   const einlesen = async (liste: FileList | null) => {
     if (!liste || !liste.length) return;
@@ -91,6 +307,8 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
     }
   };
 
+  const importiertAktiv = bericht?.schluessel !== undefined && bericht.schluessel === aktiv;
+
   return (
     <div className="profile">
       <div className="werkzeugleiste">
@@ -98,7 +316,10 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           <h1>Profile</h1>
           <p>
             Ein Profil legt fest, nach welcher Systematik gemeldet wird: Schema, Darstellung, Arbeitsanweisung, SOP und Kodierleitfaden einer Organisation oder
-            Ebene.
+            Ebene. Jedes Profil hat seinen eigenen Meldungs-Zwischenstand; er bleibt beim Wechsel erhalten.
+          </p>
+          <p className="hinweis">
+            Profilversion = Stand des Pakets · Tag an einer SOP = Fassung dieses einzelnen Dokuments · Prüfsumme = konkreter Inhalt des Pakets.
           </p>
         </div>
         <div className="werkzeugleiste-knoepfe">
@@ -135,11 +356,23 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
 
       {bericht && (
         <div className={`kasten ${bericht.ok ? "kasten-ok" : "kasten-fehler"}`} role="status">
-          <h3>{bericht.ok ? "Profil importiert" : "Profil nicht importiert"}</h3>
+          <h3>
+            {bericht.ok
+              ? `Profil importiert: ${bericht.name ?? bericht.schluessel}${bericht.version ? `, Profilversion ${bericht.version}` : ""}`
+              : "Profil nicht importiert"}
+          </h3>
+          {bericht.ok && <p>{importiertAktiv ? "Das Profil ist in Verwendung." : "Das Profil ist hinzugefügt, aber noch nicht in Verwendung."}</p>}
           <Befunde befunde={bericht.befunde} />
-          <button type="button" className="knopf leise klein" onClick={() => setBericht(null)}>
-            Ausblenden
-          </button>
+          <div className="aktionen">
+            {bericht.ok && bericht.schluessel && !importiertAktiv && (
+              <button type="button" className="knopf primaer" onClick={() => aktivieren(bericht.schluessel!)}>
+                Jetzt verwenden
+              </button>
+            )}
+            <button type="button" className="knopf leise klein" onClick={() => setBericht(null)}>
+              Ausblenden
+            </button>
+          </div>
         </div>
       )}
 
@@ -147,18 +380,40 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
         {profile.map((p) => {
           const m = p.profil?.manifest;
           const istAktiv = p.schluessel === aktiv;
+          const praefix = domId("profil", p.schluessel);
+          const zahl = befundZahl(p.befunde);
+          const dateien = Object.keys(p.dateien).sort();
           return (
-            <article key={p.schluessel} className={istAktiv ? "profil aktiv" : "profil"}>
-              <header>
-                <h2>{m?.name || p.schluessel}</h2>
-                <p className="profil-meta">
-                  {p.quelle === "eingebaut"
-                    ? "Mitgeliefert"
-                    : `Importiert${p.importiertAm ? " am " + new Date(p.importiertAm).toLocaleDateString("de-DE") : ""}`}
-                  {m && `, Version ${m.version}`}
-                </p>
+            <article key={p.schluessel} className={istAktiv ? "profil aktiv" : "profil"} aria-label={m?.name || p.schluessel}>
+              <header className="profil-kopf">
+                <div className="profil-titel">
+                  <h2>{m?.name || p.schluessel}</h2>
+                  {istAktiv && <span className="aktiv-marke">✓ In Verwendung</span>}
+                  {!p.profil && <span className="marke-fehler">nicht verwendbar</span>}
+                  {zahl && (
+                    <a
+                      className="befund-sprung"
+                      href={`#${praefix}-bericht`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        bereichOeffnen(`${praefix}-bericht`);
+                      }}
+                    >
+                      {zahl}
+                    </a>
+                  )}
+                </div>
+                {p.profil && !istAktiv && (
+                  <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
+                    Verwenden und Meldung öffnen
+                  </button>
+                )}
               </header>
-              {m?.beschreibung && <p>{m.beschreibung}</p>}
+              <p className="profil-meta">
+                {m ? `Profilversion ${m.version} · ` : ""}
+                {herkunft(p)}
+              </p>
+              {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
               {p.profil && (
                 <dl className="profil-daten">
                   <div>
@@ -171,39 +426,45 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   </div>
                   <div>
                     <dt>Schema</dt>
-                    <dd>{m?.meldung.schema_id}</dd>
+                    <dd className="technisch">{m?.meldung.schema_id}</dd>
                   </div>
-                  <div>
-                    <dt>SOP</dt>
+                  <div className="profil-daten-breit">
+                    <dt>SOPs und Bausteine</dt>
                     <dd>{sopAnzahl(p.profil)}</dd>
                   </div>
-                  <div>
+                  {m?.herausgeber && (
+                    <div className="profil-daten-breit">
+                      <dt>Herausgeber</dt>
+                      <dd>{m.herausgeber}</dd>
+                    </div>
+                  )}
+                  {m?.lizenz && (
+                    <div>
+                      <dt>Lizenz</dt>
+                      <dd>{m.lizenz}</dd>
+                    </div>
+                  )}
+                  <div className="profil-daten-breit">
                     <dt>Prüfsumme</dt>
-                    <dd className="hash" title={p.profil.hash}>
-                      {p.profil.hash.slice(0, 12)}
-                    </dd>
+                    <Pruefsumme hash={p.profil.hash} />
                   </div>
                 </dl>
               )}
-              {p.profil && <SopKatalog profil={p.profil} />}
-              <details>
-                <summary>Prüfbericht und Dateien</summary>
+              {p.profil && <Dokumentation profil={p.profil} praefix={praefix} />}
+              {p.profil && <SopKatalog profil={p.profil} praefix={praefix} />}
+              <details id={`${praefix}-bericht`}>
+                <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
                 <Befunde befunde={p.befunde} />
+              </details>
+              <details>
+                <summary>Dateien ({dateien.length})</summary>
                 <ul className="dateiliste">
-                  {Object.keys(p.dateien)
-                    .sort()
-                    .map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
+                  {dateien.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
                 </ul>
               </details>
-              <div className="aktionen">
-                {p.profil && !istAktiv && (
-                  <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
-                    Verwenden
-                  </button>
-                )}
-                {istAktiv && <span className="aktiv-marke">In Verwendung</span>}
+              <div className="aktionen aktionen-nachrangig">
                 <button
                   type="button"
                   className="knopf leise"
