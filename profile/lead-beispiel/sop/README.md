@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.2.2 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.2.3 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -129,11 +129,11 @@ Die App löst frühere technische IDs in gespeicherten Läufen und frühere Kenn
 
 ## Archiv
 
-Frühere Fassungen liegen unverändert in [`archiv/`](archiv/); die App liest sie nicht.
+Frühere Fassungen liegen seit Fassung 3.2.2 nicht mehr in diesem Ordner. Sie bleiben unverändert im Git-Verlauf abrufbar, zuletzt im Stand von Commit `7f88cab` (App 0.4.20, Profil 1.9.0); die Prüfsummen belegen die Unverändertheit.
 
-| Datei | Fassung | SHA-256 |
+| Datei (Git-Verlauf) | Fassung | SHA-256 |
 |---|---|---|
-| `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`) | `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626` |
-| `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; Fassung 2.0 auf `main` bis Commit 1852d49) | `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93` |
+| [`archiv/SOP-LEAD_Sammelmappe_v1.0.1.md`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md) | 1.0.1 vom 17.10.2026 (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`) | `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626` |
+| [`archiv/SOP-LEAD_Sammelmappe_v2.0.1.md`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md) | 2.0.1 vom 19.10.2026 (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; Fassung 2.0 auf `main` bis Commit 1852d49) | `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93` |
 
 Lizenz: CC BY 4.0.

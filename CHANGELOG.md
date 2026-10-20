@@ -34,9 +34,9 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
-| 0.4.19 | letzter Commit des Pull Requests „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
-| 0.4.20 | letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“ |
-| 0.4.21 | letzter Commit des Pull Requests „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
+| 0.4.19 | letzter Commit von Pull Request #16 „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
+| 0.4.20 | letzter Commit von Pull Request #18 „Aufräumen: SOP-Archiv in den Git-Verlauf, Beispielprofil 1.9.1“ (Nachtrag vom 21.10.2026: Beispielprofil 1.9.1, ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“) |
+| 0.4.21 | letzter Commit von Pull Request #19 „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
 
 ## [0.4.21] – 21.10.2026
 
@@ -49,7 +49,7 @@ Grundlage: Testreihe der KI-Modelle vom 20.10.2026 (Auftrag „Ebola Nigeria“ 
 - **Lagenradar an der vorgesehenen Stelle:** Legt die KI das Radar eine Ebene zu hoch ab (in 4 von 13 Entwürfen der Testreihe, bisher jedes Mal ein Reparaturaufruf), setzt die App es vor der Schemaprüfung an `sofort.lagenradar` und vermerkt das im Prüfbericht. Nur bei eindeutiger Zuordnung: Das Schema kennt das Feld oben nicht, der Wert ist ein Objekt, und an der vorgesehenen Stelle steht nichts; ein vorhandener Wert wird nie überschrieben.
 - **Warnung bei nicht abrufbarer Auftrags-URL:** Konnte S2 eine im Auftrag genannte Seite nicht abrufen (in der Testreihe zeit.de in allen 13 Läufen, „url_not_allowed“), nennt der Prüfbericht das als Warnung mit Grund und rät, den Inhalt als PDF oder Text beizufügen und S2 erneut zu starten.
 - **Kennsätze im Fließtext:** Ein Kennsatz wie „Neubewertung bei:“, der nur mitten in einer Zeile steht, ergibt einen Ausfüllhinweis; Lagebild und Redaktionscheck erkennen Kennsätze nur am Zeilenanfang.
-- **Beispielprofil 1.10.0:** Kodierleitfaden 1.2.2 mit einem Kurzbeispiel zu D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0; Regel unverändert), SOP-Sammelmappe 3.2.2 (nur Gültigkeitsstand). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
+- **Beispielprofil 1.10.0:** Kodierleitfaden 1.2.2 mit einem Kurzbeispiel zu D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0; Regel unverändert), SOP-Sammelmappe 3.2.3 (nur Gültigkeitsstand). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
 - Spezifikation 0.4.21 (Abschnitt 5.1), Profilformat-Beispiel.
 
 ### Tests
@@ -75,6 +75,10 @@ Grundlage: Anforderung vom 20.10.2026, bei jedem Start einer KI-Stufe das Modell
 ### Tests
 
 - `tests/modellwahl.test.ts` (2, neu): Modellwahl je Lauf; S1 mit gewähltem Modell über eine Anbieter-Attrappe, Protokoll nach S1, S2-Modell vor dem Start änderbar.
+
+### Nachtrag vom 21.10.2026 (Pull Request #18, ohne neue Versionsnummer)
+
+- Beispielprofil 1.9.1: Ordner `sop/archiv/` entfernt (Sammelmappe 3.2.2), beide Fassungen bleiben im Git-Verlauf abrufbar. Die App ist unverändert; sie las das Archiv nie und bettet es weiterhin bei keinem Profil ein.
 
 ## [0.4.19] – 20.10.2026
 

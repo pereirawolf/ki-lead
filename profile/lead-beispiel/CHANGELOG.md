@@ -14,8 +14,15 @@ Grundlage: Testreihe der KI-Modelle vom 20.10.2026 und zwei Prüfungen (umgesetz
 
 - **Modellvorgabe:** `modelle.erfassung` jetzt `claude-opus-5-5` (bisher `claude-sonnet-5-5`); S1 und Verdichtung unverändert. Begründete Ermessensentscheidung nach der Testreihe, Einzelheiten im [App-Verlauf](../../CHANGELOG.md).
 - **Kodierleitfaden 1.2.2:** Kurzbeispiel zu D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0). Die Regel in Abschnitt D8 ist unverändert; das Beispiel macht sie eindeutig, weil in der Testreihe zwei Entwürfe D8 = 0 für eine Auslandslage setzten.
-- **SOP-Sammelmappe 3.2.2:** nur Gültigkeitsstand in Teil A fortgeschrieben (Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md)).
+- **SOP-Sammelmappe 3.2.3:** nur Gültigkeitsstand in Teil A fortgeschrieben (Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md)).
 - Schema, Darstellungsdatei, Arbeitsanweisungen und Beispiele sind unverändert.
+
+## 1.9.1 – 21.10.2026
+
+Aufräumen, fachlich unverändert.
+
+- **SOP-Sammelmappe 3.2.2:** Der Ordner `sop/archiv/` mit den Fassungen 1.0.1 und 2.0.1 ist entfernt; beide bleiben unverändert im Git-Verlauf abrufbar (Verweise mit Prüfsumme in `sop/README.md`). Gültigkeitsstand in Teil A fortgeschrieben, Lesefassung neu erzeugt. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Weil die eingebettete SOP-Übersicht `sop/README.md` sich ändert, ändert sich die Prüfsumme des Profils; deshalb die neue Profilversion. Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
 
 ## 1.9.0 – 20.10.2026
 
