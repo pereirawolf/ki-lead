@@ -1,5 +1,7 @@
 // Profilansicht: Anzeigetitel und Versions-Tags, Steckbrief, Lesedokumente, Linkauflösung, Katalogsuche, Markdown
 // und Einbettung. Reine Funktionen; die Oberfläche selbst wird per Sichtprüfung kontrolliert.
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { profil } from "./hilfen";
 import { fachSops, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
@@ -266,5 +268,31 @@ describe("Einbettung", () => {
     expect(pfade).toContain("CHANGELOG.md");
     expect(pfade.some((x) => x.endsWith("_Lesefassung.md"))).toBe(false);
     expect(pfade.some((x) => x.startsWith("sop/archiv/"))).toBe(false);
+  });
+});
+
+describe("Alle unter „Profile“ lesbaren Markdown-Texte", () => {
+  it.each(["lead-beispiel", "muster"])("%s: SOPs, Arbeitsgrundlagen und Dokumentation erscheinen formatiert, ohne Markdown-Reste", async (name) => {
+    const { profil: p } = await profil(name);
+    const texte = [
+      ...p!.sops.map((s) => ({ name: s.id, text: sopLesetext(s), von: s.datei })),
+      ...arbeitsgrundlagen(p!).map((d) => ({ name: d.pfad, text: d.text, von: d.pfad })),
+      ...lesedokumente(p!).map((d) => ({ name: d.pfad, text: d.text, von: d.pfad })),
+    ];
+    expect(texte.length).toBeGreaterThan(0);
+    for (const t of texte) {
+      const html = lesetextHtml(t.text, t.von, p!);
+      expect(html, t.name).toMatch(/<(p|h[1-6]|ul|ol|table)>/);
+      // keine unformatierten Überschriften, Tabellen, Listen oder Hervorhebungen als Fließtext
+      expect(html, t.name).not.toMatch(/<p>(#{1,6} |\|.*\||[-*] |\d+\. )/);
+      expect(html, t.name).not.toMatch(/\*\*[^*\n]+\*\*/);
+      expect([...html.matchAll(/<h[23]>/g)].length, t.name).toBe(inhaltsverzeichnis(t.text).length);
+    }
+  });
+
+  it("der Renderer ist fest eingebunden und wird nicht nachgeladen", () => {
+    const quelle = readFileSync(join(__dirname, "../src/ui/Lesetext.tsx"), "utf-8");
+    expect(quelle).not.toMatch(/import\(\s*["']markdown-it["']\s*\)/);
+    expect(quelle).toMatch(/^import MarkdownItKlasse/m);
   });
 });

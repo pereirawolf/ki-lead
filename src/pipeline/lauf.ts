@@ -6,7 +6,7 @@ import { del, entries, get, set } from "idb-keyval";
 import type { AbrufFehler, Fundstelle, Nutzung } from "../anbieter/typen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.4.13";
+export const APP_KENNUNG = "KI-LEAD 0.4.14";
 
 export interface Auftrag {
   sachverhalt: string;
