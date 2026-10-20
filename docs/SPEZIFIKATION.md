@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.18 vom 20.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.19 vom 20.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -181,7 +181,7 @@ Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-
 | Stufe | Inhalt | Ausführung | Ergebnis |
 |---|---|---|---|
 | **S0 Vorverarbeitung** | TXT/MD lesen, Text aus DOCX (eigener Leser für word/document.xml) ziehen, PDF unverändert als Dokument an das Modell geben. JSON prüfen: Ist es eine Meldung des Profils, gilt sie als Vormeldung zur Fortschreibung (A.8). URLs stehen im Nutzertext, damit das Abrufwerkzeug sie verwenden darf. | lokal | Eingangsmaterial |
-| **S1 Gegenstand & SOP-Auswahl** | Sachverhalt, Stichtag, Referenzraum-Bezug, Horizont (A.1). Ereignisarten aus dem Katalog, SOPs inkl. Mischlage und Abgrenzung. Strukturierte Ausgabe (`output_config.format`) mit Enums aus Schema und SOP-Katalog. | KI, kleines Modell | strukturierter Vorschlag; **Person bestätigt oder ändert** |
+| **S1 Gegenstand & SOP-Auswahl** | Sachverhalt, Stichtag, Referenzraum-Bezug, Horizont (A.1). Ereignisarten aus dem Katalog, SOPs inkl. Mischlage und Abgrenzung. Strukturierte Ausgabe (`output_config.format`) mit Enums aus Schema und SOP-Katalog. Die App sichert zwei Felder ab: Bei einer Verdichtung ohne vorgegebenen t0 setzt sie t0 auf den jüngsten Eingang, wenn der Vorschlag davor oder mehr als 24 Stunden danach liegt, und nennt das unter „Hinweise der App“. Nennt der Auftrag keine Prüffrage, bleibt eine von S1 vorgeschlagene Prüffrage ein Vorschlag, den die Person übernehmen kann. | KI, kleines Modell | strukturierter Vorschlag; **Person bestätigt oder ändert** |
 | **S2 Recherche & Entwurf** | Recherche nach den Bausteinen R1 ff. der gewählten SOPs und Bausteine mit Websuche und Seitenabruf. Entwurf aller Felder, Radar Achse für Achse, Quellenverzeichnis. Ausgabe als Kurzantwort plus JSON-Codeblock (Ausgabevertrag der App), weil die strukturierte Ausgabe der API Schlüsselwörter wie `minLength` oder `if/then` nicht trägt. | KI, mittleres Modell, Websuche | JSON-Entwurf und Kurzantwort |
 | **S3 Prüfung & Reparatur** | Die App setzt Schemakennung, Status „Entwurf“, Profilvariablen und `_entstehung`. Danach Schemaprüfung (eigener Prüfer, 2020-12), Quellenprüfung, Kennsätze und Ausfüllhinweise. Bei Schemafehlern höchstens zwei Reparaturaufrufe ohne Werkzeuge und ohne neue Recherche. | lokal und KI | geprüfter Entwurf mit Prüfbericht |
 | **S4 Redaktion & Freigabe** | Formular aus Schema und `ui.json` (Radar, Mehrfachauswahl, Quellen-Editor mit Baukasten für neue Zeilen aus Kategorie, Art und Zusätzen, auch aus Meldungen des gespeicherten Lagebilds; Zeitfelder mit „Jetzt“, „Nur Tag“ und „Leeren“). Das Feld `_entstehung` wird automatisch gefüllt und bleibt erhalten. Export als JSON/PDF. | lokal | Meldung (Entwurf/final) |
@@ -189,7 +189,7 @@ Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-
 
 Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufprotokoll gespeichert (PDF-Inhalte nur als Verweis). Kosten einer abgebrochenen oder fehlgeschlagenen Stufe gelten als nicht erfasst, außer es fehlte der API-Schlüssel und es wurde nichts gesendet (dann 0); der Lauf nennt in diesem Fall die erfassten Kosten als Untergrenze. Schlägt S2 fehl, lässt sich S2 mit dem bestätigten Gegenstand erneut starten.
 
-**Umsetzung M2 (Stand 17.10.2026):** Anthropic Messages API mit Streaming (SSE), Fortsetzung bei `pause_turn`, Wiederholung bei Überlastung, Websuche `web_search_20250305` (lokalisiert, Höchstzahl einstellbar), Seitenabruf `web_fetch_20250910`, Prompt-Caching für Profilgrundlagen und SOP-Block, Aufwand (`effort`) je Stufe. Vorgaben: S1 claude-haiku-5-5 (mittel), S2 claude-sonnet-5-5 (mittel, bis 128 000 Ausgabetoken; bei Abschneiden folgt eine Vervollständigung ohne Recherche), S3 claude-sonnet-5-5 (niedrig); das Profil kann andere Modelle vorgeben, die Einstellungen überschreiben beides.
+**Umsetzung M2 (Stand 17.10.2026):** Anthropic Messages API mit Streaming (SSE), Fortsetzung bei `pause_turn`, Wiederholung bei Überlastung, Websuche `web_search_20250305` (lokalisiert, Höchstzahl einstellbar), Seitenabruf `web_fetch_20250910`, Prompt-Caching für Profilgrundlagen und SOP-Block, Aufwand (`effort`) je Stufe. Vorgaben: S1 claude-haiku-5-5 (seit 0.4.19 hoch, bis 16 000 Ausgabetoken), S2 claude-sonnet-5-5 (mittel, bis 128 000 Ausgabetoken; bei Abschneiden folgt eine Vervollständigung ohne Recherche), S3 claude-sonnet-5-5 (niedrig); das Profil kann andere Modelle vorgeben, die Einstellungen überschreiben beides.
 
 ### 5.2 Modul „Lagebild“ (Modus B)
 
@@ -312,4 +312,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.16 | 20.10.2026 | Redaktionscheck: Zeitzone des Profils, Uhrzeit der Ausgabe, Echtzeit oder Stichtag, leere Kennsätze, nicht prüfbare Quellen, gegenläufige Tendenzen, gemeinsame Hoch-Schwelle, Prüfstand und Abdeckung, Redaktionsbericht (Umsetzung M3) |
 | 0.4.17 | 20.10.2026 | Farbschemata der Oberfläche (Länder, Bund, Bevölkerungsschutz, neutral hell/dunkel, Profilfarben) (Abschnitt 5.4); Datum vorn in allen Dateinamen (Abschnitt 4.3) |
 | 0.4.18 | 20.10.2026 | Barrierefreiheit der Darstellung: Kontrastschemata, Systemfarben und „mehr Kontrast“, Auswahl und Radarwerte nicht nur über Farbe (Abschnitt 5.4); Erfassung: Zeitfelder mit „Jetzt“, optionaler Uhrzeit und „Nur Tag“, Baukasten für Quellenzeilen (Abschnitt 5.1) |
-
+| 0.4.19 | 20.10.2026 | S1: Aufwand „hoch“ und 16 000 Ausgabetoken als Vorgabe; t0-Absicherung bei Verdichtungen; Prüffrage aus S1 ohne Vorgabe im Auftrag nur als Vorschlag (Abschnitt 5.1, Umsetzung M2) |

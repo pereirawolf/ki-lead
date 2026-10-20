@@ -209,7 +209,11 @@ export function s1Schema(profil: Profil, eingaenge: string[] = []): object {
           },
         },
       },
-      prueffrage: { type: "string", description: "Besondere Prüffrage oder leer" },
+      prueffrage: {
+        type: "string",
+        description:
+          "Besondere Prüffrage aus dem Auftrag, sprachlich geschärft. Nennt der Auftrag keine, bleibt das Feld leer oder enthält höchstens einen Vorschlag; die App übernimmt ihn nur, wenn die Person ihn bestätigt. Rückfragen an die Person gehören in die Hinweise.",
+      },
       hinweise: { type: "string", description: "Grenzen des Materials, offene Fragen, nicht zugängliche Quellen" },
     },
   };

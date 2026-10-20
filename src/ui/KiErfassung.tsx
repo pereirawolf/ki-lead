@@ -634,6 +634,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               <p className="einleitung">
                 Vorschlag aus Stufe S1. Prüfe Gliederung, Ereignisarten und SOPs und korrigiere sie bei Bedarf. Erst danach beginnt die Recherche.
               </p>
+              {!!vorschlag.appHinweise?.length && (
+                <div className="kasten kasten-hinweis" role="status">
+                  <h3>Hinweise der App</h3>
+                  {vorschlag.appHinweise.map((h, i) => (
+                    <p key={i}>{h}</p>
+                  ))}
+                </div>
+              )}
               {vorschlag.hinweise && (
                 <div className="kasten kasten-info">
                   <h3>Hinweise aus S1</h3>
@@ -687,6 +695,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <span className="feld-label">Besondere Prüffrage</span>
                 <input type="text" value={vorschlag.prueffrage} onChange={(e) => setVorschlag({ ...vorschlag, prueffrage: e.target.value })} />
               </label>
+              {vorschlag.prueffrageVorschlag && !vorschlag.prueffrage && (
+                <p className="hinweis prueffrage-vorschlag">
+                  Vorschlag aus S1, nicht übernommen (der Auftrag nennt keine Prüffrage): „{vorschlag.prueffrageVorschlag}“{" "}
+                  <button type="button" className="knopf klein" onClick={() => setVorschlag({ ...vorschlag, prueffrage: vorschlag.prueffrageVorschlag || "" })}>
+                    Übernehmen
+                  </button>
+                </p>
+              )}
 
               {verdichtung && vorschlag.sachverhalte.length > 3 && (
                 <div className="kasten kasten-hinweis" role="status">

@@ -31,6 +31,27 @@ import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
 
 export const MAX_REPARATUREN = 2;
 
+/**
+ * Ausgabegrenze der Stufe S1. 8 000 Token reichten nicht sicher: Denkt das Modell bei hohem Aufwand
+ * selbst nach, kamen schon bei mittlerem Aufwand über 7 000 Token zusammen (Lauf 20261019-093623-ae4m).
+ */
+export const MAX_TOKENS_S1 = 16000;
+
+/**
+ * Bei Verdichtungen darf der t0-Vorschlag aus S1 höchstens so viele Stunden nach dem jüngsten Eingang liegen.
+ * Sonst setzt die App t0 auf den jüngsten Eingang: S1 hatte mehrfach die aktuelle Uhrzeit vorgeschlagen,
+ * obwohl die Eingänge Tage älter waren, und S2 ließ daraufhin alle Radarachsen offen.
+ */
+export const T0_SPIELRAUM_STUNDEN = 24;
+
+function zeitwert(z: string): number {
+  return Date.parse(`${z.slice(0, 16)}:00Z`);
+}
+
+function zeitText(z: string): string {
+  return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}, ${z.slice(11, 16)} Uhr`;
+}
+
 export interface Kontext {
   profil: Profil;
   anbieter: LlmAnbieter;
@@ -119,7 +140,7 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
   const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
     modell: modellFuer("vorverarbeitung", k.einstellungen, k.profil),
     aufwand: k.einstellungen.aufwand.vorverarbeitung,
-    maxTokens: 8000,
+    maxTokens: MAX_TOKENS_S1,
     system: [{ text: s1System(k.profil, verdichtung), cache: true }],
     nachrichten: [{ role: "user", content: inhalt }],
     jsonSchema: s1Schema(
@@ -139,11 +160,25 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
 function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const ids = new Set(fachSops(k.profil).map((s) => s.id));
   const eingaenge = new Set(k.material.filter((m) => m.art === "eingang").map((m) => m.name));
-  const t0 = k.lauf.auftrag.meldezeitpunkt
-    ? k.lauf.auftrag.meldezeitpunkt
-    : /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "")
-      ? v.meldezeitpunkt!.slice(0, 16)
-      : juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const appHinweise: string[] = [];
+  const jetzt = jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const eingang = juengsterEingang(k.material);
+  const kiT0 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "") ? v.meldezeitpunkt!.slice(0, 16) : "";
+  let t0: string;
+  if (k.lauf.auftrag.meldezeitpunkt) t0 = k.lauf.auftrag.meldezeitpunkt;
+  else if (kiT0 && eingang && istVerdichtung(k.material) && (kiT0 < eingang || zeitwert(kiT0) - zeitwert(eingang) > T0_SPIELRAUM_STUNDEN * 3_600_000)) {
+    // Verdichtung: t0 gehört kurz hinter den jüngsten Eingang (SOP-LEAD A.7), nicht auf die aktuelle Uhrzeit
+    t0 = eingang;
+    appHinweise.push(
+      `Meldezeitpunkt t0 auf den jüngsten Eingang gesetzt (${zeitText(eingang)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
+        kiT0 < eingang ? "vor dem jüngsten Eingang" : `mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`
+      }. Soll die Meldung einen späteren Stand abbilden, gib t0 hier oder im Auftrag vor.`,
+    );
+  } else t0 = kiT0 || eingang || jetzt;
+
+  // Prüffragen stellt die Person. Ohne Prüffrage im Auftrag bleibt ein Vorschlag aus S1 ein Vorschlag.
+  const auftragsfrage = (k.lauf.auftrag.prueffrage || "").trim();
+  const kiFrage = String(v.prueffrage || "").trim();
   return {
     gegenstand: String(v.gegenstand || ""),
     stichtag: /^\d{4}-\d{2}-\d{2}$/.test(v.stichtag || "") ? v.stichtag : k.lauf.auftrag.stichtag,
@@ -161,8 +196,10 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
           : {}),
       }),
     ),
-    prueffrage: String(v.prueffrage || ""),
+    prueffrage: auftragsfrage ? kiFrage || auftragsfrage : "",
+    ...(!auftragsfrage && kiFrage ? { prueffrageVorschlag: kiFrage } : {}),
     hinweise: String(v.hinweise || ""),
+    ...(appHinweise.length ? { appHinweise } : {}),
   };
 }
 

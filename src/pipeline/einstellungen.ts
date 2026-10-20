@@ -38,13 +38,13 @@ export const MODELL_AUSWAHL = MODELL_GRUPPEN.flatMap((g) => g.modelle);
 
 export const STANDARD: Einstellungen = {
   modelle: { vorverarbeitung: "", erfassung: "", verdichtung: "", reparatur: "", kurzfassung: "" },
-  aufwand: { vorverarbeitung: "medium", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   websucheMax: 15,
   abrufMax: 10,
   abrufMaxTokens: 15000,
   suchland: "DE",
   maxTokensErfassung: 128000,
-  fassung: 2,
+  fassung: 3,
 };
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
@@ -59,6 +59,12 @@ export async function einstellungenLesen(): Promise<Einstellungen> {
     if (g.maxTokensErfassung === 64000) g.maxTokensErfassung = 128000;
     if (g.aufwand?.erfassung === "high") g.aufwand = { ...g.aufwand, erfassung: "medium" };
     g.fassung = 2;
+  }
+  // Fassung 2 → 3: S1 hielt bei mittlerem Aufwand Regeln zu t0 und Prüffrage oft nicht ein. Die alte
+  // Vorgabe „medium“ wird auf „high“ angehoben; eine bewusst andere Wahl bleibt stehen.
+  if (g && g.fassung === 2) {
+    if (g.aufwand?.vorverarbeitung === "medium") g.aufwand = { ...g.aufwand, vorverarbeitung: "high" };
+    g.fassung = 3;
   }
   return {
     ...STANDARD,

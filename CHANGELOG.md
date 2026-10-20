@@ -34,6 +34,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
+| 0.4.19 | letzter Commit des Pull Requests „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
+
+## [0.4.19] – 20.10.2026
+
+Grundlage: Auswertung von sieben Laufprotokollen vom 18. bis 20.10.2026 (sechs Verdichtungen „Ilka“ mit Opus und Sonnet, eine Fortschreibung). Auffällig war nicht das Modell in S2, sondern Stufe S1: In vier von sechs Verdichtungen schlug S1 als t0 die aktuelle Uhrzeit vor, obwohl die Eingänge sechs Tage älter waren; S2 ließ daraufhin alle Radarachsen offen. In fünf von sechs Läufen trug S1 ohne Vorgabe im Auftrag eine Prüffrage ein, einmal eine Rückfrage an die Person. Ein S1-Aufruf erreichte 7 203 von 8 000 Ausgabetoken. Keine Änderung an Profil, SOPs und Schema.
+
+### Geändert
+
+- **S1 mit hohem Aufwand:** Die Vorgabe für die Rolle „vorverarbeitung“ ist jetzt „high“ statt „medium“ (Einstellungen, Fassung 3). Gespeicherte Einstellungen mit der alten Vorgabe „medium“ werden einmalig angehoben; eine andere bewusste Wahl bleibt stehen. Mehrkosten bei Haiku: Bruchteile eines Cents je Lauf.
+- **S1 mit 16 000 Ausgabetoken** statt 8 000 (`MAX_TOKENS_S1`), damit S1 bei hohem Aufwand nicht abgeschnitten wird.
+- **t0-Absicherung bei Verdichtungen:** Gibt der Auftrag keinen Meldezeitpunkt vor und liegt der Vorschlag aus S1 vor dem jüngsten Eingang oder mehr als 24 Stunden danach (`T0_SPIELRAUM_STUNDEN`), setzt die App t0 auf den jüngsten Eingang. Die Bestätigung zeigt das unter „Hinweise der App“ mit beiden Zeitpunkten; t0 bleibt dort änderbar. Erfassungen ohne Eingänge und ein im Auftrag vorgegebener t0 sind nicht betroffen.
+- **Prüffrage aus S1 nur als Vorschlag:** Nennt der Auftrag keine Prüffrage, bleibt das Feld leer; eine von S1 vorgeschlagene Prüffrage erscheint darunter mit „Übernehmen“. Nennt der Auftrag eine, gilt wie bisher die von S1 geschärfte Fassung. Die Feldbeschreibung im S1-Schema sagt das jetzt ausdrücklich und verweist Rückfragen in die Hinweise.
+- Laufprotokoll: Der S1-Vorschlag kann die neuen Felder `prueffrageVorschlag` und `appHinweise` tragen (optional, ältere Läufe bleiben lesbar).
+- Spezifikation 0.4.19 (Abschnitt 5.1, Umsetzung M2).
+
+### Tests
+
+- `tests/pipeline.test.ts` (+8): S1-Aufruf mit Aufwand und Ausgabegrenze; t0-Absicherung (zu spät, zu früh, im Spielraum, Vorgabe im Auftrag, Erfassung ohne Eingänge); Prüffrage mit und ohne Vorgabe.
+- `tests/einstellungen.test.ts` (5, neu): Vorgabe, Umstellung von Fassung 1 und 2, bewusste Wahl bleibt.
 
 ## [0.4.18] – 20.10.2026
 
