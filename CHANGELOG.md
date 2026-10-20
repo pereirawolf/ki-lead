@@ -35,6 +35,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
 | 0.4.19 | letzter Commit des Pull Requests „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
+| 0.4.20 | letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“ |
+
+## [0.4.20] – 20.10.2026
+
+Grundlage: Anforderung vom 20.10.2026, bei jedem Start einer KI-Stufe das Modell abweichend von der Standardeinstellung wählen und das Laufprotokoll schon nach S1 exportieren zu können. Baut auf 0.4.19 auf. Keine Änderung an Profilen, SOPs, Meldungen oder Ausgaben.
+
+### Neu
+
+- **Modell je Lauf wählen.** „Modelle für diesen Lauf“ (aufklappbar; die Zusammenfassung nennt die aktuelle Wahl) steht an jeder Startstelle einer KI-Stufe:
+  - im Auftrag vor S1 für S1, S2 und S3 (Reparatur),
+  - nach S1 beim Bestätigen noch für S2 und S3,
+  - bei „S2 erneut starten“,
+  - bei der Management Summary.
+
+  Die Vorgabe steht als „Standard: …“ an erster Stelle; Modelle eines Anbieters ohne hinterlegten Schlüssel sind gekennzeichnet. Schlüsselprüfung und Datenhinweis („Die Inhalte gehen an …“) folgen der Wahl. Die Wahl gilt nur für den Lauf und wird nicht gespeichert; „Neue KI-Erfassung“ setzt sie zurück. Aufwand und übrige Einstellungen bleiben, wie unter „Einstellungen“ festgelegt. Das Laufprotokoll hält das verwendete Modell je Stufe fest.
+- **Laufprotokoll schon nach S1:** „Laufprotokoll exportieren (S1)“ beim Bestätigen des Gegenstands; nach einem Abbruch oder Fehler in S1 steht der Export im Fehlerhinweis. Der Lauf erscheint nach S1 auch unter „Frühere Läufe“.
+
+### Tests
+
+- `tests/modellwahl.test.ts` (2, neu): Modellwahl je Lauf; S1 mit gewähltem Modell über eine Anbieter-Attrappe, Protokoll nach S1, S2-Modell vor dem Start änderbar.
 
 ## [0.4.19] – 20.10.2026
 
