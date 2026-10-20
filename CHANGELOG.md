@@ -34,8 +34,8 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
-| 0.4.19 | letzter Commit des Pull Requests „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
-| 0.4.20 | letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“ |
+| 0.4.19 | letzter Commit von Pull Request #16 „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
+| 0.4.20 | letzter Commit von Pull Request #18 „Aufräumen: SOP-Archiv in den Git-Verlauf, Beispielprofil 1.9.1“ (Nachtrag vom 21.10.2026: Beispielprofil 1.9.1, ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“) |
 
 ## [0.4.20] – 20.10.2026
 
@@ -55,6 +55,10 @@ Grundlage: Anforderung vom 20.10.2026, bei jedem Start einer KI-Stufe das Modell
 ### Tests
 
 - `tests/modellwahl.test.ts` (2, neu): Modellwahl je Lauf; S1 mit gewähltem Modell über eine Anbieter-Attrappe, Protokoll nach S1, S2-Modell vor dem Start änderbar.
+
+### Nachtrag vom 21.10.2026 (Pull Request #18, ohne neue Versionsnummer)
+
+- Beispielprofil 1.9.1: Ordner `sop/archiv/` entfernt (Sammelmappe 3.2.2), beide Fassungen bleiben im Git-Verlauf abrufbar. Die App ist unverändert; sie las das Archiv nie und bettet es weiterhin bei keinem Profil ein.
 
 ## [0.4.19] – 20.10.2026
 
