@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.14 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.15 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -53,7 +53,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
 - `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
-- `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
+- `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `kontrast-hell`, `kontrast-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`; bei einer Kontrastbasis gilt für Text 7:1), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
 - `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
 
 ### `kontakte.json`
@@ -91,7 +91,7 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | `label` | Bezeichnung |
 | `hinweis` | Ausfüllhinweis unter dem Feld |
 | `platzhalter` | Platzhaltertext im Eingabefeld |
-| `widget` | `text`, `text_lang`, `datum`, `datumzeit`, `auswahl`, `radio`, `mehrfachauswahl`, `radar`, `quellen` |
+| `widget` | `text`, `text_lang`, `datum` (Tag, Schaltfläche „Heute“), `datumzeit` (Tag und Uhrzeit, Uhrzeit nötig, „Jetzt“), `datum_uhrzeit` (Tag, Uhrzeit optional, „Jetzt“ und „Nur Tag“; Schema-Muster z. B. `^$\|^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$`), `auswahl`, `radio`, `mehrfachauswahl`, `radar`, `quellen`. Alle Zeitfelder haben „Leeren“; „Jetzt“ gilt in `variablen.zeitzone`. |
 | `leer_label` | Beschriftung für den Leerwert einer Auswahl |
 | `pflicht` | Hinweis „Pflicht für finale Meldung“ und Prüfung im letzten Schritt |
 | `layout` | `zeile` oder `spalten` für Gruppen |
@@ -125,7 +125,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 ### Weitere Abschnitte
 
 - `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt.
-- `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge.
+- `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge. Unter dem Quellenfeld stellt ein Baukasten neue Zeilen aus Kategorie, Art (Vorlage des Profils, Online-Quelle, Pressemitteilung, Lagebild, Meldung aus dem gespeicherten Lagebild, Datensatz, Beitrag in sozialen Medien, Auskunft, Dokument ohne URL) und Zusätzen (Datenstand, Paywall, nicht ausgewertet) zusammen; Zeilen haben die Form `[Qn] K – …`.
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern. Der Meldezeitpunkt steht im Dateinamen immer vorn (`2026-10-20T20-31_…`), auch wenn `{meldezeitpunkt}` in der Vorlage am Ende steht oder fehlt.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
@@ -202,3 +202,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.12 | 20.10.2026 | Importprüfung: Datentypen der Manifestangaben und Werte der Schema-Schlüsselwörter; zyklische Verweise (App 0.4.15) |
 | 1.13 | 20.10.2026 | Redaktionscheck: `variablen.zeitzone` bestimmt die Lesart von Fristen und nächster Ausgabe; Ersatzregel für fehlendes `beurteilung_hoch` dokumentiert (App 0.4.16) |
 | 1.14 | 20.10.2026 | Optionales `farbschema` im Manifest; Datum vorn im Dateinamen unabhängig von der Stellung von `{meldezeitpunkt}` (App 0.4.17) |
+| 1.15 | 20.10.2026 | `farbschema.basis` auch `kontrast-hell` und `kontrast-dunkel`, dann Textkontrast mindestens 7:1; Widget `datum_uhrzeit` (Tag, Uhrzeit optional); Zeitfelder mit „Jetzt“/„Heute“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen (App 0.4.18) |

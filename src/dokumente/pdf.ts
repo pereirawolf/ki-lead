@@ -133,7 +133,7 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
     return;
   }
   let text = wert === null || wert === undefined || wert === "" ? "–" : String(wert);
-  if (f.widget === "datum" || f.widget === "datumzeit") text = datumDE(text) || "–";
+  if (f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit") text = datumDE(text) || "–";
   if (text !== "–") text = gliedereFeld(gen, text, profil.ui);
   out.push([label, text]);
 }
@@ -157,7 +157,7 @@ function freigabeZeichnen(doc: jsPDF, profil: Profil, d: Meldung, startY: number
       const v = wert?.[c]?.[s];
       if (v === null || v === undefined || v === "") return "";
       const f = feldUi(ui, `${feld}.${c}.${s}`);
-      return f.widget === "datum" || f.widget === "datumzeit" ? datumDE(v) : String(v);
+      return f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit" ? datumDE(v) : String(v);
     };
     autoTable(doc, {
       startY,

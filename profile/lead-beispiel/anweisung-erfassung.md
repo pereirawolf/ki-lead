@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.3.2 vom 20.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.0 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 3.0.1 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0.1 und der Arbeitsanweisung Kurzfassung 2.1.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.3.3 vom 20.10.2026 · abgestimmt auf die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe Fassung 3.0.1 und den Kodierleitfaden LEAD Fassung 1.2 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung 2.0.1 und der Arbeitsanweisung Kurzfassung 2.1.1 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs und Bausteine, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ein thematisch passendes Beispiel-JSON dient nur als Stilbeispiel, nie als Beleg, Skalenquelle oder Vorgabe für die Bewertung. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
 
@@ -64,7 +64,7 @@ Rangfolge bei Widersprüchen:
 Leerwerte (Beispielschema):
 - `beurteilung` und `tendenz`: leerer String `""` (Option „keine Angabe“), nie `null`.
 - `lagenradar.d1` … `d8`: `null`, nie `0` als Ersatz, nie eine Zeichenkette, **nie „U“**.
-- Text- und Datumsfelder: `""`. Datum `JJJJ-MM-TT`, `meldezeitpunkt` `JJJJ-MM-TTThh:mm`.
+- Text- und Datumsfelder: `""`. Datum `JJJJ-MM-TT`, `meldezeitpunkt` `JJJJ-MM-TTThh:mm`. `eintritt`, `meldezeitraum.von` und `meldezeitraum.bis` nur dann mit Uhrzeit (`JJJJ-MM-TTThh:mm`), wenn das Material die Uhrzeit belegt; sonst nur den Tag.
 
 Setze `schema` auf die Schemakennung aus dem Schema und `_status: "Entwurf"`. Lasse Namen, Daten und Handzeichen aller `freigabe`-Felder leer. Fülle im Feld `_entstehung` die Einträge `verfahren` („KI-Entwurf“), `sop` und `kodierleitfaden` (Abschnitt 6). Füge keine schemafremden Felder hinzu; das Schema lässt keine zusätzlichen Felder zu.
 

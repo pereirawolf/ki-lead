@@ -53,8 +53,8 @@ it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwen
   await zeigeApp();
   await klick("Einstellungen");
   const optgroups = [...farbSelect().querySelectorAll("optgroup")].map((g) => g.label);
-  expect(optgroups).toEqual(["Neutral", "Bund", "Bundesländer", "Profil"]);
-  expect(farbSelect().querySelectorAll("option")).toHaveLength(22);
+  expect(optgroups).toEqual(["Neutral", "Kontrast", "Bund", "Bundesländer", "Profil"]);
+  expect(farbSelect().querySelectorAll("option")).toHaveLength(24);
   await act(async () => waehle(farbSelect(), "de-th"));
   await warte();
   expect(document.documentElement.dataset.farbschema).toBe("de-th");
@@ -116,4 +116,48 @@ it("ein fehlerhaftes Farbschema eines importierten Profils lässt die Einstellun
   (document.querySelector("details.farb-editor") as HTMLDetailsElement).open = true;
   await warte();
   expect(farbSelect().querySelector('option[value="profil"]')!.textContent).toContain("keine definiert");
+});
+
+it("Editor: Vorschau mit Kontrastbasis zeigt die Signalfarben des Kontrastschemas", async () => {
+  await zeigeApp();
+  await klick("Einstellungen");
+  const editor = document.querySelector("details.farb-editor") as HTMLDetailsElement;
+  editor.open = true;
+  const basis = [...editor.querySelectorAll("label.feld")]
+    .find((l) => l.textContent?.startsWith("Ausgangsschema"))!
+    .querySelector("select") as HTMLSelectElement;
+  await act(async () => waehle(basis, "kontrast-hell"));
+  await warte();
+  const vorschau = editor.querySelector(".farb-vorschau") as HTMLElement;
+  expect(vorschau.style.getPropertyValue("--erheblich")).toBe("#8A3300");
+  expect(vorschau.style.getPropertyValue("--band")).toBe("none");
+});
+
+it("Systemeinstellung „mehr Kontrast“: „Automatisch“ verwendet das Kontrastschema und folgt einer Änderung", async () => {
+  const hoerer: Array<() => void> = [];
+  let mehr = true;
+  const original = window.matchMedia;
+  window.matchMedia = ((q: string) => ({
+    media: q,
+    get matches() {
+      return q === "(prefers-contrast: more)" ? mehr : false;
+    },
+    addEventListener: (_: string, f: () => void) => hoerer.push(f),
+    removeEventListener: () => {},
+  })) as unknown as typeof window.matchMedia;
+  try {
+    await zeigeApp();
+    expect(document.documentElement.dataset.farbschema).toBe("kontrast-hell");
+    expect(document.documentElement.dataset.kontrast).toBe("erhoeht");
+    await klick("Einstellungen");
+    expect(document.body.textContent).toContain("Systemeinstellung „mehr Kontrast“");
+    expect(farbSelect().value).toBe("automatisch");
+    mehr = false;
+    await act(async () => hoerer.forEach((f) => f()));
+    await warte();
+    expect(document.documentElement.dataset.farbschema).toBeUndefined();
+    expect(document.documentElement.dataset.kontrast).toBeUndefined();
+  } finally {
+    window.matchMedia = original;
+  }
 });

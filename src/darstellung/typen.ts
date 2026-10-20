@@ -30,7 +30,7 @@ export const UI_TOKENS = [
 ] as const;
 export type UiToken = (typeof UI_TOKENS)[number];
 
-/** Fachliche Signalfarben: hängen nur vom Modus ab, nie vom Land oder Profil */
+/** Fachliche Signalfarben: hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell/dunkel), nie vom Land oder Profil */
 export const SEMANTIK_TOKENS = [
   "gering",
   "gering-zart",
@@ -47,12 +47,18 @@ export const SEMANTIK_TOKENS = [
 export type SemantikToken = (typeof SEMANTIK_TOKENS)[number];
 
 export type Modus = "hell" | "dunkel";
+/** Grundlage der Signalfarben: Modus oder eine der festen Kontrastpaletten */
+export type SemantikBasis = Modus | "kontrast-hell" | "kontrast-dunkel";
 
 export interface FarbschemaEintrag {
   id: string;
   name: string;
-  gruppe: "Neutral" | "Bund" | "Bundesländer";
+  gruppe: "Neutral" | "Kontrast" | "Bund" | "Bundesländer";
   modus: Modus;
+  /** Signalfarben; ohne Angabe die des Modus */
+  semantik?: SemantikBasis;
+  /** Mindestkontrast für Text (Vorgabe 4,5:1; Kontrastschemata 7:1) */
+  kontrastziel?: number;
   /** Kurzangabe zur Ausgangslage der Farben */
   herkunft: string;
   quellen: string[];
@@ -84,6 +90,8 @@ export interface AufgeloestesThema {
   name: string;
   modus: Modus | null;
   quelle: "automatisch" | "katalog" | "profil" | "lokal" | "ersatz";
+  /** true bei erhöhtem Kontrast (Kontrastschema oder Systemeinstellung „mehr Kontrast“) */
+  kontrast?: boolean;
   /** vollständige Farbwerte (UI und Semantik); leer bei automatisch */
   tokens: Record<string, string>;
   band: string[];

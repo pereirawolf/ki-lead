@@ -41,8 +41,10 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
     )
     .join(" ");
   const kurz = (label: string) => label.match(/^(D\d+)\b/)?.[1] ?? label.split(/\s+/)[0];
+  // Werte auch ohne Grafik zugänglich (Screenreader, Systemfarben): „D1 Gefahrenlage: 2 von 4; D2 …: offen“
+  const beschreibung = `Lagenradar: ${def.achsen.map((a, i) => `${a.label}: ${werte[i] === null ? "offen" : `${werte[i]} von ${def.max}`}`).join("; ")}`;
   return (
-    <svg viewBox={`0 0 ${groesse} ${groesse}`} width={groesse} height={groesse} role="img" aria-label="Lagenradar">
+    <svg viewBox={`0 0 ${groesse} ${groesse}`} width={groesse} height={groesse} role="img" aria-label={beschreibung}>
       {ringe}
       {def.achsen.map((a, i) => {
         const [x, y] = punkt(i, rMax);

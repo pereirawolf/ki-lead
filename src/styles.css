@@ -184,6 +184,10 @@ a {
 .nav.aktiv {
   color: var(--amt-tief);
   background: var(--amt-zart);
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.35em;
 }
 
 .profil-chip {
@@ -563,6 +567,10 @@ textarea {
   background: var(--amt-zart);
   color: var(--amt-tief);
   font-weight: 700;
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 
 .segment.an.wert-geringfügig {
@@ -745,6 +753,9 @@ textarea {
   background: var(--amt);
   border-color: var(--amt);
   color: var(--auf-amt);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
 }
 
 .stufe-offen {
@@ -1755,6 +1766,9 @@ details.ki-abschnitt summary,
   border-color: var(--amt);
   color: var(--auf-amt);
   font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 
 .lb-zaehler {
@@ -3002,4 +3016,169 @@ fieldset.lb-ausgabe {
   padding: 0.6rem;
   overflow-x: auto;
   font-size: 0.85rem;
+}
+
+/* ── Barrierefreiheit: Kontrastschemata und Systemfarben ── */
+
+/* Kontrastschema (gewählt oder über „mehr Kontrast“ automatisch): kräftigere Konturen, Marken mit Rahmen */
+[data-kontrast="erhoeht"] .chip,
+[data-kontrast="erhoeht"] .stufe,
+[data-kontrast="erhoeht"] .segmente,
+[data-kontrast="erhoeht"] .lb-reiter .segment,
+[data-kontrast="erhoeht"] input[type="text"],
+[data-kontrast="erhoeht"] input[type="password"],
+[data-kontrast="erhoeht"] input[type="date"],
+[data-kontrast="erhoeht"] input[type="time"],
+[data-kontrast="erhoeht"] input[type="datetime-local"],
+[data-kontrast="erhoeht"] input[type="number"],
+[data-kontrast="erhoeht"] select,
+[data-kontrast="erhoeht"] textarea {
+  border-width: 2px;
+}
+
+[data-kontrast="erhoeht"] .lb-flag {
+  border: 1px solid currentColor;
+}
+
+/* gewählte Bewertung: Fläche entspricht im Kontrastschema der Arbeitsfläche, daher Innenrahmen */
+[data-kontrast="erhoeht"] .segment.an {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+/* Schrittzähler: „linie-zart“ ist im Kontrastschema eine kräftige Konturfarbe, kein Texthintergrund */
+[data-kontrast="erhoeht"] .schritt-zahl {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+}
+
+/* Systemfarben (z. B. Kontrastdesign von Windows): das System gibt die Farben vor; die App sorgt nur dafür,
+   dass Auswahl, Marken und Radar sichtbar bleiben. */
+@media (forced-colors: active) {
+  .kopf,
+  .farb-vorschau-kopf {
+    border-image: none;
+  }
+
+  .nav.aktiv,
+  /* Spezifität wie .segment.an.wert-…, damit auch gewählte Bewertungen Highlight erhalten */
+  .segmente .segment.an,
+  .lb-reiter .segment.aktiv,
+  .stufe.aktiv,
+  .stufe-offen.aktiv,
+  .chip.an {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+
+  .lb-marke,
+  .lb-flag {
+    border: 1px solid CanvasText;
+  }
+
+  /* Balken nur aus Hintergrund würden sonst verschwinden; die Zahl steht daneben */
+  .lb-balken-wert {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .radar-ring,
+  .radar-achse {
+    stroke: GrayText;
+  }
+
+  .radar-flaeche {
+    fill: none;
+    stroke: CanvasText;
+  }
+
+  .radar-punkt {
+    fill: CanvasText;
+  }
+
+  .radar-punkt-offen {
+    stroke: CanvasText;
+  }
+
+  .radar-beschriftung {
+    fill: CanvasText;
+  }
+}
+
+/* ── Datums- und Zeitfelder mit Schaltflächen ── */
+.datumzeit-feld .datum-zeit input[type="date"] {
+  flex: 0 1 11.5rem;
+}
+
+.datumzeit-feld .datum-zeit input[type="time"] {
+  flex: 0 1 8rem;
+}
+
+.datumzeit-feld .datum-zeit input:disabled {
+  opacity: 1;
+  background: var(--papier);
+  cursor: not-allowed;
+}
+
+.datumzeit-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.datumzeit-fehlt {
+  color: var(--erheblich);
+}
+
+/* ── Quellen: Baukasten für neue Zeilen ── */
+.quellen-baukasten {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem 0.8rem;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.quellen-baukasten legend {
+  font-weight: 700;
+  padding: 0 0.3rem;
+}
+
+.quellen-reihe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+
+.quellen-reihe-titel {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 5.5rem;
+}
+
+.quellen-lagemeldung {
+  flex: 1 1 20rem;
+  margin: 0;
+}
+
+.quellen-vorschau {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.quellen-vorschau code {
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.1rem 0.35rem;
+  font-size: 0.88rem;
+}
+
+.quellen-baukasten > .knopf {
+  align-self: flex-start;
 }

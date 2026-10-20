@@ -183,7 +183,16 @@ class Pruefer {
       if (s.minLength !== undefined && laenge < s.minLength) out.push({ pfad, keyword: "minLength", text: "Pflichtangabe fehlt" });
       if (s.maxLength !== undefined && laenge > s.maxLength) out.push({ pfad, keyword: "maxLength", text: `höchstens ${s.maxLength} Zeichen` });
       if (s.pattern !== undefined && !regex(s.pattern).test(v))
-        out.push({ pfad, keyword: "pattern", text: s.pattern === "\\S" ? "Pflichtangabe fehlt" : `Format ungültig („${kurz(v)}“)` });
+        out.push({
+          pfad,
+          keyword: "pattern",
+          text:
+            s.pattern === "\\S"
+              ? "Pflichtangabe fehlt"
+              : /^\d{4}-\d{2}-\d{2}$/.test(v) && regex(s.pattern).test(`${v}T00:00`)
+                ? `Uhrzeit fehlt („${kurz(v)}“, erwartet JJJJ-MM-TTThh:mm)`
+                : `Format ungültig („${kurz(v)}“)`,
+        });
     }
     if (typeof v === "number") {
       if (s.minimum !== undefined && v < s.minimum) out.push({ pfad, keyword: "minimum", text: `Wert ${v} kleiner als ${s.minimum}` });

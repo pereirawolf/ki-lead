@@ -3,7 +3,18 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { join } from "node:path";
 import { FARBSCHEMAS } from "../src/darstellung/katalog";
-import { ALLE_VARIABLEN, AUTOMATISCH, PROFIL, SEMANTIK, anwenden, aufloesen, kontrast, kontrastFehler, profilFarbschemaFehler } from "../src/darstellung/thema";
+import {
+  ALLE_VARIABLEN,
+  AUTOMATISCH,
+  PROFIL,
+  SEMANTIK,
+  anwenden,
+  aufloesen,
+  kontrast,
+  kontrastFehler,
+  profilFarbschemaFehler,
+  semantikVon,
+} from "../src/darstellung/thema";
 import { UI_TOKENS } from "../src/darstellung/typen";
 import { gueltigeAuswahl, startLesen, startSchreiben } from "../src/darstellung/speicher";
 import { ladeProfil } from "../src/profil/laden";
@@ -21,10 +32,16 @@ afterEach(() => {
 });
 
 describe("Katalog", () => {
-  it("20 eindeutige Schemata: 2 neutral, Bund, Bevölkerungsschutz, alle 16 Länder", () => {
+  it("22 eindeutige Schemata: 2 neutral, 2 Kontrast, Bund, Bevölkerungsschutz, alle 16 Länder", () => {
     const ids = FARBSCHEMAS.map((s) => s.id);
-    expect(new Set(ids).size).toBe(20);
-    expect(ids).toEqual(expect.arrayContaining(["neutral-hell", "neutral-dunkel", "bund", "bevoelkerungsschutz", ...LAENDER]));
+    expect(new Set(ids).size).toBe(22);
+    expect(ids).toEqual(
+      expect.arrayContaining(["neutral-hell", "neutral-dunkel", "kontrast-hell", "kontrast-dunkel", "bund", "bevoelkerungsschutz", ...LAENDER]),
+    );
+    expect(FARBSCHEMAS.filter((s) => s.gruppe === "Kontrast").map((s) => [s.id, s.modus])).toEqual([
+      ["kontrast-hell", "hell"],
+      ["kontrast-dunkel", "dunkel"],
+    ]);
     expect(
       FARBSCHEMAS.filter((s) => s.gruppe === "Bundesländer")
         .map((s) => s.id)
@@ -33,10 +50,37 @@ describe("Katalog", () => {
     expect(FARBSCHEMAS.find((s) => s.id === "neutral-dunkel")!.modus).toBe("dunkel");
   });
 
-  it.each(FARBSCHEMAS.map((s) => [s.id, s] as const))("%s: alle Rollen als #RRGGBB, Band vorhanden, Kontraste eingehalten", (_, s) => {
+  it.each(FARBSCHEMAS.map((s) => [s.id, s] as const))("%s: alle Rollen als #RRGGBB, Band (außer Kontrast), Kontraste eingehalten", (_, s) => {
     for (const t of UI_TOKENS) expect(s.tokens[t], t).toMatch(/^#[0-9A-Fa-f]{6}$/);
-    expect(s.band.length).toBeGreaterThan(0);
-    expect(kontrastFehler({ ...s.tokens, ...SEMANTIK[s.modus] })).toEqual([]);
+    if (s.gruppe === "Kontrast") expect(s.band).toEqual([]);
+    else expect(s.band.length).toBeGreaterThan(0);
+    expect(kontrastFehler({ ...s.tokens, ...semantikVon(s) }, s.kontrastziel)).toEqual([]);
+  });
+
+  it("Kontrastschemata: Text und Signalfarben mindestens 7:1, eigene Signalpalette, kein dekoratives Band", () => {
+    for (const id of ["kontrast-hell", "kontrast-dunkel"]) {
+      const s = FARBSCHEMAS.find((e) => e.id === id)!;
+      expect(s.kontrastziel).toBe(7);
+      const t: Record<string, string> = { ...s.tokens, ...semantikVon(s) };
+      for (const [v, h] of [
+        ["tinte", "flaeche"],
+        ["tinte-leise", "flaeche"],
+        ["link", "flaeche"],
+        ["auf-amt", "amt"],
+        ["kritisch", "flaeche"],
+        ["erheblich", "flaeche"],
+        ["gering", "flaeche"],
+        ["ok", "flaeche"],
+        ["lese-farbe", "lese-flaeche"],
+      ])
+        expect(kontrast(t[v], t[h]), `${id}: ${v}/${h}`).toBeGreaterThanOrEqual(7);
+      expect(kontrast(t.fokus, t.flaeche)).toBeGreaterThanOrEqual(3);
+      expect(semantikVon(s)).toBe(SEMANTIK[id as "kontrast-hell"]);
+      expect(aufloesen(id)).toMatchObject({ kontrast: true, tokens: { band: "none" } });
+    }
+    // ein Neutral-Schema würde die 7:1-Schwelle nicht schaffen – die Prüfung ist also wirksam
+    const n = FARBSCHEMAS.find((e) => e.id === "neutral-hell")!;
+    expect(kontrastFehler({ ...n.tokens, ...semantikVon(n) }, 7).length).toBeGreaterThan(0);
   });
 
   it("Signalfarben hängen nur vom Modus ab", () => {
@@ -59,6 +103,15 @@ describe("Auflösen", () => {
     expect(aufloesen("de-th")).toMatchObject({ basis: "de-th", quelle: "katalog", modus: "hell" });
     expect(aufloesen(AUTOMATISCH)).toMatchObject({ basis: null, quelle: "automatisch", tokens: {} });
     expect(aufloesen("gibt-es-nicht").quelle).toBe("automatisch");
+  });
+
+  it("„Automatisch“ folgt der Systemeinstellung „mehr Kontrast“, ein festes Schema bleibt", () => {
+    expect(aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: false })).toMatchObject({ basis: null, tokens: {} });
+    const hell = aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: true });
+    expect(hell).toMatchObject({ auswahl: AUTOMATISCH, basis: "kontrast-hell", quelle: "automatisch", kontrast: true });
+    expect(hell.name).toContain("mehr Kontrast");
+    expect(aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: true, kontrast: true }).basis).toBe("kontrast-dunkel");
+    expect(aufloesen("de-th", undefined, undefined, { dunkel: true, kontrast: true }).basis).toBe("de-th");
   });
 
   it("Vorrang bei „profil“: lokale Anpassung → Profil → Ersatz mit Hinweis", () => {
@@ -90,6 +143,7 @@ describe("Prüfung von Profilfarben", () => {
     ["zu wenig Kontrast", { basis: "neutral-hell", farben: { amt: "#DDDDDD" } }, /„auf-amt“ auf „amt“/],
     ["Hintergrund schluckt Signalfarbe", { basis: "neutral-hell", farben: { flaeche: "#B3261E" } }, /„kritisch“ auf „flaeche“/],
     ["zu langer Name", { basis: "neutral-hell", name: "x".repeat(81) }, /1 bis 80 Zeichen/],
+    ["Kontrastbasis verlangt 7:1", { basis: "kontrast-hell", farben: { link: "#0F62FE" } }, /„link“ auf „flaeche“.*7/],
   ])("%s → abgewiesen", (_, f, meldung) => {
     expect(profilFarbschemaFehler(f).join(" ")).toMatch(meldung);
   });
@@ -115,8 +169,13 @@ describe("Anwenden", () => {
     expect(w.style.getPropertyValue("--marke-akzent-1")).toBe(aufloesen("neutral-dunkel").tokens["marke-akzent-1"]);
     expect(w.style.getPropertyValue("color-scheme")).toBe("dark");
     expect(meta.getAttribute("content")).toBe("#101419");
+    expect(w.dataset.kontrast).toBeUndefined();
+    anwenden(aufloesen("kontrast-dunkel"));
+    expect(w.dataset.kontrast).toBe("erhoeht");
+    expect(w.style.getPropertyValue("--kritisch")).toBe("#FF9999");
     anwenden(aufloesen(AUTOMATISCH));
     expect(w.dataset.farbschema).toBeUndefined();
+    expect(w.dataset.kontrast).toBeUndefined();
     for (const v of ALLE_VARIABLEN) expect(w.style.getPropertyValue(`--${v}`), v).toBe("");
   });
 

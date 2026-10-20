@@ -8,6 +8,7 @@ import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
 import { QuellenFeld } from "./QuellenFeld";
+import { DatumZeit } from "./DatumZeit";
 
 export interface FeldProps {
   profil: Profil;
@@ -17,6 +18,13 @@ export interface FeldProps {
   setze: (segs: Segment[], wert: unknown) => void;
   /** Für Statusfarben: Beurteilung des umgebenden Listenelements */
   ebene?: number;
+}
+
+/** Name mit übergeordneter Gruppe, wenn die Bezeichnung allein mehrdeutig ist (z. B. „Meldezeitraum, von“) */
+function zugaenglicherName(profil: Profil, gen: string, label: string): string | undefined {
+  const eltern = gen.includes(".") ? gen.slice(0, gen.lastIndexOf(".")) : "";
+  const gruppe = eltern && !eltern.endsWith("[]") ? feldUi(profil.ui, eltern).label : undefined;
+  return gruppe ? `${gruppe.replace(/\s*\(optional\)\s*$/, "")}, ${label}` : undefined;
 }
 
 function Hinweis({ text }: { text?: string }) {
@@ -218,10 +226,16 @@ export function Feld(props: FeldProps) {
       </label>
       {widget === "text_lang" ? (
         <textarea {...gemeinsam} rows={f.zeilen || 5} />
-      ) : widget === "datum" ? (
-        <input {...gemeinsam} type="date" />
-      ) : widget === "datumzeit" ? (
-        <input {...gemeinsam} type="datetime-local" />
+      ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
+        <DatumZeit
+          id={id}
+          label={label}
+          name={zugaenglicherName(profil, gen, label)}
+          modus={widget}
+          wert={wert}
+          zeitzone={profil.manifest.variablen?.zeitzone}
+          onChange={(v) => setze(segs, v)}
+        />
       ) : (
         <input {...gemeinsam} type="text" />
       )}

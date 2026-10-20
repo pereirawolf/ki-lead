@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.9.0 – 20.10.2026
+
+Grundlage: Anforderung vom 20.10.2026, Uhrzeiten in den Zeitfeldern der Meldung optional erfassen zu können (umgesetzt mit App 0.4.18).
+
+- **Meldungsschema (LEAD-Meldevorlage 1.1, Schemakennung unverändert `LEAD-Meldung-v1`):** `meldezeitraum.von`, `meldezeitraum.bis` und `sachverhalte[].eintritt` nehmen neben dem Tag (`JJJJ-MM-TT`) auch Tag mit Uhrzeit an (`JJJJ-MM-TTThh:mm`, neue Definition `datumOptionalZeitOderLeer`). Die Erweiterung ist abwärtskompatibel: Alle bisherigen Meldungen bleiben gültig, eine Migration ist nicht nötig. Meldungen mit Uhrzeit in diesen Feldern sind für Empfänger mit Profilversion 1.8.0 oder älter nicht schemakonform.
+- **Darstellungsdatei:** Diese drei Felder verwenden das Widget `datum_uhrzeit` (Tag, Uhrzeit optional, Schaltflächen „Jetzt“, „Nur Tag“, „Leeren“); Hinweis beim Meldezeitraum ergänzt.
+- **Arbeitsanweisung Erfassung 1.3.3 und Kodierleitfaden 1.2.1 (Abschnitt 6):** Uhrzeit in `eintritt` und `meldezeitraum` nur, wenn das Material sie belegt.
+- **SOP-Sammelmappe 3.2.1:** nur Gültigkeitsstand in Teil A fortgeschrieben (Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md)); Regeln, SOPs und Bausteine unverändert.
+- Arbeitsanweisungen Verdichtung und Kurzfassung sowie die Beispiele sind unverändert; ihr Bezug auf die LEAD-Meldevorlage 1.0 bleibt zutreffend, weil 1.1 abwärtskompatibel ist.
+
 ## 1.8.0 – 20.10.2026
 
 Grundlage: Vorschlag „SOP-LEAD_C12_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen E1–E3 wie empfohlen).

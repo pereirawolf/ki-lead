@@ -67,10 +67,10 @@
       "additionalProperties": false,
       "properties": {
         "von": {
-          "$ref": "#/$defs/datumOderLeer"
+          "$ref": "#/$defs/datumOptionalZeitOderLeer"
         },
         "bis": {
-          "$ref": "#/$defs/datumOderLeer"
+          "$ref": "#/$defs/datumOptionalZeitOderLeer"
         }
       }
     },
@@ -146,6 +146,11 @@
       "type": "string",
       "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}$"
     },
+    "datumOptionalZeitOderLeer": {
+      "type": "string",
+      "description": "Tag (JJJJ-MM-TT) oder Tag mit Uhrzeit (JJJJ-MM-TTThh:mm, Wanduhrzeit der Profilzeitzone); leer, wenn unbekannt. Seit LEAD-Meldevorlage 1.1.",
+      "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2})?$"
+    },
     "radarwert": {
       "type": [
         "integer",
@@ -220,7 +225,7 @@
       "additionalProperties": false,
       "properties": {
         "eintritt": {
-          "$ref": "#/$defs/datumOderLeer"
+          "$ref": "#/$defs/datumOptionalZeitOderLeer"
         },
         "art": {
           "type": "array",

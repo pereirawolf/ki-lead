@@ -25,7 +25,8 @@ import {
   type KiUebergabe,
 } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
-import { dateistempel, exportStempel, mitDatum } from "../kern/ausgabe";
+import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
+import { zoneOder } from "../kern/zeit";
 
 interface Props {
   profil: Profil;
@@ -217,7 +218,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setFehler(null);
     const l = neuerLauf(
       profil,
-      { sachverhalt, stichworte, urls: urls.gueltig, stichtag, prueffrage, websuche, ...(uhrzeit ? { meldezeitpunkt: `${stichtag}T${uhrzeit}` } : {}) },
+      {
+        sachverhalt,
+        stichworte,
+        urls: urls.gueltig,
+        stichtag,
+        prueffrage,
+        websuche,
+        ...(uhrzeit && stichtag ? { meldezeitpunkt: `${stichtag}T${uhrzeit}` } : {}),
+      },
       material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash, ...(m.rolleGewaehlt ? { rolleGewaehlt: true } : {}) })),
     );
     setLauf(l);
@@ -502,7 +511,31 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </span>
                   <div className="datum-zeit" role="group" aria-labelledby="t0-auftrag">
                     <input type="date" aria-label="Meldestichtag" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
-                    <input type="time" aria-label="Uhrzeit t0" value={uhrzeit} onChange={(e) => setUhrzeit(e.target.value)} />
+                    <input type="time" aria-label="Uhrzeit t0" value={uhrzeit} disabled={!stichtag} onChange={(e) => setUhrzeit(e.target.value)} />
+                  </div>
+                  <div className="datumzeit-knoepfe">
+                    <button
+                      type="button"
+                      className="knopf leise klein"
+                      aria-label="Jetzt: Meldezeitpunkt (t0) auf aktuelle Zeit setzen"
+                      onClick={() => {
+                        const j = jetztLokal(zoneOder(profil.manifest.variablen?.zeitzone), new Date());
+                        setStichtag(j.slice(0, 10));
+                        setUhrzeit(j.slice(11, 16));
+                      }}
+                    >
+                      Jetzt
+                    </button>
+                    {uhrzeit && (
+                      <button
+                        type="button"
+                        className="knopf leise klein"
+                        aria-label="Nur Tag: Uhrzeit beim Meldezeitpunkt (t0) entfernen"
+                        onClick={() => setUhrzeit("")}
+                      >
+                        Nur Tag
+                      </button>
+                    )}
                   </div>
                   <span className="hinweis">
                     Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand).

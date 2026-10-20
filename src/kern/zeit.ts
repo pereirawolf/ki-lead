@@ -95,3 +95,18 @@ export function tagInZone(d: Date, zone: string): string {
   const w = wanduhr(d, zoneOder(zone));
   return `${w.jahr}-${String(w.monat).padStart(2, "0")}-${String(w.tag).padStart(2, "0")}`;
 }
+
+/** Art eines Datumsfelds: nur Tag · Tag und Uhrzeit (Uhrzeit nötig) · Tag mit optionaler Uhrzeit */
+export type DatumModus = "datum" | "datumzeit" | "datum_uhrzeit";
+
+/** Zerlegt einen gespeicherten Wert in Tag und Uhrzeit; Unbekanntes bleibt leer */
+export function zerlege(wert: unknown): { tag: string; zeit: string } {
+  const m = String(wert ?? "").match(/^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2}))?/);
+  return m ? { tag: m[1], zeit: m[2] || "" } : { tag: "", zeit: "" };
+}
+
+/** Setzt Tag und Uhrzeit wieder zusammen; ohne Tag ist der Wert leer */
+export function verbinde(tag: string, zeit: string, modus: DatumModus): string {
+  if (!tag) return "";
+  return modus !== "datum" && zeit ? `${tag}T${zeit}` : tag;
+}

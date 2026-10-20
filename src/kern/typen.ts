@@ -44,7 +44,7 @@ export interface ProfilManifest {
   beispiele?: { titel: string; ordner: string; hinweis?: string }[];
 }
 
-export type Widget = "text" | "text_lang" | "datum" | "datumzeit" | "auswahl" | "radio" | "mehrfachauswahl" | "radar" | "quellen";
+export type Widget = "text" | "text_lang" | "datum" | "datumzeit" | "datum_uhrzeit" | "auswahl" | "radio" | "mehrfachauswahl" | "radar" | "quellen";
 
 export interface FeldUi {
   label?: string;
