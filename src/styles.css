@@ -2665,3 +2665,85 @@ a.knopf {
   white-space: nowrap;
   flex: none;
 }
+
+/* Arbeitsanweisungen und Kodierleitfaden: Zwecksatz, Dokumentkopf, Inhaltsverzeichnis */
+.aufklapp-zweck {
+  display: block;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin-left: 1.1rem;
+}
+
+.dokument-kopf {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: 0.2rem 0 0.5rem;
+  max-width: 78ch;
+  overflow-wrap: anywhere;
+}
+
+.dokument-app {
+  color: var(--tinte);
+  background: var(--gering-zart);
+  border-radius: var(--r-klein);
+  padding: 0.4rem 0.6rem;
+}
+
+.lesetext-werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.profil .lese-inhalt {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 0;
+  border-left: none;
+}
+
+.lese-inhalt ol {
+  list-style: none;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  columns: 2 18rem;
+  column-gap: 1.5rem;
+}
+
+.lese-inhalt li {
+  break-inside: avoid;
+}
+
+.lese-inhalt-unter {
+  padding-left: 1rem;
+}
+
+.lese-inhalt-sprung {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--ok);
+  background: none;
+  border: none;
+  padding: 0.2rem 0;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lese-inhalt-sprung:focus-visible,
+.lesetext :is(h2, h3):focus {
+  outline: 2px solid var(--ok);
+  outline-offset: 2px;
+}
+
+.lesetext :is(h2, h3) {
+  scroll-margin-top: 7rem;
+}
+
+@media (pointer: coarse) {
+  .lese-inhalt-sprung {
+    min-height: 44px;
+  }
+}

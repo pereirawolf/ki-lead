@@ -2,10 +2,24 @@
 // und Einbettung. Reine Funktionen; die Oberfläche selbst wird per Sichtprüfung kontrolliert.
 import { describe, expect, it } from "vitest";
 import { profil } from "./hilfen";
-import { fachSops } from "../src/pipeline/kontext";
+import { fachSops, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
+import { STANDARD_ANWEISUNG } from "../src/pipeline/kurzfassung";
 import { sopKennung } from "../src/profil/sop";
-import { gruppenHinweis, lesedokumente, linkZiel, pfadAufloesen, sopAnzahl, sopAnzeige, sopLesetext, sopSteckbrief, sopSuche } from "../src/profil/lesen";
-import { lesetextHtml } from "../src/ui/Lesetext";
+import {
+  arbeitsgrundlagen,
+  dokumentFassung,
+  gruppenHinweis,
+  inhaltsverzeichnis,
+  lesedokumente,
+  linkZiel,
+  pfadAufloesen,
+  sopAnzahl,
+  sopAnzeige,
+  sopLesetext,
+  sopSteckbrief,
+  sopSuche,
+} from "../src/profil/lesen";
+import { INHALT_AB, lesetextHtml } from "../src/ui/Lesetext";
 import { eingebauteProfile } from "../src/profil/eingebaut";
 import { sopGruppen } from "../src/pipeline/kontext";
 
@@ -66,26 +80,97 @@ describe("Steckbrief und Lesetext", () => {
 });
 
 describe("Lesedokumente", () => {
-  it("Beispielprofil: SOP-Übersicht und -Verlauf, Profilverlauf, drei Arbeitsanweisungen, Kodierleitfaden", async () => {
+  it("Beispielprofil: SOP-Übersicht und -Verlauf, Profilverlauf; SOP-Übersicht mit Fassung der Sammelmappe", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(lesedokumente(p!).map((d) => `${d.gruppe}: ${d.titel}`)).toEqual([
-      "SOP-Sammlung: Übersicht",
-      "SOP-Sammlung: Änderungsverlauf",
-      "Profil: Änderungsverlauf",
-      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Erfassung",
-      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Verdichtung",
-      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Kurzfassung",
-      "Arbeitsanweisungen und Kodierleitfaden: Kodierleitfaden",
-    ]);
+    const doks = lesedokumente(p!);
+    expect(doks.map((d) => `${d.gruppe}: ${d.titel}`)).toEqual(["SOP-Sammlung: Übersicht", "SOP-Sammlung: Änderungsverlauf", "Profil: Änderungsverlauf"]);
+    expect(doks[0].version).toMatch(/^\d+\.\d+/);
+    expect(doks[2].version).toBeUndefined();
   });
 
   it("Musterprofil: nur vorhandene Dateien; ein Paket ohne Zusatzdokumentation bleibt gültig", async () => {
     const { profil: m } = await profil("muster");
-    expect(lesedokumente(m!).map((d) => d.pfad)).toEqual(["CHANGELOG.md", "anweisung-erfassung.md", "kodierleitfaden.md"]);
+    expect(lesedokumente(m!).map((d) => d.pfad)).toEqual(["CHANGELOG.md"]);
     const ohne = { ...m!, dateien: Object.fromEntries(Object.entries(m!.dateien).filter(([k]) => k !== "CHANGELOG.md")) };
-    expect(lesedokumente(ohne).map((d) => d.pfad)).not.toContain("CHANGELOG.md");
+    expect(lesedokumente(ohne)).toEqual([]);
     const mitReadme = { ...m!, dateien: { ...m!.dateien, "README.md": "# Muster" } };
     expect(lesedokumente(mitReadme).map((d) => d.titel)).toContain("Beschreibung");
+  });
+});
+
+describe("Arbeitsanweisungen und Kodierleitfaden", () => {
+  it("Beispielprofil: vier Dokumente aus dem Paket, Reihenfolge, Zweck und eigene Fassung aus dem Kopf", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const doks = arbeitsgrundlagen(p!);
+    expect(doks.map((d) => [d.rolle, d.pfad, d.quelle])).toEqual([
+      ["erfassung", "anweisung-erfassung.md", "paket"],
+      ["verdichtung", "anweisung-verdichtung.md", "paket"],
+      ["kurzfassung", "anweisung-kurzfassung.md", "paket"],
+      ["kodierleitfaden", "kodierleitfaden.md", "paket"],
+    ]);
+    for (const d of doks) {
+      expect(d.zweck, d.pfad).toBeTruthy();
+      expect(d.text).toBe(p!.dateien[d.pfad]);
+      // Fassung = erstes „Fassung X vom …“ im Kopfabsatz, nicht eine dort zitierte Fassung anderer Dokumente
+      const kopf = d.text.split("\n").find((z) => z.startsWith("Beispielfassung für KI-LEAD"))!;
+      expect(kopf.match(/Fassung (\d+(?:\.\d+)*) vom (\d{2}\.\d{2}\.\d{4})/)!.slice(1)).toEqual([d.version, d.stand]);
+    }
+  });
+
+  it("dokumentFassung liest nur den ersten Absatz nach der Überschrift", () => {
+    expect(dokumentFassung("# Titel\n\nFassung 2.1 vom 01.02.2026 · abgestimmt auf Fassung 3.0\n")).toEqual({ version: "2.1", stand: "01.02.2026" });
+    expect(dokumentFassung("# Titel\n\nOhne Angabe.\n\nFassung 9.9 vom 01.01.2026\n")).toEqual({});
+    expect(dokumentFassung("Kein Titel, Fassung 1.0")).toEqual({});
+  });
+
+  it("Musterprofil: Erfassung und Kodierleitfaden ohne Fassung, Verdichtung und Kurzfassung als Standardfassung der App", async () => {
+    const { profil: m } = await profil("muster");
+    const doks = arbeitsgrundlagen(m!);
+    expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
+      ["erfassung", "paket", undefined],
+      ["verdichtung", "app", undefined],
+      ["kurzfassung", "app", undefined],
+      ["kodierleitfaden", "paket", undefined],
+    ]);
+    expect(doks[1].text).toBe(VERDICHTUNG_S2);
+    expect(doks[2].text).toBe(STANDARD_ANWEISUNG);
+    // im Manifest genannt, Datei fehlt: ebenfalls Standardfassung
+    const { profil: p } = await profil("lead-beispiel");
+    const ohne = { ...p!, dateien: Object.fromEntries(Object.entries(p!.dateien).filter(([k]) => k !== "anweisung-kurzfassung.md")) };
+    expect(arbeitsgrundlagen(ohne).find((d) => d.rolle === "kurzfassung")!.quelle).toBe("app");
+  });
+
+  it("Inhaltsverzeichnis: Überschriften der Ebenen 2 und 3, ohne Codeblöcke; Kodierleitfaden mit D1–D8", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const kl = inhaltsverzeichnis(p!.dateien["kodierleitfaden.md"]);
+    expect(kl.length).toBeGreaterThanOrEqual(INHALT_AB);
+    for (const d of ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"])
+      expect(
+        kl.some((e) => e.ebene === 3 && e.titel.startsWith(d + " ")),
+        d,
+      ).toBe(true);
+    expect(inhaltsverzeichnis("## A\n```\n## kein Titel\n```\n### B").map((e) => [e.ebene, e.titel, e.index])).toEqual([
+      [2, "A", 0],
+      [3, "B", 1],
+    ]);
+    // Teil A und jede SOP erhalten ein Inhaltsverzeichnis
+    expect(inhaltsverzeichnis(sopLesetext(p!.sops.find((s) => s.gemeinsam)!)).length).toBeGreaterThanOrEqual(INHALT_AB);
+  });
+
+  it("Inhaltsverzeichnis entspricht der Reihenfolge der Überschriften im gerenderten Text", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    for (const d of arbeitsgrundlagen(p!)) {
+      const html = await lesetextHtml(d.text, d.pfad, p!);
+      const gerendert = [...html.matchAll(/<h([23])>(.*?)<\/h\1>/g)].map((m) => m[2].replace(/<[^>]+>/g, ""));
+      expect(gerendert.length, d.pfad).toBe(inhaltsverzeichnis(d.text).length);
+    }
+  });
+
+  it("Platzhalter mit Bereich und Punkt werden hervorgehoben, aber nicht ersetzt", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const html = await lesetextHtml(p!.dateien["anweisung-erfassung.md"], "anweisung-erfassung.md", p!);
+    for (const x of ["{{profil.referenzraum}}", "{{auftrag.sachverhalt}}", "{{jetzt}}"]) expect(html).toContain(`<span class="platzhalter">${x}</span>`);
+    expect(html).not.toMatch(/\{\{[^}]+\}\}(?!<\/span>)/);
   });
 });
 
@@ -140,7 +225,7 @@ describe("Markdown-Darstellung", () => {
         "",
         "[B08](teil-b/B08_stromausfall-blackout.md) · [Verlauf](CHANGELOG.md) · [Lesefassung](SOP-LEAD_Sammelmappe_Lesefassung.md) · [SMARD](https://www.smard.de/) · [x](javascript:alert(1))",
         "",
-        "Meldende Stelle: {{meldende_stelle}}",
+        "Meldende Stelle: {{profil.meldende_stelle}}, Stand {{jetzt}}",
       ].join("\n"),
       "sop/README.md",
       p!,
@@ -155,7 +240,8 @@ describe("Markdown-Darstellung", () => {
     expect(html).toContain('<span class="link-fehlt">Lesefassung <span class="link-hinweis">(nicht im Paket)</span></span>');
     expect(html).toContain('href="https://www.smard.de/" target="_blank" rel="noopener noreferrer"');
     expect(html).not.toContain('href="javascript');
-    expect(html).toContain('<span class="platzhalter">{{meldende_stelle}}</span>');
+    expect(html).toContain('<span class="platzhalter">{{profil.meldende_stelle}}</span>');
+    expect(html).toContain('<span class="platzhalter">{{jetzt}}</span>');
   });
 
   it("alle SOPs und Lesedokumente lassen sich aufbereiten, ohne Pipe-Tabellen zu hinterlassen", async () => {
@@ -164,7 +250,7 @@ describe("Markdown-Darstellung", () => {
       const html = await lesetextHtml(sopLesetext(s), s.datei, p!);
       expect(html, s.id).not.toMatch(/^<p>\|/m);
     }
-    for (const d of lesedokumente(p!)) {
+    for (const d of [...lesedokumente(p!), ...arbeitsgrundlagen(p!)]) {
       const html = await lesetextHtml(p!.dateien[d.pfad], d.pfad, p!);
       expect(html.length, d.pfad).toBeGreaterThan(100);
     }

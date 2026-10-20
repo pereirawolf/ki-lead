@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.10 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.11 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -19,7 +19,7 @@ Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es
 
 Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nicht eingecheckt. Dort stehen echte Adressen.
 
-**Lesedokumente.** Die Profilansicht zeigt unter „Dokumentation lesen“ die folgenden Dateien, soweit das Paket sie enthält: `sop/README.md` (Übersicht der SOP-Sammlung), `sop/CHANGELOG.md`, `README.md` (Beschreibung des Profils), `CHANGELOG.md` sowie die im Manifest genannten Arbeitsanweisungen und den Kodierleitfaden. Ein eigenes Manifestfeld ist dafür nicht nötig. README- und CHANGELOG-Dateien gehen nicht an KI-Modelle. Markdown wird ohne rohes HTML und ohne Bilder dargestellt; relative Links sollen auf Dateien im selben Paket zeigen.
+**Lesedokumente.** Die Profilansicht zeigt unter „Arbeitsanweisungen und Kodierleitfaden“ die im Manifest genannten Arbeitsanweisungen und den Kodierleitfaden. Unter „Dokumentation lesen“ zeigt sie, soweit das Paket sie enthält, `sop/README.md` (Übersicht der SOP-Sammlung), `sop/CHANGELOG.md`, `README.md` (Beschreibung des Profils) und `CHANGELOG.md`. Ein eigenes Manifestfeld ist dafür nicht nötig. Die eigene Fassung eines Dokuments liest die App aus dem ersten Absatz nach der ersten Überschrift, als erstes „Fassung X“ mit optionalem „vom TT.MM.JJJJ“; Fassungen anderer Dokumente, die dort zitiert werden, sollten danach stehen. Fehlen Verdichtung oder Kurzfassung, zeigt die Profilansicht die Standardfassung der App, die dann verwendet wird. README- und CHANGELOG-Dateien gehen nicht an KI-Modelle. Markdown wird ohne rohes HTML und ohne Bilder dargestellt; relative Links sollen auf Dateien im selben Paket zeigen.
 
 ## Manifest `profil.json`
 
@@ -196,3 +196,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.8 | 19.10.2026 | SOP-Dateien: eine Datei je Abschnitt, Reihenfolge von `sop.dateien`, Kopfschlüssel `kennung`, `bisherige_ids`, `bisherige_kennung`; Importprüfungen auf Text vor dem ersten Anker und doppelte IDs |
 | 1.9 | 20.10.2026 | SOP-Kopfschlüssel `typ`, `lesegruppe`, `status` werden ausgewertet (Gliederung der Auswahl, Marke „Inhaltsgerüst“); eingebettete Profile ohne Archiv, Lesefassung und SOP-Übersicht |
 | 1.10 | 20.10.2026 | Lesedokumente (README, CHANGELOG, Arbeitsanweisungen, Kodierleitfaden) in der Profilansicht; `sop/README.md` wieder eingebettet; Steckbrief aus weiteren Kopfschlüsseln |
+| 1.11 | 20.10.2026 | Eigene Fassung eines Lesedokuments im ersten Absatz nach der Überschrift („Fassung X vom TT.MM.JJJJ“); Standardfassungen der App bei fehlender Verdichtung oder Kurzfassung sichtbar |

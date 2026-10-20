@@ -5,7 +5,19 @@
 import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
-import { domId, gruppenHinweis, lesedokumente, sopAnzahl, sopAnzeige, sopLesetext, sopSteckbrief, sopSuche } from "../profil/lesen";
+import {
+  arbeitsgrundlagen,
+  domId,
+  gruppenHinweis,
+  lesedokumente,
+  sopAnzahl,
+  sopAnzeige,
+  sopLesetext,
+  sopSteckbrief,
+  sopSuche,
+  type Lesedokument,
+} from "../profil/lesen";
+import { APP_KENNUNG } from "../pipeline/lauf";
 import type { ProfilEintrag } from "../App";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
@@ -43,6 +55,8 @@ interface AufklappProps {
   id: string;
   titel: ReactNode;
   tag?: string;
+  /** kurzer Zwecksatz unter dem Titel */
+  zweck?: string;
   klasse?: string;
   /** Inhalt erst beim ersten Öffnen aufbauen (lange Texte) */
   children: () => ReactNode;
@@ -51,7 +65,7 @@ interface AufklappProps {
 }
 
 /** Natives details/summary; der Inhalt entsteht erst beim ersten Öffnen und bleibt danach erhalten. */
-function Aufklapp({ id, titel, tag, klasse, children, schliessen }: AufklappProps) {
+function Aufklapp({ id, titel, tag, zweck, klasse, children, schliessen }: AufklappProps) {
   const [geoeffnet, setGeoeffnet] = useState(false);
   const ref = useRef<HTMLDetailsElement>(null);
   return (
@@ -64,6 +78,7 @@ function Aufklapp({ id, titel, tag, klasse, children, schliessen }: AufklappProp
             <span className="sop-version">{tag}</span>
           </>
         )}
+        {zweck && <span className="aufklapp-zweck">{zweck}</span>}
       </summary>
       {geoeffnet && (
         <div className="aufklapp-inhalt">
@@ -137,7 +152,13 @@ function SopKatalog({ profil, praefix }: { profil: Profil; praefix: string }) {
           {() => (
             <>
               <Steckbrief sop={s} />
-              <Lesetext text={sopLesetext(s)} von={s.datei} profil={profil} oeffnen={oeffnen} />
+              <Lesetext
+                text={sopLesetext(s)}
+                von={s.datei}
+                profil={profil}
+                oeffnen={oeffnen}
+                original={{ text: profil.dateien[s.datei] ?? s.text, dateiname: dateiname(s.datei) }}
+              />
             </>
           )}
         </Aufklapp>
@@ -203,6 +224,70 @@ function SopKatalog({ profil, praefix }: { profil: Profil; praefix: string }) {
 }
 
 /** Lesedokumente des Pakets (README, Änderungsverläufe, Arbeitsanweisungen, Kodierleitfaden), nur soweit vorhanden. */
+function dateiname(pfad: string): string {
+  return pfad.replace(/^.*\//, "");
+}
+
+/** Kopfzeile eines geöffneten Lesedokuments: Datei, eigene Fassung und Stand, Profil und Profilversion. */
+function DokumentKopf({ d, profil }: { d: Lesedokument; profil: Profil }) {
+  if (d.quelle === "app")
+    return (
+      <p className="dokument-kopf dokument-app">
+        <strong>Standardfassung der App ({APP_KENNUNG}), kein Bestandteil des Profils.</strong> Das Profil bringt für diese Aufgabe keine eigene
+        Arbeitsanweisung mit; die App verwendet beim KI-Lauf diesen Text.
+      </p>
+    );
+  const fassung = d.version ? `Fassung ${d.version}${d.stand ? ` vom ${d.stand}` : ""}` : "Fassung nicht angegeben";
+  return (
+    <p className="dokument-kopf">
+      Datei <code>{d.pfad}</code> · {fassung} · Profil „{profil.manifest.name}“, Profilversion {profil.manifest.version}
+    </p>
+  );
+}
+
+function LeseDokument({ d, profil, praefix, oeffnen }: { d: Lesedokument; profil: Profil; praefix: string; oeffnen: (ziel: string) => void }) {
+  const tag = d.version ? `v${d.version}` : d.quelle === "app" ? "Standardfassung der App" : d.rolle ? "Fassung nicht angegeben" : undefined;
+  return (
+    <Aufklapp id={domId(praefix, "dok", d.pfad)} klasse="lese" titel={d.titel} tag={tag} zweck={d.zweck} schliessen>
+      {() => (
+        <>
+          <DokumentKopf d={d} profil={profil} />
+          {d.rolle && d.rolle !== "kodierleitfaden" && (
+            <p className="hinweis">
+              Vorlage: Platzhalter wie <span className="platzhalter">{"{{profil.referenzraum}}"}</span> setzt die App erst beim KI-Lauf mit den Werten des
+              Profils und des Auftrags ein.
+            </p>
+          )}
+          <Lesetext
+            text={d.text}
+            von={d.quelle === "paket" ? d.pfad : ""}
+            profil={profil}
+            oeffnen={oeffnen}
+            original={{ text: d.text, dateiname: d.quelle === "paket" ? dateiname(d.pfad) : `standardfassung-${d.rolle}.md` }}
+          />
+        </>
+      )}
+    </Aufklapp>
+  );
+}
+
+/** Arbeitsanweisungen (Erfassung, Verdichtung, Kurzfassung) und Kodierleitfaden des Profils, mit eigener Fassung. */
+function Arbeitsgrundlagen({ profil, praefix }: { profil: Profil; praefix: string }) {
+  const doks = arbeitsgrundlagen(profil);
+  if (!doks.length) return null;
+  const oeffnen = zielOeffner(praefix);
+  return (
+    <details className="sop-katalog profil-arbeit" id={domId(praefix, "arbeit")}>
+      <summary>Arbeitsanweisungen und Kodierleitfaden</summary>
+      <p className="hinweis">Die Texte, nach denen die KI arbeitet, aus dem geladenen Paket. Lesen verändert kein Profil und keine Meldung.</p>
+      {doks.map((d) => (
+        <LeseDokument key={d.pfad} d={d} profil={profil} praefix={praefix} oeffnen={oeffnen} />
+      ))}
+    </details>
+  );
+}
+
+/** Übersichten und Änderungsverläufe des Pakets (README, CHANGELOG), nur soweit vorhanden. */
 function Dokumentation({ profil, praefix }: { profil: Profil; praefix: string }) {
   const doks = lesedokumente(profil);
   if (!doks.length) return null;
@@ -211,16 +296,14 @@ function Dokumentation({ profil, praefix }: { profil: Profil; praefix: string })
   return (
     <details className="sop-katalog profil-doku" id={domId(praefix, "doku")}>
       <summary>Dokumentation lesen</summary>
-      <p className="hinweis">Aus dem geladenen Paket; passt damit zu Profilversion und Prüfsumme.</p>
+      <p className="hinweis">Übersichten und Änderungsverläufe aus dem geladenen Paket; passt damit zu Profilversion und Prüfsumme.</p>
       {gruppen.map((g) => (
         <div key={g} className="sop-gruppe">
           <p className="sop-gruppe-titel">{g}</p>
           {doks
             .filter((d) => d.gruppe === g)
             .map((d) => (
-              <Aufklapp key={d.pfad} id={domId(praefix, "dok", d.pfad)} klasse="lese" titel={d.titel} schliessen>
-                {() => <Lesetext text={profil.dateien[d.pfad]} von={d.pfad} profil={profil} oeffnen={oeffnen} />}
-              </Aufklapp>
+              <LeseDokument key={d.pfad} d={d} profil={profil} praefix={praefix} oeffnen={oeffnen} />
             ))}
         </div>
       ))}
@@ -450,8 +533,9 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   </div>
                 </dl>
               )}
-              {p.profil && <Dokumentation profil={p.profil} praefix={praefix} />}
+              {p.profil && <Arbeitsgrundlagen profil={p.profil} praefix={praefix} />}
               {p.profil && <SopKatalog profil={p.profil} praefix={praefix} />}
+              {p.profil && <Dokumentation profil={p.profil} praefix={praefix} />}
               <details id={`${praefix}-bericht`}>
                 <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
                 <Befunde befunde={p.befunde} />
