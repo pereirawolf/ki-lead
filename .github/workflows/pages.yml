@@ -16,7 +16,8 @@ permissions:
   contents: read
 
 # Je Pull Request bzw. Zweig eine eigene Gruppe: Ein neuer Push bricht nur die ältere Prüfung desselben
-# Pull Requests ab, nie die Prüfung oder Veröffentlichung eines anderen Zweigs. Auf main wird nichts abgebrochen.
+# Pull Requests ab, nie die Prüfung oder Veröffentlichung eines anderen Zweigs. Auf main wird kein laufender
+# Durchgang abgebrochen; ein noch wartender wird, wie bei GitHub üblich, durch einen neueren ersetzt.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}

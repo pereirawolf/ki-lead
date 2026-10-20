@@ -168,7 +168,7 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
   const vorher = befunde.filter((b) => b.stufe === "fehler").length;
   const fehler = (text: string) => befunde.push({ stufe: "fehler", text: `profil.json: ${text}` });
   const optionalerText = (wert: unknown, name: string) => {
-    if (wert !== undefined && !istText(wert)) fehler(`„${name}“ muss ein Text sein.`);
+    if (wert !== undefined && wert !== null && !istText(wert)) fehler(`„${name}“ muss ein Text sein.`);
   };
   for (const feld of ["id", "name", "version"] as const) {
     if (m[feld] === undefined || m[feld] === null || m[feld] === "") fehler(`Angabe „${feld}“ fehlt.`);

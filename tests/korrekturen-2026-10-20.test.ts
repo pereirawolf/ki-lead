@@ -99,6 +99,11 @@ describe("F05: Profilmanifest mit falschen Datentypen", () => {
     ).toMatch(meldung);
   });
 
+  it("null bei optionalen Texten gilt wie eine fehlende Angabe", async () => {
+    const e = await mit((m) => (m.beschreibung = null));
+    expect(e.profil).not.toBeNull();
+  });
+
   it("profil.json als Liste wird abgewiesen", async () => {
     const d = basis();
     d["profil.json"] = "[]";
@@ -119,6 +124,8 @@ describe("F06: Eignungsprüfung des Meldungsschemas", () => {
     ["leeres anyOf", { anyOf: [] }, /„anyOf“ muss eine nicht leere Liste/],
     ["multipleOf 0", { type: "number", multipleOf: 0 }, /„multipleOf“ muss eine Zahl größer als 0 sein/],
     ["zyklischer Verweis", { $defs: { a: { $ref: "#/$defs/b" }, b: { $ref: "#/$defs/a" } }, $ref: "#/$defs/a" }, /Verweiskette zu lang oder zyklisch/],
+    ["Zyklus über allOf", { allOf: [{ $ref: "#" }] }, /zyklisch/],
+    ["Zyklus über $ref mit Nachbarschlüssel", { $defs: { a: { $ref: "#/$defs/a", minLength: 1 } }, $ref: "#/$defs/a" }, /zyklisch/],
   ])("%s: lesbarer Fehler statt Ausnahme oder stiller Freigabe", (_, schema, meldung) => {
     let f: string | null = null;
     expect(() => (f = schemaFehler(schema))).not.toThrow();
@@ -268,8 +275,9 @@ describe("F11: Kostenabdeckung eines Laufs", () => {
     expect(kostenSumme({ stufen: [{ stufe: "S1", kostenUsd: 0 }] } as any)).toBe(0);
   });
 
-  it("nur abgewiesene Anfragen und fehlende Schlüssel kosten sicher nichts", () => {
-    expect(kostenNachFehler(new AnbieterFehler("Überlastet", 529))).toBe(0);
+  it("nur ein fehlender Schlüssel kostet sicher nichts", () => {
+    // Ein HTTP-Fehler kann nach bereits berechneten Runden kommen (Fortsetzung, Neustart)
+    expect(kostenNachFehler(new AnbieterFehler("Überlastet", 529))).toBeNull();
     expect(kostenNachFehler(new AnbieterFehler("kein Schlüssel", 0, "schluessel"))).toBe(0);
     expect(kostenNachFehler(new AnbieterFehler("Verbindung abgebrochen", 0, "verbindung"))).toBeNull();
     expect(kostenNachFehler(new DOMException("Abgebrochen", "AbortError"))).toBeNull();

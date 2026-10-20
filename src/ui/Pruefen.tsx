@@ -11,6 +11,7 @@ import { sachverhalte } from "../kern/quellen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
 import { RadarGrafik } from "./Radar";
+import { pdfVorladen } from "../dokumente/vorladen";
 
 function Liste({ titel, eintraege, art }: { titel: string; eintraege: string[]; art: "fehler" | "hinweis" | "ok" }) {
   if (!eintraege.length) return null;
@@ -76,10 +77,10 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
           <button type="button" className="knopf primaer" onClick={() => exportiere(true)}>
             Final als JSON exportieren
           </button>
-          <button type="button" className="knopf" onClick={() => pdf(false)}>
+          <button type="button" className="knopf" onClick={() => pdf(false)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
             Entwurf als PDF
           </button>
-          <button type="button" className="knopf" onClick={() => pdf(true)}>
+          <button type="button" className="knopf" onClick={() => pdf(true)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
             Final als PDF
           </button>
         </div>

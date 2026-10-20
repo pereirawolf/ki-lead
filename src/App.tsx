@@ -156,7 +156,10 @@ export default function App() {
         });
       }
       setProfile(eintraege);
-      const gemerkt = await aktivesProfilLesen().catch(() => undefined);
+      const gemerkt = await aktivesProfilLesen().catch((e) => {
+        speicherProblem("Das zuletzt gewählte Profil konnte nicht gelesen werden; aktiv ist das erste verfügbare", e);
+        return undefined;
+      });
       const start = eintraege.find((e) => e.schluessel === gemerkt && e.profil) || eintraege.find((e) => e.profil);
       if (start) setAktiv(start.schluessel);
     })();

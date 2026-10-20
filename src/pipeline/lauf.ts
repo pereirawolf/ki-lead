@@ -148,12 +148,11 @@ export function kostenSumme(lauf: Pick<Lauf, "stufen">): number | null {
 }
 
 /**
- * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn nichts verarbeitet wurde (kein Schlüssel hinterlegt oder
- * Anfrage vom Anbieter per HTTP-Fehler abgewiesen); sonst unbekannt.
+ * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn sicher nichts gesendet wurde (kein Schlüssel hinterlegt);
+ * sonst unbekannt. Auch ein HTTP-Fehler kann erst nach bereits berechneten Runden (Fortsetzung, Neustart) kommen.
  */
 export function kostenNachFehler(e: unknown): number | null {
-  if (!(e instanceof AnbieterFehler)) return null;
-  return e.art === "schluessel" || (typeof e.status === "number" && e.status >= 400) ? 0 : null;
+  return e instanceof AnbieterFehler && e.art === "schluessel" ? 0 : null;
 }
 
 /** Anzeige der Laufkosten; bei unvollständiger Erfassung mit bekannter Untergrenze. */

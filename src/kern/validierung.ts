@@ -119,7 +119,11 @@ function regex(muster: string): RegExp {
   return r;
 }
 
+/** Größte Verschachtelung beim Prüfen; darüber gilt das Schema als zyklisch verweisend */
+const MAX_PRUEFTIEFE = 400;
+
 class Pruefer {
+  private tiefe = 0;
   constructor(private wurzel: any) {}
 
   aufloesen(s: any): any {
@@ -141,6 +145,17 @@ class Pruefer {
   }
 
   pruefe(v: unknown, schema: any, pfad: string, out: RohFehler[]): void {
+    // Zyklen über allOf, anyOf, not usw. hängen nicht von den Daten ab und würden den Stapel sprengen
+    if (this.tiefe >= MAX_PRUEFTIEFE) throw new Error("Schema verweist zyklisch auf sich selbst oder ist zu tief verschachtelt");
+    this.tiefe++;
+    try {
+      this.pruefeKnoten(v, schema, pfad, out);
+    } finally {
+      this.tiefe--;
+    }
+  }
+
+  private pruefeKnoten(v: unknown, schema: any, pfad: string, out: RohFehler[]): void {
     if (schema === true || schema === undefined) return;
     if (schema === false) {
       out.push({ pfad, keyword: "false", text: "Wert ist hier nicht zulässig" });
@@ -368,6 +383,16 @@ export function schemaFehler(schema: unknown): string | null {
     }
   };
   lauf(schema, 0);
+  // Probeläufe mit einfachen Werten decken Zyklen auf, die nicht von den Daten abhängen (z. B. allOf mit $ref auf sich selbst)
+  if (!fehler.length)
+    for (const probe of [{}, [], "", 0, null, true]) {
+      try {
+        pruefer.pruefe(probe, schema, "", []);
+      } catch (e) {
+        fehler.push((e as Error).message);
+        break;
+      }
+    }
   if (zuTief) fehler.push(`Das Schema ist tiefer als ${MAX_SCHEMATIEFE} Ebenen verschachtelt und wurde nicht vollständig geprüft`);
   if (unbekannt.size) fehler.push(`Nicht unterstützte Schlüsselwörter: ${[...unbekannt].join(", ")}`);
   return fehler.length ? fehler.join("; ") : null;

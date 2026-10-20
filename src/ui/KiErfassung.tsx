@@ -85,6 +85,8 @@ const STATUS_TEXT: Record<Lauf["status"], string> = {
   abgebrochen: "abgebrochen",
 };
 
+const speicherText = (was: string, e: unknown) => `${was} (${(e as Error)?.message || "Speicherfehler"}).`;
+
 export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
@@ -192,7 +194,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       signal: ctrl.signal,
       aktualisiert: async (x) => {
         setLauf({ ...x });
-        await laufSpeichern(x);
+        await laufSpeichern(x).catch((e) => setFehler(speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)));
       },
       fortschritt,
     };
@@ -205,8 +207,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     const zusatz = s > 0 ? ` Die Seite war während des Laufs ${s} s im Hintergrund oder gesperrt.` : "";
     l.fehler = abgebrochen ? "Von der Person abgebrochen." : (istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e)) + zusatz;
     setLauf({ ...l });
-    await laufSpeichern(l);
     setFehler(l.fehler);
+    await laufSpeichern(l).catch((e) => setFehler(`${l.fehler} ${speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)}`));
     neuLaden();
   };
 
@@ -799,7 +801,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               profil={profil}
               aendern={async (l) => {
                 setLauf(l);
-                await laufSpeichern(l);
+                await laufSpeichern(l).catch((e) => setFehler(speicherText("Die Änderung am Lauf konnte nicht im Gerät gespeichert werden", e)));
               }}
               lauf={lauf}
               fehler={fehler}
@@ -845,7 +847,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       className="knopf leise klein"
                       onClick={async () => {
                         if (confirm("Diesen Lauf mit Protokoll löschen?")) {
-                          await laufLoeschen(l.id);
+                          await laufLoeschen(l.id).catch((e) => setFehler(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
                           neuLaden();
                         }
                       }}

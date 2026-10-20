@@ -38,6 +38,7 @@ import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle, 
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";
 import { RadarGrafik } from "./Radar";
+import { pdfVorladen } from "../dokumente/vorladen";
 import { radarPng } from "./radarBild";
 
 interface Props {
@@ -225,8 +226,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     setImportFehler(erg.fehler);
   };
 
-  const entfernen = (id: string) => setDateien((alt) => alt.filter((d) => inhaltsKennung(d.text) !== id));
+  // Vor Abschluss des Ladens würde Entferntes beim Zusammenführen mit dem gespeicherten Stand zurückkehren
+  const entfernen = (id: string) => geladen && setDateien((alt) => alt.filter((d) => inhaltsKennung(d.text) !== id));
   const alleEntfernen = () => {
+    if (!geladen) return;
     if (confirm(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`)) setDateien([]);
   };
 
@@ -471,7 +474,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
               {kz.fremd ? ` und ${kz.fremd} in fremdem Schema` : ""} · {kz.sachverhalte} Sachverhalt{kz.sachverhalte === 1 ? "" : "e"}
             </p>
             <div className="werkzeugleiste-knoepfe">
-              <button type="button" className="knopf" onClick={pdf} disabled={!kz.meldungen}>
+              <button type="button" className="knopf" onClick={pdf} onPointerEnter={pdfVorladen} onFocus={pdfVorladen} disabled={!kz.meldungen}>
                 PDF
               </button>
               <button type="button" className="knopf" onClick={csv} disabled={!kz.meldungen}>
