@@ -7,7 +7,7 @@ import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from 
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.4.18";
+export const APP_KENNUNG = "KI-LEAD 0.4.19";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -39,7 +39,11 @@ export interface S1Vorschlag {
   horizont: string;
   sachverhalte: S1Sachverhalt[];
   prueffrage: string;
+  /** Prüffrage, die S1 ohne Vorgabe im Auftrag vorgeschlagen hat; gilt erst, wenn die Person sie übernimmt */
+  prueffrageVorschlag?: string;
   hinweise: string;
+  /** Hinweise der App zum Vorschlag (z. B. korrigierter t0) */
+  appHinweise?: string[];
 }
 
 export interface StufenEintrag {

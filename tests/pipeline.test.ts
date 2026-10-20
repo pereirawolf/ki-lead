@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { jsonDateien, profil } from "./hilfen";
 import { STANDARD } from "../src/pipeline/einstellungen";
 import { neuerLauf, type Lauf } from "../src/pipeline/lauf";
-import { kodierleitfadenKennung, sopKennungenAbgleichen, stufe1, stufe2und3, type Kontext } from "../src/pipeline/stufen";
+import { kodierleitfadenKennung, MAX_TOKENS_S1, sopKennungenAbgleichen, stufe1, stufe2und3, T0_SPIELRAUM_STUNDEN, type Kontext } from "../src/pipeline/stufen";
 import { sopIdsAufloesen, verdichtungsAnweisung, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
 import { zerlegeAntwort } from "../src/pipeline/json";
 import { ereignisarten, s1Schema, sopsFuerArten, anweisungErfassung, anwendungsbereich, fachSops } from "../src/pipeline/kontext";
@@ -323,6 +323,94 @@ describe("Abgeschnittene Antworten und t0", () => {
     const v = await stufe1(k);
     expect(v.meldezeitpunkt).toBe("2026-10-14T14:00");
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain("Meldezeitpunkt t0 (vorgegeben): 2026-10-14 14:00");
+  });
+});
+
+describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
+  async function eingaengeLesen(): Promise<Material[]> {
+    const { profil: p } = await profil("lead-beispiel");
+    const out: Material[] = [];
+    for (const x of ilka.filter((x) => !x.name.includes("_Bund_"))) out.push(await dateiLesen(new File([JSON.stringify(x.daten)], x.name), p!));
+    return out;
+  }
+
+  it("ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf", async () => {
+    const att = new Attrappe([antwort(JSON.stringify(VORSCHLAG))]);
+    const { k } = await kontext(att);
+    await stufe1(k);
+    expect(att.anfragen[0].aufwand).toBe("high");
+    expect(att.anfragen[0].maxTokens).toBe(MAX_TOKENS_S1);
+    expect(MAX_TOKENS_S1).toBe(16000);
+  });
+
+  it("Verdichtung: setzt einen t0 weit nach dem jüngsten Eingang auf den Eingang zurück und sagt es", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-20T22:30" }))]);
+    const { k } = await kontext(att, eingaenge);
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T11:00");
+    expect(v.appHinweise).toHaveLength(1);
+    expect(v.appHinweise![0]).toContain("14.10.2026, 11:00 Uhr");
+    expect(v.appHinweise![0]).toContain("20.10.2026, 22:30 Uhr");
+    expect(v.appHinweise![0]).toContain(`mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`);
+  });
+
+  it("Verdichtung: setzt einen t0 vor dem jüngsten Eingang ebenfalls zurück", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-14T08:00" }))]);
+    const { k } = await kontext(att, eingaenge);
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T11:00");
+    expect(v.appHinweise![0]).toContain("vor dem jüngsten Eingang");
+  });
+
+  it("Verdichtung: lässt einen t0 kurz nach dem jüngsten Eingang stehen", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-14T12:00" }))]);
+    const { k } = await kontext(att, eingaenge);
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T12:00");
+    expect(v.appHinweise).toBeUndefined();
+  });
+
+  it("Verdichtung: ein im Auftrag vorgegebener t0 geht der Absicherung vor", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-14T12:00" }))]);
+    const { k } = await kontext(att, eingaenge);
+    k.lauf.auftrag.meldezeitpunkt = "2026-10-20T22:30";
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-20T22:30");
+    expect(v.appHinweise).toBeUndefined();
+  });
+
+  it("Erfassung ohne Eingänge: t0 aus S1 bleibt unverändert", async () => {
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, meldezeitpunkt: "2026-10-20T22:30" }))]);
+    const { k } = await kontext(att);
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-20T22:30");
+    expect(v.appHinweise).toBeUndefined();
+  });
+
+  it("übernimmt eine Prüffrage aus S1 ohne Vorgabe im Auftrag nur als Vorschlag", async () => {
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, prueffrage: "Reicht die Dieselreserve?" }))]);
+    const { k } = await kontext(att);
+    const v = await stufe1(k);
+    expect(v.prueffrage).toBe("");
+    expect(v.prueffrageVorschlag).toBe("Reicht die Dieselreserve?");
+    expect((att.anfragen[0].jsonSchema as any).properties.prueffrage.description).toContain("nur, wenn die Person ihn bestätigt");
+  });
+
+  it("behält die geschärfte Prüffrage, wenn der Auftrag eine nennt", async () => {
+    const att = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, prueffrage: "Reicht die Dieselreserve bis 15.10.?" }))]);
+    const { k } = await kontext(att);
+    k.lauf.auftrag.prueffrage = "Reicht der Diesel?";
+    const v = await stufe1(k);
+    expect(v.prueffrage).toBe("Reicht die Dieselreserve bis 15.10.?");
+    expect(v.prueffrageVorschlag).toBeUndefined();
+    const att2 = new Attrappe([antwort(JSON.stringify({ ...VORSCHLAG, prueffrage: "" }))]);
+    const { k: k2 } = await kontext(att2);
+    k2.lauf.auftrag.prueffrage = "Reicht der Diesel?";
+    expect((await stufe1(k2)).prueffrage).toBe("Reicht der Diesel?");
   });
 });
 
