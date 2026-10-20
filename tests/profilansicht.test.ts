@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { profil } from "./hilfen";
-import { fachSops, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
+import { fachSops, istInhaltsgeruest, VERDICHTUNG_S2 } from "../src/pipeline/kontext";
 import { STANDARD_ANWEISUNG } from "../src/pipeline/kurzfassung";
 import { sopKennung } from "../src/profil/sop";
 import {
@@ -51,12 +51,12 @@ describe("Anzeigetitel und Versions-Tags", () => {
 
   it("Anzahl und Gruppenhinweis nennen die Inhaltsgerüste", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(sopAnzahl(p!)).toBe("17 Dach-SOPs · 17 ergänzende Bausteine, davon 16 Inhaltsgerüste");
+    expect(sopAnzahl(p!)).toBe("17 Dach-SOPs · 17 ergänzende Bausteine, davon 15 Inhaltsgerüste");
     const gruppen = sopGruppen(p!);
     expect(gruppenHinweis(gruppen[0].sops)).toBeUndefined();
-    // C01 ist ausgearbeitet (Beispielfassung); die übrigen Leseblöcke bestehen nur aus Inhaltsgerüsten
+    // Leseblöcke mit einem ausgearbeiteten Baustein (Beispielfassung, z. B. C01, C12) tragen keinen Inhaltsgerüst-Hinweis
     for (const g of gruppen.slice(1))
-      if (g.sops.some((s) => s.nummer === "C01")) expect(gruppenHinweis(g.sops), g.titel).toBeUndefined();
+      if (g.sops.some((s) => !istInhaltsgeruest(s))) expect(gruppenHinweis(g.sops), g.titel).toBeUndefined();
       else expect(gruppenHinweis(g.sops), g.titel).toMatch(/^Inhaltsgerüste/);
     const { profil: m } = await profil("muster");
     expect(sopAnzahl(m!)).toBe("keine");
