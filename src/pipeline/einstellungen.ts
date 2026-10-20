@@ -23,7 +23,7 @@ export interface Einstellungen {
 
 export const APP_MODELLE: Record<Rolle, string> = {
   vorverarbeitung: "claude-haiku-5-5",
-  erfassung: "claude-sonnet-5-5",
+  erfassung: "claude-opus-5-5",
   verdichtung: "claude-sonnet-5-5",
   reparatur: "claude-sonnet-5-5",
   kurzfassung: "claude-sonnet-5-5",

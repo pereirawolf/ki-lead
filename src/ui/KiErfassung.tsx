@@ -10,7 +10,9 @@ import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
 import { dateiAnbieten } from "../speicher/speicher";
 import { VergleichKasten } from "./Vergleich";
-import { laufModelle, mitModellwahl, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
+import { laufModelle, mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl, type Rolle } from "../pipeline/einstellungen";
+import { dauerText, schaetzeStufe, type SchaetzArt } from "../pipeline/schaetzung";
+import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
 import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
@@ -384,6 +386,11 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     ? { rolle: "verdichtung", kurz: "S2", titel: "S2 Verdichtung" }
     : { rolle: "erfassung", kurz: "S2", titel: "S2 Recherche und Entwurf" };
   const stufeS3: StufeModell = { rolle: "reparatur", kurz: "S3", titel: "S3 Reparatur (nur bei Schemafehlern)" };
+  const schaetzS2: SchaetzStufe = { kurz: "S2", rolle: stufeS2.rolle, art: verdichtung ? "verdichtung" : "erfassung" };
+  const dauerFuer = (rolle: Rolle, art: SchaetzArt) => {
+    const t = dauerText(schaetzeStufe(art, modellFuer(rolle, laufEinstellungen, profil), laufEinstellungen.aufwand[rolle]).sekunden);
+    return t === "Dauer ohne Messwert" ? "einige Minuten (für dieses Modell liegen noch keine Messwerte vor)" : t;
+  };
   const modellwahl = (stufen: StufeModell[]) => (
     <ModellWahl stufen={stufen} einstellungen={einstellungen} profil={profil} schluessel={schluessel} wahl={modellWahl} onChange={setModellWahl} />
   );
@@ -594,10 +601,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
                 </span>
               </label>
-              <p className="hinweis">
-                {websuche ? `S2 mit bis zu ${einstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."} Ein Lauf kostet je nach Umfang meist einige Cent bis
-                etwa einen US-Dollar.
-              </p>
+              <p className="hinweis">{websuche ? `S2 mit bis zu ${einstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."}</p>
+              <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <span />
                 <button type="button" className="knopf primaer" disabled={!kannStarten} onClick={s1Starten}>
@@ -618,8 +623,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               </h2>
               <p className="einleitung">
                 {phase === "s1"
-                  ? "Die KI ordnet den Auftrag ein. Das dauert meist unter einer Minute."
-                  : "Die KI recherchiert und schreibt den Entwurf. Das dauert meist zwei bis sechs Minuten. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach."}
+                  ? `Die KI ordnet den Auftrag ein. Das dauert voraussichtlich ${dauerFuer("vorverarbeitung", "s1")}.`
+                  : `Die KI ${verdichtung ? "verdichtet die Eingänge" : "recherchiert"} und schreibt den Entwurf. Das dauert voraussichtlich ${dauerFuer(stufeS2.rolle, schaetzS2.art)}. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach.`}
               </p>
               <div className="laufanzeige">
                 <span className="puls" aria-hidden="true" />
@@ -862,6 +867,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   : `S2 recherchiert mit bis zu ${einstellungen.websucheMax} Websuchen.`}
               </p>
               {modellwahl([stufeS2, stufeS3])}
+              <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <div className="aktionen">
                   <button type="button" className="knopf leise" onClick={() => setPhase("auftrag")}>

@@ -36,6 +36,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
 | 0.4.19 | letzter Commit von Pull Request #16 „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
 | 0.4.20 | letzter Commit von Pull Request #18 „Aufräumen: SOP-Archiv in den Git-Verlauf, Beispielprofil 1.9.1“ (Nachtrag vom 21.10.2026: Beispielprofil 1.9.1, ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“) |
+| 0.4.21 | letzter Commit von Pull Request #19 „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
+
+## [0.4.21] – 21.10.2026
+
+Grundlage: Testreihe der KI-Modelle vom 20.10.2026 (Auftrag „Ebola Nigeria“ als URL, drei S1- und drei S2-Varianten, 16 S1- und 13 S2-Läufe, verblindete Bewertung) mit zwei unabhängigen Prüfungen des Berichts und der Rohdaten. Konsolidierte Entscheidung: Die Umstellung der Erfassung auf Opus ist eine begründete Ermessensentscheidung, kein Ergebnis der vorab formulierten Auswahlregel (die keine Variante vollständig erfüllte). Ausschlaggebend ist die Recherche: Nur Opus mit Aufwand „medium“ rief bei gesperrter Auftrags-URL weitere Quellen erfolgreich ab (drei bis vier Seiten je Lauf, Sonnet und Opus „low“ keine) und belegte Zahlen mit Datenstand. Im ausgeglichenen 3×3-Raster: Opus „medium“ 4,67 Punkte (1,65 USD, 214 s), Opus „low“ 4,00 (0,56 USD, 76 s), Sonnet „medium“ 3,33 (0,35 USD, 69 s). Haiku „high“ bleibt in S1 vorläufig Vorgabe; einen Vorteil gegenüber „medium“ hat die Testreihe nicht gezeigt.
+
+### Geändert
+
+- **S2 Erfassung mit `claude-opus-5-5`** (Aufwand unverändert „medium“): Vorgabe der App (`APP_MODELLE.erfassung`), des Beispielprofils (1.10.0) und des Musterprofils (0.3.0). Eine Wahl unter „Einstellungen“ oder „Modelle für diesen Lauf“ geht weiter vor. Ein Lauf kostet damit etwa 1,40–2,30 USD und dauert 3–6 Minuten statt 0,15–0,60 USD und bis zu 3 Minuten. Verdichtung (Profil: Opus), S1 (Haiku, „high“) und S3 (Sonnet, „low“) bleiben unverändert.
+- **Voraussichtliche Dauer und Kosten je Modell** statt fester Angaben („meist zwei bis sechs Minuten“, „einige Cent bis etwa einen US-Dollar“): Vor S1 nennt die App beide Stufen und die Summe, vor S2 die Stufe S2, während des Laufs die erwartete Dauer. Grundlage sind gemessene Spannen aus den Läufen vom 18. bis 20.10.2026, nach außen gerundet (`src/pipeline/schaetzung.ts`). Für nicht gemessene Modelle oder Aufwände rechnet die App nur die Kosten über den Listenpreis der ähnlichsten gemessenen Variante hoch und kennzeichnet sie als „grob, ohne Messwert“.
+- **Lagenradar an der vorgesehenen Stelle:** Legt die KI das Radar eine Ebene zu hoch ab (in 4 von 13 Entwürfen der Testreihe, bisher jedes Mal ein Reparaturaufruf), setzt die App es vor der Schemaprüfung an `sofort.lagenradar` und vermerkt das im Prüfbericht. Nur bei eindeutiger Zuordnung: Das Schema kennt das Feld oben nicht, der Wert ist ein Objekt, und an der vorgesehenen Stelle steht nichts; ein vorhandener Wert wird nie überschrieben.
+- **Warnung bei nicht abrufbarer Auftrags-URL:** Konnte S2 eine im Auftrag genannte Seite nicht abrufen (in der Testreihe zeit.de in allen 13 Läufen, „url_not_allowed“), nennt der Prüfbericht das als Warnung mit Grund und rät, den Inhalt als PDF oder Text beizufügen und S2 erneut zu starten.
+- **Kennsätze im Fließtext:** Ein Kennsatz wie „Neubewertung bei:“, der nur mitten in einer Zeile steht, ergibt einen Ausfüllhinweis; Lagebild und Redaktionscheck erkennen Kennsätze nur am Zeilenanfang.
+- **Beispielprofil 1.10.0:** Kodierleitfaden 1.2.2 mit einem Kurzbeispiel zu D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0; Regel unverändert), SOP-Sammelmappe 3.2.3 (nur Gültigkeitsstand). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
+- Spezifikation 0.4.21 (Abschnitt 5.1), Profilformat-Beispiel.
+
+### Tests
+
+- `tests/standardwerte-testreihe.test.ts` (13, neu): Vorgaben; Radar-Umhängung (verschieben, nicht überschreiben, Nicht-Objekte, ohne Reparaturaufruf schemakonform); Zuordnung von Abruffehlern zur Auftrags-URL und Warnung; Kennsätze im Fließtext; Schätzung (Messwerte, Hochrechnung, unbekanntes Modell, Anzeige).
+- `tests/erfassung-zeit-quellen.test.ts`: Versionsvergleich im Gültigkeitsstand numerisch („1.9.0“ vor „1.10.0“).
 
 ## [0.4.20] – 20.10.2026
 

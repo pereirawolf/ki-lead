@@ -3,7 +3,7 @@
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
   "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Bund",
@@ -85,7 +85,7 @@
   ],
   "modelle": {
     "vorverarbeitung": "claude-haiku-5-5",
-    "erfassung": "claude-sonnet-5-5",
+    "erfassung": "claude-opus-5-5",
     "verdichtung": "claude-opus-5-5"
   }
 }

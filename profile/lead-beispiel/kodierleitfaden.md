@@ -1,6 +1,6 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD · Fassung 1.2.1 vom 20.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
+Beispielfassung für KI-LEAD · Fassung 1.2.2 vom 21.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
@@ -225,6 +225,7 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Mindestens 1.200 Evakuierte registriert, Zählung läuft | D2 = 3 (Mindestwert) | bestätigte Mindestzahl, im Text als Mindestwert gekennzeichnet |
 | Ersatzteil eines ausländischen Herstellers über den regulären Großhandel geliefert | D4 nicht „international“ | reguläre Lieferung ist keine ereignisbezogene Mobilisierung |
 | Gasversorgung angespannt, Lage seit zwei Wochen unverändert belegt | D8 = 0 | belegt stabiler Verlauf; Kipprisiken in Risiken und `Neubewertung bei:` |
+| Ausbruch im Ausland mit steigenden Fallzahlen; in Deutschland keine Fälle und keine eigene amtliche Beobachtung | D8 offen | keine deutsche Beobachtungsbasis; nicht D8 = 0. Die internationale Entwicklung steht als Frühwarnindikator im Text, nicht als deutsche Dynamik |
 
 ---
 
@@ -241,3 +242,4 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.1 | 17.10.2026 | D3: berichtete Vorsorge vor dem Akutereignis als Zurechnung (Ebene der vorsorgenden Stelle); D7: widersprüchliche Vorhersagen = 1, eindeutige Lage = 0; zwei Kurzbeispiele |
 | 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien; Bezug auf SOP-Sammelmappe und Arbeitsanweisung als Mindestfassung mit Verweis auf den Gültigkeitsstand |
 | 1.2.1 | 20.10.2026 | Abschnitt 6: `eintritt` und `meldezeitraum` dürfen eine belegte Uhrzeit tragen (LEAD-Meldevorlage 1.1); Regeln sonst unverändert |
+| 1.2.2 | 21.10.2026 | Kurzbeispiel D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0); Regeln unverändert. Anlass: Testreihe der KI-Modelle vom 20.10.2026, in der D8 = 0 für eine Auslandslage gesetzt wurde |

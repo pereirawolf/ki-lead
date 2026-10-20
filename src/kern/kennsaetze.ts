@@ -25,6 +25,20 @@ export function kennsaetzeAlle(text: unknown, prefix: string | undefined): strin
     .map((l) => l.trim().slice(prefix.length).trim());
 }
 
+/**
+ * Kennsätze, die nur mitten in einer Zeile vorkommen (nicht am Zeilenanfang) und deshalb nicht als Kennsatz
+ * gelten. Steht derselbe Kennsatz zusätzlich korrekt am Zeilenanfang, wird er nicht gemeldet.
+ */
+export function kennsaetzeImFliesstext(text: unknown, prefixe: (string | undefined)[]): string[] {
+  const zeilen = String(text || "").split(/\r?\n/);
+  return prefixe.filter((p): p is string => {
+    if (!p) return false;
+    const klein = p.toLowerCase();
+    const amAnfang = zeilen.some((l) => l.trim().toLowerCase().startsWith(klein));
+    return !amAnfang && zeilen.some((l) => l.toLowerCase().indexOf(klein) > 0);
+  });
+}
+
 export interface Frist {
   /** Zeitpunkt; null, wenn kein gültiges Datum erkennbar ist */
   datum: Date | null;
@@ -125,6 +139,13 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
       out.push({
         stufe: "hinweis",
         text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Bevölkerungsschutz, und warum jetzt?`,
+      });
+    }
+    const imFliesstext = kennsaetzeImFliesstext(bt, Object.values(ks));
+    if (imFliesstext.length) {
+      out.push({
+        stufe: "hinweis",
+        text: `${name}: ${imFliesstext.map((k) => `„${k}“`).join(", ")} steht im Fließtext. Kennsätze beginnen eine eigene Zeile, sonst erkennen Lagebild und Redaktionscheck sie nicht.`,
       });
     }
     if (kennsaetzeAlle(bt, ks.handlungsrelevant).some((hb) => !DATUM_RE.test(hb))) {

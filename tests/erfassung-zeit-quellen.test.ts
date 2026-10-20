@@ -276,6 +276,13 @@ describe("Gültigkeitsstand in Teil A", () => {
     expect(zeile("Arbeitsanweisung Kurzfassung")).toBe(kopf("anweisung-kurzfassung.md"));
     expect(zeile("SOP-LEAD-Sammelmappe")).toBe(kopf("sop/README.md"));
     const profilVersion = JSON.parse(readFileSync(join(ordner, "profil.json"), "utf8")).version;
-    expect(zeile("Darstellungsdatei").replace("Profilversion ", "") <= profilVersion).toBe(true);
+    // Versionen numerisch vergleichen („1.9.0“ liegt vor „1.10.0“)
+    const teile = (v: string) => v.split(".").map(Number);
+    const vorOderGleich = (a: string, b: string) => {
+      const [x, y] = [teile(a), teile(b)];
+      for (let i = 0; i < Math.max(x.length, y.length); i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) < (y[i] || 0);
+      return true;
+    };
+    expect(vorOderGleich(zeile("Darstellungsdatei").replace("Profilversion ", ""), profilVersion)).toBe(true);
   });
 });
