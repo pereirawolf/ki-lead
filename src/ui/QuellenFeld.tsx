@@ -1,8 +1,12 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { datumDE, heuteDE } from "../kern/ausgabe";
+import { datumDE, jetztLokal } from "../kern/ausgabe";
+import { zoneOder } from "../kern/zeit";
+import { lagebildLesen } from "../speicher/speicher";
+import { absender, einlesen, statusVon, zeitpunktVon } from "../lagebild/lagebild";
 import {
   QUELLEN_ARTEN,
   erstePlatzhalterstelle,
+  lagemeldungRumpf,
   kategorienGeordnet,
   naechsteQuellenNr,
   quellenZeile,
@@ -30,12 +34,6 @@ interface LagebildQuelle {
 
 const PROFILVORLAGE = "profil";
 
-/** Rumpf einer Quellenzeile für eine Meldung aus dem Lagebild (Form wie Kodierleitfaden Abschnitt 5): Absender, Meldezeitpunkt, Status, Datei */
-export function lagemeldungRumpf(absender: string, zeitpunkt: string, entwurf: boolean, datei: string): string {
-  const zeit = zeitpunkt ? datumDE(zeitpunkt) : "Datum";
-  return `${absender.replace(/ · /g, ", ")} (${zeit}): Lagemeldung${entwurf ? " (Entwurf)" : ""} (behördenintern), Datei „${datei}“ [Zugriff: {heute}]`;
-}
-
 export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: Props) {
   const id = useId();
   const k = profil.ui.quellen;
@@ -50,38 +48,37 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
   const textRef = useRef<HTMLTextAreaElement>(null);
   const auswahlNach = useRef<[number, number] | null>(null);
 
-  // Meldungen des gespeicherten Lagebilds erst laden, wenn diese Art gewählt wird
+  // Meldungen des gespeicherten Lagebilds erst lesen, wenn diese Art gewählt wird; bei jeder neuen Wahl frisch
   useEffect(() => {
-    if (art !== "lagemeldung" || lagebild) return;
+    if (art !== "lagemeldung") {
+      setLagebild(null);
+      setLagebildFehler(null);
+      return;
+    }
     let gueltig = true;
-    (async () => {
-      try {
-        const [{ lagebildLesen }, lb] = await Promise.all([import("../speicher/speicher"), import("../lagebild/lagebild")]);
-        const stand = await lagebildLesen(profil.manifest.id);
-        const { eintraege } = lb.einlesen(stand?.dateien || [], profil);
+    lagebildLesen(profil.manifest.id)
+      .then((stand) => {
+        const { eintraege } = einlesen(stand?.dateien || [], profil);
         const r = profil.ui.rollen;
         const liste = eintraege.map((e) => {
-          const absender = lb.absender(e, profil);
-          const zeitpunkt = lb.zeitpunktVon(e, profil);
-          const entwurf = !e.fremd && !!r.status_final && lb.statusVon(e, profil) !== r.status_final;
-          return {
-            id: e.id,
-            text: `${absender}${zeitpunkt ? ` – ${datumDE(zeitpunkt)}` : ""}${entwurf ? " (Entwurf)" : ""}`,
-            rumpf: lagemeldungRumpf(absender, zeitpunkt, entwurf, e.name),
-          };
+          const von = absender(e, profil);
+          const zeitpunkt = zeitpunktVon(e, profil);
+          const zeit = zeitpunkt ? datumDE(zeitpunkt) : "";
+          const entwurf = !e.fremd && !!r.status_final && statusVon(e, profil) !== r.status_final;
+          return { id: e.id, text: `${von}${zeit ? ` – ${zeit}` : ""}${entwurf ? " (Entwurf)" : ""}`, rumpf: lagemeldungRumpf(von, zeit, entwurf, e.name) };
         });
-        if (gueltig) {
-          setLagebild(liste);
-          setLagemeldung(liste[0]?.id ?? "");
-        }
-      } catch (e) {
+        if (!gueltig) return;
+        setLagebildFehler(null);
+        setLagebild(liste);
+        setLagemeldung(liste[0]?.id ?? "");
+      })
+      .catch((e) => {
         if (gueltig) setLagebildFehler(`Das gespeicherte Lagebild konnte nicht gelesen werden (${(e as Error)?.message || "Speicherfehler"}).`);
-      }
-    })();
+      });
     return () => {
       gueltig = false;
     };
-  }, [art, lagebild, profil]);
+  }, [art, profil]);
 
   // Nach dem Einfügen: Feld fokussieren und den ersten Platzhalter markieren, damit man ihn direkt überschreibt
   useEffect(() => {
@@ -98,15 +95,19 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
     const v = vorgeschlageneKategorie(neu, profil.ui);
     if (v) setKategorie(v);
   };
+  // Zugriffsdatum in der Zeitzone des Profils, wie „Jetzt“ in den Zeitfeldern
+  const heute = jetztLokal(zoneOder(profil.manifest.variablen?.zeitzone), new Date()).slice(0, 10).split("-").reverse().join(".");
+  // Gewählte Kategorie nur, wenn das (ggf. gewechselte) Profil sie kennt
+  const kat = kategorien.some(([c]) => c === kategorie) ? kategorie : (kategorien[0]?.[0] ?? "");
   const gewaehlteLagemeldung = art === "lagemeldung" ? lagebild?.find((l) => l.id === lagemeldung) : undefined;
   const zeile = quellenZeile(
     {
       nr: naechsteQuellenNr(wert),
-      kategorie,
+      kategorie: kat,
       art: art === PROFILVORLAGE ? undefined : art,
       rumpf: gewaehlteLagemeldung?.rumpf,
       zusaetze,
-      heute: heuteDE(),
+      heute: heute,
     },
     profil.ui,
   );
@@ -156,8 +157,14 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
             </span>
             <div className="segmente" role="radiogroup" aria-labelledby={`${id}-kat`}>
               {kategorien.map(([code, text]) => (
-                <label key={code} className={kategorie === code ? "segment an" : "segment"} title={text}>
-                  <input type="radio" name={`${id}-kat`} checked={kategorie === code} onChange={() => setKategorie(code)} />
+                <label key={code} className={kat === code ? "segment an" : "segment"} title={text}>
+                  <input
+                    type="radio"
+                    name={`${id}-kat`}
+                    aria-label={`${code}: ${text.split(" – ")[0]}`}
+                    checked={kat === code}
+                    onChange={() => setKategorie(code)}
+                  />
                   {code}
                 </label>
               ))}
@@ -179,6 +186,9 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
         </div>
         {art === "lagemeldung" && (
           <div className="quellen-reihe">
+            {vorgeschlageneKategorie("lagemeldung", profil.ui) && (
+              <p className="hinweis">Kategorie nach der Rolle der meldenden Stelle wählen; vorgewählt ist die Kategorie für Behörden.</p>
+            )}
             {lagebildFehler ? (
               <p className="fehlertext">{lagebildFehler}</p>
             ) : !lagebild ? (
@@ -207,7 +217,7 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
             {zusatz("nichtAusgewertet", "nicht ausgewertet")}
           </div>
         </div>
-        <p className="quellen-vorschau" aria-live="polite">
+        <p className="quellen-vorschau">
           <span className="quellen-reihe-titel">Vorschau</span> <code>{zeile}</code>
         </p>
         <button type="button" className="knopf" onClick={anfuegen}>

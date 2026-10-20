@@ -215,9 +215,9 @@ export const QUELLEN_ARTEN: QuellenArt[] = [
     id: "auskunft",
     name: "Auskunft (Telefon, E-Mail)",
     kategorie: "B",
-    rumpf: "Stelle, Funktion (Datum, Uhrzeit): Auskunft per Telefon bzw. E-Mail zu Gegenstand (nicht öffentlich)",
+    rumpf: "Stelle, Funktion (Datum, Uhrzeit): Auskunft per Telefon bzw. E-Mail zu Gegenstand (nicht öffentlich) [Zugriff: {heute}]",
   },
-  { id: "dokument", name: "Dokument ohne URL", kategorie: "W", rumpf: "Herausgeber (Jahr): Titel. Verlag bzw. Reihe" },
+  { id: "dokument", name: "Dokument ohne URL", kategorie: "W", rumpf: "Herausgeber (Jahr): Titel. Verlag bzw. Reihe [Zugriff: {heute}]" },
 ];
 
 /** Wörter, die beim Einfügen als Platzhalter markiert werden (in dieser Reihenfolge gesucht) */
@@ -269,10 +269,23 @@ export function quellenZeile(
     zeile = `[Q${o.nr}] ${k ? `${k} – ` : ""}${rumpf}`;
   }
   const z = o.zusaetze || {};
-  if (z.paywall) zeile = /\bURL\b/.test(zeile) ? zeile.replace(/\bURL\b/, "URL (Paywall)") : `${zeile} (Paywall)`;
+  if (z.paywall)
+    zeile = /\bURL\b/.test(zeile)
+      ? zeile.replace(/\bURL\b/, "URL (Paywall)")
+      : /\s\[Zugriff:/.test(zeile)
+        ? zeile.replace(/\s\[Zugriff:/, " (Paywall) [Zugriff:")
+        : `${zeile} (Paywall)`;
   if (z.datenstand && !/Datenstand:/.test(zeile)) zeile += " · Datenstand: TT.MM.JJJJ";
   if (z.nichtAusgewertet) zeile += " · nicht ausgewertet";
   return zeile;
+}
+
+/**
+ * Rumpf einer Quellenzeile für eine Meldung aus dem Lagebild, in der Form des Kodierleitfadens (Abschnitt 5):
+ * „Stelle (Meldezeitpunkt): Lagemeldung (behördenintern) …“. `zeit` ist bereits lesbar formatiert.
+ */
+export function lagemeldungRumpf(absender: string, zeit: string, entwurf: boolean, datei: string): string {
+  return `${absender.replace(/ · /g, ", ")} (${zeit || "Datum"}): Lagemeldung${entwurf ? " (Entwurf)" : ""} (behördenintern), Datei „${datei}“ [Zugriff: {heute}]`;
 }
 
 /** Kategorie, die eine Art vorschlägt, sofern das Profil sie kennt */

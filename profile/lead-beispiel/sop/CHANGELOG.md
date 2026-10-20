@@ -26,6 +26,7 @@ Redaktionelle Fortschreibung des Gültigkeitsstands (dritte Stelle nach der Vers
 - **Gültigkeitsstand (Teil A):**
   - Sammelmappe 3.2.1.
   - Darstellungsdatei auf dem Stand der Profilversion 1.9.0.
+  - Kodierleitfaden 1.2.1.
   - Arbeitsanweisung Erfassung 1.3.3.
   - Meldungsschema `LEAD-Meldung-v1` als LEAD-Meldevorlage 1.1: `eintritt` und `meldezeitraum` dürfen optional eine Uhrzeit tragen. Die Erweiterung ist abwärtskompatibel und braucht keine Migration (A.10.4).
 

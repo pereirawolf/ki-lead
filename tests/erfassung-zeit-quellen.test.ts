@@ -7,9 +7,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { profil } from "./hilfen";
 import { pruefeRoh } from "../src/kern/validierung";
-import { erstePlatzhalterstelle, naechsteQuellenNr, parseQuellen, quellenZeile, vorgeschlageneKategorie } from "../src/kern/quellen";
-import { verbinde, zerlege } from "../src/ui/DatumZeit";
-import { lagemeldungRumpf } from "../src/ui/QuellenFeld";
+import { quellenHinweise } from "../src/kern/quellen";
+import { erstePlatzhalterstelle, lagemeldungRumpf, naechsteQuellenNr, parseQuellen, quellenZeile, vorgeschlageneKategorie } from "../src/kern/quellen";
+import { verbinde, zerlege } from "../src/kern/zeit";
 
 const db = vi.hoisted(() => ({ werte: new Map<string, any>() }));
 vi.mock("idb-keyval", () => ({
@@ -59,7 +59,7 @@ describe("Zeitwerte", () => {
       }),
     ).toEqual([]);
     expect(mit((d) => (d.sachverhalte[0].eintritt = "2026-10-13T9:40")).length).toBeGreaterThan(0);
-    expect(mit((d) => (d.meldezeitpunkt = "2026-10-14")).length).toBeGreaterThan(0);
+    expect(mit((d) => (d.meldezeitpunkt = "2026-10-14"))).toEqual([expect.objectContaining({ text: expect.stringContaining("Uhrzeit fehlt") })]);
     // Freigabedatum bleibt ein reines Datum
     expect(mit((d) => (d.freigabe.freigabe.datum = "2026-10-14T10:00"))).toEqual([expect.objectContaining({ pfad: expect.stringContaining("freigabe") })]);
   });
@@ -82,10 +82,20 @@ describe("Quellenzeilen", () => {
       "[Q5] W – Herausgeber (Datum): Titel (Datensatz). Online abrufbar unter: URL [Zugriff: 20.10.2026] · Datenstand: TT.MM.JJJJ · nicht ausgewertet",
     );
     expect(quellenZeile({ nr: 6, kategorie: "X", art: "auskunft", heute: HEUTE }, ui)).toMatch(/^\[Q6\] Stelle, Funktion/);
-    // Jede erzeugte Zeile wird als Quelle mit Kategorie erkannt
+    // Paywall ohne URL steht vor dem Zugriffsdatum
+    expect(quellenZeile({ nr: 8, kategorie: "W", art: "dokument", heute: HEUTE, zusaetze: { paywall: true } }, ui)).toBe(
+      "[Q8] W – Herausgeber (Jahr): Titel. Verlag bzw. Reihe (Paywall) [Zugriff: 20.10.2026]",
+    );
+    // Jede erzeugte Zeile wird als Quelle mit Kategorie erkannt und hat ein Zugriffsdatum (keine Hinweise der Quellenprüfung)
     for (const art of ["url", "pressemitteilung", "lagebild", "lagemeldung", "datensatz", "social", "auskunft", "dokument"]) {
       const z = quellenZeile({ nr: 7, kategorie: vorgeschlageneKategorie(art, ui) ?? "M", art, heute: HEUTE }, ui);
       expect(parseQuellen(z)[0], art).toMatchObject({ nr: 7, code: expect.stringMatching(/^[ABWMP]$/) });
+      expect(
+        quellenHinweise({ quellen: z, sachverhalte: [{ analyse: { kern: "[Q7]" } }] } as never, ui)
+          .map((b) => b.text)
+          .filter((t) => /Zugriff|Kategorie/.test(t)),
+        art,
+      ).toEqual([]);
     }
   });
 
@@ -112,7 +122,7 @@ describe("Quellenzeilen", () => {
   });
 
   it("Meldung aus dem Lagebild", () => {
-    expect(lagemeldungRumpf("Hessen · Lagezentrum", "2026-10-14T10:15", false, "x.json")).toBe(
+    expect(lagemeldungRumpf("Hessen · Lagezentrum", "14.10.2026, 10:15 Uhr", false, "x.json")).toBe(
       "Hessen, Lagezentrum (14.10.2026, 10:15 Uhr): Lagemeldung (behördenintern), Datei „x.json“ [Zugriff: {heute}]",
     );
     expect(lagemeldungRumpf("THW", "", true, "y.json")).toBe("THW (Datum): Lagemeldung (Entwurf) (behördenintern), Datei „y.json“ [Zugriff: {heute}]");
@@ -164,20 +174,20 @@ describe("Erfassungsmaske", () => {
     await zeigeApp();
     const felder = () => [...document.querySelectorAll(".datumzeit-feld")] as HTMLElement[];
     const [zeitpunkt, von] = felder();
-    await klick(knopf("Meldezeitpunkt: leeren", zeitpunkt));
+    await klick(knopf("Leeren: Meldezeitpunkt zurücksetzen", zeitpunkt));
     expect((zeitpunkt.querySelector('input[type="date"]') as HTMLInputElement).value).toBe("");
     expect((zeitpunkt.querySelector('input[type="time"]') as HTMLInputElement).disabled).toBe(true);
-    await klick(knopf("Meldezeitpunkt: auf jetzt setzen", felder()[0]));
+    await klick(knopf("Jetzt: Meldezeitpunkt auf aktuelle Zeit setzen", felder()[0]));
     expect((felder()[0].querySelector('input[type="date"]') as HTMLInputElement).value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect((felder()[0].querySelector('input[type="time"]') as HTMLInputElement).value).toMatch(/^\d{2}:\d{2}$/);
 
     await act(async () => setzen(von.querySelector('input[type="date"]') as HTMLInputElement, "2026-10-13"));
     await warte();
-    expect(knopf("von: Uhrzeit entfernen, nur den Tag angeben", felder()[1])).toBeUndefined();
+    expect(knopf("Nur Tag: Uhrzeit bei Meldezeitraum, von entfernen", felder()[1])).toBeUndefined();
     await act(async () => setzen(felder()[1].querySelector('input[type="time"]') as HTMLInputElement, "06:00"));
     await warte();
     expect((felder()[1].querySelector('input[type="time"]') as HTMLInputElement).value).toBe("06:00");
-    await klick(knopf("von: Uhrzeit entfernen, nur den Tag angeben", felder()[1]));
+    await klick(knopf("Nur Tag: Uhrzeit bei Meldezeitraum, von entfernen", felder()[1]));
     expect((felder()[1].querySelector('input[type="date"]') as HTMLInputElement).value).toBe("2026-10-13");
     expect((felder()[1].querySelector('input[type="time"]') as HTMLInputElement).value).toBe("");
 
@@ -185,6 +195,19 @@ describe("Erfassungsmaske", () => {
     await act(async () => setzen(felder()[0].querySelector('input[type="time"]') as HTMLInputElement, ""));
     await warte();
     expect(felder()[0].textContent).toContain("Uhrzeit ergänzen");
+  });
+
+  it("unfertige Eingabe im Tagesfeld behält Tag und Uhrzeit", async () => {
+    await zeigeApp();
+    const feld = () => document.querySelector(".datumzeit-feld") as HTMLElement;
+    const vorher = (feld().querySelector('input[type="time"]') as HTMLInputElement).value;
+    expect(vorher).toMatch(/^\d{2}:\d{2}$/);
+    const tag = feld().querySelector('input[type="date"]') as HTMLInputElement;
+    Object.defineProperty(tag, "validity", { configurable: true, get: () => ({ badInput: true }) });
+    await act(async () => setzen(tag, ""));
+    await warte();
+    expect((feld().querySelector('input[type="time"]') as HTMLInputElement).value).toBe(vorher);
+    expect((feld().querySelector('input[type="date"]') as HTMLInputElement).value).toMatch(/^\d{4}-/);
   });
 
   it("Quellen: Kategorie und Art kombinieren, Zeile anfügen, Platzhalter markiert", async () => {
@@ -230,5 +253,29 @@ describe("Erfassungsmaske", () => {
         `^\\[Q1\\] A – Hessen, .*\\(14\\.10\\.2026, 10:15 Uhr\\): Lagemeldung \\(behördenintern\\), Datei „${name.replace(/[.]/g, "\\.")}“ \\[Zugriff: \\d{2}\\.\\d{2}\\.\\d{4}\\]$`,
       ),
     );
+  });
+});
+
+describe("Gültigkeitsstand in Teil A", () => {
+  it("nennt die Fassungen, die in den Köpfen der Dokumente stehen", () => {
+    const ordner = join(__dirname, "../profile/lead-beispiel");
+    const teilA = readFileSync(join(ordner, "sop/A_Gemeinsame-Regeln.md"), "utf8");
+    const zeile = (beginn: string) =>
+      teilA
+        .split("\n")
+        .find((z) => z.startsWith(`| ${beginn}`))!
+        .split("|")[2]
+        .trim();
+    const kopf = (datei: string) =>
+      readFileSync(join(ordner, datei), "utf8")
+        .slice(0, 600)
+        .match(/Fassung\s+(\d+(?:\.\d+)*)/)![1];
+    expect(zeile("Kodierleitfaden")).toBe(kopf("kodierleitfaden.md"));
+    expect(zeile("Arbeitsanweisung Erfassung")).toBe(kopf("anweisung-erfassung.md"));
+    expect(zeile("Arbeitsanweisung Verdichtung")).toBe(kopf("anweisung-verdichtung.md"));
+    expect(zeile("Arbeitsanweisung Kurzfassung")).toBe(kopf("anweisung-kurzfassung.md"));
+    expect(zeile("SOP-LEAD-Sammelmappe")).toBe(kopf("sop/README.md"));
+    const profilVersion = JSON.parse(readFileSync(join(ordner, "profil.json"), "utf8")).version;
+    expect(zeile("Darstellungsdatei").replace("Profilversion ", "") <= profilVersion).toBe(true);
   });
 });

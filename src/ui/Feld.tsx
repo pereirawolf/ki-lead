@@ -20,6 +20,13 @@ export interface FeldProps {
   ebene?: number;
 }
 
+/** Name mit übergeordneter Gruppe, wenn die Bezeichnung allein mehrdeutig ist (z. B. „Meldezeitraum, von“) */
+function zugaenglicherName(profil: Profil, gen: string, label: string): string | undefined {
+  const eltern = gen.includes(".") ? gen.slice(0, gen.lastIndexOf(".")) : "";
+  const gruppe = eltern && !eltern.endsWith("[]") ? feldUi(profil.ui, eltern).label : undefined;
+  return gruppe ? `${gruppe.replace(/\s*\(optional\)\s*$/, "")}, ${label}` : undefined;
+}
+
 function Hinweis({ text }: { text?: string }) {
   return text ? <p className="hinweis">{text}</p> : null;
 }
@@ -220,7 +227,15 @@ export function Feld(props: FeldProps) {
       {widget === "text_lang" ? (
         <textarea {...gemeinsam} rows={f.zeilen || 5} />
       ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
-        <DatumZeit id={id} label={label} modus={widget} wert={wert} zeitzone={profil.manifest.variablen?.zeitzone} onChange={(v) => setze(segs, v)} />
+        <DatumZeit
+          id={id}
+          label={label}
+          name={zugaenglicherName(profil, gen, label)}
+          modus={widget}
+          wert={wert}
+          zeitzone={profil.manifest.variablen?.zeitzone}
+          onChange={(v) => setze(segs, v)}
+        />
       ) : (
         <input {...gemeinsam} type="text" />
       )}

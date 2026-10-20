@@ -64,7 +64,7 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
   - `tests/barrierefreiheit.test.ts` (4): Radarbeschreibung, Auswahl ohne Farbe, Systemfarbenregeln, Konturen im Kontrastschema.
   - `tests/farbschemas.test.ts` (+5): beide Kontrastschemata mit 7:1, Auflösung mit Systemeinstellung, Profilbasis mit 7:1, Anwenden und Rücksetzen von `data-kontrast`.
   - `tests/farbschemas-oberflaeche.test.ts` (+2): Editorvorschau mit Kontrastbasis, „mehr Kontrast“ in der App einschließlich Zurückschalten.
-  - `tests/erfassung-zeit-quellen.test.ts` (9): Zeitwerte und Schema des Beispielprofils, Quellenzeilen je Art und Zusatz, erster Platzhalter, Bedienung in der Erfassungsmaske einschließlich Meldung aus dem Lagebild.
+  - `tests/erfassung-zeit-quellen.test.ts` (11): Zeitwerte und Schema des Beispielprofils, Quellenzeilen je Art und Zusatz (mit Zugriffsdatum, ohne Hinweise der Quellenprüfung), erster Platzhalter, Bedienung in der Erfassungsmaske einschließlich unfertiger Eingaben und Meldung aus dem Lagebild, Gültigkeitsstand in Teil A gegen die Köpfe der Dokumente.
 
 ### Geändert
 
@@ -72,8 +72,9 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
 - **Lagenradar** [A11Y-05]: Der zugängliche Name nennt alle Achsen mit Wert, z. B. „D1 Räumliche Auswirkung / Impact-Raum: 4 von 6; …; D8 Dynamik: offen“, statt nur „Lagenradar“. „Offen“ bleibt von Stufe 0 unterschieden.
 - Hinweistext der Darstellung: nennt das 7:1-Ziel und den Vorrang der Systemfarben. Die Option „Automatisch“ heißt jetzt „Automatisch (nach System: hell oder dunkel, bei „mehr Kontrast“ Kontrastschema)“.
 - Quellenfeld: Die Schaltfläche „Eintrag anfügen“ ist im Baukasten aufgegangen („Zeile anfügen“ mit der Art „Allgemein“ ergibt dieselbe Zeile wie bisher).
-- **Beispielprofil 1.9.0:** Meldungsschema (LEAD-Meldevorlage 1.1), Darstellungsdatei (`datum_uhrzeit` für Meldezeitraum und Eintritt), Arbeitsanweisung Erfassung 1.3.3 (Uhrzeit nur bei belegter Uhrzeit) und SOP-Sammelmappe 3.2.1 (nur Gültigkeitsstand in Teil A). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
+- **Beispielprofil 1.9.0:** Meldungsschema (LEAD-Meldevorlage 1.1), Darstellungsdatei (`datum_uhrzeit` für Meldezeitraum und Eintritt), Arbeitsanweisung Erfassung 1.3.3 und Kodierleitfaden 1.2.1 (Uhrzeit nur bei belegter Uhrzeit) und SOP-Sammelmappe 3.2.1 (nur Gültigkeitsstand in Teil A). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
 - PDF-Ausgabe: Felder mit `datum_uhrzeit` erscheinen als „TT.MM.JJJJ“ bzw. „TT.MM.JJJJ, hh:mm Uhr“.
+- Prüfung: Fehlt einem Zeitpunkt nur die Uhrzeit, meldet die Schemaprüfung „Uhrzeit fehlt (…, erwartet JJJJ-MM-TTThh:mm)“ statt „Format ungültig“.
 - Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata, Einschätzung der Vorschläge und der IBM-Palette, offene Abnahmepunkte), Spezifikation Abschnitte 5.1 und 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`, Widget `datum_uhrzeit`, Baukasten).
 
 ### Nicht übernommen
