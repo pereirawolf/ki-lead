@@ -42,6 +42,11 @@ export const PREIS_WEBSUCHE = 0.01;
 
 export const PREISSTAND = "18.10.2026";
 
+/** Listenpreis für Ausgabetoken (USD je Million, kurzer Kontext); null, wenn das Modell nicht in der Tabelle steht. */
+export function ausgabePreis(modell: string): number | null {
+  return REGELN.find((x) => x.muster.test(modell))?.preis.ausgabe ?? null;
+}
+
 /** Kosten einer einzelnen Anfrage. null, wenn das Modell nicht in der Tabelle steht. */
 export function kostenAnfrage(modell: string, n: Nutzung): number | null {
   const r = REGELN.find((x) => x.muster.test(modell));

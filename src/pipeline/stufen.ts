@@ -215,7 +215,14 @@ function identitaetsFelder(p: Profil): string[] {
   return [r.land, r.meldende_stelle].filter((f): f is string => !!f && !!p.manifest.variablen[f]);
 }
 
-export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekturen: string[] = [], sopHinweise: string[] = []): Meldung {
+export function nachbearbeiten(
+  roh: unknown,
+  k: Kontext,
+  modell: string,
+  korrekturen: string[] = [],
+  sopHinweise: string[] = [],
+  umhaengungen: string[] = [],
+): Meldung {
   if (!roh || typeof roh !== "object" || Array.isArray(roh)) throw new Error("Das Ergebnis ist kein JSON-Objekt.");
   const p = k.profil;
   const r = p.ui.rollen;
@@ -233,6 +240,7 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekt
       d[key] = wert;
     } else if (d[key] === undefined || d[key] === "") d[key] = wert;
   }
+  radarUmhaengen(d, p, umhaengungen);
   const t0 = k.lauf.bestaetigt?.meldezeitpunkt;
   if (r.meldezeitpunkt && t0) d[r.meldezeitpunkt] = t0;
   else if (r.meldezeitpunkt && !d[r.meldezeitpunkt]) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
@@ -269,6 +277,40 @@ export function nachbearbeiten(roh: unknown, k: Kontext, modell: string, korrekt
     d[r.entstehung_feld] = e;
   }
   return d;
+}
+
+/**
+ * Lagenradar, das die KI eine Ebene zu hoch abgelegt hat (z. B. `sachverhalte[i].lagenradar` statt
+ * `sachverhalte[i].sofort.lagenradar`), an die vorgesehene Stelle setzen. Nur wenn die Zuordnung eindeutig ist:
+ * Das Schema kennt das Feld auf der oberen Ebene nicht, der abgelegte Wert ist ein Objekt, die übergeordnete
+ * Stelle ist ein Objekt oder fehlt, und an der vorgesehenen Stelle steht noch nichts. Sonst bleibt alles, wie es
+ * ist, und Schemaprüfung bzw. Reparatur greifen wie bisher.
+ */
+export function radarUmhaengen(d: Meldung, p: Profil, meldungen: string[] = []): void {
+  const r = p.ui.rollen;
+  const pfad = (r.sv_radar || "").split(".").filter(Boolean);
+  if (!r.sachverhalte || pfad.length < 2 || pfad.some((x) => /[\[\]*]/.test(x))) return;
+  const liste = holeWert(d, r.sachverhalte);
+  if (!Array.isArray(liste)) return;
+  const feld = pfad[pfad.length - 1];
+  const eltern = pfad.slice(0, -1);
+  const svSchema = aufloesen(aufloesen(p.schema.properties?.[r.sachverhalte], p.schema)?.items, p.schema);
+  if (svSchema?.properties && feld in svSchema.properties) return;
+  liste.forEach((sv: any, i: number) => {
+    if (!sv || typeof sv !== "object" || Array.isArray(sv)) return;
+    const wert = sv[feld];
+    if (!wert || typeof wert !== "object" || Array.isArray(wert)) return;
+    let ziel: any = sv;
+    for (const seg of eltern) {
+      if (ziel[seg] === undefined) ziel[seg] = {};
+      if (!ziel[seg] || typeof ziel[seg] !== "object" || Array.isArray(ziel[seg])) return;
+      ziel = ziel[seg];
+    }
+    if (ziel[feld] !== undefined) return;
+    ziel[feld] = wert;
+    delete sv[feld];
+    meldungen.push(`Sachverhalt ${i + 1}: Lagenradar von „${feld}“ nach „${pfad.join(".")}“ verschoben`);
+  });
 }
 
 /**
@@ -440,12 +482,14 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   let schemaBefunde: SchemaBefund[] = [];
   let korrekturen: string[] = [];
   let sopHinweise: string[] = [];
+  let umhaengungen: string[] = [];
   for (let runde = 0; ; runde++) {
     if (z.json !== undefined) {
       try {
         korrekturen = [];
         sopHinweise = [];
-        meldung = nachbearbeiten(z.json, k, modell, korrekturen, sopHinweise);
+        umhaengungen = [];
+        meldung = nachbearbeiten(z.json, k, modell, korrekturen, sopHinweise, umhaengungen);
         schemaBefunde = pruefeGegenSchema(p.schema, meldung, p.ui);
       } catch (err: any) {
         meldung = undefined;
@@ -486,6 +530,13 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });
   // Nachweis „beigefügte SOPs“ setzt die App; Abweichungen der KI-Angabe zur Anwendung als Prüfhinweis
   if (meldung) for (const t of sopHinweise) befunde.push({ stufe: "hinweis", text: `SOP-Nachweis: ${t}` });
+  if (meldung && umhaengungen.length) befunde.push({ stufe: "hinweis", text: `Von der App korrigiert: ${umhaengungen.join("; ")}.` });
+  if (meldung)
+    for (const f of auftragsAbrufFehler(k.lauf.auftrag.urls, a.abrufFehler))
+      befunde.unshift({
+        stufe: "warnung",
+        text: `Die Seite aus dem Auftrag konnte nicht abgerufen werden (${f.url}, Grund: ${f.code}). Der Entwurf stützt sich auf andere Quellen und gibt den Inhalt dieser Seite nicht wieder. Soll die Seite selbst ausgewertet werden: Inhalt als PDF oder Text beifügen und S2 erneut starten.`,
+      });
   if (meldung && verdichtung) {
     const z = eingangsquellenPruefen(k.material, meldung, p);
     const liste = (st: string) => z.filter((x) => x.status === st).map((x) => `${x.stelle}${x.eintrag ? ` [Q${x.eintrag}]` : ""}`);
@@ -515,4 +566,17 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   k.lauf.aktualisiert = new Date().toISOString();
   await k.aktualisiert(k.lauf);
   return { meldung, kurzantwort, schemaBefunde, befunde };
+}
+
+/** Abruffehler, die eine im Auftrag genannte URL betreffen (je URL einmal). */
+export function auftragsAbrufFehler(urls: string[] | undefined, fehler: { url: string; code: string }[] | undefined): { url: string; code: string }[] {
+  const norm = (u: string) => u.trim().replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
+  const auftrag = new Set((urls || []).map(norm));
+  const gesehen = new Set<string>();
+  return (fehler || []).filter((f) => {
+    const n = norm(f.url || "");
+    if (!auftrag.has(n) || gesehen.has(n)) return false;
+    gesehen.add(n);
+    return true;
+  });
 }

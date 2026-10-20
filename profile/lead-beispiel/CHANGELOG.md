@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.10.0 – 21.10.2026
+
+Grundlage: Testreihe der KI-Modelle vom 20.10.2026 und zwei Prüfungen (umgesetzt mit App 0.4.21).
+
+- **Modellvorgabe:** `modelle.erfassung` jetzt `claude-opus-5-5` (bisher `claude-sonnet-5-5`); S1 und Verdichtung unverändert. Begründete Ermessensentscheidung nach der Testreihe, Einzelheiten im [App-Verlauf](../../CHANGELOG.md).
+- **Kodierleitfaden 1.2.2:** Kurzbeispiel zu D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0). Die Regel in Abschnitt D8 ist unverändert; das Beispiel macht sie eindeutig, weil in der Testreihe zwei Entwürfe D8 = 0 für eine Auslandslage setzten.
+- **SOP-Sammelmappe 3.2.2:** nur Gültigkeitsstand in Teil A fortgeschrieben (Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md)).
+- Schema, Darstellungsdatei, Arbeitsanweisungen und Beispiele sind unverändert.
+
 ## 1.9.0 – 20.10.2026
 
 Grundlage: Anforderung vom 20.10.2026, Uhrzeiten in den Zeitfeldern der Meldung optional erfassen zu können (umgesetzt mit App 0.4.18).

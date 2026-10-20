@@ -44,7 +44,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
   "beispiele": [{ "titel": "Übungslage (FIKTIV)", "ordner": "beispiele/uebung", "hinweis": "Erfundene Lage" }],
-  "modelle": { "vorverarbeitung": "claude-haiku-5-5", "erfassung": "claude-sonnet-5-5", "verdichtung": "claude-opus-5-5" },
+  "modelle": { "vorverarbeitung": "claude-haiku-5-5", "erfassung": "claude-opus-5-5", "verdichtung": "claude-opus-5-5" },
   "farbschema": { "basis": "de-th", "name": "Stab Kreis X", "farben": { "marke-akzent-1": "#0089C1", "marke-akzent-2": "#FFFFFF", "marke-akzent-3": "#D62B32" } }
 }
 ```

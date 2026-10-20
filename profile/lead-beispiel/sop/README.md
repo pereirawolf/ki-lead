@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.2.1 vom 20.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.2.2 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 

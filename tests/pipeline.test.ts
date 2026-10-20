@@ -106,7 +106,7 @@ describe("Kontext aus dem Profil", () => {
 
   it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.2.1");
+    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.2.2");
     // frühere Kennungen (01, N02) und aktuelle (B08) werden auf die gültige Kennung abgebildet
     const liste = [
       "SOP-LEAD 01 Unwetter / Sturm v0.4",
