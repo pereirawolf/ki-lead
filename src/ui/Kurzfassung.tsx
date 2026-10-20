@@ -14,7 +14,8 @@ import { useWachhalten } from "./wachhalten";
 import { dateiname, managementSummary } from "../kern/ausgabe";
 import type { Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
-import { modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
+import { ModellWahl } from "./ModellWahl";
 import { kurzfassungErstellen, kurzfassungsFingerabdruck, type Kurzfassung } from "../pipeline/kurzfassung";
 
 export interface KiZugang {
@@ -62,6 +63,8 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
   const schluesselIdb = idbSchluessel(profil.manifest.id);
   const fp = useMemo(() => kurzfassungsFingerabdruck(meldung, profil), [meldung, profil]);
   const [gespeichert, setGespeichert] = useState<Gespeichert | null>(null);
+  /** Modell nur für diese Erstellung, abweichend von „Einstellungen“ */
+  const [kfWahl, setKfWahl] = useState<Modellwahl>({});
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
   const abbruch = useRef<AbortController | null>(null);
@@ -96,7 +99,8 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
     await kurzfassungLeeren(profil.manifest.id);
   };
 
-  const kfModell = ki ? modellFuer("kurzfassung", ki.einstellungen, profil) : "";
+  const kiEinstellungen = ki ? mitModellwahl(ki.einstellungen, kfWahl) : undefined;
+  const kfModell = kiEinstellungen ? modellFuer("kurzfassung", kiEinstellungen, profil) : "";
   const hatSchluessel = !!ki && !!ki.schluessel[anbieterVon(kfModell)];
 
   const erstellen = async () => {
@@ -106,7 +110,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
     const ctrl = new AbortController();
     abbruch.current = ctrl;
     try {
-      const k = await kurzfassungErstellen(profil, meldung, new Verteiler(ki!.schluessel), ki.einstellungen, ctrl.signal);
+      const k = await kurzfassungErstellen(profil, meldung, new Verteiler(ki!.schluessel), kiEinstellungen!, ctrl.signal);
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
       await set(schluesselIdb, g).catch(() =>
@@ -193,6 +197,16 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
         </div>
       )}
 
+      {ki && !laeuft && (
+        <ModellWahl
+          stufen={[{ rolle: "kurzfassung", kurz: titel, titel }]}
+          einstellungen={ki.einstellungen}
+          profil={profil}
+          schluessel={ki.schluessel}
+          wahl={kfWahl}
+          onChange={setKfWahl}
+        />
+      )}
       <div className="aktionen">
         {hatSchluessel ? (
           laeuft ? (

@@ -3182,3 +3182,28 @@ fieldset.lb-ausgabe {
 .quellen-baukasten > .knopf {
   align-self: flex-start;
 }
+
+/* ── Modellwahl je Lauf ── */
+.modellwahl {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 0.8rem;
+  margin: 0.75rem 0;
+  background: var(--papier);
+}
+
+.modellwahl > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.modellwahl-felder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin-top: 0.6rem;
+}
+
+.modellwahl-felder .feld {
+  margin: 0;
+}

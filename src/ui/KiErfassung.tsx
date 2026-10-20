@@ -1,6 +1,6 @@
 // KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ANBIETER_NAME, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
@@ -10,7 +10,8 @@ import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
 import { dateiAnbieten } from "../speicher/speicher";
 import { VergleichKasten } from "./Vergleich";
-import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { laufModelle, mitModellwahl, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
+import { ModellWahl, type StufeModell } from "./ModellWahl";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
 import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
 import {
@@ -102,6 +103,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [uhrzeit, setUhrzeit] = useState("");
   /** null = automatisch (aus bei Verdichtung, sonst an) */
   const [websucheWahl, setWebsucheWahl] = useState<boolean | null>(null);
+  /** Modelle nur für diesen Lauf, abweichend von „Einstellungen“ */
+  const [modellWahl, setModellWahl] = useState<Modellwahl>({});
+  const laufEinstellungen = useMemo(() => mitModellwahl(einstellungen, modellWahl), [einstellungen, modellWahl]);
   const [lauf, setLauf] = useState<Lauf | null>(null);
   const [vorschlag, setVorschlag] = useState<S1Vorschlag | null>(null);
   const [protokoll, setProtokoll] = useState<{ zeit: number; text: string }[]>([]);
@@ -190,7 +194,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     return {
       profil,
       anbieter: new Verteiler(schluessel),
-      einstellungen,
+      einstellungen: laufEinstellungen,
       lauf: l,
       material,
       signal: ctrl.signal,
@@ -237,6 +241,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       const v = await stufe1(kontext(l));
       setVorschlag(structuredClone(v));
       setPhase("bestaetigen");
+      // Lauf nach S1 auch unter „Frühere Läufe“ zeigen (Protokoll schon jetzt exportierbar)
+      neuLaden();
     } catch (e) {
       await fehlerBehandeln(l, e);
       setPhase("auftrag");
@@ -326,6 +332,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setDatenOk(false);
     setUhrzeit("");
     setWebsucheWahl(null);
+    setModellWahl({});
   }
 
   const protokollExport = (l: Lauf) => {
@@ -372,7 +379,19 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setVorschlag({ ...vorschlag, sachverhalte: [...vorschlag.sachverhalte.slice(0, i - 1), vereint, ...vorschlag.sachverhalte.slice(i + 1)] });
   };
 
-  const fehlend = fehlendeSchluessel(laufModelle(einstellungen, profil, istVerdichtung(material)), schluessel);
+  const fehlend = fehlendeSchluessel(laufModelle(laufEinstellungen, profil, istVerdichtung(material)), schluessel);
+  const stufeS2: StufeModell = verdichtung
+    ? { rolle: "verdichtung", kurz: "S2", titel: "S2 Verdichtung" }
+    : { rolle: "erfassung", kurz: "S2", titel: "S2 Recherche und Entwurf" };
+  const stufeS3: StufeModell = { rolle: "reparatur", kurz: "S3", titel: "S3 Reparatur (nur bei Schemafehlern)" };
+  const modellwahl = (stufen: StufeModell[]) => (
+    <ModellWahl stufen={stufen} einstellungen={einstellungen} profil={profil} schluessel={schluessel} wahl={modellWahl} onChange={setModellWahl} />
+  );
+  const protokollKnopf = (l: Lauf, text = "Laufprotokoll exportieren") => (
+    <button type="button" className="knopf leise" onClick={() => protokollExport(l)}>
+      {text}
+    </button>
+  );
   const kannStarten = !fehlend.length && datenOk && (sachverhalt.trim() || stichworte.trim() || urls.gueltig.length || material.length);
 
   return (
@@ -430,6 +449,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               {fehler && (
                 <div className="kasten kasten-fehler" role="alert">
                   <p>{fehler}</p>
+                  {lauf && <div className="aktionen">{protokollKnopf(lauf, "Laufprotokoll des abgebrochenen Laufs exportieren")}</div>}
                 </div>
               )}
               <label className="feld feld-lang">
@@ -566,18 +586,17 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </span>
                 </span>
               </label>
+              {modellwahl([{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl" }, stufeS2, stufeS3])}
               <label className="bestaetigung">
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
                   Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an{" "}
-                  {[...new Set(laufModelle(einstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
+                  {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
                 </span>
               </label>
               <p className="hinweis">
-                S1 mit {modellFuer("vorverarbeitung", einstellungen, profil)}, S2 mit{" "}
-                {modellFuer(verdichtung ? "verdichtung" : "erfassung", einstellungen, profil)}
-                {websuche ? ` und bis zu ${einstellungen.websucheMax} Websuchen` : " ohne Websuche"}. Ein Lauf kostet je nach Umfang meist einige Cent bis etwa
-                einen US-Dollar.
+                {websuche ? `S2 mit bis zu ${einstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."} Ein Lauf kostet je nach Umfang meist einige Cent bis
+                etwa einen US-Dollar.
               </p>
               <div className="schritt-nav">
                 <span />
@@ -842,10 +861,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   ? "S2 arbeitet ohne Websuche nur mit dem Material."
                   : `S2 recherchiert mit bis zu ${einstellungen.websucheMax} Websuchen.`}
               </p>
+              {modellwahl([stufeS2, stufeS3])}
               <div className="schritt-nav">
-                <button type="button" className="knopf leise" onClick={() => setPhase("auftrag")}>
-                  Zurück zum Auftrag
-                </button>
+                <div className="aktionen">
+                  <button type="button" className="knopf leise" onClick={() => setPhase("auftrag")}>
+                    Zurück zum Auftrag
+                  </button>
+                  {lauf && protokollKnopf(lauf, "Laufprotokoll exportieren (S1)")}
+                </div>
                 <button type="button" className="knopf primaer" onClick={s2Starten} disabled={!vorschlag.sachverhalte.length}>
                   {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
                 </button>
@@ -865,6 +888,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               uebernehmen={uebernehmen}
               exportieren={() => protokollExport(lauf)}
               erneut={vorschlag ? s2Starten : undefined}
+              modellwahl={vorschlag ? modellwahl([stufeS2, stufeS3]) : undefined}
             />
           )}
         </section>
@@ -930,6 +954,7 @@ function Ergebnis({
   uebernehmen,
   exportieren,
   erneut,
+  modellwahl,
 }: {
   profil: Profil;
   aendern: (l: Lauf) => void;
@@ -938,6 +963,8 @@ function Ergebnis({
   uebernehmen: (m: Meldung) => void;
   exportieren: () => void;
   erneut?: () => void;
+  /** Modellwahl für „S2 erneut starten“ */
+  modellwahl?: ReactNode;
 }) {
   const e = lauf.ergebnis;
   const s2 = lauf.stufen.find((s) => s.stufe.startsWith("S2"));
@@ -1060,6 +1087,7 @@ function Ergebnis({
         <p className="hinweis">Lauf {lauf.id}. Kosten sind eine Schätzung nach Listenpreisen; maßgeblich ist die Abrechnung des Anbieters.</p>
       </details>
 
+      {!e && erneut && modellwahl}
       <div className="schritt-nav">
         <div className="aktionen">
           <button type="button" className="knopf leise" onClick={exportieren}>

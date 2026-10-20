@@ -98,3 +98,12 @@ export async function alleSchluesselLesen(): Promise<Schluessel> {
 export function laufModelle(e: Einstellungen, profil: Profil, verdichtung: boolean): string[] {
   return [modellFuer("vorverarbeitung", e, profil), modellFuer(verdichtung ? "verdichtung" : "erfassung", e, profil), modellFuer("reparatur", e, profil)];
 }
+
+/** Modelle, die nur für einen Lauf von den Einstellungen abweichen (leer = Standard) */
+export type ModellWahl = Partial<Record<Rolle, string>>;
+
+/** Einstellungen mit den für diesen Lauf gewählten Modellen; nicht gewählte Stufen behalten ihre Vorgabe */
+export function mitModellwahl(e: Einstellungen, wahl: ModellWahl): Einstellungen {
+  const gesetzt = Object.fromEntries(Object.entries(wahl).filter(([, v]) => !!v)) as ModellWahl;
+  return Object.keys(gesetzt).length ? { ...e, modelle: { ...e.modelle, ...gesetzt } } : e;
+}
