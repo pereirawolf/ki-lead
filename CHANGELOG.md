@@ -37,12 +37,12 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 
 ## [0.4.18] – 20.10.2026
 
-Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbschemas_Aenderungsvorschlaege_65c278b“ (A11Y-01 bis A11Y-07), geprüft am Stand von 0.4.17 gegen die [IBM Design Language: Color, Accessibility](https://www.ibm.com/design/language/color/#accessibility) und die Palette [„Color-Blind Safe by IBM Design Library“](https://www.color-hex.com/color-palette/1044488). Dazu Anforderungen vom 20.10.2026 zur Erfassung: Zeitfelder mit „Jetzt“, optionaler Uhrzeit und Zurücksetzen; Baukasten für Quellenzeilen. Keine Änderung an SOP-Regeln, SOPs und Bausteinen; im Beispielprofil (1.9.0) ist das Meldungsschema abwärtskompatibel erweitert (siehe unten).
+Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbschemas_Aenderungsvorschlaege_65c278b“ (A11Y-01 bis A11Y-07), geprüft am Stand von 0.4.17 gegen die allgemeinen Anforderungen der [WCAG 2.2](https://www.w3.org/TR/WCAG22/) (Erfolgskriterien 1.4.1, 1.4.3, 1.4.6, 1.4.11). Die Farbwerte der Kontrastschemata sind eigene Festlegungen; Paletten oder Bezeichnungen von Unternehmen oder Designsystemen werden nicht übernommen. Dazu Anforderungen vom 20.10.2026 zur Erfassung: Zeitfelder mit „Jetzt“, optionaler Uhrzeit und Zurücksetzen; Baukasten für Quellenzeilen. Keine Änderung an SOP-Regeln, SOPs und Bausteinen; im Beispielprofil (1.9.0) ist das Meldungsschema abwärtskompatibel erweitert (siehe unten).
 
 ### Neu
 
 - **Zwei Kontrastschemata** unter „Einstellungen → Darstellung“, Gruppe „Kontrast“ [A11Y-01, A11Y-02]:
-  - **Kontrast · Hell** (Schwarz auf Weiß) und **Kontrast · Dunkel** (Weiß auf Schwarz), aus IBM-Neutralfarben. Alle Textpaare einschließlich der Signalfarben erreichen mindestens 7:1, Konturen mindestens 3:1.
+  - **Kontrast · Hell** (Schwarz auf Weiß) und **Kontrast · Dunkel** (Weiß auf Schwarz), eigene Graustufen und Signaltöne. Alle Textpaare einschließlich der Signalfarben erreichen mindestens 7:1, Konturen mindestens 3:1.
   - Ohne dekoratives Band, mit kräftigeren Rahmen (Eingaben, Chips, Stufen, Reiter 2 px; Hinweisfahnen mit Rahmen; gewählte Bewertung mit Innenrahmen; Schrittzähler der Meldung auf heller bzw. dunkler Fläche) und einem Radar ohne Füllung.
   - Eigene feste Signalpaletten gleicher Bedeutung für beide Kontrastschemata. Profilfarben bleiben auf Oberflächenrollen beschränkt; mit Kontrastbasis gilt auch für sie 7:1.
   - Mit dem Bevölkerungsschutz-Schema aus 0.4.17 umfasst der Katalog jetzt 22 Schemata.
@@ -75,12 +75,12 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
 - **Beispielprofil 1.9.0:** Meldungsschema (LEAD-Meldevorlage 1.1), Darstellungsdatei (`datum_uhrzeit` für Meldezeitraum und Eintritt), Arbeitsanweisung Erfassung 1.3.3 und Kodierleitfaden 1.2.1 (Uhrzeit nur bei belegter Uhrzeit) und SOP-Sammelmappe 3.2.1 (nur Gültigkeitsstand in Teil A). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
 - PDF-Ausgabe: Felder mit `datum_uhrzeit` erscheinen als „TT.MM.JJJJ“ bzw. „TT.MM.JJJJ, hh:mm Uhr“.
 - Prüfung: Fehlt einem Zeitpunkt nur die Uhrzeit, meldet die Schemaprüfung „Uhrzeit fehlt (…, erwartet JJJJ-MM-TTThh:mm)“ statt „Format ungültig“.
-- Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata, Einschätzung der Vorschläge und der IBM-Palette, offene Abnahmepunkte), Spezifikation Abschnitte 5.1 und 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`, Widget `datum_uhrzeit`, Baukasten).
+- Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata mit Farbwerten und Kontrasten, Einschätzung der Vorschläge, offene Abnahmepunkte), Spezifikation Abschnitte 5.1 und 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`, Widget `datum_uhrzeit`, Baukasten).
 
 ### Nicht übernommen
 
-- **Fünffarbenpalette `#FFB000`, `#FE6100`, `#DC267F`, `#785EF0`, `#648FFF` als Oberflächenschema** [A11Y-06]: Die Palette ist für voneinander unabhängige Datenreihen gedacht und liefert keine vollständigen Oberflächenrollen. Auf Weiß erreicht `#FFB000` nur 1,8:1, keine der fünf Farben 7:1. Für die geordneten Schwereklassen fehlt ihr die Helligkeitsstufung. Sie ist in der Doku als Reserve für künftige Diagramme mit mehreren Reihen beschrieben, nur zusammen mit Beschriftung, Marker oder Muster.
-- **Eigene Themen je Farbsehschwäche** (Protanopie, Deuteranopie, Tritanopie): IBM empfiehlt, Information nicht allein über Farbe zu vermitteln. Ein solches Theme würde eine Sicherheit versprechen, die Farbe allein nicht bietet; die App setzt in jedem Schema auf Wörter, Unterstreichung, Konturen und Zahlen.
+- **Fremde Fünffarbenpalette als Oberflächenschema** [A11Y-06]: Die vorgeschlagene qualitative Palette ist für voneinander unabhängige Datenreihen gedacht und liefert keine vollständigen Oberflächenrollen. Ihre hellste Farbe erreicht auf Weiß nur 1,8:1, keine 7:1; für die geordneten Schwereklassen fehlt ihr die Helligkeitsstufung. Für künftige Diagramme beschreibt die Doku stattdessen eine allgemeine Regel (eigene geprüfte Farben, immer mit Beschriftung, Marker oder Muster).
+- **Eigene Themen je Farbsehschwäche** (Protanopie, Deuteranopie, Tritanopie): Nach WCAG 2.2, Erfolgskriterium 1.4.1, darf Information nicht allein über Farbe vermittelt werden. Ein solches Theme würde eine Sicherheit versprechen, die Farbe allein nicht bietet; die App setzt in jedem Schema auf Wörter, Unterstreichung, Konturen und Zahlen.
 - **Formsymbole für Schwereklassen** (Raute, Dreieck, Kreis; A11Y-03, optional): Die Bewertungen stehen bereits überall als Wort; Symbole wären eine zusätzliche fachliche Kodierung und bleiben einer späteren Abstimmung vorbehalten.
 - **`title`/`desc` mit eigenen IDs im Radar-SVG** (A11Y-05): Der zugängliche Name (`aria-label`) enthält die vollständige Wertetabelle und kann bei mehreren Radargrafiken nicht kollidieren.
 - **Kontrastwahl beim ersten Start speichern** (A11Y-04): Stattdessen folgt „Automatisch“ der Systemeinstellung laufend. Wer „mehr Kontrast“ im System abschaltet, erhält die Standarddarstellung zurück.

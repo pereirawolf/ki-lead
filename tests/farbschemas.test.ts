@@ -172,7 +172,7 @@ describe("Anwenden", () => {
     expect(w.dataset.kontrast).toBeUndefined();
     anwenden(aufloesen("kontrast-dunkel"));
     expect(w.dataset.kontrast).toBe("erhoeht");
-    expect(w.style.getPropertyValue("--kritisch")).toBe("#FFB3B8");
+    expect(w.style.getPropertyValue("--kritisch")).toBe("#FF9999");
     anwenden(aufloesen(AUTOMATISCH));
     expect(w.dataset.farbschema).toBeUndefined();
     expect(w.dataset.kontrast).toBeUndefined();

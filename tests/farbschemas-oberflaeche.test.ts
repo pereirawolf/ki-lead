@@ -129,7 +129,7 @@ it("Editor: Vorschau mit Kontrastbasis zeigt die Signalfarben des Kontrastschema
   await act(async () => waehle(basis, "kontrast-hell"));
   await warte();
   const vorschau = editor.querySelector(".farb-vorschau") as HTMLElement;
-  expect(vorschau.style.getPropertyValue("--erheblich")).toBe("#7A3200");
+  expect(vorschau.style.getPropertyValue("--erheblich")).toBe("#8A3300");
   expect(vorschau.style.getPropertyValue("--band")).toBe("none");
 });
 
