@@ -3,6 +3,7 @@
 import { holeWert } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
 import { feldUi } from "./ui";
+import { zeitpunktInZone } from "./zeit";
 import type { Befund, Meldung, TextGliederung, UiKonfig } from "./typen";
 
 export const DATUM_RE = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/;
@@ -24,21 +25,61 @@ export function kennsaetzeAlle(text: unknown, prefix: string | undefined): strin
     .map((l) => l.trim().slice(prefix.length).trim());
 }
 
+export interface Frist {
+  /** Zeitpunkt; null, wenn kein gültiges Datum erkennbar ist */
+  datum: Date | null;
+  /** „minute“ mit genannter Uhrzeit, „tag“ ohne (dann gilt das Tagesende 23:59) */
+  genauigkeit: "minute" | "tag";
+  /** Hinweis, wenn eine Zeitangabe zwar vorkommt, aber nicht sicher zuzuordnen ist */
+  hinweis?: string;
+}
+
+const UHRZEIT_NACH_DATUM = [
+  // „12:00“, „, 12:00“, „um 12:00 Uhr“
+  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2}):(\d{2})(?!\d)(?:\s*Uhr\b)?/i,
+  // „12.00 Uhr“ nur mit „Uhr“: ohne wäre „21.10.2026, 21.10.“ oder „10.15 Euro“ nicht von einer Uhrzeit zu unterscheiden
+  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2})\.(\d{2})\s*Uhr\b/i,
+  // „um 12 Uhr“, „12 Uhr“
+  /^\s*,?\s*(?:(?:um|gegen)\s+)?(\d{1,2})\s*Uhr\b/i,
+];
+
 /**
- * Datum „TT.MM.JJJJ“ mit optionaler Uhrzeit „hh:mm“ (lokale Zeit des Geräts; die Profile nutzen
- * Europe/Berlin). Ohne Uhrzeit gilt 23:59. Ungültige Angaben (31.02., Monat 13, 25:99) ergeben null,
- * statt stillschweigend umgerechnet zu werden.
+ * Frist „TT.MM.JJJJ“ mit optionaler Uhrzeit („hh:mm“, „hh.mm“, „um hh:mm Uhr“, „hh Uhr“). Ohne Uhrzeit gilt das
+ * Tagesende 23:59 (Genauigkeit „tag“). Ungültige Angaben (31.02., Monat 13, 25:99) ergeben datum null, statt still
+ * umgerechnet zu werden. Mit Zeitzone wird die Wanduhrzeit dort gelesen (Profilzeitzone), sonst in der Gerätezeit.
+ * Steht hinter dem Datum eine Zeitangabe in anderer Form („ab 8:00“), wird sie nicht geraten: Tagesende plus Hinweis.
  */
-export function parseDatumDE(s: unknown): Date | null {
-  const m = String(s || "").match(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/);
-  if (!m) return null;
+export function leseFrist(s: unknown, zeitzone?: string): Frist {
+  const text = String(s || "");
+  const m = text.match(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/);
+  if (!m) return { datum: null, genauigkeit: "tag" };
   const [tag, monat, jahr] = [+m[1], +m[2], +m[3]];
-  const stunde = m[4] ? +m[4] : 23;
-  const minute = m[5] ? +m[5] : 59;
-  if (monat < 1 || monat > 12 || tag < 1 || stunde > 23 || minute > 59) return null;
-  const d = new Date(jahr, monat - 1, tag, stunde, minute);
-  if (isNaN(d.getTime()) || d.getFullYear() !== jahr || d.getMonth() !== monat - 1 || d.getDate() !== tag) return null;
-  return d;
+  const rest = text.slice(m.index! + m[0].length);
+  let stunde = 23;
+  let minute = 59;
+  let genauigkeit: Frist["genauigkeit"] = "tag";
+  let hinweis: string | undefined;
+  const zeit = UHRZEIT_NACH_DATUM.map((re) => rest.match(re)).find(Boolean);
+  if (zeit) {
+    stunde = +zeit[1];
+    minute = zeit[2] !== undefined ? +zeit[2] : 0;
+    genauigkeit = "minute";
+  } else if (/^[^\n]{0,24}?\b\d{1,2}(?::\d{2}\b|(?:\.\d{2})?\s*Uhr\b)/i.test(rest.split(/\b\d{1,2}\.\d{1,2}\.\d{4}\b/)[0])) {
+    hinweis = "Uhrzeit nicht eindeutig zuzuordnen; gewertet wird das Tagesende (23:59).";
+  }
+  // „24 Uhr“ / „24:00“ ist das Tagesende: 0 Uhr des Folgetags
+  const tagesende = stunde === 24 && minute === 0;
+  if (monat < 1 || monat > 12 || tag < 1 || (stunde > 23 && !tagesende) || minute > 59) return { datum: null, genauigkeit };
+  const probe = new Date(Date.UTC(jahr, monat - 1, tag));
+  if (probe.getUTCFullYear() !== jahr || probe.getUTCMonth() !== monat - 1 || probe.getUTCDate() !== tag) return { datum: null, genauigkeit };
+  const [t, h] = tagesende ? [tag + 1, 0] : [tag, stunde];
+  const datum = zeitzone ? zeitpunktInZone(jahr, monat, t, h, minute, zeitzone) : new Date(jahr, monat - 1, t, h, minute);
+  return { datum, genauigkeit, ...(hinweis ? { hinweis } : {}) };
+}
+
+/** Zeitpunkt einer Frist (siehe leseFrist); null, wenn kein gültiges Datum erkennbar ist. */
+export function parseDatumDE(s: unknown, zeitzone?: string): Date | null {
+  return leseFrist(s, zeitzone).datum;
 }
 
 function leer(v: unknown): boolean {

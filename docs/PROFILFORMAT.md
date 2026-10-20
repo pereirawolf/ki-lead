@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.12 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.13 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -116,7 +116,7 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 | `sv_beurteilung`, `sv_tendenz`, `sv_bewertung_text` | Bewertung und Kennsätze |
 | `sv_radar` | Radar des Sachverhalts |
 | `sv_textfelder`, `sv_analysefelder` | Texte mit Quellenverweisen bzw. Analysefelder der Kurzfassung |
-| `beurteilung_hoch`, `tendenz_entspannung`, `tendenz_verschaerfung` | Werte für Kennzahlen und Redaktionshinweise; ohne `tendenz_verschaerfung` gilt der letzte Wert der Aufzählung |
+| `beurteilung_hoch`, `tendenz_entspannung`, `tendenz_verschaerfung` | Werte für Kennzahlen und Redaktionshinweise; ohne `beurteilung_hoch` gelten die beiden höchsten Stufen des Schemas (der Redaktionscheck weist das aus), ohne `tendenz_verschaerfung` der letzte Wert der Aufzählung. Als gegenläufig gelten nur `tendenz_entspannung` und die Verschärfung |
 
 Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteigende Schwere: Das Lagebild sortiert danach und färbt die höchste Stufe rot, die zweithöchste orange, die dritthöchste gelb.
 
@@ -128,7 +128,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
 - `analyse_gliederung`: dasselbe für die Analysefelder (Rolle `sv_analysefelder`). Ein Umbruch entsteht nur nach einem Satzende (`. ; ! ? ) ] “`), bei `zeile` auch nach einem Doppelpunkt, damit eine Aufzählung „Prüfbedarf: (1) … (2) …“ untereinander steht. Mit `kurzlabel: n` beginnt zusätzlich jeder kurze Aspektbegriff aus höchstens n Wörtern mit Doppelpunkt eine neue Zeile („Strom:“, „Verkehr → Versorgung:“, „Land (Behörde):“); Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Begriff. `kurzlabel` gilt auch in `bewertung_gliederung`, Werte 0 bis 8, 0 oder fehlend schaltet es ab. Beispiel: `{ "absatz": ["Szenario:", "Einordnung „"], "zeile": ["\\(\\d+\\) "], "kurzlabel": 3 }`. Die Gliederung betrifft nur Ausgaben (PDF, Kopiervorlage, Lagebild-Tabelle), nie die gespeicherte Meldung.
-- `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
+- `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck; Fristen und Ausgabe gelten in der Zeitzone `variablen.zeitzone`, Standard Europe/Berlin) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
 
 ## Arbeitsanweisungen
 
@@ -198,3 +198,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.10 | 20.10.2026 | Lesedokumente (README, CHANGELOG, Arbeitsanweisungen, Kodierleitfaden) in der Profilansicht; `sop/README.md` wieder eingebettet; Steckbrief aus weiteren Kopfschlüsseln |
 | 1.11 | 20.10.2026 | Eigene Fassung eines Lesedokuments im ersten Absatz nach der Überschrift („Fassung X vom TT.MM.JJJJ“); Standardfassungen der App bei fehlender Verdichtung oder Kurzfassung sichtbar |
 | 1.12 | 20.10.2026 | Importprüfung: Datentypen der Manifestangaben und Werte der Schema-Schlüsselwörter; zyklische Verweise (App 0.4.15) |
+| 1.13 | 20.10.2026 | Redaktionscheck: `variablen.zeitzone` bestimmt die Lesart von Fristen und nächster Ausgabe; Ersatzregel für fehlendes `beurteilung_hoch` dokumentiert (App 0.4.16) |

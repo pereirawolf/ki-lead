@@ -8,6 +8,7 @@ import { datumDE } from "../kern/ausgabe";
 import { holeWert } from "../kern/pfad";
 import { parseQuellen, sachverhalte } from "../kern/quellen";
 import { kennsaetzeAlle, parseDatumDE } from "../kern/kennsaetze";
+import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import type { Meldung, Profil } from "../kern/typen";
 import { ersetzePlatzhalter } from "../profil/platzhalter";
 import { modellFuer, type Einstellungen } from "./einstellungen";
@@ -141,10 +142,10 @@ export interface Frist {
   ueberfaellig: boolean;
 }
 
+/** Meldezeitpunkt als Zeitpunkt in der Profilzeitzone (wie die Fristen) */
 function meldestand(d: Meldung, profil: Profil): Date | null {
   const p = profil.ui.rollen.meldezeitpunkt;
-  const m = p ? String(holeWert(d, p) || "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/) : null;
-  return m ? new Date(+m[1], +m[2] - 1, +m[3], m[4] ? +m[4] : 0, m[5] ? +m[5] : 0) : null;
+  return p ? (isoLokalZuZeitpunkt(String(holeWert(d, p) || ""), zoneOder(profil.manifest.variablen?.zeitzone))?.datum ?? null) : null;
 }
 
 /**
@@ -163,7 +164,7 @@ export function fristen(d: Meldung, profil: Profil): Frist[] {
   const out: Frist[] = [];
   for (const sv of sachverhalte(d, ui)) {
     for (const wert of kennsaetzeAlle(holeWert(sv, feld), prefix)) {
-      const datum = parseDatumDE(wert);
+      const datum = parseDatumDE(wert, zoneOder(profil.manifest.variablen?.zeitzone));
       if (!datum) continue;
       const text = wert
         .replace(/\s*\[Q[^\]]*\]/g, "")

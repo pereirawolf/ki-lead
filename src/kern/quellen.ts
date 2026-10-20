@@ -124,7 +124,17 @@ export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     if (refsAll.size) out.push({ stufe: "warnung", text: "Der Text verweist auf Quellen ([Q…]), das Quellenverzeichnis ist aber leer." });
     else if (hatText && istFinal) out.push({ stufe: "warnung", text: "Keine Quellen angegeben. Belege im Quellenverzeichnis führen." });
   } else if (!entries.length) {
-    out.push({ stufe: "hinweis", text: "Das Quellenverzeichnis enthält keine Einträge im Format „[Q1] A – …“; Verweise im Text sind so nicht prüfbar." });
+    // Mit Verweisen im Text ist das eine Warnung: Ob [Q…] belegt ist, lässt sich nicht prüfen (keine stille Entwarnung)
+    if (refsAll.size)
+      out.push({
+        stufe: "warnung",
+        text: `Verweise ${[...refsAll]
+          .sort((a, b) => a - b)
+          .slice(0, 5)
+          .map((n) => `[Q${n}]`)
+          .join(", ")}${refsAll.size > 5 ? " …" : ""} nicht prüfbar: Das Quellenverzeichnis enthält keine Einträge im Format „[Q1] A – …“.`,
+      });
+    else out.push({ stufe: "hinweis", text: "Das Quellenverzeichnis enthält keine Einträge im Format „[Q1] A – …“; Verweise im Text sind so nicht prüfbar." });
   }
   [...refsAll]
     .sort((a, b) => a - b)

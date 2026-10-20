@@ -31,6 +31,44 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.13 | bbf368b |
 | 0.4.14 | Commit „SOP-LEAD C12 1.1.0: Kraftstoff- und Wärmeversorgung; Sammelmappe 3.2.0, Profil 1.8.0“ (Nachtrag vom 20.10.2026: Beispielprofil 1.8.0, ohne Änderung der App; Stand der Version selbst: c8406ab) |
 | 0.4.15 | letzter Commit von Pull Request #12 „Korrekturen aus dem Code-Review vom 20.10.2026; 0.4.15“ |
+| 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
+
+## [0.4.16] – 20.10.2026
+
+Grundlage: Review „KI-LEAD_Redaktionscheck_Review_2026-10-20“ (Befunde RC02–RC08, Empfehlungen RV01–RV08; RC01 war mit 0.4.15 behoben), am Stand 7f727b4 nachvollzogen. Keine Änderung an SOP-Inhalten, Arbeitsanweisungen oder Profilinhalten; importierte Meldungen bleiben unverändert.
+
+### Behoben
+
+- Redaktionscheck: Fristen wurden nur neu eingestuft, wenn sich Meldungen, Profil oder Ausgabedatum änderten. Eine während der Sitzung fällige Frist blieb „vor der nächsten Ausgabe“. Jetzt wird im Modus „jetzt“ alle 30 Sekunden und bei Rückkehr zur Seite neu geprüft [RC02].
+- Fristen wie „21.10.2026 um 08:00 Uhr“, „8 Uhr“ oder „8.30 Uhr“ wurden still auf 23:59 gesetzt. Sie werden jetzt gelesen. „24 Uhr“ bzw. „24:00“ gilt als Tagesende. Die Punktform („8.30“) gilt nur mit „Uhr“ als Uhrzeit, damit ein Folgedatum („20.10.2026, 21.10.2026“) oder ein Betrag nicht als Uhrzeit gelesen wird. Eine Zeitangabe in anderer Form („ab 08:00“) wird nicht geraten: Gewertet wird das Tagesende, mit Hinweis. Reine Datumsangaben zeigen „ohne Uhrzeit: Tagesende angenommen“ [RC03].
+- Ein leerer Kennsatz „Abschluss im Lagebild:“ galt als Abschluss. Er unterdrückte Nachlauf- und Vollständigkeitshinweise und erschien grün. Leere Kennsätze (Abschluss, abweichende Bewertung, Änderung) und offene Abschlussangaben („nein“, „offen“, „nicht abgeschlossen“, „kein Abschluss“, „unklar“ …) sind jetzt eigene Befunde „Kennsatz ohne Inhalt/Aussage“. Sie verdecken keine Vollständigkeitsprüfung; bei Tendenz Entspannung schließt der Befund die Nachlauffrage ein (ein Befund statt zwei). Eine leere Zeile „Neubewertung bei:“ wird gemeldet [RC04].
+- Quellen: Ein Text mit `[Q1]` und ein Quellenverzeichnis ohne lesbare Einträge erschienen unauffällig. Solche Verweise sind jetzt eine Warnung „nicht prüfbar“, auch in Meldungsmaske und Prüfansicht [RC05].
+- Tendenzen: Stabilisierung und Verschärfung wurden als „gegenläufig“ bezeichnet, aber nicht gezählt. Jetzt heißen verschiedene Tendenzen „unterschiedlich“ (Information). „Gegenläufig“ gilt nur für Entspannung und Verschärfung, ist zu klären und wird gezählt [RC06].
+- Ohne `beurteilung_hoch` im Profil prüfte der Redaktionscheck keinen Sachverhalt, während die Kennzahlen die beiden höchsten Schema-Stufen verwendeten. Beide nutzen jetzt dieselbe Regel; der Check weist die abgeleitete Schwelle aus [RC07].
+- Fristen, Ausgabe und Prüfzeitpunkt wurden in der Gerätezeit gelesen. Ein anders eingestelltes Gerät bewertete dieselbe Frist um Stunden verschoben. Maßgeblich ist jetzt die Zeitzone des Profils (`variablen.zeitzone`, Standard Europe/Berlin), einschließlich Sommerzeitwechsel und Monatsende. Eine nicht lesbare nächste Ausgabe ergibt „Einstufung offen“ statt einer Ersatzzeit. Das gilt auch für die Fristen der Management Summary und die Vermerke an S1/S2 [RC08].
+
+### Geändert
+
+- Nächste Ausgabe mit optionaler Uhrzeit. Eine Frist vor der Ausgabe ist zeitkritisch, ebenso eine zeitgleiche. Eine Frist am Ausgabetag ohne bekannte Reihenfolge ist zu klären. Die Entwarnung lautet eng: „aus dieser Frist kein Anlass für eine frühere Weitergabe“ [RV01].
+- Prüfstand „jetzt (laufend aktualisiert)“ oder „Stichtag“, z. B. für Übungen oder einen Rückblick. Der Stichtag wird mit dem Lagebild gespeichert. Damit er nicht unbemerkt weiterwirkt, ist er am Reiter („· Stichtag“) und durch einen Hinweis mit seinem Alter und „Auf ‚jetzt‘ umstellen“ sichtbar [RV01].
+- Kopf des Redaktionschecks mit Zählung nach Einstufung (zeitkritisch, zu klären, Information). Gezählt wird jeder Befund einzeln, und die Zahlen ergeben sich aus der Befundliste. Dazu Abdeckung (ausgewertete und fremde Meldungen, nicht konfigurierte Regeln) und Sprungmarken mit Trefferzahl je Abschnitt; der Fokus folgt dem Sprung. Die Zahl am Reiter zählt jetzt auch leere Kennsätze, gegenläufige Tendenzen und nicht prüfbare Quellen [RV04, RV06, RV08].
+- Abschnitt 4 heißt „Formale Vollständigkeit bei hoher Beurteilung“ und sagt, was geprüft wird: vorhandene Angaben, nicht die fachliche Tragfähigkeit. Leere Abschnitte sagen „Keine Befunde der automatischen Prüfungen dieses Abschnitts“ bzw. „Nicht geprüft“ bei fehlender Profilangabe [RV06].
+- Befunde führen per „Meldung in der Liste zeigen“ zur markierten Meldung (nur lesen; die Meldungsmaske bleibt unberührt). Alle Schemaabweichungen sind lesbar: die ersten acht direkt, weitere aufklappbar statt nur gezählt [RV05].
+- Zusammenhang: Die Vergleichstabelle zeigt den Stand je Meldung und die Tendenz. Der Textbaustein nennt je Aussage Sachverhalt und Stand und ist als Entwurf gekennzeichnet („nur verwenden, wenn derselbe Sachverhalt“). Gruppen ohne Abweichung heißen „Möglicher Zusammenhang“ [RV03].
+- Mehrere Meldungen derselben Stelle: Der Hinweis sagt wie die Vermerke an S1/S2, dass eine jüngere Meldung ältere Angaben nur ersetzt, soweit sie denselben Gegenstand aktualisiert. Eigenständige Lagen bleiben nebeneinander gültig (statt „dann gilt die jüngste Meldung“) [RV02, teilweise].
+- Exportknöpfe heißen „Lagebild als PDF“ und „Rohtabelle als CSV“ [RV07].
+- Einstufungen sind auch ohne Farbe erkennbar (Text für Screenreader). Die Ansage nach Änderungen beschränkt sich auf die Zählzeile; die Knöpfe „Meldung in der Liste zeigen“ nennen ihren Bezug [RV08].
+
+### Neu
+
+- Redaktionsbericht als TXT und JSON: Prüfstand mit Zeitzone, Profil mit Prüfsumme, alle Meldungen mit Inhaltskennung und ob ausgewertet, Abdeckung und alle Befunde. Er dokumentiert den automatischen Check, keine fachliche Freigabe [RV07].
+- Zeitmodul `kern/zeit.ts` (Wanduhrzeit in einer IANA-Zeitzone ↔ Zeitpunkt).
+- Tests: `tests/redaktionscheck.test.ts` (38 Fälle zu RC02–RC08, RV01, RV03, RV04, RV06, RV07, darunter zwei Zeitzonen in getrennten Prozessen, Sommerzeitwechsel und Monatsende) und `tests/redaktionscheck-oberflaeche.test.ts` (6 Oberflächenfälle in jsdom: Fristablauf ohne Dateiänderung, Stichtag, Uhrzeit der Ausgabe, Übersicht und Sprungmarken, Sprung zur Meldung, Bericht).
+
+### Nicht übernommen
+
+- RV02 (Rolle je Meldung: aktuell, Vormeldung, Zusatz): Das braucht eine nachvollziehbare Zuordnung von Fassungen und ist eine eigene Produktentscheidung. Umgesetzt ist nur die zutreffende Formulierung des Hinweises.
+- RV03 (Auswahl der Sachverhalte vor dem Baustein), RV04 (Filter) und RV05 (lokale Bearbeitungsstände mit Notiz): Sie bauen auf einem stabilen Befundmodell auf. `befundListe` liefert dafür jetzt die Grundlage.
 
 ## [0.4.15] – 20.10.2026
 

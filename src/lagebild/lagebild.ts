@@ -301,17 +301,28 @@ export interface Kennzahlen {
   entwuerfe: number;
 }
 
+/**
+ * Hohe Beurteilungsstufen, schwerste zuerst: aus „beurteilung_hoch“ des Profils, sonst die beiden höchsten Stufen
+ * des Schemas (abgeleitet = true). Kennzahlen und Redaktionscheck verwenden dieselbe Regel.
+ */
+export function hochStufen(profil: Profil): { stufen: string[]; abgeleitet: boolean } {
+  const r = profil.ui.rollen;
+  const alle = beurteilungsStufen(profil);
+  const abgeleitet = !r.beurteilung_hoch?.length;
+  const stufen = (abgeleitet ? alle.slice(-2) : r.beurteilung_hoch!).slice().sort((a, b) => alle.indexOf(b) - alle.indexOf(a));
+  return { stufen, abgeleitet };
+}
+
 export function kennzahlen(eintraege: LagebildEintrag[], profil: Profil): Kennzahlen {
   const svs = alleSachverhalte(eintraege, profil);
   const r = profil.ui.rollen;
-  const stufen = beurteilungsStufen(profil);
-  const hochStufen = (r.beurteilung_hoch?.length ? r.beurteilung_hoch : stufen.slice(-2)).slice().sort((a, b) => stufen.indexOf(b) - stufen.indexOf(a));
+  const hoch = hochStufen(profil).stufen;
   const vs = verschaerfungsWert(profil);
   return {
     meldungen: eintraege.filter((e) => !e.fremd).length,
     fremd: eintraege.filter((e) => e.fremd).length,
     sachverhalte: svs.length,
-    hoch: hochStufen.map((stufe) => ({ stufe, anzahl: svs.filter((s) => s.beurteilung === stufe).length, farbe: farbeBeurteilung(profil, stufe) })),
+    hoch: hoch.map((stufe) => ({ stufe, anzahl: svs.filter((s) => s.beurteilung === stufe).length, farbe: farbeBeurteilung(profil, stufe) })),
     verschaerfung: vs ? { wert: vs, anzahl: svs.filter((s) => s.tendenz === vs).length } : undefined,
     schemaAbweichungen: eintraege.filter((e) => e.schema.length).length,
     entwuerfe: eintraege.filter((e) => !e.fremd && statusVon(e, profil) === r.status_entwurf).length,
