@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.9.1 – 21.10.2026
+
+Aufräumen, fachlich unverändert.
+
+- **SOP-Sammelmappe 3.2.2:** Der Ordner `sop/archiv/` mit den Fassungen 1.0.1 und 2.0.1 ist entfernt; beide bleiben unverändert im Git-Verlauf abrufbar (Verweise mit Prüfsumme in `sop/README.md`). Gültigkeitsstand in Teil A fortgeschrieben, Lesefassung neu erzeugt. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Weil die eingebettete SOP-Übersicht `sop/README.md` sich ändert, ändert sich die Prüfsumme des Profils; deshalb die neue Profilversion. Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 1.9.0 – 20.10.2026
 
 Grundlage: Anforderung vom 20.10.2026, Uhrzeiten in den Zeitfeldern der Meldung optional erfassen zu können (umgesetzt mit App 0.4.18).
