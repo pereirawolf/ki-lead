@@ -99,6 +99,11 @@ function FarbFeld({ token, titel, wert, basiswert, setzen }: { token: string; ti
 function EigeneFarben({ profil, zugang }: { profil: Profil; zugang: FarbZugang }) {
   const vorlage: ProfilFarbschema = zugang.lokal || profil.manifest.farbschema || { basis: "neutral-hell" };
   const [entwurf, setEntwurf] = useState<ProfilFarbschema>(() => structuredClone(vorlage));
+  // Nach Speichern oder Zurücksetzen gilt der neue Stand als Ausgangspunkt (der Editor bleibt offen)
+  useEffect(() => {
+    setEntwurf(structuredClone(zugang.lokal || profil.manifest.farbschema || { basis: "neutral-hell" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zugang.lokal]);
   const [meldung, setMeldung] = useState<{ art: "ok" | "fehler"; text: string } | null>(null);
   const [kopiert, setKopiert] = useState(false);
   const basis = katalogEintrag(entwurf.basis) || katalogEintrag("neutral-hell")!;
@@ -307,7 +312,7 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
       {t.basis && (
         <Vorschau stil={vorschauStil(t.basis, Object.fromEntries(Object.entries(t.tokens).filter(([k]) => !k.startsWith("radar"))))} titel={t.name} />
       )}
-      {profil && <EigeneFarben key={`${profil.hash}-${zugang.lokal ? "l" : "p"}`} profil={profil} zugang={zugang} />}
+      {profil && <EigeneFarben key={profil.hash} profil={profil} zugang={zugang} />}
     </section>
   );
 }

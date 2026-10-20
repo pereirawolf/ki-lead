@@ -43,19 +43,19 @@ Grundlage: Umsetzungsplan „2026-10-20_KI-LEAD_Farbschemas_Umsetzungsplan_65c27
 - **Farbschema der Oberfläche** unter „Einstellungen → Darstellung“ [TH-01, TH-04, TH-05]:
   - **Auswahl:** Automatisch (bisherige Darstellung, hell oder dunkel nach System; Vorgabe), Neutral · Hell, Neutral · Night Mode, Bund, Bevölkerungsschutz (Orange und Blau des Zivilschutzzeichens), je ein Schema für alle 16 Länder sowie „Farben des aktiven Profils“.
   - **Gestaltung:** Die Landesfarben erscheinen als schmales Identitätsband unter dem Kopf und in den Aktionsfarben; die Arbeitsfläche bleibt hell.
-  - **Bedienung:** Eine Vorschau zeigt Text, Link, Primärknopf, Auswahl und Signalfarbe. Die Auswahl wirkt sofort und gilt nach dem Neuladen ohne Aufblitzen.
+  - **Bedienung:** Eine Vorschau zeigt Text, Link, Primärknopf, Auswahl und Signalfarbe. Die Auswahl wirkt sofort und gilt nach dem Neuladen ohne Aufblitzen, bei „Farben des aktiven Profils“ auch, bevor das Profil geladen ist.
 - **Profilfarben** [TH-06, TH-07]:
-  - Ein Profil kann in `profil.json` optional ein `farbschema` mitbringen (Basis aus dem Katalog, einzelne Farbrollen als `#RRGGBB`). Ein fehlerhaftes Farbschema ergibt eine Warnung und sperrt das Profil nicht.
+  - Ein Profil kann in `profil.json` optional ein `farbschema` mitbringen (Basis aus dem Katalog, einzelne Farbrollen als `#RRGGBB`). Ein fehlerhaftes Farbschema ergibt eine Warnung, wird verworfen und sperrt das Profil nicht.
   - Unter „Eigene Farben für dieses Profil“ lassen sich Farben auf dem Gerät festlegen: Farbwähler und Hex-Feld, Vorschau und Kontrastprüfung. Sie sind an Profilschlüssel und Prüfsumme gebunden und lassen sich als Ausschnitt für `profil.json` kopieren.
 - Katalog mit Herkunft, Quellen und Einschätzung je Palette: [docs/farbschemas.md](docs/farbschemas.md) [TH-10].
 - Tests:
   - `tests/farbschemas.test.ts` (41): Katalog, Kontraste aller 20 Schemata, Vorrangregeln, Abwehr von CSS-Texten und unzulässigen Rollen, Anwenden und Rücksetzen, Profilimport.
-  - `tests/farbschemas-oberflaeche.test.ts` (3): Auswahl, Ersatzdarstellung, eigene Farben.
-  - `tests/dateinamen.test.ts` (16): Beispiel der Anforderung, Vorlagenvarianten, Rückfall, Zeitzonen, Bereinigung, Sortierung.
+  - `tests/farbschemas-oberflaeche.test.ts` (4): Auswahl, Ersatzdarstellung, eigene Farben, fehlerhaftes Profilfarbschema.
+  - `tests/dateinamen.test.ts` (17): Beispiel der Anforderung, Vorlagenvarianten, Rückfall, Zeitzonen, Bereinigung, Sortierung.
 
 ### Geändert
 
-- **Dateinamen: Datum immer vorn** [DN-01 bis DN-12]:
+- **Dateinamen: Datum immer vorn** [DN-01 bis DN-12]. Steuerzeichen werden entfernt, der Namensrumpf ist auf 150 Zeichen begrenzt:
   - **Meldungen:** `2026-10-20T20-31_LEAD-Meldung_Bund_THW_OV_Wesel_ENTWURF.pdf` statt `LEAD-Meldung_Bund_THW_OV_Wesel_2026-10-20T20-31_ENTWURF.pdf`, ebenso JSON, Management Summary, Protokoll und Feldauszug. Maßgeblich ist der Meldezeitpunkt. Die App setzt ihn unabhängig von der Stellung von `{meldezeitpunkt}` in der Vorlage nach vorn; ältere und importierte Profilvorlagen ergeben so ebenfalls das Datum vorn.
   - **Lagebild-PDF und -CSV:** `2026-10-20_Lagebild.pdf`.
   - **Redaktionsbericht:** `2026-10-20T08-00_Redaktionsbericht_Lagebild.json`.
@@ -63,8 +63,14 @@ Grundlage: Umsetzungsplan „2026-10-20_KI-LEAD_Farbschemas_Umsetzungsplan_65c27
   - **Notfallsicherung, Profilpaket und Lesetext-Downloads:** Exportzeitpunkt vorn.
   - **Zeitbasis:** Zeiten gelten in der Profilzeitzone; der Exportzeitpunkt wird je Aktion einmal erfasst. Paketinhalte, interne Pfade, Lauf-IDs und Importe bleiben unverändert.
 - **Oberfläche: Farbrollen getrennt** [TH-03, TH-08]:
-  - Text auf der Aktionsfarbe (`--auf-amt`), Links (`--link`), Fokus mit zweitem hellem Ring (`--fokus`, `--fokus-abstand`), Eingaberahmen mit mindestens 3:1 (`--eingabe-rand`), Kopfzeile, Lesebereiche der Profilansicht (`--lese-farbe`, `--lese-flaeche` statt Grün für „ok“) und Radarlinie (`--radar-linie`). Die Standarddarstellung sieht bis auf die kräftigeren Eingaberahmen aus wie bisher.
-  - Der orange Zähler am Redaktionscheck hat im Dunkelmodus dunkle statt weißer Schrift (vorher 2,3:1).
+  - Text auf der Aktionsfarbe (`--auf-amt`), Links (`--link`), Fokus mit zweitem hellem Ring (`--fokus`, `--fokus-abstand`), Eingaberahmen mit mindestens 3:1 (`--eingabe-rand`), Kopfzeile, Lesebereiche der Profilansicht (`--lese-farbe`, `--lese-flaeche` statt Grün für „ok“) und Radarlinie (`--radar-linie`). In der Standarddarstellung („Automatisch“) ändern sich dadurch:
+    - kräftigere Rahmen von Eingabefeldern, Chips und Radar-Stufen (mindestens 3:1),
+    - ein zweiter heller Fokusring,
+    - einige Texte auf heller Auswahlfläche in dunklerem Blau (Schrittnummer, Marken, Hinweisfahnen),
+    - etwas dunklere Signalfarben „geringfügig“ und „erheblich“ (Kontrast, gleich in allen hellen Schemata),
+    - dunklere Radarringe,
+    - eine dunkle Browserleiste im Dunkelmodus.
+  - Der orange Zähler am Redaktionscheck erreicht jetzt mindestens 4,5:1: im hellen Modus durch dunkleres Orange (vorher 4,41:1), im Dunkelmodus durch dunkle Schrift (vorher 2,3:1).
   - Die Kopfzeile der Meldungskarten im Lagebild ist nicht mehr halbtransparent.
   - Die Word-Kopiervorlage bleibt auch im Night Mode hell.
 - Der automatische Dunkelmodus gilt nur ohne gewähltes Farbschema. Ein gewähltes Schema setzt alle Rollen einschließlich der Signalfarben selbst; die Browserleiste (`theme-color`) folgt dem Schema [TH-04].

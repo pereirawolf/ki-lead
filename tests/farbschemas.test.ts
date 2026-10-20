@@ -151,6 +151,8 @@ describe("Profilimport", () => {
     const e = await mitFarben({ basis: "neutral-hell", farben: { amt: "javascript:alert(1)" } });
     expect(e.profil).not.toBeNull();
     expect(e.befunde.find((b) => b.text.includes("Farbschema"))).toMatchObject({ stufe: "warnung" });
+    // ungeprüfte Werte werden nicht weitergereicht
+    expect(e.profil!.manifest.farbschema).toBeUndefined();
     expect(aufloesen(PROFIL, e.profil!.manifest.farbschema).quelle).toBe("ersatz");
   });
 

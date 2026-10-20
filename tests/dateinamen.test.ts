@@ -70,6 +70,7 @@ describe("T-06: Zeitsemantik", () => {
     expect(dateistempel("2026-10-20T18:31:00.123Z", "America/New_York")).toBe("2026-10-20T14-31");
     expect(dateistempel("2026-12-31T23:30:00Z", "Europe/Berlin", "tag")).toBe("2027-01-01");
     expect(dateistempel("2026-10-20", "Europe/Berlin")).toBe("2026-10-20");
+    expect(dateistempel("2026-10-20 20:31", "Europe/Berlin")).toBe("2026-10-20T20-31");
   });
 
   it("unbrauchbare Werte und ungültige Zonen", () => {
@@ -82,6 +83,12 @@ describe("T-07/T-11: Bereinigung, keine Verdopplung", () => {
   it("Pfad- und Sonderzeichen werden ersetzt, Datumsangaben im Eigennamen bleiben", async () => {
     const d = { ...meldung(), meldende_stelle: "Stab 1/2: Lage 14.10.2026" };
     expect(dateiname(d, await beispiel(), false)).toBe("2026-10-20T20-31_LEAD-Meldung_Bund_Stab_1-2-_Lage_14.10.2026");
+  });
+
+  it("Steuerzeichen, Pfadteile am Rand und überlange Namen", async () => {
+    expect(dateiname(meldung(), mitVorlage(await beispiel(), "../{schema}"), false)).toBe("2026-10-20T20-31_LEAD-Meldung-v1");
+    expect(mitDatum("2026-10-20", "Lage\u0007bild\n", "pdf")).toBe("2026-10-20_Lagebild.pdf");
+    expect(mitDatum("2026-10-20", "x".repeat(400), "csv")).toBe(`2026-10-20_${"x".repeat(150)}.csv`);
   });
 
   it("Lauf-ID und Originalnamen behalten eigene Datumsanteile", () => {

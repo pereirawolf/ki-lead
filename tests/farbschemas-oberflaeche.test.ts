@@ -101,3 +101,19 @@ it("eigene Profilfarben: Kontrastfehler verhindern das Speichern, gültige werde
   expect(document.documentElement.style.getPropertyValue("--amt")).toBe("#234D68");
   expect(farbSelect().value).toBe("profil");
 });
+
+it("ein fehlerhaftes Farbschema eines importierten Profils lässt die Einstellungen nicht abstürzen", async () => {
+  const { leseOrdner } = await import("./hilfen");
+  const { join } = await import("node:path");
+  const dateien = leseOrdner(join(__dirname, "../profile/lead-beispiel"));
+  const m = JSON.parse(dateien["profil.json"]);
+  dateien["profil.json"] = JSON.stringify({ ...m, id: "kaputt", version: "9.9.9", farbschema: { basis: "neutral-hell", name: {}, farben: { amt: 5 } } });
+  db.werte.set("profil:kaputt@9.9.9", { schluessel: "kaputt@9.9.9", quelle: "importiert", dateien });
+  db.werte.set("aktives-profil", "kaputt@9.9.9");
+  await zeigeApp();
+  await klick("Einstellungen");
+  expect(document.body.textContent).toContain("Darstellung");
+  (document.querySelector("details.farb-editor") as HTMLDetailsElement).open = true;
+  await warte();
+  expect(farbSelect().querySelector('option[value="profil"]')!.textContent).toContain("keine definiert");
+});

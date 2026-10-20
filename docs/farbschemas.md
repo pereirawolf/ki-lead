@@ -72,8 +72,8 @@ Ein Profil kann in `profil.json` optional ein Farbschema mitbringen. Es gilt, we
 
 - `basis`: Kennung aus dem Katalog; alle Rollen werden von dort übernommen.
 - `farben` (optional): einzelne Rollen als `#RRGGBB`: `papier`, `flaeche`, `tinte`, `tinte-leise`, `linie`, `linie-zart`, `eingabe-rand`, `fokus`, `fokus-abstand`, `auswahl-text`, `lese-farbe`, `lese-flaeche`, `header-hintergrund`, `header-text`, `amt`, `amt-tief`, `amt-zart`, `auf-amt`, `auf-amt-hover`, `link`, `auswahl-rand`, `browserleiste`, `marke-akzent-1`, `marke-akzent-2`, `marke-akzent-3`. Signalfarben, Radar, Schrift und CSS-Texte sind nicht änderbar.
-- `marke-akzent-1` bis `-3` bilden, wenn gesetzt, das Identitätsband.
-- Ein fehlerhaftes Farbschema (unbekannte Rolle, kein Hexwert, zu wenig Kontrast) sperrt das Profil nicht: Die App meldet eine Warnung und verwendet „Neutral · Hell“.
+- Ist mindestens eine der Farben `marke-akzent-1` bis `-3` gesetzt, bilden die drei das Identitätsband (nicht gesetzte kommen aus der Basis); sonst gilt das Band der Basis.
+- Ein fehlerhaftes Farbschema (unbekannte Rolle, kein Hexwert, zu wenig Kontrast) sperrt das Profil nicht: Die App meldet eine Warnung und verwirft es. Verwendet werden dann eigene Farben auf dem Gerät, falls vorhanden, sonst „Neutral · Hell“.
 
 Ohne Paketänderung lassen sich unter „Einstellungen → Darstellung → Eigene Farben für dieses Profil“ Farben auf dem eigenen Gerät festlegen. Sie gelten nur für diesen Profilstand (Schlüssel und Prüfsumme) und lassen sich als Ausschnitt für `profil.json` kopieren.
 

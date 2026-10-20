@@ -287,7 +287,11 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   // Optionales Farbschema: Fehler sperren das fachliche Profil nicht, das Schema wird dann nicht verwendet
   if (manifest.farbschema !== undefined) {
     const f = profilFarbschemaFehler(manifest.farbschema);
-    if (f.length) befunde.push({ stufe: "warnung", text: `profil.json: Das Farbschema wird nicht verwendet – ${f.join(" ")}` });
+    if (f.length) {
+      befunde.push({ stufe: "warnung", text: `profil.json: Das Farbschema wird nicht verwendet – ${f.join(" ")}` });
+      // Ungeprüfte Werte nicht weiterreichen (die Rohdatei und damit die Prüfsumme bleiben unverändert)
+      delete manifest.farbschema;
+    }
   }
 
   const schema = jsonLesen(dateien, manifest.meldung.schema, befunde, true);

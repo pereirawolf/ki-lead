@@ -14,15 +14,15 @@
   --amt: #1f4f82;
   --amt-tief: #163b63;
   --amt-zart: #e1eaf4;
-  --gering: #9a6f00;
+  --gering: #8a6400;
   --gering-zart: #fbf3d9;
-  --erheblich: #c25a07;
+  --erheblich: #a74900;
   --erheblich-zart: #fdebdc;
   --kritisch: #b3261e;
   --kritisch-zart: #fbe4e2;
   --ok: #2e6b3e;
   --ok-zart: #e3f1e6;
-  --radar-ring: #b9c6c0;
+  --radar-ring: #69737d;
   --radar-flaeche: rgba(31, 79, 130, 0.2);
   --radar-linie: var(--amt);
   /* Rollen, die ein Farbschema einzeln setzen kann (Vorgabe: Standarddarstellung) */
@@ -43,10 +43,7 @@
   --marke-akzent-2: var(--amt);
   --marke-akzent-3: var(--amt);
   --band: linear-gradient(90deg, var(--amt) 0 100%);
-  --auf-gering: #ffffff;
   --auf-erheblich: #ffffff;
-  --auf-kritisch: #ffffff;
-  --auf-ok: #ffffff;
   --schatten: 0 1px 0 rgba(24, 38, 58, 0.06);
   --schrift: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --r-klein: 4px;
@@ -74,16 +71,13 @@
     --kritisch-zart: #361615;
     --ok: #7fc28f;
     --ok-zart: #15291b;
-    --radar-ring: #34465a;
+    --radar-ring: #83909e;
     --radar-flaeche: rgba(134, 179, 230, 0.25);
     --eingabe-rand: #6d7d8c;
     --auf-amt: #0f1620;
     --auf-amt-hover: #0f1620;
     --browserleiste: #0f1620;
-    --auf-gering: #121820;
     --auf-erheblich: #121820;
-    --auf-kritisch: #121820;
-    --auf-ok: #121820;
     color-scheme: dark;
   }
 }

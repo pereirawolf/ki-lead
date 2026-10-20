@@ -34,16 +34,13 @@ export type UiToken = (typeof UI_TOKENS)[number];
 export const SEMANTIK_TOKENS = [
   "gering",
   "gering-zart",
-  "auf-gering",
   "erheblich",
   "erheblich-zart",
   "auf-erheblich",
   "kritisch",
   "kritisch-zart",
-  "auf-kritisch",
   "ok",
   "ok-zart",
-  "auf-ok",
   "radar-linie",
   "radar-ring",
 ] as const;

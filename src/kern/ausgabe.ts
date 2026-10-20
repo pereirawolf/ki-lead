@@ -33,16 +33,20 @@ export function jetztLokal(zeitzone = "Europe/Berlin", d = new Date()): string {
 function bereinige(s: string): string {
   return s
     .trim()
+    .replace(/[\u0000-\u001f\u007f]+/g, "")
     .replace(/[\\/:*?"<>|]+/g, "-")
     .replace(/\s+/g, "_");
 }
+
+/** Höchstlänge des Namensrumpfs (ohne Datum und Endung), damit Dateisysteme den Namen sicher annehmen */
+const MAX_RUMPF = 150;
 
 // ── Dateinamen: Datum immer vorn ─────────────────────────────────────────────
 // Alle Downloads beginnen mit „JJJJ-MM-TTThh-mm“ (bzw. „JJJJ-MM-TT“ bei Tagesausgaben), damit sie im Ordner
 // chronologisch sortiert erscheinen. Lokale Wanduhrzeiten der Meldung bleiben unverändert; absolute Zeitpunkte
 // (ISO mit Z oder Versatz) werden in die Zeitzone des Profils umgerechnet.
 
-const LOKAL = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?)?$/;
+const LOKAL = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?)?$/;
 const ABSOLUT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/;
 
 /** Zeitstempel für Dateinamen aus einem gespeicherten Zeitwert; null, wenn der Wert unbrauchbar ist. */
@@ -72,7 +76,9 @@ export function exportStempel(zeitzone?: string, jetzt = new Date(), praezision:
 
 /** Dateiname „<Zeitstempel>_<Rumpf>.<Endung>“; der Rumpf wird nur von Pfad- und Sonderzeichen bereinigt. */
 export function mitDatum(stempel: string, rumpf: string, endung?: string): string {
-  const r = bereinige(rumpf);
+  const r = bereinige(rumpf)
+    .slice(0, MAX_RUMPF)
+    .replace(/^[_\-. ]+|[_\-. ]+$/g, "");
   return `${stempel}${r ? `_${r}` : ""}${endung ? `.${endung.replace(/^\./, "")}` : ""}`;
 }
 
@@ -103,12 +109,10 @@ export function dateiname(d: Meldung, profil: Profil, entwurf: boolean, jetzt = 
   const zeitwert = holeWert(d, r.meldezeitpunkt || "meldezeitpunkt");
   const stempel = dateistempel(zeitwert, zone) ?? exportStempel(zone, jetzt);
   const vorlage = ohneDatumsplatzhalter(profil.ui.dateiname || "{schema}", datumsfelder);
-  const rumpf = vorlage
-    .replace(/\{([a-z_]+)\}/g, (_, feld: string) => {
-      const wert = feld === "schema" ? holeWert(d, r.schema_feld) : holeWert(d, feld);
-      return bereinige(String(wert || `ohne_${feld}`));
-    })
-    .replace(/^[_\-. ]+|[_\-. ]+$/g, "");
+  const rumpf = vorlage.replace(/\{([a-z_]+)\}/g, (_, feld: string) => {
+    const wert = feld === "schema" ? holeWert(d, r.schema_feld) : holeWert(d, feld);
+    return bereinige(String(wert || `ohne_${feld}`));
+  });
   return mitDatum(stempel, rumpf || bereinige(String(holeWert(d, r.schema_feld) || "Meldung"))) + (entwurf ? "_ENTWURF" : "");
 }
 

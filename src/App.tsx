@@ -92,8 +92,11 @@ export default function App() {
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
 
   // Farbschema der Oberfläche: Auswahl (global) und eigene Farben des aktiven Profils (lokal, an Schlüssel und Prüfsumme gebunden)
-  const [farbAuswahl, setFarbAuswahlRoh] = useState(() => startLesen().auswahl);
+  const [farbStart] = useState(() => startLesen());
+  const [farbAuswahl, setFarbAuswahlRoh] = useState(farbStart.auswahl);
   const [lokaleFarben, setLokaleFarben] = useState<ProfilFarbschema | undefined>();
+  /** Profil, für das die eigenen Farben gelesen sind (Schlüssel#Prüfsumme); bis dahin gilt der Startcache */
+  const [farbenGelesenFuer, setFarbenGelesenFuer] = useState<string | null>(null);
   const farbSchreiben = useRef(Promise.resolve());
   useEffect(() => {
     darstellungLesen()
@@ -104,18 +107,33 @@ export default function App() {
     setLokaleFarben(undefined);
     if (!aktiv || !profil) return;
     let gueltig = true;
+    const fuer = `${aktiv}#${profil.hash}`;
     lokaleFarbenLesen(aktiv, profil.hash)
       .then((f) => gueltig && setLokaleFarben(f))
-      .catch(() => undefined);
+      .catch(() => undefined)
+      .finally(() => gueltig && setFarbenGelesenFuer(fuer));
     return () => {
       gueltig = false;
     };
   }, [aktiv, profil]);
-  const thema = useMemo(() => aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben), [farbAuswahl, profil, lokaleFarben]);
+  // Solange Profil und eigene Farben noch laden, gilt bei „profil“ die Definition aus dem Startcache (kein Aufblitzen)
+  const profilFarbenBereit = !!profil && farbenGelesenFuer === `${aktiv}#${profil.hash}`;
+  const thema = useMemo(
+    () =>
+      farbAuswahl === PROFIL && !profilFarbenBereit ? aufloesen(PROFIL, farbStart.profil) : aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben),
+    [farbAuswahl, profilFarbenBereit, farbStart, profil, lokaleFarben],
+  );
   useEffect(() => {
     anwenden(thema);
-    startSchreiben(thema.auswahl, thema.quelle === "lokal" ? lokaleFarben : thema.quelle === "profil" ? profil?.manifest.farbschema : undefined);
-  }, [thema, lokaleFarben, profil]);
+    if (farbAuswahl !== PROFIL || profilFarbenBereit)
+      startSchreiben(thema.auswahl, thema.quelle === "lokal" ? lokaleFarben : thema.quelle === "profil" ? profil?.manifest.farbschema : undefined);
+    // Automatisch: Browserleiste folgt einem Wechsel des Systems zwischen hell und dunkel
+    if (thema.quelle !== "automatisch" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const neu = () => anwenden(thema);
+    mq.addEventListener?.("change", neu);
+    return () => mq.removeEventListener?.("change", neu);
+  }, [thema, lokaleFarben, profil, farbAuswahl, profilFarbenBereit]);
   /** Auswahl sofort anwenden; Speichern nacheinander, damit nach dem Neuladen die letzte Auswahl gilt */
   const setFarbAuswahl = (auswahl: string) => {
     setFarbAuswahlRoh(auswahl);
@@ -452,14 +470,16 @@ export default function App() {
           </Fehlergrenze>
         )}
         {ansicht === "einstellungen" && (
-          <EinstellungenAnsicht
-            profil={profil}
-            einstellungen={einstellungen}
-            setEinstellungen={setEinstellungen}
-            schluessel={schluessel}
-            setSchluessel={setSchluessel}
-            farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
-          />
+          <Fehlergrenze schluessel={profil?.hash || "einstellungen"}>
+            <EinstellungenAnsicht
+              profil={profil}
+              einstellungen={einstellungen}
+              setEinstellungen={setEinstellungen}
+              schluessel={schluessel}
+              setSchluessel={setSchluessel}
+              farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
+            />
+          </Fehlergrenze>
         )}
         {(ansicht === "meldung" || ansicht === "ki" || ansicht === "lagebild") && !profil && profile.length > 0 && (
           <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
