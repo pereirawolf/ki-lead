@@ -10,12 +10,36 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.1.0 vom 20.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.1.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.2.0 vom 20.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.2.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.2.0] – 20.10.2026
+
+Fachliche Überarbeitung von C12 nach dem konsolidierten Vorschlag „SOP-LEAD_C12_Vorschlag_konsolidiert_2026-10-20“ (Prüfung „KI-LEAD_C12_Pruefung_und_Vorschlag_2026-10-20“, Empfehlungen C12-01 bis C12-15; Entscheidungen E1–E3 wie empfohlen). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte).
+
+### Geändert
+
+- **C12 Kraftstoff- und Wärmeversorgung 1.1.0** (bisher 1.0.1, Inhaltsgerüst):
+  - Anwendungsbereich mit dem Leitsatz:
+    - Mangelprodukt und räumliche Ausdehnung feststellen.
+    - Mengenmangel, Raffinerie- oder Tanklagerausfall, Transport, Strom- oder IT-Ausfall an Tankstellen und Nachfragespitze unterscheiden.
+    - Gefährdung trotz rechnerisch ausreichender Landesbestände ist möglich.
+    - Maßstab ist der Zeitpunkt bis zum Ausfall einer kritischen Funktion.
+  - Prüffragen: R1–R6 mit bisherigem Gegenstand, präzisiert. Neu sind:
+    - R7 Produkt, Versorgungsraum und Engpass
+    - R8 Restreichweite gegen wirksame Nachversorgung, mit `Handlungsrelevant bis:` und Weitergabe nach A.7.3
+    - R9 Ersatzbeschaffung
+    - R10 staatliche Maßnahmen: Freigabe der Erdölreserve nach § 12 ErdölBevG, EnSiG und MinÖlAV, WiSiG und MinÖlBewV sowie Gefahrenabwehr, jeweils getrennt
+    - R11 verteidigungsbezogene Folgen mit C17 und A.7.4
+  - Prüfpfade je Lage als Tabelle: stromlose Tankstellen, regionale Dieselknappheit, bundesweiter Mengenausfall, unmittelbar bedrohte Rettung oder Notstromversorgung, verteidigungsbezogene Lage.
+  - D1–D8 konkretisiert (Tankreichweite ist kein D5-Wert); die Darstellung nutzt die vorhandenen Meldungsfelder.
+  - Fachgrundlagen mit Kurzbezeichnung: BBK Praxis im Bevölkerungsschutz 18 als Hauptquelle, Nationale Reserve Blackout nur zu Aggregaten.
+  - Status „Beispielfassung“ mit Prüfauslösern; damit trägt C12 keine Marke „Inhaltsgerüst“ mehr.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.2.0.
 
 ## [3.1.0] – 20.10.2026
 
