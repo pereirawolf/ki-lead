@@ -171,3 +171,125 @@ export function neuerQuellenEintrag(quellenText: string, ui: UiKonfig, heute: st
   const vorlage = ui.quellen?.vorlage || "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]";
   return vorlage.replace("{n}", String(n)).replace("{heute}", heute);
 }
+
+// ── Baukasten für neue Quellenzeilen ─────────────────────────────────────────
+// Kategorie (aus dem Profil) + Art der Quelle + Zusätze ergeben eine Zeile im Format der Profilvorlage
+// „[Qn] K – Herausgeber (Datum): Titel …“. Platzhalter sind Wörter, die nach dem Einfügen markiert und überschrieben werden.
+
+export interface QuellenArt {
+  id: string;
+  name: string;
+  /** Vorgeschlagene Kategorie (wird nur übernommen, wenn das Profil sie kennt) */
+  kategorie?: string;
+  /** Rumpf ohne „[Qn] K – “; {heute} = Zugriffsdatum */
+  rumpf: string;
+}
+
+export const QUELLEN_ARTEN: QuellenArt[] = [
+  { id: "url", name: "Online-Quelle (URL)", rumpf: "Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]" },
+  {
+    id: "pressemitteilung",
+    name: "Pressemitteilung",
+    kategorie: "A",
+    rumpf: "Herausgeber (Datum): Pressemitteilung „Titel“. Online abrufbar unter: URL [Zugriff: {heute}]",
+  },
+  {
+    id: "lagebild",
+    name: "Lagebild/Lagebericht",
+    kategorie: "A",
+    rumpf: "Herausgeber (Datum, Uhrzeit): Lagebild „Bezeichnung“, Ausgabe Nr. (behördenintern) [Zugriff: {heute}]",
+  },
+  { id: "lagemeldung", name: "Meldung aus dem Lagebild", kategorie: "A", rumpf: "Stelle (Datum, Uhrzeit): Lagemeldung (behördenintern) [Zugriff: {heute}]" },
+  {
+    id: "datensatz",
+    name: "Datensatz/Dashboard",
+    rumpf: "Herausgeber (Datum): Titel (Datensatz). Online abrufbar unter: URL [Zugriff: {heute}] · Datenstand: TT.MM.JJJJ",
+  },
+  {
+    id: "social",
+    name: "Beitrag in sozialen Medien",
+    kategorie: "P",
+    rumpf: "Konto (@Kennung) (Datum, Uhrzeit): Beitrag auf Plattform. Online abrufbar unter: URL [Zugriff: {heute}]",
+  },
+  {
+    id: "auskunft",
+    name: "Auskunft (Telefon, E-Mail)",
+    kategorie: "B",
+    rumpf: "Stelle, Funktion (Datum, Uhrzeit): Auskunft per Telefon bzw. E-Mail zu Gegenstand (nicht öffentlich)",
+  },
+  { id: "dokument", name: "Dokument ohne URL", kategorie: "W", rumpf: "Herausgeber (Jahr): Titel. Verlag bzw. Reihe" },
+];
+
+/** Wörter, die beim Einfügen als Platzhalter markiert werden (in dieser Reihenfolge gesucht) */
+export const QUELLEN_PLATZHALTER = [
+  "Herausgeber",
+  "Stelle, Funktion",
+  "Stelle",
+  "Konto",
+  "Datum",
+  "Uhrzeit",
+  "Titel",
+  "Bezeichnung",
+  "Gegenstand",
+  "Plattform",
+  "URL",
+  "TT.MM.JJJJ",
+];
+
+export interface QuellenZusaetze {
+  datenstand?: boolean;
+  paywall?: boolean;
+  nichtAusgewertet?: boolean;
+}
+
+/** Nächste freie Quellennummer */
+export function naechsteQuellenNr(quellenText: string): number {
+  const nrs = parseQuellen(quellenText).map((e) => e.nr);
+  return nrs.length ? Math.max(...nrs) + 1 : 1;
+}
+
+/**
+ * Baut eine Quellenzeile. Ohne Art („profil“) gilt die Vorlage des Profils; eine gewählte Kategorie ersetzt dort
+ * die Kategorie der Vorlage. `rumpf` ersetzt den Rumpf der Art (z. B. für eine konkrete Lagemeldung).
+ */
+export function quellenZeile(
+  o: { nr: number; kategorie?: string; art?: string; rumpf?: string; zusaetze?: QuellenZusaetze; heute: string },
+  ui: UiKonfig,
+): string {
+  const kategorien = ui.quellen?.kategorien || {};
+  const k = o.kategorie && o.kategorie in kategorien ? o.kategorie : "";
+  const art = QUELLEN_ARTEN.find((a) => a.id === o.art);
+  let zeile: string;
+  if (!art && !o.rumpf) {
+    const vorlage = ui.quellen?.vorlage || "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]";
+    zeile = vorlage.replace("{n}", String(o.nr)).replace("{heute}", o.heute);
+    if (k) zeile = zeile.replace(/^(\[Q\d+\]\s*)[A-Z](?=\s*[–\-·:|])/, `$1${k}`);
+  } else {
+    const rumpf = (o.rumpf ?? art!.rumpf).replace("{heute}", o.heute);
+    zeile = `[Q${o.nr}] ${k ? `${k} – ` : ""}${rumpf}`;
+  }
+  const z = o.zusaetze || {};
+  if (z.paywall) zeile = /\bURL\b/.test(zeile) ? zeile.replace(/\bURL\b/, "URL (Paywall)") : `${zeile} (Paywall)`;
+  if (z.datenstand && !/Datenstand:/.test(zeile)) zeile += " · Datenstand: TT.MM.JJJJ";
+  if (z.nichtAusgewertet) zeile += " · nicht ausgewertet";
+  return zeile;
+}
+
+/** Kategorie, die eine Art vorschlägt, sofern das Profil sie kennt */
+export function vorgeschlageneKategorie(artId: string, ui: UiKonfig): string | undefined {
+  const k = QUELLEN_ARTEN.find((a) => a.id === artId)?.kategorie;
+  return k && k in (ui.quellen?.kategorien || {}) ? k : undefined;
+}
+
+/** Erste Platzhalterstelle in einer Zeile: [Anfang, Ende] relativ zur Zeile oder null */
+export function erstePlatzhalterstelle(zeile: string): [number, number] | null {
+  const kopf = zeile.match(/^\[Q\d+\]\s*(?:[A-Z]\s*–\s*)?/)?.[0] ?? "";
+  const rest = zeile.slice(kopf.length);
+  let best: [number, number] | null = null;
+  for (const p of QUELLEN_PLATZHALTER) {
+    const muster = new RegExp(`(?<=^|[\\s(„])${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?=$|[\\s).,:“])`);
+    const i = rest.search(muster);
+    if (i >= 0 && (!best || kopf.length + i < best[0])) best = [kopf.length + i, kopf.length + i + p.length];
+  }
+  return best;
+}

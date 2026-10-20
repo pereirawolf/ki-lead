@@ -8,6 +8,7 @@ import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
 import { QuellenFeld } from "./QuellenFeld";
+import { DatumZeit } from "./DatumZeit";
 
 export interface FeldProps {
   profil: Profil;
@@ -218,10 +219,8 @@ export function Feld(props: FeldProps) {
       </label>
       {widget === "text_lang" ? (
         <textarea {...gemeinsam} rows={f.zeilen || 5} />
-      ) : widget === "datum" ? (
-        <input {...gemeinsam} type="date" />
-      ) : widget === "datumzeit" ? (
-        <input {...gemeinsam} type="datetime-local" />
+      ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
+        <DatumZeit id={id} label={label} modus={widget} wert={wert} zeitzone={profil.manifest.variablen?.zeitzone} onChange={(v) => setze(segs, v)} />
       ) : (
         <input {...gemeinsam} type="text" />
       )}

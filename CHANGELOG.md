@@ -33,11 +33,11 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.15 | letzter Commit von Pull Request #12 „Korrekturen aus dem Code-Review vom 20.10.2026; 0.4.15“ |
 | 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
 | 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
-| 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung: Kontrastschemata und Systemfarben; 0.4.18“ |
+| 0.4.18 | letzter Commit von Pull Request #15 „Barrierefreiheit der Darstellung und Erfassungshilfen: Kontrastschemata, Systemfarben, Zeitfelder, Quellen-Baukasten; 0.4.18“ |
 
 ## [0.4.18] – 20.10.2026
 
-Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbschemas_Aenderungsvorschlaege_65c278b“ (A11Y-01 bis A11Y-07), geprüft am Stand von 0.4.17 gegen die [IBM Design Language: Color, Accessibility](https://www.ibm.com/design/language/color/#accessibility) und die Palette [„Color-Blind Safe by IBM Design Library“](https://www.color-hex.com/color-palette/1044488). Keine Änderung an SOP-Inhalten, Arbeitsanweisungen, Profilinhalten, Meldungen oder Ausgaben (PDF, Word, CSV, JSON).
+Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbschemas_Aenderungsvorschlaege_65c278b“ (A11Y-01 bis A11Y-07), geprüft am Stand von 0.4.17 gegen die [IBM Design Language: Color, Accessibility](https://www.ibm.com/design/language/color/#accessibility) und die Palette [„Color-Blind Safe by IBM Design Library“](https://www.color-hex.com/color-palette/1044488). Dazu Anforderungen vom 20.10.2026 zur Erfassung: Zeitfelder mit „Jetzt“, optionaler Uhrzeit und Zurücksetzen; Baukasten für Quellenzeilen. Keine Änderung an SOP-Regeln, SOPs und Bausteinen; im Beispielprofil (1.9.0) ist das Meldungsschema abwärtskompatibel erweitert (siehe unten).
 
 ### Neu
 
@@ -48,17 +48,33 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
   - Mit dem Bevölkerungsschutz-Schema aus 0.4.17 umfasst der Katalog jetzt 22 Schemata.
 - **„Automatisch“ folgt „mehr Kontrast“** [A11Y-04]: Ist im System „mehr Kontrast“ eingestellt (`prefers-contrast: more`), verwendet „Automatisch“ das passende Kontrastschema (hell oder dunkel nach System) und nennt das unter „Verwendet“. Die App übernimmt Änderungen der Systemeinstellung ohne Neuladen. Eine ausdrücklich gewählte Darstellung bleibt unberührt; „weniger“ oder „benutzerdefiniert“ lösen nichts aus.
 - **Systemfarben** (`forced-colors`, z. B. Kontrastdesign von Windows) [A11Y-04]: Das System bestimmt die Farben, die App schaltet sie nirgends global ab. Hervorgehoben werden nur ausgewählte Navigation, Reiter, Segmente, Chips und Radarstufen (Systemfarbe `Highlight`). Marken und Hinweisfahnen erhalten einen Rahmen, Balken im Lagebild die Systemtextfarbe, das Radar zeichnet Linien in Systemfarben ohne Füllung, das Band entfällt.
+- **Erfassung: Zeitfelder mit Schaltflächen.**
+  - Datum und Uhrzeit stehen in getrennten Feldern; das Uhrzeitfeld ist erst nach dem Tag bedienbar.
+  - „Jetzt“ setzt Tag und Uhrzeit auf die aktuelle Zeit in der Profilzeitzone, bei reinen Datumsfeldern „Heute“ den Tag.
+  - „Nur Tag“ entfernt die Uhrzeit wieder, „Leeren“ setzt das Feld zurück.
+  - Verlangt ein Feld eine Uhrzeit (Meldezeitpunkt), weist ein Hinweis auf eine fehlende Uhrzeit hin.
+  - Gilt auch für den Meldezeitpunkt (t0) im Auftrag der KI-Erfassung.
+- **Neues Widget `datum_uhrzeit`** (Tag, Uhrzeit optional). Im Beispielprofil 1.9.0 verwenden es Meldezeitraum (von, bis) und Eintritt eines Sachverhalts. Das Meldungsschema `LEAD-Meldung-v1` nimmt dort jetzt auch `JJJJ-MM-TTThh:mm` an (LEAD-Meldevorlage 1.1, abwärtskompatibel, keine Migration). Der Meldezeitpunkt verlangt weiterhin Tag und Uhrzeit.
+- **Quellen: Baukasten für neue Zeilen.** Unter dem Quellenfeld lassen sich Kategorie (A, B, W, M, P aus dem Profil), Art und Zusätze per Klick kombinieren; eine Vorschau zeigt die Zeile, „Zeile anfügen“ setzt sie mit der nächsten freien Nummer ein und markiert den ersten Platzhalter zum direkten Überschreiben.
+  - **Arten:** Allgemein (Vorlage des Profils), Online-Quelle (URL), Pressemitteilung, Lagebild/Lagebericht, Meldung aus dem Lagebild, Datensatz/Dashboard, Beitrag in sozialen Medien, Auskunft (Telefon, E-Mail), Dokument ohne URL.
+  - Arten mit naheliegender Kategorie wählen sie vor (z. B. Pressemitteilung und Lagebild A, soziale Medien P, Auskunft B, Dokument W); die Kategorie bleibt änderbar.
+  - **Meldung aus dem Lagebild:** Auswahl aus den im Lagebild gespeicherten Meldungen; die Zeile übernimmt Land, Stelle, Meldezeitpunkt, Entwurfsstatus und Dateiname in der Form des Kodierleitfadens (Abschnitt 5), z. B. `[Q2] A – Hessen, Hessisches Ministerium … (14.10.2026, 10:15 Uhr): Lagemeldung (behördenintern), Datei „…“ [Zugriff: 20.10.2026]`.
+  - **Zusätze:** Datenstand, Paywall, nicht ausgewertet.
 - Tests [A11Y-07]:
   - `tests/barrierefreiheit.test.ts` (4): Radarbeschreibung, Auswahl ohne Farbe, Systemfarbenregeln, Konturen im Kontrastschema.
   - `tests/farbschemas.test.ts` (+5): beide Kontrastschemata mit 7:1, Auflösung mit Systemeinstellung, Profilbasis mit 7:1, Anwenden und Rücksetzen von `data-kontrast`.
   - `tests/farbschemas-oberflaeche.test.ts` (+2): Editorvorschau mit Kontrastbasis, „mehr Kontrast“ in der App einschließlich Zurückschalten.
+  - `tests/erfassung-zeit-quellen.test.ts` (9): Zeitwerte und Schema des Beispielprofils, Quellenzeilen je Art und Zusatz, erster Platzhalter, Bedienung in der Erfassungsmaske einschließlich Meldung aus dem Lagebild.
 
 ### Geändert
 
 - **Auswahl nicht nur über Farbe** [A11Y-03]: Die aktive Hauptnavigation, der aktive Reiter im Lagebild, die gewählte Option in Auswahlfeldern (Segmente, auch Bewertungen) und die gewählte Radarstufe sind zusätzlich unterstrichen; die Hauptnavigation meldet die aktive Ansicht an Hilfstechnik (`aria-current`).
 - **Lagenradar** [A11Y-05]: Der zugängliche Name nennt alle Achsen mit Wert, z. B. „D1 Räumliche Auswirkung / Impact-Raum: 4 von 6; …; D8 Dynamik: offen“, statt nur „Lagenradar“. „Offen“ bleibt von Stufe 0 unterschieden.
 - Hinweistext der Darstellung: nennt das 7:1-Ziel und den Vorrang der Systemfarben. Die Option „Automatisch“ heißt jetzt „Automatisch (nach System: hell oder dunkel, bei „mehr Kontrast“ Kontrastschema)“.
-- Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata, Einschätzung der Vorschläge und der IBM-Palette, offene Abnahmepunkte), Spezifikation Abschnitt 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`).
+- Quellenfeld: Die Schaltfläche „Eintrag anfügen“ ist im Baukasten aufgegangen („Zeile anfügen“ mit der Art „Allgemein“ ergibt dieselbe Zeile wie bisher).
+- **Beispielprofil 1.9.0:** Meldungsschema (LEAD-Meldevorlage 1.1), Darstellungsdatei (`datum_uhrzeit` für Meldezeitraum und Eintritt), Arbeitsanweisung Erfassung 1.3.3 (Uhrzeit nur bei belegter Uhrzeit) und SOP-Sammelmappe 3.2.1 (nur Gültigkeitsstand in Teil A). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
+- PDF-Ausgabe: Felder mit `datum_uhrzeit` erscheinen als „TT.MM.JJJJ“ bzw. „TT.MM.JJJJ, hh:mm Uhr“.
+- Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata, Einschätzung der Vorschläge und der IBM-Palette, offene Abnahmepunkte), Spezifikation Abschnitte 5.1 und 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`, Widget `datum_uhrzeit`, Baukasten).
 
 ### Nicht übernommen
 
@@ -72,6 +88,7 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
 
 - Ohne Änderung der Systemeinstellungen und ohne eigene Schemawahl sieht die Oberfläche bis auf die Unterstreichung der aktiven Navigation, des aktiven Reiters, der gewählten Option in Auswahlfeldern und der gewählten Radarstufe aus wie in 0.4.17.
 - Eine WCAG- oder BITV-Konformität wird nicht beansprucht. Offen sind die Sichtprüfung mit echtem Kontrastdesign unter Windows, Simulationen von Farbsehschwächen, 200 % Zoom und Prüfungen mit Betroffenen [A11Y-07].
+- Meldungen mit Uhrzeit in Meldezeitraum oder Eintritt sind für Empfänger mit Beispielprofil 1.8.0 oder älter nicht schemakonform; Empfänger sollten auf 1.9.0 aktualisieren.
 
 ## [0.4.17] – 20.10.2026
 

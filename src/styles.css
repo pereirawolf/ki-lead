@@ -3105,3 +3105,80 @@ fieldset.lb-ausgabe {
     fill: CanvasText;
   }
 }
+
+/* ── Datums- und Zeitfelder mit Schaltflächen ── */
+.datumzeit-feld .datum-zeit input[type="date"] {
+  flex: 0 1 11.5rem;
+}
+
+.datumzeit-feld .datum-zeit input[type="time"] {
+  flex: 0 1 8rem;
+}
+
+.datumzeit-feld .datum-zeit input:disabled {
+  opacity: 1;
+  background: var(--papier);
+  cursor: not-allowed;
+}
+
+.datumzeit-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.datumzeit-fehlt {
+  color: var(--erheblich);
+}
+
+/* ── Quellen: Baukasten für neue Zeilen ── */
+.quellen-baukasten {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem 0.8rem;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.quellen-baukasten legend {
+  font-weight: 700;
+  padding: 0 0.3rem;
+}
+
+.quellen-reihe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+
+.quellen-reihe-titel {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 5.5rem;
+}
+
+.quellen-lagemeldung {
+  flex: 1 1 20rem;
+  margin: 0;
+}
+
+.quellen-vorschau {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.quellen-vorschau code {
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.1rem 0.35rem;
+  font-size: 0.88rem;
+}
+
+.quellen-baukasten > .knopf {
+  align-self: flex-start;
+}

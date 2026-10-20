@@ -61,16 +61,16 @@
     },
     "meldezeitraum": {
       "label": "Meldezeitraum (optional)",
-      "hinweis": "Von – Bis, sofern die Meldung sich auf einen Berichtszeitraum bezieht.",
+      "hinweis": "Von – Bis, sofern die Meldung sich auf einen Berichtszeitraum bezieht. Uhrzeit optional; „Nur Tag“ entfernt sie wieder.",
       "layout": "zeile"
     },
     "meldezeitraum.von": {
       "label": "von",
-      "widget": "datum"
+      "widget": "datum_uhrzeit"
     },
     "meldezeitraum.bis": {
       "label": "bis",
-      "widget": "datum"
+      "widget": "datum_uhrzeit"
     },
     "quellen": {
       "label": "Quellen & Referenzen",
@@ -86,7 +86,7 @@
     },
     "sachverhalte[].eintritt": {
       "label": "Eintritt (falls zutreffend)",
-      "widget": "datum"
+      "widget": "datum_uhrzeit"
     },
     "sachverhalte[].ort": {
       "label": "Ort",

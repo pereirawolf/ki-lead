@@ -25,7 +25,8 @@ import {
   type KiUebergabe,
 } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
-import { dateistempel, exportStempel, mitDatum } from "../kern/ausgabe";
+import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
+import { zoneOder } from "../kern/zeit";
 
 interface Props {
   profil: Profil;
@@ -503,6 +504,25 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <div className="datum-zeit" role="group" aria-labelledby="t0-auftrag">
                     <input type="date" aria-label="Meldestichtag" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
                     <input type="time" aria-label="Uhrzeit t0" value={uhrzeit} onChange={(e) => setUhrzeit(e.target.value)} />
+                  </div>
+                  <div className="datumzeit-knoepfe">
+                    <button
+                      type="button"
+                      className="knopf leise klein"
+                      aria-label="Meldezeitpunkt (t0): auf jetzt setzen"
+                      onClick={() => {
+                        const j = jetztLokal(zoneOder(profil.manifest.variablen?.zeitzone), new Date());
+                        setStichtag(j.slice(0, 10));
+                        setUhrzeit(j.slice(11, 16));
+                      }}
+                    >
+                      Jetzt
+                    </button>
+                    {uhrzeit && (
+                      <button type="button" className="knopf leise klein" aria-label="Meldezeitpunkt (t0): Uhrzeit entfernen" onClick={() => setUhrzeit("")}>
+                        Nur Tag
+                      </button>
+                    )}
                   </div>
                   <span className="hinweis">
                     Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand).
