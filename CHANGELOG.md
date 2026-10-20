@@ -43,18 +43,19 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
 
 - **Zwei Kontrastschemata** unter „Einstellungen → Darstellung“, Gruppe „Kontrast“ [A11Y-01, A11Y-02]:
   - **Kontrast · Hell** (Schwarz auf Weiß) und **Kontrast · Dunkel** (Weiß auf Schwarz), aus IBM-Neutralfarben. Alle Textpaare einschließlich der Signalfarben erreichen mindestens 7:1, Konturen mindestens 3:1.
-  - Ohne dekoratives Band, mit kräftigeren Rahmen (Eingaben, Chips, Stufen, Reiter 2 px; Hinweisfahnen mit Rahmen) und einem Radar ohne Füllung.
+  - Ohne dekoratives Band, mit kräftigeren Rahmen (Eingaben, Chips, Stufen, Reiter 2 px; Hinweisfahnen mit Rahmen; gewählte Bewertung mit Innenrahmen; Schrittzähler der Meldung auf heller bzw. dunkler Fläche) und einem Radar ohne Füllung.
   - Eigene feste Signalpaletten gleicher Bedeutung für beide Kontrastschemata. Profilfarben bleiben auf Oberflächenrollen beschränkt; mit Kontrastbasis gilt auch für sie 7:1.
   - Mit dem Bevölkerungsschutz-Schema aus 0.4.17 umfasst der Katalog jetzt 22 Schemata.
 - **„Automatisch“ folgt „mehr Kontrast“** [A11Y-04]: Ist im System „mehr Kontrast“ eingestellt (`prefers-contrast: more`), verwendet „Automatisch“ das passende Kontrastschema (hell oder dunkel nach System) und nennt das unter „Verwendet“. Die App übernimmt Änderungen der Systemeinstellung ohne Neuladen. Eine ausdrücklich gewählte Darstellung bleibt unberührt; „weniger“ oder „benutzerdefiniert“ lösen nichts aus.
-- **Systemfarben** (`forced-colors`, z. B. Kontrastdesign von Windows) [A11Y-04]: Das System bestimmt die Farben, die App schaltet sie nirgends global ab. Hervorgehoben werden nur ausgewählte Navigation, Reiter, Segmente, Chips und Radarstufen (Systemfarbe `Highlight`). Marken und Hinweisfahnen erhalten einen Rahmen, das Radar zeichnet Linien in Systemfarben ohne Füllung, das Band entfällt.
+- **Systemfarben** (`forced-colors`, z. B. Kontrastdesign von Windows) [A11Y-04]: Das System bestimmt die Farben, die App schaltet sie nirgends global ab. Hervorgehoben werden nur ausgewählte Navigation, Reiter, Segmente, Chips und Radarstufen (Systemfarbe `Highlight`). Marken und Hinweisfahnen erhalten einen Rahmen, Balken im Lagebild die Systemtextfarbe, das Radar zeichnet Linien in Systemfarben ohne Füllung, das Band entfällt.
 - Tests [A11Y-07]:
   - `tests/barrierefreiheit.test.ts` (4): Radarbeschreibung, Auswahl ohne Farbe, Systemfarbenregeln, Konturen im Kontrastschema.
   - `tests/farbschemas.test.ts` (+5): beide Kontrastschemata mit 7:1, Auflösung mit Systemeinstellung, Profilbasis mit 7:1, Anwenden und Rücksetzen von `data-kontrast`.
+  - `tests/farbschemas-oberflaeche.test.ts` (+2): Editorvorschau mit Kontrastbasis, „mehr Kontrast“ in der App einschließlich Zurückschalten.
 
 ### Geändert
 
-- **Auswahl nicht nur über Farbe** [A11Y-03]: Die aktive Hauptnavigation, der aktive Reiter im Lagebild und die gewählte Radarstufe sind zusätzlich unterstrichen; die Hauptnavigation meldet die aktive Ansicht an Hilfstechnik (`aria-current`).
+- **Auswahl nicht nur über Farbe** [A11Y-03]: Die aktive Hauptnavigation, der aktive Reiter im Lagebild, die gewählte Option in Auswahlfeldern (Segmente, auch Bewertungen) und die gewählte Radarstufe sind zusätzlich unterstrichen; die Hauptnavigation meldet die aktive Ansicht an Hilfstechnik (`aria-current`).
 - **Lagenradar** [A11Y-05]: Der zugängliche Name nennt alle Achsen mit Wert, z. B. „D1 Räumliche Auswirkung / Impact-Raum: 4 von 6; …; D8 Dynamik: offen“, statt nur „Lagenradar“. „Offen“ bleibt von Stufe 0 unterschieden.
 - Hinweistext der Darstellung: nennt das 7:1-Ziel und den Vorrang der Systemfarben. Die Option „Automatisch“ heißt jetzt „Automatisch (nach System: hell oder dunkel, bei „mehr Kontrast“ Kontrastschema)“.
 - Dokumentation: [docs/farbschemas.md](docs/farbschemas.md) (Kontrastschemata, Einschätzung der Vorschläge und der IBM-Palette, offene Abnahmepunkte), Spezifikation Abschnitt 5.4, Profilformat 1.15 (`farbschema.basis` auch `kontrast-hell`/`kontrast-dunkel`).
@@ -69,7 +70,7 @@ Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbsche
 
 ### Hinweise
 
-- Ohne Änderung der Systemeinstellungen und ohne eigene Schemawahl sieht die Oberfläche bis auf die Unterstreichung der aktiven Navigation, des aktiven Reiters und der gewählten Radarstufe aus wie in 0.4.17.
+- Ohne Änderung der Systemeinstellungen und ohne eigene Schemawahl sieht die Oberfläche bis auf die Unterstreichung der aktiven Navigation, des aktiven Reiters, der gewählten Option in Auswahlfeldern und der gewählten Radarstufe aus wie in 0.4.17.
 - Eine WCAG- oder BITV-Konformität wird nicht beansprucht. Offen sind die Sichtprüfung mit echtem Kontrastdesign unter Windows, Simulationen von Farbsehschwächen, 200 % Zoom und Prüfungen mit Betroffenen [A11Y-07].
 
 ## [0.4.17] – 20.10.2026

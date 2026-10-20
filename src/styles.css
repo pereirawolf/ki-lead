@@ -567,6 +567,10 @@ textarea {
   background: var(--amt-zart);
   color: var(--amt-tief);
   font-weight: 700;
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 
 .segment.an.wert-geringfügig {
@@ -3036,6 +3040,17 @@ fieldset.lb-ausgabe {
   border: 1px solid currentColor;
 }
 
+/* gewählte Bewertung: Fläche entspricht im Kontrastschema der Arbeitsfläche, daher Innenrahmen */
+[data-kontrast="erhoeht"] .segment.an {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+/* Schrittzähler: „linie-zart“ ist im Kontrastschema eine kräftige Konturfarbe, kein Texthintergrund */
+[data-kontrast="erhoeht"] .schritt-zahl {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+}
+
 /* Systemfarben (z. B. Kontrastdesign von Windows): das System gibt die Farben vor; die App sorgt nur dafür,
    dass Auswahl, Marken und Radar sichtbar bleiben. */
 @media (forced-colors: active) {
@@ -3045,7 +3060,8 @@ fieldset.lb-ausgabe {
   }
 
   .nav.aktiv,
-  .segment.an,
+  /* Spezifität wie .segment.an.wert-…, damit auch gewählte Bewertungen Highlight erhalten */
+  .segmente .segment.an,
   .lb-reiter .segment.aktiv,
   .stufe.aktiv,
   .stufe-offen.aktiv,
@@ -3059,6 +3075,12 @@ fieldset.lb-ausgabe {
   .lb-marke,
   .lb-flag {
     border: 1px solid CanvasText;
+  }
+
+  /* Balken nur aus Hintergrund würden sonst verschwinden; die Zahl steht daneben */
+  .lb-balken-wert {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 
   .radar-ring,

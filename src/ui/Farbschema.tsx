@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { Profil } from "../kern/typen";
 import { FARBSCHEMAS } from "../darstellung/katalog";
-import { AUTOMATISCH, PROFIL, SEMANTIK, bandVerlauf, katalogEintrag, profilFarbschemaFehler } from "../darstellung/thema";
+import { AUTOMATISCH, PROFIL, bandVerlauf, katalogEintrag, profilFarbschemaFehler, semantikVon } from "../darstellung/thema";
 import type { AufgeloestesThema, ProfilFarbschema, UiToken } from "../darstellung/typen";
 
 export interface FarbZugang {
@@ -49,7 +49,7 @@ const WEITERE: { token: UiToken; titel: string }[] = [
 /** CSS-Variablen für eine Vorschau (nur innerhalb des Vorschaukastens) */
 function vorschauStil(basisId: string, farben: Partial<Record<string, string>> = {}): CSSProperties {
   const b = katalogEintrag(basisId) || katalogEintrag("neutral-hell")!;
-  const alle: Record<string, string> = { ...b.tokens, ...SEMANTIK[b.modus], ...farben };
+  const alle: Record<string, string> = { ...b.tokens, ...semantikVon(b), ...farben };
   const eigenesBand = ["marke-akzent-1", "marke-akzent-2", "marke-akzent-3"].some((k) => farben[k] && farben[k] !== b.tokens[k as UiToken]);
   alle.band = bandVerlauf(eigenesBand ? [alle["marke-akzent-1"], alle["marke-akzent-2"], alle["marke-akzent-3"]] : b.band);
   return Object.fromEntries(Object.entries(alle).map(([k, v]) => [`--${k}`, v])) as CSSProperties;
@@ -260,7 +260,9 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
         : t.quelle === "ersatz"
           ? "Ersatz"
           : t.quelle === "automatisch"
-            ? "Standarddarstellung"
+            ? t.basis
+              ? katalogEintrag(t.basis)?.herkunft || ""
+              : "Standarddarstellung"
             : t.basis
               ? katalogEintrag(t.basis)?.herkunft || ""
               : "";
