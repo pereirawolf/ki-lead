@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.0.1 vom 20.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.1.0 vom 20.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -50,7 +50,7 @@ Alle Bausteine haben den Status „Inhaltsgerüst“: Sie ergänzen die Dach-SOP
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.0.1 | N01 |
+| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.1.0 | N01 |
 | C02 | Massenbewegungen, Bodenversagen und Gebäudeeinsturz | Themenbaustein | [`teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md`](teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md) | 1.0.1 | N09 |
 | C03 | Weltraumwetter und Störungen von Navigation und Zeitreferenz | Themenbaustein | [`teil-c/C03_weltraumwetter-navigation-zeitreferenz.md`](teil-c/C03_weltraumwetter-navigation-zeitreferenz.md) | 1.0.1 | N15 |
 | C04 | Vulkanasche mit Deutschland- oder Versorgungsbezug | Themenbaustein | [`teil-c/C04_vulkanasche.md`](teil-c/C04_vulkanasche.md) | 1.0.1 | N18 |

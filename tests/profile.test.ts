@@ -81,7 +81,16 @@ describe("Beispielprofil LEAD", () => {
     for (const s of p!.sops.filter((x) => !x.gemeinsam)) {
       expect(readme, s.id).toContain(`| ${s.nummer} | `);
       expect(readme, s.id).toContain(s.datei.replace(/^sop\//, ""));
+      // Fassung in der Übersicht = `version` im Kopf
+      const zeile = readme.split("\n").find((z) => z.startsWith(`| ${s.nummer} | `))!;
+      expect(zeile, s.id).toContain(`| ${s.version} |`);
     }
+  });
+
+  it("SOP-Dateien enthalten keine nummerierten Quellenverweise (dem Quellenverzeichnis der Meldung vorbehalten, A.10.1)", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const dateien = [...p!.manifest.sop!.dateien, "sop/README.md"];
+    for (const d of dateien) expect(p!.dateien[d], d).not.toMatch(/\[Q\d/);
   });
 
   it("meldet Text vor dem ersten Anker und doppelte SOP-Kennungen", async () => {

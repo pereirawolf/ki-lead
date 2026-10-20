@@ -10,12 +10,37 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.0.1 vom 20.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.0.1 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.1.0 vom 20.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.1.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | archiviert, unverändert (bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.1.0] – 20.10.2026
+
+Fachliche Überarbeitung von C01 nach dem konsolidierten Vorschlag „SOP-LEAD_C01_Vorschlag_konsolidiert_2026-10-20“ (Review „KI-LEAD_C01_Review_2026-10-20“, Änderungen C01-01 bis C01-15; Entscheidungen E1–E4 wie empfohlen, E4 in neuer Fassung ohne Änderung der App). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte).
+
+### Geändert
+
+- **C01 Radiologische / nukleare Lage 1.1.0** (bisher 1.0.1, Inhaltsgerüst):
+  - Einordnung nach den Referenzszenarien S0–S15 des ANoPl-Bund (Tabelle 3.4) in Abschnitt 2. Abgedeckt sind:
+    - Kernkraftwerke in Deutschland, im grenznahen Ausland, in Europa und außerhalb Europas sowie andere kerntechnische Anlagen und Einrichtungen im In- und Ausland
+    - sonstige Tätigkeiten, Transport an Land, Funde und Kontaminationen
+    - Satellit oder Raumfahrzeug, Oberflächen- und Meeresgewässer
+    - Straftaten mit und ohne Anlagenbezug, Nuklearwaffenexplosion und sonstiger Notfall beim Umgang mit Nuklearwaffen
+  - Abschnitt 1 bleibt knapp, weil er bei jedem KI-Lauf in die Auswahl geht.
+  - Prüffragen: R1–R9 gemeinsam (R1–R6 mit bisherigem Gegenstand), R10–R17 je Referenzszenario.
+  - Weitere Inhalte:
+    - Spannungs- und Verteidigungsfall nach Rn. 7 ANoPl-Bund mit Verweis auf C17
+    - Lagebild nach § 108 StrlSchG; bei lokalen Notfällen ohne Lagebild bewerten die örtlichen Behörden selbst
+    - Messung, Prognose und Bewertung getrennt; Jodtablettenausgabe ist keine Einnahmeaufforderung
+    - D1–D8 konkretisiert; Darstellung in den vorhandenen Meldungsfeldern
+  - Fachgrundlagen (ANoPl-Bund, StrlSchG) mit Kurzbezeichnung und Fundstelle, ohne nummerierte Quellenkennungen.
+  - Status „Beispielfassung“ mit Prüfauslösern; damit trägt C01 keine Marke „Inhaltsgerüst“ mehr.
+- **Teil A, A.3:** Die Formatzeile mit Beispielverweisen ist durch einen Verweis auf Kodierleitfaden Abschnitt 5 ersetzt. Die SOP-Dateien enthalten damit keine nummerierten Quellenverweise mehr.
+- **Teil A, A.10.1:** neue Redaktionsregel. Fachgrundlagen und Rechercheeinstiege werden mit Kurzbezeichnung und Fundstelle angegeben; nummerierte Quellenverweise sind dem Quellenverzeichnis der Meldung vorbehalten.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.1.0.
 
 ## [3.0.1] – 20.10.2026
 
