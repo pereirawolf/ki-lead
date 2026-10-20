@@ -1,6 +1,6 @@
 # Farbschemata der Oberfläche
 
-Stand 20.10.2026, App 0.4.18. Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
+Stand 21.10.2026, App 0.4.22. Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
 
 ## Grundsätze
 
@@ -38,7 +38,7 @@ Stand 20.10.2026, App 0.4.18. Die Farbschemata ändern nur die Bildschirmdarstel
 | `de-sh` | Schleswig-Holstein | Blau-Weiß-Rot | `#003064` | `#003064` `#FFFFFF` `#D4004B` | CI-Farbwerte belegt | stimmig: Blau-Weiß-Rot. |
 | `de-th` | Thüringen | Weiß-Rot | `#006F9C` | `#0089C1` `#FFFFFF` `#D62B32` | CI-Farbwerte belegt | stimmig: Thüringen-Blau des Landesauftritts (für Text abgedunkelt), Band mit Weiß-Rot der Landesfarben. |
 
-Zusätzlich: **Automatisch** (Standarddarstellung der App, hell oder dunkel nach Systemeinstellung, bei „mehr Kontrast“ das passende Kontrastschema; Vorgabe) und **Farben des aktiven Profils**.
+Zusätzlich: **Automatisch** (Vorgabe: „Neutral · Hell“ oder „Neutral · Night Mode“ nach Systemeinstellung, bei „mehr Kontrast“ das passende Kontrastschema; seit 0.4.22 ohne eigene, davon abweichende Farben) und **Farben des aktiven Profils**.
 
 ## Barrierefreiheit: geprüfte Vorschläge
 

@@ -391,8 +391,16 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     const t = dauerText(schaetzeStufe(art, modellFuer(rolle, laufEinstellungen, profil), laufEinstellungen.aufwand[rolle]).sekunden);
     return t === "Dauer ohne Messwert" ? "einige Minuten (für dieses Modell liegen noch keine Messwerte vor)" : t;
   };
-  const modellwahl = (stufen: StufeModell[]) => (
-    <ModellWahl stufen={stufen} einstellungen={einstellungen} profil={profil} schluessel={schluessel} wahl={modellWahl} onChange={setModellWahl} />
+  const modellwahl = (stufen: StufeModell[], mitWebsuche: boolean) => (
+    <ModellWahl
+      stufen={stufen}
+      einstellungen={einstellungen}
+      profil={profil}
+      schluessel={schluessel}
+      wahl={modellWahl}
+      onChange={setModellWahl}
+      websuche={mitWebsuche}
+    />
   );
   const protokollKnopf = (l: Lauf, text = "Laufprotokoll exportieren") => (
     <button type="button" className="knopf leise" onClick={() => protokollExport(l)}>
@@ -578,8 +586,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <h3>Verdichtung</h3>
                   <p>
                     {eingaenge.length} Eingangsmeldung{eingaenge.length === 1 ? "" : "en"} anderer Stellen erkannt. Die KI verdichtet sie zu einer eigenen
-                    Meldung mit möglichst wenigen Sachverhalten (SOP-LEAD A.7). Diese Funktion ist vorläufig; die vollständige Verdichtung folgt mit Meilenstein
-                    4.
+                    Meldung mit möglichst wenigen Sachverhalten (SOP-LEAD A.7).
                   </p>
                 </div>
               )}
@@ -593,7 +600,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </span>
                 </span>
               </label>
-              {modellwahl([{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl" }, stufeS2, stufeS3])}
+              {modellwahl([{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl" }, stufeS2, stufeS3], websuche)}
               <label className="bestaetigung">
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
@@ -601,7 +608,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
                 </span>
               </label>
-              <p className="hinweis">{websuche ? `S2 mit bis zu ${einstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."}</p>
+              <p className="hinweis">{websuche ? `S2 mit bis zu ${laufEinstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."}</p>
               <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <span />
@@ -864,9 +871,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 Kosten S1: {laufKostenText(lauf)}.{" "}
                 {lauf?.auftrag.websuche === false
                   ? "S2 arbeitet ohne Websuche nur mit dem Material."
-                  : `S2 recherchiert mit bis zu ${einstellungen.websucheMax} Websuchen.`}
+                  : `S2 recherchiert mit bis zu ${laufEinstellungen.websucheMax} Websuchen.`}
               </p>
-              {modellwahl([stufeS2, stufeS3])}
+              {modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false)}
               <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <div className="aktionen">
@@ -894,7 +901,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               uebernehmen={uebernehmen}
               exportieren={() => protokollExport(lauf)}
               erneut={vorschlag ? s2Starten : undefined}
-              modellwahl={vorschlag ? modellwahl([stufeS2, stufeS3]) : undefined}
+              modellwahl={vorschlag ? modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false) : undefined}
             />
           )}
         </section>

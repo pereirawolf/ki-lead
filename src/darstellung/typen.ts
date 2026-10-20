@@ -85,7 +85,7 @@ export interface Darstellung {
 export interface AufgeloestesThema {
   /** gewünschte Auswahl */
   auswahl: string;
-  /** tatsächlich verwendetes Schema; null = Standarddarstellung der App (automatisch hell/dunkel) */
+  /** tatsächlich verwendetes Schema; null = keine Schemafarben gesetzt (Standarddarstellung aus styles.css) */
   basis: string | null;
   name: string;
   modus: Modus | null;

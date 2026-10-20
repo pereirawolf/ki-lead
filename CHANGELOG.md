@@ -37,6 +37,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.19 | letzter Commit von Pull Request #16 „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
 | 0.4.20 | letzter Commit von Pull Request #18 „Aufräumen: SOP-Archiv in den Git-Verlauf, Beispielprofil 1.9.1“ (Nachtrag vom 21.10.2026: Beispielprofil 1.9.1, ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“) |
 | 0.4.21 | letzter Commit von Pull Request #19 „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
+| 0.4.22 | letzter Commit des Pull Requests „Aufwand und Websuchen je Lauf, Automatisch = Neutral; 0.4.22“ |
+
+## [0.4.22] – 21.10.2026
+
+Grundlage: Anforderungen vom 21.10.2026 zur KI-Erfassung und zur Darstellung. Keine Änderung an Profilen, SOPs, Pipeline-Regeln oder Ausgaben.
+
+### Geändert
+
+- **„Modelle für diesen Lauf“ mit Aufwand:** Je Stufe stehen jetzt Modell und Aufwand nebeneinander („Standard: …“ an erster Stelle, dann niedrig bis maximal). Die Zusammenfassung nennt beides, z. B. „S2: claude-opus-5-5 (mittel)“. Die Wahl gilt nur für den Lauf, bleibt von S1 bis S2 erhalten und wirkt auch auf die Schätzung von Dauer und Kosten; das Laufprotokoll hält den Aufwand je Stufe fest. Gilt auch für die Management Summary.
+- **Websuchen je Lauf:** Recherchiert der Lauf (Haken „Websuche und Seitenabruf erlauben“), lässt sich die Höchstzahl der Websuchen für S2 abweichend von den Einstellungen setzen (0–50, leer = Standard, 0 = keine Websuche). Die Hinweise vor S1 und vor S2 nennen den gewählten Wert.
+- **Verdichtung:** Der Hinweis „Diese Funktion ist vorläufig; die vollständige Verdichtung folgt mit Meilenstein 4.“ entfällt.
+- **Farbschema „Automatisch“** verwendet jetzt genau „Neutral · Hell“ oder „Neutral · Night Mode“ nach der Systemeinstellung hell oder dunkel (bei „mehr Kontrast“ wie bisher das Kontrastschema) statt der davon abweichenden Standarddarstellung. „Verwendet“ nennt das Schema, z. B. „Automatisch: Neutral · Night Mode (Systemeinstellung dunkel)“; ein Wechsel der Systemeinstellung wirkt ohne Neuladen.
+- Spezifikation 0.4.22 (Abschnitte 5.1 und 5.4), `docs/farbschemas.md`.
+
+### Tests
+
+- `tests/modellwahl.test.ts` (+1, erweitert): Aufwand je Stufe und Websuchen je Lauf in der Oberfläche, Anfrage mit gewähltem Aufwand, Wahl bleibt bis S2, leeres Feld = Standard; `mitModellwahl` mit Aufwand und Grenzen der Websuchen.
+- `tests/farbschemas.test.ts`, `tests/farbschemas-oberflaeche.test.ts`: „Automatisch“ ergibt dieselben Farben wie „Neutral · Hell“ bzw. „Neutral · Night Mode“.
 
 ## [0.4.21] – 21.10.2026
 

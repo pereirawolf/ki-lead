@@ -63,7 +63,9 @@ it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwen
   expect(document.body.textContent).toContain("Verwendet: Thüringen");
   await act(async () => waehle(farbSelect(), "automatisch"));
   await warte();
-  expect(document.documentElement.dataset.farbschema).toBeUndefined();
+  // „Automatisch“ = Neutral · Hell oder Neutral · Night Mode nach System (hier hell), kein eigenes Schema
+  expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
+  expect(document.body.textContent).toContain("Automatisch: Neutral · Hell");
 });
 
 it("„Farben des aktiven Profils“ ohne Profilfarben: Ersatz mit Erklärung", async () => {
@@ -155,7 +157,7 @@ it("Systemeinstellung „mehr Kontrast“: „Automatisch“ verwendet das Kontr
     mehr = false;
     await act(async () => hoerer.forEach((f) => f()));
     await warte();
-    expect(document.documentElement.dataset.farbschema).toBeUndefined();
+    expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
     expect(document.documentElement.dataset.kontrast).toBeUndefined();
   } finally {
     window.matchMedia = original;
