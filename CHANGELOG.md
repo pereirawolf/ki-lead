@@ -32,7 +32,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.14 | Commit „SOP-LEAD C12 1.1.0: Kraftstoff- und Wärmeversorgung; Sammelmappe 3.2.0, Profil 1.8.0“ (Nachtrag vom 20.10.2026: Beispielprofil 1.8.0, ohne Änderung der App; Stand der Version selbst: c8406ab) |
 | 0.4.15 | letzter Commit von Pull Request #12 „Korrekturen aus dem Code-Review vom 20.10.2026; 0.4.15“ |
 | 0.4.16 | letzter Commit von Pull Request #13 „Redaktionscheck: Zeitlogik, Prüfstatus und Bedienung; 0.4.16“ |
-| 0.4.17 | letzter Commit des Pull Requests „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
+| 0.4.17 | letzter Commit von Pull Request #14 „Farbschemata der Oberfläche und Datum vorn im Dateinamen; 0.4.17“ |
 
 ## [0.4.17] – 20.10.2026
 
