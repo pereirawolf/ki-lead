@@ -28,7 +28,19 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.10 | 90ab407 (Nachtrag vom 20.10.2026: README) |
 | 0.4.11 | 706be47 |
 | 0.4.12 | ef5280b (Nachtrag vom 20.10.2026: Beispielprofil 1.7.0, ohne Änderung der App; Stand der Version selbst: 3d58abf) |
-| 0.4.13 | Commit „Arbeitsanweisungen und Kodierleitfaden unter Profile; 0.4.13“ |
+| 0.4.13 | bbf368b |
+| 0.4.14 | Commit „Lesetexte zuverlässig formatiert; 0.4.14“ |
+
+## [0.4.14] – 20.10.2026
+
+### Behoben
+
+- Profile: Nach einer Neuveröffentlichung zeigte eine noch offene ältere Seite alle Lesetexte (SOPs, Arbeitsanweisungen, Kodierleitfaden, Übersichten) nur als Markdown-Quelltext. Die Seite verlangte den nachgeladenen Markdown-Renderer unter seinem alten Dateinamen, den es nicht mehr gab, und fiel stillschweigend auf den Quelltext zurück. Nachgestellt mit dem Stand 0.4.13: alle 47 Leseeinträge unformatiert. Der Renderer ist jetzt fest im Haupt-JavaScript enthalten (rund 98 KB mehr), und ein Fehler bei der Aufbereitung wird sichtbar gemeldet statt still übergangen.
+- Andere nachgeladene Teile (PDF-Ausgabe) laden die Seite nach einer Neuveröffentlichung einmal neu (`vite:preloadError`), statt zu scheitern.
+
+### Neu
+
+- Test: Alle unter „Profile“ lesbaren Texte beider Profile werden formatiert (keine Markdown-Überschriften, -Tabellen, -Listen oder -Hervorhebungen als Fließtext; Überschriften gleich Inhaltsverzeichnis). Ein weiterer Test hält fest, dass der Renderer nicht nachgeladen wird.
 
 ## [0.4.13] – 20.10.2026
 
