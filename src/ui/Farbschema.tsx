@@ -19,6 +19,7 @@ export interface FarbZugang {
 }
 
 const NEUTRAL = FARBSCHEMAS.filter((s) => s.gruppe === "Neutral");
+const KONTRAST = FARBSCHEMAS.filter((s) => s.gruppe === "Kontrast");
 const BUND = FARBSCHEMAS.filter((s) => s.gruppe === "Bund");
 const LAENDER = FARBSCHEMAS.filter((s) => s.gruppe === "Bundesländer").sort((a, b) => a.name.localeCompare(b.name, "de"));
 
@@ -132,7 +133,7 @@ function EigeneFarben({ profil, zugang }: { profil: Profil; zugang: FarbZugang }
         <label className="feld">
           <span>Ausgangsschema</span>
           <select value={entwurf.basis} onChange={(e) => setEntwurf((x) => ({ ...x, basis: e.target.value }))}>
-            {[...NEUTRAL, ...BUND, ...LAENDER].map((s) => (
+            {[...NEUTRAL, ...KONTRAST, ...BUND, ...LAENDER].map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
               </option>
@@ -267,17 +268,25 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
     <section className="schritt-inhalt abschnitt-einzeln">
       <h2>Darstellung</h2>
       <p className="einleitung">
-        Farbschema der Oberfläche. Es ändert nur die Bildschirmfarben: Bewertungen behalten ihre Signalfarben, PDF, Word-Kopiervorlage und andere Ausgaben ihre
-        eigene Gestaltung.
+        Farbschema der Oberfläche. Es ändert nur die Bildschirmfarben: Bewertungen behalten Bedeutung und Bezeichnung, PDF, Word-Kopiervorlage und andere
+        Ausgaben ihre eigene Gestaltung. Die Kontrastschemata haben Text mit mindestens 7:1 und kräftige Konturen; eine im System eingestellte Farbanpassung (z.
+        B. Kontrastdesign von Windows) geht immer vor.
       </p>
       <label className="feld">
         <span>Farbschema</span>
         <select value={zugang.auswahl} onChange={(e) => zugang.setAuswahl(e.target.value)}>
-          <option value={AUTOMATISCH}>Automatisch (hell oder dunkel nach System)</option>
+          <option value={AUTOMATISCH}>Automatisch (nach System: hell oder dunkel, bei „mehr Kontrast“ Kontrastschema)</option>
           <optgroup label="Neutral">
             {NEUTRAL.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Kontrast">
+            {KONTRAST.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name} – {s.modus === "hell" ? "heller" : "dunkler"} Hintergrund, besonders deutlicher Text und Konturen
               </option>
             ))}
           </optgroup>

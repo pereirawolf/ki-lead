@@ -53,8 +53,8 @@ it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwen
   await zeigeApp();
   await klick("Einstellungen");
   const optgroups = [...farbSelect().querySelectorAll("optgroup")].map((g) => g.label);
-  expect(optgroups).toEqual(["Neutral", "Bund", "Bundesländer", "Profil"]);
-  expect(farbSelect().querySelectorAll("option")).toHaveLength(22);
+  expect(optgroups).toEqual(["Neutral", "Kontrast", "Bund", "Bundesländer", "Profil"]);
+  expect(farbSelect().querySelectorAll("option")).toHaveLength(24);
   await act(async () => waehle(farbSelect(), "de-th"));
   await warte();
   expect(document.documentElement.dataset.farbschema).toBe("de-th");

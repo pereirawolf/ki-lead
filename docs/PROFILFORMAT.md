@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.14 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.15 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -53,7 +53,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
 - `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
-- `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
+- `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `kontrast-hell`, `kontrast-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`; bei einer Kontrastbasis gilt für Text 7:1), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
 - `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
 
 ### `kontakte.json`
@@ -202,3 +202,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.12 | 20.10.2026 | Importprüfung: Datentypen der Manifestangaben und Werte der Schema-Schlüsselwörter; zyklische Verweise (App 0.4.15) |
 | 1.13 | 20.10.2026 | Redaktionscheck: `variablen.zeitzone` bestimmt die Lesart von Fristen und nächster Ausgabe; Ersatzregel für fehlendes `beurteilung_hoch` dokumentiert (App 0.4.16) |
 | 1.14 | 20.10.2026 | Optionales `farbschema` im Manifest; Datum vorn im Dateinamen unabhängig von der Stellung von `{meldezeitpunkt}` (App 0.4.17) |
+| 1.15 | 20.10.2026 | `farbschema.basis` auch `kontrast-hell` und `kontrast-dunkel`, dann Textkontrast mindestens 7:1 (App 0.4.18) |

@@ -25,7 +25,7 @@ import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
-import { anwenden, aufloesen, PROFIL } from "./darstellung/thema";
+import { anwenden, aufloesen, PROFIL, systemVorgabe } from "./darstellung/thema";
 import {
   darstellungLesen,
   darstellungSchreiben,
@@ -118,21 +118,26 @@ export default function App() {
   }, [aktiv, profil]);
   // Solange Profil und eigene Farben noch laden, gilt bei „profil“ die Definition aus dem Startcache (kein Aufblitzen)
   const profilFarbenBereit = !!profil && farbenGelesenFuer === `${aktiv}#${profil.hash}`;
+  // Systemeinstellungen hell/dunkel und „mehr Kontrast“ für „Automatisch“ (bei Änderung sofort übernommen)
+  const [system, setSystem] = useState(systemVorgabe);
+  useEffect(() => {
+    if (!window.matchMedia) return;
+    const abfragen = ["(prefers-color-scheme: dark)", "(prefers-contrast: more)"].map((q) => window.matchMedia(q));
+    const neu = () => setSystem(systemVorgabe());
+    abfragen.forEach((mq) => mq.addEventListener?.("change", neu));
+    return () => abfragen.forEach((mq) => mq.removeEventListener?.("change", neu));
+  }, []);
   const thema = useMemo(
     () =>
-      farbAuswahl === PROFIL && !profilFarbenBereit ? aufloesen(PROFIL, farbStart.profil) : aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben),
-    [farbAuswahl, profilFarbenBereit, farbStart, profil, lokaleFarben],
+      farbAuswahl === PROFIL && !profilFarbenBereit
+        ? aufloesen(PROFIL, farbStart.profil)
+        : aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben, system),
+    [farbAuswahl, profilFarbenBereit, farbStart, profil, lokaleFarben, system],
   );
   useEffect(() => {
     anwenden(thema);
     if (farbAuswahl !== PROFIL || profilFarbenBereit)
       startSchreiben(thema.auswahl, thema.quelle === "lokal" ? lokaleFarben : thema.quelle === "profil" ? profil?.manifest.farbschema : undefined);
-    // Automatisch: Browserleiste folgt einem Wechsel des Systems zwischen hell und dunkel
-    if (thema.quelle !== "automatisch" || !window.matchMedia) return;
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const neu = () => anwenden(thema);
-    mq.addEventListener?.("change", neu);
-    return () => mq.removeEventListener?.("change", neu);
   }, [thema, lokaleFarben, profil, farbAuswahl, profilFarbenBereit]);
   /** Auswahl sofort anwenden; Speichern nacheinander, damit nach dem Neuladen die letzte Auswahl gilt */
   const setFarbAuswahl = (auswahl: string) => {
@@ -387,19 +392,44 @@ export default function App() {
           <span className="marke-zusatz">Demonstrator</span>
         </div>
         <nav className="hauptnav" aria-label="Bereiche">
-          <button type="button" className={ansicht === "meldung" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("meldung")}>
+          <button
+            type="button"
+            className={ansicht === "meldung" ? "nav aktiv" : "nav"}
+            aria-current={ansicht === "meldung" ? "page" : undefined}
+            onClick={() => setAnsicht("meldung")}
+          >
             Meldung
           </button>
-          <button type="button" className={ansicht === "ki" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("ki")}>
+          <button
+            type="button"
+            className={ansicht === "ki" ? "nav aktiv" : "nav"}
+            aria-current={ansicht === "ki" ? "page" : undefined}
+            onClick={() => setAnsicht("ki")}
+          >
             KI-Erfassung
           </button>
-          <button type="button" className={ansicht === "lagebild" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("lagebild")}>
+          <button
+            type="button"
+            className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
+            aria-current={ansicht === "lagebild" ? "page" : undefined}
+            onClick={() => setAnsicht("lagebild")}
+          >
             {profil?.ui.lagebild?.titel || "Lagebild"}
           </button>
-          <button type="button" className={ansicht === "profile" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("profile")}>
+          <button
+            type="button"
+            className={ansicht === "profile" ? "nav aktiv" : "nav"}
+            aria-current={ansicht === "profile" ? "page" : undefined}
+            onClick={() => setAnsicht("profile")}
+          >
             Profile
           </button>
-          <button type="button" className={ansicht === "einstellungen" ? "nav aktiv" : "nav"} onClick={() => setAnsicht("einstellungen")}>
+          <button
+            type="button"
+            className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
+            aria-current={ansicht === "einstellungen" ? "page" : undefined}
+            onClick={() => setAnsicht("einstellungen")}
+          >
             Einstellungen
           </button>
         </nav>
@@ -486,7 +516,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.17. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.18. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

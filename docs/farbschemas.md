@@ -1,12 +1,15 @@
 # Farbschemata der Oberfläche
 
-Stand 20.10.2026, App 0.4.17. Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur vom Modus hell/dunkel ab, nie vom Land. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
+Stand 20.10.2026, App 0.4.18. Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
 
 ## Grundsätze
 
 - **Wiedererkennbarkeit vor CI-Genauigkeit.** Die Paletten greifen Landes- bzw. CI-Farben auf. Flächen, Hover-, Link- und Auswahlfarben sind für die Lesbarkeit abgeleitet. Eine amtliche Freigabe oder vollständige CI-Konformität wird nicht beansprucht; Wappenfarben (z. B. nach Wikipedia/Wikimedia Commons) oder plausible Annäherungen sind als Ausgangslage zulässig.
-- **Helle Arbeitsfläche, schmales Identitätsband.** Alle Bund- und Länderschemata sind hell; die Landesfarben erscheinen im Band unter dem Kopf und in den Aktionsfarben, nicht großflächig. Dunkel ist allein „Neutral · Night Mode“.
+- **Helle Arbeitsfläche, schmales Identitätsband.** Alle Bund- und Länderschemata sind hell; die Landesfarben erscheinen im Band unter dem Kopf und in den Aktionsfarben, nicht großflächig. Dunkel sind „Neutral · Night Mode“ und „Kontrast · Dunkel“.
 - **Kontraste.** Text mindestens 4,5:1, Konturen und Bedienelemente mindestens 3:1. Die Paare stehen in `src/darstellung/thema.ts` (`KONTRASTPAARE`) und werden für jedes Schema getestet (`tests/farbschemas.test.ts`). Dieselbe Prüfung gilt für Profilfarben.
+- **Kontrastschemata.** „Kontrast · Hell“ und „Kontrast · Dunkel“ verlangen für alle Textpaare (einschließlich der Signalfarben) mindestens 7:1 (WCAG 2.2, Erfolgskriterium 1.4.6), Konturen weiterhin mindestens 3:1. Sie haben kein dekoratives Band, eigene feste Signalpaletten gleicher Bedeutung, ein Radar ohne Füllung und kräftigere Rahmen (`data-kontrast="erhoeht"`). Ein Profil mit Kontrastbasis unterliegt ebenfalls 7:1. Eine WCAG- oder BITV-Konformität der App wird damit nicht beansprucht.
+- **Nicht nur Farbe.** Ausgewählte Navigation, Reiter und Radarstufen sind zusätzlich unterstrichen bzw. fett; Bewertungen stehen immer als Wort da; das Lagenradar nennt alle Achsenwerte einschließlich „offen“ im zugänglichen Namen.
+- **Systemeinstellungen gehen vor.** Bei erzwungenen Systemfarben (`forced-colors`, z. B. Kontrastdesign von Windows) übernimmt das System die Farben; die App hebt nur Auswahl, Marken und Radar mit Systemfarben hervor und schaltet die Systemfarben nirgends global ab. Ist „Automatisch“ gewählt und im System „mehr Kontrast“ eingestellt (`prefers-contrast: more`), verwendet die App das passende Kontrastschema (hell oder dunkel nach System); eine ausdrückliche Wahl bleibt davon unberührt, „weniger“ oder „benutzerdefiniert“ lösen nichts aus.
 
 ## Katalog
 
@@ -14,6 +17,8 @@ Stand 20.10.2026, App 0.4.17. Die Farbschemata ändern nur die Bildschirmdarstel
 |---|---|---|---|---|---|---|
 | `neutral-hell` | Neutral · Hell | – | `#3D4A59` | `#6B7785` | eigener Entwurf | eigener Entwurf ohne Landesbezug. |
 | `neutral-dunkel` | Neutral · Night Mode | – | `#B6C0CB` | `#83909E` | eigener Entwurf | eigener Entwurf, einziges dunkles Schema (Night Mode). |
+| `kontrast-hell` | Kontrast · Hell | – | `#000000` | – (kein Band) | eigener Entwurf mit IBM-Neutralfarben | neu: Schwarz auf Weiß, Nebentext `#393939` (11,6:1), Link und Fokus `#002D9C` (11,3:1), Signalfarben 9,2:1 bis 11,5:1, Konturen `#525252` (7,8:1). |
+| `kontrast-dunkel` | Kontrast · Dunkel | – | `#FFFFFF` | – (kein Band) | eigener Entwurf mit IBM-Neutralfarben | neu: Weiß auf Schwarz, Nebentext `#C6C6C6` (12,3:1), Link und Fokus `#FFE38A` (16,6:1), Signalfarben 12,4:1 bis 16,6:1, Konturen `#A8A8A8` (8,8:1). |
 | `bund` | Bund · Schwarz–Rot–Gold | Schwarz-Rot-Gold | `#000000` | `#000000` `#FF0000` `#FFCC00` | CI-Farbwerte belegt | stimmig: Nationalfarben im Band, Schwarz als zurückhaltende Aktionsfarbe wie im Bundes-Styleguide. |
 | `bevoelkerungsschutz` | Bevölkerungsschutz · BBK | Zivilschutzzeichen: blaues Dreieck auf Orange | `#1D4F91` | `#E75B12` `#1D4F91` `#E75B12` | an RAL-Farben des Zivilschutzzeichens angenähert | neu: Orange und Blau des Zivilschutzzeichens; Orange nur im Band, damit es nicht mit der Signalfarbe „erheblich“ verwechselt wird. |
 | `de-bw` | Baden-Württemberg | Schwarz-Gold | `#2A2623` | `#2A2623` `#FFFC00` | Farbwerte des Landesportals | stimmig: Schwarz und Gelb des Landes-CD (seit 2024); Gelb nur im Band, weil es als Text nicht lesbar ist. |
@@ -33,10 +38,20 @@ Stand 20.10.2026, App 0.4.17. Die Farbschemata ändern nur die Bildschirmdarstel
 | `de-sh` | Schleswig-Holstein | Blau-Weiß-Rot | `#003064` | `#003064` `#FFFFFF` `#D4004B` | CI-Farbwerte belegt | stimmig: Blau-Weiß-Rot. |
 | `de-th` | Thüringen | Weiß-Rot | `#006F9C` | `#0089C1` `#FFFFFF` `#D62B32` | CI-Farbwerte belegt | stimmig: Thüringen-Blau des Landesauftritts (für Text abgedunkelt), Band mit Weiß-Rot der Landesfarben. |
 
-Zusätzlich: **Automatisch** (Standarddarstellung der App, hell oder dunkel nach Systemeinstellung, Vorgabe) und **Farben des aktiven Profils**.
+Zusätzlich: **Automatisch** (Standarddarstellung der App, hell oder dunkel nach Systemeinstellung, bei „mehr Kontrast“ das passende Kontrastschema; Vorgabe) und **Farben des aktiven Profils**.
+
+## Barrierefreiheit: geprüfte Vorschläge
+
+Grundlage: Änderungsvorschläge „2026-10-20_KI-LEAD_Barrierefreiheit_Farbschemas_Aenderungsvorschlaege_65c278b“ (A11Y-01 bis A11Y-07), die [IBM Design Language: Color, Abschnitt Accessibility](https://www.ibm.com/design/language/color/#accessibility) und die Palette [„Color-Blind Safe by IBM Design Library“ auf color-hex.com](https://www.color-hex.com/color-palette/1044488).
+
+- **Umgesetzt:** zwei Kontrastschemata (s. o.), Vorrang der Systemfarben, „mehr Kontrast“ bei „Automatisch“, Auswahl nicht nur über Farbe, Radarwerte als Text.
+- **Fünffarbenpalette nicht als Oberflächenschema.** `#FFB000`, `#FE6100`, `#DC267F`, `#785EF0`, `#648FFF` ist eine qualitative Palette für voneinander unabhängige Datenreihen, kein vollständiger Satz von Oberflächenrollen. Auf Weiß erreichen `#FFB000` nur 1,8:1 und `#FE6100` sowie `#648FFF` je 3,0:1, keine Farbe 7:1; als Text taugt sie also nicht. Für die geordneten Schwereklassen (geringfügig bis kritisch) ist sie ungeeignet, weil sie keine Helligkeitsstufung hat. Sie bleibt Reserve für künftige Diagramme mit mehreren unabhängigen Reihen, dann nur mit sichtbarer Beschriftung, Marker oder Linienmuster und dunkler Kontur.
+- **Keine Themen je Farbsehschwäche.** IBM empfiehlt, Information nicht allein über Farbe zu vermitteln (gilt für Protanopie, Deuteranopie und Tritanopie gleichermaßen). Ein „Protanopie-Theme“ würde eine Sicherheit versprechen, die eine Palette allein nicht liefert; die App setzt stattdessen auf Wörter, Unterstreichung, Konturen und Zahlen in jedem Schema.
+- **Offen (Abnahme):** Sichtprüfung mit echtem Kontrastdesign unter Windows, Simulation von Farbsehschwächen und Graustufen, 200 % Zoom und 320 px Breite, nach Möglichkeit mit Betroffenen. Automatisiert geprüft sind Kontrastwerte, Auflösung, Stylesheet-Regeln und Radarbeschreibung; im Browser (Chromium) gesichtet sind beide Kontrastschemata, „mehr Kontrast“ hell und dunkel sowie emulierte Systemfarben.
 
 ## Quellen
 
+- Kontrast · Hell und Dunkel: [IBM Design Language: Color, Accessibility](https://www.ibm.com/design/language/color/#accessibility) (Neutralfarben der IBM-Palette); [WCAG 2.2: Contrast (Enhanced)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced.html); [WCAG 2.2: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html); [MDN: forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors)
 - Bund · Schwarz–Rot–Gold: [Styleguide Bundesregierung: Farben](https://styleguide.bundesregierung.gov.de/sg-de/basiselemente/farben)
 - Bevölkerungsschutz · BBK: [https://www.gesetze-bayern.de/Content/Document/BayVwV96933](https://www.gesetze-bayern.de/Content/Document/BayVwV96933); [https://warnung-der-bevoelkerung.de/wp-content/uploads/2025/12/Katastrophenschutz-Leuchttuerme_Setzhinweise_fuer_Piktogramme.pdf](https://warnung-der-bevoelkerung.de/wp-content/uploads/2025/12/Katastrophenschutz-Leuchttuerme_Setzhinweise_fuer_Piktogramme.pdf)
 - Baden-Württemberg: [Neues Landes-CD und aktuelle Webimplementierung Baden-Württemberg](https://www.baden-wuerttemberg.de/de/service/alle-meldungen/meldung/pid/baden-wuerttemberg-stellt-neues-corporate-design-vor); [Stylesheet des Landesportals Baden-Württemberg](https://assets.baden-wuerttemberg.de/versions/5.13.1/stylesheets/main.css?v=5.13.1)

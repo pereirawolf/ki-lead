@@ -184,6 +184,10 @@ a {
 .nav.aktiv {
   color: var(--amt-tief);
   background: var(--amt-zart);
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.35em;
 }
 
 .profil-chip {
@@ -745,6 +749,9 @@ textarea {
   background: var(--amt);
   border-color: var(--amt);
   color: var(--auf-amt);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
 }
 
 .stufe-offen {
@@ -1755,6 +1762,9 @@ details.ki-abschnitt summary,
   border-color: var(--amt);
   color: var(--auf-amt);
   font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 
 .lb-zaehler {
@@ -3002,4 +3012,74 @@ fieldset.lb-ausgabe {
   padding: 0.6rem;
   overflow-x: auto;
   font-size: 0.85rem;
+}
+
+/* ── Barrierefreiheit: Kontrastschemata und Systemfarben ── */
+
+/* Kontrastschema (gewählt oder über „mehr Kontrast“ automatisch): kräftigere Konturen, Marken mit Rahmen */
+[data-kontrast="erhoeht"] .chip,
+[data-kontrast="erhoeht"] .stufe,
+[data-kontrast="erhoeht"] .segmente,
+[data-kontrast="erhoeht"] .lb-reiter .segment,
+[data-kontrast="erhoeht"] input[type="text"],
+[data-kontrast="erhoeht"] input[type="password"],
+[data-kontrast="erhoeht"] input[type="date"],
+[data-kontrast="erhoeht"] input[type="time"],
+[data-kontrast="erhoeht"] input[type="datetime-local"],
+[data-kontrast="erhoeht"] input[type="number"],
+[data-kontrast="erhoeht"] select,
+[data-kontrast="erhoeht"] textarea {
+  border-width: 2px;
+}
+
+[data-kontrast="erhoeht"] .lb-flag {
+  border: 1px solid currentColor;
+}
+
+/* Systemfarben (z. B. Kontrastdesign von Windows): das System gibt die Farben vor; die App sorgt nur dafür,
+   dass Auswahl, Marken und Radar sichtbar bleiben. */
+@media (forced-colors: active) {
+  .kopf,
+  .farb-vorschau-kopf {
+    border-image: none;
+  }
+
+  .nav.aktiv,
+  .segment.an,
+  .lb-reiter .segment.aktiv,
+  .stufe.aktiv,
+  .stufe-offen.aktiv,
+  .chip.an {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+
+  .lb-marke,
+  .lb-flag {
+    border: 1px solid CanvasText;
+  }
+
+  .radar-ring,
+  .radar-achse {
+    stroke: GrayText;
+  }
+
+  .radar-flaeche {
+    fill: none;
+    stroke: CanvasText;
+  }
+
+  .radar-punkt {
+    fill: CanvasText;
+  }
+
+  .radar-punkt-offen {
+    stroke: CanvasText;
+  }
+
+  .radar-beschriftung {
+    fill: CanvasText;
+  }
 }

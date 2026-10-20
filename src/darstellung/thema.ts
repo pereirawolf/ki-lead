@@ -2,14 +2,17 @@
 // Dokument nur als geprüfte #RRGGBB-Werte erlaubter Rollen (keine CSS-Texte, keine Selektoren).
 
 import { FARBSCHEMAS } from "./katalog";
-import { UI_TOKENS, type AufgeloestesThema, type FarbschemaEintrag, type Modus, type ProfilFarbschema, type UiToken } from "./typen";
+import { UI_TOKENS, type AufgeloestesThema, type FarbschemaEintrag, type ProfilFarbschema, type SemantikBasis, type UiToken } from "./typen";
 
 export const AUTOMATISCH = "automatisch";
 export const PROFIL = "profil";
 export const STANDARD_AUSWAHL = AUTOMATISCH;
 
-/** Signalfarben je Modus (unabhängig von Land und Profil) */
-export const SEMANTIK: Record<Modus, Record<string, string>> = {
+/**
+ * Signalfarben je Basis: hell und dunkel für alle Länder-, Bund- und Neutralschemata (unabhängig von Land und
+ * Profil), dazu je eine feste Palette für die Kontrastschemata (gleiche Bedeutung, nur kräftiger).
+ */
+export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
   hell: {
     gering: "#8A6400",
     "gering-zart": "#FBF3D9",
@@ -38,7 +41,58 @@ export const SEMANTIK: Record<Modus, Record<string, string>> = {
     "radar-ring": "#83909E",
     "radar-flaeche": "rgba(134, 179, 230, 0.25)",
   },
+  "kontrast-hell": {
+    gering: "#5C4400",
+    "gering-zart": "#FFFFFF",
+    erheblich: "#7A3200",
+    "erheblich-zart": "#FFFFFF",
+    "auf-erheblich": "#FFFFFF",
+    kritisch: "#750E13",
+    "kritisch-zart": "#FFFFFF",
+    ok: "#044317",
+    "ok-zart": "#FFFFFF",
+    "radar-linie": "#000000",
+    "radar-ring": "#525252",
+    "radar-flaeche": "transparent",
+  },
+  "kontrast-dunkel": {
+    gering: "#FFE38A",
+    "gering-zart": "#000000",
+    erheblich: "#FFD1AD",
+    "erheblich-zart": "#000000",
+    "auf-erheblich": "#000000",
+    kritisch: "#FFB3B8",
+    "kritisch-zart": "#000000",
+    ok: "#A7F0BA",
+    "ok-zart": "#000000",
+    "radar-linie": "#FFFFFF",
+    "radar-ring": "#A8A8A8",
+    "radar-flaeche": "transparent",
+  },
 };
+
+/** Signalfarben eines Katalogeintrags */
+export function semantikVon(e: FarbschemaEintrag): Record<string, string> {
+  return SEMANTIK[e.semantik ?? e.modus];
+}
+
+/** Systemeinstellungen, die „Automatisch“ berücksichtigt */
+export interface SystemVorgabe {
+  dunkel: boolean;
+  /** „mehr Kontrast“ (prefers-contrast: more) */
+  kontrast: boolean;
+}
+
+export function systemVorgabe(): SystemVorgabe {
+  try {
+    return {
+      dunkel: !!window.matchMedia?.("(prefers-color-scheme: dark)").matches,
+      kontrast: !!window.matchMedia?.("(prefers-contrast: more)").matches,
+    };
+  } catch {
+    return { dunkel: false, kontrast: false };
+  }
+}
 
 /** Alle Variablen, die ein Schema setzen kann; beim Wechsel werden sie vollständig ersetzt oder entfernt */
 export const ALLE_VARIABLEN = [...UI_TOKENS, ...Object.keys(SEMANTIK.hell), "band"];
@@ -103,9 +157,11 @@ export function bandVerlauf(band: string[]): string {
 }
 
 /** Kontrastfehler einer vollständigen Farbtabelle */
-export function kontrastFehler(tokens: Record<string, string>): string[] {
+export function kontrastFehler(tokens: Record<string, string>, textZiel = 4.5): string[] {
   const out: string[] = [];
-  for (const [v, h, min] of KONTRASTPAARE) {
+  for (const [v, h, grundwert] of KONTRASTPAARE) {
+    // Texte (4,5:1) auf das Ziel des Schemas anheben; Konturen und Bedienelemente bleiben bei 3:1
+    const min = grundwert >= 4.5 ? Math.max(grundwert, textZiel) : grundwert;
     const a = tokens[v];
     const b = tokens[h];
     if (!HEX.test(a || "") || !HEX.test(b || "")) continue;
@@ -136,7 +192,7 @@ export function profilFarbschemaFehler(f: unknown): string[] {
       }
   }
   if (fehler.length) return fehler;
-  return kontrastFehler(tokensFuer(o as unknown as ProfilFarbschema));
+  return kontrastFehler(tokensFuer(o as unknown as ProfilFarbschema), katalogEintrag(o.basis as string)!.kontrastziel ?? 4.5);
 }
 
 /** Vollständige Farbtabelle eines Profilfarbschemas: Basis, darauf die erlaubten Änderungen, dazu die Signalfarben */
@@ -144,7 +200,7 @@ function tokensFuer(p: ProfilFarbschema): Record<string, string> {
   const basis = katalogEintrag(p.basis)!;
   const ui: Record<string, string> = { ...basis.tokens };
   for (const [k, v] of Object.entries(p.farben || {})) if ((UI_TOKENS as readonly string[]).includes(k) && typeof v === "string" && HEX.test(v)) ui[k] = v;
-  return { ...ui, ...SEMANTIK[basis.modus] };
+  return { ...ui, ...semantikVon(basis) };
 }
 
 function ausKatalog(e: FarbschemaEintrag, auswahl: string, quelle: AufgeloestesThema["quelle"], hinweise: string[] = []): AufgeloestesThema {
@@ -154,7 +210,8 @@ function ausKatalog(e: FarbschemaEintrag, auswahl: string, quelle: AufgeloestesT
     name: e.name,
     modus: e.modus,
     quelle,
-    tokens: { ...e.tokens, ...SEMANTIK[e.modus], band: bandVerlauf(e.band) },
+    tokens: { ...e.tokens, ...semantikVon(e), band: bandVerlauf(e.band) },
+    kontrast: !!e.kontrastziel && e.kontrastziel > 4.5,
     band: e.band,
     hinweise,
   };
@@ -174,21 +231,28 @@ function ausProfil(p: ProfilFarbschema, auswahl: string, quelle: "profil" | "lok
     tokens: { ...tokens, band: bandVerlauf(band) },
     band,
     hinweise: [],
+    kontrast: !!basis.kontrastziel && basis.kontrastziel > 4.5,
   };
 }
 
 /**
  * Löst die Auswahl auf. Vorrang: festes Schema → bei „profil“ die gültige lokale Anpassung des aktiven Profils →
- * gültiges Farbschema aus profil.json → Ersatz „Neutral · Hell“ mit Hinweis. „automatisch“ setzt keine Farben.
+ * gültiges Farbschema aus profil.json → Ersatz „Neutral · Hell“ mit Hinweis. „automatisch“ setzt keine Farben, außer die
+ * Systemeinstellung verlangt mehr Kontrast (dann das passende Kontrastschema).
  */
-export function aufloesen(auswahl: string, profilSchema?: unknown, lokal?: unknown): AufgeloestesThema {
+export function aufloesen(auswahl: string, profilSchema?: unknown, lokal?: unknown, system?: SystemVorgabe): AufgeloestesThema {
   if (auswahl !== PROFIL) {
     const e = katalogEintrag(auswahl);
     if (e) return ausKatalog(e, auswahl, "katalog");
+    // Automatisch mit Systemeinstellung „mehr Kontrast“: passendes Kontrastschema
+    if (system?.kontrast) {
+      const k = ausKatalog(katalogEintrag(system.dunkel ? "kontrast-dunkel" : "kontrast-hell")!, AUTOMATISCH, "automatisch");
+      return { ...k, name: `Automatisch: ${k.name} (Systemeinstellung „mehr Kontrast“)` };
+    }
     return {
       auswahl: AUTOMATISCH,
       basis: null,
-      name: "Automatisch (hell oder dunkel nach System)",
+      name: "Automatisch (nach System)",
       modus: null,
       quelle: "automatisch",
       tokens: {},
@@ -222,6 +286,11 @@ export function anwenden(t: AufgeloestesThema, wurzel: HTMLElement = document.do
     for (const [k, v] of Object.entries(t.tokens)) if (ALLE_VARIABLEN.includes(k)) wurzel.style.setProperty(`--${k}`, v);
     wurzel.dataset.farbschema = t.basis;
     wurzel.dataset.farbmodus = t.modus;
+  }
+  // Erhöhter Kontrast: kräftigere Konturen und Zustandsmarkierungen (styles.css, [data-kontrast])
+  if (t.kontrast) wurzel.dataset.kontrast = "erhoeht";
+  else delete wurzel.dataset.kontrast;
+  if (t.basis !== null && t.modus) {
     wurzel.style.setProperty("color-scheme", t.modus === "dunkel" ? "dark" : "light");
   }
   const meta = document.querySelector('meta[name="theme-color"]');
