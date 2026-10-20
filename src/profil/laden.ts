@@ -159,8 +159,53 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
   return befunde.length === vorher;
 }
 
-function pruefeManifestStruktur(m: any, befunde: Befund[]) {
+/**
+ * Prüft die Form des Manifests, bevor es weiter gelesen wird; liefert false bei Fehlern. Falsche Datentypen
+ * (etwa ein Objekt als Name oder eine Zahl als SOP-Liste) würden sonst erst beim Anzeigen, Exportieren oder
+ * im KI-Lauf scheitern, und ein gespeichertes Profil könnte die Profilverwaltung dauerhaft stören.
+ */
+function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
+  const vorher = befunde.filter((b) => b.stufe === "fehler").length;
   const fehler = (text: string) => befunde.push({ stufe: "fehler", text: `profil.json: ${text}` });
+  const optionalerText = (wert: unknown, name: string) => {
+    if (wert !== undefined && !istText(wert)) fehler(`„${name}“ muss ein Text sein.`);
+  };
+  for (const feld of ["id", "name", "version"] as const) {
+    if (m[feld] === undefined || m[feld] === null || m[feld] === "") fehler(`Angabe „${feld}“ fehlt.`);
+    else if (!istText(m[feld]) || !m[feld].trim()) fehler(`Angabe „${feld}“ muss ein nicht leerer Text sein.`);
+  }
+  for (const feld of ["format", "beschreibung", "herausgeber", "lizenz", "ebene", "referenzraum", "kodierleitfaden", "kontakte"]) optionalerText(m[feld], feld);
+  if (m.meldung !== undefined) {
+    if (!istObjekt(m.meldung)) fehler("„meldung“ muss ein Objekt sein.");
+    else {
+      for (const feld of ["schema", "ui"])
+        if (m.meldung[feld] !== undefined && !(istText(m.meldung[feld]) && m.meldung[feld])) fehler(`„meldung.${feld}“ muss ein Dateipfad (Text) sein.`);
+      optionalerText(m.meldung.schema_id, "meldung.schema_id");
+      if (m.meldung.eingang_schema_ids !== undefined && !textListe(m.meldung.eingang_schema_ids))
+        fehler("„meldung.eingang_schema_ids“ muss eine Liste von Texten sein.");
+    }
+  }
+  if (m.anweisungen !== undefined && (!istObjekt(m.anweisungen) || !Object.values(m.anweisungen).every(istText)))
+    fehler("„anweisungen“ muss ein Objekt mit Dateipfaden (Texten) sein.");
+  if (m.sop !== undefined) {
+    if (!istObjekt(m.sop) || !textListe(m.sop.dateien)) fehler("„sop“ braucht „dateien“ als Liste von Dateipfaden.");
+    else optionalerText(m.sop.teil_gemeinsam, "sop.teil_gemeinsam");
+  }
+  if (
+    m.migrationen !== undefined &&
+    !(
+      Array.isArray(m.migrationen) &&
+      m.migrationen.every(
+        (g: any) =>
+          istObjekt(g) &&
+          istText(g.von) &&
+          (g.setze === undefined || istObjekt(g.setze)) &&
+          (g.ergaenze === undefined || istObjekt(g.ergaenze)) &&
+          (g.hinweis === undefined || istText(g.hinweis)),
+      )
+    )
+  )
+    fehler("„migrationen“ braucht je Eintrag „von“ (Text) und gegebenenfalls „setze“ und „ergaenze“ als Objekte.");
   if (m.variablen !== undefined && (!istObjekt(m.variablen) || !Object.values(m.variablen).every(istText)))
     fehler("„variablen“ muss ein Objekt mit Texten sein.");
   if (m.eigene_stellen !== undefined && !textListe(m.eigene_stellen)) fehler("„eigene_stellen“ muss eine Liste von Texten sein.");
@@ -168,6 +213,7 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]) {
     fehler("„beispiele“ braucht je Eintrag „titel“ und „ordner“.");
   if (m.modelle !== undefined && (!istObjekt(m.modelle) || !Object.values(m.modelle).every(istText)))
     fehler("„modelle“ muss ein Objekt mit Modellkennungen sein.");
+  return befunde.filter((b) => b.stufe === "fehler").length === vorher;
 }
 
 function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
@@ -224,22 +270,26 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   const dateien = normalisiereDateien(rohDateien);
   const befunde: Befund[] = [];
   const manifest = jsonLesen(dateien, "profil.json", befunde, true) as ProfilManifest | undefined;
-  if (!manifest) return { profil: null, befunde };
-  if (manifest.format !== "lead-profil/1") befunde.push({ stufe: "warnung", text: `Unbekanntes Profilformat „${manifest.format}“ (erwartet lead-profil/1).` });
-  for (const feld of ["id", "name", "version"] as const) {
-    if (!manifest[feld]) befunde.push({ stufe: "fehler", text: `profil.json: Angabe „${feld}“ fehlt.` });
+  if (manifest === undefined) return { profil: null, befunde };
+  if (!istObjekt(manifest)) {
+    befunde.push({ stufe: "fehler", text: "profil.json muss ein JSON-Objekt enthalten." });
+    return { profil: null, befunde };
   }
+  if (manifest.format !== "lead-profil/1") befunde.push({ stufe: "warnung", text: `Unbekanntes Profilformat „${manifest.format}“ (erwartet lead-profil/1).` });
+  const strukturOk = pruefeManifestStruktur(manifest, befunde);
   if (!manifest.meldung?.schema || !manifest.meldung?.ui) {
     befunde.push({ stufe: "fehler", text: "profil.json: Abschnitt „meldung“ mit „schema“ und „ui“ fehlt." });
     return { profil: null, befunde };
   }
-  pruefeManifestStruktur(manifest, befunde);
+  if (!strukturOk) return { profil: null, befunde };
   manifest.variablen = manifest.variablen || {};
 
   const schema = jsonLesen(dateien, manifest.meldung.schema, befunde, true);
   const ui = jsonLesen(dateien, manifest.meldung.ui, befunde, true) as UiKonfig | undefined;
+  let schemaOk = false;
   if (schema) {
     const f = schemaFehler(schema);
+    schemaOk = !f;
     if (f) befunde.push({ stufe: "fehler", text: `Das Meldungsschema ist nicht verwendbar: ${f}` });
     const kennung = schema?.properties?.[ui?.rollen?.schema_feld || "schema"]?.const;
     if (kennung && manifest.meldung.schema_id && kennung !== manifest.meldung.schema_id)
@@ -247,7 +297,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     if (!manifest.meldung.schema_id && kennung) manifest.meldung.schema_id = kennung;
   }
   const uiOk = ui ? pruefeUiStruktur(ui, befunde) : false;
-  if (schema && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
+  if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });

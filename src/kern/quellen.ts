@@ -28,6 +28,9 @@ export function parseQuellen(text: unknown): QuellenEintrag[] {
   return entries;
 }
 
+/** Größte Zahl an Quellennummern, die ein Bereich wie [Q1–Q5] ergibt */
+const MAX_BEREICH = 50;
+
 export function verweise(text: unknown): Set<number> {
   const refs = new Set<number>();
   const re = /\[([^\]\n]{1,60})\]/g;
@@ -39,9 +42,13 @@ export function verweise(text: unknown): Set<number> {
     inner.split(/[,;]/).forEach((tok) => {
       const r = tok.match(/^\s*Q(\d+)\s*(?:[–-]\s*Q?(\d+))?\s*$/);
       if (!r) return;
-      const a = +r[1];
-      const b = r[2] ? +r[2] : a;
-      for (let i = Math.min(a, b); i <= Math.max(a, b) && i - a < 50; i++) refs.add(i);
+      const a = Number(r[1]);
+      const b = r[2] ? Number(r[2]) : a;
+      // Höchstens MAX_BEREICH Nummern je Bereich, auch rückwärts ([Q9–Q1]). Gezählt wird über einen kleinen
+      // Abstand statt über die Nummer selbst: Oberhalb von 2^53 ändert i++ eine JavaScript-Zahl nicht mehr.
+      const von = Math.min(a, b);
+      const anzahl = Math.min(Math.max(a, b) - von, MAX_BEREICH - 1);
+      for (let k = 0; k <= anzahl; k++) refs.add(von + k);
     });
   }
   return refs;

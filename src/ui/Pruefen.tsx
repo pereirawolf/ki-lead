@@ -1,6 +1,6 @@
 // Schritt „Prüfen & Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe.
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
 import { dateiname } from "../kern/ausgabe";
@@ -10,7 +10,6 @@ import { alsText, feldUi, radarFuer } from "../kern/ui";
 import { sachverhalte } from "../kern/quellen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
-import { meldungAlsPdf } from "../dokumente/pdf";
 import { RadarGrafik } from "./Radar";
 
 function Liste({ titel, eintraege, art }: { titel: string; eintraege: string[]; art: "fehler" | "hinweis" | "ok" }) {
@@ -51,10 +50,18 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
     if (!finalFreigeben(final)) return;
     dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final) + ".json", "application/json");
   };
-  const pdf = (final: boolean) => {
+  const [pdfFehler, setPdfFehler] = useState<string | null>(null);
+  const pdf = async (final: boolean) => {
+    setPdfFehler(null);
     if (!finalFreigeben(final)) return;
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
-    dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final) + ".pdf", "application/pdf");
+    try {
+      // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
+      const { meldungAlsPdf } = await import("../dokumente/pdf");
+      dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final) + ".pdf", "application/pdf");
+    } catch (e) {
+      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}). Die Meldung lässt sich weiterhin als JSON speichern.`);
+    }
   };
   const text = (b: Befund[]) => b.map((x) => x.text);
 
@@ -76,6 +83,11 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
             Final als PDF
           </button>
         </div>
+        {pdfFehler && (
+          <div className="kasten kasten-fehler" role="alert">
+            <p>{pdfFehler}</p>
+          </div>
+        )}
 
         <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} />
       </div>

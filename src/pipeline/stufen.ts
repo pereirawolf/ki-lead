@@ -22,7 +22,7 @@ import {
   sopIdsAufloesen,
   verdichtungsAnweisung,
 } from "./kontext";
-import { kostenSumme, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
+import { kostenNachFehler, kostenStand, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
 import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
 import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
@@ -69,6 +69,8 @@ async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise
     return a;
   } catch (e: any) {
     eintrag.fehler = e?.name === "AbortError" ? "abgebrochen" : String(e?.message || e);
+    // Nach einem Abbruch kann der Anbieter schon gearbeitet haben: Kosten unbekannt, nicht 0
+    eintrag.kostenUsd = kostenNachFehler(e);
     if (Array.isArray(e?.teilinhalt) && e.teilinhalt.length) {
       eintrag.antwort = { text: "", inhalt: e.teilinhalt, stopGrund: "abgebrochen", runden: 0 };
     }
@@ -76,7 +78,10 @@ async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise
   } finally {
     eintrag.ende = new Date().toISOString();
     eintrag.dauerMs = Date.parse(eintrag.ende) - Date.parse(eintrag.start);
-    k.lauf.kostenUsd = kostenSumme(k.lauf);
+    const kosten = kostenStand(k.lauf);
+    k.lauf.kostenUsd = kosten.vollstaendig ? kosten.bekannt : null;
+    if (kosten.vollstaendig) delete k.lauf.kostenBekanntUsd;
+    else k.lauf.kostenBekanntUsd = kosten.bekannt;
     k.lauf.aktualisiert = eintrag.ende;
     await k.aktualisiert(k.lauf);
   }

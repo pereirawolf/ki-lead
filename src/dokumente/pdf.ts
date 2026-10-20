@@ -207,7 +207,26 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     didDrawCell: radarHaken(doc),
   });
 
-  const liste = holeWert(d, r.sachverhalte) || [];
+  // Eine importierte Meldung kann trotz Typfehler übernommen worden sein: Statt abzubrechen oder die Angabe still
+  // zu übergehen, steht im PDF ein deutlich markierter Hinweis mit dem gefundenen Inhalt.
+  const roh = holeWert(d, r.sachverhalte);
+  const liste: any[] = Array.isArray(roh) ? roh : [];
+  if (!Array.isArray(roh) && roh !== undefined && roh !== null) {
+    const typ = typeof roh === "object" ? "Objekt" : typeof roh === "string" ? "Text" : typeof roh;
+    const inhalt = typeof roh === "string" ? roh : JSON.stringify(roh);
+    autoTable(doc, {
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
+      head: [[{ content: `${bezeichnung(ui, r.sachverhalte)}: ungültiger Datentyp`, colSpan: 2 }]],
+      body: [
+        ["Befund", `Erwartet eine Liste, gefunden: ${typ}. Die Angabe ist nicht als Sachverhalt ausgegeben; Meldung bitte korrigieren.`],
+        ["Inhalt", inhalt.length > 2000 ? inhalt.slice(0, 2000) + " …" : inhalt],
+      ],
+      theme: "grid",
+      headStyles: { fillColor: [176, 42, 42] },
+      styles: { fontSize: 8, cellPadding: 1.8, overflow: "linebreak", valign: "top" },
+      columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+    });
+  }
   const elementSchema = aufloesen(wurzel.properties?.[r.sachverhalte]?.items, profil.schema);
   const elementName = feldUi(ui, r.sachverhalte).element_label || "Eintrag";
   liste.forEach((sv: any, i: number) => {

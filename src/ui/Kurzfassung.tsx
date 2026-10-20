@@ -15,7 +15,7 @@ import { dateiname, managementSummary } from "../kern/ausgabe";
 import type { Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
 import { modellFuer, type Einstellungen } from "../pipeline/einstellungen";
-import { fingerabdruck, kurzfassungErstellen, meldungFuerKurzfassung, type Kurzfassung } from "../pipeline/kurzfassung";
+import { kurzfassungErstellen, kurzfassungsFingerabdruck, type Kurzfassung } from "../pipeline/kurzfassung";
 
 export interface KiZugang {
   schluessel: Schluessel;
@@ -60,7 +60,7 @@ function Kopieren({ text }: { text: string }) {
 export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; meldung: Meldung; ki?: KiZugang }) {
   const titel = profil.ui.kurzfassung?.titel || "Management Summary";
   const schluesselIdb = idbSchluessel(profil.manifest.id);
-  const fp = useMemo(() => fingerabdruck(meldungFuerKurzfassung(meldung, profil)), [meldung, profil]);
+  const fp = useMemo(() => kurzfassungsFingerabdruck(meldung, profil), [meldung, profil]);
   const [gespeichert, setGespeichert] = useState<Gespeichert | null>(null);
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
@@ -72,7 +72,9 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
 
   useEffect(() => {
     let gueltig = true;
-    get(schluesselIdb).then((g) => gueltig && setGespeichert((g as Gespeichert) || null));
+    get(schluesselIdb)
+      .then((g) => gueltig && setGespeichert((g as Gespeichert) || null))
+      .catch((e) => gueltig && setFehler(`Die gespeicherte Fassung konnte nicht gelesen werden (${(e as Error)?.message || "Speicherfehler"}).`));
     const geleert = (e: Event) => {
       if ((e as CustomEvent).detail !== profil.manifest.id) return;
       abbruch.current?.abort();

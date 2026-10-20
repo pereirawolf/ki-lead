@@ -3,10 +3,11 @@
 
 import type { GespeicherterVergleich } from "./vergleich";
 import { del, entries, get, set } from "idb-keyval";
-import type { AbrufFehler, Fundstelle, Nutzung } from "../anbieter/typen";
+import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from "../anbieter/typen";
+import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.4.14";
+export const APP_KENNUNG = "KI-LEAD 0.4.15";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -82,7 +83,10 @@ export interface Lauf {
     abrufFehler?: AbrufFehler[];
     schemakonform: boolean;
   };
+  /** Geschätzte Gesamtkosten; null, wenn nicht alle Stufen erfasst sind */
   kostenUsd: number | null;
+  /** Bei unvollständiger Erfassung: Summe der erfassten Stufen (Untergrenze) */
+  kostenBekanntUsd?: number;
   fehler?: string;
   /** Vergleich des Ergebnisses mit einer Referenzfassung (Abnahme, Forschung) */
   vergleich?: GespeicherterVergleich;
@@ -122,13 +126,42 @@ export function ohneBase64<T>(wert: T): T {
   );
 }
 
-export function kostenSumme(lauf: Lauf): number | null {
-  let s = 0;
+/**
+ * Erfasste Kosten eines Laufs: Summe der Stufen mit bekannten Kosten und ob alle Stufen erfasst sind.
+ * Eine Stufe ohne Kostenangabe (Abbruch, Verbindungsfehler, Modell ohne Preis) gilt als nicht erfasst,
+ * nicht als kostenlos.
+ */
+export function kostenStand(lauf: Pick<Lauf, "stufen">): { bekannt: number; vollstaendig: boolean } {
+  let bekannt = 0;
+  let vollstaendig = true;
   for (const st of lauf.stufen) {
-    if (st.kostenUsd === null) return null;
-    s += st.kostenUsd || 0;
+    if (typeof st.kostenUsd === "number") bekannt += st.kostenUsd;
+    else vollstaendig = false;
   }
-  return s;
+  return { bekannt, vollstaendig };
+}
+
+/** Gesamtkosten, wenn alle Stufen erfasst sind, sonst null. */
+export function kostenSumme(lauf: Pick<Lauf, "stufen">): number | null {
+  const k = kostenStand(lauf);
+  return k.vollstaendig ? k.bekannt : null;
+}
+
+/**
+ * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn nichts verarbeitet wurde (kein Schlüssel hinterlegt oder
+ * Anfrage vom Anbieter per HTTP-Fehler abgewiesen); sonst unbekannt.
+ */
+export function kostenNachFehler(e: unknown): number | null {
+  if (!(e instanceof AnbieterFehler)) return null;
+  return e.art === "schluessel" || (typeof e.status === "number" && e.status >= 400) ? 0 : null;
+}
+
+/** Anzeige der Laufkosten; bei unvollständiger Erfassung mit bekannter Untergrenze. */
+export function laufKostenText(lauf: Pick<Lauf, "kostenUsd" | "kostenBekanntUsd"> | null | undefined): string {
+  if (!lauf) return formatUsd(undefined);
+  if (typeof lauf.kostenUsd === "number") return formatUsd(lauf.kostenUsd);
+  if (lauf.kostenBekanntUsd) return `mindestens ${formatUsd(lauf.kostenBekanntUsd)} (nicht alle Stufen erfasst)`;
+  return formatUsd(null);
 }
 
 export async function laufSpeichern(l: Lauf): Promise<void> {

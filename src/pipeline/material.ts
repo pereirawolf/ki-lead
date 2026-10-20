@@ -39,6 +39,16 @@ export interface UebergabeMeldung {
   rolle: MeldungsRolle;
 }
 
+/**
+ * Auftrag des Lagebilds an die KI-Erfassung. Er gilt nur für das Profil, unter dem er entstand
+ * (Prüfsumme), und wird nach der Verarbeitung quittiert, damit er nicht erneut übernommen wird.
+ */
+export interface KiUebergabe {
+  nr: number;
+  profilHash: string;
+  dateien: UebergabeMeldung[];
+}
+
 /** Welche Rollen für eine Meldung möglich sind, mit Begründung für die nicht möglichen. */
 export function moeglicheRollen(obj: unknown, profil: Profil): Record<MeldungsRolle, { moeglich: boolean; grund?: string }> {
   const eingang = !!eingangsInfo(obj, profil);

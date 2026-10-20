@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.11 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.12 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -165,7 +165,7 @@ Weitere Schlüssel (z. B. `pflegeverantwortlich`, `naechste_pruefung_faellig`) g
 
 ## Prüfung beim Import
 
-Die App prüft die Struktur von Manifest, Darstellungsdatei und Kontakten (u. a. mindestens ein Bearbeitungsschritt, Pflichtrollen als Text, Radare mit ganzzahligem `max` und vollständigen Achsen). Fehler verhindern die Aktivierung. Ein Paket mit gleicher ID und Version, aber anderem Inhalt gilt als Versionskonflikt; ersetzt man es trotzdem, bleibt der alte Stand im Gerät archiviert. Für geänderte Inhalte daher die Version erhöhen.
+Die App prüft die Struktur von Manifest, Darstellungsdatei und Kontakten (u. a. mindestens ein Bearbeitungsschritt, Pflichtrollen als Text, Radare mit ganzzahligem `max` und vollständigen Achsen). Im Manifest müssen `id`, `name` und `version` nicht leere Texte sein; Pfadangaben sind Texte, `sop.dateien` und `meldung.eingang_schema_ids` Listen von Texten, `anweisungen` ein Objekt mit Texten, `migrationen` eine Liste mit `von` (Text) und gegebenenfalls `setze`/`ergaenze` als Objekte. Im Meldungsschema prüft die App neben bekannten Schlüsselwörtern auch deren Werte (etwa `required` als Liste von Feldnamen, `properties` als Objekt mit Teilschemata, Längen als ganze Zahlen ab 0) sowie zyklische Verweise. Fehler verhindern die Aktivierung. Ein Paket mit gleicher ID und Version, aber anderem Inhalt gilt als Versionskonflikt; ersetzt man es trotzdem, bleibt der alte Stand im Gerät archiviert. Für geänderte Inhalte daher die Version erhöhen.
 
 
 Die App meldet Fehler (Profil nicht verwendbar), Warnungen und Hinweise. Geprüft werden unter anderem: Pflichtdateien, gültiges JSON, verwendbares Schema, Felder und Rollen der Darstellungsdatei, Anzahl der Stufentexte, Platzhalter ohne Profilvariable, Erkennbarkeit des gemeinsamen SOP-Teils und die Übereinstimmung der Stufentexte mit dem Kodierleitfaden.
@@ -197,3 +197,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.9 | 20.10.2026 | SOP-Kopfschlüssel `typ`, `lesegruppe`, `status` werden ausgewertet (Gliederung der Auswahl, Marke „Inhaltsgerüst“); eingebettete Profile ohne Archiv, Lesefassung und SOP-Übersicht |
 | 1.10 | 20.10.2026 | Lesedokumente (README, CHANGELOG, Arbeitsanweisungen, Kodierleitfaden) in der Profilansicht; `sop/README.md` wieder eingebettet; Steckbrief aus weiteren Kopfschlüsseln |
 | 1.11 | 20.10.2026 | Eigene Fassung eines Lesedokuments im ersten Absatz nach der Überschrift („Fassung X vom TT.MM.JJJJ“); Standardfassungen der App bei fehlender Verdichtung oder Kurzfassung sichtbar |
+| 1.12 | 20.10.2026 | Importprüfung: Datentypen der Manifestangaben und Werte der Schema-Schlüsselwörter; zyklische Verweise (App 0.4.15) |
