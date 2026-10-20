@@ -2,7 +2,7 @@
 // Er ersetzt nicht die fachliche Prüfung: Gleiche Ereignisart heißt nicht gleicher Sachverhalt, und die Zahl
 // der Meldungen belegt keine Verschärfung.
 
-import { kennsatz, parseDatumDE } from "../kern/kennsaetze";
+import { kennsatz, kennsaetzeAlle, parseDatumDE } from "../kern/kennsaetze";
 import { holeWert } from "../kern/pfad";
 import { quellenHinweise } from "../kern/quellen";
 import { bezeichnung } from "../kern/ui";
@@ -66,18 +66,19 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   // 1) Zeitfenster „Handlungsrelevant bis“ (A.5 Nr. 2, A.7.3)
   const zeit: Zeitfenster[] = [];
   if (ks.handlungsrelevant) {
-    for (const sv of svs) {
-      const t = kennsatz(sv.bewertungText, ks.handlungsrelevant);
-      if (t === null) continue;
-      const datum = parseDatumDE(t);
-      let status: string;
-      let klasse: Klasse;
-      if (!datum) [status, klasse] = ["Datum nicht erkennbar (TT.MM.JJJJ)", "warn"];
-      else if (datum < jetzt) [status, klasse] = ["Zeitfenster abgelaufen – Aktualität prüfen", "warn"];
-      else if (datum < naechsteAusgabe) [status, klasse] = ["vor der nächsten Ausgabe – frühere Weitergabe prüfen", "alert"];
-      else [status, klasse] = ["nach der nächsten Ausgabe – keine Sonderweitergabe nötig", "ok"];
-      zeit.push({ sv, text: t, datum, status, klasse });
-    }
+    // Jede Kennsatzzeile zählt einzeln, wie in der Kurzfassung (fristen): eine zweite, frühere Frist
+    // desselben Sachverhalts darf nicht hinter der ersten verschwinden.
+    for (const sv of svs)
+      for (const t of kennsaetzeAlle(sv.bewertungText, ks.handlungsrelevant)) {
+        const datum = parseDatumDE(t);
+        let status: string;
+        let klasse: Klasse;
+        if (!datum) [status, klasse] = ["Datum nicht erkennbar (TT.MM.JJJJ)", "warn"];
+        else if (datum < jetzt) [status, klasse] = ["Zeitfenster abgelaufen – Aktualität prüfen", "warn"];
+        else if (datum < naechsteAusgabe) [status, klasse] = ["vor der nächsten Ausgabe – frühere Weitergabe prüfen", "alert"];
+        else [status, klasse] = ["nach der nächsten Ausgabe – keine Sonderweitergabe nötig", "ok"];
+        zeit.push({ sv, text: t, datum, status, klasse });
+      }
     zeit.sort((a, b) => (a.datum?.getTime() ?? 0) - (b.datum?.getTime() ?? 0));
   }
 

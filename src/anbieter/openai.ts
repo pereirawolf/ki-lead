@@ -24,6 +24,7 @@ import {
   type Nutzung,
   type Zitat,
 } from "./typen";
+import { abbruchPruefen, warte } from "./warten";
 
 export const OPENAI_URL = "https://api.openai.com/v1/responses";
 const MAX_WIEDERHOLUNGEN = 3;
@@ -48,10 +49,15 @@ export function strengesSchema(s: any): any {
     for (const key of alle) {
       if (pflicht.has(key)) continue;
       const p = out.properties[key];
-      const t = p.type;
-      if (typeof t === "string") out.properties[key] = { ...p, type: [t, "null"] };
-      else if (Array.isArray(t) && !t.includes("null")) out.properties[key] = { ...p, type: [...t, "null"] };
-      else if (!t) out.properties[key] = { anyOf: [p, { type: "null" }] };
+      const t = p?.type;
+      // enum, const und Verweise schränken die Werte weiter ein; null muss dann als eigene Alternative stehen,
+      // sonst wäre das bisher optionale Feld nur noch mit einem der erlaubten Werte zu füllen.
+      const eingeschraenkt = !p || typeof p !== "object" || "enum" in p || "const" in p || "$ref" in p || "anyOf" in p || "oneOf" in p || "allOf" in p;
+      if (eingeschraenkt) {
+        if (!(Array.isArray(p?.anyOf) && p.anyOf.some((x: any) => x?.type === "null"))) out.properties[key] = { anyOf: [p, { type: "null" }] };
+      } else if (typeof t === "string") out.properties[key] = t === "null" ? p : { ...p, type: [t, "null"] };
+      else if (Array.isArray(t)) out.properties[key] = t.includes("null") ? p : { ...p, type: [...t, "null"] };
+      else out.properties[key] = { anyOf: [p, { type: "null" }] };
     }
     out.required = alle;
     out.additionalProperties = false;
@@ -174,15 +180,6 @@ export function nutzungOpenAi(u: any, ausgabe: any[]): Nutzung {
   };
 }
 
-const warte = (ms: number, signal?: AbortSignal) =>
-  new Promise<void>((ok, nein) => {
-    const t = setTimeout(ok, ms);
-    signal?.addEventListener("abort", () => {
-      clearTimeout(t);
-      nein(new DOMException("Abgebrochen", "AbortError"));
-    });
-  });
-
 class StromEnde extends Error {}
 
 export class OpenAiAnbieter implements LlmAnbieter {
@@ -197,6 +194,7 @@ export class OpenAiAnbieter implements LlmAnbieter {
   private async eineRunde(a: LlmAnfrage): Promise<any> {
     const body = anfrageKoerperOpenAi(a);
     for (let versuch = 0; ; versuch++) {
+      abbruchPruefen(a.signal);
       let antwort: Response;
       try {
         antwort = await this.abruf(this.url, {

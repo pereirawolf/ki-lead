@@ -30,6 +30,43 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.12 | ef5280b (Nachtrag vom 20.10.2026: Beispielprofil 1.7.0, ohne Änderung der App; Stand der Version selbst: 3d58abf) |
 | 0.4.13 | bbf368b |
 | 0.4.14 | Commit „SOP-LEAD C12 1.1.0: Kraftstoff- und Wärmeversorgung; Sammelmappe 3.2.0, Profil 1.8.0“ (Nachtrag vom 20.10.2026: Beispielprofil 1.8.0, ohne Änderung der App; Stand der Version selbst: c8406ab) |
+| 0.4.15 | letzter Commit von Pull Request #12 „Korrekturen aus dem Code-Review vom 20.10.2026; 0.4.15“ |
+
+## [0.4.15] – 20.10.2026
+
+Grundlage: Code-Review „KI-LEAD_CodeReview_2026-10-20_2d49aca“ (Befunde F01–F13, Verbesserungen V03 und V04), vor der Umsetzung am Stand ca402d0 erneut nachvollzogen. SOP-Inhalte, Arbeitsanweisungen und Profilinhalte sind unverändert.
+
+### Behoben
+
+- Quellenprüfung: Ein Verweis mit sehr großer Nummer (ab 2^53, etwa `[Q9007199254740992]`) oder ein großer rückwärts geschriebener Bereich (`[Q100000000–Q1]`) hielt die Seite an. Bereiche umfassen jetzt in beide Richtungen höchstens 50 Nummern, und jede Eingabe wird in begrenzter Zeit gelesen [F01].
+- KI-Erfassung: Eine Übergabe aus dem Lagebild wurde nach einem Profilwechsel unter dem neuen Profil erneut als Material übernommen. Eine Übergabe gilt jetzt nur für das Profil, unter dem sie entstand, wird genau einmal übernommen (auch im StrictMode) und beim Profilwechsel verworfen [F02].
+- Lagebild: Meldungen, die vor Abschluss des ersten Ladens hinzugefügt wurden, verschwanden, sobald der gespeicherte Stand eintraf. Beide Stände werden jetzt zusammengeführt; ein verspätetes Ergebnis nach Wechsel wird verworfen. Scheitert das Laden, erscheint ein Hinweis mit „Erneut laden“, und der gespeicherte Stand wird nicht überschrieben [F03, F13].
+- Schemaprüfung: Geerbte JavaScript-Namen wie `constructor` oder `toString` galten als vorhandene Felder. Zusatzfelder mit solchen Namen wurden bei `additionalProperties: false` übersehen, fehlende Pflichtfelder mit solchen Namen nicht gemeldet. Gezählt werden jetzt nur eigene Schlüssel [F04].
+- Profilimport: Ein Manifest mit falschen Datentypen (etwa ein Objekt als `name`, eine Zahl als `sop.dateien`, `beispiele: [null]`) wurde aktiviert und scheiterte erst beim Anzeigen, oder der Import brach mit einer technischen Meldung ab. Das Manifest wird jetzt vor der weiteren Verarbeitung geprüft; Fehler nennen die betroffene Angabe. `null` bei optionalen Texten gilt weiterhin als fehlende Angabe [F05].
+- Eignungsprüfung des Meldungsschemas: Werte bekannter Schlüsselwörter wurden nicht geprüft. `required` als Text galt als verwendbar, `properties: null` brach die Prüfung ab. Jetzt ergeben ungültige Werte, zyklische Verweise (auch über `allOf` oder `$ref` mit Nachbarschlüsseln) und eine Verschachtelung über 60 Ebenen lesbare Fehler. Bei der Prüfung von Meldungen bricht ein Zyklus mit einer Fehlermeldung ab statt mit einem Stapelüberlauf. **Achtung:** Schemata mit Formen älterer Entwürfe, die die Prüfung bisher still übergangen hat (`items` als Liste, `exclusiveMinimum: true`), werden jetzt abgewiesen. Bereits importierte Profile dieser Art erscheinen mit Befund in der Profilliste und lassen sich nicht aktivieren [F06].
+- Redaktionscheck: Bei mehreren Zeilen „Handlungsrelevant bis“ in einem Sachverhalt wurde nur die erste ausgewertet; eine zweite, frühere Frist fehlte. Jede Zeile wird jetzt einzeln eingestuft, wie in der Management Summary. Lagebild-PDF, Kopiervorlage und Ausfüllhinweise berücksichtigen ebenfalls alle Zeilen. Das wirkt auch auf die „Vermerke aus dem Redaktionscheck“, die die KI-Erfassung bei der Verdichtung an S1 und S2 mitgibt. Bei mehreren Fristen enthalten sie mehr Zeilen, und die Zahl der Redaktionshinweise kann steigen [F07].
+- Management Summary: Eine Änderung im Quellenverzeichnis, die die Herkunftsliste für die KI änderte (etwa ein anderer Herausgeber), ließ die gespeicherte Fassung als aktuell erscheinen. Der Änderungsnachweis umfasst jetzt Meldung, Herkunftsliste und Arbeitsanweisung. Bereits gespeicherte Fassungen erscheinen deshalb einmal als veraltet [F08].
+- KI-Anbieter: Ein Abbruch kurz vor der Wartezeit vor einem neuen Versuch wirkte erst nach deren Ende (bis zu 60 Sekunden). Ein gemeinsamer Wartebaustein beendet bei bereits abgebrochenem Signal sofort und räumt Zeitgeber und Listener ab. Vor jedem Versuch wird das Signal geprüft [F09].
+- PDF: Eine typfehlerhafte Meldung (etwa Sachverhalte als Text) ließ den PDF-Export ohne Datei und ohne Meldung scheitern. Das PDF enthält jetzt einen rot markierten Hinweis mit dem gefundenen Inhalt, statt die Angabe still zu übergehen. Fehler beim Erzeugen werden in Meldung und Lagebild angezeigt [F10].
+- Kosten: Eine abgebrochene oder fehlgeschlagene Stufe ging mit 0 USD in die Summe ein. Sie gilt jetzt als nicht erfasst, außer es fehlte der API-Schlüssel und es wurde nichts gesendet (dann 0). Auch ein HTTP-Fehler zählt als nicht erfasst, weil er erst nach bereits berechneten Runden (Fortsetzung, Neustart) kommen kann. Der Lauf zeigt in diesem Fall „mindestens … (nicht alle Stufen erfasst)“ [F11].
+- OpenAI: Die Umwandlung in ein strenges Schema machte optionale Felder mit `enum`, `const`, `$ref` oder `anyOf` nicht wirklich mit `null` belegbar. Solche Felder erhalten jetzt `anyOf: [Feld, null]`. Die derzeit gesendeten Schemata waren nicht betroffen [F12].
+- Gerätespeicher: Lese- und Schreibfehler beim Start und bei Einstellungen blieben unbehandelt. Wenn importierte Profile nicht lesbar waren, fehlten auch die mitgelieferten. Jetzt bleiben mitgelieferte Profile verfügbar, ein einzelnes defektes Profil verdeckt die übrigen nicht, und Fehler beim Lesen oder Speichern von Einstellungen, Schlüsseln, Zwischenstand, Startprofil, Laufprotokollen (Speichern, Ändern, Löschen, Liste früherer Läufe) und gespeicherter Management Summary werden angezeigt [F13].
+
+### Geändert
+
+- Die PDF-Ausgabe wird erst bei Bedarf geladen, schon beim Zeigen auf eine PDF-Schaltfläche oder bei deren Fokus. So bleibt der Download auch in Safari eine Folge des Klicks. Das Haupt-JavaScript sinkt von rund 1,54 MB auf 1,12 MB, die Warnung zur Chunkgröße entfällt. Fehlt der nachgeladene Teil nach einer Neuveröffentlichung, greift das Neuladen über `vite:preloadError` aus 0.4.14 [V04].
+- GitHub Actions: Jeder Pull Request und jeder Zweig hat eine eigene Concurrency-Gruppe. Ein Push auf einen Pull Request bricht keine Prüfung oder Veröffentlichung eines anderen Zweigs mehr ab. Auf `main` wird kein laufender Durchgang abgebrochen; ein noch wartender wird, wie bei GitHub üblich, durch einen neueren ersetzt. Die Veröffentlichung läuft in der Gruppe `pages`, ohne laufende Veröffentlichungen abzubrechen. Schreibrechte für Pages erhält nur der Veröffentlichungsjob [V03].
+
+### Neu
+
+- Komponententests der Oberfläche mit jsdom (`tests/oberflaeche.test.ts`, neue Entwicklungsabhängigkeit `jsdom`): Übergabe beim Profilwechsel, Laden des Lagebilds, Start bei gestörtem Gerätespeicher.
+- Regressionstests zu F01 und F04–F12 (`tests/korrekturen-2026-10-20.test.ts`).
+
+### Nicht übernommen
+
+- V01 (Laufkonfiguration als unveränderlicher Snapshot): Das Laufprotokoll hält das tatsächlich verwendete Modell schon je Stufe fest. Ein Wechsel zwischen S1 und S2 kann gewollt sein.
+- V02 (gemeinsame Importbudgets): Grenzen je Datei bestehen. Ein Gesamtbudget vor S1 bleibt als eigene Ergänzung offen.
+- V05 (Signaturfragmente anhängen): Das offizielle Anthropic-SDK ersetzt die Signatur bei `signature_delta` ebenfalls. Das bisherige Verhalten entspricht dem.
 
 ## [0.4.14] – 20.10.2026
 

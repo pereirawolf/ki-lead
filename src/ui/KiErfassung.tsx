@@ -12,7 +12,7 @@ import { dateiAnbieten } from "../speicher/speicher";
 import { VergleichKasten } from "./Vergleich";
 import { laufModelle, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
-import { laeufeLaden, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
+import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
 import {
   dateiLesen,
   istMeldung,
@@ -22,7 +22,7 @@ import {
   umklassifizieren,
   urlsAusText,
   type Material,
-  type UebergabeMeldung,
+  type KiUebergabe,
 } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 
@@ -33,7 +33,9 @@ interface Props {
   zuEinstellungen: () => void;
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
-  uebergabe?: { nr: number; dateien: UebergabeMeldung[] } | null;
+  uebergabe?: KiUebergabe | null;
+  /** Quittiert eine verarbeitete Übergabe, damit sie nach einem erneuten Einhängen nicht wiederholt wird */
+  uebergabeQuittieren?: (nr: number) => void;
   /** Meldet der App, ob gerade ein KI-Lauf aktiv ist (ein Profilwechsel bricht ihn ab). */
   laufMelden?: (laeuft: boolean) => void;
 }
@@ -83,7 +85,9 @@ const STATUS_TEXT: Record<Lauf["status"], string> = {
   abgebrochen: "abgebrochen",
 };
 
-export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, laufMelden }: Props) {
+const speicherText = (was: string, e: unknown) => `${was} (${(e as Error)?.message || "Speicherfehler"}).`;
+
+export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
@@ -126,7 +130,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     [],
   );
 
-  const neuLaden = async () => setLaeufe((await laeufeLaden()).filter((l) => l.profil.id === profil.manifest.id));
+  const neuLaden = async () => {
+    try {
+      setLaeufe((await laeufeLaden()).filter((l) => l.profil.id === profil.manifest.id));
+    } catch (e) {
+      setFehler(`Frühere Läufe konnten nicht aus dem Gerätespeicher gelesen werden (${(e as Error)?.message || "Speicherfehler"}).`);
+    }
+  };
   useEffect(() => {
     neuLaden();
   }, [profil]);
@@ -184,7 +194,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       signal: ctrl.signal,
       aktualisiert: async (x) => {
         setLauf({ ...x });
-        await laufSpeichern(x);
+        await laufSpeichern(x).catch((e) => setFehler(speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)));
       },
       fortschritt,
     };
@@ -197,8 +207,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     const zusatz = s > 0 ? ` Die Seite war während des Laufs ${s} s im Hintergrund oder gesperrt.` : "";
     l.fehler = abgebrochen ? "Von der Person abgebrochen." : (istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e)) + zusatz;
     setLauf({ ...l });
-    await laufSpeichern(l);
     setFehler(l.fehler);
+    await laufSpeichern(l).catch((e) => setFehler(`${l.fehler} ${speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)}`));
     neuLaden();
   };
 
@@ -254,8 +264,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   };
 
   // Übergabe aus dem Lagebild: Meldungen als Material, bei abgeschlossenem Lauf mit neuer Erfassung
+  // Nur Übergaben des eigenen Profils und jede nur einmal (auch bei doppeltem Effektlauf im StrictMode).
+  const verarbeiteteUebergabe = useRef<number | null>(null);
   useEffect(() => {
-    if (!uebergabe?.dateien.length) return;
+    if (!uebergabe?.dateien.length || uebergabe.profilHash !== profil.hash) return;
+    if (verarbeiteteUebergabe.current === uebergabe.nr) return;
+    verarbeiteteUebergabe.current = uebergabe.nr;
+    uebergabeQuittieren?.(uebergabe.nr);
     if (laeuft) {
       setDateiFehler(["Die Meldungen aus dem Lagebild wurden nicht übernommen, weil gerade ein Lauf läuft. Nach dem Lauf erneut übergeben."]);
       return;
@@ -551,7 +566,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <span>
                   {dauer(jetzt - start)}
                   {zeichen > 0 ? ` · ${zeichen.toLocaleString("de-DE")} Zeichen geschrieben` : ""}
-                  {lauf?.kostenUsd ? ` · bisher ${formatUsd(lauf.kostenUsd)}` : ""}
+                  {lauf?.kostenUsd || lauf?.kostenBekanntUsd ? ` · bisher ${laufKostenText(lauf)}` : ""}
                 </span>
               </div>
               {protokoll.length > 0 && (
@@ -765,7 +780,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </button>
               </div>
               <p className="hinweis">
-                Kosten S1: {formatUsd(lauf?.kostenUsd)}.{" "}
+                Kosten S1: {laufKostenText(lauf)}.{" "}
                 {lauf?.auftrag.websuche === false
                   ? "S2 arbeitet ohne Websuche nur mit dem Material."
                   : `S2 recherchiert mit bis zu ${einstellungen.websucheMax} Websuchen.`}
@@ -786,7 +801,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               profil={profil}
               aendern={async (l) => {
                 setLauf(l);
-                await laufSpeichern(l);
+                await laufSpeichern(l).catch((e) => setFehler(speicherText("Die Änderung am Lauf konnte nicht im Gerät gespeichert werden", e)));
               }}
               lauf={lauf}
               fehler={fehler}
@@ -817,7 +832,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <td>{new Date(l.erstellt).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</td>
                   <td>{l.bestaetigt?.gegenstand || l.vorschlag?.gegenstand || l.auftrag.sachverhalt || "–"}</td>
                   <td>{STATUS_TEXT[l.status]}</td>
-                  <td>{formatUsd(l.kostenUsd)}</td>
+                  <td>{laufKostenText(l)}</td>
                   <td className="tabelle-aktionen">
                     {l.ergebnis && (
                       <button type="button" className="knopf klein" onClick={() => uebernehmen(l.ergebnis!.meldung)}>
@@ -832,7 +847,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       className="knopf leise klein"
                       onClick={async () => {
                         if (confirm("Diesen Lauf mit Protokoll löschen?")) {
-                          await laufLoeschen(l.id);
+                          await laufLoeschen(l.id).catch((e) => setFehler(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
                           neuLaden();
                         }
                       }}
@@ -955,7 +970,7 @@ function Ergebnis({
       )}
 
       <details className="ki-abschnitt">
-        <summary>Laufprotokoll: {formatUsd(lauf.kostenUsd)} gesamt</summary>
+        <summary>Laufprotokoll: {laufKostenText(lauf)} gesamt</summary>
         <table className="tabelle">
           <thead>
             <tr>

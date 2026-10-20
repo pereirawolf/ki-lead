@@ -339,10 +339,25 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
   }
 }
 
-/** Kurzer, stabiler Fingerabdruck einer Meldung (erkennt, ob die Kurzfassung veraltet ist). */
-export function fingerabdruck(d: Meldung): string {
+/** Kurzer, stabiler Fingerabdruck eines JSON-Werts. */
+export function fingerabdruck(d: unknown): string {
   const s = JSON.stringify(d);
   let h = 5381;
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
   return (h >>> 0).toString(16);
+}
+
+/**
+ * Fingerabdruck des vollständigen Eingangs der Kurzfassung: Meldung ohne Quellenverzeichnis und Freigabe,
+ * die daraus abgeleitete Herkunftsliste („laut Betreiber“) und die Arbeitsanweisung. Ändert sich einer
+ * davon, gilt eine gespeicherte Fassung als veraltet. Fassungen mit älterem Fingerabdruck erscheinen
+ * einmal als veraltet und sind neu zu prüfen.
+ */
+export function kurzfassungsFingerabdruck(d: Meldung, profil: Profil): string {
+  return fingerabdruck({
+    fassung: 2,
+    meldung: meldungFuerKurzfassung(d, profil),
+    herkunft: herkunftsliste(d, profil),
+    anweisung: kurzfassungAnweisung(profil),
+  });
 }

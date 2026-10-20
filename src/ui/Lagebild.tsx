@@ -6,7 +6,7 @@ import { holeWert } from "../kern/pfad";
 import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarZeilen } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE, jetztLokal } from "../kern/ausgabe";
-import { gliedereAnalyse, gliedereBewertung, kennsatz } from "../kern/kennsaetze";
+import { gliedereAnalyse, gliedereBewertung, kennsaetzeAlle, kennsatz } from "../kern/kennsaetze";
 import {
   absender,
   alleSachverhalte,
@@ -36,9 +36,9 @@ import {
 import { redaktionscheck, type Klasse } from "../lagebild/redaktion";
 import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
-import { lagebildAlsPdf } from "../dokumente/pdf";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";
 import { RadarGrafik } from "./Radar";
+import { pdfVorladen } from "../dokumente/vorladen";
 import { radarPng } from "./radarBild";
 
 interface Props {
@@ -140,6 +140,18 @@ function Punkt({ klasse, marke, titel, children }: { klasse: Klasse | ""; marke?
   );
 }
 
+/** Hängt neue Dateien an, ohne inhaltsgleiche zu verdoppeln; die Reihenfolge des Bestands bleibt. */
+export function zusammenfuehren(bestand: LagebildDatei[], neu: LagebildDatei[]): LagebildDatei[] {
+  const ids = new Set(bestand.map((d) => inhaltsKennung(d.text)));
+  const dazu = neu.filter((d) => {
+    const id = inhaltsKennung(d.text);
+    if (ids.has(id)) return false;
+    ids.add(id);
+    return true;
+  });
+  return dazu.length ? [...bestand, ...dazu] : bestand;
+}
+
 export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const ui = profil.ui;
   const r = ui.rollen;
@@ -150,17 +162,38 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const [reiter, setReiter] = useState<Reiter>("uebersicht");
   const [importFehler, setImportFehler] = useState<LagebildFehler[]>([]);
   const [geladen, setGeladen] = useState(false);
+  const [ladeFehler, setLadeFehler] = useState<string | null>(null);
+  const [ladeVersuch, setLadeVersuch] = useState(0);
   const [ziehen, setZiehen] = useState(false);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const eingabe = useRef<HTMLInputElement>(null);
 
+  // Gespeicherten Stand laden. Was vor dem Abschluss schon hinzugefügt wurde, bleibt erhalten (zusammengeführt);
+  // ein verspätetes Ergebnis nach Wechsel oder Aushängen wird verworfen. Solange nicht geladen ist, wird nicht
+  // gespeichert, damit ein Lesefehler keinen leeren Stand über vorhandene Daten schreibt.
   useEffect(() => {
-    lagebildLesen(profil.manifest.id).then((s) => {
-      if (s?.dateien) setDateien(s.dateien);
-      if (s?.naechsteAusgabe) setAusgabe(s.naechsteAusgabe);
-      setGeladen(true);
-    });
-  }, [profil.manifest.id]);
+    let gueltig = true;
+    setLadeFehler(null);
+    lagebildLesen(profil.manifest.id)
+      .then((s) => {
+        if (!gueltig) return;
+        if (s?.dateien) {
+          const gespeichert = s.dateien;
+          setDateien((neu) => zusammenfuehren(gespeichert, neu));
+        }
+        if (s?.naechsteAusgabe) setAusgabe(s.naechsteAusgabe);
+        setGeladen(true);
+      })
+      .catch((e) => {
+        if (gueltig)
+          setLadeFehler(
+            `Der gespeicherte Stand des Lagebilds konnte nicht gelesen werden (${(e as Error)?.message || "Speicherfehler"}). Änderungen werden erst nach erfolgreichem Laden gespeichert.`,
+          );
+      });
+    return () => {
+      gueltig = false;
+    };
+  }, [profil.manifest.id, ladeVersuch]);
 
   useEffect(() => {
     if (geladen)
@@ -184,12 +217,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const ks = ui.kennsaetze || {};
   const v = lb.verweise || {};
 
-  const hinzufuegen = (neu: LagebildDatei[]) => {
-    setDateien((alt) => {
-      const ids = new Set(alt.map((d) => inhaltsKennung(d.text)));
-      return [...alt, ...neu.filter((d) => !ids.has(inhaltsKennung(d.text)))];
-    });
-  };
+  const hinzufuegen = (neu: LagebildDatei[]) => setDateien((alt) => zusammenfuehren(alt, neu));
 
   const auswahl = async (liste: FileList | File[] | null) => {
     if (!liste || !liste.length) return;
@@ -198,8 +226,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     setImportFehler(erg.fehler);
   };
 
-  const entfernen = (id: string) => setDateien((alt) => alt.filter((d) => inhaltsKennung(d.text) !== id));
+  // Vor Abschluss des Ladens würde Entferntes beim Zusammenführen mit dem gespeicherten Stand zurückkehren
+  const entfernen = (id: string) => geladen && setDateien((alt) => alt.filter((d) => inhaltsKennung(d.text) !== id));
   const alleEntfernen = () => {
+    if (!geladen) return;
     if (confirm(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`)) setDateien([]);
   };
 
@@ -242,14 +272,16 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
       "text/csv;charset=utf-8",
     );
 
-  const pdf = () => {
+  const [pdfFehler, setPdfFehler] = useState<string | null>(null);
+  const pdf = async () => {
+    setPdfFehler(null);
     const kopf = ["Meldung", "Sachverhalt", lBeurteilung, ...(r.sv_tendenz ? [lTendenz] : []), ...(ks.handlungsrelevant ? ["Handlungsrelevant bis"] : [])];
     const zeilen = sortiert.map((s) => [
       absender(s.eintrag, profil),
       s.bezeichnung || "(ohne Bezeichnung)",
       s.beurteilung || "keine Angabe",
       ...(r.sv_tendenz ? [s.tendenz || "keine Angabe"] : []),
-      ...(ks.handlungsrelevant ? [kennsatz(s.bewertungText, ks.handlungsrelevant) || ""] : []),
+      ...(ks.handlungsrelevant ? [kennsaetzeAlle(s.bewertungText, ks.handlungsrelevant).join("; ")] : []),
     ]);
     const meldungen = eintraege
       .filter((e) => !e.fremd)
@@ -261,11 +293,17 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
           ["Schemaprüfung", e.schema.length ? `${e.schema.length} Abweichung(en)` : "ohne Befund"],
         ],
       }));
-    dateiAnbieten(
-      lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()),
-      `${titel}_${jetztLokal(profil.manifest.variablen.zeitzone).slice(0, 10)}.pdf`,
-      "application/pdf",
-    );
+    try {
+      // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
+      const { lagebildAlsPdf } = await import("../dokumente/pdf");
+      dateiAnbieten(
+        lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()),
+        `${titel}_${jetztLokal(profil.manifest.variablen.zeitzone).slice(0, 10)}.pdf`,
+        "application/pdf",
+      );
+    } catch (e) {
+      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}).`);
+    }
   };
 
   const marken = (e: LagebildEintrag) => (
@@ -393,6 +431,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
         </p>
       </section>
 
+      {ladeFehler && (
+        <div className="kasten kasten-fehler" role="alert">
+          <p>{ladeFehler}</p>
+          <button type="button" className="knopf" onClick={() => setLadeVersuch((n) => n + 1)}>
+            Erneut laden
+          </button>
+        </div>
+      )}
       {speicherFehler && (
         <div className="kasten kasten-fehler" role="alert">
           <p>{speicherFehler}</p>
@@ -412,6 +458,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
         </div>
       )}
 
+      {pdfFehler && (
+        <div className="kasten kasten-fehler" role="alert">
+          <p>{pdfFehler}</p>
+        </div>
+      )}
+
       {eintraege.length === 0 ? (
         <p className="leer">Noch keine Meldungen geladen.</p>
       ) : (
@@ -422,7 +474,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
               {kz.fremd ? ` und ${kz.fremd} in fremdem Schema` : ""} · {kz.sachverhalte} Sachverhalt{kz.sachverhalte === 1 ? "" : "e"}
             </p>
             <div className="werkzeugleiste-knoepfe">
-              <button type="button" className="knopf" onClick={pdf} disabled={!kz.meldungen}>
+              <button type="button" className="knopf" onClick={pdf} onPointerEnter={pdfVorladen} onFocus={pdfVorladen} disabled={!kz.meldungen}>
                 PDF
               </button>
               <button type="button" className="knopf" onClick={csv} disabled={!kz.meldungen}>
@@ -1005,7 +1057,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                       />
                     </div>
                     {bloecke.map(({ s, html, text }) => {
-                      const hb = ks.handlungsrelevant ? kennsatz(s.bewertungText, ks.handlungsrelevant) : null;
+                      const fristen = kennsaetzeAlle(s.bewertungText, ks.handlungsrelevant);
+                      const hb = fristen.length ? fristen.join("; ") : null;
                       const abs = ks.abschluss ? kennsatz(s.bewertungText, ks.abschluss) : null;
                       return (
                         <div key={`${s.eintrag.id}-${s.index}`} className="lb-vorlage">

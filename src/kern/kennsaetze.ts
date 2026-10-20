@@ -86,8 +86,7 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
         text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Bevölkerungsschutz, und warum jetzt?`,
       });
     }
-    const hb = kennsatz(bt, ks.handlungsrelevant);
-    if (hb !== null && !DATUM_RE.test(hb)) {
+    if (kennsaetzeAlle(bt, ks.handlungsrelevant).some((hb) => !DATUM_RE.test(hb))) {
       out.push({ stufe: "hinweis", text: `${name}: „${ks.handlungsrelevant}“ bitte mit Datum im Format TT.MM.JJJJ angeben.` });
     }
     if (r.tendenz_entspannung && tendenz === r.tendenz_entspannung && ks.abschluss && kennsatz(bt, ks.abschluss) === null) {

@@ -21,6 +21,7 @@ import {
   TEXT_VERBINDUNGSABBRUCH,
 } from "./typen";
 import type { ZusammengesetzteNachricht } from "./strom";
+import { abbruchPruefen, warte } from "./warten";
 
 /** Verbindung riss mitten im Strom ab; enthält die bis dahin vollständigen Blöcke. */
 export class StromAbbruch extends Error {
@@ -121,15 +122,6 @@ export function auswerten(bloecke: any[]): {
   return { text, zitate, fundstellen: [...fund.values()], suchen, abrufe, abrufFehler };
 }
 
-const warte = (ms: number, signal?: AbortSignal) =>
-  new Promise<void>((ok, nein) => {
-    const t = setTimeout(ok, ms);
-    signal?.addEventListener("abort", () => {
-      clearTimeout(t);
-      nein(new DOMException("Abgebrochen", "AbortError"));
-    });
-  });
-
 export class AnthropicAnbieter implements LlmAnbieter {
   id = "anthropic";
   constructor(
@@ -141,6 +133,7 @@ export class AnthropicAnbieter implements LlmAnbieter {
   private async eineRunde(a: LlmAnfrage, nachrichten: any[]) {
     const body = anfrageKoerper(a, nachrichten);
     for (let versuch = 0; ; versuch++) {
+      abbruchPruefen(a.signal);
       let antwort: Response;
       try {
         antwort = await this.abruf(this.url, {

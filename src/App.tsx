@@ -21,7 +21,7 @@ import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { EinstellungenAnsicht } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
-import type { UebergabeMeldung } from "./pipeline/material";
+import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
@@ -64,23 +64,34 @@ export default function App() {
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
-  const [kiUebergabe, setKiUebergabe] = useState<{ nr: number; dateien: UebergabeMeldung[] } | null>(null);
+  const [kiUebergabe, setKiUebergabe] = useState<KiUebergabe | null>(null);
+  /** Laufende Nummer der Übergaben; bleibt nach dem Quittieren erhalten, damit jede Übergabe neu ist */
+  const uebergabeNr = useRef(0);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
 
-  useEffect(() => {
-    einstellungenLesen().then(setEinstellungenRoh);
-    alleSchluesselLesen().then(setSchluesselRoh);
+  /** Meldet einen Fehler des Gerätespeichers sichtbar (IndexedDB gesperrt, voll oder defekt). */
+  const speicherProblem = useCallback((was: string, e: unknown) => {
+    setSpeicherFehler(`${was} (${(e as Error)?.message || "Speicherfehler"}).`);
   }, []);
+
+  useEffect(() => {
+    einstellungenLesen()
+      .then(setEinstellungenRoh)
+      .catch((e) => speicherProblem("Die gespeicherten Einstellungen konnten nicht gelesen werden; es gelten die Vorgaben", e));
+    alleSchluesselLesen()
+      .then(setSchluesselRoh)
+      .catch((e) => speicherProblem("Die gespeicherten API-Schlüssel konnten nicht gelesen werden", e));
+  }, [speicherProblem]);
 
   const setEinstellungen = (e: Einstellungen) => {
     setEinstellungenRoh(e);
-    einstellungenSchreiben(e);
+    einstellungenSchreiben(e).catch((x) => speicherProblem("Die Einstellungen gelten nur bis zum Neuladen; sie konnten nicht im Gerät gespeichert werden", x));
   };
 
   const setSchluessel = (id: AnbieterId, wert: string) => {
     setSchluesselRoh((alt) => ({ ...alt, [id]: wert }));
-    schluesselSchreiben(wert, id);
+    schluesselSchreiben(wert, id).catch((x) => speicherProblem("Der API-Schlüssel gilt nur bis zum Neuladen; er konnte nicht im Gerät gespeichert werden", x));
   };
 
   /** Meldung in der Maske durch eine andere ersetzen; die Management Summary der alten Meldung wird geleert. */
@@ -103,20 +114,38 @@ export default function App() {
 
   const anKiUebergeben = (dateien: UebergabeMeldung[]) => {
     // Aus der Verdichtung entsteht eine neue Meldung: die bisherige Management Summary gilt nicht mehr
-    if (profil) kurzfassungLeeren(profil.manifest.id);
-    setKiUebergabe((alt) => ({ nr: (alt?.nr || 0) + 1, dateien }));
+    if (!profil) return;
+    kurzfassungLeeren(profil.manifest.id);
+    uebergabeNr.current += 1;
+    setKiUebergabe({ nr: uebergabeNr.current, profilHash: profil.hash, dateien });
     setAnsicht("ki");
   };
 
+  const uebergabeQuittieren = useCallback((nr: number) => setKiUebergabe((alt) => (alt?.nr === nr ? null : alt)), []);
+
   useEffect(() => {
     (async () => {
+      // Ein einzelnes defektes Profil oder ein nicht lesbarer Gerätespeicher darf die übrigen Profile nicht verdecken.
+      const sicherLaden = async (dateien: Record<string, string>) => {
+        try {
+          return await ladeProfil(dateien);
+        } catch (e) {
+          return { profil: null, befunde: [{ stufe: "fehler" as const, text: `Das Profil konnte nicht geladen werden: ${(e as Error)?.message || e}` }] };
+        }
+      };
       const eintraege: ProfilEintrag[] = [];
       for (const e of eingebauteProfile()) {
-        const erg = await ladeProfil(e.dateien);
+        const erg = await sicherLaden(e.dateien);
         eintraege.push({ schluessel: e.ordner, quelle: "eingebaut", dateien: e.dateien, profil: erg.profil, befunde: erg.befunde });
       }
-      for (const g of await profileLaden()) {
-        const erg = await ladeProfil(g.dateien);
+      let gespeichert: Awaited<ReturnType<typeof profileLaden>> = [];
+      try {
+        gespeichert = await profileLaden();
+      } catch (e) {
+        speicherProblem("Importierte Profile konnten nicht aus dem Gerätespeicher gelesen werden; verfügbar sind nur die mitgelieferten Profile", e);
+      }
+      for (const g of gespeichert) {
+        const erg = await sicherLaden(g.dateien);
         eintraege.push({
           schluessel: g.schluessel,
           quelle: "importiert",
@@ -127,7 +156,10 @@ export default function App() {
         });
       }
       setProfile(eintraege);
-      const gemerkt = await aktivesProfilLesen();
+      const gemerkt = await aktivesProfilLesen().catch((e) => {
+        speicherProblem("Das zuletzt gewählte Profil konnte nicht gelesen werden; aktiv ist das erste verfügbare", e);
+        return undefined;
+      });
       const start = eintraege.find((e) => e.schluessel === gemerkt && e.profil) || eintraege.find((e) => e.profil);
       if (start) setAktiv(start.schluessel);
     })();
@@ -176,7 +208,19 @@ export default function App() {
     let gueltig = true;
     setMeldungRoh(null);
     (async () => {
-      const z = await zwischenstandLesen(profil.manifest.id);
+      let z: Awaited<ReturnType<typeof zwischenstandLesen>>;
+      try {
+        z = await zwischenstandLesen(profil.manifest.id);
+      } catch (e) {
+        if (!gueltig) return;
+        speicherProblem(
+          "Der Zwischenstand konnte nicht aus dem Gerätespeicher gelesen werden. Angezeigt wird eine neue Meldung; Änderungen daran überschreiben einen vorhandenen Zwischenstand",
+          e,
+        );
+        setMeldungRoh(neueMeldung(profil));
+        setGesichert(undefined);
+        return;
+      }
       if (!gueltig) return;
       setMeldungRoh(z?.daten ?? neueMeldung(profil));
       const anderer = z?.profilVersion && z.profilVersion !== profil.manifest.version ? ` (angelegt mit Profilversion ${z.profilVersion}, bitte prüfen)` : "";
@@ -215,7 +259,9 @@ export default function App() {
     )
       return;
     setAktiv(schluessel);
-    await aktivesProfilSetzen(schluessel);
+    // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil
+    if (schluessel !== aktiv) setKiUebergabe(null);
+    await aktivesProfilSetzen(schluessel).catch((e) => speicherProblem("Das gewählte Profil konnte nicht als Startprofil gespeichert werden", e));
     setAnsicht("meldung");
   };
 
@@ -332,6 +378,7 @@ export default function App() {
               zuEinstellungen={() => setAnsicht("einstellungen")}
               uebernehmen={kiUebernehmen}
               uebergabe={kiUebergabe}
+              uebergabeQuittieren={uebergabeQuittieren}
               laufMelden={(l) => {
                 kiLaeuft.current = l;
               }}
@@ -357,7 +404,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.14. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.15. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>
