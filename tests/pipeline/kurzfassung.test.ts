@@ -19,37 +19,13 @@ import {
   kurzfassungText,
   woerter,
 } from "../../src/pipeline/kurzfassung";
-import { leereNutzung, type LlmAnbieter, type LlmAnfrage } from "../../src/anbieter/typen";
+import { leereNutzung } from "../../src/anbieter/typen";
+import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 
-import { ilkaDateien } from "../support/fixtures";
-const ilka = ilkaDateien();
-const th = ilka.find((x) => x.name.includes("_TH_"))!.daten; // zwei Sachverhalte
+const th = ilkaMeldung("TH"); // zwei Sachverhalte
 
-function attrappe(text: string): LlmAnbieter & { anfragen: LlmAnfrage[] } {
-  const anfragen: LlmAnfrage[] = [];
-  return {
-    id: "attrappe",
-    anfragen,
-    async senden(a) {
-      anfragen.push(a);
-      return {
-        modell: "claude-test",
-        text,
-        inhalt: [],
-        zitate: [],
-        fundstellen: [],
-        suchen: [],
-        abrufe: [],
-        abrufFehler: [],
-        nutzung: leereNutzung(),
-        kostenUsd: 0.02,
-        stopGrund: "end_turn",
-        dauerMs: 1,
-        runden: 1,
-      };
-    },
-  };
-}
+/** Anbieter mit genau einer Antwort (Kosten 0,02 USD); ein zweiter Aufruf schlägt fehl */
+const attrappe = (text: string) => skriptAnbieter([llmAntwort(text, { inhalt: [], nutzung: leereNutzung(), kostenUsd: 0.02, dauerMs: 1 })]);
 
 describe("Management Summary", () => {
   it("leitet die Abschnitte aus den Analysefeldern des Profils ab", async () => {
@@ -174,7 +150,7 @@ describe("Management Summary", () => {
 
   it("gibt der KI eine Herkunftsliste ohne URLs mit und hält die Richtwerte konsistent", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    const ni = ilka.find((x) => x.name.includes("_NI_"))!.daten;
+    const ni = ilkaMeldung("NI");
     const h = herkunftsliste(ni, p!);
     expect(h).toContain("[Q4] B – Verteilnetzbetreiber Netzgebiet Harz");
     expect(h.join(" ")).not.toMatch(/https?:|Zugriff/);

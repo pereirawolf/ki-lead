@@ -1,20 +1,12 @@
 // OpenAI-Adapter: Anfrage, strenges Schema, Stromauswertung, Fehler; nullable Konvertierung (Review 20.10.2026, F12).
 import { describe, expect, it } from "vitest";
+import { ohneWarten, sseAntwort, sseText as sse } from "../support/anbieter";
 import { referenzAjv } from "../support/ajv";
 import { anfrageKoerperOpenAi, OpenAiAnbieter, strengesSchema, auswertenOpenAi } from "../../src/anbieter/openai";
 import { type LlmAnfrage } from "../../src/anbieter/typen";
 
-const sse = (events: object[]) => events.map((e: any) => `event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`).join("");
-
-function strom(text: string, status = 200): Response {
-  const body = new ReadableStream({
-    start(c) {
-      c.enqueue(new TextEncoder().encode(text));
-      c.close();
-    },
-  });
-  return new Response(body, { status, headers: { "content-type": "text/event-stream" } });
-}
+/** Ganze Antwort in einem Stück wie bisher; Teilungen prüft tests/anbieter/strom.test.ts */
+const strom = (text: string, status = 200) => sseAntwort(text, 1, status);
 
 const fertig = (output: any[], extra: object = {}) => ({
   type: "response.completed",
@@ -133,8 +125,10 @@ describe("OpenAI: Antwort", () => {
       ++n === 1
         ? new Response(JSON.stringify({ error: { code: "rate_limit_exceeded" } }), { status: 429, headers: { "retry-after": "0.01" } })
         : strom(sse([fertig([])]));
-    await new OpenAiAnbieter("k", "https://x", fetch429 as any).senden(anfrage);
+    const r = await ohneWarten(() => new OpenAiAnbieter("k", "https://x", fetch429 as any).senden(anfrage));
+    expect(r.fehler).toBeUndefined();
     expect(n).toBe(2);
+    expect(r.dauerMs).toBe(10); // retry-after 0.01 s
     const quota = async () => new Response(JSON.stringify({ error: { code: "insufficient_quota", message: "quota" } }), { status: 429 });
     await expect(new OpenAiAnbieter("k", "https://x", quota as any).senden(anfrage)).rejects.toThrow(/Guthaben/);
     const auth = async () => new Response(JSON.stringify({ error: { code: "invalid_api_key" } }), { status: 401 });
@@ -147,9 +141,10 @@ describe("OpenAI: Antwort", () => {
       ++n === 1
         ? strom(sse([{ type: "response.output_text.delta", delta: "x" }]))
         : strom(sse([fertig([{ type: "message", content: [{ type: "output_text", text: "ok", annotations: [] }] }])]));
-    const a = await new OpenAiAnbieter("k", "https://x", fetch as any).senden(anfrage);
-    expect(a.text).toBe("ok");
+    const { wert: a, dauerMs } = await ohneWarten(() => new OpenAiAnbieter("k", "https://x", fetch as any).senden(anfrage));
+    expect(a!.text).toBe("ok");
     expect(n).toBe(2);
+    expect(dauerMs).toBe(1500);
   });
 
   it("erkennt Ablehnungen", () => {
@@ -160,12 +155,14 @@ describe("OpenAI: Antwort", () => {
 describe("F12: OpenAI-Schemakonvertierung macht optionale Felder wirklich nullable", () => {
   const validiert = (s: object, d: unknown) => referenzAjv().validate(s, d);
 
-  it.each<[string, object, unknown]>([
-    ["enum", { type: "string", enum: ["A", "B"] }, "A"],
-    ["const", { const: "fest" }, "fest"],
-    ["$ref", { $ref: "#/$defs/t" }, "x"],
-    ["anyOf", { anyOf: [{ type: "string" }, { type: "integer" }] }, 3],
-  ])("optionales Feld mit %s erlaubt null und weiter die ursprünglichen Werte", (_, feld, gut) => {
+  // Je Fall: Teilschema des optionalen Felds, Werte, die erlaubt bleiben müssen (null kommt hinzu), und Werte, die
+  // das ursprüngliche Teilschema schon verbot und die auch nach der Umwandlung abgewiesen werden müssen.
+  it.each<[string, object, unknown[], unknown[]]>([
+    ["enum", { type: "string", enum: ["A", "B"] }, ["A", "B"], ["C", true, {}]],
+    ["const", { const: "fest" }, ["fest"], ["anders", true, {}]],
+    ["$ref", { $ref: "#/$defs/t" }, ["x"], [true, {}, []]],
+    ["anyOf", { anyOf: [{ type: "string" }, { type: "integer" }] }, ["x", 3], [true, {}, 3.5]],
+  ])("optionales Feld mit %s erlaubt null und weiter die ursprünglichen Werte", (_, feld, gueltig, ungueltig) => {
     const original = {
       type: "object",
       $defs: { t: { type: "string" } },
@@ -176,9 +173,15 @@ describe("F12: OpenAI-Schemakonvertierung macht optionale Felder wirklich nullab
     const s = strengesSchema(original);
     expect(original).toEqual(kopie);
     expect(s.required).toEqual(["wahl", "pflicht"]);
+    expect(s.additionalProperties).toBe(false);
+
     expect(validiert(s, { wahl: null, pflicht: "X" })).toBe(true);
-    expect(validiert(s, { wahl: gut, pflicht: "X" })).toBe(true);
-    expect(validiert(s, { wahl: "unzulässig-" + Math.random(), pflicht: "X" })).toBe(_ === "$ref" || _ === "anyOf");
+    for (const wert of gueltig) expect(validiert(s, { wahl: wert, pflicht: "X" }), `gültig: ${JSON.stringify(wert)}`).toBe(true);
+    for (const wert of ungueltig) expect(validiert(s, { wahl: wert, pflicht: "X" }), `ungültig: ${JSON.stringify(wert)}`).toBe(false);
+
+    // Strenger Modus: Das Feld muss vorhanden sein (notfalls null), Pflichtfelder bleiben ohne null, nichts Zusätzliches
+    expect(validiert(s, { pflicht: "X" })).toBe(false);
     expect(validiert(s, { wahl: null, pflicht: null })).toBe(false);
+    expect(validiert(s, { wahl: null, pflicht: "X", extra: 1 })).toBe(false);
   });
 });

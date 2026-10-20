@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { STANDARD } from "../../src/pipeline/einstellungen";
+import { AUFWAND_STUFEN, STANDARD } from "../../src/pipeline/einstellungen";
+import { ausgabePreis } from "../../src/anbieter/preise";
 import { dauerText, kostenText, MESSWERTE, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
 import { LaufSchaetzung } from "../../src/ui/LaufSchaetzung";
 
@@ -40,10 +41,28 @@ describe("Schätzung von Dauer und Kosten", () => {
   });
 
   it("enthält nur Modelle mit Preisangabe und plausible Spannen", () => {
+    const arten = ["s1", "erfassung", "verdichtung"];
+    const aufwand = AUFWAND_STUFEN.map((a) => a.id as string);
+    expect(Object.keys(MESSWERTE).length).toBeGreaterThan(0);
     for (const [k, m] of Object.entries(MESSWERTE)) {
-      expect(k.split("|")).toHaveLength(3);
-      expect(m.sekunden[0]).toBeLessThan(m.sekunden[1]);
-      expect(m.usd[0]).toBeLessThan(m.usd[1]);
+      const teile = k.split("|");
+      expect(teile, k).toHaveLength(3);
+      const [art, modell, stufe] = teile;
+      expect(arten, `${k}: Art`).toContain(art);
+      expect(aufwand, `${k}: Aufwand`).toContain(stufe);
+      // Preis vorhanden: Grundlage der Hochrechnung für nicht gemessene Modelle
+      const preis = ausgabePreis(modell);
+      expect(preis, `${k}: Ausgabepreis`).not.toBeNull();
+      expect(Number.isFinite(preis) && preis! > 0, `${k}: Ausgabepreis ${preis}`).toBe(true);
+      for (const [name, [von, bis]] of [
+        ["sekunden", m.sekunden],
+        ["usd", m.usd],
+      ] as const) {
+        expect(Number.isFinite(von) && Number.isFinite(bis), `${k}: ${name} endlich`).toBe(true);
+        expect(von, `${k}: ${name} nicht negativ`).toBeGreaterThanOrEqual(0);
+        expect(von, `${k}: ${name} geordnet`).toBeLessThan(bis);
+      }
+      expect(m.sekunden[0], `${k}: Dauer über 0`).toBeGreaterThan(0);
     }
   });
 

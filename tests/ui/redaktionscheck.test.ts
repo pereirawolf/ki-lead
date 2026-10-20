@@ -4,43 +4,36 @@
 
 import { afterEach, beforeAll, beforeEach, expect, it, vi } from "vitest";
 import React, { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { profil } from "../support/dateien";
+import { ilkaMeldung } from "../support/fixtures";
+import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
+import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { zeitpunktInZone } from "../../src/kern/zeit";
 
-import { ilkaMeldung } from "../support/fixtures";
-const db = vi.hoisted(() => ({ werte: new Map<string, any>() }));
-vi.mock("idb-keyval", () => ({
-  get: vi.fn(async (k: string) => structuredClone(db.werte.get(k))),
-  set: vi.fn(async (k: string, v: any) => void db.werte.set(k, structuredClone(v))),
-  del: vi.fn(async (k: string) => void db.werte.delete(k)),
-  keys: vi.fn(async () => [...db.werte.keys()]),
-  entries: vi.fn(async () => [...db.werte.entries()]),
-}));
+const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
+vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(db));
 const downloads = vi.hoisted(() => [] as { inhalt: string; name: string }[]);
 vi.mock("../../src/speicher/speicher", async (original) => ({
   ...(await original<typeof import("../../src/speicher/speicher")>()),
   dateiAnbieten: (inhalt: string, name: string) => void downloads.push({ inhalt, name }),
 }));
 
-let root: Root | undefined;
 let p: any;
 let basis: any;
 beforeAll(async () => {
-  (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+  reactUmgebung();
   p = (await profil("lead-beispiel")).profil!;
   basis = ilkaMeldung("Bund");
 });
 beforeEach(() => {
+  // Nur Uhr und Intervalle gefälscht: bisWahr wartet über setTimeout und läuft weiter
   vi.useFakeTimers({ toFake: ["Date", "setInterval", "clearInterval"] });
   vi.setSystemTime(zeitpunktInZone(2026, 10, 20, 8, 0, "Europe/Berlin"));
-  db.werte.clear();
+  speicherLeeren(db);
   downloads.length = 0;
 });
 afterEach(async () => {
-  if (root) await act(async () => root!.unmount());
-  root = undefined;
-  document.body.innerHTML = "";
+  await aushaengen();
   vi.useRealTimers();
 });
 
@@ -61,32 +54,26 @@ function ablegen(meldungen: { id: string; text: string; tendenz?: string }[], na
   db.werte.set("lagebild:" + p.manifest.id, { dateien, naechsteAusgabe });
 }
 
-const warte = () => act(async () => void (await new Promise((r) => setTimeout(r, 20))));
+const gespeichert = () => db.werte.get("lagebild:" + p.manifest.id);
+
+/** Zeigt das Lagebild und wartet, bis der gespeicherte Stand geladen ist */
 async function zeige() {
   const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
-  const ziel = document.createElement("div");
-  document.body.appendChild(ziel);
-  root = createRoot(ziel);
-  await act(async () => root!.render(React.createElement(LagebildAnsicht, { profil: p, uebergeben: () => {}, oeffnen: () => {} })));
-  await warte();
+  await einhaengen(React.createElement(LagebildAnsicht, { profil: p, uebergeben: () => {}, oeffnen: () => {} }));
+  const namen = gespeichert().dateien.map((d: any) => d.name);
+  await bisWahr(() => namen.every((n: string) => document.body.textContent!.includes(n)));
 }
-async function klick(text: string) {
-  const b = [...document.querySelectorAll("button")].find((e) => e.textContent?.trim().startsWith(text));
-  expect(b, text).toBeTruthy();
-  await act(async () => b!.click());
-  await warte();
+const beginntMit = (text: string) => new RegExp("^" + text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+async function redaktionscheck() {
+  await klick(knopf(beginntMit("Redaktionscheck")));
+  await bisWahr(() => document.querySelector(".lb-redaktion") !== null);
 }
 const redaktion = () => document.querySelector(".lb-redaktion")!.textContent || "";
-function eingeben(el: HTMLInputElement, wert: string) {
-  const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
-  setter.call(el, wert);
-  el.dispatchEvent(new Event("input", { bubbles: true }));
-}
 
 it("RC02: eine Frist wird nach Ablauf ohne Dateiänderung neu eingestuft", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
   await zeige();
-  await klick("Redaktionscheck");
+  await redaktionscheck();
   expect(redaktion()).toContain("vor der nächsten Ausgabe – frühere Weitergabe prüfen");
   await act(async () => {
     vi.setSystemTime(zeitpunktInZone(2026, 10, 20, 10, 0, "Europe/Berlin"));
@@ -98,10 +85,10 @@ it("RC02: eine Frist wird nach Ablauf ohne Dateiänderung neu eingestuft", async
 it("RC02: ein Stichtag hält die Einstufung fest und wird gespeichert", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
   await zeige();
-  await klick("Redaktionscheck");
+  await redaktionscheck();
   const stichtag = [...document.querySelectorAll<HTMLInputElement>('input[type="radio"]')][1];
-  await act(async () => stichtag.click());
-  await warte();
+  await klick(stichtag);
+  await bisWahr(() => gespeichert().pruefstand === "2026-10-20T08:00");
   await act(async () => {
     vi.setSystemTime(zeitpunktInZone(2026, 10, 20, 10, 0, "Europe/Berlin"));
     vi.advanceTimersByTime(60_000);
@@ -110,19 +97,19 @@ it("RC02: ein Stichtag hält die Einstufung fest und wird gespeichert", async ()
   expect(redaktion()).toContain("fester Stichtag");
   expect(redaktion()).toContain("Stichtag aktiv");
   expect(document.querySelector(".lb-stichtag-marke")).toBeTruthy();
-  expect(db.werte.get("lagebild:" + p.manifest.id).pruefstand).toBe("2026-10-20T08:00");
+  expect(gespeichert().pruefstand).toBe("2026-10-20T08:00");
 });
 
 it("RV01: Uhrzeit der Ausgabe macht aus „Tag der Ausgabe“ eine eindeutige Einstufung und wird gespeichert", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 23.10.2026 12:00" }]);
   await zeige();
-  await klick("Redaktionscheck");
+  await redaktionscheck();
   expect(redaktion()).toContain("am Tag der nächsten Ausgabe; deren Uhrzeit ist nicht angegeben");
   const zeit = document.querySelector<HTMLInputElement>('input[type="time"]')!;
-  await act(async () => eingeben(zeit, "15:00"));
-  await warte();
+  await eingeben(zeit, "15:00");
+  await bisWahr(() => gespeichert().naechsteAusgabe === "2026-10-23T15:00");
   expect(redaktion()).toContain("vor der nächsten Ausgabe – frühere Weitergabe prüfen");
-  expect(db.werte.get("lagebild:" + p.manifest.id).naechsteAusgabe).toBe("2026-10-23T15:00");
+  expect(gespeichert().naechsteAusgabe).toBe("2026-10-23T15:00");
 });
 
 it("RV04, RV06: Übersicht nach Einstufung, Abdeckung und Sprungmarken mit Trefferzahl", async () => {
@@ -131,7 +118,7 @@ it("RV04, RV06: Übersicht nach Einstufung, Abdeckung und Sprungmarken mit Treff
     { id: "b", text: "", tendenz: "Verschärfung" },
   ]);
   await zeige();
-  await klick("Redaktionscheck");
+  await redaktionscheck();
   const uebersicht = document.querySelector(".lb-red-uebersicht")!.textContent!;
   expect(uebersicht).toMatch(/1 zeitkritisch · \d+ zu klären/);
   expect(uebersicht).toContain("Ausgewertet: 2 Meldungen nach dem Schema des Profils");
@@ -145,8 +132,9 @@ it("RV04, RV06: Übersicht nach Einstufung, Abdeckung und Sprungmarken mit Treff
 it("RV05: vom Befund zur Meldung in der Liste, ohne die Meldungsmaske zu berühren", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
   await zeige();
-  await klick("Redaktionscheck");
-  await klick("Meldung in der Liste zeigen");
+  await redaktionscheck();
+  await klick(knopf(beginntMit("Meldung in der Liste zeigen")));
+  await bisWahr(() => document.querySelector(".lb-karte-markiert") !== null);
   const karte = document.querySelector(".lb-karte-markiert");
   expect(karte?.id).toMatch(/^lb-meldung-/);
   expect(karte?.textContent).toContain("a.json");
@@ -158,8 +146,9 @@ it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   expect([...document.querySelectorAll("button")].map((b) => b.textContent?.trim())).toEqual(
     expect.arrayContaining(["Lagebild als PDF", "Rohtabelle als CSV"]),
   );
-  await klick("Redaktionscheck");
-  await klick("Redaktionsbericht (JSON)");
+  await redaktionscheck();
+  await klick(knopf(beginntMit("Redaktionsbericht (JSON)")));
+  await bisWahr(() => downloads.length === 1);
   const j = JSON.parse(downloads[0].inhalt);
   expect(downloads[0].name).toBe("2026-10-20T08-00_Redaktionsbericht_Lagebild.json");
   expect(j.pruefstand.geprueft_fuer).toBe("20.10.2026, 08:00 Uhr");

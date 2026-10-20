@@ -1,5 +1,6 @@
 // Anbieterattrappen und Antwortfabriken: skriptierte LLM-Antworten für die Pipeline, SSE-Ströme für die
 // Anbieteradapter. Jede Fabrik liefert frische Objekte; Sollwerte werden nie aus Produktionsfunktionen berechnet.
+import { vi } from "vitest";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "../../src/anbieter/typen";
 
 /** Vollständige LLM-Antwort mit festen, kleinen Kosten; Einzelfelder über extra überschreiben. */
@@ -99,4 +100,40 @@ export function abreissenderStrom(text: string): Response {
 /** JSON-Fehlerantwort eines Anbieters */
 export function fehlerAntwort(status: number, fehler: object, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify({ error: fehler }), { status, headers });
+}
+
+// ── Gefälschte Uhr für Wiederholungen ─────────────────────────────────────────
+
+export interface UhrErgebnis<T> {
+  wert?: T;
+  fehler?: any;
+  /** Auf der gefälschten Uhr verstrichene Zeit (Summe aller Wartezeiten) */
+  dauerMs: number;
+}
+
+/**
+ * Führt einen Anbieteraufruf mit gefälschter Uhr aus: Wartezeiten zwischen Versuchen vergehen sofort, die
+ * verstrichene Zeit wird gemessen. Gefälscht werden nur setTimeout und Date; Ströme und Mikrotasks laufen echt.
+ * Vor dem Lauf lässt sich mit vorher() ein Zeitgeber auf der gefälschten Uhr anlegen (etwa ein Abbruch nach 1 s).
+ */
+export async function ohneWarten<T>(lauf: () => Promise<T>, vorher?: () => void): Promise<UhrErgebnis<T>> {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "Date"] });
+  try {
+    const start = Date.now();
+    vorher?.();
+    let fertig = false;
+    const p = lauf().then(
+      (wert) => ({ wert }),
+      (fehler) => ({ fehler }),
+    );
+    void p.finally(() => (fertig = true));
+    for (let i = 0; !fertig && i < 10_000; i++) {
+      if (vi.getTimerCount() > 0) await vi.advanceTimersToNextTimerAsync();
+      else await new Promise((r) => setImmediate(r));
+    }
+    const erg = await p;
+    return { ...erg, dauerMs: Date.now() - start };
+  } finally {
+    vi.useRealTimers();
+  }
 }

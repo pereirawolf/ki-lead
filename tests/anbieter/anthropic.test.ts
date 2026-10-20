@@ -1,24 +1,8 @@
 // Anthropic-Adapter: Anfragekörper, Stromauswertung, pause_turn, Wiederholungen, Abruffehler, Verbindungsabbruch.
 import { describe, expect, it } from "vitest";
+import { abreissenderStrom, ohneWarten, sseAntwort as stromAntwort, sseText as sse } from "../support/anbieter";
 import { AnthropicAnbieter, anfrageKoerper } from "../../src/anbieter/anthropic";
 import { AnbieterFehler, type LlmAnfrage } from "../../src/anbieter/typen";
-
-function sse(ereignisse: any[]): string {
-  return ereignisse.map((e) => `event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`).join("");
-}
-
-function stromAntwort(text: string, teile = 7): Response {
-  const stuecke: string[] = [];
-  const n = Math.ceil(text.length / teile);
-  for (let i = 0; i < text.length; i += n) stuecke.push(text.slice(i, i + n));
-  const strom = new ReadableStream({
-    start(c) {
-      for (const s of stuecke) c.enqueue(new TextEncoder().encode(s));
-      c.close();
-    },
-  });
-  return new Response(strom, { status: 200, headers: { "content-type": "text/event-stream" } });
-}
 
 const RECHERCHE = [
   {
@@ -85,7 +69,7 @@ describe("Anthropic-Anbieter", () => {
     const r = await a.senden({ ...anfrage, fortschritt: (f) => fortschritt.push(f.art) });
     expect(aufrufe[0].headers["anthropic-dangerous-direct-browser-access"]).toBe("true");
     expect(aufrufe[0].headers["x-api-key"]).toBe("sk-test");
-    expect(r.text).toBe("Kernaussage: Lage stabil.");
+    expect(r!.text).toBe("Kernaussage: Lage stabil.");
     expect(r.suchen).toEqual(["Orkan Ilka Schäden"]);
     expect(r.fundstellen).toEqual([{ url: "https://beispiel.invalid/a", titel: "Bericht A", stand: "14.10.2026" }]);
     expect(r.zitate[0].text).toBe("Schäden");
@@ -113,7 +97,7 @@ describe("Anthropic-Anbieter", () => {
     expect(koerper[1].messages[1].content.map((b: any) => b.type)).toEqual(["server_tool_use", "web_search_tool_result"]);
     expect(koerper[1].messages[1].content[0].input).toEqual({ query: "Orkan Ilka Schäden" });
     expect(r.runden).toBe(2);
-    expect(r.text).toBe("Kernaussage: Lage stabil.");
+    expect(r!.text).toBe("Kernaussage: Lage stabil.");
     expect(r.suchen).toEqual(["Orkan Ilka Schäden"]);
   });
 
@@ -127,8 +111,10 @@ describe("Anthropic-Anbieter", () => {
         });
       return stromAntwort(sse(RECHERCHE));
     }) as any);
-    const r = await a.senden(anfrage);
-    expect(r.text).toContain("Lage stabil");
+    const r = await ohneWarten(() => a.senden(anfrage));
+    expect(r.wert!.text).toContain("Lage stabil");
+    expect(n).toBe(2);
+    expect(r.dauerMs).toBe(10); // retry-after 0.01 s
 
     const b = new AnthropicAnbieter(
       "falsch",
@@ -154,18 +140,6 @@ describe("Abruffehler", () => {
 });
 
 describe("Verbindungsabbruch", () => {
-  function abbrechenderStrom(text: string): Response {
-    let gesendet = false;
-    const strom = new ReadableStream({
-      pull(c) {
-        if (!gesendet) {
-          gesendet = true;
-          c.enqueue(new TextEncoder().encode(text));
-        } else c.error(new TypeError("Load failed"));
-      },
-    });
-    return new Response(strom, { status: 200 });
-  }
   // Suche mit Ergebnis vollständig, dann reißt die Verbindung im Text ab
   const BIS_ERGEBNIS = sse(RECHERCHE.slice(0, 7)) + sse([RECHERCHE[7], RECHERCHE[8]]);
 
@@ -175,16 +149,17 @@ describe("Verbindungsabbruch", () => {
     const fortschritt: string[] = [];
     const a = new AnthropicAnbieter("k", "https://api.test", (async (_u: any, init: any) => {
       koerper.push(JSON.parse(init.body));
-      if (n++ === 0) return abbrechenderStrom(BIS_ERGEBNIS);
+      if (n++ === 0) return abreissenderStrom(BIS_ERGEBNIS);
       const fortsetzung = [RECHERCHE[0], ...RECHERCHE.slice(7).map((e: any) => ("index" in e ? { ...e, index: e.index - 2 } : e))];
       return stromAntwort(sse(fortsetzung));
     }) as any);
-    const r = await a.senden({ ...anfrage, fortschritt: (f) => f.art === "wiederholung" && fortschritt.push(f.grund) });
+    const { wert: r, dauerMs } = await ohneWarten(() => a.senden({ ...anfrage, fortschritt: (f) => f.art === "wiederholung" && fortschritt.push(f.grund) }));
+    expect(dauerMs).toBe(1500);
     expect(koerper).toHaveLength(2);
     expect(koerper[1].messages[1].role).toBe("assistant");
     // halber Textblock ist nicht dabei, Suche und Ergebnis schon
     expect(koerper[1].messages[1].content.map((b: any) => b.type)).toEqual(["server_tool_use", "web_search_tool_result"]);
-    expect(r.text).toBe("Kernaussage: Lage stabil.");
+    expect(r!.text).toBe("Kernaussage: Lage stabil.");
     expect(fortschritt[0]).toMatch(/fortgesetzt/);
   });
 
@@ -192,10 +167,12 @@ describe("Verbindungsabbruch", () => {
     const koerper: any[] = [];
     const a = new AnthropicAnbieter("k", "https://api.test", (async (_u: any, init: any) => {
       koerper.push(JSON.parse(init.body));
-      return abbrechenderStrom(sse(RECHERCHE.slice(0, 3)));
+      return abreissenderStrom(sse(RECHERCHE.slice(0, 3)));
     }) as any);
-    await expect(a.senden(anfrage)).rejects.toThrow(/Verbindung zum Anbieter ist während der Antwort abgerissen/);
+    const { fehler, dauerMs } = await ohneWarten(() => a.senden(anfrage));
+    expect(fehler?.message).toMatch(/Verbindung zum Anbieter ist während der Antwort abgerissen/);
     expect(koerper).toHaveLength(3);
+    expect(dauerMs).toBe(2 * 1500);
     expect(koerper.every((k) => k.messages.length === 1)).toBe(true);
   });
 });

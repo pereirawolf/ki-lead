@@ -2,102 +2,79 @@
 // Farbschema in der Oberfläche: Auswahl unter „Einstellungen“, Speicherung, eigene Profilfarben.
 import { afterEach, beforeAll, expect, it, vi } from "vitest";
 import React, { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { leseOrdner, repoPfad } from "../support/dateien";
+import { aushaengen, bisWahr, einhaengen, eingeben, klick, reactUmgebung, seitentext } from "../support/dom";
+import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 
-import { repoPfad } from "../support/dateien";
-const db = vi.hoisted(() => ({ werte: new Map<string, any>() }));
-vi.mock("idb-keyval", () => ({
-  get: vi.fn(async (k: string) => structuredClone(db.werte.get(k))),
-  set: vi.fn(async (k: string, v: any) => void db.werte.set(k, structuredClone(v))),
-  del: vi.fn(async (k: string) => void db.werte.delete(k)),
-  keys: vi.fn(async () => [...db.werte.keys()]),
-  entries: vi.fn(async () => [...db.werte.entries()]),
-}));
+const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
+vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(db));
 
-let root: Root | undefined;
-beforeAll(() => {
-  (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
-  globalThis.confirm = () => true;
-});
+beforeAll(reactUmgebung);
 afterEach(async () => {
-  if (root) await act(async () => root!.unmount());
-  root = undefined;
-  document.body.innerHTML = "";
-  db.werte.clear();
+  await aushaengen();
+  speicherLeeren(db);
   localStorage.clear();
   vi.resetModules();
 });
 
-const warte = (ms = 40) => act(async () => void (await new Promise((r) => setTimeout(r, ms))));
+/** App zeigen; fertig, sobald Profil und Farbschema angewendet sind */
 async function zeigeApp() {
   const { default: App } = await import("../../src/App");
-  const ziel = document.createElement("div");
-  document.body.appendChild(ziel);
-  root = createRoot(ziel);
-  await act(async () => root!.render(React.createElement(App)));
-  await warte(80);
+  await einhaengen(React.createElement(App));
+  await bisWahr(() => document.querySelector(".chip-name") !== null && !!document.documentElement.dataset.farbschema);
 }
-async function klick(text: string) {
-  const b = [...document.querySelectorAll("button")].find((e) => e.textContent?.trim() === text);
-  expect(b, text).toBeTruthy();
-  await act(async () => b!.click());
-  await warte();
+async function einstellungen() {
+  await klick("Einstellungen");
+  await bisWahr(() => expect(farbSelect()).toBeTruthy());
 }
 function waehle(select: HTMLSelectElement, wert: string) {
   select.value = wert;
   select.dispatchEvent(new Event("change", { bubbles: true }));
 }
 const farbSelect = () =>
-  [...document.querySelectorAll("label.feld")].find((l) => l.textContent?.startsWith("Farbschema"))!.querySelector("select") as HTMLSelectElement;
+  [...document.querySelectorAll("label.feld")].find((l) => l.textContent?.startsWith("Farbschema"))?.querySelector("select") as HTMLSelectElement;
 
 it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwendete Schema", async () => {
   await zeigeApp();
-  await klick("Einstellungen");
+  await einstellungen();
   const optgroups = [...farbSelect().querySelectorAll("optgroup")].map((g) => g.label);
   expect(optgroups).toEqual(["Neutral", "Kontrast", "Bund", "Bundesländer", "Profil"]);
   expect(farbSelect().querySelectorAll("option")).toHaveLength(24);
   await act(async () => waehle(farbSelect(), "de-th"));
-  await warte();
+  await bisWahr(() => expect(db.werte.get("darstellung")).toEqual({ version: 1, auswahl: "de-th" }));
   expect(document.documentElement.dataset.farbschema).toBe("de-th");
   expect(document.documentElement.style.getPropertyValue("--amt")).toBe("#006F9C");
   expect(db.werte.get("darstellung")).toEqual({ version: 1, auswahl: "de-th" });
-  expect(document.body.textContent).toContain("Verwendet: Thüringen");
+  expect(seitentext()).toContain("Verwendet: Thüringen");
   await act(async () => waehle(farbSelect(), "automatisch"));
-  await warte();
+  await bisWahr(() => expect(db.werte.get("darstellung")).toEqual({ version: 1, auswahl: "automatisch" }));
   // „Automatisch“ = Neutral · Hell oder Neutral · Night Mode nach System (hier hell), kein eigenes Schema
   expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
-  expect(document.body.textContent).toContain("Automatisch: Neutral · Hell");
+  expect(seitentext()).toContain("Automatisch: Neutral · Hell");
 });
 
 it("„Farben des aktiven Profils“ ohne Profilfarben: Ersatz mit Erklärung", async () => {
   await zeigeApp();
-  await klick("Einstellungen");
+  await einstellungen();
   await act(async () => waehle(farbSelect(), "profil"));
-  await warte();
+  await bisWahr(() => expect(seitentext()).toContain("definiert kein Farbschema"));
   expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
-  expect(document.body.textContent).toContain("definiert kein Farbschema");
 });
 
 it("eigene Profilfarben: Kontrastfehler verhindern das Speichern, gültige werden lokal gespeichert und verwendet", async () => {
   await zeigeApp();
-  await klick("Einstellungen");
+  await einstellungen();
   const editor = document.querySelector("details.farb-editor") as HTMLDetailsElement;
   editor.open = true;
   const primaer = document.getElementById("farbe-amt") as HTMLInputElement;
-  const setzen = (el: HTMLInputElement, wert: string) => {
-    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(el, wert);
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-  };
-  await act(async () => setzen(primaer, "#EEEEEE"));
-  await warte();
+  await eingeben(primaer, "#EEEEEE");
   expect(editor.textContent).toContain("„auf-amt“ auf „amt“");
   const speichern = [...editor.querySelectorAll("button")].find((b) => b.textContent === "Speichern und verwenden") as HTMLButtonElement;
   expect(speichern.disabled).toBe(true);
-  await act(async () => setzen(primaer, "#234D68"));
-  await warte();
+  await eingeben(primaer, "#234D68");
   expect(speichern.disabled).toBe(false);
-  await act(async () => speichern.click());
-  await warte();
+  await klick(speichern);
+  await bisWahr(() => [...db.werte.keys()].some((k) => k.startsWith("darstellung:profil:")));
   const schluessel = [...db.werte.keys()].find((k) => k.startsWith("darstellung:profil:"));
   expect(schluessel).toMatch(/^darstellung:profil:lead-beispiel#[0-9a-f]{64}$/);
   expect(db.werte.get(schluessel!).definition.farben.amt).toBe("#234D68");
@@ -106,31 +83,29 @@ it("eigene Profilfarben: Kontrastfehler verhindern das Speichern, gültige werde
 });
 
 it("ein fehlerhaftes Farbschema eines importierten Profils lässt die Einstellungen nicht abstürzen", async () => {
-  const { leseOrdner } = await import("../support/dateien");
   const dateien = leseOrdner(repoPfad("profile/lead-beispiel"));
   const m = JSON.parse(dateien["profil.json"]);
   dateien["profil.json"] = JSON.stringify({ ...m, id: "kaputt", version: "9.9.9", farbschema: { basis: "neutral-hell", name: {}, farben: { amt: 5 } } });
   db.werte.set("profil:kaputt@9.9.9", { schluessel: "kaputt@9.9.9", quelle: "importiert", dateien });
   db.werte.set("aktives-profil", "kaputt@9.9.9");
   await zeigeApp();
-  await klick("Einstellungen");
-  expect(document.body.textContent).toContain("Darstellung");
+  await einstellungen();
+  expect(seitentext()).toContain("Darstellung");
   (document.querySelector("details.farb-editor") as HTMLDetailsElement).open = true;
-  await warte();
   expect(farbSelect().querySelector('option[value="profil"]')!.textContent).toContain("keine definiert");
 });
 
 it("Editor: Vorschau mit Kontrastbasis zeigt die Signalfarben des Kontrastschemas", async () => {
   await zeigeApp();
-  await klick("Einstellungen");
+  await einstellungen();
   const editor = document.querySelector("details.farb-editor") as HTMLDetailsElement;
   editor.open = true;
   const basis = [...editor.querySelectorAll("label.feld")]
     .find((l) => l.textContent?.startsWith("Ausgangsschema"))!
     .querySelector("select") as HTMLSelectElement;
   await act(async () => waehle(basis, "kontrast-hell"));
-  await warte();
   const vorschau = editor.querySelector(".farb-vorschau") as HTMLElement;
+  await bisWahr(() => expect(vorschau.style.getPropertyValue("--erheblich")).toBe("#8A3300"));
   expect(vorschau.style.getPropertyValue("--erheblich")).toBe("#8A3300");
   expect(vorschau.style.getPropertyValue("--band")).toBe("none");
 });
@@ -151,13 +126,12 @@ it("Systemeinstellung „mehr Kontrast“: „Automatisch“ verwendet das Kontr
     await zeigeApp();
     expect(document.documentElement.dataset.farbschema).toBe("kontrast-hell");
     expect(document.documentElement.dataset.kontrast).toBe("erhoeht");
-    await klick("Einstellungen");
-    expect(document.body.textContent).toContain("Systemeinstellung „mehr Kontrast“");
+    await einstellungen();
+    expect(seitentext()).toContain("Systemeinstellung „mehr Kontrast“");
     expect(farbSelect().value).toBe("automatisch");
     mehr = false;
     await act(async () => hoerer.forEach((f) => f()));
-    await warte();
-    expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
+    await bisWahr(() => expect(document.documentElement.dataset.farbschema).toBe("neutral-hell"));
     expect(document.documentElement.dataset.kontrast).toBeUndefined();
   } finally {
     window.matchMedia = original;

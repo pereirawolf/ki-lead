@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
+import { ilkaMeldung } from "../support/fixtures";
 import { vergleiche, vergleichTabelle, zuordnen } from "../../src/pipeline/vergleich";
 
-import { ilkaDateien } from "../support/fixtures";
 const p = (await profil("lead-beispiel")).profil!;
-const ilka = ilkaDateien();
-const bund = ilka.find((x) => x.name.includes("_Bund_"))!.daten;
-const th = ilka.find((x) => x.name.includes("_TH_"))!.daten;
+const bund = ilkaMeldung("Bund");
+const th = ilkaMeldung("TH");
 
 describe("Vergleich mit Referenzfassung", () => {
   it("gleiche Fassung: volle Übereinstimmung je Achse", () => {
