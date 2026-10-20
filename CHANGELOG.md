@@ -26,7 +26,33 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.8 | Commit „SOP-LEAD 2.0: Befunde der unabhängigen Prüfung eingearbeitet“ |
 | 0.4.9 | 99403c0 |
 | 0.4.10 | 90ab407 (Nachtrag vom 20.10.2026: README) |
-| 0.4.11 | Commit „SOP-Integration: Nachweis, gegliederte Auswahl, Lagebild, Katalog; 0.4.11“ |
+| 0.4.11 | 706be47 |
+| 0.4.12 | Commit „Profilansicht: Versionen, Dokumentation und Verläufe; 0.4.12“ |
+
+## [0.4.12] – 20.10.2026
+
+Grundlage: Prüfung „KI-LEAD_Profile_Ergonomie_2026-10-20“ und konsolidierter Vorschlag „KI-LEAD_Profile_Ergonomie_Vorschlag_konsolidiert_2026-10-20“ (Kennungen PROFIL-UX-01 bis -16; Entscheidungen D1–D6 wie empfohlen).
+
+### Neu
+
+- Profilansicht: „Dokumentation lesen“ mit den Lesedokumenten des geladenen Pakets (SOP-Übersicht und -Änderungsverlauf, Profil-Beschreibung und -Änderungsverlauf, Arbeitsanweisungen, Kodierleitfaden), jeweils nur bei vorhandener Datei [PROFIL-UX-03, PROFIL-UX-15, D5].
+- SOPs und Lesedokumente als lesbarer Text mit Überschriften, Listen und Tabellen (markdown-it 15.0.2, erst beim Öffnen nachgeladen; rohes HTML wird nicht ausgeführt, Bilder werden nicht geladen). SOPs mit Steckbrief aus dem Kopf, „Quelltext anzeigen“ und „Schließen“. Relative Links öffnen den Eintrag im selben Paket, fehlende Ziele sind als „nicht im Paket“ gekennzeichnet. Platzhalter der Arbeitsanweisungen sind hervorgehoben [PROFIL-UX-06, PROFIL-UX-11, D4].
+- SOP-Katalog: Suche nach Kennung, Kurzname, früherer Kennung und früherer ID (z. B. „N02“ → C11), optional im Text, mit Trefferzahl und Zurücksetzen; „Alle schließen“ [PROFIL-UX-10, PROFIL-UX-11].
+- Prüfsumme kopierbar und vollständig anzeigbar, ohne Hover [PROFIL-UX-09].
+- Nach dem Import: Name, Profilversion, Verwendungszustand und Knopf „Jetzt verwenden“ [PROFIL-UX-13].
+- Profilwechsel während eines laufenden KI-Auftrags nur nach Rückfrage, weil der Wechsel den Lauf abbricht [PROFIL-UX-12].
+- Tests: Anzeigetitel und Tags aller 34 Fachzeilen, Steckbrief, Lesedokumente beider Profile, Linkauflösung, Suche, Markdown (Tabellen, kein HTML, keine Bilder, Linkziele, Platzhalter), Einbettung [PROFIL-UX-16].
+
+### Geändert
+
+- Profile stehen auf allen Bildschirmbreiten untereinander [PROFIL-UX-01].
+- SOP-Zeilen zeigen Kennung und Kurzname sowie ein neutrales Versions-Tag aus der Fassung des Dokuments (Teil A: „gilt immer“, fehlende Fassung: „ohne Version“). Der Bearbeitungsstand steht im Steckbrief und einmal am Leseblock („Inhaltsgerüste: vor Verwendung konkretisieren“). Der Nachweis in `_entstehung.sop` bleibt unverändert, ebenso die Marke „Inhaltsgerüst“ in der KI-Erfassung [PROFIL-UX-02, D1, D3].
+- „✓ In Verwendung“ steht grün im Kopf der Karte, die obere Kartenkante ist grün; Aufklapptitel der Profilansicht ebenfalls grün (Farbe von „Entspannung“), übrige App unverändert. Der Profil-Chip im App-Kopf zeigt die Profilversion [PROFIL-UX-04, PROFIL-UX-05, D2].
+- Kopfaktion „Verwenden und Meldung öffnen“ statt „Verwenden“ am Kartenende; Export und Entfernen nachrangig am Ende [PROFIL-UX-07].
+- Metadaten: „Profilversion … · Herkunft“, „SOPs und Bausteine“ mit Anzahl der Inhaltsgerüste, Herausgeber und Lizenz; kurze Erklärung von Profilversion, Tag und Prüfsumme in der Einleitung [PROFIL-UX-08].
+- Prüfbericht und Dateien getrennt; Fehler und Warnungen im Kopf mit Sprung zum Bericht; „nicht verwendbar“ bei ungültigem Profil [PROFIL-UX-13].
+- Bedienung: Aufklappzeilen und Knöpfe der Profilansicht mit 44 px Bedienhöhe bei Touch-Bedienung, sichtbare Fokusmarkierung, Tags dürfen umbrechen [PROFIL-UX-14].
+- `sop/README.md` wird wieder eingebettet (Lesedokument); Beispielprofil 1.6.2; Spezifikation 0.4.12, Profilformat 1.10.
 
 ## [0.4.11] – 20.10.2026
 

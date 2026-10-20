@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.9 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.10 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -18,6 +18,8 @@ Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es
 | Beispiele | nein | Ordner mit Beispielmeldungen (z. B. einer fiktiven Lage), im Lagebild per Knopf ladbar |
 
 Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nicht eingecheckt. Dort stehen echte Adressen.
+
+**Lesedokumente.** Die Profilansicht zeigt unter „Dokumentation lesen“ die folgenden Dateien, soweit das Paket sie enthält: `sop/README.md` (Übersicht der SOP-Sammlung), `sop/CHANGELOG.md`, `README.md` (Beschreibung des Profils), `CHANGELOG.md` sowie die im Manifest genannten Arbeitsanweisungen und den Kodierleitfaden. Ein eigenes Manifestfeld ist dafür nicht nötig. README- und CHANGELOG-Dateien gehen nicht an KI-Modelle. Markdown wird ohne rohes HTML und ohne Bilder dargestellt; relative Links sollen auf Dateien im selben Paket zeigen.
 
 ## Manifest `profil.json`
 
@@ -159,7 +161,7 @@ Aus dem YAML-Block oder Frontmatter liest die App:
 | `lesegruppe` | Leseblock der Bausteine in Auswahl und Katalog (nur Navigation) |
 | `status` | Bearbeitungsstand; beginnt er mit „Inhaltsgerüst“, zeigt die App eine entsprechende Marke |
 
-Weitere Schlüssel (z. B. `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Mitgelieferte Profile bettet die App ohne `sop/archiv/`, Lesefassung und `sop/README.md` ein. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
+Weitere Schlüssel (z. B. `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Mitgelieferte Profile bettet die App ohne `sop/archiv/` und Lesefassung ein. `sop/README.md` ist eingebettet und erscheint als Lesedokument. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Die Profilansicht zeigt aus dem Kopf `version` als Tag sowie einen Steckbrief (u. a. `typ`, `lesegruppe`, `art_vorschlag` bzw. `art_zuordnung`, `status`, `stand`, `naechste_pruefung_faellig`, `pflegeverantwortlich`). Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
 
 ## Prüfung beim Import
 
@@ -193,3 +195,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.7 | 19.10.2026 | Darstellungsdatei: `quellen.rangfolge` (Quellenpriorität) und Strukturprüfung des Abschnitts `quellen`; SOP-Abschnitte ohne `art_vorschlag` (Bausteine) und Kennung „SOP-LEAD N01 …“ |
 | 1.8 | 19.10.2026 | SOP-Dateien: eine Datei je Abschnitt, Reihenfolge von `sop.dateien`, Kopfschlüssel `kennung`, `bisherige_ids`, `bisherige_kennung`; Importprüfungen auf Text vor dem ersten Anker und doppelte IDs |
 | 1.9 | 20.10.2026 | SOP-Kopfschlüssel `typ`, `lesegruppe`, `status` werden ausgewertet (Gliederung der Auswahl, Marke „Inhaltsgerüst“); eingebettete Profile ohne Archiv, Lesefassung und SOP-Übersicht |
+| 1.10 | 20.10.2026 | Lesedokumente (README, CHANGELOG, Arbeitsanweisungen, Kodierleitfaden) in der Profilansicht; `sop/README.md` wieder eingebettet; Steckbrief aus weiteren Kopfschlüsseln |
