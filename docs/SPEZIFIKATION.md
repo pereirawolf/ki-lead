@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.16 vom 20.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.17 vom 20.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -142,6 +142,8 @@ Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt au
 }
 ```
 
+**Dateinamen:** Alle Downloads beginnen mit dem Datum, damit sie im Ordner zeitlich sortiert stehen: `2026-10-20T20-31_LEAD-Meldung_Bund_THW_OV_Wesel_ENTWURF.pdf`. Bei Meldungen und daraus abgeleiteten Dateien (Management Summary, Feldauszug, Protokoll) ist es der Meldezeitpunkt (Rolle `meldezeitpunkt`), ohne ihn der Exportzeitpunkt. Den Platzhalter `{meldezeitpunkt}` setzt die App unabhängig von seiner Stelle in der Vorlage nach vorn; ältere Vorlagen müssen nicht geändert werden. Lagebild-PDF und -CSV tragen den Exporttag (`2026-10-20_Lagebild.pdf`), Redaktionsbericht, Notfallsicherung, Profilpaket und Lesetexte den Exportzeitpunkt, Laufprotokoll und Vergleich ihren Erstellungszeitpunkt, jeweils in der Zeitzone des Profils. Lauf-IDs, Paketinhalte und Originalnamen bleiben unverändert hinter dem Datum.
+
 ### 4.4 Arbeitsanweisungen mit Platzhaltern
 
 Die Arbeitsanweisungen sind Markdown-Dateien mit Platzhaltern, die die App vor dem Aufruf ersetzt:
@@ -211,6 +213,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 
 ### 5.4 Einstellungen
 
+- Darstellung: Farbschema der Oberfläche – Automatisch (Standard, hell oder dunkel nach System), Neutral · Hell, Neutral · Night Mode, Bund, Bevölkerungsschutz, je ein Schema für jedes der 16 Länder, oder die Farben des aktiven Profils (`farbschema` in `profil.json` bzw. eigene Farben auf dem Gerät, an Profilschlüssel und Prüfsumme gebunden). Das Schema ändert nur Bildschirmfarben; Signalfarben der Bewertungen und das Lagenradar hängen nur vom Modus hell/dunkel ab, Ausgaben (PDF, Word, CSV) behalten ihre Gestaltung. Katalog, Herkunft und Kontrastregeln: [farbschemas.md](farbschemas.md).
 - API-Schlüssel je Anbieter.
 - Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil.
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
@@ -219,7 +222,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.16 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“). In `sop` führt sie die tatsächlich beigefügten SOPs und Bausteine (Kennung mit gültiger Fassung, aus der zusammengestellten S2-Anfrage), unabhängig vom Antwortformat des Modells; das belegt den Kontext, nicht die fachliche Anwendung. Die Angabe des Modells zur Anwendung vergleicht sie damit und gibt Abweichungen als Prüfhinweis „SOP-Nachweis: …“ aus (fehlende Angabe, nicht beigefügte oder unbekannte Kennungen, beigefügte, aber nicht genannte). Prüfansicht, PDF, Lagebild-Karte und Rohtabelle/CSV („SOP (Entstehung)“) zeigen die gespeicherte Angabe; historische Kennungen bleiben unverändert. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.17 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“). In `sop` führt sie die tatsächlich beigefügten SOPs und Bausteine (Kennung mit gültiger Fassung, aus der zusammengestellten S2-Anfrage), unabhängig vom Antwortformat des Modells; das belegt den Kontext, nicht die fachliche Anwendung. Die Angabe des Modells zur Anwendung vergleicht sie damit und gibt Abweichungen als Prüfhinweis „SOP-Nachweis: …“ aus (fehlende Angabe, nicht beigefügte oder unbekannte Kennungen, beigefügte, aber nicht genannte). Prüfansicht, PDF, Lagebild-Karte und Rohtabelle/CSV („SOP (Entstehung)“) zeigen die gespeicherte Angabe; historische Kennungen bleiben unverändert. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 
@@ -307,4 +310,5 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.14 | 20.10.2026 | Lesetexte der Profilansicht ohne nachgeladenen Renderer; Aufbereitungsfehler werden angezeigt (Abschnitt 4.6) |
 | 0.4.15 | 20.10.2026 | Korrekturen aus dem Code-Review: Übergabe profilgebunden, Redaktionscheck mit allen Fristen, Management Summary veraltet auch bei geänderter Herkunft oder Anweisung, Kosten nicht erfasster Stufen als unbekannt (Abschnitte 5 und 5.2, Umsetzung M3/M4) |
 | 0.4.16 | 20.10.2026 | Redaktionscheck: Zeitzone des Profils, Uhrzeit der Ausgabe, Echtzeit oder Stichtag, leere Kennsätze, nicht prüfbare Quellen, gegenläufige Tendenzen, gemeinsame Hoch-Schwelle, Prüfstand und Abdeckung, Redaktionsbericht (Umsetzung M3) |
+| 0.4.17 | 20.10.2026 | Farbschemata der Oberfläche (Länder, Bund, Bevölkerungsschutz, neutral hell/dunkel, Profilfarben) (Abschnitt 5.4); Datum vorn in allen Dateinamen (Abschnitt 4.3) |
 

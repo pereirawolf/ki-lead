@@ -1,6 +1,7 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
 import { schemaFehler } from "../kern/validierung";
+import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
@@ -283,6 +284,15 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   }
   if (!strukturOk) return { profil: null, befunde };
   manifest.variablen = manifest.variablen || {};
+  // Optionales Farbschema: Fehler sperren das fachliche Profil nicht, das Schema wird dann nicht verwendet
+  if (manifest.farbschema !== undefined) {
+    const f = profilFarbschemaFehler(manifest.farbschema);
+    if (f.length) {
+      befunde.push({ stufe: "warnung", text: `profil.json: Das Farbschema wird nicht verwendet – ${f.join(" ")}` });
+      // Ungeprüfte Werte nicht weiterreichen (die Rohdatei und damit die Prüfsumme bleiben unverändert)
+      delete manifest.farbschema;
+    }
+  }
 
   const schema = jsonLesen(dateien, manifest.meldung.schema, befunde, true);
   const ui = jsonLesen(dateien, manifest.meldung.ui, befunde, true) as UiKonfig | undefined;

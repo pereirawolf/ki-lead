@@ -127,7 +127,7 @@ describe("Ausgabe", () => {
     const { profil: p } = await profil("lead-beispiel");
     const d = ilka.find((x) => x.name.includes("_HE_"))!.daten;
     expect(dateiname(d, p!, true)).toBe(
-      "LEAD-Meldung_Hessen_" + d.meldende_stelle.replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, "_") + "_" + d.meldezeitpunkt.replace(/:/g, "-") + "_ENTWURF",
+      d.meldezeitpunkt.replace(/:/g, "-") + "_LEAD-Meldung_Hessen_" + d.meldende_stelle.replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, "_") + "_ENTWURF",
     );
   });
 

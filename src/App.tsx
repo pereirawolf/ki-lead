@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ladeProfil } from "./profil/laden";
 import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
@@ -25,6 +25,18 @@ import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
+import { anwenden, aufloesen, PROFIL } from "./darstellung/thema";
+import {
+  darstellungLesen,
+  darstellungSchreiben,
+  lokaleFarbenLesen,
+  lokaleFarbenLoeschen,
+  lokaleFarbenSchreiben,
+  startLesen,
+  startSchreiben,
+} from "./darstellung/speicher";
+import type { ProfilFarbschema } from "./darstellung/typen";
+import { exportStempel, mitDatum } from "./kern/ausgabe";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -52,6 +64,15 @@ function neueMeldung(p: Profil): Meldung {
   return d;
 }
 
+/** Name der Notfallsicherung: bewusst ohne Profilvorlage, damit eine defekte Meldung die Sicherung nicht verhindert */
+function sicherungsName(zone?: string): string {
+  try {
+    return mitDatum(exportStempel(zone), "KI-LEAD_Meldung_Sicherung", "json");
+  } catch {
+    return "KI-LEAD_Meldung_Sicherung.json";
+  }
+}
+
 export default function App() {
   const [profile, setProfile] = useState<ProfilEintrag[]>([]);
   const [aktiv, setAktiv] = useState<string>();
@@ -69,6 +90,64 @@ export default function App() {
   const uebergabeNr = useRef(0);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
+
+  // Farbschema der Oberfläche: Auswahl (global) und eigene Farben des aktiven Profils (lokal, an Schlüssel und Prüfsumme gebunden)
+  const [farbStart] = useState(() => startLesen());
+  const [farbAuswahl, setFarbAuswahlRoh] = useState(farbStart.auswahl);
+  const [lokaleFarben, setLokaleFarben] = useState<ProfilFarbschema | undefined>();
+  /** Profil, für das die eigenen Farben gelesen sind (Schlüssel#Prüfsumme); bis dahin gilt der Startcache */
+  const [farbenGelesenFuer, setFarbenGelesenFuer] = useState<string | null>(null);
+  const farbSchreiben = useRef(Promise.resolve());
+  useEffect(() => {
+    darstellungLesen()
+      .then((d) => setFarbAuswahlRoh(d.auswahl))
+      .catch(() => undefined);
+  }, []);
+  useEffect(() => {
+    setLokaleFarben(undefined);
+    if (!aktiv || !profil) return;
+    let gueltig = true;
+    const fuer = `${aktiv}#${profil.hash}`;
+    lokaleFarbenLesen(aktiv, profil.hash)
+      .then((f) => gueltig && setLokaleFarben(f))
+      .catch(() => undefined)
+      .finally(() => gueltig && setFarbenGelesenFuer(fuer));
+    return () => {
+      gueltig = false;
+    };
+  }, [aktiv, profil]);
+  // Solange Profil und eigene Farben noch laden, gilt bei „profil“ die Definition aus dem Startcache (kein Aufblitzen)
+  const profilFarbenBereit = !!profil && farbenGelesenFuer === `${aktiv}#${profil.hash}`;
+  const thema = useMemo(
+    () =>
+      farbAuswahl === PROFIL && !profilFarbenBereit ? aufloesen(PROFIL, farbStart.profil) : aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben),
+    [farbAuswahl, profilFarbenBereit, farbStart, profil, lokaleFarben],
+  );
+  useEffect(() => {
+    anwenden(thema);
+    if (farbAuswahl !== PROFIL || profilFarbenBereit)
+      startSchreiben(thema.auswahl, thema.quelle === "lokal" ? lokaleFarben : thema.quelle === "profil" ? profil?.manifest.farbschema : undefined);
+    // Automatisch: Browserleiste folgt einem Wechsel des Systems zwischen hell und dunkel
+    if (thema.quelle !== "automatisch" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const neu = () => anwenden(thema);
+    mq.addEventListener?.("change", neu);
+    return () => mq.removeEventListener?.("change", neu);
+  }, [thema, lokaleFarben, profil, farbAuswahl, profilFarbenBereit]);
+  /** Auswahl sofort anwenden; Speichern nacheinander, damit nach dem Neuladen die letzte Auswahl gilt */
+  const setFarbAuswahl = (auswahl: string) => {
+    setFarbAuswahlRoh(auswahl);
+    farbSchreiben.current = farbSchreiben.current
+      .then(() => darstellungSchreiben({ version: 1, auswahl }))
+      .catch((e) => speicherProblem("Das Farbschema gilt nur bis zum Neuladen; es konnte nicht im Gerät gespeichert werden", e));
+  };
+  const eigeneFarbenSpeichern = async (f: ProfilFarbschema | null) => {
+    if (!aktiv || !profil) return;
+    if (f) await lokaleFarbenSchreiben(aktiv, profil.hash, f);
+    else await lokaleFarbenLoeschen(aktiv, profil.hash);
+    setLokaleFarben(f || undefined);
+    if (f) setFarbAuswahl(PROFIL);
+  };
 
   /** Meldet einen Fehler des Gerätespeichers sichtbar (IndexedDB gesperrt, voll oder defekt). */
   const speicherProblem = useCallback((was: string, e: unknown) => {
@@ -352,7 +431,7 @@ export default function App() {
         {ansicht === "meldung" && profil && meldung && (
           <Fehlergrenze
             schluessel={profil.hash}
-            sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", "KI-LEAD_Meldung_Sicherung.json", "application/json")}
+            sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", sicherungsName(profil.manifest.variablen?.zeitzone), "application/json")}
             zuruecksetzen={() => meldungErsetzen(neueMeldung(profil))}
             zuruecksetzenText="Neue Meldung beginnen"
           >
@@ -391,20 +470,23 @@ export default function App() {
           </Fehlergrenze>
         )}
         {ansicht === "einstellungen" && (
-          <EinstellungenAnsicht
-            profil={profil}
-            einstellungen={einstellungen}
-            setEinstellungen={setEinstellungen}
-            schluessel={schluessel}
-            setSchluessel={setSchluessel}
-          />
+          <Fehlergrenze schluessel={profil?.hash || "einstellungen"}>
+            <EinstellungenAnsicht
+              profil={profil}
+              einstellungen={einstellungen}
+              setEinstellungen={setEinstellungen}
+              schluessel={schluessel}
+              setSchluessel={setSchluessel}
+              farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
+            />
+          </Fehlergrenze>
         )}
         {(ansicht === "meldung" || ansicht === "ki" || ansicht === "lagebild") && !profil && profile.length > 0 && (
           <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.16. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.17. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

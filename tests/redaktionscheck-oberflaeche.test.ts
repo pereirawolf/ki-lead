@@ -160,7 +160,7 @@ it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   await klick("Redaktionscheck");
   await klick("Redaktionsbericht (JSON)");
   const j = JSON.parse(downloads[0].inhalt);
-  expect(downloads[0].name).toMatch(/^Redaktionsbericht_Lagebild_2026-10-20T08-00\.json$/);
+  expect(downloads[0].name).toBe("2026-10-20T08-00_Redaktionsbericht_Lagebild.json");
   expect(j.pruefstand.geprueft_fuer).toBe("20.10.2026, 08:00 Uhr");
   expect(j.befunde[0].einstufung).toBe("zeitkritisch");
 });

@@ -4,6 +4,7 @@ import { kennsatz } from "./kennsaetze";
 import { holeWert } from "./pfad";
 import { sachverhalte } from "./quellen";
 import type { Meldung, Profil } from "./typen";
+import { zoneOder } from "./zeit";
 
 export function datumDE(s: unknown): string {
   const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
@@ -32,19 +33,87 @@ export function jetztLokal(zeitzone = "Europe/Berlin", d = new Date()): string {
 function bereinige(s: string): string {
   return s
     .trim()
+    .replace(/[\u0000-\u001f\u007f]+/g, "")
     .replace(/[\\/:*?"<>|]+/g, "-")
     .replace(/\s+/g, "_");
 }
 
-export function dateiname(d: Meldung, profil: Profil, entwurf: boolean): string {
-  const vorlage = profil.ui.dateiname || "{schema}_{meldezeitpunkt}";
+/** Höchstlänge des Namensrumpfs (ohne Datum und Endung), damit Dateisysteme den Namen sicher annehmen */
+const MAX_RUMPF = 150;
+
+// ── Dateinamen: Datum immer vorn ─────────────────────────────────────────────
+// Alle Downloads beginnen mit „JJJJ-MM-TTThh-mm“ (bzw. „JJJJ-MM-TT“ bei Tagesausgaben), damit sie im Ordner
+// chronologisch sortiert erscheinen. Lokale Wanduhrzeiten der Meldung bleiben unverändert; absolute Zeitpunkte
+// (ISO mit Z oder Versatz) werden in die Zeitzone des Profils umgerechnet.
+
+const LOKAL = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?)?$/;
+const ABSOLUT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/;
+
+/** Zeitstempel für Dateinamen aus einem gespeicherten Zeitwert; null, wenn der Wert unbrauchbar ist. */
+export function dateistempel(wert: unknown, zeitzone?: string, praezision: "minute" | "tag" = "minute"): string | null {
+  const s = String(wert ?? "").trim();
+  if (ABSOLUT.test(s)) {
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return null;
+    const lokal = jetztLokal(zoneOder(zeitzone), d);
+    return praezision === "tag" ? lokal.slice(0, 10) : lokal.replace(":", "-");
+  }
+  const m = s.match(LOKAL);
+  if (!m) return null;
+  const [j, mo, t] = [+m[1], +m[2], +m[3]];
+  const probe = new Date(Date.UTC(j, mo - 1, t));
+  if (probe.getUTCMonth() !== mo - 1 || probe.getUTCDate() !== t) return null;
+  if (m[4] === undefined || praezision === "tag") return `${m[1]}-${m[2]}-${m[3]}`;
+  if (+m[4] > 23 || +m[5] > 59) return null;
+  return `${m[1]}-${m[2]}-${m[3]}T${m[4]}-${m[5]}`;
+}
+
+/** Zeitstempel des Exports (einmal je Aktion erfassen und weiterreichen) */
+export function exportStempel(zeitzone?: string, jetzt = new Date(), praezision: "minute" | "tag" = "minute"): string {
+  const lokal = jetztLokal(zoneOder(zeitzone), jetzt);
+  return praezision === "tag" ? lokal.slice(0, 10) : lokal.replace(":", "-");
+}
+
+/** Dateiname „<Zeitstempel>_<Rumpf>.<Endung>“; der Rumpf wird nur von Pfad- und Sonderzeichen bereinigt. */
+export function mitDatum(stempel: string, rumpf: string, endung?: string): string {
+  const r = bereinige(rumpf)
+    .slice(0, MAX_RUMPF)
+    .replace(/^[_\-. ]+|[_\-. ]+$/g, "");
+  return `${stempel}${r ? `_${r}` : ""}${endung ? `.${endung.replace(/^\./, "")}` : ""}`;
+}
+
+/** Entfernt Datumsplatzhalter samt einem angrenzenden Trenner aus einer Dateinamenvorlage. */
+function ohneDatumsplatzhalter(vorlage: string, felder: string[]): string {
+  let t = vorlage;
+  const trenner = /[_\-. ]/;
+  for (const f of felder) {
+    const ph = `{${f}}`;
+    for (let i = t.indexOf(ph); i >= 0; i = t.indexOf(ph)) {
+      if (i > 0 && trenner.test(t[i - 1])) t = t.slice(0, i - 1) + t.slice(i + ph.length);
+      else if (trenner.test(t[i + ph.length] || "")) t = t.slice(0, i) + t.slice(i + ph.length + 1);
+      else t = t.slice(0, i) + t.slice(i + ph.length);
+    }
+  }
+  return t;
+}
+
+/**
+ * Basisname einer Meldung ohne Endung: Meldezeitpunkt zuerst, dann die Vorlage des Profils ohne Datumsplatzhalter,
+ * gegebenenfalls „_ENTWURF“. Auch ältere Vorlagen mit dem Datum am Ende oder in der Mitte ergeben so das Datum vorn.
+ * Fehlt ein brauchbarer Meldezeitpunkt, gilt der (einmal erfasste) Exportzeitpunkt in der Profilzeitzone.
+ */
+export function dateiname(d: Meldung, profil: Profil, entwurf: boolean, jetzt = new Date()): string {
   const r = profil.ui.rollen;
-  const name = vorlage.replace(/\{([a-z_]+)\}/g, (_, feld: string) => {
+  const zone = profil.manifest.variablen?.zeitzone;
+  const datumsfelder = [...new Set(["meldezeitpunkt", r.meldezeitpunkt].filter((x): x is string => !!x))];
+  const zeitwert = holeWert(d, r.meldezeitpunkt || "meldezeitpunkt");
+  const stempel = dateistempel(zeitwert, zone) ?? exportStempel(zone, jetzt);
+  const vorlage = ohneDatumsplatzhalter(profil.ui.dateiname || "{schema}", datumsfelder);
+  const rumpf = vorlage.replace(/\{([a-z_]+)\}/g, (_, feld: string) => {
     const wert = feld === "schema" ? holeWert(d, r.schema_feld) : holeWert(d, feld);
-    if (feld === "meldezeitpunkt" && !wert) return jetztLokal(profil.manifest.variablen.zeitzone).replace(/:/g, "-");
     return bereinige(String(wert || `ohne_${feld}`));
   });
-  return name + (entwurf ? "_ENTWURF" : "");
+  return mitDatum(stempel, rumpf || bereinige(String(holeWert(d, r.schema_feld) || "Meldung"))) + (entwurf ? "_ENTWURF" : "");
 }
 
 /** Klartext-Kurzfassung ohne Quellenverweise, zum Kopieren in Mail oder Vermerk. */

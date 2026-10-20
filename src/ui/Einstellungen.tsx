@@ -5,6 +5,7 @@ import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
+import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
 import { APP_MODELLE, MODELL_GRUPPEN, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
 
 interface Props {
@@ -13,6 +14,8 @@ interface Props {
   setEinstellungen: (e: E) => void;
   schluessel: Schluessel;
   setSchluessel: (id: AnbieterId, wert: string) => void;
+  /** Farbschema der Oberfläche */
+  farben?: FarbZugang;
 }
 
 const ROLLEN: { id: Rolle; titel: string; text: string }[] = [
@@ -127,7 +130,7 @@ function SchluesselAbschnitt({ a, wert, setzen }: { a: (typeof ANBIETER)[number]
   );
 }
 
-export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellungen, schluessel, setSchluessel }: Props) {
+export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellungen, schluessel, setSchluessel, farben }: Props) {
   const setze = (teil: Partial<E>) => setEinstellungen({ ...e, ...teil });
   const openAiGenutzt = ROLLEN.some((r) => anbieterVon(e.modelle[r.id] || profil?.manifest.modelle?.[r.id] || APP_MODELLE[r.id]) === "openai");
 
@@ -139,6 +142,8 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
           <p>Gelten für dieses Gerät und diesen Browser. Leere Modellfelder bedeuten: Vorgabe des aktiven Profils.</p>
         </div>
       </div>
+
+      {farben && <FarbschemaAbschnitt profil={profil} zugang={farben} />}
 
       {ANBIETER.map((a) => (
         <SchluesselAbschnitt key={a.id} a={a} wert={schluessel[a.id]} setzen={(w) => setSchluessel(a.id, w)} />

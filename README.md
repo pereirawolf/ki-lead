@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.4.16, Meilenstein 4 (Verdichtung, zwei KI-Anbieter); siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.4.17, Meilenstein 4 (Verdichtung, zwei KI-Anbieter); siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -32,6 +32,7 @@ Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezog
 - **Management Summary:** eine Fassung der Meldung für die Leitung, lesbar in einer Minute. Beurteilung, Tendenz, Fristen und Entwurfsvermerk übernimmt die App aus der Meldung.
 - **Profile:** Profile untereinander mit Aktivstatus, Metadaten und Prüfsumme. Arbeitsanweisungen und Kodierleitfaden (mit Fassung), SOP-Katalog mit Suche sowie Übersichten und Änderungsverläufe lassen sich ohne KI direkt in der App lesen, mit Inhaltsverzeichnis und Einzeldownload.
 - **Zwei Anbieter:** je Stufe ein Modell von Anthropic oder OpenAI.
+- **Darstellung:** Farbschema der Oberfläche nach Wahl: neutral hell oder dunkel, Bund, Bevölkerungsschutz, jedes der 16 Länder oder eigene Farben des Profils ([Farbschemata](docs/farbschemas.md)). Downloads tragen das Datum vorn im Dateinamen (`2026-10-20T20-31_LEAD-Meldung_…_ENTWURF.pdf`).
 - **Forschungsfunktionen:** Laufprotokoll mit Prompts, Antworten, Token, Kosten und Dauer (Export als JSON); Vergleich eines Laufs mit einer Referenzfassung je Radarachse, ohne Gesamtwert.
 
 Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber weder die sachliche Richtigkeit noch die Vollständigkeit einer Meldung. Ergebnisse bleiben bis zur fachlichen Prüfung und Freigabe Entwürfe. Einzelheiten zu allen Funktionen: [Spezifikation](docs/SPEZIFIKATION.md).
@@ -96,7 +97,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.4.16), jedes Profil eine eigene Version (Beispielprofil 1.8.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.4.17), jedes Profil eine eigene Version (Beispielprofil 1.8.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -120,6 +121,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.16) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.17) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

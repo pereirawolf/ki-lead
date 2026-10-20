@@ -7,6 +7,7 @@ import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type G
 import { sachverhalte } from "../kern/quellen";
 import { holeWert } from "../kern/pfad";
 import { sha256 } from "../profil/laden";
+import { dateistempel, exportStempel, mitDatum } from "../kern/ausgabe";
 import { alsCsv } from "../lagebild/ausgabe";
 import { dateiAnbieten } from "../speicher/speicher";
 
@@ -36,6 +37,11 @@ export function VergleichKasten({
   const v = gespeichert?.ergebnis;
   const refDaten = gespeichert?.referenzDaten;
   const r = profil.ui.rollen;
+  /** Datum der Vergleichsfassung vorn, Lauf-ID unverändert im Namen */
+  const vergleichsName = (endung: string) => {
+    const zone = profil.manifest.variablen?.zeitzone;
+    return mitDatum(dateistempel(gespeichert?.erstellt, zone) ?? exportStempel(zone), `KI-LEAD_Vergleich_${laufId}`, endung);
+  };
   const refTitel = refDaten
     ? sachverhalte(refDaten, profil.ui).map(
         (sv, j) => `${j + 1}: ${String((r.sv_bezeichnung && holeWert(sv, r.sv_bezeichnung)) || "ohne Bezeichnung").slice(0, 70)}`,
@@ -96,14 +102,14 @@ export function VergleichKasten({
             <button
               type="button"
               className="knopf leise"
-              onClick={() => dateiAnbieten(alsCsv(vergleichTabelle(v)), `KI-LEAD_Vergleich_${laufId}.csv`, "text/csv;charset=utf-8")}
+              onClick={() => dateiAnbieten(alsCsv(vergleichTabelle(v)), vergleichsName("csv"), "text/csv;charset=utf-8")}
             >
               CSV
             </button>
             <button
               type="button"
               className="knopf leise"
-              onClick={() => dateiAnbieten(JSON.stringify(gespeichert, null, 2), `KI-LEAD_Vergleich_${laufId}.json`, "application/json")}
+              onClick={() => dateiAnbieten(JSON.stringify(gespeichert, null, 2), vergleichsName("json"), "application/json")}
             >
               JSON
             </button>

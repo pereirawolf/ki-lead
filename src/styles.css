@@ -14,16 +14,36 @@
   --amt: #1f4f82;
   --amt-tief: #163b63;
   --amt-zart: #e1eaf4;
-  --gering: #9a6f00;
+  --gering: #8a6400;
   --gering-zart: #fbf3d9;
-  --erheblich: #c25a07;
+  --erheblich: #a74900;
   --erheblich-zart: #fdebdc;
   --kritisch: #b3261e;
   --kritisch-zart: #fbe4e2;
   --ok: #2e6b3e;
   --ok-zart: #e3f1e6;
-  --radar-ring: #b9c6c0;
+  --radar-ring: #69737d;
   --radar-flaeche: rgba(31, 79, 130, 0.2);
+  --radar-linie: var(--amt);
+  /* Rollen, die ein Farbschema einzeln setzen kann (Vorgabe: Standarddarstellung) */
+  --auf-amt: #ffffff;
+  --auf-amt-hover: #ffffff;
+  --link: var(--amt);
+  --fokus: var(--amt);
+  --fokus-abstand: var(--flaeche);
+  --eingabe-rand: #7a8580;
+  --auswahl-rand: var(--amt);
+  --auswahl-text: var(--tinte);
+  --header-hintergrund: var(--flaeche);
+  --header-text: var(--tinte);
+  --lese-farbe: var(--ok);
+  --lese-flaeche: var(--ok-zart);
+  --browserleiste: #1c3d5a;
+  --marke-akzent-1: var(--amt);
+  --marke-akzent-2: var(--amt);
+  --marke-akzent-3: var(--amt);
+  --band: linear-gradient(90deg, var(--amt) 0 100%);
+  --auf-erheblich: #ffffff;
   --schatten: 0 1px 0 rgba(24, 38, 58, 0.06);
   --schrift: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --r-klein: 4px;
@@ -31,8 +51,9 @@
   color-scheme: light;
 }
 
+/* Automatischer Dunkelmodus nur ohne gewähltes Farbschema; ein gewähltes Schema setzt alle Rollen selbst */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-farbschema]) {
     --papier: #0f1620;
     --flaeche: #16202b;
     --tinte: #e4eaf0;
@@ -50,8 +71,13 @@
     --kritisch-zart: #361615;
     --ok: #7fc28f;
     --ok-zart: #15291b;
-    --radar-ring: #34465a;
+    --radar-ring: #83909e;
     --radar-flaeche: rgba(134, 179, 230, 0.25);
+    --eingabe-rand: #6d7d8c;
+    --auf-amt: #0f1620;
+    --auf-amt-hover: #0f1620;
+    --browserleiste: #0f1620;
+    --auf-erheblich: #121820;
     color-scheme: dark;
   }
 }
@@ -81,9 +107,15 @@ textarea {
   color: inherit;
 }
 
+a {
+  color: var(--link);
+}
+
 :focus-visible {
-  outline: 3px solid var(--amt);
+  outline: 3px solid var(--fokus);
   outline-offset: 2px;
+  /* zweiter, heller Ring: Fokus bleibt auch auf farbigen Flächen sichtbar */
+  box-shadow: 0 0 0 2px var(--fokus-abstand);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -106,8 +138,11 @@ textarea {
   align-items: center;
   gap: 1.25rem;
   padding: calc(0.6rem + env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.6rem max(1rem, env(safe-area-inset-left));
-  background: var(--flaeche);
+  background: var(--header-hintergrund);
+  color: var(--header-text);
+  /* Identitätsband des Farbschemas (dekorativ) */
   border-bottom: 4px solid var(--amt);
+  border-image: var(--band) 1;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -243,11 +278,12 @@ textarea {
 
 .knopf.primaer {
   background: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
 }
 
 .knopf.primaer:hover {
   background: var(--amt-tief);
+  color: var(--auf-amt-hover);
 }
 
 .knopf.leise {
@@ -323,7 +359,7 @@ textarea {
 
 .schritt.erledigt .schritt-nr {
   border-color: var(--amt);
-  color: var(--amt);
+  color: var(--amt-tief);
 }
 
 .schritt.aktiv {
@@ -335,7 +371,7 @@ textarea {
 .schritt.aktiv .schritt-nr {
   background: var(--amt);
   border-color: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
 }
 
 .schritt-inhalt {
@@ -400,7 +436,7 @@ input[type="number"],
 select,
 textarea {
   width: 100%;
-  border: 1px solid var(--linie);
+  border: 1px solid var(--eingabe-rand);
   border-radius: var(--r-klein);
   background: var(--flaeche);
   padding: 0.6rem 0.7rem;
@@ -460,7 +496,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  border: 1px solid var(--linie);
+  border: 1px solid var(--eingabe-rand);
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
   min-height: 40px;
@@ -478,7 +514,7 @@ textarea {
 .chip.an {
   background: var(--amt);
   border-color: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
 }
 
 .chip:has(input:focus-visible) {
@@ -648,13 +684,13 @@ textarea {
 
 .radar-flaeche {
   fill: var(--radar-flaeche);
-  stroke: var(--amt);
+  stroke: var(--radar-linie);
   stroke-width: 2;
   stroke-linejoin: round;
 }
 
 .radar-punkt {
-  fill: var(--amt);
+  fill: var(--radar-linie);
   stroke: var(--flaeche);
   stroke-width: 1.5;
 }
@@ -697,7 +733,7 @@ textarea {
 .stufe {
   min-width: 0;
   min-height: 40px;
-  border: 1px solid var(--linie);
+  border: 1px solid var(--eingabe-rand);
   border-radius: var(--r-klein);
   background: var(--flaeche);
   font-weight: 700;
@@ -708,7 +744,7 @@ textarea {
 .stufe.aktiv {
   background: var(--amt);
   border-color: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
 }
 
 .stufe-offen {
@@ -1025,7 +1061,7 @@ textarea {
 
 .profil summary {
   cursor: pointer;
-  color: var(--ok);
+  color: var(--lese-farbe);
   font-weight: 700;
   min-height: 32px;
   padding-block: 0.25rem;
@@ -1038,7 +1074,7 @@ textarea {
 }
 
 .profil summary:focus-visible {
-  outline: 2px solid var(--ok);
+  outline: 2px solid var(--lese-farbe);
   outline-offset: 2px;
   border-radius: var(--r-klein);
 }
@@ -1282,7 +1318,7 @@ textarea {
   height: 1.25rem;
   flex: none;
   margin-top: 0.15rem;
-  accent-color: var(--amt);
+  accent-color: var(--auswahl-rand);
 }
 
 .laufanzeige {
@@ -1371,7 +1407,7 @@ details.ki-abschnitt summary,
 }
 
 .fundstellen a {
-  color: var(--amt);
+  color: var(--link);
 }
 
 .frueher {
@@ -1421,7 +1457,7 @@ details.ki-abschnitt summary,
 }
 
 .abschnitt-einzeln a {
-  color: var(--amt);
+  color: var(--link);
 }
 
 .schluessel-zeile {
@@ -1553,7 +1589,7 @@ details.ki-abschnitt summary,
   height: 1.25rem;
   flex: none;
   margin-top: 0.15rem;
-  accent-color: var(--amt);
+  accent-color: var(--auswahl-rand);
 }
 
 .schalter .hinweis {
@@ -1688,7 +1724,7 @@ details.ki-abschnitt summary,
   background: var(--papier);
 }
 .lb-marke.lb-amt {
-  color: var(--amt);
+  color: var(--amt-tief);
   background: var(--amt-zart);
 }
 
@@ -1717,7 +1753,7 @@ details.ki-abschnitt summary,
 .lb-reiter .segment.aktiv {
   background: var(--amt);
   border-color: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
   font-weight: 700;
 }
 
@@ -1727,7 +1763,7 @@ details.ki-abschnitt summary,
   padding: 0 0.35rem;
   border-radius: 999px;
   background: var(--erheblich);
-  color: #fff;
+  color: var(--auf-erheblich);
   font-size: 0.75rem;
   font-weight: 700;
   text-align: center;
@@ -1928,13 +1964,12 @@ a.knopf {
 
 .lb-karte header {
   background: var(--amt);
-  color: var(--flaeche);
+  color: var(--auf-amt);
   padding: 0.6rem 0.9rem;
 }
 
 .lb-karte header .lb-karte-meta {
-  color: inherit;
-  opacity: 0.85;
+  color: var(--auf-amt);
 }
 
 .lb-karte-titel {
@@ -2178,7 +2213,7 @@ fieldset.lb-ausgabe {
 }
 .lb-flag-info {
   background: var(--amt-zart);
-  color: var(--amt);
+  color: var(--amt-tief);
 }
 
 .lb-baustein {
@@ -2222,6 +2257,7 @@ fieldset.lb-ausgabe {
 .lb-vorlage-inhalt {
   background: #fff;
   color: #000;
+  color-scheme: light;
   padding: 0.75rem;
   overflow-x: auto;
 }
@@ -2517,7 +2553,7 @@ fieldset.lb-ausgabe {
 }
 
 .profil details.lese[open] {
-  border-left: 3px solid var(--ok);
+  border-left: 3px solid var(--lese-farbe);
   padding-left: 0.75rem;
 }
 
@@ -2582,7 +2618,7 @@ fieldset.lb-ausgabe {
   gap: 0.35rem 1rem;
   margin: 0.4rem 0 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: var(--ok-zart);
+  background: var(--lese-flaeche);
   border-radius: var(--r-klein);
   font-size: 0.88rem;
   max-width: 78ch;
@@ -2642,7 +2678,7 @@ fieldset.lb-ausgabe {
 }
 
 .lesetext a {
-  color: var(--ok);
+  color: var(--lese-farbe);
 }
 
 .lesetext code,
@@ -2804,7 +2840,7 @@ fieldset.lb-ausgabe {
 .lese-inhalt-sprung {
   font: inherit;
   font-size: 0.9rem;
-  color: var(--ok);
+  color: var(--lese-farbe);
   background: none;
   border: none;
   padding: 0.2rem 0;
@@ -2816,7 +2852,7 @@ fieldset.lb-ausgabe {
 
 .lese-inhalt-sprung:focus-visible,
 .lesetext :is(h2, h3):focus {
-  outline: 2px solid var(--ok);
+  outline: 2px solid var(--lese-farbe);
   outline-offset: 2px;
 }
 
@@ -2835,4 +2871,135 @@ fieldset.lb-ausgabe {
 .lb-pruefstand input[type="datetime-local"] {
   width: auto;
   flex: 1 1 9rem;
+}
+
+/* ── Darstellung: Farbschema ─────────────────────── */
+
+.farb-vorschau {
+  margin: 0.75rem 0;
+  max-width: 34rem;
+  background: var(--papier);
+  color: var(--tinte);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  overflow: hidden;
+}
+
+.farb-vorschau-kopf {
+  background: var(--header-hintergrund);
+  color: var(--header-text);
+  font-weight: 700;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 4px solid var(--amt);
+  border-image: var(--band) 1;
+}
+
+.farb-vorschau p {
+  margin: 0;
+  padding: 0.6rem 0.75rem 0;
+  background: var(--flaeche);
+}
+
+.farb-vorschau-leise {
+  color: var(--tinte-leise);
+}
+
+.farb-vorschau-link {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.farb-vorschau-zeile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--flaeche);
+}
+
+.farb-vorschau-knopf {
+  background: var(--amt);
+  color: var(--auf-amt);
+  border-radius: var(--r-klein);
+  padding: 0.25rem 0.7rem;
+  font-weight: 700;
+}
+
+.farb-vorschau-auswahl {
+  background: var(--amt-zart);
+  color: var(--auswahl-text);
+  border: 2px solid var(--auswahl-rand);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.farb-vorschau-signal {
+  background: var(--erheblich-zart);
+  color: var(--erheblich);
+  border-radius: var(--r-klein);
+  padding: 0.25rem 0.6rem;
+  font-weight: 700;
+}
+
+.farb-editor {
+  margin-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+  padding-top: 0.75rem;
+}
+
+.farb-editor > summary,
+.farb-weitere > summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 32px;
+}
+
+.farb-editor-raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.75rem;
+}
+
+.farb-felder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.farb-feld {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  grid-template-areas: "titel titel" "waehler text";
+  gap: 0.2rem 0.5rem;
+  align-items: center;
+}
+
+.farb-feld label {
+  grid-area: titel;
+  font-size: 0.9rem;
+}
+
+.farb-feld input[type="color"] {
+  grid-area: waehler;
+  width: 2.75rem;
+  height: 2.5rem;
+  padding: 0.1rem;
+  border: 1px solid var(--eingabe-rand);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+}
+
+.farb-feld input[type="text"] {
+  grid-area: text;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.farb-ausschnitt {
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.6rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
 }
