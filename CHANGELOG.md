@@ -27,7 +27,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.9 | 99403c0 |
 | 0.4.10 | 90ab407 (Nachtrag vom 20.10.2026: README) |
 | 0.4.11 | 706be47 |
-| 0.4.12 | Commit „Profilansicht: Versionen, Dokumentation und Verläufe; 0.4.12“ |
+| 0.4.12 | Commit „SOP-LEAD C01 1.1.0: Referenzszenarien ANoPl-Bund; Sammelmappe 3.1.0, Profil 1.7.0“ (Nachtrag vom 20.10.2026: Beispielprofil 1.7.0, ohne Änderung der App; Stand der Version selbst: 3d58abf) |
 
 ## [0.4.12] – 20.10.2026
 

@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.7.0 – 20.10.2026
+
+Grundlage: Vorschlag „SOP-LEAD_C01_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen E1–E4 wie empfohlen, E4 in neuer Fassung ohne Änderung der App).
+
+- **SOP-Sammelmappe 3.1.0** mit fachlich überarbeitetem Baustein C01 1.1.0 (Referenzszenarien des ANoPl-Bund) und der Redaktionsregel zu Quellenverweisen in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Kodierleitfaden, Darstellungsdatei, Arbeitsanweisungen und Schema sind unverändert.
+
 ## 1.6.2 – 20.10.2026
 
 Grundlage: Vorschlag „KI-LEAD_Profile_Ergonomie_Vorschlag_konsolidiert_2026-10-20“ (Entscheidungen D1–D6 wie empfohlen). Fachlich unverändert.

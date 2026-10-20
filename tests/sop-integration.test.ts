@@ -44,7 +44,9 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
     expect(s1System(p!)).toContain(`- ${s.id}: ${sopKennung(s)}`);
     expect(sopBlock(p!, [s.id])).toContain(`## ${sopKennung(s)}`);
     expect(istBaustein(s)).toBe(kennung.startsWith("C"));
-    expect(istInhaltsgeruest(s)).toBe(kennung.startsWith("C"));
+    // Inhaltsgerüste gibt es nur in Teil C; ausgearbeitete Bausteine (z. B. C01) tragen den Status „Beispielfassung“
+    if (kennung.startsWith("B")) expect(istInhaltsgeruest(s)).toBe(false);
+    else expect(istInhaltsgeruest(s)).toBe(!/^Beispielfassung/.test(s.status || ""));
     expect(sopGruppen(p!).some((g) => g.sops.includes(s))).toBe(true);
   });
 
