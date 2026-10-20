@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.13 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.14 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -44,7 +44,8 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "kodierleitfaden": "kodierleitfaden.md",
   "kontakte": "kontakte.json",
   "beispiele": [{ "titel": "Übungslage (FIKTIV)", "ordner": "beispiele/uebung", "hinweis": "Erfundene Lage" }],
-  "modelle": { "vorverarbeitung": "claude-haiku-5-5", "erfassung": "claude-sonnet-5-5", "verdichtung": "claude-opus-5-5" }
+  "modelle": { "vorverarbeitung": "claude-haiku-5-5", "erfassung": "claude-sonnet-5-5", "verdichtung": "claude-opus-5-5" },
+  "farbschema": { "basis": "de-th", "name": "Stab Kreis X", "farben": { "marke-akzent-1": "#0089C1", "marke-akzent-2": "#FFFFFF", "marke-akzent-3": "#D62B32" } }
 }
 ```
 
@@ -52,6 +53,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
 - `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
+- `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
 - `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
 
 ### `kontakte.json`
@@ -124,7 +126,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 
 - `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt.
 - `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge.
-- `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern.
+- `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern. Der Meldezeitpunkt steht im Dateinamen immer vorn (`2026-10-20T20-31_…`), auch wenn `{meldezeitpunkt}` in der Vorlage am Ende steht oder fehlt.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
 - `analyse_gliederung`: dasselbe für die Analysefelder (Rolle `sv_analysefelder`). Ein Umbruch entsteht nur nach einem Satzende (`. ; ! ? ) ] “`), bei `zeile` auch nach einem Doppelpunkt, damit eine Aufzählung „Prüfbedarf: (1) … (2) …“ untereinander steht. Mit `kurzlabel: n` beginnt zusätzlich jeder kurze Aspektbegriff aus höchstens n Wörtern mit Doppelpunkt eine neue Zeile („Strom:“, „Verkehr → Versorgung:“, „Land (Behörde):“); Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Begriff. `kurzlabel` gilt auch in `bewertung_gliederung`, Werte 0 bis 8, 0 oder fehlend schaltet es ab. Beispiel: `{ "absatz": ["Szenario:", "Einordnung „"], "zeile": ["\\(\\d+\\) "], "kurzlabel": 3 }`. Die Gliederung betrifft nur Ausgaben (PDF, Kopiervorlage, Lagebild-Tabelle), nie die gespeicherte Meldung.
@@ -199,3 +201,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.11 | 20.10.2026 | Eigene Fassung eines Lesedokuments im ersten Absatz nach der Überschrift („Fassung X vom TT.MM.JJJJ“); Standardfassungen der App bei fehlender Verdichtung oder Kurzfassung sichtbar |
 | 1.12 | 20.10.2026 | Importprüfung: Datentypen der Manifestangaben und Werte der Schema-Schlüsselwörter; zyklische Verweise (App 0.4.15) |
 | 1.13 | 20.10.2026 | Redaktionscheck: `variablen.zeitzone` bestimmt die Lesart von Fristen und nächster Ausgabe; Ersatzregel für fehlendes `beurteilung_hoch` dokumentiert (App 0.4.16) |
+| 1.14 | 20.10.2026 | Optionales `farbschema` im Manifest; Datum vorn im Dateinamen unabhängig von der Stellung von `{meldezeitpunkt}` (App 0.4.17) |

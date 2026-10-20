@@ -42,6 +42,7 @@ import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../p
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { radarPng } from "./radarBild";
+import { exportStempel, mitDatum } from "../kern/ausgabe";
 
 interface Props {
   profil: Profil;
@@ -354,24 +355,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
 
   const berichtSpeichern = (art: "txt" | "json") => {
     const b = redaktionsbericht(red, eintraege, profil, APP_KENNUNG);
-    const tag = jetztLokal(zone).slice(0, 16).replace(/:/g, "-");
     dateiAnbieten(
       art === "json" ? b.json : b.text,
-      `Redaktionsbericht_${titel}_${tag}.${art}`,
+      mitDatum(exportStempel(zone), `Redaktionsbericht_${titel}`, art),
       art === "json" ? "application/json" : "text/plain;charset=utf-8",
     );
   };
 
   const csv = () =>
-    dateiAnbieten(
-      alsCsv(rohtabelle(eintraege, profil)),
-      `${titel}_${jetztLokal(profil.manifest.variablen.zeitzone).slice(0, 10)}.csv`,
-      "text/csv;charset=utf-8",
-    );
+    dateiAnbieten(alsCsv(rohtabelle(eintraege, profil)), mitDatum(exportStempel(zone, new Date(), "tag"), titel, "csv"), "text/csv;charset=utf-8");
 
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
   const pdf = async () => {
     setPdfFehler(null);
+    const tag = exportStempel(zone, new Date(), "tag");
     const kopf = ["Meldung", "Sachverhalt", lBeurteilung, ...(r.sv_tendenz ? [lTendenz] : []), ...(ks.handlungsrelevant ? ["Handlungsrelevant bis"] : [])];
     const zeilen = sortiert.map((s) => [
       absender(s.eintrag, profil),
@@ -393,11 +390,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
       const { lagebildAlsPdf } = await import("../dokumente/pdf");
-      dateiAnbieten(
-        lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()),
-        `${titel}_${jetztLokal(profil.manifest.variablen.zeitzone).slice(0, 10)}.pdf`,
-        "application/pdf",
-      );
+      dateiAnbieten(lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()), mitDatum(tag, titel, "pdf"), "application/pdf");
     } catch (e) {
       setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}).`);
     }

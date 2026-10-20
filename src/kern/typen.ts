@@ -38,6 +38,8 @@ export interface ProfilManifest {
   kodierleitfaden?: string;
   kontakte?: string;
   modelle?: Record<string, string>;
+  /** Optionales Farbschema der Oberfläche (Basis aus dem Katalog, einzelne Farbrollen änderbar) */
+  farbschema?: { basis: string; name?: string; farben?: Record<string, string> };
   /** Beispieldatensätze im Paket, z. B. eine fiktive Lage zum Ausprobieren des Lagebilds */
   beispiele?: { titel: string; ordner: string; hinweis?: string }[];
 }

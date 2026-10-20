@@ -47,19 +47,22 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
       `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft.\n\nTrotzdem final ausgeben?`,
     );
   const exportiere = (final: boolean) => {
+    const jetzt = new Date();
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     if (!finalFreigeben(final)) return;
-    dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final) + ".json", "application/json");
+    dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final, jetzt) + ".json", "application/json");
   };
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
   const pdf = async (final: boolean) => {
     setPdfFehler(null);
+    // Exportzeitpunkt vor dem Nachladen der PDF-Ausgabe festhalten (Rückfall, wenn kein Meldezeitpunkt angegeben ist)
+    const jetzt = new Date();
     if (!finalFreigeben(final)) return;
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
       const { meldungAlsPdf } = await import("../dokumente/pdf");
-      dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final) + ".pdf", "application/pdf");
+      dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final, jetzt) + ".pdf", "application/pdf");
     } catch (e) {
       setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}). Die Meldung lässt sich weiterhin als JSON speichern.`);
     }

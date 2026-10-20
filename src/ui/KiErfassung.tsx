@@ -25,6 +25,7 @@ import {
   type KiUebergabe,
 } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { dateistempel, exportStempel, mitDatum } from "../kern/ausgabe";
 
 interface Props {
   profil: Profil;
@@ -318,7 +319,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setWebsucheWahl(null);
   }
 
-  const protokollExport = (l: Lauf) => dateiAnbieten(JSON.stringify(l, null, 2), `KI-LEAD_Lauf_${l.id}.json`, "application/json");
+  const protokollExport = (l: Lauf) => {
+    const zone = profil.manifest.variablen?.zeitzone;
+    dateiAnbieten(
+      JSON.stringify(l, null, 2),
+      mitDatum(dateistempel(l.erstellt, zone) ?? exportStempel(zone), `KI-LEAD_Lauf_${l.id}`, "json"),
+      "application/json",
+    );
+  };
 
   const setzeSv = (i: number, teil: Partial<S1Vorschlag["sachverhalte"][number]>) => {
     if (!vorschlag) return;

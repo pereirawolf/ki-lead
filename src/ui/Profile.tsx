@@ -22,6 +22,7 @@ import type { ProfilEintrag } from "../App";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
 import { Lesetext } from "./Lesetext";
+import { exportStempel, mitDatum } from "../kern/ausgabe";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -552,7 +553,10 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 <button
                   type="button"
                   className="knopf leise"
-                  onClick={async () => dateiAnbieten(await alsZip(p.dateien, p.schluessel), `${p.schluessel}.leadprofil`, "application/zip")}
+                  onClick={async () => {
+                    const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
+                    dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+                  }}
                 >
                   Als Paket exportieren
                 </button>

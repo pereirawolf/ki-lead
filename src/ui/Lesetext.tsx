@@ -9,6 +9,7 @@ import MarkdownItKlasse, { type MarkdownIt } from "markdown-it";
 import type { Profil } from "../kern/typen";
 import { inhaltsverzeichnis, linkZiel, type LinkZiel } from "../profil/lesen";
 import { dateiAnbieten } from "../speicher/speicher";
+import { exportStempel, mitDatum } from "../kern/ausgabe";
 
 interface LeseUmgebung {
   von: string;
@@ -111,7 +112,11 @@ export function Lesetext({ text, von, profil, oeffnen, original }: Props) {
           {quelltext ? "Lesefassung anzeigen" : "Quelltext anzeigen"}
         </button>
         {original && (
-          <button type="button" className="knopf leise klein" onClick={() => dateiAnbieten(original.text, original.dateiname, "text/markdown")}>
+          <button
+            type="button"
+            className="knopf leise klein"
+            onClick={() => dateiAnbieten(original.text, mitDatum(exportStempel(profil.manifest.variablen?.zeitzone), original.dateiname), "text/markdown")}
+          >
             Originaldatei herunterladen
           </button>
         )}
