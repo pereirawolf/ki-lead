@@ -4,7 +4,7 @@
 import { load as yamlLaden } from "js-yaml";
 import type { Sop } from "../kern/typen";
 
-function yamlKopf(text: string): Record<string, any> {
+export function yamlKopf(text: string): Record<string, any> {
   const front = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   const block = text.match(/```ya?ml\r?\n([\s\S]*?)\r?\n```/);
   const quelle = front?.[1] ?? block?.[1];

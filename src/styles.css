@@ -1,6 +1,8 @@
 /* KI-LEAD – Arbeitsmittel für Lagemeldungen.
    Leitbild: Lagekartenpapier und Behördenblau. Kräftig ist nur das Lagenradar;
-   Signalfarben tragen ausschließlich die Bewertung (geringfügig/erheblich/kritisch). */
+   Signalfarben tragen ausschließlich die Bewertung (geringfügig/erheblich/kritisch). Grün (--ok) steht für
+   Entspannung und gelungene Prüfungen, in der Profilansicht außerdem für das verwendete Profil und die Lesebereiche
+   (keine fachliche Freigabe). */
 
 :root {
   --papier: #eef1ee;
@@ -150,6 +152,8 @@ textarea {
 }
 
 .profil-chip {
+  display: inline-flex;
+  min-width: 0;
   margin-left: auto;
   max-width: 40vw;
   overflow: hidden;
@@ -902,7 +906,7 @@ textarea {
 
 .profilliste {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -914,26 +918,90 @@ textarea {
   padding: 1rem 1.25rem;
 }
 
+.profil {
+  min-width: 0;
+}
+
 .profil.aktiv {
-  border-top-color: var(--amt);
+  border-top-color: var(--ok);
+}
+
+.profil-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+}
+
+.profil-titel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  min-width: 0;
 }
 
 .profil h2 {
   margin: 0;
   font-size: 1.2rem;
+  overflow-wrap: anywhere;
 }
 
 .profil-meta {
-  margin: 0.1rem 0 0.5rem;
+  margin: 0.25rem 0 0.5rem;
   color: var(--tinte-leise);
   font-size: 0.88rem;
 }
 
+.profil-beschreibung,
+.profil .hinweis {
+  max-width: 78ch;
+}
+
 .profil-daten {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-  gap: 0.5rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.6rem 1.25rem;
   margin: 0.75rem 0;
+}
+
+.profil-daten-breit {
+  grid-column: span 2;
+}
+
+@media (max-width: 520px) {
+  .profil-daten-breit {
+    grid-column: auto;
+  }
+}
+
+.profil-daten .technisch {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.pruefsumme .knopf {
+  vertical-align: baseline;
+}
+
+.hash-voll {
+  display: block;
+  margin-top: 0.3rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.pruefsumme-status {
+  display: block;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--ok);
+}
+
+.pruefsumme-status:empty {
+  display: none;
 }
 
 .profil-daten dt {
@@ -957,8 +1025,54 @@ textarea {
 
 .profil summary {
   cursor: pointer;
-  color: var(--amt-tief);
+  color: var(--ok);
   font-weight: 700;
+  min-height: 32px;
+  padding-block: 0.25rem;
+  scroll-margin-top: 7rem;
+}
+
+.profil summary:hover .aufklapp-titel,
+.profil summary:hover {
+  text-decoration: underline;
+}
+
+.profil summary:focus-visible {
+  outline: 2px solid var(--ok);
+  outline-offset: 2px;
+  border-radius: var(--r-klein);
+}
+
+@media (pointer: coarse) {
+  .profil summary,
+  .profil .knopf {
+    min-height: 44px;
+  }
+
+  .profil summary {
+    padding-block: 0.6rem;
+  }
+}
+
+.befund-sprung {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--erheblich);
+}
+
+.marke-fehler {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--kritisch);
+  border: 1px solid currentColor;
+  border-radius: var(--r-klein);
+  padding: 0.1rem 0.45rem;
+}
+
+.aktionen-nachrangig {
+  border-top: 1px solid var(--linie-zart);
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .befunde {
@@ -1001,8 +1115,13 @@ textarea {
 
 .aktiv-marke {
   font-weight: 700;
-  color: var(--amt-tief);
-  padding: 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--ok);
+  background: var(--ok-zart);
+  border: 1px solid currentColor;
+  border-radius: var(--r-klein);
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
 }
 
 /* ── Schmale Bildschirme (iPhone) ─────────────────── */
@@ -1355,7 +1474,7 @@ details.ki-abschnitt summary,
   }
 
   .profil-chip {
-    display: inline-block;
+    display: inline-flex;
     margin-left: auto;
     max-width: 55vw;
     overflow: hidden;
@@ -2293,12 +2412,202 @@ a.knopf {
   margin-top: 0.5rem;
 }
 
-.sop-details summary,
-.sop-katalog summary {
+.sop-details summary {
   cursor: pointer;
   color: var(--amt-tief);
   font-weight: 700;
   min-height: 32px;
+}
+
+/* Profilansicht: Lesebereiche grün (vgl. Leitkommentar), Versions-Tags neutral */
+.sop-version {
+  display: inline-block;
+  color: var(--tinte-leise);
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  font-size: 0.78rem;
+  font-weight: 400;
+  padding: 0 0.35rem;
+  margin-left: 0.15rem;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+
+.profil details.lese[open] {
+  border-left: 3px solid var(--ok);
+  padding-left: 0.75rem;
+}
+
+.sop-gruppe-hinweis {
+  font-weight: 400;
+}
+
+.katalog-werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.katalog-suche {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  flex: 1 1 18rem;
+  max-width: 32rem;
+}
+
+.katalog-suche input {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--tinte);
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  padding: 0.45rem 0.6rem;
+  min-height: 40px;
+}
+
+.katalog-option {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  min-height: 40px;
+}
+
+.katalog-treffer {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: 0.25rem 0 0.5rem;
+}
+
+.aufklapp-inhalt {
+  padding: 0.25rem 0 0.5rem;
+}
+
+.aufklapp-schliessen {
+  margin-top: 0.5rem;
+}
+
+.steckbrief {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.35rem 1rem;
+  margin: 0.4rem 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--ok-zart);
+  border-radius: var(--r-klein);
+  font-size: 0.88rem;
+  max-width: 78ch;
+}
+
+.steckbrief dt {
+  color: var(--tinte-leise);
+  font-size: 0.8rem;
+}
+
+.steckbrief dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.lesetext-rahmen > .knopf {
+  margin-bottom: 0.4rem;
+}
+
+.lesetext {
+  line-height: 1.5;
+  font-size: 0.95rem;
+  overflow-wrap: break-word;
+}
+
+.lesetext h1,
+.lesetext h2,
+.lesetext h3,
+.lesetext h4 {
+  color: var(--tinte);
+  line-height: 1.25;
+  margin: 1.1rem 0 0.4rem;
+}
+
+.lesetext h1 {
+  font-size: 1.2rem;
+}
+
+.lesetext h2 {
+  font-size: 1.1rem;
+}
+
+.lesetext h3,
+.lesetext h4 {
+  font-size: 1rem;
+}
+
+.lesetext p,
+.lesetext ul,
+.lesetext ol {
+  margin: 0.4rem 0;
+}
+
+/* Fließtext auf lesbare Zeilenlänge begrenzen; Tabellen dürfen die volle Kartenbreite nutzen */
+.lesetext > :not(.tabelle-rahmen) {
+  max-width: 78ch;
+}
+
+.lesetext a {
+  color: var(--ok);
+}
+
+.lesetext code,
+.quelltext {
+  font-size: 0.88em;
+}
+
+.tabelle-rahmen {
+  overflow-x: auto;
+  margin: 0.5rem 0;
+  max-width: 100%;
+}
+
+.lesetext table {
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 36rem;
+}
+
+.lesetext th,
+.lesetext td {
+  border: 1px solid var(--linie);
+  padding: 0.3rem 0.45rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.lesetext th {
+  background: var(--papier);
+}
+
+.link-hinweis {
+  color: var(--tinte-leise);
+  font-size: 0.85em;
+}
+
+.platzhalter {
+  background: var(--gering-zart);
+  border-radius: 3px;
+  padding: 0 0.15rem;
+}
+
+.quelltext {
+  white-space: pre-wrap;
+  max-width: 78ch;
+  line-height: 1.45;
+  margin: 0.3rem 0 0;
 }
 
 .sop-auszug {
@@ -2337,4 +2646,22 @@ a.knopf {
 
 .lb-entstehung dd {
   margin: 0 0 0.3rem;
+}
+
+.sop-katalog .quelltext {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+/* Profil-Chip: Name kürzen, Version stets sichtbar */
+.chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.chip-version {
+  white-space: nowrap;
+  flex: none;
 }

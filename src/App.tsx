@@ -204,7 +204,16 @@ export default function App() {
     [profil, schreiben],
   );
 
+  // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
+  const kiLaeuft = useRef(false);
+
   const aktivieren = async (schluessel: string) => {
+    if (
+      schluessel !== aktiv &&
+      kiLaeuft.current &&
+      !confirm("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?")
+    )
+      return;
     setAktiv(schluessel);
     await aktivesProfilSetzen(schluessel);
     setAnsicht("meldung");
@@ -236,7 +245,7 @@ export default function App() {
       ...alt.filter((p) => p.schluessel !== schluessel),
       { schluessel, quelle: "importiert", dateien: erg.profil!.dateien, importiertAm, profil: erg.profil, befunde: erg.befunde },
     ]);
-    return { ok: true, befunde: erg.befunde };
+    return { ok: true, befunde: erg.befunde, schluessel, name: erg.profil.manifest.name, version: erg.profil.manifest.version };
   };
 
   const loeschen = async (schluessel: string) => {
@@ -270,8 +279,14 @@ export default function App() {
           </button>
         </nav>
         {profil && (
-          <button type="button" className="profil-chip" onClick={() => setAnsicht("profile")} title="Profil wechseln">
-            {profil.manifest.name}
+          <button
+            type="button"
+            className="profil-chip"
+            onClick={() => setAnsicht("profile")}
+            title={`Profil wechseln (in Verwendung: ${profil.manifest.name}, Profilversion ${profil.manifest.version})`}
+          >
+            <span className="chip-name">{profil.manifest.name}</span>
+            <span className="chip-version">&nbsp;· {profil.manifest.version}</span>
           </button>
         )}
       </header>
@@ -317,6 +332,9 @@ export default function App() {
               zuEinstellungen={() => setAnsicht("einstellungen")}
               uebernehmen={kiUebernehmen}
               uebergabe={kiUebergabe}
+              laufMelden={(l) => {
+                kiLaeuft.current = l;
+              }}
             />
           </div>
         )}
@@ -339,7 +357,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.11. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.12. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

@@ -34,6 +34,8 @@ interface Props {
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
   uebergabe?: { nr: number; dateien: UebergabeMeldung[] } | null;
+  /** Meldet der App, ob gerade ein KI-Lauf aktiv ist (ein Profilwechsel bricht ihn ab). */
+  laufMelden?: (laeuft: boolean) => void;
 }
 
 type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
@@ -81,7 +83,7 @@ const STATUS_TEXT: Record<Lauf["status"], string> = {
   abgebrochen: "abgebrochen",
 };
 
-export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe }: Props) {
+export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, laufMelden }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
@@ -112,6 +114,17 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const sopGliederung = useMemo(() => sopGruppen(profil), [profil]);
   const urls = urlsAusText(urlText);
   const laeuft = phase === "s1" || phase === "s2";
+  const laufMeldenRef = useRef(laufMelden);
+  laufMeldenRef.current = laufMelden;
+  useEffect(() => {
+    laufMeldenRef.current?.(laeuft);
+  }, [laeuft]);
+  useEffect(
+    () => () => {
+      laufMeldenRef.current?.(false);
+    },
+    [],
+  );
 
   const neuLaden = async () => setLaeufe((await laeufeLaden()).filter((l) => l.profil.id === profil.manifest.id));
   useEffect(() => {

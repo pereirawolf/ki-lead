@@ -1,0 +1,181 @@
+// Profilansicht: Anzeigetitel und Versions-Tags, Steckbrief, Lesedokumente, Linkauflösung, Katalogsuche, Markdown
+// und Einbettung. Reine Funktionen; die Oberfläche selbst wird per Sichtprüfung kontrolliert.
+import { describe, expect, it } from "vitest";
+import { profil } from "./hilfen";
+import { fachSops } from "../src/pipeline/kontext";
+import { sopKennung } from "../src/profil/sop";
+import { gruppenHinweis, lesedokumente, linkZiel, pfadAufloesen, sopAnzahl, sopAnzeige, sopLesetext, sopSteckbrief, sopSuche } from "../src/profil/lesen";
+import { lesetextHtml } from "../src/ui/Lesetext";
+import { eingebauteProfile } from "../src/profil/eingebaut";
+import { sopGruppen } from "../src/pipeline/kontext";
+
+describe("Anzeigetitel und Versions-Tags", () => {
+  it("alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const fach = fachSops(p!);
+    expect(fach).toHaveLength(34);
+    for (const s of fach) {
+      const a = sopAnzeige(s);
+      expect(a.kennung).toMatch(/^[BC]\d{2}$/);
+      expect(a.tag).toBe(`v${s.version}`);
+      expect(`${a.kennung} ${a.name}`).not.toContain(s.version!);
+      expect(a.name).not.toMatch(/SOP LEAD|Baustein LEAD/);
+    }
+    expect(sopAnzeige(fach.find((s) => s.nummer === "B08")!)).toEqual({ kennung: "B08", name: "Stromausfall / Blackout", tag: "v2.0.1" });
+  });
+
+  it("Teil A trägt „gilt immer“, fehlende Version „ohne Version“; der Nachweis bleibt unverändert", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const a = p!.sops.find((s) => s.gemeinsam)!;
+    expect(sopAnzeige(a)).toEqual({ name: "Teil A – Gemeinsame Regeln", tag: "gilt immer" });
+    const b08 = fachSops(p!).find((s) => s.nummer === "B08")!;
+    expect(sopAnzeige({ ...b08, version: undefined }).tag).toBe("ohne Version");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.0.1");
+  });
+
+  it("Anzahl und Gruppenhinweis nennen die Inhaltsgerüste", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(sopAnzahl(p!)).toBe("17 Dach-SOPs · 17 ergänzende Bausteine, davon 17 Inhaltsgerüste");
+    const gruppen = sopGruppen(p!);
+    expect(gruppenHinweis(gruppen[0].sops)).toBeUndefined();
+    for (const g of gruppen.slice(1)) expect(gruppenHinweis(g.sops)).toMatch(/^Inhaltsgerüste/);
+    const { profil: m } = await profil("muster");
+    expect(sopAnzahl(m!)).toBe("keine");
+  });
+});
+
+describe("Steckbrief und Lesetext", () => {
+  it("Steckbrief aus dem Kopf, Lesetext ohne Überschrift und YAML", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const c11 = fachSops(p!).find((s) => s.nummer === "C11")!;
+    const sb = Object.fromEntries(sopSteckbrief(c11).map((a) => [a.label, a.wert]));
+    expect(sb.Version).toBe("1.0.1");
+    expect(sb.Bearbeitungsstand).toMatch(/^Inhaltsgerüst/);
+    expect(sb.Ereignisart).toBe("KRITIS-Ausfall, Cyberangriff / IT-Sicherheitsvorfall");
+    expect(sb["Frühere Kennung"]).toBe("N02");
+    const t = sopLesetext(c11);
+    expect(t.startsWith("### 1. Anwendungsbereich")).toBe(true);
+    expect(t).not.toContain("```yaml");
+    const a = p!.sops.find((s) => s.gemeinsam)!;
+    expect(sopSteckbrief(a)).toEqual([]);
+    expect(sopLesetext(a).startsWith("**Gültigkeitsstand.**")).toBe(true);
+  });
+});
+
+describe("Lesedokumente", () => {
+  it("Beispielprofil: SOP-Übersicht und -Verlauf, Profilverlauf, drei Arbeitsanweisungen, Kodierleitfaden", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect(lesedokumente(p!).map((d) => `${d.gruppe}: ${d.titel}`)).toEqual([
+      "SOP-Sammlung: Übersicht",
+      "SOP-Sammlung: Änderungsverlauf",
+      "Profil: Änderungsverlauf",
+      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Erfassung",
+      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Verdichtung",
+      "Arbeitsanweisungen und Kodierleitfaden: Arbeitsanweisung Kurzfassung",
+      "Arbeitsanweisungen und Kodierleitfaden: Kodierleitfaden",
+    ]);
+  });
+
+  it("Musterprofil: nur vorhandene Dateien; ein Paket ohne Zusatzdokumentation bleibt gültig", async () => {
+    const { profil: m } = await profil("muster");
+    expect(lesedokumente(m!).map((d) => d.pfad)).toEqual(["CHANGELOG.md", "anweisung-erfassung.md", "kodierleitfaden.md"]);
+    const ohne = { ...m!, dateien: Object.fromEntries(Object.entries(m!.dateien).filter(([k]) => k !== "CHANGELOG.md")) };
+    expect(lesedokumente(ohne).map((d) => d.pfad)).not.toContain("CHANGELOG.md");
+    const mitReadme = { ...m!, dateien: { ...m!.dateien, "README.md": "# Muster" } };
+    expect(lesedokumente(mitReadme).map((d) => d.titel)).toContain("Beschreibung");
+  });
+});
+
+describe("Links", () => {
+  it("Pfade werden relativ aufgelöst und dürfen das Paket nicht verlassen", () => {
+    expect(pfadAufloesen("sop/README.md", "teil-b/B08_x.md")).toBe("sop/teil-b/B08_x.md");
+    expect(pfadAufloesen("sop/CHANGELOG.md", "../CHANGELOG.md")).toBe("CHANGELOG.md");
+    expect(pfadAufloesen("sop/CHANGELOG.md", "../../../CHANGELOG.md")).toBeUndefined();
+  });
+
+  it("Ziele: SOP, Lesedokument, nicht im Paket, extern, ungültig", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const b08 = fachSops(p!).find((s) => s.nummer === "B08")!;
+    expect(linkZiel(b08.datei.replace("sop/", ""), "sop/README.md", p!)).toEqual({ art: "sop", id: "b08" });
+    expect(linkZiel("A_Gemeinsame-Regeln.md", "sop/README.md", p!)).toEqual({ art: "sop", id: "teil-a" });
+    expect(linkZiel("CHANGELOG.md", "sop/README.md", p!)).toEqual({ art: "dokument", pfad: "sop/CHANGELOG.md" });
+    expect(linkZiel("sop/CHANGELOG.md", "CHANGELOG.md", p!)).toEqual({ art: "dokument", pfad: "sop/CHANGELOG.md" });
+    expect(linkZiel("SOP-LEAD_Sammelmappe_Lesefassung.md", "sop/README.md", { ...p!, dateien: { ...p!.dateien } })).toMatchObject({ art: "fehlt" });
+    expect(linkZiel("../../../CHANGELOG.md", "sop/CHANGELOG.md", p!)).toMatchObject({ art: "fehlt" });
+    expect(linkZiel("https://www.smard.de/", "sop/teil-b/B08.md", p!)).toEqual({ art: "extern", url: "https://www.smard.de/" });
+    expect(linkZiel("javascript:alert(1)", "sop/README.md", p!)).toEqual({ art: "ungueltig" });
+    expect(linkZiel("#c11", "sop/README.md", p!)).toEqual({ art: "sop", id: "c11" });
+  });
+});
+
+describe("Katalogsuche", () => {
+  it("findet über Kennung, Name, frühere Kennung und frühere ID", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    expect([...sopSuche(p!, "C11")]).toEqual(["c11"]);
+    expect([...sopSuche(p!, "telekommunikation")]).toContain("c11");
+    expect([...sopSuche(p!, "N02")]).toEqual(["c11"]);
+    expect([...sopSuche(p!, "sop-08")]).toEqual(["b08"]);
+    expect(sopSuche(p!, "").size).toBe(35);
+    expect(sopSuche(p!, "gibtesnicht").size).toBe(0);
+    expect(sopSuche(p!, "Lastabschaltung").size).toBe(0);
+    expect([...sopSuche(p!, "Lastabschaltung", true)]).toContain("b08");
+  });
+});
+
+describe("Markdown-Darstellung", () => {
+  it("Tabellen als Tabelle, kein rohes HTML, keine Bilder, Links nach Ziel", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const html = await lesetextHtml(
+      [
+        "| ID | Frage |",
+        "|---|---|",
+        "| R1 | Wer? |",
+        "",
+        '<script>alert(1)</script> <img src="x" onerror="y">',
+        "",
+        "![Bild](https://example.org/a.png)",
+        "",
+        "[B08](teil-b/B08_stromausfall-blackout.md) · [Verlauf](CHANGELOG.md) · [Lesefassung](SOP-LEAD_Sammelmappe_Lesefassung.md) · [SMARD](https://www.smard.de/) · [x](javascript:alert(1))",
+        "",
+        "Meldende Stelle: {{meldende_stelle}}",
+      ].join("\n"),
+      "sop/README.md",
+      p!,
+    );
+    expect(html).toContain('<div class="tabelle-rahmen"><table>');
+    expect(html).toContain("<td>R1</td>");
+    expect(html).not.toContain("<script");
+    expect(html).not.toContain("<img");
+    expect(html).toContain("&lt;script&gt;");
+    expect(html).toContain('data-ziel="sop:b08"');
+    expect(html).toContain('data-ziel="dokument:sop/CHANGELOG.md"');
+    expect(html).toContain('<span class="link-fehlt">Lesefassung <span class="link-hinweis">(nicht im Paket)</span></span>');
+    expect(html).toContain('href="https://www.smard.de/" target="_blank" rel="noopener noreferrer"');
+    expect(html).not.toContain('href="javascript');
+    expect(html).toContain('<span class="platzhalter">{{meldende_stelle}}</span>');
+  });
+
+  it("alle SOPs und Lesedokumente lassen sich aufbereiten, ohne Pipe-Tabellen zu hinterlassen", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    for (const s of p!.sops) {
+      const html = await lesetextHtml(sopLesetext(s), s.datei, p!);
+      expect(html, s.id).not.toMatch(/^<p>\|/m);
+    }
+    for (const d of lesedokumente(p!)) {
+      const html = await lesetextHtml(p!.dateien[d.pfad], d.pfad, p!);
+      expect(html.length, d.pfad).toBeGreaterThan(100);
+    }
+  });
+});
+
+describe("Einbettung", () => {
+  it("SOP-README und Verläufe sind eingebettet, Lesefassung und Archiv nicht", () => {
+    const beispiel = eingebauteProfile().find((e) => e.ordner === "lead-beispiel")!;
+    const pfade = Object.keys(beispiel.dateien);
+    expect(pfade).toContain("sop/README.md");
+    expect(pfade).toContain("sop/CHANGELOG.md");
+    expect(pfade).toContain("CHANGELOG.md");
+    expect(pfade.some((x) => x.endsWith("_Lesefassung.md"))).toBe(false);
+    expect(pfade.some((x) => x.startsWith("sop/archiv/"))).toBe(false);
+  });
+});
