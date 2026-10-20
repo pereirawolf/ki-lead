@@ -6,7 +6,7 @@ import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
-import { APP_MODELLE, MODELL_GRUPPEN, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
+import { APP_MODELLE, AUFWAND_STUFEN, MODELL_GRUPPEN, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
 
 interface Props {
   profil: Profil | null;
@@ -26,13 +26,7 @@ const ROLLEN: { id: Rolle; titel: string; text: string }[] = [
   { id: "kurzfassung", titel: "Management Summary", text: "Konsolidierte Fassung für die Leitung aus der fertigen Meldung" },
 ];
 
-const AUFWAND: { id: Aufwand; titel: string }[] = [
-  { id: "low", titel: "niedrig" },
-  { id: "medium", titel: "mittel" },
-  { id: "high", titel: "hoch" },
-  { id: "xhigh", titel: "sehr hoch" },
-  { id: "max", titel: "maximal" },
-];
+const AUFWAND = AUFWAND_STUFEN;
 
 const ANBIETER: { id: AnbieterId; konsole: string; konsoleName: string; host: string; platzhalter: string; testModell: string }[] = [
   {

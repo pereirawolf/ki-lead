@@ -277,7 +277,7 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
       <label className="feld">
         <span>Farbschema</span>
         <select value={zugang.auswahl} onChange={(e) => zugang.setAuswahl(e.target.value)}>
-          <option value={AUTOMATISCH}>Automatisch (nach System: hell oder dunkel, bei „mehr Kontrast“ Kontrastschema)</option>
+          <option value={AUTOMATISCH}>Automatisch (nach System: Neutral · Hell oder Neutral · Night Mode, bei „mehr Kontrast“ Kontrastschema)</option>
           <optgroup label="Neutral">
             {NEUTRAL.map((s) => (
               <option key={s.id} value={s.id}>

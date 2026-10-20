@@ -99,11 +99,44 @@ export function laufModelle(e: Einstellungen, profil: Profil, verdichtung: boole
   return [modellFuer("vorverarbeitung", e, profil), modellFuer(verdichtung ? "verdichtung" : "erfassung", e, profil), modellFuer("reparatur", e, profil)];
 }
 
-/** Modelle, die nur für einen Lauf von den Einstellungen abweichen (leer = Standard) */
-export type ModellWahl = Partial<Record<Rolle, string>>;
+/** Stufen des Aufwands mit deutscher Bezeichnung (Einstellungen und Wahl je Lauf) */
+export const AUFWAND_STUFEN: { id: Aufwand; titel: string }[] = [
+  { id: "low", titel: "niedrig" },
+  { id: "medium", titel: "mittel" },
+  { id: "high", titel: "hoch" },
+  { id: "xhigh", titel: "sehr hoch" },
+  { id: "max", titel: "maximal" },
+];
 
-/** Einstellungen mit den für diesen Lauf gewählten Modellen; nicht gewählte Stufen behalten ihre Vorgabe */
+export const ROLLEN: Rolle[] = ["vorverarbeitung", "erfassung", "verdichtung", "reparatur", "kurzfassung"];
+
+/** Höchstzahl der Websuchen je Lauf (wie unter „Einstellungen“) */
+export const WEBSUCHE_GRENZE = 50;
+
+/**
+ * Wahl nur für einen Lauf, abweichend von den Einstellungen (leer = Standard): Modell je Stufe als Schlüssel der
+ * Rolle, dazu optional Aufwand je Stufe und die Höchstzahl der Websuchen.
+ */
+export type ModellWahl = Partial<Record<Rolle, string>> & {
+  aufwand?: Partial<Record<Rolle, Aufwand>>;
+  websucheMax?: number;
+};
+
+/** Ob die Wahl etwas von den Einstellungen abweichen lässt */
+export function wahlAbweichend(wahl: ModellWahl, rollen: Rolle[] = ROLLEN, mitWebsuche = true): boolean {
+  return rollen.some((r) => !!wahl[r] || !!wahl.aufwand?.[r]) || (mitWebsuche && wahl.websucheMax !== undefined);
+}
+
+/** Einstellungen mit der für diesen Lauf getroffenen Wahl; nicht gewählte Stufen behalten ihre Vorgabe */
 export function mitModellwahl(e: Einstellungen, wahl: ModellWahl): Einstellungen {
-  const gesetzt = Object.fromEntries(Object.entries(wahl).filter(([, v]) => !!v)) as ModellWahl;
-  return Object.keys(gesetzt).length ? { ...e, modelle: { ...e.modelle, ...gesetzt } } : e;
+  const modelle = Object.fromEntries(ROLLEN.filter((r) => !!wahl[r]).map((r) => [r, wahl[r]!]));
+  const aufwand = Object.fromEntries(ROLLEN.filter((r) => !!wahl.aufwand?.[r]).map((r) => [r, wahl.aufwand![r]!]));
+  const websuche = wahl.websucheMax !== undefined && Number.isFinite(wahl.websucheMax);
+  if (!Object.keys(modelle).length && !Object.keys(aufwand).length && !websuche) return e;
+  return {
+    ...e,
+    modelle: { ...e.modelle, ...modelle },
+    aufwand: { ...e.aufwand, ...aufwand },
+    ...(websuche ? { websucheMax: Math.min(WEBSUCHE_GRENZE, Math.max(0, Math.round(wahl.websucheMax!))) } : {}),
+  };
 }

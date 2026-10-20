@@ -101,12 +101,20 @@ describe("Auflösen", () => {
 
   it("festes Schema, automatisch und unbekannte Auswahl", () => {
     expect(aufloesen("de-th")).toMatchObject({ basis: "de-th", quelle: "katalog", modus: "hell" });
-    expect(aufloesen(AUTOMATISCH)).toMatchObject({ basis: null, quelle: "automatisch", tokens: {} });
+    expect(aufloesen(AUTOMATISCH)).toMatchObject({ basis: "neutral-hell", quelle: "automatisch", auswahl: AUTOMATISCH });
     expect(aufloesen("gibt-es-nicht").quelle).toBe("automatisch");
   });
 
   it("„Automatisch“ folgt der Systemeinstellung „mehr Kontrast“, ein festes Schema bleibt", () => {
-    expect(aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: false })).toMatchObject({ basis: null, tokens: {} });
+    // ohne „mehr Kontrast“: genau die neutralen Schemata, keine eigenen Farben
+    const nh = aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: false });
+    expect(nh).toMatchObject({ auswahl: AUTOMATISCH, basis: "neutral-hell", modus: "hell", quelle: "automatisch" });
+    expect(nh.tokens).toEqual(aufloesen("neutral-hell").tokens);
+    expect(nh.name).toBe("Automatisch: Neutral · Hell (Systemeinstellung hell)");
+    const nd = aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: true, kontrast: false });
+    expect(nd).toMatchObject({ basis: "neutral-dunkel", modus: "dunkel" });
+    expect(nd.tokens).toEqual(aufloesen("neutral-dunkel").tokens);
+    expect(nd.name).toBe("Automatisch: Neutral · Night Mode (Systemeinstellung dunkel)");
     const hell = aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: true });
     expect(hell).toMatchObject({ auswahl: AUTOMATISCH, basis: "kontrast-hell", quelle: "automatisch", kontrast: true });
     expect(hell.name).toContain("mehr Kontrast");
@@ -173,9 +181,13 @@ describe("Anwenden", () => {
     anwenden(aufloesen("kontrast-dunkel"));
     expect(w.dataset.kontrast).toBe("erhoeht");
     expect(w.style.getPropertyValue("--kritisch")).toBe("#FF9999");
-    anwenden(aufloesen(AUTOMATISCH));
-    expect(w.dataset.farbschema).toBeUndefined();
+    anwenden(aufloesen(AUTOMATISCH, undefined, undefined, { dunkel: false, kontrast: false }));
+    expect(w.dataset.farbschema).toBe("neutral-hell");
     expect(w.dataset.kontrast).toBeUndefined();
+    expect(w.style.getPropertyValue("--kritisch")).toBe(aufloesen("neutral-hell").tokens.kritisch);
+    // ohne Schema (Standarddarstellung beim Start) bleiben keine Werte des vorherigen Schemas stehen
+    anwenden({ auswahl: AUTOMATISCH, basis: null, name: "", modus: null, quelle: "automatisch", tokens: {}, band: [], hinweise: [] });
+    expect(w.dataset.farbschema).toBeUndefined();
     for (const v of ALLE_VARIABLEN) expect(w.style.getPropertyValue(`--${v}`), v).toBe("");
   });
 

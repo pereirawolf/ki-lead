@@ -3199,11 +3199,26 @@ fieldset.lb-ausgabe {
 
 .modellwahl-felder {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
   gap: 0.5rem 1rem;
   margin-top: 0.6rem;
 }
 
 .modellwahl-felder .feld {
   margin: 0;
+}
+
+.modellwahl-stufe {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.4rem 0.6rem 0.6rem;
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  min-width: 0;
+}
+
+.modellwahl-stufe > legend {
+  font-weight: 700;
+  padding: 0 0.25rem;
 }

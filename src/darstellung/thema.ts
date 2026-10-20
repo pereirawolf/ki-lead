@@ -237,28 +237,23 @@ function ausProfil(p: ProfilFarbschema, auswahl: string, quelle: "profil" | "lok
 
 /**
  * Löst die Auswahl auf. Vorrang: festes Schema → bei „profil“ die gültige lokale Anpassung des aktiven Profils →
- * gültiges Farbschema aus profil.json → Ersatz „Neutral · Hell“ mit Hinweis. „automatisch“ setzt keine Farben, außer die
- * Systemeinstellung verlangt mehr Kontrast (dann das passende Kontrastschema).
+ * gültiges Farbschema aus profil.json → Ersatz „Neutral · Hell“ mit Hinweis. „automatisch“ folgt dem System: „Neutral · Hell“
+ * oder „Neutral · Night Mode“, bei der Systemeinstellung „mehr Kontrast“ das passende Kontrastschema. Ein eigenes, davon
+ * abweichendes Farbschema gibt es für „automatisch“ nicht. Ohne übergebene Systemvorgabe wird sie hier ermittelt.
  */
 export function aufloesen(auswahl: string, profilSchema?: unknown, lokal?: unknown, system?: SystemVorgabe): AufgeloestesThema {
   if (auswahl !== PROFIL) {
     const e = katalogEintrag(auswahl);
     if (e) return ausKatalog(e, auswahl, "katalog");
+    const sys = system ?? systemVorgabe();
     // Automatisch mit Systemeinstellung „mehr Kontrast“: passendes Kontrastschema
-    if (system?.kontrast) {
-      const k = ausKatalog(katalogEintrag(system.dunkel ? "kontrast-dunkel" : "kontrast-hell")!, AUTOMATISCH, "automatisch");
+    if (sys.kontrast) {
+      const k = ausKatalog(katalogEintrag(sys.dunkel ? "kontrast-dunkel" : "kontrast-hell")!, AUTOMATISCH, "automatisch");
       return { ...k, name: `Automatisch: ${k.name} (Systemeinstellung „mehr Kontrast“)` };
     }
-    return {
-      auswahl: AUTOMATISCH,
-      basis: null,
-      name: "Automatisch (nach System)",
-      modus: null,
-      quelle: "automatisch",
-      tokens: {},
-      band: [],
-      hinweise: [],
-    };
+    // Sonst das neutrale Schema passend zur Systemeinstellung hell oder dunkel
+    const n = ausKatalog(katalogEintrag(sys.dunkel ? "neutral-dunkel" : "neutral-hell")!, AUTOMATISCH, "automatisch");
+    return { ...n, name: `Automatisch: ${n.name} (Systemeinstellung ${sys.dunkel ? "dunkel" : "hell"})` };
   }
   const hinweise: string[] = [];
   if (lokal !== undefined && lokal !== null) {
