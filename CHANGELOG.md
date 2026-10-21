@@ -40,6 +40,35 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.22 | letzter Commit von Pull Request #20 „Aufwand und Websuchen je Lauf, Automatisch = Neutral; 0.4.22“ |
 | 0.4.23 | letzter Commit von Pull Request #21 „Tests konsolidieren und schärfen, Browsertests, Modellbewertung getrennt; 0.4.23“ |
 | 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
+| 0.4.25 | letzter Commit des Pull Requests „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
+
+## [0.4.25] – 21.10.2026
+
+Grundlage: zwei Verdichtungen mit Haiku und Aufwand „high“ (Läufe `20261021-133605-75wi` und `20261021-133728-cvza`, sechs Ilka-Eingänge), die in S1 scheiterten, sowie der konsolidierte Vorschlag `2026-10-21_KI-LEAD_S1_Ausgabegrenze_Konsolidiert.json` aus zwei Vorschlägen gleichen Datums. Keine Änderung an Profilen, SOPs, Prompts, Schemata oder Modellvorgaben.
+
+### Ursache
+
+- S1 hatte eine feste Grenze von 16 000 Ausgabetoken. Bei Haiku 5.5 zählen Denk- und Antworttoken gemeinsam gegen diese Grenze. Beide Läufe endeten nach 69–72 s bei genau 16 000 Token mit `max_tokens`: einer nur mit Denkblock (Meldung „keinen JSON-Block“), einer mit 3 023 Zeichen abgebrochenem JSON („JSON unvollständig“). Die Meldungen nannten die Ursache nicht.
+
+### Geändert
+
+- **S1-Ausgabegrenze 128 000 Token** für `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5` und `claude-fable-5-1` (Höchstwert laut Herstellerdokumentation, nur genau diese Kennungen). Andere Modelle behalten 16 000. Modell und Aufwand bleiben unverändert (Vorgabe Haiku, „high“); die Grenze ist eine Obergrenze, berechnet wird nur die tatsächliche Ausgabe (Listenpreis Haiku: 128 000 Ausgabetoken kosten bei Prompts bis 100 000 Token rund 0,06 USD, darüber rund 0,32 USD). Die Grenze für S2 (`maxTokensErfassung`) wirkt nicht auf S1.
+- **Ein Aufruf, keine automatische Wiederholung:** S1 startet direkt mit der vollen Grenze statt mit 32 000 und einem zweiten Versuch mit 64 000; so wird das Material nicht zweimal verarbeitet.
+- **Verständlicher Abbruch an der Grenze:** Ohne vollständigen Vorschlag nennt die Meldung Grenze, Modell und Aufwand („S1 hat die Ausgabegrenze von 128.000 Token erreicht, bevor ein vollständiger Vorschlag vorlag …“); der Parserbefund steht nur ergänzend dahinter. Eine leere Antwort ohne `max_tokens` heißt „leere Antwort“, andere Abbruchgründe werden genannt. Das Laufprotokoll hält Grenze, Abbruchgrund, Nutzung, Kosten und eine Notiz fest; Auftrag und Material bleiben in der Maske.
+- **Strukturprüfung vor der Bestätigung:** Nur ein JSON-Objekt mit mindestens einem Sachverhalt mit Titel geht zur Bestätigung; abgeschnittenes JSON wird nicht repariert, ein Teilvorschlag nicht übernommen. Endet ein technisch vollständiger Vorschlag an der Grenze, erscheint er mit Prüfhinweis zur Bestätigung. Nicht zugeordnete Eingänge zeigt die Bestätigung wie bisher an; die Person ordnet sie dort zu.
+- **Schätzung S1 Haiku „high“:** vorläufig bis 3 Minuten und 0,05 USD statt „unter 1 Minute, bis 0,02 USD“, weil Verdichtungen schon bei 16 000 Token 69–72 s brauchten; nach der Abnahme anpassen.
+- Spezifikation 0.4.25 (Abschnitt 5.1, Umsetzung M2).
+
+### Tests
+
+- `tests/pipeline/stufen.test.ts` (+16): Grenze je Modell und unabhängig von S2 (T01–T03), Abbruch nur mit Denkblock und mitten im JSON (T04, T05), strukturell unvollständige Vorschläge (T06), vollständiger Vorschlag an der Grenze (T07), übliche Bestätigung (T08), leere Antwort (T09), anderer Abbruchgrund, Protokoll (T14).
+- `tests/anbieter/anthropic.test.ts` (+1, T13): `max_tokens` 128 000, `effort` high und Schema werden unverändert übertragen; Denken wird nicht abgeschaltet.
+- `tests/ui/s1-grenze.test.ts` (1, neu): Meldung mit Grenze, Modell und Aufwand, Auftrag bleibt, genau ein Aufruf, Laufprotokoll mit Grenze und Notiz, ohne Schlüssel.
+- `tests/pipeline/schaetzung.test.ts`: neue Spanne für S1 Haiku „high“.
+
+### Offen
+
+- Abnahme mit echten Läufen: dieselben sechs Ilka-Eingänge, Haiku „high“, drei Wiederholungen; festzuhalten sind Vollständigkeit, Zuordnung aller Eingänge, Ausgabetoken, Dauer, Kosten und Abbruchgrund. Die Offline-Tests belegen nur die Fehlerbehandlung, nicht den Erfolg mit 128 000 Token.
 
 ## [0.4.24] – 21.10.2026
 
