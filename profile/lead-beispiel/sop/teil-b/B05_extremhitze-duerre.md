@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "30.04.2027"
@@ -23,6 +23,8 @@ bisherige_ids: ["sop-05"]
 ### 1. Anwendungsbereich und Befassungsanlässe
 
 **Umfasst / grenzt ab von:** Hitzeperioden mit Gesundheitsfolgen sowie mehrmonatige Trockenheit, sinkende Grund- und Oberflächenwasserstände und Niedrigwasser – auch ohne akute Hitzewelle. Einschränkungen der Trinkwasserversorgung zusätzlich mit B10. Beispiel dafür: Hitze mit geschätzter Übersterblichkeit und regionalen Entnahmeverboten; anhaltendes Niedrigwasser mit Transporteinschränkungen. Beispiel dagegen: Rohrbruch ohne Wetterbezug (B10).
+
+**Vertiefung nach Wirkung:** C09 bei eigenständigem medizinisch-pflegerischem Engpass (5a); C13 bei tatsächlich eingeschränkter Transportleistung im Niedrigwasser (5b); C12 bei daraus folgendem Kraftstoffengpass; C14 bei konkreter Lücke der Lebensmittelversorgung. Trinkwasser B10 (oben). Dürreindizes und allgemeine Sektorrisiken genügen nicht für eine Mitwahl (A.1 Nr. 2).
 
 **Teilprofile:** Die SOP arbeitet mit zwei Teilprofilen unter derselben Ereignisart, weil Bezugsräume, Zeitverzug und Entspannungsindikatoren verschieden sind:
 - **5a Hitzeperiode:** Dauer, nächtliche Entlastung, fachlich bestätigte Gesundheitsbelastung, Hitzeschutz und Funktionsfähigkeit ambulanter, stationärer und häuslicher Versorgung (Prüffragen R1–R4).

@@ -9,12 +9,12 @@ bausteintyp: "Querschnittsbaustein"
 lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Zivile Schutz-, Versorgungs- und Verwaltungsfolgen im Kontext der zivilen Verteidigung"
 art_zuordnung: ["Sonstiges"]
-art_hinweis: "„Sonstiges“ als begründetes Dach für eine noch nicht abgebildete Ursache; vorhandene Folgenarten passend ergänzen"
-anschluss: "A.1, B14, B15, B16"
+art_hinweis: "vorrangig die tatsächlich passenden Ursachen- und Folgenarten (Querschnitt, A.1 Nr. 7); „Sonstiges“ nur begründet, wenn kein vorhandenes Dach den Gegenstand trägt; C17 allein begründet weder eine Ereignisart noch einen förmlichen Rechtszustand"
+anschluss: "A.1, A.7.4; Fach-SOP und Bausteine nach betroffener ziviler Funktion (insbesondere C01, C09–C16); B14, B15, B16 nur bei belegtem Sicherheits-, Cyber- oder Tatbezug"
 zweck: "Gemeinsamer Betrachtungsrahmen für Folgen von Waffeneinwirkung, längerfristigem Schutzbedarf, eingeschränkter staatlicher Handlungsfähigkeit und gleichzeitiger Beanspruchung ziviler Fähigkeiten – ausschließlich ziviler Wirkungsbezug."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N13"
@@ -27,7 +27,7 @@ bisherige_ids: ["baustein-n13"]
 
 **Befassungsanlässe:** Behördlich belegte zivilschutzrelevante Entwicklung · konkrete Einschränkung staatlicher oder lebenswichtiger ziviler Funktionen · belegter zusätzlicher ziviler Versorgungs- bzw. Betreuungsbedarf.
 
-**Zuordnung im Schema:** „Sonstiges“ als begründetes Dach für eine noch nicht abgebildete Ursache; vorhandene Folgenarten passend ergänzen.
+**Zuordnung im Schema:** Die tatsächlich passenden Ursachen- und Folgenarten (z. B. „KRITIS-Ausfall“ bei belegter Funktionseinschränkung). „Sonstiges“ nur begründet, wenn kein vorhandenes Dach den Gegenstand trägt; die Auswahl von C17 allein begründet keinen zusätzlichen Sachverhalt und keine Sicherheits- oder Sabotageart. Kontext und gegebenenfalls amtlich festgestellter Rechtszustand werden getrennt genannt.
 
 ### 2. Erfassung: Prüffragen
 

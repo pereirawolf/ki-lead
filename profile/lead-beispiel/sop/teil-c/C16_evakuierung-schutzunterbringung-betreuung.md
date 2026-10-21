@@ -9,12 +9,12 @@ bausteintyp: "Querschnittsbaustein"
 lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
 art_zuordnung: ["Migrationslage", "Sonstiges"]
-art_hinweis: "vorrangig die Ereignisart der Ursache; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
-anschluss: "A.5, A.9.1, A.9.2, B13"
+art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
+anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; A.5, A.9.1, A.9.2"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N03"
@@ -25,9 +25,11 @@ bisherige_ids: ["baustein-n03"]
 
 **Umfasst / grenzt ab von:** Evakuierungen, Schutz in Gebäuden, Unterkunftsverlust und Betreuungslagen aus jedem Anlass (Hochwasser, Industrieunfall, Kampfmittelfund, Stromausfall u. a.); Migration ist nur ein möglicher Anlass (B13). Keine operative Evakuierungsplanung durch die Redaktion. Schutz in Gebäuden und Evakuierung werden als unterschiedliche behördliche Maßnahmen dokumentiert.
 
+**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
+
 **Befassungsanlässe:** Angeordnete oder konkret vorbereitete Evakuierung · Unterkunftsverlust oder größerer Schutz- bzw. Betreuungsbedarf · länderübergreifende Aufnahme- oder Transportabstimmung.
 
-**Zuordnung im Schema:** Ursachenart des Ereignisses; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“, falls kein passender Ursachenwert besteht.
+**Zuordnung im Schema:** Ursachenart des Anlasses (z. B. Hochwasser, Industrieunfall, Stromausfall), ohne Beschränkung auf die Werte im Kopf; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“, falls kein passender Ursachenwert besteht.
 
 ### 2. Erfassung: Prüffragen
 
@@ -46,7 +48,7 @@ bisherige_ids: ["baustein-n03"]
 - **D4:** Herkunft tatsächlich eingesetzter Transport- und Betreuungskräfte.
 - **D5:** Zielzustand benennen (Rückkehr, gesicherte Zwischenunterbringung, Ende der Betreuung).
 
-**Offenlassen:** D2 ohne gezählte Personen; D5 ohne Rückkehrperspektive.
+**Offenlassen:** D2 ohne gezählte Personen (die Bevölkerung des Räumungsgebiets ist keine Zahl der Evakuierten); D5 ohne benannten Zielzustand und tragfähige Prognose – ein Rückkehrkriterium oder ein Plan ist keine Prognose.
 
 ### 4. Darstellung
 

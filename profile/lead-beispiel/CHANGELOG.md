@@ -8,6 +8,18 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.19.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_Querverweise-B-C_Vorschlag_konsolidiert_2026-10-21“ (Prüfung der Bezüge zwischen und innerhalb von Teil B und Teil C, ohne Anlassfall).
+
+- **SOP-Sammelmappe 3.10.0:**
+  - Teil A: Bedeutung von Verweisen und Funktionsdach B12 (A.1 Nr. 2), Routentabelle ergänzt (B10, B13, B14; C02, C05, C09, C17), Status je Dateikopf und Semantik von `art_zuordnung` und `anschluss` (A.1 Nr. 7), kombinierte SOPs in der Fortschreibung (A.8.1).
+  - Teil B: B03, B05, B06 mit Vertiefung nach Wirkung; B04 D4 und B16 D6 an A.2 angeglichen; B06/B09 mit C12 für die Wärmefunktion; B12 gegenüber spezialisierten Versorgungs-SOPs abgegrenzt; B17 mit C17 als Querschnitt; B08, B10, B13 redaktionell.
+  - Teil C: C16 und C17 als Querschnitte (Kopf, Zuordnung, Arbeitsteilung); C02, C04 mit bedingten Ursachenverweisen; C12 Kopf an Abschnitt 1 angeglichen.
+  - Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Neue strukturelle Tests der Verweise (vorhandene Kennungen, keine alten Nummernlisten, Katalogwerte in `art_zuordnung`, Statusübersicht).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.18.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_C08_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).

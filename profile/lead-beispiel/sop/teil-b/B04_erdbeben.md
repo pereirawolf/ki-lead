@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -35,7 +35,7 @@ bisherige_ids: ["sop-04"]
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
 | R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. |
-| R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M; D4 | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6). |
+| R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten (A.7.4) und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6); deutsche Hilfe ins Ausland ergibt keinen D4-Wert (Abschnitt 3). |
 
 ### 3. Auswertung: Prüfpunkte
 
@@ -43,7 +43,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D1/D2:** Belegte Wirkungsräume und Betroffene in Deutschland unabhängig vom Epizentrum; ausländische Schäden nicht in deutsche D1/D2-Werte übertragen; ohne deutschen Wirkungsnachweis offen.
 - **D3:** Schadensfeststellung und Gefahrenabwehr bei Ländern/Kommunen; BGR/GFZ sind fachlich-wissenschaftlich tätig.
-- **D4:** Bei Auslandsbeben kann tatsächlich eingesetzte deutsche Unterstützung für den dafür festgelegten Betrachtungsgegenstand belegt werden; Referenzraum und D4-Auslegung vor der Kodierung benennen.
+- **D4:** Wie A.2: Herkunft der tatsächlich eingesetzten externen Unterstützung für die bewertete Lage im Referenzraum. Deutsche Hilfe bei einem Auslandsbeben und die dadurch gebundenen deutschen Fähigkeiten sind Textbefunde (A.7.4) und ergeben keinen D4-Wert; keine eigene D4-Auslegung je Gegenstand (wie C07). Internationale Hilfe für eine Lage in Deutschland bleibt D4-relevant.
 - **D5:** Sichere Gebäudenutzung, Notversorgung und Wiederherstellung sind verschiedene Zielzustände.
 
 **Beurteilung/Tendenz:** Magnitude ist keine Beurteilung. Bei Auslandsbeben die Schwere vor Ort nicht auf die deutsche Beurteilung übertragen, die Bindung deutscher Fähigkeiten aber nicht ausblenden; abnehmende Nachbeben ersetzen keine Bewertung fortdauernder Schäden.
@@ -65,4 +65,4 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BGR · Landeserdbebendienste · GFZ · Bauaufsicht der Länder · Auswärtiges Amt/GMLZ (Auslandsbeben)
 
-**Offene Punkte:** Kodierbeispiel zu D4 bei deutscher Auslandshilfe für den Kodierleitfaden erarbeiten (A.10.3).
+**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07.

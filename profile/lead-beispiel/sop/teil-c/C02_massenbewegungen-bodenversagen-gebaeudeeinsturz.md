@@ -9,10 +9,10 @@ bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
 lageart: "Hangrutschung, Felssturz, Erdfall, Tagesbruch, Bergsenkung sowie Einsturz oder drohendes erhebliches Versagen von Gebäuden und Bauwerken"
 art_zuordnung: ["Sonstiges", "Hochwasser / Überschwemmung", "Erdbeben", "KRITIS-Ausfall"]
-art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge"
-anschluss: "B04, B17, C05; B01/B02 bei Starkregen- oder Hochwasserbezug, B06 bei Schnee- oder Eislast, B07/B16 bei Explosion oder Vorsatz; C13, C16 und Sektor-SOP nach Folge"
+art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; weitere Ursachenarten (B01, B06, B07, B16) nur bei belegtem Bezug; „KRITIS-Ausfall“ bei belegter Folge; sonst „Sonstiges“"
+anschluss: "B04, B17, C05; B01/B02 bei Starkregen- oder Hochwasserbezug, B06 bei Schnee- oder Eislast, B07 bei Explosion in Anlagen oder bei Gefahrguttransporten, B16 bei behördlich benanntem Vorsatzbezug, sonst B17; C13, C16 und Sektor-SOP nach Folge"
 zweck: "Fachrecherche für Massenbewegungen, Bodenversagen und Bauwerksversagen unabhängig von der Ursache; die Ursache wird über die passende SOP ergänzt."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -23,11 +23,11 @@ bisherige_ids: ["baustein-n09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Zwei fachliche Prüfpfade unter einer Kennung: (a) Massenbewegungen und Bodenversagen, z. B. Hangrutschung, Felssturz, Erdfall, Tagesbruch oder Bergsenkung; (b) Einsturz oder fachlich begründet drohendes erhebliches Versagen von Gebäuden und Bauwerken einschließlich Brücken und anderer Verkehrsbauwerke. Relevanz nach A.1 aus Schutz- oder Rettungsbedarf, Unterkunftsverlust, kritischem Funktionsverlust oder konkret begründetem übergreifendem Informations- oder Abstimmungsbedarf, nicht allein aus Schadensgröße oder Verwaltungsgrenze; auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit erheblich sein. Frühe Befassung vor dem Versagen ist bei fachbehördlich begründetem Hinweis möglich; nicht jeder Gebäudeschaden oder Karteneintrag gehört ins übergreifende Lagebild. Der Baustein gilt unabhängig von der Ursache. Sie wird über die passende SOP ergänzt (Erdbeben B04, Starkregen oder Hochwasser B01/B02, Schnee- oder Eislast B06, Explosion B07, Vorsatz B16) und darf offenbleiben; belegte Folgen werden trotzdem dargestellt. Fachbewertung durch geologische, bautechnische, bergbehördliche und Gefahrenabwehrstellen; keine eigene Standsicherheits- oder Rettbarkeitseinschätzung aus Bildern. Unfall- und Rettungsfolgen C05, Betreuung und Unterbringung C16, Verkehrswege C13.
+**Umfasst / grenzt ab von:** Zwei fachliche Prüfpfade unter einer Kennung: (a) Massenbewegungen und Bodenversagen, z. B. Hangrutschung, Felssturz, Erdfall, Tagesbruch oder Bergsenkung; (b) Einsturz oder fachlich begründet drohendes erhebliches Versagen von Gebäuden und Bauwerken einschließlich Brücken und anderer Verkehrsbauwerke. Relevanz nach A.1 aus Schutz- oder Rettungsbedarf, Unterkunftsverlust, kritischem Funktionsverlust oder konkret begründetem übergreifendem Informations- oder Abstimmungsbedarf, nicht allein aus Schadensgröße oder Verwaltungsgrenze; auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit erheblich sein. Frühe Befassung vor dem Versagen ist bei fachbehördlich begründetem Hinweis möglich; nicht jeder Gebäudeschaden oder Karteneintrag gehört ins übergreifende Lagebild. Der Baustein gilt unabhängig von der Ursache. Sie wird über die passende SOP ergänzt (Erdbeben B04, Starkregen oder Hochwasser B01/B02, Schnee- oder Eislast B06, Explosion in Anlagen oder bei Gefahrguttransporten B07, behördlich benannter Vorsatzbezug B16, sonst B17) und darf offenbleiben; belegte Folgen werden trotzdem dargestellt. Fachbewertung durch geologische, bautechnische, bergbehördliche und Gefahrenabwehrstellen; keine eigene Standsicherheits- oder Rettbarkeitseinschätzung aus Bildern. Unfall- und Rettungsfolgen C05, Betreuung und Unterbringung C16, Verkehrswege C13.
 
 **Befassungsanlässe:** Fachbehördlich begründeter Versagenshinweis · bestätigtes Ereignis mit Schutz- oder Rettungsbedarf, Unterkunftsverlust oder kritischem Funktionsverlust · Sperrung eines kritischen Verkehrsbauwerks oder einer einzigen Zufahrt.
 
-**Zuordnung im Schema:** „Sonstiges“; „Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge.
+**Zuordnung im Schema:** Ereignisart der belegten Ursache, z. B. „Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge; „Sonstiges“, wenn keine passende Ursachenart besteht oder die Ursache offen ist.
 
 ### 2. Erfassung: Prüffragen
 

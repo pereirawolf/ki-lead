@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Gasversorgungsengpass (angespannte Versorgung, Stufen des Notfallplans Gas, regionale Einschränkungen, Anlagenstörungen)"
 art_vorschlag: ["Gasversorgungsengpass"]
 zweck: "Reproduzierbare Beobachtung der Gasversorgungslage von Frühwarnsignalen bis zu Versorgungseinschränkungen und ihrer Folgen für Wärme, Strom und Industrie."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.10.2026"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstoffversorgung unabhängig vom Gas: Baustein C12. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel dagegen: Preisanstieg ohne physischen Mangel; lokaler Leitungsschaden mit kurzer Unterbrechung.
+**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstofffunktion vertiefend über Baustein C12, auch bei gasbedingtem Wärmeausfall; B09 bleibt für Gasversorgung, Notfallplanstufen und gasbezogene Maßnahmen maßgeblich. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel dagegen: Preisanstieg ohne physischen Mangel; lokaler Leitungsschaden mit kurzer Unterbrechung.
 
 **Befassungsanlässe:** Ausrufung oder Änderung einer Stufe des Notfallplans Gas · BNetzA-Lagebericht mit Verschlechterung · regionale Abschaltungen · Ausfall eines gasabhängigen Wärmenetzes · Monitoring: BNetzA-Lageberichte und Speicherdaten. Die geltende Stufe wird stets aktuell bei BNetzA bzw. dem zuständigen Bundesministerium geprüft und nicht aus dieser SOP übernommen.
 

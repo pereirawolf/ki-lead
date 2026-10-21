@@ -6,7 +6,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.9.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.10.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -21,20 +21,29 @@
    **Frühe Befassung:** Auch ohne eingetretenen Schaden kann eine Befassung erforderlich sein, wenn eine fachlich begründete Entwicklung im Betrachtungszeitraum konkrete Schutzgüter, kritische Dienstleistungen oder gemeinsame Bewältigungskapazitäten berühren kann und ein benennbarer Informations-, Vorbereitungs- oder Abstimmungsbedarf besteht. Warnung, Prognose und bestätigte Wirkung werden getrennt dargestellt. Ohne Wirkungsnachweis bleiben die einschlägigen Ist-Achsen offen; die Meldung ist trotzdem zulässig. Eine beliebige Warnung löst keine automatische Aufnahme aus (Nr. 3).
 2. **Mehrfachzuordnung:** Ein Ereignis kann mehrere Ereignisarten berühren (Mehrfachauswahl `art`). Dann alle zutreffenden SOPs heranziehen – typisch sind Ursache-SOP plus Folge-SOP (z. B. Wintersturm → Stromausfall). Denselben Sachverhalt nicht doppelt zählen. Ursache-Folge-Routen sind Recherchehinweise: Eine Folge-SOP oder ein Baustein wird herangezogen, sobald eine Wirkung belegt oder fachlich begründet zu erwarten ist; es gibt keine automatische Kaskade.
 
+   **Bedeutung eines Verweises:** Verweise in Teil B und Teil C (Text und Kopfangabe `anschluss`) sind bedingte Prüfhinweise. Sie nennen (a) eine mögliche Ursache – heranzuziehen nur bei belegtem oder fachbehördlich benanntem Zusammenhang; (b) eine Folge- oder Funktions-SOP – bei belegter oder fachlich begründet zu erwartender Wirkung; (c) eine Vertiefung oder einen Querschnitt in Teil C – bei eigenem entscheidungsrelevantem Prüfbedarf; (d) eine Abgrenzung – gerade keine Mitwahl. Eine erwartete Folge rechtfertigt die Prüfung des zugehörigen Regelwerks; sie belegt weder den Eintritt noch die zugehörige Ereignisart. Ein herangezogener Baustein fügt keine Ereignisart hinzu. Verweise werden nicht transitiv abgearbeitet; Rückverweise (z. B. C02 und C05) sind zulässig, und nicht jeder Verweis braucht einen Gegenverweis.
+
+   **Funktionsdach B12:** Ist eine spezialisierte Versorgungs-SOP einschlägig (Strom B08, Gas B09, Trinkwasser B10, medizinisch-pflegerische Versorgung und Arzneimittel B11 mit C09/C10), wird derselbe Ausfall nicht allein wegen des KRITIS-Bezugs zusätzlich unter B12 geführt. B12 kommt hinzu, wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht. Eine Wirkungskette bleibt ein Sachverhalt; getrennt wird nur bei eigenem Prüfauftrag, eigenen Entscheidungen oder eigener Fortschreibung (A.7.1).
+
    | Ursache-SOP | häufig zu prüfende Folge-SOP bzw. Bausteine (Teil C) |
    |---|---|
-   | B01 Unwetter / Sturm | B02, B08, B12 (C13) |
-   | B02 Hochwasser / Überschwemmung | B10, B08, B07, C15, C16 |
-   | B03 Waldbrand | B08, B12 (C13), C16 |
+   | B01 Unwetter / Sturm | B02, B08, B12 (C13); C02 bei Hangrutschung oder Bauwerksschaden |
+   | B02 Hochwasser / Überschwemmung | B10, B08, B07, C15, C16; C02 bei Hangrutschung, Unterspülung oder Bauwerksschaden |
+   | B03 Waldbrand | B08, B12 (C13), C16; C09 bei eigener medizinischer Versorgungsfolge |
    | B04 Erdbeben | C02, B07, B12 |
-   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13) |
-   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), B02 bei Tauwetter |
-   | B07 Industrieunfall / Chemieunfall | B10, B11, C16; radiologische Lagen C01 |
+   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13); C12 bei Kraftstoffengpass nach Niedrigwasser; C14 bei Lücke der Lebensmittelversorgung |
+   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), C16; C02 bei Schnee- oder Eislast; B09 bei Gasursache des Wärmeausfalls; B02 bei Tauwetter |
+   | B07 Industrieunfall / Chemieunfall | B10, B11, C05, C16; radiologische Lagen C01 |
    | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09) |
-   | B09 Gasversorgungsengpass | B08, B12 (C12) |
+   | B09 Gasversorgungsengpass | B08, B12; C12 für die Wärmefunktion |
+   | B10 Trinkwasserversorgung | C15, B11 (C09) bei Kliniken, Pflege oder Dialyse, C16 |
    | B11 Gesundheitliche Lage / Epidemie | C09, C07, C10, C08 |
-   | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B12), C11 |
-   | B16 Sabotage / Anschlag | die Sektor-SOP der Folge (B08–B12), C05, C16 |
+   | B13 Migrationslage | C16 für Unterbringung und Betreuung; B11 (C07, C09) bei eigener Gesundheitsfrage |
+   | B14 Sicherheitslage | C05, C06, C16; C17 bei konkretem zivilen Wirkungsbezug; B16 nach eingetretener Tat |
+   | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B11; B12 nach dem Funktionsdach oben), C11 |
+   | B16 Sabotage / Anschlag | die Sektor-SOP der Folge (B08–B12), C05, C16; C17 bei konkretem zivilen Wirkungsbezug |
+
+   B12 und B17 haben keine eigene Zeile: Sie sind Folge- bzw. Auffangdach; ihre Bausteine nennt jeweils Abschnitt 1.
 
 3. **Anlass ≠ Relevanz:** Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz. Es gibt keine automatischen Aufnahmeschwellen. Das gilt für alle Befassungsanlässe in Teil B und Teil C.
 4. **Rollenprofil:** Vor der Anwendung wird das Rollenprofil festgelegt.
@@ -44,7 +53,7 @@
    In beiden Profilen werden Empfehlungen, Entscheidungen und Umsetzung getrennt dargestellt (A.4). Befugnisse ergeben sich aus dem jeweiligen Auftrag und den geltenden Regelungen, nicht aus dieser SOP.
 5. **Sachlichkeit:** Keine Dramatisierung, keine Spekulation über Ursachen, Täter oder Motive, keine Zuschreibungen an Personengruppen. Beobachtete Lage, prognostizierte Entwicklung und Maßnahme sind sprachlich unterscheidbar. Glaubwürdigkeit entsteht über Verifizierbarkeit. Umgang mit Falsch- und Desinformation: A.9.5.
 6. **Auslandsbezug:** Für Auslandsereignisse den konkreten Deutschlandbezug ausweisen: unmittelbare grenzüberschreitende Wirkung, Auswirkungen auf Personen oder Einrichtungen mit Deutschlandbezug, kritische Liefer- oder Verkehrsbeziehungen oder konkret angeforderte bzw. geleistete Hilfe. Diese Gegenstände werden getrennt behandelt, und je Gegenstand wird der bewertete Referenzraum festgehalten. Ausländische Schäden, Fallzahlen oder Mobilisierung werden nicht in deutsche Radarwerte übertragen (Kodierleitfaden D2, D8).
-7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet (Angabe `art_zuordnung` im Kopf des Bausteins), vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor. Bausteine mit dem Status „Inhaltsgerüst“ (in dieser Beispielfassung alle) ergänzen die Dach-SOP nur als Prüfhinweise; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. `art_zuordnung` nennt nur Katalogwerte; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“ des Bausteins.
+7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet und vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. **Status:** Er steht im Kopf jeder Datei und wird nicht für einen ganzen Teil angenommen. Ein Baustein im Status „Inhaltsgerüst“ ergänzt die Dach-SOP nur als Prüfhinweis; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Eine „Beispielfassung“ (in dieser Sammelmappe die Dach-SOPs sowie C01 und C12) ist ausgearbeitet, aber nicht organisationsspezifisch freigegeben. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; die gemeinsamen Kodier-, Quellen- und Referenzraumregeln (A.2, A.6, Kodierleitfaden) gehen auch ihm vor. Widersprüche zwischen Dach-SOP und Baustein werden zur Pflege gemeldet (A.10.2). Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. **Kopfangaben:** `art_zuordnung` nennt Katalogwerte, unter denen der Baustein typischerweise geführt wird; bei Querschnittsbausteinen (C16, C17) nur die Werte, die neben der vorrangigen Ursachen- oder Funktionsart in Betracht kommen. Die Liste ist keine Ausschlussliste; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“. `anschluss` nennt bedingte Bezüge im Sinne von Nr. 2. Beide Angaben begründen keine automatische Auswahl.
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
@@ -178,6 +187,8 @@ Keine erfundenen Live-Daten; Offline-Stände werden als solche gekennzeichnet (A
 ### A.8 Fortschreibung, Nachlauf und Rückblick
 
 **A.8.1 Fortschreibung.** Wird ein Sachverhalt in einer Folgeausgabe fortgeschrieben, nennt der Bewertungstext die wesentliche Änderung zur letzten Bewertung (Kennsatz `Änderung zur Vormeldung:`). Fehlende neue Erkenntnisse sind kein Beleg für Stabilisierung. Die bereits benannten Indikatoren (`Neubewertung bei:`) werden je Indikator mit „verändert“, „unverändert“ oder „nicht überprüfbar“ fortgeschrieben; der nächste Prüfpunkt wird in der Wiedervorlage der Redaktion festgehalten (Indikator, Quelle, Bearbeitung, Prüftermin oder Prüfanlass). Gebundene Spezialfähigkeiten, Ablösung, Kraftstoff, Material, Unterbringung und konkurrierende Anforderungen werden gemeinsam betrachtet (A.7.4). Ändert sich die bewertete Funktion (D3) oder das Betrachtungsobjekt einer Achse, wird das offengelegt.
+
+**Bei kombinierten SOPs:** Werden für einen Sachverhalt mehrere SOPs oder Bausteine herangezogen, bleiben Gegenstand, Raum, Zeitfenster, bewertete Funktion (D3) und Zielzustand (D5) in der Fortschreibung gleich, oder der geänderte Zuschnitt wird genannt. Das Ende der Ursache beendet die Folgen nicht automatisch (z. B. Strom wieder verfügbar, Abwasserentsorgung weiter gestört); umgekehrt hält eine offene Ursachen- oder Ermittlungsfrage allein eine abgeschlossene Versorgungsbefassung nicht offen. Eine Folge wird nur als eigener Sachverhalt abgetrennt, wenn Prüfauftrag, Entscheidungen oder Fortschreibung das erfordern (A.1 Nr. 2). Personen, Vorräte, Transport- und Spezialfähigkeiten einer Wirkungskette werden einmal geführt (A.3, A.7.4).
 
 **A.8.2 Nachlauf und Abschluss.** Ereignis beendet heißt nicht Lage erledigt. Vor dem Herausnehmen eines Sachverhalts aus der laufenden Lagebild-Befassung prüfen: Ist der in D5 benannte Zielzustand erreicht? Bestehen noch bevölkerungsschutzrelevante Folgewirkungen, Notbetrieb oder Einschränkungen? Verbleibt ein Beobachtungsbedarf? Fehlende Folgemeldungen gelten nicht als Nachweis der Wiederherstellung. Die letzte Nennung trägt den sichtbaren Kennsatz `Abschluss im Lagebild:` mit Ende des Ereignisses, offen bleibenden Punkten (oder „nichts“) und der Stelle, bei der die Nachsorge liegt. Eine abgeklungene Lage wird nicht ohne Anlass weitergeführt; solange Folgewirkungen bestehen, genügt je Ausgabe ein Satz zum Stand des Wiederanlaufs.
 

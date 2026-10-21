@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.9.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.10.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -73,20 +73,29 @@
    **Frühe Befassung:** Auch ohne eingetretenen Schaden kann eine Befassung erforderlich sein, wenn eine fachlich begründete Entwicklung im Betrachtungszeitraum konkrete Schutzgüter, kritische Dienstleistungen oder gemeinsame Bewältigungskapazitäten berühren kann und ein benennbarer Informations-, Vorbereitungs- oder Abstimmungsbedarf besteht. Warnung, Prognose und bestätigte Wirkung werden getrennt dargestellt. Ohne Wirkungsnachweis bleiben die einschlägigen Ist-Achsen offen; die Meldung ist trotzdem zulässig. Eine beliebige Warnung löst keine automatische Aufnahme aus (Nr. 3).
 2. **Mehrfachzuordnung:** Ein Ereignis kann mehrere Ereignisarten berühren (Mehrfachauswahl `art`). Dann alle zutreffenden SOPs heranziehen – typisch sind Ursache-SOP plus Folge-SOP (z. B. Wintersturm → Stromausfall). Denselben Sachverhalt nicht doppelt zählen. Ursache-Folge-Routen sind Recherchehinweise: Eine Folge-SOP oder ein Baustein wird herangezogen, sobald eine Wirkung belegt oder fachlich begründet zu erwarten ist; es gibt keine automatische Kaskade.
 
+   **Bedeutung eines Verweises:** Verweise in Teil B und Teil C (Text und Kopfangabe `anschluss`) sind bedingte Prüfhinweise. Sie nennen (a) eine mögliche Ursache – heranzuziehen nur bei belegtem oder fachbehördlich benanntem Zusammenhang; (b) eine Folge- oder Funktions-SOP – bei belegter oder fachlich begründet zu erwartender Wirkung; (c) eine Vertiefung oder einen Querschnitt in Teil C – bei eigenem entscheidungsrelevantem Prüfbedarf; (d) eine Abgrenzung – gerade keine Mitwahl. Eine erwartete Folge rechtfertigt die Prüfung des zugehörigen Regelwerks; sie belegt weder den Eintritt noch die zugehörige Ereignisart. Ein herangezogener Baustein fügt keine Ereignisart hinzu. Verweise werden nicht transitiv abgearbeitet; Rückverweise (z. B. C02 und C05) sind zulässig, und nicht jeder Verweis braucht einen Gegenverweis.
+
+   **Funktionsdach B12:** Ist eine spezialisierte Versorgungs-SOP einschlägig (Strom B08, Gas B09, Trinkwasser B10, medizinisch-pflegerische Versorgung und Arzneimittel B11 mit C09/C10), wird derselbe Ausfall nicht allein wegen des KRITIS-Bezugs zusätzlich unter B12 geführt. B12 kommt hinzu, wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht. Eine Wirkungskette bleibt ein Sachverhalt; getrennt wird nur bei eigenem Prüfauftrag, eigenen Entscheidungen oder eigener Fortschreibung (A.7.1).
+
    | Ursache-SOP | häufig zu prüfende Folge-SOP bzw. Bausteine (Teil C) |
    |---|---|
-   | B01 Unwetter / Sturm | B02, B08, B12 (C13) |
-   | B02 Hochwasser / Überschwemmung | B10, B08, B07, C15, C16 |
-   | B03 Waldbrand | B08, B12 (C13), C16 |
+   | B01 Unwetter / Sturm | B02, B08, B12 (C13); C02 bei Hangrutschung oder Bauwerksschaden |
+   | B02 Hochwasser / Überschwemmung | B10, B08, B07, C15, C16; C02 bei Hangrutschung, Unterspülung oder Bauwerksschaden |
+   | B03 Waldbrand | B08, B12 (C13), C16; C09 bei eigener medizinischer Versorgungsfolge |
    | B04 Erdbeben | C02, B07, B12 |
-   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13) |
-   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), B02 bei Tauwetter |
-   | B07 Industrieunfall / Chemieunfall | B10, B11, C16; radiologische Lagen C01 |
+   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13); C12 bei Kraftstoffengpass nach Niedrigwasser; C14 bei Lücke der Lebensmittelversorgung |
+   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), C16; C02 bei Schnee- oder Eislast; B09 bei Gasursache des Wärmeausfalls; B02 bei Tauwetter |
+   | B07 Industrieunfall / Chemieunfall | B10, B11, C05, C16; radiologische Lagen C01 |
    | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09) |
-   | B09 Gasversorgungsengpass | B08, B12 (C12) |
+   | B09 Gasversorgungsengpass | B08, B12; C12 für die Wärmefunktion |
+   | B10 Trinkwasserversorgung | C15, B11 (C09) bei Kliniken, Pflege oder Dialyse, C16 |
    | B11 Gesundheitliche Lage / Epidemie | C09, C07, C10, C08 |
-   | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B12), C11 |
-   | B16 Sabotage / Anschlag | die Sektor-SOP der Folge (B08–B12), C05, C16 |
+   | B13 Migrationslage | C16 für Unterbringung und Betreuung; B11 (C07, C09) bei eigener Gesundheitsfrage |
+   | B14 Sicherheitslage | C05, C06, C16; C17 bei konkretem zivilen Wirkungsbezug; B16 nach eingetretener Tat |
+   | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B11; B12 nach dem Funktionsdach oben), C11 |
+   | B16 Sabotage / Anschlag | die Sektor-SOP der Folge (B08–B12), C05, C16; C17 bei konkretem zivilen Wirkungsbezug |
+
+   B12 und B17 haben keine eigene Zeile: Sie sind Folge- bzw. Auffangdach; ihre Bausteine nennt jeweils Abschnitt 1.
 
 3. **Anlass ≠ Relevanz:** Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz. Es gibt keine automatischen Aufnahmeschwellen. Das gilt für alle Befassungsanlässe in Teil B und Teil C.
 4. **Rollenprofil:** Vor der Anwendung wird das Rollenprofil festgelegt.
@@ -96,7 +105,7 @@
    In beiden Profilen werden Empfehlungen, Entscheidungen und Umsetzung getrennt dargestellt (A.4). Befugnisse ergeben sich aus dem jeweiligen Auftrag und den geltenden Regelungen, nicht aus dieser SOP.
 5. **Sachlichkeit:** Keine Dramatisierung, keine Spekulation über Ursachen, Täter oder Motive, keine Zuschreibungen an Personengruppen. Beobachtete Lage, prognostizierte Entwicklung und Maßnahme sind sprachlich unterscheidbar. Glaubwürdigkeit entsteht über Verifizierbarkeit. Umgang mit Falsch- und Desinformation: A.9.5.
 6. **Auslandsbezug:** Für Auslandsereignisse den konkreten Deutschlandbezug ausweisen: unmittelbare grenzüberschreitende Wirkung, Auswirkungen auf Personen oder Einrichtungen mit Deutschlandbezug, kritische Liefer- oder Verkehrsbeziehungen oder konkret angeforderte bzw. geleistete Hilfe. Diese Gegenstände werden getrennt behandelt, und je Gegenstand wird der bewertete Referenzraum festgehalten. Ausländische Schäden, Fallzahlen oder Mobilisierung werden nicht in deutsche Radarwerte übertragen (Kodierleitfaden D2, D8).
-7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet (Angabe `art_zuordnung` im Kopf des Bausteins), vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor. Bausteine mit dem Status „Inhaltsgerüst“ (in dieser Beispielfassung alle) ergänzen die Dach-SOP nur als Prüfhinweise; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. `art_zuordnung` nennt nur Katalogwerte; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“ des Bausteins.
+7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet und vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. **Status:** Er steht im Kopf jeder Datei und wird nicht für einen ganzen Teil angenommen. Ein Baustein im Status „Inhaltsgerüst“ ergänzt die Dach-SOP nur als Prüfhinweis; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Eine „Beispielfassung“ (in dieser Sammelmappe die Dach-SOPs sowie C01 und C12) ist ausgearbeitet, aber nicht organisationsspezifisch freigegeben. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; die gemeinsamen Kodier-, Quellen- und Referenzraumregeln (A.2, A.6, Kodierleitfaden) gehen auch ihm vor. Widersprüche zwischen Dach-SOP und Baustein werden zur Pflege gemeldet (A.10.2). Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. **Kopfangaben:** `art_zuordnung` nennt Katalogwerte, unter denen der Baustein typischerweise geführt wird; bei Querschnittsbausteinen (C16, C17) nur die Werte, die neben der vorrangigen Ursachen- oder Funktionsart in Betracht kommen. Die Liste ist keine Ausschlussliste; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“. `anschluss` nennt bedingte Bezüge im Sinne von Nr. 2. Beide Angaben begründen keine automatische Auswahl.
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
@@ -230,6 +239,8 @@ Keine erfundenen Live-Daten; Offline-Stände werden als solche gekennzeichnet (A
 ### A.8 Fortschreibung, Nachlauf und Rückblick
 
 **A.8.1 Fortschreibung.** Wird ein Sachverhalt in einer Folgeausgabe fortgeschrieben, nennt der Bewertungstext die wesentliche Änderung zur letzten Bewertung (Kennsatz `Änderung zur Vormeldung:`). Fehlende neue Erkenntnisse sind kein Beleg für Stabilisierung. Die bereits benannten Indikatoren (`Neubewertung bei:`) werden je Indikator mit „verändert“, „unverändert“ oder „nicht überprüfbar“ fortgeschrieben; der nächste Prüfpunkt wird in der Wiedervorlage der Redaktion festgehalten (Indikator, Quelle, Bearbeitung, Prüftermin oder Prüfanlass). Gebundene Spezialfähigkeiten, Ablösung, Kraftstoff, Material, Unterbringung und konkurrierende Anforderungen werden gemeinsam betrachtet (A.7.4). Ändert sich die bewertete Funktion (D3) oder das Betrachtungsobjekt einer Achse, wird das offengelegt.
+
+**Bei kombinierten SOPs:** Werden für einen Sachverhalt mehrere SOPs oder Bausteine herangezogen, bleiben Gegenstand, Raum, Zeitfenster, bewertete Funktion (D3) und Zielzustand (D5) in der Fortschreibung gleich, oder der geänderte Zuschnitt wird genannt. Das Ende der Ursache beendet die Folgen nicht automatisch (z. B. Strom wieder verfügbar, Abwasserentsorgung weiter gestört); umgekehrt hält eine offene Ursachen- oder Ermittlungsfrage allein eine abgeschlossene Versorgungsbefassung nicht offen. Eine Folge wird nur als eigener Sachverhalt abgetrennt, wenn Prüfauftrag, Entscheidungen oder Fortschreibung das erfordern (A.1 Nr. 2). Personen, Vorräte, Transport- und Spezialfähigkeiten einer Wirkungskette werden einmal geführt (A.3, A.7.4).
 
 **A.8.2 Nachlauf und Abschluss.** Ereignis beendet heißt nicht Lage erledigt. Vor dem Herausnehmen eines Sachverhalts aus der laufenden Lagebild-Befassung prüfen: Ist der in D5 benannte Zielzustand erreicht? Bestehen noch bevölkerungsschutzrelevante Folgewirkungen, Notbetrieb oder Einschränkungen? Verbleibt ein Beobachtungsbedarf? Fehlende Folgemeldungen gelten nicht als Nachweis der Wiederherstellung. Die letzte Nennung trägt den sichtbaren Kennsatz `Abschluss im Lagebild:` mit Ende des Ereignisses, offen bleibenden Punkten (oder „nichts“) und der Stelle, bei der die Nachsorge liegt. Eine abgeklungene Lage wird nicht ohne Anlass weitergeführt; solange Folgewirkungen bestehen, genügt je Ausgabe ein Satz zum Stand des Wiederanlaufs.
 
@@ -429,9 +440,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Waldbrand (Wald-, Vegetations-, Moor- und einschlägige Flächenbrände)"
 art_vorschlag: ["Waldbrand"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Wald- und Vegetationsbränden mit überörtlichem Kräftebedarf oder Gefährdung von Siedlungen und Infrastruktur."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.03.2027"
@@ -443,6 +454,8 @@ bisherige_ids: ["sop-03"]
 ### 1. Anwendungsbereich und Befassungsanlässe
 
 **Umfasst / grenzt ab von:** Wald-, Vegetations-, Moor- und einschlägige Flächenbrände (z. B. Heide-, Feld- oder Böschungsbrände) mit überörtlichem Kräftebedarf, Evakuierungen, Rauchbelastung oder Gefährdung von Infrastruktur; die Ereignisart des Katalogs bleibt „Waldbrand“. Erhöhte Brandgefahr ist Frühwarnkontext. Trockenheit ohne Brand: B05. Beispiel dafür: Großbrand auf munitionsbelasteter Fläche mit Luftunterstützung. Beispiel dagegen: örtlich rasch gelöschter Flächenbrand; Gebäudebrand ist kein Waldbrand.
+
+**Vertiefung nach Wirkung:** Evakuierung, Schutzunterbringung und Betreuung C16; eigenständige medizinisch-pflegerische Versorgungsfolge C09; kritische Verkehrsfunktion C13; kritische Kraftstoff- oder Ersatzversorgung C12. Munitionsbelastung der Fläche bleibt Teil der Brandlage; C06 nur bei eigenständigem, fachbehördlich benanntem Fund- oder Räumungsvorgang. Ein Baustein fügt keine Ereignisart hinzu (A.1 Nr. 2).
 
 **Befassungsanlässe:** hoher Waldbrand- bzw. Graslandfeuerindex des DWD · Lagemeldung eines Landes · Anforderung von Luftunterstützung · Monitoring: Satellitendetektion (EFFIS) und VOST-Auswertung.
 
@@ -499,9 +512,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -525,7 +538,7 @@ bisherige_ids: ["sop-04"]
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
 | R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. |
-| R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M; D4 | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6). |
+| R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten (A.7.4) und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6); deutsche Hilfe ins Ausland ergibt keinen D4-Wert (Abschnitt 3). |
 
 ### 3. Auswertung: Prüfpunkte
 
@@ -533,7 +546,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D1/D2:** Belegte Wirkungsräume und Betroffene in Deutschland unabhängig vom Epizentrum; ausländische Schäden nicht in deutsche D1/D2-Werte übertragen; ohne deutschen Wirkungsnachweis offen.
 - **D3:** Schadensfeststellung und Gefahrenabwehr bei Ländern/Kommunen; BGR/GFZ sind fachlich-wissenschaftlich tätig.
-- **D4:** Bei Auslandsbeben kann tatsächlich eingesetzte deutsche Unterstützung für den dafür festgelegten Betrachtungsgegenstand belegt werden; Referenzraum und D4-Auslegung vor der Kodierung benennen.
+- **D4:** Wie A.2: Herkunft der tatsächlich eingesetzten externen Unterstützung für die bewertete Lage im Referenzraum. Deutsche Hilfe bei einem Auslandsbeben und die dadurch gebundenen deutschen Fähigkeiten sind Textbefunde (A.7.4) und ergeben keinen D4-Wert; keine eigene D4-Auslegung je Gegenstand (wie C07). Internationale Hilfe für eine Lage in Deutschland bleibt D4-relevant.
 - **D5:** Sichere Gebäudenutzung, Notversorgung und Wiederherstellung sind verschiedene Zielzustände.
 
 **Beurteilung/Tendenz:** Magnitude ist keine Beurteilung. Bei Auslandsbeben die Schwere vor Ort nicht auf die deutsche Beurteilung übertragen, die Bindung deutscher Fähigkeiten aber nicht ausblenden; abnehmende Nachbeben ersetzen keine Bewertung fortdauernder Schäden.
@@ -555,7 +568,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BGR · Landeserdbebendienste · GFZ · Bauaufsicht der Länder · Auswärtiges Amt/GMLZ (Auslandsbeben)
 
-**Offene Punkte:** Kodierbeispiel zu D4 bei deutscher Auslandshilfe für den Kodierleitfaden erarbeiten (A.10.3).
+**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07.
 
 <!-- Quelle: sop/teil-b/B05_extremhitze-duerre.md -->
 
@@ -570,9 +583,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "30.04.2027"
@@ -584,6 +597,8 @@ bisherige_ids: ["sop-05"]
 ### 1. Anwendungsbereich und Befassungsanlässe
 
 **Umfasst / grenzt ab von:** Hitzeperioden mit Gesundheitsfolgen sowie mehrmonatige Trockenheit, sinkende Grund- und Oberflächenwasserstände und Niedrigwasser – auch ohne akute Hitzewelle. Einschränkungen der Trinkwasserversorgung zusätzlich mit B10. Beispiel dafür: Hitze mit geschätzter Übersterblichkeit und regionalen Entnahmeverboten; anhaltendes Niedrigwasser mit Transporteinschränkungen. Beispiel dagegen: Rohrbruch ohne Wetterbezug (B10).
+
+**Vertiefung nach Wirkung:** C09 bei eigenständigem medizinisch-pflegerischem Engpass (5a); C13 bei tatsächlich eingeschränkter Transportleistung im Niedrigwasser (5b); C12 bei daraus folgendem Kraftstoffengpass; C14 bei konkreter Lücke der Lebensmittelversorgung. Trinkwasser B10 (oben). Dürreindizes und allgemeine Sektorrisiken genügen nicht für eine Mitwahl (A.1 Nr. 2).
 
 **Teilprofile:** Die SOP arbeitet mit zwei Teilprofilen unter derselben Ereignisart, weil Bezugsräume, Zeitverzug und Entspannungsindikatoren verschieden sind:
 - **5a Hitzeperiode:** Dauer, nächtliche Entlastung, fachlich bestätigte Gesundheitsbelastung, Hitzeschutz und Funktionsfähigkeit ambulanter, stationärer und häuslicher Versorgung (Prüffragen R1–R4).
@@ -655,9 +670,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -668,7 +683,9 @@ bisherige_ids: ["sop-06"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Starkschneefall, Eisregen, Glatteis und winterliche Sturmlagen mit Verkehrszusammenbrüchen, Leitungsausfällen oder Versorgungsengpässen; außerdem länger andauernde extreme Kälte mit Schutz-, Wärme- oder Versorgungsbedarf, auch ohne Sturm oder Schneefall. Stromausfälle zusätzlich mit B08 (Referenzfall Münsterland 2005); Wärmeversorgung unabhängig vom Gas mit Baustein C12. Beispiel dafür: Eislast mit Mastbrüchen und gesperrten Autobahnen; mehrtägige Kälte mit ausgefallener Wärmeversorgung. Beispiel dagegen: übliche Winterwitterung ohne konkrete Folgen.
+**Umfasst / grenzt ab von:** Starkschneefall, Eisregen, Glatteis und winterliche Sturmlagen mit Verkehrszusammenbrüchen, Leitungsausfällen oder Versorgungsengpässen; außerdem länger andauernde extreme Kälte mit Schutz-, Wärme- oder Versorgungsbedarf, auch ohne Sturm oder Schneefall. Stromausfälle zusätzlich mit B08 (Referenzfall Münsterland 2005); Wärme- und Kraftstoffversorgung mit Baustein C12; bei konkreter Gasversorgungsursache zusätzlich B09. Beispiel dafür: Eislast mit Mastbrüchen und gesperrten Autobahnen; mehrtägige Kälte mit ausgefallener Wärmeversorgung. Beispiel dagegen: übliche Winterwitterung ohne konkrete Folgen.
+
+**Vertiefung nach Wirkung:** Bauwerksversagen durch Schnee- oder Eislast C02; kritische Verkehrsfunktion C13; Schutzunterbringung und Betreuung, etwa bei Wärmeausfall oder gestrandeten Reisenden, C16; eigenständige medizinisch-pflegerische Versorgungsfolge C09. Ein Baustein fügt keine Ereignisart hinzu (A.1 Nr. 2).
 
 **Befassungsanlässe:** DWD-Unwetterwarnung Schnee/Glatteis bzw. Warnung vor strengem Frost · großflächige Verkehrs- oder Stromausfälle · Lagemeldung eines Landes · Monitoring: DWD-Warnlage und Lagemeldungen der Länder.
 
@@ -796,9 +813,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Stromausfall / Blackout (großflächiger oder langandauernder Netzausfall)"
 art_vorschlag: ["Stromausfall / Blackout"]
 zweck: "Reproduzierbare Erfassung großflächiger oder langandauernder Stromausfälle, ihrer Ersatzversorgung und ihrer zeitverzögerten Kaskadeneffekte."
-version: "2.0.1"
+version: "2.0.2"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -809,7 +826,7 @@ bisherige_ids: ["sop-08"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Stromausfälle, die nach Dauer, Fläche oder Folgewirkung über kurze örtliche Störungen hinausgehen, bis zur Systemstörung. Die Ursache wird zusätzlich über die jeweilige SOP geprüft (06, 15, 16). Eine angekündigte Lastabschaltung oder eine Warnung vor Gefährdung der Systemsicherheit ist vom bereits wirksamen Ausfall zu trennen; sie kann eine Vorwarnlage nach A.1 Nr. 1 begründen. Beispiel dafür: mehrtägiger Ausfall nach Mastbruch (Münsterland 2005). Beispiel dagegen: Störung, die in wenigen Stunden ohne Folgeausfälle behoben ist; Strompreise allein belegen keinen Ausfall.
+**Umfasst / grenzt ab von:** Stromausfälle, die nach Dauer, Fläche oder Folgewirkung über kurze örtliche Störungen hinausgehen, bis zur Systemstörung. Die Ursache wird bei belegtem Zusammenhang zusätzlich über die passende SOP geprüft, z. B. B06 (Winterwetter), B15 (IT-Sicherheitsvorfall) oder B16 (behördlich benannter Vorsatz). Eine angekündigte Lastabschaltung oder eine Warnung vor Gefährdung der Systemsicherheit ist vom bereits wirksamen Ausfall zu trennen; sie kann eine Vorwarnlage nach A.1 Nr. 1 begründen. Beispiel dafür: mehrtägiger Ausfall nach Mastbruch (Münsterland 2005). Beispiel dagegen: Störung, die in wenigen Stunden ohne Folgeausfälle behoben ist; Strompreise allein belegen keinen Ausfall.
 
 **Befassungsanlässe:** Störungsmeldung eines Netzbetreibers · Warnung eines Übertragungsnetzbetreibers vor Gefährdung der Systemsicherheit oder angekündigte Lastabschaltung · Lagemeldung eines Landes bzw. landesrechtlich festgestellte herausgehobene Lage (A.9.4) · BNetzA-Mitteilung · Monitoring: Störungsmeldungen der Netzbetreiber und VOST-Auswertung.
 
@@ -867,9 +884,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Gasversorgungsengpass (angespannte Versorgung, Stufen des Notfallplans Gas, regionale Einschränkungen, Anlagenstörungen)"
 art_vorschlag: ["Gasversorgungsengpass"]
 zweck: "Reproduzierbare Beobachtung der Gasversorgungslage von Frühwarnsignalen bis zu Versorgungseinschränkungen und ihrer Folgen für Wärme, Strom und Industrie."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.10.2026"
@@ -880,7 +897,7 @@ bisherige_ids: ["sop-09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstoffversorgung unabhängig vom Gas: Baustein C12. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel dagegen: Preisanstieg ohne physischen Mangel; lokaler Leitungsschaden mit kurzer Unterbrechung.
+**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstofffunktion vertiefend über Baustein C12, auch bei gasbedingtem Wärmeausfall; B09 bleibt für Gasversorgung, Notfallplanstufen und gasbezogene Maßnahmen maßgeblich. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel dagegen: Preisanstieg ohne physischen Mangel; lokaler Leitungsschaden mit kurzer Unterbrechung.
 
 **Befassungsanlässe:** Ausrufung oder Änderung einer Stufe des Notfallplans Gas · BNetzA-Lagebericht mit Verschlechterung · regionale Abschaltungen · Ausfall eines gasabhängigen Wärmenetzes · Monitoring: BNetzA-Lageberichte und Speicherdaten. Die geltende Stufe wird stets aktuell bei BNetzA bzw. dem zuständigen Bundesministerium geprüft und nicht aus dieser SOP übernommen.
 
@@ -937,9 +954,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Trinkwasserversorgung (Unterbrechung, Mengeneinschränkung, Qualitätsproblem)"
 art_vorschlag: ["Trinkwasserversorgung"]
 zweck: "Reproduzierbare Erfassung von Unterbrechungen, Mengeneinschränkungen und Qualitätsproblemen der öffentlichen Trinkwasserversorgung (KRITIS-Sektor Wasser, Branche öffentliche Wasserversorgung) einschließlich der tatsächlich wirksamen Ersatzversorgung."
-version: "2.0.1"
+version: "2.0.2"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -950,7 +967,7 @@ bisherige_ids: ["sop-10"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Versorgungsunterbrechungen, Abkochgebote, Nutzungsverbote und Verbrauchsbeschränkungen bei Gewinnung, Aufbereitung und Verteilung. Ursache zusätzlich über die jeweilige SOP (05, 02, 08, 07, 15, 16). Abwasser-, Sanitär- und Entsorgungsfolgen: Baustein C15. Beispiel dafür: Abkochgebot für mehrere Gemeinden nach Verkeimung. Beispiel dagegen: Rohrbruch mit kurzer Unterbrechung weniger Haushalte; niedriger Flusspegel ohne Trinkwasserfolgen.
+**Umfasst / grenzt ab von:** Versorgungsunterbrechungen, Abkochgebote, Nutzungsverbote und Verbrauchsbeschränkungen bei Gewinnung, Aufbereitung und Verteilung. Ursache bei belegtem Zusammenhang zusätzlich über die passende SOP (B05, B02, B08, B07, B15 oder B16); aus dem Trinkwasserproblem allein wird keine Ursachenart abgeleitet. Abwasser-, Sanitär- und Entsorgungsfolgen: Baustein C15. Beispiel dafür: Abkochgebot für mehrere Gemeinden nach Verkeimung. Beispiel dagegen: Rohrbruch mit kurzer Unterbrechung weniger Haushalte; niedriger Flusspegel ohne Trinkwasserfolgen.
 
 **Befassungsanlässe:** Abkochgebot oder Nutzungsverbot · Versorgungsunterbrechung · Lagemeldung eines Landes · Monitoring: Warnungen und Allgemeinverfügungen zur Trinkwasserversorgung.
 
@@ -1084,9 +1101,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "KRITIS-Ausfall (sektorübergreifend oder in Sektoren ohne eigene SOP)"
 art_vorschlag: ["KRITIS-Ausfall"]
 zweck: "Reproduzierbare Erfassung von Ausfällen kritischer Versorgungsfunktionen in Sektoren ohne eigene SOP (z. B. Telekommunikation, Verkehr, Finanzwesen, Ernährung, Abwasser) und sektorübergreifender Kaskaden; Dach für die Bausteine C11 und C12 bis C15."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1097,7 +1114,7 @@ bisherige_ids: ["sop-12"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Ausfall oder wesentliche Einschränkung kritischer Dienstleistungen einschließlich mehrerer Sektoren. Für Strom, Gas und Trinkwasser gelten B08–B10; Ursachen zusätzlich über B15/B16. Kritische Dienstleistungen werden funktional geprüft, auch wenn der formale regulatorische Status eines Betreibers ungeklärt ist; der Rechtsstatus wird nicht selbst festgestellt, und eine gesetzliche Betreiberregistrierung ist kein Aufnahmekriterium. Vertiefung über Bausteine: Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit C11 · Kraftstoff und Wärme C12 · Verkehr und kritische Logistik C13 · Lebensmittel C14 · Abwasser, Sanitärhygiene und Entsorgung C15; Zahlungsverkehr bis zur Ausarbeitung eines Bausteins in dieser SOP. Beispiel dafür: großflächiger Ausfall von Mobilfunk und Notruf; bundesweite Störung des Zahlungsverkehrs. Beispiel dagegen: kurze Störung eines Dienstes mit Ausweichmöglichkeit.
+**Umfasst / grenzt ab von:** Ausfall oder wesentliche Einschränkung kritischer Dienstleistungen einschließlich mehrerer Sektoren. Für Strom, Gas und Trinkwasser gelten vorrangig B08–B10, für medizinisch-pflegerische Versorgung und Arzneimittel B11 mit C09/C10; B12 kommt hinzu, wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht, nicht allein wegen des KRITIS-Bezugs (A.1 Nr. 2, Funktionsdach). Ursachen zusätzlich über B15/B16. Kritische Dienstleistungen werden funktional geprüft, auch wenn der formale regulatorische Status eines Betreibers ungeklärt ist; der Rechtsstatus wird nicht selbst festgestellt, und eine gesetzliche Betreiberregistrierung ist kein Aufnahmekriterium. Vertiefung über Bausteine: Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit C11 · Kraftstoff und Wärme C12 · Verkehr und kritische Logistik C13 · Lebensmittel C14 · Abwasser, Sanitärhygiene und Entsorgung C15; Zahlungsverkehr bis zur Ausarbeitung eines Bausteins in dieser SOP. Beispiel dafür: großflächiger Ausfall von Mobilfunk und Notruf; bundesweite Störung des Zahlungsverkehrs. Beispiel dagegen: kurze Störung eines Dienstes mit Ausweichmöglichkeit.
 
 **Befassungsanlässe:** Lagemeldung eines Landes · Betreiber- oder Aufsichtsmitteilung · Ausfall von Notrufnummern · Monitoring: Störungsmeldungen der Betreiber und VOST-Auswertung.
 
@@ -1156,9 +1173,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Migrationslage (Aufnahme-, Unterbringungs- und Versorgungslage Schutzsuchender)"
 art_vorschlag: ["Migrationslage"]
 zweck: "Reproduzierbare Beobachtung von Schutz-, Unterbringungs- und Versorgungsbedarfen im Zusammenhang mit Fluchtbewegungen, soweit der Bevölkerungsschutz berührt ist; Maßstab ist die Bedarfsdeckung."
-version: "2.0.1"
+version: "2.0.2"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1169,7 +1186,7 @@ bisherige_ids: ["sop-13"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Lagen, in denen Zugänge Schutzsuchender Unterstützungsbedarf für Unterbringung, Versorgung oder Gesundheitsversorgung erzeugen, der die Regelstrukturen erreicht oder übersteigt. Gegenstand ist die Bedarfsdeckung, nicht die Bewertung von Personengruppen; Ordnungs- und Grenzfragen sind nicht Gegenstand. Evakuierung, Schutzunterbringung und Betreuung aus anderen Anlässen: Baustein C16. Beispiel dafür: dokumentierte Kapazitätslücke mit Notunterkünften unter Beteiligung von Hilfsorganisationen und THW. Beispiel dagegen: steigende Antragszahlen innerhalb der regulären Kapazitäten.
+**Umfasst / grenzt ab von:** Lagen, in denen Zugänge Schutzsuchender Unterstützungsbedarf für Unterbringung, Versorgung oder Gesundheitsversorgung erzeugen, der die Regelstrukturen erreicht oder übersteigt. Gegenstand ist die Bedarfsdeckung, nicht die Bewertung von Personengruppen; Ordnungs- und Grenzfragen sind nicht Gegenstand. Evakuierung, Schutzunterbringung und Betreuung aus anderen Anlässen: Baustein C16; er kann auch hier Unterbringung und Betreuung vertiefen. Beispiel dafür: dokumentierte Kapazitätslücke mit Notunterkünften unter Beteiligung von Hilfsorganisationen und THW. Beispiel dagegen: steigende Antragszahlen innerhalb der regulären Kapazitäten.
 
 **Befassungsanlässe:** Anfrage eines Landes zu Unterbringungsunterstützung · Einrichtung von Notunterkünften · internationale Fluchtbewegung mit absehbarem Deutschlandbezug · Monitoring: Aufnahme- und Belegungsmeldungen der Länder. Änderungen des vorübergehenden Schutzes werden nur bei belegbarem Bezug zu erwarteten Bedarfen aufgenommen und nicht automatisch als Verschärfung gewertet.
 
@@ -1376,9 +1393,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1411,7 +1428,7 @@ bisherige_ids: ["sop-16"]
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D3:** Ermittlungszuständigkeit (Polizei, ggf. GBA/BKA) und Folgenbewältigung (Land/Kommune, Betreiber) getrennt; bewertete Funktion begründen, nicht pauschal „Bund“.
-- **D6:** Nach belegten Folgeausfällen kodieren, nicht nach Symbolwert des Ziels oder denkbarer Angriffswirkung.
+- **D6:** Nach belegten Kopplungen der konkreten Lage (A.2); eingetretene Folgeausfälle sind ein Beleg, aber keine zusätzliche Voraussetzung. Symbolwert des Ziels, Sektorzugehörigkeit oder denkbare Angriffswirkung legen keine Stufe fest; mögliche Folgeschäden sind Szenario.
 - **D8:** Misst die Dynamik der eingetretenen Lage; Nachahmungs- oder Folgerisiken gehören in den Risikotext.
 
 **Beurteilung/Tendenz:** Beurteilung nach Folgen für Bevölkerung und Versorgung; Ermittlungserfolg ersetzt keine Bewertung fortdauernder Versorgungsfolgen. Keine Spekulation über Motive oder Folgetaten; sachliche Sprache.
@@ -1448,9 +1465,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sonstiges (Sachverhalte ohne ausreichend passende Katalogart)"
 art_vorschlag: ["Sonstiges"]
 zweck: "Reproduzierbare Prüfung und Meldung von Sachverhalten mit möglicher Bevölkerungsschutzrelevanz, die keiner spezifischen Katalogart ausreichend entsprechen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1461,7 +1478,7 @@ bisherige_ids: ["sop-17"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Auffangkategorie. Zuerst prüfen, ob eine spezifische Ereignisart (ggf. zusätzlich) passt; „Sonstiges“ nur, wenn keine bestehende Art hinreichend passt, und kurz begründen. Arzneimittelversorgung grundsätzlich unter B11 und bei konkretem Funktionsausfall ggf. B12 (Baustein C10). Bausteine, die mangels passender Ursachenart typischerweise unter „Sonstiges“ geführt werden: C01 radiologische Lage · C02 Massenbewegungen und Gebäudeeinsturz · C17 zivile Verteidigung · C03 Weltraumwetter ohne eingetretene Wirkung · C05 Großunfall · C06 Kampfmittelfund · C04 Vulkanasche – jeweils mit zusätzlich zutreffenden Folgenarten. Beispiel dafür: Weltraumwetter-Frühwarnung ohne bestätigten Netzausfall. Beispiel dagegen: bestätigter Stromausfall – vorrangig B08; Arzneimittel-Lieferengpass – vorrangig B11.
+**Umfasst / grenzt ab von:** Auffangkategorie. Zuerst prüfen, ob eine spezifische Ereignisart (ggf. zusätzlich) passt; „Sonstiges“ nur, wenn keine bestehende Art hinreichend passt, und kurz begründen. Arzneimittelversorgung grundsätzlich unter B11 und bei konkretem Funktionsausfall ggf. B12 (Baustein C10). Bausteine, die unter „Sonstiges“ geführt werden können, wenn keine passende Ursachenart besteht (zuerst die Zuordnung im Baustein prüfen): C01 radiologische Lage · C02 Massenbewegungen und Gebäudeeinsturz · C03 Weltraumwetter ohne eingetretene Wirkung · C04 Vulkanasche · C05 Großunfall · C06 Kampfmittelfund – jeweils mit zusätzlich zutreffenden Folgenarten. C17 zivile Verteidigung ist ein Querschnitt unter den tatsächlich passenden Ursachen- und Folgenarten; „Sonstiges“ nur, wenn kein vorhandenes Dach den Gegenstand trägt. Nichtindustrieller Gebäudebrand, Gebäudeeinsturz oder Explosion ohne passende Ursachenart: „Sonstiges“ mit C02 bzw. C05; ein Gebäudebrand ist nicht allein wegen des Feuers B03, eine Explosion nicht allein wegen des Wortes B07. Beispiel dafür: Weltraumwetter-Frühwarnung ohne bestätigten Netzausfall. Beispiel dagegen: bestätigter Stromausfall – vorrangig B08; Arzneimittel-Lieferengpass – vorrangig B11.
 
 **Befassungsanlässe:** fachbehördliches Signal · neue sektorübergreifende Entwicklung · Anfrage ohne passende Kategorie · Monitoring: Fachsignale der zuständigen Behörde (je Thema benennen).
 
@@ -1641,10 +1658,10 @@ bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
 lageart: "Hangrutschung, Felssturz, Erdfall, Tagesbruch, Bergsenkung sowie Einsturz oder drohendes erhebliches Versagen von Gebäuden und Bauwerken"
 art_zuordnung: ["Sonstiges", "Hochwasser / Überschwemmung", "Erdbeben", "KRITIS-Ausfall"]
-art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge"
-anschluss: "B04, B17, C05; B01/B02 bei Starkregen- oder Hochwasserbezug, B06 bei Schnee- oder Eislast, B07/B16 bei Explosion oder Vorsatz; C13, C16 und Sektor-SOP nach Folge"
+art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; weitere Ursachenarten (B01, B06, B07, B16) nur bei belegtem Bezug; „KRITIS-Ausfall“ bei belegter Folge; sonst „Sonstiges“"
+anschluss: "B04, B17, C05; B01/B02 bei Starkregen- oder Hochwasserbezug, B06 bei Schnee- oder Eislast, B07 bei Explosion in Anlagen oder bei Gefahrguttransporten, B16 bei behördlich benanntem Vorsatzbezug, sonst B17; C13, C16 und Sektor-SOP nach Folge"
 zweck: "Fachrecherche für Massenbewegungen, Bodenversagen und Bauwerksversagen unabhängig von der Ursache; die Ursache wird über die passende SOP ergänzt."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -1655,11 +1672,11 @@ bisherige_ids: ["baustein-n09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Zwei fachliche Prüfpfade unter einer Kennung: (a) Massenbewegungen und Bodenversagen, z. B. Hangrutschung, Felssturz, Erdfall, Tagesbruch oder Bergsenkung; (b) Einsturz oder fachlich begründet drohendes erhebliches Versagen von Gebäuden und Bauwerken einschließlich Brücken und anderer Verkehrsbauwerke. Relevanz nach A.1 aus Schutz- oder Rettungsbedarf, Unterkunftsverlust, kritischem Funktionsverlust oder konkret begründetem übergreifendem Informations- oder Abstimmungsbedarf, nicht allein aus Schadensgröße oder Verwaltungsgrenze; auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit erheblich sein. Frühe Befassung vor dem Versagen ist bei fachbehördlich begründetem Hinweis möglich; nicht jeder Gebäudeschaden oder Karteneintrag gehört ins übergreifende Lagebild. Der Baustein gilt unabhängig von der Ursache. Sie wird über die passende SOP ergänzt (Erdbeben B04, Starkregen oder Hochwasser B01/B02, Schnee- oder Eislast B06, Explosion B07, Vorsatz B16) und darf offenbleiben; belegte Folgen werden trotzdem dargestellt. Fachbewertung durch geologische, bautechnische, bergbehördliche und Gefahrenabwehrstellen; keine eigene Standsicherheits- oder Rettbarkeitseinschätzung aus Bildern. Unfall- und Rettungsfolgen C05, Betreuung und Unterbringung C16, Verkehrswege C13.
+**Umfasst / grenzt ab von:** Zwei fachliche Prüfpfade unter einer Kennung: (a) Massenbewegungen und Bodenversagen, z. B. Hangrutschung, Felssturz, Erdfall, Tagesbruch oder Bergsenkung; (b) Einsturz oder fachlich begründet drohendes erhebliches Versagen von Gebäuden und Bauwerken einschließlich Brücken und anderer Verkehrsbauwerke. Relevanz nach A.1 aus Schutz- oder Rettungsbedarf, Unterkunftsverlust, kritischem Funktionsverlust oder konkret begründetem übergreifendem Informations- oder Abstimmungsbedarf, nicht allein aus Schadensgröße oder Verwaltungsgrenze; auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit erheblich sein. Frühe Befassung vor dem Versagen ist bei fachbehördlich begründetem Hinweis möglich; nicht jeder Gebäudeschaden oder Karteneintrag gehört ins übergreifende Lagebild. Der Baustein gilt unabhängig von der Ursache. Sie wird über die passende SOP ergänzt (Erdbeben B04, Starkregen oder Hochwasser B01/B02, Schnee- oder Eislast B06, Explosion in Anlagen oder bei Gefahrguttransporten B07, behördlich benannter Vorsatzbezug B16, sonst B17) und darf offenbleiben; belegte Folgen werden trotzdem dargestellt. Fachbewertung durch geologische, bautechnische, bergbehördliche und Gefahrenabwehrstellen; keine eigene Standsicherheits- oder Rettbarkeitseinschätzung aus Bildern. Unfall- und Rettungsfolgen C05, Betreuung und Unterbringung C16, Verkehrswege C13.
 
 **Befassungsanlässe:** Fachbehördlich begründeter Versagenshinweis · bestätigtes Ereignis mit Schutz- oder Rettungsbedarf, Unterkunftsverlust oder kritischem Funktionsverlust · Sperrung eines kritischen Verkehrsbauwerks oder einer einzigen Zufahrt.
 
-**Zuordnung im Schema:** „Sonstiges“; „Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge.
+**Zuordnung im Schema:** Ereignisart der belegten Ursache, z. B. „Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge; „Sonstiges“, wenn keine passende Ursachenart besteht oder die Ursache offen ist.
 
 ### 2. Erfassung: Prüffragen
 
@@ -1793,9 +1810,9 @@ lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
 lageart: "Fachlich erwartete oder bestätigte Vulkanaschelage mit Bezug zu Luftverkehr, Gesundheit oder kritischer Versorgung in Deutschland"
 art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
-anschluss: "B04, B12, B17, C13; C09/C10 bei medizinischen Gütern oder Transfers; B11 bei gesundheitlichen Folgen bodennaher Exposition"
+anschluss: "B17, B12, C13; C09/C10 bei medizinischen Gütern oder Transfers; B11 bei gesundheitlichen Folgen bodennaher Exposition; B04 nur bei gesondert belegtem Erdbeben mit eigenem Deutschlandbezug"
 zweck: "Erfassung von Verkehrs- und Versorgungsfolgen einer Vulkanaschelage."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2391,14 +2408,14 @@ kennung: "C12"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Gefährdung oder Störung der Kraftstoffversorgung (Einsatz, Notstrom, kritische Mobilität) und der Wärmeversorgung unabhängig vom Gas"
+lageart: "Gefährdung oder Störung der Kraftstoffversorgung (Einsatz, Notstrom, kritische Mobilität) und der Wärmeversorgung unabhängig von der Ursache; Gasversorgung selbst B09"
 art_zuordnung: ["KRITIS-Ausfall", "Gasversorgungsengpass", "Stromausfall / Blackout", "Sonstiges"]
 art_hinweis: "„Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall; „Sonstiges“ nur begründet, wenn kein vorhandenes Dach passt"
 anschluss: "B08, B09, B12, B17; C09, C13, C16, C17 nach konkretem Bezug"
 zweck: "Mangelprodukt, Wirkungsraum, Engpass der Versorgungskette und rechtzeitig wirksame Deckung kritischer Funktionen erfassen; Maßstab ist der Zeitpunkt bis zum Ausfall einer kritischen Funktion."
-version: "1.1.0"
+version: "1.1.1"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
-stand: "20.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "20.10.2026 – BBK PiB 18, ErdölBevG § 12, EnSiG §§ 1, 3, 4, MinÖlAV § 14, WiSiG § 2, MinÖlBewV § 11; keine Prüfung organisationsspezifischer Melde- und Anforderungswege"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2722,12 +2739,12 @@ bausteintyp: "Querschnittsbaustein"
 lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
 art_zuordnung: ["Migrationslage", "Sonstiges"]
-art_hinweis: "vorrangig die Ereignisart der Ursache; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
-anschluss: "A.5, A.9.1, A.9.2, B13"
+art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
+anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; A.5, A.9.1, A.9.2"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N03"
@@ -2738,9 +2755,11 @@ bisherige_ids: ["baustein-n03"]
 
 **Umfasst / grenzt ab von:** Evakuierungen, Schutz in Gebäuden, Unterkunftsverlust und Betreuungslagen aus jedem Anlass (Hochwasser, Industrieunfall, Kampfmittelfund, Stromausfall u. a.); Migration ist nur ein möglicher Anlass (B13). Keine operative Evakuierungsplanung durch die Redaktion. Schutz in Gebäuden und Evakuierung werden als unterschiedliche behördliche Maßnahmen dokumentiert.
 
+**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
+
 **Befassungsanlässe:** Angeordnete oder konkret vorbereitete Evakuierung · Unterkunftsverlust oder größerer Schutz- bzw. Betreuungsbedarf · länderübergreifende Aufnahme- oder Transportabstimmung.
 
-**Zuordnung im Schema:** Ursachenart des Ereignisses; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“, falls kein passender Ursachenwert besteht.
+**Zuordnung im Schema:** Ursachenart des Anlasses (z. B. Hochwasser, Industrieunfall, Stromausfall), ohne Beschränkung auf die Werte im Kopf; „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“, falls kein passender Ursachenwert besteht.
 
 ### 2. Erfassung: Prüffragen
 
@@ -2759,7 +2778,7 @@ bisherige_ids: ["baustein-n03"]
 - **D4:** Herkunft tatsächlich eingesetzter Transport- und Betreuungskräfte.
 - **D5:** Zielzustand benennen (Rückkehr, gesicherte Zwischenunterbringung, Ende der Betreuung).
 
-**Offenlassen:** D2 ohne gezählte Personen; D5 ohne Rückkehrperspektive.
+**Offenlassen:** D2 ohne gezählte Personen (die Bevölkerung des Räumungsgebiets ist keine Zahl der Evakuierten); D5 ohne benannten Zielzustand und tragfähige Prognose – ein Rückkehrkriterium oder ein Plan ist keine Prognose.
 
 ### 4. Darstellung
 
@@ -2782,12 +2801,12 @@ bausteintyp: "Querschnittsbaustein"
 lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Zivile Schutz-, Versorgungs- und Verwaltungsfolgen im Kontext der zivilen Verteidigung"
 art_zuordnung: ["Sonstiges"]
-art_hinweis: "„Sonstiges“ als begründetes Dach für eine noch nicht abgebildete Ursache; vorhandene Folgenarten passend ergänzen"
-anschluss: "A.1, B14, B15, B16"
+art_hinweis: "vorrangig die tatsächlich passenden Ursachen- und Folgenarten (Querschnitt, A.1 Nr. 7); „Sonstiges“ nur begründet, wenn kein vorhandenes Dach den Gegenstand trägt; C17 allein begründet weder eine Ereignisart noch einen förmlichen Rechtszustand"
+anschluss: "A.1, A.7.4; Fach-SOP und Bausteine nach betroffener ziviler Funktion (insbesondere C01, C09–C16); B14, B15, B16 nur bei belegtem Sicherheits-, Cyber- oder Tatbezug"
 zweck: "Gemeinsamer Betrachtungsrahmen für Folgen von Waffeneinwirkung, längerfristigem Schutzbedarf, eingeschränkter staatlicher Handlungsfähigkeit und gleichzeitiger Beanspruchung ziviler Fähigkeiten – ausschließlich ziviler Wirkungsbezug."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N13"
@@ -2800,7 +2819,7 @@ bisherige_ids: ["baustein-n13"]
 
 **Befassungsanlässe:** Behördlich belegte zivilschutzrelevante Entwicklung · konkrete Einschränkung staatlicher oder lebenswichtiger ziviler Funktionen · belegter zusätzlicher ziviler Versorgungs- bzw. Betreuungsbedarf.
 
-**Zuordnung im Schema:** „Sonstiges“ als begründetes Dach für eine noch nicht abgebildete Ursache; vorhandene Folgenarten passend ergänzen.
+**Zuordnung im Schema:** Die tatsächlich passenden Ursachen- und Folgenarten (z. B. „KRITIS-Ausfall“ bei belegter Funktionseinschränkung). „Sonstiges“ nur begründet, wenn kein vorhandenes Dach den Gegenstand trägt; die Auswahl von C17 allein begründet keinen zusätzlichen Sachverhalt und keine Sicherheits- oder Sabotageart. Kontext und gegebenenfalls amtlich festgestellter Rechtszustand werden getrennt genannt.
 
 ### 2. Erfassung: Prüffragen
 
