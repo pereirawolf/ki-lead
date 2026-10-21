@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/evaluation/bewertungsschema.json",
+  "title": "Bewertung eines KI-LEAD-Laufs",
+  "description": "Eine Bewertung je Entwurf und bewertender Person. Blind: Variante und Kosten werden erst nach der Bewertung zugeordnet.",
+  "type": "object",
+  "required": ["format", "fall", "kennung", "bewertet_am", "blind", "kriterien", "unbelegte_aussagen", "gesamt"],
+  "additionalProperties": false,
+  "$defs": {
+    "note": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "kriterium": {
+      "type": "object",
+      "required": ["note", "begruendung"],
+      "additionalProperties": false,
+      "properties": { "note": { "$ref": "#/$defs/note" }, "begruendung": { "type": "string", "minLength": 1 } }
+    },
+    "stufe": {
+      "type": "object",
+      "required": ["modell", "aufwand"],
+      "additionalProperties": false,
+      "properties": {
+        "modell": { "type": "string", "minLength": 1 },
+        "aufwand": { "enum": ["low", "medium", "high", "xhigh", "max"] }
+      }
+    }
+  },
+  "properties": {
+    "format": { "const": "ki-lead-bewertung/1" },
+    "fall": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "planfassung": { "type": "string" },
+    "kennung": { "type": "string", "minLength": 1, "description": "Zufällige Kennung, unter der der Entwurf blind vorlag" },
+    "bewertet_am": { "type": "string", "format": "date" },
+    "bewertet_von": { "type": "string", "description": "Rolle oder Kürzel, kein vollständiger Name nötig" },
+    "blind": { "type": "boolean" },
+    "kriterien": {
+      "type": "object",
+      "required": ["belege", "zeit", "referenzraum", "unsicherheit", "radar", "empfehlungen"],
+      "additionalProperties": false,
+      "properties": {
+        "belege": { "$ref": "#/$defs/kriterium" },
+        "zeit": { "$ref": "#/$defs/kriterium" },
+        "referenzraum": { "$ref": "#/$defs/kriterium" },
+        "unsicherheit": { "$ref": "#/$defs/kriterium" },
+        "radar": { "$ref": "#/$defs/kriterium" },
+        "empfehlungen": { "$ref": "#/$defs/kriterium" }
+      }
+    },
+    "unbelegte_aussagen": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["aussage"],
+        "additionalProperties": false,
+        "properties": { "aussage": { "type": "string", "minLength": 1 }, "feld": { "type": "string" }, "schwere": { "enum": ["gering", "erheblich"] } }
+      }
+    },
+    "gesamt": {
+      "type": "object",
+      "required": ["note", "begruendung"],
+      "additionalProperties": false,
+      "description": "Ganzheitliches Urteil, kein Mittelwert der Kriterien",
+      "properties": { "note": { "$ref": "#/$defs/note" }, "begruendung": { "type": "string", "minLength": 1 } }
+    },
+    "variante": {
+      "type": "object",
+      "description": "Erst nach der blinden Bewertung ergänzt",
+      "additionalProperties": false,
+      "properties": { "s1": { "$ref": "#/$defs/stufe" }, "s2": { "$ref": "#/$defs/stufe" }, "material": { "enum": ["ohne", "pdf", "eingaenge"] } }
+    },
+    "lauf": {
+      "type": "object",
+      "description": "Aus dem Laufprotokoll übernommen, erst nach der Bewertung",
+      "additionalProperties": false,
+      "properties": {
+        "kennung": { "type": "string" },
+        "kosten_usd": { "type": ["number", "null"], "minimum": 0 },
+        "dauer_s": { "type": "number", "minimum": 0 },
+        "websuchen": { "type": "integer", "minimum": 0 },
+        "schemakonform": { "type": "boolean" }
+      }
+    }
+  }
+}

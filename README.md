@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.4.22, Meilenstein 4 (Verdichtung, zwei KI-Anbieter); siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.4.23, Meilenstein 4 (Verdichtung, zwei KI-Anbieter); siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -80,16 +80,18 @@ Voraussetzung ist Node.js 22.
 ```
 npm ci                  # Abhängigkeiten nach package-lock.json
 npm run dev             # Entwicklungsserver
-npm test                # Tests (Kern, Profile, Übungsdaten, Referenzvergleich mit Ajv, Anbieter und Pipeline mit Attrappe)
+npm test                # Tests (Kern, Profile, Pipeline, Anbieter, Oberfläche; KI-Anbieter simuliert)
+npm run test:zufall     # dieselben Tests in zufälliger, fester Reihenfolge
+npm run test:browser    # Browsertests mit Playwright gegen den Build (einmalig: npx playwright install chromium)
 npm run build           # Produktionsbuild nach dist/
 npm run sop:lesefassung # Lesefassung der SOP-Sammelmappe neu erzeugen
 ```
 
-Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter einer strengen Content-Security-Policy. Die Tests vergleichen ihr Urteil mit Ajv als Referenz.
+Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter einer strengen Content-Security-Policy. Die Tests vergleichen ihr Urteil mit Ajv als Referenz. Aufbau, Hilfen und Regeln der Tests: [docs/TESTS.md](docs/TESTS.md); die inhaltliche Bewertung von KI-Modellen ist davon getrennt und in [evaluation/](evaluation/README.md) beschrieben.
 
 **Testdaten:** Im Ordner `profile/lead-beispiel/beispiele/orkantief-ilka` liegt der **fiktive** Datensatz Orkantief „Ilka“ mit sechs Ländermeldungen und der daraus verdichteten Meldung einer Koordinierungsstelle; keine Meldung stammt von den darin genannten Stellen (siehe `LIESMICH.md` dort). Eigene Testdaten unter `privat/testdaten/<satz>/` prüft `npm test` mit, wenn dort eine Datei `profil.txt` den Profilordner nennt.
 
-**Prüfung und Veröffentlichung:** GitHub Actions prüft Pull Requests, Änderungen am Hauptzweig `main` und manuell gestartete Läufe mit Tests und Build. Die Veröffentlichung auf GitHub Pages ist gesondert konfiguriert und setzt die Repository-Variable `PAGES_AKTIV=true` sowie „GitHub Actions“ als Pages-Quelle voraus (`.github/workflows/pages.yml`).
+**Prüfung und Veröffentlichung:** GitHub Actions prüft Pull Requests, Änderungen am Hauptzweig `main` und manuell gestartete Läufe mit Tests (auch in zufälliger Reihenfolge), Build und Browsertests. Die Veröffentlichung auf GitHub Pages ist gesondert konfiguriert und setzt die Repository-Variable `PAGES_AKTIV=true` sowie „GitHub Actions“ als Pages-Quelle voraus (`.github/workflows/pages.yml`).
 
 **SOPs bearbeiten:** Maßgeblich sind die Einzeldateien unter `profile/lead-beispiel/sop/`; welche davon die App lädt, steht im Profilmanifest unter `sop.dateien`. Nach Änderungen `npm run sop:lesefassung` ausführen; die erzeugte Lesefassung und die Archivfassungen nicht von Hand bearbeiten. Fassungen und Gültigkeitsstand (Teil A) sowie die Änderungsverläufe nach den Pflegeregeln fortschreiben.
 
@@ -97,7 +99,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.4.22), jedes Profil eine eigene Version (Beispielprofil 1.10.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.4.23), jedes Profil eine eigene Version (Beispielprofil 1.10.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -121,6 +123,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.22) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.4.23) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.
