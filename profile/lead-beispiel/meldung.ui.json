@@ -395,5 +395,176 @@
       "abweichung",
       "abschluss"
     ]
+  },
+  "feldhilfen": {
+    "format": "lead-feldhilfen/1",
+    "felder": {
+      "analyse.lage_ereignis": {
+        "vorlagen": [
+          {
+            "id": "kernaussage",
+            "label": "Kernaussage:",
+            "vorlage": "Kernaussage: ⟦zentrale Aussage zur Lage⟧.",
+            "position": "anfang"
+          },
+          {
+            "id": "bestaetigt",
+            "label": "Bestätigt ist",
+            "vorlage": "Bestätigt ist ⟦tatsächlich bestätigter Sachstand⟧ (Stand: ⟦Datenstand⟧; ⟦Quellenverweis⟧).",
+            "hinweis": "Nur bei bestätigtem Sachstand verwenden. Der Klick bestätigt den Inhalt nicht. Vorläufige, indirekte oder widersprüchliche Angaben weiterhin frei und mit ihrem tatsächlichen Bestätigungsgrad erfassen."
+          },
+          {
+            "id": "einordnung",
+            "label": "Einordnung „…“:",
+            "vorlage": "Einordnung „⟦Begriff⟧“: ⟦belegte Einordnung und Bezug zum Referenzraum⟧.",
+            "hinweis": "Keine neue Ereignisart, amtliche Feststellung oder Bewertung durch den Klick setzen."
+          }
+        ]
+      },
+      "analyse.risiken_auswirkungen": {
+        "vorlagen": [
+          {
+            "id": "wirkungen",
+            "label": "Eingetretene Wirkungen:",
+            "vorlage": "Eingetretene Wirkungen: ⟦belegte Auswirkungen im Referenzraum⟧ (Stand: ⟦Datenstand⟧; ⟦Quellenverweis⟧)."
+          },
+          {
+            "id": "entwicklungen",
+            "label": "Mögliche Entwicklungen:",
+            "vorlage": "Mögliche Entwicklungen: ⟦mögliche Entwicklung unter benannter Bedingung und mit vorhandenem Zeithorizont⟧."
+          },
+          {
+            "id": "szenario",
+            "label": "Szenario:",
+            "vorlage": "Szenario: ⟦Annahme, Bedingung und mögliche Folge; Zeithorizont, soweit vorhanden⟧."
+          },
+          {
+            "id": "einschaetzung",
+            "label": "Einschätzung (…):",
+            "vorlage": "Einschätzung ({{kurzname}}): ⟦eigene, als solche gekennzeichnete Schlussfolgerung⟧.",
+            "hinweis": "Nur für eigene Einschätzungen der meldenden Stelle. Fehlt der Kurzname im Profil, bleibt er als offene Stelle sichtbar."
+          }
+        ]
+      },
+      "analyse.massnahmen_empfehlungen": {
+        "vorlagen": [
+          {
+            "id": "massnahmen",
+            "label": "Bestehende Maßnahmen:",
+            "vorlage": "Bestehende Maßnahmen: ⟦verantwortliche Stelle⟧ – ⟦dokumentierte Maßnahme⟧; Status: ⟦Status auswählen⟧; Stand: ⟦Datenstand⟧; ⟦Quellenverweis⟧.",
+            "status_auswahl": [
+              "geplant",
+              "angefordert",
+              "angeordnet",
+              "begonnen",
+              "umgesetzt",
+              "wirksam",
+              "beendet"
+            ],
+            "hinweis": "Kein Status ist vorausgewählt. „wirksam“ nur bei belegter Wirkung. Eigene Maßnahmen nur im tatsächlichen Auftrag."
+          },
+          {
+            "id": "empfehlung",
+            "label": "Prüf- und Abstimmungsbedarf:",
+            "vorlage": "Prüf- und Abstimmungsbedarf: (1) ⟦zuständige Stelle⟧ sollte bis ⟦belegter Termin oder offen⟧ ⟦Prüfung oder Entscheidung⟧, weil ⟦Anlass und belegte Lücke⟧.",
+            "hinweis": "Empfehlung, keine Weisung und keine bereits vollzogene Maßnahme. Weitere Punkte als (2), (3) … in demselben Absatz. Ein Termin wird nicht automatisch ergänzt."
+          },
+          {
+            "id": "abstimmungen",
+            "label": "Abstimmungen",
+            "vorlage": "Abstimmungen ⟦tatsächlicher Stand und beteiligte Stellen⟧ (Stand: ⟦Datenstand⟧; ⟦Quellenverweis⟧).",
+            "hinweis": "Weder eine erfolgte noch eine unterbliebene Abstimmung voraussetzen."
+          }
+        ]
+      },
+      "analyse.abhaengigkeiten_interdependenzen": {
+        "vorlagen": [
+          {
+            "id": "kopplung",
+            "label": "Belegte Kopplungen:",
+            "vorlage": "Belegte Kopplungen: ⟦beeinträchtigte Funktion⟧ wirkt über ⟦belegte Abhängigkeit und Bedingung⟧ auf ⟦weiteren Bereich⟧ (⟦Quellenverweis⟧)."
+          },
+          {
+            "id": "wirkungskette",
+            "label": "Wirkungskette:",
+            "vorlage": "Wirkungskette: ⟦beeinträchtigte Funktion⟧ → ⟦entscheidende Abhängigkeit und Bedingung⟧ → ⟦weiterer Bereich⟧; ⟦Puffer, der die Folgewirkung derzeit aufhält, und seine belegte Reichweite – oder offen⟧; ⟦Quellenverweis⟧.",
+            "hinweis": "Nur bei bewertungsrelevanter Folgekette (SOP-LEAD A.5 Nr. 3); Puffer und Reichweite nicht schätzen."
+          },
+          {
+            "id": "szenario",
+            "label": "Szenario:",
+            "vorlage": "Szenario: ⟦Bedingung, ausdrücklich mögliche Folgekette und vorhandener Zeithorizont⟧.",
+            "hinweis": "Ein mögliches Szenario ist keine belegte Kopplung und setzt keinen D6-Wert."
+          }
+        ]
+      },
+      "sofort.bewertung_text": {
+        "vorlagen": [
+          {
+            "id": "kernaussage",
+            "label": "Kernaussage:",
+            "vorlage": "Kernaussage: ⟦Bedeutung für den Bevölkerungsschutz, Veränderung und gegebenenfalls Prüf- oder Abstimmungsfrage⟧.",
+            "position": "anfang"
+          },
+          {
+            "id": "referenzraum",
+            "label": "Referenzraum:",
+            "vorlage": "Referenzraum: ⟦Referenzraum der Bewertung⟧. t0: {{t0}}.",
+            "position": "vor_kennsaetzen",
+            "hinweis": "Den Referenzraum für diese Bewertung selbst eintragen (z. B. „Land Hessen“). t0 ist der Meldezeitpunkt der Meldung; fehlt er, bleibt eine offene Stelle."
+          },
+          {
+            "id": "beurteilung",
+            "label": "Beurteilung „…“:",
+            "vorlage": "Beurteilung „{{beurteilung}}“: ⟦bereits vorliegende Begründung im Referenzraum⟧.",
+            "position": "vor_kennsaetzen",
+            "nur_mit_wert": "beurteilung",
+            "hinweis": "Nur bei gewählter Beurteilung verfügbar. Keine Einstufung und keine Begründung automatisch erzeugen."
+          },
+          {
+            "id": "tendenz",
+            "label": "Tendenz „…“:",
+            "vorlage": "Tendenz „{{tendenz}}“: ⟦bereits vorliegende Begründung mit Bezugsraum und Vergleichszeitraum⟧.",
+            "position": "vor_kennsaetzen",
+            "nur_mit_wert": "tendenz",
+            "hinweis": "Nur bei gewählter Tendenz verfügbar."
+          },
+          {
+            "id": "neubewertung",
+            "label": "Neubewertung bei:",
+            "vorlage": "⟦Indikator oder Bedingung, die eine Neubewertung erfordern würde⟧",
+            "kennsatz": "neubewertung"
+          },
+          {
+            "id": "frist",
+            "label": "Handlungsrelevant bis:",
+            "vorlage": "⟦TT.MM.JJJJ HH:MM⟧ – ⟦Aufgabe, Adressat⟧ – ⟦Bedingung, falls zutreffend⟧; Grundlage: ⟦Quellenverweis⟧",
+            "kennsatz": "handlungsrelevant",
+            "hinweis": "Nur bei zeitgebundenem Bedarf. Unbelegte Uhrzeit und nicht zutreffende Bedingung von Hand streichen. Mehrere Fristen in derselben Zeile, die früheste zuerst."
+          },
+          {
+            "id": "aenderung",
+            "label": "Änderung zur Vormeldung:",
+            "vorlage": "⟦wesentliche Änderung gegenüber der Vormeldung mit Zeitbezug⟧",
+            "kennsatz": "aenderung",
+            "hinweis": "Nur bei Fortschreibung desselben Sachverhalts (A.8.1)."
+          },
+          {
+            "id": "abweichung",
+            "label": "Abweichende Bewertung:",
+            "vorlage": "⟦Stelle A⟧ „⟦Stufe⟧“ – ⟦tragender Grund⟧; ⟦Stelle B⟧ „⟦Stufe⟧“ – ⟦tragender Grund⟧. Ursache: ⟦Bezugsraum / Datenstand / Zielzustand / Maßstab⟧. Klärend wäre: ⟦Information⟧.",
+            "kennsatz": "abweichung",
+            "hinweis": "Textbaustein aus A.7.2; Bewertungen nicht angleichen oder mitteln."
+          },
+          {
+            "id": "abschluss",
+            "label": "Abschluss im Lagebild:",
+            "vorlage": "⟦Ende des Ereignisses⟧; offen bleiben: ⟦offene Punkte oder „nichts“⟧; Nachsorge bei: ⟦zuständige Stelle⟧",
+            "kennsatz": "abschluss",
+            "hinweis": "Nur bei bewusster letzter Nennung nach Prüfung des Nachlaufs (A.8.2). Entspannung allein bedeutet keinen Abschluss."
+          }
+        ]
+      }
+    }
   }
 }

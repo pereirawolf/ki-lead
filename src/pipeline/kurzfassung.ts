@@ -14,6 +14,7 @@ import { ersetzePlatzhalter } from "../profil/platzhalter";
 import { modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
 import type { StufenEintrag } from "./lauf";
+import { offenePlatzhalter } from "../kern/feldhilfen";
 
 export const STANDARD_ANWEISUNG = `# Arbeitsanweisung Kurzfassung: Management Summary
 
@@ -166,14 +167,17 @@ export function fristen(d: Meldung, profil: Profil): Frist[] {
     for (const wert of kennsaetzeAlle(holeWert(sv, feld), prefix)) {
       const datum = parseDatumDE(wert, zoneOder(profil.manifest.variablen?.zeitzone));
       if (!datum) continue;
+      // Offene Vorlagenstellen ⟦…⟧ samt Trennzeichen davor nicht in die Fassung übernehmen, aber kennzeichnen
+      const unvollstaendig = offenePlatzhalter(wert).length > 0;
       const text = wert
+        .replace(/\s*(?:–|-|;|,)?\s*⟦[^⟦⟧\n]*⟧/g, "")
         .replace(/\s*\[Q[^\]]*\]/g, "")
         .replace(/[;,.]?\s*Grundlage:.*$/i, "")
         .replace(/[\s;,.]+$/, "")
         .trim();
       if (!text || gesehen.has(text)) continue;
       gesehen.add(text);
-      out.push({ datum, text, ueberfaellig: !!stand && datum < stand });
+      out.push({ datum, text: unvollstaendig ? `${text} (Angaben unvollständig)` : text, ueberfaellig: !!stand && datum < stand });
     }
   }
   return out.sort((a, b) => a.datum.getTime() - b.datum.getTime());
@@ -327,8 +331,23 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
       abschnitte: Object.fromEntries(abschnitte(profil).map((x) => [x.schluessel, rein(roh.abschnitte[x.schluessel])])),
       kurztitel: Array.isArray(roh.kurztitel) ? roh.kurztitel.map(rein) : [],
     };
+    // Offene Vorlagenstellen ⟦…⟧ aus der Meldung gehören nicht in die Fassung
+    let offen = false;
+    const ohneOffen = (t: string) => {
+      if (!offenePlatzhalter(t).length) return t;
+      offen = true;
+      return t
+        .replace(/\s*(?:–|-|;|,)?\s*⟦[^⟦⟧\n]*⟧/g, "")
+        .replace(/\s+([.,;:])/g, "$1")
+        .trim();
+    };
+    struktur.kernaussage = ohneOffen(struktur.kernaussage);
+    for (const s of Object.keys(struktur.abschnitte)) struktur.abschnitte[s] = ohneOffen(struktur.abschnitte[s]);
+    struktur.kurztitel = struktur.kurztitel.map(ohneOffen);
     const hinweise = kurzfassungHinweise(struktur, zahl);
     if (entfernt) hinweise.push("Verbliebene Quellenverweise oder URLs wurden entfernt.");
+    if (offen)
+      hinweise.push("Offene Vorlagenstellen ⟦…⟧ aus der Meldung wurden nicht übernommen; die Meldung ist noch nicht vollständig ausgefüllt. Bitte prüfen.");
     eintrag.befunde = hinweise;
     return { text: kurzfassungText(d, profil, struktur), struktur, hinweise, eintrag, erstellt: new Date().toISOString() };
   } catch (err: any) {

@@ -168,6 +168,35 @@ export interface UiKonfig {
   bewertung_gliederung?: TextGliederung;
   /** Gliederung der Analysefelder (Rolle sv_analysefelder) in Ausgaben. */
   analyse_gliederung?: TextGliederung;
+  /** Optionale LEAD-Eingabehilfen: Vorlagen vorhandener Satzanfänge und Kennsätze je Textfeld */
+  feldhilfen?: FeldhilfenKonfig;
+}
+
+/** Vorlage für einen vorhandenen Satzanfang oder Kennsatz; offene Stellen als ⟦…⟧, gelesene Werte als {{t0}} usw. */
+export interface FeldhilfeVorlage {
+  id: string;
+  /** Beschriftung der Schaltfläche (der Satzanfang) */
+  label: string;
+  vorlage: string;
+  hinweis?: string;
+  /** Einfügestelle; Vorgabe „ende“ (neuer Absatz). Nicht zusammen mit „kennsatz“. */
+  position?: "anfang" | "vor_kennsaetzen" | "ende";
+  /** Schlüssel aus „kennsaetze“ (nur Bewertungstext): eigene Zeile im Kennsatzblock am Textende */
+  kennsatz?: string;
+  /** Auswahl für ⟦Status auswählen⟧ (keine Vorauswahl) */
+  status_auswahl?: string[];
+  /** Nur verfügbar, wenn dieser Auswahlwert des Sachverhalts gesetzt ist */
+  nur_mit_wert?: "beurteilung" | "tendenz";
+}
+
+export interface Feldhilfe {
+  vorlagen: FeldhilfeVorlage[];
+}
+
+export interface FeldhilfenKonfig {
+  format: "lead-feldhilfen/1";
+  /** Schlüssel relativ zu einem Sachverhalt (Einträge aus sv_analysefelder und sv_bewertung_text) */
+  felder: Record<string, Feldhilfe>;
 }
 
 export interface Sop {

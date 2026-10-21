@@ -78,6 +78,8 @@ export default function App() {
   const [aktiv, setAktiv] = useState<string>();
   const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
   const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
+  /** Zählt Dokumentinstanzen der Meldungsmaske (neue Meldung, geöffnete Datei, Übernahme, Profilwechsel) */
+  const [dokumentNr, setDokumentNr] = useState(0);
   const [gesichert, setGesichert] = useState<string>();
   /** Ausstehende Speicherungen je Profil (Entprellung), damit ein Profilwechsel nichts verliert */
   const ausstehend = useRef(new Map<string, { daten: Meldung; timer: number }>());
@@ -181,6 +183,7 @@ export default function App() {
   /** Meldung in der Maske durch eine andere ersetzen; die Management Summary der alten Meldung wird geleert. */
   const meldungErsetzen = (m: Meldung) => {
     setMeldung(m);
+    setDokumentNr((n) => n + 1);
     if (profil) kurzfassungLeeren(profil.manifest.id);
   };
 
@@ -291,6 +294,7 @@ export default function App() {
     aktivesProfilId.current = profil.manifest.id;
     let gueltig = true;
     setMeldungRoh(null);
+    setDokumentNr((n) => n + 1);
     (async () => {
       let z: Awaited<ReturnType<typeof zwischenstandLesen>>;
       try {
@@ -471,8 +475,9 @@ export default function App() {
               meldung={meldung}
               setMeldung={setMeldung}
               neu={() => meldungErsetzen(neueMeldung(profil))}
-              ersetzt={() => kurzfassungLeeren(profil.manifest.id)}
+              ersetzen={meldungErsetzen}
               zwischenstand={gesichert}
+              dokument={dokumentNr}
               ki={{ schluessel, einstellungen }}
             />
           </Fehlergrenze>
@@ -516,7 +521,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.23. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.4.24. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

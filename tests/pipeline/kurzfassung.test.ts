@@ -194,3 +194,36 @@ describe("F08: Fingerabdruck der Management Summary", () => {
     expect(kurzfassungsFingerabdruck(d, anders)).not.toBe(kurzfassungsFingerabdruck(d, p));
   });
 });
+
+// LEAD-Eingabehilfen (Umsetzungsbeschreibung vom 21.10.2026, A11): keine offenen Stellen in der Fassung
+describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
+  it("offene Stellen samt Trennzeichen entfallen, die Frist ist als unvollständig gekennzeichnet", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("HE");
+    m.sachverhalte[0].sofort.bewertung_text =
+      "Kernaussage: Z.\nHandlungsrelevant bis: 22.10.2026 12:00 – ⟦Aufgabe, Adressat⟧ – ⟦Bedingung, falls zutreffend⟧; Grundlage: ⟦Quellenverweis⟧";
+    const f = fristen(m, p!);
+    expect(f.map((x) => x.text)).toEqual(["22.10.2026 12:00 (Angaben unvollständig)"]);
+  });
+
+  it("eine Frist ohne lesbares Datum entfällt wie bisher", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("HE");
+    m.sachverhalte[0].sofort.bewertung_text = "Kernaussage: Z.\nHandlungsrelevant bis: ⟦TT.MM.JJJJ HH:MM⟧ – ⟦Aufgabe, Adressat⟧";
+    expect(fristen(m, p!)).toEqual([]);
+  });
+
+  it("übernimmt aus der KI-Antwort keine offenen Stellen und weist darauf hin", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
+    const antwort = {
+      kernaussage: "Kernaussage: ⟦zentrale Aussage⟧.",
+      abschnitte: { lage_ereignis: "L ⟦offen⟧.", risiken_auswirkungen: "R.", massnahmen_empfehlungen: "M.", abhaengigkeiten_interdependenzen: "A." },
+      kurztitel: ["Stromausfall Sonneberg"],
+    };
+    const k = await kurzfassungErstellen(p!, eins, attrappe(JSON.stringify(antwort)), STANDARD);
+    expect(k.text).not.toMatch(/⟦|⟧/);
+    expect(k.struktur.abschnitte.lage_ereignis).toBe("L.");
+    expect(k.hinweise.join(" ")).toMatch(/Offene Vorlagenstellen ⟦…⟧ aus der Meldung wurden nicht übernommen/);
+  });
+});

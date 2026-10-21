@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.15 vom 20.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.16 vom 21.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -132,6 +132,54 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 - `analyse_gliederung`: dasselbe für die Analysefelder (Rolle `sv_analysefelder`). Ein Umbruch entsteht nur nach einem Satzende (`. ; ! ? ) ] “`), bei `zeile` auch nach einem Doppelpunkt, damit eine Aufzählung „Prüfbedarf: (1) … (2) …“ untereinander steht. Mit `kurzlabel: n` beginnt zusätzlich jeder kurze Aspektbegriff aus höchstens n Wörtern mit Doppelpunkt eine neue Zeile („Strom:“, „Verkehr → Versorgung:“, „Land (Behörde):“); Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Begriff. `kurzlabel` gilt auch in `bewertung_gliederung`, Werte 0 bis 8, 0 oder fehlend schaltet es ab. Beispiel: `{ "absatz": ["Szenario:", "Einordnung „"], "zeile": ["\\(\\d+\\) "], "kurzlabel": 3 }`. Die Gliederung betrifft nur Ausgaben (PDF, Kopiervorlage, Lagebild-Tabelle), nie die gespeicherte Meldung.
 - `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck; Fristen und Ausgabe gelten in der Zeitzone `variablen.zeitzone`, Standard Europe/Berlin) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
 
+### `feldhilfen` (LEAD-Eingabehilfen)
+
+Optionale Vorlagen für die Textfelder eines Sachverhalts mit der Rolle `sv_analysefelder` oder `sv_bewertung_text`. Unter jedem konfigurierten Feld zeigt die App einen zugeklappten Bereich „LEAD-Eingabehilfen“; jede Schaltfläche fügt eine Vorlage mit offenen Stellen `⟦…⟧` in genau dieses Feld ein. Die Vorlagen sind freiwillige Eingabehilfen nach den bestehenden Regeln des Profils: Sie sollen nur Satzanfänge und Kennsätze verwenden, die das Profil schon führt (Gliederung, Kennsätze, Arbeitsanweisung), und begründen weder neue Kennsätze noch Pflichtangaben. Es gibt keine KI-Funktion und keine Netzwerkanfrage.
+
+```json
+"feldhilfen": {
+  "format": "lead-feldhilfen/1",
+  "felder": {
+    "analyse.massnahmen_empfehlungen": {
+      "vorlagen": [
+        { "id": "massnahmen", "label": "Bestehende Maßnahmen:",
+          "vorlage": "Bestehende Maßnahmen: ⟦verantwortliche Stelle⟧ – ⟦dokumentierte Maßnahme⟧; Status: ⟦Status auswählen⟧; Stand: ⟦Datenstand⟧; ⟦Quellenverweis⟧.",
+          "status_auswahl": ["geplant", "angefordert", "angeordnet", "begonnen", "umgesetzt", "wirksam", "beendet"] }
+      ]
+    },
+    "sofort.bewertung_text": {
+      "vorlagen": [
+        { "id": "beurteilung", "label": "Beurteilung „…“:", "position": "vor_kennsaetzen", "nur_mit_wert": "beurteilung",
+          "vorlage": "Beurteilung „{{beurteilung}}“: ⟦bereits vorliegende Begründung im Referenzraum⟧." },
+        { "id": "neubewertung", "label": "Neubewertung bei:", "kennsatz": "neubewertung",
+          "vorlage": "⟦Indikator oder Bedingung, die eine Neubewertung erfordern würde⟧" }
+      ]
+    }
+  }
+}
+```
+
+Die Schlüssel unter `felder` sind Pfade relativ zum Sachverhalt, wie in den Rollen. Je Feld gibt es nur `vorlagen` (nicht leere Liste, Reihenfolge der Schaltflächen). Je Vorlage:
+
+| Angabe | Bedeutung |
+|---|---|
+| `id` | eindeutig im Feld |
+| `label` | Beschriftung der Schaltfläche (der Satzanfang) |
+| `vorlage` | Klartext ohne spitze Klammern; offene Stellen als vollständiges `⟦…⟧` (1 bis 160 Zeichen, eine Zeile) |
+| `hinweis` | optional; steht sichtbar neben der Schaltfläche |
+| `position` | `anfang`, `vor_kennsaetzen` (vor den Block der Kennsatzzeilen am Textende) oder `ende` (Vorgabe); immer als eigener Absatz |
+| `kennsatz` | Schlüssel aus `kennsaetze`, nur im Bewertungstext und nicht zusammen mit `position`: die App stellt den Satzanfang aus `kennsaetze` voran und fügt eine eigene Zeile im Kennsatzblock am Textende ein, in der Reihenfolge von `kennsaetze` |
+| `status_auswahl` | Werte für `⟦Status auswählen⟧`; ohne Vorauswahl |
+| `nur_mit_wert` | `beurteilung` oder `tendenz`: Pflicht, wenn die Vorlage `{{beurteilung}}` bzw. `{{tendenz}}` enthält; ohne gewählten Wert ist die Schaltfläche gesperrt und nennt den Grund |
+
+Gelesene Werte (nur beim Einfügen, nie geschrieben): `{{beurteilung}}` und `{{tendenz}}` des Sachverhalts, `{{t0}}` aus der Rolle `meldezeitpunkt` als „TT.MM.JJJJ, HH:MM Uhr“ bzw. „TT.MM.JJJJ“, `{{kurzname}}` aus `variablen.kurzname`. Fehlt ein Wert, bleibt eine offene Stelle; das aktuelle Datum wird nie eingesetzt. `⟦Quellenverweis⟧` ersetzt die App nur, wenn in „Quelle“ ein vorhandener Eintrag `[Qn]` des Quellenverzeichnisses gewählt ist.
+
+Beim Einfügen wird vorhandener Text nicht umformuliert oder umsortiert; nur die Leerzeilen um den eingefügten Absatz werden vereinheitlicht. Beginnt der Text schon mit dem Satzanfang einer `anfang`-Vorlage oder steht ein Kennsatz schon am Zeilenanfang, springt die App dorthin, statt zu doppeln; steht ein Kennsatz nur im Fließtext, fügt sie nichts ein und weist darauf hin. Nach dem Einfügen ist die erste offene Stelle des eingefügten Bausteins markiert; „Einfügung rückgängig“ stellt den vorherigen Wert wieder her, solange der Text seither nicht geändert wurde.
+
+Offene Stellen ergeben in der Prüfung einen Ausfüllhinweis. Im Redaktionscheck zählt ein Kennsatz mit offener Stelle nicht als Vermerk, eine Frist mit offener Stelle gilt als unvollständig; die Management Summary übernimmt keine offenen Stellen und weist darauf hin. Gesperrte Schaltflächen (fehlender Auswahlwert, Rücknahme nach Handeingabe) bleiben erreichbar und nennen beim Betätigen den Grund.
+
+Die App prüft den Abschnitt beim Laden: Format, zulässige Felder, unbekannte Angaben auf jeder Ebene, doppelte Kennungen, Werte in `{{…}}` (nur die vier genannten, ohne Leerzeichen), vollständige `⟦…⟧`, `position`, `kennsatz`, `status_auswahl` und `nur_mit_wert`. Bei einem Fehler bleibt das Profil nutzbar; die Eingabehilfen werden dann nicht verwendet, und die Profilprüfung nennt den Grund. Profile ohne `feldhilfen` zeigen keinen Bereich.
+
 ## Arbeitsanweisungen
 
 Markdown mit Platzhaltern: `{{profil.*}}`, `{{auftrag.*}}` (Sachverhalt, Ausgangsquellen, Stichtag, Prüffrage, Ereignisarten), `{{jetzt}}` und `{{app.ausgabevertrag}}`. Den Ausgabevertrag setzt die App ein. Er beschreibt, in welcher technischen Form die KI antworten soll.
@@ -203,3 +251,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.13 | 20.10.2026 | Redaktionscheck: `variablen.zeitzone` bestimmt die Lesart von Fristen und nächster Ausgabe; Ersatzregel für fehlendes `beurteilung_hoch` dokumentiert (App 0.4.16) |
 | 1.14 | 20.10.2026 | Optionales `farbschema` im Manifest; Datum vorn im Dateinamen unabhängig von der Stellung von `{meldezeitpunkt}` (App 0.4.17) |
 | 1.15 | 20.10.2026 | `farbschema.basis` auch `kontrast-hell` und `kontrast-dunkel`, dann Textkontrast mindestens 7:1; Widget `datum_uhrzeit` (Tag, Uhrzeit optional); Zeitfelder mit „Jetzt“/„Heute“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen (App 0.4.18) |
+| 1.16 | 21.10.2026 | Darstellungsdatei: optionaler Abschnitt `feldhilfen` (LEAD-Eingabehilfen, `lead-feldhilfen/1`) mit Vorlagen vorhandener Satzanfänge und Kennsätze für Analysefelder und Bewertungstext; Prüfung beim Laden deaktiviert nur die Eingabehilfen (App 0.4.24) |

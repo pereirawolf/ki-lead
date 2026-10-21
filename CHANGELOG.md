@@ -39,6 +39,37 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.21 | letzter Commit von Pull Request #19 „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
 | 0.4.22 | letzter Commit von Pull Request #20 „Aufwand und Websuchen je Lauf, Automatisch = Neutral; 0.4.22“ |
 | 0.4.23 | letzter Commit von Pull Request #21 „Tests konsolidieren und schärfen, Browsertests, Modellbewertung getrennt; 0.4.23“ |
+| 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
+
+## [0.4.24] – 21.10.2026
+
+Grundlage: Umsetzungsbeschreibung vom 21.10.2026 (`2026-10-21_KI-LEAD_Manuelle_LEAD-Eingabehilfen_Umsetzung_auf_main.json`), die einen Vorschlag gleichen Datums prüft und korrigiert. LEAD-Systematik, SOP-Regeln und -Inhalte, Kodierleitfaden, Arbeitsanweisungen und Meldungsschema sind unverändert.
+
+### Hinzugefügt
+
+- **LEAD-Eingabehilfen** unter den vier Analysefeldern und dem Text „Bewertung & Tendenz“: ein zugeklappter Bereich mit Schaltflächen, die vorhandene Satzanfänge und Kennsätze als Vorlage mit offenen Stellen ⟦…⟧ einfügen. Ohne KI, ohne API-Schlüssel, ohne Netzwerkanfrage.
+  - **Nur vorhandene Satzanfänge:** Jede Vorlage beginnt mit einem Satzanfang aus den Gliederungsmustern oder den Kennsätzen des Profils; die Herkunft je Vorlage steht in der Umsetzungsbeschreibung. Kennsatzvorlagen folgen dem Fristformat aus A.4, dem Textbaustein aus A.7.2 und den Bestandteilen des Abschlusses aus A.8.2.
+  - **Nur das Zielfeld ändert sich:** Beurteilung, Tendenz, Lagenradar, Quellenverzeichnis, Freigabe und andere Sachverhalte bleiben unverändert. „Beurteilung „…“:“ und „Tendenz „…“:“ übernehmen den gewählten Wert nur lesend und sind ohne gewählten Wert gesperrt (mit Grund).
+  - **Einfügestellen:** Kernaussage vorn, Referenzraum und Begründungen vor dem Block der Kennsätze, sonst als neuer Absatz am Ende; Kennsätze als eigene Zeile am Textende in der Reihenfolge des Profils. Vorhandener Text wird nicht umformuliert oder umsortiert; nur die Leerzeilen um den eingefügten Absatz werden vereinheitlicht.
+  - **Keine Dopplungen:** Eine vorhandene Kernaussage am Anfang und ein vorhandener Kennsatz werden angesprungen („Weitere Fristen in dieser Zeile ergänzen, die früheste zuerst.“). Steht ein Kennsatz nur im Fließtext, fügt die App nichts ein und weist darauf hin.
+  - **Werte:** t0 kommt aus dem Meldezeitpunkt in der Form der Beispielmeldungen („t0: 14.10.2026, 10:15 Uhr“), der Kurzname aus dem Profil; der Referenzraum bleibt offen. Fehlt ein Wert, bleibt eine offene Stelle. Status (sieben Werte aus A.4) und Quelle (nur ein beim Einfügen noch vorhandener Marker `[Qn]`) ohne Vorauswahl.
+  - **Bedienung:** Die erste offene Stelle des eingefügten Bausteins ist markiert, der Fokus liegt im Textfeld. „Einfügung rückgängig“ stellt den vorherigen Wert exakt wieder her, auch wenn ein Teil des Pfades vorher fehlte oder null war (bis 20 Einfügungen je Feld), und setzt den Fokus zurück ins Textfeld; nach einer Handeingabe ist es gesperrt und nennt den Grund. Der Verlauf gilt für die geöffnete Meldung, übersteht einen Wechsel der Ansicht und entfällt bei neuer oder geöffneter Meldung, Übernahme, Profilwechsel und geänderter Zahl der Sachverhalte. Ein Doppelklick fügt nur einmal ein.
+  - **Barrierefreiheit:** Zugängliche Namen mit Feld und Sachverhalt, sichtbare und verknüpfte Hinweise, eine Live-Region je Feld (gleichlautende Meldungen werden erneut angesagt), vollständige Tastaturbedienung. Gesperrte Schaltflächen bleiben erreichbar (`aria-disabled`, sichtbar abgeschwächt wie gesperrte Schaltflächen) und sagen beim Betätigen ihren Grund an.
+- **Offene Stellen ⟦…⟧:** Ausfüllhinweis je Feld in der Prüfung. Im Redaktionscheck zählt ein Kennsatz mit offener Stelle nicht als Vermerk (Abschluss, Änderung, Abweichung: „offen“; Neubewertung: fehlt), eine Frist mit offener Stelle gilt als „Angaben unvollständig“. Die Management Summary übernimmt keine offenen Stellen: Fristen erhalten „(Angaben unvollständig)“, offene Stellen in Kernaussage, Abschnitten und Kurztiteln der KI-Antwort werden entfernt und mit einem Prüfhinweis gemeldet.
+- **Profilformat 1.16:** optionaler Abschnitt `feldhilfen` (`lead-feldhilfen/1`) mit Prüfung beim Laden; Fehler deaktivieren nur die Eingabehilfen. Spezifikation 0.4.24 (Abschnitt 5.1, S4).
+- **Beispielprofil 1.11.0** mit 22 Vorlagen; SOP-Sammelmappe 3.2.4 (nur Gültigkeitsstand). Einzelheiten im [Profilverlauf](profile/lead-beispiel/CHANGELOG.md).
+
+### Verworfen
+
+- Die KI-Schreibhilfe aus dem ersten Stand dieses Pull Requests (Commit `27c8134`: Schaltfläche „KI-Unterstützung“, KI-Prüfstufen, Modellwahl für Feldhilfen) ist vollständig verworfen und nicht Teil der App. Ebenso entfallen die Satzanfänge „Erkenntnislücke:“, „Begründung der Beurteilung:“ und „Begründung der Tendenz:“ samt Gliederungsmustern, weil sie im Profil nicht belegt sind.
+
+### Tests
+
+- `tests/kern/feldhilfen.test.ts` (38, neu): Herkunft der Satzanfänge und Kennsätze mit festem Soll, Prüfregeln (auch Schreibweise der Werte), t0-Format, gesperrte Vorlagen, Status und Quelle, Einfügestellen, Markierung, Dopplungen, Ausfüllhinweise.
+- `tests/profil/feldhilfen.test.ts` (2, neu): fehlerhafte Konfiguration deaktiviert nur die Eingabehilfen; Musterprofil ohne Eingabehilfen.
+- `tests/lagebild/redaktionscheck.test.ts` (+2), `tests/pipeline/kurzfassung.test.ts` (+3): offene Stellen in Kennsätzen, Fristen und der KI-Antwort der Management Summary.
+- `tests/ui/eingabehilfen.test.ts` (8, neu): zugeklappt und ohne Schlüssel bedienbar, keine KI-Schaltfläche, null Anbieteraufrufe und Abrufe, nur das Zielfeld ändert sich, Markierung, Rücknahme mit Fokus, bei fehlendem Pfad und bei null, gesperrte Vorlagen und Rücknahme mit angesagtem Grund, keine Dopplungen, Doppelklick, Verlauf beim Wechsel der Ansicht, bei neuer Meldung und bei geänderter Zahl der Sachverhalte.
+- `tests/browser/eingabehilfen.spec.ts` (2, neu): Tastaturbedienung mit Fokus und Markierung, zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen.
 
 ## [0.4.23] – 21.10.2026
 
