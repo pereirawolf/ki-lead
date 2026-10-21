@@ -42,6 +42,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
 | 0.4.25 | letzter Commit von Pull Request #23 „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
 | 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
+| 0.4.27 | letzter Commit von Pull Request #25 „Schätzung von Dauer und Kosten nach den Läufen vom 21.10.2026; 0.4.27“ |
+
+## [0.4.27] – 21.10.2026
+
+Grundlage: drei Verdichtungen „Ilka“ (sechs Eingänge, ohne Websuche) mit App 0.4.25 und der Ausgabegrenze von 128 000 Token: Läufe `20261021-163738-9s7d` und `20261021-164604-u1kb` (S1), `20261021-165220-1hmp` (S1 und S2 bis zur fertigen Meldung, schemakonform, ohne Reparatur). Keine Änderung am Verhalten der App außer der angezeigten Schätzung.
+
+### Geändert
+
+- **Schätzung vor dem Start, S1 mit Haiku „high“:** „bis 3 Minuten, bis 0,03 USD“ (Spanne 15–150 s, 0–0,03 USD) statt der vorläufigen „bis 3 Minuten, bis 0,05 USD“ aus 0.4.25. Gemessen: 88–95 s, 0,019–0,020 USD und 20 821–22 134 Ausgabetoken je Verdichtung, alle drei Läufe mit `end_turn` und vollständiger Zuordnung aller sechs Eingänge; Erfassungen bisher 18–37 s.
+- **Schätzung S2 Verdichtung mit Opus „medium“:** Kosten 1,20–2,00 USD statt 1,20–1,75 USD; Dauer unverändert 5–9 Minuten. Gemessen: 408 s und 1,63 USD (50 071 Ausgabetoken, 80 118 Token neu in den Cache), bisher 298–410 s und 1,23–1,38 USD.
+- Spezifikation 0.4.27 (Abschnitt 5.1, Umsetzung M2: Messgrundlage bis 21.10.2026).
+
+### Tests
+
+- `tests/pipeline/schaetzung.test.ts`: Spannen für S1 Haiku „high“ und Verdichtung Opus „medium“ mit festem Soll, Anzeige und Summe vor dem Start.
 
 ## [0.4.26] – 21.10.2026
 

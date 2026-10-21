@@ -14,9 +14,13 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(s).toEqual({ sekunden: [200, 360], usd: [1.4, 2.3], gemessen: true });
     expect(dauerText(s.sekunden)).toBe("3–6 Minuten");
     expect(kostenText(s.usd)).toBe("1,40–2,30 USD");
-    // S1 Haiku high vorläufig bis 3 Minuten und 0,05 USD (Verdichtungen brachen bei 16 000 Token nach 69–72 s ab; 0.4.25)
+    // S1 Haiku high: Verdichtungen „Ilka“ 88–95 s und höchstens 0,020 USD (0.4.27)
+    expect(schaetzeStufe("s1", "claude-haiku-5-5", "high")).toEqual({ sekunden: [15, 150], usd: [0, 0.03], gemessen: true });
     expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "high").sekunden)).toBe("bis 3 Minuten");
-    expect(kostenText(schaetzeStufe("s1", "claude-haiku-5-5", "high").usd)).toBe("bis 0,05 USD");
+    expect(kostenText(schaetzeStufe("s1", "claude-haiku-5-5", "high").usd)).toBe("bis 0,03 USD");
+    // Verdichtung mit Opus medium: bis 1,63 USD gemessen (0.4.27)
+    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium")).toEqual({ sekunden: [300, 540], usd: [1.2, 2.0], gemessen: true });
+    expect(kostenText(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium").usd)).toBe("1,20–2,00 USD");
     expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "medium").sekunden)).toBe("unter 1 Minute");
     expect(dauerText(schaetzeStufe("erfassung", "claude-sonnet-5-5", "medium").sekunden)).toBe("bis 3 Minuten");
   });
@@ -80,8 +84,8 @@ describe("Schätzung von Dauer und Kosten", () => {
         profil: p!,
       }),
     );
-    expect(html).toContain("S1 (claude-haiku-5-5, high): bis 3 Minuten, bis 0,05 USD");
+    expect(html).toContain("S1 (claude-haiku-5-5, high): bis 3 Minuten, bis 0,03 USD");
     expect(html).toContain("S2 (claude-opus-5-5, medium): 3–6 Minuten, 1,40–2,30 USD");
-    expect(html).toContain("Zusammen etwa 1,40–2,35 USD");
+    expect(html).toContain("Zusammen etwa 1,40–2,33 USD");
   });
 });
