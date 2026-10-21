@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.2.4 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.3.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.11.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -121,6 +121,8 @@ Für jeden übernommenen Befund: Beobachtung und fachliche Einordnung getrennt �
 
 **Bestätigungsgrad.** Für zentrale Aussagen einheitlich angeben: *bestätigt*, *vorläufige Eigenangabe*, *indirekt berichtet* oder *widersprüchlich*; fehlende Verifikation benennen. Quellenkategorie (Herkunft) und Bestätigungsgrad bleiben getrennt. Ein einzelner zuständiger Primärbeleg kann tragfähig sein; eine Mindestzahl von Links ersetzt keine Prüfung.
 
+**Teilzugriff.** Suchtreffer, Suchindex-Auszug, Vorschau und der frei sichtbare Teil hinter einer Bezahlschranke belegen nur ihren sichtbaren Inhalt, nicht die vollständig geprüfte Originalquelle; der Zugriffsstatus steht im Quelleneintrag (Kodierleitfaden Abschnitt 5). Für bewertungs- oder handlungstragende Aussagen die Originalquelle oder einen unmittelbar zugänglichen belastbaren Ersatz prüfen; gelingt das nicht, die Aussage auf den belegten Umfang beschränken und die entscheidungsrelevante Unsicherheit benennen. Eine in einem Medienbericht wiedergegebene Behörden- oder Herstellerangabe wird nicht durch einen zusätzlichen Link zur selbst geprüften Primärangabe. Eigene Zugriffslücken begründen weder einen höheren D7-Wert noch eine Verschärfung.
+
 **Zählregeln.** Personen, Haushalte, Anschlüsse, Zähler, Einsatzstellen und Einrichtungen getrennt ausweisen und nicht gleichsetzen. Bestand zum Stichtag und kumulierte Fälle seit Ereignisbeginn unterscheiden. Überlappende Gruppen oder dieselbe Person in mehreren Meldungen nicht addieren; bei unbekannter Überschneidung keine scheinexakte Gesamtsumme bilden. Hochrechnungen (z. B. Haushalte → Personen) nur mit begründetem Faktor, passendem Gebiet und Datum; Bandbreite und Unsicherheit dokumentieren (A.2 „Keine unbelegte Präzision“). Einwohnerzahlen sind ein Plausibilitätsbezug, keine allgemeine Obergrenze: Pendler, Gäste und Veranstaltungen können relevant sein. Gemeinde bzw. Kreis mit eindeutigem Raumbezug benennen, bei Bedarf mit amtlichem Schlüssel; Prognose-, Warn-, Wirkungs- und Versorgungsraum getrennt halten.
 
 **Quellen & Referenzen.** Alle Belege einer Meldung stehen zentral im Feld „Quellen & Referenzen“ (`quellen`), nicht in „Lage & Ereignis“. Je Quelle ein Eintrag, nummeriert in der Reihenfolge der ersten Nennung, mit genau einer Kategorie. Die Buchstaben kennzeichnen Herkunft bzw. Rolle der Quelle für die verwendete Aussage; ihre Reihenfolge ist die Quellenpriorität **A > B > W > M > P**:
@@ -173,6 +175,8 @@ Format der Quelleneinträge und der Verweise im Text: Kodierleitfaden Abschnitt 
 | `Abschluss im Lagebild:` | letzte Nennung eines Sachverhalts (A.8.2) | „Abschluss im Lagebild: Ereignis beendet seit 05.10.2026; offen bleiben: Trinkwasserfreigabe in zwei Ortsteilen; Nachsorge bei: Gesundheitsamt Y“ |
 
 Format des Kennsatzes `Handlungsrelevant bis:`: `TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle`, je Sachverhalt eine Zeile, mehrere unabhängige Fristen in derselben Zeile mit der frühesten zuerst; ohne belegte Uhrzeit entfällt `HH:MM`. Redaktionscheck und Management Summary werten Datum, Uhrzeit und Bedingung aus.
+
+**Fristgrundlage.** Eine qualitative Dringlichkeitsangabe wie „unverzüglich“ begründet für sich kein Kalenderdatum und keine Uhrzeit; ohne belegten Termin steht sie im Maßnahmen- und Empfehlungstext, und der Kennsatz wird nicht künstlich gefüllt. Eine eigene Prüf- oder Wiedervorlagefrist der meldenden Stelle wird als deren Vorschlag mit eigener Grundlage gekennzeichnet und nicht der Warnquelle zugeschrieben. Akuter Handlungsbedarf wartet nicht auf die nächste Lagebild-Ausgabe (A.1 Nr. 1, A.7.3).
 
 ### A.5 Abschlusscheck (für jede Meldung)
 
@@ -1287,62 +1291,73 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Cyberangriff / IT-Sicherheitsvorfall mit Folgen für Versorgung, KRITIS oder Verwaltung"
 art_vorschlag: ["Cyberangriff / IT-Sicherheitsvorfall"]
 zweck: "Reproduzierbare Erfassung von IT-Sicherheitsvorfällen, deren Folgen die Versorgung der Bevölkerung, KRITIS oder die Handlungsfähigkeit von Behörden berühren, einschließlich begründeter Vorsorgelagen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 und 21.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
+pruefausloeser: "Rückblick nach A.8.3; Abschluss des Kalibrierfalls vom 21.10.2026 (Abschnitt 5); Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "15"
 bisherige_ids: ["sop-15"]
 ```
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Bestätigte oder behördlich begründet vermutete Vorfälle (z. B. Ransomware, DDoS, Ausnutzung kritischer Schwachstellen) mit Funktions- oder Versorgungsbezug, einschließlich der Eigenbetroffenheit von Leitstellen, Verwaltung und Hilfsorganisationen und der Kopplung über gemeinsame IT-Dienstleister. Technische Vorfallsbewältigung und Attribution sind nicht Gegenstand; Folgeausfälle zusätzlich über B08–B12; Notruf, Leitstellen und Warnmittel vertiefend Baustein C11. Beispiel dafür: Ransomware mit Ausfall von Bürgerdiensten und Leitstelle. Eine Schwachstellenwarnung allein belegt keinen Angriff; bei nachgewiesen betroffenen kritischen Funktionen und konkretem Vorbereitungsbedarf ist eine ausdrücklich als Vorsorge gekennzeichnete Befassung möglich (A.1 Nr. 1). Beispiel ohne übergreifenden Befassungsbedarf: Schwachstellenwarnung ohne bekannte Betroffenheit kritischer Funktionen.
+**Umfasst / grenzt ab von:** Bestätigte oder behördlich begründet vermutete IT-Sicherheitsvorfälle (z. B. Ransomware, DDoS, Ausnutzung kritischer Schwachstellen) mit Folgen für Bevölkerung, Versorgung oder behördliche Handlungsfähigkeit, einschließlich der Eigenbetroffenheit von Leitstellen, Verwaltung und Hilfsorganisationen und der Kopplung über gemeinsame IT-Dienstleister; außerdem begründete Vorsorgelagen nach A.1 Nr. 1. Eine Schwachstellenwarnung allein belegt weder eine konkrete Verwundbarkeit noch einen Angriff und eröffnet für sich keine Befassung. Bereits eingetretene Schutzabschaltungen (vorsorgliche Abschaltung von Behörden- oder Betreiberangeboten) werden mit ihren Funktionsfolgen erfasst, auch ohne Angriffsnachweis; Umfang und Bedeutung der eingeschränkten Leistung sind darzulegen, und die Bezeichnung des Sachverhalts nennt die Vorsorgelage. Technische Vorfallsbewältigung und Attribution sind nicht Gegenstand. Folgeausfälle zusätzlich über die Sektor-SOP der ausgefallenen Dienstleistung (B08–B12; B12 erst bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung). Sind Webauftritte von Polizei oder Behörden, Notruf, Leitstellen oder Warnwege berührt, vertiefend Baustein C11. Beispiele dafür: Ransomware mit Ausfall von Bürgerdiensten und Leitstelle; vorsorgliche Abschaltung zahlreicher Landesportale mit benennbarem Informations- oder Abstimmungsbedarf. Beispiele ohne übergreifenden Befassungsbedarf: Schwachstellenwarnung ohne bekannte Betroffenheit und ohne Schutzabschaltung mit Leistungsfolgen; kurze Website-Störung.
 
-**Befassungsanlässe:** BSI-Warnung oder -Mitteilung · öffentlich bekannter Vorfall bei Betreiber oder Behörde · Lagemeldung eines Landes · Monitoring: BSI-Warnungen und Sicherheitshinweise.
+**Befassungsanlässe:** BSI-Warnung oder -Mitteilung · öffentlich bekannter Vorfall bei Betreiber oder Behörde · öffentlich bekannte vorsorgliche Abschaltung von Behörden- oder Betreiberangeboten · Lagemeldung eines Landes · Monitoring: BSI-Cybersicherheitswarnungen und Sicherheitshinweise (Signal: Aufforderung zu unverzüglichem Handeln oder berichtete Schutzabschaltungen bei Behörden oder Betreibern).
 
 ### 2. Erfassung: Prüffragen
 
+**Statusprofil (vor der Detailrecherche):** Für jede bewertungsrelevante Funktion getrennt festhalten: (a) fachliche Warnung mit Ausgabestand · (b) konkrete Verwundbarkeit des betriebenen Systems nach Betreiber- oder Fachstellenangabe · (c) Angriffshinweise bzw. bestätigte Kompromittierung mit Bezugsraum · (d) Schutzmaßnahme einschließlich vorsorglicher Abschaltung · (e) tatsächlich eingeschränkte Leistung und bestätigter Ersatzweg. Die Zustände sind keine zwingende zeitliche Folge und können gleichzeitig vorliegen. Unbekanntes bleibt unbekannt; Nichterreichbarkeit beweist weder Angriff noch erfolgreichen Schutz. Technische Einzelheiten nur, soweit sie Betroffenheit oder Entscheidung erklären.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Was ist zu Vorfall, betroffenen Diensten und Bestätigungsgrad bekannt? | Betreibermeldungen (A.3) | L; D1 | Störung, Angriff und vorsorgliche Abschaltung unterscheiden; IT-/OT-Ausfall, Vertraulichkeit, Integrität und Verfügbarkeit nach ihren Versorgungsfolgen unterscheiden. |
-| R2 | Welche Schwachstelle oder Bedrohung ist fachlich beschrieben? | [BSI Sicherheitshinweise und Warnungen](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Technische-Sicherheitshinweise-und-Warnungen/technische-sicherheitshinweise-und-warnungen_node.html); anlassbezogen | L/R | Technische Warnung ist kein Angriffsnachweis; BSI-Kommunikation ist oft anonymisiert. |
+| R1 | Was ist zu Vorfall, betroffenen Diensten und Bestätigungsgrad bekannt? | Betreibermeldungen (A.3); Hinweis- oder Statusseite der betroffenen Behörde bzw. des Betreibers (selbst einsehen) | L/M; D1 | Störung, Angriff und vorsorgliche Abschaltung unterscheiden; IT-/OT-Ausfall, Vertraulichkeit, Integrität und Verfügbarkeit nach ihren Versorgungsfolgen unterscheiden. Eine Schutzabschaltung ist eine Maßnahme mit Stelle, Zeitpunkt, Umfang und Bedingung für die Wiederfreischaltung (A.4). Ein Medienbericht über eine Abschaltung bleibt M; erst die eingesehene Hinweisseite ist der Eigenbeleg (A.3). |
+| R2 | Welche Schwachstelle oder Bedrohung ist fachlich beschrieben, und welche Versionen und Abhilfen nennt der Hersteller? | [BSI Sicherheitshinweise und Warnungen](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Technische-Sicherheitshinweise-und-Warnungen/technische-sicherheitshinweise-und-warnungen_node.html); Hersteller-Sicherheitshinweis; jeweils mit Ausgabe- bzw. Versionsstand; anlassbezogen | L/R | Technische Warnung ist kein Angriffsnachweis; BSI-Kommunikation ist oft anonymisiert. Warnungen werden innerhalb von Stunden fortgeschrieben. Der Hersteller-Sicherheitshinweis zur eigenen Software ist Kategorie P (keine Betreiberangabe), zu betroffenen Versionen und Abhilfen aber unmittelbar sachkundig; eine Abweichung von der Quellenpriorität wird nach A.3 begründet. |
 | R3 | Welche Leistungen sind für welche Personen nicht verfügbar? | Lagemeldungen (A.3); betroffene Organisation | R; D2 | Datensätze, Nutzerkonten und betroffene Personen nicht gleichsetzen. |
 | R4 | Welche Ersatzverfahren und Folgewirkungen bestehen? | Betreibermeldungen (A.3) | M/R; D6 | Backup ist kein Nachweis erfolgreicher Wiederherstellung; Kopplungen über gemeinsame IT-Dienstleister mehrerer Kommunen oder Betreiber wirken verzögert. |
 | R5 | Welche Unterstützung und Koordination bestehen? | Lagemeldungen (A.3); BSI, Cybersicherheitsstellen der Länder | M; D3/D4 | IT-Betrieb, Gefahrenabwehr und Ermittlungen getrennt zuordnen; gesetzliche Meldepflichten (z. B. nach NIS-2-Umsetzung) sind keine Radar-Kriterien, Pflichtmeldungen sind in der Regel nicht öffentlich. |
 | R6 | Welche Wiederanlauf- und Informationslage ist bestätigt? | Betreibermeldungen (A.3) | M/R; D5/D7 | Keine Täter- oder Ursachenzuschreibung aus unbestätigten Behauptungen; Ausfall behördlicher Kommunikation wirkt auf die Informationslage. |
+| R7 | Welche Evidenz trägt die Aussage zur Ausnutzung: technische Möglichkeit, veröffentlichter Demonstrations- oder Angriffscode, beobachtete Angriffsversuche oder bestätigte Kompromittierung – und in welchem Raum? | BSI bzw. zuständiges CERT; Hersteller; originäre Sicherheitsanalyse; jeweils Datenstand, Bezugsraum und Beobachtungsmethode | L/R; D7 | Die Evidenzstufen sind keine zwingende zeitliche Folge. Honeypot-Beobachtungen belegen keine Kompromittierung produktiver Systeme im Referenzraum. „Keine bestätigten Fälle bekannt“ und eine anders abgegrenzte private Beobachtung sind nicht automatisch widersprüchlich: zuerst Zeit, Raum und Beobachtungsgegenstand abgleichen (A.3). Angaben von Sicherheitsunternehmen sind P und in der Regel vorläufige Eigenangabe. |
+| R8 | Werden mehrere Angebote über dieselbe technische oder organisatorische Abhängigkeit betrieben, und welche Leistungen hängen tatsächlich daran? | Betreiber bzw. IT-Dienstleister; Leistungs- und Störungsmeldungen mit Stand | R/I; D1/D6 | Gleiche Software, gleichzeitige Nichterreichbarkeit und gemeinsame Medienmeldung beweisen keinen gemeinsamen Betreiber und keine Ausbreitung. Gemeinsame Exposition, zentrale Schutzabschaltung und technische Kaskade getrennt beschreiben. Nachweisbare Konzentration und fehlende unabhängige Ersatzwege als längerfristigen Prüfbedarf benennen. |
+| R9 | Welche Abhilfe ist für die tatsächlich eingesetzte Version und Betriebsform bestätigt, und was ist zum Wiederanlauf belegt? | Hersteller; Distributions- bzw. Langzeitpflege-Anbieter; zuständiger Betreiber oder IT-Dienstleister; jeweils aktueller Stand | M/R; D5 | Upstream-Version, Distributionspaket und dokumentierten Backport unterscheiden; eine alte Versionsnummer allein beweist keinen fehlenden Schutz. Patch verfügbar, eingespielt, fachlich geprüft, Dienst wieder freigeschaltet und Leistung wieder nutzbar getrennt ausweisen. Bei Angriffshinweisen die Kompromittierungsprüfung durch zuständige IT-Stellen als eigenen Prüfbedarf benennen; ein Update allein belegt keine Bereinigung. Keine technischen Konfigurationsanweisungen und keine Entwarnung aus der Lagebildredaktion. |
 
 ### 3. Auswertung: Prüfpunkte
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
-- **D1:** Nach dem Raum der betroffenen Leistungen kodieren (z. B. Kreis der ausgefallenen Verwaltung), nicht nach Serverstandort oder Angriffsgröße.
-- **D5:** Notbetrieb, Teildienste, vertrauenswürdiger Wiederanlauf und Vollbetrieb sind verschiedene Zielzustände; nach Ransomware oft Wochen bis Monate – nur mit Prognose kodieren.
-- **D7:** Einheitlich nach A.2: auch fachlich erhebliche Lücken und Widersprüche zu Leistungsgrad, Integrität oder Wiederanlauf, soweit sie die Befassung tatsächlich betreffen; ein technischer Kommunikationsausfall ist keine Voraussetzung. Manipulierte Daten können eine kritische Funktion beeinträchtigen, obwohl Systeme erreichbar bleiben. Fehlende technische Detailangaben allein erhöhen D7 nicht.
+- **D1:** Nach dem belegten Wirkungsraum einer konkret bezeichneten eingeschränkten Leistung kodieren (z. B. Kreis der ausgefallenen Verwaltung), nicht nach Serverstandort, Angriffsgröße, Adressatenkreis einer Warnung, Zuständigkeitsraum der Behörde oder Verbreitung der Software (Kodierleitfaden D1). Parallele Schutzabschaltungen in anderen Ländern sind für eine Teilraum-Meldung Kontext (A.7.1).
+- **D3:** Bewertete Funktion benennen: Betrieb (ein IT-Dienstleister ist Betreiber), Entscheidung über Abschaltung und Wiederfreischaltung, Gefahrenabwehr oder Ermittlung. Eine Behörde als berichtende Stelle belegt keinen Eigenbetrieb. Eine belegte Abschaltungsentscheidung kann als Vorsorge vor dem Akutereignis kodiert werden, gekennzeichnet mit „D3 Vorsorge: [Maßnahme], [Stelle]“ (Kodierleitfaden D3). Das BSI ist Quelleninstitution, nicht schon deshalb Zurechnungszentrum.
+- **D5:** Notbetrieb, Teildienste, vertrauenswürdiger Wiederanlauf und Vollbetrieb sind verschiedene Zielzustände; nach Ransomware oft Wochen bis Monate – nur mit Prognose kodieren. Bei Schutzabschaltungen ist die Wiederfreischaltung ein eigener Zielzustand; sie belegt keinen vertrauenswürdigen Wiederanlauf (R9).
+- **D6:** Nur nach konkreter funktionaler Kopplung: Welche Schutz-, Informations- oder Versorgungsfunktion fällt weg, und welcher Ersatzweg trägt (C11)? Ein abgeschalteter Behördenauftritt, die Zugehörigkeit zum Sektor Staat und Verwaltung oder eine mögliche Betroffenheit von KRITIS-Betreibern legen für sich keine Stufe fest; mögliche Kompromittierungen bleiben Szenario.
+- **D7:** Einheitlich nach A.2: auch fachlich erhebliche Lücken und Widersprüche zu Leistungsgrad, Integrität oder Wiederanlauf, soweit sie die Befassung tatsächlich betreffen; ein technischer Kommunikationsausfall ist keine Voraussetzung. Manipulierte Daten können eine kritische Funktion beeinträchtigen, obwohl Systeme erreichbar bleiben. Fehlende technische Detailangaben allein erhöhen D7 nicht. Abweichende Angaben zum Ausnutzungsstatus zählen erst, wenn sie bei gleichem Gegenstand, Zeitpunkt und Raum fortbestehen und entscheidungsrelevant sind (R7); eigene Zugriffslücken zählen nicht (A.3).
 
-**Beurteilung/Tendenz:** Beurteilung nach Folgen für Bevölkerung und Versorgung, nicht nach technischer Raffinesse; beendete Angriffsaktivität kann mit langem Wiederherstellungsbedarf einhergehen – Tendenz auf Leistungserbringung beziehen. Ursachenoffenheit schließt Folgenbewertung nicht aus.
+**Beurteilung/Tendenz:** Beurteilung nach Folgen für Bevölkerung, Versorgung und behördliche Handlungsfähigkeit, nicht nach technischer Raffinesse. Technischer Schweregrad (z. B. CVSS) und BSI-Warnstufe beschreiben Bedrohung bzw. fachliche Handlungsdringlichkeit; sie werden nicht in Beurteilung, Radarwerte oder Tendenz umgerechnet. Bei Vorsorgelagen braucht die Beurteilung eine eigenständige Begründung aus konkreten Folgen (Umfang, Dauer, Ersatzwege) oder konkret begründetem Vorsorgebedarf im Referenzraum; ungeklärte Betroffenheit allein trägt keine höhere Stufe und ist ohne diese Prüfung auch kein Grund für eine niedrigere. Beendete Angriffsaktivität kann mit langem Wiederherstellungsbedarf einhergehen – Tendenz auf Leistungserbringung bzw. den konkret begründeten Vorsorgebedarf beziehen: Verfügbare Updates sind Voraussetzung, keine Entspannung; veröffentlichte Angriffsdetails oder zahlreiche Medienmeldungen belegen allein keine Verschärfung. Ursachenoffenheit schließt Folgenbewertung nicht aus.
 
-**Offenlassen:** D2 ohne belastbare Personenzahl; D4 ohne belegte externe Unterstützung.
+**Zeitfenster:** Eine amtliche Aufforderung zu „unverzüglichem“ Handeln wird im Maßnahmen- und Empfehlungstext wiedergegeben, nicht als Datum im Kennsatz (A.4, Fristgrundlage). Liegen Hinweise vor, dass Leitstellen, Alarmierung oder Warnmittel konkret verwundbar oder angegriffen sind, gilt A.7.3; Gegenstand der Weitergabe ist die bevölkerungsschutzrelevante Folge, nicht die Wiederverteilung einer Warnung, die den zuständigen Stellen vorliegt.
+
+**Offenlassen:** D2 ohne belastbare Personenzahl; D4 ohne belegte externe Unterstützung; D5 ohne Prognose für den gewählten Zielzustand.
 
 ### 4. Darstellung
 
 | Meldungsbereich | Lageart-spezifische Leitfrage |
 |---|---|
-| Lage & Ereignis | Betroffene Organisation, ausgefallene Leistungen, Zeitstand; keine technischen Angriffsdetails |
-| Risiken & Auswirkungen | Folgen für Versorgung, Notruf, Verwaltung; Ausweitung als Szenario |
-| Maßnahmen & Handlungsempfehlungen | Notbetrieb, Ausweichverfahren, Information der Bevölkerung mit Status |
-| Abhängigkeiten & Interdependenzen | Folgeausfälle in anderen Sektoren; Kopplung an Kommunikationswege und gemeinsame IT-Dienstleister |
+| Lage & Ereignis | Betroffene Organisation, eingeschränkte Leistungen, Zeitstand; bei Vorsorgelagen Kennzeichnung und Statusprofil getrennt; keine technischen Angriffsdetails |
+| Risiken & Auswirkungen | Folgen für Versorgung, Notruf, Verwaltung und öffentliche Information; Ausweitung und mögliche Kompromittierung als Szenario |
+| Maßnahmen & Handlungsempfehlungen | Schutzabschaltung, Update und Wiederfreischaltung als Maßnahmen mit Stelle und Status; Notbetrieb, Ausweichverfahren, bestätigte Ersatzwege für die Information der Bevölkerung (C11); Prüfbedarf an die zuständigen IT-, Fach- oder Koordinierungsfunktionen |
+| Abhängigkeiten & Interdependenzen | Folgeausfälle in anderen Sektoren; Kopplung an Kommunikationswege und gemeinsame IT-Dienstleister (R8); parallele Schutzabschaltungen in anderen Ländern als Kontext derselben Ursache (A.7.1) |
 
 Übertrag, Abschlusscheck und Querschnittsprüfungen nach Teil A.4, A.5 und A.9.
 
+**Übergreifender Erkenntniswert:** Für das wöchentliche Lagebild (A.1 Nr. 1) knapp herausarbeiten, welche belegte oder ausdrücklich als Prüfbedarf gekennzeichnete strukturelle Frage bleibt, etwa Inventarisierung und Pflege eingesetzter Software, Sicherheitsupdates einschließlich Distributionspflege, Konzentration bei Dienstleistern, unabhängige Informationskanäle und nachgewiesene Wiederanlauffähigkeit. Nur lagebegründete Fragen aufnehmen. Empfehlungen an die zuständigen IT-, Fach- oder Koordinierungsfunktionen richten; eine Zuständigkeit für flächendeckende Patch-Kontrollen bei Kommunen oder Sektorbetreibern wird dem Katastrophenschutzressort nicht ohne Beleg zugeschrieben. Eine Erkundigung über etablierte Melde- und Abstimmungswege ist von Aufsicht und technischer Prüfung zu unterscheiden.
+
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** Betroffene Betreiber/IT-Verantwortliche · BSI/zuständiges CERT · Cybersicherheitsstellen der Länder · Polizei bei Ermittlungsbezug
+**Ansprechstellen:** Betroffene Betreiber, IT-Verantwortliche und IT-Dienstleister · BSI/zuständiges CERT · für Informationssicherheit der Landesverwaltung zuständige Stelle bzw. CERT des Landes · Cybersicherheitsstellen der Länder · für Leitstellen, Alarmierung und Warnung zuständige Stellen (mit C11) · Polizei bei Ermittlungsbezug
 
-**Offene Punkte:** Vorsorgebefassung bei Schwachstellenwarnungen mit betroffenen kritischen Funktionen an Übungsfällen kalibrieren (A.10.3).
+**Offene Punkte:** Vorsorgebefassung bei Schwachstellenwarnungen und Schutzabschaltungen an dokumentierten Fällen kalibrieren (A.10.3). Erster Kalibrierfall: Warnung zu kritischen PHP-Schwachstellen mit vorsorglicher Abschaltung von Landesangeboten (Beispielmeldung vom 21.10.2026, realer Anlass, fiktive Stelle); Prüfszenarien K01–K10 im Vorschlag „SOP-LEAD_B15-C11_Vorschlag_konsolidiert_2026-10-21“. Rückblick nach A.8.3 nach Abschluss des Sachverhalts. Einordnung von Hersteller-Sicherheitshinweisen zur eigenen Software in Teil A und Kodierleitfaden Abschnitt 5 klären (bis dahin P mit begründeter Abweichung, R2); betrifft auch weitere SOPs.
 
 <!-- Quelle: sop/teil-b/B16_sabotage-anschlag-terrorismus.md -->
 
@@ -2159,14 +2174,14 @@ kennung: "C11"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk oder Warnmitteln"
+lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk, Warnmitteln oder amtlichen Informationsangeboten mit Schutzbezug"
 art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
-art_hinweis: "„Cyberangriff / IT-Sicherheitsvorfall“ nur bei entsprechend belegtem Vorfall"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei belegtem Vorfall oder als Prüfhilfe zu B15 bei begründeter Vorsorgebefassung"
 anschluss: "B12, B15, A.9.3"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N02"
@@ -2177,11 +2192,15 @@ bisherige_ids: ["baustein-n02"]
 
 **Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nur nach Auswirkung auf die Lageinformation der Befassung; die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2). Ursache zusätzlich über B08, B15 oder B16.
 
-**Befassungsanlässe:** Bestätigter Ausfall eines Notruf- oder Leitstellenwegs · Störung von TK- oder BOS-Diensten oder Warnmitteln mit Schutzbezug.
+**Öffentliche Informationsversorgung:** Ergänzend den Wegfall amtlicher Informationsangebote prüfen, soweit er einen konkreten Schutz-, Orientierungs- oder Hilfszugangsbezug hat, etwa wenn etablierte Informationsseiten während einer Gefahrenlage fehlen. Ein ausgefallener Behörden- oder Polizei-Webauftritt belegt keine Störung von 110/112, Leitstellen, BOS-Funk, MoWaS oder angeschlossenen Warnmultiplikatoren. Rein repräsentative Website-Ausfälle ohne solchen Funktionsbezug werden nicht zur Warnfähigkeits- oder KRITIS-Lage.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“; „Cyberangriff / IT-Sicherheitsvorfall“ zusätzlich nur bei entsprechend belegtem Vorfall.
+**Befassungsanlässe:** Bestätigter Ausfall eines Notruf- oder Leitstellenwegs · Störung von TK- oder BOS-Diensten oder Warnmitteln mit Schutzbezug · Wegfall amtlicher Informationsangebote mit Schutz- oder Hilfszugangsbezug.
+
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei entsprechend belegtem Vorfall. Als Prüfhilfe zu B15 kann der Baustein auch bei begründeter Vorsorgebefassung dienen; die Ereignisart wird dadurch nicht um „KRITIS-Ausfall“ erweitert.
 
 ### 2. Erfassung: Prüffragen
+
+**Funktions- und Ersatzwegeprofil:** Nur entscheidungsrelevante Funktionen getrennt prüfen: öffentliche Schutzinformation · Online-Verwaltungsdienst · Notrufannahme · Leitstellenbetrieb · BOS-Kommunikation · Warnauslösung · Warnübertragung. Je Funktion: betroffener Raum, Beginn, letzter bestätigter Status, Umfang, bestätigter Ersatzweg mit seiner technischen und organisatorischen Unabhängigkeit und seinen Grenzen, Wiederanlaufprognose. Ungeprüfte Funktionen ausdrücklich offenlassen, ohne lange Fehlanzeigen für alle Funktionen. Webseiten als Informationsquelle und als Online-Dienst unterscheiden. Die Erreichbarkeit eines Ersatzwegs folgt nicht aus seiner bloßen Existenz; ein Social-Media-Konto ist nicht ohne Prüfung gleichwertig. Für Menschen ohne digitalen Zugang oder mit Sprach- oder Wahrnehmungsbarrieren nach belegten Alternativen fragen (A.9.2). Kontaktdaten und Ersatznotrufwege nur nach R4.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -2202,11 +2221,11 @@ bisherige_ids: ["baustein-n02"]
 
 ### 4. Darstellung
 
-Nach B12; je Funktion (Notruf, Leitstelle, BOS-Funk, Warnung, Telefonie/Daten) Status, Ersatzweg und Prognose getrennt.
+Nach B12, unter B15 nach dessen Darstellung; je Funktion (öffentliche Schutzinformation, Online-Verwaltungsdienst, Notruf, Leitstelle, BOS-Funk, Warnauslösung und -übertragung, Telefonie/Daten) Status, Ersatzweg und Prognose getrennt.
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Zuständige Ansprechstellen für BOS-Funk und Leitstellen organisationsspezifisch festlegen.
+**Offene Punkte:** Zuständige Ansprechstellen für BOS-Funk und Leitstellen organisationsspezifisch festlegen. Ebenso festlegen, welche amtlichen Informationsangebote im Referenzraum für Schutzinformation und Hilfszugang erforderlich sind, welche Ersatzkanäle bestehen und über welche etablierten Melde- und Abstimmungswege der Funktionsstatus zu erfahren ist, ohne der Koordinierungsstelle Betriebs- oder Aufsichtsaufgaben zuzuschreiben.
 
 <!-- Quelle: sop/teil-c/C12_kraftstoff-waerme.md -->
 

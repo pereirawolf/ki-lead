@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.2.4 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.3.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -38,7 +38,7 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 | B12 | KRITIS-Ausfall | [`teil-b/B12_kritis-ausfall.md`](teil-b/B12_kritis-ausfall.md) | 2.0.1 | 12 |
 | B13 | Migrationslage | [`teil-b/B13_migrationslage.md`](teil-b/B13_migrationslage.md) | 2.0.1 | 13 |
 | B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.0.1 | 14 |
-| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.0.1 | 15 |
+| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.1.0 | 15 |
 | B16 | Sabotage / Anschlag / Terrorismus | [`teil-b/B16_sabotage-anschlag-terrorismus.md`](teil-b/B16_sabotage-anschlag-terrorismus.md) | 2.0.1 | 16 |
 | B17 | Sonstiges | [`teil-b/B17_sonstiges.md`](teil-b/B17_sonstiges.md) | 2.0.1 | 17 |
 
@@ -70,7 +70,7 @@ Alle Bausteine haben den Status „Inhaltsgerüst“: Sie ergänzen die Dach-SOP
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.0.1 | N02 |
+| C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.1.0 | N02 |
 | C12 | Kraftstoff- und Wärmeversorgung | Themenbaustein | [`teil-c/C12_kraftstoff-waerme.md`](teil-c/C12_kraftstoff-waerme.md) | 1.1.0 | N05 |
 | C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.0.1 | N06 |
 | C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.0.1 | N07 |

@@ -1,9 +1,10 @@
 // Vorsichtige Schätzung von Dauer und Kosten je KI-Stufe aus gemessenen Läufen.
 //
-// Messgrundlage (Laufprotokolle vom 18.–20.10.2026, App 0.4.5–0.4.19, Beispielprofil):
-// - S1: 16 Läufe der Testreihe „Ebola Nigeria“ (Haiku medium/high, Sonnet medium) und 7 Läufe „Ilka“ (Haiku medium)
+// Messgrundlage (Laufprotokolle vom 18.–21.10.2026, App 0.4.5–0.4.25, Beispielprofil):
+// - S1: 16 Läufe der Testreihe „Ebola Nigeria“ (Haiku medium/high, Sonnet medium), 7 Läufe „Ilka“ (Haiku medium) und
+//   3 Verdichtungen „Ilka“ mit Haiku high (21.10.2026, App 0.4.25, Grenze 128 000 Token)
 // - Erfassung mit Websuche: 11 Läufe der Testreihe (Sonnet medium 5, Opus low 3, Opus medium 3), 2 mit PDF, 1 Fortschreibung
-// - Verdichtung „Ilka“ (6 Eingangsmeldungen, ohne Websuche): Opus medium 4, Sonnet medium 2
+// - Verdichtung „Ilka“ (6 Eingangsmeldungen, ohne Websuche): Opus medium 5, Sonnet medium 2
 // Die Spannen sind nach außen gerundet und enthalten eine Reparatur in S3. Kosten nach Listenpreisen (preise.ts).
 // Für nicht gemessene Kombinationen wird nur der Preis aus einer gemessenen Variante gleicher Art hochgerechnet;
 // eine Dauer wird dann nicht angegeben.
@@ -31,11 +32,9 @@ interface Messwert {
 export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 7–41 s, höchstens 0,011 USD
   "s1|claude-haiku-5-5|medium": { sekunden: [10, 60], usd: [0, 0.02] },
-  // gemessen 18–37 s, höchstens 0,008 USD (Erfassung). Verdichtung „Ilka“ (sechs Eingänge, 21.10.2026): zwei Läufe
-  // brachen nach 69–72 s an der damaligen Grenze von 16 000 Token ab (0,012–0,017 USD, rund 230 Token/s). Der
-  // Bedarf darüber ist noch nicht gemessen; vorläufig bis 3 Minuten und 0,05 USD (etwa 40 000 Ausgabetoken),
-  // nach der Abnahme mit 128 000 Token als Grenze anpassen.
-  "s1|claude-haiku-5-5|high": { sekunden: [15, 180], usd: [0, 0.05] },
+  // gemessen: Erfassung 18–37 s, höchstens 0,008 USD; Verdichtung „Ilka“ mit sechs Eingängen 88–95 s,
+  // 0,019–0,020 USD, 20 821–22 134 Ausgabetoken (Läufe 20261021-163738-9s7d, -164604-u1kb, -165220-1hmp)
+  "s1|claude-haiku-5-5|high": { sekunden: [15, 150], usd: [0, 0.03] },
   // gemessen 9–12 s, 0,02–0,12 USD (0,12 ohne Cache)
   "s1|claude-sonnet-5-5|medium": { sekunden: [10, 30], usd: [0.02, 0.15] },
   // gemessen 46–168 s, 0,18–0,43 USD (mit PDF 168 s)
@@ -46,8 +45,9 @@ export const MESSWERTE: Record<string, Messwert> = {
   "erfassung|claude-opus-5-5|medium": { sekunden: [200, 360], usd: [1.4, 2.3] },
   // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch)
   "verdichtung|claude-sonnet-5-5|medium": { sekunden: [150, 360], usd: [0.55, 0.95] },
-  // gemessen 298–410 s, 1,23–1,38 USD
-  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 1.75] },
+  // gemessen 298–410 s, 1,23–1,63 USD (1,63 USD: 50 071 Ausgabetoken, 80 118 Token neu in den Cache, Lauf
+  // 20261021-165220-1hmp, 408 s)
+  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.0] },
 };
 
 const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];

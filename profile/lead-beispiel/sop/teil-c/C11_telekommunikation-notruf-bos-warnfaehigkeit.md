@@ -7,14 +7,14 @@ kennung: "C11"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk oder Warnmitteln"
+lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk, Warnmitteln oder amtlichen Informationsangeboten mit Schutzbezug"
 art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
-art_hinweis: "„Cyberangriff / IT-Sicherheitsvorfall“ nur bei entsprechend belegtem Vorfall"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei belegtem Vorfall oder als Prüfhilfe zu B15 bei begründeter Vorsorgebefassung"
 anschluss: "B12, B15, A.9.3"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N02"
@@ -25,11 +25,15 @@ bisherige_ids: ["baustein-n02"]
 
 **Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nur nach Auswirkung auf die Lageinformation der Befassung; die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2). Ursache zusätzlich über B08, B15 oder B16.
 
-**Befassungsanlässe:** Bestätigter Ausfall eines Notruf- oder Leitstellenwegs · Störung von TK- oder BOS-Diensten oder Warnmitteln mit Schutzbezug.
+**Öffentliche Informationsversorgung:** Ergänzend den Wegfall amtlicher Informationsangebote prüfen, soweit er einen konkreten Schutz-, Orientierungs- oder Hilfszugangsbezug hat, etwa wenn etablierte Informationsseiten während einer Gefahrenlage fehlen. Ein ausgefallener Behörden- oder Polizei-Webauftritt belegt keine Störung von 110/112, Leitstellen, BOS-Funk, MoWaS oder angeschlossenen Warnmultiplikatoren. Rein repräsentative Website-Ausfälle ohne solchen Funktionsbezug werden nicht zur Warnfähigkeits- oder KRITIS-Lage.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“; „Cyberangriff / IT-Sicherheitsvorfall“ zusätzlich nur bei entsprechend belegtem Vorfall.
+**Befassungsanlässe:** Bestätigter Ausfall eines Notruf- oder Leitstellenwegs · Störung von TK- oder BOS-Diensten oder Warnmitteln mit Schutzbezug · Wegfall amtlicher Informationsangebote mit Schutz- oder Hilfszugangsbezug.
+
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei entsprechend belegtem Vorfall. Als Prüfhilfe zu B15 kann der Baustein auch bei begründeter Vorsorgebefassung dienen; die Ereignisart wird dadurch nicht um „KRITIS-Ausfall“ erweitert.
 
 ### 2. Erfassung: Prüffragen
+
+**Funktions- und Ersatzwegeprofil:** Nur entscheidungsrelevante Funktionen getrennt prüfen: öffentliche Schutzinformation · Online-Verwaltungsdienst · Notrufannahme · Leitstellenbetrieb · BOS-Kommunikation · Warnauslösung · Warnübertragung. Je Funktion: betroffener Raum, Beginn, letzter bestätigter Status, Umfang, bestätigter Ersatzweg mit seiner technischen und organisatorischen Unabhängigkeit und seinen Grenzen, Wiederanlaufprognose. Ungeprüfte Funktionen ausdrücklich offenlassen, ohne lange Fehlanzeigen für alle Funktionen. Webseiten als Informationsquelle und als Online-Dienst unterscheiden. Die Erreichbarkeit eines Ersatzwegs folgt nicht aus seiner bloßen Existenz; ein Social-Media-Konto ist nicht ohne Prüfung gleichwertig. Für Menschen ohne digitalen Zugang oder mit Sprach- oder Wahrnehmungsbarrieren nach belegten Alternativen fragen (A.9.2). Kontaktdaten und Ersatznotrufwege nur nach R4.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -50,8 +54,8 @@ bisherige_ids: ["baustein-n02"]
 
 ### 4. Darstellung
 
-Nach B12; je Funktion (Notruf, Leitstelle, BOS-Funk, Warnung, Telefonie/Daten) Status, Ersatzweg und Prognose getrennt.
+Nach B12, unter B15 nach dessen Darstellung; je Funktion (öffentliche Schutzinformation, Online-Verwaltungsdienst, Notruf, Leitstelle, BOS-Funk, Warnauslösung und -übertragung, Telefonie/Daten) Status, Ersatzweg und Prognose getrennt.
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Zuständige Ansprechstellen für BOS-Funk und Leitstellen organisationsspezifisch festlegen.
+**Offene Punkte:** Zuständige Ansprechstellen für BOS-Funk und Leitstellen organisationsspezifisch festlegen. Ebenso festlegen, welche amtlichen Informationsangebote im Referenzraum für Schutzinformation und Hilfszugang erforderlich sind, welche Ersatzkanäle bestehen und über welche etablierten Melde- und Abstimmungswege der Funktionsstatus zu erfahren ist, ohne der Koordinierungsstelle Betriebs- oder Aufsichtsaufgaben zuzuschreiben.

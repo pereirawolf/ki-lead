@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.12.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_B15-C11_Vorschlag_konsolidiert_2026-10-21“ (Kalibrierfall Cyber-Vorsorgelage vom 21.10.2026).
+
+- **SOP-Sammelmappe 3.3.0:** B15 2.1.0 (Vorsorgelagen und Schutzabschaltungen, Statusprofil, Prüffragen R7–R9, Prüfpunkte D1/D3/D5/D6/D7, Zeitfenster), C11 1.1.0 (öffentliche Informationsversorgung, Funktions- und Ersatzwegeprofil) und Teil A (A.3 „Teilzugriff“, A.4 „Fristgrundlage“). Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert; die neuen Regeln in Teil A wenden die geltenden Regeln von Kodierleitfaden und Arbeitsanweisung Erfassung an.
+
 ## 1.11.0 – 21.10.2026
 
 Grundlage: Umsetzungsbeschreibung vom 21.10.2026 zu manuellen LEAD-Eingabehilfen (umgesetzt mit App 0.4.24).
