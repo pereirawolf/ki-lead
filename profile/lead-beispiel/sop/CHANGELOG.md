@@ -10,12 +10,42 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.5.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.5.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.6.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.6.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.6.0] – 21.10.2026
+
+Fachliche Überarbeitung von C02, C03 und C04 ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_C02-C03-C04_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_C02-C03-C04_Vorschlag_2026-10-21“ (F1–F9) und „2026-10-21_KI-LEAD_SOP_C02_C03_C04_PR-Vorschlag“ (G01–G07, W01–W07, V01–V07, 21 Prüfszenarien). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Alle drei bleiben Inhaltsgerüste. Teil A ohne Regeländerung; Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **C02 Massenbewegungen, Bodenversagen und Gebäudeeinsturz 1.1.0** (bisher 1.0.1):
+  - Kopf und Abschnitt 1: „nichtseismisch“ gestrichen. Der Baustein gilt unabhängig von der Ursache und passt damit zur Route B04 → C02 in A.1 Nr. 2 und zum Verweis in B04. Die Ursache wird über B04, B01/B02, B06, B07 oder B16 ergänzt.
+  - Abschnitt 1: zwei Prüfpfade (Gelände bzw. Bauwerk) einschließlich Brücken und Verkehrsbauwerken; Relevanz ohne Mindestgröße; frühe Befassung. Neuer Befassungsanlass: Sperrung eines kritischen Verkehrsbauwerks oder einer einzigen Zufahrt. `anschluss` um C13 und C16 ergänzt.
+  - Abschnitt 2: „Befundprofil“ (Gefahrenhinweiskarte ≠ aktueller Befund). R4 ohne D8, eine Prognose bleibt Szenario. Neue Prüffrage R7 zu Spezialfähigkeiten für Ortung, Rettung und Sicherung (D4). Absätze „Räume und Schutzfolgen“, „Verlauf und Sekundärfolgen“ und „Freigabe und Nachlauf“.
+  - Abschnitte 3–5: Prüfpunkte D1–D8, Beurteilung, Darstellung nach der Dach-SOP der Ursache, Ansprechstellen, Übungsfälle.
+- **C03 Weltraumwetter und Störungen von Navigation und Zeitreferenz 1.1.0** (bisher 1.0.1):
+  - D6 an den Kodierleitfaden angeglichen: belegte Kopplung statt „nur belegte Störungen“.
+  - Abschnitt 1: frühe Befassung; Messung, Modell, Exposition und Dienststörung getrennt; keine Ursachenzuschreibung aus zeitlicher Koinzidenz. `anschluss` um C11, C13 und B14/B15 nach Befund ergänzt.
+  - Abschnitt 2: „Warn- und Messprofil“ (Produktart, Gültigkeit, Zeitzone, keine Umrechnung von Skalen), „Funktionsprofil“ und „Ersatz und Tragfähigkeit“ (unabhängige Redundanz).
+  - Abschnitte 3–5: Prüfpunkte D1–D8 mit Verweis auf das Kurzbeispiel Weltraumwetter im Kodierleitfaden, Darstellung, Ansprechstellen. Offener Punkt: BKG-Einstieg in R1 prüfen.
+- **C04 Vulkanasche 1.1.0** (bisher 1.0.1): Status-Text wie bei den übrigen Inhaltsgerüsten statt „nur nach konkretem Bedarf ausarbeiten“.
+  - Abschnitt 1: frühe Befassung; Asche in Flughöhe, bodennahe Asche, Gase und Aerosole getrennt; deutscher Bezug auch über ausländische Luftverkehrs- oder Lieferwege. `anschluss` um C09/C10 und B11 ergänzt.
+  - Abschnitt 2: „Asche- und Vorhersageprofil“ (zuständiges VAAC, Höhenbereich, Gültigkeit). R1 präzisiert. Neue Prüffragen R4 bodennahe Exposition, R5 Verkehrs- und Betriebsentscheidung, R6 Zielzustände. Absätze „Luftverkehrsstatus“ (Advisory ≠ Beschränkung ≠ Betreiberentscheidung) und „Versorgungspfad“.
+  - Abschnitte 3–5: Prüfpunkte D1–D8, Offenlassen achsenbezogen statt pauschal, Darstellung, Ansprechstellen.
+- **Alle drei:** Darstellung „nach der passenden Dach-SOP bzw. B17“ statt nur „nach B17“.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.6.0.
+
+### Nicht übernommen
+
+- Neue Links (BKG-Seiten, ESA, NOAA, VAAC, EASA, Landesdienste). Sie ließen sich bei der Bearbeitung nicht aufrufen; Fachdienste sind ohne Link genannt, der BKG-Einstieg ist als offener Punkt vorgemerkt (A.6).
+- Feste Warn-, Konzentrations-, Toleranz- oder Größenschwellen sowie Regelungen aus früheren Ascheereignissen.
+- Abweichende Absatzbezeichnungen in Abschnitt 5; es bleibt bei „Ansprechstellen“ und „Offene Punkte“ (A.8.3).
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.5.0] – 21.10.2026
 

@@ -42,7 +42,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
 | 0.4.25 | letzter Commit von Pull Request #23 „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
 | 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
-| 0.4.27 | letzter Commit von Pull Request #27 „SOP C09/C10: Medizinische Versorgungsfähigkeit und kritische Produktengpässe; Profil 1.14.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, Beispielprofil 1.14.0 mit Pull Request #27, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
+| 0.4.27 | letzter Commit von Pull Request #28 „SOP C02/C03/C04: Gefahrenbefund, Funktionswirkung und Wiederanlauf; Profil 1.15.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit Pull Request #27 und 1.15.0 mit Pull Request #28, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
 
 ## [0.4.27] – 21.10.2026
 

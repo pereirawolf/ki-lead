@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.5.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.6.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -1639,14 +1639,14 @@ kennung: "C02"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
-lageart: "Hangrutschung, Felssturz, Erdfall, Tagesbruch, Bergsenkung und erheblicher nichtseismischer Einsturz von Gebäuden oder Bauwerken"
+lageart: "Hangrutschung, Felssturz, Erdfall, Tagesbruch, Bergsenkung sowie Einsturz oder drohendes erhebliches Versagen von Gebäuden und Bauwerken"
 art_zuordnung: ["Sonstiges", "Hochwasser / Überschwemmung", "Erdbeben", "KRITIS-Ausfall"]
 art_hinweis: "„Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge"
-anschluss: "B04, B17, C05"
-zweck: "Eigene Fachrecherche für nichtseismische Massenbewegungen und Bauwerksversagen."
-version: "1.0.1"
+anschluss: "B04, B17, C05; B01/B02 bei Starkregen- oder Hochwasserbezug, B06 bei Schnee- oder Eislast, B07/B16 bei Explosion oder Vorsatz; C13, C16 und Sektor-SOP nach Folge"
+zweck: "Fachrecherche für Massenbewegungen, Bodenversagen und Bauwerksversagen unabhängig von der Ursache; die Ursache wird über die passende SOP ergänzt."
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N09"
@@ -1655,37 +1655,55 @@ bisherige_ids: ["baustein-n09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Hangrutschung, Felssturz, Erdfall, Bergsenkung und nichtseismischer Einsturz mit überörtlichem Schutz- oder Rettungsbedarf oder kritischem Funktionsverlust. Fachbewertung durch geologische Dienste, Bauaufsicht und zuständige Gefahrenabwehr; keine eigene Standsicherheitsdiagnose aus Bildern. Nicht jeder einzelne Gebäudeschaden benötigt eine übergreifende Meldung. Seismische Ursache: B04; Unfallfolgen und Rettung: C05.
+**Umfasst / grenzt ab von:** Zwei fachliche Prüfpfade unter einer Kennung: (a) Massenbewegungen und Bodenversagen, z. B. Hangrutschung, Felssturz, Erdfall, Tagesbruch oder Bergsenkung; (b) Einsturz oder fachlich begründet drohendes erhebliches Versagen von Gebäuden und Bauwerken einschließlich Brücken und anderer Verkehrsbauwerke. Relevanz nach A.1 aus Schutz- oder Rettungsbedarf, Unterkunftsverlust, kritischem Funktionsverlust oder konkret begründetem übergreifendem Informations- oder Abstimmungsbedarf, nicht allein aus Schadensgröße oder Verwaltungsgrenze; auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit erheblich sein. Frühe Befassung vor dem Versagen ist bei fachbehördlich begründetem Hinweis möglich; nicht jeder Gebäudeschaden oder Karteneintrag gehört ins übergreifende Lagebild. Der Baustein gilt unabhängig von der Ursache. Sie wird über die passende SOP ergänzt (Erdbeben B04, Starkregen oder Hochwasser B01/B02, Schnee- oder Eislast B06, Explosion B07, Vorsatz B16) und darf offenbleiben; belegte Folgen werden trotzdem dargestellt. Fachbewertung durch geologische, bautechnische, bergbehördliche und Gefahrenabwehrstellen; keine eigene Standsicherheits- oder Rettbarkeitseinschätzung aus Bildern. Unfall- und Rettungsfolgen C05, Betreuung und Unterbringung C16, Verkehrswege C13.
 
-**Befassungsanlässe:** Fachbehördlich begründeter Versagenshinweis · bestätigtes Ereignis mit überörtlichem Schutz- bzw. Rettungsbedarf oder kritischem Funktionsverlust.
+**Befassungsanlässe:** Fachbehördlich begründeter Versagenshinweis · bestätigtes Ereignis mit Schutz- oder Rettungsbedarf, Unterkunftsverlust oder kritischem Funktionsverlust · Sperrung eines kritischen Verkehrsbauwerks oder einer einzigen Zufahrt.
 
 **Zuordnung im Schema:** „Sonstiges“; „Hochwasser / Überschwemmung“ oder „Erdbeben“ nur bei entsprechendem Zusammenhang; „KRITIS-Ausfall“ bei belegter Folge.
 
 ### 2. Erfassung: Prüffragen
 
+**Befundprofil:** Prozess bzw. betroffene Bauwerksfunktion, Lage, Stand, fachliche Quelle und Bestätigungsgrad erfassen. Gefahrenhinweiskarte, historisches Ereigniskataster, aktuelle Messung, Fachprognose und behördliche Schutzentscheidung sind verschiedene Befunde. Maßstab, Abdeckung und Aktualität von Karten beachten; aus einer Übersichtskarte keine parzellenscharfe aktuelle Gefährdung, Eintrittszeit oder Entwarnung ableiten, und ein fehlender Karteneintrag ist kein Nachweis fehlender Gefahr. Mechanismus (z. B. Rutschung, Hohlraumversagen), möglichen Auslöser und tatsächlich betroffene Funktion getrennt führen; Regen, Bautätigkeit oder Altbergbau nicht ohne Fachbeleg als Ursache festlegen.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welcher Mechanismus und welcher bestätigte oder prognostizierte Wirkungsraum sind fachlich beschrieben? | Geologische Landesdienste, Landesbergbehörden; [BBK: Naturgefahren](https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Naturgefahren/naturgefahren.html) (Hintergrund) | L; D1 | Prognostizierter und bestätigter Raum trennen. |
-| R2 | Welche Gebäude, Hänge, Wege oder Leitungen sind tatsächlich betroffen oder gesperrt? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | L/R; D6 | Vorsorgliche Sperrung ≠ Schaden. |
+| R2 | Welche Gebäude, Hänge, Wege oder Leitungen sind tatsächlich betroffen oder gesperrt? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | L/R; D6 | Vorsorgliche Sperrung ≠ Schaden; die Folgen der Sperrung nach „Räume und Schutzfolgen“ prüfen. |
 | R3 | Welche Personenschäden, Unterkunftsverluste und Zugangseinschränkungen bestehen? | Lagemeldungen (A.3) | R; D2 | Zählregeln A.3; Betreuung nach C16. |
-| R4 | Welche weiteren Bewegungen oder Versagensfolgen sind fachlich zu erwarten? | Geologische Dienste, Bauaufsicht | R; D8 | Nur Fachprognose übernehmen. |
+| R4 | Welche weiteren Bewegungen oder Versagensfolgen sind fachlich zu erwarten? | Geologische Dienste, Bauaufsicht | R | Nur Fachprognose übernehmen; sie bleibt Szenario. D8 nur aus beobachtetem Verlauf. |
 | R5 | Welche geologischen, bautechnischen und behördlichen Bewertungen liegen vor? | Bauaufsicht, Gefahrenabwehrbehörde | L/R | Keine eigene Standsicherheitsaussage. |
 | R6 | Welche Bedingungen gelten für Freigabe, Rückkehr und Wiederherstellung? | Zuständige Behörden | M; D5 | Freigabe einzelner Gebäude ≠ Gebietsfreigabe. |
+| R7 | Welche Spezialfähigkeiten zur Ortung, Rettung und Sicherung werden benötigt, und welche sind tatsächlich eingesetzt? | Lagemeldungen (A.3); Gefahrenabwehrbehörde | M; D4 | Angefordert ≠ eingesetzt; für D4 zählt der Herkunftsraum der eingesetzten Fähigkeit. Keine eigene Bewertung von Rettbarkeit oder Einsatztaktik. |
+
+**Räume und Schutzfolgen:** Prozess- bzw. Schadensfläche, fachlich prognostizierten Ausbreitungsraum, behördlichen Sperr- oder Evakuierungsraum und tatsächlichen Versorgungswirkungsraum getrennt benennen. Eine vorsorgliche Sperrung belegt keinen eingetretenen Schaden, kann aber reale Zugangs-, Unterkunfts- oder Versorgungsfolgen haben. Bewohner im Gefahrenraum, Verletzte, Vermisste, Evakuierte und Betreute unterscheiden; Überschneidungen nicht addieren (A.3). Bei abgeschnittenen Räumen erreichbare Rettung, Pflege, kritische Lieferungen und bestätigte Ausweichwege nach C13 und C16 prüfen. Eine Straßenumleitung macht nicht alle Anwohnenden unmittelbar betroffen.
+
+**Verlauf und Sekundärfolgen:** Nur nach Fachangabe dokumentieren, ob die Bewegung fortbesteht, sich verlangsamt oder beschleunigt oder weitere Versagensbereiche erwartet werden; Beobachtungszeit, Messgröße und Aussagegrenze nennen. Lagebezogen belegte Folgeketten prüfen: versagender Hang oder Bauwerk → blockierter Verkehrs- oder Gewässerweg bzw. beschädigte Leitung → konkret betroffene Schutz- oder Versorgungsfunktion. Aufstau, Überflutung, Leckage oder weiterer Einsturz nur bei fachlichem Hinweis; das Vorhandensein einer Leitung oder eines Gewässers allein belegt keinen Folgeausfall. Offene Fachbeurteilungen sichtbar machen, ohne eigene Sperrabstände oder Sicherungsmaßnahmen vorzugeben.
+
+**Freigabe und Nachlauf:** Freigebende Stelle, Objekt oder Teilbereich, Nutzungszweck, Zeitpunkt und Bedingungen erfassen. Zugang zur Erkundung, eingeschränkte Nutzung, Rückkehr zum Wohnen und Wiederherstellung kritischer Versorgung nicht gleichsetzen. Eine beendete Rettungsphase oder abgebaute Absperrung belegt weder uneingeschränkte Nutzbarkeit noch wiederhergestellte Versorgung. Bei fortbestehendem Monitoring oder Rückkehrhindernis die Entscheidungsrelevanz und die zuständige Nachsorge nennen; eine fehlende Folgemeldung ist keine Freigabe.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D1:** belegter Wirkungsraum, nicht geologisch gefährdeter Gesamtbereich.
-- **D5:** Freigabe, Rückkehr und Wiederherstellung getrennt.
+- **D1:** Belegter Schadens-, Schutzfolgen- oder Versorgungswirkungsraum; Kartenfläche und bloß prognostizierte Ausbreitung nicht übernehmen.
+- **D2:** Unmittelbar Betroffene nach Kodierleitfaden; Personenschäden, Evakuierung, Unterkunftsverlust und mittelbare Zugangshindernisse unterscheiden.
+- **D3/D4:** Bewertete Funktion und tatsächliche Steuerung benennen; sachverständige Beratung und tatsächlich eingesetzte externe Unterstützung mit Stand nachweisen (R7). Eine Fachquelle oder angeforderte Spezialfähigkeit legt keine Stufe fest.
+- **D5:** Freigabe, Rückkehr und Wiederherstellung der gewählten Funktion sind verschiedene Ziele; nur belegte fachliche Restdauer.
+- **D6:** Konkrete Kopplung an Verkehrs-, Versorgungs- oder Schutzfunktion, nicht bloße Nähe zu Infrastruktur.
+- **D7:** Entscheidungsrelevante Lücken zu Wirkungsraum, weiterer Entwicklung oder Freigabe nach Kodierleitfaden; eigene Recherchegrenzen nicht kodieren.
+- **D8:** Beobachtete neue Bewegungen, Folgeschäden oder Änderungen der Schutz- und Versorgungslage; die Erwartung weiterer Bewegung allein genügt nicht.
 
-**Offenlassen:** D5 ohne fachliche Prognose; D8 ohne Beobachtung.
+**Beurteilung/Tendenz:** Nach konkreten Folgen, fachlich begründetem Vorsorgebedarf, verfügbaren Spezialfähigkeiten und tragfähigen Ausweichwegen. Eine kleine Schadensfläche kann bei hoher funktionaler Bedeutung erheblich sein; keine Stufe aus eindrucksvollen Bildern.
+
+**Offenlassen:** D2 ohne belegte Zahl unmittelbar Betroffener; D5 ohne fachliche Prognose für das benannte Ziel; D8 ohne beobachteten Verlauf.
 
 ### 4. Darstellung
 
-Nach B17 bzw. Dach-SOP; Mechanismus, Wirkung und Fachbewertung getrennt.
+Nach der Dach-SOP der Ursache bzw. B17. „Lage & Ereignis“: gesicherter Befund, Mechanismus soweit fachlich geklärt, Wirkung und Stand. „Risiken & Auswirkungen“: eingetretene Folgen, Fachprognose und offene Folgeketten getrennt. „Maßnahmen & Handlungsempfehlungen“: Schutzentscheidungen und Freigaben mit Status, zuständig adressierte Klärung. „Abhängigkeiten & Interdependenzen“: die maßgeblich beeinträchtigte Funktion und nutzbarer Ersatz. Neubewertung bei fachlich bestätigter Bewegung, geänderter Schutzentscheidung, neuem kritischem Funktionsverlust oder geänderter Freigabeprognose. Akuter Rettungs- oder Schutzbedarf nach A.7.3; Termine nur mit Grundlage nach A.4. Abschluss erst mit geklärtem Nachlauf, nicht allein mit dem Ende der Rettungsphase (A.8.2).
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Zuständige geologische Dienste und Bergbehörden organisationsspezifisch benennen.
+**Ansprechstellen:** Geologische Landesdienste · bei Bergbaubezug die zuständige Bergbehörde · für Bauwerksbewertung die Bauaufsicht und beauftragte Fachstellen · für Schutzentscheidungen die örtlich zuständige Gefahrenabwehr · Infrastrukturbetreiber zu ihrer eigenen Leistung (B). Zuständigkeiten fall- und landesspezifisch prüfen; keine bundeseinheitliche operative Fachleitung unterstellen.
+
+**Offene Punkte:** Zuständige geologische Dienste und Bergbehörden organisationsspezifisch benennen. Fachmaterial von BGR und Landesdiensten ist Rechercheeinstieg, kein aktueller Vor-Ort-Befund. Übungsfälle zu Rutschung, Erdfall oder Tagesbruch, drohendem Bauwerksversagen und abgeschnittenem Versorgungsraum.
 
 <!-- Quelle: sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md -->
 
@@ -1701,11 +1719,11 @@ lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
 lageart: "Weltraumwetter mit konkretem deutschem Funktionsbezug; Navigations-, Zeitreferenz-, Funk- oder Netzstörungen"
 art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
 art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
-anschluss: "B17, B08, B12"
+anschluss: "B17, B08, B12; C11 bei Funk-, TK- oder Warnbezug; C13 bei Navigationsbezug im Verkehr; B14 oder B15 nur nach entsprechendem Befund zur Ursache"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N15"
@@ -1714,37 +1732,52 @@ bisherige_ids: ["baustein-n15"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Fachlich relevante Weltraumwettersignale mit konkretem deutschem Funktionsbezug und bestätigte Navigations-, Zeitreferenz-, Funk- oder Netzstörungen. Ein Index oder ein Polarlichtnachweis belegt keinen deutschen Netzausfall. Terrestrische GNSS-Manipulation wird nicht ohne Fachnachweis dem Weltraumwetter zugerechnet; sie passt je nach Befund zu B14, B15 oder einer ursachenoffenen KRITIS-Lage. Vulkanasche: C04.
+**Umfasst / grenzt ab von:** Fachlich relevante Weltraumwettersignale mit konkret begründetem deutschem Schutz-, Versorgungs- oder Vorsorgebezug sowie belegte Störungen von Positionierung, Navigation, Zeitreferenz, Funk- oder Satellitendiensten und davon abhängigen Leistungen. Frühe Befassung nach A.1 Nr. 1 auch ohne Ausfall, wenn ein benennbarer Prüf- oder Vorbereitungsbedarf besteht; Polarlichtsichtung oder hoher Index allein genügen nicht und belegen keinen deutschen Netzausfall. Physikalische Messung, modellierte Wirkung, Betroffenheit einer konkreten Technik und tatsächliche Dienststörung getrennt beschreiben. Die Ursache darf offenbleiben: Gleichzeitiges Weltraumwetter belegt nicht, dass es eine Störung verursacht hat. Terrestrische Interferenz, Jamming, Spoofing, technische Fehlfunktion oder Cybervorfall nicht ohne Fachnachweis zuordnen; je nach Befund B14, B15 oder eine ursachenoffene KRITIS-Lage. Keine eigene Betriebs-, Frequenz-, Navigations- oder Netzführungsanweisung. Vulkanasche: C04.
 
-**Befassungsanlässe:** Fachlich relevantes Weltraumwettersignal mit konkretem deutschem Funktionsbezug · bestätigte Navigations-, Zeitreferenz-, Funk- oder Netzstörung.
+**Befassungsanlässe:** Fachlich relevantes Weltraumwettersignal mit konkretem deutschem Funktionsbezug oder benennbarem Vorbereitungsbedarf · bestätigte Navigations-, Zeitreferenz-, Funk- oder Netzstörung.
 
 **Zuordnung im Schema:** „Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt.
 
 ### 2. Erfassung: Prüffragen
+
+**Warn- und Messprofil:** Herausgebenden Fachdienst, Produktart, Ausgabezeit, Bezugs- bzw. Gültigkeitszeit mit Zeitzone, räumlichen oder technischen Bezug und Unsicherheit festhalten; Zeitangaben in UTC nicht stillschweigend als Ortszeit ausgeben. Geomagnetische Störung, solares Strahlungsereignis und Funkbeeinträchtigung getrennt führen; Fachskalen und Indizes nur mit ihrer eigenen Bedeutung wiedergeben und nicht ineinander umrechnen. Prognose, Warnung vor erwarteten Bedingungen, Meldung gemessener Umweltbedingungen und Betreiberbefund zur Dienstleistung sind keine austauschbaren Status. Ein großräumiger Umweltindex ist keine räumliche Schadensbilanz für Deutschland; technische Fachschwere wird nicht in LEAD-Beurteilung oder Radarstufen umgerechnet.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welche Fachwarnung gilt für welchen Zeitraum und welche technische Wirkung? | [BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); zuständige Fachdienste | L/R; D8 | Warnung ≠ Störung. |
 | R2 | Welche deutsche Infrastruktur oder Dienstleistung ist nach Fach- oder Betreiberbewertung konkret exponiert? | Betreibermeldungen (A.3); Fachbehörden | R/I | Exposition nur nach Fach- oder Betreiberbewertung. |
 | R3 | Welche Auswirkungen sind gemessen, welche nur prognostiziert? | Fachdienste; Betreibermeldungen (A.3) | L/R | Gemessen und prognostiziert trennen. |
-| R4 | Welche Redundanz oder betriebliche Anpassung ist tatsächlich verfügbar bzw. umgesetzt? | Betreibermeldungen (A.3) | M; D5 | Vorhanden ≠ umgesetzt. |
+| R4 | Welche Redundanz oder betriebliche Anpassung ist tatsächlich verfügbar bzw. umgesetzt? | Betreibermeldungen (A.3) | M; D5 | Vorhanden ≠ umgesetzt; „Ersatz und Tragfähigkeit“. |
 | R5 | Welche Rolle spielen Navigation, Zeitreferenz, Kommunikation und Energie für die konkrete Folgekette? | Betreibermeldungen (A.3) | I; D6 | Wirkungskette nach A.2 belegen. |
 | R6 | Welche fachlichen Entwarnungs- oder Neubewertungsindikatoren bestehen? | Fachdienste | M; D5/D8 | Für Kennsatz `Neubewertung bei:` verwenden. |
 
+**Funktionsprofil:** Benötigte Positionierungs-, Navigations-, Zeit- oder Kommunikationsleistung, erforderliche Qualität und konkreten Anwendungsraum nach Betreiber- oder Fachangabe benennen. Ausfall, verringerte Genauigkeit, zeitweilige Nichtverfügbarkeit und unzuverlässige oder inkonsistente Daten unterscheiden: Ein erreichbares System ist nicht automatisch verlässlich, eine einzelne Gerätebeobachtung belegt aber keine flächige Störung. Die Kopplung zur kritischen Dienstleistung mit Beleg verfolgen, etwa Navigation im Verkehr (C13), Synchronisation in Telekommunikation oder Energie, Funkverbindung einer Schutzfunktion (C11). Anlagenabhängigkeit und eingetretener Folgeausfall bleiben getrennt; keine eigenen Toleranzwerte.
+
+**Ersatz und Tragfähigkeit:** Eine Alternative muss nach Betreiberangabe geeignet, betriebsbereit, zugänglich und von der maßgeblichen Störursache hinreichend unabhängig sein. Mehrere Empfänger oder Satellitensysteme sind nicht automatisch unabhängiger Ersatz; eine Zeitverteilung über andere Technik kann denselben vorgelagerten Zeitbezug nutzen. Vorhanden, getestet, aktiviert und wirksam unterscheiden. Für den Weiterbetrieb ohne externen Referenzabgleich nur fachlich bestätigte Dauer und Qualitätsgrenzen nennen; keine selbst berechnete Uhrendrift oder Überbrückungszeit und keine pauschale Autarkie. Vorhaltung allein ist keine D4-Unterstützung.
+
 ### 3. Auswertung: Prüfpunkte
 
-- **D1/D2:** in der Frühwarnphase offen.
-- **D6:** nur belegte Störungen.
+- **D1/D2:** Ohne belegte Wirkung bzw. unmittelbar Betroffene im Referenzraum offen (Kodierleitfaden, Kurzbeispiel Weltraumwetter); Warngebiet, Polarlichtbereich und technische Reichweite nicht übernehmen. Reale Folgen einer Schutzmaßnahme gesondert prüfen, auch wenn ein technischer Schaden verhindert wurde.
+- **D3:** Strukturell nur mit konkreter Fachaufgabe und belegter Stelle nach Kodierleitfaden, sonst die tatsächlich handelnde Funktion. Ein internationaler Fachdienst als Quelle begründet keine internationale Steuerung.
+- **D4:** Tatsächlich eingesetzte ereignisbezogene externe Unterstützung, nicht eine ausländische Fachwarnung oder der reguläre Bezug eines Dienstes.
+- **D5:** Benanntes Ziel und belastbare Restdauer; das vorhergesagte Ende eines Umweltphänomens ist nicht die Wiederherstellung einer abhängigen Dienstleistung.
+- **D6:** Belegte Kopplung der konkreten Lage zu einer kritischen Dienstleistung nach Kodierleitfaden, nicht allgemeine Technikabhängigkeit oder eine Liste möglicher Sektoren. Eine Störung ist ein möglicher Beleg, aber keine zusätzliche Voraussetzung; erwartete Folgeausfälle bleiben Szenario.
+- **D7:** Informationslage der Befassung, nicht die Qualität der Navigation oder die Kommunikation mit der Bevölkerung; gestörte Lage- und Meldewege oder entscheidungsrelevante Unklarheit nach Kodierleitfaden.
+- **D8:** Beobachtete Veränderung der maßgeblichen Lage im Referenzraum, nicht eine Prognoseänderung oder Indexschwankung ohne solchen Bezug.
 
-**Offenlassen:** Die meisten Ist-Achsen in der Frühwarnphase (A.1 Nr. 1).
+**Beurteilung/Tendenz:** Nach konkreter gegenwärtiger Relevanz einschließlich fachlich begründetem Vorsorgebedarf und nutzbarem Ersatz; Fachwarnstufe, technische Wirkung und Bevölkerungsschutzrelevanz getrennt begründen.
+
+**Offenlassen:** Ist-Achsen ohne belegte Wirkung im Referenzraum (A.1 Nr. 1); D5 ohne benanntes Ziel und Prognose.
 
 ### 4. Darstellung
 
-Nach B17; Warnung, gemessene Wirkung und Szenario getrennt.
+Nach der passenden Dach-SOP bzw. B17: Fachwarnung mit Gültigkeitsfenster, gemessene Umweltbedingungen, belegte Funktionswirkung im Referenzraum und bedingte Folgeketten getrennt. Die Kernaussage beantwortet: Welche Schutz- oder Versorgungsfunktion braucht welche konkret begründete Prüfung, welcher Ersatz ist wirksam, und was bleibt offen? Betriebsanpassungen als Betreibermaßnahme mit Status, Empfehlungen als zuständig adressierte Klärung nach A.4; keine Steuerungsanweisungen. Neubewertung bei konkreter Änderung von Dienstqualität oder Verfügbarkeit, aktualisierter relevanter Fachwarnung oder veränderter Tragfähigkeit des Ersatzes. Nach Abklingen der Umweltstörung den verlässlichen Wiederanlauf der betroffenen Dienste fachlich bestätigen lassen; eine fachliche Entwarnung ist keine betriebliche Freigabe. Für die Wochenlage belegte strukturelle Abhängigkeiten und fehlende unabhängige Referenz- oder Ersatzwege als Prüfbedarf benennen, ohne aus allgemeiner Exposition einen Ausfall abzuleiten.
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren.
+**Ansprechstellen:** Fachdienste für Weltraumwetter produktbezogen (u. a. BKG, Weltraumwetterdienst der ESA, NOAA Space Weather Prediction Center) · betroffene Betreiber zu ihrer Dienstleistung (B) · zuständige Fachstellen für Navigation, Zeitreferenz, Energie, Telekommunikation oder Luftfahrt fallbezogen. Keiner Stelle pauschal die Verantwortung für alle Wirkungen zuschreiben; eine internationale Prognose ist keine deutsche Behördenentscheidung.
+
+**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren. Rechercheeinstieg BKG prüfen: Der Link in R1 ist nach einem Hinweis vom 21.10.2026 möglicherweise veraltet; die Beobachtungsdaten des BKG zum Weltraumwetter kommen als weiterer Einstieg in Betracht (beides vor Erstverwendung prüfen, A.6). Übungsfälle zu hoher Fachwarnstufe ohne Schaden, realem Verlust von GNSS- oder Zeitqualität, abhängiger und unabhängiger Redundanz und ursachenoffener Störung.
 
 <!-- Quelle: sop/teil-c/C04_vulkanasche.md -->
 
@@ -1757,14 +1790,14 @@ kennung: "C04"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
-lageart: "Amtlich bzw. fachlich bestätigte Aschelage mit Bezug zu Luftverkehr, Gesundheit oder kritischer Logistik"
+lageart: "Fachlich erwartete oder bestätigte Vulkanaschelage mit Bezug zu Luftverkehr, Gesundheit oder kritischer Versorgung in Deutschland"
 art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
-anschluss: "B04, B12, B17, C13"
+anschluss: "B04, B12, B17, C13; C09/C10 bei medizinischen Gütern oder Transfers; B11 bei gesundheitlichen Folgen bodennaher Exposition"
 zweck: "Erfassung von Verkehrs- und Versorgungsfolgen einer Vulkanaschelage."
-version: "1.0.1"
-status: "Inhaltsgerüst – nur nach konkretem Bedarf ausarbeiten"
-stand: "19.10.2026"
+version: "1.1.0"
+status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N18"
@@ -1773,33 +1806,51 @@ bisherige_ids: ["baustein-n18"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Aschelagen mit konkretem Bezug zu Luftverkehr, Gesundheit oder kritischer Logistik in Deutschland. Nicht mit Weltraumwetter (C03) verschmelzen: andere Ursachen, Fachquellen und Wirkungspfade. Eine Warnung allein bestimmt keinen Radarwert.
+**Umfasst / grenzt ab von:** Fachlich begründet erwartete oder bestätigte Vulkanaschelage mit konkretem Schutz-, Luftverkehrs- oder Versorgungsbezug zu Deutschland. Frühe Befassung nach A.1 Nr. 1, wenn ein benennbarer Vorbereitungs- oder Abstimmungsbedarf besteht; eine ferne Eruption ohne solchen Pfad genügt nicht. Eruption, Asche in der Atmosphäre, bodennahe Konzentration und Ablagerung am Boden unterscheiden. Vulkanische Gase und daraus entstehende Aerosole sind nicht mit Asche gleichzusetzen; bei gesundheitlichen oder Umweltfolgen die zuständige Fachbewertung und die passende Dach-SOP ergänzen. Ein deutscher Wirkungsbezug kann auch über unterbrochene ausländische Luftverkehrs- oder Lieferwege entstehen, ohne dass Asche über Deutschland nachgewiesen ist. Nicht mit Weltraumwetter (C03) vermischen. Keine eigene Flugfreigabe, Luftraumsperrung oder gesundheitliche Grenzwertentscheidung; eine Warnung allein bestimmt keinen Radarwert.
 
-**Befassungsanlässe:** Amtlich bzw. fachlich bestätigte Aschelage mit konkretem Bezug zu Luftverkehr, Gesundheit oder kritischer Logistik.
+**Befassungsanlässe:** Fachlich erwartete oder bestätigte Aschelage mit konkretem Bezug zu Luftverkehr, Gesundheit oder kritischer Versorgung · bestätigte Einschränkung des Luftverkehrs mit Schutz- oder Versorgungsfolgen in Deutschland, auch über ausländische Flughäfen oder Lieferwege.
 
 **Zuordnung im Schema:** „Sonstiges“; einschlägige bestehende Folgenarten ergänzen.
 
 ### 2. Erfassung: Prüffragen
 
+**Asche- und Vorhersageprofil:** Zuständiges Vulkanasche-Beratungszentrum (VAAC) nach Eruptionsgebiet, ergänzende Fachquelle, Ausgabe- und Gültigkeitszeit mit Zeitzone, Gebiet, Höhenbereich, Produktart und Unsicherheit erfassen. Beobachtung (Satellit, Boden, Luftfahrzeug), modellierte Ausbreitung und fachlich bearbeitetes Advisory unterscheiden. Ein Kartenpolygon ist weder Schadensfläche noch Luftraumsperrung; verschiedene Höhenbereiche oder Gültigkeitszeiten nicht zu einer einheitlich betroffenen Fläche überlagern. Ein fehlender Messnachweis ist bei begrenzter Beobachtungsabdeckung keine Entwarnung. Die für Deutschland bzw. den konkreten Versorgungsweg relevante aktuelle Ausgabe verwenden; ältere Karten nicht als gegenwärtige Lage darstellen. Keine eigene Ausbreitungsrechnung oder Konzentrationsschätzung.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Fachinformation beschreibt Ausbreitung, Zeitfenster und Unsicherheit? | Zuständige Fachdienste der Luftfahrt und Meteorologie; fallbezogen | L/R | Vorhersage mit Gültigkeit und Unsicherheit. |
+| R1 | Welche Fachinformation beschreibt Ausbreitung, Höhenbereich, Zeitfenster und Unsicherheit? | Zuständiges VAAC; DWD als Flugwetterdienst; weitere Fachdienste der Luftfahrt und Meteorologie; fallbezogen | L/R | Vorhersage mit Gültigkeit und Unsicherheit; Prognosen erst nach Abgleich von Zeit, Höhe und Produkt vergleichen. |
 | R2 | Welche Verkehrs- bzw. Versorgungsausfälle sind tatsächlich wirksam? | Betreibermeldungen (A.3) (Flughäfen, Luftverkehr) | R; D6 | Wirksam ≠ befürchtet. |
-| R3 | Welche Ersatzwege bestehen, welche kritischen Güter sind betroffen? | Betreibermeldungen (A.3) | I; D6 | Nach C13. |
+| R3 | Welche Ersatzwege bestehen, welche kritischen Güter sind betroffen? | Betreibermeldungen (A.3) | I; D6 | Nach C13 und „Versorgungspfad“. |
+| R4 | Welche bodennahe Exposition oder Ablagerung und welche gesundheitlichen, betrieblichen oder infrastrukturellen Folgen sind fachlich belegt? | Zuständige Umwelt- und Gesundheitsbehörden; meteorologische Fachdienste; Betreiber zur eigenen Anlage (B); Raum, Messstand und Stoffbezug prüfen | L/R/I; D2/D6 | Asche in Flughöhe ist kein Beleg bodennaher Belastung. Schutzempfehlungen nur mit zuständigem fachlichem Ursprung und Gültigkeit; keine eigene medizinische oder toxikologische Bewertung. |
+| R5 | Welche aktuelle Verkehrs- oder Betriebsentscheidung und welche geeigneten Ersatzwege sind bestätigt? | Zuständige Luftfahrtstellen, Flugsicherung, Flughafen- und Verkehrsbetreiber, betroffene Versorgungsträger | L/M/I; D3/D6 | Fachadvisory, amtliche Beschränkung und Betreiberentscheidung getrennt (Absatz „Luftverkehrsstatus“). |
+| R6 | Welche Freigabe-, Neubewertungs- und Wiederanlaufbedingungen gelten für den gewählten Zielzustand? | Zuständige Fachstellen und Betreiber | M; D5/D8 | Ende der Eruption, Ende der relevanten Ascheexposition, Betriebsfreigabe und abgearbeiteter Liefer- oder Versorgungsrückstand sind verschiedene Ziele. |
+
+**Luftverkehrsstatus:** Advisory bzw. Fachprognose, gegebenenfalls geltende amtliche Luftfahrtinformation oder Beschränkung, betriebliche Risikobewertung und tatsächlichen Betriebsstatus getrennt erfassen, jeweils mit herausgebender Stelle, Geltungsbereich und Stand. Einzelne Flugausfälle belegen weder die Schließung eines Flughafens noch die Sperrung des Luftraums; ein Warngebiet ist kein Flugverbot. Flugbetriebliche Entscheidungen werden nicht von der Lagebildredaktion abgeleitet; keine Konzentrationsgrenzen oder Ausnahmeregeln aus früheren Ereignissen übernehmen. Folgen für Rettungs- und Spezialtransporte nur bei konkretem Vorgang und bestätigter Einschränkung.
+
+**Versorgungspfad:** Welche konkret benötigten Güter, Personen oder Spezialfähigkeiten kommen auf welchem Weg nicht rechtzeitig an? Bestand am Bedarfspunkt, kritisches Zeitfenster und bestätigte Ersatzroute mit Kapazität, Laufzeit und nötiger Kühl- oder Spezialtransportfähigkeit nach C13 prüfen. Abhängigkeit vom Luftverkehr ist noch keine Versorgungslücke, eine Ersatzroute auf der Karte noch keine nutzbare Zuführung. Bei medizinischen Gütern oder Transfers C09 und C10, bei anderen kritischen Gütern die passenden Bausteine. Nach Wiederaufnahme des Flugverkehrs Rückstau, Verteilung und lokale Bedarfsdeckung getrennt verfolgen; dieselbe Ware oder Transportkapazität nicht in mehreren Meldungen als verfügbar zählen (A.7.4).
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D1/D2:** nur belegte Wirkung in Deutschland.
+- **D1/D2:** Nur belegte Wirkungen bzw. unmittelbar Betroffene im Referenzraum; Vulkanstandort, Aschepolygon und Zahl aller Flugreisenden nicht übernehmen. Reale Schutz- oder Versorgungsfolgen von Maßnahmen getrennt prüfen.
+- **D3/D4:** Bewertete Funktion benennen: Fachinformation, Verkehrs- oder Betriebsentscheidung, Versorgung; eine internationale Fachquelle ist keine internationale Steuerung. Externe Unterstützung nur bei tatsächlichem ereignisbezogenem Einsatz; strukturelle Zurechnung in der Vorsorge nach Kodierleitfaden bleibt möglich.
+- **D5:** Prognostizierte Restdauer bis zum benannten Betriebs- oder Versorgungsziel; Ende der Eruption oder Wetterwechsel ist nicht automatisch Wiederherstellung.
+- **D6:** Konkrete Kopplung an eine Schutz- oder Versorgungsleistung, nicht allgemeine Luftverkehrsabhängigkeit; eingetretene Folgeausfälle und mögliche Folgekette trennen.
+- **D7:** Entscheidungsrelevante Informationslücken nach Abgleich von Produkt, Höhe, Raum und Gültigkeit; eigene Abrufgrenzen zählen nicht.
+- **D8:** Beobachtete Änderungen der maßgeblichen Lage im Referenzraum, nicht mehr Warn- oder Medienmeldungen oder ein verschobenes Prognosepolygon.
 
-**Offenlassen:** Ist-Achsen ohne belegte Wirkung.
+**Beurteilung/Tendenz:** Nach konkreten Schutz- oder Versorgungsfolgen bzw. fachlich begründetem Vorsorgebedarf, belegtem Zeitfenster und Ersatz; keine Stufe aus Eruptionsstärke, historischer Analogie oder Größe der Aschewolke in Flughöhe.
+
+**Offenlassen:** Einzelne Achsen ohne tragfähigen Bezugsgegenstand oder Beleg nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Prognose. Strukturelle Zurechnung in der Vorsorge und belegte Kopplungen fallbezogen prüfen.
 
 ### 4. Darstellung
 
-Nach B17; Vorhersage, Wirkung und Ersatzwege getrennt.
+Nach der passenden Dach-SOP bzw. B17: Fachprognose mit Höhe und Gültigkeit, tatsächlich geltende Betriebs- oder Verkehrsentscheidung, reale Schutz- oder Versorgungswirkung und bestätigter Ersatz getrennt. Die Kernaussage nennt die konkrete Leistung, den verbleibenden Puffer und die zuständig zu klärende Frage. Maßnahmen mit Status, Empfehlungen mit belegter Grundlage und Zeitfenster nach A.4; keine eigenen Flug- oder Gesundheitsanweisungen. Neubewertung bei relevanter neuer Fachprognose, bestätigter Betriebsänderung, befristetem Ausfall einer kritischen Lieferung oder geänderter Fachbewertung bodennaher Belastung. Abschluss nach Erreichen des benannten Ziels und Klärung des Nachlaufs; das Ende einer Warnung genügt nicht (A.8.2).
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Fachdienste und Zuständigkeiten erst bei konkretem Bedarf ausarbeiten.
+**Ansprechstellen:** Zuständiges VAAC nach Eruptionsgebiet (nicht pauschal ein bestimmtes Zentrum) · DWD bzw. zuständige meteorologische Fachdienste der Luftfahrt · zuständige Luftfahrtstellen, Flugsicherung und Betreiber für tatsächliche Verkehrsentscheidungen · Umwelt- und Gesundheitsfachstellen bei bodennaher Exposition · Versorgungsträger für Güter- und Patientenpfade. Fachinformationen der europäischen Luftfahrtbehörde sind Hintergrund, keine aktuelle deutsche Betriebsentscheidung.
+
+**Offene Punkte:** Quellenprodukte, Links, Zuständigkeiten und örtliche Meldewege vor Übernahme prüfen (A.6). Übungsfälle zu Asche in Flughöhe ohne Bodenwirkung, betrieblicher Einschränkung ohne allgemeine Luftraumsperre, kritischem Importweg ohne Asche über Deutschland und Rückstau nach dem Wiederanlauf.
 
 <!-- Quelle: sop/teil-c/C05_grossunfall-unfallfolgen.md -->
 
