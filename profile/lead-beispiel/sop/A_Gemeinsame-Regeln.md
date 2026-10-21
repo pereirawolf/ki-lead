@@ -6,7 +6,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.7.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.8.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -30,7 +30,7 @@
    | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13) |
    | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), B02 bei Tauwetter |
    | B07 Industrieunfall / Chemieunfall | B10, B11, C16; radiologische Lagen C01 |
-   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C15), B11 (C09) |
+   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09) |
    | B09 Gasversorgungsengpass | B08, B12 (C12) |
    | B11 Gesundheitliche Lage / Epidemie | C09, C07, C10, C08 |
    | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B12), C11 |

@@ -10,12 +10,40 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.7.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.7.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.8.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.8.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.8.0] – 21.10.2026
+
+Fachliche Überarbeitung von C14 und C15 ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_C14-C15_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_C14-C15_Vorschlag_2026-10-21“ (F1–F6) und „2026-10-21_KI-LEAD_SOP_C14_C15_PR-Vorschlag“ (F01–F08, S01–S08, 20 Prüfszenarien). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Beide bleiben Inhaltsgerüste. Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **C14 Lebensmittelversorgung 1.1.0** (bisher 1.0.1):
+  - Kopf und Abschnitt 1:
+    - Die Leistungskette reicht von der Produktion bis zur erreichbaren Abgabe; frühe Befassung ist möglich.
+    - Lebensmittelsicherheit und Mengenmangel sind getrennt; lebensmittelbedingte Erkrankungen laufen über B11/C07, Tierseuchen über C08.
+    - Neuer Befassungsanlass: Stromausfall mit Folgen für Kühlung, Zahlung oder Abgabe.
+    - `art_hinweis` (Prüfhilfe unter der Ursache) und `anschluss` (B08, B10, C13, C16, C09/C10, C08, B11/C07, C17) angepasst.
+  - Abschnitt 2: neue Absätze „Bedarfs- und Versorgungsprofil“, „Eignung und Zugang“, „Sichere Nutzbarkeit und Verarbeitung“ sowie „Ersatzversorgung und staatliche Instrumente“ (Reserve vorhanden ≠ freigegeben ≠ geliefert ≠ ausgegeben). R3 und R6: Bestandsreichweite und Nachschubprognose sind keine D5-Dauer.
+  - Abschnitte 3–5: Prüfpunkte D1–D8, D5 bis zum Versorgungsziel; Darstellung, Ansprechstellen, Übungsfälle.
+- **C15 Abwasser, Sanitärhygiene und kritische Entsorgung 1.1.0** (bisher 1.0.1):
+  - Abschnitt 1: drei Prüfpfade (Abwasser, Sanitär, Entsorgung), Tierkörperbeseitigung (C08) einbezogen, frühe Befassung. Abwassermonitoring als Surveillance gehört zu B11. `art_hinweis` und `anschluss` (B02, B08, C08, C09, C13, C16) angepasst.
+  - Abschnitt 2: neue Absätze „Funktions- und Bedarfsprofil“, „Sanitärersatz und besondere Bedarfe“, „Einleitung, Kontakt und Folgewirkung“ und „Kritischer Entsorgungspfad“. R6 präzisiert: Wiederherstellung ≠ Freigabe ≠ nutzbare Leistung, keine einheitliche Freigabepflicht.
+  - Abschnitte 3–5: Prüfpunkte D1–D8; Offenlassen mit Prognose statt „Freigabeperspektive“; Darstellung, Ansprechstellen, Übungsfälle.
+- **Teil A, A.1 Nr. 2:** Route B08 Stromausfall um C14 ergänzt (Kühlung, Kassen- und Bestellsysteme). Recherchehinweis, keine Kaskade.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.8.0.
+
+### Nicht übernommen
+
+- Neue Links (BLE, BfR, BBK, UBA, LAGA); Institutionen sind ohne Link genannt, vor Erstverwendung zu prüfen (A.6).
+- Benennung einzelner Gesetze und Reservearten; Aussagen zu Sicherstellungsinstrumenten bleiben allgemein.
+- Abweichende Absatzbezeichnungen in Abschnitt 5; es bleibt bei „Ansprechstellen“ und „Offene Punkte“ (A.8.3).
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.7.0] – 21.10.2026
 

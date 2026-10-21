@@ -8,6 +8,17 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.17.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_C14-C15_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
+
+- **SOP-Sammelmappe 3.8.0:**
+  - C14 1.1.0: Leistungskette bis zur Abgabe, Eignung und Zugang, sichere Nutzbarkeit, Statuspfad für Ersatzversorgung und Reserven, Abgrenzung zu B11/C07 und C08, Prüfpunkte D1–D8.
+  - C15 1.1.0: drei Prüfpfade, Sanitärersatz, Einleitung und Folgewirkung, kritischer Entsorgungspfad einschließlich Tierkörperbeseitigung, Prüfpunkte D1–D8.
+  - Teil A, A.1 Nr. 2: Route B08 um C14 ergänzt.
+  - Beide bleiben Inhaltsgerüste. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 1.16.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_C05-C06-C13_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).

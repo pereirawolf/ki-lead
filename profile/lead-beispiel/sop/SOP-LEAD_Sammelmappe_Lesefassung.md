@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.7.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.8.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -82,7 +82,7 @@
    | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13) |
    | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), B02 bei Tauwetter |
    | B07 Industrieunfall / Chemieunfall | B10, B11, C16; radiologische Lagen C01 |
-   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C15), B11 (C09) |
+   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09) |
    | B09 Gasversorgungsengpass | B08, B12 (C12) |
    | B11 Gesundheitliche Lage / Epidemie | C09, C07, C10, C08 |
    | B15 Cyberangriff | die Sektor-SOP der ausgefallenen Dienstleistung (B08–B12), C11 |
@@ -2547,14 +2547,14 @@ kennung: "C14"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Störung lebenswichtiger Lebensmittelversorgung (Produktion, Verteilung, Kühlung, Abgabe)"
+lageart: "Tatsächliche oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung (Produktion, Lagerung und Kühlung, Transport, Verarbeitung, Abgabe)"
 art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
-art_hinweis: "„Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen"
-anschluss: "B12"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
+anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N07"
@@ -2563,37 +2563,54 @@ bisherige_ids: ["baustein-n07"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Belegte Störungen lebenswichtiger Lebensmittelversorgung und besonderer Ernährungsbedarfe. Preissteigerung, leerer Einzelmarkt oder Lieferproblem eines Produkts sind kein Nachweis einer Ernährungskrise. Keine automatische Auslösung fachrechtlicher Kriseninstrumente.
+**Umfasst / grenzt ab von:** Tatsächliche oder fachlich begründet drohende Unterbrechung notwendiger Lebensmittelversorgung und konkret benannter besonderer Ernährungsbedarfe. Produktion, sichere Lagerung und Kühlung, Transport, Verarbeitung bzw. Zubereitung und tatsächlich erreichbare Abgabe werden als Leistungskette geprüft. Preissteigerung, leerer Einzelmarkt, geringere Auswahl oder Lieferproblem eines Produkts belegen keine Ernährungskrise; umgekehrt schließt Ware in Lagern oder anderen Regionen eine örtliche oder bedarfsgruppenspezifische Lücke nicht aus. Zugangs- und Abgabehindernisse lagebezogen erfassen; Erschwinglichkeit nicht aus Marktpreisen allein beurteilen. Frühe Befassung nach A.1 Nr. 1 bei begründetem Vorbereitungs- oder Abstimmungsbedarf, ohne drohende Schäden als eingetreten darzustellen. Lebensmittelsicherheitsproblem und Mengen- oder Verteilmangel getrennt: Eine Produktwarnung belegt keinen umfassenden Versorgungsausfall, eine lebensmittelbedingte Erkrankungshäufung läuft über B11/C07, Tierseuchen mit Produktionsfolgen über C08; C14 erfasst dann nur die Versorgungsfolge. Keine automatische Auslösung fachrechtlicher Kriseninstrumente, keine eigene Diät- oder Sicherheitsfreigabe, Verzehrempfehlung oder Zuteilung. Trinkwasser B10, Logistik C13, Gemeinschaftsunterbringung C16, medizinisch bedingte Kost C09/C10, zivile Verteidigung C17 nach konkretem Bezug.
 
-**Befassungsanlässe:** Belegte Störung lebenswichtiger Lebensmittelversorgung · Ausfall von Produktion, Verteilung, Kühlung oder Abgabe mit relevantem Versorgungsbezug.
+**Befassungsanlässe:** Belegte oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung · Ausfall von Produktion, Lagerung, Kühlung, Verteilung, Zahlung oder Abgabe mit relevantem Versorgungsbezug, etwa bei länger andauerndem Stromausfall · ungedeckter besonderer Ernährungsbedarf in Einrichtungen oder Unterkünften.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
 
 ### 2. Erfassung: Prüffragen
 
+**Bedarfs- und Versorgungsprofil:** Für welche Menschen oder Einrichtungen wird welche geeignete Ernährung in welchem Raum und Zeitraum benötigt? Benötigte Menge und Qualität, tatsächlich nutzbaren Bestand, gebundene Reserven, Verbrauch und bestätigte Zuführung mit Quelle und Stand auf vergleichbarer Basis gegenüberstellen. Rohware, Fertigprodukt, zubereitete Mahlzeit und ausgegebene Portion sind verschiedene Leistungsstände; Kilogramm, Packungen, Portionen, Abgaben und versorgte Menschen nicht ungeprüft umrechnen oder addieren. Allgemeine Vorratsempfehlungen ersetzen weder erhobene Haushaltsbestände noch einen aktuellen Bedarfsnachweis; eine fehlende Erhebung ist weder Nullbefund noch bestätigte Unterversorgung.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Lebensmittel oder besonderen Ernährungsbedarfe sind in welchem Raum nicht ausreichend verfügbar? | Lagemeldungen (A.3); zuständige Landesbehörden | L; D1 | Besondere Bedarfe (z. B. Säuglingsnahrung, Diäten) eigens prüfen. |
+| R1 | Welche Lebensmittel oder besonderen Ernährungsbedarfe sind in welchem Raum nicht ausreichend verfügbar? | Lagemeldungen (A.3); zuständige Landesbehörden | L; D1 | Besondere Bedarfe (z. B. Säuglingsnahrung, medizinisch erforderliche Kostformen) eigens prüfen (Absatz „Eignung und Zugang“). |
 | R2 | Handelt es sich um einzelne Produkte, Marktverschiebung oder tatsächlich ungedeckte Grundversorgung? | [BMLEH: Ernährungsvorsorge](https://www.bmel.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html) (Hintergrund); Lagemeldungen (A.3) | L/R | Marktbeobachtung ≠ Versorgungslücke. |
-| R3 | Welche Bestände sind nutzbar, verteilt und erreichbar? | Betreibermeldungen (A.3) (Handel, Logistik) | R/M; D5 | Bestand ≠ erreichbare Abgabe. |
-| R4 | Welche Rolle spielen Strom, Wasser, Kühlkette, Personal und Zahlungsmöglichkeiten? | Betreibermeldungen (A.3) | R/I; D6 | Kopplungen einzeln belegen. |
+| R3 | Welche Bestände sind sicher nutzbar, verteilt und erreichbar? | Betreibermeldungen (A.3) (Handel, Logistik) | R/M | Bestand ≠ erreichbare Abgabe; Bestandsreichweite ist ein Risikofenster, keine D5-Dauer. |
+| R4 | Welche Rolle spielen Strom, Wasser, Kühlkette, Personal und Zahlungsmöglichkeiten? | Betreibermeldungen (A.3) | R/I; D6 | Kopplungen einzeln belegen; Stromausfall nach B08. |
 | R5 | Welche Ersatzabgabe und institutionelle Versorgung sind tatsächlich eingerichtet? | Lagemeldungen (A.3) | M; D4 | Geplant ≠ eingerichtet ≠ genutzt. |
-| R6 | Welche zeitliche Reichweite und Nachschubprognose sind belegt? | Betreibermeldungen (A.3); zuständige Behörden | M; D5 | Prognosegeber und Stand nennen. |
+| R6 | Welche zeitliche Reichweite und Nachschubprognose sind belegt? | Betreibermeldungen (A.3); zuständige Behörden | M; D5 | Prognosegeber und Stand nennen; eine Nachschubprognose allein ist noch kein Versorgungsziel. |
+
+**Eignung und Zugang:** Nur lagebezogen konkret benannte Bedarfe prüfen, etwa geeignete Säuglingsnahrung, medizinisch erforderliche Kostform, besonderer Schluck- oder Zubereitungsbedarf oder allergenbedingt ungeeignete Standardverpflegung; keine pauschale Betroffenheit aufgrund von Alter, Behinderung oder Gruppenzugehörigkeit. Geeignete Alternative, Menge, Beschaffung und rechtzeitige Zubereitung nach Betreiber- oder Fachangabe; keine eigene Ernährungs- oder Substitutionsentscheidung. Erreichbarkeit für häuslich versorgte oder mobilitätseingeschränkte Menschen und die Belieferung von Pflege- und Gesundheitseinrichtungen und Unterkünften nach A.9.2. Ein geöffneter Ausgabepunkt kann ohne geeignete Kost, Personal, barrierefreien Zugang oder bestätigte Belieferung unzureichend sein. Ausfall von Zahlungs- oder Bestellsystemen und tatsächliche Ersatzabgabe getrennt belegen.
+
+**Sichere Nutzbarkeit und Verarbeitung:** Verfügbaren Bestand nicht mit sicher verwendbarer Ware gleichsetzen. Rückruf, behördliche oder betriebliche Sperre, Kontaminationsverdacht, Überschwemmung oder gestörte Kühlkette mit Aussagegrad und fachlicher Bewertung erfassen. Ein Stromausfall belegt nicht automatisch Verderb, wieder eingeschaltete Kühlung nicht die Unbedenklichkeit. Verarbeitung und Zubereitung können geeignete Anlagen, Wasser in erforderlicher Qualität, Energie, Personal, Verpackung und Entsorgung benötigen; nur die entscheidende Engpasskette ausführen. Lebensmittelsicherheitsbewertung und Freigabe bleiben bei den zuständigen Fach- und Betreiberstellen; keine eigenen Temperatur- oder Zeitgrenzen, Aufbereitungs- oder Verzehrregeln.
+
+**Ersatzversorgung und staatliche Instrumente:** Bedarfsfeststellung, Anforderung, Entscheidung bzw. Freigabe, Zuführung, Verarbeitung, betriebene Ausgabe und erreichte Bedarfsdeckung unterscheiden. Eine staatliche Lebensmittelreserve ist weder automatisch örtlich verfügbar noch eine ausgegebene Mahlzeit; Logistik und Verpflegungskapazität bleiben Teil des Versorgungspfads. Freigabe von Reserven und Anwendung besonderer Sicherstellungsinstrumente rechtlich und tatsächlich getrennt prüfen; weder Versorgungskrise noch Eingriffsbefugnis oder Zuteilung allein aus Marktstörung, Katastrophenfall oder LEAD-Beurteilung ableiten. Rechtsgrundlage, zuständige Stelle, Geltung und getroffene Entscheidung nur nach aktueller amtlicher Quelle (A.6); reguläre Hilfsversorgung der Gefahrenabwehr kann eigene Wege haben.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D2:** nur Personen mit belegt ungedecktem Grundbedarf.
-- **D6:** Kühlkette, Strom und Zahlungsverkehr als Kopplungen belegen.
+- **D1:** Belegter Wirkungsraum der konkreten Versorgungslücke, nicht das gesamte Absatzgebiet oder der Herstellerstandort.
+- **D2:** Tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden, etwa Menschen mit tatsächlich ungedeckter notwendiger Ernährung. Einkaufsversuche, ausgegebene Portionen, Einrichtungen und potenzielle Kunden sind keine Personenzahl; die D2-Nullregel gilt unverändert.
+- **D3:** Bewertete Funktion benennen, etwa örtliche Abgabe, Betreiberlogistik oder übergreifende Vorsorge; eine amtliche Quelle oder Bundesreserve bestimmt nicht die Steuerung der gesamten Lage.
+- **D4:** Tatsächlich eingesetzte ereignisbezogene externe Unterstützung; reguläre Handelsbelieferung und Herkunft der Lebensmittel zählen nicht.
+- **D5:** Belastbare Restdauer bis zum benannten Versorgungsziel; Lieferankündigung oder Bestandsreichweite allein belegen keine Wiederherstellung.
+- **D6:** Konkrete Kopplung an Energie, Wasser, Zahlung oder Bestellung, Transport, Verarbeitung oder institutionelle Versorgung, keine allgemeine Sektorliste.
+- **D7/D8:** Entscheidungsrelevante Informationslücken und beobachteter Verlauf; leere Regale, schmaleres Sortiment oder mehr Medienmeldungen belegen weder eine höhere Informationsstufe noch Versorgungsdynamik.
 
-**Offenlassen:** D2 ohne belegte Versorgungslücke; D5 ohne Nachschubprognose.
+**Beurteilung/Tendenz:** Nach tatsächlich ungedecktem Bedarf bzw. fachlich begründetem Vorsorgebedarf, nutzbarem Ersatz, Zeitkritikalität und Verlauf im Referenzraum; keine Stufe aus Produktzahl, Preis oder der Bezeichnung „Versorgungskrise“.
+
+**Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener; D5 ohne benanntes Versorgungsziel und belastbare Prognose.
 
 ### 4. Darstellung
 
-Nach B12; Bedarf, nutzbarer Bestand, Ersatzabgabe und Lücke getrennt (A.9.1).
+Nach B12 bzw. der Dach-SOP der Ursache und A.9.1. „Lage & Ereignis“: betroffene notwendige Versorgung, Raum, Stand, belegte Ursache. „Risiken & Auswirkungen“: tatsächliche Lücke, nutzbarer Puffer und bedingtes Ausfallrisiko. „Maßnahmen & Handlungsempfehlungen“: wirksame Ersatzabgabe bzw. Zuführung mit Status und zuständig adressierte Klärung. „Abhängigkeiten & Interdependenzen“: die maßgebliche Liefer-, Verarbeitungs- und Abgabekette. Die Kernaussage beantwortet: Welche geeignete Ernährung erreicht wen aktuell oder absehbar nicht, welcher Ersatz trägt noch, und welche Abstimmung ist erforderlich? Neubewertung bei belegter Änderung von Bestandsreichweite, geeigneter Kost, Erreichbarkeit, Liefer- oder Ausgabekapazität oder Fachbewertung. Termine nach A.4; akuter erheblicher Bedarf nach A.7.3. Abschluss erst bei erreichtem Versorgungsziel und geklärtem Nachlauf, nicht allein bei wieder geöffneten Märkten oder wiederhergestelltem Strom (A.8.2). Keine detaillierten Reservebestände oder -standorte.
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Zuständige Ernährungsvorsorgebehörden der Länder organisationsspezifisch benennen.
+**Ansprechstellen:** Zuständige Ernährungsvorsorge- und Gefahrenabwehrstellen · Lebensmittelüberwachung und Gesundheitsbehörden nach Auftrag · Handel, Produktion, Verarbeitung, Logistik und Gemeinschaftsverpflegung zur eigenen Leistung (B) · BLE und zuständiges Bundesressort für amtliche Grundlagen und belegte Reserveentscheidungen. Fachinformationen des BfR sind Hintergrund zur Lebensmittelsicherheit, kein örtlicher Freigabenachweis.
+
+**Offene Punkte:** Zuständige Ernährungsvorsorgebehörden der Länder organisationsspezifisch benennen; Meldewege, Freigabe- und Abgabeverfahren und Pflegefunktion festlegen. Übungsfälle zu Warenbestand ohne funktionierende Abgabe, besonderen Ernährungsbedarfen, Kühlkettenstörung bei Stromausfall und Reservebereitstellung ohne Verarbeitung.
 
 <!-- Quelle: sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md -->
 
@@ -2606,14 +2623,14 @@ kennung: "C15"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Ausfall von Abwassertransport oder -behandlung, nicht nutzbare Sanitärversorgung, kritischer Entsorgungsrückstau"
+lageart: "Ausfall von Abwasserableitung, -transport oder -behandlung, nicht nutzbare Sanitärversorgung, kritischer Entsorgungsrückstau"
 art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung"]
-art_hinweis: "„Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug"
-anschluss: "B10, B12"
+art_hinweis: "„KRITIS-Ausfall“ bei belegter relevanter Funktion; „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; sonst Prüfhilfe unter der Ereignisart der Ursache"
+anschluss: "B10, B12; B02 bei Hochwasser, B08 bei Stromausfall; C08 bei Tierkörperbeseitigung; C09 bei Gesundheits- und Pflegeeinrichtungen; C13 Transport; C16 Unterkünfte"
 zweck: "Erfassung von Entwässerungs-, Sanitär- und hygienisch relevanten Entsorgungsfolgen."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N08"
@@ -2622,13 +2639,15 @@ bisherige_ids: ["baustein-n08"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Ausfall von Abwassertransport oder -behandlung mit Gesundheits- oder Versorgungsfolgen, nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen, kritischer Entsorgungsrückstau. Nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination und Gesundheitsgefahr nur auf Grundlage zuständiger Fachbewertung.
+**Umfasst / grenzt ab von:** Drei fachliche Prüfpfade: (a) Abwasserableitung, -transport und -behandlung; (b) tatsächlich nutzbare Sanitär- und Hygieneleistung für Menschen und Einrichtungen; (c) kritische Sammlung, sichere Zwischenhaltung, Abfuhr und Behandlung von Abfällen einschließlich Tierkörperbeseitigung (C08). Eine Funktion kann ausfallen, während andere weiterlaufen: Intakte Trinkwasserabgabe belegt keine funktionierende Toilette, eine laufende Kläranlage keine örtliche Entwässerung, eine verschobene Müllabfuhr keine Gesundheitsgefahr. Relevant sind belegte Schutz- oder Versorgungsfolgen oder ein fachlich begründet drohender Ausfall mit konkretem Vorbereitungs- oder Abstimmungsbedarf (A.1 Nr. 1); nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination, Exposition und Gesundheitsrisiko nur nach zuständiger Fachbewertung und mit Aussagegrad; keine eigene hygienische, wasser- oder abfallrechtliche Freigabe. Abwassermonitoring als Surveillance-Instrument gehört zu B11 (R6), nicht hierher. Trinkwasser B10, Hochwasser B02, Stromausfall B08, medizinisch-pflegerische Folgen C09, Unterkunft C16, Transport C13.
 
-**Befassungsanlässe:** Ausfall von Abwassertransport oder -behandlung mit Gesundheits- bzw. Versorgungsfolgen · nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen · kritischer Entsorgungsrückstau.
+**Befassungsanlässe:** Ausfall von Abwasserableitung, -transport oder -behandlung mit Gesundheits- bzw. Versorgungsfolgen · nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen · kritischer Entsorgungsrückstau · fachlich begründet drohender Ausfall mit konkretem Vorbereitungsbedarf.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“; „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegter relevanter Funktion; „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; keine gesundheitliche Ereignisart allein aus einem hypothetischen Risiko.
 
 ### 2. Erfassung: Prüffragen
+
+**Funktions- und Bedarfsprofil:** Benötigte Leistung, betroffenes Gebiet bzw. Einrichtung, Beginn und Stand, verbleibende Leistung, Ausweichmöglichkeit und Zeitfenster benennen. Abwasser: örtliche Ableitung bzw. Hebeanlage, Transport und Pumpwerk, Behandlung und Einleitung getrennt. Sanitär: nutzbare Toiletten und Waschmöglichkeiten einschließlich Zugang, Verbrauchsmitteln, Reinigung und anschließender Entsorgung. Abfall: konkret relevanter Stoffstrom, Erfassung, geeignete Zwischenhaltung, Abfuhr und bestätigte Annahme bzw. Behandlung. Eine nominelle Anlagen- oder Containerzahl belegt kein betriebenes Gesamtsystem; nur die entscheidenden Engpassglieder ausführen.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -2637,22 +2656,37 @@ bisherige_ids: ["baustein-n08"]
 | R3 | Welche Einleitungen, Rückstau- oder Kontaminationsfolgen sind fachlich bestätigt? | Umwelt- und Wasserbehörden; [BBK: Sektor Wasser](https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/Sektoren-Branchen/Wasser/Risiken/risiken_node.html) (Hintergrund) | R/I; D6 | Nur bestätigte Folgen; Vermutung kennzeichnen. |
 | R4 | Welche Auswirkungen bestehen auf Roh- und Trinkwasser und auf die medizinisch-pflegerische Versorgung? | Gesundheitsamt; Wasserversorger (B) | R/I; D6 | Trinkwasserbezug nach B10. |
 | R5 | Welche Ersatzlösungen sind tatsächlich eingerichtet und ausreichend betrieben? | Lagemeldungen (A.3) | M; D4 | Eingerichtet ≠ ausreichend betrieben. |
-| R6 | Welche Wiederherstellungs- und hygienischen Freigabekriterien bestehen? | Betreibermeldungen (A.3); Gesundheitsamt | M; D5 | Technische Wiederherstellung ≠ hygienische Freigabe. |
+| R6 | Welche Wiederherstellungs- und gegebenenfalls hygienischen Freigabekriterien bestehen? | Betreibermeldungen (A.3); Gesundheitsamt; zuständige Wasser- oder Abfallbehörde | M; D5 | Technische Wiederherstellung ≠ fachliche Freigabe ≠ nutzbare Leistung; nicht jeder Pfad hat dieselbe Freigabepflicht. |
+
+**Sanitärersatz und besondere Bedarfe:** Lagebezogen prüfen, ob die Ersatzlösung für die tatsächlich Betroffenen erreichbar, bedarfsgerecht, ausreichend betrieben und dauerhaft versorgt ist: Standort, Betreiber und Personal, Handhygiene und Betriebsstoffe, Reinigung, regelmäßige Entleerung bzw. Abfuhr und bestätigter Entsorgungsweg. Aufgestellte Einheit, betriebsbereite Kapazität, tatsächliche Nutzung und gedeckter Bedarf trennen. Pflege- und Gesundheitseinrichtungen, Gemeinschaftsunterkünfte und häusliches Umfeld nach tatsächlichem Bedarf, nicht nach Gruppenzugehörigkeit. Wasserlieferung allein behebt keine gestörte Abwasserentsorgung. Keine eigenen Bemessungszahlen, Hygieneprotokolle oder Entleerungsfristen.
+
+**Einleitung, Kontakt und Folgewirkung:** Störung bzw. Überlastung, tatsächlich ausgetretenes oder eingeleitetes Material, Umweltbelastung, mögliche Exposition und fachlich bewertete Gesundheits- oder Versorgungsfolge getrennt führen. Ein bestätigter Einleitungsbefund belegt weder verunreinigtes Trinkwasser noch Erkrankungen. Eintragsweg, betroffenes Gewässer oder Objekt, Zeit- und Raumbezug, zuständige Bewertung und wirksame Schutzmaßnahme nur soweit belegt. Roh- und Trinkwasserbezug über konkrete Funktion und Betreiber- bzw. Fachangabe prüfen; ein fehlender Nachweis ist keine Entwarnung. Keine Infektionswahrscheinlichkeit, Konzentration oder Nutzungsempfehlung selbst ableiten.
+
+**Kritischer Entsorgungspfad:** Relevanten Stoffstrom und Engpass konkret feststellen, z. B. hygienisch bedeutsame Abfälle aus Gesundheit und Pflege, verdorbene Lebensmittel, Hochwasserabfälle, Tierkörper oder fachlich eingestufte gefährliche Stoffe. Nicht alle Abfälle nach Hochwasser oder aus einer Klinik pauschal als gefährlich oder infektiös bezeichnen. Einstufung, geeignete Sammlung und Zwischenhaltung, zulässiger Transport, tatsächlich aufnahmefähige Behandlung und deren Kapazität nach zuständiger Fach- oder Betreiberangabe prüfen; Stoffströme und Anlagen sind nicht beliebig austauschbar, und die Abfuhr zu einem Zwischenstandort ist keine abgeschlossene Behandlung. Rückstau nach seiner Rückwirkung auf Schutz, Pflege und Behandlung, Lebensmittelabgabe oder Unterbringung bewerten. Keine eigene Abfalleinstufung, Ablagerungsanweisung oder Ausnahmegenehmigung.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D5:** technische Wiederherstellung und hygienische Freigabe als getrennte Zielzustände.
-- **D6:** Kopplungen zu Trinkwasser, Gesundheit und Strom belegen.
+- **D1:** Wirkungsraum tatsächlich eingeschränkter Sanitär-, Schutz- oder Versorgungsleistung, nicht automatisch das gesamte Netz- oder Gemeindegebiet oder der Gewässerverlauf.
+- **D2:** Tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; Anschlüsse, potenzielle Nutzer, Abfallmengen und Einrichtungen sind keine Personenzahl. Tatsächliche Beeinträchtigung der Grundversorgung mit Zeit- und Raumbezug belegen.
+- **D3:** Bewertete Funktion nennen, etwa Anlagenbetrieb, Fachüberwachung, Schutzentscheidung oder Ersatzversorgung; Eigentum an der Anlage bestimmt die Ebene nicht.
+- **D4:** Tatsächlich eingesetzte ereignisbezogene externe Unterstützung, nicht Absichten, vorgehaltene Container oder reguläre Entsorgungsverträge.
+- **D5:** Belastbare Restdauer bis zum benannten Ziel: Ableitung, notwendige Behandlung, betriebene Sanitärleistung oder gesicherter Entsorgungsweg. Technischer Wiederanlauf, gegebenenfalls erforderliche Freigabe und nutzbare Leistung getrennt; keine einheitliche hygienische Freigabepflicht für jeden Pfad unterstellen.
+- **D6:** Belegte Kopplung zu Trinkwasser, Gesundheit und Pflege, Energie, Unterkunft oder einer anderen kritischen Funktion; allgemeine Netzabhängigkeit genügt nicht.
+- **D7/D8:** Entscheidungsrelevante Informationslücken und beobachtete Veränderung; Geruch, Meldedichte oder eine verzögerte Erhebung belegen weder Kontamination noch Gesundheitsgefahr oder Dynamik.
 
-**Offenlassen:** D2 ohne belegten Personenkreis; D5 ohne Freigabeperspektive.
+**Beurteilung/Tendenz:** Nach verbleibender notwendiger Leistung, fachlich bewerteten Folgen, Ersatz, Zeitkritikalität und Verlauf im Referenzraum. Wenige Betroffene in einer Einrichtung können ohne Ersatz relevant sein; keine Schwellen aus Abfallmenge oder Ausfalldauer.
+
+**Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener; D5 ohne benanntes Funktionsziel und belastbare Prognose.
 
 ### 4. Darstellung
 
-Nach B12 bzw. B10; Funktion, Hygienefolgen, Ersatzlösung und Freigabe getrennt.
+Nach B12 bzw. B10 oder der Dach-SOP der Ursache. „Lage & Ereignis“: Funktion und tatsächlicher Leistungsgrad, Raum und Stand. „Risiken & Auswirkungen“: bestätigte Folgen, fachlich bewertete Risiken und bedingte Folgeketten. „Maßnahmen & Handlungsempfehlungen“: betriebener Ersatz und zuständig adressierter Klärungsbedarf mit Status. „Abhängigkeiten & Interdependenzen“: die maßgebliche Abwasser-, Sanitär- oder Entsorgungskette. Die Kernaussage beantwortet: Welche notwendige Leistung fehlt für wen, welcher Ersatz trägt wie lange, und welche Abstimmung ist erforderlich? Neubewertung bei belegter Kapazitäts- oder Qualitätsänderung, erschöpfter Speicher- oder Zwischenhaltung, ausfallender Ersatzabfuhr, relevantem Fachbefund oder geänderter Wiederherstellungsprognose. Keine selbst berechneten Füll- oder Ausfalltermine; Fristen nach A.4, akuter Schutzbedarf nach A.7.3. Abschluss nach erreichtem Funktionsziel und geklärtem Nachlauf einschließlich fortbestehender Umwelt- oder Rückstaufolgen; wiederhergestellter Strom oder abgeholte Container genügen nicht (A.8.2).
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Abgrenzung zu B10 an einem Übungsfall prüfen.
+**Ansprechstellen:** Abwasser- und Entsorgungsbetreiber sowie Einrichtungen zur eigenen Leistung (B) · zuständige Wasser-, Umwelt- und Abfallbehörden für ihre Fachentscheidung · Gesundheitsamt für einschlägige Hygienefragen · örtlich zuständige Gefahrenabwehr für Ersatz- und Schutzkoordination. Keine pauschale Zuständigkeit des Gesundheitsamts für jede Betriebsfreigabe und keine eigene wasser- oder abfallrechtliche Entscheidung der Koordinierungsstelle.
+
+**Offene Punkte:** Abgrenzung zu B10 an einem Übungsfall prüfen. Fachmaterial von Bund und Ländern zu Abwasser und Abfall ist Rechercheeinstieg; aktuelle landes- und fallbezogene Geltung vor Übernahme prüfen (A.6). Pflegefunktion, Meldewege und erforderliche Freigaben je Prüfpfad festlegen. Übungsfälle zu laufendem Trinkwassernetz bei defekter Hebeanlage, Sanitärersatz ohne Entleerung, Rückstau von Klinikabfällen, Tierkörperbeseitigung bei einer Tierseuche und Abwassereintrag ohne nachgewiesene Trinkwasserbelastung.
 
 **Leseblock: Lageübergreifende Querschnitte**
 
