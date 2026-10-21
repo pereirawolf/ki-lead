@@ -73,6 +73,9 @@ describe("Management Summary", () => {
     const att = attrappe(JSON.stringify(antwortJson));
     const k = await kurzfassungErstellen(p!, th, att, STANDARD);
     expect(att.anfragen[0].jsonSchema).toBeTruthy();
+    // Höchstzahl Ausgabetoken aus den Einstellungen wie für alle KI-Aufrufe (0.4.25)
+    expect(att.anfragen[0].maxTokens).toBe(128000);
+    expect(k.eintrag.anfrage?.maxTokens).toBe(128000);
     expect(att.anfragen[0].werkzeuge).toBeUndefined();
     expect(String(att.anfragen[0].nachrichten[0].content)).not.toContain('"quellen"');
     const zeilen = k.text.split("\n");
@@ -225,5 +228,18 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
     expect(k.text).not.toMatch(/⟦|⟧/);
     expect(k.struktur.abschnitte.lage_ereignis).toBe("L.");
     expect(k.hinweise.join(" ")).toMatch(/Offene Vorlagenstellen ⟦…⟧ aus der Meldung wurden nicht übernommen/);
+  });
+
+  it("verwendet eine abweichend eingestellte Höchstzahl Ausgabetoken (0.4.25)", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
+    const antwort = {
+      kernaussage: "K.",
+      abschnitte: { lage_ereignis: "L.", risiken_auswirkungen: "R.", massnahmen_empfehlungen: "M.", abhaengigkeiten_interdependenzen: "A." },
+      kurztitel: ["Stromausfall Sonneberg"],
+    };
+    const att = attrappe(JSON.stringify(antwort));
+    await kurzfassungErstellen(p!, eins, att, { ...STANDARD, maxTokensErfassung: 24000 });
+    expect(att.anfragen[0].maxTokens).toBe(24000);
   });
 });

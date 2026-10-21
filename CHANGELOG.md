@@ -41,6 +41,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.23 | letzter Commit von Pull Request #21 „Tests konsolidieren und schärfen, Browsertests, Modellbewertung getrennt; 0.4.23“ |
 | 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
 | 0.4.25 | letzter Commit von Pull Request #23 „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
+| 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
+
+## [0.4.26] – 21.10.2026
+
+Grundlage: Anforderung vom 21.10.2026, die Einstellung zur Höchstzahl der Ausgabetoken für jeden KI-Aufruf zu verwenden. Keine Änderung an Profilen, SOPs, Prompts, Schemata oder Modellvorgaben.
+
+### Geändert
+
+- **„Einstellungen › Recherche“:** Das Feld „Höchstzahl Ausgabetoken (S2, S3)“ heißt jetzt „Höchstzahl Ausgabetoken (S1, S2, S3)“ und gilt für jeden KI-Aufruf der App: S1, S2 (Erfassung und Verdichtung), S3 (Vervollständigung und Reparatur) und die Management Summary. Vorgabe 128 000, zulässig 8 000 bis 128 000; ein leeres Feld setzt die Vorgabe (bisher 64 000). Ein Hinweis unter dem Feld erklärt Geltung und Wirkung.
+- **S1** verwendet die Einstellung statt der festen Tabelle aus 0.4.25 (128 000 für Claude 5.5 und Fable 5.1, 16 000 für andere Modelle). Mit der Vorgabe ändert sich für Claude-Modelle nichts; für OpenAI-Modelle gilt in S1 jetzt wie in S2 der eingestellte Wert. Die Meldung bei Abbruch an der Grenze nennt den tatsächlich eingestellten Wert.
+- **Management Summary:** bisher fest 16 000, jetzt der eingestellte Wert.
+- Gespeicherte Einstellungen bleiben gültig; der interne Schlüssel `maxTokensErfassung` bleibt unverändert, eine Umstellung ist nicht nötig.
+- Nicht betroffen ist die Schlüsselprüfung unter „Einstellungen“: Sie bleibt ein kleiner Testaufruf mit 64 (Anthropic) bzw. 400 (OpenAI) Ausgabetoken, damit sie nichts kostet.
+- Spezifikation 0.4.26 (Abschnitt 5.1, Umsetzung M2).
+
+### Tests
+
+- `tests/pipeline/stufen.test.ts`: T01–T03 neu gefasst (Vorgabe 128 000, S1 folgt der Einstellung, für jedes Modell; Meldung nennt den gesetzten Wert).
+- `tests/pipeline/kurzfassung.test.ts` (+1): Management Summary mit Vorgabe und mit abweichender Einstellung.
+- `tests/ui/einstellungen.test.ts` (1, neu): Bezeichnung, Hinweis, Vorgabe und Grenzen der Eingabe.
 
 ## [0.4.25] – 21.10.2026
 

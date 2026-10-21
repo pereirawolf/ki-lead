@@ -16,6 +16,10 @@ export interface Einstellungen {
   abrufMaxTokens: number;
   /** ISO-Ländercode für die Lokalisierung der Websuche */
   suchland: string;
+  /**
+   * Höchstzahl Ausgabetoken für jeden KI-Aufruf (S1, S2, S3, Management Summary). Der Name stammt aus der Zeit,
+   * als der Wert nur für S2 und S3 galt; er bleibt, damit gespeicherte Einstellungen gültig bleiben.
+   */
   maxTokensErfassung: number;
   /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
   fassung?: number;

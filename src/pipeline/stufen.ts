@@ -31,31 +31,6 @@ import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
 
 export const MAX_REPARATUREN = 2;
 
-/**
- * Ausgabegrenze der Stufe S1 für Modelle ohne hier geprüfte Höchstgrenze (bisheriger Wert). Denk- und Antworttoken
- * zählen gemeinsam gegen die Grenze.
- */
-export const S1_AUSGABE_STANDARD = 16000;
-
-/**
- * Ausgabegrenzen der Stufe S1 je Modellkennung (genau diese Kennungen, keine Teilzeichenfolge). Für diese Modelle
- * nennt die Herstellerdokumentation (Stand 21.10.2026) 128 000 Ausgabetoken. 16 000 reichten bei Verdichtungen
- * mit Haiku und Aufwand „high“ nicht: zwei Läufe mit sechs Ilka-Eingängen endeten nach 69–72 s bei genau
- * 16 000 Token mit stopGrund „max_tokens“, einer ganz ohne sichtbaren Text (Läufe 20261021-133605-75wi und
- * 20261021-133728-cvza). Die Grenze ist eine Obergrenze, kein Verbrauch; berechnet wird nur, was das Modell ausgibt.
- */
-export const S1_AUSGABE_MAX: Readonly<Record<string, number>> = {
-  "claude-haiku-5-5": 128000,
-  "claude-sonnet-5-5": 128000,
-  "claude-opus-5-5": 128000,
-  "claude-fable-5-1": 128000,
-};
-
-/** Ausgabegrenze für S1 mit diesem Modell */
-export function s1Ausgabelimit(modell: string): number {
-  return S1_AUSGABE_MAX[modell] ?? S1_AUSGABE_STANDARD;
-}
-
 const tausender = (n: number) => n.toLocaleString("de-DE");
 
 /** Technisch unvollständiger S1-Vorschlag: Grund oder null. Prüft nur die Struktur, nicht den Inhalt. */
@@ -168,10 +143,12 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
     ...(vermerke ? [{ type: "text", text: vermerke }] : []),
     { type: "text", text: "Kläre jetzt den Gegenstand und schlage Gliederung, Ereignisarten und SOPs vor." },
   ];
-  // Modell einmal auflösen: dasselbe für die Anfrage und die Wahl der Ausgabegrenze
+  // Ausgabegrenze aus den Einstellungen wie für alle KI-Aufrufe (Vorgabe 128 000). Denk- und Antworttoken zählen
+  // gemeinsam: Die frühere feste Grenze von 16 000 reichte bei Verdichtungen mit Haiku „high“ nicht (Läufe
+  // 20261021-133605-75wi und 20261021-133728-cvza endeten nach 69–72 s bei genau 16 000 Token mit max_tokens).
   const modell = modellFuer("vorverarbeitung", k.einstellungen, k.profil);
   const aufwand = k.einstellungen.aufwand.vorverarbeitung;
-  const maxTokens = s1Ausgabelimit(modell);
+  const maxTokens = k.einstellungen.maxTokensErfassung;
   const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
     modell,
     aufwand,

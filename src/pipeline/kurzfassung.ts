@@ -301,13 +301,13 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
     start: new Date().toISOString(),
     modell,
     aufwand: e.aufwand.kurzfassung,
-    anfrage: { system: [system], nachrichten: [{ role: "user", content: nachricht }], jsonSchema: schema, maxTokens: 16000 },
+    anfrage: { system: [system], nachrichten: [{ role: "user", content: nachricht }], jsonSchema: schema, maxTokens: e.maxTokensErfassung },
   };
   try {
     const a = await anbieter.senden({
       modell,
       aufwand: e.aufwand.kurzfassung,
-      maxTokens: 16000,
+      maxTokens: e.maxTokensErfassung,
       system: [{ text: system, cache: true }],
       nachrichten: [{ role: "user", content: nachricht }],
       jsonSchema: schema,
