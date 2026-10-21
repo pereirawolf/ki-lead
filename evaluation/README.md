@@ -14,6 +14,8 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 ## Inhalt
 
 - `faelle/`: Bewertungsfälle, je Datei ein Auftrag mit Material und Erwartungen (`fall.schema.json`)
+- `material/`: fiktives Übungsmaterial der Fälle, soweit es im Repository liegt
+- `plaene/`: festgelegte Bewertungspläne (Fragestellung, Varianten, Umfang) und die Soll-Abdeckung der Fälle; ein Plan ist kein Ergebnis
 - `bewertungsschema.json`: Format einer Bewertung (ein Lauf, eine bewertende Person)
 - `ergebnisse/`: zusammengefasste Bewertungen; Laufprotokolle und Rohantworten bleiben außerhalb des öffentlichen Repositorys
 

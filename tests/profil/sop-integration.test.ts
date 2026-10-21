@@ -154,3 +154,26 @@ describe("SOP-Querverweise in Teil B und C", () => {
     expect(readFileSync(`${sopOrdner}/A_Gemeinsame-Regeln.md`, "utf-8")).not.toMatch(/in dieser Beispielfassung alle\)/);
   });
 });
+
+// Quellenregister (SOP-LEAD A.6): jede URL aus Teil A, B und C ist genau einmal nachgewiesen.
+describe("Quellenregister der SOP-Sammelmappe", () => {
+  const register = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/sop/quellenregister.json"), "utf-8"));
+  const sopText = [
+    readFileSync(repoPfad("profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md"), "utf-8"),
+    ...readme.matchAll(/^\| [BC]\d{2} \| .*?\| \[`([^`]+)`\]/gm),
+  ]
+    .map((x) => (typeof x === "string" ? x : readFileSync(repoPfad("profile/lead-beispiel/sop", x[1]), "utf-8")))
+    .join("\n");
+  const urls = new Set([...sopText.matchAll(/https?:\/\/[^\s)>"`]+/g)].map((m) => m[0].replace(/[.,;]$/, "")));
+  const eintraege: { id: string; url: string }[] = register.eintraege;
+
+  it("Kennungen und URLs sind eindeutig", () => {
+    expect(new Set(eintraege.map((e) => e.id)).size).toBe(eintraege.length);
+    expect(new Set(eintraege.map((e) => e.url)).size).toBe(eintraege.length);
+  });
+
+  it("jede URL der Pflegequellen hat einen Registereintrag", () => {
+    const erfasst = new Set(eintraege.map((e) => e.url));
+    expect([...urls].filter((u) => !erfasst.has(u))).toEqual([]);
+  });
+});

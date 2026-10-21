@@ -8,12 +8,12 @@ typ: "Dach-SOP"
 lesegruppe: "Katalog-Einstiege"
 lageart: "Industrieunfall / Chemieunfall (Störfall, Gefahrstofffreisetzung, Gefahrguttransport, industrieller Großbrand)"
 art_vorschlag: ["Industrieunfall / Chemieunfall"]
-zweck: "Reproduzierbare Erfassung von Störfällen, Gefahrstofffreisetzungen, industriellen Bränden und Explosionen mit Wirkung über das Betriebsgelände hinaus."
-version: "2.0.1"
+zweck: "Reproduzierbare Erfassung von Störfällen, Gefahrstofffreisetzungen, industriellen Bränden und Explosionen mit belegter oder fachlich konkret prognostizierter Außenwirkung oder überörtlichem Rettungs-, Schutz- oder Versorgungsbedarf."
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "07"
@@ -28,16 +28,20 @@ bisherige_ids: ["sop-07"]
 
 ### 2. Erfassung: Prüffragen
 
+**Mess- und Stoffprofil.** Für urteilsprägende Angaben Stoff/Identität und Bestätigungsgrad, Medium (Luft, Wasser, Boden), Proben-/Messort, Zeitpunkt, Einheit, Messverfahren und fachlich benannte Nachweis-/Bestimmungsgrenzen erhalten. Ein Messwert unter einer Nachweisgrenze ist kein allgemeiner Nachweis der Stofffreiheit; eine unauffällige Einzelmessung entwarnt andere Orte, Medien oder Zeiträume nicht. Vergleichs-/Beurteilungswerte nur mit Herkunft, Anwendungsbereich und fachlicher Einordnung wiedergeben. Arbeitsplatzgrenzwerte aus Stoffdatenbanken nicht eigenständig in Bevölkerungsgrenzwerte oder Schutzradien umdeuten. GESTIS erläutert Stoffeigenschaften und Arbeitsschutz; TUIS unterstützt zuständige Einsatzstellen, ersetzt aber keine amtliche Schutzentscheidung.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Was ist zu Anlage, Stoff, Menge und Ursache bestätigt? | Zuständige Immissionsschutz-/Störfallbehörde; Betreibermeldungen und Lagemeldungen (A.3) | L; D3 | Frühe Stoff-, Mengen- und Ursachenangaben sind vorläufig; Betreiberangaben (B) von amtlicher Gefahrenbewertung (A) trennen. |
-| R2 | Welche Gefahr geht vom Stoff aus? | GESTIS-Stoffdatenbank (IFA/DGUV); [TUIS (VCI)](https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp) bei Transport- und Lagerunfällen mit Chemikalien | R | Stoffeigenschaft ≠ gemessene Exposition; keine eigene toxikologische Bewertung. |
+| R2 | Welche Gefahr geht vom Stoff aus? | [GESTIS-Stoffdatenbank (IFA/DGUV)](https://www.dguv.de/ifa/gestis/gestis-stoffdatenbank/index.jsp); [TUIS (VCI)](https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp) bei Transport- und Lagerunfällen mit Chemikalien | R | Stoffeigenschaft ≠ gemessene Exposition; keine eigene toxikologische Bewertung. |
 | R3 | Welche Messungen und Warn-/Sperrräume sind amtlich belegt? | Lagemeldungen (A.3); Messdienste (ABC-Erkundung, analytische Fachunterstützung wie die Analytische Task Force), Umweltbehörden | L/R; D1 | Stoffidentität, Freisetzung, Messwert, Ausbreitungsmodell, Exposition und beobachtete Gesundheitswirkung trennen; keine Messung ≠ keine Belastung. |
 | R4 | Welche Menschen sind exponiert, verletzt oder evakuiert? | Gesundheitsamt; Lagemeldungen (A.3) | R; D2 | Exponierte, Verletzte und Vorsorgeevakuierte getrennt (A.3 Zählregeln). |
 | R5 | Welche Umwelt- und Versorgungsfolgen bestehen? | Umwelt-/Wasserbehörden; Betreibermeldungen (A.3); bei Rhein ggf. internationale Warn- und Alarmpläne (IKSR) | R/I; D6 | Sekundärkontamination (Wasser, Boden, Lebensmittel), Löschwasserrückhaltung und Domino-Effekte eigens belegen; grenzüberschreitende Gewässerfolgen getrennt. |
 | R6 | Welche Schutz- und Entwarnungshinweise gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | M; D5 | Keine eigene toxikologische Handlungsanweisung; Produktionsfreigabe ≠ sichere Umgebung; Warnlage nach A.9.3. |
 
 ### 3. Auswertung: Prüfpunkte
+
+**Gesundheit und Fachunterstützung.** Tatsächlich erkrankte/verletzte Personen, bestätigte Exposition, vorsorglich untersuchte und evakuierte Personen mit Zeitstand und Überschneidung trennen; D2 ausschließlich nach A.2 und Zählregeln A.3. Verdachtsabklärung ist keine bestätigte Vergiftung. Bei TUIS, Messdiensten oder analytischer Fachunterstützung zwischen Beratungsanfrage, Zusage, Anfahrt, Einsatz und verwertbarem Ergebnis unterscheiden. Spezialgerät allein bestimmt weder D3 noch D4; benötigte Fähigkeit, zuständigen Anforderungsweg und reale Verfügbarkeit dokumentieren. C09 bei eigenständiger medizinischer Versorgungsfolge, B10/C14/C15 bei belegtem Wasser-, Lebensmittel- oder Entsorgungsbezug heranziehen.
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
@@ -50,6 +54,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 **Offenlassen:** D2 ohne abgestimmte Personendaten; D5 solange Stoff- und Freigabefragen keine Dauer erlauben.
 
 ### 4. Darstellung
+
+**Beendigung je Wirkung.** Brandbekämpfung abgeschlossen, Freisetzung beendet, Warnung aufgehoben, Fläche freigegeben, Kontamination beseitigt und Betrieb wiederhergestellt sind eigene Statusangaben. Für Löschwasser, Rückstände, kontaminiertes Material und länger gesperrte Verkehrs-/Versorgungsflächen zuständige Fachbewertung und nächste Prüfung nennen. Ein industrieller Großbrand ohne nachgewiesene Gefahrstofffreisetzung bleibt B07, wenn der industrielle Bezug und relevante Außenwirkung oder überörtlicher Bedarf belegt sind; ohne industriellen oder Gefahrgutbezug B17 mit C05/C02 nach Wirkung prüfen.
 
 | Meldungsbereich | Lageart-spezifische Leitfrage |
 |---|---|
@@ -64,4 +70,4 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Zuständige Gefahrenabwehr-, Umwelt- und Gesundheitsbehörden · Betreiber · TUIS (VCI) · UBA/ZEMA (Einordnung) · [BBK Gefahrstoff-Freisetzung](https://www.bbk.bund.de/DE/Warnung-Vorsorge/Vorsorge/Schutz-suchen/Gefahrstoff-Freisetzung/gefahrstoff-freisetzung_node.html) (Hintergrund)
 
-**Offene Punkte:** Abgrenzung industrieller Großbrände ohne Gefahrstoffbezug zu B17 an Übungsfällen prüfen.
+**Offene Punkte:** Die Abgrenzung industrieller Großbrände ohne Gefahrstofffreisetzung (Abschnitt 4, „Beendigung je Wirkung“) an Bewertungsfällen erproben (z. B. `evaluation/faelle/sop-chemie-ohne-aussenfreisetzung.json`).

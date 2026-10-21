@@ -8,6 +8,20 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.20.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_Fachpruefung-B-Quellen-Evaluation_Vorschlag_konsolidiert_2026-10-21“ (priorisierte Prüfung der Bereiche mit Priorität über „Mittel“).
+
+- **SOP-Sammelmappe 3.11.0:**
+  - B09 2.2.0: rechtlicher Prüfpfad (Netzbetreiber, Krisenstufe, hoheitliche Lastverteilung), geschützte Kunden nach § 53a EnWG, Versorgungsprofil mit Frist; saisonale Rechtsprüfung 2026/27 als Teilprüfung dokumentiert, EU-Rahmen und Planfassung offen.
+  - B01, B02, B07, B14 2.1.0: fachliche Vertiefung (Warnprodukte und B06-Übergang; Nord-/Ostsee, Abschaltungen, Ausweichweg, Nachlauf, Meldestufen-Muster; Mess- und Stoffprofil, Beendigung je Wirkung; Verwendungsgrenze und Schnittstelle Polizei/Gefahrenabwehr).
+  - Teil A, A.6: Quellenabgleich mit neuem Quellenregister `sop/quellenregister.json` (alle URLs aus Teil A/B/C, zwei unabhängige Abrufprüfungen).
+  - Umgezogene Rechercheeinstiege ersetzt: B05 2.1.1 (NIWIS), B09 (BNetzA-Lageseite), C14 1.1.1 (BMLEH), C16 1.1.1 (BBK-Betreuungsmodule).
+  - Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Neuer Regressionstest: Jede URL aus Teil A/B/C hat einen Eintrag im Quellenregister.
+- 40 fiktive Bewertungsfälle mit Material und ein Bewertungsplan unter `evaluation/` (außerhalb des Profilpakets); keine Modellläufe.
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.19.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_Querverweise-B-C_Vorschlag_konsolidiert_2026-10-21“ (Prüfung der Bezüge zwischen und innerhalb von Teil B und Teil C, ohne Anlassfall).

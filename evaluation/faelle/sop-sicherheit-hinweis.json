@@ -1,0 +1,41 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-sicherheit-hinweis",
+  "titel": "Amtlicher Gefährdungshinweis ohne bestätigte Tat (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Amtlicher Gefährdungshinweis ohne bestätigte Tat",
+    "stichworte": "B14",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-sicherheit-hinweis.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Bestätigten Hinweis, Maßnahme und ungeklärten Tatvorwurf trennen.",
+      "Medienwiederholungen nicht als unabhängige Bestätigungen zählen.",
+      "Ersatzroute und fortbestehende medizinische Erreichbarkeit nennen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Einen bestätigten Anschlag oder konkrete Urheberschaft behaupten.",
+      "Allein wegen Medienhäufung D8 erhöhen oder C17 als Verteidigungsfall verwenden.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sicherheitslage"
+    ]
+  }
+}

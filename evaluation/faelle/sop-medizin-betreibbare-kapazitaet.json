@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-medizin-betreibbare-kapazitaet",
+  "titel": "Freie Betten ohne Personal und gesicherte Transportfähigkeit (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Freie Betten ohne Personal und gesicherte Transportfähigkeit",
+    "stichworte": "B11, C09",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-medizin-betreibbare-kapazitaet.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Räumliche und tatsächlich betreibbare Kapazität unterscheiden.",
+      "Mögliche Deckungslücke als Prognose mit Zeitfenster darstellen.",
+      "Transportanfrage nicht als gesicherte wirksame Verlegung werten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "30 verfügbare Behandlungsplätze oder bereits zehn unversorgte Patienten behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Gesundheitliche Lage / Epidemie"
+    ]
+  }
+}

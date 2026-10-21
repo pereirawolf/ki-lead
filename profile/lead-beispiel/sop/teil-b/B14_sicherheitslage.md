@@ -9,11 +9,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sicherheitslage (Bedrohungslagen, Großveranstaltungen, hybride Bedrohungen) – Bevölkerungsschutzfolgen"
 art_vorschlag: ["Sicherheitslage"]
 zweck: "Reproduzierbare Beobachtung behördlich belegter Sicherheitslagen ausschließlich im Hinblick auf Folgen und Vorsorgefragen für den Bevölkerungsschutz."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "14"
@@ -28,9 +28,11 @@ bisherige_ids: ["sop-14"]
 
 ### 2. Erfassung: Prüffragen
 
+**Schnittstelle zur nichtpolizeilichen Gefahrenabwehr.** Schutz-/Sperrmaßnahme, anordnende Stelle und freigegebener Geltungsbereich getrennt von bestätigten zivilen Folgen erfassen. Bei Versorgung oder Hilfezugang: Welche Einrichtung/Dienstleistung ist tatsächlich eingeschränkt, welche Ersatzroute oder Ersatzleistung ist fachlich bestätigt, und welche zuständige Stelle muss bis wann abstimmen? Eine polizeiliche Aufhebung ist keine automatische betriebliche Wiederfreigabe. Offene Ermittlungsangaben bleiben offen; für den Prüfauftrag genügende öffentliche Aussagen verwenden, keine taktischen Details oder vermuteten Schwachstellen ergänzen. Eigenständige medizinische Versorgung C09, Transport C13 und Betreuung C16 nach Wirkung; B16 nur bei belegtem Tat-/Vorsatzbezug.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Nur veröffentlichte oder zur Weitergabe freigegebene Informationen; Aussagegrad nennen; keine eigene Gefährdungsbewertung. |
+| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
 | R2 | Welche Räume und Schutzmaßnahmen sind betroffen? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | L/M; D1 | Sperr- oder Schutzraum ≠ Schadensraum; Absagen sind Vorsorge. |
 | R3 | Welche Personenschäden oder Evakuierungen bestehen? | Lagemeldungen (A.3) | R; D2 | Nicht alle Anwesenden oder von Maßnahmen Berührten als direkt betroffen zählen. |
 | R4 | Welche Dienste, Transportwege oder Einrichtungen sind eingeschränkt? | Betreibermeldungen (A.3) | R/I; D6 | Einschränkung und Grund getrennt belegen; Gefährdungshinweis ≠ Beeinträchtigung. |
@@ -38,6 +40,8 @@ bisherige_ids: ["sop-14"]
 | R6 | Welche Informationen kursieren öffentlich? | Medienauswertung (VOST) gegen amtliche Quellen | D7 | Gerüchte und Desinformation kennzeichnen, nicht weitertragen (A.9.5); belegte Wirkungen auf Schutz, Versorgung oder Hilfszugang gesondert beschreiben. |
 
 ### 3. Auswertung: Prüfpunkte
+
+**Unbestätigte Informationen und Informationslücken.** Ein amtlicher Hinweis bestätigt zunächst den veröffentlichten Hinweis, nicht jedes zugrunde liegende Tatdetail. Widersprüche nach Zeitstand, Bezug und Aussagegegenstand prüfen; eine reine Medienwiederholung ist keine unabhängige Bestätigung. Fehlende öffentliche Ermittlungsdetails erhöhen D7 nicht automatisch. Maßgeblich sind konkret fehlende Informationen für die zivile Schutz-/Versorgungsfrage; eine eigene technische Zugriffssperre wird als Recherchegrenze dokumentiert. Gerüchte nur soweit für belegte Schutz- oder Versorgungswirkungen erforderlich behandeln, ohne Personenverdächtigungen oder unbelegte Zuschreibung weiterzugeben.
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
@@ -64,4 +68,6 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Lagezentren der Innenministerien · zuständige Polizeibehörden · BMI · BBK
 
-**Offene Punkte:** Umgang mit eingestuften Informationen (VS) in der Lagebild-Darstellung klären.
+**Verwendungsgrenze:** Im aktuellen Demonstrator ausschließlich fiktive oder offen zugängliche Inhalte; keine personenbezogenen oder eingestuften Inhalte (README/Spezifikation). Nichtöffentliche, auch zur behördlichen Weitergabe freigegebene Informationen sind dadurch nicht automatisch zur Verarbeitung in KI-LEAD zugelassen. Auf notwendige öffentliche, hinreichend aggregierte Aussagen begrenzen; eine bloße Entfernung des VS-Vermerks ist keine Freigabe. Ein organisationsspezifisches geschütztes Verfahren wäre gesondert zu regeln und ist nicht Gegenstand dieser Beispielfassung.
+
+**Offene Punkte:** Öffentliche Informationswege der zuständigen Landes-/Bundespolizei, Rückfragen und Nachlauf nach Aufhebung von Schutzmaßnahmen organisationsspezifisch festlegen.

@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -50,7 +50,7 @@ Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewer
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R5 | Welche Bodentrockenheit ist modelliert? | [UFZ-Dürremonitor](https://www.ufz.de/index.php?de=37937); täglich; [Dürreatlas BKG](https://gdz.bkg.bund.de/index.php/default/duerreatlas.html) zur Einordnung | L | Ober- und Gesamtboden trennen; Bodenfeuchte ist weder Grundwasserstand noch Trinkwassermangel. |
-| R6 | Wie entwickeln sich Grundwasser und Pegel? | [BGR-GRUVO](https://gruvo.bgr.de/); [BfG Niedrigwasser/NIWIS](https://www.bafg.de/DE/05_Wissen/01_Infoplattformen/Niedrigwasser/niedrigwasser_node.html) | R/I; D5 | Grundwasser reagiert verzögert. |
+| R6 | Wie entwickeln sich Grundwasser und Pegel? | [BGR-GRUVO](https://gruvo.bgr.de/); [NIWIS](https://niwis-online.de/) (BfG; neuer Einstieg amtlich belegt durch [BMUKN vom 15.07.2026](https://www.bundesumweltministerium.de/pressemitteilung/niedrigwasserinformationssystem-niwis); Datenzugang und Messstand vor Verwendung prüfen) | R/I; D5 | Grundwasser reagiert verzögert. |
 | R7 | Welche Einschränkungen der Wasserbereitstellung bestehen? | Betreibermeldungen (Wasserversorger), Wasser- und Gesundheitsbehörden; fallbezogen | R/I; D6 | Entnahmeverbot für Oberflächenwasser ≠ Trinkwassereinschränkung; Rohwasser und Trinkwasser trennen; einzelne Kommunen ≠ Landeslage. |
 | R8 | Welche Kühlwasser- und Transportfolgen sind belegt? | Betreibermeldungen (Kraftwerke, Binnenschifffahrt), BNetzA; WSV/BfG zu Abladetiefen | R/I; D6 | Pegel, Abladetiefe und tatsächliche Transportleistung getrennt bewerten; Leistungsreduktion ≠ Versorgungsausfall. |
 

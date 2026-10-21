@@ -1,10 +1,10 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.10.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.11.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
-**Quelle und Lesefassung.** Gepflegt werden ausschließlich die Einzeldateien. Die Lesefassung [`SOP-LEAD_Sammelmappe_Lesefassung.md`](SOP-LEAD_Sammelmappe_Lesefassung.md) wird daraus erzeugt (`npm run sop:lesefassung`) und nicht von Hand bearbeitet; ein Test prüft, dass sie zum Stand der Einzeldateien passt. Als SOP liest die App nur die in `profil.json` unter `sop.dateien` genannten Dateien, nicht diese Übersicht, die Lesefassung oder das Archiv. Diese Übersicht zeigt sie in der Profilansicht als Lesedokument; Lesefassung und Archiv sind nicht in die App eingebettet.
+**Quelle und Lesefassung.** Gepflegt werden ausschließlich die Einzeldateien. Die Lesefassung [`SOP-LEAD_Sammelmappe_Lesefassung.md`](SOP-LEAD_Sammelmappe_Lesefassung.md) wird daraus erzeugt (`npm run sop:lesefassung`) und nicht von Hand bearbeitet; ein Test prüft, dass sie zum Stand der Einzeldateien passt. Das Quellenregister [`quellenregister.json`](quellenregister.json) weist jede URL aus Teil A, B und C mit Prüfergebnis und offener Nachprüfung nach (Teil A, A.6). Als SOP liest die App nur die in `profil.json` unter `sop.dateien` genannten Dateien, nicht diese Übersicht, das Quellenregister, die Lesefassung oder das Archiv. Diese Übersicht zeigt sie in der Profilansicht als Lesedokument; Lesefassung und Archiv sind nicht in die App eingebettet.
 
 Der **Gültigkeitsstand** (welche Fassungen von SOPs, Kodierleitfaden, Darstellungsdatei, Arbeitsanweisungen und Schema zusammengehören) steht am Anfang von Teil A, damit er jeder KI-Anfrage beiliegt. Gliederung, Zitierweise und feste Kennungen regelt Teil A, A.10.1.
 
@@ -24,20 +24,20 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 
 | Kennung | Ereignisart | Datei | Fassung | bisher |
 |---|---|---|---|---|
-| B01 | Unwetter / Sturm | [`teil-b/B01_unwetter-sturm.md`](teil-b/B01_unwetter-sturm.md) | 2.0.1 | 01 |
-| B02 | Hochwasser / Überschwemmung | [`teil-b/B02_hochwasser-ueberschwemmung.md`](teil-b/B02_hochwasser-ueberschwemmung.md) | 2.0.1 | 02 |
+| B01 | Unwetter / Sturm | [`teil-b/B01_unwetter-sturm.md`](teil-b/B01_unwetter-sturm.md) | 2.1.0 | 01 |
+| B02 | Hochwasser / Überschwemmung | [`teil-b/B02_hochwasser-ueberschwemmung.md`](teil-b/B02_hochwasser-ueberschwemmung.md) | 2.1.0 | 02 |
 | B03 | Waldbrand | [`teil-b/B03_waldbrand.md`](teil-b/B03_waldbrand.md) | 2.1.0 | 03 |
 | B04 | Erdbeben | [`teil-b/B04_erdbeben.md`](teil-b/B04_erdbeben.md) | 2.1.0 | 04 |
-| B05 | Extremhitze / Dürre | [`teil-b/B05_extremhitze-duerre.md`](teil-b/B05_extremhitze-duerre.md) | 2.1.0 | 05 |
+| B05 | Extremhitze / Dürre | [`teil-b/B05_extremhitze-duerre.md`](teil-b/B05_extremhitze-duerre.md) | 2.1.1 | 05 |
 | B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.1.0 | 06 |
-| B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.0.1 | 07 |
+| B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.1.0 | 07 |
 | B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.0.2 | 08 |
-| B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.1.0 | 09 |
+| B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.2.0 | 09 |
 | B10 | Trinkwasserversorgung | [`teil-b/B10_trinkwasserversorgung.md`](teil-b/B10_trinkwasserversorgung.md) | 2.0.2 | 10 |
 | B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.2.0 | 11 |
 | B12 | KRITIS-Ausfall | [`teil-b/B12_kritis-ausfall.md`](teil-b/B12_kritis-ausfall.md) | 2.1.0 | 12 |
 | B13 | Migrationslage | [`teil-b/B13_migrationslage.md`](teil-b/B13_migrationslage.md) | 2.0.2 | 13 |
-| B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.0.1 | 14 |
+| B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.1.0 | 14 |
 | B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.1.0 | 15 |
 | B16 | Sabotage / Anschlag / Terrorismus | [`teil-b/B16_sabotage-anschlag-terrorismus.md`](teil-b/B16_sabotage-anschlag-terrorismus.md) | 2.1.0 | 16 |
 | B17 | Sonstiges | [`teil-b/B17_sonstiges.md`](teil-b/B17_sonstiges.md) | 2.1.0 | 17 |
@@ -73,14 +73,14 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 | C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.1.0 | N02 |
 | C12 | Kraftstoff- und Wärmeversorgung | Themenbaustein | [`teil-c/C12_kraftstoff-waerme.md`](teil-c/C12_kraftstoff-waerme.md) | 1.1.1 | N05 |
 | C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.1.0 | N06 |
-| C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.1.0 | N07 |
+| C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.1.1 | N07 |
 | C15 | Abwasser, Sanitärhygiene und kritische Entsorgung | Themenbaustein | [`teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md`](teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md) | 1.1.0 | N08 |
 
 **Leseblock: Lageübergreifende Querschnitte**
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C16 | Evakuierung, Schutzunterbringung und Betreuung | Querschnittsbaustein | [`teil-c/C16_evakuierung-schutzunterbringung-betreuung.md`](teil-c/C16_evakuierung-schutzunterbringung-betreuung.md) | 1.1.0 | N03 |
+| C16 | Evakuierung, Schutzunterbringung und Betreuung | Querschnittsbaustein | [`teil-c/C16_evakuierung-schutzunterbringung-betreuung.md`](teil-c/C16_evakuierung-schutzunterbringung-betreuung.md) | 1.1.1 | N03 |
 | C17 | Zivile Verteidigung – zivile Schutz- und Versorgungsfolgen | Querschnittsbaustein | [`teil-c/C17_zivile-verteidigung-zivile-folgen.md`](teil-c/C17_zivile-verteidigung-zivile-folgen.md) | 1.1.0 | N13 |
 
 Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbetrieb und Kalibrierung (P01, P02) sind Redaktionsregeln in Teil A (A.7.4, A.7.5, A.10.3), keine Bausteine; deshalb gab es bis Fassung 2.0.1 keinen Baustein N14, und die Lücke wird nicht durch einen weiteren Baustein gefüllt.

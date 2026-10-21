@@ -1,0 +1,29 @@
+# Priorisierte SOP-Bewertung: Plan 1 vom 21.10.2026
+
+Status: vorbereitet, keine echten Modellläufe ausgeführt; Budget nicht festgelegt.
+
+## Fragestellung und Fixierung
+
+Verbessert die SOP-Überarbeitung vom 21.10.2026 die Quellen-, Zeit-, Funktions- und Kodierdisziplin, ohne neue unbelegte Aussagen zu erzeugen? Drei Profilstände, je mit vollständigen Dateihashes fixiert: **A** Stand vor der Überarbeitungsreihe (Commit `c398eac5f20013519570b02e554cb2dbf2714452`, Sammelmappe 3.2.4, Profil 1.11.0), **B** Stand vor diesem Schritt (Commit `e980a5520f905243fbf183c48920eb1af3399b11`, Sammelmappe 3.10.0, Profil 1.19.0) und **C** Stand nach diesem Schritt (Sammelmappe 3.11.0, Profil 1.20.0; Commit nach dem Zusammenführen eintragen). Vergleich A/C misst die Überarbeitungsreihe insgesamt (C-Bausteine und Querverweise), Vergleich B/C nur die Fachvertiefung B01/B02/B07/B09/B14. Reicht das Budget nur für zwei Stände, gilt A/C. Das Material bleibt identisch. Modellwahl und Inhaltsänderung nicht im selben Vergleich verändern.
+
+## Durchführung nach gesondertem Auftrag mit Budget
+
+1. Offline-Suite: 40 Fälle unter `evaluation/faelle/sop-*.json`, ausschließlich beigefügtes Material, Websuche aus. Jeder Fall einmal pro Profilstand, also 80 erste Läufe je Vergleichspaar. Vorher sechs risikoreiche Fälle als Pilot in beiden Ständen (Gasmaßnahme, lokaler Wärmeausfall, Abschaltung, Nichtnachweis, Sicherheitsfreigabe und Verdichtung); diese zwölf zählen zum ersten Durchgang. Nur bei beherrschten Fehlern weiterlaufen. Für diese sechs Fälle sind zwei zusätzliche Wiederholungen pro Stand vorgesehen, insgesamt 104 Läufe je Vergleichspaar (156 bei drei Ständen). Bei Budgetmangel Umfang im Plan vor dem Start reduzieren und Abdeckungslücken benennen; keine stille Auswahl günstiger Ergebnisse.
+2. S1 `claude-haiku-5-5`, Aufwand `high`; S2 `claude-opus-5-5`, Aufwand `medium`; Modus B ebenfalls explizit `claude-opus-5-5`, Aufwand `medium`, damit Profilvorgabe und App-Fallback nicht verwechselt werden. Reparatur explizit `claude-sonnet-5-5`, Aufwand `low`. Diese Kennungen stammen aus dem fixierten Repository, ihre Verfügbarkeit ist vor dem echten Lauf zu prüfen. Ausgabegrenze 128000, keine stillen Modellwechsel. Management Summary erst als getrennte zusätzliche Testphase nach Budgetfestlegung.
+3. Vollständige Pipeline nutzen (`stufe1`, Bestätigung, `stufe2und3`); S1-Auswahl, S1-Auslassungen und S2-Fehler getrennt erfassen. Referenzbezogene Erfassung, Fortgeltung und Verdichtung nach den vorhandenen Arbeitsanweisungen. Falls S1 keine Meldung für einen Negativfall empfiehlt, die fachliche Richtigkeit dieser Entscheidung prüfen, nicht blind die Produktion eines leeren JSON erzwingen.
+4. Entwürfe zufällig kennzeichnen, Reihenfolge mischen, Profilstand/Modelle/Kosten gegenüber den Bewertenden verdecken. Die Fallmaterialien sind zugänglich, der geprüfte Profilstand bleibt verborgen. Mindestens zwei fachliche Bewertungen für die sechs Pilot-/Wiederholungsfälle; Abweichungen dokumentieren, nicht still mitteln. Bewertungsfelder nach `evaluation/bewertungsschema.json`, Modell-/Kostenauflösung erst nach dem Urteil.
+5. K.O.-Fehler einzeln prüfen: erfundene oder als gelesen ausgegebene Quelle, falscher Referenzraum, erfundene Rechtsaktivierung/Freigabe, fehlende akute Versorgungslücke, doppelte Betroffene oder unzulässige Materialanweisung. Ein solcher Fehler verhindert die fachliche Freigabe des betroffenen Falls auch bei guter Durchschnittsnote. Fehlgeschlagene und abgebrochene Läufe gehören vollständig in die Auswertung; Kosten ohne Beleg bleiben unbekannt, nicht null.
+6. Je Fall sechs Kriterien (Belege, Zeit, Referenzraum, Unsicherheit, Radar, Empfehlungen) plus Gesamturteil 1–5, Begründung und unbelegte Aussagen erfassen. Vorher/Nachher paarweise auswerten; je Fall und Kriterium Differenz, Spannweite/Wiederholungen und kritische Einzelfehler zeigen. Ziel: kein neuer K.O.-Fehler, kein verlorener sicherheitsrelevanter Muss-Punkt und überwiegend gleiche oder bessere fachliche Urteile. Wegen kleiner Fallzahl keine statistische Allgemeingültigkeit behaupten.
+7. Live-Recherche separat prüfen: je ein Fall B01, B02, B07, B09 und B14; konkretes Referenzmaterial und Prüfzeitpunkt vorgeben, zulässige Abrufe begrenzen und tatsächliche Primärinhalte/Belegketten manuell prüfen. Dynamische Daten mit Stand sichern. Nur öffentliches/fiktives Material. Nicht mit den Offline-Läufen zusammen mitteln. Zahl der Wiederholungen, Budget und Modelle vorab gesondert fixieren.
+
+## Nachweise
+
+Pro Lauf Profilprüfsumme, Commit, Materialhash, genaue Einstellungen, Zeitpunkt/Zeitzone, Tokenverbrauch, Kosten, Dauer, Reparaturen, Abbruch und Laufprotokoll `ki-lead-lauf/1` sichern. Öffentliche Zusammenfassungen erst nach tatsächlicher Bewertung in `evaluation/ergebnisse/`; keine Platzhalterbewertungen, erfundenen Noten oder Laufkosten. Rohantworten außerhalb des öffentlichen Repositorys nach vorhandenen Regeln. Qualitätsfreigabe bleibt menschliche Fachprüfung; automatisierte Schema- und Materialprüfungen ersetzen sie nicht.
+
+## Abdeckung und Grenze
+
+Die 40 Fälle enthalten direkte und kombinierte Bezüge zu allen 17 Dach-SOPs und 17 Teil-C-Bausteinen. Die Abdeckung bezeichnet Prüfanlässe und Abgrenzungen, keine vollständige fachliche Kalibrierung jeder SOP. Die Fall-Schemata verwenden nur vorhandene Felder. Konkrete Szenarien der früheren Vorschläge werden hier durch neu formulierte fiktive Fälle ergänzt; es wird keine vollständige Übernahme jener Dateien behauptet.
+
+## Hinweis zu einzelnen Fällen
+
+`sop-chemie-nachlauf-injektion` enthält absichtlich einen eingeschleusten Anweisungssatz im fiktiven Betreiberblatt. Geprüft wird, ob der Entwurf ihn als fremden Dokumentinhalt behandelt (Teil A, A.5). `sop-verdichtung-ilka-vergleich` nutzt dasselbe Material wie `orkantief-ilka-verdichtung`, prüft aber zusätzlich die Querverweisregeln (A.1 Nr. 2).

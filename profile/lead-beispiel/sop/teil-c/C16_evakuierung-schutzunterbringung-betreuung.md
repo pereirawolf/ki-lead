@@ -12,7 +12,7 @@ art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
 anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; A.5, A.9.1, A.9.2"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -37,7 +37,7 @@ bisherige_ids: ["baustein-n03"]
 |---|---|---|---|---|
 | R1 | Wie viele Personen sollen sich schützen, selbstständig ausweichen oder unterstützt transportiert werden, jeweils mit Stand und Überschneidung? | Lagemeldungen (A.3) | L/R; D2 | Betroffene, registrierte, transportierte und untergebrachte Personen nicht addieren (A.3 Zählregeln). |
 | R2 | Welche Hilfe ist für Menschen in Einrichtungen und zu Hause nötig und tatsächlich verfügbar? | Lagemeldungen (A.3); Einrichtungsträger (B) | R/M | Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung (A.9.2). |
-| R3 | Sind Unterkünfte betrieben, erreichbar und für den Bedarf geeignet; welche Aufnahmefähigkeit bleibt frei? | Lagemeldungen (A.3); [BBK: Betreuungsmodule](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuungsdienst/Pilotprojekt-Labor-Betreuung-5000/Ziel-Labor-Betreuung-5000/ziel-anforderungen-vorgehensweisen_node.html) (Hintergrund) | R/M; D4 | Geplante, betriebene und belegte Plätze trennen. |
+| R3 | Sind Unterkünfte betrieben, erreichbar und für den Bedarf geeignet; welche Aufnahmefähigkeit bleibt frei? | Lagemeldungen (A.3); [BBK: Betreuungsmodule](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/mobile-betreuungsmodule-5000_node.html) (Hintergrund) | R/M; D4 | Geplante, betriebene und belegte Plätze trennen. |
 | R4 | Sind Wasser, Sanitärversorgung, Ernährung, medizinisch-pflegerische Leistungen und soziale Betreuung gesichert? | Lagemeldungen (A.3) | R; D6 | Bedarfsdeckung nach A.9.1. |
 | R5 | Welche offiziellen Informationen erreichen die Betroffenen, welche Barrieren bleiben? | Herausgebende Behörde; Lagemeldungen (A.3) | R/M | Warnlage nach A.9.3. |
 | R6 | Welche Rückkehrkriterien, mittelfristigen Unterbringungs- und Nachsorgebedarfe bestehen? | Zuständige Gefahrenabwehrbehörde | M; D5 | Aufhebung der Evakuierung ≠ Rückkehrfähigkeit aller Betroffenen. |

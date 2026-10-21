@@ -42,7 +42,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.24 | letzter Commit von Pull Request #22 „Manuelle LEAD-Eingabehilfen für Analysefelder und Bewertungstext; 0.4.24“ |
 | 0.4.25 | letzter Commit von Pull Request #23 „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
 | 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
-| 0.4.27 | letzter Commit von Pull Request #32 „SOP-Querverweise Teil B/C: Verweislogik, Querschnitte C16/C17, Kodierangleichung; Profil 1.19.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit #27, 1.15.0 mit #28, 1.16.0 mit #29, 1.17.0 mit #30, 1.18.0 mit #31 und 1.19.0 mit #32, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
+| 0.4.27 | letzter Commit von Pull Request #33 „SOP B01/B02/B07/B09/B14 vertieft, Quellenregister, 40 Bewertungsfälle; Profil 1.20.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit #27, 1.15.0 mit #28, 1.16.0 mit #29, 1.17.0 mit #30, 1.18.0 mit #31, 1.19.0 mit #32 und 1.20.0 mit #33, außerdem 40 Bewertungsfälle unter `evaluation/` mit #33, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
 
 ## [0.4.27] – 21.10.2026
 

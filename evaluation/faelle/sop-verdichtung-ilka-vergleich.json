@@ -1,0 +1,62 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-verdichtung-ilka-vergleich",
+  "titel": "Fortgeltung, Engpass und Achsendivergenzen bei Ilka (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Verdichtung der Ländermeldungen zu den Sturmfolgen des Orkantiefs „Ilka“ für die Redaktionskonferenz der Koordinierungsstelle",
+    "stichworte": "Sturm, Stromausfall, KRITIS, Notstrom",
+    "stichtag": "2026-10-14",
+    "meldezeitpunkt": "2026-10-14T14:00",
+    "websuche": false,
+    "verdichtung": true
+  },
+  "material": [
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_HE_2026-10-14T10-15_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    },
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_NI_2026-10-14T09-45_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    },
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_NW_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    },
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_RP_2026-10-14T09-30_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    },
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_ST_2026-10-14T11-00_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    },
+    {
+      "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+      "rolle": "eingang"
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Alle sechs Ländermeldungen (HE, NI, NW, RP, ST, TH) sind als Eingänge mit eigenem A-Eintrag in den Quellen berücksichtigt",
+      "Die Zahl der weiterhin Stromlosen wird aus den Ländermeldungen zusammengeführt und mit Stand angegeben",
+      "Das Ende von Notstrompuffern vor der Wiederversorgung wird als zeitkritischer Punkt benannt",
+      "Abweichende Bewertungen oder Tendenzen der Länder werden benannt statt geglättet",
+      "Gleiche Ereignis- und Wirkungsketten werden nicht durch zusätzliche B/C-Verweise zu doppelten Personen- oder Ressourcenangaben.",
+      "Keine aktuelle Webprüfung oder gesonderte Rechtsprüfung wird bei deaktivierter Websuche behauptet."
+    ],
+    "darf_nicht": [
+      "Angaben, die in keiner Ländermeldung stehen, ohne Kennzeichnung als Annahme",
+      "Eine eigene Websuche oder Quellen außerhalb der Eingänge"
+    ],
+    "t0": "2026-10-14T14:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm",
+      "Stromausfall / Blackout",
+      "KRITIS-Ausfall"
+    ]
+  }
+}

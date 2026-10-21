@@ -1,0 +1,39 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-zivile-verteidigung-funktionsbezug",
+  "titel": "Zivile Versorgung bei bestätigter Sabotage ohne formalen Verteidigungsfall (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Zivile Versorgung bei bestätigter Sabotage ohne formalen Verteidigungsfall",
+    "stichworte": "B16, C17, C12, C13",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-zivile-verteidigung-funktionsbezug.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Bestätigte Tat, zivile Funktionsfolge und fehlenden Nachweis eines förmlichen Rechtszustands unterscheiden.",
+      "C17 nur als Querschnitt der konkreten zivilen Folge verwenden.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "C17 als eigene Ereignisart verwenden oder einen Verteidigungsfall und besondere Bewirtschaftungsbefugnisse unterstellen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sabotage / Anschlag / Terrorismus"
+    ]
+  }
+}

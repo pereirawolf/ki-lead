@@ -1,0 +1,39 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-kraftstoff-abgabe",
+  "titel": "Volle Tanklager, Abgabe und Nachtransport nicht wirksam (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Volle Tanklager, Abgabe und Nachtransport nicht wirksam",
+    "stichworte": "B08, C12, C13",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-kraftstoff-abgabe.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Bestand und wirksame Abgabe-/Transportkette trennen.",
+      "Mögliche zweistündige kritische Deckungslücke und rechtzeitigen Abstimmungsbedarf darstellen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Volle Lager als Nachweis gedeckter Krankenhausversorgung oder vorhandenes Aggregat als wirksame Versorgung werten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Stromausfall / Blackout"
+    ]
+  }
+}

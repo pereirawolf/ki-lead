@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-abwasser-trinkwasser",
+  "titel": "Trinkwasser wieder verfügbar, Sanitärfunktion weiter eingeschränkt (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Trinkwasser wieder verfügbar, Sanitärfunktion weiter eingeschränkt",
+    "stichworte": "B10, C15",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-abwasser-trinkwasser.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Trinkwasserfreigabe und Abwasser-/Sanitärfunktion getrennt bewerten.",
+      "Bestellte Toiletten nicht als betriebene Sanitärkapazität anrechnen.",
+      "Folgepflege und Entleerung als Deckungsbedingung nennen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Gesamtentwarnung oder feste Wiederherstellungsdauer aus der Trinkwasserfreigabe ableiten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Trinkwasserversorgung"
+    ]
+  }
+}

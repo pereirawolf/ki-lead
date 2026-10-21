@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-erdbeben-ausland-hilfe",
+  "titel": "Auslandsbeben und deutsche Hilfe ohne deutschen Wirkungsnachweis (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Auslandsbeben und deutsche Hilfe ohne deutschen Wirkungsnachweis",
+    "stichworte": "B04, C02",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-erdbeben-ausland-hilfe.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Ausländische Schäden und deutsche Hilfe getrennt darstellen.",
+      "Auslandswirkung nicht in deutsche D1/D2 übertragen.",
+      "D4 nicht allein aus deutscher Auslandshilfe ableiten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eine deutsche Direktbetroffenheit oder deutschen D4-Wert aus der Entsendung ableiten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Erdbeben"
+    ]
+  }
+}

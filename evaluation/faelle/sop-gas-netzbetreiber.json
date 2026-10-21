@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-gas-netzbetreiber",
+  "titel": "Netzanpassung ohne nationale Notfallstufe (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Netzanpassung ohne nationale Notfallstufe",
+    "stichworte": "B09",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-gas-netzbetreiber.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Netzbetreibermaßnahme von einer hoheitlichen Lastverteilung unterscheiden.",
+      "D3 bezogen auf die tatsächlich bewertete Funktion begründen.",
+      "Industrielle Anschlusszahl nicht in Personen umrechnen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Aus der Anpassung eine nationale Notfallstufe oder BNetzA-Verfügung ableiten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Gasversorgungsengpass"
+    ]
+  }
+}

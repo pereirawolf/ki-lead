@@ -1,0 +1,41 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-chemie-tuis-untersuchung",
+  "titel": "Telefonberatung und vorsorglich untersuchte Personen (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Telefonberatung und vorsorglich untersuchte Personen",
+    "stichworte": "B07, C09",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-chemie-tuis-untersuchung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "40 Untersuchte und fünf darin enthaltene symptomatische Personen getrennt und überschneidungsfrei darstellen.",
+      "Telefonische Beratung, Anfrage und tatsächlichen Ressourceneinsatz unterscheiden.",
+      "D2 nur auf tragfähige direkte Betroffenheit nach aktueller Kodierregel beziehen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "45 Verletzte oder 40 Vergiftete behaupten.",
+      "Ein Spezialfahrzeug als bereits eingetroffen oder automatisch höchste D4-Stufe angeben.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Industrieunfall / Chemieunfall"
+    ]
+  }
+}

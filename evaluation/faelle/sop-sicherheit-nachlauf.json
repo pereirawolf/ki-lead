@@ -1,0 +1,41 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-sicherheit-nachlauf",
+  "titel": "Polizeisperre aufgehoben, Betriebsfreigabe fehlt (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Polizeisperre aufgehoben, Betriebsfreigabe fehlt",
+    "stichworte": "B14, C13, C16",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-sicherheit-nachlauf.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Polizeiliche Aufhebung und betriebliche Freigabe unterscheiden.",
+      "120 gestrandete Reisende und den offenen Transportstatus darstellen.",
+      "D7 anhand der zivil entscheidungsrelevanten Lücken, nicht fehlender Ermittlungsdetails begründen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Wiederaufnahme des Verkehrs oder erfolgten Abtransport behaupten.",
+      "D7 allein wegen nichtöffentlicher Ermittlungsdetails erhöhen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sicherheitslage"
+    ]
+  }
+}

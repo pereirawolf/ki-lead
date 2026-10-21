@@ -1,0 +1,39 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-kampfmittel-freigabe",
+  "titel": "Kampfmittelbeseitigung und verzögerte Rückkehr (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Kampfmittelbeseitigung und verzögerte Rückkehr",
+    "stichworte": "B17, C06, C16",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-kampfmittel-freigabe.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Beseitigung des Kampfmittels und sichere Rückkehr trennen.",
+      "200 Personen einmal führen; fortgeltenden Teilbereich erhalten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Selbst einen Räumradius festlegen oder Gesamtfreigabe behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sonstiges"
+    ]
+  }
+}
