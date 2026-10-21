@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.6.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.7.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -54,8 +54,8 @@ Alle Bausteine haben den Status „Inhaltsgerüst“: Sie ergänzen die Dach-SOP
 | C02 | Massenbewegungen, Bodenversagen und Gebäudeeinsturz | Themenbaustein | [`teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md`](teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md) | 1.1.0 | N09 |
 | C03 | Weltraumwetter und Störungen von Navigation und Zeitreferenz | Themenbaustein | [`teil-c/C03_weltraumwetter-navigation-zeitreferenz.md`](teil-c/C03_weltraumwetter-navigation-zeitreferenz.md) | 1.1.0 | N15 |
 | C04 | Vulkanasche mit Deutschland- oder Versorgungsbezug | Themenbaustein | [`teil-c/C04_vulkanasche.md`](teil-c/C04_vulkanasche.md) | 1.1.0 | N18 |
-| C05 | Großunfall und überörtliche Unfallfolgen | Themenbaustein | [`teil-c/C05_grossunfall-unfallfolgen.md`](teil-c/C05_grossunfall-unfallfolgen.md) | 1.0.1 | N16 |
-| C06 | Kampfmittelfund mit Räumung oder Versorgungsauswirkung | Themenbaustein | [`teil-c/C06_kampfmittelfund.md`](teil-c/C06_kampfmittelfund.md) | 1.0.1 | N17 |
+| C05 | Großunfall und überörtliche Unfallfolgen | Themenbaustein | [`teil-c/C05_grossunfall-unfallfolgen.md`](teil-c/C05_grossunfall-unfallfolgen.md) | 1.1.0 | N16 |
+| C06 | Kampfmittelfund mit Räumung oder Versorgungsauswirkung | Themenbaustein | [`teil-c/C06_kampfmittelfund.md`](teil-c/C06_kampfmittelfund.md) | 1.1.0 | N17 |
 
 **Leseblock: Gesundheit und medizinische Versorgung**
 
@@ -72,7 +72,7 @@ Alle Bausteine haben den Status „Inhaltsgerüst“: Sie ergänzen die Dach-SOP
 |---|---|---|---|---|---|
 | C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.1.0 | N02 |
 | C12 | Kraftstoff- und Wärmeversorgung | Themenbaustein | [`teil-c/C12_kraftstoff-waerme.md`](teil-c/C12_kraftstoff-waerme.md) | 1.1.0 | N05 |
-| C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.0.1 | N06 |
+| C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.1.0 | N06 |
 | C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.0.1 | N07 |
 | C15 | Abwasser, Sanitärhygiene und kritische Entsorgung | Themenbaustein | [`teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md`](teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md) | 1.0.1 | N08 |
 

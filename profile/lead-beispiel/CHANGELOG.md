@@ -8,6 +8,17 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.16.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_C05-C06-C13_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
+
+- **SOP-Sammelmappe 3.7.0:**
+  - C05 1.1.0: Abgrenzung zu B07 und B16, `art_zuordnung` ergänzt; Personenprofil, Schutzentscheidungen, Zielzustand, psychosoziale Notfallversorgung; D2 nach Kodierleitfaden.
+  - C06 1.1.0: Verdacht und kleine kritische Maßnahmen, Relevanz für die Wochenlage, Warnung, Rückkehr, Versorgungskette.
+  - C13 1.1.0: Luftverkehr, Umschlag und Verteilung, Prüfhilfe unter der Ursachen-SOP, nutzbarer Ersatz, Zeitkritikalität; D2 nach Kodierleitfaden.
+  - Alle bleiben Inhaltsgerüste. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 1.15.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_C02-C03-C04_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
