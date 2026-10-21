@@ -1,13 +1,16 @@
 {
   "name": "ki-lead",
-  "version": "0.4.22",
+  "version": "0.4.23",
   "description": "KI-LEAD – Forschungsdemonstrator für die LEAD-Systematik (Lageerfassung, -auswertung und -darstellung)",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "pruefe-profile": "vitest run tests/profile.test.ts",
+    "test:ui": "vitest run tests/ui",
+    "test:zufall": "vitest run --sequence.shuffle --sequence.seed=20261021",
+    "test:browser": "playwright test",
+    "pruefe-profile": "vitest run tests/profil",
     "sop:lesefassung": "node scripts/sop-lesefassung.mjs"
   },
   "author": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
@@ -24,6 +27,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.6.5",
     "@types/react": "^18.3.31",

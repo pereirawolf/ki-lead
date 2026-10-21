@@ -2,7 +2,7 @@
 // Grundlage: Umsetzungsplan „KI-LEAD_Farbschemas_Umsetzungsplan_65c278b“ (19 Paletten) und ergänzt um „Bevölkerungsschutz“.
 // Die Paletten sind App-Adaptionen: Landes- bzw. CI-Farben werden aufgegriffen, Flächen, Hover- und Linkfarben sind
 // für Lesbarkeit abgeleitet. Eine amtliche Freigabe oder vollständige CI-Konformität wird nicht beansprucht.
-// Herkunft und Quellen je Palette: docs/farbschemas.md. Kontraste prüft tests/farbschemas.test.ts.
+// Herkunft und Quellen je Palette: docs/farbschemas.md. Kontraste prüft tests/darstellung/farbschemas.test.ts.
 
 import type { FarbschemaEintrag } from "./typen";
 

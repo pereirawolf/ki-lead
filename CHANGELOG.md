@@ -37,7 +37,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.19 | letzter Commit von Pull Request #16 „S1: Aufwand, Ausgabegrenze, t0-Absicherung und Prüffrage-Vorschlag; 0.4.19“ |
 | 0.4.20 | letzter Commit von Pull Request #18 „Aufräumen: SOP-Archiv in den Git-Verlauf, Beispielprofil 1.9.1“ (Nachtrag vom 21.10.2026: Beispielprofil 1.9.1, ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #17 „KI: Modell je Lauf wählen, Laufprotokoll schon nach S1; 0.4.20“) |
 | 0.4.21 | letzter Commit von Pull Request #19 „Vorgaben nach der Testreihe der KI-Modelle; 0.4.21“ |
-| 0.4.22 | letzter Commit des Pull Requests „Aufwand und Websuchen je Lauf, Automatisch = Neutral; 0.4.22“ |
+| 0.4.22 | letzter Commit von Pull Request #20 „Aufwand und Websuchen je Lauf, Automatisch = Neutral; 0.4.22“ |
+| 0.4.23 | letzter Commit von Pull Request #21 „Tests konsolidieren und schärfen, Browsertests, Modellbewertung getrennt; 0.4.23“ |
+
+## [0.4.23] – 21.10.2026
+
+Grundlage: Vorschläge einer weiteren KI zur Konsolidierung der Tests vom 21.10.2026 (`KI-LEAD_Tests_Konsolidierung_Vorschlaege_2026-10-21`, TEST-01 bis TEST-15), geprüft und übernommen wie unten beschrieben. **Keine Änderung am Verhalten der App**, an Vorgaben, Preisen, Profilen oder SOPs; nur die Versionsnummer ändert sich.
+
+### Tests
+
+- **Neu gegliedert nach Fachbereichen** (`tests/kern`, `profil`, `pipeline`, `anbieter`, `lagebild`, `dokumente`, `darstellung`, `ui`, `evaluation`, `browser`). Die Sammeldateien der Reviews (`korrekturen*.test.ts`), `standardwerte-testreihe`, `pipeline`, `kern`, `anbieter`, `openai`, `oberflaeche`, `erfassung-zeit-quellen` und `validierung` sind aufgeteilt. Alle 415 bisherigen Tests stehen unter unverändertem vollständigem Namen in der neuen Struktur; den Nachweis je Test enthält [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Kennungen aus Reviews (F01–F13, RC, RV) bleiben im Namen, der Kopfkommentar jeder Datei nennt Review und Datum.
+- **Gemeinsame Hilfen** unter `tests/support/`: Dateien und Profile (sortiert, Pflichtordner), Beispielmeldungen über ihr Kennzeichen statt über die Reihenfolge, skriptierter KI-Anbieter, SSE mit Teilung an Bytegrenzen, gefälschte Uhr für Wiederholungen, Speicherattrappe mit Schreibfehlern, DOM-Hilfen mit bedingtem Warten, Ajv-Referenzprüfer.
+- **Schärfere Prüfungen:** Preisangaben der Schätzung werden tatsächlich geprüft; Nullable-Konvertierung für OpenAI mit festen Negativfällen statt `Math.random`; Ajv-Vergleiche mit benannten Varianten und unabhängigem Soll; SSE mit ausdrücklichem Soll.
+- **Keine festen Pausen und keine echten Wartezeiten mehr:** Oberflächentests warten auf Zustände, Wiederholungen der Anbieter laufen mit gefälschter Uhr. Summe der Testzeit je Datei von rund 20 s auf rund 11 s.
+- **Neue Fälle (28):** gemeinsamer Vertrag beider Anbieteradapter (Wartezeiten, Obergrenze für retry-after, kein Wiederholen bei Schlüssel oder fehlendem Guthaben, Abbruch vor dem Start, in der Wartezeit und im Strom); UTF-8 über Bytegrenzen, fehlendes Ende und Zeilenenden im Ereignisstrom; voller Gerätespeicher im Lagebild; API-Schlüssel je Anbieter getrennt; Schlüssel nie im Laufprotokoll; Zwischenstand bleibt beim Profilwechsel beim Profil; Schemata der Modellbewertung.
+- **Browsertests mit Playwright** (`npm run test:browser`, nur Chromium, KI-Anbieter am Netzwerkrand simuliert, jede andere Anfrage nach außen wird abgebrochen): Meldung herunterladen und dieselbe Datei wieder öffnen, Lagebild mit Redaktionscheck und PDF, S1 bis zur Bestätigung, Abbruch, Wiederherstellung nach Neuladen, Speicherfehler, zugängliche Namen, Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben. Neue Entwicklungsabhängigkeit `@playwright/test`.
+- **Skripte:** `test:zufall` (zufällige, feste Reihenfolge), `test:ui`, `test:browser`; `pruefe-profile` prüft `tests/profil`. GitHub Actions führt zusätzlich `test:zufall` und die Browsertests aus.
+- Beschreibung von Aufbau, Hilfen und Regeln: [docs/TESTS.md](docs/TESTS.md).
+
+### Modellbewertung
+
+- Neuer Ordner `evaluation/`: Vorgehen für die inhaltliche Bewertung von KI-Modellen getrennt von den Regressionstests (Plan vor dem Lauf, blinde Bewertung, Kriterien Belege, Zeit, Referenzraum, Unsicherheit, Radar, Empfehlungen, unbelegte Aussagen, Gesamturteil), Schemata für Fälle und Bewertungen, ein fiktiver Fall (Verdichtung Orkantief „Ilka“). Keine echten Läufe; keine urheberrechtlich geschützten Texte im Repository.
+- Spezifikation 0.4.23 (Abschnitt 7).
 
 ## [0.4.22] – 21.10.2026
 

@@ -48,3 +48,7 @@ npm-debug.log*
 # Lokale, nicht öffentliche Profilergänzungen (z. B. echte Kontaktadressen)
 profile/**/*.lokal.json
 privat/
+
+# Browsertests (Playwright)
+test-results/
+playwright-report/

@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.22 vom 21.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.23 vom 21.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -254,6 +254,8 @@ src/
   speicher/    Dateien, Index, Schlüssel
 profile/       Beispielprofil, Musterprofil
 privat/        eigene Profile und Testdaten, nicht eingecheckt
+tests/         Funktions-, Komponenten- und Browsertests ohne echte KI-Aufrufe (docs/TESTS.md)
+evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen, getrennt von den Tests
 ```
 
 ## 8. Datenschutz und Sicherheit
@@ -316,3 +318,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.20 | 20.10.2026 | Modellwahl je KI-Lauf (S1–S3, Management Summary); Laufprotokoll ab S1 exportierbar (Abschnitt 5.1) |
 | 0.4.21 | 21.10.2026 | S2 Erfassung mit claude-opus-5-5 als Vorgabe; voraussichtliche Dauer und Kosten je Stufe nach Modell; Lagenradar-Umhängung und Warnung bei nicht abrufbarer Auftrags-URL in S3; Hinweis auf Kennsätze im Fließtext (Abschnitt 5.1, Umsetzung M2) |
 | 0.4.22 | 21.10.2026 | Wahl je Lauf um Aufwand je Stufe und Höchstzahl der Websuchen erweitert (Abschnitt 5.1); „Automatisch“ verwendet Neutral · Hell bzw. Neutral · Night Mode (Abschnitt 5.4) |
+| 0.4.23 | 21.10.2026 | Abschnitt 7: Ordner `tests/` und `evaluation/` ergänzt (Neugliederung der Tests, Modellbewertung getrennt von den Regressionstests) |

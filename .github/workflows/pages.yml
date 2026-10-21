@@ -33,7 +33,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      # Einmal in zufälliger, fester Reihenfolge: deckt Abhängigkeiten zwischen Tests auf
+      - run: npm run test:zufall
       - run: npm run build
+      # Browsertests gegen den Build (nur Chromium, KI-Anbieter simuliert, kein Netz nach außen)
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main' && vars.PAGES_AKTIV == 'true'
         with:
