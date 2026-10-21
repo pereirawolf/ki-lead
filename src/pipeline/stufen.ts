@@ -32,10 +32,41 @@ import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
 export const MAX_REPARATUREN = 2;
 
 /**
- * Ausgabegrenze der Stufe S1. 8 000 Token reichten nicht sicher: Denkt das Modell bei hohem Aufwand
- * selbst nach, kamen schon bei mittlerem Aufwand über 7 000 Token zusammen (Lauf 20261019-093623-ae4m).
+ * Ausgabegrenze der Stufe S1 für Modelle ohne hier geprüfte Höchstgrenze (bisheriger Wert). Denk- und Antworttoken
+ * zählen gemeinsam gegen die Grenze.
  */
-export const MAX_TOKENS_S1 = 16000;
+export const S1_AUSGABE_STANDARD = 16000;
+
+/**
+ * Ausgabegrenzen der Stufe S1 je Modellkennung (genau diese Kennungen, keine Teilzeichenfolge). Für diese Modelle
+ * nennt die Herstellerdokumentation (Stand 21.10.2026) 128 000 Ausgabetoken. 16 000 reichten bei Verdichtungen
+ * mit Haiku und Aufwand „high“ nicht: zwei Läufe mit sechs Ilka-Eingängen endeten nach 69–72 s bei genau
+ * 16 000 Token mit stopGrund „max_tokens“, einer ganz ohne sichtbaren Text (Läufe 20261021-133605-75wi und
+ * 20261021-133728-cvza). Die Grenze ist eine Obergrenze, kein Verbrauch; berechnet wird nur, was das Modell ausgibt.
+ */
+export const S1_AUSGABE_MAX: Readonly<Record<string, number>> = {
+  "claude-haiku-5-5": 128000,
+  "claude-sonnet-5-5": 128000,
+  "claude-opus-5-5": 128000,
+  "claude-fable-5-1": 128000,
+};
+
+/** Ausgabegrenze für S1 mit diesem Modell */
+export function s1Ausgabelimit(modell: string): number {
+  return S1_AUSGABE_MAX[modell] ?? S1_AUSGABE_STANDARD;
+}
+
+const tausender = (n: number) => n.toLocaleString("de-DE");
+
+/** Technisch unvollständiger S1-Vorschlag: Grund oder null. Prüft nur die Struktur, nicht den Inhalt. */
+export function s1Strukturfehler(json: unknown): string | null {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return "Die Antwort ist kein JSON-Objekt.";
+  const sv = (json as { sachverhalte?: unknown }).sachverhalte;
+  if (!Array.isArray(sv) || sv.length === 0) return "Der Vorschlag enthält keine Sachverhalte.";
+  const ungueltig = sv.findIndex((s) => !s || typeof s !== "object" || Array.isArray(s) || typeof (s as { titel?: unknown }).titel !== "string");
+  if (ungueltig >= 0) return `Sachverhalt ${ungueltig + 1} ist unvollständig.`;
+  return null;
+}
 
 /**
  * Bei Verdichtungen darf der t0-Vorschlag aus S1 höchstens so viele Stunden nach dem jüngsten Eingang liegen.
@@ -137,10 +168,14 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
     ...(vermerke ? [{ type: "text", text: vermerke }] : []),
     { type: "text", text: "Kläre jetzt den Gegenstand und schlage Gliederung, Ereignisarten und SOPs vor." },
   ];
+  // Modell einmal auflösen: dasselbe für die Anfrage und die Wahl der Ausgabegrenze
+  const modell = modellFuer("vorverarbeitung", k.einstellungen, k.profil);
+  const aufwand = k.einstellungen.aufwand.vorverarbeitung;
+  const maxTokens = s1Ausgabelimit(modell);
   const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
-    modell: modellFuer("vorverarbeitung", k.einstellungen, k.profil),
-    aufwand: k.einstellungen.aufwand.vorverarbeitung,
-    maxTokens: MAX_TOKENS_S1,
+    modell,
+    aufwand,
+    maxTokens,
     system: [{ text: s1System(k.profil, verdichtung), cache: true }],
     nachrichten: [{ role: "user", content: inhalt }],
     jsonSchema: s1Schema(
@@ -148,9 +183,36 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
       k.material.filter((m) => m.art === "eingang").map((m) => m.name),
     ),
   });
+  const eintrag = k.lauf.stufen[k.lauf.stufen.length - 1];
   const z = zerlegeAntwort(a.text);
-  if (!z.json || typeof z.json !== "object") throw new Error(`Stufe S1 lieferte kein auswertbares Ergebnis. ${z.fehler || ""}`.trim());
+  const struktur = z.json === undefined ? null : s1Strukturfehler(z.json);
+  const abgeschnitten = a.stopGrund === "max_tokens";
+  if (z.json === undefined || struktur) {
+    // Die Ursache (Ausgabegrenze, leere Antwort) geht vor dem Parserbefund; nichts wird repariert oder ergänzt
+    const technisch = struktur || z.fehler || "";
+    let meldung: string;
+    if (abgeschnitten) {
+      eintrag.notiz = `S1-Ausgabegrenze von ${tausender(maxTokens)} Token erreicht; kein vollständiger Vorschlag. Sichtbarer Text: ${tausender(a.text.length)} Zeichen.`;
+      meldung = `S1 hat die Ausgabegrenze von ${tausender(maxTokens)} Token erreicht, bevor ein vollständiger Vorschlag vorlag (Modell ${modell}, Aufwand ${aufwand ?? "Standard"}). Eingaben und Laufprotokoll bleiben erhalten.${technisch ? ` Technisch: ${technisch}` : ""}`;
+    } else if (!a.text.trim()) {
+      eintrag.notiz = `Leere Antwort (stopGrund ${a.stopGrund || "unbekannt"}).`;
+      meldung = `Stufe S1 lieferte eine leere Antwort (Modell ${modell}, Abbruchgrund ${a.stopGrund || "unbekannt"}). Eingaben und Laufprotokoll bleiben erhalten.`;
+    } else {
+      meldung =
+        `Stufe S1 lieferte kein auswertbares Ergebnis. ${technisch}${a.stopGrund && a.stopGrund !== "end_turn" ? ` (Abbruchgrund ${a.stopGrund})` : ""}`.trim();
+    }
+    await k.aktualisiert(k.lauf);
+    throw new Error(meldung);
+  }
   const v = bereinigeVorschlag(z.json as S1Vorschlag, k);
+  if (abgeschnitten) {
+    // Vollständig und strukturell geprüft, aber an der Grenze beendet: zur Bestätigung, mit sichtbarem Prüfbedarf
+    eintrag.notiz = `S1-Ausgabegrenze von ${tausender(maxTokens)} Token erreicht; der Vorschlag ist technisch vollständig.`;
+    v.appHinweise = [
+      ...(v.appHinweise || []),
+      `S1 hat die Ausgabegrenze von ${tausender(maxTokens)} Token erreicht. Der Vorschlag ist technisch vollständig; bitte Gliederung, Zuordnung der Eingänge und SOPs besonders sorgfältig prüfen.`,
+    ];
+  }
   k.lauf.vorschlag = v;
   k.lauf.status = "bestaetigen";
   await k.aktualisiert(k.lauf);

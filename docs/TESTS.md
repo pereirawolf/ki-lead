@@ -28,7 +28,7 @@ GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, 
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
-| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Farbschema, Redaktionscheck |
+| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck |
 | `tests/evaluation/` | Schemata der Modellbewertung (ohne KI-Aufruf) |
 | `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit im echten Browser |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |

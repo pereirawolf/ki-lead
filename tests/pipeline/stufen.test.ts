@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { MAX_TOKENS_S1, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { s1Ausgabelimit, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { STANDARD } from "../../src/pipeline/einstellungen";
 import { pruefeRoh } from "../../src/kern/validierung";
 import type { Material } from "../../src/pipeline/material";
 
@@ -124,13 +125,11 @@ describe("Abgeschnittene Antworten und t0", () => {
 });
 
 describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
-  it("ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf", async () => {
+  it("ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)", async () => {
     const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
     const { k } = await pipelineKontext(att);
     await stufe1(k);
     expect(att.anfragen[0].aufwand).toBe("high");
-    expect(att.anfragen[0].maxTokens).toBe(MAX_TOKENS_S1);
-    expect(MAX_TOKENS_S1).toBe(16000);
   });
 
   it("Erfassung ohne Eingänge: t0 aus S1 bleibt unverändert", async () => {
@@ -195,5 +194,116 @@ describe("Gescheiterter Abruf der Auftrags-URL", () => {
     const { k } = await pipelineKontext(att, [], WIE_TESTREIHE);
     const e = await stufe2und3(k, bestaetigterVorschlag() as any);
     expect(e.befunde.some((b) => /Seite aus dem Auftrag/.test(b.text))).toBe(false);
+  });
+});
+
+// S1-Ausgabegrenze (0.4.25): Läufe 20261021-133605-75wi und 20261021-133728-cvza brachen bei 16 000 Token ab.
+// Kennungen T01–T14 nach dem konsolidierten Vorschlag vom 21.10.2026.
+describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
+  /** Kontext mit abweichendem S1-Modell bzw. abweichender Grenze für S2 */
+  async function kontext(antworten: Parameters<typeof skriptAnbieter>[0], s1Modell = "", maxTokensErfassung = STANDARD.maxTokensErfassung) {
+    const att = skriptAnbieter(antworten);
+    const { k, protokolle } = await pipelineKontext(att);
+    k.einstellungen = { ...STANDARD, maxTokensErfassung, modelle: { ...STANDARD.modelle, vorverarbeitung: s1Modell } };
+    return { att, k, protokolle };
+  }
+  const abgeschnitten = (text: string, inhalt: any[] = [{ type: "thinking" }, { type: "text", text }]) =>
+    llmAntwort(text, {
+      stopGrund: "max_tokens",
+      inhalt,
+      nutzung: { eingabe: 34246, ausgabe: 128000, cacheSchreiben: 0, cacheLesen: 44327, websuchen: 0, abrufe: 0 },
+      kostenUsd: 0.07,
+    });
+
+  it("T01/T02: Haiku mit Aufwand high erhält beim ersten und einzigen S1-Aufruf 128 000 Token, unabhängig von der S2-Grenze", async () => {
+    for (const s2 of [128000, 32000]) {
+      const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], "", s2);
+      await stufe1(k);
+      expect(att.anfragen).toHaveLength(1);
+      expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual(["claude-haiku-5-5", "high", 128000]);
+      expect(k.lauf.stufen[0].anfrage?.maxTokens).toBe(128000);
+    }
+  });
+
+  it.each([
+    ["claude-sonnet-5-5", 128000],
+    ["claude-opus-5-5", 128000],
+    ["claude-fable-5-1", 128000],
+    ["gpt-6-luna", 16000],
+    ["claude-haiku-4-5", 16000],
+    ["claude-haiku-5-5-extra", 16000],
+  ])("T03: %s erhält in S1 %i Token (nur genau benannte Kennungen)", async (modell, soll) => {
+    expect(s1Ausgabelimit(modell)).toBe(soll);
+    const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], modell);
+    await stufe1(k);
+    expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual([modell, "high", soll]);
+  });
+
+  it("T04/T14: max_tokens nur mit Denkblock: Budgetfehler mit Grenze, Modell und Aufwand; kein Vorschlag, kein zweiter Aufruf; Protokoll vollständig", async () => {
+    const { att, k, protokolle } = await kontext([abgeschnitten("", [{ type: "thinking" }])]);
+    await expect(stufe1(k)).rejects.toThrow(
+      "S1 hat die Ausgabegrenze von 128.000 Token erreicht, bevor ein vollständiger Vorschlag vorlag (Modell claude-haiku-5-5, Aufwand high). Eingaben und Laufprotokoll bleiben erhalten. Technisch: Die Antwort enthält keinen JSON-Block.",
+    );
+    expect(att.anfragen).toHaveLength(1);
+    expect(k.lauf.vorschlag).toBeUndefined();
+    expect(k.lauf.status).toBe("s1");
+    const e = protokolle[protokolle.length - 1].stufen[0];
+    expect(e.notiz).toBe("S1-Ausgabegrenze von 128.000 Token erreicht; kein vollständiger Vorschlag. Sichtbarer Text: 0 Zeichen.");
+    expect([e.anfrage?.maxTokens, e.antwort?.stopGrund, e.nutzung?.ausgabe, e.kostenUsd]).toEqual([128000, "max_tokens", 128000, 0.07]);
+  });
+
+  it("T05: JSON bricht mitten im zweiten Sachverhalt ab: Budgetfehler, keine Klammerreparatur, kein Teilvorschlag", async () => {
+    const voll = JSON.stringify({
+      ...s1Vorschlag(),
+      sachverhalte: [s1Vorschlag().sachverhalte[0], { titel: "Stromausfall", ereignisarten: ["Stromausfall / Blackout"], sops: ["b08"], begruendung: "x" }],
+    });
+    const text = voll.slice(0, voll.indexOf("Stromausfall") + 8);
+    const { att, k } = await kontext([abgeschnitten(text)]);
+    await expect(stufe1(k)).rejects.toThrow(/Ausgabegrenze von 128\.000 Token erreicht.*Technisch: JSON unvollständig/);
+    expect(att.anfragen).toHaveLength(1);
+    expect(k.lauf.vorschlag).toBeUndefined();
+  });
+
+  it.each([
+    ["ohne Sachverhalte", { ...s1Vorschlag(), sachverhalte: [] }, "Der Vorschlag enthält keine Sachverhalte."],
+    ["Sachverhalt ohne Titel", { ...s1Vorschlag(), sachverhalte: [{ ereignisarten: [] }] }, "Sachverhalt 1 ist unvollständig."],
+  ])("T06: max_tokens mit vollständigem, aber strukturell unvollständigem JSON (%s): keine Bestätigung", async (_, json, grund) => {
+    const { k } = await kontext([abgeschnitten(JSON.stringify(json))]);
+    await expect(stufe1(k)).rejects.toThrow(`Technisch: ${grund}`);
+    expect(k.lauf.status).toBe("s1");
+  });
+
+  it("T06: Strukturprüfung lehnt Listen, null und Skalare ab", () => {
+    for (const x of [[s1Vorschlag()], null, 42, "Text"]) expect(s1Strukturfehler(x)).toBe("Die Antwort ist kein JSON-Objekt.");
+    expect(s1Strukturfehler(s1Vorschlag())).toBeNull();
+  });
+
+  it("T07: max_tokens mit vollständigem, gültigem Vorschlag: Bestätigung mit sichtbarem Prüfbedarf, kein S2", async () => {
+    const { att, k } = await kontext([abgeschnitten(JSON.stringify(s1Vorschlag()))]);
+    const v = await stufe1(k);
+    expect(k.lauf.status).toBe("bestaetigen");
+    expect(v.appHinweise).toEqual([expect.stringMatching(/^S1 hat die Ausgabegrenze von 128\.000 Token erreicht\. Der Vorschlag ist technisch vollständig/)]);
+    expect(k.lauf.stufen[0].notiz).toMatch(/technisch vollständig/);
+    expect(att.anfragen).toHaveLength(1);
+  });
+
+  it("T08: end_turn mit vollständigem Vorschlag: übliche Bestätigung ohne Grenzhinweis", async () => {
+    const { k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    const v = await stufe1(k);
+    expect(v.appHinweise).toBeUndefined();
+    expect(k.lauf.stufen[0].notiz).toBeUndefined();
+  });
+
+  it("T09: end_turn mit leerer Antwort: leere Antwort, keine Budgetdiagnose", async () => {
+    const { k } = await kontext([llmAntwort("", { inhalt: [] })]);
+    await expect(stufe1(k)).rejects.toThrow(
+      "Stufe S1 lieferte eine leere Antwort (Modell claude-haiku-5-5, Abbruchgrund end_turn). Eingaben und Laufprotokoll bleiben erhalten.",
+    );
+    expect(k.lauf.stufen[0].notiz).toBe("Leere Antwort (stopGrund end_turn).");
+  });
+
+  it("anderer Abbruchgrund ohne JSON: Grund wird genannt, keine Budgetdiagnose", async () => {
+    const { k } = await kontext([llmAntwort("Dazu kann ich nichts sagen.", { stopGrund: "refusal" })]);
+    await expect(stufe1(k)).rejects.toThrow("Stufe S1 lieferte kein auswertbares Ergebnis. Die Antwort enthält keinen JSON-Block. (Abbruchgrund refusal)");
   });
 });

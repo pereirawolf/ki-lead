@@ -59,6 +59,21 @@ describe("Anthropic-Anbieter", () => {
     expect(b.output_config).toEqual({ effort: "high", format: { type: "json_schema", schema: { type: "object" } } });
   });
 
+  it("T13 (0.4.25): überträgt die S1-Grenze 128 000 unverändert, Aufwand high und Schema; schaltet das Denken nicht ab", () => {
+    const b = anfrageKoerper({
+      modell: "claude-haiku-5-5",
+      aufwand: "high",
+      maxTokens: 128000,
+      system: [{ text: "S1" }],
+      nachrichten: [{ role: "user", content: "Los" }],
+      jsonSchema: { type: "object" },
+    });
+    expect(b.max_tokens).toBe(128000);
+    expect(b.output_config).toEqual({ effort: "high", format: { type: "json_schema", schema: { type: "object" } } });
+    expect(b.thinking).toBeUndefined();
+    expect(b.tools).toBeUndefined();
+  });
+
   it("liest einen Strom mit Websuche, Zitaten und Nutzung", async () => {
     const aufrufe: any[] = [];
     const fortschritt: string[] = [];

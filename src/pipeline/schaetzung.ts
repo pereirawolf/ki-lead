@@ -31,8 +31,11 @@ interface Messwert {
 export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 7–41 s, höchstens 0,011 USD
   "s1|claude-haiku-5-5|medium": { sekunden: [10, 60], usd: [0, 0.02] },
-  // gemessen 18–37 s, höchstens 0,008 USD
-  "s1|claude-haiku-5-5|high": { sekunden: [15, 60], usd: [0, 0.02] },
+  // gemessen 18–37 s, höchstens 0,008 USD (Erfassung). Verdichtung „Ilka“ (sechs Eingänge, 21.10.2026): zwei Läufe
+  // brachen nach 69–72 s an der damaligen Grenze von 16 000 Token ab (0,012–0,017 USD, rund 230 Token/s). Der
+  // Bedarf darüber ist noch nicht gemessen; vorläufig bis 3 Minuten und 0,05 USD (etwa 40 000 Ausgabetoken),
+  // nach der Abnahme mit 128 000 Token als Grenze anpassen.
+  "s1|claude-haiku-5-5|high": { sekunden: [15, 180], usd: [0, 0.05] },
   // gemessen 9–12 s, 0,02–0,12 USD (0,12 ohne Cache)
   "s1|claude-sonnet-5-5|medium": { sekunden: [10, 30], usd: [0.02, 0.15] },
   // gemessen 46–168 s, 0,18–0,43 USD (mit PDF 168 s)
