@@ -10,12 +10,41 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.4.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.4.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.5.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.5.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.5.0] – 21.10.2026
+
+Fachliche Überarbeitung von C09 und C10 ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_C09-C10_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_C09-C10_Vorschlag_2026-10-21“ (C09-01 bis C10-05) und „2026-10-21_KI-LEAD_SOP_C09_C10_PR-Vorschlag“ (M01–M08, A01–A08, Prüfszenarien C09-01 bis C10-11). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Beide Bausteine bleiben Inhaltsgerüste. Teil A ohne Regeländerung; Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **C09 1.1.0** (bisher 1.0.1), neuer Titel „Medizinische und pflegerische Versorgungslage und MANV-Folgen“ (bisher „Nichtinfektiöse medizinische Versorgungslage und MANV-Folgen“). Kennung `c09` und `bisherige_ids` sind unverändert.
+  - Abschnitt 1: Abgrenzung nach Versorgungsfunktion statt nach Ursache, passend zu C07 1.1.0 und den Routen in A.1 Nr. 2 (B05, B08 → C09). Bei Infektionsgeschehen bleiben B11 und C07 maßgeblich. Einbezogen sind ambulante und häusliche Versorgung sowie frühe Befassung. Die MANV-Einstufung wird von der zuständigen Stelle übernommen. Querverweise C05, C07, C10, C11, C12, C16, B15 und C17. Neue Befassungsanlässe: Abmeldung von Notaufnahmen oder Fachgebieten; Gefährdung häuslich versorgter Menschen.
+  - Abschnitt 2: Versorgungsprofil vor der Detailrecherche. R2 und R4 präzisiert, R5 um B15 ergänzt. Neue Prüffrage R7 zur Leistungsfähigkeit des Rettungsdienstes; Hilfsfristen sind keine Radar-Kriterien. Neue Absätze „Bedarfsgruppen und Folgebedarf“, „Verlegung und Evakuierung“ und „Tragfähigkeit und Nachlauf“.
+  - Abschnitt 3: Prüfpunkte D1–D8 ausformuliert, ohne neue Achsenregel; Offenlassen präzisiert.
+  - Abschnitt 4: Darstellung je Analysefeld, Kernaussage, Neubewertung; der Abschluss ist nicht an das Ende des MANV-Alarms gebunden.
+  - Abschnitt 5: Ansprechstellen; offene Punkte mit Pflegeauftrag und Übungsfällen.
+- **C10 1.1.0** (bisher 1.0.1):
+  - Kopf: `lageart` nennt alle Produktgruppen einschließlich Impfstoffen, Blutprodukten und medizinischen Gasen. `anschluss` lautet jetzt „B11, C09; B12 bei belegtem Dienstleistungsausfall; C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet“ statt „B11, B17“.
+  - Abschnitt 1: Ursachen und frühe Befassung. Ein lokaler Mangel ist auch ohne Datenbankeintrag möglich; fehlende zugelassene Therapie ist kein Lieferengpass. Befassungsanlässe nach Produktgruppe (BfArM, PEI).
+  - Abschnitt 2: Produkt- und Bedarfsprofil. R1 nach Produktgruppe und Quellenabdeckung, PEI ergänzt. R5 mit Apotheken und Blutspendediensten. Neue Prüffrage R7 zu staatlichen und institutionellen Reserven (vorhanden ≠ abgerufen ≠ zugeteilt ≠ eingetroffen, A.7.4). Neue Absätze „Nutzbarkeit und Alternativen“, „Reichweite und Wiederherstellung“ und „Rechtliche und behördliche Maßnahmen“.
+  - Abschnitt 3: Prüfpunkte D1–D8; D5 bis zum Versorgungsziel statt Lieferprognose. Absatz zu Beurteilung und Tendenz.
+  - Abschnitt 4: Darstellung je Analysefeld; die Löschung eines Datenbankeintrags ist keine Entwarnung.
+  - Abschnitt 5: Ansprechstellen; offene Punkte zu Rechercheeinstiegen und Übungsfällen.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.5.0.
+
+### Nicht übernommen
+
+- Neue Links zu BBK, PEI und BfArM-Unterseiten. Sie ließen sich bei der Bearbeitung nicht aufrufen; Institutionen sind ohne Link genannt und vor Erstverwendung zu prüfen (A.6).
+- Benannte staatliche Reserveprogramme, weil ihr aktueller Stand nicht belegt ist; R7 in C10 bleibt allgemein.
+- Feste Kapazitäts-, Autarkie-, MANV- oder Therapieschwellen sowie produktspezifische Rechtsgrundlagen.
+- Abweichende Absatzbezeichnungen in Abschnitt 5 („Ansprechstellen und Recherchepfad“, „Offene Punkte und Pflege“). Es bleibt bei „Ansprechstellen“ und „Offene Punkte“ (A.8.3).
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.4.0] – 21.10.2026
 
