@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.18.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_C08_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
+
+- **SOP-Sammelmappe 3.9.0:**
+  - C08 1.1.0: Zuordnung im Beispielprofil festgelegt („Gesundheitliche Lage / Epidemie“ mit Tiergesundheitsbezug, ohne „Sonstiges“); drei Prüfpfade, Daten-, Human-, Personal-, Beseitigungs- und Versorgungspfad; Prüfpunkte D1–D8.
+  - B11 2.2.0: Klarstellung des Anwendungsbereichs für Tierseuchen.
+  - C08 bleibt Inhaltsgerüst. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.17.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_C14-C15_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).

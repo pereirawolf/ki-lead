@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Gesundheitliche Lage / Epidemie (Infektionsgeschehen, gesundheitliche Versorgungslagen)"
 art_vorschlag: ["Gesundheitliche Lage / Epidemie"]
 zweck: "Reproduzierbare Erfassung gesundheitlicher Lagen mit möglichen übergreifenden Folgen für Bevölkerung und Gesundheitsversorgung; Dach für die Bausteine C09, C08, C07 und C10."
-version: "2.1.0"
+version: "2.2.0"
 status: "Beispielfassung"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-11"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Infektionsgeschehen im In- und Ausland mit Deutschlandbezug sowie gesundheitliche Versorgungslagen, auch ohne Infektionsgeschehen. Infektionsgefahr, Krankheitsschwere und Funktionsfähigkeit der Versorgung werden getrennt bewertet. Hitzebedingte Gesundheitsfolgen: B05. Vertiefung über Bausteine: MANV-Folgen und Ausfall von Klinik-, Pflege-, Dialyse- oder Rettungsdienstfunktionen C09 · Tierseuchen und zoonotische Exposition C08 · Auslandsausbruch und lokale Häufung C07 · Arzneimittel und kritisches medizinisches Material C10. Beispiel dafür: ungewöhnliche Fallhäufung oder belegter klinischer Versorgungsengpass; ebenso ein fachbehördlich relevantes Einzelereignis, das Expositionsklärung, Kontaktmanagement, Sonderversorgung oder länderübergreifende Abstimmung erfordert. Beispiel ohne übergreifenden Befassungsbedarf: Einzelbefund ohne zusätzlichen fachlichen Prüf- oder Versorgungsbedarf.
+**Umfasst / grenzt ab von:** Infektionsgeschehen im In- und Ausland mit Deutschlandbezug sowie gesundheitliche Versorgungslagen, auch ohne Infektionsgeschehen. Infektionsgefahr, Krankheitsschwere und Funktionsfähigkeit der Versorgung werden getrennt bewertet. Hitzebedingte Gesundheitsfolgen: B05. Vertiefung über Bausteine: MANV-Folgen und Ausfall von Klinik-, Pflege-, Dialyse- oder Rettungsdienstfunktionen C09 · Tierseuchen und zoonotische Exposition C08 · Auslandsausbruch und lokale Häufung C07 · Arzneimittel und kritisches medizinisches Material C10. Tierseuchen werden im Beispielprofil über C08 unter dieser Ereignisart geführt, auch ohne Humanerkrankung; das behauptet keine Humanepidemie. Beispiel dafür: ungewöhnliche Fallhäufung oder belegter klinischer Versorgungsengpass; ebenso ein fachbehördlich relevantes Einzelereignis, das Expositionsklärung, Kontaktmanagement, Sonderversorgung oder länderübergreifende Abstimmung erfordert. Beispiel ohne übergreifenden Befassungsbedarf: Einzelbefund ohne zusätzlichen fachlichen Prüf- oder Versorgungsbedarf.
 
 **Befassungsanlässe:** RKI- oder Landesbewertung · ungewöhnliche Häufung · WHO-/ECDC-Signal mit begründetem Deutschlandbezug · Aufnahme oder Verdachtsabklärung einer Person mit hochpathogenem Erreger in Deutschland, auch nach medizinischer Evakuierung · belegte Kapazitätsprobleme · Monitoring: RKI-Berichte, wöchentlicher Bedrohungsbericht des ECDC und syndromische Surveillance. Eine internationale Warnkategorie (etwa eine gesundheitliche Notlage internationaler Tragweite nach den Internationalen Gesundheitsvorschriften) ist keine automatische deutsche Lagefeststellung und begründet für sich keine deutsche Gefährdungsstufe.
 

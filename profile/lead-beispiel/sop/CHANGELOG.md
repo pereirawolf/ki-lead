@@ -10,12 +10,37 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.8.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.8.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.9.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.9.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.9.0] – 21.10.2026
+
+Fachliche Überarbeitung von C08 ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_C08_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_C08_Vorschlag_2026-10-21“ (F1–F5) und „2026-10-21_KI-LEAD_SOP_C08_PR-Vorschlag“ (T01–T10, 14 Prüfszenarien). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). C08 bleibt Inhaltsgerüst. Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **C08 Tierseuchen und zoonotische Expositionslagen 1.1.0** (bisher 1.0.1):
+  - Zuordnung festgelegt: Im Beispielprofil gilt „Gesundheitliche Lage / Epidemie“ mit ausdrücklichem Tiergesundheits- bzw. Zoonosebezug, auch ohne Humanerkrankung. „Sonstiges“ ist aus `art_zuordnung` gestrichen. Eine abweichende Auslegung legt eine übernehmende Stelle profilweit fest, nicht die KI im Einzelfall. Der bisherige offene Punkt zur Katalogauslegung ist damit erledigt.
+  - Abschnitt 1:
+    - drei Prüfpfade (veterinär, human, Kapazität und Versorgung); frühe Befassung;
+    - Auslandsbezug nach A.1 Nr. 6; vektorübertragene Zoonosen (veterinärer Teil C08, humaner Teil C07);
+    - Abgrenzung zu Tierbeständen in anderen Lagen;
+    - `anschluss` um C07, C09/C10, C13, C14 und C15 ergänzt.
+  - Abschnitt 2: R2 präzisiert. Neue Absätze „Veterinär- und Datenprofil“, „Humaner Prüfpfad“, „Schutz und Einsetzbarkeit von Personal“, „Unterstützungs- und Beseitigungspfad“ und „Maßnahmenraum und Versorgung“.
+  - Abschnitt 3: D2 nach Kodierleitfaden (Exposition oder Hilfeleistung allein ist keine unmittelbare Betroffenheit); D5 mit Ziel und Prognose; Prüfpunkte D1–D8.
+  - Abschnitte 4–5: Darstellung, Ansprechstellen, offene Punkte und Übungsfälle.
+- **B11 Gesundheitliche Lage / Epidemie 2.2.0** (bisher 2.1.0): Abschnitt 1 stellt klar, dass Tierseuchen im Beispielprofil über C08 unter dieser Ereignisart geführt werden, auch ohne Humanerkrankung.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.9.0.
+
+### Nicht übernommen
+
+- Neue Links (FLI-Unterseiten, RKI, BAuA/ABAS); Institutionen sind ohne Link genannt, vor Erstverwendung zu prüfen (A.6). Systemnamen der Meldewege sind allgemein gefasst.
+- Abweichende Absatzbezeichnungen in Abschnitt 5; es bleibt bei „Ansprechstellen“ und „Offene Punkte“ (A.8.3).
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.8.0] – 21.10.2026
 
