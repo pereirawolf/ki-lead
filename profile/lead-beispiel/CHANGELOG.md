@@ -8,6 +8,17 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.15.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_C02-C03-C04_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
+
+- **SOP-Sammelmappe 3.6.0:**
+  - C02 1.1.0: unabhängig von der Ursache, damit passend zur Route B04 → C02; Befundprofil, Spezialfähigkeiten, Schutzfolgen, Freigabe, Prüfpunkte D1–D8.
+  - C03 1.1.0: D6 an den Kodierleitfaden angeglichen; Warn- und Messprofil, Funktionsprofil, unabhängige Redundanz, Prüfpunkte D1–D8.
+  - C04 1.1.0: frühe Befassung, Höhen- und Bodenasche, Luftverkehrsstatus, Versorgungspfad, Prüffragen R4–R6, Prüfpunkte D1–D8.
+  - Alle bleiben Inhaltsgerüste. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 1.14.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_C09-C10_Vorschlag_konsolidiert_2026-10-21“ (allgemeine Überarbeitung ohne Anlassfall).
