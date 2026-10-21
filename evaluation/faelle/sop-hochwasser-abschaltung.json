@@ -1,0 +1,41 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-hochwasser-abschaltung",
+  "titel": "Vorsorgliche Abschaltung mit unterschiedlicher Dienstleistungsfolge (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Vorsorgliche Abschaltung mit unterschiedlicher Dienstleistungsfolge",
+    "stichworte": "B02, B08, B10",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-hochwasser-abschaltung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Drei Zustände unterscheiden: tatsächlicher Stromausfall, kompensierter Anlagenstillstand, bloße Ankündigung.",
+      "Ersatzversorgung nur für die belegte Wasserfunktion als wirksam führen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Alle Abschaltungen pauschal als folgenlos oder alle Anlagen als ausgefallene Versorgung zählen.",
+      "Anschlüsse in Menschen umrechnen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Hochwasser / Überschwemmung",
+      "Stromausfall / Blackout"
+    ]
+  }
+}

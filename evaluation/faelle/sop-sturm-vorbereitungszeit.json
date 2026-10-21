@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-sturm-vorbereitungszeit",
+  "titel": "Vorwarnung mit belegtem Vorbereitungsbedarf (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Vorwarnung mit belegtem Vorbereitungsbedarf",
+    "stichworte": "B01, C16",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-sturm-vorbereitungszeit.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Vorbereitungsfenster und aktuellen Entscheidungsstatus darstellen.",
+      "Abstimmung spätestens vor Ausschöpfung des vierstündigen Vorlaufs als belegten Zeitbedarf kennzeichnen.",
+      "Reine Vorwarnlage nicht als eingetretenen Schaden kodieren.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eine durchgeführte Räumung oder konkrete Zahl Evakuierter behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm"
+    ]
+  }
+}

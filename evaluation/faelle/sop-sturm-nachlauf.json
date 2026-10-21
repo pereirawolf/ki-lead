@@ -1,0 +1,41 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-sturm-nachlauf",
+  "titel": "Wind lässt nach, Versorgungsfolgen bleiben (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Wind lässt nach, Versorgungsfolgen bleiben",
+    "stichworte": "B01, B08, C11",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-sturm-nachlauf.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Wetterphase, Stromwiederherstellung und Teilwiederherstellung der Kommunikation getrennt darstellen.",
+      "D5 nur mit benanntem Zielzustand und verbleibender fachlicher Prognose bewerten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Gesamtentwarnung allein aus Windabnahme ableiten.",
+      "Nicht belegte Notrufabdeckung oder automatisch D8 = 0 behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm",
+      "Stromausfall / Blackout"
+    ]
+  }
+}

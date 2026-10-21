@@ -12,7 +12,7 @@ art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -36,7 +36,7 @@ bisherige_ids: ["baustein-n07"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welche Lebensmittel oder besonderen Ernährungsbedarfe sind in welchem Raum nicht ausreichend verfügbar? | Lagemeldungen (A.3); zuständige Landesbehörden | L; D1 | Besondere Bedarfe (z. B. Säuglingsnahrung, medizinisch erforderliche Kostformen) eigens prüfen (Absatz „Eignung und Zugang“). |
-| R2 | Handelt es sich um einzelne Produkte, Marktverschiebung oder tatsächlich ungedeckte Grundversorgung? | [BMLEH: Ernährungsvorsorge](https://www.bmel.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html) (Hintergrund); Lagemeldungen (A.3) | L/R | Marktbeobachtung ≠ Versorgungslücke. |
+| R2 | Handelt es sich um einzelne Produkte, Marktverschiebung oder tatsächlich ungedeckte Grundversorgung? | [BMLEH: Ernährungsvorsorge](https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html) (Hintergrund); Lagemeldungen (A.3) | L/R | Marktbeobachtung ≠ Versorgungslücke. |
 | R3 | Welche Bestände sind sicher nutzbar, verteilt und erreichbar? | Betreibermeldungen (A.3) (Handel, Logistik) | R/M | Bestand ≠ erreichbare Abgabe; Bestandsreichweite ist ein Risikofenster, keine D5-Dauer. |
 | R4 | Welche Rolle spielen Strom, Wasser, Kühlkette, Personal und Zahlungsmöglichkeiten? | Betreibermeldungen (A.3) | R/I; D6 | Kopplungen einzeln belegen; Stromausfall nach B08. |
 | R5 | Welche Ersatzabgabe und institutionelle Versorgung sind tatsächlich eingerichtet? | Lagemeldungen (A.3) | M; D4 | Geplant ≠ eingerichtet ≠ genutzt. |

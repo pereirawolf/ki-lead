@@ -1,0 +1,39 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-arzneimittel-register",
+  "titel": "Registermeldung ohne lokale Therapielücke (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Registermeldung ohne lokale Therapielücke",
+    "stichworte": "B11, C10",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-arzneimittel-register.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Lieferengpass, lokaler Bestand, freigegebene Alternative und tatsächliche Therapiefolge trennen.",
+      "Registerabdeckung und verschiedene Produkte auseinanderhalten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eigene Wirkstoff-/Dosissubstitution empfehlen oder eine lokale Therapielücke allein aus dem Register folgern.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Gesundheitliche Lage / Epidemie"
+    ]
+  }
+}

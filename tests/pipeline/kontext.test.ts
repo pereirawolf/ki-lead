@@ -50,12 +50,12 @@ describe("Kontext aus dem Profil", () => {
       "SOP-LEAD B08 Strom",
     ];
     expect(sopKennungenAbgleichen(liste, p!)).toEqual([
-      "SOP-LEAD B01 Unwetter / Sturm v2.0.1",
+      "SOP-LEAD B01 Unwetter / Sturm v2.1.0",
       "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.1.0",
       "SOP-LEAD B08 Stromausfall / Blackout v2.0.2",
     ]);
     // Nicht in S1 bestätigte (nicht beigefügte) SOPs entfallen
-    expect(sopKennungenAbgleichen(liste, p!, new Set(["b01"]))).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.0.1"]);
+    expect(sopKennungenAbgleichen(liste, p!, new Set(["b01"]))).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.1.0"]);
   });
 
   it("löst frühere SOP-IDs gespeicherter Läufe auf", async () => {

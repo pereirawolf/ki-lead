@@ -10,12 +10,41 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.10.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.10.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.11.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `quellenregister.json` | Stand 21.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.11.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.11.0] – 21.10.2026
+
+Priorisierte Fachprüfung der Bereiche mit Priorität über „Mittel“ nach dem konsolidierten Vorschlag „SOP-LEAD_Fachpruefung-B-Quellen-Evaluation_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_Fachpruefung-B-Quellen-Evaluation_Vorschlag_2026-10-21“ (E1–E12, eigene Normen- und Quellenprüfung) und „2026-10-21_KI-LEAD_Priorisierte_Fachpruefung_Quellen_Evaluation_PR-Vorschlag“ (G01–G06, W01–W02, H01–H04, C01–C05, S01–S04, Q01–Q04, E01; Quellenregister; 40 Bewertungsfälle). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert. Barrierefreiheit und die offenen Punkte der Spezifikation (Priorität „Mittel“) sind nicht Gegenstand.
+
+### Geändert
+
+- **B09 Gasversorgungsengpass 2.2.0:**
+  - Abschnitt 1: Gegenbeispiel präzisiert; ein örtlicher Leitungsschaden ist relevant, wenn eine nicht rechtzeitig ersetzbare Wärmefunktion betroffen ist (z. B. Pflegeeinrichtung).
+  - Abschnitt 2: „Rechtlicher Prüfpfad“ mit drei getrennt zu belegenden Ebenen: Netzbetreibermaßnahmen nach §§ 16, 16a EnWG, Krisenstufe des Notfallplans, hoheitliche Lastverteilung nach EnSiG/GasSV (Feststellung und Anwendbarkeit nach § 7 GasSV). R1-Link auf die aktuelle BNetzA-Lageseite.
+  - Abschnitt 3: „Geschützte Kunden und lebenswichtiger Bedarf“ nach § 53a EnWG (geschützt heißt nicht garantiert); D3 nach bewerteter Funktion statt nach Stufe.
+  - Abschnitt 4: „Versorgungsprofil und Frist“.
+  - Abschnitt 5: Prüfvermerk zur saisonalen Rechtsprüfung 2026/27 (Teilprüfung; BNetzA-Lagebewertung vom 20.10.2026 als Prüfstand, nicht fortgeschrieben). Offen bleiben EU-Rahmen (Verordnung (EU) 2017/1938 in aktueller Fassung; angekündigte Überarbeitung), geltende Planfassung des Notfallplans und Länderzuständigkeiten. Prüftermin 31.10.2026 bleibt.
+- **B01 Unwetter / Sturm 2.1.0:** Übergang zu B06 und Folgen (ein Sachverhalt, beide Prüfperspektiven); „Warn- und Beobachtungsprofil“ (Produktart, Ausgabe, Gültigkeit, Ersetzung, Unsicherheit; DWD-Warnkriterien sind keine Radargrenzen).
+- **B02 Hochwasser / Überschwemmung 2.1.0:** R2 Nord-/Ostsee getrennt (Tide bzw. Windstau); R5 angekündigte und vollzogene Abschaltung getrennt; „Datenzugang und Ausweichweg“ bei Portalausfall; „Überlagerung und Nachlauf“; Darstellungsmuster für Meldestufen mehrerer Länder (erledigt den bisherigen offenen Punkt).
+- **B07 Industrieunfall / Chemieunfall 2.1.0:** `zweck` an Abschnitt 1 angeglichen (auch überörtlicher Bedarf ohne Freisetzung); „Mess- und Stoffprofil“; „Gesundheit und Fachunterstützung“; „Beendigung je Wirkung“ mit Abgrenzung industrieller Großbrände zu B17; GESTIS-Link.
+- **B14 Sicherheitslage 2.1.0:** „Schnittstelle zur nichtpolizeilichen Gefahrenabwehr“; „Unbestätigte Informationen und Informationslücken“; R1 und neue „Verwendungsgrenze“ wie README und Spezifikation (nur fiktive oder offen zugängliche Inhalte; eine Weitergabefreigabe genügt nicht). Der offene Punkt zu eingestuften Informationen ist dadurch ersetzt.
+- **Teil A, A.6:** Quellenabgleich vom 21.10.2026 und Pflegeverfahren; neues Quellenregister `quellenregister.json` mit allen URLs aus Teil A, B und C, Ergebnis einer Erstprüfung (Direktabruf) und einer unabhängigen Zweitprüfung, Eignung, offener Nachprüfung und bestätigten Nachfolgern. Der bisherige Vermerk bleibt als Historie.
+- **Rechercheeinstiege mit amtlich bestätigtem Nachfolger ersetzt:** B05 2.1.1 (BfG-Niedrigwasser → NIWIS), B09 (BNetzA-Gasversorgung → aktuelle Lageseite), C14 1.1.1 (bmel.de → bmleh.de), C16 1.1.1 (BBK-Pilotprojekt → Mobile Betreuungsmodule 5000).
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.11.0.
+
+### Nicht übernommen
+
+- Paragraphen-Absätze in § 4 EnSiG (Abs. 3, Abs. 5) und die produktbezogene Zeitzonenaussage zu PEGELONLINE: im Abgleich nicht bestätigt; allgemeiner gefasst.
+- Verweis auf das Quellenregister als relativer Link aus Teil B (bricht in der Lesefassung); stattdessen Pfadangabe.
+- Pauschale, rein formale Rechercheaufträge je Prüffrage im Quellenregister; sie wiederholen nur die Regel aus A.6.
+- Weitere Linkersetzungen ohne bestätigten Nachfolger (u. a. BGR-Erdbebendienst, BBK-Startseite, BfArM-Startseite); als offene Schwerpunkte im Register geführt.
+- Echte Modellläufe und Bewertungen: nur mit gesondertem Auftrag und Budget (`evaluation/README.md`).
 
 ## [3.10.0] – 21.10.2026
 

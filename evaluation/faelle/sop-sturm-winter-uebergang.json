@@ -1,0 +1,42 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-sturm-winter-uebergang",
+  "titel": "Gemeinsame Wind- und Eislastlage (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Gemeinsame Wind- und Eislastlage",
+    "stichworte": "B01, B06, B08, C13",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-sturm-winter-uebergang.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "B01/B06 als Prüfperspektiven desselben Ereignisses verknüpfen.",
+      "12.000 Anschlüsse einmal führen, Personenbetroffenheit nicht unbelegt berechnen.",
+      "Sperrung einer Zufahrt und tatsächliche Isolation unterscheiden.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "24.000 betroffene Anschlüsse durch Addition zweier Berichte angeben.",
+      "Ohne Beleg sämtliche Kunden als isolierte Personen zählen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm",
+      "Stromausfall / Blackout"
+    ]
+  }
+}

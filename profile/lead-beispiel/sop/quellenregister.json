@@ -1,0 +1,1900 @@
+{
+  "format": "ki-lead-quellenpruefung/1",
+  "stand": "2026-10-21",
+  "basis_commit": "e980a5520f905243fbf183c48920eb1af3399b11",
+  "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung.",
+  "bedeutung": "Technischer Abruf, Rechercheeignung, gezielter Inhaltsabgleich und aktueller Ereignisnachweis werden getrennt. Inhaltsabruf per Direkt-HTTP ergänzte Webabrufe mit häufigen Zugriffssperren. Keine Sperre wurde umgangen; nur öffentlich abrufbare Seiten. SHA-256 bezeichnet geladene Bytes, nicht eine amtliche Fassungsbeglaubigung.",
+  "pruefungen": [
+    {
+      "kennung": "Erstprüfung",
+      "beschreibung": "Direktabruf per HTTP mit Prüfsumme der geladenen Bytes und gezieltem Inhaltsabgleich (Felder http_status, sha256, status, prueftiefe)."
+    },
+    {
+      "kennung": "Zweitprüfung",
+      "beschreibung": "Unabhängiger Abruf über ein Webabrufwerkzeug mit Freigabe über Suchtreffer derselben amtlichen Domain (Feld zweitpruefung). „Abruf verweigert“ bezeichnet eine Werkzeug- oder robots.txt-Sperre, keinen Linkdefekt."
+    }
+  ],
+  "regeln": [
+    "Ein Link wird nur durch einen amtlich bestätigten Nachfolger ersetzt (Feld ersetzt_durch).",
+    "Zugriffsfehler beweisen weder einen dauerhaften Linkdefekt noch Ereignisfreiheit.",
+    "Neue Links in Teil A, B oder C erhalten einen Registereintrag; der Regressionstest prüft das."
+  ],
+  "eintraege": [
+    {
+      "id": "S001",
+      "url": "https://www.dwd.de/",
+      "fundstellen": [
+        "sop/teil-b/B01_unwetter-sturm.md",
+        "sop/teil-b/B05_extremhitze-duerre.md",
+        "sop/teil-b/B06_wintersturm-schnee-eis.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://www.dwd.de/DE/Home/home_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "67ce2f61366d7c4dd8633e4d072693658bfddac6f42e5e3e98195ac2f9c85241",
+      "bytes": 94304,
+      "titel": "Wetter und Klima - Deutscher Wetterdienst   -  Startseite",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Amtlicher Wetterdienst und Zugang zu Warnprodukten; Startseite kein einzelner Warnnachweis.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die Root-URL ab (nicht auf Allowlist). Die Startseite https://www.dwd.de/DE/Home/home_node.html wurde wegen robots.txt nicht abgerufen. Als allgemeiner Einstieg für R1/R6 (B01) ist die Startseite plausibel. In B03 steht das Label 'DWD Waldbrandgefahrenindex' aber auf der DWD-Startseite statt auf U31; das ist laut Fundstelle ein Label/Ziel-Widerspruch.",
+        "anmerkung_konsolidierung": "Hinweis der zweiten Prüfung, B03 führe das Label „DWD Waldbrandgefahrenindex“ auf der Startseite, trifft nicht zu (B03 verlinkt die Fachseite)."
+      }
+    },
+    {
+      "id": "S002",
+      "url": "https://warnung.bund.de/",
+      "fundstellen": [
+        "sop/teil-b/B01_unwetter-sturm.md",
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md",
+        "sop/teil-b/B08_stromausfall-blackout.md",
+        "sop/teil-b/B10_trinkwasserversorgung.md",
+        "sop/teil-b/B14_sicherheitslage.md",
+        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://warnung.bund.de/",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "a9bd4962016fd929530dead281e88f98dd79316ac0b9ff1d89022cac2dc05828",
+      "bytes": 14500,
+      "titel": "",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Bundeswarnportal; statischer Abruf liefert keine vollständige aktuelle Warnliste.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Wartung/leer/JS-Hülle",
+        "eignung": "passt",
+        "hinweis": "Titel und Betreiber entsprechen dem amtlichen Warnportal und damit der Verwendung (geltende Warnungen, Schutz- und Entwarnungshinweise). Die Warnmeldungen werden aber per JavaScript geladen ('JavaScript aktivieren!') und waren im Abruf nicht sichtbar. Die Inhalte selbst sind daher nicht geprüft."
+      }
+    },
+    {
+      "id": "S003",
+      "url": "https://hochwasserzentralen.de/",
+      "fundstellen": [
+        "sop/teil-b/B02_hochwasser-ueberschwemmung.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://hochwasserzentralen.de/",
+      "content_type": "text/html",
+      "sha256": "585f6575006b0be21a59e4f1d938cf8cc10409eeb86dfa26288c864d55e5882c",
+      "bytes": 1234,
+      "titel": "LHP :: Derzeit offline",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Gemeinsamer Zugang zu Länder-Hochwasserinformationen; beim Abruf ausdrücklich nicht verfügbar.",
+      "status": "nichtverfuegbarkeitsseite",
+      "prueftiefe": "Nichtverfügbarkeit direkt bestätigt, keine Lagedaten",
+      "offene_nachpruefung": "Zuständigen Landesdienst direkt nutzen, konkreten Dienst organisationsspezifisch hinterlegen; Zeitpunkt dokumentieren.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Wartung/leer/JS-Hülle",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "Die exakte URL ohne www wurde abgelehnt (Allowlist). Die www-Variante zeigte am 21.10.2026 eine Störungsseite: Das Webangebot ist 'wegen Sicherheitsmaßnahmen' derzeit nicht verfügbar. Die Unterseite hochwasserzentralen.de/info ist erreichbar, enthält aber nur Erläuterungen und keine Pegel oder Vorhersagen. Ein Nachfolger wurde nicht gesucht, da kein 404 vorliegt; erneut prüfen."
+      }
+    },
+    {
+      "id": "S004",
+      "url": "https://www.dwd.de/DE/leistungen/waldbrandgef/waldbrandgef.html",
+      "fundstellen": [
+        "sop/teil-b/B03_waldbrand.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://www.dwd.de/DE/leistungen/waldbrandgef/waldbrandgef.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "4f0def7ec0254478548c8f444775d8b746668131eedadd991c92c44bc90e7984",
+      "bytes": 56103,
+      "titel": "Wetter und Klima - Deutscher Wetterdienst   -  Leistungen - Waldbrandgefahrenindex",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Meteorologisches Waldbrandpotenzial und Produktaktualisierung; kein Brand-/Verbotsnachweis.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "Die URL erscheint mit diesem Titel in der Suche auf dwd.de; der Abruf scheiterte an robots.txt (ROBOTS_DISALLOWED). Laut Titel ist es die richtige Fachseite für die Frage nach der meteorologischen Brandgefahr, den Inhalt habe ich aber nicht gesehen."
+      }
+    },
+    {
+      "id": "S005",
+      "url": "https://www.wettergefahren.de/warnungen/indizes.html",
+      "fundstellen": [
+        "sop/teil-b/B03_waldbrand.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://www.wettergefahren.de/warnungen/indizes.html",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "eb9f5194a400beb4efa3b35e2e9e1874c2e991b79fac10b09845e9e0ec531991",
+      "bytes": 14144,
+      "titel": "Deutscher Wetterdienst - Gefahrenindizes - (Wald-, Grasbrand)",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "DWD-Wald-/Grasbrandindizes und ihre Abgrenzung zu örtlichen Warnstufen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Die Seite enthält den Waldbrandgefahrenindex und den Grasland-Feuerindex, je Bundesland und für rund 500 Stationen mit Vorhersage. Die Indizes gelten saisonal vom 1.3. bis 31.10. Die Tabellenwerte waren im Abruf nicht enthalten. Eine eigene GLFI-Unterseite (wettergefahren.de/warnungen/indizes/grasland.html) erschien in der Suche, wurde aber nicht abgerufen."
+      }
+    },
+    {
+      "id": "S006",
+      "url": "https://gdz.bkg.bund.de/index.php/default/waldbrandatlas.html",
+      "fundstellen": [
+        "sop/teil-b/B03_waldbrand.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Waldbrandatlas als räumlicher Rechercheeinstieg; Layerdaten gesondert prüfen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt nicht",
+        "hinweis": "Die Seite beschreibt nur aktuelle Gefährdungsstufen, Brände, Wind- und Niederschlagsvorhersagen sowie Satellitenbilder. Historische Daten oder ein Mehrjahresvergleich werden nicht erwähnt. Die Anwendung selbst ist nur Behörden und Feuerwehren nach Zugangsprüfung zugänglich, ihr Inhalt ist daher nicht beurteilbar."
+      }
+    },
+    {
+      "id": "S007",
+      "url": "https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html",
+      "fundstellen": [
+        "sop/teil-b/B04_erdbeben.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "fehler": "HTTP Error 400: Bad Request",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Erdbebenfachinformationen; automatische Lösungen und Revisionen fallbezogen prüfen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab (nicht auf Allowlist). Die Suche auf bgr.bund.de fand die Seite nicht, sondern eine neue Struktur 'Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund', darunter 'Aktuelle Erdbeben & Ereignisse' (…/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html). Diese Seiten lieferten beim Abruf Fehler (CLIENT_ERROR/SERVER_ERROR) und sind daher unbestätigt. Ein Umzug der Seite ist möglich, aber nicht belegt."
+      }
+    },
+    {
+      "id": "S008",
+      "url": "https://www.rki.de/DE/Themen/Gesundheit-und-Gesellschaft/Gesundheitliche-Einflussfaktoren-A-Z/H/Hitze/Bericht_Hitzemortalitaet.html",
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://www.rki.de/DE/Themen/Gesundheit-und-Gesellschaft/Gesundheitliche-Einflussfaktoren-A-Z/H/Hitze/Bericht_Hitzemortalitaet.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "b74fd78db3da444c5fe3351374e00333b86868787e6be268e119ea7f3dae81b9",
+      "bytes": 199958,
+      "titel": "RKI  -  Hitze und Gesundheit - Wochen­bericht zur hitze­bedingten Morta­lität",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "RKI-Hitzemortalität mit Berichts-/Saisonstand; keine Echtzeitfallzahl.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Die Seite schätzt die hitzebedingte Mortalität, bis KW 37/2026 rund 16.000 Todesfälle (95-%-PI 14.400–17.600). Sie meldet das Ende der wöchentlichen Berichterstattung 2026, liefert also saisonal und außerhalb des Sommers keine laufenden Zahlen."
+      }
+    },
+    {
+      "id": "S009",
+      "url": "https://www.ufz.de/index.php?de=37937",
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Modellierte Bodentrockenheit; kein unmittelbarer Trinkwasser-/Grundwassernachweis.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "Der erste Abruf scheiterte an der Allowlist, der zweite nach einem Suchtreffer an robots.txt (ROBOTS_DISALLOWED). Ich habe das nicht umgangen. Der Titel des Suchtreffers passt zur Fundstelle 'UFZ-Dürremonitor'."
+      }
+    },
+    {
+      "id": "S010",
+      "url": "https://gdz.bkg.bund.de/index.php/default/duerreatlas.html",
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Dürreatlas als Kombination von Geodaten; Layerstände nicht aus Katalogdatum ableiten.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zusaetzlicher_abruf": "Produktseite über Webabruf gelesen; Katalog nennt Aktualitätsstand 06.2023, einzelne Layerstände nicht geprüft.",
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Produktseite einer interaktiven Kartenanwendung (Bodenfeuchte, Niederschlag, Wind, Wasserstände, Hitze). Der Zugang ist nur nach Prüfung für Bundes-, Landes- und Kommunalbehörden mit Login möglich, es gibt keine öffentlich einsehbaren Daten. Ob eine modellierte Bodentrockenheit enthalten ist, ist auf der Seite nicht konkret belegt."
+      }
+    },
+    {
+      "id": "S011",
+      "url": "https://gruvo.bgr.de/",
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "http_status": 200,
+      "end_url": "https://gruvo.bgr.de/website/index.php",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "671740607dcacde8cf609621ed2224862ca3d8867e1861d2e25883b0f9bf0301",
+      "bytes": 10057,
+      "titel": "Bundesweite Grundwasserstände und Vorhersagen",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Grundwassermessungen, Prognosen und Projektionen mit verschiedenen Horizonten.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die Stamm-URL ab (URL_NOT_ON_ALLOWLIST), und die Suche lieferte sie nicht als Treffer. Abgerufen wurde stattdessen die Kartenanwendung derselben Domain, gruvo.bgr.de/website/mapapp?lang=de: 'Bundesweite Grundwasserstände und Vorhersagen - Karte', BGR, Version 2.4.12, mit aktuellen Ständen ('Anfang Oktober') und Vorhersagen. Sie passt zur Grundwasser-Frage, liefert aber keine Oberflächenpegel. Die Daten werden per JavaScript geladen.",
+        "nachfolger_url": "https://gruvo.bgr.de/website/mapapp?lang=de",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S012",
+      "url": "https://www.bafg.de/DE/05_Wissen/01_Infoplattformen/Niedrigwasser/niedrigwasser_node.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
+      "fehler": "HTTP Error 404: Not Found",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Alter BfG-Einstieg; im Direktabruf 404, neuer NIWIS-Zugang amtlich belegt.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "ersetzt_durch": "https://niwis-online.de/",
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab (Allowlist), und die Suche lieferte sie nicht als Treffer. Alle aktuellen BfG-Treffer nutzen die Pfadstruktur /DE/5_Informiert/…. Das deutet darauf hin, dass der Pfad /DE/05_Wissen/… veraltet ist; ein 404 ist aber nicht bestätigt. Die bestätigte NIWIS-Seite (BfG, Niedrigwasserinformationssystem mit Link auf niwis-online.de) entspricht der SOP-Angabe 'BfG Niedrigwasser/NIWIS'.",
+        "nachfolger_url": "https://www.bafg.de/DE/5_Informiert/1_Portale_Dienste/NIWIS/niwis_node.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S013",
+      "url": "https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp",
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:59+00:00",
+      "http_status": 200,
+      "end_url": "https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp",
+      "content_type": "text/html;charset=UTF-8",
+      "sha256": "a7a42f898951e746152093ac33b5915e4ac038bb03e972df2e5a589234245244",
+      "bytes": 66148,
+      "titel": "TUIS | VCI",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "TUIS-Beratung und technische Hilfe für zuständige öffentliche Einsatzstellen; keine aktuelle Zusage.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "TUIS ist ein Hilfeleistungssystem: Rund 130 Werkfeuerwehren und Fachleute beraten Feuerwehr und Polizei bei Chemieunfällen. Es ist keine Stoffgefahrendatenbank. Die Seite bietet eine Standort- und Stoffsuche und verlinkt GESTIS und GisChem. Zur Frage 'Welche Gefahr geht vom Stoff aus?' trägt sie daher nur ergänzend bei."
+      }
+    },
+    {
+      "id": "S014",
+      "url": "https://www.bbk.bund.de/DE/Warnung-Vorsorge/Vorsorge/Schutz-suchen/Gefahrstoff-Freisetzung/gefahrstoff-freisetzung_node.html",
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:15:59+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Warnung-Vorsorge/Vorsorge/Schutz-suchen/Gefahrstoff-Freisetzung/gefahrstoff-freisetzung_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "b722c0b08c1635501512fe00ccabd8b68d78b281dd399e835afb210a00d184e6",
+      "bytes": 112229,
+      "titel": "Handeln bei Gefahrstoff-Freisetzung  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-Hintergrund zur Gefahrstofffreisetzung; kein örtlicher Mess- oder Entwarnungsnachweis.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Verhaltenshinweise für die Bevölkerung bei CBRN-Freisetzung (Notruf, Durchsagen beachten, Verhalten im Haus, im Freien und im Auto), passend zu Schutzhinweisen. Ein Entwarnungsverfahren und behördliche Zuständigkeiten werden kaum oder gar nicht behandelt."
+      }
+    },
+    {
+      "id": "S015",
+      "url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Stromausfall/stromausfall_node.html",
+      "fundstellen": [
+        "sop/teil-b/B08_stromausfall-blackout.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:00+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Stromausfall/stromausfall_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "14618e2d8b893bd80f840b17b495a3f748ae7495891ad98bb00299ae34cdcae5",
+      "bytes": 136864,
+      "titel": "Stromausfall  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-Hintergrund Stromausfall; keine örtliche Netz-/Wiederherstellungsmeldung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Behandelt Folgen eines großflächigen Stromausfalls für KRITIS und die Notstromplanung, darunter eine empfohlene 72-h-Treibstoffreserve. Das passt als Einordnung zur Frage, wie lange die Ersatzversorgung trägt. Eine kleine Darstellungsstörung ('view for document type NavNode was not found') steckt nur in Breadcrumb und Teilen-Links."
+      }
+    },
+    {
+      "id": "S016",
+      "url": "https://www.smard.de/",
+      "fundstellen": [
+        "sop/teil-b/B08_stromausfall-blackout.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:00+00:00",
+      "http_status": 200,
+      "end_url": "https://www.smard.de/",
+      "content_type": "text/html;charset=UTF-8",
+      "sha256": "386e7fceb100aa4043ba98d648475a2d410dc6a139f83dcfff66db096e6238f9",
+      "bytes": 42194,
+      "titel": "SMARD | SMARD - Strom- und Gasmarktdaten Menu Close",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Marktdaten und Kontext; keine lokale Störungs-/Wiederaufbaumeldung.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "teilweise",
+        "hinweis": "Die Root-URL lehnte WebFetch ab. Eine Weiterleitung auf /home ist nicht belegt. Die Beurteilung stützt sich auf /home: Dort gibt es Markt-, Erzeugungs- und Verbrauchsdaten, zur Netz- und Systemeinordnung aber nur am Rande (Netzengpassmanagement). Die Daten sind eine JS-Hülle und im Abruf nicht sichtbar."
+      }
+    },
+    {
+      "id": "S017",
+      "url": "https://www.bundesnetzagentur.de/DE/Gasversorgung/start.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:00+00:00",
+      "fehler": "HTTP Error 404: Not Found",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Alter Gasversorgungseinstieg, im Direktabruf 404; erreichbare Lagebewertung unter S059.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "ersetzt_durch": "https://www.bundesnetzagentur.de/DE/Gasversorgung/aktuelle_gasversorgung/start.html",
+      "zweitpruefung": {
+        "status": "Fehler",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch meldete beim Abruf CLIENT_ERROR ('There was an error while fetching'); ein zweiter Versuch wurde vom Tool blockiert. Die URL erscheint in der Suche mit dem Titel 'Bundesnetzagentur - Gasversorgung', die Adresse existiert also wahrscheinlich. Ob die geltende Stufe des Notfallplans Gas genannt wird, ist ungeprüft. Laut Suche gibt es auch die Unterseite 'Aktuelle Lage der Gasversorgung' (…/DE/Gasversorgung/aktuelle_gasversorgung/artikel.html); auch sie ist nicht abgerufen."
+      }
+    },
+    {
+      "id": "S018",
+      "url": "https://www.umweltbundesamt.de/themen/wasser/trinkwasser",
+      "fundstellen": [
+        "sop/teil-b/B10_trinkwasserversorgung.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:00+00:00",
+      "http_status": 200,
+      "end_url": "https://www.umweltbundesamt.de/themen/wasser/trinkwasser",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "f0498358b72679d9222aa2d962d152244ace3a885967c917fca3a2d16f9041bf",
+      "bytes": 246476,
+      "titel": "Trinkwasser | Umweltbundesamt",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "UBA-Trinkwassergrundlagen und Zuständigkeitsrahmen; kein örtlicher Befund.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL zweimal ab (Allowlist), und die Suche lieferte sie nicht als Treffer. Die erreichbare Unterseite '/rechtliche-grundlagen-empfehlungen-regelwerk' verlinkt sie in der Breadcrumb als übergeordnete Seite 'Trinkwasser'. Den Inhalt habe ich nicht gesehen."
+      }
+    },
+    {
+      "id": "S019",
+      "url": "https://www.umweltbundesamt.de/system/files/document/260417_UBA_Empfehlungen_%C2%A7%C2%A762-68_nach_Freigabe_final_clean.pdf",
+      "fundstellen": [
+        "sop/teil-b/B10_trinkwasserversorgung.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:03+00:00",
+      "http_status": 200,
+      "end_url": "https://www.umweltbundesamt.de/system/files/document/260417_UBA_Empfehlungen_%C2%A7%C2%A762-68_nach_Freigabe_final_clean.pdf",
+      "content_type": "application/pdf",
+      "sha256": "69e5c8eaffa3ae35f265cc11c7bea27100138abe5c29c76ffd17747840f52b74",
+      "bytes": 2879001,
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "UBA-Empfehlung zum Vollzug §§ 62–68 TrinkwV; Titelstand Februar 2026, redaktionell April 2026; kein aktueller Ortsbefund.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Das Dokument enthält Vollzugsempfehlungen für Gesundheitsämter zu Abweichungen der Trinkwasserbeschaffenheit, darunter Maßnahmenpläne, mikrobiologische und chemische Parameter, Abkochgebot und Verbraucherinformation. Das entspricht dem Titel in der Fundstelle (2026)."
+      }
+    },
+    {
+      "id": "S020",
+      "url": "https://www.rki.de/",
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.rki.de/DE/Home/home_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "e93342ea071b036ff7a0cbbf441a8987e2c627a0e84b3254e1e6c2d9aefbbccc",
+      "bytes": 212834,
+      "titel": "RKI  -  Startseite",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "RKI-Einstieg; erregerspezifische Quelle und Melde-/Datenstand müssen im Fall ermittelt werden.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Die Startseite eignet sich nur als allgemeiner Einstieg. Für B11/R1 (Fälle, Definitionen, Zeiträume) verlinkt sie Infektionskrankheiten A–Z, Meldewesen und das Epid. Bulletin, aber keine Falldefinitionen direkt. Für B05 'RKI Hitzemortalität' ist U51 der passende Link; zu prüfen ist, ob B05 auf die Startseite statt auf U51 verweist."
+      }
+    },
+    {
+      "id": "S021",
+      "url": "https://www.who.int/emergencies/disease-outbreak-news",
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.who.int/emergencies/disease-outbreak-news",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "ca9b347d7172fa56c8b9f1435ed0dbe38a8aa491746ae458f80826af68ddfef8",
+      "bytes": 330236,
+      "titel": "Disease Outbreak News",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "WHO-Ausbruchsberichte zu ausgewählten Ereignissen; keine vollständige weltweite Surveillance.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL zweimal ab (Allowlist), und die Suche lieferte nur Einzelmeldungen. Die erreichbare Meldung 2026-DON620 verlinkt genau diese URL als Übersicht. Den Inhalt der Listenseite habe ich nicht gesehen."
+      }
+    },
+    {
+      "id": "S022",
+      "url": "https://www.ecdc.europa.eu/",
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.ecdc.europa.eu/en",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "e7545d6c8a602eb3c3bf6fde20b7d3a7480959a0059a5212225972aea643d0b3",
+      "bytes": 106790,
+      "titel": "Homepage | European Centre for Disease Prevention and Control",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "ECDC-Einstieg und Bedrohungsberichte; einzelfallbezogene Definition/Stand prüfen.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die Root-URL ab (nicht auf Allowlist); eine Weiterleitung ließ sich so nicht prüfen. Abgerufen wurde https://www.ecdc.europa.eu/en: die Startseite mit aktuellen Meldungen (neuester Beitrag 15.10.2026, CDTR KW 42) und Links zu Weekly threats reports und Epidemiological updates. Diese Seite passt zur Frage nach dem internationalen Verlauf. Empfehlung: direkt /en verlinken."
+      }
+    },
+    {
+      "id": "S023",
+      "url": "https://www.bbk.bund.de/",
+      "fundstellen": [
+        "sop/teil-b/B12_kritis-ausfall.md",
+        "sop/teil-b/B17_sonstiges.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Home/home_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "a0c1a7c981c4bda761a0fde9af6e3182b1ae7dbd5b6bcc3c8080e8c1acb823b3",
+      "bytes": 200496,
+      "titel": "Startseite  -  BBK bbk-icon/unwetter BBK-Icons/map BBK-Icons/fokus",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-Startseite als Institutionseinstieg; Sektor-/Fachquelle konkretisieren.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Nur die Startseite. Die in der SOP genannten Themen (Gefahrstoff-Freisetzung, Stromausfall, KRITIS) sind von dort erreichbar, aber nicht direkt verlinkt. Sinnvoller sind die Tiefenlinks wie U17 und U14 sowie die KRITIS-Seite. Die Linktexte [BBK Gefahrstoff-Freisetzung], [BBK Stromausfall] und [BBK KRITIS] versprechen mehr, als die Startseite liefert."
+      }
+    },
+    {
+      "id": "S024",
+      "url": "https://www.bamf.de/DE/Themen/Statistik/Asylzahlen/AsylGesStatistik/asylgeschaeftsstatistik-node.html",
+      "fundstellen": [
+        "sop/teil-b/B13_migrationslage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bamf.de/DE/Themen/Statistik/Asylzahlen/AsylGesStatistik/asylgeschaeftsstatistik-node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "1fd404b27e6576f49dfba0efe63e233e2bb841d9df4fdd76e3edda4cc686192e",
+      "bytes": 51314,
+      "titel": "BAMF - Bundesamt für Migration und Flüchtlinge  -  Asylgeschäftsstatistik",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BAMF-Asylgeschäftsstatistik; Anträge sind weder Einreisen noch örtliche Belegung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Aktuelle monatliche Antrags-, Entscheidungs- und Bestandsstatistik nach Staatsangehörigkeit. Zugänge bzw. Zuführungen und Definitionen sind im Seitentext nicht ausgewiesen; dafür gibt es eine separate FAQ-PDF. Die Verteilung auf Länder ist nicht sichtbar."
+      }
+    },
+    {
+      "id": "S025",
+      "url": "https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html",
+      "fundstellen": [
+        "sop/teil-b/B14_sicherheitslage.md",
+        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BKA-Pressestelle; konkreten öffentlichen Gefährdungshinweis der zuständigen Stelle ermitteln.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zusaetzlicher_abruf": "Amtlicher Suchindex bestätigt Funktion der Pressestelle; kein aktueller Gefährdungshinweis direkt geprüft.",
+      "zweitpruefung": {
+        "status": "Wartung/leer/JS-Hülle",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "Beim Abruf kam nur eine Wartungsseite (auch für https://www.bka.de/DE/Presse/presse_node.html); das kann auch eine Sperre für automatisierte Abrufe sein. Laut Suchtreffer heißt die Seite 'BKA - Ihr Kontakt zur Pressestelle'. Sie ist also wahrscheinlich nur eine Kontaktseite und keine Liste der Pressemitteilungen. Für B14/B16 (behördlich bestätigte Fakten) wäre die Presse-Übersicht (…/DE/Presse/presse_node.html) vermutlich geeigneter, das ist aber nicht geprüft."
+      }
+    },
+    {
+      "id": "S026",
+      "url": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Technische-Sicherheitshinweise-und-Warnungen/technische-sicherheitshinweise-und-warnungen_node.html",
+      "fundstellen": [
+        "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Technische-Sicherheitshinweise-und-Warnungen/technische-sicherheitshinweise-und-warnungen_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "23a47185294771827be3994405276542c997bafeb4d15936bc2c347e425bc46f",
+      "bytes": 61093,
+      "titel": "BSI  -  Technische Sicherheitshinweise und Warnungen",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BSI-Warn-/Sicherheitshinweise; Meldungsfassung, Produktbetroffenheit und Herstellerangabe prüfen.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Die Seite ist der Einstieg zu den technischen Sicherheitshinweisen (WID), den BSI-IT-Sicherheitsmitteilungen und den Warnungen nach § 13 BSIG. Dort stehen die Beschreibungen der Schwachstellen mit betroffenen Versionen und Abhilfen; die Seite selbst ist eine Übersicht."
+      }
+    },
+    {
+      "id": "S027",
+      "url": "https://www.bundesumweltministerium.de/themen/strahlenschutz/radiologischer-notfallschutz/notfallschutz",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:05+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bundesumweltministerium.de/themen/strahlenschutz/radiologischer-notfallschutz/notfallschutz",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "9a4eaa1c15c156787b9d0baad94b46376c587e8cd246bcaeb756257f82055187",
+      "bytes": 153835,
+      "titel": "BMUKN: Notfallschutz",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BMUKN-radiologischer Notfallschutz; keine aktuelle Lagebewertung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Die Seite erklärt Notfallpläne, Notfallmanagementsystem und RLZ und erwähnt das radiologische Lagebild (§ 108 StrlSchG), verlinkt es aber nicht und nennt keinen Ausgabestand. Für die Frage nach vorliegendem Lagebild und Ausgabestand ist sie Hintergrund; die eigentliche Quelle ist BfS/RLZ (U21). Den ANoPl-Bund nennt die Seite nicht namentlich."
+      }
+    },
+    {
+      "id": "S028",
+      "url": "https://www.bfs.de/DE/themen/ion/notfallschutz/bfs/rlz/rlz_node.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:06+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bfs.de/DE/themen/ion/notfallschutz/bfs/rlz/rlz_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "50ab7073db3061dbd463cbf8c5a4be845d75f604f4860ac379ccbcf31230d62a",
+      "bytes": 169346,
+      "titel": "BfS  -  Radiologisches Lagezentrum",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BfS-Radiologisches Lagezentrum und Aufgaben; keine einzelfallbezogene amtliche Lageausgabe.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab (nicht auf Allowlist), auch nach Suche. Indizien sprechen für eine gültige Adresse: Die BMUKN-Seite 'Notfallschutz' (Stand 09.02.2026) verlinkt genau diese URL, und die Navigation der BfS-Seite listet den Pfad. Abgerufen wurde nur die inhaltsgleiche BfS-Seite https://www.bfs.de/DE/themen/ion/notfallschutz/wer-macht-was/rlz/rlz_node.html. Sie ist erreichbar, beschreibt das RLZ des Bundes, verlinkt das Radiologische Lagebild (…/bfs/rlz/rlb.html) und passt damit zur Verwendung. Die kanonische URL dieser Seite ist der wer-macht-was-Pfad."
+      }
+    },
+    {
+      "id": "S029",
+      "url": "https://odlinfo.bfs.de/",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:06+00:00",
+      "http_status": 200,
+      "end_url": "https://odlinfo.bfs.de/ODL/DE/home/home_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "6fa36cb645ca8b7502b3ec3afd11d0dcdb140eb10106e5be2429948b4a05ec2e",
+      "bytes": 34435,
+      "titel": "ODL-Info  -  Startseite",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "ODL-Netz misst Gamma-Ortsdosisleistung; keine umfassende Kontaminations- oder Dosisfreigabe.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Amtliche Quelle zur Gamma-Ortsdosisleistung mit rund 1.700 Messstellen, Karte und Liste, als 24-h-Mittelwerte. Sie deckt aber nur diese eine Messgröße ab, keine weiteren Medien wie Luft, Boden oder Lebensmittel. Einheiten und konkrete Messwerte waren im abgerufenen Text nicht sichtbar."
+      }
+    },
+    {
+      "id": "S030",
+      "url": "https://www.jodblockade.de/jodtabletten/einnahmezeitpunkt/",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:06+00:00",
+      "http_status": 200,
+      "end_url": "https://www.jodblockade.de/jodtabletten/einnahmezeitpunkt/",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "33269e4ded614478ef4ec142231c29d80e81e77de72426e877b9e64e4dc4a060",
+      "bytes": 46954,
+      "titel": "Zeitpunkt - Wirksamkeit der Einnahme | Jodblockade - Schutz bei Reaktorunfall | Bundesumweltministerium Logo Bundesministerium für Umwelt, Klimaschutz, Naturschutz und nukleare Sicherheit",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Amtlicher Hintergrund zum Einnahmezeitpunkt von Jodtabletten; Ausgabe ist keine Einnahmeaufforderung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Laut Seite entscheiden nur die Katastrophenschutzbehörden über die Jodblockade und den Zeitpunkt. Die vorsorgliche Ausgabe bedeutet keine sofortige Einnahme. Das deckt die Fundstelle wörtlich."
+      }
+    },
+    {
+      "id": "S031",
+      "url": "https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:07+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf",
+      "content_type": "application/pdf",
+      "sha256": "620f43bf37c0a3a1f3a3ef613aabe147f593cc1fb126522ffa1ab1fe6f53f3da",
+      "bytes": 8162563,
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "ANoPl-Bund: PDF vorhanden, keine erneute Vollprüfung aller Szenarien/Verweise dieses Reviews.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab. Der Dateiname 'anopi' sieht nach einem Tippfehler für 'anopl' (ANoPl) aus, und die Suche fand die Datei weder unter dem einen noch unter dem anderen Namen. Die amtliche BMUKN-Seite zur AVV ANoPl-Bund (aktualisiert 29.04.2026) ist erreichbar. Sie verlinkt als einziges PDF die Bundesanzeiger-Veröffentlichung der AVV vom 10.11.2023 (in Kraft seit 24.11.2023), nicht ein BMU-PDF. Unter …/Glaeserne_Gesetze/20._Lp/anopl_bund/Entwurf/anopl_bund_refe_bf.pdf liegt nur der Referentenentwurf, der ist kein Ersatz. Der Link sollte geprüft und durch die BMUKN-Seite ersetzt werden.",
+        "nachfolger_url": "https://www.bundesumweltministerium.de/gesetz/allgemeine-verwaltungsvorschrift-fuer-einen-allgemeinen-notfallplan-des-bundes-nach-98-des-strahlenschutzgesetzes-anopl-bund",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S032",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__5.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:08+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__5.html",
+      "content_type": "text/html",
+      "sha256": "e6c45f78f49ad4aae8009d5efa4a6e437ebff4cd3821dd5f7e2ac0738e08f697",
+      "bytes": 23826,
+      "titel": "§ 5 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 5: abrufbare Begriffsgrundlage; in diesem Review kein vollständiger Normabgleich.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Abs. 26 definiert 'Notfall' als Ereignis mit möglichen erheblichen nachteiligen Auswirkungen durch ionisierende Strahlung, ausgenommen Ereignisse, die von den Regeln für geplante Expositionssituationen erfasst werden. Die Angabe '§ 5 Abs. 26 (Notfall)' stimmt also."
+      }
+    },
+    {
+      "id": "S033",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__100.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:09+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__100.html",
+      "content_type": "text/html",
+      "sha256": "87821fb458fb87be195cb79e65cda6587cdf5e1df3f91550bf7733d5764e0782",
+      "bytes": 4078,
+      "titel": "§ 100 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 100: Länderpläne; keine organisationsspezifische Planprüfung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Die Norm verpflichtet die Länder zu allgemeinen und besonderen Notfallplänen, die die Notfallpläne des Bundes konkretisieren. Das trägt die Fundstelle 'Notfallpläne der Länder'."
+      }
+    },
+    {
+      "id": "S034",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__106.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:09+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__106.html",
+      "content_type": "text/html",
+      "sha256": "3499a8b5dad54f1ab5a69d56543d6e7f81a9aafdbe7d2e80483240da87c33e3c",
+      "bytes": 7035,
+      "titel": "§ 106 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 106: radiologisches Lagezentrum; Abruf, keine erneute Vollprüfung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Das BMUKN richtet das Lagezentrum ein. Es sammelt Daten, erstellt das radiologische Lagebild, gibt es an Länder und Bundesbehörden weiter und koordiniert Maßnahmen. Das deckt die Fundstelle. Der erste Abruf scheiterte mit einem Serverfehler, der zweite gelang."
+      }
+    },
+    {
+      "id": "S035",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__108.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:10+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__108.html",
+      "content_type": "text/html",
+      "sha256": "0b261337fe50da185e606955d37dcfda2e89b3b09d6a7602691faf3351069823",
+      "bytes": 6450,
+      "titel": "§ 108 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 108: Lagebild; Abruf, keine erneute Vollprüfung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Bei überregionalen und regionalen Notfällen ist ein radiologisches Lagebild zu erstellen und fortzuschreiben. Zuständig ist bei überregionalen Notfällen das RLZ des Bundes, bei regionalen das betroffene Land. Das entspricht der Fundstelle."
+      }
+    },
+    {
+      "id": "S036",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__109.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:11+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__109.html",
+      "content_type": "text/html",
+      "sha256": "4bf770162c6c141a034c3cbacf1c3a7e6b681c8df49149d649eb23c76f48d75f",
+      "bytes": 5551,
+      "titel": "§ 109 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 109: Schutzmaßnahmen; Abruf, keine eigene Maßnahmeableitung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Die zuständigen Behörden entscheiden unter Berücksichtigung der Notfallpläne und des radiologischen Lagebilds über Schutzmaßnahmen und passen sie fortlaufend an. Das trägt die Fundstelle."
+      }
+    },
+    {
+      "id": "S037",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__111.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:11+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__111.html",
+      "content_type": "text/html",
+      "sha256": "7a995ede04afc2d7827121a405d8785e82aea67fe83eae3395c3ca975d57d3ae",
+      "bytes": 8299,
+      "titel": "§ 111 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 111: Dosisabschätzung; Abruf, keine eigene Dosismodellierung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab (nicht auf der Allowlist), und die Suche lieferte sie nicht als Treffer. Den Normtext habe ich nicht gesehen. Die Überschrift aus der Inhaltsübersicht passt zur Fundstelle 'Dosisabschätzung'."
+      }
+    },
+    {
+      "id": "S038",
+      "url": "https://www.gesetze-im-internet.de/strlschg/__119.html",
+      "fundstellen": [
+        "sop/teil-c/C01_radiologische-nukleare-lage.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:11+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/strlschg/__119.html",
+      "content_type": "text/html",
+      "sha256": "d0d95faa6977656d2fa756c64cb3dc456fe423f7ac9a50cb4b19906e6f70b722",
+      "bytes": 3947,
+      "titel": "§ 119 StrlSchG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "StrlSchG § 119: nachbestehende Expositionslage; Abruf, kein neuer Einzelfallbefund.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Für die nach einem Notfall bestehende Expositionssituation gelten §§ 92 und 106 bis 111 entsprechend. An die Stelle der Referenzwerte und Notfallpläne treten die Werte und Pläne nach § 118. Das deckt die Fundstelle."
+      }
+    },
+    {
+      "id": "S039",
+      "url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Naturgefahren/naturgefahren.html",
+      "fundstellen": [
+        "sop/teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:11+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Naturgefahren/naturgefahren.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "793f0fac30953201cde8efbcc2757539c0d55fb47c456bc5ec8466d069f2dffc",
+      "bytes": 124872,
+      "titel": "Naturgefahren - Naturgefahren  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-Naturgefahren als Hintergrund; örtliche Geologie/Bauwerksbewertung separat.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die exakte URL mit der Endung naturgefahren.html ab (Allowlist). Die Suche liefert nur die Variante naturgefahren_node.html. Ob die .html-Variante funktioniert, ist nicht festgestellt. Die bestätigte _node-Seite 'Naturgefahren - BBK' nennt geologische Gefahren wie Erdbeben, Felsstürze und Hangrutschungen als KRITIS-Gefahr. Sie eignet sich nur zur allgemeinen Einordnung, ohne Angaben zum Wirkungsraum.",
+        "nachfolger_url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/KRITIS-Gefahrenlagen/Naturgefahren/naturgefahren_node.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S040",
+      "url": "https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html",
+      "fundstellen": [
+        "sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:11+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BKG-Weltraumwetter; im Abruf nicht erreichbar, Fachprodukt noch zu prüfen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die URL ab (nicht auf Allowlist). Pfadgleiche Spiegel-/Sprachversionen (evrs.bkg.bund.de/…/weltraumwetter.html, bkg.bund.de/en/…/space-weather) wurden wegen robots.txt nicht abgerufen. Ob die Seite Fachwarnungen mit Zeitraum und technischer Wirkung enthält, ist ungeprüft. Laut Suche betreibt das BKG zusätzlich ein Datenportal unter https://weltraumwetter.bkg.bund.de/ (nicht abgerufen)."
+      }
+    },
+    {
+      "id": "S041",
+      "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/",
+      "fundstellen": [
+        "sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:12+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "FLI-Tierseucheneinstieg; zuständiges aktuelles Produkt vor Verwendung prüfen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Für C08/R1 passt die Seite als Einstieg: Sie verweist auf TSIS (bestätigte anzeigepflichtige Tierseuchen auf Kreisebene), Radar Bulletin, ASP und AI. In C08/R2 steht jedoch das Label 'FLI: Aviäre Influenza' auf dieser Übersichtsseite statt auf der AI-Seite (U34); das ist ein Label/Ziel-Widerspruch.",
+        "anmerkung_konsolidierung": "Hinweis der zweiten Prüfung, C08/R2 führe das Label „Aviäre Influenza“ auf der Übersichtsseite, trifft nicht zu (R2 verlinkt die AI-Seite)."
+      }
+    },
+    {
+      "id": "S042",
+      "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/",
+      "fundstellen": [
+        "sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:12+00:00",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "FLI-aviäre Influenza; konkrete Risikoeinschätzung/Stand vor Verwendung prüfen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Die Seite enthält die laufenden FLI-Risikoeinschätzungen zu HPAI H5 bei Geflügel, Wildvögeln und Säugetieren. Zum Menschen sagt sie nur allgemein, dass bei hoher Infektionsdosis eine Übertragung mit möglichem tödlichem Verlauf möglich ist. Eine fachliche Bewertung humaner Exposition oder Infektion (R2) leistet sie nicht; dafür wären RKI-Quellen zu ergänzen."
+      }
+    },
+    {
+      "id": "S043",
+      "url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Sanitaetsdienst/MANV/manv_node.html",
+      "fundstellen": [
+        "sop/teil-c/C09_medizinische-versorgung-manv.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Sanitaetsdienst/MANV/manv_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "c68e5dfb1faa3e8b8cc073fd3c3ec7b980b2cbfa2a47f38b263a11cdcb93d2f4",
+      "bytes": 120662,
+      "titel": "MANV  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-MANV-Grundlage; Bedarf und einsetzbare Versorgung, keine universelle Patientenzahlschwelle.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Fachlicher Hintergrund zum MANV: Definition, besondere Herausforderungen im Zivilschutz, BBK-Aktivitäten wie MTF und Sichtung. Die Seite eignet sich zur Einordnung, enthält aber keine Kapazitäts- oder Bedarfsangaben."
+      }
+    },
+    {
+      "id": "S044",
+      "url": "https://www.bfarm.de/DE/",
+      "fundstellen": [
+        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bfarm.de/DE/Home/_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "88216ec55c793f8372e41928856d3583d5fd6b6515bcfa30ea99ef72df57f8d7",
+      "bytes": 373139,
+      "titel": "BfArM  -  Startseite",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BfArM-Einstieg; Produktabdeckung und lokale Verfügbarkeit bleiben gesondert zu belegen.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die exakte URL /DE/ ab (Allowlist). Abgerufen wurde https://www.bfarm.de/ mit dem Titel 'BfArM - Startseite' (kanonisch /DE/Home/_node.html). Das ist eine generische Startseite ohne Datum. Für die Frage nach Produktgruppe und Versorgungskette ist die bestätigte Seite 'BfArM - Lieferengpässe' (Arzneimittel, Lieferengpassdatenbank) zielgenauer. Für Medizinprodukte gibt es den Bereich 'Meldungen und Maßnahmen' (Anzeige von Lieferunterbrechungen).",
+        "nachfolger_url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S045",
+      "url": "https://www.bbk.bund.de/DE/Warnung-Vorsorge/Warnung-in-Deutschland/So-werden-Sie-gewarnt/so-werden-sie-gewarnt_node.html",
+      "fundstellen": [
+        "sop/teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Warnung-Vorsorge/Warnung-in-Deutschland/So-werden-Sie-gewarnt/so-werden-sie-gewarnt_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "98e44060d3ef97b905a3c98aa16c406825f70d7617570899593b355d850040bf",
+      "bytes": 144344,
+      "titel": "So werden Sie gewarnt  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Warnmix; mehrere Kanäle begründen keine vollständige Wahrnehmung der Bevölkerung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Erklärt den Warnmittelmix (Sirenen, Rundfunk, Apps, Cell Broadcast usw.) und die Reichweite. Die Unterscheidung zwischen Auslösung, Übertragung und tatsächlicher Erreichbarkeit wird nicht ausdrücklich getroffen, zur Auslösung steht wenig. Ergänzend könnte die Seite 'Organisation der Warnung' dienen; sie erschien im Suchtreffer, wurde aber nicht abgerufen."
+      }
+    },
+    {
+      "id": "S046",
+      "url": "https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/PiB/PiB-18-treibstoffversorgung-stromausfall.pdf?__blob=publicationFile&v=14",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/PiB/PiB-18-treibstoffversorgung-stromausfall.pdf?__blob=publicationFile&v=14",
+      "content_type": "application/pdf",
+      "sha256": "d337538efc651411a2a139840c3a0655303ae549c6fd2203c4d4b0f21267e187",
+      "bytes": 4024597,
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK PiB 18 als Fachhintergrund zur Treibstoffkette; keine konkrete Lieferzusage.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "umgeleitet",
+        "eignung": "teilweise",
+        "hinweis": "Statt der PDF-Datei kam die HTML-Mediathekseite zurück (kanonisch .html?v=14) mit den Metadaten 'Praxis im Bevölkerungsschutz Band 18' und 'Empfehlungen für Zivil- und Katastrophenschutzbehörden'. Thematisch passt sie (Stichworte Tanklager, Notstrom, letzte Meile). Ob Personal, Zufahrt, Transport und Entladung behandelt werden, ließ sich nicht prüfen, weil kein PDF-Text abrufbar war und kein Download-Link im Auszug erschien. Ob ein Browser die PDF direkt erhält, ist nicht festgestellt.",
+        "nachfolger_url": "https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/PiB/PiB-18-treibstoffversorgung-stromausfall.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S047",
+      "url": "https://www.bbk.bund.de/DE/Das-BBK/Zivile-Verteidigung/ZS-Notstrom/zs-notstrom.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Das-BBK/Zivile-Verteidigung/ZS-Notstrom/zs-notstrom.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "c827dcf77f1ec2292ce3277bf3f7101fdd32cd6fddf710acba07f3c669745b0d",
+      "bytes": 132811,
+      "titel": "Zivile Verteidigung - Nationale Reserve Blackout  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Nationale Reserve Blackout als Aggregateprogramm, keine automatische Kraftstofflieferung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Beschreibt die 'Nationale Reserve Blackout' (mobile Notstromaggregate, Förderung nach ZSKG, technische Anforderungen, Antrag über die Länder) und entspricht damit dem SOP-Linktext. Ein Abrufverfahren oder Bestand im Ereignisfall wird nicht beschrieben."
+      }
+    },
+    {
+      "id": "S048",
+      "url": "https://www.gesetze-im-internet.de/erd_lbevg_2012/__12.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/erd_lbevg_2012/__12.html",
+      "content_type": "text/html",
+      "sha256": "2efec793e677e7fd84308bd03fdd2faddbd288aba0bf78adf63acc924995b6ab",
+      "bytes": 8944,
+      "titel": "§ 12 Erd�lBevG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "ErdölBevG § 12: abrufbare Freigaberegelung; keine Prüfung einer aktuellen Freigabeverordnung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "§ 12 regelt die Freigabe von Vorräten per Rechtsverordnung des Bundeswirtschaftsministeriums bei Versorgungsstörungen oder zur Erfüllung internationaler Pflichten. Das deckt den Klammerzusatz 'Freigabe der Vorräte' in C12 genau."
+      }
+    },
+    {
+      "id": "S049",
+      "url": "https://www.gesetze-im-internet.de/ensig_1975/__1.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/ensig_1975/__1.html",
+      "content_type": "text/html",
+      "sha256": "46c8c10af695c222b25ecbcc8aee5f7baa17fb02dc92081cb5e757962d1ec50d",
+      "bytes": 12249,
+      "titel": "§ 1 EnSiG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "EnSiG § 1: Voraussetzungen/Verordnungsermächtigung; keine Aktivierung allein durch SOP.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "§ 1 ermächtigt die Bundesregierung, per Rechtsverordnung Maßnahmen zur Sicherung des lebenswichtigen Energiebedarfs zu erlassen, wenn die Versorgung unmittelbar gefährdet ist und Marktmaßnahmen nicht reichen. Das ist eine Kernnorm für die Fachgrundlagen in C12."
+      }
+    },
+    {
+      "id": "S050",
+      "url": "https://www.gesetze-im-internet.de/ensig_1975/__3.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/ensig_1975/__3.html",
+      "content_type": "text/html",
+      "sha256": "9d9d5f82fcfdcf5358ed9bc228b70d8a1c83e5eb0360222b7a1e3950e380eef6",
+      "bytes": 9145,
+      "titel": "§ 3 EnSiG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "EnSiG § 3: Erlass/Anwendung von Verordnungen und Feststellungen; für B09 gezielt abgeglichen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "§ 3 regelt Erlass, Übertragung, Geltungsdauer, Zustimmung, Aussetzung und Aufhebung der EnSiG-Verordnungen, einschließlich der Bedingungen für deren Anwendung. Er gehört damit zu den Fachgrundlagen in C12."
+      }
+    },
+    {
+      "id": "S051",
+      "url": "https://www.gesetze-im-internet.de/ensig_1975/__4.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:16+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/ensig_1975/__4.html",
+      "content_type": "text/html",
+      "sha256": "10af88858a6748d2be216d32e2eb7d5c44fe8410c09edca5e792da4bb139b930",
+      "bytes": 6736,
+      "titel": "§ 4 EnSiG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "EnSiG § 4: überregionale Lastverteilung BNetzA und verbleibende Landeszuständigkeit.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "§ 4 legt die ausführenden Behörden fest: in der Regel das BAFA, für leitungsgebundene Energie die BNetzA, für Heizöl die Zollverwaltung, im Übrigen die nach Landesrecht zuständigen Stellen. Das ist für die Zuständigkeitsfrage in C12 einschlägig."
+      }
+    },
+    {
+      "id": "S052",
+      "url": "https://www.gesetze-im-internet.de/min_lav/__14.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:16+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/min_lav/__14.html",
+      "content_type": "text/html",
+      "sha256": "36d9eb7548c7c63a2f3c7c7a2e79a4cf02f3ab6e85f5661a7fc22d517a952f11",
+      "bytes": 4531,
+      "titel": "§ 14 Min�lAV - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "MinÖlAV § 14: Abruf des Anwendungsvorbehalts; kein aktueller Aktivierungsnachweis.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "passt",
+        "hinweis": "Die Einzelnorm-URL lehnte WebFetch ab (nicht auf Allowlist, auch nicht per Suche auffindbar). Geprüft habe ich den Inhalt über die amtliche Volltextseite https://www.gesetze-im-internet.de/min_lav/BJNR022670985.html. Danach gilt § 14 Abs. 2 und 3 erst nach Aktivierung von IEA-Notmaßnahmen (Abs. 3 zusätzlich: Ausfall von mindestens 7 % und eine Verordnung nach EnSiG). Das trägt den SOP-Zusatz genau. § 14 ist der letzte Paragraph, die Einzelnorm-URL ist daher plausibel, aber nicht direkt bestätigt."
+      }
+    },
+    {
+      "id": "S053",
+      "url": "https://www.gesetze-im-internet.de/wisig_1965/__2.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:16+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/wisig_1965/__2.html",
+      "content_type": "text/html",
+      "sha256": "015f9d43a92c723a9e1dfb87cdf6cd1219a9d8a41e4f11ff7f95294b0f972ef4",
+      "bytes": 4592,
+      "titel": "§ 2 WiSiG 1965 - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "WiSiG § 2: Abruf des Anwendungsbezugs; keine Feststellung eines Spannungs-/Verteidigungsfalls.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Fehler",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "Die Einzelnormseite gab bei zwei Versuchen 'SERVER_ERROR' zurück. Laut Volltext derselben Domain sind Verordnungen nach § 1 nur zur Abwendung einer Versorgungsgefährdung zulässig, nachrangig zu marktgerechten Maßnahmen und auf das Mindestmaß zu begrenzen. Die Norm existiert also, aber die Fundstelle C12 nennt keinen Verwendungszweck."
+      }
+    },
+    {
+      "id": "S054",
+      "url": "https://www.gesetze-im-internet.de/min_lbewv_1988/__11.html",
+      "fundstellen": [
+        "sop/teil-c/C12_kraftstoff-waerme.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:18+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/min_lbewv_1988/__11.html",
+      "content_type": "text/html",
+      "sha256": "e24803711bd979f3cd0b61716e379eb3b8b268fcf37245397959293d0172fdb6",
+      "bytes": 3849,
+      "titel": "§ 11 Min�lBewV - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "MinÖlBewV § 11: Abruf des Anwendungsvorbehalts; kein aktueller Aktivierungsnachweis.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
+      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "passt",
+        "hinweis": "Die Einzelnorm-URL lehnte WebFetch ab (nicht auf Allowlist, auch nicht per Suche auffindbar). Geprüft habe ich den Inhalt über die amtliche Volltextseite https://www.gesetze-im-internet.de/min_lbewv_1988/BJNR005300988.html. Danach darf die Verordnung nach § 11 Abs. 2 nur unter den Voraussetzungen des Art. 80a GG angewandt werden und nur, wenn das BMWE dies per Rechtsverordnung bestimmt (Verweis auf § 2 Abs. 1 WiSiG). Das trägt den SOP-Zusatz genau. § 11 ist der letzte Paragraph."
+      }
+    },
+    {
+      "id": "S055",
+      "url": "https://www.bmel.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:19+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "07883ce19eb34b564e3a0170c772fc788fa4f711cf801e77590c75b6efb9a0aa",
+      "bytes": 776074,
+      "titel": "BMLEH  -  Kontrolle + Risikomanagement - Maßnahmen zur Überbrückung von Versorgungsengpässen bluesky_icon x_icon instragram_icon youtube_icon Group bluesky_icon x_icon instragram_icon youtube_icon Group",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Ernährungsvorsorge als Hintergrund; Vorratsfreigaben und örtliche Bedarfsdeckung separat belegen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "ersetzt_durch": "https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html",
+      "zweitpruefung": {
+        "status": "Abruf verweigert",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch lehnte die bmel.de-URL ab. Die pfadgleiche Seite auf der neuen Ministeriumsdomain bmleh.de ist erreichbar: 'Maßnahmen zur Überbrückung von Versorgungsengpässen', erschienen 13.08.2025, aktualisiert 08.09.2026 (laut Metadaten). Sie behandelt staatliche Ernährungsvorsorge und das ESVG. Für die R2-Frage (einzelne Produkte, Marktverschiebung oder ungedeckte Grundversorgung) liefert sie nur den Rahmen und keine Lagedaten; sie passt also teilweise. Das SOP-Label nennt bereits 'BMLEH', der Link zeigt aber noch auf bmel.de.",
+        "nachfolger_url": "https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S056",
+      "url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/Sektoren-Branchen/Wasser/Risiken/risiken_node.html",
+      "fundstellen": [
+        "sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:19+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Kritische-Infrastrukturen/Sektoren-Branchen/Wasser/Risiken/risiken_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "46f1c7afa7669484b7d4f6b88009fd73b43908141ddaebf66b4e201ea15412a9",
+      "bytes": 128757,
+      "titel": "Risiken und Gefahren  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Wasser-/Abwasserrisiken als Hintergrund; kein örtlicher Hygienebefund.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Allgemeine Risikobeschreibung für Wasser und Abwasser: Starkregen mit ungeklärtem Abwasser, Kontamination, Dürre, Cyberangriffe, Abhängigkeit vom Strom. Rückstau wird nicht behandelt, und lagebezogene Bestätigungen liefert die Seite naturgemäß nicht."
+      }
+    },
+    {
+      "id": "S057",
+      "url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuungsdienst/Pilotprojekt-Labor-Betreuung-5000/Ziel-Labor-Betreuung-5000/ziel-anforderungen-vorgehensweisen_node.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:19+00:00",
+      "fehler": "HTTP Error 404: Not Found",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Historischer BBK-Pilotprojekteinstieg: Direktabruf 404; Index älter, aktueller Moduleinstieg MBM.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "zusaetzlicher_abruf": "Suchindex liefert älteren Projekttext; aktueller bestätigter Moduleinstieg unter MBM.",
+      "ersetzt_durch": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/mobile-betreuungsmodule-5000_node.html",
+      "zweitpruefung": {
+        "status": "Fehler",
+        "eignung": "nicht beurteilbar",
+        "hinweis": "WebFetch meldete CLIENT_ERROR ('There was an error while fetching.'), und das Tool blockierte einen zweiten Versuch. Die URL erscheint noch im Suchindex. Das BBK führt das Projekt inzwischen aber auch unter dem neuen Pfad /Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/Labor-5000/. Die dortige, bestätigte Seite 'Das Pilotprojekt Labor Betreuung 5.000' beschreibt das Bundes-Betreuungsmodul (bis zu 5.000 Personen) und dient nur als Hintergrund, nicht als Lagequelle zur Aufnahmefähigkeit.",
+        "nachfolger_url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/Labor-5000/labor-5000-node.html",
+        "nachfolger_bestaetigt": true
+      }
+    },
+    {
+      "id": "S058",
+      "url": "https://www.bbk.bund.de/DE/Themen/Risikomanagement/Basisszenarien-Zivile-Verteidigung/basisszenarien-zivile-verteidigung_node.html",
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:19+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Risikomanagement/Basisszenarien-Zivile-Verteidigung/basisszenarien-zivile-verteidigung_node.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "f078df85ef2d4c785f874350e3442cafd7aa57c7220e42d7642b5ad4042e753e",
+      "bytes": 120761,
+      "titel": "Basisszenarien im Kontext der Zivilen Verteidigung  -  BBK",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "BBK-Basisszenarien zivile Verteidigung als Planungshintergrund, keine Feststellung eines Rechtszustands.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "teilweise",
+        "hinweis": "Beschreibt kommunal relevante Lagen der Zivilen Verteidigung und nennt als Akteure kommunale Verwaltung, Einsatzkräfte, Versorger, Polizeien und Bundeswehr. Zur Zulässigkeit von Schnittstellen sagt die Seite selbst nichts."
+      }
+    },
+    {
+      "id": "S059",
+      "url": "https://www.bundesnetzagentur.de/DE/Gasversorgung/aktuelle_gasversorgung/start.html",
+      "fundstellen": [
+        "sop/teil-b/B09_gasversorgungsengpass.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bundesnetzagentur.de/DE/Gasversorgung/aktuelle_gasversorgung/start.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "dc60ea281b45ee75841c935364c3694302ca072df908468d52bcf8d71eef7c86",
+      "bytes": 1434478,
+      "titel": "Bundesnetzagentur  - \nAktuelle Lage Gasversorgung",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Aktuelle BNetzA-Lagebewertung vom 21.10.2026 direkt eingesehen; Krisenstufe bleibt zeitgebunden.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": true,
+      "dokumentstand": "Lagebewertung 21.10.2026; Krisenstufe nur zu diesem Prüfstand"
+    },
+    {
+      "id": "S060",
+      "url": "https://www.bundesnetzagentur.de/DE/Fachthemen/ElektrizitaetundGas/Versorgungssicherheit/Gas/artikel.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bundesnetzagentur.de/DE/Fachthemen/ElektrizitaetundGas/Versorgungssicherheit/Gas/artikel.html",
+      "content_type": "text/html;charset=utf-8",
+      "sha256": "f967ddfd2c36b557792a2299ff45f90bcbaad36cc7ed67cc75af44f231b89418",
+      "bytes": 90260,
+      "titel": "Bundesnetzagentur  - \nHomepage - Gas: Krisenmanagement und -vorsorge",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "BNetzA zur Lastverteilung, Schutzkunden und fehlender abstrakter Abschaltreihenfolge.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S061",
+      "url": "https://www.bundeswirtschaftsministerium.de/Redaktion/DE/Textsammlungen/Energie/gas.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.bundeswirtschaftsministerium.de/Redaktion/DE/Textsammlungen/Energie/gas.html",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "dc6e1bade6dc0cd1f32258c9d9d2be69226cd843b7cad14244d50b33baffddb0",
+      "bytes": 118413,
+      "titel": "Radware Page",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "BMWE-Gasübersicht: Direktabruf lieferte Botprüfung trotz HTTP 200; Inhalt nur teilweise im Suchindex.",
+      "status": "zugriffssperre_oder_leere_antwort",
+      "prueftiefe": "kein direkt geprüfter Fachinhalt",
+      "offene_nachpruefung": "Maßgeblichen Fach-/Rechtsinhalt direkt oder aus bereitgestellter amtlicher Fassung prüfen; keine Freigabe aus Suchindex oder HTTP-Status.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S062",
+      "url": "https://www.gesetze-im-internet.de/enwg_2005/__16.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/enwg_2005/__16.html",
+      "content_type": "text/html",
+      "sha256": "358b72415bf2aa4afaec09a0bed28ec8073925c945af3d6baf228fe981a4a88e",
+      "bytes": 7910,
+      "titel": "§ 16 EnWG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "EnWG § 16: Netz-/Marktmaßnahmen und notwendige Anpassung zur Systemsicherheit.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S063",
+      "url": "https://www.gesetze-im-internet.de/enwg_2005/__16a.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/enwg_2005/__16a.html",
+      "content_type": "text/html",
+      "sha256": "bd9b33b562ec42875426ba356a0b14cd70a6f6c832aa711a206d6ce99f765899",
+      "bytes": 3690,
+      "titel": "§ 16a EnWG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "EnWG § 16a: entsprechende Anwendung für verantwortliche Verteilnetzbetreiber.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S064",
+      "url": "https://www.gesetze-im-internet.de/enwg_2005/__53a.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/enwg_2005/__53a.html",
+      "content_type": "text/html",
+      "sha256": "8c3c8f8fb240cdd5fbc5e7900d19824a8cd15cf960438a1773c6fa95d36a341a",
+      "bytes": 5350,
+      "titel": "§ 53a EnWG - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "EnWG § 53a: begünstigte Kunden-/Wärmefunktionen und begrenzter Gasanteil.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S065",
+      "url": "https://www.gesetze-im-internet.de/gassv/__1.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:20+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/gassv/__1.html",
+      "content_type": "text/html",
+      "sha256": "139596783f5cf0b2ef931d44a1516b707c6f6f7cc3005691191d9e6dc349657f",
+      "bytes": 7262,
+      "titel": "§ 1 GasSV - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "GasSV § 1: Lastverteilungsverfügungen und Schutz der lebenswichtigen Versorgung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S066",
+      "url": "https://www.gesetze-im-internet.de/gassv/__7.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:22+00:00",
+      "http_status": 200,
+      "end_url": "https://www.gesetze-im-internet.de/gassv/__7.html",
+      "content_type": "text/html",
+      "sha256": "9f4b0b091697754e6907d30b17adb1f3ea10734c2312df95c78e504e5e30d666",
+      "bytes": 4569,
+      "titel": "§ 7 GasSV - Einzelnorm",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "GasSV § 7: Anwendbarkeitsvoraussetzungen und gesetzliche Ausnahmen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S067",
+      "url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:02017R1938-20260622",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:22+00:00",
+      "http_status": 202,
+      "end_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:02017R1938-20260622",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "titel": "",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Aktuelle EU-Konsolidierung 22.06.2026: Direktinhalt nicht zugänglich, Suchindex reicht nicht für Vollprüfung.",
+      "status": "zugriffssperre_oder_leere_antwort",
+      "prueftiefe": "kein direkt geprüfter Fachinhalt",
+      "offene_nachpruefung": "Maßgeblichen Fach-/Rechtsinhalt direkt oder aus bereitgestellter amtlicher Fassung prüfen; keine Freigabe aus Suchindex oder HTTP-Status.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S068",
+      "url": "https://wasserstand.bsh.de/",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:23+00:00",
+      "http_status": 200,
+      "end_url": "https://wasserstand.bsh.de/",
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "f20af4bff38aa45cace911f185545b3109d4e4d3604a7c832222bdef970d8e15",
+      "bytes": 22421,
+      "titel": "Wasserstandsvorhersage – BSH",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Amtlicher BSH-Einstieg; Nord-/Ostseeprodukte und Bezugswasserstände unterscheiden.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S069",
+      "url": "https://pegelonline.wsv.de/webservice/ueberblick",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:24+00:00",
+      "http_status": 200,
+      "end_url": "https://pegelonline.wsv.de/webservice/ueberblick",
+      "content_type": "text/html;charset=UTF-8",
+      "sha256": "9d2a75a7997f96ea409e45a23756a012b21567135fc814e4ef4938b742ab114e",
+      "bytes": 16398,
+      "titel": "Webservices & APIs – Übersicht | PEGELONLINE Facebook Icon - Link zu WSV Facebook-Seite Instagram Icon - Link zu WSV Instagram-Seite Youtube Icon - Link zu WSV Youtube-Seite",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "PEGELONLINE-Produkte: ungeprüfte Bundeswasserstraßen-Rohdaten; ausgewählte XML-/Downloadzeiten ganzjährig MEZ.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S070",
+      "url": "https://www.dguv.de/ifa/gestis/gestis-stoffdatenbank/index.jsp",
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ],
+      "abrufzeit_utc": "2026-10-21T20:16:25+00:00",
+      "http_status": 200,
+      "end_url": "https://www.dguv.de/ifa/gestis/gestis-stoffdatenbank/index.jsp",
+      "content_type": "text/html;charset=UTF-8",
+      "sha256": "f4cfb939ef00c050bb4effa6f1b5806e1b44d7a16ae9be9a418e4c6694907c33",
+      "bytes": 42714,
+      "titel": "Gefahrstoffe: GESTIS-Stoffdatenbank",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "GESTIS-Stoffinformation/Arbeitsschutz; keine eigene toxikologische Bevölkerungsbewertung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S071",
+      "url": "https://www.wettergefahren.de/warnungen/aktuell.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:25+00:00",
+      "fehler": "HTTP Error 404: Not Found",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Nicht verwendbarer zusätzlich erprobter Wettergefahren-Pfad; kein Ersatzlink.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S072",
+      "url": "https://www.wettergefahren.de/warnungen/warnkriterien.html",
+      "fundstellen": [],
+      "abrufzeit_utc": "2026-10-21T20:16:25+00:00",
+      "fehler": "HTTP Error 404: Not Found",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Nicht verwendbarer zusätzlich erprobter Wettergefahren-Pfad; geprüfter DWD-Kurzeinstieg WARNKRITERIEN.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "GASPLAN",
+      "url": "https://www.bundeswirtschaftsministerium.de/Redaktion/DE/Downloads/M-O/notfallplan-gas-bundesrepublik-deutschland.pdf?__blob=publicationFile&v=5",
+      "http_status": 200,
+      "end_url": "https://www.bundeswirtschaftsministerium.de/Redaktion/DE/Downloads/M-O/notfallplan-gas-bundesrepublik-deutschland.pdf?__blob=publicationFile&v=5",
+      "bytes": 3470049,
+      "sha256": "73bd6b25997e78c9e453afcd111b89ecf92def6f4a6d306fa28df197821b3a49",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Amtlich bereitgestelltes PDF trägt die Fassung 2023; Kapitel 1–3, insbesondere Krisenstufen/Aktivierung, gezielt gelesen. Bereitstellungsdatum nicht als Inhaltsfassung verwenden.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": []
+    },
+    {
+      "id": "EULATEST",
+      "url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:02017R1938-20260622",
+      "http_status": 202,
+      "end_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:02017R1938-20260622",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "EU-Konsolidierung als PDF ebenfalls nur leere Antwort; keine Vollprüfung.",
+      "status": "zugriffssperre_oder_leere_antwort",
+      "prueftiefe": "kein direkt geprüfter Fachinhalt",
+      "offene_nachpruefung": "Maßgeblichen Fach-/Rechtsinhalt direkt oder aus bereitgestellter amtlicher Fassung prüfen; keine Freigabe aus Suchindex oder HTTP-Status.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": []
+    },
+    {
+      "id": "MBM",
+      "url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/mobile-betreuungsmodule-5000_node.html",
+      "http_status": 200,
+      "end_url": "https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/mobile-betreuungsmodule-5000_node.html",
+      "bytes": 134817,
+      "sha256": "d298b4e351265cab49afef80172f2f11c1b6d4dea9d9d9939048b87b2d59ca7b",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Aktuelle BBK-Modulbeschreibung: modulare Fähigkeit, keine Nachweise aktueller Verfügbarkeit, Zusage oder Aufbauzeit.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C16_evakuierung-schutzunterbringung-betreuung.md"
+      ]
+    },
+    {
+      "id": "NIWIS",
+      "url": "https://www.bundesumweltministerium.de/pressemitteilung/niedrigwasserinformationssystem-niwis",
+      "http_status": 200,
+      "end_url": "https://www.bundesumweltministerium.de/pressemitteilung/niedrigwasserinformationssystem-niwis",
+      "bytes": 164831,
+      "sha256": "2a11c88c4e92f61fd93618cd34088e757bea47e2abe9362cd0907f6af6af97bc",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Amtliche BMUKN-Veröffentlichung 15.07.2026 mit Link auf niwis-online.de; keine Prüfung aktueller einzelner Messwerte.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ]
+    },
+    {
+      "id": "WARNKRITERIEN",
+      "url": "https://www.dwd.de/warnkriterien",
+      "http_status": 200,
+      "end_url": "https://www.dwd.de/DE/wetter/warnungen_aktuell/kriterien/warnkriterien.html",
+      "bytes": 114246,
+      "sha256": "326ece7252350109eea13f80246b2d234a9e9fc114891ad2a23c4fa858a49e1a",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "DWD-Kurzlink auf aktuelle Warnkriterien; meteorologische Kriterien, keine LEAD-Schwellen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Sichtbare für den genannten Zweck einschlägige Passagen geprüft; keine Vollprüfung aller Verweise/Unterseiten",
+      "offene_nachpruefung": "Aktuellen Anwendungs-/Ereignisbezug und lokale Zuständigkeit vor Einsatz gesondert prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": []
+    },
+    {
+      "id": "BKA",
+      "url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/Pressemeldungen/pressemitteilungen_node.html",
+      "fehler": "HTTP Error 503: Service Unavailable",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Zusätzlich erprobte BKA-Mitteilungsübersicht im Direktabruf nicht verfügbar; kein unbesehenes Ersetzen.",
+      "status": "abruf_offen",
+      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
+      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": []
+    },
+    {
+      "id": "NIWISPORTAL",
+      "url": "https://niwis-online.de/",
+      "http_status": 200,
+      "bytes": 932,
+      "sha256": "35e6cd6d230f8888a94676073f4ddb5ba0b8a9d8014818050459dd48b52db0ac",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Neuer NIWIS-Einstieg unmittelbar abrufbar, liefert statisch nur die JavaScript-Anwendungshülle; keine aktuellen Messwerte geprüft.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
+      "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B05_extremhitze-duerre.md"
+      ]
+    },
+    {
+      "id": "BMLEH",
+      "url": "https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html",
+      "pruefdatum": "2026-10-21",
+      "im_basisbestand": false,
+      "titel": "Maßnahmen zur Überbrückung von Versorgungsengpässen (BMLEH)",
+      "dokumentstand": "erschienen 13.08.2025, aktualisiert 08.09.2026 (Metadaten)",
+      "zweck_und_pruefgrenze": "Nachfolger des bmel.de-Einstiegs nach Umbenennung des Ministeriums; Rahmen der staatlichen Ernährungsvorsorge, keine Lagedaten.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "In der zweiten Prüfung abgerufen; sichtbare einschlägige Passagen geprüft",
+      "offene_nachpruefung": "Konkrete Vorratsfreigaben und örtliche Bedarfsdeckung gesondert belegen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C14_lebensmittelversorgung.md"
+      ]
+    }
+  ],
+  "offene_schwerpunkte": [
+    "B09: aktuelle EU-Konsolidierung und möglicherweise neuerer Planstand; übernehmende Länderzuständigkeiten.",
+    "B02: konkrete Landes-Ausweichdienste und produktbezogene Datenprüfung.",
+    "Nicht erreichbare BGR-, BKG-, UFZ-, FLI- und BKA-Einstiege vor Verwendung nachprüfen.",
+    "JavaScript-Portale einzeln auf tatsächlich gelieferte Meldungs-/Messinhalte prüfen.",
+    "B04: BGR-Erdbebeneinstieg in beiden Prüfungen nicht abrufbar; möglicher Umzug in die Struktur „Erdbebendienst_Bund“ nicht bestätigt.",
+    "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen.",
+    "C10: BfArM-Startseite; zielgenauer wäre die Seite zu Lieferengpässen (in der Zweitprüfung bestätigt)."
+  ]
+}

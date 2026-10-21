@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-betreuung-migration",
+  "titel": "Unterbringungsbedarf mit nicht betreibbaren Plätzen (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Unterbringungsbedarf mit nicht betreibbaren Plätzen",
+    "stichworte": "B13, C16, C09, C14, C15",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-betreuung-migration.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "20 freie betriebene Plätze von 500 geplanten Plätzen unterscheiden; belegte Lücke für 100 der 120 aufzunehmenden Personen benennen.",
+      "Aufnahmen, Belegung und freie Plätze getrennt halten.",
+      "Betreuungs-/Pflege-/WASH-Bedingungen statt bloßer Bettenzahl prüfen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "500 sofort nutzbare Plätze oder 300 Asylanträge behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Migrationslage"
+    ]
+  }
+}

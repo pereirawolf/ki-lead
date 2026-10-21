@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.10.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.11.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -203,6 +203,10 @@ Danach die Querschnittsprüfungen nach A.9 (Bedarfsdeckung, besondere Bedarfe, W
 
 ### A.6 Quellenstatus
 
+**Quellenabgleich 21.10.2026.** Das Quellenregister (`quellenregister.json` in diesem Ordner) dokumentiert alle URLs aus Teil A, B und C einzeln: Fundstellen, Abrufergebnis, sichtbarer Dokumentstand, Eignung für die Prüffrage, Prüfgrenze und offene Nachprüfung, zusätzlich das Ergebnis einer zweiten, unabhängigen Abrufprüfung. Ein technischer Abruf, ein geeigneter Rechercheeinstieg, eine eingesehene Rechts- oder Fachgrundlage und ein geprüfter aktueller Lageinhalt sind verschiedene Nachweise. HTTP-Erfolg, Seitentitel, Suchindex oder eine JavaScript-Hülle sind keine Inhaltsprüfung. Zugriffssperren und Wartungsseiten werden dokumentiert, aber nicht ohne Weiteres als dauerhaft defekte Quelle bewertet; ein Link wird nur durch einen amtlich bestätigten Nachfolger ersetzt. Der Abgleich ersetzt keine aktuelle Ereignisprüfung und keine organisationsspezifische Freigabe. Der vorstehende Vermerk bleibt als Historie erhalten.
+
+**Pflegeverfahren.** Je Eintrag die mit dieser Quelle zu beantwortende Frage und, soweit vorhanden, einen zuständigen amtlichen Ausweichweg festhalten; neue Links nur mit Registereintrag aufnehmen. Bei Änderungen nur betroffene Nachweise fortschreiben; `quellen_geprueft_am` wird nicht pauschal für alle SOPs auf ein neues Datum gesetzt. Für Institutionen ohne konkreten Link bleiben das einschlägige Produkt, seine Zuständigkeit, der aktuelle Stand und gegebenenfalls der zulässige Zugang vor Verwendung zu klären. Die Auswahl von B/C-Bausteinen, Quellenrangfolge und Kodierung werden dadurch nicht geändert.
+
 Die Rechercheeinstiege wurden am 26.09.2026 in einem Überarbeitungslauf teilweise über Primärquellen geprüft (u. a. DWD, Länderübergreifendes Hochwasserportal, BGR, UFZ, RKI, WHO, ECDC, BNetzA, SMARD, UBA, BAMF, BSI, BKA). Das ist keine Vollprüfung und keine Aussage über den aktuellen Zustand eines Ereignisses. Einige Portale zeigen Live-Daten nur dynamisch; einzelne Seiten waren beim Direktabruf gesperrt. Die mit Fassung 2.0 neu aufgenommenen Rechercheeinstiege (Teil B und Teil C) stammen aus dem fachlichen Review vom 19.10.2026 und sind überwiegend über Suchindex-Auszüge belegt; sie sind vor der Erstverwendung zu prüfen. Institutionen ohne Link sind vor Erstverwendung zu prüfen. Rechtsrahmen und amtliche Stufen (z. B. Notfallplan Gas, KRITIS-Dachgesetz, NIS-2-Umsetzung, Internationale Gesundheitsvorschriften) werden fallbezogen mit aktuellem amtlichem Stand geprüft und nicht aus dieser Mappe übernommen.
 
 ### A.7 Redaktion des Lagebilds (Zusammenführung der Meldungen)
@@ -293,11 +297,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Unwetter / Sturm (Sturm, Orkan, Gewitter, Starkregen, Hagel, Tornado)"
 art_vorschlag: ["Unwetter / Sturm"]
 zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter Vorwarnlagen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung der DWD-Warnprodukte"
 bisherige_kennung: "01"
@@ -310,7 +314,11 @@ bisherige_ids: ["sop-01"]
 
 **Befassungsanlässe:** DWD-Unwetterwarnung bzw. Warnlagebericht mit absehbarer Wirkung · bestätigte Schadenshäufung oder landesrechtlich festgestellte herausgehobene Lage (A.9.4) · länderübergreifende Folgen in Verkehr/Energie · Anfrage eines Landes · Monitoring: DWD-Warnlage und Lagemeldungen der Länder.
 
+**Übergang zu B06 und Folgen.** Bei winterlichen Phänomenen B06 heranziehen; bei Wind plus Schnee/Eis beide Prüfperspektiven nutzen, aber nur einen gemeinsamen Sachverhalt führen, soweit Gegenstand und Prüfauftrag gleich bleiben. Einen Folgesachverhalt nur nach A.8.1 abtrennen. Überflutungswirkung B02, Hang-/Bauwerksversagen C02, kritische Verkehrsfolge C13 und Schutzunterbringung C16 nur bei konkretem Bezug vertiefen. Zugänglichkeit und wirksame Vorbereitungszeit für gefährdete Einrichtungen mit zuständiger Stelle prüfen; aus einer Warnung allein entstehen keine Betroffenen- oder Ausfallzahlen.
+
 ### 2. Erfassung: Prüffragen
+
+**Warn- und Beobachtungsprofil.** Produktart (Vorabinformation, Warnung, Warnlagebericht oder Mess-/Radarbeobachtung), herausgebende Stelle, Ausgabe-/Änderungszeit, Gültigkeitsbeginn/-ende, Phänomen, Warnraum und räumlich-zeitliche Unsicherheit festhalten. Eine neuere Fassung kann eine ältere ersetzen; Warnungen desselben Phänomens nicht addieren. Vorabinformation und konkrete Warnung getrennt nennen. Ein Punkt ohne gemeldeten Schaden oder außerhalb eines Warnpolygons ist kein erhobener Nullbefund. Mengen und Schwellen immer mit Dauer und Einheit übernehmen; DWD-Warnkriterien sind meteorologische Kriterien und keine LEAD-Radargrenzen. Wird ein Produkt nur im Suchindex gesehen, bleiben Zugriff und Gültigkeit ungeprüft (A.6).
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -365,11 +373,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Hochwasser / Überschwemmung (Flusshochwasser, pluviale Überflutung/Sturzflut, Sturmflut)"
 art_vorschlag: ["Hochwasser / Überschwemmung"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Fluss-, Starkregen- und Sturmflutereignissen mit Folgen für Bevölkerung, Einsatzwesen und KRITIS, einschließlich begründeter Vorwarnlagen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung länderspezifischer Meldestufen oder Vorhersageprodukte"
 bisherige_kennung: "02"
@@ -386,17 +394,21 @@ bisherige_ids: ["sop-02"]
 
 ### 2. Erfassung: Prüffragen
 
+**Datenzugang und Ausweichweg.** Ist das länderübergreifende Portal nicht nutzbar, unmittelbar die zuständige Landeshochwasserzentrale bzw. den zuständigen Küstenwarndienst heranziehen und den Zugriffsweg dokumentieren; die lokalen Dienste sind vor Verwendung organisationsspezifisch festzulegen. PEGELONLINE (WSV) liefert Rohdaten an Bundeswasserstraßen; sie ergänzen, ersetzen aber weder Landeswarnungen noch deren fachliche Einordnung. Pro Messung/Vorhersage Station, Parameter, Einheit, Höhen-/Pegelbezug, Zeitstempel/Zeitzone, Qualitätsstatus und Vorhersagelauf erhalten. Zeitbezug und Zeitzone je Produkt aus dessen Beschreibung übernehmen, nicht pauschal annehmen. Eine Wartungsseite oder ein leerer Kartenabruf ist kein Hochwasser-Nullbefund.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welche Pegel, Vorhersagen und Einzugsgebiete sind maßgeblich? | [Länderübergreifendes Hochwasserportal](https://hochwasserzentralen.de/), Landeshochwasserzentralen, PEGELONLINE (WSV); pegel- und produktabhängig | L; D1/D8 | Pegel nur mit Station, Zeit und Bezugssystem; Meldestufen immer mit Land, Pegel und Bedeutung angeben. Pegelstände, Abfluss und Wiederkehrintervalle sind ohne Bezugsbedingungen nicht bundesweit vergleichbar. |
-| R2 | Besteht eine Sturmflutlage? | BSH, Wasserstandsvorhersage und Sturmflutwarndienst | L/R | Tidebedingte Scheitelzeiten genau angeben. |
+| R2 | Besteht eine Sturmflutlage? | BSH, Wasserstandsvorhersage und Sturmflutwarndienst | L/R | Nordsee: Tide, Scheitelzeit und Abweichung vom angegebenen Bezugswasserstand getrennt angeben. Ostsee: zeitlichen Wasserstands-/Windstauverlauf und fachlich erwartetes Maximum übernehmen, keinen Tidezeitpunkt voraussetzen. NHN, Pegelnull und mittleres Hochwasser nicht vermischen; Warnung und Vorhersage mit Ausgabe und Gültigkeit dokumentieren. |
 | R3 | Welche Überflutungsflächen und Evakuierungen sind bestätigt? | Lagemeldungen (A.3); ggf. Copernicus EMS Rapid Mapping | L/R; D1/D2 | Warn-, Evakuierungs- und überflutete Fläche trennen; Evakuierte ≠ Betroffene. Bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung prüfen (A.9.2, C16). |
 | R4 | Wie ist der Zustand von Deichen, Talsperren und Rückhaltebecken? | Länder-Hochwasserberichte, Deichverbände, Talsperrenbetreiber und -aufsicht | R; D8 | Zustand nur nach zuständiger Fachbewertung darstellen. Deichverteidigung und vorsorglicher Kräfteeinsatz belegen allein keine Verschärfung. Durchnässung und Dauer der Einstaubelastung sind fachbehördlich zu bewertende Indikatoren der Deichsicherheit (`Neubewertung bei:`). |
-| R5 | Welche Anlagen und Versorgungsfunktionen sind betroffen (Strom, Wassergewinnung, Kläranlagen, Kanalnetz)? | Betreibermeldungen (A.3) | R/I; D6 | Lage im Gefahrengebiet oder vorsorgliche Abschaltung belegt keinen Ausfall; Abwasserfolgen mit C15 vertiefen. |
+| R5 | Welche Anlagen und Versorgungsfunktionen sind betroffen (Strom, Wassergewinnung, Kläranlagen, Kanalnetz)? | Betreibermeldungen (A.3) | R/I; D6 | Lage im Gefahrengebiet oder angekündigte Abschaltung belegt noch keinen Dienstleistungsausfall. Eine tatsächlich vollzogene Abschaltung kann ihn belegen: prüfen, welche Funktion seit wann in welchem Umfang fehlt und ob wirksame Ersatzversorgung sie aufrechterhält. Technischen Anlagenzustand, Dienstleistungsfolge und Vorsorgestatus getrennt darstellen; Abwasserfolgen mit C15 vertiefen. |
 | R6 | Treten wassergefährdende Stoffe aus (z. B. Heizöl)? | Umwelt- und Wasserbehörden; Lagemeldungen (A.3) | R/I; D6 | Kontamination nur nach Fachbewertung; zusätzlich B07 prüfen. |
 | R7 | Welche Hilfe ist eingesetzt, welche Rückkehrbedingungen gelten? | Lagemeldungen (A.3); THW, Bundeswehr (Amtshilfe) | M; D4/D5 | Anforderung, Zusage und Einsatz sind verschiedene Zustände; sinkender Pegel bedeutet nicht Nutzbarkeit. |
 
 ### 3. Auswertung: Prüfpunkte
+
+**Überlagerung und Nachlauf.** Bei Flusshochwasser, Starkregen/Sturzflut und Küstenhochwasser jeweils eigene Vorlaufzeiten und Wirkungsnachweise prüfen. Bemessungs-/Gefahrenkarten sind Szenarien, keine aktuelle Überflutungskarte. Grundwasseranstieg, Rückstau und lokale Entwässerungsprobleme können andere Räume und Zeitverläufe haben als der Flusspegel. Bei gemeinsamem Regen-/Rückstau-/Küstenereignis Personen und Schäden wirkungsbezogen abgleichen. Sinkendes Wasser beendet weder die Belastung von Schutzanlagen noch automatisch Kontamination, Gebäudesperren oder Versorgungsfolgen; Freigabe und Wiederherstellung getrennt nachweisen (C02, B10, C15, C16 nach Wirkung).
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
@@ -425,7 +437,9 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Landeshochwasserzentralen · BSH (Sturmflut) · Wasserstraßen- und Schifffahrtsverwaltung · Katastrophenschutzbehörden der Länder · GMLZ
 
-**Offene Punkte:** Darstellungsbeispiel für Meldestufen mehrerer Länder in einem Sachverhalt ergänzen (Regel in R1).
+**Darstellung von Meldestufen mehrerer Länder** (Regel in R1): je Pegel Land, Stufe mit Stufenzahl des Landessystems und Bedeutung, Wert mit Bezug und Zeitstand, Quelle; keine Umrechnung in eine gemeinsame Skala. Muster: „Pegel A (Land X): Meldestufe 3 von 4 nach Landessystem X (Bedeutung laut Landeshochwasserzentrale), Wasserstand … cm über Pegelnull, Stand TT.MM., hh:mm Uhr · Pegel B (Land Y): Alarmstufe 2 von 4 nach Landessystem Y …“. Unterschiedliche Stufen verschiedener Länder sind keine Rangfolge der Lage.
+
+**Offene Punkte:** Landeshochwasserzentralen und Küstenwarndienste als Ausweichwege bei Portalausfall organisationsspezifisch festlegen.
 
 <!-- Quelle: sop/teil-b/B03_waldbrand.md -->
 
@@ -583,7 +597,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -624,7 +638,7 @@ Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewer
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R5 | Welche Bodentrockenheit ist modelliert? | [UFZ-Dürremonitor](https://www.ufz.de/index.php?de=37937); täglich; [Dürreatlas BKG](https://gdz.bkg.bund.de/index.php/default/duerreatlas.html) zur Einordnung | L | Ober- und Gesamtboden trennen; Bodenfeuchte ist weder Grundwasserstand noch Trinkwassermangel. |
-| R6 | Wie entwickeln sich Grundwasser und Pegel? | [BGR-GRUVO](https://gruvo.bgr.de/); [BfG Niedrigwasser/NIWIS](https://www.bafg.de/DE/05_Wissen/01_Infoplattformen/Niedrigwasser/niedrigwasser_node.html) | R/I; D5 | Grundwasser reagiert verzögert. |
+| R6 | Wie entwickeln sich Grundwasser und Pegel? | [BGR-GRUVO](https://gruvo.bgr.de/); [NIWIS](https://niwis-online.de/) (BfG; neuer Einstieg amtlich belegt durch [BMUKN vom 15.07.2026](https://www.bundesumweltministerium.de/pressemitteilung/niedrigwasserinformationssystem-niwis); Datenzugang und Messstand vor Verwendung prüfen) | R/I; D5 | Grundwasser reagiert verzögert. |
 | R7 | Welche Einschränkungen der Wasserbereitstellung bestehen? | Betreibermeldungen (Wasserversorger), Wasser- und Gesundheitsbehörden; fallbezogen | R/I; D6 | Entnahmeverbot für Oberflächenwasser ≠ Trinkwassereinschränkung; Rohwasser und Trinkwasser trennen; einzelne Kommunen ≠ Landeslage. |
 | R8 | Welche Kühlwasser- und Transportfolgen sind belegt? | Betreibermeldungen (Kraftwerke, Binnenschifffahrt), BNetzA; WSV/BfG zu Abladetiefen | R/I; D6 | Pegel, Abladetiefe und tatsächliche Transportleistung getrennt bewerten; Leistungsreduktion ≠ Versorgungsausfall. |
 
@@ -742,12 +756,12 @@ typ: "Dach-SOP"
 lesegruppe: "Katalog-Einstiege"
 lageart: "Industrieunfall / Chemieunfall (Störfall, Gefahrstofffreisetzung, Gefahrguttransport, industrieller Großbrand)"
 art_vorschlag: ["Industrieunfall / Chemieunfall"]
-zweck: "Reproduzierbare Erfassung von Störfällen, Gefahrstofffreisetzungen, industriellen Bränden und Explosionen mit Wirkung über das Betriebsgelände hinaus."
-version: "2.0.1"
+zweck: "Reproduzierbare Erfassung von Störfällen, Gefahrstofffreisetzungen, industriellen Bränden und Explosionen mit belegter oder fachlich konkret prognostizierter Außenwirkung oder überörtlichem Rettungs-, Schutz- oder Versorgungsbedarf."
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "07"
@@ -762,16 +776,20 @@ bisherige_ids: ["sop-07"]
 
 ### 2. Erfassung: Prüffragen
 
+**Mess- und Stoffprofil.** Für urteilsprägende Angaben Stoff/Identität und Bestätigungsgrad, Medium (Luft, Wasser, Boden), Proben-/Messort, Zeitpunkt, Einheit, Messverfahren und fachlich benannte Nachweis-/Bestimmungsgrenzen erhalten. Ein Messwert unter einer Nachweisgrenze ist kein allgemeiner Nachweis der Stofffreiheit; eine unauffällige Einzelmessung entwarnt andere Orte, Medien oder Zeiträume nicht. Vergleichs-/Beurteilungswerte nur mit Herkunft, Anwendungsbereich und fachlicher Einordnung wiedergeben. Arbeitsplatzgrenzwerte aus Stoffdatenbanken nicht eigenständig in Bevölkerungsgrenzwerte oder Schutzradien umdeuten. GESTIS erläutert Stoffeigenschaften und Arbeitsschutz; TUIS unterstützt zuständige Einsatzstellen, ersetzt aber keine amtliche Schutzentscheidung.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Was ist zu Anlage, Stoff, Menge und Ursache bestätigt? | Zuständige Immissionsschutz-/Störfallbehörde; Betreibermeldungen und Lagemeldungen (A.3) | L; D3 | Frühe Stoff-, Mengen- und Ursachenangaben sind vorläufig; Betreiberangaben (B) von amtlicher Gefahrenbewertung (A) trennen. |
-| R2 | Welche Gefahr geht vom Stoff aus? | GESTIS-Stoffdatenbank (IFA/DGUV); [TUIS (VCI)](https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp) bei Transport- und Lagerunfällen mit Chemikalien | R | Stoffeigenschaft ≠ gemessene Exposition; keine eigene toxikologische Bewertung. |
+| R2 | Welche Gefahr geht vom Stoff aus? | [GESTIS-Stoffdatenbank (IFA/DGUV)](https://www.dguv.de/ifa/gestis/gestis-stoffdatenbank/index.jsp); [TUIS (VCI)](https://www.vci.de/themen/logistik-verkehr/tuis/uebersichtsseite.jsp) bei Transport- und Lagerunfällen mit Chemikalien | R | Stoffeigenschaft ≠ gemessene Exposition; keine eigene toxikologische Bewertung. |
 | R3 | Welche Messungen und Warn-/Sperrräume sind amtlich belegt? | Lagemeldungen (A.3); Messdienste (ABC-Erkundung, analytische Fachunterstützung wie die Analytische Task Force), Umweltbehörden | L/R; D1 | Stoffidentität, Freisetzung, Messwert, Ausbreitungsmodell, Exposition und beobachtete Gesundheitswirkung trennen; keine Messung ≠ keine Belastung. |
 | R4 | Welche Menschen sind exponiert, verletzt oder evakuiert? | Gesundheitsamt; Lagemeldungen (A.3) | R; D2 | Exponierte, Verletzte und Vorsorgeevakuierte getrennt (A.3 Zählregeln). |
 | R5 | Welche Umwelt- und Versorgungsfolgen bestehen? | Umwelt-/Wasserbehörden; Betreibermeldungen (A.3); bei Rhein ggf. internationale Warn- und Alarmpläne (IKSR) | R/I; D6 | Sekundärkontamination (Wasser, Boden, Lebensmittel), Löschwasserrückhaltung und Domino-Effekte eigens belegen; grenzüberschreitende Gewässerfolgen getrennt. |
 | R6 | Welche Schutz- und Entwarnungshinweise gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | M; D5 | Keine eigene toxikologische Handlungsanweisung; Produktionsfreigabe ≠ sichere Umgebung; Warnlage nach A.9.3. |
 
 ### 3. Auswertung: Prüfpunkte
+
+**Gesundheit und Fachunterstützung.** Tatsächlich erkrankte/verletzte Personen, bestätigte Exposition, vorsorglich untersuchte und evakuierte Personen mit Zeitstand und Überschneidung trennen; D2 ausschließlich nach A.2 und Zählregeln A.3. Verdachtsabklärung ist keine bestätigte Vergiftung. Bei TUIS, Messdiensten oder analytischer Fachunterstützung zwischen Beratungsanfrage, Zusage, Anfahrt, Einsatz und verwertbarem Ergebnis unterscheiden. Spezialgerät allein bestimmt weder D3 noch D4; benötigte Fähigkeit, zuständigen Anforderungsweg und reale Verfügbarkeit dokumentieren. C09 bei eigenständiger medizinischer Versorgungsfolge, B10/C14/C15 bei belegtem Wasser-, Lebensmittel- oder Entsorgungsbezug heranziehen.
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
@@ -784,6 +802,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 **Offenlassen:** D2 ohne abgestimmte Personendaten; D5 solange Stoff- und Freigabefragen keine Dauer erlauben.
 
 ### 4. Darstellung
+
+**Beendigung je Wirkung.** Brandbekämpfung abgeschlossen, Freisetzung beendet, Warnung aufgehoben, Fläche freigegeben, Kontamination beseitigt und Betrieb wiederhergestellt sind eigene Statusangaben. Für Löschwasser, Rückstände, kontaminiertes Material und länger gesperrte Verkehrs-/Versorgungsflächen zuständige Fachbewertung und nächste Prüfung nennen. Ein industrieller Großbrand ohne nachgewiesene Gefahrstofffreisetzung bleibt B07, wenn der industrielle Bezug und relevante Außenwirkung oder überörtlicher Bedarf belegt sind; ohne industriellen oder Gefahrgutbezug B17 mit C05/C02 nach Wirkung prüfen.
 
 | Meldungsbereich | Lageart-spezifische Leitfrage |
 |---|---|
@@ -798,7 +818,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Zuständige Gefahrenabwehr-, Umwelt- und Gesundheitsbehörden · Betreiber · TUIS (VCI) · UBA/ZEMA (Einordnung) · [BBK Gefahrstoff-Freisetzung](https://www.bbk.bund.de/DE/Warnung-Vorsorge/Vorsorge/Schutz-suchen/Gefahrstoff-Freisetzung/gefahrstoff-freisetzung_node.html) (Hintergrund)
 
-**Offene Punkte:** Abgrenzung industrieller Großbrände ohne Gefahrstoffbezug zu B17 an Übungsfällen prüfen.
+**Offene Punkte:** Die Abgrenzung industrieller Großbrände ohne Gefahrstofffreisetzung (Abschnitt 4, „Beendigung je Wirkung“) an Bewertungsfällen erproben (z. B. `evaluation/faelle/sop-chemie-ohne-aussenfreisetzung.json`).
 
 <!-- Quelle: sop/teil-b/B08_stromausfall-blackout.md -->
 
@@ -884,11 +904,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Gasversorgungsengpass (angespannte Versorgung, Stufen des Notfallplans Gas, regionale Einschränkungen, Anlagenstörungen)"
 art_vorschlag: ["Gasversorgungsengpass"]
 zweck: "Reproduzierbare Beobachtung der Gasversorgungslage von Frühwarnsignalen bis zu Versorgungseinschränkungen und ihrer Folgen für Wärme, Strom und Industrie."
-version: "2.1.0"
+version: "2.2.0"
 status: "Beispielfassung"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – Teilprüfung: nationale Normen und BNetzA-Lagebewertung direkt eingesehen; EU-Rahmen, Planfassung und Landesumsetzung offen (Abschnitt 5)"
 naechste_pruefung_faellig: "31.10.2026"
 pruefausloeser: "vor jeder Heizperiode (Rechtsrahmen und amtliche Stufe prüfen); Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "09"
@@ -897,15 +917,17 @@ bisherige_ids: ["sop-09"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstofffunktion vertiefend über Baustein C12, auch bei gasbedingtem Wärmeausfall; B09 bleibt für Gasversorgung, Notfallplanstufen und gasbezogene Maßnahmen maßgeblich. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel dagegen: Preisanstieg ohne physischen Mangel; lokaler Leitungsschaden mit kurzer Unterbrechung.
+**Umfasst / grenzt ab von:** Mengen- oder netzbedingte Einschränkungen der Gasversorgung auf Bundes- oder regionaler Ebene einschließlich Stufen des Notfallplans Gas; physische Leitungs-, Speicher- oder Anlagenstörungen; Fernwärme mit Gasabhängigkeit. Amtliche Gasstufe und konkreter örtlicher Ausfall sind unterschiedliche Sachverhalte. Wärme- und Kraftstofffunktion vertiefend über Baustein C12, auch bei gasbedingtem Wärmeausfall; B09 bleibt für Gasversorgung, Notfallplanstufen und gasbezogene Maßnahmen maßgeblich. Physische Angriffe zusätzlich mit B16. Beispiel dafür: Ausrufung einer Krisenstufe mit angeordneten Einschränkungen. Beispiel ohne übergreifenden Befassungsbedarf: Preisanstieg ohne belegte Schutz- oder Versorgungsfolge; kurze örtliche Unterbrechung ohne zusätzlichen Vorbereitungs-, Abstimmungs- oder Versorgungsbedarf. Auch ein örtlicher Leitungsschaden ist relevant, wenn etwa eine Pflegeeinrichtung oder eine nicht rechtzeitig ersetzbare Wärmefunktion betroffen ist. Eine nationale Mangellage ist dafür keine Voraussetzung.
 
 **Befassungsanlässe:** Ausrufung oder Änderung einer Stufe des Notfallplans Gas · BNetzA-Lagebericht mit Verschlechterung · regionale Abschaltungen · Ausfall eines gasabhängigen Wärmenetzes · Monitoring: BNetzA-Lageberichte und Speicherdaten. Die geltende Stufe wird stets aktuell bei BNetzA bzw. dem zuständigen Bundesministerium geprüft und nicht aus dieser SOP übernommen.
 
 ### 2. Erfassung: Prüffragen
 
+**Rechtlicher Prüfpfad.** Drei Ebenen getrennt belegen: (1) Netz- und marktbezogene Maßnahmen der Netzbetreiber nach §§ 16, 16a EnWG, einschließlich erforderlicher Anpassungen zur Systemsicherheit; (2) amtliche Krisenstufe nach dem Notfallplan Gas; (3) tatsächlich anwendbare hoheitliche Lastverteilung nach EnSiG/GasSV. Aus einer örtlichen Abschaltung folgt weder eine nationale Notfallstufe noch eine Verfügung der BNetzA. Bei hoheitlichen Maßnahmen ausrufende bzw. verfügende Stelle, Rechtsgrundlage, veröffentlichte Feststellung/Anwendbarkeit, Beginn, räumlichen und sachlichen Geltungsbereich sowie Befristung oder Aufhebung prüfen (§ 3 EnSiG; § 7 GasSV). § 4 EnSiG bestimmt die ausführenden Stellen (für leitungsgebundene Energie die BNetzA, im Übrigen die nach Landesrecht zuständigen Stellen); den konkreten Aufgabenbereich aus der jeweiligen Verordnung oder Verfügung belegen. Frühwarn- und Alarmstufe werden vom zuständigen Bundesministerium festgestellt und öffentlich bekannt gegeben; hoheitliche Lastverteilung setzt zusätzlich die Feststellung und Anwendbarkeitsbestimmung durch Rechtsverordnung voraus – eine Pressemitteilung ersetzt sie nicht. Aus der SOP entsteht keine eigene Zuteilungsbefugnis.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Stufe des Notfallplans Gas gilt, wie ordnet die BNetzA die Lage ein? | [BNetzA Gasversorgung](https://www.bundesnetzagentur.de/DE/Gasversorgung/start.html); Bundesministerium für Wirtschaft und Energie; je Lagebericht | L/R; D3 | Stufen sind Schwellen des Fachrechts und gelten für das Marktgebiet – nicht automatisch in die Lagebild-Beurteilung oder auf jeden Haushalt übertragen; Stufe mit Datum der Feststellung angeben. |
+| R1 | Welche Stufe des Notfallplans Gas gilt, wie ordnet die BNetzA die Lage ein? | [BNetzA Gasversorgung](https://www.bundesnetzagentur.de/DE/Gasversorgung/aktuelle_gasversorgung/start.html); Bundesministerium für Wirtschaft und Energie; je Lagebericht | L/R; D3 | Stufen sind Schwellen des Fachrechts und gelten für das Marktgebiet – nicht automatisch in die Lagebild-Beurteilung oder auf jeden Haushalt übertragen; Stufe mit Datum der Feststellung angeben. |
 | R2 | Welche Flüsse, Speicher- und Verbrauchsdaten sind auffällig? | BNetzA-Lagebericht; AGSI+ (GIE) | L; D8 | Füllstand saisonal einordnen; Füllstand ist Vorsorgeanzeige, kein Versorgungsnachweis. |
 | R3 | Welche regionalen Netze oder Verbraucher sind eingeschränkt? | Betreibermeldungen (A.3) (Fernleitungs-/Verteilnetz) | L/R; D1/D2 | Nationaler Engpass ≠ gleiche regionale Betroffenheit; Industrieabschaltung ist Steuerungsinstrument, keine Haushaltsbetroffenheit. |
 | R4 | Welche Wärme-, Strom- und Produktionsfolgen sind belegt? | Betreibermeldungen (A.3); BNetzA | R/I; D6 | Gaskraftwerke/KWK koppeln zeitverzögert ins Stromnetz; wirtschaftliche Belastung ≠ Ausfall lebenswichtiger Versorgung. |
@@ -914,10 +936,12 @@ bisherige_ids: ["sop-09"]
 
 ### 3. Auswertung: Prüfpunkte
 
+**Geschützte Kunden und lebenswichtiger Bedarf.** Die Zugehörigkeit zu § 53a EnWG anhand der tatsächlichen Kunden- und Versorgungsfunktion mit zuständiger Stelle bzw. Versorger klären; eine eigene Registrierung, Bescheinigung oder pauschale KRITIS-Zuordnung ersetzt die gesetzlichen Voraussetzungen nicht. Geschützt bedeutet keine technisch garantierte unterbrechungsfreie Versorgung. Bei Fernwärme insbesondere begünstigte Wärmeabnehmer, betroffenen Gasanteil und mögliche Brennstoffumstellung prüfen. Auch bei nicht geschützten Kunden können lebenswichtige Funktionen oder Folgewirkungen bestehen; keine abstrakte Abschaltreihenfolge erfinden. Für Schutzbedarf, Ersatzwärme und sichere Wiederinbetriebnahme sind reale Betreiber- und Behördenangaben maßgeblich.
+
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D2:** Haushalts- und Wärmeebene ist populationsrelevant, nicht die Marktebene; aus einer Stufenausrufung nicht auf D2 schließen.
-- **D3:** Zurechnung ist stufenabhängig (Marktakteure, Netzbetreiber, BNetzA als Bundeslastverteiler in der Notfallstufe, Länder) – im Text begründen.
+- **D3:** Bewertete Funktion und tatsächlich handelnde Stelle benennen: Netzbetrieb/Systemverantwortung, hoheitliche Lastverteilung oder zivile Schutz- und Versorgungsfolge. Krisenstufe, höchste beteiligte Behörde und Quellenherausgeber bestimmen D3 nicht automatisch. Die Tätigkeit der BNetzA als Bundeslastverteiler setzt die einschlägige Aktivierung und ihren Aufgabenbereich voraus; Netzbetreibermaßnahmen und Aufgaben der Länder getrennt nachweisen.
 - **D8:** D8 bildet die belegten Änderungen im zurückliegenden Beobachtungszeitraum ab. Ein belegt stabiler Verlauf ergibt D8 = 0, auch wenn die Versorgung angespannt ist. Kälteeinbruch, technische Störung und auslaufende Reserven werden als bedingte Risiken bzw. fachliche Prognose in „Risiken & Auswirkungen“ und im Kennsatz `Neubewertung bei:` beschrieben.
 
 **Beurteilung/Tendenz:** Eine Frühwarnstufe begründet für sich keine erhebliche Lage; maßgeblich sind belegte oder konkret prognostizierte Folgen für die Bevölkerung. Preisentlastung, Speicheranstieg und Verbesserung der Versorgung sind verschiedene Befunde. Stabilität ist keine Entwarnung, aber ein möglicher tatsächlicher Zustand.
@@ -925,6 +949,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 **Offenlassen:** D2 ohne direkt betroffenen Personenkreis; D4 ohne Mobilisierung; D5 ohne konkrete Engpass- oder Wiederherstellungsperspektive.
 
 ### 4. Darstellung
+
+**Versorgungsprofil und Frist.** Für kritische Funktionen getrennt erfassen: aktueller Leistungsgrad, noch tragender Puffer, fachlich belegter Ausfallzeitpunkt, real verfügbare Ersatzleistung und deren voraussichtlicher Wirksamkeitsbeginn. Speicherfüllstand, Importfluss und Kundenreichweite nicht ineinander umrechnen. Datenstand und Betrachtungszeitraum je Kennzahl angeben. `Handlungsrelevant bis:` bezeichnet den belegten spätesten Prüf- oder Abstimmungszeitpunkt; D5 bleibt Restdauer bis zum benannten Zielzustand. Gas wieder im Netz bedeutet nicht automatisch nutzbare Wärme in jeder Einrichtung (C12, C09, C16 nach Wirkung).
 
 | Meldungsbereich | Lageart-spezifische Leitfrage |
 |---|---|
@@ -939,7 +965,9 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BNetzA · Bundesministerium für Wirtschaft und Energie · Fernleitungs- und Verteilnetzbetreiber · Fernwärmebetreiber · Energieaufsicht und Katastrophenschutz der Länder
 
-**Offene Punkte:** Rechtsrahmen (Notfallplan Gas, EnSiG, EU-Gasversorgungssicherheitsverordnung) vor jeder Heizperiode amtlich prüfen und Ergebnis im Änderungsverlauf vermerken. **Überfällig:** Die Prüfung für die Heizperiode 2026/27 ist nicht dokumentiert; sie ist vor der nächsten Verwendung dieser SOP nachzuholen. Bis dahin werden Rechtsrahmen und Krisenstufen ausschließlich aus aktuellen amtlichen Quellen übernommen (A.6).
+**Prüfvermerk 21.10.2026 – Teilprüfung für die Heizperiode 2026/27:** Direkt eingesehen: §§ 16, 16a, 53a EnWG, §§ 1, 3, 4 EnSiG, §§ 1, 7 GasSV sowie die BNetzA-Lagebewertung vom 20.10.2026 (zu diesem Zeitpunkt Frühwarnstufe seit 01.07.2025; Stand der Prüfung, nicht fortgeschrieben – die geltende Stufe wird stets aktuell geprüft, R1). Die Prüffragen und Prüfpunkte dieser SOP sind daran angeglichen.
+
+**Offene Punkte:** Vor Verwendung zu prüfen: (1) EU-Rahmen: Verordnung (EU) 2017/1938 in der aktuellen konsolidierten Fassung, insbesondere Art. 2, 6 und 11; die Speicherregeln wurden 2025 geändert, die Kommission hat nach ihrem Fitness-Check vom 05.01.2026 eine Überarbeitung angekündigt – deren Stand ist nicht geprüft. (2) Notfallplan: Die BMWE-Seite (Stand 01.07.2025) verweist auf eine Publikation vom 22.05.2025, das im Review abgerufene Dokument trägt die Fassung 2023; welche Planfassung gilt, ist zu klären. (3) Länderzuständigkeiten und Meldewege der übernehmenden Stelle. Die saisonale Prüfung ist damit teilweise erledigt; Prüftermin 31.10.2026 und Prüfauslöser bleiben. Einzelnachweise im Quellenregister (`sop/quellenregister.json`).
 
 <!-- Quelle: sop/teil-b/B10_trinkwasserversorgung.md -->
 
@@ -1242,11 +1270,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sicherheitslage (Bedrohungslagen, Großveranstaltungen, hybride Bedrohungen) – Bevölkerungsschutzfolgen"
 art_vorschlag: ["Sicherheitslage"]
 zweck: "Reproduzierbare Beobachtung behördlich belegter Sicherheitslagen ausschließlich im Hinblick auf Folgen und Vorsorgefragen für den Bevölkerungsschutz."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "14"
@@ -1261,9 +1289,11 @@ bisherige_ids: ["sop-14"]
 
 ### 2. Erfassung: Prüffragen
 
+**Schnittstelle zur nichtpolizeilichen Gefahrenabwehr.** Schutz-/Sperrmaßnahme, anordnende Stelle und freigegebener Geltungsbereich getrennt von bestätigten zivilen Folgen erfassen. Bei Versorgung oder Hilfezugang: Welche Einrichtung/Dienstleistung ist tatsächlich eingeschränkt, welche Ersatzroute oder Ersatzleistung ist fachlich bestätigt, und welche zuständige Stelle muss bis wann abstimmen? Eine polizeiliche Aufhebung ist keine automatische betriebliche Wiederfreigabe. Offene Ermittlungsangaben bleiben offen; für den Prüfauftrag genügende öffentliche Aussagen verwenden, keine taktischen Details oder vermuteten Schwachstellen ergänzen. Eigenständige medizinische Versorgung C09, Transport C13 und Betreuung C16 nach Wirkung; B16 nur bei belegtem Tat-/Vorsatzbezug.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Nur veröffentlichte oder zur Weitergabe freigegebene Informationen; Aussagegrad nennen; keine eigene Gefährdungsbewertung. |
+| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
 | R2 | Welche Räume und Schutzmaßnahmen sind betroffen? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | L/M; D1 | Sperr- oder Schutzraum ≠ Schadensraum; Absagen sind Vorsorge. |
 | R3 | Welche Personenschäden oder Evakuierungen bestehen? | Lagemeldungen (A.3) | R; D2 | Nicht alle Anwesenden oder von Maßnahmen Berührten als direkt betroffen zählen. |
 | R4 | Welche Dienste, Transportwege oder Einrichtungen sind eingeschränkt? | Betreibermeldungen (A.3) | R/I; D6 | Einschränkung und Grund getrennt belegen; Gefährdungshinweis ≠ Beeinträchtigung. |
@@ -1271,6 +1301,8 @@ bisherige_ids: ["sop-14"]
 | R6 | Welche Informationen kursieren öffentlich? | Medienauswertung (VOST) gegen amtliche Quellen | D7 | Gerüchte und Desinformation kennzeichnen, nicht weitertragen (A.9.5); belegte Wirkungen auf Schutz, Versorgung oder Hilfszugang gesondert beschreiben. |
 
 ### 3. Auswertung: Prüfpunkte
+
+**Unbestätigte Informationen und Informationslücken.** Ein amtlicher Hinweis bestätigt zunächst den veröffentlichten Hinweis, nicht jedes zugrunde liegende Tatdetail. Widersprüche nach Zeitstand, Bezug und Aussagegegenstand prüfen; eine reine Medienwiederholung ist keine unabhängige Bestätigung. Fehlende öffentliche Ermittlungsdetails erhöhen D7 nicht automatisch. Maßgeblich sind konkret fehlende Informationen für die zivile Schutz-/Versorgungsfrage; eine eigene technische Zugriffssperre wird als Recherchegrenze dokumentiert. Gerüchte nur soweit für belegte Schutz- oder Versorgungswirkungen erforderlich behandeln, ohne Personenverdächtigungen oder unbelegte Zuschreibung weiterzugeben.
 
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
@@ -1297,7 +1329,9 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Lagezentren der Innenministerien · zuständige Polizeibehörden · BMI · BBK
 
-**Offene Punkte:** Umgang mit eingestuften Informationen (VS) in der Lagebild-Darstellung klären.
+**Verwendungsgrenze:** Im aktuellen Demonstrator ausschließlich fiktive oder offen zugängliche Inhalte; keine personenbezogenen oder eingestuften Inhalte (README/Spezifikation). Nichtöffentliche, auch zur behördlichen Weitergabe freigegebene Informationen sind dadurch nicht automatisch zur Verarbeitung in KI-LEAD zugelassen. Auf notwendige öffentliche, hinreichend aggregierte Aussagen begrenzen; eine bloße Entfernung des VS-Vermerks ist keine Freigabe. Ein organisationsspezifisches geschütztes Verfahren wäre gesondert zu regeln und ist nicht Gegenstand dieser Beispielfassung.
+
+**Offene Punkte:** Öffentliche Informationswege der zuständigen Landes-/Bundespolizei, Rückfragen und Nachlauf nach Aufhebung von Schutzmaßnahmen organisationsspezifisch festlegen.
 
 <!-- Quelle: sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md -->
 
@@ -2588,7 +2622,7 @@ art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2612,7 +2646,7 @@ bisherige_ids: ["baustein-n07"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welche Lebensmittel oder besonderen Ernährungsbedarfe sind in welchem Raum nicht ausreichend verfügbar? | Lagemeldungen (A.3); zuständige Landesbehörden | L; D1 | Besondere Bedarfe (z. B. Säuglingsnahrung, medizinisch erforderliche Kostformen) eigens prüfen (Absatz „Eignung und Zugang“). |
-| R2 | Handelt es sich um einzelne Produkte, Marktverschiebung oder tatsächlich ungedeckte Grundversorgung? | [BMLEH: Ernährungsvorsorge](https://www.bmel.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html) (Hintergrund); Lagemeldungen (A.3) | L/R | Marktbeobachtung ≠ Versorgungslücke. |
+| R2 | Handelt es sich um einzelne Produkte, Marktverschiebung oder tatsächlich ungedeckte Grundversorgung? | [BMLEH: Ernährungsvorsorge](https://www.bmleh.de/DE/themen/verbraucherschutz/lebensmittelsicherheit/kontrolle-und-risikomanagement/ernaehrungsvorsorge.html) (Hintergrund); Lagemeldungen (A.3) | L/R | Marktbeobachtung ≠ Versorgungslücke. |
 | R3 | Welche Bestände sind sicher nutzbar, verteilt und erreichbar? | Betreibermeldungen (A.3) (Handel, Logistik) | R/M | Bestand ≠ erreichbare Abgabe; Bestandsreichweite ist ein Risikofenster, keine D5-Dauer. |
 | R4 | Welche Rolle spielen Strom, Wasser, Kühlkette, Personal und Zahlungsmöglichkeiten? | Betreibermeldungen (A.3) | R/I; D6 | Kopplungen einzeln belegen; Stromausfall nach B08. |
 | R5 | Welche Ersatzabgabe und institutionelle Versorgung sind tatsächlich eingerichtet? | Lagemeldungen (A.3) | M; D4 | Geplant ≠ eingerichtet ≠ genutzt. |
@@ -2742,7 +2776,7 @@ art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
 anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; A.5, A.9.1, A.9.2"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2767,7 +2801,7 @@ bisherige_ids: ["baustein-n03"]
 |---|---|---|---|---|
 | R1 | Wie viele Personen sollen sich schützen, selbstständig ausweichen oder unterstützt transportiert werden, jeweils mit Stand und Überschneidung? | Lagemeldungen (A.3) | L/R; D2 | Betroffene, registrierte, transportierte und untergebrachte Personen nicht addieren (A.3 Zählregeln). |
 | R2 | Welche Hilfe ist für Menschen in Einrichtungen und zu Hause nötig und tatsächlich verfügbar? | Lagemeldungen (A.3); Einrichtungsträger (B) | R/M | Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung (A.9.2). |
-| R3 | Sind Unterkünfte betrieben, erreichbar und für den Bedarf geeignet; welche Aufnahmefähigkeit bleibt frei? | Lagemeldungen (A.3); [BBK: Betreuungsmodule](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuungsdienst/Pilotprojekt-Labor-Betreuung-5000/Ziel-Labor-Betreuung-5000/ziel-anforderungen-vorgehensweisen_node.html) (Hintergrund) | R/M; D4 | Geplante, betriebene und belegte Plätze trennen. |
+| R3 | Sind Unterkünfte betrieben, erreichbar und für den Bedarf geeignet; welche Aufnahmefähigkeit bleibt frei? | Lagemeldungen (A.3); [BBK: Betreuungsmodule](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Betreuung-Zivilschutz/Mobile-Betreuungsmodule-5000/mobile-betreuungsmodule-5000_node.html) (Hintergrund) | R/M; D4 | Geplante, betriebene und belegte Plätze trennen. |
 | R4 | Sind Wasser, Sanitärversorgung, Ernährung, medizinisch-pflegerische Leistungen und soziale Betreuung gesichert? | Lagemeldungen (A.3) | R; D6 | Bedarfsdeckung nach A.9.1. |
 | R5 | Welche offiziellen Informationen erreichen die Betroffenen, welche Barrieren bleiben? | Herausgebende Behörde; Lagemeldungen (A.3) | R/M | Warnlage nach A.9.3. |
 | R6 | Welche Rückkehrkriterien, mittelfristigen Unterbringungs- und Nachsorgebedarfe bestehen? | Zuständige Gefahrenabwehrbehörde | M; D5 | Aufhebung der Evakuierung ≠ Rückkehrfähigkeit aller Betroffenen. |

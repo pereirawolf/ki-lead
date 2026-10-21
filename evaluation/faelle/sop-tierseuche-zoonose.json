@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-tierseuche-zoonose",
+  "titel": "Tierseuche und offener humaner Expositionspfad (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Tierseuche und offener humaner Expositionspfad",
+    "stichworte": "B11, C08, C07, C14, C15",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-tierseuche-zoonose.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Veterinär-, Human-, Versorgungs- und Entsorgungspfad unterscheiden.",
+      "Tierzahlen nicht als menschliche D2 zählen; Untersuchungen nicht zu Erkrankungen umdeuten.",
+      "Im Beispielprofil Ereignisart Gesundheitliche Lage / Epidemie mit Tiergesundheitsbezug verwenden.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "20 bestätigte Humanfälle, abgeschlossene Beseitigung oder angeordneten Rückruf erfinden.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Gesundheitliche Lage / Epidemie"
+    ]
+  }
+}

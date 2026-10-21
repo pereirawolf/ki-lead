@@ -1,0 +1,192 @@
+{
+  "format": "ki-lead-sop-abdeckung/1",
+  "stand": "2026-10-21",
+  "hinweis": "Soll-Abdeckung vorbereiteter Fälle, keine Ergebnis- oder Freigabeaussage.",
+  "faelle": {
+    "sop-gas-stabil": [
+      "B09"
+    ],
+    "sop-gas-lokal-pflege": [
+      "B09",
+      "C12",
+      "C09",
+      "C16"
+    ],
+    "sop-gas-netzbetreiber": [
+      "B09"
+    ],
+    "sop-gas-geschuetzt": [
+      "B09",
+      "C12"
+    ],
+    "sop-gas-notfall-beleg": [
+      "B09"
+    ],
+    "sop-sturm-produktwechsel": [
+      "B01"
+    ],
+    "sop-sturm-winter-uebergang": [
+      "B01",
+      "B06",
+      "B08",
+      "C13"
+    ],
+    "sop-sturm-vorbereitungszeit": [
+      "B01",
+      "C16"
+    ],
+    "sop-sturm-nachlauf": [
+      "B01",
+      "B08",
+      "C11"
+    ],
+    "sop-hochwasser-portal-ausfall": [
+      "B02"
+    ],
+    "sop-hochwasser-abschaltung": [
+      "B02",
+      "B08",
+      "B10"
+    ],
+    "sop-hochwasser-ostsee": [
+      "B02"
+    ],
+    "sop-hochwasser-nachlauf-gebaeude": [
+      "B02",
+      "C02",
+      "C15",
+      "C16"
+    ],
+    "sop-chemie-ohne-aussenfreisetzung": [
+      "B07",
+      "C09"
+    ],
+    "sop-chemie-nichtnachweis": [
+      "B07",
+      "B10"
+    ],
+    "sop-chemie-tuis-untersuchung": [
+      "B07",
+      "C09"
+    ],
+    "sop-chemie-nachlauf-injektion": [
+      "B07",
+      "C14",
+      "C15"
+    ],
+    "sop-sicherheit-hinweis": [
+      "B14"
+    ],
+    "sop-sicherheit-verwendungsgrenze": [
+      "B14"
+    ],
+    "sop-sicherheit-nachlauf": [
+      "B14",
+      "C13",
+      "C16"
+    ],
+    "sop-radiologie-jod": [
+      "B17",
+      "C01"
+    ],
+    "sop-weltraumwetter-warnung": [
+      "B12",
+      "C03"
+    ],
+    "sop-vulkanasche-transport": [
+      "B17",
+      "C04",
+      "C13",
+      "C10"
+    ],
+    "sop-grossunfall-transportkette": [
+      "B17",
+      "C05",
+      "C09",
+      "C13"
+    ],
+    "sop-kampfmittel-freigabe": [
+      "B17",
+      "C06",
+      "C16"
+    ],
+    "sop-infektion-ausland": [
+      "B11",
+      "C07"
+    ],
+    "sop-tierseuche-zoonose": [
+      "B11",
+      "C08",
+      "C07",
+      "C14",
+      "C15"
+    ],
+    "sop-medizin-betreibbare-kapazitaet": [
+      "B11",
+      "C09"
+    ],
+    "sop-arzneimittel-register": [
+      "B11",
+      "C10"
+    ],
+    "sop-telekommunikation-warnkette": [
+      "B15",
+      "B12",
+      "C11"
+    ],
+    "sop-kraftstoff-abgabe": [
+      "B08",
+      "C12",
+      "C13"
+    ],
+    "sop-logistik-niedrigwasser": [
+      "B05",
+      "C13",
+      "C12"
+    ],
+    "sop-lebensmittel-versorgung": [
+      "B05",
+      "C14",
+      "C09"
+    ],
+    "sop-abwasser-trinkwasser": [
+      "B10",
+      "C15"
+    ],
+    "sop-betreuung-migration": [
+      "B13",
+      "C16",
+      "C09",
+      "C14",
+      "C15"
+    ],
+    "sop-zivile-verteidigung-funktionsbezug": [
+      "B16",
+      "C17",
+      "C12",
+      "C13"
+    ],
+    "sop-waldbrand-munitionsgebiet": [
+      "B03",
+      "C06",
+      "C09"
+    ],
+    "sop-erdbeben-ausland-hilfe": [
+      "B04",
+      "C02"
+    ],
+    "sop-winter-kalte-ohne-sturm": [
+      "B06",
+      "C12",
+      "C16"
+    ],
+    "sop-verdichtung-ilka-vergleich": [
+      "B01",
+      "B08",
+      "B12",
+      "C11",
+      "C12",
+      "C13"
+    ]
+  }
+}

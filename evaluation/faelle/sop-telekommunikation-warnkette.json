@@ -1,0 +1,40 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-telekommunikation-warnkette",
+  "titel": "Warnung ausgelöst, Übertragung und Wahrnehmung ungeklärt (FIKTIV)",
+  "stand": "2026-10-21",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Warnung ausgelöst, Übertragung und Wahrnehmung ungeklärt",
+    "stichworte": "B15, B12, C11",
+    "stichtag": "2026-10-21",
+    "meldezeitpunkt": "2026-10-21T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-telekommunikation-warnkette.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Auslösung, Übertragung und tatsächliche Wahrnehmung unterscheiden.",
+      "Mobilfunk, Notruf und BOS-Kommunikation getrennt behandeln.",
+      "Cyberverdacht und bestätigten Funktionsbefund auseinanderhalten; keine automatische B12-Doppelmeldung.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Erreichte Gesamtbevölkerung, ausgefallenen BOS-Funk oder bestätigten Cyberangriff behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-21T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "KRITIS-Ausfall"
+    ]
+  }
+}

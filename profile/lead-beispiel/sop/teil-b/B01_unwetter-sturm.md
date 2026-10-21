@@ -9,11 +9,11 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Unwetter / Sturm (Sturm, Orkan, Gewitter, Starkregen, Hagel, Tornado)"
 art_vorschlag: ["Unwetter / Sturm"]
 zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter Vorwarnlagen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
+quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung der DWD-Warnprodukte"
 bisherige_kennung: "01"
@@ -26,7 +26,11 @@ bisherige_ids: ["sop-01"]
 
 **Befassungsanlässe:** DWD-Unwetterwarnung bzw. Warnlagebericht mit absehbarer Wirkung · bestätigte Schadenshäufung oder landesrechtlich festgestellte herausgehobene Lage (A.9.4) · länderübergreifende Folgen in Verkehr/Energie · Anfrage eines Landes · Monitoring: DWD-Warnlage und Lagemeldungen der Länder.
 
+**Übergang zu B06 und Folgen.** Bei winterlichen Phänomenen B06 heranziehen; bei Wind plus Schnee/Eis beide Prüfperspektiven nutzen, aber nur einen gemeinsamen Sachverhalt führen, soweit Gegenstand und Prüfauftrag gleich bleiben. Einen Folgesachverhalt nur nach A.8.1 abtrennen. Überflutungswirkung B02, Hang-/Bauwerksversagen C02, kritische Verkehrsfolge C13 und Schutzunterbringung C16 nur bei konkretem Bezug vertiefen. Zugänglichkeit und wirksame Vorbereitungszeit für gefährdete Einrichtungen mit zuständiger Stelle prüfen; aus einer Warnung allein entstehen keine Betroffenen- oder Ausfallzahlen.
+
 ### 2. Erfassung: Prüffragen
+
+**Warn- und Beobachtungsprofil.** Produktart (Vorabinformation, Warnung, Warnlagebericht oder Mess-/Radarbeobachtung), herausgebende Stelle, Ausgabe-/Änderungszeit, Gültigkeitsbeginn/-ende, Phänomen, Warnraum und räumlich-zeitliche Unsicherheit festhalten. Eine neuere Fassung kann eine ältere ersetzen; Warnungen desselben Phänomens nicht addieren. Vorabinformation und konkrete Warnung getrennt nennen. Ein Punkt ohne gemeldeten Schaden oder außerhalb eines Warnpolygons ist kein erhobener Nullbefund. Mengen und Schwellen immer mit Dauer und Einheit übernehmen; DWD-Warnkriterien sind meteorologische Kriterien und keine LEAD-Radargrenzen. Wird ein Produkt nur im Suchindex gesehen, bleiben Zugriff und Gültigkeit ungeprüft (A.6).
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
