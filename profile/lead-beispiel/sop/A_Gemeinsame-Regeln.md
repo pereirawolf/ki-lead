@@ -6,7 +6,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.2.4 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.3.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.11.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -69,6 +69,8 @@ Für jeden übernommenen Befund: Beobachtung und fachliche Einordnung getrennt �
 
 **Bestätigungsgrad.** Für zentrale Aussagen einheitlich angeben: *bestätigt*, *vorläufige Eigenangabe*, *indirekt berichtet* oder *widersprüchlich*; fehlende Verifikation benennen. Quellenkategorie (Herkunft) und Bestätigungsgrad bleiben getrennt. Ein einzelner zuständiger Primärbeleg kann tragfähig sein; eine Mindestzahl von Links ersetzt keine Prüfung.
 
+**Teilzugriff.** Suchtreffer, Suchindex-Auszug, Vorschau und der frei sichtbare Teil hinter einer Bezahlschranke belegen nur ihren sichtbaren Inhalt, nicht die vollständig geprüfte Originalquelle; der Zugriffsstatus steht im Quelleneintrag (Kodierleitfaden Abschnitt 5). Für bewertungs- oder handlungstragende Aussagen die Originalquelle oder einen unmittelbar zugänglichen belastbaren Ersatz prüfen; gelingt das nicht, die Aussage auf den belegten Umfang beschränken und die entscheidungsrelevante Unsicherheit benennen. Eine in einem Medienbericht wiedergegebene Behörden- oder Herstellerangabe wird nicht durch einen zusätzlichen Link zur selbst geprüften Primärangabe. Eigene Zugriffslücken begründen weder einen höheren D7-Wert noch eine Verschärfung.
+
 **Zählregeln.** Personen, Haushalte, Anschlüsse, Zähler, Einsatzstellen und Einrichtungen getrennt ausweisen und nicht gleichsetzen. Bestand zum Stichtag und kumulierte Fälle seit Ereignisbeginn unterscheiden. Überlappende Gruppen oder dieselbe Person in mehreren Meldungen nicht addieren; bei unbekannter Überschneidung keine scheinexakte Gesamtsumme bilden. Hochrechnungen (z. B. Haushalte → Personen) nur mit begründetem Faktor, passendem Gebiet und Datum; Bandbreite und Unsicherheit dokumentieren (A.2 „Keine unbelegte Präzision“). Einwohnerzahlen sind ein Plausibilitätsbezug, keine allgemeine Obergrenze: Pendler, Gäste und Veranstaltungen können relevant sein. Gemeinde bzw. Kreis mit eindeutigem Raumbezug benennen, bei Bedarf mit amtlichem Schlüssel; Prognose-, Warn-, Wirkungs- und Versorgungsraum getrennt halten.
 
 **Quellen & Referenzen.** Alle Belege einer Meldung stehen zentral im Feld „Quellen & Referenzen“ (`quellen`), nicht in „Lage & Ereignis“. Je Quelle ein Eintrag, nummeriert in der Reihenfolge der ersten Nennung, mit genau einer Kategorie. Die Buchstaben kennzeichnen Herkunft bzw. Rolle der Quelle für die verwendete Aussage; ihre Reihenfolge ist die Quellenpriorität **A > B > W > M > P**:
@@ -121,6 +123,8 @@ Format der Quelleneinträge und der Verweise im Text: Kodierleitfaden Abschnitt 
 | `Abschluss im Lagebild:` | letzte Nennung eines Sachverhalts (A.8.2) | „Abschluss im Lagebild: Ereignis beendet seit 05.10.2026; offen bleiben: Trinkwasserfreigabe in zwei Ortsteilen; Nachsorge bei: Gesundheitsamt Y“ |
 
 Format des Kennsatzes `Handlungsrelevant bis:`: `TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle`, je Sachverhalt eine Zeile, mehrere unabhängige Fristen in derselben Zeile mit der frühesten zuerst; ohne belegte Uhrzeit entfällt `HH:MM`. Redaktionscheck und Management Summary werten Datum, Uhrzeit und Bedingung aus.
+
+**Fristgrundlage.** Eine qualitative Dringlichkeitsangabe wie „unverzüglich“ begründet für sich kein Kalenderdatum und keine Uhrzeit; ohne belegten Termin steht sie im Maßnahmen- und Empfehlungstext, und der Kennsatz wird nicht künstlich gefüllt. Eine eigene Prüf- oder Wiedervorlagefrist der meldenden Stelle wird als deren Vorschlag mit eigener Grundlage gekennzeichnet und nicht der Warnquelle zugeschrieben. Akuter Handlungsbedarf wartet nicht auf die nächste Lagebild-Ausgabe (A.1 Nr. 1, A.7.3).
 
 ### A.5 Abschlusscheck (für jede Meldung)
 

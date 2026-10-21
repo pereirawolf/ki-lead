@@ -67,7 +67,7 @@ describe("Beispielprofil LEAD", () => {
     const c11 = bausteine.find((s) => s.id === "c11")!;
     expect(c11.bisherigeKennung).toBe("N02");
     expect(c11.alias).toEqual(["baustein-n02"]);
-    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.0.1");
+    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.1.0");
     // N13 → C17, N03 → C16 (Register v2.1)
     expect(bausteine.find((s) => s.id === "c17")!.bisherigeKennung).toBe("N13");
     expect(bausteine.find((s) => s.id === "c16")!.bisherigeKennung).toBe("N03");

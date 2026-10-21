@@ -10,12 +10,42 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.2.4 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.2.4 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.3.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.3.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.3.0] – 21.10.2026
+
+Fachliche Überarbeitung von B15 und C11 sowie zwei Präzisierungen in Teil A nach dem konsolidierten Vorschlag „SOP-LEAD_B15-C11_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_B15_Vorschlag_konsolidiert_2026-10-21“ (B15-01 bis B15-18) und „2026-10-21_KI-LEAD_SOP_Cyber-Vorsorgelage_PR-Vorschlag“ (S01–S11, Prüfszenarien K01–K10). Anlass ist eine Beispielmeldung vom 21.10.2026 (realer Anlass, fiktive Stelle): Nach einer Warnung zu kritischen PHP-Schwachstellen wurden Webangebote einer Landesverwaltung vorsorglich abgeschaltet; eine Kompromittierung oder der Ausfall kritischer Dienstleistungen war nicht belegt. Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **B15 Cyberangriff / IT-Sicherheitsvorfall 2.1.0** (bisher 2.0.1):
+  - Abschnitt 1: Neben Vorfällen sind begründete Vorsorgelagen nach A.1 Nr. 1 ausdrücklich erfasst. Schutzabschaltungen werden mit ihren Funktionsfolgen auch ohne Angriffsnachweis erfasst; die Bezeichnung nennt die Vorsorgelage. Eine Warnung allein eröffnet keine Befassung. Verweis auf C11 bei berührten Behörden- oder Polizeiauftritten, Notruf, Leitstellen oder Warnwegen; B12 erst bei belegtem Ausfall einer kritischen Dienstleistung. Neuer Befassungsanlass „vorsorgliche Abschaltung“; das Monitoring nennt das beobachtete Signal (A.10.1).
+  - Abschnitt 2: Statusprofil vor der Detailrecherche: Warnung, konkrete Verwundbarkeit, Angriffshinweise, Schutzmaßnahme, Leistungsfolge. R1 mit Hinweisseite der betroffenen Stelle als Eigenbeleg und Schutzabschaltung als Maßnahme; R2 mit Hersteller-Sicherheitshinweis (P, begründete Abweichung nach A.3). Neu am Tabellenende: R7 Evidenz zur Ausnutzung, R8 gemeinsame Abhängigkeit, R9 Abhilfe und Wiederanlauf. R1–R6 sind nicht umnummeriert.
+  - Abschnitt 3: Prüfpunkte zu D1 (Wirkungsraum einer konkret bezeichneten Leistung), D3 (Betrieb und Abschaltungsentscheidung getrennt, „D3 Vorsorge“), D5 (Wiederfreischaltung ≠ vertrauenswürdiger Wiederanlauf), D6 (konkrete funktionale Kopplung, keine Vorgabestufe) und D7 (Ausnutzungsangaben erst nach Abgleich von Gegenstand, Zeit und Raum). CVSS und BSI-Warnstufe werden nicht in Beurteilung, Radarwerte oder Tendenz umgerechnet; ungeklärte Betroffenheit trägt allein weder eine höhere noch eine niedrigere Stufe. Neuer Absatz „Zeitfenster“.
+  - Abschnitt 4: Darstellung nach Statusprofil, Ersatzwegen (C11) und Parallelfolgen (A.7.1). Neu ist der Absatz „Übergreifender Erkenntniswert“; Patch-Kontrollen werden dem Katastrophenschutzressort nicht ohne Beleg zugeschrieben.
+  - Abschnitt 5: Ansprechstellen ergänzt; offene Punkte mit Kalibrierfall, Rückblick nach A.8.3 und der Klärung der Herstellerangaben.
+  - Kopf: Fassung, Stand, Quellenprüfung und Prüfauslöser fortgeschrieben.
+- **C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit 1.1.0** (bisher 1.0.1, weiterhin Inhaltsgerüst):
+  - Absatz „Öffentliche Informationsversorgung“: Ein ausgefallener Behörden- oder Polizei-Webauftritt belegt keine Störung von Notruf, Leitstellen, BOS-Funk oder Warnung.
+  - Neuer Befassungsanlass; `lageart`, `art_hinweis` und „Zuordnung im Schema“ abgestimmt. Eine Verwendung als Prüfhilfe zu B15 erweitert die Ereignisart nicht um „KRITIS-Ausfall“.
+  - Funktions- und Ersatzwegeprofil vor den Prüffragen; Darstellung je Funktion; offene Punkte zu erforderlichen Informationsangeboten, Ersatzkanälen und Meldewegen.
+- **Teil A:**
+  - A.3: neuer Absatz „Teilzugriff“. Suchindex-Auszüge und Vorschauen belegen nur ihren sichtbaren Inhalt; eigene Zugriffslücken begründen weder D7 noch Verschärfung. Die Regel stimmt mit Arbeitsanweisung Erfassung, Abschnitt Quellen, und Kodierleitfaden Abschnitt 5 überein.
+  - A.4: neuer Absatz „Fristgrundlage“. „Unverzüglich“ ergibt kein Datum im Kennsatz `Handlungsrelevant bis:`; eigene Fristen werden als Vorschlag der meldenden Stelle gekennzeichnet. Das Kennsatzformat ist unverändert.
+  - Gültigkeitsstand: Sammelmappe 3.3.0.
+
+### Nicht übernommen
+
+- Feste oder regelhafte Radarwerte und Beurteilungen für den Anlassfall („in der Regel peripher“, „in der Regel erheblich“) sowie die Gleichsetzung „landesweites Angebot = landesweiter Wirkungsraum“, weil sie die Kodierregeln vorwegnehmen würden.
+- Ein Kalenderdatum für „unverzüglich“ im Kennsatz; ersetzt durch A.4 „Fristgrundlage“.
+- Neue Rechercheeinstiege ausländischer Behörden und feste Kritikalitätsschwellen als Monitoring-Signal.
+- Eine Klarstellung der Quellenkategorie für Herstellerangaben in Teil A und im Kodierleitfaden; sie bleibt offener Punkt in B15, weil sie weitere SOPs betrifft und nach A.10.2 gemeinsam fortzuschreiben ist.
+- Aufnahme der Beispielmeldung und der Prüfszenarien K01–K10 in `beispiele/` bzw. `evaluation/faelle/`; nur nach gesonderter Entscheidung und Budget (evaluation/README.md).
 
 ## [3.2.4] – 21.10.2026
 

@@ -68,7 +68,7 @@ describe("Steckbrief und Lesetext", () => {
     const { profil: p } = await profil("lead-beispiel");
     const c11 = fachSops(p!).find((s) => s.nummer === "C11")!;
     const sb = Object.fromEntries(sopSteckbrief(c11).map((a) => [a.label, a.wert]));
-    expect(sb.Version).toBe("1.0.1");
+    expect(sb.Version).toBe("1.1.0");
     expect(sb.Bearbeitungsstand).toMatch(/^Inhaltsgerüst/);
     expect(sb.Ereignisart).toBe("KRITIS-Ausfall, Cyberangriff / IT-Sicherheitsvorfall");
     expect(sb["Frühere Kennung"]).toBe("N02");
