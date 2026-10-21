@@ -10,12 +10,46 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.9.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.9.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.10.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.10.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.10.0] – 21.10.2026
+
+Prüfung der Bezüge zwischen und innerhalb von Teil B und Teil C ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_Querverweise-B-C_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_Querverweise-B-C_Vorschlag_2026-10-21“ (E1–E12, Verweisgraph aller 34 Dateien) und „2026-10-21_KI-LEAD_SOP_B_C_Querverweise_PR-Vorschlag“ (Q01–Q17, 18 Kontrastfälle). Zweite Stelle nach der Versionierungsregel (geänderte fachliche Inhalte). Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert; die Änderungen an B04 (D4) und B16 (D6) gleichen lokale Abweichungen an die bestehenden Regeln in A.2 und im Kodierleitfaden an und sind kein Fall von A.10.2. Alle Bausteine behalten ihren Status.
+
+### Geändert
+
+- **Teil A:**
+  - A.1 Nr. 2: neuer Absatz „Bedeutung eines Verweises“ (Ursache, Folge oder Funktion, Vertiefung oder Querschnitt, Abgrenzung; erwartete Folge rechtfertigt Prüfung, nicht Kodierung; keine transitive Mitwahl; Rückverweise zulässig). Neuer Absatz „Funktionsdach B12“: kein zusätzlicher B12-Sachverhalt allein wegen des KRITIS-Bezugs, wenn B08–B11 einschlägig sind.
+  - Routentabelle: neue Zeilen B10, B13 und B14; B01, B02 und B06 → C02 (Hangrutschung, Unterspülung, Schnee- oder Eislast); B03 → C09; B05 → C12 und C14; B06 → C16 und B09 bei Gasursache; B07 → C05; B09 → C12 für die Wärmefunktion; B15 → B12 nach dem Funktionsdach; B16 → C17 bei konkretem zivilen Wirkungsbezug. Hinweis, warum B12 und B17 keine eigene Zeile haben.
+  - A.1 Nr. 7: Status je Dateikopf statt der unzutreffenden Aussage, alle Bausteine seien Inhaltsgerüste (C01 und C12 sind Beispielfassungen); Beispielfassung ist nicht organisationsspezifisch freigegeben; gemeinsame Kodier-, Quellen- und Referenzraumregeln gehen auch freigegebenen Bausteinen vor. `art_zuordnung` nennt typische Katalogwerte, bei Querschnittsbausteinen nur die zusätzlich in Betracht kommenden, und ist keine Ausschlussliste; `art_zuordnung` und `anschluss` begründen keine automatische Auswahl.
+  - A.8.1: Absatz „Bei kombinierten SOPs“ (Gegenstand, D3-Funktion und D5-Ziel stabil halten oder Änderung nennen; Ende der Ursache ≠ Ende der Folgen; Abtrennung einer Folge nur mit eigenem Prüfauftrag; Personen und Ressourcen einer Wirkungskette einmal führen).
+  - Gültigkeitsstand: Sammelmappe 3.10.0.
+- **B03 Waldbrand 2.1.0**, **B05 Extremhitze / Dürre 2.1.0**, **B06 Wintersturm / Schnee / Eis 2.1.0:** Abschnitt 1 mit „Vertiefung nach Wirkung“ (C02, C09, C12, C13, C14, C16 jeweils bedingt). B03: Munitionsbelastung bleibt Teil der Brandlage, C06 nur bei eigenem Fund- oder Räumungsvorgang. B06: Wärme- und Kraftstoffversorgung über C12, bei Gasursache zusätzlich B09.
+- **B04 Erdbeben 2.1.0:** D4 wie A.2 und C07: deutsche Hilfe bei einem Auslandsbeben ergibt keinen D4-Wert, keine eigene D4-Auslegung je Gegenstand; R6 ohne D4-Bezug; offener Punkt als Kontrastbeispiel gefasst.
+- **B08 Stromausfall / Blackout 2.0.2**, **B10 Trinkwasserversorgung 2.0.2:** alte Nummernlisten „(06, 15, 16)“ bzw. „(05, 02, 08, 07, 15, 16)“ durch Kennungen ersetzt; Ursache nur bei belegtem Zusammenhang.
+- **B09 Gasversorgungsengpass 2.1.0:** C12 vertieft die Wärme- und Kraftstofffunktion auch bei gasbedingtem Wärmeausfall; B09 bleibt für Gasversorgung, Notfallplanstufen und gasbezogene Maßnahmen maßgeblich.
+- **B12 KRITIS-Ausfall 2.1.0:** medizinisch-pflegerische Versorgung und Arzneimittel vorrangig über B11 mit C09/C10; B12 nur bei weiterer eigenständig betroffener kritischer Dienstleistung oder sektorübergreifender Koordinationsfrage.
+- **B13 Migrationslage 2.0.2:** C16 kann auch hier Unterbringung und Betreuung vertiefen (Angleichung an C16).
+- **B16 Sabotage / Anschlag / Terrorismus 2.1.0:** D6 nach belegten Kopplungen (A.2); eingetretene Folgeausfälle sind Beleg, keine zusätzliche Voraussetzung.
+- **B17 Sonstiges 2.1.0:** Liste der Bausteine als bedingt gefasst; C17 als Querschnitt herausgenommen; Abgrenzung für nichtindustriellen Gebäudebrand, Einsturz oder Explosion (B17 mit C02 bzw. C05, nicht automatisch B03 oder B07).
+- **C02 Massenbewegungen, Bodenversagen und Gebäudeeinsturz 1.2.0:** B07 nur bei Explosion in Anlagen oder bei Gefahrguttransporten, B16 nur bei behördlich benanntem Vorsatzbezug, sonst B17 (wie C05); `art_hinweis` und Zuordnung im Schema: Ereignisart der belegten Ursache, sonst „Sonstiges“.
+- **C04 Vulkanasche 1.1.1:** `anschluss` nennt B04 nur bei gesondert belegtem Erdbeben mit eigenem Deutschlandbezug.
+- **C12 Kraftstoff und Wärme 1.1.1:** `lageart` an Abschnitt 1 angeglichen (Wärmeversorgung unabhängig von der Ursache; Gasversorgung selbst B09). Weiterhin Beispielfassung.
+- **C16 Evakuierung, Schutzunterbringung und Betreuung 1.1.0:** `art_hinweis`, `anschluss` und Zuordnung im Schema auf die Querschnittsrolle gebracht (Ursachenart des Anlasses ohne Beschränkung auf die Kopfwerte); neuer Absatz „Arbeitsteilung“ mit C09, B10, C13, C14, C15; Offenlassen von D2 und D5 nach Kodierleitfaden.
+- **C17 Zivile Verteidigung – zivile Schutz- und Versorgungsfolgen 1.1.0:** `art_hinweis`, `anschluss` und Zuordnung im Schema als Querschnitt unter den passenden Ursachen- und Folgenarten; „Sonstiges“ nur ohne passendes Dach; C17 allein begründet weder Sachverhalt noch Sicherheits- oder Sabotageart.
+
+### Nicht übernommen
+
+- Q17 (C08-Anschlüsse und Katalogauslegung): mit 3.9.0 bereits umgesetzt.
+- Q16 (bedingter Beziehungsblock für S1 aus den Kopfangaben): keine Codeänderung; S1 erhält Abschnitt 1 aller SOPs bereits, deshalb sind die Bedingungen dort gepflegt. Übernommen ist nur der vorgeschlagene strukturelle Test (vorhandene Kennungen, keine alten Nummernlisten, Katalogwerte, Statusübersicht); fehlende Gegenverweise werden bewusst nicht geprüft.
+- Erweiterung der `art_zuordnung` von C16 und C17 um weitere Katalogwerte; stattdessen Semantik in A.1 Nr. 2 und Nr. 7 geklärt.
+- Satz aus Q08, B01 und B06 nicht pauschal gemeinsam zu wählen: ohne Abgleich mit B01 nicht eindeutig; der Übergang Sturm/Wintersturm bleibt einer späteren Prüfung vorbehalten.
+- Aufnahme der Kontrastfälle P01–P18 unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.9.0] – 21.10.2026
 

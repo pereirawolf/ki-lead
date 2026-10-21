@@ -35,7 +35,7 @@ describe("Beispielprofil LEAD", () => {
     expect(b08.art_vorschlag).toEqual(["Stromausfall / Blackout"]);
     expect(b08.alias).toEqual(["sop-08"]);
     expect(b08.bisherigeKennung).toBe("08");
-    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.0.1");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.0.2");
   });
 
   it("gliedert jede SOP und jeden Baustein nach demselben Schema", async () => {

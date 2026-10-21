@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -22,7 +22,9 @@ bisherige_ids: ["sop-06"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Starkschneefall, Eisregen, Glatteis und winterliche Sturmlagen mit Verkehrszusammenbrüchen, Leitungsausfällen oder Versorgungsengpässen; außerdem länger andauernde extreme Kälte mit Schutz-, Wärme- oder Versorgungsbedarf, auch ohne Sturm oder Schneefall. Stromausfälle zusätzlich mit B08 (Referenzfall Münsterland 2005); Wärmeversorgung unabhängig vom Gas mit Baustein C12. Beispiel dafür: Eislast mit Mastbrüchen und gesperrten Autobahnen; mehrtägige Kälte mit ausgefallener Wärmeversorgung. Beispiel dagegen: übliche Winterwitterung ohne konkrete Folgen.
+**Umfasst / grenzt ab von:** Starkschneefall, Eisregen, Glatteis und winterliche Sturmlagen mit Verkehrszusammenbrüchen, Leitungsausfällen oder Versorgungsengpässen; außerdem länger andauernde extreme Kälte mit Schutz-, Wärme- oder Versorgungsbedarf, auch ohne Sturm oder Schneefall. Stromausfälle zusätzlich mit B08 (Referenzfall Münsterland 2005); Wärme- und Kraftstoffversorgung mit Baustein C12; bei konkreter Gasversorgungsursache zusätzlich B09. Beispiel dafür: Eislast mit Mastbrüchen und gesperrten Autobahnen; mehrtägige Kälte mit ausgefallener Wärmeversorgung. Beispiel dagegen: übliche Winterwitterung ohne konkrete Folgen.
+
+**Vertiefung nach Wirkung:** Bauwerksversagen durch Schnee- oder Eislast C02; kritische Verkehrsfunktion C13; Schutzunterbringung und Betreuung, etwa bei Wärmeausfall oder gestrandeten Reisenden, C16; eigenständige medizinisch-pflegerische Versorgungsfolge C09. Ein Baustein fügt keine Ereignisart hinzu (A.1 Nr. 2).
 
 **Befassungsanlässe:** DWD-Unwetterwarnung Schnee/Glatteis bzw. Warnung vor strengem Frost · großflächige Verkehrs- oder Stromausfälle · Lagemeldung eines Landes · Monitoring: DWD-Warnlage und Lagemeldungen der Länder.
 

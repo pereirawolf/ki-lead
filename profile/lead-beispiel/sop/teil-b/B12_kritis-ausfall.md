@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "KRITIS-Ausfall (sektorübergreifend oder in Sektoren ohne eigene SOP)"
 art_vorschlag: ["KRITIS-Ausfall"]
 zweck: "Reproduzierbare Erfassung von Ausfällen kritischer Versorgungsfunktionen in Sektoren ohne eigene SOP (z. B. Telekommunikation, Verkehr, Finanzwesen, Ernährung, Abwasser) und sektorübergreifender Kaskaden; Dach für die Bausteine C11 und C12 bis C15."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-12"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Ausfall oder wesentliche Einschränkung kritischer Dienstleistungen einschließlich mehrerer Sektoren. Für Strom, Gas und Trinkwasser gelten B08–B10; Ursachen zusätzlich über B15/B16. Kritische Dienstleistungen werden funktional geprüft, auch wenn der formale regulatorische Status eines Betreibers ungeklärt ist; der Rechtsstatus wird nicht selbst festgestellt, und eine gesetzliche Betreiberregistrierung ist kein Aufnahmekriterium. Vertiefung über Bausteine: Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit C11 · Kraftstoff und Wärme C12 · Verkehr und kritische Logistik C13 · Lebensmittel C14 · Abwasser, Sanitärhygiene und Entsorgung C15; Zahlungsverkehr bis zur Ausarbeitung eines Bausteins in dieser SOP. Beispiel dafür: großflächiger Ausfall von Mobilfunk und Notruf; bundesweite Störung des Zahlungsverkehrs. Beispiel dagegen: kurze Störung eines Dienstes mit Ausweichmöglichkeit.
+**Umfasst / grenzt ab von:** Ausfall oder wesentliche Einschränkung kritischer Dienstleistungen einschließlich mehrerer Sektoren. Für Strom, Gas und Trinkwasser gelten vorrangig B08–B10, für medizinisch-pflegerische Versorgung und Arzneimittel B11 mit C09/C10; B12 kommt hinzu, wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht, nicht allein wegen des KRITIS-Bezugs (A.1 Nr. 2, Funktionsdach). Ursachen zusätzlich über B15/B16. Kritische Dienstleistungen werden funktional geprüft, auch wenn der formale regulatorische Status eines Betreibers ungeklärt ist; der Rechtsstatus wird nicht selbst festgestellt, und eine gesetzliche Betreiberregistrierung ist kein Aufnahmekriterium. Vertiefung über Bausteine: Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit C11 · Kraftstoff und Wärme C12 · Verkehr und kritische Logistik C13 · Lebensmittel C14 · Abwasser, Sanitärhygiene und Entsorgung C15; Zahlungsverkehr bis zur Ausarbeitung eines Bausteins in dieser SOP. Beispiel dafür: großflächiger Ausfall von Mobilfunk und Notruf; bundesweite Störung des Zahlungsverkehrs. Beispiel dagegen: kurze Störung eines Dienstes mit Ausweichmöglichkeit.
 
 **Befassungsanlässe:** Lagemeldung eines Landes · Betreiber- oder Aufsichtsmitteilung · Ausfall von Notrufnummern · Monitoring: Störungsmeldungen der Betreiber und VOST-Auswertung.
 

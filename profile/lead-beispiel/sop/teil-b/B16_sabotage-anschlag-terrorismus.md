@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -44,7 +44,7 @@ bisherige_ids: ["sop-16"]
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D3:** Ermittlungszuständigkeit (Polizei, ggf. GBA/BKA) und Folgenbewältigung (Land/Kommune, Betreiber) getrennt; bewertete Funktion begründen, nicht pauschal „Bund“.
-- **D6:** Nach belegten Folgeausfällen kodieren, nicht nach Symbolwert des Ziels oder denkbarer Angriffswirkung.
+- **D6:** Nach belegten Kopplungen der konkreten Lage (A.2); eingetretene Folgeausfälle sind ein Beleg, aber keine zusätzliche Voraussetzung. Symbolwert des Ziels, Sektorzugehörigkeit oder denkbare Angriffswirkung legen keine Stufe fest; mögliche Folgeschäden sind Szenario.
 - **D8:** Misst die Dynamik der eingetretenen Lage; Nachahmungs- oder Folgerisiken gehören in den Risikotext.
 
 **Beurteilung/Tendenz:** Beurteilung nach Folgen für Bevölkerung und Versorgung; Ermittlungserfolg ersetzt keine Bewertung fortdauernder Versorgungsfolgen. Keine Spekulation über Motive oder Folgetaten; sachliche Sprache.

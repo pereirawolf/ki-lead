@@ -78,7 +78,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
   it("leere Menge beigefügter SOPs lässt nichts durch (SOP-CODE-01)", async () => {
     const { profil: p } = await profil("lead-beispiel");
     expect(sopKennungenAbgleichen(["SOP-LEAD C11 x"], p!, new Set())).toEqual([]);
-    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.0.1"]);
+    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.0.2"]);
   });
 
   it("Nachweis = beigefügte SOPs, unabhängig vom Antwortformat; Abweichungen als Hinweis (SOP-CODE-02)", async () => {
@@ -119,5 +119,38 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
     expect(spalte.wert(e({ verfahren: "KI-Entwurf", sop: [] }))).toBe("keine");
     expect(spalte.wert(e({ verfahren: "KI-Entwurf" }))).toBe("nicht dokumentiert");
     expect(sopNachweis({ verfahren: "manuell" })).toBe("");
+  });
+});
+
+// Strukturelle Integrität der Verweise (SOP-LEAD A.1 Nr. 2 und 7): Existenz und gültige Werte, keine fachliche Vollständigkeit.
+// Fehlende Gegenverweise und Rückverweise sind zulässig und werden nicht geprüft.
+describe("SOP-Querverweise in Teil B und C", () => {
+  const sopOrdner = repoPfad("profile/lead-beispiel/sop");
+  const dateien = register.map((r) => ({ kennung: r.kennung, text: readFileSync(repoPfad("profile/lead-beispiel", r.datei), "utf-8") }));
+  const kennungen = new Set(register.map((r) => r.kennung));
+  const katalog: string[] = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/meldung.schema.json"), "utf-8"))
+    .$defs.sachverhalt.properties.art.items.enum;
+
+  it.each(dateien)("$kennung verweist nur auf vorhandene Kennungen", ({ text }) => {
+    const genannt = [...text.matchAll(/\b([BC](?:0[1-9]|[1-9]\d))\b/g)].map((m) => m[1]);
+    expect(genannt.filter((k) => !kennungen.has(k))).toEqual([]);
+  });
+
+  it.each(dateien)("$kennung nennt keine bloßen alten SOP-Nummernlisten", ({ text }) => {
+    const ohneKopf = text.replace(/```yaml[\s\S]*?```/, "");
+    expect(ohneKopf).not.toMatch(/\((?:0[1-9]|1[0-7])(?:, ?(?:0[1-9]|1[0-7]))+\)/);
+  });
+
+  it.each(dateien.filter((d) => d.kennung.startsWith("C")))("$kennung: art_zuordnung enthält nur Katalogwerte", ({ text }) => {
+    const zeile = text.match(/^art_zuordnung: (\[.*\])$/m)![1];
+    for (const art of JSON.parse(zeile)) expect(katalog).toContain(art);
+  });
+
+  it("die Statusangaben der Übersicht passen zu den Dateiköpfen", () => {
+    const beispiel = dateien.filter((d) => d.kennung.startsWith("C") && /^status: "Beispielfassung/m.test(d.text)).map((d) => d.kennung);
+    const absatz = readme.split("\n").find((z) => z.startsWith("Jeder Baustein trägt seinen Status im Dateikopf"))!;
+    expect(absatz, "Statusabsatz der Übersicht").toBeTruthy();
+    for (const k of beispiel) expect(absatz).toContain(k);
+    expect(readFileSync(`${sopOrdner}/A_Gemeinsame-Regeln.md`, "utf-8")).not.toMatch(/in dieser Beispielfassung alle\)/);
   });
 });

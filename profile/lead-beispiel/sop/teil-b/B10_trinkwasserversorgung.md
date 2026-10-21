@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Trinkwasserversorgung (Unterbrechung, Mengeneinschränkung, Qualitätsproblem)"
 art_vorschlag: ["Trinkwasserversorgung"]
 zweck: "Reproduzierbare Erfassung von Unterbrechungen, Mengeneinschränkungen und Qualitätsproblemen der öffentlichen Trinkwasserversorgung (KRITIS-Sektor Wasser, Branche öffentliche Wasserversorgung) einschließlich der tatsächlich wirksamen Ersatzversorgung."
-version: "2.0.1"
+version: "2.0.2"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-10"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Versorgungsunterbrechungen, Abkochgebote, Nutzungsverbote und Verbrauchsbeschränkungen bei Gewinnung, Aufbereitung und Verteilung. Ursache zusätzlich über die jeweilige SOP (05, 02, 08, 07, 15, 16). Abwasser-, Sanitär- und Entsorgungsfolgen: Baustein C15. Beispiel dafür: Abkochgebot für mehrere Gemeinden nach Verkeimung. Beispiel dagegen: Rohrbruch mit kurzer Unterbrechung weniger Haushalte; niedriger Flusspegel ohne Trinkwasserfolgen.
+**Umfasst / grenzt ab von:** Versorgungsunterbrechungen, Abkochgebote, Nutzungsverbote und Verbrauchsbeschränkungen bei Gewinnung, Aufbereitung und Verteilung. Ursache bei belegtem Zusammenhang zusätzlich über die passende SOP (B05, B02, B08, B07, B15 oder B16); aus dem Trinkwasserproblem allein wird keine Ursachenart abgeleitet. Abwasser-, Sanitär- und Entsorgungsfolgen: Baustein C15. Beispiel dafür: Abkochgebot für mehrere Gemeinden nach Verkeimung. Beispiel dagegen: Rohrbruch mit kurzer Unterbrechung weniger Haushalte; niedriger Flusspegel ohne Trinkwasserfolgen.
 
 **Befassungsanlässe:** Abkochgebot oder Nutzungsverbot · Versorgungsunterbrechung · Lagemeldung eines Landes · Monitoring: Warnungen und Allgemeinverfügungen zur Trinkwasserversorgung.
 

@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Migrationslage (Aufnahme-, Unterbringungs- und Versorgungslage Schutzsuchender)"
 art_vorschlag: ["Migrationslage"]
 zweck: "Reproduzierbare Beobachtung von Schutz-, Unterbringungs- und Versorgungsbedarfen im Zusammenhang mit Fluchtbewegungen, soweit der Bevölkerungsschutz berührt ist; Maßstab ist die Bedarfsdeckung."
-version: "2.0.1"
+version: "2.0.2"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-13"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Lagen, in denen Zugänge Schutzsuchender Unterstützungsbedarf für Unterbringung, Versorgung oder Gesundheitsversorgung erzeugen, der die Regelstrukturen erreicht oder übersteigt. Gegenstand ist die Bedarfsdeckung, nicht die Bewertung von Personengruppen; Ordnungs- und Grenzfragen sind nicht Gegenstand. Evakuierung, Schutzunterbringung und Betreuung aus anderen Anlässen: Baustein C16. Beispiel dafür: dokumentierte Kapazitätslücke mit Notunterkünften unter Beteiligung von Hilfsorganisationen und THW. Beispiel dagegen: steigende Antragszahlen innerhalb der regulären Kapazitäten.
+**Umfasst / grenzt ab von:** Lagen, in denen Zugänge Schutzsuchender Unterstützungsbedarf für Unterbringung, Versorgung oder Gesundheitsversorgung erzeugen, der die Regelstrukturen erreicht oder übersteigt. Gegenstand ist die Bedarfsdeckung, nicht die Bewertung von Personengruppen; Ordnungs- und Grenzfragen sind nicht Gegenstand. Evakuierung, Schutzunterbringung und Betreuung aus anderen Anlässen: Baustein C16; er kann auch hier Unterbringung und Betreuung vertiefen. Beispiel dafür: dokumentierte Kapazitätslücke mit Notunterkünften unter Beteiligung von Hilfsorganisationen und THW. Beispiel dagegen: steigende Antragszahlen innerhalb der regulären Kapazitäten.
 
 **Befassungsanlässe:** Anfrage eines Landes zu Unterbringungsunterstützung · Einrichtung von Notunterkünften · internationale Fluchtbewegung mit absehbarem Deutschlandbezug · Monitoring: Aufnahme- und Belegungsmeldungen der Länder. Änderungen des vorübergehenden Schutzes werden nur bei belegbarem Bezug zu erwarteten Bedarfen aufgenommen und nicht automatisch als Verschärfung gewertet.
 

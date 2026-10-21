@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Waldbrand (Wald-, Vegetations-, Moor- und einschlägige Flächenbrände)"
 art_vorschlag: ["Waldbrand"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Wald- und Vegetationsbränden mit überörtlichem Kräftebedarf oder Gefährdung von Siedlungen und Infrastruktur."
-version: "2.0.1"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.03.2027"
@@ -23,6 +23,8 @@ bisherige_ids: ["sop-03"]
 ### 1. Anwendungsbereich und Befassungsanlässe
 
 **Umfasst / grenzt ab von:** Wald-, Vegetations-, Moor- und einschlägige Flächenbrände (z. B. Heide-, Feld- oder Böschungsbrände) mit überörtlichem Kräftebedarf, Evakuierungen, Rauchbelastung oder Gefährdung von Infrastruktur; die Ereignisart des Katalogs bleibt „Waldbrand“. Erhöhte Brandgefahr ist Frühwarnkontext. Trockenheit ohne Brand: B05. Beispiel dafür: Großbrand auf munitionsbelasteter Fläche mit Luftunterstützung. Beispiel dagegen: örtlich rasch gelöschter Flächenbrand; Gebäudebrand ist kein Waldbrand.
+
+**Vertiefung nach Wirkung:** Evakuierung, Schutzunterbringung und Betreuung C16; eigenständige medizinisch-pflegerische Versorgungsfolge C09; kritische Verkehrsfunktion C13; kritische Kraftstoff- oder Ersatzversorgung C12. Munitionsbelastung der Fläche bleibt Teil der Brandlage; C06 nur bei eigenständigem, fachbehördlich benanntem Fund- oder Räumungsvorgang. Ein Baustein fügt keine Ereignisart hinzu (A.1 Nr. 2).
 
 **Befassungsanlässe:** hoher Waldbrand- bzw. Graslandfeuerindex des DWD · Lagemeldung eines Landes · Anforderung von Luftunterstützung · Monitoring: Satellitendetektion (EFFIS) und VOST-Auswertung.
 
