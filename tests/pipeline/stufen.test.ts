@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { s1Ausgabelimit, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import { pruefeRoh } from "../../src/kern/validierung";
 import type { Material } from "../../src/pipeline/material";
@@ -200,7 +200,7 @@ describe("Gescheiterter Abruf der Auftrags-URL", () => {
 // S1-Ausgabegrenze (0.4.25): Läufe 20261021-133605-75wi und 20261021-133728-cvza brachen bei 16 000 Token ab.
 // Kennungen T01–T14 nach dem konsolidierten Vorschlag vom 21.10.2026.
 describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
-  /** Kontext mit abweichendem S1-Modell bzw. abweichender Grenze für S2 */
+  /** Kontext mit abweichendem S1-Modell bzw. abweichender Höchstzahl Ausgabetoken */
   async function kontext(antworten: Parameters<typeof skriptAnbieter>[0], s1Modell = "", maxTokensErfassung = STANDARD.maxTokensErfassung) {
     const att = skriptAnbieter(antworten);
     const { k, protokolle } = await pipelineKontext(att);
@@ -215,29 +215,28 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
       kostenUsd: 0.07,
     });
 
-  it("T01/T02: Haiku mit Aufwand high erhält beim ersten und einzigen S1-Aufruf 128 000 Token, unabhängig von der S2-Grenze", async () => {
-    for (const s2 of [128000, 32000]) {
-      const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], "", s2);
-      await stufe1(k);
-      expect(att.anfragen).toHaveLength(1);
-      expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual(["claude-haiku-5-5", "high", 128000]);
-      expect(k.lauf.stufen[0].anfrage?.maxTokens).toBe(128000);
-    }
+  it("T01: Standard: Haiku mit Aufwand high erhält beim ersten und einzigen S1-Aufruf die Vorgabe 128 000", async () => {
+    const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    await stufe1(k);
+    expect(att.anfragen).toHaveLength(1);
+    expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual(["claude-haiku-5-5", "high", 128000]);
+    expect(k.lauf.stufen[0].anfrage?.maxTokens).toBe(128000);
   });
 
-  it.each([
-    ["claude-sonnet-5-5", 128000],
-    ["claude-opus-5-5", 128000],
-    ["claude-fable-5-1", 128000],
-    ["gpt-6-luna", 16000],
-    ["claude-haiku-4-5", 16000],
-    ["claude-haiku-5-5-extra", 16000],
-  ])("T03: %s erhält in S1 %i Token (nur genau benannte Kennungen)", async (modell, soll) => {
-    expect(s1Ausgabelimit(modell)).toBe(soll);
-    const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], modell);
-    await stufe1(k);
-    expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual([modell, "high", soll]);
+  it("T02: S1 folgt der Einstellung „Höchstzahl Ausgabetoken (S1, S2, S3)“; die Meldung nennt den gesetzten Wert", async () => {
+    const { att, k } = await kontext([abgeschnitten("", [{ type: "thinking" }])], "", 32000);
+    await expect(stufe1(k)).rejects.toThrow(/^S1 hat die Ausgabegrenze von 32\.000 Token erreicht/);
+    expect(att.anfragen[0].maxTokens).toBe(32000);
   });
+
+  it.each(["claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-luna"])(
+    "T03: auch mit %s gilt die eingestellte Grenze, Aufwand unverändert",
+    async (modell) => {
+      const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], modell, 64000);
+      await stufe1(k);
+      expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual([modell, "high", 64000]);
+    },
+  );
 
   it("T04/T14: max_tokens nur mit Denkblock: Budgetfehler mit Grenze, Modell und Aufwand; kein Vorschlag, kein zweiter Aufruf; Protokoll vollständig", async () => {
     const { att, k, protokolle } = await kontext([abgeschnitten("", [{ type: "thinking" }])]);

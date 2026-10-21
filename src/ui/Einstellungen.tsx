@@ -6,7 +6,7 @@ import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
-import { APP_MODELLE, AUFWAND_STUFEN, MODELL_GRUPPEN, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
+import { APP_MODELLE, AUFWAND_STUFEN, MODELL_GRUPPEN, STANDARD, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
 
 interface Props {
   profil: Profil | null;
@@ -235,15 +235,19 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
             <span className="hinweis">Zweistelliger Ländercode, z. B. DE, AT, CH. Leer: keine Lokalisierung.</span>
           </label>
           <label className="feld">
-            <span className="feld-label">Höchstzahl Ausgabetoken (S2, S3)</span>
+            <span className="feld-label">Höchstzahl Ausgabetoken (S1, S2, S3)</span>
             <input
               type="number"
               min={8000}
               max={128000}
               step={1000}
               value={e.maxTokensErfassung}
-              onChange={(ev) => setze({ maxTokensErfassung: Math.min(128000, Math.max(8000, Number(ev.target.value) || 64000)) })}
+              onChange={(ev) => setze({ maxTokensErfassung: Math.min(128000, Math.max(8000, Number(ev.target.value) || STANDARD.maxTokensErfassung)) })}
             />
+            <span className="hinweis">
+              Gilt für jeden KI-Aufruf der App (S1, S2, S3 und Management Summary). Nachdenken und Antwort zählen gemeinsam; berechnet wird nur die tatsächliche
+              Ausgabe. Ein kleinerer Wert kann Läufe vor dem Ergebnis abbrechen.
+            </span>
           </label>
         </div>
         {openAiGenutzt && (
