@@ -466,8 +466,8 @@
           {
             "id": "empfehlung",
             "label": "Prüf- und Abstimmungsbedarf:",
-            "vorlage": "Prüf- und Abstimmungsbedarf: (1) ⟦zuständige Stelle⟧ sollte bis ⟦belegter Termin oder offen⟧ ⟦Prüfung oder Entscheidung⟧, weil ⟦Anlass und belegte Lücke⟧.",
-            "hinweis": "Empfehlung, keine Weisung und keine bereits vollzogene Maßnahme. Weitere Punkte als (2), (3) … in demselben Absatz. Ein Termin wird nicht automatisch ergänzt."
+            "vorlage": "Prüf- und Abstimmungsbedarf: (1) ⟦zuständige Stelle⟧ sollte bis ⟦belegter Termin, Bedingung oder nächster Prüfanlass⟧ ⟦Prüfung oder Entscheidung⟧, weil ⟦Anlass und belegte Lücke⟧.",
+            "hinweis": "Empfehlung, keine Weisung und keine bereits vollzogene Maßnahme. Weitere Punkte als (2), (3) … in demselben Absatz. Ein Termin wird nicht automatisch ergänzt; ohne belegten Termin eine Bedingung oder den nächsten Prüfanlass nennen, nicht „offen“ (SOP-LEAD A.4)."
           },
           {
             "id": "abstimmungen",

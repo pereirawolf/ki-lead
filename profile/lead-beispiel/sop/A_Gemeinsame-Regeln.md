@@ -6,9 +6,9 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.3.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.4.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
-| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.11.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.0.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.1.1 | 19.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
@@ -105,7 +105,7 @@ Format der Quelleneinträge und der Verweise im Text: Kodierleitfaden Abschnitt 
 - `sofort.bewertung_text` beginnt mit der **Kernaussage**: Was bedeutet der Sachverhalt für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich daraus für zuständige Stellen? Danach erläutert er Beurteilung, Tendenz (mit Bezugsraum und Zeitraum), wesentliche Achsendivergenzen, offene Achsen und Indikatoren für eine Neubewertung. Belegverweise stehen in den Analysetexten.
 - `analyse.massnahmen_empfehlungen` trennt bestehende Maßnahmen und Empfehlungen:
   - **Maßnahmen** werden als geplant, angefordert, angeordnet, begonnen, umgesetzt, wirksam (Wirkung belegt) oder beendet gekennzeichnet, jeweils mit verantwortlicher Stelle und Stand. Eine angekündigte oder umgesetzte Maßnahme ist nicht schon wirksam. Eigene Maßnahmen der meldenden Stelle werden nur im tatsächlichen Auftrag berichtet (Rollenprofil A.1 Nr. 4); die übergreifende Redaktion meldet keine eigenen Einsatzmaßnahmen.
-  - **Empfehlungen** benennen, wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht) bis wann was prüfen oder entscheiden sollte, aus welchem Anlass und aufgrund welcher belegten Lücke. Bestehende Maßnahmen werden nicht als eigene Empfehlung ausgegeben.
+  - **Empfehlungen** benennen, wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht) bis wann was prüfen oder entscheiden sollte, aus welchem Anlass und aufgrund welcher belegten Lücke. Ohne belegten Termin steht eine Bedingung oder der nächste Prüfanlass (z. B. nächste Lagebild-Ausgabe), nicht „offen“. Bestehende Maßnahmen werden nicht als eigene Empfehlung ausgegeben.
 - `sofort.beurteilung` (`geringfügig` / `erheblich` / `kritisch`) und `sofort.tendenz` (`Entspannung` / `Stabilisierung` / `Verschärfung`) unabhängig vom höchsten Radarwert begründen. Nachgewiesene Teilverbesserungen können eine begründete Teilentspannung tragen; fortbestehende Einschränkungen bleiben ausdrücklich sichtbar. „Keine Angabe“ = leerer String `""`.
 - Offene Radarwerte = `null` (nicht `0`, nicht Zeichenkette, kein „U“). Keine neuen JSON-Felder ohne Schemaänderung.
 - Schema: Schemakennung `LEAD-Meldung-v1`; Struktur und Werte werden technisch gegen `meldung.schema.json` geprüft (beim Prüfen, beim Import und in der Lagebild-Zusammenfassung). Eine erfolgreiche Schemaprüfung bestätigt nur Struktur und zulässige Werte, nicht den Inhalt (A.5).

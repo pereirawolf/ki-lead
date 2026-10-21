@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.3.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.4.0 vom 21.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -34,7 +34,7 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 | B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.0.1 | 08 |
 | B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.0.1 | 09 |
 | B10 | Trinkwasserversorgung | [`teil-b/B10_trinkwasserversorgung.md`](teil-b/B10_trinkwasserversorgung.md) | 2.0.1 | 10 |
-| B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.0.1 | 11 |
+| B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.1.0 | 11 |
 | B12 | KRITIS-Ausfall | [`teil-b/B12_kritis-ausfall.md`](teil-b/B12_kritis-ausfall.md) | 2.0.1 | 12 |
 | B13 | Migrationslage | [`teil-b/B13_migrationslage.md`](teil-b/B13_migrationslage.md) | 2.0.1 | 13 |
 | B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.0.1 | 14 |
@@ -61,7 +61,7 @@ Alle Bausteine haben den Status „Inhaltsgerüst“: Sie ergänzen die Dach-SOP
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C07 | Infektionslagen – Auslandsausbruch und lokale Häufung | Themenbaustein | [`teil-c/C07_infektionslagen.md`](teil-c/C07_infektionslagen.md) | 1.0.1 | N11 |
+| C07 | Infektionslagen – Auslandsausbruch und lokale Häufung | Themenbaustein | [`teil-c/C07_infektionslagen.md`](teil-c/C07_infektionslagen.md) | 1.1.0 | N11 |
 | C08 | Tierseuchen und zoonotische Expositionslagen | Themenbaustein | [`teil-c/C08_tierseuchen-zoonotische-expositionslagen.md`](teil-c/C08_tierseuchen-zoonotische-expositionslagen.md) | 1.0.1 | N10 |
 | C09 | Nichtinfektiöse medizinische Versorgungslage und MANV-Folgen | Themenbaustein | [`teil-c/C09_medizinische-versorgung-manv.md`](teil-c/C09_medizinische-versorgung-manv.md) | 1.0.1 | N04 |
 | C10 | Arzneimittel und kritisches medizinisches Material | Themenbaustein | [`teil-c/C10_arzneimittel-medizinisches-material.md`](teil-c/C10_arzneimittel-medizinisches-material.md) | 1.0.1 | N12 |

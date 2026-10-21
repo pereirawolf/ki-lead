@@ -10,12 +10,42 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.3.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.3.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.4.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.4.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.4.0] – 21.10.2026
+
+Fachliche Überarbeitung von B11 und C07, dazu eine Präzisierung in Teil A, nach dem konsolidierten Vorschlag „SOP-LEAD_B11-C07_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_B11-C07_Vorschlag_2026-10-21“ (B11-01 bis UI-01, A-01) und „2026-10-21_KI-LEAD_SOP_Infektionslagen_Ebola_PR-Vorschlag“ (E01–E11, Prüfszenarien A01–A12). Anlass ist eine Beispielmeldung vom 21.10.2026 zum Ebola-Ausbruch (Bundibugyo-Virus) in Afrika mit erstem Fall in Nigeria (Lauf `20261021-201106-r7ay`). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **B11 Gesundheitliche Lage / Epidemie 2.1.0** (bisher 2.0.1):
+  - Abschnitt 3: Die Ausnahme, nach der die Tendenz bei Auslandsgeschehen den internationalen Frühwarntreiber abbilden konnte, ist gestrichen. Sie widersprach Kodierleitfaden Abschnitt 4; die KI hatte den Konflikt im Lauf selbst gemeldet. Die Tendenz bleibt auf den Referenzraum bezogen. Der Frühwarntreiber steht im Text und in `Neubewertung bei:` und trägt eine Tendenz nur bei belegter Änderung der Lage in Deutschland mit. D8 bei Auslandsgeschehen ohne deutsche Beobachtungsbasis offen.
+  - Abschnitt 2: neue Absätze „Abgleich epidemiologischer Angaben“ (Fallkategorie, Zählweise, Datenstand, neueste Ausgabe) und „Erregerspezifische Fachangaben“ (keine Übertragung von verwandten Erregern; fehlende zugelassene Therapie ist kein Engpass nach C10). R5 nennt die nationale IGV-Anlaufstelle (GMLZ im BBK, § 3 IGV-DG).
+  - Abschnitt 1: Befassungsanlass „Aufnahme oder Verdachtsabklärung bei hochpathogenem Erreger, auch nach medizinischer Evakuierung“; Monitoring mit dem wöchentlichen Bedrohungsbericht des ECDC.
+  - Abschnitt 5: IGV-Anlaufstelle als Ansprechstelle; offene Punkte mit Kalibrierfall.
+- **C07 Infektionslagen 1.1.0** (bisher 1.0.1, weiterhin Inhaltsgerüst):
+  - Abschnitt 1: „Deutschlandbezug und Sachverhaltsschnitt“. Der Bezug wird nach Zeitstatus gekennzeichnet. Ein neuer Staat begründet keinen eigenen Sachverhalt; getrennt geführt wird nur ein deutscher Bezugsgegenstand mit eigenem Prüfauftrag, eigenen Maßnahmen oder eigenen Fortschreibungsbedingungen (A.1 Nr. 6). Neuer Befassungsanlass bei hochpathogenem Erreger.
+  - Abschnitt 2:
+    - R2 mit Pfadarten nach Deutschland und dem IGV-Meldeweg. Nicht veröffentlichte Kontaktdaten belegen weder Pfad noch Nullbefund.
+    - Neue Absätze „Fall- und Transferstatus“ (Transfer ≠ weiterer Fall; Zählbasis vor Widerspruch) und „Reise-, Expositions- und Übertragungskette“ (Einreiseland ≠ Infektionsort; Staatsangehörigkeit kein Ersatzindikator).
+    - R6 präzisiert, dazu die Absätze „Versorgungs- und Transferpfad“ und „Fristen und Neubewertung“ (kein Enddatum ohne belegten Fristbeginn; Neubewertungsindikatoren mit der deutschen Entscheidung verknüpft).
+  - Abschnitt 3: Prüfpunkte zu D1/D2, D3 (gleiche Funktion, gleicher Wert über Sachverhalte), D4, D6 und D7 (keine feste Stufe; nicht veröffentlichte Daten und eigene Recherchegrenzen zählen nicht). Die Tendenz richtet sich nach B11.
+  - Abschnitt 4: Ausland, deutsche Vorsorge und deutsche Wirkung getrennt darstellen; Einzelfallangaben auf das für Pfad oder Maßnahme Nötige beschränken.
+  - Abschnitt 5: Ansprechstellen; offene Punkte zu Meldewegen und Kalibrierfall.
+- **Teil A, A.4:** Empfehlungen ohne belegten Termin nennen eine Bedingung oder den nächsten Prüfanlass, nicht „offen“. Gültigkeitsstand: Sammelmappe 3.4.0, Darstellungsdatei Profilversion 1.13.0.
+
+### Nicht übernommen
+
+- Eine feste Pflicht, die Tendenz bei Auslandslagen leer zu lassen, und feste D7-Stufen für Auslandsausbrüche.
+- Ein zwingender Zusammenschluss aller Teilgeschehen zu einem Sachverhalt. Getrennte Sachverhalte bleiben nach deutschem Bezugsgegenstand zulässig.
+- Eine starre Beobachtungsdauer für alle Infektionslagen, konkrete Therapie- oder Produktstände sowie Links zu neuen Rechercheeinstiegen. Der ECDC-Bedrohungsbericht ist vor Erstverwendung zu prüfen (A.6).
+- Änderungen an Arbeitsanweisungen oder an der S1-Auswahl; sie stehen als offener Punkt in B11.
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget (evaluation/README.md).
 
 ## [3.3.0] – 21.10.2026
 

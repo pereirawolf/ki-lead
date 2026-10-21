@@ -8,6 +8,14 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.13.0 – 21.10.2026
+
+Grundlage: konsolidierter Vorschlag „SOP-LEAD_B11-C07_Vorschlag_konsolidiert_2026-10-21“ (Kalibrierfall Ebola-Ausbruch, Beispielmeldung vom 21.10.2026).
+
+- **SOP-Sammelmappe 3.4.0:** B11 2.1.0 (Tendenz bei Auslandsgeschehen an Kodierleitfaden Abschnitt 4 angeglichen, Abgleich epidemiologischer Angaben, erregerspezifische Fachangaben, IGV-Anlaufstelle), C07 1.1.0 (Deutschlandbezug und Sachverhaltsschnitt, Pfadarten, Fall- und Transferstatus, Reise- und Expositionskette, Fristen, Prüfpunkte D1–D7) und Teil A, A.4 (kein „offen“ als Zeitangabe in Empfehlungen). Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Darstellungsdatei, Eingabehilfe „Prüf- und Abstimmungsbedarf:“:** offene Stelle „⟦belegter Termin, Bedingung oder nächster Prüfanlass⟧“ statt „⟦belegter Termin oder offen⟧“, Hinweis ergänzt. Die alte Vorlage geht mit der Darstellungsdatei in die KI-Anfrage und führte in zwei Läufen zu „bis offen“. Satzanfang und übrige Vorlagen sind unverändert.
+- Schema, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 1.12.0 – 21.10.2026
 
 Grundlage: konsolidierter Vorschlag „SOP-LEAD_B15-C11_Vorschlag_konsolidiert_2026-10-21“ (Kalibrierfall Cyber-Vorsorgelage vom 21.10.2026).
