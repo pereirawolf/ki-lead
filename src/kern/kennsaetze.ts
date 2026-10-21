@@ -1,5 +1,6 @@
 // Kennsätze (SOP-LEAD A.4) und unverbindliche Ausfüllhinweise (A.4/A.5/A.8).
 
+import { feldhilfeFelder, offenePlatzhalter } from "./feldhilfen";
 import { holeWert } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
 import { feldUi } from "./ui";
@@ -150,6 +151,15 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     }
     if (kennsaetzeAlle(bt, ks.handlungsrelevant).some((hb) => !DATUM_RE.test(hb))) {
       out.push({ stufe: "hinweis", text: `${name}: „${ks.handlungsrelevant}“ bitte mit Datum im Format TT.MM.JJJJ angeben.` });
+    }
+    // Offene Stellen aus Vorlagen der LEAD-Eingabehilfen (⟦…⟧) sind noch auszufüllen oder zu streichen
+    for (const feld of new Set([...(r.sv_textfelder || []), ...feldhilfeFelder(ui).keys()])) {
+      const offen = offenePlatzhalter(String(holeWert(sv, feld) || ""));
+      if (offen.length)
+        out.push({
+          stufe: "hinweis",
+          text: `${name}, ${feldUi(ui, `${r.sachverhalte}[].${feld}`).label || feld}: offene Vorlagenstelle${offen.length === 1 ? "" : "n"} ${offen.slice(0, 4).join(", ")}${offen.length > 4 ? " …" : ""} – ausfüllen oder streichen.`,
+        });
     }
     if (r.tendenz_entspannung && tendenz === r.tendenz_entspannung && ks.abschluss && kennsatz(bt, ks.abschluss) === null) {
       out.push({

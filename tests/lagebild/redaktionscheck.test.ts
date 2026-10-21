@@ -294,3 +294,44 @@ describe("F07: Redaktionscheck wertet jede Frist eines Sachverhalts aus", () => 
     ]);
   });
 });
+
+// LEAD-Eingabehilfen (Umsetzungsbeschreibung vom 21.10.2026, A11): Vorlagen mit offenen Stellen ⟦…⟧
+describe("Redaktionscheck: Kennsätze aus Vorlagen mit offenen Stellen", () => {
+  it("Abschluss, Änderung, Abweichung und Neubewertung mit ⟦…⟧ zählen nicht als Vermerk", () => {
+    const red = redaktionscheck(
+      [
+        eintrag(
+          "a",
+          "Kernaussage: Z.\nNeubewertung bei: ⟦Indikator⟧\nÄnderung zur Vormeldung: ⟦Änderung⟧\nAbweichende Bewertung: ⟦Stelle A⟧\nAbschluss im Lagebild: ⟦Ende⟧; offen bleiben: ⟦Punkte⟧; Nachsorge bei: ⟦Stelle⟧",
+          "kritisch",
+          "Entspannung",
+        ),
+      ],
+      p,
+      "2026-10-23T15:00",
+      berlin(20, 12),
+    );
+    expect(red.abschluss).toEqual([]);
+    expect(red.aenderung).toEqual([]);
+    expect(red.vermerkt).toEqual([]);
+    expect(red.marker.map((m) => [m.kennsatz, m.art])).toEqual(
+      expect.arrayContaining([
+        ["Abschluss im Lagebild:", "offen"],
+        ["Änderung zur Vormeldung:", "offen"],
+        ["Abweichende Bewertung:", "offen"],
+      ]),
+    );
+    expect(red.kern[0]?.fehlt.join(" ")).toMatch(/„Neubewertung bei:“ mit offenen Vorlagenstellen/);
+  });
+
+  it("Frist mit Datum und offenen Angaben: „Angaben unvollständig“", () => {
+    const red = redaktionscheck(
+      [eintrag("a", "Kernaussage: Z.\nHandlungsrelevant bis: 22.10.2026 12:00 – ⟦Aufgabe, Adressat⟧ – ⟦Bedingung, falls zutreffend⟧; Grundlage: [Q1]")],
+      p,
+      "2026-10-23T15:00",
+      berlin(20, 12),
+    );
+    expect(red.zeit).toHaveLength(1);
+    expect(red.zeit[0].hinweis).toMatch(/offene Vorlagenstellen ⟦…⟧ – Angaben unvollständig/);
+  });
+});

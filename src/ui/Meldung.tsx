@@ -1,6 +1,6 @@
 // Meldungsmaske: Schritte aus der Darstellungsdatei, Formular aus dem Schema.
 
-import { useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { unterSchema } from "../kern/schema";
 import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
 import { migriere } from "../kern/migration";
@@ -10,26 +10,47 @@ import type { Meldung as MeldungTyp, Profil } from "../kern/typen";
 import { Feld } from "./Feld";
 import { Pruefen } from "./Pruefen";
 import type { KiZugang } from "./Kurzfassung";
+import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilfeKontext";
+import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
 
 interface Props {
   profil: Profil;
   meldung: MeldungTyp;
   setMeldung: (m: MeldungTyp) => void;
   neu: () => void;
-  /** Wird aufgerufen, wenn eine geöffnete Datei die Meldung in der Maske ersetzt. */
-  ersetzt?: () => void;
+  /**
+   * Ersetzt die Meldung in der Maske durch eine geöffnete Datei (neue Dokumentnummer, Management Summary leeren).
+   * Ohne diese Angabe gilt `setMeldung`.
+   */
+  ersetzen?: (m: MeldungTyp) => void;
   zwischenstand?: string;
   ki?: KiZugang;
+  /** Dokumentnummer der App (neue Meldung, geöffnete Datei, Übernahme, Profilwechsel); verwirft den Verlauf der Eingabehilfen */
+  dokument?: number;
 }
 
-export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzt, zwischenstand, ki }: Props) {
+export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwischenstand, ki, dokument = 0 }: Props) {
   const ui = profil.ui;
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
   const dateiRef = useRef<HTMLInputElement>(null);
   const aktuell = ui.schritte[schritt];
 
-  const setze = (segs: Segment[], wert: unknown) => setMeldung(mitWert(meldung, segs, wert));
+  // Änderungen immer auf dem neuesten Stand, auch wenn zwei Änderungen vor dem nächsten Zeichnen folgen
+  const stand = useRef(meldung);
+  stand.current = meldung;
+  const setze = (segs: Segment[], wert: unknown) => {
+    const m = mitWert(stand.current, segs, wert);
+    stand.current = m;
+    setMeldung(m);
+  };
+  const dok = `${profil.hash}:${dokument}`;
+  useLayoutEffect(() => eingabehilfeVerlauf.dokument(dok), [dok]);
+  const eingabehilfe = useMemo<EingabehilfeKontextWert>(
+    () => ({ dok, aktuell: () => stand.current, setze }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dok],
+  );
 
   const oeffnen = async (datei: File) => {
     let roh: unknown;
@@ -62,8 +83,9 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzt, zwis
         return;
     }
     const quellen = quellenHinweise(d, ui).filter((b) => b.stufe === "warnung");
-    setMeldung(d);
-    ersetzt?.();
+    stand.current = d;
+    if (ersetzen) ersetzen(d);
+    else setMeldung(d);
     setSchritt(0);
     const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
     if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${ui.schritte[ui.schritte.length - 1].titel}“.`);
@@ -73,103 +95,111 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzt, zwis
   };
 
   const anzahlSv = (holeWert(meldung, ui.rollen.sachverhalte) || []).length;
+  // Hinzufügen oder Entfernen von Sachverhalten verschiebt die Pfade: Verlauf der Eingabehilfen dieser Liste verwerfen
+  const vorherSv = useRef(anzahlSv);
+  useLayoutEffect(() => {
+    if (vorherSv.current !== anzahlSv) eingabehilfeVerlauf.verwerfen(`${teilePfad(ui.rollen.sachverhalte).join(".")}.`);
+    vorherSv.current = anzahlSv;
+  }, [anzahlSv, ui.rollen.sachverhalte]);
 
   return (
-    <div className="meldung">
-      <div className="werkzeugleiste">
-        <div className="werkzeugleiste-text">
-          <h1>{ui.titel}</h1>
-          {ui.untertitel && <p>{ui.untertitel}</p>}
-        </div>
-        <div className="werkzeugleiste-knoepfe">
-          <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>
-            Meldung öffnen
-          </button>
-          <button
-            type="button"
-            className="knopf leise"
-            onClick={() => {
-              if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
-                neu();
-                setSchritt(0);
-                setMeldungen(null);
-              }
-            }}
-          >
-            Neue Meldung
-          </button>
-          <input
-            ref={dateiRef}
-            type="file"
-            accept="application/json,.json"
-            hidden
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) oeffnen(f);
-              e.target.value = "";
-            }}
-          />
-        </div>
-      </div>
-      {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
-      {meldungen && (
-        <div className={`kasten kasten-${meldungen.art}`} role="status">
-          <ul>
-            {meldungen.zeilen.map((z, i) => (
-              <li key={i}>{z}</li>
-            ))}
-          </ul>
-          <button type="button" className="knopf leise klein" onClick={() => setMeldungen(null)}>
-            Ausblenden
-          </button>
-        </div>
-      )}
-
-      <div className="arbeitsbereich">
-        <nav className="schritte" aria-label="Schritte">
-          <ol>
-            {ui.schritte.map((s, i) => (
-              <li key={s.id}>
-                <button
-                  type="button"
-                  className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
-                  aria-current={i === schritt ? "step" : undefined}
-                  onClick={() => setSchritt(i)}
-                >
-                  <span className="schritt-nr">{i + 1}</span>
-                  <span className="schritt-titel">{s.titel}</span>
-                  {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
-                </button>
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        <section className="schritt-inhalt" aria-labelledby="schritt-titel">
-          <h2 id="schritt-titel">{aktuell.titel}</h2>
-          {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
-          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" />}
-          {aktuell.felder.map((feld) => {
-            const segs = teilePfad(feld);
-            return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
-          })}
-          {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" ki={ki} />}
-          <div className="schritt-nav">
-            {schritt > 0 ? (
-              <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
-                Zurück: {ui.schritte[schritt - 1].titel}
-              </button>
-            ) : (
-              <span />
-            )}
-            {schritt < ui.schritte.length - 1 && (
-              <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
-                Weiter: {ui.schritte[schritt + 1].titel}
-              </button>
-            )}
+    <EingabehilfeKontext.Provider value={eingabehilfe}>
+      <div className="meldung">
+        <div className="werkzeugleiste">
+          <div className="werkzeugleiste-text">
+            <h1>{ui.titel}</h1>
+            {ui.untertitel && <p>{ui.untertitel}</p>}
           </div>
-        </section>
+          <div className="werkzeugleiste-knoepfe">
+            <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>
+              Meldung öffnen
+            </button>
+            <button
+              type="button"
+              className="knopf leise"
+              onClick={() => {
+                if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
+                  neu();
+                  setSchritt(0);
+                  setMeldungen(null);
+                }
+              }}
+            >
+              Neue Meldung
+            </button>
+            <input
+              ref={dateiRef}
+              type="file"
+              accept="application/json,.json"
+              hidden
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) oeffnen(f);
+                e.target.value = "";
+              }}
+            />
+          </div>
+        </div>
+        {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
+        {meldungen && (
+          <div className={`kasten kasten-${meldungen.art}`} role="status">
+            <ul>
+              {meldungen.zeilen.map((z, i) => (
+                <li key={i}>{z}</li>
+              ))}
+            </ul>
+            <button type="button" className="knopf leise klein" onClick={() => setMeldungen(null)}>
+              Ausblenden
+            </button>
+          </div>
+        )}
+
+        <div className="arbeitsbereich">
+          <nav className="schritte" aria-label="Schritte">
+            <ol>
+              {ui.schritte.map((s, i) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
+                    aria-current={i === schritt ? "step" : undefined}
+                    onClick={() => setSchritt(i)}
+                  >
+                    <span className="schritt-nr">{i + 1}</span>
+                    <span className="schritt-titel">{s.titel}</span>
+                    {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          <section className="schritt-inhalt" aria-labelledby="schritt-titel">
+            <h2 id="schritt-titel">{aktuell.titel}</h2>
+            {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
+            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" />}
+            {aktuell.felder.map((feld) => {
+              const segs = teilePfad(feld);
+              return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
+            })}
+            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" ki={ki} />}
+            <div className="schritt-nav">
+              {schritt > 0 ? (
+                <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
+                  Zurück: {ui.schritte[schritt - 1].titel}
+                </button>
+              ) : (
+                <span />
+              )}
+              {schritt < ui.schritte.length - 1 && (
+                <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
+                  Weiter: {ui.schritte[schritt + 1].titel}
+                </button>
+              )}
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
+    </EingabehilfeKontext.Provider>
   );
 }

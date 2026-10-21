@@ -4,6 +4,7 @@
 // dieses Abschnitts nichts gefunden haben; nicht konfigurierte Regeln weist die Abdeckung aus.
 
 import { kennsatz, kennsaetzeAlle, leseFrist } from "../kern/kennsaetze";
+import { offenePlatzhalter } from "../kern/feldhilfen";
 import { holeWert } from "../kern/pfad";
 import { quellenHinweise } from "../kern/quellen";
 import { bezeichnung } from "../kern/ui";
@@ -182,7 +183,10 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
       for (const t of kennsaetzeAlle(sv.bewertungText, ks.handlungsrelevant)) {
         const f = leseFrist(t, zone);
         const [status, klasse] = fristEinstufen(f.datum, f.genauigkeit, jetzt, aus, zone);
-        zeit.push({ sv, text: t, datum: f.datum, genauigkeit: f.genauigkeit, ...(f.hinweis ? { hinweis: f.hinweis } : {}), status, klasse });
+        // Aus einer Vorlage mit noch offenen Stellen ⟦…⟧: als unvollständig kennzeichnen
+        const offen = offenePlatzhalter(t).length ? "offene Vorlagenstellen ⟦…⟧ – Angaben unvollständig, bitte ausfüllen oder streichen" : "";
+        const hinweis = [f.hinweis, offen].filter(Boolean).join("; ");
+        zeit.push({ sv, text: t, datum: f.datum, genauigkeit: f.genauigkeit, ...(hinweis ? { hinweis } : {}), status, klasse });
       }
     // Nicht lesbare Fristen zuerst (sie brauchen Klärung), danach zeitlich
     zeit.sort((a, b) => (a.datum?.getTime() ?? -Infinity) - (b.datum?.getTime() ?? -Infinity));
@@ -221,7 +225,8 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     for (const sv of svs) {
       const t = kennsatz(sv.bewertungText, ks.abweichung);
       if (t === null) continue;
-      if (t) vermerkt.push({ sv, text: t });
+      if (offenePlatzhalter(t).length) marker.push({ sv, kennsatz: ks.abweichung, art: "offen", text: "offene Vorlagenstellen ⟦…⟧ – noch kein Vermerk" });
+      else if (t) vermerkt.push({ sv, text: t });
       else marker.push({ sv, kennsatz: ks.abweichung, art: "leer", text: "Kennsatz ohne Inhalt" });
     }
 
@@ -240,6 +245,9 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
       const nachlaufZusatz = entspannung && sv.tendenz === entspannung ? `; Tendenz „${entspannung}“ – Nachlauf prüfen` : "";
       if (!abs) marker.push({ sv, kennsatz: ks.abschluss, art: "leer", text: `Abschlusskennsatz ohne Inhalt – kein Abschluss erkennbar${nachlaufZusatz}` });
       else if (OFFEN.test(abs)) marker.push({ sv, kennsatz: ks.abschluss, art: "offen", text: `„${abs}“ – kein Abschluss ausgesagt${nachlaufZusatz}` });
+      // Vorlage aus dem Baukasten, noch nicht ausgefüllt: kein Abschluss
+      else if (offenePlatzhalter(abs).length)
+        marker.push({ sv, kennsatz: ks.abschluss, art: "offen", text: `offene Vorlagenstellen ⟦…⟧ – kein Abschluss ausgesagt${nachlaufZusatz}` });
       else {
         abschluss.push({ sv, text: abs, rueckblick: hochSet.has(sv.beurteilung) });
         abgeschlossen.add(sv);
@@ -249,7 +257,9 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     if (!abschlussZeile.has(sv) && entspannung && sv.tendenz === entspannung) nachlauf.push(sv);
     const aen = ks.aenderung ? kennsatz(sv.bewertungText, ks.aenderung) : null;
     if (aen !== null && ks.aenderung) {
-      if (aen) aenderung.push({ sv, text: aen });
+      if (offenePlatzhalter(aen).length)
+        marker.push({ sv, kennsatz: ks.aenderung, art: "offen", text: "offene Vorlagenstellen ⟦…⟧ – noch keine Änderung vermerkt" });
+      else if (aen) aenderung.push({ sv, text: aen });
       else marker.push({ sv, kennsatz: ks.aenderung, art: "leer", text: "Kennsatz ohne Inhalt" });
     }
   }
@@ -266,6 +276,7 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
       const nb = kennsatz(sv.bewertungText, ks.neubewertung);
       if (nb === null) fehlt.push(`kein Kennsatz „${ks.neubewertung}“`);
       else if (!nb) fehlt.push(`Kennsatz „${ks.neubewertung}“ ohne Inhalt`);
+      else if (offenePlatzhalter(nb).length) fehlt.push(`Kennsatz „${ks.neubewertung}“ mit offenen Vorlagenstellen`);
     }
     if (r.sv_massnahmen && !String(holeWert(sv.sv, r.sv_massnahmen) || "").trim()) fehlt.push(`keine Angaben in „${massnahmenLabel}“`);
     if (fehlt.length) kern.push({ sv, fehlt });

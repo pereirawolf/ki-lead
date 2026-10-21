@@ -8,6 +8,20 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.11.0 – 21.10.2026
+
+Grundlage: Umsetzungsbeschreibung vom 21.10.2026 zu manuellen LEAD-Eingabehilfen (umgesetzt mit App 0.4.24).
+
+- **Darstellungsdatei, neuer Abschnitt `feldhilfen`** (Format `lead-feldhilfen/1`): je Analysefeld und für den Text „Bewertung & Tendenz“ eine endliche Liste von Vorlagen mit offenen Stellen ⟦…⟧. Jede Vorlage beginnt mit einem Satzanfang, der schon vorher in `analyse_gliederung`, `bewertung_gliederung` oder `kennsaetze` stand; die Kennsatzvorlagen geben das Fristformat aus A.4, den Textbaustein aus A.7.2 und die Bestandteile des Abschlusses aus A.8.2 wieder. Die Satzanfänge im Einzelnen:
+  - „Lage & Ereignis“: „Kernaussage:“, „Bestätigt ist“, „Einordnung „…“:“.
+  - „Risiken & Auswirkungen“: „Eingetretene Wirkungen:“, „Mögliche Entwicklungen:“, „Szenario:“, „Einschätzung (…):“.
+  - „Maßnahmen & Handlungsempfehlungen“: „Bestehende Maßnahmen:“ (mit den sieben Status aus A.4, ohne Vorauswahl), „Prüf- und Abstimmungsbedarf:“, „Abstimmungen“.
+  - „Abhängigkeiten & Interdependenzen“: „Belegte Kopplungen:“, „Wirkungskette:“, „Szenario:“.
+  - „Bewertung & Tendenz“: „Kernaussage:“, „Referenzraum:“ (Referenzraum offen, t0 aus dem Meldezeitpunkt in der Form der Beispielmeldungen), „Beurteilung „…“:“ und „Tendenz „…“:“ (nur mit gewähltem Wert) sowie die fünf Kennsätze `Neubewertung bei:`, `Handlungsrelevant bis:`, `Änderung zur Vormeldung:`, `Abweichende Bewertung:`, `Abschluss im Lagebild:`.
+- Es gibt keine neuen Satzanfänge, Kennsätze, Gliederungsmuster, Feldhinweise oder Statuswerte. Die Vorlagen sind freiwillige Eingabehilfen; freie Formulierung bleibt zulässig.
+- **SOP-Sammelmappe 3.2.4:** nur Gültigkeitsstand in Teil A fortgeschrieben (Darstellungsdatei jetzt Profilversion 1.11.0); Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Arbeitsanweisungen, Kodierleitfaden, SOP-Inhalte und Beispiele sind unverändert.
+
 ## 1.10.0 – 21.10.2026
 
 Grundlage: Testreihe der KI-Modelle vom 20.10.2026 und zwei Prüfungen (umgesetzt mit App 0.4.21).

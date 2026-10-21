@@ -1,5 +1,6 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
+import { feldhilfenFehler } from "../kern/feldhilfen";
 import { schemaFehler } from "../kern/validierung";
 import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
@@ -307,6 +308,14 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     if (!manifest.meldung.schema_id && kennung) manifest.meldung.schema_id = kennung;
   }
   const uiOk = ui ? pruefeUiStruktur(ui, befunde) : false;
+  // Optionale LEAD-Eingabehilfen: Fehler deaktivieren nur die Hilfen, das Profil bleibt nutzbar
+  if (ui && uiOk && ui.feldhilfen !== undefined) {
+    const f = feldhilfenFehler(ui.feldhilfen, ui);
+    if (f.length) {
+      befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Die LEAD-Eingabehilfen werden nicht verwendet – ${f.join(" ")}` });
+      delete ui.feldhilfen;
+    }
+  }
   if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {

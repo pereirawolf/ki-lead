@@ -1,6 +1,6 @@
 // Generisches Formular: rendert ein Feld anhand von JSON-Schema und Darstellungsdatei.
 
-import { useId } from "react";
+import { useContext, useId } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, type Segment } from "../kern/pfad";
 import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
@@ -9,6 +9,9 @@ import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
 import { QuellenFeld } from "./QuellenFeld";
 import { DatumZeit } from "./DatumZeit";
+import { Eingabehilfen } from "./Eingabehilfen";
+import { EingabehilfeKontext } from "./eingabehilfeKontext";
+import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
 
 export interface FeldProps {
   profil: Profil;
@@ -38,6 +41,7 @@ export function Feld(props: FeldProps) {
   const f = feldUi(profil.ui, gen);
   const label = bezeichnung(profil.ui, gen);
   const id = useId();
+  const eingabehilfe = useContext(EingabehilfeKontext);
   const t = typen(k);
   const e = enumWerte(k);
 
@@ -240,8 +244,31 @@ export function Feld(props: FeldProps) {
         <input {...gemeinsam} type="text" />
       )}
       <Hinweis text={f.hinweis} />
+      {eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={gemeinsam.value} />}
     </div>
   );
+}
+
+/** LEAD-Eingabehilfen nur für Rollenfelder mit gültiger Konfiguration im Profil */
+function EingabehilfenFuer({
+  profil,
+  gen,
+  segs,
+  label,
+  textId,
+  wert,
+}: {
+  profil: Profil;
+  gen: string;
+  segs: Segment[];
+  label: string;
+  textId: string;
+  wert: string;
+}) {
+  const feld = textfeldRelativ(gen, profil.ui);
+  const hilfe = feld ? hilfeFuer(profil.ui, feld.rel) : undefined;
+  if (!hilfe) return null;
+  return <Eingabehilfen profil={profil} segs={segs} label={label} textId={textId} hilfe={hilfe} wert={wert} />;
 }
 
 function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {

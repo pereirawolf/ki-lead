@@ -21,14 +21,14 @@ GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, 
 
 | Ordner | Gegenstand |
 |---|---|
-| `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, Ausgaben, Dateinamen, Beispieldatensatz |
-| `tests/profil/` | Profile laden und prüfen, Manifest, Schemaeignung, Fassungen, SOP-Integration, Profilansicht, private Profile |
+| `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
+| `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Profilansicht, private Profile |
 | `tests/pipeline/` | Einstellungen und Vorgaben, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich |
 | `tests/anbieter/` | SSE-Leser, Anthropic- und OpenAI-Adapter, gemeinsamer Vertrag beider Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
-| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, Lagebild, Modellwahl, Farbschema, Redaktionscheck |
+| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Farbschema, Redaktionscheck |
 | `tests/evaluation/` | Schemata der Modellbewertung (ohne KI-Aufruf) |
 | `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit im echten Browser |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |
@@ -69,5 +69,6 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
 - `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (von Chromium berechnet), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben
+- `eingabehilfen.spec.ts`: LEAD-Eingabehilfen mit der Tastatur (Bereich öffnen, Vorlage einfügen, Fokus und Markierung im Textfeld), zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen
 
 Einmalig vorher: `npx playwright install chromium`. Ist ein Chromium schon vorhanden, genügt `PLAYWRIGHT_CHROMIUM_PFAD=/pfad/zu/chrome npm run test:browser`. Bei Fehlern liegen Spuren unter `test-results/` (`npx playwright show-trace …`).

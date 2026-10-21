@@ -1265,7 +1265,9 @@ textarea {
 /* ── KI-Erfassung und Einstellungen ───────────────── */
 
 .knopf:disabled,
-.knopf:disabled:hover {
+.knopf:disabled:hover,
+.knopf[aria-disabled="true"],
+.knopf[aria-disabled="true"]:hover {
   opacity: 0.45;
   cursor: not-allowed;
   background: var(--flaeche);
@@ -3221,4 +3223,59 @@ fieldset.lb-ausgabe {
 .modellwahl-stufe > legend {
   font-weight: 700;
   padding: 0 0.25rem;
+}
+
+/* ── LEAD-Eingabehilfen (Analysefelder, Bewertungstext) ── */
+.eingabehilfen {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.45rem 0.8rem;
+  margin: 0.6rem 0 0;
+}
+
+.eingabehilfen > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.eingabehilfen-wahl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.eingabehilfen-wahl .feld {
+  margin: 0;
+}
+
+.eingabehilfen-liste {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.eingabehilfen-liste li,
+.eingabehilfen-ruecknahme {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+}
+
+.eingabehilfen-liste .hinweis,
+.eingabehilfen-ruecknahme .hinweis {
+  margin: 0;
+  flex: 1 1 16rem;
+}
+
+.eingabehilfen-ruecknahme {
+  margin-top: 0.6rem;
+}
+
+.eingabehilfen-meldung {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
 }
