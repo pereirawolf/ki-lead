@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.6.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.7.0 | 21.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -1863,14 +1863,14 @@ kennung: "C05"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
-lageart: "Größerer Verkehrs-, Industrie- oder Veranstaltungsunfall, Gedränge, mit relevantem Hilfebedarf"
-art_zuordnung: ["Sonstiges"]
-art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
-anschluss: "B11, B12, B14, B17; C16, C09, C02"
-zweck: "Erfassung überörtlicher medizinischer, Betreuungs- und Verkehrsfolgen größerer Unfälle."
-version: "1.0.1"
+lageart: "Größerer Verkehrs-, Industrie- oder Veranstaltungsunfall, Gedränge, mit relevantem Schutz-, Rettungs-, Betreuungs- oder Versorgungsbedarf"
+art_zuordnung: ["Sonstiges", "Industrieunfall / Chemieunfall", "Sabotage / Anschlag / Terrorismus"]
+art_hinweis: "„Industrieunfall / Chemieunfall“ bei Brand, Explosion oder Freisetzung in Anlagen oder bei Gefahrguttransporten (B07); „Sabotage / Anschlag / Terrorismus“ nur bei behördlich benanntem Tatbezug (B16); sonst „Sonstiges“ und einschlägige Folgenarten ergänzen"
+anschluss: "B07, B16, B11, B12, B14, B17; C09, C16, C13, C02"
+zweck: "Erfassung medizinischer, Betreuungs-, Verkehrs- und Versorgungsfolgen größerer Unfälle."
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N16"
@@ -1879,13 +1879,15 @@ bisherige_ids: ["baustein-n16"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Größere Verkehrs-, Industrie- oder Veranstaltungsunfälle und Gedränge mit überörtlichem medizinischem, Betreuungs- oder Verkehrsbedarf. Kein automatischer Zusammenhang mit einer Sicherheitsbedrohung. Medizinische Behandlungslage in C09, Bauwerksversagen in C02, Betreuung in C16 vertiefen. Gefahrstofffreisetzung: B07; vorsätzliche Tat: B16.
+**Umfasst / grenzt ab von:** Größere Verkehrs-, Industrie- und Veranstaltungsunfälle sowie Gedränge mit relevantem Schutz-, Rettungs-, Betreuungs- oder Versorgungsbedarf. Auch ein örtlich begrenztes Ereignis kann bei fehlender Spezialfähigkeit oder kritischem Funktionsverlust übergreifend relevant sein; keine feste Patientenzahl oder Verwaltungsgrenze als Aufnahmeschwelle. Unfallursache und Ermittlungsstand dürfen offenbleiben, während belegte Folgen bewertet werden; weder Veranstaltungsbezug noch ungeklärte Ursache belegen eine Sicherheitsbedrohung. Die Ursachen-SOP geht vor: bei Brand, Explosion oder Freisetzung in Anlagen oder bei Gefahrguttransporten B07, bei behördlich benanntem Tatbezug B16; ohne passende Ursachenart B17 begründet verwenden. C05 vertieft dann die Unfallfolgen. Medizinische Versorgungsfolgen C09, Bauwerksversagen C02, Betreuung und Unterbringung C16, kritische Verkehrs- und Logistikfolgen C13 nur bei jeweils eigenständigem Befund. Keine eigene Sichtung, Unfallrekonstruktion oder Schuld- bzw. Täterzuschreibung.
 
-**Befassungsanlässe:** Größerer Verkehrs-, Industrie- oder Veranstaltungsunfall mit relevantem Hilfebedarf · Gedränge oder Unfall mit überörtlichen medizinischen, Betreuungs- oder Verkehrsfolgen.
+**Befassungsanlässe:** Größerer Verkehrs-, Industrie- oder Veranstaltungsunfall mit relevantem Hilfebedarf · Gedränge oder Unfall mit überörtlichen medizinischen, Betreuungs- oder Verkehrsfolgen · Ereignis mit fehlender Spezialfähigkeit oder kritischem Funktionsverlust, auch örtlich begrenzt.
 
-**Zuordnung im Schema:** „Sonstiges“; einschlägige bestehende Folgenarten ergänzen.
+**Zuordnung im Schema:** „Sonstiges“; „Industrieunfall / Chemieunfall“ bzw. „Sabotage / Anschlag / Terrorismus“ unter den Bedingungen in `art_hinweis`; einschlägige Folgenarten ergänzen.
 
 ### 2. Erfassung: Prüffragen
+
+**Ereignis- und Personenprofil:** Ereignisort und -zeit, belegten Hergang, tatsächlich betroffene Funktionen und Stand der Angaben festhalten. Bestätigte Tote, Verletzte, Vermisste, tatsächlich Evakuierte, Betreute und noch ungeklärte Gruppen getrennt führen; Überschneidungen nicht addieren. Fahrgast- oder Besucherzahl und Fahrzeugkapazität sind keine Schadensbilanz. Eine bestätigte Mindestzahl ausdrücklich als solche kennzeichnen (Kodierleitfaden, Mindestkodierung). Aktualisierte Zählungen können bessere Erfassung statt neuer Schäden bedeuten. Sichtungskategorien nur für tatsächlich fachlich gesichtete Personen wiedergeben; die Redaktion weist keine Kategorien zu. Die Darstellung bleibt aggregiert.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -1893,21 +1895,33 @@ bisherige_ids: ["baustein-n16"]
 | R2 | Welche Menschen benötigen tatsächlich Behandlung, Betreuung oder Weitertransport? | Lagemeldungen (A.3); Rettungsdienst | R; D2 | Behandelte, Betreute und Vermisste nicht addieren (A.3). |
 | R3 | Welche Fähigkeiten sind vor Ort wirksam, welche fehlen? | Lagemeldungen (A.3) | M; D4 | Bedarfsdeckung nach A.9.1; Nachfrage nach C09. |
 | R4 | Welche Folgen bestehen für Verkehrswege, Infrastruktur und Nachbarregionen? | Betreibermeldungen (A.3) | R/I; D6 | Verkehrsfolgen nach C13. |
+| R5 | Welche Schutzentscheidungen, Sperren und tatsächlich nutzbaren Ausweichwege gelten für welche Funktion? | Zuständige Gefahrenabwehr- und Verkehrsstellen; Betreiber zur eigenen Leistung (B) | L/R/M; D1/D6 | Rettungszugang, Weitertransport, Schutzbereich und allgemeine Verkehrsführung getrennt; angekündigt ≠ wirksam. |
+| R6 | Welcher Zielzustand ist für die Befassung maßgeblich, und welche Fachprognose, Freigabe oder Nachlaufbedingung liegt vor? | Zuständige Einsatz- und Gefahrenabwehrstellen; Betreiber; Gesundheits- und Betreuungsstellen nach Funktion | M; D5/D8 | Ende der Rettungsphase, abgeschlossene Personenerfassung, Freigabe, Entlastung von Aufnahme- und Betreuungskapazität und wiederhergestellte Versorgung sind verschiedene Ziele. |
+
+**Bedarf und wirksame Hilfe:** Für die bewertungsrelevante Lücke benennen, welche Rettungs-, Transport-, Behandlungs-, Betreuungs- oder Spezialfähigkeit benötigt wird und welche davon tatsächlich nutzbar ist. Angefordert, angeboten, zugesagt, zugeführt, eingesetzt und wirksam trennen (A.4, A.9.1); die Herkunft eingesetzter externer Hilfe nachweisen, Einsatzumfang oder Entfernung allein begründen D4 nicht. Medizinische Aufnahmefähigkeit und Transportpfad nach C09, Betreuung besonderer Bedarfe nach C16. Psychosoziale Notfallversorgung für Betroffene, Angehörige und Einsatzkräfte sowie Personenauskunft und Angehörigeninformation als eigenen Bedarf prüfen (Kapazität, Herkunft, Stand), ohne Personendaten und ohne diese Personen als Verletzte zu zählen. Personal und Ablösung, gleichzeitige Einsätze und gemeinsam gebundene Spezialressourcen nach A.7.4; keine Mittelzuteilung durch die Lagebildredaktion.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D2:** nach bestätigten Verletzten und Betroffenen, nicht nach Fahrgast- oder Besucherzahl.
-- **D5:** Ende der Rettungsphase, Freigabe der Unfallstelle und Wiederherstellung einer Verbindung unterscheiden.
+- **D1:** Raum tatsächlich belegter Schutz-, Schadens- oder Versorgungsfolgen, nicht Veranstaltungsgröße, Herkunft der Gäste oder Fahrstrecke.
+- **D2:** Unmittelbar Betroffene nach Kodierleitfaden mit tragfähigem Beleg zu passendem Zeitpunkt und Bezugsraum; eine bestätigte Mindestzahl darf als Mindestwert kodiert werden. Es gibt keine zusätzliche Pflicht zur amtlichen Zählung. Fahrgäste, Besuchende, Vermisste und Betreute nicht automatisch als direkt betroffen summieren.
+- **D3/D4:** Bewertete Funktion und belegte Steuerung sowie Herkunft tatsächlich eingesetzter externer Hilfe nachweisen. Polizeipräsenz oder großes Medieninteresse legen keine Stufe fest.
+- **D5:** Fachlich belegte Restdauer bis zum benannten Schutz- oder Versorgungsziel (R6); Rettungsende, Freigabe und Wiederherstellung unterscheiden.
+- **D6:** Konkrete Funktionskopplungen statt bloßer Lage an einem Verkehrsweg oder in einer Industrieanlage.
+- **D7/D8:** Entscheidungsrelevante Informationslücken und beobachteter Verlauf; eine ungeklärte Unfallursache verhindert keine Folgenbewertung und ist kein hoher D7-Wert. Neue Meldungen oder korrigierte Zahlen allein belegen keine Verschärfung.
 
-**Offenlassen:** D2 ohne amtliche Zählung; D5 ohne Wiederherstellungsprognose.
+**Beurteilung/Tendenz:** Nach konkreten Folgen, nutzbarer Hilfe, verbleibender Lücke und Entwicklung im Referenzraum; Ereignisbezeichnung, Bilder oder eine formale Alarmstufe sind keine LEAD-Schwereklasse.
+
+**Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Fachprognose.
 
 ### 4. Darstellung
 
-Nach der Dach-SOP; Unfallgeschehen, medizinische Lage, Betreuung und Verkehrsfolgen getrennt.
+Nach der Dach-SOP der Ursache bzw. B17. „Lage & Ereignis“: Unfallbefund, unmittelbare Folgen, offene Ursache. „Risiken & Auswirkungen“: belegte medizinische, Betreuungs- und Versorgungswirkung und bedingte Folgerisiken. „Maßnahmen & Handlungsempfehlungen“: tatsächlich wirksame Hilfe, Maßnahmenstatus, zuständig adressierter Klärungsbedarf. „Abhängigkeiten & Interdependenzen“: kritische Folgeketten und nutzbarer Ersatz. Die Kernaussage beantwortet: Welche Schutz- oder Versorgungsleistung fehlt für wen, was trägt noch, und welche Abstimmung ist erforderlich? Neubewertung bei bestätigtem neuem Schadensumfang, kritischer Versorgungslücke, veränderter Hilfe- oder Aufnahmelage oder neuer Fachprognose. Akuter Bedarf nach A.7.3, Fristen nach A.4. Abschluss nicht allein nach Rettungsende oder ausbleibender Berichterstattung; Versorgungs- und Betreuungsnachlauf nach A.8.2 klären.
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Abgrenzung zu B14 bei Veranstaltungen an einem Übungsfall prüfen.
+**Ansprechstellen:** Zuständige Gefahrenabwehr- und Einsatzstellen · Gesundheits- und Betreuungskoordination zur eigenen Aufgabe · Polizei zu bestätigten Ermittlungsangaben · betroffene Verkehrs-, Infrastruktur- und Veranstaltungsbetreiber zur eigenen Leistung (B). Quellenrollen nach A.3; weder Polizei noch Veranstalter pauschal als Gesamtleitung darstellen.
+
+**Offene Punkte:** Abgrenzung zu B14 bei Veranstaltungen an einem Übungsfall prüfen. Lokale Führungs- und Meldewege, fachliche Pflegefunktion und Prüfanlässe organisationsspezifisch festlegen. Übungsfälle: Verkehrsunfall mit vielen unverletzten Reisenden, Gedränge ohne belegte vorsätzliche Ursache, Industrieunfall mit Gefahrstofffreisetzung unter B07, längerer Verkehrs- oder Versorgungsnachlauf.
 
 <!-- Quelle: sop/teil-c/C06_kampfmittelfund.md -->
 
@@ -1920,14 +1934,14 @@ kennung: "C06"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein"
 lesegruppe: "Besondere Ereignis- und Gefahrenlagen"
-lageart: "Bestätigter Kampfmittelfund mit großräumiger oder kapazitätskritischer Räumung"
+lageart: "Bestätigter oder fachlich begründet vermuteter Kampfmittelfund mit Räumung, Verlegung oder Verkehrs- bzw. Versorgungsauswirkung"
 art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
-anschluss: "B14, B17, C16"
+anschluss: "B14, B17, C16; C09 bei Klinik- oder Pflegeverlegung, C13 bei kritischen Verkehrsfolgen, C02 bei Folgeschäden; B03 bei munitionsbelasteten Brandflächen"
 zweck: "Erfassung von Räumungs-, Verlegungs- und Versorgungsfolgen bei Kampfmittelfunden."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N17"
@@ -1936,13 +1950,15 @@ bisherige_ids: ["baustein-n17"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Bestätigte Kampfmittelfunde mit großräumiger oder kapazitätskritischer Räumung, insbesondere mit betroffenen Krankenhäusern, Pflegeeinrichtungen oder kritischer Versorgung. Keine technischen Entschärfungsanweisungen. Munitionsbelastete Brandflächen: B03.
+**Umfasst / grenzt ab von:** Bestätigter Kampfmittelfund oder von der zuständigen Stelle fachlich begründeter Verdacht mit konkretem Schutz-, Verlegungs-, Verkehrs- oder Versorgungsbedarf. Frühe Befassung nach A.1 Nr. 1, wenn eine beabsichtigte Maßnahme bereits Vorbereitungs- oder Abstimmungsbedarf auslöst; historische Belastungsflächen oder Gerüchte reichen nicht. Relevanz kann aus einer kleinen Zahl besonders unterstützungsbedürftiger Personen oder dem Ausfall einer kritischen Funktion folgen, nicht nur aus einem großen Räumungsgebiet. Für das wöchentliche Lagebild sind Funde vor allem bei kapazitätskritischen Folgen, regionaler Häufung oder längerem Nachlauf relevant; akuter Bedarf wird nach A.7.3 weitergegeben, ohne auf die Lagebild-Ausgabe zu warten. Fachbestätigung, Gefahrenbewertung und technische Behandlung bleiben bei den zuständigen Fachstellen: keine Aussagen zu Zustand, Gefährlichkeit, Sicherheitsabständen oder technischem Vorgehen aus Bildern, Typbezeichnungen oder früheren Funden, keine automatische Sicherheits- oder Sabotagezuordnung. Munitionsbelastete Brandflächen primär B03, C06 nur bei konkretem zusätzlichem Fund mit eigenen Schutzfolgen. Verlegung und Behandlung C09, Unterbringung C16, kritische Verkehrs- und Lieferfolgen C13, Folgeschäden einer kontrollierten Sprengung C02.
 
-**Befassungsanlässe:** Bestätigter Kampfmittelfund mit großräumiger oder kapazitätskritischer Räumung · betroffene Krankenhäuser, Pflegeeinrichtungen oder kritische Versorgung.
+**Befassungsanlässe:** Bestätigter Fund oder fachlich begründeter Verdacht mit kapazitätskritischer Räumung oder Verlegung · betroffene Krankenhäuser, Pflegeeinrichtungen, häuslich versorgte Menschen oder kritische Versorgung · Sperrung kritischer Verkehrswege · auffällige regionale Häufung.
 
 **Zuordnung im Schema:** „Sonstiges“; einschlägige bestehende Folgenarten ergänzen.
 
 ### 2. Erfassung: Prüffragen
+
+**Schutzentscheidungsprofil:** Bestätigende bzw. anordnende Stelle, Fund- oder Verdachtsstatus, tatsächlich geltende Schutzmaßnahme, betroffenes Gebiet oder Objekt, Entscheidungsstand und Zeitfenster erfassen. Räumung bzw. Evakuierung, Aufenthalt in geschützten Bereichen, Betretungs- oder Verkehrssperre und Rückkehrfreigabe mit den jeweils verwendeten örtlichen Begriffen wiedergeben; Begriffe und Verfahren nicht über Ländergrenzen gleichsetzen (A.9.4). Geplanter Beginn, gesetzte Räumungsfrist, bestätigter Räumungsabschluss und Beginn der Fachmaßnahme sind verschiedene Zeitpunkte. Amtliche Karten und Straßenlisten nach Gültigkeitsstand verwenden und Änderungen fortschreiben.
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
@@ -1950,21 +1966,34 @@ bisherige_ids: ["baustein-n17"]
 | R2 | Welche Personen müssen tatsächlich unterstützt werden, welche Einrichtungen verlegt werden? | Lagemeldungen (A.3); Einrichtungsträger (B) | R; D2 | Bevölkerung im Räumungsradius ist nicht automatisch die tatsächliche Evakuierungszahl. |
 | R3 | Welche Verkehrssperren und Versorgungsunterbrechungen sind wirksam? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | R/I; D6 | Wirksam ≠ angekündigt. |
 | R4 | Welche Transport-, Aufnahme- und Rückkehrkapazitäten stehen bereit? | Lagemeldungen (A.3) | M; D4/D5 | Nach C16; bereitstehend ≠ eingesetzt. |
+| R5 | Welche Warnungen, Informationsangebote, besonderen Hilfen und Ersatzleistungen sind für die tatsächlich betroffenen Menschen bestätigt? | Zuständige Behörden; Einrichtungs- und Versorgungsbetreiber (B); jeweils Stand | M/R; D6 | Warnung nach A.9.3: ausgelöst, übertragen und erreicht unterscheiden. Öffentliche Schutzinformation ist nicht die Lageinformation der befassten Stellen (D7). Keine ungeprüften Ersatzkontakte veröffentlichen. |
+| R6 | Welche Freigaben gelten für Rückkehr, Verkehrswege und Wiederaufnahme betroffener Leistungen, und was bleibt offen? | Zuständige Gefahrenabwehr- und Fachstellen; Betreiber nach Funktion | M; D5/D8 | Technische Maßnahme beendet ≠ Rückkehr freigegeben ≠ Rücktransport abgeschlossen ≠ Versorgung wieder wirksam. |
+
+**Personen und Versorgungskette:** Bevölkerung im Gebiet, tatsächlich Anwesende, zum Verlassen Aufgeforderte, tatsächlich Evakuierte bzw. Verlegte und durch Hilfskräfte Transportierte getrennt führen; Überschneidungen nicht addieren. Besonderen Unterstützungsbedarf nach tatsächlichem Bedarf erfassen, auch bei häuslicher Pflege und medizinisch abhängigen Menschen. Geeigneter Transport, bestätigte Aufnahme, Betreuung bzw. Behandlung, Versorgung während der Abwesenheit und Rücktransport als zusammenhängenden Pfad prüfen; Angebot, Bereitschaft, Einsatz und wirksame Aufnahme unterscheiden. Klinik- und Pflegeverlegung nach C09, Betreuung nach C16; gemeldete Einrichtungsplätze sind keine Verlegungszahl. Verzögerungen können Personal und Reserven länger binden als geplant; Tragfähigkeit nur belegt angeben.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D2:** tatsächlich evakuierte bzw. verlegte Personen.
-- **D5:** Dauer nicht pauschal ansetzen; belastbare Prognose der zuständigen Stelle abwarten.
+- **D1:** Belegter Wirkungsraum tatsächlicher Schutz- und Versorgungsfolgen, nicht der Fundort allein und nicht jede frühere Planungszone.
+- **D2:** Unmittelbar Betroffene nach Kodierleitfaden, insbesondere tatsächlich Evakuierte oder Verlegte und durch konkrete Versorgungsausfälle unmittelbar Beeinträchtigte. Einwohner-, Platz- und Planungszahlen nicht als Ist-Zahl ausgeben; Überschneidungen bereinigen.
+- **D3:** Bewertete Funktion nennen, etwa technische Fachmaßnahme, örtliche Schutzentscheidung oder übergreifende Verlegungskoordination; die Beteiligung eines Landesdienstes bedeutet nicht Landessteuerung aller Folgen.
+- **D4:** Herkunft tatsächlich eingesetzter externer Unterstützung, nicht Herkunft des Kampfmittels, vorhandene Fahrzeuge oder Bereitschaft.
+- **D5:** Restdauer bis zum benannten Ziel nach belastbarer Prognose; Räumung, technische Maßnahme, Rückkehr und Versorgungswiederkehr unterscheiden. Keine Standarddauer aus Kampfmittelart oder früheren Ereignissen.
+- **D6:** Konkrete Kopplung an Verkehr, Behandlung, Pflege oder eine andere kritische Leistung, nicht allein die Lage im Ballungsraum.
+- **D7/D8:** Entscheidungsrelevante Informationslücken und reale Änderungen nach Kodierleitfaden; die Verlängerung einer ungesicherten Schätzung oder neue Medienmeldungen sind kein Lageumschlag.
+
+**Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt keine Schwereklasse fest.
 
 **Offenlassen:** D5 ohne Prognose; D6 ohne belegte Kopplung.
 
 ### 4. Darstellung
 
-Nach B17; Räumung, Verlegung, Versorgungsfolgen und Rückkehr getrennt.
+Nach der passenden Dach-SOP bzw. B17. „Lage & Ereignis“: Fund- oder Verdachtsstatus und zuständige Schutzentscheidung mit Gültigkeit. „Risiken & Auswirkungen“: tatsächliche Personen- und Versorgungsfolgen und bedingte Verzögerungsfolgen. „Maßnahmen & Handlungsempfehlungen“: wirksame Transport-, Aufnahme- und Betreuungsleistung, Warnung und Klärungsbedarf. „Abhängigkeiten & Interdependenzen“: kritische Folgeketten und Ersatz. Die Kernaussage nennt die aktuell relevante Schutz- oder Versorgungslücke und die zuständige Abstimmung. Neubewertung bei geänderter Gebiets- oder Schutzentscheidung, nicht mehr gedecktem Hilfebedarf, geänderter Fachprognose oder bestätigter Rückkehr- bzw. Betriebsfreigabe. Datierte Fristen nur nach A.4; dringlicher Bedarf nach A.7.3. Abschluss nach geklärter Rückkehr und Versorgungsnachlauf, nicht allein nach Entwarnung zur technischen Gefahr (A.8.2).
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Zuständige Kampfmittelbeseitigungsdienste der Länder organisationsspezifisch benennen.
+**Ansprechstellen:** Zuständiger Kampfmittelbeseitigungsdienst zur Fachbewertung und technischen Maßnahme · örtlich zuständige Gefahrenabwehr zur Schutzentscheidung · Gesundheits-, Rettungs- und Betreuungskoordination · Einrichtungs-, Verkehrs- und Versorgungsbetreiber zur eigenen Leistung (B). Wer bestätigt, anordnet, koordiniert und freigibt, ist landes- und fallbezogen zu prüfen; kommunale Beispielverfahren nicht als Bundesstandard übernehmen.
+
+**Offene Punkte:** Zuständige Kampfmittelbeseitigungsdienste der Länder organisationsspezifisch benennen; Pflegefunktion, Meldeweg und Prüfanlässe festlegen. Übungsfälle zu Klinik- oder Pflegeverlegung, häuslicher Versorgung, Verkehrsunterbrechung ohne große Räumung und verlängertem Rückkehrnachlauf.
 
 **Leseblock: Gesundheit und medizinische Versorgung**
 
@@ -2444,14 +2473,14 @@ kennung: "C13"
 typ: "Themenbaustein"
 bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
-lageart: "Ausfall oder deutliche Minderung kritischer Verkehrs- und Logistikleistung"
+lageart: "Ausfall oder deutliche Minderung kritischer Verkehrs-, Transport-, Umschlag- oder Verteilleistung auf Straße, Schiene, Wasser oder im Luftverkehr"
 art_zuordnung: ["KRITIS-Ausfall"]
-art_hinweis: "Ereignisart der Ursache zusätzlich nach belegtem Sachverhalt"
-anschluss: "B12"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; sonst als Prüfhilfe unter der Ereignisart der Ursache"
+anschluss: "B12; Ursache nach Dach-SOP (u. a. B01, B02, B03, B05, B06); C02 bei Bauwerksversagen, C04 bei Vulkanasche; C09/C10, C12, C14, C16, C17 nach Folge"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
-version: "1.0.1"
+version: "1.1.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "19.10.2026"
+stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N06"
@@ -2460,38 +2489,52 @@ bisherige_ids: ["baustein-n06"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Ausfälle kritischer Zufahrten, Brücken, Schienen-, Wasserstraßen- oder Hafenverbindungen mit Versorgungs-, Rettungs- oder Evakuierungsbezug; abgeschnittene Räume. Eine einzelne Verspätung oder Sperrung begründet keine Versorgungskrise; Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit.
+**Umfasst / grenzt ab von:** Tatsächlicher Ausfall oder deutliche Minderung einer für Schutz oder Versorgung notwendigen Personen- oder Güterleistung auf Straße, Schiene, Wasser oder im Luftverkehr sowie an Umschlag-, Lager- und Verteilknoten bis zum Bedarfspunkt; dazu abgeschnittene Räume. Auch fehlende Transportmittel, Personal, Abfertigung, Energie oder IT können die Leistung trotz intakter Strecke verhindern. Eine einzelne Verspätung oder Sperrung ist keine Versorgungskrise; Relevanz folgt aus konkreter Funktion, benötigter Menge und Qualität, Zeitkritikalität und nutzbarem Ersatz. Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit. Frühe Befassung nach A.1 Nr. 1 bei fachlich begründet drohendem Ausfall mit benennbarem Vorbereitungs- oder Abstimmungsbedarf; das belegt noch keinen eingetretenen KRITIS-Ausfall. Unter einer Ursachen-SOP wird C13 als Prüfhilfe verwendet, ohne die Ereignisart „KRITIS-Ausfall“ automatisch hinzuzufügen; eine eingetretene wesentliche Einschränkung kritischer Leistung über B12. Bauwerksversagen von Brücken C02; grenzüberschreitende Korridore, Häfen und Flughäfen mit Deutschlandbezug nach A.1 Nr. 6. Folgebausteine C09/C10, C12, C14 oder C16 nur bei entsprechendem Bedarfspfad, C17 bei konkretem zivilem Verteidigungsbezug.
 
-**Befassungsanlässe:** Bestätigter Ausfall oder deutliche Minderung kritischer Verkehrs- bzw. Logistikleistung · abgeschnittene Räume oder Störung unverzichtbarer Transportketten.
+**Befassungsanlässe:** Bestätigter Ausfall oder deutliche Minderung kritischer Verkehrs- bzw. Logistikleistung · abgeschnittene Räume oder Störung unverzichtbarer Transportketten · fachlich begründet drohender Ausfall mit benennbarem Vorbereitungsbedarf.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“; zusätzlich die Ursachenart nach belegtem Sachverhalt.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; die Ursachenart nach belegtem Sachverhalt. Bei früher Befassung Prüfhilfe unter der Ursachen- bzw. Vorsorgebefassung, ohne einen eingetretenen KRITIS-Ausfall zu behaupten.
 
 ### 2. Erfassung: Prüffragen
 
+**Transport- und Bedarfsprofil:** Was muss von wo nach wo, in welcher Menge und Qualität und bis wann tatsächlich verfügbar sein? Notwendige Personen- oder Güterleistung, kritischen Bedarfspunkt, Quelle, Stand und erforderliche Transport- und Umschlageigenschaften benennen. Strecke und Knoten, Transportmittel und Personal, Lager- und Umschlagfähigkeit sowie letzte Verteilung zum Bedarfspunkt als Kette prüfen, aber nur die maßgeblichen Engpässe ausführen. Nominale Netz- oder Fahrzeugkapazität, aktuell betriebsfähige Leistung, gebundene und zusätzlich zugesagte Kapazität trennen. Fahrten, Tonnen, Personen und versorgte Einrichtungen sind verschiedene Größen; keine ungeprüfte Umrechnung und keine Doppelzählung von Teiltransporten.
+
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Personen- bzw. Güterleistung wird benötigt, welche fällt tatsächlich aus? | Betreibermeldungen (A.3) (Infrastruktur- und Verkehrsbetreiber); Lagemeldungen (A.3) | L/R; D1 | Leistung, nicht nur Strecke beschreiben. |
-| R2 | Welche kritischen Zufahrten, Brücken, Schienen-, Wasserstraßen- oder Hafenverbindungen sind betroffen? | Autobahn GmbH, Straßenbauverwaltungen, DB InfraGO, WSV; Betreibermeldungen (A.3) | L; D1/D6 | Vorsorgliche Sperrung ≠ Schaden. |
-| R3 | Sind Umleitungen praktisch nutzbar und für die erforderliche Transportart geeignet? | Betreibermeldungen (A.3); Lagemeldungen (A.3) | M; D5 | Gewichts-, Höhen- und Kapazitätsgrenzen beachten; nur bestätigte Nutzbarkeit. |
+| R1 | Welche Personen- bzw. Güterleistung wird benötigt, welche fällt tatsächlich aus? | Betreibermeldungen (A.3) (Infrastruktur-, Verkehrs- und Logistikbetreiber); Lagemeldungen (A.3) | L/R; D1 | Leistung, nicht nur Strecke beschreiben. |
+| R2 | Welche kritischen Zufahrten, Brücken, Schienen-, Wasserstraßen-, Hafen-, Flughafen- oder Umschlagverbindungen sind betroffen? | Autobahn GmbH, Straßenbauverwaltungen, DB InfraGO, WSV (u. a. ELWIS), Flughafen- und Hafenbetreiber, Flugsicherung; Betreibermeldungen (A.3) | L; D1/D6 | Vorsorgliche Sperrung ≠ Schaden; Bauwerksversagen nach C02. |
+| R3 | Sind Umleitungen praktisch nutzbar und für die erforderliche Transportart geeignet? | Betreibermeldungen (A.3); Lagemeldungen (A.3) | M; D5 | Gewichts-, Höhen- und Kapazitätsgrenzen beachten; nur bestätigte Nutzbarkeit (Absatz „Nutzbarer Ersatz“). |
 | R4 | Welche Folgen bestehen für Rettung, Evakuierung, Personalwechsel, Kraftstoff, Lebensmittel oder Arzneimittel? | Lagemeldungen (A.3) | R/I; D6 | Folgebausteine C16, C12, C14, C10. |
-| R5 | Wie lange tragen lokale Puffer, und welche Lieferungen können rechtzeitig eintreffen? | Betreibermeldungen (A.3) | R; D5 | Reichweiten nur nach Beleg. |
+| R5 | Wie lange tragen lokale Puffer, und welche Lieferungen können rechtzeitig eintreffen? | Betreibermeldungen (A.3) | R; D5 | Reichweiten nur nach Beleg (Absatz „Zeitkritikalität und Kaskade“). |
 | R6 | Was ist zu Wiederfreigabe, Kapazitätsrückkehr und Rückstauabbau belegt? | Betreibermeldungen (A.3) | M; D5 | Freigabe ≠ volle Kapazität. |
+
+**Nutzbarer Ersatz:** Eine bestätigte Route oder ein anderer Verkehrsträger muss für die tatsächlichen Last-, Höhen-, Gefahrgut-, Zeit-, Kühl- oder sonstigen Anforderungen geeignet und rechtzeitig verfügbar sein. Fahrzeuge, Personal, Umschlag, Anschlusskapazität und nötige Freigaben nach zuständiger Quelle prüfen; keine eigene Routengenehmigung. Eine Pkw-Umleitung kann für Tank-, Schwer- oder Spezialtransporte ungeeignet sein. Verlagerung auf Schiene, Straße oder Wasser ist keine sofort verfügbare Ersatzmenge; zusätzliche Engpässe und konkurrierende Bedarfe nach A.7.4. Verschiedene Routen oder Träger können denselben Knoten, Strom-, IT- oder Kraftstoffbezug teilen. Weglänge oder Navigationsvorschlag belegen keine Nutzbarkeit.
+
+**Zeitkritikalität und Kaskade:** Beeinträchtigte Transportleistung → abhängiger Bedarfspunkt → nutzbarer örtlicher Bestand oder Ersatz → konkretes Ausfall- oder Verzögerungsrisiko mit Beleg verfolgen. Maßgeblich ist die Zeit bis zur Unterbrechung einer kritischen Leistung, nicht allein die Dauer der Sperre oder eine bundesweite Gütermenge. Ware im Zentrallager ist nicht verfügbar bei Pflegeeinrichtung, Tankstelle oder Klinik. Reichweite und Zuführung nur mit passendem Verbrauch, Zeitraum und Unsicherheit; keine Standardreichweiten. Eine plausible Kaskade bleibt Szenario, bis ihre Folge belegt ist. Der Pufferablauf dient der Risikobewertung und gegebenenfalls dem Kennsatz `Handlungsrelevant bis:` (A.4), nicht als D5-Wiederherstellungsdauer.
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D1:** Raum der betroffenen Versorgung, nicht Länge der gesperrten Strecke.
-- **D5:** Zielzustand (Freigabe, Kapazitätsrückkehr) benennen.
-- **D6:** belegte Kopplungen zu Versorgungsketten.
+- **D1:** Wirkungsraum tatsächlicher Schutz- und Versorgungsfolgen, nicht Länge der Strecke, Einzugsgebiet eines Hafens oder Sitz des Betreibers.
+- **D2:** Unmittelbar Betroffene nach Kodierleitfaden, z. B. bei tatsächlichem Ausfall notwendiger Grundversorgung oder belegtem Unterkunfts- und Schutzbedarf. Physisches Abgeschnittensein ist weder Voraussetzung noch für sich ein Zählbeleg; verspätete Reisende, alle Fahrgäste oder potenzielle Güterempfänger nicht pauschal zählen.
+- **D3:** Bewertete Funktion nennen: Infrastruktur- oder Transportbetrieb, Verkehrsregelung oder Versorgungskoordination; das Eigentum an der Strecke bestimmt die steuernde Ebene nicht.
+- **D4:** Herkunft tatsächlich eingesetzter ereignisbezogener externer Unterstützung, nicht regulärer Warenverkehr, Herstellungsort oder Herkunft der Güter.
+- **D5:** Belastbare Restdauer bis zum gewählten Ziel, etwa gesicherte kritische Lieferung oder benötigte Transportleistung; Freigabe, Teilkapazität, voller Betrieb und Rückstauabbau sind verschiedene Ziele.
+- **D6:** Belegte Kopplung an eine kritische Funktion; Sektorzugehörigkeit und lange Staus legen keine Stufe fest.
+- **D7/D8:** Entscheidungsrelevante Informationslücken und beobachtete Änderung der realen Leistung; veränderte Meldedichte oder eine neue Kartenansicht sind keine Dynamik.
 
-**Offenlassen:** D2 ohne belegt abgeschnittene Personen; D5 ohne Freigabeprognose.
+**Beurteilung/Tendenz:** Nach benötigter Leistung, ungedecktem Bedarf, Zeitkritikalität, nutzbarem Ersatz und Verlauf im Referenzraum; Länge der Sperrung und Zahl ausgefallener Verbindungen sind keine Schwereklasse.
+
+**Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Prognose der benötigten Transport- oder Versorgungsleistung.
 
 ### 4. Darstellung
 
-Nach B12; ausgefallene Leistung, nutzbare Ausweichwege und Versorgungsfolgen getrennt.
+Nach B12 bzw. der Dach-SOP der Ursache. „Lage & Ereignis“: ausgefallene Leistung, Engpassknoten oder -abschnitt, Ursache soweit belegt, Raum und Stand. „Risiken & Auswirkungen“: tatsächliche Versorgungslücke, tragfähiger Puffer und bedingte Kaskaden getrennt. „Maßnahmen & Handlungsempfehlungen“: bestätigter Ersatz bzw. Zuführung mit Status und zuständig adressierte Klärung. „Abhängigkeiten & Interdependenzen“: die maßgebliche kritische Kette. Die Kernaussage beantwortet: Welche notwendige Leistung erreicht wen bis wann nicht, welcher Ersatz trägt, und welche Abstimmung fehlt? Neubewertung bei belegter Kapazitätsänderung, neuem kritischem Bedarf, geändertem Puffer- oder Zuführungsstand oder belastbarer Wiederanlaufprognose. Netzfreigabe, Aufnahme des Verkehrs und lokale Bedarfsdeckung getrennt fortschreiben; Abschluss erst bei erreichtem Ziel und geklärtem Rückstau (A.8.2).
 
 ### 5. Ansprechstellen und Pflege
 
-**Offene Punkte:** Abgrenzung zu B01, B02 und B06 (wetterbedingte Sperrungen) an Rückblickfällen prüfen.
+**Ansprechstellen:** Zuständige Infrastruktur- und Verkehrsstellen · Transport-, Logistik- und Umschlagbetreiber · versorgungsabhängige Bedarfsträger; jeweils nach Aussagefunktion (eigene Betriebsangabe B, hoheitliche Anordnung A). Je nach Verkehrsträger Straßenbehörden und Betreiber, Eisenbahninfrastruktur- und Verkehrsunternehmen, WSV und Hafenbetreiber, Luftfahrtstellen, Flugsicherung und Flughafenbetreiber; die lokale Verteilung bis zum Bedarfspunkt einschließen.
+
+**Offene Punkte:** Abgrenzung zu B01, B02 und B06 (wetterbedingte Sperrungen) an Rückblickfällen prüfen. Staatliche Verfahren zur Sicherstellung von Verkehrsleistungen nur bei belegtem Anlass, aktueller Rechtsgrundlage und tatsächlicher Aktivierung berichten; ihre Erwähnung schafft keinen aktivierten Rechtszustand und keine Anordnungsbefugnis der Koordinierungsstelle. Pflegefunktion, Meldewege und Prüfanlässe organisationsspezifisch festlegen. Übungsfälle zu gesperrter Brücke mit ungeeigneter Pkw-Umleitung, reduzierter Wasserstraßenleistung, ausgefallenem Umschlag trotz offener Strecke, kritischem Luftfrachtweg und Rückstau nach Freigabe.
 
 <!-- Quelle: sop/teil-c/C14_lebensmittelversorgung.md -->
 

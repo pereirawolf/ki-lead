@@ -10,12 +10,42 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.6.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.6.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.7.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.7.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.7.0] – 21.10.2026
+
+Fachliche Überarbeitung von C05, C06 und C13 ohne konkreten Anlassfall nach dem konsolidierten Vorschlag „SOP-LEAD_C05-C06-C13_Vorschlag_konsolidiert_2026-10-21“. Er führt zwei Vorschläge zusammen: „SOP-LEAD_C05-C06-C13_Vorschlag_2026-10-21“ (F1–F7) und „2026-10-21_KI-LEAD_SOP_C05_C06_C13_PR-Vorschlag“ (U01–U07, K01–K07, L01–L07, 24 Prüfszenarien). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Alle drei bleiben Inhaltsgerüste. Teil A ohne Regeländerung; Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert.
+
+### Geändert
+
+- **C05 Großunfall und überörtliche Unfallfolgen 1.1.0** (bisher 1.0.1):
+  - Abgrenzung zu B07: Bei Brand, Explosion oder Freisetzung in Anlagen oder bei Gefahrguttransporten ist B07 die Dach-SOP, bei behördlich benanntem Tatbezug B16 (Route B16 → C05 in A.1 Nr. 2); C05 vertieft die Unfallfolgen. `art_zuordnung` um „Industrieunfall / Chemieunfall“ und „Sabotage / Anschlag / Terrorismus“ ergänzt, `art_hinweis` und `anschluss` entsprechend.
+  - Abschnitt 1: keine feste Aufnahmeschwelle; Ursache darf offenbleiben; keine Sichtung, Rekonstruktion oder Täterzuschreibung.
+  - Abschnitt 2: „Ereignis- und Personenprofil“. Neue Prüffragen R5 Schutzentscheidungen und Ausweichwege, R6 Zielzustand. Absatz „Bedarf und wirksame Hilfe“ mit psychosozialer Notfallversorgung, Personenauskunft und Angehörigeninformation als eigenem Bedarf.
+  - Abschnitt 3: D2 nach Kodierleitfaden einschließlich Mindestkodierung; die bisherige Zusatzbedingung „amtliche Zählung“ entfällt. Prüfpunkte D1–D8.
+  - Abschnitte 4–5: Darstellung, Ansprechstellen, Übungsfälle.
+- **C06 Kampfmittelfund 1.1.0** (bisher 1.0.1):
+  - Abschnitt 1: auch fachlich begründeter Verdacht und kleine, aber kritische Maßnahmen. Relevanz für das wöchentliche Lagebild (kapazitätskritische Folgen, Häufung, Nachlauf) und Weitergabe akuten Bedarfs nach A.7.3. Keine Aussagen zu Gefährlichkeit oder technischem Vorgehen. Querverweise C09, C13, C02 (Folgeschäden einer Sprengung).
+  - Abschnitt 2: „Schutzentscheidungsprofil“ mit Zeitpunkten und örtlichen Begriffen (A.9.4). Neue Prüffragen R5 Warnung und Hilfen (A.9.3) und R6 Freigaben und Rückkehr. Absatz „Personen und Versorgungskette“.
+  - Abschnitte 3–5: Prüfpunkte D1–D8, Darstellung, Ansprechstellen.
+- **C13 Verkehr, Transport und kritische Logistik 1.1.0** (bisher 1.0.1):
+  - Abschnitt 1: Luftverkehr, Umschlag, Lager und letzte Verteilung einbezogen. C13 dient als Prüfhilfe unter der Ursachen-SOP, ohne automatisch „KRITIS-Ausfall“ zu setzen; `art_hinweis` und „Zuordnung im Schema“ angepasst. Querverweise C02 (Brücken), C04 sowie Auslandsbezug nach A.1 Nr. 6.
+  - Abschnitt 2: „Transport- und Bedarfsprofil“. R2 um Flughäfen, Häfen und Umschlag ergänzt. Absätze „Nutzbarer Ersatz“ und „Zeitkritikalität und Kaskade“; der Pufferablauf ist keine D5-Dauer.
+  - Abschnitt 3: D2 nach Kodierleitfaden statt nur abgeschnittener Personen; Prüfpunkte D1–D8.
+  - Abschnitte 4–5: Darstellung, Ansprechstellen; Verfahren zur Sicherstellung von Verkehrsleistungen nur bei belegter Aktivierung.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.7.0.
+
+### Nicht übernommen
+
+- Neue Links (BBK, Autobahn GmbH, kommunale Verfahren, Hamburger Anweisung). Sie ließen sich nicht prüfen oder sind örtliche Beispiele; Institutionen sind ohne Link genannt (A.6).
+- Nennung einzelner Gesetze zur Verkehrssicherstellung; der offene Punkt in C13 bleibt allgemein.
+- Abweichende Absatzbezeichnungen in Abschnitt 5; es bleibt bei „Ansprechstellen“ und „Offene Punkte“ (A.8.3).
+- Aufnahme der Prüfszenarien unter `evaluation/faelle/`; nur mit gesondertem Auftrag und Budget.
 
 ## [3.6.0] – 21.10.2026
 
