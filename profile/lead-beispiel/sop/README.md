@@ -50,7 +50,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.1.0 | N01 |
+| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.2.0 | N01 |
 | C02 | Massenbewegungen, Bodenversagen und Gebäudeeinsturz | Themenbaustein | [`teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md`](teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md) | 1.2.0 | N09 |
 | C03 | Weltraumwetter und Störungen von Navigation und Zeitreferenz | Themenbaustein | [`teil-c/C03_weltraumwetter-navigation-zeitreferenz.md`](teil-c/C03_weltraumwetter-navigation-zeitreferenz.md) | 1.1.0 | N15 |
 | C04 | Vulkanasche mit Deutschland- oder Versorgungsbezug | Themenbaustein | [`teil-c/C04_vulkanasche.md`](teil-c/C04_vulkanasche.md) | 1.1.1 | N18 |

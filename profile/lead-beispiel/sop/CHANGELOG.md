@@ -31,6 +31,7 @@ Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidier
 - **C10 Arzneimittel und kritisches medizinisches Material 1.2.0:** Abschnitt 2 „Amtliche Engpassstufen (Arzneimittel)“ mit Tabelle (gemeldeter Lieferengpass § 52b Abs. 3c AMG, Maßnahme der Bundesoberbehörde § 52b Abs. 3d, Versorgungsmangel § 79 Abs. 5, örtliche Nichtverfügbarkeit ohne Stufe); R2 und R6 angepasst; Kopf um `quellen_geprueft_am` und `pruefausloeser`; Fachgrundlagen in Abschnitt 5.
 - **C14 Lebensmittelversorgung 1.2.0:** Absatz „Amtliche Feststellung einer Versorgungskrise“ nach § 1 ESVG mit dreistufigem Prüfpfad analog C12/R10; R2 und R5 angepasst; Kopf um `quellen_geprueft_am` und `pruefausloeser`; Fachgrundlagen in Abschnitt 5.
 - **C17 Zivile Verteidigung 1.2.0:** Abschnitt 2 „Rechtszustände“ mit Tabelle (keine Feststellung, Katastrophennotstand Art. 35 GG, Spannungsfall und Bündnisfall Art. 80a GG, Verteidigungsfall Art. 115a GG), Absatz „Zivile Aufgabenfelder der Gesamtverteidigung“ nach den Kapiteln 18–22 der Rahmenrichtlinien Gesamtverteidigung vom 05.06.2024 (amtlicher Volltext gelesen) und der Konzeption Zivile Verteidigung als Prüfraster und Absatz „Sicherstellungs- und Vorsorgerecht“ mit Prüfpfad; R1, R3, R6 und D3 angepasst; Ansprechstellen, Fachgrundlagen und Kontrastfälle in Abschnitt 5; Kopf um `quellen_geprueft_am` und `pruefausloeser`.
+- **C01 Radiologische / nukleare Lage 1.2.0:** Korrektur der Zeile zum Referenzszenario S14: Anhang B.14 des ANoPl-Bund bezieht vorsätzliche Ereignisse mit kriminellem oder terroristischem Hintergrund einschließlich einer damit einhergehenden glaubhaften Drohung des Einsatzes einer Nuklearwaffe ein, und Anhang B.13 ordnet einen drohenden Einsatz in der Regel S14 zu; die bisherige Aussage „kein S14“ war unzutreffend. Eine glaubhafte Drohung bleibt ein Anzeichen nach Tabelle 3.3 (Nr. 2) und kein hinreichendes Kriterium für einen Notfall; die Einordnung trifft die zuständige Stelle. Fundstelle in der Bekanntmachung BAnz AT 23.11.2023 B1 (S. 25, 216) ergänzt; erledigt den offenen Punkt O01 des Vorschlags.
 - **Quellenregister:** 20 Einträge für die neuen Fachgrundlagen mit Prüfverfahren „Ergänzung 22.10.2026“; Stand 22.10.2026.
 - **Gültigkeitsstand (Teil A):** Sammelmappe 3.13.0.
 
@@ -38,7 +39,7 @@ Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidier
 
 - C17: Fundstelle der Konzeption Zivile Verteidigung prüfen.
 - B11: Meldepflichten der §§ 6, 7 IfSG und konsolidierter Text der IGV-Änderungen; B15: §§ 2, 28 BSIG; C10: Definitionen von BfArM und PEI, VO (EU) 2022/123.
-- Arbeitspakete AP3–AP6 des Vorschlags folgen in eigenen Pull Requests; O01 (C01, Anhang B.14 ANoPl-Bund) bleibt offen.
+- Arbeitspakete AP3–AP6 des Vorschlags folgen in eigenen Pull Requests.
 
 ## [3.12.0] – 22.10.2026
 
