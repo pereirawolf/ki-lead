@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.4.28 vom 22.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.4.29 vom 22.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -195,7 +195,7 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 
 - **Import** mehrerer Meldungen. Jede wird geprüft und gegebenenfalls migriert (profilgesteuert).
 - **Ansichten:** Dashboard mit Meldestatus aus `kontakte.json`, Meldungen, Sachverhalte, Lagenradar je Sachverhalt (ohne Mittelwert), Rohtabelle, Redaktionscheck (A.3/A.4/A.7/A.8) und Kopiervorlage für Word.
-- **Export:** PDF, CSV, Kopiervorlage.
+- **Export:** PDF, CSV, Kopiervorlage. Gegliederte Ausgaben (PDF, Kopiervorlage) brechen eine Kennsatzzeile nicht an Signal-Satzanfängen um; ein Kennsatz reicht bis zum Zeilenende. Das PDF verwendet die Standardschrift (Windows-1252) und ersetzt andere Zeichen lesbar, etwa „→“ durch „->“ und „⟦…⟧“ durch „[[…]]“ (seit 0.4.29).
 
 **Umsetzung M4 (Stand 18.10.2026):** Übergabe aus dem Lagebild mit Auswahl und ausdrücklicher Rolle je Meldung („Als Eingang behandeln“ oder „Als Vormeldung behandeln“; eigene Meldungen vorab abgewählt, bei Auswahl als Vormeldung vorgeschlagen; nicht mögliche Rollen gesperrt und begründet; Rolle verbindlich bis S1/S2 und im Laufprotokoll). Eine Übergabe gilt nur für das Profil, unter dem sie entstand, und wird genau einmal übernommen; ein Profilwechsel verwirft eine noch nicht übernommene. Rolle „verdichtung“ mit eigenem Modell und Aufwand für S2, Arbeitsanweisung `anweisungen.verdichtung` aus dem Profil. Vor S1 und S2 erzeugt die App „Vermerke aus dem Redaktionscheck“ der Eingangsmeldungen und seit 0.4.28 auch einer eigenen Vormeldung (gleiche Logik wie das Lagebild, bezogen auf t0 und die nächste Ausgabe) und gibt sie als Arbeitshilfe mit. Nach S3 prüft sie, ob jede Eingangsmeldung im Quellenverzeichnis erkennbar ist. Vergleich mit einer Referenzfassung im Ergebnis (Zuordnung der Sachverhalte nach Ähnlichkeit, Kennzahlen je Achse ohne Gesamtwert), gespeichert im Laufprotokoll (`vergleich`), Export als CSV/JSON. OpenAI-Anbieter über die Responses API (Streaming, `web_search` mit `max_tool_calls`, Structured Outputs mit strengem Schema, `reasoning.effort`, `store: false`, PDF als `input_file`); Modelle gpt-6-luna, gpt-6.1-sol, gpt-6-astra; Auswahl des Anbieters nach Modellkennung, Schlüssel je Anbieter.
 
@@ -324,3 +324,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.26 | 21.10.2026 | Höchstzahl Ausgabetoken der Einstellungen gilt für jeden KI-Aufruf (S1, S2, S3, Management Summary) (Abschnitt 5.1, Umsetzung M2) |
 | 0.4.27 | 21.10.2026 | Schätzung von Dauer und Kosten nach drei S1-Verdichtungen mit Haiku „high“ und einer Opus-Verdichtung mit 128 000 Token als Grenze (Abschnitt 5.1, Umsetzung M2) |
 | 0.4.28 | 22.10.2026 | Fortschreibung: `{{jetzt}}` ist die Bearbeitungszeit, feste t0-Regeln, verbindlicher Steuerungsblock mit Recherchemodus für S2, Befunde zur Recherche, Redaktionsvermerke auch für eine eigene Vormeldung (Abschnitte 4.4 und 5.1, Umsetzung M4) |
+| 0.4.29 | 22.10.2026 | PDF und Kopiervorlage: Kennsatzzeilen bleiben ungeteilt; Zeichen außerhalb der PDF-Standardschrift werden lesbar ersetzt (Abschnitt 5.1) |
