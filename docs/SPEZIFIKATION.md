@@ -80,7 +80,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -331,3 +331,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.28 | 22.10.2026 | Fortschreibung: `{{jetzt}}` ist die Bearbeitungszeit, feste t0-Regeln, verbindlicher Steuerungsblock mit Recherchemodus für S2, Befunde zur Recherche, Redaktionsvermerke auch für eine eigene Vormeldung (Abschnitte 4.4 und 5.1, Umsetzung M4) |
 | 0.4.29 | 22.10.2026 | PDF und Kopiervorlage: Kennsatzzeilen bleiben ungeteilt; Zeichen außerhalb der PDF-Standardschrift werden lesbar ersetzt (Abschnitt 5.1) |
 | 0.4.30 | 22.10.2026 | Fortschreibung: Land und meldende Stelle aus der eigenen Vormeldung; Hinweis zum Seitenabruf im Steuerungsblock (Abschnitt 5.1) |
+| 0.4.30 · Nachtrag | 23.10.2026 | Ohne Änderung der App: Abschnitte 4.1–4.3 und 4.5 an das tatsächliche Profilformat angeglichen, `werkzeug` mit der zur Laufzeit verwendeten App-Version (Abschnitt 6), Verdichtung mit Quellenkategorie nach Rolle, offene Punkte 2 und 5 (Konsistenzprüfung KW 43, KP-2026-W43-44 bis -47, -55) |

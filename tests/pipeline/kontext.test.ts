@@ -42,7 +42,7 @@ describe("Kontext aus dem Profil", () => {
 
   it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.2.2");
+    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.3.0");
     // frühere Kennungen (01, N02) und aktuelle (B08) werden auf die gültige Kennung abgebildet
     const liste = [
       "SOP-LEAD 01 Unwetter / Sturm v0.4",
@@ -52,12 +52,12 @@ describe("Kontext aus dem Profil", () => {
       "SOP-LEAD B08 Strom",
     ];
     expect(sopKennungenAbgleichen(liste, p!)).toEqual([
-      "SOP-LEAD B01 Unwetter / Sturm v2.1.0",
-      "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.1",
-      "SOP-LEAD B08 Stromausfall / Blackout v2.1.2",
+      "SOP-LEAD B01 Unwetter / Sturm v2.1.1",
+      "SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.2",
+      "SOP-LEAD B08 Stromausfall / Blackout v2.2.0",
     ]);
     // Nicht in S1 bestätigte (nicht beigefügte) SOPs entfallen
-    expect(sopKennungenAbgleichen(liste, p!, new Set(["b01"]))).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.1.0"]);
+    expect(sopKennungenAbgleichen(liste, p!, new Set(["b01"]))).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.1.1"]);
   });
 
   it("löst frühere SOP-IDs gespeicherter Läufe auf", async () => {
