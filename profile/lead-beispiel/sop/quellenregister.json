@@ -2178,6 +2178,38 @@
       "fundstellen": [
         "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
       ]
+    },
+    {
+      "id": "RRGV",
+      "url": "https://www.verwaltungsvorschriften-im-internet.de/bsvwvbund_05062024_BMIKM7510011324.htm",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Rahmenrichtlinien Gesamtverteidigung (RRGV), Bundeskabinett 05.06.2024",
+      "dokumentstand": "Verwaltungsvorschrift vom 05.06.2024 (BMI)",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die zivilen Aufgabenfelder der Gesamtverteidigung (Kapitel 18–22); keine Lagedaten.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Am 22.10.2026 durch ein zweites Webrecherchewerkzeug im amtlichen Volltext gelesen: Kapitelüberschriften 19–22 wörtlich, Aufgabenfelder 18–22 zusammengefasst; vom ersten Werkzeug nicht abrufbar (Allowlist)",
+      "offene_nachpruefung": "Fortschreibung der RRGV und Fundstelle der Konzeption Zivile Verteidigung prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "BSI-BITS",
+      "url": "https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2025/2025-239237-1032.pdf?__blob=publicationFile&v=10",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "BSI-Cyber-Sicherheitswarnung CSW-Nr. 2025-239237-1032: Umstellung auf BSI-IT-Sicherheitsmitteilungen (BITS)",
+      "dokumentstand": "Version 1.0 vom 01.04.2025; Umstellung zum 01.05.2025",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die vier Kritikalitätsstufen der BITS (FAQ S. 6–7, Handlungszeiträume S. 10); kein Ereignisbeleg.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Erstes Werkzeug: nur Ankündigungstext ohne Stufen sichtbar; zweites Werkzeug las die PDF lokal und gab die Stufendefinitionen wörtlich wieder (22.10.2026)",
+      "offene_nachpruefung": "Ob das BSI die Definitionen nach dem 01.04.2025 geändert hat, ist aus der Datei nicht erkennbar; aktuelle Produktbeschreibung des BSI gelegentlich abgleichen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md"
+      ]
     }
   ],
   "offene_schwerpunkte": [
