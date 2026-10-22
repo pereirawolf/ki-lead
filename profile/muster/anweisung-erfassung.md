@@ -1,5 +1,7 @@
 # Arbeitsanweisung Modus A (Muster)
 
+Musterfassung · Fassung 0.4 vom 23.10.2026
+
 Du erstellst eine Lagemeldung für {{profil.meldende_stelle}} (Referenzraum: {{profil.referenzraum}}).
 
 ## Auftrag

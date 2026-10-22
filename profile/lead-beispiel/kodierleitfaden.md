@@ -68,7 +68,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 ### D2 Personelle Direktbetroffenheit
 
 - **Kodierfrage:** Wie viele Personen sind im Referenzraum zu t0 unmittelbar betroffen?
-- **Direkt betroffen** sind Personen, deren Leben, Gesundheit, Unterkunft oder Grundversorgung durch das Ereignis selbst unmittelbar beeinträchtigt ist, etwa Verletzte, Erkrankte, Evakuierte oder Personen ohne Strom- oder Wasserversorgung. Nicht direkt betroffen sind Personen in einem Warngebiet ohne eingetretene Beeinträchtigung und mittelbar Betroffene, etwa durch Verkehrsbehinderungen.
+- **Direkt betroffen** sind Personen, deren Leben, Gesundheit, Unterkunft oder Grundversorgung durch das Ereignis selbst unmittelbar beeinträchtigt ist, etwa Verletzte, Erkrankte, Evakuierte oder Personen ohne Strom- oder Wasserversorgung. Nicht direkt betroffen sind Personen in einem Warngebiet ohne eingetretene Beeinträchtigung und mittelbar Betroffene, etwa durch Verkehrsbehinderungen. Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene zählen, sobald die Maßnahme vollzogen ist; zum Verlassen Aufgeforderte ohne belegten Vollzug zählen nicht (SOP-LEAD A.3).
 - **Nullregel (vereinheitlicht):** Stufe 0 („unter 10 Personen“) ist zulässig, wenn **eine** der beiden Bedingungen belegt ist:
   - (a) eine belegte Zahl von 1 bis 9 direkt Betroffenen, oder
   - (b) ein Nullbefund aus einer aktiv laufenden, für den Sachverhalt einschlägigen Erhebung mit definierter Grundgesamtheit (Surveillance, Meldepflicht, Fallregister, Lagemeldung mit ausdrücklicher Fehlanzeige).
@@ -80,7 +80,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 ### D3 Verantwortungszurechnung / Zurechnungszentrum
 
 - **Kodierfrage:** Welche Ebene steuert oder trägt die bewertete Funktion zu t0?
-- **Bewertete Funktion benennen:** Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
+- **Bewertete Funktion benennen:** z. B. Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. Bewertet wird die konkret betroffene Funktion einer Stelle oder Organisation, nicht ihre institutionelle Bezeichnung; die genannten Funktionen sind Beispiele, maßgeblich sind Aufgabenwahrnehmung, Zuständigkeit und tatsächliche Betroffenheit. D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
 - **Mit Akutereignis:** Kodiert wird die Ebene, die Bewältigung oder Koordination tatsächlich steuert (z. B. Kreis als untere Katastrophenschutzbehörde = 2; Land bei landesweiter Koordinierung = 4).
 - **Ohne Akutereignis (Vorsorge-, Beobachtungs-, Frühwarnsachverhalt):** Eine **strukturelle Zurechnung** ist zulässig, wenn ein konkreter Gegenstand benennbar ist, nämlich eine bestimmte Fach-, Regulierungs- oder Vorsorgeaufgabe, und die zuständige Ebene belegt ist. Dann wird diese Ebene kodiert, und der Bewertungstext erhält die Kennzeichnung „D3 strukturell: [Aufgabe], [Stelle]“.
 - **Offen:** wenn auch die strukturelle Zuständigkeit für einen konkreten Gegenstand nicht belegbar ist. Eine fiktive Bündelung bei der Koordinierungsstelle ist ausgeschlossen. Die Koordinierungsstelle ist keine Zurechnungsebene.
@@ -111,6 +111,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 - Kodiert wird nach **belegten Kopplungen**, nicht nach Sektorzugehörigkeit oder Listen denkbarer Folgen. Die KRITIS-Prüfung ist Pflicht bei jeder Meldung.
 - **Wirkungskette:** Bei einer bewertungsrelevanten Folgekette die entscheidende Verbindung benennen: beeinträchtigte Funktion → Abhängigkeit → Bedingung → betroffener Bereich, mit Puffer und Reichweite (Notstrom, Vorräte, Speicher, Personal, Ausweichweg). Mögliche Folgeschritte als **Szenario** kennzeichnen. Sie ändern den Ist-Wert nicht.
 - **Stufe 0** („keine KRITIS-Bezüge“) nur, wenn die Prüfung durchgeführt wurde und keine Kopplung ergab.
+- D6 steigt nicht allein mit der vergangenen Ausfalldauer.
 - Ausfälle der **Kommunikation mit der Bevölkerung** (Mobilfunk, Warnmittel) gehören als Kopplung hierher und in den Text, nicht zu D7.
 
 ### D7 Kommunikation / Informationslage

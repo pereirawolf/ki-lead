@@ -6,4 +6,6 @@ Inhalt: sechs Ländermeldungen (HE, NI, NW, RP, ST, TH) und die daraus verdichte
 
 Zweck: Demonstration und automatisierte Tests von KI-LEAD (Prüfung, Export, später Verdichtung).
 
+**Entstehungsangaben:** `_entstehung` gibt die Entstehung der Meldungen wieder und wird nicht nachträglich umgeschrieben. Die Angabe `"kodierleitfaden": "LEAD v2.0"` entspricht keiner Fassung des Kodierleitfadens; nach `werkzeug` wurden die Meldungen mit dem Kodierleitfaden 1.2 angeglichen. Gültig ist das Regelwerk im Gültigkeitsstand von SOP-LEAD Teil A.
+
 Lizenz: CC BY 4.0, siehe `LICENSE-CONTENT`.

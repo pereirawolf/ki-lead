@@ -8,7 +8,7 @@ typ: "Dach-SOP"
 lesegruppe: "Katalog-Einstiege"
 lageart: "Hochwasser / Überschwemmung (Flusshochwasser, pluviale Überflutung/Sturzflut, Sturmflut)"
 art_vorschlag: ["Hochwasser / Überschwemmung"]
-zweck: "Reproduzierbare Erfassung und Bewertung von Fluss-, Starkregen- und Sturmflutereignissen mit Folgen für Bevölkerung, Einsatzwesen und KRITIS, einschließlich begründeter Vorwarnlagen."
+zweck: "Reproduzierbare Erfassung und Bewertung von Fluss-, Starkregen- und Sturmflutereignissen mit Folgen für Bevölkerung, Einsatzwesen und KRITIS, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
 version: "2.1.1"
 status: "Beispielfassung"
 stand: "22.10.2026"

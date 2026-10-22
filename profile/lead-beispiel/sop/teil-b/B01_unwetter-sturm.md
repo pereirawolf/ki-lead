@@ -8,7 +8,7 @@ typ: "Dach-SOP"
 lesegruppe: "Katalog-Einstiege"
 lageart: "Unwetter / Sturm (Sturm, Orkan, Gewitter, Starkregen, Hagel, Tornado)"
 art_vorschlag: ["Unwetter / Sturm"]
-zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter Vorwarnlagen."
+zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
 version: "2.1.0"
 status: "Beispielfassung"
 stand: "21.10.2026"

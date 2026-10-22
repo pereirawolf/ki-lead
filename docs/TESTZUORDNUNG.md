@@ -5,6 +5,7 @@ Nachweis, dass bei der Neugliederung von `tests/` keine Prüfung verloren ging. 
 - Vorher: **415** Tests in 25 Dateien
 - Nachher: **443** Tests in 46 Dateien; alle 415 bisherigen Tests unter unverändertem vollständigem Namen (`describe › it`) wiedergefunden, 28 neu
 - Kennungen aus Reviews (F01–F13, RC…, RV…, SOP-…) bleiben im Testnamen. Gleiche Kennungen aus zwei Reviews (etwa F04, F05, F09, F11 vom 18.10. und vom 20.10.2026) unterscheidet die Spalte „Herkunft“ und der Kopfkommentar der Zieldatei.
+- Fortgeschrieben (Stand 23.10.2026): Spätere Umbenennungen stehen mit Version und Commit in der Spalte „Änderung“; der bisherige Name in der ersten Spalte bleibt als Nachweis erhalten.
 - „Änderung“ leer: Prüfung unverändert übernommen (nur Importe, gemeinsame Hilfen, Fixture-Auswahl über das Kennzeichen statt über die Reihenfolge).
 
 ## Zuordnung je bisheriger Datei
@@ -377,12 +378,12 @@ Ziel: `tests/pipeline/eingangsquellen.test.ts`, `tests/pipeline/json.test.ts`, `
 | Verdichtung von Eingangsmeldungen › verdichtet ohne Websuche, mit t0 aus den Eingängen und verbindlicher Gliederung | `tests/pipeline/verdichtung.test.ts` |  |
 | Abgeschnittene Antworten und t0 › vervollständigt eine an der Token-Grenze abgeschnittene Meldung ohne neue Recherche | `tests/pipeline/stufen.test.ts` |  |
 | Abgeschnittene Antworten und t0 › übernimmt einen im Auftrag vorgegebenen t0 in S1 | `tests/pipeline/stufen.test.ts` |  |
-| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` |  |
+| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.25 (fa19eb8): „ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“ |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 weit nach dem jüngsten Eingang auf den Eingang zurück und sagt es | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 vor dem jüngsten Eingang ebenfalls zurück | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: lässt einen t0 kurz nach dem jüngsten Eingang stehen | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: ein im Auftrag vorgegebener t0 geht der Absicherung vor | `tests/pipeline/verdichtung.test.ts` |  |
-| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Erfassung ohne Eingänge: t0 aus S1 bleibt unverändert | `tests/pipeline/stufen.test.ts` |  |
+| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Erfassung ohne Eingänge: t0 aus S1 bleibt unverändert | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.28 (4166181): „Erfassung ohne Eingänge: ein t0 aus S1 am heutigen Stichtag vor der aktuellen Zeit bleibt unverändert“ |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › übernimmt eine Prüffrage aus S1 ohne Vorgabe im Auftrag nur als Vorschlag | `tests/pipeline/stufen.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › behält die geschärfte Prüffrage, wenn der Auftrag eine nennt | `tests/pipeline/stufen.test.ts` |  |
 | Quellenprüfung der Eingangsmeldungen › verlangt je Eingang einen eigenen A-Eintrag und unterscheidet ähnliche Stellen | `tests/pipeline/eingangsquellen.test.ts` |  |

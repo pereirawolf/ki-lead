@@ -125,14 +125,14 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
     expect(dokumentFassung("Kein Titel, Fassung 1.0")).toEqual({});
   });
 
-  it("Musterprofil: Erfassung und Kodierleitfaden ohne Fassung, Verdichtung und Kurzfassung als Standardfassung der App", async () => {
+  it("Musterprofil: Erfassung und Kodierleitfaden mit Fassung (KP-2026-W43-51), Verdichtung und Kurzfassung als Standardfassung der App", async () => {
     const { profil: m } = await profil("muster");
     const doks = arbeitsgrundlagen(m!);
     expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
-      ["erfassung", "paket", undefined],
+      ["erfassung", "paket", "0.4"],
       ["verdichtung", "app", undefined],
       ["kurzfassung", "app", undefined],
-      ["kodierleitfaden", "paket", undefined],
+      ["kodierleitfaden", "paket", "0.4"],
     ]);
     expect(doks[1].text).toBe(VERDICHTUNG_S2);
     expect(doks[2].text).toBe(STANDARD_ANWEISUNG);

@@ -231,7 +231,7 @@ Jede Profilversion erhält eine Prüfsumme (SHA-256 über alle Dateien). Sie wir
 ## Versionierung und Änderungsverlauf eines Profils
 
 - `version` im Manifest folgt Semantic Versioning: erste Stelle bei inkompatiblen Schemaänderungen (Meldungen brauchen eine Migration), zweite bei neuen Inhalten oder geänderten Regeln, dritte bei Korrekturen ohne fachliche Wirkung. Geänderte Inhalte erhalten immer eine neue Version.
-- Jedes Dokument (Arbeitsanweisungen, SOP, Kodierleitfaden) nennt im Kopf seine Fassung und deren Datum.
+- Jedes Dokument (Arbeitsanweisungen, SOP, Kodierleitfaden) nennt im Kopf seine Fassung und deren Datum; für versionierte fachliche Regelwerke ist das Pflicht, auch im Musterprofil.
 - Eine Datei `CHANGELOG.md` im Paket führt die Änderungen je Profilversion, mit Datum und Bezug auf die betroffenen Dokumente. Fachliche Festlegungen (z. B. Kodierregeln) stehen zusätzlich im Änderungsprotokoll des jeweiligen Dokuments.
 - `CHANGELOG.md` wird nicht an KI-Modelle übergeben.
 
