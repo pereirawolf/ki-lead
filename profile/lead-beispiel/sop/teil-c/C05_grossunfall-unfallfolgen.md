@@ -53,7 +53,7 @@ bisherige_ids: ["baustein-n16"]
 - **D6:** Konkrete Funktionskopplungen statt bloßer Lage an einem Verkehrsweg oder in einer Industrieanlage.
 - **D7/D8:** Entscheidungsrelevante Informationslücken und beobachteter Verlauf; eine ungeklärte Unfallursache verhindert keine Folgenbewertung und ist kein hoher D7-Wert. Neue Meldungen oder korrigierte Zahlen allein belegen keine Verschärfung.
 
-**Beurteilung/Tendenz:** Nach konkreten Folgen, nutzbarer Hilfe, verbleibender Lücke und Entwicklung im Referenzraum; Ereignisbezeichnung, Bilder oder eine formale Alarmstufe sind keine LEAD-Schwereklasse.
+**Beurteilung/Tendenz:** Nach konkreten Folgen, nutzbarer Hilfe, verbleibender Lücke und Entwicklung im Referenzraum; Ereignisbezeichnung, Bilder oder eine formale Alarmstufe legen die Beurteilung (A.4) nicht fest.
 
 **Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Fachprognose.
 

@@ -15,7 +15,7 @@ stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung der fachlichen Empfehlungen des UBA"
+pruefausloeser: "Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung der fachlichen Empfehlungen des UBA; Änderung der Trinkwasserverordnung oder des Wassersicherstellungsgesetzes"
 bisherige_kennung: "10"
 bisherige_ids: ["sop-10"]
 ```

@@ -56,7 +56,7 @@ bisherige_ids: ["baustein-n06"]
 - **D6:** Belegte Kopplung an eine kritische Funktion; Sektorzugehörigkeit und lange Staus legen keine Stufe fest.
 - **D7/D8:** Entscheidungsrelevante Informationslücken und beobachtete Änderung der realen Leistung; veränderte Meldedichte oder eine neue Kartenansicht sind keine Dynamik.
 
-**Beurteilung/Tendenz:** Nach benötigter Leistung, ungedecktem Bedarf, Zeitkritikalität, nutzbarem Ersatz und Verlauf im Referenzraum; Länge der Sperrung und Zahl ausgefallener Verbindungen sind keine Schwereklasse.
+**Beurteilung/Tendenz:** Nach benötigter Leistung, ungedecktem Bedarf, Zeitkritikalität, nutzbarem Ersatz und Verlauf im Referenzraum; Länge der Sperrung und Zahl ausgefallener Verbindungen legen die Beurteilung (A.4) nicht fest.
 
 **Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Prognose der benötigten Transport- oder Versorgungsleistung.
 

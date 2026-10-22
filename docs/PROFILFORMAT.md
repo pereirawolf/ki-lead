@@ -28,7 +28,10 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "format": "lead-profil/1",
   "id": "de.beispiel.kreis-x",
   "name": "Lagemeldung Kreis X",
+  "beschreibung": "Lagemeldungen des Stabes Kreis X",
   "version": "2026.10.1",
+  "herausgeber": "Kreis X",
+  "lizenz": "CC-BY-4.0",
   "ebene": "Kreis",
   "referenzraum": "Kreisgebiet X",
   "variablen": { "land": "Thüringen", "meldende_stelle": "Stab Kreis X", "zeitzone": "Europe/Berlin" },
@@ -97,6 +100,7 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | `layout` | `zeile` oder `spalten` für Gruppen |
 | `element_label`, `titel_feld`, `hinzufuegen` | Listen: Name eines Elements, Feld für dessen Überschrift, Text der Schaltfläche |
 | `radar` | Name eines Radars aus `radare` |
+| `zeilen` | Höhe mehrzeiliger Eingabefelder in Zeilen |
 
 ### `radare`
 
@@ -118,12 +122,14 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 | `sv_beurteilung`, `sv_tendenz`, `sv_bewertung_text` | Bewertung und Kennsätze |
 | `sv_radar` | Radar des Sachverhalts |
 | `sv_textfelder`, `sv_analysefelder` | Texte mit Quellenverweisen bzw. Analysefelder der Kurzfassung |
+| `sv_massnahmen` | Maßnahmenfeld eines Sachverhalts; der Redaktionscheck verlangt bei hoher Beurteilung Angaben |
 | `beurteilung_hoch`, `tendenz_entspannung`, `tendenz_verschaerfung` | Werte für Kennzahlen und Redaktionshinweise; ohne `beurteilung_hoch` gelten die beiden höchsten Stufen des Schemas (der Redaktionscheck weist das aus), ohne `tendenz_verschaerfung` der letzte Wert der Aufzählung. Als gegenläufig gelten nur `tendenz_entspannung` und die Verschärfung |
 
 Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteigende Schwere: Das Lagebild sortiert danach und färbt die höchste Stufe rot, die zweithöchste orange, die dritthöchste gelb.
 
 ### Weitere Abschnitte
 
+- `format` (`lead-ui/1`), `titel`, `untertitel`: Kennung und Kopf der Eingabemaske; `ausblenden`: Felder der obersten Ebene, die das Formular nicht zeigt.
 - `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt.
 - `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge. Unter dem Quellenfeld stellt ein Baukasten neue Zeilen aus Kategorie, Art (Vorlage des Profils, Online-Quelle, Pressemitteilung, Lagebild, Meldung aus dem gespeicherten Lagebild, Datensatz, Beitrag in sozialen Medien, Auskunft, Dokument ohne URL) und Zusätzen (Datenstand, Paywall, nicht ausgewertet) zusammen; Zeilen haben die Form `[Qn] K – …`.
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern. Der Meldezeitpunkt steht im Dateinamen immer vorn (`2026-10-20T20-31_…`), auch wenn `{meldezeitpunkt}` in der Vorlage am Ende steht oder fehlt.
@@ -211,7 +217,7 @@ Aus dem YAML-Block oder Frontmatter liest die App:
 | `lesegruppe` | Leseblock der Bausteine in Auswahl und Katalog (nur Navigation) |
 | `status` | Bearbeitungsstand; beginnt er mit „Inhaltsgerüst“, zeigt die App eine entsprechende Marke |
 
-Weitere Schlüssel (z. B. `pflegeverantwortlich`, `naechste_pruefung_faellig`) gehen mit dem Abschnitt an die KI, werden von der App aber nicht ausgewertet. Mitgelieferte Profile bettet die App ohne `sop/archiv/` und Lesefassung ein. `sop/README.md` ist eingebettet und erscheint als Lesedokument. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Die Profilansicht zeigt aus dem Kopf `version` als Tag sowie einen Steckbrief (u. a. `typ`, `lesegruppe`, `art_vorschlag` bzw. `art_zuordnung`, `status`, `stand`, `naechste_pruefung_faellig`, `pflegeverantwortlich`). Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
+Weitere Schlüssel gehen mit dem Abschnitt an die KI; für Auswahl und Katalog wertet die App sie nicht aus. Bedeutung und Pflicht von `art_zuordnung`, `art_hinweis`, `anschluss`, `pruefausloeser` und `quellen_geprueft_am` legt das Profil fest (im Beispielprofil SOP-LEAD Teil A, A.1 Nr. 7 und A.10.2). Mitgelieferte Profile bettet die App ohne `sop/archiv/` und Lesefassung ein. `sop/README.md` ist eingebettet und erscheint als Lesedokument. Nicht im Manifest genannte Dateien (z. B. `sop/archiv/`, `sop/README.md`, eine erzeugte Lesefassung) liest die App nicht als SOP. Die Profilansicht zeigt aus dem Kopf `version` als Tag sowie einen Steckbrief (u. a. `bausteintyp` vor `typ`, `lesegruppe`, `art_vorschlag` bzw. `art_zuordnung`, `art_hinweis`, `anschluss`, `status`, `stand`, `naechste_pruefung_faellig`, `pflegeverantwortlich`). Das Skript `scripts/sop-lesefassung.mjs` (`npm run sop:lesefassung`) erzeugt aus den Dateien in `sop.dateien` eine Lesefassung mit Inhaltsverzeichnis, Teilüberschriften und Leseblöcken (aus `lesegruppe`); mit `--check` prüft es, ob sie aktuell ist. Beim Import prüft sie zusätzlich: doppelte IDs (Fehler), doppelte Kennungen und Aliasse, die eine vorhandene ID verdecken (Warnung).
 
 ## Prüfung beim Import
 

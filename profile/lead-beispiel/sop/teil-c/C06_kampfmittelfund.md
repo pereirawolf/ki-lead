@@ -54,7 +54,7 @@ bisherige_ids: ["baustein-n17"]
 - **D6:** Konkrete Kopplung an Verkehr, Behandlung, Pflege oder eine andere kritische Leistung, nicht allein die Lage im Ballungsraum.
 - **D7/D8:** Entscheidungsrelevante Informationslücken und reale Änderungen nach Kodierleitfaden; die Verlängerung einer ungesicherten Schätzung oder neue Medienmeldungen sind kein Lageumschlag.
 
-**Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt keine Schwereklasse fest.
+**Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt die Beurteilung (A.4) nicht fest.
 
 **Offenlassen:** D5 ohne Prognose; D6 nur, wenn die KRITIS-Prüfung mangels Information nicht tragfähig ist – ergibt sie keine Kopplung, ist D6 = 0 (Kodierleitfaden D6).
 

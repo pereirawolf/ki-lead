@@ -15,7 +15,7 @@ stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – §§ 32, 36 BSIG am Normtext gelesen; BITS-Kritikalitätsstufen aus der BSI-Ankündigung vom 01.04.2025 (Zweitprüfung durch ein weiteres Werkzeug); Rechercheeinstiege 26.09.2026 teilweise, Ergänzungen 19.10.2026 und 21.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Änderung des BSI-Gesetzes (Meldepflichten) oder der Kritikalitätsstufen der BSI-IT-Sicherheitsmitteilungen; Rückblick nach A.8.3; Abschluss des Kalibrierfalls vom 21.10.2026 (Abschnitt 5); Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
+pruefausloeser: "Änderung des BSI-Gesetzes (Meldepflichten) oder der Kritikalitätsstufen der BSI-IT-Sicherheitsmitteilungen; Rückblick nach A.8.3; Abschluss des Kalibrierfalls vom 21.10.2026 (Abschnitt 5); Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Fortschreibung des BSI-Standards 200-4"
 bisherige_kennung: "15"
 bisherige_ids: ["sop-15"]
 ```
@@ -34,7 +34,7 @@ bisherige_ids: ["sop-15"]
 
 **Kritikalitätsstufen der BSI-IT-Sicherheitsmitteilungen (BITS).** Seit dem 01.05.2025 versendet das BSI seine Warnprodukte als BSI-IT-Sicherheitsmitteilungen; die Kritikalität trägt vier Stufen, die für alle Informationskategorien gleich gelten (Tabelle nach A.10.1). Die Stufe beschreibt die vom BSI erwartete Beeinträchtigung des Regelbetriebs betroffener Systeme und die Handlungsdringlichkeit für IT-Verantwortliche – bundesweit, nicht die Wirkung im Referenzraum. Im Meldungstext immer mit Fachgrundlage schreiben, z. B. „Kritikalität 3 (BITS) laut BSI, Stand …“.
 
-| Stufe (BITS, BSI) | Fallgruppe laut BSI | Abgrenzung für die Befassung |
+| Stufe (BITS, BSI) | Fallgruppe | Abgrenzung für die Befassung |
 |---|---|---|
 | 1 Grau | Maßnahmen sollten in absehbarer Zeit erwogen werden; keine wesentliche Beeinträchtigung zu erwarten | Kein Befassungsanlass für sich; Aufnahme nur bei konkret begründetem Schutz-, Vorbereitungs-, Informations- oder Abstimmungsbedarf nach A.1 Nr. 1 und Nr. 3 oder bei belegter Betroffenheit mit Leistungsfolge. Die Stufe entscheidet weder über Aufnahme noch über Radarwerte. |
 | 2 Gelb | Maßnahmen müssen zeitnah ergriffen werden; temporäre Beeinträchtigung des Regelbetriebs möglich | Vorsorgelage nach A.1 Nr. 1 nur mit konkret benanntem Prüf- oder Abstimmungsbedarf; D1/D2 offen ohne belegte Einschränkung. |

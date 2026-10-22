@@ -16,9 +16,9 @@ version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "22.10.2026 – Art. 80a und 115a GG (Abs. 4 am 22.10.2026 in nichtamtlicher Wiedergabe nachgelesen) und Kapitelüberschriften 18–22 der Rahmenrichtlinien Gesamtverteidigung am amtlichen Text gelesen (RRGV: Zweitprüfung durch ein weiteres Werkzeug); KZV-Fundstelle vor Verwendung prüfen (A.6)"
+quellen_geprueft_am: "22.10.2026 – Art. 80a und 115a GG und § 1 ZSKG am Normtext; Art. 35 GG und Art. 115a Abs. 4 GG in nichtamtlicher Wiedergabe nachgelesen; Rahmenrichtlinien Gesamtverteidigung im amtlichen Text (Kapitelüberschriften 19–22 wörtlich, Aufgabenfelder 18–22 zusammengefasst; Zweitprüfung durch ein weiteres Werkzeug); §§ 2, 11, 16, 18 ZSKG und KZV-Fundstelle vor Verwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Fortschreibung der Rahmenrichtlinien Gesamtverteidigung oder der Konzeption Zivile Verteidigung; Änderung des ZSKG oder der Sicherstellungsgesetze; Rückblick nach A.8.3"
+pruefausloeser: "Änderung von Art. 35, 80a oder 115a GG, des ZSKG oder der Sicherstellungsgesetze; Fortschreibung der Rahmenrichtlinien Gesamtverteidigung oder der Konzeption Zivile Verteidigung; Rückblick nach A.8.3"
 bisherige_kennung: "N13"
 bisherige_ids: ["baustein-n13"]
 ```

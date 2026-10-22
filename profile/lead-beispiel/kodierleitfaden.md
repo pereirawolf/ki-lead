@@ -4,7 +4,7 @@ Beispielfassung für KI-LEAD · Fassung 1.2.2 vom 21.10.2026 · abgeleitet aus d
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
-**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
+**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
 ---
 
@@ -231,7 +231,7 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 
 ## 8. Pflege
 
-Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei und Arbeitsanweisung gemeinsam fortgeschrieben, damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
+Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei, SOP-LEAD Teil A und Arbeitsanweisung gemeinsam fortgeschrieben (SOP-LEAD A.10.2), damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
 
 **Änderungsprotokoll:**
 

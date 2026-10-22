@@ -65,21 +65,22 @@ lead-beispiel.leadprofil/
 ├── meldung.schema.json      JSON-Schema der Meldung (Pflicht, unverändert aus der Organisation)
 ├── meldung.ui.json          Darstellung: Labels, Hinweise, Widgets, Stufentexte, Kennsätze (Pflicht)
 ├── anweisung-erfassung.md   Arbeitsanweisung Modus A (Pflicht)
-├── anweisung-verdichtung.md Arbeitsanweisung Modus B (optional; sonst nur Aggregation ohne KI)
+├── anweisung-verdichtung.md Arbeitsanweisung Modus B (optional; sonst Standardfassung der App)
+├── anweisung-kurzfassung.md Management Summary (optional; sonst Standardfassung der App)
 ├── kodierleitfaden.md       (Pflicht)
 ├── sop/                     Sammelmappe und/oder Einzel-SOPs (optional, dringend empfohlen)
 ├── kontakte.json            Stellen und Adressen für Meldestatus und Erinnerung (optional)
-└── beispiele/               Stil-Beispiele (JSON), nie Beleg- oder Skalenquelle (optional)
+└── beispiele/               Beispielmeldungen (JSON, z. B. fiktive Lage), im Lagebild ladbar, gehen nicht an KI-Modelle (optional)
 ```
 
-### 4.2 Manifest `profil.json` (Beispielprofil)
+### 4.2 Manifest `profil.json` (Beispielprofil, Auszug)
 
 ```json
 {
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.0.0",
+  "version": "1.24.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -91,10 +92,12 @@ lead-beispiel.leadprofil/
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
+    "schema_id": "LEAD-Meldung-v1",
     "eingang_schema_ids": ["LEAD-Meldung-v1"]
   },
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md",
+    "kurzfassung": "anweisung-kurzfassung.md",
     "verdichtung": "anweisung-verdichtung.md"
   },
   "sop": { "dateien": ["sop/A_Gemeinsame-Regeln.md", "sop/teil-b/B01_unwetter-sturm.md", "…", "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"], "teil_gemeinsam": "teil-a" },
@@ -114,33 +117,35 @@ Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt au
 
 ```json
 {
-  "labels": { "lage_ereignis": "Lage & Ereignis", "bewertung_text": "Bewertung & Tendenz" },
-  "hinweise": { "lage_ereignis": "Kernaussage zuerst, dann bestätigter Sachstand mit Datenstand …" },
-  "widgets": {
-    "sachverhalte[].art": "mehrfachauswahl",
-    "sachverhalte[].sofort.beurteilung": "radio",
-    "sachverhalte[].sofort.lagenradar": "radar"
+  "format": "lead-ui/1",
+  "schritte": [ { "id": "meta", "titel": "Meldungsmetadaten", "felder": ["land", "meldende_stelle", "meldezeitpunkt", "meldezeitraum"] }, "…" ],
+  "felder": {
+    "sachverhalte[].art": { "label": "Art", "widget": "mehrfachauswahl" },
+    "sachverhalte[].sofort.beurteilung": { "label": "Bewertung", "widget": "radio", "leer_label": "keine Angabe" },
+    "sachverhalte[].sofort.lagenradar": { "label": "Lagenradar", "widget": "radar", "radar": "lagenradar" }
   },
-  "radar": {
-    "max": 6,
-    "achsen": [
-      { "key": "d1", "label": "D1 Räumliche Auswirkung / Impact-Raum",
-        "stufen": ["punktuell/kleinflächig", "kommunal", "überörtlich (mehrere Kommunen/Kreis)",
-                   "regional (mehrere Kreise/Region)", "landesweit", "bundesweit", "international"] }
-    ]
+  "radare": {
+    "lagenradar": {
+      "max": 6,
+      "achsen": [
+        { "key": "d1", "label": "D1 Räumliche Auswirkung / Impact-Raum",
+          "stufen": ["punktuell/kleinflächig", "kommunal", "überörtlich (mehrere Kommunen/Kreis)",
+                     "regional (mehrere Kreise/Region)", "landesweit", "bundesweit", "international"] }
+      ]
+    }
   },
-  "kennsaetze": ["Neubewertung bei:", "Handlungsrelevant bis:", "Änderung zur Vormeldung:",
-                 "Abweichende Bewertung:", "Abschluss im Lagebild:"],
+  "rollen": { "status_feld": "_status", "entstehung_feld": "_entstehung", "quellen": "quellen", "sachverhalte": "sachverhalte", "…": "…" },
+  "kennsaetze": { "neubewertung": "Neubewertung bei:", "handlungsrelevant": "Handlungsrelevant bis:", "aenderung": "Änderung zur Vormeldung:",
+                  "abweichung": "Abweichende Bewertung:", "abschluss": "Abschluss im Lagebild:" },
   "quellen": {
-    "feld": "quellen",
-    "kategorien": { "A": "amtlich/zwischenstaatlich", "B": "Betreiber", "W": "wissenschaftlich", "M": "Medien", "P": "sonstige private Quellen" },
+    "kategorien": { "A": "amtlich/zwischenstaatlich – …", "B": "Betreiber – …", "W": "wissenschaftlich – …", "M": "Medien – …", "P": "sonstige private Quellen – …" },
     "rangfolge": ["A", "B", "W", "M", "P"]
   },
-  "status_feld": "_status",
-  "entstehung_feld": "_entstehung",
   "dateiname": "LEAD-Meldung_{land}_{meldende_stelle}_{meldezeitpunkt}"
 }
 ```
+
+Vollständige Beschreibung aller Abschnitte (u. a. `titel`, `ausblenden`, `lagebild`, `bewertung_gliederung`, `analyse_gliederung`, `kurzfassung`, `feldhilfen`): [PROFILFORMAT.md](PROFILFORMAT.md), „Darstellungsdatei“.
 
 **Dateinamen:** Alle Downloads beginnen mit dem Datum, damit sie im Ordner zeitlich sortiert stehen: `2026-10-20T20-31_LEAD-Meldung_Bund_THW_OV_Wesel_ENTWURF.pdf`. Bei Meldungen und daraus abgeleiteten Dateien (Management Summary, Feldauszug, Protokoll) ist es der Meldezeitpunkt (Rolle `meldezeitpunkt`), ohne ihn der Exportzeitpunkt. Den Platzhalter `{meldezeitpunkt}` setzt die App unabhängig von seiner Stelle in der Vorlage nach vorn; ältere Vorlagen müssen nicht geändert werden. Lagebild-PDF und -CSV tragen den Exporttag (`2026-10-20_Lagebild.pdf`), Redaktionsbericht, Notfallsicherung, Profilpaket und Lesetexte den Exportzeitpunkt, Laufprotokoll und Vergleich ihren Erstellungszeitpunkt, jeweils in der Zeitzone des Profils. Lauf-IDs, Paketinhalte und Originalnamen bleiben unverändert hinter dem Datum.
 
@@ -159,7 +164,7 @@ Die Arbeitsanweisungen sind Markdown-Dateien mit Platzhaltern, die die App vor d
 
 ### 4.5 SOP-Erkennung
 
-Die App zerlegt eine Sammelmappe an den Ankern (`<a id="sop-01">`, `<a id="teil-a">`) bzw. an den Überschriften der zweiten Ebene. Aus dem YAML-Block jeder SOP liest sie `lageart`, `art_vorschlag` und `version`. Teil A wird immer mitgegeben. In Stufe 2 werden nur die in Stufe 1 gewählten SOPs mitgegeben.
+Die App zerlegt jede Datei aus `sop.dateien` an ihren Ankern (`<a id="teil-a">`, `<a id="b01">`); ohne Anker gilt eine Datei als eine SOP. Aus dem YAML-Kopf liest sie u. a. `kennung`, `lageart`, `art_vorschlag`, `version`, `typ`, `lesegruppe`, `status`, `bisherige_ids` und `bisherige_kennung` (Einzelheiten: [PROFILFORMAT.md](PROFILFORMAT.md), „SOP-Dateien“). Der in `sop.teil_gemeinsam` genannte Abschnitt (Teil A) wird immer mitgegeben. In Stufe 2 werden nur die in Stufe 1 gewählten SOPs mitgegeben.
 
 ### 4.6 Profilverwaltung
 
@@ -222,7 +227,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ## 6. Forschungsfunktionen
 
 - **Laufprotokoll:** Profil-ID, Version und Hash; Modell-ID und Parameter; vollständige Prompts und Rohantworten; Tokens; Dauer. Exportierbar als JSON-Forschungsdatensatz.
-- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD 0.4.18 · Profil <id> <version> · Lauf <lauf-id>“, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“). In `sop` führt sie die tatsächlich beigefügten SOPs und Bausteine (Kennung mit gültiger Fassung, aus der zusammengestellten S2-Anfrage), unabhängig vom Antwortformat des Modells; das belegt den Kontext, nicht die fachliche Anwendung. Die Angabe des Modells zur Anwendung vergleicht sie damit und gibt Abweichungen als Prüfhinweis „SOP-Nachweis: …“ aus (fehlende Angabe, nicht beigefügte oder unbekannte Kennungen, beigefügte, aber nicht genannte). Prüfansicht, PDF, Lagebild-Karte und Rohtabelle/CSV („SOP (Entstehung)“) zeigen die gespeicherte Angabe; historische Kennungen bleiben unverändert. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
+- **`_entstehung`:** Das Beispielschema lässt nur die Felder `verfahren`, `werkzeug`, `modell`, `sop`, `kodierleitfaden` und `erstellt` zu. Die App setzt `werkzeug` auf „KI-LEAD <App-Version> · Profil <id> <version> · Lauf <lauf-id>“; `<App-Version>` ist die zur Laufzeit tatsächlich verwendete Version der App (z. B. „KI-LEAD 0.4.30 · …“), kein literaler Platzhalter, dazu `modell` und `erstellt`. `kodierleitfaden` setzt sie aus dem Kopf des Kodierleitfadens im Profil (Titel und „Fassung x.y“). In `sop` führt sie die tatsächlich beigefügten SOPs und Bausteine (Kennung mit gültiger Fassung, aus der zusammengestellten S2-Anfrage), unabhängig vom Antwortformat des Modells; das belegt den Kontext, nicht die fachliche Anwendung. Die Angabe des Modells zur Anwendung vergleicht sie damit und gibt Abweichungen als Prüfhinweis „SOP-Nachweis: …“ aus (fehlende Angabe, nicht beigefügte oder unbekannte Kennungen, beigefügte, aber nicht genannte). Prüfansicht, PDF, Lagebild-Karte und Rohtabelle/CSV („SOP (Entstehung)“) zeigen die gespeicherte Angabe; historische Kennungen bleiben unverändert. Die ausführliche Herkunft steht im Laufprotokoll, die Meldung verweist darauf.
 - **Später (Architektur jetzt vorsehen):** Mehrfachläufe zum selben Sachverhalt mit Vergleich je Radarachse und Auswahlfeld sowie Konsolidierung nach dem Abschnitt „Konsolidierung bei mehreren Rechercheläufen“ der Arbeitsanweisung. Dafür ist ein Lauf eine eigene Entität, und eine Meldung referenziert einen oder mehrere Läufe.
 - **Später:** Vergleich zwischen KI-Entwurf und manueller Meldung, etwa für das Kollegiumsexperiment zur Inter-Rater-Konsistenz.
 

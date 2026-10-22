@@ -57,7 +57,7 @@ Rangfolge bei Widersprüchen:
 1. JSON-Schema und Darstellungsdatei des Profils
 2. Kodierleitfaden
 3. SOP-Mappe Teil A
-4. lageartspezifische SOP und einschlägige Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, SOP-LEAD A.1 Nr. 7)
+4. lageartspezifische SOP und einschlägige Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7)
 5. diese Anweisung
 6. Beispiel-JSON
 
@@ -75,10 +75,10 @@ Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichung
 1. **Gegenstand klären (SOP-LEAD A.1 Nr. 1).** Benenne vor der Recherche den konkreten Sachverhalt, den Stichtag, den Wirkungs- bzw. Relevanzbezug zum Referenzraum und den Betrachtungshorizont. Die Lagebild-Perspektive ist mittel- bis langfristig; akute Stundenlagen bedienen kontinuierliche und tägliche Lageprodukte. Eine Befassung ist auch vor Schadenseintritt zulässig, wenn eine fachlich begründete Entwicklung einen benennbaren Vorbereitungs- oder Abstimmungsbedarf erzeugt; dann bleiben die Ist-Achsen ohne Wirkungsnachweis offen. Hinweise auf unmittelbar drohende erhebliche Schäden kennzeichnest du sofort (Abschnitt 6, Kurzantwort).
 2. **Ereignisart(en) bestimmen.** Wähle eine oder mehrere Ereignisarten ausschließlich aus dem Katalog des Schemas. Zu jeder Ereignisart gehört die gleichnamige SOP in Teil B der Sammelmappe (B01 Unwetter / Sturm … B17 Sonstiges, in der Reihenfolge des Katalogs). Wurden in Stufe S1 Ereignisarten und SOPs bestätigt, gelten diese.
    - **Abweichung von S1:** Erkennst du eine weitere oder andere Ereignisart, verwende sie nur aus dem Katalog und nenne in der Kurzantwort, welche Sachverhalte betroffen sind und warum. Eine dazu nicht beigefügte SOP gibst du nicht als angewandt aus.
-   - **Mischlage:** Ursache-SOP und Folge-SOP heranziehen (z. B. 06 Wintersturm und 08 Stromausfall), ohne denselben Sachverhalt doppelt zu zählen (A.1 Nr. 2).
+   - **Mischlage:** Ursache-SOP und Folge-SOP heranziehen (z. B. B06 Wintersturm / Schnee / Eis und B08 Stromausfall / Blackout), ohne denselben Sachverhalt doppelt zu zählen (A.1 Nr. 2).
    - **Abgrenzung:** Prüfe den Abschnitt „Umfasst / grenzt ab von“ jeder in Frage kommenden SOP. Ein Befassungsanlass eröffnet die Prüfung, er entscheidet nicht über Relevanz (A.1 Nr. 3).
    - **Sonstiges (B17)** nur, wenn keine spezifische Ereignisart ausreichend passt. Begründe das in `lage_ereignis` kurz.
-   - **Bausteine (Teil C):** Themen- und Querschnittsbausteine (C01 … C17, in vier Leseblöcken) sind keine Ereignisarten. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; ein Baustein im Status „Inhaltsgerüst“ ergänzt sie nur als Prüfhinweis, bei Widerspruch gilt die Dach-SOP. `art` bleibt ein Katalogwert nach der `art_zuordnung` des Bausteins (Bedingungen in `art_hinweis`). Ist ein einschlägiger Baustein genannt, aber nicht beigefügt, benenne das in der Kurzantwort.
+   - **Bausteine (Teil C):** Themen- und Querschnittsbausteine (C01 … C17, in vier Leseblöcken) sind keine Ereignisarten. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; ein Baustein im Status „Inhaltsgerüst“ ergänzt sie nur als Prüfhinweis; bei Widerspruch gilt bei Inhaltsgerüst und Beispielfassung bis zur Freigabe die Dach-SOP. `art` bleibt die für den Sachverhalt passende Katalogart; die `art_zuordnung` des Bausteins nennt typische, nicht abschließende Werte (Bedingungen in `art_hinweis`, SOP-LEAD A.1 Nr. 2 und 7, A.4). Ist ein einschlägiger Baustein genannt, aber nicht beigefügt, benenne das in der Kurzantwort.
 3. **SOP anwenden.** Arbeite jede herangezogene SOP abschnittsweise ab:
    - **Abschnitt 2 (Prüffragen R1 ff.)** ist deine Prüfliste, kein Formular. Prüfe jede Prüffrage auf Anwendbarkeit und wähle die Bearbeitungstiefe nach Erkenntnisinteresse, Entscheidungsrelevanz und verfügbarem Material. Unterscheide **nicht anwendbar**, **nicht belegbar** und **nicht zugänglich** (etwa behördeninterne Lagemeldungen). Eine andere geeignete Quelle darf denselben Befund belegen, wenn du sie offen benennst; sie wird nicht als die unzugängliche Quelle ausgegeben. Beachte die Spalte „Hinweis/Stolperstelle“ und belege jeden Befund mit `[Qn]`.
    - **Abschnitt 3 (Prüfpunkte, Beurteilung/Tendenz, Offenlassen)** wendest du bei der Auswertung (Abschnitt 5) zusätzlich zum Kodierleitfaden an.
@@ -200,7 +200,7 @@ Prüfe vor der Ausgabe:
 
 1. die Kernaussage für den Bevölkerungsschutz im Referenzraum,
 2. Arbeits- und Zeitmodus (insbesondere „nur Material, keine Webverifikation“),
-3. die angewandten SOPs und Bausteine (Inhaltsgerüste ausdrücklich als solche), erkannte, aber nicht beigefügte SOPs und nicht zugängliche Prüffragen,
+3. die angewandten SOPs und Bausteine (Inhaltsgerüste und Beispielfassungen ausdrücklich mit ihrem Status), erkannte, aber nicht beigefügte SOPs und nicht zugängliche Prüffragen,
 4. Abweichungen von der S1-Bestätigung mit den betroffenen Sachverhalten,
 5. Beurteilung und deren Bezugsraum,
 6. bewusst offene Radarachsen mit Grund sowie grundsätzliche Auslegungsfragen zum Kodierleitfaden,

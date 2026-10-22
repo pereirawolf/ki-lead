@@ -15,7 +15,7 @@ stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – § 5 IfSG und Art. 23 VO (EU) 2022/2371 am Normtext gelesen; Inkrafttreten der IGV-Änderungen 2024 (19.09.2025) über Bundestagsmitteilung; Rechercheeinstiege 26.09.2026 teilweise, Ergänzungen 19.10.2026 und 21.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Änderung von § 5 IfSG, der Internationalen Gesundheitsvorschriften oder der Verordnung (EU) 2022/2371; Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung internationaler Warnkategorien oder nationaler Surveillance-Produkte"
+pruefausloeser: "Änderung von §§ 5, 11 oder 28 IfSG, der Internationalen Gesundheitsvorschriften oder der Verordnung (EU) 2022/2371; Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema; Änderung internationaler Warnkategorien oder nationaler Surveillance-Produkte"
 bisherige_kennung: "11"
 bisherige_ids: ["sop-11"]
 ```
