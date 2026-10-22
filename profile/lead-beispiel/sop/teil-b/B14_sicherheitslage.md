@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sicherheitslage (Bedrohungslagen, Großveranstaltungen, hybride Bedrohungen) – Bevölkerungsschutzfolgen"
 art_vorschlag: ["Sicherheitslage"]
 zweck: "Reproduzierbare Beobachtung behördlich belegter Sicherheitslagen ausschließlich im Hinblick auf Folgen und Vorsorgefragen für den Bevölkerungsschutz."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -37,7 +37,7 @@ bisherige_ids: ["sop-14"]
 | R3 | Welche Personenschäden oder Evakuierungen bestehen? | Lagemeldungen (A.3) | R; D2 | Nicht alle Anwesenden oder von Maßnahmen Berührten als direkt betroffen zählen. |
 | R4 | Welche Dienste, Transportwege oder Einrichtungen sind eingeschränkt? | Betreibermeldungen (A.3) | R/I; D6 | Einschränkung und Grund getrennt belegen; Gefährdungshinweis ≠ Beeinträchtigung. |
 | R5 | Welche nichtpolizeiliche Unterstützung ist mobilisiert? | Lagemeldungen (A.3) | M; D3/D4 | Operative Führung nicht aus Medienpräsenz ableiten. |
-| R6 | Welche Informationen kursieren öffentlich? | Medienauswertung (VOST) gegen amtliche Quellen | D7 | Gerüchte und Desinformation kennzeichnen, nicht weitertragen (A.9.5); belegte Wirkungen auf Schutz, Versorgung oder Hilfszugang gesondert beschreiben. |
+| R6 | Welche Informationen kursieren öffentlich? | Medienauswertung (VOST) gegen amtliche Quellen | R; D7 | Gerüchte und Desinformation kennzeichnen, nicht weitertragen (A.9.5); belegte Wirkungen auf Schutz, Versorgung oder Hilfszugang gesondert beschreiben. |
 
 ### 3. Auswertung: Prüfpunkte
 

@@ -8,6 +8,14 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.23.0 – 22.10.2026
+
+Grundlage: zwei unabhängig erstellte Vorschlagsdateien zur Sammelmappe 3.13.0 („KI-LEAD_SOP_PR-Vorschlaege_2026-10-22“, 19 Vorschläge; „sop-lead_pr-vorschlaege_2026-10-22“, 28 Vorschläge), gegeneinander geprüft und konsolidiert.
+
+- **SOP-Sammelmappe 3.14.0:** Korrektur interner Bezüge (C10 Tabellenstellung, C07→B11, C17 Fundstellen, A.2 Fassungsangabe, Prüfvermerke) und fachliche Klarstellungen: Zählregel für Evakuierte (A.3, B02, C16), „KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (C09, C10, C15, B17), D7 in C11 nach A.2, Vorrang bei Bausteinen im Status „Beispielfassung“ (A.1 Nr. 7), Landesprodukte als Ereignisbeleg (A.1 Nr. 8), Meldestufen nach § 32 BSIG als Verfahrensstand (B15), Rechtszustände in C17 (Art. 80a, 115a GG), medizinische Gase in C10. Geänderte Fassungen: B02, B03, B04, B06, B08, B14, B16, B17 (dritte Stelle), B07 2.2.1, B10 2.1.0, B15 2.3.0, C01 1.2.1, C07 1.1.1, C09 1.2.0, C10 1.3.0, C11 1.2.0, C13 1.1.1, C15 1.1.1, C16 1.2.0, C17 1.3.0. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Quellenregister: nur Zweckvermerk der BSIG-Fundstelle geändert; keine neuen Links.
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.22.0 – 22.10.2026
 
 Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidiert_2026-10-22“, Arbeitspaket AP2 (Rechts- und Feststellungsstufen mit Typologietabellen).

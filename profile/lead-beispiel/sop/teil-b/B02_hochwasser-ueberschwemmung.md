@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Hochwasser / Überschwemmung (Flusshochwasser, pluviale Überflutung/Sturzflut, Sturmflut)"
 art_vorschlag: ["Hochwasser / Überschwemmung"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Fluss-, Starkregen- und Sturmflutereignissen mit Folgen für Bevölkerung, Einsatzwesen und KRITIS, einschließlich begründeter Vorwarnlagen."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -36,7 +36,7 @@ bisherige_ids: ["sop-02"]
 |---|---|---|---|---|
 | R1 | Welche Pegel, Vorhersagen und Einzugsgebiete sind maßgeblich? | [Länderübergreifendes Hochwasserportal](https://hochwasserzentralen.de/), Landeshochwasserzentralen, PEGELONLINE (WSV); pegel- und produktabhängig | L; D1/D8 | Pegel nur mit Station, Zeit und Bezugssystem; Meldestufen immer mit Land, Pegel und Bedeutung angeben. Pegelstände, Abfluss und Wiederkehrintervalle sind ohne Bezugsbedingungen nicht bundesweit vergleichbar. |
 | R2 | Besteht eine Sturmflutlage? | BSH, Wasserstandsvorhersage und Sturmflutwarndienst | L/R | Nordsee: Tide, Scheitelzeit und Abweichung vom angegebenen Bezugswasserstand getrennt angeben. Ostsee: zeitlichen Wasserstands-/Windstauverlauf und fachlich erwartetes Maximum übernehmen, keinen Tidezeitpunkt voraussetzen. NHN, Pegelnull und mittleres Hochwasser nicht vermischen; Warnung und Vorhersage mit Ausgabe und Gültigkeit dokumentieren. |
-| R3 | Welche Überflutungsflächen und Evakuierungen sind bestätigt? | Lagemeldungen (A.3); ggf. Copernicus EMS Rapid Mapping | L/R; D1/D2 | Warn-, Evakuierungs- und überflutete Fläche trennen; Evakuierte ≠ Betroffene. Bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung prüfen (A.9.2, C16). |
+| R3 | Welche Überflutungsflächen und Evakuierungen sind bestätigt? | Lagemeldungen (A.3); ggf. Copernicus EMS Rapid Mapping | L/R; D1/D2 | Warn-, Evakuierungs- und überflutete Fläche trennen. Bewohner des Evakuierungsgebiets ≠ tatsächlich Evakuierte; vollzogen Evakuierte sind direkt Betroffene (A.3 Zählregeln, C16), aber nicht die Gesamtzahl der Betroffenen – Überflutungs- und Versorgungsbetroffene mit Überschneidung führen. Bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung prüfen (A.9.2, C16). |
 | R4 | Wie ist der Zustand von Deichen, Talsperren und Rückhaltebecken? | Länder-Hochwasserberichte, Deichverbände, Talsperrenbetreiber und -aufsicht | R; D8 | Zustand nur nach zuständiger Fachbewertung darstellen. Deichverteidigung und vorsorglicher Kräfteeinsatz belegen allein keine Verschärfung. Durchnässung und Dauer der Einstaubelastung sind fachbehördlich zu bewertende Indikatoren der Deichsicherheit (`Neubewertung bei:`). |
 | R5 | Welche Anlagen und Versorgungsfunktionen sind betroffen (Strom, Wassergewinnung, Kläranlagen, Kanalnetz)? | Betreibermeldungen (A.3) | R/I; D6 | Lage im Gefahrengebiet oder angekündigte Abschaltung belegt noch keinen Dienstleistungsausfall. Eine tatsächlich vollzogene Abschaltung kann ihn belegen: prüfen, welche Funktion seit wann in welchem Umfang fehlt und ob wirksame Ersatzversorgung sie aufrechterhält. Technischen Anlagenzustand, Dienstleistungsfolge und Vorsorgestatus getrennt darstellen; Abwasserfolgen mit C15 vertiefen. |
 | R6 | Treten wassergefährdende Stoffe aus (z. B. Heizöl)? | Umwelt- und Wasserbehörden; Lagemeldungen (A.3) | R/I; D6 | Kontamination nur nach Fachbewertung; zusätzlich B07 prüfen. |

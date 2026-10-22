@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Stromausfall / Blackout (großflächiger oder langandauernder Netzausfall)"
 art_vorschlag: ["Stromausfall / Blackout"]
 zweck: "Reproduzierbare Erfassung großflächiger oder langandauernder Stromausfälle, ihrer Ersatzversorgung und ihrer zeitverzögerten Kaskadeneffekte."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-08"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Stromausfälle, die nach Dauer, Fläche oder Folgewirkung über kurze örtliche Störungen hinausgehen, bis zur Systemstörung. Die Ursache wird bei belegtem Zusammenhang zusätzlich über die passende SOP geprüft, z. B. B06 (Winterwetter), B15 (IT-Sicherheitsvorfall) oder B16 (behördlich benannter Vorsatz). Eine angekündigte Lastabschaltung oder eine Warnung vor Gefährdung der Systemsicherheit ist vom bereits wirksamen Ausfall zu trennen; sie kann eine Vorwarnlage nach A.1 Nr. 1 begründen. Beispiel dafür: mehrtägiger Ausfall nach Mastbruch (Münsterland 2005). Beispiel dagegen: Störung, die in wenigen Stunden ohne Folgeausfälle behoben ist; Strompreise allein belegen keinen Ausfall.
+**Umfasst / grenzt ab von:** Stromausfälle, die nach Dauer, Fläche oder Folgewirkung über kurze örtliche Störungen hinausgehen, bis zur Systemstörung. Die Ursache wird bei belegtem Zusammenhang zusätzlich über die passende SOP geprüft, z. B. B06 (Winterwetter), B15 (IT-Sicherheitsvorfall), B16 (behördlich benannter Vorsatz) oder C03 (fachlich belegter Weltraumwetterbezug; Gleichzeitigkeit allein belegt keine Ursache). Eine angekündigte Lastabschaltung oder eine Warnung vor Gefährdung der Systemsicherheit ist vom bereits wirksamen Ausfall zu trennen; sie kann eine Vorwarnlage nach A.1 Nr. 1 begründen. Beispiel dafür: mehrtägiger Ausfall nach Mastbruch (Münsterland 2005). Beispiel dagegen: Störung, die in wenigen Stunden ohne Folgeausfälle behoben ist; Strompreise allein belegen keinen Ausfall.
 
 **Befassungsanlässe:** Störungsmeldung eines Netzbetreibers · Warnung eines Übertragungsnetzbetreibers vor Gefährdung der Systemsicherheit oder angekündigte Lastabschaltung · Lagemeldung eines Landes bzw. landesrechtlich festgestellte herausgehobene Lage (A.9.4) · BNetzA-Mitteilung · Monitoring: Störungsmeldungen der Netzbetreiber und VOST-Auswertung.
 

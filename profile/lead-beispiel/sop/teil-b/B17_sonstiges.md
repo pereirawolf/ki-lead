@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sonstiges (Sachverhalte ohne ausreichend passende Katalogart)"
 art_vorschlag: ["Sonstiges"]
 zweck: "Reproduzierbare Prüfung und Meldung von Sachverhalten mit möglicher Bevölkerungsschutzrelevanz, die keiner spezifischen Katalogart ausreichend entsprechen."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-17"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Auffangkategorie. Zuerst prüfen, ob eine spezifische Ereignisart (ggf. zusätzlich) passt; „Sonstiges“ nur, wenn keine bestehende Art hinreichend passt, und kurz begründen. Arzneimittelversorgung grundsätzlich unter B11 und bei konkretem Funktionsausfall ggf. B12 (Baustein C10). Bausteine, die unter „Sonstiges“ geführt werden können, wenn keine passende Ursachenart besteht (zuerst die Zuordnung im Baustein prüfen): C01 radiologische Lage · C02 Massenbewegungen und Gebäudeeinsturz · C03 Weltraumwetter ohne eingetretene Wirkung · C04 Vulkanasche · C05 Großunfall · C06 Kampfmittelfund – jeweils mit zusätzlich zutreffenden Folgenarten. C17 zivile Verteidigung ist ein Querschnitt unter den tatsächlich passenden Ursachen- und Folgenarten; „Sonstiges“ nur, wenn kein vorhandenes Dach den Gegenstand trägt. Nichtindustrieller Gebäudebrand, Gebäudeeinsturz oder Explosion ohne passende Ursachenart: „Sonstiges“ mit C02 bzw. C05; ein Gebäudebrand ist nicht allein wegen des Feuers B03, eine Explosion nicht allein wegen des Wortes B07. Beispiel dafür: Weltraumwetter-Frühwarnung ohne bestätigten Netzausfall. Beispiel dagegen: bestätigter Stromausfall – vorrangig B08; Arzneimittel-Lieferengpass – vorrangig B11.
+**Umfasst / grenzt ab von:** Auffangkategorie. Zuerst prüfen, ob eine spezifische Ereignisart (ggf. zusätzlich) passt; „Sonstiges“ nur, wenn keine bestehende Art hinreichend passt, und kurz begründen. Arzneimittelversorgung grundsätzlich unter B11 mit Baustein C10; B12 nur nach dem Funktionsdach (A.1 Nr. 2), nicht allein wegen des Funktionsausfalls. Bausteine, die unter „Sonstiges“ geführt werden können, wenn keine passende Ursachenart besteht (zuerst die Zuordnung im Baustein prüfen): C01 radiologische Lage · C02 Massenbewegungen und Gebäudeeinsturz · C03 Weltraumwetter ohne eingetretene Wirkung · C04 Vulkanasche · C05 Großunfall · C06 Kampfmittelfund · C12 Kraftstoff- und Wärmeversorgung, wenn weder B08, B09 noch B12 passt · C16 Evakuierung, Schutzunterbringung und Betreuung, wenn kein Ursachenwert passt – jeweils mit zusätzlich zutreffenden Folgenarten. C17 zivile Verteidigung ist ein Querschnitt unter den tatsächlich passenden Ursachen- und Folgenarten; „Sonstiges“ nur, wenn kein vorhandenes Dach den Gegenstand trägt. Nichtindustrieller Gebäudebrand, Gebäudeeinsturz oder Explosion ohne passende Ursachenart: „Sonstiges“ mit C02 bzw. C05; ein Gebäudebrand ist nicht allein wegen des Feuers B03, eine Explosion nicht allein wegen des Wortes B07. Beispiel dafür: Weltraumwetter-Frühwarnung ohne bestätigten Netzausfall. Beispiel dagegen: bestätigter Stromausfall – vorrangig B08; Arzneimittel-Lieferengpass – vorrangig B11.
 
 **Befassungsanlässe:** fachbehördliches Signal · neue sektorübergreifende Entwicklung · Anfrage ohne passende Kategorie · Monitoring: Fachsignale der zuständigen Behörde (je Thema benennen).
 

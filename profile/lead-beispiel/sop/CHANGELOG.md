@@ -10,13 +10,54 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.13.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.14.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 22.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.13.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.14.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.14.0] – 22.10.2026
+
+Grundlage: zwei unabhängig erstellte Vorschlagsdateien vom 22.10.2026 zur Fassung 3.13.0 (Commit 77fad68): „KI-LEAD_SOP_PR-Vorschlaege_2026-10-22“ (19 Vorschläge, SOP-PR-01 bis SOP-PR-19) und „sop-lead_pr-vorschlaege_2026-10-22“ (28 Vorschläge, V01 bis V28), gegeneinander geprüft und konsolidiert. Zweite Stelle nach der Versionierungsregel: fachliche Klarstellungen in Teil A und in Bausteinen; Achsendefinitionen, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert. Keine neuen Links; das Quellenregister ändert nur den Zweckvermerk der BSIG-Fundstelle. Rechtsangaben wurden auf innere Konsistenz geprüft; Art. 115a Abs. 4 GG und § 47 Abs. 1 Nr. 2 Buchst. e AMG zusätzlich in nichtamtlicher Wiedergabe nachgelesen, die übrigen Normen nicht erneut am Normtext.
+
+### Geändert
+
+- **Teil A:** A.1 Nr. 2 Tabelle, Zeile B07, um C02 (Bauwerksversagen) ergänzt (V11). A.1 Nr. 7: Vorrangregel für Bausteine im Status „Beispielfassung“ (wie Inhaltsgerüst, bis zur Freigabe) und Klarstellung, dass der Vorrang das Regelwerk bestimmt, nicht die Richtigkeit einer Aussage – erkannte Widersprüche bleiben sichtbar (V16, SOP-PR-18). A.1 Nr. 8: Landesrecht wird nicht als Fachgrundlage zitiert, ist aber als Ereignisbeleg einer Meldung mit Land, Herausgeber, Fundstelle und Stand zulässig (SOP-PR-02); Absatz „Übernahme“ für übernehmende Stellen (Auftrag, Verantwortungsraum, Betrachtungshorizont, Fortschreibungsrhythmus; Relevanz nach dem Bedarf der adressierten Stelle) (SOP-PR-01). A.2: Fassung des Kodierleitfadens nur noch über den Gültigkeitsstand (V05, SOP-PR-17). A.3 Zählregeln: vollzogen Evakuierte, Verlegte und Untergebrachte sind direkt Betroffene (D2), nicht die Bevölkerung des Räumungs- oder Warngebiets (V13, SOP-PR-05). A.4: `art_zuordnung` als nicht abschließende Liste, Bedingungen in `art_hinweis` und A.1 Nr. 2 und 7 (SOP-PR-03). A.6: Vermerk „Ergänzung 22.10.2026“ zu den 20 Fachgrundlagen aus 3.13.0 (V25). A.10.1: zweite Spalte der Typologietabellen bei Rechts- und Feststellungsstufen „Feststellende Stelle und Voraussetzung“ (V17). A.10.2: Prüfauslöser spätestens mit Freigabe, für Fachgrundlagen schon mit deren Aufnahme; `quellen_geprueft_am` bei Inhaltsgerüsten ohne geprüfte Quellen entbehrlich (V18). Gültigkeitsstand: Sammelmappe 3.14.0; Darstellungsdatei als „Profilversion ihrer letzten Änderung“ gekennzeichnet (SOP-PR-17).
+- **B02 2.1.1:** R3 „Evakuierte ≠ Betroffene“ ersetzt: Bewohner des Evakuierungsgebiets ≠ Evakuierte; vollzogen Evakuierte sind direkt Betroffene (A.3, C16), aber nicht die Gesamtzahl (V13).
+- **B03 2.1.1:** Waldbrandatlas BKG von R6 nach R2 (Lageübersicht; Quellenregister S006 „passt nicht“ für den Mehrjahresvergleich); R6 nennt Waldbrandstatistik des Bundes und EFFIS-Statistik ohne Link, Fundstelle vor Erstverwendung prüfen (V06).
+- **B04 2.1.1:** Offenlassen ohne Verengung auf einen Schadensnachweis (belegte Evakuierung oder Funktionsausfall genügt; D5 nur mit Zielzustand und Prognose) (SOP-PR-07); Hinweis auf den nicht abrufbaren BGR-Einstieg (Quellenregister S007) (V08).
+- **B06 2.1.1:** R2: Eingeschlossene im Stau oder Zug zählen für D2 nur bei belegter unmittelbarer Beeinträchtigung, nicht bei bloßer Verspätung (Kodierleitfaden D2) (SOP-PR-06).
+- **B07 2.2.1:** Einordnungstabelle: Gefahrgutkennzeichnung belegt die deklarierte Zuordnung, nicht Inhalt, Menge oder Freisetzung (SOP-PR-16); TUIS von R2 (Stoffgefahr) nach R3 als Fachunterstützung der Einsatzstellen (V22, Quellenregister S013); Abschnitt 3 um C02 bei Bauwerksversagen nach Explosion (V11).
+- **B08 2.1.1:** Ursache-SOPs um C03 (fachlich belegter Weltraumwetterbezug) ergänzt (V12).
+- **B10 2.1.0:** Fachgrundlagen-Block nach A.6 in Abschnitt 5 (UBA-Empfehlungen zu R6 als Vollzugsempfehlung, TrinkwV und WasSiG ohne Fundstelle, vor Verwendung prüfen); offener Punkt Fundstellen (V28, V03).
+- **B14 2.1.1, B16 2.1.1:** R6 „Prüfen für“ mit Feld: „R; D7“ (V23).
+- **B15 2.3.0:** Absatz „Meldestufen nach dem BSI-Gesetz“ als Verfahrensstand statt Bestätigungsgrad; Bestätigungsgrad je Aussage nach A.3, eine Abschlussmeldung belegt keine Wiederherstellung (SOP-PR-08; Quellenregister: Zweckvermerk der BSIG-Fundstelle angepasst). BITS-Stufe 1: Aufnahme bei konkret begründetem Bedarf nach A.1 Nr. 1 und 3 nicht ausgeschlossen (SOP-PR-09). Folge-SOP-Bereich wie A.1 Nr. 2 (B08–B11; B12 nach dem Funktionsdach) (V10).
+- **B17 2.1.1:** Arzneimittel unter B11 mit C10; B12 nur nach dem Funktionsdach (SOP-PR-04); Bausteine C12 und C16 in der Aufzählung unter „Sonstiges“ ergänzt (V26).
+- **C01 1.2.1:** Schlusssatz der Referenzszenarien-Tabelle unter die Tabelle gesetzt (A.10.1) (V17); Fachgrundlagen: Bekanntmachung BAnz AT 23.11.2023 B1 als Originalstelle, Prüfgrenze des nicht abrufbaren PDF-Links (Quellenregister S031) und offener Punkt (V07).
+- **C07 1.1.1:** Verweis auf die Tabelle „Amtliche Einstufungen“ in B11, Abschnitt 2, in Abschnitt 1, R1 und R4 (V02).
+- **C09 1.2.0, C10 1.3.0, C15 1.1.1:** „KRITIS-Ausfall“ in `art_hinweis`, `anschluss` (C10) und „Zuordnung im Schema“ nur nach dem Funktionsdach B12 (A.1 Nr. 2); C15 mit bestimmter Bedingung „belegter Ausfall oder wesentliche Einschränkung“ (V14, SOP-PR-04). C10 zusätzlich: Tabelle „Amtliche Engpassstufen“ an den Anfang von Abschnitt 2 verschoben, damit R2 „Tabelle oben“ stimmt (V01, SOP-PR-14); medizinische Gase nicht pauschal außerhalb des AMG, Produktstatus belegen (§ 47 Abs. 1 Nr. 2 Buchst. e AMG, nichtamtliche Wiedergabe) (SOP-PR-13).
+- **C11 1.2.0:** D7 nach A.2 (entscheidungsrelevante Lücken zur gestörten Funktion, nicht nur gestörte Meldewege) (V15); funktionale Ansprechstellen in Abschnitt 5 (V20); `anschluss` ohne Teil-A-Verweis (V21).
+- **C13 1.1.1:** offener Punkt VerkSiG-Fundstelle (V03).
+- **C16 1.2.0:** D2 nach Kodierleitfaden und A.3 (Evakuierte, Verlegte, Untergebrachte, Unterkunftsverlust; Schätzbandbreite und Mindestzahl zulässig) (SOP-PR-05, V13); funktionale Ansprechstellen (V20); `anschluss` ohne Teil-A-Verweise (V21).
+- **C17 1.3.0:** Einleitung der Rechtszustände auf die Wehrverfassung bezogen, Art. 35 GG als Maßnahme; Art. 115a Abs. 4 GG mit beiden Voraussetzungen (Angriff und Handlungsunfähigkeit der Bundesorgane); Spannungsfall mit Feststellung oder besonderer Zustimmung; keine pauschale Geltung aller Sicherstellungsgesetze, Anwendung je Instrument belegen (SOP-PR-10); Rechtszustand kein Leerwert aller Achsen, D3 strukturell nach A.2, Betreiberbelege tragen (SOP-PR-11); Aufgabengliederung nur der RRGV zugeschrieben, KZV als vergleichbar mit offener Fundstelle; C09/C10 und B11/C07 als Vertiefung (SOP-PR-12); Fundstellen der Sicherstellungsgesetze berichtigt (EnSiG in C12, ESVG in C14; WasSiG, VerkSiG, ArbSiG offen) (V03, SOP-PR-15); Prüfvermerk zu den RRGV-Kapiteln vereinheitlicht (V04); `anschluss` ohne Teil-A-Verweise (V21).
+- **Lesefassung:** aus den Einzeldateien neu erzeugt.
+
+### Nicht übernommen
+
+- SOP-PR-12 (Teil): Zuordnung der gesundheitlichen Versorgung zu RRGV-Unterkapitel 20.4 nicht übernommen, weil der amtliche Volltext in dieser Prüfung nicht abrufbar war.
+- SOP-PR-19: Prüfregister für Querverweise ist eine Werkzeugfrage außerhalb der Sammelmappe.
+- V09: Tiefenlinks für BBK (B12, B17) und BfArM (C10) brauchen Registereinträge mit Abruf; folgt mit der nächsten Quellenprüfung.
+- V19: Quellenkategorie für Hersteller-Sicherheitshinweise (B15/R2) ist eine Zuordnungsregel und wird nach A.10.2 gemeinsam mit Kodierleitfaden Abschnitt 5 fortgeschrieben.
+- V24: Teilprofile „5a/5b“ in B05 bleiben als eingeführte Bezeichnung.
+- V27: Fachgrundlagen-Block und Normfundstellen für B09 sowie der Prüftermin 31.10.2026 bleiben der saisonalen Prüfung vorbehalten (AP3–AP6).
+
+### Offen
+
+- Fundstellen für TrinkwV, WasSiG (B10) und VerkSiG (C13) mit Registereintrag; KZV-Fundstelle und RRGV-Unterkapitel (C17); AVV ANoPl-Bund als abrufbaren amtlichen Download bestätigen (C01).
+- Abrufbare amtliche Fassung von § 32 und § 36 BSIG sowie § 47 AMG mit Prüfsumme nachweisen (B15, C10).
+- Offene Punkte aus 3.13.0 unverändert.
 
 ## [3.13.0] – 22.10.2026
 
