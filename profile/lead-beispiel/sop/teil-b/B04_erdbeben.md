@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -48,7 +48,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Beurteilung/Tendenz:** Magnitude ist keine Beurteilung. Bei Auslandsbeben die Schwere vor Ort nicht auf die deutsche Beurteilung übertragen, die Bindung deutscher Fähigkeiten aber nicht ausblenden; abnehmende Nachbeben ersetzen keine Bewertung fortdauernder Schäden.
 
-**Offenlassen:** D1, D2, D5 ohne Schadensnachweis; bei Auslandsbeben die Achsen, für die kein deutscher Betrachtungsgegenstand festgelegt ist.
+**Offenlassen:** D1 und D2 ohne belegte Wirkung bzw. unmittelbare Betroffenheit – ein Gebäudeschaden ist dafür nicht zwingend, eine belegte Evakuierung oder ein belegter Funktionsausfall genügt; D5 ohne benannten Zielzustand und tragfähige Prognose; bei Auslandsbeben die Achsen, für die kein deutscher Betrachtungsgegenstand festgelegt ist.
 
 ### 4. Darstellung
 
@@ -65,4 +65,4 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BGR · Landeserdbebendienste · GFZ · Bauaufsicht der Länder · Auswärtiges Amt/GMLZ (Auslandsbeben)
 
-**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07.
+**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07. Rechercheeinstieg BGR prüfen: Der Link in R1 war am 21.10.2026 nicht abrufbar; ein Umzug in die Struktur „Erdbebendienst_Bund“ ist möglich, aber nicht amtlich bestätigt (Quellenregister S007, A.6); GFZ GEOFON und Landeserdbebendienste als Ausweichweg.

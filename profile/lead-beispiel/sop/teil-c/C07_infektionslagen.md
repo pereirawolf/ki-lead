@@ -11,9 +11,9 @@ lageart: "Auslandsausbruch mit begründetem Deutschlandbezug; lokale Infektionsh
 art_zuordnung: ["Gesundheitliche Lage / Epidemie"]
 anschluss: "B11"
 zweck: "Ausführbare Recherchepfade für die in B11 bisher nur angekündigten Vertiefungen."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N11"
@@ -22,7 +22,7 @@ bisherige_ids: ["baustein-n11"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Zwei getrennte Kurzprofile: **Auslandsprofil** (Ausbruch im Ausland mit konkretem Eintragungs-, Expositions-, Versorgungs- oder Hilfebindungspfad für Deutschland) und **lokales Profil** (räumlich-zeitlich zusammenhängendes Geschehen in Deutschland). Hohe Ansteckungsfähigkeit und schwere Krankheitsfolgen werden nicht gleichgesetzt. Keine eigene Therapie- oder Infektionsschutzanordnung.
+**Umfasst / grenzt ab von:** Zwei getrennte Kurzprofile: **Auslandsprofil** (Ausbruch im Ausland mit konkretem Eintragungs-, Expositions-, Versorgungs- oder Hilfebindungspfad für Deutschland) und **lokales Profil** (räumlich-zeitlich zusammenhängendes Geschehen in Deutschland). Hohe Ansteckungsfähigkeit und schwere Krankheitsfolgen werden nicht gleichgesetzt. Keine eigene Therapie- oder Infektionsschutzanordnung. Amtliche Einstufungen (lokales Ausbruchsgeschehen nach § 11 IfSG, RKI-Risikobewertung, epidemische Lage von nationaler Tragweite nach § 5 IfSG, Notlagen nach den IGV und nach Art. 23 VO (EU) 2022/2371) werden nach der Tabelle in B11, Abschnitt 2, mit feststellender Stelle und Datum wiedergegeben; C07 führt keine eigene Tabelle.
 
 **Deutschlandbezug und Sachverhaltsschnitt (Auslandsprofil):** Den Bezug als belegte aktuelle Wirkung, belegten aktuellen Prüf- oder Vorsorgebedarf, historischen Bezug oder bedingtes Szenario kennzeichnen. Frühe Befassung nach A.1 Nr. 1 bleibt ohne eingetretene Exposition zulässig; die abstrakte Möglichkeit von Reiseverkehr reicht nicht. Ein Ausbruch bleibt ein Sachverhalt, auch wenn er weitere Staaten erreicht; ein neuer Staat begründet keinen zusätzlichen Sachverhalt. Getrennt geführt wird ein deutscher Bezugsgegenstand mit eigenem Prüfauftrag, eigenen Maßnahmen oder eigenen Fortschreibungsbedingungen (A.1 Nr. 6), etwa die Aufnahme evakuierter Patienten oder die Klärung von Kontaktpersonen mit möglichem Aufenthalt in Deutschland.
 
@@ -36,7 +36,7 @@ bisherige_ids: ["baustein-n11"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche bestätigte Lage, Falldefinition, Übertragung und Unsicherheit bestehen vor Ort? | WHO Disease Outbreak News; ECDC, auch wöchentlicher Bedrohungsbericht; nationale Gesundheitsbehörde; fallbezogen belegen | L/R | Auslandsschwere nicht in die deutsche Bewertung übertragen (A.1 Nr. 6). Zahlen nach B11 „Abgleich epidemiologischer Angaben“ führen; das Ende eines Ausbruchs nur nach dem Kriterium der erklärenden Behörde wiedergeben. |
+| R1 | Welche bestätigte Lage, Falldefinition, Übertragung und Unsicherheit bestehen vor Ort? | WHO Disease Outbreak News; ECDC, auch wöchentlicher Bedrohungsbericht; nationale Gesundheitsbehörde; fallbezogen belegen | L/R | Auslandsschwere nicht in die deutsche Bewertung übertragen (A.1 Nr. 6). Zahlen nach B11 „Abgleich epidemiologischer Angaben“ führen; das Ende eines Ausbruchs nur nach dem Kriterium der erklärenden Behörde wiedergeben. WHO- und EU-Einstufung nach B11, Abschnitt 2 (Tabelle) mit Stelle und Datum; sie sind keine deutsche Lagefeststellung. |
 | R2 | Welcher konkrete Pfad nach Deutschland ist belegt: Reisende und Rückkehrende (auch Einsatzkräfte), Kontaktpersonen mit Aufenthalt in Deutschland, Aufnahme evakuierter Patienten, Entsendung deutscher Kräfte, Liefer- oder Versorgungsbeziehung (C10)? | RKI; nationale IGV-Anlaufstelle (GMLZ im BBK) für internationale Mitteilungen; Auswärtiges Amt; Lagemeldungen (A.3) | R/I | Pfad benennen, je Pfad Beleg, zuständige Stelle und Stand; ohne Pfad keine deutschen Ist-Achsen. Kontaktdaten werden über die IGV-Meldewege ausgetauscht, nicht veröffentlicht: Fehlende öffentliche Angaben belegen weder einen Pfad noch einen Nullbefund. Hilfe Deutschlands ins Ausland und die Aufnahme ausländischer Patienten sind keine Unterstützung für die Lage im Referenzraum (D4). |
 
 **Fall- und Transferstatus:** Bestätigte Erkrankung, Verdachtsfall, exponierte Kontaktperson, vorsorgliche Evakuierung und medizinische Evakuierung eines bestätigten Falls getrennt führen; Infektions-, Diagnose-, Behandlungs- und Zählort unterscheiden. Ein Transfer erzeugt keinen weiteren Erkrankungsfall; eine vorsorgliche Evakuierung ohne Bestätigung wird nicht zu bestätigten Importfällen addiert. Zählungen über Importfälle zuerst nach Raumbegriff (Europa, EU/EWR, einzelner Staat), Stichtag und Abgrenzung prüfen; bis dahin ist eine Abweichung eine ungeklärte Zählbasis, kein Widerspruch (A.3).
@@ -48,7 +48,7 @@ bisherige_ids: ["baustein-n11"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R3 | Welche Fälle und Kontakte gehören zeitlich und räumlich zum selben Geschehen? | Gesundheitsamt; Landesgesundheitsbehörde | L; D2 | Fälle und Kontakte nicht addieren (A.3 Zählregeln). |
-| R4 | Welche fachbehördliche Ausbruchs- und Expositionsbewertung liegt vor? | Gesundheitsamt; RKI | L/R | Wahrscheinlicher Übertragungsweg ist keine gesicherte Quelle. |
+| R4 | Welche fachbehördliche Ausbruchs- und Expositionsbewertung liegt vor? | Gesundheitsamt; RKI | L/R | Wahrscheinlicher Übertragungsweg ist keine gesicherte Quelle. Zuordnung zu einem Ausbruchsgeschehen nach § 11 IfSG trifft das Gesundheitsamt (B11, Abschnitt 2, Tabelle). |
 
 #### Beide Profile (R5–R6)
 

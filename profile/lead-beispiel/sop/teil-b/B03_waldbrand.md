@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Waldbrand (Wald-, Vegetations-, Moor- und einschlägige Flächenbrände)"
 art_vorschlag: ["Waldbrand"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Wald- und Vegetationsbränden mit überörtlichem Kräftebedarf oder Gefährdung von Siedlungen und Infrastruktur."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.03.2027"
@@ -33,11 +33,11 @@ bisherige_ids: ["sop-03"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Wie hoch ist die meteorologische Brandgefahr? | [DWD Waldbrandgefahrenindex](https://www.dwd.de/DE/leistungen/waldbrandgef/waldbrandgef.html) und [Graslandfeuerindex](https://www.wettergefahren.de/warnungen/indizes.html); täglich | R | Indizes nach Vegetationstyp, Ausgabe und Gültigkeit als Gefahrenpotenzial erfassen – kein Brandnachweis und nicht unmittelbar D8. Betretungs- oder Zutrittsverbote nur aus tatsächlich geltenden Anordnungen ableiten. |
-| R2 | Wo brennt es, wie entwickelt sich die Fläche? | Landesforstbehörde und Gefahrenabwehrbehörde; Lagemeldungen (A.3); EFFIS (Copernicus) | L; D1/D8 | Hotspot (Detektion), interpretierte Brandfläche und behördlich bestätigte Fläche mit Produktstand, Auflösung und Unsicherheit trennen; aktive, verbrannte und geschätzte Fläche trennen. |
+| R2 | Wo brennt es, wie entwickelt sich die Fläche? | Landesforstbehörde und Gefahrenabwehrbehörde; Lagemeldungen (A.3); EFFIS (Copernicus); [Waldbrandatlas BKG](https://gdz.bkg.bund.de/index.php/default/waldbrandatlas.html) (Lageübersicht: Gefährdungsstufen, Detektionen, Satellitenbild; Zugang prüfen) | L; D1/D8 | Hotspot (Detektion), interpretierte Brandfläche und behördlich bestätigte Fläche mit Produktstand, Auflösung und Unsicherheit trennen; aktive, verbrannte und geschätzte Fläche trennen. |
 | R3 | Welche Menschen sind durch Feuer, Rauch oder Evakuierung betroffen? | Lagemeldungen (A.3); Luftqualitätsmessungen der Länder/UBA | R; D2 | Rauch ist eigene Betroffenheitsdimension; Messwerte mit Station und Zeit; eine Rauchfahne liefert keine Personenzahl. |
 | R4 | Gibt es Sonderlagen (Munition, Moor)? | Kampfmittelräumdienst, Landesforst | R; D5 | Munitionsbelastung erzwingt Abstand; Nachlösch- und Schwelphasen können die Bekämpfung verlängern – keine pauschale Dauer. |
 | R5 | Welche Kräfte sind überörtlich/international eingesetzt, welche Luftunterstützung ist tatsächlich verfügbar? | Lagemeldungen (A.3); GMLZ, Bundeswehr/Bundespolizei (Luft), EU-Katastrophenschutzverfahren (rescEU) | M; D4 | Ausländische Luftfahrzeuge im Einsatz = international; nur tatsächlich eingesetzte Kräfte zählen; angefragt ≠ verfügbar ≠ eingesetzt. |
-| R6 | Einordnung im Mehrjahresvergleich? | [Waldbrandatlas BKG](https://gdz.bkg.bund.de/index.php/default/waldbrandatlas.html) | L | Historische Häufung ist Einordnung, keine Prognose. |
+| R6 | Einordnung im Mehrjahresvergleich? | Waldbrandstatistik des Bundes (BLE) und EFFIS-Statistik; Fundstelle vor Erstverwendung prüfen und im Quellenregister nachweisen (A.6) | L | Historische Häufung ist Einordnung, keine Prognose. |
 
 ### 3. Auswertung: Prüfpunkte
 

@@ -2042,7 +2042,7 @@
       "im_basisbestand": false,
       "titel": "BSIG (2025) § 32 Meldepflichten",
       "dokumentstand": "Konsolidierte Fassung nach NIS2UmsuCG; Stand nicht im Abruf ausgewiesen",
-      "zweck_und_pruefgrenze": "Fachgrundlage für die Meldestufen (24 h, 72 h, Zwischenmeldung, ein Monat) als Bestätigungsgrad; kein Radarkriterium.",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Meldestufen (24 h, 72 h, Zwischenmeldung, ein Monat) als Verfahrensstand; Bestätigungsgrad je Aussage nach A.3; kein Radarkriterium.",
       "status": "gezielter_inhaltsabgleich",
       "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
       "offene_nachpruefung": "Begriff des erheblichen Sicherheitsvorfalls (§ 2) und Einrichtungskategorien (§ 28) vor Verwendung lesen.",

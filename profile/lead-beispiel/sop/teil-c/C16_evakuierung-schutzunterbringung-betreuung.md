@@ -10,11 +10,11 @@ lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
 art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
-anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; A.5, A.9.1, A.9.2"
+anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.1.1"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N03"
@@ -44,16 +44,18 @@ bisherige_ids: ["baustein-n03"]
 
 ### 3. Auswertung: Prüfpunkte
 
-- **D2:** tatsächlich Evakuierte bzw. Untergebrachte mit Stand, nicht die Bevölkerung des Räumungsgebiets.
+- **D2:** unmittelbar Betroffene nach Kodierleitfaden D2 und A.3 Zählregeln: tatsächlich Evakuierte, Verlegte oder Untergebrachte und Menschen mit belegtem Unterkunftsverlust, jeweils mit Stand und Überschneidung; bei Schutz in Gebäuden nur bei belegter Beeinträchtigung von Gesundheit oder Grundversorgung. Nicht gezählt werden die Bevölkerung des Räumungs- oder Warngebiets und vorsorglich benannte Zielgruppen.
 - **D4:** Herkunft tatsächlich eingesetzter Transport- und Betreuungskräfte.
 - **D5:** Zielzustand benennen (Rückkehr, gesicherte Zwischenunterbringung, Ende der Betreuung).
 
-**Offenlassen:** D2 ohne gezählte Personen (die Bevölkerung des Räumungsgebiets ist keine Zahl der Evakuierten); D5 ohne benannten Zielzustand und tragfähige Prognose – ein Rückkehrkriterium oder ein Plan ist keine Prognose.
+**Offenlassen:** D2 ohne tragfähigen Beleg – gezählte Personen, bestätigte Mindestzahl oder Schätzbandbreite innerhalb einer Stufe nach A.2 (die Bevölkerung des Räumungsgebiets ist keine Zahl der Evakuierten); D5 ohne benannten Zielzustand und tragfähige Prognose – ein Rückkehrkriterium oder ein Plan ist keine Prognose.
 
 ### 4. Darstellung
 
 Nach der Dach-SOP; Schutzmaßnahme, betroffene Gruppen, Unterkunft und Rückkehr getrennt darstellen.
 
 ### 5. Ansprechstellen und Pflege
+
+**Ansprechstellen (funktional):** Örtlich zuständige Gefahrenabwehrbehörde zu Anordnung, Gebiet und Aufhebung (A) · Betreuungs- und Unterbringungskoordination von Kommune bzw. Kreis · Einrichtungsträger und Hilfsorganisationen zu betriebenen Unterkünften und Betreuungsplätzen (B) · Gesundheits- und Pflegeaufsicht bei Verlegungen (C09) · zuständige Landesstellen für überörtliche Aufnahme und Transport; BBK (Betreuungsmodule) als Hintergrund. Zuständigkeiten landes- und fallbezogen prüfen.
 
 **Offene Punkte:** Abgleich mit örtlichen Evakuierungs- und Betreuungskonzepten der übernehmenden Stelle.

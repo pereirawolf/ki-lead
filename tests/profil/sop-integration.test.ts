@@ -78,7 +78,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
   it("leere Menge beigefügter SOPs lässt nichts durch (SOP-CODE-01)", async () => {
     const { profil: p } = await profil("lead-beispiel");
     expect(sopKennungenAbgleichen(["SOP-LEAD C11 x"], p!, new Set())).toEqual([]);
-    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.1.0"]);
+    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.1.1"]);
   });
 
   it("Nachweis = beigefügte SOPs, unabhängig vom Antwortformat; Abweichungen als Hinweis (SOP-CODE-02)", async () => {

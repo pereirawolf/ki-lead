@@ -10,11 +10,11 @@ lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk, Warnmitteln oder amtlichen Informationsangeboten mit Schutzbezug"
 art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei belegtem Vorfall oder als Prüfhilfe zu B15 bei begründeter Vorsorgebefassung"
-anschluss: "B12, B15, A.9.3"
+anschluss: "B12, B15; Warnlage nach A.9.3 im Text"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N02"
@@ -23,7 +23,7 @@ bisherige_ids: ["baustein-n02"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nur nach Auswirkung auf die Lageinformation der Befassung; die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2). Ursache zusätzlich über B08, B15 oder B16.
+**Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nach A.2 (Informationslage der Befassung einschließlich entscheidungsrelevanter Lücken zur gestörten Funktion); die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2, A.9.3). Ursache zusätzlich über B08, B15 oder B16.
 
 **Öffentliche Informationsversorgung:** Ergänzend den Wegfall amtlicher Informationsangebote prüfen, soweit er einen konkreten Schutz-, Orientierungs- oder Hilfszugangsbezug hat, etwa wenn etablierte Informationsseiten während einer Gefahrenlage fehlen. Ein ausgefallener Behörden- oder Polizei-Webauftritt belegt keine Störung von 110/112, Leitstellen, BOS-Funk, MoWaS oder angeschlossenen Warnmultiplikatoren. Rein repräsentative Website-Ausfälle ohne solchen Funktionsbezug werden nicht zur Warnfähigkeits- oder KRITIS-Lage.
 
@@ -48,7 +48,7 @@ bisherige_ids: ["baustein-n02"]
 
 - **D2:** nur mit belegter Personenzahl; Anrufversuche, Mobilfunkverträge oder Anschlüsse sind keine Personen.
 - **D6:** Kernachse; Funktion der Gefahrenabwehr und Warnfähigkeit als Kopplungsobjekt.
-- **D7:** nur, wenn die Lageinformation der befassten Stellen selbst betroffen ist (z. B. gestörte Meldewege der Leitstellen).
+- **D7:** nach A.2: gestörte Melde- und Lagewege der befassten Stellen (z. B. Leitstellen) sowie entscheidungsrelevante Lücken oder Widersprüche zu Umfang, Ersatzweg und Wiederanlauf der gestörten Funktion; ein technischer Kommunikationsausfall ist weder Voraussetzung noch für sich ein D7-Wert. Ausfälle der Kommunikation mit der Bevölkerung gehören in den Text und zu D6 (A.9.3).
 
 **Offenlassen:** D2 ohne belegte Personengrundlage; D5 ohne Entstörprognose.
 
@@ -57,5 +57,7 @@ bisherige_ids: ["baustein-n02"]
 Nach B12, unter B15 nach dessen Darstellung; je Funktion (öffentliche Schutzinformation, Online-Verwaltungsdienst, Notruf, Leitstelle, BOS-Funk, Warnauslösung und -übertragung, Telefonie/Daten) Status, Ersatzweg und Prognose getrennt.
 
 ### 5. Ansprechstellen und Pflege
+
+**Ansprechstellen (funktional):** Betroffene Telekommunikationsanbieter und Netzbetreiber zur eigenen Leistung (B) · BNetzA (Telekommunikation, Aufsicht) · Leitstellen und Träger des Rettungsdienstes bzw. der Polizei zu Notrufannahme und Leitstellenbetrieb (A) · für den BOS-Digitalfunk zuständige Stellen des Landes und BDBOS · Warnzentralen der Länder, BBK (MoWaS) und herausgebende Behörde zu Warnauslösung und -übertragung · zuständige Behörde zu amtlichen Informationsangeboten. Zuständigkeiten landes- und fallbezogen prüfen; keine Kontaktdaten in der Beispielfassung.
 
 **Offene Punkte:** Zuständige Ansprechstellen für BOS-Funk und Leitstellen organisationsspezifisch festlegen. Ebenso festlegen, welche amtlichen Informationsangebote im Referenzraum für Schutzinformation und Hilfszugang erforderlich sind, welche Ersatzkanäle bestehen und über welche etablierten Melde- und Abstimmungswege der Funktionsstatus zu erfahren ist, ohne der Koordinierungsstelle Betriebs- oder Aufsichtsaufgaben zuzuschreiben.

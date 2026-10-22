@@ -9,10 +9,10 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Gesundheit und medizinische Versorgung"
 lageart: "Tatsächliche oder fachlich begründet drohende Engpässe bei Arzneimitteln, Impfstoffen, Blutprodukten, medizinischen Gasen sowie kritischen Medizinprodukten und Verbrauchsmaterialien mit relevanten Versorgungsfolgen"
 art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
-art_hinweis: "„KRITIS-Ausfall“ bei belegtem Dienstleistungsausfall"
-anschluss: "B11, C09; B12 bei belegtem Dienstleistungsausfall; C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
+art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht"
+anschluss: "B11, C09; B12 nach dem Funktionsdach (A.1 Nr. 2); C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
-version: "1.2.0"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -29,9 +29,20 @@ bisherige_ids: ["baustein-n12"]
 
 **Befassungsanlässe:** Fachliche Bewertung eines Engpasses mit relevanten Versorgungsfolgen durch die zuständige Bundesoberbehörde (BfArM; für Impfstoffe und Blutprodukte PEI) oder Landesbehörde · bestätigte Unterbrechung kritischer Arzneimittel-, Blutprodukt-, Sauerstoff- oder Materialversorgung · förmliche Feststellung eines Versorgungsmangels · Rückruf oder Qualitätsmangel mit Versorgungsfolgen.
 
-**Zuordnung im Schema:** „Gesundheitliche Lage / Epidemie“; „KRITIS-Ausfall“ bei belegtem Dienstleistungsausfall.
+**Zuordnung im Schema:** „Gesundheitliche Lage / Epidemie“; „KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2).
 
 ### 2. Erfassung: Prüffragen
+
+**Amtliche Engpassstufen (Arzneimittel).** Die Tabelle dient der Recherche und Vollständigkeitsprüfung (A.6 Fachgrundlagen, A.10.1); sie gilt für Humanarzneimittel nach dem Arzneimittelgesetz. Für Impfstoffe, Sera und Blutprodukte ist das PEI zuständig. Medizinische Gase sind nicht pauschal vom Arzneimittelrecht ausgenommen (das AMG nennt sie in § 47 Abs. 1 Nr. 2 Buchst. e); für ein als Arzneimittel eingeordnetes Produkt, etwa medizinischen Sauerstoff, gilt die Tabelle nach seinem belegten Produktstatus. Für Medizinprodukte und sonstiges Verbrauchsmaterial gelten andere Rechtsgrundlagen; die Tabelle wird darauf nicht übertragen. Produktstatus, zuständige Fachstelle und Engpassinformation belegen; ein ungeklärter Produktstatus bleibt Prüfbedarf. Eine Stufe ist ein Rechts- oder Verfahrensstatus mit Datum, kein Radarwert. Im Meldungstext immer mit Fachgrundlage und feststellender Stelle schreiben, z. B. „Versorgungsmangel (§ 79 Abs. 5 AMG) laut Bekanntmachung des BMG vom …“.
+
+| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Grundlage | Abgrenzung für die Befassung |
+|---|---|---|
+| Gemeldeter Lieferengpass (§ 52b Abs. 3c AMG) | Pharmazeutischer Unternehmer meldet; BfArM veröffentlicht gemeldete Lieferengpässe sowie eine Liste versorgungsrelevanter und versorgungskritischer Wirkstoffe (nach Anhörung des Beirats nach Abs. 3b) | Meldung und Listeneintrag sind Betreiber- bzw. Registerangaben zum Produkt, kein Nachweis örtlicher Nichtverfügbarkeit oder ungedeckter Versorgung (R1, R2). Die Zahl der Einträge ist kein Schweregrad. |
+| Versorgungsrelevanter Lieferengpass mit Maßnahme der Bundesoberbehörde (§ 52b Abs. 3d AMG) | BfArM bzw. PEI kann nach Anhörung des Beirats Maßnahmen anordnen, auch Kontingentierung; bei versorgungskritischen Wirkstoffen zusätzlich Lagerhaltung | Angeordnete Maßnahme mit Fundstelle, Produkt, Geltung und Stand als Maßnahme (M) führen (R6); eine Anordnung belegt keine Versorgungslücke im Referenzraum. |
+| Versorgungsmangel (§ 79 Abs. 5 AMG) | Bundesministerium für Gesundheit stellt fest, dass ein Versorgungsmangel bei Arzneimitteln gegen lebensbedrohliche Erkrankungen oder eine bedrohliche übertragbare Krankheit mit entsprechendem Bedarf vorliegt oder nicht mehr vorliegt; Bekanntmachung im Bundesanzeiger; zuständige Behörden können dann im Einzelfall befristet nicht zugelassene Arzneimittel und Abweichungen von Erlaubnis- und Genehmigungserfordernissen gestatten (Abs. 5), begrenzt auf das erforderliche Maß (Abs. 6) | Förmlicher Rechtsstatus für ein Produkt; er belegt nicht in jeder Region ungedeckten Bedarf, und die rechtliche Möglichkeit einer Ausnahme ist noch keine wirksame Gegenmaßnahme. Gestattungen der zuständigen Behörden sind Maßnahmen (M) mit Stelle, Produkt und Befristung. |
+| Örtliche Nichtverfügbarkeit ohne amtliche Stufe | Einrichtung, Apotheke oder Großhandel meldet fehlende Verfügbarkeit (B); keine Meldung an das BfArM erforderlich | Für die Befassung maßgeblich, wenn eine notwendige Leistung nicht gesichert ist (R2, R4); keine Stufe aus dem Fehlen eines Registereintrags ableiten. |
+
+Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen.
 
 **Produkt- und Bedarfsprofil:** Benötigte Leistung, Produktgruppe und nach Relevanz Wirkstoff bzw. Produkt, Stärke, Darreichungsform, technische Ausführung oder Kompatibilität, betroffene Region bzw. Einrichtung und Zeitfenster benennen. Bedarfsmenge, nutzbaren Bestand, gebundene Reserven, Verbrauch und bestätigte Zuführung auf dieselbe Einheit und denselben Zeitraum beziehen. Packungen, Dosen, Gerätestückzahlen, Behandlungen und Patientenzahlen nicht ungeprüft umrechnen. Eine gleiche Wirkstoff- oder ähnliche Produktbezeichnung belegt keine Eignung für dieselbe Anwendung. Mengen und technische Details nur, soweit sie Versorgungslücke oder Entscheidungsbedarf erklären.
 
@@ -48,17 +59,6 @@ bisherige_ids: ["baustein-n12"]
 **Nutzbarkeit und Alternativen:** Vorhanden, verfügbar, fachlich geeignet und rechtlich nutzbar unterscheiden. Bestände können gesperrt, zurückgerufen, abgelaufen, nicht freigegeben, örtlich unerreichbar oder mangels Zubehör oder Qualifikation nicht einsetzbar sein. Technische und therapeutische Alternativen nur nach zuständiger fachlicher Bewertung beschreiben: Eignung für den konkreten Bedarf, ausreichende Menge, rechtzeitige Bereitstellung, zusätzlicher Personal-, Schulungs- und Logistikaufwand. Eine Alternative kann einen anderen Engpass belasten; Mehrbedarf und Verlagerung in andere Regionen oder Produkte berücksichtigen. Keine eigene Freigabe von Ersatzprodukten, Verlängerung der Haltbarkeit oder Wiederverwendung durch die Redaktion.
 
 **Reichweite und Wiederherstellung:** Fachlich belegte Reichweite der tatsächlich nutzbaren Bestände unter dem erwarteten Verbrauch, ihre Unsicherheit und die letzte gesicherte Zuführung erfassen; aus pauschalen Verbrauchswerten keine scheinexakten Ausfalltermine berechnen. Lieferankündigung, Produktion, Qualitätsfreigabe, Zuteilung, Versand, örtlicher Eingang und tatsächliche Versorgung sind unterschiedliche Status. Maßgeblich ist, wann die benötigte Behandlung voraussichtlich ausfällt oder wieder verlässlich gesichert ist; kleine Spezialbedarfe können vor einem breiten Mangel zeitkritisch werden. Gegenmaßnahmen nach A.4 mit verantwortlicher Stelle und Status; Transport und Kühlkette nach C13.
-
-**Amtliche Engpassstufen (Arzneimittel).** Die Tabelle dient der Recherche und Vollständigkeitsprüfung (A.6 Fachgrundlagen, A.10.1); sie gilt für Humanarzneimittel nach dem Arzneimittelgesetz. Für Impfstoffe, Sera und Blutprodukte ist das PEI zuständig; für Medizinprodukte, medizinische Gase und Verbrauchsmaterial gelten andere Rechtsgrundlagen, die Tabelle wird nicht übertragen. Eine Stufe ist ein Rechts- oder Verfahrensstatus mit Datum, kein Radarwert. Im Meldungstext immer mit Fachgrundlage und feststellender Stelle schreiben, z. B. „Versorgungsmangel (§ 79 Abs. 5 AMG) laut Bekanntmachung des BMG vom …“.
-
-| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Grundlage | Abgrenzung für die Befassung |
-|---|---|---|
-| Gemeldeter Lieferengpass (§ 52b Abs. 3c AMG) | Pharmazeutischer Unternehmer meldet; BfArM veröffentlicht gemeldete Lieferengpässe sowie eine Liste versorgungsrelevanter und versorgungskritischer Wirkstoffe (nach Anhörung des Beirats nach Abs. 3b) | Meldung und Listeneintrag sind Betreiber- bzw. Registerangaben zum Produkt, kein Nachweis örtlicher Nichtverfügbarkeit oder ungedeckter Versorgung (R1, R2). Die Zahl der Einträge ist kein Schweregrad. |
-| Versorgungsrelevanter Lieferengpass mit Maßnahme der Bundesoberbehörde (§ 52b Abs. 3d AMG) | BfArM bzw. PEI kann nach Anhörung des Beirats Maßnahmen anordnen, auch Kontingentierung; bei versorgungskritischen Wirkstoffen zusätzlich Lagerhaltung | Angeordnete Maßnahme mit Fundstelle, Produkt, Geltung und Stand als Maßnahme (M) führen (R6); eine Anordnung belegt keine Versorgungslücke im Referenzraum. |
-| Versorgungsmangel (§ 79 Abs. 5 AMG) | Bundesministerium für Gesundheit stellt fest, dass ein Versorgungsmangel bei Arzneimitteln gegen lebensbedrohliche Erkrankungen oder eine bedrohliche übertragbare Krankheit mit entsprechendem Bedarf vorliegt oder nicht mehr vorliegt; Bekanntmachung im Bundesanzeiger; zuständige Behörden können dann im Einzelfall befristet nicht zugelassene Arzneimittel und Abweichungen von Erlaubnis- und Genehmigungserfordernissen gestatten (Abs. 5), begrenzt auf das erforderliche Maß (Abs. 6) | Förmlicher Rechtsstatus für ein Produkt; er belegt nicht in jeder Region ungedeckten Bedarf, und die rechtliche Möglichkeit einer Ausnahme ist noch keine wirksame Gegenmaßnahme. Gestattungen der zuständigen Behörden sind Maßnahmen (M) mit Stelle, Produkt und Befristung. |
-| Örtliche Nichtverfügbarkeit ohne amtliche Stufe | Einrichtung, Apotheke oder Großhandel meldet fehlende Verfügbarkeit (B); keine Meldung an das BfArM erforderlich | Für die Befassung maßgeblich, wenn eine notwendige Leistung nicht gesichert ist (R2, R4); keine Stufe aus dem Fehlen eines Registereintrags ableiten. |
-
-Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen.
 
 **Rechtliche und behördliche Maßnahmen:** Tatsächliche Versorgungslücke, fachliche Engpassbewertung, förmliche Feststellung eines Versorgungsmangels und konkrete behördliche Ausnahme oder Maßnahme getrennt erfassen. Rechtsstatus und Befugnisse nur aus aktueller amtlicher Fundstelle mit Produkt- und Gebietsbezug und Geltungsdauer (A.6); eine Feststellung belegt nicht in jeder Region ungedeckten Bedarf, und eine rechtliche Möglichkeit ist noch keine wirksame Gegenmaßnahme. Ausnahmen, Importe, Umverteilung oder angepasste Nutzung nur als belegte Maßnahme oder als zuständig adressierten Prüfbedarf nennen.
 
@@ -86,7 +86,7 @@ Nach B11. „Lage & Ereignis“: betroffene Leistung bzw. Produktgruppe, Ursache
 
 **Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
-- Arzneimittelgesetz: [§ 52b Bereitstellung von Arzneimitteln](https://www.gesetze-im-internet.de/amg_1976/__52b.html) (Abs. 3b Beirat, Abs. 3c Listen und Veröffentlichung, Abs. 3d Maßnahmen, Abs. 3g Frühwarnsystem) und [§ 79 Ausnahmeermächtigungen für Krisenzeiten](https://www.gesetze-im-internet.de/amg_1976/__79.html) (Abs. 5, 6) – tragen die Tabelle der Engpassstufen, R2 und R6.
+- Arzneimittelgesetz: [§ 52b Bereitstellung von Arzneimitteln](https://www.gesetze-im-internet.de/amg_1976/__52b.html) (Abs. 3b Beirat, Abs. 3c Listen und Veröffentlichung, Abs. 3d Maßnahmen, Abs. 3g Frühwarnsystem) sowie § 47 Abs. 1 Nr. 2 Buchst. e (medizinische Gase; am 22.10.2026 in nichtamtlicher Wiedergabe gelesen, amtliche Fundstelle vor Verwendung prüfen, A.6) und [§ 79 Ausnahmeermächtigungen für Krisenzeiten](https://www.gesetze-im-internet.de/amg_1976/__79.html) (Abs. 5, 6) – tragen die Tabelle der Engpassstufen, R2 und R6.
 - BfArM und PEI: Lieferengpassinformationen und Begriffsbestimmungen (Lieferengpass, Versorgungsengpass) der Bundesoberbehörden; Fundstellen vor Erstverwendung prüfen (A.6), Jahresberichte ersetzen keine akute Bestandslage.
 - Verordnung (EU) 2022/123 (erweitertes Mandat der Europäischen Arzneimittel-Agentur; Überwachung von Engpässen bei Notlagen und Großereignissen): EU-Ebene neben der nationalen Stufe führen; Fundstelle vor Verwendung prüfen.
 

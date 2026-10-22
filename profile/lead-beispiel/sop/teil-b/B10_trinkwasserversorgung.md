@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Trinkwasserversorgung (Unterbrechung, Mengeneinschränkung, Qualitätsproblem)"
 art_vorschlag: ["Trinkwasserversorgung"]
 zweck: "Reproduzierbare Erfassung von Unterbrechungen, Mengeneinschränkungen und Qualitätsproblemen der öffentlichen Trinkwasserversorgung (KRITIS-Sektor Wasser, Branche öffentliche Wasserversorgung) einschließlich der tatsächlich wirksamen Ersatzversorgung."
-version: "2.0.2"
+version: "2.1.0"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -66,4 +66,10 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** Wasserversorger · Gesundheitsämter · Wasserbehörden der Länder · BBK (Trinkwassernotversorgung) · UBA (Fachgrundlagen)
 
-**Offene Punkte:** Abgrenzung zwischen B10 und Baustein C15 an einem Übungsfall prüfen.
+**Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
+
+- UBA: Empfehlungen zu Maßnahmen bei Abweichungen der Trinkwasserbeschaffenheit (Vollzugsempfehlung für Gesundheitsämter zu den §§ 62–68 TrinkwV, Fassung 2026; Link in R6, Quellenregister S019) – trägt R6; sie ist eine fachliche Empfehlung, keine Rechtsnorm, und ersetzt keine Anordnung des Gesundheitsamts.
+- Trinkwasserverordnung (TrinkwV): Maßnahmen bei Nichteinhaltung und Information der Verbraucher; Fundstelle vor Verwendung am Normtext prüfen (A.6).
+- Wassersicherstellungsgesetz (WasSiG): Maßnahmenrahmen der zivilen Verteidigung (C17); in dieser Fassung ohne Fundstelle, vor Verwendung am Normtext prüfen (A.6).
+
+**Offene Punkte:** Abgrenzung zwischen B10 und Baustein C15 an einem Übungsfall prüfen. Fundstellen für TrinkwV und WasSiG mit Registereintrag aufnehmen (A.6).

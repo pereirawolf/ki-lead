@@ -9,12 +9,12 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Gesundheit und medizinische Versorgung"
 lageart: "Missverhältnis zwischen medizinischem oder pflegerischem Bedarf und tatsächlich nutzbaren präklinischen, klinischen, pflegerischen oder häuslichen Versorgungsleistungen; Ausfall oder Evakuierung von Einrichtungen; MANV-Folgen"
 art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
-art_hinweis: "„KRITIS-Ausfall“ bei entsprechendem Funktionsausfall"
+art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn neben der medizinisch-pflegerischen Versorgung eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht; der Versorgungsausfall selbst bleibt unter „Gesundheitliche Lage / Epidemie“"
 anschluss: "B11, C05; C07 bei Infektionsgeschehen; C10, C11, C12, C16, B15, C17 nach konkretem Bezug"
 zweck: "Erfassung nutzbarer medizinischer und pflegerischer Leistung und des Ausfalls der Regelversorgung nach Versorgungsfunktion, unabhängig von der Ursache."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N04"
@@ -27,7 +27,7 @@ bisherige_ids: ["baustein-n04"]
 
 **Befassungsanlässe:** Belegtes Missverhältnis zwischen Patientenbedarf und einsetzbaren präklinischen bzw. klinischen Fähigkeiten · Ausfall oder Evakuierung von Klinik-, Pflege-, Dialyse- oder Rettungsdienstfunktionen · länger andauernde Abmeldung von Notaufnahmen oder Fachgebieten in einer Region · Gefährdung häuslich versorgter Menschen (z. B. Beatmung, Sauerstoff, Pflegedienste) · länderübergreifender Verlegungs- oder Unterstützungsbedarf.
 
-**Zuordnung im Schema:** „Gesundheitliche Lage / Epidemie“; „KRITIS-Ausfall“ bei entsprechendem Funktionsausfall.
+**Zuordnung im Schema:** „Gesundheitliche Lage / Epidemie“; „KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2), nicht allein wegen des KRITIS-Bezugs von Kliniken, Pflege oder Rettungsdienst.
 
 ### 2. Erfassung: Prüffragen
 

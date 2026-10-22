@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.1.0"
+version: "2.1.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -35,7 +35,7 @@ bisherige_ids: ["sop-16"]
 | R3 | Welche Menschen sind unmittelbar geschädigt oder evakuiert, welche Betreuung läuft? | Lagemeldungen (A.3); Rettungsdienst, PSNV-Strukturen | R; D2 | Opferzahlen nur aus amtlicher Quelle mit Bezugszeit und Bestätigungsgrad; PSNV- und Nachsorgebedarf gesondert von Verletztenzahlen darstellen. |
 | R4 | Welche Schutz-, Sperr- und Verhaltenshinweise gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; Polizei; anlassbezogen | M; D1 | Keine operativen Schwachstellen ergänzen; Ausbleiben einer Warnung ist keine Entwarnung. |
 | R5 | Welche Rettungs- und Ersatzversorgungshilfe besteht? | Lagemeldungen (A.3) | M; D3/D4 | Ermittlungsführung und Versorgungswiederherstellung unterscheiden. |
-| R6 | Welche Informationen kursieren? | Medienauswertung (VOST) gegen amtliche Quellen | D7 | Gerüchte, Falschmeldungen und unbelegte Täterangaben nicht übernehmen (A.9.5). |
+| R6 | Welche Informationen kursieren? | Medienauswertung (VOST) gegen amtliche Quellen | R; D7 | Gerüchte, Falschmeldungen und unbelegte Täterangaben nicht übernehmen (A.9.5). |
 | R7 | Verzögern behördlich bestätigte Gefährdungs- oder Sperrlagen Rettung, Betreuungszugang, Reparatur oder Wiederanlauf? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | R/M; D5 | Die Folgebewältigung kann bei gleichbleibendem Schadenumfang weiter eingeschränkt sein; daraus folgt keine eigene Täter- oder Gefahrenbewertung. |
 | R8 | Gehören mehrere Ereignisse zusammen? | Zuständige Polizei- bzw. Ermittlungsbehörde | L; D1/D8 | Nur bei belegtem Zusammenhang als Serie zusammenfassen; sonst getrennte Sachverhalte mit möglicher gemeinsamer Ressourcenwirkung (A.7.4). |
 

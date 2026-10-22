@@ -9,12 +9,12 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Ausfall von Abwasserableitung, -transport oder -behandlung, nicht nutzbare Sanitärversorgung, kritischer Entsorgungsrückstau"
 art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung"]
-art_hinweis: "„KRITIS-Ausfall“ bei belegter relevanter Funktion; „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; sonst Prüfhilfe unter der Ereignisart der Ursache"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Abwasser-, Sanitär- oder Entsorgungsfunktion (Sektor ohne eigene Dach-SOP, B12); „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B10, B12; B02 bei Hochwasser, B08 bei Stromausfall; C08 bei Tierkörperbeseitigung; C09 bei Gesundheits- und Pflegeeinrichtungen; C13 Transport; C16 Unterkünfte"
 zweck: "Erfassung von Entwässerungs-, Sanitär- und hygienisch relevanten Entsorgungsfolgen."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N08"
@@ -27,7 +27,7 @@ bisherige_ids: ["baustein-n08"]
 
 **Befassungsanlässe:** Ausfall von Abwasserableitung, -transport oder -behandlung mit Gesundheits- bzw. Versorgungsfolgen · nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen · kritischer Entsorgungsrückstau · fachlich begründet drohender Ausfall mit konkretem Vorbereitungsbedarf.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegter relevanter Funktion; „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; keine gesundheitliche Ereignisart allein aus einem hypothetischen Risiko.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Abwasser-, Sanitär- oder Entsorgungsfunktion (B12); „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; keine gesundheitliche Ereignisart allein aus einem hypothetischen Risiko.
 
 ### 2. Erfassung: Prüffragen
 
