@@ -10,13 +10,29 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.11.0 vom 21.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.12.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 21.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.11.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.12.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.12.0] – 22.10.2026
+
+Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidiert_2026-10-22“. Er führt zwei Vorschläge zusammen: „2026-10-22_KI-LEAD_SOP_Amtliche_Fachstandards_PR-Vorschlag“ (34 Einzelvorschläge, 45 Quellen) und „fachstandard-vorschlaege-sop-lead“ (Fachstandards je SOP nach dem Muster von C01 und C12), geprüft auf Steuerungsebene, bundesweite Nutzbarkeit und Belegbarkeit. Dieser Schritt setzt Arbeitspaket AP1 um (gemeinsame Regeln in Teil A). Zweite Stelle nach der Versionierungsregel: neue Regeln zur Auswahl und Darstellung von Fachgrundlagen; Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert. Teil B und Teil C, das Quellenregister und die Bewertungsfälle sind unverändert; es kommen keine neuen Links hinzu.
+
+### Geändert
+
+- **Teil A, A.1 Nr. 8 (neu) „Ebene und Geltungsraum“:** Die SOPs dienen der Steuerungsebene kommunaler und staatlicher Behördenleitungen, nicht der operativen Einsatzebene. Die bundesweit nutzbare Beispielfassung stützt sich nur auf Fachgrundlagen des Bundes, gemeinsame Grundlagen von Bund und Ländern, der EU und internationaler Stellen. Landesrecht und Landesprodukte werden nicht zitiert, sondern über einen einheitlichen Satz an landesrechtliche SOPs verwiesen; Einsatz- und Betriebsvorschriften (Feuerwehr-Dienstvorschriften, Technische Regeln, Normen) werden nicht als Fachgrundlage herangezogen.
+- **Teil A, A.6 „Fachgrundlagen“ (neu):** Begriff, Nachweis (Herausgeber, Dokumenttyp, Fassung, Originalstelle, Prüftiefe; Dokumentfassung getrennt vom Bereitstellungsdatum), Zuordnung Prüffrage–Fachgrundlage in Abschnitt 5, keine Übersetzung von Stufen in Radarwerte, kein Ereignisbeleg. Verallgemeinert die Regel aus C01, Abschnitt 5.
+- **Teil A, A.10.1:** Format für Typologietabellen nach dem Muster von C01 (Spalten, Abschlusssatz, Zitierweise im Meldungstext) und Regel für gleichlautende Begriffe verschiedener Fachgrundlagen („Alarmstufe“, „Notfall“, „Kaskade“).
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.12.0.
+
+### Offen
+
+- Arbeitspakete AP2–AP6 des Vorschlags (Typologietabellen in B07, B08, B11, B15, C03, C04, C08, C09, C10, C17; KRITIS-Rechtsrahmen 2025/2026 in B12; Gesundheit, Versorgung, Naturgefahren) folgen in eigenen Pull Requests, jeweils erst nach Lesung der Originalstellen und mit Quellenregistereinträgen.
+- Offene Prüfungen O01–O09 des Vorschlags, darunter O01: Ob Anhang B.14 des ANoPl-Bund eine glaubhafte Einsatzdrohung in das Referenzszenario S14 einbezieht, ist nicht am Originaltext bestätigt; die S14-Zeile in C01 bleibt bis dahin unverändert.
 
 ## [3.11.0] – 21.10.2026
 
