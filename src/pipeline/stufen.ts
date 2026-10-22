@@ -4,6 +4,7 @@
 
 import type { Fortschritt, LlmAnbieter, LlmAnfrage, LlmAntwort } from "../anbieter/typen";
 import { jetztLokal } from "../kern/ausgabe";
+import { gueltigerZeitpunkt } from "../kern/zeit";
 import { pflichtHinweise } from "../kern/kennsaetze";
 import { quellenHinweise } from "../kern/quellen";
 import { aufloesen } from "../kern/schema";
@@ -20,10 +21,13 @@ import {
   s1System,
   sopBlock,
   sopIdsAufloesen,
+  steuerungsBlock,
   verdichtungsAnweisung,
+  werkzeugText,
+  type RechercheModus,
 } from "./kontext";
 import { kostenNachFehler, kostenStand, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
-import { istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, type Material } from "./material";
+import { hatVormeldung, istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, vormeldungStand, type Material } from "./material";
 import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
 import { istEigeneStelle } from "../kern/ui";
@@ -50,12 +54,35 @@ export function s1Strukturfehler(json: unknown): string | null {
  */
 export const T0_SPIELRAUM_STUNDEN = 24;
 
+/**
+ * Bei der Fortschreibung einer eigenen Vormeldung mit heutigem Stichtag setzt die App t0 auf die aktuelle Zeit.
+ * Ein S1-Vorschlag, der höchstens so viele Minuten abweicht, wird ohne Hinweis ersetzt.
+ */
+export const T0_TOLERANZ_MINUTEN = 15;
+
 function zeitwert(z: string): number {
   return Date.parse(`${z.slice(0, 16)}:00Z`);
 }
 
 function zeitText(z: string): string {
   return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}, ${z.slice(11, 16)} Uhr`;
+}
+
+function tagText(z: string): string {
+  return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}`;
+}
+
+/** Recherchemodus aus dem Auftrag und den wirksamen Werkzeuggrenzen, nie aus Freitext von S1 oder Material */
+export function rechercheModus(k: Kontext): RechercheModus {
+  if (k.lauf.auftrag.websuche === false) return "nur-material";
+  return k.einstellungen.websucheMax > 0 || k.einstellungen.abrufMax > 0 ? "erlaubt" : "keine-werkzeuge";
+}
+
+function rechercheText(k: Kontext): string {
+  const m = rechercheModus(k);
+  if (m === "nur-material") return "nur Material (Websuche vom Auftrag abgeschaltet)";
+  if (m === "keine-werkzeuge") return "erlaubt, aber keine Werkzeuge verfügbar (Höchstzahlen in den Einstellungen 0)";
+  return `erlaubt (${werkzeugText(k.einstellungen.websucheMax, k.einstellungen.abrufMax)})`;
 }
 
 export interface Kontext {
@@ -122,7 +149,10 @@ function auftragsText(k: Kontext): string {
     a.meldezeitpunkt ? `Meldezeitpunkt t0 (vorgegeben): ${a.meldezeitpunkt.replace("T", " ")}` : "",
     `Besondere Prüffrage: ${a.prueffrage.trim() || "keine"}`,
     `Aktueller Zeitpunkt (${k.profil.manifest.variablen.zeitzone || "Europe/Berlin"}): ${jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date())}`,
-  ].join("\n");
+    `Recherche in S2: ${rechercheText(k)}; vom Auftrag festgelegt, nicht Teil des Gegenstands.`,
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 // ── S1 ─────────────────────────────────────────────────────────────────────────
@@ -130,13 +160,15 @@ function auftragsText(k: Kontext): string {
 export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
   k.lauf.status = "s1";
   const verdichtung = istVerdichtung(k.material);
-  const vermerke = verdichtung
-    ? redaktionsvermerke(
-        k.material,
-        k.profil,
-        k.lauf.auftrag.meldezeitpunkt || juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date()),
-      )
-    : "";
+  // Redaktionsvermerke auch für eine eigene Vormeldung: Fristen und Indikatoren sollen vor S2 sichtbar sein
+  const vermerke =
+    verdichtung || hatVormeldung(k.material)
+      ? redaktionsvermerke(
+          k.material,
+          k.profil,
+          k.lauf.auftrag.meldezeitpunkt || juengsterEingang(k.material) || jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date()),
+        )
+      : "";
   const inhalt = [
     { type: "text", text: `# Auftrag\n\n${auftragsText(k)}` },
     ...materialBloecke(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte),
@@ -201,19 +233,69 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const eingaenge = new Set(k.material.filter((m) => m.art === "eingang").map((m) => m.name));
   const appHinweise: string[] = [];
   const jetzt = jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const heute = jetzt.slice(0, 10);
+  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(k.lauf.auftrag.stichtag || "") ? k.lauf.auftrag.stichtag : heute;
   const eingang = juengsterEingang(k.material);
-  const kiT0 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v.meldezeitpunkt || "") ? v.meldezeitpunkt!.slice(0, 16) : "";
+  const roh = String(v.meldezeitpunkt || "").slice(0, 16);
+  const kiT0 = gueltigerZeitpunkt(roh) ? roh : "";
+  const auftragT0 = gueltigerZeitpunkt(k.lauf.auftrag.meldezeitpunkt) ? k.lauf.auftrag.meldezeitpunkt! : "";
+  const vorgeben = "Soll die Meldung einen anderen Stand abbilden, gib t0 hier oder im Auftrag vor.";
   let t0: string;
-  if (k.lauf.auftrag.meldezeitpunkt) t0 = k.lauf.auftrag.meldezeitpunkt;
-  else if (kiT0 && eingang && istVerdichtung(k.material) && (kiT0 < eingang || zeitwert(kiT0) - zeitwert(eingang) > T0_SPIELRAUM_STUNDEN * 3_600_000)) {
-    // Verdichtung: t0 gehört kurz hinter den jüngsten Eingang (SOP-LEAD A.7), nicht auf die aktuelle Uhrzeit
-    t0 = eingang;
+  if (auftragT0)
+    t0 = auftragT0; // R1: ausdrückliche Vorgabe, auch für historische Auswertungen
+  else if (eingang && istVerdichtung(k.material)) {
+    // R2 Verdichtung: t0 gehört kurz hinter den jüngsten Eingang (SOP-LEAD A.7), nicht auf die aktuelle Uhrzeit
+    if (kiT0 && (kiT0 < eingang || zeitwert(kiT0) - zeitwert(eingang) > T0_SPIELRAUM_STUNDEN * 3_600_000)) {
+      t0 = eingang;
+      appHinweise.push(
+        `Meldezeitpunkt t0 auf den jüngsten Eingang gesetzt (${zeitText(eingang)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
+          kiT0 < eingang ? "vor dem jüngsten Eingang" : `mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`
+        }. Soll die Meldung einen späteren Stand abbilden, gib t0 hier oder im Auftrag vor.`,
+      );
+    } else t0 = kiT0 || eingang;
+    if (hatVormeldung(k.material) && stichtag === heute && t0.slice(0, 10) < heute)
+      appHinweise.push(
+        `t0 folgt bei Verdichtung dem jüngsten Eingang (SOP-LEAD A.7) und liegt vor dem heutigen Stichtag. Soll die Meldung den heutigen Stand der Vormeldung abbilden, gib t0 hier oder im Auftrag vor.`,
+      );
+  } else if (hatVormeldung(k.material) && stichtag === heute) {
+    // R3 Fortschreibung auf heute: neuer Meldezeitpunkt ist die aktuelle Zeit; der Stand der Vormeldung ist Ausgangspunkt
+    t0 = jetzt;
+    if (kiT0 && (kiT0.slice(0, 10) !== heute || Math.abs(zeitwert(kiT0) - zeitwert(jetzt)) > T0_TOLERANZ_MINUTEN * 60_000)) {
+      const stand = vormeldungStand(k.material, k.profil);
+      appHinweise.push(
+        `Meldezeitpunkt t0 auf den aktuellen Zeitpunkt gesetzt (${zeitText(jetzt)}): Die eigene Vormeldung${
+          stand ? ` (Stand ${zeitText(stand)})` : ""
+        } wird auf den heutigen Stand fortgeschrieben; ihr Stand ist Ausgangspunkt, nicht Meldezeitpunkt. Der Vorschlag aus S1 (${zeitText(kiT0)}) wurde nicht übernommen. ${vorgeben}`,
+      );
+    }
+  } else if (stichtag === heute) {
+    // R4 Erfassung mit heutigem Stichtag: S1-Vorschlag, wenn er heute und nicht in der Zukunft liegt
+    if (kiT0 && kiT0.slice(0, 10) === heute && kiT0 <= jetzt) t0 = kiT0;
+    else {
+      t0 = jetzt;
+      if (kiT0)
+        appHinweise.push(
+          `Meldezeitpunkt t0 auf den aktuellen Zeitpunkt gesetzt (${zeitText(jetzt)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
+            kiT0 > jetzt ? "in der Zukunft" : "nicht am heutigen Stichtag"
+          }. ${vorgeben}`,
+        );
+    }
+  } else if (stichtag > heute) {
+    // R5 Stichtag in der Zukunft: t0 nie nach der aktuellen Zeit
+    t0 = kiT0 && kiT0 <= jetzt ? kiT0 : jetzt;
     appHinweise.push(
-      `Meldezeitpunkt t0 auf den jüngsten Eingang gesetzt (${zeitText(eingang)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
-        kiT0 < eingang ? "vor dem jüngsten Eingang" : `mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`
-      }. Soll die Meldung einen späteren Stand abbilden, gib t0 hier oder im Auftrag vor.`,
+      `Der Stichtag ${tagText(stichtag)} liegt nach dem heutigen Tag; ein Meldezeitpunkt in der Zukunft ist nicht zulässig. t0 steht auf ${zeitText(t0)}. Bitte Stichtag prüfen.`,
     );
-  } else t0 = kiT0 || eingang || jetzt;
+  } else {
+    // R5 zurückliegender Stichtag (Übung, Rückblick): S1-Vorschlag gilt, aber nicht in der Zukunft
+    t0 = kiT0 && kiT0 <= jetzt ? kiT0 : jetzt;
+    if (kiT0 && kiT0 > jetzt)
+      appHinweise.push(
+        `Meldezeitpunkt t0 auf den aktuellen Zeitpunkt gesetzt (${zeitText(jetzt)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag in der Zukunft. ${vorgeben}`,
+      );
+    else if (t0.slice(0, 10) !== stichtag)
+      appHinweise.push(`Der Meldezeitpunkt t0 (${zeitText(t0)}) liegt nicht am Stichtag ${tagText(stichtag)}. Bitte t0 oder Stichtag prüfen.`);
+  }
 
   // Prüffragen stellt die Person. Ohne Prüffrage im Auftrag bleibt ein Vorschlag aus S1 ein Vorschlag.
   const auftragsfrage = (k.lauf.auftrag.prueffrage || "").trim();
@@ -428,6 +510,9 @@ export interface S2Ergebnis {
 export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S2Ergebnis> {
   const p = k.profil;
   const e = k.einstellungen;
+  // Zeitvertrag vor dem ersten Aufruf prüfen: ein ungültiges t0 kostet keinen Modellaufruf
+  if (bestaetigt.meldezeitpunkt && !gueltigerZeitpunkt(bestaetigt.meldezeitpunkt))
+    throw new Error(`Der Meldezeitpunkt t0 „${bestaetigt.meldezeitpunkt}“ ist kein gültiger Zeitpunkt. Bitte im Bestätigungsschritt korrigieren.`);
   // Frühere SOP-IDs aus gespeicherten Läufen (z. B. „sop-08“) auf die aktuellen abbilden
   bestaetigt = { ...bestaetigt, sachverhalte: bestaetigt.sachverhalte.map((s) => ({ ...s, sops: sopIdsAufloesen(p, s.sops) })) };
   k.lauf.bestaetigt = bestaetigt;
@@ -437,11 +522,16 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const sopIds = [...new Set(bestaetigt.sachverhalte.flatMap((s) => s.sops))];
   const ausgang = materialUebersicht(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte);
   const auftrag = auftragAusBestaetigung(bestaetigt, p, ausgang);
-  const t0 = bestaetigt.meldezeitpunkt || jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  // Bearbeitungszeit ({{jetzt}}) und Meldezeitpunkt t0 sind verschiedene Werte (Lauf 20261022-060622-f7hb:
+  // t0 vom Vortag stand als „Aktueller Zeitpunkt“ im Systemauftrag, das Modell hielt den Stichtag für Zukunft)
+  const jetztS2 = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  const t0 = bestaetigt.meldezeitpunkt || jetztS2;
   const verdichtung = istVerdichtung(k.material);
+  const vormeldung = hatVormeldung(k.material);
   const rolleS2 = verdichtung ? "verdichtung" : "erfassung";
   const erfassungsModell = modellFuer(rolleS2, e, p);
-  const recherche = k.lauf.auftrag.websuche !== false;
+  const modus = rechercheModus(k);
+  const recherche = modus === "erlaubt";
   const n = bestaetigt.sachverhalte.length;
 
   const inhalt = [
@@ -451,9 +541,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       text: [
         `Erstelle jetzt die Meldung nach der Arbeitsanweisung${verdichtung ? " und dem Zusatz zur Verdichtung" : ""}.`,
         `Bestätigte Gliederung (verbindlich, genau ${n} Sachverhalt${n === 1 ? "" : "e"} in dieser Reihenfolge): ${auftrag.ereignisarten}. Hältst du den Zuschnitt fachlich für korrekturbedürftig, behältst du ihn bei und benennst den Bedarf mit den betroffenen Sachverhalten in der Kurzantwort.`,
-        `Meldezeitpunkt t0: ${t0.replace("T", " ")} (${p.manifest.variablen.zeitzone || "Europe/Berlin"}). Stichtag: ${auftrag.stichtag}.`,
-        k.material.some((m) => m.art === "meldung") ? "Eine eigene Vormeldung liegt bei; schreibe sie nach SOP-LEAD A.8 fort." : "",
-        recherche ? "" : "Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet; arbeite nur mit dem Material.",
+        "Zeitpunkte, Vormeldung und Recherchemodus: siehe „Steuerung durch die App“.",
       ]
         .filter(Boolean)
         .join("\n"),
@@ -462,11 +550,26 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const systemS2 = [
     { text: profilGrundlagen(p), cache: true },
     { text: sopBlock(p, sopIds), cache: true },
-    { text: anweisungErfassung(p, auftrag, t0) },
+    { text: anweisungErfassung(p, auftrag, jetztS2) },
     ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
   ];
-  const vermerke = verdichtung ? redaktionsvermerke(k.material, p, t0) : "";
+  const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
   if (vermerke) systemS2.push({ text: vermerke });
+  // Zuletzt, damit er Angaben aus Gegenstand und Material sichtbar vorgeht
+  systemS2.push({
+    text: steuerungsBlock({
+      jetzt: jetztS2,
+      t0,
+      stichtag: auftrag.stichtag,
+      zone: p.manifest.variablen.zeitzone || "Europe/Berlin",
+      vormeldung,
+      vormeldungStand: vormeldungStand(k.material, p),
+      verdichtung,
+      recherche: modus,
+      websucheMax: e.websucheMax,
+      abrufMax: e.abrufMax,
+    }),
+  });
   const a = await aufrufen(k, verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf", {
     modell: erfassungsModell,
     aufwand: e.aufwand[rolleS2],
@@ -597,6 +700,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   }
   if (meldung && svAnzahl !== n)
     befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });
+  if (meldung) befunde.unshift(...rechercheBefunde(modus, vormeldung, { nutzung: s2.nutzung, suchen: a.suchen, abrufe: a.abrufe, abrufFehler: a.abrufFehler }));
   k.lauf.ergebnis = meldung
     ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, abrufFehler: a.abrufFehler, schemakonform: schemaBefunde.length === 0 }
     : undefined;
@@ -605,6 +709,50 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   k.lauf.aktualisiert = new Date().toISOString();
   await k.aktualisiert(k.lauf);
   return { meldung, kurzantwort, schemaBefunde, befunde };
+}
+
+/**
+ * Befunde zur Recherche aus Auftrag, Materialrolle und tatsächlicher Werkzeugnutzung von S2 (nicht S3: Vervollständigung
+ * und Reparatur recherchieren nicht). Kein automatischer Folgeaufruf; die Befunde machen die Grenze sichtbar.
+ */
+export function rechercheBefunde(
+  modus: RechercheModus,
+  vormeldung: boolean,
+  nachweis: { nutzung?: { websuchen?: unknown; abrufe?: unknown }; suchen?: unknown[]; abrufe?: unknown[]; abrufFehler?: unknown[] },
+): Befund[] {
+  const { nutzung, abrufFehler } = nachweis;
+  if (modus === "keine-werkzeuge")
+    return [
+      {
+        stufe: "hinweis",
+        code: "RECHERCHE_NICHT_VERFUEGBAR",
+        text: "Recherche war im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahl Websuchen und Seitenabrufe 0); der Lauf arbeitete nur mit dem Material.",
+      },
+    ];
+  if (modus !== "erlaubt" || !vormeldung) return [];
+  const zahl = (x: unknown) => typeof x === "number" && Number.isFinite(x);
+  if (!nutzung || !zahl(nutzung.websuchen) || !zahl(nutzung.abrufe))
+    return [
+      {
+        stufe: "hinweis",
+        code: "FORTSCHREIBUNG_RECHERCHE_NICHT_NACHWEISBAR",
+        text: "Ob in diesem Lauf recherchiert wurde, ist nicht nachweisbar (keine Nutzungsdaten des Anbieters). Bitte prüfen, ob die Fortschreibung auf aktuellen Quellen beruht.",
+      },
+    ];
+  // Zähler des Anbieters und dokumentierte Werkzeugblöcke: der höhere Wert gilt
+  const websuchen = Math.max(nutzung.websuchen as number, nachweis.suchen?.length || 0);
+  const abrufe = Math.max(nutzung.abrufe as number, nachweis.abrufe?.length || 0);
+  const fehler = abrufFehler?.length || 0;
+  if (websuchen > 0 || abrufe - fehler > 0) return [];
+  return [
+    {
+      stufe: "warnung",
+      code: "FORTSCHREIBUNG_OHNE_AKTUALISIERUNG",
+      text: `Die Meldung wurde aus der Vormeldung neu aufbereitet; eine aktuelle Quellenprüfung ist in diesem Lauf nicht dokumentiert, obwohl Recherche erlaubt war.${
+        fehler ? " Versuchte Seitenabrufe sind gescheitert." : ""
+      } Aussagen zum Sachstand beruhen auf dem Stand der Vormeldung.`,
+    },
+  ];
 }
 
 /** Abruffehler, die eine im Auftrag genannte URL betreffen (je URL einmal). */

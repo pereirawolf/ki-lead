@@ -5,7 +5,7 @@ import { pruefeRoh } from "../../src/kern/validierung";
 import { parseDatumDE } from "../../src/kern/kennsaetze";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { verbinde, zerlege } from "../../src/kern/zeit";
+import { gueltigerZeitpunkt, verbinde, zerlege } from "../../src/kern/zeit";
 
 import { repoPfad } from "../support/dateien";
 import { ILKA_ORDNER } from "../support/fixtures";
@@ -62,5 +62,19 @@ describe("F05: ungültige Fristen", () => {
     const d = parseDatumDE("Handlungsrelevant bis: 15.10.2026 12:00 (Nachbetankung)")!;
     expect([d.getDate(), d.getMonth(), d.getHours(), d.getMinutes()]).toEqual([15, 9, 12, 0]);
     expect(parseDatumDE("15.10.2026")!.getHours()).toBe(23);
+  });
+});
+
+describe("gueltigerZeitpunkt (Zeitvertrag vor S2, 0.4.28)", () => {
+  it("prüft Kalendertag und Uhrzeit, nicht nur das Muster", () => {
+    expect(gueltigerZeitpunkt("2026-02-28T23:59")).toBe(true);
+    expect(gueltigerZeitpunkt("2028-02-29T00:00")).toBe(true);
+    expect(gueltigerZeitpunkt("2026-02-29T12:00")).toBe(false);
+    expect(gueltigerZeitpunkt("2026-02-30T12:00")).toBe(false);
+    expect(gueltigerZeitpunkt("2026-10-22T24:00")).toBe(false);
+    expect(gueltigerZeitpunkt("2026-10-22T12:60")).toBe(false);
+    expect(gueltigerZeitpunkt("2026-10-22")).toBe(false);
+    expect(gueltigerZeitpunkt("")).toBe(false);
+    expect(gueltigerZeitpunkt(undefined)).toBe(false);
   });
 });

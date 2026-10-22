@@ -182,12 +182,16 @@ export function s1Schema(profil: Profil, eingaenge: string[] = []): object {
     additionalProperties: false,
     required: ["gegenstand", "stichtag", "meldezeitpunkt", "referenzbezug", "horizont", "sachverhalte", "prueffrage", "hinweise"],
     properties: {
-      gegenstand: { type: "string", description: "Konkreter Sachverhalt und Erkenntnisinteresse in ein bis drei Sätzen" },
+      gegenstand: {
+        type: "string",
+        description:
+          "Konkreter Sachverhalt und Erkenntnisinteresse in ein bis drei Sätzen. Arbeitsmodus (Recherche oder nur Material) und Zeitpunkte legt der Auftrag fest; sie gehören nicht in den Gegenstand.",
+      },
       stichtag: { type: "string", description: "Stichtag im Format JJJJ-MM-TT" },
       meldezeitpunkt: {
         type: "string",
         description:
-          "Meldezeitpunkt t0 der eigenen Meldung im Format JJJJ-MM-TTThh:mm. Liegt das Material zeitlich geschlossen deutlich vor dem Stichtag (Übung, Rückblick, Eingangsmeldungen eines Tages), wähle einen Zeitpunkt kurz nach dem jüngsten Datenstand des Materials, nicht den aktuellen Zeitpunkt.",
+          "Meldezeitpunkt t0 der neuen eigenen Meldung im Format JJJJ-MM-TTThh:mm. Eine Vorgabe im Auftrag gilt. Fortschreibung einer eigenen Vormeldung mit heutigem Stichtag: der aktuelle Zeitpunkt; der Stand der Vormeldung ist Ausgangspunkt, nicht t0. Nur bei Eingangsmeldungen (Verdichtung) oder zurückliegendem Stichtag (Übung, Rückblick): kurz nach dem jüngsten Datenstand des Materials. Nie ein Zeitpunkt in der Zukunft. Die App prüft den Wert.",
       },
       referenzbezug: { type: "string", description: "Wirkungs- bzw. Relevanzbezug zum Referenzraum" },
       horizont: { type: "string", description: "Betrachtungshorizont" },
@@ -217,6 +221,73 @@ export function s1Schema(profil: Profil, eingaenge: string[] = []): object {
       hinweise: { type: "string", description: "Grenzen des Materials, offene Fragen, nicht zugängliche Quellen" },
     },
   };
+}
+
+/** Recherchemodus eines Laufs: vom Auftrag erlaubt, vom Auftrag abgeschaltet, oder erlaubt ohne verfügbare Werkzeuge */
+export type RechercheModus = "erlaubt" | "nur-material" | "keine-werkzeuge";
+
+export interface Steuerung {
+  /** Tatsächlicher Bearbeitungszeitpunkt (Wanduhr der Profilzeitzone) */
+  jetzt: string;
+  t0: string;
+  stichtag: string;
+  zone: string;
+  /** Meldezeitpunkt der eigenen Vormeldung, leer ohne Vormeldung */
+  vormeldungStand: string;
+  vormeldung: boolean;
+  verdichtung: boolean;
+  recherche: RechercheModus;
+  websucheMax: number;
+  abrufMax: number;
+}
+
+const zeitAnzeige = (z: string) => z.replace("T", " ");
+
+/** Werkzeuggrenzen in Worten, z. B. „Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal“ */
+export function werkzeugText(websucheMax: number, abrufMax: number): string {
+  return [websucheMax > 0 && `Websuche bis zu ${websucheMax}-mal`, abrufMax > 0 && `Seitenabruf bis zu ${abrufMax}-mal`].filter(Boolean).join(", ");
+}
+
+/**
+ * Verbindlicher Steuerungsblock der App für S2. Er trennt Bearbeitungszeit, Meldezeitpunkt und Stand der
+ * Vormeldung und legt den Recherchemodus aus dem Auftrag fest. Freitext aus S1 (Gegenstand) oder aus dem
+ * Material ändert diese Werte nicht (Lauf 20261022-060622-f7hb: „nicht eine neue Recherche“ im Gegenstand
+ * führte trotz erlaubter Recherche zu null Suchen).
+ */
+export function steuerungsBlock(s: Steuerung): string {
+  const z: string[] = [
+    "## Steuerung durch die App (verbindlich)",
+    "",
+    "Diese Angaben setzt die App aus dem Auftrag. Sie gehen Angaben in Gegenstand, Vormeldung und Material zu Arbeitsmodus und Zeit vor.",
+    "",
+    `- Bearbeitungszeitpunkt (${s.zone}): ${zeitAnzeige(s.jetzt)}`,
+    `- Meldezeitpunkt t0 der neuen Meldung: ${zeitAnzeige(s.t0)}`,
+    `- Stichtag: ${s.stichtag}`,
+  ];
+  if (s.vormeldung)
+    z.push(
+      `- Eigene Vormeldung${s.vormeldungStand ? ` (Stand ${zeitAnzeige(s.vormeldungStand)})` : ""}: Schreibe sie nach SOP-LEAD A.8 fort. Ihr Stand ist Ausgangspunkt der Aktualisierung, keine zeitliche Obergrenze; Quellenstände bleiben mit ihrem Datum gekennzeichnet.`,
+    );
+  if (s.recherche === "erlaubt") {
+    z.push(`- Recherche: erlaubt (${werkzeugText(s.websucheMax, s.abrufMax)}).`);
+    if (s.vormeldung)
+      z.push(
+        "- Prüfe gezielt die Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung an den maßgeblichen Quellen und schreibe die Indikatoren nach A.8.1 fort. Fristen führst du nach Teil A (Fristgrundlage) fort oder berichtigst sie begründet; die Änderung nennt der Kennsatz „Änderung zur Vormeldung:“.",
+      );
+  } else if (s.recherche === "keine-werkzeuge")
+    z.push(
+      "- Recherche: im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahlen 0). Arbeite nur mit dem Material und nenne diese technische Grenze in der Kurzantwort.",
+    );
+  else
+    z.push(
+      "- Recherche: Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet; arbeite nur mit dem Material. Eine Aktualitätsprüfung findet nicht statt; kennzeichne den Erkenntnisstand mit dem Stand des Materials.",
+    );
+  if (s.vormeldung && s.recherche !== "erlaubt")
+    z.push(
+      "- Fristen und Indikatoren der Vormeldung führst du nach Teil A (Fristgrundlage) und A.8.1 fort; ohne Prüfung sind Indikatoren „nicht überprüfbar“.",
+    );
+  z.push("- Nenne Recherche nur, wenn sie in diesem Lauf tatsächlich erfolgt ist.");
+  return z.join("\n");
 }
 
 export const VERDICHTUNG_S1 = `# Verdichtung von Eingangsmeldungen (SOP-LEAD A.7)

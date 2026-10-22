@@ -232,6 +232,8 @@ export interface Befund {
   stufe: "fehler" | "warnung" | "hinweis";
   text: string;
   pfad?: string;
+  /** Stabiler Bezeichner für Export und Auswertung (z. B. „FORTSCHREIBUNG_OHNE_AKTUALISIERUNG“) */
+  code?: string;
 }
 
 export interface Profil {

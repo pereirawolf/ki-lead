@@ -1,7 +1,7 @@
 // Kontext für Tests der Pipeline (stufe1, stufe2und3, nachbearbeiten) mit Beispielprofil und fester Uhr.
 import type { LlmAnbieter } from "../../src/anbieter/typen";
 import { STANDARD } from "../../src/pipeline/einstellungen";
-import { neuerLauf, type Lauf } from "../../src/pipeline/lauf";
+import { neuerLauf, type Auftrag, type Lauf } from "../../src/pipeline/lauf";
 import type { Material } from "../../src/pipeline/material";
 import type { Kontext } from "../../src/pipeline/stufen";
 import { profil } from "./dateien";
@@ -38,8 +38,8 @@ export const bestaetigterVorschlag = () => ({
 export interface KontextOptionen {
   /** Uhr des Laufs (Vorgabe 14.10.2026 10:00 MESZ) */
   jetzt?: string;
-  /** Abweichende Angaben im Auftrag */
-  auftrag?: { sachverhalt?: string; stichworte?: string };
+  /** Abweichende Angaben im Auftrag (gehen den Vorgaben vor, auch Stichtag und t0) */
+  auftrag?: Partial<Auftrag>;
 }
 
 /** Kontext mit Beispielprofil, Standardeinstellungen, fester Uhr und mitgeschriebenen Laufständen */
@@ -51,7 +51,7 @@ export async function pipelineKontext(
   const { profil: p } = await profil("lead-beispiel");
   const lauf = neuerLauf(
     p!,
-    { sachverhalt: "Orkan in Hessen", stichworte: "Sturm, Bahn", ...auftrag, urls: [AUFTRAGS_URL], stichtag: "2026-10-14", prueffrage: "" },
+    { sachverhalt: "Orkan in Hessen", stichworte: "Sturm, Bahn", urls: [AUFTRAGS_URL], stichtag: "2026-10-14", prueffrage: "", ...auftrag },
     [],
   );
   const protokolle: Lauf[] = [];

@@ -3,6 +3,7 @@
 // an das Modell, das PDFs selbst liest), Stichworte und URLs (Abruf übernimmt das Modell).
 
 import { istEigeneStelle } from "../kern/ui";
+import { holeWert } from "../kern/pfad";
 import JSZip from "jszip";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
@@ -335,4 +336,27 @@ export function juengsterEingang(material: Material[]): string {
 
 export function istVerdichtung(material: Material[]): boolean {
   return material.some((m) => m.art === "eingang");
+}
+
+/** true, wenn eine eigene Vormeldung fortgeschrieben wird */
+export function hatVormeldung(material: Material[]): boolean {
+  return material.some((m) => m.art === "meldung");
+}
+
+/**
+ * Meldezeitpunkt der jüngsten eigenen Vormeldung (JJJJ-MM-TTThh:mm) oder leer. Er ist der Stand, von dem die
+ * Fortschreibung ausgeht, nicht der Meldezeitpunkt der neuen Meldung.
+ */
+export function vormeldungStand(material: Material[], profil: Profil): string {
+  const rolle = profil.ui.rollen.meldezeitpunkt;
+  if (!rolle) return "";
+  return (
+    material
+      .filter((m) => m.art === "meldung" && m.meldung)
+      .map((m) => String(holeWert(m.meldung, rolle) || ""))
+      .filter((z) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(z))
+      .map((z) => z.slice(0, 16))
+      .sort()
+      .pop() || ""
+  );
 }

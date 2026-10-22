@@ -21,6 +21,7 @@ import {
   istMeldung,
   istVerdichtung,
   materialErgaenzen,
+  vormeldungStand,
   rolleSetzen,
   umklassifizieren,
   urlsAusText,
@@ -28,6 +29,7 @@ import {
   type KiUebergabe,
 } from "../pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
 import { zoneOder } from "../kern/zeit";
 
@@ -361,6 +363,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
   const eingaenge = material.filter((m) => m.art === "eingang");
+  const vormeldungsStand = vormeldungStand(material, profil);
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
@@ -573,7 +576,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                     )}
                   </div>
                   <span className="hinweis">
-                    Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand).
+                    Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Fortschreibung auf heute die aktuelle Zeit, bei Übungs- oder Altlagen kurz nach
+                    dem jüngsten Datenstand).
                   </span>
                 </div>
                 <label className="feld">
@@ -608,7 +612,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
                 </span>
               </label>
-              <p className="hinweis">{websuche ? `S2 mit bis zu ${laufEinstellungen.websucheMax} Websuchen.` : "S2 ohne Websuche."}</p>
+              <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen)}</p>
               <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <span />
@@ -711,7 +715,10 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       }
                     />
                   </div>
-                  <span className="hinweis">Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.</span>
+                  <span className="hinweis">
+                    Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.
+                    {vormeldungsStand && ` Stand der Vormeldung: ${zeitAnzeige(vormeldungsStand)} (Ausgangspunkt, nicht t0).`}
+                  </span>
                 </label>
                 <label className="feld">
                   <span className="feld-label">Betrachtungshorizont</span>
@@ -868,10 +875,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </button>
               </div>
               <p className="hinweis">
-                Kosten S1: {laufKostenText(lauf)}.{" "}
-                {lauf?.auftrag.websuche === false
-                  ? "S2 arbeitet ohne Websuche nur mit dem Material."
-                  : `S2 recherchiert mit bis zu ${laufEinstellungen.websucheMax} Websuchen.`}
+                Kosten S1: {laufKostenText(lauf)}. {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen)}
               </p>
               {modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false)}
               <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
@@ -959,6 +963,18 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   );
 }
 
+/** „TT.MM.JJJJ, hh:mm Uhr“ aus „JJJJ-MM-TTThh:mm“ */
+function zeitAnzeige(z: string): string {
+  return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}, ${z.slice(11, 16)} Uhr`;
+}
+
+/** Recherchemodus von S2 vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline) */
+function rechercheZeile(websuche: boolean, e: Einstellungen): string {
+  if (!websuche) return "S2 arbeitet ohne Websuche nur mit dem Material.";
+  if (e.websucheMax <= 0 && e.abrufMax <= 0) return "S2: Recherche erlaubt, aber in den Einstellungen nicht verfügbar (Höchstzahlen 0).";
+  return `S2: Recherche erlaubt (${werkzeugText(e.websucheMax, e.abrufMax)}).`;
+}
+
 function Ergebnis({
   profil,
   aendern,
@@ -998,6 +1014,14 @@ function Ergebnis({
         </div>
       )}
       {s2?.notiz && <p className="fehlertext">{s2.notiz}</p>}
+      {s2 && lauf.auftrag.websuche !== false && (
+        <p className="hinweis">
+          Recherche in S2:{" "}
+          {s2.nutzung && typeof s2.nutzung.websuchen === "number" && typeof s2.nutzung.abrufe === "number"
+            ? `${s2.nutzung.websuchen} Websuche${s2.nutzung.websuchen === 1 ? "" : "n"}, ${s2.nutzung.abrufe} Seitenabruf${s2.nutzung.abrufe === 1 ? "" : "e"}.`
+            : "nicht nachweisbar."}
+        </p>
+      )}
 
       {e?.kurzantwort && (
         <div className="ki-abschnitt">

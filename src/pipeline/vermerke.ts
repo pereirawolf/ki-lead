@@ -1,5 +1,5 @@
-// Redaktionsvermerke für die Verdichtung: Die App wertet die Eingangsmeldungen mit dem Redaktionscheck
-// des Lagebilds aus (deterministisch) und gibt das Ergebnis der KI als Arbeitshilfe mit. Die Vermerke
+// Redaktionsvermerke für Verdichtung und Fortschreibung: Die App wertet Eingangsmeldungen und eigene Vormeldung
+// mit dem Redaktionscheck des Lagebilds aus (deterministisch) und gibt das Ergebnis der KI als Arbeitshilfe mit. Die Vermerke
 // ersetzen keine fachliche Prüfung; sie sorgen dafür, dass nichts Prüfbares übersehen wird.
 
 import { datumDE } from "../kern/ausgabe";
@@ -23,7 +23,7 @@ function alsDateien(material: Material[]): LagebildDatei[] {
     .map((m) => ({ name: m.name, text: m.text || JSON.stringify(m.meldung), importiertAm: "" }));
 }
 
-/** Vermerke als Markdown-Abschnitt; leer, wenn es keine auswertbaren Eingangsmeldungen gibt. */
+/** Vermerke als Markdown-Abschnitt; leer, wenn es keine auswertbaren Meldungen nach Schema des Profils gibt. */
 export function redaktionsvermerke(material: Material[], profil: Profil, t0: string): string {
   const { eintraege } = einlesen(alsDateien(material), profil);
   const eigene = eintraege.filter((e) => !e.fremd);
@@ -89,9 +89,9 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
   );
 
   return [
-    "## Vermerke der App aus dem Redaktionscheck der Eingangsmeldungen",
+    "## Vermerke der App aus dem Redaktionscheck des Materials",
     "",
-    "Die App hat die Eingangsmeldungen vor dem Lauf mechanisch ausgewertet (Kennsätze, Ereignisarten, Bewertungen, Meldezeitpunkte). Die Vermerke sind Arbeitshilfe, keine Bewertung: Prüfe jeden Punkt fachlich und berücksichtige ihn in der Meldung, soweit er trägt.",
+    "Die App hat Vormeldung und Eingangsmeldungen vor dem Lauf mechanisch ausgewertet (Kennsätze, Ereignisarten, Bewertungen, Meldezeitpunkte). Die Vermerke sind Arbeitshilfe, keine Bewertung: Prüfe jeden Punkt fachlich und berücksichtige ihn in der Meldung, soweit er trägt.",
     "",
     ...z,
   ]

@@ -132,12 +132,23 @@ describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
     expect(att.anfragen[0].aufwand).toBe("high");
   });
 
-  it("Erfassung ohne Eingänge: t0 aus S1 bleibt unverändert", async () => {
+  it("Erfassung ohne Eingänge: ein t0 aus S1 am heutigen Stichtag vor der aktuellen Zeit bleibt unverändert", async () => {
+    // Testuhr 14.10.2026 10:00, Stichtag 14.10.2026
+    const att = skriptAnbieter([llmAntwort(JSON.stringify({ ...s1Vorschlag(), meldezeitpunkt: "2026-10-14T09:30" }))]);
+    const { k } = await pipelineKontext(att);
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T09:30");
+    expect(v.appHinweise).toBeUndefined();
+  });
+
+  it("Erfassung ohne Eingänge: ein t0 aus S1 in der Zukunft wird mit Hinweis auf die aktuelle Zeit gesetzt", async () => {
     const att = skriptAnbieter([llmAntwort(JSON.stringify({ ...s1Vorschlag(), meldezeitpunkt: "2026-10-20T22:30" }))]);
     const { k } = await pipelineKontext(att);
     const v = await stufe1(k);
-    expect(v.meldezeitpunkt).toBe("2026-10-20T22:30");
-    expect(v.appHinweise).toBeUndefined();
+    expect(v.meldezeitpunkt).toBe("2026-10-14T10:00");
+    expect(v.appHinweise).toHaveLength(1);
+    expect(v.appHinweise![0]).toContain("20.10.2026, 22:30 Uhr");
+    expect(v.appHinweise![0]).toContain("in der Zukunft");
   });
 
   it("übernimmt eine Prüffrage aus S1 ohne Vorgabe im Auftrag nur als Vorschlag", async () => {
