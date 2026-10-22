@@ -30,13 +30,19 @@ describe("Verdichtung von Eingangsmeldungen", () => {
     const e = await stufe2und3(k, v);
     const s2 = att.anfragen[1];
     expect(s2.werkzeuge).toBeUndefined();
-    expect(s2.system).toHaveLength(5);
+    expect(s2.system).toHaveLength(6);
     expect(s2.system[3].text).toContain("Referenzraum wechselt");
     expect(s2.modell).toBe("claude-opus-5-5"); // Rolle „verdichtung“ aus dem Profil
     expect(k.lauf.stufen.find((x) => x.stufe === "S2 Verdichtung")).toBeTruthy();
     // Redaktionsvermerke der App aus dem Lagebild-Check
     expect(s2.system[4].text).toContain("Vermerke der App aus dem Redaktionscheck");
     expect(s2.system[4].text).toMatch(/Stromausfall \/ Blackout: .*→ Bewertungen weichen ab/);
+    // Steuerungsblock zuletzt: Bearbeitungszeit (Testuhr) getrennt von t0, Recherche vom Auftrag abgeschaltet
+    expect(s2.system[5].text).toContain("Steuerung durch die App (verbindlich)");
+    expect(s2.system[5].text).toContain("Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-14 10:00");
+    expect(s2.system[5].text).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-14 11:00");
+    expect(s2.system[5].text).toContain("abgeschaltet");
+    expect(s2.system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-14T10:00**");
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain("Vermerke der App");
     expect(JSON.stringify(s2.nachrichten)).toContain("genau 1 Sachverhalt");
     expect(e.meldung!.meldezeitpunkt).toBe("2026-10-14T11:00");
@@ -82,6 +88,15 @@ describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
     const v = await stufe1(k);
     expect(v.meldezeitpunkt).toBe("2026-10-14T12:00");
     expect(v.appHinweise).toBeUndefined();
+  });
+
+  it("Verdichtung: ein t0 in der Zukunft wird auf die aktuelle Zeit gesetzt, wenn der Eingang davor liegt (0.4.28)", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = skriptAnbieter([llmAntwort(JSON.stringify({ ...s1Vorschlag(), meldezeitpunkt: "2026-10-14T23:00" }))]);
+    const { k } = await pipelineKontext(att, eingaenge, { jetzt: "2026-10-14T12:00:00+02:00" });
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T12:00");
+    expect(v.appHinweise![0]).toContain("lag in der Zukunft");
   });
 
   it("Verdichtung: ein im Auftrag vorgegebener t0 geht der Absicherung vor", async () => {

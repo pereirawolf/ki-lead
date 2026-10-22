@@ -43,6 +43,36 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.25 | letzter Commit von Pull Request #23 „S1: Ausgabegrenze 128 000 Token und verständlicher Abbruch an der Grenze; 0.4.25“ |
 | 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
 | 0.4.27 | letzter Commit von Pull Request #33 „SOP B01/B02/B07/B09/B14 vertieft, Quellenregister, 40 Bewertungsfälle; Profil 1.20.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit #27, 1.15.0 mit #28, 1.16.0 mit #29, 1.17.0 mit #30, 1.18.0 mit #31, 1.19.0 mit #32 und 1.20.0 mit #33, außerdem 40 Bewertungsfälle unter `evaluation/` mit #33, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
+| 0.4.28 | letzter Commit des Pull Requests „Fortschreibung: Bearbeitungszeit, t0 und Rechercheauftrag von der App steuern; 0.4.28“ |
+
+## [0.4.28] – 22.10.2026
+
+Grundlage: Lauf `20261022-060622-f7hb` (App 0.4.27, Profil 1.20.0), in dem eine eigene Meldung vom Vortag (t0 21.10.2026 19:40) auf den 22.10.2026 fortgeschrieben werden sollte, mit erlaubter Websuche. Befund: (1) S2 erhielt t0 als „Aktueller Zeitpunkt“ (21.10. 19:45 statt der tatsächlichen 22.10. 06:07) und hielt den Stichtag für Zukunft; (2) S1 schlug t0 kurz nach der Vormeldung vor, die App prüfte t0 nur bei Verdichtungen; (3) der Satz „nicht eine neue Recherche“ aus dem S1-Gegenstand blieb die einzige Aussage zum Arbeitsmodus, S2 suchte trotz angebotener Werkzeuge nicht (0 Websuchen, 0 Abrufe) und gab das als Vorgabe des Auftrags aus; (4) kein Befund machte das sichtbar. Profil, SOPs, Arbeitsanweisungen und Schema bleiben unverändert; die Steuerung liegt in der App. Die Originaldateien des Laufs sind nicht Teil des Repositorys; die Tests verwenden fiktives Material.
+
+### Geändert
+
+- **`{{jetzt}}` ist die Bearbeitungszeit:** Die Arbeitsanweisung in S2 erhält die tatsächliche Uhrzeit des Aufrufs, nicht mehr t0. t0 steht getrennt davon im Steuerungsblock.
+- **Meldezeitpunkt t0 nach festen Regeln** (S1-Bereinigung): Vorgabe im Auftrag geht vor; Verdichtung wie bisher nach A.7 (mit Hinweis, wenn zugleich eine Vormeldung beiliegt und t0 vor dem heutigen Stichtag landet); Fortschreibung einer eigenen Vormeldung mit heutigem Stichtag: aktuelle Zeit, Hinweis bei mehr als 15 Minuten Abweichung vom S1-Vorschlag; sonst heutiger Vorschlag nur, wenn er nicht in der Zukunft liegt; zurückliegender Stichtag wie bisher mit Hinweis, wenn t0 nicht auf ihm liegt; Stichtag in der Zukunft wird zur Prüfung gestellt. Ein Vorschlag in der Zukunft wird durch die aktuelle Zeit ersetzt, auch bei Verdichtung, sofern der jüngste Eingang davor liegt. Maßgeblich ist der Stichtag aus dem Auftrag; schlägt S1 einen anderen vor, nennt die App das. Kalendertag und Uhrzeit werden echt geprüft (`gueltigerZeitpunkt`). Eine im Bestätigungsschritt gewählte Zeit korrigiert die App nicht mehr.
+- **Steuerung durch die App (verbindlich):** neuer letzter Systemblock in S2 mit Bearbeitungszeitpunkt, t0, Stichtag, Stand einer eigenen Vormeldung und Recherchemodus aus dem Auftrag (erlaubt mit den wirksamen Höchstzahlen, nur Material, erlaubt ohne verfügbare Werkzeuge). Er geht Angaben in Gegenstand, Vormeldung und Material vor und verweist bei Fortschreibung auf A.8.1 und die Fristgrundlage in Teil A. Die bisherigen Zeilen zu t0, Vormeldung und Websuche in der Nutzeranfrage entfallen. Werkzeuge werden nur angeboten, wenn Recherche erlaubt ist und eine Höchstzahl über 0 liegt.
+- **S1** erfährt den Recherchemodus im Auftrag. Die Feldbeschreibungen im S1-Schema sagen, dass t0 bei Fortschreibung auf heute die aktuelle Zeit ist und Arbeitsmodus und Zeitpunkte nicht in den Gegenstand gehören.
+- **Redaktionsvermerke** erhalten S1 und S2 auch bei einer eigenen Vormeldung (Fristen, Kennsätze, Tendenzen), Überschrift „Vermerke der App aus dem Redaktionscheck des Materials“.
+- **Ein ungültiges t0** sperrt im Bestätigungsschritt den Start von S2 mit sichtbarer Begründung; die Pipeline bricht zusätzlich vor dem Modellaufruf ab.
+- **„Heute“ in der Zeitzone des Profils:** Die Maske belegt den Stichtag mit dem Tag in der Profilzeitzone vor (bisher Gerätezeit) und liest ihn beim Start von S1 neu, wenn er unverändert vorbelegt war (Seite über Mitternacht offen).
+- **S3-Vervollständigung** erhält den Steuerungsblock nicht mehr (sie recherchiert nicht), aber t0 und Bearbeitungszeitpunkt im Zusatz.
+- Der Steuerungsblock verwendet den Kennsatz „Änderung zur Vormeldung:“ aus der Darstellungsdatei des Profils.
+
+### Hinzugefügt
+
+- **Befunde zur Recherche** mit stabilem Feld `code`: `FORTSCHREIBUNG_OHNE_AKTUALISIERUNG` (Warnung: eigene Vormeldung, Recherche erlaubt, in S2 weder Websuche noch erfolgreicher Seitenabruf; gescheiterte Abrufe werden genannt), `FORTSCHREIBUNG_RECHERCHE_NICHT_NACHWEISBAR` (Hinweis: Nutzungszähler fehlen und keine Werkzeugblöcke dokumentiert), `RECHERCHE_NICHT_VERFUEGBAR` (Hinweis: Recherche erlaubt, beide Höchstzahlen 0). Kein automatischer Folgeaufruf, keine Zusatzkosten.
+- **Oberfläche:** Vor S1 und vor S2 eine Zeile zum Recherchemodus mit Websuchen und Seitenabrufen (auch „in den Einstellungen nicht verfügbar“); am t0-Feld der Stand der Vormeldung „(Ausgangspunkt, nicht t0)“; im Ergebnis „Recherche in S2: n Websuchen, m Seitenabrufe“ bzw. „nicht nachweisbar“, mit derselben Zählung wie die Befunde.
+- Spezifikation 0.4.28 (Abschnitte 4.4 und 5.1, Umsetzung M4).
+
+### Tests
+
+- `tests/pipeline/fortschreibung.test.ts` (neu): Fortschreibung auf heute mit getrennter Uhr für S1 und S2, Stichtag des Auftrags vor S1, Vervollständigung ohne Steuerungsblock, historisches t0 im Auftrag, manuelle Wahl, Toleranz, Vormeldung mit Eingang (A.7), Stichtag in der Zukunft, Seitenabruf als Recherche, gescheiterter Abruf, abgeschaltete Websuche, Höchstzahlen 0, fehlende Zähler, ungültiges t0 ohne Modellaufruf, Tageswechsel zwischen S1 und S2, Redaktionsvermerke für die Vormeldung.
+- `tests/ui/fortschreibung.test.ts` (neu): Moduszeile und Stand der Vormeldung vor S2, Sperre bei unvollständigem t0, Recherchezeile und Warnung im Ergebnis.
+- `tests/pipeline/kontext.test.ts`: Steuerungsblock in allen Modi, Feldbeschreibungen des S1-Schemas. `tests/kern/zeit.test.ts`: `gueltigerZeitpunkt`.
+- `tests/pipeline/stufen.test.ts`: Der frühere Fall „t0 aus S1 bleibt unverändert“ prüft jetzt einen Vorschlag am heutigen Stichtag vor der Testuhr; neuer Fall für einen Vorschlag in der Zukunft. `tests/pipeline/verdichtung.test.ts`: Steuerungsblock und Bearbeitungszeit, t0 in der Zukunft. `tests/ui/modellwahl.test.ts`: neue Moduszeile. `tests/support/pipeline.ts`: Auftrag als `Partial<Auftrag>`, auch Stichtag und t0 überschreibbar.
 
 ## [0.4.27] – 21.10.2026
 

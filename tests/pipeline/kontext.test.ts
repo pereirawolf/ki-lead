@@ -12,6 +12,8 @@ import {
   anweisungErfassung,
   anwendungsbereich,
   fachSops,
+  steuerungsBlock,
+  type Steuerung,
 } from "../../src/pipeline/kontext";
 
 describe("Kontext aus dem Profil", () => {
@@ -71,5 +73,50 @@ describe("Kontext aus dem Profil", () => {
     for (const text of [v, VERDICHTUNG_S2]) {
       expect(text).not.toMatch(/gilt die jüngste|Jede Eingangsmeldung ist eine Quelle der Kategorie A|dürfen als Belege dienen|Untergrenze/);
     }
+  });
+});
+
+describe("Steuerung durch die App und Zeitfelder von S1 (0.4.28)", () => {
+  const basis = (x: Partial<Steuerung> = {}): Steuerung => ({
+    jetzt: "2026-10-22T06:07",
+    t0: "2026-10-22T06:06",
+    stichtag: "2026-10-22",
+    zone: "Europe/Berlin",
+    vormeldung: true,
+    vormeldungStand: "2026-10-21T19:40",
+    verdichtung: false,
+    recherche: "erlaubt",
+    websucheMax: 30,
+    abrufMax: 0,
+    ...x,
+  });
+
+  it("nennt Bearbeitungszeit, t0 und Stand der Vormeldung getrennt", () => {
+    const t = steuerungsBlock(basis());
+    expect(t).toContain("- Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-22 06:07");
+    expect(t).toContain("- Meldezeitpunkt t0 der neuen Meldung: 2026-10-22 06:06");
+    expect(t).toContain("Eigene Vormeldung (Stand 2026-10-21 19:40)");
+    expect(t).toContain("keine zeitliche Obergrenze");
+  });
+
+  it("setzt den Recherchemodus positiv und nur mit den wirksamen Werkzeugen", () => {
+    const t = steuerungsBlock(basis());
+    expect(t).toContain("- Recherche: erlaubt (Websuche bis zu 30-mal).");
+    expect(t).not.toContain("Seitenabruf bis zu");
+    expect(t).toContain("Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung");
+    const ohne = steuerungsBlock(basis({ vormeldung: false, vormeldungStand: "" }));
+    expect(ohne).not.toContain("Eigene Vormeldung");
+    expect(ohne).not.toContain("Neubewertungsindikatoren");
+    expect(steuerungsBlock(basis({ recherche: "nur-material" }))).toContain("Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet");
+    expect(steuerungsBlock(basis({ recherche: "nur-material" }))).toContain("„nicht überprüfbar“");
+    expect(steuerungsBlock(basis({ recherche: "keine-werkzeuge" }))).toContain("in den Einstellungen aber nicht verfügbar (Höchstzahlen 0)");
+  });
+
+  it("S1-Schema: t0 bei Fortschreibung auf heute ist die aktuelle Zeit; Arbeitsmodus gehört nicht in den Gegenstand", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const props = (s1Schema(p!) as any).properties;
+    expect(props.meldezeitpunkt.description).toContain("Fortschreibung einer eigenen Vormeldung mit heutigem Stichtag: der aktuelle Zeitpunkt");
+    expect(props.meldezeitpunkt.description).toContain("Nie ein Zeitpunkt in der Zukunft");
+    expect(props.gegenstand.description).toContain("Arbeitsmodus (Recherche oder nur Material) und Zeitpunkte legt der Auftrag fest");
   });
 });

@@ -83,6 +83,17 @@ export function isoLokalZuZeitpunkt(s: string, zone: string): { datum: Date; mit
   return { datum: zeitpunktInZone(+m[1], +m[2], +m[3], mitUhrzeit ? +m[4] : 0, mitUhrzeit ? +m[5] : 0, zone), mitUhrzeit };
 }
 
+/**
+ * Gültiger Zeitpunkt „JJJJ-MM-TTThh:mm“ (Kalendertag und Uhrzeit echt prüfen, nicht nur das Muster). Ein Regex
+ * allein ließe „2026-02-30T25:00“ durch, und Date würde den Wert still in einen anderen Tag umrechnen.
+ */
+export function gueltigerZeitpunkt(s: string | undefined): boolean {
+  const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
+  if (!m) return false;
+  const probe = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+  return probe.getUTCFullYear() === +m[1] && probe.getUTCMonth() === +m[2] - 1 && probe.getUTCDate() === +m[3] && +m[4] <= 23 && +m[5] <= 59;
+}
+
 /** „TT.MM.JJJJ, hh:mm Uhr (Zone)“ für die Anzeige; Zone nur, wenn gewünscht. */
 export function zeitpunktDE(d: Date, zone: string, mitZone = false): string {
   const w = wanduhr(d, zoneOder(zone));

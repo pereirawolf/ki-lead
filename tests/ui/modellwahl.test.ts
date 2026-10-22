@@ -134,7 +134,7 @@ describe("KI-Erfassung", () => {
     expect(zusammenfassung).toContain("S1: claude-haiku-5-5 (niedrig)");
     expect(zusammenfassung).toContain("S2: claude-opus-5-5 (hoch)");
     expect(zusammenfassung).toContain("bis 5 Websuchen");
-    expect(seitentext()).toContain("S2 mit bis zu 5 Websuchen.");
+    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
     // Schätzung folgt dem gewählten Aufwand (S2 Opus „high“ ohne Messwert)
     expect(document.querySelector(".laufschaetzung")!.textContent).toContain("S2 (claude-opus-5-5, high)");
 
@@ -143,7 +143,7 @@ describe("KI-Erfassung", () => {
     // nach S1 bleibt die Wahl erhalten und gilt für S2
     expect(auswahl("S2", "Aufwand").value).toBe("high");
     expect(auswahl("Recherche", "Höchstzahl").value).toBe("5");
-    expect(seitentext()).toContain("S2 recherchiert mit bis zu 5 Websuchen.");
+    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
     // leeres Feld = wieder Standard
     await eingeben(auswahl("Recherche", "Höchstzahl"), "");
     expect(document.querySelector(".modellwahl summary")!.textContent).toContain(`bis ${STANDARD.websucheMax} Websuchen`);
