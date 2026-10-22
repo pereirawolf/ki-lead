@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.12.0 vom 22.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.13.0 vom 22.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -30,15 +30,15 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 | B04 | Erdbeben | [`teil-b/B04_erdbeben.md`](teil-b/B04_erdbeben.md) | 2.1.0 | 04 |
 | B05 | Extremhitze / Dürre | [`teil-b/B05_extremhitze-duerre.md`](teil-b/B05_extremhitze-duerre.md) | 2.1.1 | 05 |
 | B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.1.0 | 06 |
-| B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.1.0 | 07 |
-| B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.0.2 | 08 |
+| B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.2.0 | 07 |
+| B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.1.0 | 08 |
 | B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.2.0 | 09 |
 | B10 | Trinkwasserversorgung | [`teil-b/B10_trinkwasserversorgung.md`](teil-b/B10_trinkwasserversorgung.md) | 2.0.2 | 10 |
-| B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.2.0 | 11 |
+| B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.3.0 | 11 |
 | B12 | KRITIS-Ausfall | [`teil-b/B12_kritis-ausfall.md`](teil-b/B12_kritis-ausfall.md) | 2.1.0 | 12 |
 | B13 | Migrationslage | [`teil-b/B13_migrationslage.md`](teil-b/B13_migrationslage.md) | 2.0.2 | 13 |
 | B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.1.0 | 14 |
-| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.1.0 | 15 |
+| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.2.0 | 15 |
 | B16 | Sabotage / Anschlag / Terrorismus | [`teil-b/B16_sabotage-anschlag-terrorismus.md`](teil-b/B16_sabotage-anschlag-terrorismus.md) | 2.1.0 | 16 |
 | B17 | Sonstiges | [`teil-b/B17_sonstiges.md`](teil-b/B17_sonstiges.md) | 2.1.0 | 17 |
 
@@ -50,7 +50,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
-| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.1.0 | N01 |
+| C01 | Radiologische / nukleare Lage | Themenbaustein | [`teil-c/C01_radiologische-nukleare-lage.md`](teil-c/C01_radiologische-nukleare-lage.md) | 1.2.0 | N01 |
 | C02 | Massenbewegungen, Bodenversagen und Gebäudeeinsturz | Themenbaustein | [`teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md`](teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md) | 1.2.0 | N09 |
 | C03 | Weltraumwetter und Störungen von Navigation und Zeitreferenz | Themenbaustein | [`teil-c/C03_weltraumwetter-navigation-zeitreferenz.md`](teil-c/C03_weltraumwetter-navigation-zeitreferenz.md) | 1.1.0 | N15 |
 | C04 | Vulkanasche mit Deutschland- oder Versorgungsbezug | Themenbaustein | [`teil-c/C04_vulkanasche.md`](teil-c/C04_vulkanasche.md) | 1.1.1 | N18 |
@@ -64,7 +64,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 | C07 | Infektionslagen – Auslandsausbruch und lokale Häufung | Themenbaustein | [`teil-c/C07_infektionslagen.md`](teil-c/C07_infektionslagen.md) | 1.1.0 | N11 |
 | C08 | Tierseuchen und zoonotische Expositionslagen | Themenbaustein | [`teil-c/C08_tierseuchen-zoonotische-expositionslagen.md`](teil-c/C08_tierseuchen-zoonotische-expositionslagen.md) | 1.1.0 | N10 |
 | C09 | Medizinische und pflegerische Versorgungslage und MANV-Folgen | Themenbaustein | [`teil-c/C09_medizinische-versorgung-manv.md`](teil-c/C09_medizinische-versorgung-manv.md) | 1.1.0 | N04 |
-| C10 | Arzneimittel und kritisches medizinisches Material | Themenbaustein | [`teil-c/C10_arzneimittel-medizinisches-material.md`](teil-c/C10_arzneimittel-medizinisches-material.md) | 1.1.0 | N12 |
+| C10 | Arzneimittel und kritisches medizinisches Material | Themenbaustein | [`teil-c/C10_arzneimittel-medizinisches-material.md`](teil-c/C10_arzneimittel-medizinisches-material.md) | 1.2.0 | N12 |
 
 **Leseblock: Versorgung, Kommunikation und Logistik**
 
@@ -73,7 +73,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 | C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.1.0 | N02 |
 | C12 | Kraftstoff- und Wärmeversorgung | Themenbaustein | [`teil-c/C12_kraftstoff-waerme.md`](teil-c/C12_kraftstoff-waerme.md) | 1.1.1 | N05 |
 | C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.1.0 | N06 |
-| C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.1.1 | N07 |
+| C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.2.0 | N07 |
 | C15 | Abwasser, Sanitärhygiene und kritische Entsorgung | Themenbaustein | [`teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md`](teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md) | 1.1.0 | N08 |
 
 **Leseblock: Lageübergreifende Querschnitte**
@@ -81,7 +81,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
 | C16 | Evakuierung, Schutzunterbringung und Betreuung | Querschnittsbaustein | [`teil-c/C16_evakuierung-schutzunterbringung-betreuung.md`](teil-c/C16_evakuierung-schutzunterbringung-betreuung.md) | 1.1.1 | N03 |
-| C17 | Zivile Verteidigung – zivile Schutz- und Versorgungsfolgen | Querschnittsbaustein | [`teil-c/C17_zivile-verteidigung-zivile-folgen.md`](teil-c/C17_zivile-verteidigung-zivile-folgen.md) | 1.1.0 | N13 |
+| C17 | Zivile Verteidigung – zivile Schutz- und Versorgungsfolgen | Querschnittsbaustein | [`teil-c/C17_zivile-verteidigung-zivile-folgen.md`](teil-c/C17_zivile-verteidigung-zivile-folgen.md) | 1.2.0 | N13 |
 
 Mehrfachlagen und gemeinsame Engpassressourcen (Review-Kennung N14) sowie Notbetrieb und Kalibrierung (P01, P02) sind Redaktionsregeln in Teil A (A.7.4, A.7.5, A.10.3), keine Bausteine; deshalb gab es bis Fassung 2.0.1 keinen Baustein N14, und die Lücke wird nicht durch einen weiteren Baustein gefüllt.
 

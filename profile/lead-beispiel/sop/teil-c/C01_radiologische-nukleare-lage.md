@@ -12,11 +12,11 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall"]
 art_hinweis: "„Sonstiges“ als Katalogdach (B17); „KRITIS-Ausfall“ nur bei belegtem Funktionsbezug; weitere Ursachen- und Folgenarten nur bei belegtem Bezug"
 anschluss: "B17; B14/B16 bei Sicherheits- bzw. Vorsatzbezug; B15 bei belegtem Cyberbezug; B07 nur bei zusätzlicher chemischer Gefahr; C09, C13, C14, C15, C16, C17 nach Wirkung"
 zweck: "Belegte radiologische Lageinformation in die eigene LEAD-Meldung übernehmen, szenarienspezifische Lücken erkennen und zivile Schutz- und Versorgungsfolgen darstellen – ohne eigene Dosismodellierung oder Schutzempfehlung."
-version: "1.1.0"
+version: "1.2.0"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
-stand: "20.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "20.10.2026 – ANoPl-Bund, StrlSchG (§§ 5, 100, 106, 108, 109, 111, 119), BMUKN-Fachseiten; keine Prüfung organisationsspezifischer Alarm- und Notfallpläne"
+quellen_geprueft_am: "22.10.2026 – ANoPl-Bund Tabelle 3.3 und Anhang B.13/B.14 in der Bekanntmachung BAnz AT 23.11.2023 B1 (S. 25, 216) gelesen; 20.10.2026 – ANoPl-Bund, StrlSchG (§§ 5, 100, 106, 108, 109, 111, 119), BMUKN-Fachseiten; keine Prüfung organisationsspezifischer Alarm- und Notfallpläne"
 naechste_pruefung_faellig: "31.03.2027"
 pruefausloeser: "Änderung des ANoPl-Bund oder der Notfallvorschriften des StrlSchG; neuer besonderer Notfallplan des Bundes; Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "N01"
@@ -49,7 +49,7 @@ bisherige_ids: ["baustein-n01"]
 | S11 | Notfall auf oder in Meeresgewässern | Begriff der Meeresstrategie-Rahmenrichtlinie; Seeraum, Küste, Hafen und grenzüberschreitende Bewertung unterscheiden; reaktorbetriebene Schiffe beachten. |
 | S12 | Vorsätzliche Straftat im In- oder Ausland mit radioaktiven Stoffen, ohne Bezug zu einer Anlage oder Einrichtung | Ermittlungsstand und radiologischen Befund getrennt führen. |
 | S13 | Vorsätzliche Straftat, Störmaßnahme oder sonstige Einwirkung Dritter gegen oder auf eine Einrichtung oder kerntechnische Anlage | Im In- und Ausland; Einordnung richtet sich nach der betroffenen Anlage. Anlagenbezug und tatsächlichen Anlagenzustand belegen. |
-| S14 | Nuklearwaffenexplosion | Nur nach amtlicher Einordnung; eine glaubhafte Drohung ist ein Anhaltspunkt (ANoPl-Bund, Tabelle 3.3), kein Notfall und kein S14. |
+| S14 | Nuklearwaffenexplosion, einschließlich unfallbedingter und vorsätzlicher Ereignisse mit kriminellem oder terroristischem Hintergrund und einer damit einhergehenden glaubhaften Drohung des Einsatzes einer Nuklearwaffe auf dem Bundesgebiet und angrenzenden Gebieten (Anhang B.14); ein drohender oder erfolgter Einsatz wird in der Regel S14 zugeordnet (Anhang B.13) | Nur nach amtlicher Einordnung. Eine glaubhafte Drohung ist ein Anzeichen für eine mögliche radiologische Gefährdung (Tabelle 3.3 Nr. 2) und kein hinreichendes Kriterium für einen Notfall; ob ein Notfall vorliegt und ob er S14 zugeordnet wird, stellt die zuständige Stelle fest. Drohung, Waffeneinsatz und radiologischer Befund getrennt führen; aus einer Drohung keine Explosion und keine Kontamination ableiten. |
 | S15 | Sonstiger Notfall beim Umgang mit einer Nuklearwaffe | Unfall bei Transport, Lagerung oder Handhabung; kein Schluss auf eine Detonation. |
 
 **Spannungs- oder Verteidigungsfall:** ANoPl-Bund und besondere Notfallpläne gelten nicht für Notfälle im Zusammenhang mit Spannungs- oder Verteidigungsfällen; deren Planung erfolgt in der Konzeption Zivile Verteidigung. Die Notfallpläne können entsprechend anwendbar sein, insbesondere bei Fällen vergleichbar S12–S15 (ANoPl-Bund, Rn. 7). Für S12–S15 unterstellt der ANoPl-Bund einen kriminellen, terroristischen oder unfallbedingten Hintergrund. Einen förmlichen Rechtszustand nicht aus dem Nuklearwaffenbezug ableiten; die amtliche Einordnung wiedergeben und C17 ergänzen.
@@ -108,7 +108,7 @@ Unter dem Katalogdach (regelmäßig B17 „Sonstiges“) in den vorhandenen Feld
 
 **Fachgrundlagen** (Rechercheeinstiege; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
-- ANoPl-Bund: [Allgemeine Verwaltungsvorschrift zum Allgemeinen Notfallplan des Bundes vom 10.11.2023](https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf), insbesondere Rn. 7, Tabellen 3.3 und 3.4, Rn. 47–57, 78–83 und Anhang B
+- ANoPl-Bund: [Allgemeine Verwaltungsvorschrift zum Allgemeinen Notfallplan des Bundes vom 10.11.2023](https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf), insbesondere Rn. 7, Tabellen 3.3 und 3.4, Rn. 47–57, 78–83 und Anhang B; amtliche Bekanntmachung BAnz AT 23.11.2023 B1 (Tabelle 3.3 auf S. 25, Anhang B.14 auf S. 216)
 - StrlSchG: [§ 5 Abs. 26 (Notfall)](https://www.gesetze-im-internet.de/strlschg/__5.html), [§ 100 (Notfallpläne der Länder)](https://www.gesetze-im-internet.de/strlschg/__100.html), [§ 106 (Radiologisches Lagezentrum des Bundes)](https://www.gesetze-im-internet.de/strlschg/__106.html), [§ 108 (Radiologisches Lagebild)](https://www.gesetze-im-internet.de/strlschg/__108.html), [§ 109 (Entscheidungen über Schutzmaßnahmen)](https://www.gesetze-im-internet.de/strlschg/__109.html), [§ 111 (Dosisabschätzung)](https://www.gesetze-im-internet.de/strlschg/__111.html), [§ 119 (nach einem Notfall bestehende Expositionssituation)](https://www.gesetze-im-internet.de/strlschg/__119.html)
 
 **Offene Punkte:** Funktionskontakte und Länderpläne mit der übernehmenden Stelle konkretisieren. An Kontrastfällen erproben: Kernkraftwerk im grenznahen Ausland · Kernkraftwerk außerhalb Europas ohne direkte Inlandswirkung · ehemaliges deutsches Kernkraftwerk nach Brennelementfreiheit · Straßen- oder Schienentransport ohne bestätigte Freisetzung · Quellenfund ohne Absicht · angekündigter Wiedereintritt eines Satelliten · Schiff mit radioaktiver Ladung · Straftat mit und ohne Anlagenbezug · Nuklearwaffenereignis mit getrenntem Rechts- und Planungskontext.

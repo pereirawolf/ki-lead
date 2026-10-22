@@ -1,8 +1,8 @@
 {
   "format": "ki-lead-quellenpruefung/1",
-  "stand": "2026-10-21",
+  "stand": "2026-10-22",
   "basis_commit": "e980a5520f905243fbf183c48920eb1af3399b11",
-  "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung.",
+  "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung. Ergänzung 22.10.2026: Fachgrundlagen (Rechtsnormen) aus dem Arbeitspaket AP2; Prüfung über ein Webabrufwerkzeug ohne Prüfsumme (Feld prueftiefe).",
   "bedeutung": "Technischer Abruf, Rechercheeignung, gezielter Inhaltsabgleich und aktueller Ereignisnachweis werden getrennt. Inhaltsabruf per Direkt-HTTP ergänzte Webabrufe mit häufigen Zugriffssperren. Keine Sperre wurde umgangen; nur öffentlich abrufbare Seiten. SHA-256 bezeichnet geladene Bytes, nicht eine amtliche Fassungsbeglaubigung.",
   "pruefungen": [
     {
@@ -12,6 +12,10 @@
     {
       "kennung": "Zweitprüfung",
       "beschreibung": "Unabhängiger Abruf über ein Webabrufwerkzeug mit Freigabe über Suchtreffer derselben amtlichen Domain (Feld zweitpruefung). „Abruf verweigert“ bezeichnet eine Werkzeug- oder robots.txt-Sperre, keinen Linkdefekt."
+    },
+    {
+      "kennung": "Ergänzung 22.10.2026",
+      "beschreibung": "Fachgrundlagen nach A.6: Normtexte über ein Webabrufwerkzeug gelesen und die in der SOP zitierten Absätze abgeglichen; keine Prüfsumme, kein http_status. Wo die amtliche URL nicht abrufbar war, wurde der Inhalt über eine nichtamtliche Wiedergabe gelesen und das im Feld prueftiefe vermerkt."
     }
   ],
   "regeln": [
@@ -1885,6 +1889,326 @@
       "belegt_aktuelles_ereignis": false,
       "fundstellen": [
         "sop/teil-c/C14_lebensmittelversorgung.md"
+      ]
+    },
+    {
+      "id": "BIMSCHV12-2",
+      "url": "https://www.gesetze-im-internet.de/bimschv_12_2000/__2.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "12. BImSchV § 2 Begriffsbestimmungen",
+      "dokumentstand": "Konsolidierte Fassung auf gesetze-im-internet.de; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Einordnungstabelle (Betriebsbereich, Ereignis, Störfall, ernste Gefahr); kein Ereignisbeleg.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand und spätere Änderungen vor Verwendung am Normtext prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ]
+    },
+    {
+      "id": "BIMSCHV12-19",
+      "url": "https://www.gesetze-im-internet.de/bimschv_12_2000/__19.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "12. BImSchV § 19 Meldeverfahren",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Betreibermitteilung (B) und behördliche Bewertung (A); Fristen unverzüglich / eine Woche.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ]
+    },
+    {
+      "id": "BIMSCHV12-ANH6",
+      "url": "https://www.gesetze-im-internet.de/bimschv_12_2000/anhang_vi.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "12. BImSchV Anhang VI Meldekriterien und Inhalt der Mitteilung",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Meldekriterien (Personenstunden, Versorgungsunterbrechung, Sachschäden) und die Struktur der Betreibermitteilung; keine Radargrenzen.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Schwellenwerte bei Änderung der Verordnung erneut lesen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B07_industrieunfall-chemieunfall.md"
+      ]
+    },
+    {
+      "id": "EU2017-1485-18",
+      "url": "https://gesetze.legal/eu/vo_eu_2017_1485/18",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Verordnung (EU) 2017/1485 Art. 18 Systemzustände (nichtamtliche Wiedergabe)",
+      "dokumentstand": "Wiedergabe der Verordnung auf gesetze.legal; amtlich: EUR-Lex CELEX 32017R1485",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Tabelle der Systemzustände; nichtamtlicher Rechercheeinstieg, amtliche Fundstelle ist EUR-Lex.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt; EUR-Lex war vom Werkzeug nicht abrufbar",
+      "offene_nachpruefung": "Mit EUR-Lex (konsolidierte Fassung) abgleichen; Link bei Verfügbarkeit durch EUR-Lex ersetzen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B08_stromausfall-blackout.md"
+      ]
+    },
+    {
+      "id": "ENWG-13",
+      "url": "https://www.gesetze-im-internet.de/enwg_2005/__13.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "EnWG § 13 Systemverantwortung der Betreiber von Übertragungsnetzen",
+      "dokumentstand": "Konsolidierte Fassung; Fußnote nennt Änderungen 2022; Inhalt über nichtamtliche Wiedergabe (gesetze.legal) gelesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für den rechtlichen Prüfpfad (Abs. 1, 2, 4, 7, 8); kein Ereignisbeleg.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Inhalt am 22.10.2026 über gesetze.legal/bund/enwg/13 gelesen; die amtliche URL war vom Werkzeug nicht abrufbar",
+      "offene_nachpruefung": "Absatznummerierung nach späteren EnWG-Änderungen am amtlichen Text prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B08_stromausfall-blackout.md"
+      ]
+    },
+    {
+      "id": "IFSG-5",
+      "url": "https://www.gesetze-im-internet.de/ifsg/__5.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "IfSG § 5 Epidemische Lage von nationaler Tragweite",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Einstufungstabelle (Feststellung durch den Bundestag, Voraussetzungen Satz 6, Aufhebung).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ]
+    },
+    {
+      "id": "IFSG-11",
+      "url": "https://www.gesetze-im-internet.de/ifsg/__11.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "IfSG § 11 Übermittlung an die zuständige Landesbehörde und an das Robert Koch-Institut",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Übermittlungsweg, Erkrankungshäufung (Abs. 1 Nr. 1 Buchst. e) und Falldefinitionen des RKI (Abs. 2).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ]
+    },
+    {
+      "id": "IFSG-28",
+      "url": "https://www.gesetze-im-internet.de/ifsg/__28.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "IfSG § 28 Schutzmaßnahmen",
+      "dokumentstand": "Konsolidierte Fassung; Inhalt über nichtamtliche Wiedergabe (anwalt24.de) gelesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Schutzmaßnahmen der zuständigen Behörde (R5).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Inhalt am 22.10.2026 über anwalt24.de/gesetze/ifsg/28 gelesen; amtliche URL vom Werkzeug nicht abrufbar",
+      "offene_nachpruefung": "Am amtlichen Text prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ]
+    },
+    {
+      "id": "EU2022-2371-23",
+      "url": "https://gesetze.legal/eu/vo_eu_2022_2371/23",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Verordnung (EU) 2022/2371 Art. 23 Feststellung von gesundheitlichen Notlagen auf Unionsebene (nichtamtliche Wiedergabe)",
+      "dokumentstand": "Wiedergabe auf gesetze.legal; amtlich: EUR-Lex CELEX 32022R2371",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die EU-Stufe in der Einstufungstabelle; nichtamtlicher Rechercheeinstieg.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt; EUR-Lex war vom Werkzeug nicht abrufbar",
+      "offene_nachpruefung": "Mit EUR-Lex abgleichen; Link bei Verfügbarkeit ersetzen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B11_gesundheitliche-lage-epidemie.md"
+      ]
+    },
+    {
+      "id": "BSIG-32",
+      "url": "https://www.gesetze-im-internet.de/bsig_2025/__32.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "BSIG (2025) § 32 Meldepflichten",
+      "dokumentstand": "Konsolidierte Fassung nach NIS2UmsuCG; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Meldestufen (24 h, 72 h, Zwischenmeldung, ein Monat) als Bestätigungsgrad; kein Radarkriterium.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Begriff des erheblichen Sicherheitsvorfalls (§ 2) und Einrichtungskategorien (§ 28) vor Verwendung lesen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md"
+      ]
+    },
+    {
+      "id": "BSIG-36",
+      "url": "https://www.gesetze-im-internet.de/bsig_2025/__36.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "BSIG (2025) § 36 Rückmeldungen des Bundesamtes gegenüber meldenden Einrichtungen",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Information der Öffentlichkeit durch das BSI oder die Einrichtung (Abs. 2) als Quellenkategorie A.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md"
+      ]
+    },
+    {
+      "id": "AMG-52B",
+      "url": "https://www.gesetze-im-internet.de/amg_1976/__52b.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "AMG § 52b Bereitstellung von Arzneimitteln",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Beirat (Abs. 3b), Listen und Veröffentlichung (Abs. 3c), Maßnahmen (Abs. 3d), Frühwarnsystem (Abs. 3g); keine feste Meldefrist im Text.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Fassungsstand prüfen; Rechtsverordnung zum Frühwarnsystem (Abs. 3g) nachhalten.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
+      ]
+    },
+    {
+      "id": "AMG-79",
+      "url": "https://www.gesetze-im-internet.de/amg_1976/__79.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "AMG § 79 Ausnahmeermächtigungen für Krisenzeiten",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für den Versorgungsmangel (Abs. 5: Feststellung durch das Bundesministerium, Bekanntmachung im Bundesanzeiger, Gestattungen der zuständigen Behörden; Abs. 6).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Aktuelle Bekanntmachungen im Bundesanzeiger fallbezogen prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
+      ]
+    },
+    {
+      "id": "ESVG-1",
+      "url": "https://www.gesetze-im-internet.de/esvg/__1.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "ESVG § 1 Versorgungskrise",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die Feststellung der Versorgungskrise durch die Bundesregierung (Abs. 1 Nr. 1, 2; Abs. 2).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "Maßnahmen der §§ 2 ff. vor Verwendung lesen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C14_lebensmittelversorgung.md"
+      ]
+    },
+    {
+      "id": "GG-35",
+      "url": "https://www.gesetze-im-internet.de/gg/art_35.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Grundgesetz Art. 35 Rechts- und Amtshilfe, Katastrophenhilfe",
+      "dokumentstand": "Inhalt über nichtamtliche Wiedergabe (lxgesetze.de) gelesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für den Katastrophennotstand in der Tabelle der Rechtszustände (Abs. 2 Satz 2, Abs. 3).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Inhalt am 22.10.2026 über lxgesetze.de/gg/35 gelesen; amtliche URL vom Werkzeug nicht abrufbar",
+      "offene_nachpruefung": "Am amtlichen Text prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "GG-80A",
+      "url": "https://www.gesetze-im-internet.de/gg/art_80a.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Grundgesetz Art. 80a Spannungsfall, Bündnisfall",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Spannungsfall und Bündnisfall (Feststellung, Mehrheiten, Aufhebung).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "–",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "GG-115A",
+      "url": "https://www.gesetze-im-internet.de/gg/art_115a.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Grundgesetz Art. 115a Verteidigungsfall",
+      "dokumentstand": "Konsolidierte Fassung; Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für den Verteidigungsfall (Feststellung, Gemeinsamer Ausschuss, Fiktion bei Angriff, Verkündung).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "–",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "ZSKG-1",
+      "url": "https://www.gesetze-im-internet.de/zsg/__1.html",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "ZSKG § 1 Aufgaben des Zivilschutzes",
+      "dokumentstand": "Konsolidierte Fassung (Kürzel zsg); Stand nicht im Abruf ausgewiesen",
+      "zweck_und_pruefgrenze": "Fachgrundlage für Begriff und Aufgabenkatalog des Zivilschutzes (Abs. 1, 2 Nr. 1–7).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Normtext am 22.10.2026 über ein Webabrufwerkzeug gelesen und die zitierten Absätze inhaltlich abgeglichen; keine Prüfsumme der geladenen Bytes, kein Abgleich mit dem Bundesgesetzblatt",
+      "offene_nachpruefung": "§§ 2, 11, 16, 18 ZSKG vor Verwendung lesen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "RRGV",
+      "url": "https://www.verwaltungsvorschriften-im-internet.de/bsvwvbund_05062024_BMIKM7510011324.htm",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "Rahmenrichtlinien Gesamtverteidigung (RRGV), Bundeskabinett 05.06.2024",
+      "dokumentstand": "Verwaltungsvorschrift vom 05.06.2024 (BMI)",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die zivilen Aufgabenfelder der Gesamtverteidigung (Kapitel 18–22); keine Lagedaten.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Am 22.10.2026 durch ein zweites Webrecherchewerkzeug im amtlichen Volltext gelesen: Kapitelüberschriften 19–22 wörtlich, Aufgabenfelder 18–22 zusammengefasst; vom ersten Werkzeug nicht abrufbar (Allowlist)",
+      "offene_nachpruefung": "Fortschreibung der RRGV und Fundstelle der Konzeption Zivile Verteidigung prüfen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      ]
+    },
+    {
+      "id": "BSI-BITS",
+      "url": "https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2025/2025-239237-1032.pdf?__blob=publicationFile&v=10",
+      "pruefdatum": "2026-10-22",
+      "im_basisbestand": false,
+      "titel": "BSI-Cyber-Sicherheitswarnung CSW-Nr. 2025-239237-1032: Umstellung auf BSI-IT-Sicherheitsmitteilungen (BITS)",
+      "dokumentstand": "Version 1.0 vom 01.04.2025; Umstellung zum 01.05.2025",
+      "zweck_und_pruefgrenze": "Fachgrundlage für die vier Kritikalitätsstufen der BITS (FAQ S. 6–7, Handlungszeiträume S. 10); kein Ereignisbeleg.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Erstes Werkzeug: nur Ankündigungstext ohne Stufen sichtbar; zweites Werkzeug las die PDF lokal und gab die Stufendefinitionen wörtlich wieder (22.10.2026)",
+      "offene_nachpruefung": "Ob das BSI die Definitionen nach dem 01.04.2025 geändert hat, ist aus der Datei nicht erkennbar; aktuelle Produktbeschreibung des BSI gelegentlich abgleichen.",
+      "belegt_aktuelles_ereignis": false,
+      "fundstellen": [
+        "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md"
       ]
     }
   ],
