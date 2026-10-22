@@ -241,6 +241,8 @@ export interface Steuerung {
   abrufMax: number;
   /** Kennsatz für Änderungen gegenüber der Vormeldung aus der Darstellungsdatei des Profils */
   kennsatzAenderung?: string;
+  /** Absender der neuen Meldung (Land, meldende Stelle) und seine Herkunft */
+  absender?: { land: string; stelle: string; herkunft: "vormeldung" | "profil" };
 }
 
 const zeitAnzeige = (z: string) => z.replace("T", " ");
@@ -266,12 +268,28 @@ export function steuerungsBlock(s: Steuerung): string {
     `- Meldezeitpunkt t0 der neuen Meldung: ${zeitAnzeige(s.t0)}`,
     `- Stichtag: ${s.stichtag}`,
   ];
+  if (s.absender && (s.absender.land || s.absender.stelle))
+    z.push(
+      `- Absender der neuen Meldung: ${[s.absender.land && `Land „${s.absender.land}“`, s.absender.stelle && `meldende Stelle „${s.absender.stelle}“`]
+        .filter(Boolean)
+        .join(", ")}${
+        s.absender.herkunft === "vormeldung"
+          ? " (aus der eigenen Vormeldung übernommen; gilt anstelle der Profilangaben in der Arbeitsanweisung)."
+          : " (aus dem Profil)."
+      }`,
+    );
   if (s.vormeldung)
     z.push(
       `- Eigene Vormeldung${s.vormeldungStand ? ` (Stand ${zeitAnzeige(s.vormeldungStand)})` : ""}: Schreibe sie nach SOP-LEAD A.8 fort. Ihr Stand ist Ausgangspunkt der Aktualisierung, keine zeitliche Obergrenze; Quellenstände bleiben mit ihrem Datum gekennzeichnet.`,
     );
   if (s.recherche === "erlaubt") {
     z.push(`- Recherche: erlaubt (${werkzeugText(s.websucheMax, s.abrufMax)}).`);
+    if (s.abrufMax > 0)
+      z.push(
+        s.websucheMax > 0
+          ? "- Seitenabruf: Abrufbar sind nur Adressen aus Auftrag oder Material, aus Suchergebnissen und von bereits abgerufenen Seiten. Finde andere Seiten zuerst über die Websuche und rufe dann den Treffer ab; bilde keine Adressen selbst (sie werden abgelehnt)."
+          : "- Seitenabruf: Abrufbar sind nur Adressen aus Auftrag oder Material und von bereits abgerufenen Seiten; bilde keine Adressen selbst (sie werden abgelehnt).",
+      );
     if (s.vormeldung)
       z.push(
         `- Prüfe gezielt die Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung an den maßgeblichen Quellen und schreibe die Indikatoren nach A.8.1 fort. Fristen führst du nach Teil A (Fristgrundlage) fort oder berichtigst sie begründet; die Änderung nennt der Kennsatz „${s.kennsatzAenderung || "Änderung zur Vormeldung:"}“.`,

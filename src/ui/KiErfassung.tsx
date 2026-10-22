@@ -22,6 +22,7 @@ import {
   istVerdichtung,
   materialErgaenzen,
   vormeldungStand,
+  absenderFuer,
   rolleSetzen,
   umklassifizieren,
   urlsAusText,
@@ -373,6 +374,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
   const eingaenge = material.filter((m) => m.art === "eingang");
   const vormeldungsStand = vormeldungStand(material, profil);
+  const absender = useMemo(() => absenderFuer(material, profil), [material, profil]);
   const t0Ungueltig = !!vorschlag?.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
@@ -890,7 +892,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </button>
               </div>
               <p className="hinweis">
-                Kosten S1: {laufKostenText(lauf)}. {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen)}
+                Kosten S1: {laufKostenText(lauf)}. {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen)} {absenderZeile(absender)}
               </p>
               {modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false)}
               <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
@@ -1000,6 +1002,14 @@ function RechercheZeile({ n }: { n: { websuchen: number; abrufe: number; zaehler
         : `${n.websuchen} Websuche${n.websuchen === 1 ? "" : "n"}, ${n.abrufe} Seitenabruf${n.abrufe === 1 ? "" : "e"}.`}
     </p>
   );
+}
+
+/** Absender der neuen Meldung vor S2 (Land, meldende Stelle, Herkunft) */
+function absenderZeile(a: { land: string; stelle: string; herkunft: "vormeldung" | "profil"; fremd: string[] }): string {
+  const wer = [a.land, a.stelle].filter(Boolean).join(" · ");
+  if (!wer) return "";
+  const woher = a.herkunft === "vormeldung" ? "aus der eigenen Vormeldung" : "aus dem Profil";
+  return `Absender: ${wer} (${woher}${a.fremd.length ? "; die gewählte Vormeldung einer anderen Stelle ändert ihn nicht" : ""}).`;
 }
 
 /** Recherchemodus von S2 vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline) */

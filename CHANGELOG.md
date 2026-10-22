@@ -45,6 +45,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.27 | letzter Commit von Pull Request #33 „SOP B01/B02/B07/B09/B14 vertieft, Quellenregister, 40 Bewertungsfälle; Profil 1.20.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit #27, 1.15.0 mit #28, 1.16.0 mit #29, 1.17.0 mit #30, 1.18.0 mit #31, 1.19.0 mit #32 und 1.20.0 mit #33, außerdem 40 Bewertungsfälle unter `evaluation/` mit #33, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
 | 0.4.28 | letzter Commit des Pull Requests „Fortschreibung: Bearbeitungszeit, t0 und Rechercheauftrag von der App steuern; 0.4.28“ |
 | 0.4.29 | letzter Commit des Pull Requests „PDF: Kennsatzzeilen ungeteilt, Pfeile lesbar; 0.4.29“ |
+| 0.4.30 | letzter Commit des Pull Requests „Fortschreibung: Absender aus der eigenen Vormeldung, Hinweis zum Seitenabruf; 0.4.30“ |
+
+## [0.4.30] – 22.10.2026
+
+Grundlage: Lauf `20261022-073727-q2ex` (App 0.4.28). Die Vormeldung trug „Land: Thüringen“, der Auftrag verlangte, bearbeitende Stelle und Bezugsraum beizubehalten; die App setzte Land und meldende Stelle dennoch aus dem Profil („Bund“). Außerdem scheiterten zwei Seitenabrufe an selbst gebildeten Adressen (`url_not_in_prior_context`). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder Schemata.
+
+### Geändert
+
+- **Absender aus der eigenen Vormeldung:** Liegt eine eigene Vormeldung bei, übernimmt die App deren Land und meldende Stelle in die neue Meldung, auch wenn der Entwurf die Profilangaben nennt. „Eigen“ heißt: Die meldende Stelle der Vormeldung ist die Stelle des Profils oder ein hinterlegter Zweitname (`eigene_stellen`). Bei mehreren eigenen Vormeldungen gilt die jüngste; abweichende Absender nennt ein Hinweis (`VORMELDUNG_ABSENDER_ABWEICHEND`). Eine als Vormeldung gewählte Meldung einer anderen Stelle ändert den Absender nicht; das Ergebnis warnt (`VORMELDUNG_FREMDE_STELLE`). Ohne Vormeldung gilt wie bisher das Profil.
+- **Steuerungsblock:** nennt den Absender und seine Herkunft (gilt anstelle der Profilangaben in der Arbeitsanweisung) und bei erlaubtem Seitenabruf, dass nur Adressen aus Auftrag oder Material, aus Suchergebnissen und von bereits abgerufenen Seiten abrufbar sind. Andere Seiten soll die KI zuerst über die Websuche finden statt Adressen selbst zu bilden. Die Beschränkung selbst ist eine Vorgabe des Anbieters (Schutz vor Datenabfluss) und lässt sich in der App nicht aufheben.
+- **Oberfläche:** Der Bestätigungsschritt zeigt „Absender: Land · Stelle (aus der eigenen Vormeldung | aus dem Profil)“.
+- Spezifikation 0.4.30 (Abschnitt 5.1).
+
+### Tests
+
+- `tests/pipeline/fortschreibung.test.ts`: Absender aus der Vormeldung (Land Thüringen bei Bundesprofil), Zweitname der eigenen Stelle, fremde Meldung als Vormeldung, mehrere eigene Vormeldungen, Hinweis zum Seitenabruf.
+- `tests/ui/fortschreibung.test.ts`: Absenderzeile im Bestätigungsschritt.
 
 ## [0.4.29] – 22.10.2026
 

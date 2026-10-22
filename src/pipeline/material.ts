@@ -343,6 +343,52 @@ export function hatVormeldung(material: Material[]): boolean {
   return material.some((m) => m.art === "meldung");
 }
 
+/** Absender (Land, meldende Stelle) der neuen Meldung und woher er stammt */
+export interface Absender {
+  land: string;
+  stelle: string;
+  herkunft: "vormeldung" | "profil";
+  /** Name der Vormeldung, aus der der Absender stammt */
+  quelle?: string;
+  /** Eigene Vormeldungen mit anderem Absender als dem übernommenen */
+  abweichend: string[];
+  /** Als Vormeldung gewählte Meldungen einer anderen Stelle (Absender bleibt aus dem Profil) */
+  fremd: string[];
+}
+
+/**
+ * Absender der neuen Meldung. Wird eine eigene Vormeldung fortgeschrieben, bleiben deren Land und meldende Stelle
+ * erhalten (die jüngste zählt), damit eine Fortschreibung nicht still den Absender wechselt. „Eigen“ heißt: Die
+ * meldende Stelle der Vormeldung ist die Stelle des Profils oder einer ihrer hinterlegten Namen. Eine fremde
+ * Meldung, die als Vormeldung gewählt wurde, ändert den Absender nicht: Ein KI-Entwurf darf nicht unter dem
+ * Absender einer anderen Stelle stehen. Ohne eigene Vormeldung gelten die Angaben des Profils.
+ */
+export function absenderFuer(material: Material[], profil: Profil): Absender {
+  const r = profil.ui.rollen;
+  const v = profil.manifest.variablen;
+  const profilAbsender: Absender = {
+    land: (r.land && v[r.land]) || "",
+    stelle: (r.meldende_stelle && v[r.meldende_stelle]) || "",
+    herkunft: "profil",
+    abweichend: [],
+    fremd: [],
+  };
+  if (!r.meldende_stelle) return profilAbsender;
+  const text = (m: Material, rolle: string | undefined) => (rolle ? String(holeWert(m.meldung, rolle) ?? "").trim() : "");
+  const vormeldungen = (material || []).filter((m) => m.art === "meldung" && m.meldung);
+  const eigene = vormeldungen.filter((m) => istEigeneStelle(text(m, r.meldende_stelle), profil.manifest));
+  const fremd = vormeldungen.filter((m) => !eigene.includes(m)).map((m) => m.name);
+  if (!eigene.length) return { ...profilAbsender, fremd };
+  const zeit = (m: Material) => text(m, r.meldezeitpunkt);
+  const juengste = [...eigene].sort((a, b) => zeit(a).localeCompare(zeit(b))).pop()!;
+  const land = text(juengste, r.land) || profilAbsender.land;
+  const stelle = text(juengste, r.meldende_stelle);
+  const abweichend = eigene
+    .filter((m) => m !== juengste && ((text(m, r.land) || profilAbsender.land) !== land || text(m, r.meldende_stelle) !== stelle))
+    .map((m) => m.name);
+  return { land, stelle, herkunft: "vormeldung", quelle: juengste.name, abweichend, fremd };
+}
+
 /**
  * Meldezeitpunkt der jüngsten eigenen Vormeldung (JJJJ-MM-TTThh:mm) oder leer. Er ist der Stand, von dem die
  * Fortschreibung ausgeht, nicht der Meldezeitpunkt der neuen Meldung.
