@@ -10,13 +10,36 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.12.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `quellenregister.json` | Stand 21.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.12.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.13.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `quellenregister.json` | Stand 22.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.13.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.13.0] – 22.10.2026
+
+Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidiert_2026-10-22“, Arbeitspaket AP2 (Rechts- und Feststellungsstufen mit Typologietabellen). Zweite Stelle nach der Versionierungsregel (neue fachliche Inhalte). Jede neue Fachgrundlage wurde am 22.10.2026 am Normtext gelesen und im Quellenregister mit Prüftiefe nachgewiesen (18 neue Einträge); wo die amtliche Fundstelle nicht abrufbar war, ist die gelesene nichtamtliche Wiedergabe vermerkt. Keine Landesnorm, keine Einsatzvorschrift (A.1 Nr. 8). Achsenregeln, Stufentexte, Quellenkategorien, Kennsätze und Schema sind unverändert; der Status der Bausteine bleibt.
+
+### Geändert
+
+- **B07 Industrieunfall / Chemieunfall 2.2.0:** Abschnitt 2 „Einordnung nach Störfallrecht“ mit Tabelle nach A.10.1 (Störfall, meldepflichtiges Ereignis nach Anhang VI, Ereignis unterhalb der Meldekriterien, Ereignis außerhalb des Störfallrechts) auf Grundlage von § 2, § 19 und Anhang VI der 12. BImSchV; R1 um Betriebsbereich und behördliche Feststellung; Beurteilungswerte nur, wenn die zuständige Stelle sie angewandt hat; D3 mit Rechtsbezug; Fachgrundlagen und Kontrastfälle in Abschnitt 5; Prüfauslöser Störfall-Verordnung.
+- **B08 Stromausfall / Blackout 2.1.0:** Abschnitt 2 „Systemzustand und rechtlicher Prüfpfad“ mit Tabelle der Systemzustände nach Art. 18 VO (EU) 2017/1485 und dreistufigem Prüfpfad nach § 13 EnWG (netz- und marktbezogene Maßnahmen, Anpassungsmaßnahmen, hoheitliche Maßnahmen) analog B09/C12; Begriffskollision „Kaskade“ benannt; R1, R2, R6 und D3 angepasst; Fachgrundlagen und Kontrastfälle in Abschnitt 5.
+- **B11 Gesundheitliche Lage / Epidemie 2.3.0:** Abschnitt 2 „Amtliche Einstufungen“ mit Tabelle (lokales Ausbruchsgeschehen nach § 11 IfSG, RKI-Risikobewertung, epidemische Lage von nationaler Tragweite nach § 5 IfSG, gesundheitliche Notlage von internationaler Tragweite und pandemische Notlage nach den IGV, Notlage auf Unionsebene nach Art. 23 VO (EU) 2022/2371); C07 verweist darauf. R1, R3, R5 angepasst; Fachgrundlagen in Abschnitt 5 (IfSG §§ 5, 11, 28; IGV-Änderungen 2024, in Kraft seit 19.09.2025; Pandemieplan nur als Planungsgrundlage).
+- **B15 Cyberangriff / IT-Sicherheitsvorfall 2.2.0:** Absatz „Meldestufen nach dem BSI-Gesetz als Bestätigungsgrad“ (§ 32 BSIG: frühe Erstmeldung 24 h, Meldung 72 h, Zwischenmeldung, Abschlussmeldung ein Monat; § 36 Abs. 2 Information der Öffentlichkeit); R1, R5, R9 und Beurteilung angepasst (Kritikalitätskennzeichnung, TLP); Fachgrundlagen in Abschnitt 5. Keine Tabelle der BSI-Kritikalitätsstufen, weil das BSI seine Warnprodukte 2025 umgestellt hat; offener Punkt.
+- **C10 Arzneimittel und kritisches medizinisches Material 1.2.0:** Abschnitt 2 „Amtliche Engpassstufen (Arzneimittel)“ mit Tabelle (gemeldeter Lieferengpass § 52b Abs. 3c AMG, Maßnahme der Bundesoberbehörde § 52b Abs. 3d, Versorgungsmangel § 79 Abs. 5, örtliche Nichtverfügbarkeit ohne Stufe); R2 und R6 angepasst; Kopf um `quellen_geprueft_am` und `pruefausloeser`; Fachgrundlagen in Abschnitt 5.
+- **C14 Lebensmittelversorgung 1.2.0:** Absatz „Amtliche Feststellung einer Versorgungskrise“ nach § 1 ESVG mit dreistufigem Prüfpfad analog C12/R10; R2 und R5 angepasst; Kopf um `quellen_geprueft_am` und `pruefausloeser`; Fachgrundlagen in Abschnitt 5.
+- **C17 Zivile Verteidigung 1.2.0:** Abschnitt 2 „Rechtszustände“ mit Tabelle (keine Feststellung, Katastrophennotstand Art. 35 GG, Spannungsfall und Bündnisfall Art. 80a GG, Verteidigungsfall Art. 115a GG), Absatz „Zivile Aufgabenfelder der Gesamtverteidigung“ (Rahmenrichtlinien Gesamtverteidigung vom 05.06.2024, Konzeption Zivile Verteidigung) als Prüfraster und Absatz „Sicherstellungs- und Vorsorgerecht“ mit Prüfpfad; R1, R3, R6 und D3 angepasst; Ansprechstellen, Fachgrundlagen und Kontrastfälle in Abschnitt 5; Kopf um `quellen_geprueft_am` und `pruefausloeser`.
+- **Quellenregister:** 18 Einträge für die neuen Fachgrundlagen mit Prüfverfahren „Ergänzung 22.10.2026“; Stand 22.10.2026.
+- **Gültigkeitsstand (Teil A):** Sammelmappe 3.13.0.
+
+### Offen
+
+- B15: Geltende Beschreibung der Kritikalitätsstufen der BSI-Cyber-Sicherheitswarnungen beschaffen.
+- C17: Volltext der Rahmenrichtlinien Gesamtverteidigung lesen und die Kapitelangaben (19–22) bestätigen.
+- B11: Meldepflichten der §§ 6, 7 IfSG und konsolidierter Text der IGV-Änderungen; B15: §§ 2, 28 BSIG; C10: Definitionen von BfArM und PEI, VO (EU) 2022/123.
+- Arbeitspakete AP3–AP6 des Vorschlags folgen in eigenen Pull Requests; O01 (C01, Anhang B.14 ANoPl-Bund) bleibt offen.
 
 ## [3.12.0] – 22.10.2026
 

@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.22.0 – 22.10.2026
+
+Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidiert_2026-10-22“, Arbeitspaket AP2 (Rechts- und Feststellungsstufen mit Typologietabellen).
+
+- **SOP-Sammelmappe 3.13.0:** Typologietabellen und Prüfpfade aus Fachgrundlagen des Bundes und der EU in B07 2.2.0 (Störfallrecht), B08 2.1.0 (Systemzustände, § 13 EnWG), B11 2.3.0 (amtliche Einstufungen), B15 2.2.0 (Meldestufen § 32 BSIG), C10 1.2.0 (Engpassstufen AMG), C14 1.2.0 (Versorgungskrise ESVG), C17 1.2.0 (Rechtszustände GG, Aufgabenfelder der Gesamtverteidigung); Quellenregister um 18 Einträge ergänzt. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.21.0 – 22.10.2026
 
 Grundlage: konsolidierter Vorschlag „KI-LEAD_SOP_Fachgrundlagen_PR-konsolidiert_2026-10-22“. Er führt zwei Vorschläge zusammen: „2026-10-22_KI-LEAD_SOP_Amtliche_Fachstandards_PR-Vorschlag“ (34 Einzelvorschläge, 45 Quellen) und „fachstandard-vorschlaege-sop-lead“ (Fachstandards je SOP nach dem Muster von C01 und C12), geprüft auf Steuerungsebene, bundesweite Nutzbarkeit und Belegbarkeit.
