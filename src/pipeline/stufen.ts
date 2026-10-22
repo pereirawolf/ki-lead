@@ -27,7 +27,17 @@ import {
   type RechercheModus,
 } from "./kontext";
 import { kostenNachFehler, kostenStand, ohneBase64, type Lauf, type S1Vorschlag, type StufenEintrag } from "./lauf";
-import { hatVormeldung, istVerdichtung, juengsterEingang, materialBloecke, materialUebersicht, vormeldungStand, type Material } from "./material";
+import {
+  absenderFuer,
+  hatVormeldung,
+  istVerdichtung,
+  juengsterEingang,
+  materialBloecke,
+  materialUebersicht,
+  vormeldungStand,
+  type Absender,
+  type Material,
+} from "./material";
 import { holeWert } from "../kern/pfad";
 import { sopKennung } from "../profil/sop";
 import { istEigeneStelle } from "../kern/ui";
@@ -341,8 +351,9 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
 
 /** Feste Felder setzen, die die App verantwortet (Schemakennung, Status, Herkunft, Variablen). */
 /**
- * Felder, die die eigene Meldungsidentität bilden (Land, meldende Stelle). Sie werden aus dem Profil
- * gesetzt, nicht nur ergänzt: Ein KI-Entwurf darf nicht unter dem Absender einer Eingangsmeldung stehen.
+ * Felder, die die eigene Meldungsidentität bilden (Land, meldende Stelle). Sie werden gesetzt, nicht nur ergänzt:
+ * Ein KI-Entwurf darf nicht unter dem Absender einer Eingangsmeldung stehen. Quelle ist die eigene Vormeldung,
+ * sonst das Profil (absenderFuer).
  */
 function identitaetsFelder(p: Profil): string[] {
   const r = p.ui.rollen;
@@ -365,14 +376,22 @@ export function nachbearbeiten(
   d[r.schema_feld] = aufloesen(props[r.schema_feld], p.schema)?.const ?? p.manifest.meldung.schema_id;
   d[r.status_feld] = r.status_entwurf;
   const identitaet = identitaetsFelder(p);
-  for (const [key, wert] of Object.entries(p.manifest.variablen)) {
+  const absender = absenderFuer(k.material, p);
+  const soll = (key: string, profilWert: string) =>
+    absender.herkunft === "vormeldung" && key === r.land
+      ? absender.land
+      : absender.herkunft === "vormeldung" && key === r.meldende_stelle
+        ? absender.stelle
+        : profilWert;
+  for (const [key, profilWert] of Object.entries(p.manifest.variablen)) {
     if (!(key in props)) continue;
     if (identitaet.includes(key)) {
-      // Hinterlegte Aliasnamen der eigenen Stelle bleiben stehen
-      if (key === p.ui.rollen.meldende_stelle && istEigeneStelle(d[key], p.manifest)) continue;
+      const wert = soll(key, profilWert);
+      // Ohne Vormeldung bleiben hinterlegte Aliasnamen der eigenen Stelle stehen; mit Vormeldung gilt deren Name
+      if (absender.herkunft === "profil" && key === r.meldende_stelle && istEigeneStelle(d[key], p.manifest)) continue;
       if (d[key] !== undefined && d[key] !== "" && d[key] !== wert) korrekturen.push(`${key}: „${String(d[key])}“ → „${wert}“`);
       d[key] = wert;
-    } else if (d[key] === undefined || d[key] === "") d[key] = wert;
+    } else if (d[key] === undefined || d[key] === "") d[key] = profilWert;
   }
   radarUmhaengen(d, p, umhaengungen);
   const t0 = k.lauf.bestaetigt?.meldezeitpunkt;
@@ -584,6 +603,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       websucheMax: e.websucheMax,
       abrufMax: e.abrufMax,
       kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
+      absender: absenderFuer(k.material, p),
     }),
   });
   const a = await aufrufen(k, verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf", {
@@ -716,6 +736,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   }
   if (meldung && svAnzahl !== n)
     befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });
+  if (meldung) befunde.unshift(...absenderBefunde(absenderFuer(k.material, p)));
   if (meldung) befunde.unshift(...rechercheBefunde(modus, vormeldung, { nutzung: s2.nutzung, suchen: a.suchen, abrufe: a.abrufe, abrufFehler: a.abrufFehler }));
   k.lauf.ergebnis = meldung
     ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, abrufFehler: a.abrufFehler, schemakonform: schemaBefunde.length === 0 }
@@ -725,6 +746,26 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   k.lauf.aktualisiert = new Date().toISOString();
   await k.aktualisiert(k.lauf);
   return { meldung, kurzantwort, schemaBefunde, befunde };
+}
+
+/** Befunde zum Absender: fremde Meldung als Vormeldung, eigene Vormeldungen mit unterschiedlichem Absender */
+export function absenderBefunde(a: Absender): Befund[] {
+  const b: Befund[] = [];
+  if (a.fremd.length)
+    b.push({
+      stufe: "warnung",
+      code: "VORMELDUNG_FREMDE_STELLE",
+      text: `Als Vormeldung gewählt, aber von einer anderen Stelle: ${a.fremd.join(", ")}. Land und meldende Stelle stammen ${
+        a.herkunft === "vormeldung" ? `aus der eigenen Vormeldung ${a.quelle}` : "aus dem Profil"
+      }; der Entwurf erscheint nicht unter fremdem Absender.`,
+    });
+  if (a.abweichend.length)
+    b.push({
+      stufe: "hinweis",
+      code: "VORMELDUNG_ABSENDER_ABWEICHEND",
+      text: `Eigene Vormeldungen mit anderem Land oder anderer meldender Stelle: ${a.abweichend.join(", ")}. Übernommen ist der Absender der jüngsten (${a.quelle}: ${a.land} · ${a.stelle}).`,
+    });
+  return b;
 }
 
 /**

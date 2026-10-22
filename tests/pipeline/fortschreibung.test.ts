@@ -5,7 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { leereNutzung } from "../../src/anbieter/typen";
 import { STANDARD } from "../../src/pipeline/einstellungen";
-import { dateiLesen, rolleSetzen, type Material } from "../../src/pipeline/material";
+import { absenderFuer, dateiLesen, rolleSetzen, type Material } from "../../src/pipeline/material";
 import { rechercheBefunde, stufe1, stufe2und3, type Kontext } from "../../src/pipeline/stufen";
 import { llmAntwort, meldungsAntwort, skriptAnbieter } from "../support/anbieter";
 import { profil } from "../support/dateien";
@@ -275,5 +275,77 @@ describe("Redaktionsvermerke bei eigener Vormeldung", () => {
     const steuerung = att.anfragen[1].system.at(-1)!.text;
     expect(steuerung).toContain("Teil A (Fristgrundlage)");
     expect(steuerung).toContain("„Änderung zur Vormeldung:“");
+  });
+});
+
+describe("Absender der Fortschreibung aus der eigenen Vormeldung (0.4.30)", () => {
+  /** Fiktive eigene Vormeldung mit wählbarem Land, Stelle und Meldezeitpunkt */
+  async function meldungAls(land: string, stelle: string, zeit = "2026-10-21T19:40", name = "Vormeldung_FIKTIV.json"): Promise<Material> {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("Bund");
+    Object.assign(m, { land, meldende_stelle: stelle, meldezeitpunkt: zeit });
+    return rolleSetzen(await dateiLesen(new File([JSON.stringify(m)], name), p!), "meldung", p!);
+  }
+
+  it("übernimmt Land und meldende Stelle der eigenen Vormeldung, auch wenn der Entwurf das Profil nennt", async () => {
+    const vm = await meldungAls("Thüringen", "Koordinierungsstelle (Beispiel)");
+    const e = { ...entwurf(), land: "Bund", meldende_stelle: "Koordinierungsstelle (Beispiel)" };
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(e)], {}, [vm]);
+    const r = await stufe2und3(k, await stufe1(k));
+    expect(r.meldung!.land).toBe("Thüringen");
+    expect(r.meldung!.meldende_stelle).toBe("Koordinierungsstelle (Beispiel)");
+    expect(k.lauf.ergebnis!.schemakonform).toBe(true);
+    expect(att.anfragen[1].system.at(-1)!.text).toContain(
+      "- Absender der neuen Meldung: Land „Thüringen“, meldende Stelle „Koordinierungsstelle (Beispiel)“ (aus der eigenen Vormeldung übernommen",
+    );
+    expect(k.lauf.ergebnis!.befunde.find((b) => b.text.startsWith("Absender auf die eigene Stelle korrigiert"))?.text).toContain("land: „Bund“ → „Thüringen“");
+  });
+
+  it("behält den hinterlegten Zweitnamen der eigenen Stelle aus der Vormeldung", async () => {
+    const vm = await meldungAls("Bund", "Koordinierungsstelle (Beispiel) – Redaktionskonferenz");
+    const { k } = await fortschreibung(
+      [llmAntwort(s1Fortschreibung()), meldungsAntwort({ ...entwurf(), meldende_stelle: "Koordinierungsstelle (Beispiel)" })],
+      {},
+      [vm],
+    );
+    const r = await stufe2und3(k, await stufe1(k));
+    expect(r.meldung!.meldende_stelle).toBe("Koordinierungsstelle (Beispiel) – Redaktionskonferenz");
+  });
+
+  it("eine als Vormeldung gewählte Meldung einer anderen Stelle ändert den Absender nicht und wird gemeldet", async () => {
+    const vm = await meldungAls("Hessen", "Lagezentrum der Hessischen Landesregierung");
+    expect(vm.art).toBe("meldung");
+    const { att, k } = await fortschreibung(
+      [llmAntwort(s1Fortschreibung()), meldungsAntwort({ ...entwurf(), land: "Hessen", meldende_stelle: "Lagezentrum der Hessischen Landesregierung" })],
+      {},
+      [vm],
+    );
+    const r = await stufe2und3(k, await stufe1(k));
+    expect([r.meldung!.land, r.meldung!.meldende_stelle]).toEqual(["Bund", "Koordinierungsstelle (Beispiel)"]);
+    expect(codes(k)).toContain("VORMELDUNG_FREMDE_STELLE");
+    expect(att.anfragen[1].system.at(-1)!.text).toContain("meldende Stelle „Koordinierungsstelle (Beispiel)“ (aus dem Profil).");
+  });
+
+  it("mehrere eigene Vormeldungen: Der Absender der jüngsten gilt, Abweichungen werden genannt", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const alt = await meldungAls("Bund", "Koordinierungsstelle (Beispiel)", "2026-10-20T09:00", "alt.json");
+    const neu = await meldungAls("Thüringen", "Koordinierungsstelle (Beispiel)", "2026-10-21T19:40", "neu.json");
+    const a = absenderFuer([neu, alt], p!);
+    expect([a.land, a.stelle, a.herkunft, a.quelle, a.abweichend]).toEqual([
+      "Thüringen",
+      "Koordinierungsstelle (Beispiel)",
+      "vormeldung",
+      "neu.json",
+      ["alt.json"],
+    ]);
+    expect(absenderFuer([], p!)).toMatchObject({ land: "Bund", stelle: "Koordinierungsstelle (Beispiel)", herkunft: "profil" });
+  });
+
+  it("Steuerung nennt, dass nur Adressen aus Auftrag, Material, Suche und abgerufenen Seiten abrufbar sind", async () => {
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(entwurf())]);
+    await stufe2und3(k, await stufe1(k));
+    expect(att.anfragen[1].system.at(-1)!.text).toContain(
+      "Finde andere Seiten zuerst über die Websuche und rufe dann den Treffer ab; bilde keine Adressen selbst",
+    );
   });
 });

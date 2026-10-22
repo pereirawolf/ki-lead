@@ -64,6 +64,7 @@ describe("Fortschreibung in der KI-Erfassung", () => {
 
     await bisWahr(() => knopf("Bestätigen und recherchieren (S2)") !== undefined);
     expect(seitentext()).toContain("Stand der Vormeldung: 21.10.2026, 19:40 Uhr (Ausgangspunkt, nicht t0).");
+    expect(seitentext()).toContain("Absender: Bund · Koordinierungsstelle (Beispiel) – Redaktionskonferenz (aus der eigenen Vormeldung).");
     expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
     // Unvollständiges t0 sperrt S2 mit sichtbarer Begründung, statt in einen Fehlerlauf zu führen
     const uhr = [...document.querySelectorAll<HTMLInputElement>('input[aria-label="Uhrzeit t0"]')].at(-1)!;
