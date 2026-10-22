@@ -12,6 +12,72 @@ import type { Meldung, Profil, RadarDef } from "../kern/typen";
 
 const BLAU: [number, number, number] = [31, 79, 130];
 
+/**
+ * Die Standardschrift des PDF (Helvetica, WinAnsi) kennt nur Zeichen aus Windows-1252. Andere Zeichen gibt jsPDF
+ * als Bytefolge aus, im PDF erscheint dann Zeichensalat („→“ wurde zu „!’“). Gebräuchliche Zeichen der Meldungen
+ * werden lesbar ersetzt, übrige durch „?“. Die gespeicherte Meldung bleibt unverändert.
+ */
+const ERSATZ: Record<string, string> = {
+  "→": "->",
+  "←": "<-",
+  "↔": "<->",
+  "⇒": "=>",
+  "⇐": "<=",
+  "⇔": "<=>",
+  "↑": "^",
+  "↓": "v",
+  "⟦": "[[",
+  "⟧": "]]",
+  "≥": ">=",
+  "≤": "<=",
+  "≈": "~",
+  "≠": "!=",
+  "−": "-",
+  "‐": "-",
+  "‑": "-",
+  "‒": "-",
+  "―": "—",
+  "′": "'",
+  "″": '"',
+  "✓": "x",
+  "✔": "x",
+  "✗": "-",
+  "\u2009": " ",
+  "\u200A": " ",
+  "\u202F": " ",
+  "\u2007": " ",
+  "\u200B": "",
+  "\u2060": "",
+  "\uFEFF": "",
+};
+
+/** Zeichen außerhalb von Windows-1252 (Latin-1 plus die Sonderzeichen in 0x80–0x9F) */
+const WIN1252_EXTRA = new Set("€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ");
+function inWinAnsi(c: string): boolean {
+  const n = c.codePointAt(0)!;
+  return n === 0x09 || n === 0x0a || n === 0x0d || (n >= 0x20 && n <= 0x7e) || (n >= 0xa0 && n <= 0xff) || WIN1252_EXTRA.has(c);
+}
+
+/** Text für die Standardschrift des PDF aufbereiten (siehe ERSATZ) */
+export function pdfText(s: string): string {
+  let aus = "";
+  for (const c of s.normalize("NFC")) {
+    if (inWinAnsi(c)) aus += c;
+    else if (c in ERSATZ) aus += ERSATZ[c];
+    else {
+      // Zusammengesetzte Buchstaben auf die Grundform zurückführen („ș“ → „s“), sonst „?“
+      const basis = c.normalize("NFD").replace(/\p{M}/gu, "");
+      aus += basis && [...basis].every(inWinAnsi) ? basis : "?";
+    }
+  }
+  return aus;
+}
+
+/** autoTable-Haken: Zelltexte vor Breitenberechnung und Ausgabe aufbereiten */
+const zellText = (data: any) => {
+  if (Array.isArray(data.cell?.text)) data.cell.text = data.cell.text.map((z: string) => pdfText(String(z)));
+};
+
 /** Zelle einer PDF-Tabelle; Radarzellen tragen Definition und Werte für die Grafik. */
 type Zelle = string | { content: string; styles?: Record<string, unknown>; radar?: { def: RadarDef; wert: Record<string, unknown> | undefined } };
 
@@ -160,6 +226,7 @@ function freigabeZeichnen(doc: jsPDF, profil: Profil, d: Meldung, startY: number
       return f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit" ? datumDE(v) : String(v);
     };
     autoTable(doc, {
+      didParseCell: zellText,
       startY,
       head: [[titel, ...spalten.map((s) => bezeichnung(ui, `${feld}.${kinder[0]}.${s}`))]],
       body: kinder.map((c) => [bezeichnung(ui, `${feld}.${c}`), ...spalten.map((s) => wertText(c, s))]),
@@ -174,6 +241,7 @@ function freigabeZeichnen(doc: jsPDF, profil: Profil, d: Meldung, startY: number
   const body: Zelle[][] = [];
   zeilen(profil, k, wert, [feld], body);
   autoTable(doc, {
+    didParseCell: zellText,
     startY,
     head: [[{ content: titel, colSpan: 2 }]],
     body,
@@ -197,6 +265,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   }
   kopf.push(...zusatz);
   autoTable(doc, {
+    didParseCell: zellText,
     startY,
     head: [[{ content: kopfTitel, colSpan: 2 }]],
     body: kopf,
@@ -215,6 +284,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     const typ = typeof roh === "object" ? "Objekt" : typeof roh === "string" ? "Text" : typeof roh;
     const inhalt = typeof roh === "string" ? roh : JSON.stringify(roh);
     autoTable(doc, {
+      didParseCell: zellText,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
       head: [[{ content: `${bezeichnung(ui, r.sachverhalte)}: ungültiger Datentyp`, colSpan: 2 }]],
       body: [
@@ -234,6 +304,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     zeilen(profil, elementSchema, sv, [r.sachverhalte, i], body);
     const titel = r.sv_bezeichnung ? holeWert(sv, r.sv_bezeichnung) : "";
     autoTable(doc, {
+      didParseCell: zellText,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 30),
       head: [[{ content: `${elementName} ${i + 1}${titel ? ": " + titel : ""}`, colSpan: 2 }]],
       body,
@@ -248,6 +319,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
 
   if (r.quellen && String(holeWert(d, r.quellen) || "").trim()) {
     autoTable(doc, {
+      didParseCell: zellText,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
       head: [[bezeichnung(ui, r.quellen)]],
       body: [[String(holeWert(d, r.quellen))]],
@@ -261,6 +333,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   const ent = r.entstehung_feld ? d[r.entstehung_feld] : undefined;
   if (ent) {
     autoTable(doc, {
+      didParseCell: zellText,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 4, 14),
       body: [
         [
@@ -291,7 +364,7 @@ function seitenfuss(doc: jsPDF, text: string) {
     doc.setPage(s);
     doc.setFontSize(7.5);
     doc.setTextColor(120, 128, 136);
-    doc.text(`${text} · Seite ${s} von ${seiten}`, 14, 290);
+    doc.text(pdfText(`${text} · Seite ${s} von ${seiten}`), 14, 290);
   }
 }
 
@@ -300,10 +373,10 @@ export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blo
   const ui = profil.ui;
   doc.setFontSize(14);
   doc.setTextColor(...BLAU);
-  doc.text(`${ui.titel}`, 14, 16);
+  doc.text(pdfText(`${ui.titel}`), 14, 16);
   doc.setFontSize(9);
   doc.setTextColor(90, 100, 110);
-  doc.text(`${profil.manifest.name} · Profilversion ${profil.manifest.version} · Schema ${profil.manifest.meldung.schema_id}`, 14, 22);
+  doc.text(pdfText(`${profil.manifest.name} · Profilversion ${profil.manifest.version} · Schema ${profil.manifest.meldung.schema_id}`), 14, 22);
   if (entwurf) {
     doc.setFontSize(42);
     doc.setTextColor(225, 228, 232);
@@ -326,12 +399,13 @@ export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   doc.setFontSize(14);
   doc.setTextColor(...BLAU);
-  doc.text(titel, 14, 16);
+  doc.text(pdfText(titel), 14, 16);
   doc.setFontSize(9);
   doc.setTextColor(90, 100, 110);
-  doc.text(`${profil.manifest.name} · Schema ${profil.manifest.meldung.schema_id} · ${meldungen.length} Meldung(en) · Stand ${stand}`, 14, 22);
+  doc.text(pdfText(`${profil.manifest.name} · Schema ${profil.manifest.meldung.schema_id} · ${meldungen.length} Meldung(en) · Stand ${stand}`), 14, 22);
   doc.setTextColor(20, 20, 20);
   autoTable(doc, {
+    didParseCell: zellText,
     startY: 27,
     head: [uebersicht[0]],
     body: uebersicht.slice(1),

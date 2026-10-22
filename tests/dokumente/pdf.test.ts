@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { jsPDF } from "jspdf";
-import { meldungAlsPdf, radarZeichnen } from "../../src/dokumente/pdf";
+import { meldungAlsPdf, pdfText, radarZeichnen } from "../../src/dokumente/pdf";
 
 describe("PDF mit Lagenradar", () => {
   it("zeichnet das Radar als Grafik neben die Achsenwerte", async () => {
@@ -104,5 +104,43 @@ describe("F10: PDF bei falschem Listentyp", () => {
     d.sachverhalte = null;
     const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(d, p, true).arrayBuffer()));
     expect(roh).not.toContain("ungültiger Datentyp");
+  });
+});
+
+describe("Kennsatzzeilen und Sonderzeichen im PDF (Lauf 20261022-073727-q2ex)", () => {
+  // Ende eines Bewertungstexts wie im Lauf: Signal-Satzanfänge innerhalb einer Kennsatzzeile, Pfeile
+  const ende =
+    "D8 = 2: weil.\n\nAchsendivergenz: keine.\nNeubewertung bei: Ausnutzung in Thüringen\nÄnderung zur Vormeldung: Landesangebote wieder online; Betroffenheit: nicht überprüfbar; Beurteilung „erheblich“ → „geringfügig“, Tendenz „Verschärfung“ → „Entspannung“, D1 4 → 1";
+
+  it("bricht eine Kennsatzzeile nicht an Signal-Satzanfängen um", async () => {
+    const { gliedereBewertung } = await import("../../src/kern/kennsaetze");
+    const p = (await profil("lead-beispiel")).profil!;
+    const g = gliedereBewertung(ende, p.ui);
+    const zeilen = g.split("\n");
+    expect(zeilen).toContain(
+      "Änderung zur Vormeldung: Landesangebote wieder online; Betroffenheit: nicht überprüfbar; Beurteilung „erheblich“ → „geringfügig“, Tendenz „Verschärfung“ → „Entspannung“, D1 4 → 1",
+    );
+    expect(zeilen.at(-2)).toBe("Neubewertung bei: Ausnutzung in Thüringen");
+    // Außerhalb von Kennsätzen gliedert die Darstellung weiter
+    expect(gliedereBewertung("Kernaussage: A. Beurteilung „erheblich“: weil.", p.ui)).toBe("Kernaussage: A.\n\nBeurteilung „erheblich“: weil.");
+    // Ein Kennsatz mitten in der Zeile beginnt weiterhin eine eigene Zeile
+    expect(gliedereBewertung("D8 = 2: weil. Neubewertung bei: X; Beurteilung „y“ offen", p.ui).split("\n").at(-1)).toBe(
+      "Neubewertung bei: X; Beurteilung „y“ offen",
+    );
+  });
+
+  it("ersetzt Zeichen außerhalb der Standardschrift lesbar", () => {
+    expect(pdfText("D1 4 → 1; ⟦Ort⟧ ≥ 2 − 1")).toBe("D1 4 -> 1; [[Ort]] >= 2 - 1");
+    expect(pdfText("„Gera“ – Straße · 5 € … ™")).toBe("„Gera“ – Straße · 5 € … ™");
+    expect(pdfText("Bucureș\u0074i 😀")).toBe("Bucurest" + "i ?");
+  });
+
+  it("gibt Pfeile im PDF als „->“ aus statt als Zeichensalat", async () => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const m = ilkaMeldung("Bund");
+    m.sachverhalte[0].sofort.bewertung_text += "\n" + ende.split("\n").at(-1);
+    const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(m, p, true).arrayBuffer()));
+    expect(roh).toContain("D1 4 -> 1");
+    expect(roh).not.toMatch(/!\u0092|!’/);
   });
 });

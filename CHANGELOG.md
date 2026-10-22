@@ -44,6 +44,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.26 | letzter Commit von Pull Request #24 „Höchstzahl Ausgabetoken für jeden KI-Aufruf; 0.4.26“ |
 | 0.4.27 | letzter Commit von Pull Request #33 „SOP B01/B02/B07/B09/B14 vertieft, Quellenregister, 40 Bewertungsfälle; Profil 1.20.0“ (Nachträge vom 21.10.2026: Beispielprofil 1.13.0 mit Pull Request #26, 1.14.0 mit #27, 1.15.0 mit #28, 1.16.0 mit #29, 1.17.0 mit #30, 1.18.0 mit #31, 1.19.0 mit #32 und 1.20.0 mit #33, außerdem 40 Bewertungsfälle unter `evaluation/` mit #33, jeweils ohne Änderung der App; Stand der Version selbst: letzter Commit von Pull Request #25 „Schätzung nach den Läufen vom 21.10.2026, SOP B15/C11 für Cyber-Vorsorgelagen; 0.4.27“) |
 | 0.4.28 | letzter Commit des Pull Requests „Fortschreibung: Bearbeitungszeit, t0 und Rechercheauftrag von der App steuern; 0.4.28“ |
+| 0.4.29 | letzter Commit des Pull Requests „PDF: Kennsatzzeilen ungeteilt, Pfeile lesbar; 0.4.29“ |
+
+## [0.4.29] – 22.10.2026
+
+Grundlage: PDF der Meldung aus Lauf `20261022-073727-q2ex` (App 0.4.28). Im Text „Bewertung & Tendenz“ war der Kennsatz „Änderung zur Vormeldung:“ mitten im Satz in zwei Absätze geteilt, und „→“ erschien als „!’“. Keine Änderung an Profilen, SOPs, Prompts, Schemata oder gespeicherten Meldungen.
+
+### Behoben
+
+- **Kennsatzzeilen bleiben ungeteilt:** Die Gliederung für PDF und Kopiervorlage setzte auch innerhalb einer Kennsatzzeile Absätze vor Signal-Satzanfängen, etwa vor „Beurteilung „erheblich“ → …“ im Kennsatz „Änderung zur Vormeldung:“. Ein Kennsatz reicht jetzt bis zum Zeilenende; ein Kennsatz mitten in einer Zeile beginnt weiterhin eine eigene Zeile, und außerhalb der Kennsätze gliedert die Ausgabe wie bisher.
+- **Sonderzeichen im PDF:** Die Standardschrift des PDF (Helvetica, Windows-1252) kennt Zeichen wie „→“, „≥“ oder „⟦ ⟧“ nicht; jsPDF gab sie als Zeichensalat aus. Die App ersetzt sie jetzt in allen Tabellenzellen und Kopfzeilen lesbar („->“, „>=“, „[[ ]]“, schmale Leerzeichen als Leerzeichen); Buchstaben mit diakritischen Zeichen außerhalb des Zeichensatzes werden auf die Grundform zurückgeführt, übrige Zeichen durch „?“ ersetzt.
+- Spezifikation 0.4.29 (Abschnitt 5.1, Export).
+
+### Tests
+
+- `tests/dokumente/pdf.test.ts`: Kennsatzzeile mit Signal-Satzanfängen bleibt eine Zeile, Ersatz der Sonderzeichen, Pfeil im erzeugten PDF als „->“.
 
 ## [0.4.28] – 22.10.2026
 

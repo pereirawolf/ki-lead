@@ -212,7 +212,8 @@ export function gliedere(text: unknown, g: TextGliederung | undefined, kennsaetz
   g = g || {};
   const ks = kennsaetze.filter(Boolean).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   const absatz = (g.absatz || []).map(rx).filter(Boolean) as RegExp[];
-  const zeile = [...(g.zeile || []), ...ks].map(rx).filter(Boolean) as RegExp[];
+  const zeile = (g.zeile || []).map(rx).filter(Boolean) as RegExp[];
+  const kennsatz = ks.map(rx).filter(Boolean) as RegExp[];
   const kurz = Number.isInteger(g.kurzlabel) && g.kurzlabel! > 0 ? rx(kurzlabelQuelle(Math.min(g.kurzlabel!, 8))) : null;
   const alle = [
     ...absatz.map((r) => ({ r, art: "absatz" as const })),
@@ -220,11 +221,21 @@ export function gliedere(text: unknown, g: TextGliederung | undefined, kennsaetz
     ...(kurz ? [{ r: kurz, art: "kurz" as const }] : []),
   ];
   const ende = { absatz: ENDE_ABSATZ, zeile: ENDE_ZEILE, kurz: ENDE_KURZ };
-  // 1. Gliederungsanfänge mitten in einer Zeile: nach Satzende einen Umbruch setzen
-  for (const { r, art } of alle) {
-    const muster = new RegExp(`(${ende[art]})[ \\t]+(?=${r.source})`, "gu");
-    t = t.replace(muster, art === "absatz" ? "$1\n\n" : "$1\n");
-  }
+  const umbruch = (text: string, r: RegExp, art: keyof typeof ende) =>
+    text.replace(new RegExp(`(${ende[art]})[ \\t]+(?=${r.source})`, "gu"), art === "absatz" ? "$1\n\n" : "$1\n");
+  // 1a. Kennsätze mitten in einer Zeile beginnen eine eigene Zeile
+  for (const r of kennsatz) t = umbruch(t, r, "zeile");
+  // 1b. Übrige Gliederungsanfänge nach Satzende, aber nicht innerhalb einer Kennsatzzeile: Ein Kennsatz reicht bis
+  // zum Zeilenende („Änderung zur Vormeldung: …; Beurteilung „erheblich“ → „geringfügig““ bleibt eine Zeile)
+  const kennsatzZeile = ks.length ? new RegExp(`^(?:${ks.join("|")})`, "u") : null;
+  t = t
+    .split("\n")
+    .map((z) => {
+      if (kennsatzZeile?.test(z)) return z;
+      for (const { r, art } of alle) z = umbruch(z, r, art);
+      return z;
+    })
+    .join("\n");
   // 2. Absatzanfänge am Zeilenanfang: Leerzeile davor
   for (const r of absatz) t = t.replace(new RegExp(`([^\\n])\\n(?=${r.source})`, "gu"), "$1\n\n");
   // 3. Der erste Kennsatz eröffnet einen eigenen Absatz
