@@ -12,7 +12,7 @@ art_zuordnung: ["KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; sonst als Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; Ursache nach Dach-SOP (u. a. B01, B02, B03, B05, B06); C02 bei Bauwerksversagen, C04 bei Vulkanasche; C09/C10, C12, C14, C16, C17 nach Folge"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
-version: "1.1.1"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -23,11 +23,11 @@ bisherige_ids: ["baustein-n06"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Tatsächlicher Ausfall oder deutliche Minderung einer für Schutz oder Versorgung notwendigen Personen- oder Güterleistung auf Straße, Schiene, Wasser oder im Luftverkehr sowie an Umschlag-, Lager- und Verteilknoten bis zum Bedarfspunkt; dazu abgeschnittene Räume. Auch fehlende Transportmittel, Personal, Abfertigung, Energie oder IT können die Leistung trotz intakter Strecke verhindern. Eine einzelne Verspätung oder Sperrung ist keine Versorgungskrise; Relevanz folgt aus konkreter Funktion, benötigter Menge und Qualität, Zeitkritikalität und nutzbarem Ersatz. Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit. Frühe Befassung nach A.1 Nr. 1 bei fachlich begründet drohendem Ausfall mit benennbarem Vorbereitungs- oder Abstimmungsbedarf; das belegt noch keinen eingetretenen KRITIS-Ausfall. Unter einer Ursachen-SOP wird C13 als Prüfhilfe verwendet, ohne die Ereignisart „KRITIS-Ausfall“ automatisch hinzuzufügen; eine eingetretene wesentliche Einschränkung kritischer Leistung über B12. Bauwerksversagen von Brücken C02; grenzüberschreitende Korridore, Häfen und Flughäfen mit Deutschlandbezug nach A.1 Nr. 6. Folgebausteine C09/C10, C12, C14 oder C16 nur bei entsprechendem Bedarfspfad, C17 bei konkretem zivilem Verteidigungsbezug.
+**Umfasst / grenzt ab von:** Tatsächlicher Ausfall oder deutliche Minderung einer für Schutz oder Versorgung notwendigen Personen- oder Güterleistung auf Straße, Schiene, Wasser oder im Luftverkehr sowie an Umschlag-, Lager- und Verteilknoten bis zum Bedarfspunkt; dazu abgeschnittene Räume. Auch fehlende Transportmittel, Personal, Abfertigung, Energie oder IT können die Leistung trotz intakter Strecke verhindern. Eine einzelne Verspätung oder Sperrung ist noch keine Versorgungslücke; Relevanz folgt aus konkreter Funktion, benötigter Menge und Qualität, Zeitkritikalität und nutzbarem Ersatz. Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit. Frühe Befassung nach A.1 Nr. 1 bei fachlich begründet drohendem Ausfall mit benennbarem Vorbereitungs- oder Abstimmungsbedarf; das belegt noch keinen eingetretenen KRITIS-Ausfall. Unter einer Ursachen-SOP wird C13 als Prüfhilfe verwendet, ohne die Ereignisart „KRITIS-Ausfall“ automatisch hinzuzufügen; eine eingetretene wesentliche Einschränkung kritischer Leistung über B12. Bauwerksversagen von Brücken C02; grenzüberschreitende Korridore, Häfen und Flughäfen mit Deutschlandbezug nach A.1 Nr. 6. Folgebausteine C09/C10, C12, C14 oder C16 nur bei entsprechendem Bedarfspfad, C17 bei konkretem zivilem Verteidigungsbezug.
 
 **Befassungsanlässe:** Bestätigter Ausfall oder deutliche Minderung kritischer Verkehrs- bzw. Logistikleistung · abgeschnittene Räume oder Störung unverzichtbarer Transportketten · fachlich begründet drohender Ausfall mit benennbarem Vorbereitungsbedarf.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; die Ursachenart nach belegtem Sachverhalt. Bei früher Befassung Prüfhilfe unter der Ursachen- bzw. Vorsorgebefassung, ohne einen eingetretenen KRITIS-Ausfall zu behaupten.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; die Ursachenart nach belegtem Sachverhalt. Bei früher Befassung Prüfhilfe unter der Ursachen- bzw. Vorsorgebefassung, ohne einen eingetretenen KRITIS-Ausfall zu behaupten.
 
 ### 2. Erfassung: Prüffragen
 

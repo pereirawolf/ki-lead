@@ -12,7 +12,7 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht"
 anschluss: "B11, C09; B12 nach dem Funktionsdach (A.1 Nr. 2); C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
-version: "1.3.0"
+version: "1.3.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -35,7 +35,7 @@ bisherige_ids: ["baustein-n12"]
 
 **Amtliche Engpassstufen (Arzneimittel).** Die Tabelle dient der Recherche und Vollständigkeitsprüfung (A.6 Fachgrundlagen, A.10.1); sie gilt für Humanarzneimittel nach dem Arzneimittelgesetz. Für Impfstoffe, Sera und Blutprodukte ist das PEI zuständig. Medizinische Gase sind nicht pauschal vom Arzneimittelrecht ausgenommen (das AMG nennt sie in § 47 Abs. 1 Nr. 2 Buchst. e); für ein als Arzneimittel eingeordnetes Produkt, etwa medizinischen Sauerstoff, gilt die Tabelle nach seinem belegten Produktstatus. Für Medizinprodukte und sonstiges Verbrauchsmaterial gelten andere Rechtsgrundlagen; die Tabelle wird darauf nicht übertragen. Produktstatus, zuständige Fachstelle und Engpassinformation belegen; ein ungeklärter Produktstatus bleibt Prüfbedarf. Eine Stufe ist ein Rechts- oder Verfahrensstatus mit Datum, kein Radarwert. Im Meldungstext immer mit Fachgrundlage und feststellender Stelle schreiben, z. B. „Versorgungsmangel (§ 79 Abs. 5 AMG) laut Bekanntmachung des BMG vom …“.
 
-| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Grundlage | Abgrenzung für die Befassung |
+| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Voraussetzung | Abgrenzung für die Befassung |
 |---|---|---|
 | Gemeldeter Lieferengpass (§ 52b Abs. 3c AMG) | Pharmazeutischer Unternehmer meldet; BfArM veröffentlicht gemeldete Lieferengpässe sowie eine Liste versorgungsrelevanter und versorgungskritischer Wirkstoffe (nach Anhörung des Beirats nach Abs. 3b) | Meldung und Listeneintrag sind Betreiber- bzw. Registerangaben zum Produkt, kein Nachweis örtlicher Nichtverfügbarkeit oder ungedeckter Versorgung (R1, R2). Die Zahl der Einträge ist kein Schweregrad. |
 | Versorgungsrelevanter Lieferengpass mit Maßnahme der Bundesoberbehörde (§ 52b Abs. 3d AMG) | BfArM bzw. PEI kann nach Anhörung des Beirats Maßnahmen anordnen, auch Kontingentierung; bei versorgungskritischen Wirkstoffen zusätzlich Lagerhaltung | Angeordnete Maßnahme mit Fundstelle, Produkt, Geltung und Stand als Maßnahme (M) führen (R6); eine Anordnung belegt keine Versorgungslücke im Referenzraum. |

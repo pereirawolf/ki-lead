@@ -22,7 +22,7 @@ GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, 
 | Ordner | Gegenstand |
 |---|---|
 | `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
-| `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Profilansicht, private Profile |
+| `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Profilansicht, private Profile |
 | `tests/pipeline/` | Einstellungen und Vorgaben, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich |
 | `tests/anbieter/` | SSE-Leser, Anthropic- und OpenAI-Adapter, gemeinsamer Vertrag beider Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |

@@ -9,10 +9,10 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Tatsächliche oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung (Produktion, Lagerung und Kühlung, Transport, Verarbeitung, Abgabe)"
 art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
-art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.2.0"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -29,7 +29,7 @@ bisherige_ids: ["baustein-n07"]
 
 **Befassungsanlässe:** Belegte oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung · Ausfall von Produktion, Lagerung, Kühlung, Verteilung, Zahlung oder Abgabe mit relevantem Versorgungsbezug, etwa bei länger andauerndem Stromausfall · ungedeckter besonderer Ernährungsbedarf in Einrichtungen oder Unterkünften.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
 
 ### 2. Erfassung: Prüffragen
 

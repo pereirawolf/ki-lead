@@ -9,12 +9,12 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Gefährdung oder Störung der Kraftstoffversorgung (Einsatz, Notstrom, kritische Mobilität) und der Wärmeversorgung unabhängig von der Ursache; Gasversorgung selbst B09"
 art_zuordnung: ["KRITIS-Ausfall", "Gasversorgungsengpass", "Stromausfall / Blackout", "Sonstiges"]
-art_hinweis: "„Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall; „Sonstiges“ nur begründet, wenn kein vorhandenes Dach passt"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall; „Sonstiges“ nur begründet, wenn kein vorhandenes Dach passt"
 anschluss: "B08, B09, B12, B17; C09, C13, C16, C17 nach konkretem Bezug"
 zweck: "Mangelprodukt, Wirkungsraum, Engpass der Versorgungskette und rechtzeitig wirksame Deckung kritischer Funktionen erfassen; Maßstab ist der Zeitpunkt bis zum Ausfall einer kritischen Funktion."
-version: "1.1.1"
+version: "1.2.0"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "20.10.2026 – BBK PiB 18, ErdölBevG § 12, EnSiG §§ 1, 3, 4, MinÖlAV § 14, WiSiG § 2, MinÖlBewV § 11; keine Prüfung organisationsspezifischer Melde- und Anforderungswege"
 naechste_pruefung_faellig: "31.03.2027"
@@ -29,7 +29,7 @@ bisherige_ids: ["baustein-n05"]
 
 **Befassungsanlässe:** Belegte Versorgungsunterbrechung oder drohender Nachschubabriss mit Schutzbezug · bedrohte Rettungs- oder kritische Notstromversorgung · Ausfall von Raffinerie, Tanklager, Transport, Tankstellenstrom oder -IT mit belegten Folgen · Nachfragespitze mit belegten Versorgungsfolgen · Ausfall der Wärmeversorgung · verteidigungsbezogene zivile Versorgungsfolgen (C17).
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegter Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei eingetretenem Stromausfall (eine bedrohte Nachbetankung ist keiner); „Sonstiges“ begründet, wenn kein vorhandenes Dach passt.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei eingetretenem Stromausfall (eine bedrohte Nachbetankung ist keiner); „Sonstiges“ begründet, wenn kein vorhandenes Dach passt.
 
 ### 2. Erfassung: Prüffragen
 
@@ -87,7 +87,7 @@ Nach der Dach-SOP in den vorhandenen Feldern:
 
 **Ansprechstellen (funktional):** Betreiber und Bedarfsträger (Mindestbetrieb, Reichweite, Wiederherstellung) · Lieferanten, Tanklager, Tankstellen, Transporteure (Produkt, Abgabe, Ankunft) · Wirtschafts- und Energieverwaltung von Bund und Land (Versorgungsmaßnahmen, Freigabe der Erdölreserve) · Gefahrenabwehr und Katastrophenschutz, Rettungsdienst und Gesundheitsbehörden bei akuter Gefährdung · Stelle der zivilen Verteidigung bei verteidigungsbezogenen Folgen (C17). Die Lastverteilung der BNetzA bei Strom und Gas ist keine Kraftstoffzuteilung. Melde- und Anforderungswege organisationsspezifisch hinterlegen, nicht aus einer Websuche übernehmen.
 
-**Fachgrundlagen** (Rechercheeinstiege; sie belegen keine aktuelle Anwendung oder Lieferung und gehen nur ins Quellenverzeichnis der Meldung, wenn eine Aussage darauf beruht):
+**Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
 - BBK: [Treibstoffversorgung bei Stromausfall](https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/PiB/PiB-18-treibstoffversorgung-stromausfall.pdf?__blob=publicationFile&v=14) (Praxis im Bevölkerungsschutz, Band 18); zur Notstromreserve [Nationale Reserve Blackout](https://www.bbk.bund.de/DE/Das-BBK/Zivile-Verteidigung/ZS-Notstrom/zs-notstrom.html) (Aggregate, keine Kraftstofflieferung)
 - [§ 12 ErdölBevG](https://www.gesetze-im-internet.de/erd_lbevg_2012/__12.html) (Freigabe der Vorräte)

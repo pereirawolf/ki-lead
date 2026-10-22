@@ -12,7 +12,7 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall"]
 art_hinweis: "„Sonstiges“ als Katalogdach (B17); „KRITIS-Ausfall“ nur bei belegtem Funktionsbezug; weitere Ursachen- und Folgenarten nur bei belegtem Bezug"
 anschluss: "B17; B14/B16 bei Sicherheits- bzw. Vorsatzbezug; B15 bei belegtem Cyberbezug; B07 nur bei zusätzlicher chemischer Gefahr; C09, C13, C14, C15, C16, C17 nach Wirkung"
 zweck: "Belegte radiologische Lageinformation in die eigene LEAD-Meldung übernehmen, szenarienspezifische Lücken erkennen und zivile Schutz- und Versorgungsfolgen darstellen – ohne eigene Dosismodellierung oder Schutzempfehlung."
-version: "1.2.1"
+version: "1.2.2"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -31,7 +31,7 @@ bisherige_ids: ["baustein-n01"]
 
 ### 2. Erfassung: Prüffragen
 
-**Einordnung nach Referenzszenario.** Die Tabelle dient der Recherche und Vollständigkeitsprüfung. Eine behördliche Zuordnung mit Quelle und Stand übernehmen; sonst die Zuordnung ausdrücklich als offen kennzeichnen, nicht selbst festlegen. Im Meldungstext immer „Referenzszenario S2 (ANoPl-Bund)“ schreiben, nicht „S2“ allein.
+**Einordnung nach Referenzszenario.** Die Tabelle dient der Recherche und Vollständigkeitsprüfung. Eine behördliche Zuordnung mit Quelle und Stand übernehmen; sonst die Zuordnung ausdrücklich als offen kennzeichnen, nicht selbst festlegen. Im Meldungstext immer „Referenzszenario S2 (ANoPl-Bund) laut Fachstelle“ schreiben, nicht „S2“ allein.
 
 | Referenzszenario (ANoPl-Bund) | Fallgruppe | Abgrenzung für die Befassung |
 |---|---|---|
@@ -89,7 +89,7 @@ Teil A und Kodierleitfaden gelten. Das Lagenradar beschreibt die Wirkung im Refe
 - **D5:** Fachlich prognostizierte Dauer bis zu einem benannten Ziel (z. B. Aufhebung einer Aufenthaltsempfehlung, Freigabe von Lebensmitteln); Ereignisende, Quellenbergung und Folgenbeseitigung unterscheiden.
 - **D6:** Belegte Kopplungen zu Gesundheit, Wasser, Lebensmitteln, Energie, Verkehr, Kommunikation oder Entsorgung; kein hoher Wert allein wegen „nuklear“.
 - **D7:** Entscheidungsrelevante Lücken zu Quelle, Messung, Prognose oder geltenden Maßnahmen; nicht die fachliche Komplexität.
-- **D8:** Beobachtete Änderung im Betrachtungszeitraum; erwartete Ausbreitung oder Halbwertszeit sind keine Dynamikstufe.
+- **D8:** Beobachtete Änderung im zurückliegenden Beobachtungszeitraum; erwartete Ausbreitung oder Halbwertszeit sind keine Dynamikstufe.
 
 **Offenlassen:** Nach Kodierleitfaden mit Grund, insbesondere D2 ohne belastbare Personenbasis, D5 ohne Ziel oder Prognose, D8 ohne vergleichbare Beobachtung. Eine einzelne unauffällige Messgröße ist kein radiologischer Nullbefund. Schwellen aus Notfallplänen nur wiedergeben, wenn die Fachbehörde sie angewandt hat.
 
@@ -108,7 +108,7 @@ Unter dem Katalogdach (regelmäßig B17 „Sonstiges“) in den vorhandenen Feld
 
 **Ansprechstellen (funktional):** Strahlenschutz- bzw. Atomaufsichtsbehörde · Stelle, die das Lagebild erstellt (radiologisches Lagezentrum des Bundes oder Land) · Katastrophenschutz- und Gefahrenabwehrbehörden · Gesundheits-, Lebensmittel- und Wasserbehörden nach Wirkung · Sicherheits- und Ermittlungsbehörden bei Vorsatzverdacht · Gewässer-, See- und Weltraumlage-Fachstellen nach Szenario. Kontakte und Alarmwege aus dem geltenden Notfallplan übernehmen, nicht aus einer Websuche; die Notfallpläne der Länder konkretisieren den Bundesrahmen (§ 100 StrlSchG).
 
-**Fachgrundlagen** (Rechercheeinstiege; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
+**Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
 - ANoPl-Bund: [Allgemeine Verwaltungsvorschrift zum Allgemeinen Notfallplan des Bundes vom 10.11.2023](https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf), insbesondere Rn. 7, Tabellen 3.3 und 3.4, Rn. 47–57, 78–83 und Anhang B; amtliche Originalstelle: Bekanntmachung BAnz AT 23.11.2023 B1 (Tabelle 3.3 auf S. 25, Anhang B.14 auf S. 216); der verlinkte PDF-Download war am 21./22.10.2026 nicht abrufbar (Quellenregister S031) und ist vor Verwendung zu prüfen
 - StrlSchG: [§ 5 Abs. 26 (Notfall)](https://www.gesetze-im-internet.de/strlschg/__5.html), [§ 100 (Notfallpläne der Länder)](https://www.gesetze-im-internet.de/strlschg/__100.html), [§ 106 (Radiologisches Lagezentrum des Bundes)](https://www.gesetze-im-internet.de/strlschg/__106.html), [§ 108 (Radiologisches Lagebild)](https://www.gesetze-im-internet.de/strlschg/__108.html), [§ 109 (Entscheidungen über Schutzmaßnahmen)](https://www.gesetze-im-internet.de/strlschg/__109.html), [§ 111 (Dosisabschätzung)](https://www.gesetze-im-internet.de/strlschg/__111.html), [§ 119 (nach einem Notfall bestehende Expositionssituation)](https://www.gesetze-im-internet.de/strlschg/__119.html)

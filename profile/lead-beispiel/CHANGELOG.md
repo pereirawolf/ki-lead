@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.24.0 – 22.10.2026
+
+Grundlage: Konsistenzprüfung KW 43 (Befunddatei `ki-lead-befund_konsistenz_2026-W43.json`, Befunde KP-2026-W43-01 bis -11), vom Herausgeber freigegeben.
+
+- **SOP-Sammelmappe 3.15.0:** Bausteine an bestehende Regeln angeglichen: D6 in C06, D8 in B08 und C01, Offenlassen in C03, Kopfzeile der Fachgrundlagen in C01 und C12, Typologietabelle C10, Zitierweise C15, Kopfangaben C07 und C11, „KRITIS-Ausfall“ mit der Schwelle von B12 in C12, C13 und C14. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.23.0 – 22.10.2026
 
 Grundlage: zwei unabhängig erstellte Vorschlagsdateien zur Sammelmappe 3.13.0 („KI-LEAD_SOP_PR-Vorschlaege_2026-10-22“, 19 Vorschläge; „sop-lead_pr-vorschlaege_2026-10-22“, 28 Vorschläge), gegeneinander geprüft und konsolidiert.

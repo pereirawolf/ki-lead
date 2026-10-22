@@ -37,7 +37,7 @@ describe("Anzeigetitel und Versions-Tags", () => {
       expect(`${a.kennung} ${a.name}`).not.toContain(s.version!);
       expect(a.name).not.toMatch(/SOP LEAD|Baustein LEAD/);
     }
-    expect(sopAnzeige(fach.find((s) => s.nummer === "B08")!)).toEqual({ kennung: "B08", name: "Stromausfall / Blackout", tag: "v2.1.1" });
+    expect(sopAnzeige(fach.find((s) => s.nummer === "B08")!)).toEqual({ kennung: "B08", name: "Stromausfall / Blackout", tag: "v2.1.2" });
   });
 
   it("Teil A trägt „gilt immer“, fehlende Version „ohne Version“; der Nachweis bleibt unverändert", async () => {
@@ -46,7 +46,7 @@ describe("Anzeigetitel und Versions-Tags", () => {
     expect(sopAnzeige(a)).toEqual({ name: "Teil A – Gemeinsame Regeln", tag: "gilt immer" });
     const b08 = fachSops(p!).find((s) => s.nummer === "B08")!;
     expect(sopAnzeige({ ...b08, version: undefined }).tag).toBe("ohne Version");
-    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.1.1");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.1.2");
   });
 
   it("Anzahl und Gruppenhinweis nennen die Inhaltsgerüste", async () => {
@@ -68,7 +68,7 @@ describe("Steckbrief und Lesetext", () => {
     const { profil: p } = await profil("lead-beispiel");
     const c11 = fachSops(p!).find((s) => s.nummer === "C11")!;
     const sb = Object.fromEntries(sopSteckbrief(c11).map((a) => [a.label, a.wert]));
-    expect(sb.Version).toBe("1.2.0");
+    expect(sb.Version).toBe("1.2.1");
     expect(sb.Bearbeitungsstand).toMatch(/^Inhaltsgerüst/);
     expect(sb.Ereignisart).toBe("KRITIS-Ausfall, Cyberangriff / IT-Sicherheitsvorfall");
     expect(sb["Frühere Kennung"]).toBe("N02");

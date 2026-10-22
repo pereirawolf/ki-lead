@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Stromausfall / Blackout (großflächiger oder langandauernder Netzausfall)"
 art_vorschlag: ["Stromausfall / Blackout"]
 zweck: "Reproduzierbare Erfassung großflächiger oder langandauernder Stromausfälle, ihrer Ersatzversorgung und ihrer zeitverzögerten Kaskadeneffekte."
-version: "2.1.1"
+version: "2.1.2"
 status: "Beispielfassung"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -38,7 +38,7 @@ bisherige_ids: ["sop-08"]
 | Blackout-Zustand (Abs. 4) | Mehr als 50 % der Last in der Regelzone ausgefallen oder mindestens drei Minuten Spannungslosigkeit in der Regelzone mit Aktivierung der Netzwiederaufbaupläne | Belegter Ausfall je Netzbereich (R1) bleibt die Grundlage für D1; der Systemzustand ersetzt keine Störungs- und Wiederaufbaumeldung. |
 | Netzwiederaufbau-Zustand (Abs. 5) | Übertragungsnetzbetreiber hat Maßnahmen seines Netzwiederaufbauplans begonnen | Wiederaufbau ≠ Wiederversorgung ≠ Folgenbeseitigung (R7, D5); Teilwiederversorgung je Netzbereich mit Stand angeben. |
 
-Die Systemzustände dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen; ein Zustandswechsel ist nur dann Dynamik (D8), wenn er im Betrachtungszeitraum beobachtet wurde.
+Die Systemzustände dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen; ein Zustandswechsel ist nur dann Dynamik (D8), wenn er im zurückliegenden Beobachtungszeitraum beobachtet wurde.
 
 **Gleichlautender Begriff „Kaskade“.** In Netzbetrieb und Netzkodizes bezeichnet „Kaskade“ die gestufte Weitergabe von Anpassungsmaßnahmen vom Übertragungs- an die Verteilnetzbetreiber; in dieser Mappe bezeichnet „Kaskade“ ohne Zusatz Folgewirkungen nach A.7.4 (A.10.1). In der Meldung die Bedeutung kenntlich machen.
 

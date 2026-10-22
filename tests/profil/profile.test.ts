@@ -35,7 +35,7 @@ describe("Beispielprofil LEAD", () => {
     expect(b08.art_vorschlag).toEqual(["Stromausfall / Blackout"]);
     expect(b08.alias).toEqual(["sop-08"]);
     expect(b08.bisherigeKennung).toBe("08");
-    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.1.1");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.1.2");
   });
 
   it("gliedert jede SOP und jeden Baustein nach demselben Schema", async () => {
@@ -67,7 +67,7 @@ describe("Beispielprofil LEAD", () => {
     const c11 = bausteine.find((s) => s.id === "c11")!;
     expect(c11.bisherigeKennung).toBe("N02");
     expect(c11.alias).toEqual(["baustein-n02"]);
-    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.0");
+    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.1");
     // N13 → C17, N03 → C16 (Register v2.1)
     expect(bausteine.find((s) => s.id === "c17")!.bisherigeKennung).toBe("N13");
     expect(bausteine.find((s) => s.id === "c16")!.bisherigeKennung).toBe("N03");

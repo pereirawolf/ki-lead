@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.14.0 | 22.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.15.0 | 22.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.2.2 | 21.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.13.0 | 21.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.3.3 | 20.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -854,7 +854,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Stromausfall / Blackout (großflächiger oder langandauernder Netzausfall)"
 art_vorschlag: ["Stromausfall / Blackout"]
 zweck: "Reproduzierbare Erfassung großflächiger oder langandauernder Stromausfälle, ihrer Ersatzversorgung und ihrer zeitverzögerten Kaskadeneffekte."
-version: "2.1.1"
+version: "2.1.2"
 status: "Beispielfassung"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -883,7 +883,7 @@ bisherige_ids: ["sop-08"]
 | Blackout-Zustand (Abs. 4) | Mehr als 50 % der Last in der Regelzone ausgefallen oder mindestens drei Minuten Spannungslosigkeit in der Regelzone mit Aktivierung der Netzwiederaufbaupläne | Belegter Ausfall je Netzbereich (R1) bleibt die Grundlage für D1; der Systemzustand ersetzt keine Störungs- und Wiederaufbaumeldung. |
 | Netzwiederaufbau-Zustand (Abs. 5) | Übertragungsnetzbetreiber hat Maßnahmen seines Netzwiederaufbauplans begonnen | Wiederaufbau ≠ Wiederversorgung ≠ Folgenbeseitigung (R7, D5); Teilwiederversorgung je Netzbereich mit Stand angeben. |
 
-Die Systemzustände dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen; ein Zustandswechsel ist nur dann Dynamik (D8), wenn er im Betrachtungszeitraum beobachtet wurde.
+Die Systemzustände dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennungen; ein Zustandswechsel ist nur dann Dynamik (D8), wenn er im zurückliegenden Beobachtungszeitraum beobachtet wurde.
 
 **Gleichlautender Begriff „Kaskade“.** In Netzbetrieb und Netzkodizes bezeichnet „Kaskade“ die gestufte Weitergabe von Anpassungsmaßnahmen vom Übertragungs- an die Verteilnetzbetreiber; in dieser Mappe bezeichnet „Kaskade“ ohne Zusatz Folgewirkungen nach A.7.4 (A.10.1). In der Meldung die Bedeutung kenntlich machen.
 
@@ -1663,7 +1663,7 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall"]
 art_hinweis: "„Sonstiges“ als Katalogdach (B17); „KRITIS-Ausfall“ nur bei belegtem Funktionsbezug; weitere Ursachen- und Folgenarten nur bei belegtem Bezug"
 anschluss: "B17; B14/B16 bei Sicherheits- bzw. Vorsatzbezug; B15 bei belegtem Cyberbezug; B07 nur bei zusätzlicher chemischer Gefahr; C09, C13, C14, C15, C16, C17 nach Wirkung"
 zweck: "Belegte radiologische Lageinformation in die eigene LEAD-Meldung übernehmen, szenarienspezifische Lücken erkennen und zivile Schutz- und Versorgungsfolgen darstellen – ohne eigene Dosismodellierung oder Schutzempfehlung."
-version: "1.2.1"
+version: "1.2.2"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -1682,7 +1682,7 @@ bisherige_ids: ["baustein-n01"]
 
 ### 2. Erfassung: Prüffragen
 
-**Einordnung nach Referenzszenario.** Die Tabelle dient der Recherche und Vollständigkeitsprüfung. Eine behördliche Zuordnung mit Quelle und Stand übernehmen; sonst die Zuordnung ausdrücklich als offen kennzeichnen, nicht selbst festlegen. Im Meldungstext immer „Referenzszenario S2 (ANoPl-Bund)“ schreiben, nicht „S2“ allein.
+**Einordnung nach Referenzszenario.** Die Tabelle dient der Recherche und Vollständigkeitsprüfung. Eine behördliche Zuordnung mit Quelle und Stand übernehmen; sonst die Zuordnung ausdrücklich als offen kennzeichnen, nicht selbst festlegen. Im Meldungstext immer „Referenzszenario S2 (ANoPl-Bund) laut Fachstelle“ schreiben, nicht „S2“ allein.
 
 | Referenzszenario (ANoPl-Bund) | Fallgruppe | Abgrenzung für die Befassung |
 |---|---|---|
@@ -1740,7 +1740,7 @@ Teil A und Kodierleitfaden gelten. Das Lagenradar beschreibt die Wirkung im Refe
 - **D5:** Fachlich prognostizierte Dauer bis zu einem benannten Ziel (z. B. Aufhebung einer Aufenthaltsempfehlung, Freigabe von Lebensmitteln); Ereignisende, Quellenbergung und Folgenbeseitigung unterscheiden.
 - **D6:** Belegte Kopplungen zu Gesundheit, Wasser, Lebensmitteln, Energie, Verkehr, Kommunikation oder Entsorgung; kein hoher Wert allein wegen „nuklear“.
 - **D7:** Entscheidungsrelevante Lücken zu Quelle, Messung, Prognose oder geltenden Maßnahmen; nicht die fachliche Komplexität.
-- **D8:** Beobachtete Änderung im Betrachtungszeitraum; erwartete Ausbreitung oder Halbwertszeit sind keine Dynamikstufe.
+- **D8:** Beobachtete Änderung im zurückliegenden Beobachtungszeitraum; erwartete Ausbreitung oder Halbwertszeit sind keine Dynamikstufe.
 
 **Offenlassen:** Nach Kodierleitfaden mit Grund, insbesondere D2 ohne belastbare Personenbasis, D5 ohne Ziel oder Prognose, D8 ohne vergleichbare Beobachtung. Eine einzelne unauffällige Messgröße ist kein radiologischer Nullbefund. Schwellen aus Notfallplänen nur wiedergeben, wenn die Fachbehörde sie angewandt hat.
 
@@ -1759,7 +1759,7 @@ Unter dem Katalogdach (regelmäßig B17 „Sonstiges“) in den vorhandenen Feld
 
 **Ansprechstellen (funktional):** Strahlenschutz- bzw. Atomaufsichtsbehörde · Stelle, die das Lagebild erstellt (radiologisches Lagezentrum des Bundes oder Land) · Katastrophenschutz- und Gefahrenabwehrbehörden · Gesundheits-, Lebensmittel- und Wasserbehörden nach Wirkung · Sicherheits- und Ermittlungsbehörden bei Vorsatzverdacht · Gewässer-, See- und Weltraumlage-Fachstellen nach Szenario. Kontakte und Alarmwege aus dem geltenden Notfallplan übernehmen, nicht aus einer Websuche; die Notfallpläne der Länder konkretisieren den Bundesrahmen (§ 100 StrlSchG).
 
-**Fachgrundlagen** (Rechercheeinstiege; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
+**Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
 - ANoPl-Bund: [Allgemeine Verwaltungsvorschrift zum Allgemeinen Notfallplan des Bundes vom 10.11.2023](https://www.bundesumweltministerium.de/fileadmin/Daten_BMU/Download_PDF/Gesetze/avv_anopi_bund_bf.pdf), insbesondere Rn. 7, Tabellen 3.3 und 3.4, Rn. 47–57, 78–83 und Anhang B; amtliche Originalstelle: Bekanntmachung BAnz AT 23.11.2023 B1 (Tabelle 3.3 auf S. 25, Anhang B.14 auf S. 216); der verlinkte PDF-Download war am 21./22.10.2026 nicht abrufbar (Quellenregister S031) und ist vor Verwendung zu prüfen
 - StrlSchG: [§ 5 Abs. 26 (Notfall)](https://www.gesetze-im-internet.de/strlschg/__5.html), [§ 100 (Notfallpläne der Länder)](https://www.gesetze-im-internet.de/strlschg/__100.html), [§ 106 (Radiologisches Lagezentrum des Bundes)](https://www.gesetze-im-internet.de/strlschg/__106.html), [§ 108 (Radiologisches Lagebild)](https://www.gesetze-im-internet.de/strlschg/__108.html), [§ 109 (Entscheidungen über Schutzmaßnahmen)](https://www.gesetze-im-internet.de/strlschg/__109.html), [§ 111 (Dosisabschätzung)](https://www.gesetze-im-internet.de/strlschg/__111.html), [§ 119 (nach einem Notfall bestehende Expositionssituation)](https://www.gesetze-im-internet.de/strlschg/__119.html)
@@ -1859,9 +1859,9 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
 art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
 anschluss: "B17, B08, B12; C11 bei Funk-, TK- oder Warnbezug; C13 bei Navigationsbezug im Verkehr; B14 oder B15 nur nach entsprechendem Befund zur Ursache"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N15"
@@ -1905,7 +1905,7 @@ bisherige_ids: ["baustein-n15"]
 
 **Beurteilung/Tendenz:** Nach konkreter gegenwärtiger Relevanz einschließlich fachlich begründetem Vorsorgebedarf und nutzbarem Ersatz; Fachwarnstufe, technische Wirkung und Bevölkerungsschutzrelevanz getrennt begründen.
 
-**Offenlassen:** Ist-Achsen ohne belegte Wirkung im Referenzraum (A.1 Nr. 1); D5 ohne benanntes Ziel und Prognose.
+**Offenlassen:** die einschlägigen Ist-Achsen ohne belegte Wirkung im Referenzraum (A.1 Nr. 1); D5 ohne benanntes Ziel und Prognose.
 
 ### 4. Darstellung
 
@@ -2077,9 +2077,9 @@ art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "B14, B17, C16; C09 bei Klinik- oder Pflegeverlegung, C13 bei kritischen Verkehrsfolgen, C02 bei Folgeschäden; B03 bei munitionsbelasteten Brandflächen"
 zweck: "Erfassung von Räumungs-, Verlegungs- und Versorgungsfolgen bei Kampfmittelfunden."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N17"
@@ -2121,7 +2121,7 @@ bisherige_ids: ["baustein-n17"]
 
 **Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt keine Schwereklasse fest.
 
-**Offenlassen:** D5 ohne Prognose; D6 ohne belegte Kopplung.
+**Offenlassen:** D5 ohne Prognose; D6 nur, wenn die KRITIS-Prüfung mangels Information nicht tragfähig ist – ergibt sie keine Kopplung, ist D6 = 0 (Kodierleitfaden D6).
 
 ### 4. Darstellung
 
@@ -2148,9 +2148,10 @@ bausteintyp: "Themenbausteingruppe unter bestehendem Dach (zwei Kurzprofile)"
 lesegruppe: "Gesundheit und medizinische Versorgung"
 lageart: "Auslandsausbruch mit begründetem Deutschlandbezug; lokale Infektionshäufung in Deutschland"
 art_zuordnung: ["Gesundheitliche Lage / Epidemie"]
-anschluss: "B11"
+art_hinweis: "„Gesundheitliche Lage / Epidemie“ für beide Kurzprofile"
+anschluss: "B11; C09 bei eigenständigen Versorgungsfolgen; C10 bei konkretem Arzneimittel- oder Materialengpass"
 zweck: "Ausführbare Recherchepfade für die in B11 bisher nur angekündigten Vertiefungen."
-version: "1.1.1"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2391,7 +2392,7 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht"
 anschluss: "B11, C09; B12 nach dem Funktionsdach (A.1 Nr. 2); C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
-version: "1.3.0"
+version: "1.3.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2414,7 +2415,7 @@ bisherige_ids: ["baustein-n12"]
 
 **Amtliche Engpassstufen (Arzneimittel).** Die Tabelle dient der Recherche und Vollständigkeitsprüfung (A.6 Fachgrundlagen, A.10.1); sie gilt für Humanarzneimittel nach dem Arzneimittelgesetz. Für Impfstoffe, Sera und Blutprodukte ist das PEI zuständig. Medizinische Gase sind nicht pauschal vom Arzneimittelrecht ausgenommen (das AMG nennt sie in § 47 Abs. 1 Nr. 2 Buchst. e); für ein als Arzneimittel eingeordnetes Produkt, etwa medizinischen Sauerstoff, gilt die Tabelle nach seinem belegten Produktstatus. Für Medizinprodukte und sonstiges Verbrauchsmaterial gelten andere Rechtsgrundlagen; die Tabelle wird darauf nicht übertragen. Produktstatus, zuständige Fachstelle und Engpassinformation belegen; ein ungeklärter Produktstatus bleibt Prüfbedarf. Eine Stufe ist ein Rechts- oder Verfahrensstatus mit Datum, kein Radarwert. Im Meldungstext immer mit Fachgrundlage und feststellender Stelle schreiben, z. B. „Versorgungsmangel (§ 79 Abs. 5 AMG) laut Bekanntmachung des BMG vom …“.
 
-| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Grundlage | Abgrenzung für die Befassung |
+| Stufe (Arzneimittelgesetz) | Feststellende Stelle und Voraussetzung | Abgrenzung für die Befassung |
 |---|---|---|
 | Gemeldeter Lieferengpass (§ 52b Abs. 3c AMG) | Pharmazeutischer Unternehmer meldet; BfArM veröffentlicht gemeldete Lieferengpässe sowie eine Liste versorgungsrelevanter und versorgungskritischer Wirkstoffe (nach Anhörung des Beirats nach Abs. 3b) | Meldung und Listeneintrag sind Betreiber- bzw. Registerangaben zum Produkt, kein Nachweis örtlicher Nichtverfügbarkeit oder ungedeckter Versorgung (R1, R2). Die Zahl der Einträge ist kein Schweregrad. |
 | Versorgungsrelevanter Lieferengpass mit Maßnahme der Bundesoberbehörde (§ 52b Abs. 3d AMG) | BfArM bzw. PEI kann nach Anhörung des Beirats Maßnahmen anordnen, auch Kontingentierung; bei versorgungskritischen Wirkstoffen zusätzlich Lagerhaltung | Angeordnete Maßnahme mit Fundstelle, Produkt, Geltung und Stand als Maßnahme (M) führen (R6); eine Anordnung belegt keine Versorgungslücke im Referenzraum. |
@@ -2487,9 +2488,9 @@ lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk, Warnmitteln oder amtlichen Informationsangeboten mit Schutzbezug"
 art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei belegtem Vorfall oder als Prüfhilfe zu B15 bei begründeter Vorsorgebefassung"
-anschluss: "B12, B15; Warnlage nach A.9.3 im Text"
+anschluss: "B12, B15"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
-version: "1.2.0"
+version: "1.2.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2552,12 +2553,12 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Gefährdung oder Störung der Kraftstoffversorgung (Einsatz, Notstrom, kritische Mobilität) und der Wärmeversorgung unabhängig von der Ursache; Gasversorgung selbst B09"
 art_zuordnung: ["KRITIS-Ausfall", "Gasversorgungsengpass", "Stromausfall / Blackout", "Sonstiges"]
-art_hinweis: "„Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall; „Sonstiges“ nur begründet, wenn kein vorhandenes Dach passt"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei tatsächlich eingetretenem Stromausfall; „Sonstiges“ nur begründet, wenn kein vorhandenes Dach passt"
 anschluss: "B08, B09, B12, B17; C09, C13, C16, C17 nach konkretem Bezug"
 zweck: "Mangelprodukt, Wirkungsraum, Engpass der Versorgungskette und rechtzeitig wirksame Deckung kritischer Funktionen erfassen; Maßstab ist der Zeitpunkt bis zum Ausfall einer kritischen Funktion."
-version: "1.1.1"
+version: "1.2.0"
 status: "Beispielfassung – vor Verwendung organisationsspezifisch konkretisieren und fachlich prüfen"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "20.10.2026 – BBK PiB 18, ErdölBevG § 12, EnSiG §§ 1, 3, 4, MinÖlAV § 14, WiSiG § 2, MinÖlBewV § 11; keine Prüfung organisationsspezifischer Melde- und Anforderungswege"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2572,7 +2573,7 @@ bisherige_ids: ["baustein-n05"]
 
 **Befassungsanlässe:** Belegte Versorgungsunterbrechung oder drohender Nachschubabriss mit Schutzbezug · bedrohte Rettungs- oder kritische Notstromversorgung · Ausfall von Raffinerie, Tanklager, Transport, Tankstellenstrom oder -IT mit belegten Folgen · Nachfragespitze mit belegten Versorgungsfolgen · Ausfall der Wärmeversorgung · verteidigungsbezogene zivile Versorgungsfolgen (C17).
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegter Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei eingetretenem Stromausfall (eine bedrohte Nachbetankung ist keiner); „Sonstiges“ begründet, wenn kein vorhandenes Dach passt.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung kritischer Dienstleistungen; „Gasversorgungsengpass“ nur bei Gasbezug; „Stromausfall / Blackout“ nur bei eingetretenem Stromausfall (eine bedrohte Nachbetankung ist keiner); „Sonstiges“ begründet, wenn kein vorhandenes Dach passt.
 
 ### 2. Erfassung: Prüffragen
 
@@ -2630,7 +2631,7 @@ Nach der Dach-SOP in den vorhandenen Feldern:
 
 **Ansprechstellen (funktional):** Betreiber und Bedarfsträger (Mindestbetrieb, Reichweite, Wiederherstellung) · Lieferanten, Tanklager, Tankstellen, Transporteure (Produkt, Abgabe, Ankunft) · Wirtschafts- und Energieverwaltung von Bund und Land (Versorgungsmaßnahmen, Freigabe der Erdölreserve) · Gefahrenabwehr und Katastrophenschutz, Rettungsdienst und Gesundheitsbehörden bei akuter Gefährdung · Stelle der zivilen Verteidigung bei verteidigungsbezogenen Folgen (C17). Die Lastverteilung der BNetzA bei Strom und Gas ist keine Kraftstoffzuteilung. Melde- und Anforderungswege organisationsspezifisch hinterlegen, nicht aus einer Websuche übernehmen.
 
-**Fachgrundlagen** (Rechercheeinstiege; sie belegen keine aktuelle Anwendung oder Lieferung und gehen nur ins Quellenverzeichnis der Meldung, wenn eine Aussage darauf beruht):
+**Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
 - BBK: [Treibstoffversorgung bei Stromausfall](https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/PiB/PiB-18-treibstoffversorgung-stromausfall.pdf?__blob=publicationFile&v=14) (Praxis im Bevölkerungsschutz, Band 18); zur Notstromreserve [Nationale Reserve Blackout](https://www.bbk.bund.de/DE/Das-BBK/Zivile-Verteidigung/ZS-Notstrom/zs-notstrom.html) (Aggregate, keine Kraftstofflieferung)
 - [§ 12 ErdölBevG](https://www.gesetze-im-internet.de/erd_lbevg_2012/__12.html) (Freigabe der Vorräte)
@@ -2656,7 +2657,7 @@ art_zuordnung: ["KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; sonst als Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; Ursache nach Dach-SOP (u. a. B01, B02, B03, B05, B06); C02 bei Bauwerksversagen, C04 bei Vulkanasche; C09/C10, C12, C14, C16, C17 nach Folge"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
-version: "1.1.1"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2667,11 +2668,11 @@ bisherige_ids: ["baustein-n06"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Tatsächlicher Ausfall oder deutliche Minderung einer für Schutz oder Versorgung notwendigen Personen- oder Güterleistung auf Straße, Schiene, Wasser oder im Luftverkehr sowie an Umschlag-, Lager- und Verteilknoten bis zum Bedarfspunkt; dazu abgeschnittene Räume. Auch fehlende Transportmittel, Personal, Abfertigung, Energie oder IT können die Leistung trotz intakter Strecke verhindern. Eine einzelne Verspätung oder Sperrung ist keine Versorgungskrise; Relevanz folgt aus konkreter Funktion, benötigter Menge und Qualität, Zeitkritikalität und nutzbarem Ersatz. Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit. Frühe Befassung nach A.1 Nr. 1 bei fachlich begründet drohendem Ausfall mit benennbarem Vorbereitungs- oder Abstimmungsbedarf; das belegt noch keinen eingetretenen KRITIS-Ausfall. Unter einer Ursachen-SOP wird C13 als Prüfhilfe verwendet, ohne die Ereignisart „KRITIS-Ausfall“ automatisch hinzuzufügen; eine eingetretene wesentliche Einschränkung kritischer Leistung über B12. Bauwerksversagen von Brücken C02; grenzüberschreitende Korridore, Häfen und Flughäfen mit Deutschlandbezug nach A.1 Nr. 6. Folgebausteine C09/C10, C12, C14 oder C16 nur bei entsprechendem Bedarfspfad, C17 bei konkretem zivilem Verteidigungsbezug.
+**Umfasst / grenzt ab von:** Tatsächlicher Ausfall oder deutliche Minderung einer für Schutz oder Versorgung notwendigen Personen- oder Güterleistung auf Straße, Schiene, Wasser oder im Luftverkehr sowie an Umschlag-, Lager- und Verteilknoten bis zum Bedarfspunkt; dazu abgeschnittene Räume. Auch fehlende Transportmittel, Personal, Abfertigung, Energie oder IT können die Leistung trotz intakter Strecke verhindern. Eine einzelne Verspätung oder Sperrung ist noch keine Versorgungslücke; Relevanz folgt aus konkreter Funktion, benötigter Menge und Qualität, Zeitkritikalität und nutzbarem Ersatz. Entfernungen und theoretische Routen ersetzen keine bestätigte Nutzbarkeit. Frühe Befassung nach A.1 Nr. 1 bei fachlich begründet drohendem Ausfall mit benennbarem Vorbereitungs- oder Abstimmungsbedarf; das belegt noch keinen eingetretenen KRITIS-Ausfall. Unter einer Ursachen-SOP wird C13 als Prüfhilfe verwendet, ohne die Ereignisart „KRITIS-Ausfall“ automatisch hinzuzufügen; eine eingetretene wesentliche Einschränkung kritischer Leistung über B12. Bauwerksversagen von Brücken C02; grenzüberschreitende Korridore, Häfen und Flughäfen mit Deutschlandbezug nach A.1 Nr. 6. Folgebausteine C09/C10, C12, C14 oder C16 nur bei entsprechendem Bedarfspfad, C17 bei konkretem zivilem Verteidigungsbezug.
 
 **Befassungsanlässe:** Bestätigter Ausfall oder deutliche Minderung kritischer Verkehrs- bzw. Logistikleistung · abgeschnittene Räume oder Störung unverzichtbarer Transportketten · fachlich begründet drohender Ausfall mit benennbarem Vorbereitungsbedarf.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; die Ursachenart nach belegtem Sachverhalt. Bei früher Befassung Prüfhilfe unter der Ursachen- bzw. Vorsorgebefassung, ohne einen eingetretenen KRITIS-Ausfall zu behaupten.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; die Ursachenart nach belegtem Sachverhalt. Bei früher Befassung Prüfhilfe unter der Ursachen- bzw. Vorsorgebefassung, ohne einen eingetretenen KRITIS-Ausfall zu behaupten.
 
 ### 2. Erfassung: Prüffragen
 
@@ -2727,10 +2728,10 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Tatsächliche oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung (Produktion, Lagerung und Kühlung, Transport, Verarbeitung, Abgabe)"
 art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
-art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.2.0"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2747,7 +2748,7 @@ bisherige_ids: ["baustein-n07"]
 
 **Befassungsanlässe:** Belegte oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung · Ausfall von Produktion, Lagerung, Kühlung, Verteilung, Zahlung oder Abgabe mit relevantem Versorgungsbezug, etwa bei länger andauerndem Stromausfall · ungedeckter besonderer Ernährungsbedarf in Einrichtungen oder Unterkünften.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
 
 ### 2. Erfassung: Prüffragen
 
@@ -2815,7 +2816,7 @@ art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Abwasser-, Sanitär- oder Entsorgungsfunktion (Sektor ohne eigene Dach-SOP, B12); „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B10, B12; B02 bei Hochwasser, B08 bei Stromausfall; C08 bei Tierkörperbeseitigung; C09 bei Gesundheits- und Pflegeeinrichtungen; C13 Transport; C16 Unterkünfte"
 zweck: "Erfassung von Entwässerungs-, Sanitär- und hygienisch relevanten Entsorgungsfolgen."
-version: "1.1.1"
+version: "1.1.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
 stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -2826,7 +2827,7 @@ bisherige_ids: ["baustein-n08"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Drei fachliche Prüfpfade: (a) Abwasserableitung, -transport und -behandlung; (b) tatsächlich nutzbare Sanitär- und Hygieneleistung für Menschen und Einrichtungen; (c) kritische Sammlung, sichere Zwischenhaltung, Abfuhr und Behandlung von Abfällen einschließlich Tierkörperbeseitigung (C08). Eine Funktion kann ausfallen, während andere weiterlaufen: Intakte Trinkwasserabgabe belegt keine funktionierende Toilette, eine laufende Kläranlage keine örtliche Entwässerung, eine verschobene Müllabfuhr keine Gesundheitsgefahr. Relevant sind belegte Schutz- oder Versorgungsfolgen oder ein fachlich begründet drohender Ausfall mit konkretem Vorbereitungs- oder Abstimmungsbedarf (A.1 Nr. 1); nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination, Exposition und Gesundheitsrisiko nur nach zuständiger Fachbewertung und mit Aussagegrad; keine eigene hygienische, wasser- oder abfallrechtliche Freigabe. Abwassermonitoring als Surveillance-Instrument gehört zu B11 (R6), nicht hierher. Trinkwasser B10, Hochwasser B02, Stromausfall B08, medizinisch-pflegerische Folgen C09, Unterkunft C16, Transport C13.
+**Umfasst / grenzt ab von:** Drei fachliche Prüfpfade: (a) Abwasserableitung, -transport und -behandlung; (b) tatsächlich nutzbare Sanitär- und Hygieneleistung für Menschen und Einrichtungen; (c) kritische Sammlung, sichere Zwischenhaltung, Abfuhr und Behandlung von Abfällen einschließlich Tierkörperbeseitigung (C08). Eine Funktion kann ausfallen, während andere weiterlaufen: Intakte Trinkwasserabgabe belegt keine funktionierende Toilette, eine laufende Kläranlage keine örtliche Entwässerung, eine verschobene Müllabfuhr keine Gesundheitsgefahr. Relevant sind belegte Schutz- oder Versorgungsfolgen oder ein fachlich begründet drohender Ausfall mit konkretem Vorbereitungs- oder Abstimmungsbedarf (A.1 Nr. 1); nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination, Exposition und Gesundheitsrisiko nur nach zuständiger Fachbewertung und mit Aussagegrad; keine eigene hygienische, wasser- oder abfallrechtliche Freigabe. Abwassermonitoring als Surveillance-Instrument gehört zu B11/R6, nicht hierher. Trinkwasser B10, Hochwasser B02, Stromausfall B08, medizinisch-pflegerische Folgen C09, Unterkunft C16, Transport C13.
 
 **Befassungsanlässe:** Ausfall von Abwasserableitung, -transport oder -behandlung mit Gesundheits- bzw. Versorgungsfolgen · nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen · kritischer Entsorgungsrückstau · fachlich begründet drohender Ausfall mit konkretem Vorbereitungsbedarf.
 
