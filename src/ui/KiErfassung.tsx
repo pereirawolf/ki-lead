@@ -28,10 +28,10 @@ import {
   type Material,
   type KiUebergabe,
 } from "../pipeline/material";
-import { stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { rechercheNachweis, stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
-import { zoneOder } from "../kern/zeit";
+import { gueltigerZeitpunkt, zoneOder } from "../kern/zeit";
 
 interface Props {
   profil: Profil;
@@ -56,9 +56,9 @@ const PHASEN: { id: Phase; titel: string }[] = [
   { id: "ergebnis", titel: "Prüfung und Übergabe" },
 ];
 
-function heute(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+/** Heutiger Tag in der Zeitzone des Profils (wie in der Pipeline, nicht in der des Geräts) */
+function heute(zone: string | undefined): string {
+  return jetztLokal(zoneOder(zone), new Date()).slice(0, 10);
 }
 
 function dauer(ms: number): string {
@@ -99,7 +99,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
   const [urlText, setUrlText] = useState("");
-  const [stichtag, setStichtag] = useState(heute());
+  const [stichtag, setStichtag] = useState(() => heute(profil.manifest.variablen?.zeitzone));
+  /** Vorbelegter Stichtag: bleibt er unverändert, liest S1 den heutigen Tag beim Start neu (Seite über Mitternacht offen) */
+  const vorbelegterStichtag = useRef(stichtag);
   const [prueffrage, setPrueffrage] = useState("");
   const [material, setMaterial] = useState<Material[]>([]);
   const [dateiFehler, setDateiFehler] = useState<string[]>([]);
@@ -224,16 +226,21 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
   const s1Starten = async () => {
     setFehler(null);
+    const tag = !uhrzeit && stichtag === vorbelegterStichtag.current ? heute(profil.manifest.variablen?.zeitzone) : stichtag;
+    if (tag !== stichtag) {
+      vorbelegterStichtag.current = tag;
+      setStichtag(tag);
+    }
     const l = neuerLauf(
       profil,
       {
         sachverhalt,
         stichworte,
         urls: urls.gueltig,
-        stichtag,
+        stichtag: tag,
         prueffrage,
         websuche,
-        ...(uhrzeit && stichtag ? { meldezeitpunkt: `${stichtag}T${uhrzeit}` } : {}),
+        ...(uhrzeit && tag ? { meldezeitpunkt: `${tag}T${uhrzeit}` } : {}),
       },
       material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash, ...(m.rolleGewaehlt ? { rolleGewaehlt: true } : {}) })),
     );
@@ -329,7 +336,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setSachverhalt("");
     setStichworte("");
     setUrlText("");
-    setStichtag(heute());
+    const tag = heute(profil.manifest.variablen?.zeitzone);
+    vorbelegterStichtag.current = tag;
+    setStichtag(tag);
     setPrueffrage("");
     setMaterial([]);
     setDateiFehler([]);
@@ -364,6 +373,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
   const eingaenge = material.filter((m) => m.art === "eingang");
   const vormeldungsStand = vormeldungStand(material, profil);
+  const t0Ungueltig = !!vorschlag?.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
@@ -576,8 +586,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                     )}
                   </div>
                   <span className="hinweis">
-                    Uhrzeit optional; ohne Uhrzeit schlägt die KI t0 vor (bei Fortschreibung auf heute die aktuelle Zeit, bei Übungs- oder Altlagen kurz nach
-                    dem jüngsten Datenstand).
+                    Uhrzeit optional; ohne Uhrzeit bestimmt die App t0 aus dem Vorschlag der KI (bei Fortschreibung auf heute die aktuelle Zeit, bei Übungs-
+                    oder Altlagen kurz nach dem jüngsten Datenstand).
                   </span>
                 </div>
                 <label className="feld">
@@ -715,6 +725,11 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       }
                     />
                   </div>
+                  {t0Ungueltig && (
+                    <span className="fehlertext" id="t0-ungueltig" role="alert">
+                      Bitte Datum und Uhrzeit des Meldezeitpunkts vollständig angeben; S2 startet erst mit einem gültigen t0.
+                    </span>
+                  )}
                   <span className="hinweis">
                     Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.
                     {vormeldungsStand && ` Stand der Vormeldung: ${zeitAnzeige(vormeldungsStand)} (Ausgangspunkt, nicht t0).`}
@@ -886,7 +901,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </button>
                   {lauf && protokollKnopf(lauf, "Laufprotokoll exportieren (S1)")}
                 </div>
-                <button type="button" className="knopf primaer" onClick={s2Starten} disabled={!vorschlag.sachverhalte.length}>
+                <button
+                  type="button"
+                  className="knopf primaer"
+                  onClick={s2Starten}
+                  disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
+                  aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
+                >
                   {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
                 </button>
               </div>
@@ -968,6 +989,19 @@ function zeitAnzeige(z: string): string {
   return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}, ${z.slice(11, 16)} Uhr`;
 }
 
+/** Tatsächliche Recherche in S2 nach dem Lauf (gleiche Zählung wie die Befunde) */
+function RechercheZeile({ n }: { n: { websuchen: number; abrufe: number; zaehlerVollstaendig: boolean } }) {
+  const nichts = n.websuchen === 0 && n.abrufe === 0;
+  return (
+    <p className="hinweis">
+      Recherche in S2:{" "}
+      {nichts && !n.zaehlerVollstaendig
+        ? "nicht nachweisbar."
+        : `${n.websuchen} Websuche${n.websuchen === 1 ? "" : "n"}, ${n.abrufe} Seitenabruf${n.abrufe === 1 ? "" : "e"}.`}
+    </p>
+  );
+}
+
 /** Recherchemodus von S2 vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline) */
 function rechercheZeile(websuche: boolean, e: Einstellungen): string {
   if (!websuche) return "S2 arbeitet ohne Websuche nur mit dem Material.";
@@ -1014,14 +1048,7 @@ function Ergebnis({
         </div>
       )}
       {s2?.notiz && <p className="fehlertext">{s2.notiz}</p>}
-      {s2 && lauf.auftrag.websuche !== false && (
-        <p className="hinweis">
-          Recherche in S2:{" "}
-          {s2.nutzung && typeof s2.nutzung.websuchen === "number" && typeof s2.nutzung.abrufe === "number"
-            ? `${s2.nutzung.websuchen} Websuche${s2.nutzung.websuchen === 1 ? "" : "n"}, ${s2.nutzung.abrufe} Seitenabruf${s2.nutzung.abrufe === 1 ? "" : "e"}.`
-            : "nicht nachweisbar."}
-        </p>
-      )}
+      {e && s2 && lauf.auftrag.websuche !== false && <RechercheZeile n={rechercheNachweis({ nutzung: s2.nutzung, suchen: e.suchen })} />}
 
       {e?.kurzantwort && (
         <div className="ki-abschnitt">

@@ -90,6 +90,15 @@ describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
     expect(v.appHinweise).toBeUndefined();
   });
 
+  it("Verdichtung: ein t0 in der Zukunft wird auf die aktuelle Zeit gesetzt, wenn der Eingang davor liegt (0.4.28)", async () => {
+    const eingaenge = await eingaengeLesen();
+    const att = skriptAnbieter([llmAntwort(JSON.stringify({ ...s1Vorschlag(), meldezeitpunkt: "2026-10-14T23:00" }))]);
+    const { k } = await pipelineKontext(att, eingaenge, { jetzt: "2026-10-14T12:00:00+02:00" });
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T12:00");
+    expect(v.appHinweise![0]).toContain("lag in der Zukunft");
+  });
+
   it("Verdichtung: ein im Auftrag vorgegebener t0 geht der Absicherung vor", async () => {
     const eingaenge = await eingaengeLesen();
     const att = skriptAnbieter([llmAntwort(JSON.stringify({ ...s1Vorschlag(), meldezeitpunkt: "2026-10-14T12:00" }))]);

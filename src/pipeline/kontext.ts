@@ -239,6 +239,8 @@ export interface Steuerung {
   recherche: RechercheModus;
   websucheMax: number;
   abrufMax: number;
+  /** Kennsatz für Änderungen gegenüber der Vormeldung aus der Darstellungsdatei des Profils */
+  kennsatzAenderung?: string;
 }
 
 const zeitAnzeige = (z: string) => z.replace("T", " ");
@@ -272,7 +274,7 @@ export function steuerungsBlock(s: Steuerung): string {
     z.push(`- Recherche: erlaubt (${werkzeugText(s.websucheMax, s.abrufMax)}).`);
     if (s.vormeldung)
       z.push(
-        "- Prüfe gezielt die Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung an den maßgeblichen Quellen und schreibe die Indikatoren nach A.8.1 fort. Fristen führst du nach Teil A (Fristgrundlage) fort oder berichtigst sie begründet; die Änderung nennt der Kennsatz „Änderung zur Vormeldung:“.",
+        `- Prüfe gezielt die Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung an den maßgeblichen Quellen und schreibe die Indikatoren nach A.8.1 fort. Fristen führst du nach Teil A (Fristgrundlage) fort oder berichtigst sie begründet; die Änderung nennt der Kennsatz „${s.kennsatzAenderung || "Änderung zur Vormeldung:"}“.`,
       );
   } else if (s.recherche === "keine-werkzeuge")
     z.push(

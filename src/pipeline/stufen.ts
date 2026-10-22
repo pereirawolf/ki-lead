@@ -234,7 +234,14 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const appHinweise: string[] = [];
   const jetzt = jetztLokal(k.profil.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
   const heute = jetzt.slice(0, 10);
-  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(k.lauf.auftrag.stichtag || "") ? k.lauf.auftrag.stichtag : heute;
+  // Stichtag einmal festlegen und für Regeln und Ergebnis gleich verwenden: Auftrag vor S1, sonst S1, sonst heute
+  const tagGueltig = (x: string | undefined) => !!x && gueltigerZeitpunkt(`${x}T00:00`);
+  const kiStichtag = tagGueltig(v.stichtag) ? v.stichtag : "";
+  const stichtag = tagGueltig(k.lauf.auftrag.stichtag) ? k.lauf.auftrag.stichtag : kiStichtag || heute;
+  if (kiStichtag && kiStichtag !== stichtag)
+    appHinweise.push(
+      `S1 schlug den Stichtag ${tagText(kiStichtag)} vor; maßgeblich ist der Stichtag aus dem Auftrag (${tagText(stichtag)}). Bei Übung oder Rückblick Stichtag und t0 hier anpassen.`,
+    );
   const eingang = juengsterEingang(k.material);
   const roh = String(v.meldezeitpunkt || "").slice(0, 16);
   const kiT0 = gueltigerZeitpunkt(roh) ? roh : "";
@@ -251,6 +258,12 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
         `Meldezeitpunkt t0 auf den jüngsten Eingang gesetzt (${zeitText(eingang)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
           kiT0 < eingang ? "vor dem jüngsten Eingang" : `mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`
         }. Soll die Meldung einen späteren Stand abbilden, gib t0 hier oder im Auftrag vor.`,
+      );
+    } else if (kiT0 && kiT0 > jetzt && eingang <= jetzt) {
+      // Nicht in der Zukunft; liegt schon der jüngste Eingang nach der aktuellen Zeit, bleibt es bei A.7
+      t0 = jetzt;
+      appHinweise.push(
+        `Meldezeitpunkt t0 auf den aktuellen Zeitpunkt gesetzt (${zeitText(jetzt)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag in der Zukunft.`,
       );
     } else t0 = kiT0 || eingang;
     if (hatVormeldung(k.material) && stichtag === heute && t0.slice(0, 10) < heute)
@@ -302,7 +315,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const kiFrage = String(v.prueffrage || "").trim();
   return {
     gegenstand: String(v.gegenstand || ""),
-    stichtag: /^\d{4}-\d{2}-\d{2}$/.test(v.stichtag || "") ? v.stichtag : k.lauf.auftrag.stichtag,
+    stichtag,
     meldezeitpunkt: t0,
     referenzbezug: String(v.referenzbezug || ""),
     horizont: String(v.horizont || ""),
@@ -555,6 +568,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   ];
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
   if (vermerke) systemS2.push({ text: vermerke });
+  // Die Vervollständigung (S3) recherchiert nicht und erhält deshalb den Steuerungsblock nicht
+  const systemOhneSteuerung = [...systemS2];
   // Zuletzt, damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   systemS2.push({
     text: steuerungsBlock({
@@ -568,6 +583,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       recherche: modus,
       websucheMax: e.websucheMax,
       abrufMax: e.abrufMax,
+      kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
     }),
   });
   const a = await aufrufen(k, verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf", {
@@ -596,9 +612,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       aufwand: "low",
       maxTokens: e.maxTokensErfassung,
       system: [
-        ...systemS2,
+        ...systemOhneSteuerung,
         {
-          text: "## Vervollständigung (von der App)\n\nDein vorheriger Entwurf wurde an der Längengrenze abgeschnitten. Gib jetzt ausschließlich die vollständige Meldung als einen JSON-Codeblock aus, ohne Kurzantwort. Übernimm die bereits geschriebenen Inhalte, ergänze die fehlenden Teile nach denselben Regeln und nur aus dem Material. Recherchiere nicht neu und denke knapp.",
+          text: `## Vervollständigung (von der App)\n\nDein vorheriger Entwurf wurde an der Längengrenze abgeschnitten. Gib jetzt ausschließlich die vollständige Meldung als einen JSON-Codeblock aus, ohne Kurzantwort. Übernimm die bereits geschriebenen Inhalte, ergänze die fehlenden Teile nach denselben Regeln und nur aus dem Material. Recherchiere nicht neu und denke knapp. Meldezeitpunkt t0: ${t0.replace("T", " ")}; Bearbeitungszeitpunkt: ${jetztS2.replace("T", " ")}.`,
         },
       ],
       nachrichten: [
@@ -712,6 +728,25 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
 }
 
 /**
+ * Websuchen und Seitenabrufe von S2: Zähler des Anbieters und dokumentierte Werkzeugblöcke, der höhere Wert gilt.
+ * zaehlerVollstaendig ist false, wenn der Anbieter keine Zähler geliefert hat (z. B. ältere Laufprotokolle).
+ */
+export function rechercheNachweis(nachweis: { nutzung?: { websuchen?: unknown; abrufe?: unknown }; suchen?: unknown[]; abrufe?: unknown[] }): {
+  websuchen: number;
+  abrufe: number;
+  zaehlerVollstaendig: boolean;
+} {
+  const zahl = (x: unknown): number | null => (typeof x === "number" && Number.isFinite(x) ? x : null);
+  const ws = zahl(nachweis.nutzung?.websuchen);
+  const ab = zahl(nachweis.nutzung?.abrufe);
+  return {
+    websuchen: Math.max(ws ?? 0, nachweis.suchen?.length || 0),
+    abrufe: Math.max(ab ?? 0, nachweis.abrufe?.length || 0),
+    zaehlerVollstaendig: ws !== null && ab !== null,
+  };
+}
+
+/**
  * Befunde zur Recherche aus Auftrag, Materialrolle und tatsächlicher Werkzeugnutzung von S2 (nicht S3: Vervollständigung
  * und Reparatur recherchieren nicht). Kein automatischer Folgeaufruf; die Befunde machen die Grenze sichtbar.
  */
@@ -720,7 +755,7 @@ export function rechercheBefunde(
   vormeldung: boolean,
   nachweis: { nutzung?: { websuchen?: unknown; abrufe?: unknown }; suchen?: unknown[]; abrufe?: unknown[]; abrufFehler?: unknown[] },
 ): Befund[] {
-  const { nutzung, abrufFehler } = nachweis;
+  const { abrufFehler } = nachweis;
   if (modus === "keine-werkzeuge")
     return [
       {
@@ -730,8 +765,9 @@ export function rechercheBefunde(
       },
     ];
   if (modus !== "erlaubt" || !vormeldung) return [];
-  const zahl = (x: unknown) => typeof x === "number" && Number.isFinite(x);
-  if (!nutzung || !zahl(nutzung.websuchen) || !zahl(nutzung.abrufe))
+  const n = rechercheNachweis(nachweis);
+  if (n.websuchen > 0 || n.abrufe - (abrufFehler?.length || 0) > 0) return [];
+  if (!n.zaehlerVollstaendig)
     return [
       {
         stufe: "hinweis",
@@ -739,11 +775,7 @@ export function rechercheBefunde(
         text: "Ob in diesem Lauf recherchiert wurde, ist nicht nachweisbar (keine Nutzungsdaten des Anbieters). Bitte prüfen, ob die Fortschreibung auf aktuellen Quellen beruht.",
       },
     ];
-  // Zähler des Anbieters und dokumentierte Werkzeugblöcke: der höhere Wert gilt
-  const websuchen = Math.max(nutzung.websuchen as number, nachweis.suchen?.length || 0);
-  const abrufe = Math.max(nutzung.abrufe as number, nachweis.abrufe?.length || 0);
   const fehler = abrufFehler?.length || 0;
-  if (websuchen > 0 || abrufe - fehler > 0) return [];
   return [
     {
       stufe: "warnung",

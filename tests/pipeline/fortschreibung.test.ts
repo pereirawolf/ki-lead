@@ -142,6 +142,18 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(k.material.filter((m) => m.art === "eingang")).toHaveLength(6);
   });
 
+  it("der Stichtag des Auftrags geht dem Vorschlag aus S1 vor; die Abweichung wird genannt", async () => {
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung({ stichtag: "2026-10-21" })), meldungsAntwort(entwurf())]);
+    const v = await stufe1(k);
+    expect(v.stichtag).toBe("2026-10-22");
+    expect(v.meldezeitpunkt).toBe("2026-10-22T06:06");
+    expect(v.appHinweise!.some((h) => h.includes("S1 schlug den Stichtag 21.10.2026 vor; maßgeblich ist der Stichtag aus dem Auftrag (22.10.2026)"))).toBe(
+      true,
+    );
+    await stufe2und3(k, v);
+    expect(att.anfragen[1].system.at(-1)!.text).toContain("- Stichtag: 2026-10-22");
+  });
+
   it("Stichtag in der Zukunft: t0 nicht nach der aktuellen Zeit, mit Hinweis zum Stichtag", async () => {
     const { k } = await fortschreibung([llmAntwort(s1Fortschreibung({ stichtag: "2026-10-23", meldezeitpunkt: "2026-10-23T08:00" }))], {
       stichtag: "2026-10-23",
@@ -208,6 +220,8 @@ describe("Recherchemodus aus dem Auftrag und Befunde zur Aktualisierung", () => 
 
   it("dokumentierte Suchen zählen auch, wenn der Zähler des Anbieters fehlt oder 0 ist", () => {
     expect(rechercheBefunde("erlaubt", true, { nutzung: { websuchen: 0, abrufe: 0 }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
+    expect(rechercheBefunde("erlaubt", true, { nutzung: { websuchen: undefined, abrufe: undefined }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
+    expect(rechercheBefunde("erlaubt", true, { suchen: [], abrufe: ["https://beispiel.invalid/a"] })).toEqual([]);
     expect(rechercheBefunde("erlaubt", false, { nutzung: { websuchen: 0, abrufe: 0 } })).toEqual([]);
     expect(rechercheBefunde("nur-material", true, { nutzung: { websuchen: 0, abrufe: 0 } })).toEqual([]);
   });
@@ -222,12 +236,31 @@ describe("Zeitvertrag vor S2", () => {
   });
 
   it("Tageswechsel zwischen S1 und S2: Bearbeitungszeit folgt der Uhr, t0 bleibt", async () => {
-    const att = skriptAnbieter([meldungsAntwort(entwurf())]);
-    const { k } = await pipelineKontext(att, [await vormeldung()], { jetzt: "2026-10-23T00:02:00+02:00", auftrag: { stichtag: "2026-10-22" } });
-    const r = await stufe2und3(k, { ...bestaetigterVorschlag(), stichtag: "2026-10-22", meldezeitpunkt: "2026-10-22T23:59" });
-    expect(att.anfragen[0].system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-23T00:02**");
-    expect(att.anfragen[0].system.at(-1)!.text).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-22 23:59");
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(entwurf())]);
+    k.jetzt = () => new Date("2026-10-22T23:59:00+02:00");
+    const v = await stufe1(k);
+    expect(v.meldezeitpunkt).toBe("2026-10-22T23:59");
+    zuS2(k, "2026-10-23T00:02:00+02:00");
+    const r = await stufe2und3(k, v);
+    expect(att.anfragen[1].system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-23T00:02**");
+    expect(att.anfragen[1].system.at(-1)!.text).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-22 23:59");
     expect(r.meldung!.meldezeitpunkt).toBe("2026-10-22T23:59");
+  });
+
+  it("die Vervollständigung (S3) erhält den Steuerungsblock nicht, wohl aber t0 und Bearbeitungszeit", async () => {
+    const { att, k } = await fortschreibung([
+      llmAntwort(s1Fortschreibung()),
+      llmAntwort('Kurz.\n```json\n{"schema": ', { stopGrund: "max_tokens" }),
+      meldungsAntwort(entwurf()),
+    ]);
+    const v = await stufe1(k);
+    zuS2(k);
+    await stufe2und3(k, v);
+    const s3 = att.anfragen[2];
+    expect(s3.werkzeuge).toBeUndefined();
+    expect(s3.system.some((b) => b.text.includes("Steuerung durch die App"))).toBe(false);
+    expect(s3.system.at(-1)!.text).toContain("Recherchiere nicht neu");
+    expect(s3.system.at(-1)!.text).toContain("Meldezeitpunkt t0: 2026-10-22 06:06; Bearbeitungszeitpunkt: 2026-10-22 06:07.");
   });
 });
 

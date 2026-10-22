@@ -6,7 +6,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profil } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
-import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
+import { aushaengen, bisWahr, eingeben, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 
@@ -65,6 +65,14 @@ describe("Fortschreibung in der KI-Erfassung", () => {
     await bisWahr(() => knopf("Bestätigen und recherchieren (S2)") !== undefined);
     expect(seitentext()).toContain("Stand der Vormeldung: 21.10.2026, 19:40 Uhr (Ausgangspunkt, nicht t0).");
     expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
+    // Unvollständiges t0 sperrt S2 mit sichtbarer Begründung, statt in einen Fehlerlauf zu führen
+    const uhr = [...document.querySelectorAll<HTMLInputElement>('input[aria-label="Uhrzeit t0"]')].at(-1)!;
+    const vorher = uhr.value;
+    await eingeben(uhr, "");
+    expect(knopf("Bestätigen und recherchieren (S2)")!.disabled).toBe(true);
+    expect(seitentext()).toContain("S2 startet erst mit einem gültigen t0");
+    await eingeben(uhr, vorher);
+    expect(knopf("Bestätigen und recherchieren (S2)")!.disabled).toBe(false);
     await klick(knopf("Bestätigen und recherchieren (S2)"));
 
     await bisWahr(() => expect(seitentext()).toContain("Recherche in S2: 0 Websuchen, 0 Seitenabrufe."));
