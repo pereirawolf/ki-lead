@@ -70,7 +70,7 @@ export function pwaStarten(): void {
   });
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js", { scope: "./" })
+      .register("./sw.js", { scope: "./", updateViaCache: "none" })
       .then((reg) => {
         beobachteWartenden(reg);
         // Bei langer Nutzung ohne Neustart stündlich nach einer neuen Fassung sehen

@@ -252,6 +252,12 @@ a {
   color: var(--tinte-leise);
 }
 
+.startfehler {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
 .pwa-hinweise .hinweisband {
   color: var(--tinte);
   background: var(--amt-zart);
