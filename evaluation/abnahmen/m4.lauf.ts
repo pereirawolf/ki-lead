@@ -2,6 +2,10 @@
 // KI-Aufrufen über dieselben Funktionen wie die App. Läuft nur auf ausdrücklichen Aufruf:
 //
 //   KI_LEAD_ANTHROPIC_KEY=… KI_LEAD_LAEUFE=3 npx vitest run --config evaluation/abnahmen/vitest.config.ts
+//   KI_LEAD_OPENAI_KEY=… KI_LEAD_ANBIETER=openai KI_LEAD_LAEUFE=3 npx vitest run --config evaluation/abnahmen/vitest.config.ts
+//
+// Mit KI_LEAD_ANBIETER=openai gelten die OpenAI-Gegenstücke der Vorgaben: S1 gpt-6-luna, S2 gpt-6-astra,
+// Reparatur gpt-6.1-sol (Aufwand wie bei Anthropic); einzelne Modelle über KI_LEAD_MODELL_S1, _S2, _REPARATUR.
 //
 // Ohne Schlüssel und mit KI_LEAD_ATTRAPPE=1 läuft das Skript mit einem simulierten Anbieter (Trockenlauf, keine Kosten).
 // Abweichung von der App: Die S1-Bestätigung wird automatisch erteilt (technische Abnahme, siehe Plan).
@@ -16,8 +20,8 @@ import { migriere } from "../../src/kern/migration";
 import { pruefeGegenSchema } from "../../src/kern/validierung";
 import type { Meldung } from "../../src/kern/typen";
 import { ladeProfil, sha256 } from "../../src/profil/laden";
-import { STANDARD, modellFuer } from "../../src/pipeline/einstellungen";
-import { neuerLauf, ohneBase64, type Lauf } from "../../src/pipeline/lauf";
+import { STANDARD, modellFuer, type Einstellungen } from "../../src/pipeline/einstellungen";
+import { APP_KENNUNG, neuerLauf, ohneBase64, type Lauf } from "../../src/pipeline/lauf";
 import { dateiLesen, istVerdichtung, type Material } from "../../src/pipeline/material";
 import { stufe1, stufe2und3, type Kontext } from "../../src/pipeline/stufen";
 import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus } from "../../src/pipeline/vergleich";
@@ -29,8 +33,20 @@ const ILKA = "profile/lead-beispiel/beispiele/orkantief-ilka";
 const REFERENZ = "LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
 
-const SCHLUESSEL = process.env.KI_LEAD_ANTHROPIC_KEY || "";
-const ATTRAPPE = !SCHLUESSEL && process.env.KI_LEAD_ATTRAPPE === "1";
+const ANBIETER = process.env.KI_LEAD_ANBIETER === "openai" ? "openai" : "anthropic";
+const SCHLUESSEL = { anthropic: process.env.KI_LEAD_ANTHROPIC_KEY || "", openai: process.env.KI_LEAD_OPENAI_KEY || "" };
+const ATTRAPPE = !SCHLUESSEL[ANBIETER] && process.env.KI_LEAD_ATTRAPPE === "1";
+const ECHT = !!SCHLUESSEL[ANBIETER];
+
+/** Einstellungen des Laufs: App-Vorgaben; bei OpenAI die Gegenstücke der Modellvorgaben (klein, groß, mittel). */
+function einstellungen(): Einstellungen {
+  if (ANBIETER !== "openai") return STANDARD;
+  const e = structuredClone(STANDARD);
+  e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "gpt-6-luna";
+  e.modelle.verdichtung = process.env.KI_LEAD_MODELL_S2 || "gpt-6-astra";
+  e.modelle.reparatur = process.env.KI_LEAD_MODELL_REPARATUR || "gpt-6.1-sol";
+  return e;
+}
 const LAEUFE = Math.max(1, Math.min(5, Number(process.env.KI_LEAD_LAEUFE || 1)));
 const BUDGET_USD = Number(process.env.KI_LEAD_BUDGET_USD || 15);
 
@@ -131,7 +147,8 @@ function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | undefined
 }
 
 describe("Abnahme M4: Verdichtung Ilka", () => {
-  it.skipIf(!SCHLUESSEL && !ATTRAPPE)(`${LAEUFE} Lauf/Läufe ${ATTRAPPE ? "(Attrappe)" : "(echt, Anthropic)"}`, async () => {
+  it.skipIf(!ECHT && !ATTRAPPE)(`${LAEUFE} Lauf/Läufe ${ATTRAPPE ? "(Attrappe)" : `(echt, ${ANBIETER})`}`, async () => {
+    const EINSTELLUNGEN = einstellungen();
     mkdirSync(AUSGABE, { recursive: true });
     const geladen = await ladeProfil(leseOrdner(join(REPO, "profile/lead-beispiel")));
     const profil = geladen.profil!;
@@ -167,12 +184,12 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       );
       const datei = join(AUSGABE, `${lauf.id}.lauf.json`);
       const speichern = (l: Lauf) => writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
-      const anbieter = ATTRAPPE ? attrappe(material, JSON.parse(refText)) : new Verteiler({ anthropic: SCHLUESSEL, openai: "" });
+      const anbieter = ATTRAPPE ? attrappe(material, JSON.parse(refText)) : new Verteiler(SCHLUESSEL);
       let zeichen = 0;
       const k: Kontext = {
         profil,
         anbieter,
-        einstellungen: STANDARD,
+        einstellungen: EINSTELLUNGEN,
         lauf,
         material,
         aktualisiert: speichern,
@@ -181,7 +198,9 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
           if (f.art === "wiederholung") console.log(`  Wiederholung: ${f.grund}`);
         },
       };
-      console.log(`Lauf ${i}/${LAEUFE}: ${lauf.id} (S1 ${modellFuer("vorverarbeitung", STANDARD, profil)}, S2 ${modellFuer("verdichtung", STANDARD, profil)})`);
+      console.log(
+        `Lauf ${i}/${LAEUFE}: ${lauf.id} (S1 ${modellFuer("vorverarbeitung", EINSTELLUNGEN, profil)}, S2 ${modellFuer("verdichtung", EINSTELLUNGEN, profil)})`,
+      );
 
       let meldung: Meldung | undefined;
       try {
@@ -225,6 +244,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       const eintrag = {
         lauf: lauf.id,
         attrappe: ATTRAPPE,
+        anbieter: ANBIETER,
         status: lauf.status,
         technisch_bestanden: punkte.every((p) => p.erfuellt),
         pruefpunkte: punkte,
@@ -267,7 +287,27 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       zusammenfassung.push(eintrag);
       console.log(`  ${punkte.map((p) => `${p.nr}:${p.erfuellt ? "ok" : "NEIN"}`).join(" ")} · ${lauf.kostenUsd ?? "?"} USD · ${eintrag.dauer_s} s`);
     }
-    writeFileSync(join(AUSGABE, `reihe-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`), JSON.stringify(zusammenfassung, null, 2));
+    // Gesamtergebnis der Reihe (Format ki-lead-abnahme/1): ohne Schlüssel, zur Übergabe an die Auswertung
+    const reihe = {
+      format: "ki-lead-abnahme/1",
+      plan: "evaluation/plaene/2026-10-23-abnahme-m4.md",
+      fall: FALL.id,
+      erstellt: new Date().toISOString(),
+      app: APP_KENNUNG,
+      profil: { id: profil.manifest.id, version: profil.manifest.version, hash: profil.hash },
+      anbieter: ANBIETER,
+      attrappe: ATTRAPPE,
+      modelle: {
+        s1: { modell: modellFuer("vorverarbeitung", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.vorverarbeitung },
+        s2: { modell: modellFuer("verdichtung", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.verdichtung },
+        reparatur: { modell: modellFuer("reparatur", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.reparatur },
+      },
+      laeufe_geplant: LAEUFE,
+      technisch_bestanden: (zusammenfassung as { technisch_bestanden: boolean }[]).filter((z) => z.technisch_bestanden).length,
+      kosten_usd_summe: Math.round(summe * 10000) / 10000,
+      laeufe: zusammenfassung,
+    };
+    writeFileSync(join(AUSGABE, `reihe-${ANBIETER}-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`), JSON.stringify(reihe, null, 2));
     expect(zusammenfassung.length).toBeGreaterThan(0);
   });
 });
