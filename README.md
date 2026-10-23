@@ -110,7 +110,7 @@ Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abs
 | M1 | Web-Kern ohne KI: Profile, Formular aus Schema, Prüfung, Import und Export | umgesetzt, Abnahme durch Regressionstests |
 | M2 | KI-Pipeline für die Erfassung (gestuft nach LEAD), Anthropic | umgesetzt, erprobt in den Testreihen vom 18.–21.10.2026 |
 | M3 | Modul Lagebild: Zusammenführung und Redaktionscheck | umgesetzt, Abnahme durch Regressionstests |
-| M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | technisch abgenommen am 23.10.2026 ([Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)); Funktionsnachweis OpenAI offen |
+| M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | technisch abgenommen am 23.10.2026 mit Anthropic und OpenAI ([Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)) |
 | M5 | Apps für iOS (TestFlight) und Android, PWA | geplant |
 | M6 | Erster veröffentlichter Release mit DOI und Erprobung im Testkreis; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
 
