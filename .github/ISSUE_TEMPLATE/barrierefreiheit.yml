@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Danke für die Rückmeldung. Issues sind öffentlich: Bitte keine Angaben zur eigenen Gesundheit oder Behinderung, die nicht öffentlich sein sollen, und keine personenbezogenen oder eingestuften Daten.
+        Danke für die Rückmeldung. Issues sind öffentlich: Bitte keine Angaben zur eigenen Gesundheit oder Behinderung, die nicht öffentlich sein sollen, und keine personenbezogenen oder eingestuften Daten. Rückmeldungen aus der Erprobung fließen nach docs/ERPROBUNG.md, Abschnitt 7, in die Auswertung ein.
   - type: input
     id: ansicht
     attributes:
@@ -30,4 +30,4 @@ body:
     id: version
     attributes:
       label: Version von KI-LEAD
-      placeholder: steht unter „Einstellungen“, z. B. 0.5.4
+      placeholder: steht unter „Einstellungen → Über KI-LEAD“, z. B. 0.5.5

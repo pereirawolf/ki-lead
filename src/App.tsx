@@ -39,6 +39,9 @@ import type { ProfilFarbschema } from "./darstellung/typen";
 import { exportStempel, mitDatum } from "./kern/ausgabe";
 import { PwaHinweis } from "./ui/PwaHinweis";
 import { ablageLesen, ablageWechseln, type AblageId } from "./schluessel/ablage";
+import { ExternerLink } from "./ui/Ueber";
+import { VERWEISE } from "./kern/herausgeber";
+import { APP_KENNUNG } from "./pipeline/lauf";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -537,8 +540,9 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.5.2. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
-        EUPL-1.2, Profilinhalte unter CC BY 4.0.
+        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        EUPL-1.2, Profilinhalte unter CC BY 4.0. <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
+        <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
       </footer>
     </div>
   );

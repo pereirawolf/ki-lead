@@ -1,0 +1,31 @@
+# Hängt an jeden veröffentlichten Release die Stückliste der ausgelieferten npm-Pakete an (SBOM, CycloneDX).
+# Die Lizenzprüfung selbst läuft mit npm test in „Prüfen und veröffentlichen“ (tests/lizenzen/).
+name: Release-Anhänge
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    # Schreibrecht nur, um die Datei an den Release zu hängen
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm sbom --omit dev --sbom-format cyclonedx --sbom-type application --package-lock-only > "ki-lead-${TAG#v}-sbom.cdx.json"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+      - run: gh release upload "$TAG" "ki-lead-${TAG#v}-sbom.cdx.json" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}

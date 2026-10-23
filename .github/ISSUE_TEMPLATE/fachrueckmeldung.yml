@@ -1,0 +1,69 @@
+name: Fachrückmeldung
+description: Hinweis zum Inhalt eines Entwurfs, einer SOP, einer Arbeitsanweisung oder des Kodierleitfadens (siehe docs/ERPROBUNG.md)
+title: "Fachrückmeldung: "
+labels: ["fachrueckmeldung"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für die Rückmeldung. Issues sind öffentlich: Bitte nur fiktive oder offen zugängliche Inhalte, keine personenbezogenen oder eingestuften Daten, keine internen Unterlagen und keine API-Schlüssel. Fachliche Hinweise fließen nach den Pflegeregeln in Profil und SOP-Sammelmappe ein (docs/ERPROBUNG.md, Abschnitt 7).
+  - type: dropdown
+    id: produkt
+    attributes:
+      label: Arbeitsprodukt oder Dokument
+      options:
+        - Meldungsentwurf (Erfassung)
+        - Verdichtung mehrerer Meldungen
+        - Management Summary
+        - Lagebild und Redaktionscheck
+        - SOP oder Baustein
+        - Arbeitsanweisung
+        - Kodierleitfaden oder Lagenradar
+        - Meldungsschema oder Darstellung
+        - Sonstiges
+    validations:
+      required: true
+  - type: input
+    id: bezug
+    attributes:
+      label: Profil, Fassung und Stelle
+      placeholder: z. B. lead-beispiel 1.25.0, B09/R4; App 0.5.5
+    validations:
+      required: true
+  - type: input
+    id: fall
+    attributes:
+      label: Fall oder Material (optional)
+      placeholder: z. B. evaluation/faelle/sop-gas-stabil.json, Orkantief „Ilka“ oder eigene fiktive Lage
+  - type: textarea
+    id: hinweis
+    attributes:
+      label: Beobachtung und Vorschlag
+      description: Was ist fachlich unzutreffend, unklar oder fehlt? Was schlagen Sie vor, möglichst mit öffentlich zugänglicher Quelle?
+    validations:
+      required: true
+  - type: textarea
+    id: einschaetzung
+    attributes:
+      label: Einschätzung des Entwurfs (optional)
+      description: Je Kriterium 1 = unbrauchbar bis 5 = ohne Nacharbeit verwendbar (evaluation/README.md, „Kriterien“).
+      value: |
+        belege:
+        zeit:
+        referenzraum:
+        unsicherheit:
+        radar:
+        empfehlungen:
+        gesamt:
+  - type: input
+    id: lauf
+    attributes:
+      label: Kenndaten des Laufs (optional)
+      placeholder: Lauf-ID, Anbieter, Modelle und Aufwand je Stufe, Kosten, Dauer
+  - type: checkboxes
+    id: inhalte
+    attributes:
+      label: Inhalte
+      options:
+        - label: Dieses Issue und seine Anhänge enthalten nur fiktive oder offen zugängliche Inhalte, keine personenbezogenen oder eingestuften Daten und keinen API-Schlüssel.
+          required: true

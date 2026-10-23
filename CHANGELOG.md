@@ -52,6 +52,32 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
 | 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
 | 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ (Nachtrag vom 24.10.2026: gestaffelte Prüfung und schnellere Tests, ohne Änderung der App) |
+| 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
+
+## [0.5.5] – 24.10.2026
+
+Grundlage: Befund „Grundlagen Priorität 2“ vom 24.10.2026 (Drittkomponenten und Lizenzen, Erprobungskonzept, Impressum) mit Freigabe des Herausgebers. Lizenz- und Rechtsfragen am 24.10.2026 recherchiert, mit Quellen; keine Rechtsberatung. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Pipeline oder gespeicherten Daten.
+
+### Hinzugefügt
+
+- **Über KI-LEAD** in den Einstellungen: Version, Abgrenzung, Herausgeber und externe Verweise auf Impressum, Datenschutzhinweise, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`). Die Verweise öffnen sich in einem eigenen Fenster; die App ruft sie nicht auf, die Content-Security-Policy bleibt unverändert.
+- **Impressum und Datenschutz im Fuß** jeder Ansicht. Impressum nach § 18 Abs. 1 MStV auf der Website des Herausgebers; § 5 DDG greift für das unentgeltliche Vorhaben voraussichtlich nicht ([Spezifikation](docs/SPEZIFIKATION.md), offener Punkt 13).
+- **Lizenztexte in der App:** Der Build schreibt `lizenzen.md` mit Name, Version, Lizenz und Lizenztext aller gebündelten Pakete (`build.license` von Vite, ohne neue Abhängigkeit); `public/lizenzen-ergaenzend.md` ergänzt die nativen Bibliotheken mit Apache-Lizenz und NOTICE von Cordova sowie die Pakete in den Bundles von JSZip und html2canvas. Beide liegen im Ordner der App (GitHub Pages) und gehen mit den nativen Apps aus. Bisher enthielt der minifizierte Build kaum Lizenzvermerke.
+- **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md):** alle Laufzeitkomponenten nach `package-lock.json` mit Version, Lizenz, gewählter Lizenz bei Wahllizenzen (JSZip MIT, DOMPurify Apache-2.0, rgbcolor MIT), Urheber und Einbindung; Schrift Atkinson Hyperlegible (OFL-1.1); native Komponenten; Entwicklungsabhängigkeiten getrennt; Verträglichkeit mit EUPL-1.2 und CC BY 4.0: kein Konflikt.
+- **SBOM:** Die CI erzeugt bei jedem Lauf eine Stückliste im Format CycloneDX (`npm sbom`, ohne Entwicklungsabhängigkeiten) als Artefakt `ki-lead-sbom`; der neue Workflow „Release-Anhänge“ hängt sie an jeden veröffentlichten Release.
+- **[docs/ERPROBUNG.md](docs/ERPROBUNG.md):** Erprobung im Testkreis (M6): Rahmen, Fragestellungen F1–F6, Teilnahmehinweise, Nutzungsbedingungen und Haftung, Rückmeldeweg, Umgang mit Laufprotokollen, Übergang in die Pflege nach Teil A, Auswertung als Abnahmekriterium. Issue-Vorlagen „Fehler“ und „Fachrückmeldung“; Verweis in `config.yml`.
+
+### Geändert
+
+- **Fuß der App:** Version aus `APP_KENNUNG` statt fest eingetragen (zeigte noch 0.5.2).
+- Vorlage „Barrierefreiheit“: Fundort der Version „Einstellungen → Über KI-LEAD“.
+- Abnahme M6: Erprobung auf einem Release-Kandidaten ohne DOI, Release mit DOI nach der Auswertung ([Spezifikation](docs/SPEZIFIKATION.md), Abschnitt 9).
+- Dokumente: README (Abgrenzung mit Impressum, Dokumentation, Mitwirken, Lizenz, Fahrplan), Spezifikation 0.5.5 (Abschnitte 1, 5.4, 7–10), [DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.1 (Abschnitt 11), [SICHERHEIT.md](docs/SICHERHEIT.md) 1.1 (Abschnitt 3.7), [NATIV.md](docs/NATIV.md) (Lizenzhinweise, Abnahmepunkt), [TESTS.md](docs/TESTS.md), [evaluation/README.md](evaluation/README.md).
+
+### Tests
+
+- `tests/lizenzen/lizenzen.test.ts` (neu, 27): Prüfregel für Lizenzangaben (einfach, Wahl, Und-Verbindung, Copyleft, Verweis auf eigene Datei); jede Laufzeitkomponente mit Lizenz aus der Positivliste und vollständig in THIRD-PARTY-NOTICES.md; Entwicklungsabhängigkeiten; native Versionen gegen `android/variables.gradle` und `package.json`; NOTICE von Cordova; Lizenzdatei im Build; SBOM in CI und Release.
+- `tests/ui/ueber.test.ts` (neu, 8): Version und Abgrenzung, Verweise mit Adresse, `target` und `rel`, Fuß mit Version und Links, keine feste Version im Fuß, Abschnitt in den Einstellungen, `APP_KENNUNG` und CITATION.cff gleich `package.json`, `connect-src` nur zu den KI-Anbietern.
 
 ## [0.5.4] – 24.10.2026
 

@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.5.4 vom 24.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.5.5 vom 24.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -15,7 +15,8 @@ KI-LEAD ist ein Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD
 - **Kein Produktivsystem**, keine kommerzielle App.
 - **Nur fiktive oder offen zugängliche Daten.** Keine personenbezogenen und keine eingestuften Inhalte (VS). Die App zeigt dazu einen Hinweis an.
 - **Organisationsneutral.** Alles Organisationsspezifische steckt in einem austauschbaren Profilpaket (Abschnitt 4). Dazu gehören Schema, Kataloge, Stufentexte, Arbeitsanweisung, SOP, Kodierleitfaden und Kontakte. Die App selbst enthält nur die LEAD-Logik.
-- **Privates Forschungsvorhaben:** Der Demonstrator ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Er nutzt nur eigene oder veröffentlichte Materialien. Die Abgrenzung steht im README; ein Impressum gibt es nicht (siehe Abschnitt 10).
+- **Privates Forschungsvorhaben:** Der Demonstrator ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Er nutzt nur eigene oder veröffentlichte Materialien. Die Abgrenzung steht im README und in der App unter „Einstellungen → Über KI-LEAD“.
+- **Impressum und Kontakt:** auf der Website des Herausgebers ([pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html)), verlinkt aus dem README, aus dem Fuß der App und aus „Über KI-LEAD“. Die Links öffnen sich extern; die App ruft die Seite nicht selbst auf (Abschnitt 2). Rechtsgrundlage und Ergebnis der Prüfung: Abschnitt 10, Punkt 13.
 
 ## 2. Betriebsmodell
 
@@ -229,6 +230,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 - Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil. Seit 0.5.1 setzt „Standard-Profil wählen“ im Abschnitt des jeweiligen API-Schlüssels Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters: Anthropic S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), S3 Reparatur claude-sonnet-5-5 (niedrig), Management Summary claude-sonnet-5-5 (mittel); OpenAI mit den Gegenstücken gleicher Größe gpt-6-luna, gpt-6-astra und gpt-6.1-sol bei gleichem Aufwand. Übrige Einstellungen bleiben; einzelne Aufgaben lassen sich danach weiter anpassen.
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
 - Datenhinweis und Sprache.
+- Über KI-LEAD (seit 0.5.5): Version, Abgrenzung, Herausgeber; externe Verweise auf Impressum, Datenschutzhinweise, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`).
 
 ## 6. Forschungsfunktionen
 
@@ -250,6 +252,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 | Speicher | IndexedDB über `idb-keyval` (Einstellungen, Zwischenstände, Lagebild, Laufprotokolle, Profile); localStorage nur für das Farbschema vor dem ersten Zeichnen; Dateien nur beim Herunterladen und Exportieren. Ursprünglich geplant: Capacitor Filesystem (siehe Abschnitt 10) |
 | Geheimnisse | Wählbare Ablage (`src/schluessel/ablage.ts`): Gerätespeicher (IndexedDB, Vorgabe), nur Sitzung (Arbeitsspeicher) oder in der nativen App Keychain bzw. Keystore über `@aparajita/capacitor-secure-storage` (MIT, gepinnt); Wechsel zieht die Schlüssel mit um |
 | HTTP | im Browser direkt über `fetch` mit dem Kopf `anthropic-dangerous-direct-browser-access`; nativ später über CapacitorHttp |
+| Drittkomponenten | wenige, nur unter permissiven Lizenzen; Liste, Verträglichkeit und SBOM in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md); Lizenztexte im Build (`lizenzen.md` über `build.license` von Vite, `public/lizenzen-ergaenzend.md`); Prüfung in `tests/lizenzen/` |
 
 **Anbieter-Abstraktion:** Eine gemeinsame Schnittstelle `LlmAnbieter` (`src/anbieter/typen.ts`) deckt Nachrichten, Werkzeuge (Websuche, URL-Abruf), strukturierte Ausgabe und Token-Zählung ab. Es gibt zwei Implementierungen: Anthropic Messages API und OpenAI Responses API. Die Profilinhalte (Anweisung, Teil A, SOPs, Kodierleitfaden, Schema) stehen am Anfang des Prompts und werden gecacht. Der Auftrag und das Material stehen am Ende.
 
@@ -284,6 +287,8 @@ Einzelheiten:
 | Bedrohungsmodell mit vorhandenen und offenen Maßnahmen | [SICHERHEIT.md](SICHERHEIT.md); Meldeweg für Schwachstellen in [SECURITY.md](../SECURITY.md) |
 | Einordnung nach der KI-Verordnung, Kennzeichnung der Ausgaben, Systemkarte | [KI-VERORDNUNG.md](KI-VERORDNUNG.md) |
 | Stand und Lücken der Barrierefreiheit, rechtliche Einordnung | [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md) |
+| Drittkomponenten, Lizenzen, Verträglichkeit, SBOM | [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) |
+| Erprobung im Testkreis: Teilnahme, Bedingungen, Rückmeldung, Auswertung | [ERPROBUNG.md](ERPROBUNG.md) |
 
 ## 9. Meilensteine und Abnahme
 
@@ -295,7 +300,7 @@ Einzelheiten:
 | **M3** | Modul Lagebild: Aggregation und Redaktionscheck | Meldestatus, Sachverhalte, Radar je Sachverhalt, Redaktionscheck und Exporte |
 | **M4** | KI-Verdichtung Modus B (vorläufige Fassung seit M2: Erkennung von Eingangsmeldungen, Gliederung nach Sachverhalten mit Zuordnung, t0, Zusatzanweisung A.7); OpenAI-Anbieter | Verdichtung der sechs fiktiven Ländermeldungen „Ilka“ zu einer Meldung der Koordinierungsstelle; Vergleich mit der vorhandenen Redaktionsfassung – technisch abgenommen (23.10.2026, je drei Läufe mit Anthropic und OpenAI, [Ergebnis](../evaluation/abnahmen/2026-10-23-m4-ergebnis.md)) |
 | **M5** | Capacitor-Builds: iOS (TestFlight), Android (APK), PWA (pereirawolf.de) | Installation und Offline-Betrieb auf iPad, iPhone und Android-Emulator – PWA umgesetzt (0.5.0, Offline-Start im Browsertest geprüft); native Projekte und Schlüsselbund angelegt (0.5.1); Builds und Abnahme auf Geräten offen |
-| **M6** | Erster Release mit Zenodo-DOI; die Versionsnummer wird bei der Freigabe festgelegt (GitHub-Integration, Metadaten aus CITATION.cff); Erprobung im Testkreis | Release veröffentlicht, Rückmeldungen ausgewertet |
+| **M6** | Erprobung im Testkreis auf einem Release-Kandidaten (Git-Tag ohne DOI, [ERPROBUNG.md](ERPROBUNG.md)); danach erster Release mit Zenodo-DOI; die Versionsnummer wird bei der Freigabe festgelegt (GitHub-Integration, Metadaten aus CITATION.cff, SBOM als Anhang) | Erprobung nach festgelegtem Plan (`evaluation/plaene/`) durchgeführt; jede Rückmeldung gesichtet und zugeordnet (umgesetzt, eingeplant oder abgelehnt mit Grund); Ergebnis unter `evaluation/abnahmen/` veröffentlicht ([ERPROBUNG.md](ERPROBUNG.md), Abschnitt 8); danach Release veröffentlicht |
 
 ## 10. Offene Punkte
 
@@ -311,7 +316,8 @@ Einzelheiten:
 10. **Sicherheit:** offene Maßnahmen nach [SICHERHEIT.md](SICHERHEIT.md): Domainbegrenzung beim Seitenabruf, Signatur importierter Profile, GitHub Actions per Commit-SHA, automatische Prüfung bekannter Schwachstellen.
 11. **Daten löschen:** Ein Knopf „Alle Daten dieses Geräts löschen“ fehlt; heute geht das nur über die Browsereinstellungen oder die Deinstallation ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 10).
 12. **Speicher und Bibliothek:** Abschnitt 7 sah Capacitor Filesystem, Abschnitt 5.3 eine Bibliothek mit Teilen-Menü vor. Umgesetzt ist die Ablage in IndexedDB; eine Bibliothek mit Suche und Filter gibt es nicht. Zu klären ist, ob beides noch gebraucht wird.
-13. **Impressum:** Zu klären ist, ob die Seite auf GitHub Pages ein Impressum braucht.
+13. **Impressum:** Geklärt mit 0.5.5 (Einschätzung, keine Rechtsberatung). [§ 5 Abs. 1 DDG](https://www.gesetze-im-internet.de/ddg/__5.html) gilt für „geschäftsmäßige, in der Regel gegen Entgelt angebotene“ digitale Dienste und greift für das unentgeltliche, werbefreie Forschungsvorhaben voraussichtlich nicht. [§ 18 Abs. 1 MStV](https://lxgesetze.de/mstv/18) verlangt Name und Anschrift für jedes Telemedium, das nicht ausschließlich persönlichen oder familiären Zwecken dient; das trifft auf die öffentlich abrufbare Web-App voraussichtlich zu. Ein ständig sichtbarer Link auf das Impressum des Herausgebers genügt (Abschnitt 1). Außerhalb des Repositorys offen: Das Impressum auf pereirawolf.de sollte ausdrücklich auch für das GitHub-Angebot gelten, und die Website braucht eine eigene Datenschutzerklärung.
+14. **Lizenzhinweise der nativen Apps:** In `public/lizenzen-ergaenzend.md` mit Versionen aus `android/variables.gradle`. Offen: Die Version von KeychainSwift legt erst Xcode fest; nach dem ersten Build `Package.resolved` einchecken ([THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md), Abschnitt 4). Die SBOM erfasst nur npm-Pakete.
 
 ## 11. Änderungsverlauf
 
@@ -363,3 +369,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.3 | 23.10.2026 | Farbschemata: Kopf in den Bund- und Länderschemata in der Farbe der Arbeitsfläche, gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands |
 | 0.5.4 | 24.10.2026 | Maschinenlesbare KI-Kennzeichnung: PDF-Metadaten (XMP, IPTC Digital Source Type) und Dokumenteigenschaften, Kopfzeile der Management Summary als TXT, Hinweis bei Profilen ohne Entstehungsfeld (Abschnitt 6, offene Punkte 8 und 9); Lagenradar als Radiogruppe mit Pfeiltasten |
 | 0.5.3 · Nachtrag | 24.10.2026 | Ohne Änderung der App: Abschnitt 8 verweist auf die neuen Dokumente DATENSCHUTZ.md, SICHERHEIT.md, KI-VERORDNUNG.md und BARRIEREFREIHEIT.md; Speicher in Abschnitt 7 an den Code angeglichen; Verweis auf ein Impressum in Abschnitt 1 berichtigt; offene Punkte 7–13 |
+| 0.5.5 | 24.10.2026 | Impressum und Kontakt über die Website des Herausgebers, verlinkt aus Fuß und „Über KI-LEAD“ (Abschnitte 1 und 5.4, offener Punkt 13 geklärt); Drittkomponenten mit Lizenzdateien im Build, Lizenzprüfung und SBOM (Abschnitte 7 und 8, offener Punkt 14); Erprobung im Testkreis und Abnahme M6 präzisiert (Abschnitte 8 und 9) |

@@ -2,11 +2,13 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.5.4, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.5.5, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
 KI-LEAD ist ein privates Forschungsvorhaben von Heiko Pereira Wolf ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)). Es ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Die mitgelieferten Profile, Schemata und Daten sind Beispiele für Forschung und Erprobung; sie geben keine offiziellen Vorgaben wieder. Der Demonstrator nutzt nur eigene oder veröffentlichte Materialien.
+
+**Impressum und Kontakt:** [pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html). Die App verweist darauf im Fuß und unter „Einstellungen → Über KI-LEAD“; Datenschutzhinweise: [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md).
 
 Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezogenen und keine eingestuften Daten.
 
@@ -64,6 +66,8 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | Einordnung nach der KI-Verordnung, Systemkarte | [KI-Verordnung](docs/KI-VERORDNUNG.md) |
 | Bedrohungsmodell, Schwachstellen melden | [Sicherheit](docs/SICHERHEIT.md), [SECURITY.md](SECURITY.md) |
 | Stand und Lücken der Barrierefreiheit | [Barrierefreiheit](docs/BARRIEREFREIHEIT.md) |
+| An der Erprobung teilnehmen, Rückmeldung geben | [Erprobung im Testkreis](docs/ERPROBUNG.md) |
+| Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 
 ## Profile
 
@@ -105,11 +109,15 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 **SOPs bearbeiten:** Maßgeblich sind die Einzeldateien unter `profile/lead-beispiel/sop/`; welche davon die App lädt, steht im Profilmanifest unter `sop.dateien`. Nach Änderungen `npm run sop:lesefassung` ausführen; die erzeugte Lesefassung und die Archivfassungen nicht von Hand bearbeiten. Fassungen und Gültigkeitsstand (Teil A) sowie die Änderungsverläufe nach den Pflegeregeln fortschreiben.
 
+**Abhängigkeiten:** so wenige wie möglich. Eine neue Laufzeitabhängigkeit braucht eine Lizenz aus der Positivliste und einen Eintrag in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md); sonst scheitert `npm test` (`tests/lizenzen/`). Die CI legt bei jedem Lauf eine SBOM im Format CycloneDX als Artefakt ab und hängt sie an jeden Release.
+
+**Rückmeldungen:** über die Issue-Vorlagen „Fehler“, „Fachrückmeldung“, „Barrierefreiheit“ und „Datenschutz“; Regeln für die Erprobung in [docs/ERPROBUNG.md](docs/ERPROBUNG.md). Sicherheitslücken vertraulich nach [SECURITY.md](SECURITY.md).
+
 **Beiträge:** Änderungen in einem eigenen Zweig sammeln, `npm test` und `npm run build` ausführen und als Pull Request gegen `main` zur Prüfung vorlegen.
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.4), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.5), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -122,7 +130,7 @@ Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abs
 | M3 | Modul Lagebild: Zusammenführung und Redaktionscheck | umgesetzt, Abnahme durch Regressionstests |
 | M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | technisch abgenommen am 23.10.2026 mit Anthropic und OpenAI ([Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)) |
 | M5 | Apps für iOS (TestFlight) und Android, PWA | PWA umgesetzt (0.5.0); native Projekte und Schlüsselbund angelegt (0.5.1), Builds und Abnahme auf Geräten offen ([Anleitung](docs/NATIV.md)) |
-| M6 | Erster veröffentlichter Release mit DOI und Erprobung im Testkreis; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
+| M6 | Erprobung im Testkreis auf einem Release-Kandidaten ([Konzept](docs/ERPROBUNG.md)), danach erster veröffentlichter Release mit DOI; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
 
 „Umgesetzt“ heißt: Funktion vorhanden und durch Regressionstests belegt. „Abgenommen“ heißt: Abnahmekriterium der Spezifikation mit echten KI-Läufen geprüft und dokumentiert. KI-LEAD bleibt ein Forschungsdemonstrator; eine Abnahme ist keine fachliche Freigabe der Methodik.
 
@@ -132,9 +140,10 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 - Code: [EUPL-1.2](LICENSE)
 - Inhalte der Profilpakete im Ordner `profile/` (Arbeitsanweisungen, SOP, Kodierleitfaden, Schemata, Darstellungsdateien): [CC BY 4.0](LICENSE-CONTENT)
+- Drittkomponenten (Bibliotheken, Schrift Atkinson Hyperlegible, native Plugins) mit Lizenz, Urheber und Verträglichkeit: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Der Build legt ihre Lizenztexte als `lizenzen.md` und `lizenzen-ergaenzend.md` in die App.
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.4) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.5) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. Sie sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -130,6 +130,10 @@ Die Reparaturseite `reparatur.html` entfernt nur Programmdateien und die Service
 
 Fragen und Hinweise zu diesen Datenschutzhinweisen über ein [Issue im Repository](https://github.com/pereirawolf/ki-lead/issues/new/choose) (Vorlage „Datenschutz“). Issues sind öffentlich; bitte keine personenbezogenen Daten hineinschreiben. Fragen zur Verarbeitung beim KI-Anbieter richten sich an den Anbieter.
 
+**Rückmeldungen aus der Erprobung** ([ERPROBUNG.md](ERPROBUNG.md)) gehen ebenfalls nur über Issues. Dort verarbeitet GitHub den Beitrag und den Benutzernamen nach seinen eigenen Bedingungen; der Herausgeber liest die Beiträge, um sie auszuwerten. Laufprotokolle und Meldungen werden nur angehängt, wenn ihr Inhalt fiktiv oder selbst verfasst ist (ERPROBUNG.md, Abschnitt 6). Der Herausgeber übernimmt sie nicht ins Repository und entfernt Beiträge mit unzulässigen Inhalten. Einen anderen Rückmeldeweg, etwa per E-Mail, gibt es für die Erprobung nicht.
+
+**Impressum und Kontakt:** [pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html). Die Verweise in der App öffnen sich extern; die App ruft die Seite nicht selbst auf.
+
 ---
 
 ## Anhang A: Datenschutzangaben im App Store (Apple)
@@ -227,3 +231,4 @@ Zugriff jeweils am 24.10.2026.
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
+| 1.1 | 24.10.2026 | Abschnitt 11: Rückmeldungen aus der Erprobung, Laufprotokolle in Issues, Impressum (App 0.5.5) |

@@ -66,6 +66,13 @@ jobs:
           fi
 
       - run: npm ci
+      # Stückliste der ausgelieferten npm-Pakete (CycloneDX, ohne Entwicklungsabhängigkeiten); siehe THIRD-PARTY-NOTICES.md
+      - run: npm sbom --omit dev --sbom-format cyclonedx --sbom-type application --package-lock-only > ki-lead-sbom.cdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ki-lead-sbom
+          path: ki-lead-sbom.cdx.json
+          retention-days: 90
       # Auf Pull Requests ein Durchgang in zufälliger, fester Reihenfolge (deckt Abhängigkeiten zwischen Tests auf);
       # auf main und im Wochenlauf zusätzlich in der gewöhnlichen Reihenfolge.
       - if: github.event_name != 'pull_request'

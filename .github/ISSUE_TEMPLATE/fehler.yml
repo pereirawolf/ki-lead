@@ -1,0 +1,52 @@
+name: Fehler
+description: Die App tut etwas nicht oder falsch (siehe docs/ERPROBUNG.md)
+title: "Fehler: "
+labels: ["fehler"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für die Rückmeldung. Issues sind öffentlich: Bitte keine personenbezogenen oder eingestuften Daten und keine API-Schlüssel. Laufprotokolle und Meldungen nur anhängen, wenn das Material fiktiv oder selbst verfasst ist und der Lauf ohne Websuche und Seitenabruf lief (docs/ERPROBUNG.md, Abschnitt 6). Sicherheitslücken bitte vertraulich melden (SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Version von KI-LEAD
+      placeholder: steht unter „Einstellungen → Über KI-LEAD“, z. B. 0.5.5
+    validations:
+      required: true
+  - type: input
+    id: umgebung
+    attributes:
+      label: Gerät, System und Browser
+      placeholder: z. B. iPad mit iPadOS 26, Safari, als App installiert; Windows 11 mit Edge
+    validations:
+      required: true
+  - type: textarea
+    id: schritte
+    attributes:
+      label: Schritte
+      description: Was haben Sie nacheinander getan?
+      placeholder: |
+        1. Profil „LEAD-Beispiel – Koordinierungsstelle“ gewählt
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: ergebnis
+    attributes:
+      label: Was ist passiert, was hätten Sie erwartet?
+      description: Fehlermeldungen bitte wörtlich.
+    validations:
+      required: true
+  - type: input
+    id: lauf
+    attributes:
+      label: Lauf-ID und Profil (bei KI-Läufen, optional)
+      placeholder: z. B. 20261024-101530-ab12, Profil lead-beispiel 1.25.0
+  - type: checkboxes
+    id: inhalte
+    attributes:
+      label: Inhalte
+      options:
+        - label: Dieses Issue und seine Anhänge enthalten keine personenbezogenen oder eingestuften Daten und keinen API-Schlüssel.
+          required: true
