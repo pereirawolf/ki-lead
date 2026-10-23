@@ -31,4 +31,4 @@ Die Innenfläche zeigt eine Kodierung der Hochwasserlage nach Tief „Bernd“ a
 
 Quelle: Bundesministerium des Innern und für Heimat (2022): Bericht zur Hochwasserkatastrophe 2021: Katastrophenhilfe, Wiederaufbau und Evaluierungsprozesse. Online abrufbar unter: https://www.bmi.bund.de/SharedDocs/downloads/DE/veroeffentlichungen/2022/abschlussbericht-hochwasserkatastrophe.pdf [Zugriff: 23.10.2026]
 
-Die Symbole werden mit einem kurzen Skript aus diesen Werten gezeichnet; ändert sich die Kodierung, sind alle Größen neu zu erzeugen.
+Die Kodierung ist abgeschlossen und festgeschrieben (Stand 23.10.2026). Die daraus gezeichneten Symbole und Startbildschirme liegen als feste Dateien im Repository: `public/icons/` (Web), `ios/App/App/Assets.xcassets/` (iOS) und `android/app/src/main/res/` (Android). Maßgebliche Vorlage ist `public/icons/icon.svg`; werden später weitere Größen oder Formate gebraucht, lassen sie sich daraus ableiten, etwa mit `npx @capacitor/assets generate`. Das frühere Zeichenskript `scripts/app-symbol.py` ist entfallen und im Git-Verlauf abrufbar.

@@ -50,7 +50,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
-| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ |
+| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachtrag vom 23.10.2026: App-Symbole festgeschrieben, Python-Skript und Android-Vorlagentests entfernt, ohne Änderung der App) |
 
 ## [0.5.3] – 23.10.2026
 
@@ -63,6 +63,14 @@ Grundlage: Rückmeldung zum Schema „Thüringen“: Über dem Identitätsband s
 ### Tests
 
 - `tests/darstellung/farbschemas.test.ts` (+2): In allen Bund- und Länderschemata ist `header-hintergrund` gleich `papier`; Profilfarben können `header-hintergrund` weiterhin abweichend setzen.
+
+### Nachtrag vom 23.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Prüfung der im Repository eingesetzten Programmiersprachen. Die Kodierung des Lagenradars nach Tief „Bernd“ für das App-Symbol ist abgeschlossen und muss nicht erneut berechnet werden. Keine Änderung an der App, an Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten.
+
+- **App-Symbole festgeschrieben:** `scripts/app-symbol.py` entfällt; das Repository enthält damit kein Python mehr und braucht kein Pillow. Die erzeugten Symbole und Startbildschirme für Web, iOS und Android bleiben unverändert als feste Dateien erhalten, Vorlage ist `public/icons/icon.svg`. Kodierung und Begründung stehen weiter in [docs/app-symbol.md](docs/app-symbol.md); Verweise in [docs/NATIV.md](docs/NATIV.md) und [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) angepasst.
+- **Android-Vorlagentests entfernt:** `ExampleUnitTest.java` und `ExampleInstrumentedTest.java` aus der Capacitor-Vorlage (Paket `com.getcapacitor.myapp`) prüften nichts Eigenes; der Instrumented-Test erwartete die Kennung `com.getcapacitor.app` und wäre gegen `de.pereirawolf.kilead` gescheitert. Eigener Java- und Swift-Code beschränkt sich damit auf die Capacitor-Hülle.
+- `tests/nativ/projekt.test.ts`: Der Symboltest prüft jetzt, dass alle festgeschriebenen Symbol- und Startbilddateien für Web, iOS und Android vorhanden sind (bisher je eine Datei für iOS und Android).
 
 ## [0.5.2] – 23.10.2026
 
