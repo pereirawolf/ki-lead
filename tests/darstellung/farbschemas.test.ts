@@ -32,6 +32,12 @@ afterEach(() => {
 });
 
 describe("Katalog", () => {
+  it("Bund und Länder: Kopf in der Farbe der Arbeitsfläche, ober- und unterhalb des Bands gleicher Hintergrund", () => {
+    const betroffen = FARBSCHEMAS.filter((s) => s.gruppe === "Bund" || s.gruppe === "Bundesländer");
+    expect(betroffen).toHaveLength(18);
+    for (const s of betroffen) expect(s.tokens["header-hintergrund"], s.id).toBe(s.tokens.papier);
+  });
+
   it("22 eindeutige Schemata: 2 neutral, 2 Kontrast, Bund, Bevölkerungsschutz, alle 16 Länder", () => {
     const ids = FARBSCHEMAS.map((s) => s.id);
     expect(new Set(ids).size).toBe(22);

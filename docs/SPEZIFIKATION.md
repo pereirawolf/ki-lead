@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.5.2 vom 23.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.5.3 vom 23.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -343,3 +343,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.0 | 23.10.2026 | Beginn M5: installierbare PWA mit Manifest, Symbolen und Service Worker für den Offline-Start; Hinweise zu fehlendem Netz und neuer Fassung (Umsetzung M5, Abschnitt 9) |
 | 0.5.1 | 23.10.2026 | Native Projekte mit Capacitor (iOS, Android), wählbare Ablage der API-Schlüssel mit Schlüsselbund des Systems (Abschnitte 2, 7 und 8, Umsetzung M5); Standard-Profil je Anbieter in den Einstellungen (Abschnitt 5.4) |
 | 0.5.2 | 23.10.2026 | Korrektur des Updates der PWA: stimmige Fassung bei der Installation, keine ungefragte Übernahme, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung (Umsetzung M5) |
+| 0.5.3 | 23.10.2026 | Farbschemata: Kopf in den Bund- und Länderschemata in der Farbe der Arbeitsfläche, gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands |
