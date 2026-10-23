@@ -9,6 +9,9 @@
 // Eine leere oder nicht ermittelbare Dateiliste löst alles aus. Auf main, im Wochenlauf und bei manuellem Start läuft
 // ohnehin alles; dieses Skript wirkt nur auf Pull Requests.
 
+import { realpathSync } from "node:fs";
+import { pathToFileURL } from "node:url";
+
 /** Reine Inhalte: ändern weder Programmcode noch Bedienoberfläche des Builds */
 export const NUR_INHALT = [
   /^docs\//,
@@ -52,8 +55,16 @@ export function pruefumfang(dateien) {
   };
 }
 
-// Als Skript: Dateiliste von der Standardeingabe lesen
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Als Skript: Dateiliste von der Standardeingabe lesen. Vergleich über realpath und Datei-URL, damit Pfade mit
+// Leerzeichen, Umlauten oder symbolischen Verknüpfungen den Aufruf nicht still ins Leere laufen lassen.
+const alsSkript = (() => {
+  try {
+    return !!process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href;
+  } catch {
+    return false;
+  }
+})();
+if (alsSkript) {
   let eingabe = "";
   process.stdin.setEncoding("utf-8");
   for await (const teil of process.stdin) eingabe += teil;

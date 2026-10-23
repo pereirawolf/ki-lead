@@ -27,13 +27,17 @@ export async function aushaengen(): Promise<void> {
   document.body.innerHTML = "";
 }
 
+/** setTimeout beim Laden dieser Datei, also vor jedem vi.useFakeTimers() eines Tests */
+const echtesSetTimeout = globalThis.setTimeout;
+
 /**
- * Lässt React und ausstehende Promises einmal laufen (ein Makrotask). Läuft im Test eine gefälschte Uhr
- * (`vi.useFakeTimers`), wird sie um `ms` vorgestellt statt real zu warten; Zeitgeber der App (etwa die
- * Verzögerung des Autospeicherns) laufen dann ohne echte Wartezeit ab.
+ * Lässt React und ausstehende Promises einmal laufen (ein Makrotask). Ist im Test setTimeout gefälscht
+ * (`vi.useFakeTimers({ toFake: ["setTimeout", …] })`), wird die Uhr um `ms` vorgestellt statt real zu warten;
+ * Zeitgeber der App (etwa die Verzögerung des Autospeicherns) laufen dann ohne echte Wartezeit ab. Fälscht ein
+ * Test nur Date oder setInterval, wartet takt() wie bisher real.
  */
 export async function takt(ms = 0): Promise<void> {
-  if (vi.isFakeTimers()) {
+  if (vi.isFakeTimers() && globalThis.setTimeout !== echtesSetTimeout) {
     await act(async () => void (await vi.advanceTimersByTimeAsync(ms)));
     return;
   }

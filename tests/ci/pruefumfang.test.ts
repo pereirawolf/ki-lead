@@ -2,7 +2,8 @@
 // Browsertests aus? Grundsatz „im Zweifel prüfen“. Dazu Wächter, damit die Pfadlisten bei Umbenennungen nicht
 // unbemerkt ins Leere laufen. Grundlage: Vorschläge zur Konsolidierung der Tests vom 24.10.2026.
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { copyFileSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error: reines ES-Modul ohne Typdeklaration
@@ -51,6 +52,20 @@ describe("Prüfumfang je Änderung", () => {
       encoding: "utf-8",
     });
     expect(aus).toBe("kern=true\npwa=false\n");
+  });
+
+  it("Aufruf als Skript gelingt auch aus einem Pfad mit Leerzeichen und Umlaut und über eine symbolische Verknüpfung", () => {
+    const ordner = mkdtempSync(join(tmpdir(), "Prüf umfang "));
+    try {
+      const kopie = join(ordner, "prüf umfang.mjs");
+      copyFileSync(repoPfad("scripts", "pruefumfang.mjs"), kopie);
+      const verknuepfung = join(ordner, "verknüpfung.mjs");
+      symlinkSync(kopie, verknuepfung);
+      for (const pfad of [kopie, verknuepfung])
+        expect(execFileSync(process.execPath, [pfad], { input: "src/pwa/precache.ts\n", encoding: "utf-8" }), pfad).toBe("kern=true\npwa=true\n");
+    } finally {
+      rmSync(ordner, { recursive: true, force: true });
+    }
   });
 });
 

@@ -43,18 +43,26 @@ jobs:
           cache: npm
 
       # Prüfumfang: außerhalb von Pull Requests immer alles; scheitert die Ermittlung, ebenfalls alles
+      # shell: bash setzt pipefail; nur eine vollständige, gültige Ausgabe des Skripts darf Tests auslassen.
+      # --no-renames: Bei Umbenennungen zählen Quell- und Zielpfad.
       - id: umfang
+        shell: bash
         env:
           EREIGNIS: ${{ github.event_name }}
         run: |
+          alles() { echo "$1, prüfe alles"; printf 'kern=true\npwa=true\n' >> "$GITHUB_OUTPUT"; }
           if [ "$EREIGNIS" != "pull_request" ]; then
-            printf 'kern=true\npwa=true\n' >> "$GITHUB_OUTPUT"
-          elif dateien=$(git diff --name-only HEAD^1 HEAD); then
-            echo "Geänderte Dateien:"; echo "$dateien"
-            echo "$dateien" | node scripts/pruefumfang.mjs | tee -a "$GITHUB_OUTPUT"
+            alles "Kein Pull Request"
+          elif ! dateien=$(git diff --name-only --no-renames HEAD^1 HEAD); then
+            alles "Basis nicht ermittelbar"
           else
-            echo "Basis nicht ermittelbar, prüfe alles"
-            printf 'kern=true\npwa=true\n' >> "$GITHUB_OUTPUT"
+            echo "Geänderte Dateien:"; echo "$dateien"
+            if umfang=$(echo "$dateien" | node scripts/pruefumfang.mjs) &&
+               echo "$umfang" | grep -qxE 'kern=(true|false)' && echo "$umfang" | grep -qxE 'pwa=(true|false)'; then
+              echo "$umfang" | tee -a "$GITHUB_OUTPUT"
+            else
+              alles "Prüfumfang nicht ermittelbar"
+            fi
           fi
 
       - run: npm ci
