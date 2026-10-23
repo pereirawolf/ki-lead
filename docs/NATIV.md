@@ -17,7 +17,7 @@ Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht
 | `capacitor.config.json` | App-Kennung, Name, Webordner `dist` |
 | `ios/` | Xcode-Projekt (Swift Package Manager, kein CocoaPods) |
 | `android/` | Gradle-Projekt (minSdk 24, targetSdk 36) |
-| `scripts/app-symbol.py` | erzeugt Web-, iOS- und Android-Symbole sowie Startbildschirme ([app-symbol.md](app-symbol.md)) |
+| `public/icons/icon.svg` | Vorlage der festgeschriebenen App-Symbole und Startbildschirme für Web, iOS und Android ([app-symbol.md](app-symbol.md)) |
 
 Build-Ergebnisse, kopierte Webdateien und lokale Einstellungen schließt `.gitignore` aus.
 

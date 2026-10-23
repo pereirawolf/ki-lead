@@ -41,8 +41,24 @@ describe("Native Apps: Projektdateien", () => {
     expect(lies("ios", "App", "App", "Info.plist")).toMatch(/<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/);
   });
 
-  it("verwenden die App-Symbole aus scripts/app-symbol.py", () => {
-    expect(existsSync(repoPfad("ios", "App", "App", "Assets.xcassets", "AppIcon.appiconset", "AppIcon-512@2x.png"))).toBe(true);
-    expect(lies("android", "app", "src", "main", "res", "values", "ic_launcher_background.xml")).toContain("#E75B12");
+  it("enthalten die festgeschriebenen App-Symbole und Startbildschirme (docs/app-symbol.md)", () => {
+    const res = ["android", "app", "src", "main", "res"];
+    const dateien = [
+      ["public", "favicon.ico"],
+      ["public", "icons", "icon.svg"],
+      ["public", "icons", "icon-192.png"],
+      ["public", "icons", "icon-512.png"],
+      ["public", "icons", "icon-maskable-512.png"],
+      ["public", "icons", "apple-touch-icon.png"],
+      ["public", "icons", "favicon-48.png"],
+      ["ios", "App", "App", "Assets.xcassets", "AppIcon.appiconset", "AppIcon-512@2x.png"],
+      ...["", "-1", "-2"].map((n) => ["ios", "App", "App", "Assets.xcassets", "Splash.imageset", `splash-2732x2732${n}.png`]),
+      ...["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"].flatMap((d) =>
+        ["ic_launcher", "ic_launcher_round", "ic_launcher_foreground"].map((n) => [...res, `mipmap-${d}`, `${n}.png`]),
+      ),
+      [...res, "drawable", "splash.png"],
+    ];
+    expect(dateien.filter((d) => !existsSync(repoPfad(...d))).map((d) => d.join("/"))).toEqual([]);
+    expect(lies(...res, "values", "ic_launcher_background.xml")).toContain("#E75B12");
   });
 });

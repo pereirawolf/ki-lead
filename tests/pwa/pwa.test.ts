@@ -91,7 +91,19 @@ describe("PWA: Manifest und Symbole", () => {
     const html = readFileSync(repoPfad("index.html"), "utf-8");
     expect(html).toContain('<link rel="manifest" href="./manifest.webmanifest" />');
     expect(html).toContain('rel="apple-touch-icon"');
-    for (const m of html.matchAll(/href="\.\/(icons\/[^"]+)"/g)) expect(existsSync(repoPfad("public", m[1])), m[1]).toBe(true);
+    for (const m of html.matchAll(/href="\.\/(icons\/[^"]+|favicon\.ico)"/g)) expect(existsSync(repoPfad("public", m[1])), m[1]).toBe(true);
+  });
+
+  it("zeigt das Favicon im Browser auf App- und Reparaturseite (ICO, SVG und PNG)", () => {
+    for (const seite of [repoPfad("index.html"), repoPfad("public", "reparatur.html")]) {
+      const html = readFileSync(seite, "utf-8");
+      expect(html, seite).toContain('<link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48" />');
+      expect(html, seite).toContain('<link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />');
+      expect(html, seite).toContain('<link rel="icon" href="./icons/favicon-48.png" type="image/png" sizes="48x48" />');
+    }
+    // ICO-Kopf: reserviert 0, Typ 1 (Symbol), drei Größen (16, 32, 48)
+    const ico = readFileSync(repoPfad("public", "favicon.ico"));
+    expect([ico.readUInt16LE(0), ico.readUInt16LE(2), ico.readUInt16LE(4)]).toEqual([0, 1, 3]);
   });
 });
 
