@@ -55,7 +55,7 @@ Beginn von Meilenstein 5 (Spezifikation Abschnitt 9): KI-LEAD lässt sich als Ap
 
 ### Hinzugefügt
 
-- **Installierbare PWA:** Web-App-Manifest (`public/manifest.webmanifest`) mit relativem Start und Bereich, damit dieselbe Fassung unter GitHub Pages, pereirawolf.de und lokal läuft; App-Symbole (192, 512, maskierbar, SVG, Apple Touch) mit eigenem Motiv aus dem Lagenradar.
+- **Installierbare PWA:** Web-App-Manifest (`public/manifest.webmanifest`) mit relativem Start und Bereich, damit dieselbe Fassung unter GitHub Pages, pereirawolf.de und lokal läuft; App-Symbole (192, 512, maskierbar, SVG, Apple Touch): Lagenradar in den Farben des BBK-Farbschemas (Orange, Gerüst weiß, Innenfläche blau), ausgeprägt nach einer Kodierung der Lage bei Tief „Bernd“ 2021 ([docs/app-symbol.md](docs/app-symbol.md), Skript `scripts/app-symbol.py`).
 - **Service Worker für den Offline-Start:** Der Build erzeugt `sw.js` mit der Liste aller ausgelieferten Dateien und einer Version aus App-Version und Prüfsumme (`src/pwa/precache.ts`, Vorlage `src/pwa/sw-vorlage.js`, Plugin in `vite.config.ts`, keine neue Abhängigkeit). Eigene Dateien kommen aus dem Cache; Anfragen an die KI-Anbieter fängt er nicht ab und speichert sie nie.
 - **Hinweise:** Ohne Netz nennt ein Band, was weiter funktioniert und was eine Verbindung braucht. Eine neue Fassung wartet auf „Neu laden“, damit Seite und nachgeladene Dateien zusammenpassen.
 - Anmeldung des Service Workers nur im Produktionsbuild, im sicheren Kontext und nicht in der nativen App (`src/pwa/registrieren.ts`).
