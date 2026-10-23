@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.5.3, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.5.4, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -108,7 +108,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.3), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.4), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -134,6 +134,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.3) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.4) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

@@ -30,4 +30,4 @@ body:
     id: version
     attributes:
       label: Version von KI-LEAD
-      placeholder: steht unter „Einstellungen“, z. B. 0.5.3
+      placeholder: steht unter „Einstellungen“, z. B. 0.5.4

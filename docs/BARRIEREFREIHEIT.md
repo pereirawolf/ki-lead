@@ -1,6 +1,6 @@
 # KI-LEAD – Barrierefreiheit
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.4 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsdemonstrator; eine gesetzliche Pflicht zu dieser Erklärung besteht nicht (Abschnitt 6). Keine Rechtsberatung.
 
@@ -8,7 +8,7 @@ Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsde
 
 ## 1. Geltungsbereich
 
-Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in Version 0.5.3. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
+Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in Version 0.5.4. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
 
 ## 2. Stand der Vereinbarkeit
 
@@ -27,15 +27,16 @@ Die Bewertung ist eine Selbstbewertung des Herausgebers. Eine Prüfung durch Dri
 | Zugängliche Namen | alle Bedienelemente je Bereich mit zugänglichem Namen, von Chromium berechnet | Browsertest `barrierefreiheit.spec.ts` |
 | Tastatur | Bedienung mit der Tastatur und sichtbarem Fokus; LEAD-Eingabehilfen mit der Tastatur | Browsertests `barrierefreiheit.spec.ts`, `eingabehilfen.spec.ts` |
 | Lagenradar als Text | die Grafik nennt alle Achsenwerte einschließlich „offen“ im zugänglichen Namen | `src/ui/Radar.tsx` |
+| Lagenradar bedienen | je Achse eine Radiogruppe nach dem Muster der WAI-ARIA Authoring Practices: Optionen mit Rolle `radio` und Namen wie „Stufe 2: regional“, ein Tabstopp je Achse, Pfeiltasten wählen um, Pos1 und Ende springen (seit 0.5.4) | `tests/ui/radar-tastatur.test.ts` |
 | Schrift | Atkinson Hyperlegible, gebündelt | `package.json` |
 
 Grundlage der Prüfungen: [docs/TESTS.md](TESTS.md).
 
 ## 4. Bekannte Lücken
 
-- **Lagenradar in der Meldungsmaske:** Die Stufen einer Achse stehen in einer Gruppe mit der Rolle `radiogroup`, sind aber Schaltflächen mit `aria-pressed` statt Optionen mit der Rolle `radio`. Screenreader kündigen deshalb Widersprüchliches an. Pfeiltasten wechseln die Stufe nicht; jede Stufe ist ein eigener Tabstopp, bei acht Achsen rund 60 (`src/ui/Radar.tsx`).
+- **Lagenradar in der Meldungsmaske:** seit 0.5.4 als Radiogruppe bedienbar (Abschnitt 3). Ungeprüft ist, wie Screenreader die Gruppe ankündigen. Die Pfeiltasten wählen sofort um; wer nur durchsehen will, ändert dabei den Wert.
 - **Screenreader:** nicht mit NVDA, JAWS, VoiceOver oder TalkBack geprüft; geprüft sind nur die von Chromium berechneten Namen.
-- **PDF-Ausgaben:** Die PDFs (Meldung, Lagebild) haben keine Tags, keine Dokumentsprache und keinen Titel in den Dokumenteigenschaften. Sie sind nicht barrierefrei. Zeichen außerhalb der PDF-Standardschrift werden ersetzt, etwa „→“ durch „->“.
+- **PDF-Ausgaben:** Die PDFs (Meldung, Lagebild) haben keine Tags und keine Lesereihenfolge; seit 0.5.4 tragen sie Dokumentsprache und Titel. Sie sind nicht barrierefrei. Zeichen außerhalb der PDF-Standardschrift werden ersetzt, etwa „→“ durch „->“.
 - **Kopiervorlage für Word:** Das Radarbild hat als Alternativtext nur die Bezeichnung; die Werte stehen als Text daneben.
 - **Darstellung:** nicht geprüft sind Windows-Kontrastdesign am echten Gerät, Simulation von Farbsehschwächen, 200 % Vergrößerung und 320 Pixel Breite ([farbschemas.md](farbschemas.md), „Offen“).
 - **Native Apps:** nicht auf Geräten geprüft, auch nicht mit den Bedienungshilfen der Systeme.
@@ -64,4 +65,5 @@ Eine Schlichtungsstelle gibt es für dieses private Vorhaben nicht.
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.1 | 24.10.2026 | Lagenradar als Radiogruppe; PDF mit Dokumentsprache und Titel (App 0.5.4) |
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
