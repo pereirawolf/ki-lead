@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -88,7 +88,9 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | `npm ci` installiert genau nach `package-lock.json` | übrige Abhängigkeiten in `package.json` mit Bereichsangabe (`^`); fest ist nur der Lockfile |
 | Capacitor und das Plugin für den Schlüsselbund exakt gepinnt | GitHub Actions per Versionsmarke (`@v4`) statt Commit-SHA |
 | CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob | keine automatische Prüfung bekannter Schwachstellen (Dependabot, `npm audit` im CI) |
-| Veröffentlichung nur von `main` nach Tests, Build und Browsertests | |
+| Veröffentlichung nur von `main` nach Tests, Build und Browsertests | Version von KeychainSwift nicht festgelegt, bis `Package.resolved` eingecheckt ist |
+| Wenige Abhängigkeiten, nur permissive Lizenzen; `tests/lizenzen/` scheitert bei unzulässiger Lizenz oder fehlendem Eintrag in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) | SBOM erfasst nur npm-Pakete, nicht die nativen Bibliotheken |
+| SBOM im Format CycloneDX bei jedem CI-Lauf (Artefakt) und als Anhang jedes Releases | |
 
 ## 4. Hinweise für Nutzende
 
@@ -109,3 +111,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
+| 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |

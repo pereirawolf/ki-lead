@@ -1,4 +1,4 @@
-// Einstellungen: API-Schlüssel je Anbieter, Modelle und Aufwand je Stufe, Recherchegrenzen, Verbindungstest.
+// Einstellungen: API-Schlüssel je Anbieter, Modelle und Aufwand je Stufe, Recherchegrenzen, Verbindungstest, Über KI-LEAD.
 
 import { useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
@@ -18,6 +18,7 @@ import {
   type Rolle,
 } from "../pipeline/einstellungen";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
+import { UeberAbschnitt } from "./Ueber";
 
 interface Props {
   profil: Profil | null;
@@ -381,6 +382,8 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
         )}
         <p className="hinweis">Kostenschätzung nach Listenpreisen, Stand {PREISSTAND}.</p>
       </section>
+
+      <UeberAbschnitt />
     </div>
   );
 }

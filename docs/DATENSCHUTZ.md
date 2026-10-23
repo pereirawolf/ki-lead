@@ -1,8 +1,8 @@
-# KI-LEAD – Datenschutzhinweise und Verarbeitungsbeschreibung
+# KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.2 vom 24.10.2026, gilt für App-Version 0.5.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
-Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. Sie sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
+Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
 ---
 
@@ -16,7 +16,7 @@ Werden nur fiktive oder offen zugängliche Inhalte ohne Personenbezug verwendet,
 
 | Rolle | Wer | Wofür |
 |---|---|---|
-| Herausgeber der Software | Heiko Pereira Wolf, privates Forschungsvorhaben ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)) | Quellcode, Profile, diese Hinweise; Betrieb der Seite auf GitHub Pages |
+| Herausgeber der Software | Heiko Pereira Wolf, privates Forschungsvorhaben ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)); Anschrift und Kontakt im [Impressum](https://www.pereirawolf.de/impressum.html) | Quellcode, Profile, diese Hinweise; Betrieb der Seite auf GitHub Pages; Rückmeldungen im Repository (Abschnitt 12) |
 | Verantwortlicher für die Verarbeitung in der App | die nutzende Person oder Stelle | was sie in die App eingibt, speichert, an einen KI-Anbieter sendet und exportiert |
 | KI-Anbieter | Anthropic oder OpenAI, nach Wahl der nutzenden Person | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle |
 | Hosting der Web-App | GitHub (GitHub Pages) | Auslieferung der Programmdateien, Verbindungsprotokolle |
@@ -130,6 +130,50 @@ Die Reparaturseite `reparatur.html` entfernt nur Programmdateien und die Service
 
 Fragen und Hinweise zu diesen Datenschutzhinweisen über ein [Issue im Repository](https://github.com/pereirawolf/ki-lead/issues/new/choose) (Vorlage „Datenschutz“). Issues sind öffentlich; bitte keine personenbezogenen Daten hineinschreiben. Fragen zur Verarbeitung beim KI-Anbieter richten sich an den Anbieter.
 
+**Rückmeldungen aus der Erprobung** ([ERPROBUNG.md](ERPROBUNG.md)) gehen ebenfalls nur über Issues. Dort verarbeitet GitHub den Beitrag und den Benutzernamen nach seinen eigenen Bedingungen; der Herausgeber liest die Beiträge, um sie auszuwerten. Laufprotokolle und Meldungen werden nur angehängt, wenn ihr Inhalt fiktiv oder selbst verfasst ist (ERPROBUNG.md, Abschnitt 6). Der Herausgeber übernimmt sie nicht ins Repository und entfernt Beiträge mit unzulässigen Inhalten. Einen anderen Rückmeldeweg, etwa per E-Mail, gibt es für die Erprobung nicht.
+
+**Impressum und Kontakt:** [pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html). Die Verweise in der App öffnen sich extern; die App ruft die Seite nicht selbst auf.
+
+## 12. Datenschutzerklärung
+
+Diese Erklärung informiert nach Art. 13 DSGVO über die Verarbeitung personenbezogener Daten, für die der Herausgeber verantwortlich ist. Sie gilt für KI-LEAD: die Web-App auf GitHub Pages (`https://pereirawolf.github.io/ki-lead/`), die Apps für iOS und Android und das Repository `github.com/pereirawolf/ki-lead`. Die Website pereirawolf.de ist ein eigenes Angebot; diese Erklärung gilt für sie nicht.
+
+### 12.1 Verantwortlicher
+
+Heiko Pereira Wolf. Anschrift und E-Mail-Adresse stehen im [Impressum](https://www.pereirawolf.de/impressum.html). Ein Datenschutzbeauftragter ist nicht benannt.
+
+Für die Verarbeitung in der App ist der Herausgeber nicht verantwortlich, sondern die nutzende Person oder Stelle; für die Verarbeitung beim KI-Anbieter gelten dessen Bedingungen (Abschnitte 2 und 5).
+
+### 12.2 Verarbeitungen
+
+| Vorgang | Daten | Zweck | Rechtsgrundlage | Empfänger | Speicherdauer |
+|---|---|---|---|---|---|
+| Aufruf der Web-App | IP-Adresse, Zeitpunkt, aufgerufene Datei, Browserangaben; erhoben von GitHub | Auslieferung und Sicherheit der Programmdateien | Art. 6 Abs. 1 Buchst. f DSGVO; berechtigtes Interesse: unentgeltliche, sichere Bereitstellung des Forschungsdemonstrators | GitHub, Inc. (Hosting); der Herausgeber erhält diese Daten nicht | nach den Bedingungen von GitHub (Abschnitt 7) |
+| Speichern auf dem Gerät (IndexedDB, localStorage, Service Worker) | Einstellungen, Profile, Meldungen, Laufprotokolle, Schlüssel nach Wahl (Abschnitt 3) | Funktion der App | § 25 Abs. 2 Nr. 2 TDDDG (unbedingt erforderlich für den ausdrücklich gewünschten Dienst) | niemand; die Daten verlassen das Gerät nur bei einem KI-Lauf an den gewählten Anbieter | bis zur Löschung durch die Person (Abschnitt 10) |
+| Issues, Kommentare und Pull Requests im Repository | GitHub-Benutzername, Inhalt des Beitrags, Zeitpunkt, Anhänge | Bearbeitung von Fehlermeldungen und Hinweisen, Auswertung der Erprobung ([ERPROBUNG.md](ERPROBUNG.md)) | Art. 6 Abs. 1 Buchst. f DSGVO; berechtigtes Interesse: Weiterentwicklung und Erprobung des Forschungsvorhabens | öffentlich sichtbar; GitHub, Inc. | solange das Repository besteht; Beiträge werden auf Anfrage entfernt, soweit GitHub das zulässt; Auswertungen enthalten keine Namen |
+| Vertrauliche Sicherheitsmeldung über GitHub ([SECURITY.md](../SECURITY.md)) | GitHub-Benutzername, Inhalt der Meldung | Behebung der Schwachstelle | Art. 6 Abs. 1 Buchst. f DSGVO; berechtigtes Interesse: Sicherheit der Software | GitHub, Inc. | bis zum Abschluss; danach nach den Regeln von GitHub für Sicherheitsmeldungen |
+| Kontakt per E-Mail (Adresse im Impressum) | E-Mail-Adresse, Name, Inhalt | Beantwortung der Anfrage | Art. 6 Abs. 1 Buchst. f DSGVO; berechtigtes Interesse: Beantwortung von Anfragen | E-Mail-Dienst des Herausgebers | bis die Anfrage erledigt ist |
+
+Der Herausgeber setzt **keine Cookies, kein Tracking, keine Analyse- und keine Werbedienste** ein. Er erhält keine Inhalte, Schlüssel, Laufprotokolle oder Nutzungsdaten aus der App (Abschnitt 6). Laufprotokolle und Meldungen bitte nicht per E-Mail senden (Abschnitt 11).
+
+### 12.3 Übermittlung in Drittländer
+
+GitHub, Inc. hat seinen Sitz in den USA und verarbeitet Daten auch dort. GitHub stützt Übermittlungen aus der EU nach eigener Angabe auf das EU-U.S. Data Privacy Framework und auf Standardvertragsklauseln (GitHub, 2026).
+
+### 12.4 Pflicht zur Bereitstellung, automatisierte Entscheidungen
+
+Niemand ist verpflichtet, dem Herausgeber Daten bereitzustellen. Die App ist ohne Rückmeldung voll nutzbar; ohne Aufruf von GitHub Pages lässt sich nur die Web-App nicht laden. Der Herausgeber trifft keine automatisierten Entscheidungen und betreibt kein Profiling.
+
+### 12.5 Rechte der betroffenen Personen
+
+Betroffene Personen haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18) und Datenübertragbarkeit (Art. 20). Gegen Verarbeitungen auf Grundlage berechtigter Interessen können sie aus Gründen, die sich aus ihrer besonderen Situation ergeben, Widerspruch einlegen (Art. 21). Anfragen gehen an die Kontaktdaten im [Impressum](https://www.pereirawolf.de/impressum.html). Für Daten, die nur GitHub oder ein KI-Anbieter verarbeitet, sind diese die richtigen Ansprechpartner.
+
+Jede betroffene Person kann sich bei einer Datenschutz-Aufsichtsbehörde beschweren, insbesondere im Mitgliedstaat ihres Aufenthaltsorts, ihres Arbeitsplatzes oder des mutmaßlichen Verstoßes (Art. 77 DSGVO).
+
+### 12.6 Änderungen
+
+Diese Erklärung wird mit KI-LEAD fortgeschrieben. Die geltende Fassung steht im Kopf dieses Dokuments, frühere Fassungen im Änderungsverlauf und im Git-Verlauf.
+
 ---
 
 ## Anhang A: Datenschutzangaben im App Store (Apple)
@@ -218,8 +262,10 @@ Zugriff jeweils am 24.10.2026.
 - Apple (o. J.): App privacy details on the App Store. Online abrufbar unter: https://developer.apple.com/support/app-privacy-on-the-app-store/ [Zugriff: 24.10.2026]
 - Artikel-29-Datenschutzgruppe (2017): Guidelines on Data Protection Impact Assessment (DPIA) and determining whether processing is "likely to result in a high risk" for the purposes of Regulation 2016/679 (WP 248 rev.01), vom Europäischen Datenschutzausschuss bestätigt. Online abrufbar unter: http://ec.europa.eu/newsroom/article29/item-detail.cfm?item_id=611236 [Zugriff: 24.10.2026]
 - Datenschutzkonferenz (2018): Liste von Verarbeitungsvorgängen nach Art. 35 Abs. 4 DS-GVO – DSFA-Liste Deutschland, nicht-öffentlicher Bereich, Version 1.1 vom 17.10.2018. Online abrufbar unter: https://datenschutz-hamburg.de/fileadmin/user_upload/HmbBfDI/Datenschutz/Informationen/DSFA_Muss-Liste_fuer_den_nicht-oeffentlicher_Bereich_-_Stand_17.10.2018.pdf [Zugriff: 24.10.2026]
+- GitHub (2026): GitHub General Privacy Statement, gültig ab 27.04.2026. Online abrufbar unter: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement [Zugriff: 24.10.2026]
 - GitHub (o. J.): About GitHub Pages. Online abrufbar unter: https://docs.github.com/en/articles/about-github-pages [Zugriff: 24.10.2026]
 - Google (o. J.): Provide information for Google Play's Data safety section. Online abrufbar unter: https://support.google.com/googleplay/android-developer/answer/10787469 [Zugriff: 24.10.2026]
+- lxgesetze (o. J.): § 25 Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG). Online abrufbar unter: https://lxgesetze.de/tdddg/25 [Zugriff: 24.10.2026]
 - OpenAI (o. J.): Data controls in the OpenAI platform. Online abrufbar unter: https://developers.openai.com/api/docs/guides/your-data [Zugriff: 24.10.2026]
 
 ## Änderungsverlauf
@@ -227,3 +273,5 @@ Zugriff jeweils am 24.10.2026.
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
+| 1.1 | 24.10.2026 | Abschnitt 11: Rückmeldungen aus der Erprobung, Laufprotokolle in Issues, Impressum (App 0.5.5) |
+| 1.2 | 24.10.2026 | Abschnitt 12: Datenschutzerklärung nach Art. 13 DSGVO für die Verarbeitungen des Herausgebers, mit Verweis auf das Impressum; Abschnitt 2 mit Kontakt (App 0.5.5) |

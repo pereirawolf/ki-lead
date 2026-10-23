@@ -21,6 +21,8 @@ Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht
 
 Build-Ergebnisse, kopierte Webdateien und lokale Einstellungen schließt `.gitignore` aus.
 
+Lizenzhinweise: Die Apps übernehmen mit `dist` die Dateien `lizenzen.md` (gebündelte Pakete) und `lizenzen-ergaenzend.md` (native Bibliotheken mit Apache-Lizenz und NOTICE von Cordova). Nach dem ersten Xcode-Build `ios/App/CapApp-SPM/Package.resolved` einchecken, damit die Version von KeychainSwift feststeht ([THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md), Abschnitt 4).
+
 ## Versionen
 
 Die Version der Apps folgt `package.json`: Versionsname wie die App (`0.5.1`), Buildnummer daraus abgeleitet (0.5.1 → 501). Bei einer neuen Version sind `android/app/build.gradle` (`versionName`, `versionCode`) und im Xcode-Projekt `MARKETING_VERSION` und `CURRENT_PROJECT_VERSION` anzupassen; `tests/nativ/projekt.test.ts` prüft die Übereinstimmung.
@@ -55,5 +57,6 @@ Je auf iPad, iPhone und Android-Emulator:
 - Unter „Einstellungen“ die Ablage „Schlüsselbund des Systems“ wählen, Schlüssel speichern, App beenden und neu starten: Schlüssel ist noch da, „Verbindung prüfen“ gelingt (mit Netz)
 - Ablage zurück auf „Gerätespeicher“: Schlüssel zieht mit um
 - Eine KI-Erfassung mit Anthropic und eine mit OpenAI bis S1
+- „Einstellungen → Über KI-LEAD“: Impressum und Datenschutzhinweise öffnen sich im Browser des Systems, nicht in der App (seit 0.5.5)
 
 Nicht hier geprüft: Die nativen Builds selbst wurden in der Entwicklungsumgebung nicht übersetzt (kein Xcode, kein Android SDK); die Projektdateien prüfen die Regressionstests.

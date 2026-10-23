@@ -3,3 +3,6 @@ contact_links:
   - name: Sicherheitslücke melden (vertraulich)
     url: https://github.com/pereirawolf/ki-lead/security/advisories/new
     about: Schwachstellen bitte nicht als öffentliches Issue melden, sondern vertraulich über GitHub (siehe SECURITY.md).
+  - name: Erprobung im Testkreis
+    url: https://github.com/pereirawolf/ki-lead/blob/main/docs/ERPROBUNG.md
+    about: Ziel, Teilnahmehinweise und Rückmeldewege der Erprobung; bitte vor dem ersten Issue lesen.

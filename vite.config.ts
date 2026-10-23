@@ -56,6 +56,8 @@ export default defineConfig(({ command }) => ({
   build: {
     outDir: "dist",
     sourcemap: true,
+    // Lizenzhinweise aller gebündelten Pakete (MIT, BSD, Apache, OFL verlangen sie in jeder Kopie); siehe THIRD-PARTY-NOTICES.md
+    license: { fileName: "lizenzen.md" },
     chunkSizeWarningLimit: 1500,
   },
   test: {
