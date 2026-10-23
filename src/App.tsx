@@ -38,6 +38,7 @@ import {
 import type { ProfilFarbschema } from "./darstellung/typen";
 import { exportStempel, mitDatum } from "./kern/ausgabe";
 import { PwaHinweis } from "./ui/PwaHinweis";
+import { ablageLesen, ablageWechseln, type AblageId } from "./schluessel/ablage";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -88,6 +89,7 @@ export default function App() {
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
+  const [ablageId, setAblageId] = useState<AblageId>("geraet");
   const [kiUebergabe, setKiUebergabe] = useState<KiUebergabe | null>(null);
   /** Laufende Nummer der Übergaben; bleibt nach dem Quittieren erhalten, damit jede Übergabe neu ist */
   const uebergabeNr = useRef(0);
@@ -169,7 +171,17 @@ export default function App() {
     alleSchluesselLesen()
       .then(setSchluesselRoh)
       .catch((e) => speicherProblem("Die gespeicherten API-Schlüssel konnten nicht gelesen werden", e));
+    ablageLesen()
+      .then(setAblageId)
+      .catch(() => undefined);
   }, [speicherProblem]);
+
+  /** Ablage der API-Schlüssel wechseln; die Schlüssel ziehen mit um und werden neu gelesen. */
+  const setAblage = async (id: AblageId) => {
+    await ablageWechseln(id);
+    setAblageId(id);
+    setSchluesselRoh(await alleSchluesselLesen());
+  };
 
   const setEinstellungen = (e: Einstellungen) => {
     setEinstellungenRoh(e);
@@ -514,6 +526,8 @@ export default function App() {
               setEinstellungen={setEinstellungen}
               schluessel={schluessel}
               setSchluessel={setSchluessel}
+              ablage={ablageId}
+              setAblage={setAblage}
               farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
             />
           </Fehlergrenze>
@@ -523,7 +537,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.5.0. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.5.1. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>

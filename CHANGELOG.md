@@ -48,6 +48,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.30 | letzter Commit des Pull Requests „Fortschreibung: Absender aus der eigenen Vormeldung, Hinweis zum Seitenabruf; 0.4.30“ (Nachtrag vom 22.10.2026: Beispielprofil 1.21.0 mit dem Pull Request „SOP-LEAD 3.12.0: Fachgrundlagen und Ebenenregel für die Steuerungsebene; Profil 1.21.0“ und 1.22.0 mit dem Pull Request „SOP-LEAD 3.13.0: Typologietabellen aus Fachgrundlagen in B07, B08, B11, B15, C10, C14, C17; Profil 1.22.0“, jeweils ohne Änderung der App) |
 | 0.4.31 | letzter Commit von Pull Request #41 „Abnahme M4: technische Abnahme der Verdichtung“ |
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
+| 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
+
+## [0.5.1] – 23.10.2026
+
+Fortsetzung von Meilenstein 5: native Projekte für iOS und Android und eine wählbare Ablage der API-Schlüssel. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata oder KI-Pipeline; bereits gespeicherte Schlüssel bleiben ohne Zutun gültig.
+
+### Hinzugefügt
+
+- **Ablage der API-Schlüssel wählbar** (Einstellungen): Gerätespeicher der App (Vorgabe, wie bisher), nur für diese Sitzung (nichts wird gespeichert) oder in der nativen App der Schlüsselbund des Systems (iOS-Keychain, Android-Keystore). Ein Wechsel zieht vorhandene Schlüssel mit um und entfernt sie aus der bisherigen Ablage; bei einem Fehler bleibt alles unverändert. Mehrere gleichwertige Wege statt einer festen Lösung, damit die App ohne einzelne Abhängigkeit nutzbar bleibt (`src/schluessel/ablage.ts`).
+- **Native Projekte mit Capacitor 8.5** (MIT): `capacitor.config.json`, `ios/` (Swift Package Manager) und `android/` mit App-Kennung `de.pereirawolf.kilead`; Skripte `app:sync`, `app:ios`, `app:android`; Anleitung und Abnahmepunkte in [docs/NATIV.md](docs/NATIV.md).
+- Schlüsselbund über `@aparajita/capacitor-secure-storage` 8.0.1 (MIT, Version fest), nur in der nativen App und erst bei Bedarf geladen: Präfix `ki-lead.`, ohne iCloud-Synchronisierung, unter iOS nur dieses Gerät und nur entsperrt.
+- Native Symbole und Startbildschirme aus `scripts/app-symbol.py`; Android ohne Cloud-Sicherung der App-Daten, iOS mit Exportangabe zur Verschlüsselung.
+- **Standard-Profil je Anbieter** (Einstellungen): In den Abschnitten „API-Schlüssel (Anthropic)“ und „API-Schlüssel (OpenAI)“ setzt „Standard-Profil wählen“ unter „Modelle und Aufwand“ Modell und Aufwand aller Aufgaben auf das Profil des Anbieters. Anthropic: S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), Reparatur und Management Summary claude-sonnet-5-5 (niedrig bzw. mittel). OpenAI: gpt-6-luna (hoch), gpt-6-astra (mittel), gpt-6.1-sol (niedrig bzw. mittel), wie in der Abnahme M4 erprobt. Die Schaltfläche nennt die Belegung und zeigt, welches Profil aktiv ist; übrige Einstellungen bleiben (`STANDARD_PROFILE`, `standardProfilAnwenden` in `src/pipeline/einstellungen.ts`).
+
+### Tests
+
+- `tests/schluessel/ablage.test.ts` (8, neu): bisherige Schlüssel gelten weiter, Verfügbarkeit je Umgebung, Umzug in die Sitzung und in den Schlüsselbund (Attrappe), Verweigerung außerhalb der nativen App, Fehler im Schlüsselbund, Rückfall bei nicht verfügbarer Wahl, Auswahl in den Einstellungen.
+- `tests/pipeline/einstellungen.test.ts` (+3) und `tests/ui/einstellungen.test.ts` (+1): Standard-Profile nur mit Modellen des Anbieters und Preisangabe, Anthropic gleich den Vorgaben von App und Beispielprofil, nur Modell und Aufwand werden gesetzt, Anzeige des aktiven Profils, Wirkung in den Auswahlfeldern.
+- `tests/nativ/projekt.test.ts` (5, neu): App-Kennung und Versionen in allen Projektdateien, Plugin auf beiden Plattformen eingebunden, Sicherung und Exportangabe, Symbole.
 
 ## [0.5.0] – 23.10.2026
 

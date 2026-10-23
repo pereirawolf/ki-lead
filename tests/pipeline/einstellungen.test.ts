@@ -98,3 +98,42 @@ describe("API-Schlüssel je Anbieter", () => {
     expect(JSON.stringify(speicher.get("einstellungen"))).not.toContain("sk-ant-A");
   });
 });
+
+describe("Standard-Profile je Anbieter", () => {
+  it("nutzen nur Modelle des jeweiligen Anbieters mit Preisangabe und gültigem Aufwand", async () => {
+    const { STANDARD_PROFILE, MODELL_GRUPPEN, AUFWAND_STUFEN, ROLLEN } = await import("../../src/pipeline/einstellungen");
+    const { anbieterVon } = await import("../../src/anbieter/verteiler");
+    const { ausgabePreis } = await import("../../src/anbieter/preise");
+    const modelle = MODELL_GRUPPEN.flatMap((g) => g.modelle);
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE)) {
+      for (const r of ROLLEN) {
+        expect(modelle, `${anbieter} ${r}`).toContain(p.modelle[r]);
+        expect(anbieterVon(p.modelle[r]), `${anbieter} ${r}`).toBe(anbieter);
+        expect(ausgabePreis(p.modelle[r]), `${anbieter} ${r}: Preis`).not.toBeNull();
+        expect(AUFWAND_STUFEN.map((a) => a.id)).toContain(p.aufwand[r]);
+      }
+    }
+  });
+
+  it("Anthropic entspricht den Vorgaben von App und Beispielprofil", async () => {
+    const { STANDARD_PROFILE, modellFuer, ROLLEN } = await import("../../src/pipeline/einstellungen");
+    const p = await profil("lead-beispiel");
+    for (const r of ROLLEN) {
+      expect(STANDARD_PROFILE.anthropic.modelle[r], r).toBe(modellFuer(r, STANDARD, p.profil!));
+      expect(STANDARD_PROFILE.anthropic.aufwand[r], r).toBe(STANDARD.aufwand[r]);
+    }
+  });
+
+  it("setzt nur Modelle und Aufwand und erkennt das aktive Profil", async () => {
+    const { standardProfilAnwenden, standardProfilAktiv } = await import("../../src/pipeline/einstellungen");
+    const start = { ...STANDARD, websucheMax: 3, maxTokensErfassung: 64000 };
+    expect(standardProfilAktiv(start, "openai")).toBe(false);
+    const neu = standardProfilAnwenden(start, "openai");
+    expect(neu.websucheMax).toBe(3);
+    expect(neu.maxTokensErfassung).toBe(64000);
+    expect(standardProfilAktiv(neu, "openai")).toBe(true);
+    expect(standardProfilAktiv(neu, "anthropic")).toBe(false);
+    // Eine einzelne Abweichung hebt den Status auf
+    expect(standardProfilAktiv({ ...neu, aufwand: { ...neu.aufwand, reparatur: "medium" } }, "openai")).toBe(false);
+  });
+});

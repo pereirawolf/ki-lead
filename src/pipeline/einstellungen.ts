@@ -1,9 +1,10 @@
 // Einstellungen der KI-Pipeline. Leere Modellfelder bedeuten: Vorgabe des Profils bzw. der App.
 
-import { del, get, set } from "idb-keyval";
+import { get, set } from "idb-keyval";
 import type { Aufwand } from "../anbieter/typen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
+import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
 export type Rolle = "vorverarbeitung" | "erfassung" | "verdichtung" | "reparatur" | "kurzfassung";
 
@@ -51,6 +52,46 @@ export const STANDARD: Einstellungen = {
   fassung: 3,
 };
 
+/**
+ * Standard-Profil je Anbieter: Modell und Aufwand je Aufgabe, mit einem Klick unter „Einstellungen“ zu setzen.
+ * Anthropic entspricht den Vorgaben der App und des Beispielprofils (Verdichtung mit Opus wie in der Abnahme M4);
+ * OpenAI nimmt die Gegenstücke gleicher Größe (klein, mittel, groß), wie in der Abnahme M4 erprobt.
+ */
+export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, string>; aufwand: Record<Rolle, Aufwand> }> = {
+  anthropic: {
+    modelle: {
+      vorverarbeitung: "claude-haiku-5-5",
+      erfassung: "claude-opus-5-5",
+      verdichtung: "claude-opus-5-5",
+      reparatur: "claude-sonnet-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  },
+  openai: {
+    modelle: {
+      vorverarbeitung: "gpt-6-luna",
+      erfassung: "gpt-6-astra",
+      verdichtung: "gpt-6-astra",
+      reparatur: "gpt-6.1-sol",
+      kurzfassung: "gpt-6.1-sol",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  },
+};
+
+/** Setzt Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters; alles andere bleibt. */
+export function standardProfilAnwenden(e: Einstellungen, anbieter: AnbieterId): Einstellungen {
+  const s = STANDARD_PROFILE[anbieter];
+  return { ...e, modelle: { ...s.modelle }, aufwand: { ...s.aufwand } };
+}
+
+/** Sind Modell und Aufwand aller Aufgaben gerade genau das Standard-Profil des Anbieters? */
+export function standardProfilAktiv(e: Einstellungen, anbieter: AnbieterId): boolean {
+  const s = STANDARD_PROFILE[anbieter];
+  return (Object.keys(s.modelle) as Rolle[]).every((r) => e.modelle[r] === s.modelle[r] && e.aufwand[r] === s.aufwand[r]);
+}
+
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
   return e.modelle[rolle] || profil.manifest.modelle?.[rolle] || APP_MODELLE[rolle];
 }
@@ -82,14 +123,14 @@ export async function einstellungenSchreiben(e: Einstellungen): Promise<void> {
   await set("einstellungen", e);
 }
 
-// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert.
-export async function schluesselLesen(anbieter = "anthropic"): Promise<string> {
-  return ((await get(`schluessel:${anbieter}`)) as string | undefined) || "";
+// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert. Wo er liegt, wählt die
+// Person unter „Einstellungen“ (src/schluessel/ablage.ts: Gerätespeicher, nur Sitzung, Schlüsselbund des Systems).
+export async function schluesselLesen(anbieter: AnbieterId = "anthropic"): Promise<string> {
+  return schluesselAusAblage(anbieter);
 }
 
-export async function schluesselSchreiben(wert: string, anbieter = "anthropic"): Promise<void> {
-  if (wert) await set(`schluessel:${anbieter}`, wert);
-  else await del(`schluessel:${anbieter}`);
+export async function schluesselSchreiben(wert: string, anbieter: AnbieterId = "anthropic"): Promise<void> {
+  return schluesselInAblage(anbieter, wert);
 }
 
 export async function alleSchluesselLesen(): Promise<Schluessel> {

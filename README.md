@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.5.0, Meilenstein 5 begonnen: installierbar als App (PWA) mit Offline-Start; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.5.1, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -41,9 +41,9 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 
 ## Datenverarbeitung und Voraussetzungen
 
-- KI-LEAD ist eine Browseranwendung für Desktop, Tablet und Smartphone und lässt sich als App installieren (PWA). Meldungen, Profile, Lagebild und Einstellungen speichert sie im Browser des Geräts. Ein Service Worker hält die Dateien der App vor, damit sie ohne Netz startet; Inhalte und Anfragen an die KI-Anbieter speichert er nicht. Eigene Apps für iOS und Android sind in Arbeit (M5).
+- KI-LEAD ist eine Browseranwendung für Desktop, Tablet und Smartphone und lässt sich als App installieren (PWA). Meldungen, Profile, Lagebild und Einstellungen speichert sie im Browser des Geräts. Ein Service Worker hält die Dateien der App vor, damit sie ohne Netz startet; Inhalte und Anfragen an die KI-Anbieter speichert er nicht. Die Apps für iOS und Android entstehen aus demselben Code mit Capacitor ([Anleitung](docs/NATIV.md)).
 - Bei einer KI-Funktion übermittelt die App die dafür zusammengestellten Inhalte (Arbeitsanweisung, Profilregeln, Auftrag und Material) an den gewählten Anbieter. Websuche und Seitenabruf führt der Anbieter aus, nicht das Gerät.
-- Für KI-Funktionen ist ein eigener API-Schlüssel von Anthropic oder OpenAI nötig. Er wird im Browser gespeichert und nur an die Schnittstelle des jeweiligen Anbieters gesendet.
+- Für KI-Funktionen ist ein eigener API-Schlüssel von Anthropic oder OpenAI nötig. Er geht nur an die Schnittstelle des jeweiligen Anbieters. Wo er liegt, wählt die Person selbst: im Gerätespeicher der App, nur für die laufende Sitzung oder in der App für iOS und Android im Schlüsselbund des Systems (Keychain, Keystore). Ein Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
 
 ## Dokumentation
 
@@ -101,7 +101,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.0), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.1), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -113,7 +113,7 @@ Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abs
 | M2 | KI-Pipeline für die Erfassung (gestuft nach LEAD), Anthropic | umgesetzt, erprobt in den Testreihen vom 18.–21.10.2026 |
 | M3 | Modul Lagebild: Zusammenführung und Redaktionscheck | umgesetzt, Abnahme durch Regressionstests |
 | M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | technisch abgenommen am 23.10.2026 mit Anthropic und OpenAI ([Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)) |
-| M5 | Apps für iOS (TestFlight) und Android, PWA | PWA umgesetzt (0.5.0); native Apps in Arbeit |
+| M5 | Apps für iOS (TestFlight) und Android, PWA | PWA umgesetzt (0.5.0); native Projekte und Schlüsselbund angelegt (0.5.1), Builds und Abnahme auf Geräten offen ([Anleitung](docs/NATIV.md)) |
 | M6 | Erster veröffentlichter Release mit DOI und Erprobung im Testkreis; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
 
 „Umgesetzt“ heißt: Funktion vorhanden und durch Regressionstests belegt. „Abgenommen“ heißt: Abnahmekriterium der Spezifikation mit echten KI-Läufen geprüft und dokumentiert. KI-LEAD bleibt ein Forschungsdemonstrator; eine Abnahme ist keine fachliche Freigabe der Methodik.
@@ -127,6 +127,6 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.0) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.1) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

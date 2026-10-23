@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.5.0 vom 23.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.5.1 vom 23.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
 
@@ -22,7 +22,7 @@ KI-LEAD ist ein Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD
 - **Plattformen:** iPadOS und iOS als native App (Capacitor). Dieselbe Codebasis läuft als Android-App und als PWA.
 - **Lokal:** Profile, Meldungen, Läufe und Einstellungen liegen ausschließlich auf dem Gerät. Es gibt keine eigene Serverkomponente, kein Konto, keine Telemetrie und kein CDN. Alle Bibliotheken sind gebündelt.
 - **Einzige Netzverbindungen:** die KI-Schnittstellen von Anthropic (Claude) und OpenAI. Websuche und URL-Abruf laufen über die serverseitigen Werkzeuge des jeweiligen Anbieters.
-- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. In der nativen App liegt er im iOS-Keychain bzw. im Android-Keystore. In der PWA ist er nur im Browserspeicher abgelegt, mit Warnhinweis.
+- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. Wo er liegt, wählt die Person: im Gerätespeicher der App (unverschlüsselt, mit Hinweis), nur für die laufende Sitzung oder in der nativen App im iOS-Keychain bzw. Android-Keystore. Mehrere gleichwertige Wege sichern, dass die App ohne einzelne Abhängigkeit nutzbar bleibt.
 
 ## 3. Grundprinzip: rekursive Lagemeldung
 
@@ -208,6 +208,8 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 
 **Umsetzung M5, Teil PWA (Stand 23.10.2026, 0.5.0):** Web-App-Manifest (`public/manifest.webmanifest`: Name, relativer Start und Bereich `./`, eigenständige Anzeige, Symbole 192, 512, maskierbar und SVG; Lagenradar in den Farben des BBK-Farbschemas, Ausprägung nach Tief „Bernd“ 2021, siehe [app-symbol.md](app-symbol.md)) und Service Worker ohne zusätzliche Abhängigkeit. Der Build erzeugt `sw.js` aus `src/pwa/sw-vorlage.js` mit der Liste aller ausgelieferten Dateien (ohne Quellkarten) und einer Version aus App-Version und Prüfsumme über Dateinamen und ungehashte Inhalte. Der Service Worker hält bei der Installation alle Dateien vor, beantwortet Seitenaufrufe mit der vorgehaltenen `index.html` und eigene Dateien aus dem Cache; Anfragen an andere Adressen (KI-Anbieter) und andere Methoden als GET fängt er nicht ab und speichert sie nie. Eine neue Fassung wartet, bis die Person im Hinweis „Neu laden“ wählt oder alle Fenster geschlossen sind; der automatisch gesicherte Zwischenstand bleibt dabei erhalten. Ohne Netz zeigt ein Hinweis, was weiter funktioniert (Meldungen, Lagebild, Profile, Ausgaben) und was eine Verbindung braucht (KI-Funktionen). Anmeldung nur im Produktionsbuild, im sicheren Kontext und nicht in der nativen App. Geprüft im Browsertest: Offline-Start nach dem ersten Besuch, Beispiel im Lagebild und PDF-Ausgabe ohne Netz, keine Anfrage nach außen. Offen für M5: native Builds (Capacitor), Schlüssel im Keychain bzw. Keystore, Abnahme auf iPad, iPhone und Android.
 
+**Umsetzung M5, Teil native Apps (Stand 23.10.2026, 0.5.1):** Capacitor 8.5 (MIT) mit App-Kennung `de.pereirawolf.kilead`; Projektordner `ios/` (Swift Package Manager) und `android/` im Repository, Versionen aus `package.json` (Buildnummer 0.5.1 → 501). Ablage der API-Schlüssel wählbar unter „Einstellungen“: Gerätespeicher der App (Vorgabe, wie bisher), nur für diese Sitzung oder Schlüsselbund des Systems (nur nativ; Präfix `ki-lead.`, ohne iCloud-Synchronisierung, unter iOS nur dieses Gerät und entsperrt). Ein Wechsel schreibt zuerst in die neue Ablage und entfernt dann aus der alten; scheitert das Schreiben, bleibt alles unverändert. Eine gespeicherte, hier nicht verfügbare Wahl fällt auf den Gerätespeicher zurück. Android schließt App-Daten von der Sicherung aus; iOS erklärt Standardverschlüsselung. App-Symbole und Startbildschirme erzeugt `scripts/app-symbol.py`. Anleitung und Abnahmepunkte: [NATIV.md](NATIV.md). Offen: Übersetzen der nativen Builds, TestFlight, Abnahme auf Geräten.
+
 **Umsetzung M3 (Stand 18.10.2026):** Ansicht „Lagebild“ (Name aus `ui.lagebild.titel`). Einlesen von JSON-Dateien und ZIP-Archiven; gleiche Dateiinhalte nur einmal; Migration und Schemaprüfung je Datei; Meldungen fremder Schemata werden an ihrer Grundform (Sachverhaltsliste plus Stelle oder Land) erkannt, bleiben aus den Auswertungen heraus und lassen sich an die KI-Erfassung übergeben. Der Stand wird je Profil im Gerät gespeichert. Übersicht mit Kennzahlen (Stufen aus `beurteilung_hoch`, Tendenz aus `tendenz_verschaerfung`), Meldestatus nach `kontakte.json` mit mailto-Erinnerung, Verteilungen. Redaktionscheck in fünf Abschnitten (Zeitfenster gegen die nächste Ausgabe, jede Zeile „Handlungsrelevant bis“ einzeln; Zusammenhang und abweichende Bewertungen je Ereignisart mit Textbaustein A.7.2, gegenläufige Tendenzen nur bei Entspannung und Verschärfung; Fortschreibung, Nachlauf, Abschluss und mehrere Meldungen derselben Stelle, leere oder offene Kennsätze als Befund; formale Vollständigkeit bei hoher Beurteilung; Quellen, Schema, Status, nicht prüfbare Quellenverweise als Warnung), Fundstellen aus `ui.lagebild.verweise`. Fristen, nächste Ausgabe (Datum, Uhrzeit optional) und Prüfzeitpunkt gelten in der Zeitzone des Profils (`variablen.zeitzone`); Uhrzeiten auch in der Form „um 8:00 Uhr“, ohne Uhrzeit gilt das Tagesende. Geprüft wird für „jetzt“ (laufend aktualisiert) oder einen gespeicherten Stichtag. Grenzfälle: Frist zeitgleich mit der Ausgabe ist zeitkritisch; eine Frist am Ausgabetag ohne bekannte Reihenfolge ist zu klären. Kopf mit Prüfstand, Zählung nach Einstufung (zeitkritisch, zu klären, Information; jeder Befund einzeln), Abdeckung (ausgewertete und fremde Meldungen, nicht konfigurierte Regeln, aus dem Schema abgeleitete Schwelle) und Sprungmarken je Abschnitt. Hohe Beurteilung ohne `beurteilung_hoch`: die beiden höchsten Stufen des Schemas, wie in den Kennzahlen. Jeder Befund führt zur Meldung in der Liste, ohne die Meldungsmaske zu ändern. Redaktionsbericht als TXT und JSON mit Prüfstand, Profilprüfsumme, Meldungen mit Inhaltskennung und allen Befunden. Rohtabelle und CSV generisch aus dem Schema (eine Zeile je Sachverhalt, eine Spalte je Radarachse). Kopiervorlage als Word-kompatibles HTML mit Farbquadraten und Radar als PNG. PDF mit Übersicht nach Schwere und allen Meldungen. Jede Meldung lässt sich in der Maske öffnen. Beispieldatensätze kommen aus dem Profil (`beispiele`).
 - **KI-Verdichtung:**
   1. Die KI schlägt eine Gruppierung nach Sachverhalten vor (A.7.1). Die Person bestätigt oder korrigiert die Zuordnung.
@@ -221,8 +223,8 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ### 5.4 Einstellungen
 
 - Darstellung: Farbschema der Oberfläche – Automatisch (Standard: Neutral · Hell oder Neutral · Night Mode nach System, bei „mehr Kontrast“ das passende Kontrastschema; kein eigenes Farbschema), Neutral · Hell, Neutral · Night Mode, Kontrast · Hell, Kontrast · Dunkel (Text mindestens 7:1, kein Band), Bund, Bevölkerungsschutz, je ein Schema für jedes der 16 Länder, oder die Farben des aktiven Profils (`farbschema` in `profil.json` bzw. eigene Farben auf dem Gerät, an Profilschlüssel und Prüfsumme gebunden). Das Schema ändert nur Bildschirmfarben; Signalfarben der Bewertungen und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), erzwungene Systemfarben (`forced-colors`) gehen vor, Auswahl und Radarwerte sind nicht nur über Farbe erkennbar, Ausgaben (PDF, Word, CSV) behalten ihre Gestaltung. Katalog, Herkunft und Kontrastregeln: [farbschemas.md](farbschemas.md).
-- API-Schlüssel je Anbieter.
-- Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil.
+- API-Schlüssel je Anbieter, mit wählbarer Ablage (seit 0.5.1).
+- Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil. Seit 0.5.1 setzt „Standard-Profil wählen“ im Abschnitt des jeweiligen API-Schlüssels Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters: Anthropic S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), S3 Reparatur claude-sonnet-5-5 (niedrig), Management Summary claude-sonnet-5-5 (mittel); OpenAI mit den Gegenstücken gleicher Größe gpt-6-luna, gpt-6-astra und gpt-6.1-sol bei gleichem Aufwand. Übrige Einstellungen bleiben; einzelne Aufgaben lassen sich danach weiter anpassen.
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
 - Datenhinweis und Sprache.
 
@@ -243,7 +245,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 | Schema | eigener, interpretierender Prüfer für Draft 2020-12 ohne Codeerzeugung (läuft unter strenger Content-Security-Policy); Ajv dient in den Tests als Referenz |
 | Dokumente | DOCX-Text über JSZip, PDF direkt an das Modell; jsPDF und autotable für den Export |
 | Speicher | Capacitor Filesystem (Meldungen und Profile als Dateien, transparent und exportierbar), Index in IndexedDB |
-| Geheimnisse | Keychain bzw. Keystore über ein Secure-Storage-Plugin (ab M5); bis dahin IndexedDB des Browsers mit Warnhinweis |
+| Geheimnisse | Wählbare Ablage (`src/schluessel/ablage.ts`): Gerätespeicher (IndexedDB, Vorgabe), nur Sitzung (Arbeitsspeicher) oder in der nativen App Keychain bzw. Keystore über `@aparajita/capacitor-secure-storage` (MIT, gepinnt); Wechsel zieht die Schlüssel mit um |
 | HTTP | im Browser direkt über `fetch` mit dem Kopf `anthropic-dangerous-direct-browser-access`; nativ später über CapacitorHttp |
 
 **Anbieter-Abstraktion:** Eine gemeinsame Schnittstelle `LlmAnbieter` (`src/anbieter/typen.ts`) deckt Nachrichten, Werkzeuge (Websuche, URL-Abruf), strukturierte Ausgabe und Token-Zählung ab. Es gibt zwei Implementierungen: Anthropic Messages API und OpenAI Responses API. Die Profilinhalte (Anweisung, Teil A, SOPs, Kodierleitfaden, Schema) stehen am Anfang des Prompts und werden gecacht. Der Auftrag und das Material stehen am Ende.
@@ -269,7 +271,7 @@ evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen,
 
 - Ein Hinweis beim ersten Start und vor jedem KI-Lauf: nur fiktive oder offene Inhalte, keine personenbezogenen und keine eingestuften Daten.
 - Inhalte gehen nur an den gewählten KI-Anbieter; dort gelten dessen API-Bedingungen. Es gibt keine weitere Übermittlung, keine Analytics und keine Absturzberichte an Dritte.
-- Der API-Schlüssel verlässt das Gerät nur im Aufruf an den jeweiligen Anbieter.
+- Der API-Schlüssel verlässt das Gerät nur im Aufruf an den jeweiligen Anbieter. Die Ablage auf dem Gerät ist wählbar (Abschnitt 7, „Geheimnisse“); die native App für Android schließt App-Daten von der Cloud-Sicherung aus.
 
 ## 9. Meilensteine und Abnahme
 
@@ -280,7 +282,7 @@ evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen,
 | **M2** | KI-Pipeline Modus A (S0–S4), Anthropic | Drei fiktive Lagen erzeugen schemakonforme Entwürfe mit vollständigem Laufprotokoll |
 | **M3** | Modul Lagebild: Aggregation und Redaktionscheck | Meldestatus, Sachverhalte, Radar je Sachverhalt, Redaktionscheck und Exporte |
 | **M4** | KI-Verdichtung Modus B (vorläufige Fassung seit M2: Erkennung von Eingangsmeldungen, Gliederung nach Sachverhalten mit Zuordnung, t0, Zusatzanweisung A.7); OpenAI-Anbieter | Verdichtung der sechs fiktiven Ländermeldungen „Ilka“ zu einer Meldung der Koordinierungsstelle; Vergleich mit der vorhandenen Redaktionsfassung – technisch abgenommen (23.10.2026, je drei Läufe mit Anthropic und OpenAI, [Ergebnis](../evaluation/abnahmen/2026-10-23-m4-ergebnis.md)) |
-| **M5** | Capacitor-Builds: iOS (TestFlight), Android (APK), PWA (pereirawolf.de) | Installation und Offline-Betrieb auf iPad, iPhone und Android-Emulator – PWA umgesetzt (0.5.0, Offline-Start im Browsertest geprüft); native Builds offen |
+| **M5** | Capacitor-Builds: iOS (TestFlight), Android (APK), PWA (pereirawolf.de) | Installation und Offline-Betrieb auf iPad, iPhone und Android-Emulator – PWA umgesetzt (0.5.0, Offline-Start im Browsertest geprüft); native Projekte und Schlüsselbund angelegt (0.5.1); Builds und Abnahme auf Geräten offen |
 | **M6** | Erster Release mit Zenodo-DOI; die Versionsnummer wird bei der Freigabe festgelegt (GitHub-Integration, Metadaten aus CITATION.cff); Erprobung im Testkreis | Release veröffentlicht, Rückmeldungen ausgewertet |
 
 ## 10. Offene Punkte
@@ -337,3 +339,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.30 · Nachtrag 2 | 23.10.2026 | Ohne Änderung der App: Abnahme M4 technisch mit Anthropic und OpenAI (Abschnitt 9), M6 ohne vorab festgelegte Versionsnummer, offene Punkte 2, 5 und 6 fortgeschrieben |
 | 0.4.31 | 23.10.2026 | Schätzung von Dauer und Kosten nach der Abnahme M4: Messwerte für gpt-6-luna (S1) und gpt-6-astra (Verdichtung), Obergrenze der Opus-Verdichtung 2,20 USD, Rundung der Kostenangabe ohne Gleitkommafehler (Abschnitt 5.1, Umsetzung M2) |
 | 0.5.0 | 23.10.2026 | Beginn M5: installierbare PWA mit Manifest, Symbolen und Service Worker für den Offline-Start; Hinweise zu fehlendem Netz und neuer Fassung (Umsetzung M5, Abschnitt 9) |
+| 0.5.1 | 23.10.2026 | Native Projekte mit Capacitor (iOS, Android), wählbare Ablage der API-Schlüssel mit Schlüsselbund des Systems (Abschnitte 2, 7 und 8, Umsetzung M5); Standard-Profil je Anbieter in den Einstellungen (Abschnitt 5.4) |

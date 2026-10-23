@@ -1,0 +1,16 @@
+{
+  "appId": "de.pereirawolf.kilead",
+  "appName": "KI-LEAD",
+  "webDir": "dist",
+  "loggingBehavior": "debug",
+  "backgroundColor": "#E75B12",
+  "ios": {
+    "contentInset": "never",
+    "limitsNavigationsToAppBoundDomains": false
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false
+  }
+}
