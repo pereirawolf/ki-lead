@@ -2,7 +2,7 @@
 // LEAD-Eingabehilfen in der Meldungsmaske: zugeklappter Bereich je Textfeld, Einfügen nur im Zielfeld, Markierung,
 // Rücknahme, gesperrte Vorlagen und Dopplungen; keine KI und keine Anfrage nach außen.
 // Grundlage: Umsetzungsbeschreibung vom 21.10.2026 (A01, A02, A05–A07, A09, A10, A12, A13).
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
@@ -31,8 +31,14 @@ beforeAll(async () => {
   reactUmgebung();
   profilId = (await profilPflicht()).manifest.id;
 });
+// Gefälschte Uhr nur für setTimeout: Das Autospeichern der App (1,2 s nach der letzten Eingabe) läuft über
+// bisWahr() ohne echte Wartezeit ab; geprüft wird weiterhin der tatsächlich gespeicherte Zwischenstand.
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+});
 afterEach(async () => {
   await aushaengen();
+  vi.useRealTimers();
   speicherLeeren(db);
   aufrufe.zahl = 0;
   localStorage.clear();

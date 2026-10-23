@@ -51,7 +51,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
 | 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
-| 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ |
+| 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ (Nachtrag vom 24.10.2026: gestaffelte Prüfung und schnellere Tests, ohne Änderung der App) |
 
 ## [0.5.4] – 24.10.2026
 
@@ -72,6 +72,22 @@ Grundlage: Befund zu den Grundlagendokumenten vom 24.10.2026 (K1: maschinenlesba
 - `tests/dokumente/kennzeichnung.test.ts` (neu, 10): Herkunft aus dem Entstehungsfeld, Zusammenfassung mehrerer Meldungen, XMP mit Maskierung, PDF von KI-Entwurf und manueller Meldung, Lagebild gemischt und manuell, Kopfzeile der Management Summary.
 - `tests/profil/ki-kennzeichnung.test.ts` (neu, 4): kein Hinweis für Beispiel- und Musterprofil; Hinweis ohne Rolle `entstehung_feld` und ohne „KI-Entwurf“ im Schema.
 - `tests/ui/radar-tastatur.test.ts` (neu, 14): Rollen und Namen, ein Tabstopp je Achse, Wert außerhalb der Stufen, Pfeiltasten mit Fokus, Pos1/Ende, Klick.
+
+### Nachtrag vom 24.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Vorschläge zur Konsolidierung und Beschleunigung der Tests vom 24.10.2026. Gemessen vorher (2 Kerne): Vitest rund 42 s, davon `tests/ui/eingabehilfen.test.ts` 10,4 s; dieselbe Suite in zufälliger Reihenfolge noch einmal rund 42 s; Browsertests 82 s mit einem Worker, davon `pwa-update.spec.ts` rund 52 s. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten; kein Test entfernt, keine Prüfung abgeschwächt.
+
+#### Geändert
+
+- **Gestaffelte Prüfung in GitHub Actions:** Auf `main`, im neuen wöchentlichen Volllauf und bei manuellem Start läuft weiterhin alles. Auf Pull Requests entscheidet `scripts/pruefumfang.mjs` anhand der geänderten Dateien: Die Kern-Browsertests entfallen nur, wenn ausschließlich reine Inhalte geändert sind (Dokumentation, Bewertungsfälle, SOP und Markdown-Texte der Profile); die PWA-Browsertests laufen, wenn PWA-Mechanismus oder Testumgebung betroffen sind. Im Zweifel und bei nicht ermittelbarer Dateiliste läuft alles. Der Wochenlauf veröffentlicht nichts.
+- **Vitest auf Pull Requests einmal** in zufälliger, fester Reihenfolge; auf `main` und im Wochenlauf weiterhin zusätzlich in der gewöhnlichen Reihenfolge.
+- **Browsertests in zwei Projekten** `kern` und `pwa` (beide Chromium), in der CI mit zwei Workern (gemessen 82 s → 52 s), gegen den eben erzeugten Build statt eines zweiten (`KI_LEAD_BUILD_VORHANDEN=1`), Chromium aus dem Cache der Actions.
+- **Autospeichern ohne echte Wartezeit:** `takt()` in `tests/support/dom.ts` stellt unter `vi.useFakeTimers()` die gefälschte Uhr vor; `tests/ui/eingabehilfen.test.ts` nutzt das (10,4 s → rund 2,7 s). Geprüft wird weiterhin der tatsächlich gespeicherte Zwischenstand.
+- Neue Befehle `npm run test:browser:kern`, `npm run test:browser:pwa` und `npm run test:inhalt`; [docs/TESTS.md](docs/TESTS.md) mit Abschnitt „Gestaffelte Prüfung“.
+
+#### Tests
+
+- `tests/ci/pruefumfang.test.ts` (neu, 31): Tabellenfälle für SOP, Arbeitsanweisungen, Dokumentation, Profiloberfläche, Code, PWA, Workflow und leere Liste; Aufruf als Skript; Wächter: genannte PWA-Dateien existieren, jede Quelldatei mit Service-Worker-Bezug löst die PWA-Browsertests aus, Zuordnung jeder `*.spec.ts`, keine Datei unter `src/`, `public/` oder `tests/` gilt als reiner Inhalt.
 
 ## [0.5.3] – 23.10.2026
 
