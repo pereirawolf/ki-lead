@@ -156,6 +156,49 @@ export function bandVerlauf(band: string[]): string {
   return `linear-gradient(90deg, ${farben.map((f, i) => `${f} ${p(i)} ${p(i + 1)}`).join(", ")})`;
 }
 
+/** Mischt anteil (0–1) der Farbe a in die Farbe b; beide #RRGGBB */
+export function mischen(a: string, b: string, anteil: number): string {
+  const teil = (h: string, i: number) => parseInt(h.slice(1 + 2 * i, 3 + 2 * i), 16);
+  return (
+    "#" +
+    [0, 1, 2]
+      .map((i) => Math.round(teil(a, i) * anteil + teil(b, i) * (1 - anteil)))
+      .map((x) => x.toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase()
+  );
+}
+
+/**
+ * Höchster Abstand je Farbkanal (0–255), bis zu dem eine Bandfarbe als dieselbe Farbe wie der angrenzende
+ * Hintergrund gilt: Weiß und #F5F6F7 (Abstand 10) ja, Gelb #FFFC00 auf Weiß (Abstand 255) nein. Maßgeblich ist die
+ * Farbe selbst, nicht der Helligkeitskontrast; ein helles Gelb bleibt neben Weiß als eigene Farbe erkennbar.
+ */
+export const BAND_GLEICHE_FARBE = 16;
+
+/** Größter Abstand der Farbkanäle zweier #RRGGBB-Farben (0 = gleich, 255 = maximal verschieden) */
+export function farbAbstand(a: string, b: string): number {
+  const teil = (h: string, i: number) => parseInt(h.slice(1 + 2 * i, 3 + 2 * i), 16);
+  return Math.max(...[0, 1, 2].map((i) => Math.abs(teil(a, i) - teil(b, i))));
+}
+/** Anteil der Hauptfarbe (amt), mit dem Kopf und Seitengrund dann ganz leicht eingefärbt werden; sind beide gleich, gilt für beide der Anteil des Seitengrunds */
+export const BAND_TOENUNG = { kopf: 0.07, papier: 0.06 } as const;
+
+/**
+ * Hebt das Akzentband vom angrenzenden Hintergrund ab: Ist eine Bandfarbe (meist Weiß) dieselbe Farbe wie der Kopf
+ * darüber oder der Seitengrund darunter, werden beide ganz leicht in der Hauptfarbe des Schemas eingefärbt, damit
+ * das Weiß im Band als eigene Farbe sichtbar bleibt. Gilt für Katalog- und Profilfarben gleichermaßen.
+ */
+export function bandAbheben(tokens: Record<string, string>, band: string[]): Record<string, string> {
+  const kopf = tokens["header-hintergrund"] ?? tokens.flaeche;
+  const grund = [kopf, tokens.papier].filter((g) => g && HEX.test(g));
+  const betroffen = band.filter((f) => HEX.test(f)).some((f) => grund.some((g) => farbAbstand(f, g) <= BAND_GLEICHE_FARBE));
+  if (!betroffen || !HEX.test(tokens.amt ?? "") || !HEX.test(kopf ?? "") || !HEX.test(tokens.papier ?? "")) return tokens;
+  // Haben Kopf und Seitengrund dieselbe Farbe (Bund- und Länderschemata seit 0.5.3), behalten sie sie auch getönt
+  const kopfAnteil = kopf === tokens.papier ? BAND_TOENUNG.papier : BAND_TOENUNG.kopf;
+  return { ...tokens, "header-hintergrund": mischen(tokens.amt, kopf, kopfAnteil), papier: mischen(tokens.amt, tokens.papier, BAND_TOENUNG.papier) };
+}
+
 /** Kontrastfehler einer vollständigen Farbtabelle */
 export function kontrastFehler(tokens: Record<string, string>, textZiel = 4.5): string[] {
   const out: string[] = [];
@@ -210,7 +253,7 @@ function ausKatalog(e: FarbschemaEintrag, auswahl: string, quelle: AufgeloestesT
     name: e.name,
     modus: e.modus,
     quelle,
-    tokens: { ...e.tokens, ...semantikVon(e), band: bandVerlauf(e.band) },
+    tokens: { ...bandAbheben({ ...e.tokens }, e.band), ...semantikVon(e), band: bandVerlauf(e.band) },
     kontrast: !!e.kontrastziel && e.kontrastziel > 4.5,
     band: e.band,
     hinweise,
@@ -228,7 +271,7 @@ function ausProfil(p: ProfilFarbschema, auswahl: string, quelle: "profil" | "lok
     name: p.name?.trim() || `Profilfarben (Basis: ${basis.name})`,
     modus: basis.modus,
     quelle,
-    tokens: { ...tokens, band: bandVerlauf(band) },
+    tokens: { ...bandAbheben(tokens, band), band: bandVerlauf(band) },
     band,
     hinweise: [],
     kontrast: !!basis.kontrastziel && basis.kontrastziel > 4.5,
