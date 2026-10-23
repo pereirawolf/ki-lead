@@ -18,9 +18,16 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(schaetzeStufe("s1", "claude-haiku-5-5", "high")).toEqual({ sekunden: [15, 150], usd: [0, 0.03], gemessen: true });
     expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "high").sekunden)).toBe("bis 3 Minuten");
     expect(kostenText(schaetzeStufe("s1", "claude-haiku-5-5", "high").usd)).toBe("bis 0,03 USD");
-    // Verdichtung mit Opus medium: bis 1,63 USD gemessen (0.4.27)
-    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium")).toEqual({ sekunden: [300, 540], usd: [1.2, 2.0], gemessen: true });
-    expect(kostenText(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium").usd)).toBe("1,20–2,00 USD");
+    // Verdichtung mit Opus medium: bis 1,91 USD in der Abnahme M4 gemessen (0.4.31)
+    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium")).toEqual({ sekunden: [300, 540], usd: [1.2, 2.2], gemessen: true });
+    expect(kostenText(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium").usd)).toBe("1,20–2,20 USD");
+    // OpenAI aus der Abnahme M4 (0.4.31): Messwerte statt Hochrechnung
+    expect(schaetzeStufe("s1", "gpt-6-luna", "high")).toEqual({ sekunden: [30, 120], usd: [0, 0.02], gemessen: true });
+    expect(dauerText(schaetzeStufe("s1", "gpt-6-luna", "high").sekunden)).toBe("bis 2 Minuten");
+    expect(kostenText(schaetzeStufe("s1", "gpt-6-luna", "high").usd)).toBe("bis 0,02 USD");
+    expect(schaetzeStufe("verdichtung", "gpt-6-astra", "medium")).toEqual({ sekunden: [90, 240], usd: [1.0, 1.5], gemessen: true });
+    expect(dauerText(schaetzeStufe("verdichtung", "gpt-6-astra", "medium").sekunden)).toBe("1–4 Minuten");
+    expect(kostenText(schaetzeStufe("verdichtung", "gpt-6-astra", "medium").usd)).toBe("1,00–1,50 USD");
     expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "medium").sekunden)).toBe("unter 1 Minute");
     expect(dauerText(schaetzeStufe("erfassung", "claude-sonnet-5-5", "medium").sekunden)).toBe("bis 3 Minuten");
   });
@@ -37,6 +44,10 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(hoch.usd).toEqual([1.4, 4.6]);
     expect(schaetzeStufe("erfassung", "unbekannt-1", "medium")).toEqual({ sekunden: null, usd: null, gemessen: false });
     expect(dauerText(null)).toBe("Dauer ohne Messwert");
+    // Gleitkommawerte am Cent werden nicht über die Grenze hinaus gerundet (0.4.31)
+    expect(kostenText([1.2, 2.2])).toBe("1,20–2,20 USD");
+    expect(kostenText([0.29, 0.57])).toBe("0,29–0,57 USD");
+    expect(kostenText([1.4, 2.301])).toBe("1,40–2,31 USD");
     expect(
       summe([
         [0, 0.02],

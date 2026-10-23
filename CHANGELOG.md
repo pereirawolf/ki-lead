@@ -46,6 +46,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.28 | letzter Commit des Pull Requests „Fortschreibung: Bearbeitungszeit, t0 und Rechercheauftrag von der App steuern; 0.4.28“ |
 | 0.4.29 | letzter Commit des Pull Requests „PDF: Kennsatzzeilen ungeteilt, Pfeile lesbar; 0.4.29“ |
 | 0.4.30 | letzter Commit des Pull Requests „Fortschreibung: Absender aus der eigenen Vormeldung, Hinweis zum Seitenabruf; 0.4.30“ (Nachtrag vom 22.10.2026: Beispielprofil 1.21.0 mit dem Pull Request „SOP-LEAD 3.12.0: Fachgrundlagen und Ebenenregel für die Steuerungsebene; Profil 1.21.0“ und 1.22.0 mit dem Pull Request „SOP-LEAD 3.13.0: Typologietabellen aus Fachgrundlagen in B07, B08, B11, B15, C10, C14, C17; Profil 1.22.0“, jeweils ohne Änderung der App) |
+| 0.4.31 | letzter Commit von Pull Request #41 „Abnahme M4: technische Abnahme der Verdichtung“ |
+
+## [0.4.31] – 23.10.2026
+
+Grundlage: technische Abnahme M4 vom 23.10.2026 (je drei Verdichtungen „Ilka“ mit Anthropic und OpenAI, [Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata oder Modellvorgaben.
+
+### Geändert
+
+- **Schätzung von Dauer und Kosten:** Messwerte für OpenAI statt Hochrechnung über den Listenpreis: S1 `gpt-6-luna` „high“ bis 2 Minuten, bis 0,02 USD (gemessen 52–65 s, höchstens 0,008 USD); Verdichtung `gpt-6-astra` „medium“ 1–4 Minuten, 1,00–1,50 USD (gemessen 114–152 s, 1,18–1,23 USD). Verdichtung `claude-opus-5-5` „medium“ jetzt 1,20–2,20 USD statt 1,20–2,00 USD, weil die Abnahme bis 1,91 USD erreichte; Dauer und S1 Haiku „high“ unverändert (gemessen 428–459 s bzw. 101–136 s, 0,023–0,028 USD).
+- Spezifikation 0.4.31 (Abschnitt 5.1, offener Punkt 6).
+
+### Behoben
+
+- **Rundung der Kostenangabe:** `kostenText` rundete Grenzen wegen Gleitkommafehlern um einen Cent nach außen (2,20 USD erschien als 2,21 USD, 0,29 USD als 0,28 USD). Die Rundung arbeitet jetzt mit einer kleinen Toleranz.
+
+### Hinzugefügt
+
+- Abnahme M4 unter `evaluation/`: Plan, Laufskript für Anthropic und OpenAI (`evaluation/abnahmen/m4.lauf.ts`, eigene Vitest-Konfiguration, nie Teil von `npm test`) und Ergebnis.
+
+### Tests
+
+- `tests/pipeline/schaetzung.test.ts`: Messwerte für gpt-6-luna und gpt-6-astra, neue Obergrenze der Opus-Verdichtung, Rundung an Centgrenzen.
 
 ## [0.4.30] – 22.10.2026
 
