@@ -50,7 +50,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
-| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachtrag vom 23.10.2026: App-Symbole festgeschrieben, Python-Skript und Android-Vorlagentests entfernt, ohne Änderung der App) |
+| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachtrag vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt) |
 
 ## [0.5.3] – 23.10.2026
 
@@ -66,10 +66,12 @@ Grundlage: Rückmeldung zum Schema „Thüringen“: Über dem Identitätsband s
 
 ### Nachtrag vom 23.10.2026 (ohne neue Versionsnummer)
 
-Grundlage: Prüfung der im Repository eingesetzten Programmiersprachen. Die Kodierung des Lagenradars nach Tief „Bernd“ für das App-Symbol ist abgeschlossen und muss nicht erneut berechnet werden. Keine Änderung an der App, an Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten.
+Grundlage: Prüfung der im Repository eingesetzten Programmiersprachen. Die Kodierung des Lagenradars nach Tief „Bernd“ für das App-Symbol ist abgeschlossen und muss nicht erneut berechnet werden. An der App ändert sich nur das Favicon im Browser; keine Änderung an Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten.
 
 - **App-Symbole festgeschrieben:** `scripts/app-symbol.py` entfällt; das Repository enthält damit kein Python mehr und braucht kein Pillow. Die erzeugten Symbole und Startbildschirme für Web, iOS und Android bleiben unverändert als feste Dateien erhalten, Vorlage ist `public/icons/icon.svg`. Kodierung und Begründung stehen weiter in [docs/app-symbol.md](docs/app-symbol.md); Verweise in [docs/NATIV.md](docs/NATIV.md) und [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) angepasst.
 - **Android-Vorlagentests entfernt:** `ExampleUnitTest.java` und `ExampleInstrumentedTest.java` aus der Capacitor-Vorlage (Paket `com.getcapacitor.myapp`) prüften nichts Eigenes; der Instrumented-Test erwartete die Kennung `com.getcapacitor.app` und wäre gegen `de.pereirawolf.kilead` gescheitert. Eigener Java- und Swift-Code beschränkt sich damit auf die Capacitor-Hülle.
+- **Favicon im Browser:** `public/favicon.ico` (16, 32 und 48 Pixel, aus dem festgeschriebenen Symbol abgeleitet) ergänzt und in `index.html` und `reparatur.html` eingebunden. Damit zeigen auch Browser ohne SVG-Favicons (etwa Safari) und Lesezeichen- oder Verlaufsansichten, die nach `favicon.ico` fragen, das Lagenradar. Die Reparaturseite bindet jetzt wie die App zusätzlich das PNG-Favicon ein (bisher nur SVG). Die PWA hält die neue Datei vor; installierte Fassungen bieten deshalb einmal „Neu laden“ an.
+- `tests/pwa/pwa.test.ts` (+1): Favicon-Verweise (ICO, SVG, PNG) auf App- und Reparaturseite, ICO-Datei mit drei Größen.
 - `tests/nativ/projekt.test.ts`: Der Symboltest prüft jetzt, dass alle festgeschriebenen Symbol- und Startbilddateien für Web, iOS und Android vorhanden sind (bisher je eine Datei für iOS und Android).
 
 ## [0.5.2] – 23.10.2026

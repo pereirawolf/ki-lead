@@ -44,6 +44,7 @@ describe("Native Apps: Projektdateien", () => {
   it("enthalten die festgeschriebenen App-Symbole und Startbildschirme (docs/app-symbol.md)", () => {
     const res = ["android", "app", "src", "main", "res"];
     const dateien = [
+      ["public", "favicon.ico"],
       ["public", "icons", "icon.svg"],
       ["public", "icons", "icon-192.png"],
       ["public", "icons", "icon-512.png"],
