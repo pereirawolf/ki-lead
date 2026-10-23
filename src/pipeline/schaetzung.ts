@@ -1,10 +1,12 @@
 // Vorsichtige Schätzung von Dauer und Kosten je KI-Stufe aus gemessenen Läufen.
 //
-// Messgrundlage (Laufprotokolle vom 18.–21.10.2026, App 0.4.5–0.4.25, Beispielprofil):
+// Messgrundlage (Laufprotokolle vom 18.–23.10.2026, App 0.4.5–0.4.30, Beispielprofil):
 // - S1: 16 Läufe der Testreihe „Ebola Nigeria“ (Haiku medium/high, Sonnet medium), 7 Läufe „Ilka“ (Haiku medium) und
 //   3 Verdichtungen „Ilka“ mit Haiku high (21.10.2026, App 0.4.25, Grenze 128 000 Token)
 // - Erfassung mit Websuche: 11 Läufe der Testreihe (Sonnet medium 5, Opus low 3, Opus medium 3), 2 mit PDF, 1 Fortschreibung
 // - Verdichtung „Ilka“ (6 Eingangsmeldungen, ohne Websuche): Opus medium 5, Sonnet medium 2
+// - Abnahme M4 vom 23.10.2026 (App 0.4.30, Profil 1.25.0, Verdichtung „Ilka“, je drei Läufe): S1 Haiku high mit
+//   S2 Opus medium; S1 gpt-6-luna high mit S2 gpt-6-astra medium (evaluation/abnahmen/2026-10-23-m4-ergebnis.md)
 // Die Spannen sind nach außen gerundet und enthalten eine Reparatur in S3. Kosten nach Listenpreisen (preise.ts).
 // Für nicht gemessene Kombinationen wird nur der Preis aus einer gemessenen Variante gleicher Art hochgerechnet;
 // eine Dauer wird dann nicht angegeben.
@@ -33,7 +35,8 @@ export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 7–41 s, höchstens 0,011 USD
   "s1|claude-haiku-5-5|medium": { sekunden: [10, 60], usd: [0, 0.02] },
   // gemessen: Erfassung 18–37 s, höchstens 0,008 USD; Verdichtung „Ilka“ mit sechs Eingängen 88–95 s,
-  // 0,019–0,020 USD, 20 821–22 134 Ausgabetoken (Läufe 20261021-163738-9s7d, -164604-u1kb, -165220-1hmp)
+  // 0,019–0,020 USD, 20 821–22 134 Ausgabetoken (Läufe 20261021-163738-9s7d, -164604-u1kb, -165220-1hmp);
+  // Abnahme M4: 101–136 s, 0,023–0,028 USD, 23 953–32 762 Ausgabetoken
   "s1|claude-haiku-5-5|high": { sekunden: [15, 150], usd: [0, 0.03] },
   // gemessen 9–12 s, 0,02–0,12 USD (0,12 ohne Cache)
   "s1|claude-sonnet-5-5|medium": { sekunden: [10, 30], usd: [0.02, 0.15] },
@@ -46,8 +49,13 @@ export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch)
   "verdichtung|claude-sonnet-5-5|medium": { sekunden: [150, 360], usd: [0.55, 0.95] },
   // gemessen 298–410 s, 1,23–1,63 USD (1,63 USD: 50 071 Ausgabetoken, 80 118 Token neu in den Cache, Lauf
-  // 20261021-165220-1hmp, 408 s)
-  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.0] },
+  // 20261021-165220-1hmp, 408 s); Abnahme M4: 428–459 s, 1,84–1,91 USD, 53 735–56 355 Ausgabetoken.
+  // Obergrenze seit 0.4.31 2,20 statt 2,00 USD, weil die Abnahme bis 1,91 USD erreichte
+  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.2] },
+  // Abnahme M4: 52–65 s, 0,004–0,008 USD, 4 222–5 369 Ausgabetoken
+  "s1|gpt-6-luna|high": { sekunden: [30, 120], usd: [0, 0.02] },
+  // Abnahme M4: 114–152 s, 1,18–1,23 USD, 6 130–7 629 Ausgabetoken
+  "verdichtung|gpt-6-astra|medium": { sekunden: [90, 240], usd: [1.0, 1.5] },
 };
 
 const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
@@ -98,7 +106,8 @@ function usd(x: number): string {
 
 export function kostenText(k: [number, number] | null): string {
   if (!k) return "Kosten unbekannt (Modell ohne Preisangabe)";
-  const [a, b] = [Math.floor(k[0] * 100) / 100, Math.ceil(k[1] * 100) / 100];
+  // Toleranz gegen Gleitkommafehler: 2,2 × 100 ergibt 220,00000000000003 und würde sonst auf 2,21 aufgerundet
+  const [a, b] = [Math.floor(k[0] * 100 + 1e-9) / 100, Math.ceil(k[1] * 100 - 1e-9) / 100];
   if (b <= 0.01) return "unter 1 Cent";
   if (a < 0.01) return `bis ${usd(b)} USD`;
   return `${usd(a)}–${usd(b)} USD`;
