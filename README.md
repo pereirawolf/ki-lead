@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.4.30, Meilenstein 4 (Verdichtung, zwei KI-Anbieter); siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.4.30, Meilenstein 4 (Verdichtung, zwei KI-Anbieter) technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -107,12 +107,14 @@ Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abs
 
 | Meilenstein | Inhalt | Stand |
 |---|---|---|
-| M1 | Web-Kern ohne KI: Profile, Formular aus Schema, Prüfung, Import und Export | umgesetzt |
-| M2 | KI-Pipeline für die Erfassung (gestuft nach LEAD), Anthropic | umgesetzt |
-| M3 | Modul Lagebild: Zusammenführung und Redaktionscheck | umgesetzt |
-| M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | umgesetzt |
+| M1 | Web-Kern ohne KI: Profile, Formular aus Schema, Prüfung, Import und Export | umgesetzt, Abnahme durch Regressionstests |
+| M2 | KI-Pipeline für die Erfassung (gestuft nach LEAD), Anthropic | umgesetzt, erprobt in den Testreihen vom 18.–21.10.2026 |
+| M3 | Modul Lagebild: Zusammenführung und Redaktionscheck | umgesetzt, Abnahme durch Regressionstests |
+| M4 | KI-Verdichtung von Meldungen zur Meldung der nächsten Ebene; OpenAI | technisch abgenommen am 23.10.2026 ([Ergebnis](evaluation/abnahmen/2026-10-23-m4-ergebnis.md)); Funktionsnachweis OpenAI offen |
 | M5 | Apps für iOS (TestFlight) und Android, PWA | geplant |
 | M6 | Erster veröffentlichter Release mit DOI und Erprobung im Testkreis; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
+
+„Umgesetzt“ heißt: Funktion vorhanden und durch Regressionstests belegt. „Abgenommen“ heißt: Abnahmekriterium der Spezifikation mit echten KI-Läufen geprüft und dokumentiert. KI-LEAD bleibt ein Forschungsdemonstrator; eine Abnahme ist keine fachliche Freigabe der Methodik.
 
 Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 

@@ -18,6 +18,7 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 - `plaene/`: festgelegte Bewertungspläne (Fragestellung, Varianten, Umfang) und die Soll-Abdeckung der Fälle; ein Plan ist kein Ergebnis
 - `bewertungsschema.json`: Format einer Bewertung (ein Lauf, eine bewertende Person)
 - `ergebnisse/`: zusammengefasste Bewertungen; Laufprotokolle und Rohantworten bleiben außerhalb des öffentlichen Repositorys
+- `abnahmen/`: technische Abnahmen der Meilensteine mit echten KI-Läufen (Laufskript, eigene Vitest-Konfiguration, Ergebnis); nie Teil von `npm test`
 
 `tests/evaluation/` prüft nur, dass Fälle und Ergebnisse diesen Schemata entsprechen. Es ruft keine KI auf.
 
