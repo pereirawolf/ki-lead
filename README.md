@@ -46,6 +46,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 - KI-LEAD ist eine Browseranwendung für Desktop, Tablet und Smartphone und lässt sich als App installieren (PWA). Meldungen, Profile, Lagebild und Einstellungen speichert sie im Browser des Geräts. Ein Service Worker hält die Dateien der App vor, damit sie ohne Netz startet; Inhalte und Anfragen an die KI-Anbieter speichert er nicht. Die Apps für iOS und Android entstehen aus demselben Code mit Capacitor ([Anleitung](docs/NATIV.md)).
 - Bei einer KI-Funktion übermittelt die App die dafür zusammengestellten Inhalte (Arbeitsanweisung, Profilregeln, Auftrag und Material) an den gewählten Anbieter. Websuche und Seitenabruf führt der Anbieter aus, nicht das Gerät.
 - Für KI-Funktionen ist ein eigener API-Schlüssel von Anthropic oder OpenAI nötig. Er geht nur an die Schnittstelle des jeweiligen Anbieters. Wo er liegt, wählt die Person selbst: im Gerätespeicher der App, nur für die laufende Sitzung oder in der App für iOS und Android im Schlüsselbund des Systems (Keychain, Keystore). Ein Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
+- Einzelheiten zu Datenflüssen, Aufbewahrung bei den Anbietern, Protokollen und Löschen: [Datenschutzhinweise](docs/DATENSCHUTZ.md); Risiken und Maßnahmen: [Sicherheit](docs/SICHERHEIT.md).
 
 ## Dokumentation
 
@@ -59,6 +60,10 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | SOPs zusammenhängend lesen | [Lesefassung der Sammelmappe](profile/lead-beispiel/sop/SOP-LEAD_Sammelmappe_Lesefassung.md) |
 | Eigene Profile entwickeln | [Profilformat](docs/PROFILFORMAT.md) |
 | Technik und Funktionsumfang | [Spezifikation](docs/SPEZIFIKATION.md) |
+| Datenflüsse, Speicherorte, Store-Angaben | [Datenschutzhinweise](docs/DATENSCHUTZ.md) |
+| Einordnung nach der KI-Verordnung, Systemkarte | [KI-Verordnung](docs/KI-VERORDNUNG.md) |
+| Bedrohungsmodell, Schwachstellen melden | [Sicherheit](docs/SICHERHEIT.md), [SECURITY.md](SECURITY.md) |
+| Stand und Lücken der Barrierefreiheit | [Barrierefreiheit](docs/BARRIEREFREIHEIT.md) |
 
 ## Profile
 

@@ -50,7 +50,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
-| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachtrag vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt) |
+| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
 
 ## [0.5.3] – 23.10.2026
 
@@ -63,6 +63,17 @@ Grundlage: Rückmeldung zum Schema „Thüringen“: Über dem Identitätsband s
 ### Tests
 
 - `tests/darstellung/farbschemas.test.ts` (+2): In allen Bund- und Länderschemata ist `header-hintergrund` gleich `papier`; Profilfarben können `header-hintergrund` weiterhin abweichend setzen.
+
+### Nachtrag vom 24.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Grundlagendokumente der Priorität 1 für den Testkreis (M6). Rechtsstand und Bedingungen der Anbieter am 24.10.2026 recherchiert, mit Quellen; keine Rechtsberatung. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten.
+
+- **[docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md):** Verantwortlichkeit (Herausgeber der Software; verantwortlich für die Verarbeitung in der App ist die nutzende Person oder Stelle), Speicherorte nach dem Code, Datenflüsse, Bedingungen von Anthropic und OpenAI (Aufbewahrung, kein Training, `store: false`), Übermittlung in die USA, Protokolle von GitHub Pages, Laufprotokolle, Schlüsselablage, Löschen; Anhänge mit Antworten für App Store und Google Play und einer Vorlage zur Schwellwertanalyse für testende Stellen.
+- **[docs/KI-VERORDNUNG.md](docs/KI-VERORDNUNG.md):** Zweckbestimmung und Verwendungsgrenzen, Rollen, Ausnahmen nach Art. 2 Abs. 6, 8 und 12, Abgrenzung zu Anhang III Nr. 2 und Nr. 5 Buchst. d, Art. 50 mit Stand der Kennzeichnung, Art. 4, Fristen nach der Verordnung (EU) 2026/1744; Systemkarte mit Modellen je Stufe, menschlicher Aufsicht, Fehlerbildern aus der Abnahme M4 und Grenzen der Prüfungen.
+- **[SECURITY.md](SECURITY.md) und [docs/SICHERHEIT.md](docs/SICHERHEIT.md):** vertraulicher Meldeweg über GitHub, unterstützte Versionen; schlankes Bedrohungsmodell mit vorhandenen und offenen Maßnahmen (Prompt-Injection, Schlüsselablage, Direktzugriff aus dem Browser, Content-Security-Policy, Profilintegrität, Service Worker, Lieferkette).
+- **[docs/BARRIEREFREIHEIT.md](docs/BARRIEREFREIHEIT.md):** nach Art einer Erklärung zur Barrierefreiheit, ohne Konformität zu beanspruchen; geprüfter Stand, im Code geprüfte Lücken (Lagenradar, Screenreader, PDF), Rückmeldeweg, Einordnung nach BFSG und BITV 2.0.
+- **Issue-Vorlagen** „Barrierefreiheit“ und „Datenschutz“ sowie Verweis auf den vertraulichen Meldeweg (`.github/ISSUE_TEMPLATE/`).
+- **README:** Tabelle „Dokumentation“ und Abschnitt „Datenverarbeitung und Voraussetzungen“ verweisen auf die neuen Dokumente. **Spezifikation:** Nachtrag zu 0.5.3 (Abschnitte 1, 7, 8 und offene Punkte 7–13).
 
 ### Nachtrag vom 23.10.2026 (ohne neue Versionsnummer)
 

@@ -15,7 +15,7 @@ KI-LEAD ist ein Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD
 - **Kein Produktivsystem**, keine kommerzielle App.
 - **Nur fiktive oder offen zugängliche Daten.** Keine personenbezogenen und keine eingestuften Inhalte (VS). Die App zeigt dazu einen Hinweis an.
 - **Organisationsneutral.** Alles Organisationsspezifische steckt in einem austauschbaren Profilpaket (Abschnitt 4). Dazu gehören Schema, Kataloge, Stufentexte, Arbeitsanweisung, SOP, Kodierleitfaden und Kontakte. Die App selbst enthält nur die LEAD-Logik.
-- **Privates Forschungsvorhaben:** Der Demonstrator ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Er nutzt nur eigene oder veröffentlichte Materialien. Die Abgrenzung steht in README und Impressum (siehe Abschnitt 10).
+- **Privates Forschungsvorhaben:** Der Demonstrator ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Er nutzt nur eigene oder veröffentlichte Materialien. Die Abgrenzung steht im README; ein Impressum gibt es nicht (siehe Abschnitt 10).
 
 ## 2. Betriebsmodell
 
@@ -246,7 +246,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 | Native Hülle | Capacitor (iOS, Android); dieselbe Web-App als PWA |
 | Schema | eigener, interpretierender Prüfer für Draft 2020-12 ohne Codeerzeugung (läuft unter strenger Content-Security-Policy); Ajv dient in den Tests als Referenz |
 | Dokumente | DOCX-Text über JSZip, PDF direkt an das Modell; jsPDF und autotable für den Export |
-| Speicher | Capacitor Filesystem (Meldungen und Profile als Dateien, transparent und exportierbar), Index in IndexedDB |
+| Speicher | IndexedDB über `idb-keyval` (Einstellungen, Zwischenstände, Lagebild, Laufprotokolle, Profile); localStorage nur für das Farbschema vor dem ersten Zeichnen; Dateien nur beim Herunterladen und Exportieren. Ursprünglich geplant: Capacitor Filesystem (siehe Abschnitt 10) |
 | Geheimnisse | Wählbare Ablage (`src/schluessel/ablage.ts`): Gerätespeicher (IndexedDB, Vorgabe), nur Sitzung (Arbeitsspeicher) oder in der nativen App Keychain bzw. Keystore über `@aparajita/capacitor-secure-storage` (MIT, gepinnt); Wechsel zieht die Schlüssel mit um |
 | HTTP | im Browser direkt über `fetch` mit dem Kopf `anthropic-dangerous-direct-browser-access`; nativ später über CapacitorHttp |
 
@@ -269,11 +269,20 @@ tests/         Funktions-, Komponenten- und Browsertests ohne echte KI-Aufrufe (
 evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen, getrennt von den Tests
 ```
 
-## 8. Datenschutz und Sicherheit
+## 8. Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit
 
 - Ein Hinweis beim ersten Start und vor jedem KI-Lauf: nur fiktive oder offene Inhalte, keine personenbezogenen und keine eingestuften Daten.
 - Inhalte gehen nur an den gewählten KI-Anbieter; dort gelten dessen API-Bedingungen. Es gibt keine weitere Übermittlung, keine Analytics und keine Absturzberichte an Dritte.
-- Der API-Schlüssel verlässt das Gerät nur im Aufruf an den jeweiligen Anbieter. Die Ablage auf dem Gerät ist wählbar (Abschnitt 7, „Geheimnisse“); die native App für Android schließt App-Daten von der Cloud-Sicherung aus.
+- Der API-Schlüssel verlässt das Gerät nur im Aufruf an den jeweiligen Anbieter. Die Ablage auf dem Gerät ist wählbar (Abschnitt 7, „Geheimnisse“).
+
+Einzelheiten:
+
+| Thema | Dokument |
+|---|---|
+| Verantwortlichkeit, Datenflüsse, Bedingungen der Anbieter, Speicherorte, Löschen, Store-Angaben, Vorlage zur Schwellwertanalyse | [DATENSCHUTZ.md](DATENSCHUTZ.md) |
+| Bedrohungsmodell mit vorhandenen und offenen Maßnahmen | [SICHERHEIT.md](SICHERHEIT.md); Meldeweg für Schwachstellen in [SECURITY.md](../SECURITY.md) |
+| Einordnung nach der KI-Verordnung, Kennzeichnung der Ausgaben, Systemkarte | [KI-VERORDNUNG.md](KI-VERORDNUNG.md) |
+| Stand und Lücken der Barrierefreiheit, rechtliche Einordnung | [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md) |
 
 ## 9. Meilensteine und Abnahme
 
@@ -295,6 +304,13 @@ evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen,
 4. **Schema-Kompatibilität zwischen Ebenen:** Verwenden zwei Ebenen unterschiedliche Profilversionen, braucht die App eine Migrationsregel. Das Profilformat sieht dafür Migrationsregeln im Manifest vor.
 5. **Arbeitsanweisung Modus B:** Fassung 2.0.2 vom 23.10.2026 im Beispielprofil (`anweisung-verdichtung.md`); In der technischen Abnahme M4 (23.10.2026) wurden abweichende Bewertungen der Länder in allen sechs Läufen mit dem Textbaustein A.7.2 benannt; mehrfach stand „Handlungsrelevant bis“ auf t0 selbst (Kandidat für eine Präzisierung). Eine inhaltliche Bewährung steht aus.
 6. **Kosten und Laufzeiten** je Stufe im Pilot messen; danach die Modell-Voreinstellungen anpassen. Für die Verdichtung bestätigt die Abnahme M4 die Schätzung mit Anthropic (1,86–1,94 USD und 552–565 s je Lauf mit Haiku „high“ und Opus „medium“); mit OpenAI (gpt-6-luna „high“, gpt-6-astra „medium“) wurden 1,19–1,24 USD und 176–214 s gemessen; beides ist seit 0.4.31 in der Schätzung der App hinterlegt. Erfassung und Management Summary bleiben offen.
+7. **Rolle und Store-Angaben:** Verantwortlich für die Verarbeitung in der App ist die nutzende Person oder Stelle, nicht der Herausgeber ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 2). Die Angaben für App Store und Google Play folgen der vorsichtigen Lesart (Anhang A und B); bei der ersten Einreichung prüfen.
+8. **Maschinenlesbare KI-Kennzeichnung (Art. 50 Abs. 2 KI-VO):** Das PDF hat keine Metadaten, die Management Summary als TXT keine Kennzeichnung, und Profile ohne Entstehungsfeld kennzeichnen ihre JSON-Ausgaben nicht ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 6.1). Wasserzeichen im Text kann KI-LEAD nicht selbst erzeugen.
+9. **Barrierefreiheit:** Lagenradar ohne Semantik einer Radiogruppe und ohne Pfeiltasten; PDF-Ausgaben ohne Tags und Dokumentsprache; keine Prüfung mit Screenreadern und auf Geräten ([BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md), Abschnitt 4).
+10. **Sicherheit:** offene Maßnahmen nach [SICHERHEIT.md](SICHERHEIT.md): Domainbegrenzung beim Seitenabruf, Signatur importierter Profile, GitHub Actions per Commit-SHA, automatische Prüfung bekannter Schwachstellen.
+11. **Daten löschen:** Ein Knopf „Alle Daten dieses Geräts löschen“ fehlt; heute geht das nur über die Browsereinstellungen oder die Deinstallation ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 10).
+12. **Speicher und Bibliothek:** Abschnitt 7 sah Capacitor Filesystem, Abschnitt 5.3 eine Bibliothek mit Teilen-Menü vor. Umgesetzt ist die Ablage in IndexedDB; eine Bibliothek mit Suche und Filter gibt es nicht. Zu klären ist, ob beides noch gebraucht wird.
+13. **Impressum:** Zu klären ist, ob die Seite auf GitHub Pages ein Impressum braucht.
 
 ## 11. Änderungsverlauf
 
@@ -344,3 +360,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.1 | 23.10.2026 | Native Projekte mit Capacitor (iOS, Android), wählbare Ablage der API-Schlüssel mit Schlüsselbund des Systems (Abschnitte 2, 7 und 8, Umsetzung M5); Standard-Profil je Anbieter in den Einstellungen (Abschnitt 5.4) |
 | 0.5.2 | 23.10.2026 | Korrektur des Updates der PWA: stimmige Fassung bei der Installation, keine ungefragte Übernahme, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung (Umsetzung M5) |
 | 0.5.3 | 23.10.2026 | Farbschemata: Kopf in den Bund- und Länderschemata in der Farbe der Arbeitsfläche, gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands |
+| 0.5.3 · Nachtrag | 24.10.2026 | Ohne Änderung der App: Abschnitt 8 verweist auf die neuen Dokumente DATENSCHUTZ.md, SICHERHEIT.md, KI-VERORDNUNG.md und BARRIEREFREIHEIT.md; Speicher in Abschnitt 7 an den Code angeglichen; Verweis auf ein Impressum in Abschnitt 1 berichtigt; offene Punkte 7–13 |

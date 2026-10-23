@@ -1,0 +1,20 @@
+name: Datenschutz
+description: Frage oder Hinweis zu den Datenschutzhinweisen (siehe docs/DATENSCHUTZ.md)
+title: "Datenschutz: "
+labels: ["datenschutz"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues sind öffentlich: Bitte keine personenbezogenen oder eingestuften Daten und keine API-Schlüssel hineinschreiben. Der Herausgeber verarbeitet keine Inhalte aus der App und kann dazu keine Auskunft geben; Fragen zur Verarbeitung beim KI-Anbieter richten sich an den Anbieter.
+  - type: input
+    id: abschnitt
+    attributes:
+      label: Betroffener Abschnitt
+      placeholder: z. B. Abschnitt 5, Anhang A
+  - type: textarea
+    id: anliegen
+    attributes:
+      label: Frage oder Hinweis
+    validations:
+      required: true
