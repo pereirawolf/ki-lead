@@ -6,7 +6,17 @@ import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
-import { APP_MODELLE, AUFWAND_STUFEN, MODELL_GRUPPEN, STANDARD, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
+import {
+  APP_MODELLE,
+  AUFWAND_STUFEN,
+  MODELL_GRUPPEN,
+  STANDARD,
+  STANDARD_PROFILE,
+  standardProfilAktiv,
+  standardProfilAnwenden,
+  type Einstellungen as E,
+  type Rolle,
+} from "../pipeline/einstellungen";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 
 interface Props {
@@ -95,7 +105,39 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
   );
 }
 
-function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: (typeof ANBIETER)[number]; wert: string; setzen: (w: string) => void; ablage: AblageId }) {
+/** Kurzbeschreibung eines Standard-Profils: „S1 claude-haiku-5-5 (hoch) · …“ */
+function standardProfilText(id: AnbieterId): string {
+  const s = STANDARD_PROFILE[id];
+  const kurz: Record<Rolle, string> = {
+    vorverarbeitung: "S1",
+    erfassung: "S2 Erfassung",
+    verdichtung: "S2 Verdichtung",
+    reparatur: "S3 Reparatur",
+    kurzfassung: "Management Summary",
+  };
+  return ROLLEN.map((r) => `${kurz[r.id]} ${s.modelle[r.id]} (${AUFWAND.find((x) => x.id === s.aufwand[r.id])?.titel ?? s.aufwand[r.id]})`).join(" · ");
+}
+
+interface StandardWahl {
+  /** Modelle und Aufwand entsprechen gerade dem Standard-Profil dieses Anbieters */
+  aktiv: boolean;
+  waehlen: () => void;
+}
+
+function SchluesselAbschnitt({
+  a,
+  wert,
+  setzen,
+  ablage,
+  standard,
+}: {
+  a: (typeof ANBIETER)[number];
+  wert: string;
+  setzen: (w: string) => void;
+  ablage: AblageId;
+  standard?: StandardWahl;
+}) {
+  const [gewaehlt, setGewaehlt] = useState(false);
   const [eingabe, setEingabe] = useState(wert);
   const [zeigen, setZeigen] = useState(false);
   const [test, setTest] = useState<{ art: "ok" | "fehler" | "laeuft"; text: string } | null>(null);
@@ -168,6 +210,30 @@ function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: (typeof ANBIETER)
           <p>{test.text}</p>
         </div>
       )}
+      {standard && (
+        <div className="standard-profil">
+          <button
+            type="button"
+            className="knopf"
+            aria-describedby={`standard-${a.id}`}
+            onClick={() => {
+              standard.waehlen();
+              setGewaehlt(true);
+            }}
+          >
+            Standard-Profil wählen
+          </button>
+          <p id={`standard-${a.id}`} className="material-meta">
+            {standard.aktiv ? "Aktiv unter „Modelle und Aufwand“: " : "Setzt unter „Modelle und Aufwand“ alle Aufgaben auf "}
+            {standardProfilText(a.id)}
+          </p>
+          {gewaehlt && standard.aktiv && (
+            <div className="kasten kasten-ok" role="status">
+              <p>Modelle und Aufwand sind auf das Standard-Profil {name} gesetzt. Einzelne Aufgaben lassen sich darunter weiter anpassen.</p>
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 }
@@ -190,7 +256,14 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
       {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
 
       {ANBIETER.map((a) => (
-        <SchluesselAbschnitt key={`${a.id}:${ablage}`} a={a} wert={schluessel[a.id]} setzen={(w) => setSchluessel(a.id, w)} ablage={ablage} />
+        <SchluesselAbschnitt
+          key={`${a.id}:${ablage}`}
+          a={a}
+          wert={schluessel[a.id]}
+          setzen={(w) => setSchluessel(a.id, w)}
+          ablage={ablage}
+          standard={{ aktiv: standardProfilAktiv(e, a.id), waehlen: () => setEinstellungen(standardProfilAnwenden(e, a.id)) }}
+        />
       ))}
 
       <section className="schritt-inhalt abschnitt-einzeln">

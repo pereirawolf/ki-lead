@@ -223,8 +223,8 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 ### 5.4 Einstellungen
 
 - Darstellung: Farbschema der Oberfläche – Automatisch (Standard: Neutral · Hell oder Neutral · Night Mode nach System, bei „mehr Kontrast“ das passende Kontrastschema; kein eigenes Farbschema), Neutral · Hell, Neutral · Night Mode, Kontrast · Hell, Kontrast · Dunkel (Text mindestens 7:1, kein Band), Bund, Bevölkerungsschutz, je ein Schema für jedes der 16 Länder, oder die Farben des aktiven Profils (`farbschema` in `profil.json` bzw. eigene Farben auf dem Gerät, an Profilschlüssel und Prüfsumme gebunden). Das Schema ändert nur Bildschirmfarben; Signalfarben der Bewertungen und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), erzwungene Systemfarben (`forced-colors`) gehen vor, Auswahl und Radarwerte sind nicht nur über Farbe erkennbar, Ausgaben (PDF, Word, CSV) behalten ihre Gestaltung. Katalog, Herkunft und Kontrastregeln: [farbschemas.md](farbschemas.md).
-- API-Schlüssel je Anbieter.
-- Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil.
+- API-Schlüssel je Anbieter, mit wählbarer Ablage (seit 0.5.1).
+- Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil. Seit 0.5.1 setzt „Standard-Profil wählen“ im Abschnitt des jeweiligen API-Schlüssels Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters: Anthropic S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), S3 Reparatur claude-sonnet-5-5 (niedrig), Management Summary claude-sonnet-5-5 (mittel); OpenAI mit den Gegenstücken gleicher Größe gpt-6-luna, gpt-6-astra und gpt-6.1-sol bei gleichem Aufwand. Übrige Einstellungen bleiben; einzelne Aufgaben lassen sich danach weiter anpassen.
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
 - Datenhinweis und Sprache.
 
@@ -339,4 +339,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.4.30 · Nachtrag 2 | 23.10.2026 | Ohne Änderung der App: Abnahme M4 technisch mit Anthropic und OpenAI (Abschnitt 9), M6 ohne vorab festgelegte Versionsnummer, offene Punkte 2, 5 und 6 fortgeschrieben |
 | 0.4.31 | 23.10.2026 | Schätzung von Dauer und Kosten nach der Abnahme M4: Messwerte für gpt-6-luna (S1) und gpt-6-astra (Verdichtung), Obergrenze der Opus-Verdichtung 2,20 USD, Rundung der Kostenangabe ohne Gleitkommafehler (Abschnitt 5.1, Umsetzung M2) |
 | 0.5.0 | 23.10.2026 | Beginn M5: installierbare PWA mit Manifest, Symbolen und Service Worker für den Offline-Start; Hinweise zu fehlendem Netz und neuer Fassung (Umsetzung M5, Abschnitt 9) |
-| 0.5.1 | 23.10.2026 | Native Projekte mit Capacitor (iOS, Android), wählbare Ablage der API-Schlüssel mit Schlüsselbund des Systems (Abschnitte 2, 7 und 8, Umsetzung M5) |
+| 0.5.1 | 23.10.2026 | Native Projekte mit Capacitor (iOS, Android), wählbare Ablage der API-Schlüssel mit Schlüsselbund des Systems (Abschnitte 2, 7 und 8, Umsetzung M5); Standard-Profil je Anbieter in den Einstellungen (Abschnitt 5.4) |

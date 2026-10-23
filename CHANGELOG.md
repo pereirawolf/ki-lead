@@ -60,10 +60,12 @@ Fortsetzung von Meilenstein 5: native Projekte für iOS und Android und eine wä
 - **Native Projekte mit Capacitor 8.5** (MIT): `capacitor.config.json`, `ios/` (Swift Package Manager) und `android/` mit App-Kennung `de.pereirawolf.kilead`; Skripte `app:sync`, `app:ios`, `app:android`; Anleitung und Abnahmepunkte in [docs/NATIV.md](docs/NATIV.md).
 - Schlüsselbund über `@aparajita/capacitor-secure-storage` 8.0.1 (MIT, Version fest), nur in der nativen App und erst bei Bedarf geladen: Präfix `ki-lead.`, ohne iCloud-Synchronisierung, unter iOS nur dieses Gerät und nur entsperrt.
 - Native Symbole und Startbildschirme aus `scripts/app-symbol.py`; Android ohne Cloud-Sicherung der App-Daten, iOS mit Exportangabe zur Verschlüsselung.
+- **Standard-Profil je Anbieter** (Einstellungen): In den Abschnitten „API-Schlüssel (Anthropic)“ und „API-Schlüssel (OpenAI)“ setzt „Standard-Profil wählen“ unter „Modelle und Aufwand“ Modell und Aufwand aller Aufgaben auf das Profil des Anbieters. Anthropic: S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), Reparatur und Management Summary claude-sonnet-5-5 (niedrig bzw. mittel). OpenAI: gpt-6-luna (hoch), gpt-6-astra (mittel), gpt-6.1-sol (niedrig bzw. mittel), wie in der Abnahme M4 erprobt. Die Schaltfläche nennt die Belegung und zeigt, welches Profil aktiv ist; übrige Einstellungen bleiben (`STANDARD_PROFILE`, `standardProfilAnwenden` in `src/pipeline/einstellungen.ts`).
 
 ### Tests
 
 - `tests/schluessel/ablage.test.ts` (8, neu): bisherige Schlüssel gelten weiter, Verfügbarkeit je Umgebung, Umzug in die Sitzung und in den Schlüsselbund (Attrappe), Verweigerung außerhalb der nativen App, Fehler im Schlüsselbund, Rückfall bei nicht verfügbarer Wahl, Auswahl in den Einstellungen.
+- `tests/pipeline/einstellungen.test.ts` (+3) und `tests/ui/einstellungen.test.ts` (+1): Standard-Profile nur mit Modellen des Anbieters und Preisangabe, Anthropic gleich den Vorgaben von App und Beispielprofil, nur Modell und Aufwand werden gesetzt, Anzeige des aktiven Profils, Wirkung in den Auswahlfeldern.
 - `tests/nativ/projekt.test.ts` (5, neu): App-Kennung und Versionen in allen Projektdateien, Plugin auf beiden Plattformen eingebunden, Sicherung und Exportangabe, Symbole.
 
 ## [0.5.0] – 23.10.2026
