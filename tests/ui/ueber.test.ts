@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Impressum und „Über KI-LEAD“ (seit 0.5.5): Fuß und Einstellungen verweisen auf Impressum und Datenschutzhinweise,
+// Impressum und „Über KI-LEAD“ (seit 0.5.5): Fuß und Einstellungen verweisen auf Impressum und Datenschutzerklärung,
 // zeigen die Version aus package.json und öffnen alle Verweise extern; die App verbindet sich weiter nur mit den
 // KI-Anbietern (Content-Security-Policy unverändert). Grundlage: Befund „Grundlagen Priorität 2“ vom 24.10.2026.
 import { readFileSync } from "node:fs";
@@ -37,11 +37,11 @@ describe("Über KI-LEAD (Einstellungen)", () => {
     expect(abschnitt.textContent).toContain("keine Spezifikation einer Behörde oder Einrichtung");
   });
 
-  it("verweist auf Impressum, Datenschutzhinweise, Drittkomponenten, Quellcode, Rückmeldung und Erprobung", async () => {
+  it("verweist auf Impressum, Datenschutzerklärung, Drittkomponenten, Quellcode, Rückmeldung und Erprobung", async () => {
     await einhaengen(React.createElement(UeberAbschnitt));
     const l = links(document);
     expect(l.get("Impressum")?.getAttribute("href")).toBe(IMPRESSUM);
-    expect(l.get("Datenschutzhinweise")?.getAttribute("href")).toBe(DATENSCHUTZ);
+    expect(l.get("Datenschutzerklärung")?.getAttribute("href")).toBe(DATENSCHUTZ);
     expect(l.get("Drittkomponenten und Lizenzen")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead/blob/main/THIRD-PARTY-NOTICES.md");
     expect(l.get("Quellcode")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead");
     expect(l.get("Rückmeldung")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead/issues/new/choose");

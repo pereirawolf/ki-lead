@@ -230,7 +230,7 @@ Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Pro
 - Modell und Aufwand (Effort) je Stufe; die Voreinstellungen kommen aus dem Profil. Seit 0.5.1 setzt „Standard-Profil wählen“ im Abschnitt des jeweiligen API-Schlüssels Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters: Anthropic S1 claude-haiku-5-5 (hoch), S2 Erfassung und Verdichtung claude-opus-5-5 (mittel), S3 Reparatur claude-sonnet-5-5 (niedrig), Management Summary claude-sonnet-5-5 (mittel); OpenAI mit den Gegenstücken gleicher Größe gpt-6-luna, gpt-6-astra und gpt-6.1-sol bei gleichem Aufwand. Übrige Einstellungen bleiben; einzelne Aufgaben lassen sich danach weiter anpassen.
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
 - Datenhinweis und Sprache.
-- Über KI-LEAD (seit 0.5.5): Version, Abgrenzung, Herausgeber; externe Verweise auf Impressum, Datenschutzhinweise, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`).
+- Über KI-LEAD (seit 0.5.5): Version, Abgrenzung, Herausgeber; externe Verweise auf Impressum, Datenschutzerklärung, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`).
 
 ## 6. Forschungsfunktionen
 
@@ -283,7 +283,7 @@ Einzelheiten:
 
 | Thema | Dokument |
 |---|---|
-| Verantwortlichkeit, Datenflüsse, Bedingungen der Anbieter, Speicherorte, Löschen, Store-Angaben, Vorlage zur Schwellwertanalyse | [DATENSCHUTZ.md](DATENSCHUTZ.md) |
+| Datenschutzerklärung (Abschnitt 12), Verantwortlichkeit, Datenflüsse, Bedingungen der Anbieter, Speicherorte, Löschen, Store-Angaben, Vorlage zur Schwellwertanalyse | [DATENSCHUTZ.md](DATENSCHUTZ.md) |
 | Bedrohungsmodell mit vorhandenen und offenen Maßnahmen | [SICHERHEIT.md](SICHERHEIT.md); Meldeweg für Schwachstellen in [SECURITY.md](../SECURITY.md) |
 | Einordnung nach der KI-Verordnung, Kennzeichnung der Ausgaben, Systemkarte | [KI-VERORDNUNG.md](KI-VERORDNUNG.md) |
 | Stand und Lücken der Barrierefreiheit, rechtliche Einordnung | [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md) |
@@ -316,7 +316,7 @@ Einzelheiten:
 10. **Sicherheit:** offene Maßnahmen nach [SICHERHEIT.md](SICHERHEIT.md): Domainbegrenzung beim Seitenabruf, Signatur importierter Profile, GitHub Actions per Commit-SHA, automatische Prüfung bekannter Schwachstellen.
 11. **Daten löschen:** Ein Knopf „Alle Daten dieses Geräts löschen“ fehlt; heute geht das nur über die Browsereinstellungen oder die Deinstallation ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 10).
 12. **Speicher und Bibliothek:** Abschnitt 7 sah Capacitor Filesystem, Abschnitt 5.3 eine Bibliothek mit Teilen-Menü vor. Umgesetzt ist die Ablage in IndexedDB; eine Bibliothek mit Suche und Filter gibt es nicht. Zu klären ist, ob beides noch gebraucht wird.
-13. **Impressum:** Geklärt mit 0.5.5 (Einschätzung, keine Rechtsberatung). [§ 5 Abs. 1 DDG](https://www.gesetze-im-internet.de/ddg/__5.html) gilt für „geschäftsmäßige, in der Regel gegen Entgelt angebotene“ digitale Dienste und greift für das unentgeltliche, werbefreie Forschungsvorhaben voraussichtlich nicht. [§ 18 Abs. 1 MStV](https://lxgesetze.de/mstv/18) verlangt Name und Anschrift für jedes Telemedium, das nicht ausschließlich persönlichen oder familiären Zwecken dient; das trifft auf die öffentlich abrufbare Web-App voraussichtlich zu. Ein ständig sichtbarer Link auf das Impressum des Herausgebers genügt (Abschnitt 1). Außerhalb des Repositorys offen: Das Impressum auf pereirawolf.de sollte ausdrücklich auch für das GitHub-Angebot gelten, und die Website braucht eine eigene Datenschutzerklärung.
+13. **Impressum:** Geklärt mit 0.5.5 (Einschätzung, keine Rechtsberatung). [§ 5 Abs. 1 DDG](https://www.gesetze-im-internet.de/ddg/__5.html) gilt für „geschäftsmäßige, in der Regel gegen Entgelt angebotene“ digitale Dienste und greift für das unentgeltliche, werbefreie Forschungsvorhaben voraussichtlich nicht. [§ 18 Abs. 1 MStV](https://lxgesetze.de/mstv/18) verlangt Name und Anschrift für jedes Telemedium, das nicht ausschließlich persönlichen oder familiären Zwecken dient; das trifft auf die öffentlich abrufbare Web-App voraussichtlich zu. Ein ständig sichtbarer Link auf das Impressum des Herausgebers genügt (Abschnitt 1). Die Datenschutzerklärung für KI-LEAD steht im Repository ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 12) und verweist für Verantwortlichen und Kontakt auf das Impressum; die Website des Herausgebers bleibt unverändert.
 14. **Lizenzhinweise der nativen Apps:** In `public/lizenzen-ergaenzend.md` mit Versionen aus `android/variables.gradle`. Offen: Die Version von KeychainSwift legt erst Xcode fest; nach dem ersten Build `Package.resolved` einchecken ([THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md), Abschnitt 4). Die SBOM erfasst nur npm-Pakete.
 
 ## 11. Änderungsverlauf
@@ -369,4 +369,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.3 | 23.10.2026 | Farbschemata: Kopf in den Bund- und Länderschemata in der Farbe der Arbeitsfläche, gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands |
 | 0.5.4 | 24.10.2026 | Maschinenlesbare KI-Kennzeichnung: PDF-Metadaten (XMP, IPTC Digital Source Type) und Dokumenteigenschaften, Kopfzeile der Management Summary als TXT, Hinweis bei Profilen ohne Entstehungsfeld (Abschnitt 6, offene Punkte 8 und 9); Lagenradar als Radiogruppe mit Pfeiltasten |
 | 0.5.3 · Nachtrag | 24.10.2026 | Ohne Änderung der App: Abschnitt 8 verweist auf die neuen Dokumente DATENSCHUTZ.md, SICHERHEIT.md, KI-VERORDNUNG.md und BARRIEREFREIHEIT.md; Speicher in Abschnitt 7 an den Code angeglichen; Verweis auf ein Impressum in Abschnitt 1 berichtigt; offene Punkte 7–13 |
-| 0.5.5 | 24.10.2026 | Impressum und Kontakt über die Website des Herausgebers, verlinkt aus Fuß und „Über KI-LEAD“ (Abschnitte 1 und 5.4, offener Punkt 13 geklärt); Drittkomponenten mit Lizenzdateien im Build, Lizenzprüfung und SBOM (Abschnitte 7 und 8, offener Punkt 14); Erprobung im Testkreis und Abnahme M6 präzisiert (Abschnitte 8 und 9) |
+| 0.5.5 | 24.10.2026 | Impressum und Kontakt über die Website des Herausgebers, verlinkt aus Fuß und „Über KI-LEAD“; Datenschutzerklärung im Repository (Abschnitte 1, 5.4 und 8, offener Punkt 13 geklärt); Drittkomponenten mit Lizenzdateien im Build, Lizenzprüfung und SBOM (Abschnitte 7 und 8, offener Punkt 14); Erprobung im Testkreis und Abnahme M6 präzisiert (Abschnitte 8 und 9) |

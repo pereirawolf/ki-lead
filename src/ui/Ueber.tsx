@@ -29,7 +29,7 @@ export function UeberAbschnitt() {
           <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> und Kontakt auf der Website des Herausgebers
         </li>
         <li>
-          <ExternerLink href={VERWEISE.datenschutz}>Datenschutzhinweise</ExternerLink>: Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an
+          <ExternerLink href={VERWEISE.datenschutz}>Datenschutzerklärung</ExternerLink>: Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an
           den gewählten Anbieter
         </li>
         <li>

@@ -8,7 +8,7 @@ Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lag
 
 KI-LEAD ist ein privates Forschungsvorhaben von Heiko Pereira Wolf ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)). Es ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Die mitgelieferten Profile, Schemata und Daten sind Beispiele für Forschung und Erprobung; sie geben keine offiziellen Vorgaben wieder. Der Demonstrator nutzt nur eigene oder veröffentlichte Materialien.
 
-**Impressum und Kontakt:** [pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html). Die App verweist darauf im Fuß und unter „Einstellungen → Über KI-LEAD“; Datenschutzhinweise: [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md).
+**Impressum und Kontakt:** [pereirawolf.de/impressum.html](https://www.pereirawolf.de/impressum.html). Die App verweist darauf im Fuß und unter „Einstellungen → Über KI-LEAD“; Datenschutzerklärung: [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md), Abschnitt 12.
 
 Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezogenen und keine eingestuften Daten.
 
@@ -62,7 +62,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | SOPs zusammenhängend lesen | [Lesefassung der Sammelmappe](profile/lead-beispiel/sop/SOP-LEAD_Sammelmappe_Lesefassung.md) |
 | Eigene Profile entwickeln | [Profilformat](docs/PROFILFORMAT.md) |
 | Technik und Funktionsumfang | [Spezifikation](docs/SPEZIFIKATION.md) |
-| Datenflüsse, Speicherorte, Store-Angaben | [Datenschutzhinweise](docs/DATENSCHUTZ.md) |
+| Datenschutzerklärung, Datenflüsse, Speicherorte, Store-Angaben | [Datenschutzhinweise](docs/DATENSCHUTZ.md) |
 | Einordnung nach der KI-Verordnung, Systemkarte | [KI-Verordnung](docs/KI-VERORDNUNG.md) |
 | Bedrohungsmodell, Schwachstellen melden | [Sicherheit](docs/SICHERHEIT.md), [SECURITY.md](SECURITY.md) |
 | Stand und Lücken der Barrierefreiheit | [Barrierefreiheit](docs/BARRIEREFREIHEIT.md) |

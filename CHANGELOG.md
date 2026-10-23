@@ -60,7 +60,8 @@ Grundlage: Befund „Grundlagen Priorität 2“ vom 24.10.2026 (Drittkomponenten
 
 ### Hinzugefügt
 
-- **Über KI-LEAD** in den Einstellungen: Version, Abgrenzung, Herausgeber und externe Verweise auf Impressum, Datenschutzhinweise, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`). Die Verweise öffnen sich in einem eigenen Fenster; die App ruft sie nicht auf, die Content-Security-Policy bleibt unverändert.
+- **Über KI-LEAD** in den Einstellungen: Version, Abgrenzung, Herausgeber und externe Verweise auf Impressum, Datenschutzerklärung, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`). Die Verweise öffnen sich in einem eigenen Fenster; die App ruft sie nicht auf, die Content-Security-Policy bleibt unverändert.
+- **Datenschutzerklärung im Repository:** [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md), neuer Abschnitt 12 nach Art. 13 DSGVO für die Verarbeitungen des Herausgebers (Aufruf über GitHub Pages, Speichern auf dem Gerät, Issues, Sicherheitsmeldungen, E-Mail), mit Verweis auf das Impressum für Verantwortlichen und Kontakt. Die Website des Herausgebers bleibt unverändert. Fuß und „Über KI-LEAD“ verweisen darauf.
 - **Impressum und Datenschutz im Fuß** jeder Ansicht. Impressum nach § 18 Abs. 1 MStV auf der Website des Herausgebers; § 5 DDG greift für das unentgeltliche Vorhaben voraussichtlich nicht ([Spezifikation](docs/SPEZIFIKATION.md), offener Punkt 13).
 - **Lizenztexte in der App:** Der Build schreibt `lizenzen.md` mit Name, Version, Lizenz und Lizenztext aller gebündelten Pakete (`build.license` von Vite, ohne neue Abhängigkeit); `public/lizenzen-ergaenzend.md` ergänzt die nativen Bibliotheken mit Apache-Lizenz und NOTICE von Cordova sowie die Pakete in den Bundles von JSZip und html2canvas. Beide liegen im Ordner der App (GitHub Pages) und gehen mit den nativen Apps aus. Bisher enthielt der minifizierte Build kaum Lizenzvermerke.
 - **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md):** alle Laufzeitkomponenten nach `package-lock.json` mit Version, Lizenz, gewählter Lizenz bei Wahllizenzen (JSZip MIT, DOMPurify Apache-2.0, rgbcolor MIT), Urheber und Einbindung; Schrift Atkinson Hyperlegible (OFL-1.1); native Komponenten; Entwicklungsabhängigkeiten getrennt; Verträglichkeit mit EUPL-1.2 und CC BY 4.0: kein Konflikt.
@@ -72,7 +73,7 @@ Grundlage: Befund „Grundlagen Priorität 2“ vom 24.10.2026 (Drittkomponenten
 - **Fuß der App:** Version aus `APP_KENNUNG` statt fest eingetragen (zeigte noch 0.5.2).
 - Vorlage „Barrierefreiheit“: Fundort der Version „Einstellungen → Über KI-LEAD“.
 - Abnahme M6: Erprobung auf einem Release-Kandidaten ohne DOI, Release mit DOI nach der Auswertung ([Spezifikation](docs/SPEZIFIKATION.md), Abschnitt 9).
-- Dokumente: README (Abgrenzung mit Impressum, Dokumentation, Mitwirken, Lizenz, Fahrplan), Spezifikation 0.5.5 (Abschnitte 1, 5.4, 7–10), [DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.1 (Abschnitt 11), [SICHERHEIT.md](docs/SICHERHEIT.md) 1.1 (Abschnitt 3.7), [NATIV.md](docs/NATIV.md) (Lizenzhinweise, Abnahmepunkt), [TESTS.md](docs/TESTS.md), [evaluation/README.md](evaluation/README.md).
+- Dokumente: README (Abgrenzung mit Impressum, Dokumentation, Mitwirken, Lizenz, Fahrplan), Spezifikation 0.5.5 (Abschnitte 1, 5.4, 7–10), [DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.2 (Abschnitte 2, 11 und 12), [SICHERHEIT.md](docs/SICHERHEIT.md) 1.1 (Abschnitt 3.7), [NATIV.md](docs/NATIV.md) (Lizenzhinweise, Abnahmepunkt), [TESTS.md](docs/TESTS.md), [evaluation/README.md](evaluation/README.md).
 
 ### Tests
 
