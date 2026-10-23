@@ -21,7 +21,7 @@ Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezog
 
 **Als App:** Im Browser über „App installieren“ (Chrome, Edge) oder „Zum Home-Bildschirm“ (Safari) hinzufügen. Nach dem ersten Aufruf startet KI-LEAD auch ohne Netz; nur die KI-Funktionen brauchen eine Verbindung.
 
-**Startet die App nicht** (leere Seite), hilft zuerst ein erneuter Aufruf; seit 0.5.2 repariert sich eine beschädigte Installation dabei selbst. Sonst die Reparaturseite `reparatur.html` im Ordner der App aufrufen (etwa `https://pereirawolf.github.io/ki-lead/reparatur.html`) und „Programmdateien zurücksetzen“ wählen. Meldungen, Profile, Einstellungen und API-Schlüssel bleiben dabei erhalten. Einzelheiten: [docs/STARTPROBLEME.md](docs/STARTPROBLEME.md).
+**Startet die App nicht** (leere Seite): alle Fenster mit KI-LEAD schließen und die App neu öffnen; eine bereits geladene neuere Fassung wird dann aktiv. Sonst die Reparaturseite `reparatur.html` im Ordner der App aufrufen (etwa `https://pereirawolf.github.io/ki-lead/reparatur.html`) und „Programmdateien zurücksetzen“ wählen. Meldungen, Profile, Einstellungen und API-Schlüssel bleiben dabei erhalten. Einzelheiten: [docs/STARTPROBLEME.md](docs/STARTPROBLEME.md).
 
 **Mit KI:** In den Einstellungen einen eigenen API-Schlüssel von Anthropic oder OpenAI hinterlegen. In der KI-Erfassung dann Material bereitstellen und festlegen, ob Websuche und Seitenabruf erlaubt sind.
 

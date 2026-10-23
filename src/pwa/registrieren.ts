@@ -13,6 +13,8 @@ type Beobachter = (z: PwaZustand) => void;
 
 let zustand: PwaZustand = { aktualisierung: false, offline: typeof navigator !== "undefined" && navigator.onLine === false };
 let wartend: ServiceWorker | null = null;
+/** Hat dieses Fenster die Aktualisierung selbst angefordert („Neu laden“)? Nur dann lädt es nach der Übernahme neu. */
+let angefordert = false;
 const beobachter = new Set<Beobachter>();
 
 function setzen(neu: Partial<PwaZustand>): void {
@@ -62,8 +64,9 @@ export function pwaStarten(): void {
   if (!moeglich) return;
   let neuGeladen = false;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    // Nur nach „Neu laden“ der Person, nicht bei der ersten Übernahme der Seite
-    if (wartend && !neuGeladen) {
+    // Nur in dem Fenster, in dem die Person „Neu laden“ gewählt hat. Andere offene Fenster laufen weiter, damit
+    // ungespeicherte Eingaben (etwa der KI-Erfassung) nicht verloren gehen; sie zeigen weiter den Hinweis.
+    if (sollNeuLaden({ angefordert, neuGeladen })) {
       neuGeladen = true;
       window.location.reload();
     }
@@ -82,9 +85,16 @@ export function pwaStarten(): void {
   });
 }
 
-/** Aktiviert die wartende Fassung; die Seite lädt danach neu. */
+/** Aktiviert die wartende Fassung auf Wunsch der Person; dieses Fenster lädt danach neu. */
 export function jetztAktualisieren(): void {
-  wartend?.postMessage("jetzt-aktualisieren");
+  if (!wartend) return;
+  angefordert = true;
+  wartend.postMessage("jetzt-aktualisieren");
+}
+
+/** Lädt das Fenster nach einem Wechsel des Service Workers neu? Nur auf eigene Anforderung und nur einmal. */
+export function sollNeuLaden(z: { angefordert: boolean; neuGeladen: boolean }): boolean {
+  return z.angefordert && !z.neuGeladen;
 }
 
 export function pwaZustand(): PwaZustand {

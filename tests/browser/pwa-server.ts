@@ -42,7 +42,18 @@ function swDaten(ordner: string): { version: string; liste: string[] } {
 export function fassung(
   wurzel: string,
   name: string,
-  { endung = "", sw = "neu", indexVon }: { endung?: string; sw?: "neu" | "0.5.1"; indexVon?: Fassung } = {},
+  {
+    endung = "",
+    sw = "neu",
+    indexVon,
+    ohneDatei,
+  }: {
+    endung?: string;
+    sw?: "neu" | "0.5.1";
+    indexVon?: Fassung;
+    /** Datei der Liste auf dem Server entfernen (Installation bricht beim Laden ab, wie bei einem Netzfehler) */
+    ohneDatei?: RegExp;
+  } = {},
 ): Fassung {
   const ordner = join(wurzel, name);
   cpSync(DIST, ordner, { recursive: true });
@@ -64,6 +75,7 @@ export function fassung(
     for (const d of ["start-pruefung.js", "reparatur.html", "reparatur.js"]) rmSync(join(ordner, d), { force: true });
   }
   writeFileSync(join(ordner, "index.html"), indexVon ? readFileSync(join(indexVon.ordner, "index.html")) : html);
+  if (ohneDatei) for (const d of neueListe.filter((x) => ohneDatei.test(x))) rmSync(join(ordner, d), { force: true });
   writeFileSync(join(ordner, "sw.js"), serviceWorkerQuelle(sw === "0.5.1" ? VORLAGE_051 : VORLAGE_NEU, `${version}${endung}-${sw}`, neueListe));
   return { ordner, start };
 }
@@ -116,6 +128,7 @@ export async function pagesServer(): Promise<PagesServer> {
       return z;
     },
     schliessen: async () => {
+      server.closeAllConnections();
       await new Promise<void>((ok) => server.close(() => ok()));
       rmSync(wurzel, { recursive: true, force: true });
     },

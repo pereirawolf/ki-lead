@@ -72,7 +72,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
 - `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (von Chromium berechnet), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben
-- `pwa-update.spec.ts`: Versionswechsel mit bestehendem Cache gegen einen Server wie GitHub Pages: Fehler mit dem Service Worker von 0.5.1 (Testvorlage `fixtures/sw-vorlage-0.5.1.js`), Korrektur, Installationsschutz, Selbstheilung mit erhaltenen IndexedDB-Daten, Reparaturseite, Startprüfung
+- `pwa-update.spec.ts`: Versionswechsel mit bestehendem Cache gegen einen Server wie GitHub Pages: Fehler mit dem Service Worker von 0.5.1 (Testvorlage `fixtures/sw-vorlage-0.5.1.js`), Korrektur, Installationsschutz, Wiederherstellung mit erhaltenen IndexedDB-Daten, kein Neuladen laufender Fenster mit ungespeicherten Eingaben, keine Übernahme durch Reste gescheiterter Installationen, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung
 - `pwa.spec.ts`: Service Worker übernimmt die Seite, App startet nach dem ersten Besuch ohne Netz, Beispiel im Lagebild und PDF offline, Hinweis zum fehlenden Netz, Manifest und Symbole werden ausgeliefert (Service Worker nur hier zugelassen)
 - `eingabehilfen.spec.ts`: LEAD-Eingabehilfen mit der Tastatur (Bereich öffnen, Vorlage einfügen, Fokus und Markierung im Textfeld), zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen
 
