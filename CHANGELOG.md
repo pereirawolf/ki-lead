@@ -62,7 +62,7 @@ Grundlage: Rückmeldung zum Schema „Thüringen“: Über dem Identitätsband s
 
 ### Tests
 
-- `tests/darstellung/farbschemas.test.ts` (+1): In allen Bund- und Länderschemata ist `header-hintergrund` gleich `papier`.
+- `tests/darstellung/farbschemas.test.ts` (+2): In allen Bund- und Länderschemata ist `header-hintergrund` gleich `papier`; Profilfarben können `header-hintergrund` weiterhin abweichend setzen.
 
 ## [0.5.2] – 23.10.2026
 

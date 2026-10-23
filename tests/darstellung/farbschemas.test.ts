@@ -38,6 +38,14 @@ describe("Katalog", () => {
     for (const s of betroffen) expect(s.tokens["header-hintergrund"], s.id).toBe(s.tokens.papier);
   });
 
+  it("Profilfarben können den Kopf weiterhin abweichend von der Arbeitsfläche setzen", () => {
+    const p = { basis: "de-th", farben: { "header-hintergrund": "#FFFFFF" } };
+    expect(profilFarbschemaFehler(p)).toEqual([]);
+    const t = aufloesen(PROFIL, p);
+    expect(t.tokens["header-hintergrund"]).toBe("#FFFFFF");
+    expect(t.tokens.papier).toBe("#F5F6F7");
+  });
+
   it("22 eindeutige Schemata: 2 neutral, 2 Kontrast, Bund, Bevölkerungsschutz, alle 16 Länder", () => {
     const ids = FARBSCHEMAS.map((s) => s.id);
     expect(new Set(ids).size).toBe(22);
