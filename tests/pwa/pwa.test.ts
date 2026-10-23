@@ -4,8 +4,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { precacheListe, precacheVersion, serviceWorkerQuelle } from "../../src/pwa/precache";
-import { serviceWorkerMoeglich } from "../../src/pwa/registrieren";
+import { fehlendeVerweise, htmlVerweise, precacheListe, precacheVersion, serviceWorkerQuelle } from "../../src/pwa/precache";
+import { serviceWorkerMoeglich, sollNeuLaden } from "../../src/pwa/registrieren";
 import { PwaHinweis } from "../../src/ui/PwaHinweis";
 import { repoPfad } from "../support/dateien";
 
@@ -49,6 +49,7 @@ describe("PWA: Dateiliste und Version des Service Workers", () => {
     // Kein automatischer Wechsel der Fassung: nur auf Wunsch der Person
     const install = vorlage.slice(vorlage.indexOf('addEventListener("install"'), vorlage.indexOf('addEventListener("activate"'));
     expect(install).toContain("addAll");
+    // Nie eine Übernahme von sich aus (0.5.2): offene Fenster könnten ungespeicherte Eingaben haben
     expect(install).not.toContain("skipWaiting");
   });
 });
@@ -91,5 +92,94 @@ describe("PWA: Manifest und Symbole", () => {
     expect(html).toContain('<link rel="manifest" href="./manifest.webmanifest" />');
     expect(html).toContain('rel="apple-touch-icon"');
     for (const m of html.matchAll(/href="\.\/(icons\/[^"]+)"/g)) expect(existsSync(repoPfad("public", m[1])), m[1]).toBe(true);
+  });
+});
+
+/** Quelltext ohne Zeilenkommentare (Kommentare dürfen die Begriffe erklären) */
+const ohneKommentare = (code: string) => code.replace(/^\s*\/\/.*$/gm, "");
+
+describe("PWA: stimmige Fassung beim Update (0.5.2, Startfehler nach 0.5.1)", () => {
+  const vorlage = readFileSync(repoPfad("src", "pwa", "sw-vorlage.js"), "utf-8");
+
+  it("lädt bei der Installation am HTTP-Cache vorbei", () => {
+    expect(vorlage).toContain('new Request(adresse(d), { cache: "reload" })');
+  });
+
+  it("erkennt die Verweise einer index.html und meldet Dateien außerhalb der Liste", () => {
+    const html =
+      '<link rel="manifest" href="./manifest.webmanifest" /><script src="./start-pruefung.js"></script><script type="module" crossorigin src="./assets/index-ALT.js"></script><link rel="stylesheet" href="./assets/index-X.css"><a href="https://example.org/">x</a>';
+    expect(htmlVerweise(html)).toEqual(["manifest.webmanifest", "start-pruefung.js", "assets/index-ALT.js", "assets/index-X.css"]);
+    expect(fehlendeVerweise(html, ["manifest.webmanifest", "start-pruefung.js", "assets/index-NEU.js", "assets/index-X.css"])).toEqual(["assets/index-ALT.js"]);
+    // Der Service Worker verwendet dieselbe Regel
+    expect(vorlage).toContain('html.matchAll(/(?:src|href)="\\.\\/([^"?#]+)"/g)');
+  });
+
+  it("verwirft eine unstimmige oder abgebrochene Installation samt ihrem Cache", () => {
+    const install = vorlage.slice(vorlage.indexOf('addEventListener("install"'), vorlage.indexOf('addEventListener("activate"'));
+    expect(install).toContain("if (fremd.length || !(await stimmig(cache))) throw new Error(");
+    // Jeder Fehler im Installationsablauf (auch ein Netzfehler in addAll) entfernt den eigenen Cache
+    expect(install.indexOf("try {")).toBeLessThan(install.indexOf("caches.open(CACHE)"));
+    expect(install).toMatch(/\} catch \(fehler\) \{[\s\S]*await caches\.delete\(CACHE\);\s*throw fehler;/);
+  });
+
+  it("übernimmt nie von sich aus und lädt nie Fenster neu", () => {
+    const code = ohneKommentare(vorlage);
+    expect(code.match(/skipWaiting/g)).toHaveLength(1);
+    expect(code).toContain('if (ereignis.data === "jetzt-aktualisieren") self.skipWaiting();');
+    expect(code).not.toMatch(/\.navigate\(|clients\.matchAll|location\.reload/);
+  });
+
+  it("lädt nach einer Übernahme nur das anfordernde Fenster neu, und nur einmal", () => {
+    expect(sollNeuLaden({ angefordert: false, neuGeladen: false })).toBe(false);
+    expect(sollNeuLaden({ angefordert: true, neuGeladen: false })).toBe(true);
+    expect(sollNeuLaden({ angefordert: true, neuGeladen: true })).toBe(false);
+  });
+
+  it("berührt nur eigene Caches und nie IndexedDB oder localStorage; die Reparaturseite wird nie ersetzt", () => {
+    expect(ohneKommentare(vorlage)).not.toMatch(/indexedDB|localStorage/);
+    expect(vorlage).toContain("n.startsWith(PRAEFIX) && n !== CACHE");
+    expect(vorlage).toContain("url.pathname.endsWith(`/${REPARATUR}`)");
+  });
+
+  it("der Build verweist in index.html nur auf vorgehaltene Dateien und lädt die Startprüfung ohne Inline-Skript", () => {
+    const html = readFileSync(repoPfad("index.html"), "utf-8");
+    expect(html).toContain('<script src="./start-pruefung.js"></script>');
+    expect(html).not.toMatch(/<script>(?!<\/script>)/);
+    for (const d of ["start-pruefung.js", "reparatur.html", "reparatur.js"]) expect(existsSync(repoPfad("public", d)), d).toBe(true);
+  });
+});
+
+describe("Reparaturseite und Startprüfung", () => {
+  const seite = readFileSync(repoPfad("public", "reparatur.html"), "utf-8");
+  const skript = readFileSync(repoPfad("public", "reparatur.js"), "utf-8");
+  const pruefung = readFileSync(repoPfad("public", "start-pruefung.js"), "utf-8");
+
+  it("ist eigenständig (kein App-Bundle) und hält die Sicherheitsrichtlinie ohne Inline-Skript ein", () => {
+    expect(seite).toContain("script-src 'self'");
+    expect(seite).not.toMatch(/assets\//);
+    expect(seite).toContain('<script src="./reparatur.js"></script>');
+    expect(seite).not.toMatch(/<script>/);
+  });
+
+  it("entfernt nur die Registrierung dieses Bereichs und Caches mit dem Präfix ki-lead-, nie gespeicherte Daten", () => {
+    expect(skript).toContain("r.scope === BEREICH");
+    expect(skript).toContain('var PRAEFIX = "ki-lead-"');
+    expect(skript).toContain("n.indexOf(PRAEFIX) === 0");
+    expect(ohneKommentare(skript)).not.toMatch(/indexedDB|localStorage|sessionStorage|clear\(\)/);
+    // nur nach ausdrücklicher Betätigung, ohne automatisches Neuladen
+    expect(skript).toContain('knopf.addEventListener("click"');
+    expect(skript).not.toMatch(/location\.reload|location\.replace|location\.href\s*=/);
+  });
+
+  it("Startprüfung lädt nie selbst neu und berührt keine Daten", () => {
+    const code = ohneKommentare(pruefung);
+    expect(code).not.toMatch(/indexedDB|localStorage|caches\.|unregister/);
+    // Neuladen und Übernahme einer wartenden Fassung nur in neuLaden, und neuLaden nur auf Klick
+    const neuLaden = code.slice(code.indexOf("function neuLaden()"), code.indexOf('window.addEventListener(\n    "error"'));
+    expect(neuLaden.length).toBeGreaterThan(0);
+    expect(code.match(/location\.reload/g)!.length).toBe(neuLaden.match(/location\.reload/g)!.length);
+    expect(code.match(/jetzt-aktualisieren/g)!.length).toBe(neuLaden.match(/jetzt-aktualisieren/g)!.length);
+    expect(code.match(/neuLaden/g)).toHaveLength(2);
+    expect(code).toContain('neu.addEventListener("click", neuLaden);');
   });
 });

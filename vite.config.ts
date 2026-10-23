@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import { precacheListe, precacheVersion, serviceWorkerQuelle } from "./src/pwa/precache.ts";
+import { fehlendeVerweise, precacheListe, precacheVersion, serviceWorkerQuelle } from "./src/pwa/precache.ts";
 
 /** Alle Dateien eines Ordners (rekursiv) als Pfad relativ zum Ordner → Inhalt */
 function ordnerDateien(ordner: string): Record<string, string> {
@@ -34,6 +34,10 @@ function serviceWorker(): Plugin {
       // Dateien ohne Hash im Namen (index.html) gehen mit ihrem Inhalt in die Version ein
       for (const [name, datei] of Object.entries(bundle)) if (datei.type === "asset" && !/-[\w-]{8}\.\w+$/.test(name)) inhalte[name] = String(datei.source);
       const liste = precacheListe([...Object.keys(bundle), ...Object.keys(oeffentlich)]);
+      // Der Service Worker installiert nur eine stimmige Fassung; ein Build, der das nicht wäre, bricht hier ab
+      const index = bundle["index.html"];
+      const fehlend = index && index.type === "asset" ? fehlendeVerweise(String(index.source), liste) : ["index.html"];
+      if (fehlend.length) this.error(`index.html verweist auf Dateien außerhalb der Vorhalteliste: ${fehlend.join(", ")}`);
       const app = JSON.parse(readFileSync(join(import.meta.dirname, "package.json"), "utf-8")).version as string;
       const vorlage = readFileSync(join(import.meta.dirname, "src/pwa/sw-vorlage.js"), "utf-8");
       this.emitFile({ type: "asset", fileName: "sw.js", source: serviceWorkerQuelle(vorlage, precacheVersion(app, liste, inhalte), liste) });

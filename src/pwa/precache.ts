@@ -26,6 +26,19 @@ export function precacheVersion(appVersion: string, liste: string[], inhalte: Re
   return `${appVersion}-${h.toString(16).padStart(8, "0")}`;
 }
 
+/**
+ * Relative Verweise einer index.html auf eigene Dateien („./assets/…“, „./icons/…“); dieselbe Regel wie im
+ * Service Worker (sw-vorlage.js), der damit bei der Installation die Stimmigkeit seiner Fassung prüft.
+ */
+export function htmlVerweise(html: string): string[] {
+  return [...new Set([...html.matchAll(/(?:src|href)="\.\/([^"?#]+)"/g)].map((m) => m[1]))];
+}
+
+/** Verweise der index.html, die nicht in der Dateiliste stehen (leer = stimmig) */
+export function fehlendeVerweise(html: string, liste: string[]): string[] {
+  return htmlVerweise(html).filter((d) => !liste.includes(d));
+}
+
 /** Quelltext des Service Workers mit eingesetzter Liste und Version */
 export function serviceWorkerQuelle(vorlage: string, version: string, liste: string[]): string {
   return vorlage.replace('"__VERSION__"', JSON.stringify(version)).replace('["__DATEIEN__"]', JSON.stringify(liste));

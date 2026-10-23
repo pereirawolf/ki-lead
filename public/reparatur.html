@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <title>KI-LEAD reparieren</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 42rem;
+        padding: 1.5rem max(1rem, env(safe-area-inset-right)) 3rem max(1rem, env(safe-area-inset-left));
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      button,
+      .knopf {
+        font: inherit;
+        font-weight: 600;
+        padding: 0.6rem 1rem;
+        border-radius: 0.4rem;
+        border: 2px solid currentColor;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+      }
+      .kasten {
+        border-left: 4px solid #1d4f91;
+        padding: 0.5rem 1rem;
+        margin: 1rem 0;
+        background: rgba(29, 79, 145, 0.08);
+      }
+      .ok {
+        border-left-color: #1b7a3d;
+        background: rgba(27, 122, 61, 0.1);
+      }
+      .fehler {
+        border-left-color: #b00020;
+        background: rgba(176, 0, 32, 0.08);
+      }
+      code {
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>KI-LEAD reparieren</h1>
+    <p>
+      Diese Seite setzt die gespeicherten <strong>Programmdateien</strong> von KI-LEAD auf diesem Gerät zurück: die Anmeldung des Service Workers und seine
+      Zwischenspeicher. Danach lädt die App ihre Dateien neu vom Server.
+    </p>
+    <p>
+      <strong>Deine Daten bleiben erhalten:</strong> Meldungen, Zwischenstände, importierte Profile, Einstellungen und API-Schlüssel liegen an anderer Stelle
+      und werden hier weder gelesen noch verändert. Andere Websites und Anwendungen auf derselben Adresse sind nicht betroffen.
+    </p>
+    <div id="zustand" class="kasten" role="status">Zustand wird ermittelt …</div>
+    <p>
+      <button type="button" id="zuruecksetzen" disabled>Programmdateien zurücksetzen</button>
+    </p>
+    <div id="ergebnis" role="status" aria-live="polite"></div>
+    <p><a class="knopf" id="oeffnen" href="./">KI-LEAD öffnen</a></p>
+    <noscript><p class="kasten fehler">Für die Reparatur muss JavaScript eingeschaltet sein.</p></noscript>
+    <script src="./reparatur.js"></script>
+  </body>
+</html>

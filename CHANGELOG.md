@@ -49,6 +49,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.31 | letzter Commit von Pull Request #41 „Abnahme M4: technische Abnahme der Verdichtung“ |
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
+| 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
+
+## [0.5.2] – 23.10.2026
+
+Grundlage: Meldung, dass https://pereirawolf.github.io/ki-lead/ seit 0.5.1 in Safari auf einem iPad leer bleibt (im privaten Fenster und in einem frischen Chrome lief die App). In Chromium nachgestellt mit einem Server wie GitHub Pages; Hintergrund und Schritte für Betroffene in [docs/STARTPROBLEME.md](docs/STARTPROBLEME.md). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Pipeline oder gespeicherten Daten.
+
+### Behoben
+
+- **Leere Seite nach einem Update der PWA:** Der Service Worker lud bei der Installation einer neuen Fassung seine Dateien über den HTTP-Cache. War dort noch die ältere `index.html` (GitHub Pages: zehn Minuten), geriet sie neben die neuen Programmdateien. Nach Ablauf des HTTP-Caches fehlte ihre Startdatei, und die App startete nicht mehr, auch nach Neustart. Jetzt lädt der Service Worker am HTTP-Cache vorbei und installiert nur eine stimmige Fassung; sonst bleibt die bisherige.
+- **Gescheiterte Installation ohne Reste:** Bricht die Installation ab (etwa durch einen Netzfehler), entfernt sie ihren Cache wieder.
+- **Keine ungefragte Übernahme:** Der Service Worker übernimmt nie von sich aus und lädt keine Fenster neu. Eine neue Fassung wird aktiv mit „Neu laden“ (nur dieses Fenster lädt neu; vorher reagierten alle Fenster auf den Wechsel) oder wenn alle Fenster geschlossen sind. Betroffene des Fehlers rufen die App nach der Veröffentlichung einmal auf, schließen alle KI-LEAD-Fenster und öffnen sie neu.
+
+### Hinzugefügt
+
+- **Reparaturseite** `reparatur.html` (eigenständig, ohne App-Bundle): entfernt nach Betätigung nur die Service-Worker-Registrierung von KI-LEAD und deren Caches (Präfix `ki-lead-`); IndexedDB, localStorage, fremde Registrierungen und Caches bleiben. Der Service Worker ersetzt sie nie durch `index.html`. Unter dem Service Worker von 0.5.0/0.5.1 ist sie nicht erreichbar; dort führt das Schließen aller Fenster nach der Veröffentlichung von 0.5.2 zur neuen Fassung.
+- **Startprüfung** `start-pruefung.js` (klassisches Skript vor dem Hauptprogramm, ohne Inline-Code): Hinweis mit Weg zur Reparaturseite bei einem Ladefehler oder nach 20 Sekunden ohne Start; „Erneut laden“ übernimmt eine wartende Fassung, nur auf Klick; kein automatisches Neuladen.
+- **Fehlergrenze an der Wurzel** (`src/ui/StartFehlergrenze.tsx`): Fehler beim ersten Zeichnen erscheinen als Hinweis statt als leere Seite.
+- Der Build bricht ab, wenn `index.html` auf eine nicht vorgehaltene Datei verweist; `sw.js` wird ohne HTTP-Cache auf Aktualisierungen geprüft (`updateViaCache: "none"`).
+
+### Tests
+
+- `tests/browser/pwa-update.spec.ts` (10, neu): Fehler mit dem Service Worker von 0.5.1, Korrektur bei Update mit gültigem HTTP-Cache (danach Start nach Cache-Ablauf, erneut und offline), Installationsschutz bei fremder `index.html`, Wiederherstellung aus dem defekten Zustand mit erhaltenen IndexedDB-Daten und fremdem Cache, kein Neuladen eines noch laufenden Fensters mit ungespeicherten Eingaben, keine Übernahme durch Reste einer gescheiterten Installation, „Neu laden“ nur im anfordernden Fenster, Übernahme per Startprüfung nur auf Klick, Reparaturseite, Startprüfung ohne Neuladen. Gegenproben: Ohne `cache: "reload"` scheitert der Test zur Korrektur; mit dem Service Worker aus `3dd6df1` (automatische Übernahme) scheitern beide Regressionstests.
+- `tests/pwa/pwa.test.ts` (+10): Verweise der `index.html`, unstimmige oder abgebrochene Installation samt Cache verworfen, keine Übernahme von sich aus, Neuladen nur im anfordernden Fenster, nur eigene Caches, Reparaturseite und Startprüfung ohne Datenzugriff und ohne automatisches Neuladen.
+- `tests/ui/startfehler.test.ts` (2, neu): Fehlergrenze an der Wurzel.
+- Nicht ausgeführt: WebKit/Safari (in der Entwicklungsumgebung nicht verfügbar).
 
 ## [0.5.1] – 23.10.2026
 
