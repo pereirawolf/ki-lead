@@ -37,6 +37,7 @@ import {
 } from "./darstellung/speicher";
 import type { ProfilFarbschema } from "./darstellung/typen";
 import { exportStempel, mitDatum } from "./kern/ausgabe";
+import { PwaHinweis } from "./ui/PwaHinweis";
 
 export interface ProfilEintrag {
   schluessel: string;
@@ -453,6 +454,7 @@ export default function App() {
       <div className="hinweisband" role="note">
         Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
       </div>
+      <PwaHinweis />
 
       {speicherFehler && (
         <div className="kasten kasten-fehler speicherfehler" role="alert">
@@ -521,7 +523,7 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        KI-LEAD 0.4.31. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
+        KI-LEAD 0.5.0. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
         EUPL-1.2, Profilinhalte unter CC BY 4.0.
       </footer>
     </div>
