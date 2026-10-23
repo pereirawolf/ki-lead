@@ -1,0 +1,33 @@
+name: Barrierefreiheit
+description: Eine Barriere in KI-LEAD melden (siehe docs/BARRIEREFREIHEIT.md)
+title: "Barrierefreiheit: "
+labels: ["barrierefreiheit"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für die Rückmeldung. Issues sind öffentlich: Bitte keine Angaben zur eigenen Gesundheit oder Behinderung, die nicht öffentlich sein sollen, und keine personenbezogenen oder eingestuften Daten.
+  - type: input
+    id: ansicht
+    attributes:
+      label: Betroffene Ansicht oder Ausgabe
+      placeholder: z. B. Meldungsmaske, Lagenradar, Lagebild, PDF-Ausgabe
+    validations:
+      required: true
+  - type: input
+    id: hilfsmittel
+    attributes:
+      label: Hilfsmittel, Browser und Gerät
+      placeholder: z. B. NVDA 2026.2 mit Firefox unter Windows 11; VoiceOver auf iPad
+  - type: textarea
+    id: barriere
+    attributes:
+      label: Was ging nicht?
+      description: Was haben Sie versucht, was ist passiert, was hätten Sie erwartet?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version von KI-LEAD
+      placeholder: steht unter „Einstellungen“, z. B. 0.5.3
