@@ -50,6 +50,19 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
+| 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ |
+
+## [0.5.3] – 23.10.2026
+
+Grundlage: Rückmeldung zum Schema „Thüringen“: Über dem Identitätsband stand der Kopf weiß, darunter die Arbeitsfläche im Farbton des Schemas. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, KI-Pipeline oder gespeicherten Daten.
+
+### Geändert
+
+- **Gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands:** In den Schemata „Bund“, „Bevölkerungsschutz“ und allen 16 Länderschemata übernimmt der Kopf (`header-hintergrund`) die Farbe der Arbeitsfläche (`papier`). Das Band steht damit auf einer durchgehenden Fläche; helle Bandstreifen (etwa Weiß im Thüringen-Band) bleiben sichtbar. Unverändert: „Neutral · Hell“, „Neutral · Night Mode“, „Kontrast · Hell“, „Kontrast · Dunkel“. Profilfarben können `header-hintergrund` weiterhin eigens setzen.
+
+### Tests
+
+- `tests/darstellung/farbschemas.test.ts` (+2): In allen Bund- und Länderschemata ist `header-hintergrund` gleich `papier`; Profilfarben können `header-hintergrund` weiterhin abweichend setzen.
 
 ## [0.5.2] – 23.10.2026
 
