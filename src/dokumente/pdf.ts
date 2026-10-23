@@ -9,6 +9,8 @@ import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import { gliedereFeld } from "../kern/kennsaetze";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
+import { APP_KENNUNG } from "../pipeline/lauf";
+import { herkunftAusMeldung, herkunftMehrerer, pdfSchluesselwoerter, xmpPaket, type KiHerkunft } from "./kennzeichnung";
 
 const BLAU: [number, number, number] = [31, 79, 130];
 
@@ -368,6 +370,19 @@ function seitenfuss(doc: jsPDF, text: string) {
   }
 }
 
+/**
+ * Dokumenteigenschaften, Sprache und XMP-Metadaten mit der KI-Herkunft (KI-Verordnung Art. 50 Abs. 2, seit 0.5.4).
+ * Die Herkunft stammt aus dem Entstehungsfeld der Meldung; ohne Angabe steht sie als „unbekannt“ in den Metadaten.
+ */
+function kennzeichnen(doc: jsPDF, titel: string, herkunft: KiHerkunft, modell?: string) {
+  doc.setProperties({ title: titel, subject: titel, creator: APP_KENNUNG, keywords: pdfSchluesselwoerter(herkunft) });
+  doc.setLanguage("de-DE");
+  doc.addMetadata(xmpPaket({ titel, herkunft, modell }), true);
+}
+
+/** Sichtbarer Zusatz in der Fußzeile bei KI-Herkunft */
+const fussKi = (herkunft: KiHerkunft) => (herkunft === "ki" ? " · KI-generiert" : "");
+
 export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blob {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ui = profil.ui;
@@ -384,7 +399,9 @@ export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blo
   }
   doc.setTextColor(20, 20, 20);
   meldungZeichnen(doc, d, profil, 27);
-  seitenfuss(doc, "Erstellt mit KI-LEAD");
+  const h = herkunftAusMeldung(d, profil);
+  seitenfuss(doc, `Erstellt mit KI-LEAD${fussKi(h.herkunft)}`);
+  kennzeichnen(doc, ui.titel, h.herkunft, h.modell);
   return doc.output("blob");
 }
 
@@ -417,6 +434,8 @@ export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string
     doc.addPage();
     meldungZeichnen(doc, m.daten, profil, 16, m.titel, m.zusatz);
   });
-  seitenfuss(doc, `${titel} · erstellt mit KI-LEAD`);
+  const herkunft = herkunftMehrerer(meldungen.map((m) => herkunftAusMeldung(m.daten, profil)));
+  seitenfuss(doc, `${titel} · erstellt mit KI-LEAD${fussKi(herkunft)}`);
+  kennzeichnen(doc, titel, herkunft);
   return doc.output("blob");
 }

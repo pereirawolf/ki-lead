@@ -51,6 +51,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.1 | letzter Commit des Pull Requests „M5: native Projekte mit Capacitor, wählbare Ablage der API-Schlüssel; 0.5.1“ |
 | 0.5.2 | letzter Commit des Pull Requests „PWA: Startfehler nach Update behoben, Reparaturseite; 0.5.2“ |
 | 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
+| 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ |
+
+## [0.5.4] – 24.10.2026
+
+Grundlage: Befund zu den Grundlagendokumenten vom 24.10.2026 (K1: maschinenlesbare KI-Kennzeichnung nach Art. 50 Abs. 2 KI-Verordnung; Lagenradar nach [docs/BARRIEREFREIHEIT.md](docs/BARRIEREFREIHEIT.md)). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Pipeline oder gespeicherten Daten.
+
+### Hinzugefügt
+
+- **KI-Kennzeichnung im PDF:** Meldung und Lagebild tragen XMP-Metadaten mit der Herkunft aus `_entstehung.verfahren` (`ki`, `manuell`, `unbekannt`), bei einem KI-Entwurf mit IPTC Digital Source Type `compositeWithTrainedAlgorithmicMedia` und Modell; dazu Dokumenteigenschaften (Titel, Ersteller „KI-LEAD 0.5.4“, Schlüsselwörter „KI-generiert“ bzw. „manuell“), Dokumentsprache `de-DE` und in der Fußzeile „KI-generiert“. Ein Lagebild gilt als KI-generiert, sobald eine enthaltene Meldung ein KI-Entwurf ist. Die App erfindet keine Herkunft; ohne Angabe steht „unbekannt“ (`src/dokumente/kennzeichnung.ts`).
+- **Kennzeichnung der Management Summary:** Die TXT-Datei beginnt mit „[KI-generiert mit KI-LEAD 0.5.4, Modell …; vor Verwendung fachlich prüfen]“. Der Text zum Kopieren bleibt unverändert.
+- **Hinweis bei der Profilprüfung** (`KI_KENNZEICHNUNG_OHNE_ENTSTEHUNGSFELD`), wenn ein Profil kein Entstehungsfeld hat, dessen `verfahren` „KI-Entwurf“ zulässt. Das Profil bleibt ladbar.
+
+### Geändert
+
+- **Lagenradar als Radiogruppe:** Die Stufen einer Achse sind Optionen mit Rolle `radio` und `aria-checked` (vorher Schaltflächen mit `aria-pressed` in einer `radiogroup`), mit Namen wie „Stufe 2: regional“. Je Achse ein Tabstopp (vorher jede Stufe, bei acht Achsen rund 60); Pfeiltasten wählen um und nehmen den Fokus mit, Pos1 und Ende springen an Anfang und Ende. Liegt ein gespeicherter Wert außerhalb der Stufen, bleibt die Achse über „offen“ erreichbar. Darstellung unverändert.
+
+### Tests
+
+- `tests/dokumente/kennzeichnung.test.ts` (neu, 10): Herkunft aus dem Entstehungsfeld, Zusammenfassung mehrerer Meldungen, XMP mit Maskierung, PDF von KI-Entwurf und manueller Meldung, Lagebild gemischt und manuell, Kopfzeile der Management Summary.
+- `tests/profil/ki-kennzeichnung.test.ts` (neu, 4): kein Hinweis für Beispiel- und Musterprofil; Hinweis ohne Rolle `entstehung_feld` und ohne „KI-Entwurf“ im Schema.
+- `tests/ui/radar-tastatur.test.ts` (neu, 14): Rollen und Namen, ein Tabstopp je Achse, Wert außerhalb der Stufen, Pfeiltasten mit Fokus, Pos1/Ende, Klick.
 
 ## [0.5.3] – 23.10.2026
 

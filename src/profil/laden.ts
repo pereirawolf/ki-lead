@@ -245,6 +245,19 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
     if (!wurzel?.properties?.[pfad])
       befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“.` });
   }
+  // Maschinenlesbare KI-Kennzeichnung (KI-Verordnung Art. 50 Abs. 2, seit 0.5.4): Nur über das Entstehungsfeld trägt
+  // eine Meldung als JSON die Angabe „KI-Entwurf“. Fehlt es, ist das kein Fehler des Profils, aber zu wissen.
+  const ent = r.entstehung_feld ? wurzel?.properties?.[r.entstehung_feld] : undefined;
+  const verfahren = ent ? aufloesen(ent, schema)?.properties?.verfahren : undefined;
+  const verfahrenDef = verfahren ? aufloesen(verfahren, schema) : undefined;
+  const kiMoeglich = !!verfahrenDef && (!Array.isArray(verfahrenDef.enum) || verfahrenDef.enum.includes("KI-Entwurf"));
+  if (!kiMoeglich)
+    befunde.push({
+      stufe: "hinweis",
+      code: "KI_KENNZEICHNUNG_OHNE_ENTSTEHUNGSFELD",
+      text:
+        "Darstellungsdatei und Schema: Ohne Entstehungsfeld mit „verfahren“ (Wert „KI-Entwurf“) sind KI-Entwürfe dieses Profils als JSON nicht maschinenlesbar gekennzeichnet; PDF-Metadaten nennen die Herkunft dann „unbekannt“. Siehe docs/KI-VERORDNUNG.md, Abschnitt 6.1.",
+    });
   for (const [name, radar] of Object.entries(ui.radare || {})) {
     for (const a of radar.achsen) {
       if (a.stufen.length !== radar.max + 1)

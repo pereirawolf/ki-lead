@@ -17,6 +17,7 @@ import { dateiAnbieten } from "../speicher/speicher";
 import { mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
 import { ModellWahl } from "./ModellWahl";
 import { kurzfassungErstellen, kurzfassungsFingerabdruck, type Kurzfassung } from "../pipeline/kurzfassung";
+import { kurzfassungAlsDatei } from "../dokumente/kennzeichnung";
 
 export interface KiZugang {
   schluessel: Schluessel;
@@ -161,7 +162,7 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
             <button
               type="button"
               className="knopf leise"
-              onClick={() => dateiAnbieten(kf.text, basisName + "_Management-Summary.txt", "text/plain;charset=utf-8")}
+              onClick={() => dateiAnbieten(kurzfassungAlsDatei(kf.text, kf.eintrag.modell), basisName + "_Management-Summary.txt", "text/plain;charset=utf-8")}
             >
               Als TXT speichern
             </button>

@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.4 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -63,15 +63,17 @@ Anbieter von KI-Systemen, die Text erzeugen, sorgen dafür, dass die Ausgaben in
 
 KI-LEAD erzeugt Text in allen drei Arbeitsprodukten. Ob die Pflicht den Herausgeber trifft, hängt von Abschnitt 3 und 4 ab. Unabhängig davon kennzeichnet KI-LEAD seine Ausgaben, soweit das ohne eigene Modelle möglich ist:
 
-| Ausgabe | Stand 0.5.3 |
+| Ausgabe | Stand 0.5.4 |
 |---|---|
-| Meldung als JSON | `_entstehung.verfahren = "KI-Entwurf"` mit Werkzeug, Modell und Erstellzeit, sofern das Schema des Profils ein Entstehungsfeld hat (Beispiel- und Musterprofil: ja) |
-| Meldung als PDF | sichtbar: Zeile „Entstehung“, Fußzeile „Erstellt mit KI-LEAD“, Wasserzeichen „ENTWURF“ bis zur Freigabe; **keine** maschinenlesbaren Metadaten |
-| Lagebild als PDF und CSV | PDF: Fußzeile; CSV: Spalten „Entstehung“ und „SOP (Entstehung)“ |
-| Management Summary als TXT | **keine** Kennzeichnung |
+| Meldung als JSON | `_entstehung.verfahren = "KI-Entwurf"` mit Werkzeug, Modell und Erstellzeit, sofern das Schema des Profils ein Entstehungsfeld hat (Beispiel- und Musterprofil: ja). Fehlt es, meldet die Profilprüfung einen Hinweis (`KI_KENNZEICHNUNG_OHNE_ENTSTEHUNGSFELD`). |
+| Meldung als PDF | maschinenlesbar: XMP-Metadaten mit IPTC Digital Source Type `compositeWithTrainedAlgorithmicMedia` bei einem KI-Entwurf, Herkunft (`ki`, `manuell`, `unbekannt`) und Modell; Dokumenteigenschaften mit Ersteller „KI-LEAD &lt;Version&gt;“ und Schlüsselwort „KI-generiert“; Dokumentsprache. Sichtbar: Zeile „Entstehung“, Fußzeile „Erstellt mit KI-LEAD · KI-generiert“, Wasserzeichen „ENTWURF“ bis zur Freigabe |
+| Lagebild als PDF und CSV | PDF: Metadaten wie oben, „KI-generiert“, sobald eine enthaltene Meldung ein KI-Entwurf ist; CSV: Spalten „Entstehung“ und „SOP (Entstehung)“ |
+| Management Summary als TXT | erste Zeile „[KI-generiert mit KI-LEAD &lt;Version&gt;, Modell &lt;id&gt;; vor Verwendung fachlich prüfen]“; der Text zum Kopieren bleibt ohne diese Zeile |
 | Laufprotokoll als JSON | Modell und Parameter je Stufe |
 
-**Offen:** Maschinenlesbare Metadaten im PDF, eine Kennzeichnung der Management Summary und ein Hinweis bei Profilen ohne Entstehungsfeld ([Spezifikation](SPEZIFIKATION.md), Abschnitt 10). Ein Wasserzeichen im Text kann KI-LEAD nicht selbst erzeugen; das wäre Sache der Modellanbieter. Die zweite Ebene des Verhaltenskodex erfüllt KI-LEAD deshalb nicht.
+Die Herkunft stammt immer aus dem Entstehungsfeld der Meldung; die App erfindet keine (`src/dokumente/kennzeichnung.ts`). Wird ein KI-Entwurf von Hand überarbeitet, bleibt er als „KI-Entwurf“ gekennzeichnet.
+
+**Grenzen:** Die Metadaten sind nicht signiert. Ein Wasserzeichen im Text kann KI-LEAD nicht selbst erzeugen; das wäre Sache der Modellanbieter. Die zwei Ebenen des Verhaltenskodex erfüllt KI-LEAD deshalb nicht ([Spezifikation](SPEZIFIKATION.md), Abschnitt 10).
 
 ### 6.2 Veröffentlichte Texte (Abs. 4)
 
@@ -154,4 +156,5 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.1 | 24.10.2026 | Abschnitt 6.1: Kennzeichnung in PDF-Metadaten, Kopfzeile der Management Summary und Profilhinweis (App 0.5.4) |
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
