@@ -29,28 +29,34 @@ def punkte(cx, cy, r, anteile=None):
     ]
 
 
-def zeichne(n, inhalt=0.68, rund=True):
+def zeichne(n, inhalt=0.68, rund=True, form=None, breite=None):
+    """Symbol der Größe n×n (bzw. breite×n). form: "rund" (abgerundetes Quadrat), "quadrat", "kreis" oder "frei"
+    (transparenter Grund, für den Vordergrund adaptiver Android-Symbole); ohne Angabe nach rund."""
     s = 4  # Überabtastung für glatte Kanten
-    g = n * s
-    bild = Image.new("RGBA", (g, g), (0, 0, 0, 0))
+    form = form or ("rund" if rund else "quadrat")
+    gb, g = (breite or n) * s, n * s
+    bild = Image.new("RGBA", (gb, g), (0, 0, 0, 0))
     d = ImageDraw.Draw(bild)
-    if rund:
-        d.rounded_rectangle([0, 0, g - 1, g - 1], radius=int(g * 0.2), fill=ORANGE)
-    else:
-        d.rectangle([0, 0, g, g], fill=ORANGE)
-    c, r = g / 2, g * inhalt / 2
-    w = max(2, int(g * 0.013))
+    if form == "rund":
+        d.rounded_rectangle([0, 0, gb - 1, g - 1], radius=int(min(gb, g) * 0.2), fill=ORANGE)
+    elif form == "quadrat":
+        d.rectangle([0, 0, gb, g], fill=ORANGE)
+    elif form == "kreis":
+        d.ellipse([0, 0, gb - 1, g - 1], fill=ORANGE)
+    cx, c, r = gb / 2, g / 2, min(gb, g) * inhalt / 2
+    # Strichstärke: bei den Web-Symbolen wie bisher, sonst im Verhältnis zur Radargröße
+    w = max(2, int(min(gb, g) * inhalt * 0.019)) if form == "frei" or breite else max(2, int(g * 0.013))
     for k in (1, 2 / 3, 1 / 3):
-        d.polygon(punkte(c, c, r * k), outline=WEISS, width=w)
-    for p in punkte(c, c, r):
-        d.line([(c, c), p], fill=WEISS, width=w)
-    innen = punkte(c, c, r, WERTE)
+        d.polygon(punkte(cx, c, r * k), outline=WEISS, width=w)
+    for p in punkte(cx, c, r):
+        d.line([(cx, c), p], fill=WEISS, width=w)
+    innen = punkte(cx, c, r, WERTE)
     d.polygon(innen, fill=BLAU)
     lw = int(w * 2)
     d.line(innen + [innen[0]], fill=WEISS, width=lw, joint="curve")
     for x, y in innen:
         d.ellipse([x - lw / 2, y - lw / 2, x + lw / 2, y + lw / 2], fill=WEISS)
-    return bild.resize((n, n), Image.LANCZOS)
+    return bild.resize((breite or n, n), Image.LANCZOS)
 
 
 def svg():
@@ -76,3 +82,29 @@ if __name__ == "__main__":
     zeichne(48, inhalt=0.76).save(ZIEL / "favicon-48.png")
     (ZIEL / "icon.svg").write_text(svg(), encoding="utf-8")
     print(f"Symbole geschrieben nach {ZIEL}")
+
+    # Native Apps (Capacitor), sofern die Projektordner vorhanden sind
+    wurzel = ZIEL.parent.parent
+    ios = wurzel / "ios" / "App" / "App" / "Assets.xcassets"
+    if ios.exists():
+        # App Store verlangt ein Quadrat ohne Transparenz; iOS rundet die Ecken selbst
+        zeichne(1024, form="quadrat").convert("RGB").save(ios / "AppIcon.appiconset" / "AppIcon-512@2x.png")
+        for name in ("splash-2732x2732.png", "splash-2732x2732-1.png", "splash-2732x2732-2.png"):
+            zeichne(2732, inhalt=0.3, form="quadrat", breite=2732).convert("RGB").save(ios / "Splash.imageset" / name)
+        print(f"iOS-Symbole geschrieben nach {ios}")
+    res = wurzel / "android" / "app" / "src" / "main" / "res"
+    if res.exists():
+        for dichte, groesse in {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}.items():
+            ordner = res / f"mipmap-{dichte}"
+            zeichne(groesse, form="rund").save(ordner / "ic_launcher.png")
+            zeichne(groesse, inhalt=0.72, form="kreis").save(ordner / "ic_launcher_round.png")
+            # Adaptives Symbol: Vordergrund 108 dp, sichtbarer Kern 66 dp; das Radar bleibt darin
+            zeichne(int(groesse * 108 / 48), inhalt=0.5, form="frei").save(ordner / "ic_launcher_foreground.png")
+        for datei in res.glob("drawable*/splash.png"):
+            b, h = Image.open(datei).size
+            zeichne(h, inhalt=0.4, form="quadrat", breite=b).convert("RGB").save(datei)
+        (res / "values" / "ic_launcher_background.xml").write_text(
+            '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#E75B12</color>\n</resources>\n',
+            encoding="utf-8",
+        )
+        print(f"Android-Symbole geschrieben nach {res}")

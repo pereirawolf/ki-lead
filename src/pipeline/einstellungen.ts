@@ -1,9 +1,10 @@
 // Einstellungen der KI-Pipeline. Leere Modellfelder bedeuten: Vorgabe des Profils bzw. der App.
 
-import { del, get, set } from "idb-keyval";
+import { get, set } from "idb-keyval";
 import type { Aufwand } from "../anbieter/typen";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
+import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
 export type Rolle = "vorverarbeitung" | "erfassung" | "verdichtung" | "reparatur" | "kurzfassung";
 
@@ -82,14 +83,14 @@ export async function einstellungenSchreiben(e: Einstellungen): Promise<void> {
   await set("einstellungen", e);
 }
 
-// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert.
-export async function schluesselLesen(anbieter = "anthropic"): Promise<string> {
-  return ((await get(`schluessel:${anbieter}`)) as string | undefined) || "";
+// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert. Wo er liegt, wählt die
+// Person unter „Einstellungen“ (src/schluessel/ablage.ts: Gerätespeicher, nur Sitzung, Schlüsselbund des Systems).
+export async function schluesselLesen(anbieter: AnbieterId = "anthropic"): Promise<string> {
+  return schluesselAusAblage(anbieter);
 }
 
-export async function schluesselSchreiben(wert: string, anbieter = "anthropic"): Promise<void> {
-  if (wert) await set(`schluessel:${anbieter}`, wert);
-  else await del(`schluessel:${anbieter}`);
+export async function schluesselSchreiben(wert: string, anbieter: AnbieterId = "anthropic"): Promise<void> {
+  return schluesselInAblage(anbieter, wert);
 }
 
 export async function alleSchluesselLesen(): Promise<Schluessel> {

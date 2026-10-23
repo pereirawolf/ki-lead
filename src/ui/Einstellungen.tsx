@@ -7,6 +7,7 @@ import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
 import { APP_MODELLE, AUFWAND_STUFEN, MODELL_GRUPPEN, STANDARD, type Einstellungen as E, type Rolle } from "../pipeline/einstellungen";
+import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 
 interface Props {
   profil: Profil | null;
@@ -14,6 +15,9 @@ interface Props {
   setEinstellungen: (e: E) => void;
   schluessel: Schluessel;
   setSchluessel: (id: AnbieterId, wert: string) => void;
+  /** Gewählte Ablage der API-Schlüssel und Wechsel (zieht vorhandene Schlüssel mit um) */
+  ablage?: AblageId;
+  setAblage?: (id: AblageId) => Promise<void>;
   /** Farbschema der Oberfläche */
   farben?: FarbZugang;
 }
@@ -47,7 +51,51 @@ const ANBIETER: { id: AnbieterId; konsole: string; konsoleName: string; host: st
   },
 ];
 
-function SchluesselAbschnitt({ a, wert, setzen }: { a: (typeof ANBIETER)[number]; wert: string; setzen: (w: string) => void }) {
+function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (id: AblageId) => Promise<void> }) {
+  const [laeuft, setLaeuft] = useState(false);
+  const [fehler, setFehler] = useState<string | null>(null);
+  const waehlen = async (id: AblageId) => {
+    setFehler(null);
+    setLaeuft(true);
+    try {
+      await setAblage(id);
+    } catch (err) {
+      setFehler((err as Error).message);
+    } finally {
+      setLaeuft(false);
+    }
+  };
+  return (
+    <section className="schritt-inhalt abschnitt-einzeln">
+      <h2>Ablage der API-Schlüssel</h2>
+      <p className="einleitung">
+        Wo deine Schlüssel liegen, entscheidest du. Beim Wechsel zieht die App vorhandene Schlüssel mit um und entfernt sie aus der bisherigen Ablage. Ein
+        Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
+      </p>
+      <fieldset className="ablage-wahl" disabled={laeuft}>
+        <legend className="sr-only">Ablage der API-Schlüssel</legend>
+        {ABLAGEN.map((x) => (
+          <label key={x.id} className={x.verfuegbar() ? "ablage-option" : "ablage-option gesperrt"}>
+            <input type="radio" name="ablage" value={x.id} checked={ablage === x.id} disabled={!x.verfuegbar()} onChange={() => waehlen(x.id)} />
+            <span>
+              <strong>{x.titel}</strong>
+              {!x.verfuegbar() && " (hier nicht verfügbar)"}
+              <br />
+              <span className="ablage-text">{x.beschreibung}</span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+      {fehler && (
+        <div className="kasten kasten-fehler" role="alert">
+          <p>Die Ablage wurde nicht gewechselt: {fehler}</p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: (typeof ANBIETER)[number]; wert: string; setzen: (w: string) => void; ablage: AblageId }) {
   const [eingabe, setEingabe] = useState(wert);
   const [zeigen, setZeigen] = useState(false);
   const [test, setTest] = useState<{ art: "ok" | "fehler" | "laeuft"; text: string } | null>(null);
@@ -77,8 +125,8 @@ function SchluesselAbschnitt({ a, wert, setzen }: { a: (typeof ANBIETER)[number]
         <a href={a.konsole} target="_blank" rel="noopener noreferrer">
           {a.konsoleName}
         </a>
-        . Die App schickt ihn nur an {a.host}. Er liegt unverschlüsselt im Speicher dieses Browsers; nutze deshalb einen eigenen Schlüssel mit Ausgabenlimit und
-        lösche ihn auf geteilten Geräten.
+        . Die App schickt ihn nur an {a.host}. Ablage: {ablageVon(ablage).titel}
+        {ablage === "geraet" ? " (unverschlüsselt)" : ""}. Nutze einen eigenen Schlüssel mit Ausgabenlimit und lösche ihn auf geteilten Geräten.
       </p>
       <div className="schluessel-zeile">
         <input
@@ -124,7 +172,7 @@ function SchluesselAbschnitt({ a, wert, setzen }: { a: (typeof ANBIETER)[number]
   );
 }
 
-export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellungen, schluessel, setSchluessel, farben }: Props) {
+export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellungen, schluessel, setSchluessel, ablage = "geraet", setAblage, farben }: Props) {
   const setze = (teil: Partial<E>) => setEinstellungen({ ...e, ...teil });
   const openAiGenutzt = ROLLEN.some((r) => anbieterVon(e.modelle[r.id] || profil?.manifest.modelle?.[r.id] || APP_MODELLE[r.id]) === "openai");
 
@@ -139,8 +187,10 @@ export function EinstellungenAnsicht({ profil, einstellungen: e, setEinstellunge
 
       {farben && <FarbschemaAbschnitt profil={profil} zugang={farben} />}
 
+      {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
+
       {ANBIETER.map((a) => (
-        <SchluesselAbschnitt key={a.id} a={a} wert={schluessel[a.id]} setzen={(w) => setSchluessel(a.id, w)} />
+        <SchluesselAbschnitt key={`${a.id}:${ablage}`} a={a} wert={schluessel[a.id]} setzen={(w) => setSchluessel(a.id, w)} ablage={ablage} />
       ))}
 
       <section className="schritt-inhalt abschnitt-einzeln">
