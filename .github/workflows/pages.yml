@@ -3,6 +3,10 @@
 # (Settings → Secrets and variables → Actions → Variables) und unter Settings → Pages
 # als Source „GitHub Actions“ gewählt ist. Für private Repositories setzt Pages einen
 # kostenpflichtigen GitHub-Plan voraus.
+#
+# Gestaffelte Prüfung (docs/TESTS.md): Auf main, im Wochenlauf und bei manuellem Start läuft immer alles.
+# Auf Pull Requests entscheidet scripts/pruefumfang.mjs anhand der geänderten Dateien, ob die Kern- und die
+# PWA-Browsertests nötig sind; Vitest und Build laufen immer.
 name: Prüfen und veröffentlichen
 
 on:
@@ -10,6 +14,9 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Wöchentlicher Volllauf (montags 03:17 UTC), unabhängig von Änderungen; veröffentlicht nichts
+  schedule:
+    - cron: "17 3 * * 1"
 
 # Grundrechte für alle Jobs; nur die Veröffentlichung erhält Schreibrechte für Pages.
 permissions:
@@ -27,18 +34,70 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Bei Pull Requests ist HEAD der Merge-Commit; sein erster Elternteil ist die aktuelle Basis
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
+      # Prüfumfang: außerhalb von Pull Requests immer alles; scheitert die Ermittlung, ebenfalls alles
+      # shell: bash setzt pipefail; nur eine vollständige, gültige Ausgabe des Skripts darf Tests auslassen.
+      # --no-renames: Bei Umbenennungen zählen Quell- und Zielpfad.
+      - id: umfang
+        shell: bash
+        env:
+          EREIGNIS: ${{ github.event_name }}
+        run: |
+          alles() { echo "$1, prüfe alles"; printf 'kern=true\npwa=true\n' >> "$GITHUB_OUTPUT"; }
+          if [ "$EREIGNIS" != "pull_request" ]; then
+            alles "Kein Pull Request"
+          elif ! dateien=$(git diff --name-only --no-renames HEAD^1 HEAD); then
+            alles "Basis nicht ermittelbar"
+          else
+            echo "Geänderte Dateien:"; echo "$dateien"
+            if umfang=$(echo "$dateien" | node scripts/pruefumfang.mjs) &&
+               echo "$umfang" | grep -qxE 'kern=(true|false)' && echo "$umfang" | grep -qxE 'pwa=(true|false)'; then
+              echo "$umfang" | tee -a "$GITHUB_OUTPUT"
+            else
+              alles "Prüfumfang nicht ermittelbar"
+            fi
+          fi
+
       - run: npm ci
-      - run: npm test
-      # Einmal in zufälliger, fester Reihenfolge: deckt Abhängigkeiten zwischen Tests auf
+      # Auf Pull Requests ein Durchgang in zufälliger, fester Reihenfolge (deckt Abhängigkeiten zwischen Tests auf);
+      # auf main und im Wochenlauf zusätzlich in der gewöhnlichen Reihenfolge.
+      - if: github.event_name != 'pull_request'
+        run: npm test
       - run: npm run test:zufall
       - run: npm run build
-      # Browsertests gegen den Build (nur Chromium, KI-Anbieter simuliert, kein Netz nach außen)
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
+
+      # Browsertests gegen genau diesen Build (nur Chromium, KI-Anbieter simuliert, kein Netz nach außen)
+      - id: playwright
+        if: steps.umfang.outputs.kern == 'true' || steps.umfang.outputs.pwa == 'true'
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: browser-cache
+        if: steps.playwright.outcome == 'success'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+      - if: steps.playwright.outcome == 'success' && steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.playwright.outcome == 'success' && steps.browser-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - if: steps.umfang.outputs.kern == 'true'
+        run: npm run test:browser -- --project=kern
+        env:
+          KI_LEAD_BUILD_VORHANDEN: "1"
+      - if: steps.umfang.outputs.pwa == 'true'
+        run: npm run test:browser -- --project=pwa
+        env:
+          KI_LEAD_BUILD_VORHANDEN: "1"
+      - if: steps.umfang.outputs.kern != 'true' && steps.umfang.outputs.pwa != 'true'
+        run: echo "Nur Inhalte geändert (Dokumentation, SOP, Bewertungsfälle); Browsertests entfallen für diesen Pull Request und laufen nach dem Zusammenführen auf main."
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -46,12 +105,12 @@ jobs:
           path: playwright-report
           retention-days: 7
       - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && vars.PAGES_AKTIV == 'true'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'schedule' && vars.PAGES_AKTIV == 'true'
         with:
           path: dist
 
   veroeffentlichen:
-    if: github.ref == 'refs/heads/main' && vars.PAGES_AKTIV == 'true'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'schedule' && vars.PAGES_AKTIV == 'true'
     needs: pruefen
     runs-on: ubuntu-latest
     permissions:

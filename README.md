@@ -92,6 +92,7 @@ npm run dev             # Entwicklungsserver
 npm test                # Tests (Kern, Profile, Pipeline, Anbieter, Oberfläche; KI-Anbieter simuliert)
 npm run test:zufall     # dieselben Tests in zufälliger, fester Reihenfolge
 npm run test:browser    # Browsertests mit Playwright gegen den Build (einmalig: npx playwright install chromium)
+npm run test:inhalt     # nur Profil-, Kern- und Evaluationstests (schnell, bei Arbeit an SOP und Profilen)
 npm run build           # Produktionsbuild nach dist/
 npm run sop:lesefassung # Lesefassung der SOP-Sammelmappe neu erzeugen
 ```
@@ -100,7 +101,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 **Testdaten:** Im Ordner `profile/lead-beispiel/beispiele/orkantief-ilka` liegt der **fiktive** Datensatz Orkantief „Ilka“ mit sechs Ländermeldungen und der daraus verdichteten Meldung einer Koordinierungsstelle; keine Meldung stammt von den darin genannten Stellen (siehe `LIESMICH.md` dort). Eigene Testdaten unter `privat/testdaten/<satz>/` prüft `npm test` mit, wenn dort eine Datei `profil.txt` den Profilordner nennt.
 
-**Prüfung und Veröffentlichung:** GitHub Actions prüft Pull Requests, Änderungen am Hauptzweig `main` und manuell gestartete Läufe mit Tests (auch in zufälliger Reihenfolge), Build und Browsertests. Die Veröffentlichung auf GitHub Pages ist gesondert konfiguriert und setzt die Repository-Variable `PAGES_AKTIV=true` sowie „GitHub Actions“ als Pages-Quelle voraus (`.github/workflows/pages.yml`).
+**Prüfung und Veröffentlichung:** GitHub Actions prüft Änderungen am Hauptzweig `main`, manuell gestartete Läufe und wöchentlich den ganzen Stand mit allen Tests (auch in zufälliger Reihenfolge), Build und Browsertests. Pull Requests werden gestaffelt geprüft: Tests und Build immer, Browsertests nur, wenn die Änderung mehr als reine Inhalte (Dokumentation, SOP, Bewertungsfälle) betrifft (siehe [docs/TESTS.md](docs/TESTS.md)). Die Veröffentlichung auf GitHub Pages ist gesondert konfiguriert und setzt die Repository-Variable `PAGES_AKTIV=true` sowie „GitHub Actions“ als Pages-Quelle voraus (`.github/workflows/pages.yml`).
 
 **SOPs bearbeiten:** Maßgeblich sind die Einzeldateien unter `profile/lead-beispiel/sop/`; welche davon die App lädt, steht im Profilmanifest unter `sop.dateien`. Nach Änderungen `npm run sop:lesefassung` ausführen; die erzeugte Lesefassung und die Archivfassungen nicht von Hand bearbeiten. Fassungen und Gültigkeitsstand (Teil A) sowie die Änderungsverläufe nach den Pflegeregeln fortschreiben.
 

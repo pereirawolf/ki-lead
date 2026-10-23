@@ -13,9 +13,24 @@ Weitere Befehle:
 - `npm run test:zufall`: alle Tests in zufälliger, fester Reihenfolge (Startwert 20261021). Scheitert ein Test nur hier, hängt er von einem anderen ab.
 - `npm run test:ui`: nur die Oberflächentests in jsdom.
 - `npm run pruefe-profile`: nur die Profiltests (`tests/profil/`), auch für eigene Profile unter `privat/profile/`.
+- `npm run test:inhalt`: Profil-, Kern- und Evaluationstests; schnelle Rückmeldung bei Arbeit an SOP, Arbeitsanweisungen oder Profilen.
+- `npm run test:browser:kern` und `npm run test:browser:pwa`: nur eines der beiden Browserprojekte (siehe unten).
 - `npx vitest run tests/kern/zeit.test.ts`: eine Datei; `npx vitest` für den Beobachtungsmodus.
 
-GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, `npm run build` und die Browsertests aus.
+## Gestaffelte Prüfung in GitHub Actions
+
+Nicht jede Änderung braucht jeden Test. Änderungen an der LEAD-Systematik (SOP, Arbeitsanweisungen, Kodierleitfaden), an der Dokumentation oder an den Bewertungsfällen ändern weder Programmcode noch Bedienoberfläche; ihre Konsistenz prüfen die Vitest-Tests unter `tests/profil/`, `tests/kern/` und `tests/evaluation/`.
+
+| Anlass | Vitest | Build | Browser: kern | Browser: pwa |
+|---|---|---|---|---|
+| Push auf `main`, wöchentlicher Volllauf (montags), manueller Start | gewöhnliche und zufällige Reihenfolge | ja | immer | immer |
+| Pull Request | zufällige, feste Reihenfolge | ja | wenn nicht nur Inhalte geändert sind | wenn PWA-Mechanismus oder Testumgebung betroffen ist |
+
+Welche Dateien was auslösen, legt `scripts/pruefumfang.mjs` fest; `tests/ci/pruefumfang.test.ts` hält die Regeln mit Tabellenfällen und Wächtern fest. Grundsatz **„im Zweifel prüfen“**: Die Kern-Browsertests entfallen nur, wenn _jede_ geänderte Datei auf der Liste reiner Inhalte steht (`docs/`, `evaluation/`, Markdown im Wurzelordner, `profile/*/sop/`, Markdown-Dateien der Profile, Vorlagen für Issues). `meldung.ui.json`, `meldung.schema.json`, `profil.json` und Beispielmeldungen eines Profils gehen in den Build und die Oberfläche ein und lösen die Kern-Browsertests aus, ebenso jede unbekannte Datei. Ist die Liste der geänderten Dateien leer oder nicht ermittelbar, läuft alles.
+
+Was ein Pull Request auslässt, läuft spätestens nach dem Zusammenführen auf `main` vor der Veröffentlichung; scheitert dort ein Test, wird nicht veröffentlicht. Der Wochenlauf veröffentlicht nichts.
+
+Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions.
 
 ## Gliederung
 
@@ -34,6 +49,7 @@ GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, 
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |
 | `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit und Offline-Start der PWA im echten Browser |
+| `tests/ci/` | Prüfumfang der gestaffelten Prüfung (`scripts/pruefumfang.mjs`) mit Wächtern gegen veraltete Pfadlisten |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |
 
 Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
@@ -47,7 +63,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 | `anbieter.ts` | `llmAntwort()`, `meldungsAntwort()`, `skriptAnbieter()` (Antworten der Reihe nach, ein zusätzlicher Aufruf scheitert), `sseText()`, `sseAntwort()` (Teilung an Bytepositionen), `abreissenderStrom()`, `fehlerAntwort()`, `ohneWarten()` (gefälschte Uhr, misst Wartezeiten) |
 | `pipeline.ts` | `pipelineKontext()` mit Beispielprofil und fester Uhr, `s1Vorschlag()`, `bestaetigterVorschlag()` |
 | `speicher.ts` | Attrappe für `idb-keyval` mit auslösbaren Lese-, Schreib- und Auflistungsfehlern (`speicherVoll()`) |
-| `dom.ts` | `einhaengen()`, `aushaengen()`, `klick()`, `eingeben()`, `knopf()`, `bisWahr()` (wartet auf einen Zustand statt einer festen Zeit) |
+| `dom.ts` | `einhaengen()`, `aushaengen()`, `klick()`, `eingeben()`, `knopf()`, `bisWahr()` (wartet auf einen Zustand statt einer festen Zeit; unter `vi.useFakeTimers()` stellt `takt()` die gefälschte Uhr vor, statt real zu warten) |
 | `ajv.ts` | `referenzAjv()` mit festen Optionen, `gleichWieAjv(schema, daten, soll)` mit Diagnose |
 | `eingebaut.ts` | zwei eingebaute Profile mit verschiedener Kennung für Tests des Profilwechsels |
 
@@ -55,7 +71,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 1. **Unabhängiges Soll.** Erwartete Werte stehen als feste Werte im Test oder folgen aus einer Regel, die der Test selbst nennt; sie werden nie mit der geprüften Funktion berechnet. Beim Vergleich mit Ajv kommt ein eigenes Soll hinzu, damit zwei zugleich nachgiebige Prüfer nicht unbemerkt bleiben.
 2. **Kein Zufall.** Kein `Math.random`, keine Abhängigkeit von Reihenfolge oder Uhrzeit; Uhr und Zeitzone werden gesetzt, wo sie zählen.
-3. **Keine festen Pausen.** Oberflächentests warten mit `bisWahr()` auf einen sichtbaren oder gespeicherten Zustand. Prüft ein Test, dass etwas _nicht_ geschieht, wartet er erst auf den positiven Zustand und lässt dann ausstehende Arbeit auslaufen.
+3. **Keine festen Pausen.** Oberflächentests warten mit `bisWahr()` auf einen sichtbaren oder gespeicherten Zustand. Prüft ein Test, dass etwas _nicht_ geschieht, wartet er erst auf den positiven Zustand und lässt dann ausstehende Arbeit auslaufen. Hängt ein Zustand an einem Zeitgeber der App (etwa dem Autospeichern 1,2 s nach der letzten Eingabe), läuft der Test mit `vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] })`; `bisWahr()` stellt die Uhr dann vor. In den Browsertests sind die verbliebenen Pausen in `pwa-update.spec.ts` und `abbruch.spec.ts` Beobachtungsfenster für Negativprüfungen (kein Neuladen, keine neue Anfrage), bemessen an den Zeitgebern der Startprüfung; sie werden nicht verkürzt.
 4. **Keine echten Wartezeiten.** Wiederholungen und Abbrüche der Anbieter laufen mit `ohneWarten()`; geprüft werden Zahl der Abrufe und Länge der Wartezeiten.
 5. **Fixtures über ihr Kennzeichen.** Beispielmeldungen mit `ilkaMeldung()`/`ilkaDatei()`; fehlende Pflichtdaten lassen den Test scheitern statt ihn leer bestehen zu lassen.
 6. **Keine echten KI-Aufrufe.** Anbieter werden als Attrappe (`skriptAnbieter`, `abruf`-Parameter der Adapter) oder im Browser am Netzwerkrand simuliert; Browsertests brechen jede andere Anfrage nach außen ab und prüfen das.
@@ -65,7 +81,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 ## Browsertests
 
-`npm run test:browser` baut die App, startet `vite preview` auf Port 4173 und prüft mit Chromium:
+`npm run test:browser` baut die App, startet `vite preview` auf Port 4173 und prüft mit Chromium in zwei Projekten: **kern** (alle Dateien außer `pwa*.spec.ts`) und **pwa** (`pwa.spec.ts`, `pwa-update.spec.ts`). Mit `KI_LEAD_BUILD_VORHANDEN=1` entfällt der Build, und ein vorhandener Ordner `dist/` wird verwendet (nur sinnvoll direkt nach `npm run build`).
 
 - `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel
 - `abbruch.spec.ts`: Abbrechen während S1, Protokoll des abgebrochenen Laufs, keine neue Anfrage
