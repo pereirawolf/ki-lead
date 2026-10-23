@@ -12,13 +12,13 @@ art_zuordnung: ["Sonstiges"]
 art_hinweis: "vorrangig die tatsächlich passenden Ursachen- und Folgenarten (Querschnitt, A.1 Nr. 7); „Sonstiges“ nur begründet, wenn kein vorhandenes Dach den Gegenstand trägt; C17 allein begründet weder eine Ereignisart noch einen förmlichen Rechtszustand"
 anschluss: "Fach-SOP und Bausteine nach betroffener ziviler Funktion (insbesondere C01, C09–C16); B14, B15, B16 nur bei belegtem Sicherheits-, Cyber- oder Tatbezug"
 zweck: "Gemeinsamer Betrachtungsrahmen für Folgen von Waffeneinwirkung, längerfristigem Schutzbedarf, eingeschränkter staatlicher Handlungsfähigkeit und gleichzeitiger Beanspruchung ziviler Fähigkeiten – ausschließlich ziviler Wirkungsbezug."
-version: "1.3.0"
+version: "1.4.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
-quellen_geprueft_am: "22.10.2026 – Art. 80a und 115a GG (Abs. 4 am 22.10.2026 in nichtamtlicher Wiedergabe nachgelesen) und Kapitelüberschriften 18–22 der Rahmenrichtlinien Gesamtverteidigung am amtlichen Text gelesen (RRGV: Zweitprüfung durch ein weiteres Werkzeug); KZV-Fundstelle vor Verwendung prüfen (A.6)"
+quellen_geprueft_am: "22.10.2026 – Art. 80a und 115a GG und § 1 ZSKG am Normtext; Art. 35 GG und Art. 115a Abs. 4 GG in nichtamtlicher Wiedergabe nachgelesen; Rahmenrichtlinien Gesamtverteidigung im amtlichen Text (Kapitelüberschriften 19–22 wörtlich, Aufgabenfelder 18–22 zusammengefasst; Zweitprüfung durch ein weiteres Werkzeug); §§ 2, 11, 16, 18 ZSKG und KZV-Fundstelle vor Verwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
-pruefausloeser: "Fortschreibung der Rahmenrichtlinien Gesamtverteidigung oder der Konzeption Zivile Verteidigung; Änderung des ZSKG oder der Sicherstellungsgesetze; Rückblick nach A.8.3"
+pruefausloeser: "Änderung von Art. 35, 80a oder 115a GG, des ZSKG oder der Sicherstellungsgesetze; Fortschreibung der Rahmenrichtlinien Gesamtverteidigung oder der Konzeption Zivile Verteidigung; Rückblick nach A.8.3"
 bisherige_kennung: "N13"
 bisherige_ids: ["baustein-n13"]
 ```
@@ -80,6 +80,6 @@ Nach der jeweiligen Dach-SOP; ziviler Wirkungsbezug, betroffene Funktion und Abs
 - Grundgesetz: [Art. 35 (Rechts- und Amtshilfe, Katastrophenhilfe)](https://www.gesetze-im-internet.de/gg/art_35.html), [Art. 80a (Spannungsfall, Bündnisfall)](https://www.gesetze-im-internet.de/gg/art_80a.html), [Art. 115a (Verteidigungsfall)](https://www.gesetze-im-internet.de/gg/art_115a.html) – tragen die Tabelle der Rechtszustände und R6.
 - Zivilschutz- und Katastrophenhilfegesetz (ZSKG): [§ 1 Aufgaben des Zivilschutzes](https://www.gesetze-im-internet.de/zsg/__1.html), § 2, § 11, § 16, § 18 – Aufgabenrahmen des Zivilschutzes und Bezug zu C16 und B17.
 - Rahmenrichtlinien Gesamtverteidigung (RRGV), Beschluss des Bundeskabinetts vom 05.06.2024, veröffentlicht vom Bundesministerium des Innern; Konzeption Zivile Verteidigung (KZV, 2016) – tragen den Absatz „Zivile Aufgabenfelder“. [Amtlicher Volltext der RRGV](https://www.verwaltungsvorschriften-im-internet.de/bsvwvbund_05062024_BMIKM7510011324.htm) (Kapitelüberschriften 18–22 am 22.10.2026 gelesen; Kopfangabe `quellen_geprueft_am`); Fundstelle der KZV vor Verwendung prüfen (A.6).
-- Sicherstellungsgesetze (WasSiG, ESVG, VerkSiG, EnSiG, ArbSiG): Maßnahmenrahmen. Fundstellen: EnSiG in C12, ESVG in C14; WasSiG, VerkSiG und ArbSiG sind in dieser Fassung ohne Fundstelle (B10 bzw. C13 nennen den Ergänzungsbedarf) und vor Verwendung am Normtext zu prüfen (A.6); bis dahin werden daraus keine Befugnisse oder Aktivierungsvoraussetzungen behauptet.
+- Sicherstellungsgesetze (ausgewählte, nicht abschließende Übersicht: WasSiG, ESVG, VerkSiG, EnSiG, WiSiG, ArbSiG): Maßnahmenrahmen. Fundstellen: EnSiG und WiSiG in C12, ESVG in C14; WasSiG, VerkSiG und ArbSiG sind in dieser Fassung ohne Fundstelle (B10 bzw. C13 nennen den Ergänzungsbedarf) und vor Verwendung am Normtext zu prüfen (A.6); bis dahin werden daraus keine Befugnisse oder Aktivierungsvoraussetzungen behauptet.
 
 **Offene Punkte:** Schnittstellen der zivilen Verteidigung mit der zuständigen Stelle konkretisieren; Umgang mit eingestuften Informationen wie in B14 klären. Kontrastfälle: verteidigungsbezogener Transportbedarf ohne festgestellten Rechtszustand · Katastrophennotstand nach Art. 35 GG ohne Verteidigungsbezug · festgestellter Spannungsfall ohne belegte zivile Wirkung im Referenzraum.

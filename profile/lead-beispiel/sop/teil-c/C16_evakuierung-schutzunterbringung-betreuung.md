@@ -12,10 +12,11 @@ art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
 anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.2.0"
+version: "1.2.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
+quellen_geprueft_am: "21.10.2026 – BBK „Mobile Betreuungsmodule 5.000“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N03"
 bisherige_ids: ["baustein-n03"]

@@ -9,12 +9,12 @@ bausteintyp: "Themenbaustein unter bestehendem Dach"
 lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Tatsächliche oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung (Produktion, Lagerung und Kühlung, Transport, Verarbeitung, Abgabe)"
 art_zuordnung: ["KRITIS-Ausfall", "Gesundheitliche Lage / Epidemie"]
-art_hinweis: "„KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
+art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; B08 bei Strom-, Kühl- oder Kassenausfall; B10 bei Wasserbezug; C13 Logistik, C16 Gemeinschaftsverpflegung, C09/C10 medizinisch bedingte Kost; C08 bei Tierseuchen, B11/C07 bei lebensmittelbedingten Erkrankungen; C17 nach konkretem Bezug"
 zweck: "Quellen- und Bedarfsdeckungsfragen für die Lebensmittelversorgung."
-version: "1.2.0"
+version: "1.3.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – § 1 ESVG am Normtext gelesen; übrige Rechercheeinstiege vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -29,7 +29,7 @@ bisherige_ids: ["baustein-n07"]
 
 **Befassungsanlässe:** Belegte oder fachlich begründet drohende Störung notwendiger Lebensmittelversorgung · Ausfall von Produktion, Lagerung, Kühlung, Verteilung, Zahlung oder Abgabe mit relevantem Versorgungsbezug, etwa bei länger andauerndem Stromausfall · ungedeckter besonderer Ernährungsbedarf in Einrichtungen oder Unterkünften.
 
-**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Funktionsausfall; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
+**Zuordnung im Schema:** „KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Lebensmittelversorgung als kritischer Dienstleistung; „Gesundheitliche Lage / Epidemie“ nur bei einschlägigen gesundheitlichen Folgen; bei früher Befassung Prüfhilfe unter der Ereignisart der Ursache.
 
 ### 2. Erfassung: Prüffragen
 
@@ -77,6 +77,6 @@ Nach B12 bzw. der Dach-SOP der Ursache und A.9.1. „Lage & Ereignis“: betroff
 **Fachgrundlagen** (A.6; sie bestätigen kein aktuelles Ereignis und werden im Quellenverzeichnis der Meldung nur geführt, wenn eine Aussage darauf beruht):
 
 - Ernährungssicherstellungs- und -vorsorgegesetz (ESVG): [§ 1 Versorgungskrise](https://www.gesetze-im-internet.de/esvg/__1.html) – trägt den Absatz „Amtliche Feststellung einer Versorgungskrise“ sowie R2 und R5; Maßnahmen und Verordnungsermächtigungen der §§ 2 ff. vor Verwendung am Normtext prüfen.
-- Lebensmittelsicherheit (Abgrenzung, Abschnitt 1): Lebensmittel- und Futtermittelgesetzbuch (LFGB) und Verordnung (EG) Nr. 178/2002 (Schnellwarnsystem, Rückruf) – eine Produktwarnung ist Gegenstand der Ursache-SOP, nicht dieses Bausteins.
+- Lebensmittelsicherheit (Abgrenzung, Abschnitt 1): Lebensmittel- und Futtermittelgesetzbuch (LFGB) und Verordnung (EG) Nr. 178/2002 (Schnellwarnsystem, Rückruf), Fundstellen vor Verwendung prüfen (A.6) – eine Produktwarnung oder ein Rückruf ist für sich keine Versorgungslage dieses Bausteins; sie werden nach der tatsächlich einschlägigen Ursache und ihren Auswirkungen erfasst, bei gesundheitlicher Lage über B11/C07.
 
 **Offene Punkte:** Zuständige Ernährungsvorsorgebehörden der Länder nach A.1 Nr. 8 wiedergeben, die landesrechtliche SOP konkretisiert sie; Meldewege, Freigabe- und Abgabeverfahren und Pflegefunktion festlegen. Übungsfälle zu Warenbestand ohne funktionierende Abgabe, besonderen Ernährungsbedarfen, Kühlkettenstörung bei Stromausfall und Reservebereitstellung ohne Verarbeitung.

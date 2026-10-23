@@ -12,9 +12,9 @@ art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "B14, B17, C16; C09 bei Klinik- oder Pflegeverlegung, C13 bei kritischen Verkehrsfolgen, C02 bei Folgeschäden; B03 bei munitionsbelasteten Brandflächen"
 zweck: "Erfassung von Räumungs-, Verlegungs- und Versorgungsfolgen bei Kampfmittelfunden."
-version: "1.1.0"
+version: "1.2.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N17"
@@ -54,9 +54,9 @@ bisherige_ids: ["baustein-n17"]
 - **D6:** Konkrete Kopplung an Verkehr, Behandlung, Pflege oder eine andere kritische Leistung, nicht allein die Lage im Ballungsraum.
 - **D7/D8:** Entscheidungsrelevante Informationslücken und reale Änderungen nach Kodierleitfaden; die Verlängerung einer ungesicherten Schätzung oder neue Medienmeldungen sind kein Lageumschlag.
 
-**Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt keine Schwereklasse fest.
+**Beurteilung/Tendenz:** Nach tatsächlichen Schutz- und Versorgungsfolgen, begründetem Vorbereitungsbedarf und tragfähigem Ersatz; die Zahl im Radius oder die Bekanntheit eines Fundes legt die Beurteilung (A.4) nicht fest.
 
-**Offenlassen:** D5 ohne Prognose; D6 ohne belegte Kopplung.
+**Offenlassen:** D5 ohne Prognose; D6 nur, wenn die KRITIS-Prüfung mangels Information nicht tragfähig ist – ergibt sie keine Kopplung, ist D6 = 0 (Kodierleitfaden D6).
 
 ### 4. Darstellung
 

@@ -8,6 +8,28 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.25.0 – 23.10.2026
+
+Grundlage: Konsistenzprüfung KW 43 (Befunddatei `ki-lead-befund_konsistenz_2026-W43.json`, Befunde KP-2026-W43-12 bis -55), vom Herausgeber am 23.10.2026 freigegeben; KP-2026-W43-17 und -49 zurückgestellt.
+
+- **SOP-Sammelmappe 3.16.0:** Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Kodierleitfaden 1.3.0:** Mitfortschreibung von Teil A nach A.10.2: D2 (vollzogene Evakuierung, Verlegung, Schutzunterbringung), D3 (Funktionsliste beispielhaft), D6 (nicht allein Ausfalldauer), Rangfolge mit Beispielfassungen, Pflegeregel mit Teil A (KP-2026-W43-13, -33, -34, -38, -39).
+- **Arbeitsanweisung Erfassung 1.4.0:** Vorrangregel für Beispielfassungen (A.1 Nr. 7), `art_zuordnung` nicht abschließend (A.4), Kennungen B06/B08 statt alter Nummern, Kopfzeile „ab Fassung …“ (KP-2026-W43-34, -35, -40, -43).
+- **Arbeitsanweisung Verdichtung 2.0.2:** Satzanfang „Einschätzung ({{profil.kurzname}}):“ wie in Erfassung und Darstellungsdatei; Kennsatz „Handlungsrelevant bis:“ wie A.4; Kopfzeile „ab Fassung …“ (KP-2026-W43-36, -37, -43).
+- **Arbeitsanweisung Kurzfassung 2.1.2:** Kopfzeile „ab Fassung …“ (KP-2026-W43-43).
+- **Darstellungsdatei (Profilversion 1.25.0):** Quellenkategorie M „auch mit Betreiber- oder Behördenzitat“ wie Kodierleitfaden und Erfassung (KP-2026-W43-41).
+- **Beispieldatensatz „Ilka“:** LIESMICH unterscheidet die historische Entstehungsangabe `"kodierleitfaden": "LEAD v2.0"` vom gültigen Regelwerk; die Meldungen bleiben unverändert (KP-2026-W43-48).
+- **Prüfvermerk nach A.10.2 (Änderungen an Teil A 3.14.0–3.16.0):** Erfassung geprüft auf Grundlage 1.3.3, Anpassungsbedarf ja (umgesetzt in 1.4.0). Verdichtung geprüft auf Grundlage 2.0.1, Anpassungsbedarf ja (2.0.2). Kurzfassung geprüft auf Grundlage 2.1.1, Anpassungsbedarf nur Kopfzeile (2.1.2).
+- Schema, Quellenregister und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+- **Offen:** KP-2026-W43-49 (Quelle Q5 der NI-Meldung: reale Bezugsquelle oder fiktiv; danach Kennzeichnung und Zweckangabe im LIESMICH).
+
+## 1.24.0 – 22.10.2026
+
+Grundlage: Konsistenzprüfung KW 43 (Befunddatei `ki-lead-befund_konsistenz_2026-W43.json`, Befunde KP-2026-W43-01 bis -11), vom Herausgeber freigegeben.
+
+- **SOP-Sammelmappe 3.15.0:** Bausteine an bestehende Regeln angeglichen: D6 in C06, D8 in B08 und C01, Offenlassen in C03, Kopfzeile der Fachgrundlagen in C01 und C12, Typologietabelle C10, Zitierweise C15, Kopfangaben C07 und C11, „KRITIS-Ausfall“ mit der Schwelle von B12 in C12, C13 und C14. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.23.0 – 22.10.2026
 
 Grundlage: zwei unabhängig erstellte Vorschlagsdateien zur Sammelmappe 3.13.0 („KI-LEAD_SOP_PR-Vorschlaege_2026-10-22“, 19 Vorschläge; „sop-lead_pr-vorschlaege_2026-10-22“, 28 Vorschläge), gegeneinander geprüft und konsolidiert.

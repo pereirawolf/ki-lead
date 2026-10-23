@@ -12,9 +12,9 @@ art_zuordnung: ["Sonstiges", "Industrieunfall / Chemieunfall", "Sabotage / Ansch
 art_hinweis: "„Industrieunfall / Chemieunfall“ bei Brand, Explosion oder Freisetzung in Anlagen oder bei Gefahrguttransporten (B07); „Sabotage / Anschlag / Terrorismus“ nur bei behördlich benanntem Tatbezug (B16); sonst „Sonstiges“ und einschlägige Folgenarten ergänzen"
 anschluss: "B07, B16, B11, B12, B14, B17; C09, C16, C13, C02"
 zweck: "Erfassung medizinischer, Betreuungs-, Verkehrs- und Versorgungsfolgen größerer Unfälle."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N16"
@@ -53,7 +53,7 @@ bisherige_ids: ["baustein-n16"]
 - **D6:** Konkrete Funktionskopplungen statt bloßer Lage an einem Verkehrsweg oder in einer Industrieanlage.
 - **D7/D8:** Entscheidungsrelevante Informationslücken und beobachteter Verlauf; eine ungeklärte Unfallursache verhindert keine Folgenbewertung und ist kein hoher D7-Wert. Neue Meldungen oder korrigierte Zahlen allein belegen keine Verschärfung.
 
-**Beurteilung/Tendenz:** Nach konkreten Folgen, nutzbarer Hilfe, verbleibender Lücke und Entwicklung im Referenzraum; Ereignisbezeichnung, Bilder oder eine formale Alarmstufe sind keine LEAD-Schwereklasse.
+**Beurteilung/Tendenz:** Nach konkreten Folgen, nutzbarer Hilfe, verbleibender Lücke und Entwicklung im Referenzraum; Ereignisbezeichnung, Bilder oder eine formale Alarmstufe legen die Beurteilung (A.4) nicht fest.
 
 **Offenlassen:** D2 ohne tragfähige Zahl unmittelbar Betroffener nach Kodierleitfaden; D5 ohne benanntes Ziel und belastbare Fachprognose.
 

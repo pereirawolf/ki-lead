@@ -12,9 +12,9 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
 art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
 anschluss: "B17, B08, B12; C11 bei Funk-, TK- oder Warnbezug; C13 bei Navigationsbezug im Verkehr; B14 oder B15 nur nach entsprechendem Befund zur Ursache"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
-version: "1.1.0"
+version: "1.1.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "22.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N15"
@@ -58,7 +58,7 @@ bisherige_ids: ["baustein-n15"]
 
 **Beurteilung/Tendenz:** Nach konkreter gegenwärtiger Relevanz einschließlich fachlich begründetem Vorsorgebedarf und nutzbarem Ersatz; Fachwarnstufe, technische Wirkung und Bevölkerungsschutzrelevanz getrennt begründen.
 
-**Offenlassen:** Ist-Achsen ohne belegte Wirkung im Referenzraum (A.1 Nr. 1); D5 ohne benanntes Ziel und Prognose.
+**Offenlassen:** die einschlägigen Ist-Achsen ohne belegte Wirkung im Referenzraum (A.1 Nr. 1); D5 ohne benanntes Ziel und Prognose.
 
 ### 4. Darstellung
 

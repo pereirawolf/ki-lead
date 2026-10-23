@@ -12,10 +12,11 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn neben der medizinisch-pflegerischen Versorgung eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht; der Versorgungsausfall selbst bleibt unter „Gesundheitliche Lage / Epidemie“"
 anschluss: "B11, C05; C07 bei Infektionsgeschehen; C10, C11, C12, C16, B15, C17 nach konkretem Bezug"
 zweck: "Erfassung nutzbarer medizinischer und pflegerischer Leistung und des Ausfalls der Regelversorgung nach Versorgungsfunktion, unabhängig von der Ursache."
-version: "1.2.0"
+version: "1.2.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
+quellen_geprueft_am: "21.10.2026 – BBK „MANV“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N04"
 bisherige_ids: ["baustein-n04"]
@@ -36,7 +37,7 @@ bisherige_ids: ["baustein-n04"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welcher Bedarf ist nach Fachmeldung nicht mehr regelhaft abdeckbar? | Lagemeldungen (A.3); Gesundheitsbehörden; [BBK: MANV](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Sanitaetsdienst/MANV/manv_node.html) (Hintergrund) | L/R; D2 | Sichtungskategorien nur für tatsächlich gesichtete Patientinnen und Patienten verwenden, nicht für Vermisste. |
-| R2 | Welche Behandlung, Transport- oder Pflegeleistung ist tatsächlich verfügbar, personell betrieben und zugänglich? | Krankenhausträger und Leistungserbringer im Rettungsdienst (B); Träger des Rettungsdienstes, in der Regel Kreise und kreisfreie Städte (A); Kapazitätsnachweise der Länder; Intensivregister (B11/R6) | R/M; D6 | Nominale Betten und freie Meldekapazitäten sind nicht gleichbedeutend mit nutzbarer Leistung; ein freies Bett ohne Personal und fachliche Eignung ist keine Behandlungskapazität. |
+| R2 | Welche Behandlung, Transport- oder Pflegeleistung ist tatsächlich verfügbar, personell betrieben und zugänglich? | Krankenhausträger und Leistungserbringer im Rettungsdienst (B); Träger des Rettungsdienstes (A); Kapazitätsnachweise der Länder; Intensivregister (B11/R6) | R/M; D6 | Nominale Betten und freie Meldekapazitäten sind nicht gleichbedeutend mit nutzbarer Leistung; ein freies Bett ohne Personal und fachliche Eignung ist keine Behandlungskapazität. |
 | R3 | Welche Auswirkungen hat die Lage auf die übrige Versorgung? | Lagemeldungen (A.3) | R; D6 | Verdrängte Regelversorgung ausdrücklich prüfen. |
 | R4 | Welche Zuführung, Verlegung und Notbetriebsleistung sind bestätigt, was ist nur angeboten? | Lagemeldungen (A.3); Kleeblatt-Verfahren bzw. GMLZ nur bei belegt aktiviertem Vorgang | M; D4 | Angefragt ≠ angeboten ≠ zugesagt ≠ aufgenommen. |
 | R5 | Welche länger anhaltenden Engpässe bei Personal, Material, Energie oder Transport bestehen? | Betreibermeldungen (A.3); Lagemeldungen (A.3) | R/I; D6 | Material nach C10, Energie nach B08 bzw. C12, IT-Ausfall nach B15. |

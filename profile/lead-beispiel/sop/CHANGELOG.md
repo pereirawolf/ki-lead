@@ -10,13 +10,69 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.14.0 vom 22.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.16.0 vom 23.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 22.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.14.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.16.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.16.0] – 23.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W43.json` (Konsistenzprüfung KW 43, Commit 051cd90), Befunde KP-2026-W43-12 bis -55, vom Herausgeber am 23.10.2026 nach einer Entscheidungsempfehlung freigegeben; KP-2026-W43-17 und -49 zurückgestellt (siehe „Offen“). Zweite Stelle nach der Versionierungsregel: Die Änderungen an Teil A (D3-Funktionsliste beispielhaft, Regel zu Weitergabebeschränkungen, Klarstellungen in A.1 Nr. 2, A.10.1, A.10.2) präzisieren bestehende Regeln, Stufentexte, Quellenkategorien, Kennsätze und Schema bleiben unverändert. Kodierleitfaden, Darstellungsdatei und Arbeitsanweisungen sind nach A.10.2 mitfortgeschrieben (Profilverlauf 1.25.0). Keine neuen Links; das Quellenregister ist unverändert.
+
+### Geändert
+
+- **Teil A:** A.1 Nr. 2: Tabelle Zeile B16 nach dem Funktionsdach B12 (KP-2026-W43-22); Satz, dass die Tabelle allein maßgeblich ist und Abschnitt 1 der SOPs nur besonders relevante bedingte Anschlüsse erläutert (KP-2026-W43-30). A.1 Nr. 7: Verweis auf A.1 Nr. 6 und A.3 ergänzt (KP-2026-W43-42). A.2 D3: Funktionsliste beispielhaft; bewertet wird die konkret betroffene Funktion (KP-2026-W43-13). A.3: neuer Absatz „Weitergabebeschränkungen“ (TLP 2.0; Weitergabe ≠ Verarbeitung in KI-Diensten; nichtöffentliche Inhalte in nicht besonders freigegebenen Instanzen ausgeschlossen) (KP-2026-W43-21). A.10.1: „Kaskade“ ohne Zusatz nach der Wirkungskette (A.2, D6), keine eigene D6-Wirkung (KP-2026-W43-20); Registerkennungen sind keine nummerierten Quellenverweise (KP-2026-W43-24). A.10.2: gezielter Inhaltsabgleich genügt für `quellen_geprueft_am` mit Datum, Gegenstand und Prüftiefe; Prüfauslöser weist keine Prüfung aus (KP-2026-W43-16, -29); Prüfvermerk je Arbeitsanweisung bei Änderungen an Teil A (KP-2026-W43-43). Gültigkeitsstand fortgeschrieben.
+- **B01 2.1.1, B02 2.1.2:** `zweck` „frühe Befassung (A.1 Nr. 1)“ (KP-2026-W43-32).
+- **B05 2.2.0, B06 2.2.0:** R1 „Prüfen für“ nur L/R; Prognose begründet keinen Ist-Wert (KP-2026-W43-31).
+- **B08 2.2.0:** Tabelle der Systemzustände mit „Feststellende Stelle und Voraussetzung“ (KP-2026-W43-28); R1 Bezug auf Tabelle und Prüfpfad (KP-2026-W43-23); VO (EU) 2017/2196 als Kontext mit Prüfvermerk (KP-2026-W43-26); „Kaskade“ nach A.2, D6 (KP-2026-W43-20); „frühe Befassung“ (KP-2026-W43-32).
+- **B10 2.1.1:** Prüfauslöser TrinkwV, WasSiG (KP-2026-W43-29).
+- **B11 2.4.0:** Tabelle „Amtliche Einstufungen“: Zeile „Erkrankungshäufung (§ 11 Abs. 1 Nr. 1 Buchst. e IfSG)“; RKI-Risikobewertung als fachliche Bewertung nach R3 verlagert (KP-2026-W43-25); Prüfauslöser §§ 5, 11, 28 IfSG (KP-2026-W43-29).
+- **B15 2.4.0:** Spaltenkopf „Fallgruppe“ (KP-2026-W43-27); TLP-Hinweis verweist auf A.3 (KP-2026-W43-21); „frühe Befassung“ statt „Vorsorgelage“ (KP-2026-W43-32); Prüfauslöser BSI-Standard 200-4 (KP-2026-W43-29).
+- **B16 2.1.2:** Folgeausfälle nach dem Funktionsdach B12 (KP-2026-W43-22).
+- **C02 1.2.1, C09 1.2.1, C11 1.2.2, C15 1.1.3, C16 1.2.1:** `quellen_geprueft_am` aus dem Quellenregister (gezielter Inhaltsabgleich vom 21.10.2026) (KP-2026-W43-16); C09/R2 ohne Verallgemeinerung der Trägerschaft des Rettungsdienstes (KP-2026-W43-19).
+- **C04 1.2.0:** D3-Funktionen beispielhaft, „Fachinformation“ nur bei beeinträchtigter Funktion (KP-2026-W43-13).
+- **C05 1.1.1, C06 1.2.1, C13 1.2.1:** „Schwereklasse“ durch „Beurteilung (A.4)“ ersetzt (KP-2026-W43-12).
+- **C14 1.3.1:** Abgrenzung Produktwarnung/Rückruf nach tatsächlicher Ursache, B11/C07 bei gesundheitlicher Lage; Prüfvermerk für LFGB und VO (EG) Nr. 178/2002 (KP-2026-W43-18).
+- **C17 1.4.0:** `quellen_geprueft_am` nach Quellenregister, Prüfauslöser Art. 35, 80a, 115a GG (KP-2026-W43-14); WiSiG in der als nicht abschließend gekennzeichneten Übersicht der Sicherstellungsgesetze (KP-2026-W43-15).
+- **Lesefassung:** aus den Einzeldateien neu erzeugt.
+
+### Nicht übernommen
+
+- KP-2026-W43-28 (Teil): B07 behält „Fallgruppe“, weil die Tabelle neben feststellungsgebundenen Einordnungen (Störfall, meldepflichtiges Ereignis) auch Fallgruppen ohne Feststellung enthält.
+- KP-2026-W43-48: `_entstehung` der Beispielmeldungen bleibt als historische Angabe unverändert; das LIESMICH des Datensatzes unterscheidet Entstehungsangabe und gültiges Regelwerk (Profilverlauf).
+
+### Offen
+
+- KP-2026-W43-17: Zuordnung von ANoPl-Bund (Tabelle 3.4, Referenzszenarien) und StrlSchG zu den Prüffragen von C01 am amtlichen Dokument verifizieren.
+- KP-2026-W43-49: Quellenidentität von Q5 der NI-Beispielmeldung feststellen (Profilverlauf).
+- Offene Punkte aus 3.13.0 und 3.14.0 unverändert.
+
+## [3.15.0] – 22.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W43.json` (Konsistenzprüfung, Commit 051cd90), Befunde KP-2026-W43-01 bis -11, vom Herausgeber am 22.10.2026 freigegeben; Entscheidungsfragen zu KP-2026-W43-06 und -11 mit Ja beantwortet. Zweite Stelle nach der Versionierungsregel: Kodier- und Zuordnungsbedingungen in Bausteinen an bestehende Regeln in Teil A, Kodierleitfaden und B12 angeglichen; Achsendefinitionen, Stufentexte, Quellenkategorien, Kennsätze, Schema und Quellenregister sind unverändert. Keine neuen Links.
+
+### Geändert
+
+- **B08 2.1.2:** D8 nach A.2 „im zurückliegenden Beobachtungszeitraum“ statt „Betrachtungszeitraum“ (KP-2026-W43-02).
+- **C01 1.2.2:** D8 wie B08 (KP-2026-W43-02); Kopfzeile der Fachgrundlagen nach A.6 vereinheitlicht (KP-2026-W43-03); Schreibvorgabe „Referenzszenario S2 (ANoPl-Bund) laut Fachstelle“ nach A.10.1 (KP-2026-W43-04).
+- **C03 1.1.1:** Offenlassen nur für die einschlägigen Ist-Achsen (A.1 Nr. 1) (KP-2026-W43-05).
+- **C06 1.2.0:** D6 nur offen, wenn die KRITIS-Prüfung nicht tragfähig ist; ohne Kopplung D6 = 0 (Kodierleitfaden D6, A.2) (KP-2026-W43-01).
+- **C07 1.2.0:** `anschluss` um die im Text genannten bedingten Bezüge C09 und C10 ergänzt; `art_hinweis` neu (KP-2026-W43-06).
+- **C10 1.3.1:** Spaltenkopf der Engpassstufen „Feststellende Stelle und Voraussetzung“ (A.10.1) (KP-2026-W43-08).
+- **C11 1.2.1:** Teil-A-Verweis aus `anschluss` entfernt, wie für 3.14.0 vorgesehen (V21) (KP-2026-W43-07).
+- **C12 1.2.0:** Kopfzeile der Fachgrundlagen nach A.6 (KP-2026-W43-03); „KRITIS-Ausfall“ in `art_hinweis` und „Zuordnung im Schema“ mit der Schwelle von B12 (KP-2026-W43-11).
+- **C13 1.2.0:** „Versorgungskrise“ außerhalb der Fachgrundlage ESVG durch „Versorgungslücke“ ersetzt (A.10.1, C14) (KP-2026-W43-10); „Zuordnung im Schema“ an Kopf und B12 angeglichen (KP-2026-W43-11).
+- **C14 1.3.0:** „KRITIS-Ausfall“ in `art_hinweis` und „Zuordnung im Schema“ mit der Schwelle von B12 (KP-2026-W43-11).
+- **C15 1.1.2:** Zitierweise „B11/R6“ (A.10.1) (KP-2026-W43-09).
+- **Gültigkeitsstand (Teil A), README:** Sammelmappe 3.15.0.
+- **Lesefassung:** aus den Einzeldateien neu erzeugt.
+
+### Offen
+
+- Konsistenzprüfung KW 43 für Mitfortschreibung und Fassungen, Teil B, `docs/` und Musterprofil sowie weitere fachliche Kandidaten aus Teil C (Befunddatei, `nicht_geprueft`) folgt.
 
 ## [3.14.0] – 22.10.2026
 

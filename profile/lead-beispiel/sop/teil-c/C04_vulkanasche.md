@@ -12,9 +12,9 @@ art_zuordnung: ["Sonstiges"]
 art_hinweis: "einschlägige bestehende Folgenarten ergänzen"
 anschluss: "B17, B12, C13; C09/C10 bei medizinischen Gütern oder Transfers; B11 bei gesundheitlichen Folgen bodennaher Exposition; B04 nur bei gesondert belegtem Erdbeben mit eigenem Deutschlandbezug"
 zweck: "Erfassung von Verkehrs- und Versorgungsfolgen einer Vulkanaschelage."
-version: "1.1.1"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N18"
@@ -49,7 +49,7 @@ bisherige_ids: ["baustein-n18"]
 ### 3. Auswertung: Prüfpunkte
 
 - **D1/D2:** Nur belegte Wirkungen bzw. unmittelbar Betroffene im Referenzraum; Vulkanstandort, Aschepolygon und Zahl aller Flugreisenden nicht übernehmen. Reale Schutz- oder Versorgungsfolgen von Maßnahmen getrennt prüfen.
-- **D3/D4:** Bewertete Funktion benennen: Fachinformation, Verkehrs- oder Betriebsentscheidung, Versorgung; eine internationale Fachquelle ist keine internationale Steuerung. Externe Unterstützung nur bei tatsächlichem ereignisbezogenem Einsatz; strukturelle Zurechnung in der Vorsorge nach Kodierleitfaden bleibt möglich.
+- **D3/D4:** Bewertete Funktion benennen, etwa Verkehrs- oder Betriebsentscheidung oder Versorgung; Fachinformation nur, wenn eine tatsächlich relevante Informationsfunktion durch die Lage beeinträchtigt ist; eine internationale Fachquelle ist keine internationale Steuerung. Externe Unterstützung nur bei tatsächlichem ereignisbezogenem Einsatz; strukturelle Zurechnung in der Vorsorge nach Kodierleitfaden bleibt möglich.
 - **D5:** Prognostizierte Restdauer bis zum benannten Betriebs- oder Versorgungsziel; Ende der Eruption oder Wetterwechsel ist nicht automatisch Wiederherstellung.
 - **D6:** Konkrete Kopplung an eine Schutz- oder Versorgungsleistung, nicht allgemeine Luftverkehrsabhängigkeit; eingetretene Folgeausfälle und mögliche Folgekette trennen.
 - **D7:** Entscheidungsrelevante Informationslücken nach Abgleich von Produkt, Höhe, Raum und Gültigkeit; eigene Abrufgrenzen zählen nicht.

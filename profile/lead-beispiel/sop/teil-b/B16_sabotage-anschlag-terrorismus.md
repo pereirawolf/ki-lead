@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.1.1"
+version: "2.1.2"
 status: "Beispielfassung"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-16"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Eingetretene Sabotageakte und Anschläge mit Folgen für Bevölkerung, Versorgung oder KRITIS. Ermittlungen, Motive und Täterschaft sind nicht Gegenstand; Gefährdungshinweise ohne Ereignis: B14; Folgeausfälle über die Sektor-SOPs. Diebstahl oder Vandalismus mit Wirkung auf Infrastruktur wird über die passende Funktions-SOP abgebildet, solange keine vorsätzliche Schädigung im Sinne dieser SOP behördlich benannt ist. Ein Verdacht auf staatliche oder hybride Einflussnahme führt nicht automatisch zur Einordnung als Verteidigungslage (Baustein C17 nur bei konkretem zivilen Wirkungsbezug). Großunfallfolgen und Betreuung: Bausteine C05 und C16. Beispiel dafür: beschädigte Bahn- oder Stromtrasse mit behördlich benanntem Sabotageverdacht und großflächigen Ausfällen. Beispiel dagegen: technische Störung ohne behördlichen Hinweis auf Vorsatz (ursachenoffen); Vandalismus ohne Versorgungsfolgen.
+**Umfasst / grenzt ab von:** Eingetretene Sabotageakte und Anschläge mit Folgen für Bevölkerung, Versorgung oder KRITIS. Ermittlungen, Motive und Täterschaft sind nicht Gegenstand; Gefährdungshinweise ohne Ereignis: B14; Folgeausfälle über die Sektor-SOP der Folge (B08–B11; B12 nach dem Funktionsdach in A.1 Nr. 2). Diebstahl oder Vandalismus mit Wirkung auf Infrastruktur wird über die passende Funktions-SOP abgebildet, solange keine vorsätzliche Schädigung im Sinne dieser SOP behördlich benannt ist. Ein Verdacht auf staatliche oder hybride Einflussnahme führt nicht automatisch zur Einordnung als Verteidigungslage (Baustein C17 nur bei konkretem zivilen Wirkungsbezug). Großunfallfolgen und Betreuung: Bausteine C05 und C16. Beispiel dafür: beschädigte Bahn- oder Stromtrasse mit behördlich benanntem Sabotageverdacht und großflächigen Ausfällen. Beispiel dagegen: technische Störung ohne behördlichen Hinweis auf Vorsatz (ursachenoffen); Vandalismus ohne Versorgungsfolgen.
 
 **Befassungsanlässe:** Lagemeldung eines Landes · öffentliche Mitteilung von Polizei oder Generalbundesanwalt · Warnung über das Modulare Warnsystem · Monitoring: VOST-Auswertung gegen amtliche Mitteilungen.
 

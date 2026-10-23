@@ -1,10 +1,10 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD · Fassung 1.2.2 vom 21.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
+Beispielfassung für KI-LEAD · Fassung 1.3.0 vom 23.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
-**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
+**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
 ---
 
@@ -68,7 +68,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 ### D2 Personelle Direktbetroffenheit
 
 - **Kodierfrage:** Wie viele Personen sind im Referenzraum zu t0 unmittelbar betroffen?
-- **Direkt betroffen** sind Personen, deren Leben, Gesundheit, Unterkunft oder Grundversorgung durch das Ereignis selbst unmittelbar beeinträchtigt ist, etwa Verletzte, Erkrankte, Evakuierte oder Personen ohne Strom- oder Wasserversorgung. Nicht direkt betroffen sind Personen in einem Warngebiet ohne eingetretene Beeinträchtigung und mittelbar Betroffene, etwa durch Verkehrsbehinderungen.
+- **Direkt betroffen** sind Personen, deren Leben, Gesundheit, Unterkunft oder Grundversorgung durch das Ereignis selbst unmittelbar beeinträchtigt ist, etwa Verletzte, Erkrankte, Evakuierte oder Personen ohne Strom- oder Wasserversorgung. Nicht direkt betroffen sind Personen in einem Warngebiet ohne eingetretene Beeinträchtigung und mittelbar Betroffene, etwa durch Verkehrsbehinderungen. Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene zählen, sobald die Maßnahme vollzogen ist; zum Verlassen Aufgeforderte ohne belegten Vollzug zählen nicht (SOP-LEAD A.3).
 - **Nullregel (vereinheitlicht):** Stufe 0 („unter 10 Personen“) ist zulässig, wenn **eine** der beiden Bedingungen belegt ist:
   - (a) eine belegte Zahl von 1 bis 9 direkt Betroffenen, oder
   - (b) ein Nullbefund aus einer aktiv laufenden, für den Sachverhalt einschlägigen Erhebung mit definierter Grundgesamtheit (Surveillance, Meldepflicht, Fallregister, Lagemeldung mit ausdrücklicher Fehlanzeige).
@@ -80,7 +80,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 ### D3 Verantwortungszurechnung / Zurechnungszentrum
 
 - **Kodierfrage:** Welche Ebene steuert oder trägt die bewertete Funktion zu t0?
-- **Bewertete Funktion benennen:** Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
+- **Bewertete Funktion benennen:** z. B. Betrieb, Gefahrenabwehr, Fachaufsicht, Ermittlung oder Regulierung. Bewertet wird die konkret betroffene Funktion einer Stelle oder Organisation, nicht ihre institutionelle Bezeichnung; die genannten Funktionen sind Beispiele, maßgeblich sind Aufgabenwahrnehmung, Zuständigkeit und tatsächliche Betroffenheit. D3 bezeichnet die ausgewählte Funktion, nicht automatisch die höchste beteiligte Staatsebene. Eine Quelleninstitution ist nicht automatisch das Zurechnungszentrum. Ändern sich Funktion oder Betrachtungsobjekt in einer Fortschreibung, wird das offengelegt.
 - **Mit Akutereignis:** Kodiert wird die Ebene, die Bewältigung oder Koordination tatsächlich steuert (z. B. Kreis als untere Katastrophenschutzbehörde = 2; Land bei landesweiter Koordinierung = 4).
 - **Ohne Akutereignis (Vorsorge-, Beobachtungs-, Frühwarnsachverhalt):** Eine **strukturelle Zurechnung** ist zulässig, wenn ein konkreter Gegenstand benennbar ist, nämlich eine bestimmte Fach-, Regulierungs- oder Vorsorgeaufgabe, und die zuständige Ebene belegt ist. Dann wird diese Ebene kodiert, und der Bewertungstext erhält die Kennzeichnung „D3 strukturell: [Aufgabe], [Stelle]“.
 - **Offen:** wenn auch die strukturelle Zuständigkeit für einen konkreten Gegenstand nicht belegbar ist. Eine fiktive Bündelung bei der Koordinierungsstelle ist ausgeschlossen. Die Koordinierungsstelle ist keine Zurechnungsebene.
@@ -111,6 +111,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 - Kodiert wird nach **belegten Kopplungen**, nicht nach Sektorzugehörigkeit oder Listen denkbarer Folgen. Die KRITIS-Prüfung ist Pflicht bei jeder Meldung.
 - **Wirkungskette:** Bei einer bewertungsrelevanten Folgekette die entscheidende Verbindung benennen: beeinträchtigte Funktion → Abhängigkeit → Bedingung → betroffener Bereich, mit Puffer und Reichweite (Notstrom, Vorräte, Speicher, Personal, Ausweichweg). Mögliche Folgeschritte als **Szenario** kennzeichnen. Sie ändern den Ist-Wert nicht.
 - **Stufe 0** („keine KRITIS-Bezüge“) nur, wenn die Prüfung durchgeführt wurde und keine Kopplung ergab.
+- D6 steigt nicht allein mit der vergangenen Ausfalldauer.
 - Ausfälle der **Kommunikation mit der Bevölkerung** (Mobilfunk, Warnmittel) gehören als Kopplung hierher und in den Text, nicht zu D7.
 
 ### D7 Kommunikation / Informationslage
@@ -231,7 +232,7 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 
 ## 8. Pflege
 
-Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei und Arbeitsanweisung gemeinsam fortgeschrieben, damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
+Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei, SOP-LEAD Teil A und Arbeitsanweisung gemeinsam fortgeschrieben (SOP-LEAD A.10.2), damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
 
 **Änderungsprotokoll:**
 
@@ -243,3 +244,4 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien; Bezug auf SOP-Sammelmappe und Arbeitsanweisung als Mindestfassung mit Verweis auf den Gültigkeitsstand |
 | 1.2.1 | 20.10.2026 | Abschnitt 6: `eintritt` und `meldezeitraum` dürfen eine belegte Uhrzeit tragen (LEAD-Meldevorlage 1.1); Regeln sonst unverändert |
 | 1.2.2 | 21.10.2026 | Kurzbeispiel D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0); Regeln unverändert. Anlass: Testreihe der KI-Modelle vom 20.10.2026, in der D8 = 0 für eine Auslandslage gesetzt wurde |
+| 1.3.0 | 23.10.2026 | Mitfortschreibung von SOP-LEAD Teil A (3.14.0–3.16.0) nach A.10.2: D2 zählt Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene erst mit vollzogener Maßnahme; D3-Funktionsliste beispielhaft, bewertet wird die konkret betroffene Funktion; D6 steigt nicht allein mit der Ausfalldauer; Rangfolge nennt Beispielfassungen; Pflegeregel nennt Teil A. Anlass: Konsistenzprüfung KW 43 (KP-2026-W43-13, -33, -34, -38, -39) |

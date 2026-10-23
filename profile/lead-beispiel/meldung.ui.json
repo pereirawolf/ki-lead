@@ -338,7 +338,7 @@
       "A": "amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle (Bund, Länder, Kommunen, EU, internationale Organisationen); auch behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes); authentische Behördenbeiträge in sozialen Medien",
       "B": "Betreiber – originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft (z. B. Netzbetreiber, Wasserversorger, Verkehrsunternehmen, Krankenhausträger; Hilfsorganisation zu ihrer selbst betriebenen Einrichtung)",
       "W": "wissenschaftlich – Forschungseinrichtungen, wissenschaftliche Veröffentlichungen und Datensätze in ihrer fachwissenschaftlichen Rolle; Preprints als solche kennzeichnen",
-      "M": "Medien – redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen (auch mit Betreiberzitat)",
+      "M": "Medien – redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen (auch mit Betreiber- oder Behördenzitat)",
       "P": "sonstige private Quellen – Verbände, NGOs, persönliche Angaben und Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; Beiträge in sozialen Medien ungeklärter Identität"
     },
     "rangfolge": ["A", "B", "W", "M", "P"],

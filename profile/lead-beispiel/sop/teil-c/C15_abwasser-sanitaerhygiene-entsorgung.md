@@ -12,10 +12,11 @@ art_zuordnung: ["KRITIS-Ausfall", "Trinkwasserversorgung"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung der Abwasser-, Sanitär- oder Entsorgungsfunktion (Sektor ohne eigene Dach-SOP, B12); „Trinkwasserversorgung“ nur bei tatsächlichem Trinkwasserbezug; sonst Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B10, B12; B02 bei Hochwasser, B08 bei Stromausfall; C08 bei Tierkörperbeseitigung; C09 bei Gesundheits- und Pflegeeinrichtungen; C13 Transport; C16 Unterkünfte"
 zweck: "Erfassung von Entwässerungs-, Sanitär- und hygienisch relevanten Entsorgungsfolgen."
-version: "1.1.1"
+version: "1.1.3"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "23.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
+quellen_geprueft_am: "21.10.2026 – BBK „Sektor Wasser – Risiken“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N08"
 bisherige_ids: ["baustein-n08"]
@@ -23,7 +24,7 @@ bisherige_ids: ["baustein-n08"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Drei fachliche Prüfpfade: (a) Abwasserableitung, -transport und -behandlung; (b) tatsächlich nutzbare Sanitär- und Hygieneleistung für Menschen und Einrichtungen; (c) kritische Sammlung, sichere Zwischenhaltung, Abfuhr und Behandlung von Abfällen einschließlich Tierkörperbeseitigung (C08). Eine Funktion kann ausfallen, während andere weiterlaufen: Intakte Trinkwasserabgabe belegt keine funktionierende Toilette, eine laufende Kläranlage keine örtliche Entwässerung, eine verschobene Müllabfuhr keine Gesundheitsgefahr. Relevant sind belegte Schutz- oder Versorgungsfolgen oder ein fachlich begründet drohender Ausfall mit konkretem Vorbereitungs- oder Abstimmungsbedarf (A.1 Nr. 1); nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination, Exposition und Gesundheitsrisiko nur nach zuständiger Fachbewertung und mit Aussagegrad; keine eigene hygienische, wasser- oder abfallrechtliche Freigabe. Abwassermonitoring als Surveillance-Instrument gehört zu B11 (R6), nicht hierher. Trinkwasser B10, Hochwasser B02, Stromausfall B08, medizinisch-pflegerische Folgen C09, Unterkunft C16, Transport C13.
+**Umfasst / grenzt ab von:** Drei fachliche Prüfpfade: (a) Abwasserableitung, -transport und -behandlung; (b) tatsächlich nutzbare Sanitär- und Hygieneleistung für Menschen und Einrichtungen; (c) kritische Sammlung, sichere Zwischenhaltung, Abfuhr und Behandlung von Abfällen einschließlich Tierkörperbeseitigung (C08). Eine Funktion kann ausfallen, während andere weiterlaufen: Intakte Trinkwasserabgabe belegt keine funktionierende Toilette, eine laufende Kläranlage keine örtliche Entwässerung, eine verschobene Müllabfuhr keine Gesundheitsgefahr. Relevant sind belegte Schutz- oder Versorgungsfolgen oder ein fachlich begründet drohender Ausfall mit konkretem Vorbereitungs- oder Abstimmungsbedarf (A.1 Nr. 1); nicht jedes Entsorgungsproblem ist eine Bevölkerungsschutzlage. Kontamination, Exposition und Gesundheitsrisiko nur nach zuständiger Fachbewertung und mit Aussagegrad; keine eigene hygienische, wasser- oder abfallrechtliche Freigabe. Abwassermonitoring als Surveillance-Instrument gehört zu B11/R6, nicht hierher. Trinkwasser B10, Hochwasser B02, Stromausfall B08, medizinisch-pflegerische Folgen C09, Unterkunft C16, Transport C13.
 
 **Befassungsanlässe:** Ausfall von Abwasserableitung, -transport oder -behandlung mit Gesundheits- bzw. Versorgungsfolgen · nicht nutzbare Sanitärversorgung in relevanten Räumen oder Einrichtungen · kritischer Entsorgungsrückstau · fachlich begründet drohender Ausfall mit konkretem Vorbereitungsbedarf.
 
