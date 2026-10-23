@@ -47,6 +47,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.4.29 | letzter Commit des Pull Requests „PDF: Kennsatzzeilen ungeteilt, Pfeile lesbar; 0.4.29“ |
 | 0.4.30 | letzter Commit des Pull Requests „Fortschreibung: Absender aus der eigenen Vormeldung, Hinweis zum Seitenabruf; 0.4.30“ (Nachtrag vom 22.10.2026: Beispielprofil 1.21.0 mit dem Pull Request „SOP-LEAD 3.12.0: Fachgrundlagen und Ebenenregel für die Steuerungsebene; Profil 1.21.0“ und 1.22.0 mit dem Pull Request „SOP-LEAD 3.13.0: Typologietabellen aus Fachgrundlagen in B07, B08, B11, B15, C10, C14, C17; Profil 1.22.0“, jeweils ohne Änderung der App) |
 | 0.4.31 | letzter Commit von Pull Request #41 „Abnahme M4: technische Abnahme der Verdichtung“ |
+| 0.5.0 | letzter Commit des Pull Requests „M5: installierbare PWA mit Offline-Start; 0.5.0“ |
+
+## [0.5.0] – 23.10.2026
+
+Beginn von Meilenstein 5 (Spezifikation Abschnitt 9): KI-LEAD lässt sich als App installieren und startet nach dem ersten Aufruf ohne Netz. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Pipeline oder gespeicherten Daten.
+
+### Hinzugefügt
+
+- **Installierbare PWA:** Web-App-Manifest (`public/manifest.webmanifest`) mit relativem Start und Bereich, damit dieselbe Fassung unter GitHub Pages, pereirawolf.de und lokal läuft; App-Symbole (192, 512, maskierbar, SVG, Apple Touch): Lagenradar in den Farben des BBK-Farbschemas (Orange, Gerüst weiß, Innenfläche blau), ausgeprägt nach einer Kodierung der Lage bei Tief „Bernd“ 2021 ([docs/app-symbol.md](docs/app-symbol.md), Skript `scripts/app-symbol.py`).
+- **Service Worker für den Offline-Start:** Der Build erzeugt `sw.js` mit der Liste aller ausgelieferten Dateien und einer Version aus App-Version und Prüfsumme (`src/pwa/precache.ts`, Vorlage `src/pwa/sw-vorlage.js`, Plugin in `vite.config.ts`, keine neue Abhängigkeit). Eigene Dateien kommen aus dem Cache; Anfragen an die KI-Anbieter fängt er nicht ab und speichert sie nie.
+- **Hinweise:** Ohne Netz nennt ein Band, was weiter funktioniert und was eine Verbindung braucht. Eine neue Fassung wartet auf „Neu laden“, damit Seite und nachgeladene Dateien zusammenpassen.
+- Anmeldung des Service Workers nur im Produktionsbuild, im sicheren Kontext und nicht in der nativen App (`src/pwa/registrieren.ts`).
+- Spezifikation 0.5.0 (Umsetzung M5, Abschnitt 9), README (Installation als App).
+
+### Tests
+
+- `tests/pwa/pwa.test.ts` (8, neu): Dateiliste ohne Quellkarten und ohne sich selbst, Version, gültiges JavaScript nach dem Einsetzen, nur eigene GET-Anfragen, kein automatischer Fassungswechsel, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole.
+- `tests/browser/pwa.spec.ts` (2, neu): Offline-Start nach dem ersten Besuch mit Lagebild-Beispiel und PDF ohne Netz; Manifest, Symbole und `sw.js` werden ausgeliefert.
 
 ## [0.4.31] – 23.10.2026
 

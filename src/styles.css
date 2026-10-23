@@ -213,6 +213,16 @@ a {
   border-bottom: 1px solid var(--linie-zart);
 }
 
+.pwa-hinweise .hinweisband {
+  color: var(--tinte);
+  background: var(--amt-zart);
+  border-left: 4px solid var(--amt);
+}
+
+.pwa-aktualisierung .knopf {
+  margin: 0 0.25rem;
+}
+
 .inhalt {
   flex: 1;
   width: 100%;

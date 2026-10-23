@@ -30,7 +30,8 @@ GitHub Actions führt bei jedem Pull Request `npm test`, `npm run test:zufall`, 
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
 | `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Höchstzahl Ausgabetoken), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck |
 | `tests/evaluation/` | Schemata der Modellbewertung (ohne KI-Aufruf) |
-| `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit im echten Browser |
+| `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |
+| `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit und Offline-Start der PWA im echten Browser |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |
 
 Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
@@ -69,6 +70,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
 - `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (von Chromium berechnet), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben
+- `pwa.spec.ts`: Service Worker übernimmt die Seite, App startet nach dem ersten Besuch ohne Netz, Beispiel im Lagebild und PDF offline, Hinweis zum fehlenden Netz, Manifest und Symbole werden ausgeliefert (Service Worker nur hier zugelassen)
 - `eingabehilfen.spec.ts`: LEAD-Eingabehilfen mit der Tastatur (Bereich öffnen, Vorlage einfügen, Fokus und Markierung im Textfeld), zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen
 
 Einmalig vorher: `npx playwright install chromium`. Ist ein Chromium schon vorhanden, genügt `PLAYWRIGHT_CHROMIUM_PFAD=/pfad/zu/chrome npm run test:browser`. Bei Fehlern liegen Spuren unter `test-results/` (`npx playwright show-trace …`).

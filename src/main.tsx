@@ -6,6 +6,7 @@ import "./styles.css";
 import App from "./App";
 import { anwenden, aufloesen, systemVorgabe } from "./darstellung/thema";
 import { startLesen } from "./darstellung/speicher";
+import { pwaStarten } from "./pwa/registrieren";
 
 // Nach einer Neuveröffentlichung fehlen in einer noch offenen älteren Seite die nachgeladenen Teile (z. B. für PDF).
 // Vite meldet das als „vite:preloadError“; dann einmal neu laden, damit Seite und Dateien wieder zusammenpassen.
@@ -34,3 +35,6 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>,
 );
+
+// PWA: Service Worker für den Offline-Start (nur im Produktionsbuild, nicht in der nativen App)
+pwaStarten();

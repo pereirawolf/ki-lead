@@ -1,5 +1,45 @@
-import { defineConfig } from "vitest/config";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
+import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import { precacheListe, precacheVersion, serviceWorkerQuelle } from "./src/pwa/precache.ts";
+
+/** Alle Dateien eines Ordners (rekursiv) als Pfad relativ zum Ordner → Inhalt */
+function ordnerDateien(ordner: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (!existsSync(ordner)) return out;
+  const lauf = (dir: string) => {
+    for (const name of readdirSync(dir).sort()) {
+      const p = join(dir, name);
+      if (statSync(p).isDirectory()) lauf(p);
+      else out[relative(ordner, p).split("\\").join("/")] = readFileSync(p).toString("base64");
+    }
+  };
+  lauf(ordner);
+  return out;
+}
+
+/**
+ * Service Worker der PWA (Meilenstein 5): erzeugt beim Build sw.js aus src/pwa/sw-vorlage.js mit der Liste aller
+ * ausgelieferten Dateien. Ohne zusätzliche Abhängigkeit; nur im Produktionsbuild.
+ */
+function serviceWorker(): Plugin {
+  return {
+    name: "ki-lead-service-worker",
+    apply: "build",
+    enforce: "post",
+    generateBundle(_optionen, bundle) {
+      const oeffentlich = ordnerDateien(join(import.meta.dirname, "public"));
+      const inhalte: Record<string, string> = { ...oeffentlich };
+      // Dateien ohne Hash im Namen (index.html) gehen mit ihrem Inhalt in die Version ein
+      for (const [name, datei] of Object.entries(bundle)) if (datei.type === "asset" && !/-[\w-]{8}\.\w+$/.test(name)) inhalte[name] = String(datei.source);
+      const liste = precacheListe([...Object.keys(bundle), ...Object.keys(oeffentlich)]);
+      const app = JSON.parse(readFileSync(join(import.meta.dirname, "package.json"), "utf-8")).version as string;
+      const vorlage = readFileSync(join(import.meta.dirname, "src/pwa/sw-vorlage.js"), "utf-8");
+      this.emitFile({ type: "asset", fileName: "sw.js", source: serviceWorkerQuelle(vorlage, precacheVersion(app, liste, inhalte), liste) });
+    },
+  };
+}
 
 // Relative Basis, damit derselbe Build als PWA (Unterverzeichnis) und in Capacitor läuft.
 // Eigene Profile aus privat/profile/ nur im Entwicklungsserver oder auf ausdrücklichen Wunsch (KI_LEAD_PRIVAT=1).
@@ -8,7 +48,7 @@ export default defineConfig(({ command }) => ({
   define: {
     __KI_LEAD_PRIVAT__: JSON.stringify(command === "serve" || process.env.KI_LEAD_PRIVAT === "1"),
   },
-  plugins: [react()],
+  plugins: [react(), serviceWorker()],
   build: {
     outDir: "dist",
     sourcemap: true,
