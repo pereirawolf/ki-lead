@@ -1,14 +1,17 @@
 // @vitest-environment jsdom
 // Farbschemata: Katalog, Kontraste, Auflösung, Prüfung von Profilfarben, Anwenden und Profilimport.
 import { afterEach, describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import { FARBSCHEMAS } from "../../src/darstellung/katalog";
 import {
   ALLE_VARIABLEN,
   AUTOMATISCH,
+  BAND_GLEICHE_FARBE,
   PROFIL,
   SEMANTIK,
   anwenden,
   aufloesen,
+  farbAbstand,
   kontrast,
   kontrastFehler,
   profilFarbschemaFehler,
@@ -230,5 +233,55 @@ describe("Profilimport", () => {
   it("Profile ohne Farbschema laden unverändert", async () => {
     const e = await ladeProfil(basis());
     expect(e.profil?.manifest.farbschema).toBeUndefined();
+  });
+});
+
+describe("Akzentband: Abhebung vom Hintergrund (0.5.1)", () => {
+  // Diese Schemata führen Weiß im Band; Kopf (Weiß) und Seitengrund (#F5F6F7) würden es verschlucken
+  const MIT_WEISS = ["de-by", "de-be", "de-bb", "de-hb", "de-hh", "de-he", "de-nw", "de-sn", "de-sh", "de-th"];
+
+  it("färbt Kopf und Seitengrund genau dort leicht ein, wo eine Bandfarbe sonst darin aufginge", () => {
+    for (const s of FARBSCHEMAS) {
+      const t = aufloesen(s.id).tokens;
+      const getoent = t["header-hintergrund"] !== s.tokens["header-hintergrund"];
+      expect(getoent, s.id).toBe(MIT_WEISS.includes(s.id));
+      if (!getoent) {
+        expect(t.papier, s.id).toBe(s.tokens.papier);
+        continue;
+      }
+      // Weiß im Band hebt sich jetzt vom Kopf und vom Seitengrund ab …
+      expect(kontrast("#FFFFFF", t["header-hintergrund"]), `${s.id} Kopf`).toBeGreaterThanOrEqual(1.1);
+      expect(kontrast("#FFFFFF", t.papier), `${s.id} Seitengrund`).toBeGreaterThan(kontrast("#FFFFFF", s.tokens.papier));
+      // … bleibt aber eine ganz leichte, helle Einfärbung
+      expect(kontrast("#FFFFFF", t["header-hintergrund"]), `${s.id} Kopf hell`).toBeLessThan(1.25);
+      expect(kontrast("#FFFFFF", t.papier), `${s.id} Seitengrund hell`).toBeLessThan(1.3);
+    }
+  });
+
+  it("hält alle Kontrastregeln auch mit der Einfärbung ein", () => {
+    for (const s of FARBSCHEMAS) expect(kontrastFehler(aufloesen(s.id).tokens, s.kontrastziel ?? 4.5), s.id).toEqual([]);
+  });
+
+  it("lässt die Neutral- und Kontrastschemata und Bänder ohne Hintergrundfarbe unverändert (etwa Gelb auf Weiß)", () => {
+    for (const id of ["neutral-hell", "neutral-dunkel", "kontrast-hell", "kontrast-dunkel", "de-bw", "bund", "de-ni"]) {
+      const s = FARBSCHEMAS.find((x) => x.id === id)!;
+      const t = aufloesen(id).tokens;
+      expect(t["header-hintergrund"], id).toBe(s.tokens["header-hintergrund"]);
+      expect(t.papier, id).toBe(s.tokens.papier);
+    }
+    expect(farbAbstand("#FFFFFF", "#F5F6F7")).toBeLessThanOrEqual(BAND_GLEICHE_FARBE);
+    expect(farbAbstand("#FFFC00", "#FFFFFF")).toBeGreaterThan(BAND_GLEICHE_FARBE);
+  });
+
+  it("gilt auch für Profilfarben mit weißer Akzentfarbe", () => {
+    const t = aufloesen(PROFIL, { basis: "neutral-hell", farben: { "marke-akzent-1": "#FFFFFF", "marke-akzent-2": "#123456" } }).tokens;
+    expect(t["header-hintergrund"]).not.toBe("#FFFFFF");
+    expect(kontrast("#FFFFFF", t["header-hintergrund"])).toBeGreaterThanOrEqual(1.05);
+  });
+
+  it("ist doppelt so dick wie bisher (8 px)", () => {
+    const css = readFileSync(repoPfad("src", "styles.css"), "utf-8");
+    const baender = [...css.matchAll(/border-bottom: (\d+)px solid var\(--amt\);\s*border-image: var\(--band\) 1;/g)].map((m) => m[1]);
+    expect(baender).toEqual(["8", "8"]);
   });
 });
