@@ -13,6 +13,10 @@ Die automatisierten Prüfläufe (Prüfung wöchentlich, Erfassungstest) legen Ä
 
 Offene, noch nicht entschiedene Befunde stehen nicht im Register.
 
+## Eingang und offene Befunde
+
+Jeder Prüflauf legt seine Befunddatei vor der Freigabefrage auf dem Branch `befunde/eingang` ab (Ordner `eingang/`, Erfassungstest zusätzlich `eingang/pruefsteine/`). Der Branch enthält nur Daten, wird nie gemergt und berührt `main` nicht. **Offen** ist ein Befund, der dort liegt, aber im Register nicht entschieden ist; dazu zählen Befunde aus Läufen ohne oder mit unvollständiger Freigabe, „Weitere Beobachtungen“ jenseits der Obergrenze eines Laufs, zurückgestellte Befunde ab `wieder_vorlegen_ab` und unbeantwortete Entscheidungsfragen. Der Freitagslauf führt sie zusammen, legt sie gesammelt zur Freigabe vor und setzt sie in einem Pull Request um.
+
 ## Regeln
 
 1. **Fortschreibung:** Der Pull Request, der Befunde umsetzt, trägt im selben Zug alle Befunde derselben Befunddatei ein, auch abgelehnte und zurückgestellte. Werden Befunde nur abgelehnt, genügt ein Pull Request mit der Registeränderung.
