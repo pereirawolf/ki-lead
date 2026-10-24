@@ -217,6 +217,150 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-24",
       "pr": 55
+    },
+    {
+      "id": "LS-2026-W43-06",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B15: 1 Fall, C17: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-cyber-schutzabschaltung-kreis (B15, C11, C17).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-07",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C05: 1 Fall, B16: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-grossunfall-bahn-ursache-offen (B17, C05, B16, C13, C16).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-08",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B03: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-waldbrand-nachlauf-rueckkehr (B03, C16).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-09",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B13: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-migration-zuweisung-kapazitaet (B13, C16).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-10",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B04: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-erdbeben-inland-nachlauf (B04, C02, C16).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-11",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C08: 1 Fall"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-tierseuche-grenznah-ausland (B11, C08, C14).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-12",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C03: 1 Fall"
+        },
+        {
+          "datei": "evaluation/material/sop-weltraumwetter-warnung.md",
+          "stelle": "Übungsnachricht (Ausgangsfall der Abwandlung)"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-weltraumwetter-warnung-unbestaetigt (B17, C03).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
+    },
+    {
+      "id": "LS-2026-W43-13",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43_faelle.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C04: 1 Fall"
+        },
+        {
+          "datei": "evaluation/material/sop-vulkanasche-transport.md",
+          "stelle": "Übungsnachricht (Ausgangsfall der Abwandlung)"
+        }
+      ],
+      "kurz": "Neuer fiktiver Bewertungsfall sop-vulkanasche-transport-zeitluecke (B17, C04, C13, C10).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 56
     }
   ]
 }
