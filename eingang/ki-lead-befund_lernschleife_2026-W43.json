@@ -1,0 +1,197 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "lernschleife",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-24T17:58:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+  "pruefumfang": "Auftrag des Herausgebers vom 24.10.2026 (kein Wochenlauf): Infrastruktur für fiktive synthetische Testfälle prüfen, die sich kombinieren und für Testungen und Vergleiche nutzen lassen. Gelesen: evaluation/README.md, evaluation/faelle/ (fall.schema.json und 41 Fälle), evaluation/plaene/, evaluation/pruefsteine/, profile/lead-beispiel/beispiele/orkantief-ilka/, src/pipeline/vergleich.ts, tests/evaluation/, docs/ERPROBUNG.md, evaluation/befunde/befundregister.json.",
+  "nicht_geprueft": [
+    "Keine externen Quellen herangezogen: alle Befunde betreffen nur die Repository-Struktur.",
+    "Inhalt der 40 SOP-Prüffälle nicht fachlich bewertet; nur Aufbau und Felder.",
+    "npm test nicht ausgeführt, da keine Änderung vorgenommen wurde."
+  ],
+  "befunde": [
+    {
+      "id": "LS-2026-W43-01",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties.erwartungen",
+          "ist": "\"muss\", \"darf_nicht\", \"t0\", \"referenzraum\", \"ereignisarten\" – kein Feld für erwartete Radarwerte"
+        },
+        {
+          "datei": "evaluation/faelle/sop-gas-stabil.json",
+          "stelle": "erwartungen.muss[1]",
+          "ist": "Keine direkte Personenbetroffenheit ableiten; D2 mangels einschlägiger Grundgesamtheit offen lassen."
+        }
+      ],
+      "beobachtung": "Erwartungen an das Lagenradar stehen nur als Freitext in \"muss\". Ein Lauf lässt sich deshalb beim Radar nur durch Lesen oder gegen eine vollständige Referenzmeldung prüfen, nicht maschinell gegen die Erwartung des Falls. Für Vergleiche über viele Fälle und Varianten fehlt damit die wichtigste ordinale Messgröße.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Optionales Feld erwartungen.radar je Achse: entweder erwartet offen oder eine Spanne min–max (0–6), jeweils mit kurzem Grund. Fehlt eine Achse, gibt es keine Erwartung. Gilt nur für Fälle mit genau einem erwarteten Sachverhalt. Als Pilot sop-gas-stabil mit der bereits in \"muss\" stehenden Erwartung zu D2 befüllen; weitere Fälle erst nach fachlicher Festlegung durch den Herausgeber.",
+        "neuer_text": "\"radar\": { \"type\": \"object\", \"description\": \"Erwartete Radarwerte des (einzigen) erwarteten Sachverhalts; fehlende Achse = keine Erwartung\", \"additionalProperties\": false, \"patternProperties\": { \"^d[1-8]$\": { \"type\": \"object\", \"additionalProperties\": false, \"oneOf\": [{ \"required\": [\"offen\"] }, { \"required\": [\"min\", \"max\"] }], \"properties\": { \"offen\": { \"const\": true }, \"min\": { \"type\": \"integer\", \"minimum\": 0, \"maximum\": 6 }, \"max\": { \"type\": \"integer\", \"minimum\": 0, \"maximum\": 6 }, \"grund\": { \"type\": \"string\", \"minLength\": 1 } } } } }  // Pilot in sop-gas-stabil.json: \"radar\": { \"d2\": { \"offen\": true, \"grund\": \"Keine einschlägige Grundgesamtheit direkt betroffener Personen.\" } }"
+      },
+      "folgeaenderungen": [
+        "evaluation/faelle/sop-gas-stabil.json (Pilot)",
+        "evaluation/faelle/README.md (Feld erläutern)",
+        "tests/evaluation/schemata.test.ts",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Sollen erwartete Radarwerte als Spanne (min–max) zulässig sein oder nur als Punktwert? Und reicht es, sie auf Fälle mit genau einem erwarteten Sachverhalt zu beschränken?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/evaluation/schemata.test.ts: je Fall mit erwartungen.radar gilt min ≤ max; Negativbeispiele (min > max, Achse d9, offen und Spanne zugleich) werden abgelehnt.",
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigabe 24.10.2026: Erwartete Radarwerte zunächst als fachlich vertretbare Spanne min–max; ein Punktwert kann nach Überarbeitung des Kodierleitfadens angestrebt werden. Beschränkung auf Fälle mit genau einem erwarteten Sachverhalt wie vorgeschlagen."
+      }
+    },
+    {
+      "id": "LS-2026-W43-02",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "additionalProperties (oberste Ebene)",
+          "ist": "\"additionalProperties\": false – kein Feld, das einen Fall als Abwandlung eines anderen kennzeichnet"
+        },
+        {
+          "datei": "evaluation/faelle/README.md",
+          "stelle": "Absatz zu sop-*.json",
+          "ist": "kurze, vollständig fiktive Prüffälle zu den Prüfpfaden der SOP-Sammelmappe"
+        }
+      ],
+      "beobachtung": "Mehrere Fälle sind faktisch Abwandlungen derselben Lage (etwa sop-gas-stabil, sop-gas-geschuetzt, sop-gas-notfall-beleg), ohne dass das maschinenlesbar festgehalten ist. Kontrollierte Vergleiche (eine Stellgröße geändert, alles andere gleich) lassen sich so nicht gezielt zusammenstellen oder auswerten.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Zwei optionale Felder auf oberster Ebene: variante_von (ID des Ausgangsfalls) und abwandlung (was geändert wurde, möglichst eine Stellgröße). Bestehende Fälle bleiben unverändert; neue Abwandlungen nutzen die Felder.",
+        "neuer_text": "\"variante_von\": { \"type\": \"string\", \"pattern\": \"^[a-z0-9]+(-[a-z0-9]+)*$\", \"description\": \"ID des Ausgangsfalls, wenn dieser Fall eine gezielte Abwandlung ist\" }, \"abwandlung\": { \"type\": \"string\", \"minLength\": 1, \"description\": \"Was gegenüber dem Ausgangsfall geändert wurde, möglichst genau eine Stellgröße\" }"
+      },
+      "folgeaenderungen": [
+        "evaluation/faelle/README.md",
+        "tests/evaluation/schemata.test.ts",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/evaluation/schemata.test.ts: variante_von verweist auf einen vorhandenen Fall, nicht auf sich selbst; abwandlung ist genau dann gesetzt, wenn variante_von gesetzt ist.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "LS-2026-W43-03",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/README.md",
+          "stelle": "Ablauf einer Bewertung, Schritt 1",
+          "ist": "Plan vor dem ersten Lauf festlegen: Fall, Varianten (Modell und Aufwand je Stufe), Wiederholungen, Budgetgrenze."
+        },
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "format",
+          "ist": "\"format\": \"ki-lead-sop-abdeckung/1\" – Soll-Abdeckung, kein Bewertungsplan"
+        }
+      ],
+      "beobachtung": "Der Bewertungsplan ist im Ablauf vorgeschrieben, hat aber kein Format und keinen Test. Damit fehlt der Ort, an dem Fälle zu Testsets kombiniert werden (z. B. alle Gas-Fälle, alle Abwandlungen eines Ausgangsfalls) und an dem ein Verweis auf einen nicht vorhandenen Fall auffallen würde.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neues Schema evaluation/plaene/plan.schema.json (format ki-lead-bewertungsplan/1): Fragestellung, Liste der Fall-IDs, Varianten mit Modell und Aufwand je Stufe (Aufbau wie variante in bewertungsschema.json), Wiederholungen, Budgetgrenze. Ein Plan ist eine Auswahl, keine Kopie der Fälle. Die Abdeckungsdatei bleibt im eigenen Format.",
+        "neuer_text": "{ \"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"title\": \"Bewertungsplan KI-LEAD\", \"type\": \"object\", \"required\": [\"format\", \"id\", \"stand\", \"fragestellung\", \"faelle\"], \"additionalProperties\": false, \"properties\": { \"format\": { \"const\": \"ki-lead-bewertungsplan/1\" }, \"id\": { \"type\": \"string\", \"pattern\": \"^[a-z0-9]+(-[a-z0-9]+)*$\" }, \"stand\": { \"type\": \"string\", \"format\": \"date\" }, \"fragestellung\": { \"type\": \"string\", \"minLength\": 1 }, \"faelle\": { \"type\": \"array\", \"minItems\": 1, \"uniqueItems\": true, \"items\": { \"type\": \"string\", \"pattern\": \"^[a-z0-9]+(-[a-z0-9]+)*$\" } }, \"varianten\": { \"type\": \"array\", \"items\": { \"type\": \"object\", \"required\": [\"kennung\"], \"additionalProperties\": false, \"properties\": { \"kennung\": { \"type\": \"string\", \"minLength\": 1 }, \"s1\": { \"$ref\": \"#/$defs/stufe\" }, \"s2\": { \"$ref\": \"#/$defs/stufe\" }, \"material\": { \"enum\": [\"ohne\", \"pdf\", \"eingaenge\"] } } } }, \"wiederholungen\": { \"type\": \"integer\", \"minimum\": 1 }, \"budget_usd\": { \"type\": \"number\", \"minimum\": 0 }, \"hinweis\": { \"type\": \"string\" } }, \"$defs\": { \"stufe\": \"wie $defs.stufe in evaluation/bewertungsschema.json\" } }"
+      },
+      "folgeaenderungen": [
+        "evaluation/README.md (Inhalt, plaene/)",
+        "tests/evaluation/schemata.test.ts",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/evaluation/schemata.test.ts: jede Datei mit format ki-lead-bewertungsplan/1 entspricht plan.schema.json; jede Fall-ID existiert unter evaluation/faelle/; Dateiname entspricht id.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "LS-2026-W43-04",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleich.ts",
+          "stelle": "Dateikopf und export function vergleiche(ki, ref, …)",
+          "ist": "Vergleich zweier Meldungen nach demselben Profil, z. B. … zwei Kodierungen desselben Sachverhalts (Inter-Rater-Konsistenz)."
+        }
+      ],
+      "beobachtung": "Der Vergleich ist paarweise (KI gegen Referenz). Für mehrere unabhängige Kodierungen derselben fiktiven Lage (mehrere Personen, Wiederholungen eines Modells, Varianten eines Plans) fehlt eine Auswertung über n Meldungen je Achse. Die Kennzahlen des paarweisen Vergleichs (gleich, höchstens eine Stufe Abstand, mittlere Abweichung, einseitig offen) lassen sich dafür übernehmen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Funktion vergleicheMehrere(meldungen, profil) in src/pipeline/vergleich.ts mit denselben Grundsätzen (kein Gesamtscore, Kennzahlen je Achse): Anzahl mit Wert, Anteil offen, Median, Spannweite, Anteil der Paare mit höchstens einer Stufe Abstand; optional Abgleich mit erwartungen.radar aus LS-2026-W43-01. Dazu ein Kommandozeilenskript, das einen lokalen Ordner (z. B. privat/) einliest und eine Tabelle ausgibt; Meldungen werden dafür nicht ins Repository übernommen (docs/ERPROBUNG.md, Abschnitt 6). Keine Oberfläche in der App.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "scripts/ (neues Skript) und package.json (Skripteintrag)",
+        "tests/pipeline/ (Test mit den fiktiven Ilka-Meldungen als Eingabe)",
+        "evaluation/README.md",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Soll zusätzlich ein Übereinstimmungsmaß wie Krippendorffs Alpha (ordinal) ausgegeben werden? Bei wenigen Kodierungen ist es wenig stabil; ohne es bleibt die Auswertung bei beschreibenden Kennzahlen je Achse.",
+      "sicherheit": "mittel",
+      "automatisierbar": "tests/pipeline/: vergleicheMehrere mit festen Radarwerten (unabhängiges Soll von Hand gerechnet), darunter eine offene Achse und eine Achse mit voller Übereinstimmung.",
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigabe 24.10.2026: Zusätzlich Krippendorffs Alpha (ordinal) je Achse ausgeben, stets mit Anzahl der Kodierungen."
+      }
+    },
+    {
+      "id": "LS-2026-W43-05",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/README.md",
+          "stelle": "gesamte Datei",
+          "ist": "Je Datei ein Fall nach fall.schema.json … Material liegt entweder im Repository … oder wird nur beschrieben"
+        }
+      ],
+      "beobachtung": "Die Regeln für fiktive Fälle sind über evaluation/README.md, docs/ERPROBUNG.md (Abschnitt 7) und die Lernschleife verteilt. Wer einen neuen fiktiven Fall anlegt, findet keine zusammenhängende Anleitung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Abschnitt „Neuen fiktiven Fall anlegen“ in evaluation/faelle/README.md als kurze Prüfliste: Kennzeichen FIKTIV im Titel und im Material, fiktiv: true, erfundene Stellen und Orte, keine Texte Dritter und keine personenbezogenen Daten; Material als evaluation/material/<id>.md; Dateiname gleich id; Abdeckung in evaluation/plaene/ nachtragen; Abwandlungen mit variante_von; Meldungen und Laufprotokolle nicht einchecken, nur Bewertungen.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Fiktive Fälle mit Material, Auftrag und Erwartungen sind vorhanden (41 Fälle, Schema und Test).",
+    "Paarweiser Vergleich einschließlich Inter-Rater-Einsatz ist in src/pipeline/vergleich.ts umgesetzt.",
+    "Trennung von fiktiven Fällen (evaluation/faelle/) und realen Prüfsteinen (evaluation/pruefsteine/) ist klar geregelt.",
+    "Mehrere fiktive Kodierungen derselben Lage liegen mit Orkantief „Ilka“ bereits vor."
+  ]
+}
