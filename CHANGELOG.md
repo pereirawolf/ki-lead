@@ -56,6 +56,38 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.6 | letzter Commit von Pull Request #53 „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
 | 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
 | 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
+| 0.5.9 | letzter Commit des Pull Requests „Lizenzen bestimmt, Vorlage – eigene Organisation; 0.5.9“ |
+
+## [0.5.9] – 24.10.2026
+
+Grundlage: Lizenzprüfung vom 24.10.2026 (Befunddatei `ki-lead-befund_lizenzen_2026-W43.json`, Befunde KP-2026-W43-54 bis -60) mit Freigabe und Festlegungen des Herausgebers vom selben Tag. Grundsatz: Rechte werden bestätigt oder erweitert, nie beschränkt; für frühere Fassungen gelten die damals angegebenen Lizenzen weiter. Alle Inhalte sind im privaten Forschungsvorhaben entstanden. Keine Änderung am Beispielprofil, an SOPs, Arbeitsanweisungen oder Schemata des Beispielprofils, an der KI-Pipeline oder an gespeicherten Daten. Keine Rechtsberatung.
+
+### Geändert
+
+- **Fuß der App** (KP-2026-W43-54): statt „Profilinhalte unter CC BY 4.0“ jetzt „Code unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 (Heiko Pereira Wolf), andere Profile unter der Lizenz ihres Herausgebers“ mit Verweis „Lizenzen“ auf `LICENSE-CONTENT`. Damit steht die von CC BY 4.0 verlangte Namensnennung im Fuß, wie THIRD-PARTY-NOTICES.md es bereits angab.
+- **Über KI-LEAD** (KP-2026-W43-54): Lizenzpunkt nennt die Bestandteile der Beispielprofile, die Namensnennung, die zusätzliche CC0-Widmung, die Lizenz eigener und importierter Profile und dass Eingaben, Meldungen und Lagebilder nicht erfasst sind; neuer Verweis „Lizenzhinweise für Inhalte“ (`VERWEISE.inhaltslizenz`).
+- **`LICENSE-CONTENT`** (KP-2026-W43-55, -56, -57): Präambel neu mit Copyright-Vermerk und Grundsatz; Nr. 1 CC BY 4.0 für alle Dateien in `profile/`, `evaluation/` und `docs/`; Nr. 2 zusätzlich CC0 1.0 für Meldungsschemata, Manifeste, Kontaktlisten, Quellenregister, die JSON-Schemata in `evaluation/` und die Vorlage (Darstellungsdateien des Beispielprofils wegen der Stufentexte des Lagenradars nur CC BY 4.0); Nr. 3 Profiltexte in Ausgaben der App ohne Namensnennung verwendbar; Nr. 4 Code; Nr. 5 Ausnahmen (eigene und importierte Profile, amtliche Werke nach § 5 UrhG und Auszüge Dritter, Marken, Aufsätze unter CC BY-NC-ND 4.0, nicht schutzfähige KI-Entwürfe); Nr. 6 Herkunft; Nr. 7 Namensnennung mit Bearbeitungsvermerk. Lizenztext unverändert.
+- **Kurzsatz zu den Lizenzen** wortgleich in README.md, THIRD-PARTY-NOTICES.md, SPEZIFIKATION, ERPROBUNG und `public/lizenzen-ergaenzend.md`; README-Abschnitt „Lizenz“ nach Bereichen; `CITATION.cff` mit `EUPL-1.2` und `CC-BY-4.0`; Lizenzzeilen in `evaluation/README.md` und `evaluation/pruefsteine/README.md` (KP-2026-W43-59).
+- **Musterprofil → „Vorlage – eigene Organisation“** (Profil 0.5.0, KP-2026-W43-58, -60): alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern (Teil A, eine Dach-SOP als Inhaltsgerüst mit YAML-Kopf und fünf Abschnitten, Arbeitsanweisung Erfassung, Kodierleitfaden mit Stufentexten und Quellenkategorien, README zur Übernahme), Herausgeber „[Herausgeber]“, Lizenz CC0 1.0. Profil-ID, Schema und Schemakennung bleiben, gespeicherte Meldungen gültig. Verdichtung und Kurzfassung bleiben bewusst ohne eigene Datei: Die App nutzt ihre Standardfassungen, statt eine Anweisung mit Platzhaltern an die KI zu geben; die README der Vorlage erklärt, wie man eigene anlegt. Einzelheiten: [profile/muster/CHANGELOG.md](profile/muster/CHANGELOG.md).
+- **PROFILFORMAT 1.18** (KP-2026-W43-58): Manifestfelder `herausgeber` und `lizenz` beschrieben (SPDX-Kennung oder Ausdruck, `LicenseRef-intern` für nicht veröffentlichte Profile, Bearbeitungsvermerk bei CC BY 4.0); Beispiel „Kreis X“ ohne CC-Lizenz.
+- `scripts/pruefumfang.mjs`: `LICENSE-CC0` zählt wie die übrigen Lizenztexte als reiner Inhalt.
+
+### Hinzugefügt
+
+- **`LICENSE-CC0`**: Text CC0 1.0 Universal mit Kopf, der auf `LICENSE-CONTENT`, Nr. 2, verweist.
+
+### Tests
+
+- `tests/lizenzen/inhalte.test.ts` (neu, 18): Geltungsbereich und Abgrenzungen in `LICENSE-CONTENT` (KP-2026-W43-55); CC0-Widmung, gewidmete Dateiarten vorhanden, Darstellungsdateien nur CC BY 4.0 (-56); Kurzsatz wortgleich in fünf Dokumenten, `CITATION.cff`, Lizenzzeilen der Übersichten, kein „Profilinhalte“ mehr in `src/` (-59, -54); Lizenzangaben der mitgelieferten Profile und Beschreibung in PROFILFORMAT (-58).
+- `tests/profil/vorlage.test.ts` (neu, 5): Vorlage lädt ohne Fehler und Warnungen, führt die Manifestfelder des Beispielprofils, die Pflegeschlüssel und die fünf Abschnitte jeder Dach-SOP des Beispielprofils, Platzhalter nur in eckigen Klammern, CC0 1.0 (KP-2026-W43-60).
+- `tests/ui/ueber.test.ts`: Lizenzpunkt mit Namensnennung, eigenen Profilen und Ausgaben; Verweis „Lizenzhinweise für Inhalte“, sieben statt sechs Verweise; Fuß mit Namensnennung und Verweis „Lizenzen“ (KP-2026-W43-54).
+- `tests/profil/profilansicht.test.ts`: Vorlage mit einer Dach-SOP und README; ein Paket ohne SOP und ohne Zusatzdokumentation weiterhin über abgeleitete Pakete geprüft; Fassung 0.5.
+- `tests/ci/pruefumfang.test.ts`: Fall „Lizenztexte“.
+- [docs/TESTS.md](docs/TESTS.md): Gliederung um Vorlage und Inhaltslizenzen ergänzt.
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: KP-2026-W43-54 bis -60 als umgesetzt mit Pull Request #58.
 
 ## [0.5.8] – 24.10.2026
 

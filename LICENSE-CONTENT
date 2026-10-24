@@ -1,7 +1,65 @@
-Die Inhalte der Profilpakete im Ordner profile/ (Arbeitsanweisungen, SOP, Kodierleitfaden,
-JSON-Schemata, Darstellungsdateien) stehen unter der Lizenz Creative Commons
-Namensnennung 4.0 International (CC BY 4.0), soweit dort nicht anders angegeben.
-Namensnennung: Heiko Pereira Wolf, https://www.pereirawolf.de
+KI-LEAD – Lizenzhinweise für Inhalte
+
+© 2026 Heiko Pereira Wolf, https://www.pereirawolf.de
+
+Grundsatz: Diese Hinweise bestätigen oder erweitern die Rechte, die für frühere
+Fassungen angegeben waren; sie schränken keine ein. Für eine frühere Fassung gelten
+die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
+
+1. CC BY 4.0. Unter der Lizenz Creative Commons Namensnennung 4.0 International
+   (CC BY 4.0, Text unten) stehen, soweit in einer Datei nicht anders angegeben:
+   a) alle Dateien der Profilpakete im Ordner profile/: Arbeitsanweisungen,
+      Standardvorgehensweisen (sop/, mit Übersicht, Änderungsverlauf und
+      Quellenregister), Kodierleitfaden, Darstellungsdateien (meldung.ui.json),
+      Meldungsschemata, Manifeste, Kontaktlisten, Beispielmeldungen sowie README-
+      und CHANGELOG-Dateien;
+   b) alle Dateien im Ordner evaluation/;
+   c) die Dokumentation im Ordner docs/.
+
+2. Zusätzlich CC0 1.0. Nach Wahl der Nutzenden stehen auch unter CC0 1.0 Universal
+   (Datei LICENSE-CC0), damit Fachverfahren sie ohne Namensnennung übernehmen können:
+   a) die Meldungsschemata (profile/*/meldung.schema.json), Manifeste
+      (profile/*/profil.json), Kontaktlisten (profile/*/kontakte.json) und
+      Quellenregister (profile/*/sop/quellenregister.json);
+   b) die JSON-Schemata im Ordner evaluation/ (*.schema.json);
+   c) alle Dateien der Vorlage im Ordner profile/muster/.
+   Die Darstellungsdateien der übrigen Profile (meldung.ui.json) enthalten die
+   Stufentexte des Lagenradars; für sie gilt allein CC BY 4.0.
+
+3. Ausgaben der App. Texte aus den mitgelieferten Profilen, die die App in
+   Meldungen, Lagebilder, Kurzfassungen und andere Ausgaben übernimmt (etwa
+   Kennsätze, Stufen- und Feldbezeichnungen), dürfen dort ohne Namensnennung
+   verwendet werden. An Eingaben und Ergebnissen der Nutzenden beansprucht der
+   Herausgeber keine Rechte.
+
+4. Code. Quelltext, Tests, Skripte, Build- und Projektdateien sowie die App stehen
+   unter der EUPL-1.2 (Datei LICENSE). Die Profile sind in die App eingebettet; jede
+   Lizenz gilt für ihren Teil.
+
+5. Nicht erfasst sind:
+   a) Profile, die Nutzende selbst erstellen oder importieren; für sie gilt die
+      Lizenz, die ihr Herausgeber im Feld lizenz von profil.json angibt;
+   b) amtliche Werke nach § 5 UrhG, insbesondere zitierte Normtexte, und kurze
+      Auszüge aus Quellen Dritter; es gelten die Rechte der jeweiligen
+      Rechteinhaber;
+   c) Namen, Marken, Zeichen und Logos Dritter;
+   d) begleitende Aufsätze außerhalb des Repositorys, etwa auf Zenodo und
+      pereirawolf.de, darunter der Grundlagenbeitrag zum Lagenradar
+      (https://doi.org/10.5281/zenodo.18305827); für sie gilt die dort angegebene
+      Lizenz (CC BY-NC-ND 4.0).
+   Soweit Inhalte keinen urheberrechtlichen Schutz genießen, etwa überwiegend
+   maschinell erzeugte Prüfsteine, begründet die Lizenz keine Pflichten
+   (CC BY 4.0, Abschnitt 1(g)).
+
+6. Herkunft. Alle Inhalte sind im privaten Forschungsvorhaben KI-LEAD des
+   Herausgebers entstanden, auch die Arbeitsfassungen SOP-LEAD v0.4 und
+   Kodierleitfaden v0.4, aus denen die Beispielfassungen abgeleitet sind. Sie sind
+   keine Vorgaben einer Behörde oder Einrichtung.
+
+7. Namensnennung (Vorschlag): „<Titel>, Fassung <x.y.z>, Heiko Pereira Wolf,
+   KI-LEAD, https://github.com/pereirawolf/ki-lead, CC BY 4.0“. Bei Bearbeitungen
+   ist anzugeben, dass und wie das Material geändert wurde (CC BY 4.0,
+   Abschnitt 3(a)(1)(B)), etwa „bearbeitet von <Stelle>, <Datum>“.
 
 ----------------------------------------------------------------------
 

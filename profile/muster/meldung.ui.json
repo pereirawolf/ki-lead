@@ -1,7 +1,7 @@
 {
   "format": "lead-ui/1",
-  "titel": "Lagemeldung (Muster)",
-  "untertitel": "Schlankes Beispiel für ein eigenes Profil",
+  "titel": "Lagemeldung (Vorlage)",
+  "untertitel": "Schlankes Beispielschema – vor der Verwendung anpassen",
   "ausblenden": ["schema", "_status", "_entstehung"],
   "schritte": [
     { "id": "meta", "titel": "Kopf", "felder": ["meldende_stelle", "meldezeitpunkt"] },

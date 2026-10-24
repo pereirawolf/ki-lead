@@ -1,8 +1,8 @@
 # Drittkomponenten und Lizenzen
 
-Stand: 24.10.2026, App 0.5.5 · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
+Stand: 24.10.2026, App 0.5.9 · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
 
-KI-LEAD steht unter der [EUPL-1.2](LICENSE), die Inhalte der Profilpakete unter [CC BY 4.0](LICENSE-CONTENT). Diese Datei nennt alle fremden Komponenten, die mit der App ausgeliefert werden, und getrennt davon die Werkzeuge, die nur beim Entwickeln gebraucht werden.
+Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT). Diese Datei nennt alle fremden Komponenten, die mit der App ausgeliefert werden, und getrennt davon die Werkzeuge, die nur beim Entwickeln gebraucht werden.
 
 ## 1. Grundsatz
 
@@ -162,7 +162,7 @@ Apache-2.0 verlangt, eine Kopie der Lizenz und eine vorhandene NOTICE-Datei mitz
 
 **Schrift unter OFL-1.1.** Die OFL erlaubt, die Schrift mit Software jeder Lizenz zu bündeln und als Webfont auszuliefern; nur der Verkauf der Schrift allein ist ausgeschlossen. Copyright und Lizenz müssen mitgehen. Die Lizenz der App und der erzeugten Dokumente ändert sich dadurch nicht (SIL International, 2009).
 
-**Profilinhalte unter CC BY 4.0.** Keine Drittkomponente fließt in die Profilinhalte ein. Code und Inhalte liegen in der App nur nebeneinander; jede Lizenz gilt für ihren Teil. Die Namensnennung steht in [LICENSE-CONTENT](LICENSE-CONTENT) und im Fuß der App.
+**Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0.** Keine Drittkomponente fließt in die Inhalte ein; ausgenommen sind nur amtliche Werke nach § 5 UrhG (zitierte Normtexte) und kurze Auszüge aus Quellen Dritter (LICENSE-CONTENT, Nr. 5). Code und Inhalte liegen in der App nur nebeneinander; jede Lizenz gilt für ihren Teil. Die Namensnennung steht in [LICENSE-CONTENT](LICENSE-CONTENT), im Fuß der App und unter „Über KI-LEAD“.
 
 **Ergebnis:** kein Lizenzkonflikt.
 

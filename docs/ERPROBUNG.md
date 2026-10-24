@@ -1,6 +1,6 @@
 # KI-LEAD – Erprobung im Testkreis
 
-Fassung 1.0 vom 24.10.2026, gilt für App-Version 0.5.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.5 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument beschreibt die Erprobung von KI-LEAD in einem Testkreis (Meilenstein M6): Ziel, Fragestellungen, Regeln für die Teilnahme, Rückmeldeweg und Auswertung. Es ist keine Rechtsberatung.
 
@@ -36,7 +36,7 @@ Ziel ist zu erfahren, ob KI-LEAD in der Hand fachkundiger Personen nachvollziehb
 
 ## 4. Nutzungsbedingungen und Haftung
 
-- Für die Software gilt die [EUPL-1.2](../LICENSE), für die Profilinhalte [CC BY 4.0](../LICENSE-CONTENT). Diese Bedingungen schränken die Lizenzen nicht ein; sie regeln nur die Teilnahme an der Erprobung.
+- Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Diese Bedingungen schränken die Lizenzen nicht ein; sie regeln nur die Teilnahme an der Erprobung.
 - KI-LEAD ist ein Forschungsdemonstrator in Entwicklung. Er wird **ohne Gewähr** bereitgestellt (EUPL-1.2, Art. 7). Fehler, Ausfälle und ungeeignete Entwürfe sind zu erwarten; Inhaltsgerüste der SOP-Sammelmappe sind nicht fachlich freigegeben.
 - Die **Haftung** des Herausgebers ist ausgeschlossen, soweit das Gesetz es zulässt (EUPL-1.2, Art. 8). Unberührt bleibt die Haftung für Vorsatz und grobe Fahrlässigkeit, für Schäden an Leben, Körper und Gesundheit und nach anderen zwingenden Vorschriften.
 - Für die Verarbeitung in der App ist die testende Person oder Stelle verantwortlich, für die Verarbeitung beim KI-Anbieter gelten dessen Bedingungen ([Datenschutzhinweise](DATENSCHUTZ.md), Abschnitte 2 und 5).
@@ -92,3 +92,4 @@ Aus einer einzelnen Rückmeldung folgt keine Regeländerung. Ereignisfakten geh�
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.5) |
+| 1.1 | 24.10.2026 | Abschnitt 4: Lizenzangabe an LICENSE-CONTENT angeglichen (KP-2026-W43-55, -59) |

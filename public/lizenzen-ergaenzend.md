@@ -2,7 +2,7 @@
 
 Diese Datei ergänzt `lizenzen.md` im selben Ordner. Dort stehen alle Pakete, die der Build bündelt. Hier stehen die Komponenten, die `lizenzen.md` nicht erfasst: die nativen Bibliotheken der Apps für Android und iOS und die Pakete, die in den vorgebauten Bundles von JSZip und html2canvas enthalten sind. Übersicht und Einordnung: THIRD-PARTY-NOTICES.md im Repository (https://github.com/pereirawolf/ki-lead).
 
-KI-LEAD selbst steht unter der EUPL-1.2, die Inhalte der Profilpakete unter CC BY 4.0.
+Code unter EUPL-1.2 (LICENSE); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in LICENSE-CONTENT (alle im Repository https://github.com/pereirawolf/ki-lead).
 
 ## Native Apps
 

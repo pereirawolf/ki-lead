@@ -413,6 +413,161 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-24",
       "pr": 57
+    },
+    {
+      "id": "KP-2026-W43-54",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "footer.fuss, Zeile 550–551"
+        },
+        {
+          "datei": "src/ui/Ueber.tsx",
+          "stelle": "Liste ueber-verweise, Zeile 36"
+        },
+        {
+          "datei": "THIRD-PARTY-NOTICES.md",
+          "stelle": "Abschnitt 7, Absatz „Profilinhalte unter CC BY 4.0“"
+        }
+      ],
+      "kurz": "Fuß und „Über KI-LEAD“: Lizenzen je Bereich statt „Profilinhalte“, Namensnennung, eigene Profile, Ausgaben.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-55",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "LICENSE-CONTENT",
+          "stelle": "Präambel, Zeile 1–4"
+        },
+        {
+          "datei": "evaluation/pruefsteine/README.md",
+          "stelle": "Abschnitt „Inhalt und Rechte“"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Zeile 5"
+        }
+      ],
+      "kurz": "LICENSE-CONTENT: Geltungsbereich profile/, evaluation/, docs/; Ausgaben ohne Namensnennung; Ausnahmen; Namensnennung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-56",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "LICENSE-CONTENT",
+          "stelle": "Präambel"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "$id, description"
+        }
+      ],
+      "kurz": "Zusätzlich CC0 1.0 für maschinenlesbare Dateien und die Vorlage; Darstellungsdateien nur CC BY 4.0.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-57",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "erster Absatz"
+        },
+        {
+          "datei": "profile/lead-beispiel/CHANGELOG.md",
+          "stelle": "Erstfassung (07b9f29)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "erster Absatz nach Fassungszeile"
+        }
+      ],
+      "kurz": "Herkunftsvermerk: alle Inhalte im privaten Forschungsvorhaben entstanden.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-58",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Beispielmanifest und Änderungsverlauf 1.17"
+        },
+        {
+          "datei": "profile/muster/profil.json",
+          "stelle": "herausgeber, lizenz"
+        }
+      ],
+      "kurz": "PROFILFORMAT: Felder herausgeber und lizenz beschrieben; Beispiel ohne CC-Lizenz.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-59",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "CITATION.cff",
+          "stelle": "license"
+        },
+        {
+          "datei": "README.md",
+          "stelle": "Abschnitt „Lizenz“"
+        }
+      ],
+      "kurz": "Einheitlicher Kurzsatz zu den Lizenzen; CITATION.cff mit beiden Lizenzen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
+    },
+    {
+      "id": "KP-2026-W43-60",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_lizenzen_2026-W43.json",
+      "commit": "3b0cc68a1d42c83bafe53aefb8cb4bbbac8023ec",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/muster/profil.json",
+          "stelle": "name, version, anweisungen"
+        }
+      ],
+      "kurz": "Musterprofil zur Vorlage mit Gerüst und Platzhaltern umgebaut, CC0 1.0; Verdichtung und Kurzfassung als Standardfassung der App.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 58
     }
   ]
 }

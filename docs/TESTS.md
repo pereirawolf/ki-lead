@@ -38,7 +38,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | Ordner | Gegenstand |
 |---|---|
 | `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
-| `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Arbeitsanweisungen und Dokumentation gegen das Profil (Konsistenzprüfungen), Profilansicht, private Profile |
+| `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Arbeitsanweisungen und Dokumentation gegen das Profil (Konsistenzprüfungen), Profilansicht, Vorlage gegen das Beispielprofil, private Profile |
 | `tests/pipeline/` | Einstellungen und Vorgaben, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich und Mehrfachvergleich mit Krippendorffs Alpha |
 | `tests/anbieter/` | SSE-Leser, Adapter für Anthropic, OpenAI und Mistral, gemeinsamer Vertrag aller Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
@@ -49,7 +49,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |
-| `tests/lizenzen/` | Drittkomponenten: Lizenzen der Laufzeitpakete nach `package-lock.json` gegen die Positivliste, Vollständigkeit von THIRD-PARTY-NOTICES.md, native Versionen, Lizenzdateien im Build, SBOM in der CI |
+| `tests/lizenzen/` | Drittkomponenten: Lizenzen der Laufzeitpakete nach `package-lock.json` gegen die Positivliste, Vollständigkeit von THIRD-PARTY-NOTICES.md, native Versionen, Lizenzdateien im Build, SBOM in der CI; Inhalte: Geltungsbereich in `LICENSE-CONTENT`, CC0-Widmung, Kurzsatz in den Dokumenten, Lizenzangaben der Profile |
 | `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Einstellungen (Bereiche mit Tastatur und auf dem Smartphone) und Offline-Start der PWA im echten Browser |
 | `tests/ci/` | Prüfumfang der gestaffelten Prüfung (`scripts/pruefumfang.mjs`) mit Wächtern gegen veraltete Pfadlisten |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |

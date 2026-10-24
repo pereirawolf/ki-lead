@@ -58,8 +58,10 @@ describe("Anzeigetitel und Versions-Tags", () => {
     for (const g of gruppen.slice(1))
       if (g.sops.some((s) => !istInhaltsgeruest(s))) expect(gruppenHinweis(g.sops), g.titel).toBeUndefined();
       else expect(gruppenHinweis(g.sops), g.titel).toMatch(/^Inhaltsgerüste/);
+    // Vorlage (seit Profil 0.5.0, KP-2026-W43-60): eine Dach-SOP als Inhaltsgerüst; ein Paket ohne SOP zeigt „keine“
     const { profil: m } = await profil("muster");
-    expect(sopAnzahl(m!)).toBe("keine");
+    expect(sopAnzahl(m!)).toBe("1 SOP, davon 1 Inhaltsgerüst");
+    expect(sopAnzahl({ ...m!, sops: [] })).toBe("keine");
   });
 });
 
@@ -92,10 +94,11 @@ describe("Lesedokumente", () => {
 
   it("Musterprofil: nur vorhandene Dateien; ein Paket ohne Zusatzdokumentation bleibt gültig", async () => {
     const { profil: m } = await profil("muster");
-    expect(lesedokumente(m!).map((d) => d.pfad)).toEqual(["CHANGELOG.md"]);
-    const ohne = { ...m!, dateien: Object.fromEntries(Object.entries(m!.dateien).filter(([k]) => k !== "CHANGELOG.md")) };
+    // Vorlage (seit Profil 0.5.0, KP-2026-W43-60): Beschreibung und Änderungsverlauf, keine SOP-Übersicht
+    expect(lesedokumente(m!).map((d) => d.pfad)).toEqual(["README.md", "CHANGELOG.md"]);
+    const ohne = { ...m!, dateien: Object.fromEntries(Object.entries(m!.dateien).filter(([k]) => k !== "CHANGELOG.md" && k !== "README.md")) };
     expect(lesedokumente(ohne)).toEqual([]);
-    const mitReadme = { ...m!, dateien: { ...m!.dateien, "README.md": "# Muster" } };
+    const mitReadme = { ...ohne, dateien: { ...ohne.dateien, "README.md": "# Muster" } };
     expect(lesedokumente(mitReadme).map((d) => d.titel)).toContain("Beschreibung");
   });
 });
@@ -129,10 +132,10 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
     const { profil: m } = await profil("muster");
     const doks = arbeitsgrundlagen(m!);
     expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
-      ["erfassung", "paket", "0.4"],
+      ["erfassung", "paket", "0.5"],
       ["verdichtung", "app", undefined],
       ["kurzfassung", "app", undefined],
-      ["kodierleitfaden", "paket", "0.4"],
+      ["kodierleitfaden", "paket", "0.5"],
     ]);
     expect(doks[1].text).toBe(VERDICHTUNG_S2);
     expect(doks[2].text).toBe(STANDARD_ANWEISUNG);
