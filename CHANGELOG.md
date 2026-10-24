@@ -53,7 +53,35 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
 | 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ (Nachtrag vom 24.10.2026: gestaffelte Prüfung und schnellere Tests, ohne Änderung der App) |
 | 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
-| 0.5.6 | letzter Commit des Pull Requests „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich; acht weitere fiktive Bewertungsfälle; jeweils ohne Änderung der App) |
+| 0.5.6 | letzter Commit von Pull Request #53 „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
+| 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
+
+## [0.5.7] – 24.10.2026
+
+Grundlage: erster echter Lauf mit Mistral in der App (Laufprotokoll 20261024-195614-kyc1, Verdichtung Ilka über den globalen Endpunkt), vom Herausgeber am 24.10.2026 zur Prüfung übergeben. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel.
+
+**Nachtrag vom 24.10.2026 (Befunde LS-2026-W43-06 bis -13 der Lernschleife, ohne Änderung der App):**
+
+- **Acht weitere fiktive Bewertungsfälle** unter `evaluation/faelle/` mit Material unter `evaluation/material/` für bis dahin nur einmal abgedeckte SOPs und Bausteine: `sop-cyber-schutzabschaltung-kreis` (B15, C11, C17; LS-2026-W43-06), `sop-grossunfall-bahn-ursache-offen` (B17, C05, B16, C13, C16; -07), `sop-waldbrand-nachlauf-rueckkehr` (B03, C16; -08), `sop-migration-zuweisung-kapazitaet` (B13, C16; -09), `sop-erdbeben-inland-nachlauf` (B04, C02, C16; -10), `sop-tierseuche-grenznah-ausland` (B11, C08, C14; -11) sowie die Abwandlungen `sop-weltraumwetter-warnung-unbestaetigt` (Belegqualität; -12) und `sop-vulkanasche-transport-zeitluecke` (Zeitstand; -13). Alle mit erwarteten Radarwerten (`erwartungen.radar`); Streuung über Referenzraum, Schwierigkeit und Phase.
+- Soll-Abdeckung `evaluation/plaene/2026-10-21-sop-abdeckung.json` fortgeschrieben (Stand 24.10.2026, 48 Fälle); C01 bleibt bei einem Fall. Die Fälle sind nicht Teil von Bewertungsplan 1; keine KI-Läufe.
+- Dokument: [evaluation/faelle/README.md](evaluation/faelle/README.md).
+
+### Korrigiert
+
+Der Lauf (Verdichtung Ilka, globaler Endpunkt) scheiterte in S2 mit „Die Anfrage wurde von Mistral abgelehnt ([object Object],…)“; S1 mit `mistral-small-2603` lief durch.
+
+- **Fehlermeldung lesbar:** Mistral liefert bei HTTP 422 eine Liste von Prüffehlern statt eines Textes. Die App nennt sie jetzt mit Ort und Text (z. B. „completion_args.reasoning_effort: …“) statt „[object Object]“ (`fehlerTextAus`).
+- **Nachdenken nur mit dokumentierten Werten:** S1 („hoch“ → `high`) wurde angenommen, S2 („mittel“ → `medium`) abgelehnt; einziger Unterschied der beiden Anfragen außer dem Schema. Mistral dokumentiert für Small 4, Medium 3.5 und Large 4 nur `high` und `none`. Die App sendet deshalb nur diese beiden Werte. Der Rückfall bei Ablehnung prüft jetzt die ganze Fehlerantwort statt nur des Textes (vorher griff er wegen der Liste nicht) und wiederholt einmal ohne Angabe; das Laufprotokoll nennt dann `reasoning_effort_abgelehnt`. Ob `medium` die Ursache war, bestätigt erst die lesbare Meldung eines weiteren Laufs.
+- **Laufprotokoll kompakt:** Statt jedes Stücks des Antwortstroms einzeln (1 364 Einträge in S1) stehen dort zusammengefasste Blöcke für Nachdenken und Text, Fundstellen, Werkzeugereignisse und der Abschluss mit `usage`; bei Chat Completions (EU) ebenso.
+
+### Hinzugefügt
+
+- **Abnahmeskript M4 mit Mistral** (`evaluation/abnahmen/m4.lauf.ts`): `KI_LEAD_ANBIETER=mistral` mit `KI_LEAD_MISTRAL_KEY` setzt das Standard-Profil Mistral (S1 Small 4, S2 Medium 3.5, Reparatur Small 4), Endpunkt EU oder mit `KI_LEAD_MISTRAL_ENDPUNKT=global` global. Die Reihendatei `ki-lead-abnahme/1` enthält je Lauf zusätzlich Kurzantwort und Entwurf, damit sie allein inhaltlich auswertbar ist.
+- **Mistral-Probe erweitert:** Rohaufrufe aller Werte von `reasoning_effort` je Modell an beiden Endpunkten (mit dem Fehlertext von Mistral bei Ablehnung) und Nachstellung der gescheiterten S2-Anfrage (Medium 3.5, Aufwand „mittel“, 128 000 Ausgabetoken).
+
+### Tests
+
+- `tests/anbieter/mistral.test.ts` (+2, angepasst): Abbildung der Stufen auf `none`/`high`, 422 mit Liste in `message` lesbar, Rückfall ohne Angabe bei Ablehnung im Ort der Prüffehler, kein weiterer Rückfall ohne Angabe, zusammengefasstes Laufprotokoll für beide Endpunkte.
 
 ## [0.5.6] – 24.10.2026
 
@@ -68,12 +96,6 @@ Grundlage: Auftrag des Herausgebers vom 24.10.2026, Mistral als dritte Möglichk
 - **Anleitung** (LS-2026-W43-05): Prüfliste „Neuen fiktiven Fall anlegen“ in [evaluation/faelle/README.md](evaluation/faelle/README.md).
 - Tests: `tests/evaluation/schemata.test.ts` (+7): Radarerwartung je Achse (Spanne oder offen, Grund, d1–d8, Wertebereich), min ≤ max in allen Fällen, Pilotfall; Abwandlung nur mit Ausgangsfall, Verweis auf vorhandenen anderen Fall; Bewertungsplan gegen Schema, bekannte Formate unter `plaene/`, Verweise auf vorhandene Fälle (auch in der Abdeckungsdatei). `tests/pipeline/vergleich.test.ts` (+11): Alpha mit von Hand gerechnetem und unabhängig abgeglichenem Soll, Fälle ohne Aussage; Kennzahlen je Achse, Erwartung, Zuordnung mehrerer Sachverhalte.
 - Dokumente: [evaluation/README.md](evaluation/README.md), [evaluation/faelle/README.md](evaluation/faelle/README.md), [docs/TESTS.md](docs/TESTS.md).
-
-**Nachtrag vom 24.10.2026 (Befunde LS-2026-W43-06 bis -13 der Lernschleife, ohne Änderung der App):**
-
-- **Acht weitere fiktive Bewertungsfälle** unter `evaluation/faelle/` mit Material unter `evaluation/material/` für bis dahin nur einmal abgedeckte SOPs und Bausteine: `sop-cyber-schutzabschaltung-kreis` (B15, C11, C17; LS-2026-W43-06), `sop-grossunfall-bahn-ursache-offen` (B17, C05, B16, C13, C16; -07), `sop-waldbrand-nachlauf-rueckkehr` (B03, C16; -08), `sop-migration-zuweisung-kapazitaet` (B13, C16; -09), `sop-erdbeben-inland-nachlauf` (B04, C02, C16; -10), `sop-tierseuche-grenznah-ausland` (B11, C08, C14; -11) sowie die Abwandlungen `sop-weltraumwetter-warnung-unbestaetigt` (Belegqualität; -12) und `sop-vulkanasche-transport-zeitluecke` (Zeitstand; -13). Alle mit erwarteten Radarwerten (`erwartungen.radar`); Streuung über Referenzraum, Schwierigkeit und Phase.
-- Soll-Abdeckung `evaluation/plaene/2026-10-21-sop-abdeckung.json` fortgeschrieben (Stand 24.10.2026, 48 Fälle); C01 bleibt bei einem Fall. Die Fälle sind nicht Teil von Bewertungsplan 1; keine KI-Läufe.
-- Dokument: [evaluation/faelle/README.md](evaluation/faelle/README.md).
 
 ### Hinzugefügt
 
