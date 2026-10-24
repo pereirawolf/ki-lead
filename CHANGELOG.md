@@ -53,11 +53,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.3 | letzter Commit des Pull Requests „Farbschemata: gleiche Hintergrundfarbe ober- und unterhalb des Identitätsbands; 0.5.3“ (Nachträge vom 23.10.2026: App-Symbole festgeschrieben, Favicon im Browser ergänzt, Python-Skript und Android-Vorlagentests entfernt; vom 24.10.2026: Grundlagendokumente zu Datenschutz, Sicherheit, KI-Verordnung und Barrierefreiheit, ohne Änderung der App) |
 | 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ (Nachtrag vom 24.10.2026: gestaffelte Prüfung und schnellere Tests, ohne Änderung der App) |
 | 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
-| 0.5.6 | letzter Commit des Pull Requests „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ |
+| 0.5.6 | letzter Commit des Pull Requests „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
 
 ## [0.5.6] – 24.10.2026
 
 Grundlage: Auftrag des Herausgebers vom 24.10.2026, Mistral als dritte Möglichkeit der API-Einbindung aufzunehmen, mit dem EU-Endpunkt als Vorgabe, und der Vorschlag zur Neustrukturierung der Einstellungen vom selben Tag (begutachtet; Abweichungen in der Beschreibung des Pull Requests). Schnittstelle von Mistral nach Doku und Typdefinitionen des SDK `@mistralai/mistralai` 3.2.0 vom 24.10.2026; **nicht mit einem echten Schlüssel geprüft**; dafür gibt es die Mistral-Probe ([Spezifikation](docs/SPEZIFIKATION.md), offener Punkt 15). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel; keine neue Abhängigkeit.
+
+**Nachtrag vom 24.10.2026 (Befunde LS-2026-W43-01 bis -05 der Lernschleife, ohne Änderung der App):**
+
+- **Erwartete Radarwerte in Bewertungsfällen** (LS-2026-W43-01): `fall.schema.json` um `erwartungen.radar` ergänzt; je Achse eine fachlich vertretbare Spanne `min`–`max` oder `offen`, jeweils mit `grund`; eine fehlende Achse heißt keine Erwartung. Gilt für Fälle mit genau einem erwarteten Sachverhalt. Punktwerte sind erst nach Überarbeitung des Kodierleitfadens vorgesehen. Pilot: `sop-gas-stabil` erwartet D2 offen.
+- **Abwandlungen** (LS-2026-W43-02): `variante_von` und `abwandlung` kennzeichnen einen Fall als gezielte Abwandlung eines vorhandenen Falls; beide Felder nur gemeinsam.
+- **Bewertungspläne** (LS-2026-W43-03): `evaluation/plaene/plan.schema.json` (`ki-lead-bewertungsplan/1`) mit Fragestellung, Fall-IDs, Varianten wie in der Bewertung, Wiederholungen und Budgetgrenze; Pläne kombinieren Fälle, ohne sie zu kopieren.
+- **Mehrfachvergleich** (LS-2026-W43-04): `vergleicheMehrere` und `krippendorffAlphaOrdinal` in `src/pipeline/vergleich.ts` für mehrere Kodierungen derselben Lage; je Achse Werte, Anzahl mit Wert und offen, Median, Spannweite, Paare mit höchstens einer Stufe Abstand, Treffer der Erwartung und Krippendorffs Alpha (ordinal) über die Sachverhalte als Einheiten, stets mit Zahl der Einheiten. Kein Gesamtscore über Achsen. Aufruf über `npm run vergleich:mehrfach -- <ordner> [--profil …] [--fall …]` (`scripts/vergleich-mehrfach.mjs`); Meldungen bleiben außerhalb des Repositorys. Keine Oberfläche in der App.
+- **Anleitung** (LS-2026-W43-05): Prüfliste „Neuen fiktiven Fall anlegen“ in [evaluation/faelle/README.md](evaluation/faelle/README.md).
+- Tests: `tests/evaluation/schemata.test.ts` (+7): Radarerwartung je Achse (Spanne oder offen, Grund, d1–d8, Wertebereich), min ≤ max in allen Fällen, Pilotfall; Abwandlung nur mit Ausgangsfall, Verweis auf vorhandenen anderen Fall; Bewertungsplan gegen Schema, bekannte Formate unter `plaene/`, Verweise auf vorhandene Fälle (auch in der Abdeckungsdatei). `tests/pipeline/vergleich.test.ts` (+11): Alpha mit von Hand gerechnetem und unabhängig abgeglichenem Soll, Fälle ohne Aussage; Kennzahlen je Achse, Erwartung, Zuordnung mehrerer Sachverhalte.
+- Dokumente: [evaluation/README.md](evaluation/README.md), [evaluation/faelle/README.md](evaluation/faelle/README.md), [docs/TESTS.md](docs/TESTS.md).
 
 ### Hinzugefügt
 

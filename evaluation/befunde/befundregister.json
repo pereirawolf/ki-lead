@@ -120,6 +120,103 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-24",
       "pr": 52
+    },
+    {
+      "id": "LS-2026-W43-01",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties.erwartungen"
+        },
+        {
+          "datei": "evaluation/faelle/sop-gas-stabil.json",
+          "stelle": "erwartungen.muss[1]"
+        }
+      ],
+      "kurz": "Erwartete Radarwerte in Bewertungsfällen je Achse als Spanne oder offen, mit Grund; Pilot sop-gas-stabil.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 55
+    },
+    {
+      "id": "LS-2026-W43-02",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "additionalProperties (oberste Ebene)"
+        },
+        {
+          "datei": "evaluation/faelle/README.md",
+          "stelle": "Absatz zu sop-*.json"
+        }
+      ],
+      "kurz": "Abwandlungen eines Falls mit variante_von und abwandlung kennzeichnen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 55
+    },
+    {
+      "id": "LS-2026-W43-03",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/README.md",
+          "stelle": "Ablauf einer Bewertung, Schritt 1"
+        },
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "format"
+        }
+      ],
+      "kurz": "Schema für Bewertungspläne, die vorhandene Fälle zu Testsets kombinieren.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 55
+    },
+    {
+      "id": "LS-2026-W43-04",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleich.ts",
+          "stelle": "Dateikopf und export function vergleiche(ki, ref, …)"
+        }
+      ],
+      "kurz": "Mehrfachvergleich mehrerer Kodierungen je Achse mit Krippendorffs Alpha (ordinal), Kommandozeilenskript.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 55
+    },
+    {
+      "id": "LS-2026-W43-05",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W43.json",
+      "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/README.md",
+          "stelle": "gesamte Datei"
+        }
+      ],
+      "kurz": "Prüfliste zum Anlegen neuer fiktiver Fälle.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 55
     }
   ]
 }
