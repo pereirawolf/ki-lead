@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/evaluation/plaene/plan.schema.json",
+  "title": "Bewertungsplan KI-LEAD",
+  "description": "Vor dem ersten Lauf festgelegte Auswahl von Fällen mit Varianten, Wiederholungen und Budgetgrenze. Ein Plan verweist auf Fälle unter evaluation/faelle/ und kopiert sie nicht; er ist kein Ergebnis.",
+  "type": "object",
+  "required": ["format", "id", "stand", "fragestellung", "faelle"],
+  "additionalProperties": false,
+  "properties": {
+    "format": { "const": "ki-lead-bewertungsplan/1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "stand": { "type": "string", "format": "date" },
+    "fragestellung": { "type": "string", "minLength": 1 },
+    "faelle": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "description": "IDs der Fälle unter evaluation/faelle/"
+    },
+    "varianten": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kennung"],
+        "additionalProperties": false,
+        "properties": {
+          "kennung": { "type": "string", "minLength": 1 },
+          "s1": { "$ref": "#/$defs/stufe" },
+          "s2": { "$ref": "#/$defs/stufe" },
+          "material": { "enum": ["ohne", "pdf", "eingaenge"] }
+        }
+      }
+    },
+    "wiederholungen": { "type": "integer", "minimum": 1 },
+    "budget_usd": { "type": "number", "minimum": 0 },
+    "hinweis": { "type": "string" }
+  },
+  "$defs": {
+    "stufe": {
+      "type": "object",
+      "required": ["modell", "aufwand"],
+      "additionalProperties": false,
+      "properties": {
+        "modell": { "type": "string", "minLength": 1 },
+        "aufwand": { "enum": ["low", "medium", "high", "xhigh", "max"] }
+      }
+    }
+  }
+}

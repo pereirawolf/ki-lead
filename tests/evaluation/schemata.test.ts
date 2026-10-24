@@ -16,7 +16,11 @@ function pruefer() {
   // Nur die verwendeten Formate, ohne zusätzliche Abhängigkeit
   ajv.addFormat("date", /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/);
   ajv.addFormat("uri", /^https?:\/\/\S+$/);
-  return { fall: ajv.compile(lies("evaluation/faelle/fall.schema.json")), bewertung: ajv.compile(lies("evaluation/bewertungsschema.json")) };
+  return {
+    fall: ajv.compile(lies("evaluation/faelle/fall.schema.json")),
+    bewertung: ajv.compile(lies("evaluation/bewertungsschema.json")),
+    plan: ajv.compile(lies("evaluation/plaene/plan.schema.json")),
+  };
 }
 
 /** Vollständige, gültige Bewertung als Ausgangspunkt für Abwandlungen */
@@ -46,6 +50,113 @@ describe("Modellbewertung: Schemata", () => {
       expect(name).toBe(`${f.id}.json`);
       for (const m of f.material) if (m.datei) expect(existsSync(repoPfad(m.datei)), `${name}: ${m.datei}`).toBe(true);
       if (f.material.some((m: any) => m.datei)) expect(f.fiktiv, `${name}: Material im Repository nur bei fiktiven Fällen`).toBe(true);
+    }
+  });
+
+  // Befunde LS-2026-W43-01 bis -03 (Lernschleife, 24.10.2026): Radarerwartungen, Abwandlungen, Bewertungspläne
+  /** Kleinster gültiger Fall als Ausgangspunkt für Abwandlungen */
+  const fallMinimal = () => ({
+    format: "ki-lead-evaluationsfall/1",
+    id: "beispiel-fall",
+    titel: "Beispiel (FIKTIV)",
+    stand: "2026-10-24",
+    fiktiv: true,
+    auftrag: { sachverhalt: "Beispiel" },
+    material: [],
+    erwartungen: { muss: ["Beispiel"] },
+  });
+
+  it("LS-2026-W43-01: erwartete Radarwerte sind je Achse offen oder eine Spanne mit Grund", () => {
+    const { fall } = pruefer();
+    const mit = (radar: any) => ({ ...fallMinimal(), erwartungen: { muss: ["Beispiel"], radar } });
+    expect(fall(mit({ d2: { offen: true, grund: "x" }, d5: { min: 2, max: 3, grund: "y" } })), JSON.stringify(fall.errors)).toBe(true);
+    const falsch: [string, any][] = [
+      ["Achse d9", { d9: { min: 1, max: 1, grund: "x" } }],
+      ["ohne Grund", { d1: { min: 1, max: 2 } }],
+      ["offen und Spanne zugleich", { d1: { offen: true, min: 1, max: 2, grund: "x" } }],
+      ["nur min", { d1: { min: 1, grund: "x" } }],
+      ["Wert 7", { d1: { min: 5, max: 7, grund: "x" } }],
+      ["gebrochener Wert", { d1: { min: 1.5, max: 2, grund: "x" } }],
+      ["offen false", { d1: { offen: false, grund: "x" } }],
+      ["leeres Objekt", {}],
+    ];
+    for (const [name, radar] of falsch) expect(fall(mit(radar)), name).toBe(false);
+  });
+
+  it("LS-2026-W43-01: in allen Fällen gilt min ≤ max", () => {
+    for (const name of jsonIn("evaluation/faelle")) {
+      const radar = lies(`evaluation/faelle/${name}`).erwartungen.radar || {};
+      for (const [achse, w] of Object.entries<any>(radar)) if (!w.offen) expect(w.min <= w.max, `${name}: ${achse}`).toBe(true);
+    }
+  });
+
+  it("LS-2026-W43-01: der Pilotfall erwartet D2 offen", () => {
+    expect(lies("evaluation/faelle/sop-gas-stabil.json").erwartungen.radar).toEqual({
+      d2: { offen: true, grund: "Keine einschlägige Grundgesamtheit direkt betroffener Personen im Material." },
+    });
+  });
+
+  it("LS-2026-W43-02: Abwandlung und Ausgangsfall stehen nur gemeinsam", () => {
+    const { fall } = pruefer();
+    expect(fall({ ...fallMinimal(), variante_von: "sop-gas-stabil", abwandlung: "Speicherstand 40 statt 60 Prozent" }), JSON.stringify(fall.errors)).toBe(true);
+    expect(fall({ ...fallMinimal(), variante_von: "sop-gas-stabil" }), "ohne abwandlung").toBe(false);
+    expect(fall({ ...fallMinimal(), abwandlung: "x" }), "ohne variante_von").toBe(false);
+    expect(fall({ ...fallMinimal(), variante_von: "Sop Gas", abwandlung: "x" }), "ID-Muster").toBe(false);
+  });
+
+  it("LS-2026-W43-02: Abwandlungen verweisen auf einen anderen vorhandenen Fall", () => {
+    const ids = new Set(jsonIn("evaluation/faelle").map((n) => n.replace(/\.json$/, "")));
+    for (const name of jsonIn("evaluation/faelle")) {
+      const f = lies(`evaluation/faelle/${name}`);
+      if (!f.variante_von) continue;
+      expect(f.variante_von, `${name}: verweist auf sich selbst`).not.toBe(f.id);
+      expect(ids.has(f.variante_von), `${name}: Ausgangsfall ${f.variante_von} fehlt`).toBe(true);
+    }
+  });
+
+  it("LS-2026-W43-03: der Bewertungsplan verlangt Fragestellung und Fälle; Varianten wie in der Bewertung", () => {
+    const { plan } = pruefer();
+    const beispiel = () => ({
+      format: "ki-lead-bewertungsplan/1",
+      id: "gas-abwandlungen",
+      stand: "2026-10-24",
+      fragestellung: "Erkennen die Varianten offene Achsen?",
+      faelle: ["sop-gas-stabil", "sop-gas-geschuetzt"],
+      varianten: [
+        { kennung: "A", s1: { modell: "claude-haiku-5-5", aufwand: "high" }, s2: { modell: "claude-opus-5-5", aufwand: "medium" }, material: "ohne" },
+      ],
+      wiederholungen: 2,
+      budget_usd: 5,
+    });
+    expect(plan(beispiel()), JSON.stringify(plan.errors)).toBe(true);
+    const falsch: [string, (p: any) => void][] = [
+      ["ohne Fragestellung", (p) => delete p.fragestellung],
+      ["keine Fälle", (p) => (p.faelle = [])],
+      ["Fall doppelt", (p) => (p.faelle = ["sop-gas-stabil", "sop-gas-stabil"])],
+      ["Aufwand unbekannt", (p) => (p.varianten[0].s1.aufwand = "extrem")],
+      ["Wiederholungen 0", (p) => (p.wiederholungen = 0)],
+      ["Budget negativ", (p) => (p.budget_usd = -1)],
+      ["unbekanntes Feld", (p) => (p.ergebnis = "gut")],
+    ];
+    for (const [name, aendern] of falsch) {
+      const p = beispiel();
+      aendern(p);
+      expect(plan(p), name).toBe(false);
+    }
+  });
+
+  it("LS-2026-W43-03: Pläne haben ein bekanntes Format, Bewertungspläne verweisen nur auf vorhandene Fälle", () => {
+    const { plan } = pruefer();
+    const ids = new Set(jsonIn("evaluation/faelle").map((n) => n.replace(/\.json$/, "")));
+    for (const name of jsonIn("evaluation/plaene")) {
+      const p = lies(`evaluation/plaene/${name}`);
+      expect(["ki-lead-bewertungsplan/1", "ki-lead-sop-abdeckung/1"], `${name}: Format`).toContain(p.format);
+      const verweise = p.format === "ki-lead-bewertungsplan/1" ? p.faelle : Object.keys(p.faelle);
+      if (p.format === "ki-lead-bewertungsplan/1") {
+        expect(plan(p), `${name}: ${JSON.stringify(plan.errors)}`).toBe(true);
+        expect(name).toBe(`${p.id}.json`);
+      }
+      for (const id of verweise) expect(ids.has(id), `${name}: Fall ${id} fehlt`).toBe(true);
     }
   });
 

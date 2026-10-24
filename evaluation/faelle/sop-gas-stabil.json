@@ -36,6 +36,12 @@
     "referenzraum": "Bund",
     "ereignisarten": [
       "Gasversorgungsengpass"
-    ]
+    ],
+    "radar": {
+      "d2": {
+        "offen": true,
+        "grund": "Keine einschlägige Grundgesamtheit direkt betroffener Personen im Material."
+      }
+    }
   }
 }
