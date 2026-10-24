@@ -7,12 +7,11 @@ import { writeFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { jsPDF } from "jspdf";
 import { MISTRAL_EU_URL, MistralAnbieter, type MistralEndpunkt } from "../../src/anbieter/mistral";
-import type { Aufwand, LlmAnfrage, LlmAntwort } from "../../src/anbieter/typen";
+import type { LlmAnfrage, LlmAntwort } from "../../src/anbieter/typen";
 import { MODELL_GRUPPEN } from "../../src/pipeline/einstellungen";
 
 const SCHLUESSEL = process.env.MISTRAL_API_KEY?.trim() || "";
 const MODELLE = MODELL_GRUPPEN.find((g) => g.anbieter === "Mistral")!.modelle;
-const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh"];
 
 test.skip(!SCHLUESSEL, "Kein MISTRAL_API_KEY gesetzt; die Probe ruft Mistral nur mit einem Testschlüssel auf.");
 
@@ -89,21 +88,49 @@ test("Modelle an beiden Endpunkten", async () => {
   expect(fehlend, "Modelle der App, die am Endpunkt fehlen").toEqual([]);
 });
 
-test("Stufen des Nachdenkens je Modell (EU)", async () => {
-  zeile(`\n## Nachdenken (EU, reasoning_effort angefragt → wirksam)\n`);
-  const fehler: string[] = [];
-  for (const modell of MODELLE) {
-    const teile: string[] = [];
-    for (const aufwand of STUFEN) {
-      try {
-        const r = await senden("eu", { modell, aufwand, maxTokens: 1500 });
-        teile.push(`${aufwand} → ${r.inhalt[0]?.reasoning_effort}`);
-      } catch (e) {
-        teile.push(`${aufwand} → Fehler (${kurz(e)})`);
-        fehler.push(`${modell}/${aufwand}`);
+test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide Endpunkte, ohne die App)", async () => {
+  // Rohaufrufe, damit jede Ablehnung mit dem Text von Mistral sichtbar wird (Lauf 20261024-195614-kyc1: 422 in S2)
+  zeile(`\n## Nachdenken (reasoning_effort, Rohaufruf; ✓ angenommen, ✗ abgelehnt)\n`);
+  const pflichtFehler: string[] = [];
+  const ziele: [string, string, (m: string, e: string) => object][] = [
+    ["EU", MISTRAL_EU_URL, (m, e) => ({ model: m, max_tokens: 400, reasoning_effort: e, messages: [{ role: "user", content: "Sag nur: ok" }] })],
+    [
+      "Global",
+      "https://api.mistral.ai/v1/conversations",
+      (m, e) => ({ model: m, store: false, inputs: "Sag nur: ok", completion_args: { max_tokens: 400, reasoning_effort: e } }),
+    ],
+  ];
+  for (const [name, url, koerper] of ziele) {
+    for (const modell of MODELLE) {
+      const teile: string[] = [];
+      for (const wert of ["none", "low", "medium", "high", "xhigh"]) {
+        const r = await fetch(url, {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${SCHLUESSEL}` },
+          body: JSON.stringify(koerper(modell, wert)),
+        });
+        const text = r.ok ? "" : (await r.text()).slice(0, 200).replace(/\s+/g, " ");
+        teile.push(r.ok ? `${wert} ✓` : `${wert} ✗ (HTTP ${r.status}: ${text})`);
+        if (!r.ok && (wert === "high" || wert === "none")) pflichtFehler.push(`${name}/${modell}/${wert}`);
       }
+      zeile(`- ${name} ${modell}: ${teile.join(" · ")}`);
     }
-    zeile(`- ${modell}: ${teile.join(" · ")}`);
+  }
+  // Die App sendet nur „none“ und „high“; beide müssen angenommen werden
+  expect(pflichtFehler).toEqual([]);
+});
+
+test("Anfrage wie S2 im Lauf 20261024-195614-kyc1: Medium 3.5, Aufwand „mittel“, 128 000 Ausgabetoken (beide Endpunkte)", async () => {
+  zeile(`\n## Anfrage wie S2 im gescheiterten Lauf (über die App)\n`);
+  const fehler: string[] = [];
+  for (const endpunkt of ["eu", "global"] as const) {
+    try {
+      const r = await senden(endpunkt, { modell: "mistral-medium-3-5", aufwand: "medium", maxTokens: 128000 });
+      zeile(`- ${endpunkt}: ok, wirksam ${JSON.stringify(r.inhalt[0])}`);
+    } catch (e) {
+      zeile(`- ${endpunkt}: Fehler (${kurz(e)})`);
+      fehler.push(endpunkt);
+    }
   }
   expect(fehler).toEqual([]);
 });
