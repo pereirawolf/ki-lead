@@ -11,7 +11,9 @@ import {
   ANZAHL_MAX,
   ANZAHL_VORGABE,
   anzahlBegrenzt,
+  einstellungenFuerVariante,
   fehlendeFalldateien,
+  PLAN_STANDARDPROFILE,
   reiheZip,
   uebersichtZeilen,
   vergleichsreihe,
@@ -163,11 +165,11 @@ describe("Vergleichslauf Ilka", () => {
     expect(lauf.format).toBe("ki-lead-lauf/1");
     const csvText = (await zip.file("uebersicht.csv")!.async("string")).replace(/^﻿/, "");
     const zeilen = csvText.trim().split("\r\n");
-    expect(zeilen[0].split(";").slice(0, 3)).toEqual(["lauf", "status", "technisch_bestanden"]);
+    expect(zeilen[0].split(";").slice(0, 4)).toEqual(["lauf", "variante", "status", "technisch_bestanden"]);
     // Redaktionsfassung als Entwurf: je Lauf so viele Zeilen wie Sachverhalte der Redaktionsfassung
     const svRef = JSON.parse(d.dateien[REFERENZ]).sachverhalte.length;
     expect(zeilen).toHaveLength(1 + 2 * svRef);
-    expect(zeilen[1].startsWith(`${ids[0]};fertig;ja;mistral-small-2603;`)).toBe(true);
+    expect(zeilen[1].startsWith(`${ids[0]};;fertig;ja;mistral-small-2603;`)).toBe(true);
     expect(uebersichtZeilen(reihe, ergebnisse)[0]).toContain("d8");
     expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
   });
@@ -196,5 +198,60 @@ describe("Vergleichslauf Ilka", () => {
     });
     expect(ergebnisse).toHaveLength(2);
     expect(reihe.beendet).toBe("Budgetgrenze 0.03 USD erreicht");
+  });
+
+  it("AV-2026-W43-11: Kennzahlen und Plausibilität je Lauf; mit der Redaktionsfassung als Entwurf ohne Abweichung", async () => {
+    const d = await daten();
+    const ref = JSON.parse(d.dateien[REFERENZ]);
+    const { ergebnisse } = await vergleichsreihe({ daten: d, anbieter: attrappe(ref), einstellungen: MISTRAL, anzahl: 1 });
+    // Soll aus der Redaktionsfassung selbst
+    const svs = ref.sachverhalte as any[];
+    const werte = svs.flatMap((sv) => Object.values(sv.sofort.lagenradar));
+    expect(ergebnisse[0].eintrag.kennzahlen).toEqual({
+      sachverhalte: svs.length,
+      achsen_gesetzt: Math.round((werte.filter((w) => w !== null).length / werte.length) * 1000) / 1000,
+      tendenz_gesetzt: Math.round((svs.filter((sv) => sv.sofort.tendenz).length / svs.length) * 1000) / 1000,
+      beurteilung_gleich: 1,
+      tendenz_gleich: 1,
+      aehnlichkeit_mittel: 1,
+      achsen_abweichung_mittel: 0,
+      achsen_nah: 1,
+      plausibilitaet_befunde: 0,
+    });
+    expect(ergebnisse[0].eintrag.plausibilitaet).toEqual([]);
+    const paar = (ergebnisse[0].eintrag.beobachtungen.vergleich as any).paare[0];
+    expect(paar.ref_index).toBe(0);
+    expect(paar.ki_radar).toEqual(svs[0].sofort.lagenradar);
+  });
+
+  it("AV-2026-W43-04: Varianten des Plans standardprofile-ilka setzen S1, S2 und die Reparatur des S2-Anbieters", async () => {
+    expect(PLAN_STANDARDPROFILE.id).toBe("standardprofile-ilka");
+    expect(PLAN_STANDARDPROFILE.wiederholungen).toBe(3);
+    expect(PLAN_STANDARDPROFILE.varianten.map((v) => v.kennung)).toEqual([
+      "A-anthropic-standard",
+      "B-anthropic-sonnet",
+      "C-openai-standard",
+      "D-openai-astra-hoch",
+      "E-mistral-standard",
+      "F-mistral-large",
+    ]);
+    const f = PLAN_STANDARDPROFILE.varianten[5];
+    const e = einstellungenFuerVariante({ ...STANDARD, mistralEndpunkt: "global" }, f);
+    expect(e.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-large-4", reparatur: "mistral-small-2603" });
+    expect(e.aufwand).toMatchObject({ vorverarbeitung: "high", verdichtung: "high", reparatur: "low" });
+    expect(e.mistralEndpunkt).toBe("global");
+    // Anthropic-Bezug: Reparatur Sonnet
+    expect(einstellungenFuerVariante(STANDARD, PLAN_STANDARDPROFILE.varianten[0]).modelle.reparatur).toBe("claude-sonnet-5-5");
+    const d = await daten();
+    const { reihe } = await vergleichsreihe({
+      daten: d,
+      anbieter: attrappe(JSON.parse(d.dateien[REFERENZ])),
+      einstellungen: e,
+      anzahl: 1,
+      variante: "standardprofile-ilka/F-mistral-large",
+    });
+    expect(reihe.variante).toBe("standardprofile-ilka/F-mistral-large");
+    expect(reihe.modelle.s2).toEqual({ modell: "mistral-large-4", aufwand: "high", anbieter: "mistral" });
+    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_F-mistral-large_mistral-large-4-high_\d{8}-\d{4}\.zip$/);
   });
 });

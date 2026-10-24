@@ -2,7 +2,7 @@
 // Vergleichslauf Ilka unter „Einstellungen → Modelle & Verarbeitung“ (seit 0.5.8): Anzeige der Konfiguration,
 // Vorgabe drei Läufe, fehlender Schlüssel, Ablauf mit Attrappe und ZIP-Datei.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import React from "react";
+import React, { act } from "react";
 import JSZip from "jszip";
 import { leseOrdner, profilPflicht, repoPfad } from "../support/dateien";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
@@ -105,5 +105,28 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
     expect(text()).toContain("3 von 3 Läufen, technisch bestanden (T1–T8): 3");
     await klick("ZIP herunterladen");
     expect(downloads.liste).toHaveLength(2);
+  });
+
+  it("AV-2026-W43-04: Variante des Plans standardprofile-ilka wählen, ohne die Einstellungen zu ändern", async () => {
+    const profil = await profilPflicht("lead-beispiel");
+    await einhaengen(React.createElement(VergleichslaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    const auswahl = document.querySelector(".vergleichslauf select") as HTMLSelectElement;
+    expect([...auswahl.options].map((o) => o.value)).toEqual([
+      "",
+      "A-anthropic-standard",
+      "B-anthropic-sonnet",
+      "C-openai-standard",
+      "D-openai-astra-hoch",
+      "E-mistral-standard",
+      "F-mistral-large",
+    ]);
+    await act(async () => {
+      auswahl.value = "F-mistral-large";
+      auswahl.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    expect(text()).toContain("S2 Verdichtung: mistral-large-4 (hoch) · Mistral");
+    expect(text()).toContain("S3 Reparatur: mistral-small-2603 (niedrig) · Mistral");
+    expect(text()).toContain("fehlt der Schlüssel für Mistral");
+    expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
   });
 });

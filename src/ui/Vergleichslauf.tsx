@@ -13,6 +13,8 @@ import {
   ANZAHL_MAX,
   ANZAHL_VORGABE,
   anzahlBegrenzt,
+  einstellungenFuerVariante,
+  PLAN_STANDARDPROFILE,
   reiheZip,
   vergleichsreihe,
   VERGLEICH_ROLLEN,
@@ -66,12 +68,15 @@ export function VergleichslaufAbschnitt({
   anbieterFuer = (s, e) => Verteiler.fuer(s, { mistralEndpunkt: e.mistralEndpunkt }),
 }: VergleichslaufProps) {
   const [anzahl, setAnzahl] = useState(ANZAHL_VORGABE);
+  /** leer: aktuelle Einstellungen; sonst Kennung einer Variante des Plans standardprofile-ilka */
+  const [variante, setVariante] = useState("");
   const [zustand, setZustand] = useState<Zustand>({ art: "bereit" });
   const abbruch = useRef<AbortController | null>(null);
   const laeuft = zustand.art === "laeuft";
   useWachhalten(laeuft);
 
-  const e = vergleichsEinstellungen(einstellungen, profil);
+  const planVariante = PLAN_STANDARDPROFILE.varianten.find((v) => v.kennung === variante);
+  const e = planVariante ? einstellungenFuerVariante(einstellungen, planVariante) : vergleichsEinstellungen(einstellungen, profil);
   const zeilen = VERGLEICH_ROLLEN.map((r) => {
     const modell = e.modelle[r] || "";
     return { r, modell, aufwand: e.aufwand[r], anbieter: modell ? anbieterVon(modell) : undefined };
@@ -101,6 +106,7 @@ export function VergleichslaufAbschnitt({
         signal: ctrl.signal,
         stand: (stand) => setZustand({ art: "laeuft", stand }),
         quelle: "app",
+        variante: planVariante ? `${PLAN_STANDARDPROFILE.id}/${planVariante.kennung}` : undefined,
       });
       const zip = await reiheZip(reihe, ergebnisse);
       const name = zipDateiname(reihe);
@@ -123,6 +129,23 @@ export function VergleichslaufAbschnitt({
         übernommen, ohne Websuche. Jeder Lauf wird mit der Redaktionsfassung verglichen. Ergebnis als ZIP mit Laufprotokollen, Entwürfen, Prüfpunkten und einer
         Übersicht (CSV), um Konfigurationen miteinander zu vergleichen.
       </p>
+      <label className="feld">
+        <span className="feld-label">Konfiguration</span>
+        <select value={variante} disabled={laeuft} onChange={(ev) => setVariante(ev.target.value)}>
+          <option value="">Aktuelle Einstellungen (Tabelle oben)</option>
+          <optgroup label={`Bewertungsplan ${PLAN_STANDARDPROFILE.id}`}>
+            {PLAN_STANDARDPROFILE.varianten.map((v) => (
+              <option key={v.kennung} value={v.kennung}>
+                {v.kennung}: S1 {v.s1.modell} ({aufwandTitel(v.s1.aufwand)}), S2 {v.s2.modell} ({aufwandTitel(v.s2.aufwand)})
+              </option>
+            ))}
+          </optgroup>
+        </select>
+        <span className="hinweis">
+          Die Varianten des Plans vergleichen die Standard-Profile mit dem Bezug Anthropic (A); die Einstellungen bleiben unverändert. Je Variante{" "}
+          {PLAN_STANDARDPROFILE.wiederholungen} Läufe mit derselben App-Version.
+        </span>
+      </label>
       <ul className="vergleichslauf-konfiguration">
         {zeilen.map((z) => (
           <li key={z.r}>
@@ -195,6 +218,7 @@ export function VergleichslaufAbschnitt({
                   <th>Kosten</th>
                   <th>Sachverhalte</th>
                   <th>T1–T8</th>
+                  <th>Plausibilität</th>
                 </tr>
               </thead>
               <tbody>
@@ -208,6 +232,7 @@ export function VergleichslaufAbschnitt({
                     <td>
                       {x.eintrag.pruefpunkte.filter((p) => p.erfuellt).length}/{x.eintrag.pruefpunkte.length}
                     </td>
+                    <td>{x.eintrag.kennzahlen.plausibilitaet_befunde}</td>
                   </tr>
                 ))}
               </tbody>

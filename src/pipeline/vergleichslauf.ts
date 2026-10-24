@@ -10,17 +10,19 @@
 
 import JSZip from "jszip";
 import FALL from "../../evaluation/faelle/orkantief-ilka-verdichtung.json";
-import type { Fortschritt, LlmAnbieter } from "../anbieter/typen";
+import PLAN from "../../evaluation/plaene/standardprofile-ilka.json";
+import type { Aufwand, Fortschritt, LlmAnbieter } from "../anbieter/typen";
 import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { migriere } from "../kern/migration";
 import type { Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { sha256 } from "../profil/laden";
-import { modellFuer, type Einstellungen, type Rolle } from "./einstellungen";
+import { modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "./einstellungen";
+import { plausibilitaetPruefen, type PlausibilitaetsBefund } from "./plausibilitaet";
 import { APP_KENNUNG, neuerLauf, ohneBase64, type Auftrag, type Lauf } from "./lauf";
 import { dateiLesen, istVerdichtung, type Material } from "./material";
 import { stufe1, stufe2und3, type Kontext } from "./stufen";
-import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus } from "./vergleich";
+import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type Vergleich } from "./vergleich";
 import { eingangsquellenPruefen, type QuellenZuordnung } from "./vermerke";
 
 export const FALL_ID: string = FALL.id;
@@ -68,6 +70,28 @@ export async function fallMaterial(d: FallDaten): Promise<Material[]> {
   const out: Material[] = [];
   for (const pfad of FALL_MATERIAL) out.push(await dateiLesen(new File([d.dateien[pfad]], pfad.split("/").pop()!), d.profil));
   return out;
+}
+
+/** Variante des Bewertungsplans evaluation/plaene/standardprofile-ilka.json (AV-2026-W43-04, -10) */
+export interface PlanVariante {
+  kennung: string;
+  s1: { modell: string; aufwand: Aufwand };
+  s2: { modell: string; aufwand: Aufwand };
+}
+
+export const PLAN_STANDARDPROFILE = { id: PLAN.id, wiederholungen: PLAN.wiederholungen, varianten: PLAN.varianten as unknown as PlanVariante[] };
+
+/**
+ * Einstellungen für eine Plan-Variante: S1 und S2 Verdichtung nach dem Plan, Reparatur nach dem Standard-Profil des
+ * S2-Anbieters (Aufwand „niedrig“); alles andere (z. B. Mistral-Endpunkt) aus den Einstellungen.
+ */
+export function einstellungenFuerVariante(e: Einstellungen, v: PlanVariante): Einstellungen {
+  const rep = STANDARD_PROFILE[anbieterVon(v.s2.modell)];
+  return {
+    ...e,
+    modelle: { ...e.modelle, vorverarbeitung: v.s1.modell, verdichtung: v.s2.modell, reparatur: rep.modelle.reparatur },
+    aufwand: { ...e.aufwand, vorverarbeitung: v.s1.aufwand, verdichtung: v.s2.aufwand, reparatur: rep.aufwand.reparatur },
+  };
 }
 
 /** Konfiguration der Reihe: wirksames Modell und Aufwand je genutzter Aufgabe */
@@ -127,6 +151,49 @@ export function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | un
   ];
 }
 
+/**
+ * Kennzahlen eines Laufs für den Vergleich von Konfigurationen (AV-2026-W43-04): Zuschnitt, Vollständigkeit und
+ * Abstand zur Redaktionsfassung. Kein Gesamtwert über die Kennzahlen.
+ */
+export interface Kennzahlen {
+  sachverhalte: number;
+  /** Anteil gesetzter Radarachsen über alle Sachverhalte (0–1) */
+  achsen_gesetzt: number | null;
+  /** Anteil der Sachverhalte mit Tendenz (0–1) */
+  tendenz_gesetzt: number | null;
+  /** Anteil gleicher Beurteilung bzw. Tendenz in den Paaren mit der Redaktionsfassung */
+  beurteilung_gleich: number | null;
+  tendenz_gleich: number | null;
+  /** mittlere Ähnlichkeit der zugeordneten Sachverhalte */
+  aehnlichkeit_mittel: number | null;
+  /** mittlerer Betrag der Abweichung je Achse, wo KI und Redaktionsfassung einen Wert haben */
+  achsen_abweichung_mittel: number | null;
+  /** Anteil dieser Achsen mit höchstens einer Stufe Abstand */
+  achsen_nah: number | null;
+  plausibilitaet_befunde: number;
+}
+
+const r3 = (x: number) => Math.round(x * 1000) / 1000;
+const anteil = (z: number, n: number) => (n > 0 ? r3(z / n) : null);
+
+export function kennzahlen(v: Vergleich | undefined, plausibilitaet: PlausibilitaetsBefund[]): Kennzahlen {
+  const ki = (v?.paare ?? []).filter((p) => p.ki).map((p) => p.ki!);
+  const werte = ki.flatMap((s) => Object.values(s.radar));
+  const gepaart = (v?.paare ?? []).filter((p) => p.ki && p.ref);
+  const diffs = gepaart.flatMap((p) => p.achsen.filter((a) => typeof a.diff === "number").map((a) => Math.abs(a.diff!)));
+  return {
+    sachverhalte: ki.length,
+    achsen_gesetzt: anteil(werte.filter((w) => w !== null).length, werte.length),
+    tendenz_gesetzt: anteil(ki.filter((s) => s.tendenz).length, ki.length),
+    beurteilung_gleich: v ? anteil(v.beurteilung.gleich, v.beurteilung.n) : null,
+    tendenz_gleich: v ? anteil(v.tendenz.gleich, v.tendenz.n) : null,
+    aehnlichkeit_mittel: gepaart.length ? r3(gepaart.reduce((a, p) => a + p.aehnlichkeit, 0) / gepaart.length) : null,
+    achsen_abweichung_mittel: diffs.length ? r3(diffs.reduce((a, b) => a + b, 0) / diffs.length) : null,
+    achsen_nah: anteil(diffs.filter((d) => d <= 1).length, diffs.length),
+    plausibilitaet_befunde: plausibilitaet.length,
+  };
+}
+
 /** Ergebnis eines einzelnen Laufs */
 export interface EinzelErgebnis {
   lauf: Lauf;
@@ -158,6 +225,9 @@ export interface ReiheEintrag {
   }[];
   kosten_usd: number | null;
   dauer_s: number;
+  /** seit 0.5.8: Kennzahlen für den Vergleich der Konfigurationen und Plausibilitätsprüfung der Zahlen */
+  kennzahlen: Kennzahlen;
+  plausibilitaet: PlausibilitaetsBefund[];
   kurzantwort: string | null;
   meldung: Meldung | null;
 }
@@ -243,6 +313,7 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
   await k.aktualisiert(lauf);
 
   const punkte = pruefpunkte(lauf, material, meldung, quellen);
+  const plausibilitaet = meldung ? plausibilitaetPruefen(meldung) : [];
   const s1 = lauf.vorschlag;
   const zugeordnet = new Set((s1?.sachverhalte ?? []).flatMap((s) => s.eingangsmeldungen ?? []));
   const eintrag: ReiheEintrag = {
@@ -264,7 +335,11 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
             paare: lauf.vergleich.ergebnis.paare.map((p) => ({
               ki: p.ki?.bezeichnung ?? null,
               ref: p.ref?.bezeichnung ?? null,
+              ref_index: p.ref?.index ?? null,
               aehnlichkeit: p.aehnlichkeit,
+              ki_beurteilung: p.ki?.beurteilung ?? null,
+              ki_tendenz: p.ki?.tendenz ?? null,
+              ki_radar: p.ki?.radar ?? null,
             })),
             beurteilung: lauf.vergleich.ergebnis.beurteilung,
             tendenz: lauf.vergleich.ergebnis.tendenz,
@@ -286,6 +361,8 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
     })),
     kosten_usd: lauf.kostenUsd,
     dauer_s: Math.round((Date.parse(lauf.aktualisiert) - Date.parse(lauf.erstellt)) / 1000),
+    kennzahlen: kennzahlen(lauf.vergleich?.ergebnis, plausibilitaet),
+    plausibilitaet,
     // Kurzantwort und Entwurf eingebettet, damit die Reihe als eine Datei inhaltlich auswertbar ist; alle Inhalte fiktiv
     kurzantwort: lauf.ergebnis?.kurzantwort ?? null,
     meldung: meldung ?? null,
@@ -299,6 +376,8 @@ export interface Reihe {
   plan: string;
   /** „app“ (Einstellungen → Vergleichslauf Ilka) oder „skript“ (evaluation/abnahmen/m4.lauf.ts) */
   quelle: "app" | "skript";
+  /** Variante eines Bewertungsplans, z. B. „standardprofile-ilka/A-anthropic-standard“ */
+  variante?: string;
   fall: string;
   erstellt: string;
   app: string;
@@ -325,6 +404,7 @@ export function reiheErstellen(o: {
   quelle: "app" | "skript";
   attrappe?: boolean;
   beendet?: string;
+  variante?: string;
 }): Reihe {
   const k = konfiguration(o.einstellungen, o.daten.profil);
   const summe = o.ergebnisse.reduce((s, e) => s + (e.lauf.kostenUsd ?? e.lauf.kostenBekanntUsd ?? 0), 0);
@@ -333,6 +413,7 @@ export function reiheErstellen(o: {
     format: "ki-lead-abnahme/1",
     plan: PLAN_M4,
     quelle: o.quelle,
+    ...(o.variante ? { variante: o.variante } : {}),
     fall: FALL_ID,
     erstellt: new Date().toISOString(),
     app: APP_KENNUNG,
@@ -360,6 +441,7 @@ export interface ReihenOptionen {
   stand?: (s: ReiheStand) => void;
   attrappe?: boolean;
   quelle?: "app" | "skript";
+  variante?: string;
 }
 
 /** Anzahl der Läufe auf 1 … ANZAHL_MAX begrenzt */
@@ -425,6 +507,7 @@ export async function vergleichsreihe(o: ReihenOptionen): Promise<{ reihe: Reihe
     quelle: o.quelle ?? "app",
     attrappe: o.attrappe,
     beendet,
+    variante: o.variante,
   });
   return { reihe, ergebnisse };
 }
@@ -449,6 +532,7 @@ export function uebersichtZeilen(reihe: Reihe, ergebnisse: EinzelErgebnis[]): un
   const RADAR = radarAchsen(ergebnisse);
   const kopf = [
     "lauf",
+    "variante",
     "status",
     "technisch_bestanden",
     "s1_modell",
@@ -463,6 +547,7 @@ export function uebersichtZeilen(reihe: Reihe, ergebnisse: EinzelErgebnis[]): un
     "s1_ausgabetoken",
     "s2_ausgabetoken",
     "kosten_usd",
+    "plausibilitaet_befunde",
     "sachverhalte",
     "sv",
     "sv_bezeichnung",
@@ -477,6 +562,7 @@ export function uebersichtZeilen(reihe: Reihe, ergebnisse: EinzelErgebnis[]): un
     const st = (p: string) => e.eintrag.stufen.find((s) => s.stufe.startsWith(p));
     const basis = [
       e.lauf.id,
+      reihe.variante ?? "",
       e.lauf.status,
       e.eintrag.technisch_bestanden ? "ja" : "nein",
       reihe.modelle.s1.modell,
@@ -491,6 +577,7 @@ export function uebersichtZeilen(reihe: Reihe, ergebnisse: EinzelErgebnis[]): un
       st("S1")?.ausgabetoken ?? null,
       st("S2")?.ausgabetoken ?? null,
       e.lauf.kostenUsd ?? e.lauf.kostenBekanntUsd ?? null,
+      e.eintrag.kennzahlen.plausibilitaet_befunde,
     ];
     const paare = (e.lauf.vergleich?.ergebnis.paare ?? []).filter((p) => p.ki);
     const svs = paare.length ? paare : [undefined];
@@ -523,7 +610,8 @@ export function zipDateiname(reihe: Reihe): string {
   const d = new Date(reihe.erstellt);
   const p = (n: number) => String(n).padStart(2, "0");
   const stempel = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
-  return `KI-LEAD_Vergleichslauf_Ilka_${kurz(`${reihe.modelle.s2.modell}-${reihe.modelle.s2.aufwand}`)}_${stempel}.zip`;
+  const variante = reihe.variante ? `${kurz(reihe.variante.split("/").pop()!)}_` : "";
+  return `KI-LEAD_Vergleichslauf_Ilka_${variante}${kurz(`${reihe.modelle.s2.modell}-${reihe.modelle.s2.aufwand}`)}_${stempel}.zip`;
 }
 
 function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
@@ -532,18 +620,20 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
     `KI-LEAD – Vergleichslauf Ilka (${FALL_TITEL})`,
     "",
     `Erstellt: ${reihe.erstellt} mit ${reihe.app}, Profil ${reihe.profil.id} ${reihe.profil.version} (${reihe.profil.hash.slice(0, 12)}…)`,
+    ...(reihe.variante ? [`Variante: ${reihe.variante}`] : []),
     `Fall: ${reihe.fall} (evaluation/faelle/${reihe.fall}.json); t0 ${FALL.auftrag.meldezeitpunkt}, ohne Websuche, S1-Vorschlag unverändert übernommen.`,
     `S1: ${m.s1.modell} (${m.s1.aufwand}) · S2 Verdichtung: ${m.s2.modell} (${m.s2.aufwand}) · Reparatur: ${m.reparatur.modell} (${m.reparatur.aufwand})` +
       (reihe.mistral_endpunkt ? ` · Mistral-Endpunkt: ${reihe.mistral_endpunkt}` : ""),
     `Läufe: ${ergebnisse.length} von ${reihe.laeufe_geplant}${reihe.beendet ? ` (${reihe.beendet})` : ""}; technisch bestanden (T1–T8): ${reihe.technisch_bestanden}; Kosten zusammen ${reihe.kosten_usd_summe} USD (Listenpreise, ohne Gewähr).`,
     "",
     "Inhalt:",
-    "- reihe.json: Reihendatei (Format ki-lead-abnahme/1) mit Prüfpunkten, Kennzahlen je Stufe, Kurzantwort und Entwurf je Lauf",
+    "- reihe.json: Reihendatei (Format ki-lead-abnahme/1) mit Prüfpunkten, Kennzahlen je Stufe und je Lauf, Plausibilitätsbefunden, Kurzantwort und Entwurf",
     "- uebersicht.csv: eine Zeile je Sachverhalt und Lauf (Semikolon, Dezimalkomma), zum Vergleich mehrerer Konfigurationen",
     "- laeufe/<lauf>.lauf.json: vollständige Laufprotokolle (ki-lead-lauf/1) mit Prompts, Rohantworten, Token, Dauer und Kosten",
     "- meldungen/<lauf>.meldung.json: Entwürfe (LEAD-Meldung-v1)",
     "- vergleiche/<lauf>.vergleich.csv: Vergleich mit der Redaktionsfassung je Sachverhalt und Achse",
     "",
+    "Vergleich mehrerer Konfigurationen im Repository: npm run vergleichslauf:auswerten -- <ZIP-Dateien> (Bezug: Standard-Profil Anthropic)",
     "Mehrfachvergleich der Entwürfe im Repository: npm run vergleich:mehrfach -- <entpackter Ordner>/meldungen --fall orkantief-ilka-verdichtung",
     "Alle Inhalte sind fiktiv. Laufprotokolle gehören nicht ins öffentliche Repository (docs/ERPROBUNG.md, Abschnitt 6).",
     "",
