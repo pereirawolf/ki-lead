@@ -3,9 +3,12 @@
 //
 //   KI_LEAD_ANTHROPIC_KEY=… KI_LEAD_LAEUFE=3 npx vitest run --config evaluation/abnahmen/vitest.config.ts
 //   KI_LEAD_OPENAI_KEY=… KI_LEAD_ANBIETER=openai KI_LEAD_LAEUFE=3 npx vitest run --config evaluation/abnahmen/vitest.config.ts
+//   KI_LEAD_MISTRAL_KEY=… KI_LEAD_ANBIETER=mistral KI_LEAD_LAEUFE=3 npx vitest run --config evaluation/abnahmen/vitest.config.ts
 //
 // Mit KI_LEAD_ANBIETER=openai gelten die OpenAI-Gegenstücke der Vorgaben: S1 gpt-6-luna, S2 gpt-6-astra,
 // Reparatur gpt-6.1-sol (Aufwand wie bei Anthropic); einzelne Modelle über KI_LEAD_MODELL_S1, _S2, _REPARATUR.
+// Mit KI_LEAD_ANBIETER=mistral (seit 0.5.6) das Standard-Profil Mistral: S1 mistral-small-2603, S2 mistral-medium-3-5,
+// Reparatur mistral-small-2603; Endpunkt wie in der App EU, mit KI_LEAD_MISTRAL_ENDPUNKT=global der globale.
 //
 // Ohne Schlüssel und mit KI_LEAD_ATTRAPPE=1 läuft das Skript mit einem simulierten Anbieter (Trockenlauf, keine Kosten).
 // Abweichung von der App: Die S1-Bestätigung wird automatisch erteilt (technische Abnahme, siehe Plan).
@@ -33,15 +36,26 @@ const ILKA = "profile/lead-beispiel/beispiele/orkantief-ilka";
 const REFERENZ = "LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
 
-const ANBIETER = process.env.KI_LEAD_ANBIETER === "openai" ? "openai" : "anthropic";
-const SCHLUESSEL = { anthropic: process.env.KI_LEAD_ANTHROPIC_KEY || "", openai: process.env.KI_LEAD_OPENAI_KEY || "" };
+const ANBIETER = process.env.KI_LEAD_ANBIETER === "openai" ? "openai" : process.env.KI_LEAD_ANBIETER === "mistral" ? "mistral" : "anthropic";
+const SCHLUESSEL = {
+  anthropic: process.env.KI_LEAD_ANTHROPIC_KEY || "",
+  openai: process.env.KI_LEAD_OPENAI_KEY || "",
+  mistral: process.env.KI_LEAD_MISTRAL_KEY || "",
+};
 const ATTRAPPE = !SCHLUESSEL[ANBIETER] && process.env.KI_LEAD_ATTRAPPE === "1";
 const ECHT = !!SCHLUESSEL[ANBIETER];
 
-/** Einstellungen des Laufs: App-Vorgaben; bei OpenAI die Gegenstücke der Modellvorgaben (klein, groß, mittel). */
+/** Einstellungen des Laufs: App-Vorgaben; bei OpenAI und Mistral die Gegenstücke der Modellvorgaben. */
 function einstellungen(): Einstellungen {
-  if (ANBIETER !== "openai") return STANDARD;
+  if (ANBIETER === "anthropic") return STANDARD;
   const e = structuredClone(STANDARD);
+  if (ANBIETER === "mistral") {
+    e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "mistral-small-2603";
+    e.modelle.verdichtung = process.env.KI_LEAD_MODELL_S2 || "mistral-medium-3-5";
+    e.modelle.reparatur = process.env.KI_LEAD_MODELL_REPARATUR || "mistral-small-2603";
+    e.mistralEndpunkt = process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu";
+    return e;
+  }
   e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "gpt-6-luna";
   e.modelle.verdichtung = process.env.KI_LEAD_MODELL_S2 || "gpt-6-astra";
   e.modelle.reparatur = process.env.KI_LEAD_MODELL_REPARATUR || "gpt-6.1-sol";
@@ -184,7 +198,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       );
       const datei = join(AUSGABE, `${lauf.id}.lauf.json`);
       const speichern = (l: Lauf) => writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
-      const anbieter = ATTRAPPE ? attrappe(material, JSON.parse(refText)) : new Verteiler(SCHLUESSEL);
+      const anbieter = ATTRAPPE ? attrappe(material, JSON.parse(refText)) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
       let zeichen = 0;
       const k: Kontext = {
         profil,
@@ -281,6 +295,10 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         })),
         kosten_usd: lauf.kostenUsd,
         dauer_s: Math.round((Date.parse(lauf.aktualisiert) - Date.parse(lauf.erstellt)) / 1000),
+        // Seit 0.5.6: Kurzantwort und Entwurf eingebettet, damit die Reihe als eine Datei inhaltlich auswertbar ist
+        // (Muss- und Darf-nicht-Punkte des Falls); alle Inhalte sind fiktiv
+        kurzantwort: lauf.ergebnis?.kurzantwort ?? null,
+        meldung: meldung ?? null,
       };
       summe += lauf.kostenUsd ?? lauf.kostenBekanntUsd ?? 0;
       writeFileSync(join(AUSGABE, `${lauf.id}.pruefung.json`), JSON.stringify(eintrag, null, 2));
@@ -296,6 +314,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       app: APP_KENNUNG,
       profil: { id: profil.manifest.id, version: profil.manifest.version, hash: profil.hash },
       anbieter: ANBIETER,
+      ...(ANBIETER === "mistral" ? { mistral_endpunkt: EINSTELLUNGEN.mistralEndpunkt } : {}),
       attrappe: ATTRAPPE,
       modelle: {
         s1: { modell: modellFuer("vorverarbeitung", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.vorverarbeitung },
