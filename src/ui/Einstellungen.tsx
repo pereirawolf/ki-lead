@@ -13,6 +13,8 @@ import {
   APP_MODELLE,
   AUFWAND_STUFEN,
   MODELL_GRUPPEN,
+  aufwandAngeboten,
+  aufwandAuswahl,
   modellHerkunft,
   profilvorgabeAktiv,
   profilvorgabeAnwenden,
@@ -117,7 +119,7 @@ const ANBIETER: AnbieterInfo[] = [
       "Globaler Endpunkt: mit Websuche (Conversations-API). Die Websuche kennt keine Höchstzahl je Anfrage; die App zählt die Suchen. Ein eigenes Abrufwerkzeug gibt es nicht.",
       "Aufbewahrung 30 Tage zur Missbrauchsüberwachung. Die Löschung ohne Aufbewahrung (Zero Data Retention, auf Antrag) gilt für den EU-Weg (Chat Completions), nicht für die Conversations-API.",
       "Im kostenlosen Tarif darf Mistral Ein- und Ausgaben zum Training nutzen. Abschalten in der Mistral-Verwaltung unter „Privacy“ („Anonymous improvement data“).",
-      "Anbindung neu seit 0.5.6 und noch nicht erprobt.",
+      "Erprobt mit der Verdichtung Ilka (24.10.2026): EU-Endpunkt 7 Läufe (Small 4, Medium 3.5, Large 4), globaler Endpunkt 3 Läufe, alle ohne Websuche. Noch nicht erprobt: Websuche, PDF, Nachdenken aus (none).",
     ],
   },
 ];
@@ -259,7 +261,7 @@ function UebersichtBereich({
             <tr key={r.id}>
               <td>{r.titel}</td>
               <td>{wirksam(r.id, e, profil)}</td>
-              <td>{aufwandTitel(e.aufwand[r.id])}</td>
+              <td>{aufwandTitel(aufwandAngeboten(wirksam(r.id, e, profil), e.aufwand[r.id]))}</td>
               <td>{HERKUNFT[modellHerkunft(r.id, e, profil)]}</td>
             </tr>
           ))}
@@ -584,7 +586,11 @@ function ModelleBereich({
                   <select
                     aria-label={`Modell ${r.titel}`}
                     value={e.modelle[r.id]}
-                    onChange={(ev) => setze({ modelle: { ...e.modelle, [r.id]: ev.target.value } })}
+                    onChange={(ev) => {
+                      // Beim Modellwechsel die Stufe sichtbar auf eine angebotene setzen (AV-2026-W43-02)
+                      const neu = ev.target.value || vorgabe;
+                      setze({ modelle: { ...e.modelle, [r.id]: ev.target.value }, aufwand: { ...e.aufwand, [r.id]: aufwandAngeboten(neu, e.aufwand[r.id]) } });
+                    }}
                   >
                     <option value="">Vorgabe ({vorgabe})</option>
                     {MODELL_GRUPPEN.map((g) => (
@@ -606,10 +612,10 @@ function ModelleBereich({
                 <td>
                   <select
                     aria-label={`Aufwand ${r.titel}`}
-                    value={e.aufwand[r.id]}
+                    value={aufwandAngeboten(modell, e.aufwand[r.id])}
                     onChange={(ev) => setze({ aufwand: { ...e.aufwand, [r.id]: ev.target.value as Aufwand } })}
                   >
-                    {AUFWAND.map((a) => (
+                    {aufwandAuswahl(modell).map((a) => (
                       <option key={a.id} value={a.id}>
                         {a.titel}
                       </option>
@@ -622,8 +628,8 @@ function ModelleBereich({
         </tbody>
       </table>
       <p className="hinweis">
-        Mistral kennt nur Nachdenken an oder aus: „niedrig“ läuft ohne Nachdenken, alle anderen Stufen mit „high“. Lehnt ein Mistral-Modell die Angabe ab,
-        versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
+        Zur Wahl stehen je Modell nur die Stufen, die der Anbieter anbietet; Mistral kennt nur „niedrig – ohne Nachdenken“ und „hoch – mit Nachdenken“. Lehnt
+        ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
       </p>
       <VergleichslaufAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
     </section>

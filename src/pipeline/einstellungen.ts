@@ -1,6 +1,7 @@
 // Einstellungen der KI-Pipeline. Leere Modellfelder bedeuten: Vorgabe des Profils bzw. der App.
 
 import { get, set } from "idb-keyval";
+import { aufwandAngeboten, aufwandStufenFuer } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
 import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
 import { anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
@@ -32,10 +33,16 @@ export interface Einstellungen {
   fassung?: number;
 }
 
+/**
+ * Vorgaben der App für Profile ohne eigene Modellvorgabe; gleich dem Standard-Profil Anthropic. Verdichtung seit 0.5.10
+ * mit Opus statt Sonnet (AV-2026-W43-10, entschieden am 25.10.2026): Sonnet kam im Vergleichslauf Ilka den Radarwerten
+ * von Opus nahe, ließ aber die Tendenz im Stromausfall-Sachverhalt in zwei von drei Läufen offen; Bezug, Messwerte und
+ * Standard-Profil beruhen auf Opus (evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md).
+ */
 export const APP_MODELLE: Record<Rolle, string> = {
   vorverarbeitung: "claude-haiku-5-5",
   erfassung: "claude-opus-5-5",
-  verdichtung: "claude-sonnet-5-5",
+  verdichtung: "claude-opus-5-5",
   reparatur: "claude-sonnet-5-5",
   kurzfassung: "claude-sonnet-5-5",
 };
@@ -63,16 +70,24 @@ export const STANDARD: Einstellungen = {
 /**
  * Standard-Profil je Anbieter: Modell und Aufwand je Aufgabe, mit einem Klick unter „Einstellungen“ zu setzen.
  * Anthropic entspricht den Vorgaben der App und des Beispielprofils (Verdichtung mit Opus wie in der Abnahme M4);
- * OpenAI nimmt die Gegenstücke gleicher Größe (klein, mittel, groß), wie in der Abnahme M4 erprobt.
- * Mistral (seit 0.5.6, noch nicht erprobt): Mistral Small 4 für S1 und S3, Mistral Medium 3.5 für S2 und die
- * Management Summary. Mistral Large 4 ist am 24.10.2026 eine Public Preview und deshalb nur wählbar, nicht Vorgabe;
- * für Medium 3.5 empfiehlt Mistral das Nachdenken ausdrücklich bei agentischen Aufgaben.
+ * OpenAI nimmt die Gegenstücke gleicher Größe (klein, mittel, groß).
+ * Mistral (seit 0.5.6): Mistral Small 4 für S1 und S3, Mistral Medium 3.5 für S2 und die Management Summary, jeweils mit
+ * Nachdenken („hoch“, seit 0.5.10; Mistral kennt nur „niedrig“ = ohne und „hoch“ = mit, AV-2026-W43-03). Erprobt mit
+ * der Verdichtung Ilka am 24.10.2026: EU-Endpunkt 7 Läufe, globaler Endpunkt 3 Läufe, ohne Websuche.
  *
  * Bezug (AV-2026-W43-04, entschieden am 24.10.2026): Das Standard-Profil Anthropic ist der Maßstab. Die Standard-Profile
  * OpenAI und Mistral werden so gewählt, dass sie bei der Verdichtung Ilka in den Kennzahlen des Vergleichslaufs der
  * Anthropic-Reihe am nächsten kommen (evaluation/plaene/standardprofile-ilka.json, Auswertung mit
  * npm run vergleichslauf:auswerten); ein teureres Modell oder eine höhere Stufe ist dafür zulässig. Kosten und Dauer
- * werden berichtet, entscheiden aber nicht. Bis zur Auswertung gelten die Profile unten unverändert.
+ * werden berichtet, entscheiden aber nicht.
+ *
+ * Ergebnis (25.10.2026, je drei Läufe, evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md):
+ * - OpenAI (AV-2026-W43-13): Verdichtung mit gpt-6-astra „high“ (Variante D), weil sie in Radarabstand (0,80 statt 1,20),
+ *   Tendenz und Ähnlichkeit näher an der Anthropic-Reihe liegt als „medium“ (Variante C, zweitbeste Option); beide lassen
+ *   D2 und D4 offen und führen die Zahl der Stromlosen nicht zusammen. Erfassung bleibt „medium“ (nicht verglichen).
+ * - Mistral (AV-2026-W43-14): Verdichtung mit mistral-medium-3-5 „high“ (Variante E), weil sie in Beurteilung,
+ *   Achsenabweichung, Muss-Punkten und Zahlentreue näher an der Anthropic-Reihe liegt als mistral-large-4 „high“
+ *   (Variante F, zweitbeste Option; nur im Radarabstand knapp näher, Public Preview, mehr Zahlenfehler).
  */
 export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, string>; aufwand: Record<Rolle, Aufwand> }> = {
   anthropic: {
@@ -93,7 +108,7 @@ export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, strin
       reparatur: "gpt-6.1-sol",
       kurzfassung: "gpt-6.1-sol",
     },
-    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "high", reparatur: "low", kurzfassung: "medium" },
   },
   mistral: {
     modelle: {
@@ -103,7 +118,7 @@ export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, strin
       reparatur: "mistral-small-2603",
       kurzfassung: "mistral-medium-3-5",
     },
-    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+    aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
   },
 };
 
@@ -135,6 +150,26 @@ export function standardProfilAktiv(e: Einstellungen, anbieter: AnbieterId): boo
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
   return e.modelle[rolle] || profil.manifest.modelle?.[rolle] || APP_MODELLE[rolle];
 }
+
+/**
+ * Wirksamer Aufwand einer Aufgabe (seit 0.5.10, AV-2026-W43-02): die eingestellte Stufe, wenn das wirksame Modell sie
+ * anbietet, sonst die nächsthöhere angebotene, ohne höhere die nächstniedrigere (Mistral: „mittel“ → „hoch“). Pipeline,
+ * Schätzung, Vergleichslauf und Laufprotokoll verwenden diese Stufe.
+ */
+export function aufwandFuer(rolle: Rolle, e: Einstellungen, profil: Profil): Aufwand {
+  return aufwandAngeboten(modellFuer(rolle, e, profil), e.aufwand[rolle]);
+}
+
+/** Stufen des Aufwands, die das Modell anbietet, mit deutscher Bezeichnung (Auswahl in Einstellungen und je Lauf) */
+export function aufwandAuswahl(modell: string): { id: Aufwand; titel: string }[] {
+  const stufen = aufwandStufenFuer(modell);
+  const nurAnAus = stufen.length === 2 && stufen.includes("low") && stufen.includes("high");
+  return AUFWAND_STUFEN.filter((a) => stufen.includes(a.id)).map((a) =>
+    nurAnAus ? { id: a.id, titel: a.id === "low" ? "niedrig – ohne Nachdenken" : "hoch – mit Nachdenken" } : a,
+  );
+}
+
+export { aufwandAngeboten, aufwandStufenFuer };
 
 /** Woher das wirksame Modell einer Aufgabe stammt: eigene Einstellung, Vorgabe des Profils oder der App */
 export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | null): "einstellung" | "profil" | "app" {

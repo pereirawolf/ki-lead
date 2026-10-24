@@ -50,6 +50,10 @@ export interface Abstand {
   radar: number | null;
   /** mittlerer Betrag der Differenz der Anteile „offen“ */
   offen: number | null;
+  /** Zahl der Achsen (je Sachverhalt der Redaktionsfassung), die in den Radarabstand eingehen (seit 0.5.10, AV-2026-W43-19) */
+  achsen_verglichen: number;
+  /** Zahl der Achsen des Bezugs */
+  achsen_bezug: number;
   /** Betrag der Differenz der Mittelwerte je Kennzahl */
   kennzahlen: Record<keyof Kennzahlen, number | null>;
 }
@@ -158,8 +162,10 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
 export function abstand(x: Zusammenfassung, bezug: Zusammenfassung): Abstand {
   const radar: number[] = [];
   const offen: number[] = [];
+  let achsenBezug = 0;
   for (const [ref, achsen] of Object.entries(bezug.radar))
     for (const [achse, b] of Object.entries(achsen)) {
+      achsenBezug++;
       const w = x.radar[ref]?.[achse];
       if (!w) continue;
       offen.push(Math.abs(w.offen - b.offen));
@@ -172,7 +178,7 @@ export function abstand(x: Zusammenfassung, bezug: Zusammenfassung): Abstand {
     kennzahlen[k] = a !== null && b !== null ? r3(Math.abs(a - b)) : null;
   }
   const mittel = (w: number[]) => (w.length ? r3(w.reduce((a, b) => a + b, 0) / w.length) : null);
-  return { kennung: x.kennung, radar: mittel(radar), offen: mittel(offen), kennzahlen };
+  return { kennung: x.kennung, radar: mittel(radar), offen: mittel(offen), achsen_verglichen: radar.length, achsen_bezug: achsenBezug, kennzahlen };
 }
 
 /** Auswertung mehrerer Reihen; Bezug über die Kennung oder, ohne Angabe, das Standard-Profil Anthropic */
@@ -215,13 +221,13 @@ export function berichtMarkdown(a: Auswertung): string {
     zeilen.push(
       `## Abstand zum Bezug (${a.bezug})`,
       "",
-      "Sortiert nach dem Radarabstand (mittlerer Betrag der Differenz der Mediane je Sachverhalt der Redaktionsfassung und Achse); kein Gesamtwert.",
+      "Sortiert nach dem Radarabstand (mittlerer Betrag der Differenz der Mediane je Sachverhalt der Redaktionsfassung und Achse); kein Gesamtwert. Der Radarabstand zählt nur Achsen, die Bezug und Konfiguration beide gesetzt haben (Spalte „Achsen verglichen“); wie viele offen bleiben, zeigt „Abstand offen“.",
       "",
-      "| Kennung | Radarabstand | Abstand „offen“ | Δ Sachverhalte | Δ Achsen gesetzt | Δ Tendenz gesetzt | Δ Beurteilung gleich | Δ Ähnlichkeit | Δ Plausibilität |",
-      "|---|---|---|---|---|---|---|---|---|",
+      "| Kennung | Radarabstand | Achsen verglichen | Abstand „offen“ | Δ Sachverhalte | Δ Achsen gesetzt | Δ Tendenz gesetzt | Δ Beurteilung gleich | Δ Tendenz gleich | Δ Ähnlichkeit | Δ Achsenabweichung | Δ Achsen ≤ 1 | Δ Plausibilität |",
+      "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
       ...a.abstaende.map(
         (d) =>
-          `| ${d.kennung} | ${zahl(d.radar)} | ${zahl(d.offen)} | ${zahl(d.kennzahlen.sachverhalte, 1)} | ${zahl(d.kennzahlen.achsen_gesetzt)} | ${zahl(d.kennzahlen.tendenz_gesetzt)} | ${zahl(d.kennzahlen.beurteilung_gleich)} | ${zahl(d.kennzahlen.aehnlichkeit_mittel)} | ${zahl(d.kennzahlen.plausibilitaet_befunde, 1)} |`,
+          `| ${d.kennung} | ${zahl(d.radar)} | ${d.achsen_verglichen} von ${d.achsen_bezug} | ${zahl(d.offen)} | ${zahl(d.kennzahlen.sachverhalte, 1)} | ${zahl(d.kennzahlen.achsen_gesetzt)} | ${zahl(d.kennzahlen.tendenz_gesetzt)} | ${zahl(d.kennzahlen.beurteilung_gleich)} | ${zahl(d.kennzahlen.tendenz_gleich)} | ${zahl(d.kennzahlen.aehnlichkeit_mittel)} | ${zahl(d.kennzahlen.achsen_abweichung_mittel)} | ${zahl(d.kennzahlen.achsen_nah)} | ${zahl(d.kennzahlen.plausibilitaet_befunde, 1)} |`,
       ),
       "",
     );

@@ -1,6 +1,6 @@
 // Preise der Modelle (Anthropic-Staffel, OpenAI, seit 0.5.6 Mistral mit eigenem Preis je Websuche).
 import { describe, expect, it } from "vitest";
-import { kostenAnfrage } from "../../src/anbieter/preise";
+import { aufschlag, kostenAnfrage } from "../../src/anbieter/preise";
 
 describe("Preise", () => {
   it("rechnet Haiku oberhalb von 100 000 Token mit dem höheren Satz", () => {
@@ -28,5 +28,14 @@ describe("Mistral", () => {
   it("rechnet die Websuche mit 0,03 USD statt 0,01 USD; Seitenabrufe kosten nichts extra", () => {
     expect(kostenAnfrage("mistral-small-2603", { ...leer, websuchen: 2, abrufe: 5 })).toBeCloseTo(0.06, 10);
     expect(kostenAnfrage("claude-sonnet-5-5", { ...leer, websuchen: 2 })).toBeCloseTo(0.02, 10);
+  });
+
+  it("AV-2026-W43-06: Aufschlag 1,1 nur für Mistral am EU-Endpunkt", () => {
+    for (const m of ["mistral-small-2603", "mistral-medium-3-5", "mistral-large-4"]) {
+      expect(aufschlag(m, { mistralEndpunkt: "eu" }), m).toBe(1.1);
+      expect(aufschlag(m, { mistralEndpunkt: "global" }), m).toBe(1);
+      expect(aufschlag(m), m).toBe(1);
+    }
+    for (const m of ["claude-opus-5-5", "gpt-6-astra", "unbekannt"]) expect(aufschlag(m, { mistralEndpunkt: "eu" }), m).toBe(1);
   });
 });

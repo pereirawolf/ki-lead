@@ -57,6 +57,44 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
 | 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
 | 0.5.9 | letzter Commit des Pull Requests „Lizenzen bestimmt, Vorlage – eigene Organisation; 0.5.9“ |
+| 0.5.10 | letzter Commit des Pull Requests „Standard-Profile nach dem Vergleichslauf Ilka, Aufwand je Modell, Schätzung; 0.5.10“ |
+
+## [0.5.10] – 25.10.2026
+
+Grundlage: Auswertung der Vergleichsläufe Ilka nach dem Bewertungsplan `standardprofile-ilka` (Varianten A–F, je drei Läufe, App 0.5.8, Profil 1.26.0), vom Herausgeber am 25.10.2026 als ZIP-Dateien übergeben; Befunddatei `ki-lead-befund_anbietervergleich_2026-W43.json` (AV-2026-W43-12 bis -19 neu, Wiedervorlage von AV-2026-W43-01 bis -03, -05, -06, -09 und -10 aus `ki-lead-befund_anbieter_2026-W43.json`), vom Herausgeber am selben Tag wie empfohlen freigegeben. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel. Laufprotokolle und Entwürfe sind nicht im Repository.
+
+### Hinzugefügt
+
+- **Ergebnisbericht** [evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md](evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md) (AV-2026-W43-12): Rahmen, Konfigurationen, Prüfpunkte T1–T8 (18 von 18 erfüllt), Kosten und Dauer je Lauf (zusammen 18,33 USD), Kennzahlen, Abstand zum Bezug mit Kontrollrechnung der Zuordnung, Plausibilitätsbefunde mit Fehlalarmquote (1 von 3), Muss-Punkte, Vorbehalte, Entscheidungen.
+- **Aufwand je Modell** (AV-2026-W43-01, `src/anbieter/aufwand.ts`): Tabelle der Stufen, die jedes Modell anbietet (Anthropic und OpenAI alle fünf, Mistral nur „niedrig – ohne Nachdenken“ und „hoch – mit Nachdenken“; Quelle und Stand im Kommentar). Einstellungen und die Wahl je Lauf zeigen je Modell nur diese Stufen; der Hinweistext unter der Tabelle der Einstellungen ist entsprechend gekürzt.
+- **Wirksame Stufe** (AV-2026-W43-02, `aufwandFuer`): Eine Stufe, die das wirksame Modell nicht anbietet, gilt als die nächsthöhere angebotene, ohne höhere als die nächstniedrigere (Mistral: „mittel“, „sehr hoch“, „maximal“ → „hoch“). S1, S2, S3, Management Summary, Schätzung, Vergleichslauf und Laufprotokoll verwenden sie; das Protokoll nennt damit die tatsächlich gesendete Stufe. Beim Modellwechsel passt die Auswahl eine nicht angebotene Stufe sichtbar an. Gespeicherte Einstellungen bleiben unverändert. An die Mistral-API gehen wie bisher nur `none` und `high` (`mistralAufwand`).
+- **Messwerte** in `src/pipeline/schaetzung.ts` (AV-2026-W43-05, -15): neu gpt-6-astra „high“ (240–420 s, 1,50–2,15 USD), mistral-small-2603 „high“ in S1 (10–50 s, bis 0,02 USD), mistral-medium-3-5 „high“ (90–240 s, 0,20–0,45 USD) und mistral-large-4 „high“ (150–270 s, 0,10–0,25 USD) in der Verdichtung; Sonnet „medium“ in der Verdichtung erweitert auf 150–480 s und 0,55–1,25 USD, gpt-6-astra „medium“ ab 60 statt 90 s. Kommentare mit den Lauf-IDs des Vergleichslaufs statt der Werte der Abnahme M4; Rundungsregel im Kopfkommentar (nach außen gerundet, Obergrenze bei neuen oder überschrittenen Spannen größter Messwert plus 25 %, keine Verengung). Mistral-Werte ohne EU-Aufschlag.
+
+### Geändert
+
+- **Standard-Profil OpenAI** (AV-2026-W43-13): Verdichtung mit gpt-6-astra „hoch“ statt „mittel“ (Variante D näher an Anthropic als C in Radarabstand, Tendenz und Ähnlichkeit); Erfassung bleibt „mittel“. Gespeicherte Einstellungen mit dem bisherigen Profil gelten danach als individuelle Konfiguration.
+- **Standard-Profil Mistral** (AV-2026-W43-03, -14): Aufwand „hoch“ statt „mittel“ für S1, S2 und Management Summary (an die API ging schon bisher `high`); Verdichtung weiter mit mistral-medium-3-5 (Variante E näher an Anthropic als Large 4). Begründung beider Wahlen mit zweitbester Option im Kommentar zu `STANDARD_PROFILE`.
+- **App-Vorgabe der Verdichtung** (AV-2026-W43-10): Opus statt Sonnet, gleich dem Standard-Profil Anthropic; gilt für Profile ohne eigene Modellvorgabe (z. B. die Vorlage).
+- **EU-Aufschlag in der Schätzung** (AV-2026-W43-06): Der Aufschlag von 10 % am EU-Endpunkt von Mistral ist Eigenschaft der Preisregel (`aufschlag` in `src/anbieter/preise.ts`); Ist-Kosten des Mistral-Anbieters und `schaetzeStufe` verwenden ihn gemeinsam. Die Schätzung nennt „inkl. 10 % EU-Aufschlag“.
+- **Erprobungsstand Mistral** (AV-2026-W43-09) in den Hinweisen unter „KI-Anbieter & API“ statt „noch nicht erprobt“: EU-Endpunkt 7 Läufe, global 3 Läufe, ohne Websuche.
+- **Zuordnung der Sachverhalte** im Vergleich (AV-2026-W43-18): mit der Kernaussage des Bewertungstextes (erste Zeile, ohne den Teil ab „Referenzraum:“); Verfahren `ki-lead-vergleich/3`, Mehrfachvergleich `ki-lead-mehrfachvergleich/2`. Im Vergleichslauf vom 24./25.10.2026 ordnete das Verfahren `/2` drei von 18 Läufen dem falschen Sachverhalt zu; `/3` ordnet alle drei dem Stromausfall zu und ändert keine andere Zuordnung.
+- **Plausibilitätsprüfung D2** (AV-2026-W43-17): Eine ausdrücklich genannte Summe oder Gesamtzahl („Summe 19.600“, „zusammen …“, „insgesamt …“, „= mindestens …“) geht der größten Einzelzahl vor; behebt den einzigen Fehlalarm des Vergleichslaufs. Entscheidung (AV-2026-W43-16): Die Prüfung bleibt im Vergleichslauf; in die App kommt sie als Hinweis, sobald mindestens zehn Treffer von Hand geprüft sind und höchstens einer davon ein Fehlalarm ist.
+- **Auswertung mehrerer Vergleichsläufe** (AV-2026-W43-19): Zahl der verglichenen Achsen je Konfiguration (`achsen_verglichen`), Erklärung, dass der Radarabstand nur gemeinsam gesetzte Achsen zählt, und zusätzlich Δ Tendenz gleich, Δ Achsenabweichung und Δ Achsen ≤ 1 im Bericht.
+- Spezifikation 0.5.10: Abschnitt 5.4 (Standard-Profile, Aufwand je Modell, Schätzung, Plausibilität, Zuordnung), offene Punkte 6 und 15; `evaluation/README.md` verweist auf den Ergebnisbericht.
+
+### Tests
+
+- `tests/pipeline/aufwand.test.ts` (neu, 13): Stufen je Modell nach der Anbieterdokumentation, Auswahl mit Bezeichnung, Abbildung auf die Mistral-API, nächste angebotene Stufe, `aufwandFuer`, Laufprotokoll und Anfrage mit der gesendeten Stufe, Konfiguration des Vergleichslaufs, Standard-Profile nur mit angebotenen Stufen, OpenAI- und Mistral-Profil mit Begründung im Kommentar, App-Vorgabe gleich Standard-Profil Anthropic (AV-2026-W43-01 bis -03, -10, -13, -14).
+- `tests/pipeline/schaetzung.test.ts` (+4): Messwerte des Vergleichslaufs als festes Soll liegen in den Spannen, neue Spannen von Hand nach der Regel, S1 und Verdichtung jedes Standard-Profils gemessen, EU-Aufschlag in Schätzung und Anzeige (AV-2026-W43-05, -06, -15); Untergrenze gpt-6-astra „medium“ angepasst.
+- `tests/anbieter/preise.test.ts` (+1): Aufschlag 1,1 nur für Mistral am EU-Endpunkt (AV-2026-W43-06).
+- `tests/pipeline/plausibilitaet.test.ts` (+1): Sätze aus dem Vergleichslauf mit Summe, Gesamtzahl und Einzelzahlen (AV-2026-W43-17).
+- `tests/pipeline/vergleich.test.ts` (+1): Zuordnung eines zerlegten Entwurfs zum Stromausfall-Sachverhalt mit Kernaussage, ohne Kernaussage zum anderen (AV-2026-W43-18).
+- `tests/pipeline/vergleichsauswertung.test.ts`: Zahl der verglichenen Achsen und neue Spalten des Berichts (AV-2026-W43-19).
+- `tests/ui/einstellungen.test.ts` (+1, 1 angepasst) und `tests/ui/modellwahl.test.ts` (+1): Aufwand je Modell in Einstellungen und Wahl je Lauf, sichtbare Anpassung beim Modellwechsel; die Übersicht zeigt bei Mistral die wirksame Stufe „hoch“ statt „mittel“ (AV-2026-W43-01, -02).
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: AV-2026-W43-01 bis -03, -05, -06, -09, -10 und -12 bis -19 als umgesetzt; AV-2026-W43-07 und -08 bleiben offen.
 
 ## [0.5.9] – 24.10.2026
 

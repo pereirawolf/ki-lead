@@ -13,6 +13,7 @@ import { VergleichKasten } from "./Vergleich";
 import {
   laufModelle,
   mitModellwahl,
+  aufwandFuer,
   modellFuer,
   werkzeugeFuer,
   type Einstellungen,
@@ -411,7 +412,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const stufeS3: StufeModell = { rolle: "reparatur", kurz: "S3", titel: "S3 Reparatur (nur bei Schemafehlern)" };
   const schaetzS2: SchaetzStufe = { kurz: "S2", rolle: stufeS2.rolle, art: verdichtung ? "verdichtung" : "erfassung" };
   const dauerFuer = (rolle: Rolle, art: SchaetzArt) => {
-    const t = dauerText(schaetzeStufe(art, modellFuer(rolle, laufEinstellungen, profil), laufEinstellungen.aufwand[rolle]).sekunden);
+    const t = dauerText(schaetzeStufe(art, modellFuer(rolle, laufEinstellungen, profil), aufwandFuer(rolle, laufEinstellungen, profil)).sekunden);
     return t === "Dauer ohne Messwert" ? "einige Minuten (für dieses Modell liegen noch keine Messwerte vor)" : t;
   };
   const modellwahl = (stufen: StufeModell[], mitWebsuche: boolean) => (

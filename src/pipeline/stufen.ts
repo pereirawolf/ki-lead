@@ -10,7 +10,7 @@ import { quellenHinweise } from "../kern/quellen";
 import { aufloesen } from "../kern/schema";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
-import { modellFuer, werkzeugeFuer, type Einstellungen } from "./einstellungen";
+import { aufwandFuer, modellFuer, werkzeugeFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
 import {
   anweisungErfassung,
@@ -216,7 +216,7 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
   // gemeinsam: Die frühere feste Grenze von 16 000 reichte bei Verdichtungen mit Haiku „high“ nicht (Läufe
   // 20261021-133605-75wi und 20261021-133728-cvza endeten nach 69–72 s bei genau 16 000 Token mit max_tokens).
   const modell = modellFuer("vorverarbeitung", k.einstellungen, k.profil);
-  const aufwand = k.einstellungen.aufwand.vorverarbeitung;
+  const aufwand = aufwandFuer("vorverarbeitung", k.einstellungen, k.profil);
   const maxTokens = k.einstellungen.maxTokensErfassung;
   const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
     modell,
@@ -637,7 +637,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   });
   const a = await aufrufen(k, verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf", {
     modell: erfassungsModell,
-    aufwand: e.aufwand[rolleS2],
+    aufwand: aufwandFuer(rolleS2, e, p),
     maxTokens: e.maxTokensErfassung,
     system: systemS2,
     nachrichten: [{ role: "user", content: inhalt }],
@@ -715,7 +715,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     const entwurf = z.json !== undefined ? JSON.stringify(z.json, null, 1) : z.jsonText || "";
     const r = await aufrufen(k, `S3 Reparatur ${runde + 1}`, {
       modell: modellFuer("reparatur", e, p),
-      aufwand: e.aufwand.reparatur,
+      aufwand: aufwandFuer("reparatur", e, p),
       maxTokens: e.maxTokensErfassung,
       system: [{ text: reparaturSystem(p), cache: true }],
       nachrichten: [

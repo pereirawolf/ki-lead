@@ -7,7 +7,7 @@ import { formatUsd } from "../anbieter/preise";
 import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { LlmAnbieter } from "../anbieter/typen";
 import type { Profil } from "../kern/typen";
-import { APP_MODELLE, AUFWAND_STUFEN, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
+import { APP_MODELLE, AUFWAND_STUFEN, aufwandAngeboten, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { kostenText, dauerText, schaetzeStufe, summe } from "../pipeline/schaetzung";
 import {
   ANZAHL_MAX,
@@ -79,14 +79,17 @@ export function VergleichslaufAbschnitt({
   const e = planVariante ? einstellungenFuerVariante(einstellungen, planVariante) : vergleichsEinstellungen(einstellungen, profil);
   const zeilen = VERGLEICH_ROLLEN.map((r) => {
     const modell = e.modelle[r] || "";
-    return { r, modell, aufwand: e.aufwand[r], anbieter: modell ? anbieterVon(modell) : undefined };
+    // Stufe so, wie das Modell sie anbietet (AV-2026-W43-02)
+    return { r, modell, aufwand: modell ? aufwandAngeboten(modell, e.aufwand[r]) : e.aufwand[r], anbieter: modell ? anbieterVon(modell) : undefined };
   });
   const fehlend = [...new Set(zeilen.filter((z) => z.r !== "reparatur" && z.anbieter && !schluessel[z.anbieter]).map((z) => z.anbieter!))] as AnbieterId[];
   const ohneModell = zeilen.some((z) => z.r !== "reparatur" && !z.modell);
   const mistral = zeilen.some((z) => z.anbieter === "mistral");
 
-  const s1 = schaetzeStufe("s1", e.modelle.vorverarbeitung, e.aufwand.vorverarbeitung);
-  const s2 = schaetzeStufe("verdichtung", e.modelle.verdichtung, e.aufwand.verdichtung);
+  // Kosten mit dem Aufschlag des Mistral-EU-Endpunkts (AV-2026-W43-06)
+  const endpunkt = { mistralEndpunkt: e.mistralEndpunkt ?? "eu" } as const;
+  const s1 = schaetzeStufe("s1", e.modelle.vorverarbeitung, e.aufwand.vorverarbeitung, endpunkt);
+  const s2 = schaetzeStufe("verdichtung", e.modelle.verdichtung, e.aufwand.verdichtung, endpunkt);
   const jeLauf = summe([s1.usd, s2.usd]);
   const dauerJeLauf = s1.sekunden && s2.sekunden ? ([s1.sekunden[0] + s2.sekunden[0], s1.sekunden[1] + s2.sekunden[1]] as [number, number]) : null;
   const n = anzahlBegrenzt(anzahl);
@@ -171,7 +174,7 @@ export function VergleichslaufAbschnitt({
         Voraussichtlich je Lauf {dauerJeLauf ? `${dauerText(dauerJeLauf)}, ` : ""}
         {kostenText(jeLauf)}
         {s1.gemessen && s2.gemessen ? "" : " (grob, ohne Messwert für diese Konfiguration)"}; bei {n} Läufen zusammen {kostenText(zusammen)}
-        {mistral && e.mistralEndpunkt !== "global" ? " zuzüglich 10 % Aufschlag am EU-Endpunkt" : ""}. Maßgeblich ist die Abrechnung des Anbieters.
+        {mistral && e.mistralEndpunkt !== "global" ? ", inkl. 10 % Aufschlag am EU-Endpunkt" : ""}. Maßgeblich ist die Abrechnung des Anbieters.
       </p>
       {fehlend.length > 0 && (
         <p className="hinweis" role="status">

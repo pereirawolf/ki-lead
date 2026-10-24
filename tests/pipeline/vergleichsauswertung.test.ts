@@ -90,6 +90,8 @@ describe("Auswertung der Vergleichsläufe", () => {
     const [a, x] = zusammenfassen([A, X1, X2]);
     // d1 |4−4| = 0, d3 |4−2| = 2 → 1; offen: d1 0, d2 |1−0,5| = 0,5, d3 0 → 0,167
     expect(abstand(x, a)).toMatchObject({ kennung: "E-mistral-standard", radar: 1, offen: 0.167 });
+    // AV-2026-W43-19: in den Radarabstand gehen d1 und d3 ein (d2 bei X offen), der Bezug hat drei Achsen
+    expect(abstand(x, a)).toMatchObject({ achsen_verglichen: 2, achsen_bezug: 3 });
     expect(abstand(x, a).kennzahlen).toMatchObject({ sachverhalte: 0, plausibilitaet_befunde: 1, achsen_gesetzt: 0 });
   });
 
@@ -104,6 +106,9 @@ describe("Auswertung der Vergleichsläufe", () => {
     const md = berichtMarkdown(auswerten([A, X1, X2]));
     expect(md).toContain("| claude-opus-5-5-medium (Bezug) | S1 claude-haiku-5-5 (high) · S2 claude-opus-5-5 (medium) | 2 (2) |");
     expect(md).toContain("## Abstand zum Bezug (claude-opus-5-5-medium)");
-    expect(md).toContain("| E-mistral-standard | 1,00 | 0,17 |");
+    expect(md).toContain("| E-mistral-standard | 1,00 | 2 von 3 | 0,17 |");
+    // AV-2026-W43-19: Erklärung und alle Abstände je Kennzahl
+    expect(md).toContain("Der Radarabstand zählt nur Achsen, die Bezug und Konfiguration beide gesetzt haben");
+    for (const spalte of ["Δ Tendenz gleich", "Δ Achsenabweichung", "Δ Achsen ≤ 1", "Achsen verglichen"]) expect(md, spalte).toContain(spalte);
   });
 });

@@ -122,15 +122,31 @@ function kurz(m: Meldung, profil: Profil): SvKurz[] {
   });
 }
 
-function merkmal(s: SvKurz, sv: any, profil: Profil): Set<string> {
+/**
+ * Kernaussage eines Sachverhalts: erste Zeile des Bewertungstextes ohne das Wort „Kernaussage:“ und, wenn ein Entwurf
+ * keine Zeilenumbrüche setzt, ohne alles ab „Referenzraum:“
+ */
+export function kernaussage(sv: any, profil: Profil): string {
   const r = profil.ui.rollen;
-  return woerter([s.bezeichnung, s.arten.join(" "), r.sv_ort ? String(holeWert(sv, r.sv_ort) ?? "") : ""].join(" "));
+  const t = r.sv_bewertung_text ? String(holeWert(sv, r.sv_bewertung_text) ?? "") : "";
+  return (t.split("\n")[0] ?? "").replace(/^\s*Kernaussage:\s*/i, "").split(/\s+Referenzraum:/)[0];
 }
 
-/** Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten und Ort einander zu (gierig, eins zu eins). */
+/**
+ * Merkmale für die Zuordnung: Bezeichnung, Ereignisarten, Ort und seit Verfahren /3 die Kernaussage (AV-2026-W43-18).
+ * Ohne Kernaussage ordnete das Verfahren im Vergleichslauf Ilka drei von 18 Läufen, die die Lage in mehrere Sachverhalte
+ * zerlegten, dem Sachverhalt mit Sturmfolgen oder Verkehr statt dem Stromausfall der Redaktionsfassung zu.
+ */
+function merkmal(s: SvKurz, sv: any, profil: Profil): Set<string> {
+  const r = profil.ui.rollen;
+  return woerter([s.bezeichnung, s.arten.join(" "), r.sv_ort ? String(holeWert(sv, r.sv_ort) ?? "") : "", kernaussage(sv, profil)].join(" "));
+}
+
+/** Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten, Ort und Kernaussage einander zu (gierig, eins zu eins). */
 export const MIN_AEHNLICHKEIT = 0.08;
 
-export const VERGLEICH_VERFAHREN = "ki-lead-vergleich/2";
+/** Verfahren der Zuordnung; /3 seit 0.5.10 mit Kernaussage (AV-2026-W43-18) */
+export const VERGLEICH_VERFAHREN = "ki-lead-vergleich/3";
 
 export interface Zuordnung {
   ki: number;
@@ -138,7 +154,7 @@ export interface Zuordnung {
 }
 
 /**
- * Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten und Ort einander zu (gierig, eins zu eins,
+ * Ordnet Sachverhalte nach Ähnlichkeit von Bezeichnung, Ereignisarten, Ort und Kernaussage einander zu (gierig, eins zu eins,
  * Mindestähnlichkeit auch bei nur einem Sachverhalt je Seite). Eine manuelle Zuordnung geht vor.
  */
 export function zuordnen(ki: Meldung, ref: Meldung, profil: Profil, manuell?: Zuordnung[]): { ki?: SvKurz; ref?: SvKurz; aehnlichkeit: number }[] {
@@ -328,7 +344,8 @@ export interface Mehrfachvergleich {
   alpha: { key: string; label: string; wert: number | null; einheiten: number }[];
 }
 
-export const MEHRFACH_VERFAHREN = "ki-lead-mehrfachvergleich/1";
+/** /2 seit 0.5.10: Zuordnung mit Kernaussage wie ki-lead-vergleich/3 (AV-2026-W43-18) */
+export const MEHRFACH_VERFAHREN = "ki-lead-mehrfachvergleich/2";
 
 const median = (xs: number[]): number | null => {
   if (!xs.length) return null;

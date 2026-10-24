@@ -128,7 +128,8 @@ describe("Einstellungen: Übersicht", () => {
     const zeilen = [...document.querySelectorAll(".bereich-inhalt table")[1].querySelectorAll("tbody tr")].map((tr) =>
       [...tr.querySelectorAll("td")].map((td) => td.textContent),
     );
-    expect(zeilen.find((z) => z[0] === "S2 Recherche und Entwurf")).toEqual(["S2 Recherche und Entwurf", "mistral-medium-3-5", "mittel", "eigene Einstellung"]);
+    // Eingestellt ist „mittel“; Mistral bietet nur „niedrig“ und „hoch“ an, wirksam ist „hoch“ (AV-2026-W43-02)
+    expect(zeilen.find((z) => z[0] === "S2 Recherche und Entwurf")).toEqual(["S2 Recherche und Entwurf", "mistral-medium-3-5", "hoch", "eigene Einstellung"]);
     const herkunftS1 = zeilen.find((z) => z[0] === "S1 Gegenstand und SOP-Auswahl")![3];
     expect(["Vorgabe des Profils", "Vorgabe der App"]).toContain(herkunftS1);
 
@@ -196,6 +197,27 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
     await klick(radio("profil"));
     expect(gesetzt.at(-1)!.modelle).toEqual({ vorverarbeitung: "", erfassung: "", verdichtung: "", reparatur: "", kurzfassung: "" });
     expect(gesetzt.at(-1)!.aufwand).toEqual(STANDARD.aufwand);
+  });
+
+  it("AV-2026-W43-01, -02: Aufwand je Modell; beim Wechsel auf Mistral passt sich die Stufe sichtbar an", async () => {
+    const gesetzt: Einstellungen[] = [];
+    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt }));
+    await klick("Modelle & Verarbeitung", nav());
+    const aufwand = () => document.querySelector('select[aria-label="Aufwand S2 Verdichtung"]') as HTMLSelectElement;
+    expect([...aufwand().options].map((o) => o.value)).toEqual(["low", "medium", "high", "xhigh", "max"]);
+    expect(aufwand().value).toBe("medium");
+    await eingeben(document.querySelector('select[aria-label="Modell S2 Verdichtung"]') as HTMLSelectElement, "mistral-medium-3-5");
+    expect([...aufwand().options].map((o) => [o.value, o.textContent])).toEqual([
+      ["low", "niedrig – ohne Nachdenken"],
+      ["high", "hoch – mit Nachdenken"],
+    ]);
+    expect(aufwand().value).toBe("high");
+    expect(gesetzt.at(-1)!.aufwand.verdichtung).toBe("high");
+    // „niedrig“ bleibt beim Wechsel zurück zu Anthropic erhalten
+    await eingeben(aufwand(), "low");
+    await eingeben(document.querySelector('select[aria-label="Modell S2 Verdichtung"]') as HTMLSelectElement, "claude-opus-5-5");
+    expect(aufwand().value).toBe("low");
+    expect(document.querySelector(".bereich-inhalt")!.textContent).toContain("Zur Wahl stehen je Modell nur die Stufen, die der Anbieter anbietet");
   });
 
   it("fragt vor dem Überschreiben einer individuellen Konfiguration nach und lässt sie bei Ablehnung stehen", async () => {

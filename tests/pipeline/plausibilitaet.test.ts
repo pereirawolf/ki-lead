@@ -54,6 +54,36 @@ describe("Plausibilität: D2", () => {
     expect(d2Pruefen("D1 = 5, weil 300 Personen …", 1)).toBeNull();
   });
 
+  it("AV-2026-W43-17: eine ausdrücklich genannte Summe geht der größten Einzelzahl vor", () => {
+    // Sätze aus dem Vergleichslauf Ilka vom 24./25.10.2026; Soll von Hand nach den Stufentexten
+    // F-dh4z: Summe 19.600 → Stufe 4, D2 = 4 richtig (vorher Fehlalarm mit 3.500)
+    expect(
+      d2Pruefen(
+        "D2 = 4 (Mindestwert), weil NW mindestens 7.400, NI hochgerechnet rund 8.700 und RP rund 3.500 Personen ohne Strom melden [Q2, Q3, Q4]; Summe 19.600, Abgrenzung zu 5: unter 100.000.",
+        4,
+      ),
+    ).toBeNull();
+    // F-7ngp: insgesamt 82 → Stufe 1, D2 = 2 falsch
+    expect(
+      d2Pruefen(
+        "D2 = 2, weil insgesamt 82 verletzte Personen (1 tot, 6 schwer, 75 leicht) belegt sind [Q1, Q2, Q3, Q4, Q5, Q6]; Strombetroffene werden dort separat gezählt.",
+        2,
+      ),
+    ).toEqual(expect.objectContaining({ personen: 82, erwartet: 1 }));
+    // E-2hu5: rund 1.200 Reisende → Stufe 3, D2 = 2 falsch
+    expect(d2Pruefen("D2 = 2, weil rund 1.200 gestrandete Reisende betroffen waren [Q1 HE].", 2)).toEqual(
+      expect.objectContaining({ personen: 1200, erwartet: 3 }),
+    );
+    // B-n4c8: = mindestens 20.700 → Stufe 4, D2 = 4 richtig
+    expect(
+      d2Pruefen("D2 = 4 (Mindestwert): 7.400 (NW, HSK, Mindestangabe) + 3.500 (RP) + 9.800 (TH) = mindestens 20.700 Personen ohne Strom [Q2–Q4].", 4),
+    ).toBeNull();
+    // Summe, die nicht passt: zusammen 1.840 → Stufe 3, D2 = 2 falsch
+    expect(d2Pruefen("D2 = 2, weil 1.200 Reisende und 640 Einwohner, zusammen 1.840 Personen, betroffen sind.", 2)).toEqual(
+      expect.objectContaining({ personen: 1840, erwartet: 3 }),
+    );
+  });
+
   it("die Redaktionsfassung Ilka ist ohne Befund", () => {
     const ref = JSON.parse(
       readFileSync(
