@@ -29,7 +29,7 @@ Ziel ist zu erfahren, ob KI-LEAD in der Hand fachkundiger Personen nachvollziehb
 ## 3. Teilnahmehinweise
 
 - **Nur fiktive oder offen zugängliche Inhalte.** Keine personenbezogenen Daten, keine eingestuften Inhalte (VS), keine internen Unterlagen einer Stelle. Das gilt für Material, Eingaben, Profile und Rückmeldungen.
-- **Eigener API-Schlüssel** von Anthropic oder OpenAI, nur für KI-LEAD angelegt und mit **Ausgabenlimit** beim Anbieter. Die Kosten der Läufe trägt die testende Person über ihr Konto beim Anbieter. Der Herausgeber erhält weder Schlüssel noch Inhalte ([Datenschutzhinweise](DATENSCHUTZ.md), Abschnitt 6).
+- **Eigener API-Schlüssel** von Anthropic, OpenAI oder Mistral (Mistral seit 0.5.6, im kostenlosen Tarif Trainingsnutzung abschalten), nur für KI-LEAD angelegt und mit **Ausgabenlimit** beim Anbieter. Die Kosten der Läufe trägt die testende Person über ihr Konto beim Anbieter. Der Herausgeber erhält weder Schlüssel noch Inhalte ([Datenschutzhinweise](DATENSCHUTZ.md), Abschnitt 6).
 - **Einstieg ohne KI** mit dem fiktiven Datensatz Orkantief „Ilka“ (README, „Schnellstart“). Für KI-Läufe eignen sich die fiktiven Fälle unter [evaluation/faelle/](../evaluation/faelle/README.md) mit ihrem Material.
 - **Entwürfe bleiben Entwürfe.** Ergebnisse nicht für reale Lagen, Meldungen oder Entscheidungen verwenden. Eine Erprobung im laufenden Lagedienst wäre ein Test unter Realbedingungen und ist nicht Teil dieser Erprobung ([KI-Verordnung](KI-VERORDNUNG.md), Abschnitt 4).
 - Hinweise zur sicheren Nutzung: [Sicherheit](SICHERHEIT.md), Abschnitt 4.

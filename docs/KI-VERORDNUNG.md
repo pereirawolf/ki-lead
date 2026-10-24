@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.4 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.2 vom 24.10.2026, gilt für App-Version 0.5.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -32,7 +32,7 @@ Eine Verwendung außerhalb dieser Grenzen ändert die Einordnung (Abschnitte 4 b
 
 ## 3. Rollen
 
-KI-LEAD ist ein KI-System im Sinne von Art. 3 Nr. 1 KI-VO. Es nutzt KI-Modelle mit allgemeinem Verwendungszweck von Anthropic und OpenAI über deren Schnittstellen. Pflichten für diese Modelle (Kapitel V) treffen die Modellanbieter, nicht KI-LEAD.
+KI-LEAD ist ein KI-System im Sinne von Art. 3 Nr. 1 KI-VO. Es nutzt KI-Modelle mit allgemeinem Verwendungszweck von Anthropic, OpenAI und seit 0.5.6 Mistral über deren Schnittstellen. Pflichten für diese Modelle (Kapitel V) treffen die Modellanbieter, nicht KI-LEAD.
 
 - **Anbieter des Systems** wäre der Herausgeber, sofern KI-LEAD in Verkehr gebracht oder in Betrieb genommen wird. Inverkehrbringen setzt eine Bereitstellung im Rahmen einer Geschäftstätigkeit voraus, entgeltlich oder unentgeltlich (Art. 3 Nr. 9 und 10). Bei einem privaten, unentgeltlichen Forschungsvorhaben spricht viel dafür, dass das nicht vorliegt. Sicher ist das nicht; dieses Dokument behandelt die Anbieterpflichten deshalb so, als könnten sie greifen.
 - **Betreiberin** ist die Stelle, die KI-LEAD in eigener Verantwortung verwendet (Art. 3 Nr. 4). Wer KI-LEAD ausschließlich privat nutzt, ist nicht Betreiber.
@@ -101,13 +101,13 @@ Stand nach der Verordnung (EU) 2026/1744, veröffentlicht im Amtsblatt der EU am
 
 ### 9.1 Aufbau
 
-| Stufe | Aufgabe | Vorgabe der App (Anthropic) | Standard-Profil OpenAI |
-|---|---|---|---|
-| S1 | Gegenstand und SOP-Auswahl vorschlagen | claude-haiku-5-5, Aufwand hoch | gpt-6-luna, hoch |
-| S2 Erfassung | Recherche und Entwurf | claude-opus-5-5, mittel | gpt-6-astra, mittel |
-| S2 Verdichtung | Entwurf aus Eingangsmeldungen | claude-sonnet-5-5, mittel (Beispielprofil: claude-opus-5-5) | gpt-6-astra, mittel |
-| S3 | Reparatur von Schemafehlern, ohne Recherche | claude-sonnet-5-5, niedrig | gpt-6.1-sol, niedrig |
-| Management Summary | Kurzfassung ohne Recherche | claude-sonnet-5-5, mittel | gpt-6.1-sol, mittel |
+| Stufe | Aufgabe | Vorgabe der App (Anthropic) | Standard-Profil OpenAI | Standard-Profil Mistral (seit 0.5.6, nicht erprobt) |
+|---|---|---|---|---|
+| S1 | Gegenstand und SOP-Auswahl vorschlagen | claude-haiku-5-5, Aufwand hoch | gpt-6-luna, hoch | mistral-small-2603, hoch |
+| S2 Erfassung | Recherche und Entwurf | claude-opus-5-5, mittel | gpt-6-astra, mittel | mistral-medium-3-5, mittel |
+| S2 Verdichtung | Entwurf aus Eingangsmeldungen | claude-sonnet-5-5, mittel (Beispielprofil: claude-opus-5-5) | gpt-6-astra, mittel | mistral-medium-3-5, mittel |
+| S3 | Reparatur von Schemafehlern, ohne Recherche | claude-sonnet-5-5, niedrig | gpt-6.1-sol, niedrig | mistral-small-2603, niedrig |
+| Management Summary | Kurzfassung ohne Recherche | claude-sonnet-5-5, mittel | gpt-6.1-sol, mittel | mistral-medium-3-5, mittel |
 
 Profil und Einstellungen können andere Modelle vorgeben; je Lauf lässt sich abweichend wählen. Maßgeblich ist das Laufprotokoll, das Modell, Parameter, Prompts und Antworten jeder Stufe festhält (`src/pipeline/einstellungen.ts`, [Spezifikation](SPEZIFIKATION.md), Abschnitte 5.1 und 5.4).
 
@@ -156,5 +156,6 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.2 | 24.10.2026 | Abschnitte 3 und 9.1: Mistral als dritter Modellanbieter mit Standard-Profil (App 0.5.6) |
 | 1.1 | 24.10.2026 | Abschnitt 6.1: Kennzeichnung in PDF-Metadaten, Kopfzeile der Management Summary und Profilhinweis (App 0.5.4) |
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |

@@ -25,6 +25,8 @@ async function zeigeApp() {
 }
 async function einstellungen() {
   await klick("Einstellungen");
+  // Seit 0.5.6 stehen die Einstellungen in Bereichen; das Farbschema unter „Darstellung“
+  await klick("Darstellung");
   await bisWahr(() => expect(farbSelect()).toBeTruthy());
 }
 function waehle(select: HTMLSelectElement, wert: string) {

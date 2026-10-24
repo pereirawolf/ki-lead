@@ -19,7 +19,7 @@ import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
-import { EinstellungenAnsicht } from "./ui/Einstellungen";
+import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
 import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
@@ -82,6 +82,8 @@ export default function App() {
   const [profile, setProfile] = useState<ProfilEintrag[]>([]);
   const [aktiv, setAktiv] = useState<string>();
   const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
+  /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten (nicht über ein Neuladen hinweg) */
+  const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>("uebersicht");
   const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
   /** Zählt Dokumentinstanzen der Meldungsmaske (neue Meldung, geöffnete Datei, Übernahme, Profilwechsel) */
   const [dokumentNr, setDokumentNr] = useState(0);
@@ -506,7 +508,10 @@ export default function App() {
               profil={profil}
               einstellungen={einstellungen}
               schluessel={schluessel}
-              zuEinstellungen={() => setAnsicht("einstellungen")}
+              zuEinstellungen={() => {
+                setEinstellungsBereich("anbieter");
+                setAnsicht("einstellungen");
+              }}
               uebernehmen={kiUebernehmen}
               uebergabe={kiUebergabe}
               uebergabeQuittieren={uebergabeQuittieren}
@@ -532,6 +537,8 @@ export default function App() {
               ablage={ablageId}
               setAblage={setAblage}
               farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
+              bereich={einstellungsBereich}
+              setBereich={setEinstellungsBereich}
             />
           </Fehlergrenze>
         )}
@@ -540,8 +547,8 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic oder OpenAI). Code unter
-        EUPL-1.2, Profilinhalte unter CC BY 4.0. <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
+        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral). Code
+        unter EUPL-1.2, Profilinhalte unter CC BY 4.0. <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
         <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
       </footer>
     </div>

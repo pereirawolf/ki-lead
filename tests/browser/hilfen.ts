@@ -78,6 +78,7 @@ export async function bereich(page: Page, name: "Meldung" | "KI-Erfassung" | "La
 /** API-Schlüssel für Anthropic unter „Einstellungen“ speichern */
 export async function schluesselSetzen(page: Page): Promise<void> {
   await bereich(page, "Einstellungen");
+  await page.getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
   const feld = page.getByLabel("API-Schlüssel Anthropic");
   await feld.fill(SCHLUESSEL);
   await feld.locator("xpath=ancestor::section[1]").getByRole("button", { name: "Speichern" }).click();

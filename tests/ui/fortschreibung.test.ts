@@ -51,7 +51,7 @@ describe("Fortschreibung in der KI-Erfassung", () => {
       React.createElement(KiErfassung, {
         profil: p,
         einstellungen: { ...STANDARD, websucheMax: 30, abrufMax: 10 },
-        schluessel: { anthropic: "sk-test", openai: "" },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
         uebergabe: { nr: 1, profilHash: p.hash, dateien: [{ id: "v1", name: "Vormeldung_FIKTIV.json", text: JSON.stringify(vormeldung), rolle: "meldung" }] },

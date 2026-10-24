@@ -85,6 +85,7 @@ describe("Fuß der App", () => {
     await einhaengen(React.createElement(App));
     await bisWahr(() => expect(document.querySelector("footer.fuss")).toBeTruthy());
     await klick("Einstellungen");
+    await klick("Über KI-LEAD");
     await bisWahr(() => expect(document.querySelector("#ueber-titel")?.textContent).toBe("Über KI-LEAD"));
   });
 });
@@ -102,6 +103,6 @@ describe("Versionen und Netzzugriffe", () => {
       .split(";")
       .map((s) => s.trim())
       .find((s) => s.startsWith("connect-src"));
-    expect(connect).toBe("connect-src 'self' https://api.anthropic.com https://api.openai.com");
+    expect(connect).toBe("connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.mistral.ai");
   });
 });

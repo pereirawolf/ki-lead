@@ -1,4 +1,4 @@
-// Preise der Modelle (Anthropic-Staffel, OpenAI).
+// Preise der Modelle (Anthropic-Staffel, OpenAI, seit 0.5.6 Mistral mit eigenem Preis je Websuche).
 import { describe, expect, it } from "vitest";
 import { kostenAnfrage } from "../../src/anbieter/preise";
 
@@ -13,5 +13,20 @@ describe("Preise", () => {
 describe("Verteiler", () => {
   it("kennt OpenAI-Preise", () => {
     expect(kostenAnfrage("gpt-6-luna", { eingabe: 1_000_000, ausgabe: 1_000_000, cacheLesen: 0, cacheSchreiben: 0, websuchen: 0, abrufe: 0 })).toBeCloseTo(0.6);
+  });
+});
+
+describe("Mistral", () => {
+  const leer = { eingabe: 0, ausgabe: 0, cacheLesen: 0, cacheSchreiben: 0, websuchen: 0, abrufe: 0 };
+  it("kennt die Listenpreise vom 24.10.2026 (USD je Million Token: Eingabe/Ausgabe)", () => {
+    const million = { ...leer, eingabe: 1_000_000, ausgabe: 1_000_000 };
+    expect(kostenAnfrage("mistral-small-2603", million)).toBeCloseTo(0.15 + 0.6, 10);
+    expect(kostenAnfrage("mistral-medium-3-5", million)).toBeCloseTo(1.5 + 7.5, 10);
+    expect(kostenAnfrage("mistral-large-4", million)).toBeCloseTo(1.36 + 4.18, 10);
+  });
+
+  it("rechnet die Websuche mit 0,03 USD statt 0,01 USD; Seitenabrufe kosten nichts extra", () => {
+    expect(kostenAnfrage("mistral-small-2603", { ...leer, websuchen: 2, abrufe: 5 })).toBeCloseTo(0.06, 10);
+    expect(kostenAnfrage("claude-sonnet-5-5", { ...leer, websuchen: 2 })).toBeCloseTo(0.02, 10);
   });
 });

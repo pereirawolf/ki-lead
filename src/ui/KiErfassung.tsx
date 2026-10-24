@@ -1,7 +1,7 @@
 // KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ANBIETER_NAME, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
+import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -445,7 +445,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
       {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
-          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")}.</p>
+          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {anbieterListe(fehlend)}.</p>
           <button type="button" className="knopf klein" onClick={zuEinstellungen}>
             Zu den Einstellungen
           </button>
@@ -621,7 +621,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
                   Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an{" "}
-                  {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
+                  {anbieterListe([...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map(anbieterVon))])}.
                 </span>
               </label>
               <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen)}</p>

@@ -61,7 +61,7 @@ async function erfassungZeigen() {
     React.createElement(KiErfassung, {
       profil: p,
       einstellungen: STANDARD,
-      schluessel: { anthropic: SCHLUESSEL, openai: "" },
+      schluessel: { anthropic: SCHLUESSEL, openai: "", mistral: "" },
       zuEinstellungen: () => {},
       uebernehmen: () => {},
     }),

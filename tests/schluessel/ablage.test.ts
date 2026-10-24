@@ -42,7 +42,7 @@ describe("Ablage der API-Schlüssel", () => {
   it("nutzt ohne Wahl den Gerätespeicher unter den bisherigen Schlüsseln (bestehende Schlüssel bleiben gültig)", async () => {
     speicher.set("schluessel:anthropic", "sk-ant-alt");
     expect(await ablageLesen()).toBe("geraet");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-alt", openai: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-alt", openai: "", mistral: "" });
   });
 
   it("bietet drei Ablagen an; der Systemschlüsselbund nur in der nativen App", () => {
@@ -58,7 +58,7 @@ describe("Ablage der API-Schlüssel", () => {
     await schluesselSchreiben("sk-oai-B", "openai");
     await ablageWechseln("sitzung");
     expect(await ablageLesen()).toBe("sitzung");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
     expect([...speicher.keys()].filter((k) => k.startsWith("schluessel:"))).toEqual([]);
     expect(JSON.stringify([...speicher.values()])).not.toContain("sk-");
     // Neue Schlüssel bleiben ebenfalls nur im Arbeitsspeicher
@@ -74,7 +74,7 @@ describe("Ablage der API-Schlüssel", () => {
     expect(await ablageLesen()).toBe("system");
     expect(bund.werte.get("schluessel.anthropic")).toBe("sk-ant-A");
     expect(speicher.has("schluessel:anthropic")).toBe(false);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "" });
     // Löschen entfernt den Eintrag im Schlüsselbund
     await schluesselSchreiben("");
     expect(bund.werte.has("schluessel.anthropic")).toBe(false);
@@ -115,10 +115,11 @@ describe("Einstellungen: Wahl der Ablage", () => {
         profil: null,
         einstellungen: STANDARD,
         setEinstellungen: () => undefined,
-        schluessel: { anthropic: "", openai: "" },
+        schluessel: { anthropic: "", openai: "", mistral: "" },
         setSchluessel: () => undefined,
         ablage: "geraet",
         setAblage: async () => undefined,
+        bereich: "anbieter",
       }),
     );
     expect(html).toContain("Ablage der API-Schlüssel");

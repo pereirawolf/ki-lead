@@ -3,7 +3,7 @@
 // nach außen ab. Lokal ohne heruntergeladenen Browser: PLAYWRIGHT_CHROMIUM_PFAD auf eine Chromium-Datei setzen.
 //
 // Zwei Projekte, beide Chromium (siehe docs/TESTS.md, „Gestaffelte Prüfung“):
-// - kern: Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Eingabehilfen
+// - kern: Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Eingabehilfen, Einstellungen
 // - pwa:  Service Worker, Offline-Start und Versionswechsel (pwa.spec.ts, pwa-update.spec.ts)
 // `npm run test:browser` führt beide aus; einzeln mit `--project=kern` bzw. `--project=pwa`.
 //

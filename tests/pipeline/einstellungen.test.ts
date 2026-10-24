@@ -82,17 +82,17 @@ describe("API-Schlüssel je Anbieter", () => {
   beforeEach(() => speicher.clear());
 
   it("werden je Anbieter getrennt gesetzt, gelesen und gelöscht und nie mit den Einstellungen gespeichert", async () => {
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "" });
     await schluesselSchreiben("sk-ant-A");
     await schluesselSchreiben("sk-oai-B", "openai");
     expect(await schluesselLesen()).toBe("sk-ant-A");
     expect(await schluesselLesen("openai")).toBe("sk-oai-B");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
 
     // Ein leerer Wert löscht nur den Schlüssel dieses Anbieters
     await schluesselSchreiben("", "openai");
     expect(speicher.has("schluessel:openai")).toBe(false);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "" });
 
     await einstellungenSchreiben(STANDARD);
     expect(JSON.stringify(speicher.get("einstellungen"))).not.toContain("sk-ant-A");

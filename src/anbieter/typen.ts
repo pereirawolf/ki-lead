@@ -1,5 +1,5 @@
 // Gemeinsame Schnittstelle für KI-Anbieter. Die Pipeline kennt nur diese Typen;
-// die Übersetzung in die jeweilige API steckt in anthropic.ts (später openai.ts).
+// die Übersetzung in die jeweilige API steckt in anthropic.ts, openai.ts und mistral.ts.
 
 export type Aufwand = "low" | "medium" | "high" | "xhigh" | "max";
 
