@@ -25,6 +25,7 @@ import {
 } from "../pipeline/einstellungen";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 import { UeberAbschnitt } from "./Ueber";
+import { VergleichslaufAbschnitt } from "./Vergleichslauf";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "recherche" | "darstellung" | "ueber";
 
@@ -624,6 +625,7 @@ function ModelleBereich({
         Mistral kennt nur Nachdenken an oder aus: „niedrig“ läuft ohne Nachdenken, alle anderen Stufen mit „high“. Lehnt ein Mistral-Modell die Angabe ab,
         versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
       </p>
+      <VergleichslaufAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
     </section>
   );
 }

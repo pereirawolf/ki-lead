@@ -67,6 +67,12 @@ export const STANDARD: Einstellungen = {
  * Mistral (seit 0.5.6, noch nicht erprobt): Mistral Small 4 für S1 und S3, Mistral Medium 3.5 für S2 und die
  * Management Summary. Mistral Large 4 ist am 24.10.2026 eine Public Preview und deshalb nur wählbar, nicht Vorgabe;
  * für Medium 3.5 empfiehlt Mistral das Nachdenken ausdrücklich bei agentischen Aufgaben.
+ *
+ * Bezug (AV-2026-W43-04, entschieden am 24.10.2026): Das Standard-Profil Anthropic ist der Maßstab. Die Standard-Profile
+ * OpenAI und Mistral werden so gewählt, dass sie bei der Verdichtung Ilka in den Kennzahlen des Vergleichslaufs der
+ * Anthropic-Reihe am nächsten kommen (evaluation/plaene/standardprofile-ilka.json, Auswertung mit
+ * npm run vergleichslauf:auswerten); ein teureres Modell oder eine höhere Stufe ist dafür zulässig. Kosten und Dauer
+ * werden berichtet, entscheiden aber nicht. Bis zur Auswertung gelten die Profile unten unverändert.
  */
 export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, string>; aufwand: Record<Rolle, Aufwand> }> = {
   anthropic: {

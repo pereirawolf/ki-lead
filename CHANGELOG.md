@@ -55,6 +55,40 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
 | 0.5.6 | letzter Commit von Pull Request #53 „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
 | 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
+| 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
+
+## [0.5.8] – 24.10.2026
+
+Grundlage: Auftrag des Herausgebers vom 24.10.2026, die Konfigurationen von Modell und Aufwand der drei Anbieter mit dem Standardfall „Ilka“ per Schaltfläche vergleichbar zu machen, mit wählbarer Anzahl der Läufe (Vorauswahl 3) und dem Ergebnis als ZIP-Datei; dazu die Entscheidungen des Herausgebers vom selben Tag zu den Befunden AV-2026-W43-04 (Standard-Profile mit Anthropic als Bezug: ja), AV-2026-W43-10 (App-Vorgabe der Verdichtung erst nach Vergleich Opus/Sonnet) und AV-2026-W43-11 (Plausibilitätsprüfung: Entscheidung an Claude übertragen). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel; die Standard-Profile bleiben bis zur Auswertung der Vergleichsläufe unverändert.
+
+### Hinzugefügt
+
+- **Vergleichslauf Ilka** unter „Einstellungen → Modelle & Verarbeitung“ (`src/ui/Vergleichslauf.tsx`, `src/pipeline/vergleichslauf.ts`). Mit der dort angezeigten Konfiguration (S1, S2 Verdichtung, S3 Reparatur je mit Modell und Aufwand, bei Mistral mit Endpunkt) laufen 1 bis 10 Verdichtungen der sechs fiktiven Ilka-Eingänge (Vorauswahl 3) nacheinander:
+  - fester Auftrag aus `evaluation/faelle/orkantief-ilka-verdichtung.json`: Beispielprofil mit der Koordinierungsstelle, Referenzraum Bevölkerungsschutz in Deutschland, Stichtag 14.10.2026, t0 14:00 Uhr, ohne Websuche;
+  - S1-Vorschlag unverändert übernommen, keine vorgeschlagene Prüffrage, wie in der Abnahme M4;
+  - je Lauf Quellenprüfung der Eingänge, Prüfpunkte T1–T8 der Abnahme M4 und Vergleich mit der Redaktionsfassung.
+  - Vor dem Start nennt die App Schätzung von Dauer und Kosten je Lauf und zusammen sowie fehlende Schlüssel. Während des Laufs zeigt sie Lauf, Stufe, Zeichen und bisherige Kosten, hält den Bildschirm wach und lässt sich abbrechen (die bisherigen Läufe bleiben).
+  - **Konfiguration** wahlweise aus den aktuellen Einstellungen oder als Variante des Bewertungsplans `standardprofile-ilka` (A Anthropic-Standard als Bezug, B Anthropic mit Sonnet in der Verdichtung, C OpenAI-Standard, D OpenAI mit astra „hoch“, E Mistral-Standard, F Mistral mit Large 4); die Einstellungen bleiben dabei unverändert, die Reparatur folgt dem Standard-Profil des S2-Anbieters.
+  - **Kennzahlen je Lauf** (AV-2026-W43-04): Zahl der Sachverhalte, Anteil gesetzter Achsen und Tendenzen, Gleichheit von Beurteilung und Tendenz, Ähnlichkeit und Achsenabweichung gegenüber der Redaktionsfassung, Radarwerte je zugeordnetem Sachverhalt der Redaktionsfassung.
+  - **Plausibilitätsprüfung der Zahlen** (AV-2026-W43-11, `src/pipeline/plausibilitaet.ts`): Summenangaben der Form „mindestens N … (Teilwerte)“ gegen die Summe der Klammerwerte, D2-Wert gegen die größte im D2-Satz genannte Personenzahl nach den Stufentexten des Kodierleitfadens. Entscheidung: zunächst nur im Vergleichslauf (Reihendatei, Übersicht, Ergebnistabelle); ob sie als Hinweis an die Redaktion in die App kommt, entscheidet die Quote falscher Treffer in den Vergleichsläufen. An den vier Mistral-Entwürfen vom 24.10.2026 fand sie die bekannten Summen- und D2-Fehler, an der Redaktionsfassung und den Beispielmeldungen des Profils nichts.
+  - **ZIP-Datei** `KI-LEAD_Vergleichslauf_Ilka_[<Variante>_]<S2-Modell>-<Aufwand>_<Zeit>.zip`: `reihe.json` (Format `ki-lead-abnahme/1`, Feld `quelle: "app"`), `uebersicht.csv` (eine Zeile je Sachverhalt und Lauf mit Konfiguration, Dauer, Token, Kosten, Beurteilung, Tendenz, Radarwerten und Ähnlichkeit zur Redaktionsfassung; Semikolon, Dezimalkomma), `laeufe/*.lauf.json`, `meldungen/*.meldung.json` (für `npm run vergleich:mehrfach`), `vergleiche/*.vergleich.csv`, `LIESMICH.txt`. Die Läufe erscheinen nicht in der Läufe-Liste der KI-Erfassung.
+
+- **Bewertungsplan** `evaluation/plaene/standardprofile-ilka.json` (AV-2026-W43-04, -10): sechs Varianten, je drei Läufe, Budgetgrenze 30 USD, Bezug Variante A.
+- **Auswertung mehrerer Vergleichsläufe** (`src/pipeline/vergleichsauswertung.ts`, `npm run vergleichslauf:auswerten -- <ZIP-Dateien oder Ordner> [--bezug <kennung>] [--md <datei>] [--json <datei>]`): fasst die Reihen je Konfiguration zusammen (auch über mehrere Dateien) und stellt jede dem Bezug gegenüber, ohne Vorgabe dem Standard-Profil Anthropic; Radarabstand je Sachverhalt der Redaktionsfassung und Achse, Abstand der Anteile „offen“ und je Kennzahl. Kein Gesamtwert; sortiert nach dem Radarabstand.
+- Kommentar zu `STANDARD_PROFILE`: Anthropic als Bezug der Standard-Profile (AV-2026-W43-04).
+
+### Geändert
+
+- **Abnahmeskript M4** (`evaluation/abnahmen/m4.lauf.ts`) nutzt Ablauf, Prüfpunkte und Reihendatei des Vergleichslaufs (`einLauf`, `pruefpunkte`, `reiheErstellen`); Ausgabe und Aufruf unverändert, die Reihendatei nennt zusätzlich `quelle: "skript"` und je Aufgabe den Anbieter, je Stufe die Eingabetoken.
+
+### Tests
+
+- `tests/pipeline/vergleichslauf.test.ts` (neu, 7): Vorgabe und Grenzen der Anzahl, Falldateien im Beispielprofil und in der eingebetteten Ausgabe, drei Läufe mit festem Auftrag und allen Prüfpunkten, Reihe ohne Mistral ohne Endpunkt, Inhalt der ZIP-Datei und der Übersicht, Abbruch im zweiten Lauf, Budgetgrenze.
+- `tests/pipeline/vergleichslauf.test.ts` (+2): Kennzahlen und Plausibilität mit der Redaktionsfassung als Entwurf (Soll aus der Redaktionsfassung), Varianten des Plans mit Reparatur des S2-Anbieters und Variante im Dateinamen.
+- `tests/pipeline/plausibilitaet.test.ts` (neu, 7): Summenwidersprüche, stimmige Summen, Rundung und Untergrenze, Klammern ohne Summanden (Datum, Uhrzeit, Spannen, anderer Bezug), D2-Stufen, D2-Widersprüche ohne Grenzangaben, Redaktionsfassung ohne Befund, Zuordnung zu Sachverhalt und Feld.
+- `tests/pipeline/vergleichsauswertung.test.ts` (neu, 4): Zusammenfassung über mehrere Dateien, Abstand zum Bezug von Hand gerechnet, Wahl des Bezugs, Bericht.
+- `tests/ui/vergleichslauf.test.ts` (neu, 3): Abschnitt unter „Modelle & Verarbeitung“ mit wirksamer Konfiguration, drei Läufen und fehlendem Schlüssel; Ablauf mit Mistral-Konfiguration, ZIP-Datei und erneutem Herunterladen; Auswahl einer Plan-Variante ohne Änderung der Einstellungen.
+- `tests/browser/vergleichslauf.spec.ts` (neu, 1): zwei Läufe im Browser gegen eine simulierte Anthropic-API, ZIP-Datei, keine Anfrage nach außen.
 
 ## [0.5.7] – 24.10.2026
 

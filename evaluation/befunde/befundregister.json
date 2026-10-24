@@ -361,6 +361,58 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-24",
       "pr": 56
+    },
+    {
+      "id": "AV-2026-W43-04",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "Kommentar zu STANDARD_PROFILE"
+        }
+      ],
+      "kurz": "Standard-Profil Anthropic als Bezug; OpenAI- und Mistral-Profile über Vergleichsreihen Ilka nach festen Kennzahlen wählen (Plan standardprofile-ilka, Auswertung).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 57
+    },
+    {
+      "id": "AV-2026-W43-10",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "APP_MODELLE.verdichtung"
+        }
+      ],
+      "kurz": "App-Vorgabe der Verdichtung (Sonnet) an das Standard-Profil (Opus) angleichen.",
+      "status": "zurueckgestellt",
+      "entschieden_am": "2026-10-24",
+      "grund": "Entscheidung nach dem Vergleich Opus/Sonnet (Varianten A und B des Plans standardprofile-ilka) mit begründeter Empfehlung.",
+      "wieder_vorlegen_ab": "2026-10-31"
+    },
+    {
+      "id": "AV-2026-W43-11",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vermerke.ts",
+          "stelle": "eingangsquellenPruefen"
+        }
+      ],
+      "kurz": "Plausibilitätsprüfung für Summen und D2; zunächst nur im Vergleichslauf, Übernahme in die App nach Quote falscher Treffer.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-24",
+      "pr": 57
     }
   ]
 }
