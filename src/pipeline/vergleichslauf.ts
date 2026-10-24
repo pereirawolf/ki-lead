@@ -17,7 +17,7 @@ import { migriere } from "../kern/migration";
 import type { Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { sha256 } from "../profil/laden";
-import { modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "./einstellungen";
+import { aufwandFuer, modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "./einstellungen";
 import { plausibilitaetPruefen, type PlausibilitaetsBefund } from "./plausibilitaet";
 import { APP_KENNUNG, neuerLauf, ohneBase64, type Auftrag, type Lauf } from "./lauf";
 import { dateiLesen, istVerdichtung, type Material } from "./material";
@@ -106,7 +106,7 @@ export interface Konfiguration {
 export function konfiguration(e: Einstellungen, profil: Profil): Konfiguration {
   const teil = (r: Rolle) => {
     const modell = modellFuer(r, e, profil);
-    return { modell, aufwand: e.aufwand[r], anbieter: anbieterVon(modell) };
+    return { modell, aufwand: aufwandFuer(r, e, profil), anbieter: anbieterVon(modell) };
   };
   const k: Konfiguration = { s1: teil("vorverarbeitung"), s2: teil("verdichtung"), reparatur: teil("reparatur") };
   if ([k.s1, k.s2, k.reparatur].some((t) => t.anbieter === "mistral")) k.mistral_endpunkt = e.mistralEndpunkt ?? "eu";

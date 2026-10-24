@@ -123,6 +123,20 @@ describe("KI-Erfassung", () => {
     expect(document.querySelector(".modellwahl summary")!.textContent).toContain("S2: claude-fable-5-1");
   });
 
+  it("AV-2026-W43-01, -02: bei Mistral nur Stufen mit und ohne Nachdenken; die gewählte Stufe passt sich beim Modellwechsel an", async () => {
+    await erfassungZeigen();
+    await eingeben(auswahl("S1", "Aufwand"), "medium");
+    await eingeben(auswahl("S1"), "mistral-small-2603");
+    const a1 = auswahl("S1", "Aufwand");
+    expect([...a1.options].map((o) => [o.value, o.textContent])).toEqual([
+      ["", "Standard: hoch"],
+      ["low", "niedrig – ohne Nachdenken"],
+      ["high", "hoch – mit Nachdenken"],
+    ]);
+    expect(a1.value).toBe("high");
+    expect(document.querySelector(".modellwahl summary")!.textContent).toContain("S1: mistral-small-2603 (hoch)");
+  });
+
   it("Aufwand je Stufe und Höchstzahl der Websuchen für einen Lauf wählen", async () => {
     await erfassungZeigen();
     const a1 = auswahl("S1", "Aufwand");

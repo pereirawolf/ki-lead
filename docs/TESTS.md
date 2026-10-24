@@ -39,7 +39,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 |---|---|
 | `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
 | `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Arbeitsanweisungen und Dokumentation gegen das Profil (Konsistenzprüfungen), Profilansicht, Vorlage gegen das Beispielprofil, private Profile |
-| `tests/pipeline/` | Einstellungen und Vorgaben, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich und Mehrfachvergleich mit Krippendorffs Alpha |
+| `tests/pipeline/` | Einstellungen und Vorgaben, Aufwand je Modell und Standard-Profile, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich und Mehrfachvergleich mit Krippendorffs Alpha |
 | `tests/anbieter/` | SSE-Leser, Adapter für Anthropic, OpenAI und Mistral, gemeinsamer Vertrag aller Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |

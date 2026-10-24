@@ -11,7 +11,7 @@ import { kennsaetzeAlle, parseDatumDE } from "../kern/kennsaetze";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import type { Meldung, Profil } from "../kern/typen";
 import { ersetzePlatzhalter } from "../profil/platzhalter";
-import { modellFuer, type Einstellungen } from "./einstellungen";
+import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
 import type { StufenEintrag } from "./lauf";
 import { offenePlatzhalter } from "../kern/feldhilfen";
@@ -283,6 +283,7 @@ export function kurzfassungHinweise(k: KurzfassungStruktur, zahlSv: number): str
 
 export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter: LlmAnbieter, e: Einstellungen, signal?: AbortSignal): Promise<Kurzfassung> {
   const modell = modellFuer("kurzfassung", e, profil);
+  const aufwand = aufwandFuer("kurzfassung", e, profil);
   const system = kurzfassungAnweisung(profil);
   const stoff = meldungFuerKurzfassung(d, profil);
   const schema = kurzfassungSchema(profil);
@@ -300,13 +301,13 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
     stufe: "Management Summary",
     start: new Date().toISOString(),
     modell,
-    aufwand: e.aufwand.kurzfassung,
+    aufwand,
     anfrage: { system: [system], nachrichten: [{ role: "user", content: nachricht }], jsonSchema: schema, maxTokens: e.maxTokensErfassung },
   };
   try {
     const a = await anbieter.senden({
       modell,
-      aufwand: e.aufwand.kurzfassung,
+      aufwand,
       maxTokens: e.maxTokensErfassung,
       system: [{ text: system, cache: true }],
       nachrichten: [{ role: "user", content: nachricht }],

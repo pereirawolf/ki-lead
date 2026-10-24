@@ -7,6 +7,8 @@ import { ANBIETER_NAME, anbieterVon, type Schluessel } from "../anbieter/verteil
 import {
   AUFWAND_STUFEN,
   MODELL_GRUPPEN,
+  aufwandAngeboten,
+  aufwandAuswahl,
   WEBSUCHE_GRENZE,
   modellFuer,
   wahlAbweichend,
@@ -43,7 +45,16 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
   const rollen = stufen.map((s) => s.rolle);
   const abweichend = wahlAbweichend(wahl, rollen, !!websuche);
   const ohneSchluessel = (m: string) => (schluessel[anbieterVon(m)] ? "" : ` (kein Schlüssel für ${ANBIETER_NAME[anbieterVon(m)]})`);
-  const aufwandVon = (r: Rolle) => wahl.aufwand?.[r] || einstellungen.aufwand[r];
+  const modellVon = (r: Rolle) => wahl[r] || modellFuer(r, einstellungen, profil);
+  // Wirksame Stufe: nur Stufen, die das Modell anbietet (AV-2026-W43-01, -02)
+  const aufwandVon = (r: Rolle) => aufwandAngeboten(modellVon(r), wahl.aufwand?.[r] || einstellungen.aufwand[r]);
+  const setzeModell = (r: Rolle, m: string) => {
+    const gewaehlt = wahl.aufwand?.[r];
+    const modell = m || modellFuer(r, einstellungen, profil);
+    // Beim Modellwechsel eine gewählte Stufe, die das neue Modell nicht anbietet, sichtbar anpassen
+    const aufwand = gewaehlt && aufwandAngeboten(modell, gewaehlt) !== gewaehlt ? { ...wahl.aufwand, [r]: aufwandAngeboten(modell, gewaehlt) } : wahl.aufwand;
+    onChange({ ...wahl, [r]: m, ...(aufwand ? { aufwand } : {}) });
+  };
   const setzeAufwand = (r: Rolle, a: string) => {
     const neu = { ...(wahl.aufwand || {}) };
     if (a) neu[r] = a as Aufwand;
@@ -57,7 +68,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
         Modelle für diesen Lauf
         <span className="material-meta">
           {" "}
-          {stufen.map((s) => `${s.kurz}: ${wahl[s.rolle] || modellFuer(s.rolle, einstellungen, profil)} (${aufwandTitel(aufwandVon(s.rolle))})`).join(" · ")}
+          {stufen.map((s) => `${s.kurz}: ${modellVon(s.rolle)} (${aufwandTitel(aufwandVon(s.rolle))})`).join(" · ")}
           {websuche ? ` · bis ${websuchen} Websuchen` : ""}
           {abweichend ? " (abweichend von den Einstellungen)" : ""}
         </span>
@@ -70,12 +81,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
               <legend>{s.titel}</legend>
               <label className="feld" htmlFor={`${id}-${s.rolle}`}>
                 <span className="feld-label">Modell</span>
-                <select
-                  id={`${id}-${s.rolle}`}
-                  value={wahl[s.rolle] || ""}
-                  disabled={deaktiviert}
-                  onChange={(e) => onChange({ ...wahl, [s.rolle]: e.target.value })}
-                >
+                <select id={`${id}-${s.rolle}`} value={wahl[s.rolle] || ""} disabled={deaktiviert} onChange={(e) => setzeModell(s.rolle, e.target.value)}>
                   <option value="">
                     Standard: {standard}
                     {ohneSchluessel(standard)}
@@ -100,8 +106,8 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
                   disabled={deaktiviert}
                   onChange={(e) => setzeAufwand(s.rolle, e.target.value)}
                 >
-                  <option value="">Standard: {aufwandTitel(einstellungen.aufwand[s.rolle])}</option>
-                  {AUFWAND_STUFEN.map((a) => (
+                  <option value="">Standard: {aufwandTitel(aufwandAngeboten(modellVon(s.rolle), einstellungen.aufwand[s.rolle]))}</option>
+                  {aufwandAuswahl(modellVon(s.rolle)).map((a) => (
                     <option key={a.id} value={a.id}>
                       {a.titel}
                     </option>

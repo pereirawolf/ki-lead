@@ -23,7 +23,12 @@ interface PreisRegel {
   /** Höhere Preise ab dieser Promptlänge (Token, inkl. Cache) */
   langAb?: number;
   lang?: Preis;
+  /** Faktor auf alle Preise am regionalen Endpunkt (Mistral EU: 1,1), seit 0.5.10 */
+  regional?: number;
 }
+
+/** Aufschlag des regionalen Mistral-Endpunkts auf alle Tokenpreise (Mistral: 1,1 × Listenpreis) */
+export const MISTRAL_EU_FAKTOR = 1.1;
 
 const REGELN: PreisRegel[] = [
   { muster: /^claude-fable-5-1/, preis: { eingabe: 10, cacheSchreiben: 12.5, cacheLesen: 0.25, ausgabe: 50 } },
@@ -40,9 +45,14 @@ const REGELN: PreisRegel[] = [
   { muster: /^gpt-6\.1-sol/, preis: { eingabe: 2, cacheSchreiben: 2.5, cacheLesen: 0.1, ausgabe: 10 }, abrufKostet: true },
   { muster: /^gpt-6-luna/, preis: { eingabe: 0.1, cacheSchreiben: 0.125, cacheLesen: 0.01, ausgabe: 0.5 }, abrufKostet: true },
   // Mistral (kein Aufpreis für das Schreiben in den Cache; die Conversations-API meldet gecachte Token nicht gesondert)
-  { muster: /^mistral-large-4/, preis: { eingabe: 1.36, cacheSchreiben: 1.36, cacheLesen: 0.14, ausgabe: 4.18 }, websuche: 0.03 },
-  { muster: /^mistral-medium-3-5/, preis: { eingabe: 1.5, cacheSchreiben: 1.5, cacheLesen: 0.15, ausgabe: 7.5 }, websuche: 0.03 },
-  { muster: /^mistral-small-2603/, preis: { eingabe: 0.15, cacheSchreiben: 0.15, cacheLesen: 0.015, ausgabe: 0.6 }, websuche: 0.03 },
+  { muster: /^mistral-large-4/, preis: { eingabe: 1.36, cacheSchreiben: 1.36, cacheLesen: 0.14, ausgabe: 4.18 }, websuche: 0.03, regional: MISTRAL_EU_FAKTOR },
+  { muster: /^mistral-medium-3-5/, preis: { eingabe: 1.5, cacheSchreiben: 1.5, cacheLesen: 0.15, ausgabe: 7.5 }, websuche: 0.03, regional: MISTRAL_EU_FAKTOR },
+  {
+    muster: /^mistral-small-2603/,
+    preis: { eingabe: 0.15, cacheSchreiben: 0.15, cacheLesen: 0.015, ausgabe: 0.6 },
+    websuche: 0.03,
+    regional: MISTRAL_EU_FAKTOR,
+  },
 ];
 
 /** USD je Websuche (Anthropic, OpenAI) */
@@ -53,6 +63,15 @@ export const PREISSTAND = "18.10.2026 (Mistral 24.10.2026)";
 /** Listenpreis für Ausgabetoken (USD je Million, kurzer Kontext); null, wenn das Modell nicht in der Tabelle steht. */
 export function ausgabePreis(modell: string): number | null {
   return REGELN.find((x) => x.muster.test(modell))?.preis.ausgabe ?? null;
+}
+
+/**
+ * Faktor auf den Listenpreis je Modell und Endpunkt (seit 0.5.10, AV-2026-W43-06): Mistral über den EU-Endpunkt 1,1,
+ * sonst 1. Ist-Kosten (Mistral-Anbieter) und Schätzung vor dem Lauf (`schaetzeStufe`) verwenden ihn gemeinsam.
+ */
+export function aufschlag(modell: string, o: { mistralEndpunkt?: "eu" | "global" } = {}): number {
+  const r = REGELN.find((x) => x.muster.test(modell));
+  return o.mistralEndpunkt === "eu" && r?.regional ? r.regional : 1;
 }
 
 /** Kosten einer einzelnen Anfrage. null, wenn das Modell nicht in der Tabelle steht. */

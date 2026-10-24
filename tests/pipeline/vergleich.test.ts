@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
-import { krippendorffAlphaOrdinal, vergleiche, vergleicheMehrere, vergleichTabelle, zuordnen } from "../../src/pipeline/vergleich";
+import { kernaussage, krippendorffAlphaOrdinal, vergleiche, vergleicheMehrere, vergleichTabelle, zuordnen } from "../../src/pipeline/vergleich";
 
 const p = (await profil("lead-beispiel")).profil!;
 const bund = ilkaMeldung("Bund");
@@ -60,6 +60,50 @@ describe("Vergleich mit Referenzfassung", () => {
     expect(hand.beurteilung).toEqual({ n: 0, gleich: 0, fehlend: 1 });
     const halb = vergleiche(m("Waldbrand im Harz", "erheblich"), m("Waldbrand im Harz"), p);
     expect(halb.beurteilung).toEqual({ n: 0, gleich: 0, fehlend: 1 });
+  });
+
+  it("AV-2026-W43-18: ordnet mit der Kernaussage den Stromausfall-Sachverhalt der Redaktionsfassung zu", () => {
+    // Zerlegter KI-Entwurf nach dem Muster des Vergleichslaufs vom 24.10.2026 (Lauf F-7ngp, fiktiver Fall Ilka):
+    // Sachverhalt 1 Sturmfolgen mit Verletzten, Sachverhalt 2 Stromausfall. Die Redaktionsfassung kodiert den Stromausfall.
+    const sv = (bezeichnung: string, art: string[], ort: string, kern: string) => ({
+      bezeichnung,
+      art,
+      ort,
+      analyse: {},
+      sofort: {
+        beurteilung: "erheblich",
+        tendenz: "",
+        bewertung_text: `Kernaussage: ${kern} Referenzraum: Bevölkerungsschutz in Deutschland. D1 = 5, …`,
+        lagenradar: {},
+      },
+    });
+    const ki = {
+      sachverhalte: [
+        sv(
+          "Sturmtief „Ilka“ mit Sturmfolgen in sechs Bundesländern: rund 15.000 Feuerwehreinsätze, ein Todesopfer, sechs Schwerverletzte",
+          ["Unwetter / Sturm"],
+          "Bundesgebiet; Schwerpunkte Hessen, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Sachsen-Anhalt, Thüringen",
+          "Sechs Bundesländer meldeten erhebliche Sturmfolgen mit einem Todesopfer und über 80 Verletzten; die akute Gefahrenabwehr ist weitgehend abgeschlossen, die Bedeutung verlagert sich auf die Wiederherstellung kritischer Infrastrukturen (siehe Sachverhalte 2 und 3).",
+        ),
+        sv(
+          "Mehrtägige Stromausfälle in fünf Bundesländern mit rund 19.500 betroffenen Anschlüssen und Kopplungen zu Telekommunikation, Trinkwasser und Pflege",
+          ["Stromausfall / Blackout"],
+          "Nordrhein-Westfalen (Südwestfalen), Niedersachsen (Oberharz), Rheinland-Pfalz (Vulkaneifel), Thüringen (Landkreis Sonneberg), Hessen (Landkreis Fulda)",
+          "Rund 19.500 Anschlüsse in fünf Bundesländern sind zu t0 ohne Strom, mindestens 29.400 Personen betroffen; kritische Infrastruktur (Telekommunikation, Trinkwasser, Pflege) ist eingeschränkt, die Entwicklung hängt von der Sicherung der Notstromversorgung ab.",
+        ),
+      ],
+    };
+    const z = zuordnen(ki as any, bund, p).filter((x) => x.ki && x.ref);
+    expect(z.map((x) => x.ki!.index)).toEqual([1]);
+    // ohne Kernaussage (Verfahren /2) fiel die Wahl auf Sachverhalt 1
+    const ohne = { sachverhalte: ki.sachverhalte.map((x) => ({ ...x, sofort: { ...x.sofort, bewertung_text: "" } })) };
+    const refOhne = { ...structuredClone(bund), sachverhalte: bund.sachverhalte.map((x: any) => ({ ...x, sofort: { ...x.sofort, bewertung_text: "" } })) };
+    expect(
+      zuordnen(ohne as any, refOhne, p)
+        .filter((x) => x.ki && x.ref)
+        .map((x) => x.ki!.index),
+    ).toEqual([0]);
+    expect(kernaussage(ki.sachverhalte[1], p)).toMatch(/^Rund 19\.500 Anschlüsse.*Notstromversorgung ab\.$/);
   });
 
   it("übernimmt eine manuelle Zuordnung statt der automatischen", () => {

@@ -27,8 +27,9 @@
 // Stand der Schnittstelle: 24.10.2026, nach Doku und Typdefinitionen des offiziellen SDK @mistralai/mistralai 3.2.0.
 // Nicht mit einem echten Schlüssel geprüft; siehe „Offene Punkte“ in docs/SPEZIFIKATION.md.
 
+import { MISTRAL_STUFEN, naechsteStufe } from "./aufwand";
 import { strengesSchema } from "./openai";
-import { kostenAnfrage } from "./preise";
+import { aufschlag, kostenAnfrage, MISTRAL_EU_FAKTOR } from "./preise";
 import { SseLeser } from "./strom";
 import {
   AnbieterFehler,
@@ -50,8 +51,8 @@ export type MistralEndpunkt = "eu" | "global";
 
 export const MISTRAL_URL = "https://api.mistral.ai/v1/conversations";
 export const MISTRAL_EU_URL = "https://api.eu.mistral.ai/v1/chat/completions";
-/** Aufschlag des regionalen Endpunkts auf alle Tokenpreise (Mistral: 1,1 × Listenpreis) */
-export const MISTRAL_EU_FAKTOR = 1.1;
+/** Aufschlag des regionalen Endpunkts; seit 0.5.10 Eigenschaft der Preisregel (preise.ts, `aufschlag`) */
+export { MISTRAL_EU_FAKTOR };
 
 /** Kann der Weg Werkzeuge? Über den EU-Endpunkt gibt es keine Websuche und keinen Seitenabruf. */
 export function mistralWerkzeuge(endpunkt: MistralEndpunkt): { websuche: boolean; abruf: boolean } {
@@ -61,12 +62,18 @@ const MAX_WIEDERHOLUNGEN = 3;
 const MAX_NEUSTARTS = 2;
 
 /**
- * reasoning_effort je Stufe der App. Die API kennt zwar none, minimal, low, medium, high und xhigh, für Mistral Small 4,
- * Medium 3.5 und Large 4 dokumentiert Mistral aber nur „high“ (mit Nachdenken) und „none“ (ohne). Lauf
- * 20261024-195614-kyc1: Medium 3.5 lehnte „medium“ mit HTTP 422 ab. Deshalb: „niedrig“ ohne Nachdenken, alles
- * andere „high“. Lehnt ein Modell auch das ab, wiederholt die App einmal ohne Angabe (Vorgabe des Modells).
+ * reasoning_effort je angebotener Stufe der App. Die API kennt zwar none, minimal, low, medium, high und xhigh, für
+ * Mistral Small 4, Medium 3.5 und Large 4 dokumentiert Mistral aber nur „high“ (mit Nachdenken) und „none“ (ohne). Lauf
+ * 20261024-195614-kyc1: Medium 3.5 lehnte „medium“ mit HTTP 422 ab. Die App bietet bei Mistral deshalb nur „niedrig“
+ * (none) und „hoch“ (high) an (AV-2026-W43-01); andere Stufen, etwa aus älteren Einstellungen, gelten als „hoch“
+ * (`mistralAufwand`, AV-2026-W43-02). Lehnt ein Modell die Angabe ab, wiederholt die App einmal ohne Angabe.
  */
-export const MISTRAL_AUFWAND: Record<Aufwand, string> = { low: "none", medium: "high", high: "high", xhigh: "high", max: "high" };
+export const MISTRAL_AUFWAND: Record<"low" | "high", string> = { low: "none", high: "high" };
+
+/** reasoning_effort für eine Stufe der App */
+export function mistralAufwand(aufwand: Aufwand | undefined): string | undefined {
+  return aufwand && MISTRAL_AUFWAND[naechsteStufe(aufwand, MISTRAL_STUFEN) as "low" | "high"];
+}
 
 function inhaltZuMistral(c: string | Inhaltsblock[]): string | any[] {
   if (typeof c === "string") return c;
@@ -89,7 +96,7 @@ function inhaltZuMistral(c: string | Inhaltsblock[]): string | any[] {
 
 export function anfrageKoerperMistral(
   a: LlmAnfrage,
-  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand],
+  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = mistralAufwand(a.aufwand),
 ): Record<string, any> {
   const args: Record<string, any> = { max_tokens: a.maxTokens };
   if (aufwand) args.reasoning_effort = aufwand;
@@ -110,7 +117,7 @@ export function anfrageKoerperMistral(
 /** Anfrage an Chat Completions (EU-Endpunkt): System als erste Nachricht, keine Werkzeuge. */
 export function anfrageKoerperMistralChat(
   a: LlmAnfrage,
-  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand],
+  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = mistralAufwand(a.aufwand),
 ): Record<string, any> {
   const system = a.system.map((s) => s.text).join("\n\n");
   const body: Record<string, any> = {
@@ -329,7 +336,7 @@ export class MistralAnbieter implements LlmAnbieter {
 
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert den Sammler und die wirksame Stufe des Nachdenkens. */
   private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string; abgelehnt?: string }> {
-    let aufwand = a.aufwand && MISTRAL_AUFWAND[a.aufwand];
+    let aufwand = mistralAufwand(a.aufwand);
     let abgelehnt: string | undefined;
     let body = this.koerper(a, aufwand);
     let grobVersucht = false;
@@ -464,7 +471,7 @@ export class MistralAnbieter implements LlmAnbieter {
       abrufe: [],
       abrufFehler: [],
       nutzung: n,
-      kostenUsd: kosten === null ? null : eu ? kosten * MISTRAL_EU_FAKTOR : kosten,
+      kostenUsd: kosten === null ? null : kosten * aufschlag(a.modell, { mistralEndpunkt: this.endpunkt }),
       stopGrund: abgeschnitten ? "max_tokens" : "end_turn",
       dauerMs: Date.now() - start,
       runden: 1,

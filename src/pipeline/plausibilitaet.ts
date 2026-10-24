@@ -4,13 +4,18 @@
 // (a) Summe: Eine Angabe der Form „mindestens 12.600 Anschlüsse ohne Versorgung (Niedersachsen: 4.600 [Q2];
 //     NRW: 6.900 [Q3]; …)“ wird gegen die Summe der Klammerwerte geprüft. Datum, Uhrzeit, Quellen- und Achsenverweise,
 //     Straßen, Spannen und Angaben mit Einheiten (Uhr, km/h, %, Stunden, Tage) zählen nicht als Summanden.
-// (b) D2: Der Wert der Achse D2 im Bewertungstext wird gegen die Stufe geprüft, in die die größte dort genannte
-//     Personenzahl fällt (Stufentexte des Kodierleitfadens: 0 unter 10, 1 10–99, 2 100–999, … 6 ab 1 Mio.).
-//     Grenzangaben („unter 10 Personen“, „über 9.999“, Spannen „10–99“) zählen nicht.
+// (b) D2: Der Wert der Achse D2 im Bewertungstext wird gegen die Stufe geprüft, in die die maßgebliche Personenzahl
+//     fällt (Stufentexte des Kodierleitfadens: 0 unter 10, 1 10–99, 2 100–999, … 6 ab 1 Mio.). Maßgeblich ist eine
+//     ausdrücklich genannte Summe oder Gesamtzahl („Summe 19.600“, „zusammen …“, „insgesamt …“, „= mindestens …“, seit
+//     0.5.10, AV-2026-W43-17), sonst die größte Zahl vor einem Personenwort. Grenzangaben („unter 10 Personen“,
+//     „über 9.999“, Spannen „10–99“) zählen nicht.
 //
 // Entscheidung zu AV-2026-W43-11 (24.10.2026): Die Prüfung läuft zunächst nur im Vergleichslauf Ilka (Reihendatei,
 // Übersicht). Ob sie als Hinweis an die Redaktion in die App kommt, entscheidet die Quote falscher Treffer in den
 // Vergleichsläufen.
+// Stand 25.10.2026 (AV-2026-W43-16): Vergleichslauf standardprofile-ilka, 18 Läufe, 3 Treffer, davon 1 Fehlalarm (D2-Satz
+// mit ausdrücklicher Summe, seither behoben). Weiter nur im Vergleichslauf; Übernahme in die App als Hinweis, sobald
+// mindestens 10 Treffer von Hand geprüft sind und höchstens einer davon ein Fehlalarm ist.
 
 import type { Meldung } from "../kern/typen";
 
@@ -106,11 +111,22 @@ export function d2Pruefen(bewertungText: string, d2: number | null | undefined):
     String.raw`(unter|über|ab|bis|mehr als|weniger als|[–-])?\s*(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)\s+(?:[a-zäöüß-]+\s+){0,2}${PERSONEN}`,
     "g",
   );
-  let groesste = -1;
-  for (const m of satz.matchAll(muster)) {
-    if (m[1]) continue; // Grenzangabe oder Spanne
-    groesste = Math.max(groesste, zahl(m[2]));
-  }
+  // Ausdrücklich genannte Summe oder Gesamtzahl geht vor (AV-2026-W43-17); die letzte im Satz zählt
+  const ohneWert = satz.replace(/^D2\s*=\s*\d+/, "");
+  const summen = [
+    ...ohneWert.matchAll(
+      new RegExp(
+        String.raw`(?:\bSumme|\bzusammen|\binsgesamt|=)\s*(?:von\s+|also\s+)?(?:mindestens\s+|rund\s+|etwa\s+|ca\.\s+)?(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)`,
+        "gi",
+      ),
+    ),
+  ];
+  let groesste = summen.length ? zahl(summen[summen.length - 1][1]) : -1;
+  if (groesste < 0)
+    for (const m of satz.matchAll(muster)) {
+      if (m[1]) continue; // Grenzangabe oder Spanne
+      groesste = Math.max(groesste, zahl(m[2]));
+    }
   if (groesste < 0) return null;
   const erwartet = d2Stufe(groesste);
   return erwartet === d2 ? null : { auszug: satz.slice(0, 200), personen: groesste, erwartet };

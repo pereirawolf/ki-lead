@@ -5,14 +5,21 @@
 //   3 Verdichtungen „Ilka“ mit Haiku high (21.10.2026, App 0.4.25, Grenze 128 000 Token)
 // - Erfassung mit Websuche: 11 Läufe der Testreihe (Sonnet medium 5, Opus low 3, Opus medium 3), 2 mit PDF, 1 Fortschreibung
 // - Verdichtung „Ilka“ (6 Eingangsmeldungen, ohne Websuche): Opus medium 5, Sonnet medium 2
-// - Abnahme M4 vom 23.10.2026 (App 0.4.30, Profil 1.25.0, Verdichtung „Ilka“, je drei Läufe): S1 Haiku high mit
-//   S2 Opus medium; S1 gpt-6-luna high mit S2 gpt-6-astra medium (evaluation/abnahmen/2026-10-23-m4-ergebnis.md)
-// Die Spannen sind nach außen gerundet und enthalten eine Reparatur in S3. Kosten nach Listenpreisen (preise.ts).
+// - Vergleichslauf Ilka nach Plan standardprofile-ilka vom 24./25.10.2026 (App 0.5.8, Profil 1.26.0, je drei Läufe der
+//   Verdichtung, Mistral über den EU-Endpunkt; evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md). Er ersetzt
+//   die Werte der Abnahme M4 vom 23.10.2026 (App 0.4.30, Profil 1.25.0) für S1 Haiku high, Opus medium, gpt-6-luna high
+//   und gpt-6-astra medium; dazu Sonnet medium, gpt-6-astra high und Mistral.
+// - Mistral: vier Läufe der Verdichtung „Ilka“ vom 24.10.2026 (App 0.5.7, drei global, einer EU)
+// Spannen nach außen gerundet (Sekunden auf 30 s, unter 60 s auf 10 s; USD auf 0,05, unter 0,10 USD auf 0,01). Neue oder
+// überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); bestehende Spannen
+// werden nicht verengt. Messwerte erst ab drei Läufen. Kosten nach Listenpreisen (preise.ts) ohne den Aufschlag des
+// EU-Endpunkts von Mistral; `schaetzeStufe` schlägt ihn auf (seit 0.5.10, AV-2026-W43-06).
 // Für nicht gemessene Kombinationen wird nur der Preis aus einer gemessenen Variante gleicher Art hochgerechnet;
 // eine Dauer wird dann nicht angegeben.
 
+import { aufwandAngeboten } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
-import { ausgabePreis } from "../anbieter/preise";
+import { aufschlag, ausgabePreis } from "../anbieter/preise";
 
 export type SchaetzArt = "s1" | "erfassung" | "verdichtung";
 
@@ -36,7 +43,8 @@ export const MESSWERTE: Record<string, Messwert> = {
   "s1|claude-haiku-5-5|medium": { sekunden: [10, 60], usd: [0, 0.02] },
   // gemessen: Erfassung 18–37 s, höchstens 0,008 USD; Verdichtung „Ilka“ mit sechs Eingängen 88–95 s,
   // 0,019–0,020 USD, 20 821–22 134 Ausgabetoken (Läufe 20261021-163738-9s7d, -164604-u1kb, -165220-1hmp);
-  // Abnahme M4: 101–136 s, 0,023–0,028 USD, 23 953–32 762 Ausgabetoken
+  // Vergleichslauf Ilka 19–132 s, 0,013–0,027 USD, 3 015–31 261 Ausgabetoken (Läufe 20261024-234833-ikph,
+  // -235739-ifu7, 20261025-000620-07bh, -001616-n4c8, -002256-e85u, -002923-kg0c)
   "s1|claude-haiku-5-5|high": { sekunden: [15, 150], usd: [0, 0.03] },
   // gemessen 9–12 s, 0,02–0,12 USD (0,12 ohne Cache)
   "s1|claude-sonnet-5-5|medium": { sekunden: [10, 30], usd: [0.02, 0.15] },
@@ -46,16 +54,33 @@ export const MESSWERTE: Record<string, Messwert> = {
   "erfassung|claude-opus-5-5|low": { sekunden: [60, 150], usd: [0.4, 0.95] },
   // gemessen 209–285 s, 1,45–1,82 USD
   "erfassung|claude-opus-5-5|medium": { sekunden: [200, 360], usd: [1.4, 2.3] },
-  // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch)
-  "verdichtung|claude-sonnet-5-5|medium": { sekunden: [150, 360], usd: [0.55, 0.95] },
+  // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch); Vergleichslauf Ilka 287–381 s,
+  // 0,82–0,96 USD, 45 361–61 598 Ausgabetoken (Läufe 20261025-001616-n4c8, -002256-e85u, -002923-kg0c)
+  "verdichtung|claude-sonnet-5-5|medium": { sekunden: [150, 480], usd: [0.55, 1.25] },
   // gemessen 298–410 s, 1,23–1,63 USD (1,63 USD: 50 071 Ausgabetoken, 80 118 Token neu in den Cache, Lauf
-  // 20261021-165220-1hmp, 408 s); Abnahme M4: 428–459 s, 1,84–1,91 USD, 53 735–56 355 Ausgabetoken.
-  // Obergrenze seit 0.4.31 2,20 statt 2,00 USD, weil die Abnahme bis 1,91 USD erreichte
+  // 20261021-165220-1hmp, 408 s); Vergleichslauf Ilka 405–440 s, 1,74–1,88 USD, 50 060–54 484 Ausgabetoken (Läufe
+  // 20261024-234833-ikph, -235739-ifu7, 20261025-000620-07bh). Obergrenze 2,20 USD (seit 0.4.31) bleibt als Reserve
   "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.2] },
-  // Abnahme M4: 52–65 s, 0,004–0,008 USD, 4 222–5 369 Ausgabetoken
+  // Vergleichslauf Ilka 42–69 s, 0,005–0,008 USD, 4 659–6 856 Ausgabetoken (Läufe 20261024-232917-m97k,
+  // -233231-qjlg, -233518-4god, -231048-0gjp, -231723-etee, -232232-l69n)
   "s1|gpt-6-luna|high": { sekunden: [30, 120], usd: [0, 0.02] },
-  // Abnahme M4: 114–152 s, 1,18–1,23 USD, 6 130–7 629 Ausgabetoken
-  "verdichtung|gpt-6-astra|medium": { sekunden: [90, 240], usd: [1.0, 1.5] },
+  // Vergleichslauf Ilka 89,9–125 s, 1,22–1,24 USD, 6 495–7 118 Ausgabetoken (Läufe 20261024-232917-m97k,
+  // -233231-qjlg, -233518-4god); Untergrenze seit 0.5.10 60 statt 90 s
+  "verdichtung|gpt-6-astra|medium": { sekunden: [60, 240], usd: [1.0, 1.5] },
+  // Vergleichslauf Ilka 267–329 s, 1,52–1,69 USD, 13 574–15 867 Ausgabetoken (Läufe 20261024-231048-0gjp,
+  // -231723-etee, -232232-l69n)
+  "verdichtung|gpt-6-astra|high": { sekunden: [240, 420], usd: [1.5, 2.15] },
+  // Mistral, Kosten ohne EU-Aufschlag. Vergleichslauf Ilka, EU-Endpunkt: 23–37 s, 0,010–0,012 USD, 3 665–5 923
+  // Ausgabetoken (Läufe 20261024-224439-b628, -224751-2hu5, -225017-vou1, -225845-7ngp, -230206-jlcg, -230531-dh4z);
+  // dazu (App 0.5.7) 17–25 s, 0,009–0,011 USD (Läufe 20261024-203955-kj03, -205221-uyeb, -210208-bfob, -211602-5dfe)
+  "s1|mistral-small-2603|high": { sekunden: [10, 50], usd: [0, 0.02] },
+  // Vergleichslauf Ilka, EU-Endpunkt: 109–189 s, 0,23–0,34 USD, 15 086–29 748 Ausgabetoken (Läufe 20261024-224439-b628,
+  // -224751-2hu5, -225017-vou1); dazu (App 0.5.7) global 103–132 s, 0,22–0,26 USD, EU 162 s, 0,30 USD (Läufe
+  // 20261024-203955-kj03, -205221-uyeb, -210208-bfob, -211602-5dfe)
+  "verdichtung|mistral-medium-3-5|high": { sekunden: [90, 240], usd: [0.2, 0.45] },
+  // Vergleichslauf Ilka, EU-Endpunkt: 165–213 s, 0,12–0,18 USD, 18 047–24 852 Ausgabetoken, zum Teil mit gelesenen
+  // Cache-Token (Läufe 20261024-225845-7ngp, -230206-jlcg, -230531-dh4z)
+  "verdichtung|mistral-large-4|high": { sekunden: [150, 270], usd: [0.1, 0.25] },
 };
 
 const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
@@ -63,9 +88,16 @@ const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
 /**
  * Schätzung für eine Stufe. Reihenfolge: Messwert für Modell und Aufwand; sonst Preis einer gemessenen Variante
  * gleicher Art und gleichen Aufwands, hochgerechnet über den Ausgabepreis; sonst die mittlere Variante dieser Art,
- * bei höherem Aufwand mit doppelter Obergrenze, bei niedrigerem mit halber Untergrenze.
+ * bei höherem Aufwand mit doppelter Obergrenze, bei niedrigerem mit halber Untergrenze. Der Aufwand gilt so, wie das
+ * Modell ihn anbietet (AV-2026-W43-02); der EU-Aufschlag von Mistral kommt auf die Kosten (AV-2026-W43-06).
  */
-export function schaetzeStufe(art: SchaetzArt, modell: string, aufwand: Aufwand): Schaetzung {
+export function schaetzeStufe(art: SchaetzArt, modell: string, aufwand: Aufwand, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): Schaetzung {
+  const s = schaetzeOhneAufschlag(art, modell, aufwandAngeboten(modell, aufwand));
+  const f = aufschlag(modell, optionen);
+  return f === 1 || !s.usd ? s : { ...s, usd: [s.usd[0] * f, s.usd[1] * f] };
+}
+
+function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand): Schaetzung {
   const genau = MESSWERTE[`${art}|${modell}|${aufwand}`];
   if (genau) return { sekunden: genau.sekunden, usd: genau.usd, gemessen: true };
   const ziel = ausgabePreis(modell);
