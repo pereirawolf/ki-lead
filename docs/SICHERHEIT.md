@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.2 vom 24.10.2026, gilt für App-Version 0.5.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -51,13 +51,13 @@ Anthropic verlangt diese Kopfzeile, wenn der Browser die API direkt aufruft. Sie
 
 | vorhanden | offen |
 |---|---|
-| Schlüssel geht nur an `api.anthropic.com` bzw. `api.openai.com`; die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
+| Schlüssel geht nur an `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai`; die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
 
 ### 3.4 Skripteinschleusung und fremder Code
 
 | vorhanden | offen |
 |---|---|
-| Content-Security-Policy in `index.html`: `script-src 'self'`, `connect-src` nur eigene Adresse und die beiden Anbieter | `style-src 'unsafe-inline'` |
+| Content-Security-Policy in `index.html`: `script-src 'self'`, `connect-src` nur eigene Adresse und die drei Anbieter | `style-src 'unsafe-inline'` |
 | Schemaprüfung ohne Codeerzeugung (kein `eval`, `src/kern/validierung.ts`) | Policy nur als Meta-Element; `frame-ancestors` lässt sich so nicht setzen, GitHub Pages erlaubt keine eigenen Kopfzeilen |
 | Lesetexte mit markdown-it ohne HTML (`html: false`), keine Bilder | |
 | alle Bibliotheken gebündelt, kein CDN | |
@@ -112,3 +112,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
+| 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |

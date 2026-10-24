@@ -2,7 +2,8 @@
 
 import { get, set } from "idb-keyval";
 import type { Aufwand } from "../anbieter/typen";
-import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
+import { anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
@@ -22,6 +23,11 @@ export interface Einstellungen {
    * als der Wert nur für S2 und S3 galt; er bleibt, damit gespeicherte Einstellungen gültig bleiben.
    */
   maxTokensErfassung: number;
+  /**
+   * Mistral (seit 0.5.6): „eu“ = regionaler Endpunkt api.eu.mistral.ai ohne Websuche (Vorgabe), „global“ =
+   * api.mistral.ai mit Websuche. Fehlt der Wert in gespeicherten Einstellungen, gilt die Vorgabe.
+   */
+  mistralEndpunkt: MistralEndpunkt;
   /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
   fassung?: number;
 }
@@ -37,6 +43,7 @@ export const APP_MODELLE: Record<Rolle, string> = {
 export const MODELL_GRUPPEN: { anbieter: string; modelle: string[] }[] = [
   { anbieter: "Anthropic", modelle: ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1"] },
   { anbieter: "OpenAI", modelle: ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"] },
+  { anbieter: "Mistral", modelle: ["mistral-small-2603", "mistral-medium-3-5", "mistral-large-4"] },
 ];
 
 export const MODELL_AUSWAHL = MODELL_GRUPPEN.flatMap((g) => g.modelle);
@@ -49,6 +56,7 @@ export const STANDARD: Einstellungen = {
   abrufMaxTokens: 15000,
   suchland: "DE",
   maxTokensErfassung: 128000,
+  mistralEndpunkt: "eu",
   fassung: 3,
 };
 
@@ -56,6 +64,9 @@ export const STANDARD: Einstellungen = {
  * Standard-Profil je Anbieter: Modell und Aufwand je Aufgabe, mit einem Klick unter „Einstellungen“ zu setzen.
  * Anthropic entspricht den Vorgaben der App und des Beispielprofils (Verdichtung mit Opus wie in der Abnahme M4);
  * OpenAI nimmt die Gegenstücke gleicher Größe (klein, mittel, groß), wie in der Abnahme M4 erprobt.
+ * Mistral (seit 0.5.6, noch nicht erprobt): Mistral Small 4 für S1 und S3, Mistral Medium 3.5 für S2 und die
+ * Management Summary. Mistral Large 4 ist am 24.10.2026 eine Public Preview und deshalb nur wählbar, nicht Vorgabe;
+ * für Medium 3.5 empfiehlt Mistral das Nachdenken ausdrücklich bei agentischen Aufgaben.
  */
 export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, string>; aufwand: Record<Rolle, Aufwand> }> = {
   anthropic: {
@@ -78,12 +89,35 @@ export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, strin
     },
     aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   },
+  mistral: {
+    modelle: {
+      vorverarbeitung: "mistral-small-2603",
+      erfassung: "mistral-medium-3-5",
+      verdichtung: "mistral-medium-3-5",
+      reparatur: "mistral-small-2603",
+      kurzfassung: "mistral-medium-3-5",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  },
 };
 
 /** Setzt Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters; alles andere bleibt. */
 export function standardProfilAnwenden(e: Einstellungen, anbieter: AnbieterId): Einstellungen {
   const s = STANDARD_PROFILE[anbieter];
   return { ...e, modelle: { ...s.modelle }, aufwand: { ...s.aufwand } };
+}
+
+/**
+ * Modelle leeren (Vorgabe des aktiven Profils bzw. der App) und den Aufwand auf die Vorgaben der App setzen;
+ * alles andere bleibt.
+ */
+export function profilvorgabeAnwenden(e: Einstellungen): Einstellungen {
+  return { ...e, modelle: { ...STANDARD.modelle }, aufwand: { ...STANDARD.aufwand } };
+}
+
+/** Folgen Modell und Aufwand aller Aufgaben gerade den Vorgaben des Profils (keine eigene Wahl)? */
+export function profilvorgabeAktiv(e: Einstellungen): boolean {
+  return ROLLEN.every((r) => !e.modelle[r] && e.aufwand[r] === STANDARD.aufwand[r]);
 }
 
 /** Sind Modell und Aufwand aller Aufgaben gerade genau das Standard-Profil des Anbieters? */
@@ -94,6 +128,12 @@ export function standardProfilAktiv(e: Einstellungen, anbieter: AnbieterId): boo
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
   return e.modelle[rolle] || profil.manifest.modelle?.[rolle] || APP_MODELLE[rolle];
+}
+
+/** Woher das wirksame Modell einer Aufgabe stammt: eigene Einstellung, Vorgabe des Profils oder der App */
+export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | null): "einstellung" | "profil" | "app" {
+  if (e.modelle[rolle]) return "einstellung";
+  return profil?.manifest.modelle?.[rolle] ? "profil" : "app";
 }
 
 export async function einstellungenLesen(): Promise<Einstellungen> {
@@ -137,6 +177,15 @@ export async function alleSchluesselLesen(): Promise<Schluessel> {
   const out: Schluessel = { ...LEERE_SCHLUESSEL };
   for (const id of Object.keys(out) as AnbieterId[]) out[id] = await schluesselLesen(id);
   return out;
+}
+
+/**
+ * Werkzeuge, die das Modell mit diesen Einstellungen tatsächlich nutzen kann. Anthropic und OpenAI: beide;
+ * Mistral: über den EU-Endpunkt keine, global nur die Websuche.
+ */
+export function werkzeugeFuer(modell: string, e: Pick<Einstellungen, "mistralEndpunkt">): { websuche: boolean; abruf: boolean } {
+  if (anbieterVon(modell) === "mistral") return mistralWerkzeuge(e.mistralEndpunkt ?? "eu");
+  return { websuche: true, abruf: true };
 }
 
 /** Modelle, die ein Lauf der KI-Erfassung voraussichtlich nutzt. */

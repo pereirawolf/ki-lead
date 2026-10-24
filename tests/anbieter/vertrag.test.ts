@@ -1,9 +1,10 @@
-// Gemeinsames Verhalten beider Anbieteradapter bei Fehlern, Wiederholungen und Abbruch – mit gefälschter Uhr,
+// Gemeinsames Verhalten der Anbieteradapter (Anthropic, OpenAI, seit 0.5.6 auch Mistral) bei Fehlern, Wiederholungen und Abbruch – mit gefälschter Uhr,
 // damit Wartezeiten sofort vergehen und ihre Länge prüfbar ist. Erwartete Wartezeiten stehen als feste Zahlen hier:
 // Netzwerkfehler 2 s, 4 s, 6 s; Überlastung ohne retry-after 4 s, 8 s, 16 s; retry-after höchstens 60 s;
 // nach drei Wiederholungen (vier Abrufen) ist Schluss.
 import { describe, expect, it } from "vitest";
 import { AnthropicAnbieter } from "../../src/anbieter/anthropic";
+import { MistralAnbieter } from "../../src/anbieter/mistral";
 import { OpenAiAnbieter } from "../../src/anbieter/openai";
 import { AnbieterFehler, type LlmAnbieter, type LlmAnfrage } from "../../src/anbieter/typen";
 import { fehlerAntwort, ohneWarten, sseAntwort, sseText } from "../support/anbieter";
@@ -57,6 +58,40 @@ const FAELLE: Fall[] = [
         ]),
       ),
     schluesselFehler: () => fehlerAntwort(401, { code: "invalid_api_key", message: "bad key" }),
+  },
+  {
+    name: "Mistral EU",
+    neu: (abruf) => new MistralAnbieter("k", "https://api.test", abruf as typeof fetch),
+    modell: "mistral-small-2603",
+    erfolg: () =>
+      sseAntwort(
+        [
+          { id: "c1", model: "mistral-small-2603", choices: [{ index: 0, delta: { content: "ok" }, finish_reason: null }] },
+          {
+            id: "c1",
+            model: "mistral-small-2603",
+            choices: [{ index: 0, delta: { content: "" }, finish_reason: "stop" }],
+            usage: { prompt_tokens: 10, completion_tokens: 2 },
+          },
+        ]
+          .map((x) => `data: ${JSON.stringify(x)}\n\n`)
+          .join("") + "data: [DONE]\n\n",
+      ),
+    schluesselFehler: () => new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 }),
+  },
+  {
+    name: "Mistral global",
+    neu: (abruf) => new MistralAnbieter("k", "https://api.test", abruf as typeof fetch, "global"),
+    modell: "mistral-small-2603",
+    erfolg: () =>
+      sseAntwort(
+        sseText([
+          { type: "conversation.response.started", conversation_id: "c1" },
+          { type: "message.output.delta", output_index: 0, id: "m1", content_index: 0, model: "mistral-small-2603", role: "assistant", content: "ok" },
+          { type: "conversation.response.done", usage: { prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 } },
+        ]),
+      ),
+    schluesselFehler: () => new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 }),
   },
 ];
 

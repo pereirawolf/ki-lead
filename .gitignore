@@ -52,3 +52,6 @@ privat/
 # Browsertests (Playwright)
 test-results/
 playwright-report/
+
+# Mistral-Probe (enthält keine Schlüssel, aber Antworten des Anbieters)
+probe-bericht.md

@@ -239,6 +239,8 @@ export interface Steuerung {
   recherche: RechercheModus;
   websucheMax: number;
   abrufMax: number;
+  /** Bei „keine-werkzeuge“: Grenze des Anbieters statt der Einstellungen (seit 0.5.6) */
+  ohneWerkzeugeGrund?: string;
   /** Kennsatz für Änderungen gegenüber der Vormeldung aus der Darstellungsdatei des Profils */
   kennsatzAenderung?: string;
   /** Absender der neuen Meldung (Land, meldende Stelle) und seine Herkunft */
@@ -296,7 +298,9 @@ export function steuerungsBlock(s: Steuerung): string {
       );
   } else if (s.recherche === "keine-werkzeuge")
     z.push(
-      "- Recherche: im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahlen 0). Arbeite nur mit dem Material und nenne diese technische Grenze in der Kurzantwort.",
+      s.ohneWerkzeugeGrund
+        ? `- Recherche: im Auftrag erlaubt, aber nicht verfügbar (${s.ohneWerkzeugeGrund}). Du hast keine Websuche und keinen Seitenabruf. Arbeite nur mit dem Material und nenne diese technische Grenze in der Kurzantwort.`
+        : "- Recherche: im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahlen 0). Arbeite nur mit dem Material und nenne diese technische Grenze in der Kurzantwort.",
     );
   else
     z.push(

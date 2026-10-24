@@ -19,6 +19,9 @@ vi.mock("../../src/anbieter/verteiler", async (original) => {
   const echt: any = await original();
   class Verteiler {
     id = "attrappe";
+    static fuer() {
+      return new Verteiler();
+    }
     async senden(a: { modell: string; aufwand?: string }) {
       anfragen.modelle.push(a.modell);
       anfragen.aufwand.push(a.aufwand);
@@ -61,7 +64,7 @@ async function erfassungZeigen() {
     React.createElement(KiErfassung, {
       profil: p,
       einstellungen: STANDARD,
-      schluessel: { anthropic: SCHLUESSEL, openai: "" },
+      schluessel: { anthropic: SCHLUESSEL, openai: "", mistral: "" },
       zuEinstellungen: () => {},
       uebernehmen: () => {},
     }),

@@ -8,7 +8,7 @@ KI-LEAD läuft als native App über [Capacitor](https://capacitorjs.com/) (MIT).
 - Alle anderen Ablagen (Gerätespeicher, nur Sitzung) gibt es wie im Browser. Ist der Schlüsselbund nicht verfügbar, bleibt die App mit den anderen Ablagen voll nutzbar.
 - Android sichert keine App-Daten in die Cloud (`allowBackup="false"`), damit Meldungen und Schlüssel nicht unbemerkt das Gerät verlassen.
 
-Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht angemeldet. Die KI-Funktionen rufen wie im Browser direkt `api.anthropic.com` bzw. `api.openai.com` auf.
+Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht angemeldet. Die KI-Funktionen rufen wie im Browser direkt `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai` auf. Ob Mistral den direkten Aufruf aus der WebView zulässt (CORS), prüft die Mistral-Probe nur im Browser, nicht in der App ([Spezifikation](SPEZIFIKATION.md), offener Punkt 15).
 
 ## Ordner im Repository
 
@@ -56,7 +56,7 @@ Je auf iPad, iPhone und Android-Emulator:
 - Offline: im Flugmodus starten, Profil wählen, Lagebild-Beispiel laden, PDF ausgeben
 - Unter „Einstellungen“ die Ablage „Schlüsselbund des Systems“ wählen, Schlüssel speichern, App beenden und neu starten: Schlüssel ist noch da, „Verbindung prüfen“ gelingt (mit Netz)
 - Ablage zurück auf „Gerätespeicher“: Schlüssel zieht mit um
-- Eine KI-Erfassung mit Anthropic und eine mit OpenAI bis S1
+- Eine KI-Erfassung mit Anthropic, eine mit OpenAI und eine mit Mistral bis S1
 - „Einstellungen → Über KI-LEAD“: Impressum und Datenschutzhinweise öffnen sich im Browser des Systems, nicht in der App (seit 0.5.5)
 
 Nicht hier geprüft: Die nativen Builds selbst wurden in der Entwicklungsumgebung nicht übersetzt (kein Xcode, kein Android SDK); die Projektdateien prüfen die Regressionstests.

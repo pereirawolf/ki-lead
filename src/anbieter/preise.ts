@@ -1,5 +1,7 @@
-// Listenpreise in USD je Million Token (Stand 18.10.2026, ohne Gewähr).
-// Quellen: https://platform.claude.com/docs/en/about-claude/pricing und https://developers.openai.com/api/docs/pricing
+// Listenpreise in USD je Million Token (Stand 18.10.2026, Mistral 24.10.2026; ohne Gewähr).
+// Quellen: https://platform.claude.com/docs/en/about-claude/pricing, https://developers.openai.com/api/docs/pricing und
+// https://docs.mistral.ai/inference/pricing (Token). Den Preis der Mistral-Websuche (30 USD je 1 000 Aufrufe) nennt
+// diese Seite nicht; er stammt aus einer Übersicht Dritter (developer.puter.com, Oktober 2026) und ist unbestätigt.
 // Die App zeigt damit nur eine Schätzung; maßgeblich ist die Abrechnung des Anbieters.
 
 import type { Nutzung } from "./typen";
@@ -16,6 +18,8 @@ interface PreisRegel {
   preis: Preis;
   /** Jeder Werkzeugaufruf (auch Seitenöffnung) kostet wie eine Websuche (OpenAI) */
   abrufKostet?: boolean;
+  /** USD je Websuche, abweichend von PREIS_WEBSUCHE */
+  websuche?: number;
   /** Höhere Preise ab dieser Promptlänge (Token, inkl. Cache) */
   langAb?: number;
   lang?: Preis;
@@ -35,12 +39,16 @@ const REGELN: PreisRegel[] = [
   { muster: /^gpt-6-astra/, preis: { eingabe: 10, cacheSchreiben: 12.5, cacheLesen: 1, ausgabe: 50 }, abrufKostet: true },
   { muster: /^gpt-6\.1-sol/, preis: { eingabe: 2, cacheSchreiben: 2.5, cacheLesen: 0.1, ausgabe: 10 }, abrufKostet: true },
   { muster: /^gpt-6-luna/, preis: { eingabe: 0.1, cacheSchreiben: 0.125, cacheLesen: 0.01, ausgabe: 0.5 }, abrufKostet: true },
+  // Mistral (kein Aufpreis für das Schreiben in den Cache; die Conversations-API meldet gecachte Token nicht gesondert)
+  { muster: /^mistral-large-4/, preis: { eingabe: 1.36, cacheSchreiben: 1.36, cacheLesen: 0.14, ausgabe: 4.18 }, websuche: 0.03 },
+  { muster: /^mistral-medium-3-5/, preis: { eingabe: 1.5, cacheSchreiben: 1.5, cacheLesen: 0.15, ausgabe: 7.5 }, websuche: 0.03 },
+  { muster: /^mistral-small-2603/, preis: { eingabe: 0.15, cacheSchreiben: 0.15, cacheLesen: 0.015, ausgabe: 0.6 }, websuche: 0.03 },
 ];
 
-/** USD je Websuche */
+/** USD je Websuche (Anthropic, OpenAI) */
 export const PREIS_WEBSUCHE = 0.01;
 
-export const PREISSTAND = "18.10.2026";
+export const PREISSTAND = "18.10.2026 (Mistral 24.10.2026)";
 
 /** Listenpreis für Ausgabetoken (USD je Million, kurzer Kontext); null, wenn das Modell nicht in der Tabelle steht. */
 export function ausgabePreis(modell: string): number | null {
@@ -54,7 +62,7 @@ export function kostenAnfrage(modell: string, n: Nutzung): number | null {
   const prompt = n.eingabe + n.cacheLesen + n.cacheSchreiben;
   const p = r.langAb && r.lang && prompt > r.langAb ? r.lang : r.preis;
   const token = (n.eingabe * p.eingabe + n.cacheSchreiben * p.cacheSchreiben + n.cacheLesen * p.cacheLesen + n.ausgabe * p.ausgabe) / 1_000_000;
-  return token + (n.websuchen + (r.abrufKostet ? n.abrufe : 0)) * PREIS_WEBSUCHE;
+  return token + (n.websuchen + (r.abrufKostet ? n.abrufe : 0)) * (r.websuche ?? PREIS_WEBSUCHE);
 }
 
 export function formatUsd(x: number | null | undefined): string {

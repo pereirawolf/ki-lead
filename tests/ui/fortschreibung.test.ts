@@ -18,6 +18,9 @@ vi.mock("../../src/anbieter/verteiler", async (original) => {
   const echt: any = await original();
   class Verteiler {
     id = "attrappe";
+    static fuer() {
+      return new Verteiler();
+    }
     async senden(a: { modell: string; werkzeuge?: unknown }) {
       anfragen.liste.push({ werkzeuge: a.werkzeuge });
       const { llmAntwort, meldungsAntwort } = await import("../support/anbieter");
@@ -51,7 +54,7 @@ describe("Fortschreibung in der KI-Erfassung", () => {
       React.createElement(KiErfassung, {
         profil: p,
         einstellungen: { ...STANDARD, websucheMax: 30, abrufMax: 10 },
-        schluessel: { anthropic: "sk-test", openai: "" },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
         uebergabe: { nr: 1, profilHash: p.hash, dateien: [{ id: "v1", name: "Vormeldung_FIKTIV.json", text: JSON.stringify(vormeldung), rolle: "meldung" }] },

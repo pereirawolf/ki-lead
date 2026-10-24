@@ -1528,6 +1528,94 @@ details.ki-abschnitt summary,
   color: var(--link);
 }
 
+/* ── Einstellungen: Bereiche (seit 0.5.6) ─────────── */
+
+.bereich-inhalt {
+  min-width: 0;
+  max-width: 60rem;
+}
+
+.bereich-inhalt > .abschnitt-einzeln {
+  margin-bottom: 0;
+}
+
+.bereich-inhalt a {
+  color: var(--link);
+}
+
+.schritte.bereiche .schritt {
+  min-height: 2.75rem;
+}
+
+.einstellung-block {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.einstellung-block > h3,
+.bereich-inhalt h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.bereich-inhalt .tabelle + h3,
+.uebersicht-liste + h3 {
+  margin-top: 1.25rem;
+}
+
+.uebersicht-liste {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.uebersicht-liste dt {
+  font-weight: 700;
+}
+
+.uebersicht-liste dd {
+  margin: 0;
+}
+
+.voreinstellung-wahl {
+  margin: 0.5rem 0 1.25rem;
+}
+
+.voreinstellung-wahl legend {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.anbieter-hinweise {
+  margin-top: 0.75rem;
+}
+
+.anbieter-hinweise summary {
+  cursor: pointer;
+}
+
+.hinweis-liste {
+  padding-left: 1.2rem;
+  color: var(--tinte-leise);
+  font-size: 0.9rem;
+}
+
+.hinweis-liste li {
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 600px) {
+  .uebersicht-liste {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .uebersicht-liste dd {
+    margin-bottom: 0.4rem;
+  }
+}
+
 .schluessel-zeile {
   display: flex;
   gap: 0.5rem;

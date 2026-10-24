@@ -1,7 +1,7 @@
 // KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ANBIETER_NAME, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
+import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -10,7 +10,15 @@ import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
 import { dateiAnbieten } from "../speicher/speicher";
 import { VergleichKasten } from "./Vergleich";
-import { laufModelle, mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl, type Rolle } from "../pipeline/einstellungen";
+import {
+  laufModelle,
+  mitModellwahl,
+  modellFuer,
+  werkzeugeFuer,
+  type Einstellungen,
+  type ModellWahl as Modellwahl,
+  type Rolle,
+} from "../pipeline/einstellungen";
 import { dauerText, schaetzeStufe, type SchaetzArt } from "../pipeline/schaetzung";
 import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
@@ -200,7 +208,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     abbruch.current = ctrl;
     return {
       profil,
-      anbieter: new Verteiler(schluessel),
+      anbieter: Verteiler.fuer(schluessel, { mistralEndpunkt: laufEinstellungen.mistralEndpunkt }),
       einstellungen: laufEinstellungen,
       lauf: l,
       material,
@@ -445,7 +453,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
       {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
-          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")}.</p>
+          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {anbieterListe(fehlend)}.</p>
           <button type="button" className="knopf klein" onClick={zuEinstellungen}>
             Zu den Einstellungen
           </button>
@@ -621,10 +629,10 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
                   Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an{" "}
-                  {[...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map((m) => ANBIETER_NAME[anbieterVon(m)]))].join(" und ")}.
+                  {anbieterListe([...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map(anbieterVon))])}.
                 </span>
               </label>
-              <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen)}</p>
+              <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}</p>
               <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <span />
@@ -892,7 +900,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 </button>
               </div>
               <p className="hinweis">
-                Kosten S1: {laufKostenText(lauf)}. {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen)} {absenderZeile(absender)}
+                Kosten S1: {laufKostenText(lauf)}.{" "}
+                {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}{" "}
+                {absenderZeile(absender)}
               </p>
               {modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false)}
               <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
@@ -1013,10 +1023,17 @@ function absenderZeile(a: { land: string; stelle: string; herkunft: "vormeldung"
 }
 
 /** Recherchemodus von S2 vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline) */
-function rechercheZeile(websuche: boolean, e: Einstellungen): string {
+function rechercheZeile(websuche: boolean, e: Einstellungen, modellS2?: string): string {
   if (!websuche) return "S2 arbeitet ohne Websuche nur mit dem Material.";
   if (e.websucheMax <= 0 && e.abrufMax <= 0) return "S2: Recherche erlaubt, aber in den Einstellungen nicht verfügbar (Höchstzahlen 0).";
-  return `S2: Recherche erlaubt (${werkzeugText(e.websucheMax, e.abrufMax)}).`;
+  const w = modellS2 ? werkzeugeFuer(modellS2, e) : { websuche: true, abruf: true };
+  const websucheMax = w.websuche ? e.websucheMax : 0;
+  const abrufMax = w.abruf ? e.abrufMax : 0;
+  if (websucheMax <= 0 && abrufMax <= 0)
+    return w.websuche
+      ? `S2: Recherche erlaubt, aber ${modellS2} bietet keinen Seitenabruf und die Websuche steht in den Einstellungen auf 0.`
+      : `S2: Recherche erlaubt, aber ${modellS2} über den EU-Endpunkt von Mistral bietet keine Websuche; S2 arbeitet nur mit dem Material. Für Websuche unter „Einstellungen“ den globalen Endpunkt wählen.`;
+  return `S2: Recherche erlaubt (${werkzeugText(websucheMax, abrufMax)}).`;
 }
 
 function Ergebnis({

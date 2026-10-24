@@ -7,6 +7,7 @@ KI-LEAD prüft sich auf drei Ebenen. Die Tests der ersten beiden rufen keinen ec
 | Funktions- und Komponententests | `npm test` | Vitest, Node; Oberfläche in jsdom | `tests/<bereich>/*.test.ts` |
 | Browsertests | `npm run test:browser` | Playwright, Chromium, Produktionsbuild | `tests/browser/*.spec.ts` |
 | Modellbewertung | nur auf Auftrag | echte Läufe, eigenes Budget | `evaluation/` (siehe dortige README) |
+| Mistral-Probe | Label „mistral-probe“ am Pull Request oder Workflow von Hand | Playwright, echter Testschlüssel aus dem Secret `MISTRAL_API_KEY`, wenige Cent | `tests/probe/mistral.spec.ts` mit `playwright.probe.config.ts` |
 
 Weitere Befehle:
 
@@ -39,17 +40,17 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
 | `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Arbeitsanweisungen und Dokumentation gegen das Profil (Konsistenzprüfungen), Profilansicht, private Profile |
 | `tests/pipeline/` | Einstellungen und Vorgaben, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich |
-| `tests/anbieter/` | SSE-Leser, Anthropic- und OpenAI-Adapter, gemeinsamer Vertrag beider Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
+| `tests/anbieter/` | SSE-Leser, Adapter für Anthropic, OpenAI und Mistral, gemeinsamer Vertrag aller Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
-| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Höchstzahl Ausgabetoken), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version) |
+| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Bereiche, Übersicht, Voreinstellung, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version) |
 | `tests/evaluation/` | Schemata der Modellbewertung, des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |
 | `tests/lizenzen/` | Drittkomponenten: Lizenzen der Laufzeitpakete nach `package-lock.json` gegen die Positivliste, Vollständigkeit von THIRD-PARTY-NOTICES.md, native Versionen, Lizenzdateien im Build, SBOM in der CI |
-| `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit und Offline-Start der PWA im echten Browser |
+| `tests/browser/` | Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Einstellungen (Bereiche mit Tastatur und auf dem Smartphone) und Offline-Start der PWA im echten Browser |
 | `tests/ci/` | Prüfumfang der gestaffelten Prüfung (`scripts/pruefumfang.mjs`) mit Wächtern gegen veraltete Pfadlisten |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |
 

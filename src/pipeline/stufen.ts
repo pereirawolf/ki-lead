@@ -10,7 +10,7 @@ import { quellenHinweise } from "../kern/quellen";
 import { aufloesen } from "../kern/schema";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
-import { modellFuer, type Einstellungen } from "./einstellungen";
+import { modellFuer, werkzeugeFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
 import {
   anweisungErfassung,
@@ -82,17 +82,44 @@ function tagText(z: string): string {
   return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}`;
 }
 
+/**
+ * Wirksame Werkzeuggrenzen für S2: die Höchstzahlen der Einstellungen, begrenzt durch das, was Modell und Endpunkt
+ * können (seit 0.5.6: Mistral über den EU-Endpunkt ohne Werkzeuge, global nur mit Websuche). `grund` nennt die
+ * Grenze des Anbieters, wenn sie die Recherche ganz ausschließt.
+ */
+export function s2Grenzen(k: Kontext): { websucheMax: number; abrufMax: number; grund?: string } {
+  const e = k.einstellungen;
+  const modell = modellFuer(istVerdichtung(k.material) ? "verdichtung" : "erfassung", e, k.profil);
+  const w = werkzeugeFuer(modell, e);
+  const websucheMax = w.websuche ? e.websucheMax : 0;
+  const abrufMax = w.abruf ? e.abrufMax : 0;
+  const gekappt = (e.websucheMax > 0 && !w.websuche) || (e.abrufMax > 0 && !w.abruf);
+  return {
+    websucheMax,
+    abrufMax,
+    ...(gekappt && !websucheMax && !abrufMax
+      ? {
+          grund: w.websuche
+            ? `${modell} bietet keinen Seitenabruf, und die Websuche ist in den Einstellungen 0`
+            : `${modell} über den EU-Endpunkt von Mistral bietet keine Websuche`,
+        }
+      : {}),
+  };
+}
+
 /** Recherchemodus aus dem Auftrag und den wirksamen Werkzeuggrenzen, nie aus Freitext von S1 oder Material */
 export function rechercheModus(k: Kontext): RechercheModus {
   if (k.lauf.auftrag.websuche === false) return "nur-material";
-  return k.einstellungen.websucheMax > 0 || k.einstellungen.abrufMax > 0 ? "erlaubt" : "keine-werkzeuge";
+  const g = s2Grenzen(k);
+  return g.websucheMax > 0 || g.abrufMax > 0 ? "erlaubt" : "keine-werkzeuge";
 }
 
 function rechercheText(k: Kontext): string {
   const m = rechercheModus(k);
+  const g = s2Grenzen(k);
   if (m === "nur-material") return "nur Material (Websuche vom Auftrag abgeschaltet)";
-  if (m === "keine-werkzeuge") return "erlaubt, aber keine Werkzeuge verfügbar (Höchstzahlen in den Einstellungen 0)";
-  return `erlaubt (${werkzeugText(k.einstellungen.websucheMax, k.einstellungen.abrufMax)})`;
+  if (m === "keine-werkzeuge") return `erlaubt, aber keine Werkzeuge verfügbar (${g.grund ?? "Höchstzahlen in den Einstellungen 0"})`;
+  return `erlaubt (${werkzeugText(g.websucheMax, g.abrufMax)})`;
 }
 
 export interface Kontext {
@@ -564,6 +591,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const erfassungsModell = modellFuer(rolleS2, e, p);
   const modus = rechercheModus(k);
   const recherche = modus === "erlaubt";
+  const grenzen = s2Grenzen(k);
   const n = bestaetigt.sachverhalte.length;
 
   const inhalt = [
@@ -600,8 +628,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
       vormeldungStand: vormeldungStand(k.material, p),
       verdichtung,
       recherche: modus,
-      websucheMax: e.websucheMax,
-      abrufMax: e.abrufMax,
+      websucheMax: grenzen.websucheMax,
+      abrufMax: grenzen.abrufMax,
+      ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
       kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
       absender: absenderFuer(k.material, p),
     }),
@@ -615,8 +644,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     werkzeuge: !recherche
       ? undefined
       : {
-          websuche: e.websucheMax > 0 ? { maxUses: e.websucheMax, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
-          abruf: e.abrufMax > 0 ? { maxUses: e.abrufMax, maxTokens: e.abrufMaxTokens || undefined } : undefined,
+          websuche:
+            grenzen.websucheMax > 0 ? { maxUses: grenzen.websucheMax, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
+          abruf: grenzen.abrufMax > 0 ? { maxUses: grenzen.abrufMax, maxTokens: e.abrufMaxTokens || undefined } : undefined,
         },
   });
 
@@ -737,7 +767,10 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   if (meldung && svAnzahl !== n)
     befunde.unshift({ stufe: "warnung", text: `Der Entwurf hat ${svAnzahl} Sachverhalt(e), bestätigt waren ${n}. Bitte Gliederung prüfen.` });
   if (meldung) befunde.unshift(...absenderBefunde(absenderFuer(k.material, p)));
-  if (meldung) befunde.unshift(...rechercheBefunde(modus, vormeldung, { nutzung: s2.nutzung, suchen: a.suchen, abrufe: a.abrufe, abrufFehler: a.abrufFehler }));
+  if (meldung)
+    befunde.unshift(
+      ...rechercheBefunde(modus, vormeldung, { nutzung: s2.nutzung, suchen: a.suchen, abrufe: a.abrufe, abrufFehler: a.abrufFehler }, grenzen.grund),
+    );
   k.lauf.ergebnis = meldung
     ? { meldung, kurzantwort, befunde, fundstellen: a.fundstellen, suchen: a.suchen, abrufFehler: a.abrufFehler, schemakonform: schemaBefunde.length === 0 }
     : undefined;
@@ -795,6 +828,8 @@ export function rechercheBefunde(
   modus: RechercheModus,
   vormeldung: boolean,
   nachweis: { nutzung?: { websuchen?: unknown; abrufe?: unknown }; suchen?: unknown[]; abrufe?: unknown[]; abrufFehler?: unknown[] },
+  /** Grenze des Anbieters statt der Einstellungen (seit 0.5.6) */
+  grund?: string,
 ): Befund[] {
   const { abrufFehler } = nachweis;
   if (modus === "keine-werkzeuge")
@@ -802,7 +837,9 @@ export function rechercheBefunde(
       {
         stufe: "hinweis",
         code: "RECHERCHE_NICHT_VERFUEGBAR",
-        text: "Recherche war im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahl Websuchen und Seitenabrufe 0); der Lauf arbeitete nur mit dem Material.",
+        text: grund
+          ? `Recherche war im Auftrag erlaubt, aber nicht verfügbar (${grund}); der Lauf arbeitete nur mit dem Material.`
+          : "Recherche war im Auftrag erlaubt, in den Einstellungen aber nicht verfügbar (Höchstzahl Websuchen und Seitenabrufe 0); der Lauf arbeitete nur mit dem Material.",
       },
     ];
   if (modus !== "erlaubt" || !vormeldung) return [];
