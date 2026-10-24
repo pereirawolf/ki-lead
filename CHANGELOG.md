@@ -55,6 +55,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
 | 0.5.6 | letzter Commit von Pull Request #53 „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
 | 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
+| 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
+
+## [0.5.8] – 24.10.2026
+
+Grundlage: Auftrag des Herausgebers vom 24.10.2026, die Konfigurationen von Modell und Aufwand der drei Anbieter mit dem Standardfall „Ilka“ per Schaltfläche vergleichbar zu machen, mit wählbarer Anzahl der Läufe (Vorauswahl 3) und dem Ergebnis als ZIP-Datei. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel.
+
+### Hinzugefügt
+
+- **Vergleichslauf Ilka** unter „Einstellungen → Modelle & Verarbeitung“ (`src/ui/Vergleichslauf.tsx`, `src/pipeline/vergleichslauf.ts`). Mit der dort angezeigten Konfiguration (S1, S2 Verdichtung, S3 Reparatur je mit Modell und Aufwand, bei Mistral mit Endpunkt) laufen 1 bis 10 Verdichtungen der sechs fiktiven Ilka-Eingänge (Vorauswahl 3) nacheinander:
+  - fester Auftrag aus `evaluation/faelle/orkantief-ilka-verdichtung.json`: Beispielprofil mit der Koordinierungsstelle, Referenzraum Bevölkerungsschutz in Deutschland, Stichtag 14.10.2026, t0 14:00 Uhr, ohne Websuche;
+  - S1-Vorschlag unverändert übernommen, keine vorgeschlagene Prüffrage, wie in der Abnahme M4;
+  - je Lauf Quellenprüfung der Eingänge, Prüfpunkte T1–T8 der Abnahme M4 und Vergleich mit der Redaktionsfassung.
+  - Vor dem Start nennt die App Schätzung von Dauer und Kosten je Lauf und zusammen sowie fehlende Schlüssel. Während des Laufs zeigt sie Lauf, Stufe, Zeichen und bisherige Kosten, hält den Bildschirm wach und lässt sich abbrechen (die bisherigen Läufe bleiben).
+  - **ZIP-Datei** `KI-LEAD_Vergleichslauf_Ilka_<S2-Modell>-<Aufwand>_<Zeit>.zip`: `reihe.json` (Format `ki-lead-abnahme/1`, Feld `quelle: "app"`), `uebersicht.csv` (eine Zeile je Sachverhalt und Lauf mit Konfiguration, Dauer, Token, Kosten, Beurteilung, Tendenz, Radarwerten und Ähnlichkeit zur Redaktionsfassung; Semikolon, Dezimalkomma), `laeufe/*.lauf.json`, `meldungen/*.meldung.json` (für `npm run vergleich:mehrfach`), `vergleiche/*.vergleich.csv`, `LIESMICH.txt`. Die Läufe erscheinen nicht in der Läufe-Liste der KI-Erfassung.
+
+### Geändert
+
+- **Abnahmeskript M4** (`evaluation/abnahmen/m4.lauf.ts`) nutzt Ablauf, Prüfpunkte und Reihendatei des Vergleichslaufs (`einLauf`, `pruefpunkte`, `reiheErstellen`); Ausgabe und Aufruf unverändert, die Reihendatei nennt zusätzlich `quelle: "skript"` und je Aufgabe den Anbieter, je Stufe die Eingabetoken.
+
+### Tests
+
+- `tests/pipeline/vergleichslauf.test.ts` (neu, 7): Vorgabe und Grenzen der Anzahl, Falldateien im Beispielprofil und in der eingebetteten Ausgabe, drei Läufe mit festem Auftrag und allen Prüfpunkten, Reihe ohne Mistral ohne Endpunkt, Inhalt der ZIP-Datei und der Übersicht, Abbruch im zweiten Lauf, Budgetgrenze.
+- `tests/ui/vergleichslauf.test.ts` (neu, 2): Abschnitt unter „Modelle & Verarbeitung“ mit wirksamer Konfiguration, drei Läufen und fehlendem Schlüssel; Ablauf mit Mistral-Konfiguration, ZIP-Datei und erneutem Herunterladen.
 
 ## [0.5.7] – 24.10.2026
 
