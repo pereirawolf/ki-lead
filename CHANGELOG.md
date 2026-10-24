@@ -58,6 +58,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 
 Grundlage: Befund „Grundlagen Priorität 2“ vom 24.10.2026 (Drittkomponenten und Lizenzen, Erprobungskonzept, Impressum) mit Freigabe des Herausgebers. Lizenz- und Rechtsfragen am 24.10.2026 recherchiert, mit Quellen; keine Rechtsberatung. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Pipeline oder gespeicherten Daten.
 
+**Nachtrag vom 24.10.2026 (Befundregister und Prüfsteine, ohne Änderung der App):**
+
+- **Befundregister** [evaluation/befunde/](evaluation/befunde/README.md): `befundregister.json` hält den Entscheidungsstand der Befunde aus den automatisierten Prüfläufen fest (`umgesetzt` mit Pull Request, `abgelehnt` und `ueberholt` mit Grund, `zurueckgestellt` mit Grund und Wiedervorlage); Format `ki-lead-befundregister/1` mit Schema. Prüfläufe lesen es vor der Prüfung, damit entschiedene Befunde nicht erneut vorgelegt werden. Die Befunddateien selbst bleiben außerhalb des Repositorys.
+- Tests: `tests/evaluation/schemata.test.ts` (+2): Register gegen Schema, eindeutige IDs, Kalenderwoche von ID und Befunddatei, Entscheidungsdatum nicht nach Registerstand; Pflichtangaben je Status. Schlüsselprüfung schließt `evaluation/befunde/` ein.
+- **Prüfsteine** [evaluation/pruefsteine/](evaluation/pruefsteine/README.md): Meldungen aus dem wöchentlichen Erfassungstest zu realen Lagen bleiben unverändert erhalten, auch mangelhafte; je Lage eine Begleitnotiz `ki-lead-pruefstein/1` mit Regelwerksstand, t0, Quellen, Einstufung, bekannten Mängeln und Befund-IDs. Kennzeichnung als KI-Entwurf ohne amtlichen Charakter ist Pflicht. Schemawandel wird in der Begleitnotiz dokumentiert, die Meldung nicht angepasst.
+- **Eingang offener Befunde:** Prüfläufe legen ihre Befunddateien vor der Freigabe auf dem Daten-Branch `befunde/eingang` ab; offene Befunde arbeitet ein Freitagslauf gesammelt ab ([evaluation/befunde/README.md](evaluation/befunde/README.md)).
+- Tests: `tests/evaluation/pruefsteine.test.ts` (neu, 3): Begleitnotiz gegen Schema, Ordnername, vorhandene Meldung, Kennzeichnung (Status, Verfahren, meldende Stelle, keine Zeichnungsnamen), aktuelles Meldungsschema oder dokumentierte Abweichung, Mängel mit Befund-ID in `befunde`; Pflichtangaben der Begleitnotiz.
+- Dokumente: [evaluation/README.md](evaluation/README.md), [docs/TESTS.md](docs/TESTS.md).
+
 ### Hinzugefügt
 
 - **Über KI-LEAD** in den Einstellungen: Version, Abgrenzung, Herausgeber und externe Verweise auf Impressum, Datenschutzerklärung, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`). Die Verweise öffnen sich in einem eigenen Fenster; die App ruft sie nicht auf, die Content-Security-Policy bleibt unverändert.

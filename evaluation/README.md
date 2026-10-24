@@ -19,8 +19,10 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 - `bewertungsschema.json`: Format einer Bewertung (ein Lauf, eine bewertende Person)
 - `ergebnisse/`: zusammengefasste Bewertungen; Laufprotokolle und Rohantworten bleiben außerhalb des öffentlichen Repositorys
 - `abnahmen/`: technische Abnahmen der Meilensteine mit echten KI-Läufen (Laufskript, eigene Vitest-Konfiguration, Ergebnis); nie Teil von `npm test`. Dort steht auch das Ergebnis der Erprobung im Testkreis (M6); Plan und Regeln der Erprobung: [docs/ERPROBUNG.md](../docs/ERPROBUNG.md)
+- `befunde/`: Befundregister – Entscheidungsstand der Befunde aus den automatisierten Prüfläufen (umgesetzt, abgelehnt, zurückgestellt, überholt), damit spätere Läufe Bekanntes nicht erneut vorlegen; siehe [befunde/README.md](befunde/README.md)
+- `pruefsteine/`: KI-Meldungen aus dem wöchentlichen Erfassungstest zu realen Lagen, unverändert und mit Begleitnotiz (Regelwerksstand, Einstufung, bekannte Mängel); Prüfsteine für spätere Fassungen der LEAD-Systematik, keine Musterlösungen; siehe [pruefsteine/README.md](pruefsteine/README.md)
 
-`tests/evaluation/` prüft nur, dass Fälle und Ergebnisse diesen Schemata entsprechen. Es ruft keine KI auf.
+`tests/evaluation/` prüft nur, dass Fälle, Ergebnisse, das Befundregister und die Prüfsteine ihren Schemata entsprechen. Es ruft keine KI auf.
 
 ## Ablauf einer Bewertung
 
@@ -46,6 +48,7 @@ Skala: 1 = unbrauchbar, 2 = erhebliche Nacharbeit, 3 = brauchbar mit Nacharbeit,
 ## Urheberrecht und Datenschutz
 
 - Keine Volltexte urheberrechtlich geschützter Artikel im Repository, auch nicht in Fällen oder Ergebnissen. Fälle verweisen auf die URL und halten eine Prüfsumme (`sha256`) des verwendeten Materials fest; wer den Lauf wiederholt, beschafft das Material selbst. Muss Material zwischen Läufen weitergegeben werden, dann nur verschlüsselt.
+- Prüfsteine zu realen Lagen stützen sich nur auf öffentlich zugängliche, vorrangig amtliche Quellen in eigenen Worten und sind als KI-Entwurf ohne amtlichen Charakter gekennzeichnet (Test).
 - Öffentliche Fälle verwenden fiktive oder offen zugängliche Inhalte (etwa den fiktiven Datensatz Orkantief „Ilka“ unter `profile/lead-beispiel/beispiele/`).
 - Organisationsspezifische Profile, echte Meldungen und Laufprotokolle mit internen Inhalten bleiben im nicht eingecheckten Ordner `privat/`.
 - API-Schlüssel stehen nie in Fällen, Ergebnissen, Protokollen oder Skripten; Läufe lesen sie aus der Umgebung oder aus einem Secret.

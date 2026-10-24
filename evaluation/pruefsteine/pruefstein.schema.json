@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/evaluation/pruefsteine/pruefstein.schema.json",
+  "title": "Begleitnotiz eines Prüfsteins",
+  "description": "Beschreibt eine im Erfassungstest entstandene KI-Meldung zu einer realen Lage: Regelwerksstand, Lage, Quellen, Einstufung und bekannte Mängel. Prüfsteine sind ausdrücklich keine Musterlösungen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "id", "hinweis", "lauf", "regelwerk", "lage", "quellen", "einstufung", "maengel", "befunde"],
+  "properties": {
+    "format": { "const": "ki-lead-pruefstein/1" },
+    "id": { "type": "string", "pattern": "^\\d{4}-W\\d{2}_[a-z0-9-]+$", "description": "gleich dem Ordnernamen" },
+    "hinweis": { "const": "KI-Entwurf im Erfassungstest zu einer realen Lage – keine amtliche Meldung, keine Musterlösung." },
+    "lauf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "erstellt_utc", "modell"],
+      "properties": {
+        "agent": { "const": "erfassungstest" },
+        "erstellt_utc": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?Z$" },
+        "modell": { "type": "string", "minLength": 1 }
+      }
+    },
+    "regelwerk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "sop_mappe", "kodierleitfaden", "anweisung_erfassung", "schema"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sop_mappe": { "type": "string", "minLength": 1 },
+        "kodierleitfaden": { "type": "string", "minLength": 1 },
+        "anweisung_erfassung": { "type": "string", "minLength": 1 },
+        "schema": { "type": "string", "minLength": 1 }
+      }
+    },
+    "lage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["titel", "t0", "referenzraum", "ereignisarten", "sop"],
+      "properties": {
+        "titel": { "type": "string", "minLength": 1 },
+        "t0": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$" },
+        "referenzraum": { "type": "string", "minLength": 1 },
+        "ereignisarten": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "sop": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^(A\\.\\d+|[BC]\\d{2})$" },
+          "description": "Kennungen, z. B. B08, C12"
+        }
+      }
+    },
+    "quellen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "herausgeber", "abgerufen_utc"],
+        "properties": {
+          "url": { "type": "string", "pattern": "^https?://\\S+$" },
+          "herausgeber": { "type": "string", "minLength": 1 },
+          "abgerufen_utc": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?Z$" }
+        }
+      }
+    },
+    "einstufung": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["brauchbar", "mangelhaft", "unvollstaendig", "widerspruechlich"] }
+    },
+    "maengel": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["beschreibung", "stelle"],
+        "properties": {
+          "beschreibung": { "type": "string", "minLength": 1 },
+          "stelle": { "type": "string", "minLength": 1, "description": "Feld der Meldung, z. B. sachverhalte[0].radar.D3" },
+          "befund": { "type": "string", "pattern": "^[A-Z]{2}-\\d{4}-W\\d{2}-\\d{2}$" }
+        }
+      }
+    },
+    "befunde": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z]{2}-\\d{4}-W\\d{2}-\\d{2}$" } },
+    "schemaabweichung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seit", "beschreibung"],
+      "description": "Nur setzen, wenn die Meldung einem späteren Meldungsschema nicht mehr entspricht; die Meldung wird nicht nachträglich angepasst.",
+      "properties": {
+        "seit": { "type": "string", "minLength": 1 },
+        "beschreibung": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "einstufung": { "contains": { "enum": ["mangelhaft", "unvollstaendig", "widerspruechlich"] } } } },
+      "then": { "properties": { "maengel": { "minItems": 1 } } }
+    }
+  ]
+}
