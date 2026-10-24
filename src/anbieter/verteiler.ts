@@ -1,7 +1,7 @@
 // Wählt den Anbieter nach der Modellkennung. Die Pipeline kennt nur LlmAnbieter.
 
 import { AnthropicAnbieter } from "./anthropic";
-import { MistralAnbieter } from "./mistral";
+import { MistralAnbieter, type MistralEndpunkt } from "./mistral";
 import { OpenAiAnbieter } from "./openai";
 import { AnbieterFehler, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "./typen";
 
@@ -33,14 +33,32 @@ export function fehlendeSchluessel(modelle: string[], s: Schluessel): AnbieterId
   return [...new Set(modelle.filter(Boolean).map(anbieterVon))].filter((a) => !s[a]);
 }
 
+/** Wahl, die über den Schlüssel hinaus bestimmt, wie ein Anbieter angesprochen wird */
+export interface VerteilerOptionen {
+  /** Mistral: regionaler EU-Endpunkt (Vorgabe) oder globaler Endpunkt mit Websuche */
+  mistralEndpunkt?: MistralEndpunkt;
+}
+
 export class Verteiler implements LlmAnbieter {
   id = "verteiler";
   private cache: Partial<Record<AnbieterId, LlmAnbieter>> = {};
   constructor(
     private schluessel: Schluessel,
-    private fabrik: (id: AnbieterId, schluessel: string) => LlmAnbieter = (id, k) =>
-      id === "openai" ? new OpenAiAnbieter(k) : id === "mistral" ? new MistralAnbieter(k) : new AnthropicAnbieter(k),
+    private fabrik?: (id: AnbieterId, schluessel: string) => LlmAnbieter,
+    private optionen: VerteilerOptionen = {},
   ) {}
+
+  /** Verteiler mit den Optionen aus den Einstellungen */
+  static fuer(schluessel: Schluessel, optionen: VerteilerOptionen): Verteiler {
+    return new Verteiler(schluessel, undefined, optionen);
+  }
+
+  private bauen(id: AnbieterId, k: string): LlmAnbieter {
+    if (this.fabrik) return this.fabrik(id, k);
+    if (id === "openai") return new OpenAiAnbieter(k);
+    if (id === "mistral") return new MistralAnbieter(k, undefined, undefined, this.optionen.mistralEndpunkt ?? "eu");
+    return new AnthropicAnbieter(k);
+  }
 
   senden(a: LlmAnfrage): Promise<LlmAntwort> {
     const id = anbieterVon(a.modell);
@@ -49,6 +67,6 @@ export class Verteiler implements LlmAnbieter {
       return Promise.reject(
         new AnbieterFehler(`Für ${ANBIETER_NAME[id]} (${a.modell}) ist kein API-Schlüssel hinterlegt. Bitte unter „Einstellungen“ eintragen.`, 0, "schluessel"),
       );
-    return (this.cache[id] ??= this.fabrik(id, k)).senden(a);
+    return (this.cache[id] ??= this.bauen(id, k)).senden(a);
   }
 }

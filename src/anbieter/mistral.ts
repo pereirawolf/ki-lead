@@ -1,4 +1,12 @@
-// Mistral AI, Conversations API (POST /v1/conversations), direkt aus dem Browser bzw. der App (kein eigener Server).
+// Mistral AI, direkt aus dem Browser bzw. der App (kein eigener Server). Zwei Wege (seit 0.5.6, Vorgabe „eu“):
+//
+// - „eu“: regionaler Endpunkt api.eu.mistral.ai, Chat Completions (POST /v1/chat/completions). Verarbeitung in
+//   Rechenzentren in EU und EFTA, 10 % Aufschlag auf die Listenpreise. Eingebaute Werkzeuge (Websuche) und
+//   zustandsbehaftete Funktionen gibt es dort nicht; Doku: https://docs.mistral.ai/inference/regional-inference.
+//   Chat Completions fällt unter Mistrals Zero Data Retention (auf Antrag).
+// - „global“: api.mistral.ai, Conversations API (POST /v1/conversations), mit eingebauter Websuche.
+//
+// Zum globalen Weg (Conversations API):
 // Doku: https://docs.mistral.ai/api (Conversations), https://docs.mistral.ai/agents/tools (eingebaute Werkzeuge)
 //
 // Warum nicht /v1/chat/completions: Die eingebaute Websuche („web_search“) gibt es laut Mistral nur in der
@@ -38,7 +46,17 @@ import {
 } from "./typen";
 import { abbruchPruefen, warte } from "./warten";
 
+export type MistralEndpunkt = "eu" | "global";
+
 export const MISTRAL_URL = "https://api.mistral.ai/v1/conversations";
+export const MISTRAL_EU_URL = "https://api.eu.mistral.ai/v1/chat/completions";
+/** Aufschlag des regionalen Endpunkts auf alle Tokenpreise (Mistral: 1,1 × Listenpreis) */
+export const MISTRAL_EU_FAKTOR = 1.1;
+
+/** Kann der Weg Werkzeuge? Über den EU-Endpunkt gibt es keine Websuche und keinen Seitenabruf. */
+export function mistralWerkzeuge(endpunkt: MistralEndpunkt): { websuche: boolean; abruf: boolean } {
+  return { websuche: endpunkt === "global", abruf: false };
+}
 const MAX_WIEDERHOLUNGEN = 3;
 const MAX_NEUSTARTS = 2;
 
@@ -86,6 +104,20 @@ export function anfrageKoerperMistral(a: LlmAnfrage, aufwand: string | undefined
   return body;
 }
 
+/** Anfrage an Chat Completions (EU-Endpunkt): System als erste Nachricht, keine Werkzeuge. */
+export function anfrageKoerperMistralChat(a: LlmAnfrage, aufwand: string | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand]): Record<string, any> {
+  const system = a.system.map((s) => s.text).join("\n\n");
+  const body: Record<string, any> = {
+    model: a.modell,
+    messages: [...(system ? [{ role: "system", content: system }] : []), ...a.nachrichten.map((n) => ({ role: n.role, content: inhaltZuMistral(n.content) }))],
+    max_tokens: a.maxTokens,
+    stream: true,
+  };
+  if (aufwand) body.reasoning_effort = aufwand;
+  if (a.jsonSchema) body.response_format = { type: "json_schema", json_schema: { name: "antwort", schema: strengesSchema(a.jsonSchema), strict: true } };
+  return body;
+}
+
 export function fehlerTextMistral(status: number, code?: string, meldung?: string): string {
   const m = meldung ? ` (${meldung})` : "";
   if (status === 401) return "Der Mistral-Schlüssel wurde abgelehnt. Bitte unter „Einstellungen“ prüfen." + m;
@@ -122,6 +154,8 @@ export class MistralSammler {
   inhalt: any[] = [];
   nutzung: any = null;
   fertig = false;
+  /** Abbruchgrund (nur Chat Completions: stop, length, error, tool_calls) */
+  endgrund?: string;
 
   constructor(private fortschritt?: LlmAnfrage["fortschritt"]) {}
 
@@ -148,6 +182,23 @@ export class MistralSammler {
     else if (c?.type === "tool_reference") this.referenz(c);
   }
 
+  /** Ein Stück aus dem Strom von Chat Completions (EU-Endpunkt) */
+  verarbeiteChat(d: any) {
+    if (d?.object === "error" || (d?.error && !d?.choices)) {
+      const f = fehlerAus(d);
+      throw new AnbieterFehler(fehlerTextMistral(0, f.code, f.meldung), undefined, "error", this.inhalt);
+    }
+    if (d.model) this.modell = d.model;
+    if (d.usage) this.nutzung = d.usage;
+    const c = d.choices?.[0];
+    if (!c) return;
+    if (c.delta?.content !== undefined && c.delta?.content !== null) this.teil(c.delta.content);
+    if (c.finish_reason) {
+      this.endgrund = String(c.finish_reason);
+      if (this.endgrund === "error") throw new AnbieterFehler(fehlerTextMistral(0, "error", "Abbruch im Antwortstrom"), undefined, "error", this.inhalt);
+    }
+  }
+
   verarbeite(d: any, event: string) {
     const typ = d?.type || event;
     if (typ === "message.output.delta") {
@@ -170,6 +221,7 @@ export class MistralSammler {
     } else if (typ === "tool.execution.done") {
       this.inhalt.push(d);
     } else if (typ === "conversation.response.done") {
+      this.inhalt.push(d);
       this.nutzung = d.usage || {};
       this.fertig = true;
     } else if (typ === "conversation.response.error") {
@@ -184,6 +236,12 @@ export class MistralSammler {
  * sagt die Doku nicht; die App zählt sie vorsichtig zur Eingabe. Zwischengespeicherte Token nennt die
  * Conversations-API nicht.
  */
+/** Nutzung bei Chat Completions; zwischengespeicherte Token, soweit Mistral sie meldet */
+export function nutzungMistralChat(u: any): Nutzung {
+  const gecacht = u?.prompt_tokens_details?.cached_tokens || 0;
+  return { ...leereNutzung(), eingabe: Math.max(0, (u?.prompt_tokens || 0) - gecacht), cacheLesen: gecacht, ausgabe: u?.completion_tokens || 0 };
+}
+
 export function nutzungMistral(u: any, suchenGezaehlt: number): Nutzung {
   const ausConnectors = Object.entries(u?.connectors || {})
     .filter(([k]) => /^web_search/.test(k))
@@ -200,16 +258,24 @@ class StromEnde extends Error {}
 
 export class MistralAnbieter implements LlmAnbieter {
   id = "mistral";
+  private url: string;
   constructor(
     private schluessel: string,
-    private url = MISTRAL_URL,
+    url?: string,
     private abruf: typeof fetch = (...x) => fetch(...x),
-  ) {}
+    private endpunkt: MistralEndpunkt = "eu",
+  ) {
+    this.url = url ?? (endpunkt === "eu" ? MISTRAL_EU_URL : MISTRAL_URL);
+  }
+
+  private koerper(a: LlmAnfrage, aufwand: string | undefined) {
+    return this.endpunkt === "eu" ? anfrageKoerperMistralChat(a, aufwand) : anfrageKoerperMistral(a, aufwand);
+  }
 
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert den Sammler und die wirksame Stufe des Nachdenkens. */
   private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string }> {
     let aufwand = a.aufwand && MISTRAL_AUFWAND[a.aufwand];
-    let body = anfrageKoerperMistral(a, aufwand);
+    let body = this.koerper(a, aufwand);
     let grobVersucht = false;
     for (let versuch = 0; ; versuch++) {
       abbruchPruefen(a.signal);
@@ -229,7 +295,7 @@ export class MistralAnbieter implements LlmAnbieter {
           continue;
         }
         throw new AnbieterFehler(
-          "Keine Verbindung zu Mistral. Netz prüfen. Steht das Netz, kann auch der Browser den direkten Aufruf von api.mistral.ai blockiert haben.",
+          `Keine Verbindung zu Mistral. Netz prüfen. Steht das Netz, kann auch der Browser den direkten Aufruf von ${new URL(this.url).host} blockiert haben.`,
           0,
           "netz",
         );
@@ -245,7 +311,7 @@ export class MistralAnbieter implements LlmAnbieter {
           grobVersucht = true;
           aufwand = groberAufwand(a.aufwand);
           a.fortschritt?.({ art: "wiederholung", grund: `Mistral lehnt die Stufe des Nachdenkens ab; neuer Versuch mit „${aufwand}“.`, warteMs: 0 });
-          body = anfrageKoerperMistral(a, aufwand);
+          body = this.koerper(a, aufwand);
           versuch--;
           continue;
         }
@@ -272,7 +338,11 @@ export class MistralAnbieter implements LlmAnbieter {
         const { value, done } = await reader.read();
         if (done) break;
         for (const ev of leser.lies(value)) {
-          if (ev.data && typeof ev.data === "object") sammler.verarbeite(ev.data, ev.event);
+          if (ev.data === "[DONE]") sammler.fertig = true;
+          else if (ev.data && typeof ev.data === "object") {
+            if (this.endpunkt === "eu") sammler.verarbeiteChat(ev.data);
+            else sammler.verarbeite(ev.data, ev.event);
+          }
         }
       }
     } catch (e: any) {
@@ -280,6 +350,7 @@ export class MistralAnbieter implements LlmAnbieter {
       if (e instanceof AnbieterFehler) throw e;
       throw new StromEnde(String(e?.message || e));
     }
+    if (this.endpunkt === "eu" && sammler.endgrund) sammler.fertig = true;
     if (!sammler.fertig) throw new StromEnde("Strom ohne Abschluss beendet");
     return sammler;
   }
@@ -300,23 +371,32 @@ export class MistralAnbieter implements LlmAnbieter {
         await warte(1500, a.signal);
       }
     }
-    const n = nutzungMistral(s.nutzung, s.suchen.length);
+    const eu = this.endpunkt === "eu";
+    const n = eu ? nutzungMistralChat(s.nutzung) : nutzungMistral(s.nutzung, s.suchen.length);
     // Die Conversations-API nennt keinen Abbruchgrund. Ist die Höchstzahl der Ausgabetoken erreicht, gilt die
     // Antwort als abgeschnitten, damit die Pipeline wie bei den anderen Anbietern vervollständigen kann.
-    const abgeschnitten = n.ausgabe >= a.maxTokens;
+    const abgeschnitten = s.endgrund === "length" || n.ausgabe >= a.maxTokens;
     // Wirksame Parameter für das Laufprotokoll, wo sie von der Anfrage der App abweichen können
-    const parameter = { type: "ki-lead.parameter", anbieter: "mistral", reasoning_effort: aufwand ?? null, websuche_hoechstzahl_durchgesetzt: false };
+    const parameter = {
+      type: "ki-lead.parameter",
+      anbieter: "mistral",
+      endpunkt: new URL(this.url).host,
+      reasoning_effort: aufwand ?? null,
+      websuche: !eu && !!a.werkzeuge?.websuche,
+      websuche_hoechstzahl_durchgesetzt: false,
+    };
+    const kosten = kostenAnfrage(a.modell, n);
     return {
       modell: s.modell || a.modell,
       text: s.text,
-      inhalt: [parameter, ...s.inhalt],
+      inhalt: eu ? [parameter, { type: "ki-lead.chat", finish_reason: s.endgrund ?? null, usage: s.nutzung ?? null }] : [parameter, ...s.inhalt],
       zitate: s.zitate,
       fundstellen: s.fundstellen,
       suchen: s.suchen,
       abrufe: [],
       abrufFehler: [],
       nutzung: n,
-      kostenUsd: kostenAnfrage(a.modell, n),
+      kostenUsd: kosten === null ? null : eu ? kosten * MISTRAL_EU_FAKTOR : kosten,
       stopGrund: abgeschnitten ? "max_tokens" : "end_turn",
       dauerMs: Date.now() - start,
       runden: 1,

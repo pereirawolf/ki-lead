@@ -154,7 +154,7 @@ describe("Einstellungen: KI-Anbieter & API", () => {
     const felder = [...document.querySelectorAll("input[aria-label^='API-Schlüssel ']")].map((i) => i.getAttribute("aria-label"));
     expect(felder).toEqual(["API-Schlüssel Anthropic", "API-Schlüssel OpenAI", "API-Schlüssel Mistral"]);
     const mistral = document.querySelector("section[aria-labelledby='schluessel-mistral']") as HTMLElement;
-    expect(mistral.textContent).toContain("Die App schickt ihn nur an api.mistral.ai");
+    expect(mistral.textContent).toContain("Die App schickt ihn nur an api.eu.mistral.ai bzw. api.mistral.ai (je nach Endpunkt)");
     expect(mistral.textContent).toContain("Kein Schlüssel hinterlegt.");
     await eingeben(mistral.querySelector("input")!, "  mistral-TEST-NICHT-EXPORTIEREN  ");
     expect(mistral.textContent).toContain("Noch nicht gespeichert.");
@@ -261,6 +261,26 @@ describe("Einstellungen: Recherche & Grenzen", () => {
     expect(gesetzt.map((e) => e.maxTokensErfassung)).toEqual([128000, 8000, 128000]);
     expect(Object.keys(gesetzt[0]).sort()).toEqual(Object.keys(STANDARD).sort());
     expect(document.body.textContent).not.toContain("Höchstzahl Ausgabetoken (S1, S2, S3)");
-    expect(document.body.textContent).toContain("Mistral: Nur die Websuche");
+    expect(document.body.textContent).toContain("Mistral: Über den EU-Endpunkt (Vorgabe) gibt es keine Werkzeuge");
+    expect(document.body.textContent).toContain("Derzeit gewählt: EU (api.eu.mistral.ai).");
+  });
+});
+
+describe("Einstellungen: Mistral-Endpunkt (seit 0.5.6, Vorgabe EU)", () => {
+  it("ist als Vorgabe EU; die Wahl ändert nur den Endpunkt; die Übersicht nennt ihn", async () => {
+    const gesetzt: Einstellungen[] = [];
+    expect(STANDARD.mistralEndpunkt).toBe("eu");
+    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt }));
+    expect(document.querySelector(".uebersicht-liste")!.textContent).toContain("Mistral-EndpunktEU (api.eu.mistral.ai)");
+    await klick("KI-Anbieter & API", nav());
+    const eu = document.querySelector('input[name="mistral-endpunkt"][value="eu"]') as HTMLInputElement;
+    const global = document.querySelector('input[name="mistral-endpunkt"][value="global"]') as HTMLInputElement;
+    expect(eu.checked).toBe(true);
+    await klick(global);
+    expect(gesetzt).toHaveLength(1);
+    expect(gesetzt[0]).toEqual({ ...STANDARD, mistralEndpunkt: "global" });
+    expect(global.checked).toBe(true);
+    await klick("Übersicht", nav());
+    expect(document.querySelector(".uebersicht-liste")!.textContent).toContain("Mistral-EndpunktGlobal (api.mistral.ai)");
   });
 });

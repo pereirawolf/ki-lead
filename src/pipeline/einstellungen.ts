@@ -2,7 +2,8 @@
 
 import { get, set } from "idb-keyval";
 import type { Aufwand } from "../anbieter/typen";
-import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
+import { anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
@@ -22,6 +23,11 @@ export interface Einstellungen {
    * als der Wert nur für S2 und S3 galt; er bleibt, damit gespeicherte Einstellungen gültig bleiben.
    */
   maxTokensErfassung: number;
+  /**
+   * Mistral (seit 0.5.6): „eu“ = regionaler Endpunkt api.eu.mistral.ai ohne Websuche (Vorgabe), „global“ =
+   * api.mistral.ai mit Websuche. Fehlt der Wert in gespeicherten Einstellungen, gilt die Vorgabe.
+   */
+  mistralEndpunkt: MistralEndpunkt;
   /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
   fassung?: number;
 }
@@ -50,6 +56,7 @@ export const STANDARD: Einstellungen = {
   abrufMaxTokens: 15000,
   suchland: "DE",
   maxTokensErfassung: 128000,
+  mistralEndpunkt: "eu",
   fassung: 3,
 };
 
@@ -170,6 +177,15 @@ export async function alleSchluesselLesen(): Promise<Schluessel> {
   const out: Schluessel = { ...LEERE_SCHLUESSEL };
   for (const id of Object.keys(out) as AnbieterId[]) out[id] = await schluesselLesen(id);
   return out;
+}
+
+/**
+ * Werkzeuge, die das Modell mit diesen Einstellungen tatsächlich nutzen kann. Anthropic und OpenAI: beide;
+ * Mistral: über den EU-Endpunkt keine, global nur die Websuche.
+ */
+export function werkzeugeFuer(modell: string, e: Pick<Einstellungen, "mistralEndpunkt">): { websuche: boolean; abruf: boolean } {
+  if (anbieterVon(modell) === "mistral") return mistralWerkzeuge(e.mistralEndpunkt ?? "eu");
+  return { websuche: true, abruf: true };
 }
 
 /** Modelle, die ein Lauf der KI-Erfassung voraussichtlich nutzt. */

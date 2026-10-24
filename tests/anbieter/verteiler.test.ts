@@ -45,7 +45,7 @@ describe("Verteiler", () => {
     expect(anbieterListe(["anthropic", "openai", "mistral"])).toBe("Anthropic, OpenAI und Mistral");
   });
 
-  it("die Standard-Fabrik baut für Mistral einen MistralAnbieter", async () => {
+  it("die Standard-Fabrik baut für Mistral einen MistralAnbieter, ohne Wahl für den EU-Endpunkt", async () => {
     const aufrufe: string[] = [];
     const echt = globalThis.fetch;
     globalThis.fetch = (async (url: string) => {
@@ -53,12 +53,18 @@ describe("Verteiler", () => {
       return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }) as typeof fetch;
     try {
-      await expect(new Verteiler({ anthropic: "", openai: "", mistral: "m" }).senden({ ...anfrage, modell: "mistral-small-2603" })).rejects.toThrow(
-        /Mistral-Schlüssel/,
-      );
+      const sch = { anthropic: "", openai: "", mistral: "m" };
+      const m = { ...anfrage, modell: "mistral-small-2603" };
+      await expect(new Verteiler(sch).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
+      await expect(Verteiler.fuer(sch, { mistralEndpunkt: "eu" }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
+      await expect(Verteiler.fuer(sch, { mistralEndpunkt: "global" }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
     } finally {
       globalThis.fetch = echt;
     }
-    expect(aufrufe).toEqual(["https://api.mistral.ai/v1/conversations"]);
+    expect(aufrufe).toEqual([
+      "https://api.eu.mistral.ai/v1/chat/completions",
+      "https://api.eu.mistral.ai/v1/chat/completions",
+      "https://api.mistral.ai/v1/conversations",
+    ]);
   });
 });

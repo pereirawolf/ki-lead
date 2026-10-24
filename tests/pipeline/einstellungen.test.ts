@@ -18,6 +18,7 @@ const {
   modellFuer,
   schluesselLesen,
   schluesselSchreiben,
+  werkzeugeFuer,
 } = await import("../../src/pipeline/einstellungen");
 
 describe("Vorgaben und Umstellung der Einstellungen", () => {
@@ -35,6 +36,23 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
     expect(e.fassung).toBe(3);
+  });
+
+  it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt, Fassung unverändert", async () => {
+    const { mistralEndpunkt: _ohne, ...alt } = STANDARD;
+    speicher.set("einstellungen", alt);
+    const e = await einstellungenLesen();
+    expect(e.mistralEndpunkt).toBe("eu");
+    expect(e.fassung).toBe(3);
+    speicher.set("einstellungen", { ...alt, mistralEndpunkt: "global" });
+    expect((await einstellungenLesen()).mistralEndpunkt).toBe("global");
+  });
+
+  it("Werkzeuge je Modell und Endpunkt: Mistral EU keine, Mistral global nur Websuche, sonst beide", () => {
+    expect(werkzeugeFuer("mistral-medium-3-5", { mistralEndpunkt: "eu" })).toEqual({ websuche: false, abruf: false });
+    expect(werkzeugeFuer("mistral-medium-3-5", { mistralEndpunkt: "global" })).toEqual({ websuche: true, abruf: false });
+    expect(werkzeugeFuer("claude-opus-5-5", { mistralEndpunkt: "eu" })).toEqual({ websuche: true, abruf: true });
+    expect(werkzeugeFuer("gpt-6-astra", { mistralEndpunkt: "eu" })).toEqual({ websuche: true, abruf: true });
   });
 
   it("lässt eine bewusst andere Wahl stehen", async () => {

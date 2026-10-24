@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
+import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_IDS, ANBIETER_NAME, anbieterListe, anbieterVon, LEERE_SCHLUESSEL, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
@@ -106,16 +107,27 @@ const ANBIETER: AnbieterInfo[] = [
     id: "mistral",
     konsole: "https://console.mistral.ai/",
     konsoleName: "Mistral Console",
-    host: "api.mistral.ai",
+    host: "api.eu.mistral.ai bzw. api.mistral.ai (je nach Endpunkt)",
     platzhalter: "Schlüssel aus der Mistral Console",
     testModell: "mistral-small-2603",
     testTokens: 400,
     hinweise: [
-      "Europäischer Anbieter (Paris); die API verarbeitet standardmäßig in der EU. Für einzelne Funktionen können Unterauftragnehmer beteiligt sein. Aufbewahrung 30 Tage; die Löschung ohne Aufbewahrung (Zero Data Retention) gilt nicht für die hier genutzte Conversations-API.",
+      "Europäischer Anbieter (Paris). EU-Endpunkt: Verarbeitung in Rechenzentren in EU und EFTA, 10 % Aufschlag, keine Websuche; Kontoverwaltung und Abrechnung können außerhalb liegen. Welche Modelle dort bereitstehen, legt Mistral je Region fest.",
+      "Globaler Endpunkt: mit Websuche (Conversations-API). Die Websuche kennt keine Höchstzahl je Anfrage; die App zählt die Suchen. Ein eigenes Abrufwerkzeug gibt es nicht.",
+      "Aufbewahrung 30 Tage zur Missbrauchsüberwachung. Die Löschung ohne Aufbewahrung (Zero Data Retention, auf Antrag) gilt für den EU-Weg (Chat Completions), nicht für die Conversations-API.",
       "Im kostenlosen Tarif darf Mistral Ein- und Ausgaben zum Training nutzen. Abschalten in der Mistral-Verwaltung unter „Privacy“ („Anonymous improvement data“).",
-      "Anbindung neu seit 0.5.6 und noch nicht erprobt. Die Websuche kennt keine Höchstzahl je Anfrage; die App zählt die Suchen und schreibt sie ins Laufprotokoll. Ein eigenes Abrufwerkzeug gibt es nicht.",
+      "Anbindung neu seit 0.5.6 und noch nicht erprobt.",
     ],
   },
+];
+
+const MISTRAL_ENDPUNKTE: { id: MistralEndpunkt; titel: string; text: string }[] = [
+  {
+    id: "eu",
+    titel: "EU (api.eu.mistral.ai)",
+    text: "Vorgabe. Verarbeitung in EU und EFTA, 10 % Aufschlag, ohne Websuche: S2 arbeitet dann nur mit dem Material.",
+  },
+  { id: "global", titel: "Global (api.mistral.ai)", text: "Mit Websuche. Verarbeitung nicht auf eine Region festgelegt." },
 ];
 
 /** Wirksames Modell einer Aufgabe: eigene Einstellung, sonst Vorgabe des Profils, sonst der App */
@@ -196,6 +208,8 @@ function UebersichtBereich({
         <dd>{profil ? `${profil.manifest.name} ${profil.manifest.version}` : "keines"}</dd>
         <dt>Voreinstellung der Modelle</dt>
         <dd>{voreinstellungTitel(aktiveVoreinstellung(e))}</dd>
+        <dt>Mistral-Endpunkt</dt>
+        <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.mistralEndpunkt)?.titel}</dd>
         <dt>Ablage der API-Schlüssel</dt>
         <dd>{ablage ? ablageVon(ablage).titel : "–"}</dd>
         <dt>Recherche je Lauf</dt>
@@ -303,7 +317,21 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
   );
 }
 
-function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: AnbieterInfo; wert: string; setzen: (w: string) => void; ablage: AblageId }) {
+function SchluesselAbschnitt({
+  a,
+  wert,
+  setzen,
+  ablage,
+  e,
+  setEinstellungen,
+}: {
+  a: AnbieterInfo;
+  wert: string;
+  setzen: (w: string) => void;
+  ablage: AblageId;
+  e: E;
+  setEinstellungen: (e: E) => void;
+}) {
   const [eingabe, setEingabe] = useState(wert);
   const [zeigen, setZeigen] = useState(false);
   const [test, setTest] = useState<{ art: "ok" | "fehler" | "laeuft"; text: string } | null>(null);
@@ -313,7 +341,7 @@ function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: AnbieterInfo; wer
   const pruefen = async () => {
     setTest({ art: "laeuft", text: "Verbindung wird geprüft …" });
     try {
-      const antwort = await new Verteiler({ ...LEERE_SCHLUESSEL, [a.id]: eingabe.trim() }).senden({
+      const antwort = await Verteiler.fuer({ ...LEERE_SCHLUESSEL, [a.id]: eingabe.trim() }, { mistralEndpunkt: e.mistralEndpunkt }).senden({
         modell: a.testModell,
         maxTokens: a.testTokens,
         aufwand: "low",
@@ -386,6 +414,30 @@ function SchluesselAbschnitt({ a, wert, setzen, ablage }: { a: AnbieterInfo; wer
           <p>{test.text}</p>
         </div>
       )}
+      {a.id === "mistral" && (
+        <fieldset className="ablage-wahl mistral-endpunkt">
+          <legend>Endpunkt</legend>
+          {MISTRAL_ENDPUNKTE.map((x) => (
+            <label key={x.id} className="ablage-option">
+              <input
+                type="radio"
+                name="mistral-endpunkt"
+                value={x.id}
+                checked={e.mistralEndpunkt === x.id}
+                onChange={() => {
+                  setEinstellungen({ ...e, mistralEndpunkt: x.id });
+                  setTest(null);
+                }}
+              />
+              <span>
+                <strong>{x.titel}</strong>
+                <br />
+                <span className="ablage-text">{x.text}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+      )}
       <details className="anbieter-hinweise">
         <summary>Hinweise zu {name}</summary>
         <ul>
@@ -403,11 +455,15 @@ function AnbieterBereich({
   setSchluessel,
   ablage,
   setAblage,
+  e,
+  setEinstellungen,
 }: {
   schluessel: Schluessel;
   setSchluessel: (id: AnbieterId, wert: string) => void;
   ablage: AblageId;
   setAblage?: (id: AblageId) => Promise<void>;
+  e: E;
+  setEinstellungen: (e: E) => void;
 }) {
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
@@ -418,7 +474,15 @@ function AnbieterBereich({
       </p>
       {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
       {ANBIETER.map((a) => (
-        <SchluesselAbschnitt key={`${a.id}:${ablage}`} a={a} wert={schluessel[a.id]} setzen={(w) => setSchluessel(a.id, w)} ablage={ablage} />
+        <SchluesselAbschnitt
+          key={`${a.id}:${ablage}`}
+          a={a}
+          wert={schluessel[a.id]}
+          setzen={(w) => setSchluessel(a.id, w)}
+          ablage={ablage}
+          e={e}
+          setEinstellungen={setEinstellungen}
+        />
       ))}
     </section>
   );
@@ -631,9 +695,10 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
           {genutzt.includes("openai") ? "" : " (derzeit nicht genutzt)"}
         </li>
         <li>
-          <strong>Mistral:</strong> Nur die Websuche; die Höchstzahl ist dort nicht technisch begrenzt, die App zählt die Suchen und schreibt sie ins
-          Laufprotokoll. Seitenabrufe und die Höchstlänge je Seite gelten nicht; ohne Websuche (Höchstzahl 0) recherchiert ein Mistral-Modell gar nicht.
-          {genutzt.includes("mistral") ? "" : " (derzeit nicht genutzt)"}
+          <strong>Mistral:</strong> Über den EU-Endpunkt (Vorgabe) gibt es keine Werkzeuge; S2 arbeitet dann nur mit dem Material, und die App sagt das dem
+          Modell und im Ergebnis. Über den globalen Endpunkt nur die Websuche, ohne technische Höchstzahl; die App zählt die Suchen und schreibt sie ins
+          Laufprotokoll. Seitenabrufe und die Höchstlänge je Seite gelten bei Mistral nicht. Derzeit gewählt:{" "}
+          {MISTRAL_ENDPUNKTE.find((x) => x.id === e.mistralEndpunkt)?.titel}.{genutzt.includes("mistral") ? "" : " (derzeit nicht genutzt)"}
         </li>
       </ul>
       <p className="hinweis">Kostenschätzung nach Listenpreisen, Stand {PREISSTAND}.</p>
@@ -692,7 +757,16 @@ export function EinstellungenAnsicht({
           {aktuell === "uebersicht" && (
             <UebersichtBereich profil={profil} e={e} schluessel={schluessel} ablage={setAblage ? ablage : undefined} zeige={zeige} />
           )}
-          {aktuell === "anbieter" && <AnbieterBereich schluessel={schluessel} setSchluessel={setSchluessel} ablage={ablage} setAblage={setAblage} />}
+          {aktuell === "anbieter" && (
+            <AnbieterBereich
+              schluessel={schluessel}
+              setSchluessel={setSchluessel}
+              ablage={ablage}
+              setAblage={setAblage}
+              e={e}
+              setEinstellungen={setEinstellungen}
+            />
+          )}
           {aktuell === "modelle" && <ModelleBereich profil={profil} e={e} setEinstellungen={setEinstellungen} schluessel={schluessel} />}
           {aktuell === "recherche" && <RechercheBereich profil={profil} e={e} setEinstellungen={setEinstellungen} />}
           {aktuell === "darstellung" && farben && <FarbschemaAbschnitt profil={profil} zugang={farben} />}

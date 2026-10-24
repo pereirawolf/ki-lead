@@ -46,7 +46,7 @@ Der Service Worker der PWA hält nur Programmdateien vor. Inhalte und Anfragen a
 ## 4. Datenflüsse
 
 ```
-Gerät ──(nur bei einer KI-Funktion, HTTPS)──▶ api.anthropic.com, api.openai.com  oder  api.mistral.ai
+Gerät ──(nur bei einer KI-Funktion, HTTPS)──▶ api.anthropic.com, api.openai.com, api.eu.mistral.ai  oder  api.mistral.ai
                                                   │
                                                   └─(nur wenn im Auftrag erlaubt)─▶ Websuche und Seitenabruf
                                                                                      beim Anbieter → Suchdienste, Webseiten
@@ -78,14 +78,14 @@ Es gelten die Bedingungen, die die nutzende Person oder Stelle mit dem Anbieter 
 
 ### Mistral (seit App 0.5.6)
 
-- **Anbieter:** Mistral AI SAS, Paris. Die API verarbeitet Anfragen standardmäßig in der EU (Wavect, 2026); für den regionalen Endpunkt `api.eu.mistral.ai` nennt eine Übersicht Dritter Rechenzentren in EU und EFTA und eine nicht regionale Steuerungsebene (Connic, 2026). KI-LEAD nutzt den allgemeinen Endpunkt `api.mistral.ai`. Für einzelne Funktionen dokumentiert Mistral Übermittlungen an Unterauftragnehmer (Wavect, 2026); ob das die Websuche betrifft, ist nicht geprüft.
+- **Anbieter:** Mistral AI SAS, Paris. Der globale Endpunkt verarbeitet Anfragen standardmäßig in der EU (Wavect, 2026). KI-LEAD nutzt als Vorgabe den regionalen EU-Endpunkt `api.eu.mistral.ai`: Mistral verarbeitet Ein- und Ausgaben dort in Rechenzentren in EU und EFTA; Kontoverwaltung, Schlüssel, Abrechnung und Nutzungsauswertung können außerhalb liegen (Mistral AI, o. J. d). Über diesen Endpunkt gibt es keine Websuche. Wer in den Einstellungen den globalen Endpunkt `api.mistral.ai` wählt, erhält die Websuche, ohne regionale Festlegung. Für einzelne Funktionen dokumentiert Mistral Übermittlungen an Unterauftragnehmer (Wavect, 2026); ob das die Websuche betrifft, ist nicht geprüft.
 - **Training:** Im kostenlosen Tarif darf Mistral Ein- und Ausgaben zum Training nutzen; im Tarif mit Abrechnung nach Verbrauch liegt die Entscheidung bei der Kundin oder dem Kunden. Abschalten lässt sich das jederzeit in der Verwaltung unter „Privacy“, „Anonymous improvement data“ (Mistral AI, o. J. a; o. J. b). KI-LEAD weist in den Einstellungen darauf hin.
-- **Aufbewahrung:** Ein- und Ausgaben der API bewahrt Mistral zur Missbrauchsüberwachung 30 Tage auf (Open Terms Archive, 2024). Eine Löschung ohne Aufbewahrung (Zero Data Retention) gibt es auf Antrag nur für zustandslose Aufrufe; die Conversations-API, die KI-LEAD wegen der Websuche nutzt, ist ausdrücklich ausgenommen (Mistral AI, o. J. c).
-- **`store: false`:** KI-LEAD sendet jede Anfrage mit `store: false` (`src/anbieter/mistral.ts`), damit keine abrufbare Unterhaltung angelegt wird. PDF-Material geht inline mit der Anfrage, nicht über `/v1/files`.
+- **Aufbewahrung:** Ein- und Ausgaben der API bewahrt Mistral zur Missbrauchsüberwachung 30 Tage auf (Open Terms Archive, 2024). Eine Löschung ohne Aufbewahrung (Zero Data Retention) gibt es auf Antrag nur für zustandslose Aufrufe. Chat Completions, die KI-LEAD über den EU-Endpunkt nutzt, gehören dazu; die Conversations-API für die Websuche am globalen Endpunkt ist ausdrücklich ausgenommen (Mistral AI, o. J. c).
+- **`store: false`:** Am globalen Endpunkt sendet KI-LEAD jede Anfrage mit `store: false` (`src/anbieter/mistral.ts`), damit keine abrufbare Unterhaltung angelegt wird; Chat Completions am EU-Endpunkt legen keine an. PDF-Material geht inline mit der Anfrage, nicht über `/v1/files`.
 
 ### Übermittlung in Drittländer
 
-Anthropic und OpenAI verarbeiten Anfragen in den USA. Das ist eine Übermittlung in ein Drittland im Sinne von Kapitel V DSGVO, sofern personenbezogene Daten enthalten sind. Mistral verarbeitet standardmäßig in der EU; ob Unterauftragnehmer einzelner Funktionen Daten außerhalb der EU verarbeiten, regelt der Vertrag mit Mistral. Die Rechtsgrundlage der Übermittlung regelt der Auftragsverarbeitungsvertrag des jeweiligen Anbieters mit der nutzenden Person oder Stelle. Wer personenbezogene Daten verarbeiten will, prüft diesen Vertrag selbst. Für KI-LEAD gilt unabhängig davon: keine personenbezogenen Daten.
+Anthropic und OpenAI verarbeiten Anfragen in den USA. Das ist eine Übermittlung in ein Drittland im Sinne von Kapitel V DSGVO, sofern personenbezogene Daten enthalten sind. Mistral verarbeitet über den EU-Endpunkt (Vorgabe in KI-LEAD) in EU und EFTA, über den globalen Endpunkt standardmäßig in der EU; ob Unterauftragnehmer einzelner Funktionen Daten außerhalb der EU verarbeiten, regelt der Vertrag mit Mistral. Die Rechtsgrundlage der Übermittlung regelt der Auftragsverarbeitungsvertrag des jeweiligen Anbieters mit der nutzenden Person oder Stelle. Wer personenbezogene Daten verarbeiten will, prüft diesen Vertrag selbst. Für KI-LEAD gilt unabhängig davon: keine personenbezogenen Daten.
 
 ## 6. Keine Verarbeitung beim Herausgeber
 
@@ -268,7 +268,6 @@ Zugriff jeweils am 24.10.2026.
 - Anthropic (o. J. b): API and data retention. Online abrufbar unter: https://platform.claude.com/docs/en/manage-claude/api-and-data-retention [Zugriff: 24.10.2026]
 - Apple (o. J.): App privacy details on the App Store. Online abrufbar unter: https://developer.apple.com/support/app-privacy-on-the-app-store/ [Zugriff: 24.10.2026]
 - Artikel-29-Datenschutzgruppe (2017): Guidelines on Data Protection Impact Assessment (DPIA) and determining whether processing is "likely to result in a high risk" for the purposes of Regulation 2016/679 (WP 248 rev.01), vom Europäischen Datenschutzausschuss bestätigt. Online abrufbar unter: http://ec.europa.eu/newsroom/article29/item-detail.cfm?item_id=611236 [Zugriff: 24.10.2026]
-- Connic (2026): EU-Hosted AI Models in 2026: Providers, Dependence & Options. Online abrufbar unter: https://connic.co/blog/eu-hosted-ai-models-2026 [Zugriff: 24.10.2026]
 - Datenschutzkonferenz (2018): Liste von Verarbeitungsvorgängen nach Art. 35 Abs. 4 DS-GVO – DSFA-Liste Deutschland, nicht-öffentlicher Bereich, Version 1.1 vom 17.10.2018. Online abrufbar unter: https://datenschutz-hamburg.de/fileadmin/user_upload/HmbBfDI/Datenschutz/Informationen/DSFA_Muss-Liste_fuer_den_nicht-oeffentlicher_Bereich_-_Stand_17.10.2018.pdf [Zugriff: 24.10.2026]
 - GitHub (2026): GitHub General Privacy Statement, gültig ab 27.04.2026. Online abrufbar unter: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement [Zugriff: 24.10.2026]
 - GitHub (o. J.): About GitHub Pages. Online abrufbar unter: https://docs.github.com/en/articles/about-github-pages [Zugriff: 24.10.2026]
@@ -277,6 +276,7 @@ Zugriff jeweils am 24.10.2026.
 - Mistral AI (o. J. a): Do you use my user data to train your artificial intelligence models? Online abrufbar unter: https://help.mistral.ai/en/articles/347617-do-you-use-my-user-data-to-train-your-artificial-intelligence-models [Zugriff: 24.10.2026]
 - Mistral AI (o. J. b): Can I opt out of my input or output data being used for training? Online abrufbar unter: https://help.mistral.ai/en/articles/347614-can-i-opt-out-of-my-input-or-output-data-being-used-for-training [Zugriff: 24.10.2026]
 - Mistral AI (o. J. c): Zero data retention. Online abrufbar unter: https://docs.mistral.ai/admin/monitor-comply/zero-data-retention [Zugriff: 24.10.2026]
+- Mistral AI (o. J. d): Regional inference. Online abrufbar unter: https://docs.mistral.ai/inference/regional-inference [Zugriff: 24.10.2026]
 - Open Terms Archive (2024): Mistral AI retains API prompts and outputs for 30 days. Online abrufbar unter: https://opentermsarchive.org/en/memos/mistral-ai-retains-api-prompts-and-outputs-for-30-days/ [Zugriff: 24.10.2026]
 - OpenAI (o. J.): Data controls in the OpenAI platform. Online abrufbar unter: https://developers.openai.com/api/docs/guides/your-data [Zugriff: 24.10.2026]
 - Wavect (2026): EU Data Residency for AI APIs 2026: Provider Guide. Online abrufbar unter: https://wavect.io/blog/eu-data-residency-ai-apps-2026/ [Zugriff: 24.10.2026]
@@ -288,4 +288,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 11: Rückmeldungen aus der Erprobung, Laufprotokolle in Issues, Impressum (App 0.5.5) |
 | 1.2 | 24.10.2026 | Abschnitt 12: Datenschutzerklärung nach Art. 13 DSGVO für die Verarbeitungen des Herausgebers, mit Verweis auf das Impressum; Abschnitt 2 mit Kontakt (App 0.5.5) |
-| 1.3 | 24.10.2026 | Mistral als dritter KI-Anbieter: Abschnitte 2, 4 und 5 (Training, Aufbewahrung, Zero Data Retention, `store: false`), Drittlandübermittlung, Anhang A (App 0.5.6) |
+| 1.3 | 24.10.2026 | Mistral als dritter KI-Anbieter mit EU-Endpunkt als Vorgabe: Abschnitte 2, 4 und 5 (Endpunkte, Training, Aufbewahrung, Zero Data Retention, `store: false`), Drittlandübermittlung, Anhang A (App 0.5.6) |

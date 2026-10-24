@@ -8,7 +8,7 @@ KI-LEAD läuft als native App über [Capacitor](https://capacitorjs.com/) (MIT).
 - Alle anderen Ablagen (Gerätespeicher, nur Sitzung) gibt es wie im Browser. Ist der Schlüsselbund nicht verfügbar, bleibt die App mit den anderen Ablagen voll nutzbar.
 - Android sichert keine App-Daten in die Cloud (`allowBackup="false"`), damit Meldungen und Schlüssel nicht unbemerkt das Gerät verlassen.
 
-Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht angemeldet. Die KI-Funktionen rufen wie im Browser direkt `api.anthropic.com`, `api.openai.com` bzw. `api.mistral.ai` auf. Ob Mistral den direkten Aufruf aus der WebView zulässt (CORS), ist noch nicht geprüft ([Spezifikation](SPEZIFIKATION.md), offener Punkt 15).
+Die Dateien der App liegen in der App selbst; ein Service Worker wird dort nicht angemeldet. Die KI-Funktionen rufen wie im Browser direkt `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai` auf. Ob Mistral den direkten Aufruf aus der WebView zulässt (CORS), prüft die Mistral-Probe nur im Browser, nicht in der App ([Spezifikation](SPEZIFIKATION.md), offener Punkt 15).
 
 ## Ordner im Repository
 

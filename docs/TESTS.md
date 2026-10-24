@@ -7,6 +7,7 @@ KI-LEAD prüft sich auf drei Ebenen. Die Tests der ersten beiden rufen keinen ec
 | Funktions- und Komponententests | `npm test` | Vitest, Node; Oberfläche in jsdom | `tests/<bereich>/*.test.ts` |
 | Browsertests | `npm run test:browser` | Playwright, Chromium, Produktionsbuild | `tests/browser/*.spec.ts` |
 | Modellbewertung | nur auf Auftrag | echte Läufe, eigenes Budget | `evaluation/` (siehe dortige README) |
+| Mistral-Probe | Label „mistral-probe“ am Pull Request oder Workflow von Hand | Playwright, echter Testschlüssel aus dem Secret `MISTRAL_API_KEY`, wenige Cent | `tests/probe/mistral.spec.ts` mit `playwright.probe.config.ts` |
 
 Weitere Befehle:
 

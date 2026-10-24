@@ -1,0 +1,63 @@
+# Mistral-Probe (seit 0.5.6): echte Aufrufe an Mistral mit dem Testschlüssel im Repository-Secret MISTRAL_API_KEY.
+# Prüft, was mit Attrappen nicht geht (Spezifikation, offener Punkt 15): Aufruf direkt aus dem Browser (CORS) über
+# beide Endpunkte, Modelle am EU-Endpunkt, strukturierte Ausgabe, Stufen des Nachdenkens, PDF, Websuche.
+#
+# Start: am Pull Request das Label „mistral-probe“ setzen (erneut: Label entfernen und wieder setzen) oder, sobald
+# diese Datei auf main liegt, unter „Actions“ → „Mistral-Probe“ → „Run workflow“. Läuft nie von allein.
+# Ergebnis: Zusammenfassung des Laufs (probe-bericht.md). Keine Aufzeichnungen, keine Artefakte mit Anfragen;
+# GitHub maskiert den Schlüssel in den Protokollen. Kosten: wenige Cent je Lauf über das Mistral-Konto.
+name: Mistral-Probe
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mistral-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'mistral-probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: browser-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+      - if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - name: Schlüssel vorhanden?
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: |
+          if [ -z "$MISTRAL_API_KEY" ]; then
+            echo "::error::Repository-Secret MISTRAL_API_KEY fehlt (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+      - name: Probe
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          KI_LEAD_BUILD_VORHANDEN: "1"
+        run: npx playwright test -c playwright.probe.config.ts
+      - name: Bericht
+        if: always()
+        run: |
+          if [ -f probe-bericht.md ]; then cat probe-bericht.md >> "$GITHUB_STEP_SUMMARY"; else echo "Kein Bericht erzeugt." >> "$GITHUB_STEP_SUMMARY"; fi

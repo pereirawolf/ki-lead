@@ -111,7 +111,13 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
     const ctrl = new AbortController();
     abbruch.current = ctrl;
     try {
-      const k = await kurzfassungErstellen(profil, meldung, new Verteiler(ki!.schluessel), kiEinstellungen!, ctrl.signal);
+      const k = await kurzfassungErstellen(
+        profil,
+        meldung,
+        Verteiler.fuer(ki!.schluessel, { mistralEndpunkt: kiEinstellungen!.mistralEndpunkt }),
+        kiEinstellungen!,
+        ctrl.signal,
+      );
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
       await set(schluesselIdb, g).catch(() =>

@@ -16,6 +16,9 @@ vi.mock("../../src/anbieter/verteiler", async (original) => {
   const echt: any = await original();
   class Verteiler {
     id = "attrappe";
+    static fuer() {
+      return new Verteiler();
+    }
     async senden(a: { modell: string; aufwand?: string; maxTokens: number }) {
       anfragen.liste.push({ modell: a.modell, aufwand: a.aufwand, maxTokens: a.maxTokens });
       const { llmAntwort } = await import("../support/anbieter");

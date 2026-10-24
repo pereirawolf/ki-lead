@@ -227,6 +227,43 @@ describe("Recherchemodus aus dem Auftrag und Befunde zur Aktualisierung", () => 
   });
 });
 
+describe("Recherche mit Mistral (seit 0.5.6)", () => {
+  it("über den EU-Endpunkt ohne Werkzeuge: keine Werkzeuge in der Anfrage, Grenze in Steuerung, S1-Auftrag und Befund", async () => {
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(entwurf())]);
+    k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
+    const v = await stufe1(k);
+    expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain(
+      "Recherche in S2: erlaubt, aber keine Werkzeuge verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
+    );
+    zuS2(k);
+    await stufe2und3(k, v);
+    const s2 = att.anfragen[1];
+    expect(s2.modell).toBe("mistral-medium-3-5");
+    expect(s2.werkzeuge).toBeUndefined();
+    const steuerung = s2.system[s2.system.length - 1].text;
+    expect(steuerung).toContain(
+      "- Recherche: im Auftrag erlaubt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche). Du hast keine Websuche und keinen Seitenabruf.",
+    );
+    expect(steuerung).not.toContain("Seitenabruf: Abrufbar");
+    const befund = k.lauf.ergebnis!.befunde.find((b) => b.code === "RECHERCHE_NICHT_VERFUEGBAR");
+    expect(befund?.text).toBe(
+      "Recherche war im Auftrag erlaubt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche); der Lauf arbeitete nur mit dem Material.",
+    );
+  });
+
+  it("über den globalen Endpunkt nur Websuche: kein Seitenabruf in Anfrage und Steuerung", async () => {
+    const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(entwurf())]);
+    k.einstellungen = { ...k.einstellungen, mistralEndpunkt: "global", modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
+    const v = await stufe1(k);
+    zuS2(k);
+    await stufe2und3(k, v);
+    const s2 = att.anfragen[1];
+    expect(s2.werkzeuge?.websuche?.maxUses).toBe(30);
+    expect(s2.werkzeuge?.abruf).toBeUndefined();
+    expect(s2.system[s2.system.length - 1].text).toContain("- Recherche: erlaubt (Websuche bis zu 30-mal).");
+  });
+});
+
 describe("Zeitvertrag vor S2", () => {
   it("weist ein kalenderwidriges t0 vor dem Modellaufruf ab", async () => {
     const att = skriptAnbieter([]);

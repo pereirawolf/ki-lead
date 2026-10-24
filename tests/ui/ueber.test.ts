@@ -103,6 +103,6 @@ describe("Versionen und Netzzugriffe", () => {
       .split(";")
       .map((s) => s.trim())
       .find((s) => s.startsWith("connect-src"));
-    expect(connect).toBe("connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.mistral.ai");
+    expect(connect).toBe("connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.eu.mistral.ai https://api.mistral.ai");
   });
 });

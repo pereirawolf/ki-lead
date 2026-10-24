@@ -51,7 +51,7 @@ Anthropic verlangt diese Kopfzeile, wenn der Browser die API direkt aufruft. Sie
 
 | vorhanden | offen |
 |---|---|
-| Schlüssel geht nur an `api.anthropic.com`, `api.openai.com` bzw. `api.mistral.ai`; die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
+| Schlüssel geht nur an `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai`; die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
 
 ### 3.4 Skripteinschleusung und fremder Code
 
@@ -112,4 +112,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
-| 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.mistral.ai` erweitert (App 0.5.6) |
+| 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |

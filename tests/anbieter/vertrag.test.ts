@@ -60,8 +60,28 @@ const FAELLE: Fall[] = [
     schluesselFehler: () => fehlerAntwort(401, { code: "invalid_api_key", message: "bad key" }),
   },
   {
-    name: "Mistral",
+    name: "Mistral EU",
     neu: (abruf) => new MistralAnbieter("k", "https://api.test", abruf as typeof fetch),
+    modell: "mistral-small-2603",
+    erfolg: () =>
+      sseAntwort(
+        [
+          { id: "c1", model: "mistral-small-2603", choices: [{ index: 0, delta: { content: "ok" }, finish_reason: null }] },
+          {
+            id: "c1",
+            model: "mistral-small-2603",
+            choices: [{ index: 0, delta: { content: "" }, finish_reason: "stop" }],
+            usage: { prompt_tokens: 10, completion_tokens: 2 },
+          },
+        ]
+          .map((x) => `data: ${JSON.stringify(x)}\n\n`)
+          .join("") + "data: [DONE]\n\n",
+      ),
+    schluesselFehler: () => new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 }),
+  },
+  {
+    name: "Mistral global",
+    neu: (abruf) => new MistralAnbieter("k", "https://api.test", abruf as typeof fetch, "global"),
     modell: "mistral-small-2603",
     erfolg: () =>
       sseAntwort(
