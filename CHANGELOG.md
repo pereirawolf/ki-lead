@@ -60,7 +60,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 
 ## [0.5.9] – 24.10.2026
 
-Grundlage: Lizenzprüfung vom 24.10.2026 (Befunddatei `ki-lead-befund_konsistenz-lizenzen_2026-W43.json`, Befunde KP-2026-W43-54 bis -60) mit Freigabe und Festlegungen des Herausgebers vom selben Tag. Grundsatz: Rechte werden bestätigt oder erweitert, nie beschränkt; für frühere Fassungen gelten die damals angegebenen Lizenzen weiter. Alle Inhalte sind im privaten Forschungsvorhaben entstanden. Keine Änderung am Beispielprofil, an SOPs, Arbeitsanweisungen oder Schemata des Beispielprofils, an der KI-Pipeline oder an gespeicherten Daten. Keine Rechtsberatung.
+Grundlage: Lizenzprüfung vom 24.10.2026 (Befunddatei `ki-lead-befund_lizenzen_2026-W43.json`, Befunde KP-2026-W43-54 bis -60) mit Freigabe und Festlegungen des Herausgebers vom selben Tag. Grundsatz: Rechte werden bestätigt oder erweitert, nie beschränkt; für frühere Fassungen gelten die damals angegebenen Lizenzen weiter. Alle Inhalte sind im privaten Forschungsvorhaben entstanden. Keine Änderung am Beispielprofil, an SOPs, Arbeitsanweisungen oder Schemata des Beispielprofils, an der KI-Pipeline oder an gespeicherten Daten. Keine Rechtsberatung.
 
 ### Geändert
 
@@ -84,6 +84,10 @@ Grundlage: Lizenzprüfung vom 24.10.2026 (Befunddatei `ki-lead-befund_konsistenz
 - `tests/profil/profilansicht.test.ts`: Vorlage mit einer Dach-SOP und README; ein Paket ohne SOP und ohne Zusatzdokumentation weiterhin über abgeleitete Pakete geprüft; Fassung 0.5.
 - `tests/ci/pruefumfang.test.ts`: Fall „Lizenztexte“.
 - [docs/TESTS.md](docs/TESTS.md): Gliederung um Vorlage und Inhaltslizenzen ergänzt.
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: KP-2026-W43-54 bis -60 als umgesetzt mit Pull Request #58.
 
 ## [0.5.8] – 24.10.2026
 
