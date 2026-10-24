@@ -1,0 +1,54 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-waldbrand-nachlauf-rueckkehr",
+  "titel": "Waldbrand unter Kontrolle, Nachlöscharbeiten und ausstehende Rückkehr (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Waldbrand unter Kontrolle, Nachlöscharbeiten und ausstehende Rückkehr",
+    "stichworte": "B03, C16",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-waldbrand-nachlauf-rueckkehr.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Zielzustände trennen: „unter Kontrolle“ (erreicht), Ende der Nachlöscharbeiten (Mindestprognose bis 27.10.2026) und Rückkehr der 120 Evakuierten (Freigabe ohne Termin); unter Kontrolle heißt nicht Lage erledigt (A.8.2).",
+      "Behördlich bestätigte Fläche (140 ha, Befliegung) und automatisch ermittelte Satellitenfläche (190 ha, älterer Aufnahmestand, grobe Auflösung) mit Produktstand nebeneinander führen; die bestätigte Fläche trägt die Lagedarstellung (B03/R2).",
+      "Feinstaub als Rauchbetroffenheit mit Station und Zeitpunkt darstellen; der heutige Wert liegt im üblichen Bereich, eine Personenzahl folgt aus dem Rauch nicht.",
+      "D5 nur mit benanntem Zielzustand kodieren: 2 als gekennzeichneter Mindestwert für das Ende der Nachlöscharbeiten, offen für die Rückkehr der Evakuierten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Die Satellitenfläche als bestätigte Brandfläche übernehmen oder beide Flächenangaben verrechnen.",
+      "D4 = 6 (international) aus den vor t0 abgezogenen Löschflugzeugen ableiten oder eine Rückkehr bzw. ein Lageende ohne Freigabe behaupten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Land (fiktives Land)",
+    "ereignisarten": [
+      "Waldbrand"
+    ],
+    "radar": {
+      "d2": {
+        "min": 2,
+        "max": 2,
+        "grund": "120 Personen zu t0 in der Notunterkunft, Evakuierung vollzogen; die 300 Zurückgekehrten nicht addieren."
+      },
+      "d4": {
+        "min": 2,
+        "max": 3,
+        "grund": "Zu t0 Kräfte aus zwei Nachbarkreisen; die vor t0 abgezogenen Löschflugzeuge zählen für den Ist-Wert nicht."
+      }
+    }
+  }
+}

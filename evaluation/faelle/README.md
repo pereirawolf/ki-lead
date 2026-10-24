@@ -6,6 +6,8 @@ Je Datei ein Fall nach `fall.schema.json` (`format: "ki-lead-evaluationsfall/1"`
 
 - `sop-*.json` (40 Fälle vom 21.10.2026): kurze, vollständig fiktive Prüffälle zu den Prüfpfaden der SOP-Sammelmappe (alle Dach-SOPs B01–B17 und Bausteine C01–C17); Material unter `../material/`, Plan und Soll-Abdeckung unter `../plaene/`. Bewertungen liegen noch nicht vor.
 
+- `sop-*.json` (8 Fälle vom 24.10.2026, Befunde LS-2026-W43-06 bis -13): weitere vollständig fiktive Prüffälle für bis dahin nur einmal abgedeckte SOPs und Bausteine (B03, B04, B13, B15, B16, C03, C04, C05, C08, C17), gestreut über Referenzraum (Kreis, Land, Bund, Ausland mit Deutschlandbezug), Schwierigkeit und Phase (Vorwarnung, akute Lage, Nachlauf); alle mit erwarteten Radarwerten, zwei davon als Abwandlung (`sop-weltraumwetter-warnung-unbestaetigt`, `sop-vulkanasche-transport-zeitluecke`). Insgesamt 48 `sop-*`-Fälle; Soll-Abdeckung in `../plaene/2026-10-21-sop-abdeckung.json` (Stand 24.10.2026). Nicht Teil von Bewertungsplan 1 vom 21.10.2026; Bewertungen liegen noch nicht vor.
+
 Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) nennt die URL und die Prüfsumme der verwendeten Fassung, aber nie den Text.
 
 ## Erwartete Radarwerte und Abwandlungen

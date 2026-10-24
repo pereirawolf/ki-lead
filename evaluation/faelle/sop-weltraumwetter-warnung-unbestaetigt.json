@@ -1,0 +1,62 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-weltraumwetter-warnung-unbestaetigt",
+  "titel": "Weltraumwetterwarnung mit unbestätigtem Navigationshinweis (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "variante_von": "sop-weltraumwetter-warnung",
+  "abwandlung": "Belegqualität: Der Hinweis auf Navigationsaussetzer und Ersatznavigation stammt wortgleich nicht mehr vom Transportbetreiber, sondern aus einem Beitrag in sozialen Medien ungeklärter Identität. Datum auf den Stichtag 24.10.2026 gesetzt; sonst unverändert.",
+  "auftrag": {
+    "sachverhalt": "Weltraumwetterwarnung mit unbestätigtem Navigationshinweis",
+    "stichworte": "B17, C03",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-weltraumwetter-warnung-unbestaetigt.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Abwandlung von evaluation/material/sop-weltraumwetter-warnung.md, nur die Herkunft des Navigationshinweises ist geändert."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Den Beitrag ungeklärter Identität als unbestätigte Behauptung kennzeichnen (Kategorie P, Identität ungeklärt); er belegt weder Navigationsaussetzer noch wirksamen Ersatzbetrieb (A.3).",
+      "Die Fachwarnung als Frühwarnung ohne bestätigte Wirkung in Deutschland behandeln; Ereignisart „Sonstiges“ mit C03, nicht „KRITIS-Ausfall“ (C03, Zuordnung im Schema); Warnung, Behauptung und bestätigten Befund getrennt halten.",
+      "Die fehlende Betreiberangabe als offene, entscheidungsrelevante Frage mit Klärungsweg benennen.",
+      "D6 offen oder 0 nur nach dokumentierter Prüfung ohne belegte Kopplung; nie aus der unbestätigten Behauptung abgeleitet.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Navigationsaussetzer oder wirksamen Ersatzbetrieb als bestätigt darstellen oder daraus D1, D2 oder D6 ableiten.",
+      "Aus der Warnung einen flächigen Navigations-, Strom- oder Zeitausfall folgern.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sonstiges"
+    ],
+    "radar": {
+      "d1": {
+        "offen": true,
+        "grund": "Kein belegter Wirkungsraum in Deutschland (Kodierleitfaden, Abschnitt 7, Kurzbeispiel Weltraumwetter)."
+      },
+      "d2": {
+        "offen": true,
+        "grund": "Keine Grundgesamtheit direkt Betroffener."
+      },
+      "d4": {
+        "offen": true,
+        "grund": "Keine eingesetzte externe Unterstützung."
+      },
+      "d5": {
+        "offen": true,
+        "grund": "Kein Zielzustand mit Prognose; das Ende des Warnzeitraums ist kein Zielzustand."
+      }
+    }
+  }
+}

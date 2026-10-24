@@ -1,0 +1,52 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-migration-zuweisung-kapazitaet",
+  "titel": "Angekündigte Zuweisungen bei noch nicht betreibbarer Reservekapazität (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Angekündigte Zuweisungen bei noch nicht betreibbarer Reservekapazität",
+    "stichworte": "B13, C16",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-migration-zuweisung-kapazitaet.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Prognose (300 bis 600 Zuweisungen in 14 Tagen), Aufnahmen, Belegung und betreibbare Kapazität (120 freie betriebene Plätze, Stand 06:00 Uhr) mit Zählweise getrennt darstellen; die 150 Hallenplätze sind vor dem 07.11.2026 nicht betreibbar (B13/R1, R2).",
+      "Eine mögliche Unterbringungslücke nur als bedingtes Szenario aus der Prognosebandbreite benennen und das Zeitfenster der Zuweisungen mit der frühesten Inbetriebnahme der Halle vergleichen; Plan, Angebot und nutzbare Kapazität trennen (B13/R4).",
+      "Beurteilung und Tendenz auf die Bedarfsdeckung beziehen, nicht auf den Anstieg der Aufnahmen; sachliche Sprache ohne Zuschreibungen an Personengruppen.",
+      "D2 nicht aus Prognose oder Aufnahmen bilden; ein Wert 0 ist nur mit ausdrücklichem Bezug auf die Fehlanzeige der Landesaufnahmebehörde tragfähig, sonst bleibt D2 offen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Die 150 Hallenplätze oder das Angebot der Hilfsorganisation als verfügbare bzw. eingesetzte Kapazität werten.",
+      "Aus der Prognose oder dem Zugangsanstieg eine eingetretene Versorgungslücke, eine D2-Zahl oder eine Verschärfung ableiten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Land (fiktives Land)",
+    "ereignisarten": [
+      "Migrationslage"
+    ],
+    "radar": {
+      "d4": {
+        "offen": true,
+        "grund": "Das Angebot der Hilfsorganisation ist keine eingesetzte Unterstützung; weitere externe Hilfe ist nicht belegt."
+      },
+      "d5": {
+        "offen": true,
+        "grund": "Kein Zielzustand mit Prognose; die früheste Inbetriebnahme der Halle ist keine Prognose für die Bedarfsdeckung."
+      }
+    }
+  }
+}

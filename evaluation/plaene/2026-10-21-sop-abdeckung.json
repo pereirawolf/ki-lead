@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-sop-abdeckung/1",
-  "stand": "2026-10-21",
+  "stand": "2026-10-24",
   "hinweis": "Soll-Abdeckung vorbereiteter Fälle, keine Ergebnis- oder Freigabeaussage.",
   "faelle": {
     "sop-gas-stabil": [
@@ -187,6 +187,46 @@
       "C11",
       "C12",
       "C13"
+    ],
+    "sop-cyber-schutzabschaltung-kreis": [
+      "B15",
+      "C11",
+      "C17"
+    ],
+    "sop-grossunfall-bahn-ursache-offen": [
+      "B17",
+      "C05",
+      "B16",
+      "C13",
+      "C16"
+    ],
+    "sop-waldbrand-nachlauf-rueckkehr": [
+      "B03",
+      "C16"
+    ],
+    "sop-migration-zuweisung-kapazitaet": [
+      "B13",
+      "C16"
+    ],
+    "sop-erdbeben-inland-nachlauf": [
+      "B04",
+      "C02",
+      "C16"
+    ],
+    "sop-tierseuche-grenznah-ausland": [
+      "B11",
+      "C08",
+      "C14"
+    ],
+    "sop-weltraumwetter-warnung-unbestaetigt": [
+      "B17",
+      "C03"
+    ],
+    "sop-vulkanasche-transport-zeitluecke": [
+      "B17",
+      "C04",
+      "C13",
+      "C10"
     ]
   }
 }

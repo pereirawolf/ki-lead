@@ -1,0 +1,53 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-tierseuche-grenznah-ausland",
+  "titel": "Tierseuchenausbruch im grenznahen Ausland mit deutscher Überwachungszone (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Tierseuchenausbruch im grenznahen Ausland mit deutscher Überwachungszone",
+    "stichworte": "B11, C08, C14",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-tierseuche-grenznah-ausland.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Ausbruch im Nachbarstaat, deutsche Überwachungszone und deutsche Unterstützung im Nachbarstaat als getrennte Gegenstände mit jeweiligem Referenzraum darstellen (A.1 Nr. 6); die Zone ist kein Ausbruchsgebiet (C08/R3).",
+      "Den humanen Prüfpfad nach der Fachaussage des Instituts als derzeit nicht einschlägig kennzeichnen, ohne eine Humanlage zu konstruieren; Ereignisart „Gesundheitliche Lage / Epidemie“ mit ausdrücklich benanntem Tiergesundheitsbezug (C08, Zuordnung im Schema).",
+      "Den Versorgungspfad nur mit der Betreiberangabe darstellen: Annahmestopp ja, eingeschränkte Belieferung laut Betreiber nein (C08/R5, C14).",
+      "D4 nicht international: Die Entsendung deutscher Amtstierärzte ins Ausland ergibt keinen D4-Wert; die deutschen Kontrollen laufen mit eigenem Personal (D4 = 0 mit diesem Beleg oder offen). D5 = 2 nur mit Zielzustand „Kontrollen abgeschlossen“, offen für die Aufhebung der Zone.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eine Humanepidemie, eine Exposition der Bevölkerung oder einen Seuchenfall in deutschen Beständen behaupten.",
+      "Tierzahlen in D2 übertragen oder aus der Entsendung ins Ausland einen D4-Wert ableiten.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Bund (Auslandsereignis mit grenzüberschreitender Wirkung, A.1 Nr. 6)",
+    "ereignisarten": [
+      "Gesundheitliche Lage / Epidemie"
+    ],
+    "radar": {
+      "d2": {
+        "offen": true,
+        "grund": "Tierzahlen sind keine Personen; eine humane Betroffenheit ist nicht erhoben."
+      },
+      "d6": {
+        "min": 0,
+        "max": 1,
+        "grund": "Annahmestopp des Schlachtbetriebs ohne belegte Versorgungsfolge."
+      }
+    }
+  }
+}

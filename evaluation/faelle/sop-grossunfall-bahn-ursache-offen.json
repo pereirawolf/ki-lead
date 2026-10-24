@@ -1,0 +1,59 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-grossunfall-bahn-ursache-offen",
+  "titel": "Zugentgleisung mit offener Ursache und unbestätigter Sabotagemeldung (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Zugentgleisung mit offener Ursache und unbestätigter Sabotagemeldung",
+    "stichworte": "B17, C05, B16, C13, C16",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktiver Landkreis. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-grossunfall-bahn-ursache-offen.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Ursache offenlassen: Polizeiangaben, Medienmeldung mit ungenannter Quelle und vorläufige Betreiberangabe mit Zeitstand nebeneinander führen; Ereignisart „Sonstiges“ mit C05, nicht „Sabotage / Anschlag / Terrorismus“ ohne behördlich benannten Tatbezug (C05, Zuordnung im Schema; B16, Abschnitt 1).",
+      "Tote, Verletzte, unverletzte Betreute und Fahrgäste getrennt und ohne Addition führen; die Fahrgastzahl ist keine Schadensbilanz; psychosoziale Notfallversorgung und Angehörigeninformation als eigenen Bedarf nennen.",
+      "Streckensperrung mit Mindestprognose des Betreibers und geplanten, noch nicht wirksamen Schienenersatzverkehr als Verkehrsfolge getrennt von der Rettungsphase darstellen (C13).",
+      "D5 nur mit benanntem Zielzustand kodieren: für die Wiederbefahrbarkeit der Strecke 2 als gekennzeichneter Mindestwert (Betreiber: mindestens bis 26.10.2026), sonst offen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Sabotage, Anschlag oder eine Täterschaft als Tatsache darstellen oder die Ereignisart „Sabotage / Anschlag / Terrorismus“ wählen.",
+      "Fahrgäste, Betreute, Verletzte und Tote zu einer Gesamtzahl Betroffener addieren oder eine eigene Sichtungs- bzw. MANV-Einstufung ergänzen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Kreis (fiktiver Landkreis)",
+    "ereignisarten": [
+      "Sonstiges"
+    ],
+    "radar": {
+      "d2": {
+        "min": 1,
+        "max": 1,
+        "grund": "Zwei Tote und 23 Verletzte bestätigt; auch zusammen mit den 45 Betreuten Stufe 1; nie aus der Fahrgastzahl."
+      },
+      "d4": {
+        "min": 2,
+        "max": 3,
+        "grund": "Tatsächlich eingesetzte PSNV-Kräfte aus einem Nachbarkreis."
+      },
+      "d7": {
+        "min": 0,
+        "max": 1,
+        "grund": "Ungeklärte Unfallursache und unbestätigte Medienmeldung erhöhen D7 nicht (C05, Abschnitt 3)."
+      }
+    }
+  }
+}

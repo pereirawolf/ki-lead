@@ -54,11 +54,17 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.4 | letzter Commit des Pull Requests „KI-Kennzeichnung der Ausgaben und Lagenradar als Radiogruppe; 0.5.4“ (Nachtrag vom 24.10.2026: gestaffelte Prüfung und schnellere Tests, ohne Änderung der App) |
 | 0.5.5 | letzter Commit des Pull Requests „Grundlagen Priorität 2: Drittkomponenten und Lizenzen, Erprobung, Impressum; 0.5.5“ |
 | 0.5.6 | letzter Commit von Pull Request #53 „Mistral als dritter Anbieter, Einstellungen in Bereichen; 0.5.6“ (Nachtrag vom 24.10.2026: Radarerwartungen und Abwandlungen in Bewertungsfällen, Bewertungspläne, Mehrfachvergleich, ohne Änderung der App) |
-| 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ |
+| 0.5.7 | letzter Commit des Pull Requests „Mistral: Korrekturen nach dem ersten echten Lauf; 0.5.7“ (Nachtrag vom 24.10.2026: acht weitere fiktive Bewertungsfälle, ohne Änderung der App) |
 
 ## [0.5.7] – 24.10.2026
 
 Grundlage: erster echter Lauf mit Mistral in der App (Laufprotokoll 20261024-195614-kyc1, Verdichtung Ilka über den globalen Endpunkt), vom Herausgeber am 24.10.2026 zur Prüfung übergeben. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, gespeicherten Einstellungen oder der Ablage der Schlüssel.
+
+**Nachtrag vom 24.10.2026 (Befunde LS-2026-W43-06 bis -13 der Lernschleife, ohne Änderung der App):**
+
+- **Acht weitere fiktive Bewertungsfälle** unter `evaluation/faelle/` mit Material unter `evaluation/material/` für bis dahin nur einmal abgedeckte SOPs und Bausteine: `sop-cyber-schutzabschaltung-kreis` (B15, C11, C17; LS-2026-W43-06), `sop-grossunfall-bahn-ursache-offen` (B17, C05, B16, C13, C16; -07), `sop-waldbrand-nachlauf-rueckkehr` (B03, C16; -08), `sop-migration-zuweisung-kapazitaet` (B13, C16; -09), `sop-erdbeben-inland-nachlauf` (B04, C02, C16; -10), `sop-tierseuche-grenznah-ausland` (B11, C08, C14; -11) sowie die Abwandlungen `sop-weltraumwetter-warnung-unbestaetigt` (Belegqualität; -12) und `sop-vulkanasche-transport-zeitluecke` (Zeitstand; -13). Alle mit erwarteten Radarwerten (`erwartungen.radar`); Streuung über Referenzraum, Schwierigkeit und Phase.
+- Soll-Abdeckung `evaluation/plaene/2026-10-21-sop-abdeckung.json` fortgeschrieben (Stand 24.10.2026, 48 Fälle); C01 bleibt bei einem Fall. Die Fälle sind nicht Teil von Bewertungsplan 1; keine KI-Läufe.
+- Dokument: [evaluation/faelle/README.md](evaluation/faelle/README.md).
 
 ### Korrigiert
 
