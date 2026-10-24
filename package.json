@@ -15,6 +15,7 @@
     "test:inhalt": "vitest run tests/profil tests/kern tests/evaluation",
     "pruefe-profile": "vitest run tests/profil",
     "sop:lesefassung": "node scripts/sop-lesefassung.mjs",
+    "vergleich:mehrfach": "node scripts/vergleich-mehrfach.mjs",
     "app:sync": "vite build && cap sync",
     "app:ios": "vite build && cap sync ios && cap open ios",
     "app:android": "vite build && cap sync android && cap open android"

@@ -15,7 +15,7 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 
 - `faelle/`: Bewertungsfälle, je Datei ein Auftrag mit Material und Erwartungen (`fall.schema.json`)
 - `material/`: fiktives Übungsmaterial der Fälle, soweit es im Repository liegt
-- `plaene/`: festgelegte Bewertungspläne (Fragestellung, Varianten, Umfang) und die Soll-Abdeckung der Fälle; ein Plan ist kein Ergebnis
+- `plaene/`: festgelegte Bewertungspläne nach `plan.schema.json` (Fragestellung, Fälle, Varianten, Wiederholungen, Budgetgrenze) und die Soll-Abdeckung der Fälle; ein Plan kombiniert vorhandene Fälle, ohne sie zu kopieren, und ist kein Ergebnis
 - `bewertungsschema.json`: Format einer Bewertung (ein Lauf, eine bewertende Person)
 - `ergebnisse/`: zusammengefasste Bewertungen; Laufprotokolle und Rohantworten bleiben außerhalb des öffentlichen Repositorys
 - `abnahmen/`: technische Abnahmen der Meilensteine mit echten KI-Läufen (Laufskript, eigene Vitest-Konfiguration, Ergebnis); nie Teil von `npm test`. Dort steht auch das Ergebnis der Erprobung im Testkreis (M6); Plan und Regeln der Erprobung: [docs/ERPROBUNG.md](../docs/ERPROBUNG.md)
@@ -29,8 +29,9 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 1. **Plan vor dem ersten Lauf festlegen:** Fall, Varianten (Modell und Aufwand je Stufe), Wiederholungen, Budgetgrenze. Änderungen nur als neue Planfassung. Vorbild ist die Testreihe vom 20./21.10.2026 (3 × 3 Varianten S1 × S2, Wiederholungen einer Zelle, Kontrolle mit PDF-Material).
 2. **Läufe ausführen** mit denselben Pipeline-Funktionen wie die App (`stufe1`, `stufe2und3`); jedes Laufprotokoll im App-Format `ki-lead-lauf/1` sichern.
 3. **Blind bewerten:** Die Entwürfe werden ohne Modell, Aufwand und Kosten vorgelegt (zufällige Kennungen). Je Entwurf eine Bewertung nach `bewertungsschema.json`; unbelegte Aussagen werden einzeln aufgeführt.
-4. **Auflösen und zusammenfassen:** erst danach Kennungen den Varianten zuordnen, Mittelwerte und Spannen je Variante bilden, Kosten und Dauer aus den Laufprotokollen übernehmen. Die Gesamtnote ist ein eigenes, ganzheitliches Urteil und kein Mittelwert der Kriterien.
-5. **Entscheidung dokumentieren:** Änderungen an Vorgaben (`src/pipeline/einstellungen.ts`) oder an den Messwerten der Schätzung (`src/pipeline/schaetzung.ts`) nur mit Verweis auf die Ergebnisse.
+4. **Mehrere Kodierungen derselben Lage vergleichen** (Wiederholungen, Varianten, mehrere Personen): `npm run vergleich:mehrfach -- <ordner> [--fall <id>]` gibt je Sachverhalt und Achse Werte, Median, Spannweite, Paare mit höchstens einer Stufe Abstand und, mit `--fall`, Treffer der erwarteten Radarwerte aus; dazu Krippendorffs Alpha (ordinal) je Achse über die Sachverhalte als Einheiten. Liegen die Meldungen in Unterordnern je Lage, gehen alle Lagen in Alpha ein; mit nur einer Lage und einem Sachverhalt entfällt Alpha. Der Ordner liegt unter `privat/` oder außerhalb des Repositorys.
+5. **Auflösen und zusammenfassen:** erst danach Kennungen den Varianten zuordnen, Mittelwerte und Spannen je Variante bilden, Kosten und Dauer aus den Laufprotokollen übernehmen. Die Gesamtnote ist ein eigenes, ganzheitliches Urteil und kein Mittelwert der Kriterien.
+6. **Entscheidung dokumentieren:** Änderungen an Vorgaben (`src/pipeline/einstellungen.ts`) oder an den Messwerten der Schätzung (`src/pipeline/schaetzung.ts`) nur mit Verweis auf die Ergebnisse.
 
 ## Kriterien (je 1–5)
 

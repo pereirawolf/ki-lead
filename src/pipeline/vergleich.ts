@@ -278,3 +278,163 @@ export function vergleichTabelle(v: Vergleich): string[][] {
   }
   return z;
 }
+
+// Mehrfachvergleich (Befund LS-2026-W43-04, 24.10.2026): n unabhängige Kodierungen derselben Lage,
+// etwa mehrere Personen, Wiederholungen eines Modells oder Varianten eines Bewertungsplans.
+// Wie beim paarweisen Vergleich gibt es keinen Gesamtscore über Achsen; alle Kennzahlen stehen je Achse.
+
+/** Erwarteter Radarwert einer Achse (erwartungen.radar eines Bewertungsfalls) */
+export interface RadarErwartung {
+  offen?: boolean;
+  min?: number;
+  max?: number;
+}
+
+export interface MehrfachAchse {
+  key: string;
+  label: string;
+  /** Werte der Kodierungen in der Reihenfolge der Meldungen, null = offen */
+  werte: (number | null)[];
+  /** Kodierungen mit Wert */
+  n: number;
+  /** Kodierungen ohne Wert */
+  offen: number;
+  median: number | null;
+  min: number | null;
+  max: number | null;
+  /** Paare von Kodierungen, die beide einen Wert haben */
+  paare: number;
+  /** davon höchstens eine Stufe Abstand */
+  nah: number;
+  /** Kodierungen, die der Erwartung entsprechen; fehlt ohne Erwartung zu dieser Achse */
+  imSoll?: number;
+}
+
+export interface MehrfachGruppe {
+  /** Bezeichnung des Sachverhalts in der ersten Meldung */
+  bezeichnung: string;
+  /** Kodierungen, die diesem Sachverhalt zugeordnet sind (einschließlich der ersten Meldung) */
+  kodierungen: number;
+  achsen: MehrfachAchse[];
+}
+
+export interface Mehrfachvergleich {
+  verfahren: string;
+  meldungen: number;
+  gruppen: MehrfachGruppe[];
+  /** Sachverhalte weiterer Meldungen ohne Gegenstück in der ersten Meldung */
+  ohneGegenstueck: number;
+  /** Krippendorffs Alpha (ordinal) je Achse über die Sachverhalte als Einheiten */
+  alpha: { key: string; label: string; wert: number | null; einheiten: number }[];
+}
+
+export const MEHRFACH_VERFAHREN = "ki-lead-mehrfachvergleich/1";
+
+const median = (xs: number[]): number | null => {
+  if (!xs.length) return null;
+  const s = [...xs].sort((a, b) => a - b);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
+
+function imSoll(w: number | null, e: RadarErwartung): boolean {
+  if (e.offen) return w === null;
+  return w !== null && e.min !== undefined && e.max !== undefined && w >= e.min && w <= e.max;
+}
+
+/**
+ * Krippendorffs Alpha für ordinale Werte. Einheiten sind z. B. Sachverhalte, je Einheit stehen die Werte der
+ * Kodierungen (null = offen, zählt nicht). Nur Einheiten mit mindestens zwei Werten gehen ein. null, wenn weniger
+ * als zwei solche Einheiten vorliegen (eine einzelne Einheit ergibt keine aussagekräftige Erwartung) oder alle
+ * Werte gleich sind. Bei wenigen Einheiten ist der Wert unsicher; er steht deshalb immer mit der Zahl der Einheiten.
+ */
+export function krippendorffAlphaOrdinal(einheiten: (number | null)[][]): number | null {
+  const paarbar = einheiten.map((e) => e.filter((w): w is number => w !== null)).filter((e) => e.length >= 2);
+  if (paarbar.length < 2) return null;
+  const werte = [...new Set(paarbar.flat())].sort((a, b) => a - b);
+  const pos = new Map(werte.map((w, i) => [w, i]));
+  const k = werte.length;
+  const o = Array.from({ length: k }, () => new Array<number>(k).fill(0));
+  for (const e of paarbar)
+    for (let i = 0; i < e.length; i++) for (let j = 0; j < e.length; j++) if (i !== j) o[pos.get(e[i])!][pos.get(e[j])!] += 1 / (e.length - 1);
+  const nc = o.map((zeile) => zeile.reduce((s, x) => s + x, 0));
+  const n = nc.reduce((s, x) => s + x, 0);
+  const delta = (c: number, d: number) => {
+    const [a, b] = c <= d ? [c, d] : [d, c];
+    let s = 0;
+    for (let g = a; g <= b; g++) s += nc[g];
+    return (s - (nc[a] + nc[b]) / 2) ** 2;
+  };
+  let beobachtet = 0;
+  let erwartet = 0;
+  for (let c = 0; c < k; c++)
+    for (let d = 0; d < k; d++) {
+      const dl = delta(c, d);
+      beobachtet += o[c][d] * dl;
+      erwartet += nc[c] * nc[d] * dl;
+    }
+  if (erwartet === 0) return null;
+  return 1 - ((n - 1) * beobachtet) / erwartet;
+}
+
+/**
+ * Vergleicht mehrere Kodierungen derselben Lage. Bezug sind die Sachverhalte der ersten Meldung; die Sachverhalte
+ * jeder weiteren Meldung werden ihnen wie beim paarweisen Vergleich zugeordnet. Eine Erwartung (erwartungen.radar
+ * eines Bewertungsfalls) gilt nur, wenn die erste Meldung genau einen Sachverhalt hat.
+ */
+export function vergleicheMehrere(meldungen: Meldung[], profil: Profil, erwartung?: Record<string, RadarErwartung>): Mehrfachvergleich {
+  const def = radarDef(profil);
+  const achsen = def?.achsen || [];
+  if (!meldungen.length) return { verfahren: MEHRFACH_VERFAHREN, meldungen: 0, gruppen: [], ohneGegenstueck: 0, alpha: [] };
+  const [erste, ...weitere] = meldungen;
+  const bezug = kurz(erste, profil);
+  // je Sachverhalt der ersten Meldung die zugeordneten Sachverhalte aller Meldungen
+  const spalten: SvKurz[][] = bezug.map((s) => [s]);
+  let ohneGegenstueck = 0;
+  for (const m of weitere) {
+    for (const p of zuordnen(m, erste, profil)) {
+      if (p.ki && p.ref) spalten[p.ref.index].push(p.ki);
+      else if (p.ki) ohneGegenstueck++;
+    }
+  }
+  const soll = bezug.length === 1 ? erwartung : undefined;
+  const gruppen: MehrfachGruppe[] = spalten.map((kodiert, i) => ({
+    bezeichnung: bezug[i].bezeichnung,
+    kodierungen: kodiert.length,
+    achsen: achsen.map((a) => {
+      const werte = kodiert.map((s) => s.radar[a.key] ?? null);
+      const mit = werte.filter((w): w is number => w !== null);
+      let paare = 0;
+      let nah = 0;
+      for (let x = 0; x < mit.length; x++)
+        for (let y = x + 1; y < mit.length; y++) {
+          paare++;
+          if (Math.abs(mit[x] - mit[y]) <= 1) nah++;
+        }
+      const e = soll?.[a.key];
+      return {
+        key: a.key,
+        label: a.label,
+        werte,
+        n: mit.length,
+        offen: werte.length - mit.length,
+        median: median(mit),
+        min: mit.length ? Math.min(...mit) : null,
+        max: mit.length ? Math.max(...mit) : null,
+        paare,
+        nah,
+        ...(e ? { imSoll: werte.filter((w) => imSoll(w, e)).length } : {}),
+      };
+    }),
+  }));
+  const alpha = achsen.map((a, i) => {
+    const einheiten = gruppen.map((g) => g.achsen[i].werte);
+    return {
+      key: a.key,
+      label: a.label,
+      wert: krippendorffAlphaOrdinal(einheiten),
+      einheiten: einheiten.filter((e) => e.filter((w) => w !== null).length >= 2).length,
+    };
+  });
+  return { verfahren: MEHRFACH_VERFAHREN, meldungen: meldungen.length, gruppen, ohneGegenstueck, alpha };
+}
