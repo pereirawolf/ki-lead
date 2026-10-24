@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-10-24",
+  "stand": "2026-10-25",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -380,24 +380,6 @@
       "pr": 57
     },
     {
-      "id": "AV-2026-W43-10",
-      "agent": "anbietervergleich",
-      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
-      "commit": "92657945394ce02919458ec9077434442279f710",
-      "dringlichkeit": "niedrig",
-      "fundstellen": [
-        {
-          "datei": "src/pipeline/einstellungen.ts",
-          "stelle": "APP_MODELLE.verdichtung"
-        }
-      ],
-      "kurz": "App-Vorgabe der Verdichtung (Sonnet) an das Standard-Profil (Opus) angleichen.",
-      "status": "zurueckgestellt",
-      "entschieden_am": "2026-10-24",
-      "grund": "Entscheidung nach dem Vergleich Opus/Sonnet (Varianten A und B des Plans standardprofile-ilka) mit begründeter Empfehlung.",
-      "wieder_vorlegen_ab": "2026-10-31"
-    },
-    {
       "id": "AV-2026-W43-11",
       "agent": "anbietervergleich",
       "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
@@ -568,6 +550,301 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-24",
       "pr": 58
+    },
+    {
+      "id": "AV-2026-W43-01",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "ModelleBereich, Auswahl „Aufwand“ (const AUFWAND = AUFWAND_STUFEN)"
+        },
+        {
+          "datei": "src/anbieter/mistral.ts",
+          "stelle": "MISTRAL_AUFWAND"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "ModelleBereich, Hinweis unter der Tabelle"
+        }
+      ],
+      "kurz": "Je Modell nur die angebotenen Aufwandsstufen anbieten; Mistral nur niedrig (none) und hoch (high).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-02",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/stufen.ts",
+          "stelle": "aufrufen(), Feld aufwand des StufenEintrags"
+        },
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD.aufwand und Migration gespeicherter Einstellungen"
+        }
+      ],
+      "kurz": "Nicht angebotene Stufe auf die nächste angebotene setzen (aufwandFuer); Laufprotokoll nennt die gesendete Stufe.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-03",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.mistral.aufwand"
+        },
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "Kommentar zu STANDARD_PROFILE"
+        }
+      ],
+      "kurz": "Standard-Profil Mistral mit Aufwand „high“ statt „medium“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-05",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE (keine Einträge für Mistral)"
+        }
+      ],
+      "kurz": "Messwerte für Mistral (S1 Small, Verdichtung Medium 3.5 und Large 4) in der Schätzung, ohne EU-Aufschlag.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-06",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/anbieter/mistral.ts",
+          "stelle": "MISTRAL_EU_FAKTOR und kostenUsd im Ergebnis"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "schaetzeStufe(art, modell, aufwand)"
+        }
+      ],
+      "kurz": "EU-Aufschlag von Mistral als Eigenschaft der Preisregel, gemeinsam für Ist-Kosten und Schätzung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-09",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "ANBIETER, id mistral, hinweise"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 10, offener Punkt 15; Abschnitt 5.4 (Standard-Profile)"
+        }
+      ],
+      "kurz": "Erprobungsstand Mistral statt „noch nicht erprobt“ in Einstellungen und Spezifikation.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-10",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbieter_2026-W43.json",
+      "commit": "92657945394ce02919458ec9077434442279f710",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "APP_MODELLE.verdichtung"
+        },
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.anthropic.modelle.verdichtung"
+        }
+      ],
+      "kurz": "App-Vorgabe der Verdichtung Opus statt Sonnet, gleich dem Standard-Profil Anthropic.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-12",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "neue Datei"
+        },
+        {
+          "datei": "evaluation/plaene/standardprofile-ilka.json",
+          "stelle": "fragestellung"
+        }
+      ],
+      "kurz": "Ergebnisbericht des Vergleichslaufs Ilka nach Plan standardprofile-ilka unter evaluation/abnahmen/ anlegen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-13",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.openai.aufwand.verdichtung"
+        },
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "Kommentar zu STANDARD_PROFILE"
+        }
+      ],
+      "kurz": "Standard-Profil OpenAI: Verdichtung mit gpt-6-astra „high“ (Variante D), Erfassung unverändert; Begründung mit zweitbester Option C im Kommentar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-14",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.mistral.modelle.verdichtung und Kommentar"
+        }
+      ],
+      "kurz": "Standard-Profil Mistral: Verdichtung weiter mit mistral-medium-3-5 (Variante E); Begründung mit zweitbester Option F im Kommentar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-15",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE und Kopfkommentar (Messgrundlage)"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE[\"verdichtung|gpt-6-astra|medium\"]"
+        }
+      ],
+      "kurz": "Messwerte der Schätzung für Anthropic und OpenAI aus dem Vergleichslauf statt der Abnahme M4; gpt-6-astra „high“ neu.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-16",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/plausibilitaet.ts",
+          "stelle": "Kopfkommentar, Entscheidung zu AV-2026-W43-11"
+        }
+      ],
+      "kurz": "Plausibilitätsprüfung vorerst nur im Vergleichslauf; Übernahme in die App ab 10 von Hand geprüften Treffern mit höchstens einem Fehlalarm.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-17",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/plausibilitaet.ts",
+          "stelle": "d2Pruefen (größte Personenzahl des D2-Satzes)"
+        }
+      ],
+      "kurz": "D2-Plausibilität: ausdrücklich genannte Summe oder Gesamtzahl geht der größten Einzelzahl vor.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-18",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleich.ts",
+          "stelle": "merkmal() und zuordnen(); VERGLEICH_VERFAHREN"
+        }
+      ],
+      "kurz": "Zuordnung der Sachverhalte im Vergleich zusätzlich nach der Kernaussage (ki-lead-vergleich/3), für alle Vergleiche.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-19",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W43.json",
+      "commit": "c7ba8f5830b13772bf6fefcd1990d061f64ba4f7",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleichsauswertung.ts",
+          "stelle": "abstand() und berichtMarkdown(), Tabelle „Abstand zum Bezug“"
+        }
+      ],
+      "kurz": "Auswertung der Vergleichsläufe: Zahl der verglichenen Achsen und alle Abstände je Kennzahl im Bericht.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 59
     }
   ]
 }
