@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.26.0 – 24.10.2026
+
+Grundlage: Erfassungstest KW 43 (Befunddatei `ki-lead-befund_erfassungstest_2026-W43.json`, Befunde ET-2026-W43-01 bis -07), vom Herausgeber am 24.10.2026 freigegeben.
+
+- **SOP-Sammelmappe 3.17.0:** B10 2.2.0, B15 2.5.0, C07 1.3.0, A.2 D5. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Kodierleitfaden 1.4.0:** Grundregel 1 (Ist-Kodierung nach Ende der Einschränkung), D5 (erreichter Zielzustand, Mindestprognose), drei Kurzbeispiele einschließlich D3 bei kreisfreien Städten (ET-2026-W43-01, -04, -06).
+- **Prüfvermerk nach A.10.2 (Änderung an Teil A.2 D5):** Erfassung geprüft auf Grundlage 1.4.0, kein Anpassungsbedarf (Abschnitt 5 verweist für Achsenregeln auf den Kodierleitfaden). Verdichtung geprüft auf Grundlage 2.0.2, kein Anpassungsbedarf. Kurzfassung geprüft auf Grundlage 2.1.2, kein Anpassungsbedarf.
+- Schema, Darstellungsdatei (Stufentexte unverändert), Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.25.0 – 23.10.2026
 
 Grundlage: Konsistenzprüfung KW 43 (Befunddatei `ki-lead-befund_konsistenz_2026-W43.json`, Befunde KP-2026-W43-12 bis -55), vom Herausgeber am 23.10.2026 freigegeben; KP-2026-W43-17 und -49 zurückgestellt.

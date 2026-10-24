@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Trinkwasserversorgung (Unterbrechung, Mengeneinschränkung, Qualitätsproblem)"
 art_vorschlag: ["Trinkwasserversorgung"]
 zweck: "Reproduzierbare Erfassung von Unterbrechungen, Mengeneinschränkungen und Qualitätsproblemen der öffentlichen Trinkwasserversorgung (KRITIS-Sektor Wasser, Branche öffentliche Wasserversorgung) einschließlich der tatsächlich wirksamen Ersatzversorgung."
-version: "2.1.1"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "24.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -61,6 +61,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 | Abhängigkeiten & Interdependenzen | Kopplung zu Strom, Abwasser, Lebensmittel, Gesundheit, Löschwasser |
 
 Übertrag, Abschlusscheck und Querschnittsprüfungen nach Teil A.4, A.5 und A.9.
+
+**Übergreifender Erkenntniswert:** Knapp festhalten, ob dasselbe Versorgungsgebiet wiederholt eingeschränkt war und ob die Ursache nach der Freigabe benannt ist. Eine offene Ursache hält eine abgeschlossene Befassung nicht offen (A.8.1); sie gehört in `Neubewertung bei:` bzw. `Abschluss im Lagebild:`.
 
 ### 5. Ansprechstellen und Pflege
 

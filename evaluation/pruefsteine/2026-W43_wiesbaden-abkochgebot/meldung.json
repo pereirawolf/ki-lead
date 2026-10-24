@@ -1,0 +1,70 @@
+{
+  "schema": "LEAD-Meldung-v1",
+  "_status": "Entwurf",
+  "_entstehung": {
+    "verfahren": "KI-Entwurf",
+    "werkzeug": "Erfassungstest (Claude Cowork, geplanter Lauf), Websuche und Seitenabruf",
+    "modell": "claude-opus-5-5",
+    "sop": [
+      "SOP-LEAD B10 Trinkwasserversorgung v2.1.1"
+    ],
+    "kodierleitfaden": "Kodierleitfaden LEAD 1.3.0",
+    "erstellt": "2026-10-24T13:00"
+  },
+  "land": "Bund",
+  "meldende_stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+  "meldezeitpunkt": "2026-10-24T13:00",
+  "meldezeitraum": {
+    "von": "2026-09-25",
+    "bis": "2026-10-24"
+  },
+  "quellen": "[Q1] A – Landeshauptstadt Wiesbaden, Pressereferat (17.10.2026): Abkochgebot für Trinkwasser mit sofortiger Wirkung aufgehoben. Online abrufbar unter: https://www.wiesbaden.de/pressemitteilungen/pressereferat/oktober/abkochgebot-fuer-trinkwasser-mit-sofortiger-wirkung-aufgehoben [Zugriff: 24.10.2026]. Datenstand: 17.10.2026\n[Q2] A – Landeshauptstadt Wiesbaden, Pressereferat (25.09.2026): Vorsorgliches Abkochgebot für Trinkwasser in der Innenstadt. Online abrufbar unter: https://www.wiesbaden.de/pressemitteilungen/pressereferat/september/vorsorgliches-abkochgebot-fuer-trinkwasser-in-der-innenstadt [Zugriff: 24.10.2026]. Datenstand: 25.09.2026; Straßenliste und Karte (PDF-Anlagen) nicht ausgewertet\n[Q3] A – Landeshauptstadt Wiesbaden, Pressereferat (28.09.2026): Aktualisierung: Neue Straßenliste – vorsorgliches Abkochgebot für Trinkwasser in der Innenstadt. Online abrufbar unter: https://www.wiesbaden.de/pressemitteilungen/pressereferat/september/aktualisierung-neue-strassenliste-vorsorgliches-abkochgebot-fuer-trinkwasser-in-der-innenstadt [Zugriff: 24.10.2026]. Datenstand: 28.09.2026; Straßenliste (PDF) nicht ausgewertet\n[Q4] A – Landeshauptstadt Wiesbaden, Pressereferat (14.10.2026): Trinkwasser: Aktuelle Proben unauffällig – Aufhebung des Abkochgebots frühestens Samstag möglich (Sprachfassung uk der städtischen Seite). Online abrufbar unter: https://www.wiesbaden.de/uk/pressemitteilungen/pressereferat/oktober/trinkwasser-aktuelle-proben-unauffaellig-aufhebung-des-abkochgebots-fruehestens-samstag-moeglich [Zugriff: 24.10.2026]. Datenstand: 14.10.2026\n[Q5] M – wiesbadenaktuell.de (08.10.2026, aktualisiert 09.10.2026): Keine Entwarnung beim Trinkwasser: Abkochgebot für Wiesbadener Innenstadt bleibt bestehen. Online abrufbar unter: https://wiesbadenaktuell.de/2026/10/08/keine-entwarnung-beim-trinkwasser-abkochgebot-fuer-wiesbadener-innenstadt-bleibt-bestehen/ [Zugriff: 24.10.2026]\n[Q6] A – Landeshauptstadt Wiesbaden, Pressereferat (31.10.2025): Vorsorgliches Abkochgebot für Trinkwasser (Sprachfassung uk). Online abrufbar unter: https://www.wiesbaden.de/uk/pressemitteilungen/pressereferat/2025/oktober/251031-Vorsorgliches-Abkochgebot-fuer-Trinkwasser [Zugriff: 24.10.2026]. Datenstand: 31.10.2025\n[Q7] A – Landeshauptstadt Wiesbaden, Ausschuss für Wirtschaft, Beschäftigung, Digitalisierung und Gesundheit (11.11.2025): Beschluss Nr. 0105 zu einem Antrag zum Abkochgebot vom 31.10.2025. Online abrufbar unter: https://piwi.wiesbaden.de/dokument/v/3566895 [Zugriff: 24.10.2026]. Datenstand: 11.11.2025",
+  "sachverhalte": [
+    {
+      "eintritt": "2026-09-25",
+      "art": [
+        "Trinkwasserversorgung"
+      ],
+      "ort": "Landeshauptstadt Wiesbaden (Hessen), Teile der Innenstadt; Referenzraum: Bevölkerungsschutz in Deutschland",
+      "bezeichnung": "Abkochgebot für Teile der Wiesbadener Innenstadt nach Pseudomonas-Befund am 17.10. aufgehoben, Ursache nicht veröffentlicht",
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Das vorsorgliche Abkochgebot für Teile der Wiesbadener Innenstadt ist seit 17.10.2026 aufgehoben; die Ursache der Verunreinigung ist öffentlich nicht benannt, und es war das zweite Abkochgebot im selben Versorgungsgebiet binnen zwölf Monaten [Q1, Q6]. Sachstand: Am 25.09.2026 ordnete das Gesundheitsamt der Landeshauptstadt per Verfügung ein Abkochgebot für Teile der Innenstadt an, nachdem in Proben nahe dem Kurhaus das Bakterium Pseudomonas aeruginosa nachgewiesen worden war; Proben in der übrigen Innenstadt und den anderen Stadtteilen waren unauffällig [Q2]. Die Anweisung galt für Trinken, Zubereitung von Speisen und Getränken, Wundreinigung und Zähneputzen; Personen mit besonderen Risikofaktoren sollten auch für Händewaschen und Duschen abgekochtes Wasser verwenden; Toilettenspülung blieb uneingeschränkt [Q2]. Am 28.09. wurde eine neue Straßenliste veröffentlicht [Q3]; Umfang und Einwohnerzahl des Gebiets sind nur in nicht ausgewerteten Anlagen angegeben. Wasserversorger und Netzbetreiber spülten das Netz, tauschten belastete Leitungsabschnitte und Bauteile aus oder trennten sie ab [Q4]; am 08.10. galt das Gebot laut Medienbericht unter Berufung auf Stadt und Versorger unverändert fort [Q5].Aufhebungskriterium waren drei aufeinanderfolgende unauffällige Ergebnisse aller relevanten Entnahmestellen im Abstand von mindestens zwei Tagen; die letzte Serie vom 15.10. war unauffällig, die Aufhebung erfolgte am 17.10. [Q1, Q4]. Bezug zum Referenzraum: abgeschlossenes örtliches Ereignis (Hessen) ohne überörtliche Wirkung; Meldung im Nachlauf.",
+        "risiken_auswirkungen": "Tatsächliche Wirkung (25.09.–17.10.2026): Einschränkung der Trinkwassernutzung für die Bevölkerung des betroffenen Innenstadtgebiets über rund drei Wochen [Q1, Q2]; eine Zahl betroffener Personen liegt in den eingesehenen Quellen nicht vor. Hinweise auf Erkrankungen sind in den eingesehenen Quellen nicht genannt; das ist kein Nullbefund. Zu t0 besteht keine Einschränkung mehr [Q1]. Besondere Bedarfe: Die Anweisung unterschied Personen mit besonderen Risikofaktoren [Q2]; ob Einrichtungen wie Kliniken, Pflegeheime oder Praxen im Gebiet lagen und wie sie versorgt wurden, ist in den eingesehenen Quellen nicht angegeben (B10/R7). Folgerisiko: Solange die Ursache nicht benannt ist, lässt sich nicht beurteilen, ob ein erneuter Befund im selben Netzabschnitt wahrscheinlich ist. Szenario (Einschätzung Koordinierungsstelle): Ein erneutes Abkochgebot würde dieselbe Bevölkerung zum zweiten Mal binnen eines Jahres treffen; nach dem Ereignis vom 31.10.2025 wurden in einem Ausschuss der Stadt Verzögerungen bei der Warnung über Warn-Apps und Lücken in der Erreichbarkeit älterer und nicht digital erreichbarer Menschen thematisiert [Q7].",
+        "massnahmen_empfehlungen": "Dokumentierte Maßnahmen: Abkochgebot per Verfügung des Gesundheitsamts (angeordnet 25.09., beendet 17.10.) [Q1, Q2]; Spülungen, Austausch und Abtrennung belasteter Leitungsabschnitte durch die Wasserversorgungsbetriebe der Landeshauptstadt und ESWE Versorgung (umgesetzt) [Q1, Q4]; fortlaufende Probenahmen durch die Versorger und Hessenwasser, Bewertung durch das Gesundheitsamt (beendet mit Aufhebung) [Q4]; Ursachenermittlung durch die Versorger (Stand und Ergebnis nicht veröffentlicht) [Q1, Q4]. Information der Bevölkerung über Pressemitteilungen, Internet, soziale und lokale Medien [Q2]; eine Warnung über das Modulare Warnsystem ist in den eingesehenen Quellen nicht genannt. Empfehlungen (Einschätzung Koordinierungsstelle, keine Weisung): Gesundheitsamt und Versorger der Stadt sollten bei Vorliegen des Ursachenbefunds öffentlich darlegen, ob der Netzabschnitt dauerhaft saniert ist; für das Lagebild genügt die Wiedervorlage bei einem erneuten Befund. Eine überörtliche Abstimmung ist nicht erforderlich.",
+        "abhaengigkeiten_interdependenzen": "Wirkungskette (abgeschlossen): Mikrobieller Befund im Verteilnetz → Abkochgebot → eingeschränkte Trinkwassernutzung für Haushalte und Einrichtungen im Gebiet; Puffer: Abkochen, Filter bei Veranstaltungen [Q2]; ein Ersatzversorgungsbedarf ist in den eingesehenen Quellen nicht belegt. Kopplungen zu Gesundheitsversorgung, Lebensmittelbetrieben oder Löschwasser: keine belastbare Angabe; die betroffenen Straßen wurden nicht ausgewertet. Nach der Aufhebung besteht zu t0 keine belegte Kopplung mehr [Q1]."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "Entspannung",
+        "bewertung_text": "Kernaussage: Das Abkochgebot in Wiesbaden ist beendet; für den Bevölkerungsschutz in Deutschland bleibt kein Handlungsbedarf, offen ist nur die nicht veröffentlichte Ursache eines zweiten Abkochgebots im selben Versorgungsgebiet binnen eines Jahres. Referenzraum: Bevölkerungsschutz in Deutschland (Bund); t0: 24.10.2026, 13:00; Meldung im Nachlauf. Beurteilung „geringfügig“: örtliches, beendetes Ereignis ohne belegte Erkrankungen und ohne überörtliche Folgen [Q1, Q2]. Tendenz „Entspannung“ für das betroffene Innenstadtgebiet im Zeitfenster 25.09.–24.10.: Einschränkung aufgehoben [Q1]. Lagenradar (Ist zu t0): D1 offen, weil zu t0 kein Wirkungsraum mehr besteht; im Meldezeitraum war ein Teil einer Stadt betroffen. D2 offen: zu t0 keine Betroffenen; im Meldezeitraum keine Personenzahl veröffentlicht. D3 = 2, Funktion Gefahrenabwehr und hygienische Freigabe durch das Gesundheitsamt einer kreisfreien Stadt, das Aufgaben auf Kreisebene wahrnimmt [Q1, Q2]; Abgrenzung zu 1: Funktion der unteren Gesundheitsbehörde, nicht der Gemeinde. D4 offen: externe Unterstützung weder belegt noch ausgeschlossen; Hessenwasser wirkte als Versorgungsunternehmen mit [Q4]. D5 = 0, weil der Zielzustand „Freigabe erteilt“ am 17.10. erreicht ist [Q1]. D6 = 0, weil nach der Aufhebung keine Kopplung zu t0 besteht [Q1]. D7 = 1, leichte Verzögerungen: die Stadt informierte regelmäßig und überprüfbar, Ursache und Zahl der Betroffenen sind nicht veröffentlicht [Q1, Q4]. D8 = 2, einzelne Umschläge im Meldezeitraum: Anordnung (25.09.), neue Straßenliste (28.09.), Aufhebung (17.10.) [Q1–Q3].\nNeubewertung bei: erneutem positivem Befund im Versorgungsgebiet; Veröffentlichung einer Ursache mit Bedeutung über das Versorgungsgebiet hinaus\nAbschluss im Lagebild: Ereignis beendet seit 17.10.2026; offen bleiben: Ursache der Verunreinigung; Nachsorge bei: Gesundheitsamt der Landeshauptstadt Wiesbaden und Wasserversorgungsbetriebe der Landeshauptstadt Wiesbaden",
+        "lagenradar": {
+          "d1": null,
+          "d2": null,
+          "d3": 2,
+          "d4": null,
+          "d5": 0,
+          "d6": 0,
+          "d7": 1,
+          "d8": 2
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "versand": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    }
+  }
+}

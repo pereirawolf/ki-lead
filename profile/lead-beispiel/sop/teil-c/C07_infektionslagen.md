@@ -12,9 +12,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie"]
 art_hinweis: "„Gesundheitliche Lage / Epidemie“ für beide Kurzprofile"
 anschluss: "B11; C09 bei eigenständigen Versorgungsfolgen; C10 bei konkretem Arzneimittel- oder Materialengpass"
 zweck: "Ausführbare Recherchepfade für die in B11 bisher nur angekündigten Vertiefungen."
-version: "1.2.0"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "24.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N11"
@@ -60,7 +60,7 @@ bisherige_ids: ["baustein-n11"]
 
 **Versorgungs- und Transferpfad:** Bei begründetem Bedarf Diagnostik, Transport, Aufnahme, geschultes Personal, Schutzmaterial und Versorgung als zusammenhängenden Pfad prüfen. Vorhaltung, nominelle Bettenzahl, betriebsbereite Kapazität, aktuelle Belegung und zugesagte Aufnahme unterscheiden; Anfrage, Zusage, Transfer und Aufnahme mit Stand trennen. Fehlende öffentliche Kapazitätsangaben belegen weder fehlende Kapazität noch mangelnde Abstimmung; eine Statusklärung nur bei benanntem Entscheidungsbedarf über die zuständigen Gesundheits- und Koordinierungsstellen empfehlen. Laboranforderungen und klinische Verfahren nicht selbst festlegen. C09 erst bei eigenständigen Versorgungsfolgen, C10 erst bei konkretem Arzneimittel- oder Materialengpass.
 
-**Fristen und Neubewertung:** Eine erregerspezifische Beobachtungsdauer nur aus aktueller Fachquelle übernehmen; Fristbeginn ist die fachlich maßgebliche letzte Exposition, nicht Diagnose-, Veröffentlichungs- oder Isolationsdatum. Ohne belegten Beginn kein Enddatum berechnen; ein Rechenbeispiel ist allenfalls ausdrücklich bedingt und weder Behördenfrist noch Nachweis abgeschlossener Kontaktverfolgung noch D5-Prognose. Neubewertungsindikatoren nennen Signal, Quelle und die deutsche Entscheidung, die sich dadurch ändern würde, etwa eine von der Fachbehörde mitgeteilte Kontaktperson mit Aufenthalt in Deutschland, eine geänderte amtliche Risikobewertung, eine konkrete Evakuierungsanfrage oder ein belegter Engpass im Versorgungspfad. Weitere Fälle oder Staaten im Ausland sind Frühwarnsignale; ihre Bedeutung für Deutschland wird erläutert. Keine erfundenen Fallzahlschwellen oder Kapazitätsgrenzen.
+**Fristen und Neubewertung:** Eine erregerspezifische Beobachtungsdauer nur aus aktueller Fachquelle übernehmen; Fristbeginn ist die fachlich maßgebliche letzte Exposition, nicht Diagnose-, Veröffentlichungs- oder Isolationsdatum. Ohne belegten Beginn kein Enddatum berechnen; ein Rechenbeispiel ist allenfalls ausdrücklich bedingt und weder Behördenfrist noch Nachweis abgeschlossener Kontaktverfolgung noch D5-Prognose. Neubewertungsindikatoren nennen Signal, Quelle und die deutsche Entscheidung, die sich dadurch ändern würde, etwa eine von der Fachbehörde mitgeteilte Kontaktperson mit Aufenthalt in Deutschland, eine geänderte amtliche Risikobewertung, eine konkrete Evakuierungsanfrage oder ein belegter Engpass im Versorgungspfad. Weitere Fälle oder Staaten im Ausland sind Frühwarnsignale; ihre Bedeutung für Deutschland wird erläutert, einschließlich der Frage, ob bestehende deutsche Vorsorgemaßnahmen (Reisendeninformation, Hinweise zur Reiseanamnese) den aktuellen räumlichen Stand abdecken; eine fehlende Nennung ist Prüfbedarf, kein Beleg für ein Versäumnis. Keine erfundenen Fallzahlschwellen oder Kapazitätsgrenzen.
 
 ### 3. Auswertung: Prüfpunkte
 

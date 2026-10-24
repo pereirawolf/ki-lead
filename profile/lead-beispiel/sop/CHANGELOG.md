@@ -10,13 +10,25 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.16.0 vom 23.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.17.0 vom 24.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 22.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.16.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.17.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.17.0] – 24.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_erfassungstest_2026-W43.json` (Erfassungstest KW 43 zu drei realen Lagen, Commit fbfe50b), Befunde ET-2026-W43-01 bis -07, vom Herausgeber am 24.10.2026 freigegeben; Entscheidungsfragen zu ET-2026-W43-01, -04, -05 und -06 beantwortet (Ist-Kodierung zu t0 mit D5 = 0 bei erreichtem Zielzustand; Mindestprognose als gekennzeichneter Mindestwert; Verwaltungsleistungen allein keine Direktbetroffenheit; D3 bei kreisfreien Städten nach wahrgenommener Funktion). Zweite Stelle nach der Versionierungsregel: neue Prüfpunkte und Stolperstellen sowie eine präzisierte D5-Regel in A.2, mitfortgeschrieben im Kodierleitfaden 1.4.0 (A.10.2); Stufentexte, Quellenkategorien, Kennsätze und Schema bleiben unverändert. Keine neuen Links; das Quellenregister ist unverändert. Die im Test entstandenen Meldungen liegen als Prüfsteine unter `evaluation/pruefsteine/2026-W43_*`.
+
+### Geändert
+
+- **Teil A:** A.2 D5: erreichter Zielzustand = 0, Mindestprognose als gekennzeichneter Mindestwert (ET-2026-W43-01, -04). Gültigkeitsstand fortgeschrieben (Sammelmappe 3.17.0, Kodierleitfaden 1.4.0).
+- **B10 2.2.0:** Abschnitt 4 „Übergreifender Erkenntniswert“: wiederholte Einschränkung im selben Versorgungsgebiet, Ursache nach der Freigabe (ET-2026-W43-07).
+- **B15 2.5.0:** R3: Stolperstelle zum Datenabfluss (Art der Daten, Veröffentlichung, Information Betroffener, Warnhinweise; A.9.5), „Prüfen für“ R/M (ET-2026-W43-02); Abschnitt 3: Prüfpunkt D2 zu Verwaltungsleistungen (ET-2026-W43-05).
+- **C07 1.3.0:** Abschnitt 2 „Fristen und Neubewertung“: räumlicher Zuschnitt bestehender deutscher Vorsorgemaßnahmen nach Ausbreitung in weitere Staaten (ET-2026-W43-03).
+- **Lesefassung:** aus den Einzeldateien neu erzeugt.
 
 ## [3.16.0] – 23.10.2026
 
