@@ -1,0 +1,59 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-vulkanasche-transport-zeitluecke",
+  "titel": "Vulkanasche-Prognose mit Ersatzlieferung nach Bestandsende (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "variante_von": "sop-vulkanasche-transport",
+  "abwandlung": "Zeitstand: Die Ersatzlieferung kommt übermorgen statt morgen um 10:00 Uhr und damit nach dem Bestandsende morgen um 18:00 Uhr. Datum auf den Stichtag 24.10.2026 gesetzt; sonst unverändert.",
+  "auftrag": {
+    "sachverhalt": "Vulkanasche-Prognose mit Ersatzlieferung nach Bestandsende",
+    "stichworte": "B17, C04, C13, C10",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-vulkanasche-transport-zeitluecke.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Abwandlung von evaluation/material/sop-vulkanasche-transport.md, nur der Ankunftstag der Ersatzlieferung ist geändert."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Bestand (bis 25.10.2026, 18:00 Uhr) und Ersatzankunft (26.10.2026, 10:00 Uhr) vergleichen und die drohende Lücke von rund 16 Stunden als bedingte, noch nicht eingetretene Versorgungslücke benennen (C04, Versorgungspfad).",
+      "Zeitgebundenen Prüf- und Abstimmungsbedarf vor dem 25.10.2026, 18:00 Uhr, mit Grundlage (Angaben des klinischen Empfängers und des Flugbetreibers) als Kennsatz „Handlungsrelevant bis:“ ausweisen und die frühere Weitergabe nach A.7.3 prüfen; Empfehlungen an zuständige Stellen, keine eigene Mittelzuteilung.",
+      "Luftraumprognose, Umplanung des Flugbetreibers und klinischen Bestand getrennt darstellen; die Prognose ist keine Luftraumsperrung.",
+      "D5 nur mit benanntem Zielzustand kodieren, etwa 2 für die Ankunft der Ersatzlieferung; das Ende der Asche-Prognose ist kein Versorgungsziel.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eine eingetretene Therapielücke, Bodenbelastung in Deutschland oder eine Luftraumsperrung behaupten.",
+      "Die Ersatzlieferung als rechtzeitig bewerten oder die Lücke durch eigene Annahmen, etwa andere Transportwege oder Bestände anderer Kliniken, schließen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Sonstiges"
+    ],
+    "radar": {
+      "d2": {
+        "offen": true,
+        "grund": "Keine eingetretene Therapielücke und keine Patientenzahl."
+      },
+      "d4": {
+        "offen": true,
+        "grund": "Keine eingesetzte externe Unterstützung."
+      },
+      "d6": {
+        "min": 1,
+        "max": 2,
+        "grund": "Belegte Kopplung Lieferweg → Klinikbestand; nicht aus allgemeiner Luftverkehrsabhängigkeit."
+      }
+    }
+  }
+}

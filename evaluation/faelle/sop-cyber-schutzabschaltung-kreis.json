@@ -1,0 +1,66 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-cyber-schutzabschaltung-kreis",
+  "titel": "Vorsorgliche Schutzabschaltung eines kommunalen IT-Dienstleisters ohne Angriffsnachweis (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Vorsorgliche Schutzabschaltung eines kommunalen IT-Dienstleisters ohne Angriffsnachweis",
+    "stichworte": "B15, C11, C17",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktiver Landkreis. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-cyber-schutzabschaltung-kreis.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Statusprofil getrennt darstellen: Fachwarnung mit Kritikalitätsstufe, vorsorgliche Schutzabschaltung als Maßnahme des Betreibers mit Stand, fehlender Kompromittierungsnachweis und tatsächlich eingeschränkte Leistungen; die Kritikalitätsstufe wird nicht in Beurteilung, Tendenz oder Radarwerte umgerechnet.",
+      "Notruf, Alarmierung und Einsatzleitsystem laut Leitstelle als nicht betroffen ausweisen; keine Störung der Notruf- oder Warnfunktion ableiten (C11).",
+      "Urheberschaft offenlassen: das anonyme Medienzitat als unbestätigte Behauptung neben der Aussage des Landesinnenministeriums führen; daraus weder Sabotage- noch Verteidigungsbezug (C17) oder einen Rechtszustand ableiten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Einen bestätigten Cyberangriff, eine Kompromittierung oder eine staatliche Urheberschaft behaupten.",
+      "D2 aus Einwohner- oder Nutzerzahlen der Fachverfahren bilden oder die Kritikalitätsstufe als Radar- oder Beurteilungsstufe übernehmen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Kreis (fiktiver Landkreis)",
+    "ereignisarten": [
+      "Cyberangriff / IT-Sicherheitsvorfall"
+    ],
+    "radar": {
+      "d1": {
+        "min": 2,
+        "max": 2,
+        "grund": "Eingeschränkte Leistungen der Kreisverwaltung und von vier kreisangehörigen Gemeinden (überörtlich)."
+      },
+      "d2": {
+        "offen": true,
+        "grund": "Ausfall von Verwaltungsleistungen ist keine Direktbetroffenheit; Auszahlungen existenzsichernder Leistungen laut Kreis angewiesen."
+      },
+      "d3": {
+        "min": 0,
+        "max": 2,
+        "grund": "Je nach benannter Funktion: Betrieb und Abschaltungsentscheidung beim IT-Dienstleister als D3 Vorsorge (0) oder Koordination durch die Kreisverwaltung (2)."
+      },
+      "d5": {
+        "offen": true,
+        "grund": "Kein Termin für die Wiederfreischaltung und keine Prognose für einen anderen Zielzustand."
+      },
+      "d6": {
+        "min": 0,
+        "max": 1,
+        "grund": "Leitstelle, Notruf und Alarmierung nicht betroffen; die Sektorzugehörigkeit Staat und Verwaltung trägt keine Stufe."
+      }
+    }
+  }
+}

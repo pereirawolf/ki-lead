@@ -1,0 +1,62 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-erdbeben-inland-nachlauf",
+  "titel": "Inlandsbeben im Nachlauf: gesperrtes Wohnhaus und revidierte Magnitude (FIKTIV)",
+  "stand": "2026-10-24",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Inlandsbeben im Nachlauf: gesperrtes Wohnhaus und revidierte Magnitude",
+    "stichworte": "B04, C02, C16",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-erdbeben-inland-nachlauf.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Messdaten mit Revisionsstand (Erstlösung 4,6, revidiert 4,3) und Schadensbild getrennt darstellen; die Revision ist weder Entspannung noch Beurteilungsgrundlage (B04/R1, R2).",
+      "Rissmeldungen, begutachtete Gebäude, gesperrtes Gebäude und betroffene Personen getrennt führen; Standsicherheit nur nach Fachbewertung der Bauaufsicht; die vorsorgliche, inzwischen aufgehobene Brückensperrung nicht als Schaden darstellen (B04/R4, C02).",
+      "Nachlauf nach A.8.2: offen bleiben die Rückkehr der 18 Bewohner und die Absperrung am Kirchturm; der erwartete Gutachtentermin ist keine Rückkehrprognose; die Nachbebenaussage wird als Fachaussage des Erdbebendienstes übernommen, ohne eigene Vorhersage.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Eine eigene Nachbeben- oder Standsicherheitsprognose abgeben oder aus der Magnituderevision eine Entspannung ableiten.",
+      "Rissmeldungen oder die Einwohner der Kleinstadt als direkt Betroffene zählen oder die Rückkehr für den 28.10.2026 ankündigen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-10-24T12:00",
+    "referenzraum": "Land (fiktives Land)",
+    "ereignisarten": [
+      "Erdbeben"
+    ],
+    "radar": {
+      "d1": {
+        "min": 0,
+        "max": 1,
+        "grund": "Wirkungen in einer Kleinstadt."
+      },
+      "d2": {
+        "min": 1,
+        "max": 1,
+        "grund": "18 Personen zu t0 ohne Zugang zur eigenen Wohnung; die zwei ambulant versorgten Leichtverletzten ändern die Stufe nicht und werden nicht doppelt gezählt; Rissmeldungen sind keine Personen."
+      },
+      "d5": {
+        "offen": true,
+        "grund": "Für die Rückkehr der 18 Bewohner liegt kein Termin vor; der erwartete Gutachtentermin ist keine Prognose."
+      },
+      "d8": {
+        "min": 0,
+        "max": 1,
+        "grund": "Seit 23.10.2026 keine spürbaren Nachbeben und keine weitere Sperrung; Brückensperrung aufgehoben."
+      }
+    }
+  }
+}
