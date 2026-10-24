@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/evaluation/befunde/befundregister.schema.json",
+  "title": "Befundregister KI-LEAD",
+  "description": "Entscheidungsstand aller Befunde (Format ki-lead-befund/1) zum Repository. Die Befunddateien selbst liegen nicht im Repository; das Register hält fest, was entschieden wurde, damit spätere Prüfläufe Bekanntes nicht erneut vorlegen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "stand", "eintraege"],
+  "properties": {
+    "format": { "const": "ki-lead-befundregister/1" },
+    "stand": { "type": "string", "format": "date", "description": "Datum der letzten Fortschreibung (JJJJ-MM-TT)" },
+    "eintraege": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/eintrag" }
+    }
+  },
+  "$defs": {
+    "eintrag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "agent", "befunddatei", "commit", "dringlichkeit", "fundstellen", "kurz", "status", "entschieden_am"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}-\\d{4}-W\\d{2}-\\d{2}$",
+          "description": "ID aus der Befunddatei, z. B. KP-2026-W44-03 oder ET-2026-W44-01"
+        },
+        "agent": { "type": "string", "minLength": 1, "description": "z. B. quellenwaechter, fristenwaechter, konsistenzpruefer, lernschleife, erfassungstest" },
+        "befunddatei": { "type": "string", "pattern": "^ki-lead-befund_[a-z]+_\\d{4}-W\\d{2}\\.json$" },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "geprüfter Stand von main" },
+        "dringlichkeit": { "enum": ["hoch", "mittel", "niedrig"] },
+        "fundstellen": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["datei", "stelle"],
+            "properties": {
+              "datei": { "type": "string", "minLength": 1 },
+              "stelle": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "kurz": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Vorschlag in einem Satz" },
+        "status": {
+          "enum": ["umgesetzt", "abgelehnt", "zurueckgestellt", "ueberholt"],
+          "description": "umgesetzt: mit Pull Request eingearbeitet; abgelehnt: bewusst nicht übernommen; zurueckgestellt: später wieder vorlegen; ueberholt: Fundstelle hat sich vorher geändert"
+        },
+        "entschieden_am": { "type": "string", "format": "date" },
+        "grund": { "type": "string", "minLength": 1, "description": "Pflicht außer bei umgesetzt" },
+        "wieder_vorlegen_ab": { "type": "string", "format": "date", "description": "nur bei zurueckgestellt" },
+        "pr": { "type": "integer", "minimum": 1, "description": "Pull Request, Pflicht bei umgesetzt" }
+      },
+      "allOf": [
+        { "if": { "properties": { "status": { "const": "umgesetzt" } } }, "then": { "required": ["pr"] } },
+        { "if": { "properties": { "status": { "enum": ["abgelehnt", "zurueckgestellt", "ueberholt"] } } }, "then": { "required": ["grund"] } },
+        { "if": { "properties": { "status": { "const": "zurueckgestellt" } } }, "then": { "required": ["wieder_vorlegen_ab"] } }
+      ]
+    }
+  }
+}

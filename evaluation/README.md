@@ -19,8 +19,9 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 - `bewertungsschema.json`: Format einer Bewertung (ein Lauf, eine bewertende Person)
 - `ergebnisse/`: zusammengefasste Bewertungen; Laufprotokolle und Rohantworten bleiben außerhalb des öffentlichen Repositorys
 - `abnahmen/`: technische Abnahmen der Meilensteine mit echten KI-Läufen (Laufskript, eigene Vitest-Konfiguration, Ergebnis); nie Teil von `npm test`. Dort steht auch das Ergebnis der Erprobung im Testkreis (M6); Plan und Regeln der Erprobung: [docs/ERPROBUNG.md](../docs/ERPROBUNG.md)
+- `befunde/`: Befundregister – Entscheidungsstand der Befunde aus den automatisierten Prüfläufen (umgesetzt, abgelehnt, zurückgestellt, überholt), damit spätere Läufe Bekanntes nicht erneut vorlegen; siehe [befunde/README.md](befunde/README.md)
 
-`tests/evaluation/` prüft nur, dass Fälle und Ergebnisse diesen Schemata entsprechen. Es ruft keine KI auf.
+`tests/evaluation/` prüft nur, dass Fälle, Ergebnisse und das Befundregister ihren Schemata entsprechen. Es ruft keine KI auf.
 
 ## Ablauf einer Bewertung
 

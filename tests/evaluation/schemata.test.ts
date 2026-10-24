@@ -78,10 +78,58 @@ describe("Modellbewertung: Schemata", () => {
     }
   });
 
+  it("das Befundregister entspricht seinem Schema, IDs sind eindeutig und passen zu Befunddatei und Stand", () => {
+    const ajv = referenzAjv();
+    ajv.addFormat("date", /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/);
+    const pruefen = ajv.compile(lies("evaluation/befunde/befundregister.schema.json"));
+    const register = lies("evaluation/befunde/befundregister.json");
+    expect(pruefen(register), JSON.stringify(pruefen.errors)).toBe(true);
+    const ids = register.eintraege.map((e: any) => e.id);
+    expect(new Set(ids).size, "doppelte Befund-IDs").toBe(ids.length);
+    for (const e of register.eintraege) {
+      expect(e.befunddatei, `${e.id}: Kalenderwoche der Befunddatei`).toContain(e.id.slice(3, 11));
+      expect(e.entschieden_am <= register.stand, `${e.id}: entschieden nach Registerstand`).toBe(true);
+    }
+  });
+
+  it("das Befundschema verlangt Grund, Pull Request und Wiedervorlage je nach Status", () => {
+    const ajv = referenzAjv();
+    ajv.addFormat("date", /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/);
+    const pruefen = ajv.compile(lies("evaluation/befunde/befundregister.schema.json"));
+    const eintrag = () => ({
+      id: "KP-2026-W44-01",
+      agent: "konsistenzpruefer",
+      befunddatei: "ki-lead-befund_konsistenz_2026-W44.json",
+      commit: "4fbd397",
+      dringlichkeit: "mittel",
+      fundstellen: [{ datei: "profile/lead-beispiel/kodierleitfaden.md", stelle: "Abschnitt 3, D5" }],
+      kurz: "Beispiel",
+      status: "umgesetzt",
+      entschieden_am: "2026-10-30",
+      pr: 51,
+    });
+    const register = (e: any) => ({ format: "ki-lead-befundregister/1", stand: "2026-10-30", eintraege: [e] });
+    expect(pruefen(register(eintrag())), JSON.stringify(pruefen.errors)).toBe(true);
+    const falsch: [string, (e: any) => void][] = [
+      ["umgesetzt ohne PR", (e) => delete e.pr],
+      ["abgelehnt ohne Grund", (e) => (e.status = "abgelehnt")],
+      ["zurückgestellt ohne Wiedervorlage", (e) => Object.assign(e, { status: "zurueckgestellt", grund: "später" })],
+      ["ID ohne Kalenderwoche", (e) => (e.id = "KP-2026-01")],
+      ["Status unbekannt", (e) => (e.status = "offen")],
+      ["ohne Fundstelle", (e) => (e.fundstellen = [])],
+    ];
+    for (const [name, aendern] of falsch) {
+      const e = eintrag();
+      aendern(e);
+      expect(pruefen(register(e)), name).toBe(false);
+    }
+  });
+
   it("enthält keine API-Schlüssel", () => {
     const dateien = [
       ...jsonIn("evaluation/faelle").map((n) => `evaluation/faelle/${n}`),
       ...jsonIn("evaluation/ergebnisse").map((n) => `evaluation/ergebnisse/${n}`),
+      ...jsonIn("evaluation/befunde").map((n) => `evaluation/befunde/${n}`),
     ];
     for (const d of dateien) expect(readFileSync(repoPfad(d), "utf-8"), d).not.toMatch(/sk-(ant|proj|live)[-_][A-Za-z0-9_-]{8,}/);
   });
