@@ -621,8 +621,8 @@ function ModelleBereich({
         </tbody>
       </table>
       <p className="hinweis">
-        Mistral kennt die Stufe „maximal“ nicht; sie gilt dort als „sehr hoch“. Lehnt ein Mistral-Modell eine Stufe ab, versucht die App es einmal mit der
-        groben Stufe und vermerkt das im Laufprotokoll.
+        Mistral kennt nur Nachdenken an oder aus: „niedrig“ läuft ohne Nachdenken, alle anderen Stufen mit „high“. Lehnt ein Mistral-Modell die Angabe ab,
+        versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
       </p>
     </section>
   );

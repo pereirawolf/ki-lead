@@ -20,8 +20,8 @@
 //   Abrufwerkzeug gibt es nicht. Die App zählt die Suchen und schreibt sie ins Laufprotokoll.
 // - Structured Outputs über completion_args.response_format (json_schema, strict) mit dem strengen Schema wie bei
 //   OpenAI (geschlossene Objekte, alle Felder Pflicht, optionale nullable)
-// - Nachdenken über completion_args.reasoning_effort; lehnt das Modell eine Stufe ab, wiederholt die App einmal mit
-//   der groben Stufe „high“ bzw. „none“
+// - Nachdenken über reasoning_effort mit den dokumentierten Werten „none“ (Stufe „niedrig“) und „high“ (alle anderen);
+//   lehnt das Modell die Angabe ab, wiederholt die App einmal ohne sie
 // - store: false – die Unterhaltung wird beim Anbieter nicht für spätere Abrufe angelegt
 //
 // Stand der Schnittstelle: 24.10.2026, nach Doku und Typdefinitionen des offiziellen SDK @mistralai/mistralai 3.2.0.
@@ -60,13 +60,13 @@ export function mistralWerkzeuge(endpunkt: MistralEndpunkt): { websuche: boolean
 const MAX_WIEDERHOLUNGEN = 3;
 const MAX_NEUSTARTS = 2;
 
-/** Werte von reasoning_effort laut API: none, minimal, low, medium, high, xhigh. „max“ der App wird zu „xhigh“. */
-export const MISTRAL_AUFWAND: Record<Aufwand, string> = { low: "low", medium: "medium", high: "high", xhigh: "xhigh", max: "xhigh" };
-
-/** Grobe Stufe, falls ein Modell die feine ablehnt (die Doku zum Nachdenken nennt nur „high“ und „none“). */
-export function groberAufwand(a: Aufwand): string {
-  return a === "low" ? "none" : "high";
-}
+/**
+ * reasoning_effort je Stufe der App. Die API kennt zwar none, minimal, low, medium, high und xhigh, für Mistral Small 4,
+ * Medium 3.5 und Large 4 dokumentiert Mistral aber nur „high“ (mit Nachdenken) und „none“ (ohne). Lauf
+ * 20261024-195614-kyc1: Medium 3.5 lehnte „medium“ mit HTTP 422 ab. Deshalb: „niedrig“ ohne Nachdenken, alles
+ * andere „high“. Lehnt ein Modell auch das ab, wiederholt die App einmal ohne Angabe (Vorgabe des Modells).
+ */
+export const MISTRAL_AUFWAND: Record<Aufwand, string> = { low: "none", medium: "high", high: "high", xhigh: "high", max: "high" };
 
 function inhaltZuMistral(c: string | Inhaltsblock[]): string | any[] {
   if (typeof c === "string") return c;
@@ -87,7 +87,10 @@ function inhaltZuMistral(c: string | Inhaltsblock[]): string | any[] {
   return out;
 }
 
-export function anfrageKoerperMistral(a: LlmAnfrage, aufwand: string | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand]): Record<string, any> {
+export function anfrageKoerperMistral(
+  a: LlmAnfrage,
+  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand],
+): Record<string, any> {
   const args: Record<string, any> = { max_tokens: a.maxTokens };
   if (aufwand) args.reasoning_effort = aufwand;
   if (a.jsonSchema) args.response_format = { type: "json_schema", json_schema: { name: "antwort", schema: strengesSchema(a.jsonSchema), strict: true } };
@@ -105,7 +108,10 @@ export function anfrageKoerperMistral(a: LlmAnfrage, aufwand: string | undefined
 }
 
 /** Anfrage an Chat Completions (EU-Endpunkt): System als erste Nachricht, keine Werkzeuge. */
-export function anfrageKoerperMistralChat(a: LlmAnfrage, aufwand: string | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand]): Record<string, any> {
+export function anfrageKoerperMistralChat(
+  a: LlmAnfrage,
+  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = a.aufwand && MISTRAL_AUFWAND[a.aufwand],
+): Record<string, any> {
   const system = a.system.map((s) => s.text).join("\n\n");
   const body: Record<string, any> = {
     model: a.modell,
@@ -130,17 +136,44 @@ export function fehlerTextMistral(status: number, code?: string, meldung?: strin
   return `Fehler bei Mistral${status ? ` (HTTP ${status})` : ""}${code ? ` [${code}]` : ""}${m}.`;
 }
 
-/** Meldung und Kennung aus einer Fehlerantwort (Mistral liefert sie flach, als „detail“ oder unter „error“). */
-function fehlerAus(j: any): { code?: string; meldung?: string } {
-  const e = j?.error && typeof j.error === "object" ? j.error : j;
-  const detail = Array.isArray(e?.detail) ? e.detail.map((d: any) => d?.msg || JSON.stringify(d)).join("; ") : e?.detail;
-  const code = e?.code ?? e?.type;
-  return { code: code === undefined || code === null ? undefined : String(code), meldung: e?.message || (typeof detail === "string" ? detail : undefined) };
+/**
+ * Lesbarer Text aus einer Fehlerangabe: Zeichenkette, Liste von Prüffehlern ({loc, msg}) oder Objekt. Lauf
+ * 20261024-195614-kyc1 zeigte „[object Object],…“, weil Mistral bei HTTP 422 eine Liste statt eines Textes lieferte.
+ */
+export function fehlerTextAus(x: unknown): string | undefined {
+  if (x === undefined || x === null || x === "") return undefined;
+  if (typeof x === "string") return x;
+  if (Array.isArray(x)) {
+    const teile = x.map((d: any) => {
+      if (typeof d === "string") return d;
+      const ort = Array.isArray(d?.loc) ? d.loc.filter((l: unknown) => l !== "body").join(".") : "";
+      const text = d?.msg ?? d?.message;
+      return text ? (ort ? `${ort}: ${text}` : String(text)) : JSON.stringify(d);
+    });
+    return teile.join("; ") || undefined;
+  }
+  if (typeof x === "object") {
+    const o = x as any;
+    return fehlerTextAus(o.message) ?? fehlerTextAus(o.detail) ?? JSON.stringify(o);
+  }
+  return String(x);
 }
 
-/** Lehnt die Antwort die gewählte Stufe des Nachdenkens ab? */
-function aufwandAbgelehnt(status: number, meldung?: string): boolean {
-  return (status === 400 || status === 422) && /reasoning/i.test(meldung || "");
+/** Meldung und Kennung aus einer Fehlerantwort (Mistral liefert sie flach, als „detail“ oder unter „error“). */
+function fehlerAus(j: any): { code?: string; meldung?: string; roh: string } {
+  const e = j?.error && typeof j.error === "object" ? j.error : j;
+  const code = e?.code ?? e?.type;
+  const meldung = fehlerTextAus(e?.message) ?? fehlerTextAus(e?.detail) ?? fehlerTextAus(j?.detail);
+  return {
+    code: code === undefined || code === null || typeof code === "object" ? undefined : String(code),
+    meldung: meldung && meldung.length > 600 ? `${meldung.slice(0, 600)} …` : meldung,
+    roh: JSON.stringify(j ?? ""),
+  };
+}
+
+/** Lehnt die Antwort die Angabe zum Nachdenken ab? Geprüft wird die ganze Fehlerantwort, nicht nur der Text. */
+function aufwandAbgelehnt(status: number, roh: string): boolean {
+  return (status === 400 || status === 422) && /reasoning/i.test(roh);
 }
 
 /** Sammelt die Ereignisse eines Antwortstroms. */
@@ -150,8 +183,23 @@ export class MistralSammler {
   zitate: Zitat[] = [];
   private fund = new Map<string, Fundstelle>();
   suchen: string[] = [];
-  /** Inhalte wie empfangen (für das Laufprotokoll) */
+  /**
+   * Inhalte für das Laufprotokoll, zusammengefasst: aufeinanderfolgende Stücke gleicher Art (Nachdenken, Text) als ein
+   * Block, dazu Fundstellen und Werkzeugereignisse. Lauf 20261024-195614-kyc1 enthielt sonst 1 364 Einzelstücke.
+   */
   inhalt: any[] = [];
+
+  private block(art: "thinking" | "text", text: string) {
+    if (!text) return;
+    const letzter = this.inhalt[this.inhalt.length - 1];
+    if (letzter?.type === art) letzter.text += text;
+    else this.inhalt.push({ type: art, text });
+  }
+
+  private denken(c: any) {
+    const teile = Array.isArray(c?.thinking) ? c.thinking : [];
+    this.block("thinking", teile.map((t: any) => (typeof t === "string" ? t : (t?.text ?? ""))).join(""));
+  }
   nutzung: any = null;
   fertig = false;
   /** Abbruchgrund (nur Chat Completions: stop, length, error, tool_calls) */
@@ -173,13 +221,21 @@ export class MistralSammler {
   private teil(c: any) {
     if (typeof c === "string") {
       this.text += c;
+      this.block("text", c);
       this.fortschritt?.({ art: "schreibt", zeichen: this.text.length });
     } else if (Array.isArray(c)) c.forEach((x) => this.teil(x));
     else if (c?.type === "text") {
-      this.text += String(c.text ?? "");
+      const t = String(c.text ?? "");
+      this.text += t;
+      this.block("text", t);
       this.fortschritt?.({ art: "schreibt", zeichen: this.text.length });
-    } else if (c?.type === "thinking") this.fortschritt?.({ art: "denkt" });
-    else if (c?.type === "tool_reference") this.referenz(c);
+    } else if (c?.type === "thinking") {
+      this.denken(c);
+      this.fortschritt?.({ art: "denkt" });
+    } else if (c?.type === "tool_reference") {
+      this.referenz(c);
+      this.inhalt.push({ type: "tool_reference", tool: c.tool, title: c.title, url: c.url ?? null });
+    }
   }
 
   /** Ein Stück aus dem Strom von Chat Completions (EU-Endpunkt) */
@@ -203,10 +259,9 @@ export class MistralSammler {
     const typ = d?.type || event;
     if (typ === "message.output.delta") {
       if (d.model) this.modell = d.model;
-      this.inhalt.push(d);
       this.teil(d.content);
     } else if (typ === "tool.execution.started") {
-      this.inhalt.push(d);
+      this.inhalt.push({ type: typ, name: d.name, arguments: d.arguments });
       if (/^web_search/.test(String(d.name || ""))) {
         let frage = "";
         try {
@@ -219,9 +274,9 @@ export class MistralSammler {
         this.fortschritt?.({ art: "suche", text: frage || "Websuche" });
       }
     } else if (typ === "tool.execution.done") {
-      this.inhalt.push(d);
+      this.inhalt.push({ type: typ, name: d.name });
     } else if (typ === "conversation.response.done") {
-      this.inhalt.push(d);
+      this.inhalt.push({ type: typ, usage: d.usage ?? null });
       this.nutzung = d.usage || {};
       this.fertig = true;
     } else if (typ === "conversation.response.error") {
@@ -269,12 +324,13 @@ export class MistralAnbieter implements LlmAnbieter {
   }
 
   private koerper(a: LlmAnfrage, aufwand: string | undefined) {
-    return this.endpunkt === "eu" ? anfrageKoerperMistralChat(a, aufwand) : anfrageKoerperMistral(a, aufwand);
+    return this.endpunkt === "eu" ? anfrageKoerperMistralChat(a, aufwand ?? null) : anfrageKoerperMistral(a, aufwand ?? null);
   }
 
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert den Sammler und die wirksame Stufe des Nachdenkens. */
-  private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string }> {
+  private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string; abgelehnt?: string }> {
     let aufwand = a.aufwand && MISTRAL_AUFWAND[a.aufwand];
+    let abgelehnt: string | undefined;
     let body = this.koerper(a, aufwand);
     let grobVersucht = false;
     for (let versuch = 0; ; versuch++) {
@@ -301,16 +357,26 @@ export class MistralAnbieter implements LlmAnbieter {
         );
       }
       if (!antwort.ok) {
-        let f: { code?: string; meldung?: string } = {};
+        let f: { code?: string; meldung?: string; roh: string } = { roh: "" };
         try {
-          f = fehlerAus(await antwort.json());
+          const roh = await antwort.text();
+          try {
+            f = fehlerAus(JSON.parse(roh));
+          } catch {
+            f = { meldung: roh.slice(0, 600) || undefined, roh };
+          }
         } catch {
           /* leer */
         }
-        if (a.aufwand && !grobVersucht && aufwandAbgelehnt(antwort.status, f.meldung)) {
+        if (aufwand && !grobVersucht && aufwandAbgelehnt(antwort.status, f.roh)) {
           grobVersucht = true;
-          aufwand = groberAufwand(a.aufwand);
-          a.fortschritt?.({ art: "wiederholung", grund: `Mistral lehnt die Stufe des Nachdenkens ab; neuer Versuch mit „${aufwand}“.`, warteMs: 0 });
+          abgelehnt = aufwand;
+          a.fortschritt?.({
+            art: "wiederholung",
+            grund: `Mistral lehnt reasoning_effort „${aufwand}“ ab; neuer Versuch ohne Angabe (Vorgabe des Modells).`,
+            warteMs: 0,
+          });
+          aufwand = undefined;
           body = this.koerper(a, aufwand);
           versuch--;
           continue;
@@ -325,7 +391,7 @@ export class MistralAnbieter implements LlmAnbieter {
         }
         throw new AnbieterFehler(fehlerTextMistral(antwort.status, f.code, f.meldung), antwort.status, f.code);
       }
-      return { sammler: await this.stromLesen(antwort, a), aufwand };
+      return { sammler: await this.stromLesen(antwort, a), aufwand, abgelehnt };
     }
   }
 
@@ -359,9 +425,10 @@ export class MistralAnbieter implements LlmAnbieter {
     const start = Date.now();
     let s: MistralSammler;
     let aufwand: string | undefined;
+    let abgelehnt: string | undefined;
     for (let neustart = 0; ; neustart++) {
       try {
-        ({ sammler: s, aufwand } = await this.eineRunde(a));
+        ({ sammler: s, aufwand, abgelehnt } = await this.eineRunde(a));
         break;
       } catch (e: any) {
         const abbruch = e instanceof StromEnde || (!(e instanceof AnbieterFehler) && istVerbindungsabbruch(e) && e?.name !== "AbortError");
@@ -382,6 +449,7 @@ export class MistralAnbieter implements LlmAnbieter {
       anbieter: "mistral",
       endpunkt: new URL(this.url).host,
       reasoning_effort: aufwand ?? null,
+      ...(abgelehnt ? { reasoning_effort_abgelehnt: abgelehnt } : {}),
       websuche: !eu && !!a.werkzeuge?.websuche,
       websuche_hoechstzahl_durchgesetzt: false,
     };
@@ -389,7 +457,7 @@ export class MistralAnbieter implements LlmAnbieter {
     return {
       modell: s.modell || a.modell,
       text: s.text,
-      inhalt: eu ? [parameter, { type: "ki-lead.chat", finish_reason: s.endgrund ?? null, usage: s.nutzung ?? null }] : [parameter, ...s.inhalt],
+      inhalt: eu ? [parameter, ...s.inhalt, { type: "ki-lead.chat", finish_reason: s.endgrund ?? null, usage: s.nutzung ?? null }] : [parameter, ...s.inhalt],
       zitate: s.zitate,
       fundstellen: s.fundstellen,
       suchen: s.suchen,

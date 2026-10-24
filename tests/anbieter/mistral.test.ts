@@ -102,7 +102,7 @@ describe("Mistral EU-Endpunkt (Vorgabe): Chat Completions", () => {
       ],
       max_tokens: 5000,
       stream: true,
-      reasoning_effort: "medium",
+      reasoning_effort: "high",
       response_format: {
         type: "json_schema",
         json_schema: {
@@ -146,11 +146,16 @@ describe("Mistral EU-Endpunkt (Vorgabe): Chat Completions", () => {
       type: "ki-lead.parameter",
       anbieter: "mistral",
       endpunkt: "api.eu.mistral.ai",
-      reasoning_effort: "medium",
+      reasoning_effort: "high",
       websuche: false,
       websuche_hoechstzahl_durchgesetzt: false,
     });
-    expect(r.inhalt[1]).toEqual({
+    // Zusammengefasst statt jedes Stück einzeln (Lauf 20261024-195614-kyc1)
+    expect(r.inhalt.slice(1, 3)).toEqual([
+      { type: "thinking", text: "Überlege" },
+      { type: "text", text: '{"a":"x"}' },
+    ]);
+    expect(r.inhalt[3]).toEqual({
       type: "ki-lead.chat",
       finish_reason: "stop",
       usage: { prompt_tokens: 1000, completion_tokens: 200, total_tokens: 1200, prompt_tokens_details: { cached_tokens: 400 } },
@@ -176,14 +181,15 @@ describe("Mistral EU-Endpunkt (Vorgabe): Chat Completions", () => {
     expect(koerper).toHaveLength(2);
   });
 
-  it("die grobe Stufe gilt auch hier, im Körper von Chat Completions", async () => {
+  it("lehnt das Modell reasoning_effort ab, folgt ein Versuch ohne Angabe; auch im Körper von Chat Completions", async () => {
     const { abruf, koerper } = attrappe([
-      () => fehlerAntwort(400, { message: "reasoning_effort 'xhigh' is not supported" }),
+      () => fehlerAntwort(400, { message: "reasoning_effort 'high' is not supported" }),
       () => chatStrom([stueck("ok"), ende("stop", { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 })]),
     ]);
     const r = await ohneWarten(() => new MistralAnbieter("k", undefined, abruf).senden({ ...anfrage, aufwand: "max" }));
-    expect(koerper.map((k) => k.reasoning_effort)).toEqual(["xhigh", "high"]);
-    expect(r.wert!.inhalt[0].reasoning_effort).toBe("high");
+    expect(koerper.map((k) => k.reasoning_effort)).toEqual(["high", undefined]);
+    expect(r.wert!.inhalt[0].reasoning_effort).toBeNull();
+    expect(r.wert!.inhalt[0].reasoning_effort_abgelehnt).toBe("high");
   });
 
   it("ein Fehlerobjekt im Strom wird zur Meldung; der Netzfehler nennt den EU-Host", async () => {
@@ -219,7 +225,7 @@ describe("Mistral global: Anfrage", () => {
       },
     ]);
     expect(b.completion_args.max_tokens).toBe(5000);
-    expect(b.completion_args.reasoning_effort).toBe("medium");
+    expect(b.completion_args.reasoning_effort).toBe("high");
     // Nur die Websuche; keine Höchstzahl, kein Abrufwerkzeug
     expect(b.tools).toEqual([{ type: "web_search" }]);
     const rf = b.completion_args.response_format;
@@ -241,9 +247,9 @@ describe("Mistral global: Anfrage", () => {
     ]);
   });
 
-  it("bildet die Stufen der App auf reasoning_effort ab; „maximal“ wird zu „xhigh“", () => {
+  it("bildet die Stufen der App auf die dokumentierten Werte ab: „niedrig“ ohne Nachdenken, sonst „high“ (Lauf 20261024-195614-kyc1)", () => {
     const stufe = (aufwand: LlmAnfrage["aufwand"]) => anfrageKoerperMistral({ ...anfrage, aufwand }).completion_args.reasoning_effort;
-    expect([stufe("low"), stufe("medium"), stufe("high"), stufe("xhigh"), stufe("max")]).toEqual(["low", "medium", "high", "xhigh", "xhigh"]);
+    expect([stufe("low"), stufe("medium"), stufe("high"), stufe("xhigh"), stufe("max")]).toEqual(["none", "high", "high", "high", "high"]);
   });
 
   it("Text als Zeichenkette bleibt Zeichenkette; Textdokumente werden zu Text mit Überschrift", () => {
@@ -296,11 +302,25 @@ describe("Mistral global: Antwort", () => {
       type: "ki-lead.parameter",
       anbieter: "mistral",
       endpunkt: "api.test",
-      reasoning_effort: "medium",
+      reasoning_effort: "high",
       websuche: true,
       websuche_hoechstzahl_durchgesetzt: false,
     });
     expect(fortschritt).toEqual(expect.arrayContaining(["denkt", "suche", "schreibt"]));
+    // Laufprotokoll zusammengefasst: Denken, Werkzeug, Text, Fundstellen, Text, Abschluss
+    expect(r.inhalt.slice(1)).toEqual([
+      { type: "thinking", text: "Überlege" },
+      { type: "tool.execution.started", name: "web_search", arguments: '{"query":"Hochwasser Elbe"}' },
+      { type: "tool.execution.done", name: "web_search" },
+      { type: "text", text: '{"a":' },
+      { type: "tool_reference", tool: "web_search", title: "Pegel Dresden", url: "https://pegel.example/dresden" },
+      { type: "tool_reference", tool: "web_search", title: "Pegel Dresden", url: "https://pegel.example/dresden" },
+      { type: "text", text: '"x"}' },
+      {
+        type: "conversation.response.done",
+        usage: { prompt_tokens: 1000, completion_tokens: 200, total_tokens: 1200, connector_tokens: 300, connectors: { web_search: 1 } },
+      },
+    ]);
   });
 
   it("meldet eine Antwort an der Ausgabegrenze als max_tokens", async () => {
@@ -329,31 +349,51 @@ describe("Mistral global: Fehler und Wiederholungen", () => {
     );
   });
 
-  it("422 mit Liste in „detail“ nennt die Feldfehler", async () => {
+  it("422 mit Liste in „detail“ nennt die Feldfehler mit Ort", async () => {
     const { abruf } = attrappe([() => new Response(JSON.stringify({ detail: [{ msg: "field required", loc: ["body", "inputs"] }] }), { status: 422 })]);
     await expect(new MistralAnbieter("k", "https://api.test", abruf, "global").senden(anfrage)).rejects.toThrow(
-      "Die Anfrage wurde von Mistral abgelehnt (field required).",
+      "Die Anfrage wurde von Mistral abgelehnt (inputs: field required).",
     );
   });
 
-  it("lehnt das Modell die Stufe des Nachdenkens ab, folgt genau ein Versuch mit der groben Stufe; das Laufprotokoll nennt sie", async () => {
+  it("422 mit Liste in „message“ wird lesbar statt „[object Object]“ (Lauf 20261024-195614-kyc1)", async () => {
+    const liste = [
+      { type: "literal_error", loc: ["body", "completion_args", "max_tokens"], msg: "Input should be less than or equal to 32768" },
+      { type: "missing", loc: ["body", "agent_id"], msg: "Field required" },
+    ];
+    const { abruf } = attrappe([
+      () => new Response(JSON.stringify({ object: "error", message: liste, type: "invalid_request_error", code: null }), { status: 422 }),
+    ]);
+    const r = await ohneWarten(() => new MistralAnbieter("k", "https://api.test", abruf, "global").senden(anfrage));
+    expect(r.fehler?.message).toBe(
+      "Die Anfrage wurde von Mistral abgelehnt (completion_args.max_tokens: Input should be less than or equal to 32768; agent_id: Field required).",
+    );
+    expect(r.fehler?.message).not.toContain("[object Object]");
+  });
+
+  it("lehnt das Modell reasoning_effort ab (Hinweis nur im Ort der Prüffehler), folgt genau ein Versuch ohne Angabe", async () => {
+    const liste = [{ type: "enum", loc: ["body", "completion_args", "reasoning_effort"], msg: "Input should be 'none' or 'high'" }];
     const { abruf, koerper } = attrappe([
-      () => fehlerAntwort(400, { message: "Invalid reasoning_effort for this model", type: "invalid_request_error" }),
+      () => new Response(JSON.stringify({ object: "error", message: liste }), { status: 422 }),
       () => strom(sse([delta("ok"), fertig({ prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 })])),
     ]);
     const r = await ohneWarten(() => new MistralAnbieter("k", "https://api.test", abruf, "global").senden({ ...anfrage, aufwand: "xhigh" }));
     expect(r.wert!.text).toBe("ok");
-    expect(koerper.map((k) => k.completion_args.reasoning_effort)).toEqual(["xhigh", "high"]);
-    expect(r.wert!.inhalt[0].reasoning_effort).toBe("high");
+    expect(koerper.map((k) => k.completion_args.reasoning_effort)).toEqual(["high", undefined]);
+    expect(r.wert!.inhalt[0]).toMatchObject({ reasoning_effort: null, reasoning_effort_abgelehnt: "high" });
     expect(r.dauerMs).toBe(0);
   });
 
-  it("niedriger Aufwand fällt auf „none“ zurück; ein zweites Ablehnen wird gemeldet statt wiederholt", async () => {
+  it("ein zweites Ablehnen wird gemeldet statt wiederholt; ohne Angabe gibt es keinen Rückfall", async () => {
     const ablehnung = () => fehlerAntwort(422, { message: "reasoning_effort not supported" });
     const { abruf, koerper } = attrappe([ablehnung, ablehnung]);
     const r = await ohneWarten(() => new MistralAnbieter("k", "https://api.test", abruf, "global").senden({ ...anfrage, aufwand: "low" }));
-    expect(r.fehler?.message).toMatch(/von Mistral abgelehnt/);
-    expect(koerper.map((k) => k.completion_args.reasoning_effort)).toEqual(["low", "none"]);
+    expect(r.fehler?.message).toMatch(/von Mistral abgelehnt \(reasoning_effort not supported\)/);
+    expect(koerper.map((k) => k.completion_args.reasoning_effort)).toEqual(["none", undefined]);
+    const ohne = attrappe([ablehnung]);
+    const r2 = await ohneWarten(() => new MistralAnbieter("k", "https://api.test", ohne.abruf, "global").senden({ ...anfrage, aufwand: undefined }));
+    expect(r2.fehler?.status).toBe(422);
+    expect(ohne.koerper).toHaveLength(1);
   });
 
   it("stellt die Anfrage nach einem Stromabbruch neu", async () => {
