@@ -1,5 +1,5 @@
-// Abschnitt „Über KI-LEAD“ in den Einstellungen (seit 0.5.5): Version, Abgrenzung, Impressum, Datenschutz, Lizenzen,
-// Rückmeldung. Alle Verweise öffnen extern; die App selbst ruft sie nicht auf.
+// Abschnitt „Über KI-LEAD“ in den Einstellungen (seit 0.5.5): Version, Abgrenzung, Impressum, Datenschutz, Lizenzen
+// (Geltungsbereich seit 0.5.9, KP-2026-W43-54), Rückmeldung. Alle Verweise öffnen extern; die App selbst ruft sie nicht auf.
 import type { ReactNode } from "react";
 import { APP_VERSION, HERAUSGEBER, VERWEISE } from "../kern/herausgeber";
 
@@ -33,7 +33,10 @@ export function UeberAbschnitt() {
           den gewählten Anbieter
         </li>
         <li>
-          Lizenzen: Code unter EUPL-1.2, Profilinhalte unter CC BY 4.0;{" "}
+          Lizenzen: Der Code der App steht unter EUPL-1.2. Die mitgelieferten Beispielprofile (Arbeitsanweisungen, SOP, Kodierleitfaden, Meldungsschemata und
+          Darstellungsdateien) stehen unter CC BY 4.0, Namensnennung: {HERAUSGEBER}; Schemata und die Vorlage zusätzlich unter CC0 1.0. Für eigene und
+          importierte Profile gilt die Lizenz, die ihr Herausgeber angibt (Profilansicht, Feld „Lizenz“). Ihre Eingaben, Meldungen und Lagebilder erfassen diese
+          Lizenzen nicht. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzhinweise für Inhalte</ExternerLink> ·{" "}
           <ExternerLink href={VERWEISE.drittkomponenten}>Drittkomponenten und Lizenzen</ExternerLink>
         </li>
         <li>

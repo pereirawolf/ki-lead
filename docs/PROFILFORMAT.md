@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.16 vom 21.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.18 vom 24.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -31,7 +31,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "beschreibung": "Lagemeldungen des Stabes Kreis X",
   "version": "2026.10.1",
   "herausgeber": "Kreis X",
-  "lizenz": "CC-BY-4.0",
+  "lizenz": "LicenseRef-intern",
   "ebene": "Kreis",
   "referenzraum": "Kreisgebiet X",
   "variablen": { "land": "Thüringen", "meldende_stelle": "Stab Kreis X", "zeitzone": "Europe/Berlin" },
@@ -58,6 +58,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 - `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
 - `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `kontrast-hell`, `kontrast-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`; bei einer Kontrastbasis gilt für Text 7:1), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
 - `beispiele`: Ordner im Paket mit Meldungen als JSON. Das Lagebild bietet sie unter „Beispiel laden“ an; sie gehen nie an ein KI-Modell, solange man sie nicht selbst übergibt. Fiktive Daten im Titel und in jeder Meldung als solche kennzeichnen.
+- `herausgeber`, `lizenz` (optional): wer das Profilpaket herausgibt und unter welcher Lizenz, als SPDX-Kennung (z. B. `CC-BY-4.0`, `CC0-1.0`) oder als Ausdruck (`CC-BY-4.0 OR CC0-1.0`); für nicht veröffentlichte Profile z. B. `LicenseRef-intern`. Die Profilansicht zeigt beide Angaben; die App prüft sie nicht. Wer ein Profil unter CC BY 4.0 bearbeitet, nennt den ursprünglichen Herausgeber weiter und vermerkt die Bearbeitung. Die mitgelieferte Vorlage (`profile/muster/`) steht unter CC0 1.0; wer sie übernimmt, setzt `herausgeber` und `lizenz` selbst.
 
 ### `kontakte.json`
 
@@ -259,3 +260,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.15 | 20.10.2026 | `farbschema.basis` auch `kontrast-hell` und `kontrast-dunkel`, dann Textkontrast mindestens 7:1; Widget `datum_uhrzeit` (Tag, Uhrzeit optional); Zeitfelder mit „Jetzt“/„Heute“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen (App 0.4.18) |
 | 1.16 | 21.10.2026 | Darstellungsdatei: optionaler Abschnitt `feldhilfen` (LEAD-Eingabehilfen, `lead-feldhilfen/1`) mit Vorlagen vorhandener Satzanfänge und Kennsätze für Analysefelder und Bewertungstext; Prüfung beim Laden deaktiviert nur die Eingabehilfen (App 0.4.24) |
 | 1.17 | 23.10.2026 | Ohne Formatänderung nachgetragen: oberste Schlüssel `format`, `titel`, `untertitel`, `ausblenden`, Feldangabe `zeilen`, Rolle `sv_massnahmen`, Manifestfelder `beschreibung`, `herausgeber`, `lizenz`; ausgewertete SOP-Kopfschlüssel im Steckbrief (`bausteintyp`, `art_hinweis`, `anschluss`); Fassungsangabe Pflicht für versionierte fachliche Regelwerke (Konsistenzprüfung KW 43, KP-2026-W43-51 bis -53) |
+| 1.18 | 24.10.2026 | Ohne Formatänderung: Manifestfelder `herausgeber` und `lizenz` beschrieben (SPDX-Kennung, `LicenseRef-intern` im Beispiel „Kreis X“); Hinweis auf die Vorlage unter CC0 1.0 (KP-2026-W43-58, -60); Fassungsangabe im Kopf nachgezogen |

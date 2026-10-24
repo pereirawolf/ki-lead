@@ -1,18 +1,19 @@
 {
   "format": "lead-profil/1",
   "id": "muster.einsatzstelle",
-  "name": "Musterprofil – Einsatzstelle (leer)",
-  "beschreibung": "Leeres Musterprofil als Ausgangspunkt für eigene Organisationen. Zeigt den Mindestumfang eines Profilpakets mit eigenem, schlankem Schema ohne Länderliste und ohne Freigabeblock.",
-  "version": "0.4.0",
-  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
-  "lizenz": "CC-BY-4.0",
-  "ebene": "Einsatzstelle",
-  "referenzraum": "Einsatzabschnitt",
+  "name": "Vorlage – eigene Organisation",
+  "beschreibung": "Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern und ein schlankes Beispielschema (Einsatzstelle, ohne Länderliste und Freigabeblock). Vor der Verwendung Platzhalter ersetzen sowie Herausgeber und Lizenz setzen.",
+  "version": "0.5.0",
+  "herausgeber": "[Herausgeber]",
+  "lizenz": "CC0-1.0",
+  "ebene": "[Ebene]",
+  "referenzraum": "[Referenzraum]",
   "variablen": {
-    "meldende_stelle": "Einsatzleitung (Muster)",
+    "meldende_stelle": "[Meldende Stelle]",
+    "kurzname": "[Kurzname]",
     "zeitzone": "Europe/Berlin",
-    "meldetakt": "nach Lageentwicklung",
-    "lageprodukt": "Lagemeldung der Einsatzstelle"
+    "meldetakt": "[Meldetakt]",
+    "lageprodukt": "[Lageprodukt]"
   },
   "meldung": {
     "schema": "meldung.schema.json",
@@ -20,7 +21,13 @@
     "schema_id": "Muster-LEAD-Meldung-v1",
     "eingang_schema_ids": ["Muster-LEAD-Meldung-v1"]
   },
-  "anweisungen": { "erfassung": "anweisung-erfassung.md" },
+  "anweisungen": {
+    "erfassung": "anweisung-erfassung.md"
+  },
+  "sop": {
+    "dateien": ["sop/A_Gemeinsame-Regeln.md", "sop/teil-b/B01_lageart.md"],
+    "teil_gemeinsam": "teil-a"
+  },
   "kodierleitfaden": "kodierleitfaden.md",
   "modelle": {
     "vorverarbeitung": "claude-haiku-5-5",

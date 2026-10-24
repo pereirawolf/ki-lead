@@ -23,6 +23,7 @@ const lies = (...teile: string[]) => readFileSync(repoPfad(...teile), "utf-8");
 const VERSION = JSON.parse(lies("package.json")).version as string;
 const IMPRESSUM = "https://www.pereirawolf.de/impressum.html";
 const DATENSCHUTZ = "https://github.com/pereirawolf/ki-lead/blob/main/docs/DATENSCHUTZ.md";
+const INHALTSLIZENZ = "https://github.com/pereirawolf/ki-lead/blob/main/LICENSE-CONTENT";
 
 /** Links eines Bereichs als Text → Adresse */
 const links = (bereich: ParentNode) => new Map([...bereich.querySelectorAll("a")].map((a) => [a.textContent?.trim(), a]));
@@ -35,6 +36,10 @@ describe("Über KI-LEAD (Einstellungen)", () => {
     expect(abschnitt.textContent).toContain(`Version ${VERSION}.`);
     expect(abschnitt.textContent).toContain("privates Forschungsvorhaben von Heiko Pereira Wolf");
     expect(abschnitt.textContent).toContain("keine Spezifikation einer Behörde oder Einrichtung");
+    // KP-2026-W43-54: Lizenzen je Bereich
+    expect(abschnitt.textContent).toContain("Namensnennung: Heiko Pereira Wolf");
+    expect(abschnitt.textContent).toContain("Für eigene und importierte Profile gilt die Lizenz, die ihr Herausgeber angibt");
+    expect(abschnitt.textContent).toContain("Ihre Eingaben, Meldungen und Lagebilder erfassen diese Lizenzen nicht.");
   });
 
   it("verweist auf Impressum, Datenschutzerklärung, Drittkomponenten, Quellcode, Rückmeldung und Erprobung", async () => {
@@ -43,6 +48,7 @@ describe("Über KI-LEAD (Einstellungen)", () => {
     expect(l.get("Impressum")?.getAttribute("href")).toBe(IMPRESSUM);
     expect(l.get("Datenschutzerklärung")?.getAttribute("href")).toBe(DATENSCHUTZ);
     expect(l.get("Drittkomponenten und Lizenzen")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead/blob/main/THIRD-PARTY-NOTICES.md");
+    expect(l.get("Lizenzhinweise für Inhalte")?.getAttribute("href")).toBe(INHALTSLIZENZ);
     expect(l.get("Quellcode")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead");
     expect(l.get("Rückmeldung")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead/issues/new/choose");
     expect(l.get("Erprobung")?.getAttribute("href")).toBe("https://github.com/pereirawolf/ki-lead/blob/main/docs/ERPROBUNG.md");
@@ -51,7 +57,7 @@ describe("Über KI-LEAD (Einstellungen)", () => {
   it("öffnet jeden Verweis extern und ohne Zugriff auf das öffnende Fenster", async () => {
     await einhaengen(React.createElement(UeberAbschnitt));
     const alle = [...document.querySelectorAll("a")];
-    expect(alle.length).toBe(6);
+    expect(alle.length).toBe(7);
     for (const a of alle) {
       expect(a.getAttribute("target"), a.textContent!).toBe("_blank");
       expect(a.getAttribute("rel"), a.textContent!).toBe("noopener noreferrer");
@@ -70,6 +76,11 @@ describe("Fuß der App", () => {
     const l = links(fuss);
     expect(l.get("Impressum")?.getAttribute("href")).toBe(IMPRESSUM);
     expect(l.get("Datenschutz")?.getAttribute("href")).toBe(DATENSCHUTZ);
+    // KP-2026-W43-54: Geltungsbereich und Namensnennung im Fuß
+    expect(fuss.textContent).toContain(
+      "mitgelieferte Beispielprofile unter CC BY 4.0 (Heiko Pereira Wolf), andere Profile unter der Lizenz ihres Herausgebers",
+    );
+    expect(l.get("Lizenzen")?.getAttribute("href")).toBe(INHALTSLIZENZ);
     for (const a of l.values()) expect(a.getAttribute("rel")).toBe("noopener noreferrer");
   });
 

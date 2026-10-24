@@ -40,7 +40,7 @@ import { exportStempel, mitDatum } from "./kern/ausgabe";
 import { PwaHinweis } from "./ui/PwaHinweis";
 import { ablageLesen, ablageWechseln, type AblageId } from "./schluessel/ablage";
 import { ExternerLink } from "./ui/Ueber";
-import { VERWEISE } from "./kern/herausgeber";
+import { HERAUSGEBER, VERWEISE } from "./kern/herausgeber";
 import { APP_KENNUNG } from "./pipeline/lauf";
 
 export interface ProfilEintrag {
@@ -548,7 +548,8 @@ export default function App() {
       </main>
       <footer className="fuss">
         {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral). Code
-        unter EUPL-1.2, Profilinhalte unter CC BY 4.0. <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
+        unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz ihres Herausgebers.{" "}
+        <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> · <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
         <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
       </footer>
     </div>

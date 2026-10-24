@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.5.8, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.5.9, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -82,7 +82,7 @@ Auf jeder Ebene gilt dieselbe Systematik: Die Meldungen nachgeordneter und later
 Das Format beschreibt [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md). Mitgeliefert werden:
 
 - **`profile/lead-beispiel`:** fiktive Koordinierungsstelle auf Bundesebene mit LEAD-Meldevorlage, Kodierleitfaden mit Lagenradar, den drei Arbeitsanweisungen und der SOP-Sammelmappe: gemeinsame Regeln (Teil A), 17 Dach-SOPs zu den Ereignisarten (B01–B17) und 17 ergänzende Themen- und Querschnittsbausteine (C01–C17). Teil C ist als Inhaltsgerüst gekennzeichnet und dient bis zur fachlichen Konkretisierung und Freigabe als ergänzende Prüfhilfe.
-- **`profile/muster`:** schlankes Musterprofil als Vorlage.
+- **`profile/muster`:** Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern, schlankes Schema, CC0 1.0.
 
 **Eigene Profile** legt man lokal in den Ordner `privat/profile/<name>/`. Der Ordner ist per `.gitignore` vom Repository ausgeschlossen. `npm run dev` lädt ihn mit, ein Produktionsbuild nur mit `KI_LEAD_PRIVAT=1 npm run build`. Alternativ importiert man ein Profil in der App als ZIP-Datei (`.leadprofil`). Kontaktadressen gehören in `kontakte.lokal.json`, das ebenfalls nicht eingecheckt wird.
 
@@ -117,7 +117,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.8), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.5.9), jedes Profil eine eigene Version (Beispielprofil 1.25.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -138,12 +138,18 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 ## Lizenz
 
-- Code: [EUPL-1.2](LICENSE)
-- Inhalte der Profilpakete im Ordner `profile/` (Arbeitsanweisungen, SOP, Kodierleitfaden, Schemata, Darstellungsdateien): [CC BY 4.0](LICENSE-CONTENT)
+Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT).
+
+- **Code** (Quelltext, Tests, Skripte, Build- und Projektdateien, App): [EUPL-1.2](LICENSE)
+- **Inhalte** in `profile/`, `evaluation/` und `docs/` (Arbeitsanweisungen, SOP, Kodierleitfaden, Darstellungsdateien, Bewertungsfälle, Prüfsteine, Dokumentation): [CC BY 4.0](LICENSE-CONTENT), Namensnennung: Heiko Pereira Wolf
+- **Maschinenlesbare Dateien** (Meldungsschemata, Manifeste, Kontaktlisten, Quellenregister, JSON-Schemata der Modellbewertung) und die **Vorlage** `profile/muster/`: zusätzlich [CC0 1.0](LICENSE-CC0), damit Fachverfahren sie ohne Namensnennung übernehmen können
+- **Ausgaben der App** (Meldungen, Lagebilder, Kurzfassungen): Profiltexte, die die App dorthin übernimmt, dürfen ohne Namensnennung verwendet werden; an Eingaben und Ergebnissen beansprucht der Herausgeber keine Rechte
+- **Eigene und importierte Profile:** die Lizenz, die ihr Herausgeber im Manifest angibt
+- Begleitende Aufsätze außerhalb des Repositorys (Zenodo, pereirawolf.de): CC BY-NC-ND 4.0
 - Drittkomponenten (Bibliotheken, Schrift Atkinson Hyperlegible, native Plugins) mit Lizenz, Urheber und Verträglichkeit: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Der Build legt ihre Lizenztexte als `lizenzen.md` und `lizenzen-ergaenzend.md` in die App.
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.8) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.5.9) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

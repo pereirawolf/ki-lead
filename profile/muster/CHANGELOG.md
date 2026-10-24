@@ -1,6 +1,16 @@
-# Änderungsverlauf Musterprofil „Einsatzstelle (leer)“
+# Änderungsverlauf Vorlage – eigene Organisation
 
-Profil-ID `muster.einsatzstelle`, Inhalte unter CC BY 4.0. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand).
+Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
+
+## 0.5.0 – 24.10.2026
+
+Anlass: Befunde KP-2026-W43-58 und -60 der Lizenzprüfung, vom Herausgeber am 24.10.2026 freigegeben.
+
+- Umbau zur **Vorlage – eigene Organisation**: alle Bestandteile eines Profilpakets als Gerüst mit Platzhaltern in eckigen Klammern; Profil-ID, Schema und Schemakennung `Muster-LEAD-Meldung-v1` unverändert, gespeicherte Meldungen bleiben gültig.
+- Manifest: `herausgeber` „[Herausgeber]“, `lizenz` „CC0-1.0“, `ebene`, `referenzraum` und Variablen als Platzhalter, neue Variablen `kurzname`, `meldetakt`, `lageprodukt`; SOP-Sammlung mit gemeinsamem Teil `teil-a`.
+- Neu: `sop/A_Gemeinsame-Regeln.md` (Teil A mit Gültigkeitsstand, A.1–A.5), `sop/teil-b/B01_lageart.md` (Dach-SOP als Inhaltsgerüst mit YAML-Kopf und den fünf Abschnitten des Beispielprofils), `README.md` (Übernahme in vier Schritten, Hinweis auf die Standardfassungen für Verdichtung und Kurzfassung).
+- Arbeitsanweisung Erfassung und Kodierleitfaden: Fassung 0.5, Gliederung wie im Beispielprofil mit Platzhaltern; Kodierleitfaden mit Stufentexten und Quellenkategorien aus der Darstellungsdatei.
+- Darstellungsdatei: Titel „Lagemeldung (Vorlage)“, Untertitel angepasst; sonst unverändert.
 
 ## 0.4.0 – 23.10.2026
 

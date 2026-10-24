@@ -22,7 +22,7 @@ Je Lage ein Ordner `<JJJJ>-W<KW>_<kurzname>/` mit
 
 - Nur öffentlich zugängliche, vorrangig amtliche Quellen; Inhalte in eigenen Worten, Auszüge höchstens 25 Wörter, keine Artikeltexte.
 - Keine personenbezogenen Daten über Funktionsbezeichnungen und Behördennamen hinaus.
-- Lizenz wie die übrigen Inhalte: CC BY 4.0, siehe `LICENSE-CONTENT`.
+- Lizenz wie die übrigen Inhalte: CC BY 4.0, `pruefstein.schema.json` zusätzlich CC0 1.0, siehe `LICENSE-CONTENT` (Nr. 1b, 2b). Kurze Auszüge aus Quellen Dritter sind ausgenommen (Nr. 5b); soweit ein KI-Entwurf keinen urheberrechtlichen Schutz genießt, begründet die Lizenz keine Pflichten.
 
 ## Verwendung
 

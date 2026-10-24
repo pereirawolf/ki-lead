@@ -23,6 +23,7 @@ describe("Prüfumfang je Änderung", () => {
     ["Dokumentation und Changelog", ["docs/TESTS.md", "CHANGELOG.md", "README.md"], KEINE],
     ["Bewertungsfälle", ["evaluation/faelle/f01.json", "evaluation/README.md"], KEINE],
     ["Vorlage für Issues", [".github/ISSUE_TEMPLATE/barrierefreiheit.yml"], KEINE],
+    ["Lizenztexte (KP-2026-W43-56)", ["LICENSE", "LICENSE-CONTENT", "LICENSE-CC0"], KEINE],
     ["Bedienoberfläche aus dem Profil", ["profile/lead-beispiel/meldung.ui.json"], NUR_KERN],
     ["Schema des Profils", ["profile/lead-beispiel/meldung.schema.json"], NUR_KERN],
     ["Manifest des Profils", ["profile/lead-beispiel/profil.json"], NUR_KERN],

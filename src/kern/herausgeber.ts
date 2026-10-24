@@ -15,6 +15,7 @@ export const VERWEISE = {
   website: "https://www.pereirawolf.de",
   datenschutz: `${REPOSITORY}/blob/main/docs/DATENSCHUTZ.md`,
   drittkomponenten: `${REPOSITORY}/blob/main/THIRD-PARTY-NOTICES.md`,
+  inhaltslizenz: `${REPOSITORY}/blob/main/LICENSE-CONTENT`,
   erprobung: `${REPOSITORY}/blob/main/docs/ERPROBUNG.md`,
   rueckmeldung: `${REPOSITORY}/issues/new/choose`,
   quellcode: REPOSITORY,

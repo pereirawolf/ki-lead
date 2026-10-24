@@ -1,8 +1,8 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.5.8 vom 24.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.5.9 vom 24.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
-Lizenzen: Code EUPL-1.2; Inhalte der Profilpakete und Schemata CC BY 4.0; begleitende Aufsätze CC BY-NC-ND 4.0.
+Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
 Änderungen gegenüber 0.1: Lizenzaufteilung; Ausgabe „Management Summary“ als Klartext; eval-freie Schemaprüfung (Abschnitt 7); fiktiver Datensatz „Ilka“ als Abnahmegrundlage (Abschnitt 9).
 
@@ -174,7 +174,7 @@ Die App zerlegt jede Datei aus `sop.dateien` an ihren Ankern (`<a id="teil-a">`,
 - Optional prüft sie, ob die Stufentexte in `ui.json` mit der Tabelle in Abschnitt 2 des Kodierleitfadens übereinstimmen. Weichen sie ab, gibt es einen Hinweis, aber keinen Abbruch.
 - Jede Profilversion wird mit einem Hash ihrer Dateien gespeichert. Ältere Versionen bleiben erhalten, damit jedes Ergebnis seiner Regelgrundlage zugeordnet bleibt.
 - Ein Update ersetzt einzelne Dateien manuell. Das ist der Weg für inhaltliche Fortschreibungen der Systematik. Die App zeigt dabei an, was sich geändert hat.
-- Mitgeliefert werden das Beispielprofil „LEAD-Beispiel – Koordinierungsstelle“ und ein schlankes Musterprofil. Eigene Profile können lokal im nicht eingecheckten Ordner `privat/profile/` liegen.
+- Mitgeliefert werden das Beispielprofil „LEAD-Beispiel – Koordinierungsstelle“ und die „Vorlage – eigene Organisation“ (`profile/muster/`, schlankes Schema, Gerüst mit Platzhaltern, CC0 1.0). Eigene Profile können lokal im nicht eingecheckten Ordner `privat/profile/` liegen.
 - Die Profilansicht ist eine reine Leseansicht und zeigt die Profile untereinander. Im Kopf jeder Karte stehen der Name, beim verwendeten Profil die grüne Marke „✓ In Verwendung“, bei den übrigen der Knopf „Verwenden und Meldung öffnen“. Nur dieser Knopf aktiviert ein Profil. Darunter folgen Profilversion und Herkunft, Metadaten (Ebene, Referenzraum, Schema, SOPs und Bausteine, Herausgeber, Lizenz) und die Prüfsumme; sie ist kopierbar und lässt sich vollständig anzeigen.
 - „Arbeitsanweisungen und Kodierleitfaden“ zeigt die vier Arbeitsgrundlagen in der Reihenfolge Erfassung, Verdichtung, Kurzfassung, Kodierleitfaden. Jede Zeile hat einen Zwecksatz und ein Tag mit der eigenen Fassung aus dem Kopfabsatz des Dokuments („Fassung nicht angegeben“, wenn keine erkennbar ist). Pfade kommen aus dem Manifest, Texte aus dem geladenen Paket. Fehlt einem Profil die Verdichtung oder die Kurzfassung, zeigt die Zeile die Standardfassung der App, die dann tatsächlich verwendet wird, gekennzeichnet als „kein Bestandteil des Profils“. Ein geöffnetes Dokument nennt Datei, Fassung, Stand und Profilversion. Bei Arbeitsanweisungen erklärt ein Hinweis, dass die App die hervorgehobenen Platzhalter erst beim KI-Lauf einsetzt.
 - „Dokumentation lesen“ zeigt Übersicht und Änderungsverlauf der SOP-Sammlung sowie Beschreibung und Änderungsverlauf des Profils, jeweils nur, wenn vorhanden. Alle Lesetexte mit mindestens vier Überschriften (zweite und dritte Ebene) erhalten ein aufklappbares Inhaltsverzeichnis mit Sprüngen innerhalb des geöffneten Texts. Die Originaldatei lässt sich einzeln herunterladen; „Quelltext anzeigen“ zeigt die unveränderte Datei des Pakets. „SOP-Katalog lesen“ zeigt Teil A, die Dach-SOPs und die Leseblöcke der Bausteine. Jede Zeile trägt Kennung und Kurzname sowie ein neutrales Tag mit der Fassung des Dokuments (Teil A: „gilt immer“). Eine Suche findet Einträge über Kennung, Name und frühere Kennung, auf Wunsch auch im Text. Ein geöffneter Eintrag zeigt einen Steckbrief aus dem Kopf und den Text mit Tabellen. Rohes HTML wird nicht ausgeführt, Bilder werden nicht geladen. Der Renderer ist Teil der App und wird nicht nachgeladen; scheitert die Aufbereitung, nennt die Ansicht den Fehler und zeigt den Quelltext. Relative Links öffnen den Eintrag im selben Paket, nicht mitgelieferte Ziele sind als „nicht im Paket“ gekennzeichnet. Der Quelltext bleibt abrufbar.
@@ -242,7 +242,7 @@ Seit 0.5.6 in sechs Bereichen mit Abschnittsnavigation wie bei Meldung und Lageb
 - Kostenanzeige je Lauf auf Basis der Token-Zählung.
 - Vergleichslauf Ilka (seit 0.5.8) unter „Modelle & Verarbeitung“: Mit der angezeigten Konfiguration von Modell und Aufwand verdichtet die App den Standardfall `orkantief-ilka-verdichtung` (Beispielprofil, Koordinierungsstelle, t0 14.10.2026 14:00, ohne Websuche, S1-Vorschlag unverändert) 1- bis 10-mal (Vorgabe 3) und gibt Laufprotokolle, Entwürfe, Prüfpunkte T1–T8 der Abnahme M4, Vergleich mit der Redaktionsfassung und eine Übersicht als ZIP aus (`src/pipeline/vergleichslauf.ts`). Konfiguration aus den Einstellungen oder als Variante des Plans `standardprofile-ilka`; je Lauf Kennzahlen und eine Plausibilitätsprüfung der Zahlen (Summen in Klammern, D2-Stufe), die zunächst nur hier läuft. Auswertung mehrerer Reihen mit `npm run vergleichslauf:auswerten`, Bezug ist das Standard-Profil Anthropic. Grundlage für Messwerte der Schätzung und für die Wahl der Standard-Profile je Anbieter (offener Punkt 6).
 - Datenhinweis und Sprache.
-- Über KI-LEAD (seit 0.5.5): Version, Abgrenzung, Herausgeber; externe Verweise auf Impressum, Datenschutzerklärung, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`).
+- Über KI-LEAD (seit 0.5.5): Version, Abgrenzung, Herausgeber, Geltungsbereich der Lizenzen (seit 0.5.9: Code, mitgelieferte Beispielprofile, eigene und importierte Profile, Ausgaben); externe Verweise auf Impressum, Datenschutzerklärung, Lizenzhinweise für Inhalte, Drittkomponenten und Lizenzen, Quellcode, Rückmeldung und Erprobung (`src/ui/Ueber.tsx`, Adressen in `src/kern/herausgeber.ts`).
 
 ## 6. Forschungsfunktionen
 
@@ -279,7 +279,7 @@ src/
   dokumente/   Textextraktion, PDF-Export
   ui/          Formular aus Schema+UI, Radar, Lagebild-Ansichten
   speicher/    Dateien, Index, Schlüssel
-profile/       Beispielprofil, Musterprofil
+profile/       Beispielprofil, Vorlage
 privat/        eigene Profile und Testdaten, nicht eingecheckt
 tests/         Funktions-, Komponenten- und Browsertests ohne echte KI-Aufrufe (docs/TESTS.md)
 evaluation/    Fälle und Schema für die inhaltliche Bewertung von KI-Modellen, getrennt von den Tests
@@ -387,3 +387,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.6 | 24.10.2026 | Mistral als dritter Anbieter mit EU-Endpunkt als Vorgabe (Chat Completions, ohne Websuche) und globalem Endpunkt mit Websuche (Conversations API), Standard-Profil, Preise, Mistral-Probe (Abschnitte 5.4 und 7, offener Punkt 15); Einstellungen in sechs Bereichen mit Übersicht, Voreinstellung unter „Modelle & Verarbeitung“, Feld „Maximale Ausgabetoken je KI-Aufruf“ (Abschnitt 5.4) |
 | 0.5.7 | 24.10.2026 | Mistral nach dem ersten echten Lauf: Nachdenken nur mit `none`/`high`, Rückfall ohne Angabe, lesbare Fehlerlisten, kompaktes Laufprotokoll; Abnahmeskript M4 mit Mistral; offener Punkt 15 fortgeschrieben (Abschnitt 7) |
 | 0.5.8 | 24.10.2026 | Vergleichslauf Ilka unter „Modelle & Verarbeitung“: Reihe von Verdichtungen des Standardfalls mit der gewählten Konfiguration oder einer Variante des Plans `standardprofile-ilka`, Kennzahlen und Plausibilitätsprüfung je Lauf, Ergebnis als ZIP, Auswertung mehrerer Reihen gegen den Bezug Anthropic (Abschnitt 5.4, offener Punkt 6); Abnahmeskript M4 mit denselben Funktionen |
+| 0.5.9 | 24.10.2026 | Lizenzen bestimmt: Fuß und „Über KI-LEAD“ nennen Code, mitgelieferte Beispielprofile mit Namensnennung, eigene und importierte Profile und Ausgaben; Lizenzangabe im Kopf vereinheitlicht; Musterprofil zur „Vorlage – eigene Organisation“ umgebaut (Abschnitte 4 und 5; KP-2026-W43-54 bis -60) |

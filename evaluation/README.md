@@ -49,6 +49,7 @@ Skala: 1 = unbrauchbar, 2 = erhebliche Nacharbeit, 3 = brauchbar mit Nacharbeit,
 
 ## Urheberrecht und Datenschutz
 
+- Lizenz: CC BY 4.0, die JSON-Schemata (`*.schema.json`) zusätzlich CC0 1.0, siehe [LICENSE-CONTENT](../LICENSE-CONTENT) (Nr. 1b, 2b).
 - Keine Volltexte urheberrechtlich geschützter Artikel im Repository, auch nicht in Fällen oder Ergebnissen. Fälle verweisen auf die URL und halten eine Prüfsumme (`sha256`) des verwendeten Materials fest; wer den Lauf wiederholt, beschafft das Material selbst. Muss Material zwischen Läufen weitergegeben werden, dann nur verschlüsselt.
 - Prüfsteine zu realen Lagen stützen sich nur auf öffentlich zugängliche, vorrangig amtliche Quellen in eigenen Worten und sind als KI-Entwurf ohne amtlichen Charakter gekennzeichnet (Test).
 - Öffentliche Fälle verwenden fiktive oder offen zugängliche Inhalte (etwa den fiktiven Datensatz Orkantief „Ilka“ unter `profile/lead-beispiel/beispiele/`).
