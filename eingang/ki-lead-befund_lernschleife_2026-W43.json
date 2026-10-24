@@ -5,11 +5,16 @@
   "erstellt_utc": "2026-10-24T17:58:00Z",
   "repository": "pereirawolf/ki-lead",
   "commit": "a141b3bd97b793b60337eac9305422bbeeb201d1",
-  "pruefumfang": "Auftrag des Herausgebers vom 24.10.2026 (kein Wochenlauf): Infrastruktur für fiktive synthetische Testfälle prüfen, die sich kombinieren und für Testungen und Vergleiche nutzen lassen. Gelesen: evaluation/README.md, evaluation/faelle/ (fall.schema.json und 41 Fälle), evaluation/plaene/, evaluation/pruefsteine/, profile/lead-beispiel/beispiele/orkantief-ilka/, src/pipeline/vergleich.ts, tests/evaluation/, docs/ERPROBUNG.md, evaluation/befunde/befundregister.json.",
+  "pruefumfang": "Auftrag des Herausgebers vom 24.10.2026 (kein Wochenlauf): Infrastruktur für fiktive synthetische Testfälle prüfen, die sich kombinieren und für Testungen und Vergleiche nutzen lassen. Gelesen: evaluation/README.md, evaluation/faelle/ (fall.schema.json und 41 Fälle), evaluation/plaene/, evaluation/pruefsteine/, profile/lead-beispiel/beispiele/orkantief-ilka/, src/pipeline/vergleich.ts, tests/evaluation/, docs/ERPROBUNG.md, evaluation/befunde/befundregister.json. Nachtrag 24.10.2026 (zweiter Auftrag, LS-2026-W43-06 bis -13): Lernschleife auf Anforderung, Schwerpunkt Abdeckung: 8 neue vollständig fiktive Bewertungsfälle unter evaluation/faelle/. Gelesen: evaluation/README.md, evaluation/faelle/README.md, fall.schema.json, alle 41 Fälle und 39 Materialdateien, evaluation/plaene/2026-10-21-sop-abdeckung.json, kodierleitfaden.md (1.4.0), profil.json und meldung.schema.json (Ereignisarten), Teil A (Sammelmappe 3.17.0), B03, B04, B13, B15, B16, B17, C01, C02 (Abschnitt 3), C03, C04, C05, C08, C11, C16, C17, befundregister.json, docs/ERPROBUNG.md Abschnitte 3, 6, 7. Abdeckung am main neu gezählt: höchstens ein Fall bei B03, B04, B13, B15, B16, C01, C03, C04, C05, C08, C17 (unverändert gegenüber 21.10.2026). Nach Umsetzung: B03 2, B04 2, B13 2, B15 2, B16 2, C01 1, C03 2, C04 2, C05 2, C08 2, C17 2. Jeder Fall wurde mit Ajv (JSON Schema 2020-12, Optionen wie tests/support/ajv.ts) gegen fall.schema.json geprüft: gültig.",
   "nicht_geprueft": [
     "Keine externen Quellen herangezogen: alle Befunde betreffen nur die Repository-Struktur.",
     "Inhalt der 40 SOP-Prüffälle nicht fachlich bewertet; nur Aufbau und Felder.",
-    "npm test nicht ausgeführt, da keine Änderung vorgenommen wurde."
+    "npm test nicht ausgeführt, da keine Änderung vorgenommen wurde.",
+    "Keine KI-Läufe gegen die Fälle (kein Budget, Auftrag).",
+    "Keine externen Quellen: alle Fälle sind vollständig erfunden; Websuche entfällt.",
+    "Beim Lesen (a141b3b) enthielt fall.schema.json die Felder erwartungen.radar, variante_von und abwandlung noch nicht; sie kamen mit #55 (814bc29) auf main. Die Fälle sind bei der Umsetzung darauf übertragen (siehe pruefung.anmerkung).",
+    "C01 bleibt bei einem Fall: Von elf schwach abgedeckten Kennungen lassen sich mit acht Fällen nicht alle sinnvoll erfassen; Kandidat für die nächste Runde ist eine Abwandlung von sop-radiologie-jod mit widersprüchlichen Angaben zur Freisetzung.",
+    "Bewertungsplan 1 (2026-10-21-priorisierte-sop-bewertung.md) bleibt unverändert; die neuen Fälle sind nicht Teil dieses Plans."
   ],
   "befunde": [
     {
@@ -186,12 +191,747 @@
         "status": "angenommen",
         "anmerkung": ""
       }
+    },
+    {
+      "id": "LS-2026-W43-06",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B15: 1 Fall, C17: 1 Fall",
+          "ist": "B15 nur in sop-telekommunikation-warnkette; C17 nur in sop-zivile-verteidigung-funktionsbezug"
+        }
+      ],
+      "beobachtung": "Lücke: B15 (1 Fall) und C17 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. Bisher prüft nur sop-telekommunikation-warnkette B15, und dort nur einen untersuchten Cyberverdacht als Nebenaspekt. Der Fall prüft den Kern von B15 (Statusprofil, Schutzabschaltung als Maßnahme, Kritikalitätsstufe nicht als Radarwert, D2 bei Verwaltungsausfall, D3 Vorsorge) und als Abgrenzung C17 und B16 (hybride Zuschreibung ist kein Verteidigungs- oder Tatbezug). C17 wird damit erstmals als Abgrenzungsfall geprüft; sop-zivile-verteidigung-funktionsbezug prüft die positive Anwendung. Streuung: Referenzraum Kreis, Schwierigkeit widersprüchlich, Phase akute Lage. Kernschwierigkeit: Schutzabschaltung ohne Angriffsnachweis neben einer unbelegten Zuschreibung eines staatlichen hybriden Angriffs; Leistungsfolgen bewerten, Urheberschaft und Verteidigungsbezug offenlassen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-cyber-schutzabschaltung-kreis.json mit Material anlegen; geprüfte SOPs und Bausteine: B15, C11, C17. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-cyber-schutzabschaltung-kreis",
+          "titel": "Vorsorgliche Schutzabschaltung eines kommunalen IT-Dienstleisters ohne Angriffsnachweis (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Vorsorgliche Schutzabschaltung eines kommunalen IT-Dienstleisters ohne Angriffsnachweis",
+            "stichworte": "B15, C11, C17",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktiver Landkreis. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-cyber-schutzabschaltung-kreis.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Statusprofil getrennt darstellen: Fachwarnung mit Kritikalitätsstufe, vorsorgliche Schutzabschaltung als Maßnahme des Betreibers mit Stand, fehlender Kompromittierungsnachweis und tatsächlich eingeschränkte Leistungen; die Kritikalitätsstufe wird nicht in Beurteilung, Tendenz oder Radarwerte umgerechnet.",
+              "Notruf, Alarmierung und Einsatzleitsystem laut Leitstelle als nicht betroffen ausweisen; keine Störung der Notruf- oder Warnfunktion ableiten (C11).",
+              "Urheberschaft offenlassen: das anonyme Medienzitat als unbestätigte Behauptung neben der Aussage des Landesinnenministeriums führen; daraus weder Sabotage- noch Verteidigungsbezug (C17) oder einen Rechtszustand ableiten.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Einen bestätigten Cyberangriff, eine Kompromittierung oder eine staatliche Urheberschaft behaupten.",
+              "D2 aus Einwohner- oder Nutzerzahlen der Fachverfahren bilden oder die Kritikalitätsstufe als Radar- oder Beurteilungsstufe übernehmen.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Kreis (fiktiver Landkreis)",
+            "ereignisarten": [
+              "Cyberangriff / IT-Sicherheitsvorfall"
+            ],
+            "radar": {
+              "d1": {
+                "min": 2,
+                "max": 2,
+                "grund": "Eingeschränkte Leistungen der Kreisverwaltung und von vier kreisangehörigen Gemeinden (überörtlich)."
+              },
+              "d2": {
+                "offen": true,
+                "grund": "Ausfall von Verwaltungsleistungen ist keine Direktbetroffenheit; Auszahlungen existenzsichernder Leistungen laut Kreis angewiesen."
+              },
+              "d3": {
+                "min": 0,
+                "max": 2,
+                "grund": "Je nach benannter Funktion: Betrieb und Abschaltungsentscheidung beim IT-Dienstleister als D3 Vorsorge (0) oder Koordination durch die Kreisverwaltung (2)."
+              },
+              "d5": {
+                "offen": true,
+                "grund": "Kein Termin für die Wiederfreischaltung und keine Prognose für einen anderen Zielzustand."
+              },
+              "d6": {
+                "min": 0,
+                "max": 1,
+                "grund": "Leitstelle, Notruf und Alarmierung nicht betroffen; die Sektorzugehörigkeit Staat und Verwaltung trägt keine Stufe."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-cyber-schutzabschaltung-kreis.md (neu, 181 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle; Referenzraum dieser Meldung ist ein fiktiver Landkreis. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**07:10 Uhr, fiktive Bundesfachbehörde für IT-Sicherheit:** Sicherheitsmitteilung zu einer kritischen Schwachstelle in einer verbreiteten Verwaltungssoftware, Kritikalitätsstufe 3 von 4: Maßnahmen müssen unverzüglich ergriffen werden. Angriffe in Deutschland sind nicht bestätigt.\n\n**08:30 Uhr, fiktiver kommunaler IT-Dienstleister (Betreiber):** Die Fachverfahren für Melde-, Kfz- und Sozialleistungsangelegenheiten der Kreisverwaltung und von vier kreisangehörigen Gemeinden sind vorsorglich abgeschaltet. Hinweise auf eine Kompromittierung liegen nicht vor; die Prüfung läuft. Ein Termin für die Wiederfreischaltung wird nicht genannt.\n\n**09:15 Uhr, fiktive Kreisverwaltung:** Die Bürgerbüros bearbeiten nur dringende Fälle auf Papier. Auszahlungen existenzsichernder Leistungen bis 30.10.2026 sind bereits angewiesen. Die Internetseite des Kreises bleibt erreichbar.\n\n**09:40 Uhr, fiktive Leitstelle des Landkreises:** Einsatzleitsystem, Notruf und Alarmierung laufen auf getrennter Infrastruktur und sind nicht betroffen.\n\n**10:20 Uhr, fiktives Online-Nachrichtenportal:** Zitiert einen anonymen Fachmann, es handle sich um einen „hybriden Angriff eines fremden Staates“.\n\n**11:00 Uhr, fiktives Landesinnenministerium:** Erkenntnisse zu einem Angriff oder zu einer Urheberschaft liegen nicht vor.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-cyber-schutzabschaltung-kreis\"] = [\"B15\", \"C11\", \"C17\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": "Der Fall setzt im Auftrag einen Teilraum (Kreis bzw. Land) als Referenzraum, bewertet aber weiter aus der Rolle der Koordinierungsstelle des Beispielprofils (Kodierleitfaden, Grundregel 1; A.1 Nr. 8). Soll das so bleiben, oder soll der Auftrag ausdrücklich die Rolle einer zuständigen meldenden Stelle (A.1 Nr. 4) vorgeben?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Entscheidungsfrage beantwortet: Teilraum als Referenzraum bleibt; Meldungen von Kreis- oder Landesebene können auch auf Ebene der Koordinierungsstelle mit ihrem bundesweiten Referenzraum verarbeitet werden. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-07",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C05: 1 Fall, B16: 1 Fall",
+          "ist": "C05 nur in sop-grossunfall-transportkette; B16 nur in sop-zivile-verteidigung-funktionsbezug"
+        }
+      ],
+      "beobachtung": "Lücke: C05 (1 Fall) und B16 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. sop-grossunfall-transportkette prüft C05 bei unstrittiger Ursache (Vermisste, Klinikaufnahme, Brücke). Neu sind die Ursachenkonkurrenz und die Abgrenzung zu B16 (technische Störung ohne behördlichen Vorsatzhinweis ist ursachenoffen), die Trennung von Toten, Verletzten, Betreuten und Fahrgästen sowie PSNV als eigener Bedarf. B16 wird damit erstmals als Abgrenzungsfall geprüft; sop-zivile-verteidigung-funktionsbezug prüft die bestätigte Tat. Streuung: Referenzraum Kreis, Schwierigkeit widersprüchlich, Phase akute Lage. Kernschwierigkeit: Großunfall mit Toten und Betreuten, bei dem Polizei, Medien und Betreiber unterschiedliche Ursachenangaben machen; Folgen bewerten, ohne die Ursache vorwegzunehmen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-grossunfall-bahn-ursache-offen.json mit Material anlegen; geprüfte SOPs und Bausteine: B17, C05, B16, C13, C16. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-grossunfall-bahn-ursache-offen",
+          "titel": "Zugentgleisung mit offener Ursache und unbestätigter Sabotagemeldung (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Zugentgleisung mit offener Ursache und unbestätigter Sabotagemeldung",
+            "stichworte": "B17, C05, B16, C13, C16",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktiver Landkreis. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-grossunfall-bahn-ursache-offen.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Ursache offenlassen: Polizeiangaben, Medienmeldung mit ungenannter Quelle und vorläufige Betreiberangabe mit Zeitstand nebeneinander führen; Ereignisart „Sonstiges“ mit C05, nicht „Sabotage / Anschlag / Terrorismus“ ohne behördlich benannten Tatbezug (C05, Zuordnung im Schema; B16, Abschnitt 1).",
+              "Tote, Verletzte, unverletzte Betreute und Fahrgäste getrennt und ohne Addition führen; die Fahrgastzahl ist keine Schadensbilanz; psychosoziale Notfallversorgung und Angehörigeninformation als eigenen Bedarf nennen.",
+              "Streckensperrung mit Mindestprognose des Betreibers und geplanten, noch nicht wirksamen Schienenersatzverkehr als Verkehrsfolge getrennt von der Rettungsphase darstellen (C13).",
+              "D5 nur mit benanntem Zielzustand kodieren: für die Wiederbefahrbarkeit der Strecke 2 als gekennzeichneter Mindestwert (Betreiber: mindestens bis 26.10.2026), sonst offen.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Sabotage, Anschlag oder eine Täterschaft als Tatsache darstellen oder die Ereignisart „Sabotage / Anschlag / Terrorismus“ wählen.",
+              "Fahrgäste, Betreute, Verletzte und Tote zu einer Gesamtzahl Betroffener addieren oder eine eigene Sichtungs- bzw. MANV-Einstufung ergänzen.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Kreis (fiktiver Landkreis)",
+            "ereignisarten": [
+              "Sonstiges"
+            ],
+            "radar": {
+              "d2": {
+                "min": 1,
+                "max": 1,
+                "grund": "Zwei Tote und 23 Verletzte bestätigt; auch zusammen mit den 45 Betreuten Stufe 1; nie aus der Fahrgastzahl."
+              },
+              "d4": {
+                "min": 2,
+                "max": 3,
+                "grund": "Tatsächlich eingesetzte PSNV-Kräfte aus einem Nachbarkreis."
+              },
+              "d7": {
+                "min": 0,
+                "max": 1,
+                "grund": "Ungeklärte Unfallursache und unbestätigte Medienmeldung erhöhen D7 nicht (C05, Abschnitt 3)."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-grossunfall-bahn-ursache-offen.md (neu, 167 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle; Referenzraum dieser Meldung ist ein fiktiver Landkreis. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**06:50 Uhr, fiktive Leitstelle des Landkreises:** Ein Regionalzug ist auf freier Strecke entgleist. Stand 09:30 Uhr: zwei Tote, 23 Verletzte, davon sechs schwer; alle Verletzten sind gesichtet und in Kliniken transportiert.\n\n**07:40 Uhr, fiktive Kreisverwaltung:** Laut Zugbetreiber waren rund 140 Fahrgäste an Bord. Stand 09:00 Uhr: 45 unverletzte Fahrgäste werden in einer Betreuungsstelle betreut; ein Angehörigentelefon ist geschaltet. Psychosoziale Notfallversorgung leisten auch Kräfte aus einem Nachbarkreis.\n\n**08:30 Uhr, fiktive Polizeidirektion:** Die Ermittlungen zur Ursache laufen; Fremdeinwirkung ist weder bestätigt noch ausgeschlossen.\n\n**09:10 Uhr, fiktives Online-Nachrichtenportal:** Meldet „Sabotage“ unter Berufung auf ungenannte Ermittlerkreise.\n\n**09:45 Uhr, fiktiver Eisenbahninfrastrukturbetreiber:** Die Strecke bleibt voraussichtlich mindestens bis 26.10.2026 gesperrt; Schienenersatzverkehr ist ab 12:00 Uhr geplant. Vorläufige Eigenangabe: Es gibt Hinweise auf eine technische Störung an einer Weiche.\n\n**10:15 Uhr, fiktive Polizeidirektion:** Die Medienmeldung über eine Sabotage ist nicht bestätigt.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-grossunfall-bahn-ursache-offen\"] = [\"B17\", \"C05\", \"B16\", \"C13\", \"C16\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": "Der Fall setzt im Auftrag einen Teilraum (Kreis bzw. Land) als Referenzraum, bewertet aber weiter aus der Rolle der Koordinierungsstelle des Beispielprofils (Kodierleitfaden, Grundregel 1; A.1 Nr. 8). Soll das so bleiben, oder soll der Auftrag ausdrücklich die Rolle einer zuständigen meldenden Stelle (A.1 Nr. 4) vorgeben?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Entscheidungsfrage beantwortet: Teilraum als Referenzraum bleibt; Meldungen von Kreis- oder Landesebene können auch auf Ebene der Koordinierungsstelle mit ihrem bundesweiten Referenzraum verarbeitet werden. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-08",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B03: 1 Fall",
+          "ist": "B03 nur in sop-waldbrand-munitionsgebiet"
+        }
+      ],
+      "beobachtung": "Lücke: B03 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. sop-waldbrand-munitionsgebiet prüft B03 in der akuten Phase ohne Evakuierung. Neu sind Nachlauf, mehrere Zielzustände nach B03, Abschnitt 3 (D5), Hotspot- gegenüber bestätigter Fläche (R2), Rauch als Betroffenheitsdimension (R3) und die Ist-Kodierung von D4 nach Abzug internationaler Luftunterstützung vor t0 (Kodierleitfaden, Grundregel 1). Streuung: Referenzraum Land, Schwierigkeit eindeutig, Phase Nachlauf. Kernschwierigkeit: Brand unter Kontrolle, aber Nachlöschen, Notunterkunft und abweichende Flächenangaben bestehen fort; Zielzustände und Ist-Zustand zu t0 sauber trennen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-waldbrand-nachlauf-rueckkehr.json mit Material anlegen; geprüfte SOPs und Bausteine: B03, C16. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-waldbrand-nachlauf-rueckkehr",
+          "titel": "Waldbrand unter Kontrolle, Nachlöscharbeiten und ausstehende Rückkehr (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Waldbrand unter Kontrolle, Nachlöscharbeiten und ausstehende Rückkehr",
+            "stichworte": "B03, C16",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-waldbrand-nachlauf-rueckkehr.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Zielzustände trennen: „unter Kontrolle“ (erreicht), Ende der Nachlöscharbeiten (Mindestprognose bis 27.10.2026) und Rückkehr der 120 Evakuierten (Freigabe ohne Termin); unter Kontrolle heißt nicht Lage erledigt (A.8.2).",
+              "Behördlich bestätigte Fläche (140 ha, Befliegung) und automatisch ermittelte Satellitenfläche (190 ha, älterer Aufnahmestand, grobe Auflösung) mit Produktstand nebeneinander führen; die bestätigte Fläche trägt die Lagedarstellung (B03/R2).",
+              "Feinstaub als Rauchbetroffenheit mit Station und Zeitpunkt darstellen; der heutige Wert liegt im üblichen Bereich, eine Personenzahl folgt aus dem Rauch nicht.",
+              "D5 nur mit benanntem Zielzustand kodieren: 2 als gekennzeichneter Mindestwert für das Ende der Nachlöscharbeiten, offen für die Rückkehr der Evakuierten.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Die Satellitenfläche als bestätigte Brandfläche übernehmen oder beide Flächenangaben verrechnen.",
+              "D4 = 6 (international) aus den vor t0 abgezogenen Löschflugzeugen ableiten oder eine Rückkehr bzw. ein Lageende ohne Freigabe behaupten.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Land (fiktives Land)",
+            "ereignisarten": [
+              "Waldbrand"
+            ],
+            "radar": {
+              "d2": {
+                "min": 2,
+                "max": 2,
+                "grund": "120 Personen zu t0 in der Notunterkunft, Evakuierung vollzogen; die 300 Zurückgekehrten nicht addieren."
+              },
+              "d4": {
+                "min": 2,
+                "max": 3,
+                "grund": "Zu t0 Kräfte aus zwei Nachbarkreisen; die vor t0 abgezogenen Löschflugzeuge zählen für den Ist-Wert nicht."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-waldbrand-nachlauf-rueckkehr.md (neu, 178 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle; Referenzraum dieser Meldung ist ein fiktives Land. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**08:00 Uhr, fiktive Landesforstbehörde:** Der Waldbrand im fiktiven Landkreis K ist seit 23.10.2026, 19:00 Uhr, unter Kontrolle. Behördlich bestätigte Brandfläche: 140 Hektar (Befliegung 23.10.2026, 17:00 Uhr). Nachlöscharbeiten und Glutnestbeseitigung dauern voraussichtlich mindestens bis 27.10.2026.\n\n**08:30 Uhr, fiktiver europäischer Satellitendienst:** Automatisch ermittelte Brandfläche 190 Hektar; Aufnahme 23.10.2026, 11:00 Uhr, grobe Auflösung.\n\n**09:15 Uhr, fiktive Kreisverwaltung K:** Am 22.10.2026 wurden 420 Personen aus einem Ortsteil evakuiert. Seit heute 07:00 Uhr sind 300 zurückgekehrt, 120 sind weiterhin in einer Notunterkunft. Ihre Rückkehr setzt die Freigabe des Ortsteils voraus; ein Termin steht nicht fest.\n\n**10:00 Uhr, fiktives Lagezentrum des Landes:** Zwei Löschflugzeuge aus einem Nachbarstaat waren bis 23.10.2026, 16:00 Uhr, im Einsatz und sind abgezogen. Heute sind Feuerwehren des Landkreises K und aus zwei Nachbarkreisen eingesetzt.\n\n**10:30 Uhr, fiktive Umweltbehörde des Landes:** Feinstaub an der Messstation des Ortsteils am 23.10.2026, 22:00 Uhr, erhöht; heute 08:00 Uhr im üblichen Bereich.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-waldbrand-nachlauf-rueckkehr\"] = [\"B03\", \"C16\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": "Der Fall setzt im Auftrag einen Teilraum (Kreis bzw. Land) als Referenzraum, bewertet aber weiter aus der Rolle der Koordinierungsstelle des Beispielprofils (Kodierleitfaden, Grundregel 1; A.1 Nr. 8). Soll das so bleiben, oder soll der Auftrag ausdrücklich die Rolle einer zuständigen meldenden Stelle (A.1 Nr. 4) vorgeben?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Entscheidungsfrage beantwortet: Teilraum als Referenzraum bleibt; Meldungen von Kreis- oder Landesebene können auch auf Ebene der Koordinierungsstelle mit ihrem bundesweiten Referenzraum verarbeitet werden. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-09",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B13: 1 Fall",
+          "ist": "B13 nur in sop-betreuung-migration"
+        }
+      ],
+      "beobachtung": "Lücke: B13 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. sop-betreuung-migration prüft B13 bei einer bereits belegten Lücke auf Bundesebene. Neu sind die Vorwarnphase mit Prognosebandbreite (B13/R1), Winterfestigkeit als Betreibbarkeitsbedingung (R2), Angebot gegenüber eingesetzter Unterstützung (R4, D4) und die Bewertung nach Bedarfsdeckung statt Zugangszahlen im Referenzraum Land. Streuung: Referenzraum Land, Schwierigkeit unsicher, Phase Vorwarnung. Kernschwierigkeit: Unsichere Zuweisungsprognose trifft auf freie Plätze und eine noch nicht beheizbare Reserve; mögliche Lücke als Szenario, nicht als Ist-Lage. Hinweis: B13, Abschnitt 3 lässt D2 ohne belegte Versorgungslücke offen; der Kodierleitfaden (D2-Nullregel b) erlaubt 0 bei ausdrücklicher Fehlanzeige in einer Lagemeldung. Die Erwartung lässt deshalb beides zu; ob die Regeln abzugleichen sind, wäre ein Thema für die Konsistenzprüfung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-migration-zuweisung-kapazitaet.json mit Material anlegen; geprüfte SOPs und Bausteine: B13, C16. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-migration-zuweisung-kapazitaet",
+          "titel": "Angekündigte Zuweisungen bei noch nicht betreibbarer Reservekapazität (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Angekündigte Zuweisungen bei noch nicht betreibbarer Reservekapazität",
+            "stichworte": "B13, C16",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-migration-zuweisung-kapazitaet.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Prognose (300 bis 600 Zuweisungen in 14 Tagen), Aufnahmen, Belegung und betreibbare Kapazität (120 freie betriebene Plätze, Stand 06:00 Uhr) mit Zählweise getrennt darstellen; die 150 Hallenplätze sind vor dem 07.11.2026 nicht betreibbar (B13/R1, R2).",
+              "Eine mögliche Unterbringungslücke nur als bedingtes Szenario aus der Prognosebandbreite benennen und das Zeitfenster der Zuweisungen mit der frühesten Inbetriebnahme der Halle vergleichen; Plan, Angebot und nutzbare Kapazität trennen (B13/R4).",
+              "Beurteilung und Tendenz auf die Bedarfsdeckung beziehen, nicht auf den Anstieg der Aufnahmen; sachliche Sprache ohne Zuschreibungen an Personengruppen.",
+              "D2 nicht aus Prognose oder Aufnahmen bilden; ein Wert 0 ist nur mit ausdrücklichem Bezug auf die Fehlanzeige der Landesaufnahmebehörde tragfähig, sonst bleibt D2 offen.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Die 150 Hallenplätze oder das Angebot der Hilfsorganisation als verfügbare bzw. eingesetzte Kapazität werten.",
+              "Aus der Prognose oder dem Zugangsanstieg eine eingetretene Versorgungslücke, eine D2-Zahl oder eine Verschärfung ableiten.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Land (fiktives Land)",
+            "ereignisarten": [
+              "Migrationslage"
+            ],
+            "radar": {
+              "d4": {
+                "offen": true,
+                "grund": "Das Angebot der Hilfsorganisation ist keine eingesetzte Unterstützung; weitere externe Hilfe ist nicht belegt."
+              },
+              "d5": {
+                "offen": true,
+                "grund": "Kein Zielzustand mit Prognose; die früheste Inbetriebnahme der Halle ist keine Prognose für die Bedarfsdeckung."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-migration-zuweisung-kapazitaet.md (neu, 142 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle; Referenzraum dieser Meldung ist ein fiktives Land. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**08:00 Uhr, fiktive Verteilungsstelle des Bundes:** Für das fiktive Land werden in den nächsten 14 Tagen voraussichtlich 300 bis 600 Zuweisungen von Schutzsuchenden erwartet; die Prognose ist unsicher.\n\n**08:45 Uhr, fiktive Landesaufnahmebehörde:** Stand 24.10.2026, 06:00 Uhr: 1.000 betriebene Plätze, davon 880 belegt. In der vergangenen Woche 140 Aufnahmen, in der Vorwoche 90. Alle aufgenommenen Personen sind untergebracht und versorgt.\n\n**09:30 Uhr, fiktive Landesaufnahmebehörde:** Eine Leichtbauhalle mit 150 Plätzen ist aufgebaut, aber noch nicht beheizbar; Inbetriebnahme frühestens am 07.11.2026.\n\n**10:15 Uhr, fiktive Hilfsorganisation:** Bietet Betreuungspersonal für bis zu 200 Plätze an; eine Vereinbarung ist nicht geschlossen.\n\n**10:40 Uhr, fiktives Gesundheitsamt am Standort der Erstaufnahme:** Besondere gesundheitliche Versorgungsbedarfe sind nicht gemeldet.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-migration-zuweisung-kapazitaet\"] = [\"B13\", \"C16\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": "Der Fall setzt im Auftrag einen Teilraum (Kreis bzw. Land) als Referenzraum, bewertet aber weiter aus der Rolle der Koordinierungsstelle des Beispielprofils (Kodierleitfaden, Grundregel 1; A.1 Nr. 8). Soll das so bleiben, oder soll der Auftrag ausdrücklich die Rolle einer zuständigen meldenden Stelle (A.1 Nr. 4) vorgeben?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Entscheidungsfrage beantwortet: Teilraum als Referenzraum bleibt; Meldungen von Kreis- oder Landesebene können auch auf Ebene der Koordinierungsstelle mit ihrem bundesweiten Referenzraum verarbeitet werden. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-10",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung B04: 1 Fall",
+          "ist": "B04 nur in sop-erdbeben-ausland-hilfe"
+        }
+      ],
+      "beobachtung": "Lücke: B04 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. sop-erdbeben-ausland-hilfe prüft B04 nur für ein Auslandsbeben ohne deutsche Wirkung. Neu sind ein Inlandsbeben mit revidierter Erstlösung (R1), verspürt gegenüber Schaden und kontrollbedingte Sperrung gegenüber Beschädigung (R2, R4), Nachbeben als Fachaussage (R5) und der Nachlauf mit offenem Zielzustand (D5, A.8.2). Streuung: Referenzraum Land, Schwierigkeit unsicher, Phase Nachlauf. Kernschwierigkeit: Zwei Tage nach einem Inlandsbeben sind Nachbeben abgeklungen und eine Sperrung aufgehoben, 18 Bewohner warten aber ohne Termin auf die Rückkehr.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-erdbeben-inland-nachlauf.json mit Material anlegen; geprüfte SOPs und Bausteine: B04, C02, C16. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-erdbeben-inland-nachlauf",
+          "titel": "Inlandsbeben im Nachlauf: gesperrtes Wohnhaus und revidierte Magnitude (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Inlandsbeben im Nachlauf: gesperrtes Wohnhaus und revidierte Magnitude",
+            "stichworte": "B04, C02, C16",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Referenzraum dieser Meldung ist ein fiktives Land. Relevanz für den Bevölkerungsschutz in diesem Raum, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-erdbeben-inland-nachlauf.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Messdaten mit Revisionsstand (Erstlösung 4,6, revidiert 4,3) und Schadensbild getrennt darstellen; die Revision ist weder Entspannung noch Beurteilungsgrundlage (B04/R1, R2).",
+              "Rissmeldungen, begutachtete Gebäude, gesperrtes Gebäude und betroffene Personen getrennt führen; Standsicherheit nur nach Fachbewertung der Bauaufsicht; die vorsorgliche, inzwischen aufgehobene Brückensperrung nicht als Schaden darstellen (B04/R4, C02).",
+              "Nachlauf nach A.8.2: offen bleiben die Rückkehr der 18 Bewohner und die Absperrung am Kirchturm; der erwartete Gutachtentermin ist keine Rückkehrprognose; die Nachbebenaussage wird als Fachaussage des Erdbebendienstes übernommen, ohne eigene Vorhersage.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Eine eigene Nachbeben- oder Standsicherheitsprognose abgeben oder aus der Magnituderevision eine Entspannung ableiten.",
+              "Rissmeldungen oder die Einwohner der Kleinstadt als direkt Betroffene zählen oder die Rückkehr für den 28.10.2026 ankündigen.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Land (fiktives Land)",
+            "ereignisarten": [
+              "Erdbeben"
+            ],
+            "radar": {
+              "d1": {
+                "min": 0,
+                "max": 1,
+                "grund": "Wirkungen in einer Kleinstadt."
+              },
+              "d2": {
+                "min": 1,
+                "max": 1,
+                "grund": "18 Personen zu t0 ohne Zugang zur eigenen Wohnung; die zwei ambulant versorgten Leichtverletzten ändern die Stufe nicht und werden nicht doppelt gezählt; Rissmeldungen sind keine Personen."
+              },
+              "d5": {
+                "offen": true,
+                "grund": "Für die Rückkehr der 18 Bewohner liegt kein Termin vor; der erwartete Gutachtentermin ist keine Prognose."
+              },
+              "d8": {
+                "min": 0,
+                "max": 1,
+                "grund": "Seit 23.10.2026 keine spürbaren Nachbeben und keine weitere Sperrung; Brückensperrung aufgehoben."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-erdbeben-inland-nachlauf.md (neu, 184 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle; Referenzraum dieser Meldung ist ein fiktives Land. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**22.10.2026, 05:30 Uhr, fiktiver Landeserdbebendienst:** Beben um 03:12 Uhr nahe der fiktiven Kleinstadt S, Herdtiefe 8 km. Automatische Erstlösung Magnitude 4,6, revidiert auf 4,3.\n\n**22.10.2026, 08:00 Uhr, fiktive Stadtverwaltung S:** Zwei Leichtverletzte durch herabfallende Dachziegel, ambulant versorgt. Der Kirchturm ist wegen Steinschlaggefahr abgesperrt.\n\n**22.10.2026, 11:00 Uhr, fiktive Bauaufsicht des Landkreises:** Ein Mehrfamilienhaus mit 18 Bewohnern ist bis zur statischen Begutachtung gesperrt; die Bewohner sind bei Angehörigen oder in einer Pension untergebracht.\n\n**24.10.2026, 09:00 Uhr, fiktive Bauaufsicht des Landkreises:** Seit dem Beben 61 Meldungen über Risse; zwölf Gebäude begutachtet, keine weitere Sperrung. Das Gutachten zum Mehrfamilienhaus wird für 28.10.2026 erwartet; ein Rückkehrtermin steht nicht fest. Die 18 Bewohner sind weiterhin auswärts untergebracht.\n\n**24.10.2026, 09:30 Uhr, fiktiver Straßenbaulastträger:** Die vorsorgliche Sperrung einer Brücke für Schwerverkehr ist nach Kontrolle am 23.10.2026 aufgehoben; Schäden wurden nicht festgestellt.\n\n**24.10.2026, 10:00 Uhr, fiktiver Landeserdbebendienst:** Seit 23.10.2026 keine spürbaren Nachbeben; schwache Nachbeben bleiben möglich, ihre Wahrscheinlichkeit nimmt ab.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-erdbeben-inland-nachlauf\"] = [\"B04\", \"C02\", \"C16\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": "Der Fall setzt im Auftrag einen Teilraum (Kreis bzw. Land) als Referenzraum, bewertet aber weiter aus der Rolle der Koordinierungsstelle des Beispielprofils (Kodierleitfaden, Grundregel 1; A.1 Nr. 8). Soll das so bleiben, oder soll der Auftrag ausdrücklich die Rolle einer zuständigen meldenden Stelle (A.1 Nr. 4) vorgeben?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Entscheidungsfrage beantwortet: Teilraum als Referenzraum bleibt; Meldungen von Kreis- oder Landesebene können auch auf Ebene der Koordinierungsstelle mit ihrem bundesweiten Referenzraum verarbeitet werden. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-11",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C08: 1 Fall",
+          "ist": "C08 nur in sop-tierseuche-zoonose"
+        }
+      ],
+      "beobachtung": "Lücke: C08 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. sop-tierseuche-zoonose prüft C08 für ein Inlandsgeschehen mit offenem humanem Pfad. Neu sind ein Auslandsausbruch mit grenzüberschreitender Maßnahme (C08, Abschnitt 1, A.1 Nr. 6), Restriktionszone gegenüber Ausbruchsgebiet (R3), nicht zoonotischer Erreger als Grenze des humanen Pfads, Versorgungspfad nach C14 (R5) und deutsche Hilfe ins Ausland ohne D4-Wert (wie B04, Abschnitt 3). Streuung: Referenzraum Ausland mit Bezug zu Deutschland (Bund), Schwierigkeit eindeutig, Phase akute Lage. Kernschwierigkeit: Nicht zoonotischer Ausbruch jenseits der Grenze mit deutscher Überwachungszone und deutscher Hilfe im Nachbarstaat; Gegenstände und Referenzräume trennen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-tierseuche-grenznah-ausland.json mit Material anlegen; geprüfte SOPs und Bausteine: B11, C08, C14. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-tierseuche-grenznah-ausland",
+          "titel": "Tierseuchenausbruch im grenznahen Ausland mit deutscher Überwachungszone (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "auftrag": {
+            "sachverhalt": "Tierseuchenausbruch im grenznahen Ausland mit deutscher Überwachungszone",
+            "stichworte": "B11, C08, C14",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-tierseuche-grenznah-ausland.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Ausbruch im Nachbarstaat, deutsche Überwachungszone und deutsche Unterstützung im Nachbarstaat als getrennte Gegenstände mit jeweiligem Referenzraum darstellen (A.1 Nr. 6); die Zone ist kein Ausbruchsgebiet (C08/R3).",
+              "Den humanen Prüfpfad nach der Fachaussage des Instituts als derzeit nicht einschlägig kennzeichnen, ohne eine Humanlage zu konstruieren; Ereignisart „Gesundheitliche Lage / Epidemie“ mit ausdrücklich benanntem Tiergesundheitsbezug (C08, Zuordnung im Schema).",
+              "Den Versorgungspfad nur mit der Betreiberangabe darstellen: Annahmestopp ja, eingeschränkte Belieferung laut Betreiber nein (C08/R5, C14).",
+              "D4 nicht international: Die Entsendung deutscher Amtstierärzte ins Ausland ergibt keinen D4-Wert; die deutschen Kontrollen laufen mit eigenem Personal (D4 = 0 mit diesem Beleg oder offen). D5 = 2 nur mit Zielzustand „Kontrollen abgeschlossen“, offen für die Aufhebung der Zone.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Eine Humanepidemie, eine Exposition der Bevölkerung oder einen Seuchenfall in deutschen Beständen behaupten.",
+              "Tierzahlen in D2 übertragen oder aus der Entsendung ins Ausland einen D4-Wert ableiten.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Bund (Auslandsereignis mit grenzüberschreitender Wirkung, A.1 Nr. 6)",
+            "ereignisarten": [
+              "Gesundheitliche Lage / Epidemie"
+            ],
+            "radar": {
+              "d2": {
+                "offen": true,
+                "grund": "Tierzahlen sind keine Personen; eine humane Betroffenheit ist nicht erhoben."
+              },
+              "d6": {
+                "min": 0,
+                "max": 1,
+                "grund": "Annahmestopp des Schlachtbetriebs ohne belegte Versorgungsfolge."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-tierseuche-grenznah-ausland.md (neu, 165 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle auf Bundesebene. Zeitbezug: 24.10.2026, Europe/Berlin.\n\n**07:30 Uhr, fiktive Veterinärbehörde des Nachbarstaats N:** Amtlich festgestellter Ausbruch einer Tierseuche in einem Schweinehaltungsbetrieb mit 2.400 Tieren, 6 km von der deutschen Grenze. Der Bestand wird getötet und im Nachbarstaat beseitigt.\n\n**08:15 Uhr, fiktives Bundesforschungsinstitut für Tiergesundheit:** Der Erreger ist nach derzeitigem Kenntnisstand nicht auf den Menschen übertragbar.\n\n**09:00 Uhr, fiktiver deutscher Landkreis G:** Allgemeinverfügung vom 23.10.2026, 18:00 Uhr: Überwachungszone auf deutscher Seite in drei Gemeinden mit elf Schweinehaltungen, Verbringungsbeschränkungen. Kein Seuchenverdacht in deutschen Beständen. Das Veterinäramt kontrolliert die elf Betriebe mit eigenem Personal; Abschluss voraussichtlich am 26.10.2026.\n\n**10:00 Uhr, fiktiver Schlachtbetrieb im Landkreis G:** Die Annahme von Tieren aus der Zone ist ausgesetzt; die Belieferung des Handels in der Region ist nach eigener Angabe nicht eingeschränkt.\n\n**10:30 Uhr, fiktives Landesministerium:** Zwei Amtstierärzte des Landes werden ab 25.10.2026 zur Unterstützung der Behörden in den Nachbarstaat entsandt.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-tierseuche-grenznah-ausland\"] = [\"B11\", \"C08\", \"C14\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-12",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C03: 1 Fall",
+          "ist": "C03 nur in sop-weltraumwetter-warnung"
+        },
+        {
+          "datei": "evaluation/material/sop-weltraumwetter-warnung.md",
+          "stelle": "Übungsnachricht (Ausgangsfall der Abwandlung)",
+          "ist": "Ein deutscher Transportbetreiber bestätigt vor t0 einzelne Navigationsaussetzer, arbeitet aber mit wirksamer Ersatznavigation."
+        }
+      ],
+      "beobachtung": "Lücke: C03 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. Abwandlung von sop-weltraumwetter-warnung (B12, C03) mit genau einer Stellgröße: Der Navigationshinweis ist inhaltlich gleich, stammt aber nicht mehr vom Betreiber, sondern aus einem Beitrag ungeklärter Identität. Der Vergleich zeigt, ob der Entwurf die Ereignisart (KRITIS-Ausfall → Sonstiges nach C03) und die Ist-Achsen allein wegen der Belegqualität anpasst. Fall mit Achsen, die offen bleiben müssen. Streuung: Referenzraum Bund, Schwierigkeit unsicher, Phase Vorwarnung. Kernschwierigkeit: Dieselbe Warnung wie im Ausgangsfall, aber der Navigationshinweis stammt nur aus einem unbestätigten Beitrag; die Ist-Achsen müssen offen bleiben. Abwandlung von sop-weltraumwetter-warnung; Stellgröße: Belegqualität des Wirkungsbefunds: Betreiberbestätigung (B) → Beitrag ungeklärter Identität (P) mit wortgleichem Inhalt. Das Datum im Zeitbezug ist auf den Stichtag 24.10.2026 gesetzt (Vorgabe für alle neuen Fälle), der Aufbau des Ausgangsmaterials bleibt erhalten. Die Abwandlung steht in variante_von und abwandlung (fall.schema.json nach LS-2026-W43-02).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-weltraumwetter-warnung-unbestaetigt.json mit Material anlegen; geprüfte SOPs und Bausteine: B17, C03. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-weltraumwetter-warnung-unbestaetigt",
+          "titel": "Weltraumwetterwarnung mit unbestätigtem Navigationshinweis (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "variante_von": "sop-weltraumwetter-warnung",
+          "abwandlung": "Belegqualität: Der Hinweis auf Navigationsaussetzer und Ersatznavigation stammt wortgleich nicht mehr vom Transportbetreiber, sondern aus einem Beitrag in sozialen Medien ungeklärter Identität. Datum auf den Stichtag 24.10.2026 gesetzt; sonst unverändert.",
+          "auftrag": {
+            "sachverhalt": "Weltraumwetterwarnung mit unbestätigtem Navigationshinweis",
+            "stichworte": "B17, C03",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-weltraumwetter-warnung-unbestaetigt.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Abwandlung von evaluation/material/sop-weltraumwetter-warnung.md, nur die Herkunft des Navigationshinweises ist geändert."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Den Beitrag ungeklärter Identität als unbestätigte Behauptung kennzeichnen (Kategorie P, Identität ungeklärt); er belegt weder Navigationsaussetzer noch wirksamen Ersatzbetrieb (A.3).",
+              "Die Fachwarnung als Frühwarnung ohne bestätigte Wirkung in Deutschland behandeln; Ereignisart „Sonstiges“ mit C03, nicht „KRITIS-Ausfall“ (C03, Zuordnung im Schema); Warnung, Behauptung und bestätigten Befund getrennt halten.",
+              "Die fehlende Betreiberangabe als offene, entscheidungsrelevante Frage mit Klärungsweg benennen.",
+              "D6 offen oder 0 nur nach dokumentierter Prüfung ohne belegte Kopplung; nie aus der unbestätigten Behauptung abgeleitet.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Navigationsaussetzer oder wirksamen Ersatzbetrieb als bestätigt darstellen oder daraus D1, D2 oder D6 ableiten.",
+              "Aus der Warnung einen flächigen Navigations-, Strom- oder Zeitausfall folgern.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Bund",
+            "ereignisarten": [
+              "Sonstiges"
+            ],
+            "radar": {
+              "d1": {
+                "offen": true,
+                "grund": "Kein belegter Wirkungsraum in Deutschland (Kodierleitfaden, Abschnitt 7, Kurzbeispiel Weltraumwetter)."
+              },
+              "d2": {
+                "offen": true,
+                "grund": "Keine Grundgesamtheit direkt Betroffener."
+              },
+              "d4": {
+                "offen": true,
+                "grund": "Keine eingesetzte externe Unterstützung."
+              },
+              "d5": {
+                "offen": true,
+                "grund": "Kein Zielzustand mit Prognose; das Ende des Warnzeitraums ist kein Zielzustand."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-weltraumwetter-warnung-unbestaetigt.md (neu, 73 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle auf Bundesebene. Zeitbezug: 24.10.2026, Europe/Berlin.\n\nFiktiver Fachwarndienst warnt vor möglichen GNSS-Störungen von 13:00 bis 20:00 Uhr. Ein Beitrag in sozialen Medien ungeklärter Identität behauptet vor t0, ein deutscher Transportbetreiber habe einzelne Navigationsaussetzer, arbeite aber mit wirksamer Ersatznavigation; eine Angabe des Betreibers liegt nicht vor. Kein Zeitreferenzausfall, Netzausfall oder Versorgungsengpass bestätigt.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-weltraumwetter-warnung-unbestaetigt\"] = [\"B17\", \"C03\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Umgesetzt mit #56."
+      }
+    },
+    {
+      "id": "LS-2026-W43-13",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/2026-10-21-sop-abdeckung.json",
+          "stelle": "faelle – Abdeckung C04: 1 Fall",
+          "ist": "C04 nur in sop-vulkanasche-transport"
+        },
+        {
+          "datei": "evaluation/material/sop-vulkanasche-transport.md",
+          "stelle": "Übungsnachricht (Ausgangsfall der Abwandlung)",
+          "ist": "Klinischer Empfänger bestätigt ausreichenden Bestand bis morgen 18:00 Uhr, Ersatzankunft morgen 10:00 Uhr."
+        }
+      ],
+      "beobachtung": "Lücke: C04 (1 Fall) in der Soll-Abdeckung am main-Stand a141b3b. Abwandlung von sop-vulkanasche-transport (B17, C04, C13, C10) mit genau einer Stellgröße: Die Ersatzankunft verschiebt sich um einen Tag hinter das Bestandsende. Der Vergleich zeigt, ob der Entwurf das Zeitfenster nach C04 (Versorgungspfad) und A.5 Nr. 2 erkennt, den Kennsatz „Handlungsrelevant bis:“ mit Grundlage setzt und A.7.3 prüft, ohne eine eingetretene Therapielücke zu behaupten. Streuung: Referenzraum Bund, Schwierigkeit eindeutig, Phase Vorwarnung. Kernschwierigkeit: Wie der Ausgangsfall, aber die Ersatzlieferung kommt erst 16 Stunden nach Bestandsende; aus der Vorsorgelage wird ein zeitgebundener Abstimmungsbedarf. Abwandlung von sop-vulkanasche-transport; Stellgröße: Zeitstand der Ersatzlieferung: morgen 10:00 Uhr → übermorgen 10:00 Uhr (nach Bestandsende). Das Datum im Zeitbezug ist auf den Stichtag 24.10.2026 gesetzt (Vorgabe für alle neuen Fälle), der Aufbau des Ausgangsmaterials bleibt erhalten. Die Abwandlung steht in variante_von und abwandlung (fall.schema.json nach LS-2026-W43-02).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neuen vollständig fiktiven Bewertungsfall evaluation/faelle/sop-vulkanasche-transport-zeitluecke.json mit Material anlegen; geprüfte SOPs und Bausteine: B17, C04, C13, C10. Erwartete Radarwerte stehen in erwartungen.radar (Spanne oder offen, je mit Grund); was davon vom gewählten Zielzustand abhängt oder nur als „0 oder offen“ vertretbar ist, steht als Text unter muss.",
+        "neuer_text": {
+          "format": "ki-lead-evaluationsfall/1",
+          "id": "sop-vulkanasche-transport-zeitluecke",
+          "titel": "Vulkanasche-Prognose mit Ersatzlieferung nach Bestandsende (FIKTIV)",
+          "stand": "2026-10-24",
+          "fiktiv": true,
+          "variante_von": "sop-vulkanasche-transport",
+          "abwandlung": "Zeitstand: Die Ersatzlieferung kommt übermorgen statt morgen um 10:00 Uhr und damit nach dem Bestandsende morgen um 18:00 Uhr. Datum auf den Stichtag 24.10.2026 gesetzt; sonst unverändert.",
+          "auftrag": {
+            "sachverhalt": "Vulkanasche-Prognose mit Ersatzlieferung nach Bestandsende",
+            "stichworte": "B17, C04, C13, C10",
+            "stichtag": "2026-10-24",
+            "meldezeitpunkt": "2026-10-24T12:00",
+            "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+            "websuche": false,
+            "verdichtung": false
+          },
+          "material": [
+            {
+              "datei": "evaluation/material/sop-vulkanasche-transport-zeitluecke.md",
+              "rolle": "material",
+              "hinweis": "Vollständig erfundene Übungsnachrichten; Abwandlung von evaluation/material/sop-vulkanasche-transport.md, nur der Ankunftstag der Ersatzlieferung ist geändert."
+            }
+          ],
+          "erwartungen": {
+            "muss": [
+              "Bestand (bis 25.10.2026, 18:00 Uhr) und Ersatzankunft (26.10.2026, 10:00 Uhr) vergleichen und die drohende Lücke von rund 16 Stunden als bedingte, noch nicht eingetretene Versorgungslücke benennen (C04, Versorgungspfad).",
+              "Zeitgebundenen Prüf- und Abstimmungsbedarf vor dem 25.10.2026, 18:00 Uhr, mit Grundlage (Angaben des klinischen Empfängers und des Flugbetreibers) als Kennsatz „Handlungsrelevant bis:“ ausweisen und die frühere Weitergabe nach A.7.3 prüfen; Empfehlungen an zuständige Stellen, keine eigene Mittelzuteilung.",
+              "Luftraumprognose, Umplanung des Flugbetreibers und klinischen Bestand getrennt darstellen; die Prognose ist keine Luftraumsperrung.",
+              "D5 nur mit benanntem Zielzustand kodieren, etwa 2 für die Ankunft der Ersatzlieferung; das Ende der Asche-Prognose ist kein Versorgungsziel.",
+              "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+            ],
+            "darf_nicht": [
+              "Eine eingetretene Therapielücke, Bodenbelastung in Deutschland oder eine Luftraumsperrung behaupten.",
+              "Die Ersatzlieferung als rechtzeitig bewerten oder die Lücke durch eigene Annahmen, etwa andere Transportwege oder Bestände anderer Kliniken, schließen.",
+              "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+            ],
+            "t0": "2026-10-24T12:00",
+            "referenzraum": "Bund",
+            "ereignisarten": [
+              "Sonstiges"
+            ],
+            "radar": {
+              "d2": {
+                "offen": true,
+                "grund": "Keine eingetretene Therapielücke und keine Patientenzahl."
+              },
+              "d4": {
+                "offen": true,
+                "grund": "Keine eingesetzte externe Unterstützung."
+              },
+              "d6": {
+                "min": 1,
+                "max": 2,
+                "grund": "Belegte Kopplung Lieferweg → Klinikbestand; nicht aus allgemeiner Luftverkehrsabhängigkeit."
+              }
+            }
+          }
+        }
+      },
+      "folgeaenderungen": [
+        "evaluation/material/sop-vulkanasche-transport-zeitluecke.md (neu, 62 Wörter), vollständiger Inhalt:\n# FIKTIVES ÜBUNGSMATERIAL – keine reale Lage\n\nAlle Stellen, Meldungen und Zahlen dieses Falles sind erfunden. Der Übungsauftrag gilt für die fiktive Koordinierungsstelle auf Bundesebene. Zeitbezug: 24.10.2026, Europe/Berlin.\n\nFiktive Luftfahrtfachstelle prognostiziert Asche in einem Luftraum; der Flugbetreiber hat eine Arzneimittelsendung vorsorglich umgeplant. Klinischer Empfänger bestätigt ausreichenden Bestand bis morgen 18:00 Uhr, Ersatzankunft übermorgen 10:00 Uhr. Weder Bodenbelastung in Deutschland noch Therapielücke bestätigt.\n",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json: faelle[\"sop-vulkanasche-transport-zeitluecke\"] = [\"B17\", \"C04\", \"C13\", \"C10\"]; Feld stand auf 2026-10-24",
+        "evaluation/faelle/README.md: Anzahl und Stand der sop-Fälle fortschreiben (40 Fälle vom 21.10.2026 + 8 Fälle vom 24.10.2026)",
+        "CHANGELOG.md: Eintrag unter der laufenden Version (neue fiktive Bewertungsfälle, ohne Änderung der App)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 24.10.2026 (alle Befunde). Bei der Umsetzung an main 814bc29 angepasst: IDs von LS-2026-W43-03 bis -10 auf -06 bis -13 verschoben, weil -01 bis -05 mit #55 vergeben sind; da fall.schema.json nun erwartungen.radar, variante_von und abwandlung enthält, stehen die Radarerwartungen in erwartungen.radar und die Abwandlungen in variante_von/abwandlung (Titel ohne Zusatz), wie im Auftrag für diesen Fall vorgesehen; inhaltlich unverändert. Umgesetzt mit #56."
+      }
     }
   ],
   "unauffaellig": [
     "Fiktive Fälle mit Material, Auftrag und Erwartungen sind vorhanden (41 Fälle, Schema und Test).",
     "Paarweiser Vergleich einschließlich Inter-Rater-Einsatz ist in src/pipeline/vergleich.ts umgesetzt.",
     "Trennung von fiktiven Fällen (evaluation/faelle/) und realen Prüfsteinen (evaluation/pruefsteine/) ist klar geregelt.",
-    "Mehrere fiktive Kodierungen derselben Lage liegen mit Orkantief „Ilka“ bereits vor."
+    "Mehrere fiktive Kodierungen derselben Lage liegen mit Orkantief „Ilka“ bereits vor.",
+    "Abdeckungsdatei und Fallbestand stimmen überein: 40 sop-Fälle mit je einem Eintrag; jede in einem Fall genannte Materialdatei ist vorhanden.",
+    "Keine Dopplung: jeder neue Fall unterscheidet sich in Phase, Referenzraum oder Kernschwierigkeit von den vorhandenen Fällen derselben SOP."
   ]
 }
