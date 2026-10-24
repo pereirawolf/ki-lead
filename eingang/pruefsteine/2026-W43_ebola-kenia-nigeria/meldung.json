@@ -1,0 +1,71 @@
+{
+  "schema": "LEAD-Meldung-v1",
+  "_status": "Entwurf",
+  "_entstehung": {
+    "verfahren": "KI-Entwurf",
+    "werkzeug": "Erfassungstest (Claude Cowork, geplanter Lauf), Websuche und Seitenabruf",
+    "modell": "claude-opus-5-5",
+    "sop": [
+      "SOP-LEAD B11 Gesundheitliche Lage / Epidemie v2.4.0",
+      "SOP-LEAD C07 Infektionslagen – Auslandsausbruch und lokale Häufung v1.2.0 (Inhaltsgerüst)"
+    ],
+    "kodierleitfaden": "Kodierleitfaden LEAD 1.3.0",
+    "erstellt": "2026-10-24T13:00"
+  },
+  "land": "Bund",
+  "meldende_stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+  "meldezeitpunkt": "2026-10-24T13:00",
+  "meldezeitraum": {
+    "von": "2026-10-06",
+    "bis": "2026-10-24"
+  },
+  "quellen": "[Q1] A – Europäisches Zentrum für die Prävention und die Kontrolle von Krankheiten (ECDC) (23.10.2026): Importation of Ebola cases to Kenya and Nigeria: ECDC assesses the threat. Online abrufbar unter: https://www.ecdc.europa.eu/en/news-events/importation-ebola-cases-kenya-and-nigeria-ecdc-assesses-threat [Zugriff: 24.10.2026]. Datenstand: 23.10.2026\n[Q2] A – Robert Koch-Institut (21.10.2026): Informationen zum Ebolafieber-Ausbruch (Bundibugyo-Ebolavirus) in der Demokratischen Republik Kongo. Online abrufbar unter: https://www.rki.de/DE/Themen/Infektionskrankheiten/Infektionskrankheiten-A-Z/E/Ebola/Ausbruch-DRC-2026.html [Zugriff: 24.10.2026]. Datenstand: 21.10.2026\n[Q3] A – ECDC (20.10.2026): Ebola disease: Multi-country outbreak 2026. Online abrufbar unter: https://www.ecdc.europa.eu/en/ebola-outbreak-democratic-republic-congo-and-uganda [Zugriff: 24.10.2026]. Datenstand: 20.10.2026, 15:00 (Fallzahlen DR Kongo bis 18./19.10.2026)\n[Q4] A – ECDC (KW 42/2026): Communicable disease threats report, week 42, 10–16 October 2026. Online abrufbar unter: https://www.ecdc.europa.eu/sites/default/files/documents/communicable-disease-threats-report-week-42-2026.pdf [Zugriff: 24.10.2026]. Datenstand: Ebola-Abschnitt bis 14./15.10.2026\n[Q5] A – WHO-Regionalbüro für Afrika (KW 41/2026): Ebola disease (Bundibugyo virus) – Week 41 Situation Report. Online abrufbar unter: https://afro.who.int/sites/default/files/2026-10/Week%2041%20Situation%20Report.pdf [Zugriff: 24.10.2026]. Datenstand: DR Kongo 11.10.2026, Kenia 16.10.2026",
+  "sachverhalte": [
+    {
+      "eintritt": "2026-05-15",
+      "art": [
+        "Gesundheitliche Lage / Epidemie"
+      ],
+      "ort": "DR Kongo, Kenia, Nigeria (Ereignisraum); Referenzraum: Bevölkerungsschutz in Deutschland",
+      "bezeichnung": "Ebola (Bundibugyo-Virus): Übertragungskette in Kenia und Fall in Nigeria, kein belegter Pfad nach Deutschland",
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Der Ebola-Ausbruch (Bundibugyo-Virus) hat mit einer Übertragungskette in Kenia und einem Fall in Nigeria zwei weitere Staaten erreicht; ein konkreter Eintragungs- oder Expositionspfad nach Deutschland ist zu t0 nicht belegt, und die beiden in Deutschland behandelten Patienten sind laut RKI entlassen [Q1, Q2]. Auslandsgeschehen: Die WHO hat am 17.05.2026 eine gesundheitliche Notlage von internationaler Tragweite (IGV) festgestellt [Q2, Q4]. Die DR Kongo meldete bis 18./19.10. 9.552 bestätigte Fälle und 4.602 Todesfälle (ECDC-Zusammenstellung, Stand 20.10.) [Q3]. Kenia: erster importierter Fall am 06.10. [Q4]; laut ECDC vom 23.10. insgesamt 9 Fälle, davon 1 Todesfall, 8 auf einen Erstfall zurückgeführt, der aus der DR Kongo über Uganda einreiste [Q1]; WHO-Angaben mit Stand 16.10. (3 bestätigte Fälle, 130 erfasste Kontakte) und ECDC-Angaben mit Stand 20.10. (8 Fälle) bilden frühere Datenstände ab, keinen Widerspruch [Q3, Q5]. Nigeria: 1 Fall, Infektionsquelle in Untersuchung [Q1]. Deutschland: Zwei US-Staatsangehörige, die sich bei Hilfseinsätzen infiziert hatten, wurden nach medizinischer Evakuierung in STAKOB-Sonderisolierstationen behandelt; laut RKI (Stand 21.10.) sind beide genesen und entlassen [Q2]. Der ECDC-Wochenbericht KW 42 führte einen davon noch als in Behandlung [Q4]; maßgeblich ist die neuere Angabe der zuständigen nationalen Stelle (A.3, Zeitstand). Eine eigene RKI-Risikobewertung für Deutschland nennt die Seite nicht; sie verweist auf die ECDC-Einschätzung [Q2].",
+        "risiken_auswirkungen": "Tatsächliche Wirkung im Referenzraum: keine belegte Exposition, kein belegter Verdachtsfall, keine belegte Bindung von Sonderisolierkapazität zu t0 [Q2]. Fehlende öffentliche Angaben zu Kontaktpersonen belegen keinen Nullbefund; solche Angaben werden über die IGV-Meldewege ausgetauscht (C07/R2). Fachliche Risikoeinschätzung (ECDC, 23.10.): Infektionswahrscheinlichkeit für Reisende aus EU/EWR in den betroffenen Gebieten Kenias und Nigerias niedrig bei Einhaltung der Schutzmaßnahmen; Weiterverbreitung nach einem importierten Fall in Europa sehr unwahrscheinlich; Gesamtrisiko für die Bevölkerung der EU/EWR sehr gering; Reisebeschränkungen werden nicht empfohlen [Q1]. Diese Einschätzung gilt für EU/EWR, nicht als deutsche Lagefeststellung. Frühwarnindikator: Die Ausbreitung in einen Staat mit Fernreiseverkehr verändert den möglichen Pfad über Reisende und Rückkehrende; die vom RKI empfohlene Information für Einreisende an deutschen Flughäfen richtet sich an Personen mit Aufenthalt im Nordosten der DR Kongo und angrenzenden Regionen; Kenia wird dort nicht ausdrücklich genannt [Q2]. Szenario (Einschätzung Koordinierungsstelle): Weitere Fälle in Kenia außerhalb der bekannten Kette würden die Bedeutung dieses Pfads erhöhen.",
+        "massnahmen_empfehlungen": "Dokumentierte Maßnahmen: Bereitstellung eines Ablaufschemas zur Verdachtsabklärung, eines Rahmenkonzepts und erregerspezifischer Diagnostikhinweise durch das RKI; Therapie- und Prophylaxehinweise des STAKOB (Stand 18.09.2026) (umgesetzt) [Q2]; Empfehlung mehrsprachiger Informationsplakate in Ankunftsbereichen deutscher Flughäfen (empfohlen, Umsetzungsstand nicht belegt) [Q2]; Teilreisewarnung des Auswärtigen Amts für die betroffene Region der DR Kongo (angeordnet; Umfang laut RKI-Verweis, Originalseite nicht ausgewertet) [Q2]. ECDC empfiehlt den Staaten der EU/EWR, Vorbereitung auf mögliche Importfälle fortzuführen [Q1]. Empfehlung (Einschätzung Koordinierungsstelle, keine Weisung): RKI und für Gesundheit zuständige Bundes- und Landesstellen sollten bis zur nächsten Lagebild-Ausgabe prüfen, ob Reisendeninformation und Hinweise zur Reiseanamnese den aktuellen räumlichen Stand des Ausbruchs (Kenia, Nigeria) abdecken; Anlass ist, dass die eingesehene Empfehlung zur Flughafeninformation Kenia nicht ausdrücklich nennt [Q2].",
+        "abhaengigkeiten_interdependenzen": "Kopplung Gesundheitsämter – STAKOB-Behandlungszentren – Labore – Spezialtransport: zu t0 keine belegte Bindung, weil beide in Deutschland behandelten Patienten entlassen sind [Q2]; frühere Aufnahmen belegen keine aktuelle Bindung. Reise- und Verkehrsbezug: Fernreiseverkehr zwischen Kenia und Deutschland ist ein möglicher Pfad; eine Exposition in Deutschland ist damit nicht belegt (C07, Reise- und Expositionskette). Liefer- oder Versorgungsbeziehungen mit Bezug zum Ausbruch: keine belastbare Angabe."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "",
+        "bewertung_text": "Kernaussage: Die Ausbreitung des Ebola-Ausbruchs nach Kenia und Nigeria ändert die Lage in Deutschland zu t0 nicht, wirft aber die Prüffrage auf, ob deutsche Reisendeninformation und Hinweise zur Reiseanamnese den neuen räumlichen Stand abdecken. Referenzraum: Bevölkerungsschutz in Deutschland (Bund); t0: 24.10.2026, 13:00. Beurteilung „geringfügig“: kein belegter Pfad nach Deutschland, keine Bindung von Sonderisolierkapazität, ECDC-Gesamtrisiko für EU/EWR sehr gering [Q1, Q2]; Grund für die Befassung ist der Vorsorgebedarf. Tendenz offen: Für Deutschland fehlt eine vergleichbare Datenbasis; die Ausbreitung im Ausland ist Frühwarntreiber, keine deutsche Verschärfung (B11, Abschnitt 3). Lagenradar: D1 offen, kein deutscher Wirkungsraum. D2 offen: keine belegten Betroffenen in Deutschland; ein ausdrücklicher Nullbefund der Surveillance liegt in den eingesehenen Quellen nicht vor. D3 = 5, D3 strukturell: fachliche Risikoeinschätzung, Hinweise zur Verdachtsabklärung und Reisendeninformation, RKI [Q2]. D4 offen: keine eingesetzte Unterstützung im Referenzraum. D5 offen: kein deutscher Zielzustand. D6 = 0: geprüft, zu t0 keine Bindung von Sonderisolier-, Transport- oder Laborkapazität belegt [Q2]. D7 = 1, leichte Verzögerungen: der ECDC-Wochenbericht führte den Behandlungsstand in Deutschland abweichend vom neueren RKI-Stand [Q2, Q4]; zentrale Fragen sind sonst beantwortet. D8 offen: keine deutsche Beobachtungsbasis; der Anstieg in Kenia ist Frühwarnindikator.\nNeubewertung bei: von der Fachbehörde mitgeteilter Kontaktperson oder Verdachtsfall mit Aufenthalt in Deutschland; Anfrage zur Aufnahme eines evakuierten Patienten; Fällen in Kenia außerhalb der bekannten Übertragungskette; geänderter Risikobewertung von ECDC oder RKI",
+        "lagenradar": {
+          "d1": null,
+          "d2": null,
+          "d3": 5,
+          "d4": null,
+          "d5": null,
+          "d6": 0,
+          "d7": 1,
+          "d8": null
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "versand": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    }
+  }
+}
