@@ -11,7 +11,8 @@
 // Reparatur mistral-small-2603; Endpunkt wie in der App EU, mit KI_LEAD_MISTRAL_ENDPUNKT=global der globale.
 //
 // Ohne Schlüssel und mit KI_LEAD_ATTRAPPE=1 läuft das Skript mit einem simulierten Anbieter (Trockenlauf, keine Kosten).
-// Abweichung von der App: Die S1-Bestätigung wird automatisch erteilt (technische Abnahme, siehe Plan).
+// Abweichung von der App: Die S1-Bestätigung wird automatisch erteilt (technische Abnahme, siehe Plan), wie im
+// Vergleichslauf der App (Einstellungen → Modelle & Verarbeitung, seit 0.5.8), dessen Funktionen das Skript nutzt.
 // Laufprotokolle und Prüfergebnisse gehen nach privat/abnahme-m4/ (nicht eingecheckt).
 
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -19,21 +20,12 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { leereNutzung, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "../../src/anbieter/typen";
 import { Verteiler } from "../../src/anbieter/verteiler";
-import { migriere } from "../../src/kern/migration";
-import { pruefeGegenSchema } from "../../src/kern/validierung";
-import type { Meldung } from "../../src/kern/typen";
-import { ladeProfil, sha256 } from "../../src/profil/laden";
+import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, modellFuer, type Einstellungen } from "../../src/pipeline/einstellungen";
-import { APP_KENNUNG, neuerLauf, ohneBase64, type Lauf } from "../../src/pipeline/lauf";
-import { dateiLesen, istVerdichtung, type Material } from "../../src/pipeline/material";
-import { stufe1, stufe2und3, type Kontext } from "../../src/pipeline/stufen";
-import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus } from "../../src/pipeline/vergleich";
-import { eingangsquellenPruefen } from "../../src/pipeline/vermerke";
+import { ohneBase64, type Lauf } from "../../src/pipeline/lauf";
+import { csv, einLauf, FALL_MATERIAL, REFERENZ, reiheErstellen, type EinzelErgebnis, type FallDaten } from "../../src/pipeline/vergleichslauf";
 
 const REPO = join(__dirname, "..", "..");
-const FALL = JSON.parse(readFileSync(join(REPO, "evaluation/faelle/orkantief-ilka-verdichtung.json"), "utf-8"));
-const ILKA = "profile/lead-beispiel/beispiele/orkantief-ilka";
-const REFERENZ = "LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
 
 const ANBIETER = process.env.KI_LEAD_ANBIETER === "openai" ? "openai" : process.env.KI_LEAD_ANBIETER === "mistral" ? "mistral" : "anthropic";
@@ -78,7 +70,7 @@ function leseOrdner(ordner: string): Record<string, string> {
 }
 
 /** Trockenlauf: S1 ordnet alle Eingänge einem Sachverhalt zu, S2 liefert die Referenzfassung. */
-function attrappe(eingaenge: Material[], referenz: unknown): LlmAnbieter & { anfragen: LlmAnfrage[] } {
+function attrappe(eingaenge: string[], referenz: unknown): LlmAnbieter & { anfragen: LlmAnfrage[] } {
   const anfragen: LlmAnfrage[] = [];
   const antwort = (text: string, modell: string): LlmAntwort => ({
     modell,
@@ -114,7 +106,7 @@ function attrappe(eingaenge: Material[], referenz: unknown): LlmAnbieter & { anf
                 ereignisarten: ["Unwetter / Sturm"],
                 sops: ["b01"],
                 begruendung: "Sturm",
-                eingangsmeldungen: eingaenge.map((m) => m.name),
+                eingangsmeldungen: eingaenge,
               },
             ],
             prueffrage: "",
@@ -127,48 +119,18 @@ function attrappe(eingaenge: Material[], referenz: unknown): LlmAnbieter & { anf
   };
 }
 
-type Pruefpunkt = { nr: string; erfuellt: boolean; angabe: string };
-
-function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | undefined, quellen: ReturnType<typeof eingangsquellenPruefen>): Pruefpunkt[] {
-  const s1 = l.stufen.find((s) => s.stufe.startsWith("S1"));
-  const s2 = l.stufen.find((s) => s.stufe === "S2 Verdichtung");
-  const reparaturen = l.stufen.filter((s) => s.stufe.startsWith("S3 Reparatur")).length;
-  const eingaenge = material.filter((m) => m.art === "eingang");
-  const vermerk = "Vermerke der App aus dem Redaktionscheck";
-  const stufenVollstaendig = l.stufen.every((s) => s.modell && s.aufwand && s.nutzung && typeof s.dauerMs === "number" && s.kostenUsd !== undefined);
-  return [
-    { nr: "T1", erfuellt: eingaenge.length === 6 && istVerdichtung(material) && !!s2, angabe: `${eingaenge.length} Eingänge, Stufe „${s2?.stufe ?? "–"}“` },
-    { nr: "T2", erfuellt: l.status === "fertig", angabe: `Status ${l.status}${l.fehler ? `: ${l.fehler}` : ""}` },
-    { nr: "T3", erfuellt: !!l.ergebnis?.schemakonform && reparaturen <= 2, angabe: `schemakonform ${!!l.ergebnis?.schemakonform}, Reparaturen ${reparaturen}` },
-    { nr: "T4", erfuellt: meldung?.meldezeitpunkt === FALL.auftrag.meldezeitpunkt, angabe: `t0 ${meldung?.meldezeitpunkt ?? "–"}` },
-    {
-      nr: "T5",
-      erfuellt:
-        !!s2 &&
-        !s2.anfrage?.werkzeuge &&
-        !!s2.anfrage?.system.some((t) => t.includes(vermerk)) &&
-        JSON.stringify(s1?.anfrage?.nachrichten ?? "").includes("Vermerke der App"),
-      angabe: `Werkzeuge in S2: ${s2?.anfrage?.werkzeuge ? "ja" : "nein"}; Vermerke an S1 und S2`,
-    },
-    {
-      nr: "T6",
-      erfuellt: !!l.profil.hash && l.material.length === 6 && l.material.every((m) => !!m.hash) && stufenVollstaendig,
-      angabe: `${l.stufen.length} Stufen, Profil ${l.profil.version} (${l.profil.hash.slice(0, 12)}…)`,
-    },
-    { nr: "T7", erfuellt: !!meldung && quellen.length === 6, angabe: quellen.map((q) => `${q.stelle}: ${q.status}`).join("; ") || "–" },
-    { nr: "T8", erfuellt: !!l.vergleich?.ergebnis && !!l.vergleich.referenzHash, angabe: l.vergleich ? `${l.vergleich.ergebnis.paare.length} Paare` : "–" },
-  ];
-}
-
 describe("Abnahme M4: Verdichtung Ilka", () => {
   it.skipIf(!ECHT && !ATTRAPPE)(`${LAEUFE} Lauf/Läufe ${ATTRAPPE ? "(Attrappe)" : `(echt, ${ANBIETER})`}`, async () => {
     const EINSTELLUNGEN = einstellungen();
     mkdirSync(AUSGABE, { recursive: true });
-    const geladen = await ladeProfil(leseOrdner(join(REPO, "profile/lead-beispiel")));
+    const dateien = leseOrdner(join(REPO, "profile/lead-beispiel"));
+    const geladen = await ladeProfil(dateien);
     const profil = geladen.profil!;
     expect(profil, JSON.stringify(geladen.befunde)).toBeTruthy();
-    const refText = readFileSync(join(REPO, ILKA, REFERENZ), "utf-8");
-    const zusammenfassung: unknown[] = [];
+    const daten: FallDaten = { profil, dateien };
+    const refText = dateien[REFERENZ];
+    const eingaenge = FALL_MATERIAL.map((p) => p.split("/").pop()!);
+    const ergebnisse: EinzelErgebnis[] = [];
     let summe = 0;
 
     for (let i = 1; i <= LAEUFE; i++) {
@@ -176,157 +138,43 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         console.log(`Budgetgrenze ${BUDGET_USD} USD erreicht (${summe.toFixed(2)} USD), Reihe beendet.`);
         break;
       }
-      // Material frisch aus den Dateien des Falls, wie beim Hochladen in der App
-      const material: Material[] = [];
-      for (const m of FALL.material) {
-        const pfad = join(REPO, m.datei);
-        material.push(await dateiLesen(new File([readFileSync(pfad, "utf-8")], pfad.split("/").pop()!), profil));
-      }
-      const a = FALL.auftrag;
-      const lauf = neuerLauf(
-        profil,
-        {
-          sachverhalt: a.sachverhalt,
-          stichworte: a.stichworte,
-          urls: [],
-          stichtag: a.stichtag,
-          prueffrage: "",
-          websuche: a.websuche,
-          meldezeitpunkt: a.meldezeitpunkt,
-        },
-        material.map((m) => ({ name: m.name, art: m.art, groesse: m.groesse, hash: m.hash })),
-      );
-      const datei = join(AUSGABE, `${lauf.id}.lauf.json`);
-      const speichern = (l: Lauf) => writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
-      const anbieter = ATTRAPPE ? attrappe(material, JSON.parse(refText)) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
+      const anbieter = ATTRAPPE ? attrappe(eingaenge, JSON.parse(refText)) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
       let zeichen = 0;
-      const k: Kontext = {
-        profil,
+      let datei = "";
+      const speichern = (l: Lauf) => {
+        datei ||= join(AUSGABE, `${l.id}.lauf.json`);
+        writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
+      };
+      console.log(`Lauf ${i}/${LAEUFE} (S1 ${modellFuer("vorverarbeitung", EINSTELLUNGEN, profil)}, S2 ${modellFuer("verdichtung", EINSTELLUNGEN, profil)})`);
+      // Ablauf, Prüfpunkte und Reihendatei wie der Vergleichslauf der App (src/pipeline/vergleichslauf.ts, seit 0.5.8)
+      const erg = await einLauf({
+        daten,
         anbieter,
         einstellungen: EINSTELLUNGEN,
-        lauf,
-        material,
+        attrappe: ATTRAPPE,
         aktualisiert: speichern,
         fortschritt: (f) => {
           if (f.art === "schreibt" && f.zeichen - zeichen >= 5000) console.log(`  … ${(zeichen = f.zeichen)} Zeichen`);
           if (f.art === "wiederholung") console.log(`  Wiederholung: ${f.grund}`);
         },
-      };
-      console.log(
-        `Lauf ${i}/${LAEUFE}: ${lauf.id} (S1 ${modellFuer("vorverarbeitung", EINSTELLUNGEN, profil)}, S2 ${modellFuer("verdichtung", EINSTELLUNGEN, profil)})`,
-      );
-
-      let meldung: Meldung | undefined;
-      try {
-        const vorschlag = await stufe1(k);
-        // Automatische Bestätigung: Vorschlag unverändert, keine vorgeschlagene Prüffrage übernommen
-        const e = await stufe2und3(k, structuredClone(vorschlag));
-        meldung = e.meldung ?? undefined;
-      } catch (err) {
-        lauf.status = lauf.status === "fertig" ? lauf.status : "fehler";
-        lauf.fehler ??= String((err as Error)?.message || err);
-        console.log(`  Fehler: ${lauf.fehler}`);
-      }
-
-      const quellen = meldung ? eingangsquellenPruefen(material, meldung, profil) : [];
-      if (meldung) {
-        const mig = migriere(JSON.parse(refText), profil);
-        const ergebnis = vergleiche(meldung, mig.daten, profil);
-        lauf.vergleich = {
-          referenz: REFERENZ,
-          referenzHash: await sha256(refText),
-          referenzDaten: mig.daten,
-          verfahren: VERGLEICH_VERFAHREN,
-          manuell: false,
-          zuordnung: zuordnungAus(ergebnis),
-          erstellt: new Date().toISOString(),
-          ergebnis,
-        };
-        writeFileSync(
-          join(AUSGABE, `${lauf.id}.vergleich.csv`),
-          vergleichTabelle(ergebnis)
-            .map((z) => z.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
-            .join("\n"),
-        );
-        writeFileSync(join(AUSGABE, `${lauf.id}.meldung.json`), JSON.stringify(meldung, null, 2));
+      });
+      const lauf = erg.lauf;
+      if (lauf.fehler) console.log(`  Fehler: ${lauf.fehler}`);
+      if (erg.meldung) {
+        writeFileSync(join(AUSGABE, `${lauf.id}.vergleich.csv`), csv(erg.vergleichTabelle ?? []));
+        writeFileSync(join(AUSGABE, `${lauf.id}.meldung.json`), JSON.stringify(erg.meldung, null, 2));
       }
       speichern(lauf);
-
-      const punkte = pruefpunkte(lauf, material, meldung, quellen);
-      const s1 = lauf.vorschlag;
-      const zugeordnet = new Set((s1?.sachverhalte ?? []).flatMap((s) => s.eingangsmeldungen ?? []));
-      const eintrag = {
-        lauf: lauf.id,
-        attrappe: ATTRAPPE,
-        anbieter: ANBIETER,
-        status: lauf.status,
-        technisch_bestanden: punkte.every((p) => p.erfuellt),
-        pruefpunkte: punkte,
-        beobachtungen: {
-          s1_zugeordnete_eingaenge: zugeordnet.size,
-          s1_sachverhalte: s1?.sachverhalte.length ?? 0,
-          s1_app_hinweise: s1?.appHinweise ?? [],
-          quellen,
-          schemabefunde_endfassung: meldung ? pruefeGegenSchema(profil.schema, meldung, profil.ui).length : null,
-          befunde: lauf.ergebnis?.befunde ?? [],
-          vergleich: lauf.vergleich?.ergebnis
-            ? {
-                paare: lauf.vergleich.ergebnis.paare.map((p) => ({
-                  ki: p.ki?.bezeichnung ?? null,
-                  ref: p.ref?.bezeichnung ?? null,
-                  aehnlichkeit: p.aehnlichkeit,
-                })),
-                beurteilung: lauf.vergleich.ergebnis.beurteilung,
-                tendenz: lauf.vergleich.ergebnis.tendenz,
-                arten: lauf.vergleich.ergebnis.arten,
-                achsen: lauf.vergleich.ergebnis.achsen,
-              }
-            : null,
-        },
-        stufen: lauf.stufen.map((s) => ({
-          stufe: s.stufe,
-          modell: s.modell,
-          aufwand: s.aufwand,
-          dauer_s: s.dauerMs ? Math.round(s.dauerMs / 100) / 10 : null,
-          ausgabetoken: s.nutzung?.ausgabe ?? null,
-          kosten_usd: s.kostenUsd ?? null,
-          stop: s.antwort?.stopGrund ?? null,
-          fehler: s.fehler ?? null,
-        })),
-        kosten_usd: lauf.kostenUsd,
-        dauer_s: Math.round((Date.parse(lauf.aktualisiert) - Date.parse(lauf.erstellt)) / 1000),
-        // Seit 0.5.6: Kurzantwort und Entwurf eingebettet, damit die Reihe als eine Datei inhaltlich auswertbar ist
-        // (Muss- und Darf-nicht-Punkte des Falls); alle Inhalte sind fiktiv
-        kurzantwort: lauf.ergebnis?.kurzantwort ?? null,
-        meldung: meldung ?? null,
-      };
       summe += lauf.kostenUsd ?? lauf.kostenBekanntUsd ?? 0;
-      writeFileSync(join(AUSGABE, `${lauf.id}.pruefung.json`), JSON.stringify(eintrag, null, 2));
-      zusammenfassung.push(eintrag);
-      console.log(`  ${punkte.map((p) => `${p.nr}:${p.erfuellt ? "ok" : "NEIN"}`).join(" ")} · ${lauf.kostenUsd ?? "?"} USD · ${eintrag.dauer_s} s`);
+      writeFileSync(join(AUSGABE, `${lauf.id}.pruefung.json`), JSON.stringify(erg.eintrag, null, 2));
+      ergebnisse.push(erg);
+      console.log(
+        `  ${erg.eintrag.pruefpunkte.map((p) => `${p.nr}:${p.erfuellt ? "ok" : "NEIN"}`).join(" ")} · ${lauf.kostenUsd ?? "?"} USD · ${erg.eintrag.dauer_s} s`,
+      );
     }
     // Gesamtergebnis der Reihe (Format ki-lead-abnahme/1): ohne Schlüssel, zur Übergabe an die Auswertung
-    const reihe = {
-      format: "ki-lead-abnahme/1",
-      plan: "evaluation/plaene/2026-10-23-abnahme-m4.md",
-      fall: FALL.id,
-      erstellt: new Date().toISOString(),
-      app: APP_KENNUNG,
-      profil: { id: profil.manifest.id, version: profil.manifest.version, hash: profil.hash },
-      anbieter: ANBIETER,
-      ...(ANBIETER === "mistral" ? { mistral_endpunkt: EINSTELLUNGEN.mistralEndpunkt } : {}),
-      attrappe: ATTRAPPE,
-      modelle: {
-        s1: { modell: modellFuer("vorverarbeitung", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.vorverarbeitung },
-        s2: { modell: modellFuer("verdichtung", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.verdichtung },
-        reparatur: { modell: modellFuer("reparatur", EINSTELLUNGEN, profil), aufwand: EINSTELLUNGEN.aufwand.reparatur },
-      },
-      laeufe_geplant: LAEUFE,
-      technisch_bestanden: (zusammenfassung as { technisch_bestanden: boolean }[]).filter((z) => z.technisch_bestanden).length,
-      kosten_usd_summe: Math.round(summe * 10000) / 10000,
-      laeufe: zusammenfassung,
-    };
+    const reihe = reiheErstellen({ daten, einstellungen: EINSTELLUNGEN, ergebnisse, geplant: LAEUFE, quelle: "skript", attrappe: ATTRAPPE });
     writeFileSync(join(AUSGABE, `reihe-${ANBIETER}-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`), JSON.stringify(reihe, null, 2));
-    expect(zusammenfassung.length).toBeGreaterThan(0);
+    expect(ergebnisse.length).toBeGreaterThan(0);
   });
 });

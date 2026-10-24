@@ -1,0 +1,48 @@
+{
+  "format": "ki-lead-bewertungsplan/1",
+  "id": "standardprofile-ilka",
+  "stand": "2026-10-24",
+  "fragestellung": "Welche Standard-Profile von OpenAI und Mistral kommen bei der Verdichtung Ilka der Anthropic-Reihe am nächsten (AV-2026-W43-04), und soll die App-Vorgabe der Verdichtung Opus oder Sonnet sein (AV-2026-W43-10)? Bezug ist Variante A (Standard-Profil Anthropic). Verglichen werden die Kennzahlen des Vergleichslaufs: Zahl der Sachverhalte, gesetzte Achsen, gesetzte Tendenz, Gleichheit von Beurteilung und Tendenz, Ähnlichkeit und Achsenabweichung gegenüber der Redaktionsfassung, Abstand der Radarwerte zu Variante A und Plausibilitätsbefunde; Kosten und Dauer werden berichtet, entscheiden aber nicht. Kein Gesamtwert über die Kennzahlen.",
+  "faelle": ["orkantief-ilka-verdichtung"],
+  "varianten": [
+    {
+      "kennung": "A-anthropic-standard",
+      "s1": { "modell": "claude-haiku-5-5", "aufwand": "high" },
+      "s2": { "modell": "claude-opus-5-5", "aufwand": "medium" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "B-anthropic-sonnet",
+      "s1": { "modell": "claude-haiku-5-5", "aufwand": "high" },
+      "s2": { "modell": "claude-sonnet-5-5", "aufwand": "medium" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "C-openai-standard",
+      "s1": { "modell": "gpt-6-luna", "aufwand": "high" },
+      "s2": { "modell": "gpt-6-astra", "aufwand": "medium" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "D-openai-astra-hoch",
+      "s1": { "modell": "gpt-6-luna", "aufwand": "high" },
+      "s2": { "modell": "gpt-6-astra", "aufwand": "high" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "E-mistral-standard",
+      "s1": { "modell": "mistral-small-2603", "aufwand": "high" },
+      "s2": { "modell": "mistral-medium-3-5", "aufwand": "high" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "F-mistral-large",
+      "s1": { "modell": "mistral-small-2603", "aufwand": "high" },
+      "s2": { "modell": "mistral-large-4", "aufwand": "high" },
+      "material": "eingaenge"
+    }
+  ],
+  "wiederholungen": 3,
+  "budget_usd": 30,
+  "hinweis": "Durchführung in der App: Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Konfiguration „Plan standardprofile-ilka, Variante …“, Anzahl 3; alle Varianten mit derselben App-Version. Reparatur nach dem Standard-Profil des S2-Anbieters. Mistral über den Endpunkt aus den Einstellungen (Vorgabe EU); bei Mistral ist „high“ an der API dasselbe wie „medium“. Auswertung: npm run vergleichslauf:auswerten -- <ZIP-Dateien>. Schätzung (Listenpreise, ohne Gewähr): A etwa 6 USD, B 2–3 USD, C etwa 4 USD, D bis 8 USD, E und F je etwa 1 USD."
+}
