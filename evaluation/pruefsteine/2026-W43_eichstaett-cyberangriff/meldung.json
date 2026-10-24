@@ -1,0 +1,70 @@
+{
+  "schema": "LEAD-Meldung-v1",
+  "_status": "Entwurf",
+  "_entstehung": {
+    "verfahren": "KI-Entwurf",
+    "werkzeug": "Erfassungstest (Claude Cowork, geplanter Lauf), Websuche und Seitenabruf",
+    "modell": "claude-opus-5-5",
+    "sop": [
+      "SOP-LEAD B15 Cyberangriff / IT-Sicherheitsvorfall v2.4.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden LEAD 1.3.0",
+    "erstellt": "2026-10-24T13:00"
+  },
+  "land": "Bund",
+  "meldende_stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+  "meldezeitpunkt": "2026-10-24T13:00",
+  "meldezeitraum": {
+    "von": "2026-10-12",
+    "bis": "2026-10-24"
+  },
+  "quellen": "[Q1] A – Stadt Eichstätt (12.10.2026): Cyber-Attacke: Stadtverwaltung Eichstätt geschlossen und nur eingeschränkt erreichbar. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_stadtverwaltung-2841/ [Zugriff: 24.10.2026]. Datenstand: 12.10.2026, 15:40\n[Q2] A – Stadt Eichstätt (13.10.2026): Cyber-Attacke: Krisenstab fährt ab Mittwoch Dienstleistungen wieder hoch. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_krisenstab_faehr-2843 [Zugriff: 24.10.2026]. Datenstand: 13.10.2026, 17:19\n[Q3] A – Stadt Eichstätt (14.10.2026): Cyber-Attacke: Stadtverwaltung startet wieder im Notbetrieb. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_stadtverwaltung-2845 [Zugriff: 24.10.2026]. Datenstand: 14.10.2026, 19:03\n[Q4] A – Stadt Eichstätt (15.10.2026): Cyber-Attacke: Stadt Eichstätt arbeitet an Plan zum Wiederhochfahren der Systeme. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_stadt_eichstaett-2849/ [Zugriff: 24.10.2026]. Datenstand: 15.10.2026, 18:26\n[Q5] A – Stadt Eichstätt (19.10.2026): Cyber-Attacke: Wiederhochfahren kann ab Dienstag beginnen. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_wiederhochfahren-2855 [Zugriff: 24.10.2026]. Datenstand: 19.10.2026, 17:38\n[Q6] A – Stadt Eichstätt (20.10.2026): Cyber-Attacke: Erste Server sind wieder am Netz. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_erste_server_sin-2857 [Zugriff: 24.10.2026]. Datenstand: 20.10.2026, 16:45\n[Q7] A – Stadt Eichstätt (22.10.2026): Cyber-Attacke auf Stadtverwaltung war kein gezielter Angriff. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_auf_stadtverwalt-2861 [Zugriff: 24.10.2026]. Datenstand: 22.10.2026, 19:01\n[Q8] A – Stadt Eichstätt (22.10.2026): Häufige Fragen zum Cyberangriff (FAQ Notbetrieb). Online abrufbar unter: https://www.eichstaett.de/cyberangriff [Zugriff: 24.10.2026]. Datenstand: 22.10.2026\n[Q9] A – Stadt Eichstätt (16.10.2026): Cyber-Attacke: Stadt Eichstätt ist über das Wochenende telefonisch erreichbar. Online abrufbar unter: https://www.eichstaett.de/aktuelles/cyber-attacke_stadt_eichstaett-2851/ [Zugriff: 24.10.2026]. Datenstand: 16.10.2026, 16:00",
+  "sachverhalte": [
+    {
+      "eintritt": "2026-10-09",
+      "art": [
+        "Cyberangriff / IT-Sicherheitsvorfall"
+      ],
+      "ort": "Stadt Eichstätt (Bayern), Stadtverwaltung; Referenzraum: Bevölkerungsschutz in Deutschland",
+      "bezeichnung": "Erpressungsangriff mit Datenabfluss: Stadtverwaltung Eichstätt seit 12.10. im Notbetrieb, Einfallsweg über Anbietersoftware",
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Eine Stadtverwaltung in Bayern arbeitet nach einem Erpressungsangriff mit Verschlüsselung und Datenabfluss seit zwei Wochen im Notbetrieb; der Angriff lief nach Angabe der Stadt über eine Schwachstelle in der Software eines Anbieters, nicht gezielt gegen die Kommune [Q7]. Bestätigter Sachstand (Eigenangaben der betroffenen Stadt, Stand 22.10.2026): Der Angriff begann laut Stadt in der Nacht vom 08. auf den 09.10.2026 [Q7]; frühere Mitteilungen nannten das Wochenende vor dem 12.10. bzw. die Feststellung am Montag, 12.10. [Q1, Q4]. Die Stadt schaltete am 12.10. den Großteil ihrer EDV vorsorglich ab, schloss Rathaus und Außenstellen für Behördengänge und war per E-Mail nicht erreichbar [Q1]. Ein Krisenstab der Stadtverwaltung wurde eingerichtet [Q2]. Seit 14.10. gilt ein Notbetrieb: dringende Beurkundungen im Standesamt bei persönlicher Vorsprache, Anträge in Papierform, Notfall-Ausweise über die Verwaltungsgemeinschaft, Notfall-Hotline und Info-Punkt; nicht verfügbar sind u. a. E-Mail-Kontakt zur Kernverwaltung, SEPA-Lastschriften und Parkausweise [Q3, Q8]. Die Stadt bestätigt, dass ein Großteil der Daten kopiert und laut späterer Mitteilung auf einen Server im Ausland übertragen wurde; ob personenbezogene Daten betroffen und auswertbar sind, ist offen; veröffentlicht wurde bis 22.10. nichts, eine ausdrückliche Lösegeldforderung liegt nicht vor [Q3, Q7]. Der Wiederaufbau aus Datensicherungen hat am 20.10. begonnen; die Stadt erwartet den Notbetrieb mindestens bis Ende der Woche (KW 43) [Q5, Q6, Q8]. Bezug zum Referenzraum: kommunales Einzelereignis; bundesweiter Erkenntniswert über den Einfallsweg (Software eines Anbieters mit weiteren möglichen Kunden), der öffentlich nicht benannt ist [Q7].",
+        "risiken_auswirkungen": "Tatsächliche Wirkung: Einschränkung kommunaler Verwaltungsleistungen für die Einwohnerschaft einer Stadt seit 12.10. [Q1, Q3]; nach Angaben der Stadt sind die Stadtwerke nicht betroffen [Q1, Q3, Q8]; im städtischen Alten- und Pflegeheim fiel nur die E-Mail-Adresse aus, die übrigen Kanäle liefen weiter [Q1]. Eine Beeinträchtigung von Gefahrenabwehr, Feuerwehr oder Warnung ist in den eingesehenen Mitteilungen nicht genannt; das ist kein Nullbefund. Folgerisiken: (a) Vertraulichkeit – der Datenabfluss kann nach Veröffentlichung oder Weitergabe zu Betrugsversuchen im Namen der Stadt führen; die Stadt warnt selbst vor gefälschten Rechnungen und Mitteilungen [Q1, Q7, Q8]. Ob Bürgerinnen und Bürger individuell zu informieren sind, will die Stadt entscheiden, wenn verlässliche Erkenntnisse vorliegen [Q7]. (b) Wiederanlauf – ein vertrauenswürdiger Wiederaufbau setzt unbeschädigte Sicherungen und die Prüfung jedes Arbeitsplatzrechners voraus; die Stadt nennt keinen Termin für den Normalbetrieb [Q5, Q6]. Szenario (Einschätzung Koordinierungsstelle): Hat der Angreifer dieselbe Schwachstelle der Anbietersoftware bei weiteren Kunden genutzt, können weitere Verwaltungen oder Einrichtungen zeitversetzt betroffen sein; ein Beleg dafür liegt in den eingesehenen Quellen nicht vor (B15/R8).",
+        "massnahmen_empfehlungen": "Dokumentierte Maßnahmen: Vorsorgliche Abschaltung der städtischen EDV (Stadt Eichstätt, umgesetzt seit 12.10.) [Q1]; Krisenstab der Stadtverwaltung (eingerichtet, Stand 13.10.) [Q2]; Notbetrieb mit Hotline, Info-Punkt und Papierverfahren (begonnen 14.10., andauernd) [Q3, Q8, Q9]; Trennung von der betroffenen Software und dem Anbieter (angeordnet laut Stadt, Stand 22.10.) [Q7]; Wiederaufbau aus Datensicherungen unter Beteiligung einer beauftragten Fachfirma, abgestimmt mit dem Landesamt für Sicherheit in der Informationstechnik (begonnen 20.10.) [Q5, Q6, Q7]; Ermittlungen durch das Landeskriminalamt (laufend) [Q3, Q4]; Information der Datenschutzaufsicht des Landes (umgesetzt) [Q3, Q5]. Empfehlungen (Einschätzung Koordinierungsstelle, keine Weisung): (1) Für Informationssicherheit zuständige Stellen von Bund und Land sollten bis zur nächsten Lagebild-Ausgabe prüfen, ob die betroffene Software und weitere Kunden des Anbieters bekannt sind und ob eine Information anderer Verwaltungen über bestehende Warnwege erforderlich ist; Anlass ist der von der Stadt genannte Einfallsweg ohne Benennung des Produkts [Q7]. (2) Die betroffene Stadt und die Datenschutzaufsicht sollten über Zeitpunkt und Form einer Information möglicherweise betroffener Personen entscheiden, sobald Art der abgeflossenen Daten geklärt ist [Q7].",
+        "abhaengigkeiten_interdependenzen": "Wirkungskette: Kompromittierte Anbietersoftware → Verschlüsselung und Abschaltung der städtischen IT → Ausfall von E-Mail und Fachverfahren der Kernverwaltung → Verwaltungsleistungen nur im Notbetrieb; Puffer: Papierverfahren, Hotline, Info-Punkt, separate Server für digitale Wohnsitzanmeldung [Q3, Q6, Q8]; Reichweite des Puffers: durch die Stadt nicht beziffert. Geprüfte Kopplungen: Stadtwerke laut Stadt nicht betroffen [Q1, Q3]; Alten- und Pflegeheim nur per E-Mail eingeschränkt [Q1]. Gemeinsame Abhängigkeit über den Software-Anbieter: Exposition weiterer Kunden möglich, Ausbreitung nicht belegt (B15/R8). Keine belastbare Angabe zu Fachverfahren, die mit Landes- oder Bundesverfahren gekoppelt sind."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "Entspannung",
+        "bewertung_text": "Kernaussage: Für den Bevölkerungsschutz in Deutschland ist der Vorfall örtlich begrenzt, aber als Hinweis auf einen Einfallsweg über die Software eines Anbieters von Belang; zu prüfen ist, ob weitere Verwaltungen dieselbe Software einsetzen und informiert sind. Referenzraum: Bevölkerungsschutz in Deutschland (Bund); t0: 24.10.2026, 13:00. Beurteilung „geringfügig“: Eingeschränkt sind kommunale Verwaltungsleistungen einer Stadt mit Ersatzwegen; Versorgungs-, Gefahrenabwehr- oder Warnfunktionen sind nach den eingesehenen Angaben nicht berührt. Tendenz „Entspannung“ für die betroffene Stadtverwaltung im Zeitfenster 12.10.–24.10.: Wiederaufbau begonnen, erste Leistungen seit 21.10. wieder verfügbar; der Datenabfluss bleibt als offene Folge bestehen. Lagenradar: D1 = 1, weil die eingeschränkte Leistung die Verwaltung einer Stadt betrifft [Q1, Q3], Abgrenzung zu 2: keine weitere Kommune belegt. D2 offen: Einschränkung von Verwaltungsleistungen ist keine Beeinträchtigung von Leben, Gesundheit, Unterkunft oder Grundversorgung im Sinne von D2; eine Personenzahl liegt nicht vor. D3 = 1, Funktion Steuerung von Notbetrieb und Wiederanlauf der Verwaltungsleistungen durch den Krisenstab der Stadt [Q2]; Abgrenzung zu 0: die Stadt ist nicht nur Betreiberin ihrer IT, sondern steuert die Bewältigung. D4 = 4, weil eine Landesfachstelle für Informationssicherheit den Wiederanlauf unterstützt [Q5, Q7]; die beauftragte Fachfirma ist ohne belegten Herkunftsraum nicht berücksichtigt; Ermittlungen des LKA sind keine Bewältigungsunterstützung. D5 offen: Zielzustand Ende des Notbetriebs; die Stadt nennt nur „mindestens bis Ende der Woche“, diese Spanne ist zu t0 abgelaufen, eine neue Prognose fehlt [Q6, Q8]. D6 = 1, peripher: Stadtwerke laut Stadt nicht betroffen, Pflegeheim nur E-Mail [Q1, Q3]. D7 = 2, relevante Lücken: Produkt und Anbieter sind nicht benannt, Umfang des Datenabflusses unklar, Angaben zum Beginn uneinheitlich [Q1, Q4, Q7]; Abgrenzung zu 3: die zuständige Stelle informiert regelmäßig und überprüfbar. D8 = 2, einzelne Umschläge: Abschaltung (12.10.), Notbetrieb (14.10.), Beginn des Wiederaufbaus (20.10.) [Q1, Q3, Q6].\nNeubewertung bei: Veröffentlichung abgeflossener Daten; Bekanntwerden weiterer betroffener Kunden des Anbieters; Hinweise auf Beeinträchtigung von Gefahrenabwehr- oder Warnfunktionen; neue Prognose der Stadt zum Ende des Notbetriebs",
+        "lagenradar": {
+          "d1": 1,
+          "d2": null,
+          "d3": 1,
+          "d4": 4,
+          "d5": null,
+          "d6": 1,
+          "d7": 2,
+          "d8": 2
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    },
+    "versand": {
+      "name": "",
+      "datum": "",
+      "hz": ""
+    }
+  }
+}

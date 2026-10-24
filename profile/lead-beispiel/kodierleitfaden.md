@@ -1,6 +1,6 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD · Fassung 1.3.0 vom 23.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
+Beispielfassung für KI-LEAD · Fassung 1.4.0 vom 24.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
 Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
@@ -10,7 +10,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 ## 1. Grundregeln
 
-1. **Referenzraum und Zeitpunkt festlegen.** Vor der Kodierung werden der Referenzraum (in der Regel der deutsche Bevölkerungsschutz bzw. das meldende Land) und der Zeitpunkt t0 benannt. t0 ist der Meldezeitpunkt, nicht der Ereignisbeginn und nicht der Datenstand einer einzelnen Quelle. Kodiert wird der Ist-Zustand zu t0.
+1. **Referenzraum und Zeitpunkt festlegen.** Vor der Kodierung werden der Referenzraum (in der Regel der deutsche Bevölkerungsschutz bzw. das meldende Land) und der Zeitpunkt t0 benannt. t0 ist der Meldezeitpunkt, nicht der Ereignisbeginn und nicht der Datenstand einer einzelnen Quelle. Kodiert wird der Ist-Zustand zu t0, auch wenn die Einschränkung vor t0 beendet wurde; Umfang und Dauer des beendeten Ereignisses stehen dann im Text und im Kennsatz `Abschluss im Lagebild:` (SOP-LEAD A.8.2).
 2. **Alle acht Achsen einzeln prüfen.** Jede Achse wird für sich kodiert. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Auswahl.
 3. **Höhere Zahl = stärkere, bedeutsamere oder ungünstigere Ausprägung.** Die Bedeutung einer Stufe ergibt sich ausschließlich aus dem Stufentext (Abschnitt 2).
 4. **Stufe 0 ist eine inhaltliche Aussage, kein Leerwert.** Sie braucht einen Beleg wie jede andere Stufe.
@@ -102,6 +102,8 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 - D5 ist die zu t0 fachlich prognostizierte **Restdauer** und damit die definierte Ausnahme zur reinen Ist-Kodierung (Grundregel 7). Prognosegeber, Ausgabestand und Unsicherheit werden angegeben; bereits verstrichene Ereignisdauer zählt nicht.
 - **Zielzustand ausdrücklich benennen** (z. B. Gefahrenabwehr beendet, Versorgung wiederhergestellt, Freigabe erteilt). Wetterende oder technische Wiederversorgung sind nicht automatisch der Zielzustand. Notbetrieb, Wiederherstellung der kritischen Dienstleistung und vollständige Folgenbeseitigung werden getrennt beschrieben; bei mehreren Zielzuständen wird der für D5 gewählte begründet.
 - Grundlage ist eine belegte Prognose der zuständigen Stelle oder des Betreibers.
+- **Erreichter Zielzustand:** Ist der benannte Zielzustand zu t0 bereits erreicht, gilt D5 = 0.
+- **Mindestprognose:** Nennt der Prognosegeber nur eine Mindestdauer („mindestens bis …“), darf sie als Mindestwert kodiert und im Bewertungstext so gekennzeichnet werden (Grundregel 6); ist sie zu t0 abgelaufen und fehlt eine neue Prognose, bleibt D5 offen.
 - **Offen:** ohne Zielzustand oder ohne belastbare Prognose, bei unbestimmten Trends.
 - D5 ist **keine Dringlichkeitsskala**. Zeitkritischer Handlungsbedarf steht im Kennsatz `Handlungsrelevant bis:`.
 
@@ -226,6 +228,9 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Mindestens 1.200 Evakuierte registriert, Zählung läuft | D2 = 3 (Mindestwert) | bestätigte Mindestzahl, im Text als Mindestwert gekennzeichnet |
 | Ersatzteil eines ausländischen Herstellers über den regulären Großhandel geliefert | D4 nicht „international“ | reguläre Lieferung ist keine ereignisbezogene Mobilisierung |
 | Gasversorgung angespannt, Lage seit zwei Wochen unverändert belegt | D8 = 0 | belegt stabiler Verlauf; Kipprisiken in Risiken und `Neubewertung bei:` |
+| Abkochgebot vor t0 aufgehoben, Meldung im Nachlauf | D1, D2 offen; D5 = 0; D6 nach Kopplungen zu t0; D8 nach dem Meldezeitraum | Kodiert wird der Ist-Zustand zu t0 (Grundregel 1); Umfang und Dauer stehen in „Lage & Ereignis“ und im Kennsatz `Abschluss im Lagebild:` |
+| Gesundheitsamt einer kreisfreien Stadt ordnet ein Abkochgebot an | D3 = 2 | bewertet wird die Funktion der unteren Gesundheitsbehörde (Kreisebene), nicht die Gebietskörperschaft; eine Gemeindeaufgabe derselben Stadt bleibt 1 |
+| Betreiber erwartet Notbetrieb „mindestens bis Ende der Woche“ (vier Tage ab t0) | D5 = 3 (Mindestwert) | Mindestprognose nach D5; Kennzeichnung im Bewertungstext |
 | Ausbruch im Ausland mit steigenden Fallzahlen; in Deutschland keine Fälle und keine eigene amtliche Beobachtung | D8 offen | keine deutsche Beobachtungsbasis; nicht D8 = 0. Die internationale Entwicklung steht als Frühwarnindikator im Text, nicht als deutsche Dynamik |
 
 ---
@@ -244,4 +249,5 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien; Bezug auf SOP-Sammelmappe und Arbeitsanweisung als Mindestfassung mit Verweis auf den Gültigkeitsstand |
 | 1.2.1 | 20.10.2026 | Abschnitt 6: `eintritt` und `meldezeitraum` dürfen eine belegte Uhrzeit tragen (LEAD-Meldevorlage 1.1); Regeln sonst unverändert |
 | 1.2.2 | 21.10.2026 | Kurzbeispiel D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0); Regeln unverändert. Anlass: Testreihe der KI-Modelle vom 20.10.2026, in der D8 = 0 für eine Auslandslage gesetzt wurde |
+| 1.4.0 | 24.10.2026 | Grundregel 1: Ist-Kodierung auch nach Ende der Einschränkung vor t0 (ET-2026-W43-01); D5: erreichter Zielzustand = 0 (ET-2026-W43-01) und Mindestprognose als gekennzeichneter Mindestwert (ET-2026-W43-04); drei Kurzbeispiele, darunter D3 bei kreisfreien Städten nach wahrgenommener Funktion (ET-2026-W43-06). Mitfortschreibung von SOP-LEAD Teil A.2 (D5) nach A.10.2. Anlass: Erfassungstest KW 43 |
 | 1.3.0 | 23.10.2026 | Mitfortschreibung von SOP-LEAD Teil A (3.14.0–3.16.0) nach A.10.2: D2 zählt Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene erst mit vollzogener Maßnahme; D3-Funktionsliste beispielhaft, bewertet wird die konkret betroffene Funktion; D6 steigt nicht allein mit der Ausfalldauer; Rangfolge nennt Beispielfassungen; Pflegeregel nennt Teil A. Anlass: Konsistenzprüfung KW 43 (KP-2026-W43-13, -33, -34, -38, -39) |
