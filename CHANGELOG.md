@@ -85,12 +85,14 @@ Grundlage: Befunddatei `ki-lead-befund_konsistenz-recherchegrenzen_2026-W43.json
 - **Ein geleertes Feld schaltet nichts mehr ab** (KP-2026-W43-74): Werte gelten sofort, wenn sie gültig sind; ein leeres Feld behält beim Verlassen den bisherigen Wert und sagt, wie die Websuche bzw. der Seitenabruf abzuschalten ist. Bisher wurde ein geleertes Feld sofort als 0 gespeichert.
 - **Bereiche werden durchgesetzt** (KP-2026-W43-75): Websuchen und Seiten 0–50, Lesemenge 1.000–100.000, ganze Zahlen; Abweichungen werden beim Verlassen des Feldes korrigiert und benannt. Bisher wurden eingetippte Werte wie 500 oder 2,5 unverändert gespeichert.
 - **„Seiten nie kürzen“** (KP-2026-W43-76): eigenes Kästchen mit Kostenhinweis statt der Eingabe 0, die bei der Lesemenge „ohne Grenze“ hieß, bei den anderen Feldern aber „aus“. Gespeichert wird weiter 0; abgewählt gilt der Standard 15.000.
+- **Akzentband:** doppelt so dick (8 statt 4 px). Ist eine Bandfarbe dieselbe Farbe wie der Kopf darüber oder der Seitengrund darunter (in zehn Länderschemata das Weiß), tönt die App beide ganz leicht in der Aktionsfarbe, damit das Weiß im Band sichtbar bleibt (`bandAbheben` in `src/darstellung/thema.ts`). Neutral- und Kontrastschemata bleiben unverändert; alle Kontrastregeln gelten weiter ([docs/farbschemas.md](docs/farbschemas.md)). (PR #72, bis zu dieser Version „Unveröffentlicht“)
 - Spezifikation 0.5.19 (Abschnitt 5.4, offener Punkt 16), `docs/TESTS.md`.
 
 ### Tests
 
 - `tests/pipeline/recherchetiefe.test.ts` (neu): Werte und Bereiche der Stufen, Stufe aus gespeicherten Werten, Prüfung getippter Werte (leer, Höchst- und Mindestwerte, Komma, keine Zahl), Umrechnung, Höchstkosten je Anbieter und Stufe, Wirkung je Anbieter (KP-2026-W43-69 bis -76).
 - `tests/ui/recherchetiefe.test.ts` (neu): Auswahl der Stufen, „Eigene Werte“, Beschriftungen und verknüpfte Beschreibungen, Höchstkosten, geleertes Feld, Begrenzung beim Verlassen, Kästchen „Seiten nie kürzen“.
+- `tests/darstellung/farbschemas.test.ts` (+5): Tönung genau bei den Schemata mit Weiß im Band, Neutral- und Kontrastschemata sowie Gelb auf Weiß unverändert, Kontrastregeln mit Tönung, Profilfarben mit weißer Akzentfarbe, Bandstärke 8 px.
 
 ## [0.5.18] – 25.10.2026
 
@@ -109,16 +111,6 @@ Grundlage: Befunddatei `ki-lead-befund_konsistenz-eingabemaske_2026-W43.json` (a
 - `tests/ui/ki-erfassung-felder.test.ts` (neu): Beschriftung, verknüpfter Hilfetext und Platzhalter je Feld, leere Feldwerte, bedingter Hinweis zu Webseiten ohne Websuche, Name der Stichtagsgruppe, Referenzraum des Beispielprofils im Hilfetext (KP-2026-W43-61 bis -68).
 - `tests/pipeline/auftragsfelder.test.ts` (neu): Die Anfrage an S1 nennt weiter „Sachverhalt und Erkenntnisinteresse“, auch bei leerem Feld; Stichworte und Übersicht der Ausgangsquellen unverändert (KP-2026-W43-61, -62).
 - Browsertests: `barrierefreiheit.spec.ts` prüft die Hilfetexte als zugängliche Beschreibung; `hauptablauf.spec.ts`, `abbruch.spec.ts` und `pwa-update.spec.ts` suchen das Feld unter der neuen Beschriftung.
-
-## [Unveröffentlicht]
-
-### Geändert
-
-- **Akzentband:** doppelt so dick (8 statt 4 px). Ist eine Bandfarbe dieselbe Farbe wie der Kopf darüber oder der Seitengrund darunter (in zehn Länderschemata das Weiß), tönt die App beide ganz leicht in der Aktionsfarbe, damit das Weiß im Band sichtbar bleibt (`bandAbheben` in `src/darstellung/thema.ts`). Neutral- und Kontrastschemata bleiben unverändert; alle Kontrastregeln gelten weiter ([docs/farbschemas.md](docs/farbschemas.md)).
-
-### Tests
-
-- `tests/darstellung/farbschemas.test.ts` (+5): Tönung genau bei den Schemata mit Weiß im Band, Neutral- und Kontrastschemata sowie Gelb auf Weiß unverändert, Kontrastregeln mit Tönung, Profilfarben mit weißer Akzentfarbe, Bandstärke 8 px.
 
 ## [0.5.17] – 25.10.2026
 
