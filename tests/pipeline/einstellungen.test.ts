@@ -9,7 +9,16 @@ vi.mock("idb-keyval", () => ({
 }));
 
 const {
+  MIX_IDS,
+  MIX_PROFILE,
+  MODELL_AUSWAHL,
+  ROLLEN,
   STANDARD,
+  STANDARD_PROFILE_FASSUNG_3,
+  aufwandStufenFuer,
+  mixProfilAktiv,
+  mixProfilAnwenden,
+  standardProfilAktiv,
   alleSchluesselLesen,
   einstellungenLesen,
   einstellungenSchreiben,
@@ -24,9 +33,9 @@ const {
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand", async () => {
+  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 4", async () => {
     expect(STANDARD.aufwand.vorverarbeitung).toBe("high");
-    expect(STANDARD.fassung).toBe(3);
+    expect(STANDARD.fassung).toBe(4);
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
   });
 
@@ -35,7 +44,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const e = await einstellungenLesen();
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
-    expect(e.fassung).toBe(3);
+    expect(e.fassung).toBe(4);
   });
 
   it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt, Fassung unverändert", async () => {
@@ -43,7 +52,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", alt);
     const e = await einstellungenLesen();
     expect(e.mistralEndpunkt).toBe("eu");
-    expect(e.fassung).toBe(3);
+    expect(e.fassung).toBe(4);
     speicher.set("einstellungen", { ...alt, mistralEndpunkt: "global" });
     expect((await einstellungenLesen()).mistralEndpunkt).toBe("global");
   });
@@ -60,18 +69,97 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("low");
   });
 
-  it("stellt Fassung 1 in einem Schritt auf Fassung 3 um", async () => {
+  it("stellt Fassung 1 in einem Schritt auf Fassung 4 um", async () => {
     speicher.set("einstellungen", { maxTokensErfassung: 64000, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", erfassung: "high" } });
     const e = await einstellungenLesen();
     expect(e.maxTokensErfassung).toBe(128000);
     expect(e.aufwand.erfassung).toBe("medium");
     expect(e.aufwand.vorverarbeitung).toBe("high");
-    expect(e.fassung).toBe(3);
+    expect(e.fassung).toBe(4);
   });
 
   it("nach Fassung 3 bleibt „medium“ eine bewusste Wahl", async () => {
     speicher.set("einstellungen", { ...STANDARD, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium" } });
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("medium");
+  });
+
+  // Soll unabhängig vom Code: die Standard-Profile bis 0.5.14 laut Spezifikation 0.5.14, Abschnitt 5.4
+  const ALT_ANTHROPIC = {
+    modelle: { vorverarbeitung: "claude-haiku-5-5", erfassung: "claude-opus-5-5", verdichtung: "claude-opus-5-5", reparatur: "claude-sonnet-5-5", kurzfassung: "claude-sonnet-5-5" },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  };
+  const ALT_OPENAI = {
+    modelle: { vorverarbeitung: "gpt-6-luna", erfassung: "gpt-6-astra", verdichtung: "gpt-6-astra", reparatur: "gpt-6.1-sol", kurzfassung: "gpt-6.1-sol" },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "high", reparatur: "low", kurzfassung: "medium" },
+  };
+  const ALT_MISTRAL = {
+    modelle: { vorverarbeitung: "mistral-small-2603", erfassung: "mistral-medium-3-5", verdichtung: "mistral-medium-3-5", reparatur: "mistral-small-2603", kurzfassung: "mistral-medium-3-5" },
+    aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
+  };
+
+  it("AV-2026-W43-32, -33, -37: die Standard-Profile der Fassung 3 sind die bis 0.5.14 gültigen", () => {
+    expect(STANDARD_PROFILE_FASSUNG_3).toEqual({ anthropic: ALT_ANTHROPIC, openai: ALT_OPENAI, mistral: ALT_MISTRAL });
+  });
+
+  it.each([
+    ["anthropic", ALT_ANTHROPIC, { reparatur: "claude-haiku-5-5" }, {}],
+    ["openai", ALT_OPENAI, {}, { erfassung: "high" }],
+    ["mistral", ALT_MISTRAL, { reparatur: "mistral-medium-3-5" }, {}],
+  ] as const)("AV-2026-W43-32, -33, -37: Fassung 3 mit dem alten Standard-Profil %s folgt danach dem heutigen", async (_a, alt, modelle, aufwand) => {
+    speicher.set("einstellungen", { ...STANDARD, fassung: 3, websucheMax: 7, modelle: alt.modelle, aufwand: alt.aufwand });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual({ ...alt.modelle, ...modelle });
+    expect(e.aufwand).toEqual({ ...alt.aufwand, ...aufwand });
+    expect(e.websucheMax).toBe(7);
+    expect(e.fassung).toBe(4);
+  });
+
+  it("AV-2026-W43-32: eine abweichende Wahl der Fassung 3 bleibt stehen", async () => {
+    const eigen = { ...ALT_ANTHROPIC.modelle, kurzfassung: "claude-opus-5-5" };
+    speicher.set("einstellungen", { ...STANDARD, fassung: 3, modelle: eigen, aufwand: ALT_ANTHROPIC.aufwand });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(eigen);
+    expect(e.fassung).toBe(4);
+  });
+
+  it("AV-2026-W43-32: leere Modellfelder (Vorgaben des Profils) bleiben leer", async () => {
+    speicher.set("einstellungen", { ...STANDARD, fassung: 3 });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(STANDARD.modelle);
+    expect(e.fassung).toBe(4);
+  });
+});
+
+describe("AV-2026-W43-31: Mix-Profile", () => {
+  it("belegen alle Aufgaben wie die Varianten M1 und M2 des Plans anbietermix-ilka, Reparatur Haiku, Management Summary Sonnet", () => {
+    expect(MIX_IDS).toEqual(["mix-opus", "mix-sonnet"]);
+    const soll = (s2: string) => ({
+      modelle: { vorverarbeitung: "gpt-6-luna", erfassung: s2, verdichtung: s2, reparatur: "claude-haiku-5-5", kurzfassung: "claude-sonnet-5-5" },
+      aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+    });
+    expect(MIX_PROFILE["mix-opus"]).toMatchObject({ titel: "Mix: OpenAI S1 + Anthropic Opus", anbieter: ["openai", "anthropic"], ...soll("claude-opus-5-5") });
+    expect(MIX_PROFILE["mix-sonnet"]).toMatchObject({ titel: "Mix: OpenAI S1 + Anthropic Sonnet", anbieter: ["openai", "anthropic"], ...soll("claude-sonnet-5-5") });
+  });
+
+  it("nutzen nur angebotene Modelle und Stufen", () => {
+    for (const id of MIX_IDS)
+      for (const r of ROLLEN) {
+        const m = MIX_PROFILE[id].modelle[r];
+        expect(MODELL_AUSWAHL).toContain(m);
+        expect(aufwandStufenFuer(m)).toContain(MIX_PROFILE[id].aufwand[r]);
+      }
+  });
+
+  it("Anwenden und Erkennen sind invers; alles andere bleibt; kein Standard-Profil gilt dann als aktiv", () => {
+    const start = { ...STANDARD, websucheMax: 3 };
+    for (const id of MIX_IDS) {
+      const e = mixProfilAnwenden(start, id);
+      expect(mixProfilAktiv(e, id)).toBe(true);
+      expect(e.websucheMax).toBe(3);
+      expect(MIX_IDS.filter((m) => mixProfilAktiv(e, m))).toEqual([id]);
+      expect((["anthropic", "openai", "mistral"] as const).some((a) => standardProfilAktiv(e, a))).toBe(false);
+    }
+    expect(mixProfilAktiv(start, "mix-opus")).toBe(false);
   });
 });
 

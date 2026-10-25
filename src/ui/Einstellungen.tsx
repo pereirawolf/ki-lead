@@ -18,11 +18,17 @@ import {
   modellHerkunft,
   profilvorgabeAktiv,
   profilvorgabeAnwenden,
+  MIX_IDS,
+  MIX_PROFILE,
+  mixProfilAktiv,
+  mixProfilAnwenden,
   STANDARD,
   STANDARD_PROFILE,
   standardProfilAktiv,
   standardProfilAnwenden,
   type Einstellungen as E,
+  type MixId,
+  type ModellProfil,
   type Rolle,
 } from "../pipeline/einstellungen";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
@@ -143,23 +149,25 @@ const HERKUNFT: Record<ReturnType<typeof modellHerkunft>, string> = {
   app: "Vorgabe der App",
 };
 
-/** Voreinstellung, der Modell und Aufwand aller Aufgaben gerade folgen */
-type Voreinstellung = "profil" | AnbieterId | "individuell";
+/** Voreinstellung, der Modell und Aufwand aller Aufgaben gerade folgen (Mix-Profile seit 0.5.15) */
+type Voreinstellung = "profil" | AnbieterId | MixId | "individuell";
+
+const istMix = (v: Voreinstellung): v is MixId => (MIX_IDS as string[]).includes(v);
 
 function aktiveVoreinstellung(e: E): Voreinstellung {
   if (profilvorgabeAktiv(e)) return "profil";
-  return ANBIETER_IDS.find((a) => standardProfilAktiv(e, a)) ?? "individuell";
+  return ANBIETER_IDS.find((a) => standardProfilAktiv(e, a)) ?? MIX_IDS.find((m) => mixProfilAktiv(e, m)) ?? "individuell";
 }
 
 function voreinstellungTitel(v: Voreinstellung): string {
   if (v === "profil") return "Vorgaben des aktiven Profils";
   if (v === "individuell") return "Individuelle Modellkonfiguration";
+  if (istMix(v)) return MIX_PROFILE[v].titel;
   return `Standard-Profil ${ANBIETER_NAME[v]}`;
 }
 
-/** Kurzbeschreibung eines Standard-Profils: „S1 claude-haiku-5-5 (hoch) · …“ */
-function standardProfilText(id: AnbieterId): string {
-  const s = STANDARD_PROFILE[id];
+/** Kurzbeschreibung eines Modellprofils: „S1 claude-haiku-5-5 (hoch) · …“ */
+function modellProfilText(s: ModellProfil): string {
   const kurz: Record<Rolle, string> = {
     vorverarbeitung: "S1",
     erfassung: "S2 Erfassung",
@@ -168,6 +176,13 @@ function standardProfilText(id: AnbieterId): string {
     kurzfassung: "Management Summary",
   };
   return ROLLEN.map((r) => `${kurz[r.id]} ${s.modelle[r.id]} (${aufwandTitel(s.aufwand[r.id])})`).join(" · ");
+}
+
+/** Kurzbeschreibung eines Mix-Profils mit Hinweis auf Schlüssel und Datenweg */
+function mixProfilText(id: MixId): string {
+  const m = MIX_PROFILE[id];
+  const namen = m.anbieter.map((a) => ANBIETER_NAME[a]).join(" und ");
+  return `${modellProfilText(m)}. Braucht Schlüssel für ${namen}; die Inhalte eines Laufs gehen an beide Anbieter.`;
 }
 
 /** Anbieter, die mit den aktuellen Einstellungen genutzt werden, in fester Reihenfolge */
@@ -506,12 +521,13 @@ function VoreinstellungWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (
       )
     )
       return;
-    setEinstellungen(v === "profil" ? profilvorgabeAnwenden(e) : standardProfilAnwenden(e, v));
+    setEinstellungen(v === "profil" ? profilvorgabeAnwenden(e) : istMix(v) ? mixProfilAnwenden(e, v) : standardProfilAnwenden(e, v));
     setGesetzt(v);
   };
   const optionen: { v: Voreinstellung; text: string }[] = [
     { v: "profil", text: "Modelle wie im aktiven Profil bzw. in der App vorgegeben, Aufwand nach den Vorgaben der App." },
-    ...ANBIETER_IDS.map((a) => ({ v: a as Voreinstellung, text: standardProfilText(a) })),
+    ...ANBIETER_IDS.map((a) => ({ v: a as Voreinstellung, text: modellProfilText(STANDARD_PROFILE[a]) })),
+    ...MIX_IDS.map((m) => ({ v: m as Voreinstellung, text: mixProfilText(m) })),
     { v: "individuell", text: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
   ];
   return (

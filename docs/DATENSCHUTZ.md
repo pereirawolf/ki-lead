@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.3 vom 24.10.2026, gilt für App-Version 0.5.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.4 vom 25.10.2026, gilt für App-Version 0.5.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -18,7 +18,7 @@ Werden nur fiktive oder offen zugängliche Inhalte ohne Personenbezug verwendet,
 |---|---|---|
 | Herausgeber der Software | Heiko Pereira Wolf, privates Forschungsvorhaben ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)); Anschrift und Kontakt im [Impressum](https://www.pereirawolf.de/impressum.html) | Quellcode, Profile, diese Hinweise; Betrieb der Seite auf GitHub Pages; Rückmeldungen im Repository (Abschnitt 12) |
 | Verantwortlicher für die Verarbeitung in der App | die nutzende Person oder Stelle | was sie in die App eingibt, speichert, an einen KI-Anbieter sendet und exportiert |
-| KI-Anbieter | Anthropic, OpenAI oder Mistral, nach Wahl der nutzenden Person | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle |
+| KI-Anbieter | Anthropic, OpenAI oder Mistral, nach Wahl der nutzenden Person; das Modell ist je Aufgabe wählbar, ein Lauf kann deshalb mehrere Anbieter nutzen (etwa die Mix-Profile seit 0.5.15: OpenAI und Anthropic) | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle |
 | Hosting der Web-App | GitHub (GitHub Pages) | Auslieferung der Programmdateien, Verbindungsprotokolle |
 
 KI-LEAD hat **keinen eigenen Server**. Inhalte gehen vom Gerät direkt an den gewählten Anbieter, mit dem API-Schlüssel der nutzenden Person. Der Herausgeber erhält weder Inhalte noch Schlüssel, Protokolle oder Nutzungsdaten. Er kann deshalb auch keine Auskunft über die Verarbeitung in der App geben und nichts löschen.
@@ -289,3 +289,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.1 | 24.10.2026 | Abschnitt 11: Rückmeldungen aus der Erprobung, Laufprotokolle in Issues, Impressum (App 0.5.5) |
 | 1.2 | 24.10.2026 | Abschnitt 12: Datenschutzerklärung nach Art. 13 DSGVO für die Verarbeitungen des Herausgebers, mit Verweis auf das Impressum; Abschnitt 2 mit Kontakt (App 0.5.5) |
 | 1.3 | 24.10.2026 | Mistral als dritter KI-Anbieter mit EU-Endpunkt als Vorgabe: Abschnitte 2, 4 und 5 (Endpunkte, Training, Aufbewahrung, Zero Data Retention, `store: false`), Drittlandübermittlung, Anhang A (App 0.5.6) |
+| 1.4 | 25.10.2026 | Abschnitt 2: Modell je Aufgabe wählbar, ein Lauf kann mehrere Anbieter nutzen (Mix-Profile, App 0.5.15; AV-2026-W43-31) |

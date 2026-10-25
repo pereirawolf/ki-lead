@@ -4,7 +4,7 @@ import { get, set } from "idb-keyval";
 import { aufwandAngeboten, aufwandStufenFuer } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
 import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
-import { anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { ANBIETER_IDS, anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
@@ -37,13 +37,15 @@ export interface Einstellungen {
  * Vorgaben der App für Profile ohne eigene Modellvorgabe; gleich dem Standard-Profil Anthropic. Verdichtung seit 0.5.10
  * mit Opus statt Sonnet (AV-2026-W43-10, entschieden am 25.10.2026): Sonnet kam im Vergleichslauf Ilka den Radarwerten
  * von Opus nahe, ließ aber die Tendenz im Stromausfall-Sachverhalt in zwei von drei Läufen offen; Bezug, Messwerte und
- * Standard-Profil beruhen auf Opus (evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md).
+ * Standard-Profil beruhen auf Opus (evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md). Reparatur seit
+ * 0.5.15 mit Haiku statt Sonnet (AV-2026-W43-32, Prüffall Reparatur vom 25.10.2026: beide 10/10 fehlerfrei, Haiku zu
+ * rund einem Zwanzigstel der Kosten; evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md).
  */
 export const APP_MODELLE: Record<Rolle, string> = {
   vorverarbeitung: "claude-haiku-5-5",
   erfassung: "claude-opus-5-5",
   verdichtung: "claude-opus-5-5",
-  reparatur: "claude-sonnet-5-5",
+  reparatur: "claude-haiku-5-5",
   kurzfassung: "claude-sonnet-5-5",
 };
 
@@ -64,7 +66,7 @@ export const STANDARD: Einstellungen = {
   suchland: "DE",
   maxTokensErfassung: 128000,
   mistralEndpunkt: "eu",
-  fassung: 3,
+  fassung: 4,
 };
 
 /**
@@ -90,14 +92,30 @@ export const STANDARD: Einstellungen = {
  * - Mistral (AV-2026-W43-14): Verdichtung mit mistral-medium-3-5 „high“ (Variante E), weil sie in Beurteilung,
  *   Achsenabweichung, Muss-Punkten und Zahlentreue näher an der Anthropic-Reihe liegt als mistral-large-4 „high“
  *   (Variante F, zweitbeste Option; nur im Radarabstand knapp näher, Public Preview, mehr Zahlenfehler).
+ *
+ * Seit 0.5.15 (Prüffall Reparatur und Management Summary vom 25.10.2026, evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md
+ * und 2026-10-25-management-summary-ilka-ergebnis.md):
+ * - Reparatur Anthropic mit claude-haiku-5-5 „low“ statt Sonnet (AV-2026-W43-32): 10/10 fehlerfrei wie Sonnet, 0,010 statt
+ *   rund 0,20 USD je Fall. OpenAI bleibt bei gpt-6.1-sol „low“ (10/10); gpt-6-luna setzte D2 am Skalenrand.
+ * - Reparatur Mistral mit mistral-medium-3-5 „low“ statt Small (AV-2026-W43-33): Small leerte eine Beurteilung und strich
+ *   Textzeilen; Medium löscht nichts, setzte aber D2 am Skalenrand. Nach der geschärften Anweisung (AV-2026-W43-34) werden
+ *   beide erneut geprüft; repariert Small dann fehlerfrei, kehrt das Profil zu Small zurück.
+ * - Erfassung OpenAI mit gpt-6-astra „high“ wie die Verdichtung (AV-2026-W43-37). Die Erfassung ist in keinem Profil gemessen;
+ *   sie folgt dem Modell und der Stufe der Verdichtung.
+ * - Management Summary bestätigt: Sonnet „medium“, gpt-6.1-sol „medium“, Mistral Medium 3.5 „high“ (Large 4 nicht besser).
  */
-export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, string>; aufwand: Record<Rolle, Aufwand> }> = {
+export interface ModellProfil {
+  modelle: Record<Rolle, string>;
+  aufwand: Record<Rolle, Aufwand>;
+}
+
+export const STANDARD_PROFILE: Record<AnbieterId, ModellProfil> = {
   anthropic: {
     modelle: {
       vorverarbeitung: "claude-haiku-5-5",
       erfassung: "claude-opus-5-5",
       verdichtung: "claude-opus-5-5",
-      reparatur: "claude-sonnet-5-5",
+      reparatur: "claude-haiku-5-5",
       kurzfassung: "claude-sonnet-5-5",
     },
     aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
@@ -110,24 +128,70 @@ export const STANDARD_PROFILE: Record<AnbieterId, { modelle: Record<Rolle, strin
       reparatur: "gpt-6.1-sol",
       kurzfassung: "gpt-6.1-sol",
     },
-    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "high", reparatur: "low", kurzfassung: "medium" },
+    aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "medium" },
   },
   mistral: {
     modelle: {
       vorverarbeitung: "mistral-small-2603",
       erfassung: "mistral-medium-3-5",
       verdichtung: "mistral-medium-3-5",
-      reparatur: "mistral-small-2603",
+      reparatur: "mistral-medium-3-5",
       kurzfassung: "mistral-medium-3-5",
     },
     aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
   },
 };
 
+/** Kennungen der Mix-Profile (seit 0.5.15) */
+export type MixId = "mix-opus" | "mix-sonnet";
+export const MIX_IDS: MixId[] = ["mix-opus", "mix-sonnet"];
+
+/**
+ * Mix-Profile (seit 0.5.15, AV-2026-W43-31; löst AV-2026-W43-30 ab): S1 von OpenAI, S2, Reparatur und Management Summary von
+ * Anthropic. Grundlage: Plan anbietermix-ilka (M1, M2; evaluation/abnahmen/2026-10-25-anbietermix-ilka-ergebnis.md), Prüffall
+ * Reparatur und Management Summary vom 25.10.2026. Die Erfassung folgt der Verdichtung (abgeleitet, nicht gemessen). Für
+ * Läufe braucht es Schlüssel für OpenAI und Anthropic; die Inhalte gehen an beide Anbieter. Keine Vorgabe der App.
+ */
+export const MIX_PROFILE: Record<MixId, ModellProfil & { titel: string; anbieter: AnbieterId[] }> = {
+  "mix-opus": {
+    titel: "Mix: OpenAI S1 + Anthropic Opus",
+    anbieter: ["openai", "anthropic"],
+    modelle: {
+      vorverarbeitung: "gpt-6-luna",
+      erfassung: "claude-opus-5-5",
+      verdichtung: "claude-opus-5-5",
+      reparatur: "claude-haiku-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  },
+  "mix-sonnet": {
+    titel: "Mix: OpenAI S1 + Anthropic Sonnet",
+    anbieter: ["openai", "anthropic"],
+    modelle: {
+      vorverarbeitung: "gpt-6-luna",
+      erfassung: "claude-sonnet-5-5",
+      verdichtung: "claude-sonnet-5-5",
+      reparatur: "claude-haiku-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  },
+};
+
+/** Setzt Modell und Aufwand aller Aufgaben auf ein Modellprofil; alles andere bleibt. */
+export function modellProfilAnwenden(e: Einstellungen, p: ModellProfil): Einstellungen {
+  return { ...e, modelle: { ...p.modelle }, aufwand: { ...p.aufwand } };
+}
+
+/** Sind Modell und Aufwand aller Aufgaben gerade genau dieses Modellprofil? */
+export function modellProfilAktiv(e: Einstellungen, p: ModellProfil): boolean {
+  return ROLLEN.every((r) => e.modelle[r] === p.modelle[r] && e.aufwand[r] === p.aufwand[r]);
+}
+
 /** Setzt Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters; alles andere bleibt. */
 export function standardProfilAnwenden(e: Einstellungen, anbieter: AnbieterId): Einstellungen {
-  const s = STANDARD_PROFILE[anbieter];
-  return { ...e, modelle: { ...s.modelle }, aufwand: { ...s.aufwand } };
+  return modellProfilAnwenden(e, STANDARD_PROFILE[anbieter]);
 }
 
 /**
@@ -145,9 +209,38 @@ export function profilvorgabeAktiv(e: Einstellungen): boolean {
 
 /** Sind Modell und Aufwand aller Aufgaben gerade genau das Standard-Profil des Anbieters? */
 export function standardProfilAktiv(e: Einstellungen, anbieter: AnbieterId): boolean {
-  const s = STANDARD_PROFILE[anbieter];
-  return (Object.keys(s.modelle) as Rolle[]).every((r) => e.modelle[r] === s.modelle[r] && e.aufwand[r] === s.aufwand[r]);
+  return modellProfilAktiv(e, STANDARD_PROFILE[anbieter]);
 }
+
+/** Setzt Modell und Aufwand aller Aufgaben auf ein Mix-Profil; alles andere bleibt. */
+export function mixProfilAnwenden(e: Einstellungen, id: MixId): Einstellungen {
+  return modellProfilAnwenden(e, MIX_PROFILE[id]);
+}
+
+/** Sind Modell und Aufwand aller Aufgaben gerade genau dieses Mix-Profil? */
+export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
+  return modellProfilAktiv(e, MIX_PROFILE[id]);
+}
+
+/**
+ * Standard-Profile bis Fassung 3 der Einstellungen (bis 0.5.14): Anthropic reparierte mit Sonnet, OpenAI erfasste mit
+ * „medium“, Mistral reparierte mit Small. Gespeicherte Einstellungen, die genau einem davon entsprechen, stellt
+ * einstellungenLesen auf das heutige Standard-Profil um (AV-2026-W43-32, -33, -37).
+ */
+export const STANDARD_PROFILE_FASSUNG_3: Record<AnbieterId, ModellProfil> = {
+  anthropic: {
+    modelle: { ...STANDARD_PROFILE.anthropic.modelle, reparatur: "claude-sonnet-5-5" },
+    aufwand: { ...STANDARD_PROFILE.anthropic.aufwand },
+  },
+  openai: {
+    modelle: { ...STANDARD_PROFILE.openai.modelle },
+    aufwand: { ...STANDARD_PROFILE.openai.aufwand, erfassung: "medium" },
+  },
+  mistral: {
+    modelle: { ...STANDARD_PROFILE.mistral.modelle, reparatur: "mistral-small-2603" },
+    aufwand: { ...STANDARD_PROFILE.mistral.aufwand },
+  },
+};
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
   return e.modelle[rolle] || profil.manifest.modelle?.[rolle] || APP_MODELLE[rolle];
@@ -193,6 +286,14 @@ export async function einstellungenLesen(): Promise<Einstellungen> {
   if (g && g.fassung === 2) {
     if (g.aufwand?.vorverarbeitung === "medium") g.aufwand = { ...g.aufwand, vorverarbeitung: "high" };
     g.fassung = 3;
+  }
+  // Fassung 3 → 4 (0.5.15): Wer genau einem bisherigen Standard-Profil folgt, folgt danach dem heutigen (Reparatur
+  // Anthropic mit Haiku, Mistral mit Medium 3.5, Erfassung OpenAI „high“). Eine abweichende Wahl bleibt stehen.
+  if (g && g.fassung === 3) {
+    const voll = { ...STANDARD, ...g, modelle: { ...STANDARD.modelle, ...(g.modelle || {}) }, aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) } };
+    const alt = ANBIETER_IDS.find((a) => modellProfilAktiv(voll, STANDARD_PROFILE_FASSUNG_3[a]));
+    if (alt) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE[alt]));
+    g.fassung = 4;
   }
   return {
     ...STANDARD,

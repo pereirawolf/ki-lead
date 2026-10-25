@@ -62,6 +62,37 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.12 | letzter Commit des Pull Requests „Vergleichslauf Ilka: Umfang wählen, Musterfassung als Grundlage; 0.5.12“ |
 | 0.5.13 | letzter Commit des Pull Requests „Prüffall Reparatur, Ergebnis Anbieter-Mix; 0.5.13“ |
 | 0.5.14 | letzter Commit des Pull Requests „Plausibilität ohne Fehlalarme, Messwerte des Anbieter-Mix; 0.5.14“ |
+| 0.5.15 | letzter Commit des Pull Requests „Mix-Profile, Reparatur mit Haiku, Ergebnisse MS und Prüffall Reparatur; 0.5.15“ |
+
+## [0.5.15] – 25.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_profilauswahl_2026-W43.json` (Auswertung der Management Summary und des Prüffalls Reparatur vom 25.10.2026, Commit dbef59e), Befunde AV-2026-W43-31 bis -38, vom Herausgeber am 25.10.2026 freigegeben; AV-2026-W43-37 angepasst (Erfassung OpenAI auf „hoch“ statt nur Hinweis). Ergebnisse: `evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md` und `2026-10-25-reparatur-ilka-ergebnis.md`.
+
+### Hinzugefügt
+
+- **Mix-Profile** (AV-2026-W43-31, löst AV-2026-W43-30 ab): unter „Modelle & Verarbeitung → Voreinstellung“ zwei weitere Profile neben den Standard-Profilen, „Mix: OpenAI S1 + Anthropic Opus“ (Plan-Variante M1) und „Mix: OpenAI S1 + Anthropic Sonnet“ (M2): S1 gpt-6-luna „hoch“, S2 Erfassung und Verdichtung Opus bzw. Sonnet „mittel“, Reparatur Haiku „niedrig“, Management Summary Sonnet „mittel“. Die Auswahl nennt die nötigen Schlüssel und den Datenweg an beide Anbieter. Keine Vorgabe der App (`MIX_PROFILE`, `mixProfilAnwenden`, `mixProfilAktiv` in `src/pipeline/einstellungen.ts`).
+- **Prüffall Reparatur, Kennzahl „Stellen wie Original“** (AV-2026-W43-35): je Fall `stellen_wie_original`, in der Summe die Zahl solcher Fälle, Spalte in der Übersicht, Zeile im LIESMICH und in der Ergebnistabelle der App. Ein leerer Wert zählt nicht als Originalwert. Reihendateien vor 0.5.15 bleiben lesbar.
+
+### Geändert
+
+- **Reparatur Anthropic mit Haiku** (AV-2026-W43-32): App-Vorgabe und Standard-Profil Anthropic reparieren mit `claude-haiku-5-5` „niedrig“ statt Sonnet. Im Vergleichslauf folgt die Reparatur weiter dem Standard-Profil des S2-Anbieters und ist damit für Anthropic ebenfalls Haiku.
+- **Reparatur Mistral mit Medium 3.5** (AV-2026-W43-33): Standard-Profil Mistral repariert mit `mistral-medium-3-5` „niedrig“ statt Small.
+- **Erfassung OpenAI „hoch“** (AV-2026-W43-37): wie die Verdichtung; die Erfassung folgt in allen Profilen der Verdichtung (abgeleitet, nicht gemessen).
+- **Gespeicherte Einstellungen, Fassung 4:** Wer genau einem Standard-Profil bis 0.5.14 folgt, folgt beim nächsten Start dem heutigen; eine abweichende Wahl bleibt (Entscheidung zu AV-2026-W43-32).
+- **Anweisung der Reparatur** (AV-2026-W43-34, `reparaturSystem()` in `src/pipeline/stufen.ts`): Ein unzulässiger Radarwert, eine Beurteilung, Tendenz oder Ereignisart übernimmt den Wert aus der Begründung desselben Sachverhalts, sonst den Leerwert, nie den Skalenrand; nicht beanstandete Textfelder bleiben unverändert.
+- **Beispielprofil 1.27.0** (AV-2026-W43-36): Arbeitsanweisung Kurzfassung 2.2.0 mit 180 Wörtern als Obergrenze und Kürzungsregel; SOP-Sammelmappe 3.17.1 (nur Gültigkeitsstand).
+- **Pläne** (AV-2026-W43-38): `management-summary-ilka` mit Variante F (mistral-large-4 „hoch“), `reparatur-ilka` mit Variante R-F (mistral-medium-3-5 „niedrig“), jeweils als Fassung 2 im Hinweis vermerkt; Ergebnisberichte beider Pläne.
+- **Management Summary der App** (Standardfassung für Profile ohne eigene Arbeitsanweisung, Hinweis bei Überlänge): „höchstens 180“ statt „Toleranz bis 180“, gleichlautend mit der Arbeitsanweisung (AV-2026-W43-36).
+- **Schätzung:** Messwerte der Management Summary je Modell im Kommentar von `schaetzeKurzfassung()`; alle in den Spannen (AV-2026-W43-38).
+- Spezifikation 0.5.15: Abschnitt 5.4 (Voreinstellung, Prüffall Reparatur), offener Punkt 6. Datenschutzhinweise 1.4: ein Lauf kann mehrere Anbieter nutzen.
+
+### Tests
+
+- `tests/pipeline/einstellungen.test.ts`: Mix-Profile vollständig und mit angebotenen Stufen, Anwenden und Erkennen invers, Umstellung der Fassung 3 je Anbieter und Erhalt abweichender Wahl (AV-2026-W43-31 bis -33, -37).
+- `tests/pipeline/stufen.test.ts`: Anweisung der Reparatur nennt Begründung, Leerwert und Verbot von Skalenrand und Kürzung (AV-2026-W43-34).
+- `tests/pipeline/reparaturtest.test.ts`: `stellenWieOriginal` mit Originalwert, Skalenrand und leerem Wert; Summe, Übersicht und LIESMICH (AV-2026-W43-35).
+- `tests/ui/einstellungen.test.ts`: Auswahl eines Mix-Profils mit Hinweis auf zwei Schlüssel (AV-2026-W43-31).
+- Erwartungen an das Reparaturmodell der Standard-Profile in den Tests von Vergleichslauf und Einstellungen angepasst.
 
 ## [0.5.14] – 25.10.2026
 

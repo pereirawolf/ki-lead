@@ -46,6 +46,14 @@
         "aufwand": "high"
       },
       "material": "meldung"
+    },
+    {
+      "kennung": "F-mistral-large",
+      "kurzfassung": {
+        "modell": "mistral-large-4",
+        "aufwand": "high"
+      },
+      "material": "meldung"
     }
   ],
   "wiederholungen": 3,
@@ -54,5 +62,5 @@
     "datei": "evaluation/material/ilka-musterfassung.json",
     "sha256": "953f7682838c10f84458312bc563cf9d0f17b16bd715fd27ad9cb26ff84de4cf"
   },
-  "hinweis": "Durchführung nur auf ausdrücklichen Auftrag, seit App 0.5.12 in der App (Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Umfang „MS (aus Musterfassung)“, Konfiguration „Plan management-summary-ilka, Variante …“, Anzahl 3; Ergebnis als ZIP) oder über das Skript evaluation/abnahmen/kurzfassung.lauf.ts: Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_KURZFASSUNG, KI_LEAD_AUFWAND_KURZFASSUNG, KI_LEAD_VARIANTE=management-summary-ilka/<Kennung>, KI_LEAD_LAEUFE=3, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts evaluation/abnahmen/kurzfassung.lauf.ts; Mistral über den EU-Endpunkt. Ergebnisse unter privat/kurzfassung-ilka/ (nicht eingecheckt). Ein Aufruf je Lauf; Kosten je Lauf nach Listenpreisen grob 0,02 bis 0,30 USD, ohne Gewähr."
+  "hinweis": "Durchführung nur auf ausdrücklichen Auftrag, seit App 0.5.12 in der App (Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Umfang „MS (aus Musterfassung)“, Konfiguration „Plan management-summary-ilka, Variante …“, Anzahl 3; Ergebnis als ZIP) oder über das Skript evaluation/abnahmen/kurzfassung.lauf.ts: Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_KURZFASSUNG, KI_LEAD_AUFWAND_KURZFASSUNG, KI_LEAD_VARIANTE=management-summary-ilka/<Kennung>, KI_LEAD_LAEUFE=3, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts evaluation/abnahmen/kurzfassung.lauf.ts; Mistral über den EU-Endpunkt. Ergebnisse unter privat/kurzfassung-ilka/ (nicht eingecheckt). Ein Aufruf je Lauf; Kosten je Lauf nach Listenpreisen grob 0,02 bis 0,30 USD, ohne Gewähr. Fassung 2 vom 25.10.2026 (AV-2026-W43-38): Variante F (mistral-large-4 „high“) nachträglich aufgenommen, nachdem Variante E Faktenfehler zeigte; die Läufe aller Varianten vom 25.10.2026 wurden mit „Aktuelle Einstellungen“ gestartet und tragen keine Variantenkennung. Ergebnis: evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md."
 }

@@ -189,7 +189,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
       vorverarbeitung: "mistral-small-2603",
       erfassung: "mistral-medium-3-5",
       verdichtung: "mistral-medium-3-5",
-      reparatur: "mistral-small-2603",
+      reparatur: "mistral-medium-3-5",
       kurzfassung: "mistral-medium-3-5",
     });
     expect((document.querySelector('select[aria-label="Aufwand S1 Gegenstand und SOP-Auswahl"]') as HTMLSelectElement).value).toBe("high");
@@ -197,6 +197,35 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
     await klick(radio("profil"));
     expect(gesetzt.at(-1)!.modelle).toEqual({ vorverarbeitung: "", erfassung: "", verdichtung: "", reparatur: "", kurzfassung: "" });
     expect(gesetzt.at(-1)!.aufwand).toEqual(STANDARD.aufwand);
+  });
+
+  it("AV-2026-W43-31: Mix-Profile stehen nach den Standard-Profilen, nennen beide Schlüssel und setzen alle Aufgaben", async () => {
+    const gesetzt: Einstellungen[] = [];
+    await einhaengen(React.createElement(MitZustand, { start: { ...STANDARD, websucheMax: 5 }, gesetzt }));
+    await klick("Modelle & Verarbeitung", nav());
+    const werte = [...document.querySelectorAll('input[name="voreinstellung"]')].map((r) => (r as HTMLInputElement).value);
+    expect(werte).toEqual(["profil", "anthropic", "openai", "mistral", "mix-opus", "mix-sonnet", "individuell"]);
+    const wahl = document.querySelector(".voreinstellung-wahl")!.textContent!;
+    expect(wahl).toContain("Mix: OpenAI S1 + Anthropic Opus");
+    expect(wahl).toContain("Mix: OpenAI S1 + Anthropic Sonnet");
+    expect(wahl).toContain("Braucht Schlüssel für OpenAI und Anthropic; die Inhalte eines Laufs gehen an beide Anbieter.");
+
+    await klick(radio("mix-sonnet"));
+    expect(gesetzt.at(-1)!.modelle).toEqual({
+      vorverarbeitung: "gpt-6-luna",
+      erfassung: "claude-sonnet-5-5",
+      verdichtung: "claude-sonnet-5-5",
+      reparatur: "claude-haiku-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    });
+    expect(gesetzt.at(-1)!.aufwand).toEqual({ vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" });
+    expect(gesetzt.at(-1)!.websucheMax).toBe(5);
+    expect(radio("mix-sonnet").checked).toBe(true);
+    expect(document.querySelector(".voreinstellung-wahl [role=status]")!.textContent).toContain("Mix: OpenAI S1 + Anthropic Sonnet");
+
+    await klick(radio("mix-opus"));
+    expect(gesetzt.at(-1)!.modelle.verdichtung).toBe("claude-opus-5-5");
+    expect(radio("mix-opus").checked).toBe(true);
   });
 
   it("AV-2026-W43-01, -02: Aufwand je Modell; beim Wechsel auf Mistral passt sich die Stufe sichtbar an", async () => {

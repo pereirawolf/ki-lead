@@ -110,9 +110,19 @@ describe("Standard-Profile und App-Vorgabe nach dem Vergleichslauf Ilka", () => 
     });
   });
 
-  it("AV-2026-W43-13: OpenAI verdichtet mit gpt-6-astra „high“, Erfassung bleibt „medium“", () => {
+  it("AV-2026-W43-13, -37: OpenAI verdichtet und erfasst seit 0.5.15 mit gpt-6-astra „high“", () => {
     expect([STANDARD_PROFILE.openai.modelle.verdichtung, STANDARD_PROFILE.openai.aufwand.verdichtung]).toEqual(["gpt-6-astra", "high"]);
-    expect(STANDARD_PROFILE.openai.aufwand.erfassung).toBe("medium");
+    expect([STANDARD_PROFILE.openai.modelle.erfassung, STANDARD_PROFILE.openai.aufwand.erfassung]).toEqual(["gpt-6-astra", "high"]);
+  });
+
+  it("AV-2026-W43-32, -33: Reparatur Anthropic mit Haiku, OpenAI mit sol, Mistral mit Medium 3.5, jeweils „low“", () => {
+    expect([STANDARD_PROFILE.anthropic.modelle.reparatur, STANDARD_PROFILE.openai.modelle.reparatur, STANDARD_PROFILE.mistral.modelle.reparatur]).toEqual([
+      "claude-haiku-5-5",
+      "gpt-6.1-sol",
+      "mistral-medium-3-5",
+    ]);
+    expect(Object.values(STANDARD_PROFILE).map((s) => s.aufwand.reparatur)).toEqual(["low", "low", "low"]);
+    expect(readFileSync(repoPfad("evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md"), "utf-8")).toContain("# Prüffall Reparatur");
   });
 
   it("AV-2026-W43-14: Mistral verdichtet weiter mit mistral-medium-3-5", () => {

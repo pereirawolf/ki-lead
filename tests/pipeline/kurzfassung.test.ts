@@ -16,6 +16,7 @@ import {
   fristenText,
   GRENZEN,
   herkunftsliste,
+  STANDARD_ANWEISUNG,
   kurzfassungText,
   woerter,
 } from "../../src/pipeline/kurzfassung";
@@ -162,7 +163,8 @@ describe("Management Summary", () => {
     expect(String(att.anfragen[0].nachrichten[0].content)).toContain("Herkunft der Angaben");
     const a = kurzfassungAnweisung(p!);
     expect(a).toContain(`rund ${GRENZEN.woerterZiel} Wörter`);
-    expect(a).toContain(`Bis ${GRENZEN.woerterGesamt} Wörter`);
+    expect(a).toContain(`höchstens ${GRENZEN.woerterGesamt}`); // AV-2026-W43-36: Obergrenze statt Toleranz
+    expect(STANDARD_ANWEISUNG).toContain(`höchstens ${GRENZEN.woerterGesamt}`);
     expect(a).toContain(`mehr als ${GRENZEN.woerterSatzHinweis} Wörtern`);
   });
 
