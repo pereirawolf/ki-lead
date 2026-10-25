@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Prüffall Reparatur unter „Einstellungen → Modelle & Verarbeitung“ (seit 0.5.12, AV-2026-W43-25): Auswahl der
+// Prüffall Reparatur unter „Einstellungen → Modelle & Verarbeitung“ (seit 0.5.13, AV-2026-W43-25): Auswahl der
 // Varianten des Plans reparatur-ilka, fehlender Schlüssel, Ablauf mit Attrappe und ZIP-Datei.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";

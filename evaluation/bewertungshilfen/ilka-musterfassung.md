@@ -9,7 +9,7 @@ Eine feste, konsolidierte Verdichtung der sechs fiktiven Ländermeldungen zum Or
 1. als **Ausgangsfall für die Management Summary**: Alle KI-Profile erhalten genau diese Meldung (Fall [`ilka-management-summary`](../faelle/ilka-management-summary.json), Plan [`management-summary-ilka`](../plaene/management-summary-ilka.json)), sodass Unterschiede auf die Kurzfassung zurückgehen und nicht auf die Verdichtung;
 2. als **Bewertungsbeispiel** für einen Entwurf, der die [Bewertungshilfe Ilka](orkantief-ilka.md) erfüllt.
 
-Sie ersetzt die Redaktionsfassung im Beispielprofil nicht; diese bleibt der Bezug des Vergleichslaufs in der App.
+Sie ersetzt die Redaktionsfassung im Beispielprofil nicht; diese bleibt der Bezug für Entwürfe im Vergleichslauf der App. Seit App 0.5.12 ist die Musterfassung dort Grundlage der Umfänge „S2 + S3 (aus Musterfassung)“ (ihr Zuschnitt als fester S1-Gegenstand) und „MS (aus Musterfassung)“; im Umfang „S1 (aus Rohdaten)“ wird der S1-Vorschlag mit ihrem Zuschnitt verglichen.
 
 ## Herkunft
 

@@ -1,4 +1,4 @@
-// Prüffall Reparatur (S3) für die Wahl des Reparaturmodells (seit 0.5.12, Befund AV-2026-W43-25). Die Musterfassung Ilka
+// Prüffall Reparatur (S3) für die Wahl des Reparaturmodells (seit 0.5.13, Befund AV-2026-W43-25). Die Musterfassung Ilka
 // (evaluation/material/ilka-musterfassung.json) wird gezielt beschädigt und als Antwort von S2 eingespielt; S1 entfällt
 // (fester Gegenstand evaluation/material/ilka-s1-zuschnitt-a.json, zwei Sachverhalte wie die Musterfassung). Danach
 // läuft die Pipeline wie in der App: Nachbearbeitung, Schemaprüfung und bis zu zwei Reparaturen mit dem gewählten

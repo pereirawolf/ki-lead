@@ -1,4 +1,4 @@
-// Prüffall Reparatur (seit 0.5.12, AV-2026-W43-25) im echten Browser mit simuliertem Anthropic-Anbieter: Start unter
+// Prüffall Reparatur (seit 0.5.13, AV-2026-W43-25) im echten Browser mit simuliertem Anthropic-Anbieter: Start unter
 // „Einstellungen → Modelle & Verarbeitung“, ein Durchgang mit fünf Defekten, ZIP-Datei mit Reihendatei und Übersicht.
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";

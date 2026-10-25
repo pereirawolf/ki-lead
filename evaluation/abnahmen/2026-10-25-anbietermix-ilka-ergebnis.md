@@ -123,4 +123,4 @@ Handprüfung der sechs Entwürfe nach Abschnitt C der [Bewertungshilfe Ilka](../
 
 - Beide Mischungen sind für den Vergleich geeignet und liegen in den Kennzahlen vor A und B. M2 ist die günstigste Konfiguration mit vollständigen Achsen; M1 trifft Beurteilung und Tendenz in jedem Lauf.
 - Ob ein Mix als Voreinstellung angeboten wird, ist eine Entscheidung des Herausgebers (AV-2026-W43-30). Für sie spricht die bessere Nähe zur Redaktionsfassung bei geringeren Kosten; dagegen sprechen zwei Anbieter mit zwei Schlüsseln und Datenwegen und die kleine Zahl der Läufe.
-- S3 Reparatur war auch in diesen sechs Läufen nicht nötig. Für die Wahl des Reparaturmodells gibt es seit 0.5.12 den [Prüffall Reparatur](../plaene/reparatur-ilka.json) (AV-2026-W43-25).
+- S3 Reparatur war auch in diesen sechs Läufen nicht nötig. Für die Wahl des Reparaturmodells gibt es seit 0.5.13 den [Prüffall Reparatur](../plaene/reparatur-ilka.json) (AV-2026-W43-25).

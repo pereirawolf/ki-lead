@@ -1,4 +1,4 @@
-// Prüffall Reparatur (S3) mit der Musterfassung Ilka (seit 0.5.12, AV-2026-W43-25). Keine echten KI-Aufrufe: Die
+// Prüffall Reparatur (S3) mit der Musterfassung Ilka (seit 0.5.13, AV-2026-W43-25). Keine echten KI-Aufrufe: Die
 // Reparatur antwortet als Attrappe. Sollwerte fest: Defektstellen und Originalwerte aus der Musterfassung im Repository.
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";

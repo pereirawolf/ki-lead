@@ -9,19 +9,18 @@
 // KI_LEAD_AUFWAND_KURZFASSUNG; ohne Angabe gilt das Standard-Profil des Anbieters. Mistral über den EU-Endpunkt, mit
 // KI_LEAD_MISTRAL_ENDPUNKT=global über den globalen. Ohne Schlüssel und mit KI_LEAD_ATTRAPPE=1 Trockenlauf ohne Kosten.
 // Ergebnisse (Text, Struktur, Hinweise der App, Vorprüfung, Kosten) gehen nach privat/kurzfassung-ilka/ (nicht
-// eingecheckt). Die Musterfassung wird vor dem ersten Aufruf gegen die Prüfsumme des Plans geprüft.
+// eingecheckt). Die Musterfassung wird vor dem ersten Aufruf gegen die Prüfsumme des Plans geprüft. Seit 0.5.12
+// dieselbe Reihe wie „Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka“, Umfang „MS (aus Musterfassung)“
+// (src/pipeline/kurzfassungsreihe.ts), hier mit quelle „skript“; dazu die ZIP-Datei wie in der App.
 
-import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { leereNutzung, type LlmAnbieter, type LlmAntwort } from "../../src/anbieter/typen";
 import { Verteiler, type AnbieterId } from "../../src/anbieter/verteiler";
-import { migriere } from "../../src/kern/migration";
 import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, standardProfilAnwenden, type Einstellungen } from "../../src/pipeline/einstellungen";
-import { kurzfassungErstellen, type Kurzfassung } from "../../src/pipeline/kurzfassung";
-import { kurzfassungPruefen } from "./kurzfassung.pruefung";
+import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MUSTERFASSUNG, musterfassungAus } from "../../src/pipeline/kurzfassungsreihe";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "kurzfassung-ilka");
@@ -91,53 +90,33 @@ function attrappe(): LlmAnbieter {
 
 describe("Management Summary aus der Musterfassung Ilka", () => {
   it.skipIf(!ECHT && !ATTRAPPE)(`${LAEUFE} Lauf/Läufe ${ATTRAPPE ? "(Attrappe)" : `(echt, ${ANBIETER})`}`, async () => {
-    const text = readFileSync(join(REPO, PLAN.meldung_fest.datei), "utf-8");
-    expect(createHash("sha256").update(text).digest("hex"), "Prüfsumme der Musterfassung wie im Plan").toBe(PLAN.meldung_fest.sha256);
+    expect(MUSTERFASSUNG).toEqual(PLAN.meldung_fest);
+    // Prüfsumme der Musterfassung wie im Plan, sonst Abbruch vor dem ersten Aufruf
+    const musterfassung = await musterfassungAus(readFileSync(join(REPO, PLAN.meldung_fest.datei), "utf-8"));
     const geladen = await ladeProfil(leseOrdner(join(REPO, "profile/lead-beispiel")));
     const profil = geladen.profil!;
     expect(profil, JSON.stringify(geladen.befunde)).toBeTruthy();
-    const meldung = migriere(JSON.parse(text), profil).daten;
     const e = einstellungen();
     mkdirSync(AUSGABE, { recursive: true });
     const stempel = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
-    const laeufe: unknown[] = [];
-    for (let i = 1; i <= LAEUFE; i++) {
-      const anbieter = ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: e.mistralEndpunkt });
-      let k: Kurzfassung | undefined;
-      let fehler: string | undefined;
-      try {
-        k = await kurzfassungErstellen(profil, meldung, anbieter, e);
-      } catch (err) {
-        fehler = String((err as Error)?.message || err);
-      }
-      const eintrag = {
-        nr: i,
-        variante: VARIANTE || null,
-        modell: k?.eintrag.modell ?? e.modelle.kurzfassung,
-        aufwand: k?.eintrag.aufwand ?? e.aufwand.kurzfassung,
-        fehler: fehler ?? null,
-        kosten_usd: k?.eintrag.kostenUsd ?? null,
-        dauer_s: k?.eintrag.dauerMs ? Math.round(k.eintrag.dauerMs / 100) / 10 : null,
-        ausgabetoken: k?.eintrag.nutzung?.ausgabe ?? null,
-        hinweise_app: k?.hinweise ?? [],
-        vorpruefung: k ? kurzfassungPruefen(k.struktur) : null,
-        struktur: k?.struktur ?? null,
-        text: k?.text ?? null,
-      };
-      laeufe.push(eintrag);
-      console.log(`Lauf ${i}/${LAEUFE}: ${fehler ? `Fehler: ${fehler}` : `${eintrag.vorpruefung?.woerter} Wörter · ${eintrag.kosten_usd ?? "?"} USD · ${eintrag.dauer_s} s`}`);
-    }
-    const reihe = {
-      format: "ki-lead-kurzfassung-reihe/1",
-      plan: PLAN.id,
-      variante: VARIANTE || null,
-      meldung: PLAN.meldung_fest,
-      anbieter: ANBIETER,
+    const { reihe, ergebnisse } = await kurzfassungsreihe({
+      profil,
+      musterfassung,
+      anbieter: ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: e.mistralEndpunkt }),
+      einstellungen: e,
+      anzahl: LAEUFE,
+      budgetUsd: PLAN.budget_usd,
       attrappe: ATTRAPPE,
-      erstellt: new Date().toISOString(),
-      laeufe,
-    };
-    writeFileSync(join(AUSGABE, `reihe-${(VARIANTE.split("/").pop() || ANBIETER).replace(/[^A-Za-z0-9.-]+/g, "-")}-${stempel}.json`), JSON.stringify(reihe, null, 2));
-    expect(laeufe.length).toBe(LAEUFE);
+      quelle: "skript",
+      variante: VARIANTE || undefined,
+    });
+    for (const l of reihe.laeufe)
+      console.log(
+        `Lauf ${l.nr}/${LAEUFE}: ${l.fehler ? `Fehler: ${l.fehler}` : `${l.vorpruefung?.woerter} Wörter · ${l.kosten_usd ?? "?"} USD · ${l.dauer_s} s`}${l.auffaelligkeiten.length ? ` · ${l.auffaelligkeiten.join("; ")}` : ""}`,
+      );
+    const name = (VARIANTE.split("/").pop() || ANBIETER).replace(/[^A-Za-z0-9.-]+/g, "-");
+    writeFileSync(join(AUSGABE, `reihe-${name}-${stempel}.json`), JSON.stringify(reihe, null, 2));
+    writeFileSync(join(AUSGABE, kurzfassungsZipName(reihe)), await kurzfassungsZip(reihe, ergebnisse));
+    expect(reihe.laeufe.length).toBe(LAEUFE);
   });
 });

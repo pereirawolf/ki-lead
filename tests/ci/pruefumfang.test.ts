@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error: reines ES-Modul ohne Typdeklaration
-import { IM_BUILD, NUR_INHALT, PWA, pruefumfang } from "../../scripts/pruefumfang.mjs";
+import { IN_DER_APP, NUR_INHALT, PWA, pruefumfang } from "../../scripts/pruefumfang.mjs";
 import { REPO, repoPfad } from "../support/dateien";
 
 const KEINE = { kern: false, pwa: false };
@@ -29,6 +29,9 @@ describe("Prüfumfang je Änderung", () => {
     ],
     ["Vorlage für Issues", [".github/ISSUE_TEMPLATE/barrierefreiheit.yml"], KEINE],
     ["Lizenztexte (KP-2026-W43-56)", ["LICENSE", "LICENSE-CONTENT", "LICENSE-CC0"], KEINE],
+    ["Musterfassung, in die App eingebettet (seit 0.5.12)", ["evaluation/material/ilka-musterfassung.json"], NUR_KERN],
+    ["Bewertungsplan des Vergleichslaufs", ["evaluation/plaene/management-summary-ilka.json", "docs/TESTS.md"], NUR_KERN],
+    ["Material eines anderen Bewertungsfalls", ["evaluation/material/sop-gas-stabil.md"], KEINE],
     ["Bedienoberfläche aus dem Profil", ["profile/lead-beispiel/meldung.ui.json"], NUR_KERN],
     ["Schema des Profils", ["profile/lead-beispiel/meldung.schema.json"], NUR_KERN],
     ["Manifest des Profils", ["profile/lead-beispiel/profil.json"], NUR_KERN],
@@ -111,19 +114,24 @@ describe("Wächter der Pfadlisten", () => {
     for (const d of specs) expect(pruefumfang([d]), d).toEqual(/\/pwa[^/]*\.spec\.ts$/.test(d) ? ALLE : NUR_KERN);
   });
 
-  it("jede Datei unter evaluation/, die eine Quelldatei einbindet, löst die Kern-Browsertests aus", () => {
-    const eingebunden = new Set<string>();
-    for (const d of dateienUnter("src"))
-      for (const m of readFileSync(repoPfad(d), "utf-8").matchAll(/from "(?:\.\.\/)+(evaluation\/[^"?]+)/g)) eingebunden.add(m[1]);
-    expect([...eingebunden].sort()).toContain("evaluation/plaene/reparatur-ilka.json");
-    for (const d of eingebunden) {
+  it("jede Datei unter evaluation/, die src/ importiert, löst die Kern-Browsertests aus und existiert", () => {
+    const importe = dateienUnter("src")
+      .filter((d) => /\.tsx?$/.test(d))
+      .flatMap((d) => [...readFileSync(repoPfad(d), "utf-8").matchAll(/from\s+"(?:\.\.\/)+(evaluation\/[^"?]+)(?:\?[^"]*)?"/g)].map((m) => m[1]));
+    expect(importe.length).toBeGreaterThan(5);
+    expect(importe).toContain("evaluation/plaene/reparatur-ilka.json");
+    for (const d of new Set(importe)) {
       expect(existsSync(repoPfad(d)), d).toBe(true);
+      expect(
+        (IN_DER_APP as RegExp[]).some((m) => m.test(d)),
+        d,
+      ).toBe(true);
       expect(pruefumfang([d]).kern, d).toBe(true);
     }
     // keine Regel ins Leere: jede Regel trifft mindestens eine eingebundene Datei
-    for (const m of IM_BUILD as RegExp[])
+    for (const m of IN_DER_APP as RegExp[])
       expect(
-        [...eingebunden].some((d) => m.test(d)),
+        importe.some((d) => m.test(d)),
         m.source,
       ).toBe(true);
   });

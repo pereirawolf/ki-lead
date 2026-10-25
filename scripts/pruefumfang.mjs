@@ -4,8 +4,8 @@
 // Ausgabe:           kern=true|false und pwa=true|false, je eine Zeile
 //
 // Grundsatz „im Zweifel prüfen“: Die Kern-Browsertests entfallen nur, wenn JEDE geänderte Datei auf der Liste reiner
-// Inhalte steht (Dokumentation, Bewertungsfälle, SOP und Markdown-Texte der Profile). Jede andere oder unbekannte Datei
-// löst sie aus. Die PWA-Browsertests laufen, wenn eine Datei des PWA-Mechanismus oder der Testumgebung betroffen ist.
+// Inhalte steht (Dokumentation, Bewertungsfälle, SOP und Markdown-Texte der Profile) und nicht in die App eingebettet
+// ist. Jede andere oder unbekannte Datei löst sie aus. Die PWA-Browsertests laufen, wenn eine Datei des PWA-Mechanismus oder der Testumgebung betroffen ist.
 // Eine leere oder nicht ermittelbare Dateiliste löst alles aus. Auf main, im Wochenlauf und bei manuellem Start läuft
 // ohnehin alles; dieses Skript wirkt nur auf Pull Requests.
 
@@ -25,13 +25,14 @@ export const NUR_INHALT = [
 ];
 
 /**
- * Dateien unter evaluation/, die die App beim Build einbindet (Vergleichslauf Ilka seit 0.5.8, Prüffall Reparatur seit
- * 0.5.12): Sie gelten trotz NUR_INHALT nicht als reiner Inhalt. Wächter in tests/ci/pruefumfang.test.ts.
+ * Ausnahmen von NUR_INHALT: Dateien unter evaluation/, die die App einbettet (Vergleichslauf Ilka, seit 0.5.12 auch
+ * Musterfassung und Zuschnitt, seit 0.5.13 Plan des Prüffalls Reparatur). Ein Wächter in tests/ci/pruefumfang.test.ts
+ * prüft, dass jeder Import aus evaluation/ unter src/ hier steht und jede Regel mindestens einen Import trifft.
  */
-export const IM_BUILD = [
-  /^evaluation\/faelle\/orkantief-ilka-verdichtung\.json$/,
-  /^evaluation\/plaene\/(standardprofile|anbietermix|reparatur)-ilka\.json$/,
-  /^evaluation\/material\/ilka-(musterfassung|s1-zuschnitt-a)\.json$/,
+export const IN_DER_APP = [
+  /^evaluation\/faelle\/(orkantief-ilka-verdichtung|ilka-management-summary)\.json$/,
+  /^evaluation\/plaene\/(standardprofile-ilka|anbietermix-ilka|s2-isoliert-ilka|management-summary-ilka|reparatur-ilka)\.json$/,
+  /^evaluation\/material\/(ilka-musterfassung|ilka-s1-zuschnitt-a)\.json$/,
 ];
 
 /** PWA-Mechanismus und alles, wovon die PWA-Browsertests unmittelbar abhängen */
@@ -60,7 +61,7 @@ export function pruefumfang(dateien) {
   if (liste.length === 0) return { kern: true, pwa: true };
   const passt = (muster, d) => muster.some((m) => m.test(d));
   return {
-    kern: liste.some((d) => !passt(NUR_INHALT, d) || passt(IM_BUILD, d)),
+    kern: liste.some((d) => !passt(NUR_INHALT, d) || passt(IN_DER_APP, d)),
     pwa: liste.some((d) => passt(PWA, d)),
   };
 }

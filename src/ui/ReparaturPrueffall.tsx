@@ -1,4 +1,4 @@
-// Prüffall Reparatur unter „Einstellungen → Modelle & Verarbeitung“ (seit 0.5.12, AV-2026-W43-25): beschädigt die
+// Prüffall Reparatur unter „Einstellungen → Modelle & Verarbeitung“ (seit 0.5.13, AV-2026-W43-25): beschädigt die
 // Musterfassung Ilka gezielt (Defekte R1–R5), lässt sie mit dem gewählten Modell reparieren und misst, ob der Entwurf
 // danach schemakonform ist und die übrigen Inhalte erhalten bleiben. Nur die Reparatur ruft einen Anbieter auf.
 
