@@ -1,7 +1,6 @@
 // KI-Chip rechts oben in der Kopfleiste (seit 0.5.20): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
 // und noch nicht beendet ist. Der Chip trägt die Farben des Profils: in Ruhe zart, während der Anfrage gefüllt in der
-// Aktionsfarbe mit kreisendem Radarstrahl; die Innenfläche des kleinen Lagenradars zeigt die Farben des
-// Identitätsbands. Laufzeit und Kosten zeigt die KI-Erfassung selbst. Ein Klick führt dorthin.
+// Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die KI-Erfassung selbst. Ein Klick führt dorthin.
 export type KopfLaufStufe = "s1" | "s2" | "s3";
 
 /** Laufende KI-Anfrage, wie die KI-Erfassung sie an die Kopfleiste meldet; null, solange keine läuft */
@@ -34,14 +33,6 @@ export function kiAnsage(lauf: KopfLauf | null | undefined): string {
   return lauf ? `KI online: ${stufeText(lauf)}.` : "KI offline.";
 }
 
-const ACHTECK = (r: number) =>
-  Array.from({ length: 8 }, (_, k) => {
-    const a = ((-90 + 45 * k) * Math.PI) / 180;
-    return `${(50 + r * Math.cos(a)).toFixed(1)},${(50 + r * Math.sin(a)).toFixed(1)}`;
-  });
-const AUSSEN = ACHTECK(44);
-const MITTE = ACHTECK(29).join(" ");
-
 export function KiSymbol({ lauf, zurKi }: KiSymbolProps) {
   const online = !!lauf;
   const text = kiSymbolText(lauf);
@@ -58,19 +49,6 @@ export function KiSymbol({ lauf, zurKi }: KiSymbolProps) {
         aria-label={text}
         title={text}
       >
-        <span className="kopf-ki-radar" aria-hidden="true">
-          <span className="kopf-ki-strahl" />
-          <span className="kopf-ki-lage">
-            <span className="kopf-ki-flaeche" />
-          </span>
-          <svg className="kopf-ki-geruest" viewBox="0 0 100 100" focusable="false">
-            <polygon points={AUSSEN.join(" ")} />
-            <polygon points={MITTE} />
-            {AUSSEN.map((p) => (
-              <line key={p} x1="50" y1="50" x2={p.split(",")[0]} y2={p.split(",")[1]} />
-            ))}
-          </svg>
-        </span>
         <span className="kopf-ki-text">{online ? "KI online" : "KI offline"}</span>
       </button>
     </>

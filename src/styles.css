@@ -191,7 +191,7 @@ a {
 }
 
 /* KI-Chip rechts oben (seit 0.5.20): „KI offline“ zart in den Profilfarben, „KI online“ gefüllt in der Aktionsfarbe
-   mit kreisendem Radarstrahl; die Innenfläche des kleinen Lagenradars zeigt die Farben des Identitätsbands */
+   mit pulsierendem Ring */
 .kopf-rechts {
   margin-left: auto;
   display: flex;
@@ -199,11 +199,8 @@ a {
 }
 
 .kopf-ki {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
   flex: none;
-  padding: 0.2rem 0.8rem 0.2rem 0.3rem;
+  padding: 0.3rem 0.9rem;
   border: 1px solid var(--amt);
   border-radius: 999px;
   background: var(--amt-zart);
@@ -217,13 +214,14 @@ a {
     color 0.3s;
 }
 
+.kopf-ki.offline:hover {
+  background: var(--papier);
+}
+
 .kopf-ki.online {
   background: var(--amt);
   color: var(--auf-amt);
-}
-
-.kopf-ki.offline:hover {
-  background: var(--papier);
+  animation: kopf-ki-puls 1.8s ease-out infinite;
 }
 
 .kopf-ki.online:hover {
@@ -231,99 +229,21 @@ a {
   color: var(--auf-amt-hover);
 }
 
-/* gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt */
-.kopf-ki-text {
-  min-width: 5.6em;
-}
-
-.kopf-ki-radar {
-  position: relative;
-  flex: none;
-  width: 1.6rem;
-  height: 1.6rem;
-}
-
-.kopf-ki-geruest {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3;
-  stroke-linejoin: round;
-}
-
-.kopf-ki-geruest polygon:first-child {
-  stroke-width: 6;
-}
-
-/* Innenfläche: Radarwerte als Achteck in den Farben des Identitätsbands; die Kontur hält auch Weiß sichtbar */
-.kopf-ki-lage {
-  position: absolute;
-  inset: 0;
-  filter: drop-shadow(0 0 0.6px var(--amt-tief)) drop-shadow(0 0 0.6px var(--amt-tief));
-}
-
-.kopf-ki-flaeche {
-  position: absolute;
-  inset: 0;
-  background: var(--band);
-  clip-path: polygon(50% 26%, 69.8% 30.2%, 80% 50%, 68.4% 68.4%, 50% 82%, 31.6% 68.4%, 28% 50%, 30.2% 30.2%);
-}
-
-/* Strahl: nur innerhalb des äußeren Achtecks sichtbar, nur online */
-.kopf-ki-strahl {
-  position: absolute;
-  inset: 0;
-  display: none;
-  overflow: hidden;
-  clip-path: polygon(50% 6%, 81.1% 18.9%, 94% 50%, 81.1% 81.1%, 50% 94%, 18.9% 81.1%, 6% 50%, 18.9% 18.9%);
-}
-
-.kopf-ki-strahl::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 60%, var(--auf-amt) 100%);
-  opacity: 0.85;
-  /* ohne Bewegung (Bewegung reduzieren) bleibt der Strahl als Keil stehen */
-  transform: rotate(40deg);
-  animation: kopf-ki-strahl 2s linear infinite;
-}
-
-.kopf-ki.online .kopf-ki-strahl {
-  display: block;
-}
-
-.kopf-ki.online .kopf-ki-flaeche {
-  animation: kopf-ki-lage 3.6s ease-in-out infinite alternate;
-}
-
-@keyframes kopf-ki-strahl {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Gleiche Punktzahl in allen Stufen, damit der Browser zwischen den Lagen überblendet */
-@keyframes kopf-ki-lage {
+/* Ring in der Aktionsfarbe, der sich vom Chip löst und ausblendet */
+@keyframes kopf-ki-puls {
   0% {
-    clip-path: polygon(50% 26%, 69.8% 30.2%, 80% 50%, 68.4% 68.4%, 50% 82%, 31.6% 68.4%, 28% 50%, 30.2% 30.2%);
-  }
-  33% {
-    clip-path: polygon(50% 24%, 75.5% 24.5%, 74% 50%, 72.6% 72.6%, 50% 72%, 23.1% 76.9%, 30% 50%, 28.8% 28.8%);
-  }
-  66% {
-    clip-path: polygon(50% 14%, 65.6% 34.4%, 84% 50%, 67% 67%, 50% 88%, 35.9% 64.1%, 18% 50%, 31.6% 31.6%);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--amt) 55%, transparent);
   }
   100% {
-    clip-path: polygon(50% 28%, 72.6% 27.4%, 88% 50%, 64.1% 64.1%, 50% 80%, 31.6% 68.4%, 14% 50%, 34.4% 34.4%);
+    box-shadow: 0 0 0 0.55rem color-mix(in srgb, var(--amt) 0%, transparent);
   }
+}
+
+/* gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt */
+.kopf-ki-text {
+  display: inline-block;
+  min-width: 5.6em;
+  text-align: center;
 }
 
 .hinweisband {
