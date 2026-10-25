@@ -64,8 +64,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Die Schemaprüfung der Fälle deckt tests/evaluation/schemata.test.ts bereits ab. Ob eine Aggregation oder eine offene Achse fachlich zulässig ist, bleibt eine begründete fachliche Bewertung.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Ergänzt den Ergebnisbericht aus AV-2026-W43-12; keine erneute Forderung nach einem Ergebnisbericht und keine Aufhebung der mit 0.5.10 beschlossenen Modellvorgaben."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzt den Ergebnisbericht aus AV-2026-W43-12; keine erneute Forderung nach einem Ergebnisbericht und keine Aufhebung der mit 0.5.10 beschlossenen Modellvorgaben."
       }
     },
     {
@@ -115,8 +115,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Vor Beginn der verglichenen S2-Läufe prüfen, dass Materialhashes, Profilhash, t0 und Prüfsumme des festen S1-Gegenstands in allen Varianten gleich sind.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Zunächst Nachtrag, Plan und Ausführungsweg vorbereiten. Kostenpflichtige Läufe erst nach ausdrücklichem Auftrag mit Budget. Bestehender Plan und historische Ergebnisse bleiben unverändert. Ein möglicher Folgevergleich gpt-6-astra „xhigh“ (Ergebnisbericht, Entscheidungen) sollte diesen Weg nutzen."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Nachtrag, Plan und Ausführungsweg vorbereiten. Kostenpflichtige Läufe erst nach ausdrücklichem Auftrag mit Budget. Bestehender Plan und historische Ergebnisse bleiben unverändert. Ein möglicher Folgevergleich gpt-6-astra „xhigh“ (Ergebnisbericht, Entscheidungen) sollte diesen Weg nutzen."
       }
     },
     {
@@ -159,8 +159,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Ausweis der nicht zugeordneten Sachverhalte im Bericht und Schemaprüfung strukturierter Abdeckungsangaben; die semantische Vollständigkeit bleibt fachliche Prüfung.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Ergänzung zu AV-2026-W43-18 und -19. Die korrigierte Zuordnung wird nicht erneut als Fehler vorgelegt."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzung zu AV-2026-W43-18 und -19. Die korrigierte Zuordnung wird nicht erneut als Fehler vorgelegt."
       }
     },
     {
@@ -205,8 +205,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Fallschemata und Verweise offline prüfen. Deterministische Regressionstests nur für tatsächlich implementierte Prüfregeln; die Modellqualität über gesonderte Bewertungen untersuchen.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Der D2-Fehlalarm bei ausdrücklich genannter Summe ist mit AV-2026-W43-17 behoben. Die beschlossene Schwelle für die Übernahme der Plausibilitätsprüfung in die App (AV-2026-W43-16) bleibt unverändert."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Der D2-Fehlalarm bei ausdrücklich genannter Summe ist mit AV-2026-W43-17 behoben. Die beschlossene Schwelle für die Übernahme der Plausibilitätsprüfung in die App (AV-2026-W43-16) bleibt unverändert."
       }
     },
     {
@@ -249,8 +249,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Kennungsvergabe, Entfernen von Anbieter-, Modell- und Kostenangaben und formale Vollständigkeit der Bewertungen; Korrektur und Urteil bleiben menschliche Aufgaben.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Ausarbeitung eines Bewertungswegs; keine Behauptung bereits vorliegender Blindbewertungen und keine unmittelbare Änderung der Modellvorgaben. Die Entwürfe liegen nur in den ZIP-Dateien des Herausgebers."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ausarbeitung eines Bewertungswegs; keine Behauptung bereits vorliegender Blindbewertungen und keine unmittelbare Änderung der Modellvorgaben. Die Entwürfe liegen nur in den ZIP-Dateien des Herausgebers."
       }
     },
     {
@@ -292,8 +292,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Fallauswahl, Fassungen und Prüfsummen im Plan festhalten und vor dem Kontrolllauf prüfen; die Übertragbarkeit fachlich bewerten.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": "Zunächst Kontrollsatz und Bewertungsplan vorbereiten. Kostenpflichtige Läufe benötigen einen gesonderten Auftrag mit Budget."
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Kontrollsatz und Bewertungsplan vorbereiten. Kostenpflichtige Läufe benötigen einen gesonderten Auftrag mit Budget."
       }
     }
   ],
