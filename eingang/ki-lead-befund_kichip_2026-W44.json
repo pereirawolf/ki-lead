@@ -5,7 +5,7 @@
   "erstellt_utc": "2026-10-25T23:06:12Z",
   "repository": "pereirawolf/ki-lead",
   "commit": "8b8ba148a94d089b3b3041928915afd329756274",
-  "pruefumfang": "Auftrag des Herausgebers (kein Wochenlauf) vom 26.10.2026: Beobachtung festhalten, dass der KI-Chip der Kopfleiste beim Erstellen einer „Management Summary“ nicht von „KI offline“ auf „KI online“ wechselt. Gelesen wurde der Stand von Pull Request #75 (Branch kopfleiste-status, Commit 8b8ba14, App 0.5.21), weil der KI-Chip noch nicht in main ist (main: b7220c0). Ursache im Code nachvollzogen: src/ui/KiSymbol.tsx, src/App.tsx, src/ui/KiErfassung.tsx, src/ui/Kurzfassung.tsx, src/ui/Testlaeufe.tsx, docs/SPEZIFIKATION.md Abschnitt 5.1.",
+  "pruefumfang": "Auftrag des Herausgebers (kein Wochenlauf) vom 26.10.2026: Beobachtung festhalten, dass der KI-Chip der Kopfleiste beim Erstellen einer „Management Summary“ nicht von „KI offline“ auf „KI online“ wechselt. Gelesen wurde der Stand von Pull Request #75 (Branch kopfleiste-status, Commit 8b8ba14, App 0.5.21), weil der KI-Chip noch nicht in main ist (main: b7220c0). Ursache im Code nachvollzogen: src/ui/KiSymbol.tsx, src/App.tsx, src/ui/KiErfassung.tsx, src/ui/Kurzfassung.tsx, src/ui/Testlaeufe.tsx, docs/SPEZIFIKATION.md Abschnitt 5.1. Fortgeschrieben am 26.10.2026 mit den Entscheidungen des Herausgebers; dafür alle Aufrufe von Verteiler.fuer in src/ui gelesen (KiErfassung, Kurzfassung, Testlaeufe, Einstellungen).",
   "nicht_geprueft": [
     "Kein neuer Lauf im Browser: Die Beobachtung stammt vom Herausgeber; die Ursache ist aus dem Code eindeutig (Kurzfassung meldet ihren Lauf nicht an die Kopfleiste).",
     "Keine externen Quellen: Der Befund betrifft nur die Oberfläche der App; belege bleiben leer.",
@@ -35,33 +35,43 @@
           "ist": "export interface KopfLauf { stufe: KopfLaufStufe; verdichtung?: boolean; }"
         },
         {
+          "datei": "src/ui/Testlaeufe.tsx",
+          "stelle": "TestlaeufeBereich, anbieterFuer (Vergleichslauf Ilka, Prüffall Reparatur)",
+          "ist": "anbieterFuer = (s, e) => Verteiler.fuer(s, { mistralEndpunkt: e.mistralEndpunkt }),"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "Schlüsselfeld je Anbieter, Funktion pruefen (Verbindungstest)",
+          "ist": "const antwort = await Verteiler.fuer({ ...LEERE_SCHLUESSEL, [a.id]: eingabe.trim() }, …).senden({"
+        },
+        {
           "datei": "docs/SPEZIFIKATION.md",
           "stelle": "Abschnitt 5.1, Absatz „KI-Chip in der Kopfleiste (seit 0.5.21)“",
           "ist": "Solange eine KI-Anfrage läuft und noch nicht beendet ist – S1 oder S2 mit S3, in jeder Ansicht –, zeigt er „KI online“"
         }
       ],
-      "beobachtung": "Beim Erstellen einer Management Summary (Meldung, Schritt „Management Summary“, Knopf „Management Summary erstellen“) bleibt der Chip auf „KI offline“, obwohl eine KI-Anfrage an den Anbieter läuft (Beobachtung des Herausgebers vom 26.10.2026). Ursache: Nur die KI-Erfassung meldet ihren Lauf über laufStand an die App; KurzfassungKasten führt seinen Lauf allein im eigenen Zustand laeuft und meldet ihn nirgends. Der Typ KopfLauf kennt nur die Stufen s1, s2 und s3 der Erfassung. Die Spezifikation beschreibt den Chip ebenfalls nur für S1 bis S3, widerspricht damit aber ihrem eigenen Satz „Solange eine KI-Anfrage läuft“ und der Absicht des Chips, jede laufende KI-Anfrage anzuzeigen. Ein Klick auf den Chip führt außerdem fest zur KI-Erfassung, nicht zur Stelle der laufenden Anfrage.",
+      "beobachtung": "Beim Erstellen einer Management Summary (Meldung, Schritt „Management Summary“, Knopf „Management Summary erstellen“) bleibt der Chip auf „KI offline“, obwohl eine KI-Anfrage an den Anbieter läuft (Beobachtung des Herausgebers vom 26.10.2026). Ursache: Nur die KI-Erfassung meldet ihren Lauf über laufStand an die App. Ebenso unbemerkt bleiben die übrigen Stellen, die die KI anfragen: KurzfassungKasten (Management Summary), TestlaeufeBereich (Vergleichslauf Ilka, Prüffall Reparatur) und der Verbindungstest der API-Schlüssel unter „Einstellungen“; alle führen ihren Lauf nur im eigenen Zustand. Der Typ KopfLauf kennt nur die Stufen s1, s2 und s3 der Erfassung, und die Spezifikation beschreibt den Chip nur für S1 bis S3. Das widerspricht ihrem eigenen Satz „Solange eine KI-Anfrage läuft“ und der Entscheidung des Herausgebers, dass jede KI-Nutzung den Chip verändert.",
       "belege": [],
       "aenderungsvorschlag": {
         "typ": "ergaenzen",
-        "beschreibung": "Laufende KI-Anfragen app-weit melden statt nur aus der KI-Erfassung: KopfLauf um die Art der Anfrage erweitern (Erfassung mit Stufe, Management Summary), in App.tsx eine Meldefunktion an KiErfassung und KurzfassungKasten (über MeldungAnsicht) weitergeben; KurzfassungKasten meldet beim Start { art: \"kurzfassung\" } und im finally null. Bei gleichzeitigen Anfragen bleibt der Chip online, bis keine mehr läuft (Zähler oder Menge je Quelle). Zugänglicher Name „KI online: Anfrage läuft, Management Summary. Zur Meldung“; Klick führt zur Ansicht der laufenden Anfrage. Spezifikation Abschnitt 5.1 und CHANGELOG fortschreiben; Test ergänzen.",
-        "neuer_text": "Spezifikation 5.1, Ersatz für den Satzteil: „Solange eine KI-Anfrage läuft und noch nicht beendet ist – in der KI-Erfassung (S1 oder S2 mit S3) oder beim Erstellen der Management Summary, in jeder Ansicht –, zeigt er „KI online“ … Ein Klick führt zur Ansicht der laufenden Anfrage, sonst zur KI-Erfassung.“"
+        "beschreibung": "Jede KI-Nutzung setzt den Chip auf „KI online“, bis sie beendet ist (Erfolg, Fehler oder Abbruch). Vorzugsweise zentral an der Anbieterschicht zählen statt an jeder Aufrufstelle: Verteiler bzw. der gemeinsame senden-Aufruf erhöht einen app-weiten Zähler laufender Anfragen beim Start und senkt ihn im finally; der Chip liest den Zähler (online bei mehr als null). So sind Erfassung, Verdichtung, Management Summary, Testläufe, Verbindungstest und künftige KI-Funktionen ohne eigene Meldung erfasst, auch gleichzeitige Anfragen. Der Chip ist nicht mehr anklickbar: reine Statusanzeige statt Knopf, ohne Fokus, mit Statusregion für die Ansage; laufStand in KiErfassung und App entfällt bzw. wird durch den Zähler ersetzt. Die Stufenangabe im zugänglichen Namen entfällt oder kommt aus der Quelle der Anfrage. Spezifikation Abschnitt 5.1 und CHANGELOG fortschreiben; Tests ergänzen.",
+        "neuer_text": "Spezifikation 5.1, Ersatz für den Absatz: „KI-Chip in der Kopfleiste: Rechts oben steht ein Chip in den Farben des Profils. In Ruhe zeigt er „KI offline“. Solange irgendeine KI-Anfrage der App läuft und noch nicht beendet ist – KI-Erfassung, Verdichtung, Management Summary, Testläufe oder Verbindungstest der API-Schlüssel, in jeder Ansicht –, zeigt er „KI online“ in der Aktionsfarbe mit pulsierendem Ring. Der Chip ist eine reine Anzeige und nicht anklickbar; Wechsel werden Bildschirmlesern angesagt. Bei „Bewegung reduzieren“ entfällt der Ring. Laufzeit, Zeichen und Kosten zeigt die jeweilige Ansicht.“"
       },
       "folgeaenderungen": [
-        "src/ui/KiSymbol.tsx: KopfLauf um die Art der Anfrage, Texte für zugänglichen Namen und Ansage",
-        "src/App.tsx: Meldung laufender Anfragen aus mehreren Quellen zusammenführen, Ziel des Klicks",
-        "src/ui/Meldung.tsx: Meldefunktion an KurzfassungKasten durchreichen",
-        "src/ui/Kurzfassung.tsx: Start und Ende der Erstellung melden",
+        "src/anbieter/verteiler.ts (oder gemeinsamer senden-Aufruf): Zähler laufender Anfragen mit Abonnement für die Oberfläche",
+        "src/ui/KiSymbol.tsx: Statusanzeige statt Knopf, Texte ohne Klickziel",
+        "src/App.tsx und src/ui/KiErfassung.tsx: laufStand durch den Zähler ersetzen",
+        "src/styles.css: Hover und Cursor des Chips entfernen",
         "docs/SPEZIFIKATION.md: Abschnitt 5.1 und Änderungsverlauf",
         "CHANGELOG.md: Eintrag der umsetzenden Version",
-        "tests/ui/kisymbol.test.ts bzw. tests/browser/kisymbol.spec.ts: Management Summary mit simuliertem Anbieter"
+        "tests/ui/kisymbol.test.ts, tests/browser/kisymbol.spec.ts: Management Summary, Testlauf und Verbindungstest mit simuliertem Anbieter; Chip ohne Knopfrolle"
       ],
-      "entscheidungsfrage": "Sollen auch die Testläufe unter „Einstellungen → Testläufe“ (src/ui/Testlaeufe.tsx, eigener Lauf mit AbortController) den Chip auf „KI online“ setzen, damit er jede KI-Anfrage der App anzeigt? Und soll die Korrektur noch in Pull Request #75 (vor dem Merge) oder in einem eigenen Pull Request nach dem Merge erfolgen?",
+      "entscheidungsfrage": null,
       "sicherheit": "hoch",
-      "automatisierbar": "Browsertest in tests/browser/kisymbol.spec.ts: Meldung mit Beispielinhalt, Schritt „Management Summary“, Anbieter simuliert mit hängender Antwort (netzVorbereiten → „haengen“), „Management Summary erstellen“ wählen; erwartet .kopf-ki mit data-zustand „online“, nach Abbruch „offline“.",
+      "automatisierbar": "Browsertests in tests/browser/kisymbol.spec.ts je KI-Nutzung (Management Summary, Testlauf, Verbindungstest, KI-Erfassung) mit hängender Antwort des simulierten Anbieters: erwartet .kopf-ki mit data-zustand „online“, nach Abbruch bzw. Antwort „offline“; zusätzlich: der Chip hat keine Rolle button und keinen Tabstopp.",
       "pruefung": {
         "status": "offen",
-        "anmerkung": ""
+        "anmerkung": "Entscheidungen des Herausgebers vom 26.10.2026: (1) Jede KI-Nutzung verändert den Chip, solange sie läuft; der Chip muss nicht anklickbar sein. (2) Nur notieren; Freigabe und Umsetzung durch den Freitagslauf. Voraussetzung: Pull Request #75 (KI-Chip) ist bis dahin in main, sonst fehlen die Fundstellen."
       }
     }
   ],
