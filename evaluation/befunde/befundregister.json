@@ -1082,6 +1082,74 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
       "pr": 66
+    },
+    {
+      "id": "AV-2026-W43-27",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/plausibilitaet.ts",
+          "stelle": "summanden()"
+        }
+      ],
+      "kurz": "Komma in Dezimalzahlen trennt keine Summanden (Fehlalarm M1-8o79).",
+      "status": "umgesetzt",
+      "pr": 67
+    },
+    {
+      "id": "AV-2026-W43-28",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/plausibilitaet.ts",
+          "stelle": "d2Pruefen()"
+        }
+      ],
+      "kurz": "Stufengrenze zählt nicht als Personenzahl; „Summe … (Zahl)“ gilt als genannte Summe (M2-67tj).",
+      "status": "umgesetzt",
+      "pr": 67
+    },
+    {
+      "id": "AV-2026-W43-29",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, Kommentare"
+        }
+      ],
+      "kurz": "Lauf-IDs von M1 und M2 in den Kommentaren der Schätzung; Werte unverändert.",
+      "status": "umgesetzt",
+      "pr": 67
+    },
+    {
+      "id": "AV-2026-W43-30",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE"
+        }
+      ],
+      "kurz": "Voreinstellung „KI-Anbieter-Mix“ neben den Standard-Profilen.",
+      "status": "abgelehnt",
+      "grund": "Entscheidung des Herausgebers: keine Voreinstellung; M1 und M2 bleiben als Varianten des Plans anbietermix-ilka im Vergleichslauf für weitere Testläufe zum Vergleich."
     }
   ]
 }

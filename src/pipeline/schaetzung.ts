@@ -57,15 +57,21 @@ export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 209–285 s, 1,45–1,82 USD
   "erfassung|claude-opus-5-5|medium": { sekunden: [200, 360], usd: [1.4, 2.3] },
   // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch); Vergleichslauf Ilka 287–381 s,
-  // 0,82–0,96 USD, 45 361–61 598 Ausgabetoken (Läufe 20261025-001616-n4c8, -002256-e85u, -002923-kg0c)
+  // 0,82–0,96 USD, 45 361–61 598 Ausgabetoken (Läufe 20261025-001616-n4c8, -002256-e85u, -002923-kg0c); Plan
+  // anbietermix-ilka (M2, App 0.5.10, S1 gpt-6-luna) 218–273 s, 0,68–0,76 USD, 32 916–45 985 Ausgabetoken (Läufe
+  // 20261025-023714-ayac, -024218-d5hs, -024724-67tj)
   "verdichtung|claude-sonnet-5-5|medium": { sekunden: [150, 480], usd: [0.55, 1.25] },
   // gemessen 298–410 s, 1,23–1,63 USD (1,63 USD: 50 071 Ausgabetoken, 80 118 Token neu in den Cache, Lauf
   // 20261021-165220-1hmp, 408 s); Vergleichslauf Ilka 405–440 s, 1,74–1,88 USD, 50 060–54 484 Ausgabetoken (Läufe
-  // 20261024-234833-ikph, -235739-ifu7, 20261025-000620-07bh). Obergrenze 2,20 USD (seit 0.4.31) bleibt als Reserve
+  // 20261024-234833-ikph, -235739-ifu7, 20261025-000620-07bh). Obergrenze 2,20 USD (seit 0.4.31) bleibt als Reserve.
+  // Plan anbietermix-ilka (M1, App 0.5.10, S1 gpt-6-luna) 302–316 s, 1,48–1,53 USD, 37 345–38 117 Ausgabetoken (Läufe
+  // 20261025-021825-5rbg, -022443-2kjh, -023038-8o79); Untergrenze 300 s bleibt (keine Verengung)
   "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.2] },
   // Vergleichslauf Ilka 42–69 s, 0,005–0,008 USD, 4 659–6 856 Ausgabetoken (Läufe 20261024-232917-m97k,
   // -233231-qjlg, -233518-4god, -231048-0gjp, -231723-etee, -232232-l69n; Folgereihe 25.10.2026, App 0.5.10:
-  // 20261025-013359-jytv, -014153-g3m8, -014823-0eu1 mit 52–58 s, 0,005–0,008 USD)
+  // 20261025-013359-jytv, -014153-g3m8, -014823-0eu1 mit 52–58 s, 0,005–0,008 USD; Plan anbietermix-ilka, App 0.5.10:
+  // 20261025-021825-5rbg, -022443-2kjh, -023038-8o79, -023714-ayac, -024218-d5hs, -024724-67tj mit 32–65 s,
+  // 0,004–0,005 USD)
   "s1|gpt-6-luna|high": { sekunden: [30, 120], usd: [0, 0.02] },
   // Vergleichslauf Ilka 89,9–125 s, 1,22–1,24 USD, 6 495–7 118 Ausgabetoken (Läufe 20261024-232917-m97k,
   // -233231-qjlg, -233518-4god); Untergrenze seit 0.5.10 60 statt 90 s

@@ -7,8 +7,9 @@
 // (b) D2: Der Wert der Achse D2 im Bewertungstext wird gegen die Stufe geprüft, in die die maßgebliche Personenzahl
 //     fällt (Stufentexte des Kodierleitfadens: 0 unter 10, 1 10–99, 2 100–999, … 6 ab 1 Mio.). Maßgeblich ist eine
 //     ausdrücklich genannte Summe oder Gesamtzahl („Summe 19.600“, „zusammen …“, „insgesamt …“, „= mindestens …“, seit
-//     0.5.10, AV-2026-W43-17), sonst die größte Zahl vor einem Personenwort. Grenzangaben („unter 10 Personen“,
-//     „über 9.999“, Spannen „10–99“) zählen nicht.
+//     0.5.10, AV-2026-W43-17; „Summe … (Zahl)“ seit 0.5.14, AV-2026-W43-28), sonst die größte Zahl vor einem
+//     Personenwort. Grenzangaben („unter 10 Personen“, „über 9.999“, Spannen „10–99“, seit 0.5.14 auch „Grenze zu 4 ist
+//     10.000 Personen“) zählen nicht.
 //
 // Entscheidung zu AV-2026-W43-11 (24.10.2026): Die Prüfung läuft zunächst nur im Vergleichslauf Ilka (Reihendatei,
 // Übersicht). Ob sie als Hinweis an die Redaktion in die App kommt, entscheidet die Quote falscher Treffer in den
@@ -16,6 +17,9 @@
 // Stand 25.10.2026 (AV-2026-W43-16): Vergleichslauf standardprofile-ilka, 18 Läufe, 3 Treffer, davon 1 Fehlalarm (D2-Satz
 // mit ausdrücklicher Summe, seither behoben). Weiter nur im Vergleichslauf; Übernahme in die App als Hinweis, sobald
 // mindestens 10 Treffer von Hand geprüft sind und höchstens einer davon ein Fehlalarm ist.
+// Stand 25.10.2026 (anbietermix-ilka, AV-2026-W43-27, -28): 6 weitere Läufe, 2 Treffer, beide Fehlalarme (Dezimalkomma
+// als Trenner; Stufengrenze als Personenzahl), seit 0.5.14 behoben. Nach den Regeln vor der Korrektur 4 geprüfte Treffer,
+// davon 2 Fehlalarme; die Schwelle für die App ist nicht erreicht.
 
 import type { Meldung } from "../kern/typen";
 
@@ -42,7 +46,8 @@ const EINHEIT = /\b(Uhr|km\/h|%|Prozent|Stunden?|Std\.?|h|Tagen?|Minuten|MW|kV|G
 export function summanden(inhalt: string): { werte: number[]; ungefaehr: boolean } | null {
   const teile = inhalt
     .replace(/\[[^\]]*\]/g, " ") // Quellenverweise [Q1–Q6]
-    .split(/[;,]|\s+und\s+/)
+    // Komma nur als Trenner, nicht in Dezimalzahlen wie „1,9“ (AV-2026-W43-27)
+    .split(/;|(?<!\d),|,(?!\d)|\s+und\s+/)
     .map((t) => t.trim())
     .filter(Boolean);
   if (teile.length < 2) return null;
@@ -102,26 +107,32 @@ export function d2Stufe(personen: number): number {
 
 const PERSONEN = String.raw`(?:Personen|Betroffene|Menschen|Einwohner(?:innen)?|Verletzte|Evakuierte|Gestrandete|Wandernde|Erkrankte|Bewohner(?:innen)?|Reisende)`;
 
+/** Stufengrenze im Satz, z. B. „Grenze zu 4 ist 10.000 Personen“: keine Personenzahl (AV-2026-W43-28) */
+const GRENZE = String.raw`(?:Grenze|Schwelle)(?:\s+(?:zu|zur\s+Stufe)\s+\d)?\s+(?:ist|liegt\s+bei|bei|von)`;
+const UNGEFAEHR = String.raw`(?:mindestens\s+|rund\s+|etwa\s+|ca\.\s+)?`;
+
 /** Prüfung (b): D2-Wert gegen die größte genannte Personenzahl des D2-Satzes; null ohne Widerspruch */
 export function d2Pruefen(bewertungText: string, d2: number | null | undefined): { auszug: string; personen: number; erwartet: number } | null {
   if (typeof d2 !== "number") return null;
   const satz = bewertungText.match(/D2\s*=\s*\d[^\n]*?(?=\s*D3\s*=|\n|$)/)?.[0];
   if (!satz) return null;
   const muster = new RegExp(
-    String.raw`(unter|über|ab|bis|mehr als|weniger als|[–-])?\s*(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)\s+(?:[a-zäöüß-]+\s+){0,2}${PERSONEN}`,
+    String.raw`(unter|über|ab|bis|mehr als|weniger als|${GRENZE}|[–-])?\s*(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)\s+(?:[a-zäöüß-]+\s+){0,2}${PERSONEN}`,
     "g",
   );
-  // Ausdrücklich genannte Summe oder Gesamtzahl geht vor (AV-2026-W43-17); die letzte im Satz zählt
+  // Ausdrücklich genannte Summe oder Gesamtzahl geht vor (AV-2026-W43-17), seit 0.5.14 auch „Summe der drei amtlichen
+  // Werte (20.700)“ (AV-2026-W43-28); die letzte im Satz zählt
   const ohneWert = satz.replace(/^D2\s*=\s*\d+/, "");
   const summen = [
     ...ohneWert.matchAll(
       new RegExp(
-        String.raw`(?:\bSumme|\bzusammen|\binsgesamt|=)\s*(?:von\s+|also\s+)?(?:mindestens\s+|rund\s+|etwa\s+|ca\.\s+)?(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)`,
+        String.raw`(?:\bSumme|\bzusammen|\binsgesamt|=)\s*(?:von\s+|also\s+)?${UNGEFAEHR}(?<![\d.,:])(${ZAHL})(?![\d.,:]\d)|\bSumme(?:\s+[A-Za-zÄÖÜäöüß-]+){1,5}\s*\(\s*${UNGEFAEHR}(${ZAHL})\s*\)`,
         "gi",
       ),
     ),
   ];
-  let groesste = summen.length ? zahl(summen[summen.length - 1][1]) : -1;
+  const letzte = summen[summen.length - 1];
+  let groesste = letzte ? zahl(letzte[1] ?? letzte[2]) : -1;
   if (groesste < 0)
     for (const m of satz.matchAll(muster)) {
       if (m[1]) continue; // Grenzangabe oder Spanne

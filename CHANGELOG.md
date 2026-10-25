@@ -61,6 +61,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ (Nachträge vom 25.10.2026: Bewertungsmaßstab, fester S1-Gegenstand, Fälle zu Zählregeln und Bewertungspläne nach der Lernschleife; Musterfassung Ilka und Plan für die Management Summary; jeweils ohne Änderung der App) |
 | 0.5.12 | letzter Commit des Pull Requests „Vergleichslauf Ilka: Umfang wählen, Musterfassung als Grundlage; 0.5.12“ |
 | 0.5.13 | letzter Commit des Pull Requests „Prüffall Reparatur, Ergebnis Anbieter-Mix; 0.5.13“ |
+| 0.5.14 | letzter Commit des Pull Requests „Plausibilität ohne Fehlalarme, Messwerte des Anbieter-Mix; 0.5.14“ |
+
+## [0.5.14] – 25.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_mixauswertung_2026-W43.json`, vom Herausgeber am 25.10.2026 entschieden: AV-2026-W43-27, -28 und -29 freigegeben; zu AV-2026-W43-30 keine Voreinstellung, M1 und M2 bleiben für weitere Testläufe im Vergleichslauf. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, Standard-Profilen, gespeicherten Einstellungen oder der Ablage der Schlüssel.
+
+### Geändert
+
+- **Plausibilitätsprüfung, Summen** (AV-2026-W43-27, `summanden()` in `src/pipeline/plausibilitaet.ts`): Ein Komma zwischen zwei Ziffern trennt keine Summanden mehr. Behebt den Fehlalarm in M1-8o79 („Haushaltsfaktor 1,9“ als Summe 10).
+- **Plausibilitätsprüfung, D2** (AV-2026-W43-28, `d2Pruefen()`): Eine genannte Stufengrenze („Grenze zu 4 ist 10.000 Personen“, „die Schwelle liegt bei …“) zählt nicht als Personenzahl; „Summe der drei amtlichen Werte (20.700)“ gilt als ausdrücklich genannte Summe. In M2-67tj nennt der Befund damit die Summe 20.700 (Stufe 4 bei D2 = 3) statt der Stufengrenze. Über alle 27 Läufe der Vergleichsreihen A–G, M1 und M2 bleiben drei Treffer: die beiden aus dem Plan `standardprofile-ilka` (E-2hu5, F-7ngp) und M2-67tj.
+- **Schätzung** (AV-2026-W43-29): Kommentare zu S1 gpt-6-luna „high“ und zur Verdichtung mit Opus und Sonnet „medium“ nennen die Läufe von M1 und M2; die Werte bleiben, weil alle Messungen in den Spannen liegen.
+- Spezifikation 0.5.14: Abschnitt 5.4 (Plausibilität), offener Punkt 6 (Entscheidung zu AV-2026-W43-30); Nachtrag im Ergebnisbericht `anbietermix-ilka`.
+
+### Tests
+
+- `tests/pipeline/plausibilitaet.test.ts` (+1): Sätze aus M1-8o79 und M2-67tj, Aufzählung mit Komma, Stufengrenzen ohne Befund (AV-2026-W43-27, -28).
+- `tests/pipeline/schaetzung.test.ts`: Messwerte von M1 und M2 als festes Soll in den Spannen (AV-2026-W43-29).
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: AV-2026-W43-27 bis -29 als umgesetzt, -30 als abgelehnt (keine Voreinstellung; M1 und M2 bleiben als Plan-Varianten).
 
 ## [0.5.13] – 25.10.2026
 

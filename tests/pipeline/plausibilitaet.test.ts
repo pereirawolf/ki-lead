@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { repoPfad } from "../support/dateien";
-import { d2Pruefen, d2Stufe, plausibilitaetPruefen, summenPruefen } from "../../src/pipeline/plausibilitaet";
+import { d2Pruefen, d2Stufe, plausibilitaetPruefen, summanden, summenPruefen } from "../../src/pipeline/plausibilitaet";
 
 describe("Plausibilität: Summen in Klammern", () => {
   it("meldet eine Angabe, die nicht der Summe der Klammerwerte entspricht", () => {
@@ -82,6 +82,22 @@ describe("Plausibilität: D2", () => {
     expect(d2Pruefen("D2 = 2, weil 1.200 Reisende und 640 Einwohner, zusammen 1.840 Personen, betroffen sind.", 2)).toEqual(
       expect.objectContaining({ personen: 1840, erwartet: 3 }),
     );
+  });
+
+  it("AV-2026-W43-27, -28: Sätze aus dem Plan anbietermix-ilka (M1-8o79, M2-67tj)", () => {
+    // M1-8o79: Dezimalkomma ist kein Trenner, die Klammer keine Aufzählung → kein Befund
+    expect(summanden("Haushaltsfaktor 1,9 als angenommener Wert")).toBeNull();
+    expect(summenPruefen("rund 8.700 Personen (Haushaltsfaktor 1,9 als angenommener Wert) in Niedersachsen")).toEqual([]);
+    // Aufzählungen mit Komma und Leerzeichen gelten weiter
+    expect(summanden("Nord 4, Süd 4")).toEqual({ werte: [4, 4], ungefaehr: false });
+    // M2-67tj: Stufengrenze zählt nicht; maßgeblich ist die genannte Summe 20.700 → Stufe 4, D2 = 3
+    const satz =
+      "D2 = 3 (Mindestwert): Einzelne Kreisangaben sind belegt (TH rund 9.800, HSK rund 7.400, Vulkaneifel rund 3.500; Hochrechnung NI rund 8.700, getrennt geführt) [Q2–Q4, Q6]. Die Summe der drei amtlichen Werte (20.700) würde Stufe 4 tragen, ist aber nicht bis t0 fortgeschrieben, weil die Zahlen laufend sinken. Deshalb gilt Stufe 3; Grenze zu 4 ist 10.000 Personen. Anschlusszahlen sind keine Personen.";
+    expect(d2Pruefen(satz, 3)).toEqual(expect.objectContaining({ personen: 20700, erwartet: 4 }));
+    expect(d2Pruefen(satz, 4)).toBeNull();
+    // Grenzangabe allein ist keine Personenzahl
+    expect(d2Pruefen("D2 = 3, rund 2.000 Personen betroffen; Grenze zu 4 ist 10.000 Personen.", 3)).toBeNull();
+    expect(d2Pruefen("D2 = 3, rund 2.000 Personen betroffen; die Schwelle liegt bei 10.000 Personen.", 3)).toBeNull();
   });
 
   it("die Redaktionsfassung Ilka ist ohne Befund", () => {
