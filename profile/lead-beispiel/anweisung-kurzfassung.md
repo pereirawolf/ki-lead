@@ -1,6 +1,6 @@
 # Arbeitsanweisung Kurzfassung: Management Summary
 
-Beispielfassung für KI-LEAD · Fassung 2.1.2 vom 23.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.16.0 und die Arbeitsanweisungen Erfassung ab 1.4.0 und Verdichtung ab 2.0.2 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 2.2.0 vom 25.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.16.0 und die Arbeitsanweisungen Erfassung ab 1.4.0 und Verdichtung ab 2.0.2 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 ## Auftrag
 
@@ -31,7 +31,7 @@ Nebensachverhalte ohne Handlungsbedarf bündelst du in einem Halbsatz (z. B. „
 
 ## Sprache und Länge
 
-- **Länge:** Zielwert rund 150 Wörter für Kernaussage und die vier Abschnitte zusammen. Bis 180 Wörter sind als Toleranz für wesentliche Inhalte zulässig; darüber weist die App die Fassung zur redaktionellen Prüfung aus. Kopfzeile, Kurztitel, Bewertungszeilen und Fristen setzt die App; sie zählen nicht mit.
+- **Länge:** rund 150 Wörter für Kernaussage und die vier Abschnitte zusammen, höchstens 180. Kürze lieber Einzelheiten zu Orten und Uhrzeiten als die Kernaussage oder offene Prüfaufgaben. Kopfzeile, Kurztitel, Bewertungszeilen und Fristen setzt die App; sie zählen nicht mit.
 - **Sätze:** möglichst höchstens 25 Wörter, die Kernaussage bis 30; die App weist auf Sätze mit mehr als 30 Wörtern hin. Aktiv und konkret.
 - Keine unnötigen Ortsaufzählungen und keine Einzelwerte je Land oder Kreis; für Verständnis und Zuständigkeit notwendige Orte bleiben. Keine Quellenverweise wie [Q1], keine URLs, keine Feldnamen, keine Radarachsen oder Stufenwerte (D1–D8), keine Aufzählungszeichen, keine Füllformeln.
 - Fachkürzel bei der ersten Nennung auflösen; geläufige Behördennamen sind erlaubt. Datumsangaben als TT.MM.JJJJ, Uhrzeiten mit „Uhr“.

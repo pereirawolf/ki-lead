@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { reparaturSystem, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { profil as profilLaden } from "../support/dateien";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import { pruefeRoh } from "../../src/kern/validierung";
 import type { Material } from "../../src/pipeline/material";
@@ -315,5 +316,16 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
   it("anderer Abbruchgrund ohne JSON: Grund wird genannt, keine Budgetdiagnose", async () => {
     const { k } = await kontext([llmAntwort("Dazu kann ich nichts sagen.", { stopGrund: "refusal" })]);
     await expect(stufe1(k)).rejects.toThrow("Stufe S1 lieferte kein auswertbares Ergebnis. Die Antwort enthält keinen JSON-Block. (Abbruchgrund refusal)");
+  });
+});
+
+describe("AV-2026-W43-34: Anweisung der Reparatur", () => {
+  it("nennt die Begründung als Herkunft korrigierter Werte, den Leerwert als Ausweg und verbietet Skalenrand und Kürzung", async () => {
+    const p = (await profilLaden("lead-beispiel")).profil!;
+    const a = reparaturSystem(p);
+    expect(a).toContain("übernimm den Wert, den die Begründung desselben Sachverhalts nennt");
+    expect(a).toContain("verwende den Leerwert, nie den Rand der Skala");
+    expect(a).toContain("Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet.");
+    expect(a).toContain("Recherchiere nicht neu und ergänze keine Fakten.");
   });
 });

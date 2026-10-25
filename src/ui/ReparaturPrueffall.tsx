@@ -105,7 +105,8 @@ export function ReparaturPrueffallAbschnitt({
         Prüft das Modell der Reparatur (S3), die nur bei Schemafehlern läuft: Die App beschädigt die fiktive Musterfassung Ilka gezielt an festen Stellen (
         {DEFEKTE.map((d) => d.id.split("-")[0]).join(", ")}: Radarwert außerhalb der Skala, unzulässige Beurteilung, unbekannte Ereignisart, Radarwert als Text,
         drei Fehler zugleich) und lässt sie mit dem gewählten Modell reparieren. S1 und S2 rufen keinen Anbieter auf. Gemessen wird je Fall, ob der Entwurf
-        danach schemakonform ist, wie viele Reparaturen es brauchte und ob die übrigen Inhalte unverändert bleiben. Ergebnis als ZIP.
+        danach schemakonform ist, wie viele Reparaturen es brauchte, ob die beschädigten Stellen wieder ihren Originalwert haben und ob die übrigen Inhalte
+        unverändert bleiben. Ergebnis als ZIP.
       </p>
       <label className="feld">
         <span className="feld-label">Reparaturmodell</span>
@@ -179,7 +180,7 @@ export function ReparaturPrueffallAbschnitt({
         <div role="status">
           <p>
             {zustand.reihe.summe.faelle} Fälle, schemakonform nach der Reparatur: {zustand.reihe.summe.schemakonform}, Reparaturen:{" "}
-            {zustand.reihe.summe.reparaturen}, übrige Inhalte erhalten im Mittel:{" "}
+            {zustand.reihe.summe.reparaturen}, beschädigte Stellen wie im Original: {zustand.reihe.summe.stellen_wie_original ?? "–"}, übrige Inhalte erhalten im Mittel:{" "}
             {zustand.reihe.summe.anteil_erhalten_mittel === null ? "–" : `${Math.round(zustand.reihe.summe.anteil_erhalten_mittel * 1000) / 10} %`}, zusammen{" "}
             {formatUsd(zustand.reihe.summe.kosten_usd)}.
           </p>
@@ -191,6 +192,7 @@ export function ReparaturPrueffallAbschnitt({
                   <th>Durchgang</th>
                   <th>Schemakonform</th>
                   <th>Reparaturen</th>
+                  <th>Stellen wie Original</th>
                   <th>Inhalte erhalten</th>
                   <th>Kosten</th>
                 </tr>
@@ -202,6 +204,7 @@ export function ReparaturPrueffallAbschnitt({
                     <td>{f.wiederholung}</td>
                     <td>{f.schemakonform ? "ja" : "nein"}</td>
                     <td>{f.reparaturen}</td>
+                    <td>{f.stellen_wie_original === undefined ? "–" : f.stellen_wie_original ? "ja" : "nein"}</td>
                     <td>{f.anteil_erhalten === null ? "–" : `${f.felder_gleich}/${f.felder_geprueft}`}</td>
                     <td>{formatUsd(f.kosten_usd)}</td>
                   </tr>

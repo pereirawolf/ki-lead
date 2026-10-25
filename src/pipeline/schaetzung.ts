@@ -141,6 +141,11 @@ function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand
  * Aufruf ohne Werkzeuge; Eingabe in Token (Arbeitsanweisung und Meldung), Ausgabe einschließlich Nachdenken 500 bis
  * 3 000 Token bei „niedrig“, 1 000 bis 6 000 bei „mittel“ und 1 000 bis 16 000 darüber, zum Listenpreis ohne Cache.
  * Keine Dauer; der Aufschlag des Mistral-EU-Endpunkts kommt auf die Kosten.
+ *
+ * Messwerte vom 25.10.2026 (Plan management-summary-ilka, App 0.5.14, je drei Läufe, AV-2026-W43-38): Ausgabetoken
+ * Sonnet „mittel“ 798–908, Opus „mittel“ 2 124–3 478, Haiku „mittel“ 2 354–3 542, gpt-6.1-sol „mittel“ 734–1 395,
+ * Mistral Medium 3.5 „hoch“ 2 097–3 783, Mistral Large 4 „hoch“ 6 704–10 832; alle in den Spannen. Dauer 6–28 s je Lauf,
+ * Mistral Large 92–152 s (evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md).
  */
 export function schaetzeKurzfassung(modell: string, aufwand: Aufwand, eingabeToken: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): Schaetzung {
   const a = aufwandAngeboten(modell, aufwand);

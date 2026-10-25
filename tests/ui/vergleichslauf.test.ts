@@ -95,7 +95,7 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
     expect(anbieterFuer).toHaveBeenCalledTimes(1);
     const [s, eLauf] = anbieterFuer.mock.calls[0] as unknown as [Schluessel, typeof e];
     expect(s.mistral).toBe("test");
-    expect(eLauf.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-medium-3-5", reparatur: "mistral-small-2603" });
+    expect(eLauf.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-medium-3-5", reparatur: "mistral-medium-3-5" });
     expect(eLauf.mistralEndpunkt).toBe("global");
     const { name, inhalt } = downloads.liste[0];
     expect(name).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
@@ -127,12 +127,12 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
       auswahl.dispatchEvent(new Event("change", { bubbles: true }));
     });
     expect(text()).toContain("S2 Verdichtung: mistral-large-4 (hoch) · Mistral");
-    expect(text()).toContain("S3 Reparatur: mistral-small-2603 (niedrig) · Mistral");
+    expect(text()).toContain("S3 Reparatur: mistral-medium-3-5 (niedrig) · Mistral");
     expect(text()).toContain("fehlt der Schlüssel für Mistral");
     expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
   });
 
-  it("AV-2026-W43-23, -24: Mix-Variante M1 mit S1 OpenAI, S2 Anthropic und Reparatur Sonnet; fehlender OpenAI-Schlüssel gemeldet", async () => {
+  it("AV-2026-W43-23, -24: Mix-Variante M1 mit S1 OpenAI, S2 Anthropic und Reparatur Haiku (seit 0.5.15); fehlender OpenAI-Schlüssel gemeldet", async () => {
     const profil = await profilPflicht("lead-beispiel");
     await einhaengen(React.createElement(VergleichslaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
     const auswahl = document.querySelector(".vergleichslauf select") as HTMLSelectElement;
@@ -143,7 +143,7 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
     });
     expect(text()).toContain("S1: gpt-6-luna (hoch) · OpenAI");
     expect(text()).toContain("S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic");
-    expect(text()).toContain("S3 Reparatur: claude-sonnet-5-5 (niedrig) · Anthropic");
+    expect(text()).toContain("S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic");
     expect(text()).toContain("Die Varianten kombinieren Anbieter je Stufe");
     expect(text()).toContain("fehlt der Schlüssel für OpenAI");
     expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
@@ -185,7 +185,7 @@ describe("Vergleichslauf Ilka: Umfang wählen (seit 0.5.12)", () => {
     expect(konfiguration()).toEqual([
       "S1: claude-haiku-5-5 (hoch) · Anthropic",
       "S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic",
-      "S3 Reparatur: claude-sonnet-5-5 (niedrig) · Anthropic · nur bei Schemafehlern",
+      "S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic · nur bei Schemafehlern",
     ]);
 
     await umfangWaehlen("S1 (aus Rohdaten)");
@@ -202,7 +202,7 @@ describe("Vergleichslauf Ilka: Umfang wählen (seit 0.5.12)", () => {
     await umfangWaehlen("S2 + S3 (aus Musterfassung)");
     expect(konfiguration()).toEqual([
       "S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic",
-      "S3 Reparatur: claude-sonnet-5-5 (niedrig) · Anthropic · nur bei Schemafehlern",
+      "S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic · nur bei Schemafehlern",
       "S1: entfällt, Zuschnitt der Musterfassung (zwei Sachverhalte)",
     ]);
     expect([...auswahl().querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Bewertungsplan s2-isoliert-ilka"]);

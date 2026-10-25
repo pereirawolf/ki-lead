@@ -23,6 +23,7 @@ import {
   reparaturZip,
   schaetzePrueffall,
   schaetzeReparatur,
+  stellenWieOriginal,
   wertAn,
 } from "../../src/pipeline/reparaturtest";
 import type { FallDaten } from "../../src/pipeline/vergleichslauf";
@@ -100,7 +101,8 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
       praepariert: 7,
       repariert: MUSTER.sachverhalte[1].sofort.lagenradar.d2,
     });
-    expect(reihe.summe).toMatchObject({ faelle: 5, schemakonform: 5, reparaturen: 5, anteil_erhalten_mittel: 1, kosten_usd: 0.5 });
+    expect(reihe.summe).toMatchObject({ faelle: 5, schemakonform: 5, reparaturen: 5, anteil_erhalten_mittel: 1, stellen_wie_original: 5, kosten_usd: 0.5 });
+    expect(reihe.faelle.every((f) => f.stellen_wie_original === true)).toBe(true);
     expect(reihe.reparatur).toEqual({ modell: "claude-sonnet-5-5", aufwand: "low", anbieter: "anthropic" });
     expect(reihe.entwurf.sha256).toBe(createHash("sha256").update(MUSTER_TEXT).digest("hex"));
     expect(laeufe).toHaveLength(6);
@@ -127,6 +129,19 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     // R2 bleibt fehlerhaft: zwei Reparaturen (Höchstzahl), danach nicht schemakonform
     expect(r2).toMatchObject({ schemakonform: false, reparaturen: 2 });
     expect(r2.stellen[0]).toMatchObject({ praepariert: "hoch", repariert: "hoch" });
+    // AV-2026-W43-35: R1 hat den Originalwert wieder, R2 nicht
+    expect([r1.stellen_wie_original, r2.stellen_wie_original]).toEqual([true, false]);
+    expect(reihe.summe.stellen_wie_original).toBe(1);
+  });
+
+  it("AV-2026-W43-35: „Stellen wie Original“ verlangt an jeder Stelle den Originalwert; Skalenrand und leerer Wert zählen nicht", () => {
+    expect(stellenWieOriginal([{ original: 4, repariert: 4 }])).toBe(true);
+    expect(stellenWieOriginal([{ original: ["Unwetter / Sturm"], repariert: ["Unwetter / Sturm"] }, { original: "erheblich", repariert: "erheblich" }])).toBe(true);
+    expect(stellenWieOriginal([{ original: 4, repariert: 6 }])).toBe(false);
+    expect(stellenWieOriginal([{ original: "erheblich", repariert: "" }])).toBe(false);
+    expect(stellenWieOriginal([{ original: [], repariert: [] }])).toBe(false);
+    expect(stellenWieOriginal([{ original: 4, repariert: 4 }, { original: "erheblich", repariert: null }])).toBe(false);
+    expect(stellenWieOriginal([])).toBe(false);
   });
 
   it("Übersicht, Dateiname und ZIP", async () => {
@@ -136,6 +151,8 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
       ["R3-ereignisart", 2],
     ]);
     expect(reparaturZeilen(reihe)).toHaveLength(3);
+    expect(reparaturZeilen(reihe)[0]).toContain("stellen_wie_original");
+    expect(reparaturZeilen(reihe)[1][reparaturZeilen(reihe)[0].indexOf("stellen_wie_original")]).toBe("ja");
     expect(reparaturDateiname(reihe)).toMatch(/^KI-LEAD_Prueffall_Reparatur_claude-sonnet-5-5-low_\d{8}-\d{4}\.zip$/);
     const zip = await JSZip.loadAsync(await reparaturZip(reihe, laeufe));
     const namen = Object.keys(zip.files);
@@ -144,6 +161,7 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     expect(namen).toContain("LIESMICH.txt");
     expect(namen.filter((n) => /^laeufe\/.+\.lauf\.json$/.test(n))).toHaveLength(3);
     expect(JSON.parse(await zip.file("reihe.json")!.async("string")).format).toBe("ki-lead-reparaturtest/1");
+    expect(await zip.file("LIESMICH.txt")!.async("string")).toContain("beschädigte Stellen wie im Original: 2");
   });
 
   it("Plan reparatur-ilka: Varianten setzen nur Modell und Aufwand der Reparatur; Schätzung nach Listenpreisen", () => {

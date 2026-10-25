@@ -549,8 +549,12 @@ export function sopKennungenAbgleichen(liste: unknown[], p: Profil, beigefuegt?:
   return out;
 }
 
-function reparaturSystem(p: Profil): string {
-  return `Du korrigierst eine Meldung so, dass sie dem beigefügten JSON-Schema entspricht. Inhalte, Bewertungen, Radarwerte und Quellen bleiben unverändert, soweit die Korrektur es zulässt. Recherchiere nicht neu und ergänze keine Fakten. Wo ein Pflichtwert inhaltlich nicht belegt ist, verwende den im Schema vorgesehenen Leerwert. Gib ausschließlich das vollständige, korrigierte JSON-Objekt in einem Codeblock aus, der mit \`\`\`json beginnt.
+/**
+ * Anweisung der Reparatur (S3). Seit 0.5.15 (AV-2026-W43-34): Herkunft eines korrigierten Werts aus der Begründung und
+ * Verbot von Kürzungen, nach dem Prüffall Reparatur vom 25.10.2026 (Skalenrand statt Originalwert, gestrichene Zeilen).
+ */
+export function reparaturSystem(p: Profil): string {
+  return `Du korrigierst eine Meldung so, dass sie dem beigefügten JSON-Schema entspricht. Inhalte, Bewertungen, Radarwerte und Quellen bleiben unverändert, soweit die Korrektur es zulässt. Recherchiere nicht neu und ergänze keine Fakten. Wo ein Pflichtwert inhaltlich nicht belegt ist, verwende den im Schema vorgesehenen Leerwert. Ist ein Radarwert, eine Beurteilung, eine Tendenz oder eine Ereignisart unzulässig, übernimm den Wert, den die Begründung desselben Sachverhalts nennt (etwa „D2 = 4“ oder „Beurteilung „erheblich““); nennt sie keinen, verwende den Leerwert, nie den Rand der Skala. Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet. Gib ausschließlich das vollständige, korrigierte JSON-Objekt in einem Codeblock aus, der mit \`\`\`json beginnt.
 
 # JSON-Schema (Schemakennung ${p.manifest.meldung.schema_id})
 

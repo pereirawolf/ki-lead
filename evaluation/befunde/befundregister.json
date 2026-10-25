@@ -1149,7 +1149,155 @@
       ],
       "kurz": "Voreinstellung „KI-Anbieter-Mix“ neben den Standard-Profilen.",
       "status": "abgelehnt",
-      "grund": "Entscheidung des Herausgebers: keine Voreinstellung; M1 und M2 bleiben als Varianten des Plans anbietermix-ilka im Vergleichslauf für weitere Testläufe zum Vergleich."
+      "grund": "Entscheidung des Herausgebers: keine Voreinstellung; M1 und M2 bleiben als Varianten des Plans anbietermix-ilka im Vergleichslauf für weitere Testläufe zum Vergleich. Abgelöst am 25.10.2026 durch AV-2026-W43-31 (Mix-Profile wählbar, Pull Request #68)."
+    },
+    {
+      "id": "AV-2026-W43-31",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE, standardProfilAnwenden, standardProfilAktiv"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "Voreinstellung (Auswahl unter „Modelle & Verarbeitung“)"
+        },
+        {
+          "datei": "evaluation/befunde/befundregister.json",
+          "stelle": "eintraege[id=AV-2026-W43-30]"
+        }
+      ],
+      "kurz": "Mix-Profile M1 und M2 (S1 OpenAI, S2/S3/MS Anthropic) unter „Modelle & Verarbeitung“ wählbar; löst AV-2026-W43-30 ab.",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-32",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "APP_MODELLE.reparatur, STANDARD_PROFILE.anthropic.modelle.reparatur"
+        }
+      ],
+      "kurz": "Reparatur der App-Vorgabe und des Standard-Profils Anthropic mit Haiku „low“ statt Sonnet; Umstellung gespeicherter Einstellungen (Fassung 4).",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-33",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.mistral.modelle.reparatur"
+        }
+      ],
+      "kurz": "Reparatur Standard-Profil Mistral mit Medium 3.5 „low“ statt Small; Nachtest nach AV-2026-W43-34.",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-34",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/stufen.ts",
+          "stelle": "reparaturSystem()"
+        }
+      ],
+      "kurz": "Anweisung der Reparatur: Wert aus der Begründung, sonst Leerwert, nie Skalenrand; keine Kürzung nicht beanstandeter Textfelder.",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-35",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/reparaturtest.ts",
+          "stelle": "ReparaturReihe.summe, reparaturZeilen(), LIESMICH"
+        }
+      ],
+      "kurz": "Prüffall Reparatur zählt „Stellen wie Original“; leere Werte zählen nicht.",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-36",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-kurzfassung.md",
+          "stelle": "Abschnitt „Sprache und Länge“, Punkt Länge"
+        }
+      ],
+      "kurz": "Arbeitsanweisung Kurzfassung: 180 Wörter als Obergrenze mit Kürzungsregel (Profil 1.27.0).",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-37",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.openai.aufwand.erfassung"
+        }
+      ],
+      "kurz": "Erfassung OpenAI mit gpt-6-astra „high“ wie die Verdichtung (angepasst: Entscheidung statt Hinweis).",
+      "status": "umgesetzt",
+      "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-38",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_profilauswahl_2026-W43.json",
+      "commit": "dbef59eb1806c82d23849ebdd1b2f137806f4b03",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/management-summary-ilka.json",
+          "stelle": "varianten"
+        },
+        {
+          "datei": "evaluation/plaene/reparatur-ilka.json",
+          "stelle": "varianten"
+        }
+      ],
+      "kurz": "Pläne management-summary-ilka und reparatur-ilka mit den Nachreihen (Fassung 2) und Ergebnisberichte.",
+      "status": "umgesetzt",
+      "pr": 68
     }
   ]
 }

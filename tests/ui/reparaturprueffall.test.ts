@@ -63,14 +63,14 @@ describe("AV-2026-W43-25: Prüffall Reparatur in den Einstellungen", () => {
     );
     const titel = [...document.querySelectorAll(".vergleichslauf h3")].map((h) => h.textContent);
     expect(titel).toEqual(["Vergleichslauf Ilka", "Prüffall Reparatur"]);
-    expect(abschnitt().textContent).toContain("S3 Reparatur: claude-sonnet-5-5 (niedrig) · Anthropic");
+    expect(abschnitt().textContent).toContain("S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic");
     expect((abschnitt().querySelector('input[type="number"]') as HTMLInputElement).value).toBe("2");
     expect(abschnitt().textContent).toContain("10 Fälle mit einer bis zwei Reparaturen");
     expect(abschnitt().textContent).toContain("fehlt der Schlüssel für Anthropic");
     expect(knopf("Prüffall starten")?.disabled).toBe(true);
   });
 
-  it("bietet die fünf Varianten des Plans an, ohne die Einstellungen zu ändern; Mistral mit Endpunkt und Aufschlag", async () => {
+  it("bietet die sechs Varianten des Plans an (R-F seit Fassung 2, AV-2026-W43-38), ohne die Einstellungen zu ändern; Mistral mit Endpunkt und Aufschlag", async () => {
     const profil = await profilPflicht("lead-beispiel");
     await einhaengen(React.createElement(ReparaturPrueffallAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
     expect([...auswahl().options].map((o) => o.value)).toEqual([
@@ -80,6 +80,7 @@ describe("AV-2026-W43-25: Prüffall Reparatur in den Einstellungen", () => {
       "R-C-sol-niedrig",
       "R-D-luna-niedrig",
       "R-E-mistral-small",
+      "R-F-mistral-medium-niedrig",
     ]);
     expect(knopf("Prüffall starten")?.disabled).toBe(false);
     await waehlen("R-E-mistral-small");
@@ -115,7 +116,8 @@ describe("AV-2026-W43-25: Prüffall Reparatur in den Einstellungen", () => {
     const reihe = JSON.parse(await (await JSZip.loadAsync(await inhalt.arrayBuffer())).file("reihe.json")!.async("string"));
     expect(reihe).toMatchObject({ format: "ki-lead-reparaturtest/1", quelle: "app", variante: "reparatur-ilka/R-B-haiku-niedrig", wiederholungen: 1 });
     expect(abschnitt().querySelectorAll("tbody tr")).toHaveLength(5);
-    expect(text()).toContain("5 Fälle, schemakonform nach der Reparatur: 5, Reparaturen: 5, übrige Inhalte erhalten im Mittel: 100 %");
+    expect(text()).toContain("5 Fälle, schemakonform nach der Reparatur: 5, Reparaturen: 5, beschädigte Stellen wie im Original: 5, übrige Inhalte erhalten im Mittel: 100 %");
+    expect([...abschnitt().querySelectorAll("thead th")].map((t) => t.textContent)).toContain("Stellen wie Original");
     await klick("ZIP herunterladen");
     expect(downloads.liste).toHaveLength(2);
   });

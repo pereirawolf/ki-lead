@@ -224,6 +224,11 @@ export interface ReparaturFall {
   abweichungen: string[];
   /** Wert an den beschädigten Stellen: unbeschädigt, präpariert, nach der Reparatur */
   stellen: { pfad: string; original: unknown; praepariert: unknown; repariert: unknown }[];
+  /**
+   * Alle beschädigten Stellen haben nach der Reparatur wieder den Originalwert (seit 0.5.15, AV-2026-W43-35). Ein leerer
+   * Wert zählt nicht als Originalwert. Fehlt in Reihendateien vor 0.5.15.
+   */
+  stellen_wie_original?: boolean;
   kosten_usd: number | null;
   dauer_s: number | null;
   ausgabetoken: number | null;
@@ -250,9 +255,21 @@ export interface ReparaturReihe {
     schemakonform: number;
     reparaturen: number;
     anteil_erhalten_mittel: number | null;
+    /** Fälle, in denen alle beschädigten Stellen wieder den Originalwert haben (seit 0.5.15, AV-2026-W43-35) */
+    stellen_wie_original?: number;
     kosten_usd: number | null;
     dauer_s: number | null;
   };
+}
+
+/** Wert leer im Sinne der Kennzahl: fehlt, null, leere Zeichenkette oder leere Liste */
+function leer(w: unknown): boolean {
+  return w === undefined || w === null || w === "" || (Array.isArray(w) && w.length === 0);
+}
+
+/** Haben alle beschädigten Stellen wieder ihren Originalwert? Leere Werte zählen nicht (AV-2026-W43-35). */
+export function stellenWieOriginal(stellen: { original: unknown; repariert: unknown }[]): boolean {
+  return stellen.length > 0 && stellen.every((s) => !leer(s.repariert) && JSON.stringify(s.repariert) === JSON.stringify(s.original));
 }
 
 export interface ReparaturStand {
@@ -347,6 +364,12 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
       const vgl = inhaltVergleichen(r.meldung, soll, d.pfade);
       const k = summeOder(rep.map((s) => s.kostenUsd));
       if (typeof k === "number") kosten += k;
+      const stellen = d.pfade.map((pfad) => ({
+        pfad,
+        original: wertAn(musterfassung(), pfad) ?? null,
+        praepariert: wertAn(entwurf, pfad) ?? null,
+        repariert: r.meldung ? (wertAn(r.meldung, pfad) ?? null) : null,
+      }));
       faelle.push({
         defekt: d.id,
         wiederholung: w,
@@ -360,12 +383,8 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
         felder_gleich: vgl.gleich,
         anteil_erhalten: r.meldung && vgl.geprueft ? r3(vgl.gleich / vgl.geprueft) : null,
         abweichungen: vgl.abweichungen.slice(0, 20),
-        stellen: d.pfade.map((pfad) => ({
-          pfad,
-          original: wertAn(musterfassung(), pfad) ?? null,
-          praepariert: wertAn(entwurf, pfad) ?? null,
-          repariert: r.meldung ? (wertAn(r.meldung, pfad) ?? null) : null,
-        })),
+        stellen,
+        stellen_wie_original: stellenWieOriginal(stellen),
         kosten_usd: k === null ? null : r3(k * 1000) / 1000,
         dauer_s: rep.length ? Math.round(rep.reduce((a, s) => a + (s.dauerMs ?? 0), 0) / 100) / 10 : 0,
         ausgabetoken: rep.reduce((a, s) => a + (s.nutzung?.ausgabe ?? 0), 0),
@@ -393,6 +412,7 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
       schemakonform: faelle.filter((f) => f.schemakonform).length,
       reparaturen: faelle.reduce((a, f) => a + f.reparaturen, 0),
       anteil_erhalten_mittel: anteile.length ? r3(anteile.reduce((a, b) => a + b, 0) / anteile.length) : null,
+      stellen_wie_original: faelle.filter((f) => f.stellen_wie_original).length,
       kosten_usd: summeOder(faelle.map((f) => f.kosten_usd)) === null ? null : r3(summeOder(faelle.map((f) => f.kosten_usd))! * 1000) / 1000,
       dauer_s: Math.round(faelle.reduce((a, f) => a + (f.dauer_s ?? 0), 0)),
     },
@@ -411,6 +431,7 @@ export function reparaturZeilen(r: ReparaturReihe): unknown[][] {
       "lauf",
       "schemakonform",
       "reparaturen",
+      "stellen_wie_original",
       "anteil_erhalten",
       "abweichungen",
       "kosten_usd",
@@ -425,6 +446,7 @@ export function reparaturZeilen(r: ReparaturReihe): unknown[][] {
       f.lauf,
       f.schemakonform ? "ja" : "nein",
       f.reparaturen,
+      f.stellen_wie_original === undefined ? "" : f.stellen_wie_original ? "ja" : "nein",
       f.anteil_erhalten,
       f.abweichungen.length,
       f.kosten_usd,
@@ -457,7 +479,7 @@ export async function reparaturZip(r: ReparaturReihe, laeufe: DurchlaufErgebnis[
       `Erstellt: ${r.erstellt} mit ${r.app}, Profil ${r.profil.id} ${r.profil.version}`,
       `Reparatur: ${r.reparatur.modell} (${r.reparatur.aufwand})${r.mistral_endpunkt ? ` · Mistral ${r.mistral_endpunkt}` : ""}`,
       `Entwurf: ${r.entwurf.datei}, beschädigt nach den Defekten R1–R5; S1 fest: ${r.s1_fest.datei}; S2 ohne KI-Aufruf.`,
-      `Fälle: ${r.summe.faelle}; schemakonform nach der Reparatur: ${r.summe.schemakonform}; Reparaturen: ${r.summe.reparaturen}; übrige Inhalte erhalten im Mittel: ${r.summe.anteil_erhalten_mittel ?? "–"}; Kosten ${r.summe.kosten_usd ?? "unbekannt"} USD (Listenpreise).`,
+      `Fälle: ${r.summe.faelle}; schemakonform nach der Reparatur: ${r.summe.schemakonform}; Reparaturen: ${r.summe.reparaturen}; beschädigte Stellen wie im Original: ${r.summe.stellen_wie_original ?? "–"}; übrige Inhalte erhalten im Mittel: ${r.summe.anteil_erhalten_mittel ?? "–"}; Kosten ${r.summe.kosten_usd ?? "unbekannt"} USD (Listenpreise).`,
       "",
       "Inhalt: reihe.json (ki-lead-reparaturtest/1), uebersicht.csv, laeufe/ (Laufprotokolle, erster ohne Defekt als Soll), meldungen/ (reparierte Entwürfe).",
       "Alle Inhalte sind fiktiv. Laufprotokolle gehören nicht ins öffentliche Repository (docs/ERPROBUNG.md, Abschnitt 6).",
