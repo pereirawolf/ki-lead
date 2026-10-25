@@ -5,6 +5,7 @@ import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schlues
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
+import type { KopfLauf } from "./KiSymbol";
 import type { Fortschritt } from "../anbieter/typen";
 import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
@@ -55,6 +56,8 @@ interface Props {
   uebergabeQuittieren?: (nr: number) => void;
   /** Meldet der App, ob gerade ein KI-Lauf aktiv ist (ein Profilwechsel bricht ihn ab). */
   laufMelden?: (laeuft: boolean) => void;
+  /** Meldet die laufende KI-Anfrage (Stufe) an den KI-Chip der Kopfleiste; null, sobald keine läuft */
+  laufStand?: (stand: KopfLauf | null) => void;
 }
 
 type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
@@ -193,7 +196,7 @@ function HilfeFeld({
 
 const speicherText = (was: string, e: unknown) => `${was} (${(e as Error)?.message || "Speicherfehler"}).`;
 
-export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden }: Props) {
+export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden, laufStand }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
@@ -477,6 +480,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
+
+  // Stand für den KI-Chip der Kopfleiste: nur die Stufe, damit die App beim Streaming nicht mitzeichnet
+  const laufStandRef = useRef(laufStand);
+  laufStandRef.current = laufStand;
+  const kopfStufe = phase === "s1" ? "s1" : phase === "s2" ? (lauf?.status === "s3" ? "s3" : "s2") : null;
+  useEffect(() => {
+    laufStandRef.current?.(kopfStufe ? { stufe: kopfStufe, verdichtung } : null);
+  }, [kopfStufe, verdichtung]);
+  useEffect(() => () => laufStandRef.current?.(null), []);
 
   const zusammenfuehren = (i: number) => {
     if (!vorschlag || i < 1) return;

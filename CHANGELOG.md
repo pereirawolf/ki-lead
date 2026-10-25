@@ -68,6 +68,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
 | 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
 | 0.5.20 | letzter Commit des Pull Requests „Profilansicht übersichtlicher; 0.5.20“ |
+| 0.5.21 | letzter Commit des Pull Requests „Kopfleiste: KI-Chip „KI offline/online“ statt Profil-Chip; 0.5.21“ |
+
+## [0.5.21] – 25.10.2026
+
+Grundlage: Entscheidung des Herausgebers vom 25.10.2026 zur Kopfleiste. An der prominenten Stelle rechts oben steht nur, ob gerade eine KI-Anfrage läuft. Lagezentren wechseln ihr Profil selten; Laufzeit und Kosten zeigt die KI-Erfassung; der Entwurfsstatus steht in Maske, Dateiname und PDF.
+
+### Hinzugefügt
+
+- **KI-Chip rechts oben** (`src/ui/KiSymbol.tsx`) in den Farben des Profils. In Ruhe „KI offline“: zarte Fläche, Rand und Schrift in der Aktionsfarbe. Solange eine KI-Anfrage läuft und noch nicht beendet ist (S1 oder S2 mit S3, in jeder Ansicht), „KI online“: Fläche in der Aktionsfarbe mit einem pulsierenden Ring; kein Logo oder Symbol. Nach S1 wartet die Erfassung auf die Bestätigung; der Chip steht dann wieder auf „KI offline“. Ein Klick führt zur KI-Erfassung.
+- **Barrierefreiheit:** Der zugängliche Name beginnt mit dem sichtbaren Text und nennt die Stufe („KI online: Anfrage läuft, S2 Recherche und Entwurf. Zur KI-Erfassung“); Wechsel werden über eine unsichtbare Statusregion angesagt. Der Zustand ist am Text erkennbar, nicht nur an Farbe oder Bewegung; bei „Bewegung reduzieren“ entfällt der Ring; bei erzwungenen Farben ist „KI online“ in Systemfarben hervorgehoben. Gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt.
+- Die KI-Erfassung meldet über `laufStand` nur die laufende Stufe (keine Neuzeichnung der App beim Streaming).
+- Tests: `tests/ui/kisymbol.test.ts`, `tests/browser/kisymbol.spec.ts`.
+
+### Entfernt
+
+- **Profil-Chip in der Kopfleiste.** Das Profil wird unter „Profile“ gewählt und dort als „✓ In Verwendung“ gekennzeichnet. Tests erkennen das geladene Profil am KI-Chip (`.kopf-ki`) bzw. an `data-profil` der Kopfleiste.
+
+### Geändert
+
+- Spezifikation 0.5.21 (Abschnitt 5.1), `docs/TESTS.md`.
 
 ## [0.5.20] – 25.10.2026
 

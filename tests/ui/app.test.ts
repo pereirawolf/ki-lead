@@ -21,7 +21,7 @@ afterEach(async () => {
 });
 
 const materialNamen = () => [...document.querySelectorAll(".material-name")].map((e) => e.textContent);
-const aktivesProfil = () => document.querySelector(".chip-name")?.textContent;
+const aktivesProfil = () => document.querySelector(".kopf-rechts")?.getAttribute("data-profil");
 
 /** Lässt ausstehende Effekte und Speicherzugriffe auslaufen, bevor etwas als „nicht passiert“ gilt */
 async function ruhe() {

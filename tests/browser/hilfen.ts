@@ -67,7 +67,7 @@ export async function netzVorbereiten(page: Page, antwort: (nr: number, koerper:
 /** App öffnen und warten, bis das Profil geladen ist */
 export async function oeffnen(page: Page): Promise<void> {
   await page.goto("./");
-  await expect(page.locator(".chip-name")).toBeVisible();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
 }
 
 /** Hauptbereich über die Navigation wählen */

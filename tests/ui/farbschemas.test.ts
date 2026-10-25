@@ -21,7 +21,7 @@ afterEach(async () => {
 async function zeigeApp() {
   const { default: App } = await import("../../src/App");
   await einhaengen(React.createElement(App));
-  await bisWahr(() => document.querySelector(".chip-name") !== null && !!document.documentElement.dataset.farbschema);
+  await bisWahr(() => document.querySelector(".kopf-ki") !== null && !!document.documentElement.dataset.farbschema);
 }
 async function einstellungen() {
   await klick("Einstellungen");

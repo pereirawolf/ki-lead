@@ -190,20 +190,60 @@ a {
   text-underline-offset: 0.35em;
 }
 
-.profil-chip {
-  display: inline-flex;
-  min-width: 0;
+/* KI-Chip rechts oben (seit 0.5.21): „KI offline“ zart in den Profilfarben, „KI online“ gefüllt in der Aktionsfarbe
+   mit pulsierendem Ring */
+.kopf-rechts {
   margin-left: auto;
-  max-width: 40vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: 1px solid var(--linie);
-  background: var(--papier);
+  display: flex;
+  align-items: center;
+}
+
+.kopf-ki {
+  flex: none;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--amt);
   border-radius: 999px;
-  padding: 0.3rem 0.85rem;
+  background: var(--amt-zart);
+  color: var(--amt-tief);
   font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.kopf-ki.offline:hover {
+  background: var(--papier);
+}
+
+.kopf-ki.online {
+  background: var(--amt);
+  color: var(--auf-amt);
+  animation: kopf-ki-puls 1.8s ease-out infinite;
+}
+
+.kopf-ki.online:hover {
+  background: var(--amt-tief);
+  color: var(--auf-amt-hover);
+}
+
+/* Ring in der Aktionsfarbe, der sich vom Chip löst und ausblendet */
+@keyframes kopf-ki-puls {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--amt) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0.55rem color-mix(in srgb, var(--amt) 0%, transparent);
+  }
+}
+
+/* gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt */
+.kopf-ki-text {
+  display: inline-block;
+  min-width: 5.6em;
+  text-align: center;
 }
 
 .hinweisband {
@@ -1476,10 +1516,6 @@ textarea {
   .marke-zusatz {
     display: none;
   }
-
-  .profil-chip {
-    max-width: 34vw;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1489,10 +1525,6 @@ textarea {
 
   .nav {
     padding: 0.4rem 0.55rem;
-  }
-
-  .profil-chip {
-    display: none;
   }
 
   .segment {
@@ -1855,15 +1887,6 @@ details.ki-abschnitt summary,
     order: 3;
     width: 100%;
     margin: 0 -0.4rem;
-  }
-
-  .profil-chip {
-    display: inline-flex;
-    margin-left: auto;
-    max-width: 55vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
@@ -3122,19 +3145,6 @@ fieldset.lb-ausgabe {
   font-size: 0.82rem;
 }
 
-/* Profil-Chip: Name kürzen, Version stets sichtbar */
-.chip-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
-
-.chip-version {
-  white-space: nowrap;
-  flex: none;
-}
-
 /* Arbeitsanweisungen und Kodierleitfaden: Zwecksatz, Dokumentkopf, Inhaltsverzeichnis */
 .aufklapp-zweck {
   display: block;
@@ -3394,6 +3404,13 @@ fieldset.lb-ausgabe {
   .kopf,
   .farb-vorschau-kopf {
     border-image: none;
+  }
+
+  .kopf-ki.online {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
   }
 
   .nav.aktiv,

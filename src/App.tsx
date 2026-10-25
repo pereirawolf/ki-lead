@@ -19,6 +19,7 @@ import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
+import { KiSymbol, type KopfLauf } from "./ui/KiSymbol";
 import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
 import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
@@ -356,6 +357,8 @@ export default function App() {
 
   // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
   const kiLaeuft = useRef(false);
+  /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
+  const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
 
   const aktivieren = async (schluessel: string) => {
     if (
@@ -456,15 +459,9 @@ export default function App() {
           </button>
         </nav>
         {profil && (
-          <button
-            type="button"
-            className="profil-chip"
-            onClick={() => setAnsicht("profile")}
-            title={`Profil wechseln (in Verwendung: ${profil.manifest.name}, Profilversion ${profil.manifest.version})`}
-          >
-            <span className="chip-name">{profil.manifest.name}</span>
-            <span className="chip-version">&nbsp;· {profil.manifest.version}</span>
-          </button>
+          <div className="kopf-rechts" data-profil={profil.manifest.name}>
+            <KiSymbol lauf={kopfLauf} zurKi={() => setAnsicht("ki")} />
+          </div>
         )}
       </header>
 
@@ -518,6 +515,7 @@ export default function App() {
               laufMelden={(l) => {
                 kiLaeuft.current = l;
               }}
+              laufStand={setKopfLauf}
             />
           </div>
         )}
