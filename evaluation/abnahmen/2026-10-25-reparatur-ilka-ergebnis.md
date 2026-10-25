@@ -46,3 +46,16 @@ Die Anweisung der Reparatur sagte bis 0.5.14 nicht, woher ein korrigierter Wert 
 - Zwei Durchgänge je Modell; fünf künstliche Defekte an einem einzigen Entwurf.
 - Ergebnisse gelten für die Anweisung bis 0.5.14; Läufe mit der Anweisung ab 0.5.15 sind nicht unmittelbar vergleichbar.
 - Handprüfung durch Claude, nicht von einer Person gegengelesen.
+
+## Nachtrag vom 25.10.2026: Nachtest mit der Anweisung seit 0.5.15
+
+Der Bericht oben bleibt unverändert. Nachtest durch den Herausgeber am 25.10.2026 zwischen etwa 12:00 und 12:38 Uhr (Ortszeit) mit App 0.5.15, Beispielprofil 1.27.0 und der geschärften Anweisung der Reparatur (AV-2026-W43-34), je zwei Durchgänge als Plan-Variante; Kennzahl „Stellen wie Original“ von der App gezählt (AV-2026-W43-35). Befunde: AV-2026-W43-39, -42.
+
+| Variante | Schemakonform | Stellen wie Original | Fälle mit veränderten übrigen Inhalten | USD je Fall | Dauer je Fall | Ausgabetoken je Fall |
+|---|---|---|---|---|---|---|
+| R-B Haiku „low“ | 10/10 | 10/10 | 0 | 0,010 | 47–50 s | 16 663–17 389 |
+| R-C gpt-6.1-sol „low“ | 10/10 | 10/10 | 0 | 0,093–0,115 | 57–80 s | 9 195–9 242 |
+| R-E Mistral Small „low“ | 10/10 | 10/10 | 0 | 0,008–0,009 | 41–45 s | 10 040 |
+| R-F Mistral Medium 3.5 „low“ | 10/10 | 10/10 | 0 | 0,100–0,104 | 46–51 s | 10 040 |
+
+Jeder Fall brauchte eine Reparatur; zusammen rund 2,2 USD. Mistral Small streicht keine Zeilen mehr und lässt keine Beurteilung leer, Mistral Medium setzt D2 nicht mehr auf den Skalenrand. Nach der Bedingung aus AV-2026-W43-33 repariert das Standard-Profil Mistral seit 0.5.16 wieder mit Small (AV-2026-W43-39). Haiku (Anthropic, Mix-Profile, App-Vorgabe) und gpt-6.1-sol (OpenAI) bleiben. Weiterhin zwei Durchgänge je Modell an einem einzigen Entwurf.

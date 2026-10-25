@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.28.0 – 25.10.2026
+
+Grundlage: Nachreihe der Management Summary mit Arbeitsanweisung 2.2.0 (Befunddatei `ki-lead-befund_nachreihen_2026-W43.json`, Befund AV-2026-W43-40), vom Herausgeber am 25.10.2026 freigegeben.
+
+- **Arbeitsanweisung Kurzfassung 2.3.0:** Der Kennsatz „Klärungsbedarf:“ steht nur bei einem wesentlichen Widerspruch der Meldung, nie für offene Prüfaufgaben oder Fristen; diese gehören in Maßnahmen & Handlungsempfehlungen. Anlass: Mit 2.2.0 begann Sonnet „mittel“ alle drei Kernaussagen mit „Klärungsbedarf“, obwohl die Musterfassung keinen Widerspruch enthält. Zweite Stelle, weil die Regel präzisiert wird.
+- **SOP-Sammelmappe 3.17.2:** nur Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Teil A ändert nur den Gültigkeitsstand; Erfassung (1.4.0) und Verdichtung (2.0.2) geprüft, kein Anpassungsbedarf.
+- Schema, Darstellungsdatei, Kodierleitfaden, Arbeitsanweisungen Erfassung und Verdichtung, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.27.0 – 25.10.2026
 
 Grundlage: Auswertung der Management Summary und des Prüffalls Reparatur vom 25.10.2026 (Befunddatei `ki-lead-befund_profilauswahl_2026-W43.json`, Befund AV-2026-W43-36), vom Herausgeber am 25.10.2026 freigegeben.

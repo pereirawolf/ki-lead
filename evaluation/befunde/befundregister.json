@@ -1298,6 +1298,86 @@
       "kurz": "Pläne management-summary-ilka und reparatur-ilka mit den Nachreihen (Fassung 2) und Ergebnisberichte.",
       "status": "umgesetzt",
       "pr": 68
+    },
+    {
+      "id": "AV-2026-W43-39",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_nachreihen_2026-W43.json",
+      "commit": "c04558483d67c097f15a7716a9582e647059fe5a",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "STANDARD_PROFILE.mistral.modelle.reparatur, STANDARD_PROFILE_FASSUNG_3"
+        }
+      ],
+      "kurz": "Reparatur Standard-Profil Mistral wieder mit Small „low“ nach fehlerfreiem Nachtest; Umstellung gespeicherter Einstellungen (Fassung 5).",
+      "status": "umgesetzt",
+      "pr": 69
+    },
+    {
+      "id": "AV-2026-W43-40",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_nachreihen_2026-W43.json",
+      "commit": "c04558483d67c097f15a7716a9582e647059fe5a",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-kurzfassung.md",
+          "stelle": "Abschnitt „Sprache und Länge“, Punkt Länge"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-kurzfassung.md",
+          "stelle": "Abschnitt „Grundlage“, Widersprüche nicht still reparieren"
+        }
+      ],
+      "kurz": "Arbeitsanweisung Kurzfassung: „Klärungsbedarf:“ nur bei wesentlichen Widersprüchen, nie für offene Prüfaufgaben oder Fristen (Profil 1.28.0).",
+      "status": "umgesetzt",
+      "pr": 69
+    },
+    {
+      "id": "AV-2026-W43-41",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_nachreihen_2026-W43.json",
+      "commit": "c04558483d67c097f15a7716a9582e647059fe5a",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/kurzfassungsreihe.ts",
+          "stelle": "vorpruefung() bzw. Felder der Vorprüfung"
+        }
+      ],
+      "kurz": "Vorprüfung der Management Summary meldet eine Kernaussage, die mit „Klärungsbedarf“ beginnt.",
+      "status": "umgesetzt",
+      "pr": 69
+    },
+    {
+      "id": "AV-2026-W43-42",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_nachreihen_2026-W43.json",
+      "commit": "c04558483d67c097f15a7716a9582e647059fe5a",
+      "entschieden_am": "2026-10-25",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md",
+          "stelle": "Folgerungen"
+        },
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md",
+          "stelle": "Folgerungen"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "offener Punkt 6"
+        }
+      ],
+      "kurz": "Nachträge der Nachreihen in den Ergebnisberichten Reparatur und Management Summary sowie in der Spezifikation.",
+      "status": "umgesetzt",
+      "pr": 69
     }
   ]
 }

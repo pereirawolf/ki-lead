@@ -33,9 +33,9 @@ const {
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 4", async () => {
+  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 5", async () => {
     expect(STANDARD.aufwand.vorverarbeitung).toBe("high");
-    expect(STANDARD.fassung).toBe(4);
+    expect(STANDARD.fassung).toBe(5);
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
   });
 
@@ -44,7 +44,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const e = await einstellungenLesen();
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
   });
 
   it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt, Fassung unverändert", async () => {
@@ -52,7 +52,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", alt);
     const e = await einstellungenLesen();
     expect(e.mistralEndpunkt).toBe("eu");
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
     speicher.set("einstellungen", { ...alt, mistralEndpunkt: "global" });
     expect((await einstellungenLesen()).mistralEndpunkt).toBe("global");
   });
@@ -69,13 +69,13 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("low");
   });
 
-  it("stellt Fassung 1 in einem Schritt auf Fassung 4 um", async () => {
+  it("stellt Fassung 1 in einem Schritt auf Fassung 5 um", async () => {
     speicher.set("einstellungen", { maxTokensErfassung: 64000, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", erfassung: "high" } });
     const e = await einstellungenLesen();
     expect(e.maxTokensErfassung).toBe(128000);
     expect(e.aufwand.erfassung).toBe("medium");
     expect(e.aufwand.vorverarbeitung).toBe("high");
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
   });
 
   it("nach Fassung 3 bleibt „medium“ eine bewusste Wahl", async () => {
@@ -104,14 +104,33 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
   it.each([
     ["anthropic", ALT_ANTHROPIC, { reparatur: "claude-haiku-5-5" }, {}],
     ["openai", ALT_OPENAI, {}, { erfassung: "high" }],
-    ["mistral", ALT_MISTRAL, { reparatur: "mistral-medium-3-5" }, {}],
+    ["mistral", ALT_MISTRAL, {}, {}], // seit 0.5.16 wieder wie bis 0.5.14 (AV-2026-W43-39)
   ] as const)("AV-2026-W43-32, -33, -37: Fassung 3 mit dem alten Standard-Profil %s folgt danach dem heutigen", async (_a, alt, modelle, aufwand) => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3, websucheMax: 7, modelle: alt.modelle, aufwand: alt.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual({ ...alt.modelle, ...modelle });
     expect(e.aufwand).toEqual({ ...alt.aufwand, ...aufwand });
     expect(e.websucheMax).toBe(7);
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
+  });
+
+  it("AV-2026-W43-39: Fassung 4 mit dem Mistral-Standard aus 0.5.15 (Reparatur Medium) repariert danach mit Small", async () => {
+    // Soll unabhängig vom Code: Mistral-Standard 0.5.15 laut Spezifikation 0.5.15, Abschnitt 5.4
+    const modelle015 = { ...ALT_MISTRAL.modelle, reparatur: "mistral-medium-3-5" };
+    speicher.set("einstellungen", { ...STANDARD, fassung: 4, websucheMax: 9, modelle: modelle015, aufwand: ALT_MISTRAL.aufwand });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(ALT_MISTRAL.modelle);
+    expect(e.aufwand).toEqual(ALT_MISTRAL.aufwand);
+    expect(e.websucheMax).toBe(9);
+    expect(e.fassung).toBe(5);
+  });
+
+  it("AV-2026-W43-39: eine abweichende Wahl der Fassung 4 bleibt stehen", async () => {
+    const eigen = { ...ALT_MISTRAL.modelle, reparatur: "mistral-medium-3-5", kurzfassung: "mistral-large-4" };
+    speicher.set("einstellungen", { ...STANDARD, fassung: 4, modelle: eigen, aufwand: ALT_MISTRAL.aufwand });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(eigen);
+    expect(e.fassung).toBe(5);
   });
 
   it("AV-2026-W43-32: eine abweichende Wahl der Fassung 3 bleibt stehen", async () => {
@@ -119,14 +138,14 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3, modelle: eigen, aufwand: ALT_ANTHROPIC.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
   });
 
   it("AV-2026-W43-32: leere Modellfelder (Vorgaben des Profils) bleiben leer", async () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3 });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(STANDARD.modelle);
-    expect(e.fassung).toBe(4);
+    expect(e.fassung).toBe(5);
   });
 });
 

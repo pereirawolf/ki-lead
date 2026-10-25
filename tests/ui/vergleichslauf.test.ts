@@ -95,7 +95,7 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
     expect(anbieterFuer).toHaveBeenCalledTimes(1);
     const [s, eLauf] = anbieterFuer.mock.calls[0] as unknown as [Schluessel, typeof e];
     expect(s.mistral).toBe("test");
-    expect(eLauf.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-medium-3-5", reparatur: "mistral-medium-3-5" });
+    expect(eLauf.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-medium-3-5", reparatur: "mistral-small-2603" });
     expect(eLauf.mistralEndpunkt).toBe("global");
     const { name, inhalt } = downloads.liste[0];
     expect(name).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
@@ -127,7 +127,7 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
       auswahl.dispatchEvent(new Event("change", { bubbles: true }));
     });
     expect(text()).toContain("S2 Verdichtung: mistral-large-4 (hoch) · Mistral");
-    expect(text()).toContain("S3 Reparatur: mistral-medium-3-5 (niedrig) · Mistral");
+    expect(text()).toContain("S3 Reparatur: mistral-small-2603 (niedrig) · Mistral");
     expect(text()).toContain("fehlt der Schlüssel für Mistral");
     expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
   });

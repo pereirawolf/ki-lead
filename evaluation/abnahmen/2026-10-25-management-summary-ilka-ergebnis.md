@@ -69,3 +69,25 @@ Einzelheiten:
 - Drei Läufe je Variante; ein einziger Fall.
 - Die Musterfassung stammt aus derselben Modellfamilie wie A–C.
 - Handprüfung durch Claude, nicht von einer Person gegengelesen.
+
+## Nachtrag vom 25.10.2026: Nachreihe mit Arbeitsanweisung 2.2.0
+
+Der Bericht oben bleibt unverändert. Nachreihe durch den Herausgeber am 25.10.2026 zwischen 13:02 und 13:07 Uhr (Ortszeit) mit App 0.5.15 und Beispielprofil 1.27.0 (Arbeitsanweisung Kurzfassung 2.2.0: höchstens 180 Wörter mit Kürzungsregel, AV-2026-W43-36), Varianten A, D und E als Plan-Variante, je drei Läufe. Befunde: AV-2026-W43-40 bis -42.
+
+| Variante | Lauf | Wörter | Ausgabetoken | USD | Dauer |
+|---|---|---|---|---|---|
+| A Sonnet „medium“ | 20261025-130246-d7do | 166 | 758 | 0,047 | 6 s |
+| A Sonnet „medium“ | 20261025-130253-wsiy | 166 | 813 | 0,038 | 6 s |
+| A Sonnet „medium“ | 20261025-130259-szyt | 188 | 885 | 0,039 | 6 s |
+| D gpt-6.1-sol „medium“ | 20261025-130329-2c81 | 139 | 1 320 | 0,033 | 26 s |
+| D gpt-6.1-sol „medium“ | 20261025-130355-v2q5 | 149 | 1 194 | 0,013 | 26 s |
+| D gpt-6.1-sol „medium“ | 20261025-130421-oy0t | 152 | 1 381 | 0,015 | 32 s |
+| E Mistral Medium 3.5 „high“ | 20261025-130507-o5pl | 140 | 10 975 | 0,108 | 63 s |
+| E Mistral Medium 3.5 „high“ | 20261025-130610-4j25 | 113 | 3 100 | 0,043 | 19 s |
+| E Mistral Medium 3.5 „high“ | 20261025-130629-zozz | 100 | 3 147 | 0,043 | 20 s |
+
+Handprüfung durch Claude (Opus 5.5), nicht gegengelesen:
+
+- **A Sonnet:** kürzer (zwei Läufe mit 166 Wörtern, einer mit 188). Alle drei Kernaussagen beginnen jedoch mit „Klärungsbedarf:“ bzw. „Klärungsbedarf entfällt nicht:“, obwohl die Musterfassung keinen wesentlichen Widerspruch enthält; mit 2.1.2 kam das nie vor. Ein Lauf schreibt, die Bahnsperrungen seien „überwiegend abgearbeitet“; nach der Meldung bleiben sie mehrtägig. Nachbetankung mit Frist, Mindestwert und Prognosen sonst wie in der ersten Reihe. Die einzige Änderung gegenüber 2.1.2 ist die Längenregel mit „offene Prüfaufgaben“; ein Zusammenhang ist plausibel, aber mit drei Läufen nicht belegt. Folge: Arbeitsanweisung Kurzfassung 2.3.0 beschränkt den Kennsatz ausdrücklich auf Widersprüche (AV-2026-W43-40); die Vorprüfung meldet ihn seit 0.5.16 (AV-2026-W43-41). Eine weitere Nachreihe mit Sonnet „medium“ steht aus.
+- **D gpt-6.1-sol:** alle Läufe unter 180 Wörtern, kein „Klärungsbedarf“, keine Faktenfehler; die Frist der Nachbetankung steht weiterhin nicht im Text.
+- **E Mistral Medium 3.5:** Der Oberharz-Fehler kehrt nicht wieder. „Mindestens“ fehlt in zwei Läufen (Vorprüfung), die Bahnsperrungen stehen in allen drei Kernaussagen vorn, zwei Läufe verschärfen „gebunden oder benötigt“ zu „gebunden“, ein Lauf richtet „Nachbetankung und Netzersatz sichern“ an die Leitung. Bleibt mangels besserer Option, mit Faktenprüfung in der Redaktion.
