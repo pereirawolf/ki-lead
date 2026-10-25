@@ -171,7 +171,7 @@ function SopKatalog({ profil, praefix }: { profil: Profil; praefix: string }) {
     <details className="sop-katalog" id={domId(praefix, "katalog")}>
       <summary>SOP-Katalog lesen</summary>
       <div ref={katalogRef}>
-        <p className="hinweis">Zum Nachlesen ohne KI. Öffnen und Suchen verändern keine Meldung, keinen Nachweis und kein aktives Profil.</p>
+        <p className="hinweis">Das Tag an einem Eintrag nennt die Fassung dieses einzelnen Dokuments.</p>
         <div className="katalog-werkzeuge">
           <label htmlFor={suchId} className="katalog-suche">
             <span>Suchen</span>
@@ -279,8 +279,8 @@ function Arbeitsgrundlagen({ profil, praefix }: { profil: Profil; praefix: strin
   const oeffnen = zielOeffner(praefix);
   return (
     <details className="sop-katalog profil-arbeit" id={domId(praefix, "arbeit")}>
-      <summary>Arbeitsanweisungen und Kodierleitfaden</summary>
-      <p className="hinweis">Die Texte, nach denen die KI arbeitet, aus dem geladenen Paket. Lesen verändert kein Profil und keine Meldung.</p>
+      <summary>Arbeitsanweisungen und Kodierleitfaden lesen</summary>
+      <p className="hinweis">Die Texte, nach denen die KI arbeitet, aus dem geladenen Paket.</p>
       {doks.map((d) => (
         <LeseDokument key={d.pfad} d={d} profil={profil} praefix={praefix} oeffnen={oeffnen} />
       ))}
@@ -366,6 +366,21 @@ function befundZahl(befunde: Befund[]): string {
   return [f ? `${f} Fehler` : "", w ? `${w} Warnung${w === 1 ? "" : "en"}` : ""].filter(Boolean).join(", ");
 }
 
+/**
+ * Inhalt einer Profilkarte: beim verwendeten Profil offen, bei den übrigen hinter „Angaben, Lesetexte und Prüfung“,
+ * damit die Liste auch mit mehreren importierten Profilen überschaubar bleibt. Sprünge (Befunde, Verweise in Lesetexten)
+ * öffnen das umgebende Element über bereichOeffnen().
+ */
+function KartenInhalt({ offen, children }: { offen: boolean; children: ReactNode }) {
+  if (offen) return <>{children}</>;
+  return (
+    <details className="profil-details">
+      <summary>Angaben, Lesetexte und Prüfung</summary>
+      {children}
+    </details>
+  );
+}
+
 function herkunft(p: ProfilEintrag): string {
   return p.quelle === "eingebaut" ? "Mitgeliefert" : `Importiert${p.importiertAm ? " am " + new Date(p.importiertAm).toLocaleDateString("de-DE") : ""}`;
 }
@@ -392,6 +407,8 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
   };
 
   const importiertAktiv = bericht?.schluessel !== undefined && bericht.schluessel === aktiv;
+  /** Das verwendete Profil zuerst, die übrigen in bisheriger Reihenfolge */
+  const reihenfolge = [...profile.filter((p) => p.schluessel === aktiv), ...profile.filter((p) => p.schluessel !== aktiv)];
 
   return (
     <div className="profile">
@@ -399,11 +416,8 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
         <div className="werkzeugleiste-text">
           <h1>Profile</h1>
           <p>
-            Ein Profil legt fest, nach welcher Systematik gemeldet wird: Schema, Darstellung, Arbeitsanweisung, SOP und Kodierleitfaden einer Organisation oder
-            Ebene. Jedes Profil hat seinen eigenen Meldungs-Zwischenstand; er bleibt beim Wechsel erhalten.
-          </p>
-          <p className="hinweis">
-            Profilversion = Stand des Pakets · Tag an einer SOP = Fassung dieses einzelnen Dokuments · Prüfsumme = konkreter Inhalt des Pakets.
+            Ein Profil bündelt Schema, Darstellung, Arbeitsanweisungen, SOPs und Kodierleitfaden einer Organisation oder Ebene; beim Wechsel behält jedes Profil
+            seinen eigenen Meldungs-Zwischenstand.
           </p>
         </div>
         <div className="werkzeugleiste-knoepfe">
@@ -461,7 +475,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
       )}
 
       <div className="profilliste">
-        {profile.map((p) => {
+        {reihenfolge.map((p) => {
           const m = p.profil?.manifest;
           const istAktiv = p.schluessel === aktiv;
           const praefix = domId("profil", p.schluessel);
@@ -497,58 +511,76 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 {m ? `Profilversion ${m.version} · ` : ""}
                 {herkunft(p)}
               </p>
-              {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
-              {p.profil && (
-                <dl className="profil-daten">
-                  <div>
-                    <dt>Ebene</dt>
-                    <dd>{m?.ebene || "–"}</dd>
-                  </div>
-                  <div>
-                    <dt>Referenzraum</dt>
-                    <dd>{m?.referenzraum || "–"}</dd>
-                  </div>
-                  <div>
-                    <dt>Schema</dt>
-                    <dd className="technisch">{m?.meldung.schema_id}</dd>
-                  </div>
-                  <div className="profil-daten-breit">
-                    <dt>SOPs und Bausteine</dt>
-                    <dd>{sopAnzahl(p.profil)}</dd>
-                  </div>
-                  {m?.herausgeber && (
-                    <div className="profil-daten-breit">
-                      <dt>Herausgeber</dt>
-                      <dd>{m.herausgeber}</dd>
-                    </div>
-                  )}
-                  {m?.lizenz && (
+              <KartenInhalt offen={istAktiv}>
+                {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
+                {p.profil && (
+                  <dl className="profil-daten">
                     <div>
-                      <dt>Lizenz</dt>
-                      <dd>{m.lizenz}</dd>
+                      <dt>Ebene</dt>
+                      <dd>{m?.ebene || "–"}</dd>
                     </div>
+                    <div>
+                      <dt>Referenzraum</dt>
+                      <dd>{m?.referenzraum || "–"}</dd>
+                    </div>
+                    <div className="profil-daten-breit">
+                      <dt>SOPs und Bausteine</dt>
+                      <dd>{sopAnzahl(p.profil)}</dd>
+                    </div>
+                    {m?.herausgeber && (
+                      <div className="profil-daten-breit">
+                        <dt>Herausgeber</dt>
+                        <dd>{m.herausgeber}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+                {p.profil && (
+                  <section className="profil-bereich" aria-labelledby={`${praefix}-lesen`}>
+                    <h3 id={`${praefix}-lesen`}>Lesen</h3>
+                    <p className="hinweis">Zum Nachlesen ohne KI. Öffnen und Suchen verändern keine Meldung, keinen Nachweis und kein aktives Profil.</p>
+                    <Arbeitsgrundlagen profil={p.profil} praefix={praefix} />
+                    <SopKatalog profil={p.profil} praefix={praefix} />
+                    <Dokumentation profil={p.profil} praefix={praefix} />
+                  </section>
+                )}
+                <section className="profil-bereich" aria-labelledby={`${praefix}-pruefen`}>
+                  <h3 id={`${praefix}-pruefen`}>Prüfen</h3>
+                  {p.profil && (
+                    <>
+                      <dl className="profil-daten profil-technik">
+                        <div>
+                          <dt>Schema</dt>
+                          <dd className="technisch">{m?.meldung.schema_id}</dd>
+                        </div>
+                        {m?.lizenz && (
+                          <div>
+                            <dt>Lizenz</dt>
+                            <dd>{m.lizenz}</dd>
+                          </div>
+                        )}
+                        <div className="profil-daten-breit">
+                          <dt>Prüfsumme</dt>
+                          <Pruefsumme hash={p.profil.hash} />
+                        </div>
+                      </dl>
+                      <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
+                    </>
                   )}
-                  <div className="profil-daten-breit">
-                    <dt>Prüfsumme</dt>
-                    <Pruefsumme hash={p.profil.hash} />
-                  </div>
-                </dl>
-              )}
-              {p.profil && <Arbeitsgrundlagen profil={p.profil} praefix={praefix} />}
-              {p.profil && <SopKatalog profil={p.profil} praefix={praefix} />}
-              {p.profil && <Dokumentation profil={p.profil} praefix={praefix} />}
-              <details id={`${praefix}-bericht`}>
-                <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
-                <Befunde befunde={p.befunde} />
-              </details>
-              <details>
-                <summary>Dateien ({dateien.length})</summary>
-                <ul className="dateiliste">
-                  {dateien.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
-              </details>
+                  <details id={`${praefix}-bericht`}>
+                    <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
+                    <Befunde befunde={p.befunde} />
+                  </details>
+                  <details>
+                    <summary>Dateien ({dateien.length})</summary>
+                    <ul className="dateiliste">
+                      {dateien.map((d) => (
+                        <li key={d}>{d}</li>
+                      ))}
+                    </ul>
+                  </details>
+                </section>
+              </KartenInhalt>
               <div className="aktionen aktionen-nachrangig">
                 <button
                   type="button"

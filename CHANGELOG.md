@@ -67,6 +67,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
 | 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
 | 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
+| 0.5.20 | letzter Commit des Pull Requests „Profilansicht übersichtlicher; 0.5.20“ |
+
+## [0.5.20] – 25.10.2026
+
+Grundlage: Vorschläge zur Übersichtlichkeit der Seite „Profile“, vom Herausgeber am 25.10.2026 freigegeben (Punkte 1–4 im ersten, 5–8 im zweiten Schritt). Nur Oberfläche (`src/ui/Profile.tsx`, `src/styles.css`): keine Änderung an Profilen, Profilformat, Prüfung, Aktivierung oder gespeicherten Daten. Die Profilansicht bleibt eine reine Leseansicht; aktiviert wird weiter nur über „Verwenden und Meldung öffnen“.
+
+### Geändert
+
+- **Verwendetes Profil zuerst und offen** (Punkt 1): Die Karte des verwendeten Profils steht oben und zeigt ihren Inhalt vollständig. Die übrigen Profile erscheinen als kompakte Zeile mit Name, Profilversion, Herkunft und „Verwenden und Meldung öffnen“; ihr Inhalt liegt hinter „Angaben, Lesetexte und Prüfung“. Ein Sprung zum Prüfbericht öffnet den zugeklappten Inhalt mit.
+- **Fachliche und technische Angaben getrennt** (Punkt 2): Oben stehen Ebene, Referenzraum, SOPs und Bausteine und Herausgeber; Schema, Lizenz und Prüfsumme stehen unter „Prüfen“.
+- **Zwei Gruppen „Lesen“ und „Prüfen“** (Punkt 3): „Lesen“ enthält „Arbeitsanweisungen und Kodierleitfaden lesen“ (vorher ohne „lesen“), „SOP-Katalog lesen“ und „Dokumentation lesen“ mit einem gemeinsamen Hinweis, dass Lesen nichts verändert; „Prüfen“ enthält die technischen Angaben, den Prüfbericht und die Dateiliste.
+- **Kopf in einem Satz** (Punkt 4): Die Begriffserklärung „Profilversion = … · Tag an einer SOP = … · Prüfsumme = …“ entfällt im Kopf; Profilversion und Prüfsumme erklärt ein Satz unter „Prüfen“, das Tag an einer SOP ein Satz im SOP-Katalog.
+- Spezifikation 0.5.20 (Abschnitt 4.6), `docs/TESTS.md`.
+
+### Tests
+
+- `tests/ui/profile.test.ts` (neu): Reihenfolge mit dem verwendeten Profil zuerst, kompakte Zeilen mit zugeklapptem Inhalt, Aktivieren nur über den Knopf, Trennung fachlicher und technischer Angaben, Gruppen und Bezeichnungen, Sprung zum Prüfbericht eines zugeklappten Profils, Kopf in einem Satz.
 
 ## [0.5.19] – 25.10.2026
 
