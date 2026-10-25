@@ -1,0 +1,43 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "ilka-management-summary",
+  "titel": "Management Summary aus der Musterfassung Ilka (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Management Summary für die Behördenleitung aus der festen Musterfassung der Verdichtung Orkantief „Ilka“",
+    "stichtag": "2026-10-14",
+    "meldezeitpunkt": "2026-10-14T14:00",
+    "websuche": false,
+    "kurzfassung": true
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/ilka-musterfassung.json",
+      "rolle": "meldung",
+      "hinweis": "Feste Musterfassung (LEAD-Meldung-v1, zwei Sachverhalte), konsolidiert aus 21 Läufen der Vergleichsreihen A–G; alle Varianten erhalten genau diese Meldung. Prüfsumme im Plan management-summary-ilka."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die Kernaussage nennt die andauernden Stromausfälle und den Engpass bei den Notstrompuffern als das Entscheidungsrelevante; die abgeschlossene Sturmphase steht nicht im Vordergrund.",
+      "Die Zahl der Menschen ohne Strom erscheint als Mindestwert (mindestens rund 20.700) oder ohne Zahl; eine Gesamtzahl mit Hochrechnung nur als solche gekennzeichnet.",
+      "Die Nachbetankung bis 15.10. mittags erscheint als offene Prüfaufgabe, nicht als erledigt.",
+      "Bewertung und Tendenz stammen unverändert aus der Meldung; beide Sachverhalte erhalten in derselben Reihenfolge einen Kurztitel.",
+      "Prognosen der Wiederversorgung bleiben als Prognosen erkennbar."
+    ],
+    "darf_nicht": [
+      "Angaben, Adressaten, Fristen oder Empfehlungen, die nicht in der Meldung stehen.",
+      "Eine eigene Neubewertung (etwa „kritisch“) oder eine andere Tendenz als in der Meldung.",
+      "Quellenverweise, URLs, Radarwerte, Feldnamen oder Aufzählungszeichen im Text.",
+      "Mehr als 180 Wörter in Kernaussage und Abschnitten zusammen."
+    ],
+    "t0": "2026-10-14T14:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm",
+      "Stromausfall / Blackout",
+      "KRITIS-Ausfall"
+    ]
+  }
+}

@@ -45,7 +45,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
 | `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Bereiche, Übersicht, Voreinstellung, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version) |
-| `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne mit festem S1-Gegenstand und Prüfsumme, Bewertungen mit Korrekturen und Grad der Verblindung), des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
+| `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne mit festem S1-Gegenstand und Prüfsumme, Bewertungen mit Korrekturen und Grad der Verblindung, Pläne mit fester Meldung), Musterfassung Ilka (Schema, Plausibilität, Herkunft jeder Zahl aus den Eingängen), Vorprüfung der Management Summary, des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |

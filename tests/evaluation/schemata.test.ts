@@ -196,6 +196,22 @@ describe("Modellbewertung: Schemata", () => {
     }
   });
 
+  // Musterfassung Ilka (25.10.2026): Management Summary aus einer festen Meldung
+  it("Pläne mit fester Meldung verweisen auf eine vorhandene Datei mit passender Prüfsumme, der Fall auf dieselbe Datei", () => {
+    const plaene = jsonIn("evaluation/plaene")
+      .map((n) => lies(`evaluation/plaene/${n}`))
+      .filter((p) => p.meldung_fest);
+    expect(plaene.map((p) => p.id)).toContain("management-summary-ilka");
+    for (const p of plaene) {
+      expect(createHash("sha256").update(readFileSync(repoPfad(p.meldung_fest.datei))).digest("hex"), `${p.id}: Prüfsumme`).toBe(p.meldung_fest.sha256);
+      for (const id of p.faelle) {
+        const f = lies(`evaluation/faelle/${id}.json`);
+        expect(f.auftrag.kurzfassung, id).toBe(true);
+        expect(f.material.filter((m: any) => m.rolle === "meldung").map((m: any) => m.datei), id).toEqual([p.meldung_fest.datei]);
+      }
+    }
+  });
+
   it("LS-2026-W43-18: Korrekturen nach Art, Bearbeitungsdauer und Grad der Verblindung sind optional", () => {
     const { bewertung: pruefen } = pruefer();
     const voll = {

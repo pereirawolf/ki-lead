@@ -28,12 +28,23 @@
           "kennung": { "type": "string", "minLength": 1 },
           "s1": { "$ref": "#/$defs/stufe" },
           "s2": { "$ref": "#/$defs/stufe" },
-          "material": { "enum": ["ohne", "pdf", "eingaenge"] }
+          "material": { "enum": ["ohne", "pdf", "eingaenge", "meldung"] },
+          "kurzfassung": { "$ref": "#/$defs/stufe" }
         }
       }
     },
     "wiederholungen": { "type": "integer", "minimum": 1 },
     "budget_usd": { "type": "number", "minimum": 0 },
+    "meldung_fest": {
+      "type": "object",
+      "description": "Feste, fertige Meldung als einzige Eingabe für Bewertungen der Management Summary (Fälle mit auftrag.kurzfassung). Datei unter evaluation/material/, Prüfsumme sha256 des Dateiinhalts.",
+      "required": ["datei", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "datei": { "type": "string", "pattern": "^evaluation/material/[a-z0-9-]+\\.json$" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
     "s1_fest": {
       "type": "object",
       "description": "Fester, fachlich bestätigter S1-Gegenstand für einen isolierten Vergleich der Verdichtung (LS-2026-W43-15): S1 läuft nicht, jede Variante erhält denselben Gegenstand. Datei unter evaluation/material/, Prüfsumme sha256 des Dateiinhalts.",

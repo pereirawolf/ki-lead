@@ -92,7 +92,12 @@
       "type": "object",
       "description": "Erst nach der blinden Bewertung ergänzt",
       "additionalProperties": false,
-      "properties": { "s1": { "$ref": "#/$defs/stufe" }, "s2": { "$ref": "#/$defs/stufe" }, "material": { "enum": ["ohne", "pdf", "eingaenge"] } }
+      "properties": {
+        "s1": { "$ref": "#/$defs/stufe" },
+        "s2": { "$ref": "#/$defs/stufe" },
+        "kurzfassung": { "$ref": "#/$defs/stufe" },
+        "material": { "enum": ["ohne", "pdf", "eingaenge", "meldung"] }
+      }
     },
     "lauf": {
       "type": "object",
