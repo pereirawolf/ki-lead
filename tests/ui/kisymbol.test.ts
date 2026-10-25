@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-// KI-Symbol rechts oben in der Kopfleiste (seit 0.5.20): Ruhe, laufende KI-Anfrage mit Stufe, Warten auf die Person
-// außerhalb der KI-Erfassung; zugänglicher Name statt sichtbarem Text, Ansagen nur bei Wechseln.
+// KI-Chip rechts oben in der Kopfleiste (seit 0.5.20): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage
+// läuft; Stufe im zugänglichen Namen, der mit dem sichtbaren Text beginnt; Ansage bei jedem Wechsel.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { aushaengen, einhaengen, klick, reactUmgebung } from "../support/dom";
@@ -9,47 +9,31 @@ import { kiAnsage, KiSymbol, kiSymbolText, type KiSymbolProps } from "../../src/
 beforeAll(reactUmgebung);
 afterEach(aushaengen);
 
-const zeige = (p: Partial<KiSymbolProps>) => einhaengen(React.createElement(KiSymbol, { ansicht: "meldung", zurKi: () => {}, ...p }));
-const symbol = () => document.querySelector<HTMLButtonElement>(".kopf-ki")!;
+const zeige = (p: Partial<KiSymbolProps>) => einhaengen(React.createElement(KiSymbol, { zurKi: () => {}, ...p }));
+const chip = () => document.querySelector<HTMLButtonElement>(".kopf-ki")!;
 
-describe("KI-Symbol der Kopfleiste", () => {
-  it("ruht ohne KI-Anfrage und nennt das im Namen", async () => {
+describe("KI-Chip der Kopfleiste", () => {
+  it("zeigt in Ruhe „KI offline“", async () => {
     await zeige({ lauf: null });
-    expect(symbol().dataset.zustand).toBe("ruhe");
-    expect(symbol().getAttribute("aria-label")).toBe("KI-Erfassung: keine KI-Anfrage aktiv");
-    expect(symbol().querySelector(".kopf-ki-punkt")).toBeNull();
+    expect(chip().dataset.zustand).toBe("offline");
+    expect(chip().querySelector(".kopf-ki-text")?.textContent).toBe("KI offline");
+    expect(chip().getAttribute("aria-label")).toBe("KI offline: keine KI-Anfrage aktiv. Zur KI-Erfassung");
   });
 
-  it("zeigt eine laufende Anfrage in jeder Ansicht mit Stufe im Namen und führt zur KI-Erfassung", async () => {
+  it("zeigt „KI online“ mit Stufe im Namen, solange eine Anfrage läuft, und führt zur KI-Erfassung", async () => {
     const zurKi = vi.fn();
-    await zeige({ ansicht: "lagebild", zurKi, lauf: { zustand: "laeuft", stufe: "s2", verdichtung: true } });
-    expect(symbol().dataset.zustand).toBe("laeuft");
-    expect(symbol().getAttribute("aria-label")).toBe("KI-Anfrage läuft: S2 Verdichtung und Entwurf. Zur KI-Erfassung");
-    await klick(symbol());
+    await zeige({ zurKi, lauf: { stufe: "s2", verdichtung: true } });
+    expect(chip().dataset.zustand).toBe("online");
+    expect(chip().querySelector(".kopf-ki-text")?.textContent).toBe("KI online");
+    expect(chip().getAttribute("aria-label")).toBe("KI online: Anfrage läuft, S2 Verdichtung und Entwurf. Zur KI-Erfassung");
+    await klick(chip());
     expect(zurKi).toHaveBeenCalledOnce();
-    await aushaengen();
-    await zeige({ ansicht: "ki", lauf: { zustand: "laeuft", stufe: "s1" } });
-    expect(symbol().dataset.zustand).toBe("laeuft");
   });
 
-  it("trägt außerhalb der KI-Erfassung einen Punkt, wenn die KI auf die Person wartet", async () => {
-    await zeige({ lauf: { zustand: "bestaetigen" } });
-    expect(symbol().dataset.zustand).toBe("wartet");
-    expect(symbol().querySelector(".kopf-ki-punkt")).not.toBeNull();
-    expect(symbol().getAttribute("aria-label")).toBe("KI wartet: Gegenstand aus S1 bestätigen. Zur KI-Erfassung");
-    await aushaengen();
-    await zeige({ lauf: { zustand: "abgebrochen" } });
-    expect(symbol().classList.contains("problem")).toBe(true);
-    await aushaengen();
-    await zeige({ ansicht: "ki", lauf: { zustand: "fertig" } });
-    expect(symbol().dataset.zustand).toBe("ruhe");
-    expect(symbol().querySelector(".kopf-ki-punkt")).toBeNull();
-  });
-
-  it("sagt Stufenwechsel und Ende an", () => {
-    expect(kiAnsage({ zustand: "laeuft", stufe: "s3" })).toBe("KI-Anfrage: S3 Prüfung.");
-    expect(kiAnsage({ zustand: "fertig" })).toBe("KI-Anfrage abgeschlossen, Entwurf bereit.");
-    expect(kiAnsage(null)).toBe("");
-    expect(kiSymbolText({ zustand: "fehler" }, "profile")).toBe("KI-Anfrage mit Fehler beendet. Zur KI-Erfassung");
+  it("sagt Stufenwechsel und das Ende an", () => {
+    expect(kiAnsage({ stufe: "s1" })).toBe("KI online: S1 Gegenstand und SOP-Auswahl.");
+    expect(kiAnsage({ stufe: "s3" })).toBe("KI online: S3 Prüfung.");
+    expect(kiAnsage(null)).toBe("KI offline.");
+    expect(kiSymbolText({ stufe: "s2" })).toBe("KI online: Anfrage läuft, S2 Recherche und Entwurf. Zur KI-Erfassung");
   });
 });

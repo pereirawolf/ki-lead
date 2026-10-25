@@ -56,7 +56,7 @@ interface Props {
   uebergabeQuittieren?: (nr: number) => void;
   /** Meldet der App, ob gerade ein KI-Lauf aktiv ist (ein Profilwechsel bricht ihn ab). */
   laufMelden?: (laeuft: boolean) => void;
-  /** Meldet Stufe und Zustand des Laufs an das KI-Symbol der Kopfleiste; null ohne Lauf */
+  /** Meldet die laufende KI-Anfrage (Stufe) an den KI-Chip der Kopfleiste; null, sobald keine läuft */
   laufStand?: (stand: KopfLauf | null) => void;
 }
 
@@ -481,18 +481,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const websuche = websucheWahl ?? !verdichtung;
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
 
-  // Stand für das KI-Symbol der Kopfleiste: nur Stufe und Zustand, damit die App bei Streaming nicht mitzeichnet
+  // Stand für den KI-Chip der Kopfleiste: nur die Stufe, damit die App beim Streaming nicht mitzeichnet
   const laufStandRef = useRef(laufStand);
   laufStandRef.current = laufStand;
   const kopfStufe = phase === "s1" ? "s1" : phase === "s2" ? (lauf?.status === "s3" ? "s3" : "s2") : null;
-  const laufStatus = lauf?.status;
   useEffect(() => {
-    let stand: KopfLauf | null = null;
-    if (kopfStufe) stand = { zustand: "laeuft", stufe: kopfStufe, verdichtung };
-    else if (phase === "bestaetigen") stand = { zustand: "bestaetigen" };
-    else if (laufStatus === "fertig" || laufStatus === "fehler" || laufStatus === "abgebrochen") stand = { zustand: laufStatus };
-    laufStandRef.current?.(stand);
-  }, [kopfStufe, phase, laufStatus, verdichtung]);
+    laufStandRef.current?.(kopfStufe ? { stufe: kopfStufe, verdichtung } : null);
+  }, [kopfStufe, verdichtung]);
   useEffect(() => () => laufStandRef.current?.(null), []);
 
   const zusammenfuehren = (i: number) => {

@@ -190,8 +190,8 @@ a {
   text-underline-offset: 0.35em;
 }
 
-/* KI-Symbol rechts oben (seit 0.5.20): kleines Lagenradar; in Ruhe grau, während einer KI-Anfrage mit kreisendem
-   Strahl in der Aktionsfarbe und bewegter Innenfläche in den Farben des Identitätsbands */
+/* KI-Chip rechts oben (seit 0.5.20): „KI offline“ zart in den Profilfarben, „KI online“ gefüllt in der Aktionsfarbe
+   mit kreisendem Radarstrahl; die Innenfläche des kleinen Lagenradars zeigt die Farben des Identitätsbands */
 .kopf-rechts {
   margin-left: auto;
   display: flex;
@@ -199,20 +199,48 @@ a {
 }
 
 .kopf-ki {
-  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   flex: none;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: none;
-  color: var(--tinte-leise);
+  padding: 0.2rem 0.8rem 0.2rem 0.3rem;
+  border: 1px solid var(--amt);
+  border-radius: 999px;
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
-.kopf-ki:hover {
-  background: var(--amt-zart);
+.kopf-ki.online {
+  background: var(--amt);
+  color: var(--auf-amt);
+}
+
+.kopf-ki.offline:hover {
+  background: var(--papier);
+}
+
+.kopf-ki.online:hover {
+  background: var(--amt-tief);
+  color: var(--auf-amt-hover);
+}
+
+/* gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt */
+.kopf-ki-text {
+  min-width: 5.6em;
+}
+
+.kopf-ki-radar {
+  position: relative;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .kopf-ki-geruest {
@@ -222,33 +250,29 @@ a {
   height: 100%;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.5;
+  stroke-width: 3;
   stroke-linejoin: round;
 }
 
 .kopf-ki-geruest polygon:first-child {
-  stroke-width: 5;
+  stroke-width: 6;
 }
 
-/* Innenfläche: Radarwerte als Achteck; die Kontur (Schatten am Rahmen) hält auch weiße Bandfarben sichtbar */
+/* Innenfläche: Radarwerte als Achteck in den Farben des Identitätsbands; die Kontur hält auch Weiß sichtbar */
 .kopf-ki-lage {
   position: absolute;
   inset: 0;
-}
-
-.kopf-ki.laeuft .kopf-ki-lage,
-.kopf-ki.wartet .kopf-ki-lage {
   filter: drop-shadow(0 0 0.6px var(--amt-tief)) drop-shadow(0 0 0.6px var(--amt-tief));
 }
 
 .kopf-ki-flaeche {
   position: absolute;
   inset: 0;
-  background: var(--linie);
+  background: var(--band);
   clip-path: polygon(50% 26%, 69.8% 30.2%, 80% 50%, 68.4% 68.4%, 50% 82%, 31.6% 68.4%, 28% 50%, 30.2% 30.2%);
 }
 
-/* Strahl: nur innerhalb des äußeren Achtecks sichtbar */
+/* Strahl: nur innerhalb des äußeren Achtecks sichtbar, nur online */
 .kopf-ki-strahl {
   position: absolute;
   inset: 0;
@@ -262,31 +286,18 @@ a {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 60%, var(--amt) 100%);
+  background: conic-gradient(from 0deg, transparent 0 60%, var(--auf-amt) 100%);
   opacity: 0.85;
   /* ohne Bewegung (Bewegung reduzieren) bleibt der Strahl als Keil stehen */
   transform: rotate(40deg);
-}
-
-.kopf-ki.laeuft,
-.kopf-ki.wartet {
-  color: var(--amt);
-}
-
-.kopf-ki.laeuft .kopf-ki-strahl {
-  display: block;
-}
-
-.kopf-ki.laeuft .kopf-ki-strahl::before {
   animation: kopf-ki-strahl 2s linear infinite;
 }
 
-.kopf-ki.laeuft .kopf-ki-flaeche,
-.kopf-ki.wartet .kopf-ki-flaeche {
-  background: var(--band);
+.kopf-ki.online .kopf-ki-strahl {
+  display: block;
 }
 
-.kopf-ki.laeuft .kopf-ki-flaeche {
+.kopf-ki.online .kopf-ki-flaeche {
   animation: kopf-ki-lage 3.6s ease-in-out infinite alternate;
 }
 
@@ -313,22 +324,6 @@ a {
   100% {
     clip-path: polygon(50% 28%, 72.6% 27.4%, 88% 50%, 64.1% 64.1%, 50% 80%, 31.6% 68.4%, 14% 50%, 34.4% 34.4%);
   }
-}
-
-/* Die KI wartet auf die Person (außerhalb der KI-Erfassung): Punkt oben rechts */
-.kopf-ki-punkt {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 50%;
-  background: var(--amt);
-  border: 2px solid var(--header-hintergrund);
-}
-
-.kopf-ki.problem .kopf-ki-punkt {
-  background: var(--kritisch);
 }
 
 .hinweisband {
@@ -3318,11 +3313,11 @@ fieldset.lb-ausgabe {
     border-image: none;
   }
 
-  .kopf-ki.laeuft .kopf-ki-flaeche,
-  .kopf-ki.wartet .kopf-ki-flaeche,
-  .kopf-ki-punkt {
+  .kopf-ki.online {
     forced-color-adjust: none;
     background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
   }
 
   .nav.aktiv,

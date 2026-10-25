@@ -357,16 +357,8 @@ export default function App() {
 
   // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
   const kiLaeuft = useRef(false);
-  /** Stand des KI-Laufs für die Kopfleiste */
+  /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
   const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
-  // Ein beendeter Lauf gilt als gesehen, sobald die Person die KI-Erfassung öffnet oder er dort endet
-  const ansichtRef = useRef(ansicht);
-  ansichtRef.current = ansicht;
-  const laufBeendet = (l: KopfLauf | null) => !!l && (l.zustand === "fertig" || l.zustand === "fehler" || l.zustand === "abgebrochen");
-  const kopfLaufMelden = useCallback((l: KopfLauf | null) => setKopfLauf(ansichtRef.current === "ki" && laufBeendet(l) ? null : l), []);
-  useEffect(() => {
-    if (ansicht === "ki") setKopfLauf((l) => (laufBeendet(l) ? null : l));
-  }, [ansicht]);
 
   const aktivieren = async (schluessel: string) => {
     if (
@@ -468,7 +460,7 @@ export default function App() {
         </nav>
         {profil && (
           <div className="kopf-rechts" data-profil={profil.manifest.name}>
-            <KiSymbol lauf={kopfLauf} ansicht={ansicht} zurKi={() => setAnsicht("ki")} />
+            <KiSymbol lauf={kopfLauf} zurKi={() => setAnsicht("ki")} />
           </div>
         )}
       </header>
@@ -523,7 +515,7 @@ export default function App() {
               laufMelden={(l) => {
                 kiLaeuft.current = l;
               }}
-              laufStand={kopfLaufMelden}
+              laufStand={setKopfLauf}
             />
           </div>
         )}
