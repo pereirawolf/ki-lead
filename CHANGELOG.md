@@ -65,6 +65,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.15 | letzter Commit des Pull Requests „Mix-Profile, Reparatur mit Haiku, Ergebnisse MS und Prüffall Reparatur; 0.5.15“ |
 | 0.5.16 | letzter Commit des Pull Requests „Nachreihen: Mistral-Reparatur mit Small, Klärungsbedarf in der MS; 0.5.16“ |
 | 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
+| 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
+
+## [0.5.18] – 25.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz-eingabemaske_2026-W43.json` (anlassbezogene Prüfung der Eingabemaske der KI-Erfassung, Commit ab361f1), Befunde KP-2026-W43-61 bis -68, vom Herausgeber am 25.10.2026 freigegeben. Leitziel: Nutzende erkennen ohne Kenntnis der LEAD-Systematik, welche Angabe in welches Feld gehört; das Erkenntnisinteresse ist die Perspektive der Recherche, keine zu klärende Frage. Nur Oberfläche: Speicherung, Prüfung, Übergabe an S1/S2 und die Bezeichnungen im Prompt bleiben unverändert (`src/pipeline/` und `profile/` unberührt); bei gleichen Eingaben ist die Anfrage an die KI dieselbe.
+
+### Geändert
+
+- **Auftrag und Material** (`src/ui/KiErfassung.tsx`): „Sachverhalt und Erkenntnisinteresse“ heißt „Untersuchungsgegenstand und Erkenntnisinteresse“ (KP-2026-W43-61), „Stichworte“ heißt „Ausgangsinformationen und Stichworte“ (KP-2026-W43-62), „URLs (eine je Zeile)“ heißt „Webseiten (eine Adresse je Zeile)“ (KP-2026-W43-63); alle drei mit Hilfetext, die ersten beiden mit neuen Beispielen als Platzhalter (nie als Feldwert). Sind Adressen eingetragen und Websuche und Seitenabruf ausgeschaltet, sagt ein zusätzlicher Hinweis am Feld, dass die Seiten nicht abgerufen werden (KP-2026-W43-63, Entscheidung des Herausgebers).
+- **Stichtag** (KP-2026-W43-64): Die Gruppe heißt „Stichtag der Meldung“ statt „Meldezeitpunkt (t0)“; die Eingaben heißen „Stichtag“ und „Uhrzeit (optional)“ (vorher „Meldestichtag“ und „Uhrzeit t0“), der Hilfetext beschreibt die Eingabe statt der Ableitung von t0. Der Begriff t0 erscheint erst bei „Gegenstand bestätigen“, wo er erläutert wird.
+- **Besondere Prüffrage** (KP-2026-W43-65): Hilfetext („Ein einzelner Punkt … oder ein gewünschter Beobachtungszeitraum“) und Beispiel als Platzhalter.
+- **Gegenstand bestätigen:** „Gegenstand“ heißt „Untersuchungsgegenstand und Erkenntnisinteresse“, mit dem Hinweis, dass die Recherche sich nach diesem Text richtet (KP-2026-W43-66); Hilfetexte für „Betrachtungshorizont“ (KP-2026-W43-67) und „Bezug zum Referenzraum“ mit dem Referenzraum des aktiven Profils (KP-2026-W43-68).
+- **Barrierefreiheit:** Hilfetexte stehen zwischen Beschriftung und Eingabe und sind per `aria-describedby` verknüpft, nicht Teil des zugänglichen Namens; Beschriftungen als `<label for>` (Komponente `HilfeFeld`, Texte in `TEXT_FELD`). Abstände in `src/styles.css` (`.feld-hilfe`, `.feld-zusatz`).
+
+### Tests
+
+- `tests/ui/ki-erfassung-felder.test.ts` (neu): Beschriftung, verknüpfter Hilfetext und Platzhalter je Feld, leere Feldwerte, bedingter Hinweis zu Webseiten ohne Websuche, Name der Stichtagsgruppe, Referenzraum des Beispielprofils im Hilfetext (KP-2026-W43-61 bis -68).
+- `tests/pipeline/auftragsfelder.test.ts` (neu): Die Anfrage an S1 nennt weiter „Sachverhalt und Erkenntnisinteresse“, auch bei leerem Feld; Stichworte und Übersicht der Ausgangsquellen unverändert (KP-2026-W43-61, -62).
+- Browsertests: `barrierefreiheit.spec.ts` prüft die Hilfetexte als zugängliche Beschreibung; `hauptablauf.spec.ts`, `abbruch.spec.ts` und `pwa-update.spec.ts` suchen das Feld unter der neuen Beschriftung.
 
 ## [0.5.17] – 25.10.2026
 

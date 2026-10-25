@@ -519,6 +519,16 @@ textarea {
   max-width: 78ch;
 }
 
+/* Hilfetext zwischen Beschriftung und Eingabe (KI-Erfassung, KP-2026-W43-61 ff.) */
+.feld-hilfe {
+  margin: 0 0 0.4rem;
+}
+
+.feld-zusatz {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
 .gruppe {
   border: 1px solid var(--linie-zart);
   border-radius: var(--r-mittel);

@@ -29,6 +29,21 @@ for (const b of BEREICHE) {
   });
 }
 
+// Befunde KP-2026-W43-61, -62 und -64 (Prüfung der Eingabemaske vom 25.10.2026): Hilfetexte als zugängliche
+// Beschreibung, nicht als Teil des Namens; sichtbarer Name der Stichtagsgruppe gleich dem zugänglichen
+test("KI-Erfassung: Hilfetexte der Auftragsfelder sind zugängliche Beschreibungen (KP-2026-W43-61, -62, -64)", async ({ page }) => {
+  await bereich(page, "KI-Erfassung");
+  const gegenstand = page.getByRole("textbox", { name: "Untersuchungsgegenstand und Erkenntnisinteresse", exact: true });
+  await expect(gegenstand).toHaveAccessibleDescription(/^Welche Lage oder welches Ereignis soll die KI-Recherche erfassen/);
+  await expect(gegenstand).toHaveValue("");
+  const ausgang = page.getByRole("textbox", { name: "Ausgangsinformationen und Stichworte", exact: true });
+  await expect(ausgang).toHaveAccessibleDescription(/^Welche Informationen liegen bereits vor\?/);
+  await expect(ausgang).toHaveValue("");
+  await expect(page.getByRole("group", { name: "Stichtag der Meldung", exact: true })).toHaveAccessibleDescription(
+    /^Für welchen Tag soll die Meldung gelten\?/,
+  );
+});
+
 test("Navigation mit der Tastatur: Fokus ist sichtbar, Eingabetaste wechselt den Bereich", async ({ page }) => {
   const ziel = page.getByRole("button", { name: "Lagebild", exact: true });
   let gefunden = false;

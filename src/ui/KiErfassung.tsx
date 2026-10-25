@@ -1,6 +1,6 @@
 // KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
@@ -101,6 +101,95 @@ const STATUS_TEXT: Record<Lauf["status"], string> = {
   fehler: "Fehler",
   abgebrochen: "abgebrochen",
 };
+
+/**
+ * Beschriftungen, Hilfetexte und Platzhalter der Eingabefelder (Befunde KP-2026-W43-61 bis -68 vom 25.10.2026).
+ * Nur Oberfläche: Speicherung, Prüfung und Übergabe an S1/S2 und die Bezeichnungen im Prompt bleiben unverändert.
+ * Die Beispiele sind Platzhalter, nie Feldwerte.
+ */
+export const TEXT_FELD = {
+  gegenstand: {
+    label: "Untersuchungsgegenstand und Erkenntnisinteresse",
+    hilfe:
+      "Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der allgemeinen Sicht des Bevölkerungsschutzes.",
+    platzhalter: "Beispiel: Regionale Störungen der Kraftstoffversorgung seit Wochenbeginn, mit Blick auf Rettungsdienst und Notstromversorgung.",
+  },
+  ausgangsinformationen: {
+    label: "Ausgangsinformationen und Stichworte",
+    hilfe: "Welche Informationen liegen bereits vor? Eigene Notizen, Zahlen, Beobachtungen. Stichpunkte genügen; Unbestätigtes bitte kennzeichnen.",
+    platzhalter:
+      "Beispiel:\n– Dieselengpässe in mehreren Landkreisen gemeldet (unbestätigt)\n– Einzelne Tankstellen wegen Stromausfall außer Betrieb\n– Rettungsdienst meldet Tankprobleme bei Notstromaggregaten",
+  },
+  webseiten: {
+    label: "Webseiten (eine Adresse je Zeile)",
+    hilfe:
+      "Die KI ruft die Seiten nur ab, wenn „Websuche und Seitenabruf erlauben“ eingeschaltet ist. Gesperrte Seiten im Browser als PDF speichern und unter „Dateien“ hinzufügen.",
+    ohneWebsuche: "Websuche und Seitenabruf sind ausgeschaltet: Die eingetragenen Seiten werden nicht abgerufen, die KI sieht nur die Adressen.",
+  },
+  stichtag: {
+    label: "Stichtag der Meldung",
+    hilfe:
+      "Für welchen Tag soll die Meldung gelten? Die Uhrzeit ist optional; ohne Angabe schlägt die KI den Meldezeitpunkt vor. Für Übungen oder zurückliegende Lagen den damaligen Tag wählen.",
+  },
+  prueffrage: {
+    label: "Besondere Prüffrage (optional)",
+    hilfe: "Ein einzelner Punkt, den die Recherche gezielt prüfen soll, oder ein gewünschter Beobachtungszeitraum.",
+    platzhalter: "Beispiel: Ist die Notstromversorgung von Krankenhäusern betroffen?",
+  },
+  gegenstandS1: {
+    hilfe: "Von der KI aus dem Auftrag abgeleitet. Bei Bedarf anpassen; die Recherche richtet sich nach diesem Text.",
+  },
+  horizont: {
+    label: "Betrachtungshorizont",
+    hilfe: "Zeitraum, über den die Meldung mögliche Entwicklungen betrachtet, z. B. die kommenden Wochen.",
+  },
+  referenzbezug: {
+    label: "Bezug zum Referenzraum",
+    hilfe: (raum?: string) =>
+      `Warum die Lage für den Betrachtungsraum des Profils${raum?.trim() ? ` (${raum.trim()})` : ""} bedeutsam ist, auch bei Ereignissen außerhalb, etwa über Lieferketten.`,
+  },
+} as const;
+
+/**
+ * Eingabefeld mit Beschriftung und Hilfetext. Der Hilfetext steht zwischen Beschriftung und Eingabe und ist per
+ * aria-describedby verknüpft, nicht Teil des zugänglichen Namens; ein bedingter Zusatz wird mit verknüpft.
+ */
+function HilfeFeld({
+  label,
+  hilfe,
+  zusatz,
+  nach,
+  lang,
+  children,
+}: {
+  label: string;
+  hilfe: string;
+  zusatz?: string;
+  /** Unter der Eingabe, z. B. ein Fehlertext */
+  nach?: ReactNode;
+  lang?: boolean;
+  children: (a: { id: string; "aria-describedby": string }) => ReactNode;
+}) {
+  const id = useId();
+  const beschreibung = [`${id}-hilfe`, zusatz ? `${id}-zusatz` : ""].filter(Boolean).join(" ");
+  return (
+    <div className={lang ? "feld feld-lang" : "feld"}>
+      <label className="feld-label" htmlFor={id}>
+        {label}
+      </label>
+      <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
+        {hilfe}
+      </p>
+      {children({ id, "aria-describedby": beschreibung })}
+      {nach}
+      {zusatz && (
+        <p className="kasten kasten-hinweis feld-zusatz" id={`${id}-zusatz`} role="status">
+          {zusatz}
+        </p>
+      )}
+    </div>
+  );
+}
 
 const speicherText = (was: string, e: unknown) => `${was} (${(e as Error)?.message || "Speicherfehler"}).`;
 
@@ -491,24 +580,37 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   {lauf && <div className="aktionen">{protokollKnopf(lauf, "Laufprotokoll des abgebrochenen Laufs exportieren")}</div>}
                 </div>
               )}
-              <label className="feld feld-lang">
-                <span className="feld-label">Sachverhalt und Erkenntnisinteresse</span>
-                <textarea
-                  rows={3}
-                  value={sachverhalt}
-                  onChange={(e) => setSachverhalt(e.target.value)}
-                  placeholder="z. B. Folgen des Orkantiefs „Ilka“ für Strom- und Bahnversorgung im Referenzraum"
-                />
-              </label>
-              <label className="feld feld-lang">
-                <span className="feld-label">Stichworte</span>
-                <textarea rows={4} value={stichworte} onChange={(e) => setStichworte(e.target.value)} placeholder="Eigene Notizen, Zahlen, Beobachtungen" />
-              </label>
-              <label className="feld feld-lang">
-                <span className="feld-label">URLs (eine je Zeile)</span>
-                <textarea rows={3} value={urlText} onChange={(e) => setUrlText(e.target.value)} placeholder="https://…" />
-                {urls.ungueltig.length > 0 && <span className="fehlertext">Keine gültige Adresse: {urls.ungueltig.join(", ")}</span>}
-              </label>
+              <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstand.hilfe}>
+                {(a) => (
+                  <textarea
+                    {...a}
+                    rows={3}
+                    value={sachverhalt}
+                    onChange={(e) => setSachverhalt(e.target.value)}
+                    placeholder={TEXT_FELD.gegenstand.platzhalter}
+                  />
+                )}
+              </HilfeFeld>
+              <HilfeFeld lang label={TEXT_FELD.ausgangsinformationen.label} hilfe={TEXT_FELD.ausgangsinformationen.hilfe}>
+                {(a) => (
+                  <textarea
+                    {...a}
+                    rows={4}
+                    value={stichworte}
+                    onChange={(e) => setStichworte(e.target.value)}
+                    placeholder={TEXT_FELD.ausgangsinformationen.platzhalter}
+                  />
+                )}
+              </HilfeFeld>
+              <HilfeFeld
+                lang
+                label={TEXT_FELD.webseiten.label}
+                hilfe={TEXT_FELD.webseiten.hilfe}
+                zusatz={urls.gueltig.length > 0 && !websuche ? TEXT_FELD.webseiten.ohneWebsuche : undefined}
+                nach={urls.ungueltig.length > 0 && <span className="fehlertext">Keine gültige Adresse: {urls.ungueltig.join(", ")}</span>}
+              >
+                {(a) => <textarea {...a} rows={3} value={urlText} onChange={(e) => setUrlText(e.target.value)} placeholder="https://…" />}
+              </HilfeFeld>
               <div className="feld">
                 <span className="feld-label">Dateien</span>
                 <p className="hinweis">
@@ -566,17 +668,20 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               <div className="gruppe-spalten-zwei">
                 <div className="feld">
                   <span className="feld-label" id="t0-auftrag">
-                    Meldezeitpunkt (t0)
+                    {TEXT_FELD.stichtag.label}
                   </span>
-                  <div className="datum-zeit" role="group" aria-labelledby="t0-auftrag">
-                    <input type="date" aria-label="Meldestichtag" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
-                    <input type="time" aria-label="Uhrzeit t0" value={uhrzeit} disabled={!stichtag} onChange={(e) => setUhrzeit(e.target.value)} />
+                  <p className="hinweis feld-hilfe" id="t0-auftrag-hilfe">
+                    {TEXT_FELD.stichtag.hilfe}
+                  </p>
+                  <div className="datum-zeit" role="group" aria-labelledby="t0-auftrag" aria-describedby="t0-auftrag-hilfe">
+                    <input type="date" aria-label="Stichtag" value={stichtag} onChange={(e) => setStichtag(e.target.value)} />
+                    <input type="time" aria-label="Uhrzeit (optional)" value={uhrzeit} disabled={!stichtag} onChange={(e) => setUhrzeit(e.target.value)} />
                   </div>
                   <div className="datumzeit-knoepfe">
                     <button
                       type="button"
                       className="knopf leise klein"
-                      aria-label="Jetzt: Meldezeitpunkt (t0) auf aktuelle Zeit setzen"
+                      aria-label="Jetzt: Stichtag und Uhrzeit auf aktuelle Zeit setzen"
                       onClick={() => {
                         const j = jetztLokal(zoneOder(profil.manifest.variablen?.zeitzone), new Date());
                         setStichtag(j.slice(0, 10));
@@ -586,25 +691,23 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       Jetzt
                     </button>
                     {uhrzeit && (
-                      <button
-                        type="button"
-                        className="knopf leise klein"
-                        aria-label="Nur Tag: Uhrzeit beim Meldezeitpunkt (t0) entfernen"
-                        onClick={() => setUhrzeit("")}
-                      >
+                      <button type="button" className="knopf leise klein" aria-label="Nur Tag: Uhrzeit entfernen" onClick={() => setUhrzeit("")}>
                         Nur Tag
                       </button>
                     )}
                   </div>
-                  <span className="hinweis">
-                    Uhrzeit optional; ohne Uhrzeit bestimmt die App t0 aus dem Vorschlag der KI (bei Fortschreibung auf heute die aktuelle Zeit, bei Übungs-
-                    oder Altlagen kurz nach dem jüngsten Datenstand).
-                  </span>
                 </div>
-                <label className="feld">
-                  <span className="feld-label">Besondere Prüffrage (optional)</span>
-                  <input type="text" value={prueffrage} onChange={(e) => setPrueffrage(e.target.value)} />
-                </label>
+                <HilfeFeld label={TEXT_FELD.prueffrage.label} hilfe={TEXT_FELD.prueffrage.hilfe}>
+                  {(a) => (
+                    <input
+                      {...a}
+                      type="text"
+                      value={prueffrage}
+                      onChange={(e) => setPrueffrage(e.target.value)}
+                      placeholder={TEXT_FELD.prueffrage.platzhalter}
+                    />
+                  )}
+                </HilfeFeld>
               </div>
               {verdichtung && (
                 <div className="kasten kasten-info" role="status">
@@ -704,10 +807,9 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   <p>{vorschlag.hinweise}</p>
                 </div>
               )}
-              <label className="feld feld-lang">
-                <span className="feld-label">Gegenstand</span>
-                <textarea rows={3} value={vorschlag.gegenstand} onChange={(e) => setVorschlag({ ...vorschlag, gegenstand: e.target.value })} />
-              </label>
+              <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstandS1.hilfe}>
+                {(a) => <textarea {...a} rows={3} value={vorschlag.gegenstand} onChange={(e) => setVorschlag({ ...vorschlag, gegenstand: e.target.value })} />}
+              </HilfeFeld>
               <div className="gruppe-spalten-zwei">
                 <label className="feld">
                   <span className="feld-label">Stichtag</span>
@@ -746,15 +848,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                     {vormeldungsStand && ` Stand der Vormeldung: ${zeitAnzeige(vormeldungsStand)} (Ausgangspunkt, nicht t0).`}
                   </span>
                 </label>
-                <label className="feld">
-                  <span className="feld-label">Betrachtungshorizont</span>
-                  <input type="text" value={vorschlag.horizont} onChange={(e) => setVorschlag({ ...vorschlag, horizont: e.target.value })} />
-                </label>
+                <HilfeFeld label={TEXT_FELD.horizont.label} hilfe={TEXT_FELD.horizont.hilfe}>
+                  {(a) => <input {...a} type="text" value={vorschlag.horizont} onChange={(e) => setVorschlag({ ...vorschlag, horizont: e.target.value })} />}
+                </HilfeFeld>
               </div>
-              <label className="feld">
-                <span className="feld-label">Bezug zum Referenzraum</span>
-                <input type="text" value={vorschlag.referenzbezug} onChange={(e) => setVorschlag({ ...vorschlag, referenzbezug: e.target.value })} />
-              </label>
+              <HilfeFeld label={TEXT_FELD.referenzbezug.label} hilfe={TEXT_FELD.referenzbezug.hilfe(profil.manifest.referenzraum)}>
+                {(a) => (
+                  <input {...a} type="text" value={vorschlag.referenzbezug} onChange={(e) => setVorschlag({ ...vorschlag, referenzbezug: e.target.value })} />
+                )}
+              </HilfeFeld>
               <label className="feld">
                 <span className="feld-label">Besondere Prüffrage</span>
                 <input type="text" value={vorschlag.prueffrage} onChange={(e) => setVorschlag({ ...vorschlag, prueffrage: e.target.value })} />

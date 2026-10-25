@@ -8,7 +8,7 @@ test("Abbrechen während S1 beendet den Lauf ohne neue Anfrage", async ({ page }
   await oeffnen(page);
   await schluesselSetzen(page);
   await bereich(page, "KI-Erfassung");
-  await page.getByLabel("Sachverhalt und Erkenntnisinteresse").fill("Orkan in Hessen");
+  await page.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Orkan in Hessen");
   await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
   await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
 
