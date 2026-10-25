@@ -1,0 +1,313 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "lernschleife",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-25T00:02:33Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "87966240060484da20e9e95237e226d5d5841542",
+  "pruefumfang": "Auftrag des Herausgebers (kein Wochenlauf): Die sechs Vergleichsreihen Ilka mit insgesamt 18 Läufen (Plan standardprofile-ilka) für die Weiterentwicklung des Repositorys nutzbar machen. Erstfassung durch eine andere KI am 24.10.2026, 23:30 UTC, nach Aktualisierung auf App 0.5.10; gelesen wurden dort Ergebnisbericht vom 25.10.2026, Änderungsverlauf, Befundregister und Schema, die Lernschleifenbefunde im Eingang, Bewertungs- und Fallschemata sowie Vergleich, Plausibilitätsprüfung und Schätzung; die ZIP-Dateien der 18 Läufe wurden unmittelbar ausgewertet (alle mit demselben Profil-, Material- und Referenzhash). Konsolidiert am 25.10.2026 gegen denselben main-Stand 8796624 (unverändert aktueller main): jede Fundstelle nachgelesen und die Auszüge wörtlich gefasst; zusätzlich gelesen evaluation/faelle/sop-verdichtung-ilka-vergleich.json, fall.schema.json, bewertungsschema.json, evaluation/README.md, tests/evaluation/schemata.test.ts, src/pipeline/stufen.ts (Übergabe der bestätigten Gliederung an S2), src/pipeline/vergleichslauf.ts, src/ui/Vergleichslauf.tsx, src/pipeline/vergleich.ts (zuordnen) und src/pipeline/vergleichsauswertung.ts. Änderungen gegenüber der Erstfassung: Kategorien und Vorschlagstypen auf die Werte des Befundformats gebracht (bewertungsmassstab → konsistenz; bewertungsdesign, vergleichbarkeit, prueffaelle, redaktioneller_nutzen, uebertragbarkeit → abdeckung; praezisieren → ersetzen); LS-2026-W43-14 um den gleichlautenden Muss-Punkt in sop-verdichtung-ilka-vergleich.json erweitert und der Ersatztext auf den Muss-Punkt beschränkt; LS-2026-W43-15 mit dem Beleg im Code, dass S2 die Zahl der Sachverhalte aus S1 übernimmt, und mit der Einordnung der bereits getroffenen Modellentscheidungen; LS-2026-W43-16 und -18 auf das beschränkt, was das Repository noch nicht kann; LS-2026-W43-17 mit Vorprüfung vorhandener Fälle; LS-2026-W43-19 mit Entscheidungsfrage zur Herkunft des Kontrollsatzes; Querbezüge zwischen den Befunden ergänzt.",
+  "nicht_geprueft": [
+    "Keine vollständige fachliche Einzelbewertung aller Aussagen der 18 Entwürfe.",
+    "Keine blinde Bewertung durch unabhängige fachkundige Personen.",
+    "Keine neuen kostenpflichtigen KI-Läufe.",
+    "Keine Prüfung der tatsächlichen Anbieterabrechnungen.",
+    "npm test nicht ausgeführt: Die Konsolidierung ändert nur Daten im Eingang, nicht main. Umsetzung früherer Befunde anhand von Code, Tests, Ergebnisbericht und Befundregister nachvollzogen.",
+    "Die Zahlen der S1-Sachverhalte je Lauf (LS-2026-W43-15) stammen aus den ZIP-Dateien der Erstfassung und sind im Repository nicht nachprüfbar, weil Laufprotokolle und Entwürfe nicht eingecheckt sind. Mittelwerte und Spannen der S2-Sachverhalte im Ergebnisbericht stimmen mit ihnen überein.",
+    "Kein eigenes JSON-Schema für ki-lead-befund/1 im Repository; Aufbau nach dem Befundformat des Prüfagenten und der vorhandenen Lernschleifendatei im Eingang. Dateiname entspricht dem Muster befunddatei in befundregister.schema.json.",
+    "Keine externen Quellen herangezogen: Alle Befunde betreffen nur Repository und Evaluationsmethodik; belege bleiben deshalb leer.",
+    "Keine Änderungen an main, Befundregister oder Modellvorgaben; diese Datei liegt nur im Eingang."
+  ],
+  "befunde": [
+    {
+      "id": "LS-2026-W43-14",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/orkantief-ilka-verdichtung.json",
+          "stelle": "erwartungen.muss[1]",
+          "ist": "Die Zahl der weiterhin Stromlosen wird aus den Ländermeldungen zusammengeführt und mit Stand angegeben"
+        },
+        {
+          "datei": "evaluation/faelle/sop-verdichtung-ilka-vergleich.json",
+          "stelle": "erwartungen.muss[1]",
+          "ist": "Die Zahl der weiterhin Stromlosen wird aus den Ländermeldungen zusammengeführt und mit Stand angegeben"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-verdichtung.md",
+          "stelle": "Regeln, Nr. 4 Zählen und Addieren (mit Nr. 3 Zeitbezug und Fortgeltung)",
+          "ist": "Addiere nur bei gleicher Einheit (Personen, Haushalte, Anschlüsse, Einrichtungen), gleicher Definition, gleicher Zeitbasis und ausgeschlossener Überschneidung."
+        },
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Muss- und Darf-nicht-Punkte des Falls, Zeile „Zahl der Stromlosen zusammengeführt, mit Stand“, Spalte A",
+          "ist": "ifu7 und 07bh nennen die Teilwerte und lehnen die Summe für t0 ab"
+        }
+      ],
+      "beobachtung": "Beide Ilka-Fälle verlangen ohne Vorbehalt eine zusammengeführte Zahl. Die Arbeitsanweisung erlaubt eine Summe nur unter den Voraussetzungen der Regeln 3 und 4 und lässt sonst die Teilwerte nebeneinander stehen. Nach dem jetzigen Muss-Punkt verfehlen zwei der drei Bezugsläufe (A) und alle sechs OpenAI-Läufe (C, D) den Punkt, obwohl sie die Summe mit fehlender Zeitbasis zu t0 begründet ablehnen; die zusammenführenden Mistral-Läufe erfüllen ihn trotz Hochrechnung oder fehlendem Datenstand eher. Der Maßstab belohnt damit das Zusammenrechnen statt der Einhaltung der Zählregeln. Ob für Ilka eine Summe als Mindestwert zulässig ist, hat bisher niemand fachlich entschieden; die Redaktionsfassung führt zusammen, ist aber kein unabhängig geprüfter Bezug (Ergebnisbericht, Vorbehalte). Radarerwartungen nach erwartungen.radar (offen oder Spanne mit Grund) sind im Schema schon vorgesehen, gelten aber nur für Fälle mit einem einzigen erwarteten Sachverhalt und passen deshalb nicht auf Ilka mit wechselndem Zuschnitt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "In beiden Fällen den Muss-Punkt durch den Text unten ersetzen und das Feld stand fortschreiben. Den Ergebnisbericht nicht umschreiben, sondern um einen datierten Nachtrag ergänzen, der den Muss-Punkt nach neuem Maßstab einordnet. Für Radar und Tendenz bei Ilka eine gesondert versionierte Bewertungshilfe anlegen, die je Achse unterscheidet: begründet offen, begründet gesetzt, unzureichend begründet; sie kann zugleich als Prüfliste für LS-2026-W43-16 dienen. Die Redaktionsfassung bleibt unverändert.",
+        "neuer_text": "Die Zahl der weiterhin Stromlosen wird je Land mit Einheit und Datenstand angegeben; zusammengeführt wird sie nur, wenn die Zählregeln der Arbeitsanweisung Verdichtung (Regeln 3 und 4) erfüllt sind, sonst wird die Nichtaggregation begründet"
+      },
+      "folgeaenderungen": [
+        "evaluation/faelle/orkantief-ilka-verdichtung.json: erwartungen.muss[1], stand",
+        "evaluation/faelle/sop-verdichtung-ilka-vergleich.json: erwartungen.muss[1], stand",
+        "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md: datierter Nachtrag zum Muss-Punkt",
+        "evaluation/README.md: Erfüllung von Muss-Punkten ist nicht gleich fachlicher Qualität",
+        "Bewertungshilfe Ilka (Ablage unter evaluation/, eigene Fassung)",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Ist für Ilka zu t0 eine Zusammenführung der Stromlosen als Mindestwert mit Datenstand fachlich zulässig, ist die Nichtaggregation geboten, oder sind beide Wege bei Begründung vertretbar? Und soll die Bewertungshilfe zunächst nur Zählregeln, offene Achsen und Tendenz behandeln oder alle acht Radarachsen?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Die Schemaprüfung der Fälle deckt tests/evaluation/schemata.test.ts bereits ab. Ob eine Aggregation oder eine offene Achse fachlich zulässig ist, bleibt eine begründete fachliche Bewertung.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzt den Ergebnisbericht aus AV-2026-W43-12; keine erneute Forderung nach einem Ergebnisbericht und keine Aufhebung der mit 0.5.10 beschlossenen Modellvorgaben. Entscheidungsfragen beantwortet: Für Ilka zu t0 erfüllen sowohl eine Summe als Mindestwert mit Datenstand als auch eine begründete Nichtaggregation den Muss-Punkt; die Bewertungshilfe behandelt zunächst Zählregeln, offene Achsen und Tendenz."
+      }
+    },
+    {
+      "id": "LS-2026-W43-15",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Rahmen, Punkt „Fall“; Tabelle „Kennzahlen“, Spalte „Sachverhalte“",
+          "ist": "S1-Vorschlag unverändert übernommen"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-verdichtung.md",
+          "stelle": "Regeln, Nr. 1 Gliederung",
+          "ist": "Die bestätigte Gliederung ist verbindlich: genau so viele Sachverhalte, in dieser Reihenfolge, mit den zugeordneten Eingangsmeldungen."
+        },
+        {
+          "datei": "src/pipeline/stufen.ts",
+          "stelle": "Auftrag an S2 Verdichtung (Bestätigte Gliederung) und Warnung bei abweichender Zahl der Sachverhalte",
+          "ist": "Bestätigte Gliederung (verbindlich, genau ${n} Sachverhalt…"
+        },
+        {
+          "datei": "evaluation/plaene/standardprofile-ilka.json",
+          "stelle": "varianten",
+          "ist": "A und B: S1 claude-haiku-5-5; C und D: S1 gpt-6-luna; E und F: S1 mistral-small-2603"
+        }
+      ],
+      "beobachtung": "S2 erhält die Zahl der Sachverhalte aus der bestätigten S1-Gliederung und wird bei Abweichung gewarnt; im Vergleichslauf wird jeder S1-Vorschlag unverändert bestätigt. Die Spalte „Sachverhalte“ und „Δ Sachverhalte“ des Ergebnisberichts messen deshalb S1, nicht das Verdichtungsmodell. Die Läufe bestätigen das: S1 und S2 haben je Lauf dieselbe Zahl (A 2/2/2, B 3/2/2, C und D 1/1/1, E 2/2/5, F 4/2/3). Über die Gliederung wirkt S1 auch auf Zuordnung, Radarabstand und Muss-Punkte. Die mit 0.5.10 getroffenen Entscheidungen (AV-2026-W43-10, -13, -14) vergleichen jeweils Varianten mit demselben S1-Modell und bleiben davon im Grundsatz unberührt; überlagert sind sie aber durch die Streuung von S1 zwischen Läufen (A und B mit gleichem S1-Modell: 2/2/2 gegenüber 3/2/2). Vergleiche über Anbieter hinweg mischen S1- und S2-Wirkung. Die Evaluationsausführung kann ein festes S1-Ergebnis derzeit nicht wiederverwenden; jeder Lauf erzeugt S1 neu.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Zwei Schritte. Sofort und ohne Kosten: im datierten Nachtrag zum Ergebnisbericht (zusammen mit LS-2026-W43-14) festhalten, dass die Zahl der Sachverhalte S1 misst. Danach: einen ergänzenden Bewertungsplan für einen isolierten S2-Vergleich vorbereiten, in dem alle Varianten identisches Material, identisches t0, denselben Profilstand und denselben fachlich festgelegten S1-Gegenstand einschließlich Gliederung und SOP-Auswahl erhalten, dokumentiert mit Prüfsumme. Dafür einen nur der Evaluation vorbehaltenen Weg schaffen, ein festes S1-Ergebnis in den Vergleichslauf zu übernehmen. Der vorhandene Plan bleibt als Gesamtkettenvergleich unverändert.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md: datierter Nachtrag (gemeinsam mit LS-2026-W43-14)",
+        "evaluation/plaene/: neuer Bewertungsplan für den isolierten S2-Vergleich",
+        "evaluation/plaene/plan.schema.json: nur erweitern, falls eine strukturierte Referenz auf den festen S1-Gegenstand nötig ist",
+        "src/pipeline/vergleichslauf.ts und src/ui/Vergleichslauf.tsx: Übernahme eines festen S1-Ergebnisses, nur für die Evaluation",
+        "tests/pipeline/vergleichslauf.test.ts",
+        "evaluation/README.md: Gesamtkettenvergleich und isolierter Stufenvergleich",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Welche fachlich bestätigte Gliederung soll gemeinsame Eingabe des isolierten S2-Vergleichs sein: der Zuschnitt der Redaktionsfassung (ein Sachverhalt) oder der des Bezugs A (zwei Sachverhalte)?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Vor Beginn der verglichenen S2-Läufe prüfen, dass Materialhashes, Profilhash, t0 und Prüfsumme des festen S1-Gegenstands in allen Varianten gleich sind.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Nachtrag, Plan und Ausführungsweg vorbereiten. Kostenpflichtige Läufe erst nach ausdrücklichem Auftrag mit Budget. Bestehender Plan und historische Ergebnisse bleiben unverändert. Ein möglicher Folgevergleich gpt-6-astra „xhigh“ (Ergebnisbericht, Entscheidungen) sollte diesen Weg nutzen. Entscheidungsfrage beantwortet: Gemeinsame Eingabe des isolierten S2-Vergleichs ist der Zuschnitt des Bezugs A (zwei Sachverhalte)."
+      }
+    },
+    {
+      "id": "LS-2026-W43-16",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleich.ts",
+          "stelle": "zuordnen(), Kopfkommentar; Verfahren ki-lead-vergleich/3",
+          "ist": "gierig, eins zu eins, Mindestähnlichkeit auch bei nur einem Sachverhalt je Seite"
+        },
+        {
+          "datei": "src/pipeline/vergleichsauswertung.ts",
+          "stelle": "Kennzahl zuordnung je Variante",
+          "ist": "zuordnung: refGesamt ? r3(refZugeordnet / refGesamt) : null"
+        },
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Kontrollrechnung der Zuordnung",
+          "ist": "Die Redaktionsfassung hat einen Sachverhalt (Sturmfolgen, Stromausfall, KRITIS); seine Kodierung betrifft vor allem den Stromausfall."
+        }
+      ],
+      "beobachtung": "AV-2026-W43-18 behebt die drei bekannten Fehlzuordnungen. Es bleibt eine methodische Grenze: Ein zusammengefasster Bezug und ein aufgeteilter Entwurf lassen sich mit einem einzigen Paar nicht vollständig vergleichen. zuordnen() gibt nicht zugeordnete Sachverhalte zwar schon als Einträge ohne Gegenstück aus, die Auswertung verdichtet das aber nur zur Quote zugeordneter Bezugssachverhalte. Ob die übrigen Sachverhalte zusätzliche relevante Inhalte, Doppelungen oder unzulässige Ergänzungen enthalten, zeigt sie nicht. Die Muss-Punkte werden im Ergebnisbericht bereits über den ganzen Entwurf von Hand geprüft, Doppelungen und unzulässige Ergänzungen dagegen nicht strukturiert.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neben der Zuordnung eine getrennte Prüfung der inhaltlichen Abdeckung über alle Sachverhalte eines Entwurfs einführen: je erwartetem Kernbefund enthalten, fehlend oder doppelt, dazu Inhalte ohne Grundlage in den Eingängen. Als Kernbefunde die Muss-Punkte des Falls und die Bewertungshilfe aus LS-2026-W43-14 verwenden. Die automatische Zuordnung bleibt Arbeitshilfe; ein anderer Zuschnitt löst keine automatische Abwertung aus. Radarwerte verschiedener Sachverhalte werden nicht zu einem gemeinsamen Radar verrechnet. In der Auswertung die nicht zugeordneten Sachverhalte je Lauf mit Bezeichnung ausweisen statt nur die Quote.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "evaluation/README.md: Vergleich bei unterschiedlichem Zuschnitt",
+        "src/pipeline/vergleichsauswertung.ts: nicht zugeordnete Sachverhalte im Bericht, bei strukturierter Umsetzung Abdeckungsangaben",
+        "tests/pipeline/vergleichsauswertung.test.ts",
+        "bei strukturierter Umsetzung: Abdeckungsfelder im Bewertungsschema (gemeinsam mit LS-2026-W43-18) oder eigene Bewertungshilfe mit Schema",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Soll die Abdeckungsprüfung zunächst als dokumentierte fachliche Prüfliste erfolgen oder gleich strukturiert in Bewertungsschema und Auswertung eingehen?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Ausweis der nicht zugeordneten Sachverhalte im Bericht und Schemaprüfung strukturierter Abdeckungsangaben; die semantische Vollständigkeit bleibt fachliche Prüfung.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzung zu AV-2026-W43-18 und -19. Die korrigierte Zuordnung wird nicht erneut als Fehler vorgelegt. Entscheidungsfrage beantwortet: zunächst dokumentierte Prüfliste; die Auswertung weist nicht zugeordnete Sachverhalte aus."
+      }
+    },
+    {
+      "id": "LS-2026-W43-17",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Plausibilitätsbefunde, Absatz „Fehler, die die Prüfung nicht erfasst“",
+          "ist": "Diese Fehler sind in sich stimmig gerechnet oder stehen ohne Klammer; die beiden Prüfregeln können sie nicht finden."
+        },
+        {
+          "datei": "src/pipeline/plausibilitaet.ts",
+          "stelle": "summenPruefen() und d2Pruefen(), Signaturen",
+          "ist": "summenPruefen(text: string) … d2Pruefen(bewertungText: string, d2: number | null | undefined)"
+        },
+        {
+          "datei": "evaluation/faelle/orkantief-ilka-verdichtung.json",
+          "stelle": "erwartungen",
+          "ist": "Vier Muss- und zwei Darf-nicht-Punkte zur Gesamtverdichtung; keine Abwandlung, die ein einzelnes Fehlermuster isoliert."
+        }
+      ],
+      "beobachtung": "Die Reihe zeigt Fehlermuster, die über Ilka hinaus vorkommen: falsche Verletztenzahlen, falsche Länderzuordnung, mittelbar Betroffene (Gestrandete, nur über Forstwege erreichbare Einwohner) als direkt Betroffene gezählt, Morgenwerte auf t0 datiert. Beide Prüfregeln lesen nur den Entwurfstext, nicht die Eingänge; Quellenzuordnung, Zähleinheiten, Fortgeltung und direkte Betroffenheit können sie grundsätzlich nicht prüfen, auch nicht mit erweiterten regulären Ausdrücken. Dafür eignen sich gezielte fiktive Bewertungsfälle. Eine Stichwortsuche im Fallbestand (49 Fälle) ergibt Kandidaten für Anschlüsse, mittelbare Betroffenheit, Fortgeltung und Doppelzählung, keine für hochgerechnete Werte und Teilmengen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Kleine vollständig fiktive Fälle oder kontrollierte Abwandlungen (variante_von, abwandlung) für sechs Prüfziele vorbereiten: Personen gegenüber Anschlüssen; gezählte gegenüber hochgerechneten Werten; direkte gegenüber mittelbarer Betroffenheit; Gesamtzahl gegenüber Teilmenge; Quellen- und Länderzuordnung; Datenstand und Fortgeltung zu t0. Je Abwandlung möglichst nur eine Stellgröße ändern. Vorher die Kandidaten aus der Stichwortsuche daraufhin prüfen, ob sie ein Prüfziel schon abdecken, und nur Lücken neu schreiben. Bekannte Fehler nicht als neue SOP-Regeln formulieren, wo das Regelwerk sie schon eindeutig ausschließt. Die neuen Fälle gehören zum Entwicklungssatz, nicht zum Kontrollsatz nach LS-2026-W43-19.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "evaluation/faelle/: gezielte Fälle oder Abwandlungen",
+        "evaluation/material/: selbst verfasstes fiktives Material",
+        "evaluation/faelle/README.md",
+        "evaluation/plaene/2026-10-21-sop-abdeckung.json, soweit SOP-Bezüge betroffen sind",
+        "Bewertungsplan mit den ausgewählten Fällen",
+        "tests/evaluation/schemata.test.ts: deckt Schema und Materialverweise bereits ab; nur bei neuen Feldern erweitern",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Fallschemata und Verweise offline prüfen. Deterministische Regressionstests nur für tatsächlich implementierte Prüfregeln; die Modellqualität über gesonderte Bewertungen untersuchen.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Der D2-Fehlalarm bei ausdrücklich genannter Summe ist mit AV-2026-W43-17 behoben. Die beschlossene Schwelle für die Übernahme der Plausibilitätsprüfung in die App (AV-2026-W43-16) bleibt unverändert."
+      }
+    },
+    {
+      "id": "LS-2026-W43-18",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/README.md",
+          "stelle": "Ablauf einer Bewertung, Nr. 3 Blind bewerten; Skala",
+          "ist": "Die Entwürfe werden ohne Modell, Aufwand und Kosten vorgelegt (zufällige Kennungen)."
+        },
+        {
+          "datei": "evaluation/bewertungsschema.json",
+          "stelle": "properties.blind, properties.kriterien, properties.unbelegte_aussagen; additionalProperties false",
+          "ist": "blind: boolean; kriterien: belege, zeit, referenzraum, unsicherheit, radar, empfehlungen; unbelegte_aussagen mit schwere gering oder erheblich"
+        },
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Nicht abgedeckt",
+          "ist": "Blinde inhaltliche Bewertung der Entwürfe nach `evaluation/bewertungsschema.json`"
+        }
+      ],
+      "beobachtung": "Verfahren und Skala für eine blinde Bewertung mit Nacharbeitsstufen sind vorhanden, für die 18 Ilka-Entwürfe aber noch nicht angewandt. Technische Erfüllung, Achsenabstand, Kosten und Dauer sagen nicht, wie viel fachliche Nacharbeit bis zu einem brauchbaren Entwurf nötig ist. Das Schema erfasst Noten mit Begründung und unbelegte Aussagen, aber weder die tatsächliche Bearbeitungsdauer noch notwendige Korrekturen nach Art (etwa falsche Zahlen oder falscher Zuschnitt). Weil blind nur wahr oder falsch kennt, lässt sich eine nur teilweise Verblindung, etwa durch Kenntnis der Modellidentitäten aus dem Ergebnisbericht, nicht ehrlich angeben. Da das Schema keine zusätzlichen Felder zulässt, braucht jede Ergänzung eine Schemaänderung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Einen ergänzenden Bewertungsplan für die Ilka-Entwürfe vorbereiten: Vorlage unter zufälligen Kennungen ohne Anbieter, Modell und Kosten; je Entwurf notwendige Korrekturen nach den vorhandenen Kriterien sowie nach Zahlen und Zuschnitt erfassen, dazu Bearbeitungsdauer und verbleibende Unsicherheiten. Das Bewertungsschema nur um optionale Felder erweitern, damit vorhandene Bewertungen gültig bleiben, und den Grad der Verblindung abstufbar machen (z. B. blind, teilweise, offen). Bewertende, die die Modellidentitäten kennen, nicht als vollständig verblindet ausweisen. Die Abdeckungsangaben aus LS-2026-W43-16 können im selben Schritt aufgenommen werden.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "evaluation/plaene/: ergänzender Bewertungsplan",
+        "evaluation/bewertungsschema.json: optionale Felder, Grad der Verblindung",
+        "evaluation/README.md: Ablauf und Skala ergänzen",
+        "tests/evaluation/schemata.test.ts: vorhandene und neue Bewertungen gegen das erweiterte Schema",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Soll die ergänzende Bewertung zunächst durch eine fachkundige Person oder durch mindestens zwei unabhängig Bewertende erfolgen, und über alle 18 Entwürfe oder eine vorab festgelegte Stichprobe (z. B. ein Lauf je Variante)?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Kennungsvergabe, Entfernen von Anbieter-, Modell- und Kostenangaben und formale Vollständigkeit der Bewertungen; Korrektur und Urteil bleiben menschliche Aufgaben.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ausarbeitung eines Bewertungswegs; keine Behauptung bereits vorliegender Blindbewertungen und keine unmittelbare Änderung der Modellvorgaben. Die Entwürfe liegen nur in den ZIP-Dateien des Herausgebers. Entscheidungsfrage beantwortet: mindestens zwei unabhängig Bewertende; Stichprobe ein Lauf je Variante, vorab nach fester Regel bestimmt."
+      }
+    },
+    {
+      "id": "LS-2026-W43-19",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Vorbehalte, Punkt „Ilka ist aus der Entwicklung bekannt“",
+          "ist": "Arbeitsanweisung, Kodierleitfaden und Prüfregeln wurden an diesem Fall geschärft. Das Ergebnis sagt nichts über unbekannte Lagen."
+        },
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "Fallbestand",
+          "ist": "49 fiktive Fälle, darunter Abwandlungen mit variante_von und abwandlung"
+        },
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties",
+          "ist": "format, id, titel, stand, fiktiv, variante_von, abwandlung, auftrag, material, erwartungen"
+        }
+      ],
+      "beobachtung": "Regeln und Prüfverfahren wurden wiederholt am selben Ilka-Datensatz entwickelt. Ein erfolgreicher erneuter Ilka-Lauf zeigt deshalb noch keine Übertragbarkeit auf andere Lagen; drei Wiederholungen eines Falls sind keine drei unabhängigen Lagen. Auch die übrigen Fälle sind teils zusammen mit SOP-Überarbeitungen entstanden. Eine Trennung in Entwicklungs- und Kontrollsatz gibt es bisher weder in den Fällen noch in den Plänen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Für die nächste Qualitätsbewertung einen Kontrollsatz vorab festlegen und im Bewertungsplan mit Fassungen und Prüfsummen fixieren, mit unterschiedlichen Ereignisarten, Referenzräumen und Datenproblemen. Nach Sichtung der Kontrollergebnisse notwendige Anpassungen dokumentieren und für die folgende Kontrolle einen neuen Kontrollsatz verwenden. Die Zuordnung zum Entwicklungs- oder Kontrollsatz im Plan führen, nicht im Fallschema. Fälle aus LS-2026-W43-17 gehören zum Entwicklungssatz.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "evaluation/plaene/: Kontrollbewertungsplan",
+        "evaluation/README.md: Entwicklungssatz und Kontrollsatz",
+        "evaluation/ergebnisse/: späterer zusammengefasster Bericht",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "Soll der Kontrollsatz aus vorhandenen Fällen ausgewählt oder neu verfasst und bis zum Kontrolllauf nicht für die Regelarbeit verwendet werden?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Fallauswahl, Fassungen und Prüfsummen im Plan festhalten und vor dem Kontrolllauf prüfen; die Übertragbarkeit fachlich bewerten.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Kontrollsatz und Bewertungsplan vorbereiten. Kostenpflichtige Läufe benötigen einen gesonderten Auftrag mit Budget. Entscheidungsfrage beantwortet: Kontrollsatz wird neu verfasst und bis zum Kontrolllauf nicht für die Regelarbeit verwendet."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Commit 87966240060484da20e9e95237e226d5d5841542 ist am 25.10.2026 weiterhin der aktuelle main; App 0.5.10.",
+    "IDs LS-2026-W43-14 bis -19 sind weder im Befundregister noch in den Befunddateien des Eingangs vergeben; LS-2026-W43-01 bis -13 sind entschieden und umgesetzt.",
+    "Der zuvor vorgeschlagene Ergebnisbericht ist mit AV-2026-W43-12 und PR #59 vorhanden.",
+    "Die Schätzung wurde mit den Messwerten der Vergleichsläufe aktualisiert; AV-2026-W43-15 ist umgesetzt.",
+    "Der D2-Fehlalarm bei ausdrücklich genannter Gesamtsumme ist mit AV-2026-W43-17 korrigiert.",
+    "Die drei bekannten Fehlzuordnungen sind durch Einbeziehung der Kernaussage mit AV-2026-W43-18 bearbeitet (ki-lead-vergleich/3).",
+    "Die Zahl verglichener Achsen und zusätzliche Abstandskennzahlen sind mit AV-2026-W43-19 ergänzt.",
+    "Der Ergebnisbericht benennt geringe Wiederholungszahl, bekannte Entwicklungslage und die fehlende Unabhängigkeit von Bezug, Redaktionsfassung und Handprüfung.",
+    "Die Modellvorgaben wurden mit 0.5.10 entschieden. Aus diesen Befunden folgt keine automatische erneute Änderung.",
+    "Die Befunde LS-2026-W43-01 bis -13 wurden auf Überschneidungen geprüft; die neuen Vorschläge nutzen deren Infrastruktur (erwartungen.radar, variante_von, abwandlung, Krippendorffs Alpha).",
+    "Rohprotokolle und generierte Entwürfe bleiben außerhalb des Repositorys. Ins Repository gelangen zusammengefasste Bewertungen, selbst verfasste fiktive Fälle und beschlossene Änderungen."
+  ]
+}
