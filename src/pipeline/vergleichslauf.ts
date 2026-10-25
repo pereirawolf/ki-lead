@@ -11,6 +11,7 @@
 import JSZip from "jszip";
 import FALL from "../../evaluation/faelle/orkantief-ilka-verdichtung.json";
 import PLAN from "../../evaluation/plaene/standardprofile-ilka.json";
+import PLAN_MIX from "../../evaluation/plaene/anbietermix-ilka.json";
 import type { Aufwand, Fortschritt, LlmAnbieter } from "../anbieter/typen";
 import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { migriere } from "../kern/migration";
@@ -72,14 +73,50 @@ export async function fallMaterial(d: FallDaten): Promise<Material[]> {
   return out;
 }
 
-/** Variante des Bewertungsplans evaluation/plaene/standardprofile-ilka.json (AV-2026-W43-04, -10) */
+/** Variante eines Bewertungsplans unter evaluation/plaene/ (standardprofile-ilka: AV-2026-W43-04, -10; anbietermix-ilka: -23) */
 export interface PlanVariante {
   kennung: string;
   s1: { modell: string; aufwand: Aufwand };
   s2: { modell: string; aufwand: Aufwand };
 }
 
-export const PLAN_STANDARDPROFILE = { id: PLAN.id, wiederholungen: PLAN.wiederholungen, varianten: PLAN.varianten as unknown as PlanVariante[] };
+/** Bewertungsplan mit Varianten, die der Vergleichslauf anbietet */
+export interface VergleichsPlan {
+  id: string;
+  wiederholungen: number;
+  varianten: PlanVariante[];
+  /** kurze Erklärung unter der Auswahl */
+  kurz: string;
+}
+
+export const PLAN_STANDARDPROFILE: VergleichsPlan = {
+  id: PLAN.id,
+  wiederholungen: PLAN.wiederholungen,
+  varianten: PLAN.varianten as unknown as PlanVariante[],
+  kurz: "Die Varianten vergleichen die Standard-Profile der Anbieter mit dem Bezug Anthropic (A).",
+};
+
+/**
+ * Plan anbietermix-ilka (seit 0.5.11, AV-2026-W43-23): S1 und S2 von verschiedenen Anbietern nach der Auswertung je
+ * Stufe vom 25.10.2026; Bezug bleibt Variante A des Plans standardprofile-ilka.
+ */
+export const PLAN_ANBIETERMIX: VergleichsPlan = {
+  id: PLAN_MIX.id,
+  wiederholungen: PLAN_MIX.wiederholungen,
+  varianten: PLAN_MIX.varianten as unknown as PlanVariante[],
+  kurz: "Die Varianten kombinieren Anbieter je Stufe (S1 OpenAI, S2 Anthropic); Bezug ist Variante A des Plans standardprofile-ilka.",
+};
+
+/** Pläne in der Auswahl des Vergleichslaufs (seit 0.5.11 mehrere, AV-2026-W43-24) */
+export const VERGLEICHS_PLAENE: VergleichsPlan[] = [PLAN_STANDARDPROFILE, PLAN_ANBIETERMIX];
+
+/** Variante zu „<Plan>/<Kennung>“, z. B. „anbietermix-ilka/M1-luna-opus“; undefined, wenn es sie nicht gibt */
+export function planVarianteZu(wert: string): { plan: VergleichsPlan; variante: PlanVariante } | undefined {
+  const [planId, kennung] = wert.split("/");
+  const plan = VERGLEICHS_PLAENE.find((p) => p.id === planId);
+  const variante = plan?.varianten.find((v) => v.kennung === kennung);
+  return plan && variante ? { plan, variante } : undefined;
+}
 
 /**
  * Einstellungen für eine Plan-Variante: S1 und S2 Verdichtung nach dem Plan, Reparatur nach dem Standard-Profil des

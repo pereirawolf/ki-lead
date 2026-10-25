@@ -8,7 +8,8 @@
 // - Vergleichslauf Ilka nach Plan standardprofile-ilka vom 24./25.10.2026 (App 0.5.8, Profil 1.26.0, je drei Läufe der
 //   Verdichtung, Mistral über den EU-Endpunkt; evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md). Er ersetzt
 //   die Werte der Abnahme M4 vom 23.10.2026 (App 0.4.30, Profil 1.25.0) für S1 Haiku high, Opus medium, gpt-6-luna high
-//   und gpt-6-astra medium; dazu Sonnet medium, gpt-6-astra high und Mistral.
+//   und gpt-6-astra medium; dazu Sonnet medium, gpt-6-astra high und Mistral. Folgereihe vom 25.10.2026 (App 0.5.10):
+//   gpt-6-astra xhigh.
 // - Mistral: vier Läufe der Verdichtung „Ilka“ vom 24.10.2026 (App 0.5.7, drei global, einer EU)
 // Spannen nach außen gerundet (Sekunden auf 30 s, unter 60 s auf 10 s; USD auf 0,05, unter 0,10 USD auf 0,01). Neue oder
 // überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); bestehende Spannen
@@ -62,7 +63,8 @@ export const MESSWERTE: Record<string, Messwert> = {
   // 20261024-234833-ikph, -235739-ifu7, 20261025-000620-07bh). Obergrenze 2,20 USD (seit 0.4.31) bleibt als Reserve
   "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.2] },
   // Vergleichslauf Ilka 42–69 s, 0,005–0,008 USD, 4 659–6 856 Ausgabetoken (Läufe 20261024-232917-m97k,
-  // -233231-qjlg, -233518-4god, -231048-0gjp, -231723-etee, -232232-l69n)
+  // -233231-qjlg, -233518-4god, -231048-0gjp, -231723-etee, -232232-l69n; Folgereihe 25.10.2026, App 0.5.10:
+  // 20261025-013359-jytv, -014153-g3m8, -014823-0eu1 mit 52–58 s, 0,005–0,008 USD)
   "s1|gpt-6-luna|high": { sekunden: [30, 120], usd: [0, 0.02] },
   // Vergleichslauf Ilka 89,9–125 s, 1,22–1,24 USD, 6 495–7 118 Ausgabetoken (Läufe 20261024-232917-m97k,
   // -233231-qjlg, -233518-4god); Untergrenze seit 0.5.10 60 statt 90 s
@@ -70,6 +72,9 @@ export const MESSWERTE: Record<string, Messwert> = {
   // Vergleichslauf Ilka 267–329 s, 1,52–1,69 USD, 13 574–15 867 Ausgabetoken (Läufe 20261024-231048-0gjp,
   // -231723-etee, -232232-l69n)
   "verdichtung|gpt-6-astra|high": { sekunden: [240, 420], usd: [1.5, 2.15] },
+  // Folgereihe Vergleichslauf Ilka 25.10.2026 (App 0.5.10): 333–418 s, 0,93–1,84 USD (0,93 USD mit 87 876 gelesenen
+  // Cache-Token), 16 832–18 794 Ausgabetoken (Läufe 20261025-013359-jytv, -014153-g3m8, -014823-0eu1)
+  "verdichtung|gpt-6-astra|xhigh": { sekunden: [330, 540], usd: [0.9, 2.3] },
   // Mistral, Kosten ohne EU-Aufschlag. Vergleichslauf Ilka, EU-Endpunkt: 23–37 s, 0,010–0,012 USD, 3 665–5 923
   // Ausgabetoken (Läufe 20261024-224439-b628, -224751-2hu5, -225017-vou1, -225845-7ngp, -230206-jlcg, -230531-dh4z);
   // dazu (App 0.5.7) 17–25 s, 0,009–0,011 USD (Läufe 20261024-203955-kj03, -205221-uyeb, -210208-bfob, -211602-5dfe)

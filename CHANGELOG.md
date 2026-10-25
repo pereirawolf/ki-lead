@@ -58,6 +58,37 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
 | 0.5.9 | letzter Commit des Pull Requests „Lizenzen bestimmt, Vorlage – eigene Organisation; 0.5.9“ |
 | 0.5.10 | letzter Commit des Pull Requests „Standard-Profile nach dem Vergleichslauf Ilka, Aufwand je Modell, Schätzung; 0.5.10“ |
+| 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ |
+
+## [0.5.11] – 25.10.2026
+
+Grundlage: Folgereihe des Vergleichslaufs Ilka mit gpt-6-astra „xhigh“ (drei Läufe, App 0.5.10) und Auftrag des Herausgebers vom 25.10.2026, die App danach zu aktualisieren und die beste Kombination aus Modell und Aufwand je Stufe als Vergleichslauf startbar zu machen; Befunddatei `ki-lead-befund_anbietermix_2026-W43.json` (AV-2026-W43-20 bis -25). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, Standard-Profilen, gespeicherten Einstellungen oder der Ablage der Schlüssel.
+
+### Hinzugefügt
+
+- **Bewertungsplan** `evaluation/plaene/anbietermix-ilka.json` (AV-2026-W43-23): M1 S1 gpt-6-luna „hoch“ mit S2 claude-opus-5-5 „mittel“, M2 S1 gpt-6-luna „hoch“ mit S2 claude-sonnet-5-5 „mittel“; Reparatur nach dem S2-Anbieter (Sonnet „niedrig“); je drei Läufe, Budget 10 USD; Bezug Variante A des Plans `standardprofile-ilka`.
+- **Vergleichslauf mit mehreren Plänen** (AV-2026-W43-24): Die Auswahl „Konfiguration“ zeigt je Bewertungsplan eine Gruppe (`VERGLEICHS_PLAENE`, Wert „<Plan>/<Kennung>“) mit einer kurzen Erklärung des gewählten Plans; Reihendatei und Dateiname nennen die Variante.
+- **Messwert** gpt-6-astra „xhigh“ in der Verdichtung (AV-2026-W43-20): 330–540 s, 0,90–2,30 USD (gemessen 333–418 s, 0,93–1,84 USD); Lauf-IDs der Folgereihe auch beim S1-Eintrag gpt-6-luna „high“.
+- **Nachtrag im Ergebnisbericht** [evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md](evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md) (AV-2026-W43-21, -22): Folgereihe „xhigh“ (kommt Anthropic nicht näher als „high“; Standard-Profil OpenAI bleibt) und Auswertung je Stufe: S1 am besten mit gpt-6-luna „hoch“, S2 mit Opus „mittel“ vor Sonnet „mittel“, S3 nicht bewertbar (in keinem Lauf nötig).
+
+### Geändert
+
+- Kommentar zu `STANDARD_PROFILE` nennt die Folgereihe „xhigh“ (AV-2026-W43-21).
+- Spezifikation 0.5.11: Abschnitt 5.4 (Pläne im Vergleichslauf), offener Punkt 6; `evaluation/README.md`.
+
+### Offen
+
+- AV-2026-W43-25: Prüffall für S3 Reparatur (Wahl des Reparaturmodells), zur Entscheidung vorgelegt.
+
+### Tests
+
+- `tests/pipeline/vergleichslauf.test.ts` (+1): Plan `anbietermix-ilka`, Varianten über „Plan/Kennung“, Reparatur nach dem S2-Anbieter (AV-2026-W43-23, -24).
+- `tests/ui/vergleichslauf.test.ts` (+1, 1 angepasst): beide Pläne in der Auswahl, Mix-Variante M1 mit Anbietern je Stufe und fehlendem OpenAI-Schlüssel (AV-2026-W43-24).
+- `tests/pipeline/schaetzung.test.ts`: Messwerte der Folgereihe in den Spannen, Spanne gpt-6-astra „xhigh“ (AV-2026-W43-20).
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: AV-2026-W43-20 bis -24 als umgesetzt; AV-2026-W43-25 bleibt offen.
 
 ## [0.5.10] – 25.10.2026
 

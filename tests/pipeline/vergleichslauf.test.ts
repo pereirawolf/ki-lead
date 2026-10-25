@@ -13,7 +13,10 @@ import {
   anzahlBegrenzt,
   einstellungenFuerVariante,
   fehlendeFalldateien,
+  PLAN_ANBIETERMIX,
   PLAN_STANDARDPROFILE,
+  planVarianteZu,
+  VERGLEICHS_PLAENE,
   reiheZip,
   uebersichtZeilen,
   vergleichsreihe,
@@ -222,6 +225,28 @@ describe("Vergleichslauf Ilka", () => {
     const paar = (ergebnisse[0].eintrag.beobachtungen.vergleich as any).paare[0];
     expect(paar.ref_index).toBe(0);
     expect(paar.ki_radar).toEqual(svs[0].sofort.lagenradar);
+  });
+
+  it("AV-2026-W43-23, -24: Plan anbietermix-ilka mischt Anbieter je Stufe; Varianten über „Plan/Kennung“", () => {
+    expect(VERGLEICHS_PLAENE.map((p) => p.id)).toEqual(["standardprofile-ilka", "anbietermix-ilka"]);
+    expect(PLAN_ANBIETERMIX.wiederholungen).toBe(3);
+    expect(PLAN_ANBIETERMIX.varianten).toEqual([
+      { kennung: "M1-luna-opus", s1: { modell: "gpt-6-luna", aufwand: "high" }, s2: { modell: "claude-opus-5-5", aufwand: "medium" }, material: "eingaenge" },
+      {
+        kennung: "M2-luna-sonnet",
+        s1: { modell: "gpt-6-luna", aufwand: "high" },
+        s2: { modell: "claude-sonnet-5-5", aufwand: "medium" },
+        material: "eingaenge",
+      },
+    ]);
+    const m1 = planVarianteZu("anbietermix-ilka/M1-luna-opus")!;
+    expect(m1.plan.id).toBe("anbietermix-ilka");
+    const e = einstellungenFuerVariante(STANDARD, m1.variante);
+    expect(e.modelle).toMatchObject({ vorverarbeitung: "gpt-6-luna", verdichtung: "claude-opus-5-5", reparatur: "claude-sonnet-5-5" });
+    expect(e.aufwand).toMatchObject({ vorverarbeitung: "high", verdichtung: "medium", reparatur: "low" });
+    expect(planVarianteZu("standardprofile-ilka/D-openai-astra-hoch")!.variante.s2).toEqual({ modell: "gpt-6-astra", aufwand: "high" });
+    expect(planVarianteZu("anbietermix-ilka/gibt-es-nicht")).toBeUndefined();
+    expect(planVarianteZu("M1-luna-opus")).toBeUndefined();
   });
 
   it("AV-2026-W43-04: Varianten des Plans standardprofile-ilka setzen S1, S2 und die Reparatur des S2-Anbieters", async () => {

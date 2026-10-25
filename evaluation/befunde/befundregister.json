@@ -845,6 +845,95 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
       "pr": 59
+    },
+    {
+      "id": "AV-2026-W43-20",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietermix_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE (kein Eintrag verdichtung|gpt-6-astra|xhigh)"
+        }
+      ],
+      "kurz": "Messwert gpt-6-astra „xhigh“ in der Verdichtung aus der Folgereihe vom 25.10.2026 eintragen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 61
+    },
+    {
+      "id": "AV-2026-W43-21",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietermix_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/einstellungen.ts",
+          "stelle": "Kommentar zu STANDARD_PROFILE, OpenAI"
+        }
+      ],
+      "kurz": "Standard-Profil OpenAI bleibt bei „high“; „xhigh“ kam Anthropic nicht näher (Folgereihe im Kommentar und Bericht).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 61
+    },
+    {
+      "id": "AV-2026-W43-22",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietermix_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Ende des Berichts"
+        }
+      ],
+      "kurz": "Nachtrag im Ergebnisbericht: Folgereihe „xhigh“ und Auswertung je Stufe (S1, S2, S3).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 61
+    },
+    {
+      "id": "AV-2026-W43-23",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietermix_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/anbietermix-ilka.json",
+          "stelle": "neue Datei"
+        }
+      ],
+      "kurz": "Bewertungsplan anbietermix-ilka mit S1 gpt-6-luna „high“ und S2 Opus bzw. Sonnet „medium“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 61
+    },
+    {
+      "id": "AV-2026-W43-24",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietermix_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleichslauf.ts",
+          "stelle": "PLAN_STANDARDPROFILE (nur ein Plan)"
+        },
+        {
+          "datei": "src/ui/Vergleichslauf.tsx",
+          "stelle": "Auswahl „Konfiguration“"
+        }
+      ],
+      "kurz": "Vergleichslauf bietet Varianten mehrerer Bewertungspläne an.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 61
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Vergleichslauf Ilka nach Plan standardprofile-ilka: Ergebnis vom 25.10.2026
 
-Plan: [`../plaene/standardprofile-ilka.json`](../plaene/standardprofile-ilka.json) · Auswertung: `npm run vergleichslauf:auswerten -- <ZIP-Dateien> --bezug A-anthropic-standard` · Befunde: AV-2026-W43-01 bis -03, -05, -06, -09, -10, -12 bis -19
+Plan: [`../plaene/standardprofile-ilka.json`](../plaene/standardprofile-ilka.json) · Auswertung: `npm run vergleichslauf:auswerten -- <ZIP-Dateien> --bezug A-anthropic-standard` · Befunde: AV-2026-W43-01 bis -03, -05, -06, -09, -10, -12 bis -19; Nachtrag: AV-2026-W43-20 bis -25
 
 **Ergebnis:** Alle 18 Läufe (sechs Varianten, je drei) sind vollständig, mit derselben App-Version und demselben Profil entstanden und erfüllen die Prüfpunkte T1–T8. Am nächsten am Bezug (Variante A, Standard-Profil Anthropic) liegt Variante B (Sonnet in der Verdichtung). Von OpenAI liegt D (gpt-6-astra „high“) näher als C („medium“), beide lassen aber rund die Hälfte der Achsen offen. Von Mistral liegt E (Medium 3.5) in den meisten Kennzahlen näher als F (Large 4); F ist nur im Radarabstand knapp näher und hat mehr Zahlenfehler. Kosten und Dauer sind berichtet, haben aber nicht entschieden.
 
@@ -175,3 +175,69 @@ Die Kennzahlen oben stammen aus der Auswertung mit Verfahren `/2` (App 0.5.8). M
 - Erfassung mit Websuche, Management Summary und Reparatur (S3 war in keinem Lauf nötig)
 - Globaler Mistral-Endpunkt; `gpt-6-astra` „xhigh“; Mistral ohne Nachdenken
 - Blinde inhaltliche Bewertung der Entwürfe nach `evaluation/bewertungsschema.json`
+
+## Nachtrag vom 25.10.2026: Folgereihe „xhigh“ und Auswertung je Stufe
+
+### Folgereihe G: gpt-6-astra „xhigh“
+
+Offene Frage aus AV-2026-W43-13. Durchführung durch den Herausgeber in der App 0.5.10 (Profil 1.26.0, Prüfsumme `725c7d9d…`) mit „Aktuelle Einstellungen“: S1 `gpt-6-luna` „high“, S2 `gpt-6-astra` „xhigh“, Reparatur `gpt-6.1-sol` „low“; drei Läufe am 25.10.2026 zwischen 01:33 und 01:54 Uhr. Alle drei erfüllen T1–T8, schemakonform ohne Reparatur.
+
+| Lauf | S1 Dauer | S1 USD | S2 Dauer | S2 Ausgabetoken | S2 USD | Gesamt USD | Gesamt Dauer |
+|---|---|---|---|---|---|---|---|
+| 20261025-013359-jytv | 55 s | 0,008 | 418 s | 16 832 | 0,930 | 0,94 | 473 s |
+| 20261025-014153-g3m8 | 58 s | 0,005 | 333 s | 17 696 | 1,784 | 1,79 | 390 s |
+| 20261025-014823-0eu1 | 52 s | 0,005 | 339 s | 18 794 | 1,840 | 1,85 | 391 s |
+
+Summe 4,57 USD; der erste Lauf war günstiger, weil OpenAI 87 876 Eingabetoken aus dem Cache meldete.
+
+| Kennzahl | A (Bezug) | D „high“ | G „xhigh“ |
+|---|---|---|---|
+| Sachverhalte | 2,0 | 1,0 | 1,0 |
+| Achsen gesetzt | 0,88 | 0,46 | 0,42 |
+| Tendenz gesetzt | 1,00 | 0,33 | 0,00 |
+| Beurteilung gleich | 1,00 | 1,00 | 1,00 |
+| Achsenabweichung zur Redaktionsfassung | 0,29 | 0,61 | 0,61 |
+| Radarabstand zu A (verglichene Achsen) | – | 0,80 (5 von 8) | 0,50 (4 von 8) |
+| Abstand „offen“ zu A | – | 0,54 | 0,58 |
+| Zahl der Stromlosen zusammengeführt | 1/3 | 0/3 | 0/3 |
+
+G setzt in keinem Lauf eine Tendenz und lässt D2 bis D5 in allen Läufen offen, D1 in zwei von drei, mit derselben Begründung wie C und D. Der kleinere Radarabstand beruht auf vier statt fünf verglichenen Achsen. Ende der Notstrompuffer, abweichende Bewertung Sonneberg/Thüringen und A-Einträge: 3/3; der Zahlenabgleich gegen die Eingänge fand keine fremden Zahlen. **Ergebnis:** „xhigh“ kommt Anthropic nicht näher als „high“; das Standard-Profil OpenAI bleibt bei „high“ (AV-2026-W43-21). Die Messwerte stehen seit 0.5.11 in der Schätzung (AV-2026-W43-20).
+
+### Auswertung je Stufe
+
+Frage des Herausgebers: Welche Kombination aus Modell und Aufwand liefert in S1, S2 und S3 jeweils die besten Ergebnisse? Grundlage sind die 21 Läufe der Varianten A–G. Maßstab ist hier nicht die Nähe zu Anthropic, sondern die Redaktionsfassung, die Muss-Punkte des Falls und die Zahlentreue gegenüber den Eingängen. Jede Variante kombiniert S1 und S2 desselben Anbieters; S1 lässt sich deshalb nur an seinem eigenen Vorschlag beurteilen, nicht an seiner Wirkung auf S2.
+
+**S1 (Gegenstand und SOP-Auswahl).** Bewertet am S1-Vorschlag im Laufprotokoll: Gliederung (die Redaktionsfassung führt einen Sachverhalt; nach Teil A bleibt eine Wirkungskette ein Sachverhalt, Länder erscheinen als Teilräume), Kern-SOPs der Redaktionsfassung (B01, B08, B12) und die für die Lage einschlägigen Bausteine.
+
+| S1 | Läufe | Sachverhalte | B01, B08, B12 | C11 Notruf | C12 Kraftstoff | B10 Trinkwasser | Auffälligkeiten | Dauer | USD |
+|---|---|---|---|---|---|---|---|---|---|
+| `gpt-6-luna` „high“ (C, D, G) | 9 | 1 in 9 von 9 | 9/9 | 9/9 | 9/9 | 7/9 | Ereignisart „Gesundheitliche Lage / Epidemie“ in 6 von 9 (über die Pflegeheime, B11) | 42–69 s | 0,005–0,008 |
+| `claude-haiku-5-5` „high“ (A, B) | 6 | 2 in 5, 3 in 1 | 5/6 | 6/6 | 5/6 | 4/6 | Trennung Stromausfall/Verkehr nachvollziehbar | 19–132 s | 0,013–0,027 |
+| `mistral-small-2603` „high“ (E, F) | 6 | 2 bis 5 | 5/6 | 1/6 | 0/6 | 0/6 | Länder als eigene Sachverhalte (E-vou1, F-dh4z); Gestrandete als „Migrationslage“ (E-2hu5) | 23–37 s | 0,011–0,013 |
+
+S2 übernimmt die Gliederung aus S1: Mit luna entstand in allen neun Läufen ein Sachverhalt, mit Mistral Small zwei bis fünf. **Am besten in S1: `gpt-6-luna` „high“**, knapp vor Haiku „high“; Mistral Small ist in S1 am schwächsten.
+
+**S2 (Verdichtung).** Kennzahlen gegenüber der Redaktionsfassung mit der Zuordnung zum Stromausfall-Sachverhalt (Kontrollrechnung, entspricht `ki-lead-vergleich/3`); Muss-Punkt und Zahlenfehler aus der Handprüfung (Stichprobe).
+
+| S2 | Achsen gesetzt | Achsenabweichung | Beurteilung gleich | Tendenz gesetzt | Stromlose zusammengeführt | Zahlenfehler von Hand | USD je Lauf | Dauer je Lauf |
+|---|---|---|---|---|---|---|---|---|
+| A `claude-opus-5-5` „medium“ | 0,88 | 0,29 | 1,00 | 1,00 | 1/3, sonst Teilwerte | keine gefunden | 1,76–1,90 | 521–546 s |
+| B `claude-sonnet-5-5` „medium“ | 0,88 | 0,25 | 1,00 | 0,33 | 2/3 | keine gefunden | 0,84–0,98 | 387–413 s |
+| E `mistral-medium-3-5` „high“ | 0,98 | 0,38 | 1,00 | 1,00 | 3/3, Datenstand nur in einem Lauf | D2 in zwei Läufen | 0,26–0,38 | 146–225 s |
+| F `mistral-large-4` „high“ | 0,97 | 0,50 | 0,67 | 1,00 | 2/3 | Personen- und Einsatzzahlen in zwei Läufen | 0,15–0,21 | 201–236 s |
+| D `gpt-6-astra` „high“ | 0,46 | 0,61 | 1,00 | 0,33 | 0/3 | keine gefunden | 1,52–1,69 | 309–395 s |
+| G `gpt-6-astra` „xhigh“ | 0,42 | 0,61 | 1,00 | 0,00 | 0/3 | keine gefunden | 0,94–1,85 | 390–473 s |
+| C `gpt-6-astra` „medium“ | 0,46 | 0,69 | 1,00 | 0,00 | 0/3 | keine gefunden | 1,22–1,25 | 142–194 s |
+
+**Am besten in S2: `claude-opus-5-5` „medium“**: vollständig, ohne gefundenen Zahlenfehler, Tendenz in jedem Lauf. Knapp dahinter `claude-sonnet-5-5` „medium“ (Radarwerte am nächsten, führt die Stromlosen öfter zusammen, lässt aber die Tendenz meist offen) zum halben Preis. Mistral ist vollständig, aber fehleranfälliger; OpenAI arbeitet zurückhaltend und lässt die Hälfte der Achsen offen.
+
+**S3 (Reparatur).** In keinem der 21 Läufe und keinem der sechs Läufe der Abnahme M4 war eine Reparatur nötig; alle Entwürfe waren nach S2 schemakonform. Eine Wahl lässt sich daraus nicht begründen. Der Mix behält die Reparatur des S2-Anbieters (`claude-sonnet-5-5` „low“). Prüfbar wäre S3 nur mit absichtlich fehlerhaften Entwürfen (AV-2026-W43-25, offen).
+
+**Mix für einen Vergleichslauf** (Plan [`anbietermix-ilka`](../plaene/anbietermix-ilka.json), seit 0.5.11 in der App wählbar):
+
+| Variante | S1 | S2 | S3 | geschätzt je Lauf |
+|---|---|---|---|---|
+| M1-luna-opus | `gpt-6-luna` „high“ (OpenAI) | `claude-opus-5-5` „medium“ (Anthropic) | `claude-sonnet-5-5` „low“ | 1,8–1,9 USD, etwa 8 Minuten |
+| M2-luna-sonnet | `gpt-6-luna` „high“ (OpenAI) | `claude-sonnet-5-5` „medium“ (Anthropic) | `claude-sonnet-5-5` „low“ | 0,8–1,0 USD, 5–8 Minuten |
+
+**Vorbehalte:** S1 und S2 sind bisher nur zusammen mit demselben Anbieter gemessen. Ob Opus mit der Gliederung von luna (ein Sachverhalt) besser arbeitet als mit der von Haiku (zwei), ist eine Annahme, die M1 prüft. Die Redaktionsfassung stammt aus derselben Modellfamilie wie Opus und Sonnet; ein Sachverhalt wie in der Redaktionsfassung ist nach Teil A zulässig, aber nicht die einzige richtige Gliederung. Drei Läufe je Variante.
