@@ -141,7 +141,7 @@ a {
   background: var(--header-hintergrund);
   color: var(--header-text);
   /* Identitätsband des Farbschemas (dekorativ) */
-  border-bottom: 4px solid var(--amt);
+  border-bottom: 8px solid var(--amt);
   border-image: var(--band) 1;
   position: sticky;
   top: 0;
@@ -3059,7 +3059,7 @@ fieldset.lb-ausgabe {
   color: var(--header-text);
   font-weight: 700;
   padding: 0.4rem 0.75rem;
-  border-bottom: 4px solid var(--amt);
+  border-bottom: 8px solid var(--amt);
   border-image: var(--band) 1;
 }
 

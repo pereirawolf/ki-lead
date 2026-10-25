@@ -85,6 +85,16 @@ Grundlage: Befunddatei `ki-lead-befund_konsistenz-eingabemaske_2026-W43.json` (a
 - `tests/pipeline/auftragsfelder.test.ts` (neu): Die Anfrage an S1 nennt weiter „Sachverhalt und Erkenntnisinteresse“, auch bei leerem Feld; Stichworte und Übersicht der Ausgangsquellen unverändert (KP-2026-W43-61, -62).
 - Browsertests: `barrierefreiheit.spec.ts` prüft die Hilfetexte als zugängliche Beschreibung; `hauptablauf.spec.ts`, `abbruch.spec.ts` und `pwa-update.spec.ts` suchen das Feld unter der neuen Beschriftung.
 
+## [Unveröffentlicht]
+
+### Geändert
+
+- **Akzentband:** doppelt so dick (8 statt 4 px). Ist eine Bandfarbe dieselbe Farbe wie der Kopf darüber oder der Seitengrund darunter (in zehn Länderschemata das Weiß), tönt die App beide ganz leicht in der Aktionsfarbe, damit das Weiß im Band sichtbar bleibt (`bandAbheben` in `src/darstellung/thema.ts`). Neutral- und Kontrastschemata bleiben unverändert; alle Kontrastregeln gelten weiter ([docs/farbschemas.md](docs/farbschemas.md)).
+
+### Tests
+
+- `tests/darstellung/farbschemas.test.ts` (+5): Tönung genau bei den Schemata mit Weiß im Band, Neutral- und Kontrastschemata sowie Gelb auf Weiß unverändert, Kontrastregeln mit Tönung, Profilfarben mit weißer Akzentfarbe, Bandstärke 8 px.
+
 ## [0.5.17] – 25.10.2026
 
 Grundlage: Vorschlag zur Neugliederung von „Einstellungen → Modelle & Verarbeitung“ und der Management Summary, vom Herausgeber am 25.10.2026 freigegeben (ein Formular für alle Testläufe, Begriff „Testlauf“ in Oberfläche, Dateinamen und Doku, Archiv bis zum Löschen, Schritt der Management Summary von der App angefügt). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Profilen, gespeicherten Einstellungen, Reihenformaten oder der Ablage der Schlüssel.
