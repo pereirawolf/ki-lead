@@ -566,7 +566,17 @@ export interface S2Ergebnis {
   befunde: Befund[];
 }
 
-export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S2Ergebnis> {
+/** Optionen für S2 und S3 */
+export interface S2Optionen {
+  /**
+   * Ohne KI-Aufrufe in S3 (seit 0.5.12, nur Vergleichslauf „S1 + S2“): keine Vervollständigung einer abgeschnittenen
+   * Antwort und keine Reparatur. Nachbearbeitung, Schema- und Quellenprüfung der App laufen wie sonst, damit der
+   * Entwurf aus S2 so gemessen wird, wie er ankommt.
+   */
+  ohneS3?: boolean;
+}
+
+export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: S2Optionen = {}): Promise<S2Ergebnis> {
   const p = k.profil;
   const e = k.einstellungen;
   // Zeitvertrag vor dem ersten Aufruf prüfen: ein ungültiges t0 kostet keinen Modellaufruf
@@ -654,7 +664,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
   const kurzantwort = z.kurzantwort;
   let modell = a.modell;
   const s2 = k.lauf.stufen[k.lauf.stufen.length - 1];
-  if (a.stopGrund === "max_tokens" && z.json === undefined) {
+  if (a.stopGrund === "max_tokens" && z.json === undefined && optionen.ohneS3)
+    s2.notiz = "Antwort an der Token-Grenze abgeschnitten; ohne S3 (Vergleichslauf „S1 + S2“) keine Vervollständigung.";
+  else if (a.stopGrund === "max_tokens" && z.json === undefined) {
     // Abgeschnitten (meist durch langes Nachdenken): Meldung ohne Recherche vervollständigen lassen.
     s2.notiz = "Antwort an der Token-Grenze abgeschnitten; die App hat die Meldung in einem zweiten Schritt vervollständigen lassen.";
     const v = await aufrufen(k, "S3 Vervollständigung", {
@@ -709,7 +721,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag): Promise<S
     const eintrag = k.lauf.stufen[k.lauf.stufen.length - 1];
     eintrag.befunde = schemaBefunde.map((b) => b.text);
     await k.aktualisiert(k.lauf);
-    if (!schemaBefunde.length || runde >= MAX_REPARATUREN) break;
+    if (!schemaBefunde.length || runde >= (optionen.ohneS3 ? 0 : MAX_REPARATUREN)) break;
     if (z.json === undefined && /unvollständig/.test(z.fehler || "")) break; // weiterhin abgeschnitten: Reparatur hilft nicht
 
     const entwurf = z.json !== undefined ? JSON.stringify(z.json, null, 1) : z.jsonText || "";

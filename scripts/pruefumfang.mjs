@@ -4,8 +4,8 @@
 // Ausgabe:           kern=true|false und pwa=true|false, je eine Zeile
 //
 // Grundsatz „im Zweifel prüfen“: Die Kern-Browsertests entfallen nur, wenn JEDE geänderte Datei auf der Liste reiner
-// Inhalte steht (Dokumentation, Bewertungsfälle, SOP und Markdown-Texte der Profile). Jede andere oder unbekannte Datei
-// löst sie aus. Die PWA-Browsertests laufen, wenn eine Datei des PWA-Mechanismus oder der Testumgebung betroffen ist.
+// Inhalte steht (Dokumentation, Bewertungsfälle, SOP und Markdown-Texte der Profile) und nicht in die App eingebettet
+// ist. Jede andere oder unbekannte Datei löst sie aus. Die PWA-Browsertests laufen, wenn eine Datei des PWA-Mechanismus oder der Testumgebung betroffen ist.
 // Eine leere oder nicht ermittelbare Dateiliste löst alles aus. Auf main, im Wochenlauf und bei manuellem Start läuft
 // ohnehin alles; dieses Skript wirkt nur auf Pull Requests.
 
@@ -22,6 +22,17 @@ export const NUR_INHALT = [
   /^\.github\/ISSUE_TEMPLATE\//,
   /^profile\/[^/]+\/sop\//, // SOP-Sammelmappe, Quellenregister
   /^profile\/[^/]+\/[^/]+\.md$/, // Arbeitsanweisungen, Kodierleitfaden, Profil-Changelog
+];
+
+/**
+ * Ausnahmen von NUR_INHALT: Dateien unter evaluation/, die die App einbettet (Vergleichslauf Ilka, seit 0.5.12 auch
+ * Musterfassung und Zuschnitt). Ein Wächter in tests/ci/pruefumfang.test.ts prüft, dass jeder Import aus evaluation/
+ * unter src/ hier steht.
+ */
+export const IN_DER_APP = [
+  /^evaluation\/faelle\/(orkantief-ilka-verdichtung|ilka-management-summary)\.json$/,
+  /^evaluation\/plaene\/(standardprofile-ilka|anbietermix-ilka|s2-isoliert-ilka|management-summary-ilka)\.json$/,
+  /^evaluation\/material\/(ilka-musterfassung|ilka-s1-zuschnitt-a)\.json$/,
 ];
 
 /** PWA-Mechanismus und alles, wovon die PWA-Browsertests unmittelbar abhängen */
@@ -50,7 +61,7 @@ export function pruefumfang(dateien) {
   if (liste.length === 0) return { kern: true, pwa: true };
   const passt = (muster, d) => muster.some((m) => m.test(d));
   return {
-    kern: liste.some((d) => !passt(NUR_INHALT, d)),
+    kern: liste.some((d) => !passt(NUR_INHALT, d) || passt(IN_DER_APP, d)),
     pwa: liste.some((d) => passt(PWA, d)),
   };
 }

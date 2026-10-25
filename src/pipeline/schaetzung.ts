@@ -20,7 +20,8 @@
 
 import { aufwandAngeboten } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
-import { aufschlag, ausgabePreis } from "../anbieter/preise";
+import { aufschlag, ausgabePreis, kostenAnfrage } from "../anbieter/preise";
+import { leereNutzung } from "../anbieter/typen";
 
 export type SchaetzArt = "s1" | "erfassung" | "verdichtung";
 
@@ -127,6 +128,22 @@ function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand
     if (d < 0) von *= 0.5;
   }
   return { sekunden: null, usd: [von, bis], gemessen: false };
+}
+
+/**
+ * Grobe Schätzung der Management Summary (seit 0.5.12, Vergleichslauf „MS (aus Musterfassung)“), ohne Messwert: ein
+ * Aufruf ohne Werkzeuge; Eingabe in Token (Arbeitsanweisung und Meldung), Ausgabe einschließlich Nachdenken 500 bis
+ * 3 000 Token bei „niedrig“, 1 000 bis 6 000 bei „mittel“ und 1 000 bis 16 000 darüber, zum Listenpreis ohne Cache.
+ * Keine Dauer; der Aufschlag des Mistral-EU-Endpunkts kommt auf die Kosten.
+ */
+export function schaetzeKurzfassung(modell: string, aufwand: Aufwand, eingabeToken: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): Schaetzung {
+  const a = aufwandAngeboten(modell, aufwand);
+  const [von, bis] = a === "low" ? [500, 3000] : a === "medium" ? [1000, 6000] : [1000, 16000];
+  const k = (ausgabe: number) => kostenAnfrage(modell, { ...leereNutzung(), eingabe: eingabeToken, ausgabe });
+  const [u, o] = [k(von), k(bis)];
+  if (u === null || o === null) return { sekunden: null, usd: null, gemessen: false };
+  const f = aufschlag(modell, optionen);
+  return { sekunden: null, usd: [u * f, o * f], gemessen: false };
 }
 
 export function dauerText(s: [number, number] | null): string {

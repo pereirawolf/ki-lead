@@ -15,6 +15,7 @@ import {
   fehlendeFalldateien,
   PLAN_ANBIETERMIX,
   PLAN_STANDARDPROFILE,
+  plaeneFuer,
   planVarianteZu,
   VERGLEICHS_PLAENE,
   reiheZip,
@@ -231,7 +232,9 @@ describe("Vergleichslauf Ilka", () => {
   });
 
   it("AV-2026-W43-23, -24: Plan anbietermix-ilka mischt Anbieter je Stufe; Varianten über „Plan/Kennung“", () => {
-    expect(VERGLEICHS_PLAENE.map((p) => p.id)).toEqual(["standardprofile-ilka", "anbietermix-ilka"]);
+    // seit 0.5.12 auch die Pläne der Umfänge aus der Musterfassung; für die Rohdaten bleiben es diese zwei
+    expect(VERGLEICHS_PLAENE.map((p) => p.id)).toEqual(["standardprofile-ilka", "anbietermix-ilka", "s2-isoliert-ilka", "management-summary-ilka"]);
+    expect(plaeneFuer("s1-s2-s3").map((p) => p.id)).toEqual(["standardprofile-ilka", "anbietermix-ilka"]);
     expect(PLAN_ANBIETERMIX.wiederholungen).toBe(3);
     expect(PLAN_ANBIETERMIX.varianten).toEqual([
       { kennung: "M1-luna-opus", s1: { modell: "gpt-6-luna", aufwand: "high" }, s2: { modell: "claude-opus-5-5", aufwand: "medium" }, material: "eingaenge" },
