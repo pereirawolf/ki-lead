@@ -1064,7 +1064,7 @@
       "kurz": "Prüffall Reparatur mit beschädigter Musterfassung Ilka in der App; Fall ilka-reparatur, Plan reparatur-ilka.",
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
-      "pr": 65
+      "pr": 66
     },
     {
       "id": "AV-2026-W43-26",
@@ -1081,7 +1081,7 @@
       "kurz": "Ergebnisbericht des Plans anbietermix-ilka (M1, M2) gegen Variante A.",
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
-      "pr": 65
+      "pr": 66
     }
   ]
 }
