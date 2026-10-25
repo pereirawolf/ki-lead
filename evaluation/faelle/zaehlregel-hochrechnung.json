@@ -1,0 +1,48 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "zaehlregel-hochrechnung",
+  "titel": "Gezählte und hochgerechnete Stromlose in zwei Kreisen (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Stromausfall in zwei Kreisen nach Leitungsschaden",
+    "stichworte": "B08, C11",
+    "stichtag": "2026-11-03",
+    "meldezeitpunkt": "2026-11-03T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/zaehlregel-hochrechnung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Prüfziel gezählte gegenüber hochgerechneten Werten (LS-2026-W43-17)."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die 2.300 Einwohner aus Ostheide als gezählten Wert und die 3.800 Menschen aus Westbrück als Hochrechnung mit Faktor und Bandbreite getrennt ausweisen.",
+      "Eine Gesamtzahl nur nennen, wenn gezählter und hochgerechneter Anteil getrennt erkennbar bleiben; als gezählter Mindestwert gelten 2.300.",
+      "D2 nach dem Mindestwert oder der vollständig in einer Stufe liegenden Bandbreite kodieren und das im Bewertungstext kennzeichnen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "6.100 Menschen ohne Strom als gezählte oder amtlich gemeldete Zahl darstellen.",
+      "Die Hochrechnung ohne Faktor oder Bandbreite übernehmen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-03T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Stromausfall / Blackout"
+    ],
+    "radar": {
+      "d2": {
+        "min": 3,
+        "max": 3,
+        "grund": "Gezählter Mindestwert 2.300 und die Summe mit Hochrechnung (5.700 bis 6.500) liegen beide in Stufe 3."
+      }
+    }
+  }
+}

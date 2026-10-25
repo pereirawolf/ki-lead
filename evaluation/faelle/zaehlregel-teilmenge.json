@@ -1,0 +1,47 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "zaehlregel-teilmenge",
+  "titel": "Verletzte nach Hagelunwetter: Gesamtzahl mit Teilmenge (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Hagelunwetter über einem Volksfest",
+    "stichworte": "B01, C09",
+    "stichtag": "2026-11-05",
+    "meldezeitpunkt": "2026-11-05T10:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/zaehlregel-teilmenge.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Prüfziel Gesamtzahl gegenüber Teilmenge (LS-2026-W43-17)."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "95 Verletzte als Gesamtzahl und die 12 Schwerverletzten als Teilmenge darin darstellen.",
+      "Die Angaben der Klinik als Aufschlüsselung derselben 12 Schwerverletzten führen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "107 Verletzte durch Addition der Gesamtzahl und der Schwerverletzten angeben.",
+      "Die 10 stationär Aufgenommenen zusätzlich zu den Schwerverletzten zählen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-05T10:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm"
+    ],
+    "radar": {
+      "d2": {
+        "min": 1,
+        "max": 1,
+        "grund": "95 Verletzte liegen in Stufe 1 (10–99); die Schwerverletzten sind darin enthalten."
+      }
+    }
+  }
+}

@@ -6,6 +6,8 @@
   "type": "object",
   "required": ["format", "fall", "kennung", "bewertet_am", "blind", "kriterien", "unbelegte_aussagen", "gesamt"],
   "additionalProperties": false,
+  "if": { "properties": { "blind": { "const": false } } },
+  "then": { "properties": { "verblindung": { "not": { "const": "blind" } } } },
   "$defs": {
     "note": { "type": "integer", "minimum": 1, "maximum": 5 },
     "kriterium": {
@@ -32,6 +34,10 @@
     "bewertet_am": { "type": "string", "format": "date" },
     "bewertet_von": { "type": "string", "description": "Rolle oder Kürzel, kein vollständiger Name nötig" },
     "blind": { "type": "boolean" },
+    "verblindung": {
+      "enum": ["blind", "teilweise", "offen"],
+      "description": "Grad der Verblindung (LS-2026-W43-18): „teilweise“, wenn die bewertende Person Modellidentitäten oder Ergebnisse aus anderer Quelle kennt, etwa aus einem Ergebnisbericht. Ohne Angabe gilt das Feld blind."
+    },
     "kriterien": {
       "type": "object",
       "required": ["belege", "zeit", "referenzraum", "unsicherheit", "radar", "empfehlungen"],
@@ -53,6 +59,27 @@
         "additionalProperties": false,
         "properties": { "aussage": { "type": "string", "minLength": 1 }, "feld": { "type": "string" }, "schwere": { "enum": ["gering", "erheblich"] } }
       }
+    },
+    "korrekturen": {
+      "type": "array",
+      "description": "Notwendige Korrekturen bis zu einem verwendbaren Entwurf, je Korrektur eine Art (LS-2026-W43-18); unbelegte Aussagen stehen weiter unter unbelegte_aussagen",
+      "items": {
+        "type": "object",
+        "required": ["art", "beschreibung"],
+        "additionalProperties": false,
+        "properties": {
+          "art": { "enum": ["tatsachen", "zahlen", "quellen", "zeit", "referenzraum", "zuschnitt", "radar", "tendenz", "empfehlungen", "sonstiges"] },
+          "beschreibung": { "type": "string", "minLength": 1 },
+          "feld": { "type": "string" },
+          "schwere": { "enum": ["gering", "erheblich"] }
+        }
+      }
+    },
+    "bearbeitungsdauer_min": { "type": "number", "minimum": 0, "description": "Tatsächliche Dauer der fachlichen Nacharbeit bis zu einem verwendbaren Entwurf in Minuten (LS-2026-W43-18)" },
+    "verbleibende_unsicherheiten": {
+      "type": "array",
+      "description": "Was nach der Nacharbeit offen oder ungeprüft bleibt (LS-2026-W43-18)",
+      "items": { "type": "string", "minLength": 1 }
     },
     "gesamt": {
       "type": "object",

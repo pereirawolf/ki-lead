@@ -2,7 +2,7 @@
   "format": "ki-lead-evaluationsfall/1",
   "id": "orkantief-ilka-verdichtung",
   "titel": "Verdichtung der sechs Ländermeldungen zum Orkantief „Ilka“ (FIKTIV)",
-  "stand": "2026-10-21",
+  "stand": "2026-10-25",
   "fiktiv": true,
   "auftrag": {
     "sachverhalt": "Verdichtung der Ländermeldungen zu den Sturmfolgen des Orkantiefs „Ilka“ für die Redaktionskonferenz der Koordinierungsstelle",
@@ -23,7 +23,7 @@
   "erwartungen": {
     "muss": [
       "Alle sechs Ländermeldungen (HE, NI, NW, RP, ST, TH) sind als Eingänge mit eigenem A-Eintrag in den Quellen berücksichtigt",
-      "Die Zahl der weiterhin Stromlosen wird aus den Ländermeldungen zusammengeführt und mit Stand angegeben",
+      "Die Zahl der weiterhin Stromlosen wird je Land mit Einheit und Datenstand angegeben; zusammengeführt wird sie nur, wenn die Zählregeln der Arbeitsanweisung Verdichtung (Regeln 3 und 4) erfüllt sind, sonst wird die Nichtaggregation begründet",
       "Das Ende von Notstrompuffern vor der Wiederversorgung wird als zeitkritischer Punkt benannt",
       "Abweichende Bewertungen oder Tendenzen der Länder werden benannt statt geglättet"
     ],

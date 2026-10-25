@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-sop-abdeckung/1",
-  "stand": "2026-10-24",
+  "stand": "2026-10-25",
   "hinweis": "Soll-Abdeckung vorbereiteter Fälle, keine Ergebnis- oder Freigabeaussage.",
   "faelle": {
     "sop-gas-stabil": [
@@ -227,6 +227,25 @@
       "C04",
       "C13",
       "C10"
+    ],
+    "zaehlregel-hochrechnung": [
+      "B08",
+      "C11"
+    ],
+    "zaehlregel-mittelbar": [
+      "B10",
+      "C13"
+    ],
+    "zaehlregel-teilmenge": [
+      "B01",
+      "C09"
+    ],
+    "zaehlregel-laenderzuordnung": [
+      "B01"
+    ],
+    "zaehlregel-fortgeltung": [
+      "B06",
+      "B08"
     ]
   }
 }

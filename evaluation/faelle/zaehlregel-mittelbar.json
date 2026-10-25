@@ -1,0 +1,49 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "zaehlregel-mittelbar",
+  "titel": "Direkt Betroffene ohne Trinkwasser und gestrandete Reisende (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Ausfall der Trinkwasserversorgung und Bahnsperrung nach Rohrbruch an einer Brücke",
+    "stichworte": "B10, C13",
+    "stichtag": "2026-11-04",
+    "meldezeitpunkt": "2026-11-04T15:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/zaehlregel-mittelbar.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Prüfziel direkte gegenüber mittelbarer Betroffenheit (LS-2026-W43-17)."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die 800 Einwohner ohne Leitungswasser als direkt Betroffene führen.",
+      "Die 1.500 gestrandeten Reisenden als mittelbar Betroffene darstellen und nicht in die direkte Betroffenheit einrechnen.",
+      "Betreuung der Reisenden als eigene Folge mit Handlungsbedarf benennen, ohne sie zur Versorgungslage zu zählen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "2.300 direkt Betroffene durch Addition von Einwohnern und Reisenden angeben.",
+      "D2 aus der Zahl der Reisenden kodieren.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-04T15:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Trinkwasserversorgung",
+      "KRITIS-Ausfall"
+    ],
+    "radar": {
+      "d2": {
+        "min": 2,
+        "max": 2,
+        "grund": "Direkt betroffen sind rund 800 Einwohner ohne Leitungswasser (Stufe 2); Reisende sind mittelbar betroffen."
+      }
+    }
+  }
+}

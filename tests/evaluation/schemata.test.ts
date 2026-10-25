@@ -1,5 +1,6 @@
 // Modellbewertung (evaluation/): Fälle und Ergebnisse entsprechen ihren Schemata, Material im Repository ist vorhanden
 // und frei, keine Schlüssel. Ruft keine KI auf.
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { referenzAjv } from "../support/ajv";
@@ -157,6 +158,66 @@ describe("Modellbewertung: Schemata", () => {
         expect(name).toBe(`${p.id}.json`);
       }
       for (const id of verweise) expect(ids.has(id), `${name}: Fall ${id} fehlt`).toBe(true);
+    }
+  });
+
+  // Befunde LS-2026-W43-14, -15 und -18 (Lernschleife, 25.10.2026): Ilka-Maßstab, fester S1-Gegenstand, Nacharbeit
+  it("LS-2026-W43-14: beide Ilka-Fälle binden die Zusammenführung der Stromlosen an die Zählregeln", () => {
+    for (const id of ["orkantief-ilka-verdichtung", "sop-verdichtung-ilka-vergleich"]) {
+      const muss: string[] = lies(`evaluation/faelle/${id}.json`).erwartungen.muss;
+      const punkt = muss.filter((m) => m.includes("Stromlosen"));
+      expect(punkt, id).toHaveLength(1);
+      expect(punkt[0], id).toContain("Regeln 3 und 4");
+      expect(punkt[0], id).toContain("sonst wird die Nichtaggregation begründet");
+    }
+  });
+
+  it("LS-2026-W43-15: fester S1-Gegenstand im Plan nur mit Datei unter evaluation/material/ und Prüfsumme", () => {
+    const { plan } = pruefer();
+    const mit = (s1_fest: unknown) => ({ format: "ki-lead-bewertungsplan/1", id: "x", stand: "2026-10-25", fragestellung: "F", faelle: ["sop-gas-stabil"], s1_fest });
+    expect(plan(mit({ datei: "evaluation/material/ilka-s1-zuschnitt-a.json", sha256: "0".repeat(64) })), JSON.stringify(plan.errors)).toBe(true);
+    for (const [name, s] of [
+      ["Prüfsumme fehlt", { datei: "evaluation/material/a.json" }],
+      ["Prüfsumme zu kurz", { datei: "evaluation/material/a.json", sha256: "abc" }],
+      ["Datei außerhalb", { datei: "privat/a.json", sha256: "0".repeat(64) }],
+      ["kein JSON", { datei: "evaluation/material/a.md", sha256: "0".repeat(64) }],
+    ] as const)
+      expect(plan(mit(s)), name).toBe(false);
+  });
+
+  it("LS-2026-W43-15: Pläne mit festem S1-Gegenstand verweisen auf eine vorhandene Datei mit passender Prüfsumme", () => {
+    const mitFest = jsonIn("evaluation/plaene")
+      .map((n) => lies(`evaluation/plaene/${n}`))
+      .filter((p) => p.s1_fest);
+    expect(mitFest.map((p) => p.id)).toContain("s2-isoliert-ilka");
+    for (const p of mitFest) {
+      expect(existsSync(repoPfad(p.s1_fest.datei)), p.s1_fest.datei).toBe(true);
+      expect(createHash("sha256").update(readFileSync(repoPfad(p.s1_fest.datei))).digest("hex"), `${p.id}: Prüfsumme`).toBe(p.s1_fest.sha256);
+    }
+  });
+
+  it("LS-2026-W43-18: Korrekturen nach Art, Bearbeitungsdauer und Grad der Verblindung sind optional", () => {
+    const { bewertung: pruefen } = pruefer();
+    const voll = {
+      ...bewertung(),
+      verblindung: "teilweise",
+      korrekturen: [{ art: "zahlen", beschreibung: "75 statt 79 Leichtverletzte", feld: "sachverhalte[0].analyse", schwere: "erheblich" }],
+      bearbeitungsdauer_min: 25,
+      verbleibende_unsicherheiten: ["Fortgeltung der Personenzahlen zu t0"],
+    };
+    expect(pruefen(voll), JSON.stringify(pruefen.errors)).toBe(true);
+    expect(pruefen(bewertung()), "ohne die neuen Felder").toBe(true);
+    const falsch: [string, (b: any) => void][] = [
+      ["Art unbekannt", (b) => (b.korrekturen[0].art = "stil")],
+      ["Beschreibung leer", (b) => (b.korrekturen[0].beschreibung = "")],
+      ["Dauer negativ", (b) => (b.bearbeitungsdauer_min = -1)],
+      ["Verblindung unbekannt", (b) => (b.verblindung = "halb")],
+      ["nicht blind, aber als blind ausgewiesen", (b) => ((b.blind = false), (b.verblindung = "blind"))],
+    ];
+    for (const [name, aendern] of falsch) {
+      const b = structuredClone(voll);
+      aendern(b);
+      expect(pruefen(b), name).toBe(false);
     }
   });
 

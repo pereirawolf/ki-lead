@@ -10,6 +10,11 @@
 // Mit KI_LEAD_ANBIETER=mistral (seit 0.5.6) das Standard-Profil Mistral: S1 mistral-small-2603, S2 mistral-medium-3-5,
 // Reparatur mistral-small-2603; Endpunkt wie in der App EU, mit KI_LEAD_MISTRAL_ENDPUNKT=global der globale.
 //
+// Isolierter Vergleich der Verdichtung (LS-2026-W43-15, Plan evaluation/plaene/s2-isoliert-ilka.json): Mit
+// KI_LEAD_S1_FEST=<Pfad im Repository> entfällt S1; in jedem Lauf gilt dieser bestätigte Gegenstand, Datei und
+// Prüfsumme stehen in der Reihendatei. KI_LEAD_AUFWAND_S1 und KI_LEAD_AUFWAND_S2 setzen den Aufwand, KI_LEAD_VARIANTE
+// die Kennung der Plan-Variante (z. B. s2-isoliert-ilka/D-openai-astra-hoch).
+//
 // Ohne Schlüssel und mit KI_LEAD_ATTRAPPE=1 läuft das Skript mit einem simulierten Anbieter (Trockenlauf, keine Kosten).
 // Abweichung von der App: Die S1-Bestätigung wird automatisch erteilt (technische Abnahme, siehe Plan), wie im
 // Vergleichslauf der App (Einstellungen → Modelle & Verarbeitung, seit 0.5.8), dessen Funktionen das Skript nutzt.
@@ -23,7 +28,8 @@ import { Verteiler } from "../../src/anbieter/verteiler";
 import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, modellFuer, type Einstellungen } from "../../src/pipeline/einstellungen";
 import { ohneBase64, type Lauf } from "../../src/pipeline/lauf";
-import { csv, einLauf, FALL_MATERIAL, REFERENZ, reiheErstellen, type EinzelErgebnis, type FallDaten } from "../../src/pipeline/vergleichslauf";
+import { sha256 } from "../../src/profil/laden";
+import { csv, einLauf, FALL_MATERIAL, REFERENZ, reiheErstellen, s1FestPruefen, type EinzelErgebnis, type FallDaten, type S1Fest } from "../../src/pipeline/vergleichslauf";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
@@ -37,9 +43,37 @@ const SCHLUESSEL = {
 const ATTRAPPE = !SCHLUESSEL[ANBIETER] && process.env.KI_LEAD_ATTRAPPE === "1";
 const ECHT = !!SCHLUESSEL[ANBIETER];
 
-/** Einstellungen des Laufs: App-Vorgaben; bei OpenAI und Mistral die Gegenstücke der Modellvorgaben. */
+const AUFWAENDE = ["low", "medium", "high", "xhigh", "max"];
+const VARIANTE = process.env.KI_LEAD_VARIANTE || undefined;
+
+/** Einstellungen des Laufs mit Aufwand aus KI_LEAD_AUFWAND_S1/_S2, soweit gesetzt (LS-2026-W43-15) */
 function einstellungen(): Einstellungen {
-  if (ANBIETER === "anthropic") return STANDARD;
+  const e = grundeinstellungen();
+  for (const [rolle, wert] of [
+    ["vorverarbeitung", process.env.KI_LEAD_AUFWAND_S1],
+    ["verdichtung", process.env.KI_LEAD_AUFWAND_S2],
+  ] as const) {
+    if (!wert) continue;
+    if (!AUFWAENDE.includes(wert)) throw new Error(`Aufwand „${wert}“ unbekannt (${AUFWAENDE.join(", ")})`);
+    (e.aufwand as Record<string, string>)[rolle] = wert;
+  }
+  return e;
+}
+
+/** Fester S1-Gegenstand aus KI_LEAD_S1_FEST, geprüft gegen den Fall; ohne Angabe undefined */
+async function s1Fest(): Promise<S1Fest | undefined> {
+  const datei = process.env.KI_LEAD_S1_FEST;
+  if (!datei) return undefined;
+  const text = readFileSync(join(REPO, datei), "utf-8");
+  const vorschlag = JSON.parse(text);
+  const befunde = s1FestPruefen(vorschlag);
+  if (befunde.length) throw new Error(`${datei}: ${befunde.join("; ")}`);
+  return { datei, sha256: await sha256(text), vorschlag };
+}
+
+/** App-Vorgaben; bei OpenAI und Mistral die Gegenstücke der Modellvorgaben. */
+function grundeinstellungen(): Einstellungen {
+  if (ANBIETER === "anthropic") return structuredClone(STANDARD);
   const e = structuredClone(STANDARD);
   if (ANBIETER === "mistral") {
     e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "mistral-small-2603";
@@ -69,8 +103,8 @@ function leseOrdner(ordner: string): Record<string, string> {
   return out;
 }
 
-/** Trockenlauf: S1 ordnet alle Eingänge einem Sachverhalt zu, S2 liefert die Referenzfassung. */
-function attrappe(eingaenge: string[], referenz: unknown): LlmAnbieter & { anfragen: LlmAnfrage[] } {
+/** Trockenlauf: S1 ordnet alle Eingänge einem Sachverhalt zu, S2 liefert die Referenzfassung; mit festem S1 nur S2. */
+function attrappe(eingaenge: string[], referenz: unknown, ohneS1 = false): LlmAnbieter & { anfragen: LlmAnfrage[] } {
   const anfragen: LlmAnfrage[] = [];
   const antwort = (text: string, modell: string): LlmAntwort => ({
     modell,
@@ -92,7 +126,7 @@ function attrappe(eingaenge: string[], referenz: unknown): LlmAnbieter & { anfra
     anfragen,
     async senden(a) {
       anfragen.push(a);
-      if (anfragen.length === 1)
+      if (!ohneS1 && anfragen.length === 1)
         return antwort(
           JSON.stringify({
             gegenstand: "Sturmfolgen Orkantief Ilka",
@@ -122,6 +156,8 @@ function attrappe(eingaenge: string[], referenz: unknown): LlmAnbieter & { anfra
 describe("Abnahme M4: Verdichtung Ilka", () => {
   it.skipIf(!ECHT && !ATTRAPPE)(`${LAEUFE} Lauf/Läufe ${ATTRAPPE ? "(Attrappe)" : `(echt, ${ANBIETER})`}`, async () => {
     const EINSTELLUNGEN = einstellungen();
+    const S1_FEST = await s1Fest();
+    if (S1_FEST) console.log(`S1 fest: ${S1_FEST.datei} (${S1_FEST.sha256.slice(0, 12)}…)`);
     mkdirSync(AUSGABE, { recursive: true });
     const dateien = leseOrdner(join(REPO, "profile/lead-beispiel"));
     const geladen = await ladeProfil(dateien);
@@ -138,7 +174,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         console.log(`Budgetgrenze ${BUDGET_USD} USD erreicht (${summe.toFixed(2)} USD), Reihe beendet.`);
         break;
       }
-      const anbieter = ATTRAPPE ? attrappe(eingaenge, JSON.parse(refText)) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
+      const anbieter = ATTRAPPE ? attrappe(eingaenge, JSON.parse(refText), !!S1_FEST) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
       let zeichen = 0;
       let datei = "";
       const speichern = (l: Lauf) => {
@@ -152,6 +188,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         anbieter,
         einstellungen: EINSTELLUNGEN,
         attrappe: ATTRAPPE,
+        s1Fest: S1_FEST,
         aktualisiert: speichern,
         fortschritt: (f) => {
           if (f.art === "schreibt" && f.zeichen - zeichen >= 5000) console.log(`  … ${(zeichen = f.zeichen)} Zeichen`);
@@ -173,7 +210,16 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       );
     }
     // Gesamtergebnis der Reihe (Format ki-lead-abnahme/1): ohne Schlüssel, zur Übergabe an die Auswertung
-    const reihe = reiheErstellen({ daten, einstellungen: EINSTELLUNGEN, ergebnisse, geplant: LAEUFE, quelle: "skript", attrappe: ATTRAPPE });
+    const reihe = reiheErstellen({
+      daten,
+      einstellungen: EINSTELLUNGEN,
+      ergebnisse,
+      geplant: LAEUFE,
+      quelle: "skript",
+      attrappe: ATTRAPPE,
+      variante: VARIANTE,
+      s1Fest: S1_FEST,
+    });
     writeFileSync(join(AUSGABE, `reihe-${ANBIETER}-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`), JSON.stringify(reihe, null, 2));
     expect(ergebnisse.length).toBeGreaterThan(0);
   });

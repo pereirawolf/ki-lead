@@ -1,0 +1,66 @@
+{
+  "format": "ki-lead-bewertungsplan/1",
+  "id": "s2-isoliert-ilka",
+  "stand": "2026-10-25",
+  "fragestellung": "Wie unterscheiden sich die Verdichtungsmodelle der Standard-Profile und ihrer zweitbesten Optionen, wenn alle Varianten denselben bestätigten S1-Gegenstand erhalten (LS-2026-W43-15)? Ergänzt den Gesamtkettenvergleich standardprofile-ilka, der S1 und S2 zusammen misst. Gleich in allen Varianten: Material, t0, Profilstand und der feste S1-Gegenstand (Zuschnitt wie Bezug A, zwei Sachverhalte; Entscheidung des Herausgebers vom 25.10.2026). Kennzahlen wie im Gesamtkettenvergleich ohne „Sachverhalte“, die hier fest ist; dazu die Prüfung von Hand nach evaluation/bewertungshilfen/orkantief-ilka.md. Kosten und Dauer werden berichtet, entscheiden aber nicht. Kein Gesamtwert.",
+  "faelle": [
+    "orkantief-ilka-verdichtung"
+  ],
+  "varianten": [
+    {
+      "kennung": "A-anthropic-opus",
+      "s2": {
+        "modell": "claude-opus-5-5",
+        "aufwand": "medium"
+      },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "B-anthropic-sonnet",
+      "s2": {
+        "modell": "claude-sonnet-5-5",
+        "aufwand": "medium"
+      },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "C-openai-astra-mittel",
+      "s2": {
+        "modell": "gpt-6-astra",
+        "aufwand": "medium"
+      },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "D-openai-astra-hoch",
+      "s2": {
+        "modell": "gpt-6-astra",
+        "aufwand": "high"
+      },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "E-mistral-medium",
+      "s2": {
+        "modell": "mistral-medium-3-5",
+        "aufwand": "high"
+      },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "F-mistral-large",
+      "s2": {
+        "modell": "mistral-large-4",
+        "aufwand": "high"
+      },
+      "material": "eingaenge"
+    }
+  ],
+  "wiederholungen": 3,
+  "budget_usd": 25,
+  "s1_fest": {
+    "datei": "evaluation/material/ilka-s1-zuschnitt-a.json",
+    "sha256": "f7b14d5bf1b16959ede77698f21452560c5fb4ced4ab76e1c5aa450ee22cb319"
+  },
+  "hinweis": "Durchführung erst nach ausdrücklichem Auftrag mit Budget; der S1-Gegenstand ist vorher vom Herausgeber fachlich zu bestätigen (jede Änderung: neue Datei, neue Prüfsumme, neue Planfassung). Ausführung über das Abnahmeskript, nicht über die App: KI_LEAD_S1_FEST=evaluation/material/ilka-s1-zuschnitt-a.json KI_LEAD_VARIANTE=s2-isoliert-ilka/<Kennung> KI_LEAD_LAEUFE=3 mit dem Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_S2 und KI_LEAD_AUFWAND_S2 nach der Variante, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts; Mistral über den EU-Endpunkt. Auswertung: npm run vergleichslauf:auswerten -- privat/abnahme-m4 --bezug A-anthropic-opus. Schätzung nach den S2-Werten des Gesamtkettenvergleichs (Listenpreise, ohne Gewähr): A etwa 5,5 USD, B 2,7, C 3,7, D 4,9, E 1,0, F 0,5; zusammen etwa 18 USD."
+}
