@@ -19,6 +19,7 @@ describe("Vorprüfung der Management Summary (Musterfassung Ilka)", () => {
       hochrechnung_ungekennzeichnet: false,
       nachbetankung_als_erledigt: false,
       marker_im_text: false,
+      klaerungsbedarf: false,
     });
   });
 
@@ -28,6 +29,8 @@ describe("Vorprüfung der Management Summary (Musterfassung Ilka)", () => {
     ["Nachbetankung erledigt", { abschnitte: { massnahmen: "Die Nachbetankung ist gesichert." } }, "nachbetankung_als_erledigt"],
     ["Radarwert im Text", { abschnitte: { lage: "D2 = 4 nach Kreisangaben." } }, "marker_im_text"],
     ["Kurztitel fehlt", { kurztitel: ["Stromausfälle"] }, "kurztitel_passend"],
+    // AV-2026-W43-41: Kennsatz der Nachreihe vom 25.10.2026 (Sonnet „mittel“, Arbeitsanweisung 2.2.0)
+    ["Klärungsbedarf ohne Widerspruch", { kernaussage: "Klärungsbedarf: Die Sturmphase ist vorbei, doch mindestens rund 20.700 Menschen sind ohne Strom." }, "klaerungsbedarf"],
   ] as const)("%s", (_name, aenderung, merkmal) => {
     const b = kurzfassungPruefen({ ...gut, ...aenderung } as any);
     expect(b[merkmal]).toBe(merkmal !== "kurztitel_passend");
@@ -35,6 +38,15 @@ describe("Vorprüfung der Management Summary (Musterfassung Ilka)", () => {
 
   it("Hochrechnung als solche gekennzeichnet ist keine Auffälligkeit", () => {
     expect(kurzfassungPruefen({ ...gut, kernaussage: "Mit der Hochrechnung für Goslar rund 29.000 Menschen ohne Strom." }).hochrechnung_ungekennzeichnet).toBe(false);
+  });
+
+  it("AV-2026-W43-41: „Klärungsbedarf“ nur am Anfang der Kernaussage; als Auffälligkeit benannt", async () => {
+    expect(kurzfassungPruefen({ ...gut, kernaussage: "Klärungsbedarf entfällt nicht: mindestens rund 20.700 ohne Strom." }).klaerungsbedarf).toBe(true);
+    expect(kurzfassungPruefen({ ...gut, abschnitte: { massnahmen: "Klärungsbedarf besteht zur Nachbetankung." } }).klaerungsbedarf).toBe(false);
+    const { auffaelligkeiten } = await import("../../src/pipeline/kurzfassungsreihe");
+    expect(auffaelligkeiten(kurzfassungPruefen({ ...gut, kernaussage: "Klärungsbedarf: mindestens rund 20.700 ohne Strom." }))).toEqual([
+      "Kernaussage mit „Klärungsbedarf“ ohne Widerspruch in der Musterfassung",
+    ]);
   });
 
   it("über 180 Wörtern zu lang", () => {

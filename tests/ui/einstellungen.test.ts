@@ -189,7 +189,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
       vorverarbeitung: "mistral-small-2603",
       erfassung: "mistral-medium-3-5",
       verdichtung: "mistral-medium-3-5",
-      reparatur: "mistral-medium-3-5",
+      reparatur: "mistral-small-2603",
       kurzfassung: "mistral-medium-3-5",
     });
     expect((document.querySelector('select[aria-label="Aufwand S1 Gegenstand und SOP-Auswahl"]') as HTMLSelectElement).value).toBe("high");

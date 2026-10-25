@@ -66,7 +66,7 @@ export const STANDARD: Einstellungen = {
   suchland: "DE",
   maxTokensErfassung: 128000,
   mistralEndpunkt: "eu",
-  fassung: 4,
+  fassung: 5,
 };
 
 /**
@@ -97,9 +97,10 @@ export const STANDARD: Einstellungen = {
  * und 2026-10-25-management-summary-ilka-ergebnis.md):
  * - Reparatur Anthropic mit claude-haiku-5-5 „low“ statt Sonnet (AV-2026-W43-32): 10/10 fehlerfrei wie Sonnet, 0,010 statt
  *   rund 0,20 USD je Fall. OpenAI bleibt bei gpt-6.1-sol „low“ (10/10); gpt-6-luna setzte D2 am Skalenrand.
- * - Reparatur Mistral mit mistral-medium-3-5 „low“ statt Small (AV-2026-W43-33): Small leerte eine Beurteilung und strich
- *   Textzeilen; Medium löscht nichts, setzte aber D2 am Skalenrand. Nach der geschärften Anweisung (AV-2026-W43-34) werden
- *   beide erneut geprüft; repariert Small dann fehlerfrei, kehrt das Profil zu Small zurück.
+ * - Reparatur Mistral in 0.5.15 mit mistral-medium-3-5 „low“ statt Small (AV-2026-W43-33): Small leerte eine Beurteilung
+ *   und strich Textzeilen; Medium löscht nichts, setzte aber D2 am Skalenrand. Seit 0.5.16 wieder mit mistral-small-2603
+ *   „low“ (AV-2026-W43-39): Mit der geschärften Anweisung (AV-2026-W43-34) reparierten Small und Medium im Nachtest je 10/10
+ *   fehlerfrei; Small kostet 0,008 statt 0,10 USD je Fall.
  * - Erfassung OpenAI mit gpt-6-astra „high“ wie die Verdichtung (AV-2026-W43-37). Die Erfassung ist in keinem Profil gemessen;
  *   sie folgt dem Modell und der Stufe der Verdichtung.
  * - Management Summary bestätigt: Sonnet „medium“, gpt-6.1-sol „medium“, Mistral Medium 3.5 „high“ (Large 4 nicht besser).
@@ -135,7 +136,7 @@ export const STANDARD_PROFILE: Record<AnbieterId, ModellProfil> = {
       vorverarbeitung: "mistral-small-2603",
       erfassung: "mistral-medium-3-5",
       verdichtung: "mistral-medium-3-5",
-      reparatur: "mistral-medium-3-5",
+      reparatur: "mistral-small-2603",
       kurzfassung: "mistral-medium-3-5",
     },
     aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
@@ -224,7 +225,7 @@ export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
 
 /**
  * Standard-Profile bis Fassung 3 der Einstellungen (bis 0.5.14): Anthropic reparierte mit Sonnet, OpenAI erfasste mit
- * „medium“, Mistral reparierte mit Small. Gespeicherte Einstellungen, die genau einem davon entsprechen, stellt
+ * „medium“, Mistral reparierte mit Small (seit 0.5.16 wieder so, AV-2026-W43-39). Gespeicherte Einstellungen, die genau einem davon entsprechen, stellt
  * einstellungenLesen auf das heutige Standard-Profil um (AV-2026-W43-32, -33, -37).
  */
 export const STANDARD_PROFILE_FASSUNG_3: Record<AnbieterId, ModellProfil> = {
@@ -240,6 +241,15 @@ export const STANDARD_PROFILE_FASSUNG_3: Record<AnbieterId, ModellProfil> = {
     modelle: { ...STANDARD_PROFILE.mistral.modelle, reparatur: "mistral-small-2603" },
     aufwand: { ...STANDARD_PROFILE.mistral.aufwand },
   },
+};
+
+/**
+ * Standard-Profil Mistral der Fassung 4 der Einstellungen (0.5.15): Reparatur mit Medium 3.5. Gespeicherte Einstellungen,
+ * die genau ihm entsprechen, stellt einstellungenLesen auf das heutige Standard-Profil um (AV-2026-W43-39).
+ */
+export const STANDARD_PROFIL_MISTRAL_FASSUNG_4: ModellProfil = {
+  modelle: { ...STANDARD_PROFILE.mistral.modelle, reparatur: "mistral-medium-3-5" },
+  aufwand: { ...STANDARD_PROFILE.mistral.aufwand },
 };
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
@@ -288,12 +298,19 @@ export async function einstellungenLesen(): Promise<Einstellungen> {
     g.fassung = 3;
   }
   // Fassung 3 → 4 (0.5.15): Wer genau einem bisherigen Standard-Profil folgt, folgt danach dem heutigen (Reparatur
-  // Anthropic mit Haiku, Mistral mit Medium 3.5, Erfassung OpenAI „high“). Eine abweichende Wahl bleibt stehen.
+  // Anthropic mit Haiku, Erfassung OpenAI „high“; Mistral seit 0.5.16 wieder wie in Fassung 3). Eine abweichende Wahl bleibt.
   if (g && g.fassung === 3) {
     const voll = { ...STANDARD, ...g, modelle: { ...STANDARD.modelle, ...(g.modelle || {}) }, aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) } };
     const alt = ANBIETER_IDS.find((a) => modellProfilAktiv(voll, STANDARD_PROFILE_FASSUNG_3[a]));
     if (alt) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE[alt]));
     g.fassung = 4;
+  }
+  // Fassung 4 → 5 (0.5.16): Wer dem Mistral-Standard aus 0.5.15 folgt (Reparatur Medium 3.5), folgt danach dem heutigen
+  // (Reparatur Small). Eine abweichende Wahl bleibt.
+  if (g && g.fassung === 4) {
+    const voll = { ...STANDARD, ...g, modelle: { ...STANDARD.modelle, ...(g.modelle || {}) }, aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) } };
+    if (modellProfilAktiv(voll, STANDARD_PROFIL_MISTRAL_FASSUNG_4)) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE.mistral));
+    g.fassung = 5;
   }
   return {
     ...STANDARD,

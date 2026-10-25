@@ -30,9 +30,9 @@ export const MS_EINGABE_TOKEN = 12_000;
 // ── Vorprüfung (bis 0.5.11 in evaluation/abnahmen/kurzfassung.pruefung.ts) ─────────────────────────────────────────
 
 export interface KurzfassungBeobachtung {
-  /** Wörter in Kernaussage und Abschnitten (Richtwert der App bis 180) */
+  /** Wörter in Kernaussage und Abschnitten (seit 0.5.15 höchstens 180) */
   woerter: number;
-  /** über der Toleranz der App */
+  /** über der Obergrenze der App */
   zu_lang: boolean;
   /** ein Kurztitel je Sachverhalt der Musterfassung */
   kurztitel_passend: boolean;
@@ -44,6 +44,11 @@ export interface KurzfassungBeobachtung {
   nachbetankung_als_erledigt: boolean;
   /** Quellenmarker, URL oder Radarwert im Text */
   marker_im_text: boolean;
+  /**
+   * Kernaussage beginnt mit „Klärungsbedarf“ (seit 0.5.16, AV-2026-W43-41). Die Musterfassung enthält keinen wesentlichen
+   * Widerspruch, der den Kennsatz trüge. Fehlt in Reihendateien vor 0.5.16.
+   */
+  klaerungsbedarf?: boolean;
 }
 
 /** Zahl der Sachverhalte der Musterfassung */
@@ -64,18 +69,20 @@ export function kurzfassungPruefen(k: KurzfassungStruktur): KurzfassungBeobachtu
     hochrechnung_ungekennzeichnet: gesamt.some((s) => !/hochgerechnet|Hochrechnung|geschätzt|Schätzung|einschließlich/i.test(s)),
     nachbetankung_als_erledigt: /Nachbetankung\s+(?:ist|wurde|wird)\s+(?:bereits\s+)?(?:gesichert|sichergestellt|erfolgt|abgeschlossen)/i.test(text),
     marker_im_text: /\[Q\d|https?:\/\/|\bD[1-8]\s*=/.test(text),
+    klaerungsbedarf: /^\s*Klärungsbedarf/i.test(k.kernaussage),
   };
 }
 
 /** Auffälligkeiten einer Vorprüfung in Worten (leer = keine); keine Bewertung, nur Anlass zur Prüfung von Hand */
 export function auffaelligkeiten(b: KurzfassungBeobachtung): string[] {
   return [
-    b.zu_lang ? `${b.woerter} Wörter (Richtwert bis ${GRENZEN.woerterGesamt})` : "",
+    b.zu_lang ? `${b.woerter} Wörter (höchstens ${GRENZEN.woerterGesamt})` : "",
     b.kurztitel_passend ? "" : `Kurztitel nicht je Sachverhalt (${SACHVERHALTE_MUSTER} erwartet)`,
     b.mindestwert_fehlt ? "20.700 ohne Kennzeichnung als Mindestwert" : "",
     b.hochrechnung_ungekennzeichnet ? "Gesamtzahl mit Hochrechnung ungekennzeichnet" : "",
     b.nachbetankung_als_erledigt ? "Nachbetankung als erledigt dargestellt" : "",
     b.marker_im_text ? "Quellenmarker, URL oder Radarwert im Text" : "",
+    b.klaerungsbedarf ? "Kernaussage mit „Klärungsbedarf“ ohne Widerspruch in der Musterfassung" : "",
   ].filter(Boolean);
 }
 
@@ -297,6 +304,7 @@ export function kurzfassungsUebersicht(reihe: KurzfassungsReihe): unknown[][] {
     "hochrechnung_ungekennzeichnet",
     "nachbetankung_als_erledigt",
     "marker_im_text",
+    "klaerungsbedarf",
     "hinweise_app",
     "kurztitel",
     "kernaussage",
@@ -322,6 +330,7 @@ export function kurzfassungsUebersicht(reihe: KurzfassungsReihe): unknown[][] {
       ja(l.vorpruefung?.hochrechnung_ungekennzeichnet),
       ja(l.vorpruefung?.nachbetankung_als_erledigt),
       ja(l.vorpruefung?.marker_im_text),
+      ja(l.vorpruefung?.klaerungsbedarf),
       l.hinweise_app.length,
       l.struktur?.kurztitel.join(" | ") ?? null,
       l.struktur?.kernaussage ?? null,

@@ -268,7 +268,7 @@ describe("Vergleichslauf Ilka", () => {
     ]);
     const f = PLAN_STANDARDPROFILE.varianten[5];
     const e = einstellungenFuerVariante({ ...STANDARD, mistralEndpunkt: "global" }, f);
-    expect(e.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-large-4", reparatur: "mistral-medium-3-5" }); // AV-2026-W43-33
+    expect(e.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-large-4", reparatur: "mistral-small-2603" }); // AV-2026-W43-39
     expect(e.aufwand).toMatchObject({ vorverarbeitung: "high", verdichtung: "high", reparatur: "low" });
     expect(e.mistralEndpunkt).toBe("global");
     // Anthropic-Bezug: Reparatur seit 0.5.15 Haiku (AV-2026-W43-32)

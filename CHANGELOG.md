@@ -63,6 +63,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.13 | letzter Commit des Pull Requests „Prüffall Reparatur, Ergebnis Anbieter-Mix; 0.5.13“ |
 | 0.5.14 | letzter Commit des Pull Requests „Plausibilität ohne Fehlalarme, Messwerte des Anbieter-Mix; 0.5.14“ |
 | 0.5.15 | letzter Commit des Pull Requests „Mix-Profile, Reparatur mit Haiku, Ergebnisse MS und Prüffall Reparatur; 0.5.15“ |
+| 0.5.16 | letzter Commit des Pull Requests „Nachreihen: Mistral-Reparatur mit Small, Klärungsbedarf in der MS; 0.5.16“ |
+
+## [0.5.16] – 25.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_nachreihen_2026-W43.json` (Nachreihen vom 25.10.2026 mit App 0.5.15, Commit c045584), Befunde AV-2026-W43-39 bis -42, vom Herausgeber am 25.10.2026 freigegeben. Ergebnisse als Nachträge in `evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md` und `2026-10-25-management-summary-ilka-ergebnis.md`.
+
+### Geändert
+
+- **Reparatur Mistral wieder mit Small** (AV-2026-W43-39): Mit der Anweisung seit 0.5.15 reparierten mistral-small-2603 und mistral-medium-3-5 im Nachtest je 10/10 fehlerfrei; das Standard-Profil Mistral repariert wieder mit `mistral-small-2603` „niedrig“ (0,008 statt 0,10 USD je Fall).
+- **Gespeicherte Einstellungen, Fassung 5:** Wer dem Mistral-Standard aus 0.5.15 folgt, folgt danach dem heutigen; eine abweichende Wahl bleibt (Entscheidung zu AV-2026-W43-39).
+- **Beispielprofil 1.28.0** (AV-2026-W43-40): Arbeitsanweisung Kurzfassung 2.3.0, „Klärungsbedarf:“ nur bei einem wesentlichen Widerspruch der Meldung, nie für offene Prüfaufgaben oder Fristen; gleichlautend in der Standardfassung der App. SOP-Sammelmappe 3.17.2 (nur Gültigkeitsstand).
+- **Vorprüfung der Management Summary** (AV-2026-W43-41, `src/pipeline/kurzfassungsreihe.ts`): neues Merkmal `klaerungsbedarf` (Kernaussage beginnt mit „Klärungsbedarf“) in Reihendatei, CSV und Auffälligkeiten; die Auffälligkeit zur Länge nennt „höchstens 180“ statt „Richtwert bis 180“.
+- **Ergebnisse** (AV-2026-W43-42): Nachträge in beiden Ergebnisberichten; Spezifikation 0.5.16, Abschnitt 5.4 und offener Punkt 6.
+
+### Tests
+
+- `tests/pipeline/einstellungen.test.ts`: Umstellung Fassung 4 → 5 mit dem Mistral-Standard aus 0.5.15, Erhalt abweichender Wahl (AV-2026-W43-39).
+- `tests/evaluation/kurzfassung-pruefung.test.ts`: Kennsatz „Klärungsbedarf“ nur am Anfang der Kernaussage, als Auffälligkeit benannt (AV-2026-W43-41).
+- `tests/pipeline/kurzfassung.test.ts`: Arbeitsanweisung und Standardfassung beschränken „Klärungsbedarf“ auf Widersprüche (AV-2026-W43-40).
+- Erwartungen an das Reparaturmodell Mistral in den Tests von Einstellungen und Vergleichslauf zurück auf Small.
 
 ## [0.5.15] – 25.10.2026
 

@@ -165,6 +165,9 @@ describe("Management Summary", () => {
     expect(a).toContain(`rund ${GRENZEN.woerterZiel} Wörter`);
     expect(a).toContain(`höchstens ${GRENZEN.woerterGesamt}`); // AV-2026-W43-36: Obergrenze statt Toleranz
     expect(STANDARD_ANWEISUNG).toContain(`höchstens ${GRENZEN.woerterGesamt}`);
+    // AV-2026-W43-40: „Klärungsbedarf:“ nur bei Widersprüchen, in Arbeitsanweisung und Standardfassung
+    expect(a).toContain("„Klärungsbedarf:“ steht nur bei einem solchen Widerspruch, nie für offene Prüfaufgaben oder Fristen");
+    expect(STANDARD_ANWEISUNG).toContain("„Klärungsbedarf:“ nur bei einem wesentlichen Widerspruch der Meldung, nie für offene Prüfaufgaben oder Fristen");
     expect(a).toContain(`mehr als ${GRENZEN.woerterSatzHinweis} Wörtern`);
   });
 
