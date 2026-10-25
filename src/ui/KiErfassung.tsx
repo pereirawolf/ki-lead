@@ -5,6 +5,7 @@ import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schlues
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
+import type { KopfLauf } from "./KopfStatus";
 import type { Fortschritt } from "../anbieter/typen";
 import type { Meldung, Profil } from "../kern/typen";
 import { sopKennung } from "../profil/sop";
@@ -55,6 +56,8 @@ interface Props {
   uebergabeQuittieren?: (nr: number) => void;
   /** Meldet der App, ob gerade ein KI-Lauf aktiv ist (ein Profilwechsel bricht ihn ab). */
   laufMelden?: (laeuft: boolean) => void;
+  /** Meldet Stufe, Dauer, Zeichen und Kosten des Laufs an die Kopfleiste; null ohne Lauf */
+  laufStand?: (stand: KopfLauf | null) => void;
 }
 
 type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
@@ -74,6 +77,13 @@ function heute(zone: string | undefined): string {
 function dauer(ms: number): string {
   const s = Math.round(ms / 1000);
   return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, "0")} s`;
+}
+
+/** Kurze Kostenangabe für die Kopfleiste; „≥“, solange nicht alle Stufen erfasst sind */
+function kopfKostenText(lauf: Lauf): string | undefined {
+  if (typeof lauf.kostenUsd === "number" && lauf.kostenUsd > 0) return formatUsd(lauf.kostenUsd);
+  if (lauf.kostenBekanntUsd) return `≥ ${formatUsd(lauf.kostenBekanntUsd)}`;
+  return undefined;
 }
 
 function groesse(b: number): string {
@@ -193,7 +203,7 @@ function HilfeFeld({
 
 const speicherText = (was: string, e: unknown) => `${was} (${(e as Error)?.message || "Speicherfehler"}).`;
 
-export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden }: Props) {
+export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen, uebernehmen, uebergabe, uebergabeQuittieren, laufMelden, laufStand }: Props) {
   const [phase, setPhase] = useState<Phase>("auftrag");
   const [sachverhalt, setSachverhalt] = useState("");
   const [stichworte, setStichworte] = useState("");
@@ -477,6 +487,23 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
+
+  // Stand für die Kopfleiste; Zeichen in Hunderterschritten, damit nicht jeder Datenblock die ganze App neu zeichnet
+  const laufStandRef = useRef(laufStand);
+  laufStandRef.current = laufStand;
+  const kopfZeichen = Math.floor(zeichen / 100) * 100;
+  const kopfKosten = lauf ? kopfKostenText(lauf) : undefined;
+  const kopfEreignis = protokoll.length ? protokoll[protokoll.length - 1].text : undefined;
+  const kopfStufe = phase === "s1" ? "s1" : phase === "s2" ? (lauf?.status === "s3" ? "s3" : "s2") : null;
+  const laufStatus = lauf?.status;
+  useEffect(() => {
+    let stand: KopfLauf | null = null;
+    if (kopfStufe) stand = { zustand: "laeuft", stufe: kopfStufe, start, zeichen: kopfZeichen, kosten: kopfKosten, ereignis: kopfEreignis, verdichtung };
+    else if (phase === "bestaetigen") stand = { zustand: "bestaetigen", kosten: kopfKosten };
+    else if (laufStatus === "fertig" || laufStatus === "fehler" || laufStatus === "abgebrochen") stand = { zustand: laufStatus, kosten: kopfKosten };
+    laufStandRef.current?.(stand);
+  }, [kopfStufe, phase, laufStatus, start, kopfZeichen, kopfKosten, kopfEreignis, verdichtung]);
+  useEffect(() => () => laufStandRef.current?.(null), []);
 
   const zusammenfuehren = (i: number) => {
     if (!vorschlag || i < 1) return;

@@ -135,8 +135,10 @@ a {
 
 .kopf {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1.25rem;
+  row-gap: 0.35rem;
   padding: calc(0.6rem + env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.6rem max(1rem, env(safe-area-inset-left));
   background: var(--header-hintergrund);
   color: var(--header-text);
@@ -169,6 +171,7 @@ a {
 .hauptnav {
   display: flex;
   gap: 0.25rem;
+  flex: none;
 }
 
 .nav {
@@ -188,6 +191,218 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 0.35em;
+}
+
+/* Rechter Bereich der Kopfleiste: Laufstatus, Meldungsstatus, Profil (seit 0.5.20) */
+/* Nimmt nur den Platz neben der Navigation; zuerst kürzt sich der Profilname, Status und Lauf bleiben ganz */
+.kopf-rechts {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex: 1 1 0;
+  margin-left: auto;
+  /* Passt der Statusbereich nicht neben die Navigation, rückt er rechtsbündig in eine eigene Zeile */
+  min-width: min-content;
+}
+
+/* Für den Zeilenumbruch zählt der Profil-Chip nur mit seiner Mindestbreite: der Name darf intern umbrechen,
+   zeigt aber nur eine Zeile mit Auslassungszeichen */
+.kopf-rechts .profil-chip {
+  margin-left: 0;
+  flex: 0 1 auto;
+  min-width: 3.5rem;
+}
+
+.kopf-rechts .chip-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  white-space: normal;
+  /* bricht zeichenweise, damit die sichtbare Zeile die Breite ganz füllt */
+  word-break: break-all;
+  text-align: left;
+}
+
+.kopf-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+
+.kopf-marke,
+.kopf-lauf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Entwurf: gestrichelter Rand, damit der Stand nicht nur an der Farbe hängt */
+.kopf-marke.entwurf {
+  border: 2px dashed var(--erheblich);
+  background: var(--erheblich-zart);
+  color: var(--tinte);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kopf-marke.final {
+  border: 2px solid var(--ok);
+  background: var(--ok-zart);
+  color: var(--tinte);
+}
+
+.kopf-marke.final::before {
+  content: "✓";
+}
+
+.kopf-lauf {
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  border: 1px solid var(--amt);
+  background: var(--papier);
+  color: var(--tinte);
+}
+
+.kopf-lauf.laeuft {
+  background: var(--amt-zart);
+  padding-bottom: 0.35rem;
+}
+
+.kopf-lauf.fertig {
+  border-color: var(--ok);
+  background: var(--ok-zart);
+}
+
+.kopf-lauf.fehler,
+.kopf-lauf.abgebrochen {
+  border-color: var(--kritisch);
+  background: var(--kritisch-zart);
+}
+
+.kopf-lauf-punkt {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--amt);
+  animation: puls 1.4s ease-in-out infinite;
+}
+
+.kopf-stufen {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.kopf-stufe {
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: var(--tinte-leise);
+  border: 1px solid var(--linie);
+  background: var(--papier);
+}
+
+.kopf-stufe.erledigt {
+  color: var(--tinte);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.kopf-stufe.aktuell {
+  color: var(--auf-amt);
+  background: var(--amt);
+  border-color: var(--amt);
+}
+
+.kopf-lauf-text {
+  min-width: 0;
+}
+
+/* Letztes Ereignis (Websuche, Seitenabruf …): blendet bei jedem neuen Ereignis ein */
+.kopf-lauf-ereignis {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  color: var(--tinte-leise);
+  animation: kopf-einblenden 0.4s ease-out;
+}
+
+@keyframes kopf-einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(0.3rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Laufband am unteren Rand: zeigt, dass gearbeitet wird (kein Fortschrittswert) */
+.kopf-lauf-fortschritt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--amt) 40%, var(--amt) 60%, transparent 100%);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  animation: kopf-laufband 1.8s linear infinite;
+}
+
+@keyframes kopf-laufband {
+  from {
+    background-position: -100% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.kopf-lauf-symbol {
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .kopf-lauf-ereignis {
+    display: none;
+  }
+
+  /* Während eines Laufs weicht der Profil-Chip (Profil bleibt über „Profile“ erreichbar) */
+  .kopf-rechts:has(.kopf-lauf) .profil-chip {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .kopf-lauf-zeichen,
+  .kopf-lauf.laeuft .kopf-lauf-kosten {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .kopf-stufe:not(.aktuell) {
+    display: none;
+  }
+
+  .kopf-marke,
+  .kopf-lauf {
+    padding: 0.2rem 0.55rem;
+  }
 }
 
 .profil-chip {
@@ -3221,6 +3436,13 @@ fieldset.lb-ausgabe {
   .kopf,
   .farb-vorschau-kopf {
     border-image: none;
+  }
+
+  .kopf-stufe.aktuell {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
   }
 
   .nav.aktiv,

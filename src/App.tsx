@@ -19,6 +19,8 @@ import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
+import { KopfStatus, type KopfLauf, type KopfMeldung } from "./ui/KopfStatus";
+import { herkunftAusMeldung } from "./dokumente/kennzeichnung";
 import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
 import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
@@ -356,6 +358,23 @@ export default function App() {
 
   // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
   const kiLaeuft = useRef(false);
+  /** Stand des KI-Laufs für die Kopfleiste */
+  const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
+  // Ein beendeter Lauf gilt als gesehen, sobald die Person die KI-Erfassung öffnet oder er dort endet
+  const ansichtRef = useRef(ansicht);
+  ansichtRef.current = ansicht;
+  const laufBeendet = (l: KopfLauf | null) => !!l && (l.zustand === "fertig" || l.zustand === "fehler" || l.zustand === "abgebrochen");
+  const kopfLaufMelden = useCallback((l: KopfLauf | null) => setKopfLauf(ansichtRef.current === "ki" && laufBeendet(l) ? null : l), []);
+  useEffect(() => {
+    if (ansicht === "ki") setKopfLauf((l) => (laufBeendet(l) ? null : l));
+  }, [ansicht]);
+  const kopfMeldung = useMemo<KopfMeldung | null>(() => {
+    const r = profil?.ui.rollen;
+    if (!profil || !meldung || !r?.status_feld) return null;
+    const wert = (meldung as Record<string, unknown>)[r.status_feld];
+    const status = typeof wert === "string" && wert ? wert : r.status_entwurf;
+    return { status, final: status === r.status_final, ki: herkunftAusMeldung(meldung, profil).herkunft === "ki" };
+  }, [profil, meldung]);
 
   const aktivieren = async (schluessel: string) => {
     if (
@@ -455,17 +474,20 @@ export default function App() {
             Einstellungen
           </button>
         </nav>
-        {profil && (
-          <button
-            type="button"
-            className="profil-chip"
-            onClick={() => setAnsicht("profile")}
-            title={`Profil wechseln (in Verwendung: ${profil.manifest.name}, Profilversion ${profil.manifest.version})`}
-          >
-            <span className="chip-name">{profil.manifest.name}</span>
-            <span className="chip-version">&nbsp;· {profil.manifest.version}</span>
-          </button>
-        )}
+        <div className="kopf-rechts">
+          <KopfStatus meldung={kopfMeldung} lauf={kopfLauf} ansicht={ansicht} zurMeldung={() => setAnsicht("meldung")} zurKi={() => setAnsicht("ki")} />
+          {profil && (
+            <button
+              type="button"
+              className="profil-chip"
+              onClick={() => setAnsicht("profile")}
+              title={`Profil wechseln (in Verwendung: ${profil.manifest.name}, Profilversion ${profil.manifest.version})`}
+            >
+              <span className="chip-name">{profil.manifest.name}</span>
+              <span className="chip-version">&nbsp;· {profil.manifest.version}</span>
+            </button>
+          )}
+        </div>
       </header>
 
       <div className="hinweisband" role="note">
@@ -518,6 +540,7 @@ export default function App() {
               laufMelden={(l) => {
                 kiLaeuft.current = l;
               }}
+              laufStand={kopfLaufMelden}
             />
           </div>
         )}

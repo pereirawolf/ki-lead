@@ -67,6 +67,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
 | 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
 | 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
+| 0.5.20 | letzter Commit des Pull Requests „Kopfleiste: Meldungsstatus und KI-Lauf rechts oben; 0.5.20“ |
+
+## [0.5.20] – 25.10.2026
+
+Grundlage: Wunsch des Herausgebers vom 25.10.2026, den Bereich rechts oben in der Kopfleiste für den Bearbeitungsstand der Meldung und für einen laufenden KI-Lauf zu nutzen, beim Lauf mit sichtbarer Bewegung, solange die KI arbeitet.
+
+### Hinzugefügt
+
+- **Meldungsstatus in der Kopfleiste** (`src/ui/KopfStatus.tsx`): „Entwurf“ bzw. „KI-Entwurf“ mit gestricheltem Rand oder der finale Status mit Häkchen („KI · final“ bei KI-Herkunft), gelesen aus `rollen.status_feld` und dem Entstehungsfeld; ein Klick führt zur Meldung.
+- **KI-Lauf in der Kopfleiste**, in allen Ansichten: pulsierender Punkt, Stufenleiste S1–S2–S3, Laufzeit im Sekundentakt, geschriebene Zeichen, bisherige Kosten, letztes Ereignis des Anbieters und ein Laufband; nach dem Lauf außerhalb der KI-Erfassung „S1 bestätigen“, „KI-Entwurf bereit“, „KI-Lauf: Fehler“ oder „KI-Lauf abgebrochen“ mit Kosten, bis die KI-Erfassung geöffnet wird. Die KI-Erfassung meldet ihren Stand über `laufStand`; Zeichen in Hunderterschritten, damit nicht jeder Datenblock die ganze App neu zeichnet.
+- **Barrierefreiheit:** Stufenwechsel und Laufende als unsichtbare Statusregion (kein Sekundentakt), Stand nicht nur über Farbe (Rand, Durchstreichung, Häkchen), Bewegung entfällt bei „Bewegung reduzieren“, laufende Stufe in Systemfarben bei erzwungenen Farben.
+- Tests: `tests/ui/kopfstatus.test.ts`, `tests/browser/kopfstatus.spec.ts`.
+
+### Geändert
+
+- **Kopfleiste bricht um, statt zu überlappen:** Der rechte Bereich rückt rechtsbündig in eine eigene Zeile, wenn er nicht neben die Navigation passt; der Profilname kürzt sich zuerst und zählt dafür nur mit seiner Mindestbreite. Während eines Laufs weicht der Profil-Chip unter 1100 px Breite.
+- Spezifikation 0.5.20 (Abschnitt 5.1), `docs/TESTS.md`.
 
 ## [0.5.19] – 25.10.2026
 
