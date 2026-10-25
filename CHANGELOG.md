@@ -58,7 +58,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.8 | letzter Commit des Pull Requests „Vergleichslauf Ilka in den Einstellungen; 0.5.8“ |
 | 0.5.9 | letzter Commit des Pull Requests „Lizenzen bestimmt, Vorlage – eigene Organisation; 0.5.9“ |
 | 0.5.10 | letzter Commit des Pull Requests „Standard-Profile nach dem Vergleichslauf Ilka, Aufwand je Modell, Schätzung; 0.5.10“ |
-| 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ (Nachtrag vom 25.10.2026: Bewertungsmaßstab, fester S1-Gegenstand, Fälle zu Zählregeln und Bewertungspläne nach der Lernschleife, ohne Änderung der App) |
+| 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ (Nachträge vom 25.10.2026: Bewertungsmaßstab, fester S1-Gegenstand, Fälle zu Zählregeln und Bewertungspläne nach der Lernschleife; Musterfassung Ilka und Plan für die Management Summary; jeweils ohne Änderung der App) |
 
 ## [0.5.11] – 25.10.2026
 
@@ -74,6 +74,14 @@ Grundlage: Folgereihe des Vergleichslaufs Ilka mit gpt-6-astra „xhigh“ (drei
 - **Kontrollsatz** (LS-2026-W43-19): [Verfahren für Entwicklungs- und Kontrollsatz](evaluation/plaene/2026-10-25-kontrollsatz.md); der Kontrollsatz wird neu verfasst und bis zum Kontrolllauf zurückgehalten.
 - Tests: `tests/pipeline/vergleichslauf.test.ts` (+8): fester Gegenstand im Repository passt zum Fall und zu den SOPs des Profils, fünf unbrauchbare Gegenstände, Lauf ohne S1-Aufruf mit allen Prüfpunkten, Abbruch vor jedem Modellaufruf. `tests/pipeline/vergleichsauswertung.test.ts` (+2): Sachverhalte ohne Gegenstück, Hinweis zu S1. `tests/evaluation/schemata.test.ts` (+4): Muss-Punkt beider Ilka-Fälle, `s1_fest` im Planschema, Prüfsumme der Datei, optionale Felder der Bewertung.
 - Dokumente: [evaluation/README.md](evaluation/README.md) (Muss-Punkte, Zuschnitt und Abdeckung), [evaluation/faelle/README.md](evaluation/faelle/README.md), [docs/TESTS.md](docs/TESTS.md).
+
+**Nachtrag vom 25.10.2026 (Musterfassung Ilka und Management Summary, ohne Änderung der App):** Grundlage: Auftrag des Herausgebers vom 25.10.2026, aus den Testläufen zu Ilka eine Referenzfassung als Muster zu konsolidieren und als Ausgangsfall für die Management Summary der KI-Profile zu hinterlegen; ZIP-Dateien der Varianten A–G (21 Läufe).
+
+- **Musterfassung** `evaluation/material/ilka-musterfassung.json` (LEAD-Meldung-v1, zwei Sachverhalte wie Bezug A): Grundlage Lauf 20261024-234833-ikph, abgeglichen mit allen 21 Läufen und den sechs Eingängen; Sachsen-Anhalt im Stromausfall-Sachverhalt, Hochrechnung als Bandbreite, zwei ergänzte Prüfaufträge. Herkunft, Änderungen und Vorbehalte: [evaluation/bewertungshilfen/ilka-musterfassung.md](evaluation/bewertungshilfen/ilka-musterfassung.md) (Entwurf zur fachlichen Abnahme). Die Redaktionsfassung im Beispielprofil bleibt unverändert.
+- **Fall** `ilka-management-summary` und **Plan** `management-summary-ilka` (fünf Varianten: Sonnet, Opus und Haiku, gpt-6.1-sol, Mistral Medium 3.5; je drei Läufe, Budget 5 USD, nur auf Auftrag). `fall.schema.json`: `auftrag.kurzfassung` und Materialrolle `meldung`; `plan.schema.json`: `meldung_fest` (Datei und Prüfsumme) und je Variante `kurzfassung`; `bewertungsschema.json`: Variante mit `kurzfassung` und Material `meldung`.
+- **Skript** `evaluation/abnahmen/kurzfassung.lauf.ts` (`KI_LEAD_ANBIETER`, `KI_LEAD_MODELL_KURZFASSUNG`, `KI_LEAD_AUFWAND_KURZFASSUNG`, `KI_LEAD_VARIANTE`, `KI_LEAD_LAEUFE`; Trockenlauf mit `KI_LEAD_ATTRAPPE=1`) mit Vorprüfung `kurzfassung.pruefung.ts` (Wortzahl, Kurztitel, Mindestwert, ungekennzeichnete Hochrechnung, Nachbetankung als erledigt, Marker); Ergebnisse unter `privat/kurzfassung-ilka/`.
+- Tests: `tests/evaluation/musterfassung.test.ts` (6): Schema, Quellen, Pflichtangaben, Plausibilität, Zuschnitt, Herkunft jeder mehrstelligen Zahl. `tests/evaluation/kurzfassung-pruefung.test.ts` (8). `tests/evaluation/schemata.test.ts` (+1): Prüfsumme der festen Meldung, Fall und Plan verweisen auf dieselbe Datei.
+- Dokumente: [evaluation/README.md](evaluation/README.md), [evaluation/faelle/README.md](evaluation/faelle/README.md), [docs/TESTS.md](docs/TESTS.md).
 
 ### Hinzugefügt
 

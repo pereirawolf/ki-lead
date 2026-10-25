@@ -1,0 +1,58 @@
+{
+  "format": "ki-lead-bewertungsplan/1",
+  "id": "management-summary-ilka",
+  "stand": "2026-10-25",
+  "fragestellung": "Wie gut fassen die KI-Profile dieselbe fertige Meldung für die Behördenleitung zusammen? Alle Varianten erhalten die Musterfassung Ilka (meldung_fest) als einzige Eingabe; S1 und S2 entfallen. Geprüft werden die Muss- und Darf-nicht-Punkte des Falls, die Richtwerte der App (Hinweise der Kurzfassung) und die Treue zur Meldung (keine neuen Angaben, Mindestwert erhalten, offene Aufgaben offen); Kosten und Dauer werden berichtet, entscheiden aber nicht. Kein Gesamtwert.",
+  "faelle": [
+    "ilka-management-summary"
+  ],
+  "varianten": [
+    {
+      "kennung": "A-anthropic-standard",
+      "kurzfassung": {
+        "modell": "claude-sonnet-5-5",
+        "aufwand": "medium"
+      },
+      "material": "meldung"
+    },
+    {
+      "kennung": "B-anthropic-opus",
+      "kurzfassung": {
+        "modell": "claude-opus-5-5",
+        "aufwand": "medium"
+      },
+      "material": "meldung"
+    },
+    {
+      "kennung": "C-anthropic-haiku",
+      "kurzfassung": {
+        "modell": "claude-haiku-5-5",
+        "aufwand": "medium"
+      },
+      "material": "meldung"
+    },
+    {
+      "kennung": "D-openai-standard",
+      "kurzfassung": {
+        "modell": "gpt-6.1-sol",
+        "aufwand": "medium"
+      },
+      "material": "meldung"
+    },
+    {
+      "kennung": "E-mistral-standard",
+      "kurzfassung": {
+        "modell": "mistral-medium-3-5",
+        "aufwand": "high"
+      },
+      "material": "meldung"
+    }
+  ],
+  "wiederholungen": 3,
+  "budget_usd": 5,
+  "meldung_fest": {
+    "datei": "evaluation/material/ilka-musterfassung.json",
+    "sha256": "953f7682838c10f84458312bc563cf9d0f17b16bd715fd27ad9cb26ff84de4cf"
+  },
+  "hinweis": "Durchführung nur auf ausdrücklichen Auftrag, über das Skript evaluation/abnahmen/kurzfassung.lauf.ts: Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_KURZFASSUNG, KI_LEAD_AUFWAND_KURZFASSUNG, KI_LEAD_VARIANTE=management-summary-ilka/<Kennung>, KI_LEAD_LAEUFE=3, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts evaluation/abnahmen/kurzfassung.lauf.ts; Mistral über den EU-Endpunkt. Ergebnisse unter privat/kurzfassung-ilka/ (nicht eingecheckt). Ein Aufruf je Lauf; Kosten je Lauf nach Listenpreisen grob 0,02 bis 0,30 USD, ohne Gewähr."
+}
