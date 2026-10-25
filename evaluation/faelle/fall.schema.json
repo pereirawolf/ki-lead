@@ -30,6 +30,10 @@
         "kurzfassung": {
           "type": "boolean",
           "description": "Management Summary aus einer festen, fertigen Meldung (Material mit Rolle „meldung“); S1 und S2 entfallen"
+        },
+        "reparatur": {
+          "type": "boolean",
+          "description": "Prüffall Reparatur (S3): feste Meldung (Material mit Rolle „meldung“) wird gezielt beschädigt und repariert; S1 fest, S2 ohne KI-Aufruf"
         }
       }
     },

@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error: reines ES-Modul ohne Typdeklaration
-import { NUR_INHALT, PWA, pruefumfang } from "../../scripts/pruefumfang.mjs";
+import { IM_BUILD, NUR_INHALT, PWA, pruefumfang } from "../../scripts/pruefumfang.mjs";
 import { REPO, repoPfad } from "../support/dateien";
 
 const KEINE = { kern: false, pwa: false };
@@ -22,6 +22,11 @@ describe("Prüfumfang je Änderung", () => {
     ["Profil-Changelog", ["profile/muster/CHANGELOG.md"], KEINE],
     ["Dokumentation und Changelog", ["docs/TESTS.md", "CHANGELOG.md", "README.md"], KEINE],
     ["Bewertungsfälle", ["evaluation/faelle/f01.json", "evaluation/README.md"], KEINE],
+    [
+      "Plan und Material, die die App einbindet (AV-2026-W43-25)",
+      ["evaluation/plaene/reparatur-ilka.json", "evaluation/material/ilka-musterfassung.json"],
+      NUR_KERN,
+    ],
     ["Vorlage für Issues", [".github/ISSUE_TEMPLATE/barrierefreiheit.yml"], KEINE],
     ["Lizenztexte (KP-2026-W43-56)", ["LICENSE", "LICENSE-CONTENT", "LICENSE-CC0"], KEINE],
     ["Bedienoberfläche aus dem Profil", ["profile/lead-beispiel/meldung.ui.json"], NUR_KERN],
@@ -104,6 +109,23 @@ describe("Wächter der Pfadlisten", () => {
     const specs = dateienUnter("tests/browser").filter((d) => d.endsWith(".spec.ts"));
     expect(specs.length).toBeGreaterThan(5);
     for (const d of specs) expect(pruefumfang([d]), d).toEqual(/\/pwa[^/]*\.spec\.ts$/.test(d) ? ALLE : NUR_KERN);
+  });
+
+  it("jede Datei unter evaluation/, die eine Quelldatei einbindet, löst die Kern-Browsertests aus", () => {
+    const eingebunden = new Set<string>();
+    for (const d of dateienUnter("src"))
+      for (const m of readFileSync(repoPfad(d), "utf-8").matchAll(/from "(?:\.\.\/)+(evaluation\/[^"?]+)/g)) eingebunden.add(m[1]);
+    expect([...eingebunden].sort()).toContain("evaluation/plaene/reparatur-ilka.json");
+    for (const d of eingebunden) {
+      expect(existsSync(repoPfad(d)), d).toBe(true);
+      expect(pruefumfang([d]).kern, d).toBe(true);
+    }
+    // keine Regel ins Leere: jede Regel trifft mindestens eine eingebundene Datei
+    for (const m of IM_BUILD as RegExp[])
+      expect(
+        [...eingebunden].some((d) => m.test(d)),
+        m.source,
+      ).toBe(true);
   });
 
   it("keine Datei unter src/, public/ oder tests/ gilt als reiner Inhalt", () => {

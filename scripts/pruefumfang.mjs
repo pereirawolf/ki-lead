@@ -24,6 +24,16 @@ export const NUR_INHALT = [
   /^profile\/[^/]+\/[^/]+\.md$/, // Arbeitsanweisungen, Kodierleitfaden, Profil-Changelog
 ];
 
+/**
+ * Dateien unter evaluation/, die die App beim Build einbindet (Vergleichslauf Ilka seit 0.5.8, Prüffall Reparatur seit
+ * 0.5.12): Sie gelten trotz NUR_INHALT nicht als reiner Inhalt. Wächter in tests/ci/pruefumfang.test.ts.
+ */
+export const IM_BUILD = [
+  /^evaluation\/faelle\/orkantief-ilka-verdichtung\.json$/,
+  /^evaluation\/plaene\/(standardprofile|anbietermix|reparatur)-ilka\.json$/,
+  /^evaluation\/material\/ilka-(musterfassung|s1-zuschnitt-a)\.json$/,
+];
+
 /** PWA-Mechanismus und alles, wovon die PWA-Browsertests unmittelbar abhängen */
 export const PWA = [
   /^src\/pwa\//,
@@ -50,7 +60,7 @@ export function pruefumfang(dateien) {
   if (liste.length === 0) return { kern: true, pwa: true };
   const passt = (muster, d) => muster.some((m) => m.test(d));
   return {
-    kern: liste.some((d) => !passt(NUR_INHALT, d)),
+    kern: liste.some((d) => !passt(NUR_INHALT, d) || passt(IM_BUILD, d)),
     pwa: liste.some((d) => passt(PWA, d)),
   };
 }

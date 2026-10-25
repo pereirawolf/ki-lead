@@ -1,0 +1,42 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "ilka-reparatur",
+  "titel": "Reparatur (S3) einer gezielt beschädigten Musterfassung Ilka (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Reparatur von Schemafehlern in der festen Musterfassung der Verdichtung Orkantief „Ilka“; S1 fest (Zuschnitt A), S2 liefert den präparierten Entwurf ohne KI-Aufruf",
+    "stichtag": "2026-10-14",
+    "meldezeitpunkt": "2026-10-14T14:00",
+    "websuche": false,
+    "reparatur": true
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/ilka-musterfassung.json",
+      "rolle": "meldung",
+      "hinweis": "Feste Musterfassung (LEAD-Meldung-v1, zwei Sachverhalte); die App beschädigt sie je Fall nach den Defekten R1–R5 (src/pipeline/reparaturtest.ts). Prüfsumme im Plan reparatur-ilka."
+    },
+    {
+      "datei": "evaluation/material/ilka-s1-zuschnitt-a.json",
+      "rolle": "material",
+      "hinweis": "Fester S1-Gegenstand (Zuschnitt A, zwei Sachverhalte wie die Musterfassung). Prüfsumme im Plan reparatur-ilka."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Der Entwurf ist nach der Reparatur schemakonform, bei einem einzelnen Defekt nach genau einer Reparatur.",
+      "An den beschädigten Stellen steht ein zulässiger Wert; bei Radarwert, Beurteilung und Ereignisart nach Möglichkeit der Wert der Musterfassung.",
+      "Alle übrigen Inhalte (Sachverhalte, Analysen, Zahlen, Quellen, Radarwerte, Begründungen) bleiben unverändert.",
+      "Beide Sachverhalte bleiben in derselben Reihenfolge erhalten."
+    ],
+    "darf_nicht": [
+      "Neue Angaben, Zahlen oder Quellen, die nicht in der Musterfassung stehen.",
+      "Gekürzte, umformulierte oder weggelassene Abschnitte.",
+      "Ein „Reparieren“ durch Entfernen des fehlerhaften Sachverhalts oder Feldes."
+    ],
+    "t0": "2026-10-14T14:00",
+    "referenzraum": "Bund",
+    "ereignisarten": ["Unwetter / Sturm", "Stromausfall / Blackout", "KRITIS-Ausfall"]
+  }
+}
