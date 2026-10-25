@@ -7,6 +7,7 @@
 
 import { STANDARD_PROFILE } from "./einstellungen";
 import type { Kennzahlen, Reihe } from "./vergleichslauf";
+import { reiheUmfang, umfangInfo } from "./vergleichsumfang";
 
 export const KENNZAHLEN: (keyof Kennzahlen)[] = [
   "sachverhalte",
@@ -86,14 +87,21 @@ function median(w: number[]): number | null {
   return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
 }
 
+/**
+ * Schlüssel der Konfiguration (S1, S2, Endpunkt); seit 0.5.12 mit dem Umfang, wenn er nicht die ganze Kette ist,
+ * damit z. B. „S1 + S2“ und „S1 + S2 + S3“ derselben Modelle getrennt bleiben.
+ */
 export function konfigSchluessel(r: Reihe): string {
   const m = r.modelle;
-  return [m.s1.modell, m.s1.aufwand, m.s2.modell, m.s2.aufwand, r.mistral_endpunkt ?? ""].join("|");
+  const u = reiheUmfang(r);
+  return [m.s1.modell, m.s1.aufwand, m.s2.modell, m.s2.aufwand, r.mistral_endpunkt ?? "", ...(u === "s1-s2-s3" ? [] : [u])].join("|");
 }
 
 function konfigText(r: Reihe): string {
   const m = r.modelle;
-  return `S1 ${m.s1.modell} (${m.s1.aufwand}) · S2 ${m.s2.modell} (${m.s2.aufwand})${r.mistral_endpunkt ? ` · Mistral ${r.mistral_endpunkt}` : ""}`;
+  const u = reiheUmfang(r);
+  const s1 = u === "s2-s3" ? "S1 fest" : `S1 ${m.s1.modell} (${m.s1.aufwand})`;
+  return `${s1} · S2 ${m.s2.modell} (${m.s2.aufwand})${u === "s1-s2" ? " ohne S3" : ""}${r.mistral_endpunkt ? ` · Mistral ${r.mistral_endpunkt}` : ""}`;
 }
 
 /** Standard-Profil Anthropic als Bezug (S1 und Verdichtung nach STANDARD_PROFILE.anthropic) */
@@ -118,9 +126,13 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
   return [...gruppen.entries()].map(([schluessel, rs]) => {
     const laeufe = rs.flatMap((r) => r.laeufe).filter((l) => !l.attrappe || rs.every((r) => r.attrappe));
     const variante = rs.find((r) => r.variante)?.variante;
-    const kennung = variante
-      ? variante.split("/").pop()!
-      : `${rs[0].modelle.s2.modell}-${rs[0].modelle.s2.aufwand}${rs[0].mistral_endpunkt ? `-${rs[0].mistral_endpunkt}` : ""}`;
+    const u = reiheUmfang(rs[0]);
+    // Umfang in der Kennung, wo sie sonst mit der ganzen Kette zusammenfiele (seit 0.5.12)
+    const zusatz = u === "s1-s2" || (u === "s2-s3" && !variante) ? `@${u}` : "";
+    const kennung =
+      (variante
+        ? variante.split("/").pop()!
+        : `${rs[0].modelle.s2.modell}-${rs[0].modelle.s2.aufwand}${rs[0].mistral_endpunkt ? `-${rs[0].mistral_endpunkt}` : ""}`) + zusatz;
     const kz = {} as Record<keyof Kennzahlen, Spanne>;
     for (const k of KENNZAHLEN) kz[k] = spanne(laeufe.map((l) => l.kennzahlen?.[k] ?? null));
     // Radar je Sachverhalt der Redaktionsfassung
@@ -195,6 +207,12 @@ export function abstand(x: Zusammenfassung, bezug: Zusammenfassung): Abstand {
 
 /** Auswertung mehrerer Reihen; Bezug über die Kennung oder, ohne Angabe, das Standard-Profil Anthropic */
 export function auswerten(reihen: Reihe[], bezugKennung?: string): Auswertung {
+  // Reihen im Umfang „S1“ haben keine Entwürfe (seit 0.5.12); ihr Vergleich mit der Musterfassung steht in der Reihe selbst
+  const nurS1 = reihen.filter((r) => reiheUmfang(r) === "s1");
+  if (nurS1.length)
+    throw new Error(
+      `${nurS1.length} Reihe(n) im Umfang „${umfangInfo("s1").titel}“ ohne Entwürfe; ihr Vergleich mit dem Zuschnitt der Musterfassung steht in reihe.json (s1_vergleich) und uebersicht.csv.`,
+    );
   const zusammenfassungen = zusammenfassen(reihen);
   const bezug =
     (bezugKennung ? zusammenfassungen.find((z) => z.kennung === bezugKennung) : undefined) ??

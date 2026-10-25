@@ -59,6 +59,39 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.9 | letzter Commit des Pull Requests „Lizenzen bestimmt, Vorlage – eigene Organisation; 0.5.9“ |
 | 0.5.10 | letzter Commit des Pull Requests „Standard-Profile nach dem Vergleichslauf Ilka, Aufwand je Modell, Schätzung; 0.5.10“ |
 | 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ (Nachträge vom 25.10.2026: Bewertungsmaßstab, fester S1-Gegenstand, Fälle zu Zählregeln und Bewertungspläne nach der Lernschleife; Musterfassung Ilka und Plan für die Management Summary; jeweils ohne Änderung der App) |
+| 0.5.12 | letzter Commit des Pull Requests „Vergleichslauf Ilka: Umfang wählen, Musterfassung als Grundlage; 0.5.12“ |
+
+## [0.5.12] – 25.10.2026
+
+Grundlage: Auftrag des Herausgebers vom 25.10.2026, die Musterfassung Ilka (`evaluation/material/ilka-musterfassung.json`) unter „Einstellungen → Modelle & Verarbeitung“ als Grundlage für separate Vergleichsläufe zu nutzen, mit wählbarem Umfang. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, Standard-Profilen, gespeicherten Einstellungen, der Ablage der Schlüssel oder am Ablauf der KI-Erfassung außerhalb des Vergleichslaufs; Musterfassung und Zuschnitt sind unverändert (Prüfsummen wie in den Plänen).
+
+### Hinzugefügt
+
+- **Umfang des Vergleichslaufs Ilka** (`src/pipeline/vergleichsumfang.ts`): Radiogruppe „Was wird getestet?“ mit fünf Umfängen.
+  - **S1 (aus Rohdaten):** nur S1 aus den sechs Eingängen; Prüfpunkte T1, T2, T4–T6 bezogen auf S1 und den Vorschlag; Vergleich mit dem Zuschnitt der Musterfassung (`s1_vergleich`: Zahl der Sachverhalte, Gliederung und Zuordnung der Eingänge wie die Musterfassung, Abdeckung der SOPs, zusätzliche und fehlende SOPs, Befunde wie beim festen Gegenstand). ZIP mit `s1/<lauf>.s1.json`, Übersicht je Sachverhalt des Vorschlags.
+  - **S1 + S2 (aus Rohdaten):** wie die ganze Kette, aber ohne KI-Aufrufe in S3 (Option `ohneS3` von `stufe2und3`: keine Vervollständigung einer abgeschnittenen Antwort, keine Reparatur); Nachbearbeitung, Schema- und Quellenprüfung laufen, ein Schemafehler bleibt stehen (T3 nicht erfüllt).
+  - **S1 + S2 + S3 (aus Rohdaten):** die ganze Kette wie bis 0.5.11; Vorgabe, Dateiname unverändert.
+  - **S2 + S3 (aus Musterfassung):** der Zuschnitt der Musterfassung (`evaluation/material/ilka-s1-zuschnitt-a.json`) als fester S1-Gegenstand in jedem Lauf; Plan `s2-isoliert-ilka` jetzt auch in der App.
+  - **MS (aus Musterfassung):** Management Summary mit der Musterfassung als einziger Eingabe (`src/pipeline/kurzfassungsreihe.ts`), ein Aufruf je Lauf über `kurzfassungErstellen`; Reihendatei `ki-lead-kurzfassung-reihe/1` mit Text, Struktur, Hinweisen der App, Vorprüfung und Auffälligkeiten in Worten; ZIP mit Übersicht, Texten und Protokollen (Prompt, Rohantwort, Token, Dauer, Kosten); Plan `management-summary-ilka` jetzt auch in der App. Die Vorprüfung ist Beobachtung für die Prüfung von Hand, keine Bewertung.
+- **Musterfassung in der App** (`musterDatenEingebaut` in `src/pipeline/vergleichslauf-eingebaut.ts`): Musterfassung und Zuschnitt als Text eingebettet und vor dem ersten Aufruf gegen die Prüfsummen der Pläne `management-summary-ilka` und `s2-isoliert-ilka` geprüft; bei Abweichung bricht der Lauf ab und nennt den fortzuschreibenden Plan.
+- **Schätzung der Management Summary** (`schaetzeKurzfassung`): grob über den Listenpreis (rund 12 000 Eingabetoken, Ausgabe nach Aufwand), ohne Dauer, gekennzeichnet als „grob, ohne Messwert“; EU-Aufschlag von Mistral eingerechnet.
+
+### Geändert
+
+- **Konfiguration je Umfang:** Die Auswahl zeigt nur die Bewertungspläne, die zum Umfang passen (Rohdaten: `standardprofile-ilka`, `anbietermix-ilka`; S2 + S3: `s2-isoliert-ilka`; MS: `management-summary-ilka`), und je Variante nur die genutzten Stufen. Eine gewählte Variante fällt weg, wenn ihr Plan nicht zum neuen Umfang passt. Konfigurationszeilen, Schlüsselprüfung, Schätzung, Fortschritt, Ergebnistabelle, LIESMICH und Dateiname (`…_S1_…`, `…_S1-S2_…`, `…_S2-S3-Muster_…`, `…_MS-Muster_…`) folgen dem Umfang.
+- **Reihendatei** `ki-lead-abnahme/1` mit Feld `umfang` (ältere Dateien ohne Feld gelten als ganze Kette, mit `s1_fest` als „S2 + S3“), je Lauf `s1_vergleich`, wenn S1 lief; Übersicht der Entwürfe mit Spalte `umfang` am Ende. `PlanVariante` nennt S1, S2 und Management Summary jeweils optional; `einstellungenFuerVariante` übernimmt nur, was die Variante nennt.
+- **Auswertung mehrerer Reihen** (`npm run vergleichslauf:auswerten`): Schlüssel der Konfiguration mit dem Umfang, wenn er nicht die ganze Kette ist; Kennung mit „@s1-s2“ (und „@s2-s3“ ohne Variante); Reihen im Umfang „S1“ werden mit Hinweis auf `s1_vergleich` abgewiesen.
+- **Skript** `evaluation/abnahmen/kurzfassung.lauf.ts` nutzt dieselbe Reihe wie die App (`quelle: "skript"`, Budget des Plans) und schreibt zusätzlich die ZIP-Datei; die Vorprüfung liegt in `src/pipeline/kurzfassungsreihe.ts`, `evaluation/abnahmen/kurzfassung.pruefung.ts` verweist darauf.
+- **Gestaffelte Prüfung** (`scripts/pruefumfang.mjs`): Dateien unter `evaluation/`, die die App einbettet (Fälle, Pläne und Material des Vergleichslaufs, darunter jetzt die Musterfassung), gelten nicht mehr als reiner Inhalt und lösen die Kern-Browsertests aus (`IN_DER_APP`).
+- Hinweise der Pläne `s2-isoliert-ilka` und `management-summary-ilka` nennen den Weg über die App; Bewertungshilfe der Musterfassung, `evaluation/README.md`, Spezifikation 0.5.12 (Abschnitt 5.4), `docs/TESTS.md`.
+
+### Tests
+
+- `tests/pipeline/vergleichslauf-umfang.test.ts` (neu, 14): Umfänge und Rollen, Pläne je Umfang und Übernahme aus Varianten, Umfang gegen festen Gegenstand, eingebettete Musterfassung und Zuschnitt mit Prüfsummen der Pläne, Abbruch bei abweichender Prüfsumme, S1 mit Prüfpunkten, Vergleich zum Zuschnitt (Soll von Hand), ZIP und Übersicht, S1 + S2 ohne Reparatur und ohne Vervollständigung gegenüber der ganzen Kette mit Reparatur, S2 + S3 ohne S1-Aufruf, Management Summary mit Vorprüfung, Fehler, Abbruch, Mistral-Endpunkt und ZIP, Schätzung, Auswertung mit Umfang.
+- `tests/ui/vergleichslauf.test.ts` (+5): Radiogruppe mit fünf Umfängen und Vorgabe, Konfigurationszeilen und Pläne je Umfang, Variante gilt nur für ihre Umfänge, Ablauf S1, MS und S2 + S3 mit Attrappe und ZIP-Datei.
+- `tests/pipeline/vergleichslauf.test.ts` (1 angepasst): vier Pläne in `VERGLEICHS_PLAENE`, für die Rohdaten weiter zwei.
+- `tests/ci/pruefumfang.test.ts` (+4): eingebettete Musterfassung und Bewertungsplan lösen die Kern-Browsertests aus, anderes Material nicht; Wächter für jeden Import aus `evaluation/` unter `src/`.
+- Browsertest `tests/browser/vergleichslauf.spec.ts` unverändert (Vorgabe „S1 + S2 + S3“, Dateiname und Ergebniszeile wie bisher).
 
 ## [0.5.11] – 25.10.2026
 

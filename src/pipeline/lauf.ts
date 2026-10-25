@@ -7,7 +7,7 @@ import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from 
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.5.11";
+export const APP_KENNUNG = "KI-LEAD 0.5.12";
 
 export interface Auftrag {
   sachverhalt: string;
