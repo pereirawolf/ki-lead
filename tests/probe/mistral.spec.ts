@@ -40,7 +40,7 @@ async function senden(endpunkt: MistralEndpunkt, a: Partial<LlmAnfrage> & { mode
 
 async function verbindungPruefen(page: Page, endpunkt: MistralEndpunkt): Promise<string> {
   await page.goto("./");
-  await expect(page.locator(".chip-name")).toBeVisible();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
   await page.getByRole("button", { name: "Einstellungen", exact: true }).click();
   await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
   const abschnitt = page.locator("section[aria-labelledby='schluessel-mistral']");

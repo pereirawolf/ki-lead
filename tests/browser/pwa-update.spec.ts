@@ -19,7 +19,7 @@ test.afterEach(async () => {
 
 const gestartet = (page: Page, ms = 10_000) =>
   page
-    .locator(".chip-name")
+    .locator(".kopf-ki")
     .waitFor({ timeout: ms })
     .then(
       () => true,

@@ -18,7 +18,7 @@ test("Offline-Start: nach dem ersten Besuch läuft die App ohne Netz", async ({ 
   );
 
   await page.goto("./");
-  await expect(page.locator(".chip-name")).toBeVisible();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
   // Warten, bis der Service Worker installiert ist und die Seite steuert
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
@@ -36,7 +36,7 @@ test("Offline-Start: nach dem ersten Besuch läuft die App ohne Netz", async ({ 
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.locator(".chip-name")).toBeVisible();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
   await expect(page.getByText(/Ohne Netzverbindung/)).toBeVisible();
 
   await bereich(page, "Lagebild");

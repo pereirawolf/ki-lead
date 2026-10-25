@@ -9,7 +9,7 @@ test("Zwischenstand übersteht ein Neuladen der Seite", async ({ page }) => {
   await expect(page.getByText(/Zwischenstand automatisch gesichert/)).toBeVisible();
 
   await page.reload();
-  await expect(page.locator(".chip-name")).toBeVisible();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
   await expect(page.getByLabel("Name der meldenden Stelle")).toHaveValue("Stelle vor dem Neuladen");
   await expect(page.getByText(/Zwischenstand automatisch gesichert/)).toBeVisible();
 });

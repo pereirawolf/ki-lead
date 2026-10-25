@@ -135,10 +135,8 @@ a {
 
 .kopf {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 1.25rem;
-  row-gap: 0.35rem;
   padding: calc(0.6rem + env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.6rem max(1rem, env(safe-area-inset-left));
   background: var(--header-hintergrund);
   color: var(--header-text);
@@ -171,7 +169,6 @@ a {
 .hauptnav {
   display: flex;
   gap: 0.25rem;
-  flex: none;
 }
 
 .nav {
@@ -193,232 +190,145 @@ a {
   text-underline-offset: 0.35em;
 }
 
-/* Rechter Bereich der Kopfleiste: Laufstatus, Meldungsstatus, Profil (seit 0.5.20) */
-/* Nimmt nur den Platz neben der Navigation; zuerst kürzt sich der Profilname, Status und Lauf bleiben ganz */
+/* KI-Symbol rechts oben (seit 0.5.20): kleines Lagenradar; in Ruhe grau, während einer KI-Anfrage mit kreisendem
+   Strahl in der Aktionsfarbe und bewegter Innenfläche in den Farben des Identitätsbands */
 .kopf-rechts {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  flex: 1 1 0;
   margin-left: auto;
-  /* Passt der Statusbereich nicht neben die Navigation, rückt er rechtsbündig in eine eigene Zeile */
-  min-width: min-content;
-}
-
-/* Für den Zeilenumbruch zählt der Profil-Chip nur mit seiner Mindestbreite: der Name darf intern umbrechen,
-   zeigt aber nur eine Zeile mit Auslassungszeichen */
-.kopf-rechts .profil-chip {
-  margin-left: 0;
-  flex: 0 1 auto;
-  min-width: 3.5rem;
-}
-
-.kopf-rechts .chip-name {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  white-space: normal;
-  /* bricht zeichenweise, damit die sichtbare Zeile die Breite ganz füllt */
-  word-break: break-all;
-  text-align: left;
-}
-
-.kopf-status {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex: none;
 }
 
-.kopf-marke,
-.kopf-lauf {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  border-radius: 999px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Entwurf: gestrichelter Rand, damit der Stand nicht nur an der Farbe hängt */
-.kopf-marke.entwurf {
-  border: 2px dashed var(--erheblich);
-  background: var(--erheblich-zart);
-  color: var(--tinte);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.kopf-marke.final {
-  border: 2px solid var(--ok);
-  background: var(--ok-zart);
-  color: var(--tinte);
-}
-
-.kopf-marke.final::before {
-  content: "✓";
-}
-
-.kopf-lauf {
+.kopf-ki {
   position: relative;
-  overflow: hidden;
   flex: none;
-  border: 1px solid var(--amt);
-  background: var(--papier);
-  color: var(--tinte);
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--tinte-leise);
+  cursor: pointer;
 }
 
-.kopf-lauf.laeuft {
+.kopf-ki:hover {
   background: var(--amt-zart);
-  padding-bottom: 0.35rem;
 }
 
-.kopf-lauf.fertig {
-  border-color: var(--ok);
-  background: var(--ok-zart);
+.kopf-ki-geruest {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
 }
 
-.kopf-lauf.fehler,
-.kopf-lauf.abgebrochen {
-  border-color: var(--kritisch);
-  background: var(--kritisch-zart);
+.kopf-ki-geruest polygon:first-child {
+  stroke-width: 5;
 }
 
-.kopf-lauf-punkt {
-  flex: none;
-  width: 0.6rem;
-  height: 0.6rem;
+/* Innenfläche: Radarwerte als Achteck; die Kontur (Schatten am Rahmen) hält auch weiße Bandfarben sichtbar */
+.kopf-ki-lage {
+  position: absolute;
+  inset: 0;
+}
+
+.kopf-ki.laeuft .kopf-ki-lage,
+.kopf-ki.wartet .kopf-ki-lage {
+  filter: drop-shadow(0 0 0.6px var(--amt-tief)) drop-shadow(0 0 0.6px var(--amt-tief));
+}
+
+.kopf-ki-flaeche {
+  position: absolute;
+  inset: 0;
+  background: var(--linie);
+  clip-path: polygon(50% 26%, 69.8% 30.2%, 80% 50%, 68.4% 68.4%, 50% 82%, 31.6% 68.4%, 28% 50%, 30.2% 30.2%);
+}
+
+/* Strahl: nur innerhalb des äußeren Achtecks sichtbar */
+.kopf-ki-strahl {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+  clip-path: polygon(50% 6%, 81.1% 18.9%, 94% 50%, 81.1% 81.1%, 50% 94%, 18.9% 81.1%, 6% 50%, 18.9% 18.9%);
+}
+
+.kopf-ki-strahl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 60%, var(--amt) 100%);
+  opacity: 0.85;
+  /* ohne Bewegung (Bewegung reduzieren) bleibt der Strahl als Keil stehen */
+  transform: rotate(40deg);
+}
+
+.kopf-ki.laeuft,
+.kopf-ki.wartet {
+  color: var(--amt);
+}
+
+.kopf-ki.laeuft .kopf-ki-strahl {
+  display: block;
+}
+
+.kopf-ki.laeuft .kopf-ki-strahl::before {
+  animation: kopf-ki-strahl 2s linear infinite;
+}
+
+.kopf-ki.laeuft .kopf-ki-flaeche,
+.kopf-ki.wartet .kopf-ki-flaeche {
+  background: var(--band);
+}
+
+.kopf-ki.laeuft .kopf-ki-flaeche {
+  animation: kopf-ki-lage 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes kopf-ki-strahl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Gleiche Punktzahl in allen Stufen, damit der Browser zwischen den Lagen überblendet */
+@keyframes kopf-ki-lage {
+  0% {
+    clip-path: polygon(50% 26%, 69.8% 30.2%, 80% 50%, 68.4% 68.4%, 50% 82%, 31.6% 68.4%, 28% 50%, 30.2% 30.2%);
+  }
+  33% {
+    clip-path: polygon(50% 24%, 75.5% 24.5%, 74% 50%, 72.6% 72.6%, 50% 72%, 23.1% 76.9%, 30% 50%, 28.8% 28.8%);
+  }
+  66% {
+    clip-path: polygon(50% 14%, 65.6% 34.4%, 84% 50%, 67% 67%, 50% 88%, 35.9% 64.1%, 18% 50%, 31.6% 31.6%);
+  }
+  100% {
+    clip-path: polygon(50% 28%, 72.6% 27.4%, 88% 50%, 64.1% 64.1%, 50% 80%, 31.6% 68.4%, 14% 50%, 34.4% 34.4%);
+  }
+}
+
+/* Die KI wartet auf die Person (außerhalb der KI-Erfassung): Punkt oben rechts */
+.kopf-ki-punkt {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.7rem;
+  height: 0.7rem;
   border-radius: 50%;
   background: var(--amt);
-  animation: puls 1.4s ease-in-out infinite;
+  border: 2px solid var(--header-hintergrund);
 }
 
-.kopf-stufen {
-  display: inline-flex;
-  gap: 2px;
-}
-
-.kopf-stufe {
-  padding: 0 0.3rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  color: var(--tinte-leise);
-  border: 1px solid var(--linie);
-  background: var(--papier);
-}
-
-.kopf-stufe.erledigt {
-  color: var(--tinte);
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
-}
-
-.kopf-stufe.aktuell {
-  color: var(--auf-amt);
-  background: var(--amt);
-  border-color: var(--amt);
-}
-
-.kopf-lauf-text {
-  min-width: 0;
-}
-
-/* Letztes Ereignis (Websuche, Seitenabruf …): blendet bei jedem neuen Ereignis ein */
-.kopf-lauf-ereignis {
-  max-width: 16rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 400;
-  color: var(--tinte-leise);
-  animation: kopf-einblenden 0.4s ease-out;
-}
-
-@keyframes kopf-einblenden {
-  from {
-    opacity: 0;
-    transform: translateY(0.3rem);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* Laufband am unteren Rand: zeigt, dass gearbeitet wird (kein Fortschrittswert) */
-.kopf-lauf-fortschritt {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent 0%, var(--amt) 40%, var(--amt) 60%, transparent 100%);
-  background-size: 50% 100%;
-  background-repeat: no-repeat;
-  animation: kopf-laufband 1.8s linear infinite;
-}
-
-@keyframes kopf-laufband {
-  from {
-    background-position: -100% 0;
-  }
-  to {
-    background-position: 200% 0;
-  }
-}
-
-.kopf-lauf-symbol {
-  font-weight: 700;
-}
-
-@media (max-width: 1100px) {
-  .kopf-lauf-ereignis {
-    display: none;
-  }
-
-  /* Während eines Laufs weicht der Profil-Chip (Profil bleibt über „Profile“ erreichbar) */
-  .kopf-rechts:has(.kopf-lauf) .profil-chip {
-    display: none;
-  }
-}
-
-@media (max-width: 720px) {
-  .kopf-lauf-zeichen,
-  .kopf-lauf.laeuft .kopf-lauf-kosten {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .kopf-stufe:not(.aktuell) {
-    display: none;
-  }
-
-  .kopf-marke,
-  .kopf-lauf {
-    padding: 0.2rem 0.55rem;
-  }
-}
-
-.profil-chip {
-  display: inline-flex;
-  min-width: 0;
-  margin-left: auto;
-  max-width: 40vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: 1px solid var(--linie);
-  background: var(--papier);
-  border-radius: 999px;
-  padding: 0.3rem 0.85rem;
-  font-size: 0.85rem;
-  cursor: pointer;
+.kopf-ki.problem .kopf-ki-punkt {
+  background: var(--kritisch);
 }
 
 .hinweisband {
@@ -1518,10 +1428,6 @@ textarea {
   .marke-zusatz {
     display: none;
   }
-
-  .profil-chip {
-    max-width: 34vw;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1531,10 +1437,6 @@ textarea {
 
   .nav {
     padding: 0.4rem 0.55rem;
-  }
-
-  .profil-chip {
-    display: none;
   }
 
   .segment {
@@ -1897,15 +1799,6 @@ details.ki-abschnitt summary,
     order: 3;
     width: 100%;
     margin: 0 -0.4rem;
-  }
-
-  .profil-chip {
-    display: inline-flex;
-    margin-left: auto;
-    max-width: 55vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
@@ -3164,19 +3057,6 @@ fieldset.lb-ausgabe {
   font-size: 0.82rem;
 }
 
-/* Profil-Chip: Name kürzen, Version stets sichtbar */
-.chip-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
-
-.chip-version {
-  white-space: nowrap;
-  flex: none;
-}
-
 /* Arbeitsanweisungen und Kodierleitfaden: Zwecksatz, Dokumentkopf, Inhaltsverzeichnis */
 .aufklapp-zweck {
   display: block;
@@ -3438,11 +3318,11 @@ fieldset.lb-ausgabe {
     border-image: none;
   }
 
-  .kopf-stufe.aktuell {
+  .kopf-ki.laeuft .kopf-ki-flaeche,
+  .kopf-ki.wartet .kopf-ki-flaeche,
+  .kopf-ki-punkt {
     forced-color-adjust: none;
     background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
   }
 
   .nav.aktiv,

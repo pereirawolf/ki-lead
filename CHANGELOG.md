@@ -67,22 +67,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
 | 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
 | 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
-| 0.5.20 | letzter Commit des Pull Requests „Kopfleiste: Meldungsstatus und KI-Lauf rechts oben; 0.5.20“ |
+| 0.5.20 | letzter Commit des Pull Requests „Kopfleiste: KI-Symbol statt Profil-Chip; 0.5.20“ |
 
 ## [0.5.20] – 25.10.2026
 
-Grundlage: Wunsch des Herausgebers vom 25.10.2026, den Bereich rechts oben in der Kopfleiste für den Bearbeitungsstand der Meldung und für einen laufenden KI-Lauf zu nutzen, beim Lauf mit sichtbarer Bewegung, solange die KI arbeitet.
+Grundlage: Entscheidung des Herausgebers vom 25.10.2026 zur Kopfleiste. An der prominenten Stelle rechts oben steht nur, was in jeder Ansicht zählt und sich gerade ändert: die laufende KI-Anfrage. Lagezentren wechseln ihr Profil selten; Laufzeit und Kosten zeigt die KI-Erfassung; der Entwurfsstatus steht in Maske, Dateiname und PDF.
 
 ### Hinzugefügt
 
-- **Meldungsstatus in der Kopfleiste** (`src/ui/KopfStatus.tsx`): „Entwurf“ bzw. „KI-Entwurf“ mit gestricheltem Rand oder der finale Status mit Häkchen („KI · final“ bei KI-Herkunft), gelesen aus `rollen.status_feld` und dem Entstehungsfeld; ein Klick führt zur Meldung.
-- **KI-Lauf in der Kopfleiste**, in allen Ansichten: pulsierender Punkt, Stufenleiste S1–S2–S3, Laufzeit im Sekundentakt, geschriebene Zeichen, bisherige Kosten, letztes Ereignis des Anbieters und ein Laufband; nach dem Lauf außerhalb der KI-Erfassung „S1 bestätigen“, „KI-Entwurf bereit“, „KI-Lauf: Fehler“ oder „KI-Lauf abgebrochen“ mit Kosten, bis die KI-Erfassung geöffnet wird. Die KI-Erfassung meldet ihren Stand über `laufStand`; Zeichen in Hunderterschritten, damit nicht jeder Datenblock die ganze App neu zeichnet.
-- **Barrierefreiheit:** Stufenwechsel und Laufende als unsichtbare Statusregion (kein Sekundentakt), Stand nicht nur über Farbe (Rand, Durchstreichung, Häkchen), Bewegung entfällt bei „Bewegung reduzieren“, laufende Stufe in Systemfarben bei erzwungenen Farben.
-- Tests: `tests/ui/kopfstatus.test.ts`, `tests/browser/kopfstatus.spec.ts`.
+- **KI-Symbol rechts oben** (`src/ui/KiSymbol.tsx`): ein kleines Lagenradar wie im App-Symbol, ohne sichtbaren Text. In Ruhe grau. Während einer KI-Anfrage – in jeder Ansicht – kreist ein Radarstrahl in der Aktionsfarbe des Farbschemas, die Innenfläche bewegt sich in den Farben des Identitätsbands. Wartet die KI auf die Person (S1 bestätigen, Entwurf bereit, Fehler oder Abbruch), trägt das Symbol außerhalb der KI-Erfassung einen Punkt (bei Fehler und Abbruch in der Warnfarbe), bis die KI-Erfassung geöffnet wird. Ein Klick führt zur KI-Erfassung.
+- **Barrierefreiheit:** Zustand und Stufe im zugänglichen Namen und im Tooltip („KI-Anfrage läuft: S2 Recherche und Entwurf. Zur KI-Erfassung“); Stufenwechsel und Ende als unsichtbare Statusregion. Bei „Bewegung reduzieren“ bleibt der Strahl als Keil stehen, der laufende Zustand ist damit auch ohne Bewegung und ohne Farbe erkennbar; bei erzwungenen Farben Innenfläche und Punkt in Systemfarben.
+- Die KI-Erfassung meldet ihren Stand über `laufStand`, nur bei Wechsel von Stufe oder Zustand (keine Neuzeichnung der App beim Streaming).
+- Tests: `tests/ui/kisymbol.test.ts`, `tests/browser/kisymbol.spec.ts`.
+
+### Entfernt
+
+- **Profil-Chip in der Kopfleiste.** Das Profil wird unter „Profile“ gewählt und dort als „✓ In Verwendung“ gekennzeichnet. Tests erkennen das geladene Profil am KI-Symbol (`.kopf-ki`) bzw. an `data-profil` der Kopfleiste.
 
 ### Geändert
 
-- **Kopfleiste bricht um, statt zu überlappen:** Der rechte Bereich rückt rechtsbündig in eine eigene Zeile, wenn er nicht neben die Navigation passt; der Profilname kürzt sich zuerst und zählt dafür nur mit seiner Mindestbreite. Während eines Laufs weicht der Profil-Chip unter 1100 px Breite.
 - Spezifikation 0.5.20 (Abschnitt 5.1), `docs/TESTS.md`.
 
 ## [0.5.19] – 25.10.2026

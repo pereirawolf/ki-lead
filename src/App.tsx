@@ -19,8 +19,7 @@ import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
 import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
-import { KopfStatus, type KopfLauf, type KopfMeldung } from "./ui/KopfStatus";
-import { herkunftAusMeldung } from "./dokumente/kennzeichnung";
+import { KiSymbol, type KopfLauf } from "./ui/KiSymbol";
 import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
 import { LagebildAnsicht } from "./ui/Lagebild";
 import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
@@ -368,13 +367,6 @@ export default function App() {
   useEffect(() => {
     if (ansicht === "ki") setKopfLauf((l) => (laufBeendet(l) ? null : l));
   }, [ansicht]);
-  const kopfMeldung = useMemo<KopfMeldung | null>(() => {
-    const r = profil?.ui.rollen;
-    if (!profil || !meldung || !r?.status_feld) return null;
-    const wert = (meldung as Record<string, unknown>)[r.status_feld];
-    const status = typeof wert === "string" && wert ? wert : r.status_entwurf;
-    return { status, final: status === r.status_final, ki: herkunftAusMeldung(meldung, profil).herkunft === "ki" };
-  }, [profil, meldung]);
 
   const aktivieren = async (schluessel: string) => {
     if (
@@ -474,20 +466,11 @@ export default function App() {
             Einstellungen
           </button>
         </nav>
-        <div className="kopf-rechts">
-          <KopfStatus meldung={kopfMeldung} lauf={kopfLauf} ansicht={ansicht} zurMeldung={() => setAnsicht("meldung")} zurKi={() => setAnsicht("ki")} />
-          {profil && (
-            <button
-              type="button"
-              className="profil-chip"
-              onClick={() => setAnsicht("profile")}
-              title={`Profil wechseln (in Verwendung: ${profil.manifest.name}, Profilversion ${profil.manifest.version})`}
-            >
-              <span className="chip-name">{profil.manifest.name}</span>
-              <span className="chip-version">&nbsp;· {profil.manifest.version}</span>
-            </button>
-          )}
-        </div>
+        {profil && (
+          <div className="kopf-rechts" data-profil={profil.manifest.name}>
+            <KiSymbol lauf={kopfLauf} ansicht={ansicht} zurKi={() => setAnsicht("ki")} />
+          </div>
+        )}
       </header>
 
       <div className="hinweisband" role="note">
