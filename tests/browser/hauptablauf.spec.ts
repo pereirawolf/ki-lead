@@ -74,7 +74,7 @@ test("KI-Erfassung: S1 mit simuliertem Anbieter bis zur Bestätigung, Protokoll 
   await oeffnen(page);
   await schluesselSetzen(page);
   await bereich(page, "KI-Erfassung");
-  await page.getByLabel("Sachverhalt und Erkenntnisinteresse").fill("Orkan in Hessen");
+  await page.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Orkan in Hessen");
   await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
   await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
 

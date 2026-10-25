@@ -209,7 +209,7 @@ test("Regression: Ein noch funktionierendes Fenster mit beschädigtem Cache wird
   expect(await fenster.evaluate(() => caches.keys())).toEqual([expect.stringMatching(/B-0\.5\.1$/)]);
   // Ungespeicherte Eingabe der KI-Erfassung (nur im Zustand der Oberfläche)
   await bereich(fenster, "KI-Erfassung");
-  const feld = fenster.getByLabel("Sachverhalt und Erkenntnisinteresse");
+  const feld = fenster.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse");
   await feld.fill("Ungespeicherte Eingabe");
   const zaehler = navigationenZaehlen(fenster);
 
@@ -253,7 +253,7 @@ test("Hinweis „Neu laden“: übernimmt nur im anfordernden Fenster; ein zweit
   await zweites.goto(server.url);
   expect(await gestartet(zweites)).toBe(true);
   await bereich(zweites, "KI-Erfassung");
-  await zweites.getByLabel("Sachverhalt und Erkenntnisinteresse").fill("Eingabe im zweiten Fenster");
+  await zweites.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Eingabe im zweiten Fenster");
   const zaehlerZweites = navigationenZaehlen(zweites);
   server.veroeffentlichen(b);
   expect(await updatePruefen(page)).toMatchObject({ wartet: true });
@@ -263,7 +263,7 @@ test("Hinweis „Neu laden“: übernimmt nur im anfordernden Fenster; ein zweit
   expect(await startdatei(page)).toBe(b.start);
   await zweites.waitForTimeout(1500);
   expect(zaehlerZweites()).toBe(0);
-  await expect(zweites.getByLabel("Sachverhalt und Erkenntnisinteresse")).toHaveValue("Eingabe im zweiten Fenster");
+  await expect(zweites.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse")).toHaveValue("Eingabe im zweiten Fenster");
 });
 
 test("Nachweislich gescheiterter Start: Startprüfung übernimmt die wartende Fassung erst auf Klick", async ({ context, page }) => {
