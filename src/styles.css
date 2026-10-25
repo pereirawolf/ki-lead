@@ -1593,7 +1593,16 @@ details.ki-abschnitt summary,
   margin: 0.5rem 0 1.25rem;
 }
 
-.voreinstellung-wahl legend {
+.recherchetiefe-wahl {
+  margin: 0.5rem 0 1rem;
+}
+
+.recherche-kosten {
+  margin: 0 0 1.25rem;
+}
+
+.voreinstellung-wahl legend,
+.recherchetiefe-wahl legend {
   font-weight: 700;
   margin-bottom: 0.25rem;
 }

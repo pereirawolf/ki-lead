@@ -4,7 +4,7 @@
 // Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
@@ -33,6 +33,18 @@ import {
   type ModellProfil,
   type Rolle,
 } from "../pipeline/einstellungen";
+import {
+  hoechstkostenText,
+  lesemengeText,
+  pruefeEingabe,
+  RECHERCHE_GRENZEN,
+  RECHERCHE_STUFEN,
+  stufenWerteText,
+  stufeVon,
+  wirkungText,
+  type RechercheFeld,
+  type StufeId,
+} from "../pipeline/recherchetiefe";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
@@ -675,6 +687,180 @@ function ModelleBereich({
 
 // ── Recherche & Grenzen ───────────────────────────────────────────────────────
 
+// Recherchetiefe mit Stufen und eigenen Werten (seit 0.5.19, KP-2026-W43-69 bis -76); Logik in src/pipeline/recherchetiefe.ts
+
+const RECHERCHE_FELDER: { feld: RechercheFeld; label: string; hilfe: string }[] = [
+  {
+    feld: "websucheMax",
+    label: "Websuchen je Recherche (höchstens)",
+    hilfe:
+      "Wie oft die KI wie in einer Suchmaschine nach Quellen suchen darf. Ist die Zahl erreicht, arbeitet sie mit dem Gefundenen weiter. 0: keine Websuche. In der KI-Erfassung lässt sich die Zahl je Auftrag ändern.",
+  },
+  {
+    feld: "abrufMax",
+    label: "Seiten vollständig lesen je Recherche (höchstens)",
+    hilfe:
+      "Wie viele Webseiten die KI ganz öffnen darf, aus den Suchtreffern oder aus dem Auftrag. Ohne Seitenabruf kennt sie nur die Kurzauszüge der Trefferliste. 0: Es wird keine Seite geöffnet, auch keine im Auftrag genannte.",
+  },
+  {
+    feld: "abrufMaxTokens",
+    label: "Lesemenge je Seite (höchstens, in Token)",
+    hilfe:
+      "Längere Seiten liest die KI nur bis hierhin; was danach steht, sieht sie nicht. Zu knapp schneidet Tabellen oder Anhänge am Ende ab, zu großzügig erhöht die Kosten.",
+  },
+];
+
+/** Anbieter der S2-Modelle (Recherche und Verdichtung) in fester Reihenfolge */
+function s2Anbieter(e: E, profil: Profil | null): AnbieterId[] {
+  const genutzt = new Set((["erfassung", "verdichtung"] as Rolle[]).map((r) => anbieterVon(wirksam(r, e, profil))));
+  return ANBIETER_IDS.filter((a) => genutzt.has(a));
+}
+
+function RechercheTiefe({ profil, e, setze }: { profil: Profil | null; e: E; setze: (teil: Partial<E>) => void }) {
+  const aktuell = stufeVon(e);
+  const [eigenGewaehlt, setEigenGewaehlt] = useState(false);
+  const gewaehlt: StufeId | "eigen" = eigenGewaehlt ? "eigen" : aktuell;
+  const anbieter = s2Anbieter(e, profil);
+  const kosten = hoechstkostenText(wirksam("erfassung", e, profil), e);
+  return (
+    <>
+      <fieldset className="ablage-wahl recherchetiefe-wahl">
+        <legend>Recherchetiefe</legend>
+        {RECHERCHE_STUFEN.map((st) => (
+          <label key={st.id} className="ablage-option">
+            <input
+              type="radio"
+              name="recherchetiefe"
+              value={st.id}
+              checked={gewaehlt === st.id}
+              onChange={() => {
+                setEigenGewaehlt(false);
+                setze({ ...st.werte });
+              }}
+            />
+            <span>
+              <strong>{st.titel}</strong>
+              <br />
+              <span className="ablage-text">
+                {st.text} ({stufenWerteText(st.werte)})
+              </span>
+            </span>
+          </label>
+        ))}
+        <label className="ablage-option">
+          <input type="radio" name="recherchetiefe" value="eigen" checked={gewaehlt === "eigen"} onChange={() => setEigenGewaehlt(true)} />
+          <span>
+            <strong>Eigene Werte</strong>
+            <br />
+            <span className="ablage-text">Zahlen selbst festlegen.</span>
+          </span>
+        </label>
+      </fieldset>
+      {gewaehlt === "eigen" && (
+        <div className="gruppe-spalten-zwei">
+          {RECHERCHE_FELDER.map((f) => (
+            <GrenzFeld key={f.feld} {...f} e={e} setze={setze} vermerk={wirkungText(f.feld, anbieter, e.mistralEndpunkt)} />
+          ))}
+        </div>
+      )}
+      {kosten && <p className="hinweis recherche-kosten">{kosten}</p>}
+    </>
+  );
+}
+
+function GrenzFeld({
+  feld,
+  label,
+  hilfe,
+  vermerk,
+  e,
+  setze,
+}: {
+  feld: RechercheFeld;
+  label: string;
+  hilfe: string;
+  vermerk: string;
+  e: E;
+  setze: (teil: Partial<E>) => void;
+}) {
+  const id = useId();
+  const wert = e[feld];
+  const ohneGrenze = feld === "abrufMaxTokens" && wert === 0;
+  const [text, setText] = useState(ohneGrenze ? "" : String(wert));
+  const [hinweis, setHinweis] = useState<string>();
+  useEffect(() => setText(ohneGrenze ? "" : String(wert)), [wert, ohneGrenze]);
+  const { min, max } = RECHERCHE_GRENZEN[feld];
+  const ids = [`${id}-hilfe`, feld === "abrufMaxTokens" && !ohneGrenze && `${id}-umrechnung`, vermerk && `${id}-vermerk`, hinweis && `${id}-hinweis`]
+    .filter(Boolean)
+    .join(" ");
+  return (
+    <div className="feld">
+      <label className="feld-label" htmlFor={id}>
+        {label}
+      </label>
+      <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
+        {hilfe}
+      </p>
+      <input
+        id={id}
+        type="number"
+        min={min}
+        max={max}
+        step={feld === "abrufMaxTokens" ? 1000 : 1}
+        value={text}
+        disabled={ohneGrenze}
+        placeholder={ohneGrenze ? "ohne Grenze" : undefined}
+        aria-describedby={ids}
+        onChange={(ev) => {
+          setText(ev.target.value);
+          setHinweis(undefined);
+          const r = pruefeEingabe(feld, ev.target.value, wert);
+          if (r.fertig && r.wert !== wert) setze({ [feld]: r.wert });
+        }}
+        onBlur={() => {
+          if (ohneGrenze) return;
+          const r = pruefeEingabe(feld, text, wert);
+          if (r.fertig) return;
+          setHinweis(r.hinweis);
+          setText(String(r.wert));
+          if (r.wert !== wert) setze({ [feld]: r.wert });
+        }}
+      />
+      {feld === "abrufMaxTokens" && !ohneGrenze && (
+        <p className="hinweis" id={`${id}-umrechnung`}>
+          {lesemengeText(wert)}
+        </p>
+      )}
+      {vermerk && (
+        <p className="hinweis" id={`${id}-vermerk`}>
+          {vermerk}
+        </p>
+      )}
+      {hinweis && (
+        <p className="kasten kasten-hinweis feld-zusatz" id={`${id}-hinweis`} role="status">
+          {hinweis}
+        </p>
+      )}
+      {feld === "abrufMaxTokens" && (
+        <label className="schalter">
+          <input
+            type="checkbox"
+            checked={ohneGrenze}
+            onChange={(ev) => {
+              setHinweis(undefined);
+              setze({ abrufMaxTokens: ev.target.checked ? 0 : STANDARD.abrufMaxTokens });
+            }}
+          />
+          <span>
+            Seiten nie kürzen
+            <span className="hinweis"> Sehr lange Seiten werden vollständig gelesen; das kann einen Lauf deutlich verteuern.</span>
+          </span>
+        </label>
+      )}
+    </div>
+  );
+}
+
 function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | null; e: E; setEinstellungen: (e: E) => void }) {
   const setze = (teil: Partial<E>) => setEinstellungen({ ...e, ...teil });
   const genutzt = genutzteAnbieter(e, profil);
@@ -685,28 +871,8 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
         Allgemeine Grenzen für Umfang, Laufzeit und Kosten. Ob ein Lauf recherchieren darf, entscheidet die KI-Erfassung je Auftrag; das Laufprotokoll hält die
         wirksamen Werte fest.
       </p>
+      <RechercheTiefe profil={profil} e={e} setze={setze} />
       <div className="gruppe-spalten-zwei">
-        <label className="feld">
-          <span className="feld-label">Höchstzahl Websuchen je Lauf</span>
-          <input type="number" min={0} max={50} value={e.websucheMax} onChange={(ev) => setze({ websucheMax: Math.max(0, Number(ev.target.value) || 0) })} />
-          <span className="hinweis">0 schaltet die Websuche ab. Eine Suche kostet 0,01 USD (Mistral etwa 0,03 USD) zuzüglich Token.</span>
-        </label>
-        <label className="feld">
-          <span className="feld-label">Höchstzahl Seitenabrufe je Lauf</span>
-          <input type="number" min={0} max={50} value={e.abrufMax} onChange={(ev) => setze({ abrufMax: Math.max(0, Number(ev.target.value) || 0) })} />
-        </label>
-        <label className="feld">
-          <span className="feld-label">Höchstlänge je abgerufener Seite (Token)</span>
-          <input
-            type="number"
-            min={0}
-            max={100000}
-            step={1000}
-            value={e.abrufMaxTokens}
-            onChange={(ev) => setze({ abrufMaxTokens: Math.max(0, Number(ev.target.value) || 0) })}
-          />
-          <span className="hinweis">Kürzt sehr lange Seiten (Navigation, Tabellen) und senkt so die Kosten. 0: ohne Grenze.</span>
-        </label>
         <label className="feld">
           <span className="feld-label">Land für die Websuche</span>
           <input type="text" maxLength={2} value={e.suchland} onChange={(ev) => setze({ suchland: ev.target.value.toUpperCase() })} />
