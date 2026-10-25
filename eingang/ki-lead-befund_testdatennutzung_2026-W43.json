@@ -65,7 +65,7 @@
       "automatisierbar": "Die Schemaprüfung der Fälle deckt tests/evaluation/schemata.test.ts bereits ab. Ob eine Aggregation oder eine offene Achse fachlich zulässig ist, bleibt eine begründete fachliche Bewertung.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzt den Ergebnisbericht aus AV-2026-W43-12; keine erneute Forderung nach einem Ergebnisbericht und keine Aufhebung der mit 0.5.10 beschlossenen Modellvorgaben. Entscheidungsfragen beantwortet: Für Ilka zu t0 erfüllen sowohl eine Summe als Mindestwert mit Datenstand als auch eine begründete Nichtaggregation den Muss-Punkt; die Bewertungshilfe behandelt zunächst Zählregeln, offene Achsen und Tendenz."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzt den Ergebnisbericht aus AV-2026-W43-12; keine erneute Forderung nach einem Ergebnisbericht und keine Aufhebung der mit 0.5.10 beschlossenen Modellvorgaben. Entscheidungsfragen beantwortet: Für Ilka zu t0 erfüllen sowohl eine Summe als Mindestwert mit Datenstand als auch eine begründete Nichtaggregation den Muss-Punkt; die Bewertungshilfe behandelt zunächst Zählregeln, offene Achsen und Tendenz. Umgesetzt mit #62."
       }
     },
     {
@@ -116,7 +116,7 @@
       "automatisierbar": "Vor Beginn der verglichenen S2-Läufe prüfen, dass Materialhashes, Profilhash, t0 und Prüfsumme des festen S1-Gegenstands in allen Varianten gleich sind.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Nachtrag, Plan und Ausführungsweg vorbereiten. Kostenpflichtige Läufe erst nach ausdrücklichem Auftrag mit Budget. Bestehender Plan und historische Ergebnisse bleiben unverändert. Ein möglicher Folgevergleich gpt-6-astra „xhigh“ (Ergebnisbericht, Entscheidungen) sollte diesen Weg nutzen. Entscheidungsfrage beantwortet: Gemeinsame Eingabe des isolierten S2-Vergleichs ist der Zuschnitt des Bezugs A (zwei Sachverhalte)."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Nachtrag, Plan und Ausführungsweg vorbereiten. Kostenpflichtige Läufe erst nach ausdrücklichem Auftrag mit Budget. Bestehender Plan und historische Ergebnisse bleiben unverändert. Ein möglicher Folgevergleich gpt-6-astra „xhigh“ (Ergebnisbericht, Entscheidungen) sollte diesen Weg nutzen. Entscheidungsfrage beantwortet: Gemeinsame Eingabe des isolierten S2-Vergleichs ist der Zuschnitt des Bezugs A (zwei Sachverhalte). Umgesetzt mit #62."
       }
     },
     {
@@ -160,7 +160,7 @@
       "automatisierbar": "Ausweis der nicht zugeordneten Sachverhalte im Bericht und Schemaprüfung strukturierter Abdeckungsangaben; die semantische Vollständigkeit bleibt fachliche Prüfung.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzung zu AV-2026-W43-18 und -19. Die korrigierte Zuordnung wird nicht erneut als Fehler vorgelegt. Entscheidungsfrage beantwortet: zunächst dokumentierte Prüfliste; die Auswertung weist nicht zugeordnete Sachverhalte aus."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ergänzung zu AV-2026-W43-18 und -19. Die korrigierte Zuordnung wird nicht erneut als Fehler vorgelegt. Entscheidungsfrage beantwortet: zunächst dokumentierte Prüfliste; die Auswertung weist nicht zugeordnete Sachverhalte aus. Umgesetzt mit #62."
       }
     },
     {
@@ -206,7 +206,7 @@
       "automatisierbar": "Fallschemata und Verweise offline prüfen. Deterministische Regressionstests nur für tatsächlich implementierte Prüfregeln; die Modellqualität über gesonderte Bewertungen untersuchen.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Der D2-Fehlalarm bei ausdrücklich genannter Summe ist mit AV-2026-W43-17 behoben. Die beschlossene Schwelle für die Übernahme der Plausibilitätsprüfung in die App (AV-2026-W43-16) bleibt unverändert."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Der D2-Fehlalarm bei ausdrücklich genannter Summe ist mit AV-2026-W43-17 behoben. Die beschlossene Schwelle für die Übernahme der Plausibilitätsprüfung in die App (AV-2026-W43-16) bleibt unverändert. Umgesetzt mit #62."
       }
     },
     {
@@ -250,7 +250,7 @@
       "automatisierbar": "Kennungsvergabe, Entfernen von Anbieter-, Modell- und Kostenangaben und formale Vollständigkeit der Bewertungen; Korrektur und Urteil bleiben menschliche Aufgaben.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ausarbeitung eines Bewertungswegs; keine Behauptung bereits vorliegender Blindbewertungen und keine unmittelbare Änderung der Modellvorgaben. Die Entwürfe liegen nur in den ZIP-Dateien des Herausgebers. Entscheidungsfrage beantwortet: mindestens zwei unabhängig Bewertende; Stichprobe ein Lauf je Variante, vorab nach fester Regel bestimmt."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Ausarbeitung eines Bewertungswegs; keine Behauptung bereits vorliegender Blindbewertungen und keine unmittelbare Änderung der Modellvorgaben. Die Entwürfe liegen nur in den ZIP-Dateien des Herausgebers. Entscheidungsfrage beantwortet: mindestens zwei unabhängig Bewertende; Stichprobe ein Lauf je Variante, vorab nach fester Regel bestimmt. Umgesetzt mit #62."
       }
     },
     {
@@ -293,7 +293,7 @@
       "automatisierbar": "Fallauswahl, Fassungen und Prüfsummen im Plan festhalten und vor dem Kontrolllauf prüfen; die Übertragbarkeit fachlich bewerten.",
       "pruefung": {
         "status": "angenommen",
-        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Kontrollsatz und Bewertungsplan vorbereiten. Kostenpflichtige Läufe benötigen einen gesonderten Auftrag mit Budget. Entscheidungsfrage beantwortet: Kontrollsatz wird neu verfasst und bis zum Kontrolllauf nicht für die Regelarbeit verwendet."
+        "anmerkung": "Freigegeben vom Herausgeber am 25.10.2026 (alle Befunde). Zunächst Kontrollsatz und Bewertungsplan vorbereiten. Kostenpflichtige Läufe benötigen einen gesonderten Auftrag mit Budget. Entscheidungsfrage beantwortet: Kontrollsatz wird neu verfasst und bis zum Kontrolllauf nicht für die Regelarbeit verwendet. Umgesetzt mit #62."
       }
     }
   ],
