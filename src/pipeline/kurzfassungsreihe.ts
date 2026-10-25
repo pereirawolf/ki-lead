@@ -1,9 +1,9 @@
-// Vergleichslauf „MS (aus Musterfassung)“ (seit 0.5.12): Management Summary der festen Musterfassung Ilka, mehrfach
+// Testlauf „Management Summary (aus Musterfassung)“ (bis 0.5.16 „Vergleichslauf MS“, seit 0.5.12): Management Summary der festen Musterfassung Ilka, mehrfach
 // hintereinander mit derselben Konfiguration (Plan evaluation/plaene/management-summary-ilka.json, Fall
 // evaluation/faelle/ilka-management-summary.json). Jeder Lauf ist ein Aufruf über dieselbe Funktion wie die App
 // (kurzfassungErstellen); die Musterfassung wird vor dem ersten Aufruf gegen die Prüfsumme des Plans geprüft.
 //
-// Genutzt von „Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka“ und vom Skript
+// Genutzt von „Einstellungen → Testläufe“ und vom Skript
 // evaluation/abnahmen/kurzfassung.lauf.ts. Die Vorprüfung liefert Beobachtungen für die Prüfung von Hand, kein
 // Bestehen und keine Note. Alle Inhalte sind fiktiv.
 
@@ -143,9 +143,9 @@ export interface KurzfassungsErgebnis {
 export interface KurzfassungsReihe {
   format: "ki-lead-kurzfassung-reihe/1";
   plan: string;
-  /** „app“ (Einstellungen → Vergleichslauf Ilka) oder „skript“ (evaluation/abnahmen/kurzfassung.lauf.ts) */
+  /** „app“ (Einstellungen → Testläufe) oder „skript“ (evaluation/abnahmen/kurzfassung.lauf.ts) */
   quelle: "app" | "skript";
-  /** Umfang des Vergleichslaufs, immer „ms“ */
+  /** Umfang des Testlaufs, immer „ms“ */
   umfang: "ms";
   variante: string | null;
   fall: string;
@@ -339,15 +339,15 @@ export function kurzfassungsUebersicht(reihe: KurzfassungsReihe): unknown[][] {
   ];
 }
 
-/** Dateiname, z. B. KI-LEAD_Vergleichslauf_Ilka_MS-Muster_claude-sonnet-5-5-medium_20261025-0315.zip */
+/** Dateiname, z. B. KI-LEAD_Testlauf_Ilka_MS-Muster_claude-sonnet-5-5-medium_20261025-0315.zip */
 export function kurzfassungsZipName(reihe: KurzfassungsReihe): string {
   const variante = reihe.variante ? `${dateiKurz(reihe.variante.split("/").pop()!)}_` : "";
-  return `KI-LEAD_Vergleichslauf_Ilka_MS-Muster_${variante}${dateiKurz(`${reihe.modell.modell}-${reihe.modell.aufwand}`)}_${dateiStempel(reihe.erstellt)}.zip`;
+  return `KI-LEAD_Testlauf_Ilka_MS-Muster_${variante}${dateiKurz(`${reihe.modell.modell}-${reihe.modell.aufwand}`)}_${dateiStempel(reihe.erstellt)}.zip`;
 }
 
 function liesmich(reihe: KurzfassungsReihe): string {
   return [
-    "KI-LEAD – Vergleichslauf Ilka: MS (aus Musterfassung)",
+    "KI-LEAD – Testlauf Ilka: Management Summary (aus Musterfassung)",
     "",
     `Erstellt: ${reihe.erstellt} mit ${reihe.app}, Profil ${reihe.profil.id} ${reihe.profil.version} (${reihe.profil.hash.slice(0, 12)}…)`,
     ...(reihe.variante ? [`Variante: ${reihe.variante}`] : []),

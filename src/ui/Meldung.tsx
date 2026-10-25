@@ -1,4 +1,6 @@
-// Meldungsmaske: Schritte aus der Darstellungsdatei, Formular aus dem Schema.
+// Meldungsmaske: Schritte aus der Darstellungsdatei, Formular aus dem Schema. Seit 0.5.17 hängt die App für jedes Profil
+// einen eigenen Schritt „Management Summary“ an (Titel aus kurzfassung.titel); bis 0.5.16 stand sie im Schritt
+// „Prüfen & Exportieren“.
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { unterSchema } from "../kern/schema";
@@ -6,12 +8,20 @@ import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
 import { migriere } from "../kern/migration";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { quellenHinweise } from "../kern/quellen";
-import type { Meldung as MeldungTyp, Profil } from "../kern/typen";
+import type { Meldung as MeldungTyp, Profil, Schritt } from "../kern/typen";
 import { Feld } from "./Feld";
 import { Pruefen } from "./Pruefen";
-import type { KiZugang } from "./Kurzfassung";
+import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilfeKontext";
 import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
+
+/** Kennung des Schritts, den die App für die Management Summary anfügt */
+export const KURZFASSUNG_SCHRITT = "management-summary";
+
+/** Schritte des Profils und dahinter der Schritt der Management Summary (seit 0.5.17) */
+export function meldungsSchritte(ui: Profil["ui"]): (Schritt & { kurzfassung?: boolean })[] {
+  return [...ui.schritte, { id: KURZFASSUNG_SCHRITT, titel: ui.kurzfassung?.titel || "Management Summary", felder: [], kurzfassung: true }];
+}
 
 interface Props {
   profil: Profil;
@@ -31,10 +41,11 @@ interface Props {
 
 export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwischenstand, ki, dokument = 0 }: Props) {
   const ui = profil.ui;
+  const schritte = useMemo(() => meldungsSchritte(ui), [ui]);
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
   const dateiRef = useRef<HTMLInputElement>(null);
-  const aktuell = ui.schritte[schritt];
+  const aktuell = schritte[Math.min(schritt, schritte.length - 1)];
 
   // Änderungen immer auf dem neuesten Stand, auch wenn zwei Änderungen vor dem nächsten Zeichnen folgen
   const stand = useRef(meldung);
@@ -88,7 +99,8 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     else setMeldung(d);
     setSchritt(0);
     const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
-    if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${ui.schritte[ui.schritte.length - 1].titel}“.`);
+    const pruefschritt = ui.schritte.find((s) => s.pruefung) ?? ui.schritte[ui.schritte.length - 1];
+    if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${pruefschritt.titel}“.`);
     else zeilen.push("Schemaprüfung ohne Befund.");
     if (quellen.length) zeilen.push(`Quellen: ${quellen.length} Hinweis(e).`);
     setMeldungen({ art: !mig.bekannt || schema.length ? "hinweis" : "ok", zeilen });
@@ -157,7 +169,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
         <div className="arbeitsbereich">
           <nav className="schritte" aria-label="Schritte">
             <ol>
-              {ui.schritte.map((s, i) => (
+              {schritte.map((s, i) => (
                 <li key={s.id}>
                   <button
                     type="button"
@@ -182,18 +194,19 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               const segs = teilePfad(feld);
               return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
             })}
-            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" ki={ki} />}
+            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
+            {aktuell.kurzfassung && <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} eigenerSchritt />}
             <div className="schritt-nav">
               {schritt > 0 ? (
                 <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
-                  Zurück: {ui.schritte[schritt - 1].titel}
+                  Zurück: {schritte[schritt - 1].titel}
                 </button>
               ) : (
                 <span />
               )}
-              {schritt < ui.schritte.length - 1 && (
+              {schritt < schritte.length - 1 && (
                 <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
-                  Weiter: {ui.schritte[schritt + 1].titel}
+                  Weiter: {schritte[schritt + 1].titel}
                 </button>
               )}
             </div>

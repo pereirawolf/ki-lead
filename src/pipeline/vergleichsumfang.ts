@@ -1,4 +1,4 @@
-// Umfang eines Vergleichslaufs Ilka (seit 0.5.12): was getestet wird und mit welcher Grundlage. Eigene Datei ohne
+// Umfang eines Testlaufs Ilka (bis 0.5.16 „Vergleichslauf“, seit 0.5.12): was getestet wird und mit welcher Grundlage. Eigene Datei ohne
 // weitere Abhängigkeiten, damit die Auswertung (vergleichsauswertung.ts, Skript außerhalb von Vite) sie leicht laden kann.
 
 import type { Rolle } from "./einstellungen";
@@ -46,7 +46,7 @@ export const UMFAENGE: UmfangInfo[] = [
   },
   {
     id: "ms",
-    titel: "MS (aus Musterfassung)",
+    titel: "Management Summary (aus Musterfassung)",
     grundlage: "musterfassung",
     text: "Management Summary mit der Musterfassung als einziger Eingabe; S1 und S2 entfallen. Je Lauf Text, Hinweise der App und eine Vorprüfung (Wortzahl, Kurztitel, Mindestwert, Hochrechnung, Nachbetankung, Marker) als Beobachtung für die Prüfung von Hand.",
   },

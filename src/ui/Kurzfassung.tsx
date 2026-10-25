@@ -1,4 +1,4 @@
-// Management Summary im Schritt „Prüfen & Exportieren“: KI-Fassung für die Leitung
+// Management Summary im eigenen Schritt der Meldung (seit 0.5.17, vorher im Schritt „Prüfen & Exportieren“): KI-Fassung für die Leitung
 // (gespeichert je Profil, mit Hinweis, wenn die Meldung sich seither geändert hat) und
 // der bisherige Feldauszug ohne Quellenverweise als Rückfallebene ohne KI.
 // Die Fassung wird nur auf Knopfdruck erstellt. Sie wird geleert, wenn die Meldung in der Maske durch eine
@@ -59,7 +59,21 @@ function Kopieren({ text }: { text: string }) {
   );
 }
 
-export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; meldung: Meldung; ki?: KiZugang }) {
+/**
+ * eigenerSchritt: als Inhalt des Schritts „Management Summary“; die Überschrift kommt dann vom Schritt (h2), der Kasten
+ * hat keine eigene.
+ */
+export function KurzfassungKasten({
+  profil,
+  meldung,
+  ki,
+  eigenerSchritt = false,
+}: {
+  profil: Profil;
+  meldung: Meldung;
+  ki?: KiZugang;
+  eigenerSchritt?: boolean;
+}) {
   const titel = profil.ui.kurzfassung?.titel || "Management Summary";
   const schluesselIdb = idbSchluessel(profil.manifest.id);
   const fp = useMemo(() => kurzfassungsFingerabdruck(meldung, profil), [meldung, profil]);
@@ -135,9 +149,12 @@ export function KurzfassungKasten({ profil, meldung, ki }: { profil: Profil; mel
   const basisName = dateiname(meldung, profil, false);
 
   return (
-    <section className="kurzfassung" aria-labelledby="kurzfassung-titel">
-      <h3 id="kurzfassung-titel">{titel}</h3>
-      <p className="hinweis">
+    <section
+      className={eigenerSchritt ? "kurzfassung kurzfassung-schritt" : "kurzfassung"}
+      aria-labelledby={eigenerSchritt ? "schritt-titel" : "kurzfassung-titel"}
+    >
+      {!eigenerSchritt && <h3 id="kurzfassung-titel">{titel}</h3>}
+      <p className={eigenerSchritt ? "einleitung" : "hinweis"}>
         Eine konsolidierte Fassung für die Behördenleitung, lesbar in einer Minute: Kernaussage, Beurteilung je Sachverhalt, je Analysefeld höchstens zwei Sätze
         und die früheste Frist. Die KI formuliert nur aus der Meldung; Einzelheiten bleiben in der ausführlichen Meldung.
       </p>

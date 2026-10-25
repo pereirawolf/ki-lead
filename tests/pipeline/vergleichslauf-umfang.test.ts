@@ -87,7 +87,7 @@ describe("Umfang des Vergleichslaufs", () => {
       ["s1-s2", "S1 + S2 (aus Rohdaten)", "rohdaten"],
       ["s1-s2-s3", "S1 + S2 + S3 (aus Rohdaten)", "rohdaten"],
       ["s2-s3", "S2 + S3 (aus Musterfassung)", "musterfassung"],
-      ["ms", "MS (aus Musterfassung)", "musterfassung"],
+      ["ms", "Management Summary (aus Musterfassung)", "musterfassung"],
     ]);
     expect(UMFANG_VORGABE).toBe("s1-s2-s3");
     expect(UMFAENGE.map((u) => rollenFuer(u.id))).toEqual([
@@ -186,7 +186,7 @@ describe("S1 (aus Rohdaten)", () => {
     const zeilen = uebersichtZeilen(reihe, ergebnisse);
     expect(zeilen).toHaveLength(1 + 2 * 2);
     expect(zeilen[0].slice(10, 13)).toEqual(["sachverhalte", "gliederung_wie_muster", "zuordnung_wie_muster"]);
-    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_S1_mistral-small-2603-high_\d{8}-\d{4}\.zip$/);
+    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_S1_mistral-small-2603-high_\d{8}-\d{4}\.zip$/);
   });
 
   it("nennt Abweichungen vom Zuschnitt der Musterfassung", () => {
@@ -225,7 +225,7 @@ describe("S1 + S2 und S1 + S2 + S3 (aus Rohdaten)", () => {
     // der Entwurf wird trotzdem verglichen
     expect(l.lauf.vergleich?.ergebnis).toBeTruthy();
     expect(l.eintrag.s1_vergleich?.sachverhalte).toBe(1);
-    expect(zipDateiname(a.reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_S1-S2_mistral-medium-3-5-high_/);
+    expect(zipDateiname(a.reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_S1-S2_mistral-medium-3-5-high_/);
 
     const mit = attrappe(S1_EINER, [kaputt, gut]);
     const b = await vergleichsreihe({ daten: d, anbieter: mit, einstellungen: MISTRAL, anzahl: 1, umfang: "s1-s2-s3" });
@@ -234,7 +234,7 @@ describe("S1 + S2 und S1 + S2 + S3 (aus Rohdaten)", () => {
     expect(b.ergebnisse[0].lauf.ergebnis?.schemakonform).toBe(true);
     expect(b.reihe.technisch_bestanden).toBe(1);
     // Dateiname der ganzen Kette wie bis 0.5.11
-    expect(zipDateiname(b.reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-high_\d{8}-\d{4}\.zip$/);
+    expect(zipDateiname(b.reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_mistral-medium-3-5-high_\d{8}-\d{4}\.zip$/);
   });
 
   it("ohne S3 keine Vervollständigung einer abgeschnittenen Antwort", async () => {
@@ -257,7 +257,7 @@ describe("S2 + S3 (aus Musterfassung)", () => {
     expect(reihe).toMatchObject({ umfang: "s2-s3", s1_fest: { datei: PLAN_S2.s1_fest.datei, sha256: PLAN_S2.s1_fest.sha256 } });
     expect(ergebnisse[0].lauf.bestaetigt?.sachverhalte.map((s) => s.titel)).toEqual(ZUSCHNITT.sachverhalte.map((s: any) => s.titel));
     expect("s1_vergleich" in ergebnisse[0].eintrag).toBe(false);
-    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_S2-S3-Muster_claude-opus-5-5-medium_/);
+    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_S2-S3-Muster_claude-opus-5-5-medium_/);
   });
 });
 
@@ -342,7 +342,7 @@ describe("MS (aus Musterfassung)", () => {
     );
     expect(await zip.file(`kurzfassungen/${a.lauf}.txt`)!.async("string")).toContain("mindestens rund 20.700");
     expect(kurzfassungsUebersicht(reihe)).toHaveLength(4);
-    expect(kurzfassungsZipName(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_MS-Muster_A-anthropic-standard_claude-sonnet-5-5-medium_\d{8}-\d{4}\.zip$/);
+    expect(kurzfassungsZipName(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_MS-Muster_A-anthropic-standard_claude-sonnet-5-5-medium_\d{8}-\d{4}\.zip$/);
   });
 
   it("Mistral nennt den Endpunkt; Abbruch beendet die Reihe", async () => {

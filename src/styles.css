@@ -3422,3 +3422,99 @@ fieldset.lb-ausgabe {
   margin: 0.4rem 0 0;
   font-size: 0.9rem;
 }
+
+/* Management Summary als eigener Schritt der Meldung (seit 0.5.17) */
+.kurzfassung.kurzfassung-schritt {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* Modelle & Aufwand: Modelle des gewählten KI-Profils, Verweis auf die Testläufe (seit 0.5.17) */
+.ki-profil-modelle {
+  display: inline-block;
+  margin-top: 0.15rem;
+}
+
+.testlauf-verweis {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+}
+
+.testlauf-verweis p {
+  margin: 0;
+  flex: 1 1 16rem;
+}
+
+/* Testläufe und Archiv (seit 0.5.17) */
+.testlauf-fall {
+  margin: 0 0 0.75rem;
+}
+
+.testlauf-art {
+  margin: 0.25rem 0 1rem;
+}
+
+.testlauf-art legend {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.testlauf-konfiguration {
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.testlauf-ergebnis .knopf {
+  margin-top: 0.5rem;
+}
+
+.testlauf-archiv-aktionen {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.testlauf-archiv-alle {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.testlauf-archiv-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.testlauf-archiv-liste li {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.testlauf-archiv-wahl {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.testlauf-archiv-wahl input {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .testlauf-archiv-liste li {
+    flex-direction: column;
+  }
+}

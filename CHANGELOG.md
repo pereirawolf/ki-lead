@@ -64,6 +64,32 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.14 | letzter Commit des Pull Requests „Plausibilität ohne Fehlalarme, Messwerte des Anbieter-Mix; 0.5.14“ |
 | 0.5.15 | letzter Commit des Pull Requests „Mix-Profile, Reparatur mit Haiku, Ergebnisse MS und Prüffall Reparatur; 0.5.15“ |
 | 0.5.16 | letzter Commit des Pull Requests „Nachreihen: Mistral-Reparatur mit Small, Klärungsbedarf in der MS; 0.5.16“ |
+| 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
+
+## [0.5.17] – 25.10.2026
+
+Grundlage: Vorschlag zur Neugliederung von „Einstellungen → Modelle & Verarbeitung“ und der Management Summary, vom Herausgeber am 25.10.2026 freigegeben (ein Formular für alle Testläufe, Begriff „Testlauf“ in Oberfläche, Dateinamen und Doku, Archiv bis zum Löschen, Schritt der Management Summary von der App angefügt). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Schemata, KI-Profilen, gespeicherten Einstellungen, Reihenformaten oder der Ablage der Schlüssel.
+
+### Hinzugefügt
+
+- **Bereich „Testläufe“ in den Einstellungen** (`src/ui/Testlaeufe.tsx`, vorher `Vergleichslauf.tsx` und `ReparaturPrueffall.tsx`): Vergleichslauf Ilka und Prüffall Reparatur in einem Formular. „Was wird getestet?“ mit sechs Testarten; der Prüffall ist jetzt „S3 Reparatur (aus Musterfassung)“, „MS (aus Musterfassung)“ heißt „Management Summary (aus Musterfassung)“. Ein Startknopf („Testlauf starten“), eine Ergebnisanzeige, einheitlich „Anzahl der Läufe“ (S3 Reparatur: Vorgabe 2, höchstens 5; ein Lauf umfasst alle fünf Defekte). Die Konfiguration „Aktuelle Einstellungen (Modelle & Aufwand)“ ersetzt den Verweis „Tabelle oben“. Die Erklärung des Testfalls ist aufklappbar; fehlt ein Schlüssel, führt ein Knopf zu „KI-Anbieter & API“.
+- **Archiv der Testläufe** (`src/speicher/testlaufarchiv.ts`): Jeder Testlauf mit mindestens einem Ergebnis, auch ein abgebrochener, bleibt mit seiner ZIP-Datei in einer eigenen IndexedDB-Datenbank (`ki-lead-testlaeufe`), bis er gelöscht wird. Liste mit den jüngsten zuerst (Zeitpunkt, Testart, Konfiguration, Läufe, Kosten, Größe, App-Version) und Gesamtbelegung; Herunterladen je Eintrag; „Ausgewählte löschen“, „Alle auswählen“ und „Alle löschen“ mit Rückfrage. Scheitert das Ablegen, kommt die ZIP-Datei trotzdem, mit Hinweis.
+- **Management Summary als fünfter Schritt der Meldung** (`src/ui/Meldung.tsx`): Die App fügt für jedes Profil nach „Prüfen & Exportieren“ den Schritt „Management Summary“ an (Titel aus `kurzfassung.titel`); KI-Fassung, Hinweis bei geänderter Meldung und Feldauszug ohne KI ziehen vollständig dorthin. „Prüfen & Exportieren“ behält Prüfung, Übersicht und JSON-/PDF-Ausgabe. Das Profilformat ändert sich nicht.
+
+### Geändert
+
+- **„Modelle & Verarbeitung“ heißt „Modelle & Aufwand“** und enthält nur noch die Wahl von KI-Profil, Modell und Aufwand, dazu einen Verweis auf die Testläufe. Aus „Voreinstellung“ wird „KI-Profil“ („KI-Profil Anthropic“, „KI-Profil OpenAI“, „KI-Profil Mistral“, „KI-Profil Mix: …“), aus „Individuelle Modellkonfiguration“ „Eigene Kombination“, auch in der Übersicht. Jede Option zeigt eine Kurzzeile, die Modelle je Aufgabe nur die gewählte; die Tabelle steht unter „Modell und Aufwand je Aufgabe“.
+- **Dateinamen der ZIP-Dateien:** `KI-LEAD_Testlauf_Ilka_…` statt `KI-LEAD_Vergleichslauf_Ilka_…`, `KI-LEAD_Testlauf_Ilka_S3-Reparatur_…` statt `KI-LEAD_Prueffall_Reparatur_…`; erste Zeile im LIESMICH „KI-LEAD – Testlauf Ilka: …“. Reihenformate (`ki-lead-abnahme/1`, `ki-lead-kurzfassung-reihe/1`, `ki-lead-reparaturtest/1`), Code-Bezeichner und `npm run vergleichslauf:auswerten` bleiben; das Skript erkennt ZIP-Dateien an der Endung und liest alte wie neue.
+- Spezifikation 0.5.17 (Abschnitte 5.1 und 5.4), Datenschutzhinweise 1.5 (Archiv der Testläufe, Löschen), `docs/TESTS.md`, `evaluation/README.md`.
+
+### Tests
+
+- `tests/ui/testlaeufe.test.ts` (vorher `vergleichslauf.test.ts`, mit `reparaturprueffall.test.ts` zusammengeführt): sechs Testarten, Wechsel der Anzahl zwischen Kette und S3 Reparatur, Varianten des Plans `reparatur-ilka` je Testart, neue Dateinamen und LIESMICH; Archiv mit Reihenfolge, nachträglichem Herunterladen, Löschen ausgewählter und aller Einträge nach Rückfrage, Fehler beim Ablegen.
+- `tests/ui/meldung-schritte.test.ts` (neu): fünf Schritte im Beispielprofil und in der Vorlage, Management Summary nur im eigenen Schritt, ohne doppelte Überschrift.
+- `tests/ui/einstellungen.test.ts`: sieben Bereiche, KI-Profil mit Kurzzeile und Modellen nur bei der gewählten Option, „Modelle & Aufwand“ ohne Testläufe mit Sprung zu „Testläufe“.
+- Browsertests: `tests/browser/testlaeufe.spec.ts` (vorher `vergleichslauf.spec.ts` und `reparaturprueffall.spec.ts`) mit Archiv in der echten IndexedDB über ein Neuladen hinweg; `einstellungen.spec.ts` mit sieben Bereichen; `hauptablauf.spec.ts` mit dem Schritt „Management Summary“.
+- `tests/support/speicher.ts`: Attrappe von idb-keyval mit `createStore`.
+- `tests/pipeline/vergleichslauf.test.ts`, `vergleichslauf-umfang.test.ts`, `reparaturtest.test.ts`: neue Dateinamen und Titel der Testart „Management Summary (aus Musterfassung)“; `tests/ui/ueber.test.ts` folgt der Version 0.5.17.
 
 ## [0.5.16] – 25.10.2026
 

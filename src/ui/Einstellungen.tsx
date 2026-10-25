@@ -1,5 +1,7 @@
-// Einstellungen in sechs Bereichen mit Abschnittsnavigation wie bei Meldung und Lagebild (seit 0.5.6):
-// Übersicht, KI-Anbieter & API, Modelle & Verarbeitung, Recherche & Grenzen, Darstellung, Über KI-LEAD.
+// Einstellungen in Bereichen mit Abschnittsnavigation wie bei Meldung und Lagebild (seit 0.5.6): Übersicht,
+// KI-Anbieter & API, Modelle & Aufwand, Testläufe, Recherche & Grenzen, Darstellung, Über KI-LEAD.
+// Seit 0.5.17 heißt „Modelle & Verarbeitung“ „Modelle & Aufwand“ und enthält nur noch die Wahl von KI-Profil, Modell und
+// Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
 import { useState } from "react";
@@ -33,15 +35,15 @@ import {
 } from "../pipeline/einstellungen";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 import { UeberAbschnitt } from "./Ueber";
-import { VergleichslaufAbschnitt } from "./Vergleichslauf";
-import { ReparaturPrueffallAbschnitt } from "./ReparaturPrueffall";
+import { TestlaeufeBereich } from "./Testlaeufe";
 
-export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "recherche" | "darstellung" | "ueber";
+export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "ueber";
 
 export const BEREICHE: { id: EinstellungsBereich; titel: string }[] = [
   { id: "uebersicht", titel: "Übersicht" },
   { id: "anbieter", titel: "KI-Anbieter & API" },
-  { id: "modelle", titel: "Modelle & Verarbeitung" },
+  { id: "modelle", titel: "Modelle & Aufwand" },
+  { id: "testlaeufe", titel: "Testläufe" },
   { id: "recherche", titel: "Recherche & Grenzen" },
   { id: "darstellung", titel: "Darstellung" },
   { id: "ueber", titel: "Über KI-LEAD" },
@@ -149,7 +151,7 @@ const HERKUNFT: Record<ReturnType<typeof modellHerkunft>, string> = {
   app: "Vorgabe der App",
 };
 
-/** Voreinstellung, der Modell und Aufwand aller Aufgaben gerade folgen (Mix-Profile seit 0.5.15) */
+/** KI-Profil, dem Modell und Aufwand aller Aufgaben gerade folgen (Mix-Profile seit 0.5.15; bis 0.5.16 „Voreinstellung“) */
 type Voreinstellung = "profil" | AnbieterId | MixId | "individuell";
 
 const istMix = (v: Voreinstellung): v is MixId => (MIX_IDS as string[]).includes(v);
@@ -161,9 +163,9 @@ function aktiveVoreinstellung(e: E): Voreinstellung {
 
 function voreinstellungTitel(v: Voreinstellung): string {
   if (v === "profil") return "Vorgaben des aktiven Profils";
-  if (v === "individuell") return "Individuelle Modellkonfiguration";
-  if (istMix(v)) return MIX_PROFILE[v].titel;
-  return `Standard-Profil ${ANBIETER_NAME[v]}`;
+  if (v === "individuell") return "Eigene Kombination";
+  if (istMix(v)) return `KI-Profil ${MIX_PROFILE[v].titel}`;
+  return `KI-Profil ${ANBIETER_NAME[v]}`;
 }
 
 /** Kurzbeschreibung eines Modellprofils: „S1 claude-haiku-5-5 (hoch) · …“ */
@@ -178,11 +180,10 @@ function modellProfilText(s: ModellProfil): string {
   return ROLLEN.map((r) => `${kurz[r.id]} ${s.modelle[r.id]} (${aufwandTitel(s.aufwand[r.id])})`).join(" · ");
 }
 
-/** Kurzbeschreibung eines Mix-Profils mit Hinweis auf Schlüssel und Datenweg */
-function mixProfilText(id: MixId): string {
-  const m = MIX_PROFILE[id];
-  const namen = m.anbieter.map((a) => ANBIETER_NAME[a]).join(" und ");
-  return `${modellProfilText(m)}. Braucht Schlüssel für ${namen}; die Inhalte eines Laufs gehen an beide Anbieter.`;
+/** Hinweis eines Mix-Profils auf Schlüssel und Datenweg */
+function mixProfilHinweis(id: MixId): string {
+  const namen = MIX_PROFILE[id].anbieter.map((a) => ANBIETER_NAME[a]).join(" und ");
+  return `Braucht Schlüssel für ${namen}; die Inhalte eines Laufs gehen an beide Anbieter.`;
 }
 
 /** Anbieter, die mit den aktuellen Einstellungen genutzt werden, in fester Reihenfolge */
@@ -225,7 +226,7 @@ function UebersichtBereich({
       <dl className="uebersicht-liste">
         <dt>Aktives Profil</dt>
         <dd>{profil ? `${profil.manifest.name} ${profil.manifest.version}` : "keines"}</dd>
-        <dt>Voreinstellung der Modelle</dt>
+        <dt>KI-Profil</dt>
         <dd>{voreinstellungTitel(aktiveVoreinstellung(e))}</dd>
         <dt>Mistral-Endpunkt</dt>
         <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.mistralEndpunkt)?.titel}</dd>
@@ -488,8 +489,7 @@ function AnbieterBereich({
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
       <h2 id="einstellungen-bereich-titel">KI-Anbieter & API</h2>
       <p className="einleitung">
-        Zugang zu den KI-Anbietern. Ein Schlüssel wird erst mit „Speichern“ übernommen. Welche Modelle die Aufgaben nutzen, steht unter „Modelle &
-        Verarbeitung“.
+        Zugang zu den KI-Anbietern. Ein Schlüssel wird erst mit „Speichern“ übernommen. Welche Modelle die Aufgaben nutzen, steht unter „Modelle & Aufwand“.
       </p>
       {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
       {ANBIETER.map((a) => (
@@ -507,32 +507,38 @@ function AnbieterBereich({
   );
 }
 
-// ── Modelle & Verarbeitung ────────────────────────────────────────────────────
+// ── Modelle & Aufwand ─────────────────────────────────────────────────────────
 
-function VoreinstellungWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) => void }) {
+/**
+ * Auswahl des KI-Profils (bis 0.5.16 „Voreinstellung“): je Option eine Kurzzeile; die Modelle je Aufgabe erscheinen nur
+ * bei der gewählten Option, damit die Liste kurz bleibt (seit 0.5.17).
+ */
+function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) => void }) {
   const aktiv = aktiveVoreinstellung(e);
   const [gesetzt, setGesetzt] = useState<Voreinstellung | null>(null);
   const waehlen = (v: Exclude<Voreinstellung, "individuell">) => {
     if (v === aktiv) return;
     if (
       aktiv === "individuell" &&
-      !confirm(
-        `Die individuelle Modellkonfiguration wird überschrieben: Modell und Aufwand aller Aufgaben folgen dann „${voreinstellungTitel(v)}“. Fortfahren?`,
-      )
+      !confirm(`Die eigene Kombination wird überschrieben: Modell und Aufwand aller Aufgaben folgen dann „${voreinstellungTitel(v)}“. Fortfahren?`)
     )
       return;
     setEinstellungen(v === "profil" ? profilvorgabeAnwenden(e) : istMix(v) ? mixProfilAnwenden(e, v) : standardProfilAnwenden(e, v));
     setGesetzt(v);
   };
-  const optionen: { v: Voreinstellung; text: string }[] = [
-    { v: "profil", text: "Modelle wie im aktiven Profil bzw. in der App vorgegeben, Aufwand nach den Vorgaben der App." },
-    ...ANBIETER_IDS.map((a) => ({ v: a as Voreinstellung, text: modellProfilText(STANDARD_PROFILE[a]) })),
-    ...MIX_IDS.map((m) => ({ v: m as Voreinstellung, text: mixProfilText(m) })),
-    { v: "individuell", text: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
+  const optionen: { v: Voreinstellung; kurz: string; einzeln?: string }[] = [
+    { v: "profil", kurz: "Modelle wie im aktiven Profil bzw. in der App vorgegeben.", einzeln: "Aufwand nach den Vorgaben der App." },
+    ...ANBIETER_IDS.map((a) => ({
+      v: a as Voreinstellung,
+      kurz: `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
+      einzeln: modellProfilText(STANDARD_PROFILE[a]),
+    })),
+    ...MIX_IDS.map((m) => ({ v: m as Voreinstellung, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
+    { v: "individuell", kurz: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
   ];
   return (
     <fieldset className="ablage-wahl voreinstellung-wahl">
-      <legend>Voreinstellung</legend>
+      <legend>KI-Profil</legend>
       {optionen.map((o) => (
         <label key={o.v} className={o.v === "individuell" && aktiv !== "individuell" ? "ablage-option gesperrt" : "ablage-option"}>
           <input
@@ -546,7 +552,13 @@ function VoreinstellungWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (
           <span>
             <strong>{voreinstellungTitel(o.v)}</strong>
             <br />
-            <span className="ablage-text">{o.text}</span>
+            <span className="ablage-text">{o.kurz}</span>
+            {aktiv === o.v && o.einzeln && (
+              <>
+                <br />
+                <span className="ablage-text ki-profil-modelle">{o.einzeln}</span>
+              </>
+            )}
           </span>
         </label>
       ))}
@@ -564,21 +576,24 @@ function ModelleBereich({
   e,
   setEinstellungen,
   schluessel,
+  zeige,
 }: {
   profil: Profil | null;
   e: E;
   setEinstellungen: (e: E) => void;
   schluessel: Schluessel;
+  zeige: (b: EinstellungsBereich) => void;
 }) {
   const setze = (teil: Partial<E>) => setEinstellungen({ ...e, ...teil });
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
-      <h2 id="einstellungen-bereich-titel">Modelle & Verarbeitung</h2>
+      <h2 id="einstellungen-bereich-titel">Modelle & Aufwand</h2>
       <p className="einleitung">
-        Modell und Aufwand je Aufgabe. Höherer Aufwand bedeutet gründlichere Arbeit, aber mehr Token und längere Laufzeit. Modelle verschiedener Anbieter lassen
-        sich je Aufgabe mischen; für jeden genutzten Anbieter braucht es einen Schlüssel.
+        Wähle ein KI-Profil oder stelle Modell und Aufwand je Aufgabe selbst zusammen. Höherer Aufwand bedeutet gründlichere Arbeit, aber mehr Token und längere
+        Laufzeit. Für jeden genutzten Anbieter braucht es einen Schlüssel.
       </p>
-      <VoreinstellungWahl e={e} setEinstellungen={setEinstellungen} />
+      <KiProfilWahl e={e} setEinstellungen={setEinstellungen} />
+      <h3>Modell und Aufwand je Aufgabe</h3>
       <table className="tabelle tabelle-formular">
         <thead>
           <tr>
@@ -648,8 +663,12 @@ function ModelleBereich({
         Zur Wahl stehen je Modell nur die Stufen, die der Anbieter anbietet; Mistral kennt nur „niedrig – ohne Nachdenken“ und „hoch – mit Nachdenken“. Lehnt
         ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
       </p>
-      <VergleichslaufAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
-      <ReparaturPrueffallAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
+      <div className="kasten kasten-info testlauf-verweis">
+        <p>Wie sich eine Änderung auswirkt, zeigt ein Testlauf am fiktiven Fall „Ilka“ mit Ergebnis als ZIP-Datei.</p>
+        <button type="button" className="knopf klein" onClick={() => zeige("testlaeufe")}>
+          Zu den Testläufen
+        </button>
+      </div>
     </section>
   );
 }
@@ -793,7 +812,8 @@ export function EinstellungenAnsicht({
               setEinstellungen={setEinstellungen}
             />
           )}
-          {aktuell === "modelle" && <ModelleBereich profil={profil} e={e} setEinstellungen={setEinstellungen} schluessel={schluessel} />}
+          {aktuell === "modelle" && <ModelleBereich profil={profil} e={e} setEinstellungen={setEinstellungen} schluessel={schluessel} zeige={zeige} />}
+          {aktuell === "testlaeufe" && <TestlaeufeBereich profil={profil} einstellungen={e} schluessel={schluessel} zeige={zeige} />}
           {aktuell === "recherche" && <RechercheBereich profil={profil} e={e} setEinstellungen={setEinstellungen} />}
           {aktuell === "darstellung" && farben && <FarbschemaAbschnitt profil={profil} zugang={farben} />}
           {aktuell === "ueber" && <UeberAbschnitt />}

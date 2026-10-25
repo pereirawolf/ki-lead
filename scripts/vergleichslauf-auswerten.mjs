@@ -1,5 +1,5 @@
 // Auswertung mehrerer Vergleichsläufe Ilka (Befund AV-2026-W43-04, 24.10.2026). Liest die ZIP-Dateien aus
-// „Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka“ (oder entpackte Ordner bzw. reihe.json-Dateien),
+// „Einstellungen → Testläufe“, bis 0.5.16 „Vergleichslauf Ilka“ (oder entpackte Ordner bzw. reihe.json-Dateien),
 // fasst sie je Konfiguration zusammen und stellt jede Konfiguration dem Bezug gegenüber. Keine KI-Aufrufe.
 //
 // Aufruf: npm run vergleichslauf:auswerten -- <datei.zip | ordner | reihe.json> … [--bezug <kennung>] [--md <datei>] [--json <datei>]

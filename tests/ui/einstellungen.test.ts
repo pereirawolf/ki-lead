@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-// Einstellungen in Bereichen (seit 0.5.6): Navigation, Übersicht, Voreinstellung unter „Modelle & Verarbeitung“,
-// Grenzen, unverändertes Speicherverhalten. Vorher (0.4.26): Höchstzahl Ausgabetoken gilt für jeden KI-Aufruf.
+// Einstellungen in Bereichen (seit 0.5.6): Navigation, Übersicht, KI-Profil unter „Modelle & Aufwand“ (bis 0.5.16
+// „Voreinstellung“ unter „Modelle & Verarbeitung“), eigener Bereich „Testläufe“ (seit 0.5.17), Grenzen, unverändertes
+// Speicherverhalten. Vorher (0.4.26): Höchstzahl Ausgabetoken gilt für jeden KI-Aufruf.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
@@ -20,7 +21,7 @@ afterEach(async () => {
 const OHNE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "" };
 
 /** Bereichsnamen in der Reihenfolge der Navigation (fest, unabhängig von der Implementierung) */
-const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Verarbeitung", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
+const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
 
 /** Ansicht mit eigenem Zustand, damit Änderungen wie in der App sofort wirken */
 function MitZustand({
@@ -61,7 +62,7 @@ const ueberschriften = () => [...document.querySelectorAll(".bereich-inhalt h2")
 const radio = (wert: string) => document.querySelector(`input[name="voreinstellung"][value="${wert}"]`) as HTMLInputElement;
 
 describe("Einstellungen: Navigation in Bereichen", () => {
-  it("zeigt sechs Bereiche, beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
+  it("zeigt sieben Bereiche, beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [] }));
     expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE);
     expect(ueberschriften()).toEqual(["Übersicht"]);
@@ -124,7 +125,7 @@ describe("Einstellungen: Übersicht", () => {
     await einhaengen(React.createElement(MitZustand, { start, gesetzt: [], profil: p, schluessel: { ...OHNE_SCHLUESSEL, anthropic: "sk-ant-TEST" } }));
     const text = document.querySelector(".bereich-inhalt")!.textContent!;
     expect(text).toContain(`${p.manifest.name} ${p.manifest.version}`);
-    expect(text).toContain("Individuelle Modellkonfiguration");
+    expect(text).toContain("Eigene Kombination");
     const zeilen = [...document.querySelectorAll(".bereich-inhalt table")[1].querySelectorAll("tbody tr")].map((tr) =>
       [...tr.querySelectorAll("td")].map((td) => td.textContent),
     );
@@ -166,23 +167,27 @@ describe("Einstellungen: KI-Anbieter & API", () => {
   });
 });
 
-describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () => {
-  it("setzt Modell und Aufwand aller Aufgaben auf ein Standard-Profil; alles andere bleibt", async () => {
+describe("Einstellungen: KI-Profil unter „Modelle & Aufwand“", () => {
+  it("setzt Modell und Aufwand aller Aufgaben auf ein KI-Profil; alles andere bleibt; Modelle nur beim gewählten Profil", async () => {
     const gesetzt: Einstellungen[] = [];
     const start: Einstellungen = { ...STANDARD, websucheMax: 7 };
     await einhaengen(React.createElement(MitZustand, { start, gesetzt }));
-    await klick("Modelle & Verarbeitung", nav());
+    await klick("Modelle & Aufwand", nav());
     expect(radio("profil").checked).toBe(true);
     expect(radio("individuell").disabled).toBe(true);
-    expect(document.querySelector(".voreinstellung-wahl")!.textContent).toContain("S1 gpt-6-luna (hoch)");
+    expect(document.querySelector(".voreinstellung-wahl legend")!.textContent).toBe("KI-Profil");
+    // Kurzzeile je Option; die Modelle je Aufgabe erst bei der gewählten Option (seit 0.5.17)
+    expect(radio("openai").closest("label")!.textContent).toBe("KI-Profil OpenAIAlle Aufgaben mit Modellen von OpenAI.");
+    expect(document.querySelector(".voreinstellung-wahl")!.textContent).not.toContain("S1 gpt-6-luna (hoch)");
 
     await klick(radio("openai"));
+    expect(radio("openai").closest("label")!.querySelector(".ki-profil-modelle")!.textContent).toContain("S1 gpt-6-luna (hoch)");
     expect(gesetzt.at(-1)!.modelle).toEqual(STANDARD_PROFILE.openai.modelle);
     expect(gesetzt.at(-1)!.aufwand).toEqual(STANDARD_PROFILE.openai.aufwand);
     expect(gesetzt.at(-1)!.websucheMax).toBe(7);
     expect(radio("openai").checked).toBe(true);
     expect((document.querySelector('select[aria-label="Modell S2 Verdichtung"]') as HTMLSelectElement).value).toBe("gpt-6-astra");
-    expect(document.querySelector(".voreinstellung-wahl [role=status]")!.textContent).toContain("Standard-Profil OpenAI");
+    expect(document.querySelector(".voreinstellung-wahl [role=status]")!.textContent).toContain("KI-Profil OpenAI");
 
     await klick(radio("mistral"));
     expect(gesetzt.at(-1)!.modelle).toEqual({
@@ -202,7 +207,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
   it("AV-2026-W43-31: Mix-Profile stehen nach den Standard-Profilen, nennen beide Schlüssel und setzen alle Aufgaben", async () => {
     const gesetzt: Einstellungen[] = [];
     await einhaengen(React.createElement(MitZustand, { start: { ...STANDARD, websucheMax: 5 }, gesetzt }));
-    await klick("Modelle & Verarbeitung", nav());
+    await klick("Modelle & Aufwand", nav());
     const werte = [...document.querySelectorAll('input[name="voreinstellung"]')].map((r) => (r as HTMLInputElement).value);
     expect(werte).toEqual(["profil", "anthropic", "openai", "mistral", "mix-opus", "mix-sonnet", "individuell"]);
     const wahl = document.querySelector(".voreinstellung-wahl")!.textContent!;
@@ -231,7 +236,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
   it("AV-2026-W43-01, -02: Aufwand je Modell; beim Wechsel auf Mistral passt sich die Stufe sichtbar an", async () => {
     const gesetzt: Einstellungen[] = [];
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt }));
-    await klick("Modelle & Verarbeitung", nav());
+    await klick("Modelle & Aufwand", nav());
     const aufwand = () => document.querySelector('select[aria-label="Aufwand S2 Verdichtung"]') as HTMLSelectElement;
     expect([...aufwand().options].map((o) => o.value)).toEqual(["low", "medium", "high", "xhigh", "max"]);
     expect(aufwand().value).toBe("medium");
@@ -254,7 +259,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
     const start: Einstellungen = { ...STANDARD, modelle: { ...STANDARD.modelle, erfassung: "claude-fable-5-1", kurzfassung: "mistral-small-2603" } };
     const frage = vi.spyOn(window, "confirm").mockReturnValueOnce(false).mockReturnValueOnce(true);
     await einhaengen(React.createElement(MitZustand, { start, gesetzt }));
-    await klick("Modelle & Verarbeitung", nav());
+    await klick("Modelle & Aufwand", nav());
     expect(radio("individuell").checked).toBe(true);
 
     await klick(radio("anthropic"));
@@ -266,7 +271,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
     expect(frage).toHaveBeenCalledTimes(2);
     expect(gesetzt.at(-1)!.modelle).toEqual(STANDARD_PROFILE.anthropic.modelle);
 
-    // Von einem Standard-Profil zum anderen: nichts Individuelles geht verloren, keine Rückfrage
+    // Von einem KI-Profil zum anderen: nichts Individuelles geht verloren, keine Rückfrage
     await klick(radio("openai"));
     expect(frage).toHaveBeenCalledTimes(2);
   });
@@ -274,7 +279,7 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
   it("gemischte Konfiguration bleibt möglich; die Zeile nennt Herkunft, Anbieter und fehlenden Schlüssel", async () => {
     const gesetzt: Einstellungen[] = [];
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt, schluessel: { ...OHNE_SCHLUESSEL, anthropic: "sk-ant-TEST" } }));
-    await klick("Modelle & Verarbeitung", nav());
+    await klick("Modelle & Aufwand", nav());
     const s2 = document.querySelector('select[aria-label="Modell S2 Recherche und Entwurf"]') as HTMLSelectElement;
     expect([...s2.querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Anthropic", "OpenAI", "Mistral"]);
     s2.value = "mistral-large-4";
@@ -283,6 +288,25 @@ describe("Einstellungen: Voreinstellung unter „Modelle & Verarbeitung“", () 
     expect(gesetzt.at(-1)!.modelle.vorverarbeitung).toBe("");
     expect(radio("individuell").checked).toBe(true);
     expect(s2.closest("td")!.textContent).toContain("eigene Einstellung · Mistral · kein Schlüssel");
+  });
+});
+
+describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
+  it("„Modelle & Aufwand“ enthält keine Testläufe mehr und verweist auf den Bereich „Testläufe“", async () => {
+    const p = await profilPflicht();
+    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [], profil: p }));
+    await klick("Modelle & Aufwand", nav());
+    const inhalt = () => document.querySelector(".bereich-inhalt")!;
+    expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Modell und Aufwand je Aufgabe"]);
+    expect(inhalt().textContent).not.toMatch(/Vergleichslauf|Prüffall|Testlauf starten/);
+    await klick("Zu den Testläufen");
+    expect(ueberschriften()).toEqual(["Testläufe"]);
+    expect(navKnoepfe().find((b) => b.getAttribute("aria-current") === "true")?.textContent).toBe("Testläufe");
+    expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Neuer Testlauf", "Archiv"]);
+    expect(knopf("Testlauf starten")?.disabled).toBe(true);
+    // ohne Schlüssel: Hinweis mit Sprung zu den Schlüsseln
+    await klick("Schlüssel hinterlegen");
+    expect(ueberschriften()).toEqual(["KI-Anbieter & API"]);
   });
 });
 
