@@ -24,6 +24,7 @@ import {
 import { dauerText, schaetzeStufe, type SchaetzArt } from "../pipeline/schaetzung";
 import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
+import type { EinstellungsBereich } from "./Einstellungen";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
 import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
 import {
@@ -48,7 +49,8 @@ interface Props {
   profil: Profil;
   einstellungen: Einstellungen;
   schluessel: Schluessel;
-  zuEinstellungen: () => void;
+  /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter & API“ */
+  zuEinstellungen: (bereich?: EinstellungsBereich) => void;
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */
   uebergabe?: KiUebergabe | null;
@@ -508,15 +510,15 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
   const fehlend = fehlendeSchluessel(laufModelle(laufEinstellungen, profil, istVerdichtung(material)), schluessel);
   const stufeS2: StufeModell = verdichtung
-    ? { rolle: "verdichtung", kurz: "S2", titel: "S2 Verdichtung" }
-    : { rolle: "erfassung", kurz: "S2", titel: "S2 Recherche und Entwurf" };
-  const stufeS3: StufeModell = { rolle: "reparatur", kurz: "S3", titel: "S3 Reparatur (nur bei Schemafehlern)" };
+    ? { rolle: "verdichtung", kurz: "S2", titel: "S2 Verdichtung", art: "verdichtung" }
+    : { rolle: "erfassung", kurz: "S2", titel: "S2 Recherche und Entwurf", art: "erfassung" };
+  const stufeS3: StufeModell = { rolle: "reparatur", kurz: "S3", titel: "S3 Reparatur (nur bei Schemafehlern)", nebenbei: true };
   const schaetzS2: SchaetzStufe = { kurz: "S2", rolle: stufeS2.rolle, art: verdichtung ? "verdichtung" : "erfassung" };
   const dauerFuer = (rolle: Rolle, art: SchaetzArt) => {
     const t = dauerText(schaetzeStufe(art, modellFuer(rolle, laufEinstellungen, profil), aufwandFuer(rolle, laufEinstellungen, profil)).sekunden);
     return t === "Dauer ohne Messwert" ? "einige Minuten (für dieses Modell liegen noch keine Messwerte vor)" : t;
   };
-  const modellwahl = (stufen: StufeModell[], mitWebsuche: boolean) => (
+  const modellwahl = (stufen: StufeModell[], mitWebsuche: boolean, kopf?: ReactNode, nachher?: ReactNode) => (
     <ModellWahl
       stufen={stufen}
       einstellungen={einstellungen}
@@ -525,7 +527,11 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       wahl={modellWahl}
       onChange={setModellWahl}
       websuche={mitWebsuche}
-    />
+      kopf={kopf}
+      zuEinstellungen={() => zuEinstellungen("modelle")}
+    >
+      {nachher}
+    </ModellWahl>
   );
   const protokollKnopf = (l: Lauf, text = "Laufprotokoll exportieren") => (
     <button type="button" className="knopf leise" onClick={() => protokollExport(l)}>
@@ -556,7 +562,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
           <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {anbieterListe(fehlend)}.</p>
-          <button type="button" className="knopf klein" onClick={zuEinstellungen}>
+          <button type="button" className="knopf klein" onClick={() => zuEinstellungen()}>
             Zu den Einstellungen
           </button>
         </div>
@@ -730,17 +736,25 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </p>
                 </div>
               )}
-              <label className="schalter">
-                <input type="checkbox" checked={websuche} onChange={(e) => setWebsucheWahl(e.target.checked)} />
-                <span>
-                  Websuche und Seitenabruf erlauben
-                  <span className="hinweis">
-                    {" "}
-                    {verdichtung ? "Bei Verdichtung standardmäßig aus, z. B. für fiktive Übungslagen." : "Ohne Haken arbeitet die KI nur mit dem Material."}
+              {/* Recherche, Modelle und Schätzung in einem Rahmen, danach die Bestätigung (seit 0.5.22, Punkt 9) */}
+              {modellwahl(
+                [{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl", art: "s1" }, stufeS2, stufeS3],
+                websuche,
+                <label className="schalter">
+                  <input type="checkbox" checked={websuche} onChange={(e) => setWebsucheWahl(e.target.checked)} />
+                  <span>
+                    Websuche und Seitenabruf erlauben
+                    <span className="hinweis">
+                      {" "}
+                      {verdichtung ? "Bei Verdichtung standardmäßig aus, z. B. für fiktive Übungslagen." : "Ohne Haken arbeitet die KI nur mit dem Material."}
+                    </span>
                   </span>
-                </span>
-              </label>
-              {modellwahl([{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl" }, stufeS2, stufeS3], websuche)}
+                </label>,
+                <>
+                  <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}</p>
+                  <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
+                </>,
+              )}
               <label className="bestaetigung">
                 <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
                 <span>
@@ -748,8 +762,6 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   {anbieterListe([...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map(anbieterVon))])}.
                 </span>
               </label>
-              <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}</p>
-              <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
               <div className="schritt-nav">
                 <span />
                 <button type="button" className="knopf primaer" disabled={!kannStarten} onClick={s1Starten}>
@@ -1019,8 +1031,12 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}{" "}
                 {absenderZeile(absender)}
               </p>
-              {modellwahl([stufeS2, stufeS3], lauf?.auftrag.websuche !== false)}
-              <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
+              {modellwahl(
+                [stufeS2, stufeS3],
+                lauf?.auftrag.websuche !== false,
+                undefined,
+                <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />,
+              )}
               <div className="schritt-nav">
                 <div className="aktionen">
                   <button type="button" className="knopf leise" onClick={() => setPhase("auftrag")}>

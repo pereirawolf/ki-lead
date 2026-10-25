@@ -24,6 +24,7 @@ const {
   einstellungenSchreiben,
   laufModelle,
   mitModellwahl,
+  wahlAbweichend,
   modellFuer,
   schluesselLesen,
   schluesselSchreiben,
@@ -200,6 +201,21 @@ describe("mitModellwahl", () => {
     expect(modellFuer("erfassung", m, p)).toBe("claude-opus-5-5");
     expect(e.modelle.vorverarbeitung).toBe("");
     expect(laufModelle(m, p, false)).toContain("gpt-6-luna");
+  });
+
+  it("Punkt 8 (0.5.22): Recherchetiefe je Lauf mit allen drei Werten, in den Bereichen wie unter „Recherche & Grenzen“", () => {
+    const e = STANDARD;
+    const r = mitModellwahl(e, { websucheMax: 30, abrufMax: 20, abrufMaxTokens: 30000 });
+    expect([r.websucheMax, r.abrufMax, r.abrufMaxTokens]).toEqual([30, 20, 30000]);
+    expect([e.websucheMax, e.abrufMax, e.abrufMaxTokens]).toEqual([15, 10, 15000]);
+    // Bereiche: Seiten 0–50, Lesemenge 1 000–100 000 oder 0 (Seiten nie kürzen)
+    const g = mitModellwahl(e, { abrufMax: 99, abrufMaxTokens: 500 });
+    expect([g.abrufMax, g.abrufMaxTokens]).toEqual([50, 1000]);
+    expect(mitModellwahl(e, { abrufMaxTokens: 0 }).abrufMaxTokens).toBe(0);
+    expect(mitModellwahl(e, { abrufMax: Number.NaN })).toBe(e);
+    // abweichend nur, wenn der Lauf recherchiert
+    expect(wahlAbweichend({ abrufMax: 3 }, ["erfassung"], true)).toBe(true);
+    expect(wahlAbweichend({ abrufMax: 3 }, ["erfassung"], false)).toBe(false);
   });
 });
 

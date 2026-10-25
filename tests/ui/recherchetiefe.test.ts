@@ -91,7 +91,7 @@ describe("KP-2026-W43-70/-71/-73: Beschriftungen, Hilfetexte, Umrechnung und Wir
   it("jedes Feld ist beschriftet und mit Hilfetext und Vermerk verknüpft", async () => {
     await zeigen({ websucheMax: 7 });
     expect(beschreibung(feld(WEBSUCHEN)!)).toEqual([
-      "Wie oft die KI wie in einer Suchmaschine nach Quellen suchen darf. Ist die Zahl erreicht, arbeitet sie mit dem Gefundenen weiter. 0: keine Websuche. In der KI-Erfassung lässt sich die Zahl je Auftrag ändern.",
+      "Wie oft die KI wie in einer Suchmaschine nach Quellen suchen darf. Ist die Zahl erreicht, arbeitet sie mit dem Gefundenen weiter. 0: keine Websuche. In der KI-Erfassung lassen sich die drei Werte je Auftrag ändern.",
       "Bei den gewählten Modellen: Anthropic begrenzt die Suchen.",
     ]);
     expect(beschreibung(feld(SEITEN)!)).toEqual([
