@@ -1135,6 +1135,44 @@ textarea {
   margin: 0.5rem 0 0.75rem;
 }
 
+/* Profilkarte in zwei Gruppen: „Lesen“ (Lesetexte des Pakets) und „Prüfen“ (technische Angaben, Prüfbericht, Dateien), seit 0.5.20 */
+.profil-bereich {
+  border-top: 1px solid var(--linie-zart);
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.profil-bereich h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+.profil-bereich > .hinweis {
+  margin: 0 0 0.25rem;
+  font-size: 0.88rem;
+}
+
+.profil-technik {
+  margin-top: 0.5rem;
+}
+
+.profil-technik dd {
+  font-weight: 400;
+}
+
+/* Nicht verwendete Profile: kompakte Zeile, Inhalt hinter einem Aufklappelement */
+.profil-details {
+  margin-bottom: 0;
+}
+
+.profil-details > summary {
+  font-size: 0.92rem;
+}
+
 .profil summary {
   cursor: pointer;
   color: var(--lese-farbe);
@@ -1166,10 +1204,145 @@ textarea {
   }
 }
 
-.befund-sprung {
+/* Befundstatus am Kartentitel, führt zum Prüfbericht (seit 0.5.20) */
+.befund-chip {
   font-size: 0.85rem;
   font-weight: 700;
+  border: 1px solid currentColor;
+  border-radius: var(--r-klein);
+  padding: 0.1rem 0.45rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.befund-chip:hover {
+  text-decoration: underline;
+}
+
+.befund-chip-ok {
+  color: var(--ok);
+  font-weight: 400;
+}
+
+.befund-chip-warnung {
   color: var(--erheblich);
+  background: var(--erheblich-zart);
+}
+
+.befund-chip-fehler {
+  color: var(--kritisch);
+  background: var(--kritisch-zart);
+}
+
+.profil-kopf-aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Aufklappmenüs „Profil hinzufügen“ und „Mehr“ (Disclosure-Muster) */
+.menue {
+  position: relative;
+  display: inline-block;
+}
+
+.menue-pfeil {
+  margin-left: 0.4rem;
+  font-size: 0.8em;
+}
+
+.menue-liste {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  z-index: 20;
+  min-width: 15rem;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.14);
+}
+
+.menue-links {
+  left: 0;
+  right: auto;
+}
+
+.menue-liste {
+  max-width: calc(100vw - 2rem);
+}
+
+.menue-eintrag {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border: 0;
+  background: none;
+  color: var(--tinte);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menue-eintrag:hover,
+.menue-eintrag:focus-visible {
+  background: var(--amt-zart);
+}
+
+.menue-eintrag:focus-visible {
+  outline: 2px solid var(--amt);
+  outline-offset: -2px;
+}
+
+/* Sprungleiste innerhalb einer geöffneten Profilkarte; bleibt unter dem Kopf der App stehen */
+.profil-sprungleiste {
+  position: sticky;
+  /* Höhe des Kopfs der App, gemessen in der Profilansicht (ein- oder zweizeilig je nach Breite) */
+  top: var(--kopf-hoehe, 4.5rem);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0.5rem -0.5rem 0;
+  padding: 0.35rem 0.5rem;
+  background: var(--flaeche);
+  border-bottom: 1px solid var(--linie-zart);
+  font-size: 0.9rem;
+}
+
+.profil-sprungleiste a {
+  color: var(--lese-farbe);
+  font-weight: 700;
+  padding-block: 0.2rem;
+}
+
+@media (pointer: coarse) {
+  .profil-sprungleiste a {
+    padding-block: 0.6rem;
+  }
+}
+
+.profil-bereich h3 {
+  scroll-margin-top: calc(var(--kopf-hoehe, 4.5rem) + 3.5rem);
+}
+
+.profil-bereich h3:focus {
+  outline: none;
+}
+
+.profil-bereich h3:focus-visible {
+  outline: 2px solid var(--lese-farbe);
+  outline-offset: 2px;
+}
+
+.profil-angaben {
+  border-top: 0;
+  margin-top: 0.25rem;
 }
 
 .marke-fehler {

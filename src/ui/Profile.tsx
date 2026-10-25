@@ -2,7 +2,7 @@
 // Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
 // Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
 
-import { useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
 import {
@@ -171,7 +171,7 @@ function SopKatalog({ profil, praefix }: { profil: Profil; praefix: string }) {
     <details className="sop-katalog" id={domId(praefix, "katalog")}>
       <summary>SOP-Katalog lesen</summary>
       <div ref={katalogRef}>
-        <p className="hinweis">Zum Nachlesen ohne KI. Öffnen und Suchen verändern keine Meldung, keinen Nachweis und kein aktives Profil.</p>
+        <p className="hinweis">Das Tag an einem Eintrag nennt die Fassung dieses einzelnen Dokuments.</p>
         <div className="katalog-werkzeuge">
           <label htmlFor={suchId} className="katalog-suche">
             <span>Suchen</span>
@@ -279,8 +279,8 @@ function Arbeitsgrundlagen({ profil, praefix }: { profil: Profil; praefix: strin
   const oeffnen = zielOeffner(praefix);
   return (
     <details className="sop-katalog profil-arbeit" id={domId(praefix, "arbeit")}>
-      <summary>Arbeitsanweisungen und Kodierleitfaden</summary>
-      <p className="hinweis">Die Texte, nach denen die KI arbeitet, aus dem geladenen Paket. Lesen verändert kein Profil und keine Meldung.</p>
+      <summary>Arbeitsanweisungen und Kodierleitfaden lesen</summary>
+      <p className="hinweis">Die Texte, nach denen die KI arbeitet, aus dem geladenen Paket.</p>
       {doks.map((d) => (
         <LeseDokument key={d.pfad} d={d} profil={profil} praefix={praefix} oeffnen={oeffnen} />
       ))}
@@ -359,11 +359,134 @@ function Befunde({ befunde }: { befunde: Befund[] }) {
   );
 }
 
+interface MenueEintrag {
+  text: string;
+  aktion: () => void;
+}
+
+/**
+ * Aufklappmenü nach dem Disclosure-Muster: ein Knopf mit aria-expanded, darunter eine Liste gewöhnlicher Knöpfe.
+ * Schließt nach der Auswahl, mit Escape (Fokus zurück auf den Knopf), beim Klick außerhalb und wenn der Fokus das Menü verlässt.
+ */
+function Menue({ text, label, klasse, eintraege }: { text: string; label?: string; klasse: string; eintraege: MenueEintrag[] }) {
+  const [offen, setOffen] = useState(false);
+  const listId = useId();
+  const wurzel = useRef<HTMLDivElement>(null);
+  const knopfRef = useRef<HTMLButtonElement>(null);
+  /** Liste am linken Rand des Knopfs ausrichten, wenn sie rechtsbündig links aus dem Bild liefe (schmale Bildschirme) */
+  const [links, setLinks] = useState(false);
+  useLayoutEffect(() => {
+    if (!offen) return setLinks(false);
+    const k = knopfRef.current?.getBoundingClientRect();
+    const liste = wurzel.current?.querySelector(".menue-liste")?.getBoundingClientRect();
+    if (k && liste) setLinks(k.right - liste.width < 8);
+  }, [offen]);
+  useEffect(() => {
+    if (!offen) return;
+    const aussen = (e: PointerEvent) => {
+      if (!wurzel.current?.contains(e.target as Node)) setOffen(false);
+    };
+    document.addEventListener("pointerdown", aussen);
+    return () => document.removeEventListener("pointerdown", aussen);
+  }, [offen]);
+  return (
+    <div
+      className="menue"
+      ref={wurzel}
+      onKeyDown={(e) => {
+        if (e.key !== "Escape" || !offen) return;
+        e.stopPropagation();
+        setOffen(false);
+        knopfRef.current?.focus();
+      }}
+      onBlur={(e) => {
+        // Nur bei einem Fokuswechsel auf ein anderes Element; Safari fokussiert angeklickte Knöpfe nicht (relatedTarget leer)
+        const ziel = e.relatedTarget as Node | null;
+        if (ziel && !wurzel.current?.contains(ziel)) setOffen(false);
+      }}
+    >
+      <button
+        ref={knopfRef}
+        type="button"
+        className={klasse}
+        aria-expanded={offen}
+        aria-controls={offen ? listId : undefined}
+        aria-label={label}
+        onClick={() => setOffen((o) => !o)}
+      >
+        {text}
+        <span className="menue-pfeil" aria-hidden="true">
+          ▾
+        </span>
+      </button>
+      {offen && (
+        <ul id={listId} className={links ? "menue-liste menue-links" : "menue-liste"}>
+          {eintraege.map((m) => (
+            <li key={m.text}>
+              <button
+                type="button"
+                className="menue-eintrag"
+                onClick={() => {
+                  setOffen(false);
+                  m.aktion();
+                }}
+              >
+                {m.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Scrollt zu einem Abschnitt der Karte und setzt den Fokus auf seine Überschrift (Sprungleiste). */
+function abschnittZeigen(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ block: "start", behavior: "smooth" });
+  el.focus({ preventScroll: true });
+}
+
+/** Befundstatus am Kartentitel; führt zum Prüfbericht. Ohne Fehler und Warnungen „Geprüft“. */
+function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
+  const zahl = befundZahl(befunde);
+  const stufe = befunde.some((b) => b.stufe === "fehler") ? "fehler" : befunde.some((b) => b.stufe === "warnung") ? "warnung" : "ok";
+  return (
+    <a
+      className={`befund-chip befund-chip-${stufe}`}
+      href={`#${ziel}`}
+      onClick={(e) => {
+        e.preventDefault();
+        bereichOeffnen(ziel);
+      }}
+    >
+      {stufe === "ok" ? "✓ Geprüft" : zahl}
+    </a>
+  );
+}
+
 /** „1 Fehler, 2 Warnungen“; leer ohne Fehler und Warnungen. */
 function befundZahl(befunde: Befund[]): string {
   const f = befunde.filter((b) => b.stufe === "fehler").length;
   const w = befunde.filter((b) => b.stufe === "warnung").length;
   return [f ? `${f} Fehler` : "", w ? `${w} Warnung${w === 1 ? "" : "en"}` : ""].filter(Boolean).join(", ");
+}
+
+/**
+ * Inhalt einer Profilkarte: beim verwendeten Profil offen, bei den übrigen hinter „Angaben, Lesetexte und Prüfung“,
+ * damit die Liste auch mit mehreren importierten Profilen überschaubar bleibt. Sprünge (Befunde, Verweise in Lesetexten)
+ * öffnen das umgebende Element über bereichOeffnen().
+ */
+function KartenInhalt({ offen, children }: { offen: boolean; children: ReactNode }) {
+  if (offen) return <>{children}</>;
+  return (
+    <details className="profil-details">
+      <summary>Angaben, Lesetexte und Prüfung</summary>
+      {children}
+    </details>
+  );
 }
 
 function herkunft(p: ProfilEintrag): string {
@@ -391,7 +514,20 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
     }
   };
 
+  // Höhe des Kopfs der App als --kopf-hoehe für die Sprungleiste; der Kopf bricht je nach Breite um
+  useEffect(() => {
+    const kopf = document.querySelector<HTMLElement>(".kopf");
+    if (!kopf || typeof ResizeObserver === "undefined") return;
+    const setzen = () => document.documentElement.style.setProperty("--kopf-hoehe", `${kopf.getBoundingClientRect().height}px`);
+    setzen();
+    const beobachter = new ResizeObserver(setzen);
+    beobachter.observe(kopf);
+    return () => beobachter.disconnect();
+  }, []);
+
   const importiertAktiv = bericht?.schluessel !== undefined && bericht.schluessel === aktiv;
+  /** Das verwendete Profil zuerst, die übrigen in bisheriger Reihenfolge */
+  const reihenfolge = [...profile.filter((p) => p.schluessel === aktiv), ...profile.filter((p) => p.schluessel !== aktiv)];
 
   return (
     <div className="profile">
@@ -399,20 +535,19 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
         <div className="werkzeugleiste-text">
           <h1>Profile</h1>
           <p>
-            Ein Profil legt fest, nach welcher Systematik gemeldet wird: Schema, Darstellung, Arbeitsanweisung, SOP und Kodierleitfaden einer Organisation oder
-            Ebene. Jedes Profil hat seinen eigenen Meldungs-Zwischenstand; er bleibt beim Wechsel erhalten.
-          </p>
-          <p className="hinweis">
-            Profilversion = Stand des Pakets · Tag an einer SOP = Fassung dieses einzelnen Dokuments · Prüfsumme = konkreter Inhalt des Pakets.
+            Ein Profil bündelt Schema, Darstellung, Arbeitsanweisungen, SOPs und Kodierleitfaden einer Organisation oder Ebene; beim Wechsel behält jedes Profil
+            seinen eigenen Meldungs-Zwischenstand.
           </p>
         </div>
         <div className="werkzeugleiste-knoepfe">
-          <button type="button" className="knopf primaer" onClick={() => zipRef.current?.click()}>
-            Profilpaket importieren
-          </button>
-          <button type="button" className="knopf leise" onClick={() => ordnerRef.current?.click()}>
-            Ordner wählen
-          </button>
+          <Menue
+            text="Profil hinzufügen"
+            klasse="knopf primaer"
+            eintraege={[
+              { text: "Profilpaket importieren (ZIP)", aktion: () => zipRef.current?.click() },
+              { text: "Ordner wählen", aktion: () => ordnerRef.current?.click() },
+            ]}
+          />
           <input
             ref={zipRef}
             type="file"
@@ -461,7 +596,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
       )}
 
       <div className="profilliste">
-        {profile.map((p) => {
+        {reihenfolge.map((p) => {
           const m = p.profil?.manifest;
           const istAktiv = p.schluessel === aktiv;
           const praefix = domId("profil", p.schluessel);
@@ -474,102 +609,137 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   <h2>{m?.name || p.schluessel}</h2>
                   {istAktiv && <span className="aktiv-marke">✓ In Verwendung</span>}
                   {!p.profil && <span className="marke-fehler">nicht verwendbar</span>}
-                  {zahl && (
-                    <a
-                      className="befund-sprung"
-                      href={`#${praefix}-bericht`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        bereichOeffnen(`${praefix}-bericht`);
-                      }}
-                    >
-                      {zahl}
-                    </a>
-                  )}
+                  <BefundChip befunde={p.befunde} ziel={`${praefix}-bericht`} />
                 </div>
-                {p.profil && !istAktiv && (
-                  <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
-                    Verwenden und Meldung öffnen
-                  </button>
-                )}
+                <div className="profil-kopf-aktionen">
+                  {p.profil && !istAktiv && (
+                    <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
+                      Verwenden und Meldung öffnen
+                    </button>
+                  )}
+                  <Menue
+                    text="Mehr"
+                    label={`Mehr zu Profil „${m?.name || p.schluessel}“`}
+                    klasse="knopf leise"
+                    eintraege={[
+                      {
+                        text: "Als Paket exportieren",
+                        aktion: async () => {
+                          const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
+                          dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+                        },
+                      },
+                      ...(p.quelle === "importiert"
+                        ? [{ text: "Entfernen", aktion: () => confirm(`Profil „${m?.name || p.schluessel}“ entfernen?`) && loeschen(p.schluessel) }]
+                        : []),
+                    ]}
+                  />
+                </div>
               </header>
               <p className="profil-meta">
                 {m ? `Profilversion ${m.version} · ` : ""}
                 {herkunft(p)}
               </p>
-              {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
-              {p.profil && (
-                <dl className="profil-daten">
-                  <div>
-                    <dt>Ebene</dt>
-                    <dd>{m?.ebene || "–"}</dd>
-                  </div>
-                  <div>
-                    <dt>Referenzraum</dt>
-                    <dd>{m?.referenzraum || "–"}</dd>
-                  </div>
-                  <div>
-                    <dt>Schema</dt>
-                    <dd className="technisch">{m?.meldung.schema_id}</dd>
-                  </div>
-                  <div className="profil-daten-breit">
-                    <dt>SOPs und Bausteine</dt>
-                    <dd>{sopAnzahl(p.profil)}</dd>
-                  </div>
-                  {m?.herausgeber && (
-                    <div className="profil-daten-breit">
-                      <dt>Herausgeber</dt>
-                      <dd>{m.herausgeber}</dd>
-                    </div>
-                  )}
-                  {m?.lizenz && (
-                    <div>
-                      <dt>Lizenz</dt>
-                      <dd>{m.lizenz}</dd>
-                    </div>
-                  )}
-                  <div className="profil-daten-breit">
-                    <dt>Prüfsumme</dt>
-                    <Pruefsumme hash={p.profil.hash} />
-                  </div>
-                </dl>
-              )}
-              {p.profil && <Arbeitsgrundlagen profil={p.profil} praefix={praefix} />}
-              {p.profil && <SopKatalog profil={p.profil} praefix={praefix} />}
-              {p.profil && <Dokumentation profil={p.profil} praefix={praefix} />}
-              <details id={`${praefix}-bericht`}>
-                <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
-                <Befunde befunde={p.befunde} />
-              </details>
-              <details>
-                <summary>Dateien ({dateien.length})</summary>
-                <ul className="dateiliste">
-                  {dateien.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
-              </details>
-              <div className="aktionen aktionen-nachrangig">
-                <button
-                  type="button"
-                  className="knopf leise"
-                  onClick={async () => {
-                    const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
-                    dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
-                  }}
-                >
-                  Als Paket exportieren
-                </button>
-                {p.quelle === "importiert" && (
-                  <button
-                    type="button"
-                    className="knopf leise"
-                    onClick={() => confirm(`Profil „${m?.name || p.schluessel}“ entfernen?`) && loeschen(p.schluessel)}
-                  >
-                    Entfernen
-                  </button>
+              <KartenInhalt offen={istAktiv}>
+                {p.profil && (
+                  <nav className="profil-sprungleiste" aria-label={`Abschnitte von Profil „${m?.name || p.schluessel}“`}>
+                    {[
+                      ["angaben", "Angaben"],
+                      ["lesen", "Lesen"],
+                      ["pruefen", "Prüfen"],
+                    ].map(([teil, text]) => (
+                      <a
+                        key={teil}
+                        href={`#${praefix}-${teil}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          abschnittZeigen(`${praefix}-${teil}`);
+                        }}
+                      >
+                        {text}
+                      </a>
+                    ))}
+                  </nav>
                 )}
-              </div>
+                {!p.profil && m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
+                {p.profil && (
+                  <section className="profil-bereich profil-angaben" aria-labelledby={`${praefix}-angaben`}>
+                    <h3 id={`${praefix}-angaben`} tabIndex={-1}>
+                      Angaben
+                    </h3>
+                    {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
+                    <dl className="profil-daten">
+                      <div>
+                        <dt>Ebene</dt>
+                        <dd>{m?.ebene || "–"}</dd>
+                      </div>
+                      <div>
+                        <dt>Referenzraum</dt>
+                        <dd>{m?.referenzraum || "–"}</dd>
+                      </div>
+                      <div className="profil-daten-breit">
+                        <dt>SOPs und Bausteine</dt>
+                        <dd>{sopAnzahl(p.profil)}</dd>
+                      </div>
+                      {m?.herausgeber && (
+                        <div className="profil-daten-breit">
+                          <dt>Herausgeber</dt>
+                          <dd>{m.herausgeber}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </section>
+                )}
+                {p.profil && (
+                  <section className="profil-bereich" aria-labelledby={`${praefix}-lesen`}>
+                    <h3 id={`${praefix}-lesen`} tabIndex={-1}>
+                      Lesen
+                    </h3>
+                    <p className="hinweis">Zum Nachlesen ohne KI. Öffnen und Suchen verändern keine Meldung, keinen Nachweis und kein aktives Profil.</p>
+                    <Arbeitsgrundlagen profil={p.profil} praefix={praefix} />
+                    <SopKatalog profil={p.profil} praefix={praefix} />
+                    <Dokumentation profil={p.profil} praefix={praefix} />
+                  </section>
+                )}
+                <section className="profil-bereich" aria-labelledby={`${praefix}-pruefen`}>
+                  <h3 id={`${praefix}-pruefen`} tabIndex={-1}>
+                    Prüfen
+                  </h3>
+                  {p.profil && (
+                    <>
+                      <dl className="profil-daten profil-technik">
+                        <div>
+                          <dt>Schema</dt>
+                          <dd className="technisch">{m?.meldung.schema_id}</dd>
+                        </div>
+                        {m?.lizenz && (
+                          <div>
+                            <dt>Lizenz</dt>
+                            <dd>{m.lizenz}</dd>
+                          </div>
+                        )}
+                        <div className="profil-daten-breit">
+                          <dt>Prüfsumme</dt>
+                          <Pruefsumme hash={p.profil.hash} />
+                        </div>
+                      </dl>
+                      <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
+                    </>
+                  )}
+                  <details id={`${praefix}-bericht`}>
+                    <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
+                    <Befunde befunde={p.befunde} />
+                  </details>
+                  <details>
+                    <summary>Dateien ({dateien.length})</summary>
+                    <ul className="dateiliste">
+                      {dateien.map((d) => (
+                        <li key={d}>{d}</li>
+                      ))}
+                    </ul>
+                  </details>
+                </section>
+              </KartenInhalt>
             </article>
           );
         })}
