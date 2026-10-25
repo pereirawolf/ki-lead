@@ -92,7 +92,7 @@ Grundlage: Befunddatei `ki-lead-befund_profilauswahl_2026-W43.json` (Auswertung 
 - `tests/pipeline/stufen.test.ts`: Anweisung der Reparatur nennt Begründung, Leerwert und Verbot von Skalenrand und Kürzung (AV-2026-W43-34).
 - `tests/pipeline/reparaturtest.test.ts`: `stellenWieOriginal` mit Originalwert, Skalenrand und leerem Wert; Summe, Übersicht und LIESMICH (AV-2026-W43-35).
 - `tests/ui/einstellungen.test.ts`: Auswahl eines Mix-Profils mit Hinweis auf zwei Schlüssel (AV-2026-W43-31).
-- Erwartungen an das Reparaturmodell der Standard-Profile in den Tests von Vergleichslauf und Einstellungen angepasst.
+- Erwartungen an das Reparaturmodell der Standard-Profile in den Tests von Vergleichslauf und Einstellungen angepasst; Browsertest `tests/browser/reparaturprueffall.spec.ts` mit Haiku als Vorgabe und „Stellen wie Original“.
 
 ## [0.5.14] – 25.10.2026
 
