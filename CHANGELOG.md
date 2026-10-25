@@ -66,6 +66,33 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.16 | letzter Commit des Pull Requests „Nachreihen: Mistral-Reparatur mit Small, Klärungsbedarf in der MS; 0.5.16“ |
 | 0.5.17 | letzter Commit des Pull Requests „Einstellungen: Modelle & Aufwand, Testläufe mit Archiv; Management Summary als eigener Schritt; 0.5.17“ |
 | 0.5.18 | letzter Commit des Pull Requests „KI-Erfassung: verständliche Eingabefelder mit verknüpften Hilfetexten; 0.5.18“ |
+| 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
+
+## [0.5.19] – 25.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz-recherchegrenzen_2026-W43.json` (anlassbezogene Prüfung von Einstellungen → „Recherche & Grenzen“, Commit e5c974b), Befunde KP-2026-W43-69 bis -76, vom Herausgeber am 25.10.2026 freigegeben. Leitziel: IT-fachfremde Personen entscheiden über Gründlichkeit und Kosten der Recherche statt über technische Stellgrößen. Gespeichert werden weiter nur `websucheMax`, `abrufMax` und `abrufMaxTokens`; keine neue Einstellung, keine Umstellung der Fassung der gespeicherten Einstellungen, keine Änderung an der Pipeline (S2 erhält dieselben Grenzen).
+
+### Hinzugefügt
+
+- **Recherchetiefe** (KP-2026-W43-69, `src/ui/Einstellungen.tsx`, Logik in `src/pipeline/recherchetiefe.ts`): Auswahl „Sparsam“ (5 Websuchen, 3 Seiten, 8.000 Token je Seite), „Standard“ (Vorgaben der App: 15, 10, 15.000), „Gründlich“ (30, 20, 30.000) und „Eigene Werte“. Die Stufe ergibt sich aus den gespeicherten Werten; die Zahlenfelder erscheinen nur bei „Eigene Werte“. **Die Werte von „Sparsam“ und „Gründlich“ sind vorläufig** (Entscheidung des Herausgebers vom 25.10.2026) und über einen Testlauf zu prüfen.
+- **Höchstkosten** (KP-2026-W43-72): Zeile unter der Auswahl mit den Höchstkosten für Suchen und Seitenlesen nach Listenpreis, berechnet für das S2-Modell (Opus 5.5: Sparsam etwa 0,15 USD, Standard 0,75 USD, Gründlich 2,70 USD); OpenAI mit Gebühren je Werkzeugaufruf, Mistral mit dem Hinweis, dass die Zahl der Suchen nicht begrenzt ist, über den EU-Endpunkt ohne Recherche.
+- **Umrechnung der Lesemenge** (KP-2026-W43-71): „≈ rund 7.500 Wörter, etwa 19 Druckseiten“ für 15.000 Token (grobe Annahme: 0,5 Wörter je Token, 400 Wörter je Druckseite).
+- **Wirkung je Anbieter am Feld** (KP-2026-W43-73) für die Anbieter der S2-Modelle; bei OpenAI zählen die Seiten zur gemeinsamen Höchstzahl mit den Suchen, bei Mistral wird die Zahl der Suchen nur gezählt. Die Liste „Unterschiede der Anbieter“ bleibt.
+
+### Geändert
+
+- **Beschriftungen und Hilfetexte** (KP-2026-W43-70): „Websuchen je Recherche (höchstens)“, „Seiten vollständig lesen je Recherche (höchstens)“ und „Lesemenge je Seite (höchstens, in Token)“ statt „Höchstzahl Websuchen je Lauf“, „Höchstzahl Seitenabrufe je Lauf“ und „Höchstlänge je abgerufener Seite (Token)“; Hilfetexte zwischen Beschriftung und Eingabe, mit Umrechnung, Vermerk und Korrekturhinweis per `aria-describedby` verknüpft.
+- **Ein geleertes Feld schaltet nichts mehr ab** (KP-2026-W43-74): Werte gelten sofort, wenn sie gültig sind; ein leeres Feld behält beim Verlassen den bisherigen Wert und sagt, wie die Websuche bzw. der Seitenabruf abzuschalten ist. Bisher wurde ein geleertes Feld sofort als 0 gespeichert.
+- **Bereiche werden durchgesetzt** (KP-2026-W43-75): Websuchen und Seiten 0–50, Lesemenge 1.000–100.000, ganze Zahlen; Abweichungen werden beim Verlassen des Feldes korrigiert und benannt. Bisher wurden eingetippte Werte wie 500 oder 2,5 unverändert gespeichert.
+- **„Seiten nie kürzen“** (KP-2026-W43-76): eigenes Kästchen mit Kostenhinweis statt der Eingabe 0, die bei der Lesemenge „ohne Grenze“ hieß, bei den anderen Feldern aber „aus“. Gespeichert wird weiter 0; abgewählt gilt der Standard 15.000.
+- **Akzentband:** doppelt so dick (8 statt 4 px). Ist eine Bandfarbe dieselbe Farbe wie der Kopf darüber oder der Seitengrund darunter (in zehn Länderschemata das Weiß), tönt die App beide ganz leicht in der Aktionsfarbe, damit das Weiß im Band sichtbar bleibt (`bandAbheben` in `src/darstellung/thema.ts`). Neutral- und Kontrastschemata bleiben unverändert; alle Kontrastregeln gelten weiter ([docs/farbschemas.md](docs/farbschemas.md)). (PR #72, bis zu dieser Version „Unveröffentlicht“)
+- Spezifikation 0.5.19 (Abschnitt 5.4, offener Punkt 16), `docs/TESTS.md`.
+
+### Tests
+
+- `tests/pipeline/recherchetiefe.test.ts` (neu): Werte und Bereiche der Stufen, Stufe aus gespeicherten Werten, Prüfung getippter Werte (leer, Höchst- und Mindestwerte, Komma, keine Zahl), Umrechnung, Höchstkosten je Anbieter und Stufe, Wirkung je Anbieter (KP-2026-W43-69 bis -76).
+- `tests/ui/recherchetiefe.test.ts` (neu): Auswahl der Stufen, „Eigene Werte“, Beschriftungen und verknüpfte Beschreibungen, Höchstkosten, geleertes Feld, Begrenzung beim Verlassen, Kästchen „Seiten nie kürzen“.
+- `tests/darstellung/farbschemas.test.ts` (+5): Tönung genau bei den Schemata mit Weiß im Band, Neutral- und Kontrastschemata sowie Gelb auf Weiß unverändert, Kontrastregeln mit Tönung, Profilfarben mit weißer Akzentfarbe, Bandstärke 8 px.
 
 ## [0.5.18] – 25.10.2026
 
@@ -84,16 +111,6 @@ Grundlage: Befunddatei `ki-lead-befund_konsistenz-eingabemaske_2026-W43.json` (a
 - `tests/ui/ki-erfassung-felder.test.ts` (neu): Beschriftung, verknüpfter Hilfetext und Platzhalter je Feld, leere Feldwerte, bedingter Hinweis zu Webseiten ohne Websuche, Name der Stichtagsgruppe, Referenzraum des Beispielprofils im Hilfetext (KP-2026-W43-61 bis -68).
 - `tests/pipeline/auftragsfelder.test.ts` (neu): Die Anfrage an S1 nennt weiter „Sachverhalt und Erkenntnisinteresse“, auch bei leerem Feld; Stichworte und Übersicht der Ausgangsquellen unverändert (KP-2026-W43-61, -62).
 - Browsertests: `barrierefreiheit.spec.ts` prüft die Hilfetexte als zugängliche Beschreibung; `hauptablauf.spec.ts`, `abbruch.spec.ts` und `pwa-update.spec.ts` suchen das Feld unter der neuen Beschriftung.
-
-## [Unveröffentlicht]
-
-### Geändert
-
-- **Akzentband:** doppelt so dick (8 statt 4 px). Ist eine Bandfarbe dieselbe Farbe wie der Kopf darüber oder der Seitengrund darunter (in zehn Länderschemata das Weiß), tönt die App beide ganz leicht in der Aktionsfarbe, damit das Weiß im Band sichtbar bleibt (`bandAbheben` in `src/darstellung/thema.ts`). Neutral- und Kontrastschemata bleiben unverändert; alle Kontrastregeln gelten weiter ([docs/farbschemas.md](docs/farbschemas.md)).
-
-### Tests
-
-- `tests/darstellung/farbschemas.test.ts` (+5): Tönung genau bei den Schemata mit Weiß im Band, Neutral- und Kontrastschemata sowie Gelb auf Weiß unverändert, Kontrastregeln mit Tönung, Profilfarben mit weißer Akzentfarbe, Bandstärke 8 px.
 
 ## [0.5.17] – 25.10.2026
 

@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.5.17 vom 25.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.5.19 vom 25.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -233,7 +233,7 @@ Seit 0.5.6 in Bereichen (seit 0.5.17 sieben) mit Abschnittsnavigation wie bei Me
 | KI-Anbieter & API | Ablage der Schlüssel, Schlüssel je Anbieter mit Speichern, Verbindungstest und Löschen, aufklappbare Hinweise je Anbieter |
 | Modelle & Aufwand | KI-Profil und Modell und Aufwand je Aufgabe, Verweis auf die Testläufe (bis 0.5.16 „Modelle & Verarbeitung“ mit Vergleichslauf Ilka und Prüffall Reparatur) |
 | Testläufe | standardisierte Testläufe am Fall „Ilka“ in einem Formular, Archiv der Testläufe mit nachträglichem Herunterladen und Löschen (seit 0.5.17) |
-| Recherche & Grenzen | Websuchen, Seitenabrufe, Höchstlänge je Seite, Suchland, maximale Ausgabetoken je KI-Aufruf; Unterschiede der Anbieter |
+| Recherche & Grenzen | Recherchetiefe (Sparsam, Standard, Gründlich, Eigene Werte; seit 0.5.19) mit Websuchen, ganz gelesenen Seiten und Lesemenge je Seite, Höchstkosten für Suchen und Seitenlesen, Wirkung je Anbieter am Feld; Suchland, maximale Ausgabetoken je KI-Aufruf; Unterschiede der Anbieter |
 | Darstellung | Farbschema |
 | Über KI-LEAD | Version, Abgrenzung, Verweise |
 
@@ -337,6 +337,8 @@ Einzelheiten:
 
 15. **Mistral (seit 0.5.6):** Die Anbindung folgt der Doku und den Typdefinitionen des SDK vom 24.10.2026 und ist in den gewöhnlichen Tests nur gegen Attrappen geprüft. Mit echten Läufen erprobt (Verdichtung Ilka, 24.10.2026, ohne Websuche): EU-Endpunkt 7 Läufe mit Small 4, Medium 3.5 und Large 4, globaler Endpunkt 3 Läufe; alle schemakonform, `reasoning_effort` „high“ angenommen. Noch nicht erprobt: Websuche, PDF und Nachdenken aus (`none`). Mit einem eigenen Schlüssel prüft sie die **Mistral-Probe** (Workflow `mistral-probe.yml`, Label „mistral-probe“ am Pull Request): (a) ob `api.eu.mistral.ai` und `api.mistral.ai` Aufrufe direkt aus dem Browser zulassen (CORS; geprüft von `localhost` aus, nicht von GitHub Pages und nicht aus der WebView), (b) welche der drei Modelle am EU-Endpunkt bereitstehen, (c) strukturierte Ausgabe mit `strict` und dem strengen Schema, (d) ob die Modelle `reasoning_effort` mit `high` und `none` annehmen (seit dem Lauf 20261024-195614-kyc1 sendet die App nur diese Werte), (e) PDF als `document_url` mit Data-URL, (f) Websuche und ob `connector_tokens` in `prompt_tokens` enthalten sind (heute vorsichtig addiert). Unbestätigt bleibt der Preis von 0,03 USD je Websuche. Entschieden am 24.10.2026: EU-Endpunkt als Vorgabe (regional, ohne Websuche), globaler Endpunkt mit Websuche wählbar. Offen: generischer, OpenAI-kompatibler Endpunkt (lokale oder deutsche Modelle), ebenfalls ohne Websuche.
 
+16. **Recherchetiefe (seit 0.5.19):** Die Werte der Stufen „Sparsam“ (5 Websuchen, 3 Seiten, 8.000 Token je Seite) und „Gründlich“ (30, 20, 30.000) sind vorläufig (KP-2026-W43-69); sie sind über einen Testlauf mit Recherche zu prüfen. Ebenso die grobe Umrechnung von Token in Wörter (0,5 Wörter je Token) für deutsche Texte.
+
 ## 11. Änderungsverlauf
 
 Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gilt; Korrekturen der Spezifikation ohne neue App-Funktion erhalten eine dritte Stelle.
@@ -400,4 +402,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.5.15 | 25.10.2026 | Mix-Profile wählbar, Reparatur Anthropic mit Haiku und Mistral mit Medium 3.5, Erfassung OpenAI „hoch“, geschärfte Anweisung der Reparatur, Kennzahl „Stellen wie Original“, Ergebnisse von Management Summary und Prüffall Reparatur (Abschnitt 5.4, offener Punkt 6; AV-2026-W43-31 bis -38) |
 | 0.5.17 | 25.10.2026 | Einstellungen: „Modelle & Aufwand“ mit KI-Profilen, eigener Bereich „Testläufe“ mit Vergleichslauf und Prüffall in einem Formular, Archiv der Testläufe; Management Summary als fünfter Schritt der Meldung (Abschnitte 5.1, 5.4) |
 | 0.5.16 | 25.10.2026 | Reparatur Mistral wieder mit Small, Einstellungen Fassung 5, Vorprüfung der Management Summary meldet „Klärungsbedarf“, Ergebnisse der Nachreihen (Abschnitt 5.4, offener Punkt 6; AV-2026-W43-39 bis -42) |
-| Unveröffentlicht | 25.10.2026 | Akzentband 8 px (vorher 4 px); ist eine Bandfarbe dieselbe Farbe wie Kopf oder Seitengrund, werden beide ganz leicht in der Aktionsfarbe getönt (Abschnitt 5.4) |
+| 0.5.19 | 25.10.2026 | Einstellungen „Recherche & Grenzen“: Recherchetiefe mit Stufen und eigenen Werten, verständliche Felder, Höchstkosten, Wirkung je Anbieter, Übernahme getippter Werte, „Seiten nie kürzen“ (Abschnitt 5.4, offener Punkt 16; KP-2026-W43-69 bis -76); Akzentband 8 px (vorher 4 px); ist eine Bandfarbe dieselbe Farbe wie Kopf oder Seitengrund, werden beide ganz leicht in der Aktionsfarbe getönt (Abschnitt 5.4) |
