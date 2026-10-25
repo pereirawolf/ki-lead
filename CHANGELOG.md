@@ -79,11 +79,15 @@ Grundlage: Vorschläge zur Übersichtlichkeit der Seite „Profile“, vom Herau
 - **Fachliche und technische Angaben getrennt** (Punkt 2): Oben stehen Ebene, Referenzraum, SOPs und Bausteine und Herausgeber; Schema, Lizenz und Prüfsumme stehen unter „Prüfen“.
 - **Zwei Gruppen „Lesen“ und „Prüfen“** (Punkt 3): „Lesen“ enthält „Arbeitsanweisungen und Kodierleitfaden lesen“ (vorher ohne „lesen“), „SOP-Katalog lesen“ und „Dokumentation lesen“ mit einem gemeinsamen Hinweis, dass Lesen nichts verändert; „Prüfen“ enthält die technischen Angaben, den Prüfbericht und die Dateiliste.
 - **Kopf in einem Satz** (Punkt 4): Die Begriffserklärung „Profilversion = … · Tag an einer SOP = … · Prüfsumme = …“ entfällt im Kopf; Profilversion und Prüfsumme erklärt ein Satz unter „Prüfen“, das Tag an einer SOP ein Satz im SOP-Katalog.
+- **Menü „Profil hinzufügen“** (Punkt 5): „Profilpaket importieren (ZIP)“ und „Ordner wählen“ stehen in einem Menü statt als zwei Knöpfe im Kopf. Menüs folgen dem Disclosure-Muster (Knopf mit `aria-expanded`, Liste gewöhnlicher Knöpfe), schließen nach der Auswahl, mit Escape (Fokus zurück auf den Knopf), beim Klick außerhalb und beim Verlassen mit dem Fokus; auf schmalen Bildschirmen richtet sich die Liste am linken Rand des Knopfs aus.
+- **Menü „Mehr“ je Karte** (Punkt 6): „Als Paket exportieren“ und bei importierten Profilen „Entfernen“ stehen im Kopf der Karte unter „Mehr“ (zugänglicher Name „Mehr zu Profil „…““); der Kartenfuß entfällt.
+- **Befundstatus als Chip** (Punkt 7): Am Titel steht immer ein Chip, der zum Prüfbericht führt: „✓ Geprüft“ ohne Fehler und Warnungen, sonst die Zahl („1 Fehler, 1 Warnung“) in der Farbe der schwersten Stufe. Bisher erschien nur bei Fehlern oder Warnungen ein Textverweis.
+- **Sprungleiste in der Karte** (Punkt 8): „Angaben“, „Lesen“ und „Prüfen“ als Sprungverweise, die beim Scrollen unter dem Kopf der App stehen bleiben; der Sprung setzt den Fokus auf die Überschrift. Die fachlichen Angaben stehen dafür unter einer eigenen Überschrift „Angaben“. Die Höhe des Kopfs misst die Ansicht (`--kopf-hoehe`), weil er je nach Breite ein- oder zweizeilig ist.
 - Spezifikation 0.5.20 (Abschnitt 4.6), `docs/TESTS.md`.
 
 ### Tests
 
-- `tests/ui/profile.test.ts` (neu): Reihenfolge mit dem verwendeten Profil zuerst, kompakte Zeilen mit zugeklapptem Inhalt, Aktivieren nur über den Knopf, Trennung fachlicher und technischer Angaben, Gruppen und Bezeichnungen, Sprung zum Prüfbericht eines zugeklappten Profils, Kopf in einem Satz.
+- `tests/ui/profile.test.ts` (neu, 12 Tests): Reihenfolge mit dem verwendeten Profil zuerst, kompakte Zeilen mit zugeklapptem Inhalt, Aktivieren nur über den Knopf, Trennung fachlicher und technischer Angaben, Gruppen und Bezeichnungen, Sprung zum Prüfbericht eines zugeklappten Profils, Kopf in einem Satz; Menü „Profil hinzufügen“ mit Dateiauswahl, Escape mit Fokusrückgabe, Menü „Mehr“ mit „Entfernen“ nur bei importierten Profilen, Befund-Chip je Stufe, Sprungleiste mit Fokus auf der Überschrift.
 
 ## [0.5.19] – 25.10.2026
 

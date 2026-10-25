@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 // Profilansicht (seit 0.5.20): verwendetes Profil zuerst und offen, übrige Profile als kompakte Zeile mit
 // aufklappbarem Inhalt; fachliche Angaben getrennt von technischen; Lesetexte unter „Lesen“, Prüfbericht und
-// Dateien unter „Prüfen“; ein Satz im Kopf statt Begriffserklärung.
+// Dateien unter „Prüfen“; ein Satz im Kopf statt Begriffserklärung (Teil 1). Menüs „Profil hinzufügen“ und „Mehr“,
+// Befundstatus als Chip, Sprungleiste innerhalb der Karte (Teil 2).
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { act } from "react";
 import { aushaengen, einhaengen, klick, reactUmgebung } from "../support/dom";
@@ -48,7 +49,7 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
     await ansicht("lead-beispiel");
     const [aktiv, ander] = karten();
     expect(aktiv.querySelector(":scope > details.profil-details")).toBeNull();
-    expect(ueberschriften(aktiv)).toEqual(["Lesen", "Prüfen"]);
+    expect(ueberschriften(aktiv)).toEqual(["Angaben", "Lesen", "Prüfen"]);
     const zu = ander.querySelector<HTMLDetailsElement>(":scope > details.profil-details")!;
     expect(zu).toBeTruthy();
     expect(zu.open).toBe(false);
@@ -75,7 +76,7 @@ describe("Profilansicht: Gruppen „Lesen“ und „Prüfen“", () => {
   it("trennt fachliche Angaben von technischen", async () => {
     await ansicht("lead-beispiel");
     const k = karten()[0];
-    const fachlich = [...k.querySelectorAll(":scope > dl.profil-daten dt")].map((d) => d.textContent);
+    const fachlich = [...k.querySelectorAll(`section[aria-labelledby$="-angaben"] dl.profil-daten dt`)].map((d) => d.textContent);
     expect(fachlich).toEqual(["Ebene", "Referenzraum", "SOPs und Bausteine", "Herausgeber"]);
     const pruefen = k.querySelector(`section[aria-labelledby$="-pruefen"]`)!;
     const technisch = [...pruefen.querySelectorAll("dl.profil-technik dt")].map((d) => d.textContent);
@@ -111,7 +112,8 @@ describe("Profilansicht: Gruppen „Lesen“ und „Prüfen“", () => {
     );
     Element.prototype.scrollIntoView = () => {};
     const ander = karten()[1];
-    const sprung = ander.querySelector<HTMLAnchorElement>(".befund-sprung")!;
+    const sprung = ander.querySelector<HTMLAnchorElement>(".befund-chip")!;
+    expect(sprung.classList.contains("befund-chip-warnung")).toBe(true);
     expect(sprung.textContent).toBe("1 Warnung");
     await act(async () => sprung.click());
     expect(ander.querySelector<HTMLDetailsElement>("details.profil-details")!.open).toBe(true);
@@ -131,3 +133,109 @@ describe("Profilansicht: Kopf", () => {
     );
   });
 });
+
+describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => {
+  const menueKnopf = (name: string, im: ParentNode = document) =>
+    [...im.querySelectorAll<HTMLButtonElement>("button[aria-expanded]")].find((b) => (b.getAttribute("aria-label") || b.textContent)!.startsWith(name))!;
+  const eintraege = (k: HTMLButtonElement) => [...k.parentElement!.querySelectorAll(".menue-eintrag")].map((b) => b.textContent);
+
+  it("bündelt den Import im Menü „Profil hinzufügen“ und öffnet die Dateiauswahl über die Einträge", async () => {
+    await ansicht("lead-beispiel");
+    const k = menueKnopf("Profil hinzufügen");
+    expect(k.getAttribute("aria-expanded")).toBe("false");
+    expect(knopfMitText("Ordner wählen")).toBeUndefined();
+    await klick(k);
+    expect(k.getAttribute("aria-expanded")).toBe("true");
+    expect(document.getElementById(k.getAttribute("aria-controls")!)).toBeTruthy();
+    expect(eintraege(k)).toEqual(["Profilpaket importieren (ZIP)", "Ordner wählen"]);
+    const ordner = document.querySelector<HTMLInputElement>("input[webkitdirectory]")!;
+    const gewaehlt = vi.spyOn(ordner, "click").mockImplementation(() => {});
+    await klick("Ordner wählen");
+    expect(gewaehlt).toHaveBeenCalledOnce();
+    expect(k.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("schließt ein Menü mit Escape und gibt den Fokus an den Knopf zurück", async () => {
+    await ansicht("lead-beispiel");
+    const k = menueKnopf("Profil hinzufügen");
+    await klick(k);
+    const eintrag = k.parentElement!.querySelector<HTMLButtonElement>(".menue-eintrag")!;
+    eintrag.focus();
+    await act(async () => {
+      eintrag.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    });
+    expect(k.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(k);
+  });
+
+  it("legt Export und Entfernen ins Menü „Mehr“ der Karte; Entfernen nur bei importierten Profilen", async () => {
+    const lead = await eintrag("lead-beispiel");
+    const imp = { ...(await eintrag("muster", "importiert-x")), quelle: "importiert" as const };
+    const loeschen = vi.fn();
+    await einhaengen(
+      React.createElement(ProfileAnsicht, {
+        profile: [lead, imp],
+        aktiv: "lead-beispiel",
+        aktivieren: () => {},
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen,
+      }),
+    );
+    expect(document.querySelector(".aktionen-nachrangig")).toBeNull();
+    const [a, b] = karten();
+    const mehrA = menueKnopf("Mehr zu Profil", a);
+    expect(mehrA.getAttribute("aria-label")).toBe("Mehr zu Profil „LEAD-Beispiel – Koordinierungsstelle“");
+    await klick(mehrA);
+    expect(eintraege(mehrA)).toEqual(["Als Paket exportieren"]);
+    const mehrB = menueKnopf("Mehr zu Profil", b);
+    await klick(mehrB);
+    expect(eintraege(mehrB)).toEqual(["Als Paket exportieren", "Entfernen"]);
+    await klick("Entfernen", b);
+    expect(loeschen).toHaveBeenCalledWith("importiert-x");
+  });
+
+  it("zeigt den Befundstatus als Chip: „✓ Geprüft“ ohne Fehler und Warnungen, sonst die Zahl", async () => {
+    const lead = await eintrag("lead-beispiel");
+    lead.befunde = [{ stufe: "hinweis", text: "nur ein Hinweis" }];
+    const muster = await eintrag("muster");
+    muster.befunde = [
+      { stufe: "fehler", text: "F" },
+      { stufe: "warnung", text: "W" },
+    ];
+    await einhaengen(
+      React.createElement(ProfileAnsicht, {
+        profile: [lead, muster],
+        aktiv: "lead-beispiel",
+        aktivieren: () => {},
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+      }),
+    );
+    const [a, b] = karten().map((k) => k.querySelector<HTMLAnchorElement>("header .befund-chip")!);
+    expect(a.textContent).toBe("✓ Geprüft");
+    expect(a.classList.contains("befund-chip-ok")).toBe(true);
+    expect(b.textContent).toBe("1 Fehler, 1 Warnung");
+    expect(b.classList.contains("befund-chip-fehler")).toBe(true);
+    expect(a.getAttribute("href")).toMatch(/-bericht$/);
+  });
+
+  it("führt die Sprungleiste zu Angaben, Lesen und Prüfen und setzt den Fokus auf die Überschrift", async () => {
+    await ansicht("lead-beispiel");
+    Element.prototype.scrollIntoView = () => {};
+    const k = karten()[0];
+    const nav = k.querySelector("nav.profil-sprungleiste")!;
+    expect(nav.getAttribute("aria-label")).toBe("Abschnitte von Profil „LEAD-Beispiel – Koordinierungsstelle“");
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>("a")];
+    expect(links.map((l) => l.textContent)).toEqual(["Angaben", "Lesen", "Prüfen"]);
+    for (const l of links) {
+      const ziel = document.getElementById(l.getAttribute("href")!.slice(1))!;
+      expect(ziel.tagName).toBe("H3");
+      await act(async () => l.click());
+      expect(document.activeElement).toBe(ziel);
+    }
+  });
+});
+
+function knopfMitText(text: string) {
+  return [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === text);
+}
