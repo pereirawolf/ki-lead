@@ -1,0 +1,49 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "zaehlregel-fortgeltung",
+  "titel": "Ältere Ausfallzahlen und ihre Fortgeltung zu t0 (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Stromausfälle in zwei Kreisen nach Eisregen, Stand der Zahlen",
+    "stichworte": "B06, B08",
+    "stichtag": "2026-11-07",
+    "meldezeitpunkt": "2026-11-07T14:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/zaehlregel-fortgeltung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Prüfziel Datenstand und Fortgeltung zu t0 (LS-2026-W43-17)."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Für jede Zahl den Datenstand nennen.",
+      "Die 800 Einwohner aus Steinbach mit Begründung als zu t0 fortgeltend führen (Prognose reicht über t0 hinaus).",
+      "Die 4.200 Einwohner aus Lindenfeld nicht als Ist-Wert zu t0 führen, sondern als letzten bekannten Stand von 06:00 Uhr mit abgelaufener Prognose und offenem Prüfbedarf.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "5.000 Menschen ohne Strom zu t0 angeben.",
+      "Die Wiederversorgung in Lindenfeld als erfolgt darstellen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-07T14:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Wintersturm / Schnee / Eis",
+      "Stromausfall / Blackout"
+    ],
+    "radar": {
+      "d2": {
+        "min": 2,
+        "max": 2,
+        "grund": "Zu t0 fortgeltend belegt sind rund 800 Personen (Stufe 2); der Wert aus Lindenfeld trägt t0 nicht."
+      }
+    }
+  }
+}

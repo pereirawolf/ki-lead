@@ -2,11 +2,13 @@
 
 Je Datei ein Fall nach `fall.schema.json` (`format: "ki-lead-evaluationsfall/1"`). Material liegt entweder im Repository (`datei`, nur fiktive oder frei lizenzierte Inhalte) oder wird nur beschrieben (`extern` mit `sha256`, Inhalt nicht eingecheckt).
 
-- `orkantief-ilka-verdichtung.json`: Verdichtung der sechs fiktiven Ländermeldungen ohne Websuche; die verdichtete Meldung der Koordinierungsstelle im selben Ordner dient als Referenzfassung für den Vergleich in der App, nicht als Musterlösung.
+- `orkantief-ilka-verdichtung.json`: Verdichtung der sechs fiktiven Ländermeldungen ohne Websuche; die verdichtete Meldung der Koordinierungsstelle im selben Ordner dient als Referenzfassung für den Vergleich in der App, nicht als Musterlösung. Zur fachlichen Bewertung: [Bewertungshilfe Ilka](../bewertungshilfen/orkantief-ilka.md).
 
 - `sop-*.json` (40 Fälle vom 21.10.2026): kurze, vollständig fiktive Prüffälle zu den Prüfpfaden der SOP-Sammelmappe (alle Dach-SOPs B01–B17 und Bausteine C01–C17); Material unter `../material/`, Plan und Soll-Abdeckung unter `../plaene/`. Bewertungen liegen noch nicht vor.
 
 - `sop-*.json` (8 Fälle vom 24.10.2026, Befunde LS-2026-W43-06 bis -13): weitere vollständig fiktive Prüffälle für bis dahin nur einmal abgedeckte SOPs und Bausteine (B03, B04, B13, B15, B16, C03, C04, C05, C08, C17), gestreut über Referenzraum (Kreis, Land, Bund, Ausland mit Deutschlandbezug), Schwierigkeit und Phase (Vorwarnung, akute Lage, Nachlauf); alle mit erwarteten Radarwerten, zwei davon als Abwandlung (`sop-weltraumwetter-warnung-unbestaetigt`, `sop-vulkanasche-transport-zeitluecke`). Insgesamt 48 `sop-*`-Fälle; Soll-Abdeckung in `../plaene/2026-10-21-sop-abdeckung.json` (Stand 24.10.2026). Nicht Teil von Bewertungsplan 1 vom 21.10.2026; Bewertungen liegen noch nicht vor.
+
+- `zaehlregel-*.json` (5 Fälle vom 25.10.2026, Befund LS-2026-W43-17): kleine, vollständig fiktive Fälle zu je einem Fehlermuster der Zählregeln aus dem Vergleichslauf Ilka: gezählte gegenüber hochgerechneten Werten (`zaehlregel-hochrechnung`), direkte gegenüber mittelbarer Betroffenheit (`zaehlregel-mittelbar`), Gesamtzahl gegenüber Teilmenge (`zaehlregel-teilmenge`), Quellen- und Länderzuordnung (`zaehlregel-laenderzuordnung`), Datenstand und Fortgeltung zu t0 (`zaehlregel-fortgeltung`). Personen gegenüber Anschlüssen decken die vorhandenen Fälle `sop-gas-netzbetreiber`, `sop-hochwasser-abschaltung` und `sop-sturm-winter-uebergang` ab. Alle gehören zum Entwicklungssatz (siehe `../plaene/2026-10-25-kontrollsatz.md`). Insgesamt 53 Fälle in der Soll-Abdeckung (Stand 25.10.2026).
 
 Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) nennt die URL und die Prüfsumme der verwendeten Fassung, aber nie den Text.
 

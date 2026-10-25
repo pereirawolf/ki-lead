@@ -39,13 +39,13 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 |---|---|
 | `tests/kern/` | Schemaprüfung (mit Ajv-Referenz), Migration, Zeit und Fristen, Quellen, Kennsätze, LEAD-Eingabehilfen, Ausgaben, Dateinamen, Beispieldatensatz |
 | `tests/profil/` | Profile laden und prüfen (auch LEAD-Eingabehilfen), Manifest, Schemaeignung, Fassungen, SOP-Integration, Redaktionsregeln der SOP-Sammelmappe, Arbeitsanweisungen und Dokumentation gegen das Profil (Konsistenzprüfungen), Profilansicht, Vorlage gegen das Beispielprofil, private Profile |
-| `tests/pipeline/` | Einstellungen und Vorgaben, Aufwand je Modell und Standard-Profile, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich und Mehrfachvergleich mit Krippendorffs Alpha |
+| `tests/pipeline/` | Einstellungen und Vorgaben, Aufwand je Modell und Standard-Profile, Kontext, Material, JSON aus Antworten, Stufen S1–S3, Fortschreibung einer eigenen Vormeldung, Verdichtung, Nachbearbeitung, Eingangsquellen, Kurzfassung, Laufkosten, Schätzung, Vergleich und Mehrfachvergleich mit Krippendorffs Alpha, Vergleichslauf mit festem S1-Gegenstand, Auswertung der Vergleichsläufe |
 | `tests/anbieter/` | SSE-Leser, Adapter für Anthropic, OpenAI und Mistral, gemeinsamer Vertrag aller Adapter (Wiederholungen, Abbruch), Preise, Verteiler |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
 | `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Bereiche, Übersicht, Voreinstellung, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version) |
-| `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne, Bewertungen), des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
+| `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne mit festem S1-Gegenstand und Prüfsumme, Bewertungen mit Korrekturen und Grad der Verblindung), des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |

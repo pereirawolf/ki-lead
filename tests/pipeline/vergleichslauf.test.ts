@@ -18,12 +18,15 @@ import {
   planVarianteZu,
   VERGLEICHS_PLAENE,
   reiheZip,
+  s1FestPruefen,
   uebersichtZeilen,
   vergleichsreihe,
   zipDateiname,
   type FallDaten,
 } from "../../src/pipeline/vergleichslauf";
 import { fallDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
+import { sopIdsAufloesen } from "../../src/pipeline/kontext";
+import { createHash } from "node:crypto";
 
 // Sollwerte unabhängig von der Implementierung: aus dem Bewertungsfall und den Dateinamen im Repository
 const FALL = JSON.parse(readFileSync(repoPfad("evaluation/faelle/orkantief-ilka-verdichtung.json"), "utf-8"));
@@ -278,5 +281,62 @@ describe("Vergleichslauf Ilka", () => {
     expect(reihe.variante).toBe("standardprofile-ilka/F-mistral-large");
     expect(reihe.modelle.s2).toEqual({ modell: "mistral-large-4", aufwand: "high", anbieter: "mistral" });
     expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_F-mistral-large_mistral-large-4-high_\d{8}-\d{4}\.zip$/);
+  });
+
+  // LS-2026-W43-15 (Lernschleife, 25.10.2026): isolierter Vergleich der Verdichtung mit festem S1-Gegenstand
+  describe("LS-2026-W43-15: fester S1-Gegenstand", () => {
+    const DATEI = "evaluation/material/ilka-s1-zuschnitt-a.json";
+    const TEXT = readFileSync(repoPfad(DATEI), "utf-8");
+    const FEST = { datei: DATEI, sha256: createHash("sha256").update(TEXT).digest("hex"), vorschlag: JSON.parse(TEXT) };
+
+    it("der Gegenstand im Repository passt zum Fall: t0, alle sechs Eingänge, zwei Sachverhalte, nur bekannte SOPs", async () => {
+      expect(s1FestPruefen(FEST.vorschlag)).toEqual([]);
+      expect(FEST.vorschlag.sachverhalte).toHaveLength(2);
+      const profil = (await daten()).profil;
+      for (const s of FEST.vorschlag.sachverhalte) expect(sopIdsAufloesen(profil, s.sops), s.titel).toHaveLength(s.sops.length);
+    });
+
+    it.each([
+      ["anderes t0", (v: any) => (v.meldezeitpunkt = "2026-10-14T12:00"), /t0 2026-10-14T12:00/],
+      ["unbekannter Eingang", (v: any) => v.sachverhalte[0].eingangsmeldungen.push("fremd.json"), /unbekannter Eingang fremd\.json/],
+      ["Eingang fehlt", (v: any) => v.sachverhalte.forEach((s: any) => (s.eingangsmeldungen = s.eingangsmeldungen.filter((e: string) => !e.includes("_ST_")))), /_ST_.*keinem Sachverhalt/],
+      ["ohne SOP", (v: any) => (v.sachverhalte[1].sops = []), /Sachverhalt 2: keine SOP/],
+      ["keine Sachverhalte", (v: any) => (v.sachverhalte = []), /keine Sachverhalte/],
+    ])("verwirft einen unbrauchbaren Gegenstand: %s", (_name, aendern, muster) => {
+      const v = structuredClone(FEST.vorschlag);
+      aendern(v);
+      expect(s1FestPruefen(v).join(" | ")).toMatch(muster);
+    });
+
+    it("ohne S1-Aufruf: Gegenstand unverändert bestätigt, alle Prüfpunkte erfüllt, Datei und Prüfsumme in Lauf und Reihe", async () => {
+      const d = await daten();
+      const anbieter = attrappe(JSON.parse(d.dateien[REFERENZ]));
+      const { reihe, ergebnisse } = await vergleichsreihe({ daten: d, anbieter, einstellungen: MISTRAL, anzahl: 2, s1Fest: FEST, variante: "s2-isoliert-ilka/E-mistral-medium" });
+      // je Lauf genau ein Aufruf, und zwar S2 (ohne JSON-Schema des S1-Vorschlags)
+      expect(anbieter.anfragen.map((a) => [a.modell, !!a.jsonSchema])).toEqual([
+        ["mistral-medium-3-5", false],
+        ["mistral-medium-3-5", false],
+      ]);
+      for (const e of ergebnisse) {
+        expect(e.lauf.stufen.some((s) => s.stufe.startsWith("S1"))).toBe(false);
+        expect(e.lauf.bestaetigt?.sachverhalte.map((s) => s.titel)).toEqual(FEST.vorschlag.sachverhalte.map((s: any) => s.titel));
+        expect(e.eintrag.pruefpunkte.map((p) => [p.nr, p.erfuellt])).toEqual(["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"].map((nr) => [nr, true]));
+        expect(e.eintrag.pruefpunkte.find((p) => p.nr === "T5")?.angabe).toContain("S1 fest vorgegeben");
+        expect(e.eintrag.beobachtungen.s1_fest).toEqual({ datei: DATEI, sha256: FEST.sha256 });
+        expect(e.eintrag.beobachtungen.s1_sachverhalte).toBe(2);
+      }
+      expect(reihe.s1_fest).toEqual({ datei: DATEI, sha256: FEST.sha256 });
+      expect(reihe.variante).toBe("s2-isoliert-ilka/E-mistral-medium");
+    });
+
+    it("ein unbrauchbarer Gegenstand beendet den Lauf mit Fehler, bevor ein Modell aufgerufen wird", async () => {
+      const d = await daten();
+      const anbieter = attrappe(JSON.parse(d.dateien[REFERENZ]));
+      const kaputt = { ...FEST, vorschlag: { ...FEST.vorschlag, meldezeitpunkt: "2026-10-15T08:00" } };
+      const { ergebnisse } = await vergleichsreihe({ daten: d, anbieter, einstellungen: MISTRAL, anzahl: 1, s1Fest: kaputt });
+      expect(ergebnisse[0].lauf.status).toBe("fehler");
+      expect(ergebnisse[0].lauf.fehler).toMatch(/Fester S1-Gegenstand .* unbrauchbar/);
+      expect(anbieter.anfragen).toHaveLength(0);
+    });
   });
 });

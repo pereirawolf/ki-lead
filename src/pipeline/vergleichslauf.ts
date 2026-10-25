@@ -20,9 +20,9 @@ import { pruefeGegenSchema } from "../kern/validierung";
 import { sha256 } from "../profil/laden";
 import { aufwandFuer, modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "./einstellungen";
 import { plausibilitaetPruefen, type PlausibilitaetsBefund } from "./plausibilitaet";
-import { APP_KENNUNG, neuerLauf, ohneBase64, type Auftrag, type Lauf } from "./lauf";
+import { APP_KENNUNG, neuerLauf, ohneBase64, type Auftrag, type Lauf, type S1Vorschlag } from "./lauf";
 import { dateiLesen, istVerdichtung, type Material } from "./material";
-import { stufe1, stufe2und3, type Kontext } from "./stufen";
+import { s1Strukturfehler, stufe1, stufe2und3, type Kontext } from "./stufen";
 import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type Vergleich } from "./vergleich";
 import { eingangsquellenPruefen, type QuellenZuordnung } from "./vermerke";
 
@@ -119,6 +119,42 @@ export function planVarianteZu(wert: string): { plan: VergleichsPlan; variante: 
 }
 
 /**
+ * Fester S1-Gegenstand für den isolierten Vergleich der Verdichtung (LS-2026-W43-15, nur Evaluation): Statt S1 neu
+ * laufen zu lassen, gilt dieser bestätigte Gegenstand in jedem Lauf. Datei und Prüfsumme gehen in die Reihendatei.
+ * Die App nutzt das nicht; Aufruf über das Abnahmeskript (KI_LEAD_S1_FEST).
+ */
+export interface S1Fest {
+  /** Pfad im Repository, z. B. evaluation/material/ilka-s1-zuschnitt-a.json */
+  datei: string;
+  sha256: string;
+  vorschlag: S1Vorschlag;
+}
+
+/**
+ * Prüft einen festen S1-Gegenstand gegen den Fall: Struktur wie ein S1-Vorschlag, t0 des Falls, nur Eingänge des
+ * Falls und jeder Eingang mindestens einem Sachverhalt zugeordnet. Liefert die Befunde (leer = brauchbar).
+ */
+export function s1FestPruefen(v: unknown): string[] {
+  const struktur = s1Strukturfehler(v);
+  if (struktur) return [struktur];
+  const x = v as S1Vorschlag;
+  const befunde: string[] = [];
+  if (x.meldezeitpunkt !== FALL.auftrag.meldezeitpunkt) befunde.push(`t0 ${x.meldezeitpunkt ?? "fehlt"} statt ${FALL.auftrag.meldezeitpunkt}`);
+  const namen = new Set(FALL_MATERIAL.map((p) => p.split("/").pop()!));
+  const zugeordnet = new Set<string>();
+  x.sachverhalte.forEach((s, i) => {
+    if (!Array.isArray(s.sops) || !s.sops.length) befunde.push(`Sachverhalt ${i + 1}: keine SOP`);
+    if (!Array.isArray(s.ereignisarten) || !s.ereignisarten.length) befunde.push(`Sachverhalt ${i + 1}: keine Ereignisart`);
+    for (const e of s.eingangsmeldungen ?? []) {
+      if (!namen.has(e)) befunde.push(`Sachverhalt ${i + 1}: unbekannter Eingang ${e}`);
+      zugeordnet.add(e);
+    }
+  });
+  for (const n of namen) if (!zugeordnet.has(n)) befunde.push(`Eingang ${n} keinem Sachverhalt zugeordnet`);
+  return befunde;
+}
+
+/**
  * Einstellungen für eine Plan-Variante: S1 und S2 Verdichtung nach dem Plan, Reparatur nach dem Standard-Profil des
  * S2-Anbieters (Aufwand „niedrig“); alles andere (z. B. Mistral-Endpunkt) aus den Einstellungen.
  */
@@ -152,8 +188,11 @@ export function konfiguration(e: Einstellungen, profil: Profil): Konfiguration {
 
 export type Pruefpunkt = { nr: string; erfuellt: boolean; angabe: string };
 
-/** Technische Prüfpunkte T1–T8 der Abnahme M4 (evaluation/plaene/2026-10-23-abnahme-m4.md) */
-export function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | undefined, quellen: QuellenZuordnung[]): Pruefpunkt[] {
+/**
+ * Technische Prüfpunkte T1–T8 der Abnahme M4 (evaluation/plaene/2026-10-23-abnahme-m4.md). Mit festem S1-Gegenstand
+ * (LS-2026-W43-15) gibt es keine S1-Anfrage; T5 prüft dann nur die Vermerke an S2.
+ */
+export function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | undefined, quellen: QuellenZuordnung[], s1Fest = false): Pruefpunkt[] {
   const s1 = l.stufen.find((s) => s.stufe.startsWith("S1"));
   const s2 = l.stufen.find((s) => s.stufe === "S2 Verdichtung");
   const reparaturen = l.stufen.filter((s) => s.stufe.startsWith("S3 Reparatur")).length;
@@ -175,8 +214,8 @@ export function pruefpunkte(l: Lauf, material: Material[], meldung: Meldung | un
         !!s2 &&
         !s2.anfrage?.werkzeuge &&
         !!s2.anfrage?.system.some((t) => t.includes(vermerk)) &&
-        JSON.stringify(s1?.anfrage?.nachrichten ?? "").includes("Vermerke der App"),
-      angabe: `Werkzeuge in S2: ${s2?.anfrage?.werkzeuge ? "ja" : "nein"}; Vermerke an S1 und S2`,
+        (s1Fest ? !s1 : JSON.stringify(s1?.anfrage?.nachrichten ?? "").includes("Vermerke der App")),
+      angabe: `Werkzeuge in S2: ${s2?.anfrage?.werkzeuge ? "ja" : "nein"}; ${s1Fest ? "S1 fest vorgegeben, Vermerke an S2" : "Vermerke an S1 und S2"}`,
     },
     {
       nr: "T6",
@@ -291,9 +330,14 @@ export interface LaufOptionen {
   fortschritt?: (f: Fortschritt) => void;
   /** nach jeder Änderung am Lauf (Anzeige, Speichern) */
   aktualisiert?: (l: Lauf) => void | Promise<void>;
+  /** fester S1-Gegenstand statt S1 (LS-2026-W43-15, nur Evaluation) */
+  s1Fest?: S1Fest;
 }
 
-/** Ein Lauf: S1, unveränderte Bestätigung, S2 Verdichtung (mit S3 bei Bedarf), Quellenprüfung, Vergleich. */
+/**
+ * Ein Lauf: S1, unveränderte Bestätigung, S2 Verdichtung (mit S3 bei Bedarf), Quellenprüfung, Vergleich. Mit
+ * festem S1-Gegenstand entfällt S1; der Gegenstand wird unverändert bestätigt.
+ */
 export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
   const { daten, einstellungen } = o;
   const profil = daten.profil;
@@ -315,7 +359,15 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
   };
   let meldung: Meldung | undefined;
   try {
-    const vorschlag = await stufe1(k);
+    let vorschlag: S1Vorschlag;
+    if (o.s1Fest) {
+      const befunde = s1FestPruefen(o.s1Fest.vorschlag);
+      if (befunde.length) throw new Error(`Fester S1-Gegenstand ${o.s1Fest.datei} unbrauchbar: ${befunde.join("; ")}`);
+      vorschlag = structuredClone(o.s1Fest.vorschlag);
+      lauf.vorschlag = vorschlag;
+      lauf.status = "bestaetigen";
+      await k.aktualisiert(lauf);
+    } else vorschlag = await stufe1(k);
     // Bestätigung ohne Eingriff: Vorschlag unverändert, keine vorgeschlagene Prüffrage übernommen (wie in der App ohne Änderung)
     const e = await stufe2und3(k, structuredClone(vorschlag));
     meldung = e.meldung ?? undefined;
@@ -349,7 +401,7 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
   }
   await k.aktualisiert(lauf);
 
-  const punkte = pruefpunkte(lauf, material, meldung, quellen);
+  const punkte = pruefpunkte(lauf, material, meldung, quellen, !!o.s1Fest);
   const plausibilitaet = meldung ? plausibilitaetPruefen(meldung) : [];
   const s1 = lauf.vorschlag;
   const zugeordnet = new Set((s1?.sachverhalte ?? []).flatMap((s) => s.eingangsmeldungen ?? []));
@@ -364,6 +416,7 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
       s1_zugeordnete_eingaenge: zugeordnet.size,
       s1_sachverhalte: s1?.sachverhalte.length ?? 0,
       s1_app_hinweise: s1?.appHinweise ?? [],
+      ...(o.s1Fest ? { s1_fest: { datei: o.s1Fest.datei, sha256: o.s1Fest.sha256 } } : {}),
       quellen,
       schemabefunde_endfassung: meldung ? pruefeGegenSchema(profil.schema, meldung, profil.ui).length : null,
       befunde: lauf.ergebnis?.befunde ?? [],
@@ -415,6 +468,8 @@ export interface Reihe {
   quelle: "app" | "skript";
   /** Variante eines Bewertungsplans, z. B. „standardprofile-ilka/A-anthropic-standard“ */
   variante?: string;
+  /** fester S1-Gegenstand statt S1 (LS-2026-W43-15) */
+  s1_fest?: { datei: string; sha256: string };
   fall: string;
   erstellt: string;
   app: string;
@@ -442,6 +497,7 @@ export function reiheErstellen(o: {
   attrappe?: boolean;
   beendet?: string;
   variante?: string;
+  s1Fest?: S1Fest;
 }): Reihe {
   const k = konfiguration(o.einstellungen, o.daten.profil);
   const summe = o.ergebnisse.reduce((s, e) => s + (e.lauf.kostenUsd ?? e.lauf.kostenBekanntUsd ?? 0), 0);
@@ -451,6 +507,7 @@ export function reiheErstellen(o: {
     plan: PLAN_M4,
     quelle: o.quelle,
     ...(o.variante ? { variante: o.variante } : {}),
+    ...(o.s1Fest ? { s1_fest: { datei: o.s1Fest.datei, sha256: o.s1Fest.sha256 } } : {}),
     fall: FALL_ID,
     erstellt: new Date().toISOString(),
     app: APP_KENNUNG,
@@ -479,6 +536,7 @@ export interface ReihenOptionen {
   attrappe?: boolean;
   quelle?: "app" | "skript";
   variante?: string;
+  s1Fest?: S1Fest;
 }
 
 /** Anzahl der Läufe auf 1 … ANZAHL_MAX begrenzt */
@@ -513,6 +571,7 @@ export async function vergleichsreihe(o: ReihenOptionen): Promise<{ reihe: Reihe
       einstellungen: o.einstellungen,
       attrappe: o.attrappe,
       signal: o.signal,
+      s1Fest: o.s1Fest,
       aktualisiert: (l) => {
         const letzte = l.stufen[l.stufen.length - 1];
         if (letzte && letzte.stufe !== stufe) {
@@ -545,6 +604,7 @@ export async function vergleichsreihe(o: ReihenOptionen): Promise<{ reihe: Reihe
     attrappe: o.attrappe,
     beendet,
     variante: o.variante,
+    s1Fest: o.s1Fest,
   });
   return { reihe, ergebnisse };
 }
@@ -658,7 +718,9 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
     "",
     `Erstellt: ${reihe.erstellt} mit ${reihe.app}, Profil ${reihe.profil.id} ${reihe.profil.version} (${reihe.profil.hash.slice(0, 12)}…)`,
     ...(reihe.variante ? [`Variante: ${reihe.variante}`] : []),
-    `Fall: ${reihe.fall} (evaluation/faelle/${reihe.fall}.json); t0 ${FALL.auftrag.meldezeitpunkt}, ohne Websuche, S1-Vorschlag unverändert übernommen.`,
+    `Fall: ${reihe.fall} (evaluation/faelle/${reihe.fall}.json); t0 ${FALL.auftrag.meldezeitpunkt}, ohne Websuche, ${
+      reihe.s1_fest ? `S1-Gegenstand fest vorgegeben (${reihe.s1_fest.datei}, ${reihe.s1_fest.sha256.slice(0, 12)}…)` : "S1-Vorschlag unverändert übernommen"
+    }.`,
     `S1: ${m.s1.modell} (${m.s1.aufwand}) · S2 Verdichtung: ${m.s2.modell} (${m.s2.aufwand}) · Reparatur: ${m.reparatur.modell} (${m.reparatur.aufwand})` +
       (reihe.mistral_endpunkt ? ` · Mistral-Endpunkt: ${reihe.mistral_endpunkt}` : ""),
     `Läufe: ${ergebnisse.length} von ${reihe.laeufe_geplant}${reihe.beendet ? ` (${reihe.beendet})` : ""}; technisch bestanden (T1–T8): ${reihe.technisch_bestanden}; Kosten zusammen ${reihe.kosten_usd_summe} USD (Listenpreise, ohne Gewähr).`,

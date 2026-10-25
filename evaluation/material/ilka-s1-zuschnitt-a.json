@@ -1,0 +1,53 @@
+{
+  "gegenstand": "FIKTIV – Verdichtung der sechs Ländermeldungen zu den Folgen des Orkantiefs „Ilka“ für die Koordinierungsstelle; Referenzraum Deutschland, t0 14.10.2026, 14:00 Uhr.",
+  "stichtag": "2026-10-14",
+  "meldezeitpunkt": "2026-10-14T14:00",
+  "referenzbezug": "Bund: Bevölkerungsschutz in Deutschland; die Länder erscheinen als Teilräume.",
+  "horizont": "bis zur angekündigten Wiederversorgung in allen Räumen (16.10.2026 abends)",
+  "sachverhalte": [
+    {
+      "titel": "FIKTIV – Sturmfolgen des Orkantiefs „Ilka“ in sechs Ländern: Personenschäden, Einsätze, Verkehr",
+      "ereignisarten": [
+        "Unwetter / Sturm"
+      ],
+      "sops": [
+        "b01",
+        "c13"
+      ],
+      "begruendung": "Gemeinsame Sturmfolgen aller sechs Länder außerhalb der Stromausfälle: Personenschäden, Einsatzaufkommen, gesperrte Strecken. Getrennt vom Stromausfall, weil Wirkungsräume, Dauer und Handlungsbedarf verschieden sind.",
+      "eingangsmeldungen": [
+        "LEAD-Meldung_RP_2026-10-14T09-30_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_NI_2026-10-14T09-45_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_NW_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_HE_2026-10-14T10-15_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_ST_2026-10-14T11-00_FIKTIV_Orkantief-Ilka.json"
+      ]
+    },
+    {
+      "titel": "FIKTIV – Andauernde Stromausfälle nach dem Orkantief „Ilka“ mit Folgen für Notruf, Pflege und Trinkwasser",
+      "ereignisarten": [
+        "Stromausfall / Blackout",
+        "KRITIS-Ausfall"
+      ],
+      "sops": [
+        "b08",
+        "b12",
+        "c11",
+        "c12",
+        "b10"
+      ],
+      "begruendung": "Andauernde Stromausfälle in Vulkaneifel, Südwestfalen, Oberharz und Landkreis Sonneberg sowie Restausfälle in Hessen und Sachsen-Anhalt; gekoppelte Folgen für Notruf und Mobilfunk, Pflege und Trinkwasser mit endenden Notstrompuffern.",
+      "eingangsmeldungen": [
+        "LEAD-Meldung_RP_2026-10-14T09-30_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_NI_2026-10-14T09-45_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_NW_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_HE_2026-10-14T10-15_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+        "LEAD-Meldung_ST_2026-10-14T11-00_FIKTIV_Orkantief-Ilka.json"
+      ]
+    }
+  ],
+  "prueffrage": "",
+  "hinweise": "FIKTIV. Fester S1-Gegenstand für den isolierten Vergleich der Verdichtung (LS-2026-W43-15), Zuschnitt wie Bezug A (zwei Sachverhalte, Stromausfall als Sachverhalt 2). Vom Herausgeber fachlich zu bestätigen; jede Änderung ist eine neue Datei mit neuer Prüfsumme."
+}

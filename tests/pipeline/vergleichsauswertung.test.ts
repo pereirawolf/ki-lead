@@ -111,4 +111,31 @@ describe("Auswertung der Vergleichsläufe", () => {
     expect(md).toContain("Der Radarabstand zählt nur Achsen, die Bezug und Konfiguration beide gesetzt haben");
     for (const spalte of ["Δ Tendenz gleich", "Δ Achsenabweichung", "Δ Achsen ≤ 1", "Achsen verglichen"]) expect(md, spalte).toContain(spalte);
   });
+
+  // LS-2026-W43-15 und -16 (Lernschleife, 25.10.2026): Hinweis auf S1 und Sachverhalte ohne Gegenstück
+  it("LS-2026-W43-16: nennt Sachverhalte ohne Gegenstück in der Redaktionsfassung je Lauf", () => {
+    const geteilt = lauf("g1", 1, 2, 0, { d1: 4 });
+    geteilt.beobachtungen.vergleich.paare.push({ ki: "Verkehrsfolgen", ref: null as any, ref_index: null as any, aehnlichkeit: 0, ki_radar: { d1: 2 } });
+    const G = reihe(["claude-haiku-5-5", "high"], ["claude-sonnet-5-5", "medium"], [geteilt], { variante: "standardprofile-ilka/B-anthropic-sonnet" });
+    const z = zusammenfassen([A, G]);
+    expect(z[0].ohne_gegenstueck).toEqual([]);
+    expect(z[1].ohne_gegenstueck).toEqual([{ lauf: "g1", sachverhalte: ["Verkehrsfolgen"] }]);
+    // Der Sachverhalt ohne Gegenstück geht nicht in die Zuordnungsquote und nicht in das Radar ein
+    expect(z[1].zuordnung).toBe(1);
+    expect(z[1].radar["0"].d1).toEqual({ median: 4, offen: 0, n: 1 });
+    const md = berichtMarkdown(auswerten([A, G]));
+    expect(md).toContain("## Sachverhalte ohne Gegenstück in der Redaktionsfassung");
+    expect(md).toContain("- B-anthropic-sonnet, g1: Verkehrsfolgen");
+    expect(berichtMarkdown(auswerten([A]))).not.toContain("ohne Gegenstück");
+  });
+
+  it("LS-2026-W43-15: Bericht sagt, ob die Zahl der Sachverhalte S1 misst oder S1 fest vorgegeben war", () => {
+    expect(berichtMarkdown(auswerten([A]))).toContain("Die Zahl der Sachverhalte übernimmt S2 aus der bestätigten S1-Gliederung");
+    const fest = { datei: "evaluation/material/x.json", sha256: "ab".repeat(32) };
+    const F = reihe(["claude-haiku-5-5", "high"], ["claude-opus-5-5", "medium"], [lauf("f1", 1, 2, 0, { d1: 4 })], { s1_fest: fest });
+    expect(zusammenfassen([F])[0].s1_fest).toEqual([fest.sha256]);
+    const md = berichtMarkdown(auswerten([F]));
+    expect(md).toContain("S1-Gegenstand fest vorgegeben (Prüfsumme abababababab…)");
+    expect(md).not.toContain("misst S1");
+  });
 });

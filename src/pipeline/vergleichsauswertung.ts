@@ -42,6 +42,13 @@ export interface Zusammenfassung {
   radar: Record<string, Record<string, { median: number | null; offen: number; n: number }>>;
   /** Anteil der Sachverhalte der Redaktionsfassung, denen ein Lauf einen Sachverhalt zugeordnet hat */
   zuordnung: number | null;
+  /**
+   * Sachverhalte je Lauf ohne Gegenstück in der Redaktionsfassung (LS-2026-W43-16): Ansatzpunkte für die Prüfung der
+   * Abdeckung von Hand (evaluation/bewertungshilfen/orkantief-ilka.md, Abschnitt C); keine Abwertung.
+   */
+  ohne_gegenstueck: { lauf: string; sachverhalte: string[] }[];
+  /** Prüfsummen fester S1-Gegenstände der Reihen (LS-2026-W43-15); leer, wenn S1 in jedem Lauf neu lief */
+  s1_fest: string[];
 }
 
 export interface Abstand {
@@ -120,11 +127,14 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
     const sammlung: Record<string, Record<string, (number | null)[]>> = {};
     let refGesamt = 0;
     let refZugeordnet = 0;
+    const ohneGegenstueck: Zusammenfassung["ohne_gegenstueck"] = [];
     for (const l of laeufe) {
       const v = l.beobachtungen?.vergleich as {
         paare?: { ref_index?: number | null; ki_radar?: Record<string, number | null> | null; ki?: string | null }[];
       } | null;
       const paare = v?.paare ?? [];
+      const ohne = paare.filter((p) => p.ki && typeof p.ref_index !== "number").map((p) => p.ki!);
+      if (ohne.length) ohneGegenstueck.push({ lauf: l.lauf, sachverhalte: ohne });
       const refs = paare.filter((p) => typeof p.ref_index === "number");
       refGesamt += refs.length;
       for (const p of refs) {
@@ -154,6 +164,8 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
       kennzahlen: kz,
       radar,
       zuordnung: refGesamt ? r3(refZugeordnet / refGesamt) : null,
+      ohne_gegenstueck: ohneGegenstueck,
+      s1_fest: [...new Set(rs.flatMap((r) => (r.s1_fest ? [r.s1_fest.sha256] : [])))],
     };
   });
 }
@@ -209,6 +221,11 @@ export function berichtMarkdown(a: Auswertung): string {
     "",
     `Bezug: ${a.bezug ?? "kein Bezug (Standard-Profil Anthropic nicht unter den Reihen; mit --bezug wählen)"}. Mittelwert (Spanne) über die Läufe je Konfiguration.`,
     "",
+    // LS-2026-W43-15: S2 übernimmt die Zahl der Sachverhalte aus der bestätigten S1-Gliederung
+    z.some((s) => s.s1_fest.length)
+      ? `S1-Gegenstand fest vorgegeben (Prüfsumme ${[...new Set(z.flatMap((s) => s.s1_fest))].map((h) => `${h.slice(0, 12)}…`).join(", ")}); Unterschiede gehen auf S2 zurück.`
+      : "Die Zahl der Sachverhalte übernimmt S2 aus der bestätigten S1-Gliederung; sie misst S1, nicht das Verdichtungsmodell.",
+    "",
     "| Kennung | Konfiguration | Läufe (T1–T8) | Kosten USD | Dauer s | Sachverhalte | Achsen gesetzt | Tendenz gesetzt | Beurteilung gleich | Ähnlichkeit | Achsenabweichung | Plausibilität |",
     "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ...z.map(
@@ -232,6 +249,16 @@ export function berichtMarkdown(a: Auswertung): string {
       "",
     );
   }
+  const ohne = z.filter((s) => s.ohne_gegenstueck.length);
+  if (ohne.length)
+    zeilen.push(
+      "## Sachverhalte ohne Gegenstück in der Redaktionsfassung",
+      "",
+      "Arbeitshilfe für die Prüfung der Abdeckung von Hand; ein anderer Zuschnitt ist kein Mangel.",
+      "",
+      ...ohne.flatMap((s) => s.ohne_gegenstueck.map((o) => `- ${s.kennung}, ${o.lauf}: ${o.sachverhalte.join("; ")}`)),
+      "",
+    );
   const apps = [...new Set(z.flatMap((s) => s.app))];
   if (apps.length > 1)
     zeilen.push(`Hinweis: Die Reihen stammen aus verschiedenen App-Versionen (${apps.join(", ")}); Unterschiede können auch daher rühren.`, "");

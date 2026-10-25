@@ -1,0 +1,43 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "zaehlregel-laenderzuordnung",
+  "titel": "Personenschäden aus drei Ländermeldungen richtig zuordnen (FIKTIV)",
+  "stand": "2026-10-25",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Sturmfolgen in drei Ländern, Personenschäden je Land",
+    "stichworte": "B01",
+    "stichtag": "2026-11-06",
+    "meldezeitpunkt": "2026-11-06T13:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/zaehlregel-laenderzuordnung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Prüfziel Quellen- und Länderzuordnung (LS-2026-W43-17)."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die Personenschäden je Land mit der meldenden Stelle und dem Meldezeitpunkt zutreffend zuordnen.",
+      "Für Land A die fehlende Zahl der Leichtverletzten als offen benennen, nicht als null.",
+      "Summen nur so bilden, dass erkennbar bleibt, welche Länder einbezogen sind (Leichtverletzte: mindestens 53 aus B und C).",
+      "Die 4 in Land B versorgten Leichtverletzten einmal und bei Land C zählen.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Schwer- oder Leichtverletzte einem anderen Land zuschreiben.",
+      "Die 4 Leichtverletzten bei Land B zusätzlich zählen.",
+      "Für Land A null Leichtverletzte angeben.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-06T13:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Unwetter / Sturm"
+    ]
+  }
+}

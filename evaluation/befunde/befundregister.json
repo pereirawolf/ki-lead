@@ -934,6 +934,116 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
       "pr": 61
+    },
+    {
+      "id": "LS-2026-W43-14",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/orkantief-ilka-verdichtung.json",
+          "stelle": "erwartungen.muss[1]"
+        },
+        {
+          "datei": "evaluation/faelle/sop-verdichtung-ilka-vergleich.json",
+          "stelle": "erwartungen.muss[1]"
+        }
+      ],
+      "kurz": "Muss-Punkt „Stromlose“ an die Zählregeln gebunden, begründete Nichtaggregation gleichwertig; Bewertungshilfe Ilka für Zählregeln, offene Achsen und Tendenz.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
+    },
+    {
+      "id": "LS-2026-W43-15",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md",
+          "stelle": "Kennzahl „Sachverhalte“"
+        },
+        {
+          "datei": "src/pipeline/vergleichslauf.ts",
+          "stelle": "einLauf()"
+        }
+      ],
+      "kurz": "Fester S1-Gegenstand für den isolierten Vergleich der Verdichtung (Skript, Planfeld s1_fest, Zuschnitt A); Hinweis, dass „Sachverhalte“ S1 misst.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
+    },
+    {
+      "id": "LS-2026-W43-16",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/vergleichsauswertung.ts",
+          "stelle": "zusammenfassen() und berichtMarkdown()"
+        }
+      ],
+      "kurz": "Abdeckung bei anderem Zuschnitt als Prüfliste; Auswertung nennt Sachverhalte ohne Gegenstück.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
+    },
+    {
+      "id": "LS-2026-W43-17",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "Fälle zu Fehlermustern der Zählregeln"
+        }
+      ],
+      "kurz": "Fünf fiktive Fälle zu Hochrechnung, mittelbarer Betroffenheit, Teilmenge, Länderzuordnung und Fortgeltung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
+    },
+    {
+      "id": "LS-2026-W43-18",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/bewertungsschema.json",
+          "stelle": "properties"
+        }
+      ],
+      "kurz": "Korrekturen nach Art, Bearbeitungsdauer und Grad der Verblindung in der Bewertung; Plan Blindbewertung Ilka mit zwei Bewertenden.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
+    },
+    {
+      "id": "LS-2026-W43-19",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_testdatennutzung_2026-W43.json",
+      "commit": "87966240060484da20e9e95237e226d5d5841542",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/",
+          "stelle": "Entwicklungs- und Kontrollsatz"
+        }
+      ],
+      "kurz": "Verfahren für einen neu verfassten, zurückgehaltenen Kontrollsatz.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 62
     }
   ]
 }
