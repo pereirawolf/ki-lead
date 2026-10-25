@@ -370,28 +370,46 @@ export const WEBSUCHE_GRENZE = 50;
 
 /**
  * Wahl nur für einen Lauf, abweichend von den Einstellungen (leer = Standard): Modell je Stufe als Schlüssel der
- * Rolle, dazu optional Aufwand je Stufe und die Höchstzahl der Websuchen.
+ * Rolle, dazu optional Aufwand je Stufe und die Recherchetiefe (seit 0.5.22 alle drei Werte wie unter „Recherche &
+ * Grenzen“: Websuchen, ganz gelesene Seiten, Lesemenge je Seite).
  */
 export type ModellWahl = Partial<Record<Rolle, string>> & {
   aufwand?: Partial<Record<Rolle, Aufwand>>;
   websucheMax?: number;
+  abrufMax?: number;
+  /** 0 = Seiten nie kürzen */
+  abrufMaxTokens?: number;
 };
+
+/** Felder der Recherchetiefe in der Wahl je Lauf */
+export const WAHL_RECHERCHE = ["websucheMax", "abrufMax", "abrufMaxTokens"] as const;
 
 /** Ob die Wahl etwas von den Einstellungen abweichen lässt */
 export function wahlAbweichend(wahl: ModellWahl, rollen: Rolle[] = ROLLEN, mitWebsuche = true): boolean {
-  return rollen.some((r) => !!wahl[r] || !!wahl.aufwand?.[r]) || (mitWebsuche && wahl.websucheMax !== undefined);
+  return rollen.some((r) => !!wahl[r] || !!wahl.aufwand?.[r]) || (mitWebsuche && WAHL_RECHERCHE.some((f) => wahl[f] !== undefined));
+}
+
+/** Gültiger Wert eines Recherchefelds der Wahl je Lauf (Bereiche wie unter „Recherche & Grenzen“), sonst undefined */
+function rechercheWert(feld: (typeof WAHL_RECHERCHE)[number], w: number | undefined): number | undefined {
+  if (w === undefined || !Number.isFinite(w)) return undefined;
+  const n = Math.round(w);
+  if (feld === "websucheMax") return Math.min(WEBSUCHE_GRENZE, Math.max(0, n));
+  if (feld === "abrufMax") return Math.min(50, Math.max(0, n));
+  return n <= 0 ? 0 : Math.min(100000, Math.max(1000, n));
 }
 
 /** Einstellungen mit der für diesen Lauf getroffenen Wahl; nicht gewählte Stufen behalten ihre Vorgabe */
 export function mitModellwahl(e: Einstellungen, wahl: ModellWahl): Einstellungen {
   const modelle = Object.fromEntries(ROLLEN.filter((r) => !!wahl[r]).map((r) => [r, wahl[r]!]));
   const aufwand = Object.fromEntries(ROLLEN.filter((r) => !!wahl.aufwand?.[r]).map((r) => [r, wahl.aufwand![r]!]));
-  const websuche = wahl.websucheMax !== undefined && Number.isFinite(wahl.websucheMax);
-  if (!Object.keys(modelle).length && !Object.keys(aufwand).length && !websuche) return e;
+  const recherche = Object.fromEntries(
+    WAHL_RECHERCHE.map((f) => [f, rechercheWert(f, wahl[f])] as const).filter((x): x is [(typeof WAHL_RECHERCHE)[number], number] => x[1] !== undefined),
+  );
+  if (!Object.keys(modelle).length && !Object.keys(aufwand).length && !Object.keys(recherche).length) return e;
   return {
     ...e,
     modelle: { ...e.modelle, ...modelle },
     aufwand: { ...e.aufwand, ...aufwand },
-    ...(websuche ? { websucheMax: Math.min(WEBSUCHE_GRENZE, Math.max(0, Math.round(wahl.websucheMax!))) } : {}),
+    ...recherche,
   };
 }

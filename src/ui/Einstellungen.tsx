@@ -4,7 +4,7 @@
 // Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
-import { useEffect, useId, useState } from "react";
+import { useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
@@ -33,19 +33,9 @@ import {
   type ModellProfil,
   type Rolle,
 } from "../pipeline/einstellungen";
-import {
-  hoechstkostenText,
-  lesemengeText,
-  pruefeEingabe,
-  RECHERCHE_GRENZEN,
-  RECHERCHE_STUFEN,
-  stufenWerteText,
-  stufeVon,
-  wirkungText,
-  type RechercheFeld,
-  type StufeId,
-} from "../pipeline/recherchetiefe";
+import { hoechstkostenText, RECHERCHE_STUFEN, stufenWerteText, stufeVon, wirkungText, type StufeId } from "../pipeline/recherchetiefe";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
+import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
 
@@ -689,26 +679,8 @@ function ModelleBereich({
 
 // Recherchetiefe mit Stufen und eigenen Werten (seit 0.5.19, KP-2026-W43-69 bis -76); Logik in src/pipeline/recherchetiefe.ts
 
-const RECHERCHE_FELDER: { feld: RechercheFeld; label: string; hilfe: string }[] = [
-  {
-    feld: "websucheMax",
-    label: "Websuchen je Recherche (höchstens)",
-    hilfe:
-      "Wie oft die KI wie in einer Suchmaschine nach Quellen suchen darf. Ist die Zahl erreicht, arbeitet sie mit dem Gefundenen weiter. 0: keine Websuche. In der KI-Erfassung lässt sich die Zahl je Auftrag ändern.",
-  },
-  {
-    feld: "abrufMax",
-    label: "Seiten vollständig lesen je Recherche (höchstens)",
-    hilfe:
-      "Wie viele Webseiten die KI ganz öffnen darf, aus den Suchtreffern oder aus dem Auftrag. Ohne Seitenabruf kennt sie nur die Kurzauszüge der Trefferliste. 0: Es wird keine Seite geöffnet, auch keine im Auftrag genannte.",
-  },
-  {
-    feld: "abrufMaxTokens",
-    label: "Lesemenge je Seite (höchstens, in Token)",
-    hilfe:
-      "Längere Seiten liest die KI nur bis hierhin; was danach steht, sieht sie nicht. Zu knapp schneidet Tabellen oder Anhänge am Ende ab, zu großzügig erhöht die Kosten.",
-  },
-];
+/** Zusatz zum Hilfetext der Websuchen: Die Wahl je Lauf ändert seit 0.5.22 alle drei Werte */
+const JE_AUFTRAG = "In der KI-Erfassung lassen sich die drei Werte je Auftrag ändern.";
 
 /** Anbieter der S2-Modelle (Recherche und Verdichtung) in fester Reihenfolge */
 function s2Anbieter(e: E, profil: Profil | null): AnbieterId[] {
@@ -759,105 +731,20 @@ function RechercheTiefe({ profil, e, setze }: { profil: Profil | null; e: E; set
       {gewaehlt === "eigen" && (
         <div className="gruppe-spalten-zwei">
           {RECHERCHE_FELDER.map((f) => (
-            <GrenzFeld key={f.feld} {...f} e={e} setze={setze} vermerk={wirkungText(f.feld, anbieter, e.mistralEndpunkt)} />
+            <GrenzFeld
+              key={f.feld}
+              {...f}
+              hilfe={f.feld === "websucheMax" ? `${f.hilfe} ${JE_AUFTRAG}` : f.hilfe}
+              wert={e[f.feld]}
+              setze={(n) => setze({ [f.feld]: n })}
+              kuerzenZurueck={STANDARD.abrufMaxTokens}
+              vermerk={wirkungText(f.feld, anbieter, e.mistralEndpunkt)}
+            />
           ))}
         </div>
       )}
       {kosten && <p className="hinweis recherche-kosten">{kosten}</p>}
     </>
-  );
-}
-
-function GrenzFeld({
-  feld,
-  label,
-  hilfe,
-  vermerk,
-  e,
-  setze,
-}: {
-  feld: RechercheFeld;
-  label: string;
-  hilfe: string;
-  vermerk: string;
-  e: E;
-  setze: (teil: Partial<E>) => void;
-}) {
-  const id = useId();
-  const wert = e[feld];
-  const ohneGrenze = feld === "abrufMaxTokens" && wert === 0;
-  const [text, setText] = useState(ohneGrenze ? "" : String(wert));
-  const [hinweis, setHinweis] = useState<string>();
-  useEffect(() => setText(ohneGrenze ? "" : String(wert)), [wert, ohneGrenze]);
-  const { min, max } = RECHERCHE_GRENZEN[feld];
-  const ids = [`${id}-hilfe`, feld === "abrufMaxTokens" && !ohneGrenze && `${id}-umrechnung`, vermerk && `${id}-vermerk`, hinweis && `${id}-hinweis`]
-    .filter(Boolean)
-    .join(" ");
-  return (
-    <div className="feld">
-      <label className="feld-label" htmlFor={id}>
-        {label}
-      </label>
-      <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
-        {hilfe}
-      </p>
-      <input
-        id={id}
-        type="number"
-        min={min}
-        max={max}
-        step={feld === "abrufMaxTokens" ? 1000 : 1}
-        value={text}
-        disabled={ohneGrenze}
-        placeholder={ohneGrenze ? "ohne Grenze" : undefined}
-        aria-describedby={ids}
-        onChange={(ev) => {
-          setText(ev.target.value);
-          setHinweis(undefined);
-          const r = pruefeEingabe(feld, ev.target.value, wert);
-          if (r.fertig && r.wert !== wert) setze({ [feld]: r.wert });
-        }}
-        onBlur={() => {
-          if (ohneGrenze) return;
-          const r = pruefeEingabe(feld, text, wert);
-          if (r.fertig) return;
-          setHinweis(r.hinweis);
-          setText(String(r.wert));
-          if (r.wert !== wert) setze({ [feld]: r.wert });
-        }}
-      />
-      {feld === "abrufMaxTokens" && !ohneGrenze && (
-        <p className="hinweis" id={`${id}-umrechnung`}>
-          {lesemengeText(wert)}
-        </p>
-      )}
-      {vermerk && (
-        <p className="hinweis" id={`${id}-vermerk`}>
-          {vermerk}
-        </p>
-      )}
-      {hinweis && (
-        <p className="kasten kasten-hinweis feld-zusatz" id={`${id}-hinweis`} role="status">
-          {hinweis}
-        </p>
-      )}
-      {feld === "abrufMaxTokens" && (
-        <label className="schalter">
-          <input
-            type="checkbox"
-            checked={ohneGrenze}
-            onChange={(ev) => {
-              setHinweis(undefined);
-              setze({ abrufMaxTokens: ev.target.checked ? 0 : STANDARD.abrufMaxTokens });
-            }}
-          />
-          <span>
-            Seiten nie kürzen
-            <span className="hinweis"> Sehr lange Seiten werden vollständig gelesen; das kann einen Lauf deutlich verteuern.</span>
-          </span>
-        </label>
-      )}
-    </div>
   );
 }
 

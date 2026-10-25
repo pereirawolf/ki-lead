@@ -69,6 +69,36 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.19 | letzter Commit des Pull Requests „Recherche & Grenzen: Recherchetiefe, verständliche Felder, Höchstkosten; 0.5.19“ |
 | 0.5.20 | letzter Commit des Pull Requests „Profilansicht übersichtlicher; 0.5.20“ |
 | 0.5.21 | letzter Commit des Pull Requests „Kopfleiste: KI-Chip „KI offline/online“ statt Profil-Chip; 0.5.21“ |
+| 0.5.22 | letzter Commit des Pull Requests „KI-Erfassung: Modelle und Recherche für diesen Lauf; 0.5.22“ |
+
+## [0.5.22] – 25.10.2026
+
+Grundlage: Vorschläge zu „KI-Erfassung → Auftrag und Material → Modelle für diesen Lauf“ vom 25.10.2026 im Anschluss an Pull Request #73, vom Herausgeber am selben Tag freigegeben (Punkte 1–10). Entschieden: Seitenabrufe und Lesemenge je Seite werden je Lauf wählbar (Punkt 8); die Vermerke zu den Modellen stammen aus den vergleichenden Testläufen (Punkt 4). Gespeicherte Einstellungen, Profile und Pipeline bleiben unverändert; neu ist nur, was ein einzelner Lauf abweichend wählen kann.
+
+### Hinzugefügt
+
+- **Angaben zu den Modellen** (`src/pipeline/modellkunde.ts`, Punkte 1 und 4): Anzeigenamen (z. B. „Opus 5.5“, „GPT-6 Luna“, „Mistral Small 4“), Kostenklasse nach dem Listenpreis der Ausgabetoken (bis 1 USD je Million niedrig, bis 12 mittel, bis 25 hoch, darüber sehr hoch) und Vermerke aus den Ergebnisberichten vom 25.10.2026: „im Test vorn“ (S1 GPT-6 Luna „hoch“, Verdichtung Opus „mittel“, Management Summary Sonnet „mittel“) und „im Test bewährt“ (u. a. S1 Haiku „hoch“, Verdichtung Sonnet „mittel“, Reparatur Haiku, GPT-6.1 Sol, Mistral Small und Medium „niedrig“). Für S2 Recherche und Entwurf gibt es noch keine Vergleichsläufe und daher keine Vermerke. Kennungen der Anbieter bleiben im Hilfetext und im Laufprotokoll.
+- **KI-Profil für diesen Lauf** (Punkt 3): „Wie in den Einstellungen“, die Standard-Profile Anthropic, OpenAI und Mistral, die beiden Mix-Profile und „Einzeln anpassen“. Profile ohne nötigen Schlüssel sind gesperrt und nennen den fehlenden Schlüssel. Die Felder je Stufe erscheinen erst bei „Einzeln anpassen“.
+- **Recherchetiefe für diesen Lauf** (Punkt 8): „Wie in den Einstellungen“, die übrigen Stufen („Sparsam“, „Standard“, „Gründlich“) und „Eigene Werte“ mit allen drei Feldern (Websuchen, ganz gelesene Seiten, Lesemenge je Seite) wie unter „Recherche & Grenzen“: Beschriftungen und verknüpfte Hilfetexte, Prüfung getippter Werte (ein geleertes Feld behält den Wert, Bereiche und ganze Zahlen), Umrechnung der Lesemenge, „Seiten nie kürzen“, Wirkung je Anbieter und Höchstkosten für das S2-Modell. Felder ohne Wirkung beim S2-Modell sind gesperrt (z. B. Lesemenge bei OpenAI); mit Mistral über den EU-Endpunkt entfällt die Wahl mit Hinweis. `ModellWahl` und `mitModellwahl` kennen dafür `abrufMax` und `abrufMaxTokens`.
+- **Hinweis auf zusätzliche Anbieter** (Punkt 5): Schickt der Lauf Inhalte an einen Anbieter, der nach den Einstellungen keine bekäme, sagt das ein Hinweis direkt im Block.
+- **Schätzung je Stufe und Anpassungshinweis** (Punkt 6): Unter dem Aufwand stehen ein Hilfetext und die voraussichtliche Dauer und Kosten der Stufe; passt die App die Stufe beim Modellwechsel an, nennt sie den Grund („Aufwand auf „hoch“ gesetzt: Mistral Small 4 bietet „mittel“ nicht an.“).
+- **Zurücksetzen und Weg zu den Vorgaben** (Punkt 10): „Alles wie in den Einstellungen“ und „Vorgaben dauerhaft ändern“ (öffnet „Einstellungen → Modelle & Aufwand“). Abweichende Stufen und die Recherchetiefe tragen das Kennzeichen „abweichend“ und einen Rand in der Aktionsfarbe (bei erzwungenen Farben in Systemfarben).
+
+### Geändert
+
+- **Kopfzeile** (Punkte 1 und 2): Titel „Modelle und Recherche für diesen Lauf“ (bei nur einer Stufe „Modell für diesen Lauf“), Anzeigenamen statt Kennungen, Recherchetiefe und Schätzung des ganzen Laufs, z. B. „S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · ≈ 3–9 Minuten, 1,40–2,33 USD“; „abweichend“ als Kennzeichen statt Satz.
+- **Auswahllisten** (Punkt 4): „Wie in den Einstellungen: …“ statt „Standard: …“; Modelle ohne Schlüssel sind gesperrt statt nur gekennzeichnet; je Modell Kostenklasse und Vermerk; der Hilfetext nennt Anbieter, Kennung, Listenpreis und Befund aus den Testläufen. Eine Wahl im Feld bleibt stehen, auch wenn sie den Einstellungen gleicht; ein KI-Profil setzt nur, was abweicht.
+- **S3 Reparatur** (Punkt 7) steht unter „Weitere Stufe“ (zugeklappt, außer bei abweichender Wahl) und in der Kopfzeile nur, wenn abweichend.
+- **Reihenfolge im Auftrag** (Punkt 9): Ein Rahmen enthält zuerst den Schalter „Websuche und Seitenabruf erlauben“, dann die Wahl für diesen Lauf, dann Recherchezeile und Schätzung; die Bestätigung zur Datenweitergabe folgt danach. Vor S2 enthält der Rahmen die Schätzung für S2.
+- Das Eingabefeld der Recherchetiefe ist als `src/ui/GrenzFeld.tsx` ausgelagert und dient Einstellungen und Wahl je Lauf gemeinsam. Unter „Recherche & Grenzen“ heißt es im Hilfetext der Websuchen jetzt „In der KI-Erfassung lassen sich die drei Werte je Auftrag ändern.“
+- `zuEinstellungen` der KI-Erfassung nimmt den Bereich der Einstellungen an (ohne Angabe wie bisher „KI-Anbieter & API“).
+- Spezifikation 0.5.22 (Abschnitt 5.1, offener Punkt 17), `docs/TESTS.md`.
+
+### Tests
+
+- `tests/ui/modellwahl.test.ts` (11 Tests, vorher 3): Anzeigenamen, Kostenklasse, Vermerk und gesperrte Modelle in der Auswahl; Mistral mit Anpassungshinweis und Schätzung je Stufe; Aufwand und Recherchetiefe je Lauf bis S2, geleertes Feld behält den Wert; Kopfzeile mit Schätzung ohne S3, Rahmen vor der Bestätigung, S3 unter „Weitere Stufe“; „ohne Recherche“; Kennzeichnung, Zurücksetzen und Weg zu „Modelle & Aufwand“; KI-Profile gesperrt ohne Schlüssel, Mix-Profil mit Hinweis auf OpenAI und Wirkung im Lauf, Rückkehr zu den Einstellungen; Stufe „Gründlich“ mit Höchstkosten; gesperrte Felder bei OpenAI und Wegfall bei Mistral EU.
+- `tests/pipeline/modellkunde.test.ts` (neu): Anzeigenamen, Grenzen der Kostenklassen, Vermerke nur nach den Berichten, Verweis auf vorhandene Berichte.
+- `tests/pipeline/einstellungen.test.ts`: Recherchewerte je Lauf mit Bereichen und „abweichend“ nur bei Recherche.
 
 ## [0.5.21] – 25.10.2026
 

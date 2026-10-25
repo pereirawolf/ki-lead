@@ -3546,9 +3546,68 @@ fieldset.lb-ausgabe {
   background: var(--papier);
 }
 
-.modellwahl > summary {
+.modellwahl > .schalter {
+  margin: 0.2rem 0 0.4rem;
+}
+
+.modellwahl-details > summary {
   cursor: pointer;
+}
+
+.modellwahl-titel {
   font-weight: 700;
+}
+
+/* Kopfzeile: Anzeigenamen und Schätzung; bricht auf schmalen Bildschirmen unter den Titel um (seit 0.5.22) */
+.modellwahl-kurz {
+  overflow-wrap: anywhere;
+}
+
+/* Kennzeichen „abweichend“ an Kopfzeile, Stufe und Recherchetiefe; Text, nicht nur Farbe */
+.modellwahl-abweichend {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--amt);
+  border-radius: 999px;
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: 0.1em;
+}
+
+.modellwahl-stufe.abweichend,
+.modellwahl-recherche.abweichend {
+  border-color: var(--amt);
+}
+
+.modellwahl-profil,
+.modellwahl-recherche {
+  margin-top: 0.6rem;
+}
+
+.modellwahl-weitere {
+  margin-top: 0.6rem;
+}
+
+.modellwahl-weitere > summary {
+  cursor: pointer;
+}
+
+.modellwahl-stufe .hinweis {
+  margin: 0;
+}
+
+.modellwahl-fuss {
+  margin-top: 0.4rem;
+}
+
+@media (forced-colors: active) {
+  .modellwahl-abweichend,
+  .modellwahl-stufe.abweichend,
+  .modellwahl-recherche.abweichend {
+    border-color: Highlight;
+  }
 }
 
 .modellwahl-felder {

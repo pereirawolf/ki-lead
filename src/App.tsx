@@ -505,8 +505,8 @@ export default function App() {
               profil={profil}
               einstellungen={einstellungen}
               schluessel={schluessel}
-              zuEinstellungen={() => {
-                setEinstellungsBereich("anbieter");
+              zuEinstellungen={(bereich) => {
+                setEinstellungsBereich(bereich ?? "anbieter");
                 setAnsicht("einstellungen");
               }}
               uebernehmen={kiUebernehmen}

@@ -46,7 +46,7 @@ export function stufeVon(e: RechercheWerte): StufeId | "eigen" {
 
 /** Kurzangabe der Werte einer Stufe, z. B. „15 Websuchen, 10 Seiten, 15.000 Token je Seite“ */
 export function stufenWerteText(w: RechercheWerte): string {
-  return `${w.websucheMax} Websuchen, ${w.abrufMax} Seiten, ${zahl(w.abrufMaxTokens)} Token je Seite`;
+  return `${w.websucheMax} Websuchen, ${w.abrufMax} Seiten, ${w.abrufMaxTokens ? `${zahl(w.abrufMaxTokens)} Token je Seite` : "Seiten ungekürzt"}`;
 }
 
 /** Zulässige Bereiche der drei Felder; 0 bei der Lesemenge bedeutet „Seiten nie kürzen“ und wird über ein Kästchen gesetzt */
@@ -138,6 +138,11 @@ const WIRKUNG: Record<RechercheFeld, Record<AnbieterId | "mistral-eu", string>> 
     "mistral-eu": "bei Mistral ohne Wirkung",
   },
 };
+
+/** Ob ein Feld bei mindestens einem der Anbieter etwas bewirkt (seit 0.5.22: Felder ohne Wirkung sind in der Wahl je Lauf gesperrt) */
+export function feldWirkt(feld: RechercheFeld, anbieter: AnbieterId[], mistralEndpunkt: Einstellungen["mistralEndpunkt"]): boolean {
+  return anbieter.some((a) => !/ohne Wirkung|sucht nicht/.test(WIRKUNG[feld][a === "mistral" && (mistralEndpunkt ?? "eu") === "eu" ? "mistral-eu" : a]));
+}
 
 /** Vermerk je Feld für die Anbieter der S2-Modelle, z. B. „Bei den gewählten Modellen: Anthropic begrenzt die Suchen.“ */
 export function wirkungText(feld: RechercheFeld, anbieter: AnbieterId[], mistralEndpunkt: Einstellungen["mistralEndpunkt"]): string {
