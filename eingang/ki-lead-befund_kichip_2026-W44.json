@@ -1,0 +1,71 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "konsistenzpruefer",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-25T23:06:12Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "8b8ba148a94d089b3b3041928915afd329756274",
+  "pruefumfang": "Auftrag des Herausgebers (kein Wochenlauf) vom 26.10.2026: Beobachtung festhalten, dass der KI-Chip der Kopfleiste beim Erstellen einer „Management Summary“ nicht von „KI offline“ auf „KI online“ wechselt. Gelesen wurde der Stand von Pull Request #75 (Branch kopfleiste-status, Commit 8b8ba14, App 0.5.21), weil der KI-Chip noch nicht in main ist (main: b7220c0). Ursache im Code nachvollzogen: src/ui/KiSymbol.tsx, src/App.tsx, src/ui/KiErfassung.tsx, src/ui/Kurzfassung.tsx, src/ui/Testlaeufe.tsx, docs/SPEZIFIKATION.md Abschnitt 5.1.",
+  "nicht_geprueft": [
+    "Kein neuer Lauf im Browser: Die Beobachtung stammt vom Herausgeber; die Ursache ist aus dem Code eindeutig (Kurzfassung meldet ihren Lauf nicht an die Kopfleiste).",
+    "Keine externen Quellen: Der Befund betrifft nur die Oberfläche der App; belege bleiben leer.",
+    "npm test nicht erneut ausgeführt: Am gelesenen Commit liefen 1106 Unit-Tests und 38 Browsertests sowie die CI-Prüfung „pruefen“ grün; die Tests decken die Management Summary für den Chip nicht ab.",
+    "Keine Änderung an main, am Branch kopfleiste-status oder am Befundregister; diese Datei liegt nur im Eingang."
+  ],
+  "befunde": [
+    {
+      "id": "KP-2026-W44-01",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Kurzfassung.tsx",
+          "stelle": "KurzfassungKasten, Funktion erstellen (Zeile 121 ff.)",
+          "ist": "setLaeuft(true); const ctrl = new AbortController(); … await kurzfassungErstellen("
+        },
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Kopfleiste, KiSymbol; KiErfassung-Prop laufStand",
+          "ist": "<KiSymbol lauf={kopfLauf} … /> … laufStand={setKopfLauf}"
+        },
+        {
+          "datei": "src/ui/KiSymbol.tsx",
+          "stelle": "interface KopfLauf",
+          "ist": "export interface KopfLauf { stufe: KopfLaufStufe; verdichtung?: boolean; }"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.1, Absatz „KI-Chip in der Kopfleiste (seit 0.5.21)“",
+          "ist": "Solange eine KI-Anfrage läuft und noch nicht beendet ist – S1 oder S2 mit S3, in jeder Ansicht –, zeigt er „KI online“"
+        }
+      ],
+      "beobachtung": "Beim Erstellen einer Management Summary (Meldung, Schritt „Management Summary“, Knopf „Management Summary erstellen“) bleibt der Chip auf „KI offline“, obwohl eine KI-Anfrage an den Anbieter läuft (Beobachtung des Herausgebers vom 26.10.2026). Ursache: Nur die KI-Erfassung meldet ihren Lauf über laufStand an die App; KurzfassungKasten führt seinen Lauf allein im eigenen Zustand laeuft und meldet ihn nirgends. Der Typ KopfLauf kennt nur die Stufen s1, s2 und s3 der Erfassung. Die Spezifikation beschreibt den Chip ebenfalls nur für S1 bis S3, widerspricht damit aber ihrem eigenen Satz „Solange eine KI-Anfrage läuft“ und der Absicht des Chips, jede laufende KI-Anfrage anzuzeigen. Ein Klick auf den Chip führt außerdem fest zur KI-Erfassung, nicht zur Stelle der laufenden Anfrage.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Laufende KI-Anfragen app-weit melden statt nur aus der KI-Erfassung: KopfLauf um die Art der Anfrage erweitern (Erfassung mit Stufe, Management Summary), in App.tsx eine Meldefunktion an KiErfassung und KurzfassungKasten (über MeldungAnsicht) weitergeben; KurzfassungKasten meldet beim Start { art: \"kurzfassung\" } und im finally null. Bei gleichzeitigen Anfragen bleibt der Chip online, bis keine mehr läuft (Zähler oder Menge je Quelle). Zugänglicher Name „KI online: Anfrage läuft, Management Summary. Zur Meldung“; Klick führt zur Ansicht der laufenden Anfrage. Spezifikation Abschnitt 5.1 und CHANGELOG fortschreiben; Test ergänzen.",
+        "neuer_text": "Spezifikation 5.1, Ersatz für den Satzteil: „Solange eine KI-Anfrage läuft und noch nicht beendet ist – in der KI-Erfassung (S1 oder S2 mit S3) oder beim Erstellen der Management Summary, in jeder Ansicht –, zeigt er „KI online“ … Ein Klick führt zur Ansicht der laufenden Anfrage, sonst zur KI-Erfassung.“"
+      },
+      "folgeaenderungen": [
+        "src/ui/KiSymbol.tsx: KopfLauf um die Art der Anfrage, Texte für zugänglichen Namen und Ansage",
+        "src/App.tsx: Meldung laufender Anfragen aus mehreren Quellen zusammenführen, Ziel des Klicks",
+        "src/ui/Meldung.tsx: Meldefunktion an KurzfassungKasten durchreichen",
+        "src/ui/Kurzfassung.tsx: Start und Ende der Erstellung melden",
+        "docs/SPEZIFIKATION.md: Abschnitt 5.1 und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version",
+        "tests/ui/kisymbol.test.ts bzw. tests/browser/kisymbol.spec.ts: Management Summary mit simuliertem Anbieter"
+      ],
+      "entscheidungsfrage": "Sollen auch die Testläufe unter „Einstellungen → Testläufe“ (src/ui/Testlaeufe.tsx, eigener Lauf mit AbortController) den Chip auf „KI online“ setzen, damit er jede KI-Anfrage der App anzeigt? Und soll die Korrektur noch in Pull Request #75 (vor dem Merge) oder in einem eigenen Pull Request nach dem Merge erfolgen?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest in tests/browser/kisymbol.spec.ts: Meldung mit Beispielinhalt, Schritt „Management Summary“, Anbieter simuliert mit hängender Antwort (netzVorbereiten → „haengen“), „Management Summary erstellen“ wählen; erwartet .kopf-ki mit data-zustand „online“, nach Abbruch „offline“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "KI-Erfassung: S1 sowie S2 mit S3 setzen den Chip auf „KI online“ und nach Ende, Abbruch oder Fehler wieder auf „KI offline“ (tests/browser/kisymbol.spec.ts)."
+  ]
+}
