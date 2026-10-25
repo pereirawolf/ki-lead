@@ -1,4 +1,4 @@
-// KI-Chip rechts oben in der Kopfleiste (seit 0.5.20): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
+// KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
 // und noch nicht beendet ist. Der Chip trägt die Farben des Profils: in Ruhe zart, während der Anfrage gefüllt in der
 // Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die KI-Erfassung selbst. Ein Klick führt dorthin.
 export type KopfLaufStufe = "s1" | "s2" | "s3";

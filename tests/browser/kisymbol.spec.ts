@@ -1,4 +1,4 @@
-// KI-Chip der Kopfleiste im echten Browser (seit 0.5.20): „KI offline“ in Ruhe, „KI online“ in jeder Ansicht,
+// KI-Chip der Kopfleiste im echten Browser (seit 0.5.21): „KI offline“ in Ruhe, „KI online“ in jeder Ansicht,
 // solange eine KI-Anfrage läuft; nach S1 (Anfrage beendet, Bestätigung offen) und nach dem Abbruch wieder offline.
 import { expect, test } from "@playwright/test";
 import { bereich, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";

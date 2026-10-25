@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// KI-Chip rechts oben in der Kopfleiste (seit 0.5.20): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage
+// KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage
 // läuft; Stufe im zugänglichen Namen, der mit dem sichtbaren Text beginnt; Ansage bei jedem Wechsel.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
