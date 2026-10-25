@@ -124,3 +124,7 @@ Handprüfung der sechs Entwürfe nach Abschnitt C der [Bewertungshilfe Ilka](../
 - Beide Mischungen sind für den Vergleich geeignet und liegen in den Kennzahlen vor A und B. M2 ist die günstigste Konfiguration mit vollständigen Achsen; M1 trifft Beurteilung und Tendenz in jedem Lauf.
 - Ob ein Mix als Voreinstellung angeboten wird, ist eine Entscheidung des Herausgebers (AV-2026-W43-30). Für sie spricht die bessere Nähe zur Redaktionsfassung bei geringeren Kosten; dagegen sprechen zwei Anbieter mit zwei Schlüsseln und Datenwegen und die kleine Zahl der Läufe.
 - S3 Reparatur war auch in diesen sechs Läufen nicht nötig. Für die Wahl des Reparaturmodells gibt es seit 0.5.13 den [Prüffall Reparatur](../plaene/reparatur-ilka.json) (AV-2026-W43-25).
+
+## Nachtrag vom 25.10.2026 (Entscheidungen zu AV-2026-W43-27 bis -30)
+
+Der Bericht oben bleibt unverändert. Seit 0.5.14 meldet die Plausibilitätsprüfung den Satz aus M1-8o79 nicht mehr; für M2-67tj nennt sie die Summe 20.700 (Stufe 4) statt der Stufengrenze 10.000. Die Messwerte von M1 und M2 stehen in den Kommentaren der Schätzung. Der Herausgeber hat entschieden, keine Voreinstellung mit Mix anzubieten; M1 und M2 bleiben als Varianten des Plans `anbietermix-ilka` im Vergleichslauf für weitere Testläufe (AV-2026-W43-30).

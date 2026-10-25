@@ -114,6 +114,10 @@ describe("Schätzung von Dauer und Kosten", () => {
     // Folgereihe 25.10.2026 (AV-2026-W43-20)
     ["verdichtung|gpt-6-astra|xhigh", [332.6, 418.3], [0.9295, 1.8398]],
     ["s1|gpt-6-luna|high", [51.9, 57.8], [0.005, 0.0078]],
+    // Plan anbietermix-ilka 25.10.2026, M1 und M2 (AV-2026-W43-29)
+    ["s1|gpt-6-luna|high", [32.3, 64.8], [0.0038, 0.0054]],
+    ["verdichtung|claude-opus-5-5|medium", [302.4, 315.8], [1.477, 1.5301]],
+    ["verdichtung|claude-sonnet-5-5|medium", [217.9, 273.5], [0.6828, 0.7617]],
     ["s1|mistral-small-2603|high", [23.3, 37.4], [0.0102, 0.0116]],
     ["verdichtung|mistral-medium-3-5|high", [109.0, 189.0], [0.2275, 0.3355]],
     ["verdichtung|mistral-large-4|high", [165.4, 212.9], [0.1216, 0.178]],
