@@ -113,20 +113,39 @@ describe("Vergleichslauf Ilka in den Einstellungen", () => {
     const auswahl = document.querySelector(".vergleichslauf select") as HTMLSelectElement;
     expect([...auswahl.options].map((o) => o.value)).toEqual([
       "",
-      "A-anthropic-standard",
-      "B-anthropic-sonnet",
-      "C-openai-standard",
-      "D-openai-astra-hoch",
-      "E-mistral-standard",
-      "F-mistral-large",
+      "standardprofile-ilka/A-anthropic-standard",
+      "standardprofile-ilka/B-anthropic-sonnet",
+      "standardprofile-ilka/C-openai-standard",
+      "standardprofile-ilka/D-openai-astra-hoch",
+      "standardprofile-ilka/E-mistral-standard",
+      "standardprofile-ilka/F-mistral-large",
+      "anbietermix-ilka/M1-luna-opus",
+      "anbietermix-ilka/M2-luna-sonnet",
     ]);
     await act(async () => {
-      auswahl.value = "F-mistral-large";
+      auswahl.value = "standardprofile-ilka/F-mistral-large";
       auswahl.dispatchEvent(new Event("change", { bubbles: true }));
     });
     expect(text()).toContain("S2 Verdichtung: mistral-large-4 (hoch) · Mistral");
     expect(text()).toContain("S3 Reparatur: mistral-small-2603 (niedrig) · Mistral");
     expect(text()).toContain("fehlt der Schlüssel für Mistral");
+    expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
+  });
+
+  it("AV-2026-W43-23, -24: Mix-Variante M1 mit S1 OpenAI, S2 Anthropic und Reparatur Sonnet; fehlender OpenAI-Schlüssel gemeldet", async () => {
+    const profil = await profilPflicht("lead-beispiel");
+    await einhaengen(React.createElement(VergleichslaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    const auswahl = document.querySelector(".vergleichslauf select") as HTMLSelectElement;
+    expect([...auswahl.querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Bewertungsplan standardprofile-ilka", "Bewertungsplan anbietermix-ilka"]);
+    await act(async () => {
+      auswahl.value = "anbietermix-ilka/M1-luna-opus";
+      auswahl.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    expect(text()).toContain("S1: gpt-6-luna (hoch) · OpenAI");
+    expect(text()).toContain("S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic");
+    expect(text()).toContain("S3 Reparatur: claude-sonnet-5-5 (niedrig) · Anthropic");
+    expect(text()).toContain("Die Varianten kombinieren Anbieter je Stufe");
+    expect(text()).toContain("fehlt der Schlüssel für OpenAI");
     expect(knopf("Vergleichslauf starten")?.disabled).toBe(true);
   });
 });

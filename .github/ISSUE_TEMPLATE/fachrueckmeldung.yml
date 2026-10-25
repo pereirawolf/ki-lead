@@ -27,7 +27,7 @@ body:
     id: bezug
     attributes:
       label: Profil, Fassung und Stelle
-      placeholder: z. B. lead-beispiel 1.25.0, B09/R4; App 0.5.10
+      placeholder: z. B. lead-beispiel 1.25.0, B09/R4; App 0.5.11
     validations:
       required: true
   - type: input

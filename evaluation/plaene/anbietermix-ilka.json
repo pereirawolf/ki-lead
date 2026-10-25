@@ -1,0 +1,24 @@
+{
+  "format": "ki-lead-bewertungsplan/1",
+  "id": "anbietermix-ilka",
+  "stand": "2026-10-25",
+  "fragestellung": "Liefert ein Mix der Anbieter je Stufe bei der Verdichtung Ilka bessere Ergebnisse als das Standard-Profil Anthropic (Variante A des Plans standardprofile-ilka)? S1 mit gpt-6-luna „high“, weil es in den Läufen vom 24./25.10.2026 die Gliederung der Redaktionsfassung (ein Sachverhalt) und die einschlägigen SOPs und Bausteine am vollständigsten traf; S2 mit Opus „medium“ (M1) oder Sonnet „medium“ (M2), weil sie in Muss-Punkten, Zahlentreue und Achsen der Redaktionsfassung am nächsten kamen. Verglichen werden dieselben Kennzahlen wie im Plan standardprofile-ilka, dazu von Hand Muss-Punkte und Zahlentreue; Kosten und Dauer werden berichtet, entscheiden aber nicht. Kein Gesamtwert über die Kennzahlen.",
+  "faelle": ["orkantief-ilka-verdichtung"],
+  "varianten": [
+    {
+      "kennung": "M1-luna-opus",
+      "s1": { "modell": "gpt-6-luna", "aufwand": "high" },
+      "s2": { "modell": "claude-opus-5-5", "aufwand": "medium" },
+      "material": "eingaenge"
+    },
+    {
+      "kennung": "M2-luna-sonnet",
+      "s1": { "modell": "gpt-6-luna", "aufwand": "high" },
+      "s2": { "modell": "claude-sonnet-5-5", "aufwand": "medium" },
+      "material": "eingaenge"
+    }
+  ],
+  "wiederholungen": 3,
+  "budget_usd": 10,
+  "hinweis": "Durchführung in der App: Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Konfiguration „Plan anbietermix-ilka, Variante …“, Anzahl 3; beide Varianten mit derselben App-Version. Schlüssel für OpenAI und Anthropic nötig. Reparatur (S3) nach dem Standard-Profil des S2-Anbieters, also claude-sonnet-5-5 „low“; S3 war in keinem bisherigen Lauf nötig und ist nicht verglichen. Bezug: Variante A des Plans standardprofile-ilka (App 0.5.8; die Zuordnung nach ki-lead-vergleich/3 ist für A unverändert). Auswertung: npm run vergleichslauf:auswerten -- <ZIP-Dateien beider Pläne> --bezug A-anthropic-standard. Schätzung (Listenpreise, ohne Gewähr): M1 etwa 1,8–1,9 USD und 8 Minuten je Lauf, M2 etwa 0,8–1,0 USD und 5–8 Minuten je Lauf."
+}

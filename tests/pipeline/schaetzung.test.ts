@@ -111,6 +111,9 @@ describe("Schätzung von Dauer und Kosten", () => {
     ["s1|gpt-6-luna|high", [42.4, 68.8], [0.0046, 0.0084]],
     ["verdichtung|gpt-6-astra|medium", [89.9, 125.3], [1.2165, 1.2417]],
     ["verdichtung|gpt-6-astra|high", [266.7, 329.2], [1.5185, 1.6855]],
+    // Folgereihe 25.10.2026 (AV-2026-W43-20)
+    ["verdichtung|gpt-6-astra|xhigh", [332.6, 418.3], [0.9295, 1.8398]],
+    ["s1|gpt-6-luna|high", [51.9, 57.8], [0.005, 0.0078]],
     ["s1|mistral-small-2603|high", [23.3, 37.4], [0.0102, 0.0116]],
     ["verdichtung|mistral-medium-3-5|high", [109.0, 189.0], [0.2275, 0.3355]],
     ["verdichtung|mistral-large-4|high", [165.4, 212.9], [0.1216, 0.178]],
@@ -130,6 +133,7 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(MESSWERTE["verdichtung|gpt-6-astra|high"]).toEqual({ sekunden: [240, 420], usd: [1.5, 2.15] });
     expect(MESSWERTE["verdichtung|mistral-medium-3-5|high"]).toEqual({ sekunden: [90, 240], usd: [0.2, 0.45] });
     expect(MESSWERTE["verdichtung|mistral-large-4|high"]).toEqual({ sekunden: [150, 270], usd: [0.1, 0.25] });
+    expect(MESSWERTE["verdichtung|gpt-6-astra|xhigh"]).toEqual({ sekunden: [330, 540], usd: [0.9, 2.3] });
   });
 
   it("AV-2026-W43-05, -15: S1 und Verdichtung jedes Standard-Profils sind gemessen", () => {
