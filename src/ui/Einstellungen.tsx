@@ -28,6 +28,7 @@ import {
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 import { UeberAbschnitt } from "./Ueber";
 import { VergleichslaufAbschnitt } from "./Vergleichslauf";
+import { ReparaturPrueffallAbschnitt } from "./ReparaturPrueffall";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "recherche" | "darstellung" | "ueber";
 
@@ -632,6 +633,7 @@ function ModelleBereich({
         ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
       </p>
       <VergleichslaufAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
+      <ReparaturPrueffallAbschnitt profil={profil} einstellungen={e} schluessel={schluessel} />
     </section>
   );
 }

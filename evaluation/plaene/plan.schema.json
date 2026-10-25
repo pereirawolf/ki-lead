@@ -29,7 +29,8 @@
           "s1": { "$ref": "#/$defs/stufe" },
           "s2": { "$ref": "#/$defs/stufe" },
           "material": { "enum": ["ohne", "pdf", "eingaenge", "meldung"] },
-          "kurzfassung": { "$ref": "#/$defs/stufe" }
+          "kurzfassung": { "$ref": "#/$defs/stufe" },
+          "reparatur": { "$ref": "#/$defs/stufe", "description": "Modell und Aufwand der Reparatur (S3) im Prüffall Reparatur (Fälle mit auftrag.reparatur)" }
         }
       }
     },
@@ -37,7 +38,7 @@
     "budget_usd": { "type": "number", "minimum": 0 },
     "meldung_fest": {
       "type": "object",
-      "description": "Feste, fertige Meldung als einzige Eingabe für Bewertungen der Management Summary (Fälle mit auftrag.kurzfassung). Datei unter evaluation/material/, Prüfsumme sha256 des Dateiinhalts.",
+      "description": "Feste, fertige Meldung als einzige Eingabe für Bewertungen der Management Summary (Fälle mit auftrag.kurzfassung) oder als Grundlage des Prüffalls Reparatur (Fälle mit auftrag.reparatur). Datei unter evaluation/material/, Prüfsumme sha256 des Dateiinhalts.",
       "required": ["datei", "sha256"],
       "additionalProperties": false,
       "properties": {

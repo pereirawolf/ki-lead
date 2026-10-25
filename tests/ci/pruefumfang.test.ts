@@ -22,6 +22,11 @@ describe("Prüfumfang je Änderung", () => {
     ["Profil-Changelog", ["profile/muster/CHANGELOG.md"], KEINE],
     ["Dokumentation und Changelog", ["docs/TESTS.md", "CHANGELOG.md", "README.md"], KEINE],
     ["Bewertungsfälle", ["evaluation/faelle/f01.json", "evaluation/README.md"], KEINE],
+    [
+      "Plan und Material, die die App einbindet (AV-2026-W43-25)",
+      ["evaluation/plaene/reparatur-ilka.json", "evaluation/material/ilka-musterfassung.json"],
+      NUR_KERN,
+    ],
     ["Vorlage für Issues", [".github/ISSUE_TEMPLATE/barrierefreiheit.yml"], KEINE],
     ["Lizenztexte (KP-2026-W43-56)", ["LICENSE", "LICENSE-CONTENT", "LICENSE-CC0"], KEINE],
     ["Musterfassung, in die App eingebettet (seit 0.5.12)", ["evaluation/material/ilka-musterfassung.json"], NUR_KERN],
@@ -114,6 +119,7 @@ describe("Wächter der Pfadlisten", () => {
       .filter((d) => /\.tsx?$/.test(d))
       .flatMap((d) => [...readFileSync(repoPfad(d), "utf-8").matchAll(/from\s+"(?:\.\.\/)+(evaluation\/[^"?]+)(?:\?[^"]*)?"/g)].map((m) => m[1]));
     expect(importe.length).toBeGreaterThan(5);
+    expect(importe).toContain("evaluation/plaene/reparatur-ilka.json");
     for (const d of new Set(importe)) {
       expect(existsSync(repoPfad(d)), d).toBe(true);
       expect(
@@ -122,6 +128,12 @@ describe("Wächter der Pfadlisten", () => {
       ).toBe(true);
       expect(pruefumfang([d]).kern, d).toBe(true);
     }
+    // keine Regel ins Leere: jede Regel trifft mindestens eine eingebundene Datei
+    for (const m of IN_DER_APP as RegExp[])
+      expect(
+        importe.some((d) => m.test(d)),
+        m.source,
+      ).toBe(true);
   });
 
   it("keine Datei unter src/, public/ oder tests/ gilt als reiner Inhalt", () => {

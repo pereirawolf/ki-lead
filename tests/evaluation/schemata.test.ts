@@ -174,7 +174,14 @@ describe("Modellbewertung: Schemata", () => {
 
   it("LS-2026-W43-15: fester S1-Gegenstand im Plan nur mit Datei unter evaluation/material/ und Prüfsumme", () => {
     const { plan } = pruefer();
-    const mit = (s1_fest: unknown) => ({ format: "ki-lead-bewertungsplan/1", id: "x", stand: "2026-10-25", fragestellung: "F", faelle: ["sop-gas-stabil"], s1_fest });
+    const mit = (s1_fest: unknown) => ({
+      format: "ki-lead-bewertungsplan/1",
+      id: "x",
+      stand: "2026-10-25",
+      fragestellung: "F",
+      faelle: ["sop-gas-stabil"],
+      s1_fest,
+    });
     expect(plan(mit({ datei: "evaluation/material/ilka-s1-zuschnitt-a.json", sha256: "0".repeat(64) })), JSON.stringify(plan.errors)).toBe(true);
     for (const [name, s] of [
       ["Prüfsumme fehlt", { datei: "evaluation/material/a.json" }],
@@ -189,10 +196,15 @@ describe("Modellbewertung: Schemata", () => {
     const mitFest = jsonIn("evaluation/plaene")
       .map((n) => lies(`evaluation/plaene/${n}`))
       .filter((p) => p.s1_fest);
-    expect(mitFest.map((p) => p.id)).toContain("s2-isoliert-ilka");
+    expect(mitFest.map((p) => p.id)).toEqual(expect.arrayContaining(["s2-isoliert-ilka", "reparatur-ilka"]));
     for (const p of mitFest) {
       expect(existsSync(repoPfad(p.s1_fest.datei)), p.s1_fest.datei).toBe(true);
-      expect(createHash("sha256").update(readFileSync(repoPfad(p.s1_fest.datei))).digest("hex"), `${p.id}: Prüfsumme`).toBe(p.s1_fest.sha256);
+      expect(
+        createHash("sha256")
+          .update(readFileSync(repoPfad(p.s1_fest.datei)))
+          .digest("hex"),
+        `${p.id}: Prüfsumme`,
+      ).toBe(p.s1_fest.sha256);
     }
   });
 
@@ -201,13 +213,22 @@ describe("Modellbewertung: Schemata", () => {
     const plaene = jsonIn("evaluation/plaene")
       .map((n) => lies(`evaluation/plaene/${n}`))
       .filter((p) => p.meldung_fest);
-    expect(plaene.map((p) => p.id)).toContain("management-summary-ilka");
+    expect(plaene.map((p) => p.id)).toEqual(expect.arrayContaining(["management-summary-ilka", "reparatur-ilka"]));
     for (const p of plaene) {
-      expect(createHash("sha256").update(readFileSync(repoPfad(p.meldung_fest.datei))).digest("hex"), `${p.id}: Prüfsumme`).toBe(p.meldung_fest.sha256);
+      expect(
+        createHash("sha256")
+          .update(readFileSync(repoPfad(p.meldung_fest.datei)))
+          .digest("hex"),
+        `${p.id}: Prüfsumme`,
+      ).toBe(p.meldung_fest.sha256);
       for (const id of p.faelle) {
         const f = lies(`evaluation/faelle/${id}.json`);
-        expect(f.auftrag.kurzfassung, id).toBe(true);
-        expect(f.material.filter((m: any) => m.rolle === "meldung").map((m: any) => m.datei), id).toEqual([p.meldung_fest.datei]);
+        // Management Summary oder Prüffall Reparatur (AV-2026-W43-25)
+        expect(f.auftrag.kurzfassung === true || f.auftrag.reparatur === true, id).toBe(true);
+        expect(
+          f.material.filter((m: any) => m.rolle === "meldung").map((m: any) => m.datei),
+          id,
+        ).toEqual([p.meldung_fest.datei]);
       }
     }
   });

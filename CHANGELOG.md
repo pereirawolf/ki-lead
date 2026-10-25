@@ -60,6 +60,38 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.10 | letzter Commit des Pull Requests „Standard-Profile nach dem Vergleichslauf Ilka, Aufwand je Modell, Schätzung; 0.5.10“ |
 | 0.5.11 | letzter Commit des Pull Requests „Folgereihe astra xhigh, Auswertung je Stufe, Plan anbietermix-ilka; 0.5.11“ (Nachträge vom 25.10.2026: Bewertungsmaßstab, fester S1-Gegenstand, Fälle zu Zählregeln und Bewertungspläne nach der Lernschleife; Musterfassung Ilka und Plan für die Management Summary; jeweils ohne Änderung der App) |
 | 0.5.12 | letzter Commit des Pull Requests „Vergleichslauf Ilka: Umfang wählen, Musterfassung als Grundlage; 0.5.12“ |
+| 0.5.13 | letzter Commit des Pull Requests „Prüffall Reparatur, Ergebnis Anbieter-Mix; 0.5.13“ |
+
+## [0.5.13] – 25.10.2026
+
+Grundlage: Vergleichsläufe Ilka nach dem Plan `anbietermix-ilka` (M1 und M2, je drei Läufe, App 0.5.10), vom Herausgeber am 25.10.2026 als ZIP-Dateien übergeben, und seine Freigabe vom selben Tag, die Läufe gegen A auszuwerten und einen Prüffall für S3 Reparatur anzulegen; Befunddatei `ki-lead-befund_mixauswertung_2026-W43.json` (AV-2026-W43-25 Wiedervorlage, -26 bis -30 neu). Keine Änderung an Profilen, SOPs, Arbeitsanweisungen, Meldungsschemata, Standard-Profilen, gespeicherten Einstellungen oder der Ablage der Schlüssel. Laufprotokolle und Entwürfe sind nicht im Repository.
+
+### Hinzugefügt
+
+- **Prüffall Reparatur** (AV-2026-W43-25) unter „Einstellungen → Modelle & Verarbeitung“, nach dem Vergleichslauf Ilka (`src/pipeline/reparaturtest.ts`, `src/ui/ReparaturPrueffall.tsx`): Die App beschädigt die Musterfassung Ilka an festen Stellen (R1 Radarwert 7, R2 Beurteilung „hoch“, R3 Ereignisart „Orkan“, R4 Radarwert als Text, R5 alle drei ersten zugleich), spielt sie als Antwort von S2 ein (S1 fest nach Zuschnitt A; S1 und S2 ohne KI-Aufruf und ohne Kosten) und lässt S3 wie im normalen Lauf reparieren, höchstens zweimal. Vorher läuft der unbeschädigte Entwurf als Soll ohne Reparatur durch. Je Fall: schemakonform danach, Zahl der Reparaturen, Anteil der übrigen Inhalte, die unverändert bleiben, Werte an den beschädigten Stellen (unbeschädigt, präpariert, repariert), Kosten, Dauer und Ausgabetoken von S3. Reparaturmodell aus den Einstellungen oder als Variante des Plans `reparatur-ilka`; 1 bis 5 Durchgänge (Vorgabe 2); grobe Kostenschätzung nach Listenpreisen ohne Messwert; ZIP mit `reihe.json` (`ki-lead-reparaturtest/1`), `uebersicht.csv`, Laufprotokollen und reparierten Entwürfen.
+- **Fall** `ilka-reparatur` und **Plan** `reparatur-ilka` (AV-2026-W43-25): fünf Reparaturmodelle, je „low“: Sonnet und gpt-6.1-sol (Standard-Profile Anthropic und OpenAI), mistral-small-2603 (Standard-Profil Mistral), Haiku und gpt-6-luna (günstigste Modelle); je zwei Durchgänge, Budget 10 USD, Prüfsummen von Musterfassung und S1-Gegenstand. `fall.schema.json`: `auftrag.reparatur`; `plan.schema.json`: Variante mit `reparatur`.
+- **Ergebnisbericht** [evaluation/abnahmen/2026-10-25-anbietermix-ilka-ergebnis.md](evaluation/abnahmen/2026-10-25-anbietermix-ilka-ergebnis.md) (AV-2026-W43-26): Beide Mischungen mit gpt-6-luna „hoch“ in S1 gliedern wie die Redaktionsfassung in einen Sachverhalt und liegen in den Kennzahlen vor A und B; M1 (Opus) trifft Beurteilung und Tendenz 3/3 bei 1,48–1,54 USD und 354–377 s je Lauf, M2 (Sonnet) hat die kleinste Achsenabweichung (0,13) bei 0,69–0,77 USD und 279–306 s. Erste getrennte Messung der Wirkung von S1 auf dieselbe Verdichtung (A gegen M1, B gegen M2). Beide Plausibilitätsbefunde sind Fehlalarme (AV-2026-W43-27, -28, zur Entscheidung vorgelegt).
+
+### Geändert
+
+- **Gestaffelte Prüfung** (Folge von AV-2026-W43-25): Dateien unter `evaluation/`, die die App beim Build einbindet (Fall und Pläne des Vergleichslaufs, Plan und Material des Prüffalls), lösen die Kern-Browsertests aus (`IN_DER_APP` in `scripts/pruefumfang.mjs`, eingeführt mit 0.5.12): `plaene/reparatur-ilka.json` ergänzt; der Wächter prüft zusätzlich, dass jede Regel mindestens eine eingebundene Datei trifft.
+- Spezifikation 0.5.13: Abschnitt 5.4 (Prüffall Reparatur), offener Punkt 6 (Ergebnis des Mix); `evaluation/README.md`, `evaluation/faelle/README.md`.
+
+### Offen
+
+- AV-2026-W43-27, -28 (Fehlalarme der Plausibilitätsprüfung), -29 (Lauf-IDs der Mix-Reihen in der Schätzung) und -30 (Voreinstellung „KI-Anbieter-Mix“), zur Entscheidung vorgelegt.
+
+### Tests
+
+- `tests/pipeline/reparaturtest.test.ts` (neu, 6): Defekte an festen Stellen, Musterfassung unverändert; Inhaltsvergleich ohne die beschädigten Stellen; jeder Defekt löst genau eine Reparatur aus, S1 und S2 ohne Anbieter, Inhalte voll erhalten, Laufprotokoll; Reparatur, die Inhalte verändert oder scheitert; Übersicht, Dateiname und ZIP; Plan, Einstellungen der Variante und Schätzung.
+- `tests/ui/reparaturprueffall.test.ts` (neu, 3): Abschnitt nach dem Vergleichslauf mit Vorgabe aus den Einstellungen und zwei Durchgängen, fünf Varianten mit Mistral-Endpunkt und fehlendem Schlüssel, Ablauf mit Attrappe und ZIP.
+- `tests/browser/reparaturprueffall.spec.ts` (neu): ein Durchgang mit simuliertem Anthropic-Anbieter, fünf Anfragen nur für S3, ZIP-Datei.
+- `tests/evaluation/schemata.test.ts` (3 angepasst): Pläne mit fester Meldung oder festem S1-Gegenstand schließen `reparatur-ilka` ein; Fall mit `auftrag.reparatur`.
+- `tests/ci/pruefumfang.test.ts` (+2): eingebundene Dateien unter `evaluation/` lösen die Kern-Browsertests aus, mit Wächter über die Importe in `src/`.
+
+### Befundregister
+
+- `evaluation/befunde/befundregister.json`: AV-2026-W43-25 und -26 als umgesetzt; -27 bis -30 bleiben offen.
 
 ## [0.5.12] – 25.10.2026
 

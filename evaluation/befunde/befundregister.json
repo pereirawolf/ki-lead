@@ -1044,6 +1044,44 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-10-25",
       "pr": 62
+    },
+    {
+      "id": "AV-2026-W43-25",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/stufen.ts",
+          "stelle": "S3 Reparatur (stufe2und3)"
+        },
+        {
+          "datei": "src/pipeline/reparaturtest.ts",
+          "stelle": "neue Datei"
+        }
+      ],
+      "kurz": "Prüffall Reparatur mit beschädigter Musterfassung Ilka in der App; Fall ilka-reparatur, Plan reparatur-ilka.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 66
+    },
+    {
+      "id": "AV-2026-W43-26",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_mixauswertung_2026-W43.json",
+      "commit": "f88dbd7fe3b3cd0c07d8f1331acfc72dfb7fb5f3",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "evaluation/abnahmen/2026-10-25-anbietermix-ilka-ergebnis.md",
+          "stelle": "neue Datei"
+        }
+      ],
+      "kurz": "Ergebnisbericht des Plans anbietermix-ilka (M1, M2) gegen Variante A.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-10-25",
+      "pr": 66
     }
   ]
 }
