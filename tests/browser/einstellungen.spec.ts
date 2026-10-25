@@ -4,7 +4,7 @@
 import { expect, test } from "@playwright/test";
 import { bereich, netzVorbereiten, oeffnen } from "./hilfen";
 
-const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Verarbeitung", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
+const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
 
 test.beforeEach(async ({ page }) => {
@@ -30,19 +30,19 @@ test("jeder Bereich: genau eine Bereichsüberschrift, alle Bedienelemente mit zu
 });
 
 test("Tastatur: Bereich per Tab erreichen und mit Eingabetaste bzw. Leertaste wechseln", async ({ page }) => {
-  const ziel = leiste(page).getByRole("button", { name: "Modelle & Verarbeitung", exact: true });
+  const ziel = leiste(page).getByRole("button", { name: "Modelle & Aufwand", exact: true });
   let gefunden = false;
   for (let i = 0; i < 40 && !gefunden; i++) {
     await page.keyboard.press("Tab");
     gefunden = await ziel.evaluate((el) => el === document.activeElement);
   }
-  expect(gefunden, "„Modelle & Verarbeitung“ per Tab erreichbar").toBe(true);
+  expect(gefunden, "„Modelle & Aufwand“ per Tab erreichbar").toBe(true);
   expect(await ziel.evaluate((el) => el.matches(":focus-visible"))).toBe(true);
   await page.keyboard.press("Enter");
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Verarbeitung"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
   await page.keyboard.press("Tab");
   await page.keyboard.press("Space");
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Recherche & Grenzen"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Testläufe"]);
 });
 
 test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitliches Scrollen", async ({ page }) => {

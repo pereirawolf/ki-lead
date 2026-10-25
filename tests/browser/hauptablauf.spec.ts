@@ -1,4 +1,4 @@
-// Hauptablauf im echten Browser: Meldung als Datei sichern und wieder öffnen, Lagebild mit Beispiel und
+// Hauptablauf im echten Browser: Meldung als Datei sichern und wieder öffnen, Schritt Management Summary, Lagebild mit Beispiel und
 // Redaktionscheck, KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung.
 import { expect, test } from "@playwright/test";
 import { bereich, downloadText, netzVorbereiten, oeffnen, S1_VORSCHLAG, SCHLUESSEL, schluesselSetzen } from "./hilfen";
@@ -28,6 +28,27 @@ test("Meldung: Entwurf als JSON speichern und die heruntergeladene Datei wieder 
   // Dieselbe Datei, die der Browser heruntergeladen hat
   await page.locator('.werkzeugleiste input[type="file"]').setInputFiles((await download.path())!);
   await expect(page.getByLabel("Name der meldenden Stelle")).toHaveValue("Teststelle Browser");
+  expect(netz.ki).toHaveLength(0);
+  expect(netz.fremd).toEqual([]);
+});
+
+test("Meldung: fünfter Schritt „Management Summary“ nach „Prüfen & Exportieren“ (seit 0.5.17), Feldauszug ohne KI", async ({ page }) => {
+  const netz = await netzVorbereiten(page, () => "haengen");
+  await oeffnen(page);
+  const schritte = page.getByRole("navigation", { name: "Schritte" }).getByRole("button");
+  await expect(schritte).toHaveCount(5);
+  await expect(schritte.last()).toHaveText(/Management Summary/);
+  await page
+    .getByRole("button", { name: /Prüfen & Exportieren/ })
+    .first()
+    .click();
+  await expect(page.getByRole("button", { name: "Final als JSON exportieren" })).toBeVisible();
+  await expect(page.getByText("Feldauszug ohne KI")).toHaveCount(0);
+  await page.getByRole("button", { name: "Weiter: Management Summary" }).click();
+  await expect(page.getByRole("heading", { level: 2, name: "Management Summary" })).toBeVisible();
+  await page.getByText("Feldauszug ohne KI").click();
+  const [txt] = await Promise.all([page.waitForEvent("download"), page.locator("details.summary").getByRole("button", { name: "Als TXT speichern" }).click()]);
+  expect(txt.suggestedFilename()).toMatch(/_Feldauszug\.txt$/);
   expect(netz.ki).toHaveLength(0);
   expect(netz.fremd).toEqual([]);
 });

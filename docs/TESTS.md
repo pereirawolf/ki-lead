@@ -44,7 +44,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
 | `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
-| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Bereiche, Übersicht, Voreinstellung, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version), Vergleichslauf Ilka und Prüffall Reparatur |
+| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modellwahl, Einstellungen (Bereiche, Übersicht, KI-Profil, Testläufe als eigener Bereich, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version), Testläufe (sechs Testarten mit S3 Reparatur, Varianten, ZIP-Dateien, Archiv mit Herunterladen und Löschen), Meldung mit dem Schritt „Management Summary“ |
 | `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne mit festem S1-Gegenstand und Prüfsumme, Bewertungen mit Korrekturen und Grad der Verblindung, Pläne mit fester Meldung für Management Summary und Prüffall Reparatur), Musterfassung Ilka (Schema, Plausibilität, Herkunft jeder Zahl aus den Eingängen), Vorprüfung der Management Summary, des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
@@ -85,14 +85,14 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 `npm run test:browser` baut die App, startet `vite preview` auf Port 4173 und prüft mit Chromium in zwei Projekten: **kern** (alle Dateien außer `pwa*.spec.ts`) und **pwa** (`pwa.spec.ts`, `pwa-update.spec.ts`). Mit `KI_LEAD_BUILD_VORHANDEN=1` entfällt der Build, und ein vorhandener Ordner `dist/` wird verwendet (nur sinnvoll direkt nach `npm run build`).
 
-- `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel
+- `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; fünfter Schritt „Management Summary“ mit Feldauszug (seit 0.5.17); Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel
 - `abbruch.spec.ts`: Abbrechen während S1, Protokoll des abgebrochenen Laufs, keine neue Anfrage
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
 - `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (von Chromium berechnet), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben
 - `pwa-update.spec.ts`: Versionswechsel mit bestehendem Cache gegen einen Server wie GitHub Pages: Fehler mit dem Service Worker von 0.5.1 (Testvorlage `fixtures/sw-vorlage-0.5.1.js`), Korrektur, Installationsschutz, Wiederherstellung mit erhaltenen IndexedDB-Daten, kein Neuladen laufender Fenster mit ungespeicherten Eingaben, keine Übernahme durch Reste gescheiterter Installationen, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung
 - `pwa.spec.ts`: Service Worker übernimmt die Seite, App startet nach dem ersten Besuch ohne Netz, Beispiel im Lagebild und PDF offline, Hinweis zum fehlenden Netz, Manifest und Symbole werden ausgeliefert (Service Worker nur hier zugelassen)
-- `reparaturprueffall.spec.ts`: Prüffall Reparatur mit simuliertem Anthropic-Anbieter, ein Durchgang mit fünf Defekten, ZIP-Datei mit Reihendatei, nur S3 ruft die API auf
+- `testlaeufe.spec.ts` (bis 0.5.16 `vergleichslauf.spec.ts` und `reparaturprueffall.spec.ts`): Testläufe mit simuliertem Anthropic-Anbieter, S1 + S2 + S3 mit zwei Läufen und ZIP-Datei, S3 Reparatur mit einem Lauf über fünf Defekte (nur S3 ruft die API auf); Archiv in der echten IndexedDB übersteht ein Neuladen, liefert dieselbe Datei und lässt sich leeren
 - `eingabehilfen.spec.ts`: LEAD-Eingabehilfen mit der Tastatur (Bereich öffnen, Vorlage einfügen, Fokus und Markierung im Textfeld), zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen
 
 Einmalig vorher: `npx playwright install chromium`. Ist ein Chromium schon vorhanden, genügt `PLAYWRIGHT_CHROMIUM_PFAD=/pfad/zu/chrome npm run test:browser`. Bei Fehlern liegen Spuren unter `test-results/` (`npx playwright show-trace …`).

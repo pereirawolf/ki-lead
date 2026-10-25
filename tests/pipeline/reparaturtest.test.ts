@@ -153,7 +153,7 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     expect(reparaturZeilen(reihe)).toHaveLength(3);
     expect(reparaturZeilen(reihe)[0]).toContain("stellen_wie_original");
     expect(reparaturZeilen(reihe)[1][reparaturZeilen(reihe)[0].indexOf("stellen_wie_original")]).toBe("ja");
-    expect(reparaturDateiname(reihe)).toMatch(/^KI-LEAD_Prueffall_Reparatur_claude-sonnet-5-5-low_\d{8}-\d{4}\.zip$/);
+    expect(reparaturDateiname(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_S3-Reparatur_claude-sonnet-5-5-low_\d{8}-\d{4}\.zip$/);
     const zip = await JSZip.loadAsync(await reparaturZip(reihe, laeufe));
     const namen = Object.keys(zip.files);
     expect(namen).toContain("reihe.json");

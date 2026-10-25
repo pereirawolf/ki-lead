@@ -35,6 +35,8 @@ export function idbAttrappe(z: SpeicherZustand) {
       return [...z.werte.keys()];
     }),
     entries: vi.fn(async () => [...z.werte.entries()]),
+    // Eigene Datenbanken (createStore, z. B. Archiv der Testläufe) teilen sich in der Attrappe dieselbe Ablage
+    createStore: vi.fn(() => (() => undefined) as unknown),
   };
 }
 

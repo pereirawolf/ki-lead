@@ -1,10 +1,10 @@
-// Schritt „Prüfen & Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe.
+// Schritt „Prüfen & Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe. Die Management Summary hat seit 0.5.17
+// einen eigenen Schritt danach (Meldung.tsx).
 
 import { useMemo, useState } from "react";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
 import { dateiname } from "../kern/ausgabe";
-import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { holeWert } from "../kern/pfad";
 import { alsText, feldUi, radarFuer } from "../kern/ui";
 import { sachverhalte } from "../kern/quellen";
@@ -27,7 +27,7 @@ function Liste({ titel, eintraege, art }: { titel: string; eintraege: string[]; 
   );
 }
 
-export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung: Meldung; teil: "pruefung" | "ausgabe"; ki?: KiZugang }) {
+export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Meldung; teil: "pruefung" | "ausgabe" }) {
   const r = profil.ui.rollen;
   const alsFinal = useMemo(() => ({ ...meldung, [r.status_feld]: r.status_final }), [meldung, r]);
   const schemaBefunde = useMemo(() => pruefeGegenSchema(profil.schema, alsFinal, profil.ui), [profil, alsFinal]);
@@ -92,8 +92,6 @@ export function Pruefen({ profil, meldung, teil, ki }: { profil: Profil; meldung
             <p>{pdfFehler}</p>
           </div>
         )}
-
-        <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} />
       </div>
     );
   return (

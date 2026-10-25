@@ -113,7 +113,7 @@ export const PLAN_STANDARDPROFILE: VergleichsPlan = {
   id: PLAN.id,
   wiederholungen: PLAN.wiederholungen,
   varianten: PLAN.varianten as unknown as PlanVariante[],
-  kurz: "Die Varianten vergleichen die Standard-Profile der Anbieter mit dem Bezug Anthropic (A).",
+  kurz: "Die Varianten vergleichen die KI-Profile der Anbieter mit dem Bezug Anthropic (A).",
   umfaenge: ROHDATEN,
 };
 
@@ -617,7 +617,7 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
 export interface Reihe {
   format: "ki-lead-abnahme/1";
   plan: string;
-  /** „app“ (Einstellungen → Vergleichslauf Ilka) oder „skript“ (evaluation/abnahmen/m4.lauf.ts) */
+  /** „app“ (Einstellungen → Testläufe) oder „skript“ (evaluation/abnahmen/m4.lauf.ts) */
   quelle: "app" | "skript";
   /** Variante eines Bewertungsplans, z. B. „standardprofile-ilka/A-anthropic-standard“ */
   variante?: string;
@@ -947,14 +947,14 @@ export function dateiStempel(iso: string): string {
 const UMFANG_DATEI: Record<Exclude<Umfang, "ms">, string> = { s1: "S1_", "s1-s2": "S1-S2_", "s1-s2-s3": "", "s2-s3": "S2-S3-Muster_" };
 
 /**
- * Dateiname der ZIP-Datei, z. B. KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-high_20261024-2130.zip; mit Umfang
- * z. B. KI-LEAD_Vergleichslauf_Ilka_S1_gpt-6-luna-high_… (benannt nach dem Modell der ersten genutzten Stufe)
+ * Dateiname der ZIP-Datei, z. B. KI-LEAD_Testlauf_Ilka_mistral-medium-3-5-high_20261024-2130.zip; mit Umfang
+ * z. B. KI-LEAD_Testlauf_Ilka_S1_gpt-6-luna-high_… (bis 0.5.16 KI-LEAD_Vergleichslauf_Ilka_…) (benannt nach dem Modell der ersten genutzten Stufe)
  */
 export function zipDateiname(reihe: Reihe): string {
   const u = reiheUmfang(reihe);
   const variante = reihe.variante ? `${dateiKurz(reihe.variante.split("/").pop()!)}_` : "";
   const m = u === "s1" ? reihe.modelle.s1 : reihe.modelle.s2;
-  return `KI-LEAD_Vergleichslauf_Ilka_${UMFANG_DATEI[u]}${variante}${dateiKurz(`${m.modell}-${m.aufwand}`)}_${dateiStempel(reihe.erstellt)}.zip`;
+  return `KI-LEAD_Testlauf_Ilka_${UMFANG_DATEI[u]}${variante}${dateiKurz(`${m.modell}-${m.aufwand}`)}_${dateiStempel(reihe.erstellt)}.zip`;
 }
 
 function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
@@ -967,7 +967,7 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
   ].filter(Boolean);
   const punkte = u === "s1" ? "T1, T2, T4–T6" : "T1–T8";
   return [
-    `KI-LEAD – Vergleichslauf Ilka: ${umfangInfo(u).titel} (${FALL_TITEL})`,
+    `KI-LEAD – Testlauf Ilka: ${umfangInfo(u).titel} (${FALL_TITEL})`,
     "",
     `Erstellt: ${reihe.erstellt} mit ${reihe.app}, Profil ${reihe.profil.id} ${reihe.profil.version} (${reihe.profil.hash.slice(0, 12)}…)`,
     ...(reihe.variante ? [`Variante: ${reihe.variante}`] : []),
@@ -996,7 +996,7 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
           "- meldungen/<lauf>.meldung.json: Entwürfe (LEAD-Meldung-v1)",
           "- vergleiche/<lauf>.vergleich.csv: Vergleich mit der Redaktionsfassung je Sachverhalt und Achse",
           "",
-          "Vergleich mehrerer Konfigurationen im Repository: npm run vergleichslauf:auswerten -- <ZIP-Dateien> (Bezug: Standard-Profil Anthropic)",
+          "Vergleich mehrerer Konfigurationen im Repository: npm run vergleichslauf:auswerten -- <ZIP-Dateien> (Bezug: KI-Profil Anthropic)",
           "Mehrfachvergleich der Entwürfe im Repository: npm run vergleich:mehrfach -- <entpackter Ordner>/meldungen --fall orkantief-ilka-verdichtung",
         ]),
     "Alle Inhalte sind fiktiv. Laufprotokolle gehören nicht ins öffentliche Repository (docs/ERPROBUNG.md, Abschnitt 6).",

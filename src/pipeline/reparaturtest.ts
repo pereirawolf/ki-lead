@@ -1,4 +1,5 @@
-// Prüffall Reparatur (S3) für die Wahl des Reparaturmodells (seit 0.5.13, Befund AV-2026-W43-25). Die Musterfassung Ilka
+// Testlauf „S3 Reparatur (aus Musterfassung)“, bis 0.5.16 „Prüffall Reparatur“, für die Wahl des Reparaturmodells
+// (seit 0.5.13, Befund AV-2026-W43-25). Die Musterfassung Ilka
 // (evaluation/material/ilka-musterfassung.json) wird gezielt beschädigt und als Antwort von S2 eingespielt; S1 entfällt
 // (fester Gegenstand evaluation/material/ilka-s1-zuschnitt-a.json, zwei Sachverhalte wie die Musterfassung). Danach
 // läuft die Pipeline wie in der App: Nachbearbeitung, Schemaprüfung und bis zu zwei Reparaturen mit dem gewählten
@@ -62,7 +63,7 @@ export function schaetzeReparatur(modell: string, optionen: { mistralEndpunkt?: 
 }
 
 /**
- * Kosten eines Prüffalls: je Fall eine Reparatur (untere Grenze) bis zwei Reparaturen (obere Grenze, Höchstzahl);
+ * Kosten eines Testlaufs S3 Reparatur: je Fall eine Reparatur (untere Grenze) bis zwei Reparaturen (obere Grenze, Höchstzahl);
  * der unbeschädigte Durchlauf ruft keinen Anbieter auf.
  */
 export function schaetzePrueffall(modell: string, durchgaenge: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): [number, number] | null {
@@ -338,7 +339,7 @@ export interface ReparaturOptionen {
   variante?: string;
 }
 
-/** Prüffall Reparatur: unbeschädigter Durchlauf als Soll, dann jeder Defekt je Wiederholung */
+/** Testlauf S3 Reparatur: unbeschädigter Durchlauf als Soll, dann jeder Defekt je Wiederholung (Lauf) */
 export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: ReparaturReihe; laeufe: DurchlaufErgebnis[] }> {
   const { daten, einstellungen: e } = o;
   const profil = daten.profil;
@@ -459,7 +460,7 @@ export function reparaturZeilen(r: ReparaturReihe): unknown[][] {
 export function reparaturDateiname(r: ReparaturReihe): string {
   const stempel = r.erstellt.slice(0, 16).replace(/[-:]/g, "").replace("T", "-");
   const kurz = (s: string) => s.replace(/[^a-z0-9.-]+/gi, "-");
-  return `KI-LEAD_Prueffall_Reparatur_${kurz(`${r.reparatur.modell}-${r.reparatur.aufwand}`)}_${stempel}.zip`;
+  return `KI-LEAD_Testlauf_Ilka_S3-Reparatur_${kurz(`${r.reparatur.modell}-${r.reparatur.aufwand}`)}_${stempel}.zip`;
 }
 
 /** ZIP mit Reihendatei, Übersicht, Laufprotokollen und reparierten Entwürfen */
@@ -474,7 +475,7 @@ export async function reparaturZip(r: ReparaturReihe, laeufe: DurchlaufErgebnis[
   zip.file(
     "LIESMICH.txt",
     [
-      "KI-LEAD – Prüffall Reparatur (S3) mit der Musterfassung Ilka (FIKTIV)",
+      "KI-LEAD – Testlauf Ilka: S3 Reparatur (aus Musterfassung, FIKTIV)",
       "",
       `Erstellt: ${r.erstellt} mit ${r.app}, Profil ${r.profil.id} ${r.profil.version}`,
       `Reparatur: ${r.reparatur.modell} (${r.reparatur.aufwand})${r.mistral_endpunkt ? ` · Mistral ${r.mistral_endpunkt}` : ""}`,

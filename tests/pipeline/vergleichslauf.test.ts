@@ -178,7 +178,7 @@ describe("Vergleichslauf Ilka", () => {
     expect(zeilen).toHaveLength(1 + 2 * svRef);
     expect(zeilen[1].startsWith(`${ids[0]};;fertig;ja;mistral-small-2603;`)).toBe(true);
     expect(uebersichtZeilen(reihe, ergebnisse)[0]).toContain("d8");
-    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
+    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
   });
 
   it("Abbruch während des zweiten Laufs beendet die Reihe mit den bisherigen Läufen", async () => {
@@ -283,7 +283,7 @@ describe("Vergleichslauf Ilka", () => {
     });
     expect(reihe.variante).toBe("standardprofile-ilka/F-mistral-large");
     expect(reihe.modelle.s2).toEqual({ modell: "mistral-large-4", aufwand: "high", anbieter: "mistral" });
-    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Vergleichslauf_Ilka_F-mistral-large_mistral-large-4-high_\d{8}-\d{4}\.zip$/);
+    expect(zipDateiname(reihe)).toMatch(/^KI-LEAD_Testlauf_Ilka_F-mistral-large_mistral-large-4-high_\d{8}-\d{4}\.zip$/);
   });
 
   // LS-2026-W43-15 (Lernschleife, 25.10.2026): isolierter Vergleich der Verdichtung mit festem S1-Gegenstand
