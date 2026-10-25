@@ -73,6 +73,16 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.0 | letzter Commit des Pull Requests „Verbindliche Recherche: Recherche durchführen, Orientierungssuche, Pflichtsuchen; 0.6.0“ |
 | 0.6.1 | letzter Commit des Pull Requests „Amtliche Einstiege und Primärquellen; BSH und DWD in den SOPs; 0.6.1“ |
 
+## [Unveröffentlicht]
+
+### Hinzugefügt
+
+- **KI-Erfassung → „Frühere Läufe mit diesem Profil“** (`src/ui/KiErfassung.tsx`, `src/pipeline/lauf.ts`): Über der Liste stehen zwei Knöpfe. „Alle als ZIP speichern“ legt die Laufprotokolle aller aufgelisteten Läufe als je eine JSON-Datei in eine ZIP-Datei (`<Datum>_KI-LEAD_Laeufe_<Profil-ID>.zip`; Inhalt und Dateinamen der Protokolle wie beim Einzelexport „Protokoll“). „Alle löschen“ entfernt nach Rückfrage alle aufgelisteten Läufe samt Protokoll aus dem Gerätespeicher; solange ein KI-Lauf läuft, ist der Knopf gesperrt. Beide betreffen nur die Läufe des aktiven Profils, Läufe anderer Profile bleiben unberührt. Neue Funktionen `laeufeAlsZip` und `laeufeLoeschen` in `src/pipeline/lauf.ts`; das Laufformat (`ki-lead-lauf/1`) und die Anfragen an die KI bleiben unverändert.
+
+### Tests
+
+- `tests/ui/ki-erfassung-laeufe.test.ts` (neu, 5): keine Sammelknöpfe ohne frühere Läufe; ZIP mit je einem Protokoll der Läufe des Profils (Dateinamen, Inhalt wie Einzelexport, fremdes Profil ausgeschlossen, Speicher unverändert); Löschen mit Rückfrage (Abbrechen löscht nichts, Bestätigen löscht nur die Läufe des Profils, Singular bei einem Lauf).
+
 ## [0.6.1] – 26.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44_lauf-9t2q.json`, Befunde KP-2026-W44-15 bis -24, vom Herausgeber am 26.10.2026 freigegeben (W44-15 wie vorgeschlagen, W44-16 als Warnung). Anlass: Lauf 20261026-215737-9t2q mit 0.6.0 – beide Pflichtsuchen ausgeführt, aber keine amtliche Quelle erreicht; alle neun Quellen Medien. Auftrag des Herausgebers: BSH und DWD bei passenden SOPs als Recherchepunkte hinterlegen.
