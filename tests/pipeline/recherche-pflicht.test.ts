@@ -7,7 +7,19 @@ import { anfrageKoerper } from "../../src/anbieter/anthropic";
 import { STANDARD, sucheErzwingbar } from "../../src/pipeline/einstellungen";
 import type { S1Vorschlag } from "../../src/pipeline/lauf";
 import { pflichtRegel } from "../../src/pipeline/recherchetiefe";
-import { orientierungssuche, pflichtAbgleich, pflichtVorgaben, rechercheBefunde, stufe2und3, sucheEntspricht } from "../../src/pipeline/stufen";
+import {
+  amtlichErreicht,
+  orientierungsEintraege,
+  orientierungssuche,
+  pflichtAbgleich,
+  pflichtVorgaben,
+  primaerquelleBelegt,
+  rechercheBefunde,
+  stufe2und3,
+  sucheEntspricht,
+} from "../../src/pipeline/stufen";
+import { amtlicheEinstiege, amtlicherHost } from "../../src/pipeline/kontext";
+import { profil } from "../support/dateien";
 import { llmAntwort, meldungsAntwort, skriptAnbieter } from "../support/anbieter";
 import { ilkaMeldung } from "../support/fixtures";
 import { bestaetigterVorschlag, pipelineKontext } from "../support/pipeline";
@@ -320,5 +332,139 @@ describe("KP-2026-W44-07/-08: Pflichtsuchen, Abgleich und Nachforderung als Best
     expect(rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: undefined, abrufe: undefined } }).map((x) => x.code)).toEqual([
       "RECHERCHE_NICHT_NACHWEISBAR",
     ]);
+  });
+});
+
+describe("KP-2026-W44-15 bis -19: amtliche Einstiege, Primärquelle, Orientierungszählung (0.6.1, Lauf 20261026-215737-9t2q)", () => {
+  it("W44-15: amtliche Einstiege stammen aus den Recherchetabellen der gewählten SOPs; Unterdomains zählen zum Host", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const b02 = amtlicheEinstiege(p!, ["b02"]);
+    expect(b02.map((x) => [x.kennung, x.url])).toEqual([
+      ["B02/R1", "https://hochwasserzentralen.de/"],
+      ["B02/R2", "https://wasserstand.bsh.de/"],
+      ["B02/R2", "https://www.bsh.de/DE/THEMEN/Wasserstand_und_Gezeiten/Nordsee/nordsee.html"],
+    ]);
+    const b01 = amtlicheEinstiege(p!, ["b01"]);
+    expect(b01.map((x) => x.url)).toContain("https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html");
+    expect(amtlicherHost("https://opendata.dwd.de/weather/text_forecasts/x", b01)).toBe(true);
+    expect(amtlicherHost("https://www.ndr.de/nachrichten", b01)).toBe(false);
+    expect(amtlicherHost("keine adresse", b01)).toBe(false);
+    expect(
+      amtlichErreicht(
+        {
+          fundstellen: [],
+          abrufe: ["https://wasserstand.bsh.de/hamburg"],
+          abrufFehler: [{ url: "https://wasserstand.bsh.de/hamburg", code: "url_not_accessible" }],
+        },
+        b02,
+      ),
+    ).toBe(false);
+  });
+
+  it("W44-15: ohne Fundstelle aus einem amtlichen Einstieg fordert die App einmal nach und nennt die Einstiege", async () => {
+    const medien = { url: "https://zeitung.invalid/sturm", titel: "Sturm (FIKTIV)" };
+    const erste = meldungsAntwort(ilkaMeldung("HE"), "Kurz.", {
+      suchen: ["Orkan Hessen"],
+      fundstellen: [medien],
+      nutzung: { ...leereNutzung(), websuchen: 1 },
+    });
+    const zweite = meldungsAntwort(ilkaMeldung("HE"), "Nach Nachforderung.", {
+      suchen: ["site:wettergefahren.de Warnlagebericht"],
+      fundstellen: [{ url: "https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html", titel: "Warnlagebericht" }],
+      nutzung: { ...leereNutzung(), websuchen: 1 },
+    });
+    const att = skriptAnbieter([erste, zweite]);
+    const { k } = await pipelineKontext(att);
+    k.einstellungen = { ...k.einstellungen, nachforderung: true };
+    const r = await stufe2und3(k, bestaetigterVorschlag());
+    expect(att.anfragen).toHaveLength(2);
+    const text = String(att.anfragen[1].nachrichten[2].content);
+    expect(text).toContain("Keine der ausgewerteten Fundstellen stammt aus den amtlichen Rechercheeinstiegen der gewählten SOPs.");
+    expect(text).toContain("B01/R1 – DWD-Warnlagebericht – https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html");
+    expect(codes(r.befunde)).toContain("RECHERCHE_NACHGEFORDERT");
+    expect(codes(r.befunde)).not.toContain("KEINE_PRIMAERQUELLE");
+  });
+
+  it("W44-15: eine amtliche Fundstelle genügt, dann keine Nachforderung", async () => {
+    const att = skriptAnbieter([
+      meldungsAntwort(ilkaMeldung("HE"), "Kurz.", {
+        suchen: ["Orkan Hessen"],
+        fundstellen: [{ url: "https://www.dwd.de/DE/wetter/x.html", titel: "DWD" }],
+        nutzung: { ...leereNutzung(), websuchen: 1 },
+      }),
+    ]);
+    const { k } = await pipelineKontext(att);
+    k.einstellungen = { ...k.einstellungen, nachforderung: true };
+    await stufe2und3(k, bestaetigterVorschlag());
+    expect(att.anfragen).toHaveLength(1);
+  });
+
+  it("W44-17: amtliche Einstiege in der Nutzernachricht, Zielquelle in der Steuerung, amtlicher Orientierungstreffer zuerst und gekennzeichnet; W44-19: Titel gleich Adresse entfällt", async () => {
+    const v = bestaetigterVorschlag() as S1Vorschlag;
+    v.sachverhalte[0] = {
+      ...v.sachverhalte[0],
+      orientierung: [
+        {
+          suchbegriff: "Orkan Hessen",
+          zeit: "2026-10-14T08:00:00.000Z",
+          treffer: [
+            { titel: "https://zeitung.invalid/orkan", url: "https://zeitung.invalid/orkan" },
+            { titel: "https://opendata.dwd.de/weather/text_forecasts/html/VHDL54", url: "https://opendata.dwd.de/weather/text_forecasts/html/VHDL54" },
+          ],
+        },
+      ],
+      suchbegriffe: [{ begriff: "Unwetterwarnung Hessen Orkan", zweck: "B01/R1", zielquelle: "DWD", herkunft: "vorschlag" }],
+    };
+    const att = skriptAnbieter([mitSuche(["Unwetterwarnung Hessen Orkan"])]);
+    const { k } = await pipelineKontext(att);
+    await stufe2und3(k, v);
+    const bloecke = (att.anfragen[0].nachrichten[0].content as { type: string; text?: string }[]).map((b) => b.text || "");
+    const amtlich = bloecke.find((t) => t.startsWith("# Amtliche Rechercheeinstiege der gewählten SOPs"))!;
+    expect(amtlich).toContain("- B01/R1: DWD-Warnlagebericht – https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html");
+    const orientierung = bloecke.find((t) => t.startsWith("# Rechercheeinstiege aus der Orientierungssuche"))!;
+    const zeilen = orientierung.split("\n").filter((z) => z.startsWith("- Sachverhalt 1: "));
+    expect(zeilen).toEqual([
+      "- Sachverhalt 1: https://opendata.dwd.de/weather/text_forecasts/html/VHDL54 (amtlicher Einstieg – abrufen)",
+      "- Sachverhalt 1: https://zeitung.invalid/orkan",
+    ]);
+    const steuerung = att.anfragen[0].system.at(-1)!.text;
+    expect(steuerung).toContain("- Nennt eine Pflichtsuche eine Zielquelle, rufe deren Seite ab oder präzisiere die Suche mit Einschränkung auf ihre Website");
+    expect(steuerung).toContain("- Amtliche Rechercheeinstiege der gewählten SOPs liegen bei.");
+  });
+
+  it("W44-16: Warnung KEINE_PRIMAERQUELLE nur bei reinen Medienquellen ohne amtliche Fundstelle", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("HE");
+    m.quellen = "[Q1] M – Zeitung (FIKTIV) (14.10.2026): Orkan. Online abrufbar unter: https://zeitung.invalid/a [Zugriff: 14.10.2026]";
+    const leer = { fundstellen: [], abrufe: [], abrufFehler: [] };
+    const einstiege = amtlicheEinstiege(p!, ["b01"]);
+    expect(primaerquelleBelegt(m, p!, leer, einstiege)).toBe(false);
+    expect(primaerquelleBelegt(m, p!, { ...leer, fundstellen: [{ url: "https://opendata.dwd.de/x", titel: "DWD" }] }, einstiege)).toBe(true);
+    const mitA = { ...m, quellen: `${m.quellen}\n[Q2] A – Lagezentrum (FIKTIV) (14.10.2026): Lagemeldung [Zugriff: 14.10.2026]` };
+    expect(primaerquelleBelegt(mitA, p!, leer, einstiege)).toBe(true);
+    const b = rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: 2, abrufe: 0 }, suchen: ["a", "b"] }, undefined, { primaerquelle: false });
+    expect(b.map((x) => [x.code, x.stufe])).toEqual([["KEINE_PRIMAERQUELLE", "warnung"]]);
+    expect(rechercheBefunde("nur-material", false, { nutzung: { websuchen: 0, abrufe: 0 } }, undefined, { primaerquelle: false })).toEqual([]);
+  });
+
+  it("W44-18: je abgerechnetem Suchaufruf ein Eintrag; gebündelte Teilabfragen stehen zusammen", () => {
+    const t = [{ titel: "T", url: "https://beispiel.invalid/t" }];
+    const z = "2026-10-26T21:00:00.000Z";
+    const vier = orientierungsEintraege(
+      { suchen: ["site:dwd.de a", "site:bsh.de b", "site:db c", "site:ndr d"], nutzung: { ...leereNutzung(), websuchen: 1 } },
+      z,
+      t,
+    );
+    expect(vier).toEqual([
+      {
+        suchbegriff: "site:dwd.de a · site:bsh.de b · site:db c · site:ndr d",
+        teilabfragen: ["site:dwd.de a", "site:bsh.de b", "site:db c", "site:ndr d"],
+        zeit: z,
+        treffer: t,
+      },
+    ]);
+    expect(orientierungsEintraege({ suchen: ["a", "b"], nutzung: { ...leereNutzung(), websuchen: 2 } }, z, t).map((o) => o.suchbegriff)).toEqual(["a", "b"]);
+    expect(orientierungsEintraege({ suchen: ["a"], nutzung: { ...leereNutzung(), websuchen: 0 } }, z, t)).toHaveLength(1);
+    expect(orientierungsEintraege({ suchen: [], nutzung: leereNutzung() }, z, t)).toEqual([]);
   });
 });

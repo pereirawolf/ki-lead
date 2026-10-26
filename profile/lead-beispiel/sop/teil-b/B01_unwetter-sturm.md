@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Unwetter / Sturm (Sturm, Orkan, Gewitter, Starkregen, Hagel, Tornado)"
 art_vorschlag: ["Unwetter / Sturm"]
 zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
-version: "2.1.1"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -34,12 +34,12 @@ bisherige_ids: ["sop-01"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welches Phänomen trifft welchen Raum und Zeitraum? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; laufend; Ausgabe und Gültigkeit prüfen | L/R; D1/D8 | Warngebiet ist kein bestätigtes Schadensgebiet. |
+| R1 | Welches Phänomen trifft welchen Raum und Zeitraum? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) (bundesweit, mit Länderberichten) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe, nächste Ausgabe und Gültigkeit prüfen | L/R; D1/D8 | Warngebiet ist kein bestätigtes Schadensgebiet. An der Küste Wind und Wasserstand trennen; Sturmflut nach B02/R2 ([BSH-Wasserstandsvorhersage](https://wasserstand.bsh.de/)). |
 | R2 | Welche Schäden, Sperrungen und Verletzten sind bestätigt? | Lagemeldungen (A.3) | L/R; D1/D2 | Einsatzstellen ≠ Betroffene; Meldungen desselben Schadens nicht addieren; Länder melden in unterschiedlichem Rhythmus. |
 | R3 | Welche Strom-, Verkehrs- und Telekommunikationsdienste sind beeinträchtigt? | Betreibermeldungen (A.3); DB-, Autobahn-, Flughafenmeldungen | R/I; D6 | Vorsorgliche Sperrung ≠ Schaden; frühe „keine größeren Störungen“ nicht als final werten. |
 | R4 | Welche Warnungen und Schutzmaßnahmen gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | M | Teilentwarnung ist keine Gesamtentwarnung; Warnlage nach A.9.3. |
 | R5 | Welche Hilfe ist tatsächlich angefordert oder eingesetzt? | Lagemeldungen (A.3) | M; D4 | Bereitschaft, Anforderung und Einsatz trennen. |
-| R6 | Was ist über Folgewetter und Wiederherstellung bekannt? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; Betreibermeldungen (A.3) | R/M; D5/D8 | Aufräum- und Reparaturdauer beim Betreiber belegen, nicht aus Wetterende ableiten. |
+| R6 | Was ist über Folgewetter und Wiederherstellung bekannt? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); Betreibermeldungen (A.3) | R/M; D5/D8 | Aufräum- und Reparaturdauer beim Betreiber belegen, nicht aus Wetterende ableiten. |
 | R7 | Sind Freiluftveranstaltungen, Campingplätze oder andere exponierte Gruppen im Warngebiet? | Lagemeldungen (A.3); zuständige Ordnungsbehörde; anlassbezogen | R/M | Warnvorlauf, Erreichbarkeit und tatsächliche Schutzmöglichkeit erfassen (A.9.2); Absage ist Vorsorge, keine Betroffenheit. |
 
 ### 3. Auswertung: Prüfpunkte
@@ -68,6 +68,6 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** DWD (Wetterprognose) · Lagezentren der Länder · Betreiber (Wiederherstellungsstatus) · GMLZ
+**Ansprechstellen:** DWD (Wetterprognose) · BSH (Küste: Wasserstand und Sturmflut, B02) · Lagezentren der Länder · Betreiber (Wiederherstellungsstatus) · GMLZ
 
 **Offene Punkte:** Kriterien für „absehbare kritische Auswirkungen“ vor Schadenseintritt an Übungs- und Rückblickfällen kalibrieren (A.10.3).

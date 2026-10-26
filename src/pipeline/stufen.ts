@@ -16,6 +16,8 @@ import { zerlegeAntwort } from "./json";
 import {
   anweisungErfassung,
   auftragAusBestaetigung,
+  amtlicheEinstiege,
+  amtlicherHost,
   fachSops,
   orientierungSystem,
   prueffragenAuszug,
@@ -27,9 +29,11 @@ import {
   steuerungsBlock,
   verdichtungsAnweisung,
   werkzeugText,
+  type AmtlicherEinstieg,
   type PflichtVorgabe,
   type RechercheModus,
 } from "./kontext";
+import { parseQuellen } from "../kern/quellen";
 import {
   kostenNachFehler,
   kostenStand,
@@ -496,11 +500,11 @@ export async function orientierungssuche(k: Kontext, v: S1Vorschlag, nur?: numbe
     }
     const zeit = new Date().toISOString();
     const treffer = (a?.fundstellen || []).slice(0, ORIENTIERUNG_TREFFER).map((f) => ({ titel: f.titel, url: f.url, ...(f.stand ? { datum: f.stand } : {}) }));
-    const ausgefuehrt = a?.suchen?.length ? a.suchen : a && rechercheNachweis({ nutzung: a.nutzung, suchen: a.suchen }).websuchen > 0 ? [""] : [];
-    const orientierung: Orientierungssuche[] = ausgefuehrt.map((q, j) => ({ suchbegriff: q, zeit, treffer: j === 0 ? treffer : [] }));
+    const orientierung = a ? orientierungsEintraege(a, zeit, treffer) : [];
+    const ersteAbfrage = a?.suchen?.[0] || "";
     let vorschlaege = a && orientierung.length ? suchbegriffeAus(a.text, begriffe) : [];
     // Ohne verwertbare Vorschläge dient die ausgeführte Suche selbst als Vorschlag
-    if (!vorschlaege.length && ausgefuehrt[0]) vorschlaege = [{ begriff: ausgefuehrt[0], zweck: "Orientierung", herkunft: "vorschlag" }];
+    if (!vorschlaege.length && ersteAbfrage) vorschlaege = [{ begriff: ersteAbfrage, zweck: "Orientierung", herkunft: "vorschlag" }];
     const eigene = (sv.suchbegriffe || []).filter((b) => b.herkunft === "person");
     return { ...sv, orientierung, suchbegriffe: [...eigene, ...vorschlaege.filter((b) => !eigene.some((x) => x.begriff === b.begriff))] };
   };
@@ -520,6 +524,38 @@ export async function orientierungssuche(k: Kontext, v: S1Vorschlag, nur?: numbe
     k.lauf.status = vorher === "s1" ? "bestaetigen" : vorher;
     await k.aktualisiert(k.lauf);
   }
+}
+
+/**
+ * Orientierungssuchen einer Antwort, je abgerechnetem Suchaufruf ein Eintrag (seit 0.6.1, KP-2026-W44-18). Maßgeblich ist
+ * der Zähler des Anbieters, ersatzweise die Zahl der dokumentierten Abfragen. Bündelt ein Aufruf mehrere Teilabfragen
+ * (OpenAI), stehen sie zusammen in einem Eintrag. Die Treffer ordnet der Anbieter keinem Aufruf zu; sie stehen beim ersten.
+ */
+export function orientierungsEintraege(a: Pick<LlmAntwort, "nutzung" | "suchen">, zeit: string, treffer: Orientierungssuche["treffer"]): Orientierungssuche[] {
+  const abfragen = a.suchen || [];
+  const zaehler = typeof a.nutzung?.websuchen === "number" && a.nutzung.websuchen > 0 ? a.nutzung.websuchen : 0;
+  const n = zaehler || abfragen.length;
+  if (!n) return [];
+  const je = abfragen.length > n ? Math.ceil(abfragen.length / n) : 1;
+  const out: Orientierungssuche[] = [];
+  for (let i = 0; i < n; i++) {
+    const teil = abfragen.slice(i * je, (i + 1) * je);
+    if (je > 1 && !teil.length) break;
+    out.push({ suchbegriff: teil.join(" · "), ...(teil.length > 1 ? { teilabfragen: teil } : {}), zeit, treffer: i === 0 ? treffer : [] });
+  }
+  return out;
+}
+
+/** Ob eine Antwort eine amtliche Quelle erreicht hat: Fundstelle oder erfolgreicher Abruf vom Host eines amtlichen Einstiegs */
+export function amtlichErreicht(a: Pick<LlmAntwort, "fundstellen" | "abrufe" | "abrufFehler">, einstiege: AmtlicherEinstieg[]): boolean {
+  const fehler = new Set((a.abrufFehler || []).map((f) => f.url));
+  return [...(a.fundstellen || []).map((f) => f.url), ...(a.abrufe || []).filter((u) => !fehler.has(u))].some((u) => amtlicherHost(u, einstiege));
+}
+
+/** Zeile eines Rechercheeinstiegs; ein Titel, der nur die Adresse wiederholt, entfällt (KP-2026-W44-19) */
+function einstiegZeile(sv: number, t: { titel: string; url: string; datum?: string }, amtlich: boolean): string {
+  const titel = t.titel && t.titel !== t.url ? `${t.titel}${t.datum ? ` (${t.datum})` : ""} – ` : t.datum ? `(${t.datum}) ` : "";
+  return `- Sachverhalt ${sv}: ${titel}${t.url}${amtlich ? " (amtlicher Einstieg – abrufen)" : ""}`;
 }
 
 /**
@@ -593,9 +629,19 @@ export function antwortenZusammenfuehren(a: LlmAntwort, b: LlmAntwort, textAusB 
   };
 }
 
-/** Nachforderung der App an S2 (seit 0.6.0, KP-2026-W44-08) */
-export function nachforderungText(fehlend: PflichtVorgabe[], ohneSuche: boolean): string {
+/** Höchstzahl amtlicher Einstiege in der Nachforderung */
+export const NACHFORDERUNG_EINSTIEGE = 8;
+
+/**
+ * Nachforderung der App an S2 (seit 0.6.0, KP-2026-W44-08). Seit 0.6.1 (KP-2026-W44-15) auch, wenn keine Fundstelle
+ * und kein Abruf aus den amtlichen Einstiegen der gewählten SOPs stammt; dann nennt sie diese Einstiege.
+ */
+export function nachforderungText(fehlend: PflichtVorgabe[], ohneSuche: boolean, ohnePrimaer: AmtlicherEinstieg[] = []): string {
   const liste = fehlend.map((p) => `„${p.begriff}“ (Sachverhalt ${p.sachverhalt})`).join("; ");
+  const amtlich = ohnePrimaer
+    .slice(0, NACHFORDERUNG_EINSTIEGE)
+    .map((x) => `${x.kennung} – ${x.titel} – ${x.url}`)
+    .join("; ");
   return [
     "Die Recherche ist für diesen Lauf verbindlich (Recherche durchführen).",
     fehlend.length
@@ -603,6 +649,9 @@ export function nachforderungText(fehlend: PflichtVorgabe[], ohneSuche: boolean)
       : ohneSuche
         ? "In deiner Antwort ist keine Websuche ausgeführt. Recherchiere jetzt je Sachverhalt mindestens die zuständige Primärquelle zum Kernbefund und die dynamischen Kernangaben."
         : "",
+    ohnePrimaer.length
+      ? `Keine der ausgewerteten Fundstellen stammt aus den amtlichen Rechercheeinstiegen der gewählten SOPs. Rufe mindestens einen davon ab oder suche mit Einschränkung auf dessen Website (z. B. site:bsh.de): ${amtlich}. Ordne das Ergebnis ein, auch wenn die Seite nichts Aktuelles zeigt.`
+      : "",
     "Prüfe die Kernaussagen deines Entwurfs daran und gib die vollständige Meldung im vorgegebenen Format erneut aus (Kurzantwort, dann JSON-Codeblock).",
   ]
     .filter(Boolean)
@@ -845,14 +894,27 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Pflichtsuchen und Rechercheeinstiege aus der Orientierungssuche (seit 0.6.0, KP-2026-W44-07)
   const pflicht = recherche ? pflichtVorgaben(bestaetigt, e, grenzen.websucheMax) : [];
   const regel = pflichtRegel(e);
-  const einstiege = recherche
+  // Amtliche Rechercheeinstiege der gewählten SOPs (seit 0.6.1, KP-2026-W44-15/-17); in der Nutzernachricht, damit der
+  // Seitenabruf ihre Adressen öffnen darf
+  const amtlich = recherche ? amtlicheEinstiege(p, sopIds) : [];
+  const treffer = recherche
     ? bestaetigt.sachverhalte.flatMap((sv, i) =>
-        (sv.orientierung || []).flatMap((o) => o.treffer.map((t) => `- Sachverhalt ${i + 1}: ${t.titel}${t.datum ? ` (${t.datum})` : ""} – ${t.url}`)),
+        (sv.orientierung || []).flatMap((o) => o.treffer.map((t) => ({ sv: i + 1, t, amtlich: amtlicherHost(t.url, amtlich) }))),
       )
     : [];
+  // Amtliche Treffer zuerst und gekennzeichnet (KP-2026-W44-17)
+  const einstiege = [...treffer.filter((x) => x.amtlich), ...treffer.filter((x) => !x.amtlich)].map((x) => einstiegZeile(x.sv, x.t, x.amtlich));
 
   const inhalt = [
     ...materialBloecke(k.material, k.lauf.auftrag.urls, k.lauf.auftrag.stichworte),
+    ...(amtlich.length
+      ? [
+          {
+            type: "text",
+            text: `# Amtliche Rechercheeinstiege der gewählten SOPs\n\nAus den Recherchetabellen des Profils (Quellenregister A.6); Einstiege, kein Beleg ohne Abruf.\n\n${amtlich.map((x) => `- ${x.kennung}: ${x.titel} – ${x.url}`).join("\n")}`,
+          },
+        ]
+      : []),
     ...(einstiege.length
       ? [
           {
@@ -898,7 +960,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
       kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
       absender: absenderFuer(k.material, p),
-      ...(recherche ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0 } : {}),
+      ...(recherche
+        ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0, amtlich: amtlich.length > 0 }
+        : {}),
     }),
   });
   const s2Name = verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf";
@@ -923,7 +987,9 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     const nw = rechercheNachweis({ nutzung: erste.nutzung, suchen: erste.suchen, abrufe: erste.abrufe });
     const ohneSuche = nw.zaehlerVollstaendig && nw.websuchen === 0 && nw.abrufe - (erste.abrufFehler?.length || 0) <= 0;
     const fehlend = pflicht.filter((_, i) => !pflichtStand[i].ausgefuehrt);
-    if (fehlend.length || ohneSuche) {
+    // Nur wenn die gewählten SOPs amtliche Einstiege verlinken (Entscheidung vom 26.10.2026 zu KP-2026-W44-15)
+    const ohnePrimaer = amtlich.length && !amtlichErreicht(erste, amtlich) ? amtlich : [];
+    if (fehlend.length || ohneSuche || ohnePrimaer.length) {
       nachgefordert = true;
       const zweite = await aufrufen(k, `${s2Name} – Nachforderung`, {
         modell: erfassungsModell,
@@ -933,7 +999,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         nachrichten: [
           { role: "user", content: inhalt },
           { role: "assistant", content: erste.text.trim() || "(keine Textantwort)" },
-          { role: "user", content: nachforderungText(fehlend, ohneSuche) },
+          { role: "user", content: nachforderungText(fehlend, ohneSuche, ohnePrimaer) },
         ],
         werkzeuge: werkzeugeS2(Math.max(1, grenzen.websucheMax - nw.websuchen), Math.max(grenzen.abrufMax > 0 ? 1 : 0, grenzen.abrufMax - nw.abrufe)),
       });
@@ -1073,6 +1139,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         nachgefordert,
         kurzantwort,
         orientierungOhneSuche: orientierungOhne,
+        ...(recherche ? { primaerquelle: primaerquelleBelegt(meldung, p, a, amtlich) } : {}),
       }),
     );
   const nachweis = rechercheNachweis({ nutzung: a.nutzung, suchen: a.suchen, abrufe: a.abrufe });
@@ -1156,6 +1223,23 @@ export interface RechercheZusatz {
   kurzantwort?: string;
   /** Sachverhalte (ab 1), deren Orientierungssuche ohne Websuche blieb */
   orientierungOhneSuche?: number[];
+  /** Ob eine Primärquelle belegt ist (Kategorie A oder B im Quellenverzeichnis oder amtliche Fundstelle; seit 0.6.1) */
+  primaerquelle?: boolean;
+}
+
+/**
+ * Primärquelle belegt (seit 0.6.1, KP-2026-W44-16): Das Quellenverzeichnis der Meldung enthält einen Eintrag der
+ * Kategorie A oder B, oder eine Fundstelle bzw. ein erfolgreicher Abruf stammt aus einem amtlichen Einstieg der SOPs.
+ */
+export function primaerquelleBelegt(
+  meldung: Meldung,
+  p: Profil,
+  a: Pick<LlmAntwort, "fundstellen" | "abrufe" | "abrufFehler">,
+  einstiege: AmtlicherEinstieg[],
+): boolean {
+  const rolle = p.ui.rollen.quellen;
+  const eintraege = rolle ? parseQuellen(holeWert(meldung, rolle)) : [];
+  return eintraege.some((x) => x.code === "A" || x.code === "B") || amtlichErreicht(a, einstiege);
 }
 
 /** Aussagen der Kurzantwort, die eine Recherche oder geprüfte Unzugänglichkeit behaupten */
@@ -1229,11 +1313,17 @@ export function rechercheBefunde(
       code: "PFLICHTSUCHE_AUSGELASSEN",
       text: `Bestätigte Pflichtsuchen ohne entsprechende Websuche${nach}: ${ausgelassen.map((p) => `„${p.begriff}“ (Sachverhalt ${p.sachverhalt})`).join("; ")}.`,
     });
+  if (zusatz.primaerquelle === false)
+    b.push({
+      stufe: "warnung",
+      code: "KEINE_PRIMAERQUELLE",
+      text: "Das Quellenverzeichnis enthält nur Medien- oder Plattformquellen (keine Kategorie A oder B), und keine Fundstelle stammt aus einem amtlichen Rechercheeinstieg der SOPs. Kernaussagen sind indirekt berichtet; vor der Freigabe die zuständigen Primärquellen prüfen.",
+    });
   if (zusatz.nachgefordert && !ohne && !ausgelassen.length)
     b.push({
       stufe: "hinweis",
       code: "RECHERCHE_NACHGEFORDERT",
-      text: "S2 hat die verbindliche Recherche erst nach einer Nachforderung der App ausgeführt; die Meldung stammt aus der Antwort auf die Nachforderung.",
+      text: "S2 hat die verbindliche Recherche erst nach einer Nachforderung der App ergänzt (fehlende Pflichtsuchen, keine Suche oder keine amtliche Quelle); die Meldung stammt aus der Antwort auf die Nachforderung.",
     });
   if (ohne && n.zaehlerVollstaendig && zusatz.kurzantwort && KURZANTWORT_RECHERCHE.test(zusatz.kurzantwort))
     b.push({

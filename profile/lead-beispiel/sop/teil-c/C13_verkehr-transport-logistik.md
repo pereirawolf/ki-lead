@@ -12,9 +12,9 @@ art_zuordnung: ["KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; sonst als Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; Ursache nach Dach-SOP (u. a. B01, B02, B03, B05, B06); C02 bei Bauwerksversagen, C04 bei Vulkanasche; C09/C10, C12, C14, C16, C17 nach Folge"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
-version: "1.2.1"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N06"
@@ -41,6 +41,7 @@ bisherige_ids: ["baustein-n06"]
 | R4 | Welche Folgen bestehen für Rettung, Evakuierung, Personalwechsel, Kraftstoff, Lebensmittel oder Arzneimittel? | Lagemeldungen (A.3) | R/I; D6 | Folgebausteine C16, C12, C14, C10. |
 | R5 | Wie lange tragen lokale Puffer, und welche Lieferungen können rechtzeitig eintreffen? | Betreibermeldungen (A.3) | R; D5 | Reichweiten nur nach Beleg (Absatz „Zeitkritikalität und Kaskade“). |
 | R6 | Was ist zu Wiederfreigabe, Kapazitätsrückkehr und Rückstauabbau belegt? | Betreibermeldungen (A.3) | M; D5 | Freigabe ≠ volle Kapazität. |
+| R7 | Welche wetter- und wasserstandsbedingten Grenzen gelten für Fähr-, Hafen- und Inselverkehr? | [DWD-Seewetterbericht Nord- und Ostsee](https://opendata.dwd.de/weather/maritime/forecast/german/FQEN50_EDZW_LATEST) (Seewetterdienst Hamburg); [BSH-Wasserstandsvorhersage](https://wasserstand.bsh.de/); Betreibermeldungen (A.3) der Reedereien und Häfen; laufend | R; D5/D6 | Vorhersage ist keine Betriebsentscheidung: Einstellung und Wiederaufnahme belegt der Betreiber. Erreichbarkeit von Inseln und Halligen mit Versorgungs- und Rettungsbedarf verbinden (R4). |
 
 **Nutzbarer Ersatz:** Eine bestätigte Route oder ein anderer Verkehrsträger muss für die tatsächlichen Last-, Höhen-, Gefahrgut-, Zeit-, Kühl- oder sonstigen Anforderungen geeignet und rechtzeitig verfügbar sein. Fahrzeuge, Personal, Umschlag, Anschlusskapazität und nötige Freigaben nach zuständiger Quelle prüfen; keine eigene Routengenehmigung. Eine Pkw-Umleitung kann für Tank-, Schwer- oder Spezialtransporte ungeeignet sein. Verlagerung auf Schiene, Straße oder Wasser ist keine sofort verfügbare Ersatzmenge; zusätzliche Engpässe und konkurrierende Bedarfe nach A.7.4. Verschiedene Routen oder Träger können denselben Knoten, Strom-, IT- oder Kraftstoffbezug teilen. Weglänge oder Navigationsvorschlag belegen keine Nutzbarkeit.
 
@@ -66,6 +67,6 @@ Nach B12 bzw. der Dach-SOP der Ursache. „Lage & Ereignis“: ausgefallene Leis
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** Zuständige Infrastruktur- und Verkehrsstellen · Transport-, Logistik- und Umschlagbetreiber · versorgungsabhängige Bedarfsträger; jeweils nach Aussagefunktion (eigene Betriebsangabe B, hoheitliche Anordnung A). Je nach Verkehrsträger Straßenbehörden und Betreiber, Eisenbahninfrastruktur- und Verkehrsunternehmen, WSV und Hafenbetreiber, Luftfahrtstellen, Flugsicherung und Flughafenbetreiber; die lokale Verteilung bis zum Bedarfspunkt einschließen.
+**Ansprechstellen:** Zuständige Infrastruktur- und Verkehrsstellen · Transport-, Logistik- und Umschlagbetreiber · versorgungsabhängige Bedarfsträger; jeweils nach Aussagefunktion (eigene Betriebsangabe B, hoheitliche Anordnung A). Je nach Verkehrsträger Straßenbehörden und Betreiber, Eisenbahninfrastruktur- und Verkehrsunternehmen, WSV und Hafenbetreiber, Luftfahrtstellen, Flugsicherung und Flughafenbetreiber; für Fähr-, Hafen- und Inselverkehr zusätzlich DWD (Seewetter) und BSH (Wasserstand); die lokale Verteilung bis zum Bedarfspunkt einschließen.
 
 **Offene Punkte:** Abgrenzung zu B01, B02 und B06 (wetterbedingte Sperrungen) an Rückblickfällen prüfen. Fachgrundlagen-Block nach A.6 ergänzen: Verkehrssicherstellungsgesetz (VerkSiG) als Maßnahmenrahmen für C17, Fundstelle vor Verwendung am Normtext prüfen und im Quellenregister nachweisen. Staatliche Verfahren zur Sicherstellung von Verkehrsleistungen nur bei belegtem Anlass, aktueller Rechtsgrundlage und tatsächlicher Aktivierung berichten; ihre Erwähnung schafft keinen aktivierten Rechtszustand und keine Anordnungsbefugnis der Koordinierungsstelle. Pflegefunktion, Meldewege und Prüfanlässe organisationsspezifisch festlegen. Übungsfälle zu gesperrter Brücke mit ungeeigneter Pkw-Umleitung, reduzierter Wasserstraßenleistung, ausgefallenem Umschlag trotz offener Strecke, kritischem Luftfrachtweg und Rückstau nach Freigabe.

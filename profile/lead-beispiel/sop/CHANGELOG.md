@@ -10,13 +10,26 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.17.3 vom 26.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
-| `quellenregister.json` | Stand 22.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.17.3 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.18.0 vom 26.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.18.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.18.0] – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44_lauf-9t2q.json` (Anlass: Lauf 20261026-201050-q25q und 20261026-215737-9t2q, Sturmtief „Manja“; Auftrag des Herausgebers, BSH und DWD bei passenden SOPs als Recherchepunkte zu hinterlegen), Befunde KP-2026-W44-20 bis -24, vom Herausgeber am 26.10.2026 freigegeben. Zweite Stelle nach der Versionierungsregel: neue Rechercheeinstiege und eine neue Prüffrage; Kodier- und Quellenregeln unverändert.
+
+### Geändert
+
+- **B02 2.2.0 (KP-2026-W44-20):** R2 verlinkt die BSH-Wasserstandsvorhersage (Nord- und Ostsee) und die BSH-Seite zu Wasserstandsvorhersage Nordsee und Sturmflutwarndienst; Stolperstelle mit den Stufen über MHW (Sturmflut ab 1,5 m, schwere ab 2,5 m, sehr schwere ab 3,5 m). Recherchepfad Sturzflut nennt den DWD-Warnlagebericht.
+- **B01 2.2.0 (KP-2026-W44-21):** R1 und R6 mit dem DWD-Warnlagebericht (wettergefahren.de; derselbe Bericht auf dwd.de war für automatische Abrufe gesperrt), die DWD-Startseite bleibt; R1 trennt an der Küste Wind und Wasserstand mit Verweis auf B02/R2 und das BSH; BSH in den Ansprechstellen.
+- **B06 2.3.0 (KP-2026-W44-22):** R1 mit dem DWD-Warnlagebericht.
+- **C13 1.3.0 (KP-2026-W44-23):** neue Prüffrage R7 zu wetter- und wasserstandsbedingten Grenzen im Fähr-, Hafen- und Inselverkehr (DWD-Seewetterbericht, BSH-Wasserstandsvorhersage, Betreibermeldungen); DWD und BSH in den Ansprechstellen. Status weiterhin Inhaltsgerüst.
+- **Quellenregister (KP-2026-W44-24):** S068 (BSH-Wasserstandsvorhersage) erstmals in SOPs verwendet; neu S073 (DWD-Warnlagebericht), S074 (BSH Nordsee), S075 (DWD-Seewetterbericht); Webabruf ohne Prüfsumme, sichtbare Passagen geprüft. `quellen_geprueft_am` der SOPs unverändert.
+- **Teil A:** Gültigkeitsstand fortgeschrieben (Sammelmappe 3.18.0).
 
 ## [3.17.3] – 26.10.2026
 

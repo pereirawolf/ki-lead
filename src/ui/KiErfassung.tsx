@@ -1091,7 +1091,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                                   .map((t, j) => (
                                     <li key={j}>
                                       <a href={t.url} target="_blank" rel="noopener noreferrer">
-                                        {t.titel || t.url}
+                                        {t.titel && t.titel !== t.url ? t.titel : kurzeAdresse(t.url)}
                                       </a>
                                       {t.datum ? ` (${t.datum})` : ""}
                                     </li>
@@ -1303,6 +1303,17 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       )}
     </div>
   );
+}
+
+/** Adresse als Linktext, wenn der Anbieter keinen Titel liefert: Host und gekürzter Pfad (seit 0.6.1, KP-2026-W44-19) */
+export function kurzeAdresse(url: string, laenge = 60): string {
+  try {
+    const u = new URL(url);
+    const text = `${u.hostname.replace(/^www\./, "")}${u.pathname === "/" ? "" : decodeURIComponent(u.pathname)}`;
+    return text.length > laenge ? `${text.slice(0, laenge - 1)}…` : text;
+  } catch {
+    return url;
+  }
 }
 
 /** „TT.MM.JJJJ, hh:mm Uhr“ aus „JJJJ-MM-TTThh:mm“ */
