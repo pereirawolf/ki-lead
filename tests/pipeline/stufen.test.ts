@@ -387,3 +387,25 @@ describe("TP-2026-W44-07: Zustand eines Laufs", () => {
     expect(istGescheitert({ ...k.lauf, status: "fehler" as const })).toBe(true);
   });
 });
+
+// Persistenz während eines Laufs (seit 0.6.2, TP-2026-W44-10)
+describe("TP-2026-W44-10: Speicherfehler nach einem Aufruf verliert die Antwort nicht", () => {
+  it("scheitert das Speichern im Anschluss an den Aufruf, bleibt die bezahlte Antwort im Eintrag und der Lauf läuft weiter", async () => {
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    const { k } = await pipelineKontext(att);
+    // Das Speichern scheitert genau beim Aufruf nach der Antwort (der dritte: Start des Eintrags, nach der Antwort, Statuswechsel)
+    let aufrufe = 0;
+    k.aktualisiert = async () => {
+      aufrufe++;
+      if (aufrufe === 2) throw new DOMException("Der Speicherplatz ist erschöpft.", "QuotaExceededError");
+    };
+    const v = await stufe1(k);
+    expect(v.sachverhalte).toHaveLength(1);
+    expect(k.lauf.status).toBe("bestaetigen");
+    const eintrag = k.lauf.stufen[0]!;
+    expect(eintrag.antwort?.text).toContain("Sturmfolgen");
+    expect(eintrag.kostenUsd).toBe(0.01);
+    expect(eintrag.notiz).toMatch(/Speichern nach diesem Aufruf gescheitert: Der Speicherplatz ist erschöpft\./);
+    expect(aufrufe).toBeGreaterThanOrEqual(3);
+  });
+});

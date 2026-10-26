@@ -1,7 +1,7 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
-import { schemaFehler } from "../kern/validierung";
+import { schemaFehler, schemaHinweise } from "../kern/validierung";
 import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
@@ -314,6 +314,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     const f = schemaFehler(schema);
     schemaOk = !f;
     if (f) befunde.push({ stufe: "fehler", text: `Das Meldungsschema ist nicht verwendbar: ${f}` });
+    else for (const h of schemaHinweise(schema)) befunde.push({ stufe: "hinweis", text: `Meldungsschema: ${h}` });
     const kennung = schema?.properties?.[ui?.rollen?.schema_feld || "schema"]?.const;
     if (kennung && manifest.meldung.schema_id && kennung !== manifest.meldung.schema_id)
       befunde.push({ stufe: "warnung", text: `Schemakennung im Schema („${kennung}“) weicht von profil.json („${manifest.meldung.schema_id}“) ab.` });

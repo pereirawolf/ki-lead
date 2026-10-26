@@ -48,8 +48,10 @@ export function zerlegeAntwort(text: string): Zerlegung {
       return { ok: false, kurzantwort: kurz, jsonText: inhalt, fehler: `JSON nicht lesbar: ${e.message}` };
     }
   }
-  // Ohne Codeblock: größtes ausgeglichenes Objekt
-  const start = text.indexOf("{");
+  // Ohne geschlossenen Codeblock: Ein offener Zaun (```json ohne Ende, Antwort abgeschnitten) geht vor dem ersten „{“
+  // des Textes (seit 0.6.2, TP-2026-W44-10); sonst verschöbe ein „{“ in der Kurzantwort den JSON-Kandidaten.
+  const zaun = letzterOffenerZaun(text);
+  const start = text.indexOf("{", zaun ?? 0);
   if (start >= 0) {
     const kandidat = ausgeglichen(text, start);
     if (kandidat) {
@@ -63,4 +65,14 @@ export function zerlegeAntwort(text: string): Zerlegung {
     return { ok: false, kurzantwort: ohneZaun(text.slice(0, start)), jsonText: text.slice(start), fehler: "JSON unvollständig (Antwort abgeschnitten?)." };
   }
   return { ok: false, kurzantwort: text.trim(), fehler: "Die Antwort enthält keinen JSON-Block." };
+}
+
+/** Position hinter dem letzten öffnenden Zaun „```json“ (oder „```“ mit folgendem „{“), oder undefined */
+function letzterOffenerZaun(text: string): number | undefined {
+  let pos: number | undefined;
+  for (const m of text.matchAll(/```(?:json|JSON)?[ \t]*\r?\n/g)) {
+    const ende = m.index + m[0].length;
+    if (/^\s*\{/.test(text.slice(ende, ende + 20)) || /json/i.test(m[0])) pos = ende;
+  }
+  return pos;
 }

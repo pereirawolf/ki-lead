@@ -3,7 +3,7 @@
 
 import type { GespeicherterVergleich } from "./vergleich";
 import JSZip from "jszip";
-import { del, entries, get, set } from "idb-keyval";
+import { del, get, getMany, keys, set } from "idb-keyval";
 import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung, type StopGrund } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
@@ -263,10 +263,29 @@ export async function laeufeAlsZip(laeufe: Lauf[], dateiname: (l: Lauf) => strin
   return zip.generateAsync({ type: "blob", compression: "DEFLATE" });
 }
 
+/**
+ * Alle Laufprotokolle. Seit 0.6.2 (TP-2026-W44-10) über keys() und getMany() nur die Schlüssel „lauf:…“, statt mit
+ * entries() den ganzen Speicher samt Profilen und Dateitexten zu laden.
+ */
 export async function laeufeLaden(): Promise<Lauf[]> {
-  const alle = await entries();
-  return alle
-    .filter(([k]) => typeof k === "string" && k.startsWith("lauf:"))
-    .map(([, v]) => v as Lauf)
-    .sort((a, b) => b.erstellt.localeCompare(a.erstellt));
+  const schluessel = (await keys()).filter((k): k is string => typeof k === "string" && k.startsWith("lauf:"));
+  const werte = await getMany<Lauf | undefined>(schluessel);
+  return werte.filter((v): v is Lauf => !!v).sort((a, b) => b.erstellt.localeCompare(a.erstellt));
+}
+
+/**
+ * Bittet den Browser, den Speicher der App vor automatischer Räumung zu schützen (navigator.storage.persist, seit 0.6.2,
+ * TP-2026-W44-10). Einmal je Sitzung, nur im Browser; ohne Unterstützung oder bei Ablehnung ohne Folgen.
+ */
+let persistAngefragt = false;
+export async function speicherSchuetzen(): Promise<boolean | null> {
+  if (persistAngefragt) return null;
+  persistAngefragt = true;
+  try {
+    const st = (globalThis as { navigator?: { storage?: { persist?: () => Promise<boolean> } } }).navigator?.storage;
+    if (!st?.persist) return null;
+    return await st.persist();
+  } catch {
+    return null;
+  }
 }

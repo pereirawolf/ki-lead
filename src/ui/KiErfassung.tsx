@@ -36,6 +36,7 @@ import {
   laufLoeschen,
   laufSpeichern,
   neuerLauf,
+  speicherSchuetzen,
   type Lauf,
   type S1Vorschlag,
   type Suchbegriff,
@@ -345,6 +346,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
 
   const s1Starten = async () => {
     setFehler(null);
+    // Beim ersten Lauf den Speicher der App vor automatischer Räumung schützen lassen (TP-2026-W44-10)
+    void speicherSchuetzen();
     const tag = !uhrzeit && stichtag === vorbelegterStichtag.current ? heute(profil.manifest.variablen?.zeitzone) : stichtag;
     if (tag !== stichtag) {
       vorbelegterStichtag.current = tag;

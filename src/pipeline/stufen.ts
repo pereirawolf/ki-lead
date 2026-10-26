@@ -198,7 +198,13 @@ async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise
     if (kosten.vollstaendig) delete k.lauf.kostenBekanntUsd;
     else k.lauf.kostenBekanntUsd = kosten.bekannt;
     k.lauf.aktualisiert = eintrag.ende;
-    await k.aktualisiert(k.lauf);
+    // Die Antwort steht schon im Eintrag; ein Fehler beim Speichern (etwa voller Speicher) darf die bezahlte Antwort
+    // nicht verwerfen (seit 0.6.2, TP-2026-W44-10). Er wird am Eintrag vermerkt und beim nächsten Speichern mitgenommen.
+    try {
+      await k.aktualisiert(k.lauf);
+    } catch (e: any) {
+      eintrag.notiz = `${eintrag.notiz ? `${eintrag.notiz} ` : ""}Speichern nach diesem Aufruf gescheitert: ${String(e?.message || e)}`;
+    }
   }
 }
 

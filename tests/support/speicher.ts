@@ -27,6 +27,14 @@ export function idbAttrappe(z: SpeicherZustand) {
       if (sonder !== undefined) return sonder;
       z.werte.set(k, structuredClone(v));
     }),
+    getMany: vi.fn(async (ks: string[]) =>
+      Promise.all(
+        ks.map(async (k) => {
+          const sonder = z.lesen?.(k);
+          return sonder !== undefined ? sonder : structuredClone(z.werte.get(k));
+        }),
+      ),
+    ),
     del: vi.fn(async (k: string) => {
       z.werte.delete(k);
     }),
