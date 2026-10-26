@@ -15,26 +15,62 @@ export type RechercheFeld = "websucheMax" | "abrufMax" | "abrufMaxTokens";
  * Stufen der Recherchetiefe. „Standard“ entspricht den Vorgaben der App. Die Werte für „Sparsam“ und „Gründlich“ sind
  * VORLÄUFIG (Entscheidung des Herausgebers vom 25.10.2026, KP-2026-W43-69) und über einen Testlauf zu prüfen.
  */
-export const RECHERCHE_STUFEN: { id: StufeId; titel: string; text: string; werte: RechercheWerte }[] = [
+export const RECHERCHE_STUFEN: {
+  id: StufeId;
+  titel: string;
+  text: string;
+  werte: RechercheWerte;
+  /** Pflichtsuchen in S2 (seit 0.6.0, KP-2026-W44-09; vorläufig, über Testläufe zu prüfen) */
+  pflicht: { jeSachverhalt: number; max: number };
+  /** Erwartetes Verhalten von S2 nach den Pflichtsuchen (Steuerungsblock) */
+  verhalten: string;
+}[] = [
   {
     id: "sparsam",
     titel: "Sparsam",
     text: "Wenige gezielte Suchen, nur die wichtigsten Seiten. Für eng umrissene Aufträge oder viel eigenes Material.",
     werte: { websucheMax: 5, abrufMax: 3, abrufMaxTokens: 8000 },
+    pflicht: { jeSachverhalt: 1, max: 3 },
+    verhalten: "Nur dort nachsuchen, wo die Pflichtsuchen eine Prüffrage offen lassen.",
   },
   {
     id: "standard",
     titel: "Standard",
     text: "Für die meisten Aufträge.",
     werte: { websucheMax: STANDARD.websucheMax, abrufMax: STANDARD.abrufMax, abrufMaxTokens: STANDARD.abrufMaxTokens },
+    pflicht: { jeSachverhalt: 2, max: 5 },
+    verhalten: "Offene Prüffragen verfolgen und dynamische Kernangaben aktualisieren.",
   },
   {
     id: "gruendlich",
     titel: "Gründlich",
     text: "Breite Suche und mehr Seiten, für unübersichtliche oder neue Lagen. Dauert länger und kostet mehr.",
     werte: { websucheMax: 30, abrufMax: 20, abrufMaxTokens: 30000 },
+    pflicht: { jeSachverhalt: 3, max: 8 },
+    verhalten:
+      "Offene Prüffragen verfolgen, dynamische Kernangaben aktualisieren, zusätzlich zentrale Aussagen an einer unabhängigen Quelle gegenprüfen und Folge-SOPs ausleuchten.",
   },
 ];
+
+export interface PflichtRegel {
+  /** Titel der Stufe oder „Eigene Werte“ */
+  titel: string;
+  jeSachverhalt: number;
+  max: number;
+  verhalten: string;
+}
+
+/**
+ * Pflichtsuchen und Verhalten von S2 nach der Recherchetiefe (seit 0.6.0, KP-2026-W44-09). Bei eigenen Werten gilt die
+ * Regel von „Standard“, höchstens die Hälfte der Websuchen; nie mehr Pflichtsuchen als Websuchen.
+ */
+export function pflichtRegel(e: RechercheWerte): PflichtRegel {
+  const id = stufeVon(e);
+  const st = RECHERCHE_STUFEN.find((x) => x.id === (id === "eigen" ? "standard" : id))!;
+  const grenze = id === "eigen" ? Math.floor(e.websucheMax / 2) : e.websucheMax;
+  const max = Math.max(0, Math.min(st.pflicht.max, grenze));
+  return { titel: id === "eigen" ? "Eigene Werte" : st.titel, jeSachverhalt: Math.min(st.pflicht.jeSachverhalt, max), max, verhalten: st.verhalten };
+}
 
 /** Stufe, deren Werte genau den gespeicherten entsprechen, sonst „eigen“ */
 export function stufeVon(e: RechercheWerte): StufeId | "eigen" {

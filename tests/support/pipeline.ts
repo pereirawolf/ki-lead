@@ -42,7 +42,11 @@ export interface KontextOptionen {
   auftrag?: Partial<Auftrag>;
 }
 
-/** Kontext mit Beispielprofil, Standardeinstellungen, fester Uhr und mitgeschriebenen Laufständen */
+/**
+ * Kontext mit Beispielprofil, Standardeinstellungen, fester Uhr und mitgeschriebenen Laufständen. Die Nachforderung
+ * von S2 (seit 0.6.0) ist hier ausgeschaltet, damit Tests anderer Gegenstände nicht von der Suchnutzung der Attrappe
+ * abhängen; Tests der verbindlichen Recherche schalten sie ausdrücklich ein.
+ */
 export async function pipelineKontext(
   anbieter: LlmAnbieter,
   material: Material[] = [],
@@ -59,7 +63,7 @@ export async function pipelineKontext(
     k: {
       profil: p!,
       anbieter,
-      einstellungen: STANDARD,
+      einstellungen: { ...STANDARD, nachforderung: false },
       lauf,
       material,
       aktualisiert: (l) => {

@@ -4,6 +4,7 @@
 // - pause_turn: angehaltene Runden werden unverändert zurückgeschickt und fortgesetzt
 // - Prompt-Caching über cache_control an den Systemblöcken
 // - Websuche (web_search_20250305) und URL-Abruf (web_fetch_20250910) als Server-Werkzeuge
+// - Erzwungene Websuche über tool_choice (Orientierungssuche in S1, seit 0.6.0), nur für Modelle, die es zulassen
 
 import { kostenAnfrage } from "./preise";
 import { fehlerText, NachrichtenSammler, SseLeser } from "./strom";
@@ -66,6 +67,8 @@ export function anfrageKoerper(a: LlmAnfrage, nachrichten = a.nachrichten): Reco
       ...(a.werkzeuge.abruf.maxTokens ? { max_content_tokens: a.werkzeuge.abruf.maxTokens } : {}),
     });
   if (tools.length) body.tools = tools;
+  // Erzwungene Websuche (Orientierungssuche in S1); nur für Modelle, die erzwungene Werkzeugnutzung zulassen
+  if (a.werkzeuge?.erzwingen === "websuche" && a.werkzeuge.websuche) body.tool_choice = { type: "tool", name: "web_search" };
   const oc: Record<string, any> = {};
   if (a.aufwand) oc.effort = a.aufwand;
   if (a.jsonSchema) oc.format = { type: "json_schema", schema: a.jsonSchema };

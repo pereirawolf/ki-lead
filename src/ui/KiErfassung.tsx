@@ -1,9 +1,10 @@
-// KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
+// KI-Erfassung (Modus A): Auftrag → S1 Gegenstand bestätigen (bei „Recherche durchführen“ mit Orientierungssuche und
+// Bestätigung der Suchbegriffe) → S2 Recherche und Entwurf → S3 Prüfung → Übergabe.
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
-import { formatUsd } from "../anbieter/preise";
-import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
+import { formatUsd, kostenAnfrage } from "../anbieter/preise";
+import { istVerbindungsabbruch, leereNutzung, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
 import type { KopfLauf } from "./KiSymbol";
 import type { Fortschritt } from "../anbieter/typen";
@@ -16,6 +17,7 @@ import {
   mitModellwahl,
   aufwandFuer,
   modellFuer,
+  orientierungJeSachverhalt,
   werkzeugeFuer,
   type Einstellungen,
   type ModellWahl as Modellwahl,
@@ -26,7 +28,8 @@ import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
 import type { EinstellungsBereich } from "./Einstellungen";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
-import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
+import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag, type Suchbegriff } from "../pipeline/lauf";
+import { pflichtRegel } from "../pipeline/recherchetiefe";
 import {
   dateiLesen,
   istMeldung,
@@ -40,7 +43,7 @@ import {
   type Material,
   type KiUebergabe,
 } from "../pipeline/material";
-import { rechercheNachweis, stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { orientierungMoeglich, orientierungssuche, rechercheNachweis, stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
 import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
 import { gueltigerZeitpunkt, zoneOder } from "../kern/zeit";
@@ -62,7 +65,7 @@ interface Props {
   laufStand?: (stand: KopfLauf | null) => void;
 }
 
-type Phase = "auftrag" | "s1" | "bestaetigen" | "s2" | "ergebnis";
+type Phase = "auftrag" | "s1" | "bestaetigen" | "orientierung" | "s2" | "ergebnis";
 
 const PHASEN: { id: Phase; titel: string }[] = [
   { id: "auftrag", titel: "Auftrag und Material" },
@@ -128,8 +131,8 @@ export const TEXT_FELD = {
   webseiten: {
     label: "Webseiten (eine Adresse je Zeile)",
     hilfe:
-      "Die KI ruft die Seiten nur ab, wenn „Websuche und Seitenabruf erlauben“ eingeschaltet ist. Gesperrte Seiten im Browser als PDF speichern und unter „Dateien“ hinzufügen.",
-    ohneWebsuche: "Websuche und Seitenabruf sind ausgeschaltet: Die eingetragenen Seiten werden nicht abgerufen, die KI sieht nur die Adressen.",
+      "Die KI ruft die Seiten nur ab, wenn „Recherche durchführen“ eingeschaltet ist. Gesperrte Seiten im Browser als PDF speichern und unter „Dateien“ hinzufügen.",
+    ohneWebsuche: "„Recherche durchführen“ ist ausgeschaltet: Die eingetragenen Seiten werden nicht abgerufen, die KI sieht nur die Adressen.",
   },
   stichtag: {
     label: "Stichtag der Meldung",
@@ -233,7 +236,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const sops = useMemo(() => fachSops(profil), [profil]);
   const sopGliederung = useMemo(() => sopGruppen(profil), [profil]);
   const urls = urlsAusText(urlText);
-  const laeuft = phase === "s1" || phase === "s2";
+  const laeuft = phase === "s1" || phase === "orientierung" || phase === "s2";
   const laufMeldenRef = useRef(laufMelden);
   laufMeldenRef.current = laufMelden;
   useEffect(() => {
@@ -382,6 +385,31 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     neuLaden();
   };
 
+  /** Orientierungssuche je Sachverhalt (Bestandteil von S1, seit 0.6.0); `nur`: nur diese Sachverhalte (Index ab 0) */
+  const orientierungStarten = async (nur?: number[]) => {
+    if (!lauf || !vorschlag) return;
+    setFehler(null);
+    setProtokoll([]);
+    setZeichen(0);
+    setStart(Date.now());
+    setPhase("orientierung");
+    const l = lauf;
+    try {
+      const v = await orientierungssuche(kontext(l), vorschlag, nur);
+      setVorschlag(structuredClone(v));
+    } catch (e: any) {
+      setFehler(
+        e?.name === "AbortError"
+          ? "Orientierungssuche abgebrochen. Suchbegriffe lassen sich selbst eintragen, oder die Orientierung neu starten."
+          : `Die Orientierungssuche ist gescheitert: ${istVerbindungsabbruch(e) ? TEXT_VERBINDUNGSABBRUCH : String(e?.message || e)}`,
+      );
+      l.status = "bestaetigen";
+      setLauf({ ...l });
+      await laufSpeichern(l).catch(() => {});
+    }
+    setPhase("bestaetigen");
+  };
+
   const neueErfassung = () => {
     const etwasDa = sachverhalt || stichworte || urlText || prueffrage || material.length || lauf;
     if (
@@ -474,19 +502,29 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setzeSv(i, { ereignisarten: neu.arten, sops: neu.sops });
   };
 
-  const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === phase);
+  const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === (phase === "orientierung" ? "bestaetigen" : phase));
   const eingaenge = material.filter((m) => m.art === "eingang");
   const vormeldungsStand = vormeldungStand(material, profil);
   const absender = useMemo(() => absenderFuer(material, profil), [material, profil]);
   const t0Ungueltig = !!vorschlag?.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
+  // Orientierungssuche und Pflichtsuchen (seit 0.6.0, KP-2026-W44-06)
+  const rechercheLauf = !!lauf && lauf.auftrag.websuche !== false;
+  const orientierungAn = !!lauf && orientierungMoeglich({ einstellungen: laufEinstellungen, profil, lauf, material }).an;
+  const orientiert = !!vorschlag?.sachverhalte.some((sv) => sv.orientierung !== undefined);
+  const regel = pflichtRegel(laufEinstellungen);
+  const suchbegriffeZeigen =
+    rechercheLauf &&
+    regel.max > 0 &&
+    werkzeugeFuer(modellFuer(verdichtung ? "verdichtung" : "erfassung", laufEinstellungen, profil), laufEinstellungen).websuche;
+  const setzeBegriffe = (i: number, liste: Suchbegriff[]) => setzeSv(i, { suchbegriffe: liste });
   const nichtZugeordnet = vorschlag && verdichtung ? eingaenge.filter((m) => !vorschlag.sachverhalte.some((s) => s.eingangsmeldungen?.includes(m.name))) : [];
 
   // Stand für den KI-Chip der Kopfleiste: nur die Stufe, damit die App beim Streaming nicht mitzeichnet
   const laufStandRef = useRef(laufStand);
   laufStandRef.current = laufStand;
-  const kopfStufe = phase === "s1" ? "s1" : phase === "s2" ? (lauf?.status === "s3" ? "s3" : "s2") : null;
+  const kopfStufe = phase === "s1" || phase === "orientierung" ? "s1" : phase === "s2" ? (lauf?.status === "s3" ? "s3" : "s2") : null;
   useEffect(() => {
     laufStandRef.current?.(kopfStufe ? { stufe: kopfStufe, verdichtung } : null);
   }, [kopfStufe, verdichtung]);
@@ -578,7 +616,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   aria-current={i === aktivIndex ? "step" : undefined}
                 >
                   <span className="schritt-nr">{i + 1}</span>
-                  <span className="schritt-titel">{p.titel}</span>
+                  <span className="schritt-titel">{p.id === "bestaetigen" && orientierungAn ? "Gegenstand und Suchbegriffe bestätigen" : p.titel}</span>
                 </div>
               </li>
             ))}
@@ -743,7 +781,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 <label className="schalter">
                   <input type="checkbox" checked={websuche} onChange={(e) => setWebsucheWahl(e.target.checked)} />
                   <span>
-                    Websuche und Seitenabruf erlauben
+                    Recherche durchführen
                     <span className="hinweis">
                       {" "}
                       {verdichtung ? "Bei Verdichtung standardmäßig aus, z. B. für fiktive Übungslagen." : "Ohne Haken arbeitet die KI nur mit dem Material."}
@@ -751,7 +789,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </span>
                 </label>,
                 <>
-                  <p className="hinweis">{rechercheZeile(websuche, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}</p>
+                  <p className="hinweis">
+                    {rechercheZeile(
+                      websuche,
+                      laufEinstellungen,
+                      modellFuer(stufeS2.rolle, laufEinstellungen, profil),
+                      modellFuer("vorverarbeitung", laufEinstellungen, profil),
+                    )}
+                  </p>
                   <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
                 </>,
               )}
@@ -776,14 +821,18 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               <h2>
                 {phase === "s1"
                   ? "Stufe S1: Gegenstand und SOP-Auswahl"
-                  : lauf?.status === "s3"
-                    ? "Stufe S3: Prüfung und Reparatur"
-                    : "Stufe S2: Recherche und Entwurf"}
+                  : phase === "orientierung"
+                    ? "Stufe S1: Orientierungssuche"
+                    : lauf?.status === "s3"
+                      ? "Stufe S3: Prüfung und Reparatur"
+                      : "Stufe S2: Recherche und Entwurf"}
               </h2>
               <p className="einleitung">
                 {phase === "s1"
                   ? `Die KI ordnet den Auftrag ein. Das dauert voraussichtlich ${dauerFuer("vorverarbeitung", "s1")}.`
-                  : `Die KI ${verdichtung ? "verdichtet die Eingänge" : "recherchiert"} und schreibt den Entwurf. Das dauert voraussichtlich ${dauerFuer(stufeS2.rolle, schaetzS2.art)}. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach.`}
+                  : phase === "orientierung"
+                    ? "Die KI sucht je Sachverhalt kurz im Web, ohne Seiten zu öffnen, und schlägt daraus Suchbegriffe für die Recherche in S2 vor. Das dauert meist unter einer Minute."
+                    : `Die KI ${verdichtung ? "verdichtet die Eingänge" : "recherchiert"} und schreibt den Entwurf. Das dauert voraussichtlich ${dauerFuer(stufeS2.rolle, schaetzS2.art)}. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach.`}
               </p>
               <div className="laufanzeige">
                 <span className="puls" aria-hidden="true" />
@@ -1012,6 +1061,111 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                         </details>
                       )}
                     </fieldset>
+                    {suchbegriffeZeigen && (
+                      <fieldset className="feld suchbegriffe">
+                        <legend className="feld-label">Orientierung und Suchbegriffe für S2</legend>
+                        {s.orientierung === undefined ? (
+                          orientiert && orientierungAn ? (
+                            <p className="hinweis">
+                              Für diesen Sachverhalt lief noch keine Orientierungssuche.{" "}
+                              <button type="button" className="knopf klein" onClick={() => orientierungStarten([i])}>
+                                Orientierung suchen
+                              </button>
+                            </p>
+                          ) : null
+                        ) : s.orientierung.length === 0 ? (
+                          <p className="hinweis">Die Orientierungssuche blieb ohne Websuche. Suchbegriffe bitte selbst eintragen.</p>
+                        ) : (
+                          <>
+                            <p className="hinweis">
+                              Orientierungssuche:{" "}
+                              {s.orientierung.map((o) => (o.suchbegriff ? `„${o.suchbegriff}“` : "ohne Angabe des Suchbegriffs")).join(", ")}
+                              {s.orientierung.some((o) => o.treffer.length)
+                                ? "; Treffer (Rechercheeinstiege für S2, nicht geprüft):"
+                                : "; keine Treffer übermittelt."}
+                            </p>
+                            {s.orientierung.some((o) => o.treffer.length) && (
+                              <ul className="orientierung-treffer">
+                                {s.orientierung
+                                  .flatMap((o) => o.treffer)
+                                  .map((t, j) => (
+                                    <li key={j}>
+                                      <a href={t.url} target="_blank" rel="noopener noreferrer">
+                                        {t.titel || t.url}
+                                      </a>
+                                      {t.datum ? ` (${t.datum})` : ""}
+                                    </li>
+                                  ))}
+                              </ul>
+                            )}
+                          </>
+                        )}
+                        {(s.suchbegriffe || []).map((b, j) => (
+                          <div key={j} className="suchbegriff">
+                            <input
+                              type="text"
+                              aria-label={`Suchbegriff ${j + 1} für Sachverhalt ${i + 1}`}
+                              value={b.begriff}
+                              onChange={(e) =>
+                                setzeBegriffe(
+                                  i,
+                                  (s.suchbegriffe || []).map((x, k) => (k === j ? { ...x, begriff: e.target.value, herkunft: "person" as const } : x)),
+                                )
+                              }
+                            />
+                            <input
+                              type="text"
+                              aria-label={`Zweck von Suchbegriff ${j + 1} für Sachverhalt ${i + 1}`}
+                              placeholder="Zweck, z. B. B02/R2"
+                              value={b.zweck}
+                              onChange={(e) =>
+                                setzeBegriffe(
+                                  i,
+                                  (s.suchbegriffe || []).map((x, k) => (k === j ? { ...x, zweck: e.target.value, herkunft: "person" as const } : x)),
+                                )
+                              }
+                            />
+                            <input
+                              type="text"
+                              aria-label={`Zielquelle von Suchbegriff ${j + 1} für Sachverhalt ${i + 1}`}
+                              placeholder="Zielquelle"
+                              value={b.zielquelle || ""}
+                              onChange={(e) =>
+                                setzeBegriffe(
+                                  i,
+                                  (s.suchbegriffe || []).map((x, k) => (k === j ? { ...x, zielquelle: e.target.value, herkunft: "person" as const } : x)),
+                                )
+                              }
+                            />
+                            <button
+                              type="button"
+                              className="knopf leise klein"
+                              onClick={() =>
+                                setzeBegriffe(
+                                  i,
+                                  (s.suchbegriffe || []).filter((_, k) => k !== j),
+                                )
+                              }
+                            >
+                              Entfernen
+                            </button>
+                          </div>
+                        ))}
+                        {(s.suchbegriffe || []).length < regel.jeSachverhalt && (
+                          <button
+                            type="button"
+                            className="knopf leise klein"
+                            onClick={() => setzeBegriffe(i, [...(s.suchbegriffe || []), { begriff: "", zweck: "", herkunft: "person" }])}
+                          >
+                            Suchbegriff hinzufügen
+                          </button>
+                        )}
+                        <p className="hinweis">
+                          Bis zu {regel.jeSachverhalt} Begriff{regel.jeSachverhalt === 1 ? "" : "e"} je Sachverhalt, insgesamt höchstens {regel.max}, sind
+                          Pflichtsuchen in S2 (Recherchetiefe „{regel.titel}“). S2 führt sie zuerst aus und recherchiert danach im übrigen Kontingent.
+                        </p>
+                      </fieldset>
+                    )}
                   </div>
                 ))}
               </div>
@@ -1028,7 +1182,12 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
               </div>
               <p className="hinweis">
                 Kosten S1: {laufKostenText(lauf)}.{" "}
-                {rechercheZeile(lauf?.auftrag.websuche !== false, laufEinstellungen, modellFuer(stufeS2.rolle, laufEinstellungen, profil))}{" "}
+                {rechercheZeile(
+                  lauf?.auftrag.websuche !== false,
+                  laufEinstellungen,
+                  modellFuer(stufeS2.rolle, laufEinstellungen, profil),
+                  modellFuer("vorverarbeitung", laufEinstellungen, profil),
+                )}{" "}
                 {absenderZeile(absender)}
               </p>
               {modellwahl(
@@ -1044,15 +1203,34 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   </button>
                   {lauf && protokollKnopf(lauf, "Laufprotokoll exportieren (S1)")}
                 </div>
-                <button
-                  type="button"
-                  className="knopf primaer"
-                  onClick={s2Starten}
-                  disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
-                  aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
-                >
-                  {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
-                </button>
+                {orientierungAn && !orientiert ? (
+                  <button
+                    type="button"
+                    className="knopf primaer"
+                    onClick={() => orientierungStarten()}
+                    disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
+                    aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
+                  >
+                    Gegenstand bestätigen und Orientierung suchen (S1)
+                  </button>
+                ) : (
+                  <div className="aktionen">
+                    {orientierungAn && (
+                      <button type="button" className="knopf leise" onClick={() => orientierungStarten()} disabled={!vorschlag.sachverhalte.length}>
+                        Orientierung erneut suchen
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="knopf primaer"
+                      onClick={s2Starten}
+                      disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
+                      aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
+                    >
+                      {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
+                    </button>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -1132,15 +1310,31 @@ function zeitAnzeige(z: string): string {
   return `${z.slice(8, 10)}.${z.slice(5, 7)}.${z.slice(0, 4)}, ${z.slice(11, 16)} Uhr`;
 }
 
-/** Tatsächliche Recherche in S2 nach dem Lauf (gleiche Zählung wie die Befunde) */
-function RechercheZeile({ n }: { n: { websuchen: number; abrufe: number; zaehlerVollstaendig: boolean } }) {
+/**
+ * Tatsächliche Recherche nach dem Lauf (gleiche Zählung wie die Befunde). Seit 0.6.0 getrennt ausgewiesen:
+ * Orientierungssuchen in S1 (nicht angerechnet), Recherche in S2 einschließlich Nachforderung, Pflichtsuchen.
+ */
+function RechercheZeile({
+  n,
+  pflicht,
+}: {
+  n: { websuchen: number; abrufe: number; zaehlerVollstaendig: boolean; orientierung?: number; nachgefordert?: boolean };
+  pflicht?: { ausgefuehrt: string | null }[];
+}) {
   const nichts = n.websuchen === 0 && n.abrufe === 0;
+  const erledigt = pflicht?.filter((p) => p.ausgefuehrt).length ?? 0;
   return (
-    <p className="hinweis">
+    <p className={nichts && n.zaehlerVollstaendig ? "hinweis recherche-null" : "hinweis"}>
       Recherche in S2:{" "}
       {nichts && !n.zaehlerVollstaendig
         ? "nicht nachweisbar."
         : `${n.websuchen} Websuche${n.websuchen === 1 ? "" : "n"}, ${n.abrufe} Seitenabruf${n.abrufe === 1 ? "" : "e"}.`}
+      {pflicht?.length ? ` Pflichtsuchen: ${erledigt} von ${pflicht.length} ausgeführt.` : ""}
+      {n.nachgefordert ? " Die App hat einmal nachgefordert." : ""}
+      {n.orientierung
+        ? ` Dazu in S1 ${n.orientierung} Orientierungssuche${n.orientierung === 1 ? "" : "n"} (nicht auf das Kontingent von S2 angerechnet).`
+        : ""}
+      {nichts && n.zaehlerVollstaendig ? " Keine Recherche, obwohl „Recherche durchführen“ gewählt war." : ""}
     </p>
   );
 }
@@ -1153,18 +1347,39 @@ function absenderZeile(a: { land: string; stelle: string; herkunft: "vormeldung"
   return `Absender: ${wer} (${woher}${a.fremd.length ? "; die gewählte Vormeldung einer anderen Stelle ändert ihn nicht" : ""}).`;
 }
 
-/** Recherchemodus von S2 vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline) */
-function rechercheZeile(websuche: boolean, e: Einstellungen, modellS2?: string): string {
+/**
+ * Recherchemodus vor dem Lauf, aus Auftrag und Einstellungen (wie die Pipeline). Seit 0.6.0 mit Pflichtsuchen nach der
+ * Recherchetiefe und der Orientierungssuche in S1, die getrennt ausgewiesen und nicht angerechnet wird (KP-2026-W44-09).
+ */
+function rechercheZeile(websuche: boolean, e: Einstellungen, modellS2?: string, modellS1?: string): string {
   if (!websuche) return "S2 arbeitet ohne Websuche nur mit dem Material.";
-  if (e.websucheMax <= 0 && e.abrufMax <= 0) return "S2: Recherche erlaubt, aber in den Einstellungen nicht verfügbar (Höchstzahlen 0).";
+  if (e.websucheMax <= 0 && e.abrufMax <= 0) return "S2: „Recherche durchführen“ gewählt, aber in den Einstellungen nicht verfügbar (Höchstzahlen 0).";
   const w = modellS2 ? werkzeugeFuer(modellS2, e) : { websuche: true, abruf: true };
   const websucheMax = w.websuche ? e.websucheMax : 0;
   const abrufMax = w.abruf ? e.abrufMax : 0;
   if (websucheMax <= 0 && abrufMax <= 0)
     return w.websuche
-      ? `S2: Recherche erlaubt, aber ${modellS2} bietet keinen Seitenabruf und die Websuche steht in den Einstellungen auf 0.`
-      : `S2: Recherche erlaubt, aber ${modellS2} über den EU-Endpunkt von Mistral bietet keine Websuche; S2 arbeitet nur mit dem Material. Für Websuche unter „Einstellungen“ den globalen Endpunkt wählen.`;
-  return `S2: Recherche erlaubt (${werkzeugText(websucheMax, abrufMax)}).`;
+      ? `S2: „Recherche durchführen“ gewählt, aber ${modellS2} bietet keinen Seitenabruf und die Websuche steht in den Einstellungen auf 0.`
+      : `S2: „Recherche durchführen“ gewählt, aber ${modellS2} über den EU-Endpunkt von Mistral bietet keine Websuche; S2 arbeitet nur mit dem Material. Für Websuche unter „Einstellungen“ den globalen Endpunkt wählen.`;
+  const teile = [`S2: Recherche durchführen (${werkzeugText(websucheMax, abrufMax)}).`];
+  const regel = pflichtRegel(e);
+  if (websucheMax > 0 && regel.max > 0)
+    teile.push(
+      `Zuerst bis zu ${regel.max} Pflichtsuche${regel.max === 1 ? "" : "n"} aus den bestätigten Suchbegriffen (Recherchetiefe „${regel.titel}“: ${regel.jeSachverhalt} je Sachverhalt), danach eigene Recherche im übrigen Kontingent.`,
+    );
+  const o = orientierungJeSachverhalt(e);
+  if (o && websucheMax > 0 && modellS1) {
+    if (!werkzeugeFuer(modellS1, e).websuche) teile.push(`Orientierungssuche in S1 nicht möglich: ${modellS1} bietet keine Websuche.`);
+    else {
+      const gebuehr = kostenAnfrage(modellS1, { ...leereNutzung(), websuchen: 1 });
+      teile.push(
+        `Vorher in S1 ${o} Orientierungssuche${o === 1 ? "" : "n"} je Sachverhalt ohne Seitenabruf, nicht auf das Kontingent angerechnet${
+          gebuehr ? ` (Suchgebühr etwa ${formatUsd(gebuehr)} je Suche zuzüglich Token)` : ""
+        }.`,
+      );
+    }
+  }
+  return teile.join(" ");
 }
 
 function Ergebnis({
@@ -1206,7 +1421,9 @@ function Ergebnis({
         </div>
       )}
       {s2?.notiz && <p className="fehlertext">{s2.notiz}</p>}
-      {e && s2 && lauf.auftrag.websuche !== false && <RechercheZeile n={rechercheNachweis({ nutzung: s2.nutzung, suchen: e.suchen })} />}
+      {e && lauf.auftrag.websuche !== false && (e.recherche || s2) && (
+        <RechercheZeile n={e.recherche ?? rechercheNachweis({ nutzung: s2!.nutzung, suchen: e.suchen })} pflicht={e.pflichtsuchen} />
+      )}
 
       {e?.kurzantwort && (
         <div className="ki-abschnitt">

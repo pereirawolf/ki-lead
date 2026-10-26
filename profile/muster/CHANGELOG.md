@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 0.5.1 – 26.10.2026
+
+Anlass: Befund KP-2026-W44-11, vom Herausgeber am 26.10.2026 freigegeben.
+
+- Arbeitsanweisung Erfassung 0.5.1: Abschnitt 3 nennt den Ablauf bei „Recherche durchführen“ (zuerst die bestätigten Pflichtsuchen, dann Recherche im Rahmen der Recherchetiefe) und einen Platzhalter für den Mindestumfang je Sachverhalt; Gültigkeitsstand in Teil A fortgeschrieben.
+
 ## 0.5.0 – 24.10.2026
 
 Anlass: Befunde KP-2026-W43-58 und -60 der Lizenzprüfung, vom Herausgeber am 24.10.2026 freigegeben.

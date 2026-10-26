@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Lagemeldung [Organisation]
 
-Vorlagefassung · Fassung 0.5 vom 24.10.2026 · abgestimmt auf Teil A der SOP-Sammlung und den Kodierleitfaden der Vorlage, jeweils Fassung 0.5 · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
+Vorlagefassung · Fassung 0.5.1 vom 26.10.2026 · abgestimmt auf Teil A der SOP-Sammlung und den Kodierleitfaden der Vorlage, jeweils Fassung 0.5 · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte, Kennsätze, Quellenkategorien), Teil A der SOP-Sammlung, die in Stufe S1 ausgewählten SOPs, der Kodierleitfaden und das Eingangsmaterial des Auftrags. Ergebnis ist ein prüfbarer **Entwurf**.
 
@@ -28,7 +28,7 @@ Wende Teil A und die ausgewählten SOPs an. [Regeln der Organisation zur Auswahl
 
 ## 3. Recherche und Belegbarkeit
 
-Offen statt geschätzt: Unbelegte Angaben bleiben leer. [Zulässige Quellen, Rangfolge, Umgang mit unbestätigten Angaben.]
+Offen statt geschätzt: Unbelegte Angaben bleiben leer. Bei „Recherche durchführen“ zuerst die bestätigten Pflichtsuchen ausführen und einordnen, dann im Rahmen der Recherchetiefe weiter recherchieren. [Mindestumfang je Sachverhalt, maßgebliche Primärquellen, zulässige Quellen, Rangfolge, Umgang mit unbestätigten Angaben.]
 
 ## 4. Bewertung und Lageprofil
 

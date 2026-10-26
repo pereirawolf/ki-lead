@@ -28,7 +28,9 @@ test("KI-Chip wechselt zwischen „KI offline“ und „KI online“", async ({ 
 });
 
 test("Nach S1 ist die Anfrage beendet: KI offline, bis S2 startet", async ({ page }) => {
-  const netz = await netzVorbereiten(page, (nr) => (nr === 1 ? JSON.stringify(S1_VORSCHLAG) : "haengen"));
+  // Seit 0.6.0 folgt bei „Recherche durchführen“ die Orientierungssuche (Teil von S1, je Sachverhalt ein Versuch und eine
+  // Wiederholung ohne Suche), danach die Bestätigung der Suchbegriffe; erst der Start von S2 macht die KI wieder online.
+  const netz = await netzVorbereiten(page, (nr) => (nr === 1 ? JSON.stringify(S1_VORSCHLAG) : nr <= 3 ? "Keine Suche." : "haengen"));
   await oeffnen(page);
   await schluesselSetzen(page);
   await bereich(page, "KI-Erfassung");
@@ -36,14 +38,18 @@ test("Nach S1 ist die Anfrage beendet: KI offline, bis S2 startet", async ({ pag
   await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
   await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
   const chip = page.locator(".kopf-ki");
-  await expect(page.getByRole("button", { name: /Entwurf erstellen|S2/ }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Gegenstand bestätigen und Orientierung suchen (S1)" })).toBeVisible();
   await expect(chip).toHaveText("KI offline");
 
-  await page
-    .getByRole("button", { name: /Entwurf erstellen|S2/ })
-    .first()
-    .click();
-  await expect.poll(() => netz.ki.length).toBe(2);
+  await page.getByRole("button", { name: "Gegenstand bestätigen und Orientierung suchen (S1)" }).click();
+  await expect(page.getByRole("button", { name: "Bestätigen und recherchieren (S2)" })).toBeVisible();
+  expect(netz.ki).toHaveLength(3);
+  expect(netz.ki[1].koerper.tool_choice).toEqual({ type: "tool", name: "web_search" });
+  expect(netz.ki[1].koerper.tools.map((t: { name: string }) => t.name)).toEqual(["web_search"]);
+  await expect(chip).toHaveText("KI offline");
+
+  await page.getByRole("button", { name: "Bestätigen und recherchieren (S2)" }).click();
+  await expect.poll(() => netz.ki.length).toBe(4);
   await expect(chip).toHaveText("KI online");
   await expect(chip).toHaveAttribute("aria-label", /S2 Recherche und Entwurf/);
 });

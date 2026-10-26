@@ -3,7 +3,7 @@
   "id": "muster.einsatzstelle",
   "name": "Vorlage – eigene Organisation",
   "beschreibung": "Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern und ein schlankes Beispielschema (Einsatzstelle, ohne Länderliste und Freigabeblock). Vor der Verwendung Platzhalter ersetzen sowie Herausgeber und Lizenz setzen.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "herausgeber": "[Herausgeber]",
   "lizenz": "CC0-1.0",
   "ebene": "[Ebene]",

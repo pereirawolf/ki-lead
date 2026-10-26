@@ -201,7 +201,7 @@ describe("KI-Erfassung", () => {
     expect(zusammenfassung).toContain("S1 Haiku 5.5 (niedrig)");
     expect(zusammenfassung).toContain("S2 Opus 5.5 (hoch)");
     expect(zusammenfassung).toContain("Recherche eigene Werte (bis 5 Websuchen)");
-    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
+    expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
     // Schätzung folgt dem gewählten Aufwand (S2 Opus „high“ ohne Messwert)
     expect(document.querySelector(".laufschaetzung")!.textContent).toContain("S2 (claude-opus-5-5, high)");
 
@@ -212,7 +212,7 @@ describe("KI-Erfassung", () => {
     expect(auswahl("S2", "Aufwand").value).toBe("high");
     expect(gewaehlt("modellwahl-recherche")).toBe("eigen");
     expect(feld(WEBSUCHEN)!.value).toBe("5");
-    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
+    expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
     // KP-2026-W43-74 auch je Lauf: ein geleertes Feld behält den bisherigen Wert
     await eingeben(feld(WEBSUCHEN)!, "");
     await verlassen(feld(WEBSUCHEN)!);
@@ -229,12 +229,12 @@ describe("Punkte 1, 2, 7, 9, 10: Kopfzeile, Rahmen, S3, Zurücksetzen", () => {
     expect(document.querySelector(".modellwahl-titel")!.textContent).toBe("Modelle und Recherche für diesen Lauf");
     // S1 Haiku „hoch“ 15–150 s, 0–0,03 USD; S2 Erfassung Opus „mittel“ 200–360 s, 1,40–2,30 USD
     expect(document.querySelector(".modellwahl-kurz")!.textContent!.trim()).toBe(
-      "S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · ≈ 3–9 Minuten, 1,40–2,33 USD",
+      "S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–9 Minuten, 1,40–2,33 USD",
     );
     expect(kopfzeile()).not.toContain("abweichend");
     // Punkt 9: Schalter zuerst im Rahmen, Schätzung im Rahmen, Bestätigung danach
     const rahmen = document.querySelector(".modellwahl")!;
-    expect(rahmen.firstElementChild!.textContent).toContain("Websuche und Seitenabruf erlauben");
+    expect(rahmen.firstElementChild!.textContent).toContain("Recherche durchführen");
     expect(rahmen.querySelector(".laufschaetzung")).not.toBeNull();
     expect(rahmen.compareDocumentPosition(document.querySelector(".bestaetigung")!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     // Punkt 7: S3 unter „Weitere Stufe“
@@ -314,7 +314,7 @@ describe("Punkt 8: Recherchetiefe je Lauf", () => {
       "Mit claude-opus-5-5 kosten Suchen und Seitenlesen höchstens etwa 0,75 USD",
     );
     await klick(radio("gruendlich"));
-    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 20-mal).");
+    expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 30-mal, Seitenabruf bis zu 20-mal).");
     // 30 × 0,01 USD + 20 Seiten × 30 000 Token × 4 USD je Million
     expect(document.querySelector(".modellwahl .recherche-kosten")!.textContent).toContain("höchstens etwa 2,70 USD");
     expect(kopfzeile()).toContain("Recherche Gründlich (bis 30 Websuchen)");
