@@ -1,0 +1,257 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "konsistenzpruefer",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-26T05:14:06Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+  "pruefumfang": "Teilaspekt konsistenz, KW 44 (Zyklus 11, Wechselbereich 11 mod 3 = 2): Teil A (A_Gemeinsame-Regeln.md), kodierleitfaden.md, anweisung-erfassung.md, anweisung-verdichtung.md, anweisung-kurzfassung.md, meldung.ui.json vollständig gelesen; dazu die in den letzten 28 Tagen geänderten Dateien unter profile/ und docs/ (praktisch der gesamte Bestand) gezielt nach Fassungsangaben (Gültigkeitsstand, sop/README.md gegen version im YAML-Kopf aller 34 SOPs und Bausteine, Kopfzeilen der Arbeitsanweisungen, Profilverlauf), Mitfortschreibung der ET-2026-W43-Entscheidungen nach A.10.2 und Begriffsgebrauch geprüft; Prüfsteine unter evaluation/pruefsteine/ auf dokumentierte Mängel ohne Befund abgeglichen. Ausgeschlossen: Register (evaluation/befunde/befundregister.json), offene Befunde im Eingang (KP-2026-W44-01 KI-Chip; daher Nummerierung ab -02), zurückgestellte KP-2026-W43-17 und -49, Branch funktion/laeufe-zip-und-loeschen (nur App-Dateien).",
+  "nicht_geprueft": [
+    "npm ci && npm test: Ausführung in dieser Sitzung durch die Freigabesteuerung verweigert (Code aus externem Repository); rote Tests daher nicht ausgeschlossen.",
+    "Offene Pull Requests: GitHub-API in dieser Sitzung nicht freigeschaltet (HTTP 403), add_repo nicht verfügbar; geprüft wurden nur Remote-Branches (befunde/eingang, funktion/laeufe-zip-und-loeschen).",
+    "Inhalt von docs/ (App-Dokumentation) nur auf Profilbezüge durchgesehen, nicht vollständig gegengelesen.",
+    "Teil B und Teil C nur in Kopfangaben und einzelnen Stellen gelesen (nicht im Wechselbereich dieser Woche).",
+    "Keine externen Quellen abgerufen (für diesen Teilaspekt nicht erforderlich); keine KI-Läufe gegen evaluation/."
+  ],
+  "befunde": [
+    {
+      "id": "KP-2026-W44-02",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D2, Absatz „Direkt betroffen“",
+          "ist": "Nicht direkt betroffen sind Personen in einem Warngebiet ohne eingetretene Beeinträchtigung und mittelbar Betroffene, etwa durch Verkehrsbehinderungen."
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md",
+          "stelle": "B15, Abschnitt 3, Prüfpunkt D2",
+          "ist": "Der Ausfall von Verwaltungsleistungen allein ist keine Direktbetroffenheit; D2 nur bei belegter Beeinträchtigung von Leben, Gesundheit, Unterkunft oder Grundversorgung (Kodierleitfaden D2)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.3, Absatz „Zählregeln“",
+          "ist": "nicht direkt betroffen sind die Bevölkerung eines Warn- oder Räumungsgebiets, zum Verlassen Aufgeforderte ohne belegten Vollzug und von Sperrungen oder Umleitungen Berührte."
+        }
+      ],
+      "beobachtung": "Die am 24.10.2026 beantwortete Entscheidungsfrage zu ET-2026-W43-05 („Verwaltungsleistungen allein keine Direktbetroffenheit“) ist als D2-Auslegung formuliert, steht aber nur als Prüfpunkt in B15. Kodierleitfaden D2 und die Zählregeln in A.3 kennen die Fallgruppe nicht. Verwaltungsausfälle entstehen auch unter B08, B02 oder B16 (Rathaus ohne Strom, Bürgerbüro überflutet); ohne beigefügte B15 bleibt der im Prüfstein Eichstätt dokumentierte Mangel („andere Bearbeitung könnte die Einwohnerzahl ansetzen“) nach dem aktuellen Regelwerk möglich. A.10.2 verlangt, Achsenregeln gemeinsam in Kodierleitfaden, Teil A und Arbeitsanweisung fortzuschreiben; der Kodierleitfaden geht B15 in der Rangfolge vor.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Fallgruppe in Kodierleitfaden D2 (Absatz „Direkt betroffen“) und in A.3 (Zählregeln, Aufzählung der nicht direkt Betroffenen) aufnehmen; B15 kann dann auf den Kodierleitfaden verweisen. Kodierleitfaden 1.5.0 (geänderte Achsenregel), Sammelmappe zweite Stelle.",
+        "neuer_text": "Kodierleitfaden D2, an den Satz „Nicht direkt betroffen sind …“ anfügen: „Der Ausfall oder die Einschränkung von Verwaltungsleistungen allein ist keine Direktbetroffenheit; D2 nur, soweit dadurch Leben, Gesundheit, Unterkunft oder Grundversorgung belegt beeinträchtigt sind (z. B. ausgefallene Auszahlung existenzsichernder Leistungen). Einwohnerzahlen des Verwaltungsgebiets sind kein Ersatz.“ – A.3 Zählregeln, Aufzählung ergänzen: „…, von Sperrungen oder Umleitungen Berührte und Nutzer eingeschränkter Verwaltungsleistungen ohne belegte Beeinträchtigung ihrer Grundversorgung.“"
+      },
+      "folgeaenderungen": [
+        "Kodierleitfaden Änderungsprotokoll (1.5.0)",
+        "Gültigkeitsstand Teil A (Sammelmappe, Kodierleitfaden)",
+        "sop/CHANGELOG.md und Profilverlauf mit Prüfvermerk je Arbeitsanweisung (A.10.2)",
+        "B15 Abschnitt 3, Prüfpunkt D2: optional auf Verweis kürzen, version im Kopf",
+        "Lesefassung neu erzeugen"
+      ],
+      "entscheidungsfrage": "Gilt die Entscheidung zu ET-2026-W43-05 allgemein für alle Ereignisarten (dann Kodierleitfaden und A.3) oder bewusst nur für Cyberlagen (dann bleibt es bei B15, und B15 sollte das als lageartspezifische Abweichung kennzeichnen)?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/: Jede Formulierung in Abschnitt 3 einer SOP, die mit „D2:“ beginnt und „keine Direktbetroffenheit“ enthält, hat eine Entsprechung im Kodierleitfaden D2 oder ist als lageartspezifische Abweichung gekennzeichnet.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W44-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D4, zweiter Punkt",
+          "ist": "Maßgeblich ist der **Herkunftsraum**, nicht Menge, Wert oder Organisationsform. Grenzüberschreitend tatsächlich eingesetzte Hilfe ist „international“."
+        },
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_eichstaett-cyberangriff/pruefstein.json",
+          "stelle": "maengel[stelle=sachverhalte[0].sofort.lagenradar.d4]",
+          "ist": "D4 = 4 nach Unterstützung durch eine einzelne beratende Landesfachstelle; Stufentext „landesweit“ trägt das nur bedingt, D4 = 2 oder offen wären vertretbar."
+        }
+      ],
+      "beobachtung": "D4 regelt den Herkunftsraum, aber nicht, wie er bei einer einzelnen zentralen Fachstelle (Landes- oder Bundesbehörde, etwa eine Cybersicherheits- oder Messstelle) oder bei einer vom Betroffenen beauftragten privaten Fachfirma bestimmt wird: Sitz, Zuständigkeitsraum der entsendenden Stelle oder Raum, aus dem Kräfte zusammengezogen wurden. Der im Prüfstein Eichstätt dokumentierte Mangel (D4 = 4 für eine beratende Landesfachstelle, D4 = 2 oder offen ebenso vertretbar) entsteht nach dem aktuellen Kodierleitfaden weiterhin; er wurde im Erfassungstest nur als „Weitere Beobachtung“ vermerkt und ist kein Befund im Register. Dieselbe Frage stellt sich bei BSI-, THW- oder Bundeswehr-Spezialkräften (bundesweit oder örtlich?).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Nach Entscheidung eine Zuordnungsregel und ein Kurzbeispiel in Kodierleitfaden D4 aufnehmen; A.2 D4 nur ergänzen, falls die Regel über eine Auslegung hinausgeht. Vorschlagstext unten setzt Variante a der Entscheidungsfrage voraus.",
+        "neuer_text": "D4, nach „…nicht Menge, Wert oder Organisationsform.“ einfügen: „Bei einer einzelnen zentralen Fachstelle oder Spezialeinheit gilt der Zuständigkeitsraum der entsendenden Stelle als Herkunftsraum (Landesfachstelle = landesweit, Bundesstelle = bundesweit); der Bewertungstext nennt Stelle und Leistung. Leistungen eines vom Betroffenen regulär beauftragten Dienstleisters sind keine externe Unterstützung im Sinne von D4, es sei denn, sie werden ereignisbezogen von einer anderen Stelle vermittelt oder bereitgestellt.“ – Kurzbeispiel Abschnitt 7: „Landesfachstelle berät eine Stadtverwaltung nach Cyberangriff vor Ort | D4 = 4 | Zuständigkeitsraum der entsendenden Stelle; Text nennt die beratende Leistung“."
+      },
+      "folgeaenderungen": [
+        "Kodierleitfaden Änderungsprotokoll (1.5.0)",
+        "Gültigkeitsstand Teil A",
+        "sop/CHANGELOG.md und Profilverlauf mit Prüfvermerk je Arbeitsanweisung",
+        "evaluation/faelle: Erwartungswerte D4 in Fällen mit Fachstellenhilfe prüfen (z. B. sop-cyber-schutzabschaltung-kreis)"
+      ],
+      "entscheidungsfrage": "Wie wird der Herkunftsraum einer einzelnen Fachstelle bestimmt: (a) Zuständigkeitsraum der entsendenden Stelle, (b) Sitz bzw. Entfernung zum Ereignisort, oder (c) D4 offen mit Erläuterung, wenn keine Kräfte zusammengezogen wurden? Und zählen regulär beauftragte private Dienstleister als externe Unterstützung?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W44-04",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 4, erster Punkt",
+          "ist": "**Bewertung** (`geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "felder.sachverhalte[].sofort.beurteilung.label",
+          "ist": "Bewertung"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Punkt `sofort.beurteilung`",
+          "ist": "`sofort.beurteilung` (`geringfügig` / `erheblich` / `kritisch`) und `sofort.tendenz` (`Entspannung` / `Stabilisierung` / `Verschärfung`) unabhängig vom höchsten Radarwert begründen."
+        }
+      ],
+      "beobachtung": "Für dasselbe Feld `sofort.beurteilung` verwenden Teil A, Arbeitsanweisungen Erfassung und Kurzfassung, Kopf der Management Summary, Bewertungsgliederung und Eingabehilfe („Beurteilung „…“:“) den Begriff „Beurteilung“; Kodierleitfaden Abschnitt 4 und die Feldbeschriftung der Darstellungsdatei sagen „Bewertung“. „Bewertung“ bezeichnet zugleich den Bewertungstext (`bewertung_text`, Beschriftung „Bewertung & Tendenz“) und die abweichende Bewertung anderer Stellen. A.10.1 verlangt gleich definierte Begriffe; Kodierleitfaden und Teil A sind gemeinsam Grundlage der KI-Anfrage.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Im Kodierleitfaden Abschnitt 4 den Feldbegriff an Teil A angleichen und den Bezug zur Beschriftung der Meldevorlage herstellen; Überschrift „4. Beurteilung und Tendenz“. Die Feldbeschriftung der Darstellungsdatei bleibt bis zur Entscheidung unverändert (wortgleich zur LEAD-Meldevorlage).",
+        "neuer_text": "## 4. Beurteilung und Tendenz\n\n- **Beurteilung** (`sofort.beurteilung`, in der Meldevorlage beschriftet als „Bewertung“; `geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet, nicht aus dem höchsten Radarwert."
+      },
+      "folgeaenderungen": [
+        "Kodierleitfaden Änderungsprotokoll (1.4.1, redaktionell)",
+        "Gültigkeitsstand Teil A",
+        "Verweise „Kodierleitfaden Abschnitt 4“ prüfen",
+        "bei Entscheidung für neue Beschriftung: meldung.ui.json (Profilversion), Prüfvermerk A.10.2"
+      ],
+      "entscheidungsfrage": "Soll die Feldbeschriftung in meldung.ui.json bei „Bewertung“ bleiben (Treue zur LEAD-Meldevorlage, Begriffsbrücke im Kodierleitfaden) oder ebenfalls auf „Beurteilung“ umgestellt werden?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/: Kodierleitfaden Abschnitt 4 nennt den Feldnamen `sofort.beurteilung` und die Beschriftung aus meldung.ui.json (felder.sachverhalte[].sofort.beurteilung.label).",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W44-05",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Kopfzeile (Zeile 3)",
+          "ist": "gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2"
+        }
+      ],
+      "beobachtung": "Fassung 1.4.0 enthält die mit Sammelmappe 3.17.0 in A.2 mitfortgeschriebene D5-Regel (erreichter Zielzustand = 0, Mindestprognose), Fassung 1.3.0 die mit 3.14.0–3.16.0 abgestimmten Regeln. Mit einer Sammelmappe 2.x oder einer Erfassung 1.2 wäre der Leitfaden nicht abgestimmt. Die Arbeitsanweisungen wurden mit KP-2026-W43-43 auf „ab Fassung …“ des tatsächlich abgestimmten Stands umgestellt, der Kodierleitfaden nicht.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Mindestfassungen in der Kopfzeile auf den abgestimmten Stand setzen.",
+        "neuer_text": "gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.17.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.4.0"
+      },
+      "folgeaenderungen": [
+        "Kodierleitfaden Änderungsprotokoll (1.4.1)",
+        "Gültigkeitsstand Teil A"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/: Die Mindestfassung der Sammelmappe in der Kopfzeile des Kodierleitfadens ist nicht kleiner als die Sammelmappenfassung, mit der die aktuelle Leitfadenfassung im sop/CHANGELOG.md mitfortgeschrieben wurde.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W44-06",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8, Änderungsprotokoll, Zeilen 1.4.0 und 1.3.0",
+          "ist": "| 1.4.0 | 24.10.2026 | Grundregel 1: Ist-Kodierung auch nach Ende der Einschränkung vor t0 (ET-2026-W43-01)"
+        }
+      ],
+      "beobachtung": "Das Änderungsprotokoll ist aufsteigend geordnet (1.0 bis 1.2.2), die Zeile 1.4.0 steht aber vor 1.3.0.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Zeilen 1.3.0 und 1.4.0 tauschen, Inhalt unverändert.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "Kodierleitfaden: mit der nächsten Fassung (z. B. 1.4.1) gemeinsam"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/: Fassungen im Änderungsprotokoll des Kodierleitfadens sind streng aufsteigend (semver-Vergleich).",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W44-07",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "Abschnitt 4, Absatz zu `bezeichnung`, `ort`, `eintritt`",
+          "ist": "Setze `eintritt` nur auf einen belegten Beginn des Ereignisses; bei schleichenden Trends ohne bestimmbaren Beginn bleibt `eintritt` leer (`\"\"`)."
+        },
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_eichstaett-cyberangriff/pruefstein.json",
+          "stelle": "maengel[stelle=sachverhalte[0].eintritt]",
+          "ist": "eintritt 09.10.2026 gewählt, obwohl die Stadt den Beginn in der Nacht vom 08. auf den 09.10. verortet und frühere Mitteilungen andere Zeitpunkte nannten."
+        }
+      ],
+      "beobachtung": "Die Regel deckt belegten Beginn und schleichende Trends ab, nicht aber einen nur eingegrenzten Beginn (Nacht über einen Tageswechsel) oder nacheinander abweichende Angaben derselben Stelle. Der im Prüfstein Eichstätt dokumentierte Mangel entsteht nach Erfassung 1.4.0 weiterhin; im Erfassungstest nur als „Weitere Beobachtung“ zu B15 vermerkt. Die Frage ist nicht cyberspezifisch (Unwetter in der Nacht, Leckage unbekannten Beginns).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Satz nach der `eintritt`-Regel ergänzen; Vorschlag setzt Variante a der Entscheidungsfrage voraus.",
+        "neuer_text": "Grenzt die Quelle den Beginn nur auf einen Zeitraum ein (z. B. „in der Nacht vom 08. auf den 09.10.“) oder nennen Quellen nacheinander abweichende Zeitpunkte, setzt du `eintritt` auf den frühesten Tag, den die zuständige Stelle zuletzt noch als möglichen Beginn angibt, ohne Uhrzeit, und nennst die Spanne und abweichende Angaben mit Quelle in `lage_ereignis`."
+      },
+      "folgeaenderungen": [
+        "Arbeitsanweisung Erfassung 1.5.0 (Kopf, Profilverlauf)",
+        "Gültigkeitsstand Teil A",
+        "Profilversion"
+      ],
+      "entscheidungsfrage": "Was gilt bei eingegrenztem oder widersprüchlichem Beginn: (a) frühester noch angegebener Tag ohne Uhrzeit, Spanne im Text, (b) `eintritt` leer und Spanne nur im Text, oder (c) jüngste Angabe der zuständigen Stelle?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Gültigkeitsstand Teil A: Fassungen von Sammelmappe (3.17.2), Kodierleitfaden (1.4.0), Erfassung (1.4.0), Verdichtung (2.0.2), Kurzfassung (2.3.0) und Darstellungsdatei (Profilversion 1.25.0, letzte Änderung 23.10.2026 laut Git) stimmen mit den Dateiköpfen überein.",
+    "sop/README.md: Fassungen aller 17 SOPs und 17 Bausteine stimmen mit `version` im YAML-Kopf überein.",
+    "Stufentexte D1–D8 in Kodierleitfaden Abschnitt 2 und meldung.ui.json wortgleich; Teil A A.2 gibt die Nullstufen gleichlautend wieder.",
+    "Quellenkategorien A/B/W/M/P und Priorität A > B > W > M > P in Teil A A.3, Kodierleitfaden Abschnitt 5, Erfassung Abschnitt 4 und meldung.ui.json inhaltlich gleich (M „auch mit Betreiber- oder Behördenzitat“ überall).",
+    "D5-Regel (erreichter Zielzustand = 0, Mindestprognose) in Teil A A.2 und Kodierleitfaden D5 gleichlautend; Prüfvermerke nach A.10.2 im Profilverlauf 1.26.0–1.28.0 vorhanden.",
+    "Kennsätze und Format „Handlungsrelevant bis:“ in Teil A A.4, Erfassung Abschnitt 5, Verdichtung Regel 8 und meldung.ui.json gleich.",
+    "Rangfolge bei Widersprüchen: Kodierleitfaden, Teil A A.2 und Erfassung Abschnitt 1 vereinbar (Erfassung nennt zusätzlich Schema und Beispiel-JSON).",
+    "Gestaltungsgrundsätze: Teil A A.1 Nr. 8 (Steuerungsebene, bundesweite Nutzbarkeit, kein Landesrecht als Fachgrundlage) widerspruchsfrei zu Arbeitsanweisungen und Kodierleitfaden.",
+    "Weitere Beobachtung: B09 `naechste_pruefung_faellig` 31.10.2026 – fällig in 5 Tagen; der nächste Fristenlauf (KW 45) fände die Frist bereits überschritten (A.10.2: sachlich prüfen, nicht verschieben).",
+    "Weitere Beobachtung: Erfassung Abschnitt 6, Beispiel `_entstehung` nennt „Kodierleitfaden LEAD 1.2“ und „B01 … v2.0.1“ (aktuell 1.4.0 bzw. 2.1.1); als Beispiel gekennzeichnet, die App setzt `kodierleitfaden` selbst, Kopierrisiko gering.",
+    "Weitere Beobachtung: Kodierleitfaden D2, Nullregel (b) (Prüfstein Ebola) – durch Grundregel 1 und das Kurzbeispiel „Abkochgebot vor t0 aufgehoben“ inzwischen weitgehend beantwortet (ohne Fehlanzeige der Surveillance offen); ein Kurzbeispiel „bekannte Fälle entlassen, keine Fehlanzeige“ würde es eindeutig machen.",
+    "Weitere Beobachtung: Kodierleitfaden D6 – Abgrenzung Stufe 1 „peripher“ zu 0 (Prüfstein Eichstätt, Ausfall nur eines Kommunikationswegs einer Pflegeeinrichtung) weiterhin ohne Regel oder Beispiel.",
+    "Weitere Beobachtung: Erfassung Abschnitt 4, Quellen – keine Regel zur Sprachfassung; im Prüfstein Wiesbaden wurde die ukrainische statt der deutschen Ausgangsseite zitiert.",
+    "Weitere Beobachtung: Arbeitsanweisung Kurzfassung nennt „LEAD-Meldevorlage ab 1.0“, Erfassung „ab 1.1“; für die Kurzfassung ohne Wirkung, aber uneinheitlich."
+  ]
+}
