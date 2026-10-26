@@ -117,10 +117,14 @@ export class AnbieterFehler extends Error {
   }
 }
 
-/** Typische Meldungen der Browser, wenn eine Verbindung mitten im Strom abreißt. */
+/**
+ * Typische Meldungen der Browser, wenn eine Verbindung mitten im Strom abreißt. Seit 0.6.2 nur noch die Meldungsmuster
+ * (TP-2026-W44-04): Ein beliebiger TypeError, etwa ein Programmierfehler in der Stromverarbeitung, gilt nicht mehr als
+ * Netzabbruch. Die Adapter erkennen den Abriss am Ort des Lesens (http.ts, LeseFehler), nicht an der Fehlerklasse.
+ */
 export function istVerbindungsabbruch(e: unknown): boolean {
   const m = String((e as any)?.message || e || "");
-  return (e as any)?.name === "TypeError" || /load failed|failed to fetch|networkerror|network error|network connection was lost|terminated/i.test(m);
+  return /load failed|failed to fetch|networkerror|network error|network connection was lost|terminated/i.test(m);
 }
 
 export const TEXT_VERBINDUNGSABBRUCH =

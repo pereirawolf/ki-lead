@@ -72,6 +72,19 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.22 | letzter Commit des Pull Requests „KI-Erfassung: Modelle und Recherche für diesen Lauf; 0.5.22“ |
 | 0.6.0 | letzter Commit des Pull Requests „Verbindliche Recherche: Recherche durchführen, Orientierungssuche, Pflichtsuchen; 0.6.0“ |
 | 0.6.1 | letzter Commit des Pull Requests „Amtliche Einstiege und Primärquellen; BSH und DWD in den SOPs; 0.6.1“ |
+| 0.6.2 | letzter Commit des Pull Requests „Programmcode: Reparaturschleife, Strom-Timeout, Adapter-Gemeinsamkeiten, Tooling; 0.6.2“ |
+
+## [0.6.2] – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-01 bis -11 (Kategorie Programmcode), vom Herausgeber am 26.10.2026 freigegeben (W44-02, -08 und -09 mit Maßgabe angepasst).
+
+### Hinzugefügt
+
+### Geändert
+
+### Behoben
+
+### Tests
 
 ## [Unveröffentlicht]
 

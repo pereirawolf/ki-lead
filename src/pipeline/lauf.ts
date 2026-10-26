@@ -8,7 +8,8 @@ import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from 
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.6.1";
+/** Kennung der App in Laufprotokollen und Ausgaben; die Nummer kommt aus package.json (seit 0.6.2, TP-2026-W44-08) */
+export const APP_KENNUNG = `KI-LEAD ${__APP_VERSION__}`;
 
 export interface Auftrag {
   sachverhalt: string;

@@ -1,12 +1,14 @@
 // Gemeinsames Verhalten der Anbieteradapter (Anthropic, OpenAI, seit 0.5.6 auch Mistral) bei Fehlern, Wiederholungen und Abbruch – mit gefälschter Uhr,
 // damit Wartezeiten sofort vergehen und ihre Länge prüfbar ist. Erwartete Wartezeiten stehen als feste Zahlen hier:
 // Netzwerkfehler 2 s, 4 s, 6 s; Überlastung ohne retry-after 4 s, 8 s, 16 s; retry-after höchstens 60 s;
-// nach drei Wiederholungen (vier Abrufen) ist Schluss.
+// nach drei Wiederholungen (vier Abrufen) ist Schluss. Seit 0.6.2 (TP-2026-W44-02/-03) steht die Mechanik einmal in
+// src/anbieter/http.ts; ein Strom ohne Daten gilt nach 120 s als abgerissen.
 import { describe, expect, it } from "vitest";
 import { AnthropicAnbieter } from "../../src/anbieter/anthropic";
 import { MistralAnbieter } from "../../src/anbieter/mistral";
 import { OpenAiAnbieter } from "../../src/anbieter/openai";
-import { AnbieterFehler, type LlmAnbieter, type LlmAnfrage } from "../../src/anbieter/typen";
+import { INAKTIVITAET_MS } from "../../src/anbieter/http";
+import { AnbieterFehler, TEXT_VERBINDUNGSABBRUCH, type LlmAnbieter, type LlmAnfrage } from "../../src/anbieter/typen";
 import { fehlerAntwort, ohneWarten, sseAntwort, sseText } from "../support/anbieter";
 
 type Abruf = (url: string, init: RequestInit) => Promise<Response>;
@@ -217,6 +219,62 @@ describe.each(FAELLE)("$name: Wiederholungen und Abbruch", (f) => {
     expect(r.fehler?.name).toBe("AbortError");
     expect(aufrufe).toHaveLength(1);
     expect(r.dauerMs).toBe(500);
+  });
+});
+
+// Inaktivitätsgrenze des Antwortstroms (seit 0.6.2, TP-2026-W44-02): fest 120 s, keine Einstellung.
+describe.each(FAELLE)("$name: TP-2026-W44-02 Inaktivitätsgrenze", (f) => {
+  /** Strom, der nach dem ersten Stück offen bleibt und nie wieder Bytes liefert */
+  function schweigenderStrom(init: RequestInit): Response {
+    const strom = new ReadableStream<Uint8Array>({
+      start(c) {
+        c.enqueue(new TextEncoder().encode("event: ping\ndata: {}\n\n"));
+        init.signal?.addEventListener("abort", () => c.error(new DOMException("Abgebrochen", "AbortError")));
+      },
+    });
+    return new Response(strom, { status: 200, headers: { "content-type": "text/event-stream" } });
+  }
+
+  it("ein Strom, der nach dem ersten Stück schweigt, endet nach 120 s als Verbindungsabbruch und wird neu gestellt", async () => {
+    const aufrufe: RequestInit[] = [];
+    const abruf: Abruf = async (_url, init) => {
+      aufrufe.push(init);
+      return aufrufe.length === 1 ? schweigenderStrom(init) : f.erfolg();
+    };
+    const w = wartezeitenMerken();
+    const gruende: string[] = [];
+    const r = await ohneWarten(() =>
+      f.neu(abruf).senden(
+        anfrage(f, {
+          fortschritt: (x) => {
+            w.fortschritt(x);
+            if (x.art === "wiederholung") gruende.push(x.grund);
+          },
+        }),
+      ),
+    );
+    expect(r.fehler).toBeUndefined();
+    expect(r.wert!.text).toBe("ok");
+    expect(aufrufe).toHaveLength(2);
+    expect(INAKTIVITAET_MS).toBe(120_000);
+    expect(w.ms).toEqual([1500]);
+    expect(gruende[0]).toMatch(/Verbindung unterbrochen/);
+    // 120 s Schweigen, dann 1,5 s Pause vor dem Neustart
+    expect(r.dauerMs).toBe(120_000 + 1500);
+  });
+
+  it("gibt nach drei schweigenden Strömen mit der Meldung zum Verbindungsabbruch auf", async () => {
+    const aufrufe: RequestInit[] = [];
+    const abruf: Abruf = async (_url, init) => {
+      aufrufe.push(init);
+      return schweigenderStrom(init);
+    };
+    const r = await ohneWarten(() => f.neu(abruf).senden(anfrage(f)));
+    expect(r.fehler).toBeInstanceOf(AnbieterFehler);
+    expect(r.fehler.art).toBe("verbindung");
+    expect(r.fehler.message).toBe(TEXT_VERBINDUNGSABBRUCH);
+    expect(aufrufe).toHaveLength(3);
+    expect(r.dauerMs).toBe(3 * 120_000 + 2 * 1500);
   });
 });
 

@@ -108,6 +108,29 @@ describe("Versionen und Netzzugriffe", () => {
     expect(lies("CITATION.cff")).toMatch(new RegExp(`^version: ${VERSION.replace(/\./g, "\\.")}$`, "m"));
   });
 
+  // README und CHANGELOG nennen die Versionen von App und Beispielprofil (seit 0.6.2, TP-2026-W44-11)
+  it("TP-2026-W44-11: README nennt an allen drei Stellen die App-Version aus package.json", () => {
+    const readme = lies("README.md");
+    const v = VERSION.replace(/\./g, "\\.");
+    expect(readme).toMatch(new RegExp(`^\\*\\*Stand:\\*\\* Version ${v},`, "m"));
+    expect(readme).toMatch(new RegExp(`die App eine Versionsnummer \\(derzeit ${v}\\)`));
+    expect(readme).toMatch(new RegExp(`\\(Version ${v}\\) \\[Software\\]`));
+    // keine andere Versionsangabe der App im README
+    const andere = [...readme.matchAll(/(?:Version|derzeit) (\d+\.\d+\.\d+)/g)].map((m) => m[1]).filter((x) => x !== VERSION);
+    expect(andere).toEqual([]);
+  });
+
+  it("TP-2026-W44-11: README nennt die Version des Beispielprofils aus profil.json", () => {
+    const profil = JSON.parse(lies("profile", "lead-beispiel", "profil.json")).version as string;
+    expect(lies("README.md")).toContain(`(Beispielprofil ${profil})`);
+  });
+
+  it("TP-2026-W44-11: der jüngste Abschnitt des CHANGELOG trägt die Version aus package.json", () => {
+    const kopf = lies("CHANGELOG.md").match(/^## \[(\d+\.\d+\.\d+)\]/m)?.[1];
+    expect(kopf).toBe(VERSION);
+    expect(lies("CHANGELOG.md")).toMatch(new RegExp(`^\\| ${VERSION.replace(/\./g, "\\.")} \\| `, "m"));
+  });
+
   it("die Content-Security-Policy erlaubt Verbindungen nur zur eigenen Herkunft und zu den KI-Anbietern", () => {
     const csp = lies("index.html").match(/Content-Security-Policy" content="([^"]+)"/)?.[1] ?? "";
     const connect = csp

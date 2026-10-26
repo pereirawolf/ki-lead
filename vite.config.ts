@@ -38,12 +38,14 @@ function serviceWorker(): Plugin {
       const index = bundle["index.html"];
       const fehlend = index && index.type === "asset" ? fehlendeVerweise(String(index.source), liste) : ["index.html"];
       if (fehlend.length) this.error(`index.html verweist auf Dateien außerhalb der Vorhalteliste: ${fehlend.join(", ")}`);
-      const app = JSON.parse(readFileSync(join(import.meta.dirname, "package.json"), "utf-8")).version as string;
+      const app = APP_VERSION;
       const vorlage = readFileSync(join(import.meta.dirname, "src/pwa/sw-vorlage.js"), "utf-8");
       this.emitFile({ type: "asset", fileName: "sw.js", source: serviceWorkerQuelle(vorlage, precacheVersion(app, liste, inhalte), liste) });
     },
   };
 }
+
+const APP_VERSION = JSON.parse(readFileSync(join(import.meta.dirname, "package.json"), "utf-8")).version as string;
 
 // Relative Basis, damit derselbe Build als PWA (Unterverzeichnis) und in Capacitor läuft.
 // Eigene Profile aus privat/profile/ nur im Entwicklungsserver oder auf ausdrücklichen Wunsch (KI_LEAD_PRIVAT=1).
@@ -51,6 +53,8 @@ export default defineConfig(({ command }) => ({
   base: "./",
   define: {
     __KI_LEAD_PRIVAT__: JSON.stringify(command === "serve" || process.env.KI_LEAD_PRIVAT === "1"),
+    // Versionsnummer aus package.json statt Handpflege in lauf.ts (seit 0.6.2, TP-2026-W44-08); gilt auch unter Vitest
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
   },
   plugins: [react(), serviceWorker()],
   build: {

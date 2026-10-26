@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.2 vom 24.10.2026, gilt für App-Version 0.5.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.3 vom 26.10.2026, gilt für App-Version 0.6.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -92,6 +92,14 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | Wenige Abhängigkeiten, nur permissive Lizenzen; `tests/lizenzen/` scheitert bei unzulässiger Lizenz oder fehlendem Eintrag in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) | SBOM erfasst nur npm-Pakete, nicht die nativen Bibliotheken |
 | SBOM im Format CycloneDX bei jedem CI-Lauf (Artefakt) und als Anhang jedes Releases | |
 
+### 3.8 Verfügbarkeit während eines KI-Laufs
+
+| vorhanden | offen |
+|---|---|
+| Wiederholung bei Netzwerkfehlern und Überlastung mit Backoff, höchstens dreimal; Neustart oder Fortsetzung nach einem Verbindungsabbruch, höchstens zweimal (`src/anbieter/http.ts`, seit 0.6.2 für alle Anbieter gemeinsam) | keine Obergrenze für die Gesamtdauer eines Laufs |
+| Inaktivitätsgrenze des Antwortstroms: liefert der Anbieter 120 s lang keine Daten, gilt die Verbindung als abgerissen und die bestehende Wiederaufnahme greift (seit 0.6.2, TP-2026-W44-02); vorher konnte ein offener, stummer Strom S2 unbegrenzt blockieren | Grenze fest, nicht einstellbar (Entscheidung des Herausgebers) |
+| Abbruch durch die Person jederzeit; das Laufprotokoll behält die bis dahin empfangenen Blöcke | |
+
 ## 4. Hinweise für Nutzende
 
 - Beim Anbieter ein **Ausgabenlimit** setzen und einen **eigenen Schlüssel** nur für KI-LEAD anlegen.
@@ -113,3 +121,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
 | 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |
+| 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04, App 0.6.2) |

@@ -2,10 +2,8 @@
 // - profile/            öffentliche Beispielprofile aus dem Repository
 // - privat/profile/     eigene, nicht eingecheckte Profile (Ordner ist per .gitignore ausgeschlossen).
 //   Im Entwicklungsserver immer dabei; im Produktionsbuild nur mit KI_LEAD_PRIVAT=1,
-//   damit ein veröffentlichter Build keine privaten Inhalte enthält.
-
-declare const __KI_LEAD_PRIVAT__: boolean;
-
+//   damit ein veröffentlichter Build keine privaten Inhalte enthält (Konstante __KI_LEAD_PRIVAT__ aus vite.config.ts).
+//
 // Nicht eingebettet: archivierte SOP-Fassungen und die erzeugte Lesefassung. Die App liest sie nie (maßgeblich für SOPs
 // ist sop.dateien im Manifest); sie würden nur Ladezeit und Profilprüfsumme vergrößern. Die SOP-Übersicht
 // (`sop/README.md`) ist dagegen eingebettet: Die Profilansicht zeigt sie als Lesedokument, nicht als SOP.

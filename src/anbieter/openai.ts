@@ -6,14 +6,13 @@
 // - Structured Outputs über text.format (json_schema, strict)
 // - store: false – Antworten werden beim Anbieter nicht für spätere Abrufe gespeichert
 
+import { fehlerJson, LeseFehler, mitNeustart, mitWiederholung, sseLesen, type Fehlerregeln } from "./http";
 import { kostenAnfrage } from "./preise";
-import { SseLeser } from "./strom";
+import { strengesSchema } from "./schema";
 import {
   AnbieterFehler,
   addiereNutzung,
-  istVerbindungsabbruch,
   leereNutzung,
-  TEXT_VERBINDUNGSABBRUCH,
   type AbrufFehler,
   type Fundstelle,
   type Inhaltsblock,
@@ -24,46 +23,10 @@ import {
   type Nutzung,
   type Zitat,
 } from "./typen";
-import { abbruchPruefen, warte } from "./warten";
 
 export const OPENAI_URL = "https://api.openai.com/v1/responses";
-const MAX_WIEDERHOLUNGEN = 3;
-const MAX_NEUSTARTS = 2;
-
-/** Strenges Schema für Structured Outputs: jedes Objekt geschlossen, alle Felder Pflicht (optionale nullable). */
-export function strengesSchema(s: any): any {
-  if (Array.isArray(s)) return s.map(strengesSchema);
-  if (!s || typeof s !== "object") return s;
-  const out: any = {};
-  for (const [k, v] of Object.entries(s)) {
-    if (k === "properties" && v && typeof v === "object") {
-      out.properties = Object.fromEntries(Object.entries(v as object).map(([pk, pv]) => [pk, strengesSchema(pv)]));
-    } else if (k === "items" || k === "anyOf" || k === "$defs" || k === "definitions") {
-      out[k] =
-        k === "$defs" || k === "definitions" ? Object.fromEntries(Object.entries(v as object).map(([dk, dv]) => [dk, strengesSchema(dv)])) : strengesSchema(v);
-    } else out[k] = v;
-  }
-  if (out.type === "object" || out.properties) {
-    const alle = Object.keys(out.properties || {});
-    const pflicht = new Set<string>(out.required || []);
-    for (const key of alle) {
-      if (pflicht.has(key)) continue;
-      const p = out.properties[key];
-      const t = p?.type;
-      // enum, const und Verweise schränken die Werte weiter ein; null muss dann als eigene Alternative stehen,
-      // sonst wäre das bisher optionale Feld nur noch mit einem der erlaubten Werte zu füllen.
-      const eingeschraenkt = !p || typeof p !== "object" || "enum" in p || "const" in p || "$ref" in p || "anyOf" in p || "oneOf" in p || "allOf" in p;
-      if (eingeschraenkt) {
-        if (!(Array.isArray(p?.anyOf) && p.anyOf.some((x: any) => x?.type === "null"))) out.properties[key] = { anyOf: [p, { type: "null" }] };
-      } else if (typeof t === "string") out.properties[key] = t === "null" ? p : { ...p, type: [t, "null"] };
-      else if (Array.isArray(t)) out.properties[key] = t.includes("null") ? p : { ...p, type: [...t, "null"] };
-      else out.properties[key] = { anyOf: [p, { type: "null" }] };
-    }
-    out.required = alle;
-    out.additionalProperties = false;
-  }
-  return out;
-}
+/** Seit 0.6.2 in schema.ts (TP-2026-W44-03); hier weiter exportiert */
+export { strengesSchema };
 
 function inhaltZuOpenAi(c: string | Inhaltsblock[], rolle: Nachricht["role"]): any[] {
   const textTyp = rolle === "assistant" ? "output_text" : "input_text";
@@ -180,8 +143,6 @@ export function nutzungOpenAi(u: any, ausgabe: any[]): Nutzung {
   };
 }
 
-class StromEnde extends Error {}
-
 export class OpenAiAnbieter implements LlmAnbieter {
   id = "openai";
   constructor(
@@ -190,105 +151,65 @@ export class OpenAiAnbieter implements LlmAnbieter {
     private abruf: typeof fetch = (...x) => fetch(...x),
   ) {}
 
+  /** Fehlerregeln der Responses API für die gemeinsame Wiederholung (http.ts) */
+  private regeln(): Fehlerregeln {
+    return {
+      fehlerAus: async (antwort) => {
+        const j = await fehlerJson(antwort);
+        return { code: j?.error?.code || j?.error?.type, meldung: j?.error?.message, roh: JSON.stringify(j ?? "") };
+      },
+      wiederholbar: (status, f) => (status === 429 && f.code !== "insufficient_quota") || status >= 500,
+      fehlerText: fehlerTextOpenAi,
+      netzFehler: "Keine Verbindung zu OpenAI. Netz prüfen.",
+    };
+  }
+
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert das vollständige Antwortobjekt. */
   private async eineRunde(a: LlmAnfrage): Promise<any> {
-    const body = anfrageKoerperOpenAi(a);
-    for (let versuch = 0; ; versuch++) {
-      abbruchPruefen(a.signal);
-      let antwort: Response;
-      try {
-        antwort = await this.abruf(this.url, {
+    const body = JSON.stringify(anfrageKoerperOpenAi(a));
+    const antwort = await mitWiederholung(
+      a,
+      () =>
+        this.abruf(this.url, {
           method: "POST",
           headers: { "content-type": "application/json", authorization: `Bearer ${this.schluessel}` },
-          body: JSON.stringify(body),
+          body,
           signal: a.signal,
-        });
-      } catch (e: any) {
-        if (e?.name === "AbortError") throw e;
-        if (versuch < MAX_WIEDERHOLUNGEN) {
-          a.fortschritt?.({ art: "wiederholung", grund: "Netzwerkfehler", warteMs: 2000 * (versuch + 1) });
-          await warte(2000 * (versuch + 1), a.signal);
-          continue;
-        }
-        throw new AnbieterFehler("Keine Verbindung zu OpenAI. Netz prüfen.", 0, "netz");
-      }
-      if (!antwort.ok) {
-        let code: string | undefined;
-        let meldung: string | undefined;
-        try {
-          const j = await antwort.json();
-          code = j?.error?.code || j?.error?.type;
-          meldung = j?.error?.message;
-        } catch {
-          /* leer */
-        }
-        const wiederholbar = (antwort.status === 429 && code !== "insufficient_quota") || antwort.status >= 500;
-        if (wiederholbar && versuch < MAX_WIEDERHOLUNGEN) {
-          const ra = Number(antwort.headers.get("retry-after"));
-          const ms = Number.isFinite(ra) && ra > 0 ? Math.min(ra * 1000, 60_000) : 4000 * 2 ** versuch;
-          a.fortschritt?.({ art: "wiederholung", grund: fehlerTextOpenAi(antwort.status, code), warteMs: ms });
-          await warte(ms, a.signal);
-          continue;
-        }
-        throw new AnbieterFehler(fehlerTextOpenAi(antwort.status, code, meldung), antwort.status, code);
-      }
-      return this.stromLesen(antwort, a);
-    }
+        }),
+      this.regeln(),
+    );
+    return this.stromLesen(antwort, a);
   }
 
   private async stromLesen(antwort: Response, a: LlmAnfrage): Promise<any> {
-    const leser = new SseLeser();
-    const reader = antwort.body!.pipeThrough(new TextDecoderStream()).getReader();
     let zeichen = 0;
     let ende: any;
-    try {
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        for (const ev of leser.lies(value)) {
-          const d = ev.data;
-          const typ = d?.type || ev.event;
-          if (typ === "response.output_text.delta") {
-            zeichen += String(d.delta || "").length;
-            a.fortschritt?.({ art: "schreibt", zeichen });
-          } else if (typ === "response.output_item.added" && d.item?.type === "reasoning") {
-            a.fortschritt?.({ art: "denkt" });
-          } else if (typ === "response.output_item.done" && d.item?.type === "web_search_call") {
-            const act = d.item.action || {};
-            if (act.type === "search") a.fortschritt?.({ art: "suche", text: String((act.queries && act.queries[0]) || act.query || "Websuche") });
-            else if (act.url) a.fortschritt?.({ art: "abruf", text: String(act.url) });
-          } else if (typ === "response.completed" || typ === "response.incomplete" || typ === "response.failed") {
-            ende = d.response;
-          } else if (typ === "error") {
-            throw new AnbieterFehler(fehlerTextOpenAi(0, d.code, d.message), undefined, d.code || "error");
-          }
-        }
+    await sseLesen(antwort, a.signal, (ev) => {
+      const d = ev.data;
+      const typ = d?.type || ev.event;
+      if (typ === "response.output_text.delta") {
+        zeichen += String(d.delta || "").length;
+        a.fortschritt?.({ art: "schreibt", zeichen });
+      } else if (typ === "response.output_item.added" && d.item?.type === "reasoning") {
+        a.fortschritt?.({ art: "denkt" });
+      } else if (typ === "response.output_item.done" && d.item?.type === "web_search_call") {
+        const act = d.item.action || {};
+        if (act.type === "search") a.fortschritt?.({ art: "suche", text: String((act.queries && act.queries[0]) || act.query || "Websuche") });
+        else if (act.url) a.fortschritt?.({ art: "abruf", text: String(act.url) });
+      } else if (typ === "response.completed" || typ === "response.incomplete" || typ === "response.failed") {
+        ende = d.response;
+      } else if (typ === "error") {
+        throw new AnbieterFehler(fehlerTextOpenAi(0, d.code, d.message), undefined, d.code || "error");
       }
-    } catch (e: any) {
-      if (e?.name === "AbortError" || a.signal?.aborted) throw e;
-      if (e instanceof AnbieterFehler) throw e;
-      throw new StromEnde(String(e?.message || e));
-    }
-    if (!ende) throw new StromEnde("Strom ohne Abschluss beendet");
+    });
+    if (!ende) throw new LeseFehler(new Error("Strom ohne Abschluss beendet"));
     return ende;
   }
 
   async senden(a: LlmAnfrage): Promise<LlmAntwort> {
     const start = Date.now();
     let gesamt = leereNutzung();
-    let r: any;
-    for (let neustart = 0; ; neustart++) {
-      try {
-        r = await this.eineRunde(a);
-        break;
-      } catch (e: any) {
-        const abbruch = e instanceof StromEnde || (!(e instanceof AnbieterFehler) && istVerbindungsabbruch(e) && e?.name !== "AbortError");
-        if (!abbruch) throw e;
-        if (neustart >= MAX_NEUSTARTS) throw new AnbieterFehler(TEXT_VERBINDUNGSABBRUCH, 0, "verbindung");
-        a.fortschritt?.({ art: "wiederholung", grund: "Verbindung unterbrochen; die Anfrage wird neu gestellt.", warteMs: 1500 });
-        await warte(1500, a.signal);
-      }
-    }
+    const r: any = await mitNeustart(a, () => this.eineRunde(a));
     if (r.status === "failed") throw new AnbieterFehler(fehlerTextOpenAi(0, r.error?.code, r.error?.message), undefined, r.error?.code || "failed", r.output);
     const ausgabe: any[] = r.output || [];
     const n = nutzungOpenAi(r.usage, ausgabe);
