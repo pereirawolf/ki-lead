@@ -24,6 +24,11 @@ export interface Werkzeuge {
   websuche?: { maxUses: number; land?: string; zeitzone?: string };
   /** Abruf von URLs, die im Auftrag genannt sind oder aus der Suche stammen */
   abruf?: { maxUses: number; /** Höchstlänge je abgerufener Seite in Token */ maxTokens?: number };
+  /**
+   * Websuche erzwingen (seit 0.6.0, KP-2026-W44-05). Nur Anthropic setzt das um und nur, wenn die App es für das
+   * Modell zulässt (sucheErzwingbar); die übrigen Adapter ignorieren es, die App zählt die Suchen nach.
+   */
+  erzwingen?: "websuche";
 }
 
 export type Fortschritt =

@@ -1,6 +1,6 @@
 # Arbeitsanweisung Verdichtung (Modus B)
 
-Beispielfassung für KI-LEAD · Fassung 2.0.2 vom 23.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.16.0, den Kodierleitfaden LEAD ab Fassung 1.3.0 und die Arbeitsanweisung Erfassung ab Fassung 1.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 2.0.3 vom 26.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.16.0, den Kodierleitfaden LEAD ab Fassung 1.3.0 und die Arbeitsanweisung Erfassung ab Fassung 1.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 ## Auftrag
 
@@ -13,7 +13,7 @@ Das Material enthält Meldungen anderer Stellen (Eingangsmeldungen). Du verdicht
 | Arbeitsprodukte, Material und Arbeitsmodus | gilt; Regelfall ist „nur Material“ (die App schaltet die Websuche für Verdichtungen standardmäßig ab) |
 | 0. Kontext, 1. Technische Grundlage | gelten |
 | 2. SOP-Auswahl und -Anwendung | gilt; die Prüffragen dienen als Prüfliste für das Material, nicht als Rechercheauftrag |
-| 3. Recherche und Belegbarkeit | gilt nur, soweit die Websuche ausdrücklich erlaubt ist; sonst gelten die Regeln dieser Anweisung zum Material |
+| 3. Recherche und Belegbarkeit | gilt nur, soweit im Auftrag „Recherche durchführen“ gewählt ist; sonst gelten die Regeln dieser Anweisung zum Material |
 | 4. Meldungszuschnitt und Quellen, 5. Bewertung und Lagenradar | gelten mit den Regeln unten (Referenzraum, Zeitbezug, Zählen, Quellen) |
 | 6. Qualitätssicherung und Ausgabe | gilt; die Kurzantwort richtet sich nach dem Abschnitt „Kurzantwort der Verdichtung“ |
 

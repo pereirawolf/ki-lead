@@ -20,6 +20,13 @@ export interface Einstellungen {
   /** ISO-Ländercode für die Lokalisierung der Websuche */
   suchland: string;
   /**
+   * Orientierungssuchen je bestätigtem Sachverhalt in S1 bei „Recherche durchführen“ (seit 0.6.0, KP-2026-W44-04/-09;
+   * 0 = keine). Ohne Seitenabruf, mit dem S1-Modell; nicht auf das Websuchen-Kontingent von S2 angerechnet.
+   */
+  orientierungJeSachverhalt: number;
+  /** Einmalige Nachforderung, wenn S2 Pflichtsuchen auslässt oder nicht sucht (seit 0.6.0, KP-2026-W44-08) */
+  nachforderung: boolean;
+  /**
    * Höchstzahl Ausgabetoken für jeden KI-Aufruf (S1, S2, S3, Management Summary). Der Name stammt aus der Zeit,
    * als der Wert nur für S2 und S3 galt; er bleibt, damit gespeicherte Einstellungen gültig bleiben.
    */
@@ -64,6 +71,8 @@ export const STANDARD: Einstellungen = {
   abrufMax: 10,
   abrufMaxTokens: 15000,
   suchland: "DE",
+  orientierungJeSachverhalt: 1,
+  nachforderung: true,
   maxTokensErfassung: 128000,
   mistralEndpunkt: "eu",
   fassung: 5,
@@ -347,6 +356,27 @@ export async function alleSchluesselLesen(): Promise<Schluessel> {
 export function werkzeugeFuer(modell: string, e: Pick<Einstellungen, "mistralEndpunkt">): { websuche: boolean; abruf: boolean } {
   if (anbieterVon(modell) === "mistral") return mistralWerkzeuge(e.mistralEndpunkt ?? "eu");
   return { websuche: true, abruf: true };
+}
+
+/** Höchstzahl der Orientierungssuchen je Sachverhalt */
+export const ORIENTIERUNG_GRENZE = 3;
+
+/** Gültige Zahl der Orientierungssuchen je Sachverhalt (0 bis ORIENTIERUNG_GRENZE) */
+export function orientierungJeSachverhalt(e: Partial<Pick<Einstellungen, "orientierungJeSachverhalt">>): number {
+  const n = Math.round(Number(e.orientierungJeSachverhalt ?? STANDARD.orientierungJeSachverhalt));
+  return Number.isFinite(n) ? Math.min(ORIENTIERUNG_GRENZE, Math.max(0, n)) : STANDARD.orientierungJeSachverhalt;
+}
+
+/**
+ * Modelle, die eine Websuche nicht erzwingen lassen (seit 0.6.0, KP-2026-W44-05). Anthropic: Opus 5.5, Sonnet 5.5,
+ * Fable 5.1 und Mythos 5.1 lehnen erzwungene Werkzeugnutzung mit Fehler 400 ab (Anthropic, „Building with extended
+ * thinking“, abgerufen 26.10.2026). OpenAI und Mistral: nicht belegt erprobt, daher nicht erzwungen.
+ */
+const OHNE_ERZWUNGENE_SUCHE = /^claude-(opus-5-5|sonnet-5-5|fable-5-1|mythos-5-1)/;
+
+/** Ob die App die Websuche bei diesem Modell erzwingen kann; sonst entscheidet das Modell, und die App zählt nach */
+export function sucheErzwingbar(modell: string): boolean {
+  return anbieterVon(modell) === "anthropic" && !OHNE_ERZWUNGENE_SUCHE.test(modell);
 }
 
 /** Modelle, die ein Lauf der KI-Erfassung voraussichtlich nutzt. */

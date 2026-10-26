@@ -25,6 +25,8 @@ import {
   mixProfilAktiv,
   mixProfilAnwenden,
   STANDARD,
+  ORIENTIERUNG_GRENZE,
+  orientierungJeSachverhalt,
   STANDARD_PROFILE,
   standardProfilAktiv,
   standardProfilAnwenden,
@@ -33,7 +35,7 @@ import {
   type ModellProfil,
   type Rolle,
 } from "../pipeline/einstellungen";
-import { hoechstkostenText, RECHERCHE_STUFEN, stufenWerteText, stufeVon, wirkungText, type StufeId } from "../pipeline/recherchetiefe";
+import { hoechstkostenText, pflichtRegel, RECHERCHE_STUFEN, stufenWerteText, stufeVon, wirkungText, type StufeId } from "../pipeline/recherchetiefe";
 import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
 import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 import { UeberAbschnitt } from "./Ueber";
@@ -236,7 +238,11 @@ function UebersichtBereich({
         <dd>{ablage ? ablageVon(ablage).titel : "–"}</dd>
         <dt>Recherche je Lauf</dt>
         <dd>
-          bis zu {e.websucheMax} Websuchen und {e.abrufMax} Seitenabrufe{e.suchland ? `, Suchland ${e.suchland}` : ", ohne Suchland"}
+          bis zu {e.websucheMax} Websuchen und {e.abrufMax} Seitenabrufe{e.suchland ? `, Suchland ${e.suchland}` : ", ohne Suchland"}; dazu{" "}
+          {orientierungJeSachverhalt(e)
+            ? `${orientierungJeSachverhalt(e)} Orientierungssuche(n) je Sachverhalt in S1 (nicht angerechnet)`
+            : "keine Orientierungssuche"}
+          {e.nachforderung === false ? ", ohne Nachforderung" : ", mit einmaliger Nachforderung"}
         </dd>
         <dt>Ausgabetoken</dt>
         <dd>höchstens {e.maxTokensErfassung.toLocaleString("de-DE")} je KI-Aufruf</dd>
@@ -714,7 +720,7 @@ function RechercheTiefe({ profil, e, setze }: { profil: Profil | null; e: E; set
               <strong>{st.titel}</strong>
               <br />
               <span className="ablage-text">
-                {st.text} ({stufenWerteText(st.werte)})
+                {st.text} ({stufenWerteText(st.werte)}; Pflichtsuchen {st.pflicht.jeSachverhalt} je Sachverhalt, höchstens {st.pflicht.max})
               </span>
             </span>
           </label>
@@ -759,6 +765,39 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
         wirksamen Werte fest.
       </p>
       <RechercheTiefe profil={profil} e={e} setze={setze} />
+      <h3>Verbindliche Recherche</h3>
+      <p className="hinweis">
+        Gilt, wenn in der KI-Erfassung „Recherche durchführen“ eingeschaltet ist. Pflichtsuchen nach der Recherchetiefe: derzeit {pflichtRegel(e).jeSachverhalt}{" "}
+        je Sachverhalt, höchstens {pflichtRegel(e).max} (Stufe „{pflichtRegel(e).titel}“); sie zählen zu den Websuchen von S2.
+      </p>
+      <div className="gruppe-spalten-zwei">
+        <label className="feld">
+          <span className="feld-label">Orientierungssuchen je Sachverhalt (S1)</span>
+          <input
+            type="number"
+            min={0}
+            max={ORIENTIERUNG_GRENZE}
+            step={1}
+            value={orientierungJeSachverhalt(e)}
+            onChange={(ev) => setze({ orientierungJeSachverhalt: orientierungJeSachverhalt({ orientierungJeSachverhalt: Number(ev.target.value) }) })}
+          />
+          <span className="hinweis">
+            Nach der Bestätigung des Gegenstands sucht S1 je Sachverhalt so oft kurz im Web, ohne Seiten zu öffnen, und schlägt Suchbegriffe für S2 vor. Diese
+            Suchen werden getrennt ausgewiesen und nicht auf die Websuchen von S2 angerechnet. 0: keine Orientierungssuche; Suchbegriffe lassen sich dann selbst
+            eintragen.
+          </span>
+        </label>
+        <label className="feld schalter">
+          <input type="checkbox" checked={e.nachforderung !== false} onChange={(ev) => setze({ nachforderung: ev.target.checked })} />
+          <span>
+            Nachforderung, wenn S2 nicht recherchiert
+            <span className="hinweis">
+              {" "}
+              Lässt S2 bestätigte Pflichtsuchen aus oder sucht gar nicht, fordert die App einmal nach. Das Ergebnis nennt, was danach noch fehlt.
+            </span>
+          </span>
+        </label>
+      </div>
       <div className="gruppe-spalten-zwei">
         <label className="feld">
           <span className="feld-label">Land für die Websuche</span>

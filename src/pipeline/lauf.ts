@@ -7,7 +7,7 @@ import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from 
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.5.22";
+export const APP_KENNUNG = "KI-LEAD 0.6.0";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -15,7 +15,10 @@ export interface Auftrag {
   urls: string[];
   stichtag: string;
   prueffrage: string;
-  /** Websuche und Seitenabruf erlauben (Standard: ja; bei Verdichtung: nein) */
+  /**
+   * „Recherche durchführen“ (Standard: ja; bei Verdichtung: nein). Seit 0.6.0 ist die Recherche dann verbindlich
+   * (KP-2026-W44-01); der Feldname bleibt, damit gespeicherte Läufe lesbar bleiben.
+   */
   websuche?: boolean;
   /** Vorgegebener Meldezeitpunkt t0 (JJJJ-MM-TTThh:mm), sonst schlägt S1 ihn vor */
   meldezeitpunkt?: string;
@@ -28,6 +31,40 @@ export interface S1Sachverhalt {
   begruendung: string;
   /** Bei Verdichtung: zugeordnete Eingangsmeldungen (Dateinamen) */
   eingangsmeldungen?: string[];
+  /**
+   * Orientierungssuche in S1 (seit 0.6.0, KP-2026-W44-03/-04): tatsächlich ausgeführte Websuchen mit ihren Treffern,
+   * ohne Seitenabruf. Leer, wenn die Orientierung lief, aber keine Suche zustande kam; fehlt, wenn sie nicht lief.
+   */
+  orientierung?: Orientierungssuche[];
+  /** Suchbegriffe für S2, von S1 vorgeschlagen oder von der Person eingetragen; bestätigte Begriffe sind Pflichtsuchen */
+  suchbegriffe?: Suchbegriff[];
+}
+
+export interface Orientierungssuche {
+  suchbegriff: string;
+  /** Zeitpunkt der Suche (ISO) */
+  zeit: string;
+  treffer: { titel: string; url: string; datum?: string }[];
+}
+
+export interface Suchbegriff {
+  begriff: string;
+  /** Wozu die Suche dient, z. B. Prüffrage „B02/R2“ */
+  zweck: string;
+  /** Zuständige Primärquelle, soweit bekannt */
+  zielquelle?: string;
+  herkunft: "vorschlag" | "person";
+}
+
+/** Ausführung einer Pflichtsuche in S2 (Abgleich der App) */
+export interface Pflichtsuche {
+  /** Nummer des Sachverhalts (ab 1) */
+  sachverhalt: number;
+  begriff: string;
+  /** Tatsächlich ausgeführte Suche, die dem Begriff entspricht, sonst null */
+  ausgefuehrt: string | null;
+  /** Erst nach der Nachforderung der App ausgeführt */
+  nachgefordert: boolean;
 }
 
 export interface S1Vorschlag {
@@ -86,6 +123,13 @@ export interface Lauf {
     suchen: string[];
     abrufFehler?: AbrufFehler[];
     schemakonform: boolean;
+    /** Pflichtsuchen und ihre Ausführung (seit 0.6.0) */
+    pflichtsuchen?: Pflichtsuche[];
+    /**
+     * Recherche des Laufs, getrennt ausgewiesen (seit 0.6.0, KP-2026-W44-09): Orientierungssuchen in S1 zählen nicht
+     * gegen das Kontingent von S2.
+     */
+    recherche?: { orientierung: number; websuchen: number; abrufe: number; zaehlerVollstaendig: boolean; nachgefordert: boolean };
   };
   /** Geschätzte Gesamtkosten; null, wenn nicht alle Stufen erfasst sind */
   kostenUsd: number | null;

@@ -62,7 +62,9 @@ describe("KP-2026-W43-69: Recherchetiefe", () => {
       "eigen",
     ]);
     expect(gewaehlt()).toBe("standard");
-    expect(stufe("standard").closest("label")!.textContent).toBe("StandardFür die meisten Aufträge. (15 Websuchen, 10 Seiten, 15.000 Token je Seite)");
+    expect(stufe("standard").closest("label")!.textContent).toBe(
+      "StandardFür die meisten Aufträge. (15 Websuchen, 10 Seiten, 15.000 Token je Seite; Pflichtsuchen 2 je Sachverhalt, höchstens 5)",
+    );
     expect(feld(WEBSUCHEN)).toBeNull();
 
     await klick(stufe("gruendlich"));

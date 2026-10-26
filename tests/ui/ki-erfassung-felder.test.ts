@@ -106,8 +106,8 @@ describe("KI-Erfassung: Auftrag und Material", () => {
   it("KP-2026-W43-63: Webseiten mit Hilfetext; ohne Websuche zusätzlicher, verknüpfter Hinweis", async () => {
     await erfassungZeigen();
     const HILFE =
-      "Die KI ruft die Seiten nur ab, wenn „Websuche und Seitenabruf erlauben“ eingeschaltet ist. Gesperrte Seiten im Browser als PDF speichern und unter „Dateien“ hinzufügen.";
-    const ZUSATZ = "Websuche und Seitenabruf sind ausgeschaltet: Die eingetragenen Seiten werden nicht abgerufen, die KI sieht nur die Adressen.";
+      "Die KI ruft die Seiten nur ab, wenn „Recherche durchführen“ eingeschaltet ist. Gesperrte Seiten im Browser als PDF speichern und unter „Dateien“ hinzufügen.";
+    const ZUSATZ = "„Recherche durchführen“ ist ausgeschaltet: Die eingetragenen Seiten werden nicht abgerufen, die KI sieht nur die Adressen.";
     const f = () => feld<HTMLTextAreaElement>("Webseiten (eine Adresse je Zeile)");
     expect(beschreibung(f())).toBe(HILFE);
     const schalter = () => document.querySelector(".schalter input") as HTMLInputElement;

@@ -46,7 +46,7 @@ async function fortschreibung(antworten: Parameters<typeof skriptAnbieter>[0], a
     jetzt: UHR_S1,
     auftrag: { sachverhalt: "Eigene Meldung fortschreiben", stichworte: "", urls: [], stichtag: "2026-10-22", websuche: true, ...auftrag },
   });
-  k.einstellungen = { ...STANDARD, websucheMax: 30, abrufMax: 10 };
+  k.einstellungen = { ...STANDARD, websucheMax: 30, abrufMax: 10, nachforderung: false };
   return { att, k };
 }
 
@@ -67,7 +67,7 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(v.appHinweise![0]).toContain("Stand 21.10.2026, 19:40 Uhr");
     expect(v.appHinweise![0]).toContain("Der Vorschlag aus S1 (21.10.2026, 19:45 Uhr) wurde nicht übernommen");
     const s1Text = JSON.stringify(att.anfragen[0].nachrichten);
-    expect(s1Text).toContain("Recherche in S2: erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal)");
+    expect(s1Text).toContain("Recherche in S2: durchführen (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal)");
 
     zuS2(k);
     const r = await stufe2und3(k, v);
@@ -79,7 +79,7 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(steuerung).toContain("Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-22 06:07");
     expect(steuerung).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-22 06:06");
     expect(steuerung).toContain("Eigene Vormeldung (Stand 2026-10-21 19:40)");
-    expect(steuerung).toContain("Recherche: erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
+    expect(steuerung).toContain("Recherche: durchführen (verbindlich; Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
     expect(steuerung).toContain("gehen Angaben in Gegenstand, Vormeldung und Material zu Arbeitsmodus und Zeit vor");
     // Der Gegenstand aus S1 bleibt fachlicher Zuschnitt; die Steuerung überstimmt ihn, ohne ihn umzuschreiben
     expect(s2.system[2].text).toContain("nicht eine neue Recherche");
@@ -93,8 +93,9 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     const befund = k.lauf.ergebnis!.befunde.find((b) => b.code === "FORTSCHREIBUNG_OHNE_AKTUALISIERUNG");
     expect(befund?.stufe).toBe("warnung");
     expect(befund?.text).toContain("aktuelle Quellenprüfung ist in diesem Lauf nicht dokumentiert");
-    // Kein automatischer Folgeaufruf
+    // Ohne Nachforderung (in diesen Tests ausgeschaltet) kein Folgeaufruf; die fehlende Recherche wird gemeldet
     expect(att.anfragen).toHaveLength(2);
+    expect(k.lauf.ergebnis!.befunde.find((b) => b.code === "RECHERCHE_NICHT_DURCHGEFUEHRT")?.stufe).toBe("warnung");
   });
 
   it("ein ausdrücklich vorgegebenes historisches t0 bleibt, die Bearbeitungszeit ist trotzdem die echte Uhr", async () => {
@@ -219,10 +220,13 @@ describe("Recherchemodus aus dem Auftrag und Befunde zur Aktualisierung", () => 
   });
 
   it("dokumentierte Suchen zählen auch, wenn der Zähler des Anbieters fehlt oder 0 ist", () => {
-    expect(rechercheBefunde("erlaubt", true, { nutzung: { websuchen: 0, abrufe: 0 }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
-    expect(rechercheBefunde("erlaubt", true, { nutzung: { websuchen: undefined, abrufe: undefined }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
-    expect(rechercheBefunde("erlaubt", true, { suchen: [], abrufe: ["https://beispiel.invalid/a"] })).toEqual([]);
-    expect(rechercheBefunde("erlaubt", false, { nutzung: { websuchen: 0, abrufe: 0 } })).toEqual([]);
+    expect(rechercheBefunde("durchfuehren", true, { nutzung: { websuchen: 0, abrufe: 0 }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
+    expect(rechercheBefunde("durchfuehren", true, { nutzung: { websuchen: undefined, abrufe: undefined }, suchen: ["Bürgerportal Störung"] })).toEqual([]);
+    expect(rechercheBefunde("durchfuehren", true, { suchen: [], abrufe: ["https://beispiel.invalid/a"] })).toEqual([]);
+    // Seit 0.6.0 (KP-2026-W44-02) auch ohne Vormeldung: verbindliche Recherche ohne Suche ist eine Warnung
+    expect(rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: 0, abrufe: 0 } }).map((b) => [b.code, b.stufe])).toEqual([
+      ["RECHERCHE_NICHT_DURCHGEFUEHRT", "warnung"],
+    ]);
     expect(rechercheBefunde("nur-material", true, { nutzung: { websuchen: 0, abrufe: 0 } })).toEqual([]);
   });
 });
@@ -233,7 +237,7 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
     k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
     const v = await stufe1(k);
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain(
-      "Recherche in S2: erlaubt, aber keine Werkzeuge verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
+      "Recherche in S2: „Recherche durchführen“ gewählt, aber keine Werkzeuge verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
     );
     zuS2(k);
     await stufe2und3(k, v);
@@ -242,12 +246,12 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
     expect(s2.werkzeuge).toBeUndefined();
     const steuerung = s2.system[s2.system.length - 1].text;
     expect(steuerung).toContain(
-      "- Recherche: im Auftrag erlaubt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche). Du hast keine Websuche und keinen Seitenabruf.",
+      "- Recherche: im Auftrag „Recherche durchführen“ gewählt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche). Du hast keine Websuche und keinen Seitenabruf.",
     );
     expect(steuerung).not.toContain("Seitenabruf: Abrufbar");
     const befund = k.lauf.ergebnis!.befunde.find((b) => b.code === "RECHERCHE_NICHT_VERFUEGBAR");
     expect(befund?.text).toBe(
-      "Recherche war im Auftrag erlaubt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche); der Lauf arbeitete nur mit dem Material.",
+      "„Recherche durchführen“ war im Auftrag gewählt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche); der Lauf arbeitete nur mit dem Material.",
     );
   });
 
@@ -260,7 +264,7 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
     const s2 = att.anfragen[1];
     expect(s2.werkzeuge?.websuche?.maxUses).toBe(30);
     expect(s2.werkzeuge?.abruf).toBeUndefined();
-    expect(s2.system[s2.system.length - 1].text).toContain("- Recherche: erlaubt (Websuche bis zu 30-mal).");
+    expect(s2.system[s2.system.length - 1].text).toContain("- Recherche: durchführen (verbindlich; Websuche bis zu 30-mal).");
   });
 });
 

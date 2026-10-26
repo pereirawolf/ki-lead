@@ -70,6 +70,39 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.20 | letzter Commit des Pull Requests „Profilansicht übersichtlicher; 0.5.20“ |
 | 0.5.21 | letzter Commit des Pull Requests „Kopfleiste: KI-Chip „KI offline/online“ statt Profil-Chip; 0.5.21“ |
 | 0.5.22 | letzter Commit des Pull Requests „KI-Erfassung: Modelle und Recherche für diesen Lauf; 0.5.22“ |
+| 0.6.0 | letzter Commit des Pull Requests „Verbindliche Recherche: Recherche durchführen, Orientierungssuche, Pflichtsuchen; 0.6.0“ |
+
+## [0.6.0] – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44.json`, Befunde KP-2026-W44-01 bis -14, vom Herausgeber am 26.10.2026 freigegeben; KP-2026-W44-05 und -09 mit Maßgabe angepasst, KP-2026-W44-12 abgelehnt. Anlass: Lauf 20261026-201050-q25q, in dem bei gewählter Recherche (Höchstzahl 30) S2 keine einzige Websuche ausführte und die Kurzantwort Primärquellen als „nicht zugänglich“ bezeichnete. Entschieden: Ist die Recherche gewählt, ist eine ergänzende und flankierende Websuche verbindlich; der Modus heißt „Recherche durchführen“. Orientierungssuche, Pflichtsuchen und Nachforderung sind Bestandteile von S1 und S2, keine eigenen Stufen; kein erzwungener Modellwechsel; Orientierungssuchen werden nicht auf das Kontingent von S2 angerechnet, aber getrennt ausgewiesen und dokumentiert; keine Freigabesperre, die Person im Freigabeprozess erkennt die Warnung. Zweite Stelle, weil sich der Ablauf der KI-Erfassung ändert.
+
+### Hinzugefügt
+
+- **Orientierungssuche als Bestandteil von S1** (KP-2026-W44-04, -05): Nach der Bestätigung des Gegenstands sucht S1 je Sachverhalt parallel und ohne Seitenabruf im Web (`orientierungssuche` in `src/pipeline/stufen.ts`, Anweisung `orientierungSystem` mit Auszug der Prüffragen der gewählten SOPs, `prueffragenAuszug` in `src/pipeline/kontext.ts`) und schlägt Suchbegriffe mit Zweck und Zielquelle vor. Wo das S1-Modell es zulässt, wird die Suche erzwungen (`Werkzeuge.erzwingen`, Anthropic `tool_choice`; `sucheErzwingbar`: nicht bei Opus 5.5, Sonnet 5.5, Fable 5.1 und Mythos 5.1, nicht bei OpenAI und Mistral); lehnt der Anbieter das ab, folgt ein Versuch ohne Zwang, bleibt eine Suche aus, eine Wiederholung und danach ein Hinweis. Kein Wechsel auf ein anderes Modell.
+- **Suchbegriffe im Bestätigungsschritt** (KP-2026-W44-06): „Gegenstand bestätigen und Orientierung suchen (S1)“, danach je Sachverhalt Treffer (Rechercheeinstiege, nicht geprüft) und bearbeitbare Suchbegriffe mit Zweck und Zielquelle; „Orientierung erneut suchen“, Orientierung für einzelne neue Sachverhalte, Begriffe auch ohne Orientierung selbst eintragbar. Die Schrittleiste heißt dann „Gegenstand und Suchbegriffe bestätigen“.
+- **Pflichtsuchen, Abgleich und Nachforderung als Bestandteil von S2** (KP-2026-W44-07, -08): Die bestätigten Begriffe gehen als Pflichtsuchen in den Steuerungsblock, mit Restkontingent und Verhalten nach der Recherchetiefe; die Treffer der Orientierung als gekennzeichneter Block „Rechercheeinstiege“. Die App gleicht die ausgeführten Suchen ab (`sucheEntspricht`, `pflichtAbgleich`) und fordert einmal nach, wenn Pflichtsuchen fehlen oder S2 gar nicht sucht („S2 Recherche und Entwurf – Nachforderung“); Ergebnisse, Verbrauch und Kosten werden zusammengeführt (`antwortenZusammenfuehren`).
+- **Laufmodell** (KP-2026-W44-03): je Sachverhalt `orientierung` und `suchbegriffe`, im Ergebnis `pflichtsuchen` und `recherche`; ältere Läufe bleiben lesbar.
+- **Einstellungen** (KP-2026-W44-09): „Orientierungssuchen je Sachverhalt (S1)“ (0–3, Vorgabe 1) und „Nachforderung, wenn S2 nicht recherchiert“ (Vorgabe an) unter „Recherche & Grenzen → Verbindliche Recherche“; je Recherchetiefe Pflichtsuchen und Verhaltenstext (`pflichtRegel` in `src/pipeline/recherchetiefe.ts`: Sparsam 1 je Sachverhalt, höchstens 3; Standard 2/5; Gründlich 3/8; eigene Werte wie Standard, höchstens die Hälfte der Websuchen). Die Werte sind vorläufig und über Testläufe zu prüfen.
+- **Befunde** (KP-2026-W44-02): `RECHERCHE_NICHT_DURCHGEFUEHRT`, `PFLICHTSUCHE_AUSGELASSEN` (Warnungen), `RECHERCHE_NACHGEFORDERT`, `KURZANTWORT_RECHERCHE_WIDERSPRUCH`, `ORIENTIERUNG_OHNE_SUCHE`, `RECHERCHE_NICHT_NACHWEISBAR` (Hinweise), jetzt für jeden Lauf mit „Recherche durchführen“, nicht nur bei Fortschreibung.
+
+### Geändert
+
+- **Modus „Recherche durchführen“** statt „Recherche erlaubt“ (KP-2026-W44-01): Schalter, Hilfetexte, Recherchezeilen, Steuerungsblock, S1-Auftrag und Befundtexte. `RechercheModus` heißt `"durchfuehren"`; das Auftragsfeld `websuche` bleibt, gespeicherte Läufe brauchen keine Umstellung.
+- **Steuerungsblock** (KP-2026-W44-07): Recherche verbindlich, ohne Pflichtbegriffe mit Mindestumfang je Sachverhalt; Unterscheidung „nicht gesucht“, „gesucht, nichts gefunden“, „nicht abrufbar“.
+- **Getrennte Ausweisung** (KP-2026-W44-09): Kopfzeile der Modellwahl („Orientierung 1 Suche je Sachverhalt“), Recherchezeile vor dem Lauf mit Pflichtsuchen, Orientierung und Suchgebühr, Recherchezeile im Ergebnis („Pflichtsuchen: 1 von 1 ausgeführt. … Dazu in S1 1 Orientierungssuche (nicht auf das Kontingent von S2 angerechnet).“, bei null Suchen hervorgehoben), Übersicht der Einstellungen.
+- **Beispielprofil 1.29.0** (KP-2026-W44-10): Arbeitsanweisung Erfassung 1.5.0, Verdichtung 2.0.3, Sammelmappe 3.17.3 (nur Gültigkeitsstand). **Vorlage 0.5.1** (KP-2026-W44-11): Arbeitsanweisung Erfassung 0.5.1.
+- Spezifikation 0.6.0 (Abschnitte 5.1, 5.4; „Kein automatischer Folgeaufruf“ ersetzt durch die Regel zur einmaligen Nachforderung), `docs/TESTS.md`; Versionsangaben in `package.json`, `CITATION.cff` und den nativen Projekten.
+
+### Nicht umgesetzt
+
+- KP-2026-W44-12 (Freigabesperre ohne Pflichtrecherche): vom Herausgeber abgelehnt; die Warnungen bleiben im Ergebnis sichtbar.
+
+### Tests
+
+- `tests/pipeline/recherche-pflicht.test.ts` (neu, 16 Tests): Orientierung je Sachverhalt mit erzwungener Suche, Wiederholung, Rückfall bei Fehler 400, kein Modellwechsel, eigene Begriffe bleiben, Wegfall bei „nur Material“ und 0; `sucheErzwingbar` und `tool_choice`; Pflichtregel je Stufe, Pflichtvorgaben, Abgleich; Steuerungsblock mit Pflichtsuchen und Restkontingent; Nachforderung mit Zusammenführung, ohne Erfolg, ohne Pflichtbegriffe, abschaltbar; „nur Material“; Befunde zu Kurzantwort und Orientierung.
+- `tests/ui/orientierung.test.ts` (neu, 2 Tests): Ablauf mit Orientierung, geänderten Begriffen und getrennter Ausweisung; Ablauf ohne Orientierung mit selbst eingetragenem Begriff.
+- `tests/browser/kisymbol.spec.ts`: „Nach S1 … bis S2 startet“ folgt dem neuen Ablauf mit Orientierungssuche und prüft `tool_choice` im echten Anfragekörper.
+- Angepasst: Texte des neuen Modus in `tests/pipeline/fortschreibung.test.ts`, `kontext.test.ts`, `tests/ui/fortschreibung.test.ts`, `modellwahl.test.ts`, `ki-erfassung-felder.test.ts`, `recherchetiefe.test.ts`, `tests/profil/profilansicht.test.ts`; `rechercheBefunde` ohne Vormeldung meldet jetzt `RECHERCHE_NICHT_DURCHGEFUEHRT`. Die Nachforderung ist im gemeinsamen Pipelinekontext der Tests ausgeschaltet (`tests/support/pipeline.ts`) und wird in den Tests der verbindlichen Recherche ausdrücklich eingeschaltet.
 
 ## [0.5.22] – 25.10.2026
 

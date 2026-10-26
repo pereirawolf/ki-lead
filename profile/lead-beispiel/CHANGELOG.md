@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.29.0 – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44.json` (Anlass: Lauf 20261026-201050-q25q, Recherche gewählt, null Websuchen in S2), Befunde KP-2026-W44-01 und -10, vom Herausgeber am 26.10.2026 freigegeben. Zweite Stelle, weil sich eine Arbeitsregel ändert: Bei „Recherche durchführen“ ist die Recherche verbindlich.
+
+- **Arbeitsanweisung Erfassung 1.5.0:** Arbeitsmodus „Recherche durchführen“ statt „Recherche erlaubt“. Abschnitt 3: zuerst die bestätigten Pflichtsuchen, Ergebnis einordnen (auch „gesucht, nichts gefunden“), danach Recherche im Rahmen der Recherchetiefe mit Mindestumfang je Sachverhalt (zuständige Primärquelle zum Kernbefund); Rechercheeinstiege aus der Orientierungssuche sind kein Beleg ohne eigene Prüfung; Aktualitätsprüfung der dynamischen Kernangaben verbindlich. Kurzantwort mit Zahl der Suchen, geprüften Primärquellen und der Unterscheidung „nicht gesucht“, „gesucht, nichts gefunden“, „nicht abrufbar“.
+- **Arbeitsanweisung Verdichtung 2.0.3:** nur der Modusname im Geltungsbereich von Abschnitt 3 („Recherche durchführen“).
+- **SOP-Sammelmappe 3.17.3:** nur Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Kodierleitfaden, Darstellungsdatei und Arbeitsanweisung Kurzfassung geprüft, kein Anpassungsbedarf; Achsenregeln und Quellenkategorien unverändert.
+- Schema, Darstellungsdatei, Kodierleitfaden, Arbeitsanweisung Kurzfassung, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.28.0 – 25.10.2026
 
 Grundlage: Nachreihe der Management Summary mit Arbeitsanweisung 2.2.0 (Befunddatei `ki-lead-befund_nachreihen_2026-W43.json`, Befund AV-2026-W43-40), vom Herausgeber am 25.10.2026 freigegeben.

@@ -53,7 +53,9 @@ describe("Fortschreibung in der KI-Erfassung", () => {
     await einhaengen(
       React.createElement(KiErfassung, {
         profil: p,
-        einstellungen: { ...STANDARD, websucheMax: 30, abrufMax: 10 },
+        // Orientierungssuche und Nachforderung (seit 0.6.0) aus: Der Test gilt der Fortschreibung; den Ablauf mit
+        // Orientierung prüft tests/ui/orientierung.test.ts
+        einstellungen: { ...STANDARD, websucheMax: 30, abrufMax: 10, orientierungJeSachverhalt: 0, nachforderung: false },
         schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
@@ -61,14 +63,14 @@ describe("Fortschreibung in der KI-Erfassung", () => {
       }),
     );
     await bisWahr(() => expect(seitentext()).toContain("Vormeldung_FIKTIV.json"));
-    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
+    expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
     await klick(document.querySelector(".bestaetigung input") as HTMLInputElement);
     await klick(knopf("Gegenstand bestimmen (S1)"));
 
     await bisWahr(() => knopf("Bestätigen und recherchieren (S2)") !== undefined);
     expect(seitentext()).toContain("Stand der Vormeldung: 21.10.2026, 19:40 Uhr (Ausgangspunkt, nicht t0).");
     expect(seitentext()).toContain("Absender: Bund · Koordinierungsstelle (Beispiel) – Redaktionskonferenz (aus der eigenen Vormeldung).");
-    expect(seitentext()).toContain("S2: Recherche erlaubt (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
+    expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
     // Unvollständiges t0 sperrt S2 mit sichtbarer Begründung, statt in einen Fehlerlauf zu führen
     const uhr = [...document.querySelectorAll<HTMLInputElement>('input[aria-label="Uhrzeit t0"]')].at(-1)!;
     const vorher = uhr.value;

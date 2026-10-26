@@ -19,6 +19,7 @@ import {
   aufwandAuswahl,
   mitModellwahl,
   modellFuer,
+  orientierungJeSachverhalt,
   wahlAbweichend,
   werkzeugeFuer,
   type Einstellungen,
@@ -64,7 +65,7 @@ interface Props {
   deaktiviert?: boolean;
   /** Ob der Lauf recherchiert; mit Angabe zeigt der Block die Recherchetiefe bzw. „ohne Recherche“ */
   websuche?: boolean;
-  /** Element vor der aufklappbaren Wahl, im selben Rahmen (Schalter „Websuche und Seitenabruf erlauben“) */
+  /** Element vor der aufklappbaren Wahl, im selben Rahmen (Schalter „Recherche durchführen“) */
   kopf?: ReactNode;
   /** Elemente nach der aufklappbaren Wahl, im selben Rahmen (Recherchezeile, Schätzung) */
   children?: ReactNode;
@@ -182,6 +183,10 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
       const stufe = stufeVon(laufWerte);
       const titel = name ?? (stufe === "eigen" ? "eigene Werte" : RECHERCHE_STUFEN.find((x) => x.id === stufe)!.titel);
       teile.push(`Recherche ${titel}${werkzeuge.websuche ? ` (bis ${laufE.websucheMax} Websuchen)` : ""}`);
+      // Orientierungssuchen in S1 getrennt ausgewiesen, nicht auf das Kontingent von S2 angerechnet (KP-2026-W44-09)
+      const orientierung = orientierungJeSachverhalt(laufE);
+      if (orientierung && werkzeugeFuer(modellFuer("vorverarbeitung", laufE, profil), laufE).websuche)
+        teile.push(`Orientierung ${orientierung} Suche${orientierung === 1 ? "" : "n"} je Sachverhalt`);
     }
     const geschaetzt = stufen.filter((s) => s.art && !s.nebenbei).map((s) => schaetzeStufe(s.art!, modellVon(s.rolle), aufwandVon(s.rolle), endpunkt));
     if (geschaetzt.length) {

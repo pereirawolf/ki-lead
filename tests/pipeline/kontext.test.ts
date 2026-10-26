@@ -85,7 +85,7 @@ describe("Steuerung durch die App und Zeitfelder von S1 (0.4.28)", () => {
     vormeldung: true,
     vormeldungStand: "2026-10-21T19:40",
     verdichtung: false,
-    recherche: "erlaubt",
+    recherche: "durchfuehren",
     websucheMax: 30,
     abrufMax: 0,
     ...x,
@@ -101,7 +101,7 @@ describe("Steuerung durch die App und Zeitfelder von S1 (0.4.28)", () => {
 
   it("setzt den Recherchemodus positiv und nur mit den wirksamen Werkzeugen", () => {
     const t = steuerungsBlock(basis());
-    expect(t).toContain("- Recherche: erlaubt (Websuche bis zu 30-mal).");
+    expect(t).toContain("- Recherche: durchführen (verbindlich; Websuche bis zu 30-mal).");
     expect(t).not.toContain("Seitenabruf bis zu");
     expect(t).toContain("Neubewertungsindikatoren und offenen Prüfpunkte der Vormeldung");
     const ohne = steuerungsBlock(basis({ vormeldung: false, vormeldungStand: "" }));
@@ -109,7 +109,9 @@ describe("Steuerung durch die App und Zeitfelder von S1 (0.4.28)", () => {
     expect(ohne).not.toContain("Neubewertungsindikatoren");
     expect(steuerungsBlock(basis({ recherche: "nur-material" }))).toContain("Websuche und Seitenabruf sind für diesen Auftrag abgeschaltet");
     expect(steuerungsBlock(basis({ recherche: "nur-material" }))).toContain("„nicht überprüfbar“");
-    expect(steuerungsBlock(basis({ recherche: "keine-werkzeuge" }))).toContain("in den Einstellungen aber nicht verfügbar (Höchstzahlen 0)");
+    expect(steuerungsBlock(basis({ recherche: "keine-werkzeuge" }))).toContain(
+      "- Recherche: im Auftrag „Recherche durchführen“ gewählt, in den Einstellungen aber nicht verfügbar (Höchstzahlen 0).",
+    );
   });
 
   it("S1-Schema: t0 bei Fortschreibung auf heute ist die aktuelle Zeit; Arbeitsmodus gehört nicht in den Gegenstand", async () => {
