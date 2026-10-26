@@ -54,8 +54,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Test unter tests/profil/: Jede Formulierung in Abschnitt 3 einer SOP, die mit „D2:“ beginnt und „keine Direktbetroffenheit“ enthält, hat eine Entsprechung im Kodierleitfaden D2 oder ist als lageartspezifische Abweichung gekennzeichnet.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angenommen",
+        "anmerkung": "Entscheidung des Herausgebers vom 26.10.2026: Die Regel gilt allgemein für die Direktbetroffenheit (D2), nicht nur für Cyberlagen. Umsetzung in Kodierleitfaden D2 und Teil A A.3; B15 verweist auf den Kodierleitfaden, keine lageartspezifische Abweichung."
       }
     },
     {
@@ -79,21 +79,22 @@
       "belege": [],
       "aenderungsvorschlag": {
         "typ": "ergaenzen",
-        "beschreibung": "Nach Entscheidung eine Zuordnungsregel und ein Kurzbeispiel in Kodierleitfaden D4 aufnehmen; A.2 D4 nur ergänzen, falls die Regel über eine Auslegung hinausgeht. Vorschlagstext unten setzt Variante a der Entscheidungsfrage voraus.",
-        "neuer_text": "D4, nach „…nicht Menge, Wert oder Organisationsform.“ einfügen: „Bei einer einzelnen zentralen Fachstelle oder Spezialeinheit gilt der Zuständigkeitsraum der entsendenden Stelle als Herkunftsraum (Landesfachstelle = landesweit, Bundesstelle = bundesweit); der Bewertungstext nennt Stelle und Leistung. Leistungen eines vom Betroffenen regulär beauftragten Dienstleisters sind keine externe Unterstützung im Sinne von D4, es sei denn, sie werden ereignisbezogen von einer anderen Stelle vermittelt oder bereitgestellt.“ – Kurzbeispiel Abschnitt 7: „Landesfachstelle berät eine Stadtverwaltung nach Cyberangriff vor Ort | D4 = 4 | Zuständigkeitsraum der entsendenden Stelle; Text nennt die beratende Leistung“."
+        "beschreibung": "Standortregel für den Herkunftsraum in Kodierleitfaden D4 aufnehmen, mit Kurzbeispielen in Abschnitt 7; da die Regel über eine Auslegung hinausgeht, A.2 D4 in Kurzform mitfortschreiben (A.10.2). Ersetzt den ursprünglichen Vorschlag (Zuständigkeitsraum der entsendenden Stelle).",
+        "neuer_text": "Kodierleitfaden D4, nach „…nicht Menge, Wert oder Organisationsform.“ einfügen: „Herkunftsort ist der Standort, von dem die eingesetzte Einheit oder Stelle herangeführt wurde, bei Unterstützung ohne Entsendung ihr Dienstort. Trägerebene, Rechtsform, Behördensitz und Zuständigkeitsraum der Organisation sind unerheblich; das gilt gleichermaßen für Feuerwehren, THW, Hilfsorganisationen, Bundeswehr, Polizeien, Fachstellen und Verwaltungshilfe anderer Gebietskörperschaften. Für jede eingesetzte Kraft bestimmt sich die Stufe nach dem kleinsten Gebietsrahmen, der ihren Herkunftsort und ihren Einsatzort umfasst; maßgeblich ist die höchste Stufe. Hilfe aus unmittelbar angrenzenden Kreisen oder kreisfreien Städten ist überörtlich (Stufe 2), auch über eine Landesgrenze hinweg; Hilfe über eine Staatsgrenze bleibt „international“. Leistungen eines vom Betroffenen regulär beauftragten Dienstleisters sind keine externe Unterstützung, es sei denn, sie werden ereignisbezogen von einer anderen Stelle vermittelt oder bereitgestellt. Die Ebene der unterstützenden Stelle ist keine Reichweite; sie erscheint im Text und, soweit diese Stelle Verantwortung übernimmt, in D3. Der Bewertungstext nennt Einheit, Herkunftsort und Leistung; ist der Herkunftsort nicht belegt, bleibt D4 offen.“ – Kurzbeispiele Abschnitt 7: „THW-Ortsverband aus dem Nachbarkreis im Einsatz | D4 = 2 | Standort der Einheit; Träger auf Bundesebene unerheblich“; „Feuerwehr aus dem angrenzenden Kreis jenseits der Landesgrenze | D4 = 2 | Nachbarschaftshilfe, nicht bundesweit“; „THW-Einheiten aus mehreren Ländern zusammengezogen | D4 = 5 | am weitesten herangeführte Kraft“; „Bundeswehr-Einheit vom Standort im selben Kreis | D4 = 2 | Standort, nicht Bundesebene“; „Landesfachstelle entsendet Kräfte aus einem anderen Regierungsbezirk zur Beratung einer Stadtverwaltung | D4 = 3 | Dienstort der entsandten Kräfte; Landesebene im Text“. – A.2 D4 anfügen: „Herkunftsort ist der Standort der eingesetzten Einheit, nicht Sitz oder Ebene ihres Trägers; Nachbarschaftshilfe aus angrenzenden Kreisen ist überörtlich (Kodierleitfaden D4).“"
       },
       "folgeaenderungen": [
         "Kodierleitfaden Änderungsprotokoll (1.5.0)",
-        "Gültigkeitsstand Teil A",
+        "Teil A A.2 D4 (Mitfortschreibung nach A.10.2), Gültigkeitsstand Teil A",
         "sop/CHANGELOG.md und Profilverlauf mit Prüfvermerk je Arbeitsanweisung",
-        "evaluation/faelle: Erwartungswerte D4 in Fällen mit Fachstellenhilfe prüfen (z. B. sop-cyber-schutzabschaltung-kreis)"
+        "evaluation/faelle: Erwartungswerte D4 in Fällen mit externer Unterstützung prüfen (z. B. sop-cyber-schutzabschaltung-kreis)",
+        "Prüfstein 2026-W43_eichstaett-cyberangriff: Mangel zu D4 nach neuer Regel einordnen"
       ],
       "entscheidungsfrage": "Wie wird der Herkunftsraum einer einzelnen Fachstelle bestimmt: (a) Zuständigkeitsraum der entsendenden Stelle, (b) Sitz bzw. Entfernung zum Ereignisort, oder (c) D4 offen mit Erläuterung, wenn keine Kräfte zusammengezogen wurden? Und zählen regulär beauftragte private Dienstleister als externe Unterstützung?",
       "sicherheit": "mittel",
       "automatisierbar": null,
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angepasst",
+        "anmerkung": "Entscheidung des Herausgebers vom 26.10.2026: Nicht Variante a (Zuständigkeitsraum würde z. B. THW-Ortsverbände als Bundesanstalt „bundesweit“ kodieren), sondern Standortregel für alle Organisationen: Herkunftsort der eingesetzten Einheit, Stufe je Kraft nach Herkunfts- und Einsatzort, Nachbarschaftshilfe aus angrenzenden Kreisen überörtlich auch über Landesgrenzen, keine Nachbarschaftsregel an der Staatsgrenze (bleibt international). Regulär beauftragte Dienstleister keine externe Unterstützung. Ebene der helfenden Stelle gehört in Text bzw. D3, nicht in D4."
       }
     },
     {
@@ -128,15 +129,14 @@
       "folgeaenderungen": [
         "Kodierleitfaden Änderungsprotokoll (1.4.1, redaktionell)",
         "Gültigkeitsstand Teil A",
-        "Verweise „Kodierleitfaden Abschnitt 4“ prüfen",
-        "bei Entscheidung für neue Beschriftung: meldung.ui.json (Profilversion), Prüfvermerk A.10.2"
+        "Verweise „Kodierleitfaden Abschnitt 4“ prüfen"
       ],
       "entscheidungsfrage": "Soll die Feldbeschriftung in meldung.ui.json bei „Bewertung“ bleiben (Treue zur LEAD-Meldevorlage, Begriffsbrücke im Kodierleitfaden) oder ebenfalls auf „Beurteilung“ umgestellt werden?",
       "sicherheit": "hoch",
       "automatisierbar": "Test unter tests/profil/: Kodierleitfaden Abschnitt 4 nennt den Feldnamen `sofort.beurteilung` und die Beschriftung aus meldung.ui.json (felder.sachverhalte[].sofort.beurteilung.label).",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angenommen",
+        "anmerkung": "Entscheidung des Herausgebers vom 26.10.2026: Nur Kodierleitfaden Abschnitt 4 angleichen (Begriffsbrücke); Feldbeschriftung in meldung.ui.json bleibt „Bewertung“ (wortgleich zur LEAD-Meldevorlage)."
       }
     },
     {
@@ -166,8 +166,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Test unter tests/profil/: Die Mindestfassung der Sammelmappe in der Kopfzeile des Kodierleitfadens ist nicht kleiner als die Sammelmappenfassung, mit der die aktuelle Leitfadenfassung im sop/CHANGELOG.md mitfortgeschrieben wurde.",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angenommen",
+        "anmerkung": "Formal, ohne Entscheidungsfrage; am 26.10.2026 zur Annahme vorgelegt, vom Herausgeber nicht beanstandet."
       }
     },
     {
@@ -196,8 +196,8 @@
       "sicherheit": "hoch",
       "automatisierbar": "Test unter tests/profil/: Fassungen im Änderungsprotokoll des Kodierleitfadens sind streng aufsteigend (semver-Vergleich).",
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angenommen",
+        "anmerkung": "Formal, ohne Entscheidungsfrage; am 26.10.2026 zur Annahme vorgelegt, vom Herausgeber nicht beanstandet."
       }
     },
     {
@@ -221,8 +221,8 @@
       "belege": [],
       "aenderungsvorschlag": {
         "typ": "ergaenzen",
-        "beschreibung": "Satz nach der `eintritt`-Regel ergänzen; Vorschlag setzt Variante a der Entscheidungsfrage voraus.",
-        "neuer_text": "Grenzt die Quelle den Beginn nur auf einen Zeitraum ein (z. B. „in der Nacht vom 08. auf den 09.10.“) oder nennen Quellen nacheinander abweichende Zeitpunkte, setzt du `eintritt` auf den frühesten Tag, den die zuständige Stelle zuletzt noch als möglichen Beginn angibt, ohne Uhrzeit, und nennst die Spanne und abweichende Angaben mit Quelle in `lage_ereignis`."
+        "beschreibung": "Nach der `eintritt`-Regel zwei Sätze ergänzen (Variante a, mit Klarstellung des Bezugspunkts).",
+        "neuer_text": "Bezugspunkt für `eintritt` ist der Beginn der Wirkung, die die Befassung auslöst (Störung, Schaden, Ausfall), nicht ein später rekonstruierter Ursprung wie der Erstzugriff eines Angreifers. Grenzt die Quelle diesen Beginn nur auf einen Zeitraum ein (z. B. „in der Nacht vom 08. auf den 09.10.“) oder nennen Quellen nacheinander abweichende Zeitpunkte, setzt du `eintritt` auf den frühesten Tag, den die zuständige Stelle zuletzt noch als möglichen Beginn angibt, ohne Uhrzeit, und nennst die Spanne und abweichende Angaben mit Quelle in `lage_ereignis`."
       },
       "folgeaenderungen": [
         "Arbeitsanweisung Erfassung 1.5.0 (Kopf, Profilverlauf)",
@@ -233,8 +233,8 @@
       "sicherheit": "mittel",
       "automatisierbar": null,
       "pruefung": {
-        "status": "offen",
-        "anmerkung": ""
+        "status": "angepasst",
+        "anmerkung": "Entscheidung des Herausgebers vom 26.10.2026: Variante a. Ergänzt um den in der Beratung empfohlenen Bezugspunkt „Beginn der Wirkung, nicht rekonstruierter Ursprung“ (bei Cyberlagen liegt der Erstzugriff oft Wochen vor dem Ausfall); bei Umsetzung bestätigen lassen."
       }
     }
   ],
