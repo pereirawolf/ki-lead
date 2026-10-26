@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { reparaturSystem, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { begrenztParallel, ORIENTIERUNG_PARALLEL, reparaturSystem, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
 import { profil as profilLaden } from "../support/dateien";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import { pruefeRoh } from "../../src/kern/validierung";
@@ -327,5 +327,44 @@ describe("AV-2026-W43-34: Anweisung der Reparatur", () => {
     expect(a).toContain("verwende den Leerwert, nie den Rand der Skala");
     expect(a).toContain("Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet.");
     expect(a).toContain("Recherchiere nicht neu und ergänze keine Fakten.");
+  });
+});
+
+// Begrenzte Nebenläufigkeit der Orientierungssuchen (seit 0.6.2, TP-2026-W44-05)
+describe("TP-2026-W44-05: begrenzt parallele Aufrufe", () => {
+  it("führt höchstens zwei Aufgaben zugleich aus und liefert die Ergebnisse in Eingabereihenfolge", async () => {
+    expect(ORIENTIERUNG_PARALLEL).toBe(2);
+    let laufend = 0;
+    let hoechst = 0;
+    const freigaben: (() => void)[] = [];
+    const lauf = begrenztParallel([10, 20, 30, 40, 50], 2, async (x) => {
+      laufend++;
+      hoechst = Math.max(hoechst, laufend);
+      await new Promise<void>((r) => freigaben.push(r));
+      laufend--;
+      return x * 2;
+    });
+    // Nach dem Start laufen genau zwei; jede Freigabe lässt die nächste nachrücken
+    await new Promise((r) => setImmediate(r));
+    expect(freigaben).toHaveLength(2);
+    for (let i = 0; i < 5; i++) {
+      freigaben[i]();
+      await new Promise((r) => setImmediate(r));
+    }
+    expect(await lauf).toEqual([20, 40, 60, 80, 100]);
+    expect(hoechst).toBe(2);
+  });
+
+  it("reicht den ersten Fehler weiter, nachdem die laufenden Aufgaben beendet sind, und startet keine weiteren", async () => {
+    const gestartet: number[] = [];
+    await expect(
+      begrenztParallel([1, 2, 3, 4], 2, async (x) => {
+        gestartet.push(x);
+        await new Promise((r) => setImmediate(r));
+        if (x === 1) throw new Error("Aufgabe 1 gescheitert");
+        return x;
+      }),
+    ).rejects.toThrow("Aufgabe 1 gescheitert");
+    expect(gestartet).toEqual([1, 2]);
   });
 });

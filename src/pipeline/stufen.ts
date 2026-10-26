@@ -155,7 +155,11 @@ export interface Kontext {
   jetzt?: () => Date;
 }
 
-async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise<LlmAntwort> {
+/**
+ * Ein KI-Aufruf mit Protokolleintrag. Liefert Antwort und Eintrag als Paar (seit 0.6.2, TP-2026-W44-05): Der Eintrag
+ * wird nicht mehr über die Push-Reihenfolge gesucht, die bei parallelen Aufrufen (Orientierungssuche) nicht eindeutig ist.
+ */
+async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise<{ antwort: LlmAntwort; eintrag: StufenEintrag }> {
   const eintrag: StufenEintrag = {
     stufe,
     start: new Date().toISOString(),
@@ -177,7 +181,7 @@ async function aufrufen(k: Kontext, stufe: string, anfrage: LlmAnfrage): Promise
     eintrag.nutzung = a.nutzung;
     eintrag.kostenUsd = a.kostenUsd;
     eintrag.modell = a.modell;
-    return a;
+    return { antwort: a, eintrag };
   } catch (e: any) {
     eintrag.fehler = e?.name === "AbortError" ? "abgebrochen" : String(e?.message || e);
     // Nach einem Abbruch kann der Anbieter schon gearbeitet haben: Kosten unbekannt, nicht 0
@@ -238,7 +242,7 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
   const modell = modellFuer("vorverarbeitung", k.einstellungen, k.profil);
   const aufwand = aufwandFuer("vorverarbeitung", k.einstellungen, k.profil);
   const maxTokens = k.einstellungen.maxTokensErfassung;
-  const a = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
+  const { antwort: a, eintrag } = await aufrufen(k, "S1 Gegenstand und SOP-Auswahl", {
     modell,
     aufwand,
     maxTokens,
@@ -249,7 +253,6 @@ export async function stufe1(k: Kontext): Promise<S1Vorschlag> {
       k.material.filter((m) => m.art === "eingang").map((m) => m.name),
     ),
   });
-  const eintrag = k.lauf.stufen[k.lauf.stufen.length - 1];
   const z = zerlegeAntwort(a.text);
   const struktur = z.json === undefined ? null : s1Strukturfehler(z.json);
   const abgeschnitten = a.stopGrund === "max_tokens";
@@ -402,6 +405,34 @@ export const ORIENTIERUNG_TREFFER = 5;
 /** Stufenname der Orientierungssuche im Laufprotokoll (Bestandteil von S1) */
 export const ORIENTIERUNG_STUFE = "S1 Orientierungssuche";
 
+/** Höchstzahl gleichzeitiger Orientierungssuchen (seit 0.6.2, TP-2026-W44-05) */
+export const ORIENTIERUNG_PARALLEL = 2;
+
+/**
+ * Wie Promise.all über map, aber mit höchstens n gleichzeitig laufenden Aufgaben; Ergebnisse in der Reihenfolge der
+ * Eingabe. Der erste Fehler bricht ab, nachdem die laufenden Aufgaben beendet sind.
+ */
+export async function begrenztParallel<T, R>(eingaben: readonly T[], n: number, aufgabe: (x: T, i: number) => Promise<R>): Promise<R[]> {
+  const ergebnisse: R[] = new Array(eingaben.length);
+  let naechster = 0;
+  let fehler: { e: unknown } | undefined;
+  const arbeiter = async () => {
+    for (;;) {
+      const i = naechster++;
+      if (i >= eingaben.length || fehler) return;
+      try {
+        ergebnisse[i] = await aufgabe(eingaben[i], i);
+      } catch (e) {
+        fehler ??= { e };
+        return;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(n, eingaben.length)) }, arbeiter));
+  if (fehler) throw fehler.e;
+  return ergebnisse;
+}
+
 /** Ob für diesen Lauf eine Orientierungssuche vorgesehen ist (Recherche durchführen, Einstellung > 0, S1-Modell sucht) */
 export function orientierungMoeglich(k: Pick<Kontext, "einstellungen" | "profil" | "lauf" | "material">): { an: boolean; grund?: string } {
   if (k.lauf.auftrag.websuche === false) return { an: false };
@@ -486,7 +517,7 @@ export async function orientierungssuche(k: Kontext, v: S1Vorschlag, nur?: numbe
     let zwang = erzwingen;
     for (let versuch = 0; versuch < 2; versuch++) {
       try {
-        a = await aufrufen(k, versuch ? `${name} (Wiederholung)` : name, anfrage(zwang));
+        ({ antwort: a } = await aufrufen(k, versuch ? `${name} (Wiederholung)` : name, anfrage(zwang)));
       } catch (err: any) {
         if (err?.name === "AbortError") throw err;
         // Lehnt der Anbieter die erzwungene Suche ab, einmal ohne Zwang; andere Fehler beenden die Orientierung
@@ -510,7 +541,10 @@ export async function orientierungssuche(k: Kontext, v: S1Vorschlag, nur?: numbe
   };
 
   try {
-    const sachverhalte = await Promise.all(v.sachverhalte.map((sv, i) => (nur && !nur.includes(i) ? Promise.resolve(sv) : einzeln(sv, i))));
+    // Höchstens zwei Suchen zugleich (seit 0.6.2, TP-2026-W44-05): weniger gleichzeitige 429-Wartezeiten, Protokoll bleibt lesbar
+    const sachverhalte = await begrenztParallel(v.sachverhalte, ORIENTIERUNG_PARALLEL, (sv, i) =>
+      nur && !nur.includes(i) ? Promise.resolve(sv) : einzeln(sv, i),
+    );
     const ohne = sachverhalte.map((sv, i) => (sv.orientierung && !sv.orientierung.length ? i + 1 : 0)).filter(Boolean);
     if (ohne.length)
       hinweise.push(
@@ -970,7 +1004,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     websuche: websuche > 0 ? { maxUses: websuche, land: e.suchland || undefined, zeitzone: p.manifest.variablen.zeitzone } : undefined,
     abruf: abruf > 0 ? { maxUses: abruf, maxTokens: e.abrufMaxTokens || undefined } : undefined,
   });
-  const erste = await aufrufen(k, s2Name, {
+  const ersterAufruf = await aufrufen(k, s2Name, {
     modell: erfassungsModell,
     aufwand: aufwandFuer(rolleS2, e, p),
     maxTokens: e.maxTokensErfassung,
@@ -978,6 +1012,10 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     nachrichten: [{ role: "user", content: inhalt }],
     werkzeuge: !recherche ? undefined : werkzeugeS2(grenzen.websucheMax, grenzen.abrufMax),
   });
+
+  const erste = ersterAufruf.antwort;
+  // Eintrag des letzten S2-Aufrufs für Notizen und Befunde (nach einer Nachforderung deren Eintrag)
+  let s2 = ersterAufruf.eintrag;
 
   // Abgleich und höchstens eine Nachforderung (seit 0.6.0, KP-2026-W44-08), Bestandteil von S2
   let a = erste;
@@ -991,7 +1029,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     const ohnePrimaer = amtlich.length && !amtlichErreicht(erste, amtlich) ? amtlich : [];
     if (fehlend.length || ohneSuche || ohnePrimaer.length) {
       nachgefordert = true;
-      const zweite = await aufrufen(k, `${s2Name} – Nachforderung`, {
+      const nachforderung = await aufrufen(k, `${s2Name} – Nachforderung`, {
         modell: erfassungsModell,
         aufwand: aufwandFuer(rolleS2, e, p),
         maxTokens: e.maxTokensErfassung,
@@ -1003,6 +1041,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         ],
         werkzeuge: werkzeugeS2(Math.max(1, grenzen.websucheMax - nw.websuchen), Math.max(grenzen.abrufMax > 0 ? 1 : 0, grenzen.abrufMax - nw.abrufe)),
       });
+      const zweite = nachforderung.antwort;
+      s2 = nachforderung.eintrag;
       // Text aus der Nachforderung, wenn sie eine Meldung enthält; sonst bleibt der erste Entwurf
       const nutzbar = zerlegeAntwort(zweite.text).json !== undefined || zerlegeAntwort(erste.text).json === undefined;
       a = antwortenZusammenfuehren(erste, zweite, nutzbar);
@@ -1013,13 +1053,13 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   let z = zerlegeAntwort(a.text);
   const kurzantwort = z.kurzantwort;
   let modell = a.modell;
-  const s2 = k.lauf.stufen[k.lauf.stufen.length - 1];
+  let letzterEintrag = s2;
   if (a.stopGrund === "max_tokens" && z.json === undefined && optionen.ohneS3)
     s2.notiz = "Antwort an der Token-Grenze abgeschnitten; ohne S3 (Vergleichslauf „S1 + S2“) keine Vervollständigung.";
   else if (a.stopGrund === "max_tokens" && z.json === undefined) {
     // Abgeschnitten (meist durch langes Nachdenken): Meldung ohne Recherche vervollständigen lassen.
     s2.notiz = "Antwort an der Token-Grenze abgeschnitten; die App hat die Meldung in einem zweiten Schritt vervollständigen lassen.";
-    const v = await aufrufen(k, "S3 Vervollständigung", {
+    const { antwort: v, eintrag: vEintrag } = await aufrufen(k, "S3 Vervollständigung", {
       modell: erfassungsModell,
       aufwand: "low",
       maxTokens: e.maxTokensErfassung,
@@ -1044,7 +1084,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     });
     z = { ...zerlegeAntwort(v.text), kurzantwort: z.kurzantwort };
     modell = v.modell;
-    if (v.stopGrund === "max_tokens") k.lauf.stufen[k.lauf.stufen.length - 1].notiz = "Auch die Vervollständigung wurde abgeschnitten.";
+    letzterEintrag = vEintrag;
+    if (v.stopGrund === "max_tokens") vEintrag.notiz = "Auch die Vervollständigung wurde abgeschnitten.";
   } else if (a.stopGrund === "max_tokens") s2.notiz = "Antwort an der Token-Grenze abgeschnitten.";
 
   k.lauf.status = "s3";
@@ -1061,7 +1102,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     sopHinweise: string[];
     umhaengungen: string[];
   }
-  const bewerten = async (z: Zerlegung, modell: string): Promise<Stand> => {
+  const bewerten = async (z: Zerlegung, modell: string, eintrag: StufenEintrag): Promise<Stand> => {
     const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [] };
     if (z.json !== undefined) {
       try {
@@ -1074,18 +1115,17 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     } else {
       s.schemaBefunde = [{ pfad: "", keyword: "json", text: z.fehler || "Kein JSON." }];
     }
-    const eintrag = k.lauf.stufen[k.lauf.stufen.length - 1];
     eintrag.befunde = s.schemaBefunde.map((b) => b.text);
     await k.aktualisiert(k.lauf);
     return s;
   };
-  let stand = await bewerten(z, modell);
+  let stand = await bewerten(z, modell, letzterEintrag);
   const reparaturHinweise: string[] = [];
   for (let runde = 0; runde < (optionen.ohneS3 ? 0 : MAX_REPARATUREN) && stand.schemaBefunde.length; runde++) {
     if (stand.z.json === undefined && /unvollständig/.test(stand.z.fehler || "")) break; // weiterhin abgeschnitten: Reparatur hilft nicht
 
     const entwurf = stand.z.json !== undefined ? JSON.stringify(stand.z.json, null, 1) : stand.z.jsonText || "";
-    const r = await aufrufen(k, `S3 Reparatur ${runde + 1}`, {
+    const { antwort: r, eintrag: rEintrag } = await aufrufen(k, `S3 Reparatur ${runde + 1}`, {
       modell: modellFuer("reparatur", e, p),
       aufwand: aufwandFuer("reparatur", e, p),
       maxTokens: e.maxTokensErfassung,
@@ -1100,7 +1140,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         },
       ],
     });
-    const neu = await bewerten(zerlegeAntwort(r.text), r.modell);
+    const neu = await bewerten(zerlegeAntwort(r.text), r.modell, rEintrag);
     if (stand.meldung && !neu.meldung) {
       // Reparatur ohne verwertbares JSON: der bisherige Entwurf mit seinen Befunden bleibt, der Fehlschlag wird vermerkt
       reparaturHinweise.push(
