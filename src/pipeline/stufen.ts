@@ -12,7 +12,7 @@ import { aufloesen } from "../kern/schema";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { aufwandAngeboten, aufwandFuer, modellFuer, orientierungJeSachverhalt, sucheErzwingbar, werkzeugeFuer, type Einstellungen } from "./einstellungen";
-import { zerlegeAntwort } from "./json";
+import { zerlegeAntwort, type Zerlegung } from "./json";
 import {
   anweisungErfassung,
   auftragAusBestaetigung,
@@ -1048,33 +1048,43 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   } else if (a.stopGrund === "max_tokens") s2.notiz = "Antwort an der Token-Grenze abgeschnitten.";
 
   k.lauf.status = "s3";
-  let meldung: Meldung | undefined;
-  let schemaBefunde: SchemaBefund[] = [];
-  let korrekturen: string[] = [];
-  let sopHinweise: string[] = [];
-  let umhaengungen: string[] = [];
-  for (let runde = 0; ; runde++) {
+  /**
+   * Stand nach einer Antwort: Entwurf und seine Schemabefunde als Paar (seit 0.6.2, TP-2026-W44-01). Liefert eine
+   * Reparatur kein verwertbares JSON, bleibt der bisherige Stand bestehen; die Befunde passen so immer zum Entwurf.
+   */
+  interface Stand {
+    z: Zerlegung;
+    modell: string;
+    meldung?: Meldung;
+    schemaBefunde: SchemaBefund[];
+    korrekturen: string[];
+    sopHinweise: string[];
+    umhaengungen: string[];
+  }
+  const bewerten = async (z: Zerlegung, modell: string): Promise<Stand> => {
+    const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [] };
     if (z.json !== undefined) {
       try {
-        korrekturen = [];
-        sopHinweise = [];
-        umhaengungen = [];
-        meldung = nachbearbeiten(z.json, k, modell, korrekturen, sopHinweise, umhaengungen);
-        schemaBefunde = pruefeGegenSchema(p.schema, meldung, p.ui);
+        s.meldung = nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen);
+        s.schemaBefunde = pruefeGegenSchema(p.schema, s.meldung, p.ui);
       } catch (err: any) {
-        meldung = undefined;
-        schemaBefunde = [{ pfad: "", keyword: "typ", text: String(err.message) }];
+        s.meldung = undefined;
+        s.schemaBefunde = [{ pfad: "", keyword: "typ", text: String(err.message) }];
       }
     } else {
-      schemaBefunde = [{ pfad: "", keyword: "json", text: z.fehler || "Kein JSON." }];
+      s.schemaBefunde = [{ pfad: "", keyword: "json", text: z.fehler || "Kein JSON." }];
     }
     const eintrag = k.lauf.stufen[k.lauf.stufen.length - 1];
-    eintrag.befunde = schemaBefunde.map((b) => b.text);
+    eintrag.befunde = s.schemaBefunde.map((b) => b.text);
     await k.aktualisiert(k.lauf);
-    if (!schemaBefunde.length || runde >= (optionen.ohneS3 ? 0 : MAX_REPARATUREN)) break;
-    if (z.json === undefined && /unvollständig/.test(z.fehler || "")) break; // weiterhin abgeschnitten: Reparatur hilft nicht
+    return s;
+  };
+  let stand = await bewerten(z, modell);
+  const reparaturHinweise: string[] = [];
+  for (let runde = 0; runde < (optionen.ohneS3 ? 0 : MAX_REPARATUREN) && stand.schemaBefunde.length; runde++) {
+    if (stand.z.json === undefined && /unvollständig/.test(stand.z.fehler || "")) break; // weiterhin abgeschnitten: Reparatur hilft nicht
 
-    const entwurf = z.json !== undefined ? JSON.stringify(z.json, null, 1) : z.jsonText || "";
+    const entwurf = stand.z.json !== undefined ? JSON.stringify(stand.z.json, null, 1) : stand.z.jsonText || "";
     const r = await aufrufen(k, `S3 Reparatur ${runde + 1}`, {
       modell: modellFuer("reparatur", e, p),
       aufwand: aufwandFuer("reparatur", e, p),
@@ -1083,16 +1093,24 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       nachrichten: [
         {
           role: "user",
-          content: `Prüfbericht der App (${schemaBefunde.length} Befund${schemaBefunde.length === 1 ? "" : "e"}):\n${schemaBefunde
+          content: `Prüfbericht der App (${stand.schemaBefunde.length} Befund${stand.schemaBefunde.length === 1 ? "" : "e"}):\n${stand.schemaBefunde
             .slice(0, 80)
             .map((b) => `- ${b.pfad || "(gesamt)"}: ${b.text}`)
             .join("\n")}\n\nEntwurf:\n\`\`\`json\n${entwurf}\n\`\`\``,
         },
       ],
     });
-    z = zerlegeAntwort(r.text);
-    modell = r.modell;
+    const neu = await bewerten(zerlegeAntwort(r.text), r.modell);
+    if (stand.meldung && !neu.meldung) {
+      // Reparatur ohne verwertbares JSON: der bisherige Entwurf mit seinen Befunden bleibt, der Fehlschlag wird vermerkt
+      reparaturHinweise.push(
+        `Reparatur ${runde + 1} lieferte keinen verwertbaren Entwurf (${neu.schemaBefunde.map((b) => b.text).join(" ")}); der vorherige Entwurf bleibt.`,
+      );
+      continue;
+    }
+    stand = neu;
   }
+  const { meldung, schemaBefunde, korrekturen, sopHinweise, umhaengungen } = stand;
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
@@ -1101,6 +1119,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Nachweis „beigefügte SOPs“ setzt die App; Abweichungen der KI-Angabe zur Anwendung als Prüfhinweis
   if (meldung) for (const t of sopHinweise) befunde.push({ stufe: "hinweis", text: `SOP-Nachweis: ${t}` });
   if (meldung && umhaengungen.length) befunde.push({ stufe: "hinweis", text: `Von der App korrigiert: ${umhaengungen.join("; ")}.` });
+  if (meldung) for (const t of reparaturHinweise) befunde.push({ stufe: "hinweis", code: "REPARATUR_OHNE_ENTWURF", text: t });
   if (meldung)
     for (const f of auftragsAbrufFehler(k.lauf.auftrag.urls, a.abrufFehler))
       befunde.unshift({
