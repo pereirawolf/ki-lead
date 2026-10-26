@@ -7,6 +7,7 @@ import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } fro
 import { begrenztParallel, ORIENTIERUNG_PARALLEL, reparaturSystem, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
 import { profil as profilLaden } from "../support/dateien";
 import { STANDARD } from "../../src/pipeline/einstellungen";
+import { istBestaetigen, istFertig, istGescheitert } from "../../src/pipeline/lauf";
 import { pruefeRoh } from "../../src/kern/validierung";
 import type { Material } from "../../src/pipeline/material";
 
@@ -366,5 +367,23 @@ describe("TP-2026-W44-05: begrenzt parallele Aufrufe", () => {
       }),
     ).rejects.toThrow("Aufgabe 1 gescheitert");
     expect(gestartet).toEqual([1, 2]);
+  });
+});
+
+// Type-Guards für den Zustand eines Laufs (seit 0.6.2, TP-2026-W44-07); gespeicherte Läufe behalten ihre Form
+describe("TP-2026-W44-07: Zustand eines Laufs", () => {
+  it("istFertig verlangt Status „fertig“ und ein Ergebnis, istBestaetigen einen Vorschlag", async () => {
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    const { k } = await pipelineKontext(att);
+    expect(istBestaetigen(k.lauf)).toBe(false);
+    expect(istFertig(k.lauf)).toBe(false);
+    expect(istGescheitert(k.lauf)).toBe(false);
+    await stufe1(k);
+    expect(istBestaetigen(k.lauf)).toBe(true);
+    // Status allein genügt nicht: ein als „fertig“ markierter Lauf ohne Ergebnis ist nicht fertig
+    const ohneErgebnis = { ...k.lauf, status: "fertig" as const };
+    expect(istFertig(ohneErgebnis)).toBe(false);
+    expect(istGescheitert({ ...k.lauf, status: "abgebrochen" as const })).toBe(true);
+    expect(istGescheitert({ ...k.lauf, status: "fehler" as const })).toBe(true);
   });
 });

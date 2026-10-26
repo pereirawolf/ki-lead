@@ -47,7 +47,7 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
       const achse = radar.achsen.find((a) => a.key === seg);
       if (achse) {
         const kurz = achse.label.match(/^(D\d+)\b/);
-        teile.push(kurz ? kurz[1] : achse.label);
+        teile.push(kurz?.[1] ?? achse.label);
         continue;
       }
     }

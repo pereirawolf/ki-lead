@@ -24,5 +24,5 @@ export function ersetzePlatzhalter(text: string, k: PlatzhalterKontext): { text:
 
 /** Alle in einem Text verwendeten Platzhalter. */
 export function platzhalterIn(text: string): string[] {
-  return [...new Set([...text.matchAll(/\{\{\s*([a-z]+(?:\.[a-z_]+)?)\s*\}\}/gi)].map((m) => m[1]))];
+  return [...new Set([...text.matchAll(/\{\{\s*([a-z]+(?:\.[a-z_]+)?)\s*\}\}/gi)].map((m) => m[1] ?? ""))];
 }

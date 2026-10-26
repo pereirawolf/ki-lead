@@ -30,8 +30,9 @@ export function eingebauteProfile(): EingebautesProfil[] {
   for (const [pfad, text] of Object.entries({ ...oeffentlich, ...privat })) {
     const m = pfad.match(/^\/(?:privat\/)?profile\/([^/]+)\/(.+)$/);
     if (!m) continue;
-    if (!nachOrdner.has(m[1])) nachOrdner.set(m[1], {});
-    nachOrdner.get(m[1])![m[2]] = text;
+    const [, ordner = "", datei = ""] = m;
+    if (!nachOrdner.has(ordner)) nachOrdner.set(ordner, {});
+    nachOrdner.get(ordner)![datei] = text;
   }
   return [...nachOrdner.entries()].map(([ordner, dateien]) => ({ ordner, dateien }));
 }

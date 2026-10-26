@@ -38,7 +38,7 @@ function formatFuer(zone: string): Intl.DateTimeFormat {
 export function wanduhr(d: Date, zone: string): { jahr: number; monat: number; tag: number; stunde: number; minute: number } {
   const t: Record<string, number> = {};
   for (const p of formatFuer(zone).formatToParts(d)) if (p.type !== "literal") t[p.type] = Number(p.value);
-  return { jahr: t.year, monat: t.month, tag: t.day, stunde: t.hour % 24, minute: t.minute };
+  return { jahr: t.year ?? 0, monat: t.month ?? 0, tag: t.day ?? 0, stunde: (t.hour ?? 0) % 24, minute: t.minute ?? 0 };
 }
 
 /** Abstand der Zone zu UTC in Minuten zum Zeitpunkt d. */
@@ -66,7 +66,7 @@ export function zeitpunktInZone(jahrRoh: number, monatRoh: number, tagRoh: numbe
       return w.jahr === jahr && w.monat === monat && w.tag === tag && w.stunde === stunde && w.minute === minute;
     })
     .sort((a, b) => a.getTime() - b.getTime());
-  if (kandidaten.length) return kandidaten[0];
+  if (kandidaten[0]) return kandidaten[0];
   // Ausgefallene Wanduhrzeit: mit dem Versatz vor dem Sprung umrechnen (ergibt die Zeit nach dem Sprung)
   return new Date(naiv - versatz(new Date(naiv - 864e5), z) * 60000);
 }
@@ -76,11 +76,13 @@ export function isoLokalZuZeitpunkt(s: string, zone: string): { datum: Date; mit
   const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
   if (!m) return null;
   // Ungültige Kalendertage („2026-02-31“) und Uhrzeiten nicht still umrechnen
-  const probe = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-  if (probe.getUTCMonth() !== +m[2] - 1 || probe.getUTCDate() !== +m[3]) return null;
-  if (m[4] !== undefined && (+m[4] > 23 || +m[5] > 59)) return null;
+  const [jahr, monat, tag] = [+m[1]!, +m[2]!, +m[3]!];
+  const probe = new Date(Date.UTC(jahr, monat - 1, tag));
+  if (probe.getUTCMonth() !== monat - 1 || probe.getUTCDate() !== tag) return null;
   const mitUhrzeit = m[4] !== undefined;
-  return { datum: zeitpunktInZone(+m[1], +m[2], +m[3], mitUhrzeit ? +m[4] : 0, mitUhrzeit ? +m[5] : 0, zone), mitUhrzeit };
+  const [stunde, minute] = mitUhrzeit ? [+m[4]!, +m[5]!] : [0, 0];
+  if (mitUhrzeit && (stunde > 23 || minute > 59)) return null;
+  return { datum: zeitpunktInZone(jahr, monat, tag, stunde, minute, zone), mitUhrzeit };
 }
 
 /**
@@ -90,8 +92,9 @@ export function isoLokalZuZeitpunkt(s: string, zone: string): { datum: Date; mit
 export function gueltigerZeitpunkt(s: string | undefined): boolean {
   const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
   if (!m) return false;
-  const probe = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-  return probe.getUTCFullYear() === +m[1] && probe.getUTCMonth() === +m[2] - 1 && probe.getUTCDate() === +m[3] && +m[4] <= 23 && +m[5] <= 59;
+  const [jahr, monat, tag, stunde, minute] = [+m[1]!, +m[2]!, +m[3]!, +m[4]!, +m[5]!];
+  const probe = new Date(Date.UTC(jahr, monat - 1, tag));
+  return probe.getUTCFullYear() === jahr && probe.getUTCMonth() === monat - 1 && probe.getUTCDate() === tag && stunde <= 23 && minute <= 59;
 }
 
 /** „TT.MM.JJJJ, hh:mm Uhr (Zone)“ für die Anzeige; Zone nur, wenn gewünscht. */
@@ -113,7 +116,7 @@ export type DatumModus = "datum" | "datumzeit" | "datum_uhrzeit";
 /** Zerlegt einen gespeicherten Wert in Tag und Uhrzeit; Unbekanntes bleibt leer */
 export function zerlege(wert: unknown): { tag: string; zeit: string } {
   const m = String(wert ?? "").match(/^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2}))?/);
-  return m ? { tag: m[1], zeit: m[2] || "" } : { tag: "", zeit: "" };
+  return m ? { tag: m[1] ?? "", zeit: m[2] || "" } : { tag: "", zeit: "" };
 }
 
 /** Setzt Tag und Uhrzeit wieder zusammen; ohne Tag ist der Wert leer */

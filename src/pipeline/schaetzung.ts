@@ -115,7 +115,7 @@ function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand
   const ziel = ausgabePreis(modell);
   if (ziel === null) return { sekunden: null, usd: null, gemessen: false };
   const kandidaten = Object.entries(MESSWERTE)
-    .map(([k, m]) => ({ teile: k.split("|"), m }))
+    .map(([k, m]) => ({ teile: k.split("|") as [string, string, string], m }))
     .filter(({ teile }) => teile[0] === art);
   // Bezug ist die gemessene Variante mit dem ähnlichsten Preis (z. B. Fable → Opus, nicht Sonnet)
   const naechste = (liste: typeof kandidaten) =>

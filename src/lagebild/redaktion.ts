@@ -137,7 +137,7 @@ function ausgabeAufloesen(a: string | Date, zone: string): { beginn: Date; ende:
   // Nicht lesbare Ausgabe: keine Ersatzzeit, sonst gälte jede künftige Frist still als unkritisch
   if (!z) return null;
   if (z.mitUhrzeit) return { beginn: z.datum, ende: z.datum, mitUhrzeit: true };
-  const [j, m, t] = a.slice(0, 10).split("-").map(Number);
+  const [j, m, t] = a.slice(0, 10).split("-").map(Number) as [number, number, number];
   return { beginn: z.datum, ende: zeitpunktInZone(j, m, t + 1, 0, 0, zone), mitUhrzeit: false };
 }
 

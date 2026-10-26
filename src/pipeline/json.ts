@@ -1,11 +1,13 @@
 // JSON-Ergebnis aus einer Modellantwort lösen und die Kurzantwort davon trennen.
 
-export interface Zerlegung {
-  kurzantwort: string;
-  json?: unknown;
-  jsonText?: string;
-  fehler?: string;
-}
+/**
+ * Ergebnis der Zerlegung (seit 0.6.2 diskriminiert über `ok`, TP-2026-W44-07): mit JSON stehen `json` und `jsonText`,
+ * ohne JSON steht `fehler`, dazu `jsonText`, wenn ein Kandidat gefunden, aber nicht lesbar war. `json`, `jsonText` und
+ * `fehler` bleiben in beiden Fällen deklariert, damit `z.json === undefined` als Prüfung weiter trägt.
+ */
+export type Zerlegung =
+  | { ok: true; kurzantwort: string; json: unknown; jsonText: string; fehler?: undefined }
+  | { ok: false; kurzantwort: string; json?: undefined; jsonText?: string; fehler: string };
 
 /** Findet das am weitesten außen liegende, ausgeglichene {...} ab Position start. */
 function ausgeglichen(text: string, start: number): string | undefined {
@@ -36,13 +38,14 @@ export function zerlegeAntwort(text: string): Zerlegung {
   const bloecke = [...text.matchAll(/```(?:json|JSON)?\s*\n([\s\S]*?)\n?```/g)];
   // Den letzten Codeblock nehmen, der mit { beginnt
   for (let i = bloecke.length - 1; i >= 0; i--) {
-    const inhalt = bloecke[i][1].trim();
+    const block = bloecke[i]!;
+    const inhalt = (block[1] ?? "").trim();
     if (!inhalt.startsWith("{")) continue;
-    const kurz = (text.slice(0, bloecke[i].index) + text.slice(bloecke[i].index! + bloecke[i][0].length)).trim();
+    const kurz = (text.slice(0, block.index) + text.slice(block.index + block[0].length)).trim();
     try {
-      return { kurzantwort: kurz, json: JSON.parse(inhalt), jsonText: inhalt };
+      return { ok: true, kurzantwort: kurz, json: JSON.parse(inhalt), jsonText: inhalt };
     } catch (e: any) {
-      return { kurzantwort: kurz, jsonText: inhalt, fehler: `JSON nicht lesbar: ${e.message}` };
+      return { ok: false, kurzantwort: kurz, jsonText: inhalt, fehler: `JSON nicht lesbar: ${e.message}` };
     }
   }
   // Ohne Codeblock: größtes ausgeglichenes Objekt
@@ -52,12 +55,12 @@ export function zerlegeAntwort(text: string): Zerlegung {
     if (kandidat) {
       const kurz = ohneZaun(text.slice(0, start) + text.slice(start + kandidat.length));
       try {
-        return { kurzantwort: kurz, json: JSON.parse(kandidat), jsonText: kandidat };
+        return { ok: true, kurzantwort: kurz, json: JSON.parse(kandidat), jsonText: kandidat };
       } catch (e: any) {
-        return { kurzantwort: kurz, jsonText: kandidat, fehler: `JSON nicht lesbar: ${e.message}` };
+        return { ok: false, kurzantwort: kurz, jsonText: kandidat, fehler: `JSON nicht lesbar: ${e.message}` };
       }
     }
-    return { kurzantwort: ohneZaun(text.slice(0, start)), jsonText: text.slice(start), fehler: "JSON unvollständig (Antwort abgeschnitten?)." };
+    return { ok: false, kurzantwort: ohneZaun(text.slice(0, start)), jsonText: text.slice(start), fehler: "JSON unvollständig (Antwort abgeschnitten?)." };
   }
-  return { kurzantwort: text.trim(), fehler: "Die Antwort enthält keinen JSON-Block." };
+  return { ok: false, kurzantwort: text.trim(), fehler: "Die Antwort enthält keinen JSON-Block." };
 }

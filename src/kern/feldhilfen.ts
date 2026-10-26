@@ -77,7 +77,7 @@ export function feldhilfenFehler(a: unknown, ui: Pick<UiKonfig, "rollen" | "kenn
       const auf = (t.match(/⟦/g) || []).length;
       if (auf !== (t.match(/⟧/g) || []).length || auf !== (t.match(PLATZHALTER_RE) || []).length)
         f.push(`${w}: offene Stellen müssen als ⟦…⟧ mit 1 bis 160 Zeichen in einer Zeile stehen.`);
-      const werte = [...t.matchAll(WERT_RE)].map((m) => m[1]);
+      const werte = [...t.matchAll(WERT_RE)].map((m) => m[1] ?? "");
       if ((t.match(/\{\{|\}\}/g) || []).length !== werte.length * 2)
         f.push(`${w}: Werte stehen als {{name}} ohne Leerzeichen und klein geschrieben (zulässig: ${VORLAGEN_WERTE.join(", ")}).`);
       for (const name of werte)
@@ -179,7 +179,7 @@ export function vorlageFuellen(
 
 /** Satzanfang einer Vorlage ohne Kennsatz: Text vor der ersten offenen Stelle bzw. dem ersten Wert */
 export function satzanfang(v: FeldhilfeVorlage): string {
-  return v.vorlage.split(/⟦|\{\{/)[0].trim();
+  return (v.vorlage.split(/⟦|\{\{/)[0] ?? "").trim();
 }
 
 const beginntMit = (zeile: string, prefix: string) => zeile.trim().toLowerCase().startsWith(prefix.toLowerCase());
@@ -189,8 +189,9 @@ const istKennsatzZeile = (zeile: string, prefixe: string[]) => prefixe.some((p) 
 function kennsatzblockBeginn(zeilen: string[], prefixe: string[]): number {
   let beginn = -1;
   for (let i = zeilen.length - 1; i >= 0; i--) {
-    if (!zeilen[i].trim()) continue;
-    if (istKennsatzZeile(zeilen[i], prefixe)) beginn = i;
+    const zeile = zeilen[i] ?? "";
+    if (!zeile.trim()) continue;
+    if (istKennsatzZeile(zeile, prefixe)) beginn = i;
     else break;
   }
   return beginn;

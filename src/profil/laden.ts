@@ -49,7 +49,7 @@ export function normalisiereDateien(dateien: Record<string, string>): Record<str
   const out: Record<string, string> = {};
   for (const p of pfade) {
     if (!p.startsWith(praefix)) continue;
-    out[p.slice(praefix.length)] = dateien[p];
+    out[p.slice(praefix.length)] = dateien[p] ?? "";
   }
   return out;
 }
@@ -255,8 +255,7 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
     befunde.push({
       stufe: "hinweis",
       code: "KI_KENNZEICHNUNG_OHNE_ENTSTEHUNGSFELD",
-      text:
-        "Darstellungsdatei und Schema: Ohne Entstehungsfeld mit „verfahren“ (Wert „KI-Entwurf“) sind KI-Entwürfe dieses Profils als JSON nicht maschinenlesbar gekennzeichnet; PDF-Metadaten nennen die Herkunft dann „unbekannt“. Siehe docs/KI-VERORDNUNG.md, Abschnitt 6.1.",
+      text: "Darstellungsdatei und Schema: Ohne Entstehungsfeld mit „verfahren“ (Wert „KI-Entwurf“) sind KI-Entwürfe dieses Profils als JSON nicht maschinenlesbar gekennzeichnet; PDF-Metadaten nennen die Herkunft dann „unbekannt“. Siehe docs/KI-VERORDNUNG.md, Abschnitt 6.1.",
     });
   for (const [name, radar] of Object.entries(ui.radare || {})) {
     for (const a of radar.achsen) {
@@ -334,7 +333,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });
     else if (pfad) {
-      const unbekannt = platzhalterIn(dateien[pfad]).filter(
+      const unbekannt = platzhalterIn(dateien[pfad] ?? "").filter(
         (p) => /^profil\./.test(p) && !(p.slice(7) in manifest.variablen) && !["profil.referenzraum", "profil.ebene", "profil.name"].includes(p),
       );
       if (unbekannt.length) befunde.push({ stufe: "warnung", text: `${pfad}: Platzhalter ohne Profilvariable: ${unbekannt.join(", ")}` });

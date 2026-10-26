@@ -433,8 +433,10 @@ export function amtlicheEinstiege(profil: Profil, sopIds: string[]): AmtlicherEi
     for (const z of sop.text.split("\n")) {
       const m = z.match(/^\|\s*(R\d+)\s*\|[^|]*\|([^|]*)\|/);
       if (!m) continue;
-      for (const l of m[2].matchAll(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g))
-        if (!out.some((e) => e.url === l[2])) out.push({ kennung: `${kurz}/${m[1]}`, titel: l[1].trim(), url: l[2] });
+      for (const l of (m[2] ?? "").matchAll(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g)) {
+        const url = l[2] ?? "";
+        if (url && !out.some((e) => e.url === url)) out.push({ kennung: `${kurz}/${m[1]}`, titel: (l[1] ?? "").trim(), url });
+      }
     }
   }
   return out;
@@ -474,8 +476,8 @@ export function prueffragenAuszug(sop: Sop, hoechstens = 12): string[] {
   for (const z of sop.text.split("\n")) {
     const m = z.match(/^\|\s*(R\d+)\s*\|([^|]*)\|([^|]*)\|/);
     if (!m) continue;
-    const quelle = ohneLinks(m[3]);
-    zeilen.push(`${kurz}/${m[1]}: ${ohneLinks(m[2])}${quelle ? ` – Quelle: ${quelle.length > 160 ? `${quelle.slice(0, 157)}…` : quelle}` : ""}`);
+    const quelle = ohneLinks(m[3] ?? "");
+    zeilen.push(`${kurz}/${m[1]}: ${ohneLinks(m[2] ?? "")}${quelle ? ` – Quelle: ${quelle.length > 160 ? `${quelle.slice(0, 157)}…` : quelle}` : ""}`);
     if (zeilen.length >= hoechstens) break;
   }
   return zeilen;
@@ -505,7 +507,7 @@ Antworte nach der Suche ausschließlich mit einem JSON-Codeblock (\`\`\`json) di
 /** Abschnitt „Anwendungsbereich“ einer SOP (bis zur nächsten Überschrift gleicher Ebene), sonst Anfang. */
 export function anwendungsbereich(text: string): string {
   const m = text.match(/^###\s+1\.[^\n]*\n([\s\S]*?)(?=^###\s)/m);
-  if (m) return m[1].trim();
+  if (m) return (m[1] ?? "").trim();
   return text.slice(0, 1500);
 }
 

@@ -14,7 +14,7 @@ import type { Material } from "./material";
 /** t0 („JJJJ-MM-TT[Thh:mm]“, Wanduhrzeit der Profilzeitzone) als Zeitpunkt; ohne Uhrzeit 12:00. */
 function datumAus(t0: string, zone: string): Date {
   const m = t0.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
-  return m ? zeitpunktInZone(+m[1], +m[2], +m[3], m[4] ? +m[4] : 12, m[5] ? +m[5] : 0, zone) : new Date();
+  return m ? zeitpunktInZone(+m[1]!, +m[2]!, +m[3]!, m[4] ? +m[4] : 12, m[5] ? +m[5] : 0, zone) : new Date();
 }
 
 function alsDateien(material: Material[]): LagebildDatei[] {
@@ -32,7 +32,7 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
   const jetzt = datumAus(t0, zone);
   const tage = profil.ui.lagebild?.ausgabe_tage ?? 7;
   // Nächste Ausgabe als Kalendertag (ohne Uhrzeit) in der Profilzeitzone
-  const [j, mo, t] = tagInZone(jetzt, zone).split("-").map(Number);
+  const [j, mo, t] = tagInZone(jetzt, zone).split("-").map(Number) as [number, number, number];
   const ausgabe = tagInZone(zeitpunktInZone(j, mo, t + tage, 12, 0, zone), zone);
   const r = redaktionscheck(eintraege, profil, ausgabe, jetzt);
   const ks = profil.ui.kennsaetze || {};
@@ -132,7 +132,7 @@ export function eingangsquellenPruefen(material: Material[], meldung: Meldung, p
     const stelle = normal(m.eingang!.stelle);
     return {
       stelle,
-      kern: stelle.split(/[,(]| - /)[0].trim(),
+      kern: (stelle.split(/[,(]| - /)[0] ?? "").trim(),
       land: normal(m.eingang!.land),
       zeit: (m.eingang!.zeitpunkt.match(/T(\d{2}:\d{2})/) || [])[1] || "",
     };
@@ -165,6 +165,7 @@ export function eingangsquellenPruefen(material: Material[], meldung: Meldung, p
     const stelle = [m.eingang!.land, m.eingang!.stelle].filter(Boolean).join(", ") || m.name;
     if (!treffer) return { material: m.name, stelle, status: "fehlt" };
     const e = eintraege[treffer.j];
+    if (!e) return { material: m.name, stelle, status: "fehlt" };
     const status = Math.floor(treffer.punkte) < 2 ? "unsicher" : e.code === "A" ? "nachgewiesen" : "kategorie";
     return { material: m.name, stelle, status, eintrag: e.nr };
   });

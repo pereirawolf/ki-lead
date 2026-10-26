@@ -163,7 +163,7 @@ export function beispielDateien(profil: Profil, ordner: string): LagebildDatei[]
   return Object.keys(profil.dateien)
     .filter((p) => p.startsWith(praefix) && p.toLowerCase().endsWith(".json"))
     .sort()
-    .map((p) => ({ name: p.slice(praefix.length), text: profil.dateien[p], importiertAm: jetzt }));
+    .map((p) => ({ name: p.slice(praefix.length), text: profil.dateien[p] ?? "", importiertAm: jetzt }));
 }
 
 const text = (v: unknown) => (v === null || v === undefined ? "" : String(v));

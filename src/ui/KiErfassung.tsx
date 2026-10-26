@@ -310,7 +310,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
             : f.art === "fortsetzung"
               ? `Lange Recherche, Runde ${f.runde + 1} …`
               : `${f.grund} Neuer Versuch in ${Math.round(f.warteMs / 1000)} s.`;
-    setProtokoll((p) => (p.length && p[p.length - 1].text === text ? p : [...p, { zeit: Date.now(), text }]));
+    setProtokoll((p) => (p[p.length - 1]?.text === text ? p : [...p, { zeit: Date.now(), text }]));
   };
 
   const kontext = (l: Lauf): Kontext => {
@@ -540,8 +540,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   };
 
   const artUmschalten = (i: number, art: string) => {
-    if (!vorschlag) return;
-    const s = vorschlag.sachverhalte[i];
+    const s = vorschlag?.sachverhalte[i];
+    if (!s) return;
     const neu = sopsNachArtwechsel(profil, s.sops, s.ereignisarten, art);
     setzeSv(i, { ereignisarten: neu.arten, sops: neu.sops });
   };
@@ -578,6 +578,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     if (!vorschlag || i < 1) return;
     const a = vorschlag.sachverhalte[i - 1];
     const b = vorschlag.sachverhalte[i];
+    if (!a || !b) return;
     const vereint = {
       titel: [a.titel, b.titel].filter(Boolean).join(" / "),
       ereignisarten: [...new Set([...a.ereignisarten, ...b.ereignisarten])],

@@ -421,7 +421,7 @@ export async function begrenztParallel<T, R>(eingaben: readonly T[], n: number, 
       const i = naechster++;
       if (i >= eingaben.length || fehler) return;
       try {
-        ergebnisse[i] = await aufgabe(eingaben[i], i);
+        ergebnisse[i] = await aufgabe(eingaben[i]!, i);
       } catch (e) {
         fehler ??= { e };
         return;
@@ -790,7 +790,7 @@ export function radarUmhaengen(d: Meldung, p: Profil, meldungen: string[] = []):
   if (!r.sachverhalte || pfad.length < 2 || pfad.some((x) => /[\[\]*]/.test(x))) return;
   const liste = holeWert(d, r.sachverhalte);
   if (!Array.isArray(liste)) return;
-  const feld = pfad[pfad.length - 1];
+  const feld = pfad[pfad.length - 1]!;
   const eltern = pfad.slice(0, -1);
   const svSchema = aufloesen(aufloesen(p.schema.properties?.[r.sachverhalte], p.schema)?.items, p.schema);
   if (svSchema?.properties && feld in svSchema.properties) return;
@@ -819,7 +819,7 @@ export function kodierleitfadenKennung(p: Profil): string | undefined {
   const pfad = p.manifest.kodierleitfaden;
   const text = pfad ? p.dateien[pfad] : "";
   if (!text) return undefined;
-  const titel = (text.match(/^#\s+(.+)$/m)?.[1] || "").split(/\s+[–-]\s+/)[0].trim();
+  const titel = ((text.match(/^#\s+(.+)$/m)?.[1] || "").split(/\s+[–-]\s+/)[0] ?? "").trim();
   const fassung = text.slice(0, 800).match(/Fassung\s+(\d+(?:\.\d+)*)/)?.[1];
   return titel && fassung ? `${titel} ${fassung}` : undefined;
 }
@@ -1024,7 +1024,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   if (recherche && e.nachforderung !== false && grenzen.websucheMax > 0) {
     const nw = rechercheNachweis({ nutzung: erste.nutzung, suchen: erste.suchen, abrufe: erste.abrufe });
     const ohneSuche = nw.zaehlerVollstaendig && nw.websuchen === 0 && nw.abrufe - (erste.abrufFehler?.length || 0) <= 0;
-    const fehlend = pflicht.filter((_, i) => !pflichtStand[i].ausgefuehrt);
+    const fehlend = pflicht.filter((_, i) => !pflichtStand[i]?.ausgefuehrt);
     // Nur wenn die gewählten SOPs amtliche Einstiege verlinken (Entscheidung vom 26.10.2026 zu KP-2026-W44-15)
     const ohnePrimaer = amtlich.length && !amtlichErreicht(erste, amtlich) ? amtlich : [];
     if (fehlend.length || ohneSuche || ohnePrimaer.length) {

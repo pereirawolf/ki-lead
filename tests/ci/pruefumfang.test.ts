@@ -6,7 +6,6 @@ import { copyFileSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSyn
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
-// @ts-expect-error: reines ES-Modul ohne Typdeklaration
 import { IN_DER_APP, NUR_INHALT, PWA, pruefumfang } from "../../scripts/pruefumfang.mjs";
 import { REPO, repoPfad } from "../support/dateien";
 

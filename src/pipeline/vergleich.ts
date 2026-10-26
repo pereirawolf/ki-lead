@@ -129,7 +129,7 @@ function kurz(m: Meldung, profil: Profil): SvKurz[] {
 export function kernaussage(sv: any, profil: Profil): string {
   const r = profil.ui.rollen;
   const t = r.sv_bewertung_text ? String(holeWert(sv, r.sv_bewertung_text) ?? "") : "";
-  return (t.split("\n")[0] ?? "").replace(/^\s*Kernaussage:\s*/i, "").split(/\s+Referenzraum:/)[0];
+  return (t.split("\n")[0] ?? "").replace(/^\s*Kernaussage:\s*/i, "").split(/\s+Referenzraum:/)[0] ?? "";
 }
 
 /**
@@ -162,7 +162,7 @@ export function zuordnen(ki: Meldung, ref: Meldung, profil: Profil, manuell?: Zu
   const b = kurz(ref, profil);
   const sva = sachverhalte(ki, profil.ui);
   const svb = sachverhalte(ref, profil.ui);
-  const w = (i: number, j: number) => jaccard(merkmal(a[i], sva[i], profil), merkmal(b[j], svb[j], profil));
+  const w = (i: number, j: number) => jaccard(merkmal(a[i]!, sva[i], profil), merkmal(b[j]!, svb[j], profil));
   const belegtA = new Set<number>();
   const belegtB = new Set<number>();
   const paare: { ki?: SvKurz; ref?: SvKurz; aehnlichkeit: number }[] = [];
@@ -201,7 +201,7 @@ export function vergleiche(ki: Meldung, ref: Meldung, profil: Profil, manuell?: 
   }));
   const voll = paare.filter((p) => p.ki && p.ref);
   const achsen: AchsenStatistik[] = (def?.achsen || []).map((a, i) => {
-    const werte = voll.map((p) => p.achsen[i]);
+    const werte = voll.map((p) => p.achsen[i]!);
     const mit = werte.filter((w) => w.diff !== null);
     return {
       key: a.key,
@@ -351,7 +351,7 @@ const median = (xs: number[]): number | null => {
   if (!xs.length) return null;
   const s = [...xs].sort((a, b) => a - b);
   const m = s.length >> 1;
-  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  return s.length % 2 ? s[m]! : (s[m - 1]! + s[m]!) / 2;
 };
 
 function imSoll(w: number | null, e: RadarErwartung): boolean {
@@ -373,22 +373,28 @@ export function krippendorffAlphaOrdinal(einheiten: (number | null)[][]): number
   const k = werte.length;
   const o = Array.from({ length: k }, () => new Array<number>(k).fill(0));
   for (const e of paarbar)
-    for (let i = 0; i < e.length; i++) for (let j = 0; j < e.length; j++) if (i !== j) o[pos.get(e[i])!][pos.get(e[j])!] += 1 / (e.length - 1);
+    for (let i = 0; i < e.length; i++)
+      for (let j = 0; j < e.length; j++) {
+        if (i === j) continue;
+        const zeile = o[pos.get(e[i]!)!]!;
+        const spalte = pos.get(e[j]!)!;
+        zeile[spalte] = (zeile[spalte] ?? 0) + 1 / (e.length - 1);
+      }
   const nc = o.map((zeile) => zeile.reduce((s, x) => s + x, 0));
   const n = nc.reduce((s, x) => s + x, 0);
   const delta = (c: number, d: number) => {
     const [a, b] = c <= d ? [c, d] : [d, c];
     let s = 0;
-    for (let g = a; g <= b; g++) s += nc[g];
-    return (s - (nc[a] + nc[b]) / 2) ** 2;
+    for (let g = a; g <= b; g++) s += nc[g]!;
+    return (s - (nc[a]! + nc[b]!) / 2) ** 2;
   };
   let beobachtet = 0;
   let erwartet = 0;
   for (let c = 0; c < k; c++)
     for (let d = 0; d < k; d++) {
       const dl = delta(c, d);
-      beobachtet += o[c][d] * dl;
-      erwartet += nc[c] * nc[d] * dl;
+      beobachtet += o[c]![d]! * dl;
+      erwartet += nc[c]! * nc[d]! * dl;
     }
   if (erwartet === 0) return null;
   return 1 - ((n - 1) * beobachtet) / erwartet;
@@ -403,20 +409,20 @@ export function vergleicheMehrere(meldungen: Meldung[], profil: Profil, erwartun
   const def = radarDef(profil);
   const achsen = def?.achsen || [];
   if (!meldungen.length) return { verfahren: MEHRFACH_VERFAHREN, meldungen: 0, gruppen: [], ohneGegenstueck: 0, alpha: [] };
-  const [erste, ...weitere] = meldungen;
+  const [erste, ...weitere] = meldungen as [Meldung, ...Meldung[]];
   const bezug = kurz(erste, profil);
   // je Sachverhalt der ersten Meldung die zugeordneten Sachverhalte aller Meldungen
   const spalten: SvKurz[][] = bezug.map((s) => [s]);
   let ohneGegenstueck = 0;
   for (const m of weitere) {
     for (const p of zuordnen(m, erste, profil)) {
-      if (p.ki && p.ref) spalten[p.ref.index].push(p.ki);
+      if (p.ki && p.ref) spalten[p.ref.index]?.push(p.ki);
       else if (p.ki) ohneGegenstueck++;
     }
   }
   const soll = bezug.length === 1 ? erwartung : undefined;
   const gruppen: MehrfachGruppe[] = spalten.map((kodiert, i) => ({
-    bezeichnung: bezug[i].bezeichnung,
+    bezeichnung: bezug[i]?.bezeichnung ?? "",
     kodierungen: kodiert.length,
     achsen: achsen.map((a) => {
       const werte = kodiert.map((s) => s.radar[a.key] ?? null);
@@ -426,7 +432,7 @@ export function vergleicheMehrere(meldungen: Meldung[], profil: Profil, erwartun
       for (let x = 0; x < mit.length; x++)
         for (let y = x + 1; y < mit.length; y++) {
           paare++;
-          if (Math.abs(mit[x] - mit[y]) <= 1) nah++;
+          if (Math.abs(mit[x]! - mit[y]!) <= 1) nah++;
         }
       const e = soll?.[a.key];
       return {
@@ -445,7 +451,7 @@ export function vergleicheMehrere(meldungen: Meldung[], profil: Profil, erwartun
     }),
   }));
   const alpha = achsen.map((a, i) => {
-    const einheiten = gruppen.map((g) => g.achsen[i].werte);
+    const einheiten = gruppen.map((g) => g.achsen[i]?.werte ?? []);
     return {
       key: a.key,
       label: a.label,

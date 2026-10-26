@@ -354,7 +354,7 @@ export function TestlaufAbschnitt({
   const planHinweis = reparatur
     ? `${gilt ? "" : "Varianten des Bewertungsplans lassen die Einstellungen unverändert. "}Je Variante ${PLAN_REPARATUR.wiederholungen} Läufe mit derselben App-Version.`
     : `${planWahl ? `${planWahl.plan.kurz} ` : "Varianten der Bewertungspläne lassen die Einstellungen unverändert. "}Je Variante ${
-        (planWahl?.plan ?? plaene[0]).wiederholungen
+        (planWahl?.plan ?? plaene[0])?.wiederholungen
       } Läufe mit derselben App-Version${rollen.includes("reparatur") ? "; die Reparatur folgt dem KI-Profil des S2-Anbieters." : "."}`;
 
   return (

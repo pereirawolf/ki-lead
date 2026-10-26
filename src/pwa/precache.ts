@@ -31,7 +31,7 @@ export function precacheVersion(appVersion: string, liste: string[], inhalte: Re
  * Service Worker (sw-vorlage.js), der damit bei der Installation die Stimmigkeit seiner Fassung prüft.
  */
 export function htmlVerweise(html: string): string[] {
-  return [...new Set([...html.matchAll(/(?:src|href)="\.\/([^"?#]+)"/g)].map((m) => m[1]))];
+  return [...new Set([...html.matchAll(/(?:src|href)="\.\/([^"?#]+)"/g)].map((m) => m[1] ?? ""))];
 }
 
 /** Verweise der index.html, die nicht in der Dateiliste stehen (leer = stimmig) */

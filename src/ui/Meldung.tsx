@@ -45,7 +45,8 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
   const dateiRef = useRef<HTMLInputElement>(null);
-  const aktuell = schritte[Math.min(schritt, schritte.length - 1)];
+  // meldungsSchritte liefert immer mindestens einen Schritt
+  const aktuell = schritte[Math.min(schritt, schritte.length - 1)]!;
 
   // Änderungen immer auf dem neuesten Stand, auch wenn zwei Änderungen vor dem nächsten Zeichnen folgen
   const stand = useRef(meldung);
@@ -100,7 +101,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     setSchritt(0);
     const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
     const pruefschritt = ui.schritte.find((s) => s.pruefung) ?? ui.schritte[ui.schritte.length - 1];
-    if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${pruefschritt.titel}“.`);
+    if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${pruefschritt?.titel ?? ""}“.`);
     else zeilen.push("Schemaprüfung ohne Befund.");
     if (quellen.length) zeilen.push(`Quellen: ${quellen.length} Hinweis(e).`);
     setMeldungen({ art: !mig.bekannt || schema.length ? "hinweis" : "ok", zeilen });
@@ -199,14 +200,14 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
             <div className="schritt-nav">
               {schritt > 0 ? (
                 <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
-                  Zurück: {schritte[schritt - 1].titel}
+                  Zurück: {schritte[schritt - 1]?.titel}
                 </button>
               ) : (
                 <span />
               )}
               {schritt < schritte.length - 1 && (
                 <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
-                  Weiter: {schritte[schritt + 1].titel}
+                  Weiter: {schritte[schritt + 1]?.titel}
                 </button>
               )}
             </div>

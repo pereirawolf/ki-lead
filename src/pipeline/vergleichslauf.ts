@@ -81,7 +81,7 @@ export function fehlendeFalldateien(dateien: Record<string, string>): string[] {
 /** Material frisch aus den Dateien des Falls, wie beim Hochladen in der App */
 export async function fallMaterial(d: FallDaten): Promise<Material[]> {
   const out: Material[] = [];
-  for (const pfad of FALL_MATERIAL) out.push(await dateiLesen(new File([d.dateien[pfad]], pfad.split("/").pop()!), d.profil));
+  for (const pfad of FALL_MATERIAL) out.push(await dateiLesen(new File([d.dateien[pfad] ?? ""], pfad.split("/").pop()!), d.profil));
   return out;
 }
 
@@ -392,8 +392,8 @@ export function s1Vergleich(v: S1Vorschlag | undefined, muster: S1Vorschlag = S1
   const namen = new Set(FALL_MATERIAL.map((p) => p.split("/").pop()!));
   return {
     sachverhalte: v.sachverhalte.length,
-    gliederung_wie_muster: gleicheZahl && v.sachverhalte.every((s, i) => menge(s.ereignisarten) === menge(m[i].ereignisarten)),
-    zuordnung_wie_muster: gleicheZahl && v.sachverhalte.every((s, i) => menge(s.eingangsmeldungen) === menge(m[i].eingangsmeldungen)),
+    gliederung_wie_muster: gleicheZahl && v.sachverhalte.every((s, i) => menge(s.ereignisarten) === menge(m[i]?.ereignisarten)),
+    zuordnung_wie_muster: gleicheZahl && v.sachverhalte.every((s, i) => menge(s.eingangsmeldungen) === menge(m[i]?.eingangsmeldungen)),
     eingaenge_zugeordnet: new Set(v.sachverhalte.flatMap((s) => s.eingangsmeldungen ?? []).filter((n) => namen.has(n))).size,
     sop_abdeckung: anteil([...soll].filter((x) => ist.has(x)).length, soll.size),
     sops_zusaetzlich: [...ist].filter((x) => !soll.has(x)).sort(),
@@ -536,7 +536,7 @@ export async function einLauf(o: LaufOptionen): Promise<EinzelErgebnis> {
   const quellen = meldung ? eingangsquellenPruefen(material, meldung, profil) : [];
   let tabelle: string[][] | undefined;
   if (meldung) {
-    const refText = daten.dateien[REFERENZ];
+    const refText = daten.dateien[REFERENZ] ?? "";
     const mig = migriere(JSON.parse(refText), profil);
     const ergebnis = vergleiche(meldung, mig.daten, profil);
     lauf.vergleich = {

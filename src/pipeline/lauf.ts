@@ -4,7 +4,7 @@
 import type { GespeicherterVergleich } from "./vergleich";
 import JSZip from "jszip";
 import { del, entries, get, set } from "idb-keyval";
-import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from "../anbieter/typen";
+import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung, type StopGrund } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
@@ -96,7 +96,7 @@ export interface StufenEintrag {
   modell?: string;
   aufwand?: string;
   anfrage?: { system: string[]; nachrichten: unknown[]; werkzeuge?: unknown; jsonSchema?: unknown; maxTokens?: number };
-  antwort?: { text: string; inhalt: unknown[]; stopGrund: string; runden: number };
+  antwort?: { text: string; inhalt: unknown[]; stopGrund: StopGrund; runden: number };
   nutzung?: Nutzung;
   kostenUsd?: number | null;
   befunde?: string[];
@@ -143,6 +143,26 @@ export interface Lauf {
   fehler?: string;
   /** Vergleich des Ergebnisses mit einer Referenzfassung (Abnahme, Forschung) */
   vergleich?: GespeicherterVergleich;
+}
+
+/** Ergebnis eines Laufs, wie es `Lauf.ergebnis` trägt */
+export type LaufErgebnis = NonNullable<Lauf["ergebnis"]>;
+
+/**
+ * Type-Guards für den Zustand eines Laufs (seit 0.6.2, TP-2026-W44-07). Gespeicherte Läufe bestehen in der bisherigen
+ * Form fort, daher keine diskriminierte Union am Typ `Lauf`, sondern Prüfungen, die den Status mit den dazugehörigen
+ * Feldern verknüpfen.
+ */
+export function istFertig(l: Lauf): l is Lauf & { status: "fertig"; ergebnis: LaufErgebnis } {
+  return l.status === "fertig" && l.ergebnis !== undefined;
+}
+
+export function istBestaetigen(l: Lauf): l is Lauf & { status: "bestaetigen"; vorschlag: S1Vorschlag } {
+  return l.status === "bestaetigen" && l.vorschlag !== undefined;
+}
+
+export function istGescheitert(l: Lauf): l is Lauf & { status: "fehler" | "abgebrochen" } {
+  return l.status === "fehler" || l.status === "abgebrochen";
 }
 
 export function laufId(d = new Date()): string {

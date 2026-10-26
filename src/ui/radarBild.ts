@@ -39,7 +39,7 @@ export function radarPng(def: RadarDef, wert: Record<string, number | null> | un
     ctx.strokeStyle = "#c5cec9";
     ctx.stroke();
     const [lx, ly] = punkt(i, rMax + groesse / 14);
-    ctx.fillText(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0], lx, ly);
+    ctx.fillText(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0] ?? "", lx, ly);
   });
   const werte = def.achsen.map((a) => (Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null));
   if (werte.some((v) => v !== null)) {

@@ -214,7 +214,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
           setDateien((neu) => zusammenfuehren(gespeichert, neu));
         }
         if (s?.naechsteAusgabe) {
-          const [tag, zeit] = s.naechsteAusgabe.split("T");
+          const [tag = "", zeit] = s.naechsteAusgabe.split("T");
           setAusgabe(tag);
           setAusgabeZeit(zeit || "");
         }
@@ -951,7 +951,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                   <table className="tabelle lb-tabelle">
                     <thead>
                       <tr>
-                        {t[0].map((h, i) => (
+                        {(t[0] ?? []).map((h, i) => (
                           <th key={i}>{h}</th>
                         ))}
                       </tr>
@@ -1170,7 +1170,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                   <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
                 )}
                 {red.mehrfach.map((m) => (
-                  <Punkt key={m.stelle} klasse="warn" marke="Mehrere Meldungen derselben Stelle" titel={m.stelle} aktion={zurMeldung(m.eintraege[0].id)}>
+                  <Punkt key={m.stelle} klasse="warn" marke="Mehrere Meldungen derselben Stelle" titel={m.stelle} aktion={zurMeldung(m.eintraege[0]?.id ?? "")}>
                     {m.eintraege.map((e) => `${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"} – ${e.name}`).join("\n")}
                     {"\n"}Fortschreibung? Eine jüngere Meldung ersetzt ältere Angaben nur, soweit sie denselben Gegenstand aktualisiert, berichtigt oder
                     aufhebt. Denselben Sachverhalt nicht doppelt zählen; eigenständige Lagen derselben Stelle bleiben nebeneinander gültig.

@@ -124,14 +124,8 @@ export function herkunftsliste(d: Meldung, profil: Profil): string[] {
   const rolle = profil.ui.rollen.quellen;
   if (!rolle) return [];
   return parseQuellen(holeWert(d, rolle)).map((e) => {
-    const rest = e.text
-      .split("\n")[0]
-      .replace(/^\s*\[Q\d+\]\s*/, "")
-      .replace(/^[A-Z]\s*[–\-·:|,]\s*/, "");
-    const herausgeber = rest
-      .split(/\s\(\d|:\s|\.\s+Online/)[0]
-      .trim()
-      .slice(0, 90);
+    const rest = (e.text.split("\n")[0] ?? "").replace(/^\s*\[Q\d+\]\s*/, "").replace(/^[A-Z]\s*[–\-·:|,]\s*/, "");
+    const herausgeber = (rest.split(/\s\(\d|:\s|\.\s+Online/)[0] ?? "").trim().slice(0, 90);
     return `[Q${e.nr}] ${e.code || "?"} – ${herausgeber || "ohne Angabe"}`;
   });
 }
@@ -199,7 +193,7 @@ export function fristenText(d: Meldung, profil: Profil): string {
   const alle = fristen(d, profil);
   const prefix = profil.ui.kennsaetze?.handlungsrelevant || "Handlungsrelevant bis:";
   if (!alle.length) return "";
-  if (alle.length === 1) return `${prefix} ${fristZeile(alle[0])}`;
+  if (alle.length === 1 && alle[0]) return `${prefix} ${fristZeile(alle[0])}`;
   const zeilen = alle.slice(0, GRENZEN.fristenMax).map((f) => `• ${fristZeile(f)}`);
   if (alle.length > GRENZEN.fristenMax) zeilen.push(`• weitere ${alle.length - GRENZEN.fristenMax} Frist(en) in der Meldung`);
   return [prefix, ...zeilen].join("\n");
@@ -344,7 +338,7 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
         .trim();
     };
     struktur.kernaussage = ohneOffen(struktur.kernaussage);
-    for (const s of Object.keys(struktur.abschnitte)) struktur.abschnitte[s] = ohneOffen(struktur.abschnitte[s]);
+    for (const s of Object.keys(struktur.abschnitte)) struktur.abschnitte[s] = ohneOffen(struktur.abschnitte[s] ?? "");
     struktur.kurztitel = struktur.kurztitel.map(ohneOffen);
     const hinweise = kurzfassungHinweise(struktur, zahl);
     if (entfernt) hinweise.push("Verbliebene Quellenverweise oder URLs wurden entfernt.");

@@ -84,7 +84,7 @@ function median(w: number[]): number | null {
   if (!w.length) return null;
   const s = [...w].sort((a, b) => a - b);
   const m = Math.floor(s.length / 2);
-  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  return s.length % 2 ? s[m]! : (s[m - 1]! + s[m]!) / 2;
 }
 
 /**
@@ -126,13 +126,14 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
   return [...gruppen.entries()].map(([schluessel, rs]) => {
     const laeufe = rs.flatMap((r) => r.laeufe).filter((l) => !l.attrappe || rs.every((r) => r.attrappe));
     const variante = rs.find((r) => r.variante)?.variante;
-    const u = reiheUmfang(rs[0]);
+    const erste = rs[0]!;
+    const u = reiheUmfang(erste);
     // Umfang in der Kennung, wo sie sonst mit der ganzen Kette zusammenfiele (seit 0.5.12)
     const zusatz = u === "s1-s2" || (u === "s2-s3" && !variante) ? `@${u}` : "";
     const kennung =
       (variante
         ? variante.split("/").pop()!
-        : `${rs[0].modelle.s2.modell}-${rs[0].modelle.s2.aufwand}${rs[0].mistral_endpunkt ? `-${rs[0].mistral_endpunkt}` : ""}`) + zusatz;
+        : `${erste.modelle.s2.modell}-${erste.modelle.s2.aufwand}${erste.mistral_endpunkt ? `-${erste.mistral_endpunkt}` : ""}`) + zusatz;
     const kz = {} as Record<keyof Kennzahlen, Spanne>;
     for (const k of KENNZAHLEN) kz[k] = spanne(laeufe.map((l) => l.kennzahlen?.[k] ?? null));
     // Radar je Sachverhalt der Redaktionsfassung
@@ -167,7 +168,7 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
     return {
       kennung,
       schluessel,
-      konfiguration: konfigText(rs[0]),
+      konfiguration: konfigText(erste),
       app: [...new Set(rs.map((r) => r.app))],
       laeufe: laeufe.length,
       bestanden: laeufe.filter((l) => l.technisch_bestanden).length,

@@ -139,7 +139,7 @@ export function leuchtdichte(hex: string): number {
 
 /** Kontrastverhältnis nach WCAG 2.x (1 bis 21) */
 export function kontrast(a: string, b: string): number {
-  const [x, y] = [leuchtdichte(a), leuchtdichte(b)].sort((p, q) => q - p);
+  const [x, y] = [leuchtdichte(a), leuchtdichte(b)].sort((p, q) => q - p) as [number, number];
   return (x + 0.05) / (y + 0.05);
 }
 
@@ -191,12 +191,14 @@ export const BAND_TOENUNG = { kopf: 0.07, papier: 0.06 } as const;
  */
 export function bandAbheben(tokens: Record<string, string>, band: string[]): Record<string, string> {
   const kopf = tokens["header-hintergrund"] ?? tokens.flaeche;
-  const grund = [kopf, tokens.papier].filter((g) => g && HEX.test(g));
+  const amt = tokens.amt;
+  const papier = tokens.papier;
+  const grund = [kopf, papier].filter((g): g is string => !!g && HEX.test(g));
   const betroffen = band.filter((f) => HEX.test(f)).some((f) => grund.some((g) => farbAbstand(f, g) <= BAND_GLEICHE_FARBE));
-  if (!betroffen || !HEX.test(tokens.amt ?? "") || !HEX.test(kopf ?? "") || !HEX.test(tokens.papier ?? "")) return tokens;
+  if (!betroffen || !amt || !HEX.test(amt) || !kopf || !HEX.test(kopf) || !papier || !HEX.test(papier)) return tokens;
   // Haben Kopf und Seitengrund dieselbe Farbe (Bund- und Länderschemata seit 0.5.3), behalten sie sie auch getönt
-  const kopfAnteil = kopf === tokens.papier ? BAND_TOENUNG.papier : BAND_TOENUNG.kopf;
-  return { ...tokens, "header-hintergrund": mischen(tokens.amt, kopf, kopfAnteil), papier: mischen(tokens.amt, tokens.papier, BAND_TOENUNG.papier) };
+  const kopfAnteil = kopf === papier ? BAND_TOENUNG.papier : BAND_TOENUNG.kopf;
+  return { ...tokens, "header-hintergrund": mischen(amt, kopf, kopfAnteil), papier: mischen(amt, papier, BAND_TOENUNG.papier) };
 }
 
 /** Kontrastfehler einer vollständigen Farbtabelle */
@@ -207,7 +209,7 @@ export function kontrastFehler(tokens: Record<string, string>, textZiel = 4.5): 
     const min = grundwert >= 4.5 ? Math.max(grundwert, textZiel) : grundwert;
     const a = tokens[v];
     const b = tokens[h];
-    if (!HEX.test(a || "") || !HEX.test(b || "")) continue;
+    if (!a || !b || !HEX.test(a) || !HEX.test(b)) continue;
     const k = kontrast(a, b);
     if (k < min) out.push(`„${v}“ auf „${h}“: Kontrast ${k.toFixed(2)}:1, mindestens ${min}:1`);
   }
@@ -264,7 +266,7 @@ function ausProfil(p: ProfilFarbschema, auswahl: string, quelle: "profil" | "lok
   const basis = katalogEintrag(p.basis)!;
   const tokens = tokensFuer(p);
   const eigeneAkzente = ["marke-akzent-1", "marke-akzent-2", "marke-akzent-3"].some((k) => p.farben?.[k as UiToken]);
-  const band = eigeneAkzente ? [tokens["marke-akzent-1"], tokens["marke-akzent-2"], tokens["marke-akzent-3"]] : basis.band;
+  const band = eigeneAkzente ? ["marke-akzent-1", "marke-akzent-2", "marke-akzent-3"].map((k) => tokens[k] ?? "") : basis.band;
   return {
     auswahl,
     basis: basis.id,
