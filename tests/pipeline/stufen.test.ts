@@ -44,7 +44,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     expect(e.meldung!._status).toBe("Entwurf");
     expect(e.meldung!._entstehung.verfahren).toBe("KI-Entwurf");
     expect(e.meldung!._entstehung.werkzeug).toContain(k.lauf.id);
-    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.1.1"]);
+    expect(e.meldung!._entstehung.sop).toEqual(["SOP-LEAD B01 Unwetter / Sturm v2.2.0"]);
     expect(e.kurzantwort).toBe("Kernaussage: Folgen weitgehend behoben.");
     expect(k.lauf.status).toBe("fertig");
     expect(k.lauf.ergebnis?.schemakonform).toBe(true);

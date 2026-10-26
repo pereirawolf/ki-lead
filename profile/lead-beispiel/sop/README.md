@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.17.3 vom 26.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.18.0 vom 26.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -24,12 +24,12 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 
 | Kennung | Ereignisart | Datei | Fassung | bisher |
 |---|---|---|---|---|
-| B01 | Unwetter / Sturm | [`teil-b/B01_unwetter-sturm.md`](teil-b/B01_unwetter-sturm.md) | 2.1.1 | 01 |
-| B02 | Hochwasser / Überschwemmung | [`teil-b/B02_hochwasser-ueberschwemmung.md`](teil-b/B02_hochwasser-ueberschwemmung.md) | 2.1.2 | 02 |
+| B01 | Unwetter / Sturm | [`teil-b/B01_unwetter-sturm.md`](teil-b/B01_unwetter-sturm.md) | 2.2.0 | 01 |
+| B02 | Hochwasser / Überschwemmung | [`teil-b/B02_hochwasser-ueberschwemmung.md`](teil-b/B02_hochwasser-ueberschwemmung.md) | 2.2.0 | 02 |
 | B03 | Waldbrand | [`teil-b/B03_waldbrand.md`](teil-b/B03_waldbrand.md) | 2.1.1 | 03 |
 | B04 | Erdbeben | [`teil-b/B04_erdbeben.md`](teil-b/B04_erdbeben.md) | 2.1.1 | 04 |
 | B05 | Extremhitze / Dürre | [`teil-b/B05_extremhitze-duerre.md`](teil-b/B05_extremhitze-duerre.md) | 2.2.0 | 05 |
-| B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.2.0 | 06 |
+| B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.3.0 | 06 |
 | B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.2.1 | 07 |
 | B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.2.0 | 08 |
 | B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.2.0 | 09 |
@@ -72,7 +72,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 |---|---|---|---|---|---|
 | C11 | Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit | Themenbaustein | [`teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md`](teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md) | 1.2.2 | N02 |
 | C12 | Kraftstoff- und Wärmeversorgung | Themenbaustein | [`teil-c/C12_kraftstoff-waerme.md`](teil-c/C12_kraftstoff-waerme.md) | 1.2.0 | N05 |
-| C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.2.1 | N06 |
+| C13 | Verkehr, Transport und kritische Logistik | Themenbaustein | [`teil-c/C13_verkehr-transport-logistik.md`](teil-c/C13_verkehr-transport-logistik.md) | 1.3.0 | N06 |
 | C14 | Lebensmittelversorgung | Themenbaustein | [`teil-c/C14_lebensmittelversorgung.md`](teil-c/C14_lebensmittelversorgung.md) | 1.3.1 | N07 |
 | C15 | Abwasser, Sanitärhygiene und kritische Entsorgung | Themenbaustein | [`teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md`](teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md) | 1.1.3 | N08 |
 

@@ -58,7 +58,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.17.3 | 26.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.18.0 | 26.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.4.0 | 24.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.25.0 | 23.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.5.0 | 26.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -304,9 +304,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Unwetter / Sturm (Sturm, Orkan, Gewitter, Starkregen, Hagel, Tornado)"
 art_vorschlag: ["Unwetter / Sturm"]
 zweck: "Reproduzierbare Erfassung und Bewertung meteorologischer Unwetterlagen mit Schadens-, Versorgungs- und Betroffenenbezug für den deutschen Bevölkerungsschutz, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
-version: "2.1.1"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -329,12 +329,12 @@ bisherige_ids: ["sop-01"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welches Phänomen trifft welchen Raum und Zeitraum? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; laufend; Ausgabe und Gültigkeit prüfen | L/R; D1/D8 | Warngebiet ist kein bestätigtes Schadensgebiet. |
+| R1 | Welches Phänomen trifft welchen Raum und Zeitraum? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) (bundesweit, mit Länderberichten) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe, nächste Ausgabe und Gültigkeit prüfen | L/R; D1/D8 | Warngebiet ist kein bestätigtes Schadensgebiet. An der Küste Wind und Wasserstand trennen; Sturmflut nach B02/R2 ([BSH-Wasserstandsvorhersage](https://wasserstand.bsh.de/)). |
 | R2 | Welche Schäden, Sperrungen und Verletzten sind bestätigt? | Lagemeldungen (A.3) | L/R; D1/D2 | Einsatzstellen ≠ Betroffene; Meldungen desselben Schadens nicht addieren; Länder melden in unterschiedlichem Rhythmus. |
 | R3 | Welche Strom-, Verkehrs- und Telekommunikationsdienste sind beeinträchtigt? | Betreibermeldungen (A.3); DB-, Autobahn-, Flughafenmeldungen | R/I; D6 | Vorsorgliche Sperrung ≠ Schaden; frühe „keine größeren Störungen“ nicht als final werten. |
 | R4 | Welche Warnungen und Schutzmaßnahmen gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | M | Teilentwarnung ist keine Gesamtentwarnung; Warnlage nach A.9.3. |
 | R5 | Welche Hilfe ist tatsächlich angefordert oder eingesetzt? | Lagemeldungen (A.3) | M; D4 | Bereitschaft, Anforderung und Einsatz trennen. |
-| R6 | Was ist über Folgewetter und Wiederherstellung bekannt? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; Betreibermeldungen (A.3) | R/M; D5/D8 | Aufräum- und Reparaturdauer beim Betreiber belegen, nicht aus Wetterende ableiten. |
+| R6 | Was ist über Folgewetter und Wiederherstellung bekannt? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); Betreibermeldungen (A.3) | R/M; D5/D8 | Aufräum- und Reparaturdauer beim Betreiber belegen, nicht aus Wetterende ableiten. |
 | R7 | Sind Freiluftveranstaltungen, Campingplätze oder andere exponierte Gruppen im Warngebiet? | Lagemeldungen (A.3); zuständige Ordnungsbehörde; anlassbezogen | R/M | Warnvorlauf, Erreichbarkeit und tatsächliche Schutzmöglichkeit erfassen (A.9.2); Absage ist Vorsorge, keine Betroffenheit. |
 
 ### 3. Auswertung: Prüfpunkte
@@ -363,7 +363,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** DWD (Wetterprognose) · Lagezentren der Länder · Betreiber (Wiederherstellungsstatus) · GMLZ
+**Ansprechstellen:** DWD (Wetterprognose) · BSH (Küste: Wasserstand und Sturmflut, B02) · Lagezentren der Länder · Betreiber (Wiederherstellungsstatus) · GMLZ
 
 **Offene Punkte:** Kriterien für „absehbare kritische Auswirkungen“ vor Schadenseintritt an Übungs- und Rückblickfällen kalibrieren (A.10.3).
 
@@ -380,9 +380,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Hochwasser / Überschwemmung (Flusshochwasser, pluviale Überflutung/Sturzflut, Sturmflut)"
 art_vorschlag: ["Hochwasser / Überschwemmung"]
 zweck: "Reproduzierbare Erfassung und Bewertung von Fluss-, Starkregen- und Sturmflutereignissen mit Folgen für Bevölkerung, Einsatzwesen und KRITIS, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
-version: "2.1.2"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -395,7 +395,7 @@ bisherige_ids: ["sop-02"]
 
 **Umfasst / grenzt ab von:** Flusshochwasser, pluviale Überflutungen und Sturzfluten nach Starkregen sowie Sturmfluten mit belegter oder fachlich konkret prognostizierter Überflutung. Niedrigwasser gehört zu B05. Beispiel dafür: Pegel über Meldestufe an mehreren Flüssen mit Evakuierungen; ebenso eine belastbare Hochwasservorhersage mit Vorbereitungsbedarf (z. B. Räumung von Einrichtungen, länderübergreifende Unterstützung) vor der Ausuferung. Beispiel dagegen: bloßer Pegelanstieg ohne erkennbare Bevölkerungsschutzfolgen – keine automatische Aufnahme.
 
-**Recherchepfade:** *Flusshochwasser* mit Pegeltrend, Vorhersage und Einzugsgebiet · *pluviale Überflutung/Sturzflut* mit lokalen Wirkungsnachweisen auch ohne Pegel · *Sturmflut* mit Küstenabschnitt und Scheitelzeit. Ein Flusspegel allein deckt weder Sturzflut noch Küstenhochwasser ab.
+**Recherchepfade:** *Flusshochwasser* mit Pegeltrend, Vorhersage und Einzugsgebiet · *pluviale Überflutung/Sturzflut* mit lokalen Wirkungsnachweisen auch ohne Pegel und den DWD-Warnungen vor Stark- oder Dauerregen ([DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html)) · *Sturmflut* mit Küstenabschnitt und Scheitelzeit. Ein Flusspegel allein deckt weder Sturzflut noch Küstenhochwasser ab.
 
 **Befassungsanlässe:** Warnung der Landeshochwasserzentralen · BSH-Sturmflutwarnung · DWD-Warnung Dauer-/Starkregen · Lagemeldung eines Landes · Monitoring: Hochwasservorhersagen der Landeshochwasserzentralen.
 
@@ -406,7 +406,7 @@ bisherige_ids: ["sop-02"]
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
 | R1 | Welche Pegel, Vorhersagen und Einzugsgebiete sind maßgeblich? | [Länderübergreifendes Hochwasserportal](https://hochwasserzentralen.de/), Landeshochwasserzentralen, PEGELONLINE (WSV); pegel- und produktabhängig | L; D1/D8 | Pegel nur mit Station, Zeit und Bezugssystem; Meldestufen immer mit Land, Pegel und Bedeutung angeben. Pegelstände, Abfluss und Wiederkehrintervalle sind ohne Bezugsbedingungen nicht bundesweit vergleichbar. |
-| R2 | Besteht eine Sturmflutlage? | BSH, Wasserstandsvorhersage und Sturmflutwarndienst | L/R | Nordsee: Tide, Scheitelzeit und Abweichung vom angegebenen Bezugswasserstand getrennt angeben. Ostsee: zeitlichen Wasserstands-/Windstauverlauf und fachlich erwartetes Maximum übernehmen, keinen Tidezeitpunkt voraussetzen. NHN, Pegelnull und mittleres Hochwasser nicht vermischen; Warnung und Vorhersage mit Ausgabe und Gültigkeit dokumentieren. |
+| R2 | Besteht eine Sturmflutlage? | [BSH-Wasserstandsvorhersage](https://wasserstand.bsh.de/) (amtliche Wasserstandsvorhersage des Bundes für Nord- und Ostsee, mit Sturmflutstufen je Pegel) und [BSH: Wasserstandsvorhersage Nordsee und Sturmflutwarndienst](https://www.bsh.de/DE/THEMEN/Wasserstand_und_Gezeiten/Nordsee/nordsee.html); bei Sturmflut laufend; Ausgabe und Gültigkeit prüfen | L/R | Nordsee: Tide, Scheitelzeit und Abweichung vom angegebenen Bezugswasserstand getrennt angeben; das BSH stuft nach Abweichung vom mittleren Hochwasser (Sturmflut ab 1,5 m, schwere ab 2,5 m, sehr schwere ab 3,5 m über MHW). Ostsee: zeitlichen Wasserstands-/Windstauverlauf und fachlich erwartetes Maximum übernehmen, keinen Tidezeitpunkt voraussetzen. NHN, Pegelnull und mittleres Hochwasser nicht vermischen; Warnung und Vorhersage mit Ausgabe und Gültigkeit dokumentieren. |
 | R3 | Welche Überflutungsflächen und Evakuierungen sind bestätigt? | Lagemeldungen (A.3); ggf. Copernicus EMS Rapid Mapping | L/R; D1/D2 | Warn-, Evakuierungs- und überflutete Fläche trennen. Bewohner des Evakuierungsgebiets ≠ tatsächlich Evakuierte; vollzogen Evakuierte sind direkt Betroffene (A.3 Zählregeln, C16), aber nicht die Gesamtzahl der Betroffenen – Überflutungs- und Versorgungsbetroffene mit Überschneidung führen. Bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung prüfen (A.9.2, C16). |
 | R4 | Wie ist der Zustand von Deichen, Talsperren und Rückhaltebecken? | Länder-Hochwasserberichte, Deichverbände, Talsperrenbetreiber und -aufsicht | R; D8 | Zustand nur nach zuständiger Fachbewertung darstellen. Deichverteidigung und vorsorglicher Kräfteeinsatz belegen allein keine Verschärfung. Durchnässung und Dauer der Einstaubelastung sind fachbehördlich zu bewertende Indikatoren der Deichsicherheit (`Neubewertung bei:`). |
 | R5 | Welche Anlagen und Versorgungsfunktionen sind betroffen (Strom, Wassergewinnung, Kläranlagen, Kanalnetz)? | Betreibermeldungen (A.3) | R/I; D6 | Lage im Gefahrengebiet oder angekündigte Abschaltung belegt noch keinen Dienstleistungsausfall. Eine tatsächlich vollzogene Abschaltung kann ihn belegen: prüfen, welche Funktion seit wann in welchem Umfang fehlt und ob wirksame Ersatzversorgung sie aufrechterhält. Technischen Anlagenzustand, Dienstleistungsfolge und Vorsorgestatus getrennt darstellen; Abwasserfolgen mit C15 vertiefen. |
@@ -691,9 +691,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.2.0"
+version: "2.3.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -714,7 +714,7 @@ bisherige_ids: ["sop-06"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
+| R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
 | R2 | Welche Orte und Strecken sind abgeschnitten oder gesperrt? | Lagemeldungen (A.3); Autobahn GmbH, DB | L/R; D1/D2 | Sperrung einer Route belegt nicht Isolation. Im Stau oder in Zügen Eingeschlossene zählen für D2, wenn eine unmittelbare Beeinträchtigung belegt ist (z. B. fehlender Kälteschutz oder fehlende Versorgung über Stunden), nicht bei bloßer Verspätung oder erschwerter Weiterreise (Kodierleitfaden D2); Zahl, Bezugszeit und Quelle nennen. |
 | R3 | Welche Strom-, Wärme- und Kommunikationsdienste fallen aus? | Betreibermeldungen (A.3) | R/I; D6 | Eislast-Ausfälle ziehen nach; frühe Entwarnung nicht als final werten. |
 | R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2). |
@@ -2664,9 +2664,9 @@ art_zuordnung: ["KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Verkehrs- oder Logistikleistung; sonst als Prüfhilfe unter der Ereignisart der Ursache"
 anschluss: "B12; Ursache nach Dach-SOP (u. a. B01, B02, B03, B05, B06); C02 bei Bauwerksversagen, C04 bei Vulkanasche; C09/C10, C12, C14, C16, C17 nach Folge"
 zweck: "Einheitliche Bewertung von Dauer, verbleibender Transportleistung und versorgungsrelevanten Ausweichwegen."
-version: "1.2.1"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N06"
@@ -2693,6 +2693,7 @@ bisherige_ids: ["baustein-n06"]
 | R4 | Welche Folgen bestehen für Rettung, Evakuierung, Personalwechsel, Kraftstoff, Lebensmittel oder Arzneimittel? | Lagemeldungen (A.3) | R/I; D6 | Folgebausteine C16, C12, C14, C10. |
 | R5 | Wie lange tragen lokale Puffer, und welche Lieferungen können rechtzeitig eintreffen? | Betreibermeldungen (A.3) | R; D5 | Reichweiten nur nach Beleg (Absatz „Zeitkritikalität und Kaskade“). |
 | R6 | Was ist zu Wiederfreigabe, Kapazitätsrückkehr und Rückstauabbau belegt? | Betreibermeldungen (A.3) | M; D5 | Freigabe ≠ volle Kapazität. |
+| R7 | Welche wetter- und wasserstandsbedingten Grenzen gelten für Fähr-, Hafen- und Inselverkehr? | [DWD-Seewetterbericht Nord- und Ostsee](https://opendata.dwd.de/weather/maritime/forecast/german/FQEN50_EDZW_LATEST) (Seewetterdienst Hamburg); [BSH-Wasserstandsvorhersage](https://wasserstand.bsh.de/); Betreibermeldungen (A.3) der Reedereien und Häfen; laufend | R; D5/D6 | Vorhersage ist keine Betriebsentscheidung: Einstellung und Wiederaufnahme belegt der Betreiber. Erreichbarkeit von Inseln und Halligen mit Versorgungs- und Rettungsbedarf verbinden (R4). |
 
 **Nutzbarer Ersatz:** Eine bestätigte Route oder ein anderer Verkehrsträger muss für die tatsächlichen Last-, Höhen-, Gefahrgut-, Zeit-, Kühl- oder sonstigen Anforderungen geeignet und rechtzeitig verfügbar sein. Fahrzeuge, Personal, Umschlag, Anschlusskapazität und nötige Freigaben nach zuständiger Quelle prüfen; keine eigene Routengenehmigung. Eine Pkw-Umleitung kann für Tank-, Schwer- oder Spezialtransporte ungeeignet sein. Verlagerung auf Schiene, Straße oder Wasser ist keine sofort verfügbare Ersatzmenge; zusätzliche Engpässe und konkurrierende Bedarfe nach A.7.4. Verschiedene Routen oder Träger können denselben Knoten, Strom-, IT- oder Kraftstoffbezug teilen. Weglänge oder Navigationsvorschlag belegen keine Nutzbarkeit.
 
@@ -2718,7 +2719,7 @@ Nach B12 bzw. der Dach-SOP der Ursache. „Lage & Ereignis“: ausgefallene Leis
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** Zuständige Infrastruktur- und Verkehrsstellen · Transport-, Logistik- und Umschlagbetreiber · versorgungsabhängige Bedarfsträger; jeweils nach Aussagefunktion (eigene Betriebsangabe B, hoheitliche Anordnung A). Je nach Verkehrsträger Straßenbehörden und Betreiber, Eisenbahninfrastruktur- und Verkehrsunternehmen, WSV und Hafenbetreiber, Luftfahrtstellen, Flugsicherung und Flughafenbetreiber; die lokale Verteilung bis zum Bedarfspunkt einschließen.
+**Ansprechstellen:** Zuständige Infrastruktur- und Verkehrsstellen · Transport-, Logistik- und Umschlagbetreiber · versorgungsabhängige Bedarfsträger; jeweils nach Aussagefunktion (eigene Betriebsangabe B, hoheitliche Anordnung A). Je nach Verkehrsträger Straßenbehörden und Betreiber, Eisenbahninfrastruktur- und Verkehrsunternehmen, WSV und Hafenbetreiber, Luftfahrtstellen, Flugsicherung und Flughafenbetreiber; für Fähr-, Hafen- und Inselverkehr zusätzlich DWD (Seewetter) und BSH (Wasserstand); die lokale Verteilung bis zum Bedarfspunkt einschließen.
 
 **Offene Punkte:** Abgrenzung zu B01, B02 und B06 (wetterbedingte Sperrungen) an Rückblickfällen prüfen. Fachgrundlagen-Block nach A.6 ergänzen: Verkehrssicherstellungsgesetz (VerkSiG) als Maßnahmenrahmen für C17, Fundstelle vor Verwendung am Normtext prüfen und im Quellenregister nachweisen. Staatliche Verfahren zur Sicherstellung von Verkehrsleistungen nur bei belegtem Anlass, aktueller Rechtsgrundlage und tatsächlicher Aktivierung berichten; ihre Erwähnung schafft keinen aktivierten Rechtszustand und keine Anordnungsbefugnis der Koordinierungsstelle. Pflegefunktion, Meldewege und Prüfanlässe organisationsspezifisch festlegen. Übungsfälle zu gesperrter Brücke mit ungeeigneter Pkw-Umleitung, reduzierter Wasserstraßenleistung, ausgefallenem Umschlag trotz offener Strecke, kritischem Luftfrachtweg und Rückstau nach Freigabe.
 

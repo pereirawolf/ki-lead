@@ -8,6 +8,14 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.30.0 – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44_lauf-9t2q.json`, Befunde KP-2026-W44-20 bis -24, vom Herausgeber am 26.10.2026 freigegeben. Zweite Stelle, weil die SOP-Sammelmappe neue Rechercheeinstiege und eine neue Prüffrage erhält.
+
+- **SOP-Sammelmappe 3.18.0:** BSH und DWD als Recherchepunkte in B01, B02, B06 und C13; Quellenregister mit S068 und S073–S075. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Kodierleitfaden, Darstellungsdatei und Arbeitsanweisungen geprüft, kein Anpassungsbedarf; Kodier- und Quellenregeln unverändert.
+- Schema, Darstellungsdatei, Kodierleitfaden, Arbeitsanweisungen, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.29.0 – 26.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44.json` (Anlass: Lauf 20261026-201050-q25q, Recherche gewählt, null Websuchen in S2), Befunde KP-2026-W44-01 und -10, vom Herausgeber am 26.10.2026 freigegeben. Zweite Stelle, weil sich eine Arbeitsregel ändert: Bei „Recherche durchführen“ ist die Recherche verbindlich.

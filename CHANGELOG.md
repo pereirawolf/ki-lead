@@ -71,6 +71,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.5.21 | letzter Commit des Pull Requests „Kopfleiste: KI-Chip „KI offline/online“ statt Profil-Chip; 0.5.21“ |
 | 0.5.22 | letzter Commit des Pull Requests „KI-Erfassung: Modelle und Recherche für diesen Lauf; 0.5.22“ |
 | 0.6.0 | letzter Commit des Pull Requests „Verbindliche Recherche: Recherche durchführen, Orientierungssuche, Pflichtsuchen; 0.6.0“ |
+| 0.6.1 | letzter Commit des Pull Requests „Amtliche Einstiege und Primärquellen; BSH und DWD in den SOPs; 0.6.1“ |
+
+## [0.6.1] – 26.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44_lauf-9t2q.json`, Befunde KP-2026-W44-15 bis -24, vom Herausgeber am 26.10.2026 freigegeben (W44-15 wie vorgeschlagen, W44-16 als Warnung). Anlass: Lauf 20261026-215737-9t2q mit 0.6.0 – beide Pflichtsuchen ausgeführt, aber keine amtliche Quelle erreicht; alle neun Quellen Medien. Auftrag des Herausgebers: BSH und DWD bei passenden SOPs als Recherchepunkte hinterlegen.
+
+### Hinzugefügt
+
+- **Amtliche Rechercheeinstiege in S2** (KP-2026-W44-17): Die verlinkten Einstiege der Recherchetabellen der gewählten SOPs (`amtlicheEinstiege`, `amtlicherHost` in `src/pipeline/kontext.ts`) gehen als eigener Block in die Nutzernachricht, damit der Seitenabruf sie öffnen darf; die Steuerung verlangt ihren Abruf und bei einer Pflichtsuche mit Zielquelle deren Abruf oder eine auf ihre Website beschränkte Suche. Amtliche Treffer der Orientierung stehen zuerst und sind gekennzeichnet.
+- **Nachforderung bei fehlender Primärquelle** (KP-2026-W44-15): Stammt weder eine Fundstelle noch ein erfolgreicher Abruf von einem Host der amtlichen Einstiege, fordert die App nach und nennt höchstens acht Einstiege (`amtlichErreicht`, `nachforderungText`). Nur, wenn die SOPs solche Einstiege verlinken; weiterhin höchstens eine Nachforderung.
+- **Warnung `KEINE_PRIMAERQUELLE`** (KP-2026-W44-16): bei „Recherche durchführen“, wenn das Quellenverzeichnis keinen Eintrag der Kategorie A oder B enthält und keine Fundstelle aus einem amtlichen Einstieg stammt (`primaerquelleBelegt`). Keine Freigabesperre.
+
+### Geändert
+
+- **Orientierung je abgerechnetem Suchaufruf** (KP-2026-W44-18): `orientierungsEintraege` richtet sich nach dem Zähler des Anbieters; bündelt ein Aufruf mehrere Teilabfragen (OpenAI), stehen sie in einem Eintrag (`teilabfragen`). Im Anlasslauf wies das Ergebnis vier statt einer Orientierungssuche aus.
+- **Titel gleich Adresse** (KP-2026-W44-19): Rechercheeinstiege nennen die Adresse nur einmal; die Oberfläche zeigt Host und gekürzten Pfad als Linktext (`kurzeAdresse`).
+- **Beispielprofil 1.30.0, SOP-Sammelmappe 3.18.0** (KP-2026-W44-20 bis -24): B02/R2 mit BSH-Wasserstandsvorhersage und BSH-Seite zum Sturmflutwarndienst samt Stufen über MHW, Sturzflutpfad mit DWD-Warnlagebericht; B01/R1, R6 und B06/R1 mit DWD-Warnlagebericht (wettergefahren.de), B01 mit Küstenhinweis und BSH in den Ansprechstellen; C13 mit neuer Prüffrage R7 (DWD-Seewetterbericht, BSH-Wasserstandsvorhersage); Quellenregister S068 und neu S073–S075.
+- Spezifikation 0.6.1, `docs/TESTS.md`; Versionsangaben in `package.json`, `CITATION.cff` und den nativen Projekten.
+
+### Tests
+
+- `tests/pipeline/recherche-pflicht.test.ts` (6 neue Tests, jetzt 22): amtliche Einstiege aus den SOPs und Hostabgleich; Nachforderung ohne amtliche Fundstelle mit Einstiegsliste; keine Nachforderung bei amtlicher Fundstelle; Einstiegsblock, Kennzeichnung und Reihenfolge, Zielquelle in der Steuerung, Titel ohne Wiederholung; `KEINE_PRIMAERQUELLE`; Orientierung je abgerechnetem Aufruf.
+- Angepasst: erwartete Fassung von B01 (2.2.0) in `tests/pipeline/stufen.test.ts` und `kontext.test.ts`.
 
 ## [0.6.0] – 26.10.2026
 

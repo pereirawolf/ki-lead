@@ -7,7 +7,7 @@ import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from 
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.6.0";
+export const APP_KENNUNG = "KI-LEAD 0.6.1";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -41,7 +41,10 @@ export interface S1Sachverhalt {
 }
 
 export interface Orientierungssuche {
+  /** Suchbegriff; bei mehreren Teilabfragen eines abgerechneten Aufrufs mit „ · “ verbunden */
   suchbegriff: string;
+  /** Teilabfragen eines abgerechneten Suchaufrufs (OpenAI bündelt mehrere; seit 0.6.1, KP-2026-W44-18) */
+  teilabfragen?: string[];
   /** Zeitpunkt der Suche (ISO) */
   zeit: string;
   treffer: { titel: string; url: string; datum?: string }[];

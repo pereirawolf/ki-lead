@@ -263,6 +263,8 @@ export interface Steuerung {
   tiefe?: { titel: string; verhalten: string };
   /** Rechercheeinstiege aus der Orientierungssuche liegen der Anfrage bei */
   einstiege?: boolean;
+  /** Amtliche Rechercheeinstiege der gewählten SOPs liegen der Anfrage bei (seit 0.6.1, KP-2026-W44-17) */
+  amtlich?: boolean;
 }
 
 const zeitAnzeige = (z: string) => z.replace("T", " ");
@@ -319,7 +321,18 @@ export function steuerungsBlock(s: Steuerung): string {
       z.push(
         "- Recherchiere ergänzend und flankierend zum Material, bevor du den Entwurf schreibst: je Sachverhalt mindestens die zuständige Primärquelle zum Kernbefund und die dynamischen Kernangaben. Umfangreiches Material ersetzt die Recherche nicht.",
       );
-    if (s.einstiege) z.push("- Rechercheeinstiege aus der Orientierungssuche liegen bei; ihre Adressen darfst du abrufen.");
+    if (pflicht.some((p) => p.zielquelle))
+      z.push(
+        "- Nennt eine Pflichtsuche eine Zielquelle, rufe deren Seite ab oder präzisiere die Suche mit Einschränkung auf ihre Website (z. B. site:bsh.de).",
+      );
+    if (s.amtlich)
+      z.push(
+        "- Amtliche Rechercheeinstiege der gewählten SOPs liegen bei. Rufe die für Pflichtsuchen und Kernbefunde einschlägigen zuerst ab; ihre Adressen darfst du abrufen.",
+      );
+    if (s.einstiege)
+      z.push(
+        "- Rechercheeinstiege aus der Orientierungssuche liegen bei; ihre Adressen darfst du abrufen. Als amtlich gekennzeichnete Treffer zuerst abrufen.",
+      );
     if (s.websucheMax > 0) {
       const rest = Math.max(0, s.websucheMax - pflicht.length);
       z.push(
@@ -396,6 +409,54 @@ ${gemeinsameSops(profil)
 ${fachSops(profil)
   .map((s) => `## ${s.id}: ${sopKennung(s)}\n\n${anwendungsbereich(s.text)}`)
   .join("\n\n")}`;
+}
+
+/** Amtlicher Rechercheeinstieg aus der Recherchetabelle einer SOP */
+export interface AmtlicherEinstieg {
+  /** z. B. „B02/R2“ */
+  kennung: string;
+  titel: string;
+  url: string;
+}
+
+/**
+ * Verlinkte Rechercheeinstiege der gewählten SOPs (Spalte „Quelle & Aktualität“ der Zeilen „| R… |“), ohne Dubletten
+ * (seit 0.6.1, KP-2026-W44-15/-17). Sie sind im Quellenregister geführt (A.6) und gelten der App als amtliche Einstiege;
+ * eine fest verdrahtete Liste gibt es nicht.
+ */
+export function amtlicheEinstiege(profil: Profil, sopIds: string[]): AmtlicherEinstieg[] {
+  const out: AmtlicherEinstieg[] = [];
+  for (const id of sopIds) {
+    const sop = fachSops(profil).find((x) => x.id === id);
+    if (!sop) continue;
+    const kurz = (sop.nummer || sop.id).toUpperCase();
+    for (const z of sop.text.split("\n")) {
+      const m = z.match(/^\|\s*(R\d+)\s*\|[^|]*\|([^|]*)\|/);
+      if (!m) continue;
+      for (const l of m[2].matchAll(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g))
+        if (!out.some((e) => e.url === l[2])) out.push({ kennung: `${kurz}/${m[1]}`, titel: l[1].trim(), url: l[2] });
+    }
+  }
+  return out;
+}
+
+/** Host einer Adresse ohne „www.“, klein geschrieben; leer bei ungültiger Adresse */
+export function hostVon(url: string): string {
+  try {
+    return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+/** Ob eine Adresse zum Host eines amtlichen Einstiegs gehört (gleicher Host oder Unterdomain, z. B. opendata.dwd.de zu dwd.de) */
+export function amtlicherHost(url: string, einstiege: AmtlicherEinstieg[]): boolean {
+  const h = hostVon(url);
+  if (!h) return false;
+  return einstiege.some((e) => {
+    const x = hostVon(e.url);
+    return !!x && (h === x || h.endsWith(`.${x}`));
+  });
 }
 
 /**

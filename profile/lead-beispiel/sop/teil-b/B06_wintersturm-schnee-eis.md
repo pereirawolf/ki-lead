@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.2.0"
+version: "2.3.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "26.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -32,7 +32,7 @@ bisherige_ids: ["sop-06"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD](https://www.dwd.de/), Warnungen/Warnlagebericht; laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
+| R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
 | R2 | Welche Orte und Strecken sind abgeschnitten oder gesperrt? | Lagemeldungen (A.3); Autobahn GmbH, DB | L/R; D1/D2 | Sperrung einer Route belegt nicht Isolation. Im Stau oder in Zügen Eingeschlossene zählen für D2, wenn eine unmittelbare Beeinträchtigung belegt ist (z. B. fehlender Kälteschutz oder fehlende Versorgung über Stunden), nicht bei bloßer Verspätung oder erschwerter Weiterreise (Kodierleitfaden D2); Zahl, Bezugszeit und Quelle nennen. |
 | R3 | Welche Strom-, Wärme- und Kommunikationsdienste fallen aus? | Betreibermeldungen (A.3) | R/I; D6 | Eislast-Ausfälle ziehen nach; frühe Entwarnung nicht als final werten. |
 | R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2). |

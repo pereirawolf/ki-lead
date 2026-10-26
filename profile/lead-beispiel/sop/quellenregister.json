@@ -1,8 +1,8 @@
 {
   "format": "ki-lead-quellenpruefung/1",
-  "stand": "2026-10-22",
+  "stand": "2026-10-26",
   "basis_commit": "e980a5520f905243fbf183c48920eb1af3399b11",
-  "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung. Ergänzung 22.10.2026: Fachgrundlagen (Rechtsnormen) aus dem Arbeitspaket AP2; Prüfung über ein Webabrufwerkzeug ohne Prüfsumme (Feld prueftiefe).",
+  "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung. Ergänzung 22.10.2026: Fachgrundlagen (Rechtsnormen) aus dem Arbeitspaket AP2; Prüfung über ein Webabrufwerkzeug ohne Prüfsumme (Feld prueftiefe). Ergänzung 26.10.2026: BSH- und DWD-Einstiege für B01, B02, B06 und C13 (S068, S073–S075; KP-2026-W44-24), Webabruf ohne Prüfsumme.",
   "bedeutung": "Technischer Abruf, Rechercheeignung, gezielter Inhaltsabgleich und aktueller Ereignisnachweis werden getrennt. Inhaltsabruf per Direkt-HTTP ergänzte Webabrufe mit häufigen Zugriffssperren. Keine Sperre wurde umgangen; nur öffentlich abrufbare Seiten. SHA-256 bezeichnet geladene Bytes, nicht eine amtliche Fassungsbeglaubigung.",
   "pruefungen": [
     {
@@ -1677,7 +1677,11 @@
     {
       "id": "S068",
       "url": "https://wasserstand.bsh.de/",
-      "fundstellen": [],
+      "fundstellen": [
+        "sop/teil-b/B01_unwetter-sturm.md",
+        "sop/teil-b/B02_hochwasser-ueberschwemmung.md",
+        "sop/teil-c/C13_verkehr-transport-logistik.md"
+      ],
       "abrufzeit_utc": "2026-10-21T20:16:23+00:00",
       "http_status": 200,
       "end_url": "https://wasserstand.bsh.de/",
@@ -1686,12 +1690,17 @@
       "bytes": 22421,
       "titel": "Wasserstandsvorhersage – BSH",
       "pruefdatum": "2026-10-21",
-      "im_basisbestand": false,
+      "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Amtlicher BSH-Einstieg; Nord-/Ostseeprodukte und Bezugswasserstände unterscheiden.",
       "status": "einstieg_geprueft_liveinhalt_offen",
       "prueftiefe": "Sichtbare Funktion/Aussagegrenze geprüft; keine vollständige Live-Datenprüfung",
       "offene_nachpruefung": "Konkrete Meldung/Messreihe mit Stand, Abdeckung, Gültigkeit und Zeitzone abrufen.",
-      "belegt_aktuelles_ereignis": false
+      "belegt_aktuelles_ereignis": false,
+      "zweitpruefung": {
+        "status": "erreichbar",
+        "eignung": "passt",
+        "hinweis": "Abruf am 26.10.2026: „Amtliche Wasserstandsvorhersage des Bundes gemäß §1 SeeAufG“; Vorhersagen Nord- und Ostsee, Pegelkarte mit Sturmflutstufen, Verweis auf den Sturmflutwarndienst. Webabruf ohne Prüfsumme (KP-2026-W44-24)."
+      }
     },
     {
       "id": "S069",
@@ -1759,6 +1768,56 @@
       "status": "abruf_offen",
       "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
       "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S073",
+      "url": "https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html",
+      "fundstellen": [
+        "sop/teil-b/B01_unwetter-sturm.md",
+        "sop/teil-b/B02_hochwasser-ueberschwemmung.md",
+        "sop/teil-b/B06_wintersturm-schnee-eis.md"
+      ],
+      "abrufzeit_utc": "2026-10-26T21:08:00Z",
+      "titel": "Deutscher Wetterdienst – Warnlagebericht",
+      "pruefdatum": "2026-10-26",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Bundesweiter DWD-Warnlagebericht mit Länderberichten; Warnprodukt, kein Schadensnachweis. Derselbe Bericht auf dwd.de war für automatische Abrufe gesperrt (robots.txt).",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Webabruf ohne Prüfsumme; sichtbare Passagen geprüft (Ausgabe 26.10.2026, 10:30 Uhr)",
+      "offene_nachpruefung": "Länderberichte und Archivierung vor Einsatz prüfen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S074",
+      "url": "https://www.bsh.de/DE/THEMEN/Wasserstand_und_Gezeiten/Nordsee/nordsee.html",
+      "fundstellen": [
+        "sop/teil-b/B02_hochwasser-ueberschwemmung.md"
+      ],
+      "abrufzeit_utc": "2026-10-26T21:08:00Z",
+      "titel": "BSH – Nordsee – Wasserstandsvorhersage an der Nordsee",
+      "pruefdatum": "2026-10-26",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Beschreibung von Wasserstandsvorhersage und Sturmflutwarndienst Nordsee mit Stufen über MHW; Fachgrundlage, keine aktuelle Warnung.",
+      "status": "gezielter_inhaltsabgleich",
+      "prueftiefe": "Webabruf ohne Prüfsumme; sichtbare Passagen geprüft",
+      "offene_nachpruefung": "Stufengrenzen bei Änderung des Produkts nachführen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
+      "id": "S075",
+      "url": "https://opendata.dwd.de/weather/maritime/forecast/german/FQEN50_EDZW_LATEST",
+      "fundstellen": [
+        "sop/teil-c/C13_verkehr-transport-logistik.md"
+      ],
+      "abrufzeit_utc": "2026-10-26T21:08:00Z",
+      "titel": "Seewetterbericht für Nord- und Ostsee (FQEN50, DWD Open Data)",
+      "pruefdatum": "2026-10-26",
+      "im_basisbestand": true,
+      "zweck_und_pruefgrenze": "Jeweils neuester Seewetterbericht des Seewetterdienstes Hamburg; Textprodukt ohne Betriebsentscheidung.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Ausgabe 25.10.2026, 20:00 UTC gesehen",
+      "offene_nachpruefung": "Dauerhaftigkeit des Pfads „_LATEST“ und Ausgabezeiten prüfen.",
       "belegt_aktuelles_ereignis": false
     },
     {
