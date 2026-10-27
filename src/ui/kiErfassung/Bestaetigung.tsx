@@ -390,7 +390,8 @@ export function Bestaetigung({
                   <button
                     type="button"
                     className="knopf leise klein"
-                    aria-label={`Suchbegriff für Sachverhalt ${i + 1} hinzufügen`}
+                    // sichtbarer Text am Anfang des Namens (WCAG 2.5.3, seit 0.6.5, TP-2026-W44-22)
+                    aria-label={`Suchbegriff hinzufügen für Sachverhalt ${i + 1}`}
                     onClick={() => setzeBegriffe(i, [...(s.suchbegriffe || []), { begriff: "", zweck: "", herkunft: "person" }])}
                   >
                     Suchbegriff hinzufügen

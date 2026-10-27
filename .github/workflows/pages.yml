@@ -83,7 +83,7 @@ jobs:
       - run: npm run test:zufall
       - run: npm run build
 
-      # Browsertests gegen genau diesen Build (nur Chromium, KI-Anbieter simuliert, kein Netz nach außen)
+      # Browsertests gegen genau diesen Build (Chromium, Kerntests auch WebKit; KI-Anbieter simuliert, kein Netz nach außen)
       - id: playwright
         if: steps.umfang.outputs.kern == 'true' || steps.umfang.outputs.pwa == 'true'
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
@@ -98,11 +98,19 @@ jobs:
       - if: steps.playwright.outcome == 'success' && steps.browser-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
       - if: steps.umfang.outputs.kern == 'true'
-        run: npm run test:browser -- --project=kern
+        run: npm run test:browser:kern
         env:
           KI_LEAD_BUILD_VORHANDEN: "1"
       - if: steps.umfang.outputs.pwa == 'true'
-        run: npm run test:browser -- --project=pwa
+        run: npm run test:browser:pwa
+        env:
+          KI_LEAD_BUILD_VORHANDEN: "1"
+      # Kerntests zusätzlich in WebKit (Safari, auch iOS; seit 0.6.5, TP-2026-W44-22). WebKit wird nur hier geladen,
+      # damit `npm run test:browser` lokal mit Chromium allein auskommt.
+      - if: steps.umfang.outputs.kern == 'true'
+        run: npx playwright install --with-deps webkit
+      - if: steps.umfang.outputs.kern == 'true'
+        run: npm run test:browser:webkit
         env:
           KI_LEAD_BUILD_VORHANDEN: "1"
       - if: steps.umfang.outputs.kern != 'true' && steps.umfang.outputs.pwa != 'true'

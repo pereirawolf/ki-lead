@@ -675,7 +675,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             (sortiert.length === 0 ? (
               <p className="leer">Keine Sachverhalte in den geladenen Meldungen.</p>
             ) : (
-              <div className="lb-rahmen">
+              <div className="lb-rahmen" tabIndex={0} role="group" aria-label="Sachverhalte als Tabelle (waagerecht scrollbar)">
                 <table className="tabelle lb-tabelle">
                   <thead>
                     <tr>
@@ -755,7 +755,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             ))}
 
           {reiter === "tabelle" && (
-            <div className="lb-rahmen">
+            <div className="lb-rahmen" tabIndex={0} role="group" aria-label="Rohtabelle (waagerecht scrollbar)">
               {(() => {
                 const t = rohtabelle(eintraege, profil);
                 return (

@@ -382,7 +382,8 @@ function Erfassung({
 
       <div className="arbeitsbereich">
         <nav className="schritte" aria-label="Stufen">
-          <ol>
+          {/* Auf schmalen Bildschirmen waagerecht scrollbar; ohne Bedienelemente daher selbst fokussierbar (seit 0.6.5, TP-2026-W44-22) */}
+          <ol tabIndex={0}>
             {PHASEN.map((p, i) => (
               <li key={p.id}>
                 <div

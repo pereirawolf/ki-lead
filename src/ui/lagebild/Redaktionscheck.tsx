@@ -203,7 +203,7 @@ export function Redaktionscheck({
               }
               titel={`${g.art}: ${g.liste.length} Sachverhalte aus ${g.meldungen} Meldungen${g.tendenzGegenlaeufig ? " · Tendenzen gegenläufig" : g.tendenzAbweichend ? " · Tendenzen unterschiedlich" : ""}`}
             >
-              <div className="lb-rahmen">
+              <div className="lb-rahmen" tabIndex={0} role="group" aria-label={`Sachverhalte zu ${g.art}`}>
                 <table className="tabelle lb-tabelle lb-klein">
                   <thead>
                     <tr>

@@ -1,6 +1,8 @@
-// Barrierefreiheit im echten Browser: zugängliche Namen aller Bedienelemente (berechnet von Chromium),
-// Bedienung der Navigation mit der Tastatur und sichtbarer Fokus, erzwungene Farben (Windows-Kontrastmodus).
+// Barrierefreiheit im echten Browser: zugängliche Namen aller Bedienelemente (berechnet vom Browser),
+// Bedienung der Navigation mit der Tastatur und sichtbarer Fokus, erzwungene Farben (Windows-Kontrastmodus, nur
+// Chromium), axe-core je Bereich (seit 0.6.5).
 import { expect, test, type Page } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 import { bereich, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";
 
 const BEREICHE = ["Meldung", "KI-Erfassung", "Lagebild", "Profile", "Einstellungen"] as const;
@@ -14,8 +16,9 @@ async function ohneNamen(page: Page): Promise<string[]> {
 }
 
 test.beforeEach(async ({ page }, info) => {
-  // Der Test zur Eindeutigkeit der Namen braucht eine Antwort von S1 (frühere Läufe)
-  await netzVorbereiten(page, () => (info.title.startsWith("TP-2026-W44-14") ? JSON.stringify(S1_VORSCHLAG) : "haengen"));
+  // Der Test zur Eindeutigkeit der Namen (frühere Läufe) und die axe-Prüfung der Bestätigung brauchen eine Antwort von S1
+  const s1 = info.title.startsWith("TP-2026-W44-14") || info.titlePath.some((t) => t.startsWith("TP-2026-W44-22"));
+  await netzVorbereiten(page, () => (s1 ? JSON.stringify(S1_VORSCHLAG) : "haengen"));
   await oeffnen(page);
 });
 
@@ -67,7 +70,9 @@ test("Navigation mit der Tastatur: Fokus ist sichtbar, Eingabetaste wechselt den
   await expect(page.getByRole("button", { name: "Gegenstand bestimmen (S1)" })).toBeVisible();
 });
 
-test("Erzwungene Farben: aktive Auswahl in Systemfarben, Marken mit Kontur", async ({ page }) => {
+test("Erzwungene Farben: aktive Auswahl in Systemfarben, Marken mit Kontur", async ({ page, browserName }) => {
+  // forced-colors lässt sich nur in Chromium nachbilden (Windows-Kontrastmodus); seit 0.6.5 läuft die Datei auch in WebKit
+  test.skip(browserName !== "chromium", "forced-colors nur in Chromium emulierbar");
   await page.emulateMedia({ forcedColors: "active" });
   await bereich(page, "Lagebild");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
@@ -186,4 +191,92 @@ test("TP-2026-W44-14: zugängliche Namen der Bedienelemente sind je Liste eindeu
     await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: reiter }).click();
     expect(await doppelteNamen(page), reiter).toEqual([]);
   }
+});
+
+// Automatische Prüfung mit axe-core (seit 0.6.5): Regeln zu WCAG 2.0, 2.1 und 2.2, Stufen A und AA, je Bereich mit allen
+// Schritten, Reitern und Bereichen der Einstellungen; breit und hell, schmal und dunkel (Systemvorgabe, Farbschema
+// „Neutral“). Ausnahmen gibt es keine; käme eine hinzu, stünde sie mit Begründung in docs/BARRIEREFREIHEIT.md und hier
+// als disableRules/exclude.
+const AXE_REGELN = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22a", "wcag22aa"];
+const VARIANTEN = [
+  { breite: 1280, schema: "light" },
+  { breite: 390, schema: "dark" },
+] as const;
+
+/** Verstöße der aktuellen Seite als lesbare Zeilen („Zustand: Regel × Anzahl: Elemente“) */
+async function axeVerstoesse(page: Page, zustand: string): Promise<string[]> {
+  const erg = await new AxeBuilder({ page }).withTags(AXE_REGELN).analyze();
+  return erg.violations.map((v) => `${zustand}: ${v.id} × ${v.nodes.length}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`);
+}
+
+/** Prüft je Variante die Zustände, die `durchlaufen` herstellt (es ruft pruefen(name) für jeden auf) */
+async function jeVariante(page: Page, durchlaufen: (pruefen: (name: string) => Promise<void>) => Promise<void>): Promise<string[]> {
+  const verstoesse: string[] = [];
+  for (const { breite, schema } of VARIANTEN) {
+    await page.setViewportSize({ width: breite, height: 900 });
+    await page.emulateMedia({ colorScheme: schema });
+    await durchlaufen(async (name) => void verstoesse.push(...(await axeVerstoesse(page, `${breite}px ${schema} ${name}`))));
+  }
+  return verstoesse;
+}
+
+test.describe("TP-2026-W44-22: axe-core je Bereich ohne Verstöße gegen WCAG 2.2 A und AA", () => {
+  test.describe.configure({ timeout: 120_000 });
+
+  test("Meldung: alle Schritte", async ({ page }) => {
+    const schritte = page.getByRole("navigation", { name: "Schritte" }).getByRole("button");
+    const v = await jeVariante(page, async (pruefen) => {
+      for (let i = 0; i < (await schritte.count()); i++) {
+        await schritte.nth(i).click();
+        await pruefen(`Meldung, Schritt ${i + 1}`);
+      }
+    });
+    expect(v).toEqual([]);
+  });
+
+  test("KI-Erfassung: Auftrag und Bestätigung des Gegenstands", async ({ page }) => {
+    await schluesselSetzen(page);
+    await bereich(page, "KI-Erfassung");
+    await page.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Orkan in Hessen");
+    await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
+    const v = await jeVariante(page, (pruefen) => pruefen("KI-Erfassung, Auftrag"));
+    await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
+    await expect(page.getByRole("heading", { level: 2, name: "Gegenstand bestätigen" })).toBeVisible();
+    v.push(...(await jeVariante(page, (pruefen) => pruefen("KI-Erfassung, Bestätigung"))));
+    expect(v).toEqual([]);
+  });
+
+  test("Lagebild: alle Reiter mit Beispiel und Übergabedialog", async ({ page }) => {
+    await bereich(page, "Lagebild");
+    await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+    await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
+    const reiter = page.getByRole("navigation", { name: "Ansichten" }).getByRole("button");
+    const v = await jeVariante(page, async (pruefen) => {
+      for (let i = 0; i < (await reiter.count()); i++) {
+        await reiter.nth(i).click();
+        await pruefen(`Lagebild, Reiter ${i + 1}`);
+      }
+      await page.getByRole("button", { name: "An KI-Verdichtung übergeben" }).click();
+      await pruefen("Lagebild, Übergabe");
+      await page.keyboard.press("Escape");
+    });
+    expect(v).toEqual([]);
+  });
+
+  test("Profile", async ({ page }) => {
+    await bereich(page, "Profile");
+    expect(await jeVariante(page, (pruefen) => pruefen("Profile"))).toEqual([]);
+  });
+
+  test("Einstellungen: alle Bereiche", async ({ page }) => {
+    await bereich(page, "Einstellungen");
+    const bereiche = page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button");
+    const v = await jeVariante(page, async (pruefen) => {
+      for (let i = 0; i < (await bereiche.count()); i++) {
+        await bereiche.nth(i).click();
+        await pruefen(`Einstellungen, Bereich ${i + 1}`);
+      }
+    });
+    expect(v).toEqual([]);
+  });
 });

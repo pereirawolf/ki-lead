@@ -106,7 +106,7 @@ export function Laufanzeige({
         </span>
       </div>
       {protokoll.length > 0 && (
-        <ol className="ereignisse">
+        <ol className="ereignisse" tabIndex={0} aria-label="Ereignisse des Laufs">
           {protokoll.slice(-14).map((p, i) => (
             <li key={i}>
               <time>{new Date(p.zeit).toLocaleTimeString("de-DE")}</time> {p.text}

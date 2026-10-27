@@ -13,9 +13,10 @@
     "test": "vitest run",
     "test:ui": "vitest run tests/ui",
     "test:zufall": "vitest run --sequence.shuffle --sequence.seed=20261021",
-    "test:browser": "playwright test",
+    "test:browser": "playwright test --project=kern --project=pwa",
     "test:browser:kern": "playwright test --project=kern",
     "test:browser:pwa": "playwright test --project=pwa",
+    "test:browser:webkit": "playwright test --project=webkit",
     "test:inhalt": "vitest run tests/profil tests/kern tests/evaluation",
     "test:coverage": "vitest run --coverage",
     "pruefe-profile": "vitest run tests/profil",
@@ -44,6 +45,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@capacitor/cli": "8.5.3",
     "@playwright/test": "^1.56.1",
     "@types/js-yaml": "^4.0.9",

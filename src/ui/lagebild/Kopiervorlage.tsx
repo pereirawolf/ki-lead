@@ -43,7 +43,13 @@ export function Kopiervorlage({ profil, sortiert }: { profil: Profil; sortiert: 
               </span>
               <KopierKnopf html={html} text={text} was={svKennung(s, profil)} />
             </div>
-            <div className="lb-vorlage-inhalt" dangerouslySetInnerHTML={{ __html: html }} />
+            <div
+              className="lb-vorlage-inhalt"
+              tabIndex={0}
+              role="group"
+              aria-label={`Vorlage: ${svKennung(s, profil)}`}
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
           </div>
         );
       })}

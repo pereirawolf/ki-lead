@@ -437,6 +437,13 @@ button.lb-kennzahl:hover {
   min-width: 720px;
 }
 
+/* Im scrollbaren Rahmen scrollt nur der Rahmen (fokussierbar), nicht zusätzlich die Tabelle (seit 0.6.5, TP-2026-W44-22);
+   .tabelle ist auf schmalen Bildschirmen sonst selbst ein Block mit Scrollleiste */
+.lb-rahmen > .tabelle {
+  display: table;
+  overflow: visible;
+}
+
 .lb-tabelle.lb-klein {
   min-width: 0;
   font-size: 0.82rem;
