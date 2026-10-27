@@ -240,7 +240,7 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
     k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
     const v = await stufe1(k);
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain(
-      "Recherche in S2: „Recherche durchführen“ gewählt, aber keine Werkzeuge verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
+      "Recherche in S2: „Recherche durchführen“ gewählt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
     );
     zuS2(k);
     await stufe2und3(k, v);

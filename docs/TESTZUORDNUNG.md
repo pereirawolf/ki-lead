@@ -668,3 +668,15 @@ Quellen wurden ohne Verhaltensänderung verschoben, damit die Verzeichnisse unte
 | `profil/laden.ts` (Import aus `darstellung/thema.ts`) | Prüfung als Option `farbschemaFehler` von `ladeProfil`, von `App.tsx` übergeben | Farbschema eines Profils (TP-24) | `tests/darstellung/farbschemas.test.ts` |
 | `pipeline/vergleichslauf.ts`, `vergleichslauf-eingebaut.ts`, `vergleichslauf-export.ts`, `vergleichsumfang.ts`, `vergleichsauswertung.ts`, `kurzfassungsreihe.ts`, `reparaturtest.ts`, `plausibilitaet.ts` | `forschung/…` (gleiche Dateinamen), dazu `forschung/evaluationsdaten.ts` | Forschungsreihen, an Beispielprofil und `evaluation/` gebunden (TP-25) | `tests/pipeline/{vergleichslauf,vergleichslauf-umfang,vergleichsauswertung,reparaturtest,plausibilitaet}.test.ts` → `tests/forschung/`; `musterfassung()` und `beschaedigt()` sind seit 0.6.3 asynchron |
 
+
+## Kopplung der Arbeitsanweisungen an den Code (0.6.4, TP-2026-W44-35)
+
+Neue Datei `tests/profil/anweisungen-kopplung.test.ts`: Was die App auswertet oder selbst erzeugt, steht in den Arbeitsanweisungen des Beispielprofils so, wie die App es verwendet. Sie ergänzt die bestehenden Kopplungen in `tests/profil/fassungen.test.ts` (Gültigkeitsstand) und `tests/profil/sop-redaktion.test.ts` (Kennsatzformat, Kennungen, Quellenkategorien).
+
+| Kopplung | Code | Text |
+|---|---|---|
+| Richtwerte der Management Summary | `GRENZEN` (`pipeline/kurzfassung.ts`) | `anweisung-kurzfassung.md`, „Aufbau“ und „Sprache und Länge“ |
+| Arbeitsmodi | `steuerungsBlock` (`pipeline/kontext.ts`) | `anweisung-erfassung.md`, Tabelle „Arbeitsmodus“ |
+| Beispielzeile `Handlungsrelevant bis:` | `fristen` (`pipeline/kurzfassung.ts`) | Teil A, A.4 (Tabelle der Kennsätze) |
+| Beispieleinträge des Quellenverzeichnisses | `parseQuellen`, `quellenHinweise` (`kern/quellen.ts`) | `kodierleitfaden.md`, Abschnitt 5 |
+| Beispiel `_entstehung` | Schema `$defs.entstehung`, `kodierleitfadenKennung` (`pipeline/nachbearbeitung.ts`) | `anweisung-erfassung.md`, Abschnitt „Ausgabe“ |

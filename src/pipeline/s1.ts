@@ -52,7 +52,8 @@ function rechercheText(k: Kontext): string {
   const m = rechercheModus(k);
   const g = s2Grenzen(k);
   if (m === "nur-material") return "nur Material (Websuche vom Auftrag abgeschaltet)";
-  if (m === "keine-werkzeuge") return `„Recherche durchführen“ gewählt, aber keine Werkzeuge verfügbar (${g.grund ?? "Höchstzahlen in den Einstellungen 0"})`;
+  // Seit 0.6.4 (TP-2026-W44-35) derselbe Begriff wie im Steuerungsblock und in der Arbeitsanweisung: „nicht verfügbar“
+  if (m === "keine-werkzeuge") return `„Recherche durchführen“ gewählt, aber nicht verfügbar (${g.grund ?? "Höchstzahlen in den Einstellungen 0"})`;
   return `durchführen (${werkzeugText(g.websucheMax, g.abrufMax)})`;
 }
 

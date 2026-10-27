@@ -29,7 +29,7 @@ Du verfasst eine Eigenmeldung für das {{profil.lageprodukt}}, aus offenen Quell
 |---|---|
 | Recherche durchführen | Material auswerten und verbindlich ergänzend recherchieren: zuerst die bestätigten Pflichtsuchen, dann eigene Recherche im Rahmen der Recherchetiefe (Abschnitt 3). Umfangreiches Material ersetzt die Recherche nicht. |
 | Nur Material (Websuche vom Auftrag abgeschaltet) | Regulärer Arbeitsmodus: ausschließlich das bereitgestellte Material auswerten; Unterlagen mit ihrem Dokumentstand kennzeichnen; keine Suchergebnisse oder Quellen ergänzen; in der Kurzantwort nennen, dass keine zusätzliche Webverifikation erfolgte (SOP-LEAD A.3). Vollständigkeit und Verlässlichkeit ergeben sich aus Material und Fragestellung; fehlende entscheidende Angaben bleiben gezielt offen. |
-| Recherche technisch gescheitert | Wie „nur Material“; zusätzlich die gescheiterten Abrufe und davon abhängige Aussagen benennen. Fehlender Zugriff ist kein Nullbefund. |
+| Recherche gewählt, aber nicht verfügbar | Wie „nur Material“; die technische Grenze aus dem Steuerungsblock benennen. Dasselbe gilt, wenn bei „Recherche durchführen“ die Abrufe scheitern: gescheiterte Abrufe und davon abhängige Aussagen benennen. Fehlender Zugriff ist kein Nullbefund. |
 
 **Zeitmodus.** Lege fest, welcher Kenntnisstand gemeldet wird:
 
@@ -65,7 +65,7 @@ Leerwerte (Beispielschema):
 - `lagenradar.d1` … `d8`: `null`, nie `0` als Ersatz, nie eine Zeichenkette, **nie „U“**.
 - Text- und Datumsfelder: `""`. Datum `JJJJ-MM-TT`, `meldezeitpunkt` `JJJJ-MM-TTThh:mm`. `eintritt`, `meldezeitraum.von` und `meldezeitraum.bis` nur dann mit Uhrzeit (`JJJJ-MM-TTThh:mm`), wenn das Material die Uhrzeit belegt; sonst nur den Tag.
 
-Setze `schema` auf die Schemakennung aus dem Schema und `_status: "Entwurf"`. Lasse Namen, Daten und Handzeichen aller `freigabe`-Felder leer. Fülle im Feld `_entstehung` die Einträge `verfahren` („KI-Entwurf“), `sop` und `kodierleitfaden` (Abschnitt 6). Füge keine schemafremden Felder hinzu; das Schema lässt keine zusätzlichen Felder zu.
+Setze `schema` auf die Schemakennung aus dem Schema und `_status: "Entwurf"`. Lasse Namen, Daten und Handzeichen aller `freigabe`-Felder leer. Fülle im Feld `_entstehung` die Einträge `verfahren` („KI-Entwurf“) und `sop` (Abschnitt 6); `kodierleitfaden` setzt die App. Füge keine schemafremden Felder hinzu; das Schema lässt keine zusätzlichen Felder zu.
 
 Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichungen den Prüfbericht zur Korrektur zurück. Behaupte deshalb keine eigene technische Validierung. Verwechsle einen technisch gültigen Datensatz nicht mit inhaltlicher Prüfung.
 
@@ -176,11 +176,11 @@ Fülle in `_entstehung`:
 "_entstehung": {
   "verfahren": "KI-Entwurf",
   "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1"],
-  "kodierleitfaden": "Kodierleitfaden LEAD 1.2"
+  "kodierleitfaden": "Kodierleitfaden LEAD 1.4.0"
 }
 ```
 
-Die Werte sind Beispiele: Nenne die tatsächlich verwendeten Fassungen laut Kopf der beigefügten Dokumente und übernimm Beispielwerte nie ungeprüft. Die Einträge `werkzeug`, `modell` und `erstellt` setzt die App; sie setzt außerdem `kodierleitfaden` aus dem Profil und führt in `sop` die beigefügten SOPs und Bausteine (deine Angabe dient dem Abgleich).
+Die Werte sind Beispiele: Nenne in `sop` die tatsächlich angewandten SOPs und Bausteine mit der Fassung laut Kopf der beigefügten Dokumente und übernimm Beispielwerte nie ungeprüft. Die Einträge `werkzeug`, `modell`, `erstellt` und `kodierleitfaden` setzt die App (`kodierleitfaden` in der Form des Beispiels, aus dem Kopf des beigefügten Kodierleitfadens); in `sop` führt sie die beigefügten SOPs und Bausteine, deine Angabe dient dem Abgleich.
 
 Prüfe vor der Ausgabe:
 - **Struktur:** Jedes `art`-Element ist eine exakte Katalogoption. Alle Schlüssel, Datentypen, Auswahlwerte und Radarwerte entsprechen dem Schema; es gibt keine schemafremden Felder. Daten sind logisch und im ISO-Format. Die Freigabefelder sind leer, `_status` ist „Entwurf“.
