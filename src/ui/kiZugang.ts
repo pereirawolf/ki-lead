@@ -7,6 +7,7 @@ import type { Profil } from "../kern/typen";
 import type { Einstellungen } from "../pipeline/einstellungen";
 import type { Schluessel } from "../anbieter/verteiler";
 import type { EinstellungsBereich } from "./Einstellungen";
+import type { KopfLauf } from "./KiSymbol";
 
 export interface KiZugangWert {
   profil: Profil | null;
@@ -14,6 +15,11 @@ export interface KiZugangWert {
   schluessel: Schluessel;
   /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter & API“ */
   zuEinstellungen: (bereich?: EinstellungsBereich) => void;
+  /**
+   * Laufende Anfrage der Management Summary an die Kopfleiste melden, null bei Ende (seit 0.6.6): KI-Chip, Rückfrage beim
+   * Profilwechsel und beim Verlassen der Seite. Die KI-Erfassung meldet weiter über ihr Prop laufStand.
+   */
+  laufMelden?: (lauf: KopfLauf | null) => void;
 }
 
 export const KiZugangContext = createContext<KiZugangWert | null>(null);

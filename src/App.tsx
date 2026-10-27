@@ -212,10 +212,18 @@ export default function App() {
   const kiLaeuft = useRef(false);
   /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
   const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
+  // Laufende Management Summary (seit 0.6.6): getrennt von der KI-Erfassung, damit das Ende der einen die andere nicht verdeckt
+  const [msLauf, setMsLauf] = useState<KopfLauf | null>(null);
+  const msLaeuft = useRef(false);
+  const msMelden = useCallback((l: KopfLauf | null) => {
+    msLaeuft.current = !!l;
+    setMsLauf(l);
+  }, []);
+  const chipLauf = kopfLauf ?? msLauf;
   // Schließen oder Neuladen der Seite während eines KI-Laufs: Rückfrage des Browsers (seit 0.6.5, TP-2026-W44-20)
   useEffect(() => {
     const warnen = (e: BeforeUnloadEvent) => {
-      if (!kiLaeuft.current) return;
+      if (!kiLaeuft.current && !msLaeuft.current) return;
       e.preventDefault();
       e.returnValue = "";
     };
@@ -226,10 +234,13 @@ export default function App() {
   const aktivieren = async (schluessel: string) => {
     if (
       schluessel !== aktiv &&
-      kiLaeuft.current &&
-      !(await bestaetigen("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?", {
-        ja: "Trotzdem wechseln",
-      }))
+      (kiLaeuft.current || msLaeuft.current) &&
+      !(await bestaetigen(
+        kiLaeuft.current
+          ? "Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?"
+          : `${msLauf?.titel || "Management Summary"} wird gerade erstellt und beim Profilwechsel abgebrochen. Trotzdem wechseln?`,
+        { ja: "Trotzdem wechseln" },
+      ))
     )
       return;
     setAktiv(schluessel);
@@ -281,7 +292,10 @@ export default function App() {
     setEinstellungsBereich(bereich ?? "anbieter");
     setAnsicht("einstellungen");
   }, []);
-  const kiZugang = useMemo<KiZugangWert>(() => ({ profil, einstellungen, schluessel, zuEinstellungen }), [profil, einstellungen, schluessel, zuEinstellungen]);
+  const kiZugang = useMemo<KiZugangWert>(
+    () => ({ profil, einstellungen, schluessel, zuEinstellungen, laufMelden: msMelden }),
+    [profil, einstellungen, schluessel, zuEinstellungen, msMelden],
+  );
 
   return (
     <KiZugangContext.Provider value={kiZugang}>
@@ -335,7 +349,7 @@ export default function App() {
           </nav>
           {profil && (
             <div className="kopf-rechts" data-profil={profil.manifest.name}>
-              <KiSymbol lauf={kopfLauf} zurKi={() => setAnsicht("ki")} />
+              <KiSymbol lauf={chipLauf} zurKi={() => setAnsicht(chipLauf?.stufe === "ms" ? "meldung" : "ki")} />
             </div>
           )}
         </header>

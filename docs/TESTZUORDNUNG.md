@@ -716,3 +716,14 @@ Angepasst ohne Änderung des Solls:
 - Stylesheet nach Bereichen geteilt (TP-2026-W44-19): `tests/darstellung/barrierefreiheit.test.ts` liest `stylesheetText()` statt nur `src/styles.css`.
 - Nachgeladene Ansichten (TP-2026-W44-18): `tests/ui/farbschemas.test.ts` wartet auf den Bereich „Darstellung“; `tests/browser/pwa-server.ts` zieht bei einer umbenannten Startdatei die Verweise der nachgeladenen Teile mit.
 - Link zur Reparaturseite unter „Über“ (TP-2026-W44-21): `tests/ui/ueber.test.ts` erwartet acht statt sieben Links.
+
+## Management Summary während der Erstellung (0.6.6, Fehlermeldung des Herausgebers vom 27.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Laufzeile mit Uhr, „von voraussichtlich …“ aus den Messwerten, geschriebenen Zeichen und voraussichtlichen Kosten; nach der Antwort die Ist-Kosten | zeigt während der Erstellung Uhr, erwartete Dauer, geschriebene Zeichen und voraussichtliche Kosten | `tests/ui/kurzfassung-lauf.test.ts` (neu) |
+| Meldung an die Kopfleiste über den KI-Zugang, null bei Ende, Abbruch und Verlassen des Schritts | meldet den Lauf an die Kopfleiste und am Ende null; meldet nach Abbruch und beim Verlassen des Schritts null | `tests/ui/kurzfassung-lauf.test.ts` (neu) |
+| KI-Chip mit Stufe „ms“: Titel im zugänglichen Namen, „Zur Meldung“ | zeigt die laufende Management Summary mit ihrem Titel und führt zur Meldung | `tests/ui/kisymbol.test.ts` |
+| Dauer der Management Summary je gemessenem Modell und Aufwand (größter Messwert plus 25 %, gerundet) | Management Summary: Dauer aus den Messwerten der Abnahme vom 25.10.2026 | `tests/pipeline/schaetzung.test.ts` |
+
+Angepasst: `tests/forschung/vergleichslauf-umfang.test.ts` erwartet für Sonnet „mittel“ die Dauer `[0, 10]` statt keiner Dauer.

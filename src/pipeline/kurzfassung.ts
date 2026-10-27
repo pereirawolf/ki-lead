@@ -3,7 +3,8 @@
 // Sachverhalt einen Kurztitel. Kopfzeile (mit Entwurfsvermerk), Beurteilung und Tendenz je Sachverhalt
 // sowie die Fristen setzt die App aus der Meldung; sie entfernt Quellenverweise und prüft die Richtwerte.
 
-import type { LlmAnbieter } from "../anbieter/typen";
+import type { Fortschritt, LlmAnbieter } from "../anbieter/typen";
+import type { AnbieterOptionenTeil } from "../anbieter/optionen";
 import { datumDE } from "../kern/ausgabe";
 import { holeWert, teilePfad } from "../kern/pfad";
 import { enumWerte, unterSchema } from "../kern/schema";
@@ -18,6 +19,7 @@ import { zerlegeAntwort } from "./json";
 import type { StufenEintrag } from "./lauf";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { anweisungPlatzhalterText } from "./kontext";
+import { schaetzeKurzfassung, type Schaetzung } from "./schaetzung";
 
 // Seit 0.6.3 (TP-2026-W44-23) im Profilmodul; hier weiter exportiert, damit die Schnittstelle der Pipeline gleich bleibt
 export { STANDARD_ANWEISUNG } from "../profil/standardtexte";
@@ -364,15 +366,12 @@ export function kurzfassungHinweise(k: KurzfassungStruktur, zahlSv: number): str
   return h;
 }
 
-export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter: LlmAnbieter, e: Einstellungen, signal?: AbortSignal): Promise<Kurzfassung> {
-  const modell = modellFuer("kurzfassung", e, profil);
-  const aufwand = aufwandFuer("kurzfassung", e, profil);
-  const { text: system, offen: offenePl } = kurzfassungAnweisungErsetzt(profil);
+/** Nachricht an die KI: Meldung ohne Quellen und Herkunft der Angaben */
+export function kurzfassungNachricht(profil: Profil, d: Meldung): string {
   const stoff = meldungFuerKurzfassung(d, profil);
-  const schema = kurzfassungSchema(profil);
   const zahl = sachverhalte(d, profil.ui).length;
   const herkunft = herkunftsliste(d, profil);
-  const nachricht = [
+  return [
     `Meldung (${zahl} Sachverhalt${zahl === 1 ? "" : "e"}):\n\n\`\`\`json\n${JSON.stringify(stoff, null, 1)}\n\`\`\``,
     herkunft.length
       ? `Herkunft der Angaben (nur für sprechende Zuordnung wie „laut Betreiber“; keine Quellenmarker ausgeben):\n${herkunft.map((x) => `- ${x}`).join("\n")}`
@@ -380,6 +379,32 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
   ]
     .filter(Boolean)
     .join("\n\n");
+}
+
+/**
+ * Schätzung von Dauer und Kosten für diese Meldung (seit 0.6.6): Eingabe grob mit vier Zeichen je Token aus Arbeitsanweisung
+ * und Nachricht, sonst wie schaetzeKurzfassung.
+ */
+export function schaetzeKurzfassungFuer(profil: Profil, d: Meldung, e: Einstellungen, optionen: AnbieterOptionenTeil = {}): Schaetzung {
+  const zeichen = kurzfassungAnweisungErsetzt(profil).text.length + kurzfassungNachricht(profil, d).length;
+  return schaetzeKurzfassung(modellFuer("kurzfassung", e, profil), aufwandFuer("kurzfassung", e, profil), Math.ceil(zeichen / 4), optionen);
+}
+
+/** fortschritt (seit 0.6.6): Ereignisse des Anbieters für die Laufanzeige, etwa geschriebene Zeichen */
+export async function kurzfassungErstellen(
+  profil: Profil,
+  d: Meldung,
+  anbieter: LlmAnbieter,
+  e: Einstellungen,
+  signal?: AbortSignal,
+  fortschritt?: (f: Fortschritt) => void,
+): Promise<Kurzfassung> {
+  const modell = modellFuer("kurzfassung", e, profil);
+  const aufwand = aufwandFuer("kurzfassung", e, profil);
+  const { text: system, offen: offenePl } = kurzfassungAnweisungErsetzt(profil);
+  const schema = kurzfassungSchema(profil);
+  const zahl = sachverhalte(d, profil.ui).length;
+  const nachricht = kurzfassungNachricht(profil, d);
   const eintrag: StufenEintrag = {
     stufe: "Management Summary",
     start: new Date().toISOString(),
@@ -397,6 +422,7 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
       nachrichten: [{ role: "user", content: nachricht }],
       jsonSchema: schema,
       signal,
+      fortschritt,
     });
     eintrag.antwort = { text: a.text, inhalt: a.inhalt, stopGrund: a.stopGrund, runden: a.runden };
     eintrag.nutzung = a.nutzung;

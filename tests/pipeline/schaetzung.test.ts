@@ -5,7 +5,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AUFWAND_STUFEN, STANDARD, STANDARD_PROFILE } from "../../src/pipeline/einstellungen";
 import { ausgabePreis } from "../../src/anbieter/preise";
-import { dauerText, kostenText, MESSWERTE, schaetzeKurzfassung, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
+import { dauerText, kostenText, MESSWERTE, MS_DAUER, schaetzeKurzfassung, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
 import { LaufSchaetzung } from "../../src/ui/LaufSchaetzung";
 
 describe("Schätzung von Dauer und Kosten", () => {
@@ -184,5 +184,22 @@ describe("Schätzung von Dauer und Kosten", () => {
     );
     // eingestellt „mittel“, wirksam „hoch“; 0,20 × 1,1 = 0,22 und 0,45 × 1,1 = 0,495 → aufgerundet 0,50
     expect(html).toContain("S2 (mistral-medium-3-5, high): 1–4 Minuten, 0,22–0,50 USD inkl. 10 % EU-Aufschlag");
+  });
+
+  it("Management Summary: Dauer aus den Messwerten der Abnahme vom 25.10.2026 (seit 0.6.6)", () => {
+    // Soll je Modell: größter Messwert plus 25 %, unter 60 s auf 10 s, darüber auf 30 s nach außen gerundet
+    expect(MS_DAUER).toEqual({
+      "claude-sonnet-5-5|medium": [0, 10], // 6–8 s
+      "claude-opus-5-5|medium": [10, 40], // 18–28 s
+      "claude-haiku-5-5|medium": [10, 20], // 10–15 s
+      "gpt-6.1-sol|medium": [10, 40], // 15–32 s
+      "mistral-medium-3-5|high": [10, 90], // 14–63 s
+      "mistral-large-4|high": [90, 210], // 92–152 s
+    });
+    expect(dauerText(schaetzeKurzfassung("claude-sonnet-5-5", "medium", 12_000).sekunden)).toBe("unter 1 Minute");
+    expect(dauerText(schaetzeKurzfassung("mistral-large-4", "high", 12_000).sekunden)).toBe("1–4 Minuten");
+    // Nicht gemessen: keine Dauer, Kosten weiter über den Listenpreis
+    expect(schaetzeKurzfassung("claude-opus-5-5", "high", 12_000).sekunden).toBeNull();
+    expect(schaetzeKurzfassung("ollama:llama3.1", "medium", 12_000).sekunden).toBeNull();
   });
 });

@@ -9,7 +9,7 @@ import { laufKostenText, type Lauf } from "../../pipeline/lauf";
 import type { LaufAnzeigeStand } from "./anzeigeStand";
 import { dauerFuer, type LaufRahmen } from "./rahmen";
 import type { AnzeigeEreignis } from "./anzeigeStand";
-import { dauer } from "./zustand";
+import { LaufUhr } from "../LaufUhr";
 
 /** Mindestabstand zweier Ansagen aus dem Ereignisprotokoll */
 export const ANSAGE_ABSTAND_MS = 5000;
@@ -59,11 +59,6 @@ export function Laufanzeige({
   abbrechen: () => void;
 }) {
   const { start, protokoll, zeichen } = useSyncExternalStore(stand.abonnieren, stand.lesen);
-  const [jetzt, setJetzt] = useState(() => Date.now());
-  useEffect(() => {
-    const t = window.setInterval(() => setJetzt(Date.now()), 1000);
-    return () => window.clearInterval(t);
-  }, []);
   const ueberschrift =
     phase === "s1"
       ? "Stufe S1: Gegenstand und SOP-Auswahl"
@@ -80,7 +75,6 @@ export function Laufanzeige({
       : phase === "s2" && lauf.status !== "s3"
         ? dauerFuer(rahmen, rahmen.stufeS2.rolle, rahmen.schaetzS2.art)
         : null;
-  const vonErwartet = erwartet && !erwartet.startsWith("einige Minuten") ? ` von voraussichtlich ${erwartet}` : "";
   return (
     <div className="laeuft">
       <p className="sr-only" role="status">
@@ -94,17 +88,7 @@ export function Laufanzeige({
             ? "Die KI sucht je Sachverhalt kurz im Web, ohne Seiten zu öffnen, und schlägt daraus Suchbegriffe für die Recherche in S2 vor. Das dauert meist unter einer Minute."
             : `Die KI ${rahmen.verdichtung ? "verdichtet die Eingänge" : "recherchiert"} und schreibt den Entwurf. Das dauert voraussichtlich ${dauerFuer(rahmen, rahmen.stufeS2.rolle, rahmen.schaetzS2.art)}. Bitte die Seite im Vordergrund lassen; die App hält den Bildschirm so lange wach.`}
       </p>
-      <div className="laufanzeige">
-        <span className="puls" aria-hidden="true" />
-        <span>
-          <span role="timer" aria-hidden="true">
-            {dauer(Math.max(0, jetzt - start))}
-          </span>
-          {vonErwartet}
-          {zeichen > 0 ? ` · ${zeichen.toLocaleString("de-DE")} Zeichen geschrieben` : ""}
-          {lauf.kostenUsd || lauf.kostenBekanntUsd ? ` · bisher ${laufKostenText(lauf)}` : ""}
-        </span>
-      </div>
+      <LaufUhr start={start} zeichen={zeichen} erwartet={erwartet} kosten={lauf.kostenUsd || lauf.kostenBekanntUsd ? `bisher ${laufKostenText(lauf)}` : null} />
       {protokoll.length > 0 && (
         <ol className="ereignisse" tabIndex={0} aria-label="Ereignisse des Laufs">
           {protokoll.slice(-14).map((p, i) => (

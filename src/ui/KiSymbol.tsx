@@ -1,12 +1,15 @@
 // KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
 // und noch nicht beendet ist. Der Chip trägt die Farben des Profils: in Ruhe zart, während der Anfrage gefüllt in der
 // Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die KI-Erfassung selbst. Ein Klick führt dorthin.
-export type KopfLaufStufe = "s1" | "s2" | "s3";
+// Seit 0.6.6 meldet auch die Management Summary ihre Anfrage (Stufe „ms“); der Klick führt dann zur Meldung.
+export type KopfLaufStufe = "s1" | "s2" | "s3" | "ms";
 
-/** Laufende KI-Anfrage, wie die KI-Erfassung sie an die Kopfleiste meldet; null, solange keine läuft */
+/** Laufende KI-Anfrage, wie KI-Erfassung oder Management Summary sie an die Kopfleiste melden; null, solange keine läuft */
 export interface KopfLauf {
   stufe: KopfLaufStufe;
   verdichtung?: boolean;
+  /** Titel des Schritts bei Stufe „ms“ (kurzfassung.titel des Profils), sonst „Management Summary“ */
+  titel?: string;
 }
 
 export interface KiSymbolProps {
@@ -18,13 +21,16 @@ const STUFE: Record<KopfLaufStufe, string> = {
   s1: "S1 Gegenstand und SOP-Auswahl",
   s2: "S2 Recherche und Entwurf",
   s3: "S3 Prüfung",
+  ms: "Management Summary",
 };
 
-const stufeText = (lauf: KopfLauf) => (lauf.stufe === "s2" && lauf.verdichtung ? "S2 Verdichtung und Entwurf" : STUFE[lauf.stufe]);
+const stufeText = (lauf: KopfLauf) =>
+  lauf.stufe === "s2" && lauf.verdichtung ? "S2 Verdichtung und Entwurf" : lauf.stufe === "ms" && lauf.titel ? lauf.titel : STUFE[lauf.stufe];
 
 /** Zugänglicher Name und Tooltip; beginnt mit dem sichtbaren Text */
 export function kiSymbolText(lauf: KopfLauf | null | undefined): string {
-  return lauf ? `KI online: Anfrage läuft, ${stufeText(lauf)}. Zur KI-Erfassung` : "KI offline: keine KI-Anfrage aktiv. Zur KI-Erfassung";
+  if (!lauf) return "KI offline: keine KI-Anfrage aktiv. Zur KI-Erfassung";
+  return `KI online: Anfrage läuft, ${stufeText(lauf)}. ${lauf.stufe === "ms" ? "Zur Meldung" : "Zur KI-Erfassung"}`;
 }
 
 /** Ansage für Bildschirmleser bei jedem Wechsel von Stufe oder Zustand */
