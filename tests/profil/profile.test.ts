@@ -134,6 +134,36 @@ describe("Beispielprofil LEAD", () => {
     expect(fertig).not.toMatch(/\{\{/);
   });
 
+  it("TP-2026-W44-28: die Arbeitsanweisung nennt nur beigefügte Dokumente, die die App tatsächlich erzeugt", async () => {
+    // Soll: die Überschriften und Hüllen, mit denen kontext.ts und material.ts die Dokumente beilegen
+    const ERZEUGT: [RegExp, string][] = [
+      [/JSON-Schema/, "## JSON-Schema der Meldung"],
+      [/Darstellungsdatei/, "## Darstellungsdatei"],
+      [/Teil A/, "## SOP-Sammelmappe: Teil A"],
+      [/ausgewählten SOPs|^Bausteine$/, "# Ausgewählte SOPs"],
+      [/Kodierleitfaden/, "## Kodierleitfaden"],
+      [/Eingangsmaterial/, "<material "],
+    ];
+    const { profil: p } = await profil("lead-beispiel");
+    const { profilGrundlagen, sopBlock } = await import("../../src/pipeline/kontext");
+    const { materialBloecke } = await import("../../src/pipeline/material");
+    const material = [{ id: "m1", art: "text" as const, name: "notiz.txt", groesse: 1, hash: "h", text: "Inhalt" }];
+    const beigelegt = [profilGrundlagen(p!), sopBlock(p!, ["b01"]), ...materialBloecke(material, [], "").map((b: any) => b.text || "")].join("\n");
+    const text = p!.dateien[p!.manifest.anweisungen!.erfassung!];
+    expect(text).not.toMatch(/Beispiel-JSON|Beispielmeldung/);
+    const zeile = text.split("\n").find((z) => z.startsWith("**Von der App beigefügt:**"))!;
+    const liste = zeile
+      .replace("**Von der App beigefügt:**", "")
+      .split(/\.\s/)[0]!
+      .replace(/\([^)]*\)/g, "")
+      .split(/,\s*|\s+und\s+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    expect(liste.length).toBeGreaterThan(4);
+    const ohneErzeugung = liste.filter((x) => !ERZEUGT.some(([m, ueberschrift]) => m.test(x) && beigelegt.includes(ueberschrift)));
+    expect(ohneErzeugung).toEqual([]);
+  });
+
   it("eine leere Meldung ist als Entwurf schemakonform", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const leer = leererWert(p!.schema, p!.schema);

@@ -2,7 +2,7 @@
 
 Beispielfassung für KI-LEAD · Fassung 1.5.0 vom 26.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.16.0 und den Kodierleitfaden LEAD ab Fassung 1.3.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.0.2 und der Arbeitsanweisung Kurzfassung ab 2.1.2 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
-**Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs und Bausteine, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ein thematisch passendes Beispiel-JSON dient nur als Stilbeispiel, nie als Beleg, Skalenquelle oder Vorgabe für die Bewertung. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
+**Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte D1–D8, Kennsätze, Quellenkategorien), Teil A der SOP-LEAD-Sammelmappe, die in Stufe S1 ausgewählten SOPs und Bausteine, der Kodierleitfaden LEAD und das Eingangsmaterial des Auftrags. Ergebnis ist ein redaktionell verwendbarer, fachlich prüfbarer **Entwurf**.
 
 ────────
 
@@ -51,7 +51,7 @@ Ein ausdrücklich bestätigter Stichtag geht automatischen Vorschlägen vor. Feh
 
 ## 1. Technische Grundlage
 
-Die technische Grundlage bilden das beigefügte **JSON-Schema** und die **Darstellungsdatei** des Profils. Ermittle daraus die exakte Objektstruktur, die zulässigen Werte (Enums), die Leerwerte und die Stufentexte D1–D8. Nutze die Stufentexte der Darstellungsdatei wortgleich. Das Schema bestimmt Struktur und zulässige Werte; Kodierleitfaden und SOP bestimmen die fachliche Auslegung. Fehlt ein Bestandteil oder widersprechen sie sich, benenne das, statt es durch das Beispiel oder freie Annahmen zu ersetzen.
+Die technische Grundlage bilden das beigefügte **JSON-Schema** und die **Darstellungsdatei** des Profils. Ermittle daraus die exakte Objektstruktur, die zulässigen Werte (Enums), die Leerwerte und die Stufentexte D1–D8. Nutze die Stufentexte der Darstellungsdatei wortgleich. Das Schema bestimmt Struktur und zulässige Werte; Kodierleitfaden und SOP bestimmen die fachliche Auslegung. Fehlt ein Bestandteil oder widersprechen sie sich, benenne das, statt es durch freie Annahmen zu ersetzen.
 
 Rangfolge bei Widersprüchen:
 1. JSON-Schema und Darstellungsdatei des Profils
@@ -59,7 +59,6 @@ Rangfolge bei Widersprüchen:
 3. SOP-Mappe Teil A
 4. lageartspezifische SOP und einschlägige Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7)
 5. diese Anweisung
-6. Beispiel-JSON
 
 Leerwerte (Beispielschema):
 - `beurteilung` und `tendenz`: leerer String `""` (Option „keine Angabe“), nie `null`.
