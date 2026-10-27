@@ -554,18 +554,10 @@ a {
 }
 
 @media (max-width: 860px) {
-  /* Safari ließ die scrollbare Hauptnavigation im umbrechenden Kopf über die Bildschirmbreite hinausragen; die Seite
-     scrollte seitlich (WebKit-Test „Smartphone …“, seit 0.6.5). clip erzeugt keinen Scrollbereich, sticky bleibt. */
-  .kopf {
-    overflow-x: clip;
-  }
-
   .hauptnav {
     overflow-x: auto;
-    overflow-y: hidden;
     scrollbar-width: none;
     min-width: 0;
-    max-width: 100%;
   }
 
   .nav {
@@ -597,6 +589,13 @@ a {
 
 a.knopf {
   text-decoration: none;
+}
+
+/* Inhalt geschlossener <details> nimmt keinen Platz ein. Neuere WebKit-Fassungen blenden ihn nur aus und rechnen seine
+   Breite der Seite zu; der geschlossene Farbschema-Editor machte die Einstellungen in Smartphone-Breite 788 statt
+   390 px breit (WebKit-Test „Smartphone …“, seit 0.6.5). */
+details:not([open]) > :not(summary) {
+  display: none;
 }
 
 .sr-only {
