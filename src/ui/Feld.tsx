@@ -12,6 +12,7 @@ import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
+import { HilfeFeld } from "./HilfeFeld";
 
 export interface FeldProps {
   profil: Profil;
@@ -145,46 +146,42 @@ export function Feld(props: FeldProps) {
       );
     }
     return (
-      <div className="feld">
-        <label className={f.pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-          {label}
-        </label>
-        {/* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */}
-        <select
-          id={id}
-          value={optionen.findIndex((o) => o === wert) >= 0 ? String(optionen.findIndex((o) => o === wert)) : ""}
-          onChange={(ev) => setze(segs, ev.target.value === "" ? (e.includes("") ? "" : null) : optionen[Number(ev.target.value)])}
-        >
-          {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
-          {optionen.map((opt, i) => (
-            <option key={String(opt)} value={String(i)}>
-              {String(opt)}
-            </option>
-          ))}
-        </select>
-        <Hinweis text={f.hinweis} />
-      </div>
+      <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach pflicht={f.pflicht}>
+        {(a) => (
+          /* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */
+          <select
+            {...a}
+            value={optionen.findIndex((o) => o === wert) >= 0 ? String(optionen.findIndex((o) => o === wert)) : ""}
+            onChange={(ev) => setze(segs, ev.target.value === "" ? (e.includes("") ? "" : null) : optionen[Number(ev.target.value)])}
+          >
+            {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
+            {optionen.map((opt, i) => (
+              <option key={String(opt)} value={String(i)}>
+                {String(opt)}
+              </option>
+            ))}
+          </select>
+        )}
+      </HilfeFeld>
     );
   }
 
   if (t.includes("boolean")) {
     if (t.includes("null")) {
       return (
-        <div className="feld">
-          <label className="feld-label" htmlFor={id}>
-            {label}
-          </label>
-          <select
-            id={id}
-            value={wert === true ? "ja" : wert === false ? "nein" : ""}
-            onChange={(ev) => setze(segs, ev.target.value === "" ? null : ev.target.value === "ja")}
-          >
-            <option value="">{f.leer_label || "keine Angabe"}</option>
-            <option value="ja">ja</option>
-            <option value="nein">nein</option>
-          </select>
-          <Hinweis text={f.hinweis} />
-        </div>
+        <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach>
+          {(a) => (
+            <select
+              {...a}
+              value={wert === true ? "ja" : wert === false ? "nein" : ""}
+              onChange={(ev) => setze(segs, ev.target.value === "" ? null : ev.target.value === "ja")}
+            >
+              <option value="">{f.leer_label || "keine Angabe"}</option>
+              <option value="ja">ja</option>
+              <option value="nein">nein</option>
+            </select>
+          )}
+        </HilfeFeld>
       );
     }
     return (
@@ -200,52 +197,55 @@ export function Feld(props: FeldProps) {
 
   if (t.includes("integer") || t.includes("number")) {
     return (
-      <div className="feld">
-        <label className="feld-label" htmlFor={id}>
-          {label}
-        </label>
-        <input
-          id={id}
-          type="number"
-          inputMode="numeric"
-          value={wert ?? ""}
-          onChange={(ev) => setze(segs, ev.target.value === "" ? (t.includes("null") ? null : 0) : Number(ev.target.value))}
-        />
-        <Hinweis text={f.hinweis} />
-      </div>
+      <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach>
+        {(a) => (
+          <input
+            {...a}
+            type="number"
+            inputMode="numeric"
+            value={wert ?? ""}
+            onChange={(ev) => setze(segs, ev.target.value === "" ? (t.includes("null") ? null : 0) : Number(ev.target.value))}
+          />
+        )}
+      </HilfeFeld>
     );
   }
 
   const widget = f.widget || "text";
+  const text = typeof wert === "string" ? wert : alsText(wert);
   const gemeinsam = {
-    id,
-    value: typeof wert === "string" ? wert : alsText(wert),
+    value: text,
     placeholder: f.platzhalter,
     onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value),
   };
   return (
-    <div className={widget === "text_lang" ? "feld feld-lang" : "feld"}>
-      <label className={f.pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-        {label}
-      </label>
-      {widget === "text_lang" ? (
-        <textarea {...gemeinsam} rows={f.zeilen || 5} />
-      ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
-        <DatumZeit
-          id={id}
-          label={label}
-          name={zugaenglicherName(profil, gen, label)}
-          modus={widget}
-          wert={wert}
-          zeitzone={profil.manifest.variablen?.zeitzone}
-          onChange={(v) => setze(segs, v)}
-        />
-      ) : (
-        <input {...gemeinsam} type="text" />
-      )}
-      <Hinweis text={f.hinweis} />
-      {eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={gemeinsam.value} />}
-    </div>
+    <HilfeFeld
+      id={id}
+      lang={widget === "text_lang"}
+      label={label}
+      hilfe={f.hinweis}
+      hilfeNach
+      pflicht={f.pflicht}
+      nach={eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={text} />}
+    >
+      {(a) =>
+        widget === "text_lang" ? (
+          <textarea {...a} {...gemeinsam} rows={f.zeilen || 5} />
+        ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
+          <DatumZeit
+            id={id}
+            label={label}
+            name={zugaenglicherName(profil, gen, label)}
+            modus={widget}
+            wert={wert}
+            zeitzone={profil.manifest.variablen?.zeitzone}
+            onChange={(v) => setze(segs, v)}
+          />
+        ) : (
+          <input {...a} {...gemeinsam} type="text" />
+        )
+      }
+    </HilfeFeld>
   );
 }
 

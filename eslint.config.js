@@ -10,6 +10,18 @@ import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
+/**
+ * Regeln des React-Compilers (recommended-latest ohne die beiden klassischen), seit 0.6.5 (TP-2026-W44-17) als Fehler.
+ * Zwei bleiben Warnungen, weil ihre Fundstellen in Komponenten liegen, die die Frontend-Tranche nicht umbaut:
+ * set-state-in-effect (Farbschema.tsx 2×, Profile.tsx, QuellenFeld.tsx, Testlaeufe.tsx) und purity (Eingabehilfen.tsx).
+ */
+const NUR_WARNUNG = new Set(["react-hooks/set-state-in-effect", "react-hooks/purity"]);
+const COMPILER_REGELN = Object.fromEntries(
+  Object.keys(reactHooks.configs["recommended-latest"].rules)
+    .filter((r) => r !== "react-hooks/rules-of-hooks" && r !== "react-hooks/exhaustive-deps")
+    .map((r) => [r, NUR_WARNUNG.has(r) ? "warn" : "error"]),
+);
+
 export default tseslint.config(
   {
     ignores: [
@@ -35,11 +47,11 @@ export default tseslint.config(
       globals: { ...globals.browser },
     },
     rules: {
-      // React-Hooks: die beiden klassischen Regeln. Die Regeln des React-Compilers (set-state-in-effect, purity, refs …)
-      // aus eslint-plugin-react-hooks 7 verlangen einen Umbau der großen Komponenten und gehören zur Frontend-Tranche
-      // (TP-2026-W44-17); sie bleiben hier aus.
+      // React-Hooks: die beiden klassischen Regeln und seit 0.6.5 (TP-2026-W44-17) die Regeln des React-Compilers aus
+      // eslint-plugin-react-hooks 7 (set-state-in-effect, purity, refs, immutability …), gesammelt in COMPILER_REGELN.
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
+      ...COMPILER_REGELN,
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/switch-exhaustiveness-check": ["error", { considerDefaultExhaustiveForUnions: true }],

@@ -50,7 +50,9 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
 
   // Änderungen immer auf dem neuesten Stand, auch wenn zwei Änderungen vor dem nächsten Zeichnen folgen
   const stand = useRef(meldung);
-  stand.current = meldung;
+  useLayoutEffect(() => {
+    stand.current = meldung;
+  });
   const setze = (segs: Segment[], wert: unknown) => {
     const m = mitWert(stand.current, segs, wert);
     stand.current = m;

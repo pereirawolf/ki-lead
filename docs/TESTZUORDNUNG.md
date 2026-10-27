@@ -680,3 +680,16 @@ Neue Datei `tests/profil/anweisungen-kopplung.test.ts`: Was die App auswertet od
 | Beispielzeile `Handlungsrelevant bis:` | `fristen` (`pipeline/kurzfassung.ts`) | Teil A, A.4 (Tabelle der Kennsätze) |
 | Beispieleinträge des Quellenverzeichnisses | `parseQuellen`, `quellenHinweise` (`kern/quellen.ts`) | `kodierleitfaden.md`, Abschnitt 5 |
 | Beispiel `_entstehung` | Schema `$defs.entstehung`, `kodierleitfadenKennung` (`pipeline/nachbearbeitung.ts`) | `anweisung-erfassung.md`, Abschnitt „Ausgabe“ |
+
+## Zustandsschnitt der Oberfläche (0.6.5, TP-2026-W44-17)
+
+Die drei größten Komponenten wurden ohne Verhaltensänderung zerlegt. Kein Test wurde verschoben, umbenannt oder inhaltlich geändert; die Oberflächentests binden weiter `KiErfassung`, `LagebildAnsicht`, `MeldungAnsicht` und `App` ein, die Browsertests laufen über dieselben zugänglichen Namen. Ein Vergleich der berechneten Stile aller Elemente in 132 Zuständen (Bereiche, Schritte, Reiter; 390 und 1280 px; hell, dunkel, mehr Kontrast) vor und nach dem Umbau ergab keine Abweichung.
+
+| Quelle bis 0.6.4 | Quelle seit 0.6.5 | Inhalt | Tests |
+|---|---|---|---|
+| `ui/KiErfassung.tsx` (22 `useState`) | `ui/kiErfassung/zustand.ts` | Reducer mit Zustands-Union `Ablauf` (Phase mit Lauf und Vorschlag) und Eingaben des Auftrags | `tests/ui/ki-erfassung-felder.test.ts`, `orientierung.test.ts`, `s1-grenze.test.ts`, `modellwahl.test.ts`, `fortschreibung.test.ts`, `ki-erfassung-laeufe.test.ts` |
+| `ui/KiErfassung.tsx` | `ui/kiErfassung/Auftragsformular.tsx`, `Laufanzeige.tsx` (eigene Uhr, Stand in `anzeigeStand.ts`), `Bestaetigung.tsx`, `Ergebnis.tsx`, `FruehereLaeufe.tsx`, `LaufModellWahl.tsx`, `recherche.tsx`, `texte.ts`, `rahmen.tsx` | Schritte der KI-Erfassung; `KiErfassung.tsx` steuert nur noch den Ablauf | wie oben, `tests/browser/hauptablauf.spec.ts`, `abbruch.spec.ts` |
+| `App.tsx` | `ui/app/useFarbschema.ts`, `useZwischenstand.ts`, `useKiUebergabe.ts` | Farbschema, Zwischenstand je Profil, Übergabe aus dem Lagebild | `tests/ui/app.test.ts`, `farbschemas.test.ts`, `erfassung.test.ts`, `tests/browser/wiederherstellung.spec.ts` |
+| Props `profil`, `einstellungen`, `schluessel`, `zuEinstellungen` über App → Meldung/KI-Erfassung | `ui/kiZugang.ts` (`KiZugangContext`); Props der Komponenten gehen vor | Zugang zu den KI-Funktionen | `tests/ui/meldung-schritte.test.ts`, KI-Erfassung wie oben |
+| `ui/Lagebild.tsx` | `ui/lagebild/Uebergabe.tsx`, `Redaktionscheck.tsx`, `Kopiervorlage.tsx`, `bausteine.tsx` | Übergabedialog, Redaktionscheck, Kopiervorlage, Marken | `tests/ui/lagebild.test.ts`, `redaktionscheck.test.ts` |
+| `HilfeFeld` in `ui/KiErfassung.tsx` | `ui/HilfeFeld.tsx`, genutzt von KI-Erfassung, `GrenzFeld.tsx` und `Feld.tsx` | Feld mit verknüpftem Hilfetext | `tests/ui/ki-erfassung-felder.test.ts`, `recherchetiefe.test.ts`, `erfassung.test.ts` |
