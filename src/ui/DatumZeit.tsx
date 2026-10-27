@@ -7,6 +7,10 @@ import { verbinde, zerlege, zoneOder, type DatumModus } from "../kern/zeit";
 
 interface Props {
   id: string;
+  /** aria-describedby des Tagesfelds (Hinweis und Befunde, seit 0.6.5) */
+  beschreibung?: string;
+  /** Befunde am Feld: aria-invalid am Tagesfeld (seit 0.6.5, TP-2026-W44-15) */
+  ungueltig?: boolean;
   /** Sichtbare Bezeichnung (z. B. „von“) */
   label: string;
   /** Zugänglicher Name, wenn die Bezeichnung allein nicht eindeutig ist (z. B. „Meldezeitraum, von“) */
@@ -20,7 +24,7 @@ interface Props {
 /** Unfertige Eingabe (z. B. Tag gelöscht, Monat noch offen): Browser melden dann "" – den gespeicherten Wert behalten */
 const unfertig = (e: ChangeEvent<HTMLInputElement>) => !e.target.value && !!e.target.validity?.badInput;
 
-export function DatumZeit({ id, label, name, modus, wert, zeitzone, onChange }: Props) {
+export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wert, zeitzone, onChange }: Props) {
   const roh = String(wert ?? "");
   const { tag, zeit } = zerlege(roh);
   const n = name || label;
@@ -34,6 +38,8 @@ export function DatumZeit({ id, label, name, modus, wert, zeitzone, onChange }: 
           id={id}
           type="date"
           aria-label={name ? `${name}: Tag` : undefined}
+          aria-describedby={beschreibung}
+          aria-invalid={ungueltig || undefined}
           value={tag}
           onChange={(e) => !unfertig(e) && onChange(verbinde(e.target.value, zeit, modus))}
         />

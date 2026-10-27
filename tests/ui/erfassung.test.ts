@@ -104,4 +104,30 @@ describe("Erfassungsmaske", () => {
       ),
     );
   });
+
+  // Befunde am Feld (seit 0.6.5): Pflicht- und Schemabefunde erscheinen am Feld, nicht nur im Prüfschritt
+  it("TP-2026-W44-15: leeres Pflichtfeld trägt aria-invalid und einen per aria-describedby verknüpften Fehlertext", async () => {
+    await zeigeApp();
+    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
+    expect(bezeichnung().getAttribute("aria-invalid")).toBe("true");
+    const ids = (bezeichnung().getAttribute("aria-describedby") || "").split(" ");
+    const texte = ids.map((id) => document.getElementById(id)?.textContent || "");
+    expect(texte).toContain("Pflichtangabe fehlt.");
+    expect(bezeichnung().closest(".feld")?.querySelector(".feld-label")?.classList.contains("pflicht")).toBe(true);
+
+    await eingeben(bezeichnung(), "Sturmfolgen");
+    expect(bezeichnung().hasAttribute("aria-invalid")).toBe(false);
+    expect(bezeichnung().closest(".feld")?.querySelector(".feld-fehler")).toBeNull();
+  });
+
+  it("TP-2026-W44-15: ein Befund im Prüfschritt wechselt in den Schritt und fokussiert das Feld", async () => {
+    await zeigeApp();
+    await zuSchritt(/Prüfen & Exportieren/);
+    const befund = [...document.querySelectorAll("button.befund-sprung")].find((b) => /Bezeichnung/.test(b.textContent || "")) as HTMLButtonElement;
+    expect(befund, "Befund zur Bezeichnung als Schaltfläche").toBeTruthy();
+    await klick(befund);
+    expect(document.querySelector("#schritt-titel")?.textContent).toBe("Ereignisse/Sachverhalte");
+    expect(document.activeElement).toBe(document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input'));
+  });
 });

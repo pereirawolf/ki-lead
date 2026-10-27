@@ -12,7 +12,8 @@ import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
-import { HilfeFeld } from "./HilfeFeld";
+import { FeldFehler, HilfeFeld } from "./HilfeFeld";
+import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 
 export interface FeldProps {
   profil: Profil;
@@ -45,21 +46,41 @@ export function Feld(props: FeldProps) {
   const eingabehilfe = useContext(EingabehilfeKontext);
   const t = typen(k);
   const e = enumWerte(k);
+  // Befunde und Pflichtkennzeichen am Feld (seit 0.6.5, TP-2026-W44-15)
+  const schluessel = feldSchluessel(segs);
+  const fehler = useContext(FeldBefundeKontext)?.befunde.get(schluessel);
+  const fehlerId = fehler?.length ? `${id}-fehler` : undefined;
+  const pflicht = !!f.pflicht;
+  const labelKlasse = pflicht ? "feld-label pflicht" : "feld-label";
+  const fehlerText = fehlerId && fehler ? <FeldFehler id={fehlerId} texte={fehler} /> : null;
 
   if (f.widget === "radar") {
     const def = radarFuer(profil.ui, f);
     if (!def) return <p className="fehlertext">Radar „{f.radar}“ ist in der Darstellungsdatei nicht definiert.</p>;
     return (
-      <div className="feld">
-        <div className="feld-label">{label}</div>
+      <div className="feld" data-feld={schluessel}>
+        <div className={labelKlasse}>{label}</div>
         <Hinweis text={f.hinweis} />
         <RadarFeld def={def} wert={wert} idPraefix={id} onChange={(neu) => setze(segs, neu)} />
+        {fehlerText}
       </div>
     );
   }
 
   if (f.widget === "quellen") {
-    return <QuellenFeld profil={profil} label={label} hinweis={f.hinweis} zeilen={f.zeilen} wert={String(wert ?? "")} onChange={(v) => setze(segs, v)} />;
+    return (
+      <QuellenFeld
+        profil={profil}
+        label={label}
+        pflicht={pflicht}
+        fehler={fehler}
+        feld={schluessel}
+        hinweis={f.hinweis}
+        zeilen={f.zeilen}
+        wert={String(wert ?? "")}
+        onChange={(v) => setze(segs, v)}
+      />
+    );
   }
 
   // Liste von Objekten (z. B. Sachverhalte)
@@ -69,8 +90,8 @@ export function Feld(props: FeldProps) {
     if (itemEnum) {
       const gewaehlt: unknown[] = Array.isArray(wert) ? wert : [];
       return (
-        <fieldset className="feld feld-mehrfach">
-          <legend className="feld-label">{label}</legend>
+        <fieldset className="feld feld-mehrfach" aria-describedby={fehlerId} data-feld={schluessel}>
+          <legend className={labelKlasse}>{label}</legend>
           <Hinweis text={f.hinweis} />
           <div className="mehrfach">
             {itemEnum.map((opt) => {
@@ -83,6 +104,7 @@ export function Feld(props: FeldProps) {
               );
             })}
           </div>
+          {fehlerText}
         </fieldset>
       );
     }
@@ -111,9 +133,9 @@ export function Feld(props: FeldProps) {
     const hatLeer = e.includes("") || e.includes(null);
     if (f.widget === "radio") {
       return (
-        <fieldset className="feld">
-          <legend className="feld-label">{label}</legend>
-          <div className="segmente" role="radiogroup">
+        <fieldset className="feld" data-feld={schluessel}>
+          <legend className={labelKlasse}>{label}</legend>
+          <div className="segmente" role="radiogroup" aria-invalid={fehlerId ? true : undefined} aria-describedby={fehlerId}>
             {hatLeer && (
               <label className={wert === "" || wert === null || wert === undefined ? "segment an" : "segment"}>
                 <input
@@ -141,12 +163,13 @@ export function Feld(props: FeldProps) {
               </label>
             ))}
           </div>
+          {fehlerText}
           <Hinweis text={f.hinweis} />
         </fieldset>
       );
     }
     return (
-      <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach pflicht={f.pflicht}>
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
         {(a) => (
           /* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */
           <select
@@ -169,7 +192,7 @@ export function Feld(props: FeldProps) {
   if (t.includes("boolean")) {
     if (t.includes("null")) {
       return (
-        <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach>
+        <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
           {(a) => (
             <select
               {...a}
@@ -185,11 +208,19 @@ export function Feld(props: FeldProps) {
       );
     }
     return (
-      <div className="feld">
+      <div className="feld" data-feld={schluessel}>
         <label className="schalter" htmlFor={id}>
-          <input id={id} type="checkbox" checked={wert === true} onChange={(ev) => setze(segs, ev.target.checked)} />
+          <input
+            id={id}
+            type="checkbox"
+            checked={wert === true}
+            aria-invalid={fehlerId ? true : undefined}
+            aria-describedby={fehlerId}
+            onChange={(ev) => setze(segs, ev.target.checked)}
+          />
           <span>{label}</span>
         </label>
+        {fehlerText}
         <Hinweis text={f.hinweis} />
       </div>
     );
@@ -197,7 +228,7 @@ export function Feld(props: FeldProps) {
 
   if (t.includes("integer") || t.includes("number")) {
     return (
-      <HilfeFeld id={id} label={label} hilfe={f.hinweis} hilfeNach>
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
         {(a) => (
           <input
             {...a}
@@ -221,11 +252,13 @@ export function Feld(props: FeldProps) {
   return (
     <HilfeFeld
       id={id}
+      feld={schluessel}
       lang={widget === "text_lang"}
       label={label}
       hilfe={f.hinweis}
       hilfeNach
-      pflicht={f.pflicht}
+      pflicht={pflicht}
+      fehler={fehler}
       nach={eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={text} />}
     >
       {(a) =>
@@ -234,6 +267,8 @@ export function Feld(props: FeldProps) {
         ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
           <DatumZeit
             id={id}
+            beschreibung={a["aria-describedby"]}
+            ungueltig={!!a["aria-invalid"]}
             label={label}
             name={zugaenglicherName(profil, gen, label)}
             modus={widget}

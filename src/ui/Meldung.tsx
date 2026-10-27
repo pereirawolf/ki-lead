@@ -7,6 +7,7 @@ import { unterSchema } from "../kern/schema";
 import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
 import { migriere } from "../kern/migration";
 import { pruefeGegenSchema } from "../kern/validierung";
+import { pflichtHinweise } from "../kern/kennsaetze";
 import { quellenHinweise } from "../kern/quellen";
 import type { Meldung as MeldungTyp, Profil, Schritt } from "../kern/typen";
 import { Feld } from "./Feld";
@@ -14,6 +15,8 @@ import { Pruefen } from "./Pruefen";
 import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilfeKontext";
 import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
+import { befundeJeFeld, feldSchluessel, FeldBefundeKontext, type FeldBefundeWert } from "./feldBefunde";
+import { scrollVerhalten } from "./bewegung";
 
 /** Kennung des Schritts, den die App für die Management Summary anfügt */
 export const KURZFASSUNG_SCHRITT = "management-summary";
@@ -109,6 +112,46 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     setMeldungen({ art: !mig.bekannt || schema.length ? "hinweis" : "ok", zeilen });
   };
 
+  // Schema- und Pflichtbefunde einmal je Stand der Meldung, für die Felder und den Prüfschritt (seit 0.6.5, TP-2026-W44-15);
+  // geprüft wird wie im Prüfschritt als finale Meldung
+  const r = ui.rollen;
+  const schemaBefunde = useMemo(
+    () => pruefeGegenSchema(profil.schema, { ...meldung, [r.status_feld]: r.status_final }, ui),
+    [profil.schema, meldung, r.status_feld, r.status_final, ui],
+  );
+  const pflicht = useMemo(() => pflichtHinweise(meldung, ui), [meldung, ui]);
+  const feldBefunde = useMemo<FeldBefundeWert>(() => ({ befunde: befundeJeFeld(schemaBefunde, pflicht, ui) }), [schemaBefunde, pflicht, ui]);
+
+  /** Vom Befund im Prüfschritt zum Feld: Schritt wechseln, dann das Feld (oder das nächste umfassende) fokussieren */
+  const sprungZiel = useRef<string | null>(null);
+  const [sprungNr, setSprungNr] = useState(0);
+  const zumFeld = (pfad: string) => {
+    const segs = teilePfad(pfad);
+    const i = schritte.findIndex((st) => st.felder.some((f) => teilePfad(f)[0] === segs[0]));
+    if (i < 0) return;
+    sprungZiel.current = feldSchluessel(segs);
+    setSchritt(i);
+    setSprungNr((n) => n + 1);
+  };
+  useLayoutEffect(() => {
+    const ziel = sprungZiel.current;
+    if (ziel === null) return;
+    sprungZiel.current = null;
+    let teile = ziel.split("/");
+    while (teile.length) {
+      const k = teile.join("/");
+      const rahmen = [...document.querySelectorAll<HTMLElement>("[data-feld]")].find((el) => el.dataset.feld === k);
+      const eingabe = rahmen?.querySelector<HTMLElement>("input:not([type=hidden]), select, textarea, button");
+      if (eingabe) {
+        eingabe.focus();
+        eingabe.scrollIntoView?.({ block: "center", behavior: scrollVerhalten() });
+        return;
+      }
+      teile = teile.slice(0, -1);
+    }
+    document.getElementById("schritt-titel")?.focus();
+  }, [sprungNr]);
+
   const anzahlSv = (holeWert(meldung, ui.rollen.sachverhalte) || []).length;
   // Hinzufügen oder Entfernen von Sachverhalten verschiebt die Pfade: Verlauf der Eingabehilfen dieser Liste verwerfen
   const vorherSv = useRef(anzahlSv);
@@ -118,104 +161,108 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
   }, [anzahlSv, ui.rollen.sachverhalte]);
 
   return (
-    <EingabehilfeKontext.Provider value={eingabehilfe}>
-      <div className="meldung">
-        <div className="werkzeugleiste">
-          <div className="werkzeugleiste-text">
-            <h1>{ui.titel}</h1>
-            {ui.untertitel && <p>{ui.untertitel}</p>}
-          </div>
-          <div className="werkzeugleiste-knoepfe">
-            <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>
-              Meldung öffnen
-            </button>
-            <button
-              type="button"
-              className="knopf leise"
-              onClick={() => {
-                if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
-                  neu();
-                  setSchritt(0);
-                  setMeldungen(null);
-                }
-              }}
-            >
-              Neue Meldung
-            </button>
-            <input
-              ref={dateiRef}
-              type="file"
-              accept="application/json,.json"
-              hidden
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void oeffnen(f);
-                e.target.value = "";
-              }}
-            />
-          </div>
-        </div>
-        {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
-        {meldungen && (
-          <div className={`kasten kasten-${meldungen.art}`} role="status">
-            <ul>
-              {meldungen.zeilen.map((z, i) => (
-                <li key={i}>{z}</li>
-              ))}
-            </ul>
-            <button type="button" className="knopf leise klein" onClick={() => setMeldungen(null)}>
-              Ausblenden
-            </button>
-          </div>
-        )}
-
-        <div className="arbeitsbereich">
-          <nav className="schritte" aria-label="Schritte">
-            <ol>
-              {schritte.map((s, i) => (
-                <li key={s.id}>
-                  <button
-                    type="button"
-                    className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
-                    aria-current={i === schritt ? "step" : undefined}
-                    onClick={() => setSchritt(i)}
-                  >
-                    <span className="schritt-nr">{i + 1}</span>
-                    <span className="schritt-titel">{s.titel}</span>
-                    {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </nav>
-
-          <section className="schritt-inhalt" aria-labelledby="schritt-titel">
-            <h2 id="schritt-titel">{aktuell.titel}</h2>
-            {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
-            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" />}
-            {aktuell.felder.map((feld) => {
-              const segs = teilePfad(feld);
-              return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
-            })}
-            {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
-            {aktuell.kurzfassung && <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} eigenerSchritt />}
-            <div className="schritt-nav">
-              {schritt > 0 ? (
-                <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
-                  Zurück: {schritte[schritt - 1]?.titel}
-                </button>
-              ) : (
-                <span />
-              )}
-              {schritt < schritte.length - 1 && (
-                <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
-                  Weiter: {schritte[schritt + 1]?.titel}
-                </button>
-              )}
+    <FeldBefundeKontext.Provider value={feldBefunde}>
+      <EingabehilfeKontext.Provider value={eingabehilfe}>
+        <div className="meldung">
+          <div className="werkzeugleiste">
+            <div className="werkzeugleiste-text">
+              <h1>{ui.titel}</h1>
+              {ui.untertitel && <p>{ui.untertitel}</p>}
             </div>
-          </section>
+            <div className="werkzeugleiste-knoepfe">
+              <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>
+                Meldung öffnen
+              </button>
+              <button
+                type="button"
+                className="knopf leise"
+                onClick={() => {
+                  if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
+                    neu();
+                    setSchritt(0);
+                    setMeldungen(null);
+                  }
+                }}
+              >
+                Neue Meldung
+              </button>
+              <input
+                ref={dateiRef}
+                type="file"
+                accept="application/json,.json"
+                hidden
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void oeffnen(f);
+                  e.target.value = "";
+                }}
+              />
+            </div>
+          </div>
+          {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
+          {meldungen && (
+            <div className={`kasten kasten-${meldungen.art}`} role="status">
+              <ul>
+                {meldungen.zeilen.map((z, i) => (
+                  <li key={i}>{z}</li>
+                ))}
+              </ul>
+              <button type="button" className="knopf leise klein" onClick={() => setMeldungen(null)}>
+                Ausblenden
+              </button>
+            </div>
+          )}
+
+          <div className="arbeitsbereich">
+            <nav className="schritte" aria-label="Schritte">
+              <ol>
+                {schritte.map((s, i) => (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
+                      aria-current={i === schritt ? "step" : undefined}
+                      onClick={() => setSchritt(i)}
+                    >
+                      <span className="schritt-nr">{i + 1}</span>
+                      <span className="schritt-titel">{s.titel}</span>
+                      {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+
+            <section className="schritt-inhalt" aria-labelledby="schritt-titel">
+              <h2 id="schritt-titel" tabIndex={-1}>
+                {aktuell.titel}
+              </h2>
+              {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
+              {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" befunde={{ schema: schemaBefunde, pflicht }} zumFeld={zumFeld} />}
+              {aktuell.felder.map((feld) => {
+                const segs = teilePfad(feld);
+                return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
+              })}
+              {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
+              {aktuell.kurzfassung && <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} eigenerSchritt />}
+              <div className="schritt-nav">
+                {schritt > 0 ? (
+                  <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
+                    Zurück: {schritte[schritt - 1]?.titel}
+                  </button>
+                ) : (
+                  <span />
+                )}
+                {schritt < schritte.length - 1 && (
+                  <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
+                    Weiter: {schritte[schritt + 1]?.titel}
+                  </button>
+                )}
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
-    </EingabehilfeKontext.Provider>
+      </EingabehilfeKontext.Provider>
+    </FeldBefundeKontext.Provider>
   );
 }
