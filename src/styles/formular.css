@@ -1,0 +1,824 @@
+/* Meldungsmaske und Eingabefelder: Felder, Hilfe- und Fehlertexte, Chips, Segmente, Sachverhalte, Lagenradar,
+   Quellen, Prüfschritt, Kästen, Datum und Zeit, Quellen-Baukasten, LEAD-Eingabehilfen, Management Summary.
+   Seit 0.6.5 (TP-2026-W44-19) eigene Datei; eingebunden über src/styles.css. */
+
+/* ── Felder ───────────────────────────────────────── */
+.feld {
+  margin: 0 0 1.1rem;
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.feld-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  padding: 0;
+}
+
+.feld-label.pflicht::after {
+  content: " (Pflicht für finale Meldung)";
+  font-weight: 400;
+  color: var(--tinte-leise);
+  font-size: 0.8rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--eingabe-rand);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  padding: 0.6rem 0.7rem;
+  min-height: 44px;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.55;
+  max-width: 100%;
+}
+
+.feld-lang textarea {
+  min-height: 8rem;
+}
+
+.hinweis {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: 0.3rem 0 0;
+  max-width: 78ch;
+}
+
+/* Hilfetext zwischen Beschriftung und Eingabe (KI-Erfassung, KP-2026-W43-61 ff.) */
+.feld-hilfe {
+  margin: 0 0 0.4rem;
+}
+
+.feld-zusatz {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+.gruppe {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.75rem 1rem 0.25rem;
+  margin: 0 0 1.1rem;
+  min-width: 0;
+}
+
+.gruppe > legend {
+  font-weight: 700;
+  padding: 0 0.4rem;
+  color: var(--amt-tief);
+}
+
+.gruppe-zeile .gruppe-inhalt,
+.gruppe-spalten .gruppe-inhalt {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0 1rem;
+}
+
+.gruppe-spalten .gruppe {
+  margin-bottom: 0.75rem;
+}
+
+/* Mehrfachauswahl als Chips */
+.mehrfach {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--eingabe-rand);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  min-height: 40px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  background: var(--flaeche);
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip.an {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--auf-amt);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--amt);
+  outline-offset: 2px;
+}
+
+/* Einfachauswahl als Segmente */
+.segmente {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  overflow: hidden;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.segment {
+  position: relative;
+  padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  border-right: 1px solid var(--linie);
+  background: var(--flaeche);
+}
+
+.segment:last-child {
+  border-right: none;
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segment:has(input:focus-visible) {
+  outline: 3px solid var(--amt);
+  outline-offset: -3px;
+}
+
+.segment.an {
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  font-weight: 700;
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+/* Gewählte Bewertung nach Rang (3 höchste Stufe der Aufzählung) und Tendenz, unabhängig von den Wörtern des Profils
+   (seit 0.6.5, TP-2026-W44-16; bis 0.6.4 Klassen wie .wert-kritisch aus den Werten des Beispielprofils) */
+.segment.an[data-rang="1"] {
+  background: var(--gering-zart);
+  color: var(--gering);
+}
+
+.segment.an[data-rang="2"] {
+  background: var(--erheblich-zart);
+  color: var(--erheblich);
+}
+
+.segment.an[data-rang="3"],
+.segment.an[data-tendenz="verschaerfung"] {
+  background: var(--kritisch-zart);
+  color: var(--kritisch);
+}
+
+.segment.an[data-tendenz="entspannung"] {
+  background: var(--ok-zart);
+  color: var(--ok);
+}
+
+/* ── Listenelemente (Sachverhalte) ────────────────── */
+.liste {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.element {
+  border: 1px solid var(--linie);
+  border-left: 6px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.25rem 1.1rem 0.5rem;
+  background: var(--flaeche);
+}
+
+.element[data-rang="1"] {
+  border-left-color: var(--gering);
+}
+
+.element[data-rang="2"] {
+  border-left-color: var(--erheblich);
+}
+
+.element[data-rang="3"] {
+  border-left-color: var(--kritisch);
+}
+
+.element-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.element-kopf h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.element-nr {
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  font-weight: 400;
+  margin: 0;
+}
+
+.element-titel {
+  font-weight: 700;
+}
+
+.leer {
+  color: var(--tinte-leise);
+}
+
+/* ── Lagenradar ───────────────────────────────────── */
+.radar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.radar-grafik {
+  position: sticky;
+  top: 6rem;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--radar-ring);
+  stroke-width: 1;
+}
+
+.radar-ring-aussen {
+  stroke-width: 1.5;
+}
+
+.radar-achse {
+  stroke: var(--radar-ring);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.radar-beschriftung {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--tinte-leise);
+}
+
+.radar-flaeche {
+  fill: var(--radar-flaeche);
+  stroke: var(--radar-linie);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.radar-punkt {
+  fill: var(--radar-linie);
+  stroke: var(--flaeche);
+  stroke-width: 1.5;
+}
+
+.radar-punkt-offen {
+  fill: var(--flaeche);
+  stroke: var(--tinte-leise);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 2;
+}
+
+.radar-achsen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.radar-achse-wahl {
+  border: none;
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  border-bottom: 1px solid var(--linie-zart);
+  min-width: 0;
+}
+
+.radar-achse-wahl legend {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0;
+  margin-bottom: 0.3rem;
+}
+
+.stufen {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, auto) repeat(7, minmax(0, 2.6rem));
+  gap: 0.25rem;
+  max-width: 24rem;
+}
+
+.stufe {
+  min-width: 0;
+  min-height: 40px;
+  border: 1px solid var(--eingabe-rand);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.stufe.aktiv {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--auf-amt);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.stufe-offen {
+  padding: 0 0.6rem;
+  font-weight: 400;
+  border-style: dashed;
+}
+
+.stufe-offen.aktiv {
+  background: var(--papier);
+  border-color: var(--tinte-leise);
+  color: var(--tinte);
+  font-weight: 700;
+}
+
+.stufentext {
+  font-size: 0.85rem;
+  color: var(--amt-tief);
+  margin-top: 0.25rem;
+  min-height: 1.3em;
+}
+
+/* ── Quellen ──────────────────────────────────────── */
+.kategorien {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 0.75rem;
+}
+
+.kategorien div {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.kategorien dt {
+  font-weight: 700;
+  text-align: center;
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  border-radius: var(--r-klein);
+  height: fit-content;
+}
+
+.kategorien dd {
+  margin: 0;
+}
+
+.quellen-text {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  min-height: 14rem;
+}
+
+/* ── Prüfen ───────────────────────────────────────── */
+.kasten {
+  border: 1px solid var(--linie);
+  border-left-width: 5px;
+  border-radius: var(--r-mittel);
+  padding: 0.75rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--flaeche);
+}
+
+.kasten h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.kasten p {
+  margin: 0.2rem 0;
+}
+
+.kasten ul {
+  margin: 0.25rem 0 0.25rem;
+  padding-left: 1.2rem;
+}
+
+.kasten li {
+  margin: 0.15rem 0;
+}
+
+.kasten-ok {
+  border-left-color: var(--ok);
+  background: var(--ok-zart);
+}
+
+.kasten-fehler {
+  border-left-color: var(--kritisch);
+  background: var(--kritisch-zart);
+}
+
+.kasten-hinweis {
+  border-left-color: var(--gering);
+}
+
+.kasten-info {
+  border-left-color: var(--amt);
+  background: var(--amt-zart);
+}
+
+.abschnitt {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.uebersicht {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 0.75rem;
+}
+
+.zeile-sv {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--linie);
+  border-left: 6px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 0.75rem;
+}
+
+.zeile-sv[data-rang="1"] {
+  border-left-color: var(--gering);
+}
+
+.zeile-sv[data-rang="2"] {
+  border-left-color: var(--erheblich);
+}
+
+.zeile-sv[data-rang="3"] {
+  border-left-color: var(--kritisch);
+}
+
+.zeile-sv svg {
+  flex: none;
+}
+
+.zeile-titel {
+  font-weight: 700;
+  margin: 0.1rem 0 0.4rem;
+}
+
+.zeile-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.status {
+  font-size: 0.85rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  padding: 0.05rem 0.6rem;
+}
+
+.aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.summary {
+  margin-top: 1.25rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 1rem;
+}
+
+.summary summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 32px;
+}
+
+.summary pre {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.92rem;
+  max-width: 78ch;
+  line-height: 1.55;
+}
+
+.fehlertext {
+  color: var(--kritisch);
+}
+
+/* Befunde am Feld und Sprung aus dem Prüfschritt zum Feld (seit 0.6.5, TP-2026-W44-15) */
+.feld-fehler {
+  margin: 0.25rem 0 0;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--kritisch);
+}
+
+.befund-sprung {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--link);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .element {
+    padding: 0.25rem 0.7rem 0.5rem;
+    border-left-width: 5px;
+  }
+
+  .gruppe {
+    padding: 0.5rem 0.6rem 0.1rem;
+  }
+
+  .stufen {
+    gap: 0.2rem;
+  }
+
+  .stufe-offen {
+    padding: 0 0.3rem;
+    font-size: 0.85rem;
+  }
+
+  .radar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .radar-grafik {
+    position: static;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .segment {
+    padding: 0.45rem 0.65rem;
+  }
+}
+
+.gruppe-spalten-zwei {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0 1.25rem;
+}
+
+.kurzfassung {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.kurzfassung > h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.kurzfassung .aktionen {
+  margin-top: 0.75rem;
+}
+
+.kurzfassung-text {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.9rem 1rem;
+  margin: 0.75rem 0 0.4rem;
+  max-width: 80ch;
+  overflow-wrap: anywhere;
+}
+
+.schalter {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 1rem 0 0;
+  cursor: pointer;
+}
+
+.schalter input {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  margin-top: 0.15rem;
+  accent-color: var(--auswahl-rand);
+}
+
+.schalter .hinweis {
+  display: block;
+}
+
+.element-kopf .aktionen {
+  margin-left: auto;
+}
+
+.datum-zeit {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.datum-zeit input[type="date"] {
+  flex: 3 1 0;
+  min-width: 0;
+}
+
+.datum-zeit input[type="time"] {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+/* ── Datums- und Zeitfelder mit Schaltflächen ── */
+.datumzeit-feld .datum-zeit input[type="date"] {
+  flex: 0 1 11.5rem;
+}
+
+.datumzeit-feld .datum-zeit input[type="time"] {
+  flex: 0 1 8rem;
+}
+
+.datumzeit-feld .datum-zeit input:disabled {
+  opacity: 1;
+  background: var(--papier);
+  cursor: not-allowed;
+}
+
+.datumzeit-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.datumzeit-fehlt {
+  color: var(--erheblich);
+}
+
+/* ── Quellen: Baukasten für neue Zeilen ── */
+.quellen-baukasten {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem 0.8rem;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.quellen-baukasten legend {
+  font-weight: 700;
+  padding: 0 0.3rem;
+}
+
+.quellen-reihe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+
+.quellen-reihe-titel {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 5.5rem;
+}
+
+.quellen-lagemeldung {
+  flex: 1 1 20rem;
+  margin: 0;
+}
+
+.quellen-vorschau {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.quellen-vorschau code {
+  background: var(--papier);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  padding: 0.1rem 0.35rem;
+  font-size: 0.88rem;
+}
+
+.quellen-baukasten > .knopf {
+  align-self: flex-start;
+}
+
+/* ── LEAD-Eingabehilfen (Analysefelder, Bewertungstext) ── */
+.eingabehilfen {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.45rem 0.8rem;
+  margin: 0.6rem 0 0;
+}
+
+.eingabehilfen > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.eingabehilfen-wahl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.eingabehilfen-wahl .feld {
+  margin: 0;
+}
+
+.eingabehilfen-liste {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.eingabehilfen-liste li,
+.eingabehilfen-ruecknahme {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+}
+
+.eingabehilfen-liste .hinweis,
+.eingabehilfen-ruecknahme .hinweis {
+  margin: 0;
+  flex: 1 1 16rem;
+}
+
+.eingabehilfen-ruecknahme {
+  margin-top: 0.6rem;
+}
+
+.eingabehilfen-meldung {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* Management Summary als eigener Schritt der Meldung (seit 0.5.17) */
+.kurzfassung.kurzfassung-schritt {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}

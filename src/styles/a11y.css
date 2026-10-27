@@ -1,0 +1,114 @@
+/* Barrierefreiheit: reduzierte Bewegung, Kontrastschemata ([data-kontrast]) und erzwungene Systemfarben
+   (forced-colors), auch für die Modellwahl je Lauf.
+   Seit 0.6.5 (TP-2026-W44-19) eigene Datei; eingebunden über src/styles.css. */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── Barrierefreiheit: Kontrastschemata und Systemfarben ── */
+
+/* Kontrastschema (gewählt oder über „mehr Kontrast“ automatisch): kräftigere Konturen, Marken mit Rahmen */
+[data-kontrast="erhoeht"] .chip,
+[data-kontrast="erhoeht"] .stufe,
+[data-kontrast="erhoeht"] .segmente,
+[data-kontrast="erhoeht"] .lb-reiter .segment,
+[data-kontrast="erhoeht"] input[type="text"],
+[data-kontrast="erhoeht"] input[type="password"],
+[data-kontrast="erhoeht"] input[type="date"],
+[data-kontrast="erhoeht"] input[type="time"],
+[data-kontrast="erhoeht"] input[type="datetime-local"],
+[data-kontrast="erhoeht"] input[type="number"],
+[data-kontrast="erhoeht"] select,
+[data-kontrast="erhoeht"] textarea {
+  border-width: 2px;
+}
+
+[data-kontrast="erhoeht"] .lb-flag {
+  border: 1px solid currentColor;
+}
+
+/* gewählte Bewertung: Fläche entspricht im Kontrastschema der Arbeitsfläche, daher Innenrahmen */
+[data-kontrast="erhoeht"] .segment.an {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+/* Schrittzähler: „linie-zart“ ist im Kontrastschema eine kräftige Konturfarbe, kein Texthintergrund */
+[data-kontrast="erhoeht"] .schritt-zahl {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+}
+
+/* Systemfarben (z. B. Kontrastdesign von Windows): das System gibt die Farben vor; die App sorgt nur dafür,
+   dass Auswahl, Marken und Radar sichtbar bleiben. */
+@media (forced-colors: active) {
+  .kopf,
+  .farb-vorschau-kopf {
+    border-image: none;
+  }
+
+  .kopf-ki.online {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .nav.aktiv,
+  /* Spezifität wie .segment.an[data-rang], damit auch gewählte Bewertungen Highlight erhalten */
+  .segmente .segment.an,
+  .lb-reiter .segment.aktiv,
+  .stufe.aktiv,
+  .stufe-offen.aktiv,
+  .chip.an {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+
+  .lb-marke,
+  .lb-flag {
+    border: 1px solid CanvasText;
+  }
+
+  /* Balken nur aus Hintergrund würden sonst verschwinden; die Zahl steht daneben */
+  .lb-balken-wert {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .radar-ring,
+  .radar-achse {
+    stroke: GrayText;
+  }
+
+  .radar-flaeche {
+    fill: none;
+    stroke: CanvasText;
+  }
+
+  .radar-punkt {
+    fill: CanvasText;
+  }
+
+  .radar-punkt-offen {
+    stroke: CanvasText;
+  }
+
+  .radar-beschriftung {
+    fill: CanvasText;
+  }
+}
+
+/* Modellwahl je Lauf: Kennzeichen „abweichend“ unter Systemfarben (bis 0.6.4 im Abschnitt der Modellwahl) */
+@media (forced-colors: active) {
+  .modellwahl-abweichend,
+  .modellwahl-stufe.abweichend,
+  .modellwahl-recherche.abweichend {
+    border-color: Highlight;
+  }
+}

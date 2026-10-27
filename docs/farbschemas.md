@@ -1,6 +1,6 @@
 # Farbschemata der Oberfläche
 
-Stand 21.10.2026, App 0.4.22. Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
+Stand 27.10.2026, App 0.6.5 (Abschnitt „Pflege“: eine Farbquelle; Katalog sonst Stand 21.10.2026, App 0.4.22). Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
 
 ## Grundsätze
 
@@ -95,3 +95,7 @@ Ohne Paketänderung lassen sich unter „Einstellungen → Darstellung → Eigen
 ## Pflege
 
 Bei Farbänderungen den Katalog (`src/darstellung/katalog.ts`) und diese Übersicht anpassen und `npm test` ausführen; die Kontrastprüfung zeigt unzureichende Paare mit Verhältnis an.
+
+**Eine Farbquelle (seit 0.6.5, TP-2026-W44-19).** `katalog.ts` ist die einzige Quelle der Farbwerte. Die Grundwerte der hellen Schemata stehen einmal in `HELL_BASIS` (Flächen, Text, Linien, Fokus, Lesebereiche, Kopf, Browserleiste); Bund, Bevölkerungsschutz und die Länder übernehmen sie per Spread und setzen nur ihre Haupt-, Link- und Akzentfarben selbst (Bevölkerungsschutz auch die Lesefarben, „Neutral · Hell“ einen weißen Kopf). `DUNKEL_BASIS` ist das Gegenstück für „Neutral · Night Mode“. Die Stylesheets (`src/styles.css` mit den Bereichsdateien unter `src/styles/`) setzen keine Farbtoken. Für den Start ohne JavaScript erzeugt das Vite-Plugin `farbtokenFallback()` (`src/darstellung/fallback.ts`) im Entwicklungsserver und im Build ein `<style id="ki-lead-farbtoken">` in `index.html`: „Neutral · Hell“ mit den hellen Signalfarben, bei der Systemeinstellung dunkel „Neutral · Night Mode“ mit den dunklen. Sobald die App läuft, setzt sie das gewählte Schema am Wurzelelement; das geht dem Fallback vor. `tests/darstellung/fallback.test.ts` prüft, dass die Werte des Fallbacks dem Katalog entsprechen und kein Stylesheet Farbtoken setzt.
+
+Bis 0.6.4 stand in `styles.css` eine eigene Standardpalette („Lagekartenpapier“: Papier `#eef1ee`, Tinte `#18263a`, Aktionsfarbe `#1f4f82` u. a.), die nur noch vor dem Start von JavaScript galt und vom Katalog abwich. Maßgeblich ist jetzt der Katalog (Papier `#F5F6F7`); mit JavaScript ändert sich an der Darstellung nichts (Vergleich der berechneten Stile in 132 Zuständen ohne Abweichung).

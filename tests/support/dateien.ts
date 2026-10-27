@@ -58,3 +58,12 @@ export function jsonDateien(ordnerImRepo: string, { pflicht = false } = {}): { n
   if (pflicht && !namen.length) throw new Error(`Testdaten fehlen: keine JSON-Datei in ${ordnerImRepo}`);
   return namen.map((name) => ({ name, daten: JSON.parse(readFileSync(join(dir, name), "utf-8")) }));
 }
+
+/**
+ * Das ganze Stylesheet der App als Text, wie der Build es zusammensetzt: src/styles.css mit dem Inhalt der per @import
+ * eingebundenen Bereichsdateien an ihrer Stelle (seit 0.6.5, TP-2026-W44-19; bis 0.6.4 eine Datei).
+ */
+export function stylesheetText(): string {
+  const haupt = readFileSync(repoPfad("src", "styles.css"), "utf-8");
+  return haupt.replace(/@import "\.\/([^"]+)";/g, (_, pfad: string) => readFileSync(repoPfad("src", pfad), "utf-8"));
+}

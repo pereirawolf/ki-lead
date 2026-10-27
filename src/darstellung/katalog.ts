@@ -4,12 +4,13 @@
 // für Lesbarkeit abgeleitet. Eine amtliche Freigabe oder vollständige CI-Konformität wird nicht beansprucht.
 // Herkunft und Quellen je Palette: docs/farbschemas.md. Kontraste prüft tests/darstellung/farbschemas.test.ts.
 
-import type { FarbschemaEintrag } from "./typen";
+import type { FarbschemaEintrag } from "./typen.ts";
 
 /**
  * Grundwerte der hellen Schemata für Flächen, Text, Linien, Fokus, Lesebereiche und Kopf (seit 0.6.5, TP-2026-W44-19):
- * Bund, Bevölkerungsschutz und die 16 Länder übernehmen sie und setzen nur ihre Haupt-, Link- und Akzentfarben selbst;
- * „Neutral · Hell“ weicht beim Kopf ab. Bis 0.6.4 stand jeder Wert in jedem Eintrag.
+ * Bund, Bevölkerungsschutz und die 16 Länder übernehmen sie und setzen nur ihre Haupt-, Link- und Akzentfarben selbst
+ * (Bevölkerungsschutz auch die Lesefarben); „Neutral · Hell“ hat einen weißen Kopf. Bis 0.6.4 stand jeder Wert in jedem
+ * Eintrag. Der CSS-Fallback für den Start ohne JavaScript entsteht aus diesem Katalog (fallback.ts).
  */
 export const HELL_BASIS = {
   papier: "#F5F6F7",

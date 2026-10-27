@@ -3,6 +3,7 @@ import { join, relative } from "node:path";
 import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { fehlendeVerweise, precacheListe, precacheVersion, serviceWorkerQuelle } from "./src/pwa/precache.ts";
+import { farbtokenFallback } from "./src/darstellung/fallback.ts";
 
 /** Alle Dateien eines Ordners (rekursiv) als Pfad relativ zum Ordner → Inhalt */
 function ordnerDateien(ordner: string): Record<string, string> {
@@ -56,7 +57,8 @@ export default defineConfig(({ command }) => ({
     // Versionsnummer aus package.json statt Handpflege in lauf.ts (seit 0.6.2, TP-2026-W44-08); gilt auch unter Vitest
     __APP_VERSION__: JSON.stringify(APP_VERSION),
   },
-  plugins: [react(), serviceWorker()],
+  // Farbtoken für den Start ohne JavaScript aus katalog.ts, im Entwicklungsserver und im Build (seit 0.6.5, TP-2026-W44-19)
+  plugins: [react(), serviceWorker(), farbtokenFallback()],
   build: {
     outDir: "dist",
     sourcemap: true,
