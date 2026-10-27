@@ -272,7 +272,7 @@ describe("Punkte 1, 2, 7, 9, 10: Kopfzeile, Rahmen, S3, Zurücksetzen", () => {
 describe("Punkte 3 und 5: KI-Profil je Lauf und zusätzliche Anbieter", () => {
   it("Profile ohne Schlüssel sind gesperrt", async () => {
     await erfassungZeigen();
-    expect(radios("modellwahl-profil")).toEqual(["einstellungen", "anthropic", "openai", "mistral", "mix-opus", "mix-sonnet", "einzeln"]);
+    expect(radios("modellwahl-profil")).toEqual(["einstellungen", "anthropic", "openai", "mistral", "ollama", "mix-opus", "mix-sonnet", "einzeln"]);
     expect(gewaehlt("modellwahl-profil")).toBe("einstellungen");
     expect(radio("openai").disabled).toBe(true);
     expect(radio("openai").closest("label")!.textContent).toContain("Braucht einen Schlüssel für OpenAI.");

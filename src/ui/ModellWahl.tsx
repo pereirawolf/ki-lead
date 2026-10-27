@@ -6,20 +6,21 @@
 
 import { useId, useState, type ReactNode } from "react";
 import type { Aufwand } from "../anbieter/typen";
-import { ANBIETER_IDS, ANBIETER_NAME, anbieterVon, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { ANBIETER_IDS, ANBIETER_NAME, anbieterVon, bekannterAnbieter, hatSchluessel, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import {
   AUFWAND_STUFEN,
   MIX_IDS,
   MIX_PROFILE,
-  MODELL_GRUPPEN,
   STANDARD,
-  STANDARD_PROFILE,
   WAHL_RECHERCHE,
   aufwandAngeboten,
   aufwandAuswahl,
   mitModellwahl,
   modellFuer,
+  modellGruppen,
+  OLLAMA_HINWEIS,
   orientierungJeSachverhalt,
+  standardProfilFuer,
   wahlAbweichend,
   werkzeugeFuer,
   type Einstellungen,
@@ -78,7 +79,8 @@ type TiefeWahl = "einstellungen" | StufeId | "eigen";
 
 const PROFILE: (AnbieterId | MixId)[] = [...ANBIETER_IDS, ...MIX_IDS];
 const istMix = (p: AnbieterId | MixId): p is MixId => (MIX_IDS as string[]).includes(p);
-const profilDaten = (p: AnbieterId | MixId): ModellProfil => (istMix(p) ? MIX_PROFILE[p] : STANDARD_PROFILE[p]);
+const profilDaten = (p: AnbieterId | MixId, e: Pick<Einstellungen, "anbieterOptionen">): ModellProfil =>
+  istMix(p) ? MIX_PROFILE[p] : standardProfilFuer(p, e);
 const profilTitel = (p: AnbieterId | MixId) => (istMix(p) ? MIX_PROFILE[p].titel : `KI-Profil ${ANBIETER_NAME[p]}`);
 
 const aufwandTitel = (a: Aufwand) => AUFWAND_STUFEN.find((x) => x.id === a)?.titel || a;
@@ -91,7 +93,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
   const [angepasst, setAngepasst] = useState<Partial<Record<Rolle, string>>>({});
 
   const rollen = stufen.map((s) => s.rolle);
-  const endpunkt = { mistralEndpunkt: einstellungen.mistralEndpunkt ?? "eu" } as const;
+  const endpunkt = einstellungen.anbieterOptionen;
   const abweichend = wahlAbweichend(wahl, rollen, !!websuche);
   const rollenAbweichend = wahlAbweichend(wahl, rollen, false);
   const stufeAbweichend = (r: Rolle) => !!wahl[r] || !!wahl.aufwand?.[r];
@@ -100,7 +102,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
   const modellVon = (r: Rolle) => wahl[r] || standardModell(r);
   // Wirksame Stufe: nur Stufen, die das Modell anbietet (AV-2026-W43-01, -02)
   const aufwandVon = (r: Rolle) => aufwandAngeboten(modellVon(r), wahl.aufwand?.[r] || einstellungen.aufwand[r]);
-  const ohneSchluessel = (m: string) => !schluessel[anbieterVon(m)];
+  const ohneSchluessel = (m: string) => !hatSchluessel(anbieterVon(m), schluessel);
 
   // ── Änderungen ──
   // Mit `angleichen` (KI-Profil) entfallen Angaben, die ohnehin den Einstellungen entsprechen; eine Wahl im Feld bleibt stehen.
@@ -135,12 +137,16 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
     let neu: Wahl = { ...wahl };
     for (const r of rollen) {
       if (p === "einstellungen") neu = mitRolle(neu, r, "", undefined);
-      else neu = mitRolle(neu, r, profilDaten(p).modelle[r], profilDaten(p).aufwand[r], true);
+      else neu = mitRolle(neu, r, profilDaten(p, einstellungen).modelle[r], profilDaten(p, einstellungen).aufwand[r], true);
     }
     onChange(neu);
   };
   const profilAktiv = (p: AnbieterId | MixId) =>
-    rollen.every((r) => modellVon(r) === profilDaten(p).modelle[r] && aufwandVon(r) === aufwandAngeboten(profilDaten(p).modelle[r], profilDaten(p).aufwand[r]));
+    rollen.every(
+      (r) =>
+        modellVon(r) === profilDaten(p, einstellungen).modelle[r] &&
+        aufwandVon(r) === aufwandAngeboten(profilDaten(p, einstellungen).modelle[r], profilDaten(p, einstellungen).aufwand[r]),
+    );
   const profilAbgeleitet: ProfilWahl = !rollenAbweichend ? "einstellungen" : (PROFILE.find(profilAktiv) ?? "einzeln");
   // Ein angeklicktes Profil bleibt gewählt, solange die Wahl ihm entspricht (auch wenn es den Einstellungen gleicht)
   const klickGilt = (k: ProfilWahl | null): k is ProfilWahl => k === "einzeln" || (k === "einstellungen" ? !rollenAbweichend : !!k && profilAktiv(k));
@@ -206,7 +212,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
     const kk = kostenklasse(m);
     const v = vermerkFuer(r, m);
     return (
-      [modellName(m), kk && `Kosten ${kk}`, v && vermerkKurz(v, aufwandTitel)].filter(Boolean).join(" · ") +
+      [modellName(m), kk && (kk === "keine" ? "ohne Kosten" : `Kosten ${kk}`), v && vermerkKurz(v, aufwandTitel)].filter(Boolean).join(" · ") +
       (ohneSchluessel(m) ? ` – kein Schlüssel für ${ANBIETER_NAME[anbieterVon(m)]}` : "")
     );
   };
@@ -236,7 +242,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
               Wie in den Einstellungen: {modellName(standard)}
               {ohneSchluessel(standard) ? ` – kein Schlüssel für ${ANBIETER_NAME[anbieterVon(standard)]}` : ""}
             </option>
-            {MODELL_GRUPPEN.map((g) => (
+            {modellGruppen(einstellungen).map((g) => (
               <optgroup key={g.anbieter} label={g.anbieter}>
                 {g.modelle.map((x) => (
                   <option key={x} value={x} disabled={ohneSchluessel(x)}>
@@ -302,8 +308,8 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
   };
 
   const profilOption = (p: ProfilWahl) => {
-    const daten = p === "einstellungen" || p === "einzeln" ? null : profilDaten(p);
-    const fehlend = daten ? [...new Set(rollen.map((r) => anbieterVon(daten.modelle[r])))].filter((a) => !schluessel[a]) : [];
+    const daten = p === "einstellungen" || p === "einzeln" ? null : profilDaten(p, einstellungen);
+    const fehlend = daten ? [...new Set(rollen.map((r) => anbieterVon(daten.modelle[r])))].filter((a) => !hatSchluessel(a, schluessel)) : [];
     const text =
       p === "einstellungen"
         ? "Modell und Aufwand je Stufe wie unter „Einstellungen“."
@@ -330,6 +336,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
           <span className="ablage-text">
             {text}
             {fehlend.length ? ` Braucht einen Schlüssel für ${fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")}.` : ""}
+            {p === "ollama" ? ` ${OLLAMA_HINWEIS}` : ""}
           </span>
         </span>
       </label>
@@ -377,8 +384,8 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
         {rechercheZeigen &&
           (!werkzeuge.websuche && !werkzeuge.abruf ? (
             <p className="hinweis">
-              Mit {modellName(modellS2)} über den EU-Endpunkt von Mistral recherchiert S2 nicht im Web und arbeitet nur mit dem Material. Für eine Recherche ein
-              anderes Modell für S2 wählen.
+              Mit {modellName(modellS2)} {bekannterAnbieter(modellS2) === "ollama" ? "über Ollama" : "über den EU-Endpunkt von Mistral"} recherchiert S2 nicht
+              im Web und arbeitet nur mit dem Material. Für eine Recherche ein anderes Modell für S2 wählen.
             </p>
           ) : (
             <fieldset
@@ -456,8 +463,8 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
                       wert={laufWerte[f.feld]}
                       setze={(n) => setzeRecherche({ [f.feld]: n })}
                       kuerzenZurueck={einstellungen.abrufMaxTokens || STANDARD.abrufMaxTokens}
-                      vermerk={wirkungText(f.feld, s2Anbieter, einstellungen.mistralEndpunkt)}
-                      deaktiviert={deaktiviert || !feldWirkt(f.feld, s2Anbieter, einstellungen.mistralEndpunkt)}
+                      vermerk={wirkungText(f.feld, s2Anbieter, einstellungen.anbieterOptionen)}
+                      deaktiviert={deaktiviert || !feldWirkt(f.feld, s2Anbieter, einstellungen.anbieterOptionen)}
                     />
                   ))}
                 </div>

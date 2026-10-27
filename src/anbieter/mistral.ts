@@ -421,7 +421,7 @@ export class MistralAnbieter implements LlmAnbieter {
       abrufe: [],
       abrufFehler: [],
       nutzung: n,
-      kostenUsd: kosten === null ? null : kosten * aufschlag(a.modell, { mistralEndpunkt: this.endpunkt }),
+      kostenUsd: kosten === null ? null : kosten * aufschlag(a.modell, this.endpunkt === "eu"),
       stopGrund: abgeschnitten ? "max_tokens" : "end_turn",
       dauerMs: Date.now() - start,
       runden: 1,

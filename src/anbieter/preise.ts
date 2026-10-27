@@ -1,4 +1,4 @@
-// Listenpreise in USD je Million Token (Stand 18.10.2026, Mistral 24.10.2026; ohne Gewähr).
+// Listenpreise in USD je Million Token (Stand 18.10.2026, Mistral 24.10.2026; ohne Gewähr). Ollama (lokal) 0.
 // Quellen: https://platform.claude.com/docs/en/about-claude/pricing, https://developers.openai.com/api/docs/pricing und
 // https://docs.mistral.ai/inference/pricing (Token). Den Preis der Mistral-Websuche (30 USD je 1 000 Aufrufe) nennt
 // diese Seite nicht; er stammt aus einer Übersicht Dritter (developer.puter.com, Oktober 2026) und ist unbestätigt.
@@ -53,6 +53,8 @@ const REGELN: PreisRegel[] = [
     websuche: 0.03,
     regional: MISTRAL_EU_FAKTOR,
   },
+  // Ollama (seit 0.6.3, TP-2026-W44-26): lokale Modelle ohne Kosten beim Anbieter; Rechenzeit und Strom zählen nicht
+  { muster: /^ollama:/, preis: { eingabe: 0, cacheSchreiben: 0, cacheLesen: 0, ausgabe: 0 }, websuche: 0 },
 ];
 
 /** USD je Websuche (Anthropic, OpenAI) */
@@ -67,11 +69,13 @@ export function ausgabePreis(modell: string): number | null {
 
 /**
  * Faktor auf den Listenpreis je Modell und Endpunkt (seit 0.5.10, AV-2026-W43-06): Mistral über den EU-Endpunkt 1,1,
- * sonst 1. Ist-Kosten (Mistral-Anbieter) und Schätzung vor dem Lauf (`schaetzeStufe`) verwenden ihn gemeinsam.
+ * sonst 1. Ist-Kosten (Mistral-Anbieter) und Schätzung vor dem Lauf (`schaetzeStufe`) verwenden ihn gemeinsam. Seit
+ * 0.6.3 (TP-2026-W44-26) sagt `regional`, ob der regionale Endpunkt gewählt ist; das weiß die Beschreibung des Anbieters
+ * (`aufschlagFuer` in verteiler.ts).
  */
-export function aufschlag(modell: string, o: { mistralEndpunkt?: "eu" | "global" } = {}): number {
+export function aufschlag(modell: string, regional: boolean): number {
   const r = REGELN.find((x) => x.muster.test(modell));
-  return o.mistralEndpunkt === "eu" && r?.regional ? r.regional : 1;
+  return regional && r?.regional ? r.regional : 1;
 }
 
 /** Kosten einer einzelnen Anfrage. null, wenn das Modell nicht in der Tabelle steht. */

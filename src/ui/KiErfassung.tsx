@@ -312,7 +312,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     abbruch.current = ctrl;
     return {
       profil,
-      anbieter: Verteiler.fuer(schluessel, { mistralEndpunkt: laufEinstellungen.mistralEndpunkt }),
+      anbieter: Verteiler.fuer(schluessel, laufEinstellungen.anbieterOptionen),
       einstellungen: laufEinstellungen,
       lauf: l,
       material,

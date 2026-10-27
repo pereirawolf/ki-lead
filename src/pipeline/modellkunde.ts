@@ -2,6 +2,7 @@
 // 25.10.2026, Punkte 1 und 4): Anzeigenamen, Kostenklasse nach Listenpreis und Vermerke aus den vergleichenden
 // Testläufen. Reine Daten und Funktionen; die Oberfläche steht in src/ui/ModellWahl.tsx. Laufprotokoll, Pipeline und
 // gespeicherte Einstellungen verwenden weiter die Kennungen der Anbieter.
+import { OLLAMA_PRAEFIX } from "../anbieter/ollama";
 import { ausgabePreis } from "../anbieter/preise";
 import type { Aufwand } from "../anbieter/typen";
 import type { Rolle } from "./einstellungen";
@@ -20,20 +21,26 @@ export const MODELL_NAMEN: Record<string, string> = {
   "mistral-large-4": "Mistral Large 4",
 };
 
-/** Anzeigename; unbekannte Modelle (etwa aus einem Profil) erscheinen mit ihrer Kennung */
+/**
+ * Anzeigename; unbekannte Modelle (etwa aus einem Profil) erscheinen mit ihrer Kennung, lokale Modelle über Ollama (seit
+ * 0.6.3, TP-2026-W44-26) mit ihrem Namen und „(lokal)“
+ */
 export function modellName(modell: string): string {
+  if (modell.startsWith(OLLAMA_PRAEFIX)) return `${modell.slice(OLLAMA_PRAEFIX.length)} (lokal)`;
   return MODELL_NAMEN[modell] || modell;
 }
 
-export type Kostenklasse = "niedrig" | "mittel" | "hoch" | "sehr hoch";
+/** „keine“ seit 0.6.3 für lokale Modelle ohne Kosten beim Anbieter */
+export type Kostenklasse = "keine" | "niedrig" | "mittel" | "hoch" | "sehr hoch";
 
 /**
  * Kostenklasse nach dem Listenpreis der Ausgabetoken (USD je Million): bis 1 niedrig, bis 12 mittel, bis 25 hoch,
- * darüber sehr hoch; null ohne Preis. Grobe Orientierung für die Auswahl, keine Schätzung eines Laufs.
+ * darüber sehr hoch; „keine“ bei Preis 0 (lokal); null ohne Preis. Grobe Orientierung für die Auswahl, keine Schätzung eines Laufs.
  */
 export function kostenklasse(modell: string): Kostenklasse | null {
   const p = ausgabePreis(modell);
   if (p === null) return null;
+  if (p === 0) return "keine";
   if (p <= 1) return "niedrig";
   if (p <= 12) return "mittel";
   if (p <= 25) return "hoch";
@@ -43,6 +50,7 @@ export function kostenklasse(modell: string): Kostenklasse | null {
 /** Listenpreis als Satz, z. B. „Listenpreis 20 USD je Million Ausgabetoken.“ */
 export function preisSatz(modell: string): string {
   const p = ausgabePreis(modell);
+  if (p === 0) return "Lokales Modell über Ollama, ohne Kosten beim Anbieter.";
   return p === null ? "Kein Listenpreis hinterlegt." : `Listenpreis ${p.toLocaleString("de-DE")} USD je Million Ausgabetoken.`;
 }
 

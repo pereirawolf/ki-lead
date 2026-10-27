@@ -2,6 +2,7 @@
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
 import { fehlendeKennsaetze, KENNSATZ_ERSATZ, type PflichtKennsatz } from "../kern/kennsaetze";
+import { bekannterAnbieter, unbekanntesModellText } from "../anbieter/verteiler";
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
@@ -327,6 +328,14 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
   }
   if (!strukturOk) return { profil: null, befunde };
   manifest.variablen = manifest.variablen || {};
+  // Modellkennungen ohne Anbieter (seit 0.6.3, TP-2026-W44-26): bis 0.6.2 fielen sie still auf Anthropic
+  for (const [rolle, modell] of Object.entries(manifest.modelle || {}))
+    if (typeof modell === "string" && !bekannterAnbieter(modell))
+      befunde.push({
+        stufe: "warnung",
+        code: "MODELL_UNBEKANNT",
+        text: `profil.json: ${unbekanntesModellText(modell)} Für „${rolle}“ gilt die Vorgabe der App.`,
+      });
   // Optionales Farbschema: Fehler sperren das fachliche Profil nicht, das Schema wird dann nicht verwendet
   if (manifest.farbschema !== undefined) {
     const f = optionen.farbschemaFehler?.(manifest.farbschema);

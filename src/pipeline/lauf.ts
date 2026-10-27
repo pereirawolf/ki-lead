@@ -217,11 +217,12 @@ export function kostenSumme(lauf: Pick<Lauf, "stufen">): number | null {
 }
 
 /**
- * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn sicher nichts gesendet wurde (kein Schlüssel hinterlegt);
+ * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn sicher nichts gesendet wurde (kein Schlüssel hinterlegt, unbekanntes Modell);
  * sonst unbekannt. Auch ein HTTP-Fehler kann erst nach bereits berechneten Runden (Fortsetzung, Neustart) kommen.
  */
 export function kostenNachFehler(e: unknown): number | null {
-  return e instanceof AnbieterFehler && e.art === "schluessel" ? 0 : null;
+  // Seit 0.6.3 (TP-2026-W44-26) auch unbekannte Modellkennung und unzulässige Ollama-Adresse: beide vor dem Senden
+  return e instanceof AnbieterFehler && (e.art === "schluessel" || e.art === "modell" || e.art === "adresse") ? 0 : null;
 }
 
 /** Anzeige der Laufkosten; bei unvollständiger Erfassung mit bekannter Untergrenze. */

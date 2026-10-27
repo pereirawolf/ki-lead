@@ -543,10 +543,10 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral). Code
-        unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz ihres Herausgebers.{" "}
-        <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> · <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
-        <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
+        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral; über
+        Ollama bleiben sie auf dem Gerät). Code unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz
+        ihres Herausgebers. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> ·{" "}
+        <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> · <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
       </footer>
     </div>
   );

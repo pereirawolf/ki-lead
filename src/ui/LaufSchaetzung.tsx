@@ -1,6 +1,6 @@
 // Voraussichtliche Dauer und Kosten der nächsten KI-Stufen, nach Modell und Aufwand des Laufs.
 
-import { aufschlag } from "../anbieter/preise";
+import { aufschlagFuer } from "../anbieter/verteiler";
 import { aufwandFuer, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { kostenText, schaetzeStufe, stufenText, summe, type SchaetzArt } from "../pipeline/schaetzung";
 import type { Profil } from "../kern/typen";
@@ -15,8 +15,8 @@ export function LaufSchaetzung({ stufen, einstellungen, profil }: { stufen: Scha
   const werte = stufen.map((s) => {
     const modell = modellFuer(s.rolle, einstellungen, profil);
     const aufwand = aufwandFuer(s.rolle, einstellungen, profil);
-    const endpunkt = { mistralEndpunkt: einstellungen.mistralEndpunkt ?? "eu" } as const;
-    return { s, modell, aufwand, sch: schaetzeStufe(s.art, modell, aufwand, endpunkt), eu: aufschlag(modell, endpunkt) > 1 };
+    const optionen = einstellungen.anbieterOptionen;
+    return { s, modell, aufwand, sch: schaetzeStufe(s.art, modell, aufwand, optionen), eu: aufschlagFuer(modell, optionen) > 1 };
   });
   const gesamt = summe(werte.map((w) => w.sch.usd));
   return (

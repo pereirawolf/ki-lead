@@ -259,7 +259,7 @@ export async function kurzfassungsreihe(o: KurzfassungsReihenOptionen): Promise<
       break;
     }
   }
-  const { mistralEndpunkt } = o.einstellungen;
+  const mistralEndpunkt = o.einstellungen.anbieterOptionen.mistral.endpunkt;
   const anbieter = anbieterVon(modell);
   const reihe: KurzfassungsReihe = {
     format: "ki-lead-kurzfassung-reihe/1",
@@ -273,7 +273,7 @@ export async function kurzfassungsreihe(o: KurzfassungsReihenOptionen): Promise<
     app: APP_KENNUNG,
     profil: { id: p.manifest.id, version: p.manifest.version, hash: p.hash },
     anbieter,
-    ...(anbieter === "mistral" ? { mistral_endpunkt: mistralEndpunkt ?? "eu" } : {}),
+    ...(anbieter === "mistral" ? { mistral_endpunkt: mistralEndpunkt } : {}),
     attrappe: !!o.attrappe,
     modell: { modell, aufwand },
     laeufe_geplant: anzahl,

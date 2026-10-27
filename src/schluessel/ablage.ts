@@ -11,7 +11,7 @@
 // und entfernt sie aus der bisherigen Ablage.
 
 import { del, get, set } from "idb-keyval";
-import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel, type SchluesselId } from "../anbieter/verteiler";
 import { istNativeApp } from "../pwa/registrieren";
 
 export type AblageId = "geraet" | "sitzung" | "passphrase" | "system";
@@ -252,7 +252,7 @@ export async function schluesselSchreiben(wert: string, anbieter: AnbieterId = "
 
 export async function alleSchluesselLesen(): Promise<Schluessel> {
   const out: Schluessel = { ...LEERE_SCHLUESSEL };
-  for (const id of Object.keys(out) as AnbieterId[]) out[id] = await schluesselLesen(id);
+  for (const id of Object.keys(out) as SchluesselId[]) out[id] = await schluesselLesen(id);
   return out;
 }
 

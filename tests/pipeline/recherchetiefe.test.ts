@@ -5,6 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import {
+  feldWirkt,
   hoechstkostenText,
   lesemengeText,
   pruefeEingabe,
@@ -93,34 +94,48 @@ describe("KP-2026-W43-72: Höchstkosten für Suchen und Seitenlesen", () => {
     ["standard", "0,75 USD"],
     ["gruendlich", "2,70 USD"],
   ])("Anthropic Opus 5.5, Stufe %s: %s", (id, betrag) => {
-    const text = hoechstkostenText("claude-opus-5-5", { ...werte(id), mistralEndpunkt: "eu" })!;
+    const text = hoechstkostenText("claude-opus-5-5", { ...werte(id), anbieterOptionen: { mistral: { endpunkt: "eu" } } })!;
     expect(text).toContain(`Mit claude-opus-5-5 kosten Suchen und Seitenlesen höchstens etwa ${betrag}, dazu Trefferlisten, Material und Schreiben.`);
     expect(text).toMatch(STAND);
   });
 
   it("Anthropic ohne Längengrenze: nur die Suchen sind beziffert", () => {
-    expect(hoechstkostenText("claude-opus-5-5", { websucheMax: 15, abrufMax: 10, abrufMaxTokens: 0, mistralEndpunkt: "eu" })).toContain(
-      "kosten die Suchen höchstens etwa 0,15 USD, dazu Seiten ohne Längengrenze",
-    );
+    expect(
+      hoechstkostenText("claude-opus-5-5", { websucheMax: 15, abrufMax: 10, abrufMaxTokens: 0, anbieterOptionen: { mistral: { endpunkt: "eu" } } }),
+    ).toContain("kosten die Suchen höchstens etwa 0,15 USD, dazu Seiten ohne Längengrenze");
   });
 
   it("OpenAI: Gebühren je Werkzeugaufruf, Seitenlänge unbegrenzt", () => {
-    expect(hoechstkostenText("gpt-6.1-sol", { ...werte("standard"), mistralEndpunkt: "eu" })).toContain(
+    expect(hoechstkostenText("gpt-6.1-sol", { ...werte("standard"), anbieterOptionen: { mistral: { endpunkt: "eu" } } })).toContain(
       "Mit gpt-6.1-sol kosten Suchen und geöffnete Seiten höchstens etwa 0,25 USD, dazu die gelesenen Seiten",
     );
   });
 
   it("Mistral: global nur Suchen ohne Begrenzung, EU ohne Recherche", () => {
-    expect(hoechstkostenText("mistral-medium-3-5", { ...werte("standard"), mistralEndpunkt: "global" })).toContain(
+    expect(hoechstkostenText("mistral-medium-3-5", { ...werte("standard"), anbieterOptionen: { mistral: { endpunkt: "global" } } })).toContain(
       "Mit mistral-medium-3-5 kosten 15 Suchen etwa 0,45 USD; Mistral begrenzt die Zahl der Suchen nicht.",
     );
-    expect(hoechstkostenText("mistral-medium-3-5", { ...werte("standard"), mistralEndpunkt: "eu" })).toBe(
+    expect(hoechstkostenText("mistral-medium-3-5", { ...werte("standard"), anbieterOptionen: { mistral: { endpunkt: "eu" } } })).toBe(
       "Mit mistral-medium-3-5 recherchiert S2 nicht im Web; Suchen und Seitenlesen kosten nichts.",
     );
   });
 
+  it("TP-2026-W44-26: Ollama recherchiert nicht; unbekannte Kennung ohne Zeile", () => {
+    expect(hoechstkostenText("ollama:llama3.1", { ...werte("standard") })).toBe(
+      "Mit ollama:llama3.1 recherchiert S2 nicht im Web; Suchen und Seitenlesen kosten nichts.",
+    );
+    expect(hoechstkostenText("llama3", { ...werte("standard") })).toBeNull();
+    for (const feld of ["websucheMax", "abrufMax", "abrufMaxTokens"] as const) {
+      expect(feldWirkt(feld, ["ollama"], {}), feld).toBe(false);
+      expect(wirkungText(feld, ["ollama"], {}), feld).toBe("Bei den gewählten Modellen ohne Wirkung.");
+    }
+    expect(wirkungText("websucheMax", ["anthropic", "ollama"], {})).toBe(
+      "Bei den gewählten Modellen: Anthropic begrenzt die Suchen; Ollama (lokal) sucht nicht.",
+    );
+  });
+
   it("Modell ohne Preis: keine Zeile", () => {
-    expect(hoechstkostenText("unbekanntes-modell", { ...werte("standard"), mistralEndpunkt: "eu" })).toBeNull();
+    expect(hoechstkostenText("unbekanntes-modell", { ...werte("standard"), anbieterOptionen: { mistral: { endpunkt: "eu" } } })).toBeNull();
   });
 });
 
@@ -139,6 +154,6 @@ describe("KP-2026-W43-73: Wirkung je Anbieter", () => {
     ["abrufMaxTokens", ["anthropic", "openai"], "eu", "Bei den gewählten Modellen: Anthropic kürzt längere Seiten; bei OpenAI ohne Wirkung."],
     ["abrufMaxTokens", ["openai"], "eu", "Bei den gewählten Modellen ohne Wirkung."],
   ] as const)("%s bei %j (%s)", (feld, anbieter, endpunkt, soll) => {
-    expect(wirkungText(feld, [...anbieter], endpunkt)).toBe(soll);
+    expect(wirkungText(feld, [...anbieter], { mistral: { endpunkt } })).toBe(soll);
   });
 });

@@ -46,7 +46,8 @@ function einstellungen(): Einstellungen {
     if (!AUFWAENDE.includes(aufwand)) throw new Error(`Aufwand „${aufwand}“ unbekannt (${AUFWAENDE.join(", ")})`);
     (e.aufwand as Record<string, string>).kurzfassung = aufwand;
   }
-  if (ANBIETER === "mistral") e.mistralEndpunkt = process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu";
+  if (ANBIETER === "mistral")
+    e.anbieterOptionen = { ...e.anbieterOptionen, mistral: { endpunkt: process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu" } };
   return e;
 }
 
@@ -102,7 +103,7 @@ describe("Management Summary aus der Musterfassung Ilka", () => {
     const { reihe, ergebnisse } = await kurzfassungsreihe({
       profil,
       musterfassung,
-      anbieter: ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: e.mistralEndpunkt }),
+      anbieter: ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, e.anbieterOptionen),
       einstellungen: e,
       anzahl: LAEUFE,
       budgetUsd: PLAN.budget_usd,

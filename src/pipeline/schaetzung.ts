@@ -20,7 +20,9 @@
 
 import { aufwandAngeboten } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
-import { aufschlag, ausgabePreis, kostenAnfrage } from "../anbieter/preise";
+import { ausgabePreis, kostenAnfrage } from "../anbieter/preise";
+import type { AnbieterOptionenTeil } from "../anbieter/optionen";
+import { aufschlagFuer, bekannterAnbieter, beschreibung } from "../anbieter/verteiler";
 import { leereNutzung } from "../anbieter/typen";
 
 export type SchaetzArt = "s1" | "erfassung" | "verdichtung";
@@ -103,9 +105,12 @@ const STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
  * bei höherem Aufwand mit doppelter Obergrenze, bei niedrigerem mit halber Untergrenze. Der Aufwand gilt so, wie das
  * Modell ihn anbietet (AV-2026-W43-02); der EU-Aufschlag von Mistral kommt auf die Kosten (AV-2026-W43-06).
  */
-export function schaetzeStufe(art: SchaetzArt, modell: string, aufwand: Aufwand, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): Schaetzung {
+export function schaetzeStufe(art: SchaetzArt, modell: string, aufwand: Aufwand, optionen: AnbieterOptionenTeil = {}): Schaetzung {
+  // Lokale Modelle (Ollama, seit 0.6.3, TP-2026-W44-26): keine Kosten beim Anbieter, keine Messwerte zur Dauer
+  const id = bekannterAnbieter(modell);
+  if (id && beschreibung(id).preise.kostenlos) return { sekunden: null, usd: [0, 0], gemessen: false };
   const s = schaetzeOhneAufschlag(art, modell, aufwandAngeboten(modell, aufwand));
-  const f = aufschlag(modell, optionen);
+  const f = aufschlagFuer(modell, optionen);
   return f === 1 || !s.usd ? s : { ...s, usd: [s.usd[0] * f, s.usd[1] * f] };
 }
 
@@ -147,13 +152,13 @@ function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand
  * Mistral Medium 3.5 „hoch“ 2 097–3 783, Mistral Large 4 „hoch“ 6 704–10 832; alle in den Spannen. Dauer 6–28 s je Lauf,
  * Mistral Large 92–152 s (evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md).
  */
-export function schaetzeKurzfassung(modell: string, aufwand: Aufwand, eingabeToken: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): Schaetzung {
+export function schaetzeKurzfassung(modell: string, aufwand: Aufwand, eingabeToken: number, optionen: AnbieterOptionenTeil = {}): Schaetzung {
   const a = aufwandAngeboten(modell, aufwand);
   const [von, bis] = a === "low" ? [500, 3000] : a === "medium" ? [1000, 6000] : [1000, 16000];
   const k = (ausgabe: number) => kostenAnfrage(modell, { ...leereNutzung(), eingabe: eingabeToken, ausgabe });
   const [u, o] = [k(von), k(bis)];
   if (u === null || o === null) return { sekunden: null, usd: null, gemessen: false };
-  const f = aufschlag(modell, optionen);
+  const f = aufschlagFuer(modell, optionen);
   return { sekunden: null, usd: [u * f, o * f], gemessen: false };
 }
 
@@ -171,6 +176,7 @@ function usd(x: number): string {
 
 export function kostenText(k: [number, number] | null): string {
   if (!k) return "Kosten unbekannt (Modell ohne Preisangabe)";
+  if (k[1] === 0) return "ohne Kosten (lokales Modell)";
   // Toleranz gegen Gleitkommafehler: 2,2 × 100 ergibt 220,00000000000003 und würde sonst auf 2,21 aufgerundet
   const [a, b] = [Math.floor(k[0] * 100 + 1e-9) / 100, Math.ceil(k[1] * 100 - 1e-9) / 100];
   if (b <= 0.01) return "unter 1 Cent";

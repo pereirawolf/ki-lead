@@ -2,8 +2,10 @@
 
 import { aufwandAngeboten, aufwandStufenFuer } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
-import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
-import { ANBIETER_IDS, anbieterVon, type AnbieterId } from "../anbieter/verteiler";
+import type { MistralEndpunkt } from "../anbieter/mistral";
+import { OLLAMA_PRAEFIX } from "../anbieter/ollama";
+import { optionenVollstaendig, STANDARD_ANBIETER_OPTIONEN, type AnbieterOptionen, type AnbieterOptionenTeil } from "../anbieter/optionen";
+import { bekannterAnbieter, faehigkeitenFuer, type AnbieterId } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 
 export type Rolle = "vorverarbeitung" | "erfassung" | "verdichtung" | "reparatur" | "kurzfassung";
@@ -30,10 +32,11 @@ export interface Einstellungen {
    */
   maxTokensErfassung: number;
   /**
-   * Mistral (seit 0.5.6): „eu“ = regionaler Endpunkt api.eu.mistral.ai ohne Websuche (Vorgabe), „global“ =
-   * api.mistral.ai mit Websuche. Fehlt der Wert in gespeicherten Einstellungen, gilt die Vorgabe.
+   * Wahl je Anbieter (seit 0.6.3, TP-2026-W44-26; ersetzt `mistralEndpunkt`, Fassung 6): Mistral-Endpunkt („eu“ =
+   * api.eu.mistral.ai ohne Websuche, Vorgabe; „global“ = api.mistral.ai mit Websuche), Adresse und lokales Modell für
+   * Ollama. Fehlende Werte ergänzt die App mit den Vorgaben.
    */
-  mistralEndpunkt: MistralEndpunkt;
+  anbieterOptionen: AnbieterOptionen;
   /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
   fassung?: number;
 }
@@ -62,6 +65,21 @@ export const MODELL_GRUPPEN: { anbieter: string; modelle: string[] }[] = [
 
 export const MODELL_AUSWAHL = MODELL_GRUPPEN.flatMap((g) => g.modelle);
 
+/** Kennung eines lokalen Modells über Ollama, z. B. „ollama:llama3.1“ */
+export function ollamaKennung(modell: string): string {
+  return `${OLLAMA_PRAEFIX}${modell.trim()}`;
+}
+
+/**
+ * Auswahlgruppen der Modelle mit dem lokalen Modell aus den Einstellungen (seit 0.6.3, TP-2026-W44-26). Ist ein anderes
+ * lokales Modell gewählt (etwa vor einem Wechsel unter „Einstellungen“), steht es ebenfalls zur Wahl.
+ */
+export function modellGruppen(e: Pick<Einstellungen, "anbieterOptionen" | "modelle">): { anbieter: string; modelle: string[] }[] {
+  const lokal = ollamaKennung(optionenVollstaendig(e.anbieterOptionen).ollama.modell);
+  const gewaehlt = Object.values(e.modelle).filter((m) => bekannterAnbieter(m) === "ollama" && m !== lokal);
+  return [...MODELL_GRUPPEN, { anbieter: "Ollama (lokal)", modelle: [lokal, ...new Set(gewaehlt)] }];
+}
+
 export const STANDARD: Einstellungen = {
   modelle: { vorverarbeitung: "", erfassung: "", verdichtung: "", reparatur: "", kurzfassung: "" },
   aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
@@ -72,8 +90,8 @@ export const STANDARD: Einstellungen = {
   orientierungJeSachverhalt: 1,
   nachforderung: true,
   maxTokensErfassung: 128000,
-  mistralEndpunkt: "eu",
-  fassung: 5,
+  anbieterOptionen: STANDARD_ANBIETER_OPTIONEN,
+  fassung: 6,
 };
 
 /**
@@ -148,7 +166,29 @@ export const STANDARD_PROFILE: Record<AnbieterId, ModellProfil> = {
     },
     aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
   },
+  ollama: ollamaProfil(STANDARD_ANBIETER_OPTIONEN.ollama.modell),
 };
+
+/**
+ * Schlichtes Standard-Profil Ollama (seit 0.6.3, TP-2026-W44-26): ein lokales Modell für alle Aufgaben, feste Stufe
+ * „mittel“ (die App sendet keinen Aufwand). Das Modell ist frei wählbar (Einstellungen → KI-Anbieter & API); nicht erprobt,
+ * keine Websuche.
+ */
+export function ollamaProfil(modell: string): ModellProfil {
+  const m = ollamaKennung(modell);
+  return {
+    modelle: { vorverarbeitung: m, erfassung: m, verdichtung: m, reparatur: m, kurzfassung: m },
+    aufwand: { vorverarbeitung: "medium", erfassung: "medium", verdichtung: "medium", reparatur: "medium", kurzfassung: "medium" },
+  };
+}
+
+/** Hinweis der Oberfläche zu lokalen Modellen (seit 0.6.3, TP-2026-W44-26) */
+export const OLLAMA_HINWEIS = "Lokale Modelle über Ollama arbeiten ohne Websuche und Seitenabruf; die Ergebnisqualität in KI-LEAD ist nicht erprobt.";
+
+/** Standard-Profil eines Anbieters; für Ollama mit dem lokalen Modell aus den Einstellungen */
+export function standardProfilFuer(anbieter: AnbieterId, e: Pick<Einstellungen, "anbieterOptionen">): ModellProfil {
+  return anbieter === "ollama" ? ollamaProfil(optionenVollstaendig(e.anbieterOptionen).ollama.modell) : STANDARD_PROFILE[anbieter];
+}
 
 /** Kennungen der Mix-Profile (seit 0.5.15) */
 export type MixId = "mix-opus" | "mix-sonnet";
@@ -199,7 +239,7 @@ export function modellProfilAktiv(e: Einstellungen, p: ModellProfil): boolean {
 
 /** Setzt Modell und Aufwand aller Aufgaben auf das Standard-Profil des Anbieters; alles andere bleibt. */
 export function standardProfilAnwenden(e: Einstellungen, anbieter: AnbieterId): Einstellungen {
-  return modellProfilAnwenden(e, STANDARD_PROFILE[anbieter]);
+  return modellProfilAnwenden(e, standardProfilFuer(anbieter, e));
 }
 
 /**
@@ -217,7 +257,7 @@ export function profilvorgabeAktiv(e: Einstellungen): boolean {
 
 /** Sind Modell und Aufwand aller Aufgaben gerade genau das Standard-Profil des Anbieters? */
 export function standardProfilAktiv(e: Einstellungen, anbieter: AnbieterId): boolean {
-  return modellProfilAktiv(e, STANDARD_PROFILE[anbieter]);
+  return modellProfilAktiv(e, standardProfilFuer(anbieter, e));
 }
 
 /** Setzt Modell und Aufwand aller Aufgaben auf ein Mix-Profil; alles andere bleibt. */
@@ -235,7 +275,7 @@ export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
  * „medium“, Mistral reparierte mit Small (seit 0.5.16 wieder so, AV-2026-W43-39). Gespeicherte Einstellungen, die genau einem davon entsprechen, stellt
  * einstellungenLesen auf das heutige Standard-Profil um (AV-2026-W43-32, -33, -37).
  */
-export const STANDARD_PROFILE_FASSUNG_3: Record<AnbieterId, ModellProfil> = {
+export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama">, ModellProfil> = {
   anthropic: {
     modelle: { ...STANDARD_PROFILE.anthropic.modelle, reparatur: "claude-sonnet-5-5" },
     aufwand: { ...STANDARD_PROFILE.anthropic.aufwand },
@@ -259,8 +299,17 @@ export const STANDARD_PROFIL_MISTRAL_FASSUNG_4: ModellProfil = {
   aufwand: { ...STANDARD_PROFILE.mistral.aufwand },
 };
 
-export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil): string {
-  return e.modelle[rolle] || profil.manifest.modelle?.[rolle] || APP_MODELLE[rolle];
+/**
+ * Modellvorgabe des Profils für eine Aufgabe, sofern ein Anbieter die Kennung erkennt (seit 0.6.3, TP-2026-W44-26). Eine
+ * unbekannte Kennung meldet schon das Laden des Profils als Warnung; es gilt dann die Vorgabe der App.
+ */
+export function profilModell(rolle: Rolle, profil: Profil | null): string | undefined {
+  const m = profil?.manifest.modelle?.[rolle];
+  return m && bekannterAnbieter(m) ? m : undefined;
+}
+
+export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil | null): string {
+  return e.modelle[rolle] || profilModell(rolle, profil) || APP_MODELLE[rolle];
 }
 
 /**
@@ -275,6 +324,8 @@ export function aufwandFuer(rolle: Rolle, e: Einstellungen, profil: Profil): Auf
 /** Stufen des Aufwands, die das Modell anbietet, mit deutscher Bezeichnung (Auswahl in Einstellungen und je Lauf) */
 export function aufwandAuswahl(modell: string): { id: Aufwand; titel: string }[] {
   const stufen = aufwandStufenFuer(modell);
+  // Lokale Modelle (Ollama): eine feste Stufe, die App sendet keinen Aufwand (seit 0.6.3, TP-2026-W44-26)
+  if (stufen.length === 1 && stufen[0]) return [{ id: stufen[0], titel: "fest – bestimmt das lokale Modell" }];
   const nurAnAus = stufen.length === 2 && stufen.includes("low") && stufen.includes("high");
   return AUFWAND_STUFEN.filter((a) => stufen.includes(a.id)).map((a) =>
     nurAnAus ? { id: a.id, titel: a.id === "low" ? "niedrig – ohne Nachdenken" : "hoch – mit Nachdenken" } : a,
@@ -286,15 +337,21 @@ export { aufwandAngeboten, aufwandStufenFuer };
 /** Woher das wirksame Modell einer Aufgabe stammt: eigene Einstellung, Vorgabe des Profils oder der App */
 export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | null): "einstellung" | "profil" | "app" {
   if (e.modelle[rolle]) return "einstellung";
-  return profil?.manifest.modelle?.[rolle] ? "profil" : "app";
+  return profilModell(rolle, profil) ? "profil" : "app";
 }
 
 /**
  * Gespeicherte Einstellungen auf die heutige Fassung bringen und mit den Vorgaben ergänzen. Reine Funktion; das Lesen aus
  * dem Gerätespeicher liegt seit 0.6.3 (TP-2026-W44-24) in src/speicher/einstellungsSpeicher.ts.
  */
-export function einstellungenMigrieren(gespeichert: Partial<Einstellungen> | undefined): Einstellungen {
-  const g = gespeichert ? structuredClone(gespeichert) : undefined;
+/** Gespeicherte Einstellungen in beliebiger Fassung; bis Fassung 5 mit `mistralEndpunkt` statt `anbieterOptionen` */
+export type GespeicherteEinstellungen = Omit<Partial<Einstellungen>, "anbieterOptionen"> & {
+  anbieterOptionen?: AnbieterOptionenTeil;
+  mistralEndpunkt?: MistralEndpunkt;
+};
+
+export function einstellungenMigrieren(gespeichert: GespeicherteEinstellungen | undefined): Einstellungen {
+  const g: GespeicherteEinstellungen | undefined = gespeichert ? structuredClone(gespeichert) : undefined;
   // Fassung 1 → 2: S2 brauchte bei hohem Aufwand bis zu 60 000 Token zum Nachdenken und brach an
   // der alten Grenze von 64 000 Ausgabetoken ab. Alte Vorgaben werden daher angehoben.
   if (g && !g.fassung) {
@@ -311,33 +368,56 @@ export function einstellungenMigrieren(gespeichert: Partial<Einstellungen> | und
   // Fassung 3 → 4 (0.5.15): Wer genau einem bisherigen Standard-Profil folgt, folgt danach dem heutigen (Reparatur
   // Anthropic mit Haiku, Erfassung OpenAI „high“; Mistral seit 0.5.16 wieder wie in Fassung 3). Eine abweichende Wahl bleibt.
   if (g && g.fassung === 3) {
-    const voll = { ...STANDARD, ...g, modelle: { ...STANDARD.modelle, ...(g.modelle || {}) }, aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) } };
-    const alt = ANBIETER_IDS.find((a) => modellProfilAktiv(voll, STANDARD_PROFILE_FASSUNG_3[a]));
+    const voll = {
+      ...STANDARD,
+      ...g,
+      modelle: { ...STANDARD.modelle, ...(g.modelle || {}) },
+      aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) },
+      anbieterOptionen: STANDARD.anbieterOptionen,
+    };
+    const alt = (Object.keys(STANDARD_PROFILE_FASSUNG_3) as (keyof typeof STANDARD_PROFILE_FASSUNG_3)[]).find((a) =>
+      modellProfilAktiv(voll, STANDARD_PROFILE_FASSUNG_3[a]),
+    );
     if (alt) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE[alt]));
     g.fassung = 4;
   }
   // Fassung 4 → 5 (0.5.16): Wer dem Mistral-Standard aus 0.5.15 folgt (Reparatur Medium 3.5), folgt danach dem heutigen
   // (Reparatur Small). Eine abweichende Wahl bleibt.
   if (g && g.fassung === 4) {
-    const voll = { ...STANDARD, ...g, modelle: { ...STANDARD.modelle, ...(g.modelle || {}) }, aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) } };
+    const voll = {
+      ...STANDARD,
+      ...g,
+      modelle: { ...STANDARD.modelle, ...(g.modelle || {}) },
+      aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) },
+      anbieterOptionen: STANDARD.anbieterOptionen,
+    };
     if (modellProfilAktiv(voll, STANDARD_PROFIL_MISTRAL_FASSUNG_4)) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE.mistral));
     g.fassung = 5;
   }
+  // Fassung 5 → 6 (0.6.3, TP-2026-W44-26): `mistralEndpunkt` wird zu `anbieterOptionen.mistral.endpunkt`; die übrigen
+  // Optionen (Ollama) erhalten ihre Vorgaben. Die Wahl des Endpunkts bleibt.
+  if (g && g.fassung === 5) {
+    g.anbieterOptionen = { ...g.anbieterOptionen, mistral: { endpunkt: g.mistralEndpunkt ?? "eu", ...g.anbieterOptionen?.mistral } };
+    g.fassung = 6;
+  }
+  const { mistralEndpunkt: _alt, anbieterOptionen, ...rest } = g ?? {};
   return {
     ...STANDARD,
-    ...g,
+    ...rest,
     modelle: { ...STANDARD.modelle, ...(g?.modelle || {}) },
     aufwand: { ...STANDARD.aufwand, ...(g?.aufwand || {}) },
+    anbieterOptionen: optionenVollstaendig(anbieterOptionen),
   };
 }
 
 /**
  * Werkzeuge, die das Modell mit diesen Einstellungen tatsächlich nutzen kann. Anthropic und OpenAI: beide;
- * Mistral: über den EU-Endpunkt keine, global nur die Websuche.
+ * Mistral: über den EU-Endpunkt keine, global nur die Websuche; Ollama (lokal): keine. Seit 0.6.3 (TP-2026-W44-26) aus
+ * der Beschreibung des Anbieters (`faehigkeitenFuer`); eine unbekannte Kennung hat keine Werkzeuge.
  */
-export function werkzeugeFuer(modell: string, e: Pick<Einstellungen, "mistralEndpunkt">): { websuche: boolean; abruf: boolean } {
-  if (anbieterVon(modell) === "mistral") return mistralWerkzeuge(e.mistralEndpunkt ?? "eu");
-  return { websuche: true, abruf: true };
+export function werkzeugeFuer(modell: string, e: { anbieterOptionen?: AnbieterOptionenTeil }): { websuche: boolean; abruf: boolean } {
+  const f = faehigkeitenFuer(modell, e.anbieterOptionen);
+  return { websuche: f.websuche, abruf: f.abruf };
 }
 
 /** Höchstzahl der Orientierungssuchen je Sachverhalt */
@@ -358,7 +438,7 @@ const OHNE_ERZWUNGENE_SUCHE = /^claude-(opus-5-5|sonnet-5-5|fable-5-1|mythos-5-1
 
 /** Ob die App die Websuche bei diesem Modell erzwingen kann; sonst entscheidet das Modell, und die App zählt nach */
 export function sucheErzwingbar(modell: string): boolean {
-  return anbieterVon(modell) === "anthropic" && !OHNE_ERZWUNGENE_SUCHE.test(modell);
+  return bekannterAnbieter(modell) === "anthropic" && !OHNE_ERZWUNGENE_SUCHE.test(modell);
 }
 
 /** Modelle, die ein Lauf der KI-Erfassung voraussichtlich nutzt. */

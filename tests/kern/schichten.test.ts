@@ -76,7 +76,7 @@ const ERLAUBT: Record<string, string[]> = {
   pwa: [],
   lagebild: ["kern"],
   dokumente: ["kern"],
-  profil: ["kern", "../profile"],
+  profil: ["kern", "anbieter", "../profile"],
   pipeline: ["kern", "anbieter", "profil", "lagebild"],
   forschung: ["kern", "anbieter", "profil", "pipeline", "../evaluation"],
   schluessel: ["anbieter", "pwa"],

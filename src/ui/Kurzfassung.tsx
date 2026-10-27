@@ -6,7 +6,7 @@
 // Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { anbieterVon, ANBIETER_NAME, Verteiler, type Schluessel } from "../anbieter/verteiler";
+import { anbieterVon, ANBIETER_NAME, hatSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -108,22 +108,16 @@ export function KurzfassungKasten({
 
   const kiEinstellungen = ki ? mitModellwahl(ki.einstellungen, kfWahl) : undefined;
   const kfModell = kiEinstellungen ? modellFuer("kurzfassung", kiEinstellungen, profil) : "";
-  const hatSchluessel = !!ki && !!ki.schluessel[anbieterVon(kfModell)];
+  const schluesselDa = !!ki && hatSchluessel(anbieterVon(kfModell), ki.schluessel);
 
   const erstellen = async () => {
-    if (!hatSchluessel) return;
+    if (!schluesselDa) return;
     setFehler(null);
     setLaeuft(true);
     const ctrl = new AbortController();
     abbruch.current = ctrl;
     try {
-      const k = await kurzfassungErstellen(
-        profil,
-        meldung,
-        Verteiler.fuer(ki.schluessel, { mistralEndpunkt: kiEinstellungen!.mistralEndpunkt }),
-        kiEinstellungen!,
-        ctrl.signal,
-      );
+      const k = await kurzfassungErstellen(profil, meldung, Verteiler.fuer(ki.schluessel, kiEinstellungen!.anbieterOptionen), kiEinstellungen!, ctrl.signal);
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
       await kurzfassungSchreiben(profil.manifest.id, g).catch(() =>
@@ -224,7 +218,7 @@ export function KurzfassungKasten({
         />
       )}
       <div className="aktionen">
-        {hatSchluessel ? (
+        {schluesselDa ? (
           laeuft ? (
             <>
               <span className="laufanzeige">
@@ -242,7 +236,7 @@ export function KurzfassungKasten({
         ) : (
           <span className="hinweis">Für die KI-Fassung unter „Einstellungen“ einen API-Schlüssel für {ANBIETER_NAME[anbieterVon(kfModell)]} hinterlegen.</span>
         )}
-        {hatSchluessel && !laeuft && <span className="material-meta">Modell: {kfModell}</span>}
+        {schluesselDa && !laeuft && <span className="material-meta">Modell: {kfModell}</span>}
       </div>
 
       <details className="summary">

@@ -50,3 +50,27 @@ describe("F05: Profilmanifest mit falschen Datentypen", () => {
     expect(e.befunde[0].text).toMatch(/muss ein JSON-Objekt enthalten/);
   });
 });
+
+describe("Modellkennungen im Manifest (TP-2026-W44-26)", () => {
+  it("TP-2026-W44-26: eine Kennung ohne Anbieter ergibt beim Laden eine Warnung statt stiller Zuordnung; bekannte Kennungen nicht", async () => {
+    const d = leseOrdner(repoPfad("profile/lead-beispiel"));
+    const m = JSON.parse(d["profil.json"]);
+    m.modelle = { ...m.modelle, erfassung: "llama3", kurzfassung: "ollama:llama3.1", reparatur: "mistral-small-2603" };
+    d["profil.json"] = JSON.stringify(m);
+    const e = await ladeProfil(d);
+    expect(e.profil).not.toBeNull();
+    const w = e.befunde.filter((b) => b.code === "MODELL_UNBEKANNT");
+    expect(w).toHaveLength(1);
+    expect(w[0]).toMatchObject({ stufe: "warnung" });
+    expect(w[0]!.text).toContain("„llama3“");
+    expect(w[0]!.text).toContain("„erfassung“");
+    // Die mitgelieferten Profile nennen nur bekannte Kennungen
+    for (const name of ["lead-beispiel", "muster"]) {
+      const g = await ladeProfil(leseOrdner(repoPfad("profile", name)));
+      expect(
+        g.befunde.filter((b) => b.code === "MODELL_UNBEKANNT"),
+        name,
+      ).toEqual([]);
+    }
+  });
+});

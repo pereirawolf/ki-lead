@@ -41,7 +41,10 @@ const EINGAENGE = [
   "LEAD-Meldung_ST_2026-10-14T11-00_FIKTIV_Orkantief-Ilka.json",
   "LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
 ];
-const MISTRAL: Einstellungen = { ...standardProfilAnwenden(STANDARD, "mistral"), mistralEndpunkt: "eu" };
+const MISTRAL: Einstellungen = {
+  ...standardProfilAnwenden(STANDARD, "mistral"),
+  anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } },
+};
 
 async function daten(): Promise<FallDaten> {
   return { profil: await profilPflicht("lead-beispiel"), dateien: leseOrdner(repoPfad("profile", "lead-beispiel")) };
@@ -367,7 +370,7 @@ describe("MS (aus Musterfassung)", () => {
     expect(s.usd![0]).toBeCloseTo(0.034, 6);
     expect(s.usd![1]).toBeCloseTo(0.084, 6);
     // Mistral Medium „hoch“ am EU-Endpunkt: (12 000 × 1,5 + 16 000 × 7,5) / 1e6 × 1,1
-    expect(schaetzeKurzfassung("mistral-medium-3-5", "high", 12_000, { mistralEndpunkt: "eu" }).usd![1]).toBeCloseTo(0.1518, 6);
+    expect(schaetzeKurzfassung("mistral-medium-3-5", "high", 12_000, { mistral: { endpunkt: "eu" } }).usd![1]).toBeCloseTo(0.1518, 6);
     expect(schaetzeKurzfassung("unbekannt", "medium", 12_000).usd).toBeNull();
   });
 });

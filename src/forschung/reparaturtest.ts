@@ -10,9 +10,10 @@
 
 import JSZip from "jszip";
 import PLAN from "../../evaluation/plaene/reparatur-ilka.json";
-import { aufschlag, kostenAnfrage } from "../anbieter/preise";
+import { kostenAnfrage } from "../anbieter/preise";
+import type { AnbieterOptionenTeil } from "../anbieter/optionen";
 import { leereNutzung, type Aufwand, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "../anbieter/typen";
-import { anbieterVon } from "../anbieter/verteiler";
+import { anbieterVon, aufschlagFuer } from "../anbieter/verteiler";
 import type { Meldung } from "../kern/typen";
 import { sha256 } from "../profil/laden";
 import { aufwandAngeboten, aufwandFuer, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
@@ -59,12 +60,12 @@ export function einstellungenFuerReparatur(e: Einstellungen, v: ReparaturVariant
  * (Anweisung, Schema-Befunde und Entwurf), Ausgabe etwa 8.000–16.000 Token (vollständiger Entwurf, mit Nachdenken
  * mehr). Mistral mit dem Aufschlag des EU-Endpunkts.
  */
-export function schaetzeReparatur(modell: string, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): [number, number] | null {
+export function schaetzeReparatur(modell: string, optionen: AnbieterOptionenTeil = {}): [number, number] | null {
   const preis = (eingabe: number, ausgabe: number) => kostenAnfrage(modell, { eingabe, ausgabe, cacheLesen: 0, cacheSchreiben: 0, websuchen: 0, abrufe: 0 });
   const von = preis(10_000, 8_000);
   const bis = preis(14_000, 16_000);
   if (von === null || bis === null) return null;
-  const f = aufschlag(modell, optionen);
+  const f = aufschlagFuer(modell, optionen);
   return [von * f, bis * f];
 }
 
@@ -72,7 +73,7 @@ export function schaetzeReparatur(modell: string, optionen: { mistralEndpunkt?: 
  * Kosten eines Testlaufs S3 Reparatur: je Fall eine Reparatur (untere Grenze) bis zwei Reparaturen (obere Grenze, Höchstzahl);
  * der unbeschädigte Durchlauf ruft keinen Anbieter auf.
  */
-export function schaetzePrueffall(modell: string, durchgaenge: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): [number, number] | null {
+export function schaetzePrueffall(modell: string, durchgaenge: number, optionen: AnbieterOptionenTeil = {}): [number, number] | null {
   const je = schaetzeReparatur(modell, optionen);
   const faelle = DEFEKTE.length * durchgaengeBegrenzt(durchgaenge);
   return je ? [je[0] * faelle, je[1] * faelle * 2] : null;
@@ -412,7 +413,7 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
     entwurf: { datei: ENTWURF_DATEI, sha256: await sha256(texte.muster) },
     s1_fest: { datei: S1_DATEI, sha256: await sha256(texte.zuschnitt) },
     reparatur: { modell, aufwand: aufwandFuer("reparatur", e, profil), anbieter: anbieterVon(modell) },
-    ...(anbieterVon(modell) === "mistral" ? { mistral_endpunkt: e.mistralEndpunkt ?? "eu" } : {}),
+    ...(anbieterVon(modell) === "mistral" ? { mistral_endpunkt: e.anbieterOptionen.mistral.endpunkt } : {}),
     wiederholungen,
     basis: { schemakonform: !!basis.lauf.ergebnis?.schemakonform, reparaturen: reparaturStufen(basis.lauf).length },
     faelle,

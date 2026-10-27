@@ -256,7 +256,7 @@ export function konfiguration(e: Einstellungen, profil: Profil): Konfiguration {
     return { modell, aufwand: aufwandFuer(r, e, profil), anbieter: anbieterVon(modell) };
   };
   const k: Konfiguration = { s1: teil("vorverarbeitung"), s2: teil("verdichtung"), reparatur: teil("reparatur") };
-  if ([k.s1, k.s2, k.reparatur].some((t) => t.anbieter === "mistral")) k.mistral_endpunkt = e.mistralEndpunkt ?? "eu";
+  if ([k.s1, k.s2, k.reparatur].some((t) => t.anbieter === "mistral")) k.mistral_endpunkt = e.anbieterOptionen.mistral.endpunkt;
   return k;
 }
 

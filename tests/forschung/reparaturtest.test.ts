@@ -195,8 +195,8 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     expect(pv).toBeCloseTo(1.0, 6);
     expect(pb).toBeCloseTo(3.76, 6);
     // Mistral am EU-Endpunkt mit 10 % Aufschlag
-    expect(schaetzeReparatur("mistral-small-2603", { mistralEndpunkt: "eu" })![0]).toBeCloseTo(
-      schaetzeReparatur("mistral-small-2603", { mistralEndpunkt: "global" })![0] * 1.1,
+    expect(schaetzeReparatur("mistral-small-2603", { mistral: { endpunkt: "eu" } })![0]).toBeCloseTo(
+      schaetzeReparatur("mistral-small-2603", { mistral: { endpunkt: "global" } })![0] * 1.1,
       9,
     );
     expect(schaetzeReparatur("unbekannt")).toBeNull();
