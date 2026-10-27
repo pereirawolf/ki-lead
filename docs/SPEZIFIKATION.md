@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.2 vom 26.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.6.3 vom 26.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -424,3 +424,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.0 | 26.10.2026 | Verbindliche Recherche: Modus „Recherche durchführen“, Orientierungssuche je Sachverhalt als Teil von S1 mit Bestätigung der Suchbegriffe, Pflichtsuchen nach der Recherchetiefe, Abgleich und einmalige Nachforderung als Teil von S2, Recherchebefunde für jeden Lauf, getrennte Ausweisung der Orientierung (Abschnitte 5.1, 5.4; KP-2026-W44-01 bis -11, -13, -14) |
 | 0.6.1 | 26.10.2026 | Amtliche Rechercheeinstiege der gewählten SOPs in S2, Nachforderung auch ohne amtliche Fundstelle, Warnung `KEINE_PRIMAERQUELLE`, Orientierung je abgerechnetem Suchaufruf; Beispielprofil 1.30.0 mit BSH und DWD in B01, B02, B06 und C13 (Abschnitt 5.1; KP-2026-W44-15 bis -24) |
 | 0.6.2 | 26.10.2026 | Programmcode nach der technischen Prüfung: S3 behält bei einer Reparatur ohne JSON den Entwurf mit seinen Befunden (`REPARATUR_OHNE_ENTWURF`), Inaktivitätsgrenze 120 s für Antwortströme und gemeinsame HTTP-Mechanik der Anbieter, Orientierungssuchen höchstens zu zweit, Ablage der API-Schlüssel mit Passphrase, Pipeline auf mehrere Dateien verteilt (Abschnitte 5.1, 7; TP-2026-W44-01 bis -11) |
+| 0.6.3 | 26.10.2026 | Modularität nach der technischen Prüfung: Verzeichnisse unter `src/` zyklenfrei geschichtet mit Schichtentest, Persistenz nur unter `src/speicher/`, Forschungsreihen unter `src/forschung/`, Pflichtkennsätze des Profils und Standardtexte ohne SOP-Zitate, Registry der Anbieter mit Ollama als viertem, lokalem Anbieter und `anbieterOptionen` (Abschnitte 5.4, 6, 7; TP-2026-W44-23 bis -27) |
