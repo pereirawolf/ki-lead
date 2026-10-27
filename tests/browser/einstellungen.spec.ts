@@ -54,19 +54,25 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
       const inhalt = document.querySelector(".bereich-inhalt")!.getBoundingClientRect();
       const knoepfe = [...document.querySelectorAll('nav[aria-label="Bereiche der Einstellungen"] button')].map((k) => k.getBoundingClientRect().top);
       // Im Fehlerfall die überstehenden Elemente nennen (Diagnose für WebKit in der CI, seit 0.6.5)
-      // (ganze Seite; Elemente in geschlossenen <details> gekennzeichnet, Breite der Seite vorangestellt)
+      // (ganze Seite: äußerste überstehende Elemente außerhalb scrollender oder zuschneidender Bereiche, mit Breite und
+      // position; dazu die Breiten von html und body)
       const breite = window.innerWidth;
       const name = (el: Element) => `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).trim().split(/\s+/).join(".") : ""}`;
+      const schneidet = (el: Element) => getComputedStyle(el).overflowX !== "visible";
+      const steht = (el: Element) => el.getBoundingClientRect().right > breite + 1 || el.scrollWidth > breite + 1;
+      const frei = (el: Element) => {
+        for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (schneidet(p)) return false;
+        return true;
+      };
+      const kandidaten = [...document.body.querySelectorAll("*")].filter((el) => steht(el) && frei(el));
+      const aeusserste = kandidaten.filter((el) => !kandidaten.some((a) => a !== el && a.contains(el)));
       const zuBreit = [
-        `scrollWidth ${document.documentElement.scrollWidth} px bei ${breite} px`,
-        ...[...document.body.querySelectorAll("*")]
-          .filter((el) => el.getBoundingClientRect().right > breite + 1 && ![...el.children].some((k) => k.getBoundingClientRect().right > breite + 1))
-          .slice(0, 6)
-          .map((el) => {
-            const r = el.getBoundingClientRect();
-            const eltern = el.parentElement ? name(el.parentElement) : "";
-            return `${name(el)} in ${eltern} (${Math.round(r.left)}–${Math.round(r.right)} px${el.closest("details:not([open])") ? ", in geschlossenem details" : ""})`;
-          }),
+        `scrollWidth html ${document.documentElement.scrollWidth} px, body ${document.body.scrollWidth} px bei ${breite} px`,
+        ...aeusserste.slice(0, 6).map((el) => {
+          const r = el.getBoundingClientRect();
+          const st = getComputedStyle(el);
+          return `${name(el)} in ${el.parentElement ? name(el.parentElement) : ""} (${Math.round(r.left)}–${Math.round(r.right)} px, scrollWidth ${el.scrollWidth}, ${st.position}, overflow-x ${st.overflowX})`;
+        }),
       ];
       return {
         navOben: nav.bottom <= inhalt.top + 1,
