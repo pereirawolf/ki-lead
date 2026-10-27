@@ -10,12 +10,13 @@ import { parseQuellen, sachverhalte } from "../kern/quellen";
 import { kennsaetzeAlle, KENNSATZ_ERSATZ, parseDatumDE } from "../kern/kennsaetze";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import type { Meldung, Profil } from "../kern/typen";
-import { ersetzePlatzhalter } from "../profil/platzhalter";
+import { kennsatzPlatzhalter, ersetzePlatzhalter, profilPlatzhalter } from "../profil/platzhalter";
 import { STANDARD_ANWEISUNG } from "../profil/standardtexte";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
 import type { StufenEintrag } from "./lauf";
 import { offenePlatzhalter } from "../kern/feldhilfen";
+import { anweisungPlatzhalterText } from "./kontext";
 
 // Seit 0.6.3 (TP-2026-W44-23) im Profilmodul; hier weiter exportiert, damit die Schnittstelle der Pipeline gleich bleibt
 export { STANDARD_ANWEISUNG } from "../profil/standardtexte";
@@ -66,19 +67,15 @@ export function kurzfassungSchema(profil: Profil): object {
   };
 }
 
-export function kurzfassungAnweisung(profil: Profil): string {
+/** Arbeitsanweisung Kurzfassung mit ersetzten Platzhaltern und den offen gebliebenen (seit 0.6.4, TP-2026-W44-33) */
+export function kurzfassungAnweisungErsetzt(profil: Profil): { text: string; offen: string[] } {
   const pfad = profil.manifest.anweisungen?.kurzfassung;
   const roh = (pfad && profil.dateien[pfad]) || STANDARD_ANWEISUNG;
-  return ersetzePlatzhalter(roh, {
-    profil: {
-      kurzname: profil.manifest.variablen.meldende_stelle,
-      lageprodukt: "Lagebild",
-      ...profil.manifest.variablen,
-      referenzraum: profil.manifest.referenzraum,
-      ebene: profil.manifest.ebene,
-      name: profil.manifest.name,
-    },
-  }).text;
+  return ersetzePlatzhalter(roh, { profil: profilPlatzhalter(profil.manifest), kennsatz: kennsatzPlatzhalter(profil.ui) });
+}
+
+export function kurzfassungAnweisung(profil: Profil): string {
+  return kurzfassungAnweisungErsetzt(profil).text;
 }
 
 /** Meldung ohne Quellenverzeichnis, Freigabe und Herkunft: nur der Stoff der Kurzfassung. */
@@ -277,7 +274,7 @@ export function kurzfassungHinweise(k: KurzfassungStruktur, zahlSv: number): str
 export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter: LlmAnbieter, e: Einstellungen, signal?: AbortSignal): Promise<Kurzfassung> {
   const modell = modellFuer("kurzfassung", e, profil);
   const aufwand = aufwandFuer("kurzfassung", e, profil);
-  const system = kurzfassungAnweisung(profil);
+  const { text: system, offen: offenePl } = kurzfassungAnweisungErsetzt(profil);
   const stoff = meldungFuerKurzfassung(d, profil);
   const schema = kurzfassungSchema(profil);
   const zahl = sachverhalte(d, profil.ui).length;
@@ -297,6 +294,7 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
     aufwand,
     anfrage: { system: [system], nachrichten: [{ role: "user", content: nachricht }], jsonSchema: schema, maxTokens: e.maxTokensErfassung },
   };
+  if (offenePl.length) eintrag.offenePlatzhalter = offenePl;
   try {
     const a = await anbieter.senden({
       modell,
@@ -342,6 +340,7 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
     if (entfernt) hinweise.push("Verbliebene Quellenverweise oder URLs wurden entfernt.");
     if (offen)
       hinweise.push("Offene Vorlagenstellen ⟦…⟧ aus der Meldung wurden nicht übernommen; die Meldung ist noch nicht vollständig ausgefüllt. Bitte prüfen.");
+    if (offenePl.length) hinweise.push(anweisungPlatzhalterText("Kurzfassung", offenePl));
     eintrag.befunde = hinweise;
     return { text: kurzfassungText(d, profil, struktur), struktur, hinweise, eintrag, erstellt: new Date().toISOString() };
   } catch (err: any) {

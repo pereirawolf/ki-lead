@@ -3,9 +3,8 @@
 
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
-import { KENNSATZ_ERSATZ } from "../kern/kennsaetze";
 import type { Profil, Sop } from "../kern/typen";
-import { ersetzePlatzhalter } from "../profil/platzhalter";
+import { ersetzePlatzhalter, kennsatzPlatzhalter, profilPlatzhalter, type AuftragsSchluessel } from "../profil/platzhalter";
 import { fachSops, gemeinsameSops, istBaustein, sopKennung } from "../profil/sop";
 import { VERDICHTUNG_S2 } from "../profil/standardtexte";
 import type { S1Vorschlag } from "./lauf";
@@ -113,13 +112,8 @@ Gib zuerst die Kurzantwort als Fließtext aus (höchstens acht Sätze, ohne Übe
 
 Für das Quellenverzeichnis verwendest du nur Fundstellen aus deiner Websuche, aus abgerufenen Seiten und aus dem Eingangsmaterial. Erfinde keine URLs. Die App prüft das Ergebnis gegen das Schema und legt es der Person zur Prüfung und Freigabe vor.`;
 
-export interface AuftragsText {
-  sachverhalt: string;
-  ausgangsquellen: string;
-  stichtag: string;
-  prueffrage: string;
-  ereignisarten: string;
-}
+/** Auftragsangaben aus der Bestätigung von S1; Schlüssel wie die Platzhalter {{auftrag.*}} (AUFTRAG_SCHLUESSEL) */
+export type AuftragsText = Record<AuftragsSchluessel, string>;
 
 export function auftragAusBestaetigung(b: S1Vorschlag, profil: Profil, ausgangsquellen: string): AuftragsText {
   const gliederung = b.sachverhalte
@@ -140,23 +134,35 @@ export function auftragAusBestaetigung(b: S1Vorschlag, profil: Profil, ausgangsq
   };
 }
 
-export function anweisungErfassung(profil: Profil, auftrag: AuftragsText, jetzt: string): string {
+/** Rohtext der Arbeitsanweisung Erfassung samt Ausgabevertrag, vor dem Ersetzen der Platzhalter */
+export function anweisungErfassungRoh(profil: Profil): string {
   const pfad = profil.manifest.anweisungen?.erfassung;
   const roh = pfad ? profil.dateien[pfad] : "";
   const text = roh || "# Arbeitsanweisung\n\nErstelle eine Meldung nach dem beigefügten Schema.\n\n{{app.ausgabevertrag}}";
-  const mitVertrag = text.includes("{{app.ausgabevertrag}}") ? text : `${text}\n\n{{app.ausgabevertrag}}`;
-  return ersetzePlatzhalter(mitVertrag, {
-    profil: {
-      kurzname: profil.manifest.variablen.meldende_stelle,
-      ...profil.manifest.variablen,
-      referenzraum: profil.manifest.referenzraum,
-      ebene: profil.manifest.ebene,
-      name: profil.manifest.name,
-    },
-    auftrag: auftrag as unknown as Record<string, string>,
+  return text.includes("{{app.ausgabevertrag}}") ? text : `${text}\n\n{{app.ausgabevertrag}}`;
+}
+
+/**
+ * Arbeitsanweisung Erfassung mit ersetzten Platzhaltern und den offen gebliebenen (seit 0.6.4, TP-2026-W44-33: die
+ * Pipeline protokolliert sie und gibt einen Befund aus, statt sie still als „[nicht angegeben]“ einzusetzen).
+ */
+export function anweisungErfassungErsetzt(profil: Profil, auftrag: AuftragsText, jetzt: string): { text: string; offen: string[] } {
+  return ersetzePlatzhalter(anweisungErfassungRoh(profil), {
+    profil: profilPlatzhalter(profil.manifest),
+    auftrag,
     app: { ausgabevertrag: AUSGABEVERTRAG },
+    kennsatz: kennsatzPlatzhalter(profil.ui),
     jetzt,
-  }).text;
+  });
+}
+
+/** Text des Befunds „Anweisung mit offenem Platzhalter“ (seit 0.6.4, TP-2026-W44-33) */
+export function anweisungPlatzhalterText(anweisung: string, offen: string[]): string {
+  return `Arbeitsanweisung ${anweisung} mit offenem Platzhalter: ${offen.join(", ")}. Die App konnte ihn nicht füllen; im Prompt stand „[nicht angegeben]“. Bitte das Profil prüfen (Tippfehler oder fehlende Profilvariable).`;
+}
+
+export function anweisungErfassung(profil: Profil, auftrag: AuftragsText, jetzt: string): string {
+  return anweisungErfassungErsetzt(profil, auftrag, jetzt).text;
 }
 
 /** JSON-Schema für die strukturierte Antwort der Stufe S1 (nur von der API unterstützte Schlüsselwörter). */
@@ -508,11 +514,13 @@ export function anwendungsbereich(text: string): string {
   return text.slice(0, 1500);
 }
 
-export function verdichtungsAnweisung(profil: Profil): string {
+/** Arbeitsanweisung Verdichtung mit ersetzten Platzhaltern und den offen gebliebenen (seit 0.6.4, TP-2026-W44-33) */
+export function verdichtungsAnweisungErsetzt(profil: Profil): { text: string; offen: string[] } {
   const pfad = profil.manifest.anweisungen?.verdichtung;
   const roh = (pfad && profil.dateien[pfad]) || VERDICHTUNG_S2;
-  return ersetzePlatzhalter(roh, {
-    profil: { kurzname: profil.manifest.variablen.meldende_stelle, ...profil.manifest.variablen, referenzraum: profil.manifest.referenzraum },
-    kennsatz: { ...KENNSATZ_ERSATZ, ...profil.ui.kennsaetze },
-  }).text;
+  return ersetzePlatzhalter(roh, { profil: profilPlatzhalter(profil.manifest), kennsatz: kennsatzPlatzhalter(profil.ui) });
+}
+
+export function verdichtungsAnweisung(profil: Profil): string {
+  return verdichtungsAnweisungErsetzt(profil).text;
 }

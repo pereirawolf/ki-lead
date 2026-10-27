@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.20 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.21 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -197,7 +197,11 @@ Die App prüft den Abschnitt beim Laden: Format, zulässige Felder, unbekannte A
 
 ## Arbeitsanweisungen
 
-Markdown mit Platzhaltern: `{{profil.*}}`, `{{auftrag.*}}` (Sachverhalt, Ausgangsquellen, Stichtag, Prüffrage, Ereignisarten), `{{jetzt}}` und `{{app.ausgabevertrag}}`. Den Ausgabevertrag setzt die App ein. Er beschreibt, in welcher technischen Form die KI antworten soll.
+Markdown mit Platzhaltern. Alle drei Anweisungen kennen dieselben Profilangaben (seit App 0.6.4): `{{profil.<variable>}}` für jede Variable, dazu `{{profil.referenzraum}}`, `{{profil.ebene}}`, `{{profil.name}}`, `{{profil.kurzname}}` (ohne Variable: `meldende_stelle`) und `{{profil.lageprodukt}}` (ohne Variable: „Lagebild“), außerdem `{{kennsatz.<schlüssel>}}` mit den Kennsätzen der Darstellungsdatei (fehlende Pflichtkennsätze mit den Ersatztexten der App). Nur in der Erfassung: `{{app.ausgabevertrag}}` (den Ausgabevertrag setzt die App ein; er beschreibt, in welcher technischen Form die KI antworten soll), `{{auftrag.*}}` (`sachverhalt`, `ausgangsquellen`, `stichtag`, `prueffrage`, `ereignisarten`) und `{{jetzt}}`.
+
+**Laufabhängige Aussagen gehören in den Steuerungsblock.** Auftragsangaben, Bearbeitungszeitpunkt, Meldezeitpunkt und Recherchemodus setzt die App seit 0.6.4 im Steuerungsblock zuletzt in den Systemauftrag von S2. `{{auftrag.*}}` und `{{jetzt}}` gelten in der Erfassung weiter (fremde Profile bleiben nutzbar), werden aber nicht mehr empfohlen: Eine Anweisung mit diesen Platzhaltern ändert sich je Lauf, und die App kann sie nicht im Cache des Anbieters halten. Ohne sie ist die Anweisung statisch und wird wie Profilgrundlagen und SOPs gecacht.
+
+**Prüfung der Platzhalter.** Beim Laden meldet die App Platzhalter, die sie in der jeweiligen Anweisung nicht füllt: `{{profil.*}}` ohne Variable als „Platzhalter ohne Profilvariable“, alle übrigen (etwa ein Tippfehler wie `{{auftrag.stichtaq}}` oder `{{auftrag.*}}` in der Verdichtung) seit 0.6.4 als Warnung `PLATZHALTER_UNBEKANNT`. Bleibt im Lauf ein Platzhalter offen, steht er im Protokolleintrag der Stufe (`offenePlatzhalter`), und das Ergebnis trägt die Warnung `ANWEISUNG_PLATZHALTER_OFFEN` (Management Summary: als Hinweis); im Prompt stand dann „[nicht angegeben]“.
 
 | Schlüssel in `anweisungen` | Verwendung |
 |---|---|
@@ -273,3 +277,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.18 | 24.10.2026 | Ohne Formatänderung: Manifestfelder `herausgeber` und `lizenz` beschrieben (SPDX-Kennung, `LicenseRef-intern` im Beispiel „Kreis X“); Hinweis auf die Vorlage unter CC0 1.0 (KP-2026-W43-58, -60); Fassungsangabe im Kopf nachgezogen |
 | 1.19 | 26.10.2026 | Ohne Formatänderung: `format` im Meldungsschema wird nicht geprüft und beim Laden als Hinweis gemeldet (App 0.6.2, TP-2026-W44-10) |
 | 1.20 | 27.10.2026 | Kennsätze `handlungsrelevant`, `aenderung` und `abweichung` sind Pflicht; fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` (ältere Pakete bleiben nutzbar). Ersatztexte und Auswertung der App dokumentiert. Kategorievorschlag des Quellen-Baukastens und Vorlage ohne `quellen.vorlage` aus den Kategorien des Profils statt fester Buchstaben; Standardfassungen der App ohne SOP-Zitate (TP-2026-W44-27). Modellkennungen: Mistral nachgetragen, `ollama:<modell>` neu, unbekannte Kennung als Warnung `MODELL_UNBEKANNT` (TP-2026-W44-26) (App 0.6.3) |
+| 1.21 | 27.10.2026 | Ohne Formatänderung: gleiche Profilplatzhalter in allen drei Arbeitsanweisungen, Prüfung aller Platzhalter beim Laden (Warnung `PLATZHALTER_UNBEKANNT`), offene Platzhalter im Protokoll und als Befund `ANWEISUNG_PLATZHALTER_OFFEN` (TP-2026-W44-33); `{{auftrag.*}}` und `{{jetzt}}` gelten weiter, werden aber nicht mehr empfohlen, laufabhängige Aussagen gehören in den Steuerungsblock (TP-2026-W44-31) (App 0.6.4) |

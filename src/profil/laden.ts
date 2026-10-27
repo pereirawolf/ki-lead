@@ -8,7 +8,7 @@ import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
 import { textVorErstemAnker, zerlegeSops } from "./sop";
-import { platzhalterIn } from "./platzhalter";
+import { bekanntePlatzhalter, platzhalterIn, type AnweisungsArt } from "./platzhalter";
 
 export interface LadeErgebnis {
   profil: Profil | null;
@@ -375,10 +375,18 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });
     else if (pfad) {
-      const unbekannt = platzhalterIn(dateien[pfad] ?? "").filter(
-        (p) => /^profil\./.test(p) && !(p.slice(7) in manifest.variablen) && !["profil.referenzraum", "profil.ebene", "profil.name"].includes(p),
-      );
-      if (unbekannt.length) befunde.push({ stufe: "warnung", text: `${pfad}: Platzhalter ohne Profilvariable: ${unbekannt.join(", ")}` });
+      // Seit 0.6.4 (TP-2026-W44-33) alle Bereiche gegen die bekannten Schlüssel der jeweiligen Anweisung, nicht nur profil.*
+      const bekannt = bekanntePlatzhalter(art as AnweisungsArt, manifest, ui);
+      const unbekannt = platzhalterIn(dateien[pfad] ?? "").filter((p) => !bekannt.has(p));
+      const ohneVariable = unbekannt.filter((p) => p.startsWith("profil."));
+      const sonst = unbekannt.filter((p) => !p.startsWith("profil."));
+      if (ohneVariable.length) befunde.push({ stufe: "warnung", text: `${pfad}: Platzhalter ohne Profilvariable: ${ohneVariable.join(", ")}` });
+      if (sonst.length)
+        befunde.push({
+          stufe: "warnung",
+          code: "PLATZHALTER_UNBEKANNT",
+          text: `${pfad}: Platzhalter, die die App in dieser Arbeitsanweisung nicht füllt: ${sonst.map((x) => `{{${x}}}`).join(", ")} (erscheinen im Prompt als „[nicht angegeben]“).`,
+        });
     }
   }
   if (!manifest.anweisungen?.erfassung)

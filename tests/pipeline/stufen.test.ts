@@ -412,3 +412,33 @@ describe("TP-2026-W44-10: Speicherfehler nach einem Aufruf verliert die Antwort 
     expect(aufrufe).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe("Offene Platzhalter der Arbeitsanweisungen (TP-2026-W44-33)", () => {
+  it("TP-2026-W44-33: ein Tippfehler im Platzhalter steht im Protokoll und als Befund, nicht still im Prompt", async () => {
+    const entwurf = structuredClone(he);
+    const att = skriptAnbieter([llmAntwort("Kernaussage: x.\n\n```json\n" + JSON.stringify(entwurf) + "\n```")]);
+    const { k } = await pipelineKontext(att, [], WIE_TESTREIHE);
+    const pfad = k.profil.manifest.anweisungen!.erfassung!;
+    k.profil = {
+      ...k.profil,
+      dateien: { ...k.profil.dateien, [pfad]: `${k.profil.dateien[pfad]}\n\nStichtag: {{auftrag.stichtaq}}; Stelle: {{profil.kurznahme}}` },
+    };
+    const e = await stufe2und3(k, bestaetigterVorschlag() as any);
+    const s2 = k.lauf.stufen.find((s) => s.stufe === "S2 Recherche und Entwurf")!;
+    expect(s2.offenePlatzhalter).toEqual(["{{auftrag.stichtaq}}", "{{profil.kurznahme}}"]);
+    const b = e.befunde.find((x) => x.code === "ANWEISUNG_PLATZHALTER_OFFEN")!;
+    expect(b.stufe).toBe("warnung");
+    expect(b.text).toContain("{{auftrag.stichtaq}}");
+    expect(b.text).toContain("Erfassung");
+  });
+
+  it("TP-2026-W44-33: das Beispielprofil hat keine offenen Platzhalter, auch nicht in Verdichtung und Kurzfassung", async () => {
+    const { anweisungErfassungErsetzt, verdichtungsAnweisungErsetzt, auftragAusBestaetigung } = await import("../../src/pipeline/kontext");
+    const { kurzfassungAnweisungErsetzt } = await import("../../src/pipeline/kurzfassung");
+    const p = (await profilLaden("lead-beispiel")).profil!;
+    const auftrag = auftragAusBestaetigung(bestaetigterVorschlag() as any, p, "keine");
+    expect(anweisungErfassungErsetzt(p, auftrag, "2026-10-14T14:00").offen).toEqual([]);
+    expect(verdichtungsAnweisungErsetzt(p).offen).toEqual([]);
+    expect(kurzfassungAnweisungErsetzt(p).offen).toEqual([]);
+  });
+});

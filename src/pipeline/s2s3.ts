@@ -13,7 +13,8 @@ import { gueltigerZeitpunkt } from "../kern/zeit";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort, type Zerlegung } from "./json";
 import {
-  anweisungErfassung,
+  anweisungErfassungErsetzt,
+  anweisungPlatzhalterText,
   auftragAusBestaetigung,
   amtlicheEinstiege,
   amtlicherHost,
@@ -21,7 +22,7 @@ import {
   sopBlock,
   sopIdsAufloesen,
   steuerungsBlock,
-  verdichtungsAnweisung,
+  verdichtungsAnweisungErsetzt,
   type AmtlicherEinstieg,
   type PflichtVorgabe,
 } from "./kontext";
@@ -242,11 +243,15 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         .join("\n"),
     },
   ];
+  // Offene Platzhalter der Anweisungen werden protokolliert und als Befund gemeldet (seit 0.6.4, TP-2026-W44-33)
+  const anweisung = anweisungErfassungErsetzt(p, auftrag, jetztS2);
+  const zusatz = verdichtung ? verdichtungsAnweisungErsetzt(p) : undefined;
+  const offenePl = [...anweisung.offen.map((x) => ({ anweisung: "Erfassung", x })), ...(zusatz?.offen || []).map((x) => ({ anweisung: "Verdichtung", x }))];
   const systemS2 = [
     { text: profilGrundlagen(p), cache: true },
     { text: sopBlock(p, sopIds), cache: true },
-    { text: anweisungErfassung(p, auftrag, jetztS2) },
-    ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
+    { text: anweisung.text },
+    ...(zusatz ? [{ text: zusatz.text }] : []),
   ];
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
   if (vermerke) systemS2.push({ text: vermerke });
@@ -288,6 +293,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   });
 
   const erste = ersterAufruf.antwort;
+  if (offenePl.length) ersterAufruf.eintrag.offenePlatzhalter = offenePl.map((o) => o.x);
   // Eintrag des letzten S2-Aufrufs für Notizen und Befunde (nach einer Nachforderung deren Eintrag)
   let s2 = ersterAufruf.eintrag;
 
@@ -317,6 +323,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       });
       const zweite = nachforderung.antwort;
       s2 = nachforderung.eintrag;
+      if (offenePl.length) s2.offenePlatzhalter = offenePl.map((o) => o.x);
       // Text aus der Nachforderung, wenn sie eine Meldung enthält; sonst bleibt der erste Entwurf
       const nutzbar = zerlegeAntwort(zweite.text).json !== undefined || zerlegeAntwort(erste.text).json === undefined;
       a = antwortenZusammenfuehren(erste, zweite, nutzbar);
@@ -434,6 +441,16 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   if (meldung) for (const t of sopHinweise) befunde.push({ stufe: "hinweis", text: `SOP-Nachweis: ${t}` });
   if (meldung && umhaengungen.length) befunde.push({ stufe: "hinweis", text: `Von der App korrigiert: ${umhaengungen.join("; ")}.` });
   if (meldung) for (const t of reparaturHinweise) befunde.push({ stufe: "hinweis", code: "REPARATUR_OHNE_ENTWURF", text: t });
+  if (meldung)
+    for (const name of [...new Set(offenePl.map((o) => o.anweisung))])
+      befunde.push({
+        stufe: "warnung",
+        code: "ANWEISUNG_PLATZHALTER_OFFEN",
+        text: anweisungPlatzhalterText(
+          name,
+          offenePl.filter((o) => o.anweisung === name).map((o) => o.x),
+        ),
+      });
   if (meldung)
     for (const f of auftragsAbrufFehler(k.lauf.auftrag.urls, a.abrufFehler))
       befunde.unshift({

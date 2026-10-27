@@ -248,3 +248,19 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
     expect(att.anfragen[0].maxTokens).toBe(24000);
   });
 });
+
+describe("Offene Platzhalter der Kurzfassung (TP-2026-W44-33)", () => {
+  it("TP-2026-W44-33: ein offener Platzhalter steht im Protokolleintrag und als Hinweis der Management Summary", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const pfad = p!.manifest.anweisungen!.kurzfassung!;
+    const q = { ...p!, dateien: { ...p!.dateien, [pfad]: `${p!.dateien[pfad]}\n\nStelle: {{profil.stelle}}` } };
+    const json = {
+      kernaussage: "Lage ruhig.",
+      abschnitte: { lage_ereignis: "a", risiken_auswirkungen: "b", massnahmen_empfehlungen: "c", abhaengigkeiten_interdependenzen: "d" },
+      kurztitel: ["A", "B"],
+    };
+    const k = await kurzfassungErstellen(q, th, attrappe(JSON.stringify(json)), STANDARD);
+    expect(k.eintrag.offenePlatzhalter).toEqual(["{{profil.stelle}}"]);
+    expect(k.hinweise.join(" ")).toContain("Arbeitsanweisung Kurzfassung mit offenem Platzhalter: {{profil.stelle}}");
+  });
+});

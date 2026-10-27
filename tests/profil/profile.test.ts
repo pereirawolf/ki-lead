@@ -164,6 +164,48 @@ describe("Beispielprofil LEAD", () => {
     expect(ohneErzeugung).toEqual([]);
   });
 
+  it("TP-2026-W44-33: alle {{…}} der drei Anweisungen beider Profile und der Standardtexte gehören zu bekannten Schlüsseln", async () => {
+    const { platzhalterIn } = await import("../../src/profil/platzhalter");
+    const { VERDICHTUNG_S2, STANDARD_ANWEISUNG } = await import("../../src/profil/standardtexte");
+    // Soll unabhängig vom Code: Profilangaben, Kennsätze; nur in der Erfassung Auftrag, App und Zeitpunkt
+    const soll = (art: string, v: Record<string, string>, kennsaetze: Record<string, string> = {}) =>
+      new Set([
+        ...["referenzraum", "ebene", "name", "kurzname", "lageprodukt", ...Object.keys(v)].map((k) => `profil.${k}`),
+        ...["handlungsrelevant", "aenderung", "abweichung", ...Object.keys(kennsaetze)].map((k) => `kennsatz.${k}`),
+        ...(art === "erfassung"
+          ? ["auftrag.sachverhalt", "auftrag.ausgangsquellen", "auftrag.stichtag", "auftrag.prueffrage", "auftrag.ereignisarten", "app.ausgabevertrag", "jetzt"]
+          : []),
+      ]);
+    const fremd: string[] = [];
+    for (const name of ["lead-beispiel", "muster"]) {
+      const { profil: p } = await profil(name);
+      for (const [art, pfad] of Object.entries(p!.manifest.anweisungen || {})) {
+        const s = soll(art, p!.manifest.variablen, p!.ui.kennsaetze);
+        for (const x of platzhalterIn(p!.dateien[pfad!] || "")) if (!s.has(x)) fremd.push(`${name}/${pfad}: ${x}`);
+      }
+    }
+    for (const [art, text] of [
+      ["verdichtung", VERDICHTUNG_S2],
+      ["kurzfassung", STANDARD_ANWEISUNG],
+    ])
+      for (const x of platzhalterIn(text!)) if (!soll(art!, {}).has(x)) fremd.push(`Standardtext ${art}: ${x}`);
+    expect(fremd).toEqual([]);
+  });
+
+  it("TP-2026-W44-33: der Profilloader meldet unbekannte Platzhalter aller Bereiche, nicht nur profil.*", async () => {
+    const d = leseOrdner(repoPfad("profile", "lead-beispiel"));
+    d["anweisung-erfassung.md"] += "\n{{auftrag.stichtaq}} {{app.vertrag}} {{profil.gibtsnicht}} {{auftrag.stichtag}}";
+    d["anweisung-verdichtung.md"] += "\n{{auftrag.stichtag}} {{jetzt}} {{kennsatz.abweichung}}";
+    const { befunde } = await ladeProfil(d);
+    const unbekannt = befunde.filter((b) => b.code === "PLATZHALTER_UNBEKANNT").map((b) => b.text);
+    expect(unbekannt).toHaveLength(2);
+    expect(unbekannt.find((t) => t.startsWith("anweisung-erfassung.md"))).toMatch(/\{\{auftrag\.stichtaq\}\}, \{\{app\.vertrag\}\}/);
+    expect(unbekannt.find((t) => t.startsWith("anweisung-erfassung.md"))).not.toContain("{{auftrag.stichtag}}");
+    expect(unbekannt.find((t) => t.startsWith("anweisung-verdichtung.md"))).toMatch(/\{\{auftrag\.stichtag\}\}, \{\{jetzt\}\}/);
+    expect(unbekannt.join(" ")).not.toContain("kennsatz.abweichung");
+    expect(befunde.some((b) => b.text.includes("Platzhalter ohne Profilvariable: profil.gibtsnicht"))).toBe(true);
+  });
+
   it("eine leere Meldung ist als Entwurf schemakonform", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const leer = leererWert(p!.schema, p!.schema);
