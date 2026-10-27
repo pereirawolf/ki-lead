@@ -35,7 +35,7 @@ import {
 } from "../lagebild/lagebild";
 import { ABSCHNITTE, redaktionsbericht, redaktionscheck, type Klasse } from "../lagebild/redaktion";
 import { isoLokalZuZeitpunkt, zeitpunktDE, zoneOder } from "../kern/zeit";
-import { APP_KENNUNG } from "../pipeline/lauf";
+import { APP_KENNUNG } from "../kern/version";
 import { alsCsv, html as esc, kopiervorlageHtml, kopiervorlageText, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../pipeline/material";

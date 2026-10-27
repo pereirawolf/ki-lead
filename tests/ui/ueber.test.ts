@@ -103,7 +103,7 @@ describe("Fuß der App", () => {
 
 describe("Versionen und Netzzugriffe", () => {
   it("die Kennung der App folgt package.json", async () => {
-    const { APP_KENNUNG } = await import("../../src/pipeline/lauf");
+    const { APP_KENNUNG } = await import("../../src/kern/version");
     expect(APP_KENNUNG).toBe(`KI-LEAD ${VERSION}`);
     expect(lies("CITATION.cff")).toMatch(new RegExp(`^version: ${VERSION.replace(/\./g, "\\.")}$`, "m"));
   });

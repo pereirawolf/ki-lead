@@ -1,12 +1,10 @@
 // Einstellungen der KI-Pipeline. Leere Modellfelder bedeuten: Vorgabe des Profils bzw. der App.
 
-import { get, set } from "idb-keyval";
 import { aufwandAngeboten, aufwandStufenFuer } from "../anbieter/aufwand";
 import type { Aufwand } from "../anbieter/typen";
 import { mistralWerkzeuge, type MistralEndpunkt } from "../anbieter/mistral";
-import { ANBIETER_IDS, anbieterVon, LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { ANBIETER_IDS, anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
-import { schluesselAusAblage, schluesselInAblage } from "../schluessel/ablage";
 
 export type Rolle = "vorverarbeitung" | "erfassung" | "verdichtung" | "reparatur" | "kurzfassung";
 
@@ -291,8 +289,12 @@ export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | 
   return profil?.manifest.modelle?.[rolle] ? "profil" : "app";
 }
 
-export async function einstellungenLesen(): Promise<Einstellungen> {
-  const g = await get<Partial<Einstellungen>>("einstellungen");
+/**
+ * Gespeicherte Einstellungen auf die heutige Fassung bringen und mit den Vorgaben ergänzen. Reine Funktion; das Lesen aus
+ * dem Gerätespeicher liegt seit 0.6.3 (TP-2026-W44-24) in src/speicher/einstellungsSpeicher.ts.
+ */
+export function einstellungenMigrieren(gespeichert: Partial<Einstellungen> | undefined): Einstellungen {
+  const g = gespeichert ? structuredClone(gespeichert) : undefined;
   // Fassung 1 → 2: S2 brauchte bei hohem Aufwand bis zu 60 000 Token zum Nachdenken und brach an
   // der alten Grenze von 64 000 Ausgabetoken ab. Alte Vorgaben werden daher angehoben.
   if (g && !g.fassung) {
@@ -327,26 +329,6 @@ export async function einstellungenLesen(): Promise<Einstellungen> {
     modelle: { ...STANDARD.modelle, ...(g?.modelle || {}) },
     aufwand: { ...STANDARD.aufwand, ...(g?.aufwand || {}) },
   };
-}
-
-export async function einstellungenSchreiben(e: Einstellungen): Promise<void> {
-  await set("einstellungen", e);
-}
-
-// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert. Wo er liegt, wählt die
-// Person unter „Einstellungen“ (src/schluessel/ablage.ts: Gerätespeicher, nur Sitzung, Schlüsselbund des Systems).
-export async function schluesselLesen(anbieter: AnbieterId = "anthropic"): Promise<string> {
-  return schluesselAusAblage(anbieter);
-}
-
-export async function schluesselSchreiben(wert: string, anbieter: AnbieterId = "anthropic"): Promise<void> {
-  return schluesselInAblage(anbieter, wert);
-}
-
-export async function alleSchluesselLesen(): Promise<Schluessel> {
-  const out: Schluessel = { ...LEERE_SCHLUESSEL };
-  for (const id of Object.keys(out) as AnbieterId[]) out[id] = await schluesselLesen(id);
-  return out;
 }
 
 /**

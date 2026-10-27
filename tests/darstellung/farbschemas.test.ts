@@ -227,7 +227,7 @@ describe("Profilimport", () => {
     const m = JSON.parse(d["profil.json"]);
     m.farbschema = farbschema;
     d["profil.json"] = JSON.stringify(m);
-    return ladeProfil(d);
+    return ladeProfil(d, { farbschemaFehler: profilFarbschemaFehler });
   };
 
   it("ein gültiges Farbschema wird übernommen", async () => {
@@ -243,6 +243,17 @@ describe("Profilimport", () => {
     // ungeprüfte Werte werden nicht weitergereicht
     expect(e.profil!.manifest.farbschema).toBeUndefined();
     expect(aufloesen(PROFIL, e.profil!.manifest.farbschema).quelle).toBe("ersatz");
+  });
+
+  it("TP-2026-W44-24: ohne Prüfung aus der Darstellung reicht der Profilloader kein Farbschema weiter", async () => {
+    const d = basis();
+    const m = JSON.parse(d["profil.json"]);
+    m.farbschema = { basis: "bevoelkerungsschutz", name: "Stab" };
+    d["profil.json"] = JSON.stringify(m);
+    const e = await ladeProfil(d);
+    expect(e.profil).not.toBeNull();
+    expect(e.profil!.manifest.farbschema).toBeUndefined();
+    expect(e.befunde.filter((b) => b.text.includes("Farbschema"))).toEqual([]);
   });
 
   it("Profile ohne Farbschema laden unverändert", async () => {

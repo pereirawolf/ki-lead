@@ -19,17 +19,14 @@ const {
   mixProfilAktiv,
   mixProfilAnwenden,
   standardProfilAktiv,
-  alleSchluesselLesen,
-  einstellungenLesen,
-  einstellungenSchreiben,
   laufModelle,
   mitModellwahl,
   wahlAbweichend,
   modellFuer,
-  schluesselLesen,
-  schluesselSchreiben,
   werkzeugeFuer,
 } = await import("../../src/pipeline/einstellungen");
+const { einstellungenLesen, einstellungenSchreiben } = await import("../../src/speicher/einstellungsSpeicher");
+const { alleSchluesselLesen, schluesselLesen, schluesselSchreiben } = await import("../../src/schluessel/ablage");
 
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());

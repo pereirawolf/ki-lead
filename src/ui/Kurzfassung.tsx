@@ -6,17 +6,16 @@
 // Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { del, get, set } from "idb-keyval";
 import { anbieterVon, ANBIETER_NAME, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
 import { dateiname, managementSummary } from "../kern/ausgabe";
 import type { Meldung, Profil } from "../kern/typen";
-import { dateiAnbieten } from "../speicher/speicher";
+import { dateiAnbieten, kurzfassungLesen, kurzfassungLoeschen, kurzfassungSchreiben, type GespeicherteKurzfassung as Gespeichert } from "../speicher/speicher";
 import { mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
 import { ModellWahl } from "./ModellWahl";
-import { kurzfassungErstellen, kurzfassungsFingerabdruck, type Kurzfassung } from "../pipeline/kurzfassung";
+import { kurzfassungErstellen, kurzfassungsFingerabdruck } from "../pipeline/kurzfassung";
 import { kurzfassungAlsDatei } from "../dokumente/kennzeichnung";
 
 export interface KiZugang {
@@ -25,17 +24,11 @@ export interface KiZugang {
 }
 
 const EREIGNIS_GELEERT = "ki-lead:kurzfassung-geleert";
-const idbSchluessel = (profilId: string) => `kurzfassung:${profilId}`;
 
 /** Gespeicherte Management Summary eines Profils leeren und eine geöffnete Anzeige benachrichtigen. */
 export async function kurzfassungLeeren(profilId: string): Promise<void> {
-  await del(idbSchluessel(profilId)).catch(() => undefined);
+  await kurzfassungLoeschen(profilId).catch(() => undefined);
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(EREIGNIS_GELEERT, { detail: profilId }));
-}
-
-interface Gespeichert {
-  fingerabdruck: string;
-  kurzfassung: Kurzfassung;
 }
 
 function Kopieren({ text }: { text: string }) {
@@ -75,7 +68,6 @@ export function KurzfassungKasten({
   eigenerSchritt?: boolean;
 }) {
   const titel = profil.ui.kurzfassung?.titel || "Management Summary";
-  const schluesselIdb = idbSchluessel(profil.manifest.id);
   const fp = useMemo(() => kurzfassungsFingerabdruck(meldung, profil), [meldung, profil]);
   const [gespeichert, setGespeichert] = useState<Gespeichert | null>(null);
   /** Modell nur für diese Erstellung, abweichend von „Einstellungen“ */
@@ -90,7 +82,7 @@ export function KurzfassungKasten({
 
   useEffect(() => {
     let gueltig = true;
-    get<Gespeichert>(schluesselIdb)
+    kurzfassungLesen(profil.manifest.id)
       .then((g) => gueltig && setGespeichert(g || null))
       .catch((e) => gueltig && setFehler(`Die gespeicherte Fassung konnte nicht gelesen werden (${(e as Error)?.message || "Speicherfehler"}).`));
     const geleert = (e: Event) => {
@@ -104,7 +96,7 @@ export function KurzfassungKasten({
       gueltig = false;
       window.removeEventListener(EREIGNIS_GELEERT, geleert);
     };
-  }, [schluesselIdb, profil.manifest.id]);
+  }, [profil.manifest.id]);
 
   const leeren = async () => {
     if (
@@ -134,7 +126,7 @@ export function KurzfassungKasten({
       );
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
-      await set(schluesselIdb, g).catch(() =>
+      await kurzfassungSchreiben(profil.manifest.id, g).catch(() =>
         setFehler("Die Fassung wurde erstellt, konnte aber nicht im Gerät gespeichert werden. Bitte kopieren oder als TXT sichern."),
       );
     } catch (e: any) {

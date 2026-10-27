@@ -17,7 +17,8 @@ import type { Meldung, Profil } from "../kern/typen";
 import { sha256 } from "../profil/laden";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "./kurzfassung";
-import { APP_KENNUNG, laufId, type StufenEintrag } from "./lauf";
+import { APP_KENNUNG } from "../kern/version";
+import { laufId, type StufenEintrag } from "./lauf";
 import { anzahlBegrenzt, type ReiheStand } from "./vergleichslauf";
 import { csv, dateiKurz, dateiStempel } from "./vergleichslauf-export";
 

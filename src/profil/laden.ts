@@ -2,7 +2,6 @@
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
-import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
@@ -280,7 +279,17 @@ function pruefeStufentexte(ui: UiKonfig, leitfaden: string | undefined, befunde:
   }
 }
 
-export async function ladeProfil(rohDateien: Record<string, string>): Promise<LadeErgebnis> {
+/** Optionen des Ladens (seit 0.6.3, TP-2026-W44-24) */
+export interface LadeOptionen {
+  /**
+   * Prüfung eines Farbschemas aus profil.json: Fehlertexte, leer = gültig. Die Darstellung liefert sie
+   * (`profilFarbschemaFehler` in src/darstellung/thema.ts), die App gibt sie beim Laden mit; der Profilloader kennt die
+   * Darstellung nicht. Ohne Prüfung wird ein Farbschema nicht weitergereicht (ungeprüfte Werte nie).
+   */
+  farbschemaFehler?: (farbschema: unknown) => string[];
+}
+
+export async function ladeProfil(rohDateien: Record<string, string>, optionen: LadeOptionen = {}): Promise<LadeErgebnis> {
   const dateien = normalisiereDateien(rohDateien);
   const befunde: Befund[] = [];
   const manifest = jsonLesen(dateien, "profil.json", befunde, true) as ProfilManifest | undefined;
@@ -299,8 +308,9 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   manifest.variablen = manifest.variablen || {};
   // Optionales Farbschema: Fehler sperren das fachliche Profil nicht, das Schema wird dann nicht verwendet
   if (manifest.farbschema !== undefined) {
-    const f = profilFarbschemaFehler(manifest.farbschema);
-    if (f.length) {
+    const f = optionen.farbschemaFehler?.(manifest.farbschema);
+    if (!f) delete manifest.farbschema;
+    else if (f.length) {
       befunde.push({ stufe: "warnung", text: `profil.json: Das Farbschema wird nicht verwendet – ${f.join(" ")}` });
       // Ungeprüfte Werte nicht weiterreichen (die Rohdatei und damit die Prüfsumme bleiben unverändert)
       delete manifest.farbschema;

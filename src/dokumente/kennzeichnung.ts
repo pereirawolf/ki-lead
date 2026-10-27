@@ -7,7 +7,7 @@
 // Grenzen: Ein Wasserzeichen im Text erzeugt KI-LEAD nicht (fremde Modelle), und die Metadaten sind nicht signiert.
 
 import type { Meldung, Profil } from "../kern/typen";
-import { APP_KENNUNG } from "../pipeline/lauf";
+import { APP_KENNUNG } from "../kern/version";
 
 export type KiHerkunft = "ki" | "manuell" | "unbekannt";
 

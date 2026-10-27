@@ -21,8 +21,10 @@ const {
   passphraseVerwerfen,
   PBKDF2_ITERATIONEN,
   schluesselbundSetzen,
+  alleSchluesselLesen,
+  schluesselSchreiben,
 } = await import("../../src/schluessel/ablage");
-const { alleSchluesselLesen, schluesselSchreiben, STANDARD } = await import("../../src/pipeline/einstellungen");
+const { STANDARD } = await import("../../src/pipeline/einstellungen");
 const { EinstellungenAnsicht } = await import("../../src/ui/Einstellungen");
 
 /** Schlüsselbund-Attrappe wie das Plugin: Werte je Schlüssel, Aufrufe mitgeschrieben */

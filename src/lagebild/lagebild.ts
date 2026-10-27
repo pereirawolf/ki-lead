@@ -8,7 +8,7 @@ import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { holeWert, teilePfad } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
-import { eingangsInfo, type EingangsInfo } from "../pipeline/material";
+import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
 import type { Kontakte, Meldung, Profil } from "../kern/typen";
 
 export interface LagebildDatei {
