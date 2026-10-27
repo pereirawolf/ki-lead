@@ -76,18 +76,50 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 
 ## [0.6.2] – 26.10.2026
 
-Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-01 bis -11 (Kategorie Programmcode), vom Herausgeber am 26.10.2026 freigegeben (W44-02, -08 und -09 mit Maßgabe angepasst).
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-01 bis -11 (Kategorie Programmcode), vom Herausgeber am 26.10.2026 freigegeben (W44-02, -08 und -09 mit Maßgabe angepasst: Inaktivitätsgrenze fest 120 s ohne Einstellung; `no-explicit-any` nur als Warnung, Abdeckung als eigenes Skript; Passphrase-Ablage ergänzt, Vorgabe bleibt der Gerätespeicher). Dazu die Sammelfunktionen für frühere Läufe aus PR #79, bis dahin „Unveröffentlicht“.
 
 ### Hinzugefügt
 
+- **Ablage der API-Schlüssel mit Passphrase** (TP-2026-W44-09): vierte Wahl „Gerätespeicher, mit Passphrase verschlüsselt“ (`src/schluessel/ablage.ts`). PBKDF2-SHA-256 mit 600 000 Iterationen und zufälligem Salz, AES-GCM über WebCrypto; der abgeleitete Schlüssel ist nicht exportierbar und liegt nur im Arbeitsspeicher, die Passphrase wird je Sitzung abgefragt. Gesperrt sind die Schlüssel nicht lesbar; Schreiben und ein Wechsel der Ablage sind dann verweigert, damit nichts verloren geht. „Passphrase vergessen“ verwirft die verschlüsselten Schlüssel. Einstellungen: Festlegen bzw. Entsperren, „Jetzt sperren“. Vorgabe bleibt „Gerätespeicher“.
+- **Inaktivitätsgrenze für Antwortströme** (TP-2026-W44-02): Liefert ein Anbieter 120 s lang keine Daten, gilt die Verbindung als abgerissen; die bestehende Fortsetzung (Anthropic) bzw. der Neustart (OpenAI, Mistral) greift. Vorher konnte ein offener, stummer Strom S2 unbegrenzt blockieren.
+- **Linting, Formatprüfung, Abdeckung** (TP-2026-W44-08): `eslint.config.js` (typescript-eslint mit Typinformationen, React-Hooks, `no-floating-promises`, `switch-exhaustiveness-check`; `no-explicit-any` als Warnung), `npm run lint`, `npm run format` bzw. `format:check`, `npm run typecheck`; in `.github/workflows/pages.yml` laufen Lint und Prettier-Prüfung vor den Tests. `npm run test:coverage` (nicht Teil von `npm test`) mit Mindestwerten für `src/kern`, `src/pipeline`, `src/anbieter` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %). `.github/dependabot.yml` (npm wöchentlich, GitHub Actions), `engines` und `.nvmrc` (Node 22).
+- **Hinweis auf ungeprüftes `format`** (TP-2026-W44-10): Ein Profil, dessen Meldungsschema `format` verwendet, lädt mit einem Hinweis je Format und Stelle; weder die App noch Ajv ohne ajv-formats prüfen es (`schemaHinweise`, docs/PROFILFORMAT.md 1.19).
+- **Speicher schützen** (TP-2026-W44-10): Beim ersten KI-Lauf bittet die App den Browser per `navigator.storage.persist()`, ihren Speicher nicht automatisch zu räumen.
 - **KI-Erfassung → „Frühere Läufe mit diesem Profil“** (PR #79; `src/ui/KiErfassung.tsx`, `src/pipeline/lauf.ts`): Über der Liste stehen zwei Knöpfe. „Alle als ZIP speichern“ legt die Laufprotokolle aller aufgelisteten Läufe als je eine JSON-Datei in eine ZIP-Datei (`<Datum>_KI-LEAD_Laeufe_<Profil-ID>.zip`; Inhalt und Dateinamen der Protokolle wie beim Einzelexport „Protokoll“). „Alle löschen“ entfernt nach Rückfrage alle aufgelisteten Läufe samt Protokoll aus dem Gerätespeicher; solange ein KI-Lauf läuft, ist der Knopf gesperrt. Beide betreffen nur die Läufe des aktiven Profils, Läufe anderer Profile bleiben unberührt. Neue Funktionen `laeufeAlsZip` und `laeufeLoeschen` in `src/pipeline/lauf.ts`; das Laufformat (`ki-lead-lauf/1`) und die Anfragen an die KI bleiben unverändert.
 
 ### Geändert
 
+- **Gemeinsame HTTP-Mechanik der Anbieter** (TP-2026-W44-03): Wiederholung mit Backoff, Lesen des SSE-Stroms und Neustart nach einem Abriss stehen einmal in `src/anbieter/http.ts` (`mitWiederholung`, `sseLesen`, `mitNeustart`); die Adapter liefern nur Anfragekörper, Fehlerregeln und Verarbeitung. `strengesSchema` liegt in `src/anbieter/schema.ts` (aus `openai.ts` weiter exportiert); die doppelte Klasse `StromEnde` entfällt. Wartezeiten und Zahl der Versuche unverändert (`tests/anbieter/vertrag.test.ts` unverändert grün).
+- **Aufteilung der Pipeline** (TP-2026-W44-06): `src/pipeline/stufen.ts` in `stufen.ts` (Kontext, KI-Aufruf, Werkzeuggrenzen), `s1.ts`, `orientierung.ts`, `s2s3.ts`, `nachbearbeitung.ts` und `recherchebefunde.ts`; der Export der Vergleichsreihe aus `vergleichslauf.ts` in `vergleichslauf-export.ts`. Reine Verschiebung ohne Verhaltensänderung, Module zyklenfrei (docs/TESTZUORDNUNG.md).
+- **Protokolleintrag und Nebenläufigkeit** (TP-2026-W44-05): `aufrufen()` liefert Antwort und Protokolleintrag; der Eintrag wird nicht mehr über die Reihenfolge gesucht. Orientierungssuchen laufen höchstens zu zweit (`begrenztParallel`, `ORIENTIERUNG_PARALLEL`) statt alle zugleich.
+- **Typisierung** (TP-2026-W44-07): `Inhaltsblock` ohne Rückfall auf `Record<string, any>`; `StopGrund` und `FehlerArt` als Unions; `Zerlegung` als `{ ok: true; json } | { ok: false; fehler }`; Type-Guards `istFertig`, `istBestaetigen`, `istGescheitert` (gespeicherte Läufe behalten ihre Form). `noUncheckedIndexedAccess` für `src`; Konfigurationsdateien und Skripte im `include` (`tsconfig.tests.json` für `tests/`).
+- **Laufprotokolle laden** (TP-2026-W44-10): `laeufeLaden()` liest nur die Schlüssel `lauf:…` (`keys()` und `getMany()`) statt mit `entries()` den ganzen Speicher samt Profilen.
+- **JSON aus Antworten** (TP-2026-W44-10): Ein offener Codezaun geht dem ersten „{“ des Textes vor; ein „{“ in der Kurzantwort verschiebt den JSON-Kandidaten nicht mehr.
+- **Versionsnummer nur in package.json** (TP-2026-W44-08): `APP_KENNUNG` kommt aus `__APP_VERSION__` (`define` in `vite.config.ts`, wirkt auch unter Vitest; Deklaration in `src/vite-env.d.ts`).
+- **TypeScript** (TP-2026-W44-08): typescript-eslint unterstützt TypeScript 7 nicht. `tsc` für Typprüfung und Build kommt aus `@typescript/native` (TypeScript 7.0.2), das Paket `typescript` zeigt auf `@typescript/typescript6` (API für typescript-eslint).
+- **README** (TP-2026-W44-11): App- und Profilversion an allen Stellen aktuell, Mistral-Satz nach der Erprobung vom 24.10.2026; Abschnitt Entwicklung mit den neuen Befehlen.
+- Spezifikation 0.6.2, docs/SICHERHEIT.md 1.3 (Verfügbarkeit, Lieferkette, Passphrase), docs/DATENSCHUTZ.md 1.6, docs/PROFILFORMAT.md 1.19, docs/TESTS.md, docs/NATIV.md, THIRD-PARTY-NOTICES.md (Abschnitt 5: neue Entwicklungsabhängigkeiten).
+- Versionsangaben 0.6.2 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 602, iOS 602).
+
 ### Behoben
+
+- **S3-Reparatur ohne JSON verlor den Entwurf** (TP-2026-W44-01): Lieferte eine Reparaturrunde kein verwertbares JSON, ersetzte „Kein JSON“ die tatsächlichen Schemabefunde des weiter angezeigten Entwurfs. Jetzt bleiben Entwurf und Schemabefunde ein Paar; der Fehlschlag steht als Hinweis `REPARATUR_OHNE_ENTWURF` im Ergebnis.
+- **Programmierfehler als Netzabbruch** (TP-2026-W44-04): Jeder `TypeError` galt als Verbindungsabbruch, und OpenAI und Mistral stellten die Anfrage kostenpflichtig neu. Ein Abriss wird nun nur am Transport erkannt (`LeseFehler` in `http.ts`); `istVerbindungsabbruch` prüft nur noch die Meldungsmuster der Browser.
+- **Speicherfehler nach einem KI-Aufruf** (TP-2026-W44-10): Ein Fehler beim Speichern im Anschluss an einen Aufruf (etwa voller Speicher) verwarf die bezahlte Antwort; sie bleibt jetzt im Eintrag, der Fehler steht als Notiz daneben.
+- Schwebende Promises, die ESLint fand, sind ausdrücklich mit `void` gekennzeichnet (die Aufrufe behandeln ihre Fehler selbst); keine Änderung des Verhaltens (TP-2026-W44-08).
 
 ### Tests
 
+- `tests/pipeline/reparaturtest.test.ts` (1 neu): Reparatur ohne JSON behält Entwurf und Schemabefunde, Hinweis je gescheiterter Runde (TP-2026-W44-01).
+- `tests/anbieter/vertrag.test.ts` (8 neu, je Adapter 2): stummer Strom endet nach 120 s als Abriss und wird neu gestellt; nach drei stummen Strömen Meldung zum Verbindungsabbruch (TP-2026-W44-02). Bisherige Vertragstests unverändert (TP-2026-W44-03).
+- `tests/anbieter/abbruch.test.ts` (5 neu): Meldungsmuster statt Fehlerklasse; `sseLesen` trennt Verarbeitungs- von Lesefehlern; ein TypeError in der Stromverarbeitung wird bei Anthropic, OpenAI und Mistral nicht wiederholt (TP-2026-W44-04).
+- `tests/pipeline/stufen.test.ts` (4 neu): begrenzt parallele Aufrufe (TP-2026-W44-05), Type-Guards für Läufe (TP-2026-W44-07), Speicherfehler nach einem Aufruf (TP-2026-W44-10).
+- `tests/pipeline/json.test.ts` (7 neu): Zerlegung als Union (TP-2026-W44-07); CRLF, Zaun mit Folgetext, „{“ in der Kurzantwort, abgeschnittener Zaun, Rückfall ohne Zaun (TP-2026-W44-10).
+- `tests/pipeline/laeufe.test.ts` (neu, 3): nur `lauf:…` über `keys()` und `getMany()`, gelöschter Lauf, `speicherSchuetzen` (TP-2026-W44-10).
+- `tests/kern/validierung.test.ts` (2 neu): Hinweis auf `format` mit Stellen, Profil lädt mit Hinweis statt Fehler (TP-2026-W44-10).
+- `tests/schluessel/ablage.test.ts` (6 neu, 1 angepasst): Round-trip mit Passphrase ohne Klartext im Speicher, falsche Passphrase liefert keinen Schlüssel, Sperre verweigert Schreiben und Wechsel, kein Wechsel ohne Entsperren, Passphrase vergessen, Einstellungen fragen die Passphrase ab; erwartete Ablagen jetzt vier (TP-2026-W44-09).
+- `tests/ui/ueber.test.ts` (3 neu): README-Versionsstellen gleich `package.json`, Profilversion im README gleich `profil.json`, jüngster CHANGELOG-Abschnitt trägt die Version (TP-2026-W44-11).
+- `tests/support/speicher.ts`: Attrappe kennt `getMany`; `tests/ci/pruefumfang.test.ts` ohne überflüssiges `@ts-expect-error`; Importe nach der Aufteilung angepasst (TP-2026-W44-06).
 - `tests/ui/ki-erfassung-laeufe.test.ts` (neu, 5; PR #79): keine Sammelknöpfe ohne frühere Läufe; ZIP mit je einem Protokoll der Läufe des Profils (Dateinamen, Inhalt wie Einzelexport, fremdes Profil ausgeschlossen, Speicher unverändert); Löschen mit Rückfrage (Abbrechen löscht nichts, Bestätigen löscht nur die Läufe des Profils, Singular bei einem Lauf).
 
 ## [0.6.1] – 26.10.2026
