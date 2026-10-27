@@ -14,6 +14,7 @@ import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
 import { FeldFehler, HilfeFeld } from "./HilfeFeld";
 import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
+import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 
 export interface FeldProps {
   profil: Profil;
@@ -132,6 +133,16 @@ export function Feld(props: FeldProps) {
     const optionen = e.filter((x) => x !== "" && x !== null);
     const hatLeer = e.includes("") || e.includes(null);
     if (f.widget === "radio") {
+      // Farbe der gewählten Bewertung nach Rang bzw. Tendenz statt nach dem Wort (seit 0.6.5, TP-2026-W44-16)
+      const r = profil.ui.rollen;
+      const rolle =
+        r.sv_beurteilung && gen === `${r.sachverhalte}[].${r.sv_beurteilung}`
+          ? "beurteilung"
+          : r.sv_tendenz && gen === `${r.sachverhalte}[].${r.sv_tendenz}`
+            ? "tendenz"
+            : null;
+      const signal = (opt: unknown) =>
+        rolle === "beurteilung" ? { "data-rang": rangBeurteilung(profil, opt) } : rolle === "tendenz" ? { "data-tendenz": signalTendenz(profil, opt) } : {};
       return (
         <fieldset className="feld" data-feld={schluessel}>
           <legend className={labelKlasse}>{label}</legend>
@@ -148,16 +159,7 @@ export function Feld(props: FeldProps) {
               </label>
             )}
             {optionen.map((opt) => (
-              <label
-                key={String(opt)}
-                className={
-                  wert === opt
-                    ? `segment an wert-${String(opt)
-                        .toLowerCase()
-                        .replace(/[^a-zäöüß]/g, "")}`
-                    : "segment"
-                }
-              >
+              <label key={String(opt)} className={wert === opt ? "segment an" : "segment"} {...(wert === opt ? signal(opt) : {})}>
                 <input type="radio" name={id} checked={wert === opt} onChange={() => setze(segs, opt)} />
                 {String(opt)}
               </label>
@@ -331,7 +333,12 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
         const titel = f.titel_feld ? alsText(holeWert(el, f.titel_feld)) : "";
         const beurteilung = istSachverhalte && r.sv_beurteilung ? String(holeWert(el, r.sv_beurteilung) || "") : "";
         return (
-          <section key={i} className={`element stufe-${beurteilung.toLowerCase().replace(/[^a-zäöüß]/g, "") || "leer"}`} aria-label={`${elementName} ${i + 1}`}>
+          <section
+            key={i}
+            className="element"
+            data-rang={istSachverhalte ? rangBeurteilung(profil, beurteilung) : undefined}
+            aria-label={`${elementName} ${i + 1}`}
+          >
             <header className="element-kopf">
               <h3>
                 <span className="element-nr">

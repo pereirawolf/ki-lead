@@ -12,6 +12,7 @@ import type { Befund, Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
+import { rangBeurteilung } from "../lagebild/lagebild";
 
 /** Liste der Befunde; mit Pfad und `zumFeld` führt ein Befund per Klick zum Feld (seit 0.6.5, TP-2026-W44-15) */
 function Liste({
@@ -166,7 +167,7 @@ export function Pruefen({
           const b = r.sv_beurteilung ? String(holeWert(sv, r.sv_beurteilung) || "") : "";
           const t = r.sv_tendenz ? String(holeWert(sv, r.sv_tendenz) || "") : "";
           return (
-            <article key={i} className={`zeile-sv stufe-${b.toLowerCase().replace(/[^a-zäöüß]/g, "") || "leer"}`}>
+            <article key={i} className="zeile-sv" data-rang={rangBeurteilung(profil, b)}>
               {radarDef && r.sv_radar && <RadarGrafik def={radarDef} wert={holeWert(sv, r.sv_radar)} groesse={150} />}
               <div>
                 <p className="element-nr">

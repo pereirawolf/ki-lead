@@ -2,7 +2,7 @@
 // Erfassungsmaske: Zeitfelder mit „Jetzt“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { profil } from "../support/dateien";
+import { profil, profilPflicht } from "../support/dateien";
 import { ilkaDatei } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -129,5 +129,37 @@ describe("Erfassungsmaske", () => {
     await klick(befund);
     expect(document.querySelector("#schritt-titel")?.textContent).toBe("Ereignisse/Sachverhalte");
     expect(document.activeElement).toBe(document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input'));
+  });
+
+  // Farben der Bewertung nach Rang (seit 0.6.5): Ein Profil mit anderen Stufenwörtern behält die Farben
+  it("TP-2026-W44-16: Vorlage profile/muster: Bewertungsfeld und Sachverhalt tragen data-rang, auch bei anderen Stufenwörtern", async () => {
+    const { MeldungAnsicht } = await import("../../src/ui/Meldung");
+    const muster = await profilPflicht("muster");
+    const zeigen = async (p: typeof muster, bewertung: string) => {
+      await einhaengen(React.createElement(MeldungAnsicht, { profil: p, meldung: { sachverhalte: [{ bewertung }] }, setMeldung: () => {}, neu: () => {} }));
+      await zuSchritt(/^2?Sachverhalte/);
+    };
+    const gewaehlt = () => document.querySelector(".segmente .segment.an") as HTMLElement;
+    const element = () => document.querySelector("section.element") as HTMLElement;
+
+    await zeigen(muster, "kritisch");
+    expect(gewaehlt().textContent).toBe("kritisch");
+    expect(gewaehlt().dataset.rang).toBe("3");
+    expect(element().dataset.rang).toBe("3");
+    await aushaengen();
+
+    await zeigen(muster, "geringfügig");
+    expect(gewaehlt().dataset.rang).toBe("1");
+    expect(element().dataset.rang).toBe("1");
+    await aushaengen();
+
+    // Gleiche Vorlage mit eigenen Stufenwörtern: Rang nach der Reihenfolge der Aufzählung
+    const eigene = structuredClone(muster);
+    eigene.schema.properties.sachverhalte.items.properties.bewertung.enum = ["", "niedrig", "mittel", "hoch"];
+    await zeigen(eigene, "mittel");
+    expect(gewaehlt().textContent).toBe("mittel");
+    expect(gewaehlt().dataset.rang).toBe("2");
+    expect(element().dataset.rang).toBe("2");
+    expect(element().className).toBe("element");
   });
 });

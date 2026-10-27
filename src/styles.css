@@ -691,23 +691,25 @@ textarea {
   text-underline-offset: 0.25em;
 }
 
-.segment.an.wert-geringfügig {
+/* Gewählte Bewertung nach Rang (3 höchste Stufe der Aufzählung) und Tendenz, unabhängig von den Wörtern des Profils
+   (seit 0.6.5, TP-2026-W44-16; bis 0.6.4 Klassen wie .wert-kritisch aus den Werten des Beispielprofils) */
+.segment.an[data-rang="1"] {
   background: var(--gering-zart);
   color: var(--gering);
 }
 
-.segment.an.wert-erheblich {
+.segment.an[data-rang="2"] {
   background: var(--erheblich-zart);
   color: var(--erheblich);
 }
 
-.segment.an.wert-kritisch,
-.segment.an.wert-verschärfung {
+.segment.an[data-rang="3"],
+.segment.an[data-tendenz="verschaerfung"] {
   background: var(--kritisch-zart);
   color: var(--kritisch);
 }
 
-.segment.an.wert-entspannung {
+.segment.an[data-tendenz="entspannung"] {
   background: var(--ok-zart);
   color: var(--ok);
 }
@@ -728,15 +730,15 @@ textarea {
   background: var(--flaeche);
 }
 
-.element.stufe-geringfügig {
+.element[data-rang="1"] {
   border-left-color: var(--gering);
 }
 
-.element.stufe-erheblich {
+.element[data-rang="2"] {
   border-left-color: var(--erheblich);
 }
 
-.element.stufe-kritisch {
+.element[data-rang="3"] {
   border-left-color: var(--kritisch);
 }
 
@@ -1000,15 +1002,15 @@ textarea {
   padding: 0.5rem 0.75rem;
 }
 
-.zeile-sv.stufe-geringfügig {
+.zeile-sv[data-rang="1"] {
   border-left-color: var(--gering);
 }
 
-.zeile-sv.stufe-erheblich {
+.zeile-sv[data-rang="2"] {
   border-left-color: var(--erheblich);
 }
 
-.zeile-sv.stufe-kritisch {
+.zeile-sv[data-rang="3"] {
   border-left-color: var(--kritisch);
 }
 
@@ -3479,7 +3481,7 @@ fieldset.lb-ausgabe {
   }
 
   .nav.aktiv,
-  /* Spezifität wie .segment.an.wert-…, damit auch gewählte Bewertungen Highlight erhalten */
+  /* Spezifität wie .segment.an[data-rang], damit auch gewählte Bewertungen Highlight erhalten */
   .segmente .segment.an,
   .lb-reiter .segment.aktiv,
   .stufe.aktiv,

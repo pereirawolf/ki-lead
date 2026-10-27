@@ -253,12 +253,24 @@ export function schwere(profil: Profil, beurteilung: string): number {
   return beurteilungsStufen(profil).indexOf(beurteilung);
 }
 
-export function farbeBeurteilung(profil: Profil, beurteilung: string): Farbe {
+/** Rang einer Beurteilung für die Darstellung: 3 höchste Stufe, 2 und 1 die beiden darunter, 0 jede weitere */
+export type Rang = 0 | 1 | 2 | 3;
+
+/**
+ * Rang einer Beurteilung nach der Reihenfolge der Aufzählung (seit 0.6.5, TP-2026-W44-16); undefined ohne gültige
+ * Stufe. Die Oberfläche färbt danach (Attribut data-rang), nicht nach den Wörtern eines bestimmten Profils.
+ */
+export function rangBeurteilung(profil: Profil, beurteilung: unknown): Rang | undefined {
   const stufen = beurteilungsStufen(profil);
-  const i = stufen.indexOf(beurteilung);
-  if (i < 0) return "grau";
+  const i = typeof beurteilung === "string" ? stufen.indexOf(beurteilung) : -1;
+  if (i < 0) return undefined;
   const abstand = stufen.length - 1 - i;
-  return abstand === 0 ? "rot" : abstand === 1 ? "orange" : abstand === 2 ? "gelb" : "grau";
+  return abstand === 0 ? 3 : abstand === 1 ? 2 : abstand === 2 ? 1 : 0;
+}
+
+export function farbeBeurteilung(profil: Profil, beurteilung: string): Farbe {
+  const rang = rangBeurteilung(profil, beurteilung);
+  return rang === 3 ? "rot" : rang === 2 ? "orange" : rang === 1 ? "gelb" : "grau";
 }
 
 export function verschaerfungsWert(profil: Profil): string | undefined {
@@ -267,6 +279,13 @@ export function verschaerfungsWert(profil: Profil): string | undefined {
   const t = tendenzStufen(profil);
   const letzter = t[t.length - 1];
   return t.length > 1 && letzter !== r.tendenz_entspannung ? letzter : undefined;
+}
+
+/** Tendenz für die Darstellung (seit 0.6.5, TP-2026-W44-16, Attribut data-tendenz): Entspannung, Verschärfung oder keine */
+export function signalTendenz(profil: Profil, tendenz: unknown): "entspannung" | "verschaerfung" | undefined {
+  if (typeof tendenz !== "string" || !tendenz) return undefined;
+  if (tendenz === profil.ui.rollen.tendenz_entspannung) return "entspannung";
+  return tendenz === verschaerfungsWert(profil) ? "verschaerfung" : undefined;
 }
 
 export function farbeTendenz(profil: Profil, tendenz: string): Farbe {
