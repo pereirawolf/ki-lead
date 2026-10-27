@@ -97,6 +97,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W
 - **Beispielprofil 1.31.0:** Kodierleitfaden 1.5.0 als einziger Ort für Achsenregeln, Quellenkategorien und Rangfolge; Teil A (Sammelmappe 3.19.0) mit Zählregeln in A.3, Ausnahme C09 (1.3.0) und Pflegeregel A.10.2 „ein Ort, Verweise sonst“; Arbeitsanweisungen Erfassung 1.6.0 (neue Gliederung, Verweise, Kurzantwort, ohne Beispiel-JSON und ohne Auftragsplatzhalter), Verdichtung 2.1.0, Kurzfassung 2.4.0; Darstellungsdatei nur mit Kategorienamen (TP-2026-W44-28, -29, -30, -32, -34, -35; Einzelheiten im Profilverlauf). Vorlage 0.6.1: Erfassung ohne Auftragsplatzhalter (TP-2026-W44-31).
 - Spezifikation 0.6.4, docs/PROFILFORMAT.md 1.21, docs/SICHERHEIT.md 1.5 (Grenze der Datenhülle), docs/TESTZUORDNUNG.md, README.
 - Versionsangaben 0.6.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 604, iOS 604).
+- **Entscheidungen des Herausgebers vom 27.10.2026 zu TP-2026-W44-32** (Kodierleitfaden 1.5.0, ohne neue Fassungsnummer): JSON-Schema der Meldung mit den Stufentexten auf Rang 1 der Rangfolge; Dateiformat und Bearbeitungsmodus unerheblich für die Quellenkategorie; keine automatische Umstufung bestehender Quelleneinträge in allen Kategorien; Aktualität in der Kodierfrage von D7; Fassungstabelle des Kodierleitfadens aufsteigend sortiert. Die SOP-Sammelmappe bleibt 3.19.0.
 
 ### Behoben
 
@@ -107,6 +108,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W
 
 ### Tests
 
+- `tests/profil/sop-redaktion.test.ts`: Entscheidungen vom 27.10.2026 und aufsteigende Fassungstabelle des Kodierleitfadens (TP-2026-W44-32); Erkennungsmuster der Rangfolge an Rang 1 mit JSON-Schema angepasst.
 - `tests/profil/anweisungen-kopplung.test.ts` (neu, 5): GRENZEN gegen die Kurzfassung, Arbeitsmodi gegen den Steuerungsblock, Beispielzeile „Handlungsrelevant bis:“ aus A.4 durch `fristen`, Quellenbeispiele des Kodierleitfadens ohne Befund, `_entstehung`-Beispiel gegen Schema und `kodierleitfadenKennung` (TP-2026-W44-35).
 - `tests/profil/sop-redaktion.test.ts` (6 neu, 1 umgestellt): Quellentabelle genau einmal im Profilpaket, Achsenregeln, Begründungsmuster und Rangfolge nur im Kodierleitfaden, übernommene Regeln dort vorhanden, A.10.2 „ein Ort, Verweise sonst“, Gliederung und Kurzantwort der Erfassung (TP-2026-W44-32); KP-2026-W43-41 prüft statt Gleichlaut den einen Ort mit Verweis.
 - `tests/profil/profile.test.ts` (3 neu): beigefügte Dokumente nur, wenn die App sie erzeugt (TP-2026-W44-28); Platzhalter der drei Anweisungen beider Profile und der Standardtexte bekannt, Prüfung beim Laden (TP-2026-W44-33).

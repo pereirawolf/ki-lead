@@ -292,7 +292,7 @@ describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-
       ["D2-Nullregel", /aktiv laufenden,? (?:für den Sachverhalt )?einschlägigen Erhebung/],
       ["Begründungsmuster", /D\[n\] = \[Wert\], weil/],
       ["Mindestkodierung", /D2 = 3 \(Mindestwert\): mindestens/],
-      ["Rangfolge", /\(1\) Stufentexte der Darstellungsdatei|^1\. JSON-Schema und Darstellungsdatei/m],
+      ["Rangfolge", /\(1\) (?:JSON-Schema der Meldung \([^)]*\) und )?Stufentexte der Darstellungsdatei|^1\. JSON-Schema und Darstellungsdatei/m],
       ["Zuordnung nach der Rolle", /Die konkrete Rolle entscheidet, nicht Eigentumsform/],
       ["Priorität mit Prüfung", /unmittelbare Sachkenntnis und fachliche Zuständigkeit/],
     ];
@@ -306,6 +306,19 @@ describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-
         ] as const,
     );
     expect(Object.fromEntries(treffer)).toEqual(Object.fromEntries(merkmale.map(([was]) => [was, ["kodierleitfaden.md"]])));
+  });
+
+  it("TP-2026-W44-32: Entscheidungen des Herausgebers vom 27.10.2026 stehen im Kodierleitfaden", () => {
+    const kl = lies(`${PROFIL}/kodierleitfaden.md`);
+    expect(kl).toContain("(1) JSON-Schema der Meldung (Struktur, zulässige Werte, Leerwerte) und Stufentexte der Darstellungsdatei");
+    expect(kl).toContain("nicht Eigentumsform, Veröffentlichungskanal, Dateiformat oder Bearbeitungsmodus");
+    expect(kl).toContain("Bestehende Quelleneinträge werden nicht automatisch umgestuft");
+    expect(kl).toMatch(/\*\*Kodierfrage:\*\* Wie verfügbar, verlässlich, aktuell und widerspruchsfrei/);
+    // Fassungstabelle aufsteigend (1.3.0 stand vor dem 27.10.2026 hinter 1.4.0)
+    const fassungen = [...kl.matchAll(/^\| (\d+\.\d+(?:\.\d+)?) \| \d{2}\.\d{2}\.\d{4} \|/gm)].map((m) => m[1]!.split(".").map(Number));
+    const vergleich = (a: number[], b: number[]) => a[0]! - b[0]! || (a[1] ?? 0) - (b[1] ?? 0) || (a[2] ?? 0) - (b[2] ?? 0);
+    expect(fassungen.length).toBeGreaterThan(5);
+    for (let i = 1; i < fassungen.length; i++) expect(vergleich(fassungen[i - 1]!, fassungen[i]!)).toBeLessThan(0);
   });
 
   it("TP-2026-W44-32: Regeln, die bisher nur außerhalb des Kodierleitfadens standen, stehen jetzt dort", () => {
