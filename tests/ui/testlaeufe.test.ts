@@ -7,7 +7,7 @@ import React, { act } from "react";
 import JSZip from "jszip";
 import { readFileSync } from "node:fs";
 import { leseOrdner, profilPflicht, repoPfad } from "../support/dateien";
-import { aushaengen, bisWahr, eingeben, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
+import { aushaengen, bisWahr, dialogAntwort, eingeben, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
 import { llmAntwort, meldungsAntwort } from "../support/anbieter";
 import { STANDARD, standardProfilAnwenden } from "../../src/pipeline/einstellungen";
 import type { LlmAnbieter } from "../../src/anbieter/typen";
@@ -525,7 +525,7 @@ describe("Testläufe: Archiv (seit 0.5.17)", () => {
 
   it("löscht ausgewählte Testläufe nach Rückfrage mit Eintrag und Datei; bei Ablehnung bleibt alles", async () => {
     archivFuellen();
-    const frage = vi.spyOn(window, "confirm").mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const frage = dialogAntwort().mockReturnValueOnce(false).mockReturnValueOnce(true);
     await bereichZeigen();
     expect(knopf(/^Ausgewählte löschen/)?.disabled).toBe(true);
     const kaestchen = () => liste().map((li) => li.querySelector('input[type="checkbox"]') as HTMLInputElement);
@@ -544,7 +544,7 @@ describe("Testläufe: Archiv (seit 0.5.17)", () => {
 
   it("„Alle auswählen“ und „Alle löschen“ leeren das Archiv", async () => {
     archivFuellen();
-    vi.spyOn(window, "confirm").mockReturnValue(true);
+    const frage = dialogAntwort(true);
     await bereichZeigen();
     const alle = document.querySelector(".testlauf-archiv-alle input") as HTMLInputElement;
     await act(async () => alle.click());
@@ -552,7 +552,7 @@ describe("Testläufe: Archiv (seit 0.5.17)", () => {
     await act(async () => alle.click());
     expect(knopf("Ausgewählte löschen")?.disabled).toBe(true);
     await klick("Alle löschen");
-    expect(window.confirm).toHaveBeenLastCalledWith("Alle 3 archivierten Testläufe löschen? Die ZIP-Dateien lassen sich danach nicht wiederherstellen.");
+    expect(frage).toHaveBeenLastCalledWith("Alle 3 archivierten Testläufe löschen? Die ZIP-Dateien lassen sich danach nicht wiederherstellen.");
     await bisWahr(() => document.querySelector(".testlauf-archiv")!.textContent!.includes("Noch keine Testläufe archiviert."));
     expect(speicher.werte.size).toBe(0);
   });

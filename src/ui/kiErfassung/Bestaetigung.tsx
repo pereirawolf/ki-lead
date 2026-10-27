@@ -14,7 +14,7 @@ import { gueltigerZeitpunkt } from "../../kern/zeit";
 import { HilfeFeld } from "../HilfeFeld";
 import { LaufSchaetzung } from "../LaufSchaetzung";
 import { LaufModellWahl } from "./LaufModellWahl";
-import { ProtokollKnopf, type LaufRahmen } from "./rahmen";
+import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from "./rahmen";
 import { absenderZeile, kurzeAdresse, rechercheZeile, zeitAnzeige } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import type { KiAktion } from "./zustand";
@@ -40,7 +40,7 @@ export function Bestaetigung({
   s2Starten: () => void;
   zurueck: () => void;
 }) {
-  const { profil, laufEinstellungen, verdichtung, material, eingaenge, stufeS2, stufeS3, schaetzS2 } = rahmen;
+  const { profil, laufEinstellungen, verdichtung, material, eingaenge, stufeS2, stufeS3, schaetzS2, offline } = rahmen;
   const setVorschlag = (v: S1Vorschlag) => dispatch({ typ: "vorschlag", vorschlag: v });
   const arten = useMemo(() => ereignisarten(profil), [profil]);
   const sops = useMemo(() => fachSops(profil), [profil]);
@@ -53,6 +53,8 @@ export function Bestaetigung({
     [profil, material, lauf, vorschlag],
   );
   const t0Ungueltig = !!vorschlag.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
+  /** Verweis der Startknöpfe auf den Grund der Sperre */
+  const beschreibung = [t0Ungueltig && "t0-ungueltig", offline && OFFLINE_HINWEIS].filter(Boolean).join(" ") || undefined;
   // Orientierungssuche und Pflichtsuchen (seit 0.6.0, KP-2026-W44-06)
   const rechercheLauf = lauf.auftrag.websuche !== false;
   const orientiert = vorschlag.sachverhalte.some((sv) => sv.orientierung !== undefined);
@@ -298,6 +300,7 @@ export function Bestaetigung({
                         type="button"
                         className="knopf klein"
                         aria-label={`Orientierung suchen für Sachverhalt ${i + 1}`}
+                        disabled={offline}
                         onClick={() => orientierungStarten([i])}
                       >
                         Orientierung suchen
@@ -426,6 +429,7 @@ export function Bestaetigung({
           </p>
         )}
       </LaufModellWahl>
+      <OfflineHinweis offline={offline} />
       <div className="schritt-nav">
         <div className="aktionen">
           <button type="button" className="knopf leise" onClick={zurueck}>
@@ -438,15 +442,21 @@ export function Bestaetigung({
             type="button"
             className="knopf primaer"
             onClick={() => orientierungStarten()}
-            disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
-            aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
+            disabled={!vorschlag.sachverhalte.length || t0Ungueltig || offline}
+            aria-describedby={beschreibung}
           >
             Gegenstand bestätigen und Orientierung suchen (S1)
           </button>
         ) : (
           <div className="aktionen">
             {orientierungAn && (
-              <button type="button" className="knopf leise" onClick={() => orientierungStarten()} disabled={!vorschlag.sachverhalte.length}>
+              <button
+                type="button"
+                className="knopf leise"
+                onClick={() => orientierungStarten()}
+                disabled={!vorschlag.sachverhalte.length || offline}
+                aria-describedby={offline ? OFFLINE_HINWEIS : undefined}
+              >
                 Orientierung erneut suchen
               </button>
             )}
@@ -454,8 +464,8 @@ export function Bestaetigung({
               type="button"
               className="knopf primaer"
               onClick={s2Starten}
-              disabled={!vorschlag.sachverhalte.length || t0Ungueltig}
-              aria-describedby={t0Ungueltig ? "t0-ungueltig" : undefined}
+              disabled={!vorschlag.sachverhalte.length || t0Ungueltig || offline}
+              aria-describedby={beschreibung}
             >
               {istVerdichtung(material) ? "Bestätigen und verdichten (S2)" : "Bestätigen und recherchieren (S2)"}
             </button>

@@ -18,6 +18,7 @@ import { ModellWahl } from "./ModellWahl";
 import { useKiZugang } from "./kiZugang";
 import { kurzfassungErstellen, kurzfassungsFingerabdruck } from "../pipeline/kurzfassung";
 import { kurzfassungAlsDatei } from "../dokumente/kennzeichnung";
+import { bestaetigen } from "./bestaetigung";
 
 export interface KiZugang {
   schluessel: Schluessel;
@@ -107,7 +108,10 @@ export function KurzfassungKasten({
 
   const leeren = async () => {
     if (
-      !confirm(`${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`)
+      !(await bestaetigen(
+        `${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`,
+        { ja: "Leeren" },
+      ))
     )
       return;
     await kurzfassungLeeren(profil.manifest.id);

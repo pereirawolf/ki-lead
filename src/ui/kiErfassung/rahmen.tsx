@@ -23,6 +23,21 @@ export interface LaufRahmen {
   wahl: Modellwahl;
   setWahl: (w: Modellwahl) => void;
   protokollExport: (l: Lauf) => void;
+  /** Das Gerät meldet keine Netzverbindung: kein KI-Lauf startbar (seit 0.6.5, TP-2026-W44-20) */
+  offline: boolean;
+}
+
+/** Kennung des Hinweises, auf den gesperrte Startknöpfe ohne Netz verweisen */
+export const OFFLINE_HINWEIS = "ki-offline-hinweis";
+
+/** Hinweis neben den Startknöpfen, solange das Gerät keine Netzverbindung meldet */
+export function OfflineHinweis({ offline }: { offline: boolean }) {
+  if (!offline) return null;
+  return (
+    <p className="kasten kasten-hinweis" id={OFFLINE_HINWEIS} role="status">
+      Keine Netzverbindung: Ein KI-Lauf lässt sich erst starten, wenn das Gerät wieder online ist. Auftrag und Material bleiben stehen.
+    </p>
+  );
 }
 
 export function stufenFuer(verdichtung: boolean): Pick<LaufRahmen, "stufeS2" | "stufeS3" | "schaetzS2"> {

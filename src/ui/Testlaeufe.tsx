@@ -56,6 +56,7 @@ import {
   type TestlaufEintrag,
 } from "../speicher/testlaufarchiv";
 import { useWachhalten } from "./wachhalten";
+import { bestaetigen } from "./bestaetigung";
 
 /** Art eines Testlaufs: ein Umfang der Kette oder die Reparatur aus der beschädigten Musterfassung */
 export type Testart = Umfang | "reparatur";
@@ -683,7 +684,7 @@ export function TestlaufArchiv({ aktualisierung = 0 }: { aktualisierung?: number
   };
 
   const loeschen = async (ids: string[], frage: string) => {
-    if (!ids.length || !confirm(frage)) return;
+    if (!ids.length || !(await bestaetigen(frage, { ja: "Löschen" }))) return;
     setBeschaeftigt(true);
     try {
       await testlaeufeLoeschen(ids);

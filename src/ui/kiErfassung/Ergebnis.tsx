@@ -10,6 +10,7 @@ import { VergleichKasten } from "../Vergleich";
 import { RechercheZeile } from "./recherche";
 import { ABRUF_FEHLER } from "./texte";
 import { dauer } from "./zustand";
+import { OFFLINE_HINWEIS, OfflineHinweis } from "./rahmen";
 
 export function Ergebnis({
   profil,
@@ -20,6 +21,7 @@ export function Ergebnis({
   exportieren,
   erneut,
   modellwahl,
+  offline = false,
 }: {
   profil: Profil;
   aendern: (l: Lauf) => void;
@@ -30,6 +32,8 @@ export function Ergebnis({
   erneut?: () => void;
   /** Modellwahl für „S2 erneut starten“ */
   modellwahl?: ReactNode;
+  /** ohne Netz: „S2 erneut starten“ gesperrt (seit 0.6.5, TP-2026-W44-20) */
+  offline?: boolean;
 }) {
   const e = lauf.ergebnis;
   const s2 = lauf.stufen.find((s) => s.stufe.startsWith("S2"));
@@ -156,13 +160,14 @@ export function Ergebnis({
       </details>
 
       {!e && erneut && modellwahl}
+      {!e && erneut && <OfflineHinweis offline={offline} />}
       <div className="schritt-nav">
         <div className="aktionen">
           <button type="button" className="knopf leise" onClick={exportieren}>
             Laufprotokoll exportieren
           </button>
           {!e && erneut && (
-            <button type="button" className="knopf" onClick={erneut}>
+            <button type="button" className="knopf" onClick={erneut} disabled={offline} aria-describedby={offline ? OFFLINE_HINWEIS : undefined}>
               S2 erneut starten
             </button>
           )}

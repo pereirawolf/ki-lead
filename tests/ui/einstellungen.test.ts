@@ -5,7 +5,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
-import { aushaengen, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
+import { aushaengen, dialogAntwort, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { STANDARD, STANDARD_PROFILE, type Einstellungen } from "../../src/pipeline/einstellungen";
 import { EinstellungenAnsicht, type EinstellungsBereich } from "../../src/ui/Einstellungen";
 import type { AnbieterId, Schluessel } from "../../src/anbieter/verteiler";
@@ -288,7 +288,7 @@ describe("Einstellungen: KI-Profil unter „Modelle & Aufwand“", () => {
   it("fragt vor dem Überschreiben einer individuellen Konfiguration nach und lässt sie bei Ablehnung stehen", async () => {
     const gesetzt: Einstellungen[] = [];
     const start: Einstellungen = { ...STANDARD, modelle: { ...STANDARD.modelle, erfassung: "claude-fable-5-1", kurzfassung: "mistral-small-2603" } };
-    const frage = vi.spyOn(window, "confirm").mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const frage = dialogAntwort().mockReturnValueOnce(false).mockReturnValueOnce(true);
     await einhaengen(React.createElement(MitZustand, { start, gesetzt }));
     await klick("Modelle & Aufwand", nav());
     expect(radio("individuell").checked).toBe(true);

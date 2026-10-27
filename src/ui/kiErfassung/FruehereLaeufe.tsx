@@ -9,6 +9,7 @@ import { laeufeAlsZip, laeufeLaden, laeufeLoeschen, laufLoeschen } from "../../s
 import { dateiAnbieten } from "../../speicher/speicher";
 import { STATUS_TEXT } from "./texte";
 import { speicherText } from "./zustand";
+import { bestaetigen } from "../bestaetigung";
 
 export function FruehereLaeufe({
   profil,
@@ -66,7 +67,7 @@ export function FruehereLaeufe({
     const n = laeufe.length;
     if (!n) return;
     const frage = `${n === 1 ? "Den einen früheren Lauf" : `Alle ${n} früheren Läufe`} mit diesem Profil samt Protokoll löschen? Das lässt sich nicht rückgängig machen. Zum Aufbewahren vorher „Alle als ZIP speichern“ wählen.`;
-    if (!confirm(frage)) return;
+    if (!(await bestaetigen(frage, { ja: n === 1 ? "Lauf löschen" : "Alle löschen" }))) return;
     setSammelAktion(true);
     try {
       await laeufeLoeschen(laeufe.map((l) => l.id));
@@ -135,7 +136,7 @@ export function FruehereLaeufe({
                     className="knopf leise klein"
                     aria-label={`${lauf} löschen`}
                     onClick={async () => {
-                      if (confirm("Diesen Lauf mit Protokoll löschen?")) {
+                      if (await bestaetigen("Diesen Lauf mit Protokoll löschen?", { ja: "Lauf löschen" })) {
                         await laufLoeschen(l.id).catch((e) => fehlerMelden(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
                         neuLaden();
                       }

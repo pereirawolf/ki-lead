@@ -13,6 +13,7 @@ import { dateiAnbieten } from "../speicher/speicher";
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { rangBeurteilung } from "../lagebild/lagebild";
+import { bestaetigen } from "./bestaetigung";
 
 /** Liste der Befunde; mit Pfad und `zumFeld` führt ein Befund per Klick zum Feld (seit 0.6.5, TP-2026-W44-15) */
 function Liste({
@@ -76,16 +77,17 @@ export function Pruefen({
   const elementName = feldUi(profil.ui, r.sachverhalte).element_label || "Eintrag";
 
   /** Gemeinsame Freigabeprüfung für finale JSON- und PDF-Ausgaben */
-  const finalFreigeben = (final: boolean): boolean =>
+  const finalFreigeben = async (final: boolean): Promise<boolean> =>
     !final ||
     !schemaBefunde.length ||
-    confirm(
+    bestaetigen(
       `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft.\n\nTrotzdem final ausgeben?`,
+      { ja: "Trotzdem final ausgeben" },
     );
-  const exportiere = (final: boolean) => {
+  const exportiere = async (final: boolean) => {
     const jetzt = new Date();
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
-    if (!finalFreigeben(final)) return;
+    if (!(await finalFreigeben(final))) return;
     dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final, jetzt) + ".json", "application/json");
   };
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
@@ -93,7 +95,7 @@ export function Pruefen({
     setPdfFehler(null);
     // Exportzeitpunkt vor dem Nachladen der PDF-Ausgabe festhalten (Rückfall, wenn kein Meldezeitpunkt angegeben ist)
     const jetzt = new Date();
-    if (!finalFreigeben(final)) return;
+    if (!(await finalFreigeben(final))) return;
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)

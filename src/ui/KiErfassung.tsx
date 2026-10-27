@@ -30,6 +30,8 @@ import { Bestaetigung } from "./kiErfassung/Bestaetigung";
 import { Ergebnis } from "./kiErfassung/Ergebnis";
 import { FruehereLaeufe } from "./kiErfassung/FruehereLaeufe";
 import { LaufModellWahl } from "./kiErfassung/LaufModellWahl";
+import { usePwaZustand } from "./PwaHinweis";
+import { bestaetigen } from "./bestaetigung";
 
 export { TEXT_FELD } from "./kiErfassung/texte";
 export { kurzeAdresse } from "./kiErfassung/recherche";
@@ -246,14 +248,15 @@ function Erfassung({
     dispatch({ typ: "leeren", stichtag: tag });
   };
 
-  const neueErfassung = () => {
+  const neueErfassung = async () => {
     const { sachverhalt, stichworte, urlText, prueffrage } = eingabe;
     const etwasDa = sachverhalt || stichworte || urlText || prueffrage || material.length || lauf;
     if (
       etwasDa &&
-      !confirm(
+      !(await bestaetigen(
         "Neue KI-Erfassung beginnen? Auftrag, Material und der angezeigte Lauf werden geleert. Gespeicherte Läufe bleiben unter „Frühere Läufe“ erhalten.",
-      )
+        { ja: "Neu beginnen" },
+      ))
     )
       return;
     leeren();
@@ -302,6 +305,7 @@ function Erfassung({
   const protokollName = useCallback((l: Lauf) => mitDatum(dateistempel(l.erstellt, zone) ?? exportStempel(zone), `KI-LEAD_Lauf_${l.id}`, "json"), [zone]);
   const protokollExport = useCallback((l: Lauf) => dateiAnbieten(JSON.stringify(l, null, 2), protokollName(l), "application/json"), [protokollName]);
 
+  const { offline } = usePwaZustand();
   const setWahl = useCallback((w: Modellwahl) => dispatch({ typ: "eingabe", teil: { modellWahl: w } }), []);
   const eingaenge = useMemo(() => material.filter((m) => m.art === "eingang"), [material]);
   const rahmen: LaufRahmen = {
@@ -315,6 +319,7 @@ function Erfassung({
     wahl: eingabe.modellWahl,
     setWahl,
     protokollExport,
+    offline,
   };
 
   // Fokus beim Wechsel der Phase auf die Überschrift des neuen Schritts (seit 0.6.5, TP-2026-W44-13): Bis 0.6.4 fiel er
@@ -343,7 +348,7 @@ function Erfassung({
 
   const fehlend = fehlendeSchluessel(laufModelle(laufEinstellungen, profil, istVerdichtung(material)), schluessel);
   const kannStarten =
-    !fehlend.length && eingabe.datenOk && !!(eingabe.sachverhalt.trim() || eingabe.stichworte.trim() || urls.gueltig.length || material.length);
+    !offline && !fehlend.length && eingabe.datenOk && !!(eingabe.sachverhalt.trim() || eingabe.stichworte.trim() || urls.gueltig.length || material.length);
 
   return (
     <div className="ki">
@@ -434,6 +439,7 @@ function Erfassung({
               uebernehmen={uebernehmen}
               exportieren={() => protokollExport(ablauf.lauf)}
               erneut={s2Starten}
+              offline={offline}
               modellwahl={
                 <LaufModellWahl
                   stufen={[rahmen.stufeS2, rahmen.stufeS3]}

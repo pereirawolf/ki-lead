@@ -11,7 +11,7 @@ import { istMeldung, umklassifizieren } from "../../pipeline/material";
 import { HilfeFeld } from "../HilfeFeld";
 import { LaufSchaetzung } from "../LaufSchaetzung";
 import { LaufModellWahl } from "./LaufModellWahl";
-import { ProtokollKnopf, type LaufRahmen } from "./rahmen";
+import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from "./rahmen";
 import { rechercheZeile } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import { groesse, type Eingabe, type KiAktion } from "./zustand";
@@ -237,9 +237,16 @@ export function Auftragsformular({
           {anbieterListe([...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map(anbieterVon))])}.
         </span>
       </label>
+      <OfflineHinweis offline={rahmen.offline} />
       <div className="schritt-nav">
         <span />
-        <button type="button" className="knopf primaer" disabled={!kannStarten} onClick={starten}>
+        <button
+          type="button"
+          className="knopf primaer"
+          disabled={!kannStarten}
+          aria-describedby={rahmen.offline ? OFFLINE_HINWEIS : undefined}
+          onClick={starten}
+        >
           Gegenstand bestimmen (S1)
         </button>
       </div>

@@ -415,6 +415,30 @@ a {
   }
 }
 
+/* Bestätigungsdialog der App statt window.confirm (seit 0.6.5, TP-2026-W44-20) */
+.bestaetigung {
+  max-width: min(34rem, calc(100vw - 2rem));
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  background: var(--flaeche);
+  color: var(--tinte);
+  padding: 1.25rem 1.25rem 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.bestaetigung::backdrop {
+  background: rgba(16, 20, 25, 0.45);
+}
+
+.bestaetigung-text {
+  margin: 0 0 1rem;
+  white-space: pre-line;
+}
+
+.bestaetigung .aktionen {
+  justify-content: flex-end;
+}
+
 /* ── Arbeitsbereich mit Schritten ─────────────────── */
 
 .arbeitsbereich {

@@ -42,15 +42,20 @@ import { Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
+import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
+import { bestaetigen } from "./bestaetigung";
 
 interface Props {
   profil: Profil;
   uebergeben: (dateien: UebergabeMeldung[]) => void;
   oeffnen: (m: Meldung) => void;
+  /** Angezeigter Reiter; mit setReiter hält ihn die App in der Adresse (seit 0.6.5, TP-2026-W44-20), sonst eigener Zustand */
+  reiter?: Reiter;
+  setReiter?: (r: Reiter) => void;
 }
 
-type Reiter = "uebersicht" | "meldungen" | "sachverhalte" | "radar" | "tabelle" | "redaktion" | "kopiervorlage";
+type Reiter = LagebildReiter;
 
 const REITER: { id: Reiter; titel: string }[] = [
   { id: "uebersicht", titel: "Übersicht" },
@@ -95,7 +100,7 @@ export function zusammenfuehren(bestand: LagebildDatei[], neu: LagebildDatei[]):
   return dazu.length ? [...bestand, ...dazu] : bestand;
 }
 
-export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
+export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeReiter, setReiter: vorgabeSetReiter }: Props) {
   const ui = profil.ui;
   const r = ui.rollen;
   const lb = ui.lagebild || {};
@@ -108,7 +113,9 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   const [stichtag, setStichtag] = useState("");
   /** Geräteuhr für den Echtzeitmodus; wird laufend und bei Rückkehr in den Vordergrund erneuert */
   const [uhr, setUhr] = useState(() => Date.now());
-  const [reiter, setReiter] = useState<Reiter>("uebersicht");
+  const [eigenerReiter, setEigenerReiter] = useState<Reiter>(vorgabeReiter ?? "uebersicht");
+  const reiter = vorgabeSetReiter ? (vorgabeReiter ?? "uebersicht") : eigenerReiter;
+  const setReiter = vorgabeSetReiter ?? setEigenerReiter;
   const [importFehler, setImportFehler] = useState<LagebildFehler[]>([]);
   const [geladen, setGeladen] = useState(false);
   const [ladeFehler, setLadeFehler] = useState<string | null>(null);
@@ -201,9 +208,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
 
   // Vor Abschluss des Ladens würde Entferntes beim Zusammenführen mit dem gespeicherten Stand zurückkehren
   const entfernen = (id: string) => geladen && setDateien((alt) => alt.filter((d) => inhaltsKennung(d.text) !== id));
-  const alleEntfernen = () => {
+  const alleEntfernen = async () => {
     if (!geladen) return;
-    if (confirm(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`)) setDateien([]);
+    if (await bestaetigen(`Alle ${dateien.length} Dateien aus dem ${titel} entfernen? Die Dateien selbst bleiben unberührt.`, { ja: "Alle entfernen" }))
+      setDateien([]);
   };
 
   /** Übergabedialog an die KI-Verdichtung: 0 = geschlossen; jedes Öffnen zählt hoch und beginnt mit dem Vorschlag */

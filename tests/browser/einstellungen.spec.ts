@@ -81,3 +81,20 @@ test("Mistral-Schlüssel: Speichern, Übersicht zeigt ihn als hinterlegt, nach d
   await bereich(page, "Einstellungen");
   await expect(page.getByRole("row", { name: /^Mistral hinterlegt/ })).toBeVisible();
 });
+
+// Adresse (seit 0.6.5): Ansicht, Bereich und Reiter stehen im Hash; Neuladen behält sie, Zurück wechselt
+test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen in der Adresse", async ({ page }) => {
+  await leiste(page).getByRole("button", { name: "Modelle & Aufwand", exact: true }).click();
+  await expect(page).toHaveURL(/#\/einstellungen\/modelle$/);
+  await page.reload();
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+
+  await bereich(page, "Lagebild");
+  await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+  await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: "Redaktionscheck" }).click();
+  await expect(page).toHaveURL(/#\/lagebild\/redaktion$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/lagebild\/uebersicht$/);
+  await page.goBack();
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+});

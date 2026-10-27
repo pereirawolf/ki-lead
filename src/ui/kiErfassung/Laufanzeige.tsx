@@ -73,6 +73,14 @@ export function Laufanzeige({
           ? "Stufe S3: Prüfung und Reparatur"
           : "Stufe S2: Recherche und Entwurf";
   const ansage = useAnsage(ueberschrift, protokoll);
+  // Erwartete Dauer neben der Uhr (seit 0.6.5, TP-2026-W44-20), nur mit Messwerten für das Modell und nicht für S3
+  const erwartet =
+    phase === "s1"
+      ? dauerFuer(rahmen, "vorverarbeitung", "s1")
+      : phase === "s2" && lauf.status !== "s3"
+        ? dauerFuer(rahmen, rahmen.stufeS2.rolle, rahmen.schaetzS2.art)
+        : null;
+  const vonErwartet = erwartet && !erwartet.startsWith("einige Minuten") ? ` von voraussichtlich ${erwartet}` : "";
   return (
     <div className="laeuft">
       <p className="sr-only" role="status">
@@ -92,6 +100,7 @@ export function Laufanzeige({
           <span role="timer" aria-hidden="true">
             {dauer(Math.max(0, jetzt - start))}
           </span>
+          {vonErwartet}
           {zeichen > 0 ? ` · ${zeichen.toLocaleString("de-DE")} Zeichen geschrieben` : ""}
           {lauf.kostenUsd || lauf.kostenBekanntUsd ? ` · bisher ${laufKostenText(lauf)}` : ""}
         </span>

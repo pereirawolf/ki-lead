@@ -27,11 +27,11 @@ import { KiZugangContext, type KiZugangWert } from "./ui/kiZugang";
 import { useFarbschema } from "./ui/app/useFarbschema";
 import { useZwischenstand } from "./ui/app/useZwischenstand";
 import { useKiUebergabe } from "./ui/app/useKiUebergabe";
+import { adresseLesen, adresseText, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
+import { bestaetigen } from "./ui/bestaetigung";
 
 /** Profile laden mit der Prüfung des Farbschemas aus der Darstellung (seit 0.6.3, TP-2026-W44-24) */
 const LADEN = { farbschemaFehler: profilFarbschemaFehler };
-
-type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen";
 
 function neueMeldung(p: Profil): Meldung {
   const d = leererWert(p.schema, p.schema) as Meldung;
@@ -60,9 +60,33 @@ function sicherungsName(zone?: string): string {
 export default function App() {
   const [profile, setProfile] = useState<ProfilEintrag[]>([]);
   const [aktiv, setAktiv] = useState<string>();
-  const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
-  /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten (nicht über ein Neuladen hinweg) */
-  const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>("uebersicht");
+  // Ansicht, Bereich der Einstellungen und Reiter des Lagebilds stehen seit 0.6.5 in der Adresse (TP-2026-W44-20)
+  const [start] = useState(() => adresseLesen(window.location.hash));
+  const [ansicht, setAnsicht] = useState<Ansicht>(start.ansicht);
+  /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten */
+  const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>(start.bereich ?? "uebersicht");
+  const [lagebildReiter, setLagebildReiter] = useState<LagebildReiter>(start.reiter ?? "uebersicht");
+  // Zurück und Vor im Browser, eingegebene Adresse
+  useEffect(() => {
+    const folgen = () => {
+      const a = adresseLesen(window.location.hash);
+      setAnsicht(a.ansicht);
+      if (a.bereich) setEinstellungsBereich(a.bereich);
+      if (a.reiter) setLagebildReiter(a.reiter);
+    };
+    window.addEventListener("hashchange", folgen);
+    window.addEventListener("popstate", folgen);
+    return () => {
+      window.removeEventListener("hashchange", folgen);
+      window.removeEventListener("popstate", folgen);
+    };
+  }, []);
+  // Wechsel der Ansicht als neuer Eintrag im Verlauf; der Start ohne Adresse bleibt ohne Hash
+  useEffect(() => {
+    const text = adresseText({ ansicht, bereich: einstellungsBereich, reiter: lagebildReiter });
+    if (window.location.hash === text || (!window.location.hash && text === "#/meldung")) return;
+    window.history.pushState(null, "", text);
+  }, [ansicht, einstellungsBereich, lagebildReiter]);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
@@ -116,14 +140,14 @@ export default function App() {
     if (profil) void kurzfassungLeeren(profil.manifest.id);
   };
 
-  const kiUebernehmen = (m: Meldung) => {
-    if (!confirm("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+  const kiUebernehmen = async (m: Meldung) => {
+    if (!(await bestaetigen("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     setAnsicht("meldung");
   };
 
-  const lagebildOeffnen = (m: Meldung) => {
-    if (!confirm("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+  const lagebildOeffnen = async (m: Meldung) => {
+    if (!(await bestaetigen("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     setAnsicht("meldung");
   };
@@ -177,17 +201,32 @@ export default function App() {
   const kiLaeuft = useRef(false);
   /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
   const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
+  // Schließen oder Neuladen der Seite während eines KI-Laufs: Rückfrage des Browsers (seit 0.6.5, TP-2026-W44-20)
+  useEffect(() => {
+    const warnen = (e: BeforeUnloadEvent) => {
+      if (!kiLaeuft.current) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warnen);
+    return () => window.removeEventListener("beforeunload", warnen);
+  }, []);
 
   const aktivieren = async (schluessel: string) => {
     if (
       schluessel !== aktiv &&
       kiLaeuft.current &&
-      !confirm("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?")
+      !(await bestaetigen("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?", {
+        ja: "Trotzdem wechseln",
+      }))
     )
       return;
     setAktiv(schluessel);
-    // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil
-    if (schluessel !== aktiv) ki.verwerfen();
+    // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil; das Lagebild beginnt wieder mit der Übersicht
+    if (schluessel !== aktiv) {
+      ki.verwerfen();
+      setLagebildReiter("uebersicht");
+    }
     await aktivesProfilSetzen(schluessel).catch((e) => speicherProblem("Das gewählte Profil konnte nicht als Startprofil gespeichert werden", e));
     setAnsicht("meldung");
   };
@@ -338,7 +377,14 @@ export default function App() {
           )}
           {ansicht === "lagebild" && profil && (
             <Fehlergrenze schluessel={profil.hash}>
-              <LagebildAnsicht key={profil.hash} profil={profil} uebergeben={ki.uebergeben} oeffnen={lagebildOeffnen} />
+              <LagebildAnsicht
+                key={profil.hash}
+                profil={profil}
+                uebergeben={ki.uebergeben}
+                oeffnen={lagebildOeffnen}
+                reiter={lagebildReiter}
+                setReiter={setLagebildReiter}
+              />
             </Fehlergrenze>
           )}
           {ansicht === "einstellungen" && (

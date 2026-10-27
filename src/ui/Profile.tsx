@@ -23,6 +23,7 @@ import { dateiAnbieten } from "../speicher/speicher";
 import { Lesetext } from "./Lesetext";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { scrollVerhalten } from "./bewegung";
+import { bestaetigen } from "./bestaetigung";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -505,7 +506,10 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
       let erg = await importieren(dateien);
       if (
         erg.konflikt &&
-        confirm(`${erg.befunde[0]?.text}\n\nTrotzdem ersetzen? Der bisherige Stand wird im Gerät archiviert, damit ältere Läufe nachvollziehbar bleiben.`)
+        (await bestaetigen(
+          `${erg.befunde[0]?.text}\n\nTrotzdem ersetzen? Der bisherige Stand wird im Gerät archiviert, damit ältere Läufe nachvollziehbar bleiben.`,
+          { ja: "Ersetzen" },
+        ))
       )
         erg = await importieren(dateien, true);
       setBericht(erg);
@@ -630,7 +634,14 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                         },
                       },
                       ...(p.quelle === "importiert"
-                        ? [{ text: "Entfernen", aktion: () => confirm(`Profil „${m?.name || p.schluessel}“ entfernen?`) && loeschen(p.schluessel) }]
+                        ? [
+                            {
+                              text: "Entfernen",
+                              aktion: async () => {
+                                if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
+                              },
+                            },
+                          ]
                         : []),
                     ]}
                   />

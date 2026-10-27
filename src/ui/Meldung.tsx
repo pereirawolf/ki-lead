@@ -17,6 +17,7 @@ import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilf
 import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
 import { befundeJeFeld, feldSchluessel, FeldBefundeKontext, type FeldBefundeWert } from "./feldBefunde";
 import { scrollVerhalten } from "./bewegung";
+import { bestaetigen } from "./bestaetigung";
 
 /** Kennung des Schritts, den die App für die Management Summary anfügt */
 export const KURZFASSUNG_SCHRITT = "management-summary";
@@ -93,9 +94,10 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
         .map((b) => `• ${b.text}`)
         .join("\n");
       if (
-        !confirm(
+        !(await bestaetigen(
           `${datei.name} enthält ${typfehler.length} Feld(er) mit falschem Datentyp:\n${beispiele}${typfehler.length > 5 ? "\n…" : ""}\n\nTrotzdem in die Maske übernehmen? Betroffene Felder werden leer angezeigt; die Meldung muss korrigiert werden.`,
-        )
+          { ja: "Trotzdem übernehmen" },
+        ))
       )
         return;
     }
@@ -176,8 +178,12 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               <button
                 type="button"
                 className="knopf leise"
-                onClick={() => {
-                  if (confirm("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.")) {
+                onClick={async () => {
+                  if (
+                    await bestaetigen("Neue, leere Meldung beginnen? Der aktuelle Stand wird verworfen, sofern er nicht gespeichert ist.", {
+                      ja: "Neu beginnen",
+                    })
+                  ) {
                     neu();
                     setSchritt(0);
                     setMeldungen(null);

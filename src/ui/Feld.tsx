@@ -15,6 +15,7 @@ import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
 import { FeldFehler, HilfeFeld } from "./HilfeFeld";
 import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
+import { bestaetigen } from "./bestaetigung";
 
 export interface FeldProps {
   profil: Profil;
@@ -318,9 +319,9 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const istSachverhalte = gen === r.sachverhalte;
 
   const hinzufuegen = () => setze(segs, [...liste, leererWert(k.items, profil.schema)]);
-  const entfernen = (i: number) => {
+  const entfernen = async (i: number) => {
     const titel = f.titel_feld ? alsText(holeWert(liste[i], f.titel_feld)) : "";
-    if (!confirm(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`)) return;
+    if (!(await bestaetigen(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`, { ja: "Entfernen" }))) return;
     setze(
       segs,
       liste.filter((_, j) => j !== i),
