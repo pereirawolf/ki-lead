@@ -1,7 +1,7 @@
 // Hilfen für die Update-Tests der PWA: Fassungen aus dem aktuellen Build ableiten und wie GitHub Pages ausliefern
 // (Unterordner /ki-lead/, Cache-Control max-age=600, umschaltbares Deployment). Läuft im Testprozess, nicht im Browser.
 import { createServer, type Server } from "node:http";
-import { cpSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync, existsSync, statSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { extname, join, normalize } from "node:path";
 import type { AddressInfo } from "node:net";
@@ -64,6 +64,14 @@ export function fassung(
   if (endung) {
     const neu = start.replace(/\.js$/, `${endung}.js`);
     renameSync(join(ordner, "assets", start), join(ordner, "assets", neu));
+    // Nachgeladene Teile (seit 0.6.5 Lagebild, Profile, Einstellungen; vorgeladen nach dem ersten Zeichnen) importieren
+    // gemeinsamen Code aus der Startdatei; ihre Verweise ziehen mit, wie in einem echten Build. Sonst scheitert das
+    // Vorladen, und main.tsx lädt nach „vite:preloadError“ neu.
+    for (const d of readdirSync(join(ordner, "assets")).filter((x) => x.endsWith(".js"))) {
+      const pfad = join(ordner, "assets", d);
+      const text = readFileSync(pfad, "utf-8");
+      if (text.includes(start)) writeFileSync(pfad, text.split(start).join(neu));
+    }
     html = html.replace(`assets/${start}`, `assets/${neu}`);
     neueListe = liste.map((d) => (d === `assets/${start}` ? `assets/${neu}` : d));
     start = neu;

@@ -205,6 +205,9 @@ const VARIANTEN = [
 
 /** Verstöße der aktuellen Seite als lesbare Zeilen („Zustand: Regel × Anzahl: Elemente“) */
 async function axeVerstoesse(page: Page, zustand: string): Promise<string[]> {
+  // Übergänge abwarten (etwa Farbe des KI-Chips nach dem Wechsel auf dunkel, 0,3 s), sonst misst axe Zwischenfarben;
+  // endlose Animationen (Puls des KI-Chips) ändern keine Farben von Text oder Fläche
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running" || a.effect?.getComputedTiming().iterations === Infinity));
   const erg = await new AxeBuilder({ page }).withTags(AXE_REGELN).analyze();
   return erg.violations.map((v) => `${zustand}: ${v.id} × ${v.nodes.length}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`);
 }
