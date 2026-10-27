@@ -90,7 +90,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W
 - **Warnung beim Verlassen** (TP-2026-W44-20): Solange ein KI-Lauf läuft, fragt der Browser beim Schließen oder Neuladen nach.
 - **„Programmdateien reparieren“** unter „Einstellungen → Über KI-LEAD“ (TP-2026-W44-21): Verweis auf `reparatur.html` in einem neuen Fenster.
 - **Farbtoken-Fallback aus dem Katalog** (TP-2026-W44-19): `src/darstellung/fallback.ts` mit dem Vite-Plugin `farbtokenFallback()` setzt im Entwicklungsserver und im Build ein `<style id="ki-lead-farbtoken">` mit „Neutral · Hell“ bzw. bei dunkler Systemeinstellung „Neutral · Night Mode“ samt Signalfarben in `index.html`.
-- **axe-core in den Browsertests** (TP-2026-W44-22): `@axe-core/playwright` 4.14.0 (MPL-2.0, Entwicklungsabhängigkeit; THIRD-PARTY-NOTICES.md §5) prüft jeden Bereich gegen WCAG 2.0/2.1/2.2 A und AA. Projekt `webkit` in `playwright.config.ts` für die Kerntests, Skript `npm run test:browser:webkit`; die CI lädt WebKit mit `npx playwright install --with-deps webkit`.
+- **axe-core in den Browsertests** (TP-2026-W44-22): `@axe-core/playwright` 4.14.0 (MPL-2.0, Entwicklungsabhängigkeit; THIRD-PARTY-NOTICES.md §5) prüft jeden Bereich gegen WCAG 2.0/2.1/2.2 A und AA. Projekt `webkit` in `playwright.config.ts` für die Kerntests, Skript `npm run test:browser:webkit`; die CI lädt WebKit mit `npx playwright install --with-deps webkit`; beide WebKit-Schritte sind bis zur ersten erfolgreichen Erprobung in der CI nicht blockierend und haben Zeitgrenzen (10 bzw. 20 Minuten), weil die Installation im ersten Lauf ohne Ende hing. Fehlschläge der Browsertests erscheinen in der CI zusätzlich als Annotation (Reporter „github“).
 
 ### Geändert
 
