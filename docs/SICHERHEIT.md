@@ -40,7 +40,7 @@ Material, Suchergebnisse, abgerufene Seiten und Eingangsmeldungen können Text e
 
 | vorhanden | offen |
 |---|---|
-| Ablage wählbar: Gerätespeicher (mit Hinweis „unverschlüsselt“), nur Sitzung, Schlüsselbund des Systems in der nativen App (`src/schluessel/ablage.ts`) | im Gerätespeicher unverschlüsselt in IndexedDB; lesbar bei Zugriff auf das entsperrte Gerät oder bei einer Lücke für Skripteinschleusung (3.4) |
+| Ablage wählbar: Gerätespeicher (mit Hinweis „unverschlüsselt“), nur Sitzung, Gerätespeicher mit Passphrase verschlüsselt (seit 0.6.2: PBKDF2-SHA-256 mit 600 000 Iterationen und AES-GCM über WebCrypto, abgeleiteter Schlüssel nicht exportierbar und nur im Arbeitsspeicher, Passphrase je Sitzung), Schlüsselbund des Systems in der nativen App (`src/schluessel/ablage.ts`) | Vorgabe bleibt der Gerätespeicher, unverschlüsselt in IndexedDB; lesbar bei Zugriff auf das entsperrte Gerät oder bei einer Lücke für Skripteinschleusung (3.4). Mit Passphrase schützt die Ablage vor Auslesen des gespeicherten Profils (geteilte Dienst-PCs), nicht vor Skripteinschleusung während einer entsperrten Sitzung; die Stärke hängt an der Passphrase |
 | Keychain mit `whenUnlockedThisDeviceOnly`, keine iCloud-Synchronisierung; Android ohne Sicherung der App-Daten (`allowBackup="false"`) | iOS: nicht geprüft, ob IndexedDB der App in Gerätesicherungen landet (betrifft die Ablage „Gerätespeicher“) |
 | Schlüssel in keinem Export und keinem Laufprotokoll (Tests prüfen das) | |
 | Wechsel der Ablage entfernt den Schlüssel aus der alten | |
@@ -104,7 +104,7 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 ## 4. Hinweise für Nutzende
 
 - Beim Anbieter ein **Ausgabenlimit** setzen und einen **eigenen Schlüssel** nur für KI-LEAD anlegen.
-- Auf geteilten Geräten die Ablage **„Nur für diese Sitzung“** wählen.
+- Auf geteilten Geräten die Ablage **„Nur für diese Sitzung“** wählen, oder **„Gerätespeicher, mit Passphrase verschlüsselt“**, wenn der Schlüssel über Sitzungen hinweg erhalten bleiben soll.
 - Recherche nur erlauben, wenn sie gebraucht wird.
 - Profile nur aus vertrauenswürdiger Quelle importieren und die Prüfsumme vergleichen.
 - Jeden Entwurf vor Verwendung fachlich prüfen.
@@ -122,4 +122,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
 | 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |
-| 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04); Abschnitt 3.7: Dependabot und festgelegte Node-Version (TP-2026-W44-08) (App 0.6.2) |
+| 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04); Abschnitt 3.7: Dependabot und festgelegte Node-Version (TP-2026-W44-08); Abschnitt 3.2: Ablage mit Passphrase (TP-2026-W44-09) (App 0.6.2) |
