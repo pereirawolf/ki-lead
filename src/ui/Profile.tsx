@@ -22,6 +22,7 @@ import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
 import { Lesetext } from "./Lesetext";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
+import { scrollVerhalten } from "./bewegung";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -47,7 +48,7 @@ function bereichOeffnen(id: string) {
   if (!el) return;
   for (let p: HTMLElement | null = el; p; p = p.parentElement) if (p instanceof HTMLDetailsElement) p.open = true;
   const summary = el.querySelector<HTMLElement>(":scope > summary");
-  (summary || el).scrollIntoView({ block: "start", behavior: "smooth" });
+  (summary || el).scrollIntoView({ block: "start", behavior: scrollVerhalten() });
   summary?.focus({ preventScroll: true });
 }
 
@@ -444,7 +445,7 @@ function Menue({ text, label, klasse, eintraege }: { text: string; label?: strin
 function abschnittZeigen(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ block: "start", behavior: "smooth" });
+  el.scrollIntoView({ block: "start", behavior: scrollVerhalten() });
   el.focus({ preventScroll: true });
 }
 

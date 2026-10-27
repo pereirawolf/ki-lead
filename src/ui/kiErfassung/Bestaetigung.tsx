@@ -200,6 +200,7 @@ export function Bestaetigung({
                   <button
                     type="button"
                     className="knopf leise klein"
+                    aria-label={`Sachverhalt ${i + 1} entfernen`}
                     onClick={() => setVorschlag({ ...vorschlag, sachverhalte: vorschlag.sachverhalte.filter((_, j) => j !== i) })}
                   >
                     Entfernen
@@ -293,7 +294,12 @@ export function Bestaetigung({
                   orientiert && orientierungAn ? (
                     <p className="hinweis">
                       Für diesen Sachverhalt lief noch keine Orientierungssuche.{" "}
-                      <button type="button" className="knopf klein" onClick={() => orientierungStarten([i])}>
+                      <button
+                        type="button"
+                        className="knopf klein"
+                        aria-label={`Orientierung suchen für Sachverhalt ${i + 1}`}
+                        onClick={() => orientierungStarten([i])}
+                      >
                         Orientierung suchen
                       </button>
                     </p>
@@ -362,6 +368,7 @@ export function Bestaetigung({
                     <button
                       type="button"
                       className="knopf leise klein"
+                      aria-label={`Suchbegriff ${j + 1} für Sachverhalt ${i + 1} entfernen`}
                       onClick={() =>
                         setzeBegriffe(
                           i,
@@ -377,6 +384,7 @@ export function Bestaetigung({
                   <button
                     type="button"
                     className="knopf leise klein"
+                    aria-label={`Suchbegriff für Sachverhalt ${i + 1} hinzufügen`}
                     onClick={() => setzeBegriffe(i, [...(s.suchbegriffe || []), { begriff: "", zweck: "", herkunft: "person" }])}
                   >
                     Suchbegriff hinzufügen

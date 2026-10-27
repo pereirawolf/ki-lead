@@ -36,7 +36,7 @@ export function Kopiervorlage({ profil, sortiert }: { profil: Profil; sortiert: 
                 {hb !== null ? ` · handlungsrelevant bis ${hb}` : ""}
                 {abs !== null ? " · Abschluss vermerkt" : ""}
               </span>
-              <KopierKnopf html={html} text={text} />
+              <KopierKnopf html={html} text={text} was={svKennung(s, profil)} />
             </div>
             <div className="lb-vorlage-inhalt" dangerouslySetInnerHTML={{ __html: html }} />
           </div>

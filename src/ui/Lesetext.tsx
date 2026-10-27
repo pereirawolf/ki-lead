@@ -10,6 +10,7 @@ import type { Profil } from "../kern/typen";
 import { inhaltsverzeichnis, linkZiel, type LinkZiel } from "../profil/lesen";
 import { dateiAnbieten } from "../speicher/speicher";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
+import { scrollVerhalten } from "./bewegung";
 
 interface LeseUmgebung {
   von: string;
@@ -99,7 +100,7 @@ export function Lesetext({ text, von, profil, oeffnen, original }: Props) {
     const ziel = textRef.current?.querySelectorAll("h2, h3")[index] as HTMLElement | undefined;
     if (!ziel) return;
     ziel.setAttribute("tabindex", "-1");
-    ziel.scrollIntoView({ block: "start", behavior: "smooth" });
+    ziel.scrollIntoView({ block: "start", behavior: scrollVerhalten() });
     ziel.focus({ preventScroll: true });
   };
   const roh = original?.text ?? text;

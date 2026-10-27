@@ -30,18 +30,21 @@ async function kopieren(htmlText: string, klartext: string): Promise<boolean> {
   }
 }
 
-export function KopierKnopf({ html, text, titel = "Kopieren" }: { html: string; text: string; titel?: string }) {
+/** `was`: Gegenstand des Kopierens für den zugänglichen Namen, wenn mehrere Knöpfe nebeneinanderstehen (seit 0.6.5, TP-2026-W44-14) */
+export function KopierKnopf({ html, text, titel = "Kopieren", was }: { html: string; text: string; titel?: string; was?: string }) {
   const [stand, setStand] = useState<"" | "ok" | "fehler">("");
+  const anzeige = stand === "ok" ? "Kopiert" : stand === "fehler" ? "Kopieren nicht möglich – bitte markieren" : titel;
   return (
     <button
       type="button"
       className={stand === "ok" ? "knopf klein lb-kopiert" : "knopf klein"}
+      aria-label={was ? `${anzeige}: ${was}` : undefined}
       onClick={async () => {
         setStand((await kopieren(html, text)) ? "ok" : "fehler");
         setTimeout(() => setStand(""), 2000);
       }}
     >
-      {stand === "ok" ? "Kopiert" : stand === "fehler" ? "Kopieren nicht möglich – bitte markieren" : titel}
+      {anzeige}
     </button>
   );
 }

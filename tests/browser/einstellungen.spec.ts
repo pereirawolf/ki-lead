@@ -20,7 +20,7 @@ test("jeder Bereich: genau eine Bereichsüberschrift, alle Bedienelemente mit zu
   for (const b of BEREICHE) {
     await leiste(page).getByRole("button", { name: b, exact: true }).click();
     await expect(page.locator(".bereich-inhalt h2")).toHaveText([b]);
-    await expect(leiste(page).getByRole("button", { name: b, exact: true })).toHaveAttribute("aria-current", "true");
+    await expect(leiste(page).getByRole("button", { name: b, exact: true })).toHaveAttribute("aria-current", "page");
     const baum = await page.locator("body").ariaSnapshot();
     expect(
       baum.split("\n").filter((z) => muster.test(z)),

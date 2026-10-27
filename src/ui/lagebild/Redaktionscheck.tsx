@@ -12,6 +12,7 @@ import { ABSCHNITTE, redaktionsbericht, type redaktionscheck } from "../../lageb
 import { html as esc } from "../../lagebild/ausgabe";
 import { dateiAnbieten } from "../../speicher/speicher";
 import { Abschnitt, KopierKnopf, Punkt, SvMarken } from "./bausteine";
+import { scrollVerhalten } from "../bewegung";
 
 export function Redaktionscheck({
   profil,
@@ -58,7 +59,7 @@ export function Redaktionscheck({
   const springeZu = (e: { preventDefault: () => void }, id: string) => {
     e.preventDefault();
     const ziel = document.getElementById(id);
-    ziel?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    ziel?.scrollIntoView?.({ behavior: scrollVerhalten(), block: "start" });
     ziel?.focus?.({ preventScroll: true });
   };
 
@@ -235,7 +236,11 @@ export function Redaktionscheck({
                 <div className="lb-baustein">
                   <div className="lb-baustein-kopf">
                     <strong>Textbaustein (Entwurf)</strong>
-                    <KopierKnopf html={`<p style="font-family:Arial,sans-serif;font-size:10pt;">${esc(g.baustein)}</p>`} text={g.baustein} />
+                    <KopierKnopf
+                      html={`<p style="font-family:Arial,sans-serif;font-size:10pt;">${esc(g.baustein)}</p>`}
+                      text={g.baustein}
+                      was={`Textbaustein ${g.art}`}
+                    />
                   </div>
                   <p className="hinweis">Nur verwenden, wenn es sich um denselben Sachverhalt handelt; Platzhalter in eckigen Klammern fachlich füllen.</p>
                   <p>{g.baustein}</p>

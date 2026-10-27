@@ -130,6 +130,7 @@ export function Auftragsformular({
                   <button
                     type="button"
                     className="knopf leise klein"
+                    aria-label={`${m.name} ${m.art === "meldung" ? "als Eingang behandeln" : "als Vormeldung behandeln"}`}
                     onClick={() => dispatch({ typ: "material", aendern: (a) => a.map((x) => (x.id === m.id ? umklassifizieren(x, profil) : x)) })}
                   >
                     {m.art === "meldung" ? "Als Eingang behandeln" : "Als Vormeldung behandeln"}
@@ -138,6 +139,7 @@ export function Auftragsformular({
                 <button
                   type="button"
                   className="knopf leise klein"
+                  aria-label={`${m.name} entfernen`}
                   onClick={() => dispatch({ typ: "material", aendern: (a) => a.filter((x) => x.id !== m.id) })}
                 >
                   Entfernen

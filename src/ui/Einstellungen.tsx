@@ -1121,7 +1121,7 @@ export function EinstellungenAnsicht({
                 <button
                   type="button"
                   className={b.id === aktuell ? "schritt aktiv" : "schritt"}
-                  aria-current={b.id === aktuell ? "true" : undefined}
+                  aria-current={b.id === aktuell ? "page" : undefined}
                   onClick={() => zeige(b.id)}
                 >
                   {b.titel}

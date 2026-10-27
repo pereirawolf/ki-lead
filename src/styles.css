@@ -95,7 +95,8 @@ body {
   background: var(--papier);
   color: var(--tinte);
   font-family: var(--schrift);
-  font-size: 17px;
+  /* 17 px bei der Vorgabe des Browsers (16 px); folgt seit 0.6.5 (TP-2026-W44-14) einer größeren Grundschrift */
+  font-size: 1.0625rem;
   line-height: 1.5;
 }
 
@@ -397,9 +398,21 @@ a {
 }
 
 .knopf.klein {
-  min-height: 0;
+  /* Zielgröße mindestens 24 × 24 px (WCAG 2.5.8), auf Touch-Geräten 44 px (seit 0.6.5, TP-2026-W44-14) */
+  min-height: 1.5rem;
   padding: 0.2rem 0.5rem;
   font-size: 0.85rem;
+}
+
+@media (pointer: coarse) {
+  .knopf.klein,
+  .lb-x {
+    min-height: 44px;
+  }
+
+  .lb-x {
+    min-width: 44px;
+  }
 }
 
 /* ── Arbeitsbereich mit Schritten ─────────────────── */
@@ -1453,7 +1466,7 @@ textarea {
 
 @media (max-width: 860px) {
   body {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .arbeitsbereich {

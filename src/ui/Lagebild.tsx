@@ -42,6 +42,7 @@ import { Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
+import { scrollVerhalten } from "./bewegung";
 
 interface Props {
   profil: Profil;
@@ -216,7 +217,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
   useEffect(() => {
     if (reiter !== "meldungen" || !markiert) return;
     const ziel = document.getElementById(`lb-meldung-${markiert}`);
-    ziel?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+    ziel?.scrollIntoView?.({ behavior: scrollVerhalten(), block: "center" });
     ziel?.focus?.({ preventScroll: true });
   }, [reiter, markiert]);
   const zurMeldung = (id: string, bezug?: string) => (
@@ -473,7 +474,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                 key={t.id}
                 type="button"
                 className={reiter === t.id ? "segment aktiv" : "segment"}
-                aria-pressed={reiter === t.id}
+                aria-current={reiter === t.id ? "page" : undefined}
                 onClick={() => setReiter(t.id)}
               >
                 {t.titel}
@@ -551,6 +552,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                         {!z.eintraege.length && (
                           <a
                             className="knopf klein"
+                            aria-label={`${z.name} erinnern`}
                             href={erinnerungMailto(z, profil.kontakte)}
                             title={
                               istPlatzhalterAdresse(z.email)
@@ -637,11 +639,21 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                     </div>
                     <footer className="aktionen">
                       {!e.fremd && (
-                        <button type="button" className="knopf klein" onClick={() => oeffnen(e.daten)}>
+                        <button
+                          type="button"
+                          className="knopf klein"
+                          aria-label={`${absender(e, profil)} · ${e.name} in der Maske öffnen`}
+                          onClick={() => oeffnen(e.daten)}
+                        >
                           In der Maske öffnen
                         </button>
                       )}
-                      <button type="button" className="knopf klein leise" onClick={() => entfernen(e.id)}>
+                      <button
+                        type="button"
+                        className="knopf klein leise"
+                        aria-label={`${absender(e, profil)} · ${e.name} aus dem Lagebild entfernen`}
+                        onClick={() => entfernen(e.id)}
+                      >
                         Entfernen
                       </button>
                     </footer>

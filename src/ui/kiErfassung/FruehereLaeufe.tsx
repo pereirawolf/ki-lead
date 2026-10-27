@@ -112,36 +112,41 @@ export function FruehereLaeufe({
           </tr>
         </thead>
         <tbody>
-          {laeufe.map((l) => (
-            <tr key={l.id}>
-              <td>{new Date(l.erstellt).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</td>
-              <td>{l.bestaetigt?.gegenstand || l.vorschlag?.gegenstand || l.auftrag.sachverhalt || "–"}</td>
-              <td>{STATUS_TEXT[l.status]}</td>
-              <td>{laufKostenText(l)}</td>
-              <td className="tabelle-aktionen">
-                {l.ergebnis && (
-                  <button type="button" className="knopf klein" onClick={() => uebernehmen(l.ergebnis!.meldung)}>
-                    Übernehmen
+          {laeufe.map((l, i) => {
+            // Zugängliche Namen je Zeile eindeutig (seit 0.6.5, TP-2026-W44-14): laufende Nummer und Beginn
+            const lauf = `Lauf ${i + 1} vom ${new Date(l.erstellt).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}`;
+            return (
+              <tr key={l.id}>
+                <td>{new Date(l.erstellt).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</td>
+                <td>{l.bestaetigt?.gegenstand || l.vorschlag?.gegenstand || l.auftrag.sachverhalt || "–"}</td>
+                <td>{STATUS_TEXT[l.status]}</td>
+                <td>{laufKostenText(l)}</td>
+                <td className="tabelle-aktionen">
+                  {l.ergebnis && (
+                    <button type="button" className="knopf klein" aria-label={`${lauf} übernehmen`} onClick={() => uebernehmen(l.ergebnis!.meldung)}>
+                      Übernehmen
+                    </button>
+                  )}
+                  <button type="button" className="knopf leise klein" aria-label={`Protokoll: ${lauf}`} onClick={() => protokollExport(l)}>
+                    Protokoll
                   </button>
-                )}
-                <button type="button" className="knopf leise klein" onClick={() => protokollExport(l)}>
-                  Protokoll
-                </button>
-                <button
-                  type="button"
-                  className="knopf leise klein"
-                  onClick={async () => {
-                    if (confirm("Diesen Lauf mit Protokoll löschen?")) {
-                      await laufLoeschen(l.id).catch((e) => fehlerMelden(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
-                      neuLaden();
-                    }
-                  }}
-                >
-                  Löschen
-                </button>
-              </td>
-            </tr>
-          ))}
+                  <button
+                    type="button"
+                    className="knopf leise klein"
+                    aria-label={`${lauf} löschen`}
+                    onClick={async () => {
+                      if (confirm("Diesen Lauf mit Protokoll löschen?")) {
+                        await laufLoeschen(l.id).catch((e) => fehlerMelden(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
+                        neuLaden();
+                      }
+                    }}
+                  >
+                    Löschen
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </details>

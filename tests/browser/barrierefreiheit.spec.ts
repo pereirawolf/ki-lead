@@ -1,7 +1,7 @@
 // Barrierefreiheit im echten Browser: zugängliche Namen aller Bedienelemente (berechnet von Chromium),
 // Bedienung der Navigation mit der Tastatur und sichtbarer Fokus, erzwungene Farben (Windows-Kontrastmodus).
 import { expect, test, type Page } from "@playwright/test";
-import { bereich, netzVorbereiten, oeffnen, schluesselSetzen } from "./hilfen";
+import { bereich, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";
 
 const BEREICHE = ["Meldung", "KI-Erfassung", "Lagebild", "Profile", "Einstellungen"] as const;
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
@@ -13,8 +13,9 @@ async function ohneNamen(page: Page): Promise<string[]> {
   return baum.split("\n").filter((z) => muster.test(z));
 }
 
-test.beforeEach(async ({ page }) => {
-  await netzVorbereiten(page, () => "haengen");
+test.beforeEach(async ({ page }, info) => {
+  // Der Test zur Eindeutigkeit der Namen braucht eine Antwort von S1 (frühere Läufe)
+  await netzVorbereiten(page, () => (info.title.startsWith("TP-2026-W44-14") ? JSON.stringify(S1_VORSCHLAG) : "haengen"));
   await oeffnen(page);
 });
 
@@ -118,4 +119,71 @@ test("TP-2026-W44-12: während eines Laufs enthält keine Live-Region den Sekund
   // Die Statusregion nennt die Stufe
   await expect(page.locator('.laeuft [role="status"]')).toHaveText("Stufe S1: Gegenstand und SOP-Auswahl");
   await page.getByRole("button", { name: "Abbrechen", exact: true }).click();
+});
+
+/**
+ * Listen mit Einträgen, die jeweils eigene Bedienelemente tragen: Liste und Eintrag als Selektor. Geprüft werden die
+ * zugänglichen Namen (von Chromium berechnet) der Schaltflächen und Links aller Einträge einer Liste.
+ */
+const LISTEN = [
+  { liste: "ul, ol", eintrag: ":scope > li" },
+  { liste: "tbody", eintrag: ":scope > tr" },
+  { liste: ".liste", eintrag: ":scope > section > .element-kopf, :scope > .element > .element-kopf" },
+  { liste: ".lb-karten", eintrag: ":scope > article > footer" },
+];
+
+/** Namen, die innerhalb einer Liste mehr als einmal vorkommen („Liste: Rolle Name“) */
+async function doppelteNamen(page: Page): Promise<string[]> {
+  const out: string[] = [];
+  for (const { liste, eintrag } of LISTEN) {
+    const listen = page.locator(liste);
+    for (let i = 0; i < (await listen.count()); i++) {
+      const l = listen.nth(i);
+      if (!(await l.isVisible())) continue;
+      const eintraege = l.locator(eintrag);
+      const namen: string[] = [];
+      for (let j = 0; j < (await eintraege.count()); j++) {
+        const baum = await eintraege.nth(j).ariaSnapshot();
+        namen.push(...[...baum.matchAll(/- (button|link) "([^"]+)"/g)].map((m) => `${m[1]} „${m[2]}“`));
+      }
+      for (const n of new Set(namen.filter((x, k) => namen.indexOf(x) !== k))) out.push(`${liste}: ${n}`);
+    }
+  }
+  return out;
+}
+
+// Seit 0.6.5: Schaltflächen wie „Entfernen“, „Übernehmen“, „Protokoll“ und „Löschen“ nennen in Listen ihren Eintrag
+test("TP-2026-W44-14: zugängliche Namen der Bedienelemente sind je Liste eindeutig", async ({ page }) => {
+  // Meldung mit zwei Sachverhalten
+  await page
+    .getByRole("button", { name: /Sachverhalte/ })
+    .first()
+    .click();
+  await page.getByRole("button", { name: /Sachverhalt hinzufügen/ }).click();
+  expect(await doppelteNamen(page)).toEqual([]);
+
+  // KI-Erfassung mit zwei Dateien und zwei früheren Läufen
+  await schluesselSetzen(page);
+  await bereich(page, "KI-Erfassung");
+  await page.locator('.ki input[type="file"]').setInputFiles([
+    { name: "notiz-a.txt", mimeType: "text/plain", buffer: Buffer.from("Erste Notiz") },
+    { name: "notiz-b.txt", mimeType: "text/plain", buffer: Buffer.from("Zweite Notiz") },
+  ]);
+  await expect(page.locator(".materialliste li")).toHaveCount(2);
+  await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
+  for (let i = 0; i < 2; i++) {
+    await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
+    await page.getByRole("button", { name: "Zurück zum Auftrag" }).click();
+  }
+  await page.getByText("Frühere Läufe mit diesem Profil (2)").click();
+  expect(await doppelteNamen(page)).toEqual([]);
+
+  // Lagebild mit Beispiel: Übersicht (Meldestatus), Meldungen, Kopiervorlage
+  await bereich(page, "Lagebild");
+  await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+  await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
+  for (const reiter of ["Übersicht", "Meldungen", "Kopiervorlage"]) {
+    await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: reiter }).click();
+    expect(await doppelteNamen(page), reiter).toEqual([]);
+  }
 });

@@ -69,7 +69,7 @@ describe("Einstellungen: Navigation in Bereichen", () => {
     for (const titel of BEREICHE) {
       await klick(titel, nav());
       expect(ueberschriften(), titel).toEqual([titel === "Darstellung" ? "Darstellung" : titel]);
-      const aktiv = navKnoepfe().filter((b) => b.getAttribute("aria-current") === "true");
+      const aktiv = navKnoepfe().filter((b) => b.getAttribute("aria-current") === "page");
       expect(aktiv.map((b) => b.textContent)).toEqual([titel]);
     }
   });
@@ -332,7 +332,7 @@ describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
     expect(inhalt().textContent).not.toMatch(/Vergleichslauf|Prüffall|Testlauf starten/);
     await klick("Zu den Testläufen");
     expect(ueberschriften()).toEqual(["Testläufe"]);
-    expect(navKnoepfe().find((b) => b.getAttribute("aria-current") === "true")?.textContent).toBe("Testläufe");
+    expect(navKnoepfe().find((b) => b.getAttribute("aria-current") === "page")?.textContent).toBe("Testläufe");
     expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Neuer Testlauf", "Archiv"]);
     expect(knopf("Testlauf starten")?.disabled).toBe(true);
     // ohne Schlüssel: Hinweis mit Sprung zu den Schlüsseln

@@ -304,7 +304,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
                 </span>
                 <span className="element-titel">{titel || "ohne Bezeichnung"}</span>
               </h3>
-              <button type="button" className="knopf leise" onClick={() => entfernen(i)}>
+              <button type="button" className="knopf leise" aria-label={`${elementName} ${i + 1} entfernen`} onClick={() => entfernen(i)}>
                 Entfernen
               </button>
             </header>
