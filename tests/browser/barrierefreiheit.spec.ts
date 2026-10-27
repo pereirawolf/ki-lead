@@ -1,7 +1,7 @@
 // Barrierefreiheit im echten Browser: zugängliche Namen aller Bedienelemente (berechnet von Chromium),
 // Bedienung der Navigation mit der Tastatur und sichtbarer Fokus, erzwungene Farben (Windows-Kontrastmodus).
 import { expect, test, type Page } from "@playwright/test";
-import { bereich, netzVorbereiten, oeffnen } from "./hilfen";
+import { bereich, netzVorbereiten, oeffnen, schluesselSetzen } from "./hilfen";
 
 const BEREICHE = ["Meldung", "KI-Erfassung", "Lagebild", "Profile", "Einstellungen"] as const;
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
@@ -92,4 +92,30 @@ test("Erzwungene Farben: aktive Auswahl in Systemfarben, Marken mit Kontur", asy
   expect(werte.navHintergrund).toBe(werte.highlight);
   expect(werte.navText).toBe(werte.highlightText);
   expect(werte.markeKontur).toMatch(/^solid [1-9]/);
+});
+
+// Laufanzeige (seit 0.6.5): Die Uhr zählt sichtbar weiter, liegt aber in keiner Live-Region; angesagt werden nur der
+// Wechsel der Stufe und neue Protokolleinträge über eine eigene Statusregion.
+test("TP-2026-W44-12: während eines Laufs enthält keine Live-Region den Sekundenzähler", async ({ page }) => {
+  await schluesselSetzen(page);
+  await bereich(page, "KI-Erfassung");
+  await page.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Orkan in Hessen");
+  await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
+  await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
+  const zaehler = page.locator('[role="timer"]');
+  await expect(zaehler).toHaveText(/^\d+ s$/);
+  // Mindestens ein Takt der Uhr, damit ein angesagter Zähler auffiele
+  await expect(zaehler).not.toHaveText("0 s");
+  const live = await page.evaluate(() =>
+    [...document.querySelectorAll('[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"], [role="log"]')].map((el) => ({
+      text: el.textContent || "",
+      mitZaehler: !!el.querySelector('[role="timer"]'),
+    })),
+  );
+  expect(live.filter((l) => l.mitZaehler)).toEqual([]);
+  expect(live.filter((l) => /\b\d+ s\b/.test(l.text))).toEqual([]);
+  expect(await zaehler.evaluate((el) => !!el.closest('[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"], [role="log"]'))).toBe(false);
+  // Die Statusregion nennt die Stufe
+  await expect(page.locator('.laeuft [role="status"]')).toHaveText("Stufe S1: Gegenstand und SOP-Auswahl");
+  await page.getByRole("button", { name: "Abbrechen", exact: true }).click();
 });
