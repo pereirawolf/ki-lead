@@ -28,7 +28,8 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
+  // In der CI zusätzlich „github“: Fehlschläge erscheinen als Annotation am Lauf (lesbar ohne Protokoll-Download)
+  reporter: process.env.CI ? [["list"], ["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: `http://localhost:${PORT}/`,
     locale: "de-DE",
