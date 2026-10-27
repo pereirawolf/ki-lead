@@ -2,7 +2,7 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
-## 0.6.0 – 26.10.2026
+## 0.6.0 – 27.10.2026
 
 Anlass: Befund TP-2026-W44-27 der technischen Prüfung, vom Herausgeber am 26.10.2026 freigegeben (Kennsatz-Schlüssel verbindlich).
 

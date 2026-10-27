@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.7 vom 26.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.7 vom 27.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -303,4 +303,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.4 | 25.10.2026 | Abschnitt 2: Modell je Aufgabe wählbar, ein Lauf kann mehrere Anbieter nutzen (Mix-Profile, App 0.5.15; AV-2026-W43-31) |
 | 1.5 | 25.10.2026 | Abschnitte 3 und 10: Archiv der Testläufe auf dem Gerät mit Löschen (App 0.5.17) |
 | 1.6 | 26.10.2026 | Abschnitte 3 und 9: Ablage der API-Schlüssel mit Passphrase verschlüsselt (App 0.6.2, TP-2026-W44-09) |
-| 1.7 | 26.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |
+| 1.7 | 27.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |

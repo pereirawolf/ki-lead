@@ -75,7 +75,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.2 | letzter Commit des Pull Requests „Programmcode: Reparaturschleife, Strom-Timeout, Adapter-Gemeinsamkeiten, Tooling; 0.6.2“ |
 | 0.6.3 | letzter Commit des Pull Requests „Modularität: Zyklen gelöst, Schichtentest, Forschungszone, Anbieter-Registry mit Ollama; 0.6.3“ |
 
-## [0.6.3] – 26.10.2026
+## [0.6.3] – 27.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-23 bis -27 (Kategorie Modularität), vom Herausgeber am 26.10.2026 freigegeben (W44-26 und -27 mit Maßgabe angepasst: Registry der Anbieter jetzt und zusätzlich Ollama als lokaler Anbieter über die OpenAI-kompatible Schnittstelle; Kennsatz-Schlüssel `handlungsrelevant`, `aenderung` und `abweichung` verbindlich, Pflicht in der Vorlage, Warnung beim Laden).
 

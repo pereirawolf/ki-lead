@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.4 vom 26.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.4 vom 27.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -138,4 +138,4 @@ Begründung der Freigabe:
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
 | 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |
 | 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04); Abschnitt 3.7: Dependabot und festgelegte Node-Version (TP-2026-W44-08); Abschnitt 3.2: Ablage mit Passphrase (TP-2026-W44-09) (App 0.6.2) |
-| 1.4 | 26.10.2026 | Abschnitt 3.9: Ollama als lokaler Anbieter; Content-Security-Policy um `http://localhost:11434` und `http://127.0.0.1:11434` erweitert, mit Begründung und Restrisiko; Abschnitt 3.4 angepasst (TP-2026-W44-26, App 0.6.3) |
+| 1.4 | 27.10.2026 | Abschnitt 3.9: Ollama als lokaler Anbieter; Content-Security-Policy um `http://localhost:11434` und `http://127.0.0.1:11434` erweitert, mit Begründung und Restrisiko; Abschnitt 3.4 angepasst (TP-2026-W44-26, App 0.6.3) |

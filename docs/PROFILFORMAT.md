@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.20 vom 26.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.20 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -272,4 +272,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.17 | 23.10.2026 | Ohne Formatänderung nachgetragen: oberste Schlüssel `format`, `titel`, `untertitel`, `ausblenden`, Feldangabe `zeilen`, Rolle `sv_massnahmen`, Manifestfelder `beschreibung`, `herausgeber`, `lizenz`; ausgewertete SOP-Kopfschlüssel im Steckbrief (`bausteintyp`, `art_hinweis`, `anschluss`); Fassungsangabe Pflicht für versionierte fachliche Regelwerke (Konsistenzprüfung KW 43, KP-2026-W43-51 bis -53) |
 | 1.18 | 24.10.2026 | Ohne Formatänderung: Manifestfelder `herausgeber` und `lizenz` beschrieben (SPDX-Kennung, `LicenseRef-intern` im Beispiel „Kreis X“); Hinweis auf die Vorlage unter CC0 1.0 (KP-2026-W43-58, -60); Fassungsangabe im Kopf nachgezogen |
 | 1.19 | 26.10.2026 | Ohne Formatänderung: `format` im Meldungsschema wird nicht geprüft und beim Laden als Hinweis gemeldet (App 0.6.2, TP-2026-W44-10) |
-| 1.20 | 26.10.2026 | Kennsätze `handlungsrelevant`, `aenderung` und `abweichung` sind Pflicht; fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` (ältere Pakete bleiben nutzbar). Ersatztexte und Auswertung der App dokumentiert. Kategorievorschlag des Quellen-Baukastens und Vorlage ohne `quellen.vorlage` aus den Kategorien des Profils statt fester Buchstaben; Standardfassungen der App ohne SOP-Zitate (TP-2026-W44-27). Modellkennungen: Mistral nachgetragen, `ollama:<modell>` neu, unbekannte Kennung als Warnung `MODELL_UNBEKANNT` (TP-2026-W44-26) (App 0.6.3) |
+| 1.20 | 27.10.2026 | Kennsätze `handlungsrelevant`, `aenderung` und `abweichung` sind Pflicht; fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` (ältere Pakete bleiben nutzbar). Ersatztexte und Auswertung der App dokumentiert. Kategorievorschlag des Quellen-Baukastens und Vorlage ohne `quellen.vorlage` aus den Kategorien des Profils statt fester Buchstaben; Standardfassungen der App ohne SOP-Zitate (TP-2026-W44-27). Modellkennungen: Mistral nachgetragen, `ollama:<modell>` neu, unbekannte Kennung als Warnung `MODELL_UNBEKANNT` (TP-2026-W44-26) (App 0.6.3) |
