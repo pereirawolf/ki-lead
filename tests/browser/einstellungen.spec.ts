@@ -53,13 +53,23 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
       const nav = document.querySelector('nav[aria-label="Bereiche der Einstellungen"]')!.getBoundingClientRect();
       const inhalt = document.querySelector(".bereich-inhalt")!.getBoundingClientRect();
       const knoepfe = [...document.querySelectorAll('nav[aria-label="Bereiche der Einstellungen"] button')].map((k) => k.getBoundingClientRect().top);
+      // Im Fehlerfall die überstehenden Elemente nennen (Diagnose für WebKit in der CI, seit 0.6.5)
+      const breite = window.innerWidth;
+      const zuBreit = [...document.querySelectorAll(".bereich-inhalt *")]
+        .filter((el) => el.getBoundingClientRect().right > breite + 1 && !el.closest("details:not([open])"))
+        .slice(0, 5)
+        .map(
+          (el) =>
+            `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).trim().split(/\s+/).join(".") : ""} (${Math.round(el.getBoundingClientRect().right)} px)`,
+        );
       return {
         navOben: nav.bottom <= inhalt.top + 1,
         eineZeile: Math.max(...knoepfe) - Math.min(...knoepfe) < 2,
-        seiteBreiter: document.documentElement.scrollWidth > window.innerWidth,
+        seiteBreiter: document.documentElement.scrollWidth > breite,
+        zuBreit: document.documentElement.scrollWidth > breite ? zuBreit : [],
       };
     });
-    expect(masse, b).toEqual({ navOben: true, eineZeile: true, seiteBreiter: false });
+    expect(masse, b).toEqual({ navOben: true, eineZeile: true, seiteBreiter: false, zuBreit: [] });
   }
 });
 
