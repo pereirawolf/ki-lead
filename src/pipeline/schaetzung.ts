@@ -194,3 +194,36 @@ export function summe(werte: ([number, number] | null)[]): [number, number] | nu
   if (werte.some((w) => !w)) return null;
   return (werte as [number, number][]).reduce<[number, number]>((s, w) => [s[0] + w[0], s[1] + w[1]], [0, 0]);
 }
+
+/**
+ * Zeichen je Token für die Schätzung des Umfangs einer Anfrage (seit 0.6.4, TP-2026-W44-31). Deutscher Fließtext mit
+ * Markdown und JSON liegt bei den Tokenizern der Anbieter meist zwischen drei und vier Zeichen je Token; die App rechnet
+ * vorsichtig mit drei, damit die Warnung eher zu früh als zu spät kommt.
+ */
+export const ZEICHEN_JE_TOKEN = 3;
+
+/**
+ * Warngrenze für die Eingabe von S2 in Token (seit 0.6.4, TP-2026-W44-31). Die App kennt die Kontextfenster der Modelle
+ * nicht (die Anbieter nennen sie je Modell, Tarif und Endpunkt verschieden und ändern sie); 200 000 Token sind ein
+ * Kontextfenster, das alle in der App wählbaren Cloud-Modelle mindestens bieten sollten, und lassen bei einer
+ * Ausgabegrenze bis 128 000 Token noch Raum. Darüber droht je nach Modell die Abweisung der Anfrage, sicher aber ein
+ * teurer Aufruf, den die Nachforderung und die Vervollständigung wiederholen. Material ist nur je Datei begrenzt
+ * (400 000 Zeichen), nicht in der Summe.
+ */
+export const S2_EINGABE_WARNGRENZE = 200_000;
+
+/** Geschätzte Token eines Textumfangs (aufgerundet) */
+export function tokenAusZeichen(zeichen: number): number {
+  return Math.ceil(Math.max(0, zeichen) / ZEICHEN_JE_TOKEN);
+}
+
+/**
+ * Warnung, wenn Systemauftrag und Material von S2 die Warngrenze überschreiten; leer darunter. PDFs zählt die
+ * Schätzung nicht (das Modell liest sie seitenweise, ihr Umfang ist aus der Dateigröße nicht ablesbar).
+ */
+export function s2UmfangWarnung(u: { systemZeichen: number; materialZeichen: number; pdf: number }): string {
+  const token = tokenAusZeichen(u.systemZeichen + u.materialZeichen);
+  if (token <= S2_EINGABE_WARNGRENZE) return "";
+  const tsd = (n: number) => n.toLocaleString("de-DE");
+  return `Die Anfrage an S2 ist sehr groß: geschätzt ${tsd(token)} Token Eingabe (Systemauftrag ${tsd(tokenAusZeichen(u.systemZeichen))}, Material ${tsd(tokenAusZeichen(u.materialZeichen))}${u.pdf ? `, zuzüglich ${u.pdf} PDF` : ""}; Warngrenze ${tsd(S2_EINGABE_WARNGRENZE)}). Je nach Modell kann der Anbieter die Anfrage abweisen; jeder Aufruf ist teuer. Weniger Material, kürzere Auszüge oder weniger SOPs verkleinern die Anfrage.`;
+}

@@ -56,8 +56,10 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     const anf = att.anfragen[0];
     expect(anf.werkzeuge?.websuche?.maxUses).toBe(15);
     expect(anf.system[0].cache).toBe(true);
-    expect(anf.system[1].text).toContain("SOP-LEAD B01 Unwetter / Sturm");
-    expect(anf.system[2].text).toContain("Ausgabeformat (von der App vorgegeben)");
+    // Seit 0.6.4 (TP-2026-W44-31): Präambel, Profilgrundlagen, SOPs, Arbeitsanweisung, Steuerung
+    expect(anf.system[0].text).toMatch(/^Du bist Stufe S2/);
+    expect(anf.system[2].text).toContain("SOP-LEAD B01 Unwetter / Sturm");
+    expect(anf.system[3].text).toContain("Ausgabeformat (von der App vorgegeben)");
     expect(protokolle.length).toBeGreaterThan(2);
   });
 

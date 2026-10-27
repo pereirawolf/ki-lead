@@ -23,7 +23,7 @@ import {
   type ModellWahl as Modellwahl,
   type Rolle,
 } from "../pipeline/einstellungen";
-import { dauerText, schaetzeStufe, type SchaetzArt } from "../pipeline/schaetzung";
+import { dauerText, s2UmfangWarnung, schaetzeStufe, type SchaetzArt } from "../pipeline/schaetzung";
 import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
 import type { EinstellungsBereich } from "./Einstellungen";
@@ -47,7 +47,7 @@ import {
 import { orientierungMoeglich, orientierungssuche } from "../pipeline/orientierung";
 import { rechercheNachweis } from "../pipeline/recherchebefunde";
 import { stufe1 } from "../pipeline/s1";
-import { stufe2und3 } from "../pipeline/s2s3";
+import { s2Umfang, stufe2und3 } from "../pipeline/s2s3";
 import type { Kontext } from "../pipeline/stufen";
 import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
@@ -546,6 +546,11 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const eingaenge = material.filter((m) => m.art === "eingang");
   const vormeldungsStand = vormeldungStand(material, profil);
   const absender = useMemo(() => absenderFuer(material, profil), [material, profil]);
+  // Umfang der Anfrage an S2 vor dem Start (seit 0.6.4, TP-2026-W44-31); Material ist nur je Datei begrenzt
+  const umfangS2 = useMemo(
+    () => (lauf && vorschlag ? s2UmfangWarnung(s2Umfang(profil, material, lauf.auftrag.urls, lauf.auftrag.stichworte, vorschlag)) : ""),
+    [profil, material, lauf, vorschlag],
+  );
   const t0Ungueltig = !!vorschlag?.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
   const verdichtung = eingaenge.length > 0;
   const websuche = websucheWahl ?? !verdichtung;
@@ -1235,7 +1240,14 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                 [stufeS2, stufeS3],
                 lauf?.auftrag.websuche !== false,
                 undefined,
-                <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />,
+                <>
+                  <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
+                  {umfangS2 && (
+                    <p className="kasten kasten-hinweis" role="status">
+                      {umfangS2}
+                    </p>
+                  )}
+                </>,
               )}
               <div className="schritt-nav">
                 <div className="aktionen">

@@ -232,6 +232,11 @@ export interface PflichtVorgabe {
 }
 
 export interface Steuerung {
+  /**
+   * Auftragsangaben aus der Bestätigung von S1 (seit 0.6.4, TP-2026-W44-31; bis 0.6.3 als {{auftrag.*}} in der
+   * Arbeitsanweisung, die dadurch je Lauf neu bezahlt wurde)
+   */
+  auftrag?: AuftragsText;
   /** Tatsächlicher Bearbeitungszeitpunkt (Wanduhr der Profilzeitzone) */
   jetzt: string;
   t0: string;
@@ -281,6 +286,14 @@ export function steuerungsBlock(s: Steuerung): string {
     "",
     "Diese Angaben setzt die App aus dem Auftrag. Sie gehen Angaben in Gegenstand, Vormeldung und Material zu Arbeitsmodus und Zeit vor.",
     "",
+    ...(s.auftrag
+      ? [
+          `- Sachverhalt und Erkenntnisinteresse: ${s.auftrag.sachverhalt || "nicht angegeben"}`,
+          `- Ausgangsquellen und Hinweise: ${s.auftrag.ausgangsquellen || "keine"}`,
+          `- Besondere Prüffrage oder gewünschter Beobachtungszeitraum: ${s.auftrag.prueffrage || "keine"}`,
+          `- Ereignisart(en) bzw. SOP (bestätigte Gliederung): ${s.auftrag.ereignisarten || "frei nach Katalog"}`,
+        ]
+      : []),
     `- Bearbeitungszeitpunkt (${s.zone}): ${zeitAnzeige(s.jetzt)}`,
     `- Meldezeitpunkt t0 der neuen Meldung: ${zeitAnzeige(s.t0)}`,
     `- Stichtag: ${s.stichtag}`,
@@ -412,6 +425,18 @@ ${gemeinsameSops(profil)
 ${fachSops(profil)
   .map((s) => `## ${s.id}: ${sopKennung(s)}\n\n${anwendungsbereich(s.text)}`)
   .join("\n\n")}`;
+}
+
+/**
+ * Präambel des Systemauftrags von S2 (seit 0.6.4, TP-2026-W44-31): zwei Zeilen vor den Profilgrundlagen, statisch je
+ * Profil und deshalb gecacht. Bis 0.6.3 las S2 als Erstes ein JSON-Schema, ohne Rolle und ohne Leseordnung.
+ */
+export function s2Praeambel(profil: Profil): string {
+  const m = profil.manifest;
+  return [
+    `Du bist Stufe S2 einer gestuften Lageerfassung nach der LEAD-Systematik und erstellst den Entwurf einer Meldung${m.variablen.meldende_stelle ? ` von ${m.variablen.meldende_stelle}` : ""} (Profil ${m.name}). Es folgen Referenzdokumente (Profilgrundlagen, ausgewählte SOPs); die Arbeitsanweisung steht nach den SOPs, die verbindliche Steuerung der App mit Auftrag, Zeitpunkten und Recherchemodus zuletzt.`,
+    MATERIAL_DATENREGEL,
+  ].join("\n");
 }
 
 /** Amtlicher Rechercheeinstieg aus der Recherchetabelle einer SOP */

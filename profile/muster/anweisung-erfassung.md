@@ -6,10 +6,7 @@ Vorlagefassung · Fassung 0.5.1 vom 26.10.2026 · abgestimmt auf Teil A der SOP-
 
 ## Auftrag
 
-- Sachverhalt: {{auftrag.sachverhalt}}
-- Ausgangsquellen und Hinweise: {{auftrag.ausgangsquellen}}
-- Stichtag: {{auftrag.stichtag}}
-- Aktueller Zeitpunkt: {{jetzt}}
+Sachverhalt, Ausgangsquellen, Stichtag, Prüffrage, bestätigte Ereignisarten und SOPs sowie Bearbeitungszeitpunkt und Meldezeitpunkt setzt die App im Steuerungsblock am Ende des Systemauftrags. Laufabhängige Aussagen gehören dorthin, nicht in diese Anweisung; so bleibt sie unverändert und wird beim Anbieter gecacht.
 
 ## 0. Kontext: Rolle und Lageprodukt
 
