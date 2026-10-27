@@ -554,10 +554,18 @@ a {
 }
 
 @media (max-width: 860px) {
+  /* Safari ließ die scrollbare Hauptnavigation im umbrechenden Kopf über die Bildschirmbreite hinausragen; die Seite
+     scrollte seitlich (WebKit-Test „Smartphone …“, seit 0.6.5). clip erzeugt keinen Scrollbereich, sticky bleibt. */
+  .kopf {
+    overflow-x: clip;
+  }
+
   .hauptnav {
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
     min-width: 0;
+    max-width: 100%;
   }
 
   .nav {

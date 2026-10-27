@@ -34,9 +34,6 @@ input[type="number"],
 select,
 textarea {
   width: 100%;
-  /* WebKit bemisst ein Auswahlfeld sonst nach seiner längsten Option (Safari, Smartphone-Breite; seit 0.6.5) */
-  max-width: 100%;
-  min-width: 0;
   border: 1px solid var(--eingabe-rand);
   border-radius: var(--r-klein);
   background: var(--flaeche);

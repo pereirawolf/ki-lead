@@ -230,13 +230,6 @@
   min-height: 32px;
 }
 
-.farb-editor-raster,
-.farb-felder,
-.farb-editor-raster > *,
-.farb-felder > * {
-  min-width: 0;
-}
-
 .farb-editor-raster {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
@@ -279,7 +272,6 @@
 }
 
 .farb-ausschnitt {
-  max-width: 100%;
   background: var(--papier);
   border: 1px solid var(--linie-zart);
   border-radius: var(--r-klein);
