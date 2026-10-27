@@ -250,8 +250,21 @@ export function urlsAusText(text: string): { gueltig: string[]; ungueltig: strin
   return { gueltig: [...new Set(gueltig)], ungueltig };
 }
 
+/** Attributwert ohne Anführungszeichen und spitze Klammern: ein Dateiname kann die Hülle nicht öffnen oder schließen */
 function escapeAttr(s: string) {
-  return s.replace(/"/g, "'");
+  return s.replace(/"/g, "'").replace(/[<>]/g, "");
+}
+
+/** Elemente, mit denen die App Material in der Nutzernachricht umhüllt */
+export const HUELLEN = ["material", "stichworte", "urls"] as const;
+
+/**
+ * Inhalt für eine Hülle: Schließtags der Hüllen im Text werden zu „<\/material“ usw. neutralisiert (seit 0.6.4,
+ * TP-2026-W44-29). Ein Eingang mit „</material>“ im Text verließ bis 0.6.3 die Datenhülle; was danach stand, las das
+ * Modell wie Text der App. Die Anweisungen der Stufen nennen die Neutralisierung.
+ */
+export function huellenInhalt(text: string): string {
+  return text.replace(new RegExp(`<\\s*/\\s*(${HUELLEN.join("|")})`, "gi"), (_, name: string) => `<\\/${name}`);
 }
 
 /**
@@ -261,15 +274,15 @@ function escapeAttr(s: string) {
 export function materialBloecke(material: Material[], urls: string[], stichworte: string): Inhaltsblock[] {
   const bloecke: Inhaltsblock[] = [];
   const teile: string[] = [];
-  if (stichworte.trim()) teile.push(`<stichworte>\n${stichworte.trim()}\n</stichworte>`);
-  if (urls.length) teile.push(`<urls hinweis="Bitte abrufen und auswerten">\n${urls.join("\n")}\n</urls>`);
+  if (stichworte.trim()) teile.push(`<stichworte>\n${huellenInhalt(stichworte.trim())}\n</stichworte>`);
+  if (urls.length) teile.push(`<urls hinweis="Bitte abrufen und auswerten">\n${huellenInhalt(urls.join("\n"))}\n</urls>`);
   for (const m of material) {
     if (m.art === "pdf") continue;
     const art = m.art === "meldung" ? "vormeldung" : m.art === "eingang" ? "eingangsmeldung" : m.art;
     const zusatz = m.eingang
       ? ` stelle="${escapeAttr([m.eingang.land, m.eingang.stelle].filter(Boolean).join(", "))}" meldezeitpunkt="${escapeAttr(m.eingang.zeitpunkt)}"`
       : "";
-    teile.push(`<material name="${escapeAttr(m.name)}" art="${art}"${zusatz}>\n${m.text || ""}\n</material>`);
+    teile.push(`<material name="${escapeAttr(m.name)}" art="${art}"${zusatz}>\n${huellenInhalt(m.text || "")}\n</material>`);
   }
   if (teile.length) bloecke.push({ type: "text", text: teile.join("\n\n") });
   for (const m of material) {
