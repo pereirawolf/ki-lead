@@ -116,7 +116,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W
 - **Bewertungsfarben fremder Profile** (TP-2026-W44-16): Profile mit anderen Stufenwörtern als das Beispielprofil blieben ungefärbt.
 - **Fehlalarm der Startprüfung** (TP-2026-W44-21): Auf langsamen Geräten oder Verbindungen zeigte sie nach festen 20 s ab Aufruf einen Startfehler, obwohl die App noch lud.
 - **Klasse des Rückfragedialogs** (TP-2026-W44-20): `.rueckfrage` statt `.bestaetigung`, die schon die Datenbestätigung der KI-Erfassung trug.
-- **Safari: Einstellungen „Darstellung“ breiter als der Bildschirm** (Smartphone-Breite; gefunden vom WebKit-Projekt, TP-2026-W44-22; Entscheidung des Herausgebers vom 27.10.2026): Auswahl- und Eingabefelder mit `max-width: 100%` und `min-width: 0`, Raster des Farbschema-Editors mit `min-width: 0`, Codeausschnitt begrenzt. Der Test „Smartphone: … ohne seitliches Scrollen“ nennt im Fehlerfall die überstehenden Elemente. `date-released` in `CITATION.cff` auf den 27.10.2026.
+- **Safari: Einstellungen „Darstellung“ breiter als der Bildschirm** (Smartphone-Breite; gefunden vom WebKit-Projekt, TP-2026-W44-22; Entscheidung des Herausgebers vom 27.10.2026): Auswahl- und Eingabefelder mit `max-width: 100%` und `min-width: 0`, Raster des Farbschema-Editors mit `min-width: 0`, Codeausschnitt begrenzt. Der Test „Smartphone: … ohne seitliches Scrollen“ nennt im Fehlerfall die überstehenden Elemente. `date-released` in `CITATION.cff` auf den 27.10.2026. Die axe-Prüfung wartet je Variante, bis die App den Farbmodus angewandt hat (`data-farbmodus`); sonst maß sie in der CI gelegentlich mitten im Farbwechsel des KI-Chips.
 
 ### Tests
 

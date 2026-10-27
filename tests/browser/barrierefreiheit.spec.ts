@@ -218,6 +218,10 @@ async function jeVariante(page: Page, durchlaufen: (pruefen: (name: string) => P
   for (const { breite, schema } of VARIANTEN) {
     await page.setViewportSize({ width: breite, height: 900 });
     await page.emulateMedia({ colorScheme: schema });
+    // Erst messen, wenn die App das Schema angewandt hat (sie wechselt per JavaScript); sonst findet die Wartefunktion
+    // in axeVerstoesse noch keinen laufenden Übergang, und axe misst mitten im Farbwechsel (CI, 27.10.2026)
+    const modus = schema === "dark" ? "dunkel" : "hell";
+    await page.waitForFunction((m) => document.documentElement.dataset.farbmodus === m, modus);
     await durchlaufen(async (name) => void verstoesse.push(...(await axeVerstoesse(page, `${breite}px ${schema} ${name}`))));
   }
   return verstoesse;
