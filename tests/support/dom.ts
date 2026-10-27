@@ -24,7 +24,7 @@ export function reactUmgebung(): void {
   HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
     this.setAttribute("open", "");
     if (dialogOffenLassen) return;
-    const frage = this.querySelector(".bestaetigung-text")?.textContent ?? "";
+    const frage = this.querySelector(".rueckfrage-text")?.textContent ?? "";
     const ja = antwort(frage);
     (this.querySelector(`[data-antwort="${ja ? "ja" : "nein"}"]`) as HTMLButtonElement | null)?.click();
   };

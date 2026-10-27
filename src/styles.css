@@ -416,7 +416,7 @@ a {
 }
 
 /* Bestätigungsdialog der App statt window.confirm (seit 0.6.5, TP-2026-W44-20) */
-.bestaetigung {
+.rueckfrage {
   max-width: min(34rem, calc(100vw - 2rem));
   border: 1px solid var(--linie);
   border-radius: var(--r-mittel);
@@ -426,16 +426,16 @@ a {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-.bestaetigung::backdrop {
+.rueckfrage::backdrop {
   background: rgba(16, 20, 25, 0.45);
 }
 
-.bestaetigung-text {
+.rueckfrage-text {
   margin: 0 0 1rem;
   white-space: pre-line;
 }
 
-.bestaetigung .aktionen {
+.rueckfrage .aktionen {
   justify-content: flex-end;
 }
 

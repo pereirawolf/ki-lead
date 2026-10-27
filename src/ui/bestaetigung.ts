@@ -19,11 +19,11 @@ export function bestaetigen(frage: string, optionen: BestaetigungOptionen = {}):
     const vorher = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const nr = ++laufendeNummer;
     const dialog = document.createElement("dialog");
-    dialog.className = "bestaetigung";
-    dialog.setAttribute("aria-labelledby", `bestaetigung-${nr}-text`);
+    dialog.className = "rueckfrage";
+    dialog.setAttribute("aria-labelledby", `rueckfrage-${nr}-text`);
     const text = document.createElement("p");
-    text.className = "bestaetigung-text";
-    text.id = `bestaetigung-${nr}-text`;
+    text.className = "rueckfrage-text";
+    text.id = `rueckfrage-${nr}-text`;
     text.textContent = frage;
     const aktionen = document.createElement("div");
     aktionen.className = "aktionen";
