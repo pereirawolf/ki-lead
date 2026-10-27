@@ -81,7 +81,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.30.0",
+  "version": "1.31.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {

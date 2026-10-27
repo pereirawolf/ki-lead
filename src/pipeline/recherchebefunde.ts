@@ -86,6 +86,25 @@ export function primaerquelleBelegt(
 /** Aussagen der Kurzantwort, die eine Recherche oder geprüfte Unzugänglichkeit behaupten */
 const KURZANTWORT_RECHERCHE = /nicht zugänglich|nicht erreichbar|(?<!nicht )recherchiert|Recherche ergab|Websuche ergab/i;
 
+/** Leerangabe einer beschrifteten Angabe („nicht zugängliche Prüffragen: keine“) */
+const LEERANGABE = /^(keine|keiner|keines|nein|–|-|entfällt|nicht zutreffend)\.?$/i;
+
+/**
+ * Ob die Kurzantwort Recherche oder geprüfte Unzugänglichkeit behauptet. Seit 0.6.4 (TP-2026-W44-32) gibt die
+ * Kurzantwort der Erfassung beschriftete Zeilen aus („SOPs: …; nicht zugängliche Prüffragen: keine“); Angaben, deren
+ * Wert „keine“ ist, behaupten nichts und zählen nicht.
+ */
+export function kurzantwortBehauptetRecherche(kurzantwort: string): boolean {
+  const teile = kurzantwort
+    .split(/\n|;/)
+    .map((x) => x.trim())
+    .filter((x) => {
+      const wert = x.slice(x.lastIndexOf(":") + 1).trim();
+      return !(x.includes(":") && LEERANGABE.test(wert));
+    });
+  return KURZANTWORT_RECHERCHE.test(teile.join("\n"));
+}
+
 /**
  * Befunde zur Recherche aus Auftrag, Materialrolle und tatsächlicher Werkzeugnutzung von S2 einschließlich einer
  * Nachforderung (nicht S3: Vervollständigung und Reparatur recherchieren nicht). Seit 0.6.0 (KP-2026-W44-02) für jeden
@@ -166,7 +185,7 @@ export function rechercheBefunde(
       code: "RECHERCHE_NACHGEFORDERT",
       text: "S2 hat die verbindliche Recherche erst nach einer Nachforderung der App ergänzt (fehlende Pflichtsuchen, keine Suche oder keine amtliche Quelle); die Meldung stammt aus der Antwort auf die Nachforderung.",
     });
-  if (ohne && n.zaehlerVollstaendig && zusatz.kurzantwort && KURZANTWORT_RECHERCHE.test(zusatz.kurzantwort))
+  if (ohne && n.zaehlerVollstaendig && zusatz.kurzantwort && kurzantwortBehauptetRecherche(zusatz.kurzantwort))
     b.push({
       stufe: "hinweis",
       code: "KURZANTWORT_RECHERCHE_WIDERSPRUCH",

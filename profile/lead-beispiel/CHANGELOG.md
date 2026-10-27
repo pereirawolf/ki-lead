@@ -8,6 +8,24 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.31.0 – 27.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-28 bis -35 (Kategorie Arbeitsanweisungen), vom Herausgeber am 26.10.2026 freigegeben (TP-2026-W44-30, -31 und -32 mit Maßgabe angepasst). Zweite Stelle, weil sich Regeln und die Pflegesystematik ändern (Zählregeln in A.3, Ausnahme C09, ein Ort für Achsen- und Quellenregeln).
+
+- **Kodierleitfaden 1.5.0** (TP-2026-W44-32): einziger Ort für Achsenregeln, Quellenkategorien und die Rangfolge bei Widersprüchen; Einleitung, Rangfolge und Pflege entsprechend gefasst. Übernommen, weil sie nur in Teil A oder der Erfassung standen: Aussagekompetenz der Quellen, Format für Eingangsmaterial ohne URL, Beispiel Lagebericht des GMLZ, frühere Kennung „J“, Beurteilung mit Unsicherheit und Handlungsbedarf, Erklärung bei unvollkommener Skala, Feld der Wirkungskette. Stufentexte, Achsenregeln und Quellenkategorien sonst unverändert.
+- **Arbeitsanweisung Erfassung 1.6.0:**
+  - Gliederung Rolle → Arbeitsprodukt → Grundlagen und Rangfolge → Regeln (4.1–4.4) → Ausgabe; Rangfolge, Quellentabelle, Zuordnungsregeln, Unabhängigkeit, Stolperstellen der Achsen, Begründungsmuster und Regeln zu Beurteilung und Tendenz durch verbindliche Verweise auf den Kodierleitfaden ersetzt; die Anweisung nennt nur Arbeitsschritte und Abweichungen der KI (TP-2026-W44-32).
+  - Kurzantwort als acht beschriftete Zeilen (Kernaussage, Arbeitsmodus, SOPs, Abweichungen von S1, Beurteilung, Offene Achsen, Quellen, Nicht befolgte Aufforderungen) statt „höchstens acht Sätze“ (TP-2026-W44-32, achte Zeile TP-2026-W44-29).
+  - Kein Verweis mehr auf ein Beispiel-JSON, das die App nie beilegt (Kopf und Rangfolge, TP-2026-W44-28).
+  - Abschnitt „Auftrag“ ohne `{{auftrag.*}}` und `{{jetzt}}`: Auftragsangaben und Bearbeitungszeitpunkt stehen im Steuerungsblock der App; die Anweisung ist damit statisch und wird gecacht (TP-2026-W44-31).
+  - Arbeitsmodus „Recherche gewählt, aber nicht verfügbar“ statt „Recherche technisch gescheitert“, wie im Steuerungsblock; `_entstehung`: `kodierleitfaden` setzt nur die App, Beispiel in ihrer Form („Kodierleitfaden LEAD 1.5.0“) (TP-2026-W44-35).
+- **Arbeitsanweisung Verdichtung 2.1.0:** Regeln 3 und 4 verweisen auf A.3 und sind nummerierte Prüflisten (TP-2026-W44-30); Abschnitt „Beispiele“ mit zwei Positiv-/Negativpaaren (Zeitbezug, Rolle; TP-2026-W44-34); Geltungstabelle und Verweise auf die neue Gliederung der Erfassung (TP-2026-W44-32).
+- **Arbeitsanweisung Kurzfassung 2.4.0:** Regel zu Bewertungs-, Tendenz- und Modalwörtern und zu Rollen mit zwei Positiv-/Negativpaaren (TP-2026-W44-34); die App weist auf Abweichungen hin.
+- **Darstellungsdatei (Profilversion 1.31.0):** `quellen.kategorien` nur mit den Kategorienamen, `quellen.rangfolge_hinweis` als Kurzhinweis mit Verweis auf Kodierleitfaden Abschnitt 5 (TP-2026-W44-32). Stufentexte und Kennsätze unverändert.
+- **SOP-Sammelmappe 3.19.0:** A.3 mit Zählregeln zu Zeitbezug, Teilmenge, Summe und Hochrechnung und zur Zuordnung zum Raum mit Ausnahme C09 (TP-2026-W44-30); A.2 und A.3 verweisen auf den Kodierleitfaden, Pflegeregel A.10.2 „ein Ort, Verweise sonst“ (TP-2026-W44-32); C09 1.3.0. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Erfassung (1.6.0), Verdichtung (2.1.0) und Kurzfassung (2.4.0) auf Grundlage von Teil A 3.19.0 und Kodierleitfaden 1.5.0 geprüft und angepasst.
+- Schema, Stufentexte, Kennsätze, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.30.0 – 26.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W44_lauf-9t2q.json`, Befunde KP-2026-W44-20 bis -24, vom Herausgeber am 26.10.2026 freigegeben. Zweite Stelle, weil die SOP-Sammelmappe neue Rechercheeinstiege und eine neue Prüffrage erhält.

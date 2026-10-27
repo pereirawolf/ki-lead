@@ -108,7 +108,7 @@ export function sopBlock(profil: Profil, ids: string[]): string {
 
 export const AUSGABEVERTRAG = `## Ausgabeformat (von der App vorgegeben)
 
-Gib zuerst die Kurzantwort als Fließtext aus (höchstens acht Sätze, ohne Überschrift; Einzelheiten gehören in die Meldung, nicht in die Kurzantwort). Gib danach genau einen Codeblock mit der vollständigen Meldung aus: Er beginnt mit \`\`\`json und endet mit \`\`\`. Der Codeblock enthält ausschließlich das JSON-Objekt, ohne Kommentare. Nach dem Codeblock folgt kein weiterer Text.
+Gib zuerst die Kurzantwort aus, in der Form, die die Arbeitsanweisung vorgibt (ohne Überschrift und ohne Codezaun; Einzelheiten gehören in die Meldung, nicht in die Kurzantwort). Gib danach genau einen Codeblock mit der vollständigen Meldung aus: Er beginnt mit \`\`\`json und endet mit \`\`\`. Der Codeblock enthält ausschließlich das JSON-Objekt, ohne Kommentare. Nach dem Codeblock folgt kein weiterer Text.
 
 Für das Quellenverzeichnis verwendest du nur Fundstellen aus deiner Websuche, aus abgerufenen Seiten und aus dem Eingangsmaterial. Erfinde keine URLs. Die App prüft das Ergebnis gegen das Schema und legt es der Person zur Prüfung und Freigabe vor.`;
 

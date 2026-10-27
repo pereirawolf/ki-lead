@@ -1,6 +1,6 @@
 # Arbeitsanweisung Kurzfassung: Management Summary
 
-Beispielfassung für KI-LEAD · Fassung 2.3.0 vom 25.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.16.0 und die Arbeitsanweisungen Erfassung ab 1.4.0 und Verdichtung ab 2.0.2 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 2.4.0 vom 27.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.19.0 und die Arbeitsanweisungen Erfassung ab 1.6.0 und Verdichtung ab 2.1.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 ## Auftrag
 

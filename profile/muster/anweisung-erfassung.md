@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Lagemeldung [Organisation]
 
-Vorlagefassung · Fassung 0.5.1 vom 26.10.2026 · abgestimmt auf Teil A der SOP-Sammlung und den Kodierleitfaden der Vorlage, jeweils Fassung 0.5 · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
+Vorlagefassung · Fassung 0.5.2 vom 27.10.2026 · abgestimmt auf Teil A der SOP-Sammlung und den Kodierleitfaden der Vorlage, jeweils Fassung 0.5 · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Stufentexte, Kennsätze, Quellenkategorien), Teil A der SOP-Sammlung, die in Stufe S1 ausgewählten SOPs, der Kodierleitfaden und das Eingangsmaterial des Auftrags. Ergebnis ist ein prüfbarer **Entwurf**.
 

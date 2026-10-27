@@ -132,7 +132,7 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
     const { profil: m } = await profil("muster");
     const doks = arbeitsgrundlagen(m!);
     expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
-      ["erfassung", "paket", "0.5.1"],
+      ["erfassung", "paket", "0.5.2"],
       ["verdichtung", "app", undefined],
       ["kurzfassung", "app", undefined],
       ["kodierleitfaden", "paket", "0.5"],

@@ -123,7 +123,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.3), jedes Profil eine eigene Version (Beispielprofil 1.30.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.3), jedes Profil eine eigene Version (Beispielprofil 1.31.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
