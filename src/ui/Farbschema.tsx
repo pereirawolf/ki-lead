@@ -249,6 +249,12 @@ function EigeneFarben({ profil, zugang }: { profil: Profil; zugang: FarbZugang }
   );
 }
 
+/** Regel der Option „Automatisch (wie Gerät)“ mit den Namen aus dem Katalog */
+export function automatischRegel(): string {
+  const n = (id: string) => katalogEintrag(id)?.name ?? id;
+  return `Folgt der Einstellung des Geräts: hell → ${n("neutral-hell")}, dunkel → ${n("neutral-dunkel")}, „Mehr Kontrast“ → ${n("kontrast-hell")} bzw. ${n("kontrast-dunkel")}.`;
+}
+
 export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null; zugang: FarbZugang }) {
   const t = zugang.thema;
   const profilSchema = profil?.manifest.farbschema;
@@ -276,8 +282,12 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
       </p>
       <label className="feld">
         <span>Farbschema</span>
-        <select value={zugang.auswahl} onChange={(e) => zugang.setAuswahl(e.target.value)}>
-          <option value={AUTOMATISCH}>Automatisch (nach System: Neutral · Hell oder Neutral · Night Mode, bei „mehr Kontrast“ Kontrastschema)</option>
+        <select
+          value={zugang.auswahl}
+          onChange={(e) => zugang.setAuswahl(e.target.value)}
+          aria-describedby={zugang.auswahl === AUTOMATISCH ? "farbschema-automatisch" : undefined}
+        >
+          <option value={AUTOMATISCH}>Automatisch (wie Gerät)</option>
           <optgroup label="Neutral">
             {NEUTRAL.map((s) => (
               <option key={s.id} value={s.id}>
@@ -285,10 +295,10 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
               </option>
             ))}
           </optgroup>
-          <optgroup label="Kontrast">
+          <optgroup label="Kontrast (Text mindestens 7:1)">
             {KONTRAST.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.name} – {s.modus === "hell" ? "heller" : "dunkler"} Hintergrund, besonders deutlicher Text und Konturen
+                {s.name}
               </option>
             ))}
           </optgroup>
@@ -311,6 +321,13 @@ export function FarbschemaAbschnitt({ profil, zugang }: { profil: Profil | null;
           </optgroup>
         </select>
       </label>
+      {zugang.auswahl === AUTOMATISCH && (
+        // Kurzer Optionstext, die Regel steht hier (seit 0.6.5; der frühere Optionstext machte die Seite in Safari breiter
+        // als den Bildschirm). Namen aus dem Katalog, damit Anzeige und Regel nicht auseinanderlaufen.
+        <p className="hinweis" id="farbschema-automatisch">
+          {automatischRegel()}
+        </p>
+      )}
       <p className="hinweis">
         Verwendet: <strong>{t.name}</strong>
         {quelle ? ` – ${quelle}` : ""}.

@@ -38,7 +38,7 @@ Stand 27.10.2026, App 0.6.5 (Abschnitt „Pflege“: eine Farbquelle; Katalog so
 | `de-sh` | Schleswig-Holstein | Blau-Weiß-Rot | `#003064` | `#003064` `#FFFFFF` `#D4004B` | CI-Farbwerte belegt | stimmig: Blau-Weiß-Rot. |
 | `de-th` | Thüringen | Weiß-Rot | `#006F9C` | `#0089C1` `#FFFFFF` `#D62B32` | CI-Farbwerte belegt | stimmig: Thüringen-Blau des Landesauftritts (für Text abgedunkelt), Band mit Weiß-Rot der Landesfarben. |
 
-Zusätzlich: **Automatisch** (Vorgabe: „Neutral · Hell“ oder „Neutral · Night Mode“ nach Systemeinstellung, bei „mehr Kontrast“ das passende Kontrastschema; seit 0.4.22 ohne eigene, davon abweichende Farben) und **Farben des aktiven Profils**.
+Zusätzlich: **Automatisch (wie Gerät)** (Regel als Hinweis unter dem Auswahlfeld, seit 0.6.5; Vorgabe: „Neutral · Hell“ oder „Neutral · Night Mode“ nach Systemeinstellung, bei „mehr Kontrast“ das passende Kontrastschema; seit 0.4.22 ohne eigene, davon abweichende Farben) und **Farben des aktiven Profils**.
 
 ## Barrierefreiheit: geprüfte Vorschläge
 

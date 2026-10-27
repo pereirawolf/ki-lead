@@ -42,7 +42,7 @@ it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwen
   await zeigeApp();
   await einstellungen();
   const optgroups = [...farbSelect().querySelectorAll("optgroup")].map((g) => g.label);
-  expect(optgroups).toEqual(["Neutral", "Kontrast", "Bund", "Bundesländer", "Profil"]);
+  expect(optgroups).toEqual(["Neutral", "Kontrast (Text mindestens 7:1)", "Bund", "Bundesländer", "Profil"]);
   expect(farbSelect().querySelectorAll("option")).toHaveLength(24);
   await act(async () => waehle(farbSelect(), "de-th"));
   await bisWahr(() => expect(db.werte.get("darstellung")).toEqual({ version: 1, auswahl: "de-th" }));
@@ -55,6 +55,26 @@ it("Auswahl wirkt sofort auf das Dokument, wird gespeichert und nennt das verwen
   // „Automatisch“ = Neutral · Hell oder Neutral · Night Mode nach System (hier hell), kein eigenes Schema
   expect(document.documentElement.dataset.farbschema).toBe("neutral-hell");
   expect(seitentext()).toContain("Automatisch: Neutral · Hell");
+});
+
+it("„Automatisch (wie Gerät)“: kurzer Optionstext, Regel als Hinweis nur bei dieser Auswahl (seit 0.6.5)", async () => {
+  await zeigeApp();
+  await einstellungen();
+  const optionen = [...farbSelect().querySelectorAll("option")].map((o) => o.textContent ?? "");
+  expect(optionen[0]).toBe("Automatisch (wie Gerät)");
+  expect(optionen).toContain("Kontrast · Hell");
+  expect(optionen).toContain("Kontrast · Dunkel");
+  // Lange Optionstexte machten die Seite in Safari breiter als den Bildschirm (WebKit-Test „Smartphone …“); 45 Zeichen
+  // passen bei 390 px Bildschirmbreite in das Feld (längste heute: „Farben des aktiven Profils (keine definiert)“)
+  expect(optionen.filter((t) => t.length > 45)).toEqual([]);
+  const regel =
+    "Folgt der Einstellung des Geräts: hell → Neutral · Hell, dunkel → Neutral · Night Mode, „Mehr Kontrast“ → Kontrast · Hell bzw. Kontrast · Dunkel.";
+  expect(farbSelect().value).toBe("automatisch");
+  expect(document.getElementById("farbschema-automatisch")?.textContent).toBe(regel);
+  expect(farbSelect().getAttribute("aria-describedby")).toBe("farbschema-automatisch");
+  await act(async () => waehle(farbSelect(), "de-th"));
+  await bisWahr(() => expect(document.getElementById("farbschema-automatisch")).toBeNull());
+  expect(farbSelect().hasAttribute("aria-describedby")).toBe(false);
 });
 
 it("„Farben des aktiven Profils“ ohne Profilfarben: Ersatz mit Erklärung", async () => {
