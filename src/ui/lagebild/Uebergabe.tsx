@@ -2,7 +2,7 @@
 // KI-Auftrag (Eingang oder eigene Vormeldung). Die Rolle bleibt beim Ab- und Wiederanwählen erhalten und ändert die
 // Originalmeldung nicht.
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Profil } from "../../kern/typen";
 import { datumDE } from "../../kern/ausgabe";
 import { absender, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
@@ -23,6 +23,7 @@ export function LagebildUebergabe({
   eigen: (e: LagebildEintrag) => boolean;
   dateiZu: (e: LagebildEintrag) => { name: string; text: string } | undefined;
   uebergeben: (dateien: UebergabeMeldung[]) => void;
+  /** Schließen ohne Übergabe („Abbrechen“, Escape); der Fokus geht an den auslösenden Knopf zurück */
   abbrechen: () => void;
 }) {
   const optionen = (e: LagebildEintrag) => moeglicheRollen(e.daten, profil);
@@ -48,9 +49,24 @@ export function LagebildUebergabe({
     uebergeben(liste);
   };
 
+  // Fokus beim Öffnen auf den Titel, Escape schließt (seit 0.6.5, TP-2026-W44-13); bis 0.6.4 blieb der Fokus am Knopf
+  // „An KI-Verdichtung übergeben“, und der Dialog ließ sich nur mit „Abbrechen“ schließen
+  const titelRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => titelRef.current?.focus(), []);
   return (
-    <div className="kasten kasten-info lb-uebergabe" role="dialog" aria-labelledby="uebergabe-titel">
-      <h3 id="uebergabe-titel">An die KI-Verdichtung übergeben</h3>
+    <div
+      className="kasten kasten-info lb-uebergabe"
+      role="dialog"
+      aria-labelledby="uebergabe-titel"
+      onKeyDown={(ev) => {
+        if (ev.key !== "Escape") return;
+        ev.preventDefault();
+        abbrechen();
+      }}
+    >
+      <h3 id="uebergabe-titel" ref={titelRef} tabIndex={-1}>
+        An die KI-Verdichtung übergeben
+      </h3>
       <p>
         Wähle die Meldungen und ihre Rolle für den KI-Auftrag. <strong>Eingänge</strong> liefern Informationen für die Verdichtung. Eine{" "}
         <strong>Vormeldung</strong> bildet den Ausgangspunkt für die Fortschreibung. Die Rolle gilt nur für diesen Auftrag; die Meldungen selbst bleiben

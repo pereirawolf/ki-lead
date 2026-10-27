@@ -89,3 +89,33 @@ test("KI-Erfassung: S1 mit simuliertem Anbieter bis zur Bestätigung, Protokoll 
   expect(inhalt).not.toContain(SCHLUESSEL);
   expect(netz.fremd).toEqual([]);
 });
+
+// Fokusführung (seit 0.6.5): Nach einem Phasenwechsel liegt der Fokus auf der Überschrift des neuen Schritts statt auf
+// dem Dokument; der Übergabedialog im Lagebild übernimmt den Fokus und schließt mit Escape.
+test("TP-2026-W44-13: nach S1 ist die Überschrift „Gegenstand bestätigen“ fokussiert", async ({ page }) => {
+  await netzVorbereiten(page, () => JSON.stringify(S1_VORSCHLAG));
+  await oeffnen(page);
+  await schluesselSetzen(page);
+  await bereich(page, "KI-Erfassung");
+  await page.getByLabel("Untersuchungsgegenstand und Erkenntnisinteresse").fill("Orkan in Hessen");
+  await page.getByLabel(/Ich gebe nur fiktive oder offen zugängliche/).check();
+  await page.getByRole("button", { name: "Gegenstand bestimmen (S1)" }).click();
+  const titel = page.getByRole("heading", { level: 2, name: "Gegenstand bestätigen" });
+  await expect(titel).toBeFocused();
+  await page.getByRole("button", { name: "Zurück zum Auftrag" }).click();
+  await expect(page.getByRole("heading", { level: 2, name: "Auftrag und Material" })).toBeFocused();
+});
+
+test("TP-2026-W44-13: der Übergabedialog im Lagebild übernimmt den Fokus und schließt mit Escape", async ({ page }) => {
+  await netzVorbereiten(page, () => "haengen");
+  await oeffnen(page);
+  await bereich(page, "Lagebild");
+  await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+  const knopf = page.getByRole("button", { name: "An KI-Verdichtung übergeben" });
+  await knopf.click();
+  const dialog = page.getByRole("dialog", { name: "An die KI-Verdichtung übergeben" });
+  await expect(dialog.getByRole("heading", { name: "An die KI-Verdichtung übergeben" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(knopf).toBeFocused();
+});

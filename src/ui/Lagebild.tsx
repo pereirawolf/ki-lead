@@ -207,6 +207,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
 
   /** Übergabedialog an die KI-Verdichtung: 0 = geschlossen; jedes Öffnen zählt hoch und beginnt mit dem Vorschlag */
   const [uebergabeOffen, setUebergabeOffen] = useState(0);
+  const uebergabeKnopf = useRef<HTMLButtonElement>(null);
   const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
@@ -424,7 +425,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
               <button type="button" className="knopf" onClick={csv} disabled={!kz.meldungen}>
                 Rohtabelle als CSV
               </button>
-              <button type="button" className="knopf primaer" onClick={() => setUebergabeOffen((n) => n + 1)}>
+              <button type="button" className="knopf primaer" ref={uebergabeKnopf} onClick={() => setUebergabeOffen((n) => n + 1)}>
                 An KI-Verdichtung übergeben
               </button>
               <button type="button" className="knopf leise" onClick={alleEntfernen}>
@@ -443,7 +444,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
                 setUebergabeOffen(0);
                 uebergeben(liste);
               }}
-              abbrechen={() => setUebergabeOffen(0)}
+              abbrechen={() => {
+                setUebergabeOffen(0);
+                uebergabeKnopf.current?.focus();
+              }}
             />
           )}
           <details className="lb-dateiliste" open={eintraege.length <= 4}>

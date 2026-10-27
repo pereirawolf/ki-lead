@@ -44,7 +44,7 @@ export function Auftragsformular({
   const dateiRef = useRef<HTMLInputElement>(null);
   return (
     <>
-      <h2>Auftrag und Material</h2>
+      <h2 tabIndex={-1}>Auftrag und Material</h2>
       <p className="einleitung">
         Beschreibe, was geklärt werden soll, und gib vorhandenes Material mit. Ohne Material recherchiert die KI selbst in offenen Quellen.
       </p>

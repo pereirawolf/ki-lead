@@ -93,7 +93,7 @@ export function Bestaetigung({
 
   return (
     <>
-      <h2>Gegenstand bestätigen</h2>
+      <h2 tabIndex={-1}>Gegenstand bestätigen</h2>
       <p className="einleitung">
         Vorschlag aus Stufe S1. Prüfe Gliederung, Ereignisarten und SOPs und korrigiere sie bei Bedarf. Erst danach beginnt die Recherche.
       </p>

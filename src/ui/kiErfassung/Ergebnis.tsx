@@ -35,7 +35,7 @@ export function Ergebnis({
   const s2 = lauf.stufen.find((s) => s.stufe.startsWith("S2"));
   return (
     <>
-      <h2>Prüfung und Übergabe</h2>
+      <h2 tabIndex={-1}>Prüfung und Übergabe</h2>
       {e ? (
         <div className={e.schemakonform ? "kasten kasten-ok" : "kasten kasten-hinweis"} role="status">
           <p>

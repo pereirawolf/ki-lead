@@ -78,7 +78,7 @@ export function Laufanzeige({
       <p className="sr-only" role="status">
         {ansage}
       </p>
-      <h2>{ueberschrift}</h2>
+      <h2 tabIndex={-1}>{ueberschrift}</h2>
       <p className="einleitung">
         {phase === "s1"
           ? `Die KI ordnet den Auftrag ein. Das dauert voraussichtlich ${dauerFuer(rahmen, "vorverarbeitung", "s1")}.`

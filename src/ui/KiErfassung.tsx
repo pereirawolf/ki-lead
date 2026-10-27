@@ -317,6 +317,16 @@ function Erfassung({
     protokollExport,
   };
 
+  // Fokus beim Wechsel der Phase auf die Überschrift des neuen Schritts (seit 0.6.5, TP-2026-W44-13): Bis 0.6.4 fiel er
+  // auf das Dokument, sobald der fokussierte Knopf („Abbrechen“, „Gegenstand bestimmen“) verschwand. Nicht beim Einhängen.
+  const inhaltRef = useRef<HTMLElement>(null);
+  const vorherPhase = useRef(phase);
+  useEffect(() => {
+    if (vorherPhase.current === phase) return;
+    vorherPhase.current = phase;
+    inhaltRef.current?.querySelector<HTMLElement>("h2")?.focus();
+  }, [phase]);
+
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === (phase === "orientierung" ? "bestaetigen" : phase));
   const orientierungAn = !!lauf && orientierungMoeglich({ einstellungen: laufEinstellungen, profil, lauf, material }).an;
 
@@ -380,7 +390,7 @@ function Erfassung({
           </ol>
         </nav>
 
-        <section className="schritt-inhalt">
+        <section className="schritt-inhalt" ref={inhaltRef}>
           {ablauf.phase === "auftrag" && (
             <Auftragsformular
               rahmen={rahmen}
