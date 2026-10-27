@@ -106,15 +106,17 @@ jobs:
         env:
           KI_LEAD_BUILD_VORHANDEN: "1"
       # Kerntests zusätzlich in WebKit (Safari, auch iOS; seit 0.6.5, TP-2026-W44-22). WebKit wird nur hier geladen,
-      # damit `npm run test:browser` lokal mit Chromium allein auskommt. Bis zur ersten erfolgreichen Erprobung in der
-      # CI nicht blockierend und mit Zeitgrenzen: Die Installation hing im ersten Lauf ohne Ende (27.10.2026).
+      # damit `npm run test:browser` lokal mit Chromium allein auskommt. Die Tests blockieren (seit dem ersten grünen Lauf,
+      # 27.10.2026). Die Installation hing in der CI wiederholt; sie ist zeitbegrenzt und nicht blockierend: Scheitert
+      # sie, entfallen die WebKit-Tests mit einer Warnung am Lauf, statt die Prüfung ohne Befund am Code rot zu färben.
       - if: steps.umfang.outputs.kern == 'true'
         id: webkit
         continue-on-error: true
         timeout-minutes: 10
         run: npx playwright install --with-deps webkit
+      - if: steps.umfang.outputs.kern == 'true' && steps.webkit.outcome != 'success'
+        run: echo "::warning title=WebKit::Installation von WebKit gescheitert oder abgebrochen; WebKit-Tests entfallen in diesem Lauf."
       - if: steps.umfang.outputs.kern == 'true' && steps.webkit.outcome == 'success'
-        continue-on-error: true
         timeout-minutes: 20
         run: npm run test:browser:webkit
         env:

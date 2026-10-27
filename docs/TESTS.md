@@ -34,7 +34,7 @@ Welche Dateien was auslösen, legt `scripts/pruefumfang.mjs` fest; `tests/ci/pru
 
 Was ein Pull Request auslässt, läuft spätestens nach dem Zusammenführen auf `main` vor der Veröffentlichung; scheitert dort ein Test, wird nicht veröffentlicht. Der Wochenlauf veröffentlicht nichts.
 
-Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions. WebKit lädt der Lauf eigens (`npx playwright install --with-deps webkit`), nur wenn die Kerntests anstehen. Beide WebKit-Schritte sind vorerst nicht blockierend (`continue-on-error`) und zeitbegrenzt (10 bzw. 20 Minuten); ein Fehlschlag erscheint als Warnung am Lauf, nicht als Abbruch. Fehlschläge der Browsertests meldet der Reporter „github“ als Annotation.
+Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions. WebKit lädt der Lauf eigens (`npx playwright install --with-deps webkit`), nur wenn die Kerntests anstehen. Die WebKit-Tests blockieren und sind auf 20 Minuten begrenzt. Die Installation ist auf 10 Minuten begrenzt und nicht blockierend, weil sie in der CI wiederholt hing; scheitert sie, entfallen die WebKit-Tests mit einer Warnung am Lauf. Fehlschläge der Browsertests meldet der Reporter „github“ als Annotation.
 
 ## Gliederung
 
