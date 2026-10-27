@@ -1,9 +1,11 @@
-// Ersetzt {{profil.*}}, {{auftrag.*}}, {{app.*}} und {{jetzt}} in Arbeitsanweisungen.
+// Ersetzt {{profil.*}}, {{auftrag.*}}, {{app.*}}, {{kennsatz.*}} (seit 0.6.3) und {{jetzt}} in Arbeitsanweisungen.
 
 export interface PlatzhalterKontext {
   profil: Record<string, string | undefined>;
   auftrag?: Record<string, string | undefined>;
   app?: Record<string, string | undefined>;
+  /** Kennsätze der Darstellungsdatei, mit den Ersatztexten der App für fehlende Pflichtkennsätze (seit 0.6.3, TP-2026-W44-27) */
+  kennsatz?: Record<string, string | undefined>;
   jetzt?: string;
 }
 

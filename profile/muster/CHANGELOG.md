@@ -2,6 +2,13 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 0.6.0 – 26.10.2026
+
+Anlass: Befund TP-2026-W44-27 der technischen Prüfung, vom Herausgeber am 26.10.2026 freigegeben (Kennsatz-Schlüssel verbindlich).
+
+- Darstellungsdatei: Kennsätze `handlungsrelevant` („Handlungsrelevant bis:“), `aenderung` („Änderung zur Vormeldung:“) und `abweichung` („Abweichende Bewertung:“) ergänzt. Sie sind seit Profilformat 1.20 Pflicht; die App wertet sie für Fristen, Änderungsvermerke und abweichende Bewertungen aus und warnt beim Laden, wenn einer fehlt. Bisher lief der Redaktionscheck mit der Vorlage für diese Kennsätze still auf Ersatztexte der App oder gar nicht. Die Texte sind Vorschläge wie im Beispielprofil und können bei der Übernahme angepasst werden; dann auch Arbeitsanweisung und Kodierleitfaden angleichen.
+- README: Abschnitt „Kennsätze“.
+
 ## 0.5.1 – 26.10.2026
 
 Anlass: Befund KP-2026-W44-11, vom Herausgeber am 26.10.2026 freigegeben.

@@ -9,6 +9,31 @@ import type { Befund, Meldung, TextGliederung, UiKonfig } from "./typen";
 
 export const DATUM_RE = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/;
 
+/**
+ * Kennsätze, die die App selbst auswertet; seit 0.6.3 (TP-2026-W44-27, Profilformat 1.20) Pflicht in `kennsaetze` der
+ * Darstellungsdatei. Fehlt einer, lädt das Profil mit einer Warnung (`KENNSATZ_FEHLT`).
+ * - `handlungsrelevant`: Fristen für Management Summary und Redaktionscheck
+ * - `aenderung`: Änderungsvermerk einer Fortschreibung (Redaktionscheck)
+ * - `abweichung`: abweichende Bewertungen bei der Verdichtung (Redaktionscheck, Textbaustein, Standardtext Verdichtung)
+ */
+export const PFLICHT_KENNSAETZE = ["handlungsrelevant", "aenderung", "abweichung"] as const;
+export type PflichtKennsatz = (typeof PFLICHT_KENNSAETZE)[number];
+
+/**
+ * Ersatztexte der App, wo sie ohne Kennsatz des Profils dennoch einen Satzanfang braucht (Fristenblock der Management
+ * Summary, Textbaustein „Abweichende Bewertung“, Standardtext Verdichtung). Gleich den Kennsätzen des Beispielprofils.
+ */
+export const KENNSATZ_ERSATZ: Record<PflichtKennsatz, string> = {
+  handlungsrelevant: "Handlungsrelevant bis:",
+  aenderung: "Änderung zur Vormeldung:",
+  abweichung: "Abweichende Bewertung:",
+};
+
+/** Pflichtkennsätze, die eine Darstellungsdatei nicht (oder leer) liefert */
+export function fehlendeKennsaetze(ui: Pick<UiKonfig, "kennsaetze">): PflichtKennsatz[] {
+  return PFLICHT_KENNSAETZE.filter((k) => !ui.kennsaetze?.[k]?.trim());
+}
+
 export function kennsatz(text: unknown, prefix: string | undefined): string | null {
   if (!prefix) return null;
   const hit = String(text || "")

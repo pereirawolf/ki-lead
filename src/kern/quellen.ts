@@ -168,21 +168,48 @@ export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
 export function neuerQuellenEintrag(quellenText: string, ui: UiKonfig, heute: string): string {
   const nrs = parseQuellen(quellenText).map((e) => e.nr);
   const n = nrs.length ? Math.max(...nrs) + 1 : 1;
-  const vorlage = ui.quellen?.vorlage || "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]";
-  return vorlage.replace("{n}", String(n)).replace("{heute}", heute);
+  return quellenVorlage(ui).replace("{n}", String(n)).replace("{heute}", heute);
 }
 
 // ── Baukasten für neue Quellenzeilen ─────────────────────────────────────────
 // Kategorie (aus dem Profil) + Art der Quelle + Zusätze ergeben eine Zeile im Format der Profilvorlage
 // „[Qn] K – Herausgeber (Datum): Titel …“. Platzhalter sind Wörter, die nach dem Einfügen markiert und überschrieben werden.
 
+/**
+ * Rolle einer Quelle, aus der die App die Kategorie des Profils vorschlägt (seit 0.6.3, TP-2026-W44-27, statt fester
+ * Kennbuchstaben): die erste Kategorie in der Rangfolge des Profils, deren Bezeichnung (Text vor „ – “) zur Rolle passt.
+ */
+export type QuellenRolle = "amtlich" | "betreiber" | "wissenschaftlich" | "privat";
+
+const ROLLEN_MUSTER: Record<QuellenRolle, RegExp> = {
+  amtlich: /amtlich|behörd/i,
+  betreiber: /betreiber/i,
+  wissenschaftlich: /wissenschaft/i,
+  privat: /privat/i,
+};
+
 export interface QuellenArt {
   id: string;
   name: string;
-  /** Vorgeschlagene Kategorie (wird nur übernommen, wenn das Profil sie kennt) */
-  kategorie?: string;
+  /** Rolle, nach der die App eine Kategorie des Profils vorschlägt (nur, wenn das Profil eine passende führt) */
+  rolle?: QuellenRolle;
   /** Rumpf ohne „[Qn] K – “; {heute} = Zugriffsdatum */
   rumpf: string;
+}
+
+/** Kategorie des Profils zu einer Rolle: erste in der Rangfolge, deren Bezeichnung passt; sonst undefined */
+export function kategorieFuerRolle(rolle: QuellenRolle, ui: UiKonfig): string | undefined {
+  return kategorienGeordnet(ui).find(([, text]) => ROLLEN_MUSTER[rolle].test(text.split(/\s+[–—-]\s+/)[0] ?? ""))?.[0];
+}
+
+/**
+ * Vorlage für neue Einträge: die des Profils (`quellen.vorlage`), sonst aus der ersten Kategorie der Rangfolge erzeugt
+ * (seit 0.6.3, TP-2026-W44-27; bisher fest „A“), ohne Kategorien ohne Kennbuchstaben.
+ */
+export function quellenVorlage(ui: UiKonfig): string {
+  if (ui.quellen?.vorlage) return ui.quellen.vorlage;
+  const erste = kategorienGeordnet(ui)[0]?.[0];
+  return `[Q{n}] ${erste ? `${erste} – ` : ""}Herausgeber (Datum): Titel [Zugriff: {heute}]`;
 }
 
 export const QUELLEN_ARTEN: QuellenArt[] = [
@@ -190,16 +217,16 @@ export const QUELLEN_ARTEN: QuellenArt[] = [
   {
     id: "pressemitteilung",
     name: "Pressemitteilung",
-    kategorie: "A",
+    rolle: "amtlich",
     rumpf: "Herausgeber (Datum): Pressemitteilung „Titel“. Online abrufbar unter: URL [Zugriff: {heute}]",
   },
   {
     id: "lagebild",
     name: "Lagebild/Lagebericht",
-    kategorie: "A",
+    rolle: "amtlich",
     rumpf: "Herausgeber (Datum, Uhrzeit): Lagebild „Bezeichnung“, Ausgabe Nr. (behördenintern) [Zugriff: {heute}]",
   },
-  { id: "lagemeldung", name: "Meldung aus dem Lagebild", kategorie: "A", rumpf: "Stelle (Datum, Uhrzeit): Lagemeldung (behördenintern) [Zugriff: {heute}]" },
+  { id: "lagemeldung", name: "Meldung aus dem Lagebild", rolle: "amtlich", rumpf: "Stelle (Datum, Uhrzeit): Lagemeldung (behördenintern) [Zugriff: {heute}]" },
   {
     id: "datensatz",
     name: "Datensatz/Dashboard",
@@ -208,16 +235,16 @@ export const QUELLEN_ARTEN: QuellenArt[] = [
   {
     id: "social",
     name: "Beitrag in sozialen Medien",
-    kategorie: "P",
+    rolle: "privat",
     rumpf: "Konto (@Kennung) (Datum, Uhrzeit): Beitrag auf Plattform. Online abrufbar unter: URL [Zugriff: {heute}]",
   },
   {
     id: "auskunft",
     name: "Auskunft (Telefon, E-Mail)",
-    kategorie: "B",
+    rolle: "betreiber",
     rumpf: "Stelle, Funktion (Datum, Uhrzeit): Auskunft per Telefon bzw. E-Mail zu Gegenstand (nicht öffentlich) [Zugriff: {heute}]",
   },
-  { id: "dokument", name: "Dokument ohne URL", kategorie: "W", rumpf: "Herausgeber (Jahr): Titel. Verlag bzw. Reihe [Zugriff: {heute}]" },
+  { id: "dokument", name: "Dokument ohne URL", rolle: "wissenschaftlich", rumpf: "Herausgeber (Jahr): Titel. Verlag bzw. Reihe [Zugriff: {heute}]" },
 ];
 
 /** Wörter, die beim Einfügen als Platzhalter markiert werden (in dieser Reihenfolge gesucht) */
@@ -261,8 +288,7 @@ export function quellenZeile(
   const art = QUELLEN_ARTEN.find((a) => a.id === o.art);
   let zeile: string;
   if (!art && !o.rumpf) {
-    const vorlage = ui.quellen?.vorlage || "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]";
-    zeile = vorlage.replace("{n}", String(o.nr)).replace("{heute}", o.heute);
+    zeile = quellenVorlage(ui).replace("{n}", String(o.nr)).replace("{heute}", o.heute);
     if (k) zeile = zeile.replace(/^(\[Q\d+\]\s*)[A-Z](?=\s*[–\-·:|])/, `$1${k}`);
   } else {
     const rumpf = (o.rumpf ?? art!.rumpf).replace("{heute}", o.heute);
@@ -288,10 +314,10 @@ export function lagemeldungRumpf(absender: string, zeit: string, entwurf: boolea
   return `${absender.replace(/ · /g, ", ")} (${zeit || "Datum"}): Lagemeldung${entwurf ? " (Entwurf)" : ""} (behördenintern), Datei „${datei}“ [Zugriff: {heute}]`;
 }
 
-/** Kategorie, die eine Art vorschlägt, sofern das Profil sie kennt */
+/** Kategorie, die eine Art vorschlägt, sofern das Profil eine zu ihrer Rolle passende führt */
 export function vorgeschlageneKategorie(artId: string, ui: UiKonfig): string | undefined {
-  const k = QUELLEN_ARTEN.find((a) => a.id === artId)?.kategorie;
-  return k && k in (ui.quellen?.kategorien || {}) ? k : undefined;
+  const rolle = QUELLEN_ARTEN.find((a) => a.id === artId)?.rolle;
+  return rolle ? kategorieFuerRolle(rolle, ui) : undefined;
 }
 
 /** Erste Platzhalterstelle in einer Zeile: [Anfang, Ende] relativ zur Zeile oder null */

@@ -1,6 +1,7 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
+import { fehlendeKennsaetze, KENNSATZ_ERSATZ, type PflichtKennsatz } from "../kern/kennsaetze";
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
@@ -264,6 +265,26 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
   }
 }
 
+/** Folge eines fehlenden Pflichtkennsatzes, für die Warnung beim Laden */
+const KENNSATZ_FOLGE: Record<PflichtKennsatz, string> = {
+  handlungsrelevant: "Fristen in Bewertungstexten erkennt die App dann nicht (Management Summary, Redaktionscheck).",
+  aenderung: "Der Redaktionscheck prüft dann keine Änderungsvermerke von Fortschreibungen.",
+  abweichung: `Abweichende Bewertungen erkennt der Redaktionscheck dann nicht; Textbaustein und Standardtext Verdichtung nehmen „${KENNSATZ_ERSATZ.abweichung}“.`,
+};
+
+/**
+ * Pflichtkennsätze der Darstellungsdatei (seit 0.6.3, TP-2026-W44-27, Profilformat 1.20): Fehlt einer, lädt das Profil
+ * mit einer Warnung je Kennsatz, statt still auf Ersatztexte der App zu laufen.
+ */
+function pruefePflichtKennsaetze(ui: UiKonfig, befunde: Befund[]) {
+  for (const k of fehlendeKennsaetze(ui))
+    befunde.push({
+      stufe: "warnung",
+      code: "KENNSATZ_FEHLT",
+      text: `Darstellungsdatei: Pflichtkennsatz „${k}“ fehlt in „kennsaetze“ (Profilformat 1.20; Vorschlag „${KENNSATZ_ERSATZ[k]}“). ${KENNSATZ_FOLGE[k]}`,
+    });
+}
+
 /** Vergleicht die Stufentexte der Darstellungsdatei mit Tabellen im Kodierleitfaden (nur Hinweis). */
 function pruefeStufentexte(ui: UiKonfig, leitfaden: string | undefined, befunde: Befund[]) {
   if (!leitfaden) return;
@@ -340,6 +361,7 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
     }
   }
   if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
+  if (ui && uiOk) pruefePflichtKennsaetze(ui, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });

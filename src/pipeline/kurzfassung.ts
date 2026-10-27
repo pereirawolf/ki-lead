@@ -7,7 +7,7 @@ import type { LlmAnbieter } from "../anbieter/typen";
 import { datumDE } from "../kern/ausgabe";
 import { holeWert } from "../kern/pfad";
 import { parseQuellen, sachverhalte } from "../kern/quellen";
-import { kennsaetzeAlle, parseDatumDE } from "../kern/kennsaetze";
+import { kennsaetzeAlle, KENNSATZ_ERSATZ, parseDatumDE } from "../kern/kennsaetze";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import type { Meldung, Profil } from "../kern/typen";
 import { ersetzePlatzhalter } from "../profil/platzhalter";
@@ -189,7 +189,7 @@ export function fruehesteFrist(d: Meldung, profil: Profil): string {
 /** Fristenblock der Leitungsfassung: eine Zeile bei einer Frist, sonst bis zu drei Punkte, früheste zuerst. */
 export function fristenText(d: Meldung, profil: Profil): string {
   const alle = fristen(d, profil);
-  const prefix = profil.ui.kennsaetze?.handlungsrelevant || "Handlungsrelevant bis:";
+  const prefix = profil.ui.kennsaetze?.handlungsrelevant || KENNSATZ_ERSATZ.handlungsrelevant;
   if (!alle.length) return "";
   if (alle.length === 1 && alle[0]) return `${prefix} ${fristZeile(alle[0])}`;
   const zeilen = alle.slice(0, GRENZEN.fristenMax).map((f) => `• ${fristZeile(f)}`);

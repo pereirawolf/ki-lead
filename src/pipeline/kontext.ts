@@ -3,6 +3,7 @@
 
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
+import { KENNSATZ_ERSATZ } from "../kern/kennsaetze";
 import type { Profil, Sop } from "../kern/typen";
 import { ersetzePlatzhalter } from "../profil/platzhalter";
 import { fachSops, gemeinsameSops, istBaustein, sopKennung } from "../profil/sop";
@@ -502,5 +503,6 @@ export function verdichtungsAnweisung(profil: Profil): string {
   const roh = (pfad && profil.dateien[pfad]) || VERDICHTUNG_S2;
   return ersetzePlatzhalter(roh, {
     profil: { kurzname: profil.manifest.variablen.meldende_stelle, ...profil.manifest.variablen, referenzraum: profil.manifest.referenzraum },
+    kennsatz: { ...KENNSATZ_ERSATZ, ...profil.ui.kennsaetze },
   }).text;
 }
