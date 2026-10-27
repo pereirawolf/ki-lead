@@ -84,7 +84,11 @@ self.addEventListener("fetch", (ereignis) => {
   if (anfrage.mode === "navigate") {
     // Reparaturseite: immer sie selbst, aus dem Netz, sonst aus dem Cache; nie die index.html der App
     if (url.pathname.endsWith(`/${REPARATUR}`)) {
-      ereignis.respondWith(fetch(anfrage).catch(() => caches.match(adresse(REPARATUR))));
+      ereignis.respondWith(
+        fetch(anfrage)
+          .catch(() => caches.match(adresse(REPARATUR)))
+          .then((antwort) => antwort || Response.error()),
+      );
       return;
     }
     // Übrige Seitenaufrufe: die vorgehaltene index.html (Einzelseiten-App), Netz nur als Rückfall
@@ -92,16 +96,19 @@ self.addEventListener("fetch", (ereignis) => {
       caches
         .open(CACHE)
         .then((c) => c.match(adresse("index.html")))
-        .then((antwort) => antwort || fetch(anfrage)),
+        .then((antwort) => antwort || fetch(anfrage))
+        .catch(() => Response.error()),
     );
     return;
   }
 
-  // Dateien des Builds: aus dem Cache; Unbekanntes aus dem Netz, ohne es aufzunehmen
+  // Dateien des Builds: aus dem Cache; Unbekanntes aus dem Netz, ohne es aufzunehmen. Ohne Netz und ohne Eintrag im
+  // Cache eine Fehlerantwort statt eines unbehandelten Fehlers im Service Worker (seit 0.6.5, TP-2026-W44-21)
   ereignis.respondWith(
     caches
       .open(CACHE)
       .then((c) => c.match(anfrage, { ignoreSearch: true }))
-      .then((antwort) => antwort || fetch(anfrage)),
+      .then((antwort) => antwort || fetch(anfrage))
+      .catch(() => Response.error()),
   );
 });

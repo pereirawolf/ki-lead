@@ -84,8 +84,23 @@
     true,
   );
 
-  // Rückfall: nach längerer Zeit noch nicht gestartet (auch bei sehr langsamen Geräten erst nach 20 Sekunden)
+  // Rückfall: Die App ist nicht gestartet, obwohl ihre Programmdateien geladen sind. Seit 0.6.5 (TP-2026-W44-21) zählen
+  // die 20 Sekunden erst ab dem Ereignis „load“ (alle Programmdateien geladen und ausgeführt) und nur, solange #root
+  // leer ist; ein langsames Netz oder Gerät ergibt so keinen Fehlalarm mehr. Bleibt „load“ ganz aus, gilt eine
+  // Obergrenze von 60 Sekunden ab dem Aufruf der Seite. Bis 0.6.4: feste 20 Sekunden ab dem Aufruf.
+  function leer() {
+    var wurzel = document.getElementById("root");
+    return !!wurzel && wurzel.childElementCount === 0;
+  }
+  function spaet(grund) {
+    if (leer()) anzeigen(grund);
+  }
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      spaet("Die App ist 20 Sekunden nach dem Laden ihrer Programmdateien nicht gestartet. Möglicherweise passen gespeicherte Programmdateien nicht zusammen.");
+    }, 20000);
+  });
   setTimeout(function () {
-    anzeigen("Die App ist nach 20 Sekunden nicht gestartet. Möglicherweise passen gespeicherte Programmdateien nicht zusammen.");
-  }, 20000);
+    spaet("Die App ist nach 60 Sekunden nicht gestartet. Möglicherweise passen gespeicherte Programmdateien nicht zusammen oder die Verbindung ist zu langsam.");
+  }, 60000);
 })();

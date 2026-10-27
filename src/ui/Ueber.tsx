@@ -1,5 +1,6 @@
 // Abschnitt „Über KI-LEAD“ in den Einstellungen (seit 0.5.5): Version, Abgrenzung, Impressum, Datenschutz, Lizenzen
-// (Geltungsbereich seit 0.5.9, KP-2026-W43-54), Rückmeldung. Alle Verweise öffnen extern; die App selbst ruft sie nicht auf.
+// (Geltungsbereich seit 0.5.9, KP-2026-W43-54), Rückmeldung, seit 0.6.5 die Reparaturseite (TP-2026-W44-21). Alle Verweise
+// öffnen extern bzw. in einem neuen Fenster; die App selbst ruft sie nicht auf.
 import type { ReactNode } from "react";
 import { APP_VERSION, HERAUSGEBER, VERWEISE } from "../kern/herausgeber";
 
@@ -43,8 +44,15 @@ export function UeberAbschnitt() {
           <ExternerLink href={VERWEISE.quellcode}>Quellcode</ExternerLink> und <ExternerLink href={VERWEISE.rueckmeldung}>Rückmeldung</ExternerLink>{" "}
           (öffentliche Issues; Hinweise zur <ExternerLink href={VERWEISE.erprobung}>Erprobung</ExternerLink>)
         </li>
+        <li>
+          Startet die App nicht richtig oder zeigt sie nach einer Aktualisierung alte Teile:{" "}
+          <ExternerLink href="./reparatur.html">Programmdateien reparieren</ExternerLink> (öffnet sich in einem neuen Fenster; Meldungen, Profile, Einstellungen
+          und API-Schlüssel bleiben erhalten)
+        </li>
       </ul>
-      <p className="hinweis">Die Verweise öffnen sich außerhalb der App. KI-LEAD selbst verbindet sich nur mit den KI-Anbietern.</p>
+      <p className="hinweis">
+        Die Verweise öffnen sich außerhalb der App, die Reparaturseite in einem neuen Fenster. KI-LEAD selbst verbindet sich nur mit den KI-Anbietern.
+      </p>
     </section>
   );
 }

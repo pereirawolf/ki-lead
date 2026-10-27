@@ -16,16 +16,18 @@ Warum es vor allem Safari traf, ist nicht nachgewiesen. Plausibel ist, dass Safa
 - Der Service Worker übernimmt **nie von sich aus** und lädt **nie** Fenster neu. Auch eine Fassung mit beschädigtem Cache kann in offenen Fenstern noch laufen, etwa mit ungespeicherten Eingaben der KI-Erfassung. Eine neue Fassung wird aktiv, wenn die Person im Hinweis „Neu laden“ wählt (dann lädt nur dieses Fenster neu) oder wenn alle Fenster geschlossen sind.
 - In einem Fenster mit nachweislich gescheitertem Start bietet die Startprüfung „Erneut laden“ an; das übernimmt eine bereits wartende neue Fassung, nur auf Klick.
 - Schon der Build bricht ab, wenn `index.html` auf eine nicht vorgehaltene Datei verweist.
-- Eine Startprüfung (`start-pruefung.js`, ohne Abhängigkeit vom App-Bundle) zeigt bei einem Ladefehler oder nach 20 Sekunden ohne Start einen Hinweis mit dem Weg zur Reparaturseite. Sie lädt nie selbst neu.
+- Eine Startprüfung (`start-pruefung.js`, ohne Abhängigkeit vom App-Bundle) zeigt bei einem Ladefehler oder bei ausbleibendem Start einen Hinweis mit dem Weg zur Reparaturseite. Sie lädt nie selbst neu. Seit 0.6.5 zählt die Wartezeit von 20 Sekunden erst ab dem Ereignis „load“ (alle Programmdateien geladen und ausgeführt) und nur, solange das Wurzelelement der App leer ist; bleibt „load“ aus, gilt eine Obergrenze von 60 Sekunden ab dem Aufruf. Bis 0.6.4 galten feste 20 Sekunden ab dem Aufruf, was auf langsamen Geräten oder Verbindungen einen Fehlalarm geben konnte (TP-2026-W44-21).
 - Eine Fehlergrenze an der Wurzel der App zeigt Fehler beim ersten Zeichnen an, statt eine leere Seite zu hinterlassen.
 
 ## Wieder starten
 
 1. **Die App einmal aufrufen** (nach der Veröffentlichung von 0.5.2) und einige Sekunden warten. Die Seite bleibt dabei noch leer, aber der Browser lädt im Hintergrund die neue Fassung.
 2. **Alle Fenster und Tabs mit KI-LEAD schließen** (auf dem iPad auch eine als App auf dem Home-Bildschirm abgelegte KI-LEAD aus der App-Übersicht schließen) und die App neu öffnen. Die neue Fassung wird aktiv und startet.
-3. Startet sie trotzdem nicht: Die Startprüfung der neuen Fassung zeigt dann „Erneut laden“ und den Weg zur **Reparaturseite** `reparatur.html` im Ordner der App (etwa `https://pereirawolf.github.io/ki-lead/reparatur.html`). „Programmdateien zurücksetzen“ entfernt nur die Anmeldung des Service Workers von KI-LEAD und dessen Zwischenspeicher (Präfix `ki-lead-`); danach „KI-LEAD öffnen“.
+3. Startet sie trotzdem nicht: Die Startprüfung der neuen Fassung zeigt dann „Erneut laden“ und den Weg zur **Reparaturseite** `reparatur.html` im Ordner der App (etwa `https://pereirawolf.github.io/ki-lead/reparatur.html`). „Programmdateien zurücksetzen“ entfernt nur die Anmeldung des Service Workers von KI-LEAD und dessen Zwischenspeicher (Präfix `ki-lead-`); danach „KI-LEAD öffnen“. Seit 0.6.5 führt auch „Einstellungen → Über KI-LEAD → Programmdateien reparieren“ zur Reparaturseite (in einem neuen Fenster), etwa wenn die App zwar startet, aber nach einer Aktualisierung alte Teile zeigt.
 
 Ein Neuladen allein reicht unter der alten Fassung nicht: Solange ein Fenster offen ist, bleibt die neue Fassung wartend.
+
+**Ohne Netz:** Fragt die App ohne Netz nach einer Datei, die der Service Worker nicht vorhält (etwa eine Datei einer anderen Fassung), antwortet er seit 0.6.5 mit einer Fehlerantwort, statt im Service Worker an einem unbehandelten Fehler zu scheitern (TP-2026-W44-21).
 
 **Datenerhalt:** Meldungen, Zwischenstände, importierte Profile, Einstellungen und API-Schlüssel liegen in IndexedDB und localStorage. Weder die Selbstreparatur noch die Reparaturseite lesen oder ändern diese Speicher. Andere Service Worker und Caches derselben Adresse bleiben unberührt.
 
