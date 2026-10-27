@@ -591,11 +591,15 @@ a.knopf {
   text-decoration: none;
 }
 
-/* Inhalt geschlossener <details> nimmt keinen Platz ein. Neuere WebKit-Fassungen blenden ihn nur aus und rechnen seine
-   Breite der Seite zu; der geschlossene Farbschema-Editor machte die Einstellungen in Smartphone-Breite 788 statt
-   390 px breit (WebKit-Test „Smartphone …“, seit 0.6.5). */
-details:not([open]) > :not(summary) {
-  display: none;
+/* Einzeilige Auswahlfelder schneiden ihren Inhalt ab. WebKit rechnet sonst den Text der längsten Option dem
+   umgebenden Abschnitt zu: Die Option „Automatisch (nach System: …)“ des Farbschemas machte die Einstellungen in
+   Smartphone-Breite 788 statt 390 px breit, obwohl das Feld selbst nur 358 px breit war (WebKit-Test „Smartphone …“,
+   seit 0.6.5). Listenfelder mit size oder multiple scrollen und sind ausgenommen. */
+select:not([multiple]):not([size]) {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sr-only {
