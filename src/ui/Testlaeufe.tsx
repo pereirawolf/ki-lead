@@ -31,20 +31,19 @@ import {
   einstellungenFuerVariante,
   plaeneFuer,
   planVarianteZu,
-  reiheZip,
   rollenFuer,
   UMFAENGE,
   UMFANG_VORGABE,
   umfangInfo,
   vergleichsreihe,
   VERGLEICH_ROLLEN,
-  zipDateiname,
   type EinzelErgebnis,
   type FallDaten,
   type PlanVariante,
   type Reihe,
   type Umfang,
 } from "../pipeline/vergleichslauf";
+import { reiheZip, zipDateiname } from "../pipeline/vergleichslauf-export";
 import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../pipeline/vergleichslauf-eingebaut";
 import { dateiAnbieten } from "../speicher/speicher";
 import {

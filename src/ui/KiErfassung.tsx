@@ -55,7 +55,11 @@ import {
   type Material,
   type KiUebergabe,
 } from "../pipeline/material";
-import { orientierungMoeglich, orientierungssuche, rechercheNachweis, stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { orientierungMoeglich, orientierungssuche } from "../pipeline/orientierung";
+import { rechercheNachweis } from "../pipeline/recherchebefunde";
+import { stufe1 } from "../pipeline/s1";
+import { stufe2und3 } from "../pipeline/s2s3";
+import type { Kontext } from "../pipeline/stufen";
 import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
 import { gueltigerZeitpunkt, zoneOder } from "../kern/zeit";

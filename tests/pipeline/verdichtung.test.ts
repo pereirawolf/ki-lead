@@ -5,7 +5,8 @@ import { ilkaEingaenge, ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
 import { eingangsquellenPruefen } from "../../src/pipeline/vermerke";
-import { stufe1, stufe2und3, T0_SPIELRAUM_STUNDEN } from "../../src/pipeline/stufen";
+import { stufe1, T0_SPIELRAUM_STUNDEN } from "../../src/pipeline/s1";
+import { stufe2und3 } from "../../src/pipeline/s2s3";
 import { dateiLesen, type Material } from "../../src/pipeline/material";
 
 describe("Verdichtung von Eingangsmeldungen", () => {

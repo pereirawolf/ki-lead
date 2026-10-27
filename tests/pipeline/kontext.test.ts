@@ -1,7 +1,7 @@
 // Kontext aus dem Profil: Ereignisarten, SOP-Zuordnung, Arbeitsanweisungen und Platzhalter.
 import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
-import { kodierleitfadenKennung, sopKennungenAbgleichen } from "../../src/pipeline/stufen";
+import { kodierleitfadenKennung, sopKennungenAbgleichen } from "../../src/pipeline/nachbearbeitung";
 import {
   sopIdsAufloesen,
   verdichtungsAnweisung,

@@ -634,3 +634,18 @@ Ziel: `tests/pipeline/vergleich.test.ts`
 | Lagebild: Schreibfehler des Gerätespeichers › zeigt einen vollen Speicher als Fehler, behält den gespeicherten Stand und arbeitet im Fenster weiter | `tests/ui/lagebild.test.ts` |
 
 Dazu kommen die Browsertests unter `tests/browser/` (Playwright, nicht Teil von `npm test`), siehe [TESTS.md](TESTS.md).
+
+## Aufteilung der Pipeline-Quellen (0.6.2, TP-2026-W44-06)
+
+`src/pipeline/stufen.ts` und `src/pipeline/vergleichslauf.ts` wurden ohne Verhaltensänderung auf mehrere Dateien verteilt. Kein Test wurde verschoben, umbenannt oder entfernt; geändert sind nur die Importe in den Testdateien.
+
+| Quelle bis 0.6.1 | Quelle seit 0.6.2 | Inhalt | Tests |
+|---|---|---|---|
+| `stufen.ts` | `stufen.ts` | Kontext eines Laufs, KI-Aufruf mit Protokolleintrag (`aufrufen`), `s2Grenzen`, `rechercheModus` | über alle Stufentests |
+| `stufen.ts` | `s1.ts` | `stufe1`, `s1Strukturfehler`, Bereinigung des Vorschlags (Stichtag, t0), `T0_SPIELRAUM_STUNDEN` | `tests/pipeline/stufen.test.ts`, `verdichtung.test.ts`, `auftragsfelder.test.ts`, `aufwand.test.ts`, `fortschreibung.test.ts` |
+| `stufen.ts` | `orientierung.ts` | Orientierungssuche je Sachverhalt, `begrenztParallel`, `orientierungsEintraege` | `tests/pipeline/recherche-pflicht.test.ts`, `stufen.test.ts`, `tests/ui/orientierung.test.ts` |
+| `stufen.ts` | `s2s3.ts` | `stufe2und3`, Pflichtsuchen, Abgleich, Nachforderung, `reparaturSystem`, `MAX_REPARATUREN` | `tests/pipeline/stufen.test.ts`, `recherche-pflicht.test.ts`, `reparaturtest.test.ts`, `nachbearbeitung.test.ts` |
+| `stufen.ts` | `nachbearbeitung.ts` | `nachbearbeiten`, `radarUmhaengen`, SOP-Nachweis, `kodierleitfadenKennung` | `tests/pipeline/nachbearbeitung.test.ts`, `kontext.test.ts`, `tests/profil/sop-integration.test.ts` |
+| `stufen.ts` | `recherchebefunde.ts` | `rechercheBefunde`, `rechercheNachweis`, `primaerquelleBelegt`, `amtlichErreicht`, `absenderBefunde`, `auftragsAbrufFehler` | `tests/pipeline/recherche-pflicht.test.ts`, `fortschreibung.test.ts`, `stufen.test.ts` |
+| `vergleichslauf.ts` | `vergleichslauf.ts` | Fall, Pläne, Prüfpunkte, Kennzahlen, `einLauf`, `vergleichsreihe` | `tests/pipeline/vergleichslauf.test.ts`, `vergleichslauf-umfang.test.ts` |
+| `vergleichslauf.ts` | `vergleichslauf-export.ts` | `csv`, `uebersichtZeilen`, `zipDateiname`, `reiheZip`, LIESMICH | `tests/pipeline/vergleichslauf.test.ts`, `vergleichslauf-umfang.test.ts`, `reparaturtest.test.ts` |

@@ -29,7 +29,17 @@ import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, modellFuer, type Einstellungen } from "../../src/pipeline/einstellungen";
 import { ohneBase64, type Lauf } from "../../src/pipeline/lauf";
 import { sha256 } from "../../src/profil/laden";
-import { csv, einLauf, FALL_MATERIAL, REFERENZ, reiheErstellen, s1FestPruefen, type EinzelErgebnis, type FallDaten, type S1Fest } from "../../src/pipeline/vergleichslauf";
+import {
+  einLauf,
+  FALL_MATERIAL,
+  REFERENZ,
+  reiheErstellen,
+  s1FestPruefen,
+  type EinzelErgebnis,
+  type FallDaten,
+  type S1Fest,
+} from "../../src/pipeline/vergleichslauf";
+import { csv } from "../../src/pipeline/vergleichslauf-export";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
@@ -174,7 +184,9 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         console.log(`Budgetgrenze ${BUDGET_USD} USD erreicht (${summe.toFixed(2)} USD), Reihe beendet.`);
         break;
       }
-      const anbieter = ATTRAPPE ? attrappe(eingaenge, JSON.parse(refText), !!S1_FEST) : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
+      const anbieter = ATTRAPPE
+        ? attrappe(eingaenge, JSON.parse(refText), !!S1_FEST)
+        : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
       let zeichen = 0;
       let datei = "";
       const speichern = (l: Lauf) => {

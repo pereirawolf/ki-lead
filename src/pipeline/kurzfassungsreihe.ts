@@ -18,7 +18,8 @@ import { sha256 } from "../profil/laden";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "./kurzfassung";
 import { APP_KENNUNG, laufId, type StufenEintrag } from "./lauf";
-import { anzahlBegrenzt, csv, dateiKurz, dateiStempel, type ReiheStand } from "./vergleichslauf";
+import { anzahlBegrenzt, type ReiheStand } from "./vergleichslauf";
+import { csv, dateiKurz, dateiStempel } from "./vergleichslauf-export";
 
 export const MS_PLAN_ID: string = PLAN.id;
 export const MS_FALL_ID: string = FALL.id;

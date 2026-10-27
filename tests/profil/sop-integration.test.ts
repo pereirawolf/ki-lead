@@ -14,7 +14,8 @@ import {
   sopGruppen,
   sopsNachArtwechsel,
 } from "../../src/pipeline/kontext";
-import { nachbearbeiten, sopAngabeVergleichen, sopKennungenAbgleichen, type Kontext } from "../../src/pipeline/stufen";
+import { nachbearbeiten, sopAngabeVergleichen, sopKennungenAbgleichen } from "../../src/pipeline/nachbearbeitung";
+import type { Kontext } from "../../src/pipeline/stufen";
 import { sopNachweis, spalten } from "../../src/lagebild/ausgabe";
 import { sopKennung } from "../../src/profil/sop";
 

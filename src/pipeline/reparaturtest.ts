@@ -19,8 +19,10 @@ import type { Meldung } from "../kern/typen";
 import { sha256 } from "../profil/laden";
 import { aufwandAngeboten, aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { APP_KENNUNG, neuerLauf, ohneBase64, type Lauf, type S1Vorschlag } from "./lauf";
-import { stufe2und3, type Kontext } from "./stufen";
-import { csv, fallAuftrag, fallMaterial, type FallDaten } from "./vergleichslauf";
+import { stufe2und3 } from "./s2s3";
+import type { Kontext } from "./stufen";
+import { fallAuftrag, fallMaterial, type FallDaten } from "./vergleichslauf";
+import { csv } from "./vergleichslauf-export";
 
 export const ENTWURF_DATEI = "evaluation/material/ilka-musterfassung.json";
 export const S1_DATEI = "evaluation/material/ilka-s1-zuschnitt-a.json";

@@ -18,13 +18,11 @@ import {
   plaeneFuer,
   planVarianteZu,
   VERGLEICHS_PLAENE,
-  reiheZip,
   s1FestPruefen,
-  uebersichtZeilen,
   vergleichsreihe,
-  zipDateiname,
   type FallDaten,
 } from "../../src/pipeline/vergleichslauf";
+import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/pipeline/vergleichslauf-export";
 import { fallDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
 import { sopIdsAufloesen } from "../../src/pipeline/kontext";
 import { createHash } from "node:crypto";

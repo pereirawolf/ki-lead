@@ -8,7 +8,7 @@ import { leseOrdner, profilPflicht, repoPfad } from "../support/dateien";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { ilkaMeldung } from "../support/fixtures";
 import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { stufe2und3 } from "../../src/pipeline/stufen";
+import { stufe2und3 } from "../../src/pipeline/s2s3";
 import type { LlmAnbieter, LlmAnfrage } from "../../src/anbieter/typen";
 import { STANDARD, type Einstellungen } from "../../src/pipeline/einstellungen";
 import {
