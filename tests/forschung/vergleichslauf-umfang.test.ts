@@ -21,11 +21,11 @@ import {
   vergleichsreihe,
   type FallDaten,
   type Reihe,
-} from "../../src/pipeline/vergleichslauf";
-import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/pipeline/vergleichslauf-export";
-import { musterDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
-import { kurzfassungsreihe, kurzfassungsUebersicht, kurzfassungsZip, kurzfassungsZipName, musterfassungAus } from "../../src/pipeline/kurzfassungsreihe";
-import { auswerten, konfigSchluessel, zusammenfassen } from "../../src/pipeline/vergleichsauswertung";
+} from "../../src/forschung/vergleichslauf";
+import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/forschung/vergleichslauf-export";
+import { musterDatenEingebaut } from "../../src/forschung/vergleichslauf-eingebaut";
+import { kurzfassungsreihe, kurzfassungsUebersicht, kurzfassungsZip, kurzfassungsZipName, musterfassungAus } from "../../src/forschung/kurzfassungsreihe";
+import { auswerten, konfigSchluessel, zusammenfassen } from "../../src/forschung/vergleichsauswertung";
 import { schaetzeKurzfassung } from "../../src/pipeline/schaetzung";
 
 const PLAN_S2 = JSON.parse(readFileSync(repoPfad("evaluation/plaene/s2-isoliert-ilka.json"), "utf-8"));

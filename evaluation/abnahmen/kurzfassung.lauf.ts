@@ -11,7 +11,7 @@
 // Ergebnisse (Text, Struktur, Hinweise der App, Vorprüfung, Kosten) gehen nach privat/kurzfassung-ilka/ (nicht
 // eingecheckt). Die Musterfassung wird vor dem ersten Aufruf gegen die Prüfsumme des Plans geprüft. Seit 0.5.12
 // dieselbe Reihe wie „Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka“, Umfang „MS (aus Musterfassung)“
-// (src/pipeline/kurzfassungsreihe.ts), hier mit quelle „skript“; dazu die ZIP-Datei wie in der App.
+// (src/forschung/kurzfassungsreihe.ts), hier mit quelle „skript“; dazu die ZIP-Datei wie in der App.
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,7 +20,7 @@ import { leereNutzung, type LlmAnbieter, type LlmAntwort } from "../../src/anbie
 import { Verteiler, type AnbieterId } from "../../src/anbieter/verteiler";
 import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, standardProfilAnwenden, type Einstellungen } from "../../src/pipeline/einstellungen";
-import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MUSTERFASSUNG, musterfassungAus } from "../../src/pipeline/kurzfassungsreihe";
+import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MUSTERFASSUNG, musterfassungAus } from "../../src/forschung/kurzfassungsreihe";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "kurzfassung-ilka");

@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { repoPfad } from "../support/dateien";
-import { d2Pruefen, d2Stufe, plausibilitaetPruefen, summanden, summenPruefen } from "../../src/pipeline/plausibilitaet";
+import { d2Pruefen, d2Stufe, plausibilitaetPruefen, summanden, summenPruefen } from "../../src/forschung/plausibilitaet";
 
 describe("Plausibilität: Summen in Klammern", () => {
   it("meldet eine Angabe, die nicht der Summe der Klammerwerte entspricht", () => {

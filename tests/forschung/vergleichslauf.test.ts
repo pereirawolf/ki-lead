@@ -21,9 +21,9 @@ import {
   s1FestPruefen,
   vergleichsreihe,
   type FallDaten,
-} from "../../src/pipeline/vergleichslauf";
-import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/pipeline/vergleichslauf-export";
-import { fallDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
+} from "../../src/forschung/vergleichslauf";
+import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/forschung/vergleichslauf-export";
+import { fallDatenEingebaut } from "../../src/forschung/vergleichslauf-eingebaut";
 import { sopIdsAufloesen } from "../../src/pipeline/kontext";
 import { createHash } from "node:crypto";
 

@@ -56,7 +56,7 @@ if (falsch.length) {
   process.exit(1);
 }
 
-const { auswerten, berichtMarkdown } = (await runnerImport(join(REPO, "src/pipeline/vergleichsauswertung.ts"), { configFile: false, logLevel: "error" }))
+const { auswerten, berichtMarkdown } = (await runnerImport(join(REPO, "src/forschung/vergleichsauswertung.ts"), { configFile: false, logLevel: "error" }))
   .module;
 const ergebnis = auswerten(reihen, option("--bezug"));
 const bericht = berichtMarkdown(ergebnis);

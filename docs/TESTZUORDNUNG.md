@@ -649,3 +649,22 @@ Dazu kommen die Browsertests unter `tests/browser/` (Playwright, nicht Teil von 
 | `stufen.ts` | `recherchebefunde.ts` | `rechercheBefunde`, `rechercheNachweis`, `primaerquelleBelegt`, `amtlichErreicht`, `absenderBefunde`, `auftragsAbrufFehler` | `tests/pipeline/recherche-pflicht.test.ts`, `fortschreibung.test.ts`, `stufen.test.ts` |
 | `vergleichslauf.ts` | `vergleichslauf.ts` | Fall, Pläne, Prüfpunkte, Kennzahlen, `einLauf`, `vergleichsreihe` | `tests/pipeline/vergleichslauf.test.ts`, `vergleichslauf-umfang.test.ts` |
 | `vergleichslauf.ts` | `vergleichslauf-export.ts` | `csv`, `uebersichtZeilen`, `zipDateiname`, `reiheZip`, LIESMICH | `tests/pipeline/vergleichslauf.test.ts`, `vergleichslauf-umfang.test.ts`, `reparaturtest.test.ts` |
+
+## Schichten und Forschungszone (0.6.3, TP-2026-W44-23 bis -25)
+
+Quellen wurden ohne Verhaltensänderung verschoben, damit die Verzeichnisse unter `src/` zyklenfrei geschichtet sind. Kein Test wurde entfernt oder umbenannt; verschoben sind fünf Testdateien, sonst sind nur Importe angepasst. Neu ist `tests/kern/schichten.test.ts`.
+
+| Quelle bis 0.6.2 | Quelle seit 0.6.3 | Inhalt | Tests |
+|---|---|---|---|
+| `pipeline/lauf.ts` (`APP_KENNUNG`), `kern/herausgeber.ts` (`APP_VERSION`) | `kern/version.ts` | Versionsangaben aus `package.json` (TP-23) | `tests/ui/ueber.test.ts` |
+| `App.tsx` (`ProfilEintrag`) | `kern/typen.ts` | Profil in der Liste der App (TP-23) | `tests/ui/profile.test.ts` |
+| `pipeline/material.ts` (`eingangsInfo`) | `kern/eingang.ts` | Grundform einer Eingangsmeldung (TP-23) | `tests/pipeline/material.test.ts`, `tests/lagebild/lagebild.test.ts` |
+| `pipeline/kontext.ts` (`fachSops`, `gemeinsameSops`, `istBaustein`, `istInhaltsgeruest`) | `profil/sop.ts`, in `kontext.ts` weiter exportiert | Einteilung der SOPs (TP-23) | `tests/pipeline/kontext.test.ts`, `tests/profil/profilansicht.test.ts`, `sop-integration.test.ts` |
+| `pipeline/kontext.ts` (`VERDICHTUNG_S2`), `pipeline/kurzfassung.ts` (`STANDARD_ANWEISUNG`) | `profil/standardtexte.ts`, weiter exportiert | Standardtexte der App (TP-23) | `tests/profil/profilansicht.test.ts`, `tests/pipeline/kurzfassung.test.ts` |
+| `pipeline/lauf.ts` (`laufSpeichern` … `laeufeAlsZip`, `laeufeLaden`, `speicherSchuetzen`) | `speicher/laufSpeicher.ts` | Laufprotokolle im Gerätespeicher (TP-24) | `tests/pipeline/laeufe.test.ts` → `tests/speicher/laeufe.test.ts`, `tests/ui/ki-erfassung-laeufe.test.ts` |
+| `pipeline/einstellungen.ts` (`einstellungenLesen`, `einstellungenSchreiben`) | `speicher/einstellungsSpeicher.ts`; Umstellung als `einstellungenMigrieren` in `pipeline/einstellungen.ts` | Einstellungen im Gerätespeicher (TP-24) | `tests/pipeline/einstellungen.test.ts` |
+| `pipeline/einstellungen.ts` (`schluesselLesen`, `schluesselSchreiben`, `alleSchluesselLesen`) | `schluessel/ablage.ts` | Schlüsselzugriffe (TP-24) | `tests/pipeline/einstellungen.test.ts`, `tests/schluessel/ablage.test.ts` |
+| `ui/Kurzfassung.tsx` (IndexedDB direkt) | `speicher/speicher.ts` (`kurzfassungLesen`, `kurzfassungSchreiben`, `kurzfassungLoeschen`) | gespeicherte Management Summary (TP-24) | `tests/ui/meldung-schritte.test.ts` |
+| `profil/laden.ts` (Import aus `darstellung/thema.ts`) | Prüfung als Option `farbschemaFehler` von `ladeProfil`, von `App.tsx` übergeben | Farbschema eines Profils (TP-24) | `tests/darstellung/farbschemas.test.ts` |
+| `pipeline/vergleichslauf.ts`, `vergleichslauf-eingebaut.ts`, `vergleichslauf-export.ts`, `vergleichsumfang.ts`, `vergleichsauswertung.ts`, `kurzfassungsreihe.ts`, `reparaturtest.ts`, `plausibilitaet.ts` | `forschung/…` (gleiche Dateinamen), dazu `forschung/evaluationsdaten.ts` | Forschungsreihen, an Beispielprofil und `evaluation/` gebunden (TP-25) | `tests/pipeline/{vergleichslauf,vergleichslauf-umfang,vergleichsauswertung,reparaturtest,plausibilitaet}.test.ts` → `tests/forschung/`; `musterfassung()` und `beschaedigt()` sind seit 0.6.3 asynchron |
+

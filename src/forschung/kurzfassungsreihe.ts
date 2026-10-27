@@ -15,10 +15,10 @@ import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { migriere } from "../kern/migration";
 import type { Meldung, Profil } from "../kern/typen";
 import { sha256 } from "../profil/laden";
-import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
-import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "./kurzfassung";
+import { aufwandFuer, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "../pipeline/kurzfassung";
 import { APP_KENNUNG } from "../kern/version";
-import { laufId, type StufenEintrag } from "./lauf";
+import { laufId, type StufenEintrag } from "../pipeline/lauf";
 import { anzahlBegrenzt, type ReiheStand } from "./vergleichslauf";
 import { csv, dateiKurz, dateiStempel } from "./vergleichslauf-export";
 

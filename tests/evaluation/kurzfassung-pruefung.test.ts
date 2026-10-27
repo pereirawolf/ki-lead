@@ -49,7 +49,7 @@ describe("Vorprüfung der Management Summary (Musterfassung Ilka)", () => {
   it("AV-2026-W43-41: „Klärungsbedarf“ nur am Anfang der Kernaussage; als Auffälligkeit benannt", async () => {
     expect(kurzfassungPruefen({ ...gut, kernaussage: "Klärungsbedarf entfällt nicht: mindestens rund 20.700 ohne Strom." }).klaerungsbedarf).toBe(true);
     expect(kurzfassungPruefen({ ...gut, abschnitte: { massnahmen: "Klärungsbedarf besteht zur Nachbetankung." } }).klaerungsbedarf).toBe(false);
-    const { auffaelligkeiten } = await import("../../src/pipeline/kurzfassungsreihe");
+    const { auffaelligkeiten } = await import("../../src/forschung/kurzfassungsreihe");
     expect(auffaelligkeiten(kurzfassungPruefen({ ...gut, kernaussage: "Klärungsbedarf: mindestens rund 20.700 ohne Strom." }))).toEqual([
       "Kernaussage mit „Klärungsbedarf“ ohne Widerspruch in der Musterfassung",
     ]);

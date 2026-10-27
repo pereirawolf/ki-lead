@@ -8,7 +8,7 @@ import { migriere } from "../../src/kern/migration";
 import { pflichtHinweise } from "../../src/kern/kennsaetze";
 import { quellenHinweise } from "../../src/kern/quellen";
 import { pruefeGegenSchema } from "../../src/kern/validierung";
-import { plausibilitaetPruefen } from "../../src/pipeline/plausibilitaet";
+import { plausibilitaetPruefen } from "../../src/forschung/plausibilitaet";
 
 const MUSTER = JSON.parse(readFileSync(repoPfad("evaluation/material/ilka-musterfassung.json"), "utf-8"));
 const ORDNER = "profile/lead-beispiel/beispiele/orkantief-ilka";

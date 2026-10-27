@@ -113,10 +113,13 @@ describe("Wächter der Pfadlisten", () => {
     for (const d of specs) expect(pruefumfang([d]), d).toEqual(/\/pwa[^/]*\.spec\.ts$/.test(d) ? ALLE : NUR_KERN);
   });
 
+  // seit 0.6.3 (TP-2026-W44-25) auch dynamische Importe (src/forschung/evaluationsdaten.ts)
   it("jede Datei unter evaluation/, die src/ importiert, löst die Kern-Browsertests aus und existiert", () => {
     const importe = dateienUnter("src")
       .filter((d) => /\.tsx?$/.test(d))
-      .flatMap((d) => [...readFileSync(repoPfad(d), "utf-8").matchAll(/from\s+"(?:\.\.\/)+(evaluation\/[^"?]+)(?:\?[^"]*)?"/g)].map((m) => m[1]));
+      .flatMap((d) =>
+        [...readFileSync(repoPfad(d), "utf-8").matchAll(/(?:from\s+|import\(\s*)"(?:\.\.\/)+(evaluation\/[^"?]+)(?:\?[^"]*)?"/g)].map((m) => m[1]),
+      );
     expect(importe.length).toBeGreaterThan(5);
     expect(importe).toContain("evaluation/plaene/reparatur-ilka.json");
     for (const d of new Set(importe)) {

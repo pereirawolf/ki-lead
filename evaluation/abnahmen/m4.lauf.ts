@@ -38,8 +38,8 @@ import {
   type EinzelErgebnis,
   type FallDaten,
   type S1Fest,
-} from "../../src/pipeline/vergleichslauf";
-import { csv } from "../../src/pipeline/vergleichslauf-export";
+} from "../../src/forschung/vergleichslauf";
+import { csv } from "../../src/forschung/vergleichslauf-export";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
@@ -194,7 +194,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
       };
       console.log(`Lauf ${i}/${LAEUFE} (S1 ${modellFuer("vorverarbeitung", EINSTELLUNGEN, profil)}, S2 ${modellFuer("verdichtung", EINSTELLUNGEN, profil)})`);
-      // Ablauf, Prüfpunkte und Reihendatei wie der Vergleichslauf der App (src/pipeline/vergleichslauf.ts, seit 0.5.8)
+      // Ablauf, Prüfpunkte und Reihendatei wie der Vergleichslauf der App (src/forschung/vergleichslauf.ts, seit 0.5.8)
       const erg = await einLauf({
         daten,
         anbieter,

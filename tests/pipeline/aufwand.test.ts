@@ -19,7 +19,7 @@ import {
   STANDARD_PROFILE,
   type Einstellungen,
 } from "../../src/pipeline/einstellungen";
-import { konfiguration } from "../../src/pipeline/vergleichslauf";
+import { konfiguration } from "../../src/forschung/vergleichslauf";
 import { stufe1 } from "../../src/pipeline/s1";
 
 const ALLE = ["low", "medium", "high", "xhigh", "max"];

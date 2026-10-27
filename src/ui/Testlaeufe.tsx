@@ -10,7 +10,7 @@ import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel
 import type { LlmAnbieter } from "../anbieter/typen";
 import type { Profil } from "../kern/typen";
 import { APP_MODELLE, AUFWAND_STUFEN, aufwandAngeboten, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
-import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MS_EINGABE_TOKEN, type KurzfassungsReihe } from "../pipeline/kurzfassungsreihe";
+import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MS_EINGABE_TOKEN, type KurzfassungsReihe } from "../forschung/kurzfassungsreihe";
 import {
   DEFEKTE,
   DURCHGAENGE_MAX,
@@ -22,7 +22,7 @@ import {
   reparaturZip,
   schaetzePrueffall,
   type ReparaturReihe,
-} from "../pipeline/reparaturtest";
+} from "../forschung/reparaturtest";
 import { kostenText, dauerText, schaetzeKurzfassung, schaetzeStufe, summe, type Schaetzung } from "../pipeline/schaetzung";
 import {
   ANZAHL_MAX,
@@ -42,9 +42,9 @@ import {
   type PlanVariante,
   type Reihe,
   type Umfang,
-} from "../pipeline/vergleichslauf";
-import { reiheZip, zipDateiname } from "../pipeline/vergleichslauf-export";
-import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../pipeline/vergleichslauf-eingebaut";
+} from "../forschung/vergleichslauf";
+import { reiheZip, zipDateiname } from "../forschung/vergleichslauf-export";
+import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../forschung/vergleichslauf-eingebaut";
 import { dateiAnbieten } from "../speicher/speicher";
 import {
   groesseText,

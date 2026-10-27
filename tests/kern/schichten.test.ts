@@ -77,10 +77,11 @@ const ERLAUBT: Record<string, string[]> = {
   lagebild: ["kern"],
   dokumente: ["kern"],
   profil: ["kern", "../profile"],
-  pipeline: ["kern", "anbieter", "profil", "lagebild", "../evaluation"],
+  pipeline: ["kern", "anbieter", "profil", "lagebild"],
+  forschung: ["kern", "anbieter", "profil", "pipeline", "../evaluation"],
   schluessel: ["anbieter", "pwa"],
   speicher: ["kern", "pipeline"],
-  ui: ["kern", "anbieter", "profil", "pipeline", "lagebild", "dokumente", "darstellung", "speicher", "schluessel", "pwa"],
+  ui: ["kern", "anbieter", "profil", "pipeline", "forschung", "lagebild", "dokumente", "darstellung", "speicher", "schluessel", "pwa"],
   "(wurzel)": ["kern", "anbieter", "profil", "pipeline", "darstellung", "speicher", "schluessel", "pwa", "ui"],
 };
 
@@ -92,6 +93,7 @@ const PAKETE: Record<string, string[]> = {
   dokumente: ["jspdf", "jspdf-autotable"],
   profil: ["js-yaml", "jszip"],
   pipeline: ["jszip"],
+  forschung: ["jszip"],
 };
 
 function kantenText(k: Kante[]): string[] {
@@ -140,6 +142,16 @@ describe("Schichten des Quellcodes", () => {
   it("TP-2026-W44-24: IndexedDB (idb-keyval) nur in speicher, schluessel und darstellung", () => {
     const orte = [...new Set(extern.filter((k) => k.nach === "idb-keyval").map((k) => k.von))].sort();
     expect(orte).toEqual(["darstellung", "schluessel", "speicher"]);
+  });
+
+  it("TP-2026-W44-25: Evaluationsmaterial (evaluation/) importiert nur src/forschung/", () => {
+    const orte = [...new Set(intern.filter((k) => k.nach === "../evaluation").map((k) => k.von))];
+    expect(orte).toEqual(["forschung"]);
+  });
+
+  it("TP-2026-W44-25: der Produktpfad (kern, profil, pipeline, lagebild, dokumente, speicher) importiert nicht aus forschung", () => {
+    const produkt = ["kern", "profil", "pipeline", "lagebild", "dokumente", "speicher"];
+    expect(kantenText(intern.filter((k) => produkt.includes(k.von) && k.nach === "forschung"))).toEqual([]);
   });
 
   it("TP-2026-W44-23: externe Pakete der Schichten ohne Oberfläche nur nach der Positivliste", () => {

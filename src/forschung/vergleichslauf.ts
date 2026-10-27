@@ -12,6 +12,11 @@
 // Zuschnitt der Musterfassung als festem S1-Gegenstand; „MS“ aus der Musterfassung liegt in kurzfassungsreihe.ts.
 //
 // Export der Reihe (CSV, LIESMICH, ZIP) seit 0.6.2 in vergleichslauf-export.ts (TP-2026-W44-06).
+//
+// Forschungsfunktionen liegen seit 0.6.3 (TP-2026-W44-25) unter src/forschung/: Vergleichslauf, Reparaturtest,
+// Management-Summary-Reihe, Auswertung und Plausibilitätsprüfung. Nur hier ist die Bindung an das Beispielprofil
+// (PROFIL_ORDNER, Felder wie sofort.lagenradar) und an das Evaluationsmaterial unter evaluation/ zulässig; der Produktpfad
+// (kern, profil, pipeline) bleibt profilneutral und importiert nichts von hier (tests/kern/schichten.test.ts).
 
 import FALL from "../../evaluation/faelle/orkantief-ilka-verdichtung.json";
 import PLAN from "../../evaluation/plaene/standardprofile-ilka.json";
@@ -25,17 +30,17 @@ import { migriere } from "../kern/migration";
 import type { Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { sha256 } from "../profil/laden";
-import { aufwandFuer, modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "./einstellungen";
+import { aufwandFuer, modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { APP_KENNUNG } from "../kern/version";
-import { neuerLauf, type Auftrag, type Lauf, type S1Vorschlag } from "./lauf";
-import { dateiLesen, istVerdichtung, type Material } from "./material";
+import { neuerLauf, type Auftrag, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
+import { dateiLesen, istVerdichtung, type Material } from "../pipeline/material";
 import { plausibilitaetPruefen, type PlausibilitaetsBefund } from "./plausibilitaet";
-import { s1Strukturfehler, stufe1 } from "./s1";
-import { stufe2und3 } from "./s2s3";
-import type { Kontext } from "./stufen";
-import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type Vergleich } from "./vergleich";
+import { s1Strukturfehler, stufe1 } from "../pipeline/s1";
+import { stufe2und3 } from "../pipeline/s2s3";
+import type { Kontext } from "../pipeline/stufen";
+import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type Vergleich } from "../pipeline/vergleich";
 import { UMFANG_VORGABE, umfangInfo, type Umfang } from "./vergleichsumfang";
-import { eingangsquellenPruefen, type QuellenZuordnung } from "./vermerke";
+import { eingangsquellenPruefen, type QuellenZuordnung } from "../pipeline/vermerke";
 
 export { reiheUmfang, rollenFuer, UMFAENGE, UMFANG_VORGABE, umfangInfo, type Umfang, type UmfangInfo } from "./vergleichsumfang";
 

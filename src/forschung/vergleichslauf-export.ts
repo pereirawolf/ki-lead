@@ -3,7 +3,7 @@
 
 import JSZip from "jszip";
 import FALL from "../../evaluation/faelle/orkantief-ilka-verdichtung.json";
-import { ohneBase64 } from "./lauf";
+import { ohneBase64 } from "../pipeline/lauf";
 import { FALL_TITEL, S1_ZUSCHNITT, type EinzelErgebnis, type Reihe } from "./vergleichslauf";
 import { reiheUmfang, umfangInfo, type Umfang } from "./vergleichsumfang";
 
