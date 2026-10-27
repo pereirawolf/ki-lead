@@ -36,6 +36,9 @@ Nebensachverhalte ohne Handlungsbedarf bündelst du in einem Halbsatz (z. B. „
 - Keine unnötigen Ortsaufzählungen und keine Einzelwerte je Land oder Kreis; für Verständnis und Zuständigkeit notwendige Orte bleiben. Keine Quellenverweise wie [Q1], keine URLs, keine Feldnamen, keine Radarachsen oder Stufenwerte (D1–D8), keine Aufzählungszeichen, keine Füllformeln.
 - Fachkürzel bei der ersten Nennung auflösen; geläufige Behördennamen sind erlaubt. Datumsangaben als TT.MM.JJJJ, Uhrzeiten mit „Uhr“.
 - Sachlicher Ton: keine Dramatisierung und keine Entwarnung, die die Meldung nicht trägt.
+- **Bewertungswörter, Modalwörter und Rollen bleiben, wie die Meldung sie setzt.** Die Wörter geringfügig, erheblich und kritisch sowie Entspannung, Stabilisierung und Verschärfung verwendest du nur, wenn die Meldung sie für diesen Sachverhalt so setzt; die App weist auf andere Verwendungen hin. Modalwörter (voraussichtlich, mindestens, bis zu, nach ersten Angaben) bleiben an der Zahl, zu der sie in der Meldung stehen. Wer anregt, empfiehlt oder entscheidet, übernimmst du aus der Meldung.
+  - Nicht: „Die Sperrungen dauern bis 18.10.2026 an.“ Richtig, wenn die Meldung „voraussichtlich“ schreibt: „Die Sperrungen dauern voraussichtlich bis 18.10.2026 an.“
+  - Nicht: „Die Leitung weist die Länder an, ihre Notstromreserven zu melden.“ Richtig, wenn die Meldung eine Anregung enthält: „Die Meldung regt an, dass die Länder ihre Notstromreserven melden.“
 
 ## Ausgabe
 

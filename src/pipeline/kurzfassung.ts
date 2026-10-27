@@ -5,7 +5,8 @@
 
 import type { LlmAnbieter } from "../anbieter/typen";
 import { datumDE } from "../kern/ausgabe";
-import { holeWert } from "../kern/pfad";
+import { holeWert, teilePfad } from "../kern/pfad";
+import { enumWerte, unterSchema } from "../kern/schema";
 import { parseQuellen, sachverhalte } from "../kern/quellen";
 import { kennsaetzeAlle, KENNSATZ_ERSATZ, parseDatumDE } from "../kern/kennsaetze";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
@@ -250,6 +251,98 @@ export function kurzfassungText(d: Meldung, profil: Profil, k: KurzfassungStrukt
   return zeilen.join("\n") + "\n";
 }
 
+/** Modalwörter, die an einer Zahl bleiben müssen (Arbeitsanweisung Kurzfassung, seit 0.6.4, TP-2026-W44-34) */
+export const MODALWOERTER = [
+  "voraussichtlich",
+  "mindestens",
+  "bis zu",
+  "rund",
+  "etwa",
+  "ca.",
+  "circa",
+  "knapp",
+  "mehr als",
+  "geschätzt",
+  "schätzungsweise",
+  "vorläufig",
+  "erwartet",
+  "nach ersten Angaben",
+];
+
+/** Auswahlwerte einer Rolle des Sachverhalts aus dem Schema (z. B. Beurteilung, Tendenz), ohne Leerwert */
+function auswahlwerte(profil: Profil, rolle: string | undefined): string[] {
+  const r = profil.ui.rollen;
+  if (!rolle) return [];
+  const k = unterSchema(profil.schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(rolle)]);
+  return (enumWerte(k) || []).filter((w): w is string => typeof w === "string" && w.trim() !== "");
+}
+
+/** Alle Texte einer Meldung (Werte beliebiger Tiefe), für den Abgleich der Kurzfassung */
+function texteIn(x: unknown): string[] {
+  if (typeof x === "string") return [x];
+  if (Array.isArray(x)) return x.flatMap(texteIn);
+  if (x && typeof x === "object") return Object.values(x).flatMap(texteIn);
+  return [];
+}
+
+const ohneBuchstabeDavor = "(?<![\\p{L}\\p{N}])";
+
+/**
+ * Sprachliche Treue der Kurzfassung zur Meldung (seit 0.6.4, TP-2026-W44-34): Beurteilungs- und Tendenzwörter nur, wenn
+ * ein Sachverhalt der Meldung den Wert trägt (oder die Meldung ihn als abweichende Bewertung vermerkt); Zahlen, die in
+ * der Meldung nur mit Modalwort stehen („voraussichtlich“, „mindestens“ …), nicht ohne. Anlass: Management Summary
+ * vom 25.10.2026 („anweisen“ statt „anregen“, „dauern bis 18.10. an“ statt „voraussichtlich“, „kritische
+ * Versorgungslücken“ ohne kritische Beurteilung). Hinweise, keine Sperre.
+ */
+export function kurzfassungTreue(k: KurzfassungStruktur, d: Meldung, profil: Profil): string[] {
+  const h: string[] = [];
+  const r = profil.ui.rollen;
+  const fassung = [k.kernaussage, ...Object.values(k.abschnitte), ...k.kurztitel].join("\n");
+  const meldungstexte = texteIn(meldungFuerKurzfassung(d, profil));
+  const svs = sachverhalte(d, profil.ui);
+  const abweichung = profil.ui.kennsaetze?.abweichung || KENNSATZ_ERSATZ.abweichung;
+  const vermerkt = meldungstexte
+    .flatMap((t) => t.split("\n"))
+    .filter((z) => z.trim().startsWith(abweichung))
+    .join(" ")
+    .toLowerCase();
+  for (const [rolle, art] of [
+    [r.sv_beurteilung, "Beurteilung"],
+    [r.sv_tendenz, "Tendenz"],
+  ] as const) {
+    if (!rolle) continue;
+    const getragen = new Set(svs.map((sv) => String(holeWert(sv, rolle) ?? "").toLowerCase()));
+    for (const w of auswahlwerte(profil, rolle)) {
+      const klein = w.toLowerCase();
+      // Wortstamm genügt: „kritisch“ trifft auch „kritische“, „Verschärfung“ nur sich selbst
+      const stamm = klein.replace(/(ung|e)$/, "");
+      const treffer = new RegExp(`${ohneBuchstabeDavor}${stamm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "iu").test(fassung);
+      if (treffer && !getragen.has(klein) && !vermerkt.includes(stamm))
+        h.push(
+          `„${w}“ steht in der Kurzfassung, aber kein Sachverhalt der Meldung trägt diese ${art}. Bitte Wortwahl prüfen (Arbeitsanweisung Kurzfassung, Sprache).`,
+        );
+    }
+  }
+  const zahlen = (t: string) =>
+    [...t.matchAll(/\d+(?:[.,]\d+)*/g)].map((m) => ({ zahl: m[0], vor: t.slice(Math.max(0, m.index - 40), m.index).toLowerCase() }));
+  const mitModal = (vor: string) =>
+    MODALWOERTER.some((m) => new RegExp(`${ohneBuchstabeDavor}${m.replace(".", "\\.")}(?![\\p{L}])(?:[^.;:!?]|\\.(?=\\d))*$`, "u").test(vor));
+  const inMeldung = meldungstexte.flatMap(zahlen);
+  const gemeldet = new Set<string>();
+  for (const z of zahlen(fassung)) {
+    if (mitModal(z.vor) || gemeldet.has(z.zahl)) continue;
+    // Gleiche Zahl, auch Datum mit und ohne Jahr („18.10.“ und „18.10.2026“)
+    const stellen = inMeldung.filter((m) => m.zahl === z.zahl || m.zahl.startsWith(`${z.zahl}.`) || z.zahl.startsWith(`${m.zahl}.`));
+    if (stellen.length && stellen.every((m) => mitModal(m.vor))) {
+      gemeldet.add(z.zahl);
+      h.push(
+        `„${z.zahl}“ steht in der Meldung nur mit Einschränkung (etwa „voraussichtlich“ oder „mindestens“), in der Kurzfassung ohne. Bitte das Modalwort übernehmen.`,
+      );
+    }
+  }
+  return h;
+}
+
 /** Prüft die Richtwerte und liefert Hinweise. */
 export function kurzfassungHinweise(k: KurzfassungStruktur, zahlSv: number): string[] {
   const h: string[] = [];
@@ -336,7 +429,7 @@ export async function kurzfassungErstellen(profil: Profil, d: Meldung, anbieter:
     struktur.kernaussage = ohneOffen(struktur.kernaussage);
     for (const s of Object.keys(struktur.abschnitte)) struktur.abschnitte[s] = ohneOffen(struktur.abschnitte[s] ?? "");
     struktur.kurztitel = struktur.kurztitel.map(ohneOffen);
-    const hinweise = kurzfassungHinweise(struktur, zahl);
+    const hinweise = [...kurzfassungHinweise(struktur, zahl), ...kurzfassungTreue(struktur, d, profil)];
     if (entfernt) hinweise.push("Verbliebene Quellenverweise oder URLs wurden entfernt.");
     if (offen)
       hinweise.push("Offene Vorlagenstellen ⟦…⟧ aus der Meldung wurden nicht übernommen; die Meldung ist noch nicht vollständig ausgefüllt. Bitte prüfen.");
