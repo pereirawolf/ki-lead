@@ -1,7 +1,6 @@
 // Export einer Vergleichsreihe: Übersicht als CSV (S1 und Kette), Dateinamen, LIESMICH und ZIP-Datei mit Rohdaten.
 // Seit 0.6.2 eigene Datei (TP-2026-W44-06), vorher in vergleichslauf.ts.
 
-import JSZip from "jszip";
 import FALL from "../../evaluation/faelle/orkantief-ilka-verdichtung.json";
 import { ohneBase64 } from "../pipeline/lauf";
 import { FALL_TITEL, S1_ZUSCHNITT, type EinzelErgebnis, type Reihe } from "./vergleichslauf";
@@ -238,6 +237,8 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
 
 /** ZIP mit Reihendatei, Übersicht, Laufprotokollen, Entwürfen und Vergleichen */
 export async function reiheZip(reihe: Reihe, ergebnisse: EinzelErgebnis[]): Promise<Uint8Array> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   zip.file("LIESMICH.txt", liesmich(reihe, ergebnisse));
   zip.file("reihe.json", JSON.stringify(reihe, null, 2));

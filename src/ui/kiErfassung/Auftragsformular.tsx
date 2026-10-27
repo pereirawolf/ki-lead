@@ -1,7 +1,7 @@
 // Schritt „Auftrag und Material“ der KI-Erfassung (seit 0.6.5, TP-2026-W44-17 in eigener Datei): Gegenstand,
 // Ausgangsinformationen, Webseiten, Dateien, Stichtag, Prüffrage, Recherche und Modelle, Bestätigung, Start von S1.
 
-import { useRef, type Dispatch } from "react";
+import { useMemo, useRef, type Dispatch } from "react";
 import { anbieterListe, anbieterVon } from "../../anbieter/verteiler";
 import { jetztLokal } from "../../kern/ausgabe";
 import { zoneOder } from "../../kern/zeit";
@@ -9,7 +9,8 @@ import { laufModelle, modellFuer } from "../../pipeline/einstellungen";
 import type { Lauf } from "../../pipeline/lauf";
 import { istMeldung, umklassifizieren } from "../../pipeline/material";
 import { HilfeFeld } from "../HilfeFeld";
-import { LaufSchaetzung } from "../LaufSchaetzung";
+import { LaufSchaetzung, type SchaetzStufe } from "../LaufSchaetzung";
+import type { StufeModell } from "../ModellWahl";
 import { LaufModellWahl } from "./LaufModellWahl";
 import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from "./rahmen";
 import { rechercheZeile } from "./recherche";
@@ -42,6 +43,12 @@ export function Auftragsformular({
   const { sachverhalt, stichworte, urlText, stichtag, uhrzeit, prueffrage, material, dateiFehler, datenOk } = eingabe;
   const setze = (teil: Partial<Eingabe>) => dispatch({ typ: "eingabe", teil });
   const dateiRef = useRef<HTMLInputElement>(null);
+  // Gleiche Arrays über Renderläufe (ModellWahl und LaufSchaetzung sind memo, seit 0.6.5, TP-2026-W44-18)
+  const modellStufen = useMemo<StufeModell[]>(
+    () => [{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl", art: "s1" }, stufeS2, stufeS3],
+    [stufeS2, stufeS3],
+  );
+  const schaetzStufen = useMemo<SchaetzStufe[]>(() => [{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2], [schaetzS2]);
   return (
     <>
       <h2 tabIndex={-1}>Auftrag und Material</h2>
@@ -203,7 +210,7 @@ export function Auftragsformular({
       )}
       {/* Recherche, Modelle und Schätzung in einem Rahmen, danach die Bestätigung (seit 0.5.22, Punkt 9) */}
       <LaufModellWahl
-        stufen={[{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl", art: "s1" }, stufeS2, stufeS3]}
+        stufen={modellStufen}
         websuche={websuche}
         wahl={rahmen.wahl}
         setWahl={rahmen.setWahl}
@@ -228,7 +235,7 @@ export function Auftragsformular({
             modellFuer("vorverarbeitung", laufEinstellungen, profil),
           )}
         </p>
-        <LaufSchaetzung stufen={[{ kurz: "S1", rolle: "vorverarbeitung", art: "s1" }, schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
+        <LaufSchaetzung stufen={schaetzStufen} einstellungen={laufEinstellungen} profil={profil} />
       </LaufModellWahl>
       <label className="bestaetigung">
         <input type="checkbox" checked={datenOk} onChange={(e) => setze({ datenOk: e.target.checked })} />

@@ -4,7 +4,6 @@
 
 import { istEigeneStelle } from "../kern/ui";
 import { holeWert } from "../kern/pfad";
-import JSZip from "jszip";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
@@ -83,6 +82,8 @@ function neueId(): string {
 
 /** Text aus einer DOCX-Datei: Absätze, Tabellenzellen, Tabulatoren und Umbrüche. */
 export async function docxText(daten: ArrayBuffer): Promise<string> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = await JSZip.loadAsync(daten);
   const datei = zip.file("word/document.xml");
   if (!datei) throw new Error("Keine gültige DOCX-Datei (word/document.xml fehlt).");

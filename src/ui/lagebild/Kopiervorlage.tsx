@@ -1,6 +1,7 @@
 // Reiter „Kopiervorlage“ des Lagebilds (seit 0.6.5, TP-2026-W44-17 aus Lagebild.tsx): je Sachverhalt ein Block mit
 // Tabellenlayout für Word, nach Schwere der Beurteilung sortiert.
 
+import { useMemo } from "react";
 import type { Profil } from "../../kern/typen";
 import { kennsatz, kennsaetzeAlle } from "../../kern/kennsaetze";
 import { svKennung, type SvEintrag } from "../../lagebild/lagebild";
@@ -10,7 +11,11 @@ import { KopierKnopf } from "./bausteine";
 
 export function Kopiervorlage({ profil, sortiert }: { profil: Profil; sortiert: SvEintrag[] }) {
   const ks = profil.ui.kennsaetze || {};
-  const bloecke = sortiert.map((s) => ({ s, html: kopiervorlageHtml(s, profil, radarPng), text: kopiervorlageText(s, profil) }));
+  // Radarbilder (Canvas) und HTML nur bei geänderten Sachverhalten neu erzeugen, nicht bei jedem Zeichnen (seit 0.6.5, TP-2026-W44-18)
+  const bloecke = useMemo(
+    () => sortiert.map((s) => ({ s, html: kopiervorlageHtml(s, profil, radarPng), text: kopiervorlageText(s, profil) })),
+    [sortiert, profil],
+  );
   return (
     <>
       <div className="lb-leiste">

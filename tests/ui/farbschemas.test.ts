@@ -3,7 +3,7 @@
 import { afterEach, beforeAll, expect, it, vi } from "vitest";
 import React, { act } from "react";
 import { leseOrdner, repoPfad } from "../support/dateien";
-import { aushaengen, bisWahr, einhaengen, eingeben, klick, reactUmgebung, seitentext } from "../support/dom";
+import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 
 const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
@@ -25,7 +25,9 @@ async function zeigeApp() {
 }
 async function einstellungen() {
   await klick("Einstellungen");
-  // Seit 0.5.6 stehen die Einstellungen in Bereichen; das Farbschema unter „Darstellung“
+  // Seit 0.5.6 stehen die Einstellungen in Bereichen; das Farbschema unter „Darstellung“. Seit 0.6.5 (TP-2026-W44-18)
+  // sind die Einstellungen ein nachgeladener Teil: erst warten, bis die Bereichsleiste da ist
+  await bisWahr(() => expect(knopf("Darstellung")).toBeTruthy());
   await klick("Darstellung");
   await bisWahr(() => expect(farbSelect()).toBeTruthy());
 }

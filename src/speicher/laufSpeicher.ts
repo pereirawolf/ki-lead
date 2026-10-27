@@ -2,7 +2,6 @@
 // gesammelte Ausgabe als ZIP (PR #79) und Schutz des Speichers vor automatischer Räumung. Das Laufformat selbst
 // (`ki-lead-lauf/1`) bleibt in der Pipeline.
 
-import JSZip from "jszip";
 import { del, get, getMany, keys, set } from "idb-keyval";
 import type { Lauf } from "../pipeline/lauf";
 
@@ -28,6 +27,8 @@ export async function laeufeLoeschen(ids: string[]): Promise<void> {
  * `dateiname` bestimmt den Namen je Lauf (die Lauf-ID macht ihn eindeutig).
  */
 export async function laeufeAlsZip(laeufe: Lauf[], dateiname: (l: Lauf) => string): Promise<Blob> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   for (const l of laeufe) zip.file(dateiname(l), JSON.stringify(l, null, 2));
   return zip.generateAsync({ type: "blob", compression: "DEFLATE" });

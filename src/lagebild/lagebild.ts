@@ -2,7 +2,6 @@
 // Rekursives Prinzip: Die Meldungen nachgeordneter oder lateraler Stellen ergeben das eigene Lagebild.
 // Alles Organisationsspezifische kommt aus Schema, Darstellungsdatei (Rollen, Kennsätze) und Kontakten.
 
-import JSZip from "jszip";
 import { migriere } from "../kern/migration";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { holeWert, teilePfad } from "../kern/pfad";
@@ -134,6 +133,8 @@ export async function dateienAusAuswahl(liste: File[]): Promise<{ dateien: Lageb
       if (passt(f.name, f.size)) dateien.push({ name: f.name, text: await f.text(), importiertAm: jetzt });
     } else if (endung === "zip") {
       try {
+        // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+        const { default: JSZip } = await import("jszip");
         const zip = await JSZip.loadAsync(await f.arrayBuffer());
         const json = Object.values(zip.files).filter((z) => !z.dir && /\.json$/i.test(z.name) && !IGNORIEREN.test(z.name));
         if (!json.length) fehler.push({ name: f.name, text: "das Archiv enthält keine JSON-Dateien" });

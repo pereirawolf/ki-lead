@@ -42,6 +42,9 @@ export function Bestaetigung({
 }) {
   const { profil, laufEinstellungen, verdichtung, material, eingaenge, stufeS2, stufeS3, schaetzS2, offline } = rahmen;
   const setVorschlag = (v: S1Vorschlag) => dispatch({ typ: "vorschlag", vorschlag: v });
+  // Gleiche Arrays über Renderläufe (ModellWahl und LaufSchaetzung sind memo, seit 0.6.5, TP-2026-W44-18)
+  const modellStufen = useMemo(() => [stufeS2, stufeS3], [stufeS2, stufeS3]);
+  const schaetzStufen = useMemo(() => [schaetzS2], [schaetzS2]);
   const arten = useMemo(() => ereignisarten(profil), [profil]);
   const sops = useMemo(() => fachSops(profil), [profil]);
   const sopGliederung = useMemo(() => sopGruppen(profil), [profil]);
@@ -421,8 +424,8 @@ export function Bestaetigung({
         )}{" "}
         {absenderZeile(absender)}
       </p>
-      <LaufModellWahl stufen={[stufeS2, stufeS3]} websuche={lauf.auftrag.websuche !== false} wahl={rahmen.wahl} setWahl={rahmen.setWahl}>
-        <LaufSchaetzung stufen={[schaetzS2]} einstellungen={laufEinstellungen} profil={profil} />
+      <LaufModellWahl stufen={modellStufen} websuche={lauf.auftrag.websuche !== false} wahl={rahmen.wahl} setWahl={rahmen.setWahl}>
+        <LaufSchaetzung stufen={schaetzStufen} einstellungen={laufEinstellungen} profil={profil} />
         {umfangS2 && (
           <p className="kasten kasten-hinweis" role="status">
             {umfangS2}

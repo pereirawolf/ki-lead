@@ -62,6 +62,9 @@ export default defineConfig(({ command }) => ({
     sourcemap: true,
     // Lizenzhinweise aller gebündelten Pakete (MIT, BSD, Apache, OFL verlangen sie in jeder Kopie); siehe THIRD-PARTY-NOTICES.md
     license: { fileName: "lizenzen.md" },
+    // Das Haupt-JavaScript enthält die eingebauten Profile als Text (rund 1 MB). Lagebild, Profile, Einstellungen, der
+    // Lesetext (markdown-it), jszip, PDF und die Forschungsdaten sind eigene Teile, die nachgeladen werden (seit 0.6.5,
+    // TP-2026-W44-18); der Service Worker hält sie alle vor (precacheListe).
     chunkSizeWarningLimit: 1500,
   },
   test: {

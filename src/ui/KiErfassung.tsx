@@ -308,6 +308,8 @@ function Erfassung({
   const { offline } = usePwaZustand();
   const setWahl = useCallback((w: Modellwahl) => dispatch({ typ: "eingabe", teil: { modellWahl: w } }), []);
   const eingaenge = useMemo(() => material.filter((m) => m.art === "eingang"), [material]);
+  // Gleiche Objekte über Renderläufe, damit LaufSchaetzung und ModellWahl (memo) nicht unnötig neu zeichnen
+  const stufen = useMemo(() => stufenFuer(verdichtung), [verdichtung]);
   const rahmen: LaufRahmen = {
     profil,
     laufEinstellungen,
@@ -315,7 +317,7 @@ function Erfassung({
     websuche,
     material,
     eingaenge,
-    ...stufenFuer(verdichtung),
+    ...stufen,
     wahl: eingabe.modellWahl,
     setWahl,
     protokollExport,

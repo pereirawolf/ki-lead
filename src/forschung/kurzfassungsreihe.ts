@@ -7,7 +7,6 @@
 // evaluation/abnahmen/kurzfassung.lauf.ts. Die Vorprüfung liefert Beobachtungen für die Prüfung von Hand, kein
 // Bestehen und keine Note. Alle Inhalte sind fiktiv.
 
-import JSZip from "jszip";
 import FALL from "../../evaluation/faelle/ilka-management-summary.json";
 import PLAN from "../../evaluation/plaene/management-summary-ilka.json";
 import type { LlmAnbieter } from "../anbieter/typen";
@@ -371,6 +370,8 @@ function liesmich(reihe: KurzfassungsReihe): string {
 
 /** ZIP mit Reihendatei, Übersicht, Texten und Protokollen */
 export async function kurzfassungsZip(reihe: KurzfassungsReihe, ergebnisse: KurzfassungsErgebnis[]): Promise<Uint8Array> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   zip.file("LIESMICH.txt", liesmich(reihe));
   zip.file("reihe.json", JSON.stringify(reihe, null, 2));

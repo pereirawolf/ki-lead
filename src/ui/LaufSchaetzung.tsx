@@ -1,5 +1,6 @@
 // Voraussichtliche Dauer und Kosten der nächsten KI-Stufen, nach Modell und Aufwand des Laufs.
 
+import { memo } from "react";
 import { aufschlagFuer } from "../anbieter/verteiler";
 import { aufwandFuer, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { kostenText, schaetzeStufe, stufenText, summe, type SchaetzArt } from "../pipeline/schaetzung";
@@ -11,7 +12,7 @@ export interface SchaetzStufe {
   art: SchaetzArt;
 }
 
-export function LaufSchaetzung({ stufen, einstellungen, profil }: { stufen: SchaetzStufe[]; einstellungen: Einstellungen; profil: Profil }) {
+function LaufSchaetzungText({ stufen, einstellungen, profil }: { stufen: SchaetzStufe[]; einstellungen: Einstellungen; profil: Profil }) {
   const werte = stufen.map((s) => {
     const modell = modellFuer(s.rolle, einstellungen, profil);
     const aufwand = aufwandFuer(s.rolle, einstellungen, profil);
@@ -28,3 +29,6 @@ export function LaufSchaetzung({ stufen, einstellungen, profil }: { stufen: Scha
     </p>
   );
 }
+
+/** Neu gezeichnet nur bei geänderten Angaben (seit 0.6.5, TP-2026-W44-18) */
+export const LaufSchaetzung = memo(LaufSchaetzungText);

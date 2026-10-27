@@ -20,7 +20,11 @@ import {
 import { APP_KENNUNG } from "../kern/version";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
-import { Lesetext } from "./Lesetext";
+import { nachladbar } from "./nachladen";
+
+// Lesetext mit markdown-it als eigener Teil des Builds (seit 0.6.5, TP-2026-W44-18)
+const LesetextTeil = nachladbar(() => import("./Lesetext").then((m) => m.Lesetext));
+const Lesetext = LesetextTeil.Komponente;
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";

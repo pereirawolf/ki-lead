@@ -28,9 +28,16 @@ export function fortschrittText(f: Exclude<Fortschritt, { art: "schreibt" }>): s
           : `${f.grund} Neuer Versuch in ${Math.round(f.warteMs / 1000)} s.`;
 }
 
+/** Höchstens so oft zeichnet die Laufanzeige die Zahl geschriebener Zeichen neu (seit 0.6.5, TP-2026-W44-18) */
+export const ZEICHEN_TAKT_MS = 250;
+
 export class LaufAnzeigeStand {
   private stand: AnzeigeSchnappschuss = { start: 0, protokoll: [], zeichen: 0 };
   private readonly beobachter = new Set<() => void>();
+  /** Zeichen, die noch nicht angezeigt sind, und der Zeitgeber, der sie gedrosselt nachreicht */
+  private offeneZeichen = 0;
+  private zeichenTimer: ReturnType<typeof setTimeout> | null = null;
+  private zuletztZeichen = 0;
 
   /** Für useSyncExternalStore */
   readonly abonnieren = (b: () => void): (() => void) => {
@@ -42,13 +49,25 @@ export class LaufAnzeigeStand {
 
   /** Neuer KI-Aufruf: Uhr von vorn, Protokoll und Zeichen leer */
   beginnen(start = Date.now()): void {
+    if (this.zeichenTimer !== null) clearTimeout(this.zeichenTimer);
+    this.zeichenTimer = null;
+    this.offeneZeichen = 0;
+    this.zuletztZeichen = 0;
     this.setzen({ start, protokoll: [], zeichen: 0 });
   }
 
   /** Fortschritt der Pipeline; gleiche Ereignisse hintereinander erscheinen einmal */
   readonly fortschritt = (f: Fortschritt): void => {
     if (f.art === "schreibt") {
-      if (f.zeichen !== this.stand.zeichen) this.setzen({ ...this.stand, zeichen: f.zeichen });
+      // Je Chunk ein Ereignis: gedrosselt auf ZEICHEN_TAKT_MS, der letzte Stand kommt immer an
+      this.offeneZeichen = f.zeichen;
+      if (this.zeichenTimer !== null) return;
+      const warten = Math.max(0, this.zuletztZeichen + ZEICHEN_TAKT_MS - Date.now());
+      this.zeichenTimer = setTimeout(() => {
+        this.zeichenTimer = null;
+        this.zuletztZeichen = Date.now();
+        if (this.offeneZeichen !== this.stand.zeichen) this.setzen({ ...this.stand, zeichen: this.offeneZeichen });
+      }, warten);
       return;
     }
     const text = fortschrittText(f);

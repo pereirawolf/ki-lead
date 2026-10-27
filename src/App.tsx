@@ -7,11 +7,18 @@ import type { Meldung, Profil, ProfilEintrag } from "./kern/typen";
 import { aktivesProfilLesen, dateiAnbieten, aktivesProfilSetzen, profileLaden, profilLoeschen, profilSpeichern, profilArchivieren } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
-import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { KiSymbol, type KopfLauf } from "./ui/KiSymbol";
-import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
-import { LagebildAnsicht } from "./ui/Lagebild";
+import type { EinstellungsBereich } from "./ui/Einstellungen";
+import { nachladbar } from "./ui/nachladen";
+
+// Lagebild, Profile und Einstellungen als eigene Teile des Builds (seit 0.6.5, TP-2026-W44-18), nach dem Start vorgeladen
+const Lagebild = nachladbar(() => import("./ui/Lagebild").then((m) => m.LagebildAnsicht));
+const Profile = nachladbar(() => import("./ui/Profile").then((m) => m.ProfileAnsicht));
+const Einstellungen = nachladbar(() => import("./ui/Einstellungen").then((m) => m.EinstellungenAnsicht));
+const LagebildAnsicht = Lagebild.Komponente;
+const ProfileAnsicht = Profile.Komponente;
+const EinstellungenAnsicht = Einstellungen.Komponente;
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { einstellungenLesen, einstellungenSchreiben } from "./speicher/einstellungsSpeicher";
@@ -66,6 +73,10 @@ export default function App() {
   /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten */
   const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>(start.bereich ?? "uebersicht");
   const [lagebildReiter, setLagebildReiter] = useState<LagebildReiter>(start.reiter ?? "uebersicht");
+  // Nachladbare Ansichten gleich nach dem ersten Zeichnen holen; ein Fehler zeigt sich erst beim Öffnen der Ansicht
+  useEffect(() => {
+    for (const n of [Lagebild, Profile, Einstellungen]) n.vorladen().catch(() => undefined);
+  }, []);
   // Zurück und Vor im Browser, eingegebene Adresse
   useEffect(() => {
     const folgen = () => {
