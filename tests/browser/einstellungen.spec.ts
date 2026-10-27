@@ -64,14 +64,18 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
         for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (schneidet(p)) return false;
         return true;
       };
+      // überstehender Inhalt (auch Text, der nicht umbricht): tiefste Elemente, deren Inhalt breiter ist als ihr Kasten
       const kandidaten = [...document.body.querySelectorAll("*")].filter((el) => steht(el) && frei(el));
-      const aeusserste = kandidaten.filter((el) => !kandidaten.some((a) => a !== el && a.contains(el)));
+      const ueberlauf = kandidaten.filter((el) => el.scrollWidth > el.clientWidth + 1 && !schneidet(el));
+      const tiefste = ueberlauf.filter((el) => !ueberlauf.some((k) => k !== el && el.contains(k)));
+      const aeusserste = tiefste.length ? tiefste : kandidaten.filter((el) => !kandidaten.some((a) => a !== el && a.contains(el)));
       const zuBreit = [
         `scrollWidth html ${document.documentElement.scrollWidth} px, body ${document.body.scrollWidth} px bei ${breite} px`,
         ...aeusserste.slice(0, 6).map((el) => {
           const r = el.getBoundingClientRect();
           const st = getComputedStyle(el);
-          return `${name(el)} in ${el.parentElement ? name(el.parentElement) : ""} (${Math.round(r.left)}–${Math.round(r.right)} px, scrollWidth ${el.scrollWidth}, ${st.position}, overflow-x ${st.overflowX})`;
+          const text = (el.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 60);
+          return `${name(el)} in ${el.parentElement ? name(el.parentElement) : ""} (${Math.round(r.left)}–${Math.round(r.right)} px, scrollWidth ${el.scrollWidth}, ${st.position}, overflow-x ${st.overflowX}, display ${st.display}) „${text}“`;
         }),
       ];
       return {
