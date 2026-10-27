@@ -392,7 +392,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
       const { lagebildAlsPdf } = await import("../dokumente/pdf");
       dateiAnbieten(lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()), mitDatum(tag, titel, "pdf"), "application/pdf");
     } catch (e) {
-      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}).`);
+      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || String(e)}).`);
     }
   };
 
@@ -488,7 +488,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
         onDrop={(e) => {
           e.preventDefault();
           setZiehen(false);
-          auswahl(e.dataTransfer.files);
+          void auswahl(e.dataTransfer.files);
         }}
       >
         <p>
@@ -511,7 +511,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen }: Props) {
           hidden
           accept=".json,.zip,application/json,application/zip"
           onChange={(e) => {
-            auswahl(e.target.files);
+            void auswahl(e.target.files);
             e.target.value = "";
           }}
         />

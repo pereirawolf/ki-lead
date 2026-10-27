@@ -537,11 +537,11 @@ function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) 
   const optionen: { v: Voreinstellung; kurz: string; einzeln?: string }[] = [
     { v: "profil", kurz: "Modelle wie im aktiven Profil bzw. in der App vorgegeben.", einzeln: "Aufwand nach den Vorgaben der App." },
     ...ANBIETER_IDS.map((a) => ({
-      v: a as Voreinstellung,
+      v: a,
       kurz: `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
       einzeln: modellProfilText(STANDARD_PROFILE[a]),
     })),
-    ...MIX_IDS.map((m) => ({ v: m as Voreinstellung, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
+    ...MIX_IDS.map((m) => ({ v: m, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
     { v: "individuell", kurz: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
   ];
   return (

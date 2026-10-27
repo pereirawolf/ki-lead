@@ -455,10 +455,10 @@ function suchbegriffeAus(text: string, n: number): Suchbegriff[] {
   const roh = (z.json as { suchbegriffe?: unknown } | undefined)?.suchbegriffe;
   const out: Suchbegriff[] = [];
   for (const x of Array.isArray(roh) ? roh : []) {
-    const begriff = String((x as any)?.begriff ?? "").trim();
+    const begriff = String(x?.begriff ?? "").trim();
     if (!begriff || out.some((b) => b.begriff.toLowerCase() === begriff.toLowerCase())) continue;
-    const zielquelle = String((x as any)?.zielquelle ?? "").trim();
-    out.push({ begriff, zweck: String((x as any)?.zweck ?? "").trim(), ...(zielquelle ? { zielquelle } : {}), herkunft: "vorschlag" });
+    const zielquelle = String(x?.zielquelle ?? "").trim();
+    out.push({ begriff, zweck: String(x?.zweck ?? "").trim(), ...(zielquelle ? { zielquelle } : {}), herkunft: "vorschlag" });
     if (out.length >= n) break;
   }
   return out;

@@ -7,17 +7,17 @@
 // Nicht eingebettet: archivierte SOP-Fassungen und die erzeugte Lesefassung. Die App liest sie nie (maßgeblich für SOPs
 // ist sop.dateien im Manifest); sie würden nur Ladezeit und Profilprüfsumme vergrößern. Die SOP-Übersicht
 // (`sop/README.md`) ist dagegen eingebettet: Die Profilansicht zeigt sie als Lesedokument, nicht als SOP.
-const oeffentlich = import.meta.glob(["/profile/**/*.{json,md}", "!/profile/**/sop/archiv/**", "!/profile/**/sop/*_Lesefassung.md"], {
+const oeffentlich = import.meta.glob<string>(["/profile/**/*.{json,md}", "!/profile/**/sop/archiv/**", "!/profile/**/sop/*_Lesefassung.md"], {
   query: "?raw",
   import: "default",
   eager: true,
-}) as Record<string, string>;
-const privat = __KI_LEAD_PRIVAT__
-  ? (import.meta.glob(["/privat/profile/**/*.{json,md}", "!/privat/profile/**/sop/archiv/**", "!/privat/profile/**/sop/*_Lesefassung.md"], {
+});
+const privat: Record<string, string> = __KI_LEAD_PRIVAT__
+  ? import.meta.glob<string>(["/privat/profile/**/*.{json,md}", "!/privat/profile/**/sop/archiv/**", "!/privat/profile/**/sop/*_Lesefassung.md"], {
       query: "?raw",
       import: "default",
       eager: true,
-    }) as Record<string, string>)
+    })
   : {};
 
 export interface EingebautesProfil {

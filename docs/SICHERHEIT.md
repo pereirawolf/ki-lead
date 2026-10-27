@@ -87,7 +87,8 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 |---|---|
 | `npm ci` installiert genau nach `package-lock.json` | übrige Abhängigkeiten in `package.json` mit Bereichsangabe (`^`); fest ist nur der Lockfile |
 | Capacitor und das Plugin für den Schlüsselbund exakt gepinnt | GitHub Actions per Versionsmarke (`@v4`) statt Commit-SHA |
-| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob | keine automatische Prüfung bekannter Schwachstellen (Dependabot, `npm audit` im CI) |
+| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob | kein `npm audit` im CI |
+| Dependabot schlägt wöchentlich Aktualisierungen für npm-Pakete und GitHub Actions vor (`.github/dependabot.yml`, seit 0.6.2); Node-Version festgelegt (`engines`, `.nvmrc`) | |
 | Veröffentlichung nur von `main` nach Tests, Build und Browsertests | Version von KeychainSwift nicht festgelegt, bis `Package.resolved` eingecheckt ist |
 | Wenige Abhängigkeiten, nur permissive Lizenzen; `tests/lizenzen/` scheitert bei unzulässiger Lizenz oder fehlendem Eintrag in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) | SBOM erfasst nur npm-Pakete, nicht die nativen Bibliotheken |
 | SBOM im Format CycloneDX bei jedem CI-Lauf (Artefakt) und als Anhang jedes Releases | |
@@ -121,4 +122,4 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.3) |
 | 1.1 | 24.10.2026 | Abschnitt 3.7: Lizenzprüfung, SBOM, offene Festlegung von KeychainSwift (App 0.5.5) |
 | 1.2 | 24.10.2026 | Mistral als dritter Anbieter: Schlüsselziel und Content-Security-Policy um `api.eu.mistral.ai` und `api.mistral.ai` erweitert; Mistral-Probe mit Testschlüssel als Repository-Secret, nur auf Anforderung, ohne Aufzeichnungen (App 0.5.6) |
-| 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04, App 0.6.2) |
+| 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04); Abschnitt 3.7: Dependabot und festgelegte Node-Version (TP-2026-W44-08) (App 0.6.2) |

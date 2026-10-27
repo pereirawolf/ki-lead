@@ -292,7 +292,7 @@ export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | 
 }
 
 export async function einstellungenLesen(): Promise<Einstellungen> {
-  const g = (await get("einstellungen")) as Partial<Einstellungen> | undefined;
+  const g = await get<Partial<Einstellungen>>("einstellungen");
   // Fassung 1 → 2: S2 brauchte bei hohem Aufwand bis zu 60 000 Token zum Nachdenken und brach an
   // der alten Grenze von 64 000 Ausgabetoken ab. Alte Vorgaben werden daher angehoben.
   if (g && !g.fassung) {

@@ -147,7 +147,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               hidden
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) oeffnen(f);
+                if (f) void oeffnen(f);
                 e.target.value = "";
               }}
             />

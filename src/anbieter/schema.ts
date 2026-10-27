@@ -8,7 +8,7 @@ export function strengesSchema(s: any): any {
   const out: any = {};
   for (const [k, v] of Object.entries(s)) {
     if (k === "properties" && v && typeof v === "object") {
-      out.properties = Object.fromEntries(Object.entries(v as object).map(([pk, pv]) => [pk, strengesSchema(pv)]));
+      out.properties = Object.fromEntries(Object.entries(v).map(([pk, pv]) => [pk, strengesSchema(pv)]));
     } else if (k === "items" || k === "anyOf" || k === "$defs" || k === "definitions") {
       out[k] =
         k === "$defs" || k === "definitions" ? Object.fromEntries(Object.entries(v as object).map(([dk, dv]) => [dk, strengesSchema(dv)])) : strengesSchema(v);

@@ -14,7 +14,7 @@ export function gueltigeAuswahl(a: unknown): string {
 }
 
 export async function darstellungLesen(): Promise<Darstellung> {
-  const g = (await get(SCHLUESSEL)) as Partial<Darstellung> | undefined;
+  const g = await get<Partial<Darstellung>>(SCHLUESSEL);
   return { version: 1, auswahl: gueltigeAuswahl(g?.auswahl) };
 }
 
@@ -28,7 +28,7 @@ export function lokalSchluessel(profilSchluessel: string, hash: string): string 
 }
 
 export async function lokaleFarbenLesen(profilSchluessel: string, hash: string): Promise<ProfilFarbschema | undefined> {
-  const g = (await get(lokalSchluessel(profilSchluessel, hash))) as { version?: number; definition?: unknown } | undefined;
+  const g = await get<{ version?: number; definition?: unknown }>(lokalSchluessel(profilSchluessel, hash));
   return g?.definition && !profilFarbschemaFehler(g.definition).length ? (g.definition as ProfilFarbschema) : undefined;
 }
 

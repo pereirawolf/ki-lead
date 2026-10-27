@@ -95,7 +95,7 @@ export function gleich(a: unknown, b: unknown): boolean {
     const bb = b as unknown[];
     return a.length === bb.length && a.every((x, i) => gleich(x, bb[i]));
   }
-  const ka = Object.keys(a as object);
+  const ka = Object.keys(a);
   const kb = Object.keys(b as object);
   return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && gleich((a as any)[k], (b as any)[k]));
 }

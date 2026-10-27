@@ -270,7 +270,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     }
   };
   useEffect(() => {
-    neuLaden();
+    void neuLaden();
   }, [profil]);
 
   const hintergrund = useWachhalten(laeuft);
@@ -341,7 +341,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setLauf({ ...l });
     setFehler(l.fehler);
     await laufSpeichern(l).catch((e) => setFehler(`${l.fehler} ${speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)}`));
-    neuLaden();
+    void neuLaden();
   };
 
   const s1Starten = async () => {
@@ -375,7 +375,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       setVorschlag(structuredClone(v));
       setPhase("bestaetigen");
       // Lauf nach S1 auch unter „Frühere Läufe“ zeigen (Protokoll schon jetzt exportierbar)
-      neuLaden();
+      void neuLaden();
     } catch (e) {
       await fehlerBehandeln(l, e);
       setPhase("auftrag");
@@ -397,7 +397,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       await fehlerBehandeln(l, e);
       setPhase("ergebnis");
     }
-    neuLaden();
+    void neuLaden();
   };
 
   /** Orientierungssuche je Sachverhalt (Bestandteil von S1, seit 0.6.0); `nur`: nur diese Sachverhalte (Index ab 0) */
@@ -452,7 +452,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     if (phase !== "auftrag") leeren();
     // Rolle aus dem Übergabedialog verbindlich setzen; sie geht der automatischen Erkennung vor.
     // Pfade aus ZIP-Archiven bleiben als Namensteil erhalten („Nord › meldung.json“).
-    (async () => {
+    void (async () => {
       const neu: Material[] = [];
       const fehlerListe: string[] = [];
       for (const d of uebergabe.dateien) {
@@ -532,7 +532,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       setFehler(speicherText("Die Läufe konnten nicht vollständig gelöscht werden", e));
     } finally {
       setSammelAktion(false);
-      neuLaden();
+      void neuLaden();
     }
   };
 
@@ -732,7 +732,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   hidden
                   accept=".txt,.md,.markdown,.json,.docx,.pdf,.csv,text/plain,application/json,application/pdf"
                   onChange={(e) => {
-                    dateienHinzufuegen(e.target.files);
+                    void dateienHinzufuegen(e.target.files);
                     e.target.value = "";
                   }}
                 />
@@ -1355,7 +1355,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       onClick={async () => {
                         if (confirm("Diesen Lauf mit Protokoll löschen?")) {
                           await laufLoeschen(l.id).catch((e) => setFehler(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
-                          neuLaden();
+                          void neuLaden();
                         }
                       }}
                     >

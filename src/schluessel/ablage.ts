@@ -33,7 +33,7 @@ const geraet: Ablage = {
   beschreibung:
     "Bleibt nach dem Schließen erhalten. Liegt unverschlüsselt im Speicher dieses Browsers bzw. dieser App; wer Zugriff auf das entsperrte Gerät hat, kann ihn auslesen.",
   verfuegbar: () => true,
-  lesen: async (a) => ((await get(`schluessel:${a}`)) as string | undefined) || "",
+  lesen: async (a) => (await get<string>(`schluessel:${a}`)) || "",
   schreiben: async (a, w) => {
     if (w) await set(`schluessel:${a}`, w);
     else await del(`schluessel:${a}`);
@@ -113,7 +113,7 @@ export function ablage(id: AblageId): Ablage {
 
 /** Gewählte Ablage; eine hier nicht verfügbare Wahl fällt auf den Gerätespeicher zurück. */
 export async function ablageLesen(): Promise<AblageId> {
-  const w = (await get(WAHL)) as AblageId | undefined;
+  const w = await get<AblageId>(WAHL);
   return w && ablage(w).id === w && ablage(w).verfuegbar() ? w : "geraet";
 }
 

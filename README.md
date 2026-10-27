@@ -91,10 +91,14 @@ Das Format beschreibt [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md). Mitgeliefert
 Voraussetzung ist Node.js 22.
 
 ```
-npm ci                  # Abhängigkeiten nach package-lock.json
+npm ci                  # Abhängigkeiten nach package-lock.json (Node 22, siehe .nvmrc)
 npm run dev             # Entwicklungsserver
 npm test                # Tests (Kern, Profile, Pipeline, Anbieter, Oberfläche; KI-Anbieter simuliert)
 npm run test:zufall     # dieselben Tests in zufälliger, fester Reihenfolge
+npm run test:coverage   # Tests mit Abdeckung und Mindestwerten für src/kern, src/pipeline, src/anbieter
+npm run lint            # ESLint (Fehler brechen ab; Warnungen wie no-explicit-any nicht)
+npm run format:check    # Prettier-Prüfung (npm run format schreibt die Formatierung)
+npm run typecheck       # Typprüfung von src, Konfiguration, Skripten und Tests
 npm run test:browser    # Browsertests mit Playwright gegen den Build (einmalig: npx playwright install chromium)
 npm run test:inhalt     # nur Profil-, Kern- und Evaluationstests (schnell, bei Arbeit an SOP und Profilen)
 npm run build           # Produktionsbuild nach dist/
@@ -113,7 +117,9 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 **Rückmeldungen:** über die Issue-Vorlagen „Fehler“, „Fachrückmeldung“, „Barrierefreiheit“ und „Datenschutz“; Regeln für die Erprobung in [docs/ERPROBUNG.md](docs/ERPROBUNG.md). Sicherheitslücken vertraulich nach [SECURITY.md](SECURITY.md).
 
-**Beiträge:** Änderungen in einem eigenen Zweig sammeln, `npm test` und `npm run build` ausführen und als Pull Request gegen `main` zur Prüfung vorlegen.
+**Beiträge:** Änderungen in einem eigenen Zweig sammeln, `npm run lint`, `npm run format:check`, `npm test` und `npm run build` ausführen und als Pull Request gegen `main` zur Prüfung vorlegen. Die Versionsnummer der App steht in `package.json`; die App liest sie beim Build (`__APP_VERSION__`).
+
+**TypeScript:** Typprüfung und Build laufen mit TypeScript 7 (`tsc`, Paket `@typescript/native`). Weil typescript-eslint die TypeScript-API braucht, die TypeScript 7 nicht mehr bietet, zeigt das Paket `typescript` auf `@typescript/typescript6` (Weg nach der Ankündigung von TypeScript 7.0).
 
 ## Versionen und Änderungen
 

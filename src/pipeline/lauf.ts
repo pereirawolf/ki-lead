@@ -241,7 +241,7 @@ export async function laufSpeichern(l: Lauf): Promise<void> {
 }
 
 export async function laufLesen(id: string): Promise<Lauf | undefined> {
-  return (await get(`lauf:${id}`)) as Lauf | undefined;
+  return get<Lauf>(`lauf:${id}`);
 }
 
 export async function laufLoeschen(id: string): Promise<void> {

@@ -302,7 +302,11 @@ describe("Vergleichslauf Ilka", () => {
     it.each([
       ["anderes t0", (v: any) => (v.meldezeitpunkt = "2026-10-14T12:00"), /t0 2026-10-14T12:00/],
       ["unbekannter Eingang", (v: any) => v.sachverhalte[0].eingangsmeldungen.push("fremd.json"), /unbekannter Eingang fremd\.json/],
-      ["Eingang fehlt", (v: any) => v.sachverhalte.forEach((s: any) => (s.eingangsmeldungen = s.eingangsmeldungen.filter((e: string) => !e.includes("_ST_")))), /_ST_.*keinem Sachverhalt/],
+      [
+        "Eingang fehlt",
+        (v: any) => v.sachverhalte.forEach((s: any) => (s.eingangsmeldungen = s.eingangsmeldungen.filter((e: string) => !e.includes("_ST_")))),
+        /_ST_.*keinem Sachverhalt/,
+      ],
       ["ohne SOP", (v: any) => (v.sachverhalte[1].sops = []), /Sachverhalt 2: keine SOP/],
       ["keine Sachverhalte", (v: any) => (v.sachverhalte = []), /keine Sachverhalte/],
     ])("verwirft einen unbrauchbaren Gegenstand: %s", (_name, aendern, muster) => {
@@ -314,7 +318,14 @@ describe("Vergleichslauf Ilka", () => {
     it("ohne S1-Aufruf: Gegenstand unverändert bestätigt, alle Prüfpunkte erfüllt, Datei und Prüfsumme in Lauf und Reihe", async () => {
       const d = await daten();
       const anbieter = attrappe(JSON.parse(d.dateien[REFERENZ]));
-      const { reihe, ergebnisse } = await vergleichsreihe({ daten: d, anbieter, einstellungen: MISTRAL, anzahl: 2, s1Fest: FEST, variante: "s2-isoliert-ilka/E-mistral-medium" });
+      const { reihe, ergebnisse } = await vergleichsreihe({
+        daten: d,
+        anbieter,
+        einstellungen: MISTRAL,
+        anzahl: 2,
+        s1Fest: FEST,
+        variante: "s2-isoliert-ilka/E-mistral-medium",
+      });
       // je Lauf genau ein Aufruf, und zwar S2 (ohne JSON-Schema des S1-Vorschlags)
       expect(anbieter.anfragen.map((a) => [a.modell, !!a.jsonSchema])).toEqual([
         ["mistral-medium-3-5", false],

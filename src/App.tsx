@@ -203,7 +203,7 @@ export default function App() {
   const meldungErsetzen = (m: Meldung) => {
     setMeldung(m);
     setDokumentNr((n) => n + 1);
-    if (profil) kurzfassungLeeren(profil.manifest.id);
+    if (profil) void kurzfassungLeeren(profil.manifest.id);
   };
 
   const kiUebernehmen = (m: Meldung) => {
@@ -221,7 +221,7 @@ export default function App() {
   const anKiUebergeben = (dateien: UebergabeMeldung[]) => {
     // Aus der Verdichtung entsteht eine neue Meldung: die bisherige Management Summary gilt nicht mehr
     if (!profil) return;
-    kurzfassungLeeren(profil.manifest.id);
+    void kurzfassungLeeren(profil.manifest.id);
     uebergabeNr.current += 1;
     setKiUebergabe({ nr: uebergabeNr.current, profilHash: profil.hash, dateien });
     setAnsicht("ki");
@@ -230,13 +230,16 @@ export default function App() {
   const uebergabeQuittieren = useCallback((nr: number) => setKiUebergabe((alt) => (alt?.nr === nr ? null : alt)), []);
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       // Ein einzelnes defektes Profil oder ein nicht lesbarer Gerätespeicher darf die übrigen Profile nicht verdecken.
       const sicherLaden = async (dateien: Record<string, string>) => {
         try {
           return await ladeProfil(dateien);
         } catch (e) {
-          return { profil: null, befunde: [{ stufe: "fehler" as const, text: `Das Profil konnte nicht geladen werden: ${(e as Error)?.message || e}` }] };
+          return {
+            profil: null,
+            befunde: [{ stufe: "fehler" as const, text: `Das Profil konnte nicht geladen werden: ${(e as Error)?.message || String(e)}` }],
+          };
         }
       };
       const eintraege: ProfilEintrag[] = [];
@@ -289,7 +292,7 @@ export default function App() {
     for (const [id, a] of ausstehend.current) {
       window.clearTimeout(a.timer);
       const p = profile.find((x) => x.profil?.manifest.id === id)?.profil;
-      if (p) schreiben(id, p, a.daten);
+      if (p) void schreiben(id, p, a.daten);
     }
     ausstehend.current.clear();
   }, [profile, schreiben]);
@@ -314,7 +317,7 @@ export default function App() {
     let gueltig = true;
     setMeldungRoh(null);
     setDokumentNr((n) => n + 1);
-    (async () => {
+    void (async () => {
       let z: Awaited<ReturnType<typeof zwischenstandLesen>>;
       try {
         z = await zwischenstandLesen(profil.manifest.id);
@@ -348,7 +351,7 @@ export default function App() {
       if (alt) window.clearTimeout(alt.timer);
       const timer = window.setTimeout(() => {
         ausstehend.current.delete(id);
-        schreiben(id, profil, m);
+        void schreiben(id, profil, m);
       }, 1200);
       ausstehend.current.set(id, { daten: m, timer });
     },

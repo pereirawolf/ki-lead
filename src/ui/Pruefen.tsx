@@ -64,7 +64,7 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
       const { meldungAlsPdf } = await import("../dokumente/pdf");
       dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final, jetzt) + ".pdf", "application/pdf");
     } catch (e) {
-      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || e}). Die Meldung lässt sich weiterhin als JSON speichern.`);
+      setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || String(e)}). Die Meldung lässt sich weiterhin als JSON speichern.`);
     }
   };
   const text = (b: Befund[]) => b.map((x) => x.text);

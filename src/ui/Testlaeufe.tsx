@@ -403,7 +403,7 @@ export function TestlaufAbschnitt({
               <optgroup key={plan.id} label={`Bewertungsplan ${plan.id}`}>
                 {plan.varianten.map((v) => (
                   <option key={v.kennung} value={`${plan.id}/${v.kennung}`}>
-                    {varianteText(v, art as Umfang)}
+                    {varianteText(v, art)}
                   </option>
                 ))}
               </optgroup>
@@ -671,7 +671,6 @@ export function TestlaufArchiv({ aktualisierung = 0 }: { aktualisierung?: number
   };
   useEffect(() => {
     void laden();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aktualisierung]);
 
   const herunterladen = async (x: TestlaufEintrag) => {

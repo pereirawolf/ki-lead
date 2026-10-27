@@ -231,7 +231,7 @@ export function profilFarbschemaFehler(f: unknown): string[] {
   if (o.farben !== undefined) {
     if (!o.farben || typeof o.farben !== "object" || Array.isArray(o.farben)) fehler.push("„farben“ muss ein Objekt sein.");
     else
-      for (const [k, v] of Object.entries(o.farben as object)) {
+      for (const [k, v] of Object.entries(o.farben)) {
         if (!(UI_TOKENS as readonly string[]).includes(k)) fehler.push(`Farbrolle „${k}“ ist nicht änderbar.`);
         else if (typeof v !== "string" || !HEX.test(v)) fehler.push(`„${k}“ muss eine Farbe im Format #RRGGBB sein.`);
       }

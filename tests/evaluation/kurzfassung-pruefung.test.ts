@@ -30,14 +30,20 @@ describe("Vorprüfung der Management Summary (Musterfassung Ilka)", () => {
     ["Radarwert im Text", { abschnitte: { lage: "D2 = 4 nach Kreisangaben." } }, "marker_im_text"],
     ["Kurztitel fehlt", { kurztitel: ["Stromausfälle"] }, "kurztitel_passend"],
     // AV-2026-W43-41: Kennsatz der Nachreihe vom 25.10.2026 (Sonnet „mittel“, Arbeitsanweisung 2.2.0)
-    ["Klärungsbedarf ohne Widerspruch", { kernaussage: "Klärungsbedarf: Die Sturmphase ist vorbei, doch mindestens rund 20.700 Menschen sind ohne Strom." }, "klaerungsbedarf"],
+    [
+      "Klärungsbedarf ohne Widerspruch",
+      { kernaussage: "Klärungsbedarf: Die Sturmphase ist vorbei, doch mindestens rund 20.700 Menschen sind ohne Strom." },
+      "klaerungsbedarf",
+    ],
   ] as const)("%s", (_name, aenderung, merkmal) => {
     const b = kurzfassungPruefen({ ...gut, ...aenderung } as any);
     expect(b[merkmal]).toBe(merkmal !== "kurztitel_passend");
   });
 
   it("Hochrechnung als solche gekennzeichnet ist keine Auffälligkeit", () => {
-    expect(kurzfassungPruefen({ ...gut, kernaussage: "Mit der Hochrechnung für Goslar rund 29.000 Menschen ohne Strom." }).hochrechnung_ungekennzeichnet).toBe(false);
+    expect(kurzfassungPruefen({ ...gut, kernaussage: "Mit der Hochrechnung für Goslar rund 29.000 Menschen ohne Strom." }).hochrechnung_ungekennzeichnet).toBe(
+      false,
+    );
   });
 
   it("AV-2026-W43-41: „Klärungsbedarf“ nur am Anfang der Kernaussage; als Auffälligkeit benannt", async () => {

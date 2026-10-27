@@ -676,7 +676,7 @@ export function reiheErstellen(o: {
     anbieter: k.s2.anbieter,
     ...(mistral_endpunkt ? { mistral_endpunkt } : {}),
     attrappe: !!o.attrappe,
-    modelle: modelle as Konfiguration,
+    modelle: modelle,
     laeufe_geplant: o.geplant,
     technisch_bestanden: o.ergebnisse.filter((e) => e.eintrag.technisch_bestanden).length,
     kosten_usd_summe: Math.round(summe * 10000) / 10000,

@@ -17,6 +17,8 @@ Weitere Befehle:
 - `npm run test:inhalt`: Profil-, Kern- und Evaluationstests; schnelle Rückmeldung bei Arbeit an SOP, Arbeitsanweisungen oder Profilen.
 - `npm run test:browser:kern` und `npm run test:browser:pwa`: nur eines der beiden Browserprojekte (siehe unten).
 - `npx vitest run tests/kern/zeit.test.ts`: eine Datei; `npx vitest` für den Beobachtungsmodus.
+- `npm run test:coverage` (seit 0.6.2): alle Tests mit Abdeckung (V8) für `src/kern`, `src/pipeline` und `src/anbieter`; scheitert unter den Mindestwerten in `vite.config.ts` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %, knapp unter dem Stand vom 26.10.2026). Nicht Teil von `npm test`; Bericht unter `coverage/`.
+- `npm run lint` und `npm run format:check` (seit 0.6.2): ESLint mit typescript-eslint (`eslint.config.js`) und Prettier für Code, Tests, Skripte und Konfiguration; die CI führt beide vor den Tests aus. `no-explicit-any` ist eine Warnung und lässt den Lauf bestehen.
 
 ## Gestaffelte Prüfung in GitHub Actions
 

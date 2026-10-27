@@ -90,8 +90,8 @@ export function KurzfassungKasten({
 
   useEffect(() => {
     let gueltig = true;
-    get(schluesselIdb)
-      .then((g) => gueltig && setGespeichert((g as Gespeichert) || null))
+    get<Gespeichert>(schluesselIdb)
+      .then((g) => gueltig && setGespeichert(g || null))
       .catch((e) => gueltig && setFehler(`Die gespeicherte Fassung konnte nicht gelesen werden (${(e as Error)?.message || "Speicherfehler"}).`));
     const geleert = (e: Event) => {
       if ((e as CustomEvent).detail !== profil.manifest.id) return;
@@ -128,7 +128,7 @@ export function KurzfassungKasten({
       const k = await kurzfassungErstellen(
         profil,
         meldung,
-        Verteiler.fuer(ki!.schluessel, { mistralEndpunkt: kiEinstellungen!.mistralEndpunkt }),
+        Verteiler.fuer(ki.schluessel, { mistralEndpunkt: kiEinstellungen!.mistralEndpunkt }),
         kiEinstellungen!,
         ctrl.signal,
       );

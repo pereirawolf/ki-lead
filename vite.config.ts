@@ -67,5 +67,15 @@ export default defineConfig(({ command }) => ({
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],
+    // Abdeckung (seit 0.6.2, TP-2026-W44-08): nur mit `npm run test:coverage`, Schwellen für die Fachlogik ohne Oberfläche.
+    // Die Werte liegen knapp unter dem Stand vom 26.10.2026; sie sollen Rückschritte anzeigen, nicht Ziele setzen.
+    coverage: {
+      provider: "v8",
+      include: ["src/kern/**", "src/pipeline/**", "src/anbieter/**"],
+      reporter: ["text-summary", "html"],
+      reportsDirectory: "coverage",
+      // Stand 26.10.2026: Anweisungen 93,1 %, Zweige 79,0 %, Funktionen 96,6 %, Zeilen 96,3 %
+      thresholds: { statements: 93, branches: 78, functions: 96, lines: 96 },
+    },
   },
 }));

@@ -131,7 +131,7 @@ export const DEFEKTE: Defekt[] = [
 
 /** Unbeschädigte Musterfassung (frische Kopie) */
 export function musterfassung(): Meldung {
-  return structuredClone(MUSTER) as unknown as Meldung;
+  return structuredClone(MUSTER);
 }
 
 /** Musterfassung mit einem Defekt (frische Kopie) */

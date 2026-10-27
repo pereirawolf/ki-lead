@@ -80,21 +80,15 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W
 
 ### Hinzugefügt
 
+- **KI-Erfassung → „Frühere Läufe mit diesem Profil“** (PR #79; `src/ui/KiErfassung.tsx`, `src/pipeline/lauf.ts`): Über der Liste stehen zwei Knöpfe. „Alle als ZIP speichern“ legt die Laufprotokolle aller aufgelisteten Läufe als je eine JSON-Datei in eine ZIP-Datei (`<Datum>_KI-LEAD_Laeufe_<Profil-ID>.zip`; Inhalt und Dateinamen der Protokolle wie beim Einzelexport „Protokoll“). „Alle löschen“ entfernt nach Rückfrage alle aufgelisteten Läufe samt Protokoll aus dem Gerätespeicher; solange ein KI-Lauf läuft, ist der Knopf gesperrt. Beide betreffen nur die Läufe des aktiven Profils, Läufe anderer Profile bleiben unberührt. Neue Funktionen `laeufeAlsZip` und `laeufeLoeschen` in `src/pipeline/lauf.ts`; das Laufformat (`ki-lead-lauf/1`) und die Anfragen an die KI bleiben unverändert.
+
 ### Geändert
 
 ### Behoben
 
 ### Tests
 
-## [Unveröffentlicht]
-
-### Hinzugefügt
-
-- **KI-Erfassung → „Frühere Läufe mit diesem Profil“** (`src/ui/KiErfassung.tsx`, `src/pipeline/lauf.ts`): Über der Liste stehen zwei Knöpfe. „Alle als ZIP speichern“ legt die Laufprotokolle aller aufgelisteten Läufe als je eine JSON-Datei in eine ZIP-Datei (`<Datum>_KI-LEAD_Laeufe_<Profil-ID>.zip`; Inhalt und Dateinamen der Protokolle wie beim Einzelexport „Protokoll“). „Alle löschen“ entfernt nach Rückfrage alle aufgelisteten Läufe samt Protokoll aus dem Gerätespeicher; solange ein KI-Lauf läuft, ist der Knopf gesperrt. Beide betreffen nur die Läufe des aktiven Profils, Läufe anderer Profile bleiben unberührt. Neue Funktionen `laeufeAlsZip` und `laeufeLoeschen` in `src/pipeline/lauf.ts`; das Laufformat (`ki-lead-lauf/1`) und die Anfragen an die KI bleiben unverändert.
-
-### Tests
-
-- `tests/ui/ki-erfassung-laeufe.test.ts` (neu, 5): keine Sammelknöpfe ohne frühere Läufe; ZIP mit je einem Protokoll der Läufe des Profils (Dateinamen, Inhalt wie Einzelexport, fremdes Profil ausgeschlossen, Speicher unverändert); Löschen mit Rückfrage (Abbrechen löscht nichts, Bestätigen löscht nur die Läufe des Profils, Singular bei einem Lauf).
+- `tests/ui/ki-erfassung-laeufe.test.ts` (neu, 5; PR #79): keine Sammelknöpfe ohne frühere Läufe; ZIP mit je einem Protokoll der Läufe des Profils (Dateinamen, Inhalt wie Einzelexport, fremdes Profil ausgeschlossen, Speicher unverändert); Löschen mit Rückfrage (Abbrechen löscht nichts, Bestätigen löscht nur die Läufe des Profils, Singular bei einem Lauf).
 
 ## [0.6.1] – 26.10.2026
 
