@@ -2,6 +2,7 @@
 // vollständigen Prompts, Rohantworten, Token, Kosten und Dauer je Stufe. Exportierbar als JSON.
 
 import type { GespeicherterVergleich } from "./vergleich";
+import JSZip from "jszip";
 import { del, entries, get, set } from "idb-keyval";
 import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
@@ -224,6 +225,21 @@ export async function laufLesen(id: string): Promise<Lauf | undefined> {
 
 export async function laufLoeschen(id: string): Promise<void> {
   await del(`lauf:${id}`);
+}
+
+/** Löscht mehrere Läufe samt Protokoll. */
+export async function laeufeLoeschen(ids: string[]): Promise<void> {
+  await Promise.all(ids.map((id) => del(`lauf:${id}`)));
+}
+
+/**
+ * ZIP mit je einem Laufprotokoll (ki-lead-lauf/1) als JSON-Datei. Inhalt und Dateinamen stammen vom Einzelexport;
+ * `dateiname` bestimmt den Namen je Lauf (die Lauf-ID macht ihn eindeutig).
+ */
+export async function laeufeAlsZip(laeufe: Lauf[], dateiname: (l: Lauf) => string): Promise<Blob> {
+  const zip = new JSZip();
+  for (const l of laeufe) zip.file(dateiname(l), JSON.stringify(l, null, 2));
+  return zip.generateAsync({ type: "blob", compression: "DEFLATE" });
 }
 
 export async function laeufeLaden(): Promise<Lauf[]> {

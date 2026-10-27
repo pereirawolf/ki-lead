@@ -1701,6 +1701,10 @@ details.ki-abschnitt summary,
   padding: 0.5rem 1rem 0.75rem;
 }
 
+.frueher-sammel {
+  margin-top: 0.25rem;
+}
+
 .tabelle {
   width: 100%;
   border-collapse: collapse;

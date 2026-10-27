@@ -28,7 +28,18 @@ import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
 import type { EinstellungsBereich } from "./Einstellungen";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
-import { laeufeLaden, laufKostenText, laufLoeschen, laufSpeichern, neuerLauf, type Lauf, type S1Vorschlag, type Suchbegriff } from "../pipeline/lauf";
+import {
+  laeufeAlsZip,
+  laeufeLaden,
+  laeufeLoeschen,
+  laufKostenText,
+  laufLoeschen,
+  laufSpeichern,
+  neuerLauf,
+  type Lauf,
+  type S1Vorschlag,
+  type Suchbegriff,
+} from "../pipeline/lauf";
 import { pflichtRegel } from "../pipeline/recherchetiefe";
 import {
   dateiLesen,
@@ -227,6 +238,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   const [start, setStart] = useState(0);
   const [jetzt, setJetzt] = useState(Date.now());
   const [laeufe, setLaeufe] = useState<Lauf[]>([]);
+  const [sammelAktion, setSammelAktion] = useState(false);
   const abbruch = useRef<AbortController | null>(null);
   // Laufende Anfrage beim Verlassen (Profilwechsel) kontrolliert abbrechen; der Lauf bleibt als abgebrochen protokolliert
   useEffect(() => () => abbruch.current?.abort(), []);
@@ -480,13 +492,45 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setModellWahl({});
   }
 
-  const protokollExport = (l: Lauf) => {
+  const protokollName = (l: Lauf) => {
     const zone = profil.manifest.variablen?.zeitzone;
-    dateiAnbieten(
-      JSON.stringify(l, null, 2),
-      mitDatum(dateistempel(l.erstellt, zone) ?? exportStempel(zone), `KI-LEAD_Lauf_${l.id}`, "json"),
-      "application/json",
-    );
+    return mitDatum(dateistempel(l.erstellt, zone) ?? exportStempel(zone), `KI-LEAD_Lauf_${l.id}`, "json");
+  };
+
+  const protokollExport = (l: Lauf) => {
+    dateiAnbieten(JSON.stringify(l, null, 2), protokollName(l), "application/json");
+  };
+
+  /** Alle gelisteten Läufe dieses Profils als eine ZIP-Datei (je Lauf ein Protokoll wie beim Einzelexport) */
+  const alleAlsZip = async () => {
+    if (!laeufe.length) return;
+    setSammelAktion(true);
+    try {
+      const zip = await laeufeAlsZip(laeufe, protokollName);
+      const zone = profil.manifest.variablen?.zeitzone;
+      dateiAnbieten(zip, mitDatum(exportStempel(zone), `KI-LEAD_Laeufe_${profil.manifest.id}`, "zip"), "application/zip");
+    } catch (e) {
+      setFehler(speicherText("Die Läufe konnten nicht als ZIP-Datei zusammengestellt werden", e));
+    } finally {
+      setSammelAktion(false);
+    }
+  };
+
+  /** Alle gelisteten Läufe dieses Profils samt Protokoll aus dem Gerätespeicher löschen (nach Rückfrage) */
+  const alleLoeschen = async () => {
+    const n = laeufe.length;
+    if (!n) return;
+    const frage = `${n === 1 ? "Den einen früheren Lauf" : `Alle ${n} früheren Läufe`} mit diesem Profil samt Protokoll löschen? Das lässt sich nicht rückgängig machen. Zum Aufbewahren vorher „Alle als ZIP speichern“ wählen.`;
+    if (!confirm(frage)) return;
+    setSammelAktion(true);
+    try {
+      await laeufeLoeschen(laeufe.map((l) => l.id));
+    } catch (e) {
+      setFehler(speicherText("Die Läufe konnten nicht vollständig gelöscht werden", e));
+    } finally {
+      setSammelAktion(false);
+      neuLaden();
+    }
   };
 
   const setzeSv = (i: number, teil: Partial<S1Vorschlag["sachverhalte"][number]>) => {
@@ -1256,6 +1300,25 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       {laeufe.length > 0 && (
         <details className="frueher">
           <summary>Frühere Läufe mit diesem Profil ({laeufe.length})</summary>
+          <div className="aktionen frueher-sammel">
+            <button type="button" className="knopf leise klein" disabled={sammelAktion} onClick={alleAlsZip}>
+              Alle als ZIP speichern
+            </button>
+            <button
+              type="button"
+              className="knopf leise klein"
+              disabled={sammelAktion || laeuft}
+              aria-describedby={laeuft ? "frueher-sammel-laeuft" : undefined}
+              onClick={alleLoeschen}
+            >
+              Alle löschen
+            </button>
+          </div>
+          {laeuft && (
+            <p id="frueher-sammel-laeuft" className="hinweis">
+              „Alle löschen“ ist erst möglich, wenn der laufende KI-Lauf beendet ist.
+            </p>
+          )}
           <table className="tabelle">
             <thead>
               <tr>
