@@ -54,14 +54,20 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
       const inhalt = document.querySelector(".bereich-inhalt")!.getBoundingClientRect();
       const knoepfe = [...document.querySelectorAll('nav[aria-label="Bereiche der Einstellungen"] button')].map((k) => k.getBoundingClientRect().top);
       // Im Fehlerfall die überstehenden Elemente nennen (Diagnose für WebKit in der CI, seit 0.6.5)
+      // (ganze Seite; Elemente in geschlossenen <details> gekennzeichnet, Breite der Seite vorangestellt)
       const breite = window.innerWidth;
-      const zuBreit = [...document.querySelectorAll(".bereich-inhalt *")]
-        .filter((el) => el.getBoundingClientRect().right > breite + 1 && !el.closest("details:not([open])"))
-        .slice(0, 5)
-        .map(
-          (el) =>
-            `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).trim().split(/\s+/).join(".") : ""} (${Math.round(el.getBoundingClientRect().right)} px)`,
-        );
+      const name = (el: Element) => `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).trim().split(/\s+/).join(".") : ""}`;
+      const zuBreit = [
+        `scrollWidth ${document.documentElement.scrollWidth} px bei ${breite} px`,
+        ...[...document.body.querySelectorAll("*")]
+          .filter((el) => el.getBoundingClientRect().right > breite + 1 && ![...el.children].some((k) => k.getBoundingClientRect().right > breite + 1))
+          .slice(0, 6)
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            const eltern = el.parentElement ? name(el.parentElement) : "";
+            return `${name(el)} in ${eltern} (${Math.round(r.left)}–${Math.round(r.right)} px${el.closest("details:not([open])") ? ", in geschlossenem details" : ""})`;
+          }),
+      ];
       return {
         navOben: nav.bottom <= inhalt.top + 1,
         eineZeile: Math.max(...knoepfe) - Math.min(...knoepfe) < 2,
