@@ -5,7 +5,7 @@ KI-LEAD prüft sich auf drei Ebenen. Die Tests der ersten beiden rufen keinen ec
 | Ebene | Befehl | Umgebung | Inhalt |
 |---|---|---|---|
 | Funktions- und Komponententests | `npm test` | Vitest, Node; Oberfläche in jsdom | `tests/<bereich>/*.test.ts` |
-| Browsertests | `npm run test:browser` | Playwright, Chromium, Produktionsbuild | `tests/browser/*.spec.ts` |
+| Browsertests | `npm run test:browser` | Playwright, Chromium (Kerntests in der CI auch WebKit), Produktionsbuild | `tests/browser/*.spec.ts` |
 | Modellbewertung | nur auf Auftrag | echte Läufe, eigenes Budget | `evaluation/` (siehe dortige README) |
 | Mistral-Probe | Label „mistral-probe“ am Pull Request oder Workflow von Hand | Playwright, echter Testschlüssel aus dem Secret `MISTRAL_API_KEY`, wenige Cent | `tests/probe/mistral.spec.ts` mit `playwright.probe.config.ts` |
 
@@ -15,7 +15,8 @@ Weitere Befehle:
 - `npm run test:ui`: nur die Oberflächentests in jsdom.
 - `npm run pruefe-profile`: nur die Profiltests (`tests/profil/`), auch für eigene Profile unter `privat/profile/`.
 - `npm run test:inhalt`: Profil-, Kern- und Evaluationstests; schnelle Rückmeldung bei Arbeit an SOP, Arbeitsanweisungen oder Profilen.
-- `npm run test:browser:kern` und `npm run test:browser:pwa`: nur eines der beiden Browserprojekte (siehe unten).
+- `npm run test:browser:kern` und `npm run test:browser:pwa`: nur eines der beiden Chromium-Projekte (siehe unten).
+- `npm run test:browser:webkit` (seit 0.6.5, TP-2026-W44-22): die Kerntests in WebKit (Safari, auch iOS); braucht einmalig `npx playwright install webkit` und ist nicht Teil von `npm run test:browser`.
 - `npx vitest run tests/kern/zeit.test.ts`: eine Datei; `npx vitest` für den Beobachtungsmodus.
 - `npm run test:coverage` (seit 0.6.2): alle Tests mit Abdeckung (V8) für `src/kern`, `src/pipeline`, `src/anbieter` und seit 0.6.3 `src/forschung` (vorher Teil von `src/pipeline`); scheitert unter den Mindestwerten in `vite.config.ts` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %, knapp unter dem Stand vom 26.10.2026). Nicht Teil von `npm test`; Bericht unter `coverage/`.
 - `npm run lint` und `npm run format:check` (seit 0.6.2): ESLint mit typescript-eslint (`eslint.config.js`) und Prettier für Code, Tests, Skripte und Konfiguration; die CI führt beide vor den Tests aus. `no-explicit-any` ist eine Warnung und lässt den Lauf bestehen.
@@ -24,7 +25,7 @@ Weitere Befehle:
 
 Nicht jede Änderung braucht jeden Test. Änderungen an der LEAD-Systematik (SOP, Arbeitsanweisungen, Kodierleitfaden), an der Dokumentation oder an den Bewertungsfällen ändern weder Programmcode noch Bedienoberfläche; ihre Konsistenz prüfen die Vitest-Tests unter `tests/profil/`, `tests/kern/` und `tests/evaluation/`.
 
-| Anlass | Vitest | Build | Browser: kern | Browser: pwa |
+| Anlass | Vitest | Build | Browser: kern (Chromium und WebKit) | Browser: pwa |
 |---|---|---|---|---|
 | Push auf `main`, wöchentlicher Volllauf (montags), manueller Start | gewöhnliche und zufällige Reihenfolge | ja | immer | immer |
 | Pull Request | zufällige, feste Reihenfolge | ja | wenn nicht nur Inhalte geändert sind | wenn PWA-Mechanismus oder Testumgebung betroffen ist |
@@ -33,7 +34,7 @@ Welche Dateien was auslösen, legt `scripts/pruefumfang.mjs` fest; `tests/ci/pru
 
 Was ein Pull Request auslässt, läuft spätestens nach dem Zusammenführen auf `main` vor der Veröffentlichung; scheitert dort ein Test, wird nicht veröffentlicht. Der Wochenlauf veröffentlicht nichts.
 
-Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions.
+Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions. WebKit lädt der Lauf eigens (`npx playwright install --with-deps webkit`), nur wenn die Kerntests anstehen.
 
 ## Gliederung
 
@@ -47,8 +48,8 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/anbieter/` | SSE-Leser, Adapter für Anthropic, OpenAI, Mistral und seit 0.6.3 Ollama (nur mit gefälschtem `fetch`), gemeinsamer Vertrag aller Adapter (Wiederholungen, Abbruch), Preise, Verteiler mit Registry der Anbieter (unbekannte Kennung als Fehler) |
 | `tests/lagebild/` | Lagebild und Redaktionscheck (Logik) |
 | `tests/dokumente/` | PDF und Kopiervorlage |
-| `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet |
-| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modelle und Recherche je Lauf (Kopfzeile, Rahmen und Reihenfolge, KI-Profil je Lauf, gesperrte Modelle und Profile ohne Schlüssel, Hinweis auf zusätzliche Anbieter, Aufwand mit Anpassungshinweis und Schätzung, S3 unter „Weitere Stufe“, Recherchetiefe mit Höchstkosten und gesperrten Feldern, Zurücksetzen), Einstellungen (Bereiche, Übersicht, KI-Profil, Testläufe als eigener Bereich, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version), KI-Chip der Kopfleiste („KI offline“/„KI online“), Testläufe (sechs Testarten mit S3 Reparatur, Varianten, ZIP-Dateien, Archiv mit Herunterladen und Löschen), Meldung mit dem Schritt „Management Summary“, Eingabefelder der KI-Erfassung (Beschriftung, verknüpfter Hilfetext, Platzhalter), Recherchetiefe unter „Recherche & Grenzen“, Profilansicht (Reihenfolge, kompakte Zeilen, Gruppen und Sprungleiste, Menüs „Profil hinzufügen“ und „Mehr“, Befund-Chip), Orientierung und Suchbegriffe im Bestätigungsschritt mit Pflichtsuchen in S2 und getrennter Ausweisung (`orientierung.test.ts`) |
+| `tests/darstellung/` | Farbschemata, Kontraste, Barrierefreiheit im Stylesheet; seit 0.6.5 Farbtoken-Fallback aus dem Katalog (`fallback.test.ts`, TP-2026-W44-19) |
+| `tests/ui/` | Oberfläche in jsdom: App-Zustand, Erfassung, LEAD-Eingabehilfen, Lagebild, Modelle und Recherche je Lauf (Kopfzeile, Rahmen und Reihenfolge, KI-Profil je Lauf, gesperrte Modelle und Profile ohne Schlüssel, Hinweis auf zusätzliche Anbieter, Aufwand mit Anpassungshinweis und Schätzung, S3 unter „Weitere Stufe“, Recherchetiefe mit Höchstkosten und gesperrten Feldern, Zurücksetzen), Einstellungen (Bereiche, Übersicht, KI-Profil, Testläufe als eigener Bereich, Schlüssel, Grenzen), Fortschreibung, S1 an der Ausgabegrenze, Farbschema, Redaktionscheck, Über KI-LEAD und Fuß (Impressum, Version), KI-Chip der Kopfleiste („KI offline“/„KI online“), Testläufe (sechs Testarten mit S3 Reparatur, Varianten, ZIP-Dateien, Archiv mit Herunterladen und Löschen), Meldung mit dem Schritt „Management Summary“, Eingabefelder der KI-Erfassung (Beschriftung, verknüpfter Hilfetext, Platzhalter), Recherchetiefe unter „Recherche & Grenzen“, Profilansicht (Reihenfolge, kompakte Zeilen, Gruppen und Sprungleiste, Menüs „Profil hinzufügen“ und „Mehr“, Befund-Chip), Orientierung und Suchbegriffe im Bestätigungsschritt mit Pflichtsuchen in S2 und getrennter Ausweisung (`orientierung.test.ts`); seit 0.6.5 Befunde am Feld mit `aria-invalid`, Sprung aus dem Prüfschritt und Bewertungsfarben nach Rang mit der Vorlage `profile/muster/` (`erfassung.test.ts`, TP-2026-W44-15, -16) |
 | `tests/evaluation/` | Schemata der Modellbewertung (Fälle mit Radarerwartungen und Abwandlungen, Bewertungspläne mit festem S1-Gegenstand und Prüfsumme, Bewertungen mit Korrekturen und Grad der Verblindung, Pläne mit fester Meldung für Management Summary und Prüffall Reparatur), Musterfassung Ilka (Schema, Plausibilität, Herkunft jeder Zahl aus den Eingängen), Vorprüfung der Management Summary, des Befundregisters und der Prüfsteine (ohne KI-Aufruf) |
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Passphrase (Round-trip, falsche Passphrase, Sperre, Verwerfen; seit 0.6.2), Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
@@ -64,12 +65,12 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 | Datei | Zweck |
 |---|---|
-| `dateien.ts` | `REPO`, `repoPfad()`, `leseOrdner()` (sortiert), `profil()`, `jsonDateien()` (sortiert; mit `pflicht: true` Fehler bei fehlendem oder leerem Ordner) |
+| `dateien.ts` | `REPO`, `repoPfad()`, `leseOrdner()` (sortiert), `profil()`, `jsonDateien()` (sortiert; mit `pflicht: true` Fehler bei fehlendem oder leerem Ordner), `stylesheetText()` (seit 0.6.5: `src/styles.css` mit den eingebundenen Teildateien unter `src/styles/` in Reihenfolge der Importe) |
 | `fixtures.ts` | Datensatz Orkantief „Ilka“: `ilkaMeldung("HE")` liefert genau die Meldung mit diesem Kennzeichen als frische Kopie; nie über die Reihenfolge (`[0]`) wählen |
 | `anbieter.ts` | `llmAntwort()`, `meldungsAntwort()`, `skriptAnbieter()` (Antworten der Reihe nach, ein zusätzlicher Aufruf scheitert), `sseText()`, `sseAntwort()` (Teilung an Bytepositionen), `abreissenderStrom()`, `fehlerAntwort()`, `ohneWarten()` (gefälschte Uhr, misst Wartezeiten) |
 | `pipeline.ts` | `pipelineKontext()` mit Beispielprofil und fester Uhr, `s1Vorschlag()`, `bestaetigterVorschlag()` |
 | `speicher.ts` | Attrappe für `idb-keyval` mit auslösbaren Lese-, Schreib- und Auflistungsfehlern (`speicherVoll()`) |
-| `dom.ts` | `einhaengen()`, `aushaengen()`, `klick()`, `eingeben()`, `knopf()`, `bisWahr()` (wartet auf einen Zustand statt einer festen Zeit; unter `vi.useFakeTimers()` stellt `takt()` die gefälschte Uhr vor, statt real zu warten) |
+| `dom.ts` | `einhaengen()`, `aushaengen()`, `klick()`, `eingeben()`, `knopf()`, `bisWahr()` (wartet auf einen Zustand statt einer festen Zeit; unter `vi.useFakeTimers()` stellt `takt()` die gefälschte Uhr vor, statt real zu warten); seit 0.6.5 `dialogAntwort()` (beantwortet den Rückfragedialog wie zuvor ein Stub von `window.confirm`; Vorgabe „ja“) und `dialogeOffenLassen()`, dazu `showModal`/`close` für jsdom |
 | `ajv.ts` | `referenzAjv()` mit festen Optionen, `gleichWieAjv(schema, daten, soll)` mit Diagnose |
 | `eingebaut.ts` | zwei eingebaute Profile mit verschiedener Kennung für Tests des Profilwechsels |
 
@@ -87,16 +88,17 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 ## Browsertests
 
-`npm run test:browser` baut die App, startet `vite preview` auf Port 4173 und prüft mit Chromium in zwei Projekten: **kern** (alle Dateien außer `pwa*.spec.ts`) und **pwa** (`pwa.spec.ts`, `pwa-update.spec.ts`). Mit `KI_LEAD_BUILD_VORHANDEN=1` entfällt der Build, und ein vorhandener Ordner `dist/` wird verwendet (nur sinnvoll direkt nach `npm run build`).
+`npm run test:browser` baut die App, startet `vite preview` auf Port 4173 und prüft mit Chromium in zwei Projekten: **kern** (alle Dateien außer `pwa*.spec.ts`) und **pwa** (`pwa.spec.ts`, `pwa-update.spec.ts`). Das dritte Projekt **webkit** (seit 0.6.5) führt die Dateien von kern in WebKit aus (`npm run test:browser:webkit`); der Test zu erzwungenen Farben läuft nur in Chromium, weil sich `forced-colors` nur dort nachbilden lässt. Mit `KI_LEAD_BUILD_VORHANDEN=1` entfällt der Build, und ein vorhandener Ordner `dist/` wird verwendet (nur sinnvoll direkt nach `npm run build`).
 
-- `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; fünfter Schritt „Management Summary“ mit Feldauszug (seit 0.5.17); Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel
+- `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; fünfter Schritt „Management Summary“ mit Feldauszug (seit 0.5.17); Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel; seit 0.6.5 Fokus auf der Überschrift nach S1 und im Übergabedialog mit Escape (TP-2026-W44-13), Rückfragen im eigenen Dialog statt `window.confirm` (TP-2026-W44-20)
 - `abbruch.spec.ts`: Abbrechen während S1, Protokoll des abgebrochenen Laufs, keine neue Anfrage
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
-- `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (von Chromium berechnet), Hilfetexte der Auftragsfelder der KI-Erfassung als zugängliche Beschreibung (seit 0.5.18), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben
+- `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (vom Browser berechnet), Hilfetexte der Auftragsfelder der KI-Erfassung als zugängliche Beschreibung (seit 0.5.18), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben (nur Chromium); seit 0.6.5 kein Sekundenzähler in einer Live-Region (TP-2026-W44-12), eindeutige Namen je Liste (TP-2026-W44-14) und axe-core (`@axe-core/playwright`) je Bereich mit allen Schritten, Reitern und Bereichen gegen WCAG 2.0/2.1/2.2 A und AA, breit und hell sowie 390 px und dunkel, ohne Ausnahmen (TP-2026-W44-22; Ausnahmen kämen mit Begründung nach [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md))
+- `einstellungen.spec.ts`: jeder Bereich mit einer Überschrift und benannten Bedienelementen, Tastatur, schmale Ansicht ohne seitliches Scrollen, Bereich bleibt beim Wechsel der Ansicht, Schlüssel übersteht ein Neuladen; seit 0.6.5 Bereich und Reiter des Lagebilds in der Adresse mit Zurück, Vor und Neuladen (TP-2026-W44-20)
 - `pwa-update.spec.ts`: Versionswechsel mit bestehendem Cache gegen einen Server wie GitHub Pages: Fehler mit dem Service Worker von 0.5.1 (Testvorlage `fixtures/sw-vorlage-0.5.1.js`), Korrektur, Installationsschutz, Wiederherstellung mit erhaltenen IndexedDB-Daten, kein Neuladen laufender Fenster mit ungespeicherten Eingaben, keine Übernahme durch Reste gescheiterter Installationen, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung
-- `pwa.spec.ts`: Service Worker übernimmt die Seite, App startet nach dem ersten Besuch ohne Netz, Beispiel im Lagebild und PDF offline, Hinweis zum fehlenden Netz, Manifest und Symbole werden ausgeliefert (Service Worker nur hier zugelassen)
+- `pwa.spec.ts`: Service Worker übernimmt die Seite, App startet nach dem ersten Besuch ohne Netz, Beispiel im Lagebild und PDF offline, Hinweis zum fehlenden Netz, seit 0.6.5 Start der KI-Erfassung ohne Netz gesperrt (TP-2026-W44-20), Manifest und Symbole werden ausgeliefert (Service Worker nur hier zugelassen)
 - `testlaeufe.spec.ts` (bis 0.5.16 `vergleichslauf.spec.ts` und `reparaturprueffall.spec.ts`): Testläufe mit simuliertem Anthropic-Anbieter, S1 + S2 + S3 mit zwei Läufen und ZIP-Datei, S3 Reparatur mit einem Lauf über fünf Defekte (nur S3 ruft die API auf); Archiv in der echten IndexedDB übersteht ein Neuladen, liefert dieselbe Datei und lässt sich leeren
 - `eingabehilfen.spec.ts`: LEAD-Eingabehilfen mit der Tastatur (Bereich öffnen, Vorlage einfügen, Fokus und Markierung im Textfeld), zugängliche Namen bei geöffneten Bereichen, keine Anfrage nach außen
 
-Einmalig vorher: `npx playwright install chromium`. Ist ein Chromium schon vorhanden, genügt `PLAYWRIGHT_CHROMIUM_PFAD=/pfad/zu/chrome npm run test:browser`. Bei Fehlern liegen Spuren unter `test-results/` (`npx playwright show-trace …`).
+Einmalig vorher: `npx playwright install chromium` (für `test:browser:webkit` zusätzlich `npx playwright install webkit`). Ist ein Chromium schon vorhanden, genügt `PLAYWRIGHT_CHROMIUM_PFAD=/pfad/zu/chrome npm run test:browser`. Bei Fehlern liegen Spuren unter `test-results/` (`npx playwright show-trace …`).
