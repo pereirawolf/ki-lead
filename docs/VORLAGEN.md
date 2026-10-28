@@ -34,13 +34,13 @@ Für den Datenschutz gibt es zwei weitere Vorlagen in [DATENSCHUTZ.md](DATENSCHU
 | Bereich | Bund | Thüringen |
 |---|---|---|
 | Datenschutz | DSGVO; BDSG | DSGVO; ThürDSG ([DATENSCHUTZ.md](DATENSCHUTZ.md), Anhang D) |
-| Personalvertretung | BPersVG: Unterrichtung § 66 Abs. 1; Mitbestimmung § 80 Abs. 1 Nr. 19 bis 21; Verfahren § 70; Dienstvereinbarung § 63 (Bundesministerium der Justiz, o. J. a) | ThürPersVG: Mitbestimmung bei allen personellen, sozialen, organisatorischen und innerdienstlichen Maßnahmen (§ 69 Abs. 1 Satz 1), Verfahren § 69a, Dienstvereinbarung § 75 Abs. 1 (tbb, 2021; umwelt-online, o. J.) |
+| Personalvertretung | BPersVG: Unterrichtung § 66 Abs. 1; Mitbestimmung § 80 Abs. 1 Nr. 19 bis 21; Verfahren § 70; Dienstvereinbarung § 63 (Bundesministerium der Justiz, o. J. a) | ThürPersVG: Unterrichtung § 68 Abs. 2 Satz 1; Mitbestimmung bei allen personellen, sozialen, organisatorischen und innerdienstlichen Maßnahmen (§ 69 Abs. 1 Satz 1), Beispielkatalog § 73 Abs. 3, darunter Nr. 1 (automatisierte Verarbeitung personenbezogener Daten der Beschäftigten), Nr. 7 (neue Arbeitsmethoden) und Nr. 13 (Hebung der Arbeitsleistung, Erleichterung des Arbeitsablaufs); Verfahren § 69a; Dienstvereinbarung § 75 Abs. 1 (tbb, 2021; personalrat-online, o. J. a, o. J. b; umwelt-online, o. J.) |
 | Informationssicherheit | § 44 BSIG: BSI-Standards, IT-Grundschutz-Kompendium und Mindeststandards des Bundes (Bundesministerium der Justiz, o. J. b) | Leitlinie für die Informationssicherheit in der öffentlichen Verwaltung 2018 des IT-Planungsrats (Beschluss 2019/04), verbindlich für Landesbehörden; für Kommunen § 26 ThürEGovG und Empfehlung des IT-Grundschutzes (Thüringer Landtag, 2025) |
-| Haushalt und Vergabe | § 55 BHO; Unterschwellenvergabeordnung nach den Verwaltungsvorschriften zu § 55 BHO | § 55 ThürLHO; Thüringer Vergabegesetz (ThürVgG) und Verwaltungsvorschrift des Landes zur Vergabe [Fundstelle]; Wertgrenzen nach aktuellem Stand (IHK Erfurt, o. J.) |
+| Haushalt und Vergabe | § 55 BHO; Unterschwellenvergabeordnung nach den Verwaltungsvorschriften zu § 55 BHO | § 55 ThürLHO; Thüringer Vergabegesetz (ThürVgG); Verwaltungsvorschrift zur Vergabe öffentlicher Aufträge, in Kraft seit 28.03.2025, für Land und Kommunen. Direktauftrag für Liefer- und Dienstleistungen bis 30 000 Euro (Stand 03/2025; Vergabeblog, 2025); Wertgrenzen vor Verwendung prüfen (IHK Erfurt, o. J.) |
 | KI-Verordnung | Art. 4 (KI-Kompetenz), Art. 50 (Transparenz) als Betreiberin ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 3, 6 und 7) | wie Bund |
 | Verschlusssachen | Verschlusssachenanweisung des Bundes | Verschlusssachenanweisung des Landes; [Fundstelle] |
 
-Die Angaben zur Personalvertretung in Thüringen stützen sich auf Anwendungshinweise zur Fassung von 2019. Welcher Tatbestand für technische Einrichtungen einschlägig ist, prüft die Stelle mit ihrer Personalabteilung.
+Einen eigenen Tatbestand für technische Einrichtungen zur Überwachung von Verhalten oder Leistung wie § 80 Abs. 1 Nr. 21 BPersVG enthält § 73 Abs. 3 ThürPersVG nicht. Der Katalog ist aber nicht abschließend („insbesondere“), und die Allzuständigkeit nach § 69 Abs. 1 Satz 1 erfasst die Maßnahme ohnehin. Die Angaben zum ThürPersVG beruhen auf der Fassung der Bekanntmachung vom 23.01.2020, zuletzt geändert am 21.12.2021, nach Sekundärquellen; vor Verwendung am amtlichen Text prüfen.
 
 ---
 
@@ -80,7 +80,7 @@ Das gilt für Auftrag, Material, Eingaben, eigene Profile und Rückmeldungen.
 
 ## V2: Unterrichtung der Personalvertretung und Eckpunkte einer Dienstvereinbarung
 
-Die Erprobung ist eine organisatorische Maßnahme. Ob und welche Beteiligung nötig ist, entscheidet die Stelle nach dem für sie geltenden Personalvertretungsrecht. In Betracht kommen im Bund die Mitbestimmung bei Maßnahmen zur Hebung der Arbeitsleistung oder Erleichterung des Arbeitsablaufs, bei grundlegend neuen Arbeitsmethoden und bei technischen Einrichtungen, die Verhalten oder Leistung überwachen können (§ 80 Abs. 1 Nr. 19 bis 21 BPersVG); in Thüringen die allgemeine Mitbestimmung bei organisatorischen und innerdienstlichen Maßnahmen (§ 69 Abs. 1 Satz 1 ThürPersVG). Unabhängig davon ist die Personalvertretung rechtzeitig und umfassend zu unterrichten (Bund: § 66 Abs. 1 BPersVG; Thüringen: [Vorschrift]).
+Die Erprobung ist eine organisatorische Maßnahme. Ob und welche Beteiligung nötig ist, entscheidet die Stelle nach dem für sie geltenden Personalvertretungsrecht. In Betracht kommen im Bund die Mitbestimmung bei Maßnahmen zur Hebung der Arbeitsleistung oder Erleichterung des Arbeitsablaufs, bei grundlegend neuen Arbeitsmethoden und bei technischen Einrichtungen, die Verhalten oder Leistung überwachen können (§ 80 Abs. 1 Nr. 19 bis 21 BPersVG); in Thüringen die allgemeine Mitbestimmung bei organisatorischen und innerdienstlichen Maßnahmen (§ 69 Abs. 1 Satz 1 ThürPersVG), insbesondere bei automatisierter Verarbeitung personenbezogener Daten der Beschäftigten, neuen Arbeitsmethoden und Maßnahmen zur Hebung der Arbeitsleistung (§ 73 Abs. 3 Nr. 1, 7 und 13 ThürPersVG). Unabhängig davon ist die Personalvertretung rechtzeitig und umfassend zu unterrichten (Bund: § 66 Abs. 1 BPersVG; Thüringen: frühzeitig und umfassend nach § 68 Abs. 2 Satz 1 ThürPersVG).
 
 ### Teil 1: Unterrichtung
 
@@ -171,7 +171,7 @@ Eine Zeile je Prüfpunkt; „entfällt“ mit Grund ist eine zulässige Antwort.
 | 9 | Zahlungsweg | [Rechnung / Kreditkarte der Stelle / Vorkasse]; Zulässigkeit nach Haushaltsrecht der Stelle | [ ] |
 | 10 | Kosten | Schätzung aus der Laufschätzung der App und aus Testläufen (ERPROBUNG.md, Fragestellung F5): [Zahl der Läufe] × [Kosten je Lauf] = [Betrag] | [ ] |
 | 11 | Haushaltsmittel | [Kapitel, Titel]; Bund: BHO; Thüringen: ThürLHO | [ ] |
-| 12 | Vergabe | Bund: § 55 BHO mit Unterschwellenvergabeordnung; Thüringen: § 55 ThürLHO, ThürVgG und Verwaltungsvorschrift des Landes zur Vergabe. Wertgrenzen für Direktauftrag und Verhandlungsvergabe nach aktuellem Stand (IHK Erfurt, o. J.) | [ ] |
+| 12 | Vergabe | Bund: § 55 BHO mit Unterschwellenvergabeordnung; Thüringen: § 55 ThürLHO, ThürVgG und Verwaltungsvorschrift zur Vergabe öffentlicher Aufträge (seit 28.03.2025; Direktauftrag für Liefer- und Dienstleistungen bis 30 000 Euro, Stand 03/2025). Wertgrenzen vor Verwendung prüfen (IHK Erfurt, o. J.; Vergabeblog, 2025) | [ ] |
 | 13 | Ende | Schlüssel widerrufen, Konto [schließen / behalten], Rechnungen abgerechnet | [ ] |
 
 Geprüft von, am: …
@@ -257,9 +257,12 @@ Zugriff jeweils am 28.10.2026.
 - Heuking (2025): EuG bestätigt Wirksamkeit des EU-US Data Privacy Framework, 03.09.2025. Online abrufbar unter: https://www.heuking.de/de/news-events/newsletter-fachbeitraege/artikel/eug-bestaetigt-wirksamkeit-des-eu-us-data-privacy-framework.html [Zugriff: 28.10.2026]
 - IHK Erfurt (o. J.): Wertgrenzen Thüringen. Online abrufbar unter: https://www.ihk.de/erfurt/service/oeffentliches-auftragswesen/wertgrenzen-thueringen-5366106 [Zugriff: 28.10.2026]
 - nexvyra (2026): EuGH C-703/25 P Latombe – Rechtsmittel gegen das Urteil zum Data Privacy Framework, Stand 05.10.2026. Online abrufbar unter: https://nexvyra.de/fakten/eugh-c-703-25-p-latombe-data-privacy-framework-rechtsmittel [Zugriff: 28.10.2026]
+- personalrat-online (o. J. a): Thüringer Personalvertretungsgesetz (ThürPersVG), § 68 Allgemeine Aufgaben der Personalvertretung. Online abrufbar unter: https://www.personalrat-online.de/thueringen_landespersonalvertretungsgesetz_68 [Zugriff: 28.10.2026]
+- personalrat-online (o. J. b): Thüringer Personalvertretungsgesetz (ThürPersVG), § 73 Mitbestimmung in personellen, organisatorischen und wirtschaftlichen Angelegenheiten. Online abrufbar unter: https://www.personalrat-online.de/gesetze/thueringer-personalvertretungsgesetz/thueringen_landespersonalvertretungsgesetz_73 [Zugriff: 28.10.2026]
 - tbb beamtenbund und tarifunion thüringen (2021): Anlage 1 – Anwendungshinweise zum ThürPersVG. Online abrufbar unter: https://www.thueringer-beamtenbund.de/fileadmin/user_upload/www_thueringer-beamtenbund_de/pdf/2021/Anlage_1_-_Anwendungshinweise_zum_ThuerPersVG.pdf [Zugriff: 28.10.2026]
 - Thüringer Landtag (2025): Antwort des Thüringer Ministeriums für Digitales und Infrastruktur auf die Kleine Anfrage 8/645 – IT-Sicherheit in Kommunalverwaltungen in Thüringen, Drucksache 8/1147 vom 27.05.2025. Online abrufbar unter: https://parldok.thueringer-landtag.de/ParlDok/dokument/101956 [Zugriff: 28.10.2026]
 - umwelt-online (o. J.): Thüringer Personalvertretungsgesetz (ThürPersVG), Inhaltsübersicht. Online abrufbar unter: https://www.umwelt-online.de/recht/arbeitss/arbeitsrecht/laender/th/pvg_in.htm [Zugriff: 28.10.2026]
+- Vergabeblog (2025): Thüringen hebt Wertgrenzen für öffentliche Aufträge deutlich an, 23.04.2025. Online abrufbar unter: https://vergabeblog.de/2025-04-23/thueringen-hebt-wertgrenzen-fuer-oeffentliche-auftraege-deutlich-an/ [Zugriff: 28.10.2026]
 
 ## Änderungsverlauf
 
