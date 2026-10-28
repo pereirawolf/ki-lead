@@ -4,7 +4,7 @@ Fassung 1.0 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf ·
 
 Arbeitshilfen für Stellen, die KI-LEAD dienstlich erproben wollen. Die Vorlagen übernehmen, was die Dokumentation über KI-LEAD schon sagt, und verweisen auf die Fundstelle. Felder in eckigen Klammern füllt die Stelle selbst. Anwendungsbeispiele sind das Bundesrecht und das Thüringer Landesrecht; in anderen Ländern gelten die entsprechenden Vorschriften des Landes.
 
-KI-LEAD ist ein **privates Forschungsvorhaben**. Die Vorlagen sind keine Vorgaben einer Behörde oder Einrichtung ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 6), **keine Rechtsberatung** und ersetzen nicht die Muster der eigenen Stelle. Die Verantwortung für eine Erprobung trägt die Stelle. Erprobt sie KI-LEAD dienstlich, ist das ihre eigene Maßnahme; die Teilnahme am Testkreis des Herausgebers ([ERPROBUNG.md](ERPROBUNG.md)) ist davon getrennt.
+KI-LEAD ist ein **privates Forschungsvorhaben**. Die Vorlagen sind keine Vorgaben einer Behörde oder Einrichtung ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 6), **keine Rechtsberatung** und ersetzen nicht die Muster der eigenen Stelle. **Lizenz:** Die Vorlagen V1 bis V6 stehen nach Wahl auch unter CC0 1.0 ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 2 d). Eine Stelle kann sie ohne Namensnennung übernehmen, ändern und weitergeben. Die Verantwortung für eine Erprobung trägt die Stelle. Erprobt sie KI-LEAD dienstlich, ist das ihre eigene Maßnahme; die Teilnahme am Testkreis des Herausgebers ([ERPROBUNG.md](ERPROBUNG.md)) ist davon getrennt.
 
 ---
 
@@ -265,4 +265,4 @@ Zugriff jeweils am 28.10.2026.
 
 | Fassung | Datum | Änderung |
 |---|---|---|
-| 1.0 | 28.10.2026 | Erste Fassung mit den Vorlagen V1 bis V6 (App 0.6.6) |
+| 1.0 | 28.10.2026 | Erste Fassung mit den Vorlagen V1 bis V6, zusätzlich unter CC0 1.0 (App 0.6.6) |

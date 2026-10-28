@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.8 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.9 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -226,7 +226,7 @@ Antworten für das Formular „Data safety“. Google versteht unter Erhebung je
 
 ## Anhang C: Vorlage Schwellwertanalyse zur Datenschutz-Folgenabschätzung
 
-Für Stellen, die KI-LEAD erproben. Die Vorlage hilft bei der Frage, ob eine Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO nötig ist. **DSFA und Verzeichnis der Verarbeitungstätigkeiten bleiben bei der nutzenden Stelle.** Eine Vorlage für den Eintrag im Verzeichnis steht in Anhang D. Die Vorlage ersetzt keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten.
+Für Stellen, die KI-LEAD erproben. Die Vorlage hilft bei der Frage, ob eine Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO nötig ist. **DSFA und Verzeichnis der Verarbeitungstätigkeiten bleiben bei der nutzenden Stelle.** Eine Vorlage für den Eintrag im Verzeichnis steht in Anhang D. Die Vorlage ersetzt keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten. Sie steht nach Wahl auch unter CC0 1.0 ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 2 d) und kann ohne Namensnennung übernommen werden.
 
 **Stelle:** … **Vorhaben:** Erprobung von KI-LEAD, Version … **Ausgefüllt von / am:** …
 
@@ -269,7 +269,7 @@ Datum, Unterschrift, Beteiligung der oder des Datenschutzbeauftragten: …
 
 ## Anhang D: Vorlage Eintrag im Verzeichnis von Verarbeitungstätigkeiten
 
-Für Stellen, die KI-LEAD erproben oder einsetzen und dabei personenbezogene Daten verarbeiten. Die Vorlage übernimmt die Angaben dieses Dokuments je Pflichtfeld und verweist auf den Abschnitt, in dem sie stehen. Felder in eckigen Klammern füllt die Stelle selbst. **Das Verzeichnis führt die nutzende Stelle** (Abschnitt 2). Die Vorlage ersetzt nicht das Muster der eigenen Stelle oder der zuständigen Aufsichtsbehörde und keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten.
+Für Stellen, die KI-LEAD erproben oder einsetzen und dabei personenbezogene Daten verarbeiten. Die Vorlage übernimmt die Angaben dieses Dokuments je Pflichtfeld und verweist auf den Abschnitt, in dem sie stehen. Felder in eckigen Klammern füllt die Stelle selbst. **Das Verzeichnis führt die nutzende Stelle** (Abschnitt 2). Die Vorlage ersetzt nicht das Muster der eigenen Stelle oder der zuständigen Aufsichtsbehörde und keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten. Sie steht nach Wahl auch unter CC0 1.0 ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 2 d) und kann ohne Namensnennung übernommen werden.
 
 Werden nach Anhang C, Schritt 1, keine personenbezogenen Daten verarbeitet, ist kein Eintrag nötig. Das begründete Ergebnis von Schritt 1 dokumentiert dann die Festlegung.
 
@@ -394,3 +394,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.6 | 26.10.2026 | Abschnitte 3 und 9: Ablage der API-Schlüssel mit Passphrase verschlüsselt (App 0.6.2, TP-2026-W44-09) |
 | 1.7 | 27.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |
 | 1.8 | 28.10.2026 | Anhang D: Vorlage für einen Eintrag im Verzeichnis von Verarbeitungstätigkeiten nach Art. 30 DSGVO mit Vorbefüllung und Platzhaltern, Hinweisen zu Landesrecht (ThürDSG) und zu § 70 BDSG; Verweise in Abschnitt 2 und Anhang C; Quellen ergänzt (ohne Änderung der App) |
+| 1.9 | 28.10.2026 | Anhang C und D zusätzlich unter CC0 1.0 (LICENSE-CONTENT, Nr. 2 d; ohne Änderung der App) |

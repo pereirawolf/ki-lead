@@ -17,12 +17,17 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
    c) die Dokumentation im Ordner docs/.
 
 2. Zusätzlich CC0 1.0. Nach Wahl der Nutzenden stehen auch unter CC0 1.0 Universal
-   (Datei LICENSE-CC0), damit Fachverfahren sie ohne Namensnennung übernehmen können:
+   (Datei LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung
+   übernehmen können:
    a) die Meldungsschemata (profile/*/meldung.schema.json), Manifeste
       (profile/*/profil.json), Kontaktlisten (profile/*/kontakte.json) und
       Quellenregister (profile/*/sop/quellenregister.json);
    b) die JSON-Schemata im Ordner evaluation/ (*.schema.json);
-   c) alle Dateien der Vorlage im Ordner profile/muster/.
+   c) alle Dateien der Vorlage im Ordner profile/muster/;
+   d) die Vorlagen V1 bis V6 in docs/VORLAGEN.md sowie Anhang C und Anhang D in
+      docs/DATENSCHUTZ.md (seit 28.10.2026). Ihr Aufbau folgt teils aus Gesetzen;
+      Stellen sollen sie ohne Hinweis auf den Herausgeber in eigene Muster
+      übernehmen können.
    Die Darstellungsdateien der übrigen Profile (meldung.ui.json) enthalten die
    Stufentexte des Lagenradars; für sie gilt allein CC BY 4.0.
 
