@@ -279,7 +279,7 @@ Werden nach Anhang C, Schritt 1, keine personenbezogenen Daten verarbeitet, ist 
 |---|---|---|
 | Verwaltung im Allgemeinen, auch Brand- und Katastrophenschutz | Art. 30 Abs. 1 DSGVO | Pflichtangaben D1 bis D7 |
 | Landesrecht | [Landesdatenschutzgesetz, z. B. Thüringer Datenschutzgesetz (ThürDSG)], [Fachgesetz], [Vorgaben der Aufsichtsbehörde oder hausinternes Muster] | zusätzliche Angaben unter D8 |
-| Polizei, Strafverfolgung und Gefahrenabwehr im Anwendungsbereich der Richtlinie (EU) 2016/680 | Bund: § 70 BDSG (Bundesministerium der Justiz, o. J.); Länder: eigenes Umsetzungsrecht, in Thüringen das ThürDSG und das jeweilige Fachgesetz (§ 1 Abs. 2 ThürDSG; Verzeichnis: § 50 ThürDSG in der Fassung vom 6. Juni 2018, Freistaat Thüringen, 2018) | Rechtsgrundlage ist Pflichtangabe; zusätzlich Angabe zum Profiling (D9) |
+| Polizei, Strafverfolgung und Gefahrenabwehr im Anwendungsbereich der Richtlinie (EU) 2016/680 | Bund: § 70 BDSG (Bundesministerium der Justiz, o. J.); Länder: eigenes Umsetzungsrecht, in Thüringen das ThürDSG und das jeweilige Fachgesetz (§ 1 Abs. 2 ThürDSG; Verzeichnis: § 50 ThürDSG, mit Rechtsgrundlage und Profiling wie § 70 BDSG; Freistaat Thüringen, 2018; Haufe, o. J.) | Rechtsgrundlage ist Pflichtangabe; zusätzlich Angabe zum Profiling (D9) |
 
 Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empfehlen sie, öffentliche Stellen sollen spezialgesetzliche Grundlagen nennen (TLfDI, o. J.). Die Vorlage sieht das Feld deshalb immer vor (D2).
 
@@ -348,8 +348,8 @@ Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empf
 
 | Angabe | Vorbefüllung | Eintrag der Stelle |
 |---|---|---|
-| Profiling (§ 70 Abs. 1 Nr. 5 BDSG oder Landesrecht) | KI-LEAD bewertet Lagen, nicht Personen (Anhang C, Kriterium 1). | [nein / ja, Beschreibung] |
-| Rechtsgrundlage (§ 70 Abs. 1 Nr. 7 BDSG oder Landesrecht) | siehe D2 | [Vorschrift] |
+| Profiling (§ 70 Abs. 1 Nr. 5 BDSG; § 50 Abs. 1 Nr. 5 ThürDSG; sonst Landesrecht) | KI-LEAD bewertet Lagen, nicht Personen (Anhang C, Kriterium 1). | [nein / ja, Beschreibung] |
+| Rechtsgrundlage (§ 70 Abs. 1 Nr. 7 BDSG; § 50 Abs. 1 Nr. 7 ThürDSG; sonst Landesrecht) | siehe D2 | [Vorschrift] |
 
 **Ausgefüllt von / am:** … **Beteiligung der oder des Datenschutzbeauftragten:** … **Überprüfung:** bei jeder neuen App- oder Profilversion, spätestens [Datum]
 
@@ -371,6 +371,7 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 - GitHub (2026): GitHub General Privacy Statement, gültig ab 27.04.2026. Online abrufbar unter: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement [Zugriff: 24.10.2026]
 - GitHub (o. J.): About GitHub Pages. Online abrufbar unter: https://docs.github.com/en/articles/about-github-pages [Zugriff: 24.10.2026]
 - Google (o. J.): Provide information for Google Play's Data safety section. Online abrufbar unter: https://support.google.com/googleplay/android-developer/answer/10787469 [Zugriff: 24.10.2026]
+- Haufe (o. J.): Thüringer Datenschutzgesetz, § 50 Verzeichnis von Verarbeitungstätigkeiten (Artikel 24 der Richtlinie (EU) 2016/680). Online abrufbar unter: https://www.haufe.de/id/norm/thueringer-datenschutzgesetz-50-verzeichnis-von-verarbeitungstaetigkeiten-artikel-24-der-richtlinie-eu-2016680-HI11798656_p50.html [Zugriff: 28.10.2026]
 - lxgesetze (o. J.): § 25 Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG). Online abrufbar unter: https://lxgesetze.de/tdddg/25 [Zugriff: 24.10.2026]
 - Mistral AI (o. J. a): Do you use my user data to train your artificial intelligence models? Online abrufbar unter: https://help.mistral.ai/en/articles/347617-do-you-use-my-user-data-to-train-your-artificial-intelligence-models [Zugriff: 24.10.2026]
 - Mistral AI (o. J. b): Can I opt out of my input or output data being used for training? Online abrufbar unter: https://help.mistral.ai/en/articles/347614-can-i-opt-out-of-my-input-or-output-data-being-used-for-training [Zugriff: 24.10.2026]
