@@ -13,11 +13,11 @@ KI-LEAD ist ein **privates Forschungsvorhaben**. Die Vorlagen sind keine Vorgabe
 | Nr. | Vorlage | Für | Baut auf |
 |---|---|---|---|
 | V1 | Erprobungsanweisung | Leitung der Stelle | [ERPROBUNG.md](ERPROBUNG.md), Abschnitte 3 und 6; [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3, 8 bis 10; [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 4 |
-| V2 | Unterrichtung der Personalvertretung und Eckpunkte einer Dienstvereinbarung | Personalrat | [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 8 |
-| V3 | Steckbrief für die IT-Freigabe mit Schutzbedarfsfeststellung | IT-Betrieb, Informationssicherheit | [SICHERHEIT.md](SICHERHEIT.md); [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 4 |
+| V2 | Unterrichtung der Personalvertretung und Eckpunkte einer Dienstvereinbarung | Personalrat | [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 2, 3, 5, 6 und 8; [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 1 |
+| V3 | Steckbrief für die IT-Freigabe mit Schutzbedarfsfeststellung | IT-Betrieb, Informationssicherheit | [SICHERHEIT.md](SICHERHEIT.md); [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 2, 3, 4 und 9; [NATIV.md](NATIV.md) |
 | V4 | Prüfliste KI-Anbieter, Haushalt und Beschaffung | Datenschutz, Haushalt, Beschaffung | [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5 |
-| V5 | Unterweisung zur KI-Kompetenz mit Teilnahmenachweis | Teilnehmende | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 1, 2, 6, 7 und 9 |
-| V6 | Erprobungsbericht und Entscheidungsvorlage | Leitung der Stelle | [ERPROBUNG.md](ERPROBUNG.md), Abschnitt 2 |
+| V5 | Unterweisung zur KI-Kompetenz mit Teilnahmenachweis | Teilnehmende | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 1, 2, 6, 7 und 9; [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.1; [DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 8 |
+| V6 | Erprobungsbericht und Entscheidungsvorlage | Leitung der Stelle | [ERPROBUNG.md](ERPROBUNG.md), Abschnitt 2; [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5 |
 
 Für den Datenschutz gibt es zwei weitere Vorlagen in [DATENSCHUTZ.md](DATENSCHUTZ.md): die Schwellwertanalyse zur Datenschutz-Folgenabschätzung (Anhang C) und den Eintrag im Verzeichnis von Verarbeitungstätigkeiten (Anhang D).
 
@@ -46,13 +46,13 @@ Die Angaben zur Personalvertretung in Thüringen stützen sich auf Anwendungshin
 
 ## V1: Erprobungsanweisung
 
-Muster für eine Hausanordnung oder Dienstanweisung. Was im Muster steht, gibt die Regeln des Testkreises ([ERPROBUNG.md](ERPROBUNG.md), Abschnitt 3) wieder; die Stelle kann strenger sein, sollte aber nicht weiter gehen, ohne Anhang C und D und V3 neu zu prüfen.
+Muster für eine Hausanordnung oder Dienstanweisung. Was im Muster steht, gibt die Regeln des Testkreises ([ERPROBUNG.md](ERPROBUNG.md), Abschnitt 3) wieder; die Stelle kann strenger sein. Will sie weiter gehen, etwa mit internen Unterlagen, verlässt sie den Rahmen des Testkreises und prüft Anhang C und D, V3 und die Einordnung nach der KI-Verordnung neu.
 
 **[Stelle] – Anordnung zur Erprobung von KI-LEAD**
 
 [Aktenzeichen], [Datum]
 
-**1. Gegenstand und Zweck.** Die [Organisationseinheit] erprobt KI-LEAD, Version [App-Version], mit dem Profil [Profil-ID, Profilversion], vom [Datum] bis [Datum]. Zweck ist [z. B. zu klären, ob KI-LEAD Lageentwürfe liefert, die mit vertretbarer Nacharbeit nutzbar sind; Fragestellungen nach ERPROBUNG.md, Abschnitt 2, oder eigene].
+**1. Gegenstand und Zweck.** Die [Organisationseinheit] erprobt KI-LEAD, Version [App-Version] [bei Betrieb aus GitHub Pages: jeweils aktuelle Fassung, die verwendete Version steht im Laufprotokoll], mit dem Profil [Profil-ID, Profilversion], vom [Datum] bis [Datum]. Zweck ist [z. B. zu klären, ob KI-LEAD Lageentwürfe liefert, die mit vertretbarer Nacharbeit nutzbar sind; Fragestellungen nach ERPROBUNG.md, Abschnitt 2, oder eigene].
 
 **2. Teilnehmende.** [Funktionen oder Namen]. Ansprechperson für die Erprobung: [Name, Kontakt]. Die Teilnehmenden sind vor dem ersten Lauf nach V5 unterwiesen.
 
@@ -60,7 +60,7 @@ Muster für eine Hausanordnung oder Dienstanweisung. Was im Muster steht, gibt d
 
 - personenbezogene Daten,
 - Verschlusssachen jeden Grades,
-- interne Unterlagen der Stelle [Ausnahme: …, nur nach Anhang C und D und mit Zustimmung von …].
+- interne Unterlagen der Stelle.
 
 Das gilt für Auftrag, Material, Eingaben, eigene Profile und Rückmeldungen.
 
@@ -68,9 +68,9 @@ Das gilt für Auftrag, Material, Eingaben, eigene Profile und Rückmeldungen.
 
 **5. KI-Anbieter, Konto und Schlüssel.** Genutzt wird [Anbieter] über das Konto [der Stelle / …] nach Prüfung mit V4. Jeder Schlüssel wird nur für KI-LEAD angelegt und hat ein Ausgabenlimit von [Betrag] je [Zeitraum]. Ablage des Schlüssels: [„Gerätespeicher, mit Passphrase verschlüsselt“ / „Nur für diese Sitzung“] ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 9). [Bei Mistral: Trainingsnutzung abgeschaltet.]
 
-**6. Umgang mit Ergebnissen.** Ergebnisse sind Entwürfe. Sie werden nicht für reale Lagen, Meldungen oder Entscheidungen verwendet. Die KI-Kennzeichnung und der Entwurfsvermerk werden nicht entfernt. Eine Veröffentlichung außerhalb der Stelle bedarf der fachlichen Prüfung und der Zustimmung von [Funktion].
+**6. Umgang mit Ergebnissen.** Ergebnisse sind Entwürfe. Sie werden nicht für reale Lagen, Meldungen oder Entscheidungen verwendet. Die KI-Kennzeichnung und der Entwurfsvermerk werden nicht entfernt; wer Text kopiert, etwa den Text der Management Summary, der ohne Kennzeichnungszeile kopiert wird, ergänzt die Kennzeichnung ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 6.1). Eine Veröffentlichung außerhalb der Stelle bedarf der fachlichen Prüfung und der Zustimmung von [Funktion].
 
-**7. Laufprotokolle, Meldungen, Löschung.** KI-LEAD löscht nichts selbsttätig ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Die Teilnehmenden löschen Laufprotokolle, Lagebilder und archivierte Testläufe [nach … / spätestens mit Ende der Erprobung]. Exportierte Protokolle und Meldungen werden nur in [Ablage] gespeichert. Laufprotokolle und Kenndaten werden nicht zur Kontrolle von Verhalten oder Leistung einzelner Beschäftigter ausgewertet (V2).
+**7. Laufprotokolle, Meldungen, Löschung.** KI-LEAD löscht nichts selbsttätig ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Die Teilnehmenden löschen Laufprotokolle, Management Summary, archivierte Testläufe und API-Schlüssel [nach … / spätestens mit Ende der Erprobung], mit Ende der Erprobung auch Zwischenstände, Meldungen und Lagebild; für diese gibt es keinen eigenen Löschweg, gelöscht werden die Websitedaten von `pereirawolf.github.io` im Browser oder die App ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Exportierte Protokolle und Meldungen werden nur in [Ablage] gespeichert. Laufprotokolle und Kenndaten werden nicht zur Kontrolle von Verhalten oder Leistung einzelner Beschäftigter ausgewertet (V2).
 
 **8. Rückmeldungen.** Rückmeldungen gehen an [Ansprechperson]. Rückmeldungen an den Herausgeber über Issues im Repository sind öffentlich; sie sind nur nach [Zustimmung von …] und nur nach den Regeln von ERPROBUNG.md, Abschnitte 5 und 6, zulässig. Sicherheitslücken werden vertraulich nach SECURITY.md gemeldet und [IT-Sicherheit der Stelle] informiert.
 
@@ -91,9 +91,9 @@ Die Erprobung ist eine organisatorische Maßnahme. Ob und welche Beteiligung nö
 | Maßnahme | Erprobung von KI-LEAD, einem quelloffenen Forschungsdemonstrator, der mit KI-Modellen Entwürfe für Lagemeldungen erstellt ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 1) |
 | Zeitraum, Umfang | [Datum bis Datum], [Zahl] Teilnehmende in [Organisationseinheit]; Teilnahme [freiwillig / dienstlich angeordnet] |
 | Inhalte | nur fiktive oder offen zugängliche Inhalte; keine personenbezogenen Daten (V1, Nr. 3) |
-| Welche Daten über Beschäftigte entstehen | Auf dem Gerät: Laufprotokolle mit Zeitpunkt, vollständigen Prompts, Antworten, Modell, Kosten und Dauer jedes KI-Laufs ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 8); Zwischenstände und Meldungen (Abschnitt 3). Beim KI-Anbieter: Nutzung und Kosten je API-Schlüssel im Konto der Stelle; Ein- und Ausgaben bis 30 Tage (Abschnitt 5). KI-LEAD hat kein Benutzerkonto, keinen Server und keine Telemetrie; der Herausgeber erhält nichts (Abschnitt 6) |
+| Welche Daten über Beschäftigte entstehen | Auf dem Gerät: Laufprotokolle mit Zeitpunkt, vollständigen Prompts, Antworten, Modell, Kosten und Dauer jedes KI-Laufs ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 8); Zwischenstände und Meldungen (Abschnitt 3). Beim KI-Anbieter: Ein- und Ausgaben in der Regel bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5); Nutzungs- und Kostenangaben im Konto der Stelle [nach Angaben des Anbieters, je Schlüssel prüfen]. KI-LEAD hat keinen Server und keine Telemetrie (Abschnitte 2 und 4); die App kennt keine Anmeldung, und das Laufprotokoll enthält kein Personenmerkmal (`src/pipeline/lauf.ts`); der Herausgeber erhält nichts (Abschnitt 6) |
 | Wer darauf zugreifen kann | Laufprotokolle: wer das entsperrte Gerät oder Benutzerkonto nutzt. Anbieterkonto: [Verwalterinnen und Verwalter des Kontos] |
-| Eignung zur Überwachung | Laufprotokolle und Kontoauswertungen lassen erkennen, wer wann wie viele Läufe mit welchem Ergebnis gestartet hat. Eine Auswertung zu diesem Zweck ist nicht vorgesehen und wird ausgeschlossen (Teil 2) |
+| Eignung zur Überwachung | Laufprotokolle tragen Zeitstempel je Lauf und Stufe. Zusammen mit dem Gerät oder Benutzerkonto, auf dem sie liegen, oder mit einem persönlichen Schlüssel beim Anbieter lassen sie erkennen, wer wann wie viele Läufe mit welchem Ergebnis gestartet hat. Eine Auswertung zu diesem Zweck ist nicht vorgesehen und wird ausgeschlossen (Teil 2) |
 | Auswirkungen auf die Arbeit | Erprobung neben den Dienstaufgaben; Entwürfe ersetzen keine Arbeitsschritte; keine Verwendung in realen Lagen |
 | Qualifizierung | Unterweisung nach V5 vor dem ersten Lauf |
 | Beigefügt | V1 (Entwurf), V3, Ergebnis von Anhang C |
@@ -123,14 +123,14 @@ Der Steckbrief fasst zusammen, was der IT-Betrieb für eine Freigabe braucht. [S
 | Herausgeber | Heiko Pereira Wolf, privates Forschungsvorhaben; kein Hersteller mit Wartungsvertrag, kein Support |
 | Lizenz, Quellcode | EUPL-1.2, Quellcode öffentlich: https://github.com/pereirawolf/ki-lead |
 | Betriebsformen | Web-App im Browser über GitHub Pages (`https://pereirawolf.github.io/ki-lead/`); installierbar als PWA. Native Apps für iOS und Android sind angelegt, aber noch nicht auf Geräten abgenommen ([NATIV.md](NATIV.md)) |
-| Server, Konten, Telemetrie | kein Server des Herausgebers, kein Benutzerkonto, keine Telemetrie, keine Analytics, kein CDN ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 4) |
+| Server, Anmeldung, Telemetrie | kein Server des Herausgebers ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 2); keine Anmeldung in der App; keine Telemetrie, keine Analytics, kein CDN (Abschnitt 4) |
 | Notwendige Verbindungen | `pereirawolf.github.io` (Programmdateien, nur Web-App und PWA); je nach gewähltem Anbieter `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai`, `api.mistral.ai`; bei Ollama nur `localhost:11434` bzw. `127.0.0.1:11434`. Andere Ziele sperrt die Content-Security-Policy (`index.html`) |
 | Recherche | führt der KI-Anbieter aus, nicht das Gerät; nur wenn der Auftrag sie erlaubt ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 4) |
 | Lokale Speicherung | IndexedDB, für das Farbschema localStorage, Caches des Service Workers; keine Dateien außer bei Download oder Export ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 3) |
-| API-Schlüssel | Ablage wählbar, auch mit Passphrase verschlüsselt (AES-GCM, PBKDF2) oder nur für die Sitzung ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 9) |
-| Integrität | SHA-256-Prüfsumme je Profilstand, angezeigt und im Laufprotokoll ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.5) |
-| Lieferkette | Installation nach Lockfile, Lizenzprüfung, SBOM im Format CycloneDX zu jedem Release; offene Punkte in [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.7 |
-| Bekannte Risiken | Prompt-Injection über Recherche, Dateien und Eingangsmeldungen; Schlüsselablage; Skripteinschleusung ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3) |
+| API-Schlüssel | Vorgabe: Gerätespeicher, **unverschlüsselt** in IndexedDB. Wählbar: nur für die Sitzung, mit Passphrase verschlüsselt (AES-GCM, PBKDF2), in der nativen App Schlüsselbund des Systems ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 9). Die Passphrase schützt nicht vor Skripteinschleusung während einer entsperrten Sitzung ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.2) |
+| Integrität | SHA-256-Prüfsumme je Profilstand, angezeigt und im Laufprotokoll; keine Signatur, Abgleich mit einer Referenz nur von Hand ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.5) |
+| Lieferkette | Installation nach Lockfile, Lizenzprüfung; SBOM im Format CycloneDX als Artefakt jedes CI-Laufs und als Anhang jedes Releases, nur für npm-Pakete, nicht für native Bibliotheken. Vor dem ersten Release (nach der Erprobung im Testkreis) gibt es für einen Stand nur das CI-Artefakt. Offene Punkte: [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.7 |
+| Bekannte Risiken | Prompt-Injection über Recherche, Dateien und Eingangsmeldungen; Schlüsselablage; Skripteinschleusung; Profilintegrität; Lieferkette; bei Ollama erhält jeder lokale Dienst auf Port 11434 die Inhalte, in den nativen Apps ist der Weg nicht erprobt ([SICHERHEIT.md](SICHERHEIT.md), Abschnitte 3.1 bis 3.9) |
 | Barrierefreiheit | [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md) |
 | Schwachstellen melden | vertraulich nach [SECURITY.md](../SECURITY.md) |
 
@@ -150,7 +150,7 @@ Nach BSI-Standard 200-2 in den Kategorien normal, hoch und sehr hoch. Der Vorsch
 |---|---|
 | Freigegebene Betriebsform und Geräte | [ ] |
 | Freigeschaltete Ziele im Netz | [ ] |
-| Auflagen | [z. B. Schlüsselablage nur verschlüsselt, keine Recherche, Version fest auf …] |
+| Auflagen | [z. B. Schlüsselablage nur verschlüsselt, keine Recherche]. Eine feste Version setzt voraus, dass die Stelle die App selbst aus einem Git-Tag bereitstellt; über GitHub Pages lädt die App stets die neue Fassung ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 7; [SECURITY.md](../SECURITY.md)) |
 | Beteiligt | [Informationssicherheitsbeauftragte oder -beauftragter], [Datenschutzbeauftragte oder -beauftragter] |
 | Freigabe durch, am | [ ] |
 
@@ -162,9 +162,9 @@ Eine Zeile je Prüfpunkt; „entfällt“ mit Grund ist eine zulässige Antwort.
 |---|---|---|---|
 | 1 | Vertragspartner und Kontoinhaber | Konto der Stelle statt privater Konten; Nutzungsbedingungen für gewerbliche Kunden; Konto der Testkreis-Teilnahme (ERPROBUNG.md) ist davon getrennt | [ ] |
 | 2 | Auftragsverarbeitung (Art. 28 DSGVO) | Vertrag oder Data Processing Addendum des Anbieters; bei Anthropic durch Verweis Bestandteil der kommerziellen Bedingungen ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5). Nötig, sobald personenbezogene Daten nicht ausgeschlossen sind | [ ] |
-| 3 | Drittlandübermittlung | Anthropic und OpenAI: USA. Angemessenheitsbeschluss zum EU-U.S. Data Privacy Framework (Durchführungsbeschluss (EU) 2023/1795); das Gericht der EU hat die Klage dagegen am 03.09.2025 abgewiesen (T-553/23), das Rechtsmittel (C-703/25 P) ist anhängig (Heuking, 2025; nexvyra, 2026). Stand prüfen, ebenso, ob der Anbieter unter dem Framework zertifiziert ist. Mistral über den EU-Endpunkt: EU und EFTA | [ ] |
-| 4 | Training mit Eingaben | Anthropic und OpenAI über die API: kein Training. Mistral: im kostenlosen Tarif Training möglich, abschaltbar ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5) | [ ] |
-| 5 | Aufbewahrung beim Anbieter | in der Regel bis 30 Tage, bei Verstößen länger; Zero Data Retention bei Mistral auf Antrag ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5) | [ ] |
+| 3 | Drittlandübermittlung | Anthropic und OpenAI: USA. Angemessenheitsbeschluss zum EU-U.S. Data Privacy Framework (Durchführungsbeschluss (EU) 2023/1795); das Gericht der EU hat die Klage dagegen am 03.09.2025 abgewiesen (T-553/23), das Rechtsmittel (C-703/25 P) ist anhängig (Heuking, 2025; nexvyra, 2026). Stand prüfen, ebenso, ob der Anbieter unter dem Framework zertifiziert ist. Mistral über den EU-Endpunkt (Vorgabe): Ein- und Ausgaben in EU und EFTA; Kontoverwaltung, Schlüssel, Abrechnung und Nutzungsauswertung können außerhalb liegen; der globale Endpunkt mit Websuche ist nicht regional festgelegt; Unterauftragnehmer regelt der Vertrag ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5) | [ ] |
+| 4 | Training mit Eingaben | Anthropic und OpenAI über die API: kein Training. Mistral: im kostenlosen Tarif Training möglich, abschaltbar; im Tarif mit Abrechnung nach Verbrauch entscheidet die Kundin oder der Kunde, Einstellung prüfen ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5) | [ ] |
+| 5 | Aufbewahrung beim Anbieter | in der Regel bis 30 Tage; bei Verstößen gegen die Richtlinien des Anbieters länger, bei Anthropic bis zu zwei Jahre, Klassifikationswerte bis zu sieben Jahre; längere Fristen aus gesetzlichen Pflichten möglich. Zero Data Retention bei Mistral auf Antrag, nur für zustandslose Aufrufe (Chat Completions am EU-Endpunkt), nicht für die Websuche am globalen Endpunkt ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5) | [ ] |
 | 6 | Kontoverwaltung | wer verwaltet das Konto, wer legt Schlüssel an und widerruft sie; Mehr-Faktor-Anmeldung | [ ] |
 | 7 | Schlüssel | nur für KI-LEAD, je [Person / Stelle]; Widerruf nach Ende der Erprobung | [ ] |
 | 8 | Ausgabenlimit | beim Anbieter gesetzt: [Betrag] | [ ] |
@@ -178,7 +178,7 @@ Geprüft von, am: …
 
 ## V5: Unterweisung zur KI-Kompetenz
 
-Betreiber müssen seit dem 27.07.2026 Maßnahmen ergreifen, um die KI-Kompetenz ihres Personals zu fördern; ein bestimmtes Niveau oder ein Zertifikat verlangt Art. 4 KI-VO nicht ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 7). Die Unterweisung ist eine solche Maßnahme; der Nachweis dokumentiert sie.
+Betreiber müssen seit dem 27.07.2026 Maßnahmen ergreifen, um die KI-Kompetenz ihres Personals zu fördern; ein bestimmtes Niveau müssen sie nicht gewährleisten ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 7). Die Unterweisung ist eine solche Maßnahme; der Nachweis dokumentiert sie.
 
 ### Teil 1: Inhalte
 
@@ -186,7 +186,7 @@ Betreiber müssen seit dem 27.07.2026 Maßnahmen ergreifen, um die KI-Kompetenz 
 |---|---|---|
 | 1 | Wofür KI-LEAD gedacht ist und wofür nicht | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 1 und 2 |
 | 2 | Regeln der Erprobung: zugelassene Inhalte, Schlüssel, Löschung, Rückmeldungen | V1 |
-| 3 | Ablauf S1 bis S4 und wo die Person entscheidet | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.2 |
+| 3 | Ablauf S1 bis S4 und wo die Person entscheidet | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.2; die Systemkarte beschreibt den Stand von App 0.5.6, neuere Schritte (Orientierungssuche in S1, Pflichtsuchen, lokales Modell) in [SPEZIFIKATION.md](SPEZIFIKATION.md) |
 | 4 | Bekannte Fehlerbilder, etwa Fristen auf t0 oder fehlende Tendenz | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.3 |
 | 5 | Was die Prüfungen der App belegen und was nicht | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.4 |
 | 6 | Kennzeichnung von KI-Entwürfen und Veröffentlichung | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 6 |
@@ -238,7 +238,7 @@ Unterweisung zu KI-LEAD, Version [App-Version], am [Datum]. Mit der Unterschrift
 | A: Erprobung beenden | Schlüssel widerrufen, Daten nach V1 Nr. 7 löschen, Rückmeldung an den Herausgeber [ja / nein] |
 | B: verlängern im selben Rahmen | neue Frist in V1; Personalvertretung nach V2 erneut beteiligen |
 | C: ausweiten (weitere Teilnehmende, Profile, Anbieter) | V3 und V4 ergänzen, V5 für neue Teilnehmende, V2 erneut |
-| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Mit realen Lagen oder personenbezogenen Daten tragen die Ausnahmen der KI-Verordnung für Forschung voraussichtlich nicht mehr, die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support |
+| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Dient KI-LEAD nicht mehr allein der Forschung oder wird es unter Realbedingungen eingesetzt, tragen die Ausnahmen der KI-Verordnung voraussichtlich nicht mehr; personenbezogene Daten oder reale Lagen überschreiten zudem die Verwendungsgrenzen. Die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support |
 
 **Empfehlung:** [Option, Begründung]
 
