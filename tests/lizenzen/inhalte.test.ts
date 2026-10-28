@@ -52,6 +52,43 @@ describe("LICENSE-CONTENT: Geltungsbereich (KP-2026-W43-55)", () => {
   });
 });
 
+// Klarstellungen der Zuordnung: Entscheidung des Herausgebers vom 28.10.2026 (Prüfung der Lizenzen)
+describe("LICENSE-CONTENT: Zuordnung der Grenzfälle", () => {
+  const t = lies("LICENSE-CONTENT").replace(/[ \t]*\n[ \t]*/g, " ");
+  const nr = (von: string, bis: string) => t.slice(t.indexOf(von), t.indexOf(bis));
+
+  it("Quelltext in evaluation/ fällt unter Nr. 4, nicht unter CC BY 4.0", () => {
+    expect(nr("1. CC BY 4.0.", "2. Zusätzlich CC0 1.0.")).toContain("evaluation/ außer Quelltext");
+    expect(dateienUnter("evaluation").some((p) => p.endsWith(".ts"))).toBe(true);
+  });
+
+  it("die Markdown-Dateien im Wurzelverzeichnis stehen unter CC BY 4.0", () => {
+    const nr1 = nr("1. CC BY 4.0.", "2. Zusätzlich CC0 1.0.");
+    for (const datei of ["README.md", "CHANGELOG.md", "SECURITY.md", "THIRD-PARTY-NOTICES.md"]) expect(nr1, datei).toContain(datei);
+  });
+
+  it("das App-Symbol steht zusätzlich unter CC BY 4.0; die Dateien gibt es", () => {
+    expect(nr("1. CC BY 4.0.", "2. Zusätzlich CC0 1.0.")).toContain("zusätzlich zur EUPL-1.2 das App-Symbol");
+    expect(dateienUnter("public/icons").length).toBeGreaterThan(0);
+    expect(lies("public", "favicon.ico").length).toBeGreaterThan(0);
+    expect(lies("docs", "app-symbol.md")).toContain("Nr. 1 d");
+  });
+
+  it("Nr. 4 nimmt Dateien Dritter aus; der Gradle-Wrapper steht in THIRD-PARTY-NOTICES.md", () => {
+    expect(nr("4. Code.", "5. Nicht erfasst sind:")).toContain("Gradle-Wrapper");
+    expect(lies("android", "gradlew")).toContain("SPDX-License-Identifier: Apache-2.0");
+    expect(lies("THIRD-PARTY-NOTICES.md")).toContain("gradle-wrapper.jar");
+  });
+
+  it("die Stufentexte des Lagenradars stehen bewusst unter CC BY 4.0", () => {
+    expect(nr("5. Nicht erfasst sind:", "6. Herkunft.")).toContain("Stufentexte des Lagenradars im Repository");
+  });
+
+  it("README trägt den Hinweis nach der EUPL", () => {
+    expect(lies("README.md")).toContain("© 2026 Heiko Pereira Wolf. Licensed under the EUPL-1.2");
+  });
+});
+
 describe("CC0 1.0 zusätzlich für maschinenlesbare Dateien und die Vorlage (KP-2026-W43-56)", () => {
   it("LICENSE-CC0 enthält den Text der Widmung und verweist auf LICENSE-CONTENT", () => {
     const cc0 = lies("LICENSE-CC0");

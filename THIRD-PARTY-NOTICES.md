@@ -1,6 +1,6 @@
 # Drittkomponenten und Lizenzen
 
-Stand: 24.10.2026, App 0.5.9 · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
+Stand: 24.10.2026, App 0.5.9; Nachtrag 28.10.2026: Gradle-Wrapper und Vorlagen der Capacitor-CLI (Abschnitt 4) · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
 
 Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT). Diese Datei nennt alle fremden Komponenten, die mit der App ausgeliefert werden, und getrennt davon die Werkzeuge, die nur beim Entwickeln gebraucht werden.
 
@@ -113,6 +113,8 @@ Nicht im npm-Lockfile, sondern in den nativen Projekten festgelegt. Die Versione
 | AndroidX Core SplashScreen (`androidx.core:core-splashscreen`) | 1.2.0 | Apache-2.0 | The Android Open Source Project | Android |
 
 Die AndroidX-Bibliotheken ziehen weitere AndroidX- und Kotlin-Bibliotheken nach, ebenfalls unter Apache-2.0. Eine vollständige Liste liefert erst der Gradle-Build (`./gradlew :app:dependencies`).
+
+**Im Projekt, nicht in der App:** Der Gradle-Wrapper (`android/gradlew`, `android/gradlew.bat`, `android/gradle/wrapper/gradle-wrapper.jar`) stammt von Gradle Inc. und steht unter Apache-2.0 (Kennung in den Skripten); er lädt Gradle 8.14.3 (`gradle-wrapper.properties`) und wird nur zum Bauen gebraucht. Die Grundstruktur von `android/` und `ios/` hat die Capacitor-CLI aus ihren Vorlagen erzeugt (MIT, Drifty Co. (Ionic)). Beides fällt nicht unter die EUPL-1.2 des Projekts ([LICENSE-CONTENT](LICENSE-CONTENT), Nr. 4).
 
 **NOTICE von Apache Cordova** (Apache-2.0, Abschnitt 4 Buchst. d):
 

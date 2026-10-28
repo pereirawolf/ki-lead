@@ -13,8 +13,12 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
       Quellenregister), Kodierleitfaden, Darstellungsdateien (meldung.ui.json),
       Meldungsschemata, Manifeste, Kontaktlisten, Beispielmeldungen sowie README-
       und CHANGELOG-Dateien;
-   b) alle Dateien im Ordner evaluation/;
-   c) die Dokumentation im Ordner docs/.
+   b) alle Dateien im Ordner evaluation/ außer Quelltext (etwa
+      evaluation/abnahmen/*.ts), für den Nr. 4 gilt;
+   c) die Dokumentation im Ordner docs/ sowie README.md, CHANGELOG.md,
+      SECURITY.md und THIRD-PARTY-NOTICES.md im Wurzelverzeichnis;
+   d) zusätzlich zur EUPL-1.2 das App-Symbol: public/icons/, public/favicon.ico
+      und die daraus erzeugten Symbol- und Startbilder in android/ und ios/.
 
 2. Zusätzlich CC0 1.0. Nach Wahl der Nutzenden stehen auch unter CC0 1.0 Universal
    (Datei LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung
@@ -39,7 +43,10 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
 
 4. Code. Quelltext, Tests, Skripte, Build- und Projektdateien sowie die App stehen
    unter der EUPL-1.2 (Datei LICENSE). Die Profile sind in die App eingebettet; jede
-   Lizenz gilt für ihren Teil.
+   Lizenz gilt für ihren Teil. Ausgenommen sind Dateien Dritter, die
+   THIRD-PARTY-NOTICES.md nennt, etwa der Gradle-Wrapper in android/ (Apache-2.0)
+   und die aus Vorlagen der Capacitor-CLI erzeugten Teile der nativen Projekte
+   (MIT); für sie gilt ihre eigene Lizenz.
 
 5. Nicht erfasst sind:
    a) Profile, die Nutzende selbst erstellen oder importieren; für sie gilt die
@@ -51,7 +58,13 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
    d) begleitende Aufsätze außerhalb des Repositorys, etwa auf Zenodo und
       pereirawolf.de, darunter der Grundlagenbeitrag zum Lagenradar
       (https://doi.org/10.5281/zenodo.18305827); für sie gilt die dort angegebene
-      Lizenz (CC BY-NC-ND 4.0).
+      Lizenz (CC BY-NC-ND 4.0). Die Stufentexte des Lagenradars im Repository
+      (Kodierleitfaden, Darstellungsdateien) stehen bewusst unter CC BY 4.0
+      (Nr. 1 a); die Lizenz des Grundlagenbeitrags schränkt ihre Nutzung aus dem
+      Repository nicht ein. Bitte, ohne rechtliche Bindung: abgewandelte Stufentexte
+      nicht als Fassung des Kodierleitfadens oder des Beispielprofils ausgeben;
+      Änderungen sind nach CC BY 4.0, Abschnitt 3(a)(1)(B), ohnehin kenntlich zu
+      machen, und Abschnitt 2(a)(6) schließt den Eindruck einer Billigung aus.
    Soweit Inhalte keinen urheberrechtlichen Schutz genießen, etwa überwiegend
    maschinell erzeugte Prüfsteine, begründet die Lizenz keine Pflichten
    (CC BY 4.0, Abschnitt 1(g)).
