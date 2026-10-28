@@ -67,6 +67,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | Bedrohungsmodell, Schwachstellen melden | [Sicherheit](docs/SICHERHEIT.md), [SECURITY.md](SECURITY.md) |
 | Stand und Lücken der Barrierefreiheit | [Barrierefreiheit](docs/BARRIEREFREIHEIT.md) |
 | An der Erprobung teilnehmen, Rückmeldung geben | [Erprobung im Testkreis](docs/ERPROBUNG.md) |
+| Erprobung in einer Stelle vorbereiten: Anordnung, Personalvertretung, IT-Freigabe, Anbieter, Unterweisung, Bericht | [Vorlagen](docs/VORLAGEN.md) |
 | Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 
 ## Profile
