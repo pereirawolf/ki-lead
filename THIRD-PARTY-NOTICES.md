@@ -136,7 +136,7 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 |---|---|---|---|
 | `@axe-core/playwright` | 4.14.0 | MPL-2.0 | Browsertests: automatische Prüfung der Barrierefreiheit mit axe-core (seit 0.6.5; MPL-2.0 wie axe-core, nur im Test, nicht ausgeliefert) |
 | `@capacitor/cli` | 8.5.3 | MIT | native Projekte erzeugen und abgleichen |
-| `@playwright/test` | 1.56.1 | Apache-2.0 | Browsertests |
+| `@playwright/test` | 1.64.1 | Apache-2.0 | Browsertests |
 | `@types/js-yaml` | 4.0.9 | MIT | Typdefinitionen |
 | `@types/node` | 26.6.5 | MIT | Typdefinitionen |
 | `@types/react` | 18.3.31 | MIT | Typdefinitionen |
@@ -152,7 +152,7 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 | `prettier` | 3.9.10 | MIT | Formatierung |
 | `typescript` | 6.0.2 | Apache-2.0 | TypeScript-API für typescript-eslint (Alias auf `@typescript/typescript6`, seit 0.6.2; vorher TypeScript 7.0.2 direkt) |
 | `typescript-eslint` | 8.72.1 | MIT | Linting mit Typinformationen (seit 0.6.2) |
-| `vite` | 8.3.4 | MIT | Build, Lizenzdatei im Build |
+| `vite` | 8.3.5 | MIT | Build, Lizenzdatei im Build |
 | `vitest` | 5.0.5 | MIT | Tests |
 
 Gradle, das Android-Gradle-Plugin und Xcode sind ebenfalls nur Werkzeuge.
