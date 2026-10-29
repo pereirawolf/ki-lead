@@ -87,7 +87,7 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | vorhanden | offen |
 |---|---|
 | `npm ci` installiert genau nach `package-lock.json` | übrige Abhängigkeiten in `package.json` mit Bereichsangabe (`^`); fest ist nur der Lockfile |
-| Capacitor und das Plugin für den Schlüsselbund exakt gepinnt | GitHub Actions per Versionsmarke (`@v4`) statt Commit-SHA |
+| Capacitor und das Plugin für den Schlüsselbund exakt gepinnt | GitHub Actions per Versionsmarke (etwa `@v7`) statt Commit-SHA |
 | CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob | kein `npm audit` im CI |
 | Dependabot schlägt wöchentlich Aktualisierungen für npm-Pakete und GitHub Actions vor (`.github/dependabot.yml`, seit 0.6.2); Node-Version festgelegt (`engines`, `.nvmrc`) | |
 | Veröffentlichung nur von `main` nach Tests, Build und Browsertests | Version von KeychainSwift nicht festgelegt, bis `Package.resolved` eingecheckt ist |
