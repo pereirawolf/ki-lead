@@ -131,6 +131,10 @@ Grundlage: Rückmeldung des Herausgebers vom 29.10.2026 zu einem Lauf der KI-Erf
 - `tests/profil/sop-redaktion.test.ts`: Prüfauftrag mit höchstens vier Zeilen in Vorgabe und Beispiel, Längengrenze des Beispiels, keine Leerzeilen und Kürzel; ersetzt den Test der acht Zeilen (TP-2026-W44-32).
 - `tests/pipeline/recherche-pflicht.test.ts` (1 neu): Widerspruchshinweis auch bei der neuen Form ohne Leerzeilen.
 
+### Nachtrag vom 30.10.2026 (ohne Änderung der App)
+
+- GitHub Actions: `actions/checkout` von v4 auf v7 in `pages.yml`, `release.yml` und `mistral-probe.yml`. v4 lief auf Node.js 20, das GitHub abkündigt; die Läufe wurden nur noch zwangsweise mit Node.js 24 ausgeführt (Warnung in der Prüfung). Ab v5 läuft die Action auf Node.js 24. Die Neuerungen von v6 (Zugangsdaten in einer eigenen Datei) und v7 (kein Checkout von Fork-PRs bei `pull_request_target` und `workflow_run`) betreffen die Workflows nicht: Sie nutzen diese Auslöser und Container nicht. docs/SICHERHEIT.md nennt die Versionsmarke beispielhaft.
+
 ## [0.6.7] – 29.10.2026
 
 Grundlage: Rückmeldung des Herausgebers vom 29.10.2026. Nach „Weiter: Quellen & Referenzen“, „Weiter: Management Summary“ oder „Zurück: Ereignisse/Sachverhalte“ blieb die Ansicht am Seitenende des neuen Schritts. Ursache: Die App tauschte beim Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht nur den Inhalt aus; das Dokument behielt seine Scrollhöhe. Baut auf 0.6.6 und den Dokumentstand von Pull Request #90 auf.
