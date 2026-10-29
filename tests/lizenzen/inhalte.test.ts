@@ -64,9 +64,30 @@ describe("CC0 1.0 zusätzlich für maschinenlesbare Dateien und die Vorlage (KP-
   it("LICENSE-CONTENT nennt Schemata, Manifeste, Kontaktlisten, Quellenregister und die Vorlage; Darstellungsdateien bleiben bei CC BY 4.0", () => {
     const t = lies("LICENSE-CONTENT").replace(/[ \t]*\n[ \t]*/g, " ");
     const nr2 = t.slice(t.indexOf("2. Zusätzlich CC0 1.0."), t.indexOf("3. Ausgaben der App."));
-    for (const muster of ["meldung.schema.json", "profil.json", "kontakte.json", "quellenregister.json", "*.schema.json", "profile/muster/"])
+    for (const muster of [
+      "meldung.schema.json",
+      "profil.json",
+      "kontakte.json",
+      "quellenregister.json",
+      "*.schema.json",
+      "profile/muster/",
+      "docs/VORLAGEN.md",
+      "Anhang C und Anhang D",
+    ])
       expect(nr2, muster).toContain(muster);
     expect(nr2).toMatch(/meldung\.ui\.json\)[\s\S]*allein CC BY 4\.0/);
+  });
+
+  // Vorlagen für Stellen zusätzlich unter CC0 1.0: Entscheidung des Herausgebers vom 28.10.2026
+  it("die Vorlagen für Stellen nennen ihre CC0-Widmung, die Anhänge C und D gibt es", () => {
+    expect(lies("docs", "VORLAGEN.md")).toContain("nach Wahl auch unter CC0 1.0");
+    const ds = lies("docs", "DATENSCHUTZ.md");
+    for (const anhang of ["## Anhang C:", "## Anhang D:"]) {
+      const ab = ds.indexOf(anhang);
+      expect(ab, anhang).toBeGreaterThan(-1);
+      const abschnitt = ds.slice(ab, ds.indexOf("\n## ", ab + anhang.length));
+      expect(abschnitt, anhang).toContain("nach Wahl auch unter CC0 1.0");
+    }
   });
 
   it("jede so gewidmete Art von Datei gibt es im Repository", () => {

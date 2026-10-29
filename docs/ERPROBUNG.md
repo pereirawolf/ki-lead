@@ -1,6 +1,6 @@
 # KI-LEAD – Erprobung im Testkreis
 
-Fassung 1.1 vom 24.10.2026, gilt für App-Version 0.5.5 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.2 vom 28.10.2026, gilt für App-Version 0.5.5 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument beschreibt die Erprobung von KI-LEAD in einem Testkreis (Meilenstein M6): Ziel, Fragestellungen, Regeln für die Teilnahme, Rückmeldeweg und Auswertung. Es ist keine Rechtsberatung.
 
@@ -10,7 +10,7 @@ Dieses Dokument beschreibt die Erprobung von KI-LEAD in einem Testkreis (Meilens
 
 - KI-LEAD ist ein **privates Forschungsvorhaben** von Heiko Pereira Wolf. Herausgeber ist keine Behörde und keine Einrichtung. Die Erprobung ist keine dienstliche Maßnahme.
 - Die Teilnahme ist **freiwillig und unentgeltlich**. Es gibt keine Vergütung und keine Verpflichtung, Rückmeldungen zu geben.
-- Wer im Rahmen einer Stelle teilnehmen möchte, klärt das mit dieser Stelle selbst. Hilfen dafür: [Datenschutzhinweise](DATENSCHUTZ.md), Anhang C (Vorlage zur Schwellwertanalyse), und [KI-Verordnung](KI-VERORDNUNG.md), Abschnitt 4.
+- Wer im Rahmen einer Stelle teilnehmen möchte, klärt das mit dieser Stelle selbst. Hilfen dafür: [Datenschutzhinweise](DATENSCHUTZ.md), Anhang C (Vorlage zur Schwellwertanalyse) und Anhang D (Vorlage für das Verzeichnis von Verarbeitungstätigkeiten), [KI-Verordnung](KI-VERORDNUNG.md), Abschnitt 4, und die [Vorlagen für die Erprobung in einer Stelle](VORLAGEN.md) (Erprobungsanweisung, Personalvertretung, IT-Freigabe, KI-Anbieter, Unterweisung, Bericht).
 - Erprobt wird ein **fester Stand**: ein Release-Kandidat mit Git-Tag, noch ohne DOI. Der erste Release mit Zenodo-DOI folgt nach der Auswertung (Abschnitt 8).
 
 ## 2. Ziel und Fragestellungen
@@ -93,3 +93,4 @@ Aus einer einzelnen Rückmeldung folgt keine Regeländerung. Ereignisfakten geh�
 |---|---|---|
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.5) |
 | 1.1 | 24.10.2026 | Abschnitt 4: Lizenzangabe an LICENSE-CONTENT angeglichen (KP-2026-W43-55, -59) |
+| 1.2 | 28.10.2026 | Abschnitt 1: Verweise auf Anhang D der Datenschutzhinweise und auf die Vorlagen für die Erprobung in einer Stelle (VORLAGEN.md) |
