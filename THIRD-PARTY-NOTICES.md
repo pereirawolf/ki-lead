@@ -148,7 +148,7 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 | `eslint` | 10.13.0 | MIT | Linting (seit 0.6.2) |
 | `eslint-plugin-react-hooks` | 7.1.1 | MIT | Linting: Regeln für React-Hooks (seit 0.6.2) |
 | `globals` | 17.13.0 | MIT | Linting: globale Namen von Browser und Node (seit 0.6.2) |
-| `jsdom` | 29.1.1 | MIT | Oberflächentests |
+| `jsdom` | 30.1.3 | MIT | Oberflächentests |
 | `prettier` | 3.9.10 | MIT | Formatierung |
 | `typescript` | 6.0.2 | Apache-2.0 | TypeScript-API für typescript-eslint (Alias auf `@typescript/typescript6`, seit 0.6.2; vorher TypeScript 7.0.2 direkt) |
 | `typescript-eslint` | 8.72.1 | MIT | Linting mit Typinformationen (seit 0.6.2) |
