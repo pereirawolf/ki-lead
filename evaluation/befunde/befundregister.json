@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-10-29",
+  "stand": "2026-10-30",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -1468,17 +1468,21 @@
       "agent": "beratung",
       "befunddatei": "ki-lead-befund_zeitstrahl_2026-W44.json",
       "commit": "41392fdca9cd064cede881fb1f682e25ebcf4723",
-      "entschieden_am": "2026-10-29",
+      "entschieden_am": "2026-10-30",
       "dringlichkeit": "niedrig",
       "fundstellen": [
         {
           "datei": "profile/lead-beispiel/kodierleitfaden.md",
-          "stelle": "Abschnitt 8.3, Regel 2"
+          "stelle": "Abschnitt 8.3, Form und Regel 2"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten, Kenntniszeit"
         }
       ],
-      "kurz": "Kenntniszeit („aufgenommen …“) als zusätzliche Angabe je Zeile des Zeitstrahls.",
-      "status": "abgelehnt",
-      "grund": "Entscheidung des Herausgebers vom 29.10.2026: Zeilenform mit Typ ohne Kenntniszeit; sie ergibt sich aus Quellenverzeichnis und Ausgabe (Kodierleitfaden 8.3, Regel 2)."
+      "kurz": "Kenntniszeit („aufgenommen“, Meldezeitpunkt der ersten Meldung mit der Zeile) je Zeile des Zeitstrahls, gesetzt von der App.",
+      "status": "umgesetzt",
+      "pr": 105
     }
   ]
 }

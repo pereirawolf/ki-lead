@@ -20,15 +20,15 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 ## [3.20.0] – 29.10.2026
 
-Grundlage: Entscheidung des Herausgebers vom 29.10.2026, je Sachverhalt einen Zeitstrahl relevanter Ereignisse zu führen und fortzuschreiben, mit einer über viele meldende Stellen eindeutigen Sachverhaltskennung und einem Bezug auf die eingehenden Sachverhalte (Anlasskennungen ZS-2026-W44-01 Zeitstrahl, -02 Sachverhaltskennung, -03 Bezug, -04 Bewertungszeilen der App). Zweite Stelle nach der Versionierungsregel: neue fachliche Inhalte in Teil A; Form und Regeln von Zeitstrahl, Kennung und Bezug stehen nach A.10.2 nur im Kodierleitfaden (1.6.0, Abschnitt 8). SOPs, Bausteine und Quellenregister bleiben unverändert.
+Grundlage: Entscheidung des Herausgebers vom 29.10.2026, je Sachverhalt einen Zeitstrahl relevanter Ereignisse zu führen und fortzuschreiben, mit einer über viele meldende Stellen eindeutigen Sachverhaltskennung und einem Bezug auf die eingehenden Sachverhalte (Anlasskennungen ZS-2026-W44-01 Zeitstrahl, -02 Sachverhaltskennung, -03 Bezug, -04 Bewertungszeilen der App, -05 Kenntniszeit je Zeile). Zweite Stelle nach der Versionierungsregel: neue fachliche Inhalte in Teil A; Form und Regeln von Zeitstrahl, Kennung und Bezug stehen nach A.10.2 nur im Kodierleitfaden (1.6.0, Abschnitt 8). SOPs, Bausteine und Quellenregister bleiben unverändert.
 
 ### Geändert
 
 - **Teil A, Gültigkeitsstand:** Sammelmappe 3.20.0, Kodierleitfaden 1.6.0 (Prüfanlass auch bei Änderungen an den Regeln zu Zeitstrahl und Kennung), Darstellungsdatei mit Profilversion 1.33.0, Arbeitsanweisung Erfassung 1.8.0, Arbeitsanweisung Verdichtung 2.2.0, Meldungsschema LEAD-Meldevorlage 1.2 (optionale Felder `kennung`, `bezug`, `zeitstrahl`; abwärtskompatibel, keine Migration). Erledigungsnachweis: Tabelle am Anfang von Teil A.
-- **A.4 Übertrag in die Meldung:** neuer Punkt zu `zeitstrahl`, `kennung` und `bezug` mit Verweis auf Kodierleitfaden Abschnitt 8 (ZS-2026-W44-01 bis -03).
+- **A.4 Übertrag in die Meldung:** neuer Punkt zu `zeitstrahl` (mit Ereignis- und Kenntniszeit), `kennung` und `bezug` mit Verweis auf Kodierleitfaden Abschnitt 8 (ZS-2026-W44-01 bis -03, -05).
 - **A.7.1 Zusammenhang prüfen:** Der eigene Sachverhalt nennt im Bezug die eingehenden Sachverhalte; die Zeitstrahlen der Eingänge gehen in einen eigenen Zeitstrahl ein, in dem dasselbe Ereignis einmal steht (ZS-2026-W44-01, -03).
-- **A.8.1 Fortschreibung:** Kennung bleibt; Zeitstrahl wird durch Anfügen fortgeführt, Korrekturen als „Berichtigung“, Bewertungswechsel trägt die App ein; fehlende neue Zeilen belegen keine Stabilisierung. Bei kombinierten SOPs erhält ein abgetrennter Sachverhalt eine eigene Kennung mit Bezug auf den Ausgangssachverhalt (ZS-2026-W44-01, -02, -04).
-- **A.8.3 Rückblick:** Frage 1 stützt sich auf den Zeitstrahl (ZS-2026-W44-01).
+- **A.8.1 Fortschreibung:** Kennung bleibt; Zeitstrahl wird durch Anfügen fortgeführt, frühere Zeilen samt Kenntniszeit wortgleich, Korrekturen als „Berichtigung“, Bewertungswechsel trägt die App ein; fehlende neue Zeilen belegen keine Stabilisierung. Bei kombinierten SOPs erhält ein abgetrennter Sachverhalt eine eigene Kennung mit Bezug auf den Ausgangssachverhalt (ZS-2026-W44-01, -02, -04).
+- **A.8.3 Rückblick:** Frage 1 stützt sich auf Ereignis- und Kenntniszeit im Zeitstrahl und auf Quelle und Datenstand im Quellenverzeichnis (ZS-2026-W44-01, -05).
 - **A.10.2 Ein Ort, Verweise sonst:** Form und Regeln von Zeitstrahl, Sachverhaltskennung und Bezug stehen nur im Kodierleitfaden.
 - Lesefassung neu erzeugt.
 

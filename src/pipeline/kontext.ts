@@ -309,6 +309,11 @@ export function zeitstrahlSteuerung(s: Pick<Steuerung, "vormeldung" | "verdichtu
         "Aus den Zeitstrahlen der Eingänge übernimmst du nur Wendepunkte für den eigenen Referenzraum, mit der eigenen Kennung und der Eingangsmeldung oder der selbst geprüften Originalquelle als Beleg; dasselbe Ereignis aus mehreren Eingängen steht einmal.",
       );
     if (z.typBewertung) teile.push(`Zeilen vom Typ „${z.typBewertung}“ schreibst du nicht; Bewertungswechsel trägt die App ein.`);
+    teile.push(
+      s.vormeldung
+        ? "Die Kenntniszeit „· aufgenommen …“ am Zeilenende setzt die App: bei Zeilen der Vormeldung übernimmst du sie unverändert, neuen Zeilen gibst du keine."
+        : "Die Kenntniszeit „· aufgenommen …“ am Zeilenende setzt die App; du schreibst sie nicht.",
+    );
     out.push(`- Zeitstrahl (\`${f.zeitstrahl}\`): ${teile.join(" ")}`);
   }
   return out;

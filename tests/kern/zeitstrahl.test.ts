@@ -6,11 +6,13 @@ import { quellenFuerSachverhalt, quellenHinweise } from "../../src/kern/quellen"
 import type { Profil } from "../../src/kern/typen";
 import { ausfuellHinweise } from "../../src/kern/kennsaetze";
 import {
+  aufnahmeErgaenzen,
   chronologisch,
   eintraegeFuer,
   istZeitstrahlZeit,
   naechsteZNr,
   parseZeitstrahl,
+  zeitstrahlAnzeige,
   zeitstrahlHinweise,
   zeitstrahlOrdnen,
   zeitstrahlZeile,
@@ -24,6 +26,8 @@ beforeAll(async () => {
 });
 
 const K1 = "DE-TH-20261014-K7QM";
+/** Kenntniszeit: Meldezeitpunkt der Thüringer Beispielmeldung (14.10.2026 10:30) */
+const A = " · aufgenommen 2026-10-14T10:30";
 const K2 = "DE-TH-20261014-P5VN";
 
 /** Meldung mit zwei Sachverhalten und frei wählbarem Zeitstrahl */
@@ -112,7 +116,7 @@ describe("ZS-2026-W44-01: Zeilenform und Ordnung", () => {
 
 describe("ZS-2026-W44-01: formale Hinweise zum Zeitstrahl", () => {
   it("gültiger Zeitstrahl ohne Befund", () => {
-    const d = meldung(`[Z1] 2026-10-13T13:00 · ${K1} · Warnung – DWD warnt [Q1]\n[Z2] 2026-10-14T02:00 · ${K2} · Maßnahme – Krisenstab [Q2]`);
+    const d = meldung(`[Z1] 2026-10-13T13:00 · ${K1} · Warnung – DWD warnt [Q1]${A}\n[Z2] 2026-10-14T02:00 · ${K2} · Maßnahme – Krisenstab [Q2]${A}`);
     expect(zeitstrahlHinweise(d, p.ui)).toEqual([]);
   });
 
@@ -146,21 +150,57 @@ describe("ZS-2026-W44-01: formale Hinweise zum Zeitstrahl", () => {
 
   it("Zeitpunkt am Meldetag ohne Uhrzeit ist nicht „nach t0“, eine spätere Uhrzeit desselben Tags schon", () => {
     // Meldezeitpunkt der Thüringer Meldung: 2026-10-14T10:30
-    expect(codes(meldung(`[Z1] 2026-10-14 · ${K1} · Ereignis – am Meldetag [Q1]`))).toEqual([]);
-    expect(codes(meldung(`[Z1] 2026-10-14T10:31 · ${K1} · Ereignis – eine Minute später [Q1]`))).toEqual(["ZEITSTRAHL_NACH_T0"]);
+    expect(codes(meldung(`[Z1] 2026-10-14 · ${K1} · Ereignis – am Meldetag [Q1]${A}`))).toEqual([]);
+    expect(codes(meldung(`[Z1] 2026-10-14T10:31 · ${K1} · Ereignis – eine Minute später [Q1] · aufgenommen 2026-10-14T10:31`))).toEqual([
+      "ZEITSTRAHL_NACH_T0",
+      "ZEITSTRAHL_AUFNAHME",
+    ]);
   });
 
   it("Berichtigung mit Bezug auf eine vorhandene Zeile ist in Ordnung", () => {
     const d = meldung(
-      `[Z1] 2026-10-13T13:00 · ${K1} · Ereignis – Eintritt 13:00 [Q1]\n[Z2] 2026-10-13T13:00 · ${K1} · Berichtigung – zu [Z1]: Eintritt 12:30 [Q2]`,
+      `[Z1] 2026-10-13T13:00 · ${K1} · Ereignis – Eintritt 13:00 [Q1]${A}\n[Z2] 2026-10-13T13:00 · ${K1} · Berichtigung – zu [Z1]: Eintritt 12:30 [Q2]${A}`,
     );
     expect(codes(d)).toEqual([]);
   });
 
   it("Richtwert je Sachverhalt aus der Darstellungsdatei (12): die 13. Zeile ergibt einen Hinweis", () => {
-    const zeilen = Array.from({ length: 13 }, (_, i) => `[Z${i + 1}] 2026-10-13T${String(i + 6).padStart(2, "0")}:00 · ${K1} · Ereignis – Zeile ${i + 1} [Q1]`);
+    const zeilen = Array.from(
+      { length: 13 },
+      (_, i) => `[Z${i + 1}] 2026-10-13T${String(i + 6).padStart(2, "0")}:00 · ${K1} · Ereignis – Zeile ${i + 1} [Q1]${A}`,
+    );
     expect(codes(meldung(zeilen.slice(0, 12).join("\n")))).toEqual([]);
     expect(codes(meldung(zeilen.join("\n")))).toEqual(["ZEITSTRAHL_RICHTWERT"]);
+  });
+});
+
+describe("ZS-2026-W44-05: Kenntniszeit „aufgenommen“", () => {
+  it("wird als eigener Wert gelesen und nicht zum Text gezählt; feste Form beim Schreiben", () => {
+    const e = parseZeitstrahl(`[Z1] 2026-10-13T13:00 · ${K1} · Warnung – DWD warnt · Stufe 3 [Q1] · aufgenommen 2026-10-14T10:30`).eintraege[0]!;
+    expect(e).toMatchObject({ text: "DWD warnt · Stufe 3 [Q1]", aufgenommen: "2026-10-14T10:30" });
+    expect(zeitstrahlZeile(e)).toBe(`[Z1] 2026-10-13T13:00 · ${K1} · Warnung – DWD warnt · Stufe 3 [Q1] · aufgenommen 2026-10-14T10:30`);
+    expect(parseZeitstrahl(`[Z1] 2026-10-13 · ${K1} · Warnung – ohne Angabe [Q1]`).eintraege[0]!.aufgenommen).toBeUndefined();
+    expect(zeitstrahlAnzeige(e)).toBe("[Z1] 13.10.2026 13:00 · Warnung – DWD warnt · Stufe 3 [Q1] (aufgenommen 14.10.2026 10:30)");
+  });
+
+  it("ungültig, nach dem Meldezeitpunkt oder vor dem Ereignis ergibt eine Warnung; fehlend einen Hinweis", () => {
+    const h = (z: string) => zeitstrahlHinweise(meldung(z), p.ui).map((b) => [b.code, b.stufe]);
+    expect(h(`[Z1] 2026-10-13 · ${K1} · Ereignis – Tag ohne Uhrzeit [Q1] · aufgenommen 2026-10-14`)).toEqual([["ZEITSTRAHL_AUFNAHME", "warnung"]]);
+    expect(h(`[Z1] 2026-10-13 · ${K1} · Ereignis – später als t0 [Q1] · aufgenommen 2026-10-14T11:00`)).toEqual([["ZEITSTRAHL_AUFNAHME", "warnung"]]);
+    expect(h(`[Z1] 2026-10-14T09:00 · ${K1} · Ereignis – vor dem Ereignis [Q1] · aufgenommen 2026-10-14T08:00`)).toEqual([["ZEITSTRAHL_AUFNAHME", "warnung"]]);
+    // ein Tag ohne Uhrzeit am Tag der Aufnahme ist kein Widerspruch
+    expect(h(`[Z1] 2026-10-14 · ${K1} · Ereignis – am selben Tag [Q1] · aufgenommen 2026-10-14T08:00`)).toEqual([]);
+    expect(h(`[Z1] 2026-10-13 · ${K1} · Ereignis – A [Q1]\n[Z2] 2026-10-13 · ${K1} · Ereignis – B [Q1]${A}`)).toEqual([
+      ["ZEITSTRAHL_OHNE_AUFNAHME", "hinweis"],
+    ]);
+  });
+
+  it("„Aufnahmezeit ergänzen“ setzt nur fehlende Angaben mit dem Meldezeitpunkt", () => {
+    const text = `[Z1] 2026-10-13 · ${K1} · Ereignis – A [Q1]\n[Z2] 2026-10-13 · ${K1} · Ereignis – B [Q1] · aufgenommen 2026-10-13T20:00\nNotiz`;
+    expect(aufnahmeErgaenzen(text, "2026-10-14T10:30")).toBe(
+      `[Z1] 2026-10-13 · ${K1} · Ereignis – A [Q1] · aufgenommen 2026-10-14T10:30\n[Z2] 2026-10-13 · ${K1} · Ereignis – B [Q1] · aufgenommen 2026-10-13T20:00\nNotiz`,
+    );
+    expect(aufnahmeErgaenzen(text, "")).toBe(text);
   });
 });
 

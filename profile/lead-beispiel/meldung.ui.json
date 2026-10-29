@@ -83,7 +83,7 @@
       "label": "Zeitstrahl",
       "widget": "zeitstrahl",
       "zeilen": 8,
-      "hinweis": "Je Zeile ein eingetretenes, belegtes Ereignis bis zum Meldezeitpunkt: [Zn] JJJJ-MM-TT[Thh:mm] · Kennung des Sachverhalts · Typ – Kurztext [Qn]. Typen: Ereignis, Warnung, Maßnahme, Wendepunkt, Wiederherstellung, Bewertung (setzt die App bei der Fortschreibung), Berichtigung („zu [Zn]: …“). Bei der Fortschreibung bleiben frühere Zeilen unverändert; neue Zeilen werden angefügt (Kodierleitfaden Abschnitt 8, SOP-LEAD A.8.1)."
+      "hinweis": "Je Zeile ein eingetretenes, belegtes Ereignis bis zum Meldezeitpunkt: [Zn] JJJJ-MM-TT[Thh:mm] · Kennung des Sachverhalts · Typ – Kurztext [Qn] · aufgenommen JJJJ-MM-TTThh:mm. Die Kenntniszeit am Ende ist der Meldezeitpunkt der ersten Meldung mit der Zeile; der Baukasten setzt sie, „Aufnahmezeit ergänzen“ trägt sie nach. Typen: Ereignis, Warnung, Maßnahme, Wendepunkt, Wiederherstellung, Bewertung (setzt die App bei der Fortschreibung), Berichtigung („zu [Zn]: …“). Bei der Fortschreibung bleiben frühere Zeilen unverändert, auch ihre Kenntniszeit; neue Zeilen werden angefügt (Kodierleitfaden Abschnitt 8, SOP-LEAD A.8.1)."
     },
     "sachverhalte": {
       "label": "Ereignisse/Sachverhalte",

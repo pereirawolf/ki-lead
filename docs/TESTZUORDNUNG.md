@@ -751,21 +751,23 @@ Angepasst ohne Änderung des Solls: `tests/support/dom.ts` ersetzt in `reactUmge
 | Gliederung der Kurzantwort: Folgezeilen, Leerangaben älterer Läufe, keine Beschriftung über vier Wörter, Punkte am Semikolon | Kurzantwort gliedern › … | `tests/ui/kurzantwort.test.ts` (neu) |
 | Anzeige: Beschreibungsliste, Kernaussage ungeteilt, Punkte als Liste, „Ohne Angabe“, „Dringend prüfen“ hervorgehoben, Fließtext als Absatz | Kurzantwort anzeigen › … | `tests/ui/kurzantwort.test.ts` (neu) |
 
-## Zeitstrahl, Sachverhaltskennung und Bezug (0.6.9, ZS-2026-W44-01 bis -04, Entscheidung des Herausgebers vom 29.10.2026)
+## Zeitstrahl, Sachverhaltskennung und Bezug (0.6.9, ZS-2026-W44-01 bis -05, Entscheidungen des Herausgebers vom 29. und 30.10.2026)
 
 | Soll | Test | Datei |
 |---|---|---|
 | Zeilenform `[Zn] Zeitpunkt · Kennung · Typ – Text`, Ersatzzeichen, Gedankenstrich im Text, chronologische Ordnung, ungültige Zeilen am Ende, nächste Nummer, Kalenderprüfung | ZS-2026-W44-01: Zeilenform und Ordnung › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Formale Hinweise mit Code und Stufe, „nach t0“ am Meldetag, Berichtigung mit Bezug, Richtwert aus der Darstellungsdatei | ZS-2026-W44-01: formale Hinweise zum Zeitstrahl › … | `tests/kern/zeitstrahl.test.ts` (neu) |
+| Kenntniszeit „aufgenommen“: eigener Wert, feste Form, Anzeige; Warnung bei ungültig, nach t0, vor dem Ereignis; Hinweis bei fehlend; „Aufnahmezeit ergänzen“ | ZS-2026-W44-05: Kenntniszeit „aufgenommen“ › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Fehlende, doppelte und eigene Kennungen im Bezug; Vorsatz im Prüfschritt | ZS-2026-W44-02, -03: Hinweise zu Kennung und Bezug › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Verweise im Zeitstrahl zählen als Zitate; Quellen je Sachverhalt mit seinen Zeilen | ZS-2026-W44-01: Verweise des Zeitstrahls im Quellenverzeichnis › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Präfix nach dem Feld „Land“, feste Kennung aus fester Zufallsfolge, keine Doppelung, Muster | ZS-2026-W44-02: Vergabe der Sachverhaltskennung › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Beispieldatensatz: acht eindeutige Kennungen, Bezug der verdichteten Meldung, Zeitstrahl ohne Befund | Beispieldatensatz Orkantief „Ilka“ (Profil 1.33.0) › … | `tests/kern/zeitstrahl.test.ts` (neu) |
 | Nachbearbeitung: Platzhalter, erfundene und fremde Kennungen; Bezug nur auf vorliegende Kennungen, auch geerbte; Zeilen eines Eingangs umhängen | ZS-2026-W44-02 / -03 › … | `tests/pipeline/zeitstrahl.test.ts` (neu) |
 | Fortschreibung: Zeilen der Vormeldung wortgleich, wiederhergestellt, verändert daneben, umnummeriert erkannt; Bewertungszeilen nur von der App | ZS-2026-W44-01, -04: Zeitstrahl der Fortschreibung › … | `tests/pipeline/zeitstrahl.test.ts` (neu) |
+| Kenntniszeit in der Nachbearbeitung: neue Zeilen mit dem Meldezeitpunkt (auch gegen eine Angabe der KI), Zeilen älterer Vormeldungen mit deren Meldezeitpunkt | ZS-2026-W44-05: … | `tests/pipeline/zeitstrahl.test.ts` (neu) |
 | Regeln im Steuerungsblock je Arbeitsmodus, Vorgaben aus der jüngsten eigenen Vormeldung, Position am Ende des Blocks | ZS-2026-W44-01 bis -04: Regeln im Steuerungsblock von S2 › … | `tests/pipeline/zeitstrahl.test.ts` (neu) |
 | Ganzer Lauf: S2 erhält die Regeln, Ergebnis mit Kennung, Zeilen der Vormeldung, neuer Zeile und Bewertungszeile, schemakonform | ZS-2026-W44-01, -04: ganzer Lauf der Fortschreibung › … | `tests/pipeline/zeitstrahl.test.ts` (neu) |
 | Profilprüfung: Präfixe, Typen, Bewertungs- und Berichtigungstyp, Richtwert, Rollen gegen das Schema, Warnung `ZEITSTRAHL_OHNE_KENNUNG`, Vorlage unverändert | Profilformat 1.23: Kennung und Zeitstrahl beim Laden › … | `tests/profil/zeitstrahl-profil.test.ts` (neu) |
-| Maske: Kennung beim Anlegen, „Kennung vergeben“, Zeitstrahl unter dem Quellenverzeichnis, „Zeile anfügen“, „Chronologisch ordnen“, ohne Kennung gesperrt | ZS-2026-W44-02 / -01 › … | `tests/ui/zeitstrahl.test.ts` (neu) |
+| Maske: Kennung beim Anlegen, „Kennung vergeben“, Zeitstrahl unter dem Quellenverzeichnis, „Zeile anfügen“ mit Kenntniszeit, „Chronologisch ordnen“, „Aufnahmezeit ergänzen“, ohne Kennung gesperrt | ZS-2026-W44-02 / -01 › … | `tests/ui/zeitstrahl.test.ts` (neu) |
 
 Angepasst ohne Änderung des Solls: `tests/lagebild/redaktionscheck.test.ts` (der Testfall entfernt den Zeitstrahl der Beispielmeldung, weil er alle Texte selbst setzt), `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.6.0, Verdichtung 2.2).

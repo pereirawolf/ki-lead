@@ -79,7 +79,7 @@
     },
     "zeitstrahl": {
       "type": "string",
-      "description": "Zeitstrahl je Sachverhalt, eine Zeile je eingetretenem, belegtem Ereignis bis zum Meldezeitpunkt: „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]“. Typen und Regeln: Darstellungsdatei („zeitstrahl“) und Kodierleitfaden Abschnitt 8. Optional, seit LEAD-Meldevorlage 1.2."
+      "description": "Zeitstrahl je Sachverhalt, eine Zeile je eingetretenem, belegtem Ereignis bis zum Meldezeitpunkt: „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn] · aufgenommen JJJJ-MM-TTThh:mm“ (Kenntniszeit: Meldezeitpunkt der ersten Meldung mit der Zeile, setzt die App). Typen und Regeln: Darstellungsdatei („zeitstrahl“) und Kodierleitfaden Abschnitt 8. Optional, seit LEAD-Meldevorlage 1.2."
     },
     "sachverhalte": {
       "type": "array",

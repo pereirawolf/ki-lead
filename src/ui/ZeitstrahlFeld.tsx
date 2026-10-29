@@ -8,7 +8,7 @@ import { istKennung } from "../kern/kennung";
 import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { zoneOder } from "../kern/zeit";
-import { naechsteZNr, parseZeitstrahl, zeitstrahlKonfig, zeitstrahlOrdnen, zeitstrahlZeile } from "../kern/zeitstrahl";
+import { aufnahmeErgaenzen, istAufnahmezeit, naechsteZNr, parseZeitstrahl, zeitstrahlKonfig, zeitstrahlOrdnen, zeitstrahlZeile } from "../kern/zeitstrahl";
 import { DatumZeit } from "./DatumZeit";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { FeldFehler } from "./HilfeFeld";
@@ -48,6 +48,9 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
   const [typ, setTyp] = useState(kz.typen[0] ?? "");
   const [zeit, setZeit] = useState(() => jetztLokal(zone, new Date()).slice(0, 10));
   const [text, setText] = useState("");
+  // Kenntniszeit (ZS-2026-W44-05): Meldezeitpunkt dieser Meldung, wenn gesetzt
+  const t0 = meldung && r.meldezeitpunkt ? String(holeWert(meldung, r.meldezeitpunkt) ?? "").slice(0, 16) : "";
+  const aufnahme = istAufnahmezeit(t0) ? t0 : undefined;
   const gewaehlt = sachverhalte.some((s) => s.kennung === kennung) ? kennung : (sachverhalte[0]?.kennung ?? "");
   const typGewaehlt = kz.typen.includes(typ) ? typ : (kz.typen[0] ?? "");
 
@@ -66,6 +69,7 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
     kennung: gewaehlt || "Kennung",
     typ: typGewaehlt,
     text: text.trim() || "Was ist geschehen? [Qn]",
+    aufgenommen: aufnahme,
   });
   const anfuegen = () => {
     const basis = wert.trim() ? wert.replace(/\s+$/, "") + "\n" : "";
@@ -74,6 +78,7 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
     setText("");
   };
   const lesung = parseZeitstrahl(wert);
+  const ohneAufnahme = lesung.eintraege.filter((e) => !e.aufgenommen).length;
   const geordnet = zeitstrahlOrdnen(wert);
   const ungeordnet =
     wert.trim() !== "" &&
@@ -106,11 +111,25 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
         {lesung.eintraege.length} Zeile{lesung.eintraege.length === 1 ? "" : "n"}
         {lesung.ungueltig.length ? `, davon ${lesung.ungueltig.length} nicht in der festen Form` : ""}
         {ungeordnet ? " · nicht zeitlich geordnet" : ""}
+        {ohneAufnahme ? ` · ${ohneAufnahme} ohne Kenntniszeit` : ""}
       </p>
       {hinweis && <p className="hinweis">{hinweis}</p>}
-      <button type="button" className="knopf leise klein" disabled={!ungeordnet} onClick={() => onChange(geordnet)}>
-        Chronologisch ordnen
-      </button>
+      <div className="zeitstrahl-knoepfe">
+        <button type="button" className="knopf leise klein" disabled={!ungeordnet} onClick={() => onChange(geordnet)}>
+          Chronologisch ordnen
+        </button>
+        {ohneAufnahme > 0 && (
+          <button
+            type="button"
+            className="knopf leise klein"
+            disabled={!aufnahme}
+            title={aufnahme ? undefined : "Zuerst den Meldezeitpunkt angeben"}
+            onClick={() => aufnahme && onChange(aufnahmeErgaenzen(wert, aufnahme))}
+          >
+            Aufnahmezeit ergänzen
+          </button>
+        )}
+      </div>
 
       <fieldset className="quellen-baukasten">
         <legend>Neue Zeile zusammenstellen</legend>
@@ -166,6 +185,9 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
         <button type="button" className="knopf" disabled={!gewaehlt || !zeit} onClick={anfuegen}>
           Zeile anfügen
         </button>
+        <p className="hinweis">
+          Die Kenntniszeit („aufgenommen“) ist der Meldezeitpunkt dieser Meldung{aufnahme ? "" : "; er ist noch nicht angegeben"}. Frühere Zeilen behalten ihre.
+        </p>
         {typGewaehlt === kz.typ_bewertung && (
           <p className="hinweis">Bewertungswechsel trägt die App bei der KI-Fortschreibung selbst ein; von Hand nur, wenn ohne KI fortgeschrieben wird.</p>
         )}

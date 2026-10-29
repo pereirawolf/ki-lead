@@ -1,10 +1,11 @@
 // Zeitstrahl je Sachverhalt (seit 0.6.9, ZS-2026-W44-01): ein Textfeld auf Meldungsebene (Rolle „zeitstrahl“) neben
 // dem Quellenverzeichnis, eine Zeile je relevantem Ereignis in fester Form
 //
-//   [Z1] 2026-10-14T06:00 · DE-TH-20261014-K7QM · Warnung – DWD: Unwetterwarnung Stufe 3 für Küstenkreise [Q2]
+//   [Z1] 2026-10-14T06:00 · DE-TH-20261014-K7QM · Warnung – DWD: Unwetterwarnung Stufe 3 für Küstenkreise [Q2] · aufgenommen 2026-10-14T08:00
 //
 // Nummer, Zeitpunkt (Tag oder Tag mit Uhrzeit), Kennung des Sachverhalts (Rolle „sv_kennung“), Typ aus der Liste des
-// Profils und Kurztext mit Quellenverweis. Der Zeitstrahl führt nur eingetretene, belegte Ereignisse bis zum
+// Profils, Kurztext mit Quellenverweis und (seit ZS-2026-W44-05) die Kenntniszeit: Meldezeitpunkt der ersten Meldung
+// der Stelle, in der die Zeile steht. Sie setzt die App und lässt sie danach unverändert. Der Zeitstrahl führt nur eingetretene, belegte Ereignisse bis zum
 // Meldezeitpunkt; Bewertungszeilen setzt die App bei der Fortschreibung selbst. Regeln: Kodierleitfaden des Profils.
 // Diese Datei kennt kein Quellenverzeichnis (kern/quellen.ts liest umgekehrt die Verweise des Zeitstrahls).
 
@@ -24,6 +25,8 @@ export interface ZeitstrahlEintrag {
   kennung: string;
   typ: string;
   text: string;
+  /** Kenntniszeit „JJJJ-MM-TTThh:mm“: Meldezeitpunkt der ersten Meldung, in der die Zeile steht (fehlt bei älteren Zeilen) */
+  aufgenommen?: string;
   /** Zeile wie im Feld (ohne führende und folgende Leerzeichen) */
   zeile: string;
   /** Zeilennummer im Feld, ab 1 */
@@ -39,6 +42,8 @@ export interface ZeitstrahlLesung {
 /** Trennzeichen „·“ (auch „|“), zwischen Typ und Text ein Gedankenstrich (auch „-“ mit Leerzeichen) */
 const ZEILE_RE = /^\[Z(\d{1,4})\]\s+(\S+)\s+[·|]\s+(\S+)\s+[·|]\s+(.+?)\s+[–—-]\s+(.*\S)$/u;
 const ZEIT_RE = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?$/;
+/** Angehängte Kenntniszeit „ · aufgenommen JJJJ-MM-TTThh:mm“ (auch „|“); der Wert wird gesondert geprüft */
+const AUFNAHME_RE = /\s+[·|]\s+aufgenommen\s+(\S+)$/u;
 
 export function zeitstrahlKonfig(ui: UiKonfig): Required<ZeitstrahlKonfig> {
   const z = ui.zeitstrahl || {};
@@ -75,14 +80,36 @@ export function parseZeitstrahl(text: unknown): ZeitstrahlLesung {
         ungueltig.push({ zeilenNr: i + 1, zeile });
         return;
       }
-      eintraege.push({ nr: Number(m[1]), zeit: m[2]!, kennung: m[3]!, typ: m[4]!.trim(), text: m[5]!, zeile, zeilenNr: i + 1 });
+      const a = m[5]!.match(AUFNAHME_RE);
+      const text = a ? m[5]!.slice(0, a.index).trim() : m[5]!;
+      eintraege.push({ nr: Number(m[1]), zeit: m[2]!, kennung: m[3]!, typ: m[4]!.trim(), text, ...(a ? { aufgenommen: a[1]! } : {}), zeile, zeilenNr: i + 1 });
     });
   return { eintraege, ungueltig };
 }
 
 /** Zeile in der festen Form */
-export function zeitstrahlZeile(e: Pick<ZeitstrahlEintrag, "nr" | "zeit" | "kennung" | "typ" | "text">): string {
-  return `[Z${e.nr}] ${e.zeit} · ${e.kennung} · ${e.typ} – ${e.text}`;
+export function zeitstrahlZeile(e: Pick<ZeitstrahlEintrag, "nr" | "zeit" | "kennung" | "typ" | "text" | "aufgenommen">): string {
+  return `[Z${e.nr}] ${e.zeit} · ${e.kennung} · ${e.typ} – ${e.text}${e.aufgenommen ? ` · aufgenommen ${e.aufgenommen}` : ""}`;
+}
+
+/** Gültige Kenntniszeit: Tag mit Uhrzeit (der Meldezeitpunkt einer Meldung) */
+export function istAufnahmezeit(z: string): boolean {
+  return /T\d{2}:\d{2}$/.test(z) && istZeitstrahlZeit(z);
+}
+
+/**
+ * Fehlende Kenntniszeiten mit dem Meldezeitpunkt ergänzen (Maske, „Aufnahmezeit ergänzen“); vorhandene bleiben. Zeilen
+ * außerhalb der Form und die Reihenfolge bleiben unverändert.
+ */
+export function aufnahmeErgaenzen(text: unknown, meldezeitpunkt: string): string {
+  if (!istAufnahmezeit(meldezeitpunkt)) return String(text ?? "");
+  return String(text ?? "")
+    .split(/\r?\n/)
+    .map((roh) => {
+      const e = parseZeitstrahl(roh).eintraege[0];
+      return e && !e.aufgenommen ? zeitstrahlZeile({ ...e, aufgenommen: meldezeitpunkt }) : roh;
+    })
+    .join("\n");
 }
 
 /** Chronologisch (Zeitpunkt, bei Gleichstand Nummer); ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags */
@@ -117,7 +144,7 @@ export function zeitstrahlZeitDE(zeit: string): string {
 
 /** Lesbare Zeile ohne Kennung für Ausgaben je Sachverhalt: „[Z1] 14.10.2026 06:00 · Warnung – …“ */
 export function zeitstrahlAnzeige(e: ZeitstrahlEintrag): string {
-  return `[Z${e.nr}] ${zeitstrahlZeitDE(e.zeit)} · ${e.typ} – ${e.text}`;
+  return `[Z${e.nr}] ${zeitstrahlZeitDE(e.zeit)} · ${e.typ} – ${e.text}${e.aufgenommen ? ` (aufgenommen ${zeitstrahlZeitDE(e.aufgenommen)})` : ""}`;
 }
 
 /** Text des Zeitstrahls einer Meldung (leer ohne Rolle) */
@@ -175,7 +202,7 @@ export function zeitstrahlHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     out.push({
       stufe: "warnung",
       code: "ZEITSTRAHL_FORMAT",
-      text: `Zeile ${u.zeilenNr} hat nicht die Form „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Text [Qn]“: „${u.zeile.slice(0, 80)}${u.zeile.length > 80 ? " …" : ""}“.`,
+      text: `Zeile ${u.zeilenNr} hat nicht die Form „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Text [Qn] · aufgenommen JJJJ-MM-TTThh:mm“: „${u.zeile.slice(0, 80)}${u.zeile.length > 80 ? " …" : ""}“.`,
     });
   if (ungueltig.length > 5)
     out.push({ stufe: "warnung", code: "ZEITSTRAHL_FORMAT", text: `${ungueltig.length - 5} weitere Zeilen haben nicht die feste Form.` });
@@ -183,6 +210,7 @@ export function zeitstrahlHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   const t0 = r.meldezeitpunkt ? String(holeWert(d, r.meldezeitpunkt) ?? "") : "";
   const nummern = new Map<number, number>();
   const jeKennung = new Map<string, number>();
+  const ohneAufnahme: number[] = [];
   for (const e of eintraege) {
     nummern.set(e.nr, (nummern.get(e.nr) || 0) + 1);
     const z = `[Z${e.nr}]`;
@@ -194,6 +222,15 @@ export function zeitstrahlHinweise(d: Meldung, ui: UiKonfig): Befund[] {
         code: "ZEITSTRAHL_NACH_T0",
         text: `${z} liegt nach dem Meldezeitpunkt. Der Zeitstrahl führt nur eingetretene Ereignisse; Erwartetes gehört in „Risiken & Auswirkungen“ und „Neubewertung bei:“.`,
       });
+    // Kenntniszeit (ZS-2026-W44-05): gültig, nicht nach t0, nicht vor dem Ereignis
+    if (e.aufgenommen !== undefined) {
+      if (!istAufnahmezeit(e.aufgenommen))
+        out.push({ stufe: "warnung", code: "ZEITSTRAHL_AUFNAHME", text: `${z}: Kenntniszeit „${e.aufgenommen}“ ist kein Zeitpunkt (JJJJ-MM-TTThh:mm).` });
+      else if (t0 && e.aufgenommen > t0)
+        out.push({ stufe: "warnung", code: "ZEITSTRAHL_AUFNAHME", text: `${z}: aufgenommen nach dem Meldezeitpunkt dieser Meldung.` });
+      else if (istZeitstrahlZeit(e.zeit) && (e.zeit.length > 10 ? e.zeit > e.aufgenommen : e.zeit > e.aufgenommen.slice(0, 10)))
+        out.push({ stufe: "warnung", code: "ZEITSTRAHL_AUFNAHME", text: `${z}: aufgenommen vor dem Zeitpunkt des Ereignisses.` });
+    } else ohneAufnahme.push(e.nr);
     if (!istKennung(e.kennung))
       out.push({ stufe: "warnung", code: "ZEITSTRAHL_KENNUNG_UNBEKANNT", text: `${z}: „${e.kennung}“ ist keine Sachverhaltskennung.` });
     else if (r.sv_kennung && !kennungen.has(e.kennung))
@@ -213,6 +250,15 @@ export function zeitstrahlHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     }
     jeKennung.set(e.kennung, (jeKennung.get(e.kennung) || 0) + 1);
   }
+  if (ohneAufnahme.length)
+    out.push({
+      stufe: "hinweis",
+      code: "ZEITSTRAHL_OHNE_AUFNAHME",
+      text: `Ohne Kenntniszeit: ${ohneAufnahme
+        .slice(0, 8)
+        .map((n) => `[Z${n}]`)
+        .join(", ")}${ohneAufnahme.length > 8 ? " …" : ""}. Sie ist der Meldezeitpunkt der ersten Meldung mit der Zeile („Aufnahmezeit ergänzen“).`,
+    });
   for (const [nr, n] of nummern) if (n > 1) out.push({ stufe: "warnung", code: "ZEITSTRAHL_NUMMER_DOPPELT", text: `[Z${nr}] ist mehrfach vergeben.` });
   const geordnet = chronologisch(eintraege);
   if (geordnet.some((e, i) => e !== eintraege[i]))

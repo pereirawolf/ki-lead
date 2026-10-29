@@ -92,7 +92,9 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     expect([...sachverhalt.options].map((o) => o.value)).toEqual(["DE-20261014-7QKD"]);
     await klick("Zeile anfügen", bereich);
     await bisWahr(() => String(stand.zeitstrahl).split("\n").length === 9);
-    expect(String(stand.zeitstrahl).split("\n").at(-1)).toMatch(/^\[Z9\] \d{4}-\d{2}-\d{2} · DE-20261014-7QKD · Ereignis – Was ist geschehen\? \[Qn\]$/);
+    expect(String(stand.zeitstrahl).split("\n").at(-1)).toMatch(
+      /^\[Z9\] \d{4}-\d{2}-\d{2} · DE-20261014-7QKD · Ereignis – Was ist geschehen\? \[Qn\] · aufgenommen 2026-10-14T14:00$/,
+    );
   });
 
   it("ungeordnete Zeilen: Hinweis und „Chronologisch ordnen“ ordnet", async () => {
@@ -105,6 +107,19 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     await klick("Chronologisch ordnen", bereich);
     await bisWahr(() => String(stand.zeitstrahl).startsWith("[Z1]"));
     expect(stand.zeitstrahl).toBe(ilkaMeldung("Bund").zeitstrahl);
+  });
+
+  it("ZS-2026-W44-05: Zeilen ohne Kenntniszeit werden gezählt, „Aufnahmezeit ergänzen“ setzt den Meldezeitpunkt", async () => {
+    const m = ilkaMeldung("Bund");
+    m.zeitstrahl = m.zeitstrahl.replace(/ · aufgenommen \S+/g, "");
+    await zeige(m);
+    await schritt(/Quellen & Referenzen/);
+    const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
+    expect(bereich.textContent).toContain("8 ohne Kenntniszeit");
+    await klick("Aufnahmezeit ergänzen", bereich);
+    await bisWahr(() => String(stand.zeitstrahl).includes("aufgenommen"));
+    expect(stand.zeitstrahl).toBe(ilkaMeldung("Bund").zeitstrahl);
+    expect(knopf("Aufnahmezeit ergänzen", bereich)).toBeUndefined();
   });
 
   it("ohne Sachverhalt mit Kennung: Hinweis statt Auswahl, „Zeile anfügen“ gesperrt", async () => {

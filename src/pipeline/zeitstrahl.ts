@@ -50,7 +50,8 @@ function setze(obj: any, pfad: string, wert: unknown): void {
 
 const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 /** Inhalt einer Zeile ohne Nummer, zum Wiedererkennen umnummerierter Zeilen */
-const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0 }));
+/** Inhalt ohne Nummer und ohne Kenntniszeit (die setzt die App) */
+const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0, aufgenommen: undefined }));
 
 export interface ZeitstrahlUmgebung {
   material: Material[];
@@ -287,8 +288,20 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
   }
 
   // Zeilen der Vormeldung wortgleich, alle übrigen in der festen Form
+  // Kenntniszeit (ZS-2026-W44-05): Zeilen der Vormeldung behalten ihre, ältere ohne Angabe erhalten den Meldezeitpunkt der
+  // Vormeldung; alle übrigen den Meldezeitpunkt dieser Meldung (eine Angabe der KI zählt nicht)
+  const vorT0 = vor && r.meldezeitpunkt ? String(holeWert(vor, r.meldezeitpunkt) ?? "").slice(0, 16) : "";
+  const gueltig = (z: string) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(z);
   const ausVormeldung = new Set(behalten);
+  for (const e of behalten) if (!e.aufgenommen && gueltig(vorT0)) e.aufgenommen = vorT0;
+  for (const e of [...zusatz, ...bewertung]) {
+    if (gueltig(t0)) e.aufgenommen = t0;
+    else delete e.aufgenommen;
+  }
   const alle = chronologisch([...behalten, ...zusatz, ...bewertung]);
-  const zeilen = [...alle.map((e) => (ausVormeldung.has(e) ? e.zeile : zeitstrahlZeile(e))), ...ungueltig.map((x) => x.zeile)];
+  const zeilen = [
+    ...alle.map((e) => (ausVormeldung.has(e) && parseZeitstrahl(e.zeile).eintraege[0]?.aufgenommen ? e.zeile : zeitstrahlZeile(e))),
+    ...ungueltig.map((x) => x.zeile),
+  ];
   if (roh !== undefined || zeilen.length) setze(d, r.zeitstrahl, zeilen.join("\n"));
 }

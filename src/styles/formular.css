@@ -779,8 +779,7 @@ textarea[aria-invalid="true"] {
   font-size: 0.88rem;
 }
 
-.quellen-baukasten > .knopf,
-.feld-zeitstrahl > .knopf {
+.quellen-baukasten > .knopf {
   align-self: flex-start;
 }
 
@@ -791,6 +790,12 @@ textarea[aria-invalid="true"] {
 
 .zeitstrahl-text {
   min-height: 9rem;
+}
+
+.zeitstrahl-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
 }
 
 /* ── LEAD-Eingabehilfen (Analysefelder, Bewertungstext) ── */

@@ -67,8 +67,8 @@ describe("ZS-2026-W44-02: Kennungen vergibt nur die App", () => {
     expect(d.sachverhalte[1].bezug).toEqual(["DE-TH-20261022-ABCD"]);
     // chronologisch geordnet und mit den vergebenen Kennungen
     expect(zeilen(d)).toEqual([
-      "[Z2] 2026-10-13T21:00 · DE-TH-20261022-ABCD · Maßnahme – A 71 gesperrt [Q8]",
-      "[Z1] 2026-10-13T22:30 · DE-TH-20261022-BCDE · Ereignis – Höchststand 18.000 Anschlüsse [Q4]",
+      "[Z2] 2026-10-13T21:00 · DE-TH-20261022-ABCD · Maßnahme – A 71 gesperrt [Q8] · aufgenommen 2026-10-14T10:30",
+      "[Z1] 2026-10-13T22:30 · DE-TH-20261022-BCDE · Ereignis – Höchststand 18.000 Anschlüsse [Q4] · aufgenommen 2026-10-14T10:30",
     ]);
     expect(b).toEqual([]);
   });
@@ -99,7 +99,7 @@ describe("ZS-2026-W44-02: Kennungen vergibt nur die App", () => {
     const b = nachbearbeiten(d, [mat("eingang", he, "he.json")]);
     expect(d.sachverhalte[0].kennung).toBe("DE-20261022-ABCD");
     expect(d.sachverhalte[0].bezug).toEqual(["DE-HE-20261014-6RWA"]);
-    expect(zeilen(d)).toEqual(["[Z1] 2026-10-14T06:00 · DE-20261022-ABCD · Wiederherstellung – Schnellfahrstrecke frei [Q3]"]);
+    expect(zeilen(d)).toEqual(["[Z1] 2026-10-14T06:00 · DE-20261022-ABCD · Wiederherstellung – Schnellfahrstrecke frei [Q3] · aufgenommen 2026-10-14T14:00"]);
     expect(b.map((x) => x.code)).toEqual(["KENNUNG_FREMD"]);
   });
 });
@@ -114,7 +114,7 @@ describe("ZS-2026-W44-03: Bezug nur auf vorliegende Kennungen", () => {
     d.zeitstrahl = "[Z1] 2026-10-14T05:00 · DE-NI-20261014-3HXA · Wendepunkt – Oberharz: Ausfall steigt wieder [Q4]";
     const b = nachbearbeiten(d, [mat("eingang", he, "he.json"), mat("eingang", ni, "ni.json")]);
     expect(d.sachverhalte[0].bezug).toEqual(["DE-HE-20261014-6RWA", "DE-NI-20261014-3HXA"]);
-    expect(zeilen(d)).toEqual(["[Z1] 2026-10-14T05:00 · DE-20261022-ABCD · Wendepunkt – Oberharz: Ausfall steigt wieder [Q4]"]);
+    expect(zeilen(d)).toEqual(["[Z1] 2026-10-14T05:00 · DE-20261022-ABCD · Wendepunkt – Oberharz: Ausfall steigt wieder [Q4] · aufgenommen 2026-10-14T14:00"]);
     expect(b.map((x) => x.code)).toEqual(["BEZUG_UNBEKANNT", "ZEITSTRAHL_UMGEHAENGT"]);
     expect(b[0]!.text).toContain("„DE-BY-20261014-AAAA“");
   });
@@ -144,7 +144,7 @@ describe("ZS-2026-W44-01, -04: Zeitstrahl der Fortschreibung", () => {
     expect(nachbearbeiten(d, [mat("meldung", vormeldung())])).toEqual([]);
     expect(zeilen(d)).toEqual([
       ...vormeldung().zeitstrahl.split("\n"),
-      `[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Stromversorgung im Landkreis Sonneberg wiederhergestellt [Q5]`,
+      `[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Stromversorgung im Landkreis Sonneberg wiederhergestellt [Q5] · aufgenommen 2026-10-22T06:06`,
     ]);
   });
 
@@ -159,7 +159,9 @@ describe("ZS-2026-W44-01, -04: Zeitstrahl der Fortschreibung", () => {
     const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
     const neu = zeilen(d);
     expect(neu.filter((z) => alt.includes(z))).toEqual(alt);
-    expect(neu.filter((z) => !alt.includes(z))).toEqual([alt[2]!.replace("[Z3]", "[Z9]").replace("rund 64.000", "rund 65.000")]);
+    expect(neu.filter((z) => !alt.includes(z))).toEqual([
+      alt[2]!.replace("[Z3]", "[Z9]").replace("rund 64.000", "rund 65.000").replace("aufgenommen 2026-10-14T14:00", "aufgenommen 2026-10-22T06:06"),
+    ]);
     expect(b.map((x) => x.code)).toEqual(["ZEITSTRAHL_VORMELDUNG"]);
     expect(b[0]!.text).toContain("Wiederhergestellt: [Z2].");
     expect(b[0]!.text).toContain("Verändert übernommen: [Z3]");
@@ -183,7 +185,9 @@ describe("ZS-2026-W44-01, -04: Zeitstrahl der Fortschreibung", () => {
     d.zeitstrahl += `\n[Z9] 2026-10-22T06:00 · ${BUND} · Bewertung – von der KI geschrieben`;
     const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
     // Vormeldung: erheblich / Entspannung; Zeile zum Meldezeitpunkt 22.10.2026 06:06 mit der nächsten freien Nummer
-    expect(zeilen(d).at(-1)).toBe(`[Z10] 2026-10-22T06:06 · ${BUND} · Bewertung – Beurteilung erheblich → geringfügig; Tendenz Entspannung → Stabilisierung`);
+    expect(zeilen(d).at(-1)).toBe(
+      `[Z10] 2026-10-22T06:06 · ${BUND} · Bewertung – Beurteilung erheblich → geringfügig; Tendenz Entspannung → Stabilisierung · aufgenommen 2026-10-22T06:06`,
+    );
     expect(zeilen(d).some((z) => z.includes("von der KI geschrieben"))).toBe(false);
     expect(b.map((x) => x.code)).toEqual(["ZEITSTRAHL_BEWERTUNG_KI", "ZEITSTRAHL_BEWERTUNG"]);
   });
@@ -196,6 +200,23 @@ describe("ZS-2026-W44-01, -04: Zeitstrahl der Fortschreibung", () => {
     e.sachverhalte[0].sofort.tendenz = "";
     nachbearbeiten(e, [mat("meldung", vormeldung())]);
     expect(zeilen(e).at(-1)).toContain("Bewertung – Tendenz Entspannung → keine Angabe");
+  });
+
+  it("ZS-2026-W44-05: neue Zeilen erhalten den Meldezeitpunkt als Kenntniszeit, auch gegen eine Angabe der KI", () => {
+    const d = entwurf();
+    d.zeitstrahl += `\n[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Strom wieder da [Q5] · aufgenommen 2026-10-21T18:00`;
+    nachbearbeiten(d, [mat("meldung", vormeldung())]);
+    expect(zeilen(d).at(-1)).toBe(`[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Strom wieder da [Q5] · aufgenommen 2026-10-22T06:06`);
+  });
+
+  it("ZS-2026-W44-05: Zeilen einer älteren Vormeldung ohne Kenntniszeit erhalten deren Meldezeitpunkt; die KI muss sie nicht nennen", () => {
+    const vor = vormeldung();
+    vor.zeitstrahl = vor.zeitstrahl.replace(/ · aufgenommen \S+/g, "");
+    const d = entwurf();
+    d.zeitstrahl = vor.zeitstrahl;
+    expect(nachbearbeiten(d, [mat("meldung", vor)])).toEqual([]);
+    expect(zeilen(d)).toHaveLength(8);
+    expect(zeilen(d).every((z) => z.endsWith(" · aufgenommen 2026-10-21T19:40"))).toBe(true);
   });
 
   it("Zeilen außerhalb der Form bleiben am Ende stehen (der Prüfschritt meldet sie)", () => {
@@ -217,6 +238,7 @@ describe("ZS-2026-W44-01 bis -04: Regeln im Steuerungsblock von S2", () => {
     expect(t).toContain("neue Zeilen beginnen bei [Z9]");
     expect(t).toContain("Zeile vom Typ „Berichtigung“");
     expect(t).toContain("Zeilen vom Typ „Bewertung“ schreibst du nicht");
+    expect(t).toContain("bei Zeilen der Vormeldung übernimmst du sie unverändert, neuen Zeilen gibst du keine");
     expect(t).toContain("Teilung");
     expect(t).not.toContain("Eingangsmeldungen");
   });
@@ -226,6 +248,7 @@ describe("ZS-2026-W44-01 bis -04: Regeln im Steuerungsblock von S2", () => {
     expect(t).toContain("Kennungen der Sachverhalte aus den Eingangsmeldungen");
     expect(t).toContain("nur Wendepunkte für den eigenen Referenzraum");
     expect(t).not.toContain("Übernimm die Zeilen der Vormeldung");
+    expect(t).toContain("Kenntniszeit „· aufgenommen …“ am Zeilenende setzt die App; du schreibst sie nicht.");
     expect(t).not.toContain("Kennung der Vormeldung unverändert");
   });
 
@@ -291,8 +314,8 @@ describe("ZS-2026-W44-01, -04: ganzer Lauf der Fortschreibung", () => {
     const z = String(m.zeitstrahl).split("\n");
     expect(z.slice(0, 8)).toEqual(vor.zeitstrahl.split("\n"));
     expect(z.slice(8)).toEqual([
-      `[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Stromversorgung im Landkreis Sonneberg wiederhergestellt [Q5]`,
-      `[Z10] ${m.meldezeitpunkt} · ${BUND} · Bewertung – Tendenz Entspannung → Stabilisierung`,
+      `[Z9] 2026-10-21T18:00 · ${BUND} · Wiederherstellung – Stromversorgung im Landkreis Sonneberg wiederhergestellt [Q5] · aufgenommen ${m.meldezeitpunkt}`,
+      `[Z10] ${m.meldezeitpunkt} · ${BUND} · Bewertung – Tendenz Entspannung → Stabilisierung · aufgenommen ${m.meldezeitpunkt}`,
     ]);
     const codes = k.lauf.ergebnis!.befunde.map((b) => b.code);
     expect(codes).toContain("ZEITSTRAHL_BEWERTUNG");
