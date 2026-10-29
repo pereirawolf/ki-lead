@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 0.6.1 – 27.10.2026
+
+Anlass: Befund TP-2026-W44-31 der technischen Prüfung, vom Herausgeber am 26.10.2026 mit Maßgabe freigegeben.
+
+- Arbeitsanweisung Erfassung 0.5.2: Abschnitt „Auftrag“ ohne `{{auftrag.*}}` und `{{jetzt}}`; Auftragsangaben und Bearbeitungszeitpunkt setzt die App im Steuerungsblock, laufabhängige Aussagen gehören dorthin. Die Anweisung bleibt damit unverändert je Lauf und wird gecacht. Die Platzhalter gelten für eigene Fassungen weiter, werden aber nicht mehr empfohlen (docs/PROFILFORMAT.md). Gültigkeitsstand in Teil A fortgeschrieben.
+
 ## 0.6.0 – 27.10.2026
 
 Anlass: Befund TP-2026-W44-27 der technischen Prüfung, vom Herausgeber am 26.10.2026 freigegeben (Kennsatz-Schlüssel verbindlich).

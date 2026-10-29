@@ -1,10 +1,10 @@
 # Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
 
-Beispielfassung für KI-LEAD · Fassung 1.4.0 vom 24.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 2.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.2 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
+Beispielfassung für KI-LEAD · Fassung 1.5.0 vom 27.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.19.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.6.0 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
-Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Quellenregeln aus Teil A.3. Er legt die Auslegung der Achsen D1–D8 und die Quellenkategorien A/B/W/M/P fest. Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
+Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grundregeln, Stufentexte, Achsenregeln D1–D8, Bewertung und Tendenz), für die Quellenkategorien A/B/W/M/P mit Zuordnung und Priorität und für die Rangfolge bei Widersprüchen. SOP-LEAD Teil A (A.2, A.3), die Darstellungsdatei und die Arbeitsanweisungen verweisen verbindlich darauf und wiederholen die Regeln nicht (SOP-LEAD A.10.2). Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
-**Rangfolge bei Widersprüchen:** (1) Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
+**Rangfolge bei Widersprüchen** (einzige Fassung; SOP-LEAD Teil A und die Arbeitsanweisungen verweisen hierauf): (1) JSON-Schema der Meldung (Struktur, zulässige Werte, Leerwerte) und Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
 ---
 
@@ -15,7 +15,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 3. **Höhere Zahl = stärkere, bedeutsamere oder ungünstigere Ausprägung.** Die Bedeutung einer Stufe ergibt sich ausschließlich aus dem Stufentext (Abschnitt 2).
 4. **Stufe 0 ist eine inhaltliche Aussage, kein Leerwert.** Sie braucht einen Beleg wie jede andere Stufe.
 5. **Offen statt geschätzt.** Fehlt ein Bezugsgegenstand oder ein tragfähiger Beleg, bleibt die Achse offen: in der Eingabemaske „keine Angabe“, im JSON `null`. Ein selbst erfundener Code wie „U“ ist unzulässig. Offen ist eine Information, keine Lücke.
-6. **Keine unbelegte Präzision.** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere Stufe nicht vollständig, gilt die niedrigere, und die Grenze wird im Bewertungstext benannt. Das ist keine Vorsichtsregel: Eine Stufe ist nicht deshalb richtig, weil sie niedriger ist. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb einer Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen und die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt.
+6. **Keine unbelegte Präzision.** Messwert, Schätzung, Bandbreite und bestätigte Mindestzahl werden gekennzeichnet. Maßgeblich ist die Stufe, deren Stufentext der Beleg vollständig trägt; trägt er die höhere Stufe nicht vollständig, gilt die niedrigere, und die Grenze wird im Bewertungstext benannt. Das ist keine Vorsichtsregel: Eine Stufe ist nicht deshalb richtig, weil sie niedriger ist. Bildet die Skala eine Achse nur unvollkommen ab, wird das im Bewertungstext erklärt, statt eine bequeme, aber sachlich falsche Stufe zu setzen. Liegt die gesamte tragfähige Bandbreite einer Schätzung innerhalb einer Stufe, ist diese Stufe mit Unsicherheitshinweis möglich. Schneidet die Bandbreite mehrere Stufen, bleibt die Achse offen und die Bandbreite steht im Text. **Mindestkodierung:** Eine bestätigte (gezählte oder amtlich gemeldete) Mindestzahl darf kodiert werden, wenn der Bewertungstext sie als Mindestwert kennzeichnet („D2 = 3 (Mindestwert): mindestens …“); sie wird nicht als vollständige Zahl dargestellt.
 7. **Keine Zukunft im Ist-Wert – mit einer definierten Ausnahme.** Erwartete Entwicklungen gehören in „Risiken & Auswirkungen“ und in den Kennsatz `Neubewertung bei:`, nicht in die Radarwerte. Ausnahme ist D5: Es kodiert die zu t0 fachlich prognostizierte Restdauer bis zum benannten Zielzustand (Abschnitt 3, D5).
 8. **Kein Gesamtscore.** Keine Summe, kein Mittelwert, keine Rangfolge zwischen Sachverhalten. Die Divergenz zwischen den Achsen ist der Erkenntnisgewinn.
 9. **Begründungsmuster.** Jeder gesetzte Wert wird im Bewertungstext oder in den Analysefeldern so begründet:
@@ -111,14 +111,14 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 - **Kodierfrage:** Welche Kopplungen zu kritischen Infrastrukturen sind in der konkreten Lage zu t0 belegt?
 - Kodiert wird nach **belegten Kopplungen**, nicht nach Sektorzugehörigkeit oder Listen denkbarer Folgen. Die KRITIS-Prüfung ist Pflicht bei jeder Meldung.
-- **Wirkungskette:** Bei einer bewertungsrelevanten Folgekette die entscheidende Verbindung benennen: beeinträchtigte Funktion → Abhängigkeit → Bedingung → betroffener Bereich, mit Puffer und Reichweite (Notstrom, Vorräte, Speicher, Personal, Ausweichweg). Mögliche Folgeschritte als **Szenario** kennzeichnen. Sie ändern den Ist-Wert nicht.
+- **Wirkungskette:** Bei einer bewertungsrelevanten Folgekette im Feld „Abhängigkeiten & Interdependenzen“ die entscheidende Verbindung benennen: beeinträchtigte Funktion → Abhängigkeit → Bedingung → betroffener Bereich, mit Puffer und Reichweite (Notstrom, Vorräte, Speicher, Personal, Ausweichweg). Mögliche Folgeschritte als **Szenario** kennzeichnen. Sie ändern den Ist-Wert nicht.
 - **Stufe 0** („keine KRITIS-Bezüge“) nur, wenn die Prüfung durchgeführt wurde und keine Kopplung ergab.
 - D6 steigt nicht allein mit der vergangenen Ausfalldauer.
 - Ausfälle der **Kommunikation mit der Bevölkerung** (Mobilfunk, Warnmittel) gehören als Kopplung hierher und in den Text, nicht zu D7.
 
 ### D7 Kommunikation / Informationslage
 
-- **Kodierfrage:** Wie verfügbar, verlässlich und widerspruchsfrei ist die **Lageinformation der Befassung** zu t0?
+- **Kodierfrage:** Wie verfügbar, verlässlich, aktuell und widerspruchsfrei ist die **Lageinformation der Befassung** zu t0? Aktualität wird am Lageverlauf und am Entscheidungsfenster gemessen, nicht an einer festen Frist (SOP-LEAD A.3, Zeitbezug einer Zahl).
 - **Festlegung:** D7 bewertet ausschließlich die Informationslage der befassten Stellen, also ob zuständige Stellen und Primärquellen zentrale Lagefragen beantworten. Die Kommunikationslage der Bevölkerung wird in „Risiken & Auswirkungen“ und bei D6 dargestellt.
 - **Erhöhte Stufe**, wenn für zentrale Fragen keine recherchierbaren Primärquellen bestehen, zuständige Stellen widersprüchlich oder verzögert informieren, Meldewege gestört sind oder fachlich erhebliche Lücken bzw. Widersprüche zu Leistungsgrad, Integrität, Stoffidentität oder Wiederanlauf bestehen, soweit sie die Befassung tatsächlich betreffen. Ein technischer Kommunikationsausfall ist keine Voraussetzung. Fehlende Veröffentlichungen sind nicht automatisch ein Kommunikationsausfall; bleiben zentrale Bevölkerungsschutzfragen tatsächlich ungeklärt, wird die Lücke nach ihrer Entscheidungsrelevanz abgebildet.
 - **Keine erhöhte Stufe** wegen eigener Recherchegrenzen in der verfügbaren Zeit oder wegen unterschiedlicher Bewertungen derselben Informationen (SOP-LEAD A.7.2).
@@ -138,7 +138,7 @@ Dieser Leitfaden konkretisiert die Kodierregeln aus SOP-LEAD Teil A.2 und die Qu
 
 ## 4. Bewertung und Tendenz
 
-- **Bewertung** (`geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet, nicht aus dem höchsten Radarwert. Jede Stufe, auch „geringfügig“, braucht eine fachliche Begründung. Ist keine Stufe tragfähig: „keine Angabe“ (`""`).
+- **Bewertung** (`geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet, nicht aus dem höchsten Radarwert. Jede Stufe, auch „geringfügig“, braucht eine fachliche Begründung. Die Bewertung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig. Ist keine Stufe tragfähig: „keine Angabe“ (`""`).
 - **Tendenz** (`Entspannung` / `Stabilisierung` / `Verschärfung`) wird mit ausdrücklich benanntem Bezugsraum und Zeitfenster begründet. Fehlende neue Erkenntnisse sind kein Beleg für Stabilisierung. Divergieren deutsche Lage und ausländischer Frühwarntreiber, wird das im Text erläutert, nicht in die Auswahl gezwungen.
 - Der **Bewertungstext** beginnt mit der Kernaussage (SOP-LEAD A.4) und schließt mit den Kennsätzen, soweit sie vorliegen.
 
@@ -150,10 +150,10 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 
 | Kategorie | Bedeutung | Beispiele |
 |---|---|---|
-| **A** | amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle | Bundes-, Landes- und Kommunalbehörden, Bundesoberbehörden, EU, WHO, ECDC; behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes); authentische Behördenkonten in sozialen Medien |
+| **A** | amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle | Bundes-, Landes- und Kommunalbehörden, Bundesoberbehörden, EU, WHO, ECDC; behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes, Lagebericht des GMLZ); authentische Behördenkonten in sozialen Medien |
 | **B** | Betreiber – originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft | Netzbetreiber, Wasserversorger, Stadtwerke, Verkehrs- und Infrastrukturunternehmen, Krankenhausträger; Hilfsorganisation zu ihrer selbst betriebenen Einrichtung; authentische Betreiberkonten in sozialen Medien |
 | **W** | wissenschaftlich – in fachwissenschaftlicher Rolle | Forschungseinrichtungen, begutachtete Fachpublikationen, wissenschaftliche Datensätze; Preprints mit Kennzeichnung „Preprint“ |
-| **M** | Medien | redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen; auch Berichte mit Betreiber- oder Behördenzitat |
+| **M** | Medien (bis zur Arbeitsfassung v0.3: „J“) | redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen; auch Berichte mit Betreiber- oder Behördenzitat |
 | **P** | sonstige private Quellen | Verbände, NGOs, persönliche Angaben, Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; allgemeine Positionen von Hilfsorganisationen; Beiträge in sozialen Medien ungeklärter Identität |
 
 **Quellenpriorität:** A > B > W > M > P. Bei Widersprüchen zu demselben Sachverhalt gilt die Priorität. Vor dem Vergleich werden Zeitstand, räumlicher Bezug, unmittelbare Sachkenntnis und fachliche Zuständigkeit geprüft. Eine begründete Abweichung wegen einschlägigerer oder aktuellerer Erkenntnisse wird ausdrücklich dokumentiert; beide Quellen werden genannt.
@@ -162,12 +162,12 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 
 **Zuordnungsregeln:**
 
-- Die konkrete Rolle entscheidet, nicht Eigentumsform oder Veröffentlichungskanal. Eine kommunale Betreiber-Störungsmeldung ist B, eine behördliche Anordnung A.
+- Die konkrete Rolle entscheidet, nicht Eigentumsform, Veröffentlichungskanal, Dateiformat oder Bearbeitungsmodus. Eine kommunale Betreiber-Störungsmeldung ist B, eine behördliche Anordnung A.
 - Eine Hilfsorganisation ist bei Angaben über ihre selbst betriebene Einrichtung B; eine allgemeine Verbandsposition bleibt P.
 - Ein authentischer Behördenbeitrag in sozialen Medien bleibt A, ein Betreiberbeitrag B. Ungeklärte Identität und ungeklärter Aussagegehalt werden ausdrücklich vermerkt.
 - Ein Medienbericht mit Betreiberzitat bleibt M; der Betreiber wird im Text als Ursprungsquelle genannt. Erst eine tatsächlich eingesehene Betreiberveröffentlichung erhält einen eigenen B-Eintrag.
 - Bei gemischten Rollen werden die verwendete Aussage und ihre Herkunft gekennzeichnet. Mehrere Auszüge desselben Dokuments sind nicht voneinander unabhängig.
-- Bestehende Einträge der Kategorie P werden nicht automatisch zu B umgestuft, sondern einzeln geprüft.
+- Bestehende Quelleneinträge werden nicht automatisch umgestuft (etwa von P zu B), sondern einzeln geprüft.
 
 **Ungeklärte Widersprüche** bleiben mit beiden Werten und Quellen sichtbar und werden nicht festgelegt.
 
@@ -179,9 +179,11 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 | Gesundheitsamt: Abkochgebot gilt weiterhin | A | Geltungsbereich und aktuelle Fassung prüfen; die technische Reparatur hebt die Anordnung nicht auf. |
 | Zeitung berichtet über denselben Stadtwerke-Stand | M | keine zweite unabhängige Bestätigung des Wiederherstellungsstands. |
 
+**Aussagekompetenz:** Jede Quelle trägt Aussagen nur in ihrer Rolle: Eine Behörde ist primär für ihre Lageeinschätzung maßgeblich, ein Betreiber für den eigenen Betriebs- und Wiederherstellungsstand, eine Studie für ihre Daten, eine Hilfsorganisation für ihre eigenen Tätigkeiten.
+
 **Unabhängigkeit:** Die Kategorie allein beweist keine Aussage. Mehrere Übernahmen oder Weiterverbreitungen derselben Ursprungsangabe sind keine unabhängigen Bestätigungen; unterschiedliche Kategorien sind kein Unabhängigkeitsnachweis. Die Kernaussage stützt sich nach Möglichkeit auf voneinander unabhängige Ursprungsquellen; ein einzelner zuständiger Primärbeleg kann tragfähig sein, wenn er die Aussage unmittelbar trägt. Fehlt eine unabhängige Bestätigung, wird das offen benannt.
 
-**Bestätigungsgrad:** Unabhängig von der Kategorie wird für zentrale Aussagen angegeben, ob sie *bestätigt*, *vorläufige Eigenangabe*, *indirekt berichtet* oder *widersprüchlich* sind (SOP-LEAD A.3).
+**Bestätigungsgrad:** Kategorie (Herkunft) und Bestätigungsgrad sind getrennt; den Bestätigungsgrad zentraler Aussagen regelt SOP-LEAD A.3.
 
 **Format im Feld „Quellen & Referenzen“** (ein Eintrag je Quelle, nummeriert in der Reihenfolge der ersten Nennung, Folgezeilen gehören zum vorherigen Eintrag):
 
@@ -194,6 +196,7 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 
 - Das Zugriffsdatum ist bei jeder Quelle anzugeben. Datenstand und Veröffentlichungsdatum werden getrennt geführt, soweit verfügbar.
 - Eine Bezahlschranke wird mit „(Paywall)“ gekennzeichnet, eine unzugängliche Quelle mit „nicht ausgewertet“. Davon abhängige Aussagen gelten nicht als gesichert.
+- Beigefügtes Material ohne URL wird mit Herausgeber, Datum, Titel und Dokumentstand und dem Zusatz „(Eingangsmaterial)“ geführt.
 - **Verweise im Text:** `[Q1]`, `[Q2, Q4]` oder `[Q1–Q3]` in den Analysefeldern und im Bewertungstext. Das Quellenverzeichnis steht nicht mehr in „Lage & Ereignis“.
 - Die App prüft automatisch: zitiert, aber nicht verzeichnet · verzeichnet, aber nicht zitiert · fehlende oder ungültige Kategorie · fehlendes Zugriffsdatum · doppelte Nummern · Quellenzeilen im Altformat.
 
@@ -237,7 +240,7 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 
 ## 8. Pflege
 
-Änderungen an Stufentexten, Achsenregeln oder Quellenkategorien werden in Kodierleitfaden, Darstellungsdatei, SOP-LEAD Teil A und Arbeitsanweisung gemeinsam fortgeschrieben (SOP-LEAD A.10.2), damit Mensch und KI nach derselben Fassung kodieren. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
+Achsenregeln, Quellenkategorien und die Rangfolge bei Widersprüchen werden nur in diesem Leitfaden fortgeschrieben (SOP-LEAD A.10.2: ein Ort, Verweise sonst), damit Mensch und KI nach derselben Fassung kodieren. SOP-LEAD Teil A und die Arbeitsanweisungen verweisen darauf; bei einer Änderung wird geprüft, ob ein Verweis anzupassen ist. Die Darstellungsdatei führt zusätzlich die Stufentexte und die Kategorienamen, weil die App sie anzeigt und auswertet; sie werden mit diesem Leitfaden geändert. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
 
 **Änderungsprotokoll:**
 
@@ -249,5 +252,6 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | 1.2 | 19.10.2026 | Quellenkategorie B (Betreiber), Priorität A > B > W > M > P, Zuordnungsregeln und neu gefasste Unabhängigkeitsregel (Abschnitt 5); Grundregel 6 „Keine unbelegte Präzision“ mit Mindestkodierung statt Untergrenzenregel; Grundregel 7 mit D5 als definierter Prognoseausnahme; D3 ausgewählte Funktion; D4 ohne reguläre Lieferungen; D7 ohne pauschale Vorhersageregel (ersetzt die Festlegung aus 1.1), mit fachlichen Lücken; D8 stabiler Verlauf = 0; vier neue Kurzbeispiele. Abgestimmt mit SOP-LEAD-Sammelmappe 2.0; Rangfolge mit Bausteinen aus Teil C; Belegregel bei zwei passenden Stufen; Zuordnungsbeispiele zu den Quellenkategorien; Bezug auf SOP-Sammelmappe und Arbeitsanweisung als Mindestfassung mit Verweis auf den Gültigkeitsstand |
 | 1.2.1 | 20.10.2026 | Abschnitt 6: `eintritt` und `meldezeitraum` dürfen eine belegte Uhrzeit tragen (LEAD-Meldevorlage 1.1); Regeln sonst unverändert |
 | 1.2.2 | 21.10.2026 | Kurzbeispiel D8 bei Auslandslagen ohne deutsche Beobachtungsbasis (offen, nicht 0); Regeln unverändert. Anlass: Testreihe der KI-Modelle vom 20.10.2026, in der D8 = 0 für eine Auslandslage gesetzt wurde |
-| 1.4.0 | 24.10.2026 | Grundregel 1: Ist-Kodierung auch nach Ende der Einschränkung vor t0 (ET-2026-W43-01); D5: erreichter Zielzustand = 0 (ET-2026-W43-01) und Mindestprognose als gekennzeichneter Mindestwert (ET-2026-W43-04); drei Kurzbeispiele, darunter D3 bei kreisfreien Städten nach wahrgenommener Funktion (ET-2026-W43-06). Mitfortschreibung von SOP-LEAD Teil A.2 (D5) nach A.10.2. Anlass: Erfassungstest KW 43 |
 | 1.3.0 | 23.10.2026 | Mitfortschreibung von SOP-LEAD Teil A (3.14.0–3.16.0) nach A.10.2: D2 zählt Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene erst mit vollzogener Maßnahme; D3-Funktionsliste beispielhaft, bewertet wird die konkret betroffene Funktion; D6 steigt nicht allein mit der Ausfalldauer; Rangfolge nennt Beispielfassungen; Pflegeregel nennt Teil A. Anlass: Konsistenzprüfung KW 43 (KP-2026-W43-13, -33, -34, -38, -39) |
+| 1.4.0 | 24.10.2026 | Grundregel 1: Ist-Kodierung auch nach Ende der Einschränkung vor t0 (ET-2026-W43-01); D5: erreichter Zielzustand = 0 (ET-2026-W43-01) und Mindestprognose als gekennzeichneter Mindestwert (ET-2026-W43-04); drei Kurzbeispiele, darunter D3 bei kreisfreien Städten nach wahrgenommener Funktion (ET-2026-W43-06). Mitfortschreibung von SOP-LEAD Teil A.2 (D5) nach A.10.2. Anlass: Erfassungstest KW 43 |
+| 1.5.0 | 27.10.2026 | Einziger Ort für Achsenregeln, Quellenkategorien und Rangfolge (SOP-LEAD A.10.2 „ein Ort, Verweise sonst“): Einleitung, Rangfolge und Pflege (Abschnitt 8) entsprechend gefasst. Aus Teil A und der Arbeitsanweisung Erfassung übernommen, weil sie nur dort standen: Aussagekompetenz der Quellen, Format für Eingangsmaterial ohne URL, Beispiel Lagebericht des GMLZ, frühere Kennung „J“ für Medien (Abschnitt 5), Beurteilung mit Unsicherheit und Handlungsbedarf (Abschnitt 4), Erklärung bei unvollkommener Skala (Grundregel 6), Feld der Wirkungskette (D6). Bestätigungsgrad als Verweis auf A.3. Achsenregeln, Stufentexte und Quellenkategorien sonst unverändert. Anlass: technische Prüfung KW 44 (TP-2026-W44-32) Entscheidungen des Herausgebers vom 27.10.2026 zu TP-2026-W44-32: JSON-Schema in der Rangfolge (Rang 1 mit den Stufentexten); Dateiformat und Bearbeitungsmodus unerheblich für die Quellenkategorie; keine automatische Umstufung bestehender Einträge in allen Kategorien; Aktualität in der Kodierfrage von D7. Fassungstabelle aufsteigend sortiert (1.3.0 vor 1.4.0). |

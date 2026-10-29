@@ -2,7 +2,7 @@
 // abgeschnittenen Antwort, Schemaprüfung und höchstens zwei Reparaturen. Seit 0.6.2 eigene Datei (TP-2026-W44-06),
 // vorher in stufen.ts.
 
-import { addiereNutzung, type LlmAntwort } from "../anbieter/typen";
+import { addiereNutzung, type LlmAntwort, type SystemTeil } from "../anbieter/typen";
 import { jetztLokal } from "../kern/ausgabe";
 import { pflichtHinweise } from "../kern/kennsaetze";
 import { holeWert } from "../kern/pfad";
@@ -13,23 +13,29 @@ import { gueltigerZeitpunkt } from "../kern/zeit";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort, type Zerlegung } from "./json";
 import {
-  anweisungErfassung,
+  anweisungErfassungErsetzt,
+  anweisungErfassungRoh,
+  anweisungPlatzhalterText,
   auftragAusBestaetigung,
   amtlicheEinstiege,
   amtlicherHost,
   profilGrundlagen,
+  s2Praeambel,
   sopBlock,
   sopIdsAufloesen,
   steuerungsBlock,
-  verdichtungsAnweisung,
+  verdichtungsAnweisungErsetzt,
   type AmtlicherEinstieg,
+  type AuftragsText,
   type PflichtVorgabe,
 } from "./kontext";
 import type { Pflichtsuche, S1Vorschlag, StufenEintrag } from "./lauf";
-import { absenderFuer, hatVormeldung, istVerdichtung, materialBloecke, materialUebersicht, vormeldungStand } from "./material";
+import { absenderFuer, hatVormeldung, istVerdichtung, materialBloecke, materialUebersicht, vormeldungStand, type Material } from "./material";
 import { nachbearbeiten } from "./nachbearbeitung";
 import { amtlichErreicht, absenderBefunde, rechercheNachweis, primaerquelleBelegt, rechercheBefunde, auftragsAbrufFehler } from "./recherchebefunde";
 import { pflichtRegel } from "./recherchetiefe";
+import { s2UmfangWarnung } from "./schaetzung";
+import { laufabhaengigePlatzhalter } from "../profil/platzhalter";
 import { s2Grenzen, rechercheModus, type Kontext, aufrufen } from "./stufen";
 import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
 
@@ -172,6 +178,54 @@ export interface S2Optionen {
   ohneS3?: boolean;
 }
 
+/**
+ * Statischer Teil des Systemauftrags von S2 (seit 0.6.4, TP-2026-W44-31): Präambel, Profilgrundlagen, ausgewählte SOPs
+ * und die Arbeitsanweisung (bei Verdichtung samt Zusatz im selben Block, damit höchstens vier Blöcke einen
+ * Cache-Haltepunkt tragen). Alle Blöcke tragen cache: true; die Arbeitsanweisung nur, wenn sie keine laufabhängigen
+ * Platzhalter ({{auftrag.*}}, {{jetzt}}) enthält, wie es ältere oder fremde Profile noch tun dürfen.
+ */
+export function s2Grundbloecke(
+  p: Profil,
+  sopIds: string[],
+  verdichtung: boolean,
+  auftrag: AuftragsText,
+  jetzt: string,
+): { bloecke: SystemTeil[]; offen: { anweisung: string; x: string }[] } {
+  const anweisung = anweisungErfassungErsetzt(p, auftrag, jetzt);
+  const zusatz = verdichtung ? verdichtungsAnweisungErsetzt(p) : undefined;
+  const laufabhaengig = laufabhaengigePlatzhalter(anweisungErfassungRoh(p)).length > 0;
+  return {
+    bloecke: [
+      { text: s2Praeambel(p), cache: true },
+      { text: profilGrundlagen(p), cache: true },
+      { text: sopBlock(p, sopIds), cache: true },
+      { text: [anweisung.text, zusatz?.text].filter(Boolean).join("\n\n"), cache: !laufabhaengig },
+    ],
+    offen: [...anweisung.offen.map((x) => ({ anweisung: "Erfassung", x })), ...(zusatz?.offen || []).map((x) => ({ anweisung: "Verdichtung", x }))],
+  };
+}
+
+/**
+ * Umfang der Anfrage an S2 vor dem Start (seit 0.6.4, TP-2026-W44-31), für die Warnung im Bestätigungsschritt:
+ * Zeichen des Systemauftrags (ohne den kurzen Steuerungsblock) und des Materials in der Nutzernachricht, Zahl der PDFs.
+ */
+export function s2Umfang(
+  p: Profil,
+  material: Material[],
+  urls: string[],
+  stichworte: string,
+  bestaetigt: S1Vorschlag,
+): { systemZeichen: number; materialZeichen: number; pdf: number } {
+  const sopIds = [...new Set(bestaetigt.sachverhalte.flatMap((s) => sopIdsAufloesen(p, s.sops)))];
+  const auftrag = auftragAusBestaetigung(bestaetigt, p, materialUebersicht(material, urls, stichworte));
+  const grund = s2Grundbloecke(p, sopIds, istVerdichtung(material), auftrag, bestaetigt.meldezeitpunkt || "");
+  return {
+    systemZeichen: grund.bloecke.reduce((n, s) => n + s.text.length, 0),
+    materialZeichen: materialBloecke(material, urls, stichworte).reduce((n, b) => n + (b.type === "text" ? String(b.text || "").length : 0), 0),
+    pdf: material.filter((m) => m.art === "pdf").length,
+  };
+}
+
 export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: S2Optionen = {}): Promise<S2Ergebnis> {
   const p = k.profil;
   const e = k.einstellungen;
@@ -242,36 +296,39 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
         .join("\n"),
     },
   ];
-  const systemS2 = [
-    { text: profilGrundlagen(p), cache: true },
-    { text: sopBlock(p, sopIds), cache: true },
-    { text: anweisungErfassung(p, auftrag, jetztS2) },
-    ...(verdichtung ? [{ text: verdichtungsAnweisung(p) }] : []),
-  ];
+  // Statischer Teil, gecacht (seit 0.6.4, TP-2026-W44-31); offene Platzhalter werden protokolliert (TP-2026-W44-33)
+  const grund = s2Grundbloecke(p, sopIds, verdichtung, auftrag, jetztS2);
+  const offenePl = grund.offen;
+  // Laufabhängiger Schluss: Redaktionsvermerke und zuletzt der Steuerungsblock mit Auftrag, Zeit und Recherchemodus,
+  // damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
-  if (vermerke) systemS2.push({ text: vermerke });
-  // Die Vervollständigung (S3) recherchiert nicht und erhält deshalb den Steuerungsblock nicht
-  const systemOhneSteuerung = [...systemS2];
-  // Zuletzt, damit er Angaben aus Gegenstand und Material sichtbar vorgeht
-  systemS2.push({
-    text: steuerungsBlock({
-      jetzt: jetztS2,
-      t0,
-      stichtag: auftrag.stichtag,
-      zone: p.manifest.variablen.zeitzone || "Europe/Berlin",
-      vormeldung,
-      vormeldungStand: vormeldungStand(k.material, p),
-      verdichtung,
-      recherche: modus,
-      websucheMax: grenzen.websucheMax,
-      abrufMax: grenzen.abrufMax,
-      ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
-      kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
-      absender: absenderFuer(k.material, p),
-      ...(recherche
-        ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0, amtlich: amtlich.length > 0 }
-        : {}),
-    }),
+  const steuerung = steuerungsBlock({
+    auftrag,
+    jetzt: jetztS2,
+    t0,
+    stichtag: auftrag.stichtag,
+    zone: p.manifest.variablen.zeitzone || "Europe/Berlin",
+    vormeldung,
+    vormeldungStand: vormeldungStand(k.material, p),
+    verdichtung,
+    recherche: modus,
+    websucheMax: grenzen.websucheMax,
+    abrufMax: grenzen.abrufMax,
+    ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
+    kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
+    absender: absenderFuer(k.material, p),
+    ...(recherche
+      ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0, amtlich: amtlich.length > 0 }
+      : {}),
+  });
+  const systemS2: SystemTeil[] = [...grund.bloecke, { text: [vermerke, steuerung].filter(Boolean).join("\n\n") }];
+  // Die Vervollständigung (S3) recherchiert nicht und erhält deshalb den Steuerungsblock nicht, wohl aber die Vermerke
+  const systemOhneSteuerung: SystemTeil[] = [...grund.bloecke, ...(vermerke ? [{ text: vermerke }] : [])];
+  // Umfang vor dem Aufruf schätzen (TP-2026-W44-31): Material ist nur je Datei begrenzt
+  const umfangWarnung = s2UmfangWarnung({
+    systemZeichen: systemS2.reduce((n, s) => n + s.text.length, 0),
+    materialZeichen: inhalt.reduce((n, b) => n + (b.type === "text" ? String(b.text || "").length : 0), 0),
+    pdf: k.material.filter((m) => m.art === "pdf").length,
   });
   const s2Name = verdichtung ? "S2 Verdichtung" : "S2 Recherche und Entwurf";
   const werkzeugeS2 = (websuche: number, abruf: number) => ({
@@ -288,6 +345,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   });
 
   const erste = ersterAufruf.antwort;
+  if (umfangWarnung) ersterAufruf.eintrag.notiz = umfangWarnung;
+  if (offenePl.length) ersterAufruf.eintrag.offenePlatzhalter = offenePl.map((o) => o.x);
   // Eintrag des letzten S2-Aufrufs für Notizen und Befunde (nach einer Nachforderung deren Eintrag)
   let s2 = ersterAufruf.eintrag;
 
@@ -317,6 +376,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       });
       const zweite = nachforderung.antwort;
       s2 = nachforderung.eintrag;
+      if (offenePl.length) s2.offenePlatzhalter = offenePl.map((o) => o.x);
       // Text aus der Nachforderung, wenn sie eine Meldung enthält; sonst bleibt der erste Entwurf
       const nutzbar = zerlegeAntwort(zweite.text).json !== undefined || zerlegeAntwort(erste.text).json === undefined;
       a = antwortenZusammenfuehren(erste, zweite, nutzbar);
@@ -434,6 +494,17 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   if (meldung) for (const t of sopHinweise) befunde.push({ stufe: "hinweis", text: `SOP-Nachweis: ${t}` });
   if (meldung && umhaengungen.length) befunde.push({ stufe: "hinweis", text: `Von der App korrigiert: ${umhaengungen.join("; ")}.` });
   if (meldung) for (const t of reparaturHinweise) befunde.push({ stufe: "hinweis", code: "REPARATUR_OHNE_ENTWURF", text: t });
+  if (meldung && umfangWarnung) befunde.push({ stufe: "hinweis", code: "S2_EINGABE_UMFANG", text: umfangWarnung });
+  if (meldung)
+    for (const name of [...new Set(offenePl.map((o) => o.anweisung))])
+      befunde.push({
+        stufe: "warnung",
+        code: "ANWEISUNG_PLATZHALTER_OFFEN",
+        text: anweisungPlatzhalterText(
+          name,
+          offenePl.filter((o) => o.anweisung === name).map((o) => o.x),
+        ),
+      });
   if (meldung)
     for (const f of auftragsAbrufFehler(k.lauf.auftrag.urls, a.abrufFehler))
       befunde.unshift({

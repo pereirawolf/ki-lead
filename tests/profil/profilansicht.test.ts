@@ -132,7 +132,7 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
     const { profil: m } = await profil("muster");
     const doks = arbeitsgrundlagen(m!);
     expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
-      ["erfassung", "paket", "0.5.1"],
+      ["erfassung", "paket", "0.5.2"],
       ["verdichtung", "app", undefined],
       ["kurzfassung", "app", undefined],
       ["kodierleitfaden", "paket", "0.5"],
@@ -173,7 +173,9 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
 
   it("Platzhalter mit Bereich und Punkt werden hervorgehoben, aber nicht ersetzt", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    const html = await lesetextHtml(p!.dateien["anweisung-erfassung.md"], "anweisung-erfassung.md", p!);
+    // Seit 0.6.4 (TP-2026-W44-31) nutzt das Beispielprofil {{auftrag.*}} und {{jetzt}} nicht mehr; fremde Profile dürfen es
+    const text = `${p!.dateien["anweisung-erfassung.md"]}\n\nSachverhalt: {{auftrag.sachverhalt}}, Zeitpunkt: {{jetzt}}`;
+    const html = await lesetextHtml(text, "anweisung-erfassung.md", p!);
     for (const x of ["{{profil.referenzraum}}", "{{auftrag.sachverhalt}}", "{{jetzt}}"]) expect(html).toContain(`<span class="platzhalter">${x}</span>`);
     expect(html).not.toMatch(/\{\{[^}]+\}\}(?!<\/span>)/);
   });

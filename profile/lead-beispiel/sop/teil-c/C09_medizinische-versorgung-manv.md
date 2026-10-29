@@ -12,9 +12,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn neben der medizinisch-pflegerischen Versorgung eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht; der Versorgungsausfall selbst bleibt unter „Gesundheitliche Lage / Epidemie“"
 anschluss: "B11, C05; C07 bei Infektionsgeschehen; C10, C11, C12, C16, B15, C17 nach konkretem Bezug"
 zweck: "Erfassung nutzbarer medizinischer und pflegerischer Leistung und des Ausfalls der Regelversorgung nach Versorgungsfunktion, unabhängig von der Ursache."
-version: "1.2.1"
+version: "1.3.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "27.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – BBK „MANV“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -39,7 +39,7 @@ bisherige_ids: ["baustein-n04"]
 | R1 | Welcher Bedarf ist nach Fachmeldung nicht mehr regelhaft abdeckbar? | Lagemeldungen (A.3); Gesundheitsbehörden; [BBK: MANV](https://www.bbk.bund.de/DE/Themen/Gesundheitlicher-Bevoelkerungsschutz/Sanitaetsdienst/MANV/manv_node.html) (Hintergrund) | L/R; D2 | Sichtungskategorien nur für tatsächlich gesichtete Patientinnen und Patienten verwenden, nicht für Vermisste. |
 | R2 | Welche Behandlung, Transport- oder Pflegeleistung ist tatsächlich verfügbar, personell betrieben und zugänglich? | Krankenhausträger und Leistungserbringer im Rettungsdienst (B); Träger des Rettungsdienstes (A); Kapazitätsnachweise der Länder; Intensivregister (B11/R6) | R/M; D6 | Nominale Betten und freie Meldekapazitäten sind nicht gleichbedeutend mit nutzbarer Leistung; ein freies Bett ohne Personal und fachliche Eignung ist keine Behandlungskapazität. |
 | R3 | Welche Auswirkungen hat die Lage auf die übrige Versorgung? | Lagemeldungen (A.3) | R; D6 | Verdrängte Regelversorgung ausdrücklich prüfen. |
-| R4 | Welche Zuführung, Verlegung und Notbetriebsleistung sind bestätigt, was ist nur angeboten? | Lagemeldungen (A.3); Kleeblatt-Verfahren bzw. GMLZ nur bei belegt aktiviertem Vorgang | M; D4 | Angefragt ≠ angeboten ≠ zugesagt ≠ aufgenommen. |
+| R4 | Welche Zuführung, Verlegung und Notbetriebsleistung sind bestätigt, was ist nur angeboten? | Lagemeldungen (A.3); Kleeblatt-Verfahren bzw. GMLZ nur bei belegt aktiviertem Vorgang | M; D4 | Angefragt ≠ angeboten ≠ zugesagt ≠ aufgenommen. Aufgenommene Patientinnen und Patienten belasten den Behandlungsort (Kapazitätsbezug), zählen als Betroffene aber nur im Ereignisraum (A.3, Zuordnung zum Raum). |
 | R5 | Welche länger anhaltenden Engpässe bei Personal, Material, Energie oder Transport bestehen? | Betreibermeldungen (A.3); Lagemeldungen (A.3) | R/I; D6 | Material nach C10, Energie nach B08 bzw. C12, IT-Ausfall nach B15. |
 | R6 | Wann ist welche Versorgungsfunktion nach Fachprognose wiederhergestellt? | Krankenhausträger (B); Gesundheitsbehörden | M; D5 | Notbetrieb, Teilbetrieb und Regelbetrieb unterscheiden. |
 | R7 | Wie leistungsfähig ist der Rettungsdienst im betroffenen Raum: Einsatzaufkommen, einsatzbereite Rettungsmittel, Wartezeiten bei der Übergabe in Kliniken, überörtliche Unterstützung? | Träger des Rettungsdienstes und Leitstellen (A); Lagemeldungen (A.3) | R/M; D4/D6 | Planungsgrößen wie Hilfsfristen sind landesrechtlich verschieden und keine Radar-Kriterien; Überschreitungen nur mit Träger und Bezugszeitraum. Leitstellen- und Notrufstörungen nach C11. |
@@ -59,6 +59,7 @@ bisherige_ids: ["baustein-n04"]
 - **D5:** Fachlich prognostizierte Restdauer bis zum benannten Versorgungsziel; Notbetrieb, gesicherte Mindestversorgung und Regelbetrieb unterscheiden.
 - **D6:** Belegte funktionale Kopplungen und Folgeausfälle; Krankenhausbezeichnung oder formaler KRITIS-Status ersetzen den Nachweis nicht.
 - **D7/D8:** Nach Kodierleitfaden; wechselnde Registermeldungen oder geänderte Zählverfahren allein sind keine reale Versorgungsdynamik.
+- **Zuordnung zum Raum (Ausnahme nach A.3):** Betroffene zählen im Ereignisraum. In diesem Baustein zählt der Behandlungs- oder Aufnahmeort zusätzlich als Kapazitätsbezug: Belegung und Belastung der aufnehmenden Versorgung werden dort geführt (Versorgungsbefund, D6). Dieselben Personen werden am Behandlungsort nicht erneut als Betroffene gezählt, auch nicht in D2.
 
 **Offenlassen:** D2 ohne bestätigte Zahl unmittelbar Betroffener; D5 ohne Fachprognose für das benannte Versorgungsziel. Ein fachlich belegter Versorgungsausfall kann beurteilt werden, auch wenn D2 nicht bezifferbar ist.
 

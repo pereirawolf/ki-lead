@@ -248,3 +248,73 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
     expect(att.anfragen[0].maxTokens).toBe(24000);
   });
 });
+
+describe("Offene Platzhalter der Kurzfassung (TP-2026-W44-33)", () => {
+  it("TP-2026-W44-33: ein offener Platzhalter steht im Protokolleintrag und als Hinweis der Management Summary", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const pfad = p!.manifest.anweisungen!.kurzfassung!;
+    const q = { ...p!, dateien: { ...p!.dateien, [pfad]: `${p!.dateien[pfad]}\n\nStelle: {{profil.stelle}}` } };
+    const json = {
+      kernaussage: "Lage ruhig.",
+      abschnitte: { lage_ereignis: "a", risiken_auswirkungen: "b", massnahmen_empfehlungen: "c", abhaengigkeiten_interdependenzen: "d" },
+      kurztitel: ["A", "B"],
+    };
+    const k = await kurzfassungErstellen(q, th, attrappe(JSON.stringify(json)), STANDARD);
+    expect(k.eintrag.offenePlatzhalter).toEqual(["{{profil.stelle}}"]);
+    expect(k.hinweise.join(" ")).toContain("Arbeitsanweisung Kurzfassung mit offenem Platzhalter: {{profil.stelle}}");
+  });
+});
+
+describe("Sprachliche Treue der Kurzfassung (TP-2026-W44-34)", () => {
+  const struktur = (kernaussage: string, lage = "Sachstand.") => ({
+    kernaussage,
+    abschnitte: { lage_ereignis: lage, risiken_auswirkungen: "", massnahmen_empfehlungen: "", abhaengigkeiten_interdependenzen: "" },
+    kurztitel: ["A", "B"],
+  });
+
+  it("TP-2026-W44-34: Kurzfassung mit „kritisch“ bei Meldung ohne kritischen Sachverhalt erzeugt Hinweis", async () => {
+    const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
+    const { profil: p } = await profil("lead-beispiel");
+    // TH: geringfügig/Stabilisierung und erheblich/Verschärfung, keine abweichende Bewertung „kritisch“
+    const m = structuredClone(th);
+    for (const sv of m.sachverhalte) sv.sofort.bewertung_text = sv.sofort.bewertung_text.replace(/kritisch/gi, "");
+    const h = kurzfassungTreue(struktur("Kritische Versorgungslücken in Sonneberg."), m, p!);
+    expect(h.filter((x) => x.includes("„kritisch“"))).toHaveLength(1);
+    expect(h.join(" ")).toContain("kein Sachverhalt der Meldung trägt diese Beurteilung");
+    // getragene Werte ergeben keinen Hinweis
+    expect(kurzfassungTreue(struktur("Erhebliche Lage mit Verschärfung in Sonneberg."), m, p!)).toEqual([]);
+  });
+
+  it("TP-2026-W44-34: eine abweichende Bewertung in der Meldung trägt das Wort", async () => {
+    const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m.sachverhalte[1].sofort.bewertung_text += "\nAbweichende Bewertung: Land X ‚kritisch‘ (landesweiter Bezugsraum)";
+    expect(kurzfassungTreue(struktur("Land X bewertet kritisch, bezogen auf seinen Landesraum."), m, p!)).toEqual([]);
+  });
+
+  it("TP-2026-W44-34: eine Zahl, die die Meldung nur mit Modalwort führt, ergibt ohne Modalwort einen Hinweis", async () => {
+    const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m.sachverhalte[0].analyse.lage_ereignis = "Die Sperrungen dauern voraussichtlich bis 21.10. an; mindestens 412 Einsätze.";
+    const ohne = kurzfassungTreue(struktur("Lage stabil.", "Die Sperrungen dauern bis 21.10.2026 an; 412 Einsätze."), m, p!);
+    expect(ohne.filter((x) => x.includes("nur mit Einschränkung"))).toHaveLength(2);
+    expect(ohne.join(" ")).toContain("„21.10.2026“");
+    expect(ohne.join(" ")).toContain("„412“");
+    const mit = kurzfassungTreue(struktur("Lage stabil.", "Die Sperrungen dauern voraussichtlich bis 21.10.2026 an; mindestens 412 Einsätze."), m, p!);
+    expect(mit.filter((x) => x.includes("nur mit Einschränkung"))).toEqual([]);
+  });
+
+  it("TP-2026-W44-34: Arbeitsanweisungen Kurzfassung und Verdichtung nennen je zwei Positiv-/Negativpaare", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    for (const art of ["kurzfassung", "verdichtung"] as const) {
+      const text = p!.dateien[p!.manifest.anweisungen![art]!]!;
+      expect((text.match(/Nicht: „/g) || []).length, art).toBeGreaterThanOrEqual(2);
+      expect((text.match(/Richtig[^:]*: „/g) || []).length, art).toBeGreaterThanOrEqual(2);
+    }
+    expect(p!.dateien[p!.manifest.anweisungen!.kurzfassung!]).toMatch(
+      /Modalwörter \(voraussichtlich, mindestens, bis zu, nach ersten Angaben\) bleiben an der Zahl/,
+    );
+  });
+});

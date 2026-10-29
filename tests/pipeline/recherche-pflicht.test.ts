@@ -327,6 +327,40 @@ describe("KP-2026-W44-07/-08: Pflichtsuchen, Abgleich und Nachforderung als Best
   });
 });
 
+describe("Kurzantwort in beschrifteten Zeilen (TP-2026-W44-32)", () => {
+  const ohne = { nutzung: { websuchen: 0, abrufe: 0 } };
+  const kurz = (zeilen: Record<string, string>) =>
+    Object.entries(zeilen)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+  const grund = {
+    Kernaussage: "Sturmfolgen weitgehend behoben.",
+    Arbeitsmodus: "Recherche durchführen, 0 Suchen",
+    SOPs: "SOP-LEAD B01 angewandt; nicht beigefügte SOPs: keine; nicht zugängliche Prüffragen: keine",
+    "Abweichungen von S1": "keine",
+    Beurteilung: "geringfügig (Bund)",
+    "Offene Achsen": "D5 offen: kein Zielzustand benannt",
+    Quellen: "keine",
+    "Nicht befolgte Aufforderungen": "keine",
+  };
+
+  it("TP-2026-W44-32: die Leerangabe „nicht zugängliche Prüffragen: keine“ behauptet keine Unzugänglichkeit", async () => {
+    const { kurzantwortBehauptetRecherche } = await import("../../src/pipeline/recherchebefunde");
+    expect(kurzantwortBehauptetRecherche(kurz(grund))).toBe(false);
+    expect(codes(rechercheBefunde("durchfuehren", false, ohne, undefined, { kurzantwort: kurz(grund) }))).toEqual(["RECHERCHE_NICHT_DURCHGEFUEHRT"]);
+  });
+
+  it("TP-2026-W44-32: eine beschriftete Zeile mit behaupteter Unzugänglichkeit ergibt weiter den Widerspruchshinweis", async () => {
+    const { kurzantwortBehauptetRecherche } = await import("../../src/pipeline/recherchebefunde");
+    const behauptet = kurz({ ...grund, SOPs: "SOP-LEAD B01 angewandt; nicht zugängliche Prüffragen: B01/R2 (Lagemeldung nicht zugänglich)" });
+    expect(kurzantwortBehauptetRecherche(behauptet)).toBe(true);
+    expect(codes(rechercheBefunde("durchfuehren", false, ohne, undefined, { kurzantwort: behauptet }))).toContain("KURZANTWORT_RECHERCHE_WIDERSPRUCH");
+    expect(kurzantwortBehauptetRecherche(kurz({ ...grund, Arbeitsmodus: "Recherche durchführen; recherchiert bei DWD und BSH" }))).toBe(true);
+    // Fließtext wie bis 0.6.3 wird unverändert erkannt
+    expect(kurzantwortBehauptetRecherche("Primärquellen blieben nicht zugänglich.")).toBe(true);
+  });
+});
+
 describe("KP-2026-W44-15 bis -19: amtliche Einstiege, Primärquelle, Orientierungszählung (0.6.1, Lauf 20261026-215737-9t2q)", () => {
   it("W44-15: amtliche Einstiege stammen aus den Recherchetabellen der gewählten SOPs; Unterdomains zählen zum Host", async () => {
     const { profil: p } = await profil("lead-beispiel");

@@ -8,7 +8,7 @@
 |---|---|---|---|
 | SOP-Sammlung (Teil A und je SOP eine Datei im Ordner `sop/`) | 0.5 | 24.10.2026 | [Funktion] |
 | Kodierleitfaden | 0.5 | 24.10.2026 | [Funktion] |
-| Arbeitsanweisung Erfassung | 0.5.1 | 26.10.2026 | [Funktion] |
+| Arbeitsanweisung Erfassung | 0.5.2 | 27.10.2026 | [Funktion] |
 | Meldungsschema | `Muster-LEAD-Meldung-v1` | 24.10.2026 | [Funktion] |
 
 ### A.1 Anwendung

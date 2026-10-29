@@ -335,14 +335,14 @@
   },
   "quellen": {
     "kategorien": {
-      "A": "amtlich/zwischenstaatlich – Behörden und internationale Organisationen in ihrer hoheitlichen oder amtlichen Fachrolle (Bund, Länder, Kommunen, EU, internationale Organisationen); auch behördeninterne Lagemeldungen (z. B. Lagemeldung eines Landes); authentische Behördenbeiträge in sozialen Medien",
-      "B": "Betreiber – originäre Angaben zum eigenen Netz, Standort, System oder zur eigenen Dienstleistung und deren Betrieb, unabhängig von öffentlicher oder privater Trägerschaft (z. B. Netzbetreiber, Wasserversorger, Verkehrsunternehmen, Krankenhausträger; Hilfsorganisation zu ihrer selbst betriebenen Einrichtung)",
-      "W": "wissenschaftlich – Forschungseinrichtungen, wissenschaftliche Veröffentlichungen und Datensätze in ihrer fachwissenschaftlichen Rolle; Preprints als solche kennzeichnen",
-      "M": "Medien – redaktionelle Berichte und journalistische Veröffentlichungen, Nachrichtenagenturen (auch mit Betreiber- oder Behördenzitat)",
-      "P": "sonstige private Quellen – Verbände, NGOs, persönliche Angaben und Unternehmen, soweit die konkrete Aussage keine Betreiberangabe ist; Beiträge in sozialen Medien ungeklärter Identität"
+      "A": "amtlich/zwischenstaatlich",
+      "B": "Betreiber",
+      "W": "wissenschaftlich",
+      "M": "Medien",
+      "P": "sonstige private Quellen"
     },
     "rangfolge": ["A", "B", "W", "M", "P"],
-    "rangfolge_hinweis": "Quellenpriorität bei Widersprüchen zu demselben Sachverhalt: A > B > W > M > P. Vorher Zeitstand, räumlichen Bezug, unmittelbare Sachkenntnis und fachliche Zuständigkeit prüfen; eine begründete Abweichung wegen einschlägigerer oder aktuellerer Erkenntnisse ausdrücklich dokumentieren. Unterschiedliche Aussagegegenstände sind kein Widerspruch (Behörde: Gefahrenlage; Betreiber: technischer Wiederherstellungsstand). Die Kategorie allein beweist keine Aussage; Weiterverbreitungen derselben Ursprungsangabe sind keine unabhängigen Bestätigungen (Kodierleitfaden Abschnitt 5).",
+    "rangfolge_hinweis": "Quellenpriorität bei Widersprüchen zu demselben Sachverhalt: A > B > W > M > P. Bestimmung der Kategorie, Prüfung vor dem Vergleich und Abweichungen: Kodierleitfaden Abschnitt 5.",
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]"
   },
   "lagebild": {

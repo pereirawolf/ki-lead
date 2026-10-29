@@ -98,6 +98,8 @@ export interface StufenEintrag {
   befunde?: string[];
   notiz?: string;
   fehler?: string;
+  /** Platzhalter der Arbeitsanweisung, die die App nicht füllen konnte (seit 0.6.4, TP-2026-W44-33) */
+  offenePlatzhalter?: string[];
 }
 
 export type LaufStatus = "s1" | "bestaetigen" | "s2" | "s3" | "fertig" | "fehler" | "abgebrochen";

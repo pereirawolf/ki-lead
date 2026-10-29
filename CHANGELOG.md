@@ -74,6 +74,50 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.1 | letzter Commit des Pull Requests „Amtliche Einstiege und Primärquellen; BSH und DWD in den SOPs; 0.6.1“ |
 | 0.6.2 | letzter Commit des Pull Requests „Programmcode: Reparaturschleife, Strom-Timeout, Adapter-Gemeinsamkeiten, Tooling; 0.6.2“ |
 | 0.6.3 | letzter Commit des Pull Requests „Modularität: Zyklen gelöst, Schichtentest, Forschungszone, Anbieter-Registry mit Ollama; 0.6.3“ |
+| 0.6.4 | letzter Commit des Pull Requests „Arbeitsanweisungen: Zählregeln, Materialhülle, Caching, Kodierleitfaden als einziger Regelort; 0.6.4“ |
+
+## [0.6.4] – 27.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-28 bis -35 (Kategorie Arbeitsanweisungen), vom Herausgeber am 26.10.2026 freigegeben (W44-30, -31 und -32 mit Maßgabe angepasst: Zuordnung zum Ereignisraum als allgemeine Regel mit Ausnahme C09, wo der Behandlungsort zusätzlich als Kapazitätsbezug zählt; Auftragsangaben in den Steuerungsblock, `{{auftrag.*}}` bleibt für fremde Profile gültig; Pflegeregel A.10.2 „ein Ort, Verweise sonst“ mit dem Kodierleitfaden als einzigem Ort). Beispielprofil 1.31.0 mit SOP-Sammelmappe 3.19.0, Vorlage 0.6.1.
+
+### Hinzugefügt
+
+- **Präambel und Caching des Systemauftrags von S2** (TP-2026-W44-31): zwei Zeilen vor den Profilgrundlagen (Rolle, Leseordnung, Datenregel; `s2Praeambel`); Präambel, Profilgrundlagen, SOPs und Arbeitsanweisung tragen `cache: true` (bei Verdichtung Anweisung und Zusatz in einem Block, damit höchstens vier Cache-Haltepunkte entstehen). Bis 0.6.3 wurde die Arbeitsanweisung (rund 8 000 Token) bei jedem Lauf, jeder Nachforderung und jeder Vervollständigung neu bezahlt.
+- **Warnung bei großer Anfrage an S2** (TP-2026-W44-31): `s2Umfang` und `s2UmfangWarnung` (`src/pipeline/schaetzung.ts`: drei Zeichen je Token, Warngrenze 200 000 Token Eingabe, Begründung im Kommentar). Der Bestätigungsschritt vor S2 zeigt den Hinweis; im Ergebnis steht `S2_EINGABE_UMFANG`, am Protokolleintrag eine Notiz. Material ist je Datei (400 000 Zeichen), nicht in der Summe begrenzt.
+- **Offene Platzhalter als Befund** (TP-2026-W44-33): `offenePlatzhalter` im Protokolleintrag von S2 und der Management Summary, Warnung `ANWEISUNG_PLATZHALTER_OFFEN` im Ergebnis bzw. Hinweis der Management Summary; beim Laden Warnung `PLATZHALTER_UNBEKANNT` für Platzhalter, die die App in der jeweiligen Anweisung nicht füllt (etwa `{{auftrag.stichtaq}}`).
+- **Sprachliche Treue der Management Summary** (TP-2026-W44-34): `kurzfassungTreue` gibt Hinweise, wenn ein Beurteilungs- oder Tendenzwort keinen Sachverhalt der Meldung trifft (eine vermerkte abweichende Bewertung zählt) und wenn eine Zahl, die die Meldung nur mit Modalwort führt, ohne steht.
+
+### Geändert
+
+- **Auftrag im Steuerungsblock** (TP-2026-W44-31): Sachverhalt, Ausgangsquellen, Prüffrage und bestätigte Gliederung stehen im Steuerungsblock (System, zuletzt) statt als `{{auftrag.*}}` in der Arbeitsanweisung; Redaktionsvermerke stehen im selben laufabhängigen Schlussblock vor der Steuerung. `{{auftrag.*}}` und `{{jetzt}}` gelten für fremde Profile weiter, werden aber nicht mehr empfohlen; eine solche Anweisung bleibt ungecacht.
+- **Datenhülle des Materials** (TP-2026-W44-29): Schließtags von `<material>`, `<stichworte>` und `<urls>` im Inhalt werden neutralisiert (`huellenInhalt`), Attributwerte verlieren spitze Klammern; der Systemauftrag von S1 enthält die Datenregel (`MATERIAL_DATENREGEL`), ebenso die Präambel von S2.
+- **Ein Platzhalterkontext für alle Anweisungen** (TP-2026-W44-33): `profilPlatzhalter` und `kennsatzPlatzhalter` in `src/profil/platzhalter.ts` für Erfassung, Verdichtung und Kurzfassung; bis 0.6.3 kannte nur die Erfassung `ebene` und `name` und nur die Kurzfassung einen Vorgabewert für `lageprodukt`. `AuftragsText` folgt `AUFTRAG_SCHLUESSEL`.
+- **Kurzantwort** (TP-2026-W44-32): Der Ausgabevertrag verlangt die Form der Arbeitsanweisung statt „höchstens acht Sätze“; die Erfassung des Beispielprofils gibt acht beschriftete Zeilen vor. `kurzantwortBehauptetRecherche` wertet beschriftete Leerangaben („nicht zugängliche Prüffragen: keine“) nicht als Behauptung.
+- **Arbeitsmodus** (TP-2026-W44-35): S1 nennt „Recherche durchführen“ ohne verfügbare Werkzeuge wie Steuerungsblock und Arbeitsanweisung „nicht verfügbar“.
+- **Beispielprofil 1.31.0:** Kodierleitfaden 1.5.0 als einziger Ort für Achsenregeln, Quellenkategorien und Rangfolge; Teil A (Sammelmappe 3.19.0) mit Zählregeln in A.3, Ausnahme C09 (1.3.0) und Pflegeregel A.10.2 „ein Ort, Verweise sonst“; Arbeitsanweisungen Erfassung 1.6.0 (neue Gliederung, Verweise, Kurzantwort, ohne Beispiel-JSON und ohne Auftragsplatzhalter), Verdichtung 2.1.0, Kurzfassung 2.4.0; Darstellungsdatei nur mit Kategorienamen (TP-2026-W44-28, -29, -30, -32, -34, -35; Einzelheiten im Profilverlauf). Vorlage 0.6.1: Erfassung ohne Auftragsplatzhalter (TP-2026-W44-31).
+- Spezifikation 0.6.4, docs/PROFILFORMAT.md 1.21, docs/SICHERHEIT.md 1.5 (Grenze der Datenhülle), docs/TESTZUORDNUNG.md, README.
+- Versionsangaben 0.6.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 604, iOS 604).
+- **Entscheidungen des Herausgebers vom 27.10.2026 zu TP-2026-W44-32** (Kodierleitfaden 1.5.0, ohne neue Fassungsnummer): JSON-Schema der Meldung mit den Stufentexten auf Rang 1 der Rangfolge; Dateiformat und Bearbeitungsmodus unerheblich für die Quellenkategorie; keine automatische Umstufung bestehender Quelleneinträge in allen Kategorien; Aktualität in der Kodierfrage von D7; Fassungstabelle des Kodierleitfadens aufsteigend sortiert. Die SOP-Sammelmappe bleibt 3.19.0.
+
+### Behoben
+
+- **Verweis auf ein nie beigefügtes Beispiel-JSON** (TP-2026-W44-28): Die Erfassung nannte es als Stilvorlage und in der Rangfolge.
+- **Hülle verlassen** (TP-2026-W44-29): Ein Eingang mit „</material>“ im Text schloss bis 0.6.3 die Datenhülle; der Rest las sich wie Text der App.
+- **Stille Tippfehler in Platzhaltern** (TP-2026-W44-33): `{{auftrag.stichtaq}}` oder `{{profil.ebene}}` in der Verdichtung landeten ohne Hinweis als „[nicht angegeben]“ im Prompt.
+- **Zählregeln nur in der Verdichtung** (TP-2026-W44-30): Fortgeltung und Teilmenge/Hochrechnung standen nicht im Prompt der Erfassung, die Raumzuordnung nirgends; die Bewertungsfälle `zaehlregel-*` prüften Regeln, die der geprüfte Prompt nicht trug.
+
+### Tests
+
+- `tests/profil/sop-redaktion.test.ts`: Entscheidungen vom 27.10.2026 und aufsteigende Fassungstabelle des Kodierleitfadens (TP-2026-W44-32); Erkennungsmuster der Rangfolge an Rang 1 mit JSON-Schema angepasst.
+- `tests/profil/anweisungen-kopplung.test.ts` (neu, 5): GRENZEN gegen die Kurzfassung, Arbeitsmodi gegen den Steuerungsblock, Beispielzeile „Handlungsrelevant bis:“ aus A.4 durch `fristen`, Quellenbeispiele des Kodierleitfadens ohne Befund, `_entstehung`-Beispiel gegen Schema und `kodierleitfadenKennung` (TP-2026-W44-35).
+- `tests/profil/sop-redaktion.test.ts` (6 neu, 1 umgestellt): Quellentabelle genau einmal im Profilpaket, Achsenregeln, Begründungsmuster und Rangfolge nur im Kodierleitfaden, übernommene Regeln dort vorhanden, A.10.2 „ein Ort, Verweise sonst“, Gliederung und Kurzantwort der Erfassung (TP-2026-W44-32); KP-2026-W43-41 prüft statt Gleichlaut den einen Ort mit Verweis.
+- `tests/profil/profile.test.ts` (3 neu): beigefügte Dokumente nur, wenn die App sie erzeugt (TP-2026-W44-28); Platzhalter der drei Anweisungen beider Profile und der Standardtexte bekannt, Prüfung beim Laden (TP-2026-W44-33).
+- `tests/pipeline/material.test.ts` (3 neu): kein zweiter Schließtag, Datenregel in S1, Kurzantwortzeile zu nicht befolgten Aufforderungen (TP-2026-W44-29).
+- `tests/pipeline/vorgaben.test.ts` (4 neu): alle Systemblöcke vor dem Steuerungsblock mit `cache: true` (Erfassung, Fortschreibung, Verdichtung; höchstens vier Haltepunkte), Präambel und Auftrag im Steuerungsblock, fremdes Profil mit `{{auftrag.*}}`, Warnung bei großer Anfrage (TP-2026-W44-31).
+- `tests/evaluation/schemata.test.ts` (3 neu): Stichwort je Zählregel-Fall in A.3 und im Prompt der Erfassung, Ausnahme C09 in Teil A und C09, Prüflisten der Verdichtung (TP-2026-W44-30).
+- `tests/pipeline/kurzfassung.test.ts` (5 neu): offener Platzhalter der Kurzfassung (TP-2026-W44-33); „kritisch“ ohne kritischen Sachverhalt, abweichende Bewertung, Zahl ohne Modalwort, Beispielpaare (TP-2026-W44-34).
+- `tests/pipeline/stufen.test.ts` (2 neu): Tippfehler im Platzhalter in Protokoll und Befund, Beispielprofil ohne offene Platzhalter (TP-2026-W44-33); `tests/pipeline/recherche-pflicht.test.ts` (2 neu): beschriftete Kurzantwort mit und ohne Behauptung (TP-2026-W44-32).
+- Angepasst an den neuen Aufbau des Systemauftrags von S2 ohne Änderung des Solls (Bearbeitungszeit und Auftrag jetzt im Steuerungsblock, Blöcke um die Präambel verschoben): `tests/pipeline/fortschreibung.test.ts`, `stufen.test.ts`, `verdichtung.test.ts`; `tests/profil/profilansicht.test.ts` (Platzhalter in einem ergänzten Text statt in der Anweisung des Beispielprofils); Fassungsangaben in `tests/pipeline/kontext.test.ts` und `tests/profil/profilansicht.test.ts`. Zusammen 33 neue Tests (1 263 statt 1 230).
 
 ## [0.6.3] – 27.10.2026
 

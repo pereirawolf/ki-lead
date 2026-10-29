@@ -43,7 +43,7 @@ describe("Kontext aus dem Profil", () => {
 
   it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.4.0");
+    expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.5.0");
     // frühere Kennungen (01, N02) und aktuelle (B08) werden auf die gültige Kennung abgebildet
     const liste = [
       "SOP-LEAD 01 Unwetter / Sturm v0.4",
@@ -70,7 +70,7 @@ describe("Kontext aus dem Profil", () => {
     const { profil: p } = await profil("lead-beispiel");
     const v = verdichtungsAnweisung(p!);
     expect(v).not.toMatch(/\{\{|\[nicht angegeben\]/);
-    expect(v).toContain("Fassung 2.0");
+    expect(v).toContain("Fassung 2.1");
     for (const text of [v, VERDICHTUNG_S2]) {
       expect(text).not.toMatch(/gilt die jüngste|Jede Eingangsmeldung ist eine Quelle der Kategorie A|dürfen als Belege dienen|Untergrenze/);
     }

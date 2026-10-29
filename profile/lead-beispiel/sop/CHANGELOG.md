@@ -10,13 +10,25 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.18.0 vom 26.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.19.0 vom 27.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.18.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.19.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.19.0] – 27.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-30 und -32, vom Herausgeber am 26.10.2026 mit Maßgabe freigegeben (Zuordnung zum Ereignisraum als allgemeine Regel mit Ausnahme C09; Pflegeregel A.10.2 „ein Ort, Verweise sonst“, der Kodierleitfaden ist der eine Ort). Zweite Stelle nach der Versionierungsregel: neue Zählregeln und eine Ausnahme in C09; Achsenregeln und Quellenkategorien sind inhaltlich unverändert und stehen nur noch im Kodierleitfaden (1.5.0).
+
+### Geändert
+
+- **Teil A, A.3 (TP-2026-W44-30):** drei Absätze mit je einem Beispiel: „Zeitbezug einer Zahl“ (Stand zu t0 belegt oder Fortgeltung begründet, sonst letzter belegter Stand), „Teilmenge, Summe, Hochrechnung“ (Addition nur bei gleicher Einheit, Definition und Zeitbasis ohne Überschneidung; Hochrechnungen neben gezählten Werten; Summe als Mindestwert nur unter Bedingungen) und „Zuordnung zum Raum“ (Betroffene im Ereignisraum, nicht am Behandlungs- oder Aufnahmeort; Ausnahme C09: Behandlungsort zusätzlich als Kapazitätsbezug, ohne Doppelzählung). Bisher standen Fortgeltung und Teilmenge/Hochrechnung nur in der Arbeitsanweisung Verdichtung, die Raumzuordnung nirgends.
+- **C09 1.3.0 (TP-2026-W44-30):** Prüfpunkt „Zuordnung zum Raum (Ausnahme nach A.3)“ in Abschnitt 3 und Stolperstelle zu R4: aufgenommene Patientinnen und Patienten belasten den Behandlungsort, zählen als Betroffene aber nur im Ereignisraum.
+- **Teil A, A.2 und A.3 (TP-2026-W44-32):** A.2 verweist verbindlich auf den Kodierleitfaden (Grundregeln, Stufentexte, Achsenregeln, Bewertung und Tendenz, Leerwerte, Beispiele, Rangfolge); Verweise der SOPs auf „A.2“ meinen die entsprechende Regel des Kodierleitfadens. In A.3 ersetzt ein Verweis auf Kodierleitfaden Abschnitt 5 die Quellentabelle, die Zuordnungsregeln und die Priorität; Befundnachweis, Zeitbezug, Bestätigungsgrad, Teilzugriff, Weitergabe und Zählregeln bleiben in A.3. Regeln, die nur in Teil A standen (Beispiel Lagebericht des GMLZ, frühere Kennung „J“, Beurteilung mit Unsicherheit und Handlungsbedarf, Feld der Wirkungskette), stehen jetzt im Kodierleitfaden.
+- **Teil A, A.10.1 und A.10.2 (TP-2026-W44-32):** Pflegeregel „ein Ort, Verweise sonst“: Achsenregeln, Quellenkategorien und Rangfolge nur im Kodierleitfaden; die Darstellungsdatei führt Stufentexte und Kategorienamen, weil die App sie braucht. Bisher verlangte A.10.2 die gemeinsame Fortschreibung in vier Dateien. Verweise „(A.2, D6)“ und „D8 in A.2“ in Teil A zeigen auf den Kodierleitfaden.
+- **Teil A:** Gültigkeitsstand fortgeschrieben (Sammelmappe 3.19.0, Kodierleitfaden 1.5.0, Darstellungsdatei Profilversion 1.31.0, Arbeitsanweisungen Erfassung 1.6.0, Verdichtung 2.1.0, Kurzfassung 2.4.0).
 
 ## [3.18.0] – 26.10.2026
 

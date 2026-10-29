@@ -75,8 +75,10 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     zuS2(k);
     const r = await stufe2und3(k, v);
     const s2 = att.anfragen[1];
-    expect(s2.system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-22T06:07**");
-    expect(s2.system[2].text).not.toContain("2026-10-21T19:45");
+    // Seit 0.6.4 (TP-2026-W44-31) stehen Bearbeitungszeit und Auftrag im Steuerungsblock, nicht in der Arbeitsanweisung
+    expect(s2.system[3].text).not.toContain("Aktueller Zeitpunkt");
+    expect(s2.system[3].text).not.toContain("2026-10-22T06:07");
+    expect(s2.system[3].text).not.toContain("2026-10-21T19:45");
     const steuerung = s2.system[s2.system.length - 1].text;
     expect(steuerung).toContain("## Steuerung durch die App (verbindlich)");
     expect(steuerung).toContain("Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-22 06:07");
@@ -85,7 +87,7 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(steuerung).toContain("Recherche: durchführen (verbindlich; Websuche bis zu 30-mal, Seitenabruf bis zu 10-mal).");
     expect(steuerung).toContain("gehen Angaben in Gegenstand, Vormeldung und Material zu Arbeitsmodus und Zeit vor");
     // Der Gegenstand aus S1 bleibt fachlicher Zuschnitt; die Steuerung überstimmt ihn, ohne ihn umzuschreiben
-    expect(s2.system[2].text).toContain("nicht eine neue Recherche");
+    expect(steuerung).toContain("nicht eine neue Recherche");
     expect(s2.werkzeuge?.websuche?.maxUses).toBe(30);
     expect(s2.werkzeuge?.abruf?.maxUses).toBe(10);
     // Ergebnis: strukturelles t0 aus der Bestätigung, übrige Angaben des Entwurfs unverändert
@@ -110,7 +112,7 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(v.meldezeitpunkt).toBe("2026-10-21T19:45");
     expect(v.appHinweise).toBeUndefined();
     await stufe2und3(k, v);
-    expect(att.anfragen[1].system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-22T06:06**");
+    expect(att.anfragen[1].system.at(-1)!.text).toContain("Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-22 06:06");
     expect(att.anfragen[1].system.at(-1)!.text).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-21 19:45");
   });
 
@@ -240,7 +242,7 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
     k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
     const v = await stufe1(k);
     expect(JSON.stringify(att.anfragen[0].nachrichten)).toContain(
-      "Recherche in S2: „Recherche durchführen“ gewählt, aber keine Werkzeuge verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
+      "Recherche in S2: „Recherche durchführen“ gewählt, aber nicht verfügbar (mistral-medium-3-5 über den EU-Endpunkt von Mistral bietet keine Websuche)",
     );
     zuS2(k);
     await stufe2und3(k, v);
@@ -290,7 +292,7 @@ describe("Zeitvertrag vor S2", () => {
     expect(v.meldezeitpunkt).toBe("2026-10-22T23:59");
     zuS2(k, "2026-10-23T00:02:00+02:00");
     const r = await stufe2und3(k, v);
-    expect(att.anfragen[1].system[2].text).toContain("Aktueller Zeitpunkt (Europe/Berlin): **2026-10-23T00:02**");
+    expect(att.anfragen[1].system.at(-1)!.text).toContain("Bearbeitungszeitpunkt (Europe/Berlin): 2026-10-23 00:02");
     expect(att.anfragen[1].system.at(-1)!.text).toContain("Meldezeitpunkt t0 der neuen Meldung: 2026-10-22 23:59");
     expect(r.meldung!.meldezeitpunkt).toBe("2026-10-22T23:59");
   });

@@ -343,3 +343,59 @@ describe("Modellbewertung: Schemata", () => {
     for (const d of dateien) expect(readFileSync(repoPfad(d), "utf-8"), d).not.toMatch(/sk-(ant|proj|live)[-_][A-Za-z0-9_-]{8,}/);
   });
 });
+
+describe("Zählregeln im geprüften Prompt (TP-2026-W44-30)", () => {
+  it("TP-2026-W44-30: je Zählregel-Fall steht das geprüfte Stichwort in Teil A, A.3, und damit im Prompt der Erfassung ohne Verdichtungsanweisung", async () => {
+    const { profil } = await import("../support/dateien");
+    const { profilGrundlagen, anweisungErfassung } = await import("../../src/pipeline/kontext");
+    const p = (await profil("lead-beispiel")).profil!;
+    const auftrag = { sachverhalt: "x", ausgangsquellen: "y", stichtag: "2026-11-05", prueffrage: "keine", ereignisarten: "frei" };
+    const prompt = `${profilGrundlagen(p)}\n${anweisungErfassung(p, auftrag, "2026-11-05T10:00")}`;
+    const teilA = p.sops.find((s) => s.gemeinsam)!.text;
+    const a3 = teilA.slice(teilA.indexOf("### A.3"), teilA.indexOf("### A.4"));
+    // Soll: Stichwort der Regel, die der Fall prüft (Erwartungen in evaluation/faelle/zaehlregel-*.json)
+    const STICHWORT: Record<string, RegExp> = {
+      "zaehlregel-fortgeltung": /Fortgeltung/,
+      "zaehlregel-teilmenge": /Teilmenge/,
+      "zaehlregel-hochrechnung": /Hochgerechnete|Hochrechnungen/,
+      "zaehlregel-laenderzuordnung": /Ereignisraum/,
+      "zaehlregel-mittelbar": /nicht direkt betroffen/,
+    };
+    const faelle = jsonIn("evaluation/faelle").filter((n) => n.startsWith("zaehlregel-"));
+    expect(faelle.map((n) => n.replace(".json", "")).sort()).toEqual(Object.keys(STICHWORT).sort());
+    for (const n of faelle) {
+      const fall = lies(`evaluation/faelle/${n}`);
+      expect(fall.auftrag.verdichtung, n).toBe(false);
+      const muster = STICHWORT[fall.id]!;
+      expect(a3, fall.id).toMatch(muster);
+      expect(prompt, fall.id).toMatch(muster);
+    }
+  });
+
+  it("TP-2026-W44-30: Zuordnung zum Ereignisraum gilt allgemein, mit der Ausnahme C09 in Teil A und als Prüfpunkt in C09", async () => {
+    const { readFileSync } = await import("node:fs");
+    const teilA = readFileSync(repoPfad("profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md"), "utf-8");
+    const c09 = readFileSync(repoPfad("profile/lead-beispiel/sop/teil-c/C09_medizinische-versorgung-manv.md"), "utf-8");
+    const regel = teilA.split("\n").find((z) => z.startsWith("**Zuordnung zum Raum.**"))!;
+    expect(regel).toMatch(/Betroffene werden dem Ereignisraum zugeordnet, nicht dem Behandlungs/);
+    expect(regel).toMatch(/Ausnahme[^.]*\(C09\)/);
+    expect(regel).toMatch(/Kapazitätsbezug/);
+    expect(regel).toMatch(/nur einmal, im Ereignisraum/);
+    const pruefpunkte = c09.slice(c09.indexOf("### 3."), c09.indexOf("### 4."));
+    expect(pruefpunkte).toMatch(/\*\*Zuordnung zum Raum \(Ausnahme nach A\.3\):\*\*[^\n]*Kapazitätsbezug[^\n]*nicht erneut als Betroffene/);
+    expect(c09).toMatch(/\| R4 \|[^\n]*Kapazitätsbezug[^\n]*A\.3/);
+  });
+
+  it("TP-2026-W44-30: Verdichtung, Regeln 3 und 4 verweisen auf A.3 und sind nummerierte Prüflisten", async () => {
+    const { readFileSync } = await import("node:fs");
+    const v = readFileSync(repoPfad("profile/lead-beispiel/anweisung-verdichtung.md"), "utf-8");
+    const regel = (n: number) => v.slice(v.indexOf(`\n${n}. **`), v.indexOf(`\n${n + 1}. **`));
+    for (const n of [3, 4]) {
+      expect(regel(n), `Regel ${n}`).toMatch(/SOP-LEAD A\.3/);
+      expect(regel(n).match(/\n {3}\d\. /g)?.length ?? 0, `Regel ${n}`).toBeGreaterThanOrEqual(3);
+    }
+    // die Regeltexte selbst stehen nicht mehr in der Verdichtung
+    expect(v).not.toMatch(/trägt den Ist-Wert zu t0 nur, wenn ihre Fortgeltung begründet ist/);
+    expect(v).not.toMatch(/Teilmengen zählst du nicht zusätzlich/);
+  });
+});

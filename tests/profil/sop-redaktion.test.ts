@@ -200,9 +200,15 @@ describe("Arbeitsanweisungen und Darstellungsdatei (Konsistenzprüfung KW 43)", 
     expect(treffer.map((d) => d.name)).toEqual([]);
   });
 
-  it("KP-2026-W43-41: Kategorie M nennt Betreiber- und Behördenzitat wie Kodierleitfaden und Erfassung", () => {
-    expect(String(ui.quellen.kategorien.M)).toContain("Betreiber- oder Behördenzitat");
-    expect(lies(`${PROFIL}/kodierleitfaden.md`)).toContain("Betreiber- oder Behördenzitat");
+  // Seit 0.6.4 (TP-2026-W44-32, Pflegeregel A.10.2 „ein Ort, Verweise sonst“): statt Gleichlaut in vier Dateien steht die
+  // Regel genau im Kodierleitfaden; Darstellungsdatei und Erfassung verweisen bzw. führen nur den Kategorienamen.
+  it("KP-2026-W43-41: Kategorie M mit Betreiber- und Behördenzitat steht genau im Kodierleitfaden, die übrigen verweisen", () => {
+    expect(lies(`${PROFIL}/kodierleitfaden.md`)).toContain("auch Berichte mit Betreiber- oder Behördenzitat");
+    expect(String(ui.quellen.kategorien.M)).toBe("Medien");
+    const erfassung = lies(`${PROFIL}/anweisung-erfassung.md`);
+    expect(erfassung).not.toContain("Betreiber- oder Behördenzitat");
+    expect(erfassung).toMatch(/Kodierleitfaden, Abschnitt 5/);
+    expect(lies(`${SOP}/A_Gemeinsame-Regeln.md`)).not.toContain("Betreiberzitat bleibt M");
   });
 });
 
@@ -248,5 +254,128 @@ describe("Dokumentation gegen Profil (Konsistenzprüfung KW 43)", () => {
         if (k && !format.includes(`\`${k}\``)) fehlend.push(`${name}: ${k}`);
       }
     expect([...new Set(fehlend)]).toEqual([]);
+  });
+});
+
+describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-32)", () => {
+  // Alle Markdown-Dateien des Profilpakets außer Verläufen und der erzeugten Lesefassung
+  const paket = (): { name: string; text: string }[] => {
+    const out: { name: string; text: string }[] = [];
+    const lauf = (rel: string) => {
+      for (const n of readdirSync(repoPfad(PROFIL, rel), { withFileTypes: true })) {
+        const pfad = rel ? `${rel}/${n.name}` : n.name;
+        if (n.isDirectory()) lauf(pfad);
+        else if (n.name.endsWith(".md") && n.name !== "CHANGELOG.md" && !n.name.includes("Lesefassung"))
+          out.push({ name: pfad, text: lies(`${PROFIL}/${pfad}`) });
+      }
+    };
+    lauf("");
+    return out;
+  };
+
+  it("TP-2026-W44-32: die Quellentabelle A/B/W/M/P kommt genau einmal im Profilpaket vor, im Kodierleitfaden", () => {
+    const zeilen = paket().flatMap(({ name, text }) =>
+      text
+        .split("\n")
+        .filter((z) => /^\| \*\*[ABWMP]\*\* \|/.test(z))
+        .map(() => name),
+    );
+    expect(zeilen).toEqual(Array(5).fill("kodierleitfaden.md"));
+    // Die Darstellungsdatei führt nur die Kategorienamen, keine Definitionen
+    const ui = JSON.parse(lies(`${PROFIL}/meldung.ui.json`));
+    for (const [k, v] of Object.entries(ui.quellen.kategorien as Record<string, string>)) expect(v, k).not.toMatch(/ – |;|\(/);
+    expect(ui.quellen.rangfolge_hinweis).toMatch(/Kodierleitfaden Abschnitt 5\.$/);
+  });
+
+  it("TP-2026-W44-32: Achsenregeln, Begründungsmuster und Rangfolge stehen nur im Kodierleitfaden", () => {
+    const merkmale: [string, RegExp][] = [
+      ["D2-Nullregel", /aktiv laufenden,? (?:für den Sachverhalt )?einschlägigen Erhebung/],
+      ["Begründungsmuster", /D\[n\] = \[Wert\], weil/],
+      ["Mindestkodierung", /D2 = 3 \(Mindestwert\): mindestens/],
+      ["Rangfolge", /\(1\) (?:JSON-Schema der Meldung \([^)]*\) und )?Stufentexte der Darstellungsdatei|^1\. JSON-Schema und Darstellungsdatei/m],
+      ["Zuordnung nach der Rolle", /Die konkrete Rolle entscheidet, nicht Eigentumsform/],
+      ["Priorität mit Prüfung", /unmittelbare Sachkenntnis und fachliche Zuständigkeit/],
+    ];
+    const treffer = merkmale.map(
+      ([was, m]) =>
+        [
+          was,
+          paket()
+            .filter(({ text }) => m.test(text))
+            .map((d) => d.name),
+        ] as const,
+    );
+    expect(Object.fromEntries(treffer)).toEqual(Object.fromEntries(merkmale.map(([was]) => [was, ["kodierleitfaden.md"]])));
+  });
+
+  it("TP-2026-W44-32: Entscheidungen des Herausgebers vom 27.10.2026 stehen im Kodierleitfaden", () => {
+    const kl = lies(`${PROFIL}/kodierleitfaden.md`);
+    expect(kl).toContain("(1) JSON-Schema der Meldung (Struktur, zulässige Werte, Leerwerte) und Stufentexte der Darstellungsdatei");
+    expect(kl).toContain("nicht Eigentumsform, Veröffentlichungskanal, Dateiformat oder Bearbeitungsmodus");
+    expect(kl).toContain("Bestehende Quelleneinträge werden nicht automatisch umgestuft");
+    expect(kl).toMatch(/\*\*Kodierfrage:\*\* Wie verfügbar, verlässlich, aktuell und widerspruchsfrei/);
+    // Fassungstabelle aufsteigend (1.3.0 stand vor dem 27.10.2026 hinter 1.4.0)
+    const fassungen = [...kl.matchAll(/^\| (\d+\.\d+(?:\.\d+)?) \| \d{2}\.\d{2}\.\d{4} \|/gm)].map((m) => m[1]!.split(".").map(Number));
+    const vergleich = (a: number[], b: number[]) => a[0]! - b[0]! || (a[1] ?? 0) - (b[1] ?? 0) || (a[2] ?? 0) - (b[2] ?? 0);
+    expect(fassungen.length).toBeGreaterThan(5);
+    for (let i = 1; i < fassungen.length; i++) expect(vergleich(fassungen[i - 1]!, fassungen[i]!)).toBeLessThan(0);
+  });
+
+  it("TP-2026-W44-32: Regeln, die bisher nur außerhalb des Kodierleitfadens standen, stehen jetzt dort", () => {
+    const kl = lies(`${PROFIL}/kodierleitfaden.md`);
+    for (const regel of [
+      "**Aussagekompetenz:**",
+      "Eine Behörde ist primär für ihre Lageeinschätzung maßgeblich",
+      "„(Eingangsmaterial)“",
+      "Lagebericht des GMLZ",
+      "(bis zur Arbeitsfassung v0.3: „J“)",
+      "Die Bewertung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.",
+      "Bildet die Skala eine Achse nur unvollkommen ab",
+      "im Feld „Abhängigkeiten & Interdependenzen“ die entscheidende Verbindung",
+    ])
+      expect(kl, regel).toContain(regel);
+  });
+
+  it("TP-2026-W44-32: Pflegeregel A.10.2 „ein Ort, Verweise sonst“; A.2 und A.3 verweisen verbindlich auf den Kodierleitfaden", () => {
+    const teilA = lies(`${SOP}/A_Gemeinsame-Regeln.md`);
+    const abschnitt = (von: string, bis: string) => teilA.slice(teilA.indexOf(von), teilA.indexOf(bis));
+    expect(abschnitt("**A.10.2", "**A.10.3")).toContain("**Ein Ort, Verweise sonst:**");
+    expect(abschnitt("**A.10.2", "**A.10.3")).not.toMatch(/gemeinsam in Kodierleitfaden, Darstellungsdatei, Teil A und Arbeitsanweisung fortgeschrieben/);
+    const a2 = abschnitt("### A.2", "### A.3");
+    expect(a2).toMatch(/stehen nur im \*\*Kodierleitfaden LEAD\*\*/);
+    expect(a2).not.toMatch(/^- \*\*D[1-8]/m);
+    expect(abschnitt("**Quellen & Referenzen.**", "**Wiederkehrende")).toMatch(/regelt ausschließlich der Kodierleitfaden, Abschnitt 5/);
+    expect(lies(`${PROFIL}/kodierleitfaden.md`)).toMatch(/nur in diesem Leitfaden fortgeschrieben \(SOP-LEAD A\.10\.2: ein Ort, Verweise sonst\)/);
+  });
+
+  it("TP-2026-W44-32: Gliederung der Erfassung: Rolle → Arbeitsprodukt → Grundlagen/Rangfolge → Regeln → Ausgabe", () => {
+    const erfassung = lies(`${PROFIL}/anweisung-erfassung.md`);
+    const ueberschriften = erfassung
+      .split("\n")
+      .filter((z) => z.startsWith("## "))
+      .map((z) => z.slice(3));
+    expect(ueberschriften).toEqual(["1. Rolle", "2. Arbeitsprodukt", "3. Grundlagen und Rangfolge", "4. Regeln", "5. Ausgabe"]);
+    expect(erfassung.indexOf("{{app.ausgabevertrag}}")).toBeGreaterThan(erfassung.indexOf("## 5. Ausgabe"));
+  });
+
+  it("TP-2026-W44-32: die Kurzantwort der Erfassung besteht aus acht beschrifteten Zeilen", () => {
+    const erfassung = lies(`${PROFIL}/anweisung-erfassung.md`);
+    const ab = erfassung.indexOf("**Kurzantwort** (für die prüfende Person)");
+    const block = erfassung
+      .slice(ab)
+      .match(/```\n([\s\S]*?)```/)![1]!
+      .trim()
+      .split("\n");
+    expect(block.map((z) => z.slice(0, z.indexOf(":")))).toEqual([
+      "Kernaussage",
+      "Arbeitsmodus",
+      "SOPs",
+      "Abweichungen von S1",
+      "Beurteilung",
+      "Offene Achsen",
+      "Quellen",
+      "Nicht befolgte Aufforderungen",
+    ]);
+    expect(erfassung).not.toMatch(/höchstens acht Sätze/);
   });
 });
