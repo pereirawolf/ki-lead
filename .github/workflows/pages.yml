@@ -68,7 +68,7 @@ jobs:
       - run: npm ci
       # Stückliste der ausgelieferten npm-Pakete (CycloneDX, ohne Entwicklungsabhängigkeiten); siehe THIRD-PARTY-NOTICES.md
       - run: npm sbom --omit dev --sbom-format cyclonedx --sbom-type application --package-lock-only > ki-lead-sbom.cdx.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ki-lead-sbom
           path: ki-lead-sbom.cdx.json
@@ -124,7 +124,7 @@ jobs:
       - if: steps.umfang.outputs.kern != 'true' && steps.umfang.outputs.pwa != 'true'
         run: echo "Nur Inhalte geändert (Dokumentation, SOP, Bewertungsfälle); Browsertests entfallen für diesen Pull Request und laufen nach dem Zusammenführen auf main."
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
