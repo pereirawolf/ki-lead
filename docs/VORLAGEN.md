@@ -1,6 +1,6 @@
 # KI-LEAD – Vorlagen für die Erprobung in einer Stelle
 
-Fassung 1.0 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Arbeitshilfen für Stellen, die KI-LEAD dienstlich erproben wollen. Die Vorlagen übernehmen, was die Dokumentation über KI-LEAD schon sagt, und verweisen auf die Fundstelle. Felder in eckigen Klammern füllt die Stelle selbst. Anwendungsbeispiele sind das Bundesrecht und das Thüringer Landesrecht; in anderen Ländern gelten die entsprechenden Vorschriften des Landes.
 
@@ -186,7 +186,7 @@ Betreiber müssen seit dem 27.07.2026 Maßnahmen ergreifen, um die KI-Kompetenz 
 |---|---|---|
 | 1 | Wofür KI-LEAD gedacht ist und wofür nicht | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 1 und 2 |
 | 2 | Regeln der Erprobung: zugelassene Inhalte, Schlüssel, Löschung, Rückmeldungen | V1 |
-| 3 | Ablauf S1 bis S4 und wo die Person entscheidet | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.2; die Systemkarte beschreibt den Stand von App 0.5.6, neuere Schritte (Orientierungssuche in S1, Pflichtsuchen, lokales Modell) in [SPEZIFIKATION.md](SPEZIFIKATION.md) |
+| 3 | Ablauf S1 bis S4 mit Orientierungssuche und Pflichtsuchen und wo die Person entscheidet | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 9.1 und 9.2 |
 | 4 | Bekannte Fehlerbilder, etwa Fristen auf t0 oder fehlende Tendenz | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.3 |
 | 5 | Was die Prüfungen der App belegen und was nicht | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 9.4 |
 | 6 | Kennzeichnung von KI-Entwürfen und Veröffentlichung | [KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 6 |
@@ -266,3 +266,4 @@ Zugriff jeweils am 28.10.2026.
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 28.10.2026 | Erste Fassung mit den Vorlagen V1 bis V6, zusätzlich unter CC0 1.0 (App 0.6.6); Angaben zum ThürPersVG nach der amtlichen Gesamtausgabe |
+| 1.1 | 28.10.2026 | V5 Nr. 3: Verweis auf die Systemkarte in KI-VERORDNUNG.md 1.3 statt auf die Spezifikation |
