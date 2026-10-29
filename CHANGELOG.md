@@ -76,6 +76,33 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.3 | letzter Commit des Pull Requests „Modularität: Zyklen gelöst, Schichtentest, Forschungszone, Anbieter-Registry mit Ollama; 0.6.3“ |
 | 0.6.4 | letzter Commit des Pull Requests „Arbeitsanweisungen: Zählregeln, Materialhülle, Caching, Kodierleitfaden als einziger Regelort; 0.6.4“ |
 | 0.6.5 | letzter Commit des Pull Requests „Frontend: Barrierefreiheit, Feldprüfung, Zustandsschnitt, Leistung, Farbtoken aus dem Katalog; 0.6.5“ |
+| 0.6.6 | letzter Commit des Pull Requests „Management Summary: Laufzeile mit Dauer und Kosten, KI-Chip während der Erstellung; 0.6.6“ |
+
+## [0.6.6] – 27.10.2026
+
+Grundlage: Fehlermeldung des Herausgebers vom 27.10.2026. Beim Erstellen der Management Summary zeigte der Schritt, anders als die Stufen der KI-Erfassung, weder Laufzeit noch Kosten, und der KI-Chip oben rechts blieb auf „KI offline“. Ursache: Nur die KI-Erfassung meldete ihren Lauf an die Kopfleiste, und die Laufzeile mit Uhr und Kosten war an deren Lauf gebunden. Baut auf 0.6.5 auf.
+
+### Hinzugefügt
+
+- **Laufzeile der Management Summary:** Während der Erstellung Uhr, „von voraussichtlich …“, geschriebene Zeichen und voraussichtliche Kosten nach Modell und Aufwand der Wahl im Schritt; die tatsächlichen Kosten stehen wie bisher nach der Antwort unter der Fassung. `kurzfassungErstellen` reicht dafür den Fortschritt des Anbieters durch (neuer, optionaler Parameter `fortschritt`); `schaetzeKurzfassungFuer` schätzt die Eingabe aus Arbeitsanweisung und Meldung.
+- **Dauer der Management Summary** (`MS_DAUER` in `src/pipeline/schaetzung.ts`) aus der Abnahme vom 25.10.2026 und ihrer Nachmessung, nach den Rundungsregeln der Schätzung: Sonnet „mittel“ bis 10 s, Haiku „mittel“ 10–20 s, Opus und gpt-6.1-sol „mittel“ 10–40 s, Mistral Medium 3.5 „hoch“ 10–90 s, Mistral Large 4 „hoch“ 90–210 s. Gilt auch für die Schätzung der Testart „Management Summary“ unter „Testläufe“.
+
+### Geändert
+
+- **KI-Chip** (`src/ui/KiSymbol.tsx`): Stufe „ms“; während der Management Summary „KI online“ mit deren Titel im zugänglichen Namen, ein Klick führt zur Meldung. Die Management Summary meldet über `laufMelden` im KI-Zugang (`src/ui/kiZugang.ts`), die App hält diesen Lauf getrennt von dem der KI-Erfassung. Rückfrage beim Profilwechsel und beim Verlassen der Seite (TP-2026-W44-20) gelten auch für die Management Summary.
+- **Laufzeile ausgelagert** (`src/ui/LaufUhr.tsx`): Uhr, erwartete Dauer, Zeichen und Kosten aus der Laufanzeige der KI-Erfassung; deren Anzeige ist unverändert.
+- Spezifikation 0.6.6 (Management Summary, KI-Chip, Testläufe), docs/TESTS.md, docs/TESTZUORDNUNG.md, README.
+- Versionsangaben 0.6.6 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 606, iOS 606).
+
+### Behoben
+
+- **Management Summary ohne Laufzeit und Kosten, KI-Chip blieb „KI offline“** während der Erstellung; ein Profilwechsel brach eine laufende Management Summary ohne Rückfrage ab.
+
+### Tests
+
+- `tests/ui/kurzfassung-lauf.test.ts` (neu): Laufzeile während der Erstellung; Meldung an die Kopfleiste bis Ende, Abbruch und Verlassen des Schritts.
+- `tests/ui/kisymbol.test.ts`: Stufe „ms“ mit Titel und „Zur Meldung“.
+- `tests/pipeline/schaetzung.test.ts`: `MS_DAUER` gegen die Messwerte; `tests/forschung/vergleichslauf-umfang.test.ts` erwartet für Sonnet „mittel“ eine Dauer.
 
 ## [0.6.5] – 27.10.2026
 

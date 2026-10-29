@@ -4,8 +4,10 @@
 // Die Fassung wird nur auf Knopfdruck erstellt. Sie wird geleert, wenn die Meldung in der Maske durch eine
 // andere ersetzt wird (neue Meldung, Meldung öffnen, Übernahme eines KI-Entwurfs) und bei der Übergabe von
 // Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
+// Während der Erstellung (seit 0.6.6) wie die KI-Erfassung: Uhr mit erwarteter Dauer, geschriebene Zeichen und
+// voraussichtliche Kosten; der KI-Chip der Kopfleiste steht auf „KI online“.
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { anbieterVon, ANBIETER_NAME, hatSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { formatUsd } from "../anbieter/preise";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
@@ -16,7 +18,10 @@ import { dateiAnbieten, kurzfassungLesen, kurzfassungLoeschen, kurzfassungSchrei
 import { mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
 import { ModellWahl } from "./ModellWahl";
 import { useKiZugang } from "./kiZugang";
-import { kurzfassungErstellen, kurzfassungsFingerabdruck } from "../pipeline/kurzfassung";
+import { kurzfassungErstellen, kurzfassungsFingerabdruck, schaetzeKurzfassungFuer } from "../pipeline/kurzfassung";
+import { dauerText, kostenText } from "../pipeline/schaetzung";
+import { LaufAnzeigeStand } from "./kiErfassung/anzeigeStand";
+import { LaufUhr } from "./LaufUhr";
 import { kurzfassungAlsDatei } from "../dokumente/kennzeichnung";
 import { bestaetigen } from "./bestaetigung";
 
@@ -86,6 +91,15 @@ export function KurzfassungKasten({
   // Laufende Anfrage beim Verlassen (z. B. Profilwechsel) kontrolliert abbrechen
   useEffect(() => () => abbruch.current?.abort(), []);
   useWachhalten(laeuft);
+  // Stand der Laufzeile außerhalb von React, damit das Streaming nicht den ganzen Kasten neu zeichnet
+  const [anzeige] = useState(() => new LaufAnzeigeStand());
+  // Laufende Anfrage an die Kopfleiste melden (KI-Chip, Rückfrage beim Profilwechsel und beim Verlassen der Seite)
+  const melden = kiZugang?.laufMelden;
+  useEffect(() => {
+    if (!laeuft || !melden) return;
+    melden({ stufe: "ms", titel });
+    return () => melden(null);
+  }, [laeuft, melden, titel]);
   const auszug = useMemo(() => managementSummary(meldung, profil), [meldung, profil]);
 
   useEffect(() => {
@@ -117,7 +131,7 @@ export function KurzfassungKasten({
     await kurzfassungLeeren(profil.manifest.id);
   };
 
-  const kiEinstellungen = ki ? mitModellwahl(ki.einstellungen, kfWahl) : undefined;
+  const kiEinstellungen = useMemo(() => (ki ? mitModellwahl(ki.einstellungen, kfWahl) : undefined), [ki, kfWahl]);
   const kfModell = kiEinstellungen ? modellFuer("kurzfassung", kiEinstellungen, profil) : "";
   const schluesselDa = !!ki && hatSchluessel(anbieterVon(kfModell), ki.schluessel);
 
@@ -127,8 +141,16 @@ export function KurzfassungKasten({
     setLaeuft(true);
     const ctrl = new AbortController();
     abbruch.current = ctrl;
+    anzeige.beginnen();
     try {
-      const k = await kurzfassungErstellen(profil, meldung, Verteiler.fuer(ki.schluessel, kiEinstellungen!.anbieterOptionen), kiEinstellungen!, ctrl.signal);
+      const k = await kurzfassungErstellen(
+        profil,
+        meldung,
+        Verteiler.fuer(ki.schluessel, kiEinstellungen!.anbieterOptionen),
+        kiEinstellungen!,
+        ctrl.signal,
+        anzeige.fortschritt,
+      );
       const g = { fingerabdruck: fp, kurzfassung: k };
       setGespeichert(g);
       await kurzfassungSchreiben(profil.manifest.id, g).catch(() =>
@@ -140,6 +162,11 @@ export function KurzfassungKasten({
       setLaeuft(false);
     }
   };
+
+  const schaetzung = useMemo(
+    () => (kiEinstellungen ? schaetzeKurzfassungFuer(profil, meldung, kiEinstellungen, kiEinstellungen.anbieterOptionen) : null),
+    [profil, meldung, kiEinstellungen],
+  );
 
   const kf = gespeichert?.kurzfassung;
   const veraltet = !!gespeichert && gespeichert.fingerabdruck !== fp;
@@ -228,13 +255,14 @@ export function KurzfassungKasten({
           onChange={setKfWahl}
         />
       )}
+      {laeuft && (
+        <MsLaufzeile stand={anzeige} erwartet={schaetzung ? dauerText(schaetzung.sekunden) : null} kosten={schaetzung ? kostenText(schaetzung.usd) : null} />
+      )}
       <div className="aktionen">
         {schluesselDa ? (
           laeuft ? (
             <>
-              <span className="laufanzeige">
-                <span className="puls" aria-hidden="true" /> {titel} wird erstellt …
-              </span>
+              <span>{titel} wird erstellt …</span>
               <button type="button" className="knopf leise" onClick={() => abbruch.current?.abort()}>
                 Abbrechen
               </button>
@@ -262,4 +290,12 @@ export function KurzfassungKasten({
       </details>
     </section>
   );
+}
+
+/** Laufzeile der Management Summary; abonniert nur den Anzeigestand, damit Streaming den Kasten nicht neu zeichnet */
+function MsLaufzeile({ stand, erwartet, kosten }: { stand: LaufAnzeigeStand; erwartet: string | null; kosten: string | null }) {
+  const { start, zeichen } = useSyncExternalStore(stand.abonnieren, stand.lesen);
+  // Die Kosten stehen erst mit der Antwort fest; bis dahin die Schätzung, ohne Preisangabe keine
+  const k = kosten && !kosten.startsWith("Kosten unbekannt") ? (kosten.startsWith("ohne Kosten") ? kosten : `voraussichtlich ${kosten}`) : null;
+  return <LaufUhr start={start} zeichen={zeichen} erwartet={erwartet} kosten={k} />;
 }

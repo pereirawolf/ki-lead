@@ -36,4 +36,15 @@ describe("KI-Chip der Kopfleiste", () => {
     expect(kiAnsage(null)).toBe("KI offline.");
     expect(kiSymbolText({ stufe: "s2" })).toBe("KI online: Anfrage läuft, S2 Recherche und Entwurf. Zur KI-Erfassung");
   });
+
+  it("zeigt die laufende Management Summary mit ihrem Titel und führt zur Meldung (seit 0.6.6)", async () => {
+    const zurKi = vi.fn();
+    await zeige({ zurKi, lauf: { stufe: "ms", titel: "Lagebild für die Leitung" } });
+    expect(chip().dataset.zustand).toBe("online");
+    expect(chip().getAttribute("aria-label")).toBe("KI online: Anfrage läuft, Lagebild für die Leitung. Zur Meldung");
+    await klick(chip());
+    expect(zurKi).toHaveBeenCalledOnce();
+    expect(kiSymbolText({ stufe: "ms" })).toBe("KI online: Anfrage läuft, Management Summary. Zur Meldung");
+    expect(kiAnsage({ stufe: "ms" })).toBe("KI online: Management Summary.");
+  });
 });

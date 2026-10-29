@@ -366,7 +366,8 @@ describe("MS (aus Musterfassung)", () => {
     // Sonnet: 12 000 × 2 USD + 1 000 bzw. 6 000 × 10 USD je Million Token
     const s = schaetzeKurzfassung("claude-sonnet-5-5", "medium", 12_000);
     expect(s.gemessen).toBe(false);
-    expect(s.sekunden).toBeNull();
+    // Dauer seit 0.6.6 aus MS_DAUER (Sonnet „mittel“ gemessen 6–8 s)
+    expect(s.sekunden).toEqual([0, 10]);
     expect(s.usd![0]).toBeCloseTo(0.034, 6);
     expect(s.usd![1]).toBeCloseTo(0.084, 6);
     // Mistral Medium „hoch“ am EU-Endpunkt: (12 000 × 1,5 + 16 000 × 7,5) / 1e6 × 1,1

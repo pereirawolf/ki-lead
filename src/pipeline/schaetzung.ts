@@ -145,7 +145,7 @@ function schaetzeOhneAufschlag(art: SchaetzArt, modell: string, aufwand: Aufwand
  * Grobe Schätzung der Management Summary (seit 0.5.12, Vergleichslauf „MS (aus Musterfassung)“), ohne Messwert: ein
  * Aufruf ohne Werkzeuge; Eingabe in Token (Arbeitsanweisung und Meldung), Ausgabe einschließlich Nachdenken 500 bis
  * 3 000 Token bei „niedrig“, 1 000 bis 6 000 bei „mittel“ und 1 000 bis 16 000 darüber, zum Listenpreis ohne Cache.
- * Keine Dauer; der Aufschlag des Mistral-EU-Endpunkts kommt auf die Kosten.
+ * Die Dauer kommt aus MS_DAUER, sonst keine; der Aufschlag des Mistral-EU-Endpunkts kommt auf die Kosten.
  *
  * Messwerte vom 25.10.2026 (Plan management-summary-ilka, App 0.5.14, je drei Läufe, AV-2026-W43-38): Ausgabetoken
  * Sonnet „mittel“ 798–908, Opus „mittel“ 2 124–3 478, Haiku „mittel“ 2 354–3 542, gpt-6.1-sol „mittel“ 734–1 395,
@@ -157,10 +157,26 @@ export function schaetzeKurzfassung(modell: string, aufwand: Aufwand, eingabeTok
   const [von, bis] = a === "low" ? [500, 3000] : a === "medium" ? [1000, 6000] : [1000, 16000];
   const k = (ausgabe: number) => kostenAnfrage(modell, { ...leereNutzung(), eingabe: eingabeToken, ausgabe });
   const [u, o] = [k(von), k(bis)];
-  if (u === null || o === null) return { sekunden: null, usd: null, gemessen: false };
+  const sekunden = MS_DAUER[`${modell}|${a}`] ?? null;
+  if (u === null || o === null) return { sekunden, usd: null, gemessen: false };
   const f = aufschlagFuer(modell, optionen);
-  return { sekunden: null, usd: [u * f, o * f], gemessen: false };
+  return { sekunden, usd: [u * f, o * f], gemessen: false };
 }
+
+/**
+ * Dauer der Management Summary in Sekunden (seit 0.6.6) aus derselben Abnahme vom 25.10.2026 und ihrer Nachmessung vom
+ * selben Tag (je drei bzw. sechs Läufe), nach den Regeln oben: größter Messwert plus 25 %, unter 60 s auf 10 s, darüber
+ * auf 30 s nach außen gerundet. Schlüssel: Modell|Aufwand. Gemessen: Sonnet „mittel“ 6–8 s, Opus „mittel“ 18–28 s,
+ * Haiku „mittel“ 10–15 s, gpt-6.1-sol „mittel“ 15–32 s, Mistral Medium 3.5 „hoch“ 14–63 s, Mistral Large 4 „hoch“ 92–152 s.
+ */
+export const MS_DAUER: Record<string, [number, number]> = {
+  "claude-sonnet-5-5|medium": [0, 10],
+  "claude-opus-5-5|medium": [10, 40],
+  "claude-haiku-5-5|medium": [10, 20],
+  "gpt-6.1-sol|medium": [10, 40],
+  "mistral-medium-3-5|high": [10, 90],
+  "mistral-large-4|high": [90, 210],
+};
 
 export function dauerText(s: [number, number] | null): string {
   if (!s) return "Dauer ohne Messwert";
