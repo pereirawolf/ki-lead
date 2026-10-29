@@ -4,7 +4,7 @@
 import { describe, expect, it } from "vitest";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { stufe1 } from "../../src/pipeline/stufen";
+import { stufe1 } from "../../src/pipeline/s1";
 import { materialBloecke, materialUebersicht } from "../../src/pipeline/material";
 
 /** Alle Textblöcke der ersten Nutzernachricht, in Reihenfolge */

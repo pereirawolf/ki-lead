@@ -103,8 +103,10 @@ export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, un
   };
   const vieleck = (radien: number[], stil: "S" | "F" | "FD") => {
     const pts = radien.map((r, i) => punkt(i, r));
-    const wege = pts.slice(1).map((p, i) => [p[0] - pts[i][0], p[1] - pts[i][1]]);
-    doc.lines(wege, pts[0][0], pts[0][1], [1, 1], stil, true);
+    const erster = pts[0];
+    if (!erster) return;
+    const wege = pts.slice(1).map((p, i) => [p[0] - pts[i]![0], p[1] - pts[i]![1]]);
+    doc.lines(wege, erster[0], erster[1], [1, 1], stil, true);
   };
   doc.setLineWidth(0.2);
   for (let s = 1; s <= def.max; s++) {
@@ -121,7 +123,7 @@ export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, un
     const [ax, ay] = punkt(i, rMax);
     doc.line(cx, cy, ax, ay);
     const [lx, ly] = punkt(i, rMax + 4.2);
-    doc.text(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0], lx, ly, { align: "center", baseline: "middle" });
+    doc.text(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0] ?? "", lx, ly, { align: "center", baseline: "middle" });
   });
   const werte = def.achsen.map((a) => (Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null));
   if (werte.some((v) => v !== null)) {
@@ -424,7 +426,7 @@ export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string
   autoTable(doc, {
     didParseCell: zellText,
     startY: 27,
-    head: [uebersicht[0]],
+    head: [uebersicht[0] ?? []],
     body: uebersicht.slice(1),
     theme: "grid",
     headStyles: { fillColor: BLAU },

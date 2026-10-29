@@ -6,8 +6,9 @@
 // - Websuche (web_search_20250305) und URL-Abruf (web_fetch_20250910) als Server-Werkzeuge
 // - Erzwungene Websuche über tool_choice (Orientierungssuche in S1, seit 0.6.0), nur für Modelle, die es zulassen
 
+import { fehlerJson, LeseFehler, mitWiederholung, sseLesen, type Fehlerregeln } from "./http";
 import { kostenAnfrage } from "./preise";
-import { fehlerText, NachrichtenSammler, SseLeser } from "./strom";
+import { fehlerText, NachrichtenSammler } from "./strom";
 import {
   AnbieterFehler,
   addiereNutzung,
@@ -22,7 +23,7 @@ import {
   TEXT_VERBINDUNGSABBRUCH,
 } from "./typen";
 import type { ZusammengesetzteNachricht } from "./strom";
-import { abbruchPruefen, warte } from "./warten";
+import { warte } from "./warten";
 
 /** Verbindung riss mitten im Strom ab; enthält die bis dahin vollständigen Blöcke. */
 export class StromAbbruch extends Error {
@@ -37,7 +38,6 @@ export class StromAbbruch extends Error {
 
 export const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const MAX_FORTSETZUNGEN = 6;
-const MAX_WIEDERHOLUNGEN = 3;
 
 export function anfrageKoerper(a: LlmAnfrage, nachrichten = a.nachrichten): Record<string, any> {
   const body: Record<string, any> = {
@@ -133,13 +133,25 @@ export class AnthropicAnbieter implements LlmAnbieter {
     private abruf: typeof fetch = (...x) => fetch(...x),
   ) {}
 
+  /** Fehlerregeln der Messages API für die gemeinsame Wiederholung (http.ts) */
+  private regeln(): Fehlerregeln {
+    return {
+      fehlerAus: async (antwort) => {
+        const j = await fehlerJson(antwort);
+        return { code: j?.error?.type, meldung: j?.error?.message, roh: JSON.stringify(j ?? "") };
+      },
+      wiederholbar: (status) => status === 429 || status === 529 || status >= 500,
+      fehlerText: (status, code, meldung) => fehlerText(code, meldung, status),
+      netzFehler: "Keine Verbindung zum Anbieter. Netz prüfen.",
+    };
+  }
+
   private async eineRunde(a: LlmAnfrage, nachrichten: any[]) {
-    const body = anfrageKoerper(a, nachrichten);
-    for (let versuch = 0; ; versuch++) {
-      abbruchPruefen(a.signal);
-      let antwort: Response;
-      try {
-        antwort = await this.abruf(this.url, {
+    const body = JSON.stringify(anfrageKoerper(a, nachrichten));
+    const antwort = await mitWiederholung(
+      a,
+      () =>
+        this.abruf(this.url, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -147,57 +159,23 @@ export class AnthropicAnbieter implements LlmAnbieter {
             "anthropic-version": "2023-06-01",
             "anthropic-dangerous-direct-browser-access": "true",
           },
-          body: JSON.stringify(body),
+          body,
           signal: a.signal,
-        });
-      } catch (e: any) {
-        if (e?.name === "AbortError") throw e;
-        if (versuch < MAX_WIEDERHOLUNGEN) {
-          a.fortschritt?.({ art: "wiederholung", grund: "Netzwerkfehler", warteMs: 2000 * (versuch + 1) });
-          await warte(2000 * (versuch + 1), a.signal);
-          continue;
-        }
-        throw new AnbieterFehler("Keine Verbindung zum Anbieter. Netz prüfen.", 0, "netz");
-      }
-      if (!antwort.ok) {
-        let art: string | undefined;
-        let meldung: string | undefined;
-        try {
-          const j = await antwort.json();
-          art = j?.error?.type;
-          meldung = j?.error?.message;
-        } catch {
-          /* leer */
-        }
-        const wiederholbar = antwort.status === 429 || antwort.status === 529 || antwort.status >= 500;
-        if (wiederholbar && versuch < MAX_WIEDERHOLUNGEN) {
-          const ra = Number(antwort.headers.get("retry-after"));
-          const ms = Number.isFinite(ra) && ra > 0 ? Math.min(ra * 1000, 60_000) : 4000 * 2 ** versuch;
-          a.fortschritt?.({ art: "wiederholung", grund: fehlerText(art, undefined, antwort.status), warteMs: ms });
-          await warte(ms, a.signal);
-          continue;
-        }
-        throw new AnbieterFehler(fehlerText(art, meldung, antwort.status), antwort.status, art);
-      }
-      const sammler = new NachrichtenSammler(a.fortschritt);
-      const leser = new SseLeser();
-      const reader = antwort.body!.pipeThrough(new TextDecoderStream()).getReader();
-      try {
-        for (;;) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          for (const ev of leser.lies(value)) sammler.verarbeite(ev);
-        }
-      } catch (e: any) {
-        if (e?.name === "AbortError" || a.signal?.aborted) throw e;
-        if (e instanceof AnbieterFehler) throw e;
-        throw new StromAbbruch(sammler.teil(), e);
-      }
-      const erg = sammler.ergebnis();
-      // Strom endete ohne message_stop/stop_reason: ebenfalls als Abbruch behandeln
-      if (!erg.stopGrund) throw new StromAbbruch(sammler.teil(), new Error("Strom ohne Abschluss beendet"));
-      return erg;
+        }),
+      this.regeln(),
+    );
+    const sammler = new NachrichtenSammler(a.fortschritt);
+    try {
+      await sseLesen(antwort, a.signal, (ev) => sammler.verarbeite(ev));
+    } catch (e) {
+      // Nur Fehler des Transports sind ein Abriss (TP-2026-W44-04); Fehler der Verarbeitung gehen unverändert weiter
+      if (e instanceof LeseFehler) throw new StromAbbruch(sammler.teil(), e.ursache);
+      throw e;
     }
+    const erg = sammler.ergebnis();
+    // Strom endete ohne message_stop/stop_reason: ebenfalls als Abbruch behandeln
+    if (!erg.stopGrund) throw new StromAbbruch(sammler.teil(), new Error("Strom ohne Abschluss beendet"));
+    return erg;
   }
 
   async senden(a: LlmAnfrage): Promise<LlmAntwort> {

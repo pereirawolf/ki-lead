@@ -4,7 +4,8 @@ import { profil } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { bestaetigterVorschlag, pipelineKontext } from "../support/pipeline";
-import { stufe2und3, nachbearbeiten, radarUmhaengen } from "../../src/pipeline/stufen";
+import { nachbearbeiten, radarUmhaengen } from "../../src/pipeline/nachbearbeitung";
+import { stufe2und3 } from "../../src/pipeline/s2s3";
 import { pruefeGegenSchema } from "../../src/kern/validierung";
 
 const he = ilkaMeldung("HE");
@@ -21,7 +22,7 @@ const WIE_TESTREIHE = { jetzt: "2026-10-14T14:00:00+02:00", auftrag: { sachverha
 
 describe("Meldungsidentität (F03) und eigene Stelle (F07)", () => {
   it("setzt Land und meldende Stelle eines KI-Entwurfs auf die eigene Stelle und meldet die Korrektur", async () => {
-    const { nachbearbeiten } = await import("../../src/pipeline/stufen");
+    const { nachbearbeiten } = await import("../../src/pipeline/nachbearbeitung");
     const { k } = await pipelineKontext(skriptAnbieter([]));
     const korrekturen: string[] = [];
     const m = nachbearbeiten(structuredClone(he), k, "x", korrekturen);

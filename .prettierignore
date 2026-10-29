@@ -1,0 +1,2 @@
+# Von der CI erzeugt (SBOM im Format CycloneDX, .github/workflows/pages.yml und release.yml); nicht Teil des Quellstands
+*.cdx.json

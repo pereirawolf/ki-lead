@@ -1,7 +1,7 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
-import { schemaFehler } from "../kern/validierung";
+import { schemaFehler, schemaHinweise } from "../kern/validierung";
 import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
@@ -49,7 +49,7 @@ export function normalisiereDateien(dateien: Record<string, string>): Record<str
   const out: Record<string, string> = {};
   for (const p of pfade) {
     if (!p.startsWith(praefix)) continue;
-    out[p.slice(praefix.length)] = dateien[p];
+    out[p.slice(praefix.length)] = dateien[p] ?? "";
   }
   return out;
 }
@@ -255,8 +255,7 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
     befunde.push({
       stufe: "hinweis",
       code: "KI_KENNZEICHNUNG_OHNE_ENTSTEHUNGSFELD",
-      text:
-        "Darstellungsdatei und Schema: Ohne Entstehungsfeld mit „verfahren“ (Wert „KI-Entwurf“) sind KI-Entwürfe dieses Profils als JSON nicht maschinenlesbar gekennzeichnet; PDF-Metadaten nennen die Herkunft dann „unbekannt“. Siehe docs/KI-VERORDNUNG.md, Abschnitt 6.1.",
+      text: "Darstellungsdatei und Schema: Ohne Entstehungsfeld mit „verfahren“ (Wert „KI-Entwurf“) sind KI-Entwürfe dieses Profils als JSON nicht maschinenlesbar gekennzeichnet; PDF-Metadaten nennen die Herkunft dann „unbekannt“. Siehe docs/KI-VERORDNUNG.md, Abschnitt 6.1.",
     });
   for (const [name, radar] of Object.entries(ui.radare || {})) {
     for (const a of radar.achsen) {
@@ -315,6 +314,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     const f = schemaFehler(schema);
     schemaOk = !f;
     if (f) befunde.push({ stufe: "fehler", text: `Das Meldungsschema ist nicht verwendbar: ${f}` });
+    else for (const h of schemaHinweise(schema)) befunde.push({ stufe: "hinweis", text: `Meldungsschema: ${h}` });
     const kennung = schema?.properties?.[ui?.rollen?.schema_feld || "schema"]?.const;
     if (kennung && manifest.meldung.schema_id && kennung !== manifest.meldung.schema_id)
       befunde.push({ stufe: "warnung", text: `Schemakennung im Schema („${kennung}“) weicht von profil.json („${manifest.meldung.schema_id}“) ab.` });
@@ -334,7 +334,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });
     else if (pfad) {
-      const unbekannt = platzhalterIn(dateien[pfad]).filter(
+      const unbekannt = platzhalterIn(dateien[pfad] ?? "").filter(
         (p) => /^profil\./.test(p) && !(p.slice(7) in manifest.variablen) && !["profil.referenzraum", "profil.ebene", "profil.name"].includes(p),
       );
       if (unbekannt.length) befunde.push({ stufe: "warnung", text: `${pfad}: Platzhalter ohne Profilvariable: ${unbekannt.join(", ")}` });

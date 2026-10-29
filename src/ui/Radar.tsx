@@ -116,8 +116,10 @@ export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
             const ziel = zielIndex(e.key, werte.indexOf(v), werte.length);
             if (ziel === null) return;
             e.preventDefault();
-            setze(a.key, werte[ziel]);
-            document.getElementById(optionId(werte[ziel]))?.focus();
+            const wert = werte[ziel];
+            if (wert === undefined) return;
+            setze(a.key, wert);
+            document.getElementById(optionId(wert))?.focus();
           };
           return (
             <fieldset key={a.key} className="radar-achse-wahl">

@@ -95,7 +95,7 @@ export function gleich(a: unknown, b: unknown): boolean {
     const bb = b as unknown[];
     return a.length === bb.length && a.every((x, i) => gleich(x, bb[i]));
   }
-  const ka = Object.keys(a as object);
+  const ka = Object.keys(a);
   const kb = Object.keys(b as object);
   return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && gleich((a as any)[k], (b as any)[k]));
 }
@@ -405,6 +405,35 @@ export function schemaFehler(schema: unknown): string | null {
   if (zuTief) fehler.push(`Das Schema ist tiefer als ${MAX_SCHEMATIEFE} Ebenen verschachtelt und wurde nicht vollständig geprüft`);
   if (unbekannt.size) fehler.push(`Nicht unterstützte Schlüsselwörter: ${[...unbekannt].join(", ")}`);
   return fehler.length ? fehler.join("; ") : null;
+}
+
+/**
+ * Hinweise zu einem verwendbaren Schema (seit 0.6.2, TP-2026-W44-10): „format“ steht in der Liste der bekannten
+ * Schlüsselwörter, wird aber weder von der App noch von Ajv ohne ajv-formats geprüft. Profilautoren sollen das wissen,
+ * statt sich auf eine Prüfung zu verlassen, die nicht stattfindet.
+ */
+export function schemaHinweise(schema: unknown): string[] {
+  const formate = new Map<string, Set<string>>();
+  const lauf = (k: unknown, pfad: string, tiefe: number) => {
+    if (!k || typeof k !== "object" || tiefe > MAX_SCHEMATIEFE) return;
+    if (Array.isArray(k)) {
+      k.forEach((x, i) => lauf(x, `${pfad}[${i}]`, tiefe + 1));
+      return;
+    }
+    for (const [key, wert] of Object.entries(k)) {
+      if (key === "format" && typeof wert === "string") {
+        if (!formate.has(wert)) formate.set(wert, new Set());
+        formate.get(wert)!.add(pfad || "(Wurzel)");
+      }
+      if (key === "enum" || key === "const" || key === "examples" || key === "default") continue;
+      if (wert && typeof wert === "object") lauf(wert, pfad ? `${pfad}.${key}` : key, tiefe + 1);
+    }
+  };
+  lauf(schema, "", 0);
+  return [...formate.entries()].map(
+    ([f, pfade]) =>
+      `„format“: „${f}“ an ${pfade.size} Stelle${pfade.size === 1 ? "" : "n"} (${[...pfade].slice(0, 5).join(", ")}${pfade.size > 5 ? ", …" : ""}) wird von der App nicht geprüft; Muster bitte als „pattern“ festlegen.`,
+  );
 }
 
 /** Rohprüfung ohne Bezeichnungen (für Tests und interne Zwecke). */

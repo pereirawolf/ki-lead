@@ -21,7 +21,7 @@ export function teilePfad(pfad: string): Segment[] {
       continue;
     }
     if (m[1]) out.push(m[1]);
-    const idx = m[2].match(/\[(\d*)\]/g) || [];
+    const idx = (m[2] ?? "").match(/\[(\d*)\]/g) || [];
     for (const i of idx) {
       const n = i.slice(1, -1);
       out.push(n === "" ? -1 : Number(n));

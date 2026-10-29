@@ -51,8 +51,8 @@ function vorschauStil(basisId: string, farben: Partial<Record<string, string>> =
   const b = katalogEintrag(basisId) || katalogEintrag("neutral-hell")!;
   const alle: Record<string, string> = { ...b.tokens, ...semantikVon(b), ...farben };
   const eigenesBand = ["marke-akzent-1", "marke-akzent-2", "marke-akzent-3"].some((k) => farben[k] && farben[k] !== b.tokens[k as UiToken]);
-  alle.band = bandVerlauf(eigenesBand ? [alle["marke-akzent-1"], alle["marke-akzent-2"], alle["marke-akzent-3"]] : b.band);
-  return Object.fromEntries(Object.entries(alle).map(([k, v]) => [`--${k}`, v])) as CSSProperties;
+  alle.band = bandVerlauf(eigenesBand ? ["marke-akzent-1", "marke-akzent-2", "marke-akzent-3"].map((k) => alle[k] ?? "") : b.band);
+  return Object.fromEntries(Object.entries(alle).map(([k, v]) => [`--${k}`, v]));
 }
 
 function Vorschau({ stil, titel }: { stil: CSSProperties; titel: string }) {

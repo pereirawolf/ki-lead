@@ -19,7 +19,7 @@ export function yamlKopf(text: string): Record<string, any> {
 
 function titelVon(text: string): string {
   const m = text.match(/^#{1,3}\s+(.+)$/m);
-  return m ? m[1].trim() : "";
+  return m?.[1]?.trim() ?? "";
 }
 
 function baueSop(id: string, text: string, datei: string, gemeinsamId?: string): Sop {
@@ -58,12 +58,12 @@ export function zerlegeSops(text: string, datei: string, gemeinsamId?: string): 
     const out: Sop[] = [];
     anker.forEach((m, i) => {
       const start = (m.index ?? 0) + m[0].length;
-      const ende = i + 1 < anker.length ? (anker[i + 1].index ?? text.length) : text.length;
+      const ende = anker[i + 1]?.index ?? text.length;
       const abschnitt = text
         .slice(start, ende)
         .replace(/\n---\s*$/, "")
         .trim();
-      out.push(baueSop(m[1], abschnitt, datei, gemeinsamId));
+      out.push(baueSop(m[1] ?? "", abschnitt, datei, gemeinsamId));
     });
     return out;
   }

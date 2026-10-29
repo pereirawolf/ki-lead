@@ -3,12 +3,13 @@
 
 import type { GespeicherterVergleich } from "./vergleich";
 import JSZip from "jszip";
-import { del, entries, get, set } from "idb-keyval";
-import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung } from "../anbieter/typen";
+import { del, get, getMany, keys, set } from "idb-keyval";
+import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung, type StopGrund } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 
-export const APP_KENNUNG = "KI-LEAD 0.6.1";
+/** Kennung der App in Laufprotokollen und Ausgaben; die Nummer kommt aus package.json (seit 0.6.2, TP-2026-W44-08) */
+export const APP_KENNUNG = `KI-LEAD ${__APP_VERSION__}`;
 
 export interface Auftrag {
   sachverhalt: string;
@@ -95,7 +96,7 @@ export interface StufenEintrag {
   modell?: string;
   aufwand?: string;
   anfrage?: { system: string[]; nachrichten: unknown[]; werkzeuge?: unknown; jsonSchema?: unknown; maxTokens?: number };
-  antwort?: { text: string; inhalt: unknown[]; stopGrund: string; runden: number };
+  antwort?: { text: string; inhalt: unknown[]; stopGrund: StopGrund; runden: number };
   nutzung?: Nutzung;
   kostenUsd?: number | null;
   befunde?: string[];
@@ -142,6 +143,26 @@ export interface Lauf {
   fehler?: string;
   /** Vergleich des Ergebnisses mit einer Referenzfassung (Abnahme, Forschung) */
   vergleich?: GespeicherterVergleich;
+}
+
+/** Ergebnis eines Laufs, wie es `Lauf.ergebnis` trägt */
+export type LaufErgebnis = NonNullable<Lauf["ergebnis"]>;
+
+/**
+ * Type-Guards für den Zustand eines Laufs (seit 0.6.2, TP-2026-W44-07). Gespeicherte Läufe bestehen in der bisherigen
+ * Form fort, daher keine diskriminierte Union am Typ `Lauf`, sondern Prüfungen, die den Status mit den dazugehörigen
+ * Feldern verknüpfen.
+ */
+export function istFertig(l: Lauf): l is Lauf & { status: "fertig"; ergebnis: LaufErgebnis } {
+  return l.status === "fertig" && l.ergebnis !== undefined;
+}
+
+export function istBestaetigen(l: Lauf): l is Lauf & { status: "bestaetigen"; vorschlag: S1Vorschlag } {
+  return l.status === "bestaetigen" && l.vorschlag !== undefined;
+}
+
+export function istGescheitert(l: Lauf): l is Lauf & { status: "fehler" | "abgebrochen" } {
+  return l.status === "fehler" || l.status === "abgebrochen";
 }
 
 export function laufId(d = new Date()): string {
@@ -220,7 +241,7 @@ export async function laufSpeichern(l: Lauf): Promise<void> {
 }
 
 export async function laufLesen(id: string): Promise<Lauf | undefined> {
-  return (await get(`lauf:${id}`)) as Lauf | undefined;
+  return get<Lauf>(`lauf:${id}`);
 }
 
 export async function laufLoeschen(id: string): Promise<void> {
@@ -242,10 +263,29 @@ export async function laeufeAlsZip(laeufe: Lauf[], dateiname: (l: Lauf) => strin
   return zip.generateAsync({ type: "blob", compression: "DEFLATE" });
 }
 
+/**
+ * Alle Laufprotokolle. Seit 0.6.2 (TP-2026-W44-10) über keys() und getMany() nur die Schlüssel „lauf:…“, statt mit
+ * entries() den ganzen Speicher samt Profilen und Dateitexten zu laden.
+ */
 export async function laeufeLaden(): Promise<Lauf[]> {
-  const alle = await entries();
-  return alle
-    .filter(([k]) => typeof k === "string" && k.startsWith("lauf:"))
-    .map(([, v]) => v as Lauf)
-    .sort((a, b) => b.erstellt.localeCompare(a.erstellt));
+  const schluessel = (await keys()).filter((k): k is string => typeof k === "string" && k.startsWith("lauf:"));
+  const werte = await getMany<Lauf | undefined>(schluessel);
+  return werte.filter((v): v is Lauf => !!v).sort((a, b) => b.erstellt.localeCompare(a.erstellt));
+}
+
+/**
+ * Bittet den Browser, den Speicher der App vor automatischer Räumung zu schützen (navigator.storage.persist, seit 0.6.2,
+ * TP-2026-W44-10). Einmal je Sitzung, nur im Browser; ohne Unterstützung oder bei Ablehnung ohne Folgen.
+ */
+let persistAngefragt = false;
+export async function speicherSchuetzen(): Promise<boolean | null> {
+  if (persistAngefragt) return null;
+  persistAngefragt = true;
+  try {
+    const st = (globalThis as { navigator?: { storage?: { persist?: () => Promise<boolean> } } }).navigator?.storage;
+    if (!st?.persist) return null;
+    return await st.persist();
+  } catch {
+    return null;
+  }
 }

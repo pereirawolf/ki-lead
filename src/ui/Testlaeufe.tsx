@@ -31,20 +31,19 @@ import {
   einstellungenFuerVariante,
   plaeneFuer,
   planVarianteZu,
-  reiheZip,
   rollenFuer,
   UMFAENGE,
   UMFANG_VORGABE,
   umfangInfo,
   vergleichsreihe,
   VERGLEICH_ROLLEN,
-  zipDateiname,
   type EinzelErgebnis,
   type FallDaten,
   type PlanVariante,
   type Reihe,
   type Umfang,
 } from "../pipeline/vergleichslauf";
+import { reiheZip, zipDateiname } from "../pipeline/vergleichslauf-export";
 import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../pipeline/vergleichslauf-eingebaut";
 import { dateiAnbieten } from "../speicher/speicher";
 import {
@@ -354,7 +353,7 @@ export function TestlaufAbschnitt({
   const planHinweis = reparatur
     ? `${gilt ? "" : "Varianten des Bewertungsplans lassen die Einstellungen unverändert. "}Je Variante ${PLAN_REPARATUR.wiederholungen} Läufe mit derselben App-Version.`
     : `${planWahl ? `${planWahl.plan.kurz} ` : "Varianten der Bewertungspläne lassen die Einstellungen unverändert. "}Je Variante ${
-        (planWahl?.plan ?? plaene[0]).wiederholungen
+        (planWahl?.plan ?? plaene[0])?.wiederholungen
       } Läufe mit derselben App-Version${rollen.includes("reparatur") ? "; die Reparatur folgt dem KI-Profil des S2-Anbieters." : "."}`;
 
   return (
@@ -403,7 +402,7 @@ export function TestlaufAbschnitt({
               <optgroup key={plan.id} label={`Bewertungsplan ${plan.id}`}>
                 {plan.varianten.map((v) => (
                   <option key={v.kennung} value={`${plan.id}/${v.kennung}`}>
-                    {varianteText(v, art as Umfang)}
+                    {varianteText(v, art)}
                   </option>
                 ))}
               </optgroup>
@@ -671,7 +670,6 @@ export function TestlaufArchiv({ aktualisierung = 0 }: { aktualisierung?: number
   };
   useEffect(() => {
     void laden();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aktualisierung]);
 
   const herunterladen = async (x: TestlaufEintrag) => {

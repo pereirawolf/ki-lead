@@ -36,6 +36,7 @@ import {
   laufLoeschen,
   laufSpeichern,
   neuerLauf,
+  speicherSchuetzen,
   type Lauf,
   type S1Vorschlag,
   type Suchbegriff,
@@ -54,7 +55,11 @@ import {
   type Material,
   type KiUebergabe,
 } from "../pipeline/material";
-import { orientierungMoeglich, orientierungssuche, rechercheNachweis, stufe1, stufe2und3, type Kontext } from "../pipeline/stufen";
+import { orientierungMoeglich, orientierungssuche } from "../pipeline/orientierung";
+import { rechercheNachweis } from "../pipeline/recherchebefunde";
+import { stufe1 } from "../pipeline/s1";
+import { stufe2und3 } from "../pipeline/s2s3";
+import type { Kontext } from "../pipeline/stufen";
 import { werkzeugText } from "../pipeline/kontext";
 import { dateistempel, exportStempel, jetztLokal, mitDatum } from "../kern/ausgabe";
 import { gueltigerZeitpunkt, zoneOder } from "../kern/zeit";
@@ -269,7 +274,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     }
   };
   useEffect(() => {
-    neuLaden();
+    void neuLaden();
   }, [profil]);
 
   const hintergrund = useWachhalten(laeuft);
@@ -310,7 +315,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
             : f.art === "fortsetzung"
               ? `Lange Recherche, Runde ${f.runde + 1} …`
               : `${f.grund} Neuer Versuch in ${Math.round(f.warteMs / 1000)} s.`;
-    setProtokoll((p) => (p.length && p[p.length - 1].text === text ? p : [...p, { zeit: Date.now(), text }]));
+    setProtokoll((p) => (p[p.length - 1]?.text === text ? p : [...p, { zeit: Date.now(), text }]));
   };
 
   const kontext = (l: Lauf): Kontext => {
@@ -340,11 +345,13 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     setLauf({ ...l });
     setFehler(l.fehler);
     await laufSpeichern(l).catch((e) => setFehler(`${l.fehler} ${speicherText("Das Laufprotokoll konnte nicht im Gerät gespeichert werden", e)}`));
-    neuLaden();
+    void neuLaden();
   };
 
   const s1Starten = async () => {
     setFehler(null);
+    // Beim ersten Lauf den Speicher der App vor automatischer Räumung schützen lassen (TP-2026-W44-10)
+    void speicherSchuetzen();
     const tag = !uhrzeit && stichtag === vorbelegterStichtag.current ? heute(profil.manifest.variablen?.zeitzone) : stichtag;
     if (tag !== stichtag) {
       vorbelegterStichtag.current = tag;
@@ -372,7 +379,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       setVorschlag(structuredClone(v));
       setPhase("bestaetigen");
       // Lauf nach S1 auch unter „Frühere Läufe“ zeigen (Protokoll schon jetzt exportierbar)
-      neuLaden();
+      void neuLaden();
     } catch (e) {
       await fehlerBehandeln(l, e);
       setPhase("auftrag");
@@ -394,7 +401,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       await fehlerBehandeln(l, e);
       setPhase("ergebnis");
     }
-    neuLaden();
+    void neuLaden();
   };
 
   /** Orientierungssuche je Sachverhalt (Bestandteil von S1, seit 0.6.0); `nur`: nur diese Sachverhalte (Index ab 0) */
@@ -449,7 +456,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     if (phase !== "auftrag") leeren();
     // Rolle aus dem Übergabedialog verbindlich setzen; sie geht der automatischen Erkennung vor.
     // Pfade aus ZIP-Archiven bleiben als Namensteil erhalten („Nord › meldung.json“).
-    (async () => {
+    void (async () => {
       const neu: Material[] = [];
       const fehlerListe: string[] = [];
       for (const d of uebergabe.dateien) {
@@ -529,7 +536,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
       setFehler(speicherText("Die Läufe konnten nicht vollständig gelöscht werden", e));
     } finally {
       setSammelAktion(false);
-      neuLaden();
+      void neuLaden();
     }
   };
 
@@ -540,8 +547,8 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
   };
 
   const artUmschalten = (i: number, art: string) => {
-    if (!vorschlag) return;
-    const s = vorschlag.sachverhalte[i];
+    const s = vorschlag?.sachverhalte[i];
+    if (!s) return;
     const neu = sopsNachArtwechsel(profil, s.sops, s.ereignisarten, art);
     setzeSv(i, { ereignisarten: neu.arten, sops: neu.sops });
   };
@@ -578,6 +585,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     if (!vorschlag || i < 1) return;
     const a = vorschlag.sachverhalte[i - 1];
     const b = vorschlag.sachverhalte[i];
+    if (!a || !b) return;
     const vereint = {
       titel: [a.titel, b.titel].filter(Boolean).join(" / "),
       ereignisarten: [...new Set([...a.ereignisarten, ...b.ereignisarten])],
@@ -728,7 +736,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                   hidden
                   accept=".txt,.md,.markdown,.json,.docx,.pdf,.csv,text/plain,application/json,application/pdf"
                   onChange={(e) => {
-                    dateienHinzufuegen(e.target.files);
+                    void dateienHinzufuegen(e.target.files);
                     e.target.value = "";
                   }}
                 />
@@ -1351,7 +1359,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
                       onClick={async () => {
                         if (confirm("Diesen Lauf mit Protokoll löschen?")) {
                           await laufLoeschen(l.id).catch((e) => setFehler(speicherText("Der Lauf konnte nicht gelöscht werden", e)));
-                          neuLaden();
+                          void neuLaden();
                         }
                       }}
                     >

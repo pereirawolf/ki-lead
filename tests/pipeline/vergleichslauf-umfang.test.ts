@@ -13,18 +13,16 @@ import {
   einstellungenFuerVariante,
   plaeneFuer,
   planVarianteZu,
-  reiheZip,
   rollenFuer,
   s1Vergleich,
   UMFAENGE,
   UMFANG_VORGABE,
   umfangPruefen,
-  uebersichtZeilen,
   vergleichsreihe,
-  zipDateiname,
   type FallDaten,
   type Reihe,
 } from "../../src/pipeline/vergleichslauf";
+import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/pipeline/vergleichslauf-export";
 import { musterDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
 import { kurzfassungsreihe, kurzfassungsUebersicht, kurzfassungsZip, kurzfassungsZipName, musterfassungAus } from "../../src/pipeline/kurzfassungsreihe";
 import { auswerten, konfigSchluessel, zusammenfassen } from "../../src/pipeline/vergleichsauswertung";

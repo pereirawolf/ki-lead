@@ -1,0 +1,20 @@
+# Dependabot (seit 0.6.2, TP-2026-W44-08): wöchentliche Pull Requests für npm-Pakete und GitHub Actions.
+# Neue Laufzeitabhängigkeiten brauchen weiter eine Lizenz aus der Positivliste (tests/lizenzen/); Aktualisierungen von
+# Dev-Abhängigkeiten ändern die Tabelle in THIRD-PARTY-NOTICES.md, Abschnitt 5, die der Test mitprüft.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      entwicklung:
+        dependency-type: development
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday

@@ -7,17 +7,9 @@ import { anfrageKoerper } from "../../src/anbieter/anthropic";
 import { STANDARD, sucheErzwingbar } from "../../src/pipeline/einstellungen";
 import type { S1Vorschlag } from "../../src/pipeline/lauf";
 import { pflichtRegel } from "../../src/pipeline/recherchetiefe";
-import {
-  amtlichErreicht,
-  orientierungsEintraege,
-  orientierungssuche,
-  pflichtAbgleich,
-  pflichtVorgaben,
-  primaerquelleBelegt,
-  rechercheBefunde,
-  stufe2und3,
-  sucheEntspricht,
-} from "../../src/pipeline/stufen";
+import { orientierungsEintraege, orientierungssuche } from "../../src/pipeline/orientierung";
+import { amtlichErreicht, primaerquelleBelegt, rechercheBefunde } from "../../src/pipeline/recherchebefunde";
+import { pflichtAbgleich, pflichtVorgaben, stufe2und3, sucheEntspricht } from "../../src/pipeline/s2s3";
 import { amtlicheEinstiege, amtlicherHost } from "../../src/pipeline/kontext";
 import { profil } from "../support/dateien";
 import { llmAntwort, meldungsAntwort, skriptAnbieter } from "../support/anbieter";

@@ -80,7 +80,18 @@ describe("PDF des Lagebilds", () => {
     const p = (await profil("lead-beispiel")).profil!;
     const manuell = { ...ilkaMeldung("HE"), _entstehung: { verfahren: "manuell" } };
     const kopf = [["Sachverhalt"], ["x"]];
-    const gemischt = await roh(lagebildAlsPdf(p, "Lagebild", kopf, [{ daten: manuell, titel: "HE", zusatz: [] }, { daten: ilkaMeldung("TH"), titel: "TH", zusatz: [] }], "24.10.2026"));
+    const gemischt = await roh(
+      lagebildAlsPdf(
+        p,
+        "Lagebild",
+        kopf,
+        [
+          { daten: manuell, titel: "HE", zusatz: [] },
+          { daten: ilkaMeldung("TH"), titel: "TH", zusatz: [] },
+        ],
+        "24.10.2026",
+      ),
+    );
     expect(gemischt).toContain(IPTC);
     expect(gemischt).toContain("/Keywords (KI-LEAD, KI-generiert)");
     const nurManuell = await roh(lagebildAlsPdf(p, "Lagebild", kopf, [{ daten: manuell, titel: "HE", zusatz: [] }], "24.10.2026"));

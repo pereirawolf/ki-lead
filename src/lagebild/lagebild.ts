@@ -96,7 +96,7 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
       fehler.push({ name: datei.name, text: "keine Meldung nach diesem Profil und keine erkennbare Liste von Sachverhalten" });
       continue;
     }
-    eintraege.push({ ...basis, daten: obj as Meldung, hinweise: [], schema: [], fremd: info });
+    eintraege.push({ ...basis, daten: obj, hinweise: [], schema: [], fremd: info });
   }
   return { eintraege, fehler };
 }
@@ -163,7 +163,7 @@ export function beispielDateien(profil: Profil, ordner: string): LagebildDatei[]
   return Object.keys(profil.dateien)
     .filter((p) => p.startsWith(praefix) && p.toLowerCase().endsWith(".json"))
     .sort()
-    .map((p) => ({ name: p.slice(praefix.length), text: profil.dateien[p], importiertAm: jetzt }));
+    .map((p) => ({ name: p.slice(praefix.length), text: profil.dateien[p] ?? "", importiertAm: jetzt }));
 }
 
 const text = (v: unknown) => (v === null || v === undefined ? "" : String(v));
@@ -237,7 +237,7 @@ export function svKennung(s: SvEintrag, profil: Profil): string {
 function aufzaehlung(profil: Profil, rolle?: string): string[] {
   if (!rolle) return [];
   const k = unterSchema(profil.schema, [profil.ui.rollen.sachverhalte, 0, ...teilePfad(rolle)]);
-  return ((enumWerte(k) || []) as unknown[]).filter((w) => typeof w === "string" && w !== "") as string[];
+  return (enumWerte(k) || []).filter((w) => typeof w === "string" && w !== "") as string[];
 }
 
 /** Beurteilungsstufen aufsteigend nach Schwere (Reihenfolge der Aufzählung im Schema). */

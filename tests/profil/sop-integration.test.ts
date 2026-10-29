@@ -14,7 +14,8 @@ import {
   sopGruppen,
   sopsNachArtwechsel,
 } from "../../src/pipeline/kontext";
-import { nachbearbeiten, sopAngabeVergleichen, sopKennungenAbgleichen, type Kontext } from "../../src/pipeline/stufen";
+import { nachbearbeiten, sopAngabeVergleichen, sopKennungenAbgleichen } from "../../src/pipeline/nachbearbeitung";
+import type { Kontext } from "../../src/pipeline/stufen";
 import { sopNachweis, spalten } from "../../src/lagebild/ausgabe";
 import { sopKennung } from "../../src/profil/sop";
 
@@ -128,8 +129,8 @@ describe("SOP-Querverweise in Teil B und C", () => {
   const sopOrdner = repoPfad("profile/lead-beispiel/sop");
   const dateien = register.map((r) => ({ kennung: r.kennung, text: readFileSync(repoPfad("profile/lead-beispiel", r.datei), "utf-8") }));
   const kennungen = new Set(register.map((r) => r.kennung));
-  const katalog: string[] = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/meldung.schema.json"), "utf-8"))
-    .$defs.sachverhalt.properties.art.items.enum;
+  const katalog: string[] = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/meldung.schema.json"), "utf-8")).$defs.sachverhalt.properties.art.items
+    .enum;
 
   it.each(dateien)("$kennung verweist nur auf vorhandene Kennungen", ({ text }) => {
     const genannt = [...text.matchAll(/\b([BC](?:0[1-9]|[1-9]\d))\b/g)].map((m) => m[1]);

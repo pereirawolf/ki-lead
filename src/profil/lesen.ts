@@ -178,7 +178,7 @@ export function lesedokumente(profil: Profil): Lesedokument[] {
   ];
   return kandidaten
     .filter(([pfad]) => typeof profil.dateien[pfad] === "string")
-    .map(([pfad, titel, gruppe]) => dokument(pfad, titel, gruppe, profil.dateien[pfad], "paket"));
+    .map(([pfad, titel, gruppe]) => dokument(pfad, titel, gruppe, profil.dateien[pfad] ?? "", "paket"));
 }
 
 export interface InhaltsEintrag {
@@ -196,7 +196,7 @@ export function inhaltsverzeichnis(text: string): InhaltsEintrag[] {
     if (/^\s*(```|~~~)/.test(z)) code = !code;
     if (code) continue;
     const m = z.match(/^(#{2,3})\s+(.+?)\s*#*\s*$/);
-    if (m) out.push({ ebene: m[1].length as 2 | 3, titel: m[2].replace(/[*_`]/g, ""), index: out.length });
+    if (m) out.push({ ebene: (m[1] ?? "").length as 2 | 3, titel: (m[2] ?? "").replace(/[*_`]/g, ""), index: out.length });
   }
   return out;
 }
@@ -226,7 +226,7 @@ export function linkZiel(href: string, von: string, profil: Profil): LinkZiel {
   const h = href.trim();
   if (/^https?:\/\//i.test(h)) return { art: "extern", url: h };
   if (/^[a-z][a-z0-9+.-]*:/i.test(h)) return { art: "ungueltig" };
-  const [pfadTeil, anker] = h.split("#");
+  const [pfadTeil = "", anker] = h.split("#");
   let pfad: string | undefined = von;
   if (pfadTeil) {
     try {

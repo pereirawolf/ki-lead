@@ -73,6 +73,9 @@ jobs:
           name: ki-lead-sbom
           path: ki-lead-sbom.cdx.json
           retention-days: 90
+      # Linting und Formatierung vor den Tests (seit 0.6.2, TP-2026-W44-08); Warnungen (etwa no-explicit-any) lassen den Lauf bestehen
+      - run: npm run lint
+      - run: npm run format:check
       # Auf Pull Requests ein Durchgang in zufälliger, fester Reihenfolge (deckt Abhängigkeiten zwischen Tests auf);
       # auf main und im Wochenlauf zusätzlich in der gewöhnlichen Reihenfolge.
       - if: github.event_name != 'pull_request'

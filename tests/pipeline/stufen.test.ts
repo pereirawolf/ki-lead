@@ -4,9 +4,13 @@ import { describe, expect, it } from "vitest";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { AUFTRAGS_URL, bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
-import { reparaturSystem, s1Strukturfehler, stufe1, stufe2und3, auftragsAbrufFehler } from "../../src/pipeline/stufen";
+import { begrenztParallel, ORIENTIERUNG_PARALLEL } from "../../src/pipeline/orientierung";
+import { auftragsAbrufFehler } from "../../src/pipeline/recherchebefunde";
+import { s1Strukturfehler, stufe1 } from "../../src/pipeline/s1";
+import { reparaturSystem, stufe2und3 } from "../../src/pipeline/s2s3";
 import { profil as profilLaden } from "../support/dateien";
 import { STANDARD } from "../../src/pipeline/einstellungen";
+import { istBestaetigen, istFertig, istGescheitert } from "../../src/pipeline/lauf";
 import { pruefeRoh } from "../../src/kern/validierung";
 import type { Material } from "../../src/pipeline/material";
 
@@ -327,5 +331,84 @@ describe("AV-2026-W43-34: Anweisung der Reparatur", () => {
     expect(a).toContain("verwende den Leerwert, nie den Rand der Skala");
     expect(a).toContain("Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet.");
     expect(a).toContain("Recherchiere nicht neu und ergänze keine Fakten.");
+  });
+});
+
+// Begrenzte Nebenläufigkeit der Orientierungssuchen (seit 0.6.2, TP-2026-W44-05)
+describe("TP-2026-W44-05: begrenzt parallele Aufrufe", () => {
+  it("führt höchstens zwei Aufgaben zugleich aus und liefert die Ergebnisse in Eingabereihenfolge", async () => {
+    expect(ORIENTIERUNG_PARALLEL).toBe(2);
+    let laufend = 0;
+    let hoechst = 0;
+    const freigaben: (() => void)[] = [];
+    const lauf = begrenztParallel([10, 20, 30, 40, 50], 2, async (x) => {
+      laufend++;
+      hoechst = Math.max(hoechst, laufend);
+      await new Promise<void>((r) => freigaben.push(r));
+      laufend--;
+      return x * 2;
+    });
+    // Nach dem Start laufen genau zwei; jede Freigabe lässt die nächste nachrücken
+    await new Promise((r) => setImmediate(r));
+    expect(freigaben).toHaveLength(2);
+    for (let i = 0; i < 5; i++) {
+      freigaben[i]();
+      await new Promise((r) => setImmediate(r));
+    }
+    expect(await lauf).toEqual([20, 40, 60, 80, 100]);
+    expect(hoechst).toBe(2);
+  });
+
+  it("reicht den ersten Fehler weiter, nachdem die laufenden Aufgaben beendet sind, und startet keine weiteren", async () => {
+    const gestartet: number[] = [];
+    await expect(
+      begrenztParallel([1, 2, 3, 4], 2, async (x) => {
+        gestartet.push(x);
+        await new Promise((r) => setImmediate(r));
+        if (x === 1) throw new Error("Aufgabe 1 gescheitert");
+        return x;
+      }),
+    ).rejects.toThrow("Aufgabe 1 gescheitert");
+    expect(gestartet).toEqual([1, 2]);
+  });
+});
+
+// Type-Guards für den Zustand eines Laufs (seit 0.6.2, TP-2026-W44-07); gespeicherte Läufe behalten ihre Form
+describe("TP-2026-W44-07: Zustand eines Laufs", () => {
+  it("istFertig verlangt Status „fertig“ und ein Ergebnis, istBestaetigen einen Vorschlag", async () => {
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    const { k } = await pipelineKontext(att);
+    expect(istBestaetigen(k.lauf)).toBe(false);
+    expect(istFertig(k.lauf)).toBe(false);
+    expect(istGescheitert(k.lauf)).toBe(false);
+    await stufe1(k);
+    expect(istBestaetigen(k.lauf)).toBe(true);
+    // Status allein genügt nicht: ein als „fertig“ markierter Lauf ohne Ergebnis ist nicht fertig
+    const ohneErgebnis = { ...k.lauf, status: "fertig" as const };
+    expect(istFertig(ohneErgebnis)).toBe(false);
+    expect(istGescheitert({ ...k.lauf, status: "abgebrochen" as const })).toBe(true);
+    expect(istGescheitert({ ...k.lauf, status: "fehler" as const })).toBe(true);
+  });
+});
+
+// Persistenz während eines Laufs (seit 0.6.2, TP-2026-W44-10)
+describe("TP-2026-W44-10: Speicherfehler nach einem Aufruf verliert die Antwort nicht", () => {
+  it("scheitert das Speichern im Anschluss an den Aufruf, bleibt die bezahlte Antwort im Eintrag und der Lauf läuft weiter", async () => {
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
+    const { k } = await pipelineKontext(att);
+    // Das Speichern scheitert genau beim Aufruf nach der Antwort (der dritte: Start des Eintrags, nach der Antwort, Statuswechsel)
+    let aufrufe = 0;
+    k.aktualisiert = async () => {
+      aufrufe++;
+      if (aufrufe === 2) throw new DOMException("Der Speicherplatz ist erschöpft.", "QuotaExceededError");
+    };
+    const v = await stufe1(k);
+    expect(v.sachverhalte).toHaveLength(1);
+    expect(k.lauf.status).toBe("bestaetigen");
+    const eintrag = k.lauf.stufen[0]!;
+    expect(eintrag.antwort?.text).toContain("Sturmfolgen");
+    expect(eintrag.kostenUsd).toBe(0.01);
+    expect(eintrag.notiz).toMatch(/Speichern nach diesem Aufruf gescheitert: Der Speicherplatz ist erschöpft\./);
+    expect(aufrufe).toBeGreaterThanOrEqual(3);
   });
 });

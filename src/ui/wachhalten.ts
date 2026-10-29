@@ -23,10 +23,10 @@ export function useWachhalten(aktiv: boolean) {
       else {
         if (verborgenSeit) hintergrund.current += Date.now() - verborgenSeit;
         verborgenSeit = 0;
-        holen();
+        void holen();
       }
     };
-    holen();
+    void holen();
     document.addEventListener("visibilitychange", sichtbarkeit);
     return () => {
       document.removeEventListener("visibilitychange", sichtbarkeit);

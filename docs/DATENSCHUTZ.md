@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.5 vom 25.10.2026, gilt für App-Version 0.5.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.6 vom 26.10.2026, gilt für App-Version 0.6.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -39,7 +39,7 @@ Alles, was die App speichert, liegt **auf dem Gerät**: im Browser (IndexedDB, f
 | Profile und Profilarchiv | `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme | bis zur Löschung |
 | Management Summary | je Profil | zuletzt erstellte Fassung | bis zum Leeren oder Ersetzen |
 | Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
-| API-Schlüssel | `schluessel:<anbieter>` oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
+| API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
 | Programmdateien (nur PWA) | Caches `ki-lead-…` | HTML, Skripte, Symbole der App | bis zur nächsten Fassung |
 
 Der Service Worker der PWA hält nur Programmdateien vor. Inhalte und Anfragen an die KI-Anbieter fängt er nicht ab und speichert er nie (`src/pwa/sw-vorlage.js`).
@@ -117,6 +117,7 @@ Der Schlüssel geht nur im Aufruf an die Schnittstelle des jeweiligen Anbieters.
 |---|---|---|
 | Gerätespeicher der App (Vorgabe) | IndexedDB | unverschlüsselt; lesbar für jeden mit Zugriff auf das entsperrte Gerät |
 | Nur für diese Sitzung | Arbeitsspeicher | nach Schließen oder Neuladen weg |
+| Gerätespeicher, mit Passphrase verschlüsselt (seit 0.6.2) | IndexedDB, nur verschlüsselt | AES-GCM mit einem Schlüssel, den die App per PBKDF2 (SHA-256, 600 000 Iterationen, zufälliges Salz) aus einer Passphrase ableitet; Passphrase und abgeleiteter Schlüssel nur im Arbeitsspeicher, je Sitzung neu einzugeben; ohne Passphrase nicht lesbar. Vergessene Passphrase: die verschlüsselten Schlüssel lassen sich nur verwerfen |
 | Schlüsselbund des Systems (nur iOS und Android) | Keychain bzw. Keystore | verschlüsselt, nur dieses Gerät, nie in der iCloud; iOS nur entsperrt |
 
 Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBackup="false"`). Ein Ausgabenlimit beim Anbieter begrenzt das Risiko eines verlorenen Schlüssels in jedem Fall. Weiteres in [SICHERHEIT.md](SICHERHEIT.md).
@@ -293,3 +294,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.3 | 24.10.2026 | Mistral als dritter KI-Anbieter mit EU-Endpunkt als Vorgabe: Abschnitte 2, 4 und 5 (Endpunkte, Training, Aufbewahrung, Zero Data Retention, `store: false`), Drittlandübermittlung, Anhang A (App 0.5.6) |
 | 1.4 | 25.10.2026 | Abschnitt 2: Modell je Aufgabe wählbar, ein Lauf kann mehrere Anbieter nutzen (Mix-Profile, App 0.5.15; AV-2026-W43-31) |
 | 1.5 | 25.10.2026 | Abschnitte 3 und 10: Archiv der Testläufe auf dem Gerät mit Löschen (App 0.5.17) |
+| 1.6 | 26.10.2026 | Abschnitte 3 und 9: Ablage der API-Schlüssel mit Passphrase verschlüsselt (App 0.6.2, TP-2026-W44-09) |

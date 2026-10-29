@@ -377,8 +377,8 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
         {rechercheZeigen &&
           (!werkzeuge.websuche && !werkzeuge.abruf ? (
             <p className="hinweis">
-              Mit {modellName(modellS2!)} über den EU-Endpunkt von Mistral recherchiert S2 nicht im Web und arbeitet nur mit dem Material. Für eine Recherche
-              ein anderes Modell für S2 wählen.
+              Mit {modellName(modellS2)} über den EU-Endpunkt von Mistral recherchiert S2 nicht im Web und arbeitet nur mit dem Material. Für eine Recherche ein
+              anderes Modell für S2 wählen.
             </p>
           ) : (
             <fieldset
@@ -463,7 +463,7 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
                 </div>
               )}
               {(() => {
-                const kosten = hoechstkostenText(modellS2!, laufE);
+                const kosten = hoechstkostenText(modellS2, laufE);
                 return kosten ? <p className="hinweis recherche-kosten">{kosten}</p> : null;
               })()}
             </fieldset>

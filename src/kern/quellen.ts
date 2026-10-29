@@ -19,10 +19,10 @@ export function parseQuellen(text: unknown): QuellenEintrag[] {
     .forEach((line) => {
       const m = line.match(/^\s*\[Q(\d+)\]\s*(.*)$/);
       if (m) {
-        const c = m[2].match(/^([A-Z])(?=\s*[–\-·:|,]|\s|$)/);
-        entries.push({ nr: +m[1], code: c ? c[1] : "", text: line.trim() });
+        const c = (m[2] ?? "").match(/^([A-Z])(?=\s*[–\-·:|,]|\s|$)/);
+        entries.push({ nr: +m[1]!, code: c?.[1] ?? "", text: line.trim() });
       } else if (line.trim() && entries.length) {
-        entries[entries.length - 1].text += "\n" + line.trim();
+        entries[entries.length - 1]!.text += "\n" + line.trim();
       }
     });
   return entries;
@@ -37,7 +37,7 @@ export function verweise(text: unknown): Set<number> {
   const s = String(text || "");
   let m: RegExpExecArray | null;
   while ((m = re.exec(s)) !== null) {
-    const inner = m[1];
+    const inner = m[1] ?? "";
     if (!/^\s*Q\d+/.test(inner)) continue;
     inner.split(/[,;]/).forEach((tok) => {
       const r = tok.match(/^\s*Q(\d+)\s*(?:[–-]\s*Q?(\d+))?\s*$/);
@@ -96,7 +96,7 @@ export function kategorienGeordnet(ui: UiKonfig): [string, string][] {
   const kategorien = ui.quellen?.kategorien || {};
   const rang = (ui.quellen?.rangfolge || []).filter((c) => c in kategorien);
   const rest = Object.keys(kategorien).filter((c) => !rang.includes(c));
-  return [...rang, ...rest].map((c) => [c, kategorien[c]]);
+  return [...rang, ...rest].map((c) => [c, kategorien[c] ?? ""]);
 }
 
 /** Lesbare Quellenpriorität, z. B. „A > B > W > M > P“; leer, wenn das Profil keine Rangfolge angibt. */

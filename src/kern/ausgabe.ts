@@ -60,11 +60,11 @@ export function dateistempel(wert: unknown, zeitzone?: string, praezision: "minu
   }
   const m = s.match(LOKAL);
   if (!m) return null;
-  const [j, mo, t] = [+m[1], +m[2], +m[3]];
+  const [j, mo, t] = [+m[1]!, +m[2]!, +m[3]!];
   const probe = new Date(Date.UTC(j, mo - 1, t));
   if (probe.getUTCMonth() !== mo - 1 || probe.getUTCDate() !== t) return null;
   if (m[4] === undefined || praezision === "tag") return `${m[1]}-${m[2]}-${m[3]}`;
-  if (+m[4] > 23 || +m[5] > 59) return null;
+  if (+m[4] > 23 || +m[5]! > 59) return null;
   return `${m[1]}-${m[2]}-${m[3]}T${m[4]}-${m[5]}`;
 }
 
@@ -89,7 +89,7 @@ function ohneDatumsplatzhalter(vorlage: string, felder: string[]): string {
   for (const f of felder) {
     const ph = `{${f}}`;
     for (let i = t.indexOf(ph); i >= 0; i = t.indexOf(ph)) {
-      if (i > 0 && trenner.test(t[i - 1])) t = t.slice(0, i - 1) + t.slice(i + ph.length);
+      if (i > 0 && trenner.test(t[i - 1] ?? "")) t = t.slice(0, i - 1) + t.slice(i + ph.length);
       else if (trenner.test(t[i + ph.length] || "")) t = t.slice(0, i) + t.slice(i + ph.length + 1);
       else t = t.slice(0, i) + t.slice(i + ph.length);
     }

@@ -64,7 +64,7 @@ export function summanden(inhalt: string): { werte: number[]; ungefaehr: boolean
     const treffer = [...bereinigt.matchAll(new RegExp(String.raw`(?<![\d.,])(${ZAHL})(?![\d.,]\d)`, "g"))];
     if (treffer.length !== 1) return null;
     if (/(~|≈|rund|etwa|ca\.|circa|mind\.|mindestens|über|knapp)/i.test(t)) ungefaehr = true;
-    werte.push(zahl(treffer[0][1]));
+    werte.push(zahl(treffer[0]![1] ?? ""));
   }
   return { werte, ungefaehr };
 }
@@ -81,10 +81,10 @@ export function summenPruefen(text: string): { auszug: string; angabe: number; s
     if (/[\d.:–-]/.test(vor)) continue; // Teil eines Datums, einer Uhrzeit oder Spanne
     // Die Klammer muss die gezählte Angabe selbst aufschlüsseln: „rund 12.000 Einsätze und zahlreiche Verletzte (…)“
     // schlüsselt die Verletzten auf, nicht die Einsätze
-    if (/\b(und|sowie|oder)\b/.test(m[3])) continue;
+    if (/\b(und|sowie|oder)\b/.test(m[3] ?? "")) continue;
     const art = (m[1] || "").toLowerCase();
-    const angabe = zahl(m[2]);
-    const s = summanden(m[4]);
+    const angabe = zahl(m[2] ?? "");
+    const s = summanden(m[4] ?? "");
     if (!s) continue;
     const summe = s.werte.reduce((a, b) => a + b, 0);
     const ungefaehr = s.ungefaehr || ["rund", "etwa", "ca.", "circa", "~", "knapp"].includes(art);
@@ -132,11 +132,11 @@ export function d2Pruefen(bewertungText: string, d2: number | null | undefined):
     ),
   ];
   const letzte = summen[summen.length - 1];
-  let groesste = letzte ? zahl(letzte[1] ?? letzte[2]) : -1;
+  let groesste = letzte ? zahl(letzte[1] ?? letzte[2] ?? "") : -1;
   if (groesste < 0)
     for (const m of satz.matchAll(muster)) {
       if (m[1]) continue; // Grenzangabe oder Spanne
-      groesste = Math.max(groesste, zahl(m[2]));
+      groesste = Math.max(groesste, zahl(m[2] ?? ""));
     }
   if (groesste < 0) return null;
   const erwartet = d2Stufe(groesste);

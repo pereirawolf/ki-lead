@@ -28,14 +28,12 @@
 // Nicht mit einem echten Schlüssel geprüft; siehe „Offene Punkte“ in docs/SPEZIFIKATION.md.
 
 import { MISTRAL_STUFEN, naechsteStufe } from "./aufwand";
-import { strengesSchema } from "./openai";
+import { LeseFehler, mitNeustart, mitWiederholung, sseLesen, type FehlerInfo, type Fehlerregeln } from "./http";
 import { aufschlag, kostenAnfrage, MISTRAL_EU_FAKTOR } from "./preise";
-import { SseLeser } from "./strom";
+import { strengesSchema } from "./schema";
 import {
   AnbieterFehler,
-  istVerbindungsabbruch,
   leereNutzung,
-  TEXT_VERBINDUNGSABBRUCH,
   type Aufwand,
   type Fundstelle,
   type Inhaltsblock,
@@ -45,7 +43,6 @@ import {
   type Nutzung,
   type Zitat,
 } from "./typen";
-import { abbruchPruefen, warte } from "./warten";
 
 export type MistralEndpunkt = "eu" | "global";
 
@@ -58,8 +55,6 @@ export { MISTRAL_EU_FAKTOR };
 export function mistralWerkzeuge(endpunkt: MistralEndpunkt): { websuche: boolean; abruf: boolean } {
   return { websuche: endpunkt === "global", abruf: false };
 }
-const MAX_WIEDERHOLUNGEN = 3;
-const MAX_NEUSTARTS = 2;
 
 /**
  * reasoning_effort je angebotener Stufe der App. Die API kennt zwar none, minimal, low, medium, high und xhigh, für
@@ -167,7 +162,7 @@ export function fehlerTextAus(x: unknown): string | undefined {
 }
 
 /** Meldung und Kennung aus einer Fehlerantwort (Mistral liefert sie flach, als „detail“ oder unter „error“). */
-function fehlerAus(j: any): { code?: string; meldung?: string; roh: string } {
+function fehlerAus(j: any): FehlerInfo {
   const e = j?.error && typeof j.error === "object" ? j.error : j;
   const code = e?.code ?? e?.type;
   const meldung = fehlerTextAus(e?.message) ?? fehlerTextAus(e?.detail) ?? fehlerTextAus(j?.detail);
@@ -316,8 +311,6 @@ export function nutzungMistral(u: any, suchenGezaehlt: number): Nutzung {
   };
 }
 
-class StromEnde extends Error {}
-
 export class MistralAnbieter implements LlmAnbieter {
   id = "mistral";
   private url: string;
@@ -338,113 +331,70 @@ export class MistralAnbieter implements LlmAnbieter {
   private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string; abgelehnt?: string }> {
     let aufwand = mistralAufwand(a.aufwand);
     let abgelehnt: string | undefined;
-    let body = this.koerper(a, aufwand);
+    let body = JSON.stringify(this.koerper(a, aufwand));
     let grobVersucht = false;
-    for (let versuch = 0; ; versuch++) {
-      abbruchPruefen(a.signal);
-      let antwort: Response;
-      try {
-        antwort = await this.abruf(this.url, {
-          method: "POST",
-          headers: { "content-type": "application/json", accept: "text/event-stream", authorization: `Bearer ${this.schluessel}` },
-          body: JSON.stringify(body),
-          signal: a.signal,
-        });
-      } catch (e: any) {
-        if (e?.name === "AbortError") throw e;
-        if (versuch < MAX_WIEDERHOLUNGEN) {
-          a.fortschritt?.({ art: "wiederholung", grund: "Netzwerkfehler", warteMs: 2000 * (versuch + 1) });
-          await warte(2000 * (versuch + 1), a.signal);
-          continue;
-        }
-        throw new AnbieterFehler(
-          `Keine Verbindung zu Mistral. Netz prüfen. Steht das Netz, kann auch der Browser den direkten Aufruf von ${new URL(this.url).host} blockiert haben.`,
-          0,
-          "netz",
-        );
-      }
-      if (!antwort.ok) {
-        let f: { code?: string; meldung?: string; roh: string } = { roh: "" };
+    const regeln: Fehlerregeln = {
+      fehlerAus: async (antwort) => {
         try {
           const roh = await antwort.text();
           try {
-            f = fehlerAus(JSON.parse(roh));
+            return fehlerAus(JSON.parse(roh));
           } catch {
-            f = { meldung: roh.slice(0, 600) || undefined, roh };
+            return { meldung: roh.slice(0, 600) || undefined, roh };
           }
         } catch {
-          /* leer */
+          return { roh: "" };
         }
-        if (aufwand && !grobVersucht && aufwandAbgelehnt(antwort.status, f.roh)) {
-          grobVersucht = true;
-          abgelehnt = aufwand;
-          a.fortschritt?.({
-            art: "wiederholung",
-            grund: `Mistral lehnt reasoning_effort „${aufwand}“ ab; neuer Versuch ohne Angabe (Vorgabe des Modells).`,
-            warteMs: 0,
-          });
-          aufwand = undefined;
-          body = this.koerper(a, aufwand);
-          versuch--;
-          continue;
-        }
-        const wiederholbar = antwort.status === 429 || antwort.status >= 500;
-        if (wiederholbar && versuch < MAX_WIEDERHOLUNGEN) {
-          const ra = Number(antwort.headers.get("retry-after"));
-          const ms = Number.isFinite(ra) && ra > 0 ? Math.min(ra * 1000, 60_000) : 4000 * 2 ** versuch;
-          a.fortschritt?.({ art: "wiederholung", grund: fehlerTextMistral(antwort.status, f.code), warteMs: ms });
-          await warte(ms, a.signal);
-          continue;
-        }
-        throw new AnbieterFehler(fehlerTextMistral(antwort.status, f.code, f.meldung), antwort.status, f.code);
-      }
-      return { sammler: await this.stromLesen(antwort, a), aufwand, abgelehnt };
-    }
+      },
+      // Lehnt das Modell die Angabe zum Nachdenken ab, einmal ohne sie (zählt nicht als Versuch)
+      anpassen: (status, f) => {
+        if (!aufwand || grobVersucht || !aufwandAbgelehnt(status, f.roh)) return false;
+        grobVersucht = true;
+        abgelehnt = aufwand;
+        a.fortschritt?.({
+          art: "wiederholung",
+          grund: `Mistral lehnt reasoning_effort „${aufwand}“ ab; neuer Versuch ohne Angabe (Vorgabe des Modells).`,
+          warteMs: 0,
+        });
+        aufwand = undefined;
+        body = JSON.stringify(this.koerper(a, aufwand));
+        return true;
+      },
+      wiederholbar: (status) => status === 429 || status >= 500,
+      fehlerText: fehlerTextMistral,
+      netzFehler: `Keine Verbindung zu Mistral. Netz prüfen. Steht das Netz, kann auch der Browser den direkten Aufruf von ${new URL(this.url).host} blockiert haben.`,
+    };
+    const antwort = await mitWiederholung(
+      a,
+      () =>
+        this.abruf(this.url, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "text/event-stream", authorization: `Bearer ${this.schluessel}` },
+          body,
+          signal: a.signal,
+        }),
+      regeln,
+    );
+    return { sammler: await this.stromLesen(antwort, a), aufwand, abgelehnt };
   }
 
   private async stromLesen(antwort: Response, a: LlmAnfrage): Promise<MistralSammler> {
-    const leser = new SseLeser();
     const sammler = new MistralSammler(a.fortschritt);
-    const reader = antwort.body!.pipeThrough(new TextDecoderStream()).getReader();
-    try {
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        for (const ev of leser.lies(value)) {
-          if (ev.data === "[DONE]") sammler.fertig = true;
-          else if (ev.data && typeof ev.data === "object") {
-            if (this.endpunkt === "eu") sammler.verarbeiteChat(ev.data);
-            else sammler.verarbeite(ev.data, ev.event);
-          }
-        }
+    await sseLesen(antwort, a.signal, (ev) => {
+      if (ev.data === "[DONE]") sammler.fertig = true;
+      else if (ev.data && typeof ev.data === "object") {
+        if (this.endpunkt === "eu") sammler.verarbeiteChat(ev.data);
+        else sammler.verarbeite(ev.data, ev.event);
       }
-    } catch (e: any) {
-      if (e?.name === "AbortError" || a.signal?.aborted) throw e;
-      if (e instanceof AnbieterFehler) throw e;
-      throw new StromEnde(String(e?.message || e));
-    }
+    });
     if (this.endpunkt === "eu" && sammler.endgrund) sammler.fertig = true;
-    if (!sammler.fertig) throw new StromEnde("Strom ohne Abschluss beendet");
+    if (!sammler.fertig) throw new LeseFehler(new Error("Strom ohne Abschluss beendet"));
     return sammler;
   }
 
   async senden(a: LlmAnfrage): Promise<LlmAntwort> {
     const start = Date.now();
-    let s: MistralSammler;
-    let aufwand: string | undefined;
-    let abgelehnt: string | undefined;
-    for (let neustart = 0; ; neustart++) {
-      try {
-        ({ sammler: s, aufwand, abgelehnt } = await this.eineRunde(a));
-        break;
-      } catch (e: any) {
-        const abbruch = e instanceof StromEnde || (!(e instanceof AnbieterFehler) && istVerbindungsabbruch(e) && e?.name !== "AbortError");
-        if (!abbruch) throw e;
-        if (neustart >= MAX_NEUSTARTS) throw new AnbieterFehler(TEXT_VERBINDUNGSABBRUCH, 0, "verbindung");
-        a.fortschritt?.({ art: "wiederholung", grund: "Verbindung unterbrochen; die Anfrage wird neu gestellt.", warteMs: 1500 });
-        await warte(1500, a.signal);
-      }
-    }
+    const { sammler: s, aufwand, abgelehnt } = await mitNeustart(a, () => this.eineRunde(a));
     const eu = this.endpunkt === "eu";
     const n = eu ? nutzungMistralChat(s.nutzung) : nutzungMistral(s.nutzung, s.suchen.length);
     // Die Conversations-API nennt keinen Abbruchgrund. Ist die Höchstzahl der Ausgabetoken erreicht, gilt die

@@ -47,7 +47,7 @@ function bereichOeffnen(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
   for (let p: HTMLElement | null = el; p; p = p.parentElement) if (p instanceof HTMLDetailsElement) p.open = true;
-  const summary = el.querySelector(":scope > summary") as HTMLElement | null;
+  const summary = el.querySelector<HTMLElement>(":scope > summary");
   (summary || el).scrollIntoView({ block: "start", behavior: "smooth" });
   summary?.focus({ preventScroll: true });
 }
@@ -70,7 +70,7 @@ function Aufklapp({ id, titel, tag, zweck, klasse, children, schliessen }: Aufkl
   const [geoeffnet, setGeoeffnet] = useState(false);
   const ref = useRef<HTMLDetailsElement>(null);
   return (
-    <details id={id} ref={ref} className={klasse} onToggle={(e) => (e.currentTarget as HTMLDetailsElement).open && setGeoeffnet(true)}>
+    <details id={id} ref={ref} className={klasse} onToggle={(e) => e.currentTarget.open && setGeoeffnet(true)}>
       <summary>
         <span className="aufklapp-titel">{titel}</span>
         {tag && (
@@ -92,7 +92,7 @@ function Aufklapp({ id, titel, tag, zweck, klasse, children, schliessen }: Aufkl
                 const d = ref.current;
                 if (!d) return;
                 d.open = false;
-                const s = d.querySelector(":scope > summary") as HTMLElement | null;
+                const s = d.querySelector<HTMLElement>(":scope > summary");
                 s?.focus({ preventScroll: true });
                 s?.scrollIntoView({ block: "nearest" });
               }}
@@ -555,7 +555,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
             multiple
             hidden
             onChange={(e) => {
-              einlesen(e.target.files);
+              void einlesen(e.target.files);
               e.target.value = "";
             }}
           />
@@ -566,7 +566,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
             multiple
             {...({ webkitdirectory: "", directory: "" } as Record<string, string>)}
             onChange={(e) => {
-              einlesen(e.target.files);
+              void einlesen(e.target.files);
               e.target.value = "";
             }}
           />

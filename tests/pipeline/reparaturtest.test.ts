@@ -5,7 +5,10 @@ import { createHash } from "node:crypto";
 import JSZip from "jszip";
 import { describe, expect, it } from "vitest";
 import { leseOrdner, profilPflicht, repoPfad } from "../support/dateien";
-import { llmAntwort } from "../support/anbieter";
+import { llmAntwort, skriptAnbieter } from "../support/anbieter";
+import { ilkaMeldung } from "../support/fixtures";
+import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
+import { stufe2und3 } from "../../src/pipeline/s2s3";
 import type { LlmAnbieter, LlmAnfrage } from "../../src/anbieter/typen";
 import { STANDARD, type Einstellungen } from "../../src/pipeline/einstellungen";
 import {
@@ -136,11 +139,21 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
 
   it("AV-2026-W43-35: „Stellen wie Original“ verlangt an jeder Stelle den Originalwert; Skalenrand und leerer Wert zählen nicht", () => {
     expect(stellenWieOriginal([{ original: 4, repariert: 4 }])).toBe(true);
-    expect(stellenWieOriginal([{ original: ["Unwetter / Sturm"], repariert: ["Unwetter / Sturm"] }, { original: "erheblich", repariert: "erheblich" }])).toBe(true);
+    expect(
+      stellenWieOriginal([
+        { original: ["Unwetter / Sturm"], repariert: ["Unwetter / Sturm"] },
+        { original: "erheblich", repariert: "erheblich" },
+      ]),
+    ).toBe(true);
     expect(stellenWieOriginal([{ original: 4, repariert: 6 }])).toBe(false);
     expect(stellenWieOriginal([{ original: "erheblich", repariert: "" }])).toBe(false);
     expect(stellenWieOriginal([{ original: [], repariert: [] }])).toBe(false);
-    expect(stellenWieOriginal([{ original: 4, repariert: 4 }, { original: "erheblich", repariert: null }])).toBe(false);
+    expect(
+      stellenWieOriginal([
+        { original: 4, repariert: 4 },
+        { original: "erheblich", repariert: null },
+      ]),
+    ).toBe(false);
     expect(stellenWieOriginal([])).toBe(false);
   });
 
@@ -188,5 +201,38 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     );
     expect(schaetzeReparatur("unbekannt")).toBeNull();
     expect([0, 1, 7, 2.4].map(durchgaengeBegrenzt)).toEqual([1, 1, 5, 2]);
+  });
+});
+
+// Reparaturschleife von S3 in der Pipeline (seit 0.6.2, TP-2026-W44-01): Entwurf und Schemabefunde bleiben ein Paar.
+describe("TP-2026-W44-01: Reparatur ohne JSON verliert den Entwurf nicht", () => {
+  it("fällt auf den Entwurf der vorigen Runde mit dessen Schemabefunden zurück und vermerkt die gescheiterte Reparatur", async () => {
+    const kaputt = ilkaMeldung("HE");
+    kaputt.sachverhalte[0].sofort.beurteilung = "katastrophal";
+    const att = skriptAnbieter([
+      llmAntwort("Kurz.\n```json\n" + JSON.stringify(kaputt) + "\n```"),
+      llmAntwort("Ich kann die Meldung leider nicht korrigieren, weil mir Angaben fehlen."),
+      llmAntwort("Entschuldigung, auch dieser Versuch gelingt nicht."),
+    ]);
+    const { k } = await pipelineKontext(att);
+    const e = await stufe2und3(k, s1Vorschlag() as any);
+    // Zwei Reparaturversuche, beide ohne JSON
+    expect(att.anfragen).toHaveLength(3);
+    expect(k.lauf.stufen.map((s) => s.stufe)).toEqual(["S2 Recherche und Entwurf", "S3 Reparatur 1", "S3 Reparatur 2"]);
+    // Entwurf aus Runde 1 mit seinen tatsächlichen Schemabefunden, nicht „Kein JSON“
+    expect(e.meldung).toBeTruthy();
+    expect(e.meldung!.sachverhalte[0].sofort.beurteilung).toBe("katastrophal");
+    expect(e.schemaBefunde.length).toBeGreaterThan(0);
+    expect(e.schemaBefunde.some((b) => b.pfad.includes("beurteilung"))).toBe(true);
+    expect(e.schemaBefunde.some((b) => b.keyword === "json")).toBe(false);
+    expect(k.lauf.status).toBe("fertig");
+    expect(k.lauf.ergebnis?.schemakonform).toBe(false);
+    // Die gescheiterten Reparaturen stehen als Hinweis in den Befunden, nicht als Ersatz der Schemabefunde
+    const hinweise = e.befunde.filter((b) => b.code === "REPARATUR_OHNE_ENTWURF");
+    expect(hinweise).toHaveLength(2);
+    expect(hinweise[0].stufe).toBe("hinweis");
+    expect(hinweise[0].text).toMatch(/Reparatur 1 lieferte keinen verwertbaren Entwurf .*keinen JSON-Block.*vorherige Entwurf bleibt/);
+    // Das Laufprotokoll der Reparaturrunden nennt den Parserbefund
+    expect(k.lauf.stufen[1].befunde).toEqual(["Die Antwort enthält keinen JSON-Block."]);
   });
 });

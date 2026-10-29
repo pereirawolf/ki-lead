@@ -1,11 +1,15 @@
 {
   "name": "ki-lead",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "KI-LEAD – Forschungsdemonstrator für die LEAD-Systematik (Lageerfassung, -auswertung und -darstellung)",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.tests.json --noEmit",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"*.{ts,js,json}\" \".github/**/*.yml\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"*.{ts,js,json}\" \".github/**/*.yml\"",
     "test": "vitest run",
     "test:ui": "vitest run tests/ui",
     "test:zufall": "vitest run --sequence.shuffle --sequence.seed=20261021",
@@ -13,6 +17,7 @@
     "test:browser:kern": "playwright test --project=kern",
     "test:browser:pwa": "playwright test --project=pwa",
     "test:inhalt": "vitest run tests/profil tests/kern tests/evaluation",
+    "test:coverage": "vitest run --coverage",
     "pruefe-profile": "vitest run tests/profil",
     "sop:lesefassung": "node scripts/sop-lesefassung.mjs",
     "vergleich:mehrfach": "node scripts/vergleich-mehrfach.mjs",
@@ -45,14 +50,23 @@
     "@types/node": "^26.6.5",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.5",
     "ajv": "^8.20.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.10",
-    "typescript": "^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.72.1",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  }
 }

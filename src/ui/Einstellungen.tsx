@@ -4,7 +4,7 @@
 // Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
@@ -36,7 +36,16 @@ import {
   type Rolle,
 } from "../pipeline/einstellungen";
 import { hoechstkostenText, pflichtRegel, RECHERCHE_STUFEN, stufenWerteText, stufeVon, wirkungText, type StufeId } from "../pipeline/recherchetiefe";
-import { ABLAGEN, ablage as ablageVon, type AblageId } from "../schluessel/ablage";
+import {
+  ABLAGEN,
+  ablage as ablageVon,
+  passphraseEntsperren,
+  passphraseFestgelegt,
+  passphraseGesperrt,
+  passphraseSperren,
+  passphraseVerwerfen,
+  type AblageId,
+} from "../schluessel/ablage";
 import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
@@ -304,8 +313,24 @@ function UebersichtBereich({
 function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (id: AblageId) => Promise<void> }) {
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
+  // Passphrase-Ablage (seit 0.6.2, TP-2026-W44-09): Eingabe je Sitzung, nie gespeichert
+  const [passphraseWahl, setPassphraseWahl] = useState(false);
+  const [passphrase, setPassphrase] = useState("");
+  const [festgelegt, setFestgelegt] = useState(false);
+  const [gesperrt, setGesperrt] = useState(passphraseGesperrt());
+  useEffect(() => {
+    passphraseFestgelegt()
+      .then(setFestgelegt)
+      .catch(() => undefined);
+  }, [ablage, gesperrt]);
   const waehlen = async (id: AblageId) => {
     setFehler(null);
+    // Für die Passphrase-Ablage zuerst die Passphrase abfragen
+    if (id === "passphrase" && passphraseGesperrt()) {
+      setPassphraseWahl(true);
+      return;
+    }
+    setPassphraseWahl(false);
     setLaeuft(true);
     try {
       await setAblage(id);
@@ -315,6 +340,38 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
       setLaeuft(false);
     }
   };
+  const entsperren = async () => {
+    setFehler(null);
+    setLaeuft(true);
+    try {
+      if (!(await passphraseEntsperren(passphrase))) {
+        setFehler("Die Passphrase ist falsch.");
+        return;
+      }
+      setPassphrase("");
+      setGesperrt(false);
+      setPassphraseWahl(false);
+      // Zieht die Schlüssel in die verschlüsselte Ablage um bzw. liest sie nach dem Entsperren neu
+      await setAblage("passphrase");
+    } catch (err) {
+      setFehler((err as Error).message);
+    } finally {
+      setLaeuft(false);
+    }
+  };
+  const sperren = async () => {
+    passphraseSperren();
+    setGesperrt(true);
+    await setAblage("passphrase").catch(() => undefined);
+  };
+  const verwerfen = async () => {
+    if (!confirm("Passphrase vergessen? Die damit verschlüsselten API-Schlüssel werden gelöscht; danach lässt sich eine neue Passphrase festlegen.")) return;
+    await passphraseVerwerfen();
+    setFestgelegt(false);
+    setGesperrt(true);
+    await setAblage(ablage).catch(() => undefined);
+  };
+  const passphraseFeld = (ablage === "passphrase" && gesperrt) || passphraseWahl;
   return (
     <section className="einstellung-block" aria-labelledby="ablage-titel">
       <h3 id="ablage-titel">Ablage der API-Schlüssel</h3>
@@ -326,7 +383,14 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
         <legend className="sr-only">Ablage der API-Schlüssel</legend>
         {ABLAGEN.map((x) => (
           <label key={x.id} className={x.verfuegbar() ? "ablage-option" : "ablage-option gesperrt"}>
-            <input type="radio" name="ablage" value={x.id} checked={ablage === x.id} disabled={!x.verfuegbar()} onChange={() => waehlen(x.id)} />
+            <input
+              type="radio"
+              name="ablage"
+              value={x.id}
+              checked={passphraseWahl ? x.id === "passphrase" : ablage === x.id}
+              disabled={!x.verfuegbar()}
+              onChange={() => waehlen(x.id)}
+            />
             <span>
               <strong>{x.titel}</strong>
               {!x.verfuegbar() && " (hier nicht verfügbar)"}
@@ -336,9 +400,44 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
           </label>
         ))}
       </fieldset>
+      {passphraseFeld && (
+        <form
+          className="aktionen"
+          onSubmit={(ev) => {
+            ev.preventDefault();
+            void entsperren();
+          }}
+        >
+          <label className="feld">
+            <span className="feld-label">{festgelegt ? "Passphrase eingeben (gilt bis zum Schließen der App)" : "Neue Passphrase festlegen"}</span>
+            <input
+              type="password"
+              value={passphrase}
+              onChange={(ev) => setPassphrase(ev.target.value)}
+              autoComplete={festgelegt ? "current-password" : "new-password"}
+              spellCheck={false}
+            />
+          </label>
+          <button type="submit" className="knopf primaer" disabled={!passphrase || laeuft}>
+            {festgelegt ? "Entsperren" : "Festlegen und verschlüsseln"}
+          </button>
+          {festgelegt && (
+            <button type="button" className="knopf leise" onClick={verwerfen}>
+              Passphrase vergessen
+            </button>
+          )}
+        </form>
+      )}
+      {ablage === "passphrase" && !gesperrt && (
+        <div className="aktionen">
+          <button type="button" className="knopf leise" onClick={sperren}>
+            Jetzt sperren
+          </button>
+        </div>
+      )}
       {fehler && (
         <div className="kasten kasten-fehler" role="alert">
-          <p>Die Ablage wurde nicht gewechselt: {fehler}</p>
+          <p>{fehler === "Die Passphrase ist falsch." ? fehler : `Die Ablage wurde nicht gewechselt: ${fehler}`}</p>
         </div>
       )}
     </section>
@@ -391,7 +490,8 @@ function SchluesselAbschnitt({
           {a.konsoleName}
         </a>
         . Die App schickt ihn nur an {a.host}. Ablage: {ablageVon(ablage).titel}
-        {ablage === "geraet" ? " (unverschlüsselt)" : ""}. Nutze einen eigenen Schlüssel mit Ausgabenlimit und lösche ihn auf geteilten Geräten.
+        {ablage === "geraet" ? " (unverschlüsselt)" : ablage === "passphrase" && passphraseGesperrt() ? " (gesperrt; Passphrase oben eingeben)" : ""}. Nutze
+        einen eigenen Schlüssel mit Ausgabenlimit und lösche ihn auf geteilten Geräten.
       </p>
       <div className="schluessel-zeile">
         <input
@@ -537,11 +637,11 @@ function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) 
   const optionen: { v: Voreinstellung; kurz: string; einzeln?: string }[] = [
     { v: "profil", kurz: "Modelle wie im aktiven Profil bzw. in der App vorgegeben.", einzeln: "Aufwand nach den Vorgaben der App." },
     ...ANBIETER_IDS.map((a) => ({
-      v: a as Voreinstellung,
+      v: a,
       kurz: `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
       einzeln: modellProfilText(STANDARD_PROFILE[a]),
     })),
-    ...MIX_IDS.map((m) => ({ v: m as Voreinstellung, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
+    ...MIX_IDS.map((m) => ({ v: m, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
     { v: "individuell", kurz: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
   ];
   return (

@@ -88,7 +88,7 @@ export function VergleichKasten({
 
   return (
     <details className="ki-abschnitt" open={!!v}>
-      <summary>Vergleich mit einer Referenzfassung{v ? `: ${gespeichert!.referenz}` : ""}</summary>
+      <summary>Vergleich mit einer Referenzfassung{v ? `: ${gespeichert.referenz}` : ""}</summary>
       <p className="hinweis">
         Vergleicht den Entwurf mit einer vorhandenen Fassung desselben Profils, etwa der Redaktionsfassung: Zuordnung der Sachverhalte, Beurteilung, Tendenz,
         Ereignisarten und jede Radarachse einzeln. Es gibt bewusst keinen Gesamtwert über alle Achsen. Der Vergleich wird im Laufprotokoll gespeichert.

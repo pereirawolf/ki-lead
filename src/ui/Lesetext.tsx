@@ -26,7 +26,7 @@ function ladeRenderer(): MarkdownIt {
     const standard = (tokens: any[], idx: number, opt: any, _env: any, self: any) => self.renderToken(tokens, idx, opt);
     md.renderer.rules.link_open = (tokens, idx, opt, roh, self) => {
       const env = roh as unknown as LeseUmgebung;
-      const t = tokens[idx];
+      const t = tokens[idx]!;
       const ziel: LinkZiel = linkZiel(String(t.attrGet("href") ?? ""), env.von, env.profil);
       env.stapel.push(ziel);
       if (ziel.art === "extern") {

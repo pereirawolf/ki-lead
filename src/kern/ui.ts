@@ -47,7 +47,7 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
       const achse = radar.achsen.find((a) => a.key === seg);
       if (achse) {
         const kurz = achse.label.match(/^(D\d+)\b/);
-        teile.push(kurz ? kurz[1] : achse.label);
+        teile.push(kurz?.[1] ?? achse.label);
         continue;
       }
     }
@@ -60,7 +60,7 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
 export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undefined): string[] {
   return def.achsen.map((a) => {
     const v = wert?.[a.key];
-    return `${a.label}: ${Number.isInteger(v) ? `${v}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}`;
+    return `${a.label}: ${Number.isInteger(v) ? `${String(v)}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}`;
   });
 }
 

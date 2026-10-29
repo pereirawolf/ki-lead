@@ -14,8 +14,9 @@ export async function ausZip(daten: ArrayBuffer | Blob): Promise<Record<string, 
 
 export async function ausDateiliste(liste: FileList | File[]): Promise<Record<string, string>> {
   const dateien = Array.from(liste);
-  if (dateien.length === 1 && /\.(zip|leadprofil)$/i.test(dateien[0].name)) {
-    return ausZip(await dateien[0].arrayBuffer());
+  const einzige = dateien.length === 1 ? dateien[0] : undefined;
+  if (einzige && /\.(zip|leadprofil)$/i.test(einzige.name)) {
+    return ausZip(await einzige.arrayBuffer());
   }
   const out: Record<string, string> = {};
   for (const f of dateien) {

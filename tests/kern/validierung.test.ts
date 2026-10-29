@@ -1,10 +1,11 @@
 // Eval-freier Schemaprüfer: Referenzvergleich mit Ajv, verständliche Fehlermeldungen, Regressionen aus
 // Review 18.10.2026 (F04 Verweise, F11 strukturelle Gleichheit) und Review 20.10.2026 (F04 eigene JSON-Schlüssel).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { leseOrdner, profil, repoPfad } from "../support/dateien";
 import { ilkaDateien, ilkaMeldung } from "../support/fixtures";
 import { gleichWieAjv, referenzAjv } from "../support/ajv";
-import { pruefeRoh, pruefeGegenSchema } from "../../src/kern/validierung";
+import { pruefeRoh, pruefeGegenSchema, schemaHinweise } from "../../src/kern/validierung";
+import { ladeProfil } from "../../src/profil/laden";
 import { pfadBezeichnung } from "../../src/kern/ui";
 
 const ilka = ilkaDateien();
@@ -168,5 +169,41 @@ describe("F04: Schemaprüfung zählt nur eigene JSON-Schlüssel", () => {
     gleichWieAjv(s, {});
     gleichWieAjv(s, { a: 1 });
     gleichWieAjv(s, { valueOf: 3 });
+  });
+});
+
+// „format“ wird weder von der App noch von Ajv ohne ajv-formats geprüft (seit 0.6.2, TP-2026-W44-10)
+describe("TP-2026-W44-10: Hinweis auf ungeprüftes „format“", () => {
+  it("nennt jedes verwendete Format mit seinen Stellen; ohne „format“ keine Hinweise", async () => {
+    const schema = {
+      type: "object",
+      properties: {
+        mail: { type: "string", format: "email" },
+        sv: {
+          type: "array",
+          items: { type: "object", properties: { zeit: { type: "string", format: "date-time" }, bis: { type: "string", format: "date-time" } } },
+        },
+      },
+    };
+    const h = schemaHinweise(schema);
+    expect(h).toHaveLength(2);
+    expect(h[0]).toMatch(/„email“ an 1 Stelle \(properties\.mail\)/);
+    expect(h[1]).toMatch(/„date-time“ an 2 Stellen \(properties\.sv\.items\.properties\.zeit, properties\.sv\.items\.properties\.bis\)/);
+    expect(h[0]).toMatch(/nicht geprüft/);
+    // Der eigene Prüfer und Ajv (ohne ajv-formats) lassen einen ungültigen Wert tatsächlich durch
+    gleichWieAjv(schema, { mail: "kein-mail" }, true);
+    const { profil: p } = await profil("lead-beispiel");
+    expect(schemaHinweise(p!.schema)).toEqual([]);
+  });
+
+  it("ein Profil mit „format“ im Schema lädt mit einem Hinweis, nicht mit einem Fehler", async () => {
+    const dateien = leseOrdner(repoPfad("profile", "lead-beispiel"));
+    const schema = JSON.parse(dateien["meldung.schema.json"]!);
+    schema.properties.land = { ...schema.properties.land, format: "iso-land" };
+    const erg = await ladeProfil({ ...dateien, "meldung.schema.json": JSON.stringify(schema) });
+    expect(erg.profil).toBeTruthy();
+    const hinweise = erg.befunde.filter((b) => b.stufe === "hinweis" && /„format“/.test(b.text));
+    expect(hinweise).toHaveLength(1);
+    expect(hinweise[0]!.text).toMatch(/Meldungsschema: „format“: „iso-land“ an 1 Stelle \(properties\.land\)/);
   });
 });

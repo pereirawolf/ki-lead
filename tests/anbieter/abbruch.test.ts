@@ -2,7 +2,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { OpenAiAnbieter } from "../../src/anbieter/openai";
 import { AnthropicAnbieter } from "../../src/anbieter/anthropic";
+import { MistralAnbieter } from "../../src/anbieter/mistral";
+import { LeseFehler, sseLesen } from "../../src/anbieter/http";
+import { SseLeser } from "../../src/anbieter/strom";
+import { istVerbindungsabbruch } from "../../src/anbieter/typen";
 import { warte } from "../../src/anbieter/warten";
+import { abreissenderStrom, ohneWarten, sseAntwort } from "../support/anbieter";
 
 describe("F09: Abbruch während der Wartezeit vor einem neuen Versuch", () => {
   afterEach(() => vi.useRealTimers());
@@ -43,5 +48,55 @@ describe("F09: Abbruch während der Wartezeit vor einem neuen Versuch", () => {
     await lauf;
     expect(fehler?.name).toBe("AbortError");
     expect(aufrufe).toBe(1);
+  });
+});
+
+// Verbindungsabbruch nur am Ort des Lesens (seit 0.6.2, TP-2026-W44-04): Ein TypeError aus der Verarbeitung der
+// Ereignisse ist ein Programmierfehler und darf keine bezahlte Wiederholung der Anfrage auslösen.
+let aufrufe = 0;
+const abruf = async () => {
+  aufrufe++;
+  return sseAntwort("event: a\ndata: {}\n\n", 1);
+};
+
+describe("TP-2026-W44-04: TypeError aus der Verarbeitung ist kein Netzabbruch", () => {
+  it("istVerbindungsabbruch prüft nur die Meldungsmuster, nicht die Fehlerklasse", () => {
+    expect(istVerbindungsabbruch(new TypeError("Failed to fetch"))).toBe(true);
+    expect(istVerbindungsabbruch(new Error("Load failed"))).toBe(true);
+    expect(istVerbindungsabbruch(new TypeError("Cannot read properties of undefined (reading 'type')"))).toBe(false);
+    expect(istVerbindungsabbruch(new TypeError("x is not a function"))).toBe(false);
+  });
+
+  it("sseLesen reicht einen Fehler der Verarbeitung unverändert weiter, einen Lesefehler als LeseFehler", async () => {
+    const antwort = () => sseAntwort("event: a\ndata: {}\n\n", 1);
+    const programmierfehler = new TypeError("x is not a function");
+    await expect(
+      sseLesen(antwort(), undefined, () => {
+        throw programmierfehler;
+      }),
+    ).rejects.toBe(programmierfehler);
+    await expect(sseLesen(abreissenderStrom("event: a\ndata: {}\n\n"), undefined, () => undefined)).rejects.toBeInstanceOf(LeseFehler);
+  });
+
+  it.each([
+    ["OpenAI", () => new OpenAiAnbieter("k", "https://api.test", abruf as typeof fetch)],
+    ["Mistral", () => new MistralAnbieter("k", "https://api.test", abruf as typeof fetch, "global")],
+    ["Anthropic", () => new AnthropicAnbieter("k", "https://api.test", abruf as typeof fetch)],
+  ])("%s: ein TypeError in der Stromverarbeitung wird nicht wiederholt, sondern gemeldet", async (_, neu) => {
+    aufrufe = 0;
+    const a = neu();
+    // Die Verarbeitung der Ereignisse scheitert mit einem TypeError, der Transport nicht
+    const programmierfehler = new TypeError("Verarbeitung gescheitert (Test)");
+    const verarbeite = vi.spyOn(SseLeser.prototype, "lies").mockImplementation(() => {
+      throw programmierfehler;
+    });
+    try {
+      const r = await ohneWarten(() => a.senden({ modell: "m", maxTokens: 10, system: [], nachrichten: [{ role: "user", content: "Los" }] }));
+      expect(r.fehler).toBe(programmierfehler);
+      expect(aufrufe).toBe(1);
+      expect(r.dauerMs).toBe(0);
+    } finally {
+      verarbeite.mockRestore();
+    }
   });
 });

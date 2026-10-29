@@ -9,10 +9,22 @@ export interface SystemTeil {
   cache?: boolean;
 }
 
+/**
+ * Inhaltsblöcke der Nachrichten an den Anbieter. Seit 0.6.2 (TP-2026-W44-07) ohne den Rückfall `Record<string, any>`,
+ * der die Union zu any kollabieren ließ; vom Anbieter zurückgesandte Blöcke (Fortsetzung, pause_turn) sind
+ * `Rohblock` und tragen ihren `type` als freien String.
+ */
 export type Inhaltsblock =
   | { type: "text"; text: string }
   | { type: "document"; source: { type: "base64"; media_type: "application/pdf"; data: string }; title?: string }
-  | Record<string, any>;
+  | { type: "document"; source: { type: "text"; media_type?: string; data: string }; title?: string }
+  | Rohblock;
+
+/** Block, wie der Anbieter ihn geliefert hat (Werkzeugaufruf, Ergebnis, Denkblock); Felder je Anbieter verschieden */
+export interface Rohblock {
+  type: string;
+  [k: string]: unknown;
+}
 
 export interface Nachricht {
   role: "user" | "assistant";
@@ -78,6 +90,21 @@ export interface AbrufFehler {
   code: string;
 }
 
+/**
+ * Ende der Antwort, auf die Begriffe der App vereinheitlicht (seit 0.6.2 als Union, TP-2026-W44-07): „end_turn“ normal,
+ * „max_tokens“ an der Ausgabegrenze, „pause_turn“ angehalten (nur Anthropic), „refusal“ abgelehnt, „abgebrochen“ nach
+ * einem Abriss; „tool_use“ und „stop_sequence“ aus der Anthropic-API; alles Weitere aus den Angaben des Anbieters
+ * (OpenAI incomplete_details.reason) als freier String.
+ */
+export type StopGrund = "end_turn" | "max_tokens" | "pause_turn" | "refusal" | "abgebrochen" | "tool_use" | "stop_sequence" | (string & {});
+
+/**
+ * Art eines AnbieterFehlers, soweit die App darauf verzweigt (seit 0.6.2 als Union, TP-2026-W44-07): „schluessel“ kein
+ * Schlüssel hinterlegt (Kosten sicher 0), „netz“ keine Verbindung, „verbindung“ Abriss im Strom, „refusal“ Ablehnung
+ * durch das Modell, „error“ Fehlerereignis im Strom; sonst der Fehlercode des Anbieters (z. B. „authentication_error“).
+ */
+export type FehlerArt = "schluessel" | "netz" | "verbindung" | "refusal" | "error" | "failed" | (string & {});
+
 export interface LlmAntwort {
   modell: string;
   /** Zusammengesetzter Antworttext */
@@ -93,7 +120,7 @@ export interface LlmAntwort {
   nutzung: Nutzung;
   /** Kosten in USD, soweit Preise bekannt */
   kostenUsd: number | null;
-  stopGrund: string;
+  stopGrund: StopGrund;
   dauerMs: number;
   /** Zahl der Anfragen (Fortsetzungen eingeschlossen) */
   runden: number;
@@ -108,7 +135,7 @@ export class AnbieterFehler extends Error {
   constructor(
     message: string,
     public status?: number,
-    public art?: string,
+    public art?: FehlerArt,
     /** Bis zum Fehler empfangene Inhaltsblöcke (für das Laufprotokoll) */
     public teilinhalt?: any[],
   ) {
@@ -117,10 +144,14 @@ export class AnbieterFehler extends Error {
   }
 }
 
-/** Typische Meldungen der Browser, wenn eine Verbindung mitten im Strom abreißt. */
+/**
+ * Typische Meldungen der Browser, wenn eine Verbindung mitten im Strom abreißt. Seit 0.6.2 nur noch die Meldungsmuster
+ * (TP-2026-W44-04): Ein beliebiger TypeError, etwa ein Programmierfehler in der Stromverarbeitung, gilt nicht mehr als
+ * Netzabbruch. Die Adapter erkennen den Abriss am Ort des Lesens (http.ts, LeseFehler), nicht an der Fehlerklasse.
+ */
 export function istVerbindungsabbruch(e: unknown): boolean {
   const m = String((e as any)?.message || e || "");
-  return (e as any)?.name === "TypeError" || /load failed|failed to fetch|networkerror|network error|network connection was lost|terminated/i.test(m);
+  return /load failed|failed to fetch|networkerror|network error|network connection was lost|terminated/i.test(m);
 }
 
 export const TEXT_VERBINDUNGSABBRUCH =

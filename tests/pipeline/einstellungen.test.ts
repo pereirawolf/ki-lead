@@ -86,7 +86,13 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
 
   // Soll unabhängig vom Code: die Standard-Profile bis 0.5.14 laut Spezifikation 0.5.14, Abschnitt 5.4
   const ALT_ANTHROPIC = {
-    modelle: { vorverarbeitung: "claude-haiku-5-5", erfassung: "claude-opus-5-5", verdichtung: "claude-opus-5-5", reparatur: "claude-sonnet-5-5", kurzfassung: "claude-sonnet-5-5" },
+    modelle: {
+      vorverarbeitung: "claude-haiku-5-5",
+      erfassung: "claude-opus-5-5",
+      verdichtung: "claude-opus-5-5",
+      reparatur: "claude-sonnet-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    },
     aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   };
   const ALT_OPENAI = {
@@ -94,7 +100,13 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "high", reparatur: "low", kurzfassung: "medium" },
   };
   const ALT_MISTRAL = {
-    modelle: { vorverarbeitung: "mistral-small-2603", erfassung: "mistral-medium-3-5", verdichtung: "mistral-medium-3-5", reparatur: "mistral-small-2603", kurzfassung: "mistral-medium-3-5" },
+    modelle: {
+      vorverarbeitung: "mistral-small-2603",
+      erfassung: "mistral-medium-3-5",
+      verdichtung: "mistral-medium-3-5",
+      reparatur: "mistral-small-2603",
+      kurzfassung: "mistral-medium-3-5",
+    },
     aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
   };
 
@@ -158,7 +170,11 @@ describe("AV-2026-W43-31: Mix-Profile", () => {
       aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
     });
     expect(MIX_PROFILE["mix-opus"]).toMatchObject({ titel: "Mix: OpenAI S1 + Anthropic Opus", anbieter: ["openai", "anthropic"], ...soll("claude-opus-5-5") });
-    expect(MIX_PROFILE["mix-sonnet"]).toMatchObject({ titel: "Mix: OpenAI S1 + Anthropic Sonnet", anbieter: ["openai", "anthropic"], ...soll("claude-sonnet-5-5") });
+    expect(MIX_PROFILE["mix-sonnet"]).toMatchObject({
+      titel: "Mix: OpenAI S1 + Anthropic Sonnet",
+      anbieter: ["openai", "anthropic"],
+      ...soll("claude-sonnet-5-5"),
+    });
   });
 
   it("nutzen nur angebotene Modelle und Stufen", () => {

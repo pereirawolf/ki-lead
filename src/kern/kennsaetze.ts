@@ -68,7 +68,7 @@ export function leseFrist(s: unknown, zeitzone?: string): Frist {
   const text = String(s || "");
   const m = text.match(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/);
   if (!m) return { datum: null, genauigkeit: "tag" };
-  const [tag, monat, jahr] = [+m[1], +m[2], +m[3]];
+  const [tag, monat, jahr] = [+m[1]!, +m[2]!, +m[3]!];
   const rest = text.slice(m.index! + m[0].length);
   let stunde = 23;
   let minute = 59;
@@ -76,10 +76,10 @@ export function leseFrist(s: unknown, zeitzone?: string): Frist {
   let hinweis: string | undefined;
   const zeit = UHRZEIT_NACH_DATUM.map((re) => rest.match(re)).find(Boolean);
   if (zeit) {
-    stunde = +zeit[1];
+    stunde = +zeit[1]!;
     minute = zeit[2] !== undefined ? +zeit[2] : 0;
     genauigkeit = "minute";
-  } else if (/^[^\n]{0,24}?\b\d{1,2}(?::\d{2}\b|(?:\.\d{2})?\s*Uhr\b)/i.test(rest.split(/\b\d{1,2}\.\d{1,2}\.\d{4}\b/)[0])) {
+  } else if (/^[^\n]{0,24}?\b\d{1,2}(?::\d{2}\b|(?:\.\d{2})?\s*Uhr\b)/i.test(rest.split(/\b\d{1,2}\.\d{1,2}\.\d{4}\b/)[0] ?? "")) {
     hinweis = "Uhrzeit nicht eindeutig zuzuordnen; gewertet wird das Tagesende (23:59).";
   }
   // „24 Uhr“ / „24:00“ ist das Tagesende: 0 Uhr des Folgetags
