@@ -149,7 +149,7 @@
       "belege": [],
       "aenderungsvorschlag": {
         "typ": "ergaenzen",
-        "beschreibung": "Zeilenform um „· aufgenommen <t0 der Ausgabe>“ erweitern; die App setzt den Wert beim ersten Erscheinen der Zeile."
+        "beschreibung": "Zeilenform um „· aufgenommen <Meldezeitpunkt>“ erweitern; die App setzt den Wert beim ersten Erscheinen der Zeile (Nachbearbeitung nach S2, Baukasten, „Aufnahmezeit ergänzen“) und lässt ihn danach unverändert; Prüfung auf Gültigkeit, nicht vor dem Ereignis, nicht nach t0."
       },
       "folgeaenderungen": [
         "profile/lead-beispiel/kodierleitfaden.md, src/kern/zeitstrahl.ts, src/pipeline/zeitstrahl.ts"
@@ -158,8 +158,8 @@
       "sicherheit": "mittel",
       "automatisierbar": "ja (Zeilenform, Übernahme bei der Fortschreibung)",
       "pruefung": {
-        "status": "abgelehnt",
-        "anmerkung": "Entscheidung des Herausgebers vom 29.10.2026: Zeilenform „mit Typ“ ohne Kenntniszeit gewählt. Die Kenntniszeit ergibt sich aus Quellenverzeichnis und Ausgabe (Kodierleitfaden 8.3, Regel 2). Erneut vorlegen nur mit neuer Erkenntnis, etwa wenn ein Rückblick daran scheitert."
+        "status": "angenommen",
+        "anmerkung": "Fortgeschrieben am 30.10.2026: Der Eintrag „abgelehnt“ vom 29.10.2026 schrieb dem Herausgeber eine Begründung zu, die von Claude stammte; der Herausgeber hatte nur die empfohlene Zeilenform gewählt. Nach Beratung am 30.10.2026 hat der Herausgeber die Umsetzung freigegeben. Umgesetzt mit Pull Request #105: Kenntniszeit „aufgenommen“ = Meldezeitpunkt der ersten Meldung mit der Zeile, gesetzt von der App, bei der Fortschreibung unverändert; gilt auch für Zeilen, die eine Verdichtung aus Eingängen übernimmt."
       }
     },
     {
