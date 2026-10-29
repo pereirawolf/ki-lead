@@ -1,0 +1,246 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "beratung",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-29T22:55:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "41392fdca9cd064cede881fb1f682e25ebcf4723",
+  "pruefumfang": "Beratung des Herausgebers im Chat vom 29.10.2026 zur Idee, bei KI-Erfassung und KI-Verdichtung je Sachverhalt einen Zeitstrahl relevanter Ereignisse zu notieren und fortzuschreiben. Gelesen: Meldungsschema, Darstellungsdatei, Kodierleitfaden, SOP-LEAD Teil A (A.3, A.4, A.7, A.8, A.10), Arbeitsanweisungen Erfassung und Verdichtung, Pipeline (s2s3.ts, nachbearbeitung.ts, kontext.ts, material.ts), Formular (Feld.tsx, QuellenFeld.tsx), Lagebild und Ausgaben. ZS-2026-W44-01 bis -04 hat der Herausgeber im Chat festgelegt und freigegeben; umgesetzt mit Pull Request #105. ZS-2026-W44-05 bis -07 sind die dort bewusst offen gelassenen Punkte, nachträglich als Befunde erfasst.",
+  "nicht_geprueft": [
+    "Kein echter KI-Lauf: Ob die Modelle die Regeln im Steuerungsblock einhalten, zeigt erst der nächste Erfassungstest; die App korrigiert Kennung, Bezug und Zeilen der Vormeldung deterministisch.",
+    "Keine externen Quellen; belege bleiben leer.",
+    "ZS-2026-W44-06 und -07 nur am Code und an der Vorlage nachvollzogen, keine Umsetzung."
+  ],
+  "befunde": [
+    {
+      "id": "ZS-2026-W44-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "properties (Meldungsebene)",
+          "ist": "quellen als einziges Feld des Belegapparats; kein Zeitstrahl"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.8.1 Fortschreibung",
+          "ist": "Kennsatz „Änderung zur Vormeldung:“ nennt nur die Differenz zur letzten Bewertung"
+        }
+      ],
+      "beobachtung": "Eine Meldung trägt je Sachverhalt nur die Differenz zur Vormeldung. Bei jeder Fortschreibung rekonstruiert die KI den Verlauf aus einer einzigen Vormeldung; Verdichtung, D8-Begründung und Rückblick (A.8.3, Frage 1) haben keine belegte Ereignisfolge.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Zeitstrahl je Sachverhalt als eigener Bereich auf der Seite „Quellen & Referenzen“ in fester Zeilenform mit Typ; Regeln im Kodierleitfaden, Verweise in Teil A; Feld optional; Beispieldatensatz „Ilka“ ergänzt."
+      },
+      "folgeaenderungen": [
+        "Schema, Darstellungsdatei, Kodierleitfaden Abschnitt 8, Teil A, Arbeitsanweisungen, App (Widget, Prüfungen, Ausgaben), Tests"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/zeitstrahl.test.ts, tests/ui/zeitstrahl.test.ts",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Festlegung des Herausgebers im Chat vom 29.10.2026 (Zeilenform mit Typ, optional, Ilka-Beispiel). Umgesetzt mit Pull Request #105 (Branch befunde/claude-2026-W44-zeitstrahl)."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-02",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "$defs.sachverhalt",
+          "ist": "keine stabile Kennung; die Fortschreibung ordnet über die Bezeichnung zu"
+        }
+      ],
+      "beobachtung": "Ohne stabile Kennung lassen sich Zeilen eines Zeitstrahls keinem Sachverhalt zuordnen, und Umbenennung oder Teilung reißt den Verlauf ab. „S1, S2 …“ ist ungeeignet, weil die Stufen der Läufe so heißen; die Kennung muss über viele meldende Stellen eindeutig sein.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Kennung „Präfix-JJJJMMTT-XXXX“ (Herkunft nach ISO 3166 aus dem Feld „Land“, Anlagedatum, vier Zeichen Crockford-Base32); vergibt nur die App; bleibt bei der Fortschreibung."
+      },
+      "folgeaenderungen": [
+        "src/kern/kennung.ts, src/pipeline/zeitstrahl.ts, src/ui/Feld.tsx, meldung.ui.json (kennung.praefixe)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/zeitstrahl.test.ts, tests/pipeline/zeitstrahl.test.ts",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Festlegung des Herausgebers im Chat vom 29.10.2026 (Herkunft, Datum, Zufall; Übernahme der Kennung bei der Fortschreibung). Umgesetzt mit Pull Request #105 (Branch befunde/claude-2026-W44-zeitstrahl)."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-verdichtung.md",
+          "stelle": "Regeln",
+          "ist": "keine Zuordnung der eigenen Sachverhalte zu den Sachverhalten der Eingänge außer über das Quellenverzeichnis"
+        }
+      ],
+      "beobachtung": "Bei Verdichtung und Teilung fehlt die Zuordnung auf Sachverhaltsebene; Ketten über Ebenen sind nicht nachvollziehbar.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Feld „bezug“ mit den Kennungen der eingehenden Sachverhalte; die App prüft gegen Eingangs- und Vormeldungen."
+      },
+      "folgeaenderungen": [
+        "src/pipeline/zeitstrahl.ts, Arbeitsanweisung Verdichtung Regel 15, Lagebild-Tabelle"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline/zeitstrahl.test.ts",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Festlegung des Herausgebers im Chat vom 29.10.2026. Umgesetzt mit Pull Request #105 (Branch befunde/claude-2026-W44-zeitstrahl)."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-04",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.8.1 Fortschreibung",
+          "ist": "Wechsel von Beurteilung und Tendenz stehen nur im Kennsatz „Änderung zur Vormeldung:“"
+        }
+      ],
+      "beobachtung": "Bewertungswechsel gehören in den Zeitstrahl, sind aber aus Vormeldung und neuer Fassung ohne Urteil bestimmbar; eine KI würde sie fehleranfälliger schreiben.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Die App trägt bei der Fortschreibung je geänderter Beurteilung oder Tendenz eine Zeile vom Typ „Bewertung“ ein; Bewertungszeilen der KI entfallen; Zeilen der Vormeldung bleiben wortgleich."
+      },
+      "folgeaenderungen": [
+        "src/pipeline/zeitstrahl.ts, src/pipeline/kontext.ts"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline/zeitstrahl.test.ts",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Festlegung des Herausgebers im Chat vom 29.10.2026. Umgesetzt mit Pull Request #105 (Branch befunde/claude-2026-W44-zeitstrahl)."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-05",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 2",
+          "ist": "Wann eine Angabe bekannt wurde, zeigen Zugriff und Datenstand im Quellenverzeichnis und die Ausgabe, in der die Zeile zuerst steht."
+        }
+      ],
+      "beobachtung": "Für den Rückblick (A.8.3, Frage 1) wäre je Zeile eine Kenntniszeit („aufgenommen JJJJ-MM-TTThh:mm“, von der App gesetzt) möglich gewesen, neben der Ereigniszeit.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Zeilenform um „· aufgenommen <t0 der Ausgabe>“ erweitern; die App setzt den Wert beim ersten Erscheinen der Zeile."
+      },
+      "folgeaenderungen": [
+        "profile/lead-beispiel/kodierleitfaden.md, src/kern/zeitstrahl.ts, src/pipeline/zeitstrahl.ts"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": "ja (Zeilenform, Übernahme bei der Fortschreibung)",
+      "pruefung": {
+        "status": "abgelehnt",
+        "anmerkung": "Entscheidung des Herausgebers vom 29.10.2026: Zeilenform „mit Typ“ ohne Kenntniszeit gewählt. Die Kenntniszeit ergibt sich aus Quellenverzeichnis und Ausgabe (Kodierleitfaden 8.3, Regel 2). Erneut vorlegen nur mit neuer Erkenntnis, etwa wenn ein Rückblick daran scheitert."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-06",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "Abschnitt 3 „Fortschreibung, Nachlauf und Abschluss“ und mehrfachMeldungen (src/lagebild/lagebild.ts)",
+          "ist": "Mehrere Meldungen derselben Stelle werden nach der meldenden Stelle gruppiert; Kennungen der Sachverhalte wertet der Redaktionscheck nicht aus."
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Sachverhalte“",
+          "ist": "Kennung und Bezug werden angezeigt, aber nicht geprüft."
+        }
+      ],
+      "beobachtung": "Seit 0.6.9 tragen Sachverhalte eine Kennung und einen Bezug. Der Redaktionscheck nutzt sie noch nicht: Er erkennt Fortschreibungen nur über die meldende Stelle, nicht über die Kennung, und bemerkt nicht, wenn dieselbe Kennung in Meldungen verschiedener Stellen steht (Doppelvergabe oder übernommene fremde Kennung) oder wenn ein Bezug auf einen Sachverhalt verweist, der im Lagebild fehlt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Redaktionscheck um Prüfungen zur Kennung erweitern: (1) dieselbe Kennung bei verschiedenen meldenden Stellen als Warnung; (2) dieselbe Kennung in mehreren Meldungen derselben Stelle als Fortschreibung erkennen (genauer als die Gruppierung nach Stelle, A.7.1); (3) Bezug auf eine im Lagebild nicht geladene Kennung als Hinweis; Verweis SOP-LEAD A.7.1 und Kodierleitfaden Abschnitt 8."
+      },
+      "folgeaenderungen": [
+        "src/lagebild/redaktion.ts, src/lagebild/lagebild.ts, src/ui/lagebild/Redaktionscheck.tsx",
+        "docs/SPEZIFIKATION.md Abschnitt 5.2 und offener Punkt 18",
+        "CHANGELOG.md",
+        "tests/lagebild/redaktionscheck.test.ts"
+      ],
+      "entscheidungsfrage": "Sollen Fortschreibungen im Redaktionscheck künftig vorrangig über die Kennung statt über die meldende Stelle erkannt werden, mit der Stelle nur noch als Rückfall für Meldungen ohne Kennung?",
+      "sicherheit": "mittel",
+      "automatisierbar": "ja: Lagebild aus Ilka-Meldungen mit doppelter Kennung bei zwei Ländern, mit zwei Fassungen derselben Stelle und mit einem Bezug auf eine nicht geladene Kennung; erwartete Abschnitte und Stufen fest im Test",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Vom Herausgeber am 29.10.2026 als offener Punkt aus PR #105 festgehalten; Entscheidung im Freitagslauf."
+      }
+    },
+    {
+      "id": "ZS-2026-W44-07",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/muster/meldung.ui.json",
+          "stelle": "rollen",
+          "ist": "keine Rollen zeitstrahl, sv_kennung, sv_bezug; keine Abschnitte kennung und zeitstrahl"
+        },
+        {
+          "datei": "profile/muster/meldung.schema.json",
+          "stelle": "properties und Sachverhalt",
+          "ist": "keine Felder zeitstrahl, kennung, bezug"
+        },
+        {
+          "datei": "README.md",
+          "stelle": "Abschnitt „Profile“",
+          "ist": "„profile/muster: Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern“"
+        }
+      ],
+      "beobachtung": "Die Vorlage soll alle Bestandteile als Gerüst zeigen. Seit Profilformat 1.23 gibt es die optionalen Rollen und Abschnitte für Zeitstrahl, Kennung und Bezug; die Vorlage führt sie nicht. Wer ein eigenes Profil aus der Vorlage baut, erfährt davon nur aus dem Profilformat.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Vorlage um die optionalen Felder und Rollen ergänzen (Schema: zeitstrahl, kennung mit Muster, bezug; Darstellungsdatei: Rollen, Felder mit den Widgets zeitstrahl, kennung, kennungen, Abschnitte kennung mit Platzhalter-Präfix und zeitstrahl mit den Typen des Beispielprofils), Vorlage-README und Profilverlauf der Vorlage fortschreiben; alternativ nur ein Hinweis in der Vorlage-README."
+      },
+      "folgeaenderungen": [
+        "profile/muster/meldung.schema.json, profile/muster/meldung.ui.json, profile/muster/README.md, profile/muster/CHANGELOG.md, profile/muster/profil.json (Version)",
+        "tests/profil/vorlage.test.ts (Vorlage gegen Beispielprofil)"
+      ],
+      "entscheidungsfrage": "Soll die Vorlage Zeitstrahl, Kennung und Bezug als Gerüst enthalten (Vorlage zeigt alles, was das Format kann) oder nur in der README darauf hinweisen (Vorlage bleibt schlank)?",
+      "sicherheit": "hoch",
+      "automatisierbar": "ja: tests/profil/vorlage.test.ts prüft, dass die Vorlage die Rollen des Beispielprofils kennt bzw. dass die README die optionalen Rollen nennt",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Vom Herausgeber am 29.10.2026 als offener Punkt aus PR #105 festgehalten; Entscheidung im Freitagslauf."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Zeitstrahl, Kennung und Bezug sind optional; ältere Profile und Meldungen laden unverändert (tests/profil/zeitstrahl-profil.test.ts)."
+  ]
+}
