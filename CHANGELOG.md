@@ -77,6 +77,35 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.4 | letzter Commit des Pull Requests „Arbeitsanweisungen: Zählregeln, Materialhülle, Caching, Kodierleitfaden als einziger Regelort; 0.6.4“ |
 | 0.6.5 | letzter Commit des Pull Requests „Frontend: Barrierefreiheit, Feldprüfung, Zustandsschnitt, Leistung, Farbtoken aus dem Katalog; 0.6.5“ |
 | 0.6.6 | letzter Commit des Pull Requests „Management Summary: Laufzeile mit Dauer und Kosten, KI-Chip während der Erstellung; 0.6.6“ |
+| 0.6.7 | letzter Commit des Pull Requests „Sprungziele: neuer Inhalt beginnt oben, Fokus auf der neuen Überschrift; 0.6.7“ |
+
+## [0.6.7] – 29.10.2026
+
+Grundlage: Rückmeldung des Herausgebers vom 29.10.2026. Nach „Weiter: Quellen & Referenzen“, „Weiter: Management Summary“ oder „Zurück: Ereignisse/Sachverhalte“ blieb die Ansicht am Seitenende des neuen Schritts. Ursache: Die App tauschte beim Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht nur den Inhalt aus; das Dokument behielt seine Scrollhöhe. Baut auf 0.6.6 und den Dokumentstand von Pull Request #90 auf.
+
+### Hinzugefügt
+
+- **Sprungziele** (`src/ui/sprung.ts`): `springeZu` richtet den Anfang des neuen Inhalts unter dem mitlaufenden Kopf aus (Kopfhöhe live gemessen, 12 px Abstand, sofort statt animiert) und setzt den Fokus wahlweise immer, nur bei verlorenem Fokus oder nie; `useSprung` führt den Sprung nach dem Zeichnen des neuen Inhalts aus; Sprünge in der verborgenen KI-Erfassung merkt sich die App und holt sie beim Zeigen nach. Die Ziele je Auslöser stehen in der Spezifikation („Sprungziele“).
+- **Meldung:** „Weiter“ und „Zurück“ springen an den Anfang des Arbeitsbereichs und fokussieren die neue Überschrift; die Schrittleiste scrollt nur bei Bedarf und behält den Fokus; „Meldung öffnen“ zeigt den Statuskasten, „Neue Meldung“ den Seitenanfang. In Listen (etwa „Ereignis/Sachverhalt hinzufügen“) erhält der neue Eintrag den Fokus auf seinem ersten Feld, nach „Entfernen“ der vorige Eintrag.
+- **Ansichten:** Hauptnavigation, Zurück und Vor im Browser beginnen oben; die KI-Erfassung kehrt an die zuletzt gesehene Stelle zurück. Übernahmen in die Maske springen zu Schritt 1 mit Fokus auf dessen Überschrift, „Profil verwenden“ zur Überschrift der Meldung, „Zu den Einstellungen“ und die Übergabe an die KI zum Arbeitsbereich der Zielansicht, der KI-Chip zur Laufanzeige.
+- **KI-Erfassung:** Jeder Phasenwechsel richtet zusätzlich zum Fokus (seit 0.6.5) den Arbeitsbereich aus; nach der Orientierungssuche für einen einzelnen Sachverhalt steht dessen Karte oben.
+- **Einstellungen und Lagebild:** Bereichs- und Reiterleiste scrollen nur bei Bedarf und behalten den Fokus; ein Knopf in einem Bereich der Einstellungen (etwa „Schlüssel hinterlegen“) und die Kennzahlen der Lagebild-Übersicht springen mit Fokus auf das Ziel.
+
+### Geändert
+
+- Spezifikation 0.6.7 (Abschnitt „Bedienung, Adresse und Rückfragen“, neue Tabelle „Sprungziele“), docs/BARRIEREFREIHEIT.md 1.3, docs/TESTS.md, docs/TESTZUORDNUNG.md, README.
+- Versionsangaben 0.6.7 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 607, iOS 607).
+
+### Behoben
+
+- **Ansicht blieb nach „Weiter“ und „Zurück“ am Seitenende** des neuen Schritts; ebenso nach einem Wechsel der Ansicht, eines Bereichs der Einstellungen und nach „S1 starten“ am Ende des Auftrags.
+- **Fokus nach „Weiter“ und „Zurück“ der Meldung** blieb am Knopf, der im neuen Schritt am Seitenende steht (docs/BARRIEREFREIHEIT.md beschrieb seit 1.2 bereits den Fokus auf der neuen Überschrift).
+
+### Tests
+
+- `tests/ui/sprungziele.test.ts` (neu, 12): Ausrichtung unter dem Kopf, Scrollen nur bei Bedarf, Fokusregeln, nachgeholter Sprung; Meldung mit „Weiter“/„Zurück“ durch alle Schritte, Schrittleiste, Listeneinträge; Einstellungen; Wechsel der Ansicht mit der zuletzt gesehenen Stelle der KI-Erfassung.
+- `tests/browser/sprungziele.spec.ts` (neu, 3): vom Seitenende aus „Weiter“ und „Zurück“ breit und mit 390 px, Hauptnavigation; schlägt mit dem Stand 0.6.6 fehl.
+- `tests/support/dom.ts`: `window.scrollTo` für jsdom, `scrollAufrufe()`.
 
 ## [0.6.6] – 27.10.2026
 

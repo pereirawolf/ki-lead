@@ -190,9 +190,9 @@ export function Bestaetigung({
       )}
       <div className="liste">
         {vorschlag.sachverhalte.map((s, i) => (
-          <div key={i} className="element">
+          <div key={i} className="element" data-sachverhalt={i}>
             <div className="element-kopf">
-              <h3>
+              <h3 tabIndex={-1}>
                 <span className="element-nr">Sachverhalt {i + 1}</span>
               </h3>
               <div className="aktionen">

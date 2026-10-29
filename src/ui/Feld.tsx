@@ -1,6 +1,6 @@
 // Generisches Formular: rendert ein Feld anhand von JSON-Schema und Darstellungsdatei.
 
-import { useContext, useId } from "react";
+import { useContext, useId, useRef } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, type Segment } from "../kern/pfad";
 import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
@@ -16,6 +16,7 @@ import { FeldFehler, HilfeFeld } from "./HilfeFeld";
 import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
+import { springeZu, useSprung } from "./sprung";
 
 export interface FeldProps {
   profil: Profil;
@@ -318,7 +319,18 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const r = profil.ui.rollen;
   const istSachverhalte = gen === r.sachverhalte;
 
-  const hinzufuegen = () => setze(segs, [...liste, leererWert(k.items, profil.schema)]);
+  // Sprungziele (seit 0.6.7): Nach „hinzufügen“ der neue Eintrag mit Fokus auf seinem ersten Eingabefeld; nach
+  // „Entfernen“ (der Knopf verschwindet) der vorige Eintrag, beim ersten der nachrückende, sonst „hinzufügen“.
+  const listeRef = useRef<HTMLDivElement>(null);
+  const sprung = useSprung();
+  const eintrag = (i: number) => listeRef.current?.querySelectorAll<HTMLElement>(":scope > .element")[i] ?? null;
+  const hinzufuegen = () => {
+    setze(segs, [...liste, leererWert(k.items, profil.schema)]);
+    sprung(() => {
+      const neu = eintrag(liste.length);
+      springeZu(neu, neu?.querySelector<HTMLElement>("input:not([type=hidden]), select, textarea"), { fokus: true });
+    });
+  };
   const entfernen = async (i: number) => {
     const titel = f.titel_feld ? alsText(holeWert(liste[i], f.titel_feld)) : "";
     if (!(await bestaetigen(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`, { ja: "Entfernen" }))) return;
@@ -326,9 +338,15 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
       segs,
       liste.filter((_, j) => j !== i),
     );
+    sprung(() => {
+      const nachbar = eintrag(i > 0 ? i - 1 : 0);
+      if (nachbar) springeZu(nachbar, nachbar.querySelector<HTMLElement>("h3"), { fokus: true, nurWennNoetig: true });
+      else springeZu(hinzufuegenRef.current, hinzufuegenRef.current, { fokus: true, nurWennNoetig: true });
+    });
   };
+  const hinzufuegenRef = useRef<HTMLButtonElement>(null);
   return (
-    <div className="liste">
+    <div className="liste" ref={listeRef}>
       {liste.length === 0 && <p className="leer">Noch kein {elementName} erfasst.</p>}
       {liste.map((el, i) => {
         const titel = f.titel_feld ? alsText(holeWert(el, f.titel_feld)) : "";
@@ -355,7 +373,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
           </section>
         );
       })}
-      <button type="button" className="knopf" onClick={hinzufuegen}>
+      <button type="button" className="knopf" ref={hinzufuegenRef} onClick={hinzufuegen}>
         {f.hinzufuegen || `${elementName} hinzufügen`}
       </button>
     </div>

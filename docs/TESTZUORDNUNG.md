@@ -727,3 +727,17 @@ Angepasst ohne Änderung des Solls:
 | Dauer der Management Summary je gemessenem Modell und Aufwand (größter Messwert plus 25 %, gerundet) | Management Summary: Dauer aus den Messwerten der Abnahme vom 25.10.2026 | `tests/pipeline/schaetzung.test.ts` |
 
 Angepasst: `tests/forschung/vergleichslauf-umfang.test.ts` erwartet für Sonnet „mittel“ die Dauer `[0, 10]` statt keiner Dauer.
+
+## Sprungziele (0.6.7, Rückmeldung des Herausgebers vom 29.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Anfang des Ziels unter dem Kopf (Kopfhöhe plus 12 px), nicht über den Seitenanfang hinaus; Überschrift programmatisch fokussierbar | richtet den Anfang des Ziels unter dem Kopf aus …; nicht über den Seitenanfang hinaus | `tests/ui/sprungziele.test.ts` (neu) |
+| Leisten scrollen nur bei Bedarf; „wenn verloren“ stiehlt keinen Fokus; Sprung in verborgener Ansicht wird nachgeholt | nurWennNoetig …; „wenn-verloren“ …; in einer verborgenen Ansicht … | `tests/ui/sprungziele.test.ts` (neu) |
+| Meldung: „Weiter“ und „Zurück“ springen und fokussieren die Überschrift, in allen Schritten bis zur Management Summary; Schrittleiste behält den Fokus | „Weiter: …“ und „Zurück: …“ …; bis „Weiter: Management Summary“ …; Schrittleiste … | `tests/ui/sprungziele.test.ts` (neu) |
+| Listeneintrag hinzufügen fokussiert das erste Feld, Entfernen den vorigen Eintrag | „Ereignis/Sachverhalt hinzufügen“ … | `tests/ui/sprungziele.test.ts` (neu) |
+| Einstellungen: aus einem Bereich mit Fokus auf die Überschrift, aus der Leiste ohne Fokuswechsel | aus der Übersicht in einen Bereich …; über die Bereichsleiste … | `tests/ui/sprungziele.test.ts` (neu) |
+| Hauptnavigation an den Seitenanfang, KI-Erfassung an die zuletzt gesehene Stelle | Hauptnavigation: Seitenanfang … | `tests/ui/sprungziele.test.ts` (neu), `tests/browser/sprungziele.spec.ts` (neu) |
+| Im echten Browser, breit und 390 px: vom Seitenende „Weiter“/„Zurück“, Anfang des Arbeitsbereichs unter dem Kopf | Meldung (breit / 390 px): „Weiter“ und „Zurück“ … | `tests/browser/sprungziele.spec.ts` (neu) |
+
+Angepasst ohne Änderung des Solls: `tests/support/dom.ts` ersetzt in `reactUmgebung()` das in jsdom fehlende `window.scrollTo` und zeichnet die Ziele auf (`scrollAufrufe()`).

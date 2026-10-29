@@ -18,6 +18,7 @@ import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
 import { befundeJeFeld, feldSchluessel, FeldBefundeKontext, type FeldBefundeWert } from "./feldBefunde";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
+import { springeZu, useSprung, zumSeitenanfang } from "./sprung";
 
 /** Kennung des Schritts, den die App für die Management Summary anfügt */
 export const KURZFASSUNG_SCHRITT = "management-summary";
@@ -49,6 +50,23 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
   const [schritt, setSchritt] = useState(0);
   const [meldungen, setMeldungen] = useState<{ art: "ok" | "hinweis" | "fehler"; zeilen: string[] } | null>(null);
   const dateiRef = useRef<HTMLInputElement>(null);
+  // Sprungziele (seit 0.6.7): Anfang des Arbeitsbereichs mit Schrittleiste und Überschrift, Statuskasten nach dem Öffnen
+  const arbeitsbereichRef = useRef<HTMLDivElement>(null);
+  const titelRef = useRef<HTMLHeadingElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const sprung = useSprung();
+  /** „Weiter“ und „Zurück“: der Knopf steht im neuen Schritt am Ende, daher Fokus auf die neue Überschrift */
+  const schrittBlaettern = (i: number) => {
+    setSchritt(i);
+    sprung(() => springeZu(arbeitsbereichRef.current, titelRef.current, { fokus: true }));
+  };
+  /** Statuskasten nach „Meldung öffnen“: er steht unter der Werkzeugleiste, meist schon im Bild */
+  const statusZeigen = () => springeZu(statusRef.current, null, { nurWennNoetig: true });
+  /** Schrittleiste: der Knopf bleibt stehen und behält den Fokus; scrollen nur, wenn der Anfang nicht zu sehen ist */
+  const schrittWaehlen = (i: number) => {
+    setSchritt(i);
+    sprung(() => springeZu(arbeitsbereichRef.current, null, { nurWennNoetig: true }));
+  };
   // meldungsSchritte liefert immer mindestens einen Schritt
   const aktuell = schritte[Math.min(schritt, schritte.length - 1)]!;
 
@@ -76,10 +94,12 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
       roh = JSON.parse(await datei.text());
     } catch {
       setMeldungen({ art: "fehler", zeilen: [`${datei.name} ist keine gültige JSON-Datei.`] });
+      sprung(statusZeigen);
       return;
     }
     if (!roh || typeof roh !== "object" || Array.isArray(roh)) {
       setMeldungen({ art: "fehler", zeilen: [`${datei.name} enthält keine Meldung (erwartet ein JSON-Objekt).`] });
+      sprung(statusZeigen);
       return;
     }
     const mig = migriere(roh, profil);
@@ -106,6 +126,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     if (ersetzen) ersetzen(d);
     else setMeldung(d);
     setSchritt(0);
+    sprung(statusZeigen);
     const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
     const pruefschritt = ui.schritte.find((s) => s.pruefung) ?? ui.schritte[ui.schritte.length - 1];
     if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${pruefschritt?.titel ?? ""}“.`);
@@ -168,7 +189,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
         <div className="meldung">
           <div className="werkzeugleiste">
             <div className="werkzeugleiste-text">
-              <h1>{ui.titel}</h1>
+              <h1 tabIndex={-1}>{ui.titel}</h1>
               {ui.untertitel && <p>{ui.untertitel}</p>}
             </div>
             <div className="werkzeugleiste-knoepfe">
@@ -187,6 +208,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
                     neu();
                     setSchritt(0);
                     setMeldungen(null);
+                    sprung(() => zumSeitenanfang());
                   }
                 }}
               >
@@ -207,7 +229,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
           </div>
           {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
           {meldungen && (
-            <div className={`kasten kasten-${meldungen.art}`} role="status">
+            <div ref={statusRef} className={`kasten kasten-${meldungen.art}`} role="status">
               <ul>
                 {meldungen.zeilen.map((z, i) => (
                   <li key={i}>{z}</li>
@@ -219,7 +241,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
             </div>
           )}
 
-          <div className="arbeitsbereich">
+          <div className="arbeitsbereich" ref={arbeitsbereichRef}>
             <nav className="schritte" aria-label="Schritte">
               <ol>
                 {schritte.map((s, i) => (
@@ -228,7 +250,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
                       type="button"
                       className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
                       aria-current={i === schritt ? "step" : undefined}
-                      onClick={() => setSchritt(i)}
+                      onClick={() => schrittWaehlen(i)}
                     >
                       <span className="schritt-nr">{i + 1}</span>
                       <span className="schritt-titel">{s.titel}</span>
@@ -240,7 +262,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
             </nav>
 
             <section className="schritt-inhalt" aria-labelledby="schritt-titel">
-              <h2 id="schritt-titel" tabIndex={-1}>
+              <h2 id="schritt-titel" ref={titelRef} tabIndex={-1}>
                 {aktuell.titel}
               </h2>
               {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
@@ -253,14 +275,14 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               {aktuell.kurzfassung && <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} eigenerSchritt />}
               <div className="schritt-nav">
                 {schritt > 0 ? (
-                  <button type="button" className="knopf leise" onClick={() => setSchritt(schritt - 1)}>
+                  <button type="button" className="knopf leise" onClick={() => schrittBlaettern(schritt - 1)}>
                     Zurück: {schritte[schritt - 1]?.titel}
                   </button>
                 ) : (
                   <span />
                 )}
                 {schritt < schritte.length - 1 && (
-                  <button type="button" className="knopf primaer" onClick={() => setSchritt(schritt + 1)}>
+                  <button type="button" className="knopf primaer" onClick={() => schrittBlaettern(schritt + 1)}>
                     Weiter: {schritte[schritt + 1]?.titel}
                   </button>
                 )}

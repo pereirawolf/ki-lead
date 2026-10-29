@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ladeProfil } from "./profil/laden";
 import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
@@ -36,6 +36,23 @@ import { useZwischenstand } from "./ui/app/useZwischenstand";
 import { useKiUebergabe } from "./ui/app/useKiUebergabe";
 import { adresseLesen, adresseText, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
 import { bestaetigen } from "./ui/bestaetigung";
+import { ausstehendenSprungAusfuehren, fensterScrollen, springeZu, zumSeitenanfang } from "./ui/sprung";
+
+/**
+ * Sprungziel beim Wechsel der Ansicht (seit 0.6.7): `ziel` wird unter dem Kopf ausgerichtet, `fokus` erhält den Fokus;
+ * beides als Selektor, weil die Ansicht erst mit dem Wechsel eingehängt wird. Nur `fokus`: Seitenanfang mit Fokus.
+ * Ohne beides: Seitenanfang, in der KI-Erfassung die zuletzt gesehene Stelle.
+ */
+interface AnsichtSprung {
+  ziel?: string;
+  fokus?: string;
+}
+
+/** Übernahme in die Meldungsmaske: Schritt 1, Fokus auf seine Überschrift (der auslösende Knopf verschwindet) */
+const ZUR_MELDUNG: AnsichtSprung = { ziel: ".meldung .arbeitsbereich", fokus: "#schritt-titel" };
+
+/** Wie oft (je ein Bild) die App auf eine nachgeladene Ansicht wartet, bevor sie an den Seitenanfang springt */
+const SPRUNG_VERSUCHE = 20;
 
 /** Profile laden mit der Prüfung des Farbschemas aus der Darstellung (seit 0.6.3, TP-2026-W44-24) */
 const LADEN = { farbschemaFehler: profilFarbschemaFehler };
@@ -98,6 +115,59 @@ export default function App() {
     if (window.location.hash === text || (!window.location.hash && text === "#/meldung")) return;
     window.history.pushState(null, "", text);
   }, [ansicht, einstellungsBereich, lagebildReiter]);
+  // Sprungziele beim Wechsel der Ansicht (seit 0.6.7): bis 0.6.6 blieb die Scrollhöhe der vorigen Ansicht stehen.
+  // Die KI-Erfassung bleibt im Hintergrund eingehängt (ein Lauf geht weiter); für sie merkt sich die App die Stelle.
+  const ansichtSprung = useRef<AnsichtSprung | null>(null);
+  const [ansichtSprungNr, setAnsichtSprungNr] = useState(0);
+  const kiRahmen = useRef<HTMLDivElement>(null);
+  const kiPosition = useRef(0);
+  const ansichtJetzt = useRef(ansicht);
+  /** Ansicht zeigen und danach an `sprung` (oder nach der Vorgabe) springen, auch wenn die Ansicht schon gezeigt wird */
+  const zeigeAnsicht = useCallback((a: Ansicht, sprung?: AnsichtSprung) => {
+    ansichtSprung.current = sprung ?? null;
+    setAnsicht(a);
+    setAnsichtSprungNr((n) => n + 1);
+  }, []);
+  useEffect(() => {
+    const merken = () => {
+      if (ansichtJetzt.current === "ki") kiPosition.current = window.scrollY;
+    };
+    window.addEventListener("scroll", merken, { passive: true });
+    return () => window.removeEventListener("scroll", merken);
+  }, []);
+  const ersteAnsicht = useRef(true);
+  useLayoutEffect(() => {
+    ansichtJetzt.current = ansicht;
+    const sprung = ansichtSprung.current;
+    ansichtSprung.current = null;
+    if (ersteAnsicht.current) {
+      ersteAnsicht.current = false;
+      return;
+    }
+    if (!sprung?.ziel && !sprung?.fokus) {
+      if (ansicht === "ki") {
+        if (!ausstehendenSprungAusfuehren(kiRahmen.current)) fensterScrollen(kiPosition.current);
+      } else zumSeitenanfang();
+      return;
+    }
+    // Nachgeladene Ansichten (Einstellungen, Lagebild, Profile) stehen beim ersten Zeichnen eventuell noch nicht im Dokument
+    let versuche = 0;
+    let bild = 0;
+    const versuchen = () => {
+      const ziel = sprung.ziel ? document.querySelector<HTMLElement>(sprung.ziel) : null;
+      const fokus = sprung.fokus ? document.querySelector<HTMLElement>(sprung.fokus) : null;
+      if (ziel) {
+        if (ansicht === "ki") ausstehendenSprungAusfuehren(kiRahmen.current);
+        springeZu(ziel, fokus, { fokus: !!fokus });
+      } else if (!sprung.ziel && fokus) zumSeitenanfang(fokus);
+      else if (++versuche < SPRUNG_VERSUCHE && typeof requestAnimationFrame === "function") bild = requestAnimationFrame(versuchen);
+      else zumSeitenanfang();
+    };
+    versuchen();
+    return () => {
+      if (bild && typeof cancelAnimationFrame === "function") cancelAnimationFrame(bild);
+    };
+  }, [ansicht, ansichtSprungNr]);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
@@ -113,7 +183,7 @@ export default function App() {
   // Farbschema, Zwischenstand und Übergabe an die KI (seit 0.6.5, TP-2026-W44-17 als eigene Hooks)
   const farben = useFarbschema(aktiv, profil, speicherProblem);
   const { meldung, setMeldung, dokumentNr, neuesDokument, gesichert } = useZwischenstand(profil, profile, neueMeldung, setSpeicherFehler, speicherProblem);
-  const ki = useKiUebergabe(profil, () => setAnsicht("ki"));
+  const ki = useKiUebergabe(profil, () => zeigeAnsicht("ki", { ziel: ".ki .arbeitsbereich", fokus: ".ki .schritt-inhalt h2" }));
 
   useEffect(() => {
     einstellungenLesen()
@@ -154,13 +224,13 @@ export default function App() {
   const kiUebernehmen = async (m: Meldung) => {
     if (!(await bestaetigen("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
-    setAnsicht("meldung");
+    zeigeAnsicht("meldung", ZUR_MELDUNG);
   };
 
   const lagebildOeffnen = async (m: Meldung) => {
     if (!(await bestaetigen("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
-    setAnsicht("meldung");
+    zeigeAnsicht("meldung", ZUR_MELDUNG);
   };
 
   useEffect(() => {
@@ -250,7 +320,8 @@ export default function App() {
       setLagebildReiter("uebersicht");
     }
     await aktivesProfilSetzen(schluessel).catch((e) => speicherProblem("Das gewählte Profil konnte nicht als Startprofil gespeichert werden", e));
-    setAnsicht("meldung");
+    // Der Knopf „Verwenden“ verschwindet mit der Profilansicht: Fokus auf die Überschrift der Meldung
+    zeigeAnsicht("meldung", { fokus: ".meldung h1" });
   };
 
   const importieren = async (dateien: Record<string, string>, ersetzen = false) => {
@@ -288,10 +359,13 @@ export default function App() {
     if (aktiv === schluessel) setAktiv(profile.find((p) => p.profil && p.schluessel !== schluessel)?.schluessel);
   };
 
-  const zuEinstellungen = useCallback((bereich?: EinstellungsBereich) => {
-    setEinstellungsBereich(bereich ?? "anbieter");
-    setAnsicht("einstellungen");
-  }, []);
+  const zuEinstellungen = useCallback(
+    (bereich?: EinstellungsBereich) => {
+      setEinstellungsBereich(bereich ?? "anbieter");
+      zeigeAnsicht("einstellungen", { ziel: ".einstellungen .arbeitsbereich", fokus: ".einstellungen .bereich-inhalt h2" });
+    },
+    [zeigeAnsicht],
+  );
   const kiZugang = useMemo<KiZugangWert>(
     () => ({ profil, einstellungen, schluessel, zuEinstellungen, laufMelden: msMelden }),
     [profil, einstellungen, schluessel, zuEinstellungen, msMelden],
@@ -310,7 +384,7 @@ export default function App() {
               type="button"
               className={ansicht === "meldung" ? "nav aktiv" : "nav"}
               aria-current={ansicht === "meldung" ? "page" : undefined}
-              onClick={() => setAnsicht("meldung")}
+              onClick={() => zeigeAnsicht("meldung")}
             >
               Meldung
             </button>
@@ -318,7 +392,7 @@ export default function App() {
               type="button"
               className={ansicht === "ki" ? "nav aktiv" : "nav"}
               aria-current={ansicht === "ki" ? "page" : undefined}
-              onClick={() => setAnsicht("ki")}
+              onClick={() => zeigeAnsicht("ki")}
             >
               KI-Erfassung
             </button>
@@ -326,7 +400,7 @@ export default function App() {
               type="button"
               className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
               aria-current={ansicht === "lagebild" ? "page" : undefined}
-              onClick={() => setAnsicht("lagebild")}
+              onClick={() => zeigeAnsicht("lagebild")}
             >
               {profil?.ui.lagebild?.titel || "Lagebild"}
             </button>
@@ -334,7 +408,7 @@ export default function App() {
               type="button"
               className={ansicht === "profile" ? "nav aktiv" : "nav"}
               aria-current={ansicht === "profile" ? "page" : undefined}
-              onClick={() => setAnsicht("profile")}
+              onClick={() => zeigeAnsicht("profile")}
             >
               Profile
             </button>
@@ -342,14 +416,19 @@ export default function App() {
               type="button"
               className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
               aria-current={ansicht === "einstellungen" ? "page" : undefined}
-              onClick={() => setAnsicht("einstellungen")}
+              onClick={() => zeigeAnsicht("einstellungen")}
             >
               Einstellungen
             </button>
           </nav>
           {profil && (
             <div className="kopf-rechts" data-profil={profil.manifest.name}>
-              <KiSymbol lauf={chipLauf} zurKi={() => setAnsicht(chipLauf?.stufe === "ms" ? "meldung" : "ki")} />
+              <KiSymbol
+                lauf={chipLauf}
+                zurKi={() =>
+                  chipLauf?.stufe === "ms" ? zeigeAnsicht("meldung", { ziel: ".meldung .arbeitsbereich" }) : zeigeAnsicht("ki", { ziel: ".ki .arbeitsbereich" })
+                }
+              />
             </div>
           )}
         </header>
@@ -387,7 +466,7 @@ export default function App() {
             </Fehlergrenze>
           )}
           {profil && (
-            <div hidden={ansicht !== "ki"}>
+            <div hidden={ansicht !== "ki"} ref={kiRahmen}>
               <KiErfassung
                 key={profil.hash}
                 uebernehmen={kiUebernehmen}

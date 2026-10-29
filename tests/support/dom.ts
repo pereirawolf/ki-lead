@@ -11,6 +11,13 @@ const vorgabeAntwort = () => true;
 let antwort: (frage: string) => boolean = vorgabeAntwort;
 /** Bestätigungsdialoge bleiben offen, statt beantwortet zu werden (Tests des Dialogs selbst) */
 let dialogOffenLassen = false;
+/** Ziele (top) der Aufrufe von window.scrollTo seit dem letzten Aushängen (seit 0.6.7) */
+const scrollZiele: number[] = [];
+
+/** Liefert die Ziele der Aufrufe von window.scrollTo seit dem letzten Aushängen oder Abruf und leert die Liste */
+export function scrollAufrufe(): number[] {
+  return scrollZiele.splice(0);
+}
 
 /**
  * React-act-Umgebung und Bestätigungsdialoge (einmal je Datei in beforeAll). Seit 0.6.5 (TP-2026-W44-20) fragt die App
@@ -20,6 +27,11 @@ let dialogOffenLassen = false;
  */
 export function reactUmgebung(): void {
   (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+  // jsdom kennt window.scrollTo nicht (Meldung „Not implemented“); seit 0.6.7 springt die App damit zu ihren Sprungzielen
+  if (typeof window !== "undefined")
+    window.scrollTo = ((x?: ScrollToOptions | number, y?: number) => {
+      scrollZiele.push(typeof x === "number" ? (y ?? 0) : (x?.top ?? 0));
+    }) as typeof window.scrollTo;
   if (typeof HTMLDialogElement === "undefined") return;
   HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
     this.setAttribute("open", "");
@@ -66,6 +78,7 @@ export async function aushaengen(): Promise<void> {
   document.body.innerHTML = "";
   antwort = vorgabeAntwort;
   dialogOffenLassen = false;
+  scrollZiele.length = 0;
   if (typeof location !== "undefined" && location.hash) history.replaceState(null, "", location.pathname + location.search);
 }
 

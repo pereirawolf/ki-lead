@@ -3,7 +3,7 @@
 // Seit 0.6.5 (TP-2026-W44-17) mit einem Reducer (kiErfassung/zustand.ts) und Teilkomponenten unter kiErfassung/;
 // diese Datei steuert den Ablauf (Start der Stufen, Fehler, Übergabe aus dem Lagebild, Meldungen an die App).
 
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from "react";
 import { anbieterListe, fehlendeSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
 import { istVerbindungsabbruch, TEXT_VERBINDUNGSABBRUCH } from "../anbieter/typen";
 import { useWachhalten } from "./wachhalten";
@@ -32,6 +32,7 @@ import { FruehereLaeufe } from "./kiErfassung/FruehereLaeufe";
 import { LaufModellWahl } from "./kiErfassung/LaufModellWahl";
 import { usePwaZustand } from "./PwaHinweis";
 import { bestaetigen } from "./bestaetigung";
+import { springeZu } from "./sprung";
 
 export { TEXT_FELD } from "./kiErfassung/texte";
 export { kurzeAdresse } from "./kiErfassung/recherche";
@@ -224,6 +225,7 @@ function Erfassung({
     if (!lauf || !vorschlag) return;
     fehlerMelden(null);
     anzeige.beginnen();
+    orientierungFuer.current = nur?.length === 1 ? nur[0]! : null;
     dispatch({ typ: "orientierung" });
     const l = lauf;
     try {
@@ -326,12 +328,26 @@ function Erfassung({
 
   // Fokus beim Wechsel der Phase auf die Überschrift des neuen Schritts (seit 0.6.5, TP-2026-W44-13): Bis 0.6.4 fiel er
   // auf das Dokument, sobald der fokussierte Knopf („Abbrechen“, „Gegenstand bestimmen“) verschwand. Nicht beim Einhängen.
+  // Seit 0.6.7 richtet die App dazu den Anfang des Arbeitsbereichs unter dem Kopf aus; bis 0.6.6 blieb nach „S1 starten“
+  // am Ende des Auftrags die Scrollhöhe stehen. Nach der Orientierungssuche für einen einzelnen Sachverhalt steht dessen
+  // Karte oben. Wechselt die Phase, während die KI-Erfassung verborgen ist, holt die App den Sprung beim Zeigen nach.
+  const arbeitsbereichRef = useRef<HTMLDivElement>(null);
   const inhaltRef = useRef<HTMLElement>(null);
   const vorherPhase = useRef(phase);
-  useEffect(() => {
+  /** Sachverhalt (Index ab 0), für den allein die Orientierungssuche läuft */
+  const orientierungFuer = useRef<number | null>(null);
+  useLayoutEffect(() => {
     if (vorherPhase.current === phase) return;
+    const vorher = vorherPhase.current;
     vorherPhase.current = phase;
-    inhaltRef.current?.querySelector<HTMLElement>("h2")?.focus();
+    const ueberschrift = inhaltRef.current?.querySelector<HTMLElement>("h2") ?? null;
+    const sv = orientierungFuer.current;
+    if (phase === "bestaetigen" && vorher === "orientierung" && sv !== null) {
+      orientierungFuer.current = null;
+      const karte = inhaltRef.current?.querySelector<HTMLElement>(`[data-sachverhalt="${sv}"]`);
+      if (karte && springeZu(karte, karte.querySelector<HTMLElement>("h3"), { fokus: true })) return;
+    }
+    springeZu(arbeitsbereichRef.current, ueberschrift, { fokus: true });
   }, [phase]);
 
   const aktivIndex = phase === "s1" ? 0 : PHASEN.findIndex((p) => p.id === (phase === "orientierung" ? "bestaetigen" : phase));
@@ -380,7 +396,7 @@ function Erfassung({
         </div>
       )}
 
-      <div className="arbeitsbereich">
+      <div className="arbeitsbereich" ref={arbeitsbereichRef}>
         <nav className="schritte" aria-label="Stufen">
           {/* Auf schmalen Bildschirmen waagerecht scrollbar; ohne Bedienelemente daher selbst fokussierbar (seit 0.6.5, TP-2026-W44-22) */}
           <ol tabIndex={0}>

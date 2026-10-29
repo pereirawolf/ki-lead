@@ -45,6 +45,7 @@ import { Kopiervorlage } from "./lagebild/Kopiervorlage";
 import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
+import { springeZu, useSprung } from "./sprung";
 
 interface Props {
   profil: Profil;
@@ -219,6 +220,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const uebergabeKnopf = useRef<HTMLButtonElement>(null);
   const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
+
+  // Sprungziele beim Reiterwechsel (seit 0.6.7): Die Reiterleiste steht über dem Inhalt. Aus der Leiste nur bei Bedarf
+  // und ohne Fokuswechsel; aus einer Kennzahl der Übersicht heraus mit Fokus auf den gewählten Reiter, weil die Kennzahl
+  // mit der Übersicht verschwindet.
+  const reiterRef = useRef<HTMLElement>(null);
+  const sprung = useSprung();
+  const reiterWaehlen = (r: Reiter) => {
+    setReiter(r);
+    sprung(() => springeZu(reiterRef.current, null, { nurWennNoetig: true }));
+  };
+  const reiterZeigen = (r: Reiter) => {
+    setReiter(r);
+    sprung(() => springeZu(reiterRef.current, reiterRef.current?.querySelector<HTMLElement>("[aria-current]"), { fokus: true }));
+  };
 
   // Vom Befund zur Meldung in der Liste „Meldungen“ (nur lesen; die Meldungsmaske bleibt unberührt)
   const [markiert, setMarkiert] = useState<string | null>(null);
@@ -476,14 +491,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             </ul>
           </details>
 
-          <nav className="lb-reiter" aria-label="Ansichten">
+          <nav className="lb-reiter" aria-label="Ansichten" ref={reiterRef}>
             {REITER.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 className={reiter === t.id ? "segment aktiv" : "segment"}
                 aria-current={reiter === t.id ? "page" : undefined}
-                onClick={() => setReiter(t.id)}
+                onClick={() => reiterWaehlen(t.id)}
               >
                 {t.titel}
                 {t.id === "redaktion" && red.anzahl > 0 && <span className="lb-zaehler">{red.anzahl}</span>}
@@ -522,7 +537,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 <button
                   type="button"
                   className={red.anzahl ? "lb-kennzahl lb-rand-orange" : "lb-kennzahl lb-rand-gruen"}
-                  onClick={() => setReiter("redaktion")}
+                  onClick={() => reiterZeigen("redaktion")}
                 >
                   <b>{red.anzahl}</b>
                   <span>Redaktionshinweise →</span>
@@ -530,7 +545,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 <button
                   type="button"
                   className={kz.schemaAbweichungen ? "lb-kennzahl lb-rand-rot" : "lb-kennzahl lb-rand-gruen"}
-                  onClick={() => setReiter("redaktion")}
+                  onClick={() => reiterZeigen("redaktion")}
                 >
                   <b>{kz.schemaAbweichungen}</b>
                   <span>Meldungen mit Schemaabweichung →</span>
