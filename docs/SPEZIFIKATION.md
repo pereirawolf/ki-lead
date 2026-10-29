@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.8 vom 29.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.6.9 vom 29.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -81,7 +81,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.32.0",
+  "version": "1.33.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -218,6 +218,13 @@ Die App zerlegt jede Datei aus `sop.dateien` an ihren Ankern (`<a id="teil-a">`,
 | „Zu den Einstellungen“, Übergabe an die KI, KI-Chip | Arbeitsbereich der Zielansicht | Überschrift (KI-Chip: bleibt) |
 
 Wechselt die Phase der KI-Erfassung, während eine andere Ansicht gezeigt wird, holt die App den Sprung beim Zeigen der KI-Erfassung nach (ohne Fokuswechsel).
+
+**Zeitstrahl, Kennung und Bezug (seit 0.6.9, ZS-2026-W44-01 bis -04):** Führt das Profil die Rollen `zeitstrahl`, `sv_kennung` und `sv_bezug` (Profilformat 1.23), gilt:
+
+- **Kennung:** Ein neuer Sachverhalt in der Maske erhält sofort eine Kennung `Präfix-JJJJMMTT-XXXX` (Präfix nach dem Feld „Land“ und `kennung.praefixe`, Anlagedatum in der Profilzeitzone, vier Zeichen Crockford-Base32 aus dem Zufallsgenerator des Geräts); ein Sachverhalt ohne Kennung, etwa aus einer älteren Datei, zeigt „Kennung vergeben“. Der Kopf eines Sachverhalts nennt die Kennung. Die Kennung ist ohne Register und Zählerstand eindeutig; bei der Fortschreibung bleibt sie gleich.
+- **Zeitstrahl:** Auf der Seite „Quellen & Referenzen“ steht unter dem Quellenverzeichnis ein eigener Bereich „Zeitstrahl“: Textfeld mit einer Zeile je Ereignis (`[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]`), Zähler und Hinweis auf ungeordnete Zeilen, „Chronologisch ordnen“ (ungültige Zeilen bleiben am Ende) und ein Baukasten „Neue Zeile zusammenstellen“ (Sachverhalt über seine Kennung, Typ, Zeitpunkt mit „Jetzt“ und „Nur Tag“, Kurztext, Vorschau, „Zeile anfügen“ mit der nächsten freien Nummer). Der Prüfschritt meldet formale Befunde mit stabilem Code: `ZEITSTRAHL_FORMAT`, `ZEITSTRAHL_ZEIT`, `ZEITSTRAHL_NACH_T0`, `ZEITSTRAHL_KENNUNG_UNBEKANNT`, `ZEITSTRAHL_TYP`, `ZEITSTRAHL_OHNE_BELEG`, `ZEITSTRAHL_NUMMER_DOPPELT` (Warnungen), `ZEITSTRAHL_REIHENFOLGE`, `ZEITSTRAHL_BERICHTIGUNG`, `ZEITSTRAHL_RICHTWERT` (Hinweise), dazu `KENNUNG_FEHLT` (Hinweis), `KENNUNG_DOPPELT` und `BEZUG_SELBST` (Warnungen). Verweise im Zeitstrahl zählen im Quellenverzeichnis als Zitate.
+- **KI-Erfassung und Verdichtung:** Der Steuerungsblock von S2 nennt die Regeln der App: Kennungen der Vormeldung übernehmen, neue Sachverhalte mit Platzhaltern `NEU-1`, `NEU-2` …, Bezug nur auf Kennungen aus dem Material, Zeilen der Vormeldung wortgleich mit nächster freier Nummer `[Zn]`, Korrektur als Berichtigung, keine Bewertungszeilen. Nach S2 (und nach jeder Reparatur) legt die App in der Nachbearbeitung vor der Schemaprüfung fest: Kennungen vergibt nur sie (Platzhalter, leere, erfundene und von einer anderen Stelle übernommene Kennungen werden ersetzt und in Zeitstrahl und Bezug nachgezogen; eine fremde Kennung wandert in den Bezug, Hinweis `KENNUNG_FREMD` bzw. `KENNUNG_ERSETZT`); der Bezug nennt nur Kennungen aus Eingangs- und Vormeldungen (sonst Warnung `BEZUG_UNBEKANNT`, fehlender Bezug bei vorliegenden Kennungen Hinweis `BEZUG_FEHLT`); Zeilen mit der Kennung eines Eingangs gehen an den eigenen Sachverhalt, der diese Kennung als einziger im Bezug nennt (`ZEITSTRAHL_UMGEHAENGT`); Zeilen der jüngsten eigenen Vormeldung bleiben wortgleich (fehlende werden wiederhergestellt, veränderte bleiben in der Fassung der Vormeldung und die neue Fassung steht mit freier Nummer daneben, Warnung `ZEITSTRAHL_VORMELDUNG`); Bewertungszeilen der KI entfallen (`ZEITSTRAHL_BEWERTUNG_KI`); je fortgeschriebenem Sachverhalt mit geänderter Beurteilung oder Tendenz trägt die App zum Meldezeitpunkt eine Zeile vom Typ `typ_bewertung` ein, etwa „Beurteilung erheblich → kritisch; Tendenz Stabilisierung → Verschärfung“ (`ZEITSTRAHL_BEWERTUNG`). Danach ordnet sie den Zeitstrahl chronologisch.
+- **Ausgaben:** Das PDF zeigt den Zeitstrahl als eigenen Block nach dem Quellenverzeichnis (chronologisch); die Lagebild-Tabelle „Sachverhalte“ nennt unter der Bezeichnung Kennung und Bezug (mit meldender Stelle, soweit geladen) und hat eine Spalte mit dem Zeitstrahl des Sachverhalts; Rohtabelle und CSV führen ihn je Sachverhalt, die Kopiervorlage als Zeile vor den zitierten Quellen, deren Auswahl seine Verweise einschließt. Die Management Summary erhält den Zeitstrahl nicht.
 
 Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufprotokoll gespeichert (PDF-Inhalte nur als Verweis). Kosten einer abgebrochenen oder fehlgeschlagenen Stufe gelten als nicht erfasst, außer es fehlte der API-Schlüssel und es wurde nichts gesendet (dann 0); der Lauf nennt in diesem Fall die erfassten Kosten als Untergrenze. Schlägt S2 fehl, lässt sich S2 mit dem bestätigten Gegenstand erneut starten.
 
@@ -452,3 +459,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.7 | 29.10.2026 | Sprungziele nach dem Wechsel von Schritt, Phase, Bereich, Reiter und Ansicht: Anfang des neuen Inhalts unter dem Kopf, Fokus auf der neuen Überschrift, wenn der Auslöser verschwindet; KI-Erfassung behält die zuletzt gesehene Stelle (Abschnitt „Bedienung, Adresse und Rückfragen“; Rückmeldung des Herausgebers vom 29.10.2026) |
 | 0.6.6 | 27.10.2026 | Management Summary während der Erstellung wie die KI-Erfassung: Laufzeile mit Uhr, erwarteter Dauer aus den Messwerten vom 25.10.2026, geschriebenen Zeichen und voraussichtlichen Kosten; KI-Chip „KI online“ mit Titel der Management Summary, Klick zur Meldung; Rückfrage bei Profilwechsel und beim Verlassen der Seite (Abschnitte zur Management Summary und zum KI-Chip; Fehlermeldung des Herausgebers vom 27.10.2026) |
 | 0.6.8 | 29.10.2026 | Kurzantwort der KI-Erfassung als Prüfauftrag: Arbeitsanweisung Erfassung 1.7.0 mit höchstens vier beschrifteten Zeilen, gegliederte Anzeige im Schritt „Prüfung und Übergabe“ (Abschnitt S3; Rückmeldung des Herausgebers vom 29.10.2026) |
+| 0.6.9 | 29.10.2026 | Zeitstrahl je Sachverhalt mit Sachverhaltskennung und Bezug (Abschnitt 5.1 „Zeitstrahl, Kennung und Bezug“): Bereich auf der Seite „Quellen & Referenzen“, Vergabe der Kennung durch die App, Regeln im Steuerungsblock von S2, Nachbearbeitung nach S2, formale Befunde, Ausgaben in PDF und Lagebild; Profil 1.33.0 (ZS-2026-W44-01 bis -04) |

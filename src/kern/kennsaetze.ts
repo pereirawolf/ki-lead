@@ -3,6 +3,7 @@
 import { feldhilfeFelder, offenePlatzhalter } from "./feldhilfen";
 import { holeWert } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
+import { zeitstrahlHinweise } from "./zeitstrahl";
 import { feldUi } from "./ui";
 import { zeitpunktInZone } from "./zeit";
 import type { Befund, Meldung, TextGliederung, UiKonfig } from "./typen";
@@ -195,6 +196,8 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   });
   const finalSicht = { ...d, [r.status_feld]: r.status_final };
   quellenHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: "Quellen: " + b.text }));
+  // Zeitstrahl, Kennungen und Bezug (seit 0.6.9)
+  zeitstrahlHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: `${b.code?.startsWith("ZEITSTRAHL") ? "Zeitstrahl" : "Kennung"}: ${b.text}` }));
   return out;
 }
 

@@ -3,6 +3,7 @@
 
 import { holeWert } from "./pfad";
 import type { Befund, Meldung, UiKonfig } from "./typen";
+import { eintraegeFuer, parseZeitstrahl, zeitstrahlText } from "./zeitstrahl";
 
 export interface QuellenEintrag {
   nr: number;
@@ -83,10 +84,16 @@ export function altQuellenZeilen(d: Meldung, ui: UiKonfig): { sv: number; feld: 
   return out;
 }
 
-export function quellenFuerSachverhalt(quellenText: unknown, sv: any, ui: UiKonfig): QuellenEintrag[] | null {
+/**
+ * Quellen, die ein Sachverhalt zitiert: in seinen Texten und (seit 0.6.9) in seinen Zeilen des Zeitstrahls, wenn
+ * dessen Text übergeben wird.
+ */
+export function quellenFuerSachverhalt(quellenText: unknown, sv: any, ui: UiKonfig, zeitstrahl?: unknown): QuellenEintrag[] | null {
   const entries = parseQuellen(quellenText);
   if (!entries.length) return null;
-  const refs = verweise(svTexte(sv, ui));
+  const kennung = ui.rollen.sv_kennung ? String(holeWert(sv, ui.rollen.sv_kennung) ?? "") : "";
+  const zeilen = zeitstrahl !== undefined && kennung ? eintraegeFuer(zeitstrahl, kennung).map((e) => e.text) : [];
+  const refs = verweise([svTexte(sv, ui), ...zeilen].join("\n"));
   const hit = entries.filter((e) => refs.has(e.nr));
   return hit.length ? hit : null;
 }
@@ -117,6 +124,8 @@ export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   const refsAll = new Set<number>();
   const svs = sachverhalte(d, ui);
   svs.forEach((sv) => verweise(svTexte(sv, ui)).forEach((n) => refsAll.add(n)));
+  // Verweise im Zeitstrahl zählen als Zitate (seit 0.6.9)
+  for (const e of parseZeitstrahl(zeitstrahlText(d, ui)).eintraege) verweise(e.text).forEach((n) => refsAll.add(n));
   const hatText = svs.some((sv) => svTexte(sv, ui).trim());
   const istFinal = holeWert(d, ui.rollen.status_feld) === ui.rollen.status_final;
 

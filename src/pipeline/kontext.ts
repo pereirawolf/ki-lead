@@ -263,6 +263,55 @@ export interface Steuerung {
   einstiege?: boolean;
   /** Amtliche Rechercheeinstiege der gewählten SOPs liegen der Anfrage bei (seit 0.6.1, KP-2026-W44-17) */
   amtlich?: boolean;
+  /** Kennung, Bezug und Zeitstrahl, soweit das Profil die Rollen führt (seit 0.6.9, ZS-2026-W44-01 bis -04) */
+  zeitstrahl?: ZeitstrahlSteuerung;
+}
+
+export interface ZeitstrahlSteuerung {
+  /** Feldpfade aus den Rollen des Profils */
+  felder: { kennung?: string; bezug?: string; zeitstrahl?: string };
+  /** Kennungen der jüngsten eigenen Vormeldung */
+  kennungenVormeldung: string[];
+  /** Nächste freie Nummer im Zeitstrahl der Vormeldung (1 ohne Vormeldung) */
+  naechsteZ: number;
+  /** Typ der Bewertungszeilen, die nur die App schreibt */
+  typBewertung: string;
+  typBerichtigung: string;
+}
+
+/** Regeln der App zu Kennung, Bezug und Zeitstrahl für S2 (leer, wenn das Profil keine dieser Rollen führt) */
+export function zeitstrahlSteuerung(s: Pick<Steuerung, "vormeldung" | "verdichtung">, z: ZeitstrahlSteuerung | undefined): string[] {
+  if (!z) return [];
+  const out: string[] = [];
+  const f = z.felder;
+  if (f.kennung)
+    out.push(
+      `- Sachverhaltskennung (\`${f.kennung}\`): ${
+        s.vormeldung && z.kennungenVormeldung.length
+          ? `Übernimm bei fortgeschriebenen Sachverhalten die Kennung der Vormeldung unverändert (${z.kennungenVormeldung.join(", ")}). `
+          : ""
+      }Neue Sachverhalte erhalten die Platzhalter NEU-1, NEU-2 usw.; verwende denselben Platzhalter auch${f.zeitstrahl ? " im Zeitstrahl" : ""}${f.bezug ? `${f.zeitstrahl ? " und" : ""} im Bezug` : ""}. Die App vergibt danach die endgültigen Kennungen. Bilde keine Kennungen selbst und übernimm keine Kennung einer anderen Stelle als eigene.`,
+    );
+  if (f.bezug && (s.verdichtung || s.vormeldung))
+    out.push(
+      `- Bezug (\`${f.bezug}\`): ${s.verdichtung ? "Nenne je Sachverhalt die Kennungen der Sachverhalte aus den Eingangsmeldungen, die in ihn eingehen. " : ""}${
+        s.vormeldung ? "Geht ein neuer Sachverhalt aus einem Sachverhalt der Vormeldung hervor (Teilung), nennt er dessen Kennung. " : ""
+      }Nur Kennungen, die im Material stehen.`,
+    );
+  if (f.zeitstrahl) {
+    const teile = ["Form und Regeln nach dem Kodierleitfaden; nur eingetretene, belegte Ereignisse bis t0, chronologisch."];
+    if (s.vormeldung)
+      teile.push(
+        `Übernimm die Zeilen der Vormeldung wortgleich mit ihren Nummern; neue Zeilen beginnen bei [Z${z.naechsteZ}]. Eine frühere Zeile änderst du nicht, sondern ergänzt eine Zeile vom Typ „${z.typBerichtigung || "Berichtigung"}“ mit „zu [Zn]: …“.`,
+      );
+    if (s.verdichtung)
+      teile.push(
+        "Aus den Zeitstrahlen der Eingänge übernimmst du nur Wendepunkte für den eigenen Referenzraum, mit der eigenen Kennung und der Eingangsmeldung oder der selbst geprüften Originalquelle als Beleg; dasselbe Ereignis aus mehreren Eingängen steht einmal.",
+      );
+    if (z.typBewertung) teile.push(`Zeilen vom Typ „${z.typBewertung}“ schreibst du nicht; Bewertungswechsel trägt die App ein.`);
+    out.push(`- Zeitstrahl (\`${f.zeitstrahl}\`): ${teile.join(" ")}`);
+  }
+  return out;
 }
 
 const zeitAnzeige = (z: string) => z.replace("T", " ");
@@ -375,6 +424,7 @@ export function steuerungsBlock(s: Steuerung): string {
       "- Fristen und Indikatoren der Vormeldung führst du nach Teil A (Fristgrundlage) und A.8.1 fort; ohne Prüfung sind Indikatoren „nicht überprüfbar“.",
     );
   z.push("- Nenne Recherche nur, wenn sie in diesem Lauf tatsächlich erfolgt ist.");
+  z.push(...zeitstrahlSteuerung(s, s.zeitstrahl));
   return z.join("\n");
 }
 

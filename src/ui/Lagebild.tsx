@@ -5,6 +5,8 @@ import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
 import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarZeilen } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
+import { bezugVon } from "../kern/kennung";
+import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../kern/zeitstrahl";
 import { datumDE, heuteDE } from "../kern/ausgabe";
 import { gliedereAnalyse, gliedereBewertung, kennsaetzeAlle } from "../kern/kennsaetze";
 import {
@@ -191,6 +193,13 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   /** Ganze Tage, die ein gesetzter Stichtag hinter der Geräteuhr liegt */
   const stichtagAlter = stichtag ? Math.floor((uhr - red.stand.jetzt.getTime()) / 864e5) : 0;
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
+  /** Kennung → meldende Stelle aller geladenen Sachverhalte, zum Auflösen des Bezugs (seit 0.6.9) */
+  const kennungsStelle = useMemo(() => {
+    const m = new Map<string, string>();
+    if (r.sv_kennung) for (const s of svs) m.set(String(holeWert(s.sv, r.sv_kennung) ?? ""), absender(s.eintrag, profil));
+    return m;
+  }, [svs, profil, r.sv_kennung]);
+  const svKennung = (sv: any) => (r.sv_kennung ? String(holeWert(sv, r.sv_kennung) ?? "") : "");
 
   const radarFeld = r.sv_radar ? feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
   const radarDef = radarFeld ? radarFuer(ui, radarFeld) : undefined;
@@ -707,6 +716,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       {(r.sv_analysefelder || []).map((f) => (
                         <th key={f}>{bezeichnung(ui, `${r.sachverhalte}[].${f}`)}</th>
                       ))}
+                      {r.zeitstrahl && r.sv_kennung && <th>{bezeichnung(ui, r.zeitstrahl)}</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -715,7 +725,18 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         <td>
                           <strong>{absender(s.eintrag, profil)}</strong>
                         </td>
-                        <td>{s.bezeichnung || "–"}</td>
+                        <td>
+                          {s.bezeichnung || "–"}
+                          {svKennung(s.sv) && <span className="lb-kennung">{svKennung(s.sv)}</span>}
+                          {bezugVon(s.sv, ui).length > 0 && (
+                            <span className="lb-kennung">
+                              Bezug:{" "}
+                              {bezugVon(s.sv, ui)
+                                .map((k) => (kennungsStelle.has(k) ? `${k} (${kennungsStelle.get(k)})` : k))
+                                .join("; ")}
+                            </span>
+                          )}
+                        </td>
                         {r.sv_art && <td>{s.arten.join(", ") || "–"}</td>}
                         {r.sv_ort && <td>{s.ort || "–"}</td>}
                         {r.sv_eintritt && <td>{datumDE(s.eintritt) || "–"}</td>}
@@ -728,6 +749,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                             {gliedereAnalyse(holeWert(s.sv, f), ui) || "–"}
                           </td>
                         ))}
+                        {r.zeitstrahl && r.sv_kennung && (
+                          <td className="lb-lang">
+                            {eintraegeFuer(zeitstrahlText(s.eintrag.daten, ui), svKennung(s.sv)).map(zeitstrahlAnzeige).join("\n") || "–"}
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

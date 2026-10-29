@@ -8,6 +8,7 @@ import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radar
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import { gliedereFeld } from "../kern/kennsaetze";
+import { zeitstrahlOrdnen } from "../kern/zeitstrahl";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
 import { APP_KENNUNG } from "../kern/version";
 import { herkunftAusMeldung, herkunftMehrerer, pdfSchluesselwoerter, xmpPaket, type KiHerkunft } from "./kennzeichnung";
@@ -263,7 +264,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   const wurzel = aufloesen(profil.schema, profil.schema);
   const kopf: Zelle[][] = [];
   for (const key of Object.keys(wurzel.properties || {})) {
-    if (key === r.sachverhalte || key === r.quellen || key === r.freigabe || istAusgeblendet(ui, key)) continue;
+    if (key === r.sachverhalte || key === r.quellen || key === r.zeitstrahl || key === r.freigabe || istAusgeblendet(ui, key)) continue;
     if (d[key] === undefined) continue;
     zeilen(profil, wurzel.properties[key], d[key], [key], kopf);
   }
@@ -327,6 +328,18 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
       head: [[bezeichnung(ui, r.quellen)]],
       body: [[String(holeWert(d, r.quellen))]],
+      theme: "grid",
+      headStyles: { fillColor: BLAU },
+      styles: { fontSize: 7.5, cellPadding: 1.8 },
+    });
+  }
+  // Zeitstrahl als eigener Block nach dem Quellenverzeichnis, chronologisch (seit 0.6.9)
+  if (r.zeitstrahl && String(holeWert(d, r.zeitstrahl) || "").trim()) {
+    autoTable(doc, {
+      didParseCell: zellText,
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
+      head: [[bezeichnung(ui, r.zeitstrahl)]],
+      body: [[zeitstrahlOrdnen(holeWert(d, r.zeitstrahl))]],
       theme: "grid",
       headStyles: { fillColor: BLAU },
       styles: { fontSize: 7.5, cellPadding: 1.8 },

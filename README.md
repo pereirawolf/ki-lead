@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.6.8, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.6.9, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -35,6 +35,7 @@ Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezog
   3. *S2 Entwurf:* Die KI arbeitet mit dem Material und, sofern im Auftrag erlaubt, mit Websuche und Seitenabruf.
   4. *S3 Prüfung:* Die App prüft gegen das Schema und lässt Fehler höchstens zweimal ohne neue Recherche korrigieren. Der Entwurf geht in die Meldungsmaske.
 - **Lagebild und Verdichtung:** Meldungen mehrerer Stellen (JSON-Dateien oder ZIP-Archive) zusammenführen, prüfen und darstellen: Übersicht, Meldestatus, Sachverhalte nach Schwere, Lagenradar je Sachverhalt ohne Mittelwert, Redaktionscheck; Ausgabe für Word, als CSV und als PDF. Ausgewählte Meldungen gehen an die Verdichtung, die den Sachverhalt für den eigenen Referenzraum neu bewertet; die Websuche ist dabei standardmäßig aus. Verwendete Eingangsmeldungen werden als Quellen nachgewiesen; ihre Kategorie richtet sich nach der Rolle der meldenden Stelle (z. B. Behörde A, Betreiber zum eigenen Betrieb B).
+- **Zeitstrahl je Sachverhalt** (seit 0.6.9): Auf der Seite „Quellen & Referenzen“ steht unter dem Quellenverzeichnis ein Zeitstrahl, eine Zeile je eingetretenem, belegtem Ereignis in fester Form (`[Zn] Zeitpunkt · Kennung · Typ – Kurztext [Qn]`). Jeder Sachverhalt trägt eine eindeutige Kennung (etwa `DE-TH-20261014-K7QM`), die die App vergibt und die bei der Fortschreibung bleibt; ein verdichteter Sachverhalt nennt im Bezug die eingehenden Sachverhalte. Bei der KI-Fortschreibung bleiben frühere Zeilen unverändert, und die App trägt Wechsel von Beurteilung und Tendenz selbst ein.
 - **Management Summary:** eine Fassung der Meldung für die Leitung, lesbar in einer Minute. Beurteilung, Tendenz, Fristen und Entwurfsvermerk übernimmt die App aus der Meldung.
 - **Profile:** Profile untereinander mit Aktivstatus, Metadaten und Prüfsumme. Arbeitsanweisungen und Kodierleitfaden (mit Fassung), SOP-Katalog mit Suche sowie Übersichten und Änderungsverläufe lassen sich ohne KI direkt in der App lesen, mit Inhaltsverzeichnis und Einzeldownload.
 - **Vier Anbieter:** je Stufe ein Modell von Anthropic, OpenAI oder Mistral (Mistral seit 0.5.6, erprobt am 24.10.2026 mit der Verdichtung Ilka ohne Websuche; als Vorgabe über den EU-Endpunkt ohne Websuche, wahlweise global mit Websuche) oder seit 0.6.3 ein lokales Modell über Ollama auf dem eigenen Gerät (ohne Schlüssel, ohne Websuche; Ergebnisqualität nicht erprobt).
@@ -125,7 +126,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.8), jedes Profil eine eigene Version (Beispielprofil 1.32.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.9), jedes Profil eine eigene Version (Beispielprofil 1.33.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -161,6 +162,6 @@ Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial u
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.8) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.9) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

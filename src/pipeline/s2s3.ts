@@ -7,6 +7,8 @@ import { jetztLokal } from "../kern/ausgabe";
 import { pflichtHinweise } from "../kern/kennsaetze";
 import { holeWert } from "../kern/pfad";
 import { quellenHinweise } from "../kern/quellen";
+import { zeitstrahlHinweise, zeitstrahlKonfig } from "../kern/zeitstrahl";
+import { zeitstrahlVorgaben } from "./zeitstrahl";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema, type SchemaBefund } from "../kern/validierung";
 import { gueltigerZeitpunkt } from "../kern/zeit";
@@ -302,6 +304,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Laufabhängiger Schluss: Redaktionsvermerke und zuletzt der Steuerungsblock mit Auftrag, Zeit und Recherchemodus,
   // damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
+  const zv = zeitstrahlVorgaben(k.material, p);
   const steuerung = steuerungsBlock({
     auftrag,
     jetzt: jetztS2,
@@ -317,6 +320,17 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
     kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
     absender: absenderFuer(k.material, p),
+    ...(p.ui.rollen.sv_kennung || p.ui.rollen.zeitstrahl
+      ? {
+          zeitstrahl: {
+            felder: { kennung: p.ui.rollen.sv_kennung, bezug: p.ui.rollen.sv_bezug, zeitstrahl: p.ui.rollen.zeitstrahl },
+            kennungenVormeldung: zv.kennungen,
+            naechsteZ: zv.naechsteZ,
+            typBewertung: zeitstrahlKonfig(p.ui).typ_bewertung,
+            typBerichtigung: zeitstrahlKonfig(p.ui).typ_berichtigung,
+          },
+        }
+      : {}),
     ...(recherche
       ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0, amtlich: amtlich.length > 0 }
       : {}),
@@ -435,12 +449,13 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     korrekturen: string[];
     sopHinweise: string[];
     umhaengungen: string[];
+    zeitstrahlBefunde: Befund[];
   }
   const bewerten = async (z: Zerlegung, modell: string, eintrag: StufenEintrag): Promise<Stand> => {
-    const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [] };
+    const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [], zeitstrahlBefunde: [] };
     if (z.json !== undefined) {
       try {
-        s.meldung = nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen);
+        s.meldung = nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen, s.zeitstrahlBefunde);
         s.schemaBefunde = pruefeGegenSchema(p.schema, s.meldung, p.ui);
       } catch (err: any) {
         s.meldung = undefined;
@@ -484,9 +499,15 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     }
     stand = neu;
   }
-  const { meldung, schemaBefunde, korrekturen, sopHinweise, umhaengungen } = stand;
+  const { meldung, schemaBefunde, korrekturen, sopHinweise, umhaengungen, zeitstrahlBefunde } = stand;
 
   const befunde: Befund[] = meldung ? [...quellenHinweise(meldung, p.ui), ...pflichtHinweise(meldung, p.ui)] : [];
+  // Kennungen, Bezug und Zeitstrahl (seit 0.6.9): Korrekturen der App, danach formale Hinweise
+  if (meldung)
+    befunde.push(
+      ...zeitstrahlBefunde,
+      ...zeitstrahlHinweise(meldung, p.ui).filter((b) => !zeitstrahlBefunde.some((x) => x.code === b.code && x.text === b.text)),
+    );
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
   if (meldung && korrekturen.length)
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });

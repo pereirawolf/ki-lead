@@ -7,6 +7,7 @@ import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
 import { gliedereAnalyse, gliedereBewertung } from "../kern/kennsaetze";
 import type { Profil, RadarDef } from "../kern/typen";
+import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../kern/zeitstrahl";
 import { absender, farbeBeurteilung, farbeTendenz, stelleVon, zeitpunktVon, type Farbe, type LagebildEintrag, type SvEintrag } from "./lagebild";
 
 export interface Spalte {
@@ -66,7 +67,7 @@ export function spalten(profil: Profil): Spalte[] {
   const wurzel = aufloesen(profil.schema, profil.schema);
   const kopf: Spalte[] = [];
   for (const key of Object.keys(wurzel?.properties || {})) {
-    if (key === r.sachverhalte || key === r.quellen || key === r.entstehung_feld || istAusgeblendet(profil.ui, key)) continue;
+    if (key === r.sachverhalte || key === r.quellen || key === r.zeitstrahl || key === r.entstehung_feld || istAusgeblendet(profil.ui, key)) continue;
     blaetter(profil, wurzel.properties[key], [key], [bezeichnung(profil.ui, key)], 0, kopf);
   }
   const sv: Spalte[] = [];
@@ -85,6 +86,20 @@ export function spalten(profil: Profil): Spalte[] {
         ]
       : []),
     ...sv,
+    // Zeitstrahl je Sachverhalt über die Kennung (seit 0.6.9)
+    ...(r.zeitstrahl && r.sv_kennung
+      ? [
+          {
+            titel: bezeichnung(profil.ui, r.zeitstrahl) + " (Sachverhalt)",
+            wert: (e: LagebildEintrag, s?: any) =>
+              s
+                ? eintraegeFuer(zeitstrahlText(e.daten, profil.ui), String(holeWert(s, r.sv_kennung!) ?? ""))
+                    .map(zeitstrahlAnzeige)
+                    .join("\n")
+                : "",
+          },
+        ]
+      : []),
     ...(r.quellen ? [{ titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, r.quellen!)) }] : []),
     {
       titel: "Schemaprüfung",
@@ -194,10 +209,17 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     }
   }
 
+  // Zeitstrahl des Sachverhalts (seit 0.6.9)
+  const zs = zeitstrahlText(s.eintrag.daten, ui);
+  if (r.zeitstrahl && r.sv_kennung) {
+    const eintraege = eintraegeFuer(zs, String(holeWert(s.sv, r.sv_kennung) ?? ""));
+    if (eintraege.length) zeile(bezeichnung(ui, r.zeitstrahl), html(eintraege.map(zeitstrahlAnzeige).join("\n")), "font-size:8.5pt;");
+  }
+
   if (r.quellen) {
     const qText = String(holeWert(s.eintrag.daten, r.quellen) || "");
     if (qText.trim()) {
-      const zitiert = quellenFuerSachverhalt(qText, s.sv, ui);
+      const zitiert = quellenFuerSachverhalt(qText, s.sv, ui, zs);
       zeile(bezeichnung(ui, r.quellen), html(zitiert ? zitiert.map((q) => q.text).join("\n") : qText), "font-size:8.5pt;");
     }
   }

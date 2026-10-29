@@ -36,6 +36,8 @@ function eintrag(id = "a", text = "", beurteilung = "geringfügig", tendenz = "S
   for (const k of Object.keys(sv.analyse)) sv.analyse[k] = "";
   sv.analyse.massnahmen_empfehlungen = "Maßnahmen vorhanden.";
   d.quellen = "[Q1] A – Teststelle (20.10.2026): Lage [Zugriff: 20.10.2026]";
+  // Seit Profil 1.33.0 trägt die Beispielmeldung einen Zeitstrahl mit Verweisen; der Testfall setzt alle Texte selbst
+  delete d.zeitstrahl;
   return { id, name: id + ".json", daten: d, herkunft: d.schema, hinweise: [], schema: [], fremd: null, importiertAm: "2026-10-20T10:00:00Z" };
 }
 const check = (e: LagebildEintrag[], ausgabe: string | Date = "2026-10-23T15:00", jetzt = berlin(20, 12), pr = p) => redaktionscheck(e, pr, ausgabe, jetzt);

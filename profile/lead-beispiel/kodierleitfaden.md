@@ -1,8 +1,8 @@
-# Kodierleitfaden LEAD – Lagenradar und Quellenkategorien
+# Kodierleitfaden LEAD – Lagenradar, Quellenkategorien und Zeitstrahl
 
-Beispielfassung für KI-LEAD · Fassung 1.5.0 vom 27.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.19.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.6.0 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
+Beispielfassung für KI-LEAD · Fassung 1.6.0 vom 29.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.8.0 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
-Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grundregeln, Stufentexte, Achsenregeln D1–D8, Bewertung und Tendenz), für die Quellenkategorien A/B/W/M/P mit Zuordnung und Priorität und für die Rangfolge bei Widersprüchen. SOP-LEAD Teil A (A.2, A.3), die Darstellungsdatei und die Arbeitsanweisungen verweisen verbindlich darauf und wiederholen die Regeln nicht (SOP-LEAD A.10.2). Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
+Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grundregeln, Stufentexte, Achsenregeln D1–D8, Bewertung und Tendenz), für die Quellenkategorien A/B/W/M/P mit Zuordnung und Priorität, für die Rangfolge bei Widersprüchen und für Form und Regeln von Zeitstrahl, Sachverhaltskennung und Bezug (Abschnitt 8). SOP-LEAD Teil A (A.2, A.3), die Darstellungsdatei und die Arbeitsanweisungen verweisen verbindlich darauf und wiederholen die Regeln nicht (SOP-LEAD A.10.2). Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
 **Rangfolge bei Widersprüchen** (einzige Fassung; SOP-LEAD Teil A und die Arbeitsanweisungen verweisen hierauf): (1) JSON-Schema der Meldung (Struktur, zulässige Werte, Leerwerte) und Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
@@ -209,6 +209,9 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 | `sofort.lagenradar.d1` … `d8` | `null` | nie `0`, nie Zeichenkette, nie „U“ |
 | `sofort.beurteilung`, `sofort.tendenz` | `""` | Option „keine Angabe“ |
 | Textfelder, Datumsfelder | `""` | Datum als `JJJJ-MM-TT`, Meldezeitpunkt als `JJJJ-MM-TTThh:mm`; `eintritt` und `meldezeitraum` nur bei belegter Uhrzeit als `JJJJ-MM-TTThh:mm` |
+| `kennung` (Sachverhalt) | `""` | vergibt die App; die KI setzt für neue Sachverhalte Platzhalter `NEU-1`, `NEU-2` … (Abschnitt 8.1) |
+| `bezug` (Sachverhalt) | `[]` oder Feld weglassen | nur Kennungen aus vorliegenden Meldungen (Abschnitt 8.2) |
+| `zeitstrahl` | `""` oder Feld weglassen | eine Zeile je Ereignis (Abschnitt 8.3) |
 
 Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.json`).
 
@@ -238,9 +241,64 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 
 ---
 
-## 8. Pflege
+## 8. Zeitstrahl, Sachverhaltskennung und Bezug
 
-Achsenregeln, Quellenkategorien und die Rangfolge bei Widersprüchen werden nur in diesem Leitfaden fortgeschrieben (SOP-LEAD A.10.2: ein Ort, Verweise sonst), damit Mensch und KI nach derselben Fassung kodieren. SOP-LEAD Teil A und die Arbeitsanweisungen verweisen darauf; bei einer Änderung wird geprüft, ob ein Verweis anzupassen ist. Die Darstellungsdatei führt zusätzlich die Stufentexte und die Kategorienamen, weil die App sie anzeigt und auswertet; sie werden mit diesem Leitfaden geändert. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
+Der Zeitstrahl gehört wie das Quellenverzeichnis zum Belegapparat der Meldung: Er zeigt je Sachverhalt, wann was eingetreten ist, und trägt Fortschreibung (SOP-LEAD A.8.1), Verdichtung (A.7.1) und Rückblick (A.8.3). Er bewertet nicht. Kennung und Bezug machen Sachverhalte über Ausgaben und Ebenen hinweg zuordenbar.
+
+### 8.1 Sachverhaltskennung (`kennung`)
+
+- **Form** `Präfix-JJJJMMTT-XXXX`, z. B. `DE-TH-20261014-K7QM`: Präfix nach der Herkunft der meldenden Stelle (Darstellungsdatei, `kennung.praefixe`; in diesem Profil nach ISO 3166: `DE` für den Bund, `DE-TH` für Thüringen usw.), Anlagedatum und vier Zeichen aus dem Base32-Alphabet nach Crockford (Ziffern und Großbuchstaben ohne I, L, O, U). Die Kennung ist ohne Register und ohne Zählerstand eindeutig, auch offline und über viele meldende Stellen.
+- **Vergabe:** Die App vergibt die Kennung beim Anlegen eines Sachverhalts in der Maske und nach einem KI-Entwurf. Eine KI bildet keine Kennungen; sie setzt für neue Sachverhalte die Platzhalter `NEU-1`, `NEU-2` … und verwendet sie auch im Zeitstrahl und im Bezug.
+- **Fortschreibung:** Die Kennung bleibt unverändert, solange Gegenstand, Raum und bewertete Funktion gleich bleiben (A.8.1). Bei geändertem Zuschnitt (Teilung, Zusammenführung) erhält der neue Sachverhalt eine neue Kennung und nennt die bisherige im Bezug.
+- Eine Kennung einer anderen Stelle wird nie als eigene geführt.
+
+### 8.2 Bezug (`bezug`)
+
+- Liste der Kennungen der Sachverhalte aus Eingangs- und Vormeldungen, aus denen der Sachverhalt hervorgeht: bei der Verdichtung alle eingehenden Sachverhalte (A.7.1), bei einer Teilung die Kennung des Ausgangssachverhalts.
+- Nur Kennungen, die in einer vorliegenden Meldung stehen. Ein neu erfasster Sachverhalt hat keinen Bezug.
+- Der Bezug ersetzt nicht den Quellennachweis: Jede verwendete Eingangsmeldung bleibt ein eigener Eintrag im Quellenverzeichnis (Abschnitt 5).
+
+### 8.3 Zeitstrahl (`zeitstrahl`)
+
+**Form:** eine Zeile je Ereignis, `[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]`. Die Uhrzeit steht nur, wenn sie belegt ist (wie bei `eintritt`, Abschnitt 6), als Wanduhrzeit der Profilzeitzone. Der Kurztext ist ein Satz mit höchstens etwa 160 Zeichen; Verweise wie in Abschnitt 5.
+
+| Typ | Wann | Beleg |
+|---|---|---|
+| Ereignis | Eintritt, Ausweitung, Schadensereignis, Höchststand | `[Qn]` |
+| Warnung | Ausgabe, Hoch- oder Herabstufung oder Aufhebung einer amtlichen Warnung | `[Qn]` |
+| Maßnahme | angeordnete, begonnene oder beendete Maßnahme einer zuständigen Stelle (Status nach SOP-LEAD A.4) | `[Qn]` |
+| Wendepunkt | belegte Änderung der Dynamik oder des Zuschnitts (z. B. Scheitel überschritten, Ursache bestätigt) | `[Qn]` |
+| Wiederherstellung | erreichter Zielzustand oder belegte Teilwiederherstellung | `[Qn]` |
+| Bewertung | Wechsel von Beurteilung oder Tendenz gegenüber der Vormeldung; setzt die App bei der Fortschreibung | ohne Verweis (eigene Meldung) |
+| Berichtigung | Korrektur einer früheren Zeile, beginnt mit „zu [Zn]:“ | `[Qn]` |
+
+**Regeln:**
+
+1. **Nur Eingetretenes bis t0.** Erwartete Entwicklungen, Prognosen und Fristen stehen in „Risiken & Auswirkungen“ und in den Kennsätzen `Neubewertung bei:` und `Handlungsrelevant bis:`, nicht im Zeitstrahl (Grundregel 7). Eine zu t0 gültige Warnung steht mit ihrer Ausgabe, nicht mit ihrem Gültigkeitsende.
+2. **Ereigniszeit, nicht Meldezeit.** Der Zeitpunkt ist der des Ereignisses. Ist nur der Zeitpunkt einer Meldung bekannt, sagt der Kurztext das („nach Meldung von … um …“). Wann eine Angabe bekannt wurde, zeigen Zugriff und Datenstand im Quellenverzeichnis und die Ausgabe, in der die Zeile zuerst steht.
+3. **Auswahl:** Aufgenommen werden Ereignisse, die Bewertung, Tendenz oder eine Radarachse tragen oder verändern, nicht jede Einzelmeldung. Richtwert: zwölf Zeilen je Sachverhalt; darüber werden nur noch Wendepunkte neu aufgenommen, frühere Zeilen bleiben stehen.
+4. **Reihenfolge:** chronologisch, bei gleichem Zeitpunkt nach Nummer; ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags.
+5. **Fortschreibung (A.8.1):** Frühere Zeilen bleiben wortgleich mit ihrer Nummer; neue Zeilen erhalten die nächste freie Nummer. Eine Korrektur steht als neue Zeile vom Typ „Berichtigung“ („zu [Z3]: Eintritt 14.10.2026 05:30 statt 06:00 [Q7]“), nie als Änderung der früheren Zeile.
+6. **Verdichtung (A.7.1):** Dasselbe Ereignis aus mehreren Eingängen steht einmal, mit der eigenen Kennung. Beleg ist die Eingangsmeldung (Kategorie nach der Rolle der meldenden Stelle, Abschnitt 5) oder die selbst geprüfte Originalquelle. Widersprüchliche Zeitangaben stehen mit beiden Stellen in einer Zeile nebeneinander und werden nicht gemittelt.
+7. **Verhältnis zum Lagenradar:** Der Zeitstrahl trägt keine Radarwerte und ersetzt keine Begründung. D8 stützt sich nur auf vergleichbare Beobachtungen; die Zahl der Zeilen ist kein Maß für Dynamik. Für D5 zählt die seit dem Eintritt verstrichene Dauer nicht (Restdauer, Abschnitt 3); eine Zeile „Wiederherstellung“ belegt D5 = 0 nur, wenn sie den benannten Zielzustand betrifft.
+8. **Prüfung durch die App:** Form der Zeile, gültiger Zeitpunkt, kein Zeitpunkt nach t0, vorhandene Kennung, zulässiger Typ, Quellenverweis (außer „Bewertung“), doppelte Nummern, Reihenfolge, Berichtigung mit Bezug auf eine Zeile und Richtwert. Verweise im Zeitstrahl zählen im Quellenverzeichnis als Zitate. Bei der Fortschreibung stellt die App veränderte oder fehlende Zeilen der Vormeldung wieder her und trägt Bewertungswechsel selbst ein.
+
+**Beispiel** (fiktiv, Auszug aus der verdichteten Meldung im Datensatz Orkantief „Ilka“; [Q1] bis [Q6] sind dort die Eingangsmeldungen der Länder):
+
+```
+[Z1] 2026-10-13T12:00 · DE-20261014-7QKD · Warnung – DWD-Warnung vor Orkanböen für Eifel, Hunsrück und Westerwald bis 20:00 Uhr, nach Meldung Rheinland-Pfalz [Q1]
+[Z5] 2026-10-13T22:30 · DE-20261014-7QKD · Ereignis – Höchststand im Landkreis Sonneberg mit rund 18.000 Anschlüssen ohne Strom nach Mastschäden an einer 20-kV-Leitung [Q5]
+[Z7] 2026-10-14T05:00 · DE-20261014-7QKD · Wendepunkt – Oberharz: nachstürzende Bäume werfen die Wiederversorgung zurück, wieder rund 4.600 Haushaltsanschlüsse ohne Strom [Q4]
+[Z8] 2026-10-14T06:00 · DE-20261014-7QKD · Wiederherstellung – Schnellfahrstrecke Köln–Rhein/Main wieder frei, Fernverkehr läuft schrittweise wieder an [Q3]
+```
+
+Der Sachverhalt `DE-20261014-7QKD` nennt im Bezug die sieben Sachverhalte der sechs Ländermeldungen (Thüringen meldet zwei).
+
+---
+
+## 9. Pflege
+
+Achsenregeln, Quellenkategorien, die Rangfolge bei Widersprüchen und die Regeln zu Zeitstrahl, Kennung und Bezug werden nur in diesem Leitfaden fortgeschrieben (SOP-LEAD A.10.2: ein Ort, Verweise sonst), damit Mensch und KI nach derselben Fassung kodieren. SOP-LEAD Teil A und die Arbeitsanweisungen verweisen darauf; bei einer Änderung wird geprüft, ob ein Verweis anzupassen ist. Die Darstellungsdatei führt zusätzlich die Stufentexte und die Kategorienamen, weil die App sie anzeigt und auswertet; sie werden mit diesem Leitfaden geändert. Die App prüft beim Import eines Profils, ob die Stufentexte der Darstellungsdatei wortgleich im Kodierleitfaden stehen.
 
 **Änderungsprotokoll:**
 
@@ -255,3 +313,4 @@ Achsenregeln, Quellenkategorien und die Rangfolge bei Widersprüchen werden nur 
 | 1.3.0 | 23.10.2026 | Mitfortschreibung von SOP-LEAD Teil A (3.14.0–3.16.0) nach A.10.2: D2 zählt Evakuierte, Verlegte und in Schutzunterbringung Aufgenommene erst mit vollzogener Maßnahme; D3-Funktionsliste beispielhaft, bewertet wird die konkret betroffene Funktion; D6 steigt nicht allein mit der Ausfalldauer; Rangfolge nennt Beispielfassungen; Pflegeregel nennt Teil A. Anlass: Konsistenzprüfung KW 43 (KP-2026-W43-13, -33, -34, -38, -39) |
 | 1.4.0 | 24.10.2026 | Grundregel 1: Ist-Kodierung auch nach Ende der Einschränkung vor t0 (ET-2026-W43-01); D5: erreichter Zielzustand = 0 (ET-2026-W43-01) und Mindestprognose als gekennzeichneter Mindestwert (ET-2026-W43-04); drei Kurzbeispiele, darunter D3 bei kreisfreien Städten nach wahrgenommener Funktion (ET-2026-W43-06). Mitfortschreibung von SOP-LEAD Teil A.2 (D5) nach A.10.2. Anlass: Erfassungstest KW 43 |
 | 1.5.0 | 27.10.2026 | Einziger Ort für Achsenregeln, Quellenkategorien und Rangfolge (SOP-LEAD A.10.2 „ein Ort, Verweise sonst“): Einleitung, Rangfolge und Pflege (Abschnitt 8) entsprechend gefasst. Aus Teil A und der Arbeitsanweisung Erfassung übernommen, weil sie nur dort standen: Aussagekompetenz der Quellen, Format für Eingangsmaterial ohne URL, Beispiel Lagebericht des GMLZ, frühere Kennung „J“ für Medien (Abschnitt 5), Beurteilung mit Unsicherheit und Handlungsbedarf (Abschnitt 4), Erklärung bei unvollkommener Skala (Grundregel 6), Feld der Wirkungskette (D6). Bestätigungsgrad als Verweis auf A.3. Achsenregeln, Stufentexte und Quellenkategorien sonst unverändert. Anlass: technische Prüfung KW 44 (TP-2026-W44-32) Entscheidungen des Herausgebers vom 27.10.2026 zu TP-2026-W44-32: JSON-Schema in der Rangfolge (Rang 1 mit den Stufentexten); Dateiformat und Bearbeitungsmodus unerheblich für die Quellenkategorie; keine automatische Umstufung bestehender Einträge in allen Kategorien; Aktualität in der Kodierfrage von D7. Fassungstabelle aufsteigend sortiert (1.3.0 vor 1.4.0). |
+| 1.6.0 | 29.10.2026 | Neuer Abschnitt 8 „Zeitstrahl, Sachverhaltskennung und Bezug“ (ZS-2026-W44-01 bis -04): Kennung `Präfix-JJJJMMTT-XXXX` mit Vergabe durch die App und Platzhaltern `NEU-n` für die KI, Bezug bei Verdichtung und Teilung, Zeitstrahl mit fester Zeilenform, sieben Typen, Regeln zu Ereigniszeit, Auswahl (Richtwert zwölf Zeilen), Fortschreibung nur durch Anfügen und Berichtigung, Verdichtung und Verhältnis zu D5/D8. Abschnitt 6 mit Leerwerten der neuen Felder, Pflege jetzt Abschnitt 9, Titel und Einleitung ergänzt. Achsenregeln, Stufentexte und Quellenkategorien unverändert. Anlass: Entscheidung des Herausgebers vom 29.10.2026 |

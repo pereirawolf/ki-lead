@@ -1,13 +1,17 @@
 // Generisches Formular: rendert ein Feld anhand von JSON-Schema und Darstellungsdatei.
 
-import { useContext, useId, useRef } from "react";
+import { useContext, useId, useRef, useState } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
-import { generischerPfad, type Segment } from "../kern/pfad";
+import { generischerPfad, teilePfad, type Segment } from "../kern/pfad";
 import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
 import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
 import { QuellenFeld } from "./QuellenFeld";
+import { ZeitstrahlFeld } from "./ZeitstrahlFeld";
+import { jetztLokal } from "../kern/ausgabe";
+import { kennungenDerMeldung, neueKennung } from "../kern/kennung";
+import { zoneOder } from "../kern/zeit";
 import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
@@ -83,6 +87,31 @@ export function Feld(props: FeldProps) {
         wert={String(wert ?? "")}
         onChange={(v) => setze(segs, v)}
       />
+    );
+  }
+
+  if (f.widget === "zeitstrahl") {
+    return (
+      <ZeitstrahlFeld
+        profil={profil}
+        label={label}
+        pflicht={pflicht}
+        fehler={fehler}
+        feld={schluessel}
+        hinweis={f.hinweis}
+        zeilen={f.zeilen}
+        wert={String(wert ?? "")}
+        onChange={(v) => setze(segs, v)}
+      />
+    );
+  }
+
+  // Kennungen als eine Zeile, getrennt durch Komma, Semikolon oder Leerzeichen (Bezug, seit 0.6.9)
+  if (f.widget === "kennungen" && t.includes("array")) {
+    return (
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
+        {(a) => <KennungenEingabe a={a} wert={wert} onChange={(v) => setze(segs, v)} platzhalter={f.platzhalter} />}
+      </HilfeFeld>
     );
   }
 
@@ -248,6 +277,29 @@ export function Feld(props: FeldProps) {
 
   const widget = f.widget || "text";
   const text = typeof wert === "string" ? wert : alsText(wert);
+  if (widget === "kennung") {
+    return (
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
+        {(a) => (
+          <div className="kennung-feld">
+            <input
+              {...a}
+              type="text"
+              value={text}
+              spellCheck={false}
+              placeholder={f.platzhalter}
+              onChange={(ev) => setze(segs, ev.target.value.trim().toUpperCase())}
+            />
+            {!text.trim() && (
+              <button type="button" className="knopf leise klein" onClick={() => setze(segs, kennungFuerNeu(profil, eingabehilfe?.aktuell()))}>
+                Kennung vergeben
+              </button>
+            )}
+          </div>
+        )}
+      </HilfeFeld>
+    );
+  }
   const gemeinsam = {
     value: text,
     placeholder: f.platzhalter,
@@ -310,6 +362,52 @@ function EingabehilfenFuer({
   return <Eingabehilfen profil={profil} segs={segs} label={label} textId={textId} hilfe={hilfe} wert={wert} />;
 }
 
+/** Neue Sachverhaltskennung für die Maske: Herkunft aus dem Feld „land“, Datum heute in der Profilzeitzone */
+export function kennungFuerNeu(profil: Profil, meldung: Record<string, any> | undefined): string {
+  const r = profil.ui.rollen;
+  const herkunft = meldung && r.land ? holeWert(meldung, r.land) : profil.manifest.variablen?.[r.land || "land"];
+  const heute = jetztLokal(zoneOder(profil.manifest.variablen?.zeitzone), new Date());
+  return neueKennung(profil.ui, herkunft, heute, kennungenDerMeldung(meldung, profil.ui));
+}
+
+/** Eingabe einer Liste von Kennungen als eine Zeile; übernommen wird beim Verlassen des Felds */
+function KennungenEingabe({
+  a,
+  wert,
+  onChange,
+  platzhalter,
+}: {
+  a: Record<string, any>;
+  wert: unknown;
+  onChange: (v: string[]) => void;
+  platzhalter?: string;
+}) {
+  const liste = Array.isArray(wert) ? wert.map((x) => String(x ?? "")) : [];
+  const [roh, setRoh] = useState<string | null>(null);
+  const zerlegen = (s: string) => [
+    ...new Set(
+      s
+        .split(/[\s,;]+/)
+        .map((x) => x.trim().toUpperCase())
+        .filter(Boolean),
+    ),
+  ];
+  return (
+    <input
+      {...a}
+      type="text"
+      spellCheck={false}
+      placeholder={platzhalter}
+      value={roh ?? liste.join(", ")}
+      onChange={(ev) => setRoh(ev.target.value)}
+      onBlur={() => {
+        if (roh !== null) onChange(zerlegen(roh));
+        setRoh(null);
+      }}
+    />
+  );
+}
+
 function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const k = aufloesen(knoten, profil.schema);
   const gen = generischerPfad(segs);
@@ -324,8 +422,17 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const listeRef = useRef<HTMLDivElement>(null);
   const sprung = useSprung();
   const eintrag = (i: number) => listeRef.current?.querySelectorAll<HTMLElement>(":scope > .element")[i] ?? null;
+  const kx = useContext(EingabehilfeKontext);
   const hinzufuegen = () => {
-    setze(segs, [...liste, leererWert(k.items, profil.schema)]);
+    const neu = leererWert(k.items, profil.schema);
+    // Neuer Sachverhalt erhält sofort eine Kennung (seit 0.6.9)
+    if (istSachverhalte && r.sv_kennung && neu && typeof neu === "object") {
+      const pfad = teilePfad(r.sv_kennung);
+      let ziel: any = neu;
+      for (const seg of pfad.slice(0, -1)) ziel = ziel[seg] && typeof ziel[seg] === "object" ? ziel[seg] : (ziel[seg] = {});
+      ziel[pfad[pfad.length - 1]!] = kennungFuerNeu(profil, kx?.aktuell());
+    }
+    setze(segs, [...liste, neu]);
     sprung(() => {
       const neu = eintrag(liste.length);
       springeZu(neu, neu?.querySelector<HTMLElement>("input:not([type=hidden]), select, textarea"), { fokus: true });
@@ -364,6 +471,9 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
                   {elementName} {i + 1}
                 </span>
                 <span className="element-titel">{titel || "ohne Bezeichnung"}</span>
+                {istSachverhalte && r.sv_kennung && holeWert(el, r.sv_kennung) ? (
+                  <span className="element-kennung">{String(holeWert(el, r.sv_kennung))}</span>
+                ) : null}
               </h3>
               <button type="button" className="knopf leise" aria-label={`${elementName} ${i + 1} entfernen`} onClick={() => entfernen(i)}>
                 Entfernen

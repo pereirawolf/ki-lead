@@ -79,6 +79,36 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.6 | letzter Commit des Pull Requests „Management Summary: Laufzeile mit Dauer und Kosten, KI-Chip während der Erstellung; 0.6.6“ |
 | 0.6.7 | letzter Commit des Pull Requests „Sprungziele: neuer Inhalt beginnt oben, Fokus auf der neuen Überschrift; 0.6.7“ |
 | 0.6.8 | letzter Commit des Pull Requests „Kurzantwort der KI-Erfassung als Prüfauftrag; Profil 1.32.0; 0.6.8“ |
+| 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
+
+## [0.6.9] – 29.10.2026
+
+Grundlage: Entscheidung des Herausgebers vom 29.10.2026, bei KI-Erfassung und KI-Verdichtung je Sachverhalt einen Zeitstrahl relevanter Ereignisse zu notieren und fortzuschreiben, in der LEAD-Systematik und in der App, als eigener Bereich in standardisierter Form auf der Seite „Quellen & Referenzen“; dazu eine über viele meldende Stellen eindeutige Sachverhaltskennung (Herkunft, Anlagedatum, Zufall) und ein Bezug auf die eingehenden Sachverhalte; Bewertungswechsel trägt die App ein; Feld optional, Beispieldatensatz „Ilka“ ergänzt. Anlasskennungen ZS-2026-W44-01 (Zeitstrahl), -02 (Sachverhaltskennung), -03 (Bezug), -04 (Bewertungszeilen der App). Baut auf 0.6.8 auf.
+
+### Hinzugefügt
+
+- **Sachverhaltskennung** (`src/kern/kennung.ts`): Form `Präfix-JJJJMMTT-XXXX` mit Präfix nach dem Feld der Rolle `land` (`kennung.praefixe` der Darstellungsdatei, Standard `kennung.standard`, ohne Angabe „SV“), Anlagedatum in der Profilzeitzone und vier Zeichen Crockford-Base32 aus `crypto.getRandomValues`; keine Doppelung innerhalb einer Meldung. In der Maske erhält ein neuer Sachverhalt sofort eine Kennung, der Kopf des Sachverhalts zeigt sie, ein Sachverhalt ohne Kennung zeigt „Kennung vergeben“ (Widget `kennung`); der Bezug ist eine Zeile mit Kennungen (Widget `kennungen`).
+- **Zeitstrahl** (`src/kern/zeitstrahl.ts`, `src/ui/ZeitstrahlFeld.tsx`): Textfeld auf Meldungsebene (Rolle `zeitstrahl`, Widget `zeitstrahl`) mit einer Zeile je Ereignis `[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]`; Lesen, Schreiben, chronologisches Ordnen (ungültige Zeilen bleiben am Ende), Einträge je Sachverhalt. Auf der Seite „Quellen & Referenzen“ unter dem Quellenverzeichnis: Zähler, Hinweis auf ungeordnete Zeilen, „Chronologisch ordnen“ und Baukasten „Neue Zeile zusammenstellen“ (Sachverhalt über seine Kennung, Typ, Zeitpunkt, Kurztext, Vorschau, „Zeile anfügen“).
+- **Formale Befunde** im Prüfschritt und im KI-Ergebnis mit stabilem Code: `ZEITSTRAHL_FORMAT`, `ZEITSTRAHL_ZEIT`, `ZEITSTRAHL_NACH_T0`, `ZEITSTRAHL_KENNUNG_UNBEKANNT`, `ZEITSTRAHL_TYP`, `ZEITSTRAHL_OHNE_BELEG`, `ZEITSTRAHL_NUMMER_DOPPELT` (Warnungen), `ZEITSTRAHL_REIHENFOLGE`, `ZEITSTRAHL_BERICHTIGUNG`, `ZEITSTRAHL_RICHTWERT` (Hinweise), `KENNUNG_FEHLT` (Hinweis), `KENNUNG_DOPPELT`, `BEZUG_SELBST` (Warnungen).
+- **Nachbearbeitung nach S2** (`src/pipeline/zeitstrahl.ts`, aufgerufen am Ende von `nachbearbeiten`, also auch nach jeder Reparatur): Kennungen vergibt nur die App (Platzhalter `NEU-n`, leere, erfundene und fremde Kennungen werden ersetzt und in Zeitstrahl und Bezug nachgezogen; `KENNUNG_ERSETZT`, `KENNUNG_FREMD`); Bezug nur auf Kennungen aus Eingangs- und Vormeldungen einschließlich der Bezüge der Vormeldung (`BEZUG_UNBEKANNT`, `BEZUG_FEHLT`); Zeilen mit der Kennung eines Eingangs gehen an den eigenen Sachverhalt mit diesem Bezug (`ZEITSTRAHL_UMGEHAENGT`); Zeilen der jüngsten eigenen Vormeldung bleiben wortgleich, fehlende werden wiederhergestellt, veränderte stehen mit freier Nummer daneben (`ZEITSTRAHL_VORMELDUNG`); Bewertungszeilen der KI entfallen (`ZEITSTRAHL_BEWERTUNG_KI`), die App trägt je geänderter Beurteilung oder Tendenz eine Zeile zum Meldezeitpunkt ein (`ZEITSTRAHL_BEWERTUNG`).
+- **Steuerungsblock von S2** (`zeitstrahlSteuerung` in `src/pipeline/kontext.ts`): Regeln zu Kennung (Kennungen der Vormeldung, Platzhalter), Bezug (Eingänge, Teilung) und Zeitstrahl (nächste freie Nummer, Berichtigung, Wendepunkte der Eingänge, keine Bewertungszeilen), nur wenn das Profil die Rollen führt.
+- **Profilprüfung** (`src/profil/laden.ts`): Abschnitte `kennung` (Präfixe) und `zeitstrahl` (Typen, Bewertungs- und Berichtigungstyp, Richtwert), Rollen `sv_kennung`, `sv_bezug` und `zeitstrahl` gegen das Schema, Warnung `ZEITSTRAHL_OHNE_KENNUNG`.
+
+### Geändert
+
+- **Quellenverzeichnis** (`src/kern/quellen.ts`): Verweise im Zeitstrahl zählen als Zitate; die Quellen eines Sachverhalts in der Kopiervorlage schließen die Verweise seiner Zeilen ein.
+- **Ausgaben:** PDF mit dem Zeitstrahl als eigenem Block nach dem Quellenverzeichnis; Lagebild-Tabelle „Sachverhalte“ mit Kennung und Bezug (aufgelöst zur meldenden Stelle) und einer Spalte „Zeitstrahl“; Rohtabelle und CSV mit „Zeitstrahl (Sachverhalt)“; Kopiervorlage mit einer Zeile „Zeitstrahl“. Die Management Summary erhält den Zeitstrahl nicht.
+- **Beispielprofil 1.33.0:** LEAD-Meldevorlage 1.2 (optionale Felder `kennung`, `bezug`, `zeitstrahl`, abwärtskompatibel), Darstellungsdatei mit Rollen, Feldern, Präfixen nach ISO 3166 und Typen, Kodierleitfaden 1.6.0 mit Abschnitt 8, Arbeitsanweisung Erfassung 1.8.0, Verdichtung 2.2.0, Sammelmappe 3.20.0, Beispieldatensatz „Ilka“ mit Kennungen, Bezug und Zeitstrahl; Einzelheiten im Profilverlauf.
+- Profilformat 1.23, Spezifikation 0.6.9 (Abschnitt 5.1 „Zeitstrahl, Kennung und Bezug“), README, docs/TESTZUORDNUNG.md.
+- Versionsangaben 0.6.9 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 609, iOS 609).
+
+### Tests
+
+- `tests/kern/zeitstrahl.test.ts` (neu, 22): Zeilenform, Ordnung, Hinweise mit Codes und Stufen, Kennungsvergabe mit fester Zufallsfolge, Verweise im Quellenverzeichnis, Beispieldatensatz.
+- `tests/pipeline/zeitstrahl.test.ts` (neu, 19): Nachbearbeitung (Platzhalter, erfundene und fremde Kennungen, Bezug, Vormeldung wortgleich, Bewertungszeilen), Steuerungsblock, ganzer Lauf der Fortschreibung.
+- `tests/profil/zeitstrahl-profil.test.ts` (neu, 5): Prüfung der neuen Abschnitte und Rollen beim Laden.
+- `tests/ui/zeitstrahl.test.ts` (neu, 6): Kennung beim Anlegen, „Kennung vergeben“, Zeitstrahl auf der Seite „Quellen & Referenzen“.
+- Angepasst ohne Änderung des Solls: `tests/lagebild/redaktionscheck.test.ts` (der Testfall entfernt den neuen Zeitstrahl der Beispielmeldung, weil er alle Texte selbst setzt); `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.6.0 und Verdichtung 2.2).
 
 ## [0.6.8] – 29.10.2026
 

@@ -44,7 +44,23 @@ export interface ProfilManifest {
   beispiele?: { titel: string; ordner: string; hinweis?: string }[];
 }
 
-export type Widget = "text" | "text_lang" | "datum" | "datumzeit" | "datum_uhrzeit" | "auswahl" | "radio" | "mehrfachauswahl" | "radar" | "quellen";
+export type Widget =
+  | "text"
+  | "text_lang"
+  | "datum"
+  | "datumzeit"
+  | "datum_uhrzeit"
+  | "auswahl"
+  | "radio"
+  | "mehrfachauswahl"
+  | "radar"
+  | "quellen"
+  /** Zeitstrahl auf Meldungsebene (seit 0.6.9) */
+  | "zeitstrahl"
+  /** Sachverhaltskennung mit „Kennung vergeben“ (seit 0.6.9) */
+  | "kennung"
+  /** Liste von Kennungen als eine Zeile (seit 0.6.9) */
+  | "kennungen";
 
 export interface FeldUi {
   label?: string;
@@ -97,7 +113,13 @@ export interface Rollen {
   meldende_stelle?: string;
   meldezeitpunkt?: string;
   quellen?: string;
+  /** Zeitstrahl auf Meldungsebene: eine Zeile je Ereignis, Zuordnung über die Kennung des Sachverhalts (seit 0.6.9) */
+  zeitstrahl?: string;
   sachverhalte: string;
+  /** Sachverhaltskennung, bleibt bei der Fortschreibung gleich (seit 0.6.9) */
+  sv_kennung?: string;
+  /** Kennungen der Sachverhalte, aus denen der Sachverhalt hervorgeht (Verdichtung, Teilung; Liste von Texten, seit 0.6.9) */
+  sv_bezug?: string;
   sv_bezeichnung?: string;
   sv_art?: string;
   sv_ort?: string;
@@ -138,6 +160,26 @@ export interface QuellenKonfig {
   vorlage?: string;
 }
 
+/** Vergabe der Sachverhaltskennung (seit 0.6.9): Präfix nach dem Wert des Felds der Rolle „land“ */
+export interface KennungKonfig {
+  /** Herkunft (Wert des Felds „land“) → Präfix, z. B. „Thüringen“ → „DE-TH“ */
+  praefixe?: Record<string, string>;
+  /** Präfix für leere oder nicht genannte Herkunft */
+  standard?: string;
+}
+
+/** Zeitstrahl (seit 0.6.9) */
+export interface ZeitstrahlKonfig {
+  /** zulässige Typen in der Reihenfolge der Auswahl */
+  typen?: string[];
+  /** Typ der Bewertungszeilen, die die App bei der Fortschreibung setzt (ohne Quellenverweis zulässig) */
+  typ_bewertung?: string;
+  /** Typ einer Berichtigung (nennt die berichtigte Zeile) */
+  typ_berichtigung?: string;
+  /** Richtwert für Zeilen je Sachverhalt; darüber ein Hinweis */
+  richtwert_je_sachverhalt?: number;
+}
+
 /** Satzanfänge (reguläre Ausdrücke), vor denen Ausgaben einen Absatz bzw. eine neue Zeile beginnen. */
 export interface TextGliederung {
   absatz?: string[];
@@ -157,6 +199,8 @@ export interface UiKonfig {
   rollen: Rollen;
   kennsaetze?: Record<string, string>;
   quellen?: QuellenKonfig;
+  kennung?: KennungKonfig;
+  zeitstrahl?: ZeitstrahlKonfig;
   dateiname?: string;
   kurzfassung?: { titel: string; kopf: string; kennsaetze?: string[] };
   lagebild?: LagebildKonfig;

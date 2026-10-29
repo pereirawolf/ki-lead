@@ -1,15 +1,16 @@
 // Nachbearbeitung des Entwurfs durch die App vor der Schemaprüfung: Identität und Absender, Lagenradar an der
-// vorgesehenen Stelle, SOP-Nachweis und Kodierleitfaden. Seit 0.6.2 eigene Datei (TP-2026-W44-06), vorher in stufen.ts.
+// vorgesehenen Stelle, SOP-Nachweis und Kodierleitfaden, seit 0.6.9 Kennungen, Bezug und Zeitstrahl (zeitstrahl.ts). Seit 0.6.2 eigene Datei (TP-2026-W44-06), vorher in stufen.ts.
 
 import { jetztLokal } from "../kern/ausgabe";
 import { holeWert } from "../kern/pfad";
 import { aufloesen } from "../kern/schema";
-import type { Meldung, Profil } from "../kern/typen";
+import type { Befund, Meldung, Profil } from "../kern/typen";
 import { istEigeneStelle } from "../kern/ui";
 import { sopKennung } from "../profil/sop";
 import { fachSops, sopIdsAufloesen } from "./kontext";
 import { absenderFuer } from "./material";
 import type { Kontext } from "./stufen";
+import { zeitstrahlNachbearbeiten } from "./zeitstrahl";
 
 /** Feste Felder setzen, die die App verantwortet (Schemakennung, Status, Herkunft, Variablen). */
 /**
@@ -29,6 +30,7 @@ export function nachbearbeiten(
   korrekturen: string[] = [],
   sopHinweise: string[] = [],
   umhaengungen: string[] = [],
+  zeitstrahlBefunde: Befund[] = [],
 ): Meldung {
   if (!roh || typeof roh !== "object" || Array.isArray(roh)) throw new Error("Das Ergebnis ist kein JSON-Objekt.");
   const p = k.profil;
@@ -91,6 +93,8 @@ export function nachbearbeiten(
     if ("kodierleitfaden" in erlaubt && kl) e.kodierleitfaden = kl;
     d[r.entstehung_feld] = e;
   }
+  // Kennungen, Bezug und Zeitstrahl (seit 0.6.9): nach Absender und t0, weil Präfix und Bewertungszeilen davon abhängen
+  zeitstrahlNachbearbeiten(d, p, { material: k.material, jetzt: k.jetzt?.() ?? new Date() }, zeitstrahlBefunde);
   return d;
 }
 
