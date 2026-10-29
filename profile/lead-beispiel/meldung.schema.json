@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "LEAD-Meldung-v1.schema.json",
   "title": "LEAD-Meldevorlage – JSON-Schema v1",
-  "description": "Beispielschema einer LEAD-Meldung (Schemakennung LEAD-Meldung-v1). Prüft Struktur, Datentypen, zulässige Werte und – bei _status 'final' – die vier Pflichtfelder. Inhaltliche Richtigkeit prüft das Schema nicht.",
+  "description": "Beispielschema einer LEAD-Meldung (Schemakennung LEAD-Meldung-v1). LEAD-Meldevorlage 1.2. Prüft Struktur, Datentypen, zulässige Werte und – bei _status 'final' – die vier Pflichtfelder. Inhaltliche Richtigkeit prüft das Schema nicht.",
   "type": "object",
   "required": [
     "schema",
@@ -76,6 +76,10 @@
     },
     "quellen": {
       "type": "string"
+    },
+    "zeitstrahl": {
+      "type": "string",
+      "description": "Zeitstrahl je Sachverhalt, eine Zeile je eingetretenem, belegtem Ereignis bis zum Meldezeitpunkt: „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn] · aufgenommen JJJJ-MM-TTThh:mm“ (Kenntniszeit: Meldezeitpunkt der ersten Meldung mit der Zeile, setzt die App). Typen und Regeln: Darstellungsdatei („zeitstrahl“) und Kodierleitfaden Abschnitt 8. Optional, seit LEAD-Meldevorlage 1.2."
     },
     "sachverhalte": {
       "type": "array",
@@ -352,8 +356,26 @@
               }
             }
           }
+        },
+        "kennung": {
+          "type": "string",
+          "pattern": "^$|^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$",
+          "description": "Sachverhaltskennung „Präfix-JJJJMMTT-XXXX“ (Herkunft, Anlagedatum, vier Zeichen nach Crockford-Base32), z. B. „DE-TH-20261014-K7QM“; leer, solange keine vergeben ist. Vergibt die App; bleibt bei der Fortschreibung gleich. Seit LEAD-Meldevorlage 1.2."
+        },
+        "bezug": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/kennung"
+          },
+          "description": "Kennungen der Sachverhalte aus Eingangs- oder Vormeldungen, aus denen dieser Sachverhalt hervorgeht (Verdichtung, Teilung). Optional, seit LEAD-Meldevorlage 1.2."
         }
       }
+    },
+    "kennung": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$",
+      "description": "Gültige Sachverhaltskennung (Form wie im Feld „kennung“ eines Sachverhalts)."
     }
   }
 }

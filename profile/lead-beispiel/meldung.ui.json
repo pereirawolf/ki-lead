@@ -29,9 +29,10 @@
       "id": "quellen",
       "titel": "Quellen & Referenzen",
       "felder": [
-        "quellen"
+        "quellen",
+        "zeitstrahl"
       ],
-      "einleitung": "Zentrales Quellenverzeichnis für alle Ereignisse/Sachverhalte dieser Meldung (SOP-LEAD Teil A.3). In den Analysefeldern und im Bewertungstext wird nur mit [Q1], [Q2, Q4] oder [Q1–Q3] verwiesen. Je Quelle ein Eintrag, nummeriert in der Reihenfolge der ersten Nennung; Folgezeilen gehören zum vorherigen Eintrag."
+      "einleitung": "Zentrales Quellenverzeichnis für alle Ereignisse/Sachverhalte dieser Meldung (SOP-LEAD Teil A.3). In den Analysefeldern und im Bewertungstext wird nur mit [Q1], [Q2, Q4] oder [Q1–Q3] verwiesen. Je Quelle ein Eintrag, nummeriert in der Reihenfolge der ersten Nennung; Folgezeilen gehören zum vorherigen Eintrag. Darunter der Zeitstrahl: je Sachverhalt die eingetretenen, belegten Ereignisse in fester Form (Kodierleitfaden Abschnitt 8)."
     },
     {
       "id": "pruefen",
@@ -77,6 +78,12 @@
       "widget": "quellen",
       "zeilen": 12,
       "hinweis": "Format je Eintrag: [Qn] Kategorie (A, B, W, M oder P) – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ] · optional „Datenstand: TT.MM.JJJJ“ · Bezahlschranke mit „(Paywall)“ kennzeichnen · nicht ausgewertete Quellen als „nicht ausgewertet“ markieren."
+    },
+    "zeitstrahl": {
+      "label": "Zeitstrahl",
+      "widget": "zeitstrahl",
+      "zeilen": 8,
+      "hinweis": "Je Zeile ein eingetretenes, belegtes Ereignis bis zum Meldezeitpunkt: [Zn] JJJJ-MM-TT[Thh:mm] · Kennung des Sachverhalts · Typ – Kurztext [Qn] · aufgenommen JJJJ-MM-TTThh:mm. Die Kenntniszeit am Ende ist der Meldezeitpunkt der ersten Meldung mit der Zeile; der Baukasten setzt sie, „Aufnahmezeit ergänzen“ trägt sie nach. Typen: Ereignis, Warnung, Maßnahme, Wendepunkt, Wiederherstellung, Bewertung (setzt die App bei der Fortschreibung), Berichtigung („zu [Zn]: …“). Bei der Fortschreibung bleiben frühere Zeilen unverändert, auch ihre Kenntniszeit; neue Zeilen werden angefügt (Kodierleitfaden Abschnitt 8, SOP-LEAD A.8.1)."
     },
     "sachverhalte": {
       "label": "Ereignisse/Sachverhalte",
@@ -143,6 +150,17 @@
       "widget": "text_lang",
       "platzhalter": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz – und warum jetzt?",
       "hinweis": "Erster Satz: Was bedeutet das für den Bevölkerungsschutz, was verändert sich, und welche Prüf- oder Abstimmungsfrage ergibt sich für zuständige Stellen? Danach Bewertung und Tendenz begründen (Bezugsraum, Zeitraum). Optional, jeweils in eigener Zeile am Ende: Neubewertung bei: … · Handlungsrelevant bis: TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung … · Änderung zur Vormeldung: … · Abweichende Bewertung: … · Abschluss im Lagebild: …"
+    },
+    "sachverhalte[].kennung": {
+      "label": "Kennung",
+      "widget": "kennung",
+      "hinweis": "Eindeutige Kennung des Sachverhalts (Herkunft, Anlagedatum, vier Zeichen). Die App vergibt sie beim Anlegen; bei der Fortschreibung bleibt sie gleich. Der Zeitstrahl ordnet seine Zeilen darüber zu."
+    },
+    "sachverhalte[].bezug": {
+      "label": "Bezug (Kennungen)",
+      "widget": "kennungen",
+      "platzhalter": "z. B. DE-TH-20261014-K7QM, DE-NI-20261014-3HXA",
+      "hinweis": "Kennungen der Sachverhalte aus Eingangs- oder Vormeldungen, aus denen dieser Sachverhalt hervorgeht (Verdichtung, Teilung); mit Komma getrennt. Leer, wenn der Sachverhalt neu erfasst ist."
     },
     "sachverhalte[].sofort.lagenradar": {
       "label": "Lagenradar",
@@ -295,7 +313,10 @@
     "meldende_stelle": "meldende_stelle",
     "meldezeitpunkt": "meldezeitpunkt",
     "quellen": "quellen",
+    "zeitstrahl": "zeitstrahl",
     "sachverhalte": "sachverhalte",
+    "sv_kennung": "kennung",
+    "sv_bezug": "bezug",
     "sv_bezeichnung": "bezeichnung",
     "sv_art": "art",
     "sv_ort": "ort",
@@ -344,6 +365,34 @@
     "rangfolge": ["A", "B", "W", "M", "P"],
     "rangfolge_hinweis": "Quellenpriorität bei Widersprüchen zu demselben Sachverhalt: A > B > W > M > P. Bestimmung der Kategorie, Prüfung vor dem Vergleich und Abweichungen: Kodierleitfaden Abschnitt 5.",
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]"
+  },
+  "kennung": {
+    "praefixe": {
+      "Bund": "DE",
+      "Baden-Württemberg": "DE-BW",
+      "Bayern": "DE-BY",
+      "Berlin": "DE-BE",
+      "Brandenburg": "DE-BB",
+      "Bremen": "DE-HB",
+      "Hamburg": "DE-HH",
+      "Hessen": "DE-HE",
+      "Mecklenburg-Vorpommern": "DE-MV",
+      "Niedersachsen": "DE-NI",
+      "Nordrhein-Westfalen": "DE-NW",
+      "Rheinland-Pfalz": "DE-RP",
+      "Saarland": "DE-SL",
+      "Sachsen": "DE-SN",
+      "Sachsen-Anhalt": "DE-ST",
+      "Schleswig-Holstein": "DE-SH",
+      "Thüringen": "DE-TH"
+    },
+    "standard": "DE"
+  },
+  "zeitstrahl": {
+    "typen": ["Ereignis", "Warnung", "Maßnahme", "Wendepunkt", "Wiederherstellung", "Bewertung", "Berichtigung"],
+    "typ_bewertung": "Bewertung",
+    "typ_berichtigung": "Berichtigung",
+    "richtwert_je_sachverhalt": 12
   },
   "lagebild": {
     "titel": "Lagebild",

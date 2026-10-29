@@ -81,11 +81,11 @@ export function kurzfassungAnweisung(profil: Profil): string {
   return kurzfassungAnweisungErsetzt(profil).text;
 }
 
-/** Meldung ohne Quellenverzeichnis, Freigabe und Herkunft: nur der Stoff der Kurzfassung. */
+/** Meldung ohne Quellenverzeichnis, Zeitstrahl (seit 0.6.9), Freigabe und Herkunft: nur der Stoff der Kurzfassung. */
 export function meldungFuerKurzfassung(d: Meldung, profil: Profil): Meldung {
   const r = profil.ui.rollen;
   const kopie: Meldung = structuredClone(d);
-  for (const k of [r.quellen, r.entstehung_feld, "freigabe", r.status_feld]) if (k) delete kopie[k];
+  for (const k of [r.quellen, r.zeitstrahl, r.entstehung_feld, "freigabe", r.status_feld]) if (k) delete kopie[k];
   return kopie;
 }
 

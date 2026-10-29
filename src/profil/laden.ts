@@ -6,6 +6,7 @@ import { bekannterAnbieter, unbekanntesModellText } from "../anbieter/verteiler"
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
+import { PRAEFIX_RE } from "../kern/kennung";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
 import { textVorErstemAnker, zerlegeSops } from "./sop";
 import { bekanntePlatzhalter, platzhalterIn, type AnweisungsArt } from "./platzhalter";
@@ -138,6 +139,32 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
       }
     }
   }
+  // Sachverhaltskennung und Zeitstrahl (seit 0.6.9, Profilformat 1.23)
+  if (ui.kennung !== undefined) {
+    const k = ui.kennung;
+    if (!istObjekt(k)) fehler("„kennung“ muss ein Objekt sein.");
+    else {
+      if (k.praefixe !== undefined && (!istObjekt(k.praefixe) || !Object.values(k.praefixe).every(istText)))
+        fehler("„kennung.praefixe“ muss ein Objekt mit Texten sein.");
+      else
+        for (const [herkunft, p] of Object.entries<string>(k.praefixe || {}))
+          if (!PRAEFIX_RE.test(p)) fehler(`„kennung.praefixe“: Präfix „${p}“ für „${herkunft}“ ist ungültig (Großbuchstaben und Ziffern, z. B. „DE-TH“).`);
+      if (k.standard !== undefined && (!istText(k.standard) || !PRAEFIX_RE.test(k.standard)))
+        fehler("„kennung.standard“ muss ein Präfix aus Großbuchstaben und Ziffern sein (z. B. „DE“).");
+    }
+  }
+  if (ui.zeitstrahl !== undefined) {
+    const z = ui.zeitstrahl;
+    if (!istObjekt(z)) fehler("„zeitstrahl“ muss ein Objekt sein.");
+    else {
+      if (z.typen !== undefined && (!textListe(z.typen) || !z.typen.length || z.typen.some((t: string) => !t.trim() || /[·|\[\]–]/.test(t))))
+        fehler("„zeitstrahl.typen“ muss eine nicht leere Liste von Typen ohne „·“, „|“, „–“ und eckige Klammern sein.");
+      for (const k of ["typ_bewertung", "typ_berichtigung"])
+        if (z[k] !== undefined && (!istText(z[k]) || (textListe(z.typen) && !z.typen.includes(z[k])))) fehler(`„zeitstrahl.${k}“ muss einer der Typen sein.`);
+      if (z.richtwert_je_sachverhalt !== undefined && !(Number.isInteger(z.richtwert_je_sachverhalt) && z.richtwert_je_sachverhalt > 0))
+        fehler("„zeitstrahl.richtwert_je_sachverhalt“ muss eine ganze Zahl ab 1 sein.");
+    }
+  }
   for (const name of ["bewertung_gliederung", "analyse_gliederung"]) {
     const g = ui[name];
     if (g === undefined) continue;
@@ -241,11 +268,26 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
   }
   const wurzel = aufloesen(schema, schema);
   for (const [rolle, pfad] of Object.entries(r)) {
-    if (typeof pfad !== "string" || !/^(schema_feld|status_feld|entstehung_feld|land|meldende_stelle|meldezeitpunkt|quellen|sachverhalte)$/.test(rolle))
+    if (
+      typeof pfad !== "string" ||
+      !/^(schema_feld|status_feld|entstehung_feld|land|meldende_stelle|meldezeitpunkt|quellen|zeitstrahl|sachverhalte)$/.test(rolle)
+    )
       continue;
     if (!wurzel?.properties?.[pfad])
       befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“.` });
   }
+  // Rollen der Sachverhaltskennung und des Bezugs (seit 0.6.9): Felder im Element der Sachverhaltsliste
+  for (const rolle of ["sv_kennung", "sv_bezug"] as const) {
+    const pfad = r[rolle];
+    if (pfad && !unterSchema(schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(pfad)]))
+      befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“ im Sachverhalt.` });
+  }
+  if (r.zeitstrahl && !r.sv_kennung)
+    befunde.push({
+      stufe: "warnung",
+      code: "ZEITSTRAHL_OHNE_KENNUNG",
+      text: "Darstellungsdatei: Rolle „zeitstrahl“ ohne „sv_kennung“; Zeilen des Zeitstrahls lassen sich dann keinem Sachverhalt zuordnen.",
+    });
   // Maschinenlesbare KI-Kennzeichnung (KI-Verordnung Art. 50 Abs. 2, seit 0.5.4): Nur über das Entstehungsfeld trägt
   // eine Meldung als JSON die Angabe „KI-Entwurf“. Fehlt es, ist das kein Fehler des Profils, aber zu wissen.
   const ent = r.entstehung_feld ? wurzel?.properties?.[r.entstehung_feld] : undefined;

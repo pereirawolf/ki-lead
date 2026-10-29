@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.7.0 vom 29.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.1 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.19.0 und den Kodierleitfaden LEAD ab Fassung 1.5.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.1.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.8.0 vom 29.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 und den Kodierleitfaden LEAD ab Fassung 1.6.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.2.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 Gliederung: 1. Rolle · 2. Arbeitsprodukt · 3. Grundlagen und Rangfolge · 4. Regeln (4.1 SOP-Auswahl und -Anwendung, 4.2 Recherche und Belegbarkeit, 4.3 Meldungszuschnitt, Redaktion und Quellen, 4.4 Bewertung und Lagenradar) · 5. Ausgabe. Achsenregeln, Quellenkategorien und Rangfolge stehen nur im Kodierleitfaden (SOP-LEAD A.10.2); diese Anweisung verweist darauf und nennt nur, was für die KI hinzukommt.
 
@@ -108,9 +108,11 @@ Die vier Analysefelder folgen den Darstellungs-Leitfragen der SOP (Abschnitt 4):
 
 **Quellen & Referenzen (`quellen`).** Führe alle Belege der Meldung zentral im Feld `quellen`. Kategorie je Quelle, Zuordnung nach ihrer Rolle, Priorität bei Widersprüchen, Format der Einträge (mit „(Paywall)“, „nicht ausgewertet“ und „(Eingangsmaterial)“) und der Verweise im Text regelt der Kodierleitfaden, Abschnitt 5; halte ihn ein. Für die KI kommt hinzu: Das Zugriffsdatum übernimmst du aus der tatsächlichen Einsicht in diesem Lauf oder aus belastbaren Metadaten des Materials, nie aus dem Veröffentlichungsdatum oder aus Erinnerung. Die übrigen Angaben eines Eintrags führst du, soweit verfügbar.
 
+**Zeitstrahl, Kennung und Bezug (`zeitstrahl`, `kennung`, `bezug`).** Führe im Feld `zeitstrahl` je Sachverhalt die eingetretenen, belegten Ereignisse, die Bewertung, Tendenz oder eine Radarachse tragen; Form, Typen und Regeln stehen im Kodierleitfaden, Abschnitt 8. Für die KI kommt hinzu: Kennungen bildest du nicht. Ein fortgeschriebener Sachverhalt behält die Kennung der Vormeldung; ein neuer Sachverhalt erhält den Platzhalter `NEU-1`, `NEU-2` usw., den du auch in seinen Zeilen des Zeitstrahls verwendest; die App vergibt danach die Kennung. Zeilen der Vormeldung übernimmst du wortgleich mit ihren Nummern und fügst neue mit der nächsten freien Nummer an; eine Korrektur steht als Zeile vom Typ „Berichtigung“. Zeilen vom Typ „Bewertung“ schreibst du nicht, die App trägt Bewertungswechsel ein. Die Kenntniszeit am Zeilenende („· aufgenommen …“) setzt ebenfalls die App: Bei Zeilen der Vormeldung übernimmst du sie unverändert, neuen Zeilen gibst du keine. Der Zeitpunkt einer Zeile ist der des Ereignisses; ist nur der Zeitpunkt einer Meldung belegt, sagt der Kurztext das. Erwartetes gehört nicht in den Zeitstrahl.
+
 Stelle eigene Schlussfolgerungen als **Einschätzung ({{profil.kurzname}})**, hypothetische Verläufe als **Szenario** und nicht verifizierte Angaben als solche dar.
 
-**Redaktionsmaßstab:** Richtwerte sind für die vier Analysefelder zusammen 2.500–4.500 Zeichen und für `bewertung_text` 1.200–2.000 Zeichen. Das Quellenverzeichnis zählt nicht mit. Bei komplexen oder besonders unsicheren Sachverhalten besteht keine Kürzungspflicht. Querschnittsprüfungen (A.9) und Bausteine erzeugen nur Text, wenn ihr Befund die Bewertung trägt oder ändert; „nicht relevant“ wird nicht vermerkt. Entferne zuerst Wiederholungen und Rechercheprotokolle. Keine künstliche Vollständigkeit, keine dramatisierende Sprache, keine präziser klingende Prognose ohne Datengrundlage.
+**Redaktionsmaßstab:** Richtwerte sind für die vier Analysefelder zusammen 2.500–4.500 Zeichen und für `bewertung_text` 1.200–2.000 Zeichen. Quellenverzeichnis und Zeitstrahl zählen nicht mit. Bei komplexen oder besonders unsicheren Sachverhalten besteht keine Kürzungspflicht. Querschnittsprüfungen (A.9) und Bausteine erzeugen nur Text, wenn ihr Befund die Bewertung trägt oder ändert; „nicht relevant“ wird nicht vermerkt. Entferne zuerst Wiederholungen und Rechercheprotokolle. Keine künstliche Vollständigkeit, keine dramatisierende Sprache, keine präziser klingende Prognose ohne Datengrundlage.
 
 ### 4.4 Bewertung und Lagenradar
 
@@ -140,7 +142,7 @@ Fülle in `_entstehung`:
 "_entstehung": {
   "verfahren": "KI-Entwurf",
   "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1"],
-  "kodierleitfaden": "Kodierleitfaden LEAD 1.5.0"
+  "kodierleitfaden": "Kodierleitfaden LEAD 1.6.0"
 }
 ```
 
@@ -149,6 +151,7 @@ Die Werte sind Beispiele: Nenne in `sop` die tatsächlich angewandten SOPs und B
 Prüfe vor der Ausgabe:
 - **Struktur:** Jedes `art`-Element ist eine exakte Katalogoption. Alle Schlüssel, Datentypen, Auswahlwerte und Radarwerte entsprechen dem Schema; es gibt keine schemafremden Felder. Daten sind logisch und im ISO-Format. Die Freigabefelder sind leer, `_status` ist „Entwurf“.
 - **Quellen:** Jeder `[Qn]`-Verweis, auch in Bereichen wie `[Q2–Q5]` und nach einer Umnummerierung, steht in `quellen`; jeder Eintrag hat genau eine Kategorie nach Kodierleitfaden Abschnitt 5 und ein Zugriffsdatum. In den Analysefeldern stehen keine Quellenzeilen. Formulierungen sind belegtreu.
+- **Zeitstrahl:** Jede Zeile hat die Form nach Kodierleitfaden Abschnitt 8, einen Zeitpunkt nicht nach t0, die Kennung oder den Platzhalter ihres Sachverhalts und einen Quellenverweis; die Zeilen stehen chronologisch, Zeilen der Vormeldung sind unverändert (auch ihre Kenntniszeit).
 - **Inhalt:**
   - Jede zentrale Zahl und Bewertung ist durch Quellen und Text getragen.
   - Ist-Lage und Szenarien sind sauber getrennt; Verdacht bleibt Verdacht.

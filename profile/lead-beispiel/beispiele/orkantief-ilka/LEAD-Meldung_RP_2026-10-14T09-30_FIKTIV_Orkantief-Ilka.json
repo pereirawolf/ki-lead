@@ -19,6 +19,7 @@
   "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Rheinland-Pfalz und Saarland, Orkantief „Ilka“, Ausgabe 11:20 mit Folgeprognose bis 16.10. (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Kreisverwaltung Vulkaneifel (14.10.2026): Lagemeldung Nr. 4 an das Lagezentrum (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 07:00\n[Q3] A – Lagezentrum MdI Rheinland-Pfalz (14.10.2026): Lageübersicht Unwetter 13./14.10. (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30\n[Q4] B – Verteilnetzbetreiber Netzgebiet Eifel (14.10.2026): Störungs- und Wiederversorgungsmeldung (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q5] B – Mobilfunknetzbetreiber A (14.10.2026): Mitteilung an die Kreisverwaltung Vulkaneifel zu Standortausfällen (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 06:00\n[Q6] B – DB InfraGO, Regionalbereich Mitte (14.10.2026): Streckeninformation Eifelstrecke und linke Rheinstrecke (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 07:30",
   "sachverhalte": [
     {
+      "kennung": "DE-RP-20261014-4M2X",
       "eintritt": "2026-10-13",
       "art": ["Unwetter / Sturm", "Stromausfall / Blackout"],
       "ort": "Rheinland-Pfalz; Schwerpunkte Eifelkreis Bitburg-Prüm, Landkreis Vulkaneifel, Rhein-Hunsrück-Kreis, Westerwaldkreis",

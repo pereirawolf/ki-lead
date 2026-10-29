@@ -449,6 +449,15 @@ button.lb-kennzahl:hover {
   font-size: 0.82rem;
 }
 
+/* Kennung und Bezug unter der Bezeichnung (seit 0.6.9) */
+.lb-kennung {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
 .lb-lang {
   white-space: pre-line;
   min-width: 14rem;

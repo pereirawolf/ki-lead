@@ -255,6 +255,28 @@ textarea {
   font-weight: 700;
 }
 
+/* Sachverhaltskennung im Kopf und im Feld (seit 0.6.9) */
+.element-kennung {
+  font-size: 0.82rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--tinte-leise);
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.kennung-feld {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  align-items: center;
+}
+
+.kennung-feld input {
+  flex: 1 1 16rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .leer {
   color: var(--tinte-leise);
 }
@@ -759,6 +781,21 @@ textarea[aria-invalid="true"] {
 
 .quellen-baukasten > .knopf {
   align-self: flex-start;
+}
+
+/* Zeitstrahl auf der Seite „Quellen & Referenzen“ (seit 0.6.9) */
+.feld-zeitstrahl {
+  margin-top: 1.5rem;
+}
+
+.zeitstrahl-text {
+  min-height: 9rem;
+}
+
+.zeitstrahl-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
 }
 
 /* ── LEAD-Eingabehilfen (Analysefelder, Bewertungstext) ── */
