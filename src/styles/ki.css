@@ -128,6 +128,49 @@ details.ki-abschnitt summary,
   line-height: 1.6;
 }
 
+/* Kurzantwort in beschrifteten Zeilen (seit 0.6.8) */
+.kurzantwort-gegliedert {
+  white-space: normal;
+}
+
+.kurzantwort-zeile {
+  margin: 0 0 0.6rem;
+}
+
+.kurzantwort-zeile dt {
+  font-weight: 700;
+}
+
+.kurzantwort-zeile dd {
+  margin: 0.1rem 0 0;
+}
+
+.kurzantwort-zeile ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.kurzantwort-zeile li {
+  margin: 0.15rem 0;
+}
+
+.kurzantwort-kern dd {
+  font-size: 1.05rem;
+}
+
+.kurzantwort-dringend {
+  border-left: 4px solid var(--kritisch);
+  padding-left: 0.6rem;
+}
+
+.kurzantwort-dringend dt {
+  color: var(--kritisch);
+}
+
+.kurzantwort-leer {
+  margin: 0;
+}
+
 .fundstellen {
   margin: 0.5rem 0 0;
   padding-left: 1.2rem;

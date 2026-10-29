@@ -741,3 +741,12 @@ Angepasst: `tests/forschung/vergleichslauf-umfang.test.ts` erwartet für Sonnet 
 | Im echten Browser, breit und 390 px: vom Seitenende „Weiter“/„Zurück“, Anfang des Arbeitsbereichs unter dem Kopf | Meldung (breit / 390 px): „Weiter“ und „Zurück“ … | `tests/browser/sprungziele.spec.ts` (neu) |
 
 Angepasst ohne Änderung des Solls: `tests/support/dom.ts` ersetzt in `reactUmgebung()` das in jsdom fehlende `window.scrollTo` und zeichnet die Ziele auf (`scrollAufrufe()`).
+
+## Kurzantwort als Prüfauftrag (0.6.8, Rückmeldung des Herausgebers vom 29.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Erfassung 1.7.0: höchstens vier beschriftete Zeilen „Kernaussage“, „Bitte bestätigen“, „Lücken“, „Nicht übernommen“ in Vorgabe und Beispiel; Beispiel höchstens 120 Wörter; keine Leerzeilen, keine Wiederholung von Angaben der App, keine Kürzel S1, S2, t0 | Kurzantwort als Prüfauftrag (Erfassung 1.7.0 …): höchstens vier beschriftete Zeilen | `tests/profil/sop-redaktion.test.ts` (ersetzt „TP-2026-W44-32: die Kurzantwort der Erfassung besteht aus acht beschrifteten Zeilen“) |
+| Neue Form ohne Leerzeilen: nur eine Lücke mit „nicht zugänglich“ ergibt ohne Suche den Widerspruchshinweis | Erfassung 1.7.0: die Kurzantwort als Prüfauftrag ohne Leerzeilen … | `tests/pipeline/recherche-pflicht.test.ts` |
+| Gliederung der Kurzantwort: Folgezeilen, Leerangaben älterer Läufe, keine Beschriftung über vier Wörter, Punkte am Semikolon | Kurzantwort gliedern › … | `tests/ui/kurzantwort.test.ts` (neu) |
+| Anzeige: Beschreibungsliste, Kernaussage ungeteilt, Punkte als Liste, „Ohne Angabe“, „Dringend prüfen“ hervorgehoben, Fließtext als Absatz | Kurzantwort anzeigen › … | `tests/ui/kurzantwort.test.ts` (neu) |

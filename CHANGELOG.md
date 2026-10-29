@@ -78,6 +78,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.5 | letzter Commit des Pull Requests „Frontend: Barrierefreiheit, Feldprüfung, Zustandsschnitt, Leistung, Farbtoken aus dem Katalog; 0.6.5“ |
 | 0.6.6 | letzter Commit des Pull Requests „Management Summary: Laufzeile mit Dauer und Kosten, KI-Chip während der Erstellung; 0.6.6“ |
 | 0.6.7 | letzter Commit des Pull Requests „Sprungziele: neuer Inhalt beginnt oben, Fokus auf der neuen Überschrift; 0.6.7“ |
+| 0.6.8 | letzter Commit des Pull Requests „Kurzantwort der KI-Erfassung als Prüfauftrag; Profil 1.32.0; 0.6.8“ |
+
+## [0.6.8] – 29.10.2026
+
+Grundlage: Rückmeldung des Herausgebers vom 29.10.2026 zu einem Lauf der KI-Erfassung (Ebola-Ausbruch, Meldezeitpunkt 29.10.2026 21:22). Die „Kurzantwort der KI“ war zu ausführlich, unstrukturiert und richtete sich eher an die Technik als an die prüfende Person. Ursachen: Die Arbeitsanweisung Erfassung 1.6.0 verlangte acht feste Zeilen, auch leer („keine“), darunter Angaben, die die App selbst anzeigt (Suchzahlen, Pflichtsuchen, angewandte SOPs mit Fassung), Selbstauskünfte ohne Prüfwert und interne Kürzel; die App zeigte den Text als einen Absatz. Baut auf 0.6.7 auf.
+
+### Hinzugefügt
+
+- **Gegliederte Kurzantwort** (`src/ui/kiErfassung/Kurzantwort.tsx`): Der Schritt „Prüfung und Übergabe“ zeigt beschriftete Zeilen als Beschreibungsliste mit hervorgehobener Beschriftung, Punkte mit Semikolon als Liste (die Kernaussage bleibt ungeteilt), „Dringend prüfen“ hervorgehoben und Leerangaben älterer Läufe in einer Zeile „Ohne Angabe: …“. Text ohne Beschriftung (ältere Läufe, fremde Profile) bleibt ein Absatz. `LEERANGABE` aus `src/pipeline/recherchebefunde.ts` wird dafür exportiert.
+
+### Geändert
+
+- **Beispielprofil 1.32.0:** Arbeitsanweisung Erfassung 1.7.0 mit der Kurzantwort als Prüfauftrag in höchstens vier Zeilen („Kernaussage“, „Bitte bestätigen“, „Lücken“, „Nicht übernommen“), Sammelmappe 3.19.1 (nur Gültigkeitsstand); Einzelheiten im Profilverlauf.
+- Spezifikation 0.6.8 (Abschnitt S3), docs/TESTZUORDNUNG.md, README.
+- Versionsangaben 0.6.8 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 608, iOS 608).
+
+### Tests
+
+- `tests/ui/kurzantwort.test.ts` (neu, 8): Gliederung und Anzeige der Kurzantwort.
+- `tests/profil/sop-redaktion.test.ts`: Prüfauftrag mit höchstens vier Zeilen in Vorgabe und Beispiel, Längengrenze des Beispiels, keine Leerzeilen und Kürzel; ersetzt den Test der acht Zeilen (TP-2026-W44-32).
+- `tests/pipeline/recherche-pflicht.test.ts` (1 neu): Widerspruchshinweis auch bei der neuen Form ohne Leerzeilen.
 
 ## [0.6.7] – 29.10.2026
 

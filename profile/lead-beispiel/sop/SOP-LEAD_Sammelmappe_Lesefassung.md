@@ -58,10 +58,10 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.19.0 | 27.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.19.1 | 29.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.5.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln oder Quellenkategorien (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.31.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.6.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.7.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.1.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.4.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.1: `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 20.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |

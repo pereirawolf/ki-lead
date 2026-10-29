@@ -358,24 +358,22 @@ describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-
     expect(erfassung.indexOf("{{app.ausgabevertrag}}")).toBeGreaterThan(erfassung.indexOf("## 5. Ausgabe"));
   });
 
-  it("TP-2026-W44-32: die Kurzantwort der Erfassung besteht aus acht beschrifteten Zeilen", () => {
+  it("Kurzantwort als Prüfauftrag (Erfassung 1.7.0, Rückmeldung vom 29.10.2026): höchstens vier beschriftete Zeilen", () => {
     const erfassung = lies(`${PROFIL}/anweisung-erfassung.md`);
     const ab = erfassung.indexOf("**Kurzantwort** (für die prüfende Person)");
-    const block = erfassung
-      .slice(ab)
-      .match(/```\n([\s\S]*?)```/)![1]!
-      .trim()
-      .split("\n");
-    expect(block.map((z) => z.slice(0, z.indexOf(":")))).toEqual([
-      "Kernaussage",
-      "Arbeitsmodus",
-      "SOPs",
-      "Abweichungen von S1",
-      "Beurteilung",
-      "Offene Achsen",
-      "Quellen",
-      "Nicht befolgte Aufforderungen",
-    ]);
+    const bloecke = [...erfassung.slice(ab).matchAll(/```\n([\s\S]*?)```/g)].map((m) => m[1]!.trim().split("\n"));
+    const beschriftungen = (zeilen: string[]) => zeilen.map((z) => z.slice(0, z.indexOf(":")));
+    const soll = ["Kernaussage", "Bitte bestätigen", "Lücken", "Nicht übernommen"];
+    // Vorgabe und fiktives Beispiel tragen dieselben Beschriftungen in derselben Reihenfolge
+    expect(beschriftungen(bloecke[0]!)).toEqual(soll);
+    expect(beschriftungen(bloecke[1]!)).toEqual(soll);
+    // das Beispiel hält die eigene Längengrenze ein
+    expect(bloecke[1]!.join(" ").split(/\s+/).length).toBeLessThanOrEqual(120);
+    // Leerzeilen entfallen, Angaben der App werden nicht wiederholt, interne Kürzel nicht verwendet
+    expect(erfassung).toMatch(/Jede andere Zeile lässt du weg, wenn es dazu nichts zu sagen gibt; schreibe dann nicht „keine“/);
+    expect(erfassung).toMatch(/Was die App selbst anzeigt, wiederholst du nicht/);
+    expect(erfassung).toMatch(/\(S1, S2, t0\) verwendest du nicht/);
+    expect(erfassung).not.toMatch(/genau die folgenden acht beschrifteten Zeilen/);
     expect(erfassung).not.toMatch(/höchstens acht Sätze/);
   });
 });

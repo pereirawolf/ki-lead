@@ -87,7 +87,7 @@ export function primaerquelleBelegt(
 const KURZANTWORT_RECHERCHE = /nicht zugänglich|nicht erreichbar|(?<!nicht )recherchiert|Recherche ergab|Websuche ergab/i;
 
 /** Leerangabe einer beschrifteten Angabe („nicht zugängliche Prüffragen: keine“) */
-const LEERANGABE = /^(keine|keiner|keines|nein|–|-|entfällt|nicht zutreffend)\.?$/i;
+export const LEERANGABE = /^(keine|keiner|keines|nein|–|-|entfällt|nicht zutreffend)\.?$/i;
 
 /**
  * Ob die Kurzantwort Recherche oder geprüfte Unzugänglichkeit behauptet. Seit 0.6.4 (TP-2026-W44-32) gibt die

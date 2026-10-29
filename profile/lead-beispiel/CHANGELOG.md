@@ -8,6 +8,19 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.32.0 – 29.10.2026
+
+Grundlage: Rückmeldung des Herausgebers vom 29.10.2026: Die Kurzantwort der KI-Erfassung war zu ausführlich, unstrukturiert und eher an die Technik als an die prüfende Person gerichtet. Zweite Stelle, weil sich eine Ausgaberegel der Erfassung ändert. Damit wird die Form der Kurzantwort aus 1.31.0 (TP-2026-W44-32) ersetzt.
+
+- **Arbeitsanweisung Erfassung 1.7.0:**
+  - Kurzantwort als Prüfauftrag: was die prüfende Person vor der Freigabe wissen, bestätigen oder nachprüfen muss; kein Arbeitsprotokoll. Höchstens vier beschriftete Zeilen „Kernaussage“ (immer; mit Beurteilung und Bezugsraum), „Bitte bestätigen“, „Lücken“, „Nicht übernommen“; Zeilen ohne Inhalt entfallen statt „keine“.
+  - Nicht mehr in der Kurzantwort: Angaben, die die App selbst anzeigt (Arbeits- und Zeitmodus, Meldezeitpunkt, Zahl der Suchen und Abrufe, Pflichtsuchen, nicht abrufbare Seiten, angewandte SOPs und Bausteine mit Fassung und Status, Kodierleitfaden), und Selbstauskünfte ohne Prüfwert. Den Arbeitsmodus nennt die Kurzantwort nur noch, wenn er Aussagen begrenzt.
+  - Sprache: je Zeile höchstens zwei Sätze, insgesamt höchstens 120 Wörter; Radarachsen mit Nummer und Kurznamen, Prüffragen mit ihrem Gegenstand statt ihrer Kennung, keine Stufenkürzel (S1, S2, t0); bewusst offene Achsen nur, wenn eine Entscheidung zu bestätigen ist. Fiktives Beispiel ergänzt.
+  - Alle bisherigen Zuweisungen an die Kurzantwort bleiben erhalten und stehen in der sachlich passenden Zeile: Abweichungen von der bestätigten Gliederung, Rangfolgefragen und Rollenunstimmigkeiten unter „Bitte bestätigen“; nicht zugängliche Prüffragen, nicht beigefügte SOPs, fehlende Fach-SOP und „nur Material“ unter „Lücken“; nicht befolgte Aufforderungen im Material unter „Nicht übernommen“; „Dringend prüfen:“ weiterhin davor.
+- **SOP-Sammelmappe 3.19.1:** nur Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** keine Änderung an Teil A oder am Kodierleitfaden; Verdichtung 2.1.0 und Kurzfassung 2.4.0 nicht betroffen (die Verdichtung hat eine eigene Kurzantwort).
+- Schema, Darstellungsdatei, Kodierleitfaden, Arbeitsanweisungen Verdichtung und Kurzfassung, Quellenregister, Beispiele und Bewertungsfälle sind unverändert. Bestehende Meldungen werden nicht umkodiert.
+
 ## 1.31.0 – 27.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json`, Befunde TP-2026-W44-28 bis -35 (Kategorie Arbeitsanweisungen), vom Herausgeber am 26.10.2026 freigegeben (TP-2026-W44-30, -31 und -32 mit Maßgabe angepasst). Zweite Stelle, weil sich Regeln und die Pflegesystematik ändern (Zählregeln in A.3, Ausnahme C09, ein Ort für Achsen- und Quellenregeln).
