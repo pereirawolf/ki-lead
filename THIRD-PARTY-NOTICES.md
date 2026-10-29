@@ -60,7 +60,7 @@ Einbindung:
 | `lie` | 3.3.0 | MIT | MIT | Calvin Metcalf, Jordan Harband | im JSZip-Bundle |
 | `linkify-it` | 6.1.0 | MIT | MIT | Vitaly Puzrin | Web-Build |
 | `loose-envify` | 1.4.0 | MIT | MIT | Andres Suarez | nicht ausgeliefert |
-| `markdown-it` | 15.0.2 | MIT | MIT | Vitaly Puzrin, Alex Kocharin | Web-Build |
+| `markdown-it` | 15.0.3 | MIT | MIT | Vitaly Puzrin, Alex Kocharin | Web-Build |
 | `mdurl` | 2.1.0 | MIT | MIT | Vitaly Puzrin, Alex Kocharin | Web-Build |
 | `pako` | 2.2.0 | (MIT AND Zlib) | MIT AND Zlib | Vitaly Puzrin, Andrei Tuputcyn | Web-Build |
 | `performance-now` | 2.1.0 | MIT | MIT | Braveg1rl | nachgeladen |
