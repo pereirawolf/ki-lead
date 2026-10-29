@@ -20,8 +20,14 @@ import {
 import { APP_KENNUNG } from "../kern/version";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
-import { Lesetext } from "./Lesetext";
+import { nachladbar } from "./nachladen";
+
+// Lesetext mit markdown-it als eigener Teil des Builds (seit 0.6.5, TP-2026-W44-18)
+const LesetextTeil = nachladbar(() => import("./Lesetext").then((m) => m.Lesetext));
+const Lesetext = LesetextTeil.Komponente;
 import { exportStempel, mitDatum } from "../kern/ausgabe";
+import { scrollVerhalten } from "./bewegung";
+import { bestaetigen } from "./bestaetigung";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -47,7 +53,7 @@ function bereichOeffnen(id: string) {
   if (!el) return;
   for (let p: HTMLElement | null = el; p; p = p.parentElement) if (p instanceof HTMLDetailsElement) p.open = true;
   const summary = el.querySelector<HTMLElement>(":scope > summary");
-  (summary || el).scrollIntoView({ block: "start", behavior: "smooth" });
+  (summary || el).scrollIntoView({ block: "start", behavior: scrollVerhalten() });
   summary?.focus({ preventScroll: true });
 }
 
@@ -444,7 +450,7 @@ function Menue({ text, label, klasse, eintraege }: { text: string; label?: strin
 function abschnittZeigen(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ block: "start", behavior: "smooth" });
+  el.scrollIntoView({ block: "start", behavior: scrollVerhalten() });
   el.focus({ preventScroll: true });
 }
 
@@ -504,7 +510,10 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
       let erg = await importieren(dateien);
       if (
         erg.konflikt &&
-        confirm(`${erg.befunde[0]?.text}\n\nTrotzdem ersetzen? Der bisherige Stand wird im Gerät archiviert, damit ältere Läufe nachvollziehbar bleiben.`)
+        (await bestaetigen(
+          `${erg.befunde[0]?.text}\n\nTrotzdem ersetzen? Der bisherige Stand wird im Gerät archiviert, damit ältere Läufe nachvollziehbar bleiben.`,
+          { ja: "Ersetzen" },
+        ))
       )
         erg = await importieren(dateien, true);
       setBericht(erg);
@@ -629,7 +638,14 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                         },
                       },
                       ...(p.quelle === "importiert"
-                        ? [{ text: "Entfernen", aktion: () => confirm(`Profil „${m?.name || p.schluessel}“ entfernen?`) && loeschen(p.schluessel) }]
+                        ? [
+                            {
+                              text: "Entfernen",
+                              aktion: async () => {
+                                if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
+                              },
+                            },
+                          ]
                         : []),
                     ]}
                   />

@@ -1,8 +1,8 @@
 // Auflösen, Prüfen und Anwenden der Farbschemata. Reine Funktionen bis auf anwenden(); Profilwerte erreichen das
 // Dokument nur als geprüfte #RRGGBB-Werte erlaubter Rollen (keine CSS-Texte, keine Selektoren).
 
-import { FARBSCHEMAS } from "./katalog";
-import { UI_TOKENS, type AufgeloestesThema, type FarbschemaEintrag, type ProfilFarbschema, type SemantikBasis, type UiToken } from "./typen";
+import { FARBSCHEMAS } from "./katalog.ts";
+import { UI_TOKENS, type AufgeloestesThema, type FarbschemaEintrag, type ProfilFarbschema, type SemantikBasis, type UiToken } from "./typen.ts";
 
 export const AUTOMATISCH = "automatisch";
 export const PROFIL = "profil";

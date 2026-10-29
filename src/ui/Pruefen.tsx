@@ -12,26 +12,63 @@ import type { Befund, Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten } from "../speicher/speicher";
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
+import { rangBeurteilung } from "../lagebild/lagebild";
+import { bestaetigen } from "./bestaetigung";
 
-function Liste({ titel, eintraege, art }: { titel: string; eintraege: string[]; art: "fehler" | "hinweis" | "ok" }) {
+/** Liste der Befunde; mit Pfad und `zumFeld` führt ein Befund per Klick zum Feld (seit 0.6.5, TP-2026-W44-15) */
+function Liste({
+  titel,
+  eintraege,
+  art,
+  zumFeld,
+}: {
+  titel: string;
+  eintraege: { text: string; pfad?: string }[];
+  art: "fehler" | "hinweis" | "ok";
+  zumFeld?: (pfad: string) => void;
+}) {
   if (!eintraege.length) return null;
   return (
     <div className={`kasten kasten-${art}`}>
       <h3>{titel}</h3>
       <ul>
-        {eintraege.map((t, i) => (
-          <li key={i}>{t}</li>
+        {eintraege.map((b, i) => (
+          <li key={i}>
+            {b.pfad && zumFeld ? (
+              <button type="button" className="befund-sprung" onClick={() => zumFeld(b.pfad!)}>
+                {b.text}
+              </button>
+            ) : (
+              b.text
+            )}
+          </li>
         ))}
       </ul>
     </div>
   );
 }
 
-export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Meldung; teil: "pruefung" | "ausgabe" }) {
+export function Pruefen({
+  profil,
+  meldung,
+  teil,
+  befunde,
+  zumFeld,
+}: {
+  profil: Profil;
+  meldung: Meldung;
+  teil: "pruefung" | "ausgabe";
+  /** Schema- und Pflichtbefunde, wenn die Meldungsmaske sie schon berechnet hat (seit 0.6.5) */
+  befunde?: { schema: { pfad?: string; text: string }[]; pflicht: Befund[] };
+  /** Vom Befund zum Feld (Schritt wechseln, Feld fokussieren) */
+  zumFeld?: (pfad: string) => void;
+}) {
   const r = profil.ui.rollen;
   const alsFinal = useMemo(() => ({ ...meldung, [r.status_feld]: r.status_final }), [meldung, r]);
-  const schemaBefunde = useMemo(() => pruefeGegenSchema(profil.schema, alsFinal, profil.ui), [profil, alsFinal]);
-  const pflicht = useMemo(() => pflichtHinweise(meldung, profil.ui), [profil, meldung]);
+  const eigeneSchema = useMemo(() => (befunde ? null : pruefeGegenSchema(profil.schema, alsFinal, profil.ui)), [befunde, profil, alsFinal]);
+  const eigenePflicht = useMemo(() => (befunde ? null : pflichtHinweise(meldung, profil.ui)), [befunde, profil, meldung]);
+  const schemaBefunde = befunde?.schema ?? eigeneSchema ?? [];
+  const pflicht = befunde?.pflicht ?? eigenePflicht ?? [];
   const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui), [profil, meldung]);
   const ent = r.entstehung_feld ? meldung[r.entstehung_feld] : undefined;
   const svs = sachverhalte(meldung, profil.ui);
@@ -40,16 +77,17 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
   const elementName = feldUi(profil.ui, r.sachverhalte).element_label || "Eintrag";
 
   /** Gemeinsame Freigabeprüfung für finale JSON- und PDF-Ausgaben */
-  const finalFreigeben = (final: boolean): boolean =>
+  const finalFreigeben = async (final: boolean): Promise<boolean> =>
     !final ||
     !schemaBefunde.length ||
-    confirm(
+    bestaetigen(
       `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft.\n\nTrotzdem final ausgeben?`,
+      { ja: "Trotzdem final ausgeben" },
     );
-  const exportiere = (final: boolean) => {
+  const exportiere = async (final: boolean) => {
     const jetzt = new Date();
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
-    if (!finalFreigeben(final)) return;
+    if (!(await finalFreigeben(final))) return;
     dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final, jetzt) + ".json", "application/json");
   };
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
@@ -57,7 +95,7 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
     setPdfFehler(null);
     // Exportzeitpunkt vor dem Nachladen der PDF-Ausgabe festhalten (Rückfall, wenn kein Meldezeitpunkt angegeben ist)
     const jetzt = new Date();
-    if (!finalFreigeben(final)) return;
+    if (!(await finalFreigeben(final))) return;
     const daten = { ...meldung, [r.status_feld]: final ? r.status_final : r.status_entwurf };
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
@@ -67,7 +105,6 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
       setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || String(e)}). Die Meldung lässt sich weiterhin als JSON speichern.`);
     }
   };
-  const text = (b: Befund[]) => b.map((x) => x.text);
 
   if (teil === "ausgabe")
     return (
@@ -116,15 +153,15 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
       )}
 
       {schemaBefunde.length ? (
-        <Liste titel={`Schemaprüfung als finale Meldung: ${schemaBefunde.length} Abweichung(en)`} eintraege={schemaBefunde.map((b) => b.text)} art="fehler" />
+        <Liste titel={`Schemaprüfung als finale Meldung: ${schemaBefunde.length} Abweichung(en)`} eintraege={schemaBefunde} art="fehler" zumFeld={zumFeld} />
       ) : (
         <div className="kasten kasten-ok">
           <h3>Schemaprüfung bestanden</h3>
           <p>Die Meldung entspricht dem Schema {profil.manifest.meldung.schema_id}, auch als finale Meldung. Inhaltliche Richtigkeit prüft das Schema nicht.</p>
         </div>
       )}
-      <Liste titel="Pflichtangaben" eintraege={text(pflicht)} art="fehler" />
-      <Liste titel="Ausfüllhinweise (keine Pflichtangaben)" eintraege={text(hinweise)} art="hinweis" />
+      <Liste titel="Pflichtangaben" eintraege={pflicht} art="fehler" zumFeld={zumFeld} />
+      <Liste titel="Ausfüllhinweise (keine Pflichtangaben)" eintraege={hinweise} art="hinweis" zumFeld={zumFeld} />
 
       <h3 className="abschnitt">Übersicht</h3>
       <div className="uebersicht">
@@ -132,7 +169,7 @@ export function Pruefen({ profil, meldung, teil }: { profil: Profil; meldung: Me
           const b = r.sv_beurteilung ? String(holeWert(sv, r.sv_beurteilung) || "") : "";
           const t = r.sv_tendenz ? String(holeWert(sv, r.sv_tendenz) || "") : "";
           return (
-            <article key={i} className={`zeile-sv stufe-${b.toLowerCase().replace(/[^a-zäöüß]/g, "") || "leer"}`}>
+            <article key={i} className="zeile-sv" data-rang={rangBeurteilung(profil, b)}>
               {radarDef && r.sv_radar && <RadarGrafik def={radarDef} wert={holeWert(sv, r.sv_radar)} groesse={150} />}
               <div>
                 <p className="element-nr">

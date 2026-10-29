@@ -12,6 +12,10 @@ import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
+import { FeldFehler, HilfeFeld } from "./HilfeFeld";
+import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
+import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
+import { bestaetigen } from "./bestaetigung";
 
 export interface FeldProps {
   profil: Profil;
@@ -44,21 +48,41 @@ export function Feld(props: FeldProps) {
   const eingabehilfe = useContext(EingabehilfeKontext);
   const t = typen(k);
   const e = enumWerte(k);
+  // Befunde und Pflichtkennzeichen am Feld (seit 0.6.5, TP-2026-W44-15)
+  const schluessel = feldSchluessel(segs);
+  const fehler = useContext(FeldBefundeKontext)?.befunde.get(schluessel);
+  const fehlerId = fehler?.length ? `${id}-fehler` : undefined;
+  const pflicht = !!f.pflicht;
+  const labelKlasse = pflicht ? "feld-label pflicht" : "feld-label";
+  const fehlerText = fehlerId && fehler ? <FeldFehler id={fehlerId} texte={fehler} /> : null;
 
   if (f.widget === "radar") {
     const def = radarFuer(profil.ui, f);
     if (!def) return <p className="fehlertext">Radar „{f.radar}“ ist in der Darstellungsdatei nicht definiert.</p>;
     return (
-      <div className="feld">
-        <div className="feld-label">{label}</div>
+      <div className="feld" data-feld={schluessel}>
+        <div className={labelKlasse}>{label}</div>
         <Hinweis text={f.hinweis} />
         <RadarFeld def={def} wert={wert} idPraefix={id} onChange={(neu) => setze(segs, neu)} />
+        {fehlerText}
       </div>
     );
   }
 
   if (f.widget === "quellen") {
-    return <QuellenFeld profil={profil} label={label} hinweis={f.hinweis} zeilen={f.zeilen} wert={String(wert ?? "")} onChange={(v) => setze(segs, v)} />;
+    return (
+      <QuellenFeld
+        profil={profil}
+        label={label}
+        pflicht={pflicht}
+        fehler={fehler}
+        feld={schluessel}
+        hinweis={f.hinweis}
+        zeilen={f.zeilen}
+        wert={String(wert ?? "")}
+        onChange={(v) => setze(segs, v)}
+      />
+    );
   }
 
   // Liste von Objekten (z. B. Sachverhalte)
@@ -68,8 +92,8 @@ export function Feld(props: FeldProps) {
     if (itemEnum) {
       const gewaehlt: unknown[] = Array.isArray(wert) ? wert : [];
       return (
-        <fieldset className="feld feld-mehrfach">
-          <legend className="feld-label">{label}</legend>
+        <fieldset className="feld feld-mehrfach" aria-describedby={fehlerId} data-feld={schluessel}>
+          <legend className={labelKlasse}>{label}</legend>
           <Hinweis text={f.hinweis} />
           <div className="mehrfach">
             {itemEnum.map((opt) => {
@@ -82,6 +106,7 @@ export function Feld(props: FeldProps) {
               );
             })}
           </div>
+          {fehlerText}
         </fieldset>
       );
     }
@@ -109,10 +134,20 @@ export function Feld(props: FeldProps) {
     const optionen = e.filter((x) => x !== "" && x !== null);
     const hatLeer = e.includes("") || e.includes(null);
     if (f.widget === "radio") {
+      // Farbe der gewählten Bewertung nach Rang bzw. Tendenz statt nach dem Wort (seit 0.6.5, TP-2026-W44-16)
+      const r = profil.ui.rollen;
+      const rolle =
+        r.sv_beurteilung && gen === `${r.sachverhalte}[].${r.sv_beurteilung}`
+          ? "beurteilung"
+          : r.sv_tendenz && gen === `${r.sachverhalte}[].${r.sv_tendenz}`
+            ? "tendenz"
+            : null;
+      const signal = (opt: unknown) =>
+        rolle === "beurteilung" ? { "data-rang": rangBeurteilung(profil, opt) } : rolle === "tendenz" ? { "data-tendenz": signalTendenz(profil, opt) } : {};
       return (
-        <fieldset className="feld">
-          <legend className="feld-label">{label}</legend>
-          <div className="segmente" role="radiogroup">
+        <fieldset className="feld" data-feld={schluessel}>
+          <legend className={labelKlasse}>{label}</legend>
+          <div className="segmente" role="radiogroup" aria-invalid={fehlerId ? true : undefined} aria-describedby={fehlerId}>
             {hatLeer && (
               <label className={wert === "" || wert === null || wert === undefined ? "segment an" : "segment"}>
                 <input
@@ -125,74 +160,70 @@ export function Feld(props: FeldProps) {
               </label>
             )}
             {optionen.map((opt) => (
-              <label
-                key={String(opt)}
-                className={
-                  wert === opt
-                    ? `segment an wert-${String(opt)
-                        .toLowerCase()
-                        .replace(/[^a-zäöüß]/g, "")}`
-                    : "segment"
-                }
-              >
+              <label key={String(opt)} className={wert === opt ? "segment an" : "segment"} {...(wert === opt ? signal(opt) : {})}>
                 <input type="radio" name={id} checked={wert === opt} onChange={() => setze(segs, opt)} />
                 {String(opt)}
               </label>
             ))}
           </div>
+          {fehlerText}
           <Hinweis text={f.hinweis} />
         </fieldset>
       );
     }
     return (
-      <div className="feld">
-        <label className={f.pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-          {label}
-        </label>
-        {/* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */}
-        <select
-          id={id}
-          value={optionen.findIndex((o) => o === wert) >= 0 ? String(optionen.findIndex((o) => o === wert)) : ""}
-          onChange={(ev) => setze(segs, ev.target.value === "" ? (e.includes("") ? "" : null) : optionen[Number(ev.target.value)])}
-        >
-          {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
-          {optionen.map((opt, i) => (
-            <option key={String(opt)} value={String(i)}>
-              {String(opt)}
-            </option>
-          ))}
-        </select>
-        <Hinweis text={f.hinweis} />
-      </div>
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
+        {(a) => (
+          /* Auswahl über den Index, damit Zahlen und Wahrheitswerte ihren Typ behalten */
+          <select
+            {...a}
+            value={optionen.findIndex((o) => o === wert) >= 0 ? String(optionen.findIndex((o) => o === wert)) : ""}
+            onChange={(ev) => setze(segs, ev.target.value === "" ? (e.includes("") ? "" : null) : optionen[Number(ev.target.value)])}
+          >
+            {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
+            {optionen.map((opt, i) => (
+              <option key={String(opt)} value={String(i)}>
+                {String(opt)}
+              </option>
+            ))}
+          </select>
+        )}
+      </HilfeFeld>
     );
   }
 
   if (t.includes("boolean")) {
     if (t.includes("null")) {
       return (
-        <div className="feld">
-          <label className="feld-label" htmlFor={id}>
-            {label}
-          </label>
-          <select
-            id={id}
-            value={wert === true ? "ja" : wert === false ? "nein" : ""}
-            onChange={(ev) => setze(segs, ev.target.value === "" ? null : ev.target.value === "ja")}
-          >
-            <option value="">{f.leer_label || "keine Angabe"}</option>
-            <option value="ja">ja</option>
-            <option value="nein">nein</option>
-          </select>
-          <Hinweis text={f.hinweis} />
-        </div>
+        <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
+          {(a) => (
+            <select
+              {...a}
+              value={wert === true ? "ja" : wert === false ? "nein" : ""}
+              onChange={(ev) => setze(segs, ev.target.value === "" ? null : ev.target.value === "ja")}
+            >
+              <option value="">{f.leer_label || "keine Angabe"}</option>
+              <option value="ja">ja</option>
+              <option value="nein">nein</option>
+            </select>
+          )}
+        </HilfeFeld>
       );
     }
     return (
-      <div className="feld">
+      <div className="feld" data-feld={schluessel}>
         <label className="schalter" htmlFor={id}>
-          <input id={id} type="checkbox" checked={wert === true} onChange={(ev) => setze(segs, ev.target.checked)} />
+          <input
+            id={id}
+            type="checkbox"
+            checked={wert === true}
+            aria-invalid={fehlerId ? true : undefined}
+            aria-describedby={fehlerId}
+            onChange={(ev) => setze(segs, ev.target.checked)}
+          />
           <span>{label}</span>
         </label>
+        {fehlerText}
         <Hinweis text={f.hinweis} />
       </div>
     );
@@ -200,52 +231,59 @@ export function Feld(props: FeldProps) {
 
   if (t.includes("integer") || t.includes("number")) {
     return (
-      <div className="feld">
-        <label className="feld-label" htmlFor={id}>
-          {label}
-        </label>
-        <input
-          id={id}
-          type="number"
-          inputMode="numeric"
-          value={wert ?? ""}
-          onChange={(ev) => setze(segs, ev.target.value === "" ? (t.includes("null") ? null : 0) : Number(ev.target.value))}
-        />
-        <Hinweis text={f.hinweis} />
-      </div>
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} hilfeNach pflicht={pflicht} fehler={fehler}>
+        {(a) => (
+          <input
+            {...a}
+            type="number"
+            inputMode="numeric"
+            value={wert ?? ""}
+            onChange={(ev) => setze(segs, ev.target.value === "" ? (t.includes("null") ? null : 0) : Number(ev.target.value))}
+          />
+        )}
+      </HilfeFeld>
     );
   }
 
   const widget = f.widget || "text";
+  const text = typeof wert === "string" ? wert : alsText(wert);
   const gemeinsam = {
-    id,
-    value: typeof wert === "string" ? wert : alsText(wert),
+    value: text,
     placeholder: f.platzhalter,
     onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value),
   };
   return (
-    <div className={widget === "text_lang" ? "feld feld-lang" : "feld"}>
-      <label className={f.pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-        {label}
-      </label>
-      {widget === "text_lang" ? (
-        <textarea {...gemeinsam} rows={f.zeilen || 5} />
-      ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
-        <DatumZeit
-          id={id}
-          label={label}
-          name={zugaenglicherName(profil, gen, label)}
-          modus={widget}
-          wert={wert}
-          zeitzone={profil.manifest.variablen?.zeitzone}
-          onChange={(v) => setze(segs, v)}
-        />
-      ) : (
-        <input {...gemeinsam} type="text" />
-      )}
-      <Hinweis text={f.hinweis} />
-      {eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={gemeinsam.value} />}
-    </div>
+    <HilfeFeld
+      id={id}
+      feld={schluessel}
+      lang={widget === "text_lang"}
+      label={label}
+      hilfe={f.hinweis}
+      hilfeNach
+      pflicht={pflicht}
+      fehler={fehler}
+      nach={eingabehilfe && widget === "text_lang" && <EingabehilfenFuer profil={profil} gen={gen} segs={segs} label={label} textId={id} wert={text} />}
+    >
+      {(a) =>
+        widget === "text_lang" ? (
+          <textarea {...a} {...gemeinsam} rows={f.zeilen || 5} />
+        ) : widget === "datum" || widget === "datumzeit" || widget === "datum_uhrzeit" ? (
+          <DatumZeit
+            id={id}
+            beschreibung={a["aria-describedby"]}
+            ungueltig={!!a["aria-invalid"]}
+            label={label}
+            name={zugaenglicherName(profil, gen, label)}
+            modus={widget}
+            wert={wert}
+            zeitzone={profil.manifest.variablen?.zeitzone}
+            onChange={(v) => setze(segs, v)}
+          />
+        ) : (
+          <input {...a} {...gemeinsam} type="text" />
+        )
+      }
+    </HilfeFeld>
   );
 }
 
@@ -281,9 +319,9 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const istSachverhalte = gen === r.sachverhalte;
 
   const hinzufuegen = () => setze(segs, [...liste, leererWert(k.items, profil.schema)]);
-  const entfernen = (i: number) => {
+  const entfernen = async (i: number) => {
     const titel = f.titel_feld ? alsText(holeWert(liste[i], f.titel_feld)) : "";
-    if (!confirm(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`)) return;
+    if (!(await bestaetigen(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`, { ja: "Entfernen" }))) return;
     setze(
       segs,
       liste.filter((_, j) => j !== i),
@@ -296,7 +334,12 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
         const titel = f.titel_feld ? alsText(holeWert(el, f.titel_feld)) : "";
         const beurteilung = istSachverhalte && r.sv_beurteilung ? String(holeWert(el, r.sv_beurteilung) || "") : "";
         return (
-          <section key={i} className={`element stufe-${beurteilung.toLowerCase().replace(/[^a-zäöüß]/g, "") || "leer"}`} aria-label={`${elementName} ${i + 1}`}>
+          <section
+            key={i}
+            className="element"
+            data-rang={istSachverhalte ? rangBeurteilung(profil, beurteilung) : undefined}
+            aria-label={`${elementName} ${i + 1}`}
+          >
             <header className="element-kopf">
               <h3>
                 <span className="element-nr">
@@ -304,7 +347,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
                 </span>
                 <span className="element-titel">{titel || "ohne Bezeichnung"}</span>
               </h3>
-              <button type="button" className="knopf leise" onClick={() => entfernen(i)}>
+              <button type="button" className="knopf leise" aria-label={`${elementName} ${i + 1} entfernen`} onClick={() => entfernen(i)}>
                 Entfernen
               </button>
             </header>

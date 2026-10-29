@@ -61,8 +61,9 @@ test("S1 + S2 + S3: zwei Läufe mit der Vorgabe Anthropic, ZIP-Datei und Eintrag
   const nochmal = page.waitForEvent("download");
   await archiv.getByRole("button", { name: `ZIP herunterladen: ${datei.suggestedFilename()}` }).click();
   expect((await nochmal).suggestedFilename()).toBe(datei.suggestedFilename());
-  page.on("dialog", (d) => d.accept());
   await archiv.getByRole("button", { name: "Alle löschen" }).click();
+  // Rückfrage im eigenen Dialog der App (seit 0.6.5, TP-2026-W44-20; bis 0.6.4 window.confirm)
+  await page.getByRole("dialog").getByRole("button", { name: "Löschen" }).click();
   await expect(archiv.getByText("Noch keine Testläufe archiviert.")).toBeVisible();
 });
 

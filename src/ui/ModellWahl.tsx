@@ -4,7 +4,7 @@
 // KI-Profil je Lauf, Recherchetiefe mit allen drei Werten wie unter „Recherche & Grenzen“, Schätzung je Stufe,
 // Hinweis auf zusätzliche Anbieter, Kennzeichnung abweichender Felder und Zurücksetzen.
 
-import { useId, useState, type ReactNode } from "react";
+import { memo, useId, useState, type ReactNode } from "react";
 import type { Aufwand } from "../anbieter/typen";
 import { ANBIETER_IDS, ANBIETER_NAME, anbieterVon, bekannterAnbieter, hatSchluessel, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import {
@@ -86,7 +86,7 @@ const profilTitel = (p: AnbieterId | MixId) => (istMix(p) ? MIX_PROFILE[p].titel
 const aufwandTitel = (a: Aufwand) => AUFWAND_STUFEN.find((x) => x.id === a)?.titel || a;
 const rechercheWerte = (e: RechercheWerte): RechercheWerte => ({ websucheMax: e.websucheMax, abrufMax: e.abrufMax, abrufMaxTokens: e.abrufMaxTokens });
 
-export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, onChange, deaktiviert, websuche, kopf, children, zuEinstellungen }: Props) {
+function ModellWahlBlock({ stufen, einstellungen, profil, schluessel, wahl, onChange, deaktiviert, websuche, kopf, children, zuEinstellungen }: Props) {
   const id = useId();
   const [profilKlick, setProfilKlick] = useState<ProfilWahl | null>(null);
   const [eigenGewaehlt, setEigenGewaehlt] = useState(false);
@@ -499,3 +499,6 @@ export function ModellWahl({ stufen, einstellungen, profil, schluessel, wahl, on
     </div>
   );
 }
+
+/** Neu gezeichnet nur bei geänderten Angaben (seit 0.6.5, TP-2026-W44-18) */
+export const ModellWahl = memo(ModellWahlBlock);

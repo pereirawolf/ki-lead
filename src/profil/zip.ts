@@ -1,10 +1,10 @@
 // Import und Export von Profilpaketen als ZIP (Endung .leadprofil oder .zip) bzw. als Dateiauswahl.
 
-import JSZip from "jszip";
-
 const TEXT = /\.(json|md|txt|yaml|yml)$/i;
 
 export async function ausZip(daten: ArrayBuffer | Blob): Promise<Record<string, string>> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = await JSZip.loadAsync(daten);
   const out: Record<string, string> = {};
   const eintraege = Object.values(zip.files).filter((f) => !f.dir && TEXT.test(f.name));
@@ -28,6 +28,8 @@ export async function ausDateiliste(liste: FileList | File[]): Promise<Record<st
 }
 
 export async function alsZip(dateien: Record<string, string>, ordner: string): Promise<Blob> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   const wurzel = zip.folder(ordner)!;
   for (const [pfad, text] of Object.entries(dateien)) wurzel.file(pfad, text);

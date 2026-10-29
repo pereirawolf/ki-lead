@@ -1,0 +1,422 @@
+/* KI-Erfassung: Material, Laufanzeige, Ergebnis, frühere Läufe, Orientierung und Suchbegriffe, Vergleich mit
+   Referenzfassung, SOP-Auswahl, Modellwahl je Lauf.
+   Seit 0.6.5 (TP-2026-W44-19) eigene Datei; eingebunden über src/styles.css. */
+
+.materialliste {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.materialliste li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.material-name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.material-meta {
+  color: var(--tinte-leise);
+  font-size: 0.85rem;
+}
+
+.materialliste .knopf {
+  margin-left: auto;
+}
+
+.bestaetigung {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--amt);
+  border-radius: var(--r-klein);
+  background: var(--amt-zart);
+  cursor: pointer;
+}
+
+.bestaetigung input {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  margin-top: 0.15rem;
+  accent-color: var(--auswahl-rand);
+}
+
+.laufanzeige {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.puls {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--amt);
+  animation: puls 1.4s ease-in-out infinite;
+}
+
+@keyframes puls {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+.ereignisse {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-klein);
+  background: var(--papier);
+  font-size: 0.9rem;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.ereignisse li {
+  padding: 0.2rem 0;
+  overflow-wrap: anywhere;
+}
+
+.ereignisse time {
+  color: var(--tinte-leise);
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.5rem;
+}
+
+.ki-abschnitt {
+  margin: 1.25rem 0 0;
+}
+
+.ki-abschnitt h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+}
+
+details.ki-abschnitt summary,
+.frueher summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.35rem 0;
+}
+
+.kurzantwort {
+  white-space: pre-wrap;
+  margin: 0;
+  max-width: 78ch;
+  line-height: 1.6;
+}
+
+.fundstellen {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.fundstellen li {
+  margin: 0.25rem 0;
+  overflow-wrap: anywhere;
+}
+
+.fundstellen a {
+  color: var(--link);
+}
+
+.frueher {
+  margin-top: 1.5rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+.frueher-sammel {
+  margin-top: 0.25rem;
+}
+
+.ki .schritt {
+  cursor: default;
+}
+
+/* Orientierung und Suchbegriffe im Bestätigungsschritt (seit 0.6.0) */
+.suchbegriff {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .suchbegriff {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.orientierung-treffer {
+  margin: 0.25rem 0 0.75rem 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.recherche-null {
+  color: var(--kritisch);
+}
+
+/* ── Vergleich mit Referenzfassung ────────────────── */
+.vg-kennzahlen {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+}
+
+.vg-paar {
+  border-top: 1px solid var(--linie-zart);
+  padding-top: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.vg-titel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+
+.vg-achsen td,
+.vg-achsen th {
+  text-align: center;
+}
+
+.vg-achsen tbody th {
+  text-align: left;
+}
+
+.vg-diff {
+  display: inline-block;
+  min-width: 1.8rem;
+  border-radius: var(--r-klein);
+  font-weight: 700;
+}
+
+.vg-gleich {
+  background: var(--ok-zart);
+  color: var(--ok);
+}
+
+.vg-nah {
+  background: var(--gering-zart);
+  color: var(--gering);
+}
+
+.vg-weit {
+  background: var(--kritisch-zart);
+  color: var(--kritisch);
+}
+
+.vg-offen {
+  color: var(--tinte-leise);
+}
+
+@media (max-width: 640px) {
+  .vg-titel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vg-wahl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.vg-wahl select {
+  max-width: 100%;
+}
+
+/* SOP-Auswahl und SOP-Katalog: Gliederung nach Dach-SOPs und Bausteinen */
+.sop-gruppe {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.sop-gruppe-titel {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+.sop-status {
+  margin-left: 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: var(--r-klein);
+  padding: 0 0.3rem;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.sop-details,
+.sop-katalog details {
+  margin-top: 0.5rem;
+}
+
+.sop-details summary {
+  cursor: pointer;
+  color: var(--amt-tief);
+  font-weight: 700;
+  min-height: 32px;
+}
+
+/* Versions-Tags der SOPs neutral (Profilansicht und SOP-Auswahl) */
+.sop-version {
+  display: inline-block;
+  color: var(--tinte-leise);
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  font-size: 0.78rem;
+  font-weight: 400;
+  padding: 0 0.35rem;
+  margin-left: 0.15rem;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+
+.sop-gruppe-hinweis {
+  font-weight: 400;
+}
+
+.sop-auszug {
+  margin: 0.6rem 0;
+}
+
+.sop-auszug pre,
+.sop-katalog pre {
+  white-space: pre-wrap;
+  font-family: var(--schrift);
+  font-size: 0.9rem;
+  max-width: 78ch;
+  line-height: 1.5;
+  margin: 0.3rem 0 0;
+}
+
+.sop-katalog .quelltext {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+/* ── Modellwahl je Lauf ── */
+.modellwahl {
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  padding: 0.5rem 0.8rem;
+  margin: 0.75rem 0;
+  background: var(--papier);
+}
+
+.modellwahl > .schalter {
+  margin: 0.2rem 0 0.4rem;
+}
+
+.modellwahl-details > summary {
+  cursor: pointer;
+}
+
+.modellwahl-titel {
+  font-weight: 700;
+}
+
+/* Kopfzeile: Anzeigenamen und Schätzung; bricht auf schmalen Bildschirmen unter den Titel um (seit 0.5.22) */
+.modellwahl-kurz {
+  overflow-wrap: anywhere;
+}
+
+/* Kennzeichen „abweichend“ an Kopfzeile, Stufe und Recherchetiefe; Text, nicht nur Farbe */
+.modellwahl-abweichend {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--amt);
+  border-radius: 999px;
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: 0.1em;
+}
+
+.modellwahl-stufe.abweichend,
+.modellwahl-recherche.abweichend {
+  border-color: var(--amt);
+}
+
+.modellwahl-profil,
+.modellwahl-recherche {
+  margin-top: 0.6rem;
+}
+
+.modellwahl-weitere {
+  margin-top: 0.6rem;
+}
+
+.modellwahl-weitere > summary {
+  cursor: pointer;
+}
+
+.modellwahl-stufe .hinweis {
+  margin: 0;
+}
+
+.modellwahl-fuss {
+  margin-top: 0.4rem;
+}
+
+.modellwahl-felder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin-top: 0.6rem;
+}
+
+.modellwahl-felder .feld {
+  margin: 0;
+}
+
+.modellwahl-stufe {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.4rem 0.6rem 0.6rem;
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-mittel);
+  min-width: 0;
+}
+
+.modellwahl-stufe > legend {
+  font-weight: 700;
+  padding: 0 0.25rem;
+}

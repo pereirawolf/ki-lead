@@ -2,7 +2,7 @@
 // Erfassungsmaske: Zeitfelder mit „Jetzt“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { profil } from "../support/dateien";
+import { profil, profilPflicht } from "../support/dateien";
 import { ilkaDatei } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -103,5 +103,63 @@ describe("Erfassungsmaske", () => {
         `^\\[Q1\\] A – Hessen, .*\\(14\\.10\\.2026, 10:15 Uhr\\): Lagemeldung \\(behördenintern\\), Datei „${name.replace(/[.]/g, "\\.")}“ \\[Zugriff: \\d{2}\\.\\d{2}\\.\\d{4}\\]$`,
       ),
     );
+  });
+
+  // Befunde am Feld (seit 0.6.5): Pflicht- und Schemabefunde erscheinen am Feld, nicht nur im Prüfschritt
+  it("TP-2026-W44-15: leeres Pflichtfeld trägt aria-invalid und einen per aria-describedby verknüpften Fehlertext", async () => {
+    await zeigeApp();
+    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
+    expect(bezeichnung().getAttribute("aria-invalid")).toBe("true");
+    const ids = (bezeichnung().getAttribute("aria-describedby") || "").split(" ");
+    const texte = ids.map((id) => document.getElementById(id)?.textContent || "");
+    expect(texte).toContain("Pflichtangabe fehlt.");
+    expect(bezeichnung().closest(".feld")?.querySelector(".feld-label")?.classList.contains("pflicht")).toBe(true);
+
+    await eingeben(bezeichnung(), "Sturmfolgen");
+    expect(bezeichnung().hasAttribute("aria-invalid")).toBe(false);
+    expect(bezeichnung().closest(".feld")?.querySelector(".feld-fehler")).toBeNull();
+  });
+
+  it("TP-2026-W44-15: ein Befund im Prüfschritt wechselt in den Schritt und fokussiert das Feld", async () => {
+    await zeigeApp();
+    await zuSchritt(/Prüfen & Exportieren/);
+    const befund = [...document.querySelectorAll("button.befund-sprung")].find((b) => /Bezeichnung/.test(b.textContent || "")) as HTMLButtonElement;
+    expect(befund, "Befund zur Bezeichnung als Schaltfläche").toBeTruthy();
+    await klick(befund);
+    expect(document.querySelector("#schritt-titel")?.textContent).toBe("Ereignisse/Sachverhalte");
+    expect(document.activeElement).toBe(document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input'));
+  });
+
+  // Farben der Bewertung nach Rang (seit 0.6.5): Ein Profil mit anderen Stufenwörtern behält die Farben
+  it("TP-2026-W44-16: Vorlage profile/muster: Bewertungsfeld und Sachverhalt tragen data-rang, auch bei anderen Stufenwörtern", async () => {
+    const { MeldungAnsicht } = await import("../../src/ui/Meldung");
+    const muster = await profilPflicht("muster");
+    const zeigen = async (p: typeof muster, bewertung: string) => {
+      await einhaengen(React.createElement(MeldungAnsicht, { profil: p, meldung: { sachverhalte: [{ bewertung }] }, setMeldung: () => {}, neu: () => {} }));
+      await zuSchritt(/^2?Sachverhalte/);
+    };
+    const gewaehlt = () => document.querySelector(".segmente .segment.an") as HTMLElement;
+    const element = () => document.querySelector("section.element") as HTMLElement;
+
+    await zeigen(muster, "kritisch");
+    expect(gewaehlt().textContent).toBe("kritisch");
+    expect(gewaehlt().dataset.rang).toBe("3");
+    expect(element().dataset.rang).toBe("3");
+    await aushaengen();
+
+    await zeigen(muster, "geringfügig");
+    expect(gewaehlt().dataset.rang).toBe("1");
+    expect(element().dataset.rang).toBe("1");
+    await aushaengen();
+
+    // Gleiche Vorlage mit eigenen Stufenwörtern: Rang nach der Reihenfolge der Aufzählung
+    const eigene = structuredClone(muster);
+    eigene.schema.properties.sachverhalte.items.properties.bewertung.enum = ["", "niedrig", "mittel", "hoch"];
+    await zeigen(eigene, "mittel");
+    expect(gewaehlt().textContent).toBe("mittel");
+    expect(gewaehlt().dataset.rang).toBe("2");
+    expect(element().dataset.rang).toBe("2");
+    expect(element().className).toBe("element");
   });
 });

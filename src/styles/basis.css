@@ -1,0 +1,621 @@
+/* Grundlagen: Werte ohne Farbschema, Grundformatierung, Rahmen der App (Kopf, Navigation, Fuß), Werkzeugleiste,
+   Knöpfe, Rückfragedialog, Arbeitsbereich mit Schritten, Tabellen, Hilfsklassen.
+   Seit 0.6.5 (TP-2026-W44-19) eigene Datei; eingebunden über src/styles.css. */
+
+:root {
+  /* Farbtoken (Flächen, Text, Signalfarben, Band) stehen seit 0.6.5 nur in src/darstellung/katalog.ts: Ohne JavaScript
+     gilt der Fallback, den das Vite-Plugin farbtokenFallback() als <style> in index.html setzt (neutral-hell, bei
+     Systemeinstellung dunkel neutral-dunkel); danach setzt die App das gewählte Schema am Wurzelelement (TP-2026-W44-19).
+     Hier stehen nur Werte ohne Farbschema. */
+  --schatten: 0 1px 0 rgba(24, 38, 58, 0.06);
+  --schrift: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-klein: 4px;
+  --r-mittel: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--tinte);
+  font-family: var(--schrift);
+  /* 17 px bei der Vorgabe des Browsers (16 px); folgt seit 0.6.5 (TP-2026-W44-14) einer größeren Grundschrift */
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus-visible {
+  outline: 3px solid var(--fokus);
+  outline-offset: 2px;
+  /* zweiter, heller Ring: Fokus bleibt auch auf farbigen Flächen sichtbar */
+  box-shadow: 0 0 0 2px var(--fokus-abstand);
+}
+
+/* ── Rahmen ───────────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.kopf {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: calc(0.6rem + env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.6rem max(1rem, env(safe-area-inset-left));
+  background: var(--header-hintergrund);
+  color: var(--header-text);
+  /* Identitätsband des Farbschemas (dekorativ): in src/styles.css */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.marke {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.marke-name {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  color: var(--amt-tief);
+}
+
+.marke-zusatz {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+}
+
+.hauptnav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav {
+  background: none;
+  border: none;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-klein);
+  cursor: pointer;
+  color: var(--tinte-leise);
+  font-weight: 700;
+}
+
+.nav.aktiv {
+  color: var(--amt-tief);
+  background: var(--amt-zart);
+  /* Auswahl nicht nur über Farbe erkennbar */
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.35em;
+}
+
+/* KI-Chip rechts oben (seit 0.5.21): „KI offline“ zart in den Profilfarben, „KI online“ gefüllt in der Aktionsfarbe
+   mit pulsierendem Ring */
+.kopf-rechts {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.kopf-ki {
+  flex: none;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--amt);
+  border-radius: 999px;
+  background: var(--amt-zart);
+  color: var(--amt-tief);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.kopf-ki.offline:hover {
+  background: var(--papier);
+}
+
+.kopf-ki.online {
+  background: var(--amt);
+  color: var(--auf-amt);
+  animation: kopf-ki-puls 1.8s ease-out infinite;
+}
+
+.kopf-ki.online:hover {
+  background: var(--amt-tief);
+  color: var(--auf-amt-hover);
+}
+
+/* Ring in der Aktionsfarbe, der sich vom Chip löst und ausblendet */
+@keyframes kopf-ki-puls {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--amt) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0.55rem color-mix(in srgb, var(--amt) 0%, transparent);
+  }
+}
+
+/* gleiche Breite für beide Texte, damit die Kopfleiste beim Wechsel nicht springt */
+.kopf-ki-text {
+  display: inline-block;
+  min-width: 5.6em;
+  text-align: center;
+}
+
+.hinweisband {
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+  color: var(--tinte-leise);
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.standard-profil {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.standard-profil .material-meta {
+  margin: 0.4rem 0 0;
+}
+
+.ablage-wahl {
+  border: 0;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.ablage-option {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.ablage-option input {
+  margin-top: 0.25rem;
+}
+
+.ablage-option.gesperrt {
+  color: var(--tinte-leise);
+  cursor: not-allowed;
+}
+
+.ablage-text {
+  font-size: 0.9rem;
+  color: var(--tinte-leise);
+}
+
+.startfehler {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.pwa-hinweise .hinweisband {
+  color: var(--tinte);
+  background: var(--amt-zart);
+  border-left: 4px solid var(--amt);
+}
+
+.pwa-aktualisierung .knopf {
+  margin: 0 0.25rem;
+}
+
+.inhalt {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.25rem max(1rem, env(safe-area-inset-right)) 3rem max(1rem, env(safe-area-inset-left));
+}
+
+.fuss {
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  text-align: center;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* ── Werkzeugleiste ───────────────────────────────── */
+.werkzeugleiste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.werkzeugleiste h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.werkzeugleiste-text p {
+  margin: 0.2rem 0 0;
+  color: var(--tinte-leise);
+  max-width: 62ch;
+}
+
+.werkzeugleiste-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.zwischenstand {
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  margin: -0.5rem 0 1rem;
+}
+
+/* ── Knöpfe ───────────────────────────────────────── */
+.knopf {
+  border: 1px solid var(--amt);
+  background: var(--flaeche);
+  color: var(--amt-tief);
+  border-radius: var(--r-klein);
+  padding: 0.55rem 1rem;
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.knopf:hover {
+  background: var(--amt-zart);
+}
+
+.knopf.primaer {
+  background: var(--amt);
+  color: var(--auf-amt);
+}
+
+.knopf.primaer:hover {
+  background: var(--amt-tief);
+  color: var(--auf-amt-hover);
+}
+
+.knopf.leise {
+  border-color: transparent;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.knopf.leise:hover {
+  background: var(--amt-zart);
+}
+
+.knopf.klein {
+  /* Zielgröße mindestens 24 × 24 px (WCAG 2.5.8), auf Touch-Geräten 44 px (seit 0.6.5, TP-2026-W44-14) */
+  min-height: 1.5rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+@media (pointer: coarse) {
+  .knopf.klein,
+  .lb-x {
+    min-height: 44px;
+  }
+
+  .lb-x {
+    min-width: 44px;
+  }
+}
+
+/* Bestätigungsdialog der App statt window.confirm (seit 0.6.5, TP-2026-W44-20) */
+.rueckfrage {
+  max-width: min(34rem, calc(100vw - 2rem));
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  background: var(--flaeche);
+  color: var(--tinte);
+  padding: 1.25rem 1.25rem 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.rueckfrage::backdrop {
+  background: rgba(16, 20, 25, 0.45);
+}
+
+.rueckfrage-text {
+  margin: 0 0 1rem;
+  white-space: pre-line;
+}
+
+.rueckfrage .aktionen {
+  justify-content: flex-end;
+}
+
+/* ── Arbeitsbereich mit Schritten ─────────────────── */
+.arbeitsbereich {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.schritte ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: sticky;
+  top: 5rem;
+  border-left: 2px solid var(--linie);
+}
+
+.schritt {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.6rem 0.75rem;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  color: var(--tinte-leise);
+}
+
+.schritt-nr {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--linie);
+  font-weight: 700;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.schritt-zahl {
+  margin-left: auto;
+  font-size: 0.8rem;
+  background: var(--linie-zart);
+  border-radius: 999px;
+  padding: 0 0.5rem;
+}
+
+.schritt.erledigt .schritt-nr {
+  border-color: var(--amt);
+  color: var(--amt-tief);
+}
+
+.schritt.aktiv {
+  border-left-color: var(--amt);
+  color: var(--tinte);
+  font-weight: 700;
+}
+
+.schritt.aktiv .schritt-nr {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--auf-amt);
+}
+
+.schritt-inhalt {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 1.25rem 1.5rem 1.5rem;
+  box-shadow: var(--schatten);
+}
+
+.schritt-inhalt > h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+}
+
+.einleitung {
+  color: var(--tinte-leise);
+  max-width: 72ch;
+  margin-top: 0;
+}
+
+.schritt-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+/* ── Schmale Bildschirme (iPhone) ─────────────────── */
+@media (max-width: 860px) {
+  body {
+    font-size: 1rem;
+  }
+
+  .arbeitsbereich {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .schritte ol {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    border-left: none;
+    border-bottom: 2px solid var(--linie);
+    scrollbar-width: none;
+  }
+
+  .schritt {
+    white-space: nowrap;
+    margin-left: 0;
+    margin-bottom: -2px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+
+  .schritt.aktiv {
+    border-bottom-color: var(--amt);
+  }
+
+  .schritt-inhalt {
+    padding: 0.9rem 0.75rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .marke-zusatz {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .kopf {
+    gap: 0.5rem;
+  }
+
+  .nav {
+    padding: 0.4rem 0.55rem;
+  }
+}
+
+/* ── Deaktivierte Knöpfe, Tabellen ───────────────── */
+.knopf:disabled,
+.knopf:disabled:hover,
+.knopf[aria-disabled="true"],
+.knopf[aria-disabled="true"]:hover {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--flaeche);
+}
+
+.knopf.primaer:disabled {
+  background: var(--amt);
+}
+
+.tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.tabelle th,
+.tabelle td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.tabelle th {
+  color: var(--tinte-leise);
+  font-weight: 700;
+  border-bottom-color: var(--linie);
+}
+
+.tabelle-aktionen {
+  white-space: nowrap;
+}
+
+.tabelle-aktionen .knopf {
+  margin-right: 0.25rem;
+}
+
+@media (max-width: 860px) {
+  .hauptnav {
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+  }
+
+  .nav {
+    white-space: nowrap;
+  }
+
+  .tabelle {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+.marke-name {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .kopf {
+    flex-wrap: wrap;
+    row-gap: 0.35rem;
+  }
+
+  .hauptnav {
+    order: 3;
+    width: 100%;
+    margin: 0 -0.4rem;
+  }
+}
+
+a.knopf {
+  text-decoration: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.speicherfehler {
+  margin: 0.75rem auto 0;
+  max-width: 1200px;
+}
+
+.unsichtbar {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

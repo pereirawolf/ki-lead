@@ -5,7 +5,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import JSZip from "jszip";
 import { profil } from "../support/dateien";
-import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
+import { aushaengen, bisWahr, dialogAntwort, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import { neuerLauf, type Lauf } from "../../src/pipeline/lauf";
@@ -97,7 +97,7 @@ describe("KI-Erfassung: frühere Läufe gesammelt sichern und löschen", () => {
     await erfassungZeigen(p);
     await bisWahr(() => seitentext().includes("Frühere Läufe mit diesem Profil (2)"));
 
-    const frage = vi.spyOn(window, "confirm").mockReturnValue(false);
+    const frage = dialogAntwort(false);
     await klick("Alle löschen");
     expect(frage).toHaveBeenCalledTimes(1);
     expect(frage.mock.calls[0][0]).toContain("Alle 2 früheren Läufe");
@@ -114,7 +114,7 @@ describe("KI-Erfassung: frühere Läufe gesammelt sichern und löschen", () => {
     await erfassungZeigen(p);
     await bisWahr(() => seitentext().includes("Frühere Läufe mit diesem Profil (2)"));
 
-    vi.spyOn(window, "confirm").mockReturnValue(true);
+    dialogAntwort(true);
     await klick("Alle löschen");
     await bisWahr(() => !seitentext().includes("Frühere Läufe mit diesem Profil"));
 
@@ -128,7 +128,7 @@ describe("KI-Erfassung: frühere Läufe gesammelt sichern und löschen", () => {
     lauf(p, "20261020-101500-aaaa", "2026-10-20T10:15:00.000Z", "Kraftstoff");
     await erfassungZeigen(p);
     await bisWahr(() => seitentext().includes("Frühere Läufe mit diesem Profil (1)"));
-    const frage = vi.spyOn(window, "confirm").mockReturnValue(false);
+    const frage = dialogAntwort(false);
     await klick("Alle löschen");
     expect(frage.mock.calls[0][0]).toContain("Den einen früheren Lauf");
   });

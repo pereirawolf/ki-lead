@@ -680,3 +680,39 @@ Neue Datei `tests/profil/anweisungen-kopplung.test.ts`: Was die App auswertet od
 | Beispielzeile `Handlungsrelevant bis:` | `fristen` (`pipeline/kurzfassung.ts`) | Teil A, A.4 (Tabelle der Kennsätze) |
 | Beispieleinträge des Quellenverzeichnisses | `parseQuellen`, `quellenHinweise` (`kern/quellen.ts`) | `kodierleitfaden.md`, Abschnitt 5 |
 | Beispiel `_entstehung` | Schema `$defs.entstehung`, `kodierleitfadenKennung` (`pipeline/nachbearbeitung.ts`) | `anweisung-erfassung.md`, Abschnitt „Ausgabe“ |
+
+## Zustandsschnitt der Oberfläche (0.6.5, TP-2026-W44-17)
+
+Die drei größten Komponenten wurden ohne Verhaltensänderung zerlegt. Kein Test wurde verschoben, umbenannt oder inhaltlich geändert; die Oberflächentests binden weiter `KiErfassung`, `LagebildAnsicht`, `MeldungAnsicht` und `App` ein, die Browsertests laufen über dieselben zugänglichen Namen. Ein Vergleich der berechneten Stile aller Elemente in 132 Zuständen (Bereiche, Schritte, Reiter; 390 und 1280 px; hell, dunkel, mehr Kontrast) vor und nach dem Umbau ergab keine Abweichung.
+
+| Quelle bis 0.6.4 | Quelle seit 0.6.5 | Inhalt | Tests |
+|---|---|---|---|
+| `ui/KiErfassung.tsx` (22 `useState`) | `ui/kiErfassung/zustand.ts` | Reducer mit Zustands-Union `Ablauf` (Phase mit Lauf und Vorschlag) und Eingaben des Auftrags | `tests/ui/ki-erfassung-felder.test.ts`, `orientierung.test.ts`, `s1-grenze.test.ts`, `modellwahl.test.ts`, `fortschreibung.test.ts`, `ki-erfassung-laeufe.test.ts` |
+| `ui/KiErfassung.tsx` | `ui/kiErfassung/Auftragsformular.tsx`, `Laufanzeige.tsx` (eigene Uhr, Stand in `anzeigeStand.ts`), `Bestaetigung.tsx`, `Ergebnis.tsx`, `FruehereLaeufe.tsx`, `LaufModellWahl.tsx`, `recherche.tsx`, `texte.ts`, `rahmen.tsx` | Schritte der KI-Erfassung; `KiErfassung.tsx` steuert nur noch den Ablauf | wie oben, `tests/browser/hauptablauf.spec.ts`, `abbruch.spec.ts` |
+| `App.tsx` | `ui/app/useFarbschema.ts`, `useZwischenstand.ts`, `useKiUebergabe.ts` | Farbschema, Zwischenstand je Profil, Übergabe aus dem Lagebild | `tests/ui/app.test.ts`, `farbschemas.test.ts`, `erfassung.test.ts`, `tests/browser/wiederherstellung.spec.ts` |
+| Props `profil`, `einstellungen`, `schluessel`, `zuEinstellungen` über App → Meldung/KI-Erfassung | `ui/kiZugang.ts` (`KiZugangContext`); Props der Komponenten gehen vor | Zugang zu den KI-Funktionen | `tests/ui/meldung-schritte.test.ts`, KI-Erfassung wie oben |
+| `ui/Lagebild.tsx` | `ui/lagebild/Uebergabe.tsx`, `Redaktionscheck.tsx`, `Kopiervorlage.tsx`, `bausteine.tsx` | Übergabedialog, Redaktionscheck, Kopiervorlage, Marken | `tests/ui/lagebild.test.ts`, `redaktionscheck.test.ts` |
+| `HilfeFeld` in `ui/KiErfassung.tsx` | `ui/HilfeFeld.tsx`, genutzt von KI-Erfassung, `GrenzFeld.tsx` und `Feld.tsx` | Feld mit verknüpftem Hilfetext | `tests/ui/ki-erfassung-felder.test.ts`, `recherchetiefe.test.ts`, `erfassung.test.ts` |
+
+## Tests zu den Befunden der Oberfläche (0.6.5, TP-2026-W44-12 bis -22)
+
+| Befund | Test | Datei |
+|---|---|---|
+| TP-2026-W44-12 | keine Live-Region enthält den Sekundenzähler | `tests/browser/barrierefreiheit.spec.ts` |
+| TP-2026-W44-13 | Fokus auf „Gegenstand bestätigen“ nach S1; Übergabedialog mit Fokus und Escape | `tests/browser/hauptablauf.spec.ts` |
+| TP-2026-W44-14 | zugängliche Namen je Liste eindeutig | `tests/browser/barrierefreiheit.spec.ts` |
+| TP-2026-W44-15 | `aria-invalid` mit verknüpftem Fehlertext; Sprung aus dem Prüfschritt | `tests/ui/erfassung.test.ts` |
+| TP-2026-W44-16 | Vorlage `profile/muster/`: `data-rang` an Bewertungsfeld und Sachverhalt | `tests/ui/erfassung.test.ts` |
+| TP-2026-W44-19 | Fallback-Tokens gleich Katalog (hell, dunkel), Vite-Plugin, keine Farbtoken in den Stylesheets, jede Variable definiert | `tests/darstellung/fallback.test.ts` (neu); `tests/darstellung/farbschemas.test.ts` unverändert |
+| TP-2026-W44-20 | Rückfragen im eigenen Dialog; Bereich und Reiter in der Adresse; ohne Netz kein Start der KI-Erfassung | `tests/browser/hauptablauf.spec.ts`, `einstellungen.spec.ts`, `pwa.spec.ts` |
+| TP-2026-W44-22 | axe-core je Bereich (Meldung, KI-Erfassung, Lagebild, Profile, Einstellungen) | `tests/browser/barrierefreiheit.spec.ts`; Projekt `webkit` in `playwright.config.ts` |
+
+TP-2026-W44-17, -18 und -21 haben keinen eigenen Test (nicht automatisierbar laut Befund); sie sind durch die bestehenden Tests und den Stilvergleich abgesichert.
+
+Angepasst ohne Änderung des Solls:
+
+- Stub von `window.confirm` durch `dialogAntwort()` aus `tests/support/dom.ts` ersetzt (TP-2026-W44-20): `tests/ui/testlaeufe.test.ts`, `einstellungen.test.ts`, `ki-erfassung-laeufe.test.ts`; in den Browsertests `hauptablauf.spec.ts` und `testlaeufe.spec.ts` Klick im Dialog statt `page.on("dialog")`.
+- `aria-current="page"` statt `"true"` (TP-2026-W44-14): `tests/ui/einstellungen.test.ts`, `tests/browser/einstellungen.spec.ts`.
+- Stylesheet nach Bereichen geteilt (TP-2026-W44-19): `tests/darstellung/barrierefreiheit.test.ts` liest `stylesheetText()` statt nur `src/styles.css`.
+- Nachgeladene Ansichten (TP-2026-W44-18): `tests/ui/farbschemas.test.ts` wartet auf den Bereich „Darstellung“; `tests/browser/pwa-server.ts` zieht bei einer umbenannten Startdatei die Verweise der nachgeladenen Teile mit.
+- Link zur Reparaturseite unter „Über“ (TP-2026-W44-21): `tests/ui/ueber.test.ts` erwartet acht statt sieben Links.

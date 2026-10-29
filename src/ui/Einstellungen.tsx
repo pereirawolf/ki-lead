@@ -66,6 +66,7 @@ import {
 import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
+import { bestaetigen } from "./bestaetigung";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "ueber";
 
@@ -386,7 +387,12 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
     await setAblage("passphrase").catch(() => undefined);
   };
   const verwerfen = async () => {
-    if (!confirm("Passphrase vergessen? Die damit verschlüsselten API-Schlüssel werden gelöscht; danach lässt sich eine neue Passphrase festlegen.")) return;
+    if (
+      !(await bestaetigen("Passphrase vergessen? Die damit verschlüsselten API-Schlüssel werden gelöscht; danach lässt sich eine neue Passphrase festlegen.", {
+        ja: "Passphrase vergessen",
+      }))
+    )
+      return;
     await passphraseVerwerfen();
     setFestgelegt(false);
     setGesperrt(true);
@@ -757,11 +763,13 @@ function AnbieterBereich({
 function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) => void }) {
   const aktiv = aktiveVoreinstellung(e);
   const [gesetzt, setGesetzt] = useState<Voreinstellung | null>(null);
-  const waehlen = (v: Exclude<Voreinstellung, "individuell">) => {
+  const waehlen = async (v: Exclude<Voreinstellung, "individuell">) => {
     if (v === aktiv) return;
     if (
       aktiv === "individuell" &&
-      !confirm(`Die eigene Kombination wird überschrieben: Modell und Aufwand aller Aufgaben folgen dann „${voreinstellungTitel(v)}“. Fortfahren?`)
+      !(await bestaetigen(`Die eigene Kombination wird überschrieben: Modell und Aufwand aller Aufgaben folgen dann „${voreinstellungTitel(v)}“. Fortfahren?`, {
+        ja: "Überschreiben",
+      }))
     )
       return;
     setEinstellungen(v === "profil" ? profilvorgabeAnwenden(e) : istMix(v) ? mixProfilAnwenden(e, v) : standardProfilAnwenden(e, v));
@@ -1121,7 +1129,7 @@ export function EinstellungenAnsicht({
                 <button
                   type="button"
                   className={b.id === aktuell ? "schritt aktiv" : "schritt"}
-                  aria-current={b.id === aktuell ? "true" : undefined}
+                  aria-current={b.id === aktuell ? "page" : undefined}
                   onClick={() => zeige(b.id)}
                 >
                   {b.titel}

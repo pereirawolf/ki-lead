@@ -57,7 +57,9 @@ describe("Über KI-LEAD (Einstellungen)", () => {
   it("öffnet jeden Verweis extern und ohne Zugriff auf das öffnende Fenster", async () => {
     await einhaengen(React.createElement(UeberAbschnitt));
     const alle = [...document.querySelectorAll("a")];
-    expect(alle.length).toBe(7);
+    // seit 0.6.5 (TP-2026-W44-21) dazu die Reparaturseite, ebenfalls in einem neuen Fenster
+    expect(alle.length).toBe(8);
+    expect(alle.find((a) => a.textContent === "Programmdateien reparieren")?.getAttribute("href")).toBe("./reparatur.html");
     for (const a of alle) {
       expect(a.getAttribute("target"), a.textContent!).toBe("_blank");
       expect(a.getAttribute("rel"), a.textContent!).toBe("noopener noreferrer");

@@ -1,12 +1,12 @@
 // Barrierefreiheit der Darstellung: Radarwerte als Text, Auswahl nicht nur über Farbe, Systemfarben (forced-colors).
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { RadarGrafik } from "../../src/ui/Radar";
 
-import { repoPfad } from "../support/dateien";
-const css = readFileSync(repoPfad("src/styles.css"), "utf8");
+import { stylesheetText } from "../support/dateien";
+// Seit 0.6.5 (TP-2026-W44-19) besteht das Stylesheet aus src/styles.css und Bereichsdateien unter src/styles/
+const css = stylesheetText();
 /** Regelblock eines Selektors (erster Treffer) */
 const regel = (selektor: string, quelle = css) => {
   const i = quelle.indexOf(`${selektor} {`);

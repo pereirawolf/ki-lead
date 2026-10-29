@@ -15,8 +15,10 @@ import type { Meldung, Profil } from "../kern/typen";
 import { dateiAnbieten, kurzfassungLesen, kurzfassungLoeschen, kurzfassungSchreiben, type GespeicherteKurzfassung as Gespeichert } from "../speicher/speicher";
 import { mitModellwahl, modellFuer, type Einstellungen, type ModellWahl as Modellwahl } from "../pipeline/einstellungen";
 import { ModellWahl } from "./ModellWahl";
+import { useKiZugang } from "./kiZugang";
 import { kurzfassungErstellen, kurzfassungsFingerabdruck } from "../pipeline/kurzfassung";
 import { kurzfassungAlsDatei } from "../dokumente/kennzeichnung";
+import { bestaetigen } from "./bestaetigung";
 
 export interface KiZugang {
   schluessel: Schluessel;
@@ -59,14 +61,20 @@ function Kopieren({ text }: { text: string }) {
 export function KurzfassungKasten({
   profil,
   meldung,
-  ki,
+  ki: kiVorgabe,
   eigenerSchritt = false,
 }: {
   profil: Profil;
   meldung: Meldung;
+  /** Schlüssel und Einstellungen; ohne Angabe aus dem KI-Zugang der App (seit 0.6.5, TP-2026-W44-17) */
   ki?: KiZugang;
   eigenerSchritt?: boolean;
 }) {
+  const kiZugang = useKiZugang();
+  const ki = useMemo<KiZugang | undefined>(
+    () => kiVorgabe ?? (kiZugang ? { schluessel: kiZugang.schluessel, einstellungen: kiZugang.einstellungen } : undefined),
+    [kiVorgabe, kiZugang],
+  );
   const titel = profil.ui.kurzfassung?.titel || "Management Summary";
   const fp = useMemo(() => kurzfassungsFingerabdruck(meldung, profil), [meldung, profil]);
   const [gespeichert, setGespeichert] = useState<Gespeichert | null>(null);
@@ -100,7 +108,10 @@ export function KurzfassungKasten({
 
   const leeren = async () => {
     if (
-      !confirm(`${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`)
+      !(await bestaetigen(
+        `${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`,
+        { ja: "Leeren" },
+      ))
     )
       return;
     await kurzfassungLeeren(profil.manifest.id);

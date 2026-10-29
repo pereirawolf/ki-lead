@@ -15,10 +15,17 @@ import {
   type QuellenZusaetze,
 } from "../kern/quellen";
 import type { Profil } from "../kern/typen";
+import { FeldFehler } from "./HilfeFeld";
 
 interface Props {
   profil: Profil;
   label: string;
+  /** Pflichtfeld: Kennzeichen an der Beschriftung (seit 0.6.5, TP-2026-W44-15) */
+  pflicht?: boolean;
+  /** Befunde am Feld: aria-invalid am Textfeld, Fehlertext darunter (seit 0.6.5, TP-2026-W44-15) */
+  fehler?: string[];
+  /** Schlüssel des Feldes in der Meldung (data-feld) */
+  feld?: string;
   hinweis?: string;
   zeilen?: number;
   wert: string;
@@ -34,7 +41,7 @@ interface LagebildQuelle {
 
 const PROFILVORLAGE = "profil";
 
-export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: Props) {
+export function QuellenFeld({ profil, label, pflicht, fehler, feld, hinweis, zeilen, wert, onChange }: Props) {
   const id = useId();
   const k = profil.ui.quellen;
   const rang = rangfolgeText(profil.ui);
@@ -125,7 +132,7 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
   );
 
   return (
-    <div className="feld feld-quellen">
+    <div className="feld feld-quellen" data-feld={feld}>
       {k && (
         <dl className="kategorien">
           {kategorien.map(([code, text]) => (
@@ -142,10 +149,21 @@ export function QuellenFeld({ profil, label, hinweis, zeilen, wert, onChange }: 
         </p>
       )}
       {k?.rangfolge_hinweis && <p className="hinweis">{k.rangfolge_hinweis}</p>}
-      <label className="feld-label" htmlFor={id}>
+      <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
         {label}
       </label>
-      <textarea ref={textRef} id={id} className="quellen-text" rows={zeilen || 10} value={wert} onChange={(e) => onChange(e.target.value)} spellCheck={false} />
+      <textarea
+        ref={textRef}
+        id={id}
+        className="quellen-text"
+        rows={zeilen || 10}
+        value={wert}
+        onChange={(e) => onChange(e.target.value)}
+        spellCheck={false}
+        aria-invalid={fehler?.length ? true : undefined}
+        aria-describedby={fehler?.length ? `${id}-fehler` : undefined}
+      />
+      {!!fehler?.length && <FeldFehler id={`${id}-fehler`} texte={fehler} />}
       {hinweis && <p className="hinweis">{hinweis}</p>}
 
       <fieldset className="quellen-baukasten">

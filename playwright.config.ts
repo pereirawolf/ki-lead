@@ -2,10 +2,12 @@
 // Keine echten KI-Aufrufe: Die Tests simulieren den Anbieter am Netzwerkrand und brechen jede andere Anfrage
 // nach außen ab. Lokal ohne heruntergeladenen Browser: PLAYWRIGHT_CHROMIUM_PFAD auf eine Chromium-Datei setzen.
 //
-// Zwei Projekte, beide Chromium (siehe docs/TESTS.md, „Gestaffelte Prüfung“):
-// - kern: Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Eingabehilfen, Einstellungen
-// - pwa:  Service Worker, Offline-Start und Versionswechsel (pwa.spec.ts, pwa-update.spec.ts)
-// `npm run test:browser` führt beide aus; einzeln mit `--project=kern` bzw. `--project=pwa`.
+// Drei Projekte (siehe docs/TESTS.md, „Gestaffelte Prüfung“):
+// - kern:   Chromium; Hauptablauf, Abbruch, Wiederherstellung, Speicherfehler, Barrierefreiheit, Eingabehilfen, Einstellungen
+// - pwa:    Chromium; Service Worker, Offline-Start und Versionswechsel (pwa.spec.ts, pwa-update.spec.ts)
+// - webkit: WebKit (Safari, auch iOS); dieselben Dateien wie kern (seit 0.6.5, TP-2026-W44-22)
+// `npm run test:browser` führt kern und pwa aus und braucht damit nur Chromium; WebKit läuft eigens mit
+// `npm run test:browser:webkit` (in der CI nach `npx playwright install --with-deps webkit`).
 //
 // KI_LEAD_BUILD_VORHANDEN=1 verwendet einen bereits erzeugten Ordner dist/ (in der CI direkt nach `npm run build`),
 // statt vor den Tests erneut zu bauen. Getestet wird damit genau der Build, der auch veröffentlicht wird.
@@ -26,7 +28,8 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
+  // In der CI zusätzlich „github“: Fehlschläge erscheinen als Annotation am Lauf (lesbar ohne Protokoll-Download)
+  reporter: process.env.CI ? [["list"], ["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: `http://localhost:${PORT}/`,
     locale: "de-DE",
@@ -39,6 +42,7 @@ export default defineConfig({
   projects: [
     { name: "kern", testIgnore: PWA, use: chromium },
     { name: "pwa", testMatch: PWA, use: chromium },
+    { name: "webkit", testIgnore: PWA, use: devices["Desktop Safari"] },
   ],
   webServer: {
     command: process.env.KI_LEAD_BUILD_VORHANDEN === "1" ? vorschau : `npx vite build && ${vorschau}`,

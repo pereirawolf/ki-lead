@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.21 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.22 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -126,7 +126,7 @@ Rollen verbinden die LEAD-Logik mit den Feldnamen des Schemas. Pfade mit `sv_` g
 | `sv_massnahmen` | Maßnahmenfeld eines Sachverhalts; der Redaktionscheck verlangt bei hoher Beurteilung Angaben |
 | `beurteilung_hoch`, `tendenz_entspannung`, `tendenz_verschaerfung` | Werte für Kennzahlen und Redaktionshinweise; ohne `beurteilung_hoch` gelten die beiden höchsten Stufen des Schemas (der Redaktionscheck weist das aus), ohne `tendenz_verschaerfung` der letzte Wert der Aufzählung. Als gegenläufig gelten nur `tendenz_entspannung` und die Verschärfung |
 
-Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteigende Schwere: Das Lagebild sortiert danach und färbt die höchste Stufe rot, die zweithöchste orange, die dritthöchste gelb.
+Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteigende Schwere: Das Lagebild sortiert danach und färbt die höchste Stufe rot, die zweithöchste orange, die dritthöchste gelb. Dieselbe Zuordnung nach Rang gilt seit App 0.6.5 in der Meldungsmaske (gewählte Bewertung, Rand des Sachverhalts, Übersicht im Prüfschritt; Attribut `data-rang` 3, 2, 1, sonst 0); die gewählte Tendenz ist rot bei der Verschärfung und grün bei `tendenz_entspannung` (`data-tendenz`). Bis 0.6.4 hingen diese Farben an den Wörtern des Beispielprofils („geringfügig“, „erheblich“, „kritisch“), ein Profil mit anderen Stufen blieb ungefärbt.
 
 ### Weitere Abschnitte
 
@@ -278,3 +278,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.19 | 26.10.2026 | Ohne Formatänderung: `format` im Meldungsschema wird nicht geprüft und beim Laden als Hinweis gemeldet (App 0.6.2, TP-2026-W44-10) |
 | 1.20 | 27.10.2026 | Kennsätze `handlungsrelevant`, `aenderung` und `abweichung` sind Pflicht; fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` (ältere Pakete bleiben nutzbar). Ersatztexte und Auswertung der App dokumentiert. Kategorievorschlag des Quellen-Baukastens und Vorlage ohne `quellen.vorlage` aus den Kategorien des Profils statt fester Buchstaben; Standardfassungen der App ohne SOP-Zitate (TP-2026-W44-27). Modellkennungen: Mistral nachgetragen, `ollama:<modell>` neu, unbekannte Kennung als Warnung `MODELL_UNBEKANNT` (TP-2026-W44-26) (App 0.6.3) |
 | 1.21 | 27.10.2026 | Ohne Formatänderung: gleiche Profilplatzhalter in allen drei Arbeitsanweisungen, Prüfung aller Platzhalter beim Laden (Warnung `PLATZHALTER_UNBEKANNT`), offene Platzhalter im Protokoll und als Befund `ANWEISUNG_PLATZHALTER_OFFEN` (TP-2026-W44-33); `{{auftrag.*}}` und `{{jetzt}}` gelten weiter, werden aber nicht mehr empfohlen, laufabhängige Aussagen gehören in den Steuerungsblock (TP-2026-W44-31) (App 0.6.4) |
+| 1.22 | 27.10.2026 | Ohne Formatänderung: Farben der Bewertung in der Meldungsmaske nach dem Rang der Aufzählung von `sv_beurteilung` und nach `tendenz_entspannung`/Verschärfung statt nach festen Wörtern (TP-2026-W44-16) (App 0.6.5) |

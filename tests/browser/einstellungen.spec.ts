@@ -20,7 +20,7 @@ test("jeder Bereich: genau eine Bereichsüberschrift, alle Bedienelemente mit zu
   for (const b of BEREICHE) {
     await leiste(page).getByRole("button", { name: b, exact: true }).click();
     await expect(page.locator(".bereich-inhalt h2")).toHaveText([b]);
-    await expect(leiste(page).getByRole("button", { name: b, exact: true })).toHaveAttribute("aria-current", "true");
+    await expect(leiste(page).getByRole("button", { name: b, exact: true })).toHaveAttribute("aria-current", "page");
     const baum = await page.locator("body").ariaSnapshot();
     expect(
       baum.split("\n").filter((z) => muster.test(z)),
@@ -53,13 +53,39 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
       const nav = document.querySelector('nav[aria-label="Bereiche der Einstellungen"]')!.getBoundingClientRect();
       const inhalt = document.querySelector(".bereich-inhalt")!.getBoundingClientRect();
       const knoepfe = [...document.querySelectorAll('nav[aria-label="Bereiche der Einstellungen"] button')].map((k) => k.getBoundingClientRect().top);
+      // Im Fehlerfall die überstehenden Elemente nennen (Diagnose für WebKit in der CI, seit 0.6.5)
+      // (ganze Seite: äußerste überstehende Elemente außerhalb scrollender oder zuschneidender Bereiche, mit Breite und
+      // position; dazu die Breiten von html und body)
+      const breite = window.innerWidth;
+      const name = (el: Element) => `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).trim().split(/\s+/).join(".") : ""}`;
+      const schneidet = (el: Element) => getComputedStyle(el).overflowX !== "visible";
+      const steht = (el: Element) => el.getBoundingClientRect().right > breite + 1 || el.scrollWidth > breite + 1;
+      const frei = (el: Element) => {
+        for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (schneidet(p)) return false;
+        return true;
+      };
+      // überstehender Inhalt (auch Text, der nicht umbricht): tiefste Elemente, deren Inhalt breiter ist als ihr Kasten
+      const kandidaten = [...document.body.querySelectorAll("*")].filter((el) => steht(el) && frei(el));
+      const ueberlauf = kandidaten.filter((el) => el.scrollWidth > el.clientWidth + 1 && !schneidet(el));
+      const tiefste = ueberlauf.filter((el) => !ueberlauf.some((k) => k !== el && el.contains(k)));
+      const aeusserste = tiefste.length ? tiefste : kandidaten.filter((el) => !kandidaten.some((a) => a !== el && a.contains(el)));
+      const zuBreit = [
+        `scrollWidth html ${document.documentElement.scrollWidth} px, body ${document.body.scrollWidth} px bei ${breite} px`,
+        ...aeusserste.slice(0, 6).map((el) => {
+          const r = el.getBoundingClientRect();
+          const st = getComputedStyle(el);
+          const text = (el.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 60);
+          return `${name(el)} in ${el.parentElement ? name(el.parentElement) : ""} (${Math.round(r.left)}–${Math.round(r.right)} px, scrollWidth ${el.scrollWidth}, ${st.position}, overflow-x ${st.overflowX}, display ${st.display}) „${text}“`;
+        }),
+      ];
       return {
         navOben: nav.bottom <= inhalt.top + 1,
         eineZeile: Math.max(...knoepfe) - Math.min(...knoepfe) < 2,
-        seiteBreiter: document.documentElement.scrollWidth > window.innerWidth,
+        seiteBreiter: document.documentElement.scrollWidth > breite,
+        zuBreit: document.documentElement.scrollWidth > breite ? zuBreit : [],
       };
     });
-    expect(masse, b).toEqual({ navOben: true, eineZeile: true, seiteBreiter: false });
+    expect(masse, b).toEqual({ navOben: true, eineZeile: true, seiteBreiter: false, zuBreit: [] });
   }
 });
 
@@ -80,4 +106,21 @@ test("Mistral-Schlüssel: Speichern, Übersicht zeigt ihn als hinterlegt, nach d
   await page.reload();
   await bereich(page, "Einstellungen");
   await expect(page.getByRole("row", { name: /^Mistral hinterlegt/ })).toBeVisible();
+});
+
+// Adresse (seit 0.6.5): Ansicht, Bereich und Reiter stehen im Hash; Neuladen behält sie, Zurück wechselt
+test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen in der Adresse", async ({ page }) => {
+  await leiste(page).getByRole("button", { name: "Modelle & Aufwand", exact: true }).click();
+  await expect(page).toHaveURL(/#\/einstellungen\/modelle$/);
+  await page.reload();
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+
+  await bereich(page, "Lagebild");
+  await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+  await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: "Redaktionscheck" }).click();
+  await expect(page).toHaveURL(/#\/lagebild\/redaktion$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/lagebild\/uebersicht$/);
+  await page.goBack();
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
 });

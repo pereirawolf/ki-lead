@@ -4,51 +4,41 @@ import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
 import { jetztLokal } from "./kern/ausgabe";
 import type { Meldung, Profil, ProfilEintrag } from "./kern/typen";
-import {
-  aktivesProfilLesen,
-  dateiAnbieten,
-  aktivesProfilSetzen,
-  profileLaden,
-  profilLoeschen,
-  profilSpeichern,
-  profilArchivieren,
-  zwischenstandLesen,
-  zwischenstandSchreiben,
-} from "./speicher/speicher";
+import { aktivesProfilLesen, dateiAnbieten, aktivesProfilSetzen, profileLaden, profilLoeschen, profilSpeichern, profilArchivieren } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
 import { kurzfassungLeeren } from "./ui/Kurzfassung";
-import { ProfileAnsicht } from "./ui/Profile";
 import { KiErfassung } from "./ui/KiErfassung";
 import { KiSymbol, type KopfLauf } from "./ui/KiSymbol";
-import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellungen";
-import { LagebildAnsicht } from "./ui/Lagebild";
-import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
+import type { EinstellungsBereich } from "./ui/Einstellungen";
+import { nachladbar } from "./ui/nachladen";
+
+// Lagebild, Profile und Einstellungen als eigene Teile des Builds (seit 0.6.5, TP-2026-W44-18), nach dem Start vorgeladen
+const Lagebild = nachladbar(() => import("./ui/Lagebild").then((m) => m.LagebildAnsicht));
+const Profile = nachladbar(() => import("./ui/Profile").then((m) => m.ProfileAnsicht));
+const Einstellungen = nachladbar(() => import("./ui/Einstellungen").then((m) => m.EinstellungenAnsicht));
+const LagebildAnsicht = Lagebild.Komponente;
+const ProfileAnsicht = Profile.Komponente;
+const EinstellungenAnsicht = Einstellungen.Komponente;
 import { Fehlergrenze } from "./ui/Fehlergrenze";
 import { STANDARD, type Einstellungen } from "./pipeline/einstellungen";
 import { einstellungenLesen, einstellungenSchreiben } from "./speicher/einstellungsSpeicher";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
-import { anwenden, aufloesen, PROFIL, profilFarbschemaFehler, systemVorgabe } from "./darstellung/thema";
-import {
-  darstellungLesen,
-  darstellungSchreiben,
-  lokaleFarbenLesen,
-  lokaleFarbenLoeschen,
-  lokaleFarbenSchreiben,
-  startLesen,
-  startSchreiben,
-} from "./darstellung/speicher";
-import type { ProfilFarbschema } from "./darstellung/typen";
+import { profilFarbschemaFehler } from "./darstellung/thema";
 import { exportStempel, mitDatum } from "./kern/ausgabe";
 import { PwaHinweis } from "./ui/PwaHinweis";
 import { ablageLesen, ablageWechseln, alleSchluesselLesen, schluesselSchreiben, type AblageId } from "./schluessel/ablage";
 import { ExternerLink } from "./ui/Ueber";
 import { HERAUSGEBER, VERWEISE } from "./kern/herausgeber";
 import { APP_KENNUNG } from "./kern/version";
+import { KiZugangContext, type KiZugangWert } from "./ui/kiZugang";
+import { useFarbschema } from "./ui/app/useFarbschema";
+import { useZwischenstand } from "./ui/app/useZwischenstand";
+import { useKiUebergabe } from "./ui/app/useKiUebergabe";
+import { adresseLesen, adresseText, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
+import { bestaetigen } from "./ui/bestaetigung";
 
 /** Profile laden mit der Prüfung des Farbschemas aus der Darstellung (seit 0.6.3, TP-2026-W44-24) */
 const LADEN = { farbschemaFehler: profilFarbschemaFehler };
-
-type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen";
 
 function neueMeldung(p: Profil): Meldung {
   const d = leererWert(p.schema, p.schema) as Meldung;
@@ -77,93 +67,53 @@ function sicherungsName(zone?: string): string {
 export default function App() {
   const [profile, setProfile] = useState<ProfilEintrag[]>([]);
   const [aktiv, setAktiv] = useState<string>();
-  const [ansicht, setAnsicht] = useState<Ansicht>("meldung");
-  /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten (nicht über ein Neuladen hinweg) */
-  const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>("uebersicht");
-  const [meldung, setMeldungRoh] = useState<Meldung | null>(null);
-  /** Zählt Dokumentinstanzen der Meldungsmaske (neue Meldung, geöffnete Datei, Übernahme, Profilwechsel) */
-  const [dokumentNr, setDokumentNr] = useState(0);
-  const [gesichert, setGesichert] = useState<string>();
-  /** Ausstehende Speicherungen je Profil (Entprellung), damit ein Profilwechsel nichts verliert */
-  const ausstehend = useRef(new Map<string, { daten: Meldung; timer: number }>());
-  const aktivesProfilId = useRef<string>();
+  // Ansicht, Bereich der Einstellungen und Reiter des Lagebilds stehen seit 0.6.5 in der Adresse (TP-2026-W44-20)
+  const [start] = useState(() => adresseLesen(window.location.hash));
+  const [ansicht, setAnsicht] = useState<Ansicht>(start.ansicht);
+  /** Bereich der Einstellungen; bleibt beim Wechsel der Ansicht erhalten */
+  const [einstellungsBereich, setEinstellungsBereich] = useState<EinstellungsBereich>(start.bereich ?? "uebersicht");
+  const [lagebildReiter, setLagebildReiter] = useState<LagebildReiter>(start.reiter ?? "uebersicht");
+  // Nachladbare Ansichten gleich nach dem ersten Zeichnen holen; ein Fehler zeigt sich erst beim Öffnen der Ansicht
+  useEffect(() => {
+    for (const n of [Lagebild, Profile, Einstellungen]) n.vorladen().catch(() => undefined);
+  }, []);
+  // Zurück und Vor im Browser, eingegebene Adresse
+  useEffect(() => {
+    const folgen = () => {
+      const a = adresseLesen(window.location.hash);
+      setAnsicht(a.ansicht);
+      if (a.bereich) setEinstellungsBereich(a.bereich);
+      if (a.reiter) setLagebildReiter(a.reiter);
+    };
+    window.addEventListener("hashchange", folgen);
+    window.addEventListener("popstate", folgen);
+    return () => {
+      window.removeEventListener("hashchange", folgen);
+      window.removeEventListener("popstate", folgen);
+    };
+  }, []);
+  // Wechsel der Ansicht als neuer Eintrag im Verlauf; der Start ohne Adresse bleibt ohne Hash
+  useEffect(() => {
+    const text = adresseText({ ansicht, bereich: einstellungsBereich, reiter: lagebildReiter });
+    if (window.location.hash === text || (!window.location.hash && text === "#/meldung")) return;
+    window.history.pushState(null, "", text);
+  }, [ansicht, einstellungsBereich, lagebildReiter]);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const [einstellungen, setEinstellungenRoh] = useState<Einstellungen>(STANDARD);
   const [schluessel, setSchluesselRoh] = useState<Schluessel>(LEERE_SCHLUESSEL);
   const [ablageId, setAblageId] = useState<AblageId>("geraet");
-  const [kiUebergabe, setKiUebergabe] = useState<KiUebergabe | null>(null);
-  /** Laufende Nummer der Übergaben; bleibt nach dem Quittieren erhalten, damit jede Übergabe neu ist */
-  const uebergabeNr = useRef(0);
 
   const profil = profile.find((p) => p.schluessel === aktiv)?.profil || null;
-
-  // Farbschema der Oberfläche: Auswahl (global) und eigene Farben des aktiven Profils (lokal, an Schlüssel und Prüfsumme gebunden)
-  const [farbStart] = useState(() => startLesen());
-  const [farbAuswahl, setFarbAuswahlRoh] = useState(farbStart.auswahl);
-  const [lokaleFarben, setLokaleFarben] = useState<ProfilFarbschema | undefined>();
-  /** Profil, für das die eigenen Farben gelesen sind (Schlüssel#Prüfsumme); bis dahin gilt der Startcache */
-  const [farbenGelesenFuer, setFarbenGelesenFuer] = useState<string | null>(null);
-  const farbSchreiben = useRef(Promise.resolve());
-  useEffect(() => {
-    darstellungLesen()
-      .then((d) => setFarbAuswahlRoh(d.auswahl))
-      .catch(() => undefined);
-  }, []);
-  useEffect(() => {
-    setLokaleFarben(undefined);
-    if (!aktiv || !profil) return;
-    let gueltig = true;
-    const fuer = `${aktiv}#${profil.hash}`;
-    lokaleFarbenLesen(aktiv, profil.hash)
-      .then((f) => gueltig && setLokaleFarben(f))
-      .catch(() => undefined)
-      .finally(() => gueltig && setFarbenGelesenFuer(fuer));
-    return () => {
-      gueltig = false;
-    };
-  }, [aktiv, profil]);
-  // Solange Profil und eigene Farben noch laden, gilt bei „profil“ die Definition aus dem Startcache (kein Aufblitzen)
-  const profilFarbenBereit = !!profil && farbenGelesenFuer === `${aktiv}#${profil.hash}`;
-  // Systemeinstellungen hell/dunkel und „mehr Kontrast“ für „Automatisch“ (bei Änderung sofort übernommen)
-  const [system, setSystem] = useState(systemVorgabe);
-  useEffect(() => {
-    if (!window.matchMedia) return;
-    const abfragen = ["(prefers-color-scheme: dark)", "(prefers-contrast: more)"].map((q) => window.matchMedia(q));
-    const neu = () => setSystem(systemVorgabe());
-    abfragen.forEach((mq) => mq.addEventListener?.("change", neu));
-    return () => abfragen.forEach((mq) => mq.removeEventListener?.("change", neu));
-  }, []);
-  const thema = useMemo(
-    () =>
-      farbAuswahl === PROFIL && !profilFarbenBereit
-        ? aufloesen(PROFIL, farbStart.profil)
-        : aufloesen(farbAuswahl, profil?.manifest.farbschema, lokaleFarben, system),
-    [farbAuswahl, profilFarbenBereit, farbStart, profil, lokaleFarben, system],
-  );
-  useEffect(() => {
-    anwenden(thema);
-    if (farbAuswahl !== PROFIL || profilFarbenBereit)
-      startSchreiben(thema.auswahl, thema.quelle === "lokal" ? lokaleFarben : thema.quelle === "profil" ? profil?.manifest.farbschema : undefined);
-  }, [thema, lokaleFarben, profil, farbAuswahl, profilFarbenBereit]);
-  /** Auswahl sofort anwenden; Speichern nacheinander, damit nach dem Neuladen die letzte Auswahl gilt */
-  const setFarbAuswahl = (auswahl: string) => {
-    setFarbAuswahlRoh(auswahl);
-    farbSchreiben.current = farbSchreiben.current
-      .then(() => darstellungSchreiben({ version: 1, auswahl }))
-      .catch((e) => speicherProblem("Das Farbschema gilt nur bis zum Neuladen; es konnte nicht im Gerät gespeichert werden", e));
-  };
-  const eigeneFarbenSpeichern = async (f: ProfilFarbschema | null) => {
-    if (!aktiv || !profil) return;
-    if (f) await lokaleFarbenSchreiben(aktiv, profil.hash, f);
-    else await lokaleFarbenLoeschen(aktiv, profil.hash);
-    setLokaleFarben(f || undefined);
-    if (f) setFarbAuswahl(PROFIL);
-  };
 
   /** Meldet einen Fehler des Gerätespeichers sichtbar (IndexedDB gesperrt, voll oder defekt). */
   const speicherProblem = useCallback((was: string, e: unknown) => {
     setSpeicherFehler(`${was} (${(e as Error)?.message || "Speicherfehler"}).`);
   }, []);
+
+  // Farbschema, Zwischenstand und Übergabe an die KI (seit 0.6.5, TP-2026-W44-17 als eigene Hooks)
+  const farben = useFarbschema(aktiv, profil, speicherProblem);
+  const { meldung, setMeldung, dokumentNr, neuesDokument, gesichert } = useZwischenstand(profil, profile, neueMeldung, setSpeicherFehler, speicherProblem);
+  const ki = useKiUebergabe(profil, () => setAnsicht("ki"));
 
   useEffect(() => {
     einstellungenLesen()
@@ -197,32 +147,21 @@ export default function App() {
   /** Meldung in der Maske durch eine andere ersetzen; die Management Summary der alten Meldung wird geleert. */
   const meldungErsetzen = (m: Meldung) => {
     setMeldung(m);
-    setDokumentNr((n) => n + 1);
+    neuesDokument();
     if (profil) void kurzfassungLeeren(profil.manifest.id);
   };
 
-  const kiUebernehmen = (m: Meldung) => {
-    if (!confirm("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+  const kiUebernehmen = async (m: Meldung) => {
+    if (!(await bestaetigen("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     setAnsicht("meldung");
   };
 
-  const lagebildOeffnen = (m: Meldung) => {
-    if (!confirm("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.")) return;
+  const lagebildOeffnen = async (m: Meldung) => {
+    if (!(await bestaetigen("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     setAnsicht("meldung");
   };
-
-  const anKiUebergeben = (dateien: UebergabeMeldung[]) => {
-    // Aus der Verdichtung entsteht eine neue Meldung: die bisherige Management Summary gilt nicht mehr
-    if (!profil) return;
-    void kurzfassungLeeren(profil.manifest.id);
-    uebergabeNr.current += 1;
-    setKiUebergabe({ nr: uebergabeNr.current, profilHash: profil.hash, dateien });
-    setAnsicht("ki");
-  };
-
-  const uebergabeQuittieren = useCallback((nr: number) => setKiUebergabe((alt) => (alt?.nr === nr ? null : alt)), []);
 
   useEffect(() => {
     void (async () => {
@@ -269,105 +208,36 @@ export default function App() {
     })();
   }, []);
 
-  const schreiben = useCallback(async (id: string, p: Profil, daten: Meldung) => {
-    const jetzt = new Date();
-    try {
-      await zwischenstandSchreiben(id, { gespeichertAm: jetzt.toISOString(), daten, profilVersion: p.manifest.version, profilHash: p.hash });
-      if (aktivesProfilId.current === id) setGesichert(jetzt.toLocaleString("de-DE"));
-      setSpeicherFehler(null);
-    } catch (e) {
-      setSpeicherFehler(
-        `Der Zwischenstand konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}). Bitte die Meldung als JSON sichern.`,
-      );
-    }
-  }, []);
-
-  /** Alle ausstehenden Speicherungen sofort schreiben (Profilwechsel, Seite wird verlassen). */
-  const ausstehendSchreiben = useCallback(() => {
-    for (const [id, a] of ausstehend.current) {
-      window.clearTimeout(a.timer);
-      const p = profile.find((x) => x.profil?.manifest.id === id)?.profil;
-      if (p) void schreiben(id, p, a.daten);
-    }
-    ausstehend.current.clear();
-  }, [profile, schreiben]);
-
-  useEffect(() => {
-    const weg = () => ausstehendSchreiben();
-    const sichtbar = () => document.visibilityState === "hidden" && ausstehendSchreiben();
-    window.addEventListener("pagehide", weg);
-    document.addEventListener("visibilitychange", sichtbar);
-    return () => {
-      window.removeEventListener("pagehide", weg);
-      document.removeEventListener("visibilitychange", sichtbar);
-    };
-  }, [ausstehendSchreiben]);
-
-  // Beim Profilwechsel: ausstehende Speicherungen schreiben, dann Zwischenstand laden oder neue Meldung anlegen.
-  // Verspätete Ergebnisse eines vorher aktiven Profils werden verworfen.
-  useEffect(() => {
-    if (!profil) return;
-    ausstehendSchreiben();
-    aktivesProfilId.current = profil.manifest.id;
-    let gueltig = true;
-    setMeldungRoh(null);
-    setDokumentNr((n) => n + 1);
-    void (async () => {
-      let z: Awaited<ReturnType<typeof zwischenstandLesen>>;
-      try {
-        z = await zwischenstandLesen(profil.manifest.id);
-      } catch (e) {
-        if (!gueltig) return;
-        speicherProblem(
-          "Der Zwischenstand konnte nicht aus dem Gerätespeicher gelesen werden. Angezeigt wird eine neue Meldung; Änderungen daran überschreiben einen vorhandenen Zwischenstand",
-          e,
-        );
-        setMeldungRoh(neueMeldung(profil));
-        setGesichert(undefined);
-        return;
-      }
-      if (!gueltig) return;
-      setMeldungRoh(z?.daten ?? neueMeldung(profil));
-      const anderer = z?.profilVersion && z.profilVersion !== profil.manifest.version ? ` (angelegt mit Profilversion ${z.profilVersion}, bitte prüfen)` : "";
-      setGesichert(z ? new Date(z.gespeichertAm).toLocaleString("de-DE") + anderer : undefined);
-    })();
-    return () => {
-      gueltig = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profil]);
-
-  const setMeldung = useCallback(
-    (m: Meldung) => {
-      setMeldungRoh(m);
-      if (!profil) return;
-      const id = profil.manifest.id;
-      const alt = ausstehend.current.get(id);
-      if (alt) window.clearTimeout(alt.timer);
-      const timer = window.setTimeout(() => {
-        ausstehend.current.delete(id);
-        void schreiben(id, profil, m);
-      }, 1200);
-      ausstehend.current.set(id, { daten: m, timer });
-    },
-    [profil, schreiben],
-  );
-
   // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
   const kiLaeuft = useRef(false);
   /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
   const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
+  // Schließen oder Neuladen der Seite während eines KI-Laufs: Rückfrage des Browsers (seit 0.6.5, TP-2026-W44-20)
+  useEffect(() => {
+    const warnen = (e: BeforeUnloadEvent) => {
+      if (!kiLaeuft.current) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warnen);
+    return () => window.removeEventListener("beforeunload", warnen);
+  }, []);
 
   const aktivieren = async (schluessel: string) => {
     if (
       schluessel !== aktiv &&
       kiLaeuft.current &&
-      !confirm("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?")
+      !(await bestaetigen("Ein KI-Lauf ist aktiv und wird beim Profilwechsel abgebrochen (im Laufprotokoll als abgebrochen vermerkt). Trotzdem wechseln?", {
+        ja: "Trotzdem wechseln",
+      }))
     )
       return;
     setAktiv(schluessel);
-    // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil
-    if (schluessel !== aktiv) setKiUebergabe(null);
+    // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil; das Lagebild beginnt wieder mit der Übersicht
+    if (schluessel !== aktiv) {
+      ki.verwerfen();
+      setLagebildReiter("uebersicht");
+    }
     await aktivesProfilSetzen(schluessel).catch((e) => speicherProblem("Das gewählte Profil konnte nicht als Startprofil gespeichert werden", e));
     setAnsicht("meldung");
   };
@@ -407,147 +277,154 @@ export default function App() {
     if (aktiv === schluessel) setAktiv(profile.find((p) => p.profil && p.schluessel !== schluessel)?.schluessel);
   };
 
+  const zuEinstellungen = useCallback((bereich?: EinstellungsBereich) => {
+    setEinstellungsBereich(bereich ?? "anbieter");
+    setAnsicht("einstellungen");
+  }, []);
+  const kiZugang = useMemo<KiZugangWert>(() => ({ profil, einstellungen, schluessel, zuEinstellungen }), [profil, einstellungen, schluessel, zuEinstellungen]);
+
   return (
-    <div className="app">
-      <header className="kopf">
-        <div className="marke">
-          <span className="marke-name">KI-LEAD</span>
-          <span className="marke-zusatz">Demonstrator</span>
+    <KiZugangContext.Provider value={kiZugang}>
+      <div className="app">
+        <header className="kopf">
+          <div className="marke">
+            <span className="marke-name">KI-LEAD</span>
+            <span className="marke-zusatz">Demonstrator</span>
+          </div>
+          <nav className="hauptnav" aria-label="Bereiche">
+            <button
+              type="button"
+              className={ansicht === "meldung" ? "nav aktiv" : "nav"}
+              aria-current={ansicht === "meldung" ? "page" : undefined}
+              onClick={() => setAnsicht("meldung")}
+            >
+              Meldung
+            </button>
+            <button
+              type="button"
+              className={ansicht === "ki" ? "nav aktiv" : "nav"}
+              aria-current={ansicht === "ki" ? "page" : undefined}
+              onClick={() => setAnsicht("ki")}
+            >
+              KI-Erfassung
+            </button>
+            <button
+              type="button"
+              className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
+              aria-current={ansicht === "lagebild" ? "page" : undefined}
+              onClick={() => setAnsicht("lagebild")}
+            >
+              {profil?.ui.lagebild?.titel || "Lagebild"}
+            </button>
+            <button
+              type="button"
+              className={ansicht === "profile" ? "nav aktiv" : "nav"}
+              aria-current={ansicht === "profile" ? "page" : undefined}
+              onClick={() => setAnsicht("profile")}
+            >
+              Profile
+            </button>
+            <button
+              type="button"
+              className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
+              aria-current={ansicht === "einstellungen" ? "page" : undefined}
+              onClick={() => setAnsicht("einstellungen")}
+            >
+              Einstellungen
+            </button>
+          </nav>
+          {profil && (
+            <div className="kopf-rechts" data-profil={profil.manifest.name}>
+              <KiSymbol lauf={kopfLauf} zurKi={() => setAnsicht("ki")} />
+            </div>
+          )}
+        </header>
+
+        <div className="hinweisband" role="note">
+          Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
         </div>
-        <nav className="hauptnav" aria-label="Bereiche">
-          <button
-            type="button"
-            className={ansicht === "meldung" ? "nav aktiv" : "nav"}
-            aria-current={ansicht === "meldung" ? "page" : undefined}
-            onClick={() => setAnsicht("meldung")}
-          >
-            Meldung
-          </button>
-          <button
-            type="button"
-            className={ansicht === "ki" ? "nav aktiv" : "nav"}
-            aria-current={ansicht === "ki" ? "page" : undefined}
-            onClick={() => setAnsicht("ki")}
-          >
-            KI-Erfassung
-          </button>
-          <button
-            type="button"
-            className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
-            aria-current={ansicht === "lagebild" ? "page" : undefined}
-            onClick={() => setAnsicht("lagebild")}
-          >
-            {profil?.ui.lagebild?.titel || "Lagebild"}
-          </button>
-          <button
-            type="button"
-            className={ansicht === "profile" ? "nav aktiv" : "nav"}
-            aria-current={ansicht === "profile" ? "page" : undefined}
-            onClick={() => setAnsicht("profile")}
-          >
-            Profile
-          </button>
-          <button
-            type="button"
-            className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
-            aria-current={ansicht === "einstellungen" ? "page" : undefined}
-            onClick={() => setAnsicht("einstellungen")}
-          >
-            Einstellungen
-          </button>
-        </nav>
-        {profil && (
-          <div className="kopf-rechts" data-profil={profil.manifest.name}>
-            <KiSymbol lauf={kopfLauf} zurKi={() => setAnsicht("ki")} />
+        <PwaHinweis />
+
+        {speicherFehler && (
+          <div className="kasten kasten-fehler speicherfehler" role="alert">
+            <p>{speicherFehler}</p>
           </div>
         )}
-      </header>
 
-      <div className="hinweisband" role="note">
-        Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
+        <main className="inhalt">
+          {ansicht === "profile" && <ProfileAnsicht profile={profile} aktiv={aktiv} aktivieren={aktivieren} importieren={importieren} loeschen={loeschen} />}
+          {ansicht === "meldung" && profil && meldung && (
+            <Fehlergrenze
+              schluessel={profil.hash}
+              sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", sicherungsName(profil.manifest.variablen?.zeitzone), "application/json")}
+              zuruecksetzen={() => meldungErsetzen(neueMeldung(profil))}
+              zuruecksetzenText="Neue Meldung beginnen"
+            >
+              <MeldungAnsicht
+                key={profil.hash}
+                profil={profil}
+                meldung={meldung}
+                setMeldung={setMeldung}
+                neu={() => meldungErsetzen(neueMeldung(profil))}
+                ersetzen={meldungErsetzen}
+                zwischenstand={gesichert}
+                dokument={dokumentNr}
+              />
+            </Fehlergrenze>
+          )}
+          {profil && (
+            <div hidden={ansicht !== "ki"}>
+              <KiErfassung
+                key={profil.hash}
+                uebernehmen={kiUebernehmen}
+                uebergabe={ki.uebergabe}
+                uebergabeQuittieren={ki.quittieren}
+                laufMelden={(l) => {
+                  kiLaeuft.current = l;
+                }}
+                laufStand={setKopfLauf}
+              />
+            </div>
+          )}
+          {ansicht === "lagebild" && profil && (
+            <Fehlergrenze schluessel={profil.hash}>
+              <LagebildAnsicht
+                key={profil.hash}
+                profil={profil}
+                uebergeben={ki.uebergeben}
+                oeffnen={lagebildOeffnen}
+                reiter={lagebildReiter}
+                setReiter={setLagebildReiter}
+              />
+            </Fehlergrenze>
+          )}
+          {ansicht === "einstellungen" && (
+            <Fehlergrenze schluessel={profil?.hash || "einstellungen"}>
+              <EinstellungenAnsicht
+                profil={profil}
+                einstellungen={einstellungen}
+                setEinstellungen={setEinstellungen}
+                schluessel={schluessel}
+                setSchluessel={setSchluessel}
+                ablage={ablageId}
+                setAblage={setAblage}
+                farben={farben}
+                bereich={einstellungsBereich}
+                setBereich={setEinstellungsBereich}
+              />
+            </Fehlergrenze>
+          )}
+          {(ansicht === "meldung" || ansicht === "ki" || ansicht === "lagebild") && !profil && profile.length > 0 && (
+            <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
+          )}
+        </main>
+        <footer className="fuss">
+          {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral; über
+          Ollama bleiben sie auf dem Gerät). Code unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz
+          ihres Herausgebers. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> ·{" "}
+          <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> · <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
+        </footer>
       </div>
-      <PwaHinweis />
-
-      {speicherFehler && (
-        <div className="kasten kasten-fehler speicherfehler" role="alert">
-          <p>{speicherFehler}</p>
-        </div>
-      )}
-
-      <main className="inhalt">
-        {ansicht === "profile" && <ProfileAnsicht profile={profile} aktiv={aktiv} aktivieren={aktivieren} importieren={importieren} loeschen={loeschen} />}
-        {ansicht === "meldung" && profil && meldung && (
-          <Fehlergrenze
-            schluessel={profil.hash}
-            sichern={() => dateiAnbieten(JSON.stringify(meldung, null, 2) + "\n", sicherungsName(profil.manifest.variablen?.zeitzone), "application/json")}
-            zuruecksetzen={() => meldungErsetzen(neueMeldung(profil))}
-            zuruecksetzenText="Neue Meldung beginnen"
-          >
-            <MeldungAnsicht
-              key={profil.hash}
-              profil={profil}
-              meldung={meldung}
-              setMeldung={setMeldung}
-              neu={() => meldungErsetzen(neueMeldung(profil))}
-              ersetzen={meldungErsetzen}
-              zwischenstand={gesichert}
-              dokument={dokumentNr}
-              ki={{ schluessel, einstellungen }}
-            />
-          </Fehlergrenze>
-        )}
-        {profil && (
-          <div hidden={ansicht !== "ki"}>
-            <KiErfassung
-              key={profil.hash}
-              profil={profil}
-              einstellungen={einstellungen}
-              schluessel={schluessel}
-              zuEinstellungen={(bereich) => {
-                setEinstellungsBereich(bereich ?? "anbieter");
-                setAnsicht("einstellungen");
-              }}
-              uebernehmen={kiUebernehmen}
-              uebergabe={kiUebergabe}
-              uebergabeQuittieren={uebergabeQuittieren}
-              laufMelden={(l) => {
-                kiLaeuft.current = l;
-              }}
-              laufStand={setKopfLauf}
-            />
-          </div>
-        )}
-        {ansicht === "lagebild" && profil && (
-          <Fehlergrenze schluessel={profil.hash}>
-            <LagebildAnsicht key={profil.hash} profil={profil} uebergeben={anKiUebergeben} oeffnen={lagebildOeffnen} />
-          </Fehlergrenze>
-        )}
-        {ansicht === "einstellungen" && (
-          <Fehlergrenze schluessel={profil?.hash || "einstellungen"}>
-            <EinstellungenAnsicht
-              profil={profil}
-              einstellungen={einstellungen}
-              setEinstellungen={setEinstellungen}
-              schluessel={schluessel}
-              setSchluessel={setSchluessel}
-              ablage={ablageId}
-              setAblage={setAblage}
-              farben={{ auswahl: farbAuswahl, setAuswahl: setFarbAuswahl, thema, lokal: lokaleFarben, speichern: eigeneFarbenSpeichern }}
-              bereich={einstellungsBereich}
-              setBereich={setEinstellungsBereich}
-            />
-          </Fehlergrenze>
-        )}
-        {(ansicht === "meldung" || ansicht === "ki" || ansicht === "lagebild") && !profil && profile.length > 0 && (
-          <p className="leer">Kein verwendbares Profil. Bitte unter „Profile“ ein Profilpaket importieren.</p>
-        )}
-      </main>
-      <footer className="fuss">
-        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral; über
-        Ollama bleiben sie auf dem Gerät). Code unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz
-        ihres Herausgebers. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> ·{" "}
-        <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> · <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
-      </footer>
-    </div>
+    </KiZugangContext.Provider>
   );
 }

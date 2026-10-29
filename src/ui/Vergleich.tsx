@@ -1,6 +1,6 @@
 // Vergleich eines KI-Entwurfs mit einer Referenzfassung (z. B. Redaktionsfassung) nach demselben Profil.
 
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { migriere } from "../kern/migration";
 import { VERGLEICH_VERFAHREN, vergleiche, vergleichTabelle, zuordnungAus, type GespeicherterVergleich, type Zuordnung } from "../pipeline/vergleich";
@@ -19,7 +19,7 @@ function Abweichung({ d }: { d: number | null }) {
   return <span className={`vg-diff ${k}`}>{d > 0 ? `+${d}` : d}</span>;
 }
 
-export function VergleichKasten({
+function VergleichKastenInhalt({
   profil,
   meldung,
   gespeichert,
@@ -247,3 +247,6 @@ export function VergleichKasten({
     </details>
   );
 }
+
+/** Neu gezeichnet nur bei geänderten Angaben (seit 0.6.5, TP-2026-W44-18) */
+export const VergleichKasten = memo(VergleichKastenInhalt);

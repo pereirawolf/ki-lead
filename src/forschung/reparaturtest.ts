@@ -8,7 +8,6 @@
 // Gemessen je Fall: schemakonform nach der Reparatur, Zahl der Reparaturen, Erhalt der übrigen Inhalte gegenüber dem
 // unbeschädigten Durchlauf (Soll, ohne KI-Aufruf ermittelt), Kosten, Dauer und Token von S3. Alle Inhalte sind fiktiv.
 
-import JSZip from "jszip";
 import PLAN from "../../evaluation/plaene/reparatur-ilka.json";
 import { kostenAnfrage } from "../anbieter/preise";
 import type { AnbieterOptionenTeil } from "../anbieter/optionen";
@@ -474,6 +473,8 @@ export function reparaturDateiname(r: ReparaturReihe): string {
 
 /** ZIP mit Reihendatei, Übersicht, Laufprotokollen und reparierten Entwürfen */
 export async function reparaturZip(r: ReparaturReihe, laeufe: DurchlaufErgebnis[]): Promise<Uint8Array> {
+  // jszip erst bei Bedarf laden (seit 0.6.5, TP-2026-W44-18): nicht im Haupt-JavaScript
+  const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   zip.file("reihe.json", JSON.stringify(r, null, 2));
   zip.file("uebersicht.csv", csv(reparaturZeilen(r)));

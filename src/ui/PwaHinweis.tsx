@@ -1,6 +1,11 @@
 // Hinweise der PWA: ohne Netz (was weiter geht, was nicht) und bereitstehende neue Fassung.
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { jetztAktualisieren, pwaBeobachten, pwaZustand, type PwaZustand } from "../pwa/registrieren";
+
+/** Zustand der PWA (Netz, neue Fassung) für Komponenten; folgt den Ereignissen online/offline (seit 0.6.5, TP-2026-W44-20) */
+export function usePwaZustand(): PwaZustand {
+  return useSyncExternalStore(pwaBeobachten, pwaZustand);
+}
 
 export interface PwaHinweisProps {
   /** Fester Zustand (Tests); ohne Angabe folgt der Hinweis dem Zustand der App */
