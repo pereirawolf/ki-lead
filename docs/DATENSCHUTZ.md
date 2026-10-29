@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.7 vom 27.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.8 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -23,7 +23,7 @@ Werden nur fiktive oder offen zugängliche Inhalte ohne Personenbezug verwendet,
 
 KI-LEAD hat **keinen eigenen Server**. Inhalte gehen vom Gerät direkt an den gewählten Anbieter, mit dem API-Schlüssel der nutzenden Person. Der Herausgeber erhält weder Inhalte noch Schlüssel, Protokolle oder Nutzungsdaten. Er kann deshalb auch keine Auskunft über die Verarbeitung in der App geben und nichts löschen.
 
-Nutzt eine Behörde KI-LEAD, ist sie Verantwortliche für ihre Verarbeitung. Sie führt das Verzeichnis der Verarbeitungstätigkeiten und entscheidet über eine Datenschutz-Folgenabschätzung (Anhang C).
+Nutzt eine Behörde KI-LEAD, ist sie Verantwortliche für ihre Verarbeitung. Sie führt das Verzeichnis der Verarbeitungstätigkeiten (Vorlage in Anhang D) und entscheidet über eine Datenschutz-Folgenabschätzung (Anhang C).
 
 ## 3. Was wo gespeichert wird
 
@@ -226,7 +226,7 @@ Antworten für das Formular „Data safety“. Google versteht unter Erhebung je
 
 ## Anhang C: Vorlage Schwellwertanalyse zur Datenschutz-Folgenabschätzung
 
-Für Stellen, die KI-LEAD erproben. Die Vorlage hilft bei der Frage, ob eine Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO nötig ist. **DSFA und Verzeichnis der Verarbeitungstätigkeiten bleiben bei der nutzenden Stelle.** Die Vorlage ersetzt keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten.
+Für Stellen, die KI-LEAD erproben. Die Vorlage hilft bei der Frage, ob eine Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO nötig ist. **DSFA und Verzeichnis der Verarbeitungstätigkeiten bleiben bei der nutzenden Stelle.** Eine Vorlage für den Eintrag im Verzeichnis steht in Anhang D. Die Vorlage ersetzt keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten.
 
 **Stelle:** … **Vorhaben:** Erprobung von KI-LEAD, Version … **Ausgefüllt von / am:** …
 
@@ -267,11 +267,97 @@ Lautet die Antwort „nein“ und ist sie begründet, ist keine DSFA nötig. Erg
 
 Datum, Unterschrift, Beteiligung der oder des Datenschutzbeauftragten: …
 
+## Anhang D: Vorlage Eintrag im Verzeichnis von Verarbeitungstätigkeiten
+
+Für Stellen, die KI-LEAD erproben oder einsetzen und dabei personenbezogene Daten verarbeiten. Die Vorlage übernimmt die Angaben dieses Dokuments je Pflichtfeld und verweist auf den Abschnitt, in dem sie stehen. Felder in eckigen Klammern füllt die Stelle selbst. **Das Verzeichnis führt die nutzende Stelle** (Abschnitt 2). Die Vorlage ersetzt nicht das Muster der eigenen Stelle oder der zuständigen Aufsichtsbehörde und keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten.
+
+Werden nach Anhang C, Schritt 1, keine personenbezogenen Daten verarbeitet, ist kein Eintrag nötig. Das begründete Ergebnis von Schritt 1 dokumentiert dann die Festlegung.
+
+### Rechtsrahmen
+
+| Bereich | Maßgeblich | Folge für den Eintrag |
+|---|---|---|
+| Verwaltung im Allgemeinen, auch Brand- und Katastrophenschutz | Art. 30 Abs. 1 DSGVO | Pflichtangaben D1 bis D7 |
+| Landesrecht | [Landesdatenschutzgesetz, z. B. Thüringer Datenschutzgesetz (ThürDSG)], [Fachgesetz], [Vorgaben der Aufsichtsbehörde oder hausinternes Muster] | zusätzliche Angaben unter D8 |
+| Polizei, Strafverfolgung und Gefahrenabwehr im Anwendungsbereich der Richtlinie (EU) 2016/680 | Bund: § 70 BDSG (Bundesministerium der Justiz, o. J.); Länder: eigenes Umsetzungsrecht, in Thüringen das ThürDSG und das jeweilige Fachgesetz (§ 1 Abs. 2 ThürDSG; Verzeichnis: § 50 ThürDSG, mit Rechtsgrundlage und Profiling wie § 70 BDSG; Freistaat Thüringen, 2018; Haufe, o. J.) | Rechtsgrundlage ist Pflichtangabe; zusätzlich Angabe zum Profiling (D9) |
+
+Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empfehlen sie, öffentliche Stellen sollen spezialgesetzliche Grundlagen nennen (TLfDI, o. J.). Die Vorlage sieht das Feld deshalb immer vor (D2).
+
+**Kopf**
+
+| Angabe | Eintrag |
+|---|---|
+| Bezeichnung der Verarbeitungstätigkeit | [z. B. Erfassung und Verdichtung von Lagemeldungen mit KI-Unterstützung (KI-LEAD)] |
+| Laufende Nummer im Verzeichnis der Stelle | [ ] |
+| Eingesetzte Fassung | KI-LEAD [App-Version], Profil [Profil-ID, Profilversion] (beides steht in jedem Laufprotokoll, Abschnitt 8) |
+| Einsatzbeginn, Stand des Eintrags | [Datum], [Datum] |
+
+### D1 Verantwortlicher (Art. 30 Abs. 1 Buchst. a DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| Verantwortlich ist die nutzende Stelle (Abschnitt 2). Der Herausgeber ist weder Verantwortlicher noch Auftragsverarbeiter: Er betreibt keinen Dienst und erhält keine Inhalte (Abschnitte 6 und 12.1). | [Behörde, Anschrift], [verantwortliche Organisationseinheit], [gemeinsam Verantwortliche, falls ja], [Datenschutzbeauftragte oder Datenschutzbeauftragter mit Kontakt] |
+
+### D2 Zwecke und Rechtsgrundlage (Art. 30 Abs. 1 Buchst. b DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| KI-LEAD unterstützt die Erfassung von Lagemeldungen nach dem gewählten Profil, ihre Prüfung und Verdichtung zu einem Lagebild sowie eine Management Summary. Die KI erstellt Entwürfe; eine Person prüft und gibt frei (Anhang C, Kriterium 2). | [konkreter Zweck der Stelle, z. B. Erprobung im Rahmen von …; Sammelbegriffe vermeiden (TLfDI, o. J.)] |
+| Eine Rechtsgrundlage kann der Herausgeber nicht vorgeben. | [Rechtsgrundlage, z. B. Art. 6 Abs. 1 Buchst. e, Abs. 3 DSGVO in Verbindung mit … (Fachgesetz)] |
+
+### D3 Betroffene Personen und Datenkategorien (Art. 30 Abs. 1 Buchst. c DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| Bei bestimmungsgemäßer Nutzung keine personenbezogenen Daten (Abschnitt 1). Personenbezug kann entstehen durch: Angaben in Auftrag, Material, Meldungen und Profiltexten; Kontaktadressen meldender Stellen in `kontakte.json` oder `kontakte.lokal.json` (Abschnitt 4); Laufprotokolle mit vollständigen Prompts, Material und Rohantworten (Abschnitt 8). Speicherorte auf dem Gerät: Abschnitt 3. | [Kategorien betroffener Personen, z. B. in Meldungen genannte Personen, Ansprechpersonen meldender Stellen, Beschäftigte der Stelle] |
+| | [Datenkategorien]; besondere Kategorien nach Art. 9 DSGVO: [ja / nein, Begründung] |
+
+### D4 Empfänger (Art. 30 Abs. 1 Buchst. d DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| KI-Anbieter nach Wahl, je Aufgabe auch mehrere: Anthropic, OpenAI, Mistral, als Auftragsverarbeiter nach dem Vertrag der Stelle (Abschnitte 2 und 5). Bei Ollama kein externer Empfänger (Abschnitt 5). Bei erlaubter Recherche sehen Suchdienste und Webseiten Anfragen des Anbieters (Abschnitt 4). GitHub als Hosting der Web-App für Verbindungsdaten (Abschnitt 7). Erinnerungen per E-Mail gehen über das Mailprogramm des Geräts an die meldenden Stellen (Abschnitt 4). Der Herausgeber ist kein Empfänger (Abschnitt 6). | [genutzte Anbieter und Verträge], [interne Empfänger, z. B. Stab, Lagezentrum], [Zugriffsberechtigte nach Rolle] |
+
+### D5 Übermittlung in Drittländer (Art. 30 Abs. 1 Buchst. e DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| Anthropic und OpenAI: USA. Mistral über den EU-Endpunkt (Vorgabe): EU und EFTA; Kontoverwaltung, Abrechnung und Auswertung können außerhalb liegen. Ollama: keine Übermittlung (Abschnitt 5, „Übermittlung in Drittländer“). GitHub: USA (Abschnitt 12.3). Die Grundlage der Übermittlung regelt der Vertrag des Anbieters mit der Stelle. | [Drittländer der genutzten Anbieter], [Garantie: Angemessenheitsbeschluss, Standardvertragsklauseln oder …, geprüft am …] |
+
+### D6 Löschfristen (Art. 30 Abs. 1 Buchst. f DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| Auf dem Gerät bleibt alles bis zur Löschung durch die Person; die App löscht nichts selbsttätig (Abschnitte 3 und 10). Beim Anbieter: bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5). Exportierte Laufprotokolle sind wie das verwendete Material zu behandeln (Abschnitt 8). | [Frist der Stelle, z. B. Laufprotokolle und Lagebilder löschen nach …], [Zuständigkeit für die Löschung], [Aufbewahrung nach Aktenordnung oder Fachrecht] |
+
+### D7 Technische und organisatorische Maßnahmen (Art. 30 Abs. 1 Buchst. g, Art. 32 DSGVO)
+
+| Vorbefüllung | Eintrag der Stelle |
+|---|---|
+| Kein eigener Server; Verbindungen nur über HTTPS und nur zu den in der Content-Security-Policy erlaubten Zielen; keine Telemetrie (Abschnitt 4). Bestätigung vor jedem KI-Lauf, dass keine personenbezogenen oder eingestuften Daten verwendet werden (Abschnitt 1). Ablage der API-Schlüssel wählbar, auch mit Passphrase verschlüsselt oder im Schlüsselbund des Systems; Android-Sicherung ausgeschlossen (Abschnitt 9). Prüfsumme importierter Profile, Schutz gegen Prompt-Injection und Lieferkettenrisiken: [SICHERHEIT.md](SICHERHEIT.md). | [Gerätesicherheit, Benutzer- und Zugriffsschutz], [gewählte Schlüsselablage], [Ausgabenlimit und Kontoverwaltung beim Anbieter], [Dienstanweisung zur Erprobung, Unterweisung] |
+
+### D8 Ergänzende Angaben (Landesrecht, Empfehlungen)
+
+| Angabe | Eintrag der Stelle |
+|---|---|
+| Ergebnis der Schwellwertanalyse oder DSFA (Anhang C) | [Datum, Ergebnis, Fundstelle] |
+| Auftragsverarbeitungsverträge | [Anbieter, Vertragsstand, Fundstelle] |
+| Landesrechtliche Zusatzangaben | [nach Landesdatenschutzgesetz oder Muster der Stelle] |
+
+### D9 Nur im Anwendungsbereich der Richtlinie (EU) 2016/680
+
+| Angabe | Vorbefüllung | Eintrag der Stelle |
+|---|---|---|
+| Profiling (§ 70 Abs. 1 Nr. 5 BDSG; § 50 Abs. 1 Nr. 5 ThürDSG; sonst Landesrecht) | KI-LEAD bewertet Lagen, nicht Personen (Anhang C, Kriterium 1). | [nein / ja, Beschreibung] |
+| Rechtsgrundlage (§ 70 Abs. 1 Nr. 7 BDSG; § 50 Abs. 1 Nr. 7 ThürDSG; sonst Landesrecht) | siehe D2 | [Vorschrift] |
+
+**Ausgefüllt von / am:** … **Beteiligung der oder des Datenschutzbeauftragten:** … **Überprüfung:** bei jeder neuen App- oder Profilversion, spätestens [Datum]
+
 ---
 
 ## Quellen
 
-Zugriff jeweils am 24.10.2026.
+Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 
 - Anthropic (2025): Commercial Terms of Service. Online abrufbar unter: https://www.anthropic.com/legal/commercial-terms [Zugriff: 24.10.2026]
 - Anthropic (2026): How long do you store my organization's data? Online abrufbar unter: https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data [Zugriff: 24.10.2026]
@@ -279,10 +365,13 @@ Zugriff jeweils am 24.10.2026.
 - Anthropic (o. J. b): API and data retention. Online abrufbar unter: https://platform.claude.com/docs/en/manage-claude/api-and-data-retention [Zugriff: 24.10.2026]
 - Apple (o. J.): App privacy details on the App Store. Online abrufbar unter: https://developer.apple.com/support/app-privacy-on-the-app-store/ [Zugriff: 24.10.2026]
 - Artikel-29-Datenschutzgruppe (2017): Guidelines on Data Protection Impact Assessment (DPIA) and determining whether processing is "likely to result in a high risk" for the purposes of Regulation 2016/679 (WP 248 rev.01), vom Europäischen Datenschutzausschuss bestätigt. Online abrufbar unter: http://ec.europa.eu/newsroom/article29/item-detail.cfm?item_id=611236 [Zugriff: 24.10.2026]
+- Bundesministerium der Justiz (o. J.): § 70 Bundesdatenschutzgesetz (BDSG) – Verzeichnis von Verarbeitungstätigkeiten. Online abrufbar unter: https://www.gesetze-im-internet.de/bdsg_2018/__70.html [Zugriff: 28.10.2026]
 - Datenschutzkonferenz (2018): Liste von Verarbeitungsvorgängen nach Art. 35 Abs. 4 DS-GVO – DSFA-Liste Deutschland, nicht-öffentlicher Bereich, Version 1.1 vom 17.10.2018. Online abrufbar unter: https://datenschutz-hamburg.de/fileadmin/user_upload/HmbBfDI/Datenschutz/Informationen/DSFA_Muss-Liste_fuer_den_nicht-oeffentlicher_Bereich_-_Stand_17.10.2018.pdf [Zugriff: 24.10.2026]
+- Freistaat Thüringen (2018): Thüringer Datenschutzgesetz (ThürDSG) vom 6. Juni 2018, Artikel 1 des Thüringer Datenschutz-Anpassungs- und -Umsetzungsgesetzes EU, GVBl. Nr. 6/2018, S. 229. Online abrufbar unter: https://parldok.thueringer-landtag.de/ParlDok/dokument/67333/gesetz_und_verordnungsblatt_nr_6_2018.pdf [Zugriff: 28.10.2026]
 - GitHub (2026): GitHub General Privacy Statement, gültig ab 27.04.2026. Online abrufbar unter: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement [Zugriff: 24.10.2026]
 - GitHub (o. J.): About GitHub Pages. Online abrufbar unter: https://docs.github.com/en/articles/about-github-pages [Zugriff: 24.10.2026]
 - Google (o. J.): Provide information for Google Play's Data safety section. Online abrufbar unter: https://support.google.com/googleplay/android-developer/answer/10787469 [Zugriff: 24.10.2026]
+- Haufe (o. J.): Thüringer Datenschutzgesetz, § 50 Verzeichnis von Verarbeitungstätigkeiten (Artikel 24 der Richtlinie (EU) 2016/680). Online abrufbar unter: https://www.haufe.de/id/norm/thueringer-datenschutzgesetz-50-verzeichnis-von-verarbeitungstaetigkeiten-artikel-24-der-richtlinie-eu-2016680-HI11798656_p50.html [Zugriff: 28.10.2026]
 - lxgesetze (o. J.): § 25 Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG). Online abrufbar unter: https://lxgesetze.de/tdddg/25 [Zugriff: 24.10.2026]
 - Mistral AI (o. J. a): Do you use my user data to train your artificial intelligence models? Online abrufbar unter: https://help.mistral.ai/en/articles/347617-do-you-use-my-user-data-to-train-your-artificial-intelligence-models [Zugriff: 24.10.2026]
 - Mistral AI (o. J. b): Can I opt out of my input or output data being used for training? Online abrufbar unter: https://help.mistral.ai/en/articles/347614-can-i-opt-out-of-my-input-or-output-data-being-used-for-training [Zugriff: 24.10.2026]
@@ -290,6 +379,7 @@ Zugriff jeweils am 24.10.2026.
 - Mistral AI (o. J. d): Regional inference. Online abrufbar unter: https://docs.mistral.ai/inference/regional-inference [Zugriff: 24.10.2026]
 - Open Terms Archive (2024): Mistral AI retains API prompts and outputs for 30 days. Online abrufbar unter: https://opentermsarchive.org/en/memos/mistral-ai-retains-api-prompts-and-outputs-for-30-days/ [Zugriff: 24.10.2026]
 - OpenAI (o. J.): Data controls in the OpenAI platform. Online abrufbar unter: https://developers.openai.com/api/docs/guides/your-data [Zugriff: 24.10.2026]
+- TLfDI – Thüringer Landesbeauftragter für den Datenschutz und die Informationsfreiheit (o. J.): Hinweise zum Anwendungsbeispiel für ein Verzeichnis von Verarbeitungstätigkeiten gem. Art. 30 DS-GVO. Online abrufbar unter: https://tlfdi.de/fileadmin/tlfdi/datenschutz/hinweise_verarbeitungsverzeichnis.pdf [Zugriff: 28.10.2026]
 - Wavect (2026): EU Data Residency for AI APIs 2026: Provider Guide. Online abrufbar unter: https://wavect.io/blog/eu-data-residency-ai-apps-2026/ [Zugriff: 24.10.2026]
 
 ## Änderungsverlauf
@@ -304,3 +394,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.5 | 25.10.2026 | Abschnitte 3 und 10: Archiv der Testläufe auf dem Gerät mit Löschen (App 0.5.17) |
 | 1.6 | 26.10.2026 | Abschnitte 3 und 9: Ablage der API-Schlüssel mit Passphrase verschlüsselt (App 0.6.2, TP-2026-W44-09) |
 | 1.7 | 27.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |
+| 1.8 | 28.10.2026 | Anhang D: Vorlage für einen Eintrag im Verzeichnis von Verarbeitungstätigkeiten nach Art. 30 DSGVO mit Vorbefüllung und Platzhaltern, Hinweisen zu Landesrecht (ThürDSG) und zu § 70 BDSG; Verweise in Abschnitt 2 und Anhang C; Quellen ergänzt (ohne Änderung der App) |
