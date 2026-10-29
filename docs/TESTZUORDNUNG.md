@@ -771,3 +771,13 @@ Angepasst ohne Änderung des Solls: `tests/support/dom.ts` ersetzt in `reactUmge
 | Maske: Kennung beim Anlegen, „Kennung vergeben“, Zeitstrahl unter dem Quellenverzeichnis, „Zeile anfügen“ mit Kenntniszeit, „Chronologisch ordnen“, „Aufnahmezeit ergänzen“, ohne Kennung gesperrt | ZS-2026-W44-02 / -01 › … | `tests/ui/zeitstrahl.test.ts` (neu) |
 
 Angepasst ohne Änderung des Solls: `tests/lagebild/redaktionscheck.test.ts` (der Testfall entfernt den Zeitstrahl der Beispielmeldung, weil er alle Texte selbst setzt), `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.6.0, Verdichtung 2.2).
+
+## Bereiche und Ansprache der Oberfläche (0.6.10, OF-2026-W44-01 bis -04, Entscheidung des Herausgebers vom 30.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Navigation „Erfassung“, „KI-Erfassung“, „Auswertung“, „Profile“, „Einstellungen“; Überschrift und Kennsatz je Bereich | OF-2026-W44-01, -02: Bereiche nach den Arbeitsschritten der LEAD-Systematik › … | `tests/ui/bereiche.test.ts` (neu) |
+| Beispielprofil mit Titel „Meldung“ ohne Untertitel; PDF-Metadaten mit Produkttitel; Untertitel eines anderen Profils ergänzt den Kennsatz | OF-2026-W44-03: Produkttitel aus dem Profil, Bereichsnamen aus der App › … | `tests/ui/bereiche.test.ts` (neu) |
+| Keine Anrede mit „du“ oder „Sie“ in `src/ui/`, `src/App.tsx` und `public/`, mit Gegenprobe; Arbeitsanweisungen bleiben beim „du“ | OF-2026-W44-04: neutrale Ansprache in der Oberfläche › … | `tests/ui/bereiche.test.ts` (neu) |
+
+Angepasst ohne Änderung des Solls (neue Bereichsnamen und Texte): `tests/ui/app.test.ts`, `tests/ui/eingabehilfen.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/ueber.test.ts` und die Browsertests unter `tests/browser/`.

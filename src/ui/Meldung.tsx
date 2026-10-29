@@ -189,7 +189,8 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
         <div className="meldung">
           <div className="werkzeugleiste">
             <div className="werkzeugleiste-text">
-              <h1 tabIndex={-1}>{ui.titel}</h1>
+              <h1 tabIndex={-1}>Erfassung</h1>
+              <p>Erfassung einer Meldung nach LEAD-Systematik</p>
               {ui.untertitel && <p>{ui.untertitel}</p>}
             </div>
             <div className="werkzeugleiste-knoepfe">

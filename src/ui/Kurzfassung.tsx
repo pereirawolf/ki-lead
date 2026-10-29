@@ -123,7 +123,7 @@ export function KurzfassungKasten({
   const leeren = async () => {
     if (
       !(await bestaetigen(
-        `${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wenn du sie noch brauchst, vorher kopieren oder als TXT bzw. Protokoll sichern.`,
+        `${titel} leeren? Die Fassung wird auf diesem Gerät gelöscht. Wird sie noch gebraucht, vorher kopieren oder als TXT bzw. Protokoll sichern.`,
         { ja: "Leeren" },
       ))
     )
@@ -187,7 +187,7 @@ export function KurzfassungKasten({
         <>
           {veraltet && (
             <div className="kasten kasten-hinweis" role="status">
-              <p>Die Meldung wurde seit dieser Fassung geändert. Bitte „{titel} erstellen“ wählen, bevor du sie weitergibst.</p>
+              <p>Die Meldung wurde seit dieser Fassung geändert. Vor der Weitergabe bitte „{titel} erstellen“ wählen.</p>
             </div>
           )}
           {kf.hinweise.length > 0 && (

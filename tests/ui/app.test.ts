@@ -65,7 +65,7 @@ async function appMitUebergabe() {
 describe("Übergabe aus dem Lagebild (F02)", () => {
   it("übernimmt eine Übergabe unter dem eigenen Profil genau einmal, auch im StrictMode", async () => {
     await appMitUebergabe();
-    await klick("Lagebild");
+    await klick("Auswertung");
     await klick("Testübergabe");
     await bisWahr(() => expect(materialNamen()).toEqual(["eingang-a.json"]));
     await ruhe();
@@ -75,7 +75,7 @@ describe("Übergabe aus dem Lagebild (F02)", () => {
   it("trägt Material aus Profil A nicht in Profil B und beim Zurückwechseln nicht erneut ein", async () => {
     await appMitUebergabe();
     const profilA = aktivesProfil();
-    await klick("Lagebild");
+    await klick("Auswertung");
     await klick("Testübergabe");
     await bisWahr(() => expect(materialNamen()).toEqual(["eingang-a.json"]));
 
@@ -127,14 +127,14 @@ describe("Zwischenstand je Profil", () => {
     await bisWahr(() => expect(JSON.stringify(speicher.werte.get("entwurf:" + idA)?.daten)).toContain("Entwurf nur für A"));
     await ruhe();
     expect(JSON.stringify(speicher.werte.get("entwurf:profil-b") ?? {})).not.toContain("Entwurf nur für A");
-    await klick("Meldung");
+    await klick("Erfassung");
     await bisWahr(() => expect(textfeld()).toBeTruthy());
     expect(textfeld().value).not.toBe("Entwurf nur für A");
 
     await klick("Profile");
     await klick("Profil A aktivieren");
     await bisWahr(() => expect(aktivesProfil()).toBe(profilA));
-    await klick("Meldung");
+    await klick("Erfassung");
     await bisWahr(() => expect(textfeld().value).toBe("Entwurf nur für A"));
   });
 });

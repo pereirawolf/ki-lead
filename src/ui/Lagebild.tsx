@@ -351,11 +351,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
     <div className="lagebild">
       <div className="werkzeugleiste">
         <div className="werkzeugleiste-text">
-          <h1>{titel}</h1>
-          <p>
-            Meldungen mehrerer Stellen zusammenführen und prüfen: Übersicht, Meldestatus, Lagenradar je Sachverhalt, Redaktionscheck und Ausgabe. Die Daten
-            bleiben auf diesem Gerät.
-          </p>
+          <h1>Auswertung</h1>
+          <p>Auswertung von Meldungen mehrerer Stellen nach LEAD-Systematik</p>
         </div>
       </div>
 
@@ -674,10 +671,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         <button
                           type="button"
                           className="knopf klein"
-                          aria-label={`${absender(e, profil)} · ${e.name} in der Maske öffnen`}
+                          aria-label={`${absender(e, profil)} · ${e.name} in der Erfassung öffnen`}
                           onClick={() => oeffnen(e.daten)}
                         >
-                          In der Maske öffnen
+                          In der Erfassung öffnen
                         </button>
                       )}
                       <button

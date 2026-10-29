@@ -68,12 +68,12 @@ export function LagebildUebergabe({
         An die KI-Verdichtung übergeben
       </h3>
       <p>
-        Wähle die Meldungen und ihre Rolle für den KI-Auftrag. <strong>Eingänge</strong> liefern Informationen für die Verdichtung. Eine{" "}
+        Meldungen und ihre Rolle für den KI-Auftrag wählen. <strong>Eingänge</strong> liefern Informationen für die Verdichtung. Eine{" "}
         <strong>Vormeldung</strong> bildet den Ausgangspunkt für die Fortschreibung. Die Rolle gilt nur für diesen Auftrag; die Meldungen selbst bleiben
         unverändert.
       </p>
       <p className="hinweis">
-        Eine eigene Fassung, die nur zum späteren Vergleich dienen soll, hier abwählen. Du kannst sie nach dem KI-Lauf als Referenzfassung laden.
+        Eine eigene Fassung, die nur zum späteren Vergleich dienen soll, hier abwählen. Sie lässt sich nach dem KI-Lauf als Referenzfassung laden.
       </p>
       <ul className="lb-auswahl">
         {eintraege.map((e) => {

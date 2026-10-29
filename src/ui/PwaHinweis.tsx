@@ -20,7 +20,7 @@ export function PwaHinweis({ zustand: vorgabe }: PwaHinweisProps) {
     <div className="pwa-hinweise">
       {z.offline && (
         <div className="hinweisband pwa-offline" role="status">
-          Ohne Netzverbindung: Meldungen, Lagebild, Profile und Ausgaben funktionieren weiter; KI-Erfassung, Verdichtung und Management Summary brauchen eine
+          Ohne Netzverbindung: Erfassung, Auswertung, Profile und Ausgaben funktionieren weiter; KI-Erfassung, Verdichtung und Management Summary brauchen eine
           Verbindung.
         </div>
       )}

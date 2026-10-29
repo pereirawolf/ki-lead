@@ -91,7 +91,7 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
 
 test("der gewählte Bereich bleibt beim Wechsel der Ansicht erhalten", async ({ page }) => {
   await leiste(page).getByRole("button", { name: "Recherche & Grenzen", exact: true }).click();
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await bereich(page, "Einstellungen");
   await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Recherche & Grenzen"]);
 });
@@ -115,7 +115,7 @@ test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen 
   await page.reload();
   await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
 
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: "Redaktionscheck" }).click();
   await expect(page).toHaveURL(/#\/lagebild\/redaktion$/);

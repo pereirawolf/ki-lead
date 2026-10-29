@@ -39,7 +39,7 @@ test("Offline-Start: nach dem ersten Besuch läuft die App ohne Netz", async ({ 
   await expect(page.locator(".kopf-ki")).toBeVisible();
   await expect(page.getByText(/Ohne Netzverbindung/)).toBeVisible();
 
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
 

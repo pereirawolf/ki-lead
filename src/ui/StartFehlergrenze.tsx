@@ -21,7 +21,7 @@ export class StartFehlergrenze extends Component<{ children: ReactNode }, Zustan
       <div className="startfehler" role="alert">
         <h1>KI-LEAD konnte nicht gestartet werden</h1>
         <p>Beim Aufbau der Oberfläche ist ein Fehler aufgetreten: {fehler.message || String(fehler)}</p>
-        <p>Deine Meldungen, Zwischenstände, Profile, Einstellungen und API-Schlüssel bleiben auf diesem Gerät gespeichert.</p>
+        <p>Meldungen, Zwischenstände, Profile, Einstellungen und API-Schlüssel bleiben auf diesem Gerät gespeichert.</p>
         <p>
           <button type="button" className="knopf primaer" onClick={() => window.location.reload()}>
             Erneut laden

@@ -39,7 +39,7 @@ describe("Über KI-LEAD (Einstellungen)", () => {
     // KP-2026-W43-54: Lizenzen je Bereich
     expect(abschnitt.textContent).toContain("Namensnennung: Heiko Pereira Wolf");
     expect(abschnitt.textContent).toContain("Für eigene und importierte Profile gilt die Lizenz, die ihr Herausgeber angibt");
-    expect(abschnitt.textContent).toContain("Ihre Eingaben, Meldungen und Lagebilder erfassen diese Lizenzen nicht.");
+    expect(abschnitt.textContent).toContain("Eingaben, Meldungen und Lagebilder der Nutzenden erfassen diese Lizenzen nicht.");
   });
 
   it("verweist auf Impressum, Datenschutzerklärung, Drittkomponenten, Quellcode, Rückmeldung und Erprobung", async () => {

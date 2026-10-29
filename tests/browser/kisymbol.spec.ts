@@ -18,7 +18,7 @@ test("KI-Chip wechselt zwischen „KI offline“ und „KI online“", async ({ 
 
   // Anfrage offen: in jeder Ansicht online
   await expect(chip).toHaveText("KI online");
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await expect(chip).toHaveText("KI online");
   await expect(page.getByRole("button", { name: /^KI online: Anfrage läuft, S1/ })).toBeVisible();
 

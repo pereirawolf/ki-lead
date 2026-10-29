@@ -10,13 +10,22 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.20.0 vom 29.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.20.1 vom 30.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.20.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.20.1 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.20.1] – 30.10.2026
+
+Grundlage: Entscheidung des Herausgebers vom 30.10.2026, die Bereiche der App einheitlich nach den Arbeitsschritten der LEAD-Systematik zu benennen und die Oberfläche neutral zu formulieren (Anlasskennungen OF-2026-W44-01 bis -04). Dritte Stelle nach der Versionierungsregel: nur der Gültigkeitsstand in Teil A ändert sich; Regeln, SOPs, Bausteine und Quellenregister bleiben unverändert.
+
+### Geändert
+
+- **Teil A:** Gültigkeitsstand fortgeschrieben (Sammelmappe 3.20.1, Darstellungsdatei mit Profilversion 1.33.1: Titel „Meldung“ statt „LEAD-Meldevorlage“, ohne Untertitel). Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- Lesefassung neu erzeugt.
 
 ## [3.20.0] – 29.10.2026
 

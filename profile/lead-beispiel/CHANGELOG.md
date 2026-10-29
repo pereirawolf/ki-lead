@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.33.1 – 30.10.2026
+
+Grundlage: Entscheidung des Herausgebers vom 30.10.2026 nach Beratung: die Bereiche der App einheitlich nach den Arbeitsschritten der LEAD-Systematik benennen (Erfassung, KI-Erfassung, Auswertung; die Darstellung ist das erzeugte Ergebnis), die Kennsätze parallel bauen und die Oberfläche neutral formulieren, ohne „du“ und ohne „Sie“. Die Arbeitsanweisungen an die KI-Modelle bleiben beim „du“. Anlasskennungen OF-2026-W44-01 (Bereichsnamen), -02 (Kennsätze), -03 (Produkttitel aus dem Profil, Bereichsnamen aus der App), -04 (neutrale Ansprache). Dritte Stelle, weil sich nur Bezeichnungen der Darstellungsdatei ändern; Regeln, Schema und Meldungen bleiben unverändert.
+
+- **Darstellungsdatei (Profilversion 1.33.1):** `titel` „Meldung“ statt „LEAD-Meldevorlage“; er steht seit App 0.6.10 nur noch über der Meldung im PDF und in dessen Metadaten. `untertitel` („Meldung von Ereignissen/Sachverhalten (keine gesonderte Maßnahmenmeldung)“) entfällt; Überschrift und Kennsatz der Erfassung setzt die App. `lagebild.titel` bleibt „Lagebild“ und benennt das Produkt.
+- **SOP-Sammelmappe 3.20.1:** nur Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Kodierleitfaden und Arbeitsanweisungen nicht betroffen; sie nennen die Darstellungsdatei nicht mit Titel. Der Name des Schemas („LEAD-Meldevorlage 1.2“, Schemakennung `LEAD-Meldung-v1`) bleibt unverändert.
+- Schema, Kodierleitfaden, Arbeitsanweisungen, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.33.0 – 29.10.2026
 
 Grundlage: Entscheidung des Herausgebers vom 29.10.2026, je Sachverhalt einen Zeitstrahl relevanter Ereignisse zu führen und bei Erfassung, Verdichtung und Fortschreibung fortzuschreiben, auf der Seite „Quellen & Referenzen“ als eigener Bereich in standardisierter Form, mit eindeutiger Sachverhaltskennung und Bezug (Anlasskennungen ZS-2026-W44-01 Zeitstrahl, -02 Sachverhaltskennung, -03 Bezug, -04 Bewertungszeilen der App, -05 Kenntniszeit je Zeile; -05 nach Beratung am 30.10.2026 zur Umsetzung freigegeben). Zweite Stelle, weil neue Felder und Regeln hinzukommen; die Schemaänderung ist abwärtskompatibel, bestehende Meldungen bleiben gültig und werden nicht migriert.

@@ -80,18 +80,18 @@
             "fehler",
             "Nicht vollständig zurückgesetzt" +
               (fehler.length ? ": " + fehler.join("; ") : "") +
-              ". Deine Daten sind unverändert. Bitte alle Fenster mit KI-LEAD schließen und diese Seite erneut aufrufen.",
+              ". Die gespeicherten Daten sind unverändert. Bitte alle Fenster mit KI-LEAD schließen und diese Seite erneut aufrufen.",
           );
           knopf.disabled = false;
           return;
         }
-        melden(ergebnis, "ok", "Erledigt. Die Programmdateien werden beim nächsten Öffnen neu geladen; deine Daten sind unverändert.");
+        melden(ergebnis, "ok", "Erledigt. Die Programmdateien werden beim nächsten Öffnen neu geladen; die gespeicherten Daten sind unverändert.");
         // Neuer Aufruf mit Zeitmarke, damit keine ältere index.html aus dem Browser-Cache kommt
         oeffnen.href = "./?neu=" + Date.now();
         oeffnen.focus();
       })
       .catch(function (e) {
-        melden(ergebnis, "fehler", "Fehler beim Zurücksetzen: " + ((e && e.message) || e) + ". Deine Daten sind unverändert.");
+        melden(ergebnis, "fehler", "Fehler beim Zurücksetzen: " + ((e && e.message) || e) + ". Die gespeicherten Daten sind unverändert.");
         knopf.disabled = false;
       });
   });

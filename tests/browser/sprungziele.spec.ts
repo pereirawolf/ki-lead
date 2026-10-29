@@ -71,6 +71,6 @@ test("Hauptnavigation: neue Ansicht beginnt oben; die KI-Erfassung kehrt an die 
   await ansEnde(page);
   await bereich(page, "KI-Erfassung");
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(kiStelle);
-  await bereich(page, "Meldung");
+  await bereich(page, "Erfassung");
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 });

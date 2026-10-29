@@ -159,7 +159,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
   const roh = String(v.meldezeitpunkt || "").slice(0, 16);
   const kiT0 = gueltigerZeitpunkt(roh) ? roh : "";
   const auftragT0 = gueltigerZeitpunkt(k.lauf.auftrag.meldezeitpunkt) ? k.lauf.auftrag.meldezeitpunkt! : "";
-  const vorgeben = "Soll die Meldung einen anderen Stand abbilden, gib t0 hier oder im Auftrag vor.";
+  const vorgeben = "Soll die Meldung einen anderen Stand abbilden, ist t0 hier oder im Auftrag vorzugeben.";
   let t0: string;
   if (auftragT0)
     t0 = auftragT0; // R1: ausdrückliche Vorgabe, auch für historische Auswertungen
@@ -170,7 +170,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
       appHinweise.push(
         `Meldezeitpunkt t0 auf den jüngsten Eingang gesetzt (${zeitText(eingang)}). Der Vorschlag aus S1 (${zeitText(kiT0)}) lag ${
           kiT0 < eingang ? "vor dem jüngsten Eingang" : `mehr als ${T0_SPIELRAUM_STUNDEN} Stunden danach`
-        }. Soll die Meldung einen späteren Stand abbilden, gib t0 hier oder im Auftrag vor.`,
+        }. Soll die Meldung einen späteren Stand abbilden, ist t0 hier oder im Auftrag vorzugeben.`,
       );
     } else if (kiT0 && kiT0 > jetzt && eingang <= jetzt) {
       // Nicht in der Zukunft; liegt schon der jüngste Eingang nach der aktuellen Zeit, bleibt es bei A.7
@@ -181,7 +181,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
     } else t0 = kiT0 || eingang;
     if (hatVormeldung(k.material) && stichtag === heute && t0.slice(0, 10) < heute)
       appHinweise.push(
-        `t0 folgt bei Verdichtung dem jüngsten Eingang (SOP-LEAD A.7) und liegt vor dem heutigen Stichtag. Soll die Meldung den heutigen Stand der Vormeldung abbilden, gib t0 hier oder im Auftrag vor.`,
+        `t0 folgt bei Verdichtung dem jüngsten Eingang (SOP-LEAD A.7) und liegt vor dem heutigen Stichtag. Soll die Meldung den heutigen Stand der Vormeldung abbilden, ist t0 hier oder im Auftrag vorzugeben.`,
       );
   } else if (hatVormeldung(k.material) && stichtag === heute) {
     // R3 Fortschreibung auf heute: neuer Meldezeitpunkt ist die aktuelle Zeit; der Stand der Vormeldung ist Ausgangspunkt

@@ -45,8 +45,8 @@ export function Ergebnis({
         <div className={e.schemakonform ? "kasten kasten-ok" : "kasten kasten-hinweis"} role="status">
           <p>
             {e.schemakonform
-              ? "Der Entwurf entspricht dem Schema. Übernimm ihn in die Meldungsmaske, prüfe Inhalte, Radar und Quellen und gib ihn dort frei."
-              : "Der Entwurf weicht auch nach zwei Reparaturen noch vom Schema ab. Du kannst ihn übernehmen und die markierten Stellen in der Maske korrigieren."}
+              ? "Der Entwurf entspricht dem Schema. Nach der Übernahme in die Erfassung dort Inhalte, Radar und Quellen prüfen und freigeben."
+              : "Der Entwurf weicht auch nach zwei Reparaturen noch vom Schema ab. Er lässt sich übernehmen; die markierten Stellen sind dann in der Erfassung zu korrigieren."}
           </p>
         </div>
       ) : (
@@ -85,13 +85,14 @@ export function Ergebnis({
           <ul className="befunde">
             {e.abrufFehler.map((f, i) => (
               <li key={i} className={`befund ${lauf.auftrag.urls.includes(f.url) ? "befund-warnung" : "befund-hinweis"}`}>
-                <span className="befund-stufe">{lauf.auftrag.urls.includes(f.url) ? "Deine URL" : "Hinweis"}</span> {f.url} ({ABRUF_FEHLER[f.code] || f.code})
+                <span className="befund-stufe">{lauf.auftrag.urls.includes(f.url) ? "Angegebene URL" : "Hinweis"}</span> {f.url} (
+                {ABRUF_FEHLER[f.code] || f.code})
               </li>
             ))}
           </ul>
           <p className="hinweis">
-            Manche Seiten sperren den Abruf durch KI-Dienste. Speichere die Seite im Browser als PDF oder kopiere den Text in die Stichworte und starte einen
-            neuen Auftrag.
+            Manche Seiten sperren den Abruf durch KI-Dienste. Abhilfe: die Seite im Browser als PDF speichern oder den Text in die Stichworte kopieren und einen
+            neuen Auftrag starten.
           </p>
         </div>
       )}
@@ -175,7 +176,7 @@ export function Ergebnis({
         </div>
         {e && (
           <button type="button" className="knopf primaer" onClick={() => uebernehmen(e.meldung)}>
-            In die Meldungsmaske übernehmen
+            In die Erfassung übernehmen
           </button>
         )}
       </div>

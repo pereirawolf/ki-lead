@@ -53,7 +53,7 @@ export function Auftragsformular({
     <>
       <h2 tabIndex={-1}>Auftrag und Material</h2>
       <p className="einleitung">
-        Beschreibe, was geklärt werden soll, und gib vorhandenes Material mit. Ohne Material recherchiert die KI selbst in offenen Quellen.
+        Was geklärt werden soll, beschreiben und vorhandenes Material mitgeben. Ohne Material recherchiert die KI selbst in offenen Quellen.
       </p>
       {fehler && (
         <div className="kasten kasten-fehler" role="alert">
@@ -99,7 +99,7 @@ export function Auftragsformular({
       <div className="feld">
         <span className="feld-label">Dateien</span>
         <p className="hinweis">
-          TXT, MD, JSON (auch eine Vormeldung zur Fortschreibung), DOCX und PDF. Dateien bleiben auf dem Gerät, bis du die Erfassung startest.
+          TXT, MD, JSON (auch eine Vormeldung zur Fortschreibung), DOCX und PDF. Dateien bleiben auf dem Gerät, bis die Erfassung startet.
         </p>
         <div className="aktionen">
           <button type="button" className="knopf" onClick={() => dateiRef.current?.click()}>

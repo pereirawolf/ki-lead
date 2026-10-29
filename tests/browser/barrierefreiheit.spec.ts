@@ -5,7 +5,7 @@ import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { bereich, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";
 
-const BEREICHE = ["Meldung", "KI-Erfassung", "Lagebild", "Profile", "Einstellungen"] as const;
+const BEREICHE = ["Erfassung", "KI-Erfassung", "Auswertung", "Profile", "Einstellungen"] as const;
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
 
 /** Bedienelemente ohne zugänglichen Namen aus dem Barrierebaum, den Chromium berechnet */
@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }, info) => {
 for (const b of BEREICHE) {
   test(`${b}: alle Bedienelemente haben einen zugänglichen Namen`, async ({ page }) => {
     await bereich(page, b);
-    if (b === "Lagebild") {
+    if (b === "Auswertung") {
       await page.getByRole("button", { name: /Beispiel laden:/ }).click();
       await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
     }
@@ -49,13 +49,13 @@ test("KI-Erfassung: Hilfetexte der Auftragsfelder sind zugängliche Beschreibung
 });
 
 test("Navigation mit der Tastatur: Fokus ist sichtbar, Eingabetaste wechselt den Bereich", async ({ page }) => {
-  const ziel = page.getByRole("button", { name: "Lagebild", exact: true });
+  const ziel = page.getByRole("button", { name: "Auswertung", exact: true });
   let gefunden = false;
   for (let i = 0; i < 30 && !gefunden; i++) {
     await page.keyboard.press("Tab");
     gefunden = await ziel.evaluate((el) => el === document.activeElement);
   }
-  expect(gefunden, "„Lagebild“ per Tab erreichbar").toBe(true);
+  expect(gefunden, "„Auswertung“ per Tab erreichbar").toBe(true);
   const fokus = await ziel.evaluate((el) => {
     const s = getComputedStyle(el);
     return { matches: el.matches(":focus-visible"), outline: s.outlineStyle, breite: parseFloat(s.outlineWidth), schatten: s.boxShadow };
@@ -74,7 +74,7 @@ test("Erzwungene Farben: aktive Auswahl in Systemfarben, Marken mit Kontur", asy
   // forced-colors lässt sich nur in Chromium nachbilden (Windows-Kontrastmodus); seit 0.6.5 läuft die Datei auch in WebKit
   test.skip(browserName !== "chromium", "forced-colors nur in Chromium emulierbar");
   await page.emulateMedia({ forcedColors: "active" });
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
 
@@ -184,7 +184,7 @@ test("TP-2026-W44-14: zugängliche Namen der Bedienelemente sind je Liste eindeu
   expect(await doppelteNamen(page)).toEqual([]);
 
   // Lagebild mit Beispiel: Übersicht (Meldestatus), Meldungen, Kopiervorlage
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
   for (const reiter of ["Übersicht", "Meldungen", "Kopiervorlage"]) {
@@ -254,7 +254,7 @@ test.describe("TP-2026-W44-22: axe-core je Bereich ohne Verstöße gegen WCAG 2.
   });
 
   test("Lagebild: alle Reiter mit Beispiel und Übergabedialog", async ({ page }) => {
-    await bereich(page, "Lagebild");
+    await bereich(page, "Auswertung");
     await page.getByRole("button", { name: /Beispiel laden:/ }).click();
     await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
     const reiter = page.getByRole("navigation", { name: "Ansichten" }).getByRole("button");

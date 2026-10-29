@@ -373,10 +373,7 @@ function Erfassung({
       <div className="werkzeugleiste">
         <div className="werkzeugleiste-text">
           <h1>KI-Erfassung</h1>
-          <p>
-            Gestufter Entwurf einer Meldung nach LEAD: Gegenstand klären, recherchieren, prüfen. Das Ergebnis ist ein Entwurf, den du in der Meldungsmaske
-            prüfst und freigibst.
-          </p>
+          <p>Erfassung einer Meldung nach LEAD-Systematik mit KI-Unterstützung</p>
         </div>
         {!laeuft && (
           <div className="werkzeugleiste-knoepfe">
@@ -389,7 +386,7 @@ function Erfassung({
 
       {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
-          <p>Für die gewählten Modelle brauchst du einen eigenen API-Schlüssel von {anbieterListe(fehlend)}.</p>
+          <p>Für die gewählten Modelle ist ein eigener API-Schlüssel von {anbieterListe(fehlend)} erforderlich.</p>
           <button type="button" className="knopf klein" onClick={() => zuEinstellungen()}>
             Zu den Einstellungen
           </button>

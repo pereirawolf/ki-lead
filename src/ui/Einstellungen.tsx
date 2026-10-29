@@ -404,7 +404,7 @@ function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (
     <section className="einstellung-block" aria-labelledby="ablage-titel">
       <h3 id="ablage-titel">Ablage der API-Schlüssel</h3>
       <p className="einleitung">
-        Wo deine Schlüssel liegen, entscheidest du. Beim Wechsel zieht die App vorhandene Schlüssel mit um und entfernt sie aus der bisherigen Ablage. Ein
+        Die Ablage der Schlüssel ist frei wählbar. Beim Wechsel zieht die App vorhandene Schlüssel mit um und entfernt sie aus der bisherigen Ablage. Ein
         Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
       </p>
       <fieldset className="ablage-wahl" disabled={laeuft}>
@@ -518,8 +518,8 @@ function SchluesselAbschnitt({
           {a.konsoleName}
         </a>
         . Die App schickt ihn nur an {a.host}. Ablage: {ablageVon(ablage).titel}
-        {ablage === "geraet" ? " (unverschlüsselt)" : ablage === "passphrase" && passphraseGesperrt() ? " (gesperrt; Passphrase oben eingeben)" : ""}. Nutze
-        einen eigenen Schlüssel mit Ausgabenlimit und lösche ihn auf geteilten Geräten.
+        {ablage === "geraet" ? " (unverschlüsselt)" : ablage === "passphrase" && passphraseGesperrt() ? " (gesperrt; Passphrase oben eingeben)" : ""}. Empfohlen
+        ist ein eigener Schlüssel mit Ausgabenlimit, auf geteilten Geräten nach der Nutzung löschen.
       </p>
       <div className="schluessel-zeile">
         <input
@@ -842,7 +842,7 @@ function ModelleBereich({
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
       <h2 id="einstellungen-bereich-titel">Modelle & Aufwand</h2>
       <p className="einleitung">
-        Wähle ein KI-Profil oder stelle Modell und Aufwand je Aufgabe selbst zusammen. Höherer Aufwand bedeutet gründlichere Arbeit, aber mehr Token und längere
+        KI-Profil wählen oder Modell und Aufwand je Aufgabe selbst zusammenstellen. Höherer Aufwand bedeutet gründlichere Arbeit, aber mehr Token und längere
         Laufzeit. Für jeden genutzten Anbieter braucht es einen Schlüssel.
       </p>
       <KiProfilWahl e={e} setEinstellungen={setEinstellungen} />

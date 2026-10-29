@@ -36,8 +36,8 @@ export function UeberAbschnitt() {
         <li>
           Lizenzen: Der Code der App steht unter EUPL-1.2. Die mitgelieferten Beispielprofile (Arbeitsanweisungen, SOP, Kodierleitfaden, Meldungsschemata und
           Darstellungsdateien) stehen unter CC BY 4.0, Namensnennung: {HERAUSGEBER}; Schemata und die Vorlage zusätzlich unter CC0 1.0. Für eigene und
-          importierte Profile gilt die Lizenz, die ihr Herausgeber angibt (Profilansicht, Feld „Lizenz“). Ihre Eingaben, Meldungen und Lagebilder erfassen diese
-          Lizenzen nicht. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzhinweise für Inhalte</ExternerLink> ·{" "}
+          importierte Profile gilt die Lizenz, die ihr Herausgeber angibt (Profilansicht, Feld „Lizenz“). Eingaben, Meldungen und Lagebilder der Nutzenden
+          erfassen diese Lizenzen nicht. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzhinweise für Inhalte</ExternerLink> ·{" "}
           <ExternerLink href={VERWEISE.drittkomponenten}>Drittkomponenten und Lizenzen</ExternerLink>
         </li>
         <li>
