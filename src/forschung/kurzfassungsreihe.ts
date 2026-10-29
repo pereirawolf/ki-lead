@@ -15,9 +15,10 @@ import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { migriere } from "../kern/migration";
 import type { Meldung, Profil } from "../kern/typen";
 import { sha256 } from "../profil/laden";
-import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
-import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "./kurzfassung";
-import { APP_KENNUNG, laufId, type StufenEintrag } from "./lauf";
+import { aufwandFuer, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { GRENZEN, kurzfassungErstellen, woerter, type KurzfassungStruktur } from "../pipeline/kurzfassung";
+import { APP_KENNUNG } from "../kern/version";
+import { laufId, type StufenEintrag } from "../pipeline/lauf";
 import { anzahlBegrenzt, type ReiheStand } from "./vergleichslauf";
 import { csv, dateiKurz, dateiStempel } from "./vergleichslauf-export";
 
@@ -258,7 +259,7 @@ export async function kurzfassungsreihe(o: KurzfassungsReihenOptionen): Promise<
       break;
     }
   }
-  const { mistralEndpunkt } = o.einstellungen;
+  const mistralEndpunkt = o.einstellungen.anbieterOptionen.mistral.endpunkt;
   const anbieter = anbieterVon(modell);
   const reihe: KurzfassungsReihe = {
     format: "ki-lead-kurzfassung-reihe/1",
@@ -272,7 +273,7 @@ export async function kurzfassungsreihe(o: KurzfassungsReihenOptionen): Promise<
     app: APP_KENNUNG,
     profil: { id: p.manifest.id, version: p.manifest.version, hash: p.hash },
     anbieter,
-    ...(anbieter === "mistral" ? { mistral_endpunkt: mistralEndpunkt ?? "eu" } : {}),
+    ...(anbieter === "mistral" ? { mistral_endpunkt: mistralEndpunkt } : {}),
     attrappe: !!o.attrappe,
     modell: { modell, aufwand },
     laeufe_geplant: anzahl,

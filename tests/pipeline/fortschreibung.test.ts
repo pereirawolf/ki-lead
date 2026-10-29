@@ -260,7 +260,11 @@ describe("Recherche mit Mistral (seit 0.5.6)", () => {
 
   it("über den globalen Endpunkt nur Websuche: kein Seitenabruf in Anfrage und Steuerung", async () => {
     const { att, k } = await fortschreibung([llmAntwort(s1Fortschreibung()), meldungsAntwort(entwurf())]);
-    k.einstellungen = { ...k.einstellungen, mistralEndpunkt: "global", modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" } };
+    k.einstellungen = {
+      ...k.einstellungen,
+      anbieterOptionen: { ...k.einstellungen.anbieterOptionen, mistral: { endpunkt: "global" } },
+      modelle: { ...k.einstellungen.modelle, erfassung: "mistral-medium-3-5" },
+    };
     const v = await stufe1(k);
     zuS2(k);
     await stufe2und3(k, v);

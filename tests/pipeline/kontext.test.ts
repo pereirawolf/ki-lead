@@ -15,6 +15,7 @@ import {
   steuerungsBlock,
   type Steuerung,
 } from "../../src/pipeline/kontext";
+import { STANDARD_ANWEISUNG } from "../../src/profil/standardtexte";
 
 describe("Kontext aus dem Profil", () => {
   it("liest Ereignisarten und ordnet SOPs zu", async () => {
@@ -73,6 +74,30 @@ describe("Kontext aus dem Profil", () => {
     for (const text of [v, VERDICHTUNG_S2]) {
       expect(text).not.toMatch(/gilt die jüngste|Jede Eingangsmeldung ist eine Quelle der Kategorie A|dürfen als Belege dienen|Untergrenze/);
     }
+  });
+});
+
+describe("Standardtexte der App (TP-2026-W44-27)", () => {
+  it("TP-2026-W44-27: Standardfassungen Verdichtung und Management Summary zitieren keine SOP und keine festen Quellenkategorien", () => {
+    for (const text of [VERDICHTUNG_S2, STANDARD_ANWEISUNG]) {
+      expect(text).not.toMatch(/SOP-LEAD|\bA\.\d|Teil A\b/);
+      expect(text).not.toMatch(/Behörden sind A|\bB oder P\b/);
+    }
+  });
+
+  it("TP-2026-W44-27: die Standardfassung Verdichtung setzt den Kennsatz des Profils ein; das Beispielprofil behält seine eigene Anweisung", async () => {
+    const { profil: m } = await profil("muster");
+    expect(m!.manifest.anweisungen?.verdichtung).toBeUndefined();
+    const v = verdichtungsAnweisung(m!);
+    expect(v).toContain("im Kennsatz „Abweichende Bewertung:“");
+    expect(v).not.toMatch(/\{\{|\[nicht angegeben\]/);
+    const eigen = { ...m!, ui: { ...m!.ui, kennsaetze: { ...m!.ui.kennsaetze, abweichung: "Andere Einschätzung:" } } };
+    expect(verdichtungsAnweisung(eigen)).toContain("im Kennsatz „Andere Einschätzung:“");
+    const ohne = { ...m!, ui: { ...m!.ui, kennsaetze: {} } };
+    expect(verdichtungsAnweisung(ohne)).toContain("im Kennsatz „Abweichende Bewertung:“");
+    const { profil: b } = await profil("lead-beispiel");
+    const datei = b!.dateien[b!.manifest.anweisungen!.verdichtung!]!;
+    expect(verdichtungsAnweisung(b!).slice(0, 200)).toBe(datei.slice(0, 200));
   });
 });
 

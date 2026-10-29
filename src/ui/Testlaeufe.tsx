@@ -6,11 +6,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { formatUsd } from "../anbieter/preise";
-import { ANBIETER_NAME, anbieterVon, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { ANBIETER_NAME, anbieterVon, hatSchluessel, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { LlmAnbieter } from "../anbieter/typen";
 import type { Profil } from "../kern/typen";
 import { APP_MODELLE, AUFWAND_STUFEN, aufwandAngeboten, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
-import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MS_EINGABE_TOKEN, type KurzfassungsReihe } from "../pipeline/kurzfassungsreihe";
+import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MS_EINGABE_TOKEN, type KurzfassungsReihe } from "../forschung/kurzfassungsreihe";
 import {
   DEFEKTE,
   DURCHGAENGE_MAX,
@@ -22,7 +22,7 @@ import {
   reparaturZip,
   schaetzePrueffall,
   type ReparaturReihe,
-} from "../pipeline/reparaturtest";
+} from "../forschung/reparaturtest";
 import { kostenText, dauerText, schaetzeKurzfassung, schaetzeStufe, summe, type Schaetzung } from "../pipeline/schaetzung";
 import {
   ANZAHL_MAX,
@@ -42,9 +42,9 @@ import {
   type PlanVariante,
   type Reihe,
   type Umfang,
-} from "../pipeline/vergleichslauf";
-import { reiheZip, zipDateiname } from "../pipeline/vergleichslauf-export";
-import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../pipeline/vergleichslauf-eingebaut";
+} from "../forschung/vergleichslauf";
+import { reiheZip, zipDateiname } from "../forschung/vergleichslauf-export";
+import { fallDatenEingebaut, musterDatenEingebaut, type MusterDaten } from "../forschung/vergleichslauf-eingebaut";
 import { dateiAnbieten } from "../speicher/speicher";
 import {
   groesseText,
@@ -169,7 +169,7 @@ export function TestlaufAbschnitt({
   zeige,
   datenLaden = fallDatenEingebaut,
   musterLaden = () => musterDatenEingebaut(),
-  anbieterFuer = (s, e) => Verteiler.fuer(s, { mistralEndpunkt: e.mistralEndpunkt }),
+  anbieterFuer = (s, e) => Verteiler.fuer(s, e.anbieterOptionen),
   archiviert,
 }: TestlaeufeProps & { archiviert?: () => void }) {
   const [art, setArt] = useState<Testart>(UMFANG_VORGABE);
@@ -202,14 +202,14 @@ export function TestlaufAbschnitt({
   });
   // Die Reparatur einer Kette läuft nur bei Schemafehlern; ihr Schlüssel ist dann keine Voraussetzung
   const noetig = zeilen.filter((z) => reparatur || z.r !== "reparatur");
-  const fehlend = [...new Set(noetig.filter((z) => z.anbieter && !schluessel[z.anbieter]).map((z) => z.anbieter!))] as AnbieterId[];
+  const fehlend = [...new Set(noetig.filter((z) => z.anbieter && !hatSchluessel(z.anbieter, schluessel)).map((z) => z.anbieter!))] as AnbieterId[];
   const ohneModell = noetig.some((z) => !z.modell);
   const mistral = zeilen.some((z) => z.anbieter === "mistral");
-  const euAufschlag = mistral && e.mistralEndpunkt !== "global";
+  const euAufschlag = mistral && e.anbieterOptionen.mistral.endpunkt !== "global";
 
   const n = begrenzt(art, anzahl);
   // Kosten mit dem Aufschlag des Mistral-EU-Endpunkts (AV-2026-W43-06)
-  const endpunkt = { mistralEndpunkt: e.mistralEndpunkt ?? "eu" } as const;
+  const endpunkt = e.anbieterOptionen;
   const schaetzungen: Schaetzung[] =
     art === "ms"
       ? [schaetzeKurzfassung(e.modelle.kurzfassung, e.aufwand.kurzfassung, MS_EINGABE_TOKEN, endpunkt)]
@@ -423,7 +423,7 @@ export function TestlaufAbschnitt({
         {art === "s2-s3" && <li>S1: entfällt, Zuschnitt der Musterfassung (zwei Sachverhalte)</li>}
         {art === "s1-s2" && <li>S3: entfällt, Entwurf ohne Vervollständigung und Reparatur</li>}
         {reparatur && <li>S1 und S2: ohne KI-Aufruf, beschädigte Musterfassung</li>}
-        {mistral && <li>Mistral-Endpunkt: {e.mistralEndpunkt === "global" ? "global (api.mistral.ai)" : "EU (api.eu.mistral.ai)"}</li>}
+        {mistral && <li>Mistral-Endpunkt: {e.anbieterOptionen.mistral.endpunkt === "global" ? "global (api.mistral.ai)" : "EU (api.eu.mistral.ai)"}</li>}
       </ul>
       <label className="feld">
         <span className="feld-label">Anzahl der Läufe</span>

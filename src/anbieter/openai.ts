@@ -5,6 +5,8 @@
 //   ein eigenes Abrufwerkzeug wie bei Anthropic gibt es nicht. max_tool_calls begrenzt beides zusammen.
 // - Structured Outputs über text.format (json_schema, strict)
 // - store: false – Antworten werden beim Anbieter nicht für spätere Abrufe gespeichert
+// - Basisadresse wählbar (seit 0.6.3, TP-2026-W44-26): Ollama nutzt denselben Adapter über seine OpenAI-kompatible
+//   Schnittstelle (src/anbieter/ollama.ts), mit eigenen Fehlertexten, ohne Schlüssel und ohne Aufwand
 
 import { fehlerJson, LeseFehler, mitNeustart, mitWiederholung, sseLesen, type Fehlerregeln } from "./http";
 import { kostenAnfrage } from "./preise";
@@ -24,7 +26,9 @@ import {
   type Zitat,
 } from "./typen";
 
-export const OPENAI_URL = "https://api.openai.com/v1/responses";
+/** Basisadresse der OpenAI-API; der Adapter hängt „/responses“ an (seit 0.6.3, TP-2026-W44-26) */
+export const OPENAI_BASIS_URL = "https://api.openai.com/v1";
+export const OPENAI_URL = `${OPENAI_BASIS_URL}/responses`;
 /** Seit 0.6.2 in schema.ts (TP-2026-W44-03); hier weiter exportiert */
 export { strengesSchema };
 
@@ -143,36 +147,59 @@ export function nutzungOpenAi(u: any, ausgabe: any[]): Nutzung {
   };
 }
 
+/** Abweichungen eines OpenAI-kompatiblen Dienstes (seit 0.6.3, TP-2026-W44-26: Ollama) */
+export interface OpenAiVariante {
+  id: string;
+  fehlerText: (status: number, code?: string, meldung?: string) => string;
+  netzFehler: string;
+  /** Aufwand (reasoning.effort) senden; Ollama: nein, das lokale Modell bestimmt */
+  aufwand: boolean;
+}
+
+const OPENAI: OpenAiVariante = { id: "openai", fehlerText: fehlerTextOpenAi, netzFehler: "Keine Verbindung zu OpenAI. Netz prüfen.", aufwand: true };
+
 export class OpenAiAnbieter implements LlmAnbieter {
-  id = "openai";
+  id: string;
+  private url: string;
+  /**
+   * @param basisUrl Basisadresse der Schnittstelle ohne „/responses“ (Vorgabe: OpenAI); seit 0.6.3 (TP-2026-W44-26)
+   * @param variante Fehlertexte und Eigenheiten eines OpenAI-kompatiblen Dienstes
+   */
   constructor(
     private schluessel: string,
-    private url = OPENAI_URL,
+    basisUrl = OPENAI_BASIS_URL,
     private abruf: typeof fetch = (...x) => fetch(...x),
-  ) {}
+    private variante: OpenAiVariante = OPENAI,
+  ) {
+    this.id = variante.id;
+    this.url = `${basisUrl.replace(/\/+$/, "")}/responses`;
+  }
 
   /** Fehlerregeln der Responses API für die gemeinsame Wiederholung (http.ts) */
   private regeln(): Fehlerregeln {
     return {
       fehlerAus: async (antwort) => {
         const j = await fehlerJson(antwort);
-        return { code: j?.error?.code || j?.error?.type, meldung: j?.error?.message, roh: JSON.stringify(j ?? "") };
+        const e = typeof j?.error === "string" ? { message: j.error } : j?.error;
+        return { code: e?.code || e?.type, meldung: e?.message, roh: JSON.stringify(j ?? "") };
       },
       wiederholbar: (status, f) => (status === 429 && f.code !== "insufficient_quota") || status >= 500,
-      fehlerText: fehlerTextOpenAi,
-      netzFehler: "Keine Verbindung zu OpenAI. Netz prüfen.",
+      fehlerText: this.variante.fehlerText,
+      netzFehler: this.variante.netzFehler,
     };
   }
 
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert das vollständige Antwortobjekt. */
   private async eineRunde(a: LlmAnfrage): Promise<any> {
-    const body = JSON.stringify(anfrageKoerperOpenAi(a));
+    const body = JSON.stringify(anfrageKoerperOpenAi(this.variante.aufwand ? a : { ...a, aufwand: undefined }));
+    const headers: Record<string, string> = { "content-type": "application/json" };
+    if (this.schluessel) headers.authorization = `Bearer ${this.schluessel}`;
     const antwort = await mitWiederholung(
       a,
       () =>
         this.abruf(this.url, {
           method: "POST",
-          headers: { "content-type": "application/json", authorization: `Bearer ${this.schluessel}` },
+          headers,
           body,
           signal: a.signal,
         }),
@@ -199,7 +226,7 @@ export class OpenAiAnbieter implements LlmAnbieter {
       } else if (typ === "response.completed" || typ === "response.incomplete" || typ === "response.failed") {
         ende = d.response;
       } else if (typ === "error") {
-        throw new AnbieterFehler(fehlerTextOpenAi(0, d.code, d.message), undefined, d.code || "error");
+        throw new AnbieterFehler(this.variante.fehlerText(0, d.code, d.message), undefined, d.code || "error");
       }
     });
     if (!ende) throw new LeseFehler(new Error("Strom ohne Abschluss beendet"));
@@ -210,7 +237,8 @@ export class OpenAiAnbieter implements LlmAnbieter {
     const start = Date.now();
     let gesamt = leereNutzung();
     const r: any = await mitNeustart(a, () => this.eineRunde(a));
-    if (r.status === "failed") throw new AnbieterFehler(fehlerTextOpenAi(0, r.error?.code, r.error?.message), undefined, r.error?.code || "failed", r.output);
+    if (r.status === "failed")
+      throw new AnbieterFehler(this.variante.fehlerText(0, r.error?.code, r.error?.message), undefined, r.error?.code || "failed", r.output);
     const ausgabe: any[] = r.output || [];
     const n = nutzungOpenAi(r.usage, ausgabe);
     gesamt = addiereNutzung(gesamt, n);

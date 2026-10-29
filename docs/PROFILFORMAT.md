@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.19 vom 26.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.20 vom 27.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -131,8 +131,16 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 ### Weitere Abschnitte
 
 - `format` (`lead-ui/1`), `titel`, `untertitel`: Kennung und Kopf der Eingabemaske; `ausblenden`: Felder der obersten Ebene, die das Formular nicht zeigt.
-- `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt.
-- `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge. Unter dem Quellenfeld stellt ein Baukasten neue Zeilen aus Kategorie, Art (Vorlage des Profils, Online-Quelle, Pressemitteilung, Lagebild, Meldung aus dem gespeicherten Lagebild, Datensatz, Beitrag in sozialen Medien, Auskunft, Dokument ohne URL) und Zusätzen (Datenstand, Paywall, nicht ausgewertet) zusammen; Zeilen haben die Form `[Qn] K – …`.
+- `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt. Drei Schlüssel wertet die App selbst aus; sie sind seit Fassung 1.20 Pflicht (App 0.6.3, TP-2026-W44-27). Fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` je Schlüssel:
+
+  | Schlüssel | Auswertung der App | Vorschlag (Text des Beispielprofils) | ohne den Kennsatz |
+  |---|---|---|---|
+  | `handlungsrelevant` | Fristen für Management Summary (Fristenblock) und Redaktionscheck (zeitkritische Aufgaben) | „Handlungsrelevant bis:“ | keine Fristen erkannt |
+  | `aenderung` | Änderungsvermerk einer Fortschreibung im Redaktionscheck | „Änderung zur Vormeldung:“ | keine Prüfung der Änderungsvermerke |
+  | `abweichung` | abweichende Bewertungen im Redaktionscheck; Textbaustein „abweichende Bewertung“; Standardfassung Verdichtung | „Abweichende Bewertung:“ | Redaktionscheck erkennt keine abweichenden Bewertungen; Textbaustein und Standardfassung nehmen den Vorschlag als Ersatztext |
+
+  Weitere Kennsätze (etwa `neubewertung`, `abschluss`) sind optional. Die Vorlage `profile/muster/` führt die drei Pflichtkennsätze mit den Texten des Beispielprofils.
+- `quellen`: Kategorien mit Erläuterung (Kennung je ein Großbuchstabe), optional `rangfolge` (Quellenpriorität bei Widersprüchen, höchste zuerst, jede Kategorie genau einmal; z. B. `["A", "B", "W", "M", "P"]`), `rangfolge_hinweis`, Altkategorien und Vorlage für neue Einträge (`{n}`, `{heute}`). Die App zeigt die Kategorien in der Rangfolge an und prüft beim Import Kennungen und Rangfolge. Unter dem Quellenfeld stellt ein Baukasten neue Zeilen aus Kategorie, Art (Vorlage des Profils, Online-Quelle, Pressemitteilung, Lagebild, Meldung aus dem gespeicherten Lagebild, Datensatz, Beitrag in sozialen Medien, Auskunft, Dokument ohne URL) und Zusätzen (Datenstand, Paywall, nicht ausgewertet) zusammen; Zeilen haben die Form `[Qn] K – …`. Die Kategorie, die eine Art vorschlägt, leitet die App seit Fassung 1.20 aus den Kategorien des Profils ab (App 0.6.3, TP-2026-W44-27): die erste Kategorie der Rangfolge, deren Bezeichnung (Text vor „ – “) zur Rolle der Art passt – amtlich bzw. Behörde (Pressemitteilung, Lagebild, Meldung aus dem Lagebild), Betreiber (Auskunft), wissenschaftlich (Dokument ohne URL), privat (Beitrag in sozialen Medien); passt keine, schlägt sie keine vor. Ohne `vorlage` beginnt eine neue Zeile mit der ersten Kategorie der Rangfolge (bisher fest „A“).
 - `dateiname`: Vorlage mit Feldnamen in geschweiften Klammern. Der Meldezeitpunkt steht im Dateinamen immer vorn (`2026-10-20T20-31_…`), auch wenn `{meldezeitpunkt}` in der Vorlage am Ende steht oder fehlt.
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
@@ -197,7 +205,9 @@ Markdown mit Platzhaltern: `{{profil.*}}`, `{{auftrag.*}}` (Sachverhalt, Ausgang
 | `kurzfassung` (optional) | Management Summary aus der fertigen Meldung; ohne Datei nutzt die App eine knappe Standardanweisung. Die Absätze folgen `rollen.sv_analysefelder`. |
 | `verdichtung` (optional) | Modus B: ergänzt die Erfassungsanweisung, sobald Eingangsmeldungen anderer Stellen im Material liegen; ohne Datei nutzt die App eine knappe Standardfassung |
 
-Modelle je Rolle (`modelle`): `vorverarbeitung` (S1), `erfassung` (S2), `verdichtung` (S2 bei Verdichtung), `reparatur` (S3), `kurzfassung`. Erlaubt sind Kennungen von Anthropic (`claude-…`) und OpenAI (`gpt-…`); die App wählt den Anbieter nach der Kennung. Die Einstellungen auf dem Gerät gehen vor.
+Die Standardfassungen der App für Verdichtung und Kurzfassung (`src/profil/standardtexte/*.md`, seit App 0.6.3) zitieren keine SOP und keine festen Quellenkategorien; Fundstellen einer SOP-Sammlung gehören in die Anweisungen des Profils. Den Kennsatz für abweichende Bewertungen setzt die App in der Standardfassung Verdichtung aus `kennsaetze.abweichung` ein.
+
+Modelle je Rolle (`modelle`): `vorverarbeitung` (S1), `erfassung` (S2), `verdichtung` (S2 bei Verdichtung), `reparatur` (S3), `kurzfassung`. Erlaubt sind Kennungen von Anthropic (`claude-…`), OpenAI (`gpt-…`, `o…`, `chatgpt-…`), Mistral (`mistral-…`, `ministral-…`, `magistral-…`, `codestral-…`, `pixtral-…`, `open-mistral-…`; seit App 0.5.6) und lokale Modelle über Ollama (`ollama:<modell>`, etwa `ollama:llama3.1`; seit App 0.6.3, ohne Websuche, nicht erprobt); die App wählt den Anbieter nach der Kennung. Eine Kennung, die zu keinem Anbieter gehört, ergibt seit App 0.6.3 beim Laden die Warnung `MODELL_UNBEKANNT`, und für die Rolle gilt die Vorgabe der App (bis 0.6.2 fiel sie still auf Anthropic). Die Einstellungen auf dem Gerät gehen vor.
 
 Die Variable `kurzname` (optional) steht für Einschätzungen im Fließtext, z. B. „Einschätzung (Koordinierungsstelle)“. Fehlt sie, setzt die App `meldende_stelle` ein.
 
@@ -238,7 +248,7 @@ Jede Profilversion erhält eine Prüfsumme (SHA-256 über alle Dateien). Sie wir
 
 ## Änderungsverlauf
 
-Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwärtsverträglich. Ältere Pakete bleiben gültig, sofern sie die Strukturprüfung bestehen.
+Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwärtsverträglich (die Pflichtkennsätze der Fassung 1.20 ergeben nur eine Warnung). Ältere Pakete bleiben gültig, sofern sie die Strukturprüfung bestehen.
 
 | Fassung | Datum | Änderung |
 |---|---|---|
@@ -262,3 +272,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.17 | 23.10.2026 | Ohne Formatänderung nachgetragen: oberste Schlüssel `format`, `titel`, `untertitel`, `ausblenden`, Feldangabe `zeilen`, Rolle `sv_massnahmen`, Manifestfelder `beschreibung`, `herausgeber`, `lizenz`; ausgewertete SOP-Kopfschlüssel im Steckbrief (`bausteintyp`, `art_hinweis`, `anschluss`); Fassungsangabe Pflicht für versionierte fachliche Regelwerke (Konsistenzprüfung KW 43, KP-2026-W43-51 bis -53) |
 | 1.18 | 24.10.2026 | Ohne Formatänderung: Manifestfelder `herausgeber` und `lizenz` beschrieben (SPDX-Kennung, `LicenseRef-intern` im Beispiel „Kreis X“); Hinweis auf die Vorlage unter CC0 1.0 (KP-2026-W43-58, -60); Fassungsangabe im Kopf nachgezogen |
 | 1.19 | 26.10.2026 | Ohne Formatänderung: `format` im Meldungsschema wird nicht geprüft und beim Laden als Hinweis gemeldet (App 0.6.2, TP-2026-W44-10) |
+| 1.20 | 27.10.2026 | Kennsätze `handlungsrelevant`, `aenderung` und `abweichung` sind Pflicht; fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` (ältere Pakete bleiben nutzbar). Ersatztexte und Auswertung der App dokumentiert. Kategorievorschlag des Quellen-Baukastens und Vorlage ohne `quellen.vorlage` aus den Kategorien des Profils statt fester Buchstaben; Standardfassungen der App ohne SOP-Zitate (TP-2026-W44-27). Modellkennungen: Mistral nachgetragen, `ollama:<modell>` neu, unbekannte Kennung als Warnung `MODELL_UNBEKANNT` (TP-2026-W44-26) (App 0.6.3) |

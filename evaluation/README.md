@@ -26,6 +26,8 @@ Läufe gegen echte KI-Anbieter gehören **nie** in `npm test`, in die Browsertes
 - `befunde/`: Befundregister – Entscheidungsstand der Befunde aus den automatisierten Prüfläufen (umgesetzt, abgelehnt, zurückgestellt, überholt), damit spätere Läufe Bekanntes nicht erneut vorlegen; siehe [befunde/README.md](befunde/README.md)
 - `pruefsteine/`: KI-Meldungen aus dem wöchentlichen Erfassungstest zu realen Lagen, unverändert und mit Begleitnotiz (Regelwerksstand, Einstufung, bekannte Mängel); Prüfsteine für spätere Fassungen der LEAD-Systematik, keine Musterlösungen; siehe [pruefsteine/README.md](pruefsteine/README.md)
 
+Im Code liegen Vergleichslauf, Reparaturtest, Management-Summary-Reihe, Auswertung und Plausibilitätsprüfung seit 0.6.3 unter `src/forschung/` (TP-2026-W44-25); nur dort darf die App Dateien aus `evaluation/` einbinden, die Musterfassung und ihren Zuschnitt lädt sie erst beim Testlauf (`src/forschung/evaluationsdaten.ts`). Welche Dateien die App einbindet, legt `IN_DER_APP` in `scripts/pruefumfang.mjs` fest.
+
 `tests/evaluation/` prüft nur, dass Fälle, Ergebnisse, das Befundregister und die Prüfsteine ihren Schemata entsprechen. Es ruft keine KI auf.
 
 ## Ablauf einer Bewertung

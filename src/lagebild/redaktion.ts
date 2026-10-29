@@ -3,7 +3,7 @@
 // der Meldungen belegt keine Verschärfung. Ein Abschnitt ohne Befund heißt nur, dass die automatischen Regeln
 // dieses Abschnitts nichts gefunden haben; nicht konfigurierte Regeln weist die Abdeckung aus.
 
-import { kennsatz, kennsaetzeAlle, leseFrist } from "../kern/kennsaetze";
+import { kennsatz, kennsaetzeAlle, KENNSATZ_ERSATZ, leseFrist } from "../kern/kennsaetze";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { holeWert } from "../kern/pfad";
 import { quellenHinweise } from "../kern/quellen";
@@ -117,7 +117,7 @@ const OFFEN = /^(nein|offen|noch offen|noch nicht|nicht abgeschlossen|nicht been
 
 /** Textbaustein nach A.7.2: Bewertungen nebeneinander, mit Urheber, Sachverhalt, Stand und Platz für den tragenden Grund. */
 export function abweichungsBaustein(liste: SvEintrag[], profil: Profil): string {
-  const prefix = profil.ui.kennsaetze?.abweichung || "Abweichende Bewertung:";
+  const prefix = profil.ui.kennsaetze?.abweichung || KENNSATZ_ERSATZ.abweichung;
   const teile = liste
     .filter((s) => s.beurteilung)
     .map((s) => {

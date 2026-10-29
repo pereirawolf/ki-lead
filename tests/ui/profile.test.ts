@@ -8,7 +8,7 @@ import React, { act } from "react";
 import { aushaengen, einhaengen, klick, reactUmgebung } from "../support/dom";
 import { profil } from "../support/dateien";
 import { ProfileAnsicht } from "../../src/ui/Profile";
-import type { ProfilEintrag } from "../../src/App";
+import type { ProfilEintrag } from "../../src/kern/typen";
 
 beforeAll(reactUmgebung);
 afterEach(aushaengen);

@@ -3,10 +3,9 @@
 // Getrennt von vergleichslauf.ts, damit das Abnahmeskript M4 und Werkzeuge außerhalb von Vite die Pipeline
 // ohne die eingebetteten Profile (import.meta.glob) nutzen können.
 
-import MUSTER_TEXT from "../../evaluation/material/ilka-musterfassung.json?raw";
-import ZUSCHNITT_TEXT from "../../evaluation/material/ilka-s1-zuschnitt-a.json?raw";
 import { eingebauteProfile } from "../profil/eingebaut";
 import { ladeProfil, sha256 } from "../profil/laden";
+import { musterTexte, type MusterTexte } from "./evaluationsdaten";
 import { musterfassungAus, type Musterfassung } from "./kurzfassungsreihe";
 import { fehlendeFalldateien, PROFIL_ORDNER, S1_ZUSCHNITT, s1FestPruefen, type FallDaten, type S1Fest } from "./vergleichslauf";
 
@@ -23,7 +22,8 @@ export async function fallDatenEingebaut(): Promise<FallDaten> {
 
 // Musterfassung Ilka und ihr Zuschnitt als Text, mit der App ausgeliefert (seit 0.5.12): Grundlage der Umfänge
 // „S2 + S3 (aus Musterfassung)“ und „MS (aus Musterfassung)“. Als Text eingebettet, damit die Prüfsumme der Datei im
-// Repository gilt; beide werden vor dem ersten Aufruf gegen die Prüfsummen der Pläne geprüft.
+// Repository gilt; beide werden vor dem ersten Aufruf gegen die Prüfsummen der Pläne geprüft. Seit 0.6.3
+// (TP-2026-W44-25) erst bei Bedarf geladen (src/forschung/evaluationsdaten.ts).
 
 export interface MusterDaten {
   musterfassung: Musterfassung;
@@ -32,7 +32,8 @@ export interface MusterDaten {
 }
 
 /** Lädt Musterfassung und Zuschnitt aus der App und prüft beide gegen die Prüfsummen der Pläne. */
-export async function musterDatenEingebaut(texte = { muster: MUSTER_TEXT, zuschnitt: ZUSCHNITT_TEXT }): Promise<MusterDaten> {
+export async function musterDatenEingebaut(vorgabe?: MusterTexte): Promise<MusterDaten> {
+  const texte = vorgabe ?? (await musterTexte());
   const musterfassung = await musterfassungAus(texte.muster);
   const summe = await sha256(texte.zuschnitt);
   if (summe !== S1_ZUSCHNITT.sha256)

@@ -12,6 +12,7 @@
 // - recherchebefunde.ts: Befunde zu Recherche, Absender und Abruffehlern
 
 import type { Fortschritt, LlmAnbieter, LlmAnfrage, LlmAntwort } from "../anbieter/typen";
+import { bekannterAnbieter } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { modellFuer, werkzeugeFuer, type Einstellungen } from "./einstellungen";
 import type { RechercheModus } from "./kontext";
@@ -20,7 +21,8 @@ import { istVerdichtung, type Material } from "./material";
 
 /**
  * Wirksame Werkzeuggrenzen für S2: die Höchstzahlen der Einstellungen, begrenzt durch das, was Modell und Endpunkt
- * können (seit 0.5.6: Mistral über den EU-Endpunkt ohne Werkzeuge, global nur mit Websuche). `grund` nennt die
+ * können (seit 0.5.6: Mistral über den EU-Endpunkt ohne Werkzeuge, global nur mit Websuche; seit 0.6.3 Ollama ohne
+ * Werkzeuge). `grund` nennt die
  * Grenze des Anbieters, wenn sie die Recherche ganz ausschließt.
  */
 export function s2Grenzen(k: Kontext): { websucheMax: number; abrufMax: number; grund?: string } {
@@ -37,7 +39,9 @@ export function s2Grenzen(k: Kontext): { websucheMax: number; abrufMax: number; 
       ? {
           grund: w.websuche
             ? `${modell} bietet keinen Seitenabruf, und die Websuche ist in den Einstellungen 0`
-            : `${modell} über den EU-Endpunkt von Mistral bietet keine Websuche`,
+            : bekannterAnbieter(modell) === "ollama"
+              ? `${modell} läuft lokal über Ollama und bietet keine Websuche`
+              : `${modell} über den EU-Endpunkt von Mistral bietet keine Websuche`,
         }
       : {}),
   };

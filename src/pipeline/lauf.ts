@@ -2,14 +2,10 @@
 // vollständigen Prompts, Rohantworten, Token, Kosten und Dauer je Stufe. Exportierbar als JSON.
 
 import type { GespeicherterVergleich } from "./vergleich";
-import JSZip from "jszip";
-import { del, get, getMany, keys, set } from "idb-keyval";
 import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung, type StopGrund } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
 import type { Befund, Meldung, Profil } from "../kern/typen";
-
-/** Kennung der App in Laufprotokollen und Ausgaben; die Nummer kommt aus package.json (seit 0.6.2, TP-2026-W44-08) */
-export const APP_KENNUNG = `KI-LEAD ${__APP_VERSION__}`;
+import { APP_KENNUNG } from "../kern/version";
 
 export interface Auftrag {
   sachverhalt: string;
@@ -221,11 +217,12 @@ export function kostenSumme(lauf: Pick<Lauf, "stufen">): number | null {
 }
 
 /**
- * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn sicher nichts gesendet wurde (kein Schlüssel hinterlegt);
+ * Kosten einer fehlgeschlagenen Stufe: 0 nur, wenn sicher nichts gesendet wurde (kein Schlüssel hinterlegt, unbekanntes Modell);
  * sonst unbekannt. Auch ein HTTP-Fehler kann erst nach bereits berechneten Runden (Fortsetzung, Neustart) kommen.
  */
 export function kostenNachFehler(e: unknown): number | null {
-  return e instanceof AnbieterFehler && e.art === "schluessel" ? 0 : null;
+  // Seit 0.6.3 (TP-2026-W44-26) auch unbekannte Modellkennung und unzulässige Ollama-Adresse: beide vor dem Senden
+  return e instanceof AnbieterFehler && (e.art === "schluessel" || e.art === "modell" || e.art === "adresse") ? 0 : null;
 }
 
 /** Anzeige der Laufkosten; bei unvollständiger Erfassung mit bekannter Untergrenze. */
@@ -234,58 +231,4 @@ export function laufKostenText(lauf: Pick<Lauf, "kostenUsd" | "kostenBekanntUsd"
   if (typeof lauf.kostenUsd === "number") return formatUsd(lauf.kostenUsd);
   if (lauf.kostenBekanntUsd) return `mindestens ${formatUsd(lauf.kostenBekanntUsd)} (nicht alle Stufen erfasst)`;
   return formatUsd(null);
-}
-
-export async function laufSpeichern(l: Lauf): Promise<void> {
-  await set(`lauf:${l.id}`, l);
-}
-
-export async function laufLesen(id: string): Promise<Lauf | undefined> {
-  return get<Lauf>(`lauf:${id}`);
-}
-
-export async function laufLoeschen(id: string): Promise<void> {
-  await del(`lauf:${id}`);
-}
-
-/** Löscht mehrere Läufe samt Protokoll. */
-export async function laeufeLoeschen(ids: string[]): Promise<void> {
-  await Promise.all(ids.map((id) => del(`lauf:${id}`)));
-}
-
-/**
- * ZIP mit je einem Laufprotokoll (ki-lead-lauf/1) als JSON-Datei. Inhalt und Dateinamen stammen vom Einzelexport;
- * `dateiname` bestimmt den Namen je Lauf (die Lauf-ID macht ihn eindeutig).
- */
-export async function laeufeAlsZip(laeufe: Lauf[], dateiname: (l: Lauf) => string): Promise<Blob> {
-  const zip = new JSZip();
-  for (const l of laeufe) zip.file(dateiname(l), JSON.stringify(l, null, 2));
-  return zip.generateAsync({ type: "blob", compression: "DEFLATE" });
-}
-
-/**
- * Alle Laufprotokolle. Seit 0.6.2 (TP-2026-W44-10) über keys() und getMany() nur die Schlüssel „lauf:…“, statt mit
- * entries() den ganzen Speicher samt Profilen und Dateitexten zu laden.
- */
-export async function laeufeLaden(): Promise<Lauf[]> {
-  const schluessel = (await keys()).filter((k): k is string => typeof k === "string" && k.startsWith("lauf:"));
-  const werte = await getMany<Lauf | undefined>(schluessel);
-  return werte.filter((v): v is Lauf => !!v).sort((a, b) => b.erstellt.localeCompare(a.erstellt));
-}
-
-/**
- * Bittet den Browser, den Speicher der App vor automatischer Räumung zu schützen (navigator.storage.persist, seit 0.6.2,
- * TP-2026-W44-10). Einmal je Sitzung, nur im Browser; ohne Unterstützung oder bei Ablehnung ohne Folgen.
- */
-let persistAngefragt = false;
-export async function speicherSchuetzen(): Promise<boolean | null> {
-  if (persistAngefragt) return null;
-  persistAngefragt = true;
-  try {
-    const st = (globalThis as { navigator?: { storage?: { persist?: () => Promise<boolean> } } }).navigator?.storage;
-    if (!st?.persist) return null;
-    return await st.persist();
-  } catch {
-    return null;
-  }
 }

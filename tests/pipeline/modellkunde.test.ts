@@ -29,6 +29,15 @@ describe("Punkt 4: Kostenklasse nach Listenpreis der Ausgabe", () => {
   });
 });
 
+describe("Lokale Modelle (TP-2026-W44-26)", () => {
+  it("TP-2026-W44-26: Ollama-Modelle heißen nach ihrem Namen mit „(lokal)“ und haben die Kostenklasse „keine“", () => {
+    expect(modellName("ollama:llama3.1")).toBe("llama3.1 (lokal)");
+    expect(modellName("ollama:qwen3:32b")).toBe("qwen3:32b (lokal)");
+    expect(kostenklasse("ollama:llama3.1")).toBe("keine");
+    expect(preisSatz("ollama:llama3.1")).toBe("Lokales Modell über Ollama, ohne Kosten beim Anbieter.");
+  });
+});
+
 describe("Punkt 4: Vermerke aus den vergleichenden Testläufen", () => {
   it("nennen nur, was die Berichte feststellen", () => {
     expect(vermerkFuer("vorverarbeitung", "gpt-6-luna")?.art).toBe("vorn");

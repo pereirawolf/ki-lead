@@ -3,7 +3,7 @@ import { ladeProfil } from "./profil/laden";
 import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
 import { jetztLokal } from "./kern/ausgabe";
-import type { Befund, Meldung, Profil } from "./kern/typen";
+import type { Meldung, Profil, ProfilEintrag } from "./kern/typen";
 import {
   aktivesProfilLesen,
   dateiAnbieten,
@@ -24,9 +24,10 @@ import { EinstellungenAnsicht, type EinstellungsBereich } from "./ui/Einstellung
 import { LagebildAnsicht } from "./ui/Lagebild";
 import type { KiUebergabe, UebergabeMeldung } from "./pipeline/material";
 import { Fehlergrenze } from "./ui/Fehlergrenze";
-import { alleSchluesselLesen, einstellungenLesen, einstellungenSchreiben, schluesselSchreiben, STANDARD, type Einstellungen } from "./pipeline/einstellungen";
+import { STANDARD, type Einstellungen } from "./pipeline/einstellungen";
+import { einstellungenLesen, einstellungenSchreiben } from "./speicher/einstellungsSpeicher";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel } from "./anbieter/verteiler";
-import { anwenden, aufloesen, PROFIL, systemVorgabe } from "./darstellung/thema";
+import { anwenden, aufloesen, PROFIL, profilFarbschemaFehler, systemVorgabe } from "./darstellung/thema";
 import {
   darstellungLesen,
   darstellungSchreiben,
@@ -39,19 +40,13 @@ import {
 import type { ProfilFarbschema } from "./darstellung/typen";
 import { exportStempel, mitDatum } from "./kern/ausgabe";
 import { PwaHinweis } from "./ui/PwaHinweis";
-import { ablageLesen, ablageWechseln, type AblageId } from "./schluessel/ablage";
+import { ablageLesen, ablageWechseln, alleSchluesselLesen, schluesselSchreiben, type AblageId } from "./schluessel/ablage";
 import { ExternerLink } from "./ui/Ueber";
 import { HERAUSGEBER, VERWEISE } from "./kern/herausgeber";
-import { APP_KENNUNG } from "./pipeline/lauf";
+import { APP_KENNUNG } from "./kern/version";
 
-export interface ProfilEintrag {
-  schluessel: string;
-  quelle: "eingebaut" | "importiert";
-  dateien: Record<string, string>;
-  importiertAm?: string;
-  profil: Profil | null;
-  befunde: Befund[];
-}
+/** Profile laden mit der Prüfung des Farbschemas aus der Darstellung (seit 0.6.3, TP-2026-W44-24) */
+const LADEN = { farbschemaFehler: profilFarbschemaFehler };
 
 type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen";
 
@@ -234,7 +229,7 @@ export default function App() {
       // Ein einzelnes defektes Profil oder ein nicht lesbarer Gerätespeicher darf die übrigen Profile nicht verdecken.
       const sicherLaden = async (dateien: Record<string, string>) => {
         try {
-          return await ladeProfil(dateien);
+          return await ladeProfil(dateien, LADEN);
         } catch (e) {
           return {
             profil: null,
@@ -378,7 +373,7 @@ export default function App() {
   };
 
   const importieren = async (dateien: Record<string, string>, ersetzen = false) => {
-    const erg = await ladeProfil(dateien);
+    const erg = await ladeProfil(dateien, LADEN);
     if (!erg.profil) return { ok: false, befunde: erg.befunde };
     const schluessel = `${erg.profil.manifest.id}@${erg.profil.manifest.version}`;
     // Gleiche ID und Version mit anderem Inhalt: Konflikt melden, beim Ersetzen den alten Stand archivieren
@@ -548,10 +543,10 @@ export default function App() {
         )}
       </main>
       <footer className="fuss">
-        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral). Code
-        unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz ihres Herausgebers.{" "}
-        <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> · <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> ·{" "}
-        <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
+        {APP_KENNUNG}. Daten bleiben auf diesem Gerät; nur die KI-Funktionen senden Inhalte an den gewählten Anbieter (Anthropic, OpenAI oder Mistral; über
+        Ollama bleiben sie auf dem Gerät). Code unter EUPL-1.2, mitgelieferte Beispielprofile unter CC BY 4.0 ({HERAUSGEBER}), andere Profile unter der Lizenz
+        ihres Herausgebers. <ExternerLink href={VERWEISE.inhaltslizenz}>Lizenzen</ExternerLink> ·{" "}
+        <ExternerLink href={VERWEISE.impressum}>Impressum</ExternerLink> · <ExternerLink href={VERWEISE.datenschutz}>Datenschutz</ExternerLink>
       </footer>
     </div>
   );

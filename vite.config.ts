@@ -71,7 +71,7 @@ export default defineConfig(({ command }) => ({
     // Die Werte liegen knapp unter dem Stand vom 26.10.2026; sie sollen Rückschritte anzeigen, nicht Ziele setzen.
     coverage: {
       provider: "v8",
-      include: ["src/kern/**", "src/pipeline/**", "src/anbieter/**"],
+      include: ["src/kern/**", "src/pipeline/**", "src/forschung/**", "src/anbieter/**"],
       reporter: ["text-summary", "html"],
       reportsDirectory: "coverage",
       // Stand 26.10.2026: Anweisungen 93,1 %, Zweige 79,0 %, Funktionen 96,6 %, Zeilen 96,3 %

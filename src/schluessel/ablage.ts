@@ -11,7 +11,7 @@
 // und entfernt sie aus der bisherigen Ablage.
 
 import { del, get, set } from "idb-keyval";
-import { LEERE_SCHLUESSEL, type AnbieterId } from "../anbieter/verteiler";
+import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel, type SchluesselId } from "../anbieter/verteiler";
 import { istNativeApp } from "../pwa/registrieren";
 
 export type AblageId = "geraet" | "sitzung" | "passphrase" | "system";
@@ -238,6 +238,22 @@ export async function schluesselAusAblage(anbieter: AnbieterId): Promise<string>
 
 export async function schluesselInAblage(anbieter: AnbieterId, wert: string): Promise<void> {
   return ablage(await ablageLesen()).schreiben(anbieter, wert);
+}
+
+// Der API-Schlüssel liegt getrennt von den übrigen Einstellungen und wird nie exportiert. Wo er liegt, wählt die
+// Person unter „Einstellungen“. Seit 0.6.3 (TP-2026-W44-24) hier statt in src/pipeline/einstellungen.ts.
+export async function schluesselLesen(anbieter: AnbieterId = "anthropic"): Promise<string> {
+  return schluesselAusAblage(anbieter);
+}
+
+export async function schluesselSchreiben(wert: string, anbieter: AnbieterId = "anthropic"): Promise<void> {
+  return schluesselInAblage(anbieter, wert);
+}
+
+export async function alleSchluesselLesen(): Promise<Schluessel> {
+  const out: Schluessel = { ...LEERE_SCHLUESSEL };
+  for (const id of Object.keys(out) as SchluesselId[]) out[id] = await schluesselLesen(id);
+  return out;
 }
 
 /**

@@ -20,6 +20,9 @@
 // Stand 25.10.2026 (anbietermix-ilka, AV-2026-W43-27, -28): 6 weitere Läufe, 2 Treffer, beide Fehlalarme (Dezimalkomma
 // als Trenner; Stufengrenze als Personenzahl), seit 0.5.14 behoben. Nach den Regeln vor der Korrektur 4 geprüfte Treffer,
 // davon 2 Fehlalarme; die Schwelle für die App ist nicht erreicht.
+//
+// Seit 0.6.3 (TP-2026-W44-25) in src/forschung/: Die Prüfung läuft nur im Vergleichslauf, nicht in der KI-Erfassung,
+// und ist an das Beispielprofil gebunden (Felder und Stufen des Bewertungstexts „im Format des Beispielprofils“).
 
 import type { Meldung } from "../kern/typen";
 

@@ -3,9 +3,8 @@
 // weiterhin `sopKennung` (src/profil/sop.ts).
 
 import type { Profil, Sop } from "../kern/typen";
-import { fachSops, istBaustein, istInhaltsgeruest, VERDICHTUNG_S2 } from "../pipeline/kontext";
-import { STANDARD_ANWEISUNG } from "../pipeline/kurzfassung";
-import { yamlKopf } from "./sop";
+import { fachSops, istBaustein, istInhaltsgeruest, yamlKopf } from "./sop";
+import { STANDARD_ANWEISUNG, VERDICHTUNG_S2 } from "./standardtexte";
 
 export interface SopAnzeige {
   /** Kennung, z. B. „B08“; fehlt bei Teil A und bei SOPs ohne Kennung */

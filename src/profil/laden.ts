@@ -1,8 +1,9 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
 import { feldhilfenFehler } from "../kern/feldhilfen";
+import { fehlendeKennsaetze, KENNSATZ_ERSATZ, type PflichtKennsatz } from "../kern/kennsaetze";
+import { bekannterAnbieter, unbekanntesModellText } from "../anbieter/verteiler";
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
-import { profilFarbschemaFehler } from "../darstellung/thema";
 import { aufloesen, unterSchema } from "../kern/schema";
 import { teilePfad } from "../kern/pfad";
 import type { Befund, Kontakte, Profil, ProfilManifest, Sop, UiKonfig } from "../kern/typen";
@@ -265,6 +266,26 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
   }
 }
 
+/** Folge eines fehlenden Pflichtkennsatzes, für die Warnung beim Laden */
+const KENNSATZ_FOLGE: Record<PflichtKennsatz, string> = {
+  handlungsrelevant: "Fristen in Bewertungstexten erkennt die App dann nicht (Management Summary, Redaktionscheck).",
+  aenderung: "Der Redaktionscheck prüft dann keine Änderungsvermerke von Fortschreibungen.",
+  abweichung: `Abweichende Bewertungen erkennt der Redaktionscheck dann nicht; Textbaustein und Standardtext Verdichtung nehmen „${KENNSATZ_ERSATZ.abweichung}“.`,
+};
+
+/**
+ * Pflichtkennsätze der Darstellungsdatei (seit 0.6.3, TP-2026-W44-27, Profilformat 1.20): Fehlt einer, lädt das Profil
+ * mit einer Warnung je Kennsatz, statt still auf Ersatztexte der App zu laufen.
+ */
+function pruefePflichtKennsaetze(ui: UiKonfig, befunde: Befund[]) {
+  for (const k of fehlendeKennsaetze(ui))
+    befunde.push({
+      stufe: "warnung",
+      code: "KENNSATZ_FEHLT",
+      text: `Darstellungsdatei: Pflichtkennsatz „${k}“ fehlt in „kennsaetze“ (Profilformat 1.20; Vorschlag „${KENNSATZ_ERSATZ[k]}“). ${KENNSATZ_FOLGE[k]}`,
+    });
+}
+
 /** Vergleicht die Stufentexte der Darstellungsdatei mit Tabellen im Kodierleitfaden (nur Hinweis). */
 function pruefeStufentexte(ui: UiKonfig, leitfaden: string | undefined, befunde: Befund[]) {
   if (!leitfaden) return;
@@ -280,7 +301,17 @@ function pruefeStufentexte(ui: UiKonfig, leitfaden: string | undefined, befunde:
   }
 }
 
-export async function ladeProfil(rohDateien: Record<string, string>): Promise<LadeErgebnis> {
+/** Optionen des Ladens (seit 0.6.3, TP-2026-W44-24) */
+export interface LadeOptionen {
+  /**
+   * Prüfung eines Farbschemas aus profil.json: Fehlertexte, leer = gültig. Die Darstellung liefert sie
+   * (`profilFarbschemaFehler` in src/darstellung/thema.ts), die App gibt sie beim Laden mit; der Profilloader kennt die
+   * Darstellung nicht. Ohne Prüfung wird ein Farbschema nicht weitergereicht (ungeprüfte Werte nie).
+   */
+  farbschemaFehler?: (farbschema: unknown) => string[];
+}
+
+export async function ladeProfil(rohDateien: Record<string, string>, optionen: LadeOptionen = {}): Promise<LadeErgebnis> {
   const dateien = normalisiereDateien(rohDateien);
   const befunde: Befund[] = [];
   const manifest = jsonLesen(dateien, "profil.json", befunde, true) as ProfilManifest | undefined;
@@ -297,10 +328,19 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
   }
   if (!strukturOk) return { profil: null, befunde };
   manifest.variablen = manifest.variablen || {};
+  // Modellkennungen ohne Anbieter (seit 0.6.3, TP-2026-W44-26): bis 0.6.2 fielen sie still auf Anthropic
+  for (const [rolle, modell] of Object.entries(manifest.modelle || {}))
+    if (typeof modell === "string" && !bekannterAnbieter(modell))
+      befunde.push({
+        stufe: "warnung",
+        code: "MODELL_UNBEKANNT",
+        text: `profil.json: ${unbekanntesModellText(modell)} Für „${rolle}“ gilt die Vorgabe der App.`,
+      });
   // Optionales Farbschema: Fehler sperren das fachliche Profil nicht, das Schema wird dann nicht verwendet
   if (manifest.farbschema !== undefined) {
-    const f = profilFarbschemaFehler(manifest.farbschema);
-    if (f.length) {
+    const f = optionen.farbschemaFehler?.(manifest.farbschema);
+    if (!f) delete manifest.farbschema;
+    else if (f.length) {
       befunde.push({ stufe: "warnung", text: `profil.json: Das Farbschema wird nicht verwendet – ${f.join(" ")}` });
       // Ungeprüfte Werte nicht weiterreichen (die Rohdatei und damit die Prüfsumme bleiben unverändert)
       delete manifest.farbschema;
@@ -330,6 +370,7 @@ export async function ladeProfil(rohDateien: Record<string, string>): Promise<La
     }
   }
   if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
+  if (ui && uiOk) pruefePflichtKennsaetze(ui, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });

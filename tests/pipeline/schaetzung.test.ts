@@ -5,7 +5,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AUFWAND_STUFEN, STANDARD, STANDARD_PROFILE } from "../../src/pipeline/einstellungen";
 import { ausgabePreis } from "../../src/anbieter/preise";
-import { dauerText, kostenText, MESSWERTE, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
+import { dauerText, kostenText, MESSWERTE, schaetzeKurzfassung, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
 import { LaufSchaetzung } from "../../src/ui/LaufSchaetzung";
 
 describe("Schätzung von Dauer und Kosten", () => {
@@ -140,8 +140,16 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(MESSWERTE["verdichtung|gpt-6-astra|xhigh"]).toEqual({ sekunden: [330, 540], usd: [0.9, 2.3] });
   });
 
+  it("TP-2026-W44-26: lokale Modelle über Ollama ohne Kosten und ohne Dauer", () => {
+    for (const art of ["s1", "erfassung", "verdichtung"] as const)
+      expect(schaetzeStufe(art, "ollama:llama3.1", "medium"), art).toEqual({ sekunden: null, usd: [0, 0], gemessen: false });
+    expect(kostenText([0, 0])).toBe("ohne Kosten (lokales Modell)");
+    expect(schaetzeKurzfassung("ollama:llama3.1", "medium", 12_000).usd).toEqual([0, 0]);
+  });
+
   it("AV-2026-W43-05, -15: S1 und Verdichtung jedes Standard-Profils sind gemessen", () => {
-    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE)) {
+    // Ollama (seit 0.6.3, nicht erprobt) hat keine Messwerte; eigener Test
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama")) {
       expect(schaetzeStufe("s1", p.modelle.vorverarbeitung, p.aufwand.vorverarbeitung).gemessen, `${anbieter} S1`).toBe(true);
       expect(schaetzeStufe("verdichtung", p.modelle.verdichtung, p.aufwand.verdichtung).gemessen, `${anbieter} Verdichtung`).toBe(true);
     }
@@ -151,14 +159,14 @@ describe("Schätzung von Dauer und Kosten", () => {
 
   it("AV-2026-W43-06: EU-Aufschlag von Mistral in der Schätzung, sonst unverändert", () => {
     // Soll von Hand: Messwert 0,20–0,45 USD × 1,1 = 0,22–0,495 USD; Dauer unverändert
-    const eu = schaetzeStufe("verdichtung", "mistral-medium-3-5", "high", { mistralEndpunkt: "eu" });
+    const eu = schaetzeStufe("verdichtung", "mistral-medium-3-5", "high", { mistral: { endpunkt: "eu" } });
     expect(eu.sekunden).toEqual([90, 240]);
     expect(eu.usd![0]).toBeCloseTo(0.22, 10);
     expect(eu.usd![1]).toBeCloseTo(0.495, 10);
-    expect(schaetzeStufe("verdichtung", "mistral-medium-3-5", "high", { mistralEndpunkt: "global" }).usd).toEqual([0.2, 0.45]);
+    expect(schaetzeStufe("verdichtung", "mistral-medium-3-5", "high", { mistral: { endpunkt: "global" } }).usd).toEqual([0.2, 0.45]);
     // Anthropic und OpenAI: Endpunkt ohne Wirkung
-    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium", { mistralEndpunkt: "eu" }).usd).toEqual([1.2, 2.2]);
-    expect(schaetzeStufe("verdichtung", "gpt-6-astra", "high", { mistralEndpunkt: "eu" }).usd).toEqual([1.5, 2.15]);
+    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium", { mistral: { endpunkt: "eu" } }).usd).toEqual([1.2, 2.2]);
+    expect(schaetzeStufe("verdichtung", "gpt-6-astra", "high", { mistral: { endpunkt: "eu" } }).usd).toEqual([1.5, 2.15]);
   });
 
   it("AV-2026-W43-06: Anzeige mit Mistral über den EU-Endpunkt nennt den Aufschlag", async () => {
@@ -166,7 +174,11 @@ describe("Schätzung von Dauer und Kosten", () => {
     const html = renderToStaticMarkup(
       createElement(LaufSchaetzung, {
         stufen: [{ kurz: "S2", rolle: "verdichtung", art: "verdichtung" }],
-        einstellungen: { ...STANDARD, modelle: { ...STANDARD.modelle, verdichtung: "mistral-medium-3-5" }, mistralEndpunkt: "eu" },
+        einstellungen: {
+          ...STANDARD,
+          modelle: { ...STANDARD.modelle, verdichtung: "mistral-medium-3-5" },
+          anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } },
+        },
         profil: p!,
       }),
     );

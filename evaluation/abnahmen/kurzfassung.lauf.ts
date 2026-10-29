@@ -11,7 +11,7 @@
 // Ergebnisse (Text, Struktur, Hinweise der App, Vorprüfung, Kosten) gehen nach privat/kurzfassung-ilka/ (nicht
 // eingecheckt). Die Musterfassung wird vor dem ersten Aufruf gegen die Prüfsumme des Plans geprüft. Seit 0.5.12
 // dieselbe Reihe wie „Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka“, Umfang „MS (aus Musterfassung)“
-// (src/pipeline/kurzfassungsreihe.ts), hier mit quelle „skript“; dazu die ZIP-Datei wie in der App.
+// (src/forschung/kurzfassungsreihe.ts), hier mit quelle „skript“; dazu die ZIP-Datei wie in der App.
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,7 +20,7 @@ import { leereNutzung, type LlmAnbieter, type LlmAntwort } from "../../src/anbie
 import { Verteiler, type AnbieterId } from "../../src/anbieter/verteiler";
 import { ladeProfil } from "../../src/profil/laden";
 import { STANDARD, standardProfilAnwenden, type Einstellungen } from "../../src/pipeline/einstellungen";
-import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MUSTERFASSUNG, musterfassungAus } from "../../src/pipeline/kurzfassungsreihe";
+import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MUSTERFASSUNG, musterfassungAus } from "../../src/forschung/kurzfassungsreihe";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "kurzfassung-ilka");
@@ -46,7 +46,8 @@ function einstellungen(): Einstellungen {
     if (!AUFWAENDE.includes(aufwand)) throw new Error(`Aufwand „${aufwand}“ unbekannt (${AUFWAENDE.join(", ")})`);
     (e.aufwand as Record<string, string>).kurzfassung = aufwand;
   }
-  if (ANBIETER === "mistral") e.mistralEndpunkt = process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu";
+  if (ANBIETER === "mistral")
+    e.anbieterOptionen = { ...e.anbieterOptionen, mistral: { endpunkt: process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu" } };
   return e;
 }
 
@@ -102,7 +103,7 @@ describe("Management Summary aus der Musterfassung Ilka", () => {
     const { reihe, ergebnisse } = await kurzfassungsreihe({
       profil,
       musterfassung,
-      anbieter: ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: e.mistralEndpunkt }),
+      anbieter: ATTRAPPE ? attrappe() : Verteiler.fuer(SCHLUESSEL, e.anbieterOptionen),
       einstellungen: e,
       anzahl: LAEUFE,
       budgetUsd: PLAN.budget_usd,

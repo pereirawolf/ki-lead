@@ -2,9 +2,10 @@
 // Stufen für Websuchen, Seitenabrufe und Lesemenge je Seite, Übernahme getippter Werte, Umrechnung der Lesemenge,
 // Höchstkosten für Suchen und Seitenlesen und Wirkung je Anbieter. Reine Funktionen; die Oberfläche steht in
 // src/ui/Einstellungen.tsx. Gespeichert werden wie bisher nur websucheMax, abrufMax und abrufMaxTokens.
-import { aufschlag, formatUsd, kostenAnfrage, PREISSTAND } from "../anbieter/preise";
+import { formatUsd, kostenAnfrage, PREISSTAND } from "../anbieter/preise";
+import { optionenVollstaendig, type AnbieterOptionenTeil } from "../anbieter/optionen";
 import type { Nutzung } from "../anbieter/typen";
-import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
+import { aufschlagFuer, bekannterAnbieter, type AnbieterId } from "../anbieter/verteiler";
 import { STANDARD, WEBSUCHE_GRENZE, werkzeugeFuer, type Einstellungen } from "./einstellungen";
 
 export type RechercheWerte = Pick<Einstellungen, "websucheMax" | "abrufMax" | "abrufMaxTokens">;
@@ -133,14 +134,16 @@ const nutzung = (n: Partial<Nutzung>): Nutzung => ({ eingabe: 0, ausgabe: 0, cac
  * Höchstkosten für Suchen und Seitenlesen in S2 mit dem gegebenen Modell nach Listenpreis, oder null ohne Preis.
  * Anthropic: Suchen × Suchpreis + Seiten × Lesemenge × Eingabepreis (je Seite gerechnet, also ohne Langkontext-Preis).
  * OpenAI: Gebühren je Werkzeugaufruf; die Länge der Seiten begrenzt OpenAI nicht. Mistral: nur Suchen, nicht begrenzt.
+ * Ollama (lokal) und Mistral über den EU-Endpunkt recherchieren nicht.
  */
-export function hoechstkostenText(modell: string, e: Pick<Einstellungen, RechercheFeld | "mistralEndpunkt">): string | null {
+export function hoechstkostenText(modell: string, e: Pick<Einstellungen, RechercheFeld> & { anbieterOptionen?: AnbieterOptionenTeil }): string | null {
+  const anbieter = bekannterAnbieter(modell);
+  if (!anbieter) return null;
   const w = werkzeugeFuer(modell, e);
-  const anbieter = anbieterVon(modell);
   if (!w.websuche && !w.abruf) return `Mit ${modell} recherchiert S2 nicht im Web; Suchen und Seitenlesen kosten nichts.`;
   const suchen = w.websuche ? e.websucheMax : 0;
   const seiten = w.abruf ? e.abrufMax : 0;
-  const faktor = aufschlag(modell, { mistralEndpunkt: e.mistralEndpunkt });
+  const faktor = aufschlagFuer(modell, e.anbieterOptionen);
   const gebuehren = kostenAnfrage(modell, nutzung({ websuchen: suchen, abrufe: seiten }));
   if (gebuehren === null) return null;
   const stand = `Listenpreise, Stand ${PREISSTAND}.`;
@@ -160,29 +163,37 @@ const WIRKUNG: Record<RechercheFeld, Record<AnbieterId | "mistral-eu", string>> 
     openai: "OpenAI begrenzt Suchen und geöffnete Seiten zusammen",
     mistral: "Mistral zählt die Suchen nur, begrenzt sie nicht",
     "mistral-eu": "Mistral über den EU-Endpunkt sucht nicht",
+    ollama: "Ollama (lokal) sucht nicht",
   },
   abrufMax: {
     anthropic: "Anthropic begrenzt die Seiten",
     openai: "OpenAI zählt die Seiten zur gemeinsamen Höchstzahl mit den Suchen",
     mistral: "bei Mistral ohne Wirkung",
     "mistral-eu": "bei Mistral ohne Wirkung",
+    ollama: "bei Ollama ohne Wirkung",
   },
   abrufMaxTokens: {
     anthropic: "Anthropic kürzt längere Seiten",
     openai: "bei OpenAI ohne Wirkung",
     mistral: "bei Mistral ohne Wirkung",
     "mistral-eu": "bei Mistral ohne Wirkung",
+    ollama: "bei Ollama ohne Wirkung",
   },
 };
 
+/** Schlüssel in WIRKUNG: Mistral über den EU-Endpunkt hat eigene Texte */
+function wirkungsSchluessel(a: AnbieterId, o: AnbieterOptionenTeil): AnbieterId | "mistral-eu" {
+  return a === "mistral" && optionenVollstaendig(o).mistral.endpunkt === "eu" ? "mistral-eu" : a;
+}
+
 /** Ob ein Feld bei mindestens einem der Anbieter etwas bewirkt (seit 0.5.22: Felder ohne Wirkung sind in der Wahl je Lauf gesperrt) */
-export function feldWirkt(feld: RechercheFeld, anbieter: AnbieterId[], mistralEndpunkt: Einstellungen["mistralEndpunkt"]): boolean {
-  return anbieter.some((a) => !/ohne Wirkung|sucht nicht/.test(WIRKUNG[feld][a === "mistral" && (mistralEndpunkt ?? "eu") === "eu" ? "mistral-eu" : a]));
+export function feldWirkt(feld: RechercheFeld, anbieter: AnbieterId[], optionen: AnbieterOptionenTeil): boolean {
+  return anbieter.some((a) => !/ohne Wirkung|sucht nicht/.test(WIRKUNG[feld][wirkungsSchluessel(a, optionen)]));
 }
 
 /** Vermerk je Feld für die Anbieter der S2-Modelle, z. B. „Bei den gewählten Modellen: Anthropic begrenzt die Suchen.“ */
-export function wirkungText(feld: RechercheFeld, anbieter: AnbieterId[], mistralEndpunkt: Einstellungen["mistralEndpunkt"]): string {
-  const teile = anbieter.map((a) => WIRKUNG[feld][a === "mistral" && (mistralEndpunkt ?? "eu") === "eu" ? "mistral-eu" : a]);
+export function wirkungText(feld: RechercheFeld, anbieter: AnbieterId[], optionen: AnbieterOptionenTeil): string {
+  const teile = anbieter.map((a) => WIRKUNG[feld][wirkungsSchluessel(a, optionen)]);
   const wirkt = teile.some((t) => !/ohne Wirkung|sucht nicht/.test(t));
   if (!teile.length) return "";
   return wirkt ? `Bei den gewählten Modellen: ${teile.join("; ")}.` : "Bei den gewählten Modellen ohne Wirkung.";

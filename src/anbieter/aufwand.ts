@@ -4,7 +4,9 @@
 // fünf Stufen); OpenAI, Modellseite gpt-6-astra (low bis max; luna und sol nach einer Drittquelle ebenso, „none“ bietet
 // die App nicht an); Mistral, Reasoning-Dokumentation und Modellkarte Medium 3.5 (Small 4, Medium 3.5 und Large 4 nur
 // „none“ und „high“). „high“ ist bei Mistral am EU-Endpunkt erprobt (Vergleichslauf Ilka, 24.10.2026), „none“ nicht.
-// Unbekannte Modelle erhalten alle Stufen; dort entscheidet der Anbieter.
+// Unbekannte Modelle erhalten alle Stufen; dort entscheidet der Anbieter. Ollama (seit 0.6.3, TP-2026-W44-26): Die App
+// sendet keinen Aufwand, das lokale Modell bestimmt selbst; angeboten wird nur eine feste Stufe („mittel“) für Anzeige,
+// Schätzung und Laufprotokoll.
 
 import type { Aufwand } from "./typen";
 
@@ -14,10 +16,14 @@ export const ALLE_STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
 /** Stufen der Mistral-Modelle: „niedrig“ = ohne Nachdenken (none), „hoch“ = mit Nachdenken (high) */
 export const MISTRAL_STUFEN: Aufwand[] = ["low", "high"];
 
+/** Feste Stufe lokaler Modelle über Ollama; gesendet wird sie nicht */
+export const OLLAMA_STUFEN: Aufwand[] = ["medium"];
+
 export const AUFWAND_JE_MODELL: { muster: RegExp; stufen: Aufwand[] }[] = [
   { muster: /^claude-(haiku|sonnet|opus)-5-5|^claude-fable-5-1/, stufen: ALLE_STUFEN },
   { muster: /^gpt-6-(luna|astra)|^gpt-6\.1-sol/, stufen: ALLE_STUFEN },
   { muster: /^mistral-(small-2603|medium-3-5|large-4)/, stufen: MISTRAL_STUFEN },
+  { muster: /^ollama:/, stufen: OLLAMA_STUFEN },
 ];
 
 /** Stufen, die das Modell anbietet; unbekannte Modelle: alle */

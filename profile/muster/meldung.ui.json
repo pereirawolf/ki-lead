@@ -50,7 +50,12 @@
     "sv_analysefelder": ["lage"],
     "beurteilung_hoch": ["erheblich", "kritisch"]
   },
-  "kennsaetze": { "neubewertung": "Neubewertung bei:" },
+  "kennsaetze": {
+    "neubewertung": "Neubewertung bei:",
+    "handlungsrelevant": "Handlungsrelevant bis:",
+    "aenderung": "Änderung zur Vormeldung:",
+    "abweichung": "Abweichende Bewertung:"
+  },
   "quellen": {
     "kategorien": { "A": "amtlich", "B": "Betreiber (Angaben zum eigenen Betrieb)", "W": "wissenschaftlich", "M": "Medien", "P": "sonstige private Quellen" },
     "rangfolge": ["A", "B", "W", "M", "P"],

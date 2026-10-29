@@ -85,7 +85,7 @@ describe("Testläufe in den Einstellungen", () => {
   it("startet mit der Mistral-Konfiguration, zeigt die Läufe und bietet die ZIP-Datei an", async () => {
     const profil = await profilPflicht("lead-beispiel");
     const dateien = leseOrdner(repoPfad("profile", "lead-beispiel"));
-    const e = { ...standardProfilAnwenden(STANDARD, "mistral"), mistralEndpunkt: "global" as const };
+    const e = { ...standardProfilAnwenden(STANDARD, "mistral"), anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "global" as const } } };
     const anbieterFuer = vi.fn(() => attrappe(JSON.parse(dateien[REFERENZ])));
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
@@ -103,7 +103,7 @@ describe("Testläufe in den Einstellungen", () => {
     const [s, eLauf] = anbieterFuer.mock.calls[0] as unknown as [Schluessel, typeof e];
     expect(s.mistral).toBe("test");
     expect(eLauf.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-medium-3-5", reparatur: "mistral-small-2603" });
-    expect(eLauf.mistralEndpunkt).toBe("global");
+    expect(eLauf.anbieterOptionen.mistral.endpunkt).toBe("global");
     const { name, inhalt } = downloads.liste[0];
     expect(name).toMatch(/^KI-LEAD_Testlauf_Ilka_mistral-medium-3-5-[a-z]+_\d{8}-\d{4}\.zip$/);
     const zip = await JSZip.loadAsync(await inhalt.arrayBuffer());

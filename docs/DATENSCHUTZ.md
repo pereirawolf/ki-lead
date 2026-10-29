@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.6 vom 26.10.2026, gilt für App-Version 0.6.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.7 vom 27.10.2026, gilt für App-Version 0.6.3 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -18,7 +18,7 @@ Werden nur fiktive oder offen zugängliche Inhalte ohne Personenbezug verwendet,
 |---|---|---|
 | Herausgeber der Software | Heiko Pereira Wolf, privates Forschungsvorhaben ([ORCID 0009-0004-0014-7616](https://orcid.org/0009-0004-0014-7616)); Anschrift und Kontakt im [Impressum](https://www.pereirawolf.de/impressum.html) | Quellcode, Profile, diese Hinweise; Betrieb der Seite auf GitHub Pages; Rückmeldungen im Repository (Abschnitt 12) |
 | Verantwortlicher für die Verarbeitung in der App | die nutzende Person oder Stelle | was sie in die App eingibt, speichert, an einen KI-Anbieter sendet und exportiert |
-| KI-Anbieter | Anthropic, OpenAI oder Mistral, nach Wahl der nutzenden Person; das Modell ist je Aufgabe wählbar, ein Lauf kann deshalb mehrere Anbieter nutzen (etwa die Mix-Profile seit 0.5.15: OpenAI und Anthropic) | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle |
+| KI-Anbieter | Anthropic, OpenAI oder Mistral, nach Wahl der nutzenden Person; das Modell ist je Aufgabe wählbar, ein Lauf kann deshalb mehrere Anbieter nutzen (etwa die Mix-Profile seit 0.5.15: OpenAI und Anthropic). Seit 0.6.3 auch ein lokales Modell über Ollama auf dem eigenen Gerät; dann ist kein Drittanbieter beteiligt (Abschnitt 5) | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle; bei Ollama durch die nutzende Person oder Stelle selbst |
 | Hosting der Web-App | GitHub (GitHub Pages) | Auslieferung der Programmdateien, Verbindungsprotokolle |
 
 KI-LEAD hat **keinen eigenen Server**. Inhalte gehen vom Gerät direkt an den gewählten Anbieter, mit dem API-Schlüssel der nutzenden Person. Der Herausgeber erhält weder Inhalte noch Schlüssel, Protokolle oder Nutzungsdaten. Er kann deshalb auch keine Auskunft über die Verarbeitung in der App geben und nichts löschen.
@@ -48,13 +48,14 @@ Der Service Worker der PWA hält nur Programmdateien vor. Inhalte und Anfragen a
 
 ```
 Gerät ──(nur bei einer KI-Funktion, HTTPS)──▶ api.anthropic.com, api.openai.com, api.eu.mistral.ai  oder  api.mistral.ai
-                                                  │
-                                                  └─(nur wenn im Auftrag erlaubt)─▶ Websuche und Seitenabruf
-                                                                                     beim Anbieter → Suchdienste, Webseiten
+  │                                               │
+  │                                               └─(nur wenn im Auftrag erlaubt)─▶ Websuche und Seitenabruf
+  │                                                                                  beim Anbieter → Suchdienste, Webseiten
+  └──(nur bei einem Modell „ollama:…“, seit 0.6.3)──▶ localhost:11434 bzw. 127.0.0.1:11434 (Ollama auf demselben Gerät)
 Browser ──(Aufruf der Web-App)──▶ GitHub Pages (Programmdateien)
 ```
 
-- **Andere Verbindungen gibt es nicht.** Die Content-Security-Policy der App (`index.html`) erlaubt Verbindungen nur zur eigenen Adresse und zu den drei Anbietern. Es gibt keine Telemetrie, keine Analytics, keine Absturzberichte, kein CDN und keine nachgeladenen Schriften; alle Bibliotheken und die Schrift sind gebündelt.
+- **Andere Verbindungen gibt es nicht.** Die Content-Security-Policy der App (`index.html`) erlaubt Verbindungen nur zur eigenen Adresse, zu den drei Cloud-Anbietern und seit 0.6.3 zu Ollama auf dem eigenen Gerät (`http://localhost:11434`, `http://127.0.0.1:11434`; Begründung in [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.9). Es gibt keine Telemetrie, keine Analytics, keine Absturzberichte, kein CDN und keine nachgeladenen Schriften; alle Bibliotheken und die Schrift sind gebündelt.
 - **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
 - **Websuche und Seitenabruf** führt der Anbieter aus, nicht das Gerät. Suchanfragen gehen an den Anbieter und gegebenenfalls an dessen Suchdienst. Abgerufene Webseiten sehen eine Anfrage des Anbieters. Anthropic weist darauf hin, dass Seitenbetreiber abgerufene Adressen und Anfragedaten nach eigenen Regeln speichern können (Anthropic, o. J. a). Recherche ist nur aktiv, wenn der Auftrag sie erlaubt; die Verdichtung startet ohne Websuche.
 - **Erinnerungen an meldende Stellen** öffnen nur das Mailprogramm des Geräts (mailto). Die App versendet selbst nichts. Kontaktadressen stammen aus `kontakte.json` des Profils oder aus der nicht eingecheckten `kontakte.lokal.json`.
@@ -84,6 +85,13 @@ Es gelten die Bedingungen, die die nutzende Person oder Stelle mit dem Anbieter 
 - **Aufbewahrung:** Ein- und Ausgaben der API bewahrt Mistral zur Missbrauchsüberwachung 30 Tage auf (Open Terms Archive, 2024). Eine Löschung ohne Aufbewahrung (Zero Data Retention) gibt es auf Antrag nur für zustandslose Aufrufe. Chat Completions, die KI-LEAD über den EU-Endpunkt nutzt, gehören dazu; die Conversations-API für die Websuche am globalen Endpunkt ist ausdrücklich ausgenommen (Mistral AI, o. J. c).
 - **`store: false`:** Am globalen Endpunkt sendet KI-LEAD jede Anfrage mit `store: false` (`src/anbieter/mistral.ts`), damit keine abrufbare Unterhaltung angelegt wird; Chat Completions am EU-Endpunkt legen keine an. PDF-Material geht inline mit der Anfrage, nicht über `/v1/files`.
 
+### Ollama, lokal (seit App 0.6.3)
+
+- **Kein Drittanbieter.** Mit einem Modell „ollama:…“ gehen die Inhalte eines Laufs an Ollama auf demselben Gerät (Loopback-Schnittstelle, Port 11434), nicht an einen Anbieter im Netz. Es gibt keinen API-Schlüssel, keinen Vertrag mit einem Anbieter und keine Übermittlung in ein Drittland durch KI-LEAD. Ollama und das lokale Modell betreibt die nutzende Person oder Stelle selbst; was Ollama protokolliert oder speichert, richtet sich nach dessen Einstellungen.
+- **Keine Websuche, kein Seitenabruf.** Die App sendet an Ollama keine Werkzeuge; S2 arbeitet nur mit dem Material.
+- **Herunterladen der Modelle** (`ollama pull`) ist ein Vorgang außerhalb von KI-LEAD.
+- Die Ergebnisqualität lokaler Modelle ist in KI-LEAD nicht erprobt.
+
 ### Übermittlung in Drittländer
 
 Anthropic und OpenAI verarbeiten Anfragen in den USA. Das ist eine Übermittlung in ein Drittland im Sinne von Kapitel V DSGVO, sofern personenbezogene Daten enthalten sind. Mistral verarbeitet über den EU-Endpunkt (Vorgabe in KI-LEAD) in EU und EFTA, über den globalen Endpunkt standardmäßig in der EU; ob Unterauftragnehmer einzelner Funktionen Daten außerhalb der EU verarbeiten, regelt der Vertrag mit Mistral. Die Rechtsgrundlage der Übermittlung regelt der Auftragsverarbeitungsvertrag des jeweiligen Anbieters mit der nutzenden Person oder Stelle. Wer personenbezogene Daten verarbeiten will, prüft diesen Vertrag selbst. Für KI-LEAD gilt unabhängig davon: keine personenbezogenen Daten.
@@ -100,7 +108,7 @@ Nach dem ersten Aufruf startet die installierte PWA aus dem Gerät. GitHub wird 
 
 ## 8. Laufprotokolle
 
-Jeder KI-Lauf wird auf dem Gerät protokolliert (`src/pipeline/lauf.ts`). Ein Laufprotokoll enthält:
+Jeder KI-Lauf wird auf dem Gerät protokolliert (Format `src/pipeline/lauf.ts`, Ablage seit 0.6.3 `src/speicher/laufSpeicher.ts`). Ein Laufprotokoll enthält:
 
 - Profil-ID, Profilversion und Prüfsumme
 - je Stufe Modell, Parameter, **vollständige Prompts** einschließlich Auftrag und Material sowie die **Rohantworten**
@@ -295,3 +303,4 @@ Zugriff jeweils am 24.10.2026.
 | 1.4 | 25.10.2026 | Abschnitt 2: Modell je Aufgabe wählbar, ein Lauf kann mehrere Anbieter nutzen (Mix-Profile, App 0.5.15; AV-2026-W43-31) |
 | 1.5 | 25.10.2026 | Abschnitte 3 und 10: Archiv der Testläufe auf dem Gerät mit Löschen (App 0.5.17) |
 | 1.6 | 26.10.2026 | Abschnitte 3 und 9: Ablage der API-Schlüssel mit Passphrase verschlüsselt (App 0.6.2, TP-2026-W44-09) |
+| 1.7 | 27.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |

@@ -9,25 +9,30 @@
 // unbeschädigten Durchlauf (Soll, ohne KI-Aufruf ermittelt), Kosten, Dauer und Token von S3. Alle Inhalte sind fiktiv.
 
 import JSZip from "jszip";
-import MUSTER_TEXT from "../../evaluation/material/ilka-musterfassung.json?raw";
-import ZUSCHNITT_TEXT from "../../evaluation/material/ilka-s1-zuschnitt-a.json?raw";
 import PLAN from "../../evaluation/plaene/reparatur-ilka.json";
-import { aufschlag, kostenAnfrage } from "../anbieter/preise";
+import { kostenAnfrage } from "../anbieter/preise";
+import type { AnbieterOptionenTeil } from "../anbieter/optionen";
 import { leereNutzung, type Aufwand, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "../anbieter/typen";
-import { anbieterVon } from "../anbieter/verteiler";
+import { anbieterVon, aufschlagFuer } from "../anbieter/verteiler";
 import type { Meldung } from "../kern/typen";
 import { sha256 } from "../profil/laden";
-import { aufwandAngeboten, aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
-import { APP_KENNUNG, neuerLauf, ohneBase64, type Lauf, type S1Vorschlag } from "./lauf";
-import { stufe2und3 } from "./s2s3";
-import type { Kontext } from "./stufen";
+import { aufwandAngeboten, aufwandFuer, modellFuer, type Einstellungen } from "../pipeline/einstellungen";
+import { APP_KENNUNG } from "../kern/version";
+import { neuerLauf, ohneBase64, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
+import { stufe2und3 } from "../pipeline/s2s3";
+import type { Kontext } from "../pipeline/stufen";
 import { fallAuftrag, fallMaterial, type FallDaten } from "./vergleichslauf";
 import { csv } from "./vergleichslauf-export";
+import { musterTexte } from "./evaluationsdaten";
 
 export const ENTWURF_DATEI = "evaluation/material/ilka-musterfassung.json";
 export const S1_DATEI = "evaluation/material/ilka-s1-zuschnitt-a.json";
-const MUSTER = JSON.parse(MUSTER_TEXT);
-const ZUSCHNITT = JSON.parse(ZUSCHNITT_TEXT);
+
+/** Musterfassung und Zuschnitt, seit 0.6.3 (TP-2026-W44-25) erst bei Bedarf geladen */
+async function musterDaten(): Promise<{ musterText: string; zuschnittText: string; muster: Meldung; zuschnitt: S1Vorschlag }> {
+  const t = await musterTexte();
+  return { musterText: t.muster, zuschnittText: t.zuschnitt, muster: JSON.parse(t.muster), zuschnitt: JSON.parse(t.zuschnitt) };
+}
 
 /** Variante des Plans reparatur-ilka: Modell und Aufwand der Reparatur */
 export interface ReparaturVariante {
@@ -55,12 +60,12 @@ export function einstellungenFuerReparatur(e: Einstellungen, v: ReparaturVariant
  * (Anweisung, Schema-Befunde und Entwurf), Ausgabe etwa 8.000–16.000 Token (vollständiger Entwurf, mit Nachdenken
  * mehr). Mistral mit dem Aufschlag des EU-Endpunkts.
  */
-export function schaetzeReparatur(modell: string, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): [number, number] | null {
+export function schaetzeReparatur(modell: string, optionen: AnbieterOptionenTeil = {}): [number, number] | null {
   const preis = (eingabe: number, ausgabe: number) => kostenAnfrage(modell, { eingabe, ausgabe, cacheLesen: 0, cacheSchreiben: 0, websuchen: 0, abrufe: 0 });
   const von = preis(10_000, 8_000);
   const bis = preis(14_000, 16_000);
   if (von === null || bis === null) return null;
-  const f = aufschlag(modell, optionen);
+  const f = aufschlagFuer(modell, optionen);
   return [von * f, bis * f];
 }
 
@@ -68,7 +73,7 @@ export function schaetzeReparatur(modell: string, optionen: { mistralEndpunkt?: 
  * Kosten eines Testlaufs S3 Reparatur: je Fall eine Reparatur (untere Grenze) bis zwei Reparaturen (obere Grenze, Höchstzahl);
  * der unbeschädigte Durchlauf ruft keinen Anbieter auf.
  */
-export function schaetzePrueffall(modell: string, durchgaenge: number, optionen: { mistralEndpunkt?: "eu" | "global" } = {}): [number, number] | null {
+export function schaetzePrueffall(modell: string, durchgaenge: number, optionen: AnbieterOptionenTeil = {}): [number, number] | null {
   const je = schaetzeReparatur(modell, optionen);
   const faelle = DEFEKTE.length * durchgaengeBegrenzt(durchgaenge);
   return je ? [je[0] * faelle, je[1] * faelle * 2] : null;
@@ -92,7 +97,7 @@ const radar = (sv: number, achse: string) => `sachverhalte[${sv}].sofort.lagenra
 
 /**
  * Fehlerarten, die die Nachbearbeitung nicht behebt und die Schemaprüfung meldet (geprüft in
- * tests/pipeline/reparaturtest.test.ts). Sachverhalt 1: Sturmfolgen, Sachverhalt 2: Stromausfall.
+ * tests/forschung/reparaturtest.test.ts). Sachverhalt 1: Sturmfolgen, Sachverhalt 2: Stromausfall.
  */
 export const DEFEKTE: Defekt[] = [
   {
@@ -132,13 +137,13 @@ export const DEFEKTE: Defekt[] = [
 ];
 
 /** Unbeschädigte Musterfassung (frische Kopie) */
-export function musterfassung(): Meldung {
-  return structuredClone(MUSTER);
+export async function musterfassung(): Promise<Meldung> {
+  return (await musterDaten()).muster;
 }
 
 /** Musterfassung mit einem Defekt (frische Kopie) */
-export function beschaedigt(d: Defekt): Meldung {
-  const m = musterfassung();
+export async function beschaedigt(d: Defekt): Promise<Meldung> {
+  const m = await musterfassung();
   d.anwenden(m);
   return m;
 }
@@ -311,7 +316,7 @@ async function durchlauf(
     signal,
     aktualisiert: () => undefined,
   };
-  const vorschlag = structuredClone(ZUSCHNITT) as unknown as S1Vorschlag;
+  const vorschlag = (await musterDaten()).zuschnitt;
   lauf.vorschlag = vorschlag;
   try {
     const r = await stufe2und3(k, structuredClone(vorschlag));
@@ -347,18 +352,20 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
   const profil = daten.profil;
   const defekte = o.defekte ?? DEFEKTE;
   const wiederholungen = durchgaengeBegrenzt(o.wiederholungen ?? 1);
-  const basis = await durchlauf(daten, o.anbieter, e, musterfassung(), "unbeschädigt", o.signal);
+  const basis = await durchlauf(daten, o.anbieter, e, await musterfassung(), "unbeschädigt", o.signal);
   if (!basis.meldung) throw new Error(`Unbeschädigter Durchlauf ohne Meldung: ${basis.lauf.fehler ?? basis.lauf.status}`);
   const soll = basis.meldung;
   const faelle: ReparaturFall[] = [];
   const laeufe: DurchlaufErgebnis[] = [basis];
   const anzahl = defekte.length * wiederholungen;
+  const texte = await musterTexte();
+  const original = await musterfassung();
   let kosten = 0;
   for (let w = 1; w <= wiederholungen; w++)
     for (const d of defekte) {
       if (o.signal?.aborted) break;
       o.stand?.({ nr: faelle.length + 1, anzahl, defekt: d.id, kostenUsd: kosten });
-      const entwurf = beschaedigt(d);
+      const entwurf = await beschaedigt(d);
       const r = await durchlauf(daten, o.anbieter, e, entwurf, d.id, o.signal);
       laeufe.push(r);
       const s2 = r.lauf.stufen.find((s) => s.modell === ENTWURF_MODELL);
@@ -369,7 +376,7 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
       if (typeof k === "number") kosten += k;
       const stellen = d.pfade.map((pfad) => ({
         pfad,
-        original: wertAn(musterfassung(), pfad) ?? null,
+        original: wertAn(original, pfad) ?? null,
         praepariert: wertAn(entwurf, pfad) ?? null,
         repariert: r.meldung ? (wertAn(r.meldung, pfad) ?? null) : null,
       }));
@@ -403,10 +410,10 @@ export async function reparaturReihe(o: ReparaturOptionen): Promise<{ reihe: Rep
     erstellt: new Date().toISOString(),
     app: APP_KENNUNG,
     profil: { id: profil.manifest.id, version: profil.manifest.version, hash: basis.lauf.profil.hash },
-    entwurf: { datei: ENTWURF_DATEI, sha256: await sha256(MUSTER_TEXT) },
-    s1_fest: { datei: S1_DATEI, sha256: await sha256(ZUSCHNITT_TEXT) },
+    entwurf: { datei: ENTWURF_DATEI, sha256: await sha256(texte.muster) },
+    s1_fest: { datei: S1_DATEI, sha256: await sha256(texte.zuschnitt) },
     reparatur: { modell, aufwand: aufwandFuer("reparatur", e, profil), anbieter: anbieterVon(modell) },
-    ...(anbieterVon(modell) === "mistral" ? { mistral_endpunkt: e.mistralEndpunkt ?? "eu" } : {}),
+    ...(anbieterVon(modell) === "mistral" ? { mistral_endpunkt: e.anbieterOptionen.mistral.endpunkt } : {}),
     wiederholungen,
     basis: { schemakonform: !!basis.lauf.ergebnis?.schemakonform, reparaturen: reparaturStufen(basis.lauf).length },
     faelle,

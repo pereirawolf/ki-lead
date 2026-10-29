@@ -38,8 +38,8 @@ import {
   type EinzelErgebnis,
   type FallDaten,
   type S1Fest,
-} from "../../src/pipeline/vergleichslauf";
-import { csv } from "../../src/pipeline/vergleichslauf-export";
+} from "../../src/forschung/vergleichslauf";
+import { csv } from "../../src/forschung/vergleichslauf-export";
 
 const REPO = join(__dirname, "..", "..");
 const AUSGABE = join(REPO, "privat", "abnahme-m4");
@@ -89,7 +89,7 @@ function grundeinstellungen(): Einstellungen {
     e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "mistral-small-2603";
     e.modelle.verdichtung = process.env.KI_LEAD_MODELL_S2 || "mistral-medium-3-5";
     e.modelle.reparatur = process.env.KI_LEAD_MODELL_REPARATUR || "mistral-small-2603";
-    e.mistralEndpunkt = process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu";
+    e.anbieterOptionen = { ...e.anbieterOptionen, mistral: { endpunkt: process.env.KI_LEAD_MISTRAL_ENDPUNKT === "global" ? "global" : "eu" } };
     return e;
   }
   e.modelle.vorverarbeitung = process.env.KI_LEAD_MODELL_S1 || "gpt-6-luna";
@@ -186,7 +186,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
       }
       const anbieter = ATTRAPPE
         ? attrappe(eingaenge, JSON.parse(refText), !!S1_FEST)
-        : Verteiler.fuer(SCHLUESSEL, { mistralEndpunkt: EINSTELLUNGEN.mistralEndpunkt });
+        : Verteiler.fuer(SCHLUESSEL, EINSTELLUNGEN.anbieterOptionen);
       let zeichen = 0;
       let datei = "";
       const speichern = (l: Lauf) => {
@@ -194,7 +194,7 @@ describe("Abnahme M4: Verdichtung Ilka", () => {
         writeFileSync(datei, JSON.stringify(ohneBase64(l), null, 2));
       };
       console.log(`Lauf ${i}/${LAEUFE} (S1 ${modellFuer("vorverarbeitung", EINSTELLUNGEN, profil)}, S2 ${modellFuer("verdichtung", EINSTELLUNGEN, profil)})`);
-      // Ablauf, Prüfpunkte und Reihendatei wie der Vergleichslauf der App (src/pipeline/vergleichslauf.ts, seit 0.5.8)
+      // Ablauf, Prüfpunkte und Reihendatei wie der Vergleichslauf der App (src/forschung/vergleichslauf.ts, seit 0.5.8)
       const erg = await einLauf({
         daten,
         anbieter,

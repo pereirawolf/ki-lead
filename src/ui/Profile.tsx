@@ -3,7 +3,7 @@
 // Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
 
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import type { Befund, Profil, Sop } from "../kern/typen";
+import type { Befund, Profil, ProfilEintrag, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
 import {
   arbeitsgrundlagen,
@@ -17,8 +17,7 @@ import {
   sopSuche,
   type Lesedokument,
 } from "../profil/lesen";
-import { APP_KENNUNG } from "../pipeline/lauf";
-import type { ProfilEintrag } from "../App";
+import { APP_KENNUNG } from "../kern/version";
 import { ausDateiliste, alsZip } from "../profil/zip";
 import { dateiAnbieten } from "../speicher/speicher";
 import { Lesetext } from "./Lesetext";

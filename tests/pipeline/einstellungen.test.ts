@@ -19,24 +19,21 @@ const {
   mixProfilAktiv,
   mixProfilAnwenden,
   standardProfilAktiv,
-  alleSchluesselLesen,
-  einstellungenLesen,
-  einstellungenSchreiben,
   laufModelle,
   mitModellwahl,
   wahlAbweichend,
   modellFuer,
-  schluesselLesen,
-  schluesselSchreiben,
   werkzeugeFuer,
 } = await import("../../src/pipeline/einstellungen");
+const { einstellungenLesen, einstellungenSchreiben } = await import("../../src/speicher/einstellungsSpeicher");
+const { alleSchluesselLesen, schluesselLesen, schluesselSchreiben } = await import("../../src/schluessel/ablage");
 
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 5", async () => {
+  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 6", async () => {
     expect(STANDARD.aufwand.vorverarbeitung).toBe("high");
-    expect(STANDARD.fassung).toBe(5);
+    expect(STANDARD.fassung).toBe(6);
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
   });
 
@@ -45,24 +42,63 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const e = await einstellungenLesen();
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
-  it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt, Fassung unverändert", async () => {
-    const { mistralEndpunkt: _ohne, ...alt } = STANDARD;
-    speicher.set("einstellungen", alt);
+  it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt", async () => {
+    const { anbieterOptionen: _ohne, ...alt } = STANDARD;
+    speicher.set("einstellungen", { ...alt, fassung: 5 });
     const e = await einstellungenLesen();
-    expect(e.mistralEndpunkt).toBe("eu");
-    expect(e.fassung).toBe(5);
-    speicher.set("einstellungen", { ...alt, mistralEndpunkt: "global" });
-    expect((await einstellungenLesen()).mistralEndpunkt).toBe("global");
+    expect(e.anbieterOptionen.mistral.endpunkt).toBe("eu");
+    speicher.set("einstellungen", { ...alt, fassung: 5, mistralEndpunkt: "global" });
+    expect((await einstellungenLesen()).anbieterOptionen.mistral.endpunkt).toBe("global");
+  });
+
+  it("TP-2026-W44-26: Fassung 5 → 6 überführt mistralEndpunkt in anbieterOptionen und ergänzt die Vorgaben für Ollama", async () => {
+    const { anbieterOptionen: _ohne, ...alt } = STANDARD;
+    speicher.set("einstellungen", { ...alt, fassung: 5, mistralEndpunkt: "global", websucheMax: 7 });
+    const e = await einstellungenLesen();
+    expect(e.fassung).toBe(6);
+    expect(e.anbieterOptionen).toEqual({
+      anthropic: {},
+      openai: {},
+      mistral: { endpunkt: "global" },
+      ollama: { basisUrl: "http://localhost:11434/v1", modell: "llama3.1" },
+    });
+    expect("mistralEndpunkt" in e).toBe(false);
+    expect(e.websucheMax).toBe(7);
+    // Fassung 6 mit Teilangaben: Fehlendes kommt aus den Vorgaben, Gesetztes bleibt
+    speicher.set("einstellungen", { ...STANDARD, anbieterOptionen: { ollama: { modell: "qwen3" } } });
+    expect((await einstellungenLesen()).anbieterOptionen).toEqual({
+      anthropic: {},
+      openai: {},
+      mistral: { endpunkt: "eu" },
+      ollama: { basisUrl: "http://localhost:11434/v1", modell: "qwen3" },
+    });
+    // gespeicherte Einstellungen ohne Fassung durchlaufen die ganze Kette
+    speicher.set("einstellungen", { modelle: STANDARD.modelle, mistralEndpunkt: "global" });
+    const ganz = await einstellungenLesen();
+    expect(ganz.fassung).toBe(6);
+    expect(ganz.anbieterOptionen.mistral.endpunkt).toBe("global");
   });
 
   it("Werkzeuge je Modell und Endpunkt: Mistral EU keine, Mistral global nur Websuche, sonst beide", () => {
-    expect(werkzeugeFuer("mistral-medium-3-5", { mistralEndpunkt: "eu" })).toEqual({ websuche: false, abruf: false });
-    expect(werkzeugeFuer("mistral-medium-3-5", { mistralEndpunkt: "global" })).toEqual({ websuche: true, abruf: false });
-    expect(werkzeugeFuer("claude-opus-5-5", { mistralEndpunkt: "eu" })).toEqual({ websuche: true, abruf: true });
-    expect(werkzeugeFuer("gpt-6-astra", { mistralEndpunkt: "eu" })).toEqual({ websuche: true, abruf: true });
+    expect(werkzeugeFuer("mistral-medium-3-5", { anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } } })).toEqual({
+      websuche: false,
+      abruf: false,
+    });
+    expect(werkzeugeFuer("mistral-medium-3-5", { anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "global" } } })).toEqual({
+      websuche: true,
+      abruf: false,
+    });
+    expect(werkzeugeFuer("claude-opus-5-5", { anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } } })).toEqual({
+      websuche: true,
+      abruf: true,
+    });
+    expect(werkzeugeFuer("gpt-6-astra", { anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } } })).toEqual({
+      websuche: true,
+      abruf: true,
+    });
   });
 
   it("lässt eine bewusst andere Wahl stehen", async () => {
@@ -76,7 +112,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.maxTokensErfassung).toBe(128000);
     expect(e.aufwand.erfassung).toBe("medium");
     expect(e.aufwand.vorverarbeitung).toBe("high");
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
   it("nach Fassung 3 bleibt „medium“ eine bewusste Wahl", async () => {
@@ -124,7 +160,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual({ ...alt.modelle, ...modelle });
     expect(e.aufwand).toEqual({ ...alt.aufwand, ...aufwand });
     expect(e.websucheMax).toBe(7);
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
   it("AV-2026-W43-39: Fassung 4 mit dem Mistral-Standard aus 0.5.15 (Reparatur Medium) repariert danach mit Small", async () => {
@@ -135,7 +171,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual(ALT_MISTRAL.modelle);
     expect(e.aufwand).toEqual(ALT_MISTRAL.aufwand);
     expect(e.websucheMax).toBe(9);
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
   it("AV-2026-W43-39: eine abweichende Wahl der Fassung 4 bleibt stehen", async () => {
@@ -143,7 +179,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 4, modelle: eigen, aufwand: ALT_MISTRAL.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
   it("AV-2026-W43-32: eine abweichende Wahl der Fassung 3 bleibt stehen", async () => {
@@ -151,14 +187,14 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3, modelle: eigen, aufwand: ALT_ANTHROPIC.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 
   it("AV-2026-W43-32: leere Modellfelder (Vorgaben des Profils) bleiben leer", async () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3 });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(STANDARD.modelle);
-    expect(e.fassung).toBe(5);
+    expect(e.fassung).toBe(6);
   });
 });
 
@@ -262,7 +298,8 @@ describe("Standard-Profile je Anbieter", () => {
     const { anbieterVon } = await import("../../src/anbieter/verteiler");
     const { ausgabePreis } = await import("../../src/anbieter/preise");
     const modelle = MODELL_GRUPPEN.flatMap((g) => g.modelle);
-    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE)) {
+    // Ollama (seit 0.6.3) wählt ein frei benanntes lokales Modell; es steht nicht in der festen Liste (eigener Test)
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama")) {
       for (const r of ROLLEN) {
         expect(modelle, `${anbieter} ${r}`).toContain(p.modelle[r]);
         expect(anbieterVon(p.modelle[r]), `${anbieter} ${r}`).toBe(anbieter);
@@ -292,5 +329,38 @@ describe("Standard-Profile je Anbieter", () => {
     expect(standardProfilAktiv(neu, "anthropic")).toBe(false);
     // Eine einzelne Abweichung hebt den Status auf
     expect(standardProfilAktiv({ ...neu, aufwand: { ...neu.aufwand, reparatur: "medium" } }, "openai")).toBe(false);
+  });
+});
+
+describe("Ollama als vierter Anbieter (TP-2026-W44-26)", () => {
+  it("TP-2026-W44-26: Standard-Profil Ollama mit frei wählbarem lokalem Modell, ohne Werkzeuge, mit fester Stufe", async () => {
+    const { STANDARD_PROFILE, ROLLEN, standardProfilAnwenden, standardProfilAktiv, modellGruppen, aufwandAuswahl } =
+      await import("../../src/pipeline/einstellungen");
+    for (const r of ROLLEN) {
+      expect(STANDARD_PROFILE.ollama.modelle[r], r).toBe("ollama:llama3.1");
+      expect(STANDARD_PROFILE.ollama.aufwand[r], r).toBe("medium");
+    }
+    const eigen = { ...STANDARD, anbieterOptionen: { ...STANDARD.anbieterOptionen, ollama: { basisUrl: "http://localhost:11434/v1", modell: "qwen3:32b" } } };
+    const neu = standardProfilAnwenden(eigen, "ollama");
+    expect(Object.values(neu.modelle)).toEqual(Array(5).fill("ollama:qwen3:32b"));
+    expect(standardProfilAktiv(neu, "ollama")).toBe(true);
+    expect(standardProfilAktiv(neu, "anthropic")).toBe(false);
+    expect(werkzeugeFuer("ollama:qwen3:32b", neu)).toEqual({ websuche: false, abruf: false });
+    expect(aufwandAuswahl("ollama:qwen3:32b")).toEqual([{ id: "medium", titel: "fest – bestimmt das lokale Modell" }]);
+    // Auswahl: feste Gruppen der Anbieter, dazu das lokale Modell und ein abweichend gewähltes
+    const gruppen = modellGruppen({ ...neu, modelle: { ...neu.modelle, kurzfassung: "ollama:llama3.1" } });
+    expect(gruppen.map((g) => g.anbieter)).toEqual(["Anthropic", "OpenAI", "Mistral", "Ollama (lokal)"]);
+    expect(gruppen[3]!.modelle).toEqual(["ollama:qwen3:32b", "ollama:llama3.1"]);
+  });
+
+  it("TP-2026-W44-26: eine Modellvorgabe des Profils ohne Anbieter gilt nicht; es gilt die Vorgabe der App", async () => {
+    const { APP_MODELLE, modellHerkunft } = await import("../../src/pipeline/einstellungen");
+    const p = (await profil("lead-beispiel")).profil!;
+    const mitLlama = { ...p, manifest: { ...p.manifest, modelle: { ...p.manifest.modelle, erfassung: "llama3" } } };
+    expect(modellFuer("erfassung", STANDARD, mitLlama)).toBe(APP_MODELLE.erfassung);
+    expect(modellHerkunft("erfassung", STANDARD, mitLlama)).toBe("app");
+    const mitOllama = { ...p, manifest: { ...p.manifest, modelle: { ...p.manifest.modelle, erfassung: "ollama:llama3.1" } } };
+    expect(modellFuer("erfassung", STANDARD, mitOllama)).toBe("ollama:llama3.1");
+    expect(modellHerkunft("erfassung", STANDARD, mitOllama)).toBe("profil");
   });
 });

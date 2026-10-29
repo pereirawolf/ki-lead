@@ -19,7 +19,7 @@ import {
   STANDARD_PROFILE,
   type Einstellungen,
 } from "../../src/pipeline/einstellungen";
-import { konfiguration } from "../../src/pipeline/vergleichslauf";
+import { konfiguration } from "../../src/forschung/vergleichslauf";
 import { stufe1 } from "../../src/pipeline/s1";
 
 const ALLE = ["low", "medium", "high", "xhigh", "max"];
@@ -121,7 +121,8 @@ describe("Standard-Profile und App-Vorgabe nach dem Vergleichslauf Ilka", () => 
       "gpt-6.1-sol",
       "mistral-small-2603",
     ]);
-    expect(Object.values(STANDARD_PROFILE).map((s) => s.aufwand.reparatur)).toEqual(["low", "low", "low"]);
+    // gemessene Standard-Profile; Ollama (seit 0.6.3) ist nicht erprobt und hat eine feste Stufe
+    expect([STANDARD_PROFILE.anthropic, STANDARD_PROFILE.openai, STANDARD_PROFILE.mistral].map((s) => s.aufwand.reparatur)).toEqual(["low", "low", "low"]);
     expect(readFileSync(repoPfad("evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md"), "utf-8")).toContain("# Prüffall Reparatur");
   });
 

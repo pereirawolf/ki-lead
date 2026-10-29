@@ -3,6 +3,7 @@
 
 import { del, get, keys, set } from "idb-keyval";
 import type { Meldung } from "../kern/typen";
+import type { Kurzfassung } from "../pipeline/kurzfassung";
 
 export interface GespeichertesProfil {
   schluessel: string;
@@ -79,6 +80,27 @@ export async function lagebildLesen(profilId: string): Promise<LagebildStand | u
 
 export async function lagebildSchreiben(profilId: string, stand: LagebildStand): Promise<void> {
   await set("lagebild:" + profilId, stand);
+}
+
+/**
+ * Management Summary eines Profils mit dem Fingerabdruck der Meldung, aus der sie entstand. Seit 0.6.3
+ * (TP-2026-W44-24) hier statt direkt in src/ui/Kurzfassung.tsx; Schlüssel unverändert „kurzfassung:<Profil-ID>“.
+ */
+export interface GespeicherteKurzfassung {
+  fingerabdruck: string;
+  kurzfassung: Kurzfassung;
+}
+
+export async function kurzfassungLesen(profilId: string): Promise<GespeicherteKurzfassung | undefined> {
+  return get<GespeicherteKurzfassung>("kurzfassung:" + profilId);
+}
+
+export async function kurzfassungSchreiben(profilId: string, g: GespeicherteKurzfassung): Promise<void> {
+  await set("kurzfassung:" + profilId, g);
+}
+
+export async function kurzfassungLoeschen(profilId: string): Promise<void> {
+  await del("kurzfassung:" + profilId);
 }
 
 /** Datei an den Nutzer übergeben (Browser: Download; in der App später: Teilen-Menü). */

@@ -2,7 +2,7 @@
 // sonst an Überschriften der zweiten Ebene; Kopfdaten aus dem YAML-Block bzw. -Frontmatter.
 
 import { load as yamlLaden } from "js-yaml";
-import type { Sop } from "../kern/typen";
+import type { Profil, Sop } from "../kern/typen";
 
 export function yamlKopf(text: string): Record<string, any> {
   const front = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -81,4 +81,27 @@ export function zerlegeSops(text: string, datei: string, gemeinsamId?: string): 
 export function sopKennung(sop: Sop): string {
   const name = sop.titel.replace(/^[A-Z]?\d+\.\s*(?:SOP|Baustein) LEAD:\s*/i, "").trim();
   return `SOP-LEAD ${sop.nummer ? sop.nummer.padStart(2, "0") + " " : ""}${name}${sop.version ? " v" + sop.version : ""}`;
+}
+
+// Einteilung der SOPs eines Profils (seit 0.6.3, TP-2026-W44-23, aus src/pipeline/kontext.ts)
+
+/** Fachliche SOPs (ohne die gemeinsamen Regeln, Teil A) */
+export function fachSops(profil: Profil): Sop[] {
+  return profil.sops.filter((s) => !s.gemeinsam);
+}
+
+/** Gemeinsame Regeln (Teil A) */
+export function gemeinsameSops(profil: Profil): Sop[] {
+  return profil.sops.filter((s) => s.gemeinsam);
+}
+
+/** Ergänzender Baustein (keine Dach-SOP einer Ereignisart): Typ aus dem Kopf, sonst fehlender `art_vorschlag`. */
+export function istBaustein(s: Sop): boolean {
+  if (s.typ) return !/^dach-sop$/i.test(s.typ.trim());
+  return !s.art_vorschlag?.length;
+}
+
+/** Abschnitt im Status „Inhaltsgerüst“ (ergänzt die Dach-SOP nur als Prüfhinweis, SOP-LEAD A.1 Nr. 7). */
+export function istInhaltsgeruest(s: Sop): boolean {
+  return /^inhaltsger(ü|ue)st/i.test(s.status || "");
 }

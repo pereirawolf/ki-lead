@@ -1,6 +1,17 @@
 // Verteiler: Anbieter nach Modell, passender Schlüssel.
 import { describe, expect, it } from "vitest";
-import { anbieterListe, anbieterVon, fehlendeSchluessel, Verteiler } from "../../src/anbieter/verteiler";
+import {
+  anbieterListe,
+  anbieterVon,
+  ANBIETER_IDS,
+  bekannterAnbieter,
+  faehigkeitenFuer,
+  fehlendeSchluessel,
+  hatSchluessel,
+  REGISTRY,
+  Verteiler,
+} from "../../src/anbieter/verteiler";
+import { AnbieterFehler } from "../../src/anbieter/typen";
 import { MODELL_AUSWAHL, STANDARD_PROFILE } from "../../src/pipeline/einstellungen";
 import type { LlmAnbieter, LlmAnfrage, LlmAntwort } from "../../src/anbieter/typen";
 
@@ -56,8 +67,8 @@ describe("Verteiler", () => {
       const sch = { anthropic: "", openai: "", mistral: "m" };
       const m = { ...anfrage, modell: "mistral-small-2603" };
       await expect(new Verteiler(sch).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
-      await expect(Verteiler.fuer(sch, { mistralEndpunkt: "eu" }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
-      await expect(Verteiler.fuer(sch, { mistralEndpunkt: "global" }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
+      await expect(Verteiler.fuer(sch, { mistral: { endpunkt: "eu" } }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
+      await expect(Verteiler.fuer(sch, { mistral: { endpunkt: "global" } }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
     } finally {
       globalThis.fetch = echt;
     }
@@ -66,5 +77,113 @@ describe("Verteiler", () => {
       "https://api.eu.mistral.ai/v1/chat/completions",
       "https://api.mistral.ai/v1/conversations",
     ]);
+  });
+});
+
+describe("Registry der Anbieter (TP-2026-W44-26)", () => {
+  it("TP-2026-W44-26: unbekanntes Modellpräfix liefert einen Fehler statt stiller Zuordnung", async () => {
+    for (const m of ["llama3", "qwen3:32b", "ollama:", "", "gemini-3-pro"]) {
+      expect(bekannterAnbieter(m), m).toBeUndefined();
+      expect(() => anbieterVon(m), m).toThrow(AnbieterFehler);
+      expect(() => anbieterVon(m), m).toThrow(/gehört zu keinem bekannten Anbieter/);
+    }
+    const gebaut: string[] = [];
+    const v = new Verteiler({ anthropic: "a", openai: "o", mistral: "m" }, (id) => {
+      gebaut.push(id);
+      return { id, senden: async () => ({ text: id }) as LlmAntwort };
+    });
+    const fehler = await v.senden({ ...anfrage, modell: "llama3" }).catch((e: unknown) => e);
+    expect(fehler).toBeInstanceOf(AnbieterFehler);
+    expect((fehler as AnbieterFehler).art).toBe("modell");
+    expect(gebaut).toEqual([]);
+    // fehlende Schlüssel: unbekannte Kennungen zählen nicht, Ollama braucht keinen
+    expect(fehlendeSchluessel(["llama3", "ollama:llama3.1", "gpt-6-luna"], { anthropic: "", openai: "", mistral: "" })).toEqual(["openai"]);
+  });
+
+  it("TP-2026-W44-26: vier Anbieter in fester Reihenfolge; jede Kennung gehört genau einem", () => {
+    expect(ANBIETER_IDS).toEqual(["anthropic", "openai", "mistral", "ollama"]);
+    const faelle: [string, string][] = [
+      ["claude-opus-5-5", "anthropic"],
+      ["gpt-6-astra", "openai"],
+      ["o4-mini", "openai"],
+      ["mistral-small-2603", "mistral"],
+      ["magistral-medium-2509", "mistral"],
+      ["ollama:llama3.1", "ollama"],
+      ["ollama:qwen3:32b", "ollama"],
+    ];
+    for (const [m, id] of faelle) {
+      expect(bekannterAnbieter(m), m).toBe(id);
+      expect(
+        REGISTRY.filter((a) => a.erkennt(m)).map((a) => a.id),
+        m,
+      ).toEqual([id]);
+    }
+    expect(hatSchluessel("ollama", { anthropic: "", openai: "", mistral: "" })).toBe(true);
+    expect(hatSchluessel("mistral", { anthropic: "", openai: "", mistral: "" })).toBe(false);
+  });
+
+  it("TP-2026-W44-26: Fähigkeiten je Anbieter und Optionen", () => {
+    expect(faehigkeitenFuer("claude-opus-5-5")).toMatchObject({ websuche: true, abruf: true });
+    expect(faehigkeitenFuer("mistral-medium-3-5", { mistral: { endpunkt: "eu" } })).toMatchObject({ websuche: false, abruf: false, aufwand: ["low", "high"] });
+    expect(faehigkeitenFuer("mistral-medium-3-5", { mistral: { endpunkt: "global" } })).toMatchObject({ websuche: true, abruf: false });
+    expect(faehigkeitenFuer("ollama:llama3.1")).toEqual({ websuche: false, abruf: false, aufwand: ["medium"] });
+    expect(faehigkeitenFuer("llama3")).toMatchObject({ websuche: false, abruf: false });
+  });
+
+  it("TP-2026-W44-26: Ollama ohne Schlüssel über die OpenAI-kompatible Schnittstelle, Modell ohne Präfix, ohne Werkzeuge und Aufwand, Kosten 0", async () => {
+    const aufrufe: { url: string; init: RequestInit }[] = [];
+    const echt = globalThis.fetch;
+    globalThis.fetch = (async (url: string, init: RequestInit) => {
+      aufrufe.push({ url: String(url), init });
+      const ende = {
+        type: "response.completed",
+        response: {
+          status: "completed",
+          model: "llama3.1",
+          output: [{ type: "message", content: [{ type: "output_text", text: "Verbindung steht.", annotations: [] }] }],
+          usage: { input_tokens: 12, output_tokens: 4 },
+        },
+      };
+      return new Response(`data: ${JSON.stringify(ende)}\n\n`, { status: 200, headers: { "content-type": "text/event-stream" } });
+    }) as typeof fetch;
+    try {
+      const leer = { anthropic: "", openai: "", mistral: "" };
+      const r = await Verteiler.fuer(leer, {}).senden({
+        ...anfrage,
+        modell: "ollama:llama3.1",
+        aufwand: "high",
+        werkzeuge: { websuche: { maxUses: 5 }, abruf: { maxUses: 3 } },
+      });
+      expect(r.text).toBe("Verbindung steht.");
+      expect(r.modell).toBe("ollama:llama3.1");
+      expect(r.kostenUsd).toBe(0);
+      // eigene Adresse
+      await Verteiler.fuer(leer, { ollama: { basisUrl: "http://127.0.0.1:11434/v1" } }).senden({ ...anfrage, modell: "ollama:qwen3:32b" });
+    } finally {
+      globalThis.fetch = echt;
+    }
+    expect(aufrufe.map((a) => a.url)).toEqual(["http://localhost:11434/v1/responses", "http://127.0.0.1:11434/v1/responses"]);
+    const koerper = JSON.parse(String(aufrufe[0]!.init.body));
+    expect(koerper.model).toBe("llama3.1");
+    expect(koerper.tools).toBeUndefined();
+    expect(koerper.reasoning).toBeUndefined();
+    expect(JSON.parse(String(aufrufe[1]!.init.body)).model).toBe("qwen3:32b");
+    expect(Object.keys(aufrufe[0]!.init.headers as Record<string, string>)).toEqual(["content-type"]);
+  });
+
+  it("TP-2026-W44-26: eine Ollama-Adresse außerhalb von localhost bzw. 127.0.0.1:11434 wird vor dem Senden abgewiesen", async () => {
+    const aufrufe: string[] = [];
+    const echt = globalThis.fetch;
+    globalThis.fetch = (async (url: string) => (aufrufe.push(String(url)), new Response("", { status: 500 }))) as typeof fetch;
+    try {
+      const v = Verteiler.fuer({ anthropic: "", openai: "", mistral: "" }, { ollama: { basisUrl: "http://192.168.1.20:11434/v1" } });
+      const fehler = await v.senden({ ...anfrage, modell: "ollama:llama3.1" }).catch((e: unknown) => e);
+      expect(fehler).toBeInstanceOf(AnbieterFehler);
+      expect((fehler as AnbieterFehler).art).toBe("adresse");
+      expect((fehler as Error).message).toMatch(/nicht zulässig/);
+    } finally {
+      globalThis.fetch = echt;
+    }
+    expect(aufrufe).toEqual([]);
   });
 });

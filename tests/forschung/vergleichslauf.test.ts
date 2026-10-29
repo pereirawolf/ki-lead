@@ -21,9 +21,9 @@ import {
   s1FestPruefen,
   vergleichsreihe,
   type FallDaten,
-} from "../../src/pipeline/vergleichslauf";
-import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/pipeline/vergleichslauf-export";
-import { fallDatenEingebaut } from "../../src/pipeline/vergleichslauf-eingebaut";
+} from "../../src/forschung/vergleichslauf";
+import { reiheZip, uebersichtZeilen, zipDateiname } from "../../src/forschung/vergleichslauf-export";
+import { fallDatenEingebaut } from "../../src/forschung/vergleichslauf-eingebaut";
 import { sopIdsAufloesen } from "../../src/pipeline/kontext";
 import { createHash } from "node:crypto";
 
@@ -72,7 +72,10 @@ function attrappe(referenz: unknown, extra?: (a: LlmAnfrage, nr: number) => void
   };
 }
 
-const MISTRAL: Einstellungen = { ...standardProfilAnwenden(STANDARD, "mistral"), mistralEndpunkt: "eu" };
+const MISTRAL: Einstellungen = {
+  ...standardProfilAnwenden(STANDARD, "mistral"),
+  anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "eu" } },
+};
 
 describe("Vergleichslauf Ilka", () => {
   it("Vorgabe drei Läufe, Grenzen 1 bis 10", () => {
@@ -265,10 +268,10 @@ describe("Vergleichslauf Ilka", () => {
       "F-mistral-large",
     ]);
     const f = PLAN_STANDARDPROFILE.varianten[5];
-    const e = einstellungenFuerVariante({ ...STANDARD, mistralEndpunkt: "global" }, f);
+    const e = einstellungenFuerVariante({ ...STANDARD, anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "global" } } }, f);
     expect(e.modelle).toMatchObject({ vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-large-4", reparatur: "mistral-small-2603" }); // AV-2026-W43-39
     expect(e.aufwand).toMatchObject({ vorverarbeitung: "high", verdichtung: "high", reparatur: "low" });
-    expect(e.mistralEndpunkt).toBe("global");
+    expect(e.anbieterOptionen.mistral.endpunkt).toBe("global");
     // Anthropic-Bezug: Reparatur seit 0.5.15 Haiku (AV-2026-W43-32)
     expect(einstellungenFuerVariante(STANDARD, PLAN_STANDARDPROFILE.varianten[0]).modelle.reparatur).toBe("claude-haiku-5-5");
     const d = await daten();

@@ -4,6 +4,7 @@
 // eckigen Klammern; Lizenz CC0 1.0.
 import { describe, expect, it } from "vitest";
 import { leseOrdner, profil, repoPfad } from "../support/dateien";
+import { ladeProfil } from "../../src/profil/laden";
 
 const beispiel = leseOrdner(repoPfad("profile", "lead-beispiel"));
 const vorlage = leseOrdner(repoPfad("profile", "muster"));
@@ -94,5 +95,42 @@ describe("Vorlage – eigene Organisation (KP-2026-W43-60)", () => {
     expect(manifest(vorlage).lizenz).toBe("CC0-1.0");
     expect(vorlage["README.md"]).toContain("CC0 1.0");
     expect(vorlage["CHANGELOG.md"]).toContain("CC0 1.0");
+  });
+});
+
+describe("Pflichtkennsätze (TP-2026-W44-27)", () => {
+  /** Soll nach Profilformat 1.20: Kennsätze, die die App selbst auswertet */
+  const PFLICHT = ["handlungsrelevant", "aenderung", "abweichung"];
+
+  it.each(["muster", "lead-beispiel"])(
+    "TP-2026-W44-27: %s liefert alle von der App erwarteten Kennsatz-Schlüssel und lädt ohne Kennsatzwarnung",
+    async (name) => {
+      const d = leseOrdner(repoPfad("profile", name));
+      const ui = JSON.parse(d["meldung.ui.json"]);
+      for (const k of PFLICHT) expect(String(ui.kennsaetze?.[k] ?? "").trim(), `${name}: ${k}`).not.toBe("");
+      const { befunde } = await profil(name);
+      expect(befunde.filter((b) => b.code === "KENNSATZ_FEHLT")).toEqual([]);
+    },
+  );
+
+  it("TP-2026-W44-27: fehlt ein Pflichtkennsatz, meldet die App ihn beim Laden als Warnung; das Profil bleibt nutzbar", async () => {
+    for (const fehlt of PFLICHT) {
+      const d = { ...vorlage };
+      const ui = JSON.parse(d["meldung.ui.json"]);
+      delete ui.kennsaetze[fehlt];
+      d["meldung.ui.json"] = JSON.stringify(ui);
+      const { profil: p, befunde } = await ladeProfil(d);
+      expect(p, fehlt).not.toBeNull();
+      const w = befunde.filter((b) => b.code === "KENNSATZ_FEHLT");
+      expect(w, fehlt).toHaveLength(1);
+      expect(w[0]).toMatchObject({ stufe: "warnung" });
+      expect(w[0]!.text).toContain(`„${fehlt}“`);
+    }
+    // ohne Abschnitt „kennsaetze“: je Pflichtkennsatz eine Warnung
+    const d = { ...vorlage };
+    const ui = JSON.parse(d["meldung.ui.json"]);
+    delete ui.kennsaetze;
+    d["meldung.ui.json"] = JSON.stringify(ui);
+    expect((await ladeProfil(d)).befunde.filter((b) => b.code === "KENNSATZ_FEHLT")).toHaveLength(3);
   });
 });

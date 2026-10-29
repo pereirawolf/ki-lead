@@ -1,9 +1,8 @@
 // Herausgeber, Impressum und Verweise (seit 0.5.5). Die App ruft keine dieser Adressen selbst auf; sie öffnen sich als
 // Link in einem eigenen Fenster bzw. im Browser des Systems. Netzaufrufe der App gehen nur an die KI-Anbieter.
-import { APP_KENNUNG } from "../pipeline/lauf";
 
-/** Versionsnummer der App, z. B. „0.5.5“ (aus der Kennung „KI-LEAD 0.5.5“) */
-export const APP_VERSION = APP_KENNUNG.replace(/^KI-LEAD /, "");
+/** Versionsnummer der App; seit 0.6.3 (TP-2026-W44-23) aus src/kern/version.ts */
+export { APP_VERSION } from "./version";
 
 export const HERAUSGEBER = "Heiko Pereira Wolf";
 

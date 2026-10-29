@@ -137,10 +137,12 @@ describe("Einstellungen: Übersicht", () => {
     const anbieter = [...document.querySelectorAll(".bereich-inhalt table")[0].querySelectorAll("tbody tr")].map((tr) =>
       [...tr.querySelectorAll("td")].map((td) => td.textContent),
     );
-    expect(anbieter.map((z) => z[0])).toEqual(["Anthropic", "OpenAI", "Mistral"]);
+    expect(anbieter.map((z) => z[0])).toEqual(["Anthropic", "OpenAI", "Mistral", "Ollama (lokal)"]);
     expect(anbieter[0][1]).toBe("hinterlegt");
     expect(anbieter[1]).toEqual(["OpenAI", "nicht hinterlegt", "–"]);
     expect(anbieter[2]).toEqual(["Mistral", "fehlt", "S2 Recherche und Entwurf"]);
+    // Ollama (seit 0.6.3) braucht keinen Schlüssel
+    expect(anbieter[3]).toEqual(["Ollama (lokal)", "nicht nötig (lokal)", "–"]);
     expect(text).toContain("Für Mistral ist kein API-Schlüssel hinterlegt");
 
     await klick("Schlüssel hinterlegen");
@@ -164,6 +166,35 @@ describe("Einstellungen: KI-Anbieter & API", () => {
     expect(schluesselGesetzt).toEqual([["mistral", "mistral-TEST-NICHT-EXPORTIEREN"]]);
     // Keine Voreinstellung mehr im Schlüsselbereich
     expect(knopf("Standard-Profil wählen")).toBeUndefined();
+  });
+
+  it("TP-2026-W44-26: Karte Ollama mit Adresse und lokalem Modell statt Schlüssel; nur localhost bzw. 127.0.0.1:11434 lassen sich speichern", async () => {
+    const gesetzt: Einstellungen[] = [];
+    const { standardProfilAnwenden } = await import("../../src/pipeline/einstellungen");
+    await einhaengen(React.createElement(MitZustand, { start: standardProfilAnwenden(STANDARD, "ollama"), gesetzt }));
+    await klick("KI-Anbieter & API", nav());
+    const karte = document.querySelector("section[aria-labelledby='schluessel-ollama']") as HTMLElement;
+    expect(karte.querySelector("h3")!.textContent).toBe("Lokales Modell (Ollama)");
+    expect(karte.textContent).toContain("ohne Websuche und Seitenabruf; die Ergebnisqualität in KI-LEAD ist nicht erprobt");
+    expect(karte.querySelector("input[aria-label^='API-Schlüssel']")).toBeNull();
+    const [adresse, modell] = [...karte.querySelectorAll("input")] as HTMLInputElement[];
+    expect(adresse!.value).toBe("http://localhost:11434/v1");
+    expect(modell!.value).toBe("llama3.1");
+    const speichern = () => [...karte.querySelectorAll("button")].find((b) => b.textContent === "Speichern")!;
+    expect(speichern().disabled).toBe(true);
+    await eingeben(adresse!, "http://192.168.1.20:11434/v1");
+    expect(adresse!.getAttribute("aria-invalid")).toBe("true");
+    expect(karte.textContent).toContain("Nicht zulässig");
+    expect(speichern().disabled).toBe(true);
+    await eingeben(adresse!, "http://127.0.0.1:11434/v1");
+    await eingeben(modell!, "qwen3:32b");
+    expect(speichern().disabled).toBe(false);
+    await klick(speichern());
+    expect(gesetzt).toHaveLength(1);
+    expect(gesetzt[0]!.anbieterOptionen.ollama).toEqual({ basisUrl: "http://127.0.0.1:11434/v1", modell: "qwen3:32b" });
+    // Folgten alle Aufgaben dem KI-Profil Ollama, folgen sie ihm mit dem neuen Modell
+    expect(Object.values(gesetzt[0]!.modelle)).toEqual(Array(5).fill("ollama:qwen3:32b"));
+    expect(gesetzt[0]!.anbieterOptionen.mistral).toEqual(STANDARD.anbieterOptionen.mistral);
   });
 });
 
@@ -209,7 +240,7 @@ describe("Einstellungen: KI-Profil unter „Modelle & Aufwand“", () => {
     await einhaengen(React.createElement(MitZustand, { start: { ...STANDARD, websucheMax: 5 }, gesetzt }));
     await klick("Modelle & Aufwand", nav());
     const werte = [...document.querySelectorAll('input[name="voreinstellung"]')].map((r) => (r as HTMLInputElement).value);
-    expect(werte).toEqual(["profil", "anthropic", "openai", "mistral", "mix-opus", "mix-sonnet", "individuell"]);
+    expect(werte).toEqual(["profil", "anthropic", "openai", "mistral", "ollama", "mix-opus", "mix-sonnet", "individuell"]);
     const wahl = document.querySelector(".voreinstellung-wahl")!.textContent!;
     expect(wahl).toContain("Mix: OpenAI S1 + Anthropic Opus");
     expect(wahl).toContain("Mix: OpenAI S1 + Anthropic Sonnet");
@@ -281,7 +312,7 @@ describe("Einstellungen: KI-Profil unter „Modelle & Aufwand“", () => {
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt, schluessel: { ...OHNE_SCHLUESSEL, anthropic: "sk-ant-TEST" } }));
     await klick("Modelle & Aufwand", nav());
     const s2 = document.querySelector('select[aria-label="Modell S2 Recherche und Entwurf"]') as HTMLSelectElement;
-    expect([...s2.querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Anthropic", "OpenAI", "Mistral"]);
+    expect([...s2.querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Anthropic", "OpenAI", "Mistral", "Ollama (lokal)"]);
     s2.value = "mistral-large-4";
     await React.act(async () => s2.dispatchEvent(new Event("change", { bubbles: true })));
     expect(gesetzt.at(-1)!.modelle.erfassung).toBe("mistral-large-4");
@@ -344,7 +375,7 @@ describe("Einstellungen: Recherche & Grenzen", () => {
 describe("Einstellungen: Mistral-Endpunkt (seit 0.5.6, Vorgabe EU)", () => {
   it("ist als Vorgabe EU; die Wahl ändert nur den Endpunkt; die Übersicht nennt ihn", async () => {
     const gesetzt: Einstellungen[] = [];
-    expect(STANDARD.mistralEndpunkt).toBe("eu");
+    expect(STANDARD.anbieterOptionen.mistral.endpunkt).toBe("eu");
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt }));
     expect(document.querySelector(".uebersicht-liste")!.textContent).toContain("Mistral-EndpunktEU (api.eu.mistral.ai)");
     await klick("KI-Anbieter & API", nav());
@@ -353,7 +384,7 @@ describe("Einstellungen: Mistral-Endpunkt (seit 0.5.6, Vorgabe EU)", () => {
     expect(eu.checked).toBe(true);
     await klick(global);
     expect(gesetzt).toHaveLength(1);
-    expect(gesetzt[0]).toEqual({ ...STANDARD, mistralEndpunkt: "global" });
+    expect(gesetzt[0]).toEqual({ ...STANDARD, anbieterOptionen: { ...STANDARD.anbieterOptionen, mistral: { endpunkt: "global" } } });
     expect(global.checked).toBe(true);
     await klick("Übersicht", nav());
     expect(document.querySelector(".uebersicht-liste")!.textContent).toContain("Mistral-EndpunktGlobal (api.mistral.ai)");

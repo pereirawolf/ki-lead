@@ -103,7 +103,7 @@ describe("Fuß der App", () => {
 
 describe("Versionen und Netzzugriffe", () => {
   it("die Kennung der App folgt package.json", async () => {
-    const { APP_KENNUNG } = await import("../../src/pipeline/lauf");
+    const { APP_KENNUNG } = await import("../../src/kern/version");
     expect(APP_KENNUNG).toBe(`KI-LEAD ${VERSION}`);
     expect(lies("CITATION.cff")).toMatch(new RegExp(`^version: ${VERSION.replace(/\./g, "\\.")}$`, "m"));
   });
@@ -137,6 +137,26 @@ describe("Versionen und Netzzugriffe", () => {
       .split(";")
       .map((s) => s.trim())
       .find((s) => s.startsWith("connect-src"));
-    expect(connect).toBe("connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.eu.mistral.ai https://api.mistral.ai");
+    expect(connect).toBe(
+      "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.eu.mistral.ai https://api.mistral.ai http://localhost:11434 http://127.0.0.1:11434",
+    );
+  });
+
+  it("TP-2026-W44-26: für Ollama lässt die Content-Security-Policy nur localhost und 127.0.0.1 mit Port 11434 zu, und der Adapter prüft dasselbe", async () => {
+    const csp = lies("index.html").match(/Content-Security-Policy" content="([^"]+)"/)?.[1] ?? "";
+    const quellen = (csp.split(";").find((s) => s.trim().startsWith("connect-src")) ?? "").trim().split(/\s+/).slice(1);
+    // Unverschlüsselt nur diese beiden Quellen, kein Platzhalter, kein anderer Port
+    expect(quellen.filter((q) => q.startsWith("http:"))).toEqual(["http://localhost:11434", "http://127.0.0.1:11434"]);
+    expect(quellen.some((q) => q.includes("*"))).toBe(false);
+    const { ollamaAdresseZulaessig } = await import("../../src/anbieter/ollama");
+    for (const ok of ["http://localhost:11434/v1", "http://127.0.0.1:11434/v1", "http://localhost:11434"]) expect(ollamaAdresseZulaessig(ok), ok).toBe(true);
+    for (const nein of [
+      "http://localhost:8080/v1",
+      "http://192.168.1.5:11434/v1",
+      "https://localhost:11434/v1",
+      "http://localhost.example.org:11434/v1",
+      "http://localhost:114340/v1",
+    ])
+      expect(ollamaAdresseZulaessig(nein), nein).toBe(false);
   });
 });

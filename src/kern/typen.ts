@@ -247,3 +247,16 @@ export interface Profil {
   /** SHA-256 über alle Dateien (sortiert nach Pfad) */
   hash: string;
 }
+
+/**
+ * Profil in der Liste der App: gespeicherte Dateien, geladenes Profil (oder null) und Befunde des Ladens. Seit 0.6.3
+ * (TP-2026-W44-23) hier statt in App.tsx, damit die Profilansicht nicht aus der Wurzel importiert.
+ */
+export interface ProfilEintrag {
+  schluessel: string;
+  quelle: "eingebaut" | "importiert";
+  dateien: Record<string, string>;
+  importiertAm?: string;
+  profil: Profil | null;
+  befunde: Befund[];
+}

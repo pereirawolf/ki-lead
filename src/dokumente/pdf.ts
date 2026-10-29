@@ -9,7 +9,7 @@ import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import { gliedereFeld } from "../kern/kennsaetze";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
-import { APP_KENNUNG } from "../pipeline/lauf";
+import { APP_KENNUNG } from "../kern/version";
 import { herkunftAusMeldung, herkunftMehrerer, pdfSchluesselwoerter, xmpPaket, type KiHerkunft } from "./kennzeichnung";
 
 const BLAU: [number, number, number] = [31, 79, 130];

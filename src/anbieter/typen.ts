@@ -103,7 +103,8 @@ export type StopGrund = "end_turn" | "max_tokens" | "pause_turn" | "refusal" | "
  * Schlüssel hinterlegt (Kosten sicher 0), „netz“ keine Verbindung, „verbindung“ Abriss im Strom, „refusal“ Ablehnung
  * durch das Modell, „error“ Fehlerereignis im Strom; sonst der Fehlercode des Anbieters (z. B. „authentication_error“).
  */
-export type FehlerArt = "schluessel" | "netz" | "verbindung" | "refusal" | "error" | "failed" | (string & {});
+/** „modell“ (unbekannte Kennung) und „adresse“ (Ollama-Adresse nicht zulässig) seit 0.6.3, TP-2026-W44-26; beide vor dem Senden */
+export type FehlerArt = "schluessel" | "modell" | "adresse" | "netz" | "verbindung" | "refusal" | "error" | "failed" | (string & {});
 
 export interface LlmAntwort {
   modell: string;

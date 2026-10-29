@@ -1,4 +1,4 @@
-// Gemeinsames Verhalten der Anbieteradapter (Anthropic, OpenAI, seit 0.5.6 auch Mistral) bei Fehlern, Wiederholungen und Abbruch – mit gefälschter Uhr,
+// Gemeinsames Verhalten der Anbieteradapter (Anthropic, OpenAI, seit 0.5.6 auch Mistral, seit 0.6.3 Ollama) bei Fehlern, Wiederholungen und Abbruch – mit gefälschter Uhr,
 // damit Wartezeiten sofort vergehen und ihre Länge prüfbar ist. Erwartete Wartezeiten stehen als feste Zahlen hier:
 // Netzwerkfehler 2 s, 4 s, 6 s; Überlastung ohne retry-after 4 s, 8 s, 16 s; retry-after höchstens 60 s;
 // nach drei Wiederholungen (vier Abrufen) ist Schluss. Seit 0.6.2 (TP-2026-W44-02/-03) steht die Mechanik einmal in
@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 import { AnthropicAnbieter } from "../../src/anbieter/anthropic";
 import { MistralAnbieter } from "../../src/anbieter/mistral";
+import { OllamaAnbieter } from "../../src/anbieter/ollama";
 import { OpenAiAnbieter } from "../../src/anbieter/openai";
 import { INAKTIVITAET_MS } from "../../src/anbieter/http";
 import { AnbieterFehler, TEXT_VERBINDUNGSABBRUCH, type LlmAnbieter, type LlmAnfrage } from "../../src/anbieter/typen";
@@ -21,6 +22,10 @@ interface Fall {
   erfolg: () => Response;
   /** Fehler, der sofort und ohne Wiederholung zur Person gehört */
   schluesselFehler: () => Response;
+  /** Status und Meldung dieses Fehlers (Vorgabe: 401, „Schlüssel wurde abgelehnt“; Ollama hat keinen Schlüssel) */
+  abgelehnt?: { status: number; meldung: RegExp };
+  /** Meldung ohne Verbindung (Vorgabe: „Netz prüfen“) */
+  netzMeldung?: RegExp;
 }
 
 const FAELLE: Fall[] = [
@@ -95,6 +100,29 @@ const FAELLE: Fall[] = [
       ),
     schluesselFehler: () => new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 }),
   },
+  {
+    // seit 0.6.3 (TP-2026-W44-26): OpenAI-kompatible Schnittstelle von Ollama, nur mit gefälschtem fetch
+    name: "Ollama",
+    neu: (abruf) => new OllamaAnbieter("http://localhost:11434/v1", abruf as typeof fetch),
+    modell: "ollama:llama3.1",
+    erfolg: () =>
+      sseAntwort(
+        sseText([
+          {
+            type: "response.completed",
+            response: {
+              status: "completed",
+              model: "llama3.1",
+              output: [{ type: "message", content: [{ type: "output_text", text: "ok", annotations: [] }] }],
+              usage: { input_tokens: 10, output_tokens: 2 },
+            },
+          },
+        ]),
+      ),
+    schluesselFehler: () => fehlerAntwort(404, { message: "model 'llama3.1' not found" }),
+    abgelehnt: { status: 404, meldung: /in Ollama nicht vorhanden/ },
+    netzMeldung: /Keine Verbindung zu Ollama/,
+  },
 ];
 
 const anfrage = (f: Fall, extra: Partial<LlmAnfrage> = {}): LlmAnfrage => ({
@@ -143,7 +171,7 @@ describe.each(FAELLE)("$name: Wiederholungen und Abbruch", (f) => {
     const r = await ohneWarten(() => f.neu(abruf).senden(anfrage(f)));
     expect(r.fehler).toBeInstanceOf(AnbieterFehler);
     expect(r.fehler.art).toBe("netz");
-    expect(r.fehler.message).toMatch(/Netz prüfen/);
+    expect(r.fehler.message).toMatch(f.netzMeldung ?? /Netz prüfen/);
     expect(aufrufe).toHaveLength(4);
     expect(r.dauerMs).toBe(2000 + 4000 + 6000);
   });
@@ -173,8 +201,8 @@ describe.each(FAELLE)("$name: Wiederholungen und Abbruch", (f) => {
     const { abruf, aufrufe } = abrufFolge(f, [f.schluesselFehler()]);
     const r = await ohneWarten(() => f.neu(abruf).senden(anfrage(f)));
     expect(r.fehler).toBeInstanceOf(AnbieterFehler);
-    expect(r.fehler.status).toBe(401);
-    expect(r.fehler.message).toMatch(/Schlüssel wurde abgelehnt/);
+    expect(r.fehler.status).toBe(f.abgelehnt?.status ?? 401);
+    expect(r.fehler.message).toMatch(f.abgelehnt?.meldung ?? /Schlüssel wurde abgelehnt/);
     expect(aufrufe).toHaveLength(1);
     expect(r.dauerMs).toBe(0);
   });

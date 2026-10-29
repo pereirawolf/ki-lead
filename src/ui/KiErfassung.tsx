@@ -28,19 +28,8 @@ import { LaufSchaetzung, type SchaetzStufe } from "./LaufSchaetzung";
 import { ModellWahl, type StufeModell } from "./ModellWahl";
 import type { EinstellungsBereich } from "./Einstellungen";
 import { anwendungsbereich, ereignisarten, fachSops, istInhaltsgeruest, sopGruppen, sopsNachArtwechsel } from "../pipeline/kontext";
-import {
-  laeufeAlsZip,
-  laeufeLaden,
-  laeufeLoeschen,
-  laufKostenText,
-  laufLoeschen,
-  laufSpeichern,
-  neuerLauf,
-  speicherSchuetzen,
-  type Lauf,
-  type S1Vorschlag,
-  type Suchbegriff,
-} from "../pipeline/lauf";
+import { laufKostenText, neuerLauf, type Lauf, type S1Vorschlag, type Suchbegriff } from "../pipeline/lauf";
+import { laeufeAlsZip, laeufeLaden, laeufeLoeschen, laufLoeschen, laufSpeichern, speicherSchuetzen } from "../speicher/laufSpeicher";
 import { pflichtRegel } from "../pipeline/recherchetiefe";
 import {
   dateiLesen,
@@ -323,7 +312,7 @@ export function KiErfassung({ profil, einstellungen, schluessel, zuEinstellungen
     abbruch.current = ctrl;
     return {
       profil,
-      anbieter: Verteiler.fuer(schluessel, { mistralEndpunkt: laufEinstellungen.mistralEndpunkt }),
+      anbieter: Verteiler.fuer(schluessel, laufEinstellungen.anbieterOptionen),
       einstellungen: laufEinstellungen,
       lauf: l,
       material,

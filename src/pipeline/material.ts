@@ -7,6 +7,7 @@ import { holeWert } from "../kern/pfad";
 import JSZip from "jszip";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
+import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
 
 /** meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung) */
 export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "eingang" | "docx" | "pdf";
@@ -115,36 +116,6 @@ export function istMeldung(obj: unknown, profil: Profil): boolean {
     ...(profil.manifest.migrationen || []).map((m) => m.von),
   ];
   return bekannt.includes(kennung);
-}
-
-export interface EingangsInfo {
-  stelle: string;
-  land: string;
-  zeitpunkt: string;
-  sachverhalte: number;
-  schema: string;
-}
-
-/**
- * Erkennt Meldungen auch fremder Schemata an ihrer Grundform: Liste von Sachverhalten plus
- * meldende Stelle oder Land. So lassen sich Meldungen anderer Ebenen verdichten (rekursives Prinzip).
- */
-export function eingangsInfo(obj: unknown, profil: Profil): EingangsInfo | null {
-  if (!obj || typeof obj !== "object" || Array.isArray(obj)) return null;
-  const o = obj as Record<string, any>;
-  const r = profil.ui.rollen;
-  const svs = o[r.sachverhalte] ?? o.sachverhalte;
-  if (!Array.isArray(svs) || !svs.length || typeof svs[0] !== "object") return null;
-  const stelle = String(o[r.meldende_stelle || "meldende_stelle"] ?? o.meldende_stelle ?? "");
-  const land = String(o[r.land || "land"] ?? o.land ?? "");
-  if (!stelle && !land) return null;
-  return {
-    stelle,
-    land,
-    zeitpunkt: String(o[r.meldezeitpunkt || "meldezeitpunkt"] ?? o.meldezeitpunkt ?? ""),
-    sachverhalte: svs.length,
-    schema: String(o[r.schema_feld] ?? o.schema ?? ""),
-  };
 }
 
 /**

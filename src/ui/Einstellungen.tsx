@@ -8,16 +8,33 @@ import { useEffect, useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
-import { ANBIETER_IDS, ANBIETER_NAME, anbieterListe, anbieterVon, LEERE_SCHLUESSEL, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import { OLLAMA_STANDARD_URL, ollamaAdresseZulaessig } from "../anbieter/ollama";
+import {
+  ANBIETER_IDS,
+  ANBIETER_NAME,
+  anbieterListe,
+  anbieterVon,
+  hatSchluessel,
+  LEERE_SCHLUESSEL,
+  schluesselNoetig,
+  Verteiler,
+  type AnbieterId,
+  type Schluessel,
+  type SchluesselId,
+} from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
 import {
   APP_MODELLE,
   AUFWAND_STUFEN,
-  MODELL_GRUPPEN,
   aufwandAngeboten,
   aufwandAuswahl,
+  modellFuer,
+  modellGruppen,
   modellHerkunft,
+  OLLAMA_HINWEIS,
+  ollamaKennung,
+  profilModell,
   profilvorgabeAktiv,
   profilvorgabeAnwenden,
   MIX_IDS,
@@ -27,9 +44,9 @@ import {
   STANDARD,
   ORIENTIERUNG_GRENZE,
   orientierungJeSachverhalt,
-  STANDARD_PROFILE,
   standardProfilAktiv,
   standardProfilAnwenden,
+  standardProfilFuer,
   type Einstellungen as E,
   type MixId,
   type ModellProfil,
@@ -93,7 +110,7 @@ const AUFWAND = AUFWAND_STUFEN;
 const aufwandTitel = (a: Aufwand) => AUFWAND.find((x) => x.id === a)?.titel ?? a;
 
 interface AnbieterInfo {
-  id: AnbieterId;
+  id: SchluesselId;
   konsole: string;
   konsoleName: string;
   host: string;
@@ -155,8 +172,8 @@ const MISTRAL_ENDPUNKTE: { id: MistralEndpunkt; titel: string; text: string }[] 
   { id: "global", titel: "Global (api.mistral.ai)", text: "Mit Websuche. Verarbeitung nicht auf eine Region festgelegt." },
 ];
 
-/** Wirksames Modell einer Aufgabe: eigene Einstellung, sonst Vorgabe des Profils, sonst der App */
-const wirksam = (r: Rolle, e: E, profil: Profil | null) => e.modelle[r] || profil?.manifest.modelle?.[r] || APP_MODELLE[r];
+/** Wirksames Modell einer Aufgabe: eigene Einstellung, sonst Vorgabe des Profils (bekannter Anbieter), sonst der App */
+const wirksam = (r: Rolle, e: E, profil: Profil | null) => modellFuer(r, e, profil);
 
 const HERKUNFT: Record<ReturnType<typeof modellHerkunft>, string> = {
   einstellung: "eigene Einstellung",
@@ -221,7 +238,7 @@ function UebersichtBereich({
   zeige: (b: EinstellungsBereich) => void;
 }) {
   const genutzt = genutzteAnbieter(e, profil);
-  const fehlend = genutzt.filter((a) => !schluessel[a]);
+  const fehlend = genutzt.filter((a) => !hatSchluessel(a, schluessel));
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
       <h2 id="einstellungen-bereich-titel">Übersicht</h2>
@@ -242,7 +259,11 @@ function UebersichtBereich({
         <dt>KI-Profil</dt>
         <dd>{voreinstellungTitel(aktiveVoreinstellung(e))}</dd>
         <dt>Mistral-Endpunkt</dt>
-        <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.mistralEndpunkt)?.titel}</dd>
+        <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.anbieterOptionen.mistral.endpunkt)?.titel}</dd>
+        <dt>Ollama (lokal)</dt>
+        <dd>
+          {e.anbieterOptionen.ollama.basisUrl}, Modell {e.anbieterOptionen.ollama.modell}
+        </dd>
         <dt>Ablage der API-Schlüssel</dt>
         <dd>{ablage ? ablageVon(ablage).titel : "–"}</dd>
         <dt>Recherche je Lauf</dt>
@@ -272,7 +293,7 @@ function UebersichtBereich({
             return (
               <tr key={a}>
                 <td>{ANBIETER_NAME[a]}</td>
-                <td>{schluessel[a] ? "hinterlegt" : aufgaben.length ? "fehlt" : "nicht hinterlegt"}</td>
+                <td>{!schluesselNoetig(a) ? "nicht nötig (lokal)" : schluessel[a] ? "hinterlegt" : aufgaben.length ? "fehlt" : "nicht hinterlegt"}</td>
                 <td>{aufgaben.length ? aufgaben.map((r) => r.titel).join(", ") : "–"}</td>
               </tr>
             );
@@ -468,7 +489,7 @@ function SchluesselAbschnitt({
   const pruefen = async () => {
     setTest({ art: "laeuft", text: "Verbindung wird geprüft …" });
     try {
-      const antwort = await Verteiler.fuer({ ...LEERE_SCHLUESSEL, [a.id]: eingabe.trim() }, { mistralEndpunkt: e.mistralEndpunkt }).senden({
+      const antwort = await Verteiler.fuer({ ...LEERE_SCHLUESSEL, [a.id]: eingabe.trim() }, e.anbieterOptionen).senden({
         modell: a.testModell,
         maxTokens: a.testTokens,
         aufwand: "low",
@@ -551,9 +572,9 @@ function SchluesselAbschnitt({
                 type="radio"
                 name="mistral-endpunkt"
                 value={x.id}
-                checked={e.mistralEndpunkt === x.id}
+                checked={e.anbieterOptionen.mistral.endpunkt === x.id}
                 onChange={() => {
-                  setEinstellungen({ ...e, mistralEndpunkt: x.id });
+                  setEinstellungen({ ...e, anbieterOptionen: { ...e.anbieterOptionen, mistral: { endpunkt: x.id } } });
                   setTest(null);
                 }}
               />
@@ -572,6 +593,117 @@ function SchluesselAbschnitt({
           {a.hinweise.map((h) => (
             <li key={h}>{h}</li>
           ))}
+        </ul>
+      </details>
+    </section>
+  );
+}
+
+/**
+ * Lokales Modell über Ollama (seit 0.6.3, TP-2026-W44-26): Adresse und Modell statt eines Schlüssels, im Stil der
+ * Schlüsselabschnitte. Übernommen wird erst mit „Speichern“.
+ */
+function OllamaAbschnitt({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) => void }) {
+  const o = e.anbieterOptionen.ollama;
+  const [adresse, setAdresse] = useState(o.basisUrl);
+  const [modell, setModell] = useState(o.modell);
+  const [test, setTest] = useState<{ art: "ok" | "fehler" | "laeuft"; text: string } | null>(null);
+  const adresseOk = ollamaAdresseZulaessig(adresse);
+  const vollstaendig = adresseOk && !!modell.trim();
+  const geaendert = adresse.trim() !== o.basisUrl || modell.trim() !== o.modell;
+  const neu = { ...e.anbieterOptionen, ollama: { basisUrl: adresse.trim(), modell: modell.trim() } };
+
+  const speichern = () => {
+    const mitOptionen = { ...e, anbieterOptionen: neu };
+    // Folgten alle Aufgaben dem KI-Profil Ollama, folgen sie ihm mit dem neuen Modell weiter
+    setEinstellungen(standardProfilAktiv(e, "ollama") ? standardProfilAnwenden(mitOptionen, "ollama") : mitOptionen);
+    setTest(null);
+  };
+
+  const pruefen = async () => {
+    setTest({ art: "laeuft", text: "Verbindung wird geprüft …" });
+    try {
+      const antwort = await Verteiler.fuer(LEERE_SCHLUESSEL, neu).senden({
+        modell: ollamaKennung(modell),
+        maxTokens: 64,
+        system: [{ text: "Antworte knapp." }],
+        nachrichten: [{ role: "user", content: "Antworte nur mit: Verbindung steht." }],
+      });
+      setTest({ art: "ok", text: `${antwort.text.trim() || "Antwort erhalten."} (${antwort.modell})` });
+    } catch (err) {
+      setTest({ art: "fehler", text: (err as Error).message });
+    }
+  };
+
+  return (
+    <section className="einstellung-block" aria-labelledby="schluessel-ollama">
+      <h3 id="schluessel-ollama">Lokales Modell (Ollama)</h3>
+      <p className="einleitung">
+        <a href="https://ollama.com/download" target="_blank" rel="noopener noreferrer">
+          Ollama
+        </a>{" "}
+        führt Modelle auf diesem Gerät aus. Die App spricht es über seine OpenAI-kompatible Schnittstelle an; Inhalte verlassen das Gerät nicht, ein Schlüssel
+        ist nicht nötig. {OLLAMA_HINWEIS}
+      </p>
+      <div className="gruppe-spalten-zwei">
+        <label className="feld">
+          <span className="feld-label">Adresse</span>
+          <input
+            type="url"
+            value={adresse}
+            onChange={(ev) => setAdresse(ev.target.value)}
+            placeholder={OLLAMA_STANDARD_URL}
+            spellCheck={false}
+            aria-invalid={!adresseOk}
+            aria-describedby="ollama-adresse-hilfe"
+          />
+          <span className="hinweis" id="ollama-adresse-hilfe">
+            {adresseOk
+              ? `Vorgabe ${OLLAMA_STANDARD_URL}. Zulässig sind nur http://localhost:11434 und http://127.0.0.1:11434 (Sicherheitsrichtlinie der App).`
+              : "Nicht zulässig: Die Sicherheitsrichtlinie der App erlaubt nur http://localhost:11434 und http://127.0.0.1:11434, jeweils mit Pfad wie /v1."}
+          </span>
+        </label>
+        <label className="feld">
+          <span className="feld-label">Lokales Modell</span>
+          <input
+            type="text"
+            value={modell}
+            onChange={(ev) => setModell(ev.target.value)}
+            placeholder="llama3.1"
+            spellCheck={false}
+            aria-describedby="ollama-modell-hilfe"
+          />
+          <span className="hinweis" id="ollama-modell-hilfe">
+            Name wie in „ollama list“. In der App heißt es „{ollamaKennung(modell || "…")}“; es gilt für das KI-Profil Ollama und steht in der Modellwahl.
+          </span>
+        </label>
+      </div>
+      <div className="aktionen">
+        <button type="button" className="knopf primaer" disabled={!geaendert || !vollstaendig} onClick={speichern}>
+          Speichern
+        </button>
+        <button type="button" className="knopf" disabled={!vollstaendig || test?.art === "laeuft"} onClick={pruefen}>
+          Verbindung prüfen
+        </button>
+      </div>
+      <p className="material-meta">{geaendert ? "Eingabe geändert, noch nicht gespeichert." : "Gespeichert."}</p>
+      {test && (
+        <div className={`kasten ${test.art === "ok" ? "kasten-ok" : test.art === "fehler" ? "kasten-fehler" : "kasten-info"}`} role="status">
+          <p>{test.text}</p>
+        </div>
+      )}
+      <details className="anbieter-hinweise">
+        <summary>Hinweise zu Ollama</summary>
+        <ul>
+          <li>
+            Verarbeitung auf diesem Gerät, ohne Drittanbieter und ohne Kosten beim Anbieter. Keine Websuche und kein Seitenabruf; S2 arbeitet nur mit dem
+            Material.
+          </li>
+          <li>
+            Ruft die App Ollama aus dem Browser auf, muss Ollama ihre Herkunft zulassen (Umgebungsvariable OLLAMA_ORIGINS). Manche Browser fragen vor dem
+            Zugriff auf Dienste im lokalen Netz nach.
+          </li>
+          <li>Nicht erprobt: Ergebnisqualität lokaler Modelle, strukturierte Ausgabe, PDF-Material und die nativen Apps.</li>
         </ul>
       </details>
     </section>
@@ -611,6 +743,7 @@ function AnbieterBereich({
           setEinstellungen={setEinstellungen}
         />
       ))}
+      <OllamaAbschnitt e={e} setEinstellungen={setEinstellungen} />
     </section>
   );
 }
@@ -638,8 +771,11 @@ function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) 
     { v: "profil", kurz: "Modelle wie im aktiven Profil bzw. in der App vorgegeben.", einzeln: "Aufwand nach den Vorgaben der App." },
     ...ANBIETER_IDS.map((a) => ({
       v: a,
-      kurz: `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
-      einzeln: modellProfilText(STANDARD_PROFILE[a]),
+      kurz:
+        a === "ollama"
+          ? `Alle Aufgaben mit einem lokalen Modell über Ollama, ohne Schlüssel. ${OLLAMA_HINWEIS}`
+          : `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
+      einzeln: modellProfilText(standardProfilFuer(a, e)),
     })),
     ...MIX_IDS.map((m) => ({ v: m, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
     { v: "individuell", kurz: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
@@ -712,9 +848,9 @@ function ModelleBereich({
         </thead>
         <tbody>
           {ROLLEN.map((r) => {
-            const vorgabe = profil?.manifest.modelle?.[r.id] || APP_MODELLE[r.id];
+            const vorgabe = profilModell(r.id, profil) || APP_MODELLE[r.id];
             const modell = wirksam(r.id, e, profil);
-            const ohneSchluessel = !schluessel[anbieterVon(modell)];
+            const ohneSchluessel = !hatSchluessel(anbieterVon(modell), schluessel);
             return (
               <tr key={r.id}>
                 <td>
@@ -733,7 +869,7 @@ function ModelleBereich({
                     }}
                   >
                     <option value="">Vorgabe ({vorgabe})</option>
-                    {MODELL_GRUPPEN.map((g) => (
+                    {modellGruppen(e).map((g) => (
                       <optgroup key={g.anbieter} label={g.anbieter}>
                         {g.modelle.map((m) => (
                           <option key={m} value={m}>
@@ -769,7 +905,8 @@ function ModelleBereich({
       </table>
       <p className="hinweis">
         Zur Wahl stehen je Modell nur die Stufen, die der Anbieter anbietet; Mistral kennt nur „niedrig – ohne Nachdenken“ und „hoch – mit Nachdenken“. Lehnt
-        ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll.
+        ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll. Lokale Modelle über Ollama erhalten keinen
+        Aufwand; das lokale Modell steht unter „KI-Anbieter & API“. {OLLAMA_HINWEIS}
       </p>
       <div className="kasten kasten-info testlauf-verweis">
         <p>Wie sich eine Änderung auswirkt, zeigt ein Testlauf am fiktiven Fall „Ilka“ mit Ergebnis als ZIP-Datei.</p>
@@ -844,7 +981,7 @@ function RechercheTiefe({ profil, e, setze }: { profil: Profil | null; e: E; set
               wert={e[f.feld]}
               setze={(n) => setze({ [f.feld]: n })}
               kuerzenZurueck={STANDARD.abrufMaxTokens}
-              vermerk={wirkungText(f.feld, anbieter, e.mistralEndpunkt)}
+              vermerk={wirkungText(f.feld, anbieter, e.anbieterOptionen)}
             />
           ))}
         </div>
@@ -935,7 +1072,11 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
           <strong>Mistral:</strong> Über den EU-Endpunkt (Vorgabe) gibt es keine Werkzeuge; S2 arbeitet dann nur mit dem Material, und die App sagt das dem
           Modell und im Ergebnis. Über den globalen Endpunkt nur die Websuche, ohne technische Höchstzahl; die App zählt die Suchen und schreibt sie ins
           Laufprotokoll. Seitenabrufe und die Höchstlänge je Seite gelten bei Mistral nicht. Derzeit gewählt:{" "}
-          {MISTRAL_ENDPUNKTE.find((x) => x.id === e.mistralEndpunkt)?.titel}.{genutzt.includes("mistral") ? "" : " (derzeit nicht genutzt)"}
+          {MISTRAL_ENDPUNKTE.find((x) => x.id === e.anbieterOptionen.mistral.endpunkt)?.titel}.{genutzt.includes("mistral") ? "" : " (derzeit nicht genutzt)"}
+        </li>
+        <li>
+          <strong>Ollama (lokal):</strong> keine Werkzeuge; S2 arbeitet nur mit dem Material, und die App sagt das dem Modell und im Ergebnis. Keine Kosten beim
+          Anbieter.{genutzt.includes("ollama") ? "" : " (derzeit nicht genutzt)"}
         </li>
       </ul>
       <p className="hinweis">Kostenschätzung nach Listenpreisen, Stand {PREISSTAND}.</p>

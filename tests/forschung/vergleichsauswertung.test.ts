@@ -1,8 +1,8 @@
 // Auswertung mehrerer Vergleichsläufe (AV-2026-W43-04, seit 0.5.8): Zusammenfassung je Konfiguration, Bezug
 // Standard-Profil Anthropic, Radarabstand und Abstand je Kennzahl. Synthetische Reihen, Sollwerte von Hand gerechnet.
 import { describe, expect, it } from "vitest";
-import { abstand, auswerten, berichtMarkdown, zusammenfassen } from "../../src/pipeline/vergleichsauswertung";
-import type { Reihe } from "../../src/pipeline/vergleichslauf";
+import { abstand, auswerten, berichtMarkdown, zusammenfassen } from "../../src/forschung/vergleichsauswertung";
+import type { Reihe } from "../../src/forschung/vergleichslauf";
 
 const KZ = {
   achsen_gesetzt: 1,

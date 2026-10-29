@@ -28,8 +28,8 @@ import {
   schaetzeReparatur,
   stellenWieOriginal,
   wertAn,
-} from "../../src/pipeline/reparaturtest";
-import type { FallDaten } from "../../src/pipeline/vergleichslauf";
+} from "../../src/forschung/reparaturtest";
+import type { FallDaten } from "../../src/forschung/vergleichslauf";
 
 const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.json"), "utf-8");
 const MUSTER = JSON.parse(MUSTER_TEXT);
@@ -59,19 +59,19 @@ function reparatur(antwort: (a: LlmAnfrage) => string = () => `\`\`\`json\n${MUS
 const E: Einstellungen = { ...STANDARD, modelle: { ...STANDARD.modelle, reparatur: "claude-sonnet-5-5" }, aufwand: { ...STANDARD.aufwand, reparatur: "low" } };
 
 describe("AV-2026-W43-25: Prüffall Reparatur", () => {
-  it("fünf Defekte an festen Stellen der Musterfassung; die Musterfassung bleibt unverändert", () => {
+  it("fünf Defekte an festen Stellen der Musterfassung; die Musterfassung bleibt unverändert", async () => {
     expect(DEFEKTE.map((d) => d.id)).toEqual(["R1-radar-skala", "R2-beurteilung", "R3-ereignisart", "R4-typ", "R5-mehrere"]);
     // Soll aus der Datei: zwei Sachverhalte, Sturmfolgen und Stromausfall
     expect(MUSTER.sachverhalte).toHaveLength(2);
-    const r1 = beschaedigt(DEFEKTE[0]) as any;
+    const r1 = (await beschaedigt(DEFEKTE[0])) as any;
     expect(r1.sachverhalte[1].sofort.lagenradar.d2).toBe(7);
-    expect((beschaedigt(DEFEKTE[3]) as any).sachverhalte[0].sofort.lagenradar.d4).toBe(String(MUSTER.sachverhalte[0].sofort.lagenradar.d4));
-    expect(musterfassung()).toEqual(MUSTER);
+    expect(((await beschaedigt(DEFEKTE[3])) as any).sachverhalte[0].sofort.lagenradar.d4).toBe(String(MUSTER.sachverhalte[0].sofort.lagenradar.d4));
+    expect(await musterfassung()).toEqual(MUSTER);
     expect(wertAn(MUSTER, "sachverhalte[1].sofort.lagenradar.d2")).toBe(MUSTER.sachverhalte[1].sofort.lagenradar.d2);
   });
 
-  it("Inhaltsvergleich ohne die beschädigten Stellen", () => {
-    const soll = musterfassung();
+  it("Inhaltsvergleich ohne die beschädigten Stellen", async () => {
+    const soll = await musterfassung();
     expect(inhaltVergleichen(soll, soll, []).abweichungen).toEqual([]);
     const ist = structuredClone(soll) as any;
     ist.sachverhalte[1].sofort.lagenradar.d2 = 3;
@@ -195,8 +195,8 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     expect(pv).toBeCloseTo(1.0, 6);
     expect(pb).toBeCloseTo(3.76, 6);
     // Mistral am EU-Endpunkt mit 10 % Aufschlag
-    expect(schaetzeReparatur("mistral-small-2603", { mistralEndpunkt: "eu" })![0]).toBeCloseTo(
-      schaetzeReparatur("mistral-small-2603", { mistralEndpunkt: "global" })![0] * 1.1,
+    expect(schaetzeReparatur("mistral-small-2603", { mistral: { endpunkt: "eu" } })![0]).toBeCloseTo(
+      schaetzeReparatur("mistral-small-2603", { mistral: { endpunkt: "global" } })![0] * 1.1,
       9,
     );
     expect(schaetzeReparatur("unbekannt")).toBeNull();

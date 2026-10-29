@@ -12,6 +12,7 @@ import {
   lagemeldungRumpf,
   naechsteQuellenNr,
   quellenZeile,
+  quellenVorlage,
   vorgeschlageneKategorie,
 } from "../../src/kern/quellen";
 
@@ -89,6 +90,44 @@ describe("Quellenzeilen", () => {
         art,
       ).toEqual([]);
     }
+  });
+
+  it("TP-2026-W44-27: Kategorievorschlag und Vorlage folgen den Quellenkategorien des Profils, nicht festen Buchstaben", async () => {
+    const ui = (await profil("lead-beispiel")).profil!.ui;
+    // Beispielprofil: wie bisher A, A, A, P, B, W
+    expect(["pressemitteilung", "lagebild", "lagemeldung", "social", "auskunft", "dokument"].map((a) => vorgeschlageneKategorie(a, ui))).toEqual([
+      "A",
+      "A",
+      "A",
+      "P",
+      "B",
+      "W",
+    ]);
+    // Eigenes Profil mit anderen Kennbuchstaben; „Betreiber … privater Trägerschaft“ zählt nicht als privat (nur die Bezeichnung vor „ – “)
+    const eigen = {
+      ...ui,
+      quellen: {
+        kategorien: {
+          X: "Betreiber – auch in privater Trägerschaft",
+          Y: "Behörden – Bund, Länder, Kommunen",
+          Z: "Privatpersonen und Verbände",
+          F: "Fachpresse",
+        },
+        rangfolge: ["Y", "X", "F", "Z"],
+      },
+    };
+    expect(["pressemitteilung", "social", "auskunft", "dokument", "url"].map((a) => vorgeschlageneKategorie(a, eigen))).toEqual([
+      "Y",
+      "Z",
+      "X",
+      undefined,
+      undefined,
+    ]);
+    // Ohne Vorlage des Profils: erste Kategorie der Rangfolge statt fest „A“
+    expect(quellenVorlage(eigen)).toBe("[Q{n}] Y – Herausgeber (Datum): Titel [Zugriff: {heute}]");
+    expect(quellenZeile({ nr: 3, heute: HEUTE }, eigen)).toBe("[Q3] Y – Herausgeber (Datum): Titel [Zugriff: 20.10.2026]");
+    expect(quellenVorlage({ ...ui, quellen: undefined })).toBe("[Q{n}] Herausgeber (Datum): Titel [Zugriff: {heute}]");
+    expect(quellenVorlage(ui)).toBe(ui.quellen!.vorlage);
   });
 
   it("vorgeschlagene Kategorie, nächste Nummer, erster Platzhalter", async () => {

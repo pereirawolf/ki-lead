@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.6.2, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.6.3, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -25,7 +25,7 @@ Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezog
 
 **Startet die App nicht** (leere Seite): alle Fenster mit KI-LEAD schließen und die App neu öffnen; eine bereits geladene neuere Fassung wird dann aktiv. Sonst die Reparaturseite `reparatur.html` im Ordner der App aufrufen (etwa `https://pereirawolf.github.io/ki-lead/reparatur.html`) und „Programmdateien zurücksetzen“ wählen. Meldungen, Profile, Einstellungen und API-Schlüssel bleiben dabei erhalten. Einzelheiten: [docs/STARTPROBLEME.md](docs/STARTPROBLEME.md).
 
-**Mit KI:** In den Einstellungen unter „KI-Anbieter & API“ einen eigenen API-Schlüssel von Anthropic, OpenAI oder Mistral hinterlegen. In der KI-Erfassung dann Material bereitstellen und festlegen, ob Websuche und Seitenabruf erlaubt sind.
+**Mit KI:** In den Einstellungen unter „KI-Anbieter & API“ einen eigenen API-Schlüssel von Anthropic, OpenAI oder Mistral hinterlegen oder ein lokales Modell über Ollama einstellen (seit 0.6.3, ohne Schlüssel). In der KI-Erfassung dann Material bereitstellen und festlegen, ob Websuche und Seitenabruf erlaubt sind.
 
 ## Funktionen
 
@@ -37,7 +37,7 @@ Bitte nur fiktive oder offen zugängliche Inhalte verwenden, keine personenbezog
 - **Lagebild und Verdichtung:** Meldungen mehrerer Stellen (JSON-Dateien oder ZIP-Archive) zusammenführen, prüfen und darstellen: Übersicht, Meldestatus, Sachverhalte nach Schwere, Lagenradar je Sachverhalt ohne Mittelwert, Redaktionscheck; Ausgabe für Word, als CSV und als PDF. Ausgewählte Meldungen gehen an die Verdichtung, die den Sachverhalt für den eigenen Referenzraum neu bewertet; die Websuche ist dabei standardmäßig aus. Verwendete Eingangsmeldungen werden als Quellen nachgewiesen; ihre Kategorie richtet sich nach der Rolle der meldenden Stelle (z. B. Behörde A, Betreiber zum eigenen Betrieb B).
 - **Management Summary:** eine Fassung der Meldung für die Leitung, lesbar in einer Minute. Beurteilung, Tendenz, Fristen und Entwurfsvermerk übernimmt die App aus der Meldung.
 - **Profile:** Profile untereinander mit Aktivstatus, Metadaten und Prüfsumme. Arbeitsanweisungen und Kodierleitfaden (mit Fassung), SOP-Katalog mit Suche sowie Übersichten und Änderungsverläufe lassen sich ohne KI direkt in der App lesen, mit Inhaltsverzeichnis und Einzeldownload.
-- **Drei Anbieter:** je Stufe ein Modell von Anthropic, OpenAI oder Mistral (Mistral seit 0.5.6, erprobt am 24.10.2026 mit der Verdichtung Ilka ohne Websuche; als Vorgabe über den EU-Endpunkt ohne Websuche, wahlweise global mit Websuche).
+- **Vier Anbieter:** je Stufe ein Modell von Anthropic, OpenAI oder Mistral (Mistral seit 0.5.6, erprobt am 24.10.2026 mit der Verdichtung Ilka ohne Websuche; als Vorgabe über den EU-Endpunkt ohne Websuche, wahlweise global mit Websuche) oder seit 0.6.3 ein lokales Modell über Ollama auf dem eigenen Gerät (ohne Schlüssel, ohne Websuche; Ergebnisqualität nicht erprobt).
 - **Darstellung:** Farbschema der Oberfläche nach Wahl: neutral hell oder dunkel, Bund, Bevölkerungsschutz, jedes der 16 Länder oder eigene Farben des Profils ([Farbschemata](docs/farbschemas.md)). Downloads tragen das Datum vorn im Dateinamen (`2026-10-20T20-31_LEAD-Meldung_…_ENTWURF.pdf`).
 - **Forschungsfunktionen:** Laufprotokoll mit Prompts, Antworten, Token, Kosten und Dauer (Export als JSON); Vergleich eines Laufs mit einer Referenzfassung je Radarachse, ohne Gesamtwert.
 
@@ -47,7 +47,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 
 - KI-LEAD ist eine Browseranwendung für Desktop, Tablet und Smartphone und lässt sich als App installieren (PWA). Meldungen, Profile, Lagebild und Einstellungen speichert sie im Browser des Geräts. Ein Service Worker hält die Dateien der App vor, damit sie ohne Netz startet; Inhalte und Anfragen an die KI-Anbieter speichert er nicht. Die Apps für iOS und Android entstehen aus demselben Code mit Capacitor ([Anleitung](docs/NATIV.md)).
 - Bei einer KI-Funktion übermittelt die App die dafür zusammengestellten Inhalte (Arbeitsanweisung, Profilregeln, Auftrag und Material) an den gewählten Anbieter. Websuche und Seitenabruf führt der Anbieter aus, nicht das Gerät.
-- Für KI-Funktionen ist ein eigener API-Schlüssel von Anthropic, OpenAI oder Mistral nötig. Er geht nur an die Schnittstelle des jeweiligen Anbieters. Wo er liegt, wählt die Person selbst: im Gerätespeicher der App, nur für die laufende Sitzung, im Gerätespeicher mit einer Passphrase verschlüsselt (seit 0.6.2) oder in der App für iOS und Android im Schlüsselbund des Systems (Keychain, Keystore). Ein Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
+- Für KI-Funktionen ist ein eigener API-Schlüssel von Anthropic, OpenAI oder Mistral nötig; ein lokales Modell über Ollama braucht keinen, die Inhalte bleiben dann auf dem Gerät. Er geht nur an die Schnittstelle des jeweiligen Anbieters. Wo er liegt, wählt die Person selbst: im Gerätespeicher der App, nur für die laufende Sitzung, im Gerätespeicher mit einer Passphrase verschlüsselt (seit 0.6.2) oder in der App für iOS und Android im Schlüsselbund des Systems (Keychain, Keystore). Ein Ausgabenlimit beim Anbieter begrenzt das Risiko in jedem Fall.
 - Einzelheiten zu Datenflüssen, Aufbewahrung bei den Anbietern, Protokollen und Löschen: [Datenschutzhinweise](docs/DATENSCHUTZ.md); Risiken und Maßnahmen: [Sicherheit](docs/SICHERHEIT.md).
 
 ## Dokumentation
@@ -123,7 +123,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.2), jedes Profil eine eigene Version (Beispielprofil 1.30.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.3), jedes Profil eine eigene Version (Beispielprofil 1.30.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -156,6 +156,6 @@ Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial u
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.2) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.3) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

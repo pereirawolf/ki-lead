@@ -1,4 +1,5 @@
 // Laden der Laufprotokolle aus IndexedDB (seit 0.6.2, TP-2026-W44-10): nur die Schlüssel „lauf:…“, nicht der ganze Speicher.
+// Seit 0.6.3 (TP-2026-W44-24) in src/speicher/laufSpeicher.ts.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 
@@ -6,7 +7,7 @@ const speicher = vi.hoisted(() => ({ werte: new Map<string, any>() }) as Speiche
 vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(speicher));
 
 import * as idb from "idb-keyval";
-import { laeufeLaden, speicherSchuetzen } from "../../src/pipeline/lauf";
+import { laeufeLaden, speicherSchuetzen } from "../../src/speicher/laufSpeicher";
 
 afterEach(() => {
   speicherLeeren(speicher);

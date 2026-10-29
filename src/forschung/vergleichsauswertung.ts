@@ -5,7 +5,7 @@
 //
 // Aufruf über scripts/vergleichslauf-auswerten.mjs (npm run vergleichslauf:auswerten -- <ZIP-Dateien oder Ordner>).
 
-import { STANDARD_PROFILE } from "./einstellungen";
+import { STANDARD_PROFILE } from "../pipeline/einstellungen";
 import type { Kennzahlen, Reihe } from "./vergleichslauf";
 import { reiheUmfang, umfangInfo } from "./vergleichsumfang";
 

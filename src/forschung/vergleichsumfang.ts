@@ -1,7 +1,7 @@
 // Umfang eines Testlaufs Ilka (bis 0.5.16 „Vergleichslauf“, seit 0.5.12): was getestet wird und mit welcher Grundlage. Eigene Datei ohne
 // weitere Abhängigkeiten, damit die Auswertung (vergleichsauswertung.ts, Skript außerhalb von Vite) sie leicht laden kann.
 
-import type { Rolle } from "./einstellungen";
+import type { Rolle } from "../pipeline/einstellungen";
 
 /**
  * Was ein Vergleichslauf testet (seit 0.5.12). Aus Rohdaten: die sechs Eingänge des Falls orkantief-ilka-verdichtung.
