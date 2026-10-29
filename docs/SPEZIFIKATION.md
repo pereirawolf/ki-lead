@@ -383,6 +383,8 @@ Einzelheiten:
 
 17. **Vermerke zu den Modellen (seit 0.5.22):** Die Vermerke „im Test vorn“ und „im Test bewährt“ in der Wahl je Lauf (`src/pipeline/modellkunde.ts`) stützen sich auf die Ergebnisberichte vom 25.10.2026 (Standard-Profile mit Auswertung je Stufe, Prüffall Reparatur, Management Summary), jeweils am fiktiven Fall „Ilka“ mit drei bis zehn Läufen. Sie sind nach jeder neuen Reihe nachzuführen; für S2 Recherche und Entwurf fehlt eine Reihe (offener Punkt 6). Die Grenzen der Kostenklassen (1, 12 und 25 USD je Million Ausgabetoken) sind gesetzt, nicht gemessen.
 
+18. **Zeitstrahl, Kennung und Bezug (seit 0.6.9):** Bewusst offen gelassen und als Befunde auf dem Branch `befunde/eingang` erfasst (`ki-lead-befund_zeitstrahl_2026-W44.json`): ZS-2026-W44-06, der Redaktionscheck wertet Kennungen noch nicht aus (dieselbe Kennung bei verschiedenen Stellen, Fortschreibung über die Kennung statt über die Stelle, Bezug auf nicht geladene Sachverhalte); ZS-2026-W44-07, die Vorlage `profile/muster` führt Zeitstrahl, Kennung und Bezug nicht. Abgelehnt ist ZS-2026-W44-05, eine Kenntniszeit je Zeile (Befundregister). Ob die Modelle die Regeln im Steuerungsblock einhalten, zeigt erst ein echter Lauf.
+
 ## 11. Änderungsverlauf
 
 Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gilt; Korrekturen der Spezifikation ohne neue App-Funktion erhalten eine dritte Stelle.

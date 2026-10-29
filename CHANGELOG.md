@@ -99,7 +99,8 @@ Grundlage: Entscheidung des Herausgebers vom 29.10.2026, bei KI-Erfassung und KI
 - **Quellenverzeichnis** (`src/kern/quellen.ts`): Verweise im Zeitstrahl zählen als Zitate; die Quellen eines Sachverhalts in der Kopiervorlage schließen die Verweise seiner Zeilen ein.
 - **Ausgaben:** PDF mit dem Zeitstrahl als eigenem Block nach dem Quellenverzeichnis; Lagebild-Tabelle „Sachverhalte“ mit Kennung und Bezug (aufgelöst zur meldenden Stelle) und einer Spalte „Zeitstrahl“; Rohtabelle und CSV mit „Zeitstrahl (Sachverhalt)“; Kopiervorlage mit einer Zeile „Zeitstrahl“. Die Management Summary erhält den Zeitstrahl nicht.
 - **Beispielprofil 1.33.0:** LEAD-Meldevorlage 1.2 (optionale Felder `kennung`, `bezug`, `zeitstrahl`, abwärtskompatibel), Darstellungsdatei mit Rollen, Feldern, Präfixen nach ISO 3166 und Typen, Kodierleitfaden 1.6.0 mit Abschnitt 8, Arbeitsanweisung Erfassung 1.8.0, Verdichtung 2.2.0, Sammelmappe 3.20.0, Beispieldatensatz „Ilka“ mit Kennungen, Bezug und Zeitstrahl; Einzelheiten im Profilverlauf.
-- Profilformat 1.23, Spezifikation 0.6.9 (Abschnitt 5.1 „Zeitstrahl, Kennung und Bezug“), README, docs/TESTZUORDNUNG.md.
+- Profilformat 1.23, Spezifikation 0.6.9 (Abschnitt 5.1 „Zeitstrahl, Kennung und Bezug“, offener Punkt 18), README, docs/TESTZUORDNUNG.md.
+- **Befundregister:** ZS-2026-W44-01 bis -04 umgesetzt, ZS-2026-W44-05 (Kenntniszeit je Zeile) abgelehnt. Offen auf `befunde/eingang` (`ki-lead-befund_zeitstrahl_2026-W44.json`): ZS-2026-W44-06 (Redaktionscheck wertet Kennungen aus) und ZS-2026-W44-07 (Vorlage `profile/muster`).
 - Versionsangaben 0.6.9 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 609, iOS 609).
 
 ### Tests
