@@ -32,3 +32,7 @@ Die Innenfläche zeigt eine Kodierung der Hochwasserlage nach Tief „Bernd“ a
 Quelle: Bundesministerium des Innern und für Heimat (2022): Bericht zur Hochwasserkatastrophe 2021: Katastrophenhilfe, Wiederaufbau und Evaluierungsprozesse. Online abrufbar unter: https://www.bmi.bund.de/SharedDocs/downloads/DE/veroeffentlichungen/2022/abschlussbericht-hochwasserkatastrophe.pdf [Zugriff: 23.10.2026]
 
 Die Kodierung ist abgeschlossen und festgeschrieben (Stand 23.10.2026). Die daraus gezeichneten Symbole und Startbildschirme liegen als feste Dateien im Repository: `public/icons/` und `public/favicon.ico` (Web), `ios/App/App/Assets.xcassets/` (iOS) und `android/app/src/main/res/` (Android). Maßgebliche Vorlage ist `public/icons/icon.svg`; werden später weitere Größen oder Formate gebraucht, lassen sie sich daraus ableiten, etwa mit `npx @capacitor/assets generate`. Das frühere Zeichenskript `scripts/app-symbol.py` ist entfallen und im Git-Verlauf abrufbar.
+
+## Lizenz
+
+Das App-Symbol steht wie die App unter der EUPL-1.2 und zusätzlich unter CC BY 4.0: `public/icons/`, `public/favicon.ico` und die daraus erzeugten Symbol- und Startbilder in `android/` und `ios/` ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 1 d). Das Zivilschutzzeichen selbst ist nicht Teil des Symbols und von keiner Lizenz erfasst (LICENSE-CONTENT, Nr. 5 c).
