@@ -4,7 +4,7 @@
 // Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
@@ -67,6 +67,7 @@ import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
 import { bestaetigen } from "./bestaetigung";
+import { springeZu, useSprung } from "./sprung";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "ueber";
 
@@ -1108,7 +1109,21 @@ export function EinstellungenAnsicht({
 }: Props) {
   const [eigenerBereich, setEigenerBereich] = useState<EinstellungsBereich>(bereich ?? "uebersicht");
   const aktiv = setBereich ? (bereich ?? "uebersicht") : eigenerBereich;
-  const zeige = setBereich ?? setEigenerBereich;
+  const setzeBereich = setBereich ?? setEigenerBereich;
+  // Sprungziele (seit 0.6.7): Anfang des Arbeitsbereichs unter dem Kopf. Aus der Bereichsleiste nur bei Bedarf und ohne
+  // Fokuswechsel (der Knopf bleibt stehen); aus einem Bereich heraus mit Fokus auf die Überschrift des neuen Bereichs,
+  // weil der auslösende Knopf verschwindet.
+  const arbeitsbereichRef = useRef<HTMLDivElement>(null);
+  const sprung = useSprung();
+  const ueberschrift = () => arbeitsbereichRef.current?.querySelector<HTMLElement>(".bereich-inhalt h2") ?? null;
+  const waehlen = (b: EinstellungsBereich) => {
+    setzeBereich(b);
+    sprung(() => springeZu(arbeitsbereichRef.current, null, { nurWennNoetig: true }));
+  };
+  const zeige = (b: EinstellungsBereich) => {
+    setzeBereich(b);
+    sprung(() => springeZu(arbeitsbereichRef.current, ueberschrift(), { fokus: true }));
+  };
   const sichtbar = BEREICHE.filter((b) => b.id !== "darstellung" || farben);
   const aktuell = sichtbar.some((b) => b.id === aktiv) ? aktiv : "uebersicht";
 
@@ -1121,7 +1136,7 @@ export function EinstellungenAnsicht({
         </div>
       </div>
 
-      <div className="arbeitsbereich">
+      <div className="arbeitsbereich" ref={arbeitsbereichRef}>
         <nav className="schritte bereiche" aria-label="Bereiche der Einstellungen">
           <ol>
             {sichtbar.map((b) => (
@@ -1130,7 +1145,7 @@ export function EinstellungenAnsicht({
                   type="button"
                   className={b.id === aktuell ? "schritt aktiv" : "schritt"}
                   aria-current={b.id === aktuell ? "page" : undefined}
-                  onClick={() => zeige(b.id)}
+                  onClick={() => waehlen(b.id)}
                 >
                   {b.titel}
                 </button>
