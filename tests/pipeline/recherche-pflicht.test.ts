@@ -359,6 +359,15 @@ describe("Kurzantwort in beschrifteten Zeilen (TP-2026-W44-32)", () => {
     // Fließtext wie bis 0.6.3 wird unverändert erkannt
     expect(kurzantwortBehauptetRecherche("Primärquellen blieben nicht zugänglich.")).toBe(true);
   });
+
+  it("Erfassung 1.7.0: die Kurzantwort als Prüfauftrag ohne Leerzeilen behauptet nur, was in „Lücken“ steht", async () => {
+    const { kurzantwortBehauptetRecherche } = await import("../../src/pipeline/recherchebefunde");
+    const neu = { Kernaussage: "Sturmfolgen weitgehend behoben.", "Bitte bestätigen": "D5 Zeit bis Zielzustand offen, weil kein Zielzustand benannt ist" };
+    expect(kurzantwortBehauptetRecherche(kurz(neu))).toBe(false);
+    const luecke = kurz({ ...neu, Lücken: "Lagemeldung des Landes nicht zugänglich; die Zahl der Betroffenen hängt daran" });
+    expect(kurzantwortBehauptetRecherche(luecke)).toBe(true);
+    expect(codes(rechercheBefunde("durchfuehren", false, ohne, undefined, { kurzantwort: luecke }))).toContain("KURZANTWORT_RECHERCHE_WIDERSPRUCH");
+  });
 });
 
 describe("KP-2026-W44-15 bis -19: amtliche Einstiege, Primärquelle, Orientierungszählung (0.6.1, Lauf 20261026-215737-9t2q)", () => {

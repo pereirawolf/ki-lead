@@ -7,6 +7,7 @@ import type { Meldung, Profil } from "../../kern/typen";
 import { laufKostenText, type Lauf } from "../../pipeline/lauf";
 import { rechercheNachweis } from "../../pipeline/recherchebefunde";
 import { VergleichKasten } from "../Vergleich";
+import { Kurzantwort } from "./Kurzantwort";
 import { RechercheZeile } from "./recherche";
 import { ABRUF_FEHLER } from "./texte";
 import { dauer } from "./zustand";
@@ -61,7 +62,7 @@ export function Ergebnis({
       {e?.kurzantwort && (
         <div className="ki-abschnitt">
           <h3>Kurzantwort der KI</h3>
-          <p className="kurzantwort">{e.kurzantwort}</p>
+          <Kurzantwort text={e.kurzantwort} />
         </div>
       )}
 
