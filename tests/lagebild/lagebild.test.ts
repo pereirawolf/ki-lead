@@ -148,7 +148,18 @@ describe("Lagebild: Auswertung", () => {
     const mf = mehrfachMeldungen(zwei, p);
     expect(mf).toHaveLength(1);
     expect(mf[0].eintraege.map((e) => e.name)).toEqual([ilka[2].name, "neuer.json"]);
-    expect(redaktionscheck(zwei, p, new Date(2026, 9, 21)).mehrfach).toHaveLength(1);
+    // Seit ZS-2026-W44-06: Tragen beide Meldungen Kennungen, ordnet der Redaktionscheck über die Kennung zu …
+    const red = redaktionscheck(zwei, p, new Date(2026, 9, 21));
+    expect(red.mehrfach).toHaveLength(0);
+    expect(red.kennungen.filter((k) => k.art === "fortschreibung").length).toBeGreaterThan(0);
+    // … ohne Kennungen bleibt die Gruppierung nach meldender Stelle (Rückfall)
+    const ohne = (x: any) => {
+      for (const sv of x.sachverhalte) delete sv.kennung;
+      return x;
+    };
+    const alt = ohne(JSON.parse(ilka[2].text));
+    const { eintraege: zweiOhne } = einlesen([datei("alt.json", alt), datei("neuer.json", ohne(structuredClone(m)))], p);
+    expect(redaktionscheck(zweiOhne, p, new Date(2026, 9, 21)).mehrfach).toHaveLength(1);
   });
 
   test("fehlende Kernaussage bei hoher Beurteilung", () => {
