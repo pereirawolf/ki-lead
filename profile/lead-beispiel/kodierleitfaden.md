@@ -169,6 +169,7 @@ Jede Quelle im Feld **„Quellen & Referenzen“** erhält genau eine Kategorie.
 - Ein authentischer Behördenbeitrag in sozialen Medien bleibt A, ein Betreiberbeitrag B. Ungeklärte Identität und ungeklärter Aussagegehalt werden ausdrücklich vermerkt.
 - Ein Medienbericht mit Betreiberzitat bleibt M; der Betreiber wird im Text als Ursprungsquelle genannt. Erst eine tatsächlich eingesehene Betreiberveröffentlichung erhält einen eigenen B-Eintrag.
 - Bei gemischten Rollen werden die verwendete Aussage und ihre Herkunft gekennzeichnet. Mehrere Auszüge desselben Dokuments sind nicht voneinander unabhängig.
+- **Sprachfassung:** Bei mehrsprachigen Seiten deutscher Stellen wird die deutsche Ausgangsfassung zitiert. Bei ausländischen Stellen sind die Originalfassung und eine amtliche englische Fassung desselben Herausgebers gleichrangig. Übersetzungen Dritter und automatische Übersetzungen sind keine eigene Quelle.
 - Bestehende Quelleneinträge werden nicht automatisch umgestuft (etwa von P zu B), sondern einzeln geprüft.
 
 **Ungeklärte Widersprüche** bleiben mit beiden Werten und Quellen sichtbar und werden nicht festgelegt.
