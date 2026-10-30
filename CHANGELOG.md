@@ -82,7 +82,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
-| 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachtrag vom 30.10.2026: Pull Request „CI-Lieferkette: Actions per Commit-SHA, npm audit“, ohne Änderung der App) |
+| 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
 
 ## [0.6.12] – 30.10.2026
 
@@ -105,6 +105,14 @@ Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json` (Freitagslauf 
 - `tests/lagebild/redaktionscheck.test.ts` (5 neu): Fortschreibung, Doppelvergabe, eigenständige Kennungen, Bezug, Rückfall; `tests/lagebild/lagebild.test.ts` angepasst.
 - `tests/profil/vorlage.test.ts` (1 neu): Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug.
 - `tests/profil/sop-redaktion.test.ts`, `tests/pipeline/kontext.test.ts`: Begriff „Beurteilung“ und Kodierleitfaden 1.7.0.
+
+### Nachtrag 2 vom 30.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A1.json` (Arbeitspaket A1 „Fester Stand und Dokumentation“), freigegeben vom Herausgeber am 30.10.2026. Nur Dokumentation; keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Fester Erprobungsstand (TP-2026-W44-38):** Die Anordnungsvorlage V1 in [docs/VORLAGEN.md](docs/VORLAGEN.md) nennt statt der „jeweils aktuellen Fassung“ den Release-Kandidaten mit Git-Tag und zwei Betriebswege, die ihn festhalten (eigener Build des Tags oder GitHub Pages, solange dort dieser Stand veröffentlicht ist); damit passt sie zu [docs/ERPROBUNG.md](docs/ERPROBUNG.md), Abschnitt 1.
+- **Unterstützte Versionen (TP-2026-W44-39):** [SECURITY.md](SECURITY.md) unterstützt den Release-Kandidaten einer laufenden Erprobung bis zu deren Ende, weiterhin ohne Fristzusage.
+- **Spezifikation (TP-2026-W44-40, -41):** Abschnitt 2 an den Code angeglichen (Plattformen, Netzverbindungen mit Mistral, Ollama und Programmdateien, Ablage mit Passphrase); Abschnitt 5.3 und offener Punkt 12: Bibliothek bis nach der Erprobung zurückgestellt.
 
 ### Nachtrag vom 30.10.2026 (ohne neue Versionsnummer)
 
