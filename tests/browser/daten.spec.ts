@@ -34,8 +34,10 @@ test("TP-2026-W44-44/-45: sichern ohne Schlüssel, alles löschen, Sicherung ein
   expect(s.geraetespeicher.some(([k]: [string]) => k.startsWith("schluessel"))).toBe(false);
 
   // Alles löschen: nach dem Neustart kein Lagebild und kein Schlüssel
+  // Die App lädt nach dem Löschen neu; erst nach dem Neuladen weiterprüfen (in WebKit dauert das Leeren länger,
+  // ohne Warten liefen die folgenden Schritte noch in der alten Seite)
   await page.getByRole("button", { name: "Alle Daten dieses Geräts löschen" }).click();
-  await page.getByRole("dialog").getByRole("button", { name: "Alle Daten löschen" }).click();
+  await Promise.all([page.waitForEvent("load"), page.getByRole("dialog").getByRole("button", { name: "Alle Daten löschen" }).click()]);
   await expect(page.locator(".kopf-ki")).toBeVisible();
   await bereich(page, "Auswertung");
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toHaveCount(0);
@@ -44,8 +46,10 @@ test("TP-2026-W44-44/-45: sichern ohne Schlüssel, alles löschen, Sicherung ein
 
   // Einspielen: Lagebild zurück, Schlüssel bleibt weg
   await daten(page);
-  await page.getByLabel("Sicherungsdatei wählen").setInputFiles({ name: "sicherung.json", mimeType: "application/json", buffer: Buffer.from(text) });
-  await page.getByRole("dialog").getByRole("button", { name: "Sicherung einspielen" }).click();
+  await page
+    .locator('input[type="file"][aria-label="Sicherungsdatei wählen"]')
+    .setInputFiles({ name: "sicherung.json", mimeType: "application/json", buffer: Buffer.from(text) });
+  await Promise.all([page.waitForEvent("load"), page.getByRole("dialog").getByRole("button", { name: "Sicherung einspielen" }).click()]);
   await expect(page.locator(".kopf-ki")).toBeVisible();
   await bereich(page, "Auswertung");
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
