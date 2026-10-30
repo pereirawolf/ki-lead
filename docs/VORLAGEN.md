@@ -52,7 +52,7 @@ Muster für eine Hausanordnung oder Dienstanweisung. Was im Muster steht, gibt d
 
 [Aktenzeichen], [Datum]
 
-**1. Gegenstand und Zweck.** Die [Organisationseinheit] erprobt KI-LEAD, Version [App-Version] [bei Betrieb aus GitHub Pages: jeweils aktuelle Fassung, die verwendete Version steht im Laufprotokoll], mit dem Profil [Profil-ID, Profilversion], vom [Datum] bis [Datum]. Zweck ist [z. B. zu klären, ob KI-LEAD Lageentwürfe liefert, die mit vertretbarer Nacharbeit nutzbar sind; Fragestellungen nach ERPROBUNG.md, Abschnitt 2, oder eigene].
+**1. Gegenstand und Zweck.** Die [Organisationseinheit] erprobt KI-LEAD, Version [App-Version], Release-Kandidat [Git-Tag], betrieben [als eigener Build dieses Tags | aus GitHub Pages, solange dort dieser Stand veröffentlicht ist; die verwendete Version und die Prüfsumme des Profils stehen im Laufprotokoll], mit dem Profil [Profil-ID, Profilversion], vom [Datum] bis [Datum]. Zweck ist [z. B. zu klären, ob KI-LEAD Lageentwürfe liefert, die mit vertretbarer Nacharbeit nutzbar sind; Fragestellungen nach ERPROBUNG.md, Abschnitt 2, oder eigene].
 
 **2. Teilnehmende.** [Funktionen oder Namen]. Ansprechperson für die Erprobung: [Name, Kontakt]. Die Teilnehmenden sind vor dem ersten Lauf nach V5 unterwiesen.
 

@@ -17,6 +17,7 @@ Nach einer Korrektur steht die Schwachstelle im [Änderungsverlauf](CHANGELOG.md
 | Version | unterstützt |
 |---|---|
 | jeweils letzter Stand von `main` und die auf GitHub Pages veröffentlichte Fassung | ja |
+| Release-Kandidat einer laufenden Erprobung (Git-Tag `v…-rc.N`, siehe [docs/ERPROBUNG.md](docs/ERPROBUNG.md)) | ja, bis zum Ende der Erprobung; Korrekturen erscheinen als neuer Kandidat |
 | ältere Versionen | nein |
 | Apps für iOS und Android | noch nicht veröffentlicht |
 

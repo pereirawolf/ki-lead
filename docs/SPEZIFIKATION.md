@@ -20,10 +20,10 @@ KI-LEAD ist ein Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD
 
 ## 2. Betriebsmodell
 
-- **Plattformen:** iPadOS und iOS als native App (Capacitor). Dieselbe Codebasis läuft als Android-App und als PWA.
+- **Plattformen:** Web-App im Browser, installierbar als PWA (Betrieb bisher über GitHub Pages). Dieselbe Codebasis ergibt mit Capacitor native Apps für iOS, iPadOS und Android; sie sind angelegt, aber noch nicht auf Geräten abgenommen (M5).
 - **Lokal:** Profile, Meldungen, Läufe und Einstellungen liegen ausschließlich auf dem Gerät. Es gibt keine eigene Serverkomponente, kein Konto, keine Telemetrie und kein CDN. Alle Bibliotheken sind gebündelt.
-- **Einzige Netzverbindungen:** die KI-Schnittstellen von Anthropic (Claude) und OpenAI. Websuche und URL-Abruf laufen über die serverseitigen Werkzeuge des jeweiligen Anbieters.
-- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. Wo er liegt, wählt die Person: im Gerätespeicher der App (unverschlüsselt, mit Hinweis), nur für die laufende Sitzung oder in der nativen App im iOS-Keychain bzw. Android-Keystore. Mehrere gleichwertige Wege sichern, dass die App ohne einzelne Abhängigkeit nutzbar bleibt.
+- **Einzige Netzverbindungen:** die Programmdateien von der eigenen Adresse und die KI-Schnittstellen von Anthropic, OpenAI und Mistral (EU-Endpunkt oder global) sowie ein lokales Modell über Ollama auf demselben Gerät (`localhost`/`127.0.0.1`, Port 11434); die Content-Security-Policy in `index.html` lässt keine anderen Ziele zu. Websuche und Seitenabruf laufen über die serverseitigen Werkzeuge des jeweiligen Anbieters.
+- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. Wo er liegt, wählt die Person: im Gerätespeicher der App (unverschlüsselt, mit Hinweis), nur für die laufende Sitzung, im Gerätespeicher mit Passphrase verschlüsselt oder in der nativen App im iOS-Keychain bzw. Android-Keystore (`src/schluessel/ablage.ts`). Mehrere gleichwertige Wege sichern, dass die App ohne einzelne Abhängigkeit nutzbar bleibt.
 
 ## 3. Grundprinzip: rekursive Lagemeldung
 
@@ -256,7 +256,7 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 
 ### 5.3 Bibliothek
 
-Lokale Ablage aller Meldungen, Läufe und Profile, mit Suche und Filter nach Profil, Status und Ereignisart. Teilen über das System-Teilen-Menü (Dateien, Mail, AirDrop).
+Nicht umgesetzt und bis nach der Erprobung zurückgestellt (offener Punkt 12). Meldungen werden als Dateien ausgegeben und im Lagebild wieder eingelesen; Laufprotokolle stehen unter „Frühere Läufe“ der KI-Erfassung und unter „Testläufe“. Geplant war eine lokale Ablage aller Meldungen, Läufe und Profile mit Suche und Filter nach Profil, Status und Ereignisart und Teilen über das System-Teilen-Menü.
 
 ### 5.4 Einstellungen
 
@@ -375,7 +375,7 @@ Einzelheiten:
 9. **Barrierefreiheit:** PDF-Ausgaben ohne Tags; keine Prüfung mit Screenreadern und auf Geräten; das Lagenradar ist seit 0.5.4 eine Radiogruppe mit Pfeiltasten; seit 0.6.5 prüft axe-core jeden Bereich in den Browsertests gegen WCAG 2.2 A und AA ([BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md), Abschnitt 4).
 10. **Sicherheit:** offene Maßnahmen nach [SICHERHEIT.md](SICHERHEIT.md): Domainbegrenzung beim Seitenabruf, Signatur importierter Profile. Erledigt am 30.10.2026: GitHub Actions per Commit-SHA (TP-2026-W44-36) und `npm audit` für ausgelieferte Pakete in der CI (TP-2026-W44-37).
 11. **Daten löschen:** Ein Knopf „Alle Daten dieses Geräts löschen“ fehlt; heute geht das nur über die Browsereinstellungen oder die Deinstallation ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 10).
-12. **Speicher und Bibliothek:** Abschnitt 7 sah Capacitor Filesystem, Abschnitt 5.3 eine Bibliothek mit Teilen-Menü vor. Umgesetzt ist die Ablage in IndexedDB; eine Bibliothek mit Suche und Filter gibt es nicht. Zu klären ist, ob beides noch gebraucht wird.
+12. **Speicher und Bibliothek:** Abschnitt 7 sah Capacitor Filesystem, Abschnitt 5.3 eine Bibliothek mit Teilen-Menü vor. Umgesetzt ist die Ablage in IndexedDB; eine Bibliothek mit Suche und Filter gibt es nicht. Entschieden am 30.10.2026 (TP-2026-W44-41): Bibliothek und Capacitor Filesystem bis nach der Erprobung zurückgestellt; die Ablage bleibt IndexedDB.
 13. **Impressum:** Geklärt mit 0.5.5 (Einschätzung, keine Rechtsberatung). [§ 5 Abs. 1 DDG](https://www.gesetze-im-internet.de/ddg/__5.html) gilt für „geschäftsmäßige, in der Regel gegen Entgelt angebotene“ digitale Dienste und greift für das unentgeltliche, werbefreie Forschungsvorhaben voraussichtlich nicht. [§ 18 Abs. 1 MStV](https://lxgesetze.de/mstv/18) verlangt Name und Anschrift für jedes Telemedium, das nicht ausschließlich persönlichen oder familiären Zwecken dient; das trifft auf die öffentlich abrufbare Web-App voraussichtlich zu. Ein ständig sichtbarer Link auf das Impressum des Herausgebers genügt (Abschnitt 1). Die Datenschutzerklärung für KI-LEAD steht im Repository ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 12) und verweist für Verantwortlichen und Kontakt auf das Impressum; die Website des Herausgebers bleibt unverändert.
 14. **Lizenzhinweise der nativen Apps:** In `public/lizenzen-ergaenzend.md` mit Versionen aus `android/variables.gradle`. Offen: Die Version von KeychainSwift legt erst Xcode fest; nach dem ersten Build `Package.resolved` einchecken ([THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md), Abschnitt 4). Die SBOM erfasst nur npm-Pakete.
 
@@ -467,3 +467,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.10 | 30.10.2026 | Bereiche nach den Arbeitsschritten der LEAD-Systematik („Erfassung“, „KI-Erfassung“, „Auswertung“) mit einheitlichen Kennsätzen; Reiter, Überschrift und Kennsatz aus der App, Produkttitel aus dem Profil; neutrale Ansprache in der Oberfläche (Abschnitt 5, OF-2026-W44-01 bis -04) |
 | 0.6.12 | 30.10.2026 | KI-Chip aus einem zentralen Zähler laufender Anfragen, auch Testläufe und Verbindungstest, als reine Statusanzeige (Abschnitt 5.1, KP-2026-W44-01); Redaktionscheck erkennt Fortschreibung, Doppelvergabe und Bezug über die Sachverhaltskennung, Stelle als Rückfall (M3, ZS-2026-W44-06); offener Punkt 18 erledigt (ZS-2026-W44-06, -07) |
 | 0.6.12 · Nachtrag | 30.10.2026 | Ohne Änderung der App: offener Punkt 10 (Sicherheit) – GitHub Actions per Commit-SHA und `npm audit` in der CI erledigt (TP-2026-W44-36, -37) |
+| 0.6.12 · Nachtrag 2 | 30.10.2026 | Ohne Änderung der App: Abschnitt 2 an den Code angeglichen (Plattformen, Netzverbindungen mit Mistral, Ollama und Programmdateien, Ablage mit Passphrase; TP-2026-W44-40); Abschnitt 5.3 und offener Punkt 12: Bibliothek bis nach der Erprobung zurückgestellt (TP-2026-W44-41) |
