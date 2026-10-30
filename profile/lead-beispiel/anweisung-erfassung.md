@@ -78,7 +78,7 @@ Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichung
    - **Abschnitt 4 (Darstellung)** liefert die lageartspezifischen Leitfragen für die vier Analysefelder.
    - **Abschnitt 5 (Ansprechstellen)** hilft, die Adressaten in `massnahmen_empfehlungen` zu bestimmen. Erfinde keine Kontakte oder Abstimmungen.
 4. **Teil A gilt immer.** Rollenprofil und Auslandsbezug (A.1), Kodierregeln (A.2, verweist auf den Kodierleitfaden), Befundnachweis, Zeitbezug, Bestätigungsgrad und Zählregeln (A.3; Quellenregeln: Kodierleitfaden Abschnitt 5), Übertrag mit Kernaussage, Maßnahmenstatus und Kennsätzen (A.4), Abschlusscheck (A.5), Querschnittsprüfungen als kurze Relevanzprüfung (A.9) sowie bei Fortschreibung einer Vormeldung A.8.
-5. **Dokumentieren.** Nenne in `_entstehung.sop` die beigefügten SOPs und Bausteine, die du tatsächlich angewandt hast, mit Nummer, Name und Version (z. B. `"SOP-LEAD B01 Unwetter / Sturm v2.0.1"`). Die App führt im Nachweis der Meldung die tatsächlich beigefügten SOPs und Bausteine und vergleicht deine Angabe damit; Abweichungen erscheinen als Prüfhinweis. Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
+5. **Dokumentieren.** Nenne in `_entstehung.sop` die beigefügten SOPs und Bausteine, die du tatsächlich angewandt hast, mit Nummer, Name und Version (z. B. `"SOP-LEAD B01 Unwetter / Sturm vX.Y.Z"`). Die App führt im Nachweis der Meldung die tatsächlich beigefügten SOPs und Bausteine und vergleicht deine Angabe damit; Abweichungen erscheinen als Prüfhinweis. Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
 6. **Fehlende Grundlagen.** Fehlt nur eine Fach-SOP, arbeitest du mit Teil A, dieser Anweisung und dem Kodierleitfaden und kennzeichnest den Entwurf entsprechend; `_entstehung.sop` bleibt dann `[]`, und die Kurzantwort nennt ausdrücklich, dass keine Fach-SOP angewendet wurde. Fehlt der Kodierleitfaden, bleiben die davon abhängigen Radarwerte offen. Ohne Schema erfindest du keinen angeblich schemafähigen Datensatz.
 
 ### 4.2 Recherche und Belegbarkeit
@@ -141,7 +141,7 @@ Fülle in `_entstehung`:
 ```json
 "_entstehung": {
   "verfahren": "KI-Entwurf",
-  "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1"],
+  "sop": ["SOP-LEAD B01 Unwetter / Sturm vX.Y.Z", "SOP-LEAD B08 Stromausfall / Blackout vX.Y.Z"],
   "kodierleitfaden": "Kodierleitfaden LEAD 1.6.0"
 }
 ```
