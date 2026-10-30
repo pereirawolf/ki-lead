@@ -24,6 +24,7 @@
     "meldende_stelle": { "type": "string" },
     "meldezeitpunkt": { "type": "string", "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$" },
     "quellen": { "type": "string" },
+    "zeitstrahl": { "type": "string", "description": "Optional (Profilformat 1.23): eine Zeile je eingetretenem, belegtem Ereignis, „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]“." },
     "sachverhalte": {
       "type": "array",
       "items": {
@@ -31,6 +32,17 @@
         "required": ["bezeichnung", "art", "lage", "bewertung", "radar"],
         "additionalProperties": false,
         "properties": {
+          "kennung": {
+            "type": "string",
+            "pattern": "^$|^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$",
+            "description": "Optional (Profilformat 1.23): Sachverhaltskennung „Präfix-JJJJMMTT-XXXX“; vergibt die App."
+          },
+          "bezug": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$" },
+            "description": "Optional (Profilformat 1.23): Kennungen der Sachverhalte, aus denen dieser hervorgeht."
+          },
           "bezeichnung": { "type": "string" },
           "art": { "type": "array", "uniqueItems": true, "items": { "enum": ["Brand", "Technische Hilfe", "Unwetter", "Versorgungsstörung", "Sonstiges"] } },
           "lage": { "type": "string" },

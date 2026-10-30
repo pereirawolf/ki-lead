@@ -91,6 +91,25 @@ describe("Vorlage – eigene Organisation (KP-2026-W43-60)", () => {
     }
   });
 
+  it("ZS-2026-W44-07: führt Zeitstrahl, Kennung und Bezug des Beispielprofils als Gerüst und nennt sie im README", async () => {
+    // Soll: Profilformat 1.23 (docs/PROFILFORMAT.md) – optionale Rollen und Abschnitte, die das Beispielprofil verwendet
+    const ub = JSON.parse(beispiel["meldung.ui.json"]);
+    const uv = JSON.parse(vorlage["meldung.ui.json"]);
+    const sv = JSON.parse(vorlage["meldung.schema.json"]);
+    for (const rolle of ["zeitstrahl", "sv_kennung", "sv_bezug"]) {
+      expect(ub.rollen, `Beispielprofil: ${rolle}`).toHaveProperty(rolle);
+      expect(uv.rollen, `Vorlage: ${rolle}`).toHaveProperty(rolle);
+    }
+    expect(sv.properties).toHaveProperty(uv.rollen.zeitstrahl);
+    expect(sv.properties.sachverhalte.items.properties).toHaveProperty(uv.rollen.sv_kennung);
+    expect(sv.properties.sachverhalte.items.properties).toHaveProperty(uv.rollen.sv_bezug);
+    expect(uv.zeitstrahl.typen).toEqual(ub.zeitstrahl.typen);
+    expect(uv.kennung).toHaveProperty("standard");
+    const { befunde } = await profil("muster");
+    expect(befunde.filter((b) => b.code === "ZEITSTRAHL_OHNE_KENNUNG")).toEqual([]);
+    for (const r of ["`zeitstrahl`", "`sv_kennung`", "`sv_bezug`"]) expect(vorlage["README.md"], r).toContain(r);
+  });
+
   it("steht unter CC0 1.0 und nennt das im README und im Änderungsverlauf", () => {
     expect(manifest(vorlage).lizenz).toBe("CC0-1.0");
     expect(vorlage["README.md"]).toContain("CC0 1.0");
