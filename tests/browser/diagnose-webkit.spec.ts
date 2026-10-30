@@ -58,3 +58,51 @@ test("D5: Beispiel laden, sichern, ohne Löschen einspielen", async ({ page }) =
   await Promise.all([page.waitForEvent("load"), page.getByRole("dialog").getByRole("button", { name: "Sicherung einspielen" }).click()]);
   await expect(page.locator(".kopf-ki")).toBeVisible();
 });
+
+test("D6: Beispiel, sichern, löschen, einspielen – mit Zustandsbericht", async ({ page }) => {
+  const konsole: string[] = [];
+  page.on("console", (m) => konsole.push(`${m.type()}: ${m.text()}`));
+  page.on("pageerror", (e) => konsole.push(`pageerror: ${e.message}`));
+  await bereich(page, "Auswertung");
+  await page.getByRole("button", { name: /Beispiel laden:/ }).click();
+  await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
+  const daten = async () => {
+    await bereich(page, "Einstellungen");
+    await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "Daten", exact: true }).click();
+  };
+  await daten();
+  const [d] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Gerätestand sichern" }).click()]);
+  const text = await (await import("node:fs/promises")).readFile((await d.path())!, "utf-8");
+  await page.getByRole("button", { name: "Alle Daten dieses Geräts löschen" }).click();
+  await Promise.all([page.waitForEvent("load"), page.getByRole("dialog").getByRole("button", { name: "Alle Daten löschen" }).click()]);
+  await expect(page.locator(".kopf-ki")).toBeVisible();
+  await daten();
+  await page
+    .locator('input[type="file"][aria-label="Sicherungsdatei wählen"]')
+    .setInputFiles({ name: "x.json", mimeType: "application/json", buffer: Buffer.from(text) });
+  let geladen = false;
+  page.once("load", () => (geladen = true));
+  await page.getByRole("dialog").getByRole("button", { name: "Sicherung einspielen" }).click();
+  await page.waitForTimeout(6000);
+  const idb = await page
+    .evaluate(
+      () =>
+        new Promise<string>((ok) => {
+          const r = indexedDB.open("keyval-store");
+          r.onsuccess = () => {
+            const k = r.result.transaction("keyval").objectStore("keyval").getAllKeys();
+            k.onsuccess = () => ok(JSON.stringify(k.result));
+            k.onerror = () => ok("getAllKeys-Fehler");
+          };
+          r.onerror = () => ok("open-Fehler");
+          r.onblocked = () => ok("open-blockiert");
+          setTimeout(() => ok("open-zeitueberschreitung"), 3000);
+        }),
+    )
+    .catch((e) => `evaluate-Fehler: ${e.message}`);
+  const inhalt = await page
+    .locator(".bereich-inhalt")
+    .innerText()
+    .catch(() => "-");
+  expect({ geladen, idb, inhalt: inhalt.slice(-300), konsole: konsole.slice(-10) }).toEqual({ geladen: true });
+});
