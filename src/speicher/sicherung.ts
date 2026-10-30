@@ -11,7 +11,7 @@
 // - Das Löschen leert beide Datenbanken vollständig, einschließlich der Schlüssel im Gerätespeicher. Farbschema im
 //   localStorage und Schlüssel im Schlüsselbund des Systems löscht die Oberfläche dazu (andere Schichten).
 
-import { clear, entries, setMany } from "idb-keyval";
+import { delMany, entries, keys, setMany, type UseStore } from "idb-keyval";
 import { APP_VERSION } from "../kern/version";
 import { testlaufAblage } from "./testlaufarchiv";
 
@@ -110,11 +110,10 @@ export function sicherungLesen(text: string): Sicherung {
  */
 export async function sicherungEinspielen(s: Sicherung): Promise<number> {
   // Gerätespeicher ist der Standardspeicher von idb-keyval (dieselbe Datenbank wie get/set in speicher.ts)
-  const behalten = (await entries()).filter(([k]) => ausgeschlossen(k));
-  await clear();
-  await setMany([...behalten, ...s.geraetespeicher.map(([k, v]) => [k, dekodieren(v)] as [IDBValidKey, unknown])]);
+  await leeren(undefined, (k) => !ausgeschlossen(k));
+  await setMany(s.geraetespeicher.map(([k, v]) => [k, dekodieren(v)] as [IDBValidKey, unknown]));
   const tl = testlaufAblage();
-  await clear(tl);
+  await leeren(tl);
   await setMany(
     s.testlaeufe.map(([k, v]) => [k, dekodieren(v)] as [IDBValidKey, unknown]),
     tl,
@@ -122,8 +121,17 @@ export async function sicherungEinspielen(s: Sicherung): Promise<number> {
   return s.geraetespeicher.length + s.testlaeufe.length;
 }
 
+/**
+ * Entfernt die Einträge eines Speichers einzeln statt mit objectStore.clear(): In WebKit (Playwright, CI) stürzte die
+ * Seite beim Neuladen ab, wenn ein mit clear() geleerter Speicher neu beschrieben worden war.
+ */
+async function leeren(ablage?: UseStore, auswahl: (k: IDBValidKey) => boolean = () => true): Promise<void> {
+  const weg = (await keys(ablage)).filter(auswahl);
+  if (weg.length) await delMany(weg, ablage);
+}
+
 /** Leert Gerätespeicher (einschließlich Schlüssel) und Testlaufarchiv vollständig */
 export async function geraetestandLoeschen(): Promise<void> {
-  await clear();
-  await clear(testlaufAblage());
+  await leeren();
+  await leeren(testlaufAblage());
 }

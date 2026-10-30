@@ -22,6 +22,7 @@ vi.mock("idb-keyval", () => {
     entries: async (s?: unknown) => [...db(s).entries()].map(([k, v]) => [k, structuredClone(v)]),
     clear: async (s?: unknown) => void db(s).clear(),
     setMany: async (e: [string, unknown][], s?: unknown) => e.forEach(([k, v]) => db(s).set(k, structuredClone(v))),
+    delMany: async (ks: string[], s?: unknown) => ks.forEach((k) => db(s).delete(k)),
   };
 });
 
