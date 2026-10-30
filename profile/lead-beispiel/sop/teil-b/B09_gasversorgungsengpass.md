@@ -14,7 +14,7 @@ status: "Beispielfassung"
 stand: "21.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – Teilprüfung: nationale Normen und BNetzA-Lagebewertung direkt eingesehen; EU-Rahmen, Planfassung und Landesumsetzung offen (Abschnitt 5)"
-naechste_pruefung_faellig: "31.10.2026"
+naechste_pruefung_faellig: "31.12.2026"
 pruefausloeser: "vor jeder Heizperiode (Rechtsrahmen und amtliche Stufe prüfen); Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "09"
 bisherige_ids: ["sop-09"]
@@ -72,4 +72,6 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Prüfvermerk 21.10.2026 – Teilprüfung für die Heizperiode 2026/27:** Direkt eingesehen: §§ 16, 16a, 53a EnWG, §§ 1, 3, 4 EnSiG, §§ 1, 7 GasSV sowie die BNetzA-Lagebewertung vom 20.10.2026 (zu diesem Zeitpunkt Frühwarnstufe seit 01.07.2025; Stand der Prüfung, nicht fortgeschrieben – die geltende Stufe wird stets aktuell geprüft, R1). Die Prüffragen und Prüfpunkte dieser SOP sind daran angeglichen.
 
-**Offene Punkte:** Vor Verwendung zu prüfen: (1) EU-Rahmen: Verordnung (EU) 2017/1938 in der aktuellen konsolidierten Fassung, insbesondere Art. 2, 6 und 11; die Speicherregeln wurden 2025 geändert, die Kommission hat nach ihrem Fitness-Check vom 05.01.2026 eine Überarbeitung angekündigt – deren Stand ist nicht geprüft. (2) Notfallplan: Die BMWE-Seite (Stand 01.07.2025) verweist auf eine Publikation vom 22.05.2025, das im Review abgerufene Dokument trägt die Fassung 2023; welche Planfassung gilt, ist zu klären. (3) Länderzuständigkeiten und Meldewege der übernehmenden Stelle. Die saisonale Prüfung ist damit teilweise erledigt; Prüftermin 31.10.2026 und Prüfauslöser bleiben. Einzelnachweise im Quellenregister (`sop/quellenregister.json`).
+**Offene Punkte:** Vor Verwendung zu prüfen: (1) EU-Rahmen: Verordnung (EU) 2017/1938 in der aktuellen konsolidierten Fassung, insbesondere Art. 2, 6 und 11; die Speicherregeln wurden 2025 geändert, die Kommission hat nach ihrem Fitness-Check vom 05.01.2026 eine Überarbeitung angekündigt – deren Stand ist nicht geprüft. (2) Notfallplan: Die BMWE-Seite (Stand 01.07.2025) verweist auf eine Publikation vom 22.05.2025, das im Review abgerufene Dokument trägt die Fassung 2023; welche Planfassung gilt, ist zu klären. (3) Länderzuständigkeiten und Meldewege der übernehmenden Stelle. Die saisonale Prüfung ist damit teilweise erledigt; der Prüfauslöser bleibt.
+
+**Terminvermerk 30.10.2026:** Der Prüftermin 31.10.2026 ist auf Entscheidung des Herausgebers der Beispielfassung auf den 31.12.2026 verschoben, **ohne sachliche Prüfung** der offenen Punkte (1) bis (3) (OB-2026-W44-01). `quellen_geprueft_am` bleibt beim Stand 21.10.2026; die offenen Punkte gelten fort. Einzelnachweise im Quellenregister (`sop/quellenregister.json`).
