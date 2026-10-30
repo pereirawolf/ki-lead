@@ -114,6 +114,7 @@ Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grun
 - Kodiert wird nach **belegten Kopplungen**, nicht nach Sektorzugehörigkeit oder Listen denkbarer Folgen. Die KRITIS-Prüfung ist Pflicht bei jeder Meldung.
 - **Wirkungskette:** Bei einer bewertungsrelevanten Folgekette im Feld „Abhängigkeiten & Interdependenzen“ die entscheidende Verbindung benennen: beeinträchtigte Funktion → Abhängigkeit → Bedingung → betroffener Bereich, mit Puffer und Reichweite (Notstrom, Vorräte, Speicher, Personal, Ausweichweg). Mögliche Folgeschritte als **Szenario** kennzeichnen. Sie ändern den Ist-Wert nicht.
 - **Stufe 0** („keine KRITIS-Bezüge“) nur, wenn die Prüfung durchgeführt wurde und keine Kopplung ergab.
+- **Abgrenzung 0/1:** Stufe 1 („peripher“) setzt eine belegte Kopplung voraus, durch die eine Leistung für Betroffene trotz vorhandener Ersatzwege tatsächlich verzögert oder eingeschränkt ist. Fällt nur ein einzelner Weg oder Dienst aus und trägt ein belegter Ersatzweg die Funktion vollständig, ist das keine bewertungsrelevante Kopplung (D6 = 0); Ausfall und Ersatzweg stehen im Text.
 - D6 steigt nicht allein mit der vergangenen Ausfalldauer.
 - Ausfälle der **Kommunikation mit der Bevölkerung** (Mobilfunk, Warnmittel) gehören als Kopplung hierher und in den Text, nicht zu D7.
 
@@ -234,6 +235,8 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Landesfachstelle entsendet Kräfte aus einem anderen Regierungsbezirk zur Beratung einer Stadtverwaltung | D4 = 3 | Dienstort der entsandten Kräfte; Landesebene im Text |
 | Netzbetreiber nennt widersprüchliche Wiederversorgungszeiten, Land meldet verzögert | D7 = 2 oder 3 nach Belegen | Informationslage der Befassung eingeschränkt |
 | Mobilfunk im Schadensgebiet ausgefallen, Lagezentrum gut informiert | D7 niedrig, D6 erfasst TK-Kopplung | Bevölkerungskommunikation gehört zu D6 und Text |
+| E-Mail einer Pflegeeinrichtung ausgefallen, Erreichbarkeit per Telefon und Fax belegt | D6 = 0 | Ersatzweg trägt die Funktion vollständig; Ausfall im Text |
+| E-Mail einer Pflegeeinrichtung ausgefallen, Medikamentenbestellungen verzögern sich belegt | D6 = 1 | Leistung für Betroffene trotz Ersatzweg verzögert (peripher) |
 | Sturmflut erwartet; Stadt gibt vor dem Scheitel Sandsäcke aus, Medien berichten darüber | D3 = 1 | Vorsorge vor dem Akutereignis ist beobachtbare Zurechnung (Kommune) |
 | Wasserstandsvorhersagen zweier Dienste weichen deutlich voneinander ab | D7 nach Entscheidungsrelevanz, keine feste Stufe | zuerst Bezugsraum, Gültigkeitszeit, Methodik und Unsicherheit vergleichen; übereinstimmende Vorhersagen tragen D7 = 0 nur bei sonst aktueller und tragfähiger Lageinformation |
 | Hochrechnung 800–1.400 Personen ohne Wasserversorgung (Haushalte × Faktor) | D2 offen; Bandbreite im Text | Bandbreite schneidet die Grenze zwischen Stufe 2 und 3 (Grundregel 6) |
