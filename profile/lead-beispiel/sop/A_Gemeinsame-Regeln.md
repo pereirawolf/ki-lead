@@ -58,7 +58,7 @@
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
-Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Bewertung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
+Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Beurteilung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
 
 ### A.3 Befundnachweis
 

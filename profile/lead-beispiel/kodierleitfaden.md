@@ -2,7 +2,7 @@
 
 Beispielfassung für KI-LEAD · Fassung 1.6.0 vom 29.10.2026 · abgeleitet aus der Arbeitsfassung v0.4 · gilt für die LEAD-Meldevorlage 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 (Beispielfassung) und die Arbeitsanweisung Erfassung ab Fassung 1.8.0 (gültiges Paket: Gültigkeitsstand in SOP-LEAD Teil A)
 
-Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grundregeln, Stufentexte, Achsenregeln D1–D8, Bewertung und Tendenz), für die Quellenkategorien A/B/W/M/P mit Zuordnung und Priorität, für die Rangfolge bei Widersprüchen und für Form und Regeln von Zeitstrahl, Sachverhaltskennung und Bezug (Abschnitt 8). SOP-LEAD Teil A (A.2, A.3), die Darstellungsdatei und die Arbeitsanweisungen verweisen verbindlich darauf und wiederholen die Regeln nicht (SOP-LEAD A.10.2). Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
+Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grundregeln, Stufentexte, Achsenregeln D1–D8, Beurteilung und Tendenz), für die Quellenkategorien A/B/W/M/P mit Zuordnung und Priorität, für die Rangfolge bei Widersprüchen und für Form und Regeln von Zeitstrahl, Sachverhaltskennung und Bezug (Abschnitt 8). SOP-LEAD Teil A (A.2, A.3), die Darstellungsdatei und die Arbeitsanweisungen verweisen verbindlich darauf und wiederholen die Regeln nicht (SOP-LEAD A.10.2). Das Lagenradar ist veröffentlicht als: Pereira Wolf, H. (2026). Hybride Zwischenlagen im Bevölkerungsschutz. https://doi.org/10.5281/zenodo.18305827
 
 **Rangfolge bei Widersprüchen** (einzige Fassung; SOP-LEAD Teil A und die Arbeitsanweisungen verweisen hierauf): (1) JSON-Schema der Meldung (Struktur, zulässige Werte, Leerwerte) und Stufentexte der Darstellungsdatei, (2) dieser Kodierleitfaden, (3) SOP-LEAD Teil A, (4) lageartspezifische Hinweise der einzelnen SOP und der einschlägigen Bausteine aus Teil C (Inhaltsgerüste nur als Prüfhinweise, Beispielfassungen bis zur Freigabe nachrangig, SOP-LEAD A.1 Nr. 7), (5) Arbeitsanweisung. Stellt jemand einen Widerspruch fest, wird er offen benannt und nicht stillschweigend aufgelöst.
 
@@ -137,9 +137,9 @@ Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grun
 
 ---
 
-## 4. Bewertung und Tendenz
+## 4. Beurteilung und Tendenz
 
-- **Bewertung** (`geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet, nicht aus dem höchsten Radarwert. Jede Stufe, auch „geringfügig“, braucht eine fachliche Begründung. Die Bewertung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig. Ist keine Stufe tragfähig: „keine Angabe“ (`""`).
+- **Beurteilung** (`sofort.beurteilung`, in der Meldevorlage beschriftet als „Bewertung“; `geringfügig` / `erheblich` / `kritisch`) wird eigenständig aus der belegten gegenwärtigen Relevanz für den Bevölkerungsschutz im Referenzraum abgeleitet, nicht aus dem höchsten Radarwert. Jede Stufe, auch „geringfügig“, braucht eine fachliche Begründung. Die Beurteilung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig. Ist keine Stufe tragfähig: „keine Angabe“ (`""`).
 - **Tendenz** (`Entspannung` / `Stabilisierung` / `Verschärfung`) wird mit ausdrücklich benanntem Bezugsraum und Zeitfenster begründet. Fehlende neue Erkenntnisse sind kein Beleg für Stabilisierung. Divergieren deutsche Lage und ausländischer Frühwarntreiber, wird das im Text erläutert, nicht in die Auswahl gezwungen.
 - Der **Bewertungstext** beginnt mit der Kernaussage (SOP-LEAD A.4) und schließt mit den Kennsätzen, soweit sie vorliegen.
 
