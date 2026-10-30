@@ -92,6 +92,7 @@ Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grun
 
 - **Kodierfrage:** Aus welchem Raum stammt die für diese Befassung tatsächlich eingesetzte, ereignisbezogene externe Unterstützung zu t0?
 - Maßgeblich ist der **Herkunftsraum**, nicht Menge, Wert oder Organisationsform. Grenzüberschreitend tatsächlich eingesetzte Hilfe ist „international“. Eine ereignisbezogene Sonderbeschaffung aus dem Ausland zählt nur, wenn sie als Unterstützungsleistung für diese Lage belegt und im Text begründet ist.
+- **Herkunftsort:** Herkunftsort ist der Standort, von dem die eingesetzte Einheit oder Stelle herangeführt wurde, bei Unterstützung ohne Entsendung ihr Dienstort. Trägerebene, Rechtsform, Behördensitz und Zuständigkeitsraum der Organisation sind unerheblich; das gilt gleichermaßen für Feuerwehren, THW, Hilfsorganisationen, Bundeswehr, Polizeien, Fachstellen und Verwaltungshilfe anderer Gebietskörperschaften. Für jede eingesetzte Kraft bestimmt sich die Stufe nach dem kleinsten Gebietsrahmen, der ihren Herkunftsort und ihren Einsatzort umfasst; maßgeblich ist die höchste Stufe. Hilfe aus unmittelbar angrenzenden Kreisen oder kreisfreien Städten ist überörtlich (Stufe 2), auch über eine Landesgrenze hinweg; Hilfe über eine Staatsgrenze bleibt „international“. Leistungen eines vom Betroffenen regulär beauftragten Dienstleisters sind keine externe Unterstützung, es sei denn, sie werden ereignisbezogen von einer anderen Stelle vermittelt oder bereitgestellt. Die Ebene der unterstützenden Stelle ist keine Reichweite; sie erscheint im Text und, soweit diese Stelle Verantwortung übernimmt, in D3. Der Bewertungstext nennt Einheit, Herkunftsort und Leistung; ist der Herkunftsort nicht belegt, bleibt D4 offen.
 - **Nicht:** Bereitschaft, Zusage, Anforderung ohne Einsatz, historische Unterstützung, reguläre Warenlieferungen, ausländischer Herstellungsort eines Geräts.
 - D4 beschreibt die Herkunft, nicht, ob die Hilfe ausreicht (Bedarfsdeckung: SOP-LEAD A.9.1).
 - **Stufe 0** („keine externe Hilfe“) nur mit Beleg, dass die Lage ohne externe Unterstützung bewältigt wird.
@@ -226,6 +227,11 @@ Struktur und Werte prüft das JSON-Schema der Meldung (Datei `meldung.schema.jso
 | Meldepflichtige Krankheit, Surveillance meldet für Deutschland keine Fälle | D2 = 0 | belegter Nullbefund (Bedingung b) |
 | Stromausfall, 12.000 Anschlüsse ohne Versorgung, kein Umrechnungsfaktor belegt | D2 offen | Anschlüsse ≠ Personen |
 | Landesweit zusammengezogene Kräfte im Einsatz, Hilfe aus Nachbarstaat nur zugesagt | D4 = 4 | Zusage zählt nicht; maßgeblich ist die Herkunft der eingesetzten Kräfte |
+| THW-Ortsverband aus dem Nachbarkreis im Einsatz | D4 = 2 | Standort der Einheit; Träger auf Bundesebene unerheblich |
+| Feuerwehr aus dem angrenzenden Kreis jenseits der Landesgrenze | D4 = 2 | Nachbarschaftshilfe, nicht bundesweit |
+| THW-Einheiten aus mehreren Ländern zusammengezogen | D4 = 5 | am weitesten herangeführte Kraft |
+| Bundeswehr-Einheit vom Standort im selben Kreis | D4 = 2 | Standort, nicht Bundesebene |
+| Landesfachstelle entsendet Kräfte aus einem anderen Regierungsbezirk zur Beratung einer Stadtverwaltung | D4 = 3 | Dienstort der entsandten Kräfte; Landesebene im Text |
 | Netzbetreiber nennt widersprüchliche Wiederversorgungszeiten, Land meldet verzögert | D7 = 2 oder 3 nach Belegen | Informationslage der Befassung eingeschränkt |
 | Mobilfunk im Schadensgebiet ausgefallen, Lagezentrum gut informiert | D7 niedrig, D6 erfasst TK-Kopplung | Bevölkerungskommunikation gehört zu D6 und Text |
 | Sturmflut erwartet; Stadt gibt vor dem Scheitel Sandsäcke aus, Medien berichten darüber | D3 = 1 | Vorsorge vor dem Akutereignis ist beobachtbare Zurechnung (Kommune) |
