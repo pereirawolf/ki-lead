@@ -82,6 +82,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
+| 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ |
+
+## [0.6.12] – 30.10.2026
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json` (Freitagslauf KW 44, offene Befunde aus `befunde/eingang`), Entscheidungen des Herausgebers vom 26. und 30.10.2026. Baut auf 0.6.11 auf.
+
+### Geändert
+
+- **KI-Chip der Kopfleiste (KP-2026-W44-01):** Ein zentraler Zähler laufender Anfragen (`src/anbieter/laufzaehler.ts`), gezählt im Verteiler vom Start bis Antwort, Fehler oder Abbruch, bestimmt „KI online“. Damit zeigen auch Testläufe (Vergleichslauf Ilka, Prüffall Reparatur) und der Verbindungstest der API-Schlüssel unter „Einstellungen“ den Lauf an, gleichzeitige Anfragen eingeschlossen; der zugängliche Name nennt bei mehreren Anfragen deren Zahl. Der Chip ist eine reine Statusanzeige (Rolle `img`, kein Knopf, kein Tabstopp, kein Hover); bis 0.6.11 führte ein Klick zur KI-Erfassung bzw. zur Meldung. KI-Erfassung und Management Summary melden ihren Lauf weiter für Stufe bzw. Titel im Namen und für die Rückfragen bei Profilwechsel und beim Verlassen der Seite.
+- **Redaktionscheck, Abschnitt 3 (ZS-2026-W44-06):** Fortschreibungen werden bei Profilen mit Sachverhaltskennung über die Kennung erkannt: dieselbe Kennung in mehreren Meldungen derselben Stelle als Fortschreibung, bei verschiedenen Stellen oder mehrfach in einer Meldung als Vergabebefund (beides zu klären), ein Bezug auf eine nicht geladene Kennung als Information. „Mehrere Meldungen derselben Stelle“ bleibt Rückfall, sobald eine Meldung der Gruppe keine Kennung trägt; zwei Meldungen derselben Stelle mit verschiedenen Kennungen gelten als eigenständig. Anzeige, Befundliste und Redaktionsbericht.
+- **Beispielprofil 1.34.0:** Kodierleitfaden 1.7.0, Arbeitsanweisungen Erfassung 1.9.0 und Kurzfassung 2.4.1, Sammelmappe 3.20.2 (KP-2026-W44-02, -03, -04, -07, OB-2026-W44-01 bis -05). Einzelheiten in `profile/lead-beispiel/CHANGELOG.md`.
+- **Vorlage – eigene Organisation 0.7.0 (ZS-2026-W44-07):** Zeitstrahl, Kennung und Bezug als Gerüst. Einzelheiten in `profile/muster/CHANGELOG.md`.
+- Spezifikation 0.6.12 (Abschnitt 5.1, M3, offener Punkt 18). Versionsangaben 0.6.12 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 612, iOS 612).
+- Befundregister: Entscheidungen zu allen Befunden der Sammelbefunddatei, dazu KP-2026-W43-17 und -49 als zurückgestellt nachgetragen.
+
+### Tests
+
+- `tests/anbieter/laufzaehler.test.ts` (neu, 3): Zähler über den Verteiler, gleichzeitige Anfragen, Fehler, abgelehnte Anfragen zählen nicht.
+- `tests/ui/kisymbol.test.ts`: Chip aus dem Zähler, Namen ohne Klickziel, keine Knopfrolle.
+- `tests/browser/kisymbol.spec.ts`: Verbindungstest setzt den Chip auf „KI online“; Chip ohne Knopf.
+- `tests/lagebild/redaktionscheck.test.ts` (5 neu): Fortschreibung, Doppelvergabe, eigenständige Kennungen, Bezug, Rückfall; `tests/lagebild/lagebild.test.ts` angepasst.
+- `tests/profil/vorlage.test.ts` (1 neu): Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug.
+- `tests/profil/sop-redaktion.test.ts`, `tests/pipeline/kontext.test.ts`: Begriff „Beurteilung“ und Kodierleitfaden 1.7.0.
 
 ## [0.6.11] – 30.10.2026
 

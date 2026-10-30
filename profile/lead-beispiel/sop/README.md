@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.20.1 vom 30.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.20.2 vom 30.10.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -32,13 +32,13 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 | B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.3.0 | 06 |
 | B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.2.1 | 07 |
 | B08 | Stromausfall / Blackout | [`teil-b/B08_stromausfall-blackout.md`](teil-b/B08_stromausfall-blackout.md) | 2.2.0 | 08 |
-| B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.2.0 | 09 |
+| B09 | Gasversorgungsengpass | [`teil-b/B09_gasversorgungsengpass.md`](teil-b/B09_gasversorgungsengpass.md) | 2.2.1 | 09 |
 | B10 | Trinkwasserversorgung | [`teil-b/B10_trinkwasserversorgung.md`](teil-b/B10_trinkwasserversorgung.md) | 2.2.0 | 10 |
 | B11 | Gesundheitliche Lage / Epidemie | [`teil-b/B11_gesundheitliche-lage-epidemie.md`](teil-b/B11_gesundheitliche-lage-epidemie.md) | 2.4.0 | 11 |
 | B12 | KRITIS-Ausfall | [`teil-b/B12_kritis-ausfall.md`](teil-b/B12_kritis-ausfall.md) | 2.1.0 | 12 |
 | B13 | Migrationslage | [`teil-b/B13_migrationslage.md`](teil-b/B13_migrationslage.md) | 2.0.2 | 13 |
 | B14 | Sicherheitslage | [`teil-b/B14_sicherheitslage.md`](teil-b/B14_sicherheitslage.md) | 2.1.1 | 14 |
-| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.5.0 | 15 |
+| B15 | Cyberangriff / IT-Sicherheitsvorfall | [`teil-b/B15_cyberangriff-it-sicherheitsvorfall.md`](teil-b/B15_cyberangriff-it-sicherheitsvorfall.md) | 2.5.1 | 15 |
 | B16 | Sabotage / Anschlag / Terrorismus | [`teil-b/B16_sabotage-anschlag-terrorismus.md`](teil-b/B16_sabotage-anschlag-terrorismus.md) | 2.1.2 | 16 |
 | B17 | Sonstiges | [`teil-b/B17_sonstiges.md`](teil-b/B17_sonstiges.md) | 2.1.1 | 17 |
 

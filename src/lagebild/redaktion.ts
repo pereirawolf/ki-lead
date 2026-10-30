@@ -6,6 +6,7 @@
 import { kennsatz, kennsaetzeAlle, KENNSATZ_ERSATZ, leseFrist } from "../kern/kennsaetze";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { holeWert } from "../kern/pfad";
+import { bezugVon, istKennung, kennungenDerMeldung } from "../kern/kennung";
 import { quellenHinweise } from "../kern/quellen";
 import { bezeichnung } from "../kern/ui";
 import { datumDE } from "../kern/ausgabe";
@@ -89,6 +90,16 @@ export interface Abdeckung {
   hinweise: string[];
 }
 
+/** Befund zur Sachverhaltskennung (ZS-2026-W44-06): Fortschreibung, Doppelvergabe oder Bezug ins Leere */
+export interface KennungsBefund {
+  /** fortschreibung: dieselbe Kennung in mehreren Meldungen derselben Stelle (warn);
+   *  doppelt: dieselbe Kennung bei verschiedenen Stellen oder mehrfach in einer Meldung (warn);
+   *  bezug: Bezug auf eine Kennung, die im Lagebild nicht geladen ist (info) */
+  art: "fortschreibung" | "doppelt" | "bezug";
+  kennung: string;
+  sachverhalte: SvEintrag[];
+}
+
 export interface Redaktion {
   stand: Pruefstand;
   zeit: Zeitfenster[];
@@ -98,7 +109,10 @@ export interface Redaktion {
   abschluss: { sv: SvEintrag; text: string; rueckblick: boolean }[];
   aenderung: { sv: SvEintrag; text: string }[];
   marker: MarkerBefund[];
+  /** Mehrere Meldungen derselben Stelle, die sich nicht über die Kennung zuordnen lassen (Rückfall) */
   mehrfach: { stelle: string; eintraege: LagebildEintrag[] }[];
+  /** Befunde zur Sachverhaltskennung (seit 0.6.12, nur bei Rolle „sv_kennung“) */
+  kennungen: KennungsBefund[];
   kern: { sv: SvEintrag; fehlt: string[] }[];
   /** Für Abschnitt 4 verwendete hohe Beurteilungen */
   hoch: { stufen: string[]; abgeleitet: boolean };
@@ -263,7 +277,31 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
       else marker.push({ sv, kennsatz: ks.aenderung, art: "leer", text: "Kennsatz ohne Inhalt" });
     }
   }
-  const mehrfach = mehrfachMeldungen(eintraege, profil);
+  // Fortschreibung vorrangig über die Sachverhaltskennung (ZS-2026-W44-06, Kodierleitfaden Abschnitt 8, A.7.1);
+  // die Gruppierung nach meldender Stelle bleibt Rückfall für Meldungen ohne Kennung.
+  const kennungen: KennungsBefund[] = [];
+  const mitKennung = new Set<string>();
+  if (r.sv_kennung) {
+    const nachKennung = new Map<string, SvEintrag[]>();
+    for (const sv of svs) {
+      const k = String(holeWert(sv.sv, r.sv_kennung) ?? "").trim();
+      if (istKennung(k)) nachKennung.set(k, [...(nachKennung.get(k) || []), sv]);
+    }
+    for (const e of eintraege) if (!e.fremd && kennungenDerMeldung(e.daten, ui).length) mitKennung.add(e.id);
+    const zeit = (s: SvEintrag) => zeitpunktVon(s.eintrag, profil);
+    for (const [kennung, liste] of nachKennung) {
+      if (liste.length < 2) continue;
+      const stellen = new Set(liste.map((s) => absender(s.eintrag, profil)));
+      const meldungen = new Set(liste.map((s) => s.eintrag.id));
+      const art = stellen.size > 1 || meldungen.size < liste.length ? "doppelt" : "fortschreibung";
+      kennungen.push({ art, kennung, sachverhalte: [...liste].sort((a, b) => zeit(a).localeCompare(zeit(b))) });
+    }
+    if (r.sv_bezug)
+      for (const sv of svs)
+        for (const b of bezugVon(sv.sv, ui)) if (istKennung(b) && !nachKennung.has(b)) kennungen.push({ art: "bezug", kennung: b, sachverhalte: [sv] });
+  }
+  // Rückfall: Gruppen nach Stelle nur, wenn mindestens eine Meldung der Gruppe keine Kennung trägt
+  const mehrfach = mehrfachMeldungen(eintraege, profil).filter((m) => m.eintraege.some((e) => !mitKennung.has(e.id)));
 
   // 4) Formale Vollständigkeit bei hoher Beurteilung (A.4, A.5): Bewertungstext, Neubewertung, Maßnahmen
   const kern: Redaktion["kern"] = [];
@@ -330,7 +368,7 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   const abschnitte: Redaktion["abschnitte"] = [
     zeit.filter((z) => z.klasse === "alert" || z.klasse === "warn").length,
     gruppen.filter((g) => g.abweichend || g.tendenzGegenlaeufig).length,
-    nachlauf.length + mehrfach.length + marker.length,
+    nachlauf.length + mehrfach.length + marker.length + kennungen.filter((k) => k.art !== "bezug").length,
     kern.length,
     quellen.filter((q) => q.klasse !== "info").length,
   ];
@@ -341,7 +379,8 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     quellen.filter((q) => q.klasse === "info").length +
     vermerkt.length +
     aenderung.length +
-    abschluss.length;
+    abschluss.length +
+    kennungen.filter((k) => k.art === "bezug").length;
 
   return {
     stand: { jetzt, ausgabe: aus?.beginn ?? null, ausgabeMitUhrzeit: aus?.mitUhrzeit ?? false, zeitzone: zone },
@@ -353,6 +392,7 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     aenderung,
     marker,
     mehrfach,
+    kennungen,
     kern,
     hoch,
     quellen,
@@ -382,6 +422,16 @@ export const ABSCHNITTE = [
   "Formale Vollständigkeit bei hoher Beurteilung",
   "Quellen, Schema und Status",
 ] as const;
+
+/** Text eines Kennungsbefunds für Bericht und Anzeige */
+export function kennungsText(k: KennungsBefund, profil: Profil): string {
+  const wo = k.sachverhalte
+    .map((s) => `${absender(s.eintrag, profil)} · ${s.eintrag.name} (${datumDE(zeitpunktVon(s.eintrag, profil)) || "ohne Zeitpunkt"})`)
+    .join("; ");
+  if (k.art === "fortschreibung") return `Fortschreibung desselben Sachverhalts (Kennung ${k.kennung}): ${wo}`;
+  if (k.art === "doppelt") return `Kennung ${k.kennung} mehrfach vergeben oder übernommen: ${wo}`;
+  return `Bezug auf ${k.kennung}, im Lagebild nicht geladen: ${wo}`;
+}
 
 /** Alle Befunde als Zeilen; zeitkritisch und zu klären ergeben zusammen die Anzahl des Checks. */
 export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
@@ -417,6 +467,8 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
       bezug: m.stelle,
       text: `Mehrere Meldungen derselben Stelle: ${m.eintraege.map((e) => `${e.name} (${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"})`).join(", ")}`,
     });
+  for (const k of red.kennungen)
+    out.push({ abschnitt: 3, klasse: k.art === "bezug" ? "info" : "warn", ...sv(k.sachverhalte[0]!), bezug: k.kennung, text: kennungsText(k, profil) });
   for (const x of red.marker) out.push({ abschnitt: 3, klasse: "warn", ...sv(x.sv), text: `„${x.kennsatz}“ – ${x.text}` });
   for (const x of red.nachlauf) out.push({ abschnitt: 3, klasse: "warn", ...sv(x), text: `Tendenz „${x.tendenz}“ ohne Abschlussvermerk – Nachlauf prüfen` });
   for (const x of red.abschluss)

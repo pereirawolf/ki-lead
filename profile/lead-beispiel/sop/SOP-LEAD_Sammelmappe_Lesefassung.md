@@ -58,12 +58,12 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.20.1 | 30.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.6.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.20.2 | 30.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.7.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.33.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.8.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.9.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.2.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
-| Arbeitsanweisung Kurzfassung | 2.4.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
+| Arbeitsanweisung Kurzfassung | 2.4.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.2: optionale Felder `kennung` und `bezug` je Sachverhalt und `zeitstrahl` auf Meldungsebene; seit 1.1 `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 29.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
 
 ### A.1 Anwendung
@@ -110,7 +110,7 @@
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
-Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Bewertung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
+Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Beurteilung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
 
 ### A.3 Befundnachweis
 
@@ -929,12 +929,12 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Gasversorgungsengpass (angespannte Versorgung, Stufen des Notfallplans Gas, regionale Einschränkungen, Anlagenstörungen)"
 art_vorschlag: ["Gasversorgungsengpass"]
 zweck: "Reproduzierbare Beobachtung der Gasversorgungslage von Frühwarnsignalen bis zu Versorgungseinschränkungen und ihrer Folgen für Wärme, Strom und Industrie."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
-stand: "21.10.2026"
+stand: "30.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – Teilprüfung: nationale Normen und BNetzA-Lagebewertung direkt eingesehen; EU-Rahmen, Planfassung und Landesumsetzung offen (Abschnitt 5)"
-naechste_pruefung_faellig: "31.10.2026"
+naechste_pruefung_faellig: "31.12.2026"
 pruefausloeser: "vor jeder Heizperiode (Rechtsrahmen und amtliche Stufe prüfen); Rückblick nach A.8.3; Änderung von Kodierleitfaden, Darstellungsdatei oder Schema"
 bisherige_kennung: "09"
 bisherige_ids: ["sop-09"]
@@ -992,7 +992,9 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Prüfvermerk 21.10.2026 – Teilprüfung für die Heizperiode 2026/27:** Direkt eingesehen: §§ 16, 16a, 53a EnWG, §§ 1, 3, 4 EnSiG, §§ 1, 7 GasSV sowie die BNetzA-Lagebewertung vom 20.10.2026 (zu diesem Zeitpunkt Frühwarnstufe seit 01.07.2025; Stand der Prüfung, nicht fortgeschrieben – die geltende Stufe wird stets aktuell geprüft, R1). Die Prüffragen und Prüfpunkte dieser SOP sind daran angeglichen.
 
-**Offene Punkte:** Vor Verwendung zu prüfen: (1) EU-Rahmen: Verordnung (EU) 2017/1938 in der aktuellen konsolidierten Fassung, insbesondere Art. 2, 6 und 11; die Speicherregeln wurden 2025 geändert, die Kommission hat nach ihrem Fitness-Check vom 05.01.2026 eine Überarbeitung angekündigt – deren Stand ist nicht geprüft. (2) Notfallplan: Die BMWE-Seite (Stand 01.07.2025) verweist auf eine Publikation vom 22.05.2025, das im Review abgerufene Dokument trägt die Fassung 2023; welche Planfassung gilt, ist zu klären. (3) Länderzuständigkeiten und Meldewege der übernehmenden Stelle. Die saisonale Prüfung ist damit teilweise erledigt; Prüftermin 31.10.2026 und Prüfauslöser bleiben. Einzelnachweise im Quellenregister (`sop/quellenregister.json`).
+**Offene Punkte:** Vor Verwendung zu prüfen: (1) EU-Rahmen: Verordnung (EU) 2017/1938 in der aktuellen konsolidierten Fassung, insbesondere Art. 2, 6 und 11; die Speicherregeln wurden 2025 geändert, die Kommission hat nach ihrem Fitness-Check vom 05.01.2026 eine Überarbeitung angekündigt – deren Stand ist nicht geprüft. (2) Notfallplan: Die BMWE-Seite (Stand 01.07.2025) verweist auf eine Publikation vom 22.05.2025, das im Review abgerufene Dokument trägt die Fassung 2023; welche Planfassung gilt, ist zu klären. (3) Länderzuständigkeiten und Meldewege der übernehmenden Stelle. Die saisonale Prüfung ist damit teilweise erledigt; der Prüfauslöser bleibt.
+
+**Terminvermerk 30.10.2026:** Der Prüftermin 31.10.2026 ist auf Entscheidung des Herausgebers der Beispielfassung auf den 31.12.2026 verschoben, **ohne sachliche Prüfung** der offenen Punkte (1) bis (3) (OB-2026-W44-01). `quellen_geprueft_am` bleibt beim Stand 21.10.2026; die offenen Punkte gelten fort. Einzelnachweise im Quellenregister (`sop/quellenregister.json`).
 
 <!-- Quelle: sop/teil-b/B10_trinkwasserversorgung.md -->
 
@@ -1397,9 +1399,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Cyberangriff / IT-Sicherheitsvorfall mit Folgen für Versorgung, KRITIS oder Verwaltung"
 art_vorschlag: ["Cyberangriff / IT-Sicherheitsvorfall"]
 zweck: "Reproduzierbare Erfassung von IT-Sicherheitsvorfällen, deren Folgen die Versorgung der Bevölkerung, KRITIS oder die Handlungsfähigkeit von Behörden berühren, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
-version: "2.5.0"
+version: "2.5.1"
 status: "Beispielfassung"
-stand: "24.10.2026"
+stand: "30.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – §§ 32, 36 BSIG am Normtext gelesen; BITS-Kritikalitätsstufen aus der BSI-Ankündigung vom 01.04.2025 (Zweitprüfung durch ein weiteres Werkzeug); Rechercheeinstiege 26.09.2026 teilweise, Ergänzungen 19.10.2026 und 21.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1448,7 +1450,7 @@ Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennung
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D1:** Nach dem belegten Wirkungsraum einer konkret bezeichneten eingeschränkten Leistung kodieren (z. B. Kreis der ausgefallenen Verwaltung), nicht nach Serverstandort, Angriffsgröße, Adressatenkreis einer Warnung, Zuständigkeitsraum der Behörde oder Verbreitung der Software (Kodierleitfaden D1). Parallele Schutzabschaltungen in anderen Ländern sind für eine Teilraum-Meldung Kontext (A.7.1).
-- **D2:** Der Ausfall von Verwaltungsleistungen allein ist keine Direktbetroffenheit; D2 nur bei belegter Beeinträchtigung von Leben, Gesundheit, Unterkunft oder Grundversorgung (Kodierleitfaden D2), etwa einer ausgefallenen Auszahlung existenzsichernder Leistungen. Einwohnerzahlen sind kein Ersatz.
+- **D2:** Ausgefallene Verwaltungsleistungen allein begründen keine Direktbetroffenheit (Kodierleitfaden D2).
 - **D3:** Bewertete Funktion benennen: Betrieb (ein IT-Dienstleister ist Betreiber), Entscheidung über Abschaltung und Wiederfreischaltung, Gefahrenabwehr oder Ermittlung. Eine Behörde als berichtende Stelle belegt keinen Eigenbetrieb. Eine belegte Abschaltungsentscheidung kann als Vorsorge vor dem Akutereignis kodiert werden, gekennzeichnet mit „D3 Vorsorge: [Maßnahme], [Stelle]“ (Kodierleitfaden D3). Das BSI ist Quelleninstitution, nicht schon deshalb Zurechnungszentrum.
 - **D5:** Notbetrieb, Teildienste, vertrauenswürdiger Wiederanlauf und Vollbetrieb sind verschiedene Zielzustände; nach Ransomware oft Wochen bis Monate – nur mit Prognose kodieren. Bei Schutzabschaltungen ist die Wiederfreischaltung ein eigener Zielzustand; sie belegt keinen vertrauenswürdigen Wiederanlauf (R9).
 - **D6:** Nur nach konkreter funktionaler Kopplung: Welche Schutz-, Informations- oder Versorgungsfunktion fällt weg, und welcher Ersatzweg trägt (C11)? Ein abgeschalteter Behördenauftritt, die Zugehörigkeit zum Sektor Staat und Verwaltung oder eine mögliche Betroffenheit von KRITIS-Betreibern legen für sich keine Stufe fest; mögliche Kompromittierungen bleiben Szenario.

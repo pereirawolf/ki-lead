@@ -1483,6 +1483,344 @@
       "kurz": "Kenntniszeit („aufgenommen“, Meldezeitpunkt der ersten Meldung mit der Zeile) je Zeile des Zeitstrahls, gesetzt von der App.",
       "status": "umgesetzt",
       "pr": 105
+    },
+    {
+      "id": "KP-2026-W44-05",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Kopfzeile (Zeile 3)"
+        }
+      ],
+      "kurz": "Mindestfassungen in der Kopfzeile des Kodierleitfadens auf den abgestimmten Stand setzen.",
+      "status": "ueberholt",
+      "grund": "Kopfzeile des Kodierleitfadens nennt seit 1.5.0/1.6.0 Sammelmappe ab 3.20.0 und Erfassung ab 1.8.0; Mindestfassungen entsprechen dem abgestimmten Stand (main 307aedc)."
+    },
+    {
+      "id": "KP-2026-W44-06",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8, Änderungsprotokoll, Zeilen 1.4.0 und 1.3.0"
+        }
+      ],
+      "kurz": "Zeilen 1.3.0 und 1.4.0 im Änderungsprotokoll des Kodierleitfadens tauschen.",
+      "status": "ueberholt",
+      "grund": "Änderungsprotokoll des Kodierleitfadens (jetzt Abschnitt 9) ist aufsteigend geordnet: 1.3.0, 1.4.0, 1.5.0, 1.6.0 (main 307aedc)."
+    },
+    {
+      "id": "KP-2026-W43-17",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W43.json",
+      "commit": "051cd90",
+      "entschieden_am": "2026-10-23",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C01_radiologische-nukleare-lage.md",
+          "stelle": "Abschnitt 2, Prüffragen; Fachgrundlagen"
+        }
+      ],
+      "kurz": "Zuordnung von ANoPl-Bund (Tabelle 3.4, Referenzszenarien) und StrlSchG zu den Prüffragen von C01 am amtlichen Dokument verifizieren.",
+      "status": "zurueckgestellt",
+      "grund": "Vom Herausgeber am 23.10.2026 zurückgestellt (sop/CHANGELOG.md 3.16.0, „Offen“); am 30.10.2026 mit Wiedervorlage nachgetragen, weil der Eintrag im Register fehlte. Die Befunddatei liegt nicht im Eingang; die Dringlichkeit ist nicht überliefert und hier als niedrig angesetzt.",
+      "wieder_vorlegen_ab": "2026-12-31"
+    },
+    {
+      "id": "KP-2026-W43-49",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W43.json",
+      "commit": "051cd90",
+      "entschieden_am": "2026-10-23",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_NI_2026-10-14T09-45_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "quellen, Q5"
+        }
+      ],
+      "kurz": "Quellenidentität von Q5 der NI-Beispielmeldung feststellen (reale Bezugsquelle oder fiktiv), danach Kennzeichnung und Zweckangabe im LIESMICH.",
+      "status": "zurueckgestellt",
+      "grund": "Vom Herausgeber am 23.10.2026 zurückgestellt (sop/CHANGELOG.md 3.16.0, „Offen“); am 30.10.2026 mit Wiedervorlage nachgetragen, weil der Eintrag im Register fehlte. Die Befunddatei liegt nicht im Eingang; die Dringlichkeit ist nicht überliefert und hier als niedrig angesetzt.",
+      "wieder_vorlegen_ab": "2026-12-31"
+    },
+    {
+      "id": "OB-2026-W44-01",
+      "agent": "offene-befunde",
+      "befunddatei": "ki-lead-befund_offen_2026-W44.json",
+      "commit": "307aedc53d1a3b9884c414cfda8661cb193f48a0",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B09_gasversorgungsengpass.md",
+          "stelle": "YAML-Kopf, naechste_pruefung_faellig und pruefausloeser"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B09_gasversorgungsengpass.md",
+          "stelle": "Abschnitt 5, „Offene Punkte“"
+        }
+      ],
+      "kurz": "Prüftermin B09 auf 31.12.2026 verschoben, ohne sachliche Prüfung der offenen Punkte; offen vermerkt.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "KP-2026-W44-01",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_kichip_2026-W44.json",
+      "commit": "8b8ba148a94d089b3b3041928915afd329756274",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Kopfleiste, KiSymbol; kiZugang mit laufMelden: msMelden"
+        },
+        {
+          "datei": "src/ui/KiSymbol.tsx",
+          "stelle": "KopfLaufStufe, KiSymbol (button mit onClick)"
+        },
+        {
+          "datei": "src/ui/Testlaeufe.tsx",
+          "stelle": "TestlaeufeBereich, anbieterFuer (Vergleichslauf Ilka, Prüffall Reparatur)"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "Schlüsselfeld je Anbieter, Funktion pruefen (Verbindungstest)"
+        }
+      ],
+      "kurz": "KI-Chip aus zentralem Zähler laufender Anfragen (auch Testläufe, Verbindungstest), reine Statusanzeige.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "KP-2026-W44-02",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D2, Absatz „Direkt betroffen“"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md",
+          "stelle": "B15, Abschnitt 3, Prüfpunkt D2"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.3, Absatz „Zählregeln“"
+        }
+      ],
+      "kurz": "Verwaltungsleistungen allein keine Direktbetroffenheit in Kodierleitfaden D2; B15 verweist, A.3 unverändert.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "KP-2026-W44-03",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D4, zweiter Punkt"
+        },
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_eichstaett-cyberangriff/pruefstein.json",
+          "stelle": "maengel[stelle=sachverhalte[0].sofort.lagenradar.d4]"
+        }
+      ],
+      "kurz": "Standortregel für den Herkunftsort in Kodierleitfaden D4 mit Kurzbeispielen, ohne Ergänzung in A.2.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "KP-2026-W44-07",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "Abschnitt 4.3, Absatz zu `bezeichnung`, `ort`, `eintritt` (Fassung 1.8.0)"
+        },
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_eichstaett-cyberangriff/pruefstein.json",
+          "stelle": "maengel[stelle=sachverhalte[0].eintritt]"
+        }
+      ],
+      "kurz": "eintritt bei eingegrenztem oder widersprüchlichem Beginn: Beginn der Wirkung, frühester Tag, Spanne im Text.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "KP-2026-W44-04",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 4, Überschrift und erster Punkt"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "felder.sachverhalte[].sofort.beurteilung.label"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Punkt `sofort.beurteilung`"
+        }
+      ],
+      "kurz": "Kodierleitfaden Abschnitt 4 „Beurteilung und Tendenz“ mit Brücke zur Beschriftung „Bewertung“.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "OB-2026-W44-02",
+      "agent": "offene-befunde",
+      "befunddatei": "ki-lead-befund_offen_2026-W44.json",
+      "commit": "307aedc53d1a3b9884c414cfda8661cb193f48a0",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 2, Stufentexte, Zeile Stufe 1 (D6 „peripher“)"
+        },
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_eichstaett-cyberangriff/pruefstein.json",
+          "stelle": "maengel[stelle=sachverhalte[0].sofort.lagenradar.d6]"
+        }
+      ],
+      "kurz": "Abgrenzung D6 Stufe 0/1: peripher nur bei Verzögerung einer Leistung trotz Ersatzweg.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "OB-2026-W44-03",
+      "agent": "offene-befunde",
+      "befunddatei": "ki-lead-befund_offen_2026-W44.json",
+      "commit": "307aedc53d1a3b9884c414cfda8661cb193f48a0",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "evaluation/pruefsteine/2026-W43_wiesbaden-abkochgebot/pruefstein.json",
+          "stelle": "maengel[stelle=quellen]"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Quellenkategorien A/B/W/M/P"
+        }
+      ],
+      "kurz": "Regel zur Sprachfassung zitierter Quellen in Kodierleitfaden Abschnitt 5.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "ZS-2026-W44-06",
+      "agent": "beratung",
+      "befunddatei": "ki-lead-befund_zeitstrahl_2026-W44.json",
+      "commit": "41392fdca9cd064cede881fb1f682e25ebcf4723",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "Abschnitt 3 „Fortschreibung, Nachlauf und Abschluss“ und mehrfachMeldungen (src/lagebild/lagebild.ts)"
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Sachverhalte“"
+        }
+      ],
+      "kurz": "Redaktionscheck erkennt Fortschreibung, Doppelvergabe und Bezug über die Sachverhaltskennung, Stelle als Rückfall.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "ZS-2026-W44-07",
+      "agent": "beratung",
+      "befunddatei": "ki-lead-befund_zeitstrahl_2026-W44.json",
+      "commit": "41392fdca9cd064cede881fb1f682e25ebcf4723",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/muster/meldung.ui.json",
+          "stelle": "rollen"
+        },
+        {
+          "datei": "profile/muster/meldung.schema.json",
+          "stelle": "properties und Sachverhalt"
+        },
+        {
+          "datei": "README.md",
+          "stelle": "Abschnitt „Profile“"
+        }
+      ],
+      "kurz": "Vorlage profile/muster mit Zeitstrahl, Kennung und Bezug als Gerüst.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "OB-2026-W44-04",
+      "agent": "offene-befunde",
+      "befunddatei": "ki-lead-befund_offen_2026-W44.json",
+      "commit": "307aedc53d1a3b9884c414cfda8661cb193f48a0",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "Abschnitt 4.1 Nr. 5 und Abschnitt 5, Beispiel `_entstehung`"
+        }
+      ],
+      "kurz": "Beispielwerte in _entstehung.sop mit Platzhalter „vX.Y.Z“ statt überholter Fassungen.",
+      "status": "umgesetzt",
+      "pr": 110
+    },
+    {
+      "id": "OB-2026-W44-05",
+      "agent": "offene-befunde",
+      "befunddatei": "ki-lead-befund_offen_2026-W44.json",
+      "commit": "307aedc53d1a3b9884c414cfda8661cb193f48a0",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-kurzfassung.md",
+          "stelle": "Kopfzeile"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "Kopfzeile"
+        }
+      ],
+      "kurz": "Arbeitsanweisung Kurzfassung gilt für die LEAD-Meldevorlage ab 1.2.",
+      "status": "umgesetzt",
+      "pr": 110
     }
   ]
 }

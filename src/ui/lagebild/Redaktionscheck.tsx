@@ -8,7 +8,7 @@ import { datumDE, exportStempel, jetztLokal, mitDatum } from "../../kern/ausgabe
 import { zeitpunktDE } from "../../kern/zeit";
 import { APP_KENNUNG } from "../../kern/version";
 import { absender, svKennung, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
-import { ABSCHNITTE, redaktionsbericht, type redaktionscheck } from "../../lagebild/redaktion";
+import { ABSCHNITTE, kennungsText, redaktionsbericht, type redaktionscheck } from "../../lagebild/redaktion";
 import { html as esc } from "../../lagebild/ausgabe";
 import { dateiAnbieten } from "../../speicher/speicher";
 import { Abschnitt, KopierKnopf, Punkt, SvMarken } from "./bausteine";
@@ -262,7 +262,7 @@ export function Redaktionscheck({
       </Abschnitt>
 
       <Abschnitt nr={3} id="lb-red-3" titel="Fortschreibung, Nachlauf und Abschluss" verweis={v.fortschreibung}>
-        {!red.nachlauf.length && !red.abschluss.length && !red.aenderung.length && !red.mehrfach.length && !red.marker.length && (
+        {!red.nachlauf.length && !red.abschluss.length && !red.aenderung.length && !red.mehrfach.length && !red.kennungen.length && !red.marker.length && (
           <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
         )}
         {red.mehrfach.map((m) => (
@@ -270,6 +270,22 @@ export function Redaktionscheck({
             {m.eintraege.map((e) => `${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"} – ${e.name}`).join("\n")}
             {"\n"}Fortschreibung? Eine jüngere Meldung ersetzt ältere Angaben nur, soweit sie denselben Gegenstand aktualisiert, berichtigt oder aufhebt.
             Denselben Sachverhalt nicht doppelt zählen; eigenständige Lagen derselben Stelle bleiben nebeneinander gültig.
+          </Punkt>
+        ))}
+        {red.kennungen.map((k) => (
+          <Punkt
+            key={`kn-${k.art}-${k.kennung}-${k.sachverhalte[0]?.eintrag.id}-${k.sachverhalte[0]?.index}`}
+            klasse={k.art === "bezug" ? "" : "warn"}
+            marke={k.art === "fortschreibung" ? "Fortschreibung (Kennung)" : k.art === "doppelt" ? "Kennung mehrfach" : "Bezug nicht geladen"}
+            titel={k.kennung}
+            aktion={zurMeldung(k.sachverhalte[0]?.eintrag.id ?? "", k.sachverhalte[0] ? svKennung(k.sachverhalte[0], profil) : undefined)}
+          >
+            {kennungsText(k, profil)}
+            {k.art === "fortschreibung"
+              ? "\nDie jüngere Meldung schreibt denselben Sachverhalt fort; nur ihren Stand übernehmen, nicht doppelt zählen."
+              : k.art === "doppelt"
+                ? "\nDieselbe Kennung bezeichnet hier Sachverhalte verschiedener Stellen oder steht mehrfach in einer Meldung: Vergabe prüfen (Kodierleitfaden Abschnitt 8)."
+                : "\nDie Meldung, aus der dieser Sachverhalt hervorgeht, liegt nicht vor; bei Bedarf nachladen."}
           </Punkt>
         ))}
         {red.marker.map((x) => (

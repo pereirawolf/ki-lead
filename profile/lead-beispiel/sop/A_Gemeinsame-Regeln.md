@@ -6,12 +6,12 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.20.1 | 30.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.6.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.20.2 | 30.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.7.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.33.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.8.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.9.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.2.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
-| Arbeitsanweisung Kurzfassung | 2.4.0 | 27.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
+| Arbeitsanweisung Kurzfassung | 2.4.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.2: optionale Felder `kennung` und `bezug` je Sachverhalt und `zeitstrahl` auf Meldungsebene; seit 1.1 `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 29.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
 
 ### A.1 Anwendung
@@ -58,7 +58,7 @@
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
 
-Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Bewertung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
+Die Kodierregeln des Lagenradars sind für alle SOPs und Bausteine verbindlich. Sie stehen nur im **Kodierleitfaden LEAD** in der im Gültigkeitsstand genannten Fassung (A.10.2: ein Ort, Verweise sonst): Grundregeln und Prüfreihenfolge je Achse (Abschnitt 1), Stufentexte (Abschnitt 2), Achsenregeln D1–D8 einschließlich D2-Nullregel und Wirkungskette (Abschnitt 3), Beurteilung und Tendenz (Abschnitt 4), Leerwerte (Abschnitt 6) und Abgrenzungsbeispiele (Abschnitt 7). Die Rangfolge bei Widersprüchen steht im Kopf des Kodierleitfadens. Die in einer SOP hervorgehobenen Achsen sind Stolperstellen, keine Beschränkung des Radars. Verweise in SOPs und Bausteinen auf A.2 (etwa „nach Teil A.2 prüfen“, „A.2 D7“ oder „A.2 „Keine unbelegte Präzision““) meinen die entsprechende Regel des Kodierleitfadens.
 
 ### A.3 Befundnachweis
 

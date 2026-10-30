@@ -2,6 +2,14 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 0.7.0 – 30.10.2026
+
+Anlass: Befund ZS-2026-W44-07 (Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json`), vom Herausgeber am 30.10.2026 freigegeben (volles Gerüst).
+
+- Schema: optionales Feld `zeitstrahl` auf Meldungsebene, je Sachverhalt optional `kennung` (Muster `Präfix-JJJJMMTT-XXXX` oder leer) und `bezug` (Liste gültiger Kennungen). Bestehende Meldungen bleiben gültig.
+- Darstellungsdatei: Rollen `zeitstrahl`, `sv_kennung`, `sv_bezug`; Schritt „Quellen“ mit dem Zeitstrahl; Felder mit den Widgets `zeitstrahl`, `kennung`, `kennungen`; Abschnitte `kennung` (ohne Länderliste, Standardpräfix „SV“) und `zeitstrahl` mit den Typen des Beispielprofils (Profilformat 1.23).
+- README: Abschnitt „Zeitstrahl, Kennung und Bezug“.
+
 ## 0.6.1 – 27.10.2026
 
 Anlass: Befund TP-2026-W44-31 der technischen Prüfung, vom Herausgeber am 26.10.2026 mit Maßgabe freigegeben.

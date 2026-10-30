@@ -92,6 +92,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 
 - `hauptablauf.spec.ts`: Meldung als JSON herunterladen und genau diese Datei wieder öffnen; fünfter Schritt „Management Summary“ mit Feldauszug (seit 0.5.17); Lagebild mit Beispiel, Redaktionscheck und PDF; KI-Erfassung S1 mit simuliertem Anbieter bis zur Bestätigung, Laufprotokoll ohne Schlüssel; seit 0.6.5 Fokus auf der Überschrift nach S1 und im Übergabedialog mit Escape (TP-2026-W44-13), Rückfragen im eigenen Dialog statt `window.confirm` (TP-2026-W44-20)
 - `sprungziele.spec.ts` (seit 0.6.7): „Weiter“ und „Zurück“ der Meldung vom Seitenende aus, breit und 390 px: Anfang des Arbeitsbereichs unter dem Kopf, Fokus auf der neuen Überschrift; Hauptnavigation an den Seitenanfang, KI-Erfassung an die zuletzt gesehene Stelle
+- `kisymbol.spec.ts`: KI-Chip „KI offline“/„KI online“ in jeder Ansicht, nach S1 offline bis S2; seit 0.6.12 reine Statusanzeige ohne Knopf und „KI online“ während des Verbindungstests der API-Schlüssel (KP-2026-W44-01)
 - `baukasten.spec.ts` (seit 0.6.11): Baukasten „Neue Zeile zusammenstellen“ im Zeitstrahl, breit und 390 px: Felder direkt im Baukasten ohne Raum unter dem Eingabefeld, Vorschau ohne Lücke
 - `abbruch.spec.ts`: Abbrechen während S1, Protokoll des abgebrochenen Laufs, keine neue Anfrage
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)

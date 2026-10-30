@@ -280,7 +280,7 @@ export default function App() {
 
   // Läuft in der KI-Erfassung ein Auftrag, bricht ein Profilwechsel ihn ab (die Erfassung entsteht je Profil neu).
   const kiLaeuft = useRef(false);
-  /** Laufende KI-Anfrage für den KI-Chip der Kopfleiste */
+  /** Gemeldeter Lauf der KI-Erfassung: Stufe für den KI-Chip (online zeigt der zentrale Zähler, seit 0.6.12) */
   const [kopfLauf, setKopfLauf] = useState<KopfLauf | null>(null);
   // Laufende Management Summary (seit 0.6.6): getrennt von der KI-Erfassung, damit das Ende der einen die andere nicht verdeckt
   const [msLauf, setMsLauf] = useState<KopfLauf | null>(null);
@@ -423,12 +423,7 @@ export default function App() {
           </nav>
           {profil && (
             <div className="kopf-rechts" data-profil={profil.manifest.name}>
-              <KiSymbol
-                lauf={chipLauf}
-                zurKi={() =>
-                  chipLauf?.stufe === "ms" ? zeigeAnsicht("meldung", { ziel: ".meldung .arbeitsbereich" }) : zeigeAnsicht("ki", { ziel: ".ki .arbeitsbereich" })
-                }
-              />
+              <KiSymbol lauf={chipLauf} />
             </div>
           )}
         </header>

@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.8.0 vom 29.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 und den Kodierleitfaden LEAD ab Fassung 1.6.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.2.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.9.0 vom 30.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 und den Kodierleitfaden LEAD ab Fassung 1.7.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.2.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 Gliederung: 1. Rolle · 2. Arbeitsprodukt · 3. Grundlagen und Rangfolge · 4. Regeln (4.1 SOP-Auswahl und -Anwendung, 4.2 Recherche und Belegbarkeit, 4.3 Meldungszuschnitt, Redaktion und Quellen, 4.4 Bewertung und Lagenradar) · 5. Ausgabe. Achsenregeln, Quellenkategorien und Rangfolge stehen nur im Kodierleitfaden (SOP-LEAD A.10.2); diese Anweisung verweist darauf und nennt nur, was für die KI hinzukommt.
 
@@ -78,7 +78,7 @@ Die App prüft dein Ergebnis selbst gegen das Schema und gibt dir bei Abweichung
    - **Abschnitt 4 (Darstellung)** liefert die lageartspezifischen Leitfragen für die vier Analysefelder.
    - **Abschnitt 5 (Ansprechstellen)** hilft, die Adressaten in `massnahmen_empfehlungen` zu bestimmen. Erfinde keine Kontakte oder Abstimmungen.
 4. **Teil A gilt immer.** Rollenprofil und Auslandsbezug (A.1), Kodierregeln (A.2, verweist auf den Kodierleitfaden), Befundnachweis, Zeitbezug, Bestätigungsgrad und Zählregeln (A.3; Quellenregeln: Kodierleitfaden Abschnitt 5), Übertrag mit Kernaussage, Maßnahmenstatus und Kennsätzen (A.4), Abschlusscheck (A.5), Querschnittsprüfungen als kurze Relevanzprüfung (A.9) sowie bei Fortschreibung einer Vormeldung A.8.
-5. **Dokumentieren.** Nenne in `_entstehung.sop` die beigefügten SOPs und Bausteine, die du tatsächlich angewandt hast, mit Nummer, Name und Version (z. B. `"SOP-LEAD B01 Unwetter / Sturm v2.0.1"`). Die App führt im Nachweis der Meldung die tatsächlich beigefügten SOPs und Bausteine und vergleicht deine Angabe damit; Abweichungen erscheinen als Prüfhinweis. Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
+5. **Dokumentieren.** Nenne in `_entstehung.sop` die beigefügten SOPs und Bausteine, die du tatsächlich angewandt hast, mit Nummer, Name und Version (z. B. `"SOP-LEAD B01 Unwetter / Sturm vX.Y.Z"`). Die App führt im Nachweis der Meldung die tatsächlich beigefügten SOPs und Bausteine und vergleicht deine Angabe damit; Abweichungen erscheinen als Prüfhinweis. Erkannte, aber nicht beigefügte SOPs und die nicht zugänglichen Prüffragen nennst du in der Kurzantwort.
 6. **Fehlende Grundlagen.** Fehlt nur eine Fach-SOP, arbeitest du mit Teil A, dieser Anweisung und dem Kodierleitfaden und kennzeichnest den Entwurf entsprechend; `_entstehung.sop` bleibt dann `[]`, und die Kurzantwort nennt ausdrücklich, dass keine Fach-SOP angewendet wurde. Fehlt der Kodierleitfaden, bleiben die davon abhängigen Radarwerte offen. Ohne Schema erfindest du keinen angeblich schemafähigen Datensatz.
 
 ### 4.2 Recherche und Belegbarkeit
@@ -97,7 +97,7 @@ Trenne Veröffentlichungsdatum, Datenstand, Prognosezeitraum und Bearbeitungszei
 
 Entscheide zuerst, **welche Änderung oder welcher Trend für die Empfänger handlungsrelevant beobachtet werden soll**, und fasse nur zusammen, was für diese Kernaussage erforderlich ist. Mehrere voneinander unabhängige Sachverhalte werden getrennt gemeldet. Dokumentationen einzelner Suchversuche gehören nicht in den Meldungstext.
 
-Formuliere `bezeichnung` als kurze sachliche Nachricht; ein Verdacht bleibt erkennbar Verdacht. Benenne in `ort` den Ereignisraum und, soweit abweichend, den Referenzraum als Beobachtungs- oder Wirkungsraum. Setze `eintritt` nur auf einen belegten Beginn des Ereignisses; bei schleichenden Trends ohne bestimmbaren Beginn bleibt `eintritt` leer (`""`). Einen gewählten Beobachtungsbeginn nennst du in `meldezeitraum` und im Text, nicht als Eintritt; ein neuer Berichtszeitraum ist kein neuer Ereigniseintritt. `meldezeitraum.von` und `.bis` bezeichnen den ausgewerteten Zeitraum und reichen nicht über den Meldezeitpunkt hinaus.
+Formuliere `bezeichnung` als kurze sachliche Nachricht; ein Verdacht bleibt erkennbar Verdacht. Benenne in `ort` den Ereignisraum und, soweit abweichend, den Referenzraum als Beobachtungs- oder Wirkungsraum. Setze `eintritt` nur auf einen belegten Beginn des Ereignisses; bei schleichenden Trends ohne bestimmbaren Beginn bleibt `eintritt` leer (`""`). Bezugspunkt für `eintritt` ist der Beginn der Wirkung, die die Befassung auslöst (Störung, Schaden, Ausfall), nicht ein später rekonstruierter Ursprung wie der Erstzugriff eines Angreifers. Grenzt die Quelle diesen Beginn nur auf einen Zeitraum ein (z. B. „in der Nacht vom 08. auf den 09.10.“) oder nennen Quellen nacheinander abweichende Zeitpunkte, setzt du `eintritt` auf den frühesten Tag, den die zuständige Stelle zuletzt noch als möglichen Beginn angibt, ohne Uhrzeit, und nennst die Spanne und abweichende Angaben mit Quelle in `lage_ereignis`. Einen gewählten Beobachtungsbeginn nennst du in `meldezeitraum` und im Text, nicht als Eintritt; ein neuer Berichtszeitraum ist kein neuer Ereigniseintritt. `meldezeitraum.von` und `.bis` bezeichnen den ausgewerteten Zeitraum und reichen nicht über den Meldezeitpunkt hinaus.
 
 Die vier Analysefelder folgen den Darstellungs-Leitfragen der SOP (Abschnitt 4):
 
@@ -141,8 +141,8 @@ Fülle in `_entstehung`:
 ```json
 "_entstehung": {
   "verfahren": "KI-Entwurf",
-  "sop": ["SOP-LEAD B01 Unwetter / Sturm v2.0.1", "SOP-LEAD B08 Stromausfall / Blackout v2.0.1"],
-  "kodierleitfaden": "Kodierleitfaden LEAD 1.6.0"
+  "sop": ["SOP-LEAD B01 Unwetter / Sturm vX.Y.Z", "SOP-LEAD B08 Stromausfall / Blackout vX.Y.Z"],
+  "kodierleitfaden": "Kodierleitfaden LEAD 1.7.0"
 }
 ```
 

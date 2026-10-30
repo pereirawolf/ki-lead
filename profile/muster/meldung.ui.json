@@ -6,14 +6,22 @@
   "schritte": [
     { "id": "meta", "titel": "Kopf", "felder": ["meldende_stelle", "meldezeitpunkt"] },
     { "id": "sachverhalte", "titel": "Sachverhalte", "felder": ["sachverhalte"] },
-    { "id": "quellen", "titel": "Quellen", "felder": ["quellen"] },
+    { "id": "quellen", "titel": "Quellen", "felder": ["quellen", "zeitstrahl"] },
     { "id": "pruefen", "titel": "Prüfen & Exportieren", "felder": [], "pruefung": true }
   ],
   "felder": {
     "meldende_stelle": { "label": "Meldende Stelle", "pflicht": true },
     "meldezeitpunkt": { "label": "Meldezeitpunkt", "widget": "datumzeit", "pflicht": true },
     "quellen": { "label": "Quellen", "widget": "quellen", "zeilen": 8 },
+    "zeitstrahl": {
+      "label": "Zeitstrahl",
+      "widget": "zeitstrahl",
+      "zeilen": 6,
+      "hinweis": "Je Zeile ein eingetretenes, belegtes Ereignis: [Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn]."
+    },
     "sachverhalte": { "label": "Sachverhalte", "element_label": "Sachverhalt", "titel_feld": "bezeichnung", "hinzufuegen": "Sachverhalt hinzufügen" },
+    "sachverhalte[].kennung": { "label": "Kennung", "widget": "kennung", "hinweis": "Die App vergibt die Kennung beim Anlegen; bei der Fortschreibung bleibt sie gleich." },
+    "sachverhalte[].bezug": { "label": "Bezug (Kennungen)", "widget": "kennungen", "hinweis": "Kennungen der Sachverhalte, aus denen dieser hervorgeht (Verdichtung, Teilung); leer bei neu erfassten Sachverhalten." },
     "sachverhalte[].bezeichnung": { "label": "Bezeichnung", "pflicht": true },
     "sachverhalte[].art": { "label": "Art", "widget": "mehrfachauswahl" },
     "sachverhalte[].lage": { "label": "Lage", "widget": "text_lang" },
@@ -40,7 +48,10 @@
     "meldende_stelle": "meldende_stelle",
     "meldezeitpunkt": "meldezeitpunkt",
     "quellen": "quellen",
+    "zeitstrahl": "zeitstrahl",
     "sachverhalte": "sachverhalte",
+    "sv_kennung": "kennung",
+    "sv_bezug": "bezug",
     "sv_bezeichnung": "bezeichnung",
     "sv_art": "art",
     "sv_beurteilung": "bewertung",
@@ -60,6 +71,13 @@
     "kategorien": { "A": "amtlich", "B": "Betreiber (Angaben zum eigenen Betrieb)", "W": "wissenschaftlich", "M": "Medien", "P": "sonstige private Quellen" },
     "rangfolge": ["A", "B", "W", "M", "P"],
     "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel [Zugriff: {heute}]"
+  },
+  "kennung": { "praefixe": {}, "standard": "SV" },
+  "zeitstrahl": {
+    "typen": ["Ereignis", "Warnung", "Maßnahme", "Wendepunkt", "Wiederherstellung", "Bewertung", "Berichtigung"],
+    "typ_bewertung": "Bewertung",
+    "typ_berichtigung": "Berichtigung",
+    "richtwert_je_sachverhalt": 12
   },
   "dateiname": "Lagemeldung_{meldende_stelle}_{meldezeitpunkt}"
 }

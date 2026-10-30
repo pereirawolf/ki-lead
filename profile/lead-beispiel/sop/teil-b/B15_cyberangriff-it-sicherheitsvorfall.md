@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Cyberangriff / IT-Sicherheitsvorfall mit Folgen für Versorgung, KRITIS oder Verwaltung"
 art_vorschlag: ["Cyberangriff / IT-Sicherheitsvorfall"]
 zweck: "Reproduzierbare Erfassung von IT-Sicherheitsvorfällen, deren Folgen die Versorgung der Bevölkerung, KRITIS oder die Handlungsfähigkeit von Behörden berühren, einschließlich begründeter früher Befassung (A.1 Nr. 1)."
-version: "2.5.0"
+version: "2.5.1"
 status: "Beispielfassung"
-stand: "24.10.2026"
+stand: "30.10.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – §§ 32, 36 BSIG am Normtext gelesen; BITS-Kritikalitätsstufen aus der BSI-Ankündigung vom 01.04.2025 (Zweitprüfung durch ein weiteres Werkzeug); Rechercheeinstiege 26.09.2026 teilweise, Ergänzungen 19.10.2026 und 21.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -60,7 +60,7 @@ Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennung
 Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 - **D1:** Nach dem belegten Wirkungsraum einer konkret bezeichneten eingeschränkten Leistung kodieren (z. B. Kreis der ausgefallenen Verwaltung), nicht nach Serverstandort, Angriffsgröße, Adressatenkreis einer Warnung, Zuständigkeitsraum der Behörde oder Verbreitung der Software (Kodierleitfaden D1). Parallele Schutzabschaltungen in anderen Ländern sind für eine Teilraum-Meldung Kontext (A.7.1).
-- **D2:** Der Ausfall von Verwaltungsleistungen allein ist keine Direktbetroffenheit; D2 nur bei belegter Beeinträchtigung von Leben, Gesundheit, Unterkunft oder Grundversorgung (Kodierleitfaden D2), etwa einer ausgefallenen Auszahlung existenzsichernder Leistungen. Einwohnerzahlen sind kein Ersatz.
+- **D2:** Ausgefallene Verwaltungsleistungen allein begründen keine Direktbetroffenheit (Kodierleitfaden D2).
 - **D3:** Bewertete Funktion benennen: Betrieb (ein IT-Dienstleister ist Betreiber), Entscheidung über Abschaltung und Wiederfreischaltung, Gefahrenabwehr oder Ermittlung. Eine Behörde als berichtende Stelle belegt keinen Eigenbetrieb. Eine belegte Abschaltungsentscheidung kann als Vorsorge vor dem Akutereignis kodiert werden, gekennzeichnet mit „D3 Vorsorge: [Maßnahme], [Stelle]“ (Kodierleitfaden D3). Das BSI ist Quelleninstitution, nicht schon deshalb Zurechnungszentrum.
 - **D5:** Notbetrieb, Teildienste, vertrauenswürdiger Wiederanlauf und Vollbetrieb sind verschiedene Zielzustände; nach Ransomware oft Wochen bis Monate – nur mit Prognose kodieren. Bei Schutzabschaltungen ist die Wiederfreischaltung ein eigener Zielzustand; sie belegt keinen vertrauenswürdigen Wiederanlauf (R9).
 - **D6:** Nur nach konkreter funktionaler Kopplung: Welche Schutz-, Informations- oder Versorgungsfunktion fällt weg, und welcher Ersatzweg trägt (C11)? Ein abgeschalteter Behördenauftritt, die Zugehörigkeit zum Sektor Staat und Verwaltung oder eine mögliche Betroffenheit von KRITIS-Betreibern legen für sich keine Stufe fest; mögliche Kompromittierungen bleiben Szenario.

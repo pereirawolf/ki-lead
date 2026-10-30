@@ -337,3 +337,53 @@ describe("Redaktionscheck: Kennsätze aus Vorlagen mit offenen Stellen", () => {
     expect(red.zeit[0].hinweis).toMatch(/offene Vorlagenstellen ⟦…⟧ – Angaben unvollständig/);
   });
 });
+
+describe("ZS-2026-W44-06: Fortschreibung, Doppelvergabe und Bezug über die Sachverhaltskennung", () => {
+  // Soll: Kodierleitfaden Abschnitt 8 und SOP-LEAD A.7.1 – dieselbe Kennung derselben Stelle ist eine Fortschreibung,
+  // dieselbe Kennung bei verschiedenen Stellen ein Vergabefehler; ein Bezug auf eine nicht geladene Kennung ein Hinweis.
+  const K1 = "DE-TH-20261014-K7QM";
+  const K2 = "DE-NI-20261014-3HXA";
+  const mit = (id: string, stelle: string, zeitpunkt: string, kennung: string, bezug?: string[]) => {
+    const e = eintrag(id);
+    e.daten.meldende_stelle = stelle;
+    e.daten.meldezeitpunkt = zeitpunkt;
+    e.daten.sachverhalte[0].kennung = kennung;
+    if (bezug) e.daten.sachverhalte[0].bezug = bezug;
+    else delete e.daten.sachverhalte[0].bezug;
+    return e;
+  };
+
+  it("zwei Fassungen derselben Stelle mit gleicher Kennung: eine Fortschreibung, kein Rückfall nach Stelle", () => {
+    const red = check([mit("n", "Stelle X", "2026-10-15T09:00", K1), mit("a", "Stelle X", "2026-10-14T09:00", K1)]);
+    expect(red.kennungen).toHaveLength(1);
+    expect(red.kennungen[0]).toMatchObject({ art: "fortschreibung", kennung: K1 });
+    expect(red.kennungen[0]!.sachverhalte.map((s) => s.eintrag.id)).toEqual(["a", "n"]);
+    expect(red.mehrfach).toEqual([]);
+    expect(befundListe(red, p).filter((b) => b.bezug === K1)).toEqual([expect.objectContaining({ abschnitt: 3, klasse: "warn" })]);
+  });
+
+  it("dieselbe Kennung bei zwei Stellen ist ein Vergabebefund (zu klären)", () => {
+    const red = check([mit("a", "Stelle X", "2026-10-14T09:00", K1), mit("b", "Stelle Y", "2026-10-14T10:00", K1)]);
+    expect(red.kennungen.map((k) => [k.art, k.kennung])).toEqual([["doppelt", K1]]);
+    expect(red.abschnitte[2]).toBe(1);
+  });
+
+  it("zwei Meldungen derselben Stelle mit verschiedenen Kennungen sind eigenständig: kein Befund", () => {
+    const red = check([mit("a", "Stelle X", "2026-10-14T09:00", K1), mit("b", "Stelle X", "2026-10-15T09:00", K2)]);
+    expect(red.kennungen).toEqual([]);
+    expect(red.mehrfach).toEqual([]);
+  });
+
+  it("Bezug auf eine nicht geladene Kennung ist ein Hinweis, auf eine geladene kein Befund", () => {
+    const red = check([mit("a", "Stelle X", "2026-10-14T09:00", K1), mit("v", "Stelle V", "2026-10-14T14:00", "DE-20261014-ABCD", [K1, K2])]);
+    expect(red.kennungen.map((k) => [k.art, k.kennung])).toEqual([["bezug", K2]]);
+    expect(red.abschnitte[2]).toBe(0);
+    expect(befundListe(red, p).find((b) => b.bezug === K2)).toMatchObject({ abschnitt: 3, klasse: "info" });
+  });
+
+  it("Rückfall: Meldungen derselben Stelle ohne Kennung bleiben nach Stelle gruppiert", () => {
+    const red = check([mit("a", "Stelle X", "2026-10-14T09:00", ""), mit("b", "Stelle X", "2026-10-15T09:00", "")]);
+    expect(red.kennungen).toEqual([]);
+    expect(red.mehrfach).toHaveLength(1);
+  });
+});
