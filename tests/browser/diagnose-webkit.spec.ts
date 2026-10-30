@@ -59,7 +59,8 @@ test("D5: Beispiel laden, sichern, ohne Löschen einspielen", async ({ page }) =
   await expect(page.locator(".kopf-ki")).toBeVisible();
 });
 
-test("D6: Beispiel, sichern, löschen, einspielen – mit Zustandsbericht", async ({ page }) => {
+test("D6: Beispiel, sichern, löschen, einspielen – mit Zustandsbericht", async ({ page, browserName }) => {
+  test.skip(browserName !== "webkit", "nur Diagnose in WebKit");
   const konsole: string[] = [];
   page.on("console", (m) => konsole.push(`${m.type()}: ${m.text()}`));
   page.on("pageerror", (e) => konsole.push(`pageerror: ${e.message}`));
