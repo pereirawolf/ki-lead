@@ -4,6 +4,7 @@
 # Gruppen (seit 0.6.9): Pakete, die nur zusammen installierbar sind, kommen in einem Pull Request
 # (react mit react-dom; alle @capacitor/*, deren Version auch in ios/App/CapApp-SPM/Package.swift steht).
 # Major-Sprünge von React bleiben aus, bis die Migration auf React 19 als eigenes Vorhaben ansteht.
+# GitHub Actions sind seit TP-2026-W44-36 per Commit-SHA mit Versionskommentar eingebunden; Dependabot schreibt beides fort.
 version: 2
 updates:
   - package-ecosystem: npm

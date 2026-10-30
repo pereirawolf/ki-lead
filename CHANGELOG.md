@@ -82,7 +82,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
-| 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ |
+| 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachtrag vom 30.10.2026: Pull Request „CI-Lieferkette: Actions per Commit-SHA, npm audit“, ohne Änderung der App) |
 
 ## [0.6.12] – 30.10.2026
 
@@ -105,6 +105,15 @@ Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json` (Freitagslauf 
 - `tests/lagebild/redaktionscheck.test.ts` (5 neu): Fortschreibung, Doppelvergabe, eigenständige Kennungen, Bezug, Rückfall; `tests/lagebild/lagebild.test.ts` angepasst.
 - `tests/profil/vorlage.test.ts` (1 neu): Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug.
 - `tests/profil/sop-redaktion.test.ts`, `tests/pipeline/kontext.test.ts`: Begriff „Beurteilung“ und Kodierleitfaden 1.7.0.
+
+### Nachtrag vom 30.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44.json` (Arbeitspaket A7 „CI-Pflege“), freigegeben vom Herausgeber am 30.10.2026. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **GitHub Actions per Commit-SHA (TP-2026-W44-36):** Alle zwölf Einbindungen in `pages.yml`, `release.yml` und `mistral-probe.yml` verweisen auf den vollständigen Commit-SHA mit der Version als Kommentar (`actions/checkout` v7.0.1, `actions/setup-node` v7.1.0, `actions/upload-artifact` v7.0.2, `actions/cache` v6.1.0, `actions/upload-pages-artifact` v5.0.0, `actions/deploy-pages` v5.0.1). Eine verschobene Versionsmarke ändert den ausgeführten Code nicht mehr unbemerkt; Dependabot schreibt SHA und Kommentar fort (Hinweis in `.github/dependabot.yml`).
+- **Prüfung bekannter Schwachstellen (TP-2026-W44-37):** `pages.yml` führt nach `npm ci` `npm audit --omit=dev --audit-level=high` aus; hohe und kritische Meldungen zu ausgelieferten Paketen brechen den Lauf ab, mittlere stehen im Protokoll. Entwicklungsabhängigkeiten bleiben außen vor (Stand 30.10.2026: drei mittlere Meldungen über `@capacitor/cli`).
+- [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.6 (Abschnitt 3.7), Spezifikation (offener Punkt 10, Nachtrag zu 0.6.12), [docs/TESTS.md](docs/TESTS.md) (Abschnitt „Gestaffelte Prüfung in GitHub Actions“).
+- `tests/ci/actions.test.ts` (neu, 14): Wächter für drei Workflows und zwölf Einbindungen; je Einbindung Commit-SHA mit Versionskommentar; Audit-Schritt nach `npm ci` mit Stufe „high“.
 
 ## [0.6.11] – 30.10.2026
 
