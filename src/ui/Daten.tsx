@@ -47,7 +47,8 @@ export function DatenBereich({ zeitzone, neuStarten = () => window.location.relo
       if (!ok) return;
       setBeschaeftigt(true);
       await sicherungEinspielen(s);
-      neuStarten();
+      // Neustart erst nach dem Ende des Ereignisses der Dateiauswahl: WebKit stürzte beim sofortigen Neuladen ab
+      setTimeout(neuStarten, 100);
     } catch (e) {
       setMeldung({ text: `Die Sicherung wurde nicht eingespielt: ${(e as Error)?.message || String(e)}`, fehler: true });
     } finally {
