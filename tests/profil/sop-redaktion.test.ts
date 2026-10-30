@@ -329,7 +329,7 @@ describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-
       "„(Eingangsmaterial)“",
       "Lagebericht des GMLZ",
       "(bis zur Arbeitsfassung v0.3: „J“)",
-      "Die Bewertung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.",
+      "Die Beurteilung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.", // Begriff seit KP-2026-W44-04
       "Bildet die Skala eine Achse nur unvollkommen ab",
       "im Feld „Abhängigkeiten & Interdependenzen“ die entscheidende Verbindung",
     ])
