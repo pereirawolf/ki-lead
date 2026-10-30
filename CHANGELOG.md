@@ -81,6 +81,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.8 | letzter Commit des Pull Requests „Kurzantwort der KI-Erfassung als Prüfauftrag; Profil 1.32.0; 0.6.8“ |
 | 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
+| 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
+
+## [0.6.11] – 30.10.2026
+
+Grundlage: Rückmeldung des Herausgebers vom 30.10.2026 (Bildschirmfoto, Safari auf dem iPad). Im Baukasten „Neue Zeile zusammenstellen“ des Zeitstrahls stand zwischen „Kurztext mit Beleg“ und „Vorschau“ eine große Lücke. Ursache: `.quellen-lagemeldung` trug `flex: 1 1 20rem`. Im Quellen-Baukasten steht das Feld in einer Zeile (`.quellen-reihe`), dort sind 20rem eine Breite; im Zeitstrahl (seit 0.6.9) steht es direkt im Baukasten, der seine Inhalte untereinander ordnet, dort wurden 20rem zur Höhe (320 px statt rund 70 px). Baut auf 0.6.10 auf.
+
+### Behoben
+
+- **Lücke im Baukasten des Zeitstrahls** (`src/styles/formular.css`): Die Flex-Grundgröße gilt nur noch in `.quellen-reihe`. „Kurztext mit Beleg“ und, sobald Sachverhalte mit Kennung vorhanden sind, die Auswahl „Sachverhalt“ sind so hoch wie ihr Inhalt; die Vorschau folgt mit dem Abstand des Baukastens. Der Quellen-Baukasten bleibt unverändert.
+
+### Geändert
+
+- Versionsangaben 0.6.11 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 611, iOS 611). Spezifikation und Profil unverändert.
+
+### Tests
+
+- `tests/browser/baukasten.spec.ts` (neu, 2): Felder direkt im Baukasten enden mit ihrem Eingabefeld, Abstand bis zur Vorschau unter 40 px, breit und mit 390 px; schlägt mit dem Stand 0.6.10 fehl (rund 250 px Raum unter dem Eingabefeld).
+- docs/TESTS.md.
 
 ## [0.6.10] – 30.10.2026
 

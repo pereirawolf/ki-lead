@@ -762,8 +762,13 @@ textarea[aria-invalid="true"] {
 }
 
 .quellen-lagemeldung {
-  flex: 1 1 20rem;
   margin: 0;
+}
+
+/* Nur in einer Zeile (.quellen-reihe) ist 20rem eine Breite. Direkt im Baukasten (Spalte) wäre es die Höhe:
+   Das Feld „Kurztext mit Beleg“ im Zeitstrahl stand dann 20rem hoch mit großer Lücke bis zur Vorschau. */
+.quellen-reihe > .quellen-lagemeldung {
+  flex: 1 1 20rem;
 }
 
 .quellen-vorschau {
