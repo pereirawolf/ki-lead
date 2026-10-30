@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.5 vom 27.10.2026, gilt für App-Version 0.6.4 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.6 vom 30.10.2026, gilt für App-Version 0.6.12 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -87,8 +87,8 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 | vorhanden | offen |
 |---|---|
 | `npm ci` installiert genau nach `package-lock.json` | übrige Abhängigkeiten in `package.json` mit Bereichsangabe (`^`); fest ist nur der Lockfile |
-| Capacitor und das Plugin für den Schlüsselbund exakt gepinnt | GitHub Actions per Versionsmarke (etwa `@v7`) statt Commit-SHA |
-| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob | kein `npm audit` im CI |
+| Capacitor und das Plugin für den Schlüsselbund exakt gepinnt; GitHub Actions per Commit-SHA mit Versionskommentar, fortgeschrieben durch Dependabot (seit TP-2026-W44-36, geprüft in `tests/ci/actions.test.ts`) | |
+| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob; `npm audit --omit=dev --audit-level=high` nach `npm ci` bricht bei hohen und kritischen Meldungen zu ausgelieferten Paketen ab (seit TP-2026-W44-37) | Entwicklungsabhängigkeiten nicht im Audit (Stand 30.10.2026: drei mittlere Meldungen über `@capacitor/cli` → `xcode` → `uuid`); mittlere Meldungen ausgelieferter Pakete brechen nicht ab |
 | Dependabot schlägt wöchentlich Aktualisierungen für npm-Pakete und GitHub Actions vor (`.github/dependabot.yml`, seit 0.6.2); Node-Version festgelegt (`engines`, `.nvmrc`) | |
 | Veröffentlichung nur von `main` nach Tests, Build und Browsertests | Version von KeychainSwift nicht festgelegt, bis `Package.resolved` eingecheckt ist |
 | Wenige Abhängigkeiten, nur permissive Lizenzen; `tests/lizenzen/` scheitert bei unzulässiger Lizenz oder fehlendem Eintrag in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) | SBOM erfasst nur npm-Pakete, nicht die nativen Bibliotheken |
@@ -141,3 +141,4 @@ Begründung der Freigabe:
 | 1.3 | 26.10.2026 | Abschnitt 3.8 Verfügbarkeit: Inaktivitätsgrenze 120 s für Antwortströme, gemeinsame Wiederholungs- und Neustartmechanik (TP-2026-W44-02/-03/-04); Abschnitt 3.7: Dependabot und festgelegte Node-Version (TP-2026-W44-08); Abschnitt 3.2: Ablage mit Passphrase (TP-2026-W44-09) (App 0.6.2) |
 | 1.4 | 27.10.2026 | Abschnitt 3.9: Ollama als lokaler Anbieter; Content-Security-Policy um `http://localhost:11434` und `http://127.0.0.1:11434` erweitert, mit Begründung und Restrisiko; Abschnitt 3.4 angepasst (TP-2026-W44-26, App 0.6.3) |
 | 1.5 | 27.10.2026 | Abschnitt 3.1: Datenhülle für Material mit neutralisierten Schließtags, Datenregel auch im Systemauftrag von S1, Kurzantwort mit nicht befolgten Aufforderungen; Grenze der Hülle bei Suchergebnissen, abgerufenen Seiten und PDFs (TP-2026-W44-29, App 0.6.4) |
+| 1.6 | 30.10.2026 | Abschnitt 3.7 Lieferkette: GitHub Actions per Commit-SHA (TP-2026-W44-36) und `npm audit` für ausgelieferte Pakete in der CI (TP-2026-W44-37) von „offen“ nach „vorhanden“; Grenze des Audits bei Entwicklungsabhängigkeiten als offen ergänzt (App 0.6.12, ohne Änderung der App) |

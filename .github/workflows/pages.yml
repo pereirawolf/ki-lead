@@ -33,11 +33,11 @@ jobs:
   pruefen:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Bei Pull Requests ist HEAD der Merge-Commit; sein erster Elternteil ist die aktuelle Basis
           fetch-depth: 2
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -66,9 +66,12 @@ jobs:
           fi
 
       - run: npm ci
+      # Bekannte Schwachstellen der ausgelieferten npm-Pakete (seit TP-2026-W44-37): Abbruch ab Stufe „high“; mittlere
+      # Meldungen stehen im Protokoll. Entwicklungsabhängigkeiten bleiben außen vor (nicht ausgeliefert, Pflege durch Dependabot).
+      - run: npm audit --omit=dev --audit-level=high
       # Stückliste der ausgelieferten npm-Pakete (CycloneDX, ohne Entwicklungsabhängigkeiten); siehe THIRD-PARTY-NOTICES.md
       - run: npm sbom --omit dev --sbom-format cyclonedx --sbom-type application --package-lock-only > ki-lead-sbom.cdx.json
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ki-lead-sbom
           path: ki-lead-sbom.cdx.json
@@ -89,7 +92,7 @@ jobs:
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
       - id: browser-cache
         if: steps.playwright.outcome == 'success'
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
@@ -124,13 +127,13 @@ jobs:
       - if: steps.umfang.outputs.kern != 'true' && steps.umfang.outputs.pwa != 'true'
         run: echo "Nur Inhalte geändert (Dokumentation, SOP, Bewertungsfälle); Browsertests entfallen für diesen Pull Request und laufen nach dem Zusammenführen auf main."
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: playwright-report
           path: playwright-report
           retention-days: 7
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         if: github.ref == 'refs/heads/main' && github.event_name != 'schedule' && vars.PAGES_AKTIV == 'true'
         with:
           path: dist
@@ -152,4 +155,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
