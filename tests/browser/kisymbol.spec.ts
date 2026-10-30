@@ -20,9 +20,11 @@ test("KI-Chip wechselt zwischen „KI offline“ und „KI online“", async ({ 
   await expect(chip).toHaveText("KI online");
   await bereich(page, "Auswertung");
   await expect(chip).toHaveText("KI online");
-  await expect(page.getByRole("button", { name: /^KI online: Anfrage läuft, S1/ })).toBeVisible();
+  await expect(page.getByRole("img", { name: /^KI online: Anfrage läuft, S1/ })).toBeVisible();
+  // Seit 0.6.12 reine Statusanzeige (KP-2026-W44-01): kein Knopf, kein Sprung
+  await expect(page.getByRole("button", { name: /^KI (on|off)line/ })).toHaveCount(0);
 
-  await chip.click();
+  await bereich(page, "KI-Erfassung");
   await page.getByRole("button", { name: "Abbrechen", exact: true }).click();
   await expect(chip).toHaveText("KI offline");
 });
@@ -52,4 +54,33 @@ test("Nach S1 ist die Anfrage beendet: KI offline, bis S2 startet", async ({ pag
   await expect.poll(() => netz.ki.length).toBe(4);
   await expect(chip).toHaveText("KI online");
   await expect(chip).toHaveAttribute("aria-label", /S2 Recherche und Entwurf/);
+});
+
+test("KP-2026-W44-01: Verbindungstest der API-Schlüssel setzt den Chip auf „KI online“, bis die Antwort da ist", async ({ page }) => {
+  let freigeben = () => {};
+  const warten = new Promise<void>((ja) => (freigeben = ja));
+  await page.route("https://api.anthropic.com/**", async (route) => {
+    if (route.request().method() === "OPTIONS")
+      return route.fulfill({
+        status: 204,
+        headers: { "access-control-allow-origin": "*", "access-control-allow-methods": "POST", "access-control-allow-headers": "*" },
+      });
+    await warten;
+    return route.fulfill({
+      status: 401,
+      headers: { "access-control-allow-origin": "*", "content-type": "application/json" },
+      body: JSON.stringify({ type: "error", error: { type: "authentication_error", message: "invalid x-api-key" } }),
+    });
+  });
+  await oeffnen(page);
+  const chip = page.locator(".kopf-ki");
+  await bereich(page, "Einstellungen");
+  await page.getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  const feld = page.getByLabel("API-Schlüssel Anthropic");
+  await feld.fill("sk-ant-test");
+  await expect(chip).toHaveText("KI offline");
+  await feld.locator("xpath=ancestor::section[1]").getByRole("button", { name: "Verbindung prüfen" }).click();
+  await expect(chip).toHaveText("KI online");
+  freigeben();
+  await expect(chip).toHaveText("KI offline");
 });

@@ -1,7 +1,12 @@
 // KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
 // und noch nicht beendet ist. Der Chip trägt die Farben des Profils: in Ruhe zart, während der Anfrage gefüllt in der
-// Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die KI-Erfassung selbst. Ein Klick führt dorthin.
-// Seit 0.6.6 meldet auch die Management Summary ihre Anfrage (Stufe „ms“); der Klick führt dann zur Meldung.
+// Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die jeweilige Ansicht selbst.
+// Seit 0.6.12 (KP-2026-W44-01) liest der Chip den zentralen Zähler laufender Anfragen (src/anbieter/laufzaehler.ts): jede
+// KI-Nutzung zählt, auch Testläufe und der Verbindungstest. Er ist eine reine Statusanzeige, kein Knopf. Melden
+// KI-Erfassung oder Management Summary ihren Lauf, nennt der zugängliche Name die Stufe bzw. den Titel.
+import { useSyncExternalStore } from "react";
+import { abonniereAnfragen, laufendeAnfragen } from "../anbieter/laufzaehler";
+
 export type KopfLaufStufe = "s1" | "s2" | "s3" | "ms";
 
 /** Laufende KI-Anfrage, wie KI-Erfassung oder Management Summary sie an die Kopfleiste melden; null, solange keine läuft */
@@ -13,8 +18,10 @@ export interface KopfLauf {
 }
 
 export interface KiSymbolProps {
+  /** Gemeldeter Lauf mit Stufe (nur für den zugänglichen Namen und die Ansage) */
   lauf?: KopfLauf | null;
-  zurKi: () => void;
+  /** Zahl laufender Anfragen; ohne Angabe aus dem zentralen Zähler */
+  anfragen?: number;
 }
 
 const STUFE: Record<KopfLaufStufe, string> = {
@@ -27,36 +34,41 @@ const STUFE: Record<KopfLaufStufe, string> = {
 const stufeText = (lauf: KopfLauf) =>
   lauf.stufe === "s2" && lauf.verdichtung ? "S2 Verdichtung und Entwurf" : lauf.stufe === "ms" && lauf.titel ? lauf.titel : STUFE[lauf.stufe];
 
+/** Online, wenn der Zähler eine laufende Anfrage kennt oder ein Lauf gemeldet ist */
+const istOnline = (lauf: KopfLauf | null | undefined, anfragen = 0) => anfragen > 0 || !!lauf;
+
 /** Zugänglicher Name und Tooltip; beginnt mit dem sichtbaren Text */
-export function kiSymbolText(lauf: KopfLauf | null | undefined): string {
-  if (!lauf) return "KI offline: keine KI-Anfrage aktiv. Zur KI-Erfassung";
-  return `KI online: Anfrage läuft, ${stufeText(lauf)}. ${lauf.stufe === "ms" ? "Zur Meldung" : "Zur KI-Erfassung"}`;
+export function kiSymbolText(lauf: KopfLauf | null | undefined, anfragen = 0): string {
+  if (!istOnline(lauf, anfragen)) return "KI offline: keine KI-Anfrage aktiv";
+  if (anfragen > 1) return `KI online: ${anfragen} Anfragen laufen${lauf ? `, darunter ${stufeText(lauf)}` : ""}`;
+  return lauf ? `KI online: Anfrage läuft, ${stufeText(lauf)}` : "KI online: Anfrage läuft";
 }
 
 /** Ansage für Bildschirmleser bei jedem Wechsel von Stufe oder Zustand */
-export function kiAnsage(lauf: KopfLauf | null | undefined): string {
+export function kiAnsage(lauf: KopfLauf | null | undefined, anfragen = 0): string {
   // Der Anfangsinhalt einer Statusregion wird nicht angesagt, erst ihre Änderung
-  return lauf ? `KI online: ${stufeText(lauf)}.` : "KI offline.";
+  if (!istOnline(lauf, anfragen)) return "KI offline.";
+  return lauf ? `KI online: ${stufeText(lauf)}.` : "KI online.";
 }
 
-export function KiSymbol({ lauf, zurKi }: KiSymbolProps) {
-  const online = !!lauf;
-  const text = kiSymbolText(lauf);
+/** Zahl laufender KI-Anfragen als React-Zustand */
+export function useLaufendeAnfragen(): number {
+  return useSyncExternalStore(abonniereAnfragen, laufendeAnfragen, laufendeAnfragen);
+}
+
+export function KiSymbol({ lauf, anfragen }: KiSymbolProps) {
+  const zentral = useLaufendeAnfragen();
+  const n = anfragen ?? zentral;
+  const online = istOnline(lauf, n);
+  const text = kiSymbolText(lauf, n);
   return (
     <>
       <span className="sr-only" role="status" aria-live="polite">
-        {kiAnsage(lauf)}
+        {kiAnsage(lauf, n)}
       </span>
-      <button
-        type="button"
-        className={online ? "kopf-ki online" : "kopf-ki offline"}
-        data-zustand={online ? "online" : "offline"}
-        onClick={zurKi}
-        aria-label={text}
-        title={text}
-      >
+      <span role="img" className={online ? "kopf-ki online" : "kopf-ki offline"} data-zustand={online ? "online" : "offline"} aria-label={text} title={text}>
         <span className="kopf-ki-text">{online ? "KI online" : "KI offline"}</span>
-      </button>
+      </span>
     </>
   );
 }

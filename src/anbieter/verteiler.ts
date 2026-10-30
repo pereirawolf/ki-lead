@@ -5,6 +5,7 @@
 // keinem Anbieter gehört, ist ein Fehler, statt still Anthropic zugeordnet zu werden (bis 0.6.2 fiel etwa „llama3“ auf
 // Anthropic).
 
+import { gezaehlt } from "./laufzaehler";
 import { AnthropicAnbieter } from "./anthropic";
 import { aufwandStufenFuer } from "./aufwand";
 import { mistralWerkzeuge, MistralAnbieter } from "./mistral";
@@ -190,6 +191,7 @@ export class Verteiler implements LlmAnbieter {
       return Promise.reject(
         new AnbieterFehler(`Für ${ANBIETER_NAME[id]} (${a.modell}) ist kein API-Schlüssel hinterlegt. Bitte unter „Einstellungen“ eintragen.`, 0, "schluessel"),
       );
-    return (this.cache[id] ??= this.bauen(id, k)).senden(a);
+    // Jede Anfrage zählt für den KI-Chip der Kopfleiste, bis sie beendet ist (seit 0.6.12, KP-2026-W44-01)
+    return gezaehlt((this.cache[id] ??= this.bauen(id, k)).senden(a));
   }
 }

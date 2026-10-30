@@ -16,8 +16,9 @@ export interface KiZugangWert {
   /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter & API“ */
   zuEinstellungen: (bereich?: EinstellungsBereich) => void;
   /**
-   * Laufende Anfrage der Management Summary an die Kopfleiste melden, null bei Ende (seit 0.6.6): KI-Chip, Rückfrage beim
-   * Profilwechsel und beim Verlassen der Seite. Die KI-Erfassung meldet weiter über ihr Prop laufStand.
+   * Laufende Anfrage der Management Summary an die Kopfleiste melden, null bei Ende (seit 0.6.6): Titel im zugänglichen
+   * Namen des KI-Chips, Rückfrage beim Profilwechsel und beim Verlassen der Seite. Ob der Chip online ist, bestimmt seit
+   * 0.6.12 der zentrale Zähler (src/anbieter/laufzaehler.ts). Die KI-Erfassung meldet weiter über ihr Prop laufStand.
    */
   laufMelden?: (lauf: KopfLauf | null) => void;
 }
