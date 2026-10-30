@@ -793,3 +793,22 @@ Angepasst ohne Änderung des Solls (neue Bereichsnamen und Texte): `tests/ui/app
 | Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug, README nennt sie | Vorlage – eigene Organisation (KP-2026-W43-60) › ZS-2026-W44-07: … | `tests/profil/vorlage.test.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Zur KI-Erfassung“/„Zur Meldung“, kein Klick; Soll geändert nach KP-2026-W44-01), `tests/browser/kisymbol.spec.ts` (Rolle `img` statt `button`), `tests/lagebild/lagebild.test.ts` (mehrere Meldungen derselben Stelle: mit Kennung über die Kennung, ohne Kennung nach Stelle), `tests/profil/sop-redaktion.test.ts` (Begriff „Beurteilung“), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.7.0).
+
+## CI-Lieferkette (Nachtrag zu 0.6.12, TP-2026-W44-36, -37, Entscheidung des Herausgebers vom 30.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Drei Workflows mit zwölf Einbindungen von Actions; jede per Commit-SHA mit Versionskommentar | GitHub Actions › TP-2026-W44-36: … | `tests/ci/actions.test.ts` (neu) |
+| `npm audit --omit=dev --audit-level=high` nach `npm ci` in `pages.yml` | GitHub Actions › TP-2026-W44-37: … | `tests/ci/actions.test.ts` (neu) |
+
+## Freigabe und Datensicherheit (0.6.13, TP-2026-W44-42 bis -45, Freigabe des Herausgebers vom 30.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Finale PDF mit Schemabefund trägt den Vermerk auf jeder Seite und in den Schlüsselwörtern; ohne Befund und im Entwurf nicht | TP-2026-W44-42: Vermerk „Schemaprüfung mit Befund“ › … | `tests/dokumente/pdf.test.ts` |
+| Hinweis bei „Handlungsrelevant bis“ auf oder vor t0, nicht nach t0, nicht bei „überfällig“, nicht ohne Meldezeitpunkt | TP-2026-W44-43: Frist auf oder vor dem Meldezeitpunkt › … | `tests/kern/kennsaetze.test.ts` |
+| Sicherung ohne Schlüssel, Rundreise, abgelehnte Dateien | Sicherung des Gerätestands › TP-2026-W44-44: … | `tests/speicher/sicherung.test.ts` (neu) |
+| Löschen beider Datenbanken; Rückfrage abbrechen löscht nichts; Bestätigen löscht und startet neu | Alle Daten dieses Geräts löschen › TP-2026-W44-45: …; Bereich „Daten“ › TP-2026-W44-45: … | `tests/speicher/sicherung.test.ts` (neu) |
+| Sichern, Löschen und Einspielen im echten Browser | TP-2026-W44-44/-45: sichern ohne Schlüssel, alles löschen, Sicherung einspielen | `tests/browser/daten.spec.ts` (neu) |
+
+Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts` und `tests/browser/einstellungen.spec.ts` (acht statt sieben Bereiche).

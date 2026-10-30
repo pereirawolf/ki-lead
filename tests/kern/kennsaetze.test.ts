@@ -35,3 +35,42 @@ describe("Kennsätze im Fließtext", () => {
     expect(h.some((b) => /„Neubewertung bei:“ steht im Fließtext/.test(b.text))).toBe(true);
   });
 });
+
+// Frist auf oder vor t0 im Prüfschritt (seit 0.6.13). Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A3.json
+// vom 30.10.2026 (Arbeitspaket A3), TP-2026-W44-43; Fehlerbild der Vergleichsreihen vom 25.10.2026.
+describe("TP-2026-W44-43: Frist auf oder vor dem Meldezeitpunkt", () => {
+  const ZONE = "Europe/Berlin";
+  /** Meldung HE mit Meldezeitpunkt 14.10.2026 10:15 und einer Fristzeile im ersten Sachverhalt */
+  const mitFrist = (zeile: string, t0 = "2026-10-14T10:15") => {
+    const m = structuredClone(he);
+    m.meldezeitpunkt = t0;
+    m.sachverhalte[0].sofort.bewertung_text = `Kernaussage: Lage angespannt.\n${zeile}`;
+    return m;
+  };
+  const frist = async (m: unknown, zone: string | undefined = ZONE) => {
+    const { profil: p } = await profil("lead-beispiel");
+    return ausfuellHinweise(m as never, p!.ui, zone).filter((b) => /liegt auf oder vor dem Meldezeitpunkt/.test(b.text));
+  };
+
+  it.each([
+    ["vor t0", "Handlungsrelevant bis: 13.10.2026 18:00 – Sandsäcke ausgeben, Kreise", 1],
+    ["auf t0 mit Uhrzeit", "Handlungsrelevant bis: 14.10.2026 10:15 – Lage melden, Land", 1],
+    ["auf t0 ohne Uhrzeit (Tag zählt)", "Handlungsrelevant bis: 14.10.2026 – Lage melden, Land", 1],
+    ["nach t0 am selben Tag", "Handlungsrelevant bis: 14.10.2026 16:00 – Lage melden, Land", 0],
+    ["am Folgetag", "Handlungsrelevant bis: 15.10.2026 – Lage melden, Land", 0],
+    ["als überfällig gekennzeichnet", "Handlungsrelevant bis: 13.10.2026 18:00 – überfällig, Erledigung ungeklärt", 0],
+  ])("%s", async (_name, zeile, anzahl) => {
+    expect((await frist(mitFrist(zeile))).length).toBe(anzahl);
+  });
+
+  it("ohne Meldezeitpunkt kein Hinweis", async () => {
+    expect((await frist(mitFrist("Handlungsrelevant bis: 13.10.2026 18:00 – Lage melden, Land", ""))).length).toBe(0);
+  });
+
+  it("nennt Sachverhalt und Datum im Hinweis", async () => {
+    const [b] = await frist(mitFrist("Handlungsrelevant bis: 13.10.2026 18:00 – Sandsäcke ausgeben, Kreise"));
+    expect(b!.stufe).toBe("hinweis");
+    expect(b!.text).toContain("„Handlungsrelevant bis: 13.10.2026“");
+    expect(b!.text).toContain("überfällig, Erledigung ungeklärt");
+  });
+});

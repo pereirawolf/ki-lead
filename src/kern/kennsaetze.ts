@@ -5,7 +5,7 @@ import { holeWert } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
 import { zeitstrahlHinweise } from "./zeitstrahl";
 import { feldUi } from "./ui";
-import { zeitpunktInZone } from "./zeit";
+import { isoLokalZuZeitpunkt, tagInZone, zeitpunktInZone, zoneOder } from "./zeit";
 import type { Befund, Meldung, TextGliederung, UiKonfig } from "./typen";
 
 export const DATUM_RE = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/;
@@ -151,10 +151,12 @@ export function pflichtHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   return out;
 }
 
-export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
+export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): Befund[] {
   const r = ui.rollen;
   const ks = ui.kennsaetze || {};
   const out: Befund[] = [];
+  const zone = zoneOder(zeitzone);
+  const t0 = r.meldezeitpunkt ? isoLokalZuZeitpunkt(String(holeWert(d, r.meldezeitpunkt) || ""), zone) : null;
   const elementName = feldUi(ui, r.sachverhalte).element_label || "Sachverhalt";
   sachverhalte(d, ui).forEach((sv, i) => {
     const bez = r.sv_bezeichnung ? holeWert(sv, r.sv_bezeichnung) : "";
@@ -177,6 +179,21 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig): Befund[] {
     }
     if (kennsaetzeAlle(bt, ks.handlungsrelevant).some((hb) => !DATUM_RE.test(hb))) {
       out.push({ stufe: "hinweis", text: `${name}: „${ks.handlungsrelevant}“ bitte mit Datum im Format TT.MM.JJJJ angeben.` });
+    }
+    // Frist auf oder vor t0 (seit 0.6.13, TP-2026-W44-43): eine bei Ausgabe schon erreichte Frist ist als überfällig zu
+    // kennzeichnen (SOP-LEAD A.7.3). Ohne Uhrzeit zählt der Tag: derselbe Tag wie t0 gilt als „auf t0“.
+    if (t0) {
+      for (const hb of kennsaetzeAlle(bt, ks.handlungsrelevant)) {
+        if (/überfällig/i.test(hb)) continue;
+        const f = leseFrist(hb, zone);
+        if (!f.datum) continue;
+        const erreicht = f.genauigkeit === "tag" ? tagInZone(f.datum, zone) <= tagInZone(t0.datum, zone) : f.datum.getTime() <= t0.datum.getTime();
+        if (erreicht)
+          out.push({
+            stufe: "hinweis",
+            text: `${name}: „${ks.handlungsrelevant} ${hb.match(DATUM_RE)?.[0] ?? ""}“ liegt auf oder vor dem Meldezeitpunkt. Eine bei Ausgabe schon erreichte Frist als „überfällig, Erledigung ungeklärt“ kennzeichnen oder den nächsten offenen Termin nennen.`,
+          });
+      }
     }
     // Offene Stellen aus Vorlagen der LEAD-Eingabehilfen (⟦…⟧) sind noch auszufüllen oder zu streichen
     for (const feld of new Set([...(r.sv_textfelder || []), ...feldhilfeFelder(ui).keys()])) {

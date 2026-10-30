@@ -21,7 +21,7 @@ afterEach(async () => {
 const OHNE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "" };
 
 /** Bereichsnamen in der Reihenfolge der Navigation (fest, unabhängig von der Implementierung) */
-const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
+const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
 
 /** Ansicht mit eigenem Zustand, damit Änderungen wie in der App sofort wirken */
 function MitZustand({
@@ -62,7 +62,7 @@ const ueberschriften = () => [...document.querySelectorAll(".bereich-inhalt h2")
 const radio = (wert: string) => document.querySelector(`input[name="voreinstellung"][value="${wert}"]`) as HTMLInputElement;
 
 describe("Einstellungen: Navigation in Bereichen", () => {
-  it("zeigt sieben Bereiche, beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
+  it("zeigt acht Bereiche (seit 0.6.13 mit „Daten“), beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [] }));
     expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE);
     expect(ueberschriften()).toEqual(["Übersicht"]);

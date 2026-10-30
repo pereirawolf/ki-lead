@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { jsPDF } from "jspdf";
-import { meldungAlsPdf, pdfText, radarZeichnen } from "../../src/dokumente/pdf";
+import { meldungAlsPdf, pdfText, radarZeichnen, schemaVermerk } from "../../src/dokumente/pdf";
 
 describe("PDF mit Lagenradar", () => {
   it("zeichnet das Radar als Grafik neben die Achsenwerte", async () => {
@@ -142,5 +142,38 @@ describe("Kennsatzzeilen und Sonderzeichen im PDF (Lauf 20261022-073727-q2ex)", 
     const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(m, p, true).arrayBuffer()));
     expect(roh).toContain("D1 4 -> 1");
     expect(roh).not.toMatch(/!\u0092|!’/);
+  });
+});
+
+// Vermerk bei finaler Ausgabe trotz Schemabefund (seit 0.6.13). Grundlage: Befunddatei
+// ki-lead-befund_technik_2026-W44-A3.json vom 30.10.2026 (Arbeitspaket A3), TP-2026-W44-42; SOP-LEAD A.5.
+describe("TP-2026-W44-42: Vermerk „Schemaprüfung mit Befund“", () => {
+  const roh = async (b: Blob) => new TextDecoder("latin1").decode(new Uint8Array(await b.arrayBuffer()));
+  // Im PDF-Strom stehen Klammern maskiert: „\\(“ und „\\)“
+  const VERMERK = pdfText(schemaVermerk(3)).replace(/[()]/g, "\\$&");
+
+  it("benennt die Zahl der Abweichungen", () => {
+    expect(schemaVermerk(1)).toBe("Schemaprüfung mit Befund (1 Abweichung) – als final ausgegeben");
+    expect(schemaVermerk(3)).toBe("Schemaprüfung mit Befund (3 Abweichungen) – als final ausgegeben");
+  });
+
+  it("finale PDF mit Befund: Vermerk auf jeder Seite und in den Schlüsselwörtern", async () => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const text = await roh(meldungAlsPdf(ilkaMeldung("Bund"), p, false, { schemaBefunde: 3 }));
+    const seiten = (text.match(/\/Type \/Page\b/g) || []).length;
+    expect(seiten).toBeGreaterThan(1);
+    expect(text.split(`(${VERMERK}) Tj`).length - 1).toBe(seiten);
+    // Schlüsselwörter mit Umlaut stehen als UTF-16 im Dokumentinfo-Eintrag
+    const kw = text.slice(text.indexOf("/Keywords"), text.indexOf("/Creator")).replace(/\u0000/g, "");
+    expect(kw).toContain("KI-LEAD, KI-generiert; Schemaprüfung mit Befund");
+  });
+
+  it.each([
+    ["finale PDF ohne Befund", false, 0],
+    ["Entwurf mit Befund", true, 3],
+  ])("%s: kein Vermerk", async (_name, entwurf, befunde) => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const text = await roh(meldungAlsPdf(ilkaMeldung("Bund"), p, entwurf, { schemaBefunde: befunde }));
+    expect(text).not.toContain("Schemapr");
   });
 });

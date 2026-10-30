@@ -69,7 +69,7 @@ export function Pruefen({
   const eigenePflicht = useMemo(() => (befunde ? null : pflichtHinweise(meldung, profil.ui)), [befunde, profil, meldung]);
   const schemaBefunde = befunde?.schema ?? eigeneSchema ?? [];
   const pflicht = befunde?.pflicht ?? eigenePflicht ?? [];
-  const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui), [profil, meldung]);
+  const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone), [profil, meldung]);
   const ent = r.entstehung_feld ? meldung[r.entstehung_feld] : undefined;
   const svs = sachverhalte(meldung, profil.ui);
   const radarFeld = r.sv_radar ? feldUi(profil.ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
@@ -81,7 +81,7 @@ export function Pruefen({
     !final ||
     !schemaBefunde.length ||
     bestaetigen(
-      `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft.\n\nTrotzdem final ausgeben?`,
+      `Die Meldung besteht die Schemaprüfung als finale Meldung nicht (${schemaBefunde.length} Abweichung(en)). Eine so ausgegebene Fassung gilt als fehlerhaft; das PDF trägt dann auf jeder Seite den Vermerk „Schemaprüfung mit Befund“, das JSON nicht.\n\nTrotzdem final ausgeben?`,
       { ja: "Trotzdem final ausgeben" },
     );
   const exportiere = async (final: boolean) => {
@@ -100,7 +100,11 @@ export function Pruefen({
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
       const { meldungAlsPdf } = await import("../dokumente/pdf");
-      dateiAnbieten(meldungAlsPdf(daten, profil, !final), dateiname(daten, profil, !final, jetzt) + ".pdf", "application/pdf");
+      dateiAnbieten(
+        meldungAlsPdf(daten, profil, !final, { schemaBefunde: schemaBefunde.length }),
+        dateiname(daten, profil, !final, jetzt) + ".pdf",
+        "application/pdf",
+      );
     } catch (e) {
       setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || String(e)}). Die Meldung lässt sich weiterhin als JSON speichern.`);
     }

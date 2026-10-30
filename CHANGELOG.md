@@ -83,6 +83,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
 | 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
+| 0.6.13 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.13“ |
+
+## [0.6.13] – 30.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A3 „Freigabe und Datensicherheit“), freigegeben vom Herausgeber am 30.10.2026, mit dessen Entscheidung E7 (kein Sperrschalter, sichtbarer Vermerk). Baut auf 0.6.12 auf. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+### Neu
+
+- **Bereich „Daten“ unter „Einstellungen“ (TP-2026-W44-44, -45):** „Gerätestand sichern“ schreibt Gerätespeicher und Testlaufarchiv als JSON-Datei `ki-lead-sicherung/1`, ohne API-Schlüssel und ihre Ablage (alle Einträge, deren Schlüssel mit `schluessel` beginnt); Binärdaten und Zeitpunkte bleiben lesbar kodiert. „Gerätestand wiederherstellen“ prüft Format und Inhalt, fragt nach und ersetzt den Stand; Schlüssel des Geräts bleiben. „Alle Daten dieses Geräts löschen“ leert nach Rückfrage Gerätespeicher einschließlich Schlüssel, Testlaufarchiv und Farbschema, in der nativen App auch den Schlüsselbund, und startet die App neu (`src/ui/Daten.tsx`, `src/speicher/sicherung.ts`; `alleSchluesselEntfernen()` in `src/schluessel/ablage.ts`, `startLoeschen()` in `src/darstellung/speicher.ts`). Die Adresse `#/einstellungen/daten` öffnet den Bereich.
+
+### Geändert
+
+- **Finale PDF trotz Schemabefund (TP-2026-W44-42):** Nach der Rückfrage trägt die PDF auf jeder Seite und in den Schlüsselwörtern „Schemaprüfung mit Befund (n Abweichungen) – als final ausgegeben“; die Rückfrage nennt das. Das JSON bleibt ohne Vermerk, weil das Schema keine weiteren Felder zulässt (`meldungAlsPdf(…, { schemaBefunde })`, `schemaVermerk()`).
+- **Frist auf oder vor t0 (TP-2026-W44-43):** Der Prüfschritt weist auf jede Zeile „Handlungsrelevant bis:“ hin, deren Datum auf oder vor dem Meldezeitpunkt liegt und die nicht „überfällig“ trägt; ohne Uhrzeit zählt der Tag (`ausfuellHinweise(d, ui, zeitzone)`).
+- Spezifikation 0.6.13 (Abschnitte 5.1, 5.4, 7; offener Punkt 11 erledigt, 19 neu), [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.10 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md) (auch für den Nachtrag TP-2026-W44-36, -37). Versionsangaben 0.6.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 613, iOS 613).
+
+### Tests
+
+- `tests/speicher/sicherung.test.ts` (neu, 9): Inhalt der Sicherung ohne Schlüssel (mit Erkennungsmarke), Rundreise mit Binärdaten und Zeitpunkten und den Schlüsseln des Zielgeräts, vier abgelehnte Dateien, Löschen beider Datenbanken; Bereich „Daten“: Abbrechen löscht nichts, Bestätigen löscht und startet neu.
+- `tests/kern/kennsaetze.test.ts` (8 neu): Frist vor, auf (mit und ohne Uhrzeit), nach t0 am selben Tag, am Folgetag, als überfällig gekennzeichnet; ohne Meldezeitpunkt; Text des Hinweises.
+- `tests/dokumente/pdf.test.ts` (4 neu): Text des Vermerks, Vermerk auf jeder Seite und in den Schlüsselwörtern, kein Vermerk ohne Befund und im Entwurf.
+- `tests/browser/daten.spec.ts` (neu, 1): sichern ohne Schlüssel, alles löschen, Sicherung einspielen mit echter IndexedDB.
+- `tests/ui/einstellungen.test.ts`, `tests/browser/einstellungen.spec.ts`: acht Bereiche mit „Daten“.
 
 ## [0.6.12] – 30.10.2026
 
