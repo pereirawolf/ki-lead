@@ -781,3 +781,15 @@ Angepasst ohne Änderung des Solls: `tests/lagebild/redaktionscheck.test.ts` (de
 | Keine Anrede mit „du“ oder „Sie“ in `src/ui/`, `src/App.tsx` und `public/`, mit Gegenprobe; Arbeitsanweisungen bleiben beim „du“ | OF-2026-W44-04: neutrale Ansprache in der Oberfläche › … | `tests/ui/bereiche.test.ts` (neu) |
 
 Angepasst ohne Änderung des Solls (neue Bereichsnamen und Texte): `tests/ui/app.test.ts`, `tests/ui/eingabehilfen.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/ueber.test.ts` und die Browsertests unter `tests/browser/`.
+
+## Offene Befunde KW 44 (0.6.12, Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json`, Entscheidungen des Herausgebers vom 26. und 30.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Zähler laufender Anfragen über den Verteiler, gleichzeitige Anfragen, Fehler; abgelehnte Anfragen zählen nicht; doppelter Abschluss | KP-2026-W44-01: zentraler Zähler laufender KI-Anfragen › … | `tests/anbieter/laufzaehler.test.ts` (neu) |
+| Chip online bei jeder laufenden Anfrage, Name ohne Klickziel, mehrere Anfragen, folgt dem Zähler, kein Knopf | KP-2026-W44-01: KI-Chip aus dem zentralen Zähler, reine Statusanzeige › … | `tests/ui/kisymbol.test.ts` |
+| Verbindungstest der API-Schlüssel setzt den Chip auf „KI online“ | KP-2026-W44-01: Verbindungstest der API-Schlüssel … | `tests/browser/kisymbol.spec.ts` |
+| Fortschreibung, Doppelvergabe, eigenständige Kennungen, Bezug auf nicht geladene Kennung, Rückfall nach Stelle | ZS-2026-W44-06: Fortschreibung, Doppelvergabe und Bezug über die Sachverhaltskennung › … | `tests/lagebild/redaktionscheck.test.ts` |
+| Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug, README nennt sie | Vorlage – eigene Organisation (KP-2026-W43-60) › ZS-2026-W44-07: … | `tests/profil/vorlage.test.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Zur KI-Erfassung“/„Zur Meldung“, kein Klick; Soll geändert nach KP-2026-W44-01), `tests/browser/kisymbol.spec.ts` (Rolle `img` statt `button`), `tests/lagebild/lagebild.test.ts` (mehrere Meldungen derselben Stelle: mit Kennung über die Kennung, ohne Kennung nach Stelle), `tests/profil/sop-redaktion.test.ts` (Begriff „Beurteilung“), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.7.0).

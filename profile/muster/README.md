@@ -1,6 +1,6 @@
 # Vorlage – eigene Organisation
 
-Fassung 0.6 vom 27.10.2026 · Lizenz CC0 1.0: ohne Namensnennung übernehmbar
+Fassung 0.7 vom 30.10.2026 · Lizenz CC0 1.0: ohne Namensnennung übernehmbar
 
 Diese Vorlage zeigt alle Bestandteile eines Profilpakets als Gerüst. Platzhalter stehen in eckigen Klammern, etwa [Meldende Stelle]. Das Schema ist ein schlankes Beispiel einer Einsatzstelle ohne Länderliste und ohne Freigabeblock. Ein ausgearbeitetes Profil mit vollständiger SOP-Sammlung ist das Beispielprofil „LEAD-Beispiel – Koordinierungsstelle“.
 

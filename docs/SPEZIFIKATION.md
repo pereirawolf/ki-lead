@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.10 vom 30.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.6.12 vom 30.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -81,7 +81,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.33.1",
+  "version": "1.34.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -465,3 +465,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.8 | 29.10.2026 | Kurzantwort der KI-Erfassung als Prüfauftrag: Arbeitsanweisung Erfassung 1.7.0 mit höchstens vier beschrifteten Zeilen, gegliederte Anzeige im Schritt „Prüfung und Übergabe“ (Abschnitt S3; Rückmeldung des Herausgebers vom 29.10.2026) |
 | 0.6.9 | 29.10.2026 | Zeitstrahl je Sachverhalt mit Sachverhaltskennung und Bezug (Abschnitt 5.1 „Zeitstrahl, Kennung und Bezug“): Bereich auf der Seite „Quellen & Referenzen“, Vergabe der Kennung durch die App, Regeln im Steuerungsblock von S2, Nachbearbeitung nach S2, formale Befunde, Ausgaben in PDF und Lagebild; Profil 1.33.0 (ZS-2026-W44-01 bis -04) |
 | 0.6.10 | 30.10.2026 | Bereiche nach den Arbeitsschritten der LEAD-Systematik („Erfassung“, „KI-Erfassung“, „Auswertung“) mit einheitlichen Kennsätzen; Reiter, Überschrift und Kennsatz aus der App, Produkttitel aus dem Profil; neutrale Ansprache in der Oberfläche (Abschnitt 5, OF-2026-W44-01 bis -04) |
+| 0.6.12 | 30.10.2026 | KI-Chip aus einem zentralen Zähler laufender Anfragen, auch Testläufe und Verbindungstest, als reine Statusanzeige (Abschnitt 5.1, KP-2026-W44-01); Redaktionscheck erkennt Fortschreibung, Doppelvergabe und Bezug über die Sachverhaltskennung, Stelle als Rückfall (M3, ZS-2026-W44-06); offener Punkt 18 erledigt (ZS-2026-W44-06, -07) |

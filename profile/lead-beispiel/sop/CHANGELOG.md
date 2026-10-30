@@ -10,13 +10,24 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.20.1 vom 30.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.20.2 vom 30.10.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.20.1 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.20.2 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.20.2] – 30.10.2026
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json` (Freitagslauf KW 44, offene Befunde aus `befunde/eingang`), Entscheidungen des Herausgebers vom 26. und 30.10.2026. Dritte Stelle nach der Versionierungsregel: Die neuen Regeln stehen nach A.10.2 nur im Kodierleitfaden (1.7.0) und in der Arbeitsanweisung Erfassung (1.9.0); in der Sammelmappe ändern sich ein Verweis, ein Prüftermin und der Gültigkeitsstand.
+
+### Geändert
+
+- **B09 Gasversorgungsengpass 2.2.1 (OB-2026-W44-01):** `naechste_pruefung_faellig` 31.12.2026 statt 31.10.2026, auf Entscheidung des Herausgebers vom 30.10.2026 **ohne sachliche Prüfung** verschoben; Terminvermerk in Abschnitt 5. `quellen_geprueft_am` (21.10.2026, Teilprüfung) und die offenen Punkte (1) EU-Rahmen, (2) Fassung des Notfallplans Gas und (3) Länderzuständigkeiten bleiben. Erledigungsnachweis: Abschnitt 5, „Terminvermerk 30.10.2026“.
+- **B15 Cyberangriff / IT-Sicherheitsvorfall 2.5.1 (KP-2026-W44-02):** Prüfpunkt D2 in Abschnitt 3 verweist nur noch auf Kodierleitfaden D2, der die Regel zu Verwaltungsleistungen seit 1.7.0 allgemein führt. Erledigungsnachweis: B15, Abschnitt 3, Prüfpunkt D2.
+- **Teil A (KP-2026-W44-04):** A.2 nennt Abschnitt 4 des Kodierleitfadens „Beurteilung und Tendenz“; Gültigkeitsstand fortgeschrieben (Sammelmappe 3.20.2, Kodierleitfaden 1.7.0, Erfassung 1.9.0, Kurzfassung 2.4.1). Teil A A.3 bleibt nach A.10.2 unverändert (Entscheidung zu KP-2026-W44-02).
+- Lesefassung neu erzeugt. Quellenregister unverändert.
 
 ## [3.20.1] – 30.10.2026
 

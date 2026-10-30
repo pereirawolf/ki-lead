@@ -1483,6 +1483,76 @@
       "kurz": "Kenntniszeit („aufgenommen“, Meldezeitpunkt der ersten Meldung mit der Zeile) je Zeile des Zeitstrahls, gesetzt von der App.",
       "status": "umgesetzt",
       "pr": 105
+    },
+    {
+      "id": "KP-2026-W44-05",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Kopfzeile (Zeile 3)"
+        }
+      ],
+      "kurz": "Mindestfassungen in der Kopfzeile des Kodierleitfadens auf den abgestimmten Stand setzen.",
+      "status": "ueberholt",
+      "grund": "Kopfzeile des Kodierleitfadens nennt seit 1.5.0/1.6.0 Sammelmappe ab 3.20.0 und Erfassung ab 1.8.0; Mindestfassungen entsprechen dem abgestimmten Stand (main 307aedc)."
+    },
+    {
+      "id": "KP-2026-W44-06",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W44.json",
+      "commit": "cfb0253c7cdf164eac9e772540f8a9ce5f335ddb",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8, Änderungsprotokoll, Zeilen 1.4.0 und 1.3.0"
+        }
+      ],
+      "kurz": "Zeilen 1.3.0 und 1.4.0 im Änderungsprotokoll des Kodierleitfadens tauschen.",
+      "status": "ueberholt",
+      "grund": "Änderungsprotokoll des Kodierleitfadens (jetzt Abschnitt 9) ist aufsteigend geordnet: 1.3.0, 1.4.0, 1.5.0, 1.6.0 (main 307aedc)."
+    },
+    {
+      "id": "KP-2026-W43-17",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W43.json",
+      "commit": "051cd90",
+      "entschieden_am": "2026-10-23",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C01_radiologische-nukleare-lage.md",
+          "stelle": "Abschnitt 2, Prüffragen; Fachgrundlagen"
+        }
+      ],
+      "kurz": "Zuordnung von ANoPl-Bund (Tabelle 3.4, Referenzszenarien) und StrlSchG zu den Prüffragen von C01 am amtlichen Dokument verifizieren.",
+      "status": "zurueckgestellt",
+      "grund": "Vom Herausgeber am 23.10.2026 zurückgestellt (sop/CHANGELOG.md 3.16.0, „Offen“); am 30.10.2026 mit Wiedervorlage nachgetragen, weil der Eintrag im Register fehlte. Die Befunddatei liegt nicht im Eingang; die Dringlichkeit ist nicht überliefert und hier als niedrig angesetzt.",
+      "wieder_vorlegen_ab": "2026-12-31"
+    },
+    {
+      "id": "KP-2026-W43-49",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W43.json",
+      "commit": "051cd90",
+      "entschieden_am": "2026-10-23",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_NI_2026-10-14T09-45_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "quellen, Q5"
+        }
+      ],
+      "kurz": "Quellenidentität von Q5 der NI-Beispielmeldung feststellen (reale Bezugsquelle oder fiktiv), danach Kennzeichnung und Zweckangabe im LIESMICH.",
+      "status": "zurueckgestellt",
+      "grund": "Vom Herausgeber am 23.10.2026 zurückgestellt (sop/CHANGELOG.md 3.16.0, „Offen“); am 30.10.2026 mit Wiedervorlage nachgetragen, weil der Eintrag im Register fehlte. Die Befunddatei liegt nicht im Eingang; die Dringlichkeit ist nicht überliefert und hier als niedrig angesetzt.",
+      "wieder_vorlegen_ab": "2026-12-31"
     }
   ]
 }
