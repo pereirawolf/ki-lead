@@ -100,7 +100,7 @@ export function Bestaetigung({
     <>
       <h2 tabIndex={-1}>Gegenstand bestätigen</h2>
       <p className="einleitung">
-        Vorschlag aus Stufe S1. Prüfe Gliederung, Ereignisarten und SOPs und korrigiere sie bei Bedarf. Erst danach beginnt die Recherche.
+        Vorschlag aus Stufe S1. Gliederung, Ereignisarten und SOPs prüfen und bei Bedarf korrigieren. Erst danach beginnt die Recherche.
       </p>
       {!!vorschlag.appHinweise?.length && (
         <div className="kasten kasten-hinweis" role="status">
@@ -178,7 +178,7 @@ export function Bestaetigung({
       {verdichtung && vorschlag.sachverhalte.length > 3 && (
         <div className="kasten kasten-hinweis" role="status">
           <p>
-            {vorschlag.sachverhalte.length} Sachverhalte bei einer Verdichtung: Prüfe, ob mehrere Meldungen dasselbe Ereignis beschreiben und sich
+            {vorschlag.sachverhalte.length} Sachverhalte bei einer Verdichtung: prüfen, ob mehrere Meldungen dasselbe Ereignis beschreiben und sich
             zusammenführen lassen (SOP-LEAD A.7.1).
           </p>
         </div>

@@ -71,7 +71,7 @@ export async function oeffnen(page: Page): Promise<void> {
 }
 
 /** Hauptbereich über die Navigation wählen */
-export async function bereich(page: Page, name: "Meldung" | "KI-Erfassung" | "Lagebild" | "Profile" | "Einstellungen"): Promise<void> {
+export async function bereich(page: Page, name: "Erfassung" | "KI-Erfassung" | "Auswertung" | "Profile" | "Einstellungen"): Promise<void> {
   await page.getByRole("button", { name, exact: true }).click();
 }
 

@@ -222,13 +222,13 @@ export default function App() {
   };
 
   const kiUebernehmen = async (m: Meldung) => {
-    if (!(await bestaetigen("Den KI-Entwurf in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
+    if (!(await bestaetigen("Den KI-Entwurf in die Erfassung übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     zeigeAnsicht("meldung", ZUR_MELDUNG);
   };
 
   const lagebildOeffnen = async (m: Meldung) => {
-    if (!(await bestaetigen("Diese Meldung in die Meldungsmaske übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
+    if (!(await bestaetigen("Diese Meldung in die Erfassung übernehmen? Die dort geöffnete Meldung wird ersetzt.", { ja: "Übernehmen" }))) return;
     meldungErsetzen(m);
     zeigeAnsicht("meldung", ZUR_MELDUNG);
   };
@@ -386,7 +386,7 @@ export default function App() {
               aria-current={ansicht === "meldung" ? "page" : undefined}
               onClick={() => zeigeAnsicht("meldung")}
             >
-              Meldung
+              Erfassung
             </button>
             <button
               type="button"
@@ -402,7 +402,7 @@ export default function App() {
               aria-current={ansicht === "lagebild" ? "page" : undefined}
               onClick={() => zeigeAnsicht("lagebild")}
             >
-              {profil?.ui.lagebild?.titel || "Lagebild"}
+              Auswertung
             </button>
             <button
               type="button"

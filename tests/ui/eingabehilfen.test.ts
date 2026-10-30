@@ -190,7 +190,7 @@ describe("LEAD-Eingabehilfen in der Meldungsmaske", () => {
     await klick(vorlage(label, "Einordnung „…“:"));
     const nav = (n: RegExp) => knopf(n, document.querySelector(".hauptnav")!);
     await klick(nav(/^KI-Erfassung/));
-    await klick(nav(/^Meldung/));
+    await klick(nav(/^Erfassung/));
     await zuSachverhalten();
     expect(knopf(`Einfügung rückgängig: ${label}, Ereignis/Sachverhalt 1`)).toBeTruthy();
     await klick(knopf("Neue Meldung"));

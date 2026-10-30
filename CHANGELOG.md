@@ -80,6 +80,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.7 | letzter Commit des Pull Requests „Sprungziele: neuer Inhalt beginnt oben, Fokus auf der neuen Überschrift; 0.6.7“ |
 | 0.6.8 | letzter Commit des Pull Requests „Kurzantwort der KI-Erfassung als Prüfauftrag; Profil 1.32.0; 0.6.8“ |
 | 0.6.9 | letzter Commit des Pull Requests „Zeitstrahl je Sachverhalt mit Kennung und Bezug; Profil 1.33.0; 0.6.9“ |
+| 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
+
+## [0.6.10] – 30.10.2026
+
+Grundlage: Entscheidung des Herausgebers vom 30.10.2026 nach Beratung: die Bereiche der App einheitlich nach den Arbeitsschritten der LEAD-Systematik benennen (Erfassung, KI-Erfassung, Auswertung; die Darstellung ist das erzeugte Ergebnis), die Kennsätze parallel bauen und die Oberfläche neutral formulieren, ohne „du“ und ohne „Sie“. Die Arbeitsanweisungen an die KI-Modelle bleiben beim „du“. Anlasskennungen OF-2026-W44-01 (Bereichsnamen), -02 (Kennsätze), -03 (Produkttitel aus dem Profil, Bereichsnamen aus der App), -04 (neutrale Ansprache). Baut auf 0.6.9 auf.
+
+### Geändert
+
+- **Bereiche (OF-2026-W44-01):** Die Navigation heißt „Erfassung“ (bisher „Meldung“), „KI-Erfassung“ und „Auswertung“ (bisher „Lagebild“, Name aus `ui.lagebild.titel`), danach „Profile“ und „Einstellungen“. Die Adressen (`#/meldung`, `#/lagebild/…`) bleiben, damit Lesezeichen gültig bleiben.
+- **Kennsätze (OF-2026-W44-02):** je Bereich ein Satz unter der Überschrift, parallel gebaut: „Erfassung einer Meldung nach LEAD-Systematik“, „Erfassung einer Meldung nach LEAD-Systematik mit KI-Unterstützung“, „Auswertung von Meldungen mehrerer Stellen nach LEAD-Systematik“. Die bisherigen Erläuterungen (Stufen der KI-Erfassung, Prüfung und Freigabe in der Maske, Teilansichten des Lagebilds, „Die Daten bleiben auf diesem Gerät“) entfallen.
+- **Produkttitel aus dem Profil, Bereichsnamen aus der App (OF-2026-W44-03):** Überschrift und Kennsatz legt die App fest (`src/ui/Meldung.tsx`, `src/ui/KiErfassung.tsx`, `src/ui/Lagebild.tsx`, `src/App.tsx`). `ui.titel` steht nur noch über der Meldung im PDF und in dessen Metadaten, `ui.lagebild.titel` über Lagebild-PDF, Redaktionsbericht, Rückfrage „Alle … entfernen“ und Dateinamen; `ui.untertitel` erscheint, wenn vorhanden, als Ergänzung unter dem Kennsatz der Erfassung (etwa in `profile/muster`).
+- **Verweise auf die Erfassung:** „In die Erfassung übernehmen“ (bisher „In die Meldungsmaske übernehmen“), „In der Erfassung öffnen“ (bisher „In der Maske öffnen“), Rückfragen bei der Übernahme, Hinweise im KI-Ergebnis; Offline-Hinweis nennt „Erfassung, Auswertung, Profile und Ausgaben“.
+- **Neutrale Ansprache (OF-2026-W44-04):** Texte der Oberfläche ohne „du“ und ohne „Sie“, mit Infinitiv, Passiv oder sachlichem Bezug: KI-Erfassung (fehlender API-Schlüssel, Auftrag und Material, Dateien, Gegenstand bestätigen, Hinweis bei mehreren Sachverhalten, Ergebnis, nicht abrufbare Seiten mit „Angegebene URL“ statt „Deine URL“), Management Summary (Leeren, veraltete Fassung), Einstellungen (Ablage der Schlüssel, Schlüsselzeile, Modelle & Aufwand), Testläufe, Übergabe an die KI-Verdichtung, Über KI-LEAD („Ihre Eingaben“), Startfehler, Hinweise der App aus S1 („ist t0 hier oder im Auftrag vorzugeben“), Startprüfung und Reparaturseite (`public/`). Arbeitsanweisungen an die KI-Modelle (`src/pipeline/kontext.ts`, `src/pipeline/s2s3.ts`, `src/pipeline/vermerke.ts`, `src/profil/standardtexte/`) bleiben beim „du“.
+- **Beispielprofil 1.33.1:** `titel` „Meldung“, ohne `untertitel`; Sammelmappe 3.20.1 (nur Gültigkeitsstand); Einzelheiten im Profilverlauf.
+- Profilformat 1.24 (ohne Formatänderung), Spezifikation 0.6.10 (Abschnitt 5 „Bereiche und Ansprache“), docs/KI-VERORDNUNG.md (S4), README, docs/TESTZUORDNUNG.md.
+- Versionsangaben 0.6.10 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 610, iOS 610).
+
+### Tests
+
+- `tests/ui/bereiche.test.ts` (neu, 7): Navigation, Überschrift und Kennsatz je Bereich; Produkttitel im Beispielprofil und in den PDF-Metadaten; Untertitel eines anderen Profils als Ergänzung; keine Anrede mit „du“ oder „Sie“ in `src/ui/`, `src/App.tsx` und `public/` (mit Gegenprobe); Arbeitsanweisungen bleiben beim „du“.
+- Angepasst ohne Änderung des Solls (neue Bereichsnamen und Texte): `tests/ui/app.test.ts`, `tests/ui/eingabehilfen.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/ueber.test.ts`, die Browsertests unter `tests/browser/` (`hilfen.ts`, `barrierefreiheit`, `einstellungen`, `hauptablauf`, `kisymbol`, `pwa`, `sprungziele`).
 
 ## [0.6.9] – 29.10.2026
 

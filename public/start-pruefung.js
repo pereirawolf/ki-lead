@@ -30,7 +30,7 @@
     });
     kasten.appendChild(element("h1", "KI-LEAD startet nicht"));
     kasten.appendChild(element("p", grund));
-    kasten.appendChild(element("p", "Deine Meldungen, Zwischenstände, Profile, Einstellungen und API-Schlüssel bleiben auf diesem Gerät gespeichert."));
+    kasten.appendChild(element("p", "Meldungen, Zwischenstände, Profile, Einstellungen und API-Schlüssel bleiben auf diesem Gerät gespeichert."));
     var aktionen = element("p");
     var neu = element("button", "Erneut laden", { type: "button" });
     neu.addEventListener("click", neuLaden);

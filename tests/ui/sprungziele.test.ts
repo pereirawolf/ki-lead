@@ -256,7 +256,7 @@ describe("App: Sprungziele beim Wechsel der Ansicht", () => {
     scrollen(400);
     await klick(knopf("KI-Erfassung", document.querySelector(".hauptnav")!)!);
     expect(scrollAufrufe()).toEqual([900]);
-    await klick(knopf("Meldung", document.querySelector(".hauptnav")!)!);
+    await klick(knopf("Erfassung", document.querySelector(".hauptnav")!)!);
     expect(scrollAufrufe()).toEqual([0]);
   });
 });

@@ -1,7 +1,6 @@
 {
   "format": "lead-ui/1",
-  "titel": "LEAD-Meldevorlage",
-  "untertitel": "Meldung von Ereignissen/Sachverhalten (keine gesonderte Maßnahmenmeldung)",
+  "titel": "Meldung",
   "ausblenden": [
     "schema",
     "_status",

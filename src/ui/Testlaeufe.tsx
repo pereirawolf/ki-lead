@@ -153,7 +153,7 @@ export function TestlaeufeBereich(props: TestlaeufeProps) {
       <h2 id="einstellungen-bereich-titel">Testläufe</h2>
       <p className="einleitung">
         Standardisierte Testläufe am fiktiven Fall „Ilka“, um Modelle und Aufwand nach einer Änderung zu vergleichen und auszuwerten. Ein Testlauf besteht aus
-        einem oder mehreren Läufen. Das Ergebnis kommt als ZIP-Datei und bleibt im Archiv auf diesem Gerät, bis du es löschst.
+        einem oder mehreren Läufen. Das Ergebnis kommt als ZIP-Datei und bleibt bis zur Löschung im Archiv auf diesem Gerät.
       </p>
       <TestlaufAbschnitt {...props} archiviert={() => setArchiviert((n) => n + 1)} />
       <TestlaufArchiv aktualisierung={archiviert} />
@@ -718,8 +718,8 @@ export function TestlaufArchiv({ aktualisierung = 0 }: { aktualisierung?: number
       ) : (
         <>
           <p className="hinweis">
-            {eintraege.length === 1 ? "Ein Testlauf" : `${eintraege.length} Testläufe`}, zusammen {groesseText(gesamt)}, nur auf diesem Gerät. Sie bleiben, bis
-            du sie löschst.
+            {eintraege.length === 1 ? "Ein Testlauf" : `${eintraege.length} Testläufe`}, zusammen {groesseText(gesamt)}, nur auf diesem Gerät. Sie bleiben bis
+            zur Löschung erhalten.
           </p>
           <div className="aktionen testlauf-archiv-aktionen">
             <label className="testlauf-archiv-alle">

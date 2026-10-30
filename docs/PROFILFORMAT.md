@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.23 vom 29.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.24 vom 30.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -133,7 +133,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 
 ### Weitere Abschnitte
 
-- `format` (`lead-ui/1`), `titel`, `untertitel`: Kennung und Kopf der Eingabemaske; `ausblenden`: Felder der obersten Ebene, die das Formular nicht zeigt.
+- `format` (`lead-ui/1`), `titel`, `untertitel`: Kennung der Darstellungsdatei; `titel` ist der Titel des Produkts (Überschrift und Metadatentitel des Meldungs-PDF), `untertitel` eine optionale Ergänzung unter dem Kennsatz der Erfassung. Überschrift und Kennsatz der Bereiche legt seit App 0.6.10 die App fest; `ausblenden`: Felder der obersten Ebene, die das Formular nicht zeigt.
 - `kennsaetze`: feste Satzanfänge (z. B. „Neubewertung bei:“), die die App in Bewertungstexten erkennt. Drei Schlüssel wertet die App selbst aus; sie sind seit Fassung 1.20 Pflicht (App 0.6.3, TP-2026-W44-27). Fehlt einer, lädt das Profil mit der Warnung `KENNSATZ_FEHLT` je Schlüssel:
 
   | Schlüssel | Auswertung der App | Vorschlag (Text des Beispielprofils) | ohne den Kennsatz |
@@ -150,7 +150,7 @@ Die Reihenfolge der Aufzählung von `sv_beurteilung` im Schema gilt als aufsteig
 - `kurzfassung`: Titel und Kopfzeile der Klartext-Kurzfassung.
 - `bewertung_gliederung`: Satzanfänge (reguläre Ausdrücke) zur Gliederung des Bewertungstexts in Ausgaben; `absatz` beginnt mit Leerzeile, `zeile` auf neuer Zeile. Kennsätze gliedert die App selbst. Beispiel: `{ "absatz": ["Kernaussage:", "Beurteilung „"], "zeile": ["D[2-9] (=|offen)"] }`.
 - `analyse_gliederung`: dasselbe für die Analysefelder (Rolle `sv_analysefelder`). Ein Umbruch entsteht nur nach einem Satzende (`. ; ! ? ) ] “`), bei `zeile` auch nach einem Doppelpunkt, damit eine Aufzählung „Prüfbedarf: (1) … (2) …“ untereinander steht. Mit `kurzlabel: n` beginnt zusätzlich jeder kurze Aspektbegriff aus höchstens n Wörtern mit Doppelpunkt eine neue Zeile („Strom:“, „Verkehr → Versorgung:“, „Land (Behörde):“); Ordnungszahlen „(1)“ und „1.“ bleiben bei ihrem Begriff. `kurzlabel` gilt auch in `bewertung_gliederung`, Werte 0 bis 8, 0 oder fehlend schaltet es ab. Beispiel: `{ "absatz": ["Szenario:", "Einordnung „"], "zeile": ["\\(\\d+\\) "], "kurzlabel": 3 }`. Die Gliederung betrifft nur Ausgaben (PDF, Kopiervorlage, Lagebild-Tabelle), nie die gespeicherte Meldung.
-- `lagebild`: `titel` (Name des Moduls in der Navigation), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck; Fristen und Ausgabe gelten in der Zeitzone `variablen.zeitzone`, Standard Europe/Berlin) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
+- `lagebild`: `titel` (Titel des Produkts in Lagebild-PDF, Redaktionsbericht und Dateinamen; bis App 0.6.9 auch Name des Moduls in der Navigation, seit 0.6.10 heißt der Bereich „Auswertung“), `ausgabe_label` und `ausgabe_tage` (Vorbelegung der nächsten Ausgabe im Redaktionscheck; Fristen und Ausgabe gelten in der Zeitzone `variablen.zeitzone`, Standard Europe/Berlin) und `verweise` mit Fundstellen der SOP je Prüfabschnitt (`zeitfenster`, `zusammenhang`, `fortschreibung`, `kernaussage`, `quellen`, `rueckblick`).
 
 ### `feldhilfen` (LEAD-Eingabehilfen)
 
@@ -285,3 +285,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.21 | 27.10.2026 | Ohne Formatänderung: gleiche Profilplatzhalter in allen drei Arbeitsanweisungen, Prüfung aller Platzhalter beim Laden (Warnung `PLATZHALTER_UNBEKANNT`), offene Platzhalter im Protokoll und als Befund `ANWEISUNG_PLATZHALTER_OFFEN` (TP-2026-W44-33); `{{auftrag.*}}` und `{{jetzt}}` gelten weiter, werden aber nicht mehr empfohlen, laufabhängige Aussagen gehören in den Steuerungsblock (TP-2026-W44-31) (App 0.6.4) |
 | 1.22 | 27.10.2026 | Ohne Formatänderung: Farben der Bewertung in der Meldungsmaske nach dem Rang der Aufzählung von `sv_beurteilung` und nach `tendenz_entspannung`/Verschärfung statt nach festen Wörtern (TP-2026-W44-16) (App 0.6.5) |
 | 1.23 | 29.10.2026 | Optionale Rollen `zeitstrahl`, `sv_kennung` und `sv_bezug`, Abschnitte `kennung` und `zeitstrahl`, Widgets `zeitstrahl`, `kennung` und `kennungen`; Prüfung beim Import (Präfixe, Typen, Rollenfelder im Schema, Warnung `ZEITSTRAHL_OHNE_KENNUNG`). Ältere Pakete laden unverändert (ZS-2026-W44-01 bis -04) (App 0.6.9) |
+| 1.24 | 30.10.2026 | Ohne Formatänderung: `titel` und `lagebild.titel` benennen nur noch die Produkte (Meldung, Lagebild) in den Ausgaben; Bereichsnamen, Überschriften und Kennsätze legt die App fest, `untertitel` ergänzt den Kennsatz der Erfassung (App 0.6.10, OF-2026-W44-03) |

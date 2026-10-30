@@ -54,7 +54,7 @@ test("Meldung: fünfter Schritt „Management Summary“ nach „Prüfen & Expor
 test("Lagebild: Beispiel laden, Redaktionscheck öffnen und PDF erzeugen", async ({ page }) => {
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
 
@@ -107,7 +107,7 @@ test("TP-2026-W44-13: nach S1 ist die Überschrift „Gegenstand bestätigen“ 
 test("TP-2026-W44-13: der Übergabedialog im Lagebild übernimmt den Fokus und schließt mit Escape", async ({ page }) => {
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await bereich(page, "Lagebild");
+  await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   const knopf = page.getByRole("button", { name: "An KI-Verdichtung übergeben" });
   await knopf.click();
