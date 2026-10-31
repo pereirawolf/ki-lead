@@ -21,6 +21,10 @@ Weitere Befehle:
 - `npm run test:coverage` (seit 0.6.2): alle Tests mit Abdeckung (V8) für `src/kern`, `src/pipeline`, `src/anbieter` und seit 0.6.3 `src/forschung` (vorher Teil von `src/pipeline`); scheitert unter den Mindestwerten in `vite.config.ts` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %, knapp unter dem Stand vom 26.10.2026). Nicht Teil von `npm test`; Bericht unter `coverage/`.
 - `npm run lint` und `npm run format:check` (seit 0.6.2): ESLint mit typescript-eslint (`eslint.config.js`) und Prettier für Code, Tests, Skripte und Konfiguration; die CI führt beide vor den Tests aus. `no-explicit-any` ist eine Warnung und lässt den Lauf bestehen.
 
+## WebKit und wiederholtes Neuladen
+
+Playwright ist auf 1.57.0 festgelegt. Die zuvor verwendete Version 1.56.1 enthält einen WebKit-Fehler bei wiederholtem Neuladen nach `history.pushState()` ([Playwright #37766](https://github.com/microsoft/playwright/issues/37766)). Er lässt sich ohne KI-LEAD und ohne IndexedDB reproduzieren. Nach einer Änderung der Playwright-Version sind die zugehörigen Browser mit `npx playwright install chromium webkit` neu zu installieren. Der Test `navigation-neuladen.spec.ts` hält das wiederholte Neuladen nach Ansichtswechseln fest.
+
 ## Gestaffelte Prüfung in GitHub Actions
 
 Nicht jede Änderung braucht jeden Test. Änderungen an der LEAD-Systematik (SOP, Arbeitsanweisungen, Kodierleitfaden), an der Dokumentation oder an den Bewertungsfällen ändern weder Programmcode noch Bedienoberfläche; ihre Konsistenz prüfen die Vitest-Tests unter `tests/profil/`, `tests/kern/` und `tests/evaluation/`.

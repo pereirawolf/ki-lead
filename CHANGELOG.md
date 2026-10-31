@@ -101,6 +101,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A
 
 ### Tests
 
+- Nachtrag zur Fehlersuche in PR #113: Playwright 1.57.0 statt 1.56.1 behebt den vorgelagerten WebKit-Absturz beim wiederholten Neuladen nach einer Änderung des Browserverlaufs (microsoft/playwright#37766). `navigation-neuladen.spec.ts` prüft diesen Ablauf ohne Sicherung oder Löschung. Der vorübergehende Diagnosetest D6 prüft den Ladezustand per Teilvergleich; zusätzliche Diagnosefelder verursachen keinen Fehlalarm mehr. Keine Änderung am Anwendungscode.
 - `tests/speicher/sicherung.test.ts` (neu, 9): Inhalt der Sicherung ohne Schlüssel (mit Erkennungsmarke), Rundreise mit Binärdaten und Zeitpunkten und den Schlüsseln des Zielgeräts, vier abgelehnte Dateien, Löschen beider Datenbanken; Bereich „Daten“: Abbrechen löscht nichts, Bestätigen löscht und startet neu.
 - `tests/kern/kennsaetze.test.ts` (8 neu): Frist vor, auf (mit und ohne Uhrzeit), nach t0 am selben Tag, am Folgetag, als überfällig gekennzeichnet; ohne Meldezeitpunkt; Text des Hinweises.
 - `tests/dokumente/pdf.test.ts` (4 neu): Text des Vermerks, Vermerk auf jeder Seite und in den Schlüsselwörtern, kein Vermerk ohne Befund und im Entwurf.

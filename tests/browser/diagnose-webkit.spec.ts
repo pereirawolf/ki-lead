@@ -105,7 +105,7 @@ test("D6: Beispiel, sichern, löschen, einspielen – mit Zustandsbericht", asyn
     .locator(".bereich-inhalt")
     .innerText()
     .catch(() => "-");
-  expect({ geladen, idb, inhalt: inhalt.slice(-300), konsole: konsole.slice(-10) }).toEqual({ geladen: true });
+  expect({ geladen, idb, inhalt: inhalt.slice(-300), konsole: konsole.slice(-10) }).toMatchObject({ geladen: true });
 });
 
 test("D7: Beispiel, löschen (Neuladen aus der App), dann Neuladen durch den Test", async ({ page, browserName }) => {
