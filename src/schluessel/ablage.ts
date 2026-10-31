@@ -1,7 +1,8 @@
 // Ablage der API-Schlüssel: Die Person wählt, wo ihre Schlüssel liegen. Mehrere gleichwertige Wege statt einer
 // festen Lösung, damit die App ohne einzelne Abhängigkeit nutzbar bleibt (Resilienz):
 //
-// - geraet:  Speicher der App auf diesem Gerät (IndexedDB), unverschlüsselt; überall verfügbar, Vorgabe
+// - geraet:  Speicher der App auf diesem Gerät (IndexedDB), unverschlüsselt; überall verfügbar, Vorgabe (im Betreiberbuild
+//            seit 0.6.17 nach der Betreiberkonfiguration, TP-2026-W44-50)
 // - sitzung: nur im Arbeitsspeicher, bis die App geschlossen oder neu geladen wird; nichts wird gespeichert
 // - passphrase: im Gerätespeicher, aber mit AES-GCM verschlüsselt; der Schlüssel dazu entsteht per PBKDF2 aus einer
 //   Passphrase, liegt nur im Arbeitsspeicher und wird je Sitzung neu abgefragt (seit 0.6.2, TP-2026-W44-09)
@@ -11,6 +12,7 @@
 // und entfernt sie aus der bisherigen Ablage.
 
 import { del, get, set } from "idb-keyval";
+import { betrieb } from "../anbieter/betrieb";
 import { LEERE_SCHLUESSEL, type AnbieterId, type Schluessel, type SchluesselId } from "../anbieter/verteiler";
 import { istNativeApp } from "../pwa/registrieren";
 
@@ -226,10 +228,19 @@ export function ablage(id: AblageId): Ablage {
   return ABLAGEN.find((a) => a.id === id) ?? geraet;
 }
 
-/** Gewählte Ablage; eine hier nicht verfügbare Wahl fällt auf den Gerätespeicher zurück. */
+/**
+ * Vorgabe der Ablage (seit 0.6.17, TP-2026-W44-50, Entscheidung E4): der Gerätespeicher, im Betreiberbuild die Ablage aus
+ * der Betreiberkonfiguration, sofern sie hier verfügbar ist (Schlüsselbund nur in der nativen App).
+ */
+export function ablageVorgabe(): AblageId {
+  const v = betrieb().schluesselablage;
+  return v && ablage(v).id === v && ablage(v).verfuegbar() ? v : "geraet";
+}
+
+/** Gewählte Ablage; ohne Wahl oder bei einer hier nicht verfügbaren Wahl die Vorgabe. */
 export async function ablageLesen(): Promise<AblageId> {
   const w = await get<AblageId>(WAHL);
-  return w && ablage(w).id === w && ablage(w).verfuegbar() ? w : "geraet";
+  return w && ablage(w).id === w && ablage(w).verfuegbar() ? w : ablageVorgabe();
 }
 
 export async function schluesselAusAblage(anbieter: AnbieterId): Promise<string> {

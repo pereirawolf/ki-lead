@@ -58,9 +58,9 @@ afterEach(async () => {
   downloads.liste = [];
 });
 
-type Schluessel = { anthropic: string; openai: string; mistral: string };
-const NUR_ANTHROPIC: Schluessel = { anthropic: SCHLUESSEL, openai: "", mistral: "" };
-const ALLE: Schluessel = { anthropic: SCHLUESSEL, openai: "sk-oai", mistral: "sk-mis" };
+type Schluessel = import("../../src/anbieter/verteiler").Schluessel;
+const NUR_ANTHROPIC: Schluessel = { anthropic: SCHLUESSEL, openai: "", mistral: "", stelle: "" };
+const ALLE: Schluessel = { anthropic: SCHLUESSEL, openai: "sk-oai", mistral: "sk-mis", stelle: "" };
 
 /** KI-Erfassung zeigen; fertig, sobald die Modellwahl steht */
 async function erfassungZeigen(schluessel: Schluessel = NUR_ANTHROPIC, zuEinstellungen: (b?: string) => void = () => {}) {

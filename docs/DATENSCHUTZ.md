@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.10 vom 30.10.2026, gilt für App-Version 0.6.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.11 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -20,6 +20,7 @@ Werden nur fiktive oder offen zugängliche Inhalte ohne Personenbezug verwendet,
 | Verantwortlicher für die Verarbeitung in der App | die nutzende Person oder Stelle | was sie in die App eingibt, speichert, an einen KI-Anbieter sendet und exportiert |
 | KI-Anbieter | Anthropic, OpenAI oder Mistral, nach Wahl der nutzenden Person; das Modell ist je Aufgabe wählbar, ein Lauf kann deshalb mehrere Anbieter nutzen (etwa die Mix-Profile seit 0.5.15: OpenAI und Anthropic). Seit 0.6.3 auch ein lokales Modell über Ollama auf dem eigenen Gerät; dann ist kein Drittanbieter beteiligt (Abschnitt 5) | Verarbeitung der Anfragen nach dem eigenen API-Vertrag der nutzenden Person oder Stelle; bei Ollama durch die nutzende Person oder Stelle selbst |
 | Hosting der Web-App | GitHub (GitHub Pages) | Auslieferung der Programmdateien, Verbindungsprotokolle |
+| Betreiber eines eigenen Builds (seit App 0.6.17) | die Stelle, die KI-LEAD mit einer Betreiberkonfiguration baut und selbst ausliefert ([BETRIEB.md](BETRIEB.md)) | Auswahl der zugelassenen Anbieter, Auslieferung, ein eigener KI-Endpunkt („Endpunkt der Stelle“) und dessen Verarbeitung |
 
 KI-LEAD hat **keinen eigenen Server**. Inhalte gehen vom Gerät direkt an den gewählten Anbieter, mit dem API-Schlüssel der nutzenden Person. Der Herausgeber erhält weder Inhalte noch Schlüssel, Protokolle oder Nutzungsdaten. Er kann deshalb auch keine Auskunft über die Verarbeitung in der App geben und nichts löschen.
 
@@ -56,6 +57,7 @@ Gerät ──(nur bei einer KI-Funktion, HTTPS)──▶ api.anthropic.com, api.
 Browser ──(Aufruf der Web-App)──▶ GitHub Pages (Programmdateien)
 ```
 
+- **Betreiberbuild (seit 0.6.17):** Baut eine Stelle KI-LEAD mit einer Betreiberkonfiguration ([BETRIEB.md](BETRIEB.md)), lässt die Policy nur die dort freigegebenen Ziele zu; ein „Endpunkt der Stelle“ erhält dann die Inhalte wie sonst ein Anbieter. Die Programmdateien kommen vom Server der Stelle statt von GitHub Pages. „Einstellungen → Über KI-LEAD“ und jedes Laufprotokoll nennen die Konfiguration.
 - **Andere Verbindungen gibt es nicht.** Die Content-Security-Policy der App (`index.html`) erlaubt Verbindungen nur zur eigenen Adresse, zu den drei Cloud-Anbietern und seit 0.6.3 zu Ollama auf dem eigenen Gerät (`http://localhost:11434`, `http://127.0.0.1:11434`; Begründung in [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.9). Es gibt keine Telemetrie, keine Analytics, keine Absturzberichte, kein CDN und keine nachgeladenen Schriften; alle Bibliotheken und die Schrift sind gebündelt.
 - **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
 - **Websuche und Seitenabruf** führt der Anbieter aus, nicht das Gerät. Suchanfragen gehen an den Anbieter und gegebenenfalls an dessen Suchdienst. Abgerufene Webseiten sehen eine Anfrage des Anbieters. Anthropic weist darauf hin, dass Seitenbetreiber abgerufene Adressen und Anfragedaten nach eigenen Regeln speichern können (Anthropic, o. J. a). Recherche ist nur aktiv, wenn der Auftrag sie erlaubt; die Verdichtung startet ohne Websuche.
@@ -407,3 +409,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.9 | 28.10.2026 | Anhang C und D zusätzlich unter CC0 1.0 (LICENSE-CONTENT, Nr. 2 d; ohne Änderung der App) |
 | 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.15) |
 | 1.10 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: Anhang C und D als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
+| 1.11 | 31.10.2026 | Abschnitte 2 und 4: Betreiberbuild mit Betreiberkonfiguration und Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48, -49) |

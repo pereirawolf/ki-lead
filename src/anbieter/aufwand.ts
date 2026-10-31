@@ -6,7 +6,7 @@
 // „none“ und „high“). „high“ ist bei Mistral am EU-Endpunkt erprobt (Vergleichslauf Ilka, 24.10.2026), „none“ nicht.
 // Unbekannte Modelle erhalten alle Stufen; dort entscheidet der Anbieter. Ollama (seit 0.6.3, TP-2026-W44-26): Die App
 // sendet keinen Aufwand, das lokale Modell bestimmt selbst; angeboten wird nur eine feste Stufe („mittel“) für Anzeige,
-// Schätzung und Laufprotokoll.
+// Schätzung und Laufprotokoll. Ebenso der Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49): kein reasoning_effort.
 
 import type { Aufwand } from "./typen";
 
@@ -24,6 +24,7 @@ export const AUFWAND_JE_MODELL: { muster: RegExp; stufen: Aufwand[] }[] = [
   { muster: /^gpt-6-(luna|astra)|^gpt-6\.1-sol/, stufen: ALLE_STUFEN },
   { muster: /^mistral-(small-2603|medium-3-5|large-4)/, stufen: MISTRAL_STUFEN },
   { muster: /^ollama:/, stufen: OLLAMA_STUFEN },
+  { muster: /^stelle:/, stufen: OLLAMA_STUFEN },
 ];
 
 /** Stufen, die das Modell anbietet; unbekannte Modelle: alle */

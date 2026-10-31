@@ -164,6 +164,7 @@ const WIRKUNG: Record<RechercheFeld, Record<AnbieterId | "mistral-eu", string>> 
     mistral: "Mistral zählt die Suchen nur, begrenzt sie nicht",
     "mistral-eu": "Mistral über den EU-Endpunkt sucht nicht",
     ollama: "Ollama (lokal) sucht nicht",
+    stelle: "der Endpunkt der Stelle sucht nicht",
   },
   abrufMax: {
     anthropic: "Anthropic begrenzt die Seiten",
@@ -171,6 +172,7 @@ const WIRKUNG: Record<RechercheFeld, Record<AnbieterId | "mistral-eu", string>> 
     mistral: "bei Mistral ohne Wirkung",
     "mistral-eu": "bei Mistral ohne Wirkung",
     ollama: "bei Ollama ohne Wirkung",
+    stelle: "beim Endpunkt der Stelle ohne Wirkung",
   },
   abrufMaxTokens: {
     anthropic: "Anthropic kürzt längere Seiten",
@@ -178,6 +180,7 @@ const WIRKUNG: Record<RechercheFeld, Record<AnbieterId | "mistral-eu", string>> 
     mistral: "bei Mistral ohne Wirkung",
     "mistral-eu": "bei Mistral ohne Wirkung",
     ollama: "bei Ollama ohne Wirkung",
+    stelle: "beim Endpunkt der Stelle ohne Wirkung",
   },
 };
 

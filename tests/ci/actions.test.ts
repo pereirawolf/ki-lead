@@ -19,9 +19,21 @@ const einbindungen = dateien.flatMap((datei) =>
 );
 
 describe("GitHub Actions", () => {
-  it("TP-2026-W44-36: die drei Workflows binden Actions ein (Wächter gegen eine leere Prüfung)", () => {
-    expect(dateien).toEqual(["mistral-probe.yml", "pages.yml", "release.yml"]);
-    expect(einbindungen.length).toBe(12);
+  it("TP-2026-W44-36: die Workflows binden Actions ein (Wächter gegen eine leere Prüfung; seit 0.6.17 mit „Betreiberbuild“)", () => {
+    expect(dateien).toEqual(["betreiberbuild.yml", "mistral-probe.yml", "pages.yml", "release.yml"]);
+    expect(einbindungen.length).toBe(15);
+  });
+
+  it("TP-2026-W44-51: der Betreiberbuild startet nur von Hand, liest nur und veröffentlicht nichts", () => {
+    // ohne Kommentarzeilen, die das Ausgeschlossene beim Namen nennen
+    const text = readFileSync(`${WORKFLOWS}/betreiberbuild.yml`, "utf-8")
+      .split(/\r?\n/)
+      .filter((z) => !/^\s*#/.test(z))
+      .join("\n");
+    expect(text).toMatch(/^on:\n  workflow_dispatch:\n/m);
+    expect(text).not.toMatch(/^\s+(push|pull_request|schedule|release):/m);
+    expect(text).toMatch(/^permissions:\n  contents: read\n/m);
+    expect(text).not.toMatch(/deploy-pages|upload-pages-artifact|softprops|zenodo|npm sbom|npm publish/i);
   });
 
   it.each(einbindungen.map((e) => [`${e.datei}:${e.nr}`, e.zeile] as const))(

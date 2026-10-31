@@ -161,8 +161,11 @@ export function fehlerTextAus(x: unknown): string | undefined {
   return String(x);
 }
 
-/** Meldung und Kennung aus einer Fehlerantwort (Mistral liefert sie flach, als „detail“ oder unter „error“). */
-function fehlerAus(j: any): FehlerInfo {
+/**
+ * Meldung und Kennung aus einer Fehlerantwort (Mistral liefert sie flach, als „detail“ oder unter „error“). Seit 0.6.17
+ * auch für den Endpunkt der Stelle (OpenAI-Form unter „error“).
+ */
+export function fehlerAus(j: any): FehlerInfo {
   const e = j?.error && typeof j.error === "object" ? j.error : j;
   const code = e?.code ?? e?.type;
   const meldung = fehlerTextAus(e?.message) ?? fehlerTextAus(e?.detail) ?? fehlerTextAus(j?.detail);
@@ -207,7 +210,11 @@ export class MistralSammler {
   /** Abbruchgrund (nur Chat Completions: stop, length, error, tool_calls) */
   endgrund?: string;
 
-  constructor(private fortschritt?: LlmAnfrage["fortschritt"]) {}
+  constructor(
+    private fortschritt?: LlmAnfrage["fortschritt"],
+    /** Fehlertexte; seit 0.6.17 auch für den Endpunkt der Stelle (src/anbieter/stelle.ts), Vorgabe Mistral */
+    private fehlerText: (status: number, code?: string, meldung?: string) => string = fehlerTextMistral,
+  ) {}
 
   get fundstellen(): Fundstelle[] {
     return [...this.fund.values()];
@@ -244,7 +251,7 @@ export class MistralSammler {
   verarbeiteChat(d: any) {
     if (d?.object === "error" || (d?.error && !d?.choices)) {
       const f = fehlerAus(d);
-      throw new AnbieterFehler(fehlerTextMistral(0, f.code, f.meldung), undefined, "error", this.inhalt);
+      throw new AnbieterFehler(this.fehlerText(0, f.code, f.meldung), undefined, "error", this.inhalt);
     }
     if (d.model) this.modell = d.model;
     if (d.usage) this.nutzung = d.usage;
@@ -253,7 +260,7 @@ export class MistralSammler {
     if (c.delta?.content !== undefined && c.delta?.content !== null) this.teil(c.delta.content);
     if (c.finish_reason) {
       this.endgrund = String(c.finish_reason);
-      if (this.endgrund === "error") throw new AnbieterFehler(fehlerTextMistral(0, "error", "Abbruch im Antwortstrom"), undefined, "error", this.inhalt);
+      if (this.endgrund === "error") throw new AnbieterFehler(this.fehlerText(0, "error", "Abbruch im Antwortstrom"), undefined, "error", this.inhalt);
     }
   }
 

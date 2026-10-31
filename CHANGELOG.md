@@ -87,6 +87,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
 | 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ (Nachtrag vom 31.10.2026: Pull Request „Lizenzen: Kurzsatz „die Vorlagen“ und REUSE.toml (Issues #88, #89)“; in der App nur der Lizenzsatz unter „Über“) |
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
+| 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ |
+
+## [0.6.17] – 31.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A2.json` (Arbeitspaket A2 „Betreiberkonfiguration und Endpunkt der Stelle“), freigegeben vom Herausgeber am 31.10.2026, mit dessen Entscheidungen E3 (nur Chat Completions), E4 (Vorgabe Gerätespeicher, im Betreiberbuild einstellbar), nicht freigegebene Anbieter ganz auszublenden und einen Workflow „Betreiberbuild“ aufzunehmen. Der öffentliche Build bleibt in Policy, Anbietern und Vorgaben unverändert. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+### Neu
+
+- **Betreiberkonfiguration `ki-lead-betrieb/1` (TP-2026-W44-48):** `KI_LEAD_BETRIEB=<pfad> npm run build` baut mit einer Konfiguration aus Bezeichnung, freigegebenen Anbietern, Endpunkt der Stelle und Vorgabe der Schlüsselablage (`src/anbieter/betrieb.ts`, Schema `betrieb/betrieb.schema.json`, Beispiele unter `betrieb/`). Eine ungültige Datei bricht den Build ab. `connect-src` der Content-Security-Policy schreibt ein Vite-Plugin aus derselben Funktion, nach der die App die Anbieter zulässt; ohne Konfiguration bleibt `index.html` unverändert. Nicht freigegebene Anbieter fehlen in Übersicht, Schlüsselkarten, KI-Profilen, Mix-Profilen und Modellwahl; der Verteiler weist sie ab. Gibt der Build Anthropic nicht frei, gilt als Vorgabe der App das Standard-Profil des ersten freigegebenen Anbieters. „Über KI-LEAD“, die Übersicht der Einstellungen und jedes Laufprotokoll (Feld `betrieb`) nennen Bezeichnung und SHA-256 der Konfiguration.
+- **Anbieter „Endpunkt der Stelle“ (TP-2026-W44-49):** Kennung `stelle:<modell>`, nur im Betreiberbuild. Chat Completions unter `<basisUrl>/chat/completions` mit Strom, strengem Schema und Bearer-Schlüssel (`src/anbieter/stelle.ts`); Strom und Nutzungsangaben wie beim EU-Endpunkt von Mistral (`MistralSammler` nimmt dafür eigene Fehlertexte an). Ohne Websuche, Seitenabruf und Aufwand; PDF-Material weist der Adapter mit Hinweis ab; Kosten nach den Preisen der Konfiguration, sonst unbekannt. Karte unter „KI-Anbieter & API“ mit Adresse und Modell nur lesend, KI-Profil „Endpunkt der Stelle“.
+- **Vorgabe der Schlüsselablage (TP-2026-W44-50):** im Betreiberbuild aus der Konfiguration (`ablageVorgabe`), sonst der Gerätespeicher; eine Wahl der Person geht vor, „system“ gilt nur in der nativen App.
+- **Workflow „Betreiberbuild“ (TP-2026-W44-51):** nur von Hand unter „Actions“, baut mit einer Konfiguration aus dem Repository und legt `dist/` mit Konfiguration und Prüfsumme als Artefakt ab; nur Leserechte, keine Veröffentlichung.
+- **[docs/BETRIEB.md](docs/BETRIEB.md) 1.0 (TP-2026-W44-51):** Betreiberkonfiguration, Bauen mit und ohne Node, Anforderungen an den Endpunkt der Stelle, Auslieferung als statische Dateien mit Kopfzeilen und Beispiel für Apache, Grenzen.
+
+### Geändert
+
+- Spezifikation 0.6.17 (Abschnitte 2, 5.4, 7), [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.11 (Abschnitte 2 und 4), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.7 (Abschnitte 3.3, 3.4, neu 3.10), [docs/VORLAGEN.md](docs/VORLAGEN.md) 1.2 (V3 Teil 1), README (Verweis auf BETRIEB.md), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.17 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 617, iOS 617).
+
+### Tests
+
+- `tests/anbieter/betrieb.test.ts` (neu, 25): Prüfung der Konfiguration gegen Ajv, Policy aus derselben Quelle wie die Adapter, öffentlicher Build unverändert, Freigabe im Betreiberbuild.
+- `tests/anbieter/stelle.test.ts` (neu, 7): Adapter des Endpunkts der Stelle mit gefälschtem fetch.
+- `tests/ui/betrieb.test.ts` (neu, 7): Oberfläche im Betreiberbuild, Vorgabe der Schlüsselablage, Laufprotokoll.
+- `tests/ci/actions.test.ts` (1 neu): Workflow „Betreiberbuild“ nur von Hand und ohne Veröffentlichung.
+- Mistral-Probe (TP-2026-W44-52): neues Projekt „stelle“ mit `tests/probe/stelle.spec.ts` gegen einen Betreiberbuild mit `betrieb/probe-mistral-eu.json` (Port 4175); der Workflow baut ihn zusätzlich nach `dist-betrieb/` und hängt `probe-bericht-stelle.md` an die Zusammenfassung.
 
 ## [0.6.16] – 31.10.2026
 

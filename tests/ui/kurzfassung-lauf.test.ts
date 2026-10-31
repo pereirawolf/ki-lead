@@ -63,7 +63,7 @@ async function zeigen(laufMelden: (l: KopfLauf | null) => void) {
     profil: p,
     // Sonnet „mittel“: gemessen 6–8 s (MS_DAUER [0, 10]) → „unter 1 Minute“
     einstellungen: { ...STANDARD, modelle: { ...STANDARD.modelle, kurzfassung: "claude-sonnet-5-5" }, aufwand: { ...STANDARD.aufwand, kurzfassung: "medium" } },
-    schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
+    schluessel: { anthropic: "sk-test", openai: "", mistral: "", stelle: "" },
     zuEinstellungen: () => {},
     laufMelden,
   };

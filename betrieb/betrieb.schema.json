@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/betrieb/betrieb.schema.json",
+  "title": "KI-LEAD: Betreiberkonfiguration (ki-lead-betrieb/1)",
+  "description": "Legt zur Build-Zeit fest, welche KI-Anbieter die App nutzen darf, ob es einen eigenen Endpunkt der Stelle gibt (Chat Completions) und welche Ablage der API-Schlüssel vorgegeben ist. Anleitung: docs/BETRIEB.md. Maßgeblich ist die Prüfung in src/anbieter/betrieb.ts; dieses Schema beschreibt sie.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "bezeichnung", "anbieter"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "format": { "const": "ki-lead-betrieb/1" },
+    "bezeichnung": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "\\S",
+      "description": "Bezeichnung des Builds; erscheint unter „Über KI-LEAD“ und im Laufprotokoll."
+    },
+    "anbieter": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["anthropic", "openai", "mistral", "ollama", "stelle"] },
+      "description": "Freigegebene Anbieter in der Reihenfolge der Oberfläche. Nur sie stehen in der Content-Security-Policy und in der App."
+    },
+    "stelle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basisUrl", "modell"],
+      "description": "Endpunkt der Stelle mit Chat Completions (POST <basisUrl>/chat/completions).",
+      "properties": {
+        "basisUrl": { "type": "string", "pattern": "^https://[^\\s/?#]+(/[^\\s?#]*)?$" },
+        "modell": { "type": "string", "pattern": "^[\\w.:/@-]{1,120}$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60, "pattern": "\\S" },
+        "preise": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["eingabe", "ausgabe"],
+          "description": "USD je 1 Mio. Token; ohne Angabe bleiben die Kosten „nicht erfasst“.",
+          "properties": {
+            "eingabe": { "type": "number", "minimum": 0 },
+            "ausgabe": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "schluesselablage": {
+      "enum": ["geraet", "sitzung", "passphrase", "system"],
+      "description": "Vorgabe der Schlüsselablage; ohne Angabe der Gerätespeicher. Eine Wahl der Person geht vor; „system“ gilt nur in der nativen App."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "anbieter": { "contains": { "const": "stelle" } } }, "required": ["anbieter"] },
+      "then": { "required": ["stelle"] },
+      "else": { "not": { "required": ["stelle"] } }
+    }
+  ]
+}

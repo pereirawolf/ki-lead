@@ -33,7 +33,7 @@ afterEach(async () => {
   await aushaengen();
 });
 
-const OHNE: Schluessel = { anthropic: "", openai: "", mistral: "" };
+const OHNE: Schluessel = { anthropic: "", openai: "", mistral: "", stelle: "" };
 const REFERENZ = "beispiele/orkantief-ilka/LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const text = () => document.body.textContent || "";
 const anzahlFeld = () => document.querySelector('input[type="number"]') as HTMLInputElement;

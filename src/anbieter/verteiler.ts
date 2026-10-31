@@ -5,6 +5,7 @@
 // keinem Anbieter gehört, ist ein Fehler, statt still Anthropic zugeordnet zu werden (bis 0.6.2 fiel etwa „llama3“ auf
 // Anthropic).
 
+import { betrieb } from "./betrieb";
 import { gezaehlt } from "./laufzaehler";
 import { AnthropicAnbieter } from "./anthropic";
 import { aufwandStufenFuer } from "./aufwand";
@@ -13,16 +14,17 @@ import { OLLAMA_PRAEFIX, OllamaAnbieter } from "./ollama";
 import { OpenAiAnbieter } from "./openai";
 import { optionenVollstaendig, type AnbieterOptionen, type AnbieterOptionenTeil } from "./optionen";
 import { aufschlag } from "./preise";
+import { STELLE_NAME, STELLE_PRAEFIX, StelleAnbieter } from "./stelle";
 import { AnbieterFehler, type Aufwand, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "./typen";
 
-export type AnbieterId = "anthropic" | "openai" | "mistral" | "ollama";
+export type AnbieterId = "anthropic" | "openai" | "mistral" | "ollama" | "stelle";
 
 /** Anbieter mit API-Schlüssel; Ollama läuft lokal ohne Schlüssel */
 export type SchluesselId = Exclude<AnbieterId, "ollama">;
 
 export type Schluessel = Record<SchluesselId, string>;
 
-export const LEERE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "" };
+export const LEERE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "", stelle: "" };
 
 /** Was ein Modell mit den gewählten Optionen kann */
 export interface Faehigkeiten {
@@ -97,10 +99,46 @@ export const REGISTRY: AnbieterBeschreibung[] = [
     schluessel: false,
     bauen: (_k, o) => new OllamaAnbieter(o.ollama.basisUrl),
   },
+  {
+    // Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49): nur im Betreiberbuild freigegeben; Chat Completions ohne Werkzeuge
+    id: "stelle",
+    name: STELLE_NAME,
+    kennung: `${STELLE_PRAEFIX}<modell>`,
+    erkennt: (m) => m.toLowerCase().startsWith(STELLE_PRAEFIX) && m.length > STELLE_PRAEFIX.length,
+    faehigkeiten: (m) => ({ websuche: false, abruf: false, aufwand: aufwandStufenFuer(m) }),
+    preise: { kostenlos: false, regional: OHNE_REGION },
+    schluessel: true,
+    bauen: (k) => new StelleAnbieter(k),
+  },
 ];
 
-/** Reihenfolge der Anbieter in Listen und Auswahlfeldern */
+/** Alle Anbieter der App in der Reihenfolge der Registry */
 export const ANBIETER_IDS: AnbieterId[] = REGISTRY.map((a) => a.id);
+
+/**
+ * Freigegebene Anbieter dieses Builds in der Reihenfolge der Betreiberkonfiguration (seit 0.6.17, TP-2026-W44-48);
+ * im öffentlichen Build Anthropic, OpenAI, Mistral und Ollama. Listen, Karten und KI-Profile zeigen nur sie.
+ */
+export function freigegebeneAnbieter(): AnbieterId[] {
+  return betrieb().anbieter.filter((a): a is AnbieterId => (ANBIETER_IDS as string[]).includes(a));
+}
+
+/** Ist der Anbieter in diesem Build freigegeben? */
+export function freigegeben(id: AnbieterId): boolean {
+  return betrieb().anbieter.includes(id);
+}
+
+/** Ist das Modell bekannt und sein Anbieter freigegeben? */
+export function modellFreigegeben(modell: string): boolean {
+  const id = bekannterAnbieter(modell);
+  return !!id && freigegeben(id);
+}
+
+/** Fehlertext für ein Modell, dessen Anbieter dieser Build nicht freigibt */
+export function nichtFreigegebenText(modell: string): string {
+  const id = bekannterAnbieter(modell);
+  return `${id ? ANBIETER_NAME[id] : "Der Anbieter"} (${modell}) ist in diesem Build nicht freigegeben (Betreiberkonfiguration „${betrieb().bezeichnung}“).`;
+}
 
 export const ANBIETER_NAME = Object.fromEntries(REGISTRY.map((a) => [a.id, a.name])) as Record<AnbieterId, string>;
 
@@ -186,6 +224,7 @@ export class Verteiler implements LlmAnbieter {
   senden(a: LlmAnfrage): Promise<LlmAntwort> {
     const id = bekannterAnbieter(a.modell);
     if (!id) return Promise.reject(new AnbieterFehler(unbekanntesModellText(a.modell), 0, "modell"));
+    if (!freigegeben(id)) return Promise.reject(new AnbieterFehler(nichtFreigegebenText(a.modell), 0, "freigabe"));
     const k = schluesselNoetig(id) ? this.schluessel[id] : "";
     if (schluesselNoetig(id) && !k)
       return Promise.reject(

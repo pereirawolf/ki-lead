@@ -149,7 +149,7 @@ describe("Schätzung von Dauer und Kosten", () => {
 
   it("AV-2026-W43-05, -15: S1 und Verdichtung jedes Standard-Profils sind gemessen", () => {
     // Ollama (seit 0.6.3, nicht erprobt) hat keine Messwerte; eigener Test
-    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama")) {
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama" && a !== "stelle")) {
       expect(schaetzeStufe("s1", p.modelle.vorverarbeitung, p.aufwand.vorverarbeitung).gemessen, `${anbieter} S1`).toBe(true);
       expect(schaetzeStufe("verdichtung", p.modelle.verdichtung, p.aufwand.verdichtung).gemessen, `${anbieter} Verdichtung`).toBe(true);
     }

@@ -56,7 +56,7 @@ describe("Ablage der API-Schlüssel", () => {
   it("nutzt ohne Wahl den Gerätespeicher unter den bisherigen Schlüsseln (bestehende Schlüssel bleiben gültig)", async () => {
     speicher.set("schluessel:anthropic", "sk-ant-alt");
     expect(await ablageLesen()).toBe("geraet");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-alt", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-alt", openai: "", mistral: "", stelle: "" });
   });
 
   it("bietet vier Ablagen an (seit 0.6.2 mit Passphrase); der Systemschlüsselbund nur in der nativen App", () => {
@@ -72,7 +72,7 @@ describe("Ablage der API-Schlüssel", () => {
     await schluesselSchreiben("sk-oai-B", "openai");
     await ablageWechseln("sitzung");
     expect(await ablageLesen()).toBe("sitzung");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "", stelle: "" });
     expect([...speicher.keys()].filter((k) => k.startsWith("schluessel:"))).toEqual([]);
     expect(JSON.stringify([...speicher.values()])).not.toContain("sk-");
     // Neue Schlüssel bleiben ebenfalls nur im Arbeitsspeicher
@@ -88,7 +88,7 @@ describe("Ablage der API-Schlüssel", () => {
     expect(await ablageLesen()).toBe("system");
     expect(bund.werte.get("schluessel.anthropic")).toBe("sk-ant-A");
     expect(speicher.has("schluessel:anthropic")).toBe(false);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "", stelle: "" });
     // Löschen entfernt den Eintrag im Schlüsselbund
     await schluesselSchreiben("");
     expect(bund.werte.has("schluessel.anthropic")).toBe(false);
@@ -131,7 +131,7 @@ describe("TP-2026-W44-09: Ablage mit Passphrase", () => {
     expect(await passphraseEntsperren(PASS)).toBe(true);
     await ablageWechseln("passphrase");
     expect(await ablageLesen()).toBe("passphrase");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "", stelle: "" });
     // Kein Klartext und keine Passphrase im Gerätespeicher; Iterationen und Salz im Kopfdatensatz
     const gespeichert = JSON.stringify([...speicher.entries()]);
     expect(gespeichert).not.toContain("sk-");
@@ -142,9 +142,9 @@ describe("TP-2026-W44-09: Ablage mit Passphrase", () => {
     // Neue Sitzung: gesperrt, nichts lesbar; mit derselben Passphrase wieder da
     passphraseSperren();
     expect(passphraseGesperrt()).toBe(true);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "", stelle: "" });
     expect(await passphraseEntsperren(PASS)).toBe(true);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "", stelle: "" });
   });
 
   it("eine falsche Passphrase liefert keinen Schlüssel und lässt die Ablage gesperrt", async () => {
@@ -155,7 +155,7 @@ describe("TP-2026-W44-09: Ablage mit Passphrase", () => {
     expect(await passphraseEntsperren("falsch")).toBe(false);
     expect(await passphraseEntsperren("")).toBe(false);
     expect(passphraseGesperrt()).toBe(true);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "", stelle: "" });
   });
 
   it("gesperrt: Schreiben scheitert verständlich, und ein Wechsel weg von der Passphrase ist verweigert, damit nichts verloren geht", async () => {
@@ -188,7 +188,7 @@ describe("TP-2026-W44-09: Ablage mit Passphrase", () => {
     await passphraseVerwerfen();
     expect([...speicher.keys()].filter((k) => k.startsWith("schluessel-verschluesselt:") || k === "schluessel-passphrase")).toEqual([]);
     expect(await passphraseEntsperren("neu")).toBe(true);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "", stelle: "" });
   });
 });
 
@@ -200,7 +200,7 @@ describe("Einstellungen: Wahl der Ablage", () => {
         profil: null,
         einstellungen: STANDARD,
         setEinstellungen: () => undefined,
-        schluessel: { anthropic: "", openai: "", mistral: "" },
+        schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" },
         setSchluessel: () => undefined,
         ablage: "geraet",
         setAblage: async () => undefined,
@@ -226,7 +226,7 @@ describe("TP-2026-W44-09: Einstellungen mit Passphrase-Ablage", () => {
         profil: null,
         einstellungen: STANDARD,
         setEinstellungen: () => undefined,
-        schluessel: { anthropic: "", openai: "", mistral: "" },
+        schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" },
         setSchluessel: () => undefined,
         ablage: "passphrase",
         setAblage: async () => undefined,

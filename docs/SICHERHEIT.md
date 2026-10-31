@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.6 vom 30.10.2026, gilt für App-Version 0.6.12 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.7 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -52,14 +52,14 @@ Anthropic verlangt diese Kopfzeile, wenn der Browser die API direkt aufruft. Sie
 
 | vorhanden | offen |
 |---|---|
-| Schlüssel geht nur an `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai`; die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
+| Schlüssel geht nur an `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai` bzw. `api.mistral.ai`, im Betreiberbuild nur an die freigegebenen Ziele (Abschnitt 3.10); die Content-Security-Policy lässt keine anderen Ziele zu | Risiko trägt die Person; Empfehlung: Ausgabenlimit, eigener Schlüssel nur für KI-LEAD, bei Anthropic in einem eigenen Workspace |
 
 ### 3.4 Skripteinschleusung und fremder Code
 
 | vorhanden | offen |
 |---|---|
-| Content-Security-Policy in `index.html`: `script-src 'self'`, `connect-src` nur eigene Adresse, die drei Cloud-Anbieter und seit 0.6.3 `http://localhost:11434` und `http://127.0.0.1:11434` für Ollama (Abschnitt 3.9) | `style-src 'unsafe-inline'` |
-| Schemaprüfung ohne Codeerzeugung (kein `eval`, `src/kern/validierung.ts`) | Policy nur als Meta-Element; `frame-ancestors` lässt sich so nicht setzen, GitHub Pages erlaubt keine eigenen Kopfzeilen |
+| Content-Security-Policy in `index.html`: `script-src 'self'`, `connect-src` nur eigene Adresse, die drei Cloud-Anbieter und seit 0.6.3 `http://localhost:11434` und `http://127.0.0.1:11434` für Ollama (Abschnitt 3.9); seit 0.6.17 aus der Betreiberkonfiguration erzeugt, im öffentlichen Build unverändert (Abschnitt 3.10) | `style-src 'unsafe-inline'` |
+| Schemaprüfung ohne Codeerzeugung (kein `eval`, `src/kern/validierung.ts`) | Policy nur als Meta-Element; `frame-ancestors` lässt sich so nicht setzen, GitHub Pages erlaubt keine eigenen Kopfzeilen; im Selbstbetrieb als Kopfzeile möglich ([BETRIEB.md](BETRIEB.md), Abschnitt 5) |
 | Lesetexte mit markdown-it ohne HTML (`html: false`), keine Bilder | |
 | alle Bibliotheken gebündelt, kein CDN | |
 
@@ -117,6 +117,19 @@ Begründung der Freigabe:
 |---|---|
 | `connect-src` nur `http://localhost:11434` und `http://127.0.0.1:11434`; Adressprüfung im Adapter und in der Oberfläche; kein Schlüssel | Ollama im lokalen Netz nicht vorgesehen; native Apps nicht erprobt |
 
+### 3.10 Betreiberbuild und Endpunkt der Stelle (seit 0.6.17)
+
+Eine Stelle kann KI-LEAD mit einer Betreiberkonfiguration bauen und selbst ausliefern ([BETRIEB.md](BETRIEB.md), TP-2026-W44-48 bis -51). Die Konfiguration legt die freigegebenen Anbieter, einen eigenen Endpunkt mit Chat Completions und die Vorgabe der Schlüsselablage fest.
+
+- **Eine Quelle.** `connect-src` und die Zulassung der Anbieter entstehen aus derselben Funktion (`verbindungsziele` in `src/anbieter/betrieb.ts`); ein Test gleicht sie mit den Adressen der Adapter ab und prüft, dass der öffentliche Build seine bisherige Policy behält.
+- **Doppelte Prüfung.** Nicht freigegebene Anbieter fehlen in der Oberfläche, der Verteiler weist Anfragen an sie ab, und die Policy sperrt sie im Browser. Der Adapter des Endpunkts der Stelle sendet nur an die konfigurierte Herkunft über HTTPS.
+- **Nachvollziehbarkeit.** Bezeichnung und SHA-256 der Konfiguration stehen unter „Über KI-LEAD“ und in jedem Laufprotokoll; eine ungültige Konfiguration bricht den Build ab.
+- **Restrisiko.** Für den Endpunkt der Stelle und die Auslieferung ist die Stelle verantwortlich. Zwei Builds auf derselben Herkunft teilen Speicher und Schlüssel; deshalb verlangt die Anleitung eine eigene Herkunft je Build.
+
+| vorhanden | offen |
+|---|---|
+| Prüfung der Konfiguration beim Bauen; Policy und Adapter aus einer Quelle; Probe mit echten Aufrufen an Mistral EU als Endpunkt der Stelle | Dienste anderer Hersteller mit Chat Completions nicht erprobt; keine Signatur der Konfiguration, nur Prüfsumme |
+
 ## 4. Hinweise für Nutzende
 
 - Beim Anbieter ein **Ausgabenlimit** setzen und einen **eigenen Schlüssel** nur für KI-LEAD anlegen.
@@ -142,3 +155,4 @@ Begründung der Freigabe:
 | 1.4 | 27.10.2026 | Abschnitt 3.9: Ollama als lokaler Anbieter; Content-Security-Policy um `http://localhost:11434` und `http://127.0.0.1:11434` erweitert, mit Begründung und Restrisiko; Abschnitt 3.4 angepasst (TP-2026-W44-26, App 0.6.3) |
 | 1.5 | 27.10.2026 | Abschnitt 3.1: Datenhülle für Material mit neutralisierten Schließtags, Datenregel auch im Systemauftrag von S1, Kurzantwort mit nicht befolgten Aufforderungen; Grenze der Hülle bei Suchergebnissen, abgerufenen Seiten und PDFs (TP-2026-W44-29, App 0.6.4) |
 | 1.6 | 30.10.2026 | Abschnitt 3.7 Lieferkette: GitHub Actions per Commit-SHA (TP-2026-W44-36) und `npm audit` für ausgelieferte Pakete in der CI (TP-2026-W44-37) von „offen“ nach „vorhanden“; Grenze des Audits bei Entwicklungsabhängigkeiten als offen ergänzt (App 0.6.12, ohne Änderung der App) |
+| 1.7 | 31.10.2026 | Abschnitte 3.3, 3.4 und 3.10: Betreiberbuild mit Betreiberkonfiguration, Policy und Zulassung der Anbieter aus einer Quelle, Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48 bis -51) |

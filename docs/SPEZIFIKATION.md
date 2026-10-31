@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.16 vom 31.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.6.17 vom 31.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -20,10 +20,10 @@ KI-LEAD ist ein Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD
 
 ## 2. Betriebsmodell
 
-- **Plattformen:** Web-App im Browser, installierbar als PWA (Betrieb bisher über GitHub Pages). Dieselbe Codebasis ergibt mit Capacitor native Apps für iOS, iPadOS und Android; sie sind angelegt, aber noch nicht auf Geräten abgenommen (M5).
+- **Plattformen:** Web-App im Browser, installierbar als PWA (Betrieb bisher über GitHub Pages; seit 0.6.17 auch Selbstbetrieb einer Stelle mit Betreiberkonfiguration, [BETRIEB.md](BETRIEB.md)). Dieselbe Codebasis ergibt mit Capacitor native Apps für iOS, iPadOS und Android; sie sind angelegt, aber noch nicht auf Geräten abgenommen (M5).
 - **Lokal:** Profile, Meldungen, Läufe und Einstellungen liegen ausschließlich auf dem Gerät. Es gibt keine eigene Serverkomponente, kein Konto, keine Telemetrie und kein CDN. Alle Bibliotheken sind gebündelt.
-- **Einzige Netzverbindungen:** die Programmdateien von der eigenen Adresse und die KI-Schnittstellen von Anthropic, OpenAI und Mistral (EU-Endpunkt oder global) sowie ein lokales Modell über Ollama auf demselben Gerät (`localhost`/`127.0.0.1`, Port 11434); die Content-Security-Policy in `index.html` lässt keine anderen Ziele zu. Websuche und Seitenabruf laufen über die serverseitigen Werkzeuge des jeweiligen Anbieters.
-- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. Wo er liegt, wählt die Person: im Gerätespeicher der App (unverschlüsselt, mit Hinweis), nur für die laufende Sitzung, im Gerätespeicher mit Passphrase verschlüsselt oder in der nativen App im iOS-Keychain bzw. Android-Keystore (`src/schluessel/ablage.ts`). Mehrere gleichwertige Wege sichern, dass die App ohne einzelne Abhängigkeit nutzbar bleibt.
+- **Einzige Netzverbindungen:** die Programmdateien von der eigenen Adresse und die KI-Schnittstellen von Anthropic, OpenAI und Mistral (EU-Endpunkt oder global) sowie ein lokales Modell über Ollama auf demselben Gerät (`localhost`/`127.0.0.1`, Port 11434); die Content-Security-Policy in `index.html` lässt keine anderen Ziele zu. Seit 0.6.17 (TP-2026-W44-48) entsteht `connect-src` beim Bauen aus der Betreiberkonfiguration `ki-lead-betrieb/1` (`src/anbieter/betrieb.ts`, `betrieb/`): Ohne Konfiguration bleibt sie wie beschrieben; ein Betreiberbuild lässt nur die freigegebenen Anbieter zu, dazu gegebenenfalls einen „Endpunkt der Stelle“ (Chat Completions, TP-2026-W44-49). Websuche und Seitenabruf laufen über die serverseitigen Werkzeuge des jeweiligen Anbieters.
+- **Eigener API-Schlüssel (BYOK):** Jede Person trägt ihren eigenen Schlüssel ein. Wo er liegt, wählt die Person: im Gerätespeicher der App (unverschlüsselt, mit Hinweis), nur für die laufende Sitzung, im Gerätespeicher mit Passphrase verschlüsselt oder in der nativen App im iOS-Keychain bzw. Android-Keystore (`src/schluessel/ablage.ts`). Vorgabe ist der Gerätespeicher; ein Betreiberbuild kann eine andere Vorgabe setzen (seit 0.6.17, TP-2026-W44-50). Mehrere gleichwertige Wege sichern, dass die App ohne einzelne Abhängigkeit nutzbar bleibt.
 
 ## 3. Grundprinzip: rekursive Lagemeldung
 
@@ -268,7 +268,7 @@ Seit 0.5.6 in Bereichen (seit 0.5.17 sieben, seit 0.6.15 acht; „Testläufe“ 
 | Bereich | Inhalt |
 |---|---|
 | Übersicht (Start) | aktives Profil, KI-Profil, Ablage der Schlüssel, Recherchegrenzen; je Anbieter Schlüssel hinterlegt/fehlt und genutzte Aufgaben; je Aufgabe wirksames Modell, Aufwand und Herkunft (eigene Einstellung, Vorgabe des Profils, Vorgabe der App). Alles aus dem gespeicherten Stand berechnet, nichts zwischengespeichert. Seit 0.6.16 unter „Ansicht“ der Schalter „Forschungsfunktionen anzeigen“ (Abschnitt 6) |
-| KI-Anbieter & API | Ablage der Schlüssel, Schlüssel je Anbieter mit Speichern, Verbindungstest und Löschen, aufklappbare Hinweise je Anbieter |
+| KI-Anbieter & API | Ablage der Schlüssel, Schlüssel je Anbieter mit Speichern, Verbindungstest und Löschen, aufklappbare Hinweise je Anbieter; seit 0.6.17 nur die im Build freigegebenen Anbieter, im Betreiberbuild gegebenenfalls die Karte „Endpunkt der Stelle“ mit Adresse und Modell aus der Konfiguration (nur lesend) |
 | Modelle & Aufwand | KI-Profil und Modell und Aufwand je Aufgabe, Verweis auf die Testläufe (bis 0.5.16 „Modelle & Verarbeitung“ mit Vergleichslauf Ilka und Prüffall Reparatur) |
 | Testläufe | standardisierte Testläufe am Fall „Ilka“ in einem Formular, Archiv der Testläufe mit nachträglichem Herunterladen und Löschen (seit 0.5.17); seit 0.6.16 nur bei eingeschalteten Forschungsfunktionen |
 | Recherche & Grenzen | Recherchetiefe (Sparsam, Standard, Gründlich, Eigene Werte; seit 0.5.19) mit Websuchen, ganz gelesenen Seiten und Lesemenge je Seite, Höchstkosten für Suchen und Seitenlesen, Wirkung je Anbieter am Feld; seit 0.6.0 je Stufe die Pflichtsuchen und unter „Verbindliche Recherche“ die Orientierungssuchen je Sachverhalt in S1 (0–3, Vorgabe 1, getrennt ausgewiesen, nicht auf das Kontingent von S2 angerechnet) und die einmalige Nachforderung (Vorgabe an); Suchland, maximale Ausgabetoken je KI-Aufruf; Unterschiede der Anbieter |
@@ -322,7 +322,7 @@ src/
   pipeline/    Stufen S0–S3, Management Summary, Laufformat, Einstellungen (ohne Speicher), Schätzung
   forschung/   Vergleichslauf, Reparaturtest, Management-Summary-Reihe, Auswertung, Plausibilität (an das Beispielprofil
                und evaluation/ gebunden; nur hier, Material per dynamischem Import)
-  anbieter/    Adapter je Anbieter, gemeinsame Schnittstelle, Preise, Aufwand
+  anbieter/    Adapter je Anbieter, gemeinsame Schnittstelle, Preise, Aufwand; Betreiberkonfiguration (betrieb.ts)
   lagebild/    Lagebild und Redaktionscheck
   dokumente/   PDF-Export, KI-Kennzeichnung
   speicher/    Gerätespeicher (IndexedDB): Profile, Zwischenstände, Lagebild, Laufprotokolle, Einstellungen, Testläufe
@@ -480,3 +480,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.15 | 31.10.2026 | Vermerk „Schemaprüfung mit Befund“ in finalen PDFs und Hinweis bei Frist auf oder vor t0 im Prüfschritt (Abschnitt 5.1, TP-2026-W44-42, -43); Bereich „Daten“ mit Sicherung, Wiederherstellung und Löschen aller Daten (Abschnitt 5.4, TP-2026-W44-44, -45); offener Punkt 11 erledigt, offener Punkt 19 neu; Service Worker findet vorgehaltene Dateien unabhängig von `Vary` (Abschnitt 9, Offline-Start bei „Vary: Origin“) |
 | 0.6.15 · Nachtrag | 31.10.2026 | Ohne neue Versionsnummer: Lizenz-Kurzsatz nennt „die Vorlagen“ (Issue #88); maschinenlesbare Lizenzzuordnung in `REUSE.toml` mit Lizenztexten unter `LICENSES/` (Issue #89) |
 | 0.6.16 | 31.10.2026 | Erprobungsansicht: Schalter „Forschungsfunktionen anzeigen“ (Vorgabe aus) für den Bereich „Testläufe“ und den Vergleich mit einer Referenzfassung (Abschnitte 5.1, 5.4, 6; TP-2026-W44-46) |
+| 0.6.17 | 31.10.2026 | Betreiberkonfiguration `ki-lead-betrieb/1` mit `connect-src` und Zulassung der Anbieter aus einer Quelle, Anbieter „Endpunkt der Stelle“ über Chat Completions, Vorgabe der Schlüsselablage im Betreiberbuild, Workflow „Betreiberbuild“ (Abschnitte 2, 5.4, 7; TP-2026-W44-48 bis -52; Anleitung [BETRIEB.md](BETRIEB.md)) |

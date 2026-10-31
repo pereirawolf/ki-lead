@@ -6,10 +6,20 @@
 
 import { memo, useId, useState, type ReactNode } from "react";
 import type { Aufwand } from "../anbieter/typen";
-import { ANBIETER_IDS, ANBIETER_NAME, anbieterVon, bekannterAnbieter, hatSchluessel, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
+import {
+  ANBIETER_IDS,
+  ANBIETER_NAME,
+  freigegebeneAnbieter,
+  anbieterVon,
+  bekannterAnbieter,
+  hatSchluessel,
+  type AnbieterId,
+  type Schluessel,
+} from "../anbieter/verteiler";
 import {
   AUFWAND_STUFEN,
   MIX_IDS,
+  freigegebeneMixe,
   MIX_PROFILE,
   STANDARD,
   WAHL_RECHERCHE,
@@ -77,7 +87,8 @@ interface Props {
 type ProfilWahl = "einstellungen" | AnbieterId | MixId | "einzeln";
 type TiefeWahl = "einstellungen" | StufeId | "eigen";
 
-const PROFILE: (AnbieterId | MixId)[] = [...ANBIETER_IDS, ...MIX_IDS];
+/** KI-Profile zur Wahl: nur mit freigegebenen Anbietern (seit 0.6.17, TP-2026-W44-48) */
+const profile = (): (AnbieterId | MixId)[] => [...freigegebeneAnbieter(), ...freigegebeneMixe()];
 const istMix = (p: AnbieterId | MixId): p is MixId => (MIX_IDS as string[]).includes(p);
 const profilDaten = (p: AnbieterId | MixId, e: Pick<Einstellungen, "anbieterOptionen">): ModellProfil =>
   istMix(p) ? MIX_PROFILE[p] : standardProfilFuer(p, e);
@@ -147,7 +158,7 @@ function ModellWahlBlock({ stufen, einstellungen, profil, schluessel, wahl, onCh
         modellVon(r) === profilDaten(p, einstellungen).modelle[r] &&
         aufwandVon(r) === aufwandAngeboten(profilDaten(p, einstellungen).modelle[r], profilDaten(p, einstellungen).aufwand[r]),
     );
-  const profilAbgeleitet: ProfilWahl = !rollenAbweichend ? "einstellungen" : (PROFILE.find(profilAktiv) ?? "einzeln");
+  const profilAbgeleitet: ProfilWahl = !rollenAbweichend ? "einstellungen" : (profile().find(profilAktiv) ?? "einzeln");
   // Ein angeklicktes Profil bleibt gewählt, solange die Wahl ihm entspricht (auch wenn es den Einstellungen gleicht)
   const klickGilt = (k: ProfilWahl | null): k is ProfilWahl => k === "einzeln" || (k === "einstellungen" ? !rollenAbweichend : !!k && profilAktiv(k));
   const profilGewaehlt: ProfilWahl = klickGilt(profilKlick) ? profilKlick : profilAbgeleitet;
@@ -356,7 +367,7 @@ function ModellWahlBlock({ stufen, einstellungen, profil, schluessel, wahl, onCh
         {mitProfil && (
           <fieldset className="ablage-wahl modellwahl-profil">
             <legend>KI-Profil für diesen Lauf</legend>
-            {(["einstellungen", ...PROFILE, "einzeln"] as ProfilWahl[]).map(profilOption)}
+            {(["einstellungen", ...profile(), "einzeln"] as ProfilWahl[]).map(profilOption)}
           </fieldset>
         )}
 

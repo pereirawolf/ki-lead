@@ -32,7 +32,7 @@ async function zeige(profilName: string, meldung: any) {
       meldung,
       setMeldung: () => {},
       neu: () => {},
-      ki: { schluessel: { anthropic: "", openai: "", mistral: "" }, einstellungen: STANDARD },
+      ki: { schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" }, einstellungen: STANDARD },
     }),
   );
   return profil;

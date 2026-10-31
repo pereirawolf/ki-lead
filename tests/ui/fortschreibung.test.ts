@@ -56,7 +56,7 @@ describe("Fortschreibung in der KI-Erfassung", () => {
         // Orientierungssuche und Nachforderung (seit 0.6.0) aus: Der Test gilt der Fortschreibung; den Ablauf mit
         // Orientierung prüft tests/ui/orientierung.test.ts
         einstellungen: { ...STANDARD, websucheMax: 30, abrufMax: 10, orientierungJeSachverhalt: 0, nachforderung: false },
-        schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "", stelle: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
         uebergabe: { nr: 1, profilHash: p.hash, dateien: [{ id: "v1", name: "Vormeldung_FIKTIV.json", text: JSON.stringify(vormeldung), rolle: "meldung" }] },

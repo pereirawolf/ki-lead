@@ -4,6 +4,7 @@
 // diese Seite nicht; er stammt aus einer Übersicht Dritter (developer.puter.com, Oktober 2026) und ist unbestätigt.
 // Die App zeigt damit nur eine Schätzung; maßgeblich ist die Abrechnung des Anbieters.
 
+import { betrieb } from "./betrieb";
 import type { Nutzung } from "./typen";
 
 interface Preis {
@@ -57,6 +58,20 @@ const REGELN: PreisRegel[] = [
   { muster: /^ollama:/, preis: { eingabe: 0, cacheSchreiben: 0, cacheLesen: 0, ausgabe: 0 }, websuche: 0 },
 ];
 
+/**
+ * Regel eines Modells; für den Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49) aus den Preisen der
+ * Betreiberkonfiguration (Cache wie Eingabe), ohne Preise keine Regel (Kosten „nicht erfasst“).
+ */
+function regel(modell: string): PreisRegel | undefined {
+  if (modell.startsWith("stelle:")) {
+    const p = betrieb().stelle?.preise;
+    return p
+      ? { muster: /^stelle:/, preis: { eingabe: p.eingabe, cacheSchreiben: p.eingabe, cacheLesen: p.eingabe, ausgabe: p.ausgabe }, websuche: 0 }
+      : undefined;
+  }
+  return REGELN.find((x) => x.muster.test(modell));
+}
+
 /** USD je Websuche (Anthropic, OpenAI) */
 export const PREIS_WEBSUCHE = 0.01;
 
@@ -64,7 +79,7 @@ export const PREISSTAND = "18.10.2026 (Mistral 24.10.2026)";
 
 /** Listenpreis für Ausgabetoken (USD je Million, kurzer Kontext); null, wenn das Modell nicht in der Tabelle steht. */
 export function ausgabePreis(modell: string): number | null {
-  return REGELN.find((x) => x.muster.test(modell))?.preis.ausgabe ?? null;
+  return regel(modell)?.preis.ausgabe ?? null;
 }
 
 /**
@@ -74,13 +89,13 @@ export function ausgabePreis(modell: string): number | null {
  * (`aufschlagFuer` in verteiler.ts).
  */
 export function aufschlag(modell: string, regional: boolean): number {
-  const r = REGELN.find((x) => x.muster.test(modell));
+  const r = regel(modell);
   return regional && r?.regional ? r.regional : 1;
 }
 
 /** Kosten einer einzelnen Anfrage. null, wenn das Modell nicht in der Tabelle steht. */
 export function kostenAnfrage(modell: string, n: Nutzung): number | null {
-  const r = REGELN.find((x) => x.muster.test(modell));
+  const r = regel(modell);
   if (!r) return null;
   const prompt = n.eingabe + n.cacheLesen + n.cacheSchreiben;
   const p = r.langAb && r.lang && prompt > r.langAb ? r.lang : r.preis;

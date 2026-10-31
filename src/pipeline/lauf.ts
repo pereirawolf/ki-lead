@@ -4,6 +4,7 @@
 import type { GespeicherterVergleich } from "./vergleich";
 import { AnbieterFehler, type AbrufFehler, type Fundstelle, type Nutzung, type StopGrund } from "../anbieter/typen";
 import { formatUsd } from "../anbieter/preise";
+import { betriebImBuild } from "../anbieter/betrieb";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { APP_KENNUNG } from "../kern/version";
 
@@ -108,6 +109,8 @@ export interface Lauf {
   format: "ki-lead-lauf/1";
   id: string;
   app: string;
+  /** Betreiberkonfiguration des Builds (seit 0.6.17, TP-2026-W44-48); fehlt im öffentlichen Build */
+  betrieb?: { bezeichnung: string; sha256: string };
   profil: { id: string; name: string; version: string; hash: string };
   erstellt: string;
   aktualisiert: string;
@@ -175,6 +178,7 @@ export function neuerLauf(profil: Profil, auftrag: Auftrag, material: Lauf["mate
     format: "ki-lead-lauf/1",
     id: laufId(),
     app: APP_KENNUNG,
+    ...(betriebImBuild() ? { betrieb: { bezeichnung: betriebImBuild()!.konfiguration.bezeichnung, sha256: betriebImBuild()!.sha256 } } : {}),
     profil: { id: profil.manifest.id, name: profil.manifest.name, version: profil.manifest.version, hash: profil.hash },
     erstellt: jetzt,
     aktualisiert: jetzt,
