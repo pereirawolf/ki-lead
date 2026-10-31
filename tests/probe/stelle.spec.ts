@@ -3,7 +3,7 @@
 // Mistral) läuft auf eigenem Port. Geprüft: Content-Security-Policy mit nur diesem Ziel, nur dieser Anbieter in der
 // Oberfläche, Verbindungstest aus dem Browser (CORS), strenges Schema und Nutzungsangaben über den Adapter, Fehlertext
 // bei falschem Schlüssel. Bericht: probe-bericht-stelle.md. Kosten: unter 1 Cent je Durchgang.
-import { readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 import { betriebPruefen } from "../../src/anbieter/betrieb";
 import { StelleAnbieter } from "../../src/anbieter/stelle";
@@ -26,7 +26,8 @@ test.afterAll(() => {
     `Stand: ${new Date().toISOString()} · ${KONFIG.stelle!.basisUrl} · ${KONFIG.stelle!.modell}`,
     ``,
   ];
-  writeFileSync("probe-bericht-stelle.md", [...kopf, ...bericht, ""].join("\n"));
+  // Anhängen: Nach einem Fehlschlag startet Playwright einen neuen Worker, der Bericht des alten bleibt so erhalten
+  appendFileSync("probe-bericht-stelle.md", [...(existsSync("probe-bericht-stelle.md") ? [] : kopf), ...bericht, ""].join("\n"));
 });
 
 const adapter = (schluessel = SCHLUESSEL) => new StelleAnbieter(schluessel, KONFIG.stelle, undefined, KONFIG);

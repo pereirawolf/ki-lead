@@ -108,10 +108,10 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A2.json` (Arbeitspaket A
 ### Tests
 
 - `tests/anbieter/betrieb.test.ts` (neu, 25): Prüfung der Konfiguration gegen Ajv, Policy aus derselben Quelle wie die Adapter, öffentlicher Build unverändert, Freigabe im Betreiberbuild.
-- `tests/anbieter/stelle.test.ts` (neu, 7): Adapter des Endpunkts der Stelle mit gefälschtem fetch.
+- `tests/anbieter/stelle.test.ts` (neu, 8): Adapter des Endpunkts der Stelle mit gefälschtem fetch.
 - `tests/ui/betrieb.test.ts` (neu, 7): Oberfläche im Betreiberbuild, Vorgabe der Schlüsselablage, Laufprotokoll.
 - `tests/ci/actions.test.ts` (1 neu): Workflow „Betreiberbuild“ nur von Hand und ohne Veröffentlichung.
-- Mistral-Probe (TP-2026-W44-52): neues Projekt „stelle“ mit `tests/probe/stelle.spec.ts` gegen einen Betreiberbuild mit `betrieb/probe-mistral-eu.json` (Port 4175); der Workflow baut ihn zusätzlich nach `dist-betrieb/` und hängt `probe-bericht-stelle.md` an die Zusammenfassung.
+- Mistral-Probe (TP-2026-W44-52): neues Projekt „stelle“ mit `tests/probe/stelle.spec.ts` gegen einen Betreiberbuild mit `betrieb/probe-mistral-eu.json` (Port 4175); der Workflow baut ihn zusätzlich nach `dist-betrieb/` und hängt `probe-bericht-stelle.md` an die Zusammenfassung. Fehlschläge (Reporter „github“) und beide Berichte erscheinen zusätzlich als Annotation am Lauf; die Berichte werden angehängt statt überschrieben, damit ein Neustart des Workers nach einem Fehlschlag die früheren Abschnitte nicht verliert.
 
 ## [0.6.16] – 31.10.2026
 

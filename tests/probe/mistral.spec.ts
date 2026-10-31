@@ -3,7 +3,7 @@
 // Modelle am EU-Endpunkt, strukturierte Ausgabe mit dem strengen Schema, Stufen des Nachdenkens, PDF als
 // document_url, Websuche und Nutzungsangaben am globalen Endpunkt. Ergebnis als probe-bericht.md (Zusammenfassung
 // des Workflow-Laufs). Kosten: wenige Cent je Durchgang. Der Schlüssel erscheint in keiner Ausgabe.
-import { writeFileSync } from "node:fs";
+import { appendFileSync, existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { jsPDF } from "jspdf";
 import { MISTRAL_EU_URL, MistralAnbieter, type MistralEndpunkt } from "../../src/anbieter/mistral";
@@ -22,7 +22,8 @@ const kurz = (e: unknown) => String((e as Error)?.message || e).slice(0, 300);
 test.afterAll(() => {
   if (!SCHLUESSEL) return;
   const kopf = [`# Mistral-Probe`, ``, `Stand: ${new Date().toISOString()} · Modelle: ${MODELLE.join(", ")}`, ``];
-  writeFileSync("probe-bericht.md", [...kopf, ...bericht, ""].join("\n"));
+  // Anhängen: Nach einem Fehlschlag startet Playwright einen neuen Worker, der Bericht des alten bleibt so erhalten
+  appendFileSync("probe-bericht.md", [...(existsSync("probe-bericht.md") ? [] : kopf), ...bericht, ""].join("\n"));
 });
 
 const anbieter = (endpunkt: MistralEndpunkt) => new MistralAnbieter(SCHLUESSEL, undefined, undefined, endpunkt);

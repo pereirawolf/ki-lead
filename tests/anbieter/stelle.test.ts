@@ -93,6 +93,13 @@ describe("TP-2026-W44-49: Endpunkt der Stelle über Chat Completions", () => {
     expect(antwort.suchen).toEqual([]);
   });
 
+  it("Kosten nach den Preisen der übergebenen Konfiguration, auch wenn der Build selbst öffentlich ist (Probe unter Node)", async () => {
+    betriebFuerTests(null);
+    const a = attrappe([() => strom([stueck("x"), ende("stop", { prompt_tokens: 500_000, completion_tokens: 1_000 })])]);
+    const antwort = await new StelleAnbieter("k", KONFIG.stelle, a.abruf, KONFIG).senden(anfrage);
+    expect(antwort.kostenUsd).toBeCloseTo(0.5 + 0.002, 6);
+  });
+
   it("ohne Nutzungsangaben bleiben die Kosten unbekannt; „length“ gilt als abgeschnitten", async () => {
     const a = attrappe([() => strom([stueck("abc"), ende("length")])]);
     const antwort = await new StelleAnbieter("k", KONFIG.stelle, a.abruf).senden(anfrage);

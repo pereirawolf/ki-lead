@@ -17,7 +17,6 @@
 import { betrieb, herkunft, type Betrieb, type StelleKonfiguration } from "./betrieb";
 import { LeseFehler, mitNeustart, mitWiederholung, sseLesen, type Fehlerregeln } from "./http";
 import { fehlerAus, MistralSammler, nutzungMistralChat } from "./mistral";
-import { kostenAnfrage } from "./preise";
 import { strengesSchema } from "./schema";
 import { AnbieterFehler, type Inhaltsblock, type LlmAnbieter, type LlmAnfrage, type LlmAntwort } from "./typen";
 
@@ -169,7 +168,11 @@ export class StelleAnbieter implements LlmAnbieter {
       abrufe: [],
       abrufFehler: [],
       nutzung: n,
-      kostenUsd: s.nutzung ? kostenAnfrage(a.modell, n) : null,
+      // Preise aus der Konfiguration dieses Adapters (Cache wie Eingabe), nicht aus dem Build: so auch in der Probe unter Node
+      kostenUsd:
+        s.nutzung && this.konfig.preise
+          ? ((n.eingabe + n.cacheLesen + n.cacheSchreiben) * this.konfig.preise.eingabe + n.ausgabe * this.konfig.preise.ausgabe) / 1_000_000
+          : null,
       stopGrund: abgeschnitten ? "max_tokens" : "end_turn",
       dauerMs: Date.now() - start,
       runden: 1,
