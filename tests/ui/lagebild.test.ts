@@ -121,14 +121,15 @@ describe("I114-A1: Herkunft im Lagebild", () => {
     expect(seitentext()).toContain("Herkunft: Betreiber (B)");
 
     await klick(knopf("Sachverhalte"));
-    const zellen = [...document.querySelectorAll(".lb-tabelle tbody tr td:first-child")].map((td) => td.textContent);
+    // seit 0.6.20 (UX-2026-W44-09) kompakte Liste statt Tabelle
+    const zellen = [...document.querySelectorAll(".lb-svliste .lb-sv-zeile summary")].map((z) => z.textContent);
     expect(zellen.filter((t) => t?.includes("Herkunft: Betreiber (B)"))).toHaveLength(1);
     expect(zellen.filter((t) => t?.includes("Herkunft: Behörde (A)"))).toHaveLength(8);
 
     await act(async () => filter(/^\s*Behörde/).click());
     expect(seitentext()).toContain("1 Meldung · 1 Sachverhalt");
     expect(seitentext()).toContain("Auswahl nach Herkunft: 1 von 8 Meldungen");
-    expect([...document.querySelectorAll(".lb-tabelle tbody tr")]).toHaveLength(1);
+    expect([...document.querySelectorAll(".lb-svliste .lb-sv-zeile")]).toHaveLength(1);
     // Dateiliste zeigt weiterhin alle Dateien
     expect(document.querySelector(".lb-dateiliste summary")?.textContent).toContain("Dateien (8)");
 
@@ -144,5 +145,37 @@ describe("I114-A1: Herkunft im Lagebild", () => {
     expect(seitentext()).not.toContain("Herkunft");
     await klick(knopf("Sachverhalte"));
     expect(seitentext()).not.toContain("Herkunft");
+  });
+});
+
+describe("UX-2026-W44-09, -10, -13: Sachverhalte kompakt mit Filter, Kennzahlen als Einstieg, Radar mit Achsenliste", () => {
+  it("Beispiel Ilka: eine Zeile je Sachverhalt, Volltext zum Aufklappen, Filter nach Beurteilung über die Kennzahl", async () => {
+    await lagebildZeigen();
+    await beispielLaden();
+    await klick(knopf("Sachverhalte"));
+    expect(document.querySelector(".lb-tabelle")).toBeNull();
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
+    expect(document.querySelectorAll(".lb-sv-zeile details[open]")).toHaveLength(0);
+
+    await klick(knopf("Übersicht"));
+    await klick(knopf(/Bewertung: erheblich/));
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(5);
+    expect(seitentext()).toContain("5 von 8 Sachverhalten");
+    await klick(knopf("Filter aufheben"));
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
+
+    await klick(knopf("Übersicht"));
+    await klick(knopf(/Tendenz: Verschärfung/));
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(1);
+  });
+
+  it("Lagenradar: Achsen als Liste aus Bezeichnung und Stufe", async () => {
+    await lagebildZeigen();
+    await beispielLaden();
+    await klick(knopf("Lagenradar"));
+    const karte = document.querySelector(".lb-karte")!;
+    expect(karte.querySelectorAll(".lb-achse")).toHaveLength(8);
+    expect(karte.querySelector(".lb-achse dt")?.textContent).toMatch(/^D1 /);
+    expect(karte.querySelector(".lb-achse dd")?.textContent).toMatch(/^\d – |^offen$/);
   });
 });

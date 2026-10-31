@@ -2,8 +2,8 @@
 // einen eigenen Schritt „Management Summary“ an (Titel aus kurzfassung.titel); bis 0.5.16 stand sie im Schritt
 // „Prüfen & Exportieren“.
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { unterSchema } from "../kern/schema";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FocusEvent } from "react";
+import { leererWert, unterSchema } from "../kern/schema";
 import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
 import { migriere } from "../kern/migration";
 import { pruefeGegenSchema } from "../kern/validierung";
@@ -15,10 +15,12 @@ import { Pruefen } from "./Pruefen";
 import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilfeKontext";
 import { eingabehilfeVerlauf } from "./eingabehilfeVerlauf";
-import { befundeJeFeld, feldSchluessel, FeldBefundeKontext, type FeldBefundeWert } from "./feldBefunde";
+import { befundeJeFeld, befundeUnter, feldSchluessel, FeldBefundeKontext, sichtbareBefunde, type FeldBefundeWert } from "./feldBefunde";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung, zumSeitenanfang } from "./sprung";
+import { useAktivImBild } from "./leiste";
+import { ProfilZeile } from "./ProfilZeile";
 
 /** Kennung des Schritts, den die App für die Management Summary anfügt */
 export const KURZFASSUNG_SCHRITT = "management-summary";
@@ -44,6 +46,19 @@ interface Props {
   dokument?: number;
 }
 
+/** Ob die Meldung schon Inhalt trägt: ein Element der Sachverhaltsliste weicht vom Leerwert ab (geöffnet, übernommen) */
+function hatInhalt(meldung: MeldungTyp, profil: Profil): boolean {
+  const liste = holeWert(meldung, profil.ui.rollen.sachverhalte);
+  if (!Array.isArray(liste)) return false;
+  const leer = JSON.stringify(leererWert(unterSchema(profil.schema, [...teilePfad(profil.ui.rollen.sachverhalte), 0]), profil.schema));
+  return liste.some((el) => JSON.stringify(el) !== leer);
+}
+
+/** Zahl der Felder mit Befund in den Feldern eines Schritts */
+function befundeImSchritt(befunde: Map<string, string[]>, felder: string[]): number {
+  return felder.reduce((n, f) => n + befundeUnter(befunde, feldSchluessel(f)), 0);
+}
+
 export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwischenstand, ki, dokument = 0 }: Props) {
   const ui = profil.ui;
   const schritte = useMemo(() => meldungsSchritte(ui), [ui]);
@@ -53,6 +68,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
   // Sprungziele (seit 0.6.7): Anfang des Arbeitsbereichs mit Schrittleiste und Überschrift, Statuskasten nach dem Öffnen
   const arbeitsbereichRef = useRef<HTMLDivElement>(null);
   const titelRef = useRef<HTMLHeadingElement>(null);
+  useAktivImBild(arbeitsbereichRef, schritt);
   const statusRef = useRef<HTMLDivElement>(null);
   const sprung = useSprung();
   /** „Weiter“ und „Zurück“: der Knopf steht im neuen Schritt am Ende, daher Fokus auf die neue Überschrift */
@@ -143,7 +159,29 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     [profil.schema, meldung, r.status_feld, r.status_final, ui],
   );
   const pflicht = useMemo(() => pflichtHinweise(meldung, ui), [meldung, ui]);
-  const feldBefunde = useMemo<FeldBefundeWert>(() => ({ befunde: befundeJeFeld(schemaBefunde, pflicht, ui) }), [schemaBefunde, pflicht, ui]);
+  /** Ziel eines Sprungs aus dem Prüfschritt, bis ein eingeklapptes Listenelement darum geöffnet ist (UX-2026-W44-08) */
+  const [offenesZiel, setOffenesZiel] = useState<string | null>(null);
+  useEffect(() => {
+    if (offenesZiel !== null) setOffenesZiel(null);
+  }, [offenesZiel]);
+  const alleBefunde = useMemo(() => befundeJeFeld(schemaBefunde, pflicht, ui), [schemaBefunde, pflicht, ui]);
+  // Fehlende Pflichtangaben erst nach Bearbeiten des Feldes, nach dem Prüfschritt oder bei geladener Meldung (UX-2026-W44-05)
+  const [beruehrt, setBeruehrt] = useState<ReadonlySet<string>>(() => new Set());
+  const [alleZeigen, setAlleZeigen] = useState(() => hatInhalt(meldung, profil));
+  useLayoutEffect(() => {
+    setBeruehrt(new Set());
+    setAlleZeigen(hatInhalt(stand.current, profil));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dok]);
+  if (aktuell.pruefung && !alleZeigen) setAlleZeigen(true);
+  const feldVerlassen = (e: FocusEvent<HTMLElement>) => {
+    const k = e.target.closest<HTMLElement>("[data-feld]")?.dataset.feld;
+    if (k && !beruehrt.has(k)) setBeruehrt((alt) => new Set(alt).add(k));
+  };
+  const feldBefunde = useMemo<FeldBefundeWert>(
+    () => ({ befunde: alleZeigen ? alleBefunde : sichtbareBefunde(alleBefunde, (k) => beruehrt.has(k)), ziel: offenesZiel }),
+    [alleBefunde, alleZeigen, beruehrt, offenesZiel],
+  );
 
   /** Vom Befund im Prüfschritt zum Feld: Schritt wechseln, dann das Feld (oder das nächste umfassende) fokussieren */
   const sprungZiel = useRef<string | null>(null);
@@ -153,6 +191,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     const i = schritte.findIndex((st) => st.felder.some((f) => teilePfad(f)[0] === segs[0]));
     if (i < 0) return;
     sprungZiel.current = feldSchluessel(segs);
+    setOffenesZiel(sprungZiel.current);
     setSchritt(i);
     setSprungNr((n) => n + 1);
   };
@@ -228,6 +267,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               />
             </div>
           </div>
+          <ProfilZeile profil={profil} />
           {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
           {meldungen && (
             <div ref={statusRef} className={`kasten kasten-${meldungen.art}`} role="status">
@@ -245,24 +285,36 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
           <div className="arbeitsbereich" ref={arbeitsbereichRef}>
             <nav className="schritte" aria-label="Schritte">
               <ol>
-                {schritte.map((s, i) => (
-                  <li key={s.id}>
-                    <button
-                      type="button"
-                      className={i === schritt ? "schritt aktiv" : i < schritt ? "schritt erledigt" : "schritt"}
-                      aria-current={i === schritt ? "step" : undefined}
-                      onClick={() => schrittWaehlen(i)}
-                    >
-                      <span className="schritt-nr">{i + 1}</span>
-                      <span className="schritt-titel">{s.titel}</span>
-                      {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
-                    </button>
-                  </li>
-                ))}
+                {schritte.map((s, i) => {
+                  // Zustand aus den Befunden statt aus der Position (seit 0.6.20, UX-2026-W44-06; bis 0.6.19 „erledigt“ vor dem aktiven)
+                  const nBefunde = befundeImSchritt(feldBefunde.befunde, s.felder);
+                  return (
+                    <li key={s.id}>
+                      <button
+                        type="button"
+                        className={[i === schritt ? "schritt aktiv" : "schritt", nBefunde ? "mit-befund" : ""].filter(Boolean).join(" ")}
+                        aria-current={i === schritt ? "step" : undefined}
+                        onClick={() => schrittWaehlen(i)}
+                      >
+                        <span className="schritt-nr">
+                          {i + 1}
+                          {nBefunde > 0 && <span className="schritt-befund" aria-hidden="true" />}
+                        </span>
+                        <span className="schritt-titel">{s.titel}</span>
+                        {s.felder.includes(ui.rollen.sachverhalte) && <span className="schritt-zahl">{anzahlSv}</span>}
+                        {nBefunde > 0 && (
+                          <span className="sr-only schritt-befund-text">
+                            , {nBefunde} {nBefunde === 1 ? "Feld" : "Felder"} mit Befund
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
               </ol>
             </nav>
 
-            <section className="schritt-inhalt" aria-labelledby="schritt-titel">
+            <section className="schritt-inhalt" aria-labelledby="schritt-titel" onBlur={feldVerlassen}>
               <h2 id="schritt-titel" ref={titelRef} tabIndex={-1}>
                 {aktuell.titel}
               </h2>

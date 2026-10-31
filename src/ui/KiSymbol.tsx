@@ -1,4 +1,5 @@
-// KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI offline“ in Ruhe, „KI online“, solange eine KI-Anfrage läuft
+// KI-Chip rechts oben in der Kopfleiste (seit 0.5.21): „KI ruht“ in Ruhe, „KI aktiv“, solange eine KI-Anfrage läuft
+// (bis 0.6.19 „KI offline“/„KI online“; seit 0.6.20 ohne „offline“, das der Offline-Betrieb der App meint, UX-2026-W44-01)
 // und noch nicht beendet ist. Der Chip trägt die Farben des Profils: in Ruhe zart, während der Anfrage gefüllt in der
 // Aktionsfarbe mit einem pulsierenden Ring. Laufzeit und Kosten zeigt die jeweilige Ansicht selbst.
 // Seit 0.6.12 (KP-2026-W44-01) liest der Chip den zentralen Zähler laufender Anfragen (src/anbieter/laufzaehler.ts): jede
@@ -39,16 +40,16 @@ const istOnline = (lauf: KopfLauf | null | undefined, anfragen = 0) => anfragen 
 
 /** Zugänglicher Name und Tooltip; beginnt mit dem sichtbaren Text */
 export function kiSymbolText(lauf: KopfLauf | null | undefined, anfragen = 0): string {
-  if (!istOnline(lauf, anfragen)) return "KI offline: keine KI-Anfrage aktiv";
-  if (anfragen > 1) return `KI online: ${anfragen} Anfragen laufen${lauf ? `, darunter ${stufeText(lauf)}` : ""}`;
-  return lauf ? `KI online: Anfrage läuft, ${stufeText(lauf)}` : "KI online: Anfrage läuft";
+  if (!istOnline(lauf, anfragen)) return "KI ruht: keine KI-Anfrage aktiv";
+  if (anfragen > 1) return `KI aktiv: ${anfragen} Anfragen laufen${lauf ? `, darunter ${stufeText(lauf)}` : ""}`;
+  return lauf ? `KI aktiv: Anfrage läuft, ${stufeText(lauf)}` : "KI aktiv: Anfrage läuft";
 }
 
 /** Ansage für Bildschirmleser bei jedem Wechsel von Stufe oder Zustand */
 export function kiAnsage(lauf: KopfLauf | null | undefined, anfragen = 0): string {
   // Der Anfangsinhalt einer Statusregion wird nicht angesagt, erst ihre Änderung
-  if (!istOnline(lauf, anfragen)) return "KI offline.";
-  return lauf ? `KI online: ${stufeText(lauf)}.` : "KI online.";
+  if (!istOnline(lauf, anfragen)) return "KI ruht.";
+  return lauf ? `KI aktiv: ${stufeText(lauf)}.` : "KI aktiv.";
 }
 
 /** Zahl laufender KI-Anfragen als React-Zustand */
@@ -67,7 +68,7 @@ export function KiSymbol({ lauf, anfragen }: KiSymbolProps) {
         {kiAnsage(lauf, n)}
       </span>
       <span role="img" className={online ? "kopf-ki online" : "kopf-ki offline"} data-zustand={online ? "online" : "offline"} aria-label={text} title={text}>
-        <span className="kopf-ki-text">{online ? "KI online" : "KI offline"}</span>
+        <span className="kopf-ki-text">{online ? "KI aktiv" : "KI ruht"}</span>
       </span>
     </>
   );

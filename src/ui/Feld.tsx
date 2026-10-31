@@ -1,6 +1,6 @@
 // Generisches Formular: rendert ein Feld anhand von JSON-Schema und Darstellungsdatei.
 
-import { useContext, useId, useRef, useState } from "react";
+import { useContext, useEffect, useId, useRef, useState } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, teilePfad, type Segment } from "../kern/pfad";
 import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
@@ -17,7 +17,7 @@ import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
 import { FeldFehler, HilfeFeld } from "./HilfeFeld";
-import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
+import { befundeUnter, feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
@@ -146,6 +146,13 @@ export function Feld(props: FeldProps) {
 
   if (t.includes("object") || k?.properties) {
     const kinder = Object.keys(k.properties || {}).filter((key) => !(segs.length === 0 && istAusgeblendet(profil.ui, key)));
+    // Listenelement: das Titelfeld der Liste (etwa „Bezeichnung“ eines Sachverhalts) zuerst, unabhängig von der
+    // Reihenfolge im Schema; Schema und Ausgaben bleiben unverändert (seit 0.6.20, UX-2026-W44-07)
+    if (typeof segs[segs.length - 1] === "number") {
+      const titelFeld = feldUi(profil.ui, generischerPfad(segs.slice(0, -1))).titel_feld;
+      const i = titelFeld ? kinder.indexOf(titelFeld) : -1;
+      if (i > 0) kinder.unshift(...kinder.splice(i, 1));
+    }
     const klasse = f.layout === "zeile" ? "gruppe gruppe-zeile" : f.layout === "spalten" ? "gruppe gruppe-spalten" : "gruppe";
     const inhalt = kinder.map((key) => (
       <Feld key={key} profil={profil} knoten={k.properties[key]} segs={[...segs, key]} wert={wert?.[key]} setze={setze} ebene={(props.ebene ?? 0) + 1} />
@@ -421,6 +428,38 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const elementName = f.element_label || "Eintrag";
   const r = profil.ui.rollen;
   const istSachverhalte = gen === r.sachverhalte;
+  const listeSchluessel = feldSchluessel(segs);
+  const befundKontext = useContext(FeldBefundeKontext);
+
+  // Sachverhalte einklappbar (seit 0.6.20, UX-2026-W44-08): Ein neuer Sachverhalt ist offen; eine geladene Meldung mit
+  // mehreren Sachverhalten zeigt sie eingeklappt. Ein Sprung aus dem Prüfschritt öffnet den betroffenen Sachverhalt.
+  const dokument = useContext(EingabehilfeKontext)?.dok;
+  const [zu, setZu] = useState<ReadonlySet<number>>(() => new Set(istSachverhalte && liste.length > 1 ? liste.map((_, i) => i) : []));
+  const ersterDok = useRef(dokument);
+  useEffect(() => {
+    if (ersterDok.current === dokument) return;
+    ersterDok.current = dokument;
+    setZu(new Set(istSachverhalte && liste.length > 1 ? liste.map((_, i) => i) : []));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dokument]);
+  const ziel = befundKontext?.ziel;
+  const zielIndex = ziel && ziel.startsWith(`${listeSchluessel}/`) ? Number(ziel.slice(listeSchluessel.length + 1).split("/")[0]) : -1;
+  useEffect(() => {
+    if (zielIndex >= 0 && zu.has(zielIndex))
+      setZu((alt) => {
+        const neu = new Set(alt);
+        neu.delete(zielIndex);
+        return neu;
+      });
+  }, [zielIndex, zu]);
+  const istZu = (i: number) => istSachverhalte && zu.has(i) && i !== zielIndex;
+  const umschalten = (i: number) =>
+    setZu((alt) => {
+      const neu = new Set(alt);
+      if (istZu(i)) neu.delete(i);
+      else neu.add(i);
+      return neu;
+    });
 
   // Sprungziele (seit 0.6.7): Nach „hinzufügen“ der neue Eintrag mit Fokus auf seinem ersten Eingabefeld; nach
   // „Entfernen“ (der Knopf verschwindet) der vorige Eintrag, beim ersten der nachrückende, sonst „hinzufügen“.
@@ -450,6 +489,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
       segs,
       liste.filter((_, j) => j !== i),
     );
+    setZu((alt) => new Set([...alt].filter((j) => j !== i).map((j) => (j > i ? j - 1 : j))));
     sprung(() => {
       const nachbar = eintrag(i > 0 ? i - 1 : 0);
       if (nachbar) springeZu(nachbar, nachbar.querySelector<HTMLElement>("h3"), { fokus: true, nurWennNoetig: true });
@@ -463,10 +503,14 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
       {liste.map((el, i) => {
         const titel = elementTitel(profil, segs, el);
         const beurteilung = istSachverhalte && r.sv_beurteilung ? String(holeWert(el, r.sv_beurteilung) || "") : "";
+        const tendenz = istSachverhalte && r.sv_tendenz ? String(holeWert(el, r.sv_tendenz) || "") : "";
+        const nBefunde = istSachverhalte && befundKontext ? befundeUnter(befundKontext.befunde, `${listeSchluessel}/${i}`) : 0;
+        const geschlossen = istZu(i);
+        const inhaltId = `${listeSchluessel.replace(/\W/g, "-")}-${i}-inhalt`;
         return (
           <section
             key={i}
-            className="element"
+            className={geschlossen ? "element zu" : "element"}
             data-rang={istSachverhalte ? rangBeurteilung(profil, beurteilung) : undefined}
             aria-label={`${elementName} ${i + 1}`}
           >
@@ -479,12 +523,39 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
                 {istSachverhalte && r.sv_kennung && holeWert(el, r.sv_kennung) ? (
                   <span className="element-kennung">{String(holeWert(el, r.sv_kennung))}</span>
                 ) : null}
+                {istSachverhalte && (beurteilung || tendenz || nBefunde > 0) ? (
+                  <span className="element-stand">
+                    {[beurteilung, tendenz].filter(Boolean).join(" · ")}
+                    {nBefunde > 0 && (
+                      <span className="element-befund">
+                        {beurteilung || tendenz ? " · " : ""}
+                        {nBefunde} {nBefunde === 1 ? "Feld" : "Felder"} mit Befund
+                      </span>
+                    )}
+                  </span>
+                ) : null}
               </h3>
-              <button type="button" className="knopf leise" aria-label={`${elementName} ${i + 1} entfernen`} onClick={() => entfernen(i)}>
-                Entfernen
-              </button>
+              <span className="element-knoepfe">
+                {istSachverhalte && (
+                  <button
+                    type="button"
+                    className="knopf leise"
+                    aria-expanded={!geschlossen}
+                    aria-controls={inhaltId}
+                    aria-label={`${elementName} ${i + 1} ${geschlossen ? "aufklappen" : "einklappen"}`}
+                    onClick={() => umschalten(i)}
+                  >
+                    {geschlossen ? "Aufklappen" : "Einklappen"}
+                  </button>
+                )}
+                <button type="button" className="knopf leise" aria-label={`${elementName} ${i + 1} entfernen`} onClick={() => entfernen(i)}>
+                  Entfernen
+                </button>
+              </span>
             </header>
-            <Feld profil={profil} knoten={k.items} segs={[...segs, i]} wert={el} setze={setze} />
+            <div id={inhaltId} hidden={geschlossen || undefined}>
+              {!geschlossen && <Feld profil={profil} knoten={k.items} segs={[...segs, i]} wert={el} setze={setze} />}
+            </div>
           </section>
         );
       })}

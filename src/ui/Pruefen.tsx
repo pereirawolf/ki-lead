@@ -14,6 +14,7 @@ import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { rangBeurteilung } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
+import { feldSchluessel } from "./feldBefunde";
 
 /** Liste der Befunde; mit Pfad und `zumFeld` führt ein Befund per Klick zum Feld (seit 0.6.5, TP-2026-W44-15) */
 function Liste({
@@ -69,6 +70,11 @@ export function Pruefen({
   const eigenePflicht = useMemo(() => (befunde ? null : pflichtHinweise(meldung, profil.ui)), [befunde, profil, meldung]);
   const schemaBefunde = befunde?.schema ?? eigeneSchema ?? [];
   const pflicht = befunde?.pflicht ?? eigenePflicht ?? [];
+  // Pflichtbefunde zu Feldern, die schon eine Schemaabweichung tragen, nicht doppelt (seit 0.6.20, UX-2026-W44-11)
+  const pflichtListe = useMemo(() => {
+    const felder = new Set(schemaBefunde.flatMap((b) => (b.pfad ? [feldSchluessel(b.pfad)] : [])));
+    return pflicht.filter((b) => !b.pfad || !felder.has(feldSchluessel(b.pfad)));
+  }, [schemaBefunde, pflicht]);
   const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone), [profil, meldung]);
   const ent = r.entstehung_feld ? meldung[r.entstehung_feld] : undefined;
   const svs = sachverhalte(meldung, profil.ui);
@@ -114,19 +120,36 @@ export function Pruefen({
     return (
       <div className="pruefen">
         <h3 className="abschnitt">Ausgeben</h3>
-        <div className="aktionen">
-          <button type="button" className="knopf" onClick={() => exportiere(false)}>
-            Entwurf als JSON speichern
-          </button>
-          <button type="button" className="knopf primaer" onClick={() => exportiere(true)}>
-            Final als JSON exportieren
-          </button>
-          <button type="button" className="knopf" onClick={() => pdf(false)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
-            Entwurf als PDF
-          </button>
-          <button type="button" className="knopf" onClick={() => pdf(true)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
-            Final als PDF
-          </button>
+        {/* Zwei Gruppen mit Zustand (seit 0.6.20, UX-2026-W44-12): hervorgehoben ist, was zum Stand der Prüfung passt */}
+        <div className="ausgabe-gruppen">
+          <section className="ausgabe-gruppe" aria-labelledby="ausgabe-entwurf">
+            <h4 id="ausgabe-entwurf">Entwurf</h4>
+            <p className="hinweis">Zwischenstand, als Entwurf gekennzeichnet; jederzeit möglich.</p>
+            <div className="aktionen">
+              <button type="button" className={schemaBefunde.length ? "knopf primaer" : "knopf"} onClick={() => exportiere(false)}>
+                Entwurf als JSON speichern
+              </button>
+              <button type="button" className="knopf" onClick={() => pdf(false)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
+                Entwurf als PDF
+              </button>
+            </div>
+          </section>
+          <section className="ausgabe-gruppe" aria-labelledby="ausgabe-final" aria-describedby="ausgabe-final-stand">
+            <h4 id="ausgabe-final">Final</h4>
+            <p className={schemaBefunde.length ? "hinweis ausgabe-stand offen" : "hinweis ausgabe-stand"} id="ausgabe-final-stand">
+              {schemaBefunde.length
+                ? `Schemaprüfung: ${schemaBefunde.length} Abweichung(en) offen. Eine finale Ausgabe ist nur nach Rückfrage und mit Vermerk möglich.`
+                : "Schemaprüfung ohne Befund. Fachliche Prüfung und Freigabe bleiben davon unberührt."}
+            </p>
+            <div className="aktionen">
+              <button type="button" className={schemaBefunde.length ? "knopf" : "knopf primaer"} onClick={() => exportiere(true)}>
+                Final als JSON exportieren
+              </button>
+              <button type="button" className="knopf" onClick={() => pdf(true)} onPointerEnter={pdfVorladen} onFocus={pdfVorladen}>
+                Final als PDF
+              </button>
+            </div>
+          </section>
         </div>
         {pdfFehler && (
           <div className="kasten kasten-fehler" role="alert">
@@ -164,7 +187,7 @@ export function Pruefen({
           <p>Die Meldung entspricht dem Schema {profil.manifest.meldung.schema_id}, auch als finale Meldung. Inhaltliche Richtigkeit prüft das Schema nicht.</p>
         </div>
       )}
-      <Liste titel="Pflichtangaben" eintraege={pflicht} art="fehler" zumFeld={zumFeld} />
+      <Liste titel="Pflichtangaben" eintraege={pflichtListe} art="fehler" zumFeld={zumFeld} />
       <Liste titel="Ausfüllhinweise (keine Pflichtangaben)" eintraege={hinweise} art="hinweis" zumFeld={zumFeld} />
 
       <h3 className="abschnitt">Übersicht</h3>

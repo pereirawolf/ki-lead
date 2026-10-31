@@ -3,12 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istEigeneStelle, radarFuer } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
-import { bezugVon } from "../kern/kennung";
-import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../kern/zeitstrahl";
 import { datumDE, heuteDE } from "../kern/ausgabe";
-import { gliedereAnalyse, gliedereBewertung, kennsaetzeAlle } from "../kern/kennsaetze";
+import { kennsaetzeAlle } from "../kern/kennsaetze";
 import {
   absender,
   alleSachverhalte,
@@ -48,10 +46,12 @@ import { Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
+import { KEIN_FILTER, Sachverhaltsliste, type SvFilter } from "./lagebild/Sachverhaltsliste";
 import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
+import { ProfilZeile } from "./ProfilZeile";
 
 interface Props {
   profil: Profil;
@@ -212,7 +212,6 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
     if (r.sv_kennung) for (const s of svs) m.set(String(holeWert(s.sv, r.sv_kennung) ?? ""), absender(s.eintrag, profil));
     return m;
   }, [svs, profil, r.sv_kennung]);
-  const svKennung = (sv: any) => (r.sv_kennung ? String(holeWert(sv, r.sv_kennung) ?? "") : "");
 
   const radarFeld = r.sv_radar ? feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
   const radarDef = radarFeld ? radarFuer(ui, radarFeld) : undefined;
@@ -251,6 +250,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const reiterWaehlen = (r: Reiter) => {
     setReiter(r);
     sprung(() => springeZu(reiterRef.current, null, { nurWennNoetig: true }));
+  };
+  // Filter des Reiters „Sachverhalte“ (seit 0.6.20, UX-2026-W44-09); die fachlichen Kennzahlen setzen ihn (UX-2026-W44-10)
+  const [svFilter, setSvFilter] = useState<SvFilter>(KEIN_FILTER);
+  const sachverhalteZeigen = (f: SvFilter) => {
+    setSvFilter(f);
+    reiterZeigen("sachverhalte");
   };
   const reiterZeigen = (r: Reiter) => {
     setReiter(r);
@@ -391,6 +396,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
           <p>Auswertung von Meldungen mehrerer Stellen nach LEAD-Systematik</p>
         </div>
       </div>
+      <ProfilZeile profil={profil} />
 
       <section
         className={ziehen ? "lb-ablage lb-ablage-aktiv" : "lb-ablage"}
@@ -595,22 +601,49 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                   <b>{kz.sachverhalte}</b>
                   <span>Sachverhalte</span>
                 </div>
-                {kz.hoch.map((h) => (
-                  <div key={h.stufe} className={h.anzahl ? `lb-kennzahl lb-rand-${h.farbe}` : "lb-kennzahl"}>
-                    <b>{h.anzahl}</b>
-                    <span>
-                      {lBeurteilung}: {h.stufe}
-                    </span>
-                  </div>
-                ))}
-                {kz.verschaerfung && (
-                  <div className={kz.verschaerfung.anzahl ? "lb-kennzahl lb-rand-rot" : "lb-kennzahl"}>
-                    <b>{kz.verschaerfung.anzahl}</b>
-                    <span>
-                      {lTendenz}: {kz.verschaerfung.wert}
-                    </span>
-                  </div>
+                {/* Mit Anzahl öffnen sie die passenden Sachverhalte (seit 0.6.20, UX-2026-W44-10) */}
+                {kz.hoch.map((h) =>
+                  h.anzahl ? (
+                    <button
+                      key={h.stufe}
+                      type="button"
+                      className={`lb-kennzahl lb-rand-${h.farbe}`}
+                      onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, beurteilung: h.stufe })}
+                    >
+                      <b>{h.anzahl}</b>
+                      <span>
+                        {lBeurteilung}: {h.stufe} →
+                      </span>
+                    </button>
+                  ) : (
+                    <div key={h.stufe} className="lb-kennzahl">
+                      <b>{h.anzahl}</b>
+                      <span>
+                        {lBeurteilung}: {h.stufe}
+                      </span>
+                    </div>
+                  ),
                 )}
+                {kz.verschaerfung &&
+                  (kz.verschaerfung.anzahl ? (
+                    <button
+                      type="button"
+                      className="lb-kennzahl lb-rand-rot"
+                      onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, tendenz: kz.verschaerfung!.wert })}
+                    >
+                      <b>{kz.verschaerfung.anzahl}</b>
+                      <span>
+                        {lTendenz}: {kz.verschaerfung.wert} →
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="lb-kennzahl">
+                      <b>{kz.verschaerfung.anzahl}</b>
+                      <span>
+                        {lTendenz}: {kz.verschaerfung.wert}
+                      </span>
+                    </div>
+                  ))}
                 <button
                   type="button"
                   className={red.anzahl ? "lb-kennzahl lb-rand-orange" : "lb-kennzahl lb-rand-gruen"}
@@ -783,71 +816,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             (sortiert.length === 0 ? (
               <p className="leer">Keine Sachverhalte in den geladenen Meldungen.</p>
             ) : (
-              <div className="lb-rahmen" tabIndex={0} role="group" aria-label="Sachverhalte als Tabelle (waagerecht scrollbar)">
-                <table className="tabelle lb-tabelle">
-                  <thead>
-                    <tr>
-                      <th>Meldung</th>
-                      <th>Sachverhalt</th>
-                      {r.sv_art && <th>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_art}`)}</th>}
-                      {r.sv_ort && <th>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`)}</th>}
-                      {r.sv_eintritt && <th>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_eintritt}`)}</th>}
-                      <th>
-                        {lBeurteilung}
-                        {r.sv_tendenz ? ` / ${lTendenz}` : ""}
-                      </th>
-                      {r.sv_bewertung_text && <th>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_bewertung_text}`)}</th>}
-                      {(r.sv_analysefelder || []).map((f) => (
-                        <th key={f}>{bezeichnung(ui, `${r.sachverhalte}[].${f}`)}</th>
-                      ))}
-                      {r.zeitstrahl && r.sv_kennung && <th>{bezeichnung(ui, r.zeitstrahl)}</th>}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortiert.map((s) => (
-                      <tr key={`${s.eintrag.id}-${s.index}`}>
-                        <td>
-                          <strong>{absender(s.eintrag, profil)}</strong>
-                          {r.herkunft && (
-                            <span className="lb-svmarken">
-                              <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {s.bezeichnung || "–"}
-                          {svKennung(s.sv) && <span className="lb-kennung">{svKennung(s.sv)}</span>}
-                          {bezugVon(s.sv, ui).length > 0 && (
-                            <span className="lb-kennung">
-                              Bezug:{" "}
-                              {bezugVon(s.sv, ui)
-                                .map((k) => (kennungsStelle.has(k) ? `${k} (${kennungsStelle.get(k)})` : k))
-                                .join("; ")}
-                            </span>
-                          )}
-                        </td>
-                        {r.sv_art && <td>{s.arten.join(", ") || "–"}</td>}
-                        {r.sv_ort && <td>{s.ort || "–"}</td>}
-                        {r.sv_eintritt && <td>{datumDE(s.eintritt) || "–"}</td>}
-                        <td>
-                          <SvMarken s={s} profil={profil} />
-                        </td>
-                        {r.sv_bewertung_text && <td className="lb-lang">{gliedereBewertung(s.bewertungText, ui) || "–"}</td>}
-                        {(r.sv_analysefelder || []).map((f) => (
-                          <td key={f} className="lb-lang">
-                            {gliedereAnalyse(holeWert(s.sv, f), ui) || "–"}
-                          </td>
-                        ))}
-                        {r.zeitstrahl && r.sv_kennung && (
-                          <td className="lb-lang">
-                            {eintraegeFuer(zeitstrahlText(s.eintrag.daten, ui), svKennung(s.sv)).map(zeitstrahlAnzeige).join("\n") || "–"}
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <Sachverhaltsliste profil={profil} sortiert={sortiert} filter={svFilter} setFilter={setSvFilter} kennungsStelle={kennungsStelle} />
             ))}
 
           {reiter === "radar" &&
@@ -872,13 +841,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                             {r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : ""}
                           </p>
                         </header>
+                        {/* Radar über die Kartenbreite, darunter die Achsen zweispaltig (seit 0.6.20, UX-2026-W44-13) */}
                         <div className="lb-karte-inhalt lb-radar">
-                          {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={170} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}
-                          <ul className="lb-achsen">
-                            {radarZeilen(radarDef, wert).map((z) => (
-                              <li key={z}>{z}</li>
-                            ))}
-                          </ul>
+                          {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={260} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}
+                          <dl className="lb-achsen">
+                            {radarDef.achsen.map((a) => {
+                              const v = wert?.[a.key];
+                              return (
+                                <div key={a.key} className="lb-achse">
+                                  <dt>{a.label}</dt>
+                                  <dd>{Number.isInteger(v) ? `${String(v)}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}</dd>
+                                </div>
+                              );
+                            })}
+                          </dl>
                         </div>
                       </article>
                     );
