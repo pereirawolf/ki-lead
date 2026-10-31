@@ -43,6 +43,8 @@ export interface SvEintrag {
   sv: any;
   land: string;
   stelle: string;
+  /** Herkunftsrolle der meldenden Stelle (Rolle „herkunft“, seit 0.6.13); ohne die Rolle leer */
+  herkunftsrolle: string;
   bezeichnung: string;
   arten: string[];
   ort: string;
@@ -191,6 +193,43 @@ export function statusVon(e: LagebildEintrag, profil: Profil): string {
   return e.fremd ? "" : text(holeWert(e.daten, profil.ui.rollen.status_feld));
 }
 
+/**
+ * Herkunftsrolle der meldenden Stelle (seit 0.6.13, Issue #114, A1): Wert des Felds der Rolle „herkunft“, ohne Wert
+ * „herkunft_standard“. Ohne die Rolle leer; dann zeigt das Lagebild keine Herkunft.
+ */
+export function herkunftsrolleVon(e: LagebildEintrag, profil: Profil): string {
+  const r = profil.ui.rollen;
+  if (!r.herkunft) return "";
+  const v = holeWert(e.daten, r.herkunft);
+  const w = typeof v === "string" || typeof v === "number" ? String(v).trim() : "";
+  return w || (r.herkunft_standard ?? "").trim();
+}
+
+/** Quellenkategorie zu einer Herkunft nach „herkunft_kategorie“; ohne Zuordnung leer. */
+export function herkunftsrolleKategorie(profil: Profil, herkunft: string): string {
+  const k = profil.ui.rollen.herkunft_kategorie;
+  return k && Object.prototype.hasOwnProperty.call(k, herkunft) ? String(k[herkunft]) : "";
+}
+
+/** Herkunft für Anzeige und Ausgaben: Wert und, falls zugeordnet, Kategorie, z. B. „Betreiber (B)“. */
+export function herkunftsrolleAnzeige(profil: Profil, herkunft: string): string {
+  if (!profil.ui.rollen.herkunft) return "";
+  const kat = herkunftsrolleKategorie(profil, herkunft);
+  return `${herkunft || "keine Angabe"}${kat ? ` (${kat})` : ""}`;
+}
+
+/** Vorkommende Herkunftswerte der Meldungen in der Reihenfolge des ersten Auftretens; „“ steht für keine Angabe. */
+export function herkunftsrolleWerte(eintraege: LagebildEintrag[], profil: Profil): string[] {
+  if (!profil.ui.rollen.herkunft) return [];
+  return [...new Set(eintraege.map((e) => herkunftsrolleVon(e, profil)))];
+}
+
+/** Meldungen ohne die ausgeblendeten Herkunftswerte (Filter des Lagebilds); ohne Rolle unverändert. */
+export function nachHerkunftsrolle(eintraege: LagebildEintrag[], profil: Profil, ausgeblendet: ReadonlySet<string>): LagebildEintrag[] {
+  if (!profil.ui.rollen.herkunft || !ausgeblendet.size) return eintraege;
+  return eintraege.filter((e) => !ausgeblendet.has(herkunftsrolleVon(e, profil)));
+}
+
 /** Kurzbezeichnung der meldenden Stelle für Listen: Land (falls vorhanden) und Stelle. */
 export function absender(e: LagebildEintrag, profil: Profil): string {
   const land = landVon(e, profil);
@@ -218,6 +257,7 @@ export function alleSachverhalte(eintraege: LagebildEintrag[], profil: Profil): 
         sv,
         land: landVon(e, profil),
         stelle: stelleVon(e, profil),
+        herkunftsrolle: herkunftsrolleVon(e, profil),
         bezeichnung: wert(sv, r.sv_bezeichnung).trim(),
         arten: r.sv_art ? arten(holeWert(sv, r.sv_art)) : [],
         ort: wert(sv, r.sv_ort),

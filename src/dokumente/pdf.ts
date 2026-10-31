@@ -427,7 +427,11 @@ export interface LagebildPdfMeldung {
 }
 
 /** Zusammenstellung mehrerer Meldungen: Übersicht der Sachverhalte, danach jede Meldung vollständig. */
-export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string[][], meldungen: LagebildPdfMeldung[], stand: string): Blob {
+/**
+ * Lagebild als PDF. `vermerk` (seit 0.6.13, Issue #114, A1) steht als eigene Zeile unter der Kopfzeile, etwa die
+ * Herkunft der Meldungen und ein gesetzter Herkunftsfilter.
+ */
+export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string[][], meldungen: LagebildPdfMeldung[], stand: string, vermerk?: string): Blob {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   doc.setFontSize(14);
   doc.setTextColor(...BLAU);
@@ -435,10 +439,16 @@ export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string
   doc.setFontSize(9);
   doc.setTextColor(90, 100, 110);
   doc.text(pdfText(`${profil.manifest.name} · Schema ${profil.manifest.meldung.schema_id} · ${meldungen.length} Meldung(en) · Stand ${stand}`), 14, 22);
+  let startY = 27;
+  if (vermerk) {
+    const zeilen: string[] = doc.splitTextToSize(pdfText(vermerk), 182);
+    doc.text(zeilen, 14, 27);
+    startY = 27 + zeilen.length * 4.2;
+  }
   doc.setTextColor(20, 20, 20);
   autoTable(doc, {
     didParseCell: zellText,
-    startY: 27,
+    startY,
     head: [uebersicht[0] ?? []],
     body: uebersicht.slice(1),
     theme: "grid",

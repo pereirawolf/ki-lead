@@ -83,6 +83,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
 | 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
+| 0.6.13 | letzter Commit des Pull Requests „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil; 0.6.13“ |
+
+## [0.6.13] – 31.10.2026
+
+Grundlage: Issue #114 „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil (Anforderung aus KRITIS-LEAD)“, Anforderung A1, freigegeben vom Herausgeber am 31.10.2026. A2 (Darstellung verschachtelter Objekte in der Meldungsansicht) ist ein Prüfauftrag, der erst nach der Ladeprobe von KRITIS-LEAD (M2) umgesetzt wird, und bleibt hier unberührt. Baut auf 0.6.12 auf.
+
+### Hinzugefügt
+
+- **Herkunft der meldenden Stelle im Lagebild (Issue #114, A1):** Optionale Rollen `herkunft` (Pfad auf Meldungsebene, etwa `kritis.rolle`), `herkunft_standard` (Wert für Meldungen ohne Angabe, etwa „Behörde“) und `herkunft_kategorie` (Wert → Quellenkategorie, etwa `{"Betreiber": "B", "Behörde": "A"}`). Mit der Rolle kennzeichnet das Lagebild jede Meldung und jeden Sachverhalt mit der Herkunft (Dateiliste, Karten unter „Meldungen“, Meldestatus, Tabelle „Sachverhalte“, Lagenradar; Verteilung „Herkunft (Meldungen)“ in der Übersicht). Ein Filter „Herkunft“ blendet Meldungen je Wert ein und aus; er gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF und CSV, nicht für Dateiliste, Meldestatus, Redaktionscheck und Übergabe an die KI-Verdichtung. Rohtabelle und CSV führen die Spalten „Herkunft“ und „Herkunft: Quellenkategorie“, die Kopiervorlage für Word die Herkunft in der Kopfzeile der Stelle, das Lagebild-PDF eine Spalte „Herkunft“ in der Übersicht, eine Zeile je Meldung und einen Vermerk mit Verteilung und Auswahl des Filters (`src/lagebild/lagebild.ts`, `src/lagebild/ausgabe.ts`, `src/dokumente/pdf.ts`, `src/ui/Lagebild.tsx`, `src/ui/lagebild/bausteine.tsx`, `src/styles/lagebild.css`). Die Rolle ist allgemein und enthält keine KRITIS-spezifischen Felder, Texte oder Regeln; ohne sie bleibt das Lagebild unverändert, Beispielprofil und Vorlage bleiben ohne Änderung.
+- **Prüfung beim Laden** (`src/profil/laden.ts`): `herkunft` und `herkunft_standard` als Text, `herkunft_kategorie` als Objekt mit Texten (sonst Fehler wie bei den übrigen Rollen); Warnungen bei unbekanntem Feld, bei Kategorien, die `quellen.kategorien` nicht führt (`HERKUNFT_KATEGORIE_UNBEKANNT`), und bei `herkunft_standard` oder `herkunft_kategorie` ohne `herkunft` (`HERKUNFT_OHNE_ROLLE`).
+
+### Geändert
+
+- Profilformat 1.25 (Rollen-Tabelle, Absatz „Herkunftsrolle“ mit Verweis auf KRITIS-LEAD als Beispiel eines externen Profils, Änderungsverlauf), Spezifikation 0.6.13 (Abschnitt 5.2). Versionsangaben 0.6.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 613, iOS 613).
+
+### Tests
+
+- `tests/lagebild/herkunft.test.ts` (neu, 11): Herkunft je Meldung und Sachverhalt, Standard, Kategorie, Filter mit Kennzahlen, „keine Angabe“, Regression Ilka ohne Rolle; Spalten in Rohtabelle und CSV, Kopiervorlage als HTML und Klartext; Prüfung beim Laden (Fehler, Warnungen); Vermerk im Lagebild-PDF.
+- `tests/ui/lagebild.test.ts` (2 neu): Kennzeichen in Übersicht, Meldungen und Sachverhalten, Filter aus und ein, Dateiliste vollständig; ohne Rolle weder Filter noch Kennzeichen (Regression Ilka).
 
 ## [0.6.12] – 30.10.2026
 
