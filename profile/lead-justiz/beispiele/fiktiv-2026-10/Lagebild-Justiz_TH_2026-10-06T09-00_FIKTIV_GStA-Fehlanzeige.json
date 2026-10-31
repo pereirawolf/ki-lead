@@ -1,0 +1,101 @@
+{
+  "schema": "Lagebild-Justiz-Meldung-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell"
+  },
+  "land": "Thüringen",
+  "meldende_stelle": "Thüringer Generalstaatsanwaltschaft",
+  "institutionstyp": "Staatsanwaltschaft",
+  "meldeart": "Fehlanzeige",
+  "berichtsmodus": "Funktionslagebild",
+  "meldezeitpunkt": "2026-10-06T09:00",
+  "meldezeitraum": {
+    "von": "2026-09-01",
+    "bis": "2026-09-30"
+  },
+  "funktionslage": [
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "Staatsanwaltschaften, landesweit",
+      "status": "nicht zuständig",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": ""
+    },
+    {
+      "funktion": "F2 Richterlicher Bereitschaftsdienst",
+      "bereich": "Staatsanwaltschaften, landesweit",
+      "status": "nicht zuständig",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": ""
+    },
+    {
+      "funktion": "F3 Zeitkritische Strafverfolgung und Haftsachen",
+      "bereich": "Staatsanwaltschaften, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Geprüft nach der vereinbarten Prüfliste; keine meldepflichtige Beeinträchtigung [Q1]."
+    },
+    {
+      "funktion": "F6 Vollstreckung",
+      "bereich": "Strafvollstreckung, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Geprüft nach der vereinbarten Prüfliste [Q1]."
+    }
+  ],
+  "quellen": "[Q1] A – Thüringer Generalstaatsanwaltschaft (05.10.2026): Prüfvermerk Regelmeldung September 2026 (FIKTIV). Dokument ohne URL [Zugriff: 06.10.2026]",
+  "zeitstrahl": "",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-20261006-7HXW",
+      "bezug": [],
+      "bezeichnung": "Fehlanzeige: keine meldepflichtige Beeinträchtigung im Berichtszeitraum",
+      "funktionen": [],
+      "primaerfunktion": "",
+      "ort": "Staatsanwaltschaften, landesweit",
+      "institutionen": "Generalstaatsanwaltschaft und Staatsanwaltschaften",
+      "ressourcen": [],
+      "eintritt": "",
+      "festgestellt": "",
+      "notfall_ausgerufen": "",
+      "betriebsphase": "Normalbetrieb",
+      "zeitliche_reichweite": "",
+      "analyse": {
+        "lage": "FIKTIV. Im Berichtszeitraum 01.09.–30.09.2026 wurde für F3 und F6 nach der vereinbarten Prüfliste keine meldepflichtige Beeinträchtigung festgestellt [Q1]. Geprüft: Erreichbarkeit, Personalverfügbarkeit, IT und Aktenzugriff, Vorführungen.",
+        "folgen": "",
+        "massnahmen": "",
+        "abhaengigkeiten": ""
+      },
+      "indikatoren": [],
+      "bewertung": {
+        "beurteilung": "",
+        "dringlichkeit": "",
+        "tendenz": "",
+        "erkenntnissicherheit": "bestätigt",
+        "bewertung_text": "Fehlanzeige für den geprüften Umfang und Zeitraum [Q1]."
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "FIKTIV",
+      "datum": "2026-10-06",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "FIKTIV",
+      "datum": "2026-10-06",
+      "hz": ""
+    },
+    "versand": {
+      "name": "FIKTIV",
+      "datum": "2026-10-06",
+      "hz": ""
+    }
+  }
+}
