@@ -83,11 +83,13 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.10 | letzter Commit des Pull Requests „Bereiche nach LEAD-Arbeitsschritten, neutrale Ansprache; Profil 1.33.1; 0.6.10“ |
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
 | 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
-| 0.6.13 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.13“ |
+| 0.6.13 | letzter Commit des Pull Requests „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil; 0.6.13“ |
+| 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
+| 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ |
 
-## [0.6.13] – 30.10.2026
+## [0.6.15] – 31.10.2026
 
-Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A3 „Freigabe und Datensicherheit“), freigegeben vom Herausgeber am 30.10.2026, mit dessen Entscheidung E7 (kein Sperrschalter, sichtbarer Vermerk). Baut auf 0.6.12 auf. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A3 „Freigabe und Datensicherheit“), freigegeben vom Herausgeber am 30.10.2026, mit dessen Entscheidung E7 (kein Sperrschalter, sichtbarer Vermerk). Baut auf 0.6.14 auf; vorbereitet als 0.6.13 und nach dem Zusammenführen von 0.6.13 und 0.6.14 (Issue #114) als 0.6.15 umnummeriert. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
 
 ### Neu
 
@@ -97,7 +99,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A
 
 - **Finale PDF trotz Schemabefund (TP-2026-W44-42):** Nach der Rückfrage trägt die PDF auf jeder Seite und in den Schlüsselwörtern „Schemaprüfung mit Befund (n Abweichungen) – als final ausgegeben“; die Rückfrage nennt das. Das JSON bleibt ohne Vermerk, weil das Schema keine weiteren Felder zulässt (`meldungAlsPdf(…, { schemaBefunde })`, `schemaVermerk()`).
 - **Frist auf oder vor t0 (TP-2026-W44-43):** Der Prüfschritt weist auf jede Zeile „Handlungsrelevant bis:“ hin, deren Datum auf oder vor dem Meldezeitpunkt liegt und die nicht „überfällig“ trägt; ohne Uhrzeit zählt der Tag (`ausfuellHinweise(d, ui, zeitzone)`).
-- Spezifikation 0.6.13 (Abschnitte 5.1, 5.4, 7; offener Punkt 11 erledigt, 19 neu), [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.10 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md) (auch für den Nachtrag TP-2026-W44-36, -37). Versionsangaben 0.6.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 613, iOS 613).
+- Spezifikation 0.6.15 (Abschnitte 5.1, 5.4, 7, 9; offener Punkt 11 erledigt, 19 neu), [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.10 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md) (auch für den Nachtrag TP-2026-W44-36, -37). Versionsangaben 0.6.15 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 615, iOS 615).
 
 ### Behoben
 
@@ -112,6 +114,45 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A
 - `tests/dokumente/pdf.test.ts` (4 neu): Text des Vermerks, Vermerk auf jeder Seite und in den Schlüsselwörtern, kein Vermerk ohne Befund und im Entwurf.
 - `tests/browser/daten.spec.ts` (neu, 1): sichern ohne Schlüssel, alles löschen, Sicherung einspielen mit echter IndexedDB.
 - `tests/ui/einstellungen.test.ts`, `tests/browser/einstellungen.spec.ts`: acht Bereiche mit „Daten“.
+
+## [0.6.14] – 31.10.2026
+
+Grundlage: Issue #114, Prüfauftrag A2, nach der Ladeprobe des Profilpakets `lead-kritis` aus KRITIS-LEAD (Meilenstein M2, Stand f77ac47); Freigabe des Herausgebers vom 31.10.2026. Die Probe (Betreibermeldung `01_netz…` in Erfassung, Prüfschritt, PDF und Rohtabelle) zeigte drei Lücken: In PDF, Rohtabelle und CSV standen Listen von Objekten (etwa `sachverhalte[].betrieb.ersatzverfahren[]`, `…abhaengigkeiten[]`) als JSON. In der Maske hatten Listen keine Überschrift („Noch kein Bedarf erfasst.“ ohne Bezug), und verschachtelte Objekte ohne `label` (etwa zwei Messwerte mit `wert`, `einheit`, `status`) standen ohne Rahmen untereinander und waren nicht zu unterscheiden. Elemente ohne `titel_feld` hießen „ohne Bezeichnung“. Baut auf 0.6.13 auf.
+
+### Behoben
+
+- **PDF der Meldung** (`src/dokumente/pdf.ts`): Listen von Objekten als Zeilen je Element und Feld („Betreiberangaben › Ersatzverfahren 1 › art“) statt JSON.
+- **Rohtabelle und CSV** (`src/lagebild/ausgabe.ts`): Listen von Objekten als lesbarer Text in ihrer Spalte, je Element „Name n – Titel“ und darunter „Feld: Wert“ (verschachtelte Felder mit „›“, leere Angaben ausgelassen, Zeitfelder deutsch); neue Hilfsfunktionen in `src/kern/listen.ts`.
+- **Erfassungsmaske** (`src/ui/Feld.tsx`): Listen außer der Sachverhaltsliste stehen als Gruppe mit ihrer Bezeichnung als Überschrift (auch leer) und zeigen ihren Hinweis; Objekte ohne `label`, die in einem anderen Objekt stehen, erhalten eine Gruppe mit dem Feldnamen. Objekte der obersten Ebene und Listenelemente bleiben ohne Rahmen. Ohne `titel_feld` trägt ein Listenelement den Wert eines einfachen Elements bzw. seinen ersten nicht leeren Text als Titel (gekürzt); ein leeres `titel_feld` bleibt „ohne Bezeichnung“.
+
+Beispielprofil und Vorlage sehen unverändert aus: Sie haben außer der Sachverhaltsliste keine Liste von Objekten in der Maske und keine verschachtelten Objekte ohne `label`. Feldnamen ohne `label` (etwa `traegerschaft`, `mta_stunden`) zeigt die App weiter als Bezeichnung; Beschriftungen liefert das Profil.
+
+### Geändert
+
+- Profilformat 1.26 (ohne Formatänderung: `label`, `element_label`/`titel_feld`), Spezifikation 0.6.14 (Abschnitte 5.1, 5.2). Versionsangaben 0.6.14 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 614, iOS 614).
+
+### Tests
+
+- `tests/kern/listen.test.ts` (neu, 6): Elementtitel und Name, Liste als Text, Listen einfacher Werte; Rohtabelle/CSV und PDF einer Meldung mit Liste von Objekten ohne JSON.
+- `tests/ui/feld-verschachtelt.test.ts` (neu, 3): Gruppenüberschriften für Listen und verschachtelte Objekte, Elementtitel, leere Liste; Regression Beispielprofil (Sachverhaltsliste ohne eigene Gruppe, keine Feldnamen als Überschrift).
+
+## [0.6.13] – 31.10.2026
+
+Grundlage: Issue #114 „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil (Anforderung aus KRITIS-LEAD)“, Anforderung A1, freigegeben vom Herausgeber am 31.10.2026. A2 (Darstellung verschachtelter Objekte in der Meldungsansicht) ist ein Prüfauftrag, der erst nach der Ladeprobe von KRITIS-LEAD (M2) umgesetzt wird, und bleibt hier unberührt. Baut auf 0.6.12 auf.
+
+### Hinzugefügt
+
+- **Herkunft der meldenden Stelle im Lagebild (Issue #114, A1):** Optionale Rollen `herkunft` (Pfad auf Meldungsebene, etwa `kritis.rolle`), `herkunft_standard` (Wert für Meldungen ohne Angabe, etwa „Behörde“) und `herkunft_kategorie` (Wert → Quellenkategorie, etwa `{"Betreiber": "B", "Behörde": "A"}`). Mit der Rolle kennzeichnet das Lagebild jede Meldung und jeden Sachverhalt mit der Herkunft (Dateiliste, Karten unter „Meldungen“, Meldestatus, Tabelle „Sachverhalte“, Lagenradar; Verteilung „Herkunft (Meldungen)“ in der Übersicht). Ein Filter „Herkunft“ blendet Meldungen je Wert ein und aus; er gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF und CSV, nicht für Dateiliste, Meldestatus, Redaktionscheck und Übergabe an die KI-Verdichtung. Rohtabelle und CSV führen die Spalten „Herkunft“ und „Herkunft: Quellenkategorie“, die Kopiervorlage für Word die Herkunft in der Kopfzeile der Stelle, das Lagebild-PDF eine Spalte „Herkunft“ in der Übersicht, eine Zeile je Meldung und einen Vermerk mit Verteilung und Auswahl des Filters (`src/lagebild/lagebild.ts`, `src/lagebild/ausgabe.ts`, `src/dokumente/pdf.ts`, `src/ui/Lagebild.tsx`, `src/ui/lagebild/bausteine.tsx`, `src/styles/lagebild.css`). Die Rolle ist allgemein und enthält keine KRITIS-spezifischen Felder, Texte oder Regeln; ohne sie bleibt das Lagebild unverändert, Beispielprofil und Vorlage bleiben ohne Änderung.
+- **Prüfung beim Laden** (`src/profil/laden.ts`): `herkunft` und `herkunft_standard` als Text, `herkunft_kategorie` als Objekt mit Texten (sonst Fehler wie bei den übrigen Rollen); Warnungen bei unbekanntem Feld, bei Kategorien, die `quellen.kategorien` nicht führt (`HERKUNFT_KATEGORIE_UNBEKANNT`), und bei `herkunft_standard` oder `herkunft_kategorie` ohne `herkunft` (`HERKUNFT_OHNE_ROLLE`).
+
+### Geändert
+
+- Profilformat 1.25 (Rollen-Tabelle, Absatz „Herkunftsrolle“ mit Verweis auf KRITIS-LEAD als Beispiel eines externen Profils, Änderungsverlauf), Spezifikation 0.6.13 (Abschnitt 5.2). Versionsangaben 0.6.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 613, iOS 613).
+
+### Tests
+
+- `tests/lagebild/herkunft.test.ts` (neu, 11): Herkunft je Meldung und Sachverhalt, Standard, Kategorie, Filter mit Kennzahlen, „keine Angabe“, Regression Ilka ohne Rolle; Spalten in Rohtabelle und CSV, Kopiervorlage als HTML und Klartext; Prüfung beim Laden (Fehler, Warnungen); Vermerk im Lagebild-PDF.
+- `tests/ui/lagebild.test.ts` (2 neu): Kennzeichen in Übersicht, Meldungen und Sachverhalten, Filter aus und ein, Dateiliste vollständig; ohne Rolle weder Filter noch Kennzeichen (Regression Ilka).
 
 ## [0.6.12] – 30.10.2026
 

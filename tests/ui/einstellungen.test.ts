@@ -62,7 +62,7 @@ const ueberschriften = () => [...document.querySelectorAll(".bereich-inhalt h2")
 const radio = (wert: string) => document.querySelector(`input[name="voreinstellung"][value="${wert}"]`) as HTMLInputElement;
 
 describe("Einstellungen: Navigation in Bereichen", () => {
-  it("zeigt acht Bereiche (seit 0.6.13 mit „Daten“), beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
+  it("zeigt acht Bereiche (seit 0.6.15 mit „Daten“), beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
     await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [] }));
     expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE);
     expect(ueberschriften()).toEqual(["Übersicht"]);

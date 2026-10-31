@@ -145,7 +145,7 @@ describe("Kennsatzzeilen und Sonderzeichen im PDF (Lauf 20261022-073727-q2ex)", 
   });
 });
 
-// Vermerk bei finaler Ausgabe trotz Schemabefund (seit 0.6.13). Grundlage: Befunddatei
+// Vermerk bei finaler Ausgabe trotz Schemabefund (seit 0.6.15). Grundlage: Befunddatei
 // ki-lead-befund_technik_2026-W44-A3.json vom 30.10.2026 (Arbeitspaket A3), TP-2026-W44-42; SOP-LEAD A.5.
 describe("TP-2026-W44-42: Vermerk „Schemaprüfung mit Befund“", () => {
   const roh = async (b: Blob) => new TextDecoder("latin1").decode(new Uint8Array(await b.arrayBuffer()));

@@ -1,4 +1,4 @@
-// Bereich „Daten“ (seit 0.6.13) im echten Browser mit echter IndexedDB: Gerätestand sichern, alle Daten löschen,
+// Bereich „Daten“ (seit 0.6.15) im echten Browser mit echter IndexedDB: Gerätestand sichern, alle Daten löschen,
 // Sicherung wieder einspielen. Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A3.json vom 30.10.2026
 // (Arbeitspaket A3), TP-2026-W44-44 und TP-2026-W44-45.
 import { expect, test } from "@playwright/test";

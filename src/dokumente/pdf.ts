@@ -7,6 +7,7 @@ import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
+import { hatObjekte } from "../kern/listen";
 import { gliedereFeld } from "../kern/kennsaetze";
 import { zeitstrahlOrdnen } from "../kern/zeitstrahl";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
@@ -200,10 +201,15 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
     return;
   }
   if (Array.isArray(wert)) {
-    out.push([label, wert.map((x) => (typeof x === "object" ? JSON.stringify(x) : String(x))).join(", ") || "–"]);
+    // Listen von Objekten: je Element eigene Zeilen „Liste n › Feld“ statt JSON (seit 0.6.14, Issue #114, A2)
+    if (hatObjekte(wert)) {
+      wert.forEach((x, i) => zeilen(profil, k?.items, x, [...segs, i], out));
+      return;
+    }
+    out.push([label, wert.map(String).join(", ") || "–"]);
     return;
   }
-  let text = wert === null || wert === undefined || wert === "" ? "–" : String(wert);
+  let text = wert === null || wert === undefined || wert === "" ? "–" : typeof wert === "object" ? JSON.stringify(wert) : String(wert);
   if (f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit") text = datumDE(text) || "–";
   if (text !== "–") text = gliedereFeld(gen, text, profil.ui);
   out.push([label, text]);
@@ -400,7 +406,7 @@ function kennzeichnen(doc: jsPDF, titel: string, herkunft: KiHerkunft, modell?: 
 const fussKi = (herkunft: KiHerkunft) => (herkunft === "ki" ? " · KI-generiert" : "");
 
 /**
- * Vermerk einer finalen Ausgabe trotz Schemabefund (seit 0.6.13, TP-2026-W44-42): Der Abschlusscheck (SOP-LEAD A.5)
+ * Vermerk einer finalen Ausgabe trotz Schemabefund (seit 0.6.15, TP-2026-W44-42): Der Abschlusscheck (SOP-LEAD A.5)
  * verlangt eine Schemaprüfung ohne Befund; gibt die Person nach Rückfrage dennoch final aus, steht das sichtbar auf
  * jeder Seite und in den Schlüsselwörtern. Entwürfe tragen den Vermerk nicht, sie sind ohnehin als Entwurf gekennzeichnet.
  */
@@ -453,7 +459,11 @@ export interface LagebildPdfMeldung {
 }
 
 /** Zusammenstellung mehrerer Meldungen: Übersicht der Sachverhalte, danach jede Meldung vollständig. */
-export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string[][], meldungen: LagebildPdfMeldung[], stand: string): Blob {
+/**
+ * Lagebild als PDF. `vermerk` (seit 0.6.13, Issue #114, A1) steht als eigene Zeile unter der Kopfzeile, etwa die
+ * Herkunft der Meldungen und ein gesetzter Herkunftsfilter.
+ */
+export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string[][], meldungen: LagebildPdfMeldung[], stand: string, vermerk?: string): Blob {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   doc.setFontSize(14);
   doc.setTextColor(...BLAU);
@@ -461,10 +471,16 @@ export function lagebildAlsPdf(profil: Profil, titel: string, uebersicht: string
   doc.setFontSize(9);
   doc.setTextColor(90, 100, 110);
   doc.text(pdfText(`${profil.manifest.name} · Schema ${profil.manifest.meldung.schema_id} · ${meldungen.length} Meldung(en) · Stand ${stand}`), 14, 22);
+  let startY = 27;
+  if (vermerk) {
+    const zeilen: string[] = doc.splitTextToSize(pdfText(vermerk), 182);
+    doc.text(zeilen, 14, 27);
+    startY = 27 + zeilen.length * 4.2;
+  }
   doc.setTextColor(20, 20, 20);
   autoTable(doc, {
     didParseCell: zellText,
-    startY: 27,
+    startY,
     head: [uebersicht[0] ?? []],
     body: uebersicht.slice(1),
     theme: "grid",

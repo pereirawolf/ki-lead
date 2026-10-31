@@ -1,4 +1,4 @@
-// Bereich „Daten“ in den Einstellungen (seit 0.6.13, TP-2026-W44-44, -45): Gerätestand sichern und wiederherstellen,
+// Bereich „Daten“ in den Einstellungen (seit 0.6.15, TP-2026-W44-44, -45): Gerätestand sichern und wiederherstellen,
 // alle Daten dieses Geräts löschen. Die Logik liegt in src/speicher/sicherung.ts; Schlüssel im Schlüsselbund und das
 // Farbschema im localStorage löscht dieser Bereich über ihre eigenen Schichten mit.
 import { useRef, useState } from "react";

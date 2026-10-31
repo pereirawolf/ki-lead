@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Sicherung, Wiederherstellung und Löschen des Gerätestands (seit 0.6.13). Grundlage: Befunddatei
+// Sicherung, Wiederherstellung und Löschen des Gerätestands (seit 0.6.15). Grundlage: Befunddatei
 // ki-lead-befund_technik_2026-W44-A3.json vom 30.10.2026 (Arbeitspaket A3), TP-2026-W44-44 und TP-2026-W44-45.
 import React from "react";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

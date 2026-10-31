@@ -21,6 +21,7 @@ import { feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
+import { elementTitel } from "../kern/listen";
 
 export interface FeldProps {
   profil: Profil;
@@ -149,7 +150,11 @@ export function Feld(props: FeldProps) {
     const inhalt = kinder.map((key) => (
       <Feld key={key} profil={profil} knoten={k.properties[key]} segs={[...segs, key]} wert={wert?.[key]} setze={setze} ebene={(props.ebene ?? 0) + 1} />
     ));
-    if (!f.label) return <div className="gruppe-ohne-rahmen">{inhalt}</div>;
+    // Ohne „label“ ohne Rahmen – außer verschachtelt in einem anderen Objekt (seit 0.6.14, Issue #114, A2): Dort trägt
+    // die Gruppe den Feldnamen, damit gleichnamige Felder (etwa „wert“, „einheit“ zweier Messwerte) unterscheidbar bleiben.
+    // Listenelemente und Objekte der obersten Ebene bleiben ohne Rahmen.
+    const verschachtelt = segs.length >= 2 && typeof segs[segs.length - 1] === "string";
+    if (!f.label && !verschachtelt) return <div className="gruppe-ohne-rahmen">{inhalt}</div>;
     return (
       <fieldset className={klasse}>
         <legend>{label}</legend>
@@ -439,7 +444,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
     });
   };
   const entfernen = async (i: number) => {
-    const titel = f.titel_feld ? alsText(holeWert(liste[i], f.titel_feld)) : "";
+    const titel = elementTitel(profil, segs, liste[i]);
     if (!(await bestaetigen(`${elementName} ${i + 1}${titel ? ` („${titel}“)` : ""} entfernen?`, { ja: "Entfernen" }))) return;
     setze(
       segs,
@@ -452,11 +457,11 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
     });
   };
   const hinzufuegenRef = useRef<HTMLButtonElement>(null);
-  return (
+  const liste_ = (
     <div className="liste" ref={listeRef}>
       {liste.length === 0 && <p className="leer">Noch kein {elementName} erfasst.</p>}
       {liste.map((el, i) => {
-        const titel = f.titel_feld ? alsText(holeWert(el, f.titel_feld)) : "";
+        const titel = elementTitel(profil, segs, el);
         const beurteilung = istSachverhalte && r.sv_beurteilung ? String(holeWert(el, r.sv_beurteilung) || "") : "";
         return (
           <section
@@ -487,5 +492,15 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
         {f.hinzufuegen || `${elementName} hinzufügen`}
       </button>
     </div>
+  );
+  // Die Sachverhaltsliste steht unter der Überschrift ihres Schritts; jede andere Liste trägt ihre Bezeichnung als
+  // Gruppenüberschrift (seit 0.6.14, Issue #114, A2), auch wenn sie leer ist.
+  if (istSachverhalte) return liste_;
+  return (
+    <fieldset className="gruppe gruppe-liste">
+      <legend>{bezeichnung(profil.ui, gen)}</legend>
+      <Hinweis text={f.hinweis} />
+      <div className="gruppe-inhalt">{liste_}</div>
+    </fieldset>
   );
 }

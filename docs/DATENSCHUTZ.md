@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.10 vom 30.10.2026, gilt für App-Version 0.6.13 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.10 vom 30.10.2026, gilt für App-Version 0.6.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -40,7 +40,7 @@ Alles, was die App speichert, liegt **auf dem Gerät**: im Browser (IndexedDB, f
 | Management Summary | je Profil | zuletzt erstellte Fassung | bis zum Leeren oder Ersetzen |
 | Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
 | API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
-| Sicherung (nur auf Wunsch) | Datei `<Datum>_KI-LEAD_Sicherung.json` im Download-Ordner | alle Einträge der Zeilen oben außer API-Schlüsseln und ihrer Ablage (seit 0.6.13) | bis die Person die Datei löscht; sie liegt außerhalb der App und enthält die Inhalte im Klartext |
+| Sicherung (nur auf Wunsch) | Datei `<Datum>_KI-LEAD_Sicherung.json` im Download-Ordner | alle Einträge der Zeilen oben außer API-Schlüsseln und ihrer Ablage (seit 0.6.15) | bis die Person die Datei löscht; sie liegt außerhalb der App und enthält die Inhalte im Klartext |
 | Programmdateien (nur PWA) | Caches `ki-lead-…` | HTML, Skripte, Symbole der App | bis zur nächsten Fassung |
 
 Der Service Worker der PWA hält nur Programmdateien vor. Inhalte und Anfragen an die KI-Anbieter fängt er nicht ab und speichert er nie (`src/pwa/sw-vorlage.js`).
@@ -139,12 +139,12 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 | Management Summary | „Leeren“ in der Ansicht |
 | archivierte Testläufe | Einstellungen, „Testläufe“, Archiv: „Ausgewählte löschen“ oder „Alle löschen“ |
 | API-Schlüssel | Feld leeren und speichern; bei Wechsel der Ablage zieht er um und wird in der alten entfernt |
-| alle Daten dieses Geräts (seit 0.6.13) | Einstellungen, „Daten“, „Alle Daten dieses Geräts löschen“: Gerätespeicher einschließlich API-Schlüssel, Testlaufarchiv, Farbschema, in der nativen App auch der Schlüsselbund; vorher lässt sich der Stand sichern |
+| alle Daten dieses Geräts (seit 0.6.15) | Einstellungen, „Daten“, „Alle Daten dieses Geräts löschen“: Gerätespeicher einschließlich API-Schlüssel, Testlaufarchiv, Farbschema, in der nativen App auch der Schlüsselbund; vorher lässt sich der Stand sichern |
 | alle Daten der Web-App | auch: Websitedaten von `pereirawolf.github.io` in den Browsereinstellungen löschen |
 | alle Daten der nativen App | App deinstallieren |
 | Daten beim KI-Anbieter | nach dessen Fristen (Abschnitt 5); Anfragen dazu an den Anbieter |
 
-Die Reparaturseite `reparatur.html` entfernt nur Programmdateien und die Service-Worker-Registrierung. Sie löscht ausdrücklich keine Meldungen, Profile, Einstellungen oder Schlüssel; das tut „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (seit 0.6.13, TP-2026-W44-45). Eine Sicherung des Gerätestands enthält keine API-Schlüssel, aber alle Inhalte im Klartext; sie ist wie das verwendete Material zu behandeln (TP-2026-W44-44).
+Die Reparaturseite `reparatur.html` entfernt nur Programmdateien und die Service-Worker-Registrierung. Sie löscht ausdrücklich keine Meldungen, Profile, Einstellungen oder Schlüssel; das tut „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (seit 0.6.15, TP-2026-W44-45). Eine Sicherung des Gerätestands enthält keine API-Schlüssel, aber alle Inhalte im Klartext; sie ist wie das verwendete Material zu behandeln (TP-2026-W44-44).
 
 ## 11. Fragen und Hinweise
 
@@ -398,4 +398,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.7 | 27.10.2026 | Abschnitte 2, 4 und 5: lokales Modell über Ollama ohne Drittanbieter, Datenfluss nur zum eigenen Gerät, Content-Security-Policy; Abschnitt 8: Ablage der Laufprotokolle in `src/speicher/laufSpeicher.ts` (App 0.6.3, TP-2026-W44-24, -26) |
 | 1.8 | 28.10.2026 | Anhang D: Vorlage für einen Eintrag im Verzeichnis von Verarbeitungstätigkeiten nach Art. 30 DSGVO mit Vorbefüllung und Platzhaltern, Hinweisen zu Landesrecht (ThürDSG) und zu § 70 BDSG; Verweise in Abschnitt 2 und Anhang C; Quellen ergänzt (ohne Änderung der App) |
 | 1.9 | 28.10.2026 | Anhang C und D zusätzlich unter CC0 1.0 (LICENSE-CONTENT, Nr. 2 d; ohne Änderung der App) |
-| 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.13) |
+| 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.15) |

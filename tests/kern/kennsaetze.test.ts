@@ -36,7 +36,7 @@ describe("Kennsätze im Fließtext", () => {
   });
 });
 
-// Frist auf oder vor t0 im Prüfschritt (seit 0.6.13). Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A3.json
+// Frist auf oder vor t0 im Prüfschritt (seit 0.6.15). Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A3.json
 // vom 30.10.2026 (Arbeitspaket A3), TP-2026-W44-43; Fehlerbild der Vergleichsreihen vom 25.10.2026.
 describe("TP-2026-W44-43: Frist auf oder vor dem Meldezeitpunkt", () => {
   const ZONE = "Europe/Berlin";

@@ -708,6 +708,37 @@ fieldset.lb-ausgabe {
   margin: 0 0 1rem;
 }
 
+/* Herkunftsfilter (seit 0.6.13, Issue #114, A1) */
+fieldset.lb-herkunft {
+  margin: 0 0 1rem;
+  min-width: 0;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.4rem 0.9rem 0.6rem;
+}
+
+.lb-herkunft legend {
+  font-weight: 700;
+  padding: 0 0.2rem;
+}
+
+.lb-herkunft-werte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.2rem;
+}
+
+.lb-herkunft-werte label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+}
+
+.lb-herkunft .hinweis {
+  margin: 0.3rem 0 0;
+}
+
 .lb-dateiliste summary {
   cursor: pointer;
   min-height: 44px;

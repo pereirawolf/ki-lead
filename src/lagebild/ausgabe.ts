@@ -5,10 +5,23 @@ import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
+import { listeAlsText } from "../kern/listen";
 import { gliedereAnalyse, gliedereBewertung } from "../kern/kennsaetze";
 import type { Profil, RadarDef } from "../kern/typen";
 import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../kern/zeitstrahl";
-import { absender, farbeBeurteilung, farbeTendenz, stelleVon, zeitpunktVon, type Farbe, type LagebildEintrag, type SvEintrag } from "./lagebild";
+import {
+  absender,
+  farbeBeurteilung,
+  farbeTendenz,
+  herkunftsrolleAnzeige,
+  herkunftsrolleKategorie,
+  herkunftsrolleVon,
+  stelleVon,
+  zeitpunktVon,
+  type Farbe,
+  type LagebildEintrag,
+  type SvEintrag,
+} from "./lagebild";
 
 export interface Spalte {
   titel: string;
@@ -47,6 +60,12 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
       blaetter(profil, k.properties[key], [...segs, key], [...titel, bezeichnung(profil.ui, generischerPfad([...segs, key]))], relativ, out);
     return;
   }
+  // Listen von Objekten lesbar statt als JSON (seit 0.6.14, Issue #114, A2): je Element Kopfzeile und „Feld: Wert“
+  const element = aufloesen(k?.items, profil.schema);
+  if ((k?.type === "array" || (Array.isArray(k?.type) && k.type.includes("array")) || k?.items) && (element?.type === "object" || element?.properties)) {
+    out.push({ titel: titel.join(" › "), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
+    return;
+  }
   out.push({ titel: titel.join(" › "), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
 }
 
@@ -75,8 +94,18 @@ export function spalten(profil: Profil): Spalte[] {
   for (const key of Object.keys(element?.properties || {})) {
     blaetter(profil, element.properties[key], [r.sachverhalte, 0, key], [bezeichnung(profil.ui, `${r.sachverhalte}[].${key}`)], 2, sv);
   }
+  // Herkunftsrolle der meldenden Stelle (seit 0.6.13, Issue #114, A1): mit „herkunft_standard“, ohne Rolle keine Spalte
+  const herkunft: Spalte[] = r.herkunft
+    ? [
+        { titel: "Herkunft", wert: (e) => herkunftsrolleVon(e, profil) },
+        ...(r.herkunft_kategorie
+          ? [{ titel: "Herkunft: Quellenkategorie", wert: (e: LagebildEintrag) => herkunftsrolleKategorie(profil, herkunftsrolleVon(e, profil)) }]
+          : []),
+      ]
+    : [];
   return [
     { titel: "Datei", wert: (e) => e.name },
+    ...herkunft,
     ...kopf,
     { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)) },
     ...(r.entstehung_feld
@@ -172,7 +201,8 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
   const zeile = (label: string, inhalt: string, extra = "") =>
     zeilen.push(`<tr><td style="${S.label}">${html(label)}:</td><td style="${S.wert}${extra}">${inhalt}</td></tr>`);
 
-  zeilen.push(`<tr><td colspan="2" style="${S.stelle}">${html(absender(s.eintrag, profil))}</td></tr>`);
+  const herkunft = r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : "";
+  zeilen.push(`<tr><td colspan="2" style="${S.stelle}">${html(absender(s.eintrag, profil) + herkunft)}</td></tr>`);
   const zusatz = [
     s.arten.length ? ` (${html(s.arten.join(", "))})` : "",
     s.ort ? ` in ${html(s.ort)}` : "",
@@ -235,7 +265,8 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
 export function kopiervorlageText(s: SvEintrag, profil: Profil): string {
   const ui = profil.ui;
   const r = ui.rollen;
-  const z: string[] = [absender(s.eintrag, profil), s.bezeichnung || "(ohne Bezeichnung)"];
+  const herkunft = r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : "";
+  const z: string[] = [absender(s.eintrag, profil) + herkunft, s.bezeichnung || "(ohne Bezeichnung)"];
   for (const feld of r.sv_analysefelder || []) z.push("", bezeichnung(ui, `${r.sachverhalte}[].${feld}`), gliedereAnalyse(holeWert(s.sv, feld), ui) || "–");
   const bt = [s.beurteilung, s.tendenz].filter(Boolean).join(" / ");
   if (bt || s.bewertungText) z.push("", bt, gliedereBewertung(s.bewertungText, ui));

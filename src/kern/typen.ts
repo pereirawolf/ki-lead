@@ -112,6 +112,16 @@ export interface Rollen {
   land?: string;
   meldende_stelle?: string;
   meldezeitpunkt?: string;
+  /**
+   * Herkunftsrolle der meldenden Stelle (Pfad auf Meldungsebene, z. B. „kritis.rolle“), seit 0.6.13 (Issue #114, A1):
+   * Kennzeichen und Filter im Lagebild, Spalte in CSV und Kopiervorlage, Vermerk im PDF. Ohne die Rolle bleibt das
+   * Lagebild unverändert.
+   */
+  herkunft?: string;
+  /** Herkunft für Meldungen ohne Wert im Feld der Rolle „herkunft“, z. B. „Behörde“ */
+  herkunft_standard?: string;
+  /** Herkunft → Quellenkategorie des Profils, z. B. { "Betreiber": "B", "Behörde": "A" } */
+  herkunft_kategorie?: Record<string, string>;
   quellen?: string;
   /** Zeitstrahl auf Meldungsebene: eine Zeile je Ereignis, Zuordnung über die Kennung des Sachverhalts (seit 0.6.9) */
   zeitstrahl?: string;

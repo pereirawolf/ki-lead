@@ -54,7 +54,7 @@ export function startLesen(): { auswahl: string; profil?: ProfilFarbschema } {
   }
 }
 
-/** Entfernt den Startcache (seit 0.6.13, „Alle Daten dieses Geräts löschen“, TP-2026-W44-45) */
+/** Entfernt den Startcache (seit 0.6.15, „Alle Daten dieses Geräts löschen“, TP-2026-W44-45) */
 export function startLoeschen(): void {
   try {
     localStorage.removeItem(START);

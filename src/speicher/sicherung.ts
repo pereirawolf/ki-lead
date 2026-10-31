@@ -1,4 +1,4 @@
-// Sicherung, Wiederherstellung und Löschen des Gerätestands (seit 0.6.13, TP-2026-W44-44, -45).
+// Sicherung, Wiederherstellung und Löschen des Gerätestands (seit 0.6.15, TP-2026-W44-44, -45).
 //
 // Der Arbeitsstand liegt nur im Browser bzw. in der App (IndexedDB): Profile und Archiv, Zwischenstände, Lagebild,
 // Kurzfassungen, Laufprotokolle, Einstellungen und das Archiv der Testläufe. Die Sicherung schreibt ihn als eine

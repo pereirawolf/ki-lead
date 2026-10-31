@@ -33,7 +33,7 @@ export interface TestlaufEintrag {
 let ablage: UseStore | null = null;
 /**
  * Datenbank erst bei Bedarf öffnen; ohne IndexedDB (z. B. in Tests) wirft der Aufruf, die Oberfläche fängt das ab.
- * Seit 0.6.13 auch für Sicherung und Löschen des Gerätestands (src/speicher/sicherung.ts, TP-2026-W44-44/-45).
+ * Seit 0.6.15 auch für Sicherung und Löschen des Gerätestands (src/speicher/sicherung.ts, TP-2026-W44-44/-45).
  */
 export function testlaufAblage(): UseStore {
   return db();

@@ -180,7 +180,7 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): B
     if (kennsaetzeAlle(bt, ks.handlungsrelevant).some((hb) => !DATUM_RE.test(hb))) {
       out.push({ stufe: "hinweis", text: `${name}: „${ks.handlungsrelevant}“ bitte mit Datum im Format TT.MM.JJJJ angeben.` });
     }
-    // Frist auf oder vor t0 (seit 0.6.13, TP-2026-W44-43): eine bei Ausgabe schon erreichte Frist ist als überfällig zu
+    // Frist auf oder vor t0 (seit 0.6.15, TP-2026-W44-43): eine bei Ausgabe schon erreichte Frist ist als überfällig zu
     // kennzeichnen (SOP-LEAD A.7.3). Ohne Uhrzeit zählt der Tag: derselbe Tag wie t0 gilt als „auf t0“.
     if (t0) {
       for (const hb of kennsaetzeAlle(bt, ks.handlungsrelevant)) {

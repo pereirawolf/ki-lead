@@ -801,7 +801,27 @@ Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Z
 | Drei Workflows mit zwölf Einbindungen von Actions; jede per Commit-SHA mit Versionskommentar | GitHub Actions › TP-2026-W44-36: … | `tests/ci/actions.test.ts` (neu) |
 | `npm audit --omit=dev --audit-level=high` nach `npm ci` in `pages.yml` | GitHub Actions › TP-2026-W44-37: … | `tests/ci/actions.test.ts` (neu) |
 
-## Freigabe und Datensicherheit (0.6.13, TP-2026-W44-42 bis -45, Freigabe des Herausgebers vom 30.10.2026)
+## Herkunftsrolle im Lagebild (0.6.13, Issue #114, A1, Anforderung aus KRITIS-LEAD, freigegeben vom Herausgeber am 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Herkunft je Meldung und Sachverhalt, Standard, Kategorie; Filter mit Kennzahlen; „keine Angabe“; ohne Rolle unverändert (Ilka) | I114-A1: Herkunftsrolle im Kern des Lagebilds › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Spalten „Herkunft“ und „Herkunft: Quellenkategorie“ in Rohtabelle und CSV; Kopiervorlage als HTML und Klartext; ohne Rolle keine Spalte | I114-A1: Herkunft in Rohtabelle, CSV und Kopiervorlage › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Typen der Rollen als Fehler; unbekanntes Feld, unbekannte Kategorie, Angaben ohne Rolle als Warnung | I114-A1: Prüfung der Herkunftsrollen beim Laden › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Vermerk unter der Kopfzeile des Lagebild-PDF | I114-A1: Vermerk zur Herkunft im Lagebild-PDF › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Kennzeichen in Übersicht, Meldungen und Sachverhalten; Filter aus und ein; Dateiliste vollständig; ohne Rolle kein Filter (Ilka) | I114-A1: Herkunft im Lagebild › … | `tests/ui/lagebild.test.ts` |
+
+## Verschachtelte Objekte und Listen (0.6.14, Issue #114, A2, nach der Ladeprobe von KRITIS-LEAD M2, freigegeben vom Herausgeber am 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Elementtitel aus `titel_feld`, sonst erster Text bzw. Wert, gekürzt; Name aus `element_label` | I114-A2: Elementtitel und Name › … | `tests/kern/listen.test.ts` (neu) |
+| Liste von Objekten als Text je Element, verschachtelt, leere Angaben ausgelassen, Zeitfelder deutsch; einfache Werte mit „; “ | I114-A2: Liste als lesbarer Text › … | `tests/kern/listen.test.ts` (neu) |
+| Rohtabelle/CSV und PDF einer Meldung mit Liste von Objekten ohne JSON | I114-A2: Ausgaben einer Meldung mit Liste von Objekten › … | `tests/kern/listen.test.ts` (neu) |
+| Listen und verschachtelte Objekte ohne `label` mit Überschrift; Elementtitel; leere Liste | I114-A2: verschachtelte Objekte und Listen in der Erfassungsmaske › … | `tests/ui/feld-verschachtelt.test.ts` (neu) |
+| Sachverhaltsliste ohne eigene Gruppe, keine Feldnamen als Überschrift im Beispielprofil | I114-A2: Regression Beispielprofil › … | `tests/ui/feld-verschachtelt.test.ts` (neu) |
+
+## Freigabe und Datensicherheit (0.6.15, TP-2026-W44-42 bis -45, Freigabe des Herausgebers vom 30.10.2026)
 
 | Soll | Test | Datei |
 |---|---|---|
@@ -810,5 +830,7 @@ Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Z
 | Sicherung ohne Schlüssel, Rundreise, abgelehnte Dateien | Sicherung des Gerätestands › TP-2026-W44-44: … | `tests/speicher/sicherung.test.ts` (neu) |
 | Löschen beider Datenbanken; Rückfrage abbrechen löscht nichts; Bestätigen löscht und startet neu | Alle Daten dieses Geräts löschen › TP-2026-W44-45: …; Bereich „Daten“ › TP-2026-W44-45: … | `tests/speicher/sicherung.test.ts` (neu) |
 | Sichern, Löschen und Einspielen im echten Browser | TP-2026-W44-44/-45: sichern ohne Schlüssel, alles löschen, Sicherung einspielen | `tests/browser/daten.spec.ts` (neu) |
+| Ansichtswechsel und wiederholtes Neuladen ohne Absturz, auch in WebKit (Playwright 1.57.0) | Ansichtswechsel und wiederholtes Neuladen erhalten die Navigation | `tests/browser/navigation-neuladen.spec.ts` (neu) |
+| Offline-Start auch bei „Vary: Origin“ des Servers | PWA: stimmige Fassung beim Update › findet vorgehaltene Dateien unabhängig von Vary …; Offline-Start: nach dem ersten Besuch läuft die App ohne Netz | `tests/pwa/pwa.test.ts`, `tests/browser/pwa.spec.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts` und `tests/browser/einstellungen.spec.ts` (acht statt sieben Bereiche).

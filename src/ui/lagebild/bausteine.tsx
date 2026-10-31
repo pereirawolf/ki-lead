@@ -5,7 +5,16 @@
 import { useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
-import { farbeBeurteilung, farbeTendenz, statusVon, type Farbe, type LagebildEintrag, type SvEintrag } from "../../lagebild/lagebild";
+import {
+  farbeBeurteilung,
+  farbeTendenz,
+  herkunftsrolleAnzeige,
+  herkunftsrolleVon,
+  statusVon,
+  type Farbe,
+  type LagebildEintrag,
+  type SvEintrag,
+} from "../../lagebild/lagebild";
 import type { Klasse } from "../../lagebild/redaktion";
 
 export function Marke({ farbe, children }: { farbe: Farbe | "amt"; children: ReactNode }) {
@@ -94,7 +103,7 @@ export function Punkt({
   );
 }
 
-/** Marken einer Meldung: Schema, Migration, eigene Meldung, Entwurf, KI-Entwurf */
+/** Marken einer Meldung: Schema, Migration, eigene Meldung, Entwurf, KI-Entwurf; seit 0.6.13 Herkunft (Rolle „herkunft“) */
 export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profil; eigen: boolean }) {
   const r = profil.ui.rollen;
   return (
@@ -110,6 +119,7 @@ export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profi
       {eigen && <Marke farbe="amt">eigene Meldung</Marke>}
       {!e.fremd && statusVon(e, profil) === r.status_entwurf && <Marke farbe="gelb">{r.status_entwurf}</Marke>}
       {r.entstehung_feld && holeWert(e.daten, [r.entstehung_feld, "verfahren"]) === "KI-Entwurf" && <Marke farbe="grau">KI-Entwurf</Marke>}
+      {r.herkunft && <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))}</Marke>}
     </>
   );
 }
