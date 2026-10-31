@@ -28,6 +28,7 @@ describe("Prüfumfang je Änderung", () => {
     ],
     ["Vorlage für Issues", [".github/ISSUE_TEMPLATE/barrierefreiheit.yml"], KEINE],
     ["Lizenztexte (KP-2026-W43-56)", ["LICENSE", "LICENSE-CONTENT", "LICENSE-CC0"], KEINE],
+    ["Lizenzzuordnung nach REUSE (Issue #89)", ["REUSE.toml", "LICENSES/EUPL-1.2.txt"], KEINE],
     ["Musterfassung, in die App eingebettet (seit 0.5.12)", ["evaluation/material/ilka-musterfassung.json"], NUR_KERN],
     ["Bewertungsplan des Vergleichslaufs", ["evaluation/plaene/management-summary-ilka.json", "docs/TESTS.md"], NUR_KERN],
     ["Material eines anderen Bewertungsfalls", ["evaluation/material/sop-gas-stabil.md"], KEINE],

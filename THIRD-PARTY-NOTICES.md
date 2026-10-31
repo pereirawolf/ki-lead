@@ -1,8 +1,8 @@
 # Drittkomponenten und Lizenzen
 
-Stand: 24.10.2026, App 0.5.9; Nachtrag 28.10.2026: Gradle-Wrapper und Vorlagen der Capacitor-CLI (Abschnitt 4) · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
+Stand: 24.10.2026, App 0.5.9; Nachtrag 28.10.2026: Gradle-Wrapper und Vorlagen der Capacitor-CLI (Abschnitt 4); Nachtrag 31.10.2026: Kurzsatz „die Vorlagen“, Werkzeug `reuse` (Abschnitt 5) · Keine Rechtsberatung. Die Einschätzung beruht auf den Lizenzangaben der Pakete und den unten genannten Quellen.
 
-Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT). Diese Datei nennt alle fremden Komponenten, die mit der App ausgeliefert werden, und getrennt davon die Werkzeuge, die nur beim Entwickeln gebraucht werden.
+Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT). Diese Datei nennt alle fremden Komponenten, die mit der App ausgeliefert werden, und getrennt davon die Werkzeuge, die nur beim Entwickeln gebraucht werden.
 
 ## 1. Grundsatz
 
@@ -155,7 +155,7 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 | `vite` | 8.3.4 | MIT | Build, Lizenzdatei im Build |
 | `vitest` | 5.0.5 | MIT | Tests |
 
-Gradle, das Android-Gradle-Plugin und Xcode sind ebenfalls nur Werkzeuge.
+Gradle, das Android-Gradle-Plugin und Xcode sind ebenfalls nur Werkzeuge. Dasselbe gilt für `reuse` 6.3.0 (GPL-3.0-or-later, Python, kein npm-Paket): Die CI installiert es mit `pipx` und prüft damit die maschinenlesbare Lizenzzuordnung in `REUSE.toml` (seit Issue #89).
 
 ## 6. Verträglichkeit
 

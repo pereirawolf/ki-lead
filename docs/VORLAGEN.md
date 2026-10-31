@@ -44,6 +44,11 @@ Das ThürPersVG unterscheidet zwei Stufen. In den Fällen des § 72 Abs. 5 Satz 
 
 ---
 
+<!-- SPDX-SnippetBegin -->
+<!-- SPDX-SnippetCopyrightText: 2026 Heiko Pereira Wolf <https://www.pereirawolf.de> -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 OR CC0-1.0 -->
+<!-- Nach Wahl auch CC0 1.0: LICENSE-CONTENT, Nr. 2 d -->
+
 ## V1: Erprobungsanweisung
 
 Muster für eine Hausanordnung oder Dienstanweisung. Was im Muster steht, gibt die Regeln des Testkreises ([ERPROBUNG.md](ERPROBUNG.md), Abschnitt 3) wieder; die Stelle kann strenger sein. Will sie weiter gehen, etwa mit internen Unterlagen, verlässt sie den Rahmen des Testkreises und prüft Anhang C und D, V3 und die Einordnung nach der KI-Verordnung neu.
@@ -248,6 +253,8 @@ Unterweisung zu KI-LEAD, Version [App-Version], am [Datum]. Mit der Unterschrift
 
 ---
 
+<!-- SPDX-SnippetEnd -->
+
 ## Quellen
 
 Zugriff jeweils am 28.10.2026.
@@ -267,3 +274,4 @@ Zugriff jeweils am 28.10.2026.
 |---|---|---|
 | 1.0 | 28.10.2026 | Erste Fassung mit den Vorlagen V1 bis V6, zusätzlich unter CC0 1.0 (App 0.6.6); Angaben zum ThürPersVG nach der amtlichen Gesamtausgabe |
 | 1.1 | 28.10.2026 | V5 Nr. 3: Verweis auf die Systemkarte in KI-VERORDNUNG.md 1.3 statt auf die Spezifikation |
+| 1.1 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: V1 bis V6 als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |

@@ -76,6 +76,10 @@ jobs:
           name: ki-lead-sbom
           path: ki-lead-sbom.cdx.json
           retention-days: 90
+      # Lizenzzuordnung nach REUSE (seit Issue #89): reuse in fester Version; tests/lizenzen/reuse.test.ts gleicht
+      # REUSE.toml mit LICENSE-CONTENT ab und setzt reuse in der CI voraus
+      - run: pipx install reuse==6.3.0
+      - run: reuse lint
       # Linting und Formatierung vor den Tests (seit 0.6.2, TP-2026-W44-08); Warnungen (etwa no-explicit-any) lassen den Lauf bestehen
       - run: npm run lint
       - run: npm run format:check

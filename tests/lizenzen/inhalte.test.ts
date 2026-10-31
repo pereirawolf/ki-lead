@@ -11,7 +11,7 @@ const lies = (...teile: string[]) => readFileSync(repoPfad(...teile), "utf-8");
 const ohneLinks = (s: string) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
 const KURZSATZ =
-  "Code unter EUPL-1.2 (LICENSE); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in LICENSE-CONTENT";
+  "Code unter EUPL-1.2 (LICENSE); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in LICENSE-CONTENT";
 
 /** Alle Dateien unter einem Ordner, relativ zum Repository */
 function dateienUnter(ordner: string): string[] {
