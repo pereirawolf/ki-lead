@@ -872,3 +872,11 @@ Angepasst ohne Änderung des Solls: Schlüsselobjekte in den Tests tragen das Fe
 | Beispiellage schemakonform, im Lagebild ohne Lesefehler, Meldestatus je Kreis, Kennungen ohne Befund; Verdichtung der drei Kreismeldungen mit Attrappe | TP-2026-W44-56: Beispiellage Hochwasser an der Saale (FIKTIV) › … | `tests/profil/landesprofil.test.ts` (neu) |
 
 Angepasst ohne Änderung des Solls: `tests/support/dateien.ts` lädt Profile mit geteilten Dateien wie die App; `tests/support/pipeline.ts` nimmt einen Profilordner an (Vorgabe Beispielprofil).
+
+## Austausch und fremde Schemata (0.6.19, TP-2026-W44-58 bis -61, Freigabe des Herausgebers vom 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Beispielprofil kennt `LEAD-Meldung-Land-v1`; falsche Form Fehler; fehlende, unbrauchbare, eigene oder abweichende Schemata Warnung | TP-2026-W44-59: Eingangsschemata laden › … | `tests/lagebild/fremdschema.test.ts` (neu) |
+| Landes- und Kreismeldungen im Beispielprofil geprüft, mit Gebiet; Befunde einer fehlerhaften Meldung; unbekanntes Schema ungeprüft; Marken; Eingang der Verdichtung mit Land | TP-2026-W44-59, -60: Prüfung im Lagebild, Weg Land → Bund › … | `tests/lagebild/fremdschema.test.ts` (neu) |
+| Eingangsschema im Beispielprofil aus dem Landesprofil abgeleitet | TP-2026-W44-54: … › die abgeleiteten Dateien sind aktuell … | `tests/profil/landesprofil.test.ts` |

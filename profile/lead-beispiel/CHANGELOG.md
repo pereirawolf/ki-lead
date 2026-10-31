@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.35.0 – 31.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A6.json` (Arbeitspaket A6 „Austauschvertrag“, TP-2026-W44-60), freigegeben vom Herausgeber am 31.10.2026.
+
+- **Eingangsschema `LEAD-Meldung-Land-v1`:** `meldung.eingang_schemata` nennt das Schema des Landesprofils (`eingang/LEAD-Meldung-Land-v1.schema.json`, von `npm run profil:land` aus dem Landesprofil geschrieben) mit dem Gebiet im Feld `kreis`. Das Lagebild prüft Landes- und Kreismeldungen dieses Schemas und zeigt ihr Gebiet; sie bleiben fremde Meldungen für die KI-Verdichtung.
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, SOP-Sammelmappe, Kontakte und Beispiele sind unverändert.
+
 ## 1.34.0 – 30.10.2026
 
 Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W44.json` (Freitagslauf KW 44: offene Befunde der Konsistenzprüfung, des KI-Chip-Befunds und der Zeitstrahl-Beratung, dazu „Weitere Beobachtungen“ aus Erfassungstest KW 43 und Konsistenzprüfung KW 44), Entscheidungen des Herausgebers vom 26. und 30.10.2026. Zweite Stelle, weil neue Kodier- und Erfassungsregeln hinzukommen; Schema und Darstellungsdatei bleiben unverändert, bestehende Meldungen werden nicht umkodiert.

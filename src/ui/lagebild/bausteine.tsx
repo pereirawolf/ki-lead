@@ -108,7 +108,14 @@ export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profi
   const r = profil.ui.rollen;
   return (
     <>
-      {e.fremd ? (
+      {e.fremd && e.fremdGeprueft ? (
+        // Seit 0.6.19 (TP-2026-W44-59): geprüft gegen das Schema aus „meldung.eingang_schemata“
+        e.schema.length ? (
+          <Marke farbe="rot">fremdes Schema: {e.schema.length}</Marke>
+        ) : (
+          <Marke farbe="gruen">fremdes Schema ✓</Marke>
+        )
+      ) : e.fremd ? (
         <Marke farbe="grau">fremdes Schema</Marke>
       ) : e.schema.length ? (
         <Marke farbe="rot">Schema: {e.schema.length}</Marke>

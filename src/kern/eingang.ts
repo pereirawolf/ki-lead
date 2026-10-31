@@ -22,13 +22,16 @@ export function eingangsInfo(obj: unknown, profil: Profil): EingangsInfo | null 
   const svs = o[r.sachverhalte] ?? o.sachverhalte;
   if (!Array.isArray(svs) || !svs.length || typeof svs[0] !== "object") return null;
   const stelle = String(o[r.meldende_stelle || "meldende_stelle"] ?? o.meldende_stelle ?? "");
-  const land = String(o[r.land || "land"] ?? o.land ?? "");
+  const schema = String(o[r.schema_feld] ?? o.schema ?? "");
+  // Gebiet nach dem Eintrag des fremden Schemas (seit 0.6.19, TP-2026-W44-60), sonst nach der eigenen Rolle „land“
+  const gebiet = profil.eingangSchemata?.[schema]?.gebiet;
+  const land = String((gebiet ? o[gebiet] : undefined) ?? o[r.land || "land"] ?? o.land ?? "");
   if (!stelle && !land) return null;
   return {
     stelle,
     land,
     zeitpunkt: String(o[r.meldezeitpunkt || "meldezeitpunkt"] ?? o.meldezeitpunkt ?? ""),
     sachverhalte: svs.length,
-    schema: String(o[r.schema_feld] ?? o.schema ?? ""),
+    schema,
   };
 }

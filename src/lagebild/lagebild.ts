@@ -30,6 +30,8 @@ export interface LagebildEintrag {
   schema: SchemaBefund[];
   /** Gesetzt, wenn die Meldung einem fremden Schema folgt: dann nur für die KI-Verdichtung */
   fremd: EingangsInfo | null;
+  /** Fremde Meldung gegen ihr Schema aus `meldung.eingang_schemata` geprüft (seit 0.6.19, TP-2026-W44-59); Befunde in `schema` */
+  fremdGeprueft?: boolean;
 }
 
 export interface LagebildFehler {
@@ -97,7 +99,15 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
       fehler.push({ name: datei.name, text: "keine Meldung nach diesem Profil und keine erkennbare Liste von Sachverhalten" });
       continue;
     }
-    eintraege.push({ ...basis, daten: obj, hinweise: [], schema: [], fremd: info });
+    const es = profil.eingangSchemata?.[info.schema];
+    eintraege.push({
+      ...basis,
+      daten: obj,
+      hinweise: [],
+      schema: es ? pruefeGegenSchema(es.schema, obj, profil.ui) : [],
+      fremd: info,
+      ...(es ? { fremdGeprueft: true } : {}),
+    });
   }
   return { eintraege, fehler };
 }

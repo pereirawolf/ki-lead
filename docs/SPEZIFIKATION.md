@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.18 vom 31.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.6.19 vom 31.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -81,7 +81,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.34.0",
+  "version": "1.35.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -94,7 +94,8 @@ lead-beispiel.leadprofil/
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
     "schema_id": "LEAD-Meldung-v1",
-    "eingang_schema_ids": ["LEAD-Meldung-v1"]
+    "eingang_schema_ids": ["LEAD-Meldung-v1"],
+    "eingang_schemata": { "LEAD-Meldung-Land-v1": { "datei": "eingang/LEAD-Meldung-Land-v1.schema.json", "gebiet": "kreis" } }
   },
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md",
@@ -236,7 +237,7 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 
 ### 5.2 Modul „Lagebild“ (Modus B)
 
-- **Import** mehrerer Meldungen. Jede wird geprüft und gegebenenfalls migriert (profilgesteuert).
+- **Import** mehrerer Meldungen. Jede wird geprüft und gegebenenfalls migriert (profilgesteuert). Meldungen in einem fremden Schema prüft das Lagebild seit 0.6.19 gegen ein Schema, das das Profil unter `meldung.eingang_schemata` mitbringt (TP-2026-W44-59); das Beispielprofil prüft so Meldungen des Landesprofils (TP-2026-W44-60). Regeln für den Austausch zwischen Stellen: [AUSTAUSCH.md](AUSTAUSCH.md) (Entwurf 0.1).
 - **Ansichten:** Dashboard mit Meldestatus aus `kontakte.json`, Meldungen, Sachverhalte, Lagenradar je Sachverhalt (ohne Mittelwert), Rohtabelle, Redaktionscheck (A.3/A.4/A.7/A.8) und Kopiervorlage für Word.
 - **Herkunft der meldenden Stelle (seit 0.6.13, Issue #114, A1):** Führt das Profil die Rolle `herkunft` (Pfad auf Meldungsebene, Profilformat 1.25), trägt jede Meldung und jeder Sachverhalt ein Kennzeichen der Herkunft (Dateiliste, Meldungen, Meldestatus, Sachverhalte, Lagenradar; Verteilung in der Übersicht). Meldungen ohne Wert erhalten `herkunft_standard`, sonst „keine Angabe“; `herkunft_kategorie` ergänzt die Quellenkategorie, z. B. „Betreiber (B)“. Ein Filter blendet Meldungen je Herkunft ein und aus; er gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe an die KI-Verdichtung berücksichtigen immer alle Meldungen, damit der Filter weder Erinnerungen auslöst noch Prüfbefunde oder Eingangsmeldungen verschluckt. CSV und Rohtabelle führen die Spalten „Herkunft“ und gegebenenfalls „Herkunft: Quellenkategorie“, die Kopiervorlage die Herkunft in der Kopfzeile der Stelle, das PDF eine Spalte „Herkunft“, eine Zeile je Meldung und einen Vermerk mit Verteilung und Auswahl. Die Herkunft ist eine Anzeige der Angabe in der Meldung; sie ändert keine Bewertung. Ohne die Rolle bleibt das Lagebild unverändert. Regeln für Meldungen anderer Herkunft (etwa Betreibermeldungen) liefert ein Profilpaket, nicht die App; die App lädt keine Regeln zur Laufzeit von anderen Adressen.
 - **Export:** PDF, CSV, Kopiervorlage. Gegliederte Ausgaben (PDF, Kopiervorlage) brechen eine Kennsatzzeile nicht an Signal-Satzanfängen um; ein Kennsatz reicht bis zum Zeilenende. Das PDF verwendet die Standardschrift (Windows-1252) und ersetzt andere Zeichen lesbar, etwa „→“ durch „->“ und „⟦…⟧“ durch „[[…]]“ (seit 0.4.29).
@@ -394,6 +395,8 @@ Einzelheiten:
 
 19. **Finale Ausgabe trotz Schemabefund (seit 0.6.15, TP-2026-W44-42):** Der Abschlusscheck (SOP-LEAD A.5) verlangt eine Schemaprüfung ohne Befund; die App lässt eine finale Ausgabe nach Rückfrage dennoch zu und kennzeichnet nur das PDF (Entscheidung E7 des Herausgebers vom 30.10.2026: kein Sperrschalter im Forschungsdemonstrator). Für eine behördliche Nutzung ist zu prüfen, ob die finale Ausgabe dann gesperrt werden soll.
 
+20. **Austauschvertrag (seit 0.6.19, TP-2026-W44-58):** Was eine Meldung für den Austausch zwischen Stellen, Ebenen und Systemen mitbringen soll (Kennungen, Versionen, Bezugsraum, Zeitstände, Quellen, Freigabestatus, unbekannte Werte, fremde Schemata), beschreibt [AUSTAUSCH.md](AUSTAUSCH.md) als Entwurf 0.1. Vorschläge wie eine Meldungskennung oder die Zeitzone in der Meldung ändern die Schemata erst nach der Abstimmung in Teil C (Entscheidung des Herausgebers vom 31.10.2026).
+
 ## 11. Änderungsverlauf
 
 Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gilt; Korrekturen der Spezifikation ohne neue App-Funktion erhalten eine dritte Stelle.
@@ -482,3 +485,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.16 | 31.10.2026 | Erprobungsansicht: Schalter „Forschungsfunktionen anzeigen“ (Vorgabe aus) für den Bereich „Testläufe“ und den Vergleich mit einer Referenzfassung (Abschnitte 5.1, 5.4, 6; TP-2026-W44-46) |
 | 0.6.17 | 31.10.2026 | Betreiberkonfiguration `ki-lead-betrieb/1` mit `connect-src` und Zulassung der Anbieter aus einer Quelle, Anbieter „Endpunkt der Stelle“ über Chat Completions, Vorgabe der Schlüsselablage im Betreiberbuild, Workflow „Betreiberbuild“; Stufen von Mistral Large 4 nach der Mistral-Probe (Abschnitte 2, 5.4, 7; TP-2026-W44-48 bis -53; Anleitung [BETRIEB.md](BETRIEB.md)) |
 | 0.6.18 | 31.10.2026 | Landesprofil „LEAD-Beispiel – Land Thüringen (fiktive Inhalte)“ mit Beispiellage, abgeleitet aus dem Beispielprofil; geteilte SOP-Sammelmappe eingebauter Profile (Abschnitt 4.6; TP-2026-W44-54 bis -57) |
+| 0.6.19 | 31.10.2026 | Austauschvertrag als Entwurf (offener Punkt 20, [AUSTAUSCH.md](AUSTAUSCH.md)); Prüfung fremder Meldungen gegen mitgelieferte Schemata und Weg Land → Bund im Beispielprofil (Abschnitte 4.2, 5.2; TP-2026-W44-58 bis -61) |

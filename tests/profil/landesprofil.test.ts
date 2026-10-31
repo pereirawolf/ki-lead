@@ -3,7 +3,7 @@
 // stimmig, Beispiellage lädt im Lagebild und lässt sich (mit Attrappe) verdichten.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ableiten, KREISE, LAND, SCHEMA_ID, ZIEL } from "../../scripts/landesprofil.mjs";
+import { ableitenImRepo, EINGANG_IM_BEISPIEL, KREISE, LAND, SCHEMA_ID } from "../../scripts/landesprofil.mjs";
 import { GETEILT, mitGeteilten } from "../../src/profil/geteilt";
 import { eingebauteProfile } from "../../src/profil/eingebaut";
 import { beispielDateien, einlesen, meldestatus } from "../../src/lagebild/lagebild";
@@ -21,8 +21,10 @@ import { pipelineKontext } from "../support/pipeline";
 const ORDNER = "beispiele/hochwasser-saale";
 
 describe("TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet", () => {
-  it("die abgeleiteten Dateien sind aktuell (sonst „npm run profil:land“)", () => {
-    for (const [datei, inhalt] of Object.entries(ableiten())) expect(readFileSync(repoPfad(ZIEL, datei), "utf-8"), datei).toBe(inhalt);
+  it("die abgeleiteten Dateien sind aktuell (sonst „npm run profil:land“), seit 0.6.19 auch das Eingangsschema im Beispielprofil", () => {
+    const alle = ableitenImRepo();
+    expect(Object.keys(alle)).toContain(EINGANG_IM_BEISPIEL);
+    for (const [pfad, inhalt] of Object.entries(alle)) expect(readFileSync(repoPfad(pfad), "utf-8"), pfad).toBe(inhalt);
   });
 
   it("lädt ohne Befund: Ebene Land, Referenzraum Thüringen, Schema LEAD-Meldung-Land-v1 als Eingang und Ausgabe", async () => {

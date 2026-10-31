@@ -31,6 +31,12 @@ export interface ProfilManifest {
     ui: string;
     schema_id: string;
     eingang_schema_ids?: string[];
+    /**
+     * Fremde Schemata, gegen die das Lagebild Meldungen anderer Stellen prüft (seit Profilformat 1.27, App 0.6.19,
+     * TP-2026-W44-59): Schemakennung → Schemadatei im Profil und optional das Feld des Gebiets (z. B. „kreis“). Die
+     * Meldungen bleiben fremd (nur KI-Verdichtung); sie werden nur geprüft.
+     */
+    eingang_schemata?: Record<string, { datei: string; gebiet?: string }>;
   };
   migrationen?: Migration[];
   anweisungen?: { erfassung?: string; verdichtung?: string; kurzfassung?: string };
@@ -298,6 +304,8 @@ export interface Profil {
   dateien: Record<string, string>;
   sops: Sop[];
   kontakte?: Kontakte;
+  /** Geladene fremde Schemata nach `meldung.eingang_schemata` (seit 0.6.19, TP-2026-W44-59); nur verwendbare */
+  eingangSchemata?: Record<string, { schema: object; gebiet?: string }>;
   /** SHA-256 über alle Dateien (sortiert nach Pfad) */
   hash: string;
 }

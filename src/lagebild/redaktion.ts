@@ -327,10 +327,14 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     if (e.fremd) {
       quellen.push({
         eintrag: e,
-        zeilen: [`Fremdes Schema „${e.herkunft}“: nicht in den Auswertungen enthalten, aber an die KI-Verdichtung übergebbar.`],
-        schema: 0,
+        zeilen: [
+          `Fremdes Schema „${e.herkunft}“: nicht in den Auswertungen enthalten, aber an die KI-Verdichtung übergebbar.`,
+          // Seit 0.6.19 (TP-2026-W44-59): Prüfung gegen das Schema aus „meldung.eingang_schemata“
+          ...(e.fremdGeprueft ? (e.schema.length ? e.schema.map((b) => `Schema: ${b.text}`) : ["Gegen das mitgelieferte Schema geprüft, ohne Befund."]) : []),
+        ],
+        schema: e.schema.length,
         quellen: 0,
-        klasse: "info",
+        klasse: e.schema.length ? "alert" : "info",
       });
       continue;
     }

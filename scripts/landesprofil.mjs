@@ -2,15 +2,17 @@
 // Koordinierungsstelle (profile/lead-beispiel) ab (seit 0.6.18, TP-2026-W44-54): Schema, Darstellungsdatei, Kontakte,
 // Arbeitsanweisungen und Kodierleitfaden. Die Ableitung ändert nur, was die Landesebene verlangt (Feld „kreis“ statt
 // „land“, Kreise und kreisfreie Städte, Kennungspräfixe, einzelne Formulierungen); alles andere bleibt wortgleich.
-// Manifest, Änderungsverlauf, README und Beispiele des Landesprofils werden von Hand gepflegt. Die SOP-Sammelmappe teilt
+// Manifest, Änderungsverlauf, README und Beispiele des Landesprofils werden von Hand gepflegt. Seit 0.6.19
+// (TP-2026-W44-60) schreibt das Skript das Landesschema zusätzlich als Eingangsschema ins Beispielprofil
+// (eingang/LEAD-Meldung-Land-v1.schema.json), damit die Koordinierungsstelle Landesmeldungen prüfen kann. Die SOP-Sammelmappe teilt
 // das Landesprofil mit dem Beispielprofil (src/profil/eingebaut.ts, TP-2026-W44-55).
 //
 // Aufruf: node scripts/landesprofil.mjs [--check]
 //   ohne --check: schreibt die abgeleiteten Dateien
 //   mit --check:  prüft nur, ob sie aktuell sind (Exit-Code 1, wenn nicht); tests/profil/landesprofil.test.ts tut dasselbe
 
-import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const QUELLE = "profile/lead-beispiel";
@@ -137,7 +139,19 @@ const TEXTE = {
   ],
 };
 
-/** Abgeleitete Dateien: Pfad im Profilordner → Inhalt */
+/** Eingangsschema im Beispielprofil (Pfad relativ zum Repository) */
+export const EINGANG_IM_BEISPIEL = `${QUELLE}/eingang/${SCHEMA_ID}.schema.json`;
+
+/** Abgeleitete Dateien: Pfad im Repository → Inhalt */
+export function ableitenImRepo(lesen = (pfad) => readFileSync(pfad, "utf-8")) {
+  const land = ableiten(lesen);
+  return {
+    ...Object.fromEntries(Object.entries(land).map(([d, t]) => [join(ZIEL, d), t])),
+    [EINGANG_IM_BEISPIEL]: land["meldung.schema.json"],
+  };
+}
+
+/** Abgeleitete Dateien des Landesprofils: Pfad im Profilordner → Inhalt */
 export function ableiten(lesen = (pfad) => readFileSync(pfad, "utf-8")) {
   const q = (d) => lesen(join(QUELLE, d));
   const out = {
@@ -152,8 +166,8 @@ export function ableiten(lesen = (pfad) => readFileSync(pfad, "utf-8")) {
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const pruefen = process.argv.includes("--check");
   const veraltet = [];
-  for (const [datei, inhalt] of Object.entries(ableiten())) {
-    const pfad = join(ZIEL, datei);
+  for (const [pfad, inhalt] of Object.entries(ableitenImRepo())) {
+    const datei = pfad;
     let bisher = "";
     try {
       bisher = readFileSync(pfad, "utf-8");
@@ -162,7 +176,10 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
     }
     if (bisher === inhalt) continue;
     veraltet.push(datei);
-    if (!pruefen) writeFileSync(pfad, inhalt);
+    if (!pruefen) {
+      mkdirSync(dirname(pfad), { recursive: true });
+      writeFileSync(pfad, inhalt);
+    }
   }
   if (pruefen && veraltet.length) {
     console.error(`Landesprofil veraltet: ${veraltet.join(", ")}. Mit „npm run profil:land“ neu ableiten.`);
