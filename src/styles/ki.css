@@ -53,6 +53,31 @@
   accent-color: var(--auswahl-rand);
 }
 
+/* Offene Voraussetzungen über dem gesperrten Startknopf (seit 0.6.20, UX-2026-W44-02) */
+.start-offen {
+  margin: 1rem 0 0;
+  font-size: 0.92rem;
+  color: var(--tinte-leise);
+}
+
+.start-offen p {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.start-offen ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.start-offen li {
+  margin: 0.15rem 0;
+}
+
+.start-offen li .knopf {
+  margin-left: 0.5rem;
+}
+
 .laufanzeige {
   display: flex;
   align-items: center;

@@ -65,6 +65,8 @@ describe("ZS-2026-W44-02: Sachverhaltskennung in der Maske", () => {
     delete m.sachverhalte[0].kennung;
     await zeige(m);
     await schritt(/Ereignisse\/Sachverhalte/);
+    // geladene Meldung mit mehreren Sachverhalten: eingeklappt (seit 0.6.20, UX-2026-W44-08)
+    await klick(/^Aufklappen$/);
     await klick("Kennung vergeben");
     await bisWahr(() => !!stand.sachverhalte[0].kennung);
     expect(stand.sachverhalte[0].kennung).toMatch(/^DE-TH-\d{8}-[0-9A-HJKMNP-TV-Z]{4}$/);
@@ -131,5 +133,27 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     expect(bereich.querySelector("select")).toBeNull();
     expect(bereich.textContent).toContain("Noch kein Sachverhalt mit Kennung");
     expect((knopf("Zeile anfügen", bereich) as HTMLButtonElement).disabled).toBe(true);
+  });
+});
+
+describe("UX-2026-W44-08: Sachverhalte einklappbar", () => {
+  it("geladene Meldung mit mehreren Sachverhalten zeigt sie eingeklappt mit Kopf; der Sprung aus dem Prüfschritt öffnet den betroffenen", async () => {
+    const m = ilkaMeldung("TH");
+    expect(m.sachverhalte.length).toBeGreaterThan(1);
+    m.sachverhalte[1].bezeichnung = "";
+    await zeige(m);
+    await schritt(/Ereignisse\/Sachverhalte/);
+    const elemente = () => [...document.querySelectorAll<HTMLElement>(".liste > .element")];
+    expect(elemente().every((e) => e.classList.contains("zu"))).toBe(true);
+    expect(elemente()[1]!.querySelector(".element-stand")?.textContent).toMatch(/1 Feld mit Befund/);
+    await schritt(/Prüfen & Exportieren/);
+    const befund = [...document.querySelectorAll("button.befund-sprung")].find((b) => /Bezeichnung/.test(b.textContent || "")) as HTMLButtonElement;
+    await klick(befund);
+    await bisWahr(() => !elemente()[1]!.classList.contains("zu"));
+    expect(elemente()[0]!.classList.contains("zu")).toBe(true);
+    expect(document.activeElement).toBe(document.querySelector('[data-feld="sachverhalte/1/bezeichnung"] input'));
+    // bleibt offen, bis es eingeklappt wird
+    await klick("Ereignis/Sachverhalt 2 einklappen");
+    expect(elemente()[1]!.classList.contains("zu")).toBe(true);
   });
 });

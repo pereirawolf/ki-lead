@@ -89,7 +89,43 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
 | 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ (Nachtrag vom 31.10.2026: Profil „Lagebild Justiz“ 0.1.0 und docs/KI-VERORDNUNG.md 1.4 mit dem Pull Request „Profil Lagebild Justiz 0.1.0 (Erprobungsentwurf)“, ohne Änderung der App) |
 | 0.6.18 | letzter Commit des Pull Requests „Landesprofil Thüringen (fiktive Inhalte) mit Beispiellage; 0.6.18“ |
-| 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
+| 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ |
+| 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
+
+## [0.6.20] – 01.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_ux_2026-W44.json` (Oberfläche und Bedienung, eigene Durchsicht und Vorschläge einer zweiten KI, konsolidiert), freigegeben vom Herausgeber am 31.10.2026: UX-2026-W44-01 bis -14 angenommen, -15 (Erprobung mit Screenreader, HTML-Ausgabe) abgelehnt. Keine Änderung an KI-Pipeline, Profilen, Schema und Ausgaben.
+
+### Geändert
+
+- **KI-Chip „KI ruht“/„KI aktiv“ (UX-2026-W44-01):** statt „KI offline“/„KI online“, weil „offline“ in der App auch den Betrieb ohne Netz bezeichnet. Rolle, Farben, Zähler und `data-zustand` unverändert (Entscheidung zu KP-2026-W44-01 bleibt).
+- **Startvoraussetzungen der KI-Erfassung (UX-2026-W44-02):** Über dem gesperrten Knopf „Gegenstand bestimmen (S1)“ nennt „Noch offen“ Auftrag oder Material, Bestätigung zur Weitergabe und fehlende API-Schlüssel, je mit Sprung („Zum Auftrag“, „Zur Bestätigung“, „Zu den Einstellungen“); der Knopf verweist per `aria-describedby` darauf.
+- **Laufdetails eingeklappt (UX-2026-W44-03):** Recherchezeile und Schätzung je Stufe stehen im aufklappbaren Teil „Modelle und Recherche für diesen Lauf“ (`ModellWahl`, Eigenschaft `erlaeuterung`); die Kurzzeile nennt weiter Modelle, Recherche, Dauer und Kosten, Datenweitergabe und Anbieter bleiben vor dem Start sichtbar.
+- **Navigation auf dem Smartphone (UX-2026-W44-04):** Die Hauptnavigation bricht bis 640 px um statt abgeschnitten zu werden. Die waagerecht scrollbaren Abschnittsleisten von Erfassung, KI-Erfassung und Einstellungen zeigen am Rand einen Verlauf, solange dort weitere Abschnitte liegen, und rücken den aktiven Abschnitt ins Bild (`src/ui/leiste.ts`).
+- **Pflichtbefunde erst nach Bearbeitung (UX-2026-W44-05):** Eine fehlende Pflichtangabe erscheint am Feld erst, wenn es bearbeitet und verlassen wurde, nach dem Besuch des Prüfschritts oder bei geöffneter bzw. übernommener Meldung; andere Schemabefunde sofort (`sichtbareBefunde` in `src/ui/feldBefunde.ts`).
+- **Schrittleiste aus Befunden (UX-2026-W44-06):** Schritte mit angezeigtem Befund tragen einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen; die Kennzeichnung „erledigt“ früherer Schritte nach ihrer Position entfällt.
+- **Titelfeld zuerst (UX-2026-W44-07):** In einem Listenelement steht das Titelfeld der Liste (`titel_feld`, im Beispielprofil die Bezeichnung des Sachverhalts) zuerst; Schema und Ausgaben unverändert.
+- **Sachverhalte einklappbar (UX-2026-W44-08):** Kopf mit Bezeichnung, Kennung, Beurteilung, Tendenz und Befundzahl, „Einklappen“/„Aufklappen“ mit `aria-expanded`. Neue Sachverhalte sind offen, eine geöffnete Meldung mit mehreren Sachverhalten zeigt sie eingeklappt, ein Sprung aus dem Prüfschritt öffnet den betroffenen.
+- **Sachverhalte im Lagebild kompakt (UX-2026-W44-09):** Der Reiter „Sachverhalte“ zeigt je Sachverhalt eine Zeile mit Marken für Beurteilung und Tendenz; Bewertungstext, Analysefelder, Bezug und Zeitstrahl zum Aufklappen; Filter nach Beurteilung und Tendenz zusätzlich zum Herkunftsfilter (`src/ui/lagebild/Sachverhaltsliste.tsx`). Beim Beispiel Ilka sinkt die Seitenhöhe von rund 14.700 px auf unter 3.000 px. Die Volltabelle bleibt als Rohtabelle, im PDF und in der CSV.
+- **Kennzahlen als Einstieg (UX-2026-W44-10):** „Bewertung: …“ und „Tendenz: Verschärfung“ öffnen mit Anzahl die passend gefilterten Sachverhalte.
+- **Prüfschritt ohne Doppelmeldung (UX-2026-W44-11):** Eine Pflichtangabe, die schon als Schemaabweichung genannt ist, erscheint nicht ein zweites Mal.
+- **Ausgabe nach Entwurf und Final (UX-2026-W44-12):** zwei Gruppen mit Zustandszeile; hervorgehoben ist bei offener Schemaabweichung „Entwurf als JSON speichern“, sonst „Final als JSON exportieren“. Die Rückfrage vor einer finalen Ausgabe mit Befund bleibt.
+- **Lagenradar-Karten (UX-2026-W44-13):** Radar über die Kartenbreite, darunter je Achse Bezeichnung und Stufe.
+- **Aktives Profil im Seitenkopf (UX-2026-W44-14):** Erfassung, KI-Erfassung und Auswertung nennen das aktive Profil mit Fassung und Verweis auf „Profile“, außerhalb des Kennsatzes; die Kopfleiste bleibt ohne Profil-Chip (Entscheidung 0.5.21).
+
+### Tests
+
+- `tests/browser/ux-2026-w44.spec.ts` (neu): Startvoraussetzungen, Navigation bei 390 px, Titelfeld zuerst, kompakte Sachverhalte mit Filter.
+- Ergänzt: `tests/ui/kisymbol.test.ts`, `erfassung.test.ts`, `zeitstrahl.test.ts`, `lagebild.test.ts`, `bereiche.test.ts`; angepasst an die neuen Texte und die Liste statt Tabelle: `kisymbol.spec.ts`, `lagebild.test.ts`, `zeitstrahl.test.ts`.
+
+### Nachtrag vom 01.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 01.11.2026, die eigenen Vorschläge und die einer unabhängigen Prüfung durch eine andere KI (31.10.2026) zu einem konsolidierten Vorschlag für `LEAD-Meldung-v2` zusammenzuführen, ohne Rücksicht auf Abwärtskompatibilität. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline; das Format liegt als Entwurf neben v1.
+
+- **Meldungsformat LEAD-Meldung-v2 (Entwurf 2.0):** [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) mit Grundsätzen, Feldern, Prüfebenen, Umstellungsweg, Migration und Abwägung der Vorschläge; Dateien in `formate/lead-meldung-v2/`: Kernschema, Fachmodul `lead-bevoelkerungsschutz` 1.0 (Ereignisarten, Lagenradar je Achse mit Status, Grund und Belegen), Zusammenstellungen und erzeugte Schemata für Beispiel- und Landesprofil, zwei fiktive Beispiele (Thüringen zum Orkantief „Ilka“, Fehlanzeige Saarland).
+- **Werkzeug `npm run meldung:v2`** (`scripts/lead-meldung-v2.mjs`): `schema` stellt Kern und Module zu einem selbsttragenden Profilschema zusammen, `migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` (Quellen, Zeitstrahl, Kennsätze, Radarbegründungen, Empfehlungen aus dem Text; Unsicheres als Hinweis in `entstehung.migration`), `pruefe` prüft Schema und Verweise.
+- **Tests** `tests/format/lead-meldung-v2.test.ts`: Schemata, erzeugte Dateien aktuell, Gleichlauf des eigenen Prüfers mit Ajv, Vollständigkeit je Status (darunter der Befund der Fremdprüfung, dass eine finale v1-Meldung ohne Quellen, Lagetext und Zeichnung gültig ist), Referenzprüfung, Migration aller mitgelieferten v1-Meldungen.
+- Spezifikation: offener Punkt 21 und Nachtrag im Änderungsverlauf; [docs/AUSTAUSCH.md](docs/AUSTAUSCH.md) 0.2 mit Verweis auf den Entwurf; README, [docs/TESTS.md](docs/TESTS.md); `LICENSE-CONTENT` Nr. 1 e und 2 e und `REUSE.toml` für `formate/` (CC BY 4.0, Schemata und Zusammenstellungen zusätzlich CC0 1.0).
 
 ## [0.6.19] – 31.10.2026
 
@@ -109,15 +145,6 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A6.json` (Arbeitspaket A
 
 - `tests/lagebild/fremdschema.test.ts` (neu, 5): Laden und Warnungen, Prüfung im Lagebild mit Gebiet, Befunde und Marken, Eingang der Verdichtung im Beispielprofil.
 - `tests/profil/landesprofil.test.ts`: Ableitung prüft auch das Eingangsschema im Beispielprofil.
-
-### Nachtrag vom 01.11.2026 (ohne neue Versionsnummer)
-
-Grundlage: Auftrag des Herausgebers vom 01.11.2026, die eigenen Vorschläge und die einer unabhängigen Prüfung durch eine andere KI (31.10.2026) zu einem konsolidierten Vorschlag für `LEAD-Meldung-v2` zusammenzuführen, ohne Rücksicht auf Abwärtskompatibilität. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline; das Format liegt als Entwurf neben v1.
-
-- **Meldungsformat LEAD-Meldung-v2 (Entwurf 2.0):** [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) mit Grundsätzen, Feldern, Prüfebenen, Umstellungsweg, Migration und Abwägung der Vorschläge; Dateien in `formate/lead-meldung-v2/`: Kernschema, Fachmodul `lead-bevoelkerungsschutz` 1.0 (Ereignisarten, Lagenradar je Achse mit Status, Grund und Belegen), Zusammenstellungen und erzeugte Schemata für Beispiel- und Landesprofil, zwei fiktive Beispiele (Thüringen zum Orkantief „Ilka“, Fehlanzeige Saarland).
-- **Werkzeug `npm run meldung:v2`** (`scripts/lead-meldung-v2.mjs`): `schema` stellt Kern und Module zu einem selbsttragenden Profilschema zusammen, `migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` (Quellen, Zeitstrahl, Kennsätze, Radarbegründungen, Empfehlungen aus dem Text; Unsicheres als Hinweis in `entstehung.migration`), `pruefe` prüft Schema und Verweise.
-- **Tests** `tests/format/lead-meldung-v2.test.ts`: Schemata, erzeugte Dateien aktuell, Gleichlauf des eigenen Prüfers mit Ajv, Vollständigkeit je Status (darunter der Befund der Fremdprüfung, dass eine finale v1-Meldung ohne Quellen, Lagetext und Zeichnung gültig ist), Referenzprüfung, Migration aller mitgelieferten v1-Meldungen.
-- Spezifikation: offener Punkt 21 und Nachtrag im Änderungsverlauf; [docs/AUSTAUSCH.md](docs/AUSTAUSCH.md) 0.2 mit Verweis auf den Entwurf; README, [docs/TESTS.md](docs/TESTS.md); `LICENSE-CONTENT` Nr. 1 e und 2 e und `REUSE.toml` für `formate/` (CC BY 4.0, Schemata und Zusammenstellungen zusätzlich CC0 1.0).
 
 ## [0.6.18] – 31.10.2026
 

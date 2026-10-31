@@ -73,6 +73,7 @@ import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
+import { useAktivImBild } from "./leiste";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "daten" | "ueber";
 
@@ -1203,6 +1204,7 @@ export function EinstellungenAnsicht({
   // Forschungsfunktionen nur nach Wahl (seit 0.6.16, TP-2026-W44-46); eine Adresse auf „Testläufe“ führt sonst zur Übersicht
   const sichtbar = BEREICHE.filter((b) => (b.id !== "darstellung" || farben) && (b.id !== "testlaeufe" || e.forschung));
   const aktuell = sichtbar.some((b) => b.id === aktiv) ? aktiv : "uebersicht";
+  useAktivImBild(arbeitsbereichRef, aktuell);
 
   return (
     <div className="einstellungen">

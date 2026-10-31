@@ -2,6 +2,7 @@
 // Erfassungsmaske: Zeitfelder mit „Jetzt“, „Nur Tag“ und „Leeren“; Baukasten für Quellenzeilen.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
+import { act } from "react";
 import { profil, profilPflicht } from "../support/dateien";
 import { ilkaDatei } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
@@ -110,6 +111,11 @@ describe("Erfassungsmaske", () => {
     await zeigeApp();
     await zuSchritt(/Ereignisse\/Sachverhalte/);
     const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
+    // seit 0.6.20 (UX-2026-W44-05) erst nach dem Verlassen des Feldes
+    await act(async () => {
+      bezeichnung().focus();
+      bezeichnung().blur();
+    });
     expect(bezeichnung().getAttribute("aria-invalid")).toBe("true");
     const ids = (bezeichnung().getAttribute("aria-describedby") || "").split(" ");
     const texte = ids.map((id) => document.getElementById(id)?.textContent || "");
@@ -119,6 +125,37 @@ describe("Erfassungsmaske", () => {
     await eingeben(bezeichnung(), "Sturmfolgen");
     expect(bezeichnung().hasAttribute("aria-invalid")).toBe(false);
     expect(bezeichnung().closest(".feld")?.querySelector(".feld-fehler")).toBeNull();
+  });
+
+  it("UX-2026-W44-05: neue Meldung zeigt fehlende Pflichtangaben erst nach Bearbeiten oder nach dem Prüfschritt", async () => {
+    await zeigeApp();
+    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
+    expect(bezeichnung().hasAttribute("aria-invalid")).toBe(false);
+    expect(document.querySelector(".feld-fehler")).toBeNull();
+    await zuSchritt(/Prüfen & Exportieren/);
+    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    expect(bezeichnung().getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("UX-2026-W44-11/-12: fehlende Bezeichnung einmal im Prüfschritt; ohne bestandene Prüfung ist der Entwurf hervorgehoben", async () => {
+    await zeigeApp();
+    await zuSchritt(/Prüfen & Exportieren/);
+    const sprung = [...document.querySelectorAll("button.befund-sprung")].filter((b) => /Bezeichnung/.test(b.textContent || ""));
+    expect(sprung).toHaveLength(1);
+    expect(knopf("Entwurf als JSON speichern")?.classList.contains("primaer")).toBe(true);
+    expect(knopf("Final als JSON exportieren")?.classList.contains("primaer")).toBe(false);
+    expect(document.querySelector(".ausgabe-stand")?.textContent).toMatch(/\d+ Abweichung\(en\) offen/);
+  });
+
+  it("UX-2026-W44-06: Schrittleiste zeigt Befunde je Schritt statt „erledigt“ nach Position", async () => {
+    await zeigeApp();
+    await zuSchritt(/Prüfen & Exportieren/);
+    const knopf = (re: RegExp) => [...document.querySelectorAll<HTMLButtonElement>(".schritte .schritt")].find((b) => re.test(b.textContent || ""))!;
+    expect(knopf(/Ereignisse\/Sachverhalte/).querySelector(".schritt-befund")).toBeTruthy();
+    expect(knopf(/Ereignisse\/Sachverhalte/).textContent).toMatch(/1 Feld mit Befund/);
+    expect(knopf(/Meldungsmetadaten/).querySelector(".schritt-befund")).toBeNull();
+    expect(document.querySelector(".schritte .erledigt")).toBeNull();
   });
 
   it("TP-2026-W44-15: ein Befund im Prüfschritt wechselt in den Schritt und fokussiert das Feld", async () => {

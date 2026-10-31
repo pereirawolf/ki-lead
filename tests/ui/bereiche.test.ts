@@ -59,6 +59,23 @@ describe("OF-2026-W44-01, -02: Bereiche nach den Arbeitsschritten der LEAD-Syste
   });
 });
 
+describe("UX-2026-W44-14: aktives Profil im Seitenkopf der Arbeitsansichten", () => {
+  it("Erfassung, KI-Erfassung und Auswertung nennen das aktive Profil mit Weg zu „Profile“, außerhalb des Kennsatzes", async () => {
+    const { default: App } = await import("../../src/App");
+    await einhaengen(React.createElement(App));
+    await bisWahr(() => expect(document.querySelector(".meldung .arbeitsbereich")).toBeTruthy());
+    const nav = document.querySelector(".hauptnav")!;
+    const zeile = (bereich: string) => document.querySelector(`.${bereich} .profilzeile`);
+    expect(zeile("meldung")?.textContent).toMatch(/^Profil: .+ \d+\.\d+\.\d+ · Profile$/);
+    expect(zeile("meldung")?.querySelector("a")?.getAttribute("href")).toBe("#/profile");
+    await klick(knopf("KI-Erfassung", nav));
+    await bisWahr(() => expect(zeile("ki")).toBeTruthy());
+    await klick(knopf("Auswertung", nav));
+    await bisWahr(() => expect(zeile("lagebild")).toBeTruthy());
+    expect(document.querySelector(".hauptnav ~ .kopf-rechts .profilzeile, .kopf .profilzeile")).toBeNull();
+  });
+});
+
 describe("OF-2026-W44-03: Produkttitel aus dem Profil, Bereichsnamen aus der App", () => {
   it("Beispielprofil: Titel „Meldung“ ohne Untertitel, Lagebild „Lagebild“", async () => {
     const p = (await profil("lead-beispiel")).profil!;

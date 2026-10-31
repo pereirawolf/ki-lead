@@ -112,7 +112,7 @@ a {
   text-underline-offset: 0.35em;
 }
 
-/* KI-Chip rechts oben (seit 0.5.21): „KI offline“ zart in den Profilfarben, „KI online“ gefüllt in der Aktionsfarbe
+/* KI-Chip rechts oben (seit 0.5.21): „KI ruht“ zart in den Profilfarben, „KI aktiv“ gefüllt (bis 0.6.19 „KI offline“/„KI online“) in der Aktionsfarbe
    mit pulsierendem Ring; seit 0.6.12 reine Statusanzeige ohne Hover und Klick */
 .kopf-rechts {
   margin-left: auto;
@@ -256,6 +256,13 @@ a {
   margin: 0.2rem 0 0;
   color: var(--tinte-leise);
   max-width: 62ch;
+}
+
+/* Aktives Profil im Seitenkopf (seit 0.6.20, UX-2026-W44-14) */
+.profilzeile {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
 }
 
 .werkzeugleiste-knoepfe {
@@ -402,9 +409,26 @@ a {
   padding: 0 0.5rem;
 }
 
-.schritt.erledigt .schritt-nr {
-  border-color: var(--amt);
-  color: var(--amt-tief);
+/* Befundmarke je Schritt (seit 0.6.20, UX-2026-W44-06): roter Punkt an der Schrittnummer, Zahl im zugänglichen Namen
+   und im Tooltip; ersetzt „erledigt“ nach Position */
+.schritt-nr {
+  position: relative;
+}
+
+.schritt.mit-befund .schritt-nr {
+  border-color: var(--kritisch);
+  color: var(--kritisch);
+}
+
+.schritt-befund {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.3rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--kritisch);
+  border: 2px solid var(--papier);
 }
 
 .schritt.aktiv {
@@ -466,6 +490,13 @@ a {
     border-left: none;
     border-bottom: 2px solid var(--linie);
     scrollbar-width: none;
+    /* Verlauf am Rand, solange dort weitere Abschnitte liegen (seit 0.6.20, UX-2026-W44-04): Deckflächen wandern mit
+       dem Inhalt („local“), Schatten bleiben am Rand stehen („scroll“) und werden am Ende der Leiste verdeckt */
+    background:
+      linear-gradient(to right, var(--papier) 40%, transparent) left center / 2.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--papier) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+      linear-gradient(to right, var(--linie), transparent) left center / 1rem 100% no-repeat scroll,
+      linear-gradient(to left, var(--linie), transparent) right center / 1rem 100% no-repeat scroll;
   }
 
   .schritt {
@@ -575,6 +606,10 @@ a {
     order: 3;
     width: 100%;
     margin: 0 -0.4rem;
+    /* seit 0.6.20 (UX-2026-W44-04) umbrechen statt abschneiden: alle fünf Bereiche bleiben sichtbar */
+    flex-wrap: wrap;
+    overflow-x: visible;
+    row-gap: 0.15rem;
   }
 }
 

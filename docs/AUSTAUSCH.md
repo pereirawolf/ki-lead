@@ -1,6 +1,6 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.2 vom 01.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.19 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.2 vom 01.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.20 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
 
