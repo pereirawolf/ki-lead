@@ -34,6 +34,23 @@ test("Vorgabe: ohne Forschungsfunktionen kein Bereich „Testläufe“; nach dem
   await page.getByRole("checkbox", { name: "Forschungsfunktionen anzeigen" }).uncheck();
   await expect(leiste(page).getByRole("button")).toHaveText(BEREICHE.filter((b) => b !== "Testläufe"));
   await page.getByRole("checkbox", { name: "Forschungsfunktionen anzeigen" }).check();
+  // Erst neu laden, wenn die Wahl im Gerätespeicher steht (das Schreiben ist asynchron; ohne Warten in der CI unzuverlässig)
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          new Promise((fertig) => {
+            const db = indexedDB.open("keyval-store");
+            db.onsuccess = () => {
+              const g = db.result.transaction("keyval").objectStore("keyval").get("einstellungen");
+              g.onsuccess = () => fertig(g.result?.forschung ?? null);
+              g.onerror = () => fertig(null);
+            };
+            db.onerror = () => fertig(null);
+          }),
+      ),
+    )
+    .toBe(true);
   await page.reload();
   await expect(page.locator(".kopf-ki")).toBeVisible();
   await bereich(page, "Einstellungen");
