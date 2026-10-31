@@ -89,7 +89,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
 | 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ (Nachtrag vom 31.10.2026: Profil „Lagebild Justiz“ 0.1.0 und docs/KI-VERORDNUNG.md 1.4 mit dem Pull Request „Profil Lagebild Justiz 0.1.0 (Erprobungsentwurf)“, ohne Änderung der App) |
 | 0.6.18 | letzter Commit des Pull Requests „Landesprofil Thüringen (fiktive Inhalte) mit Beispiellage; 0.6.18“ |
-| 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ |
+| 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
 
 ## [0.6.19] – 31.10.2026
 
@@ -109,6 +109,15 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A6.json` (Arbeitspaket A
 
 - `tests/lagebild/fremdschema.test.ts` (neu, 5): Laden und Warnungen, Prüfung im Lagebild mit Gebiet, Befunde und Marken, Eingang der Verdichtung im Beispielprofil.
 - `tests/profil/landesprofil.test.ts`: Ableitung prüft auch das Eingangsschema im Beispielprofil.
+
+### Nachtrag vom 01.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 01.11.2026, die eigenen Vorschläge und die einer unabhängigen Prüfung durch eine andere KI (31.10.2026) zu einem konsolidierten Vorschlag für `LEAD-Meldung-v2` zusammenzuführen, ohne Rücksicht auf Abwärtskompatibilität. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline; das Format liegt als Entwurf neben v1.
+
+- **Meldungsformat LEAD-Meldung-v2 (Entwurf 2.0):** [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) mit Grundsätzen, Feldern, Prüfebenen, Umstellungsweg, Migration und Abwägung der Vorschläge; Dateien in `formate/lead-meldung-v2/`: Kernschema, Fachmodul `lead-bevoelkerungsschutz` 1.0 (Ereignisarten, Lagenradar je Achse mit Status, Grund und Belegen), Zusammenstellungen und erzeugte Schemata für Beispiel- und Landesprofil, zwei fiktive Beispiele (Thüringen zum Orkantief „Ilka“, Fehlanzeige Saarland).
+- **Werkzeug `npm run meldung:v2`** (`scripts/lead-meldung-v2.mjs`): `schema` stellt Kern und Module zu einem selbsttragenden Profilschema zusammen, `migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` (Quellen, Zeitstrahl, Kennsätze, Radarbegründungen, Empfehlungen aus dem Text; Unsicheres als Hinweis in `entstehung.migration`), `pruefe` prüft Schema und Verweise.
+- **Tests** `tests/format/lead-meldung-v2.test.ts`: Schemata, erzeugte Dateien aktuell, Gleichlauf des eigenen Prüfers mit Ajv, Vollständigkeit je Status (darunter der Befund der Fremdprüfung, dass eine finale v1-Meldung ohne Quellen, Lagetext und Zeichnung gültig ist), Referenzprüfung, Migration aller mitgelieferten v1-Meldungen.
+- Spezifikation: offener Punkt 21 und Nachtrag im Änderungsverlauf; [docs/AUSTAUSCH.md](docs/AUSTAUSCH.md) 0.2 mit Verweis auf den Entwurf; README, [docs/TESTS.md](docs/TESTS.md); `LICENSE-CONTENT` Nr. 1 e und 2 e und `REUSE.toml` für `formate/` (CC BY 4.0, Schemata und Zusammenstellungen zusätzlich CC0 1.0).
 
 ## [0.6.18] – 31.10.2026
 

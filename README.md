@@ -72,6 +72,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | An der Erprobung teilnehmen, Rückmeldung geben | [Erprobung im Testkreis](docs/ERPROBUNG.md) |
 | Erprobung in einer Stelle vorbereiten: Anordnung, Personalvertretung, IT-Freigabe, Anbieter, Unterweisung, Bericht | [Vorlagen](docs/VORLAGEN.md) |
 | Meldungen zwischen Stellen austauschen: Kennungen, Versionen, Zeitstände, fremde Schemata (Entwurf) | [Austausch](docs/AUSTAUSCH.md) |
+| Meldungsformat LEAD-Meldung-v2: Kern, Fachmodule, Migration aus v1 (Entwurf) | [LEAD-Meldung v2](docs/LEAD-MELDUNG-V2.md) |
 | Selbst betreiben: Betreiberkonfiguration, eigener KI-Endpunkt (Chat Completions), Auslieferung | [Betrieb](docs/BETRIEB.md) |
 | Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 

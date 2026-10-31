@@ -1,0 +1,36 @@
+{
+  "format": "lead-meldung-v2-zusammenstellung/1",
+  "$id": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/beispiel/meldung.schema.json",
+  "title": "LEAD-Meldung v2 – Beispielprofil (Bund und Länder, Bevölkerungsschutz)",
+  "description": "Schema LEAD-Meldung-v2 (Formatfassung 2.0, Entwurf) für Profile des Bevölkerungsschutzes auf Bundes- und Landesebene: Kernschema mit Pflichtmodul lead-bevoelkerungsschutz 1.0 (Ereignisarten, Lagenradar), Quellenkategorien A/B/W/M/P. Grundlage für die Umstellung von profile/lead-beispiel und profile/lead-thueringen.",
+  "kern": "kern.schema.json",
+  "module": {
+    "lead-bevoelkerungsschutz": {
+      "datei": "module/lead-bevoelkerungsschutz.schema.json",
+      "pflicht": true
+    }
+  },
+  "einschraenkungen": {
+    "absender_gebiete": [
+      "Bund",
+      "Baden-Württemberg",
+      "Bayern",
+      "Berlin",
+      "Brandenburg",
+      "Bremen",
+      "Hamburg",
+      "Hessen",
+      "Mecklenburg-Vorpommern",
+      "Niedersachsen",
+      "Nordrhein-Westfalen",
+      "Rheinland-Pfalz",
+      "Saarland",
+      "Sachsen",
+      "Sachsen-Anhalt",
+      "Schleswig-Holstein",
+      "Thüringen"
+    ],
+    "ebenen": ["Bund", "Land"],
+    "quellenkategorien": ["A", "B", "W", "M", "P"]
+  }
+}

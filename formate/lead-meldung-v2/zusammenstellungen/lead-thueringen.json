@@ -1,0 +1,42 @@
+{
+  "format": "lead-meldung-v2-zusammenstellung/1",
+  "$id": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/beispiel-land/meldung.schema.json",
+  "title": "LEAD-Meldung v2 – Landesprofil Thüringen (fiktive Inhalte)",
+  "description": "Schema LEAD-Meldung-v2 (Formatfassung 2.0, Entwurf) für das Landesprofil Thüringen: Land und Kreise als meldende Gebiete, sonst wie das Beispielprofil. Grundlage für die Umstellung von profile/lead-thueringen; ersetzt das abgeleitete Schema LEAD-Meldung-Land-v1.",
+  "kern": "kern.schema.json",
+  "module": {
+    "lead-bevoelkerungsschutz": {
+      "datei": "module/lead-bevoelkerungsschutz.schema.json",
+      "pflicht": true
+    }
+  },
+  "einschraenkungen": {
+    "absender_gebiete": [
+      "Thüringen",
+      "Ilm-Kreis",
+      "Kyffhäuserkreis",
+      "Landkreis Altenburger Land",
+      "Landkreis Eichsfeld",
+      "Landkreis Gotha",
+      "Landkreis Greiz",
+      "Landkreis Hildburghausen",
+      "Landkreis Nordhausen",
+      "Landkreis Saalfeld-Rudolstadt",
+      "Landkreis Schmalkalden-Meiningen",
+      "Landkreis Sömmerda",
+      "Landkreis Sonneberg",
+      "Landkreis Weimarer Land",
+      "Saale-Holzland-Kreis",
+      "Saale-Orla-Kreis",
+      "Stadt Erfurt",
+      "Stadt Gera",
+      "Stadt Jena",
+      "Stadt Suhl",
+      "Stadt Weimar",
+      "Unstrut-Hainich-Kreis",
+      "Wartburgkreis"
+    ],
+    "ebenen": ["Land", "Kreis"],
+    "quellenkategorien": ["A", "B", "W", "M", "P"]
+  }
+}

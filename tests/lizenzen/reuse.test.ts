@@ -35,8 +35,10 @@ const APP_SYMBOL = [
 function sollLizenzen(pfad: string): string[] {
   // Nr. 2 d: CC0 1.0 nur für Teile der Datei (Snippets), die Datei selbst nach Nr. 1 c
   if (pfad === "docs/VORLAGEN.md" || pfad === "docs/DATENSCHUTZ.md") return [CC_BY, CC_BY_ODER_CC0];
-  // Nr. 2 a bis c
+  // Nr. 2 a bis c und e
   if (
+    /^formate\/.*\.schema\.json$/.test(pfad) ||
+    /^formate\/.*\/zusammenstellungen\/[^/]+\.json$/.test(pfad) ||
     /^profile\/muster\//.test(pfad) ||
     /^profile\/[^/]+\/(meldung\.schema|profil|kontakte)\.json$/.test(pfad) ||
     /^profile\/[^/]+\/sop\/quellenregister\.json$/.test(pfad) ||
@@ -50,8 +52,8 @@ function sollLizenzen(pfad: string): string[] {
   if (/^(android|ios)\//.test(pfad)) return ["MIT"];
   // Nr. 1 b: Quelltext in evaluation/ fällt unter Nr. 4
   if (/^evaluation\/.*\.ts$/.test(pfad)) return [EUPL];
-  // Nr. 1 a bis c
-  if (/^(profile|evaluation|docs)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
+  // Nr. 1 a bis c und e
+  if (/^(profile|evaluation|docs|formate)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
   // Nr. 4
   return [EUPL];
 }
