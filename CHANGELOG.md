@@ -103,6 +103,8 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A2.json` (Arbeitspaket A
 
 ### Geändert
 
+- **Aufwand bei Mistral Large 4 (TP-2026-W44-53, Nebenbefund der Mistral-Probe vom 31.10.2026, freigegeben am selben Tag):** Large 4 lehnt `reasoning_effort` „none“ an beiden Endpunkten ab und nimmt „low“, „medium“ und „high“ an. Die App bietet für Large 4 jetzt „niedrig“, „mittel“ und „hoch“ an und sendet sie unverändert (`MISTRAL_LARGE_STUFEN`, `mistralAufwand(aufwand, modell)`). Bis 0.6.16 ging für „niedrig“ „none“ an Large 4; das Modell lehnte ab, und die App wiederholte ohne Angabe. Mistral Small und Medium bleiben bei „none“ und „high“. Die Probe prüft je Modell genau die Werte, die die App sendet.
+- Endpunkt der Stelle: die feste Stufe heißt in der Auswahl „fest – bestimmt der Endpunkt der Stelle“ statt wie bei Ollama.
 - Spezifikation 0.6.17 (Abschnitte 2, 5.4, 7), [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.11 (Abschnitte 2 und 4), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.7 (Abschnitte 3.3, 3.4, neu 3.10), [docs/VORLAGEN.md](docs/VORLAGEN.md) 1.2 (V3 Teil 1), README (Verweis auf BETRIEB.md), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.17 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 617, iOS 617).
 
 ### Tests
@@ -111,6 +113,7 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A2.json` (Arbeitspaket A
 - `tests/anbieter/stelle.test.ts` (neu, 8): Adapter des Endpunkts der Stelle mit gefälschtem fetch.
 - `tests/ui/betrieb.test.ts` (neu, 7): Oberfläche im Betreiberbuild, Vorgabe der Schlüsselablage, Laufprotokoll.
 - `tests/ci/actions.test.ts` (1 neu): Workflow „Betreiberbuild“ nur von Hand und ohne Veröffentlichung.
+- `tests/pipeline/aufwand.test.ts` (1 neu, 2 angepasst): Stufen und gesendete Werte für Mistral Large 4; wirksame Stufe „mittel“ statt „hoch“ im Vergleichslauf mit Large 4.
 - Mistral-Probe (TP-2026-W44-52): neues Projekt „stelle“ mit `tests/probe/stelle.spec.ts` gegen einen Betreiberbuild mit `betrieb/probe-mistral-eu.json` (Port 4175); der Workflow baut ihn zusätzlich nach `dist-betrieb/` und hängt `probe-bericht-stelle.md` an die Zusammenfassung. Fehlschläge (Reporter „github“) und beide Berichte erscheinen zusätzlich als Annotation am Lauf; die Berichte werden angehängt statt überschrieben, damit ein Neustart des Workers nach einem Fehlschlag die früheren Abschnitte nicht verliert.
 
 ## [0.6.16] – 31.10.2026

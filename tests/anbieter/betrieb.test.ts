@@ -21,7 +21,7 @@ import { OLLAMA_STANDARD_URL, ollamaAdresseZulaessig } from "../../src/anbieter/
 import { OPENAI_BASIS_URL } from "../../src/anbieter/openai";
 import { stelleAdresseZulaessig } from "../../src/anbieter/stelle";
 import { freigegebeneAnbieter, LEERE_SCHLUESSEL, Verteiler } from "../../src/anbieter/verteiler";
-import { appModell, freigegebeneMixe, modellFuer, modellGruppen, modellHerkunft, STANDARD } from "../../src/pipeline/einstellungen";
+import { appModell, aufwandAuswahl, freigegebeneMixe, modellFuer, modellGruppen, modellHerkunft, STANDARD } from "../../src/pipeline/einstellungen";
 import { ajvGueltig } from "../support/ajv";
 import { REPO } from "../support/dateien";
 
@@ -142,6 +142,7 @@ describe("TP-2026-W44-48: Freigabe der Anbieter im Betreiberbuild", () => {
     const mitFremdem = { ...STANDARD, modelle: { ...STANDARD.modelle, verdichtung: "claude-opus-5-5" } };
     expect(modellFuer("verdichtung", mitFremdem, null)).toBe("stelle:mistral-small-2603");
     expect(modellHerkunft("verdichtung", mitFremdem, null)).toBe("app");
+    expect(aufwandAuswahl("stelle:mistral-small-2603")).toEqual([{ id: "medium", titel: "fest – bestimmt der Endpunkt der Stelle" }]);
   });
 
   it("der Verteiler weist nicht freigegebene Anbieter ab, auch mit Schlüssel", async () => {

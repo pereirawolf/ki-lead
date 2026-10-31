@@ -25,10 +25,12 @@ import { stufe1 } from "../../src/pipeline/s1";
 const ALLE = ["low", "medium", "high", "xhigh", "max"];
 
 describe("AV-2026-W43-01: angebotene Stufen je Modell", () => {
-  it("Anthropic und OpenAI alle fünf, Mistral nur niedrig (none) und hoch (high), unbekannte alle", () => {
+  it("Anthropic und OpenAI alle fünf, Mistral Small und Medium nur niedrig (none) und hoch (high), Large 4 niedrig bis hoch, unbekannte alle", () => {
     for (const m of ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"])
       expect(aufwandStufenFuer(m), m).toEqual(ALLE);
-    for (const m of ["mistral-small-2603", "mistral-medium-3-5", "mistral-large-4"]) expect(aufwandStufenFuer(m), m).toEqual(["low", "high"]);
+    for (const m of ["mistral-small-2603", "mistral-medium-3-5"]) expect(aufwandStufenFuer(m), m).toEqual(["low", "high"]);
+    // TP-2026-W44-53: Large 4 lehnt none ab und nimmt low, medium und high (Mistral-Probe vom 31.10.2026)
+    expect(aufwandStufenFuer("mistral-large-4")).toEqual(["low", "medium", "high"]);
     expect(aufwandStufenFuer("unbekannt-1")).toEqual(ALLE);
   });
 
@@ -54,6 +56,19 @@ describe("AV-2026-W43-01: angebotene Stufen je Modell", () => {
     expect(mistralAufwand(undefined)).toBeUndefined();
     const koerper = anfrageKoerperMistralChat({ modell: "mistral-medium-3-5", aufwand: "medium", maxTokens: 10, system: [], nachrichten: [] });
     expect(koerper.reasoning_effort).toBe("high");
+  });
+
+  it("TP-2026-W44-53: an Mistral Large 4 gehen low, medium und high unverändert, nie none", () => {
+    expect(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, "mistral-large-4"))).toEqual([
+      "low",
+      "medium",
+      "high",
+      "high",
+      "high",
+    ]);
+    expect(aufwandAuswahl("mistral-large-4").map((a) => a.titel)).toEqual(["niedrig", "mittel", "hoch"]);
+    const koerper = anfrageKoerperMistralChat({ modell: "mistral-large-4", aufwand: "low", maxTokens: 10, system: [], nachrichten: [] });
+    expect(koerper.reasoning_effort).toBe("low");
   });
 });
 
@@ -93,7 +108,8 @@ describe("AV-2026-W43-02: wirksame Stufe", () => {
     const { profil: p } = await profil("lead-beispiel");
     const e: Einstellungen = { ...STANDARD, modelle: { ...STANDARD.modelle, vorverarbeitung: "mistral-small-2603", verdichtung: "mistral-large-4" } };
     const k = konfiguration({ ...e, aufwand: { ...e.aufwand, vorverarbeitung: "max", verdichtung: "medium" } }, p!);
-    expect([k.s1.aufwand, k.s2.aufwand]).toEqual(["high", "high"]);
+    // Large 4 bietet seit 0.6.17 „mittel“ an (TP-2026-W44-53)
+    expect([k.s1.aufwand, k.s2.aufwand]).toEqual(["high", "medium"]);
   });
 });
 

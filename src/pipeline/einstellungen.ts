@@ -378,7 +378,9 @@ export function aufwandFuer(rolle: Rolle, e: Einstellungen, profil: Profil): Auf
 export function aufwandAuswahl(modell: string): { id: Aufwand; titel: string }[] {
   const stufen = aufwandStufenFuer(modell);
   // Lokale Modelle (Ollama): eine feste Stufe, die App sendet keinen Aufwand (seit 0.6.3, TP-2026-W44-26)
-  if (stufen.length === 1 && stufen[0]) return [{ id: stufen[0], titel: "fest – bestimmt das lokale Modell" }];
+  // Ebenso der Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49)
+  if (stufen.length === 1 && stufen[0])
+    return [{ id: stufen[0], titel: modell.startsWith("stelle:") ? "fest – bestimmt der Endpunkt der Stelle" : "fest – bestimmt das lokale Modell" }];
   const nurAnAus = stufen.length === 2 && stufen.includes("low") && stufen.includes("high");
   return AUFWAND_STUFEN.filter((a) => stufen.includes(a.id)).map((a) =>
     nurAnAus ? { id: a.id, titel: a.id === "low" ? "niedrig – ohne Nachdenken" : "hoch – mit Nachdenken" } : a,

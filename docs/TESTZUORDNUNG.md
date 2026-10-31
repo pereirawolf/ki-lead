@@ -846,7 +846,7 @@ Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts` und `tests/
 
 Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts`, `tests/ui/testlaeufe.test.ts`, `tests/browser/einstellungen.spec.ts` und `tests/browser/testlaeufe.spec.ts` schalten die Forschungsfunktionen vor den Prüfungen der Testläufe ein. TP-2026-W44-47 berichtigt nur Kommentare in `src/speicher/sicherung.ts` und `src/ui/Daten.tsx` (ohne Test).
 
-## Betreiberkonfiguration und Endpunkt der Stelle (0.6.17, TP-2026-W44-48 bis -52, Freigabe des Herausgebers vom 31.10.2026)
+## Betreiberkonfiguration und Endpunkt der Stelle (0.6.17, TP-2026-W44-48 bis -53, Freigabe des Herausgebers vom 31.10.2026)
 
 | Soll | Test | Datei |
 |---|---|---|
@@ -858,6 +858,7 @@ Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts`, `tests/ui/
 | Vorgabe der Schlüsselablage; Wahl der Person geht vor; „system“ im Browser nicht | TP-2026-W44-50: Vorgabe der Schlüsselablage › … | `tests/ui/betrieb.test.ts` (neu) |
 | Laufprotokoll mit Bezeichnung und Prüfsumme der Konfiguration | TP-2026-W44-48: Laufprotokoll › … | `tests/ui/betrieb.test.ts` (neu) |
 | Workflow „Betreiberbuild“ nur von Hand, nur Leserechte, keine Veröffentlichung | GitHub Actions › TP-2026-W44-51: … | `tests/ci/actions.test.ts` |
+| Large 4: Stufen niedrig, mittel, hoch; gesendet low, medium, high, nie none | AV-2026-W43-01: angebotene Stufen je Modell › TP-2026-W44-53: … | `tests/pipeline/aufwand.test.ts` |
 | Echte Aufrufe: Policy, nur dieser Anbieter, Verbindungstest aus dem Browser, strenges Schema mit Nutzung und Kosten, falscher Schlüssel | Betreiberbuild: …; Adapter: … | `tests/probe/stelle.spec.ts` (neu, Mistral-Probe) |
 
 Angepasst ohne Änderung des Solls: Schlüsselobjekte in den Tests tragen das Feld `stelle` (`LEERE_SCHLUESSEL`); Prüfungen über alle Standard-Profile lassen den Endpunkt der Stelle aus, der im öffentlichen Build kein Modell hat; die Registry nennt fünf Anbieter (`tests/anbieter/verteiler.test.ts`); der Wächter der Workflows zählt vier Dateien (`tests/ci/actions.test.ts`).

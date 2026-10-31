@@ -6,7 +6,7 @@
 import { appendFileSync, existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { jsPDF } from "jspdf";
-import { MISTRAL_EU_URL, MistralAnbieter, type MistralEndpunkt } from "../../src/anbieter/mistral";
+import { MISTRAL_EU_URL, MistralAnbieter, mistralAufwand, type MistralEndpunkt } from "../../src/anbieter/mistral";
 import type { LlmAnfrage, LlmAntwort } from "../../src/anbieter/typen";
 import { MODELL_GRUPPEN } from "../../src/pipeline/einstellungen";
 
@@ -103,6 +103,8 @@ test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide
   ];
   for (const [name, url, koerper] of ziele) {
     for (const modell of MODELLE) {
+      // Werte, die die App diesem Modell sendet (seit 0.6.17 je Modell, TP-2026-W44-53); sie müssen angenommen werden
+      const pflicht = new Set(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, modell)));
       const teile: string[] = [];
       for (const wert of ["none", "low", "medium", "high", "xhigh"]) {
         const r = await fetch(url, {
@@ -112,12 +114,12 @@ test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide
         });
         const text = r.ok ? "" : (await r.text()).slice(0, 200).replace(/\s+/g, " ");
         teile.push(r.ok ? `${wert} ✓` : `${wert} ✗ (HTTP ${r.status}: ${text})`);
-        if (!r.ok && (wert === "high" || wert === "none")) pflichtFehler.push(`${name}/${modell}/${wert}`);
+        if (!r.ok && pflicht.has(wert)) pflichtFehler.push(`${name}/${modell}/${wert}`);
       }
       zeile(`- ${name} ${modell}: ${teile.join(" · ")}`);
     }
   }
-  // Die App sendet nur „none“ und „high“; beide müssen angenommen werden
+  // Jeder Wert, den die App sendet, muss angenommen werden
   expect(pflichtFehler).toEqual([]);
 });
 
