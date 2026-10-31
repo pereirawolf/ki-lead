@@ -21,10 +21,10 @@ describe("Verteiler", () => {
   it("wählt den Anbieter nach dem Modell und verlangt den passenden Schlüssel", async () => {
     expect(anbieterVon("gpt-6-luna")).toBe("openai");
     expect(anbieterVon("claude-opus-5-5")).toBe("anthropic");
-    expect(fehlendeSchluessel(["claude-haiku-5-5", "gpt-6.1-sol"], { anthropic: "a", openai: "", mistral: "" })).toEqual(["openai"]);
+    expect(fehlendeSchluessel(["claude-haiku-5-5", "gpt-6.1-sol"], { anthropic: "a", openai: "", mistral: "", stelle: "" })).toEqual(["openai"]);
     const genutzt: string[] = [];
     const attrappe = (id: string): LlmAnbieter => ({ id, senden: async () => (genutzt.push(id), { text: id } as LlmAntwort) });
-    const v = new Verteiler({ anthropic: "a", openai: "", mistral: "" }, (id) => attrappe(id));
+    const v = new Verteiler({ anthropic: "a", openai: "", mistral: "", stelle: "" }, (id) => attrappe(id));
     await v.senden({ ...anfrage, modell: "claude-sonnet-5-5" });
     expect(genutzt).toEqual(["anthropic"]);
     await expect(v.senden(anfrage)).rejects.toThrow(/Für OpenAI \(gpt-6.1-sol\) ist kein API-Schlüssel/);
@@ -37,10 +37,11 @@ describe("Verteiler", () => {
     expect(anbieterVon("claude-haiku-5-5")).toBe("anthropic");
     // Jedes wählbare Modell und jedes Standard-Profil gehört zum erwarteten Anbieter
     for (const m of MODELL_AUSWAHL.filter((x) => x.startsWith("mistral-"))) expect(anbieterVon(m)).toBe("mistral");
-    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE)) for (const m of Object.values(p.modelle)) expect(anbieterVon(m), m).toBe(anbieter);
-    expect(fehlendeSchluessel(["mistral-small-2603", "claude-haiku-5-5"], { anthropic: "a", openai: "", mistral: "" })).toEqual(["mistral"]);
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "stelle"))
+      for (const m of Object.values(p.modelle)) expect(anbieterVon(m), m).toBe(anbieter);
+    expect(fehlendeSchluessel(["mistral-small-2603", "claude-haiku-5-5"], { anthropic: "a", openai: "", mistral: "", stelle: "" })).toEqual(["mistral"]);
     const gebaut: [string, string][] = [];
-    const v = new Verteiler({ anthropic: "", openai: "", mistral: "m" }, (id, k) => {
+    const v = new Verteiler({ anthropic: "", openai: "", mistral: "m", stelle: "" }, (id, k) => {
       gebaut.push([id, k]);
       return { id, senden: async () => ({ text: id }) as LlmAntwort };
     });
@@ -64,7 +65,7 @@ describe("Verteiler", () => {
       return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }) as typeof fetch;
     try {
-      const sch = { anthropic: "", openai: "", mistral: "m" };
+      const sch = { anthropic: "", openai: "", mistral: "m", stelle: "" };
       const m = { ...anfrage, modell: "mistral-small-2603" };
       await expect(new Verteiler(sch).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
       await expect(Verteiler.fuer(sch, { mistral: { endpunkt: "eu" } }).senden(m)).rejects.toThrow(/Mistral-Schlüssel/);
@@ -88,7 +89,7 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
       expect(() => anbieterVon(m), m).toThrow(/gehört zu keinem bekannten Anbieter/);
     }
     const gebaut: string[] = [];
-    const v = new Verteiler({ anthropic: "a", openai: "o", mistral: "m" }, (id) => {
+    const v = new Verteiler({ anthropic: "a", openai: "o", mistral: "m", stelle: "" }, (id) => {
       gebaut.push(id);
       return { id, senden: async () => ({ text: id }) as LlmAntwort };
     });
@@ -97,11 +98,11 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
     expect((fehler as AnbieterFehler).art).toBe("modell");
     expect(gebaut).toEqual([]);
     // fehlende Schlüssel: unbekannte Kennungen zählen nicht, Ollama braucht keinen
-    expect(fehlendeSchluessel(["llama3", "ollama:llama3.1", "gpt-6-luna"], { anthropic: "", openai: "", mistral: "" })).toEqual(["openai"]);
+    expect(fehlendeSchluessel(["llama3", "ollama:llama3.1", "gpt-6-luna"], { anthropic: "", openai: "", mistral: "", stelle: "" })).toEqual(["openai"]);
   });
 
-  it("TP-2026-W44-26: vier Anbieter in fester Reihenfolge; jede Kennung gehört genau einem", () => {
-    expect(ANBIETER_IDS).toEqual(["anthropic", "openai", "mistral", "ollama"]);
+  it("TP-2026-W44-26: Anbieter in fester Reihenfolge (seit 0.6.17 mit dem Endpunkt der Stelle); jede Kennung gehört genau einem", () => {
+    expect(ANBIETER_IDS).toEqual(["anthropic", "openai", "mistral", "ollama", "stelle"]);
     const faelle: [string, string][] = [
       ["claude-opus-5-5", "anthropic"],
       ["gpt-6-astra", "openai"],
@@ -110,6 +111,7 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
       ["magistral-medium-2509", "mistral"],
       ["ollama:llama3.1", "ollama"],
       ["ollama:qwen3:32b", "ollama"],
+      ["stelle:mistral-small-2603", "stelle"],
     ];
     for (const [m, id] of faelle) {
       expect(bekannterAnbieter(m), m).toBe(id);
@@ -118,8 +120,8 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
         m,
       ).toEqual([id]);
     }
-    expect(hatSchluessel("ollama", { anthropic: "", openai: "", mistral: "" })).toBe(true);
-    expect(hatSchluessel("mistral", { anthropic: "", openai: "", mistral: "" })).toBe(false);
+    expect(hatSchluessel("ollama", { anthropic: "", openai: "", mistral: "", stelle: "" })).toBe(true);
+    expect(hatSchluessel("mistral", { anthropic: "", openai: "", mistral: "", stelle: "" })).toBe(false);
   });
 
   it("TP-2026-W44-26: Fähigkeiten je Anbieter und Optionen", () => {
@@ -147,7 +149,7 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
       return new Response(`data: ${JSON.stringify(ende)}\n\n`, { status: 200, headers: { "content-type": "text/event-stream" } });
     }) as typeof fetch;
     try {
-      const leer = { anthropic: "", openai: "", mistral: "" };
+      const leer = { anthropic: "", openai: "", mistral: "", stelle: "" };
       const r = await Verteiler.fuer(leer, {}).senden({
         ...anfrage,
         modell: "ollama:llama3.1",
@@ -176,7 +178,7 @@ describe("Registry der Anbieter (TP-2026-W44-26)", () => {
     const echt = globalThis.fetch;
     globalThis.fetch = (async (url: string) => (aufrufe.push(String(url)), new Response("", { status: 500 }))) as typeof fetch;
     try {
-      const v = Verteiler.fuer({ anthropic: "", openai: "", mistral: "" }, { ollama: { basisUrl: "http://192.168.1.20:11434/v1" } });
+      const v = Verteiler.fuer({ anthropic: "", openai: "", mistral: "", stelle: "" }, { ollama: { basisUrl: "http://192.168.1.20:11434/v1" } });
       const fehler = await v.senden({ ...anfrage, modell: "ollama:llama3.1" }).catch((e: unknown) => e);
       expect(fehler).toBeInstanceOf(AnbieterFehler);
       expect((fehler as AnbieterFehler).art).toBe("adresse");

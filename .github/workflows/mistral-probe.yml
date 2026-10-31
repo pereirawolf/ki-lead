@@ -4,7 +4,9 @@
 #
 # Start: am Pull Request das Label „mistral-probe“ setzen (erneut: Label entfernen und wieder setzen) oder, sobald
 # diese Datei auf main liegt, unter „Actions“ → „Mistral-Probe“ → „Run workflow“. Läuft nie von allein.
-# Ergebnis: Zusammenfassung des Laufs (probe-bericht.md). Keine Aufzeichnungen, keine Artefakte mit Anfragen;
+# Seit 0.6.17 (TP-2026-W44-52) auch der Endpunkt der Stelle: Betreiberbuild mit betrieb/probe-mistral-eu.json
+# (Chat Completions am EU-Endpunkt) in dist-betrieb/, Abnahme von Arbeitspaket A2.
+# Ergebnis: Zusammenfassung des Laufs (probe-bericht.md, probe-bericht-stelle.md). Keine Aufzeichnungen, keine Artefakte mit Anfragen;
 # GitHub maskiert den Schlüssel in den Protokollen. Kosten: wenige Cent je Lauf über das Mistral-Konto.
 name: Mistral-Probe
 
@@ -33,6 +35,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Betreiberbuild für den Endpunkt der Stelle
+        run: npx vite build --outDir dist-betrieb
+        env:
+          KI_LEAD_BETRIEB: betrieb/probe-mistral-eu.json
       - id: playwright
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
       - id: browser-cache
@@ -61,3 +67,8 @@ jobs:
         if: always()
         run: |
           if [ -f probe-bericht.md ]; then cat probe-bericht.md >> "$GITHUB_STEP_SUMMARY"; else echo "Kein Bericht erzeugt." >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f probe-bericht-stelle.md ]; then cat probe-bericht-stelle.md >> "$GITHUB_STEP_SUMMARY"; fi
+          # Berichte zusätzlich als Annotation, lesbar auch über die API der Check-Runs (seit 0.6.17)
+          for f in probe-bericht.md probe-bericht-stelle.md; do
+            if [ -f "$f" ]; then echo "::notice title=$f::$(sed 's/%/%25/g' "$f" | awk 'BEGIN{ORS="%0A"} {print}')"; fi
+          done

@@ -1,0 +1,12 @@
+{
+  "$schema": "./betrieb.schema.json",
+  "format": "ki-lead-betrieb/1",
+  "bezeichnung": "Probe: Endpunkt der Stelle über Mistral EU",
+  "anbieter": ["stelle"],
+  "stelle": {
+    "name": "Endpunkt der Stelle (Probe: Mistral EU)",
+    "basisUrl": "https://api.eu.mistral.ai/v1",
+    "modell": "mistral-small-2603",
+    "preise": { "eingabe": 0.165, "ausgabe": 0.66 }
+  }
+}

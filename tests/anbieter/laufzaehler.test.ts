@@ -11,7 +11,7 @@ const anfrage = { modell: "claude-haiku-5-5", maxTokens: 10, system: [{ text: "x
 function steuerbar() {
   const offen: { ja: (a: LlmAntwort) => void; nein: (e: Error) => void }[] = [];
   const anbieter: LlmAnbieter = { id: "a", senden: () => new Promise<LlmAntwort>((ja, nein) => offen.push({ ja, nein })) };
-  return { offen, v: new Verteiler({ anthropic: "k", openai: "", mistral: "" }, () => anbieter) };
+  return { offen, v: new Verteiler({ anthropic: "k", openai: "", mistral: "", stelle: "" }, () => anbieter) };
 }
 
 describe("KP-2026-W44-01: zentraler Zähler laufender KI-Anfragen", () => {
@@ -35,7 +35,7 @@ describe("KP-2026-W44-01: zentraler Zähler laufender KI-Anfragen", () => {
 
   it("eine abgelehnte Anfrage ohne Schlüssel oder mit unbekanntem Modell zählt nicht", async () => {
     const start = laufendeAnfragen();
-    const v = new Verteiler({ anthropic: "", openai: "", mistral: "" });
+    const v = new Verteiler({ anthropic: "", openai: "", mistral: "", stelle: "" });
     await expect(v.senden(anfrage)).rejects.toThrow(/kein API-Schlüssel/);
     await expect(v.senden({ ...anfrage, modell: "llama3" })).rejects.toThrow();
     expect(laufendeAnfragen()).toBe(start);

@@ -1,0 +1,12 @@
+{
+  "$schema": "./betrieb.schema.json",
+  "format": "ki-lead-betrieb/1",
+  "bezeichnung": "Beispiel: eigener KI-Dienst der Stelle, Mistral EU als Rückfall",
+  "anbieter": ["stelle", "mistral"],
+  "stelle": {
+    "name": "KI-Dienst der Stelle",
+    "basisUrl": "https://ki.example.de/v1",
+    "modell": "llama-3.3-70b-instruct"
+  },
+  "schluesselablage": "sitzung"
+}

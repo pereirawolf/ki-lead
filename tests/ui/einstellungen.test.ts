@@ -18,7 +18,7 @@ afterEach(async () => {
   await aushaengen();
 });
 
-const OHNE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "" };
+const OHNE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "", stelle: "" };
 /** Mit eingeschalteten Forschungsfunktionen (seit 0.6.16 Vorgabe aus, TP-2026-W44-46) */
 const MIT_FORSCHUNG: Einstellungen = { ...STANDARD, forschung: true };
 

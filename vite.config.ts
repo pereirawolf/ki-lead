@@ -4,6 +4,8 @@ import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { fehlendeVerweise, precacheListe, precacheVersion, serviceWorkerQuelle } from "./src/pwa/precache.ts";
 import { farbtokenFallback } from "./src/darstellung/fallback.ts";
+import { betriebPruefen, cspEinsetzen, OEFFENTLICH, type BetriebImBuild } from "./src/anbieter/betrieb.ts";
+import { createHash } from "node:crypto";
 
 /** Alle Dateien eines Ordners (rekursiv) als Pfad relativ zum Ordner → Inhalt */
 function ordnerDateien(ordner: string): Record<string, string> {
@@ -46,6 +48,33 @@ function serviceWorker(): Plugin {
   };
 }
 
+/**
+ * Betreiberkonfiguration (seit 0.6.17, TP-2026-W44-48): KI_LEAD_BETRIEB=<pfad> nennt eine Datei „ki-lead-betrieb/1“. Sie wird
+ * geprüft (ein Fehler bricht ab), ihre SHA-256 berechnet und an die App gegeben. Ohne Angabe: öffentlicher Build.
+ */
+function betriebLesen(): BetriebImBuild | null {
+  const pfad = process.env.KI_LEAD_BETRIEB?.trim();
+  if (!pfad) return null;
+  const roh = readFileSync(pfad);
+  let json: unknown;
+  try {
+    json = JSON.parse(roh.toString("utf-8"));
+  } catch (err) {
+    throw new Error(`Betreiberkonfiguration ${pfad}: kein gültiges JSON (${(err as Error).message})`);
+  }
+  return { konfiguration: betriebPruefen(json), sha256: createHash("sha256").update(roh).digest("hex") };
+}
+
+const BETRIEB = betriebLesen();
+
+/** Setzt connect-src der Content-Security-Policy aus der Betreiberkonfiguration (öffentlich: unverändert) */
+function sicherheitsrichtlinie(): Plugin {
+  return {
+    name: "ki-lead-sicherheitsrichtlinie",
+    transformIndexHtml: (html) => cspEinsetzen(html, BETRIEB?.konfiguration ?? OEFFENTLICH),
+  };
+}
+
 const APP_VERSION = JSON.parse(readFileSync(join(import.meta.dirname, "package.json"), "utf-8")).version as string;
 
 // Relative Basis, damit derselbe Build als PWA (Unterverzeichnis) und in Capacitor läuft.
@@ -56,9 +85,11 @@ export default defineConfig(({ command }) => ({
     __KI_LEAD_PRIVAT__: JSON.stringify(command === "serve" || process.env.KI_LEAD_PRIVAT === "1"),
     // Versionsnummer aus package.json statt Handpflege in lauf.ts (seit 0.6.2, TP-2026-W44-08); gilt auch unter Vitest
     __APP_VERSION__: JSON.stringify(APP_VERSION),
+    // Betreiberkonfiguration oder null (seit 0.6.17, TP-2026-W44-48)
+    __KI_LEAD_BETRIEB__: JSON.stringify(BETRIEB),
   },
   // Farbtoken für den Start ohne JavaScript aus katalog.ts, im Entwicklungsserver und im Build (seit 0.6.5, TP-2026-W44-19)
-  plugins: [react(), serviceWorker(), farbtokenFallback()],
+  plugins: [react(), sicherheitsrichtlinie(), serviceWorker(), farbtokenFallback()],
   build: {
     outDir: "dist",
     sourcemap: true,

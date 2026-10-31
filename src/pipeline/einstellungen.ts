@@ -5,7 +5,9 @@ import type { Aufwand } from "../anbieter/typen";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import { OLLAMA_PRAEFIX } from "../anbieter/ollama";
 import { optionenVollstaendig, STANDARD_ANBIETER_OPTIONEN, type AnbieterOptionen, type AnbieterOptionenTeil } from "../anbieter/optionen";
-import { bekannterAnbieter, faehigkeitenFuer, type AnbieterId } from "../anbieter/verteiler";
+import { betrieb } from "../anbieter/betrieb";
+import { stelleKennung, STELLE_NAME } from "../anbieter/stelle";
+import { bekannterAnbieter, faehigkeitenFuer, freigegeben, freigegebeneAnbieter, modellFreigegeben, type AnbieterId } from "../anbieter/verteiler";
 import type { Profil } from "../kern/typen";
 
 export type Rolle = "vorverarbeitung" | "erfassung" | "verdichtung" | "reparatur" | "kurzfassung";
@@ -83,7 +85,13 @@ export function ollamaKennung(modell: string): string {
 export function modellGruppen(e: Pick<Einstellungen, "anbieterOptionen" | "modelle">): { anbieter: string; modelle: string[] }[] {
   const lokal = ollamaKennung(optionenVollstaendig(e.anbieterOptionen).ollama.modell);
   const gewaehlt = Object.values(e.modelle).filter((m) => bekannterAnbieter(m) === "ollama" && m !== lokal);
-  return [...MODELL_GRUPPEN, { anbieter: "Ollama (lokal)", modelle: [lokal, ...new Set(gewaehlt)] }];
+  // Seit 0.6.17 (TP-2026-W44-48) nur Modelle freigegebener Anbieter, dazu das Modell des Endpunkts der Stelle
+  const gruppen = [
+    ...MODELL_GRUPPEN,
+    { anbieter: "Ollama (lokal)", modelle: [lokal, ...new Set(gewaehlt)] },
+    ...(betrieb().stelle ? [{ anbieter: STELLE_NAME, modelle: [stelleKennung(betrieb().stelle!.modell)] }] : []),
+  ];
+  return gruppen.map((g) => ({ ...g, modelle: g.modelle.filter(modellFreigegeben) })).filter((g) => g.modelle.length > 0);
 }
 
 export const STANDARD: Einstellungen = {
@@ -174,7 +182,24 @@ export const STANDARD_PROFILE: Record<AnbieterId, ModellProfil> = {
     aufwand: { vorverarbeitung: "high", erfassung: "high", verdichtung: "high", reparatur: "low", kurzfassung: "high" },
   },
   ollama: ollamaProfil(STANDARD_ANBIETER_OPTIONEN.ollama.modell),
+  // Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49): aus der Betreiberkonfiguration, deshalb erst beim Zugriff
+  get stelle(): ModellProfil {
+    return stelleProfil();
+  },
 };
+
+/**
+ * Standard-Profil des Endpunkts der Stelle (seit 0.6.17, TP-2026-W44-49): das Modell aus der Betreiberkonfiguration für alle
+ * Aufgaben, feste Stufe „mittel“ (gesendet wird kein Aufwand). Ohne Endpunkt leer.
+ */
+export function stelleProfil(): ModellProfil {
+  const s = betrieb().stelle;
+  const m = s ? stelleKennung(s.modell) : "";
+  return {
+    modelle: { vorverarbeitung: m, erfassung: m, verdichtung: m, reparatur: m, kurzfassung: m },
+    aufwand: { vorverarbeitung: "medium", erfassung: "medium", verdichtung: "medium", reparatur: "medium", kurzfassung: "medium" },
+  };
+}
 
 /**
  * Schlichtes Standard-Profil Ollama (seit 0.6.3, TP-2026-W44-26): ein lokales Modell für alle Aufgaben, feste Stufe
@@ -234,6 +259,11 @@ export const MIX_PROFILE: Record<MixId, ModellProfil & { titel: string; anbieter
   },
 };
 
+/** Mix-Profile, deren Anbieter alle freigegeben sind (seit 0.6.17, TP-2026-W44-48) */
+export function freigegebeneMixe(): MixId[] {
+  return MIX_IDS.filter((m) => MIX_PROFILE[m].anbieter.every(freigegeben));
+}
+
 /** Setzt Modell und Aufwand aller Aufgaben auf ein Modellprofil; alles andere bleibt. */
 export function modellProfilAnwenden(e: Einstellungen, p: ModellProfil): Einstellungen {
   return { ...e, modelle: { ...p.modelle }, aufwand: { ...p.aufwand } };
@@ -282,7 +312,7 @@ export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
  * „medium“, Mistral reparierte mit Small (seit 0.5.16 wieder so, AV-2026-W43-39). Gespeicherte Einstellungen, die genau einem davon entsprechen, stellt
  * einstellungenLesen auf das heutige Standard-Profil um (AV-2026-W43-32, -33, -37).
  */
-export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama">, ModellProfil> = {
+export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama" | "stelle">, ModellProfil> = {
   anthropic: {
     modelle: { ...STANDARD_PROFILE.anthropic.modelle, reparatur: "claude-sonnet-5-5" },
     aufwand: { ...STANDARD_PROFILE.anthropic.aufwand },
@@ -312,11 +342,27 @@ export const STANDARD_PROFIL_MISTRAL_FASSUNG_4: ModellProfil = {
  */
 export function profilModell(rolle: Rolle, profil: Profil | null): string | undefined {
   const m = profil?.manifest.modelle?.[rolle];
-  return m && bekannterAnbieter(m) ? m : undefined;
+  return m && bekannterAnbieter(m) && modellFreigegeben(m) ? m : undefined;
+}
+
+/**
+ * Vorgabe der App für eine Aufgabe: APP_MODELLE (Anthropic); gibt der Build Anthropic nicht frei (seit 0.6.17,
+ * TP-2026-W44-48), das Standard-Profil des ersten freigegebenen Anbieters.
+ */
+export function appModell(rolle: Rolle): string {
+  if (freigegeben("anthropic")) return APP_MODELLE[rolle];
+  const erster = freigegebeneAnbieter()[0];
+  return erster ? standardProfilFuer(erster, STANDARD).modelle[rolle] : APP_MODELLE[rolle];
+}
+
+/** Eigene Wahl einer Aufgabe, sofern ihr Anbieter in diesem Build freigegeben ist (seit 0.6.17) */
+function eigeneWahl(rolle: Rolle, e: Einstellungen): string {
+  const m = e.modelle[rolle];
+  return m && (modellFreigegeben(m) || !bekannterAnbieter(m)) ? m : "";
 }
 
 export function modellFuer(rolle: Rolle, e: Einstellungen, profil: Profil | null): string {
-  return e.modelle[rolle] || profilModell(rolle, profil) || APP_MODELLE[rolle];
+  return eigeneWahl(rolle, e) || profilModell(rolle, profil) || appModell(rolle);
 }
 
 /**
@@ -332,7 +378,9 @@ export function aufwandFuer(rolle: Rolle, e: Einstellungen, profil: Profil): Auf
 export function aufwandAuswahl(modell: string): { id: Aufwand; titel: string }[] {
   const stufen = aufwandStufenFuer(modell);
   // Lokale Modelle (Ollama): eine feste Stufe, die App sendet keinen Aufwand (seit 0.6.3, TP-2026-W44-26)
-  if (stufen.length === 1 && stufen[0]) return [{ id: stufen[0], titel: "fest – bestimmt das lokale Modell" }];
+  // Ebenso der Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49)
+  if (stufen.length === 1 && stufen[0])
+    return [{ id: stufen[0], titel: modell.startsWith("stelle:") ? "fest – bestimmt der Endpunkt der Stelle" : "fest – bestimmt das lokale Modell" }];
   const nurAnAus = stufen.length === 2 && stufen.includes("low") && stufen.includes("high");
   return AUFWAND_STUFEN.filter((a) => stufen.includes(a.id)).map((a) =>
     nurAnAus ? { id: a.id, titel: a.id === "low" ? "niedrig – ohne Nachdenken" : "hoch – mit Nachdenken" } : a,
@@ -343,7 +391,7 @@ export { aufwandAngeboten, aufwandStufenFuer };
 
 /** Woher das wirksame Modell einer Aufgabe stammt: eigene Einstellung, Vorgabe des Profils oder der App */
 export function modellHerkunft(rolle: Rolle, e: Einstellungen, profil: Profil | null): "einstellung" | "profil" | "app" {
-  if (e.modelle[rolle]) return "einstellung";
+  if (eigeneWahl(rolle, e)) return "einstellung";
   return profilModell(rolle, profil) ? "profil" : "app";
 }
 

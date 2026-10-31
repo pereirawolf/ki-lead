@@ -2,6 +2,7 @@
 // (Geltungsbereich seit 0.5.9, KP-2026-W43-54), Rückmeldung, seit 0.6.5 die Reparaturseite (TP-2026-W44-21). Alle Verweise
 // öffnen extern bzw. in einem neuen Fenster; die App selbst ruft sie nicht auf.
 import type { ReactNode } from "react";
+import { betriebImBuild, verbindungsziele } from "../anbieter/betrieb";
 import { APP_VERSION, HERAUSGEBER, VERWEISE } from "../kern/herausgeber";
 
 /** Link, der sich außerhalb der App öffnet */
@@ -21,6 +22,12 @@ export function UeberAbschnitt() {
         Version <strong>{APP_VERSION}</strong>. Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und
         -darstellung).
       </p>
+      {betriebImBuild() && (
+        <p className="kasten kasten-info">
+          Betreiberbuild „{betriebImBuild()!.konfiguration.bezeichnung}“. Verbindungen nur zu: {verbindungsziele(betriebImBuild()!.konfiguration).join(", ")}.
+          Prüfsumme der Betreiberkonfiguration (SHA-256): <code className="pruefsumme">{betriebImBuild()!.sha256}</code>
+        </p>
+      )}
       <p>
         KI-LEAD ist ein privates Forschungsvorhaben von {HERAUSGEBER}. Es ist kein Produkt und keine Spezifikation einer Behörde oder Einrichtung und unabhängig
         von dienstlichen Vorhaben gleichen oder ähnlichen Namens. Die mitgelieferten Profile sind Beispiele; sie geben keine offiziellen Vorgaben wieder.

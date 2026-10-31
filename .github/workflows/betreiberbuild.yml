@@ -1,0 +1,63 @@
+# Betreiberbuild (seit 0.6.17, TP-2026-W44-51): baut KI-LEAD mit einer Betreiberkonfiguration „ki-lead-betrieb/1“ und
+# legt das Ergebnis als Artefakt ab, damit eine Stelle ohne eigene Node-Umgebung einen Build für den Selbstbetrieb erhält
+# (Anleitung: docs/BETRIEB.md). Die Konfiguration liegt im Repository oder in einem Fork, etwa unter betrieb/.
+#
+# Start nur von Hand: „Actions“ → „Betreiberbuild“ → „Run workflow“, Pfad der Konfiguration angeben. Läuft nie von
+# allein; kein Release, keine Veröffentlichung, keine Stückliste und kein Zenodo-Eintrag. Das Artefakt enthält den
+# Inhalt von dist/ (statische Dateien) und die verwendete Konfiguration mit ihrer SHA-256.
+name: Betreiberbuild
+
+on:
+  workflow_dispatch:
+    inputs:
+      konfiguration:
+        description: "Pfad der Betreiberkonfiguration im Repository"
+        required: true
+        default: "betrieb/probe-mistral-eu.json"
+
+permissions:
+  contents: read
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Konfiguration prüfen
+        env:
+          KONFIGURATION: ${{ inputs.konfiguration }}
+        run: |
+          case "$KONFIGURATION" in
+            *..*|/*) echo "::error::Nur ein Pfad innerhalb des Repositorys ist zulässig."; exit 1 ;;
+          esac
+          if [ ! -f "$KONFIGURATION" ]; then echo "::error::Datei $KONFIGURATION fehlt."; exit 1; fi
+      - name: Bauen
+        env:
+          KI_LEAD_BETRIEB: ${{ inputs.konfiguration }}
+        run: npm run build
+      - name: Konfiguration und Prüfsumme beilegen
+        env:
+          KONFIGURATION: ${{ inputs.konfiguration }}
+        run: |
+          cp "$KONFIGURATION" dist/betrieb.json
+          sha256sum "$KONFIGURATION" | cut -d' ' -f1 > dist/betrieb.sha256
+          version=$(node -p "require('./package.json').version")
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          {
+            echo "## Betreiberbuild KI-LEAD $version"
+            echo ""
+            echo "- Konfiguration: \`$KONFIGURATION\` (SHA-256 \`$(cat dist/betrieb.sha256)\`)"
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- $(grep -o 'connect-src[^;"]*' dist/index.html)"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ki-lead-${{ env.VERSION }}-betrieb
+          path: dist/
+          retention-days: 30

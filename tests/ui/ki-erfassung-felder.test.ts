@@ -50,7 +50,7 @@ async function erfassungZeigen() {
     React.createElement(KiErfassung, {
       profil: p,
       einstellungen: STANDARD,
-      schluessel: { anthropic: "sk-test-NICHT-EXPORTIEREN-4c1e", openai: "", mistral: "" },
+      schluessel: { anthropic: "sk-test-NICHT-EXPORTIEREN-4c1e", openai: "", mistral: "", stelle: "" },
       zuEinstellungen: () => {},
       uebernehmen: () => {},
     }),

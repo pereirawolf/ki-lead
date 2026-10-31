@@ -20,7 +20,7 @@ function MitZustand({ start, gesetzt }: { start: Einstellungen; gesetzt: Einstel
       gesetzt.push(neu);
       setE(neu);
     },
-    schluessel: { anthropic: "", openai: "", mistral: "" },
+    schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" },
     setSchluessel: () => {},
     bereich: "recherche",
   });

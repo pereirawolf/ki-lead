@@ -275,17 +275,17 @@ describe("API-Schlüssel je Anbieter", () => {
   beforeEach(() => speicher.clear());
 
   it("werden je Anbieter getrennt gesetzt, gelesen und gelöscht und nie mit den Einstellungen gespeichert", async () => {
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "", openai: "", mistral: "", stelle: "" });
     await schluesselSchreiben("sk-ant-A");
     await schluesselSchreiben("sk-oai-B", "openai");
     expect(await schluesselLesen()).toBe("sk-ant-A");
     expect(await schluesselLesen("openai")).toBe("sk-oai-B");
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "sk-oai-B", mistral: "", stelle: "" });
 
     // Ein leerer Wert löscht nur den Schlüssel dieses Anbieters
     await schluesselSchreiben("", "openai");
     expect(speicher.has("schluessel:openai")).toBe(false);
-    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "" });
+    expect(await alleSchluesselLesen()).toEqual({ anthropic: "sk-ant-A", openai: "", mistral: "", stelle: "" });
 
     await einstellungenSchreiben(STANDARD);
     expect(JSON.stringify(speicher.get("einstellungen"))).not.toContain("sk-ant-A");
@@ -299,7 +299,7 @@ describe("Standard-Profile je Anbieter", () => {
     const { ausgabePreis } = await import("../../src/anbieter/preise");
     const modelle = MODELL_GRUPPEN.flatMap((g) => g.modelle);
     // Ollama (seit 0.6.3) wählt ein frei benanntes lokales Modell; es steht nicht in der festen Liste (eigener Test)
-    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama")) {
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama" && a !== "stelle")) {
       for (const r of ROLLEN) {
         expect(modelle, `${anbieter} ${r}`).toContain(p.modelle[r]);
         expect(anbieterVon(p.modelle[r]), `${anbieter} ${r}`).toBe(anbieter);

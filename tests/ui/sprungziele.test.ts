@@ -120,7 +120,7 @@ async function zeigeMeldung(meldung: Meldung) {
       meldung: m,
       setMeldung: setM,
       neu: () => {},
-      ki: { schluessel: { anthropic: "", openai: "", mistral: "" }, einstellungen: STANDARD },
+      ki: { schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" }, einstellungen: STANDARD },
     });
   }
   await einhaengen(React.createElement(Halter));

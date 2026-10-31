@@ -51,7 +51,7 @@ describe("S1 an der Ausgabegrenze", () => {
       React.createElement(KiErfassung, {
         profil: p,
         einstellungen: STANDARD,
-        schluessel: { anthropic: "sk-test-NICHT-EXPORTIEREN-5d1e", openai: "", mistral: "" },
+        schluessel: { anthropic: "sk-test-NICHT-EXPORTIEREN-5d1e", openai: "", mistral: "", stelle: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
       }),

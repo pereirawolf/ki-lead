@@ -1,6 +1,6 @@
 # KI-LEAD – Vorlagen für die Erprobung in einer Stelle
 
-Fassung 1.1 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.2 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Arbeitshilfen für Stellen, die KI-LEAD dienstlich erproben wollen. Die Vorlagen übernehmen, was die Dokumentation über KI-LEAD schon sagt, und verweisen auf die Fundstelle. Felder in eckigen Klammern füllt die Stelle selbst. Anwendungsbeispiele sind das Bundesrecht und das Thüringer Landesrecht; in anderen Ländern gelten die entsprechenden Vorschriften des Landes.
 
@@ -127,12 +127,12 @@ Der Steckbrief fasst zusammen, was der IT-Betrieb für eine Freigabe braucht. [S
 | Bezeichnung, Version | KI-LEAD, Version [App-Version]; geprüfter Stand: [Git-Tag oder Commit] |
 | Herausgeber | Heiko Pereira Wolf, privates Forschungsvorhaben; kein Hersteller mit Wartungsvertrag, kein Support |
 | Lizenz, Quellcode | EUPL-1.2, Quellcode öffentlich: https://github.com/pereirawolf/ki-lead |
-| Betriebsformen | Web-App im Browser über GitHub Pages (`https://pereirawolf.github.io/ki-lead/`); installierbar als PWA. Native Apps für iOS und Android sind angelegt, aber noch nicht auf Geräten abgenommen ([NATIV.md](NATIV.md)) |
+| Betriebsformen | Web-App im Browser über GitHub Pages (`https://pereirawolf.github.io/ki-lead/`); installierbar als PWA. Seit 0.6.17 auch Selbstbetrieb mit Betreiberkonfiguration auf einem Server der Stelle ([BETRIEB.md](BETRIEB.md)); [ ] öffentliche Fassung · [ ] Betreiberbuild „[Bezeichnung]“, SHA-256 der Konfiguration: [Prüfsumme]. Native Apps für iOS und Android sind angelegt, aber noch nicht auf Geräten abgenommen ([NATIV.md](NATIV.md)) |
 | Server, Anmeldung, Telemetrie | kein Server des Herausgebers ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 2); keine Anmeldung in der App; keine Telemetrie, keine Analytics, kein CDN (Abschnitt 4) |
-| Notwendige Verbindungen | `pereirawolf.github.io` (Programmdateien, nur Web-App und PWA); je nach gewähltem Anbieter `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai`, `api.mistral.ai`; bei Ollama nur `localhost:11434` bzw. `127.0.0.1:11434`. Andere Ziele sperrt die Content-Security-Policy (`index.html`) |
+| Notwendige Verbindungen | `pereirawolf.github.io` (Programmdateien, nur Web-App und PWA); je nach gewähltem Anbieter `api.anthropic.com`, `api.openai.com`, `api.eu.mistral.ai`, `api.mistral.ai`; bei Ollama nur `localhost:11434` bzw. `127.0.0.1:11434`. Im Betreiberbuild nur die freigegebenen Ziele, gegebenenfalls der Endpunkt der Stelle: [Adresse]. Andere Ziele sperrt die Content-Security-Policy (`index.html`) |
 | Recherche | führt der KI-Anbieter aus, nicht das Gerät; nur wenn der Auftrag sie erlaubt ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 4) |
 | Lokale Speicherung | IndexedDB, für das Farbschema localStorage, Caches des Service Workers; keine Dateien außer bei Download oder Export ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 3) |
-| API-Schlüssel | Vorgabe: Gerätespeicher, **unverschlüsselt** in IndexedDB. Wählbar: nur für die Sitzung, mit Passphrase verschlüsselt (AES-GCM, PBKDF2), in der nativen App Schlüsselbund des Systems ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 9). Die Passphrase schützt nicht vor Skripteinschleusung während einer entsperrten Sitzung ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.2) |
+| API-Schlüssel | Vorgabe: Gerätespeicher, **unverschlüsselt** in IndexedDB; im Betreiberbuild legt die Konfiguration die Vorgabe fest: [Ablage]. Wählbar: nur für die Sitzung, mit Passphrase verschlüsselt (AES-GCM, PBKDF2), in der nativen App Schlüsselbund des Systems ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 9). Die Passphrase schützt nicht vor Skripteinschleusung während einer entsperrten Sitzung ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.2) |
 | Integrität | SHA-256-Prüfsumme je Profilstand, angezeigt und im Laufprotokoll; keine Signatur, Abgleich mit einer Referenz nur von Hand ([SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.5) |
 | Lieferkette | Installation nach Lockfile, Lizenzprüfung; SBOM im Format CycloneDX als Artefakt jedes CI-Laufs und als Anhang jedes Releases, nur für npm-Pakete, nicht für native Bibliotheken. Vor dem ersten Release (nach der Erprobung im Testkreis) gibt es für einen Stand nur das CI-Artefakt. Offene Punkte: [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.7 |
 | Bekannte Risiken | Prompt-Injection über Recherche, Dateien und Eingangsmeldungen; Schlüsselablage; Skripteinschleusung; Profilintegrität; Lieferkette; bei Ollama erhält jeder lokale Dienst auf Port 11434 die Inhalte, in den nativen Apps ist der Weg nicht erprobt ([SICHERHEIT.md](SICHERHEIT.md), Abschnitte 3.1 bis 3.9) |
@@ -275,3 +275,4 @@ Zugriff jeweils am 28.10.2026.
 | 1.0 | 28.10.2026 | Erste Fassung mit den Vorlagen V1 bis V6, zusätzlich unter CC0 1.0 (App 0.6.6); Angaben zum ThürPersVG nach der amtlichen Gesamtausgabe |
 | 1.1 | 28.10.2026 | V5 Nr. 3: Verweis auf die Systemkarte in KI-VERORDNUNG.md 1.3 statt auf die Spezifikation |
 | 1.1 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: V1 bis V6 als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
+| 1.2 | 31.10.2026 | V3 Teil 1: Selbstbetrieb mit Betreiberkonfiguration (Betriebsform, Verbindungen, Vorgabe der Schlüsselablage; App 0.6.17, TP-2026-W44-51) |

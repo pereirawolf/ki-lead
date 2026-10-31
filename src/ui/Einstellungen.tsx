@@ -9,9 +9,12 @@ import { formatUsd, PREISSTAND } from "../anbieter/preise";
 import type { MistralEndpunkt } from "../anbieter/mistral";
 import type { Aufwand } from "../anbieter/typen";
 import { OLLAMA_STANDARD_URL, ollamaAdresseZulaessig } from "../anbieter/ollama";
+import { betriebImBuild } from "../anbieter/betrieb";
+import { stelleKennung, stelleName } from "../anbieter/stelle";
 import {
-  ANBIETER_IDS,
   ANBIETER_NAME,
+  freigegeben,
+  freigegebeneAnbieter,
   anbieterListe,
   anbieterVon,
   hatSchluessel,
@@ -25,7 +28,7 @@ import {
 import type { Profil } from "../kern/typen";
 import { FarbschemaAbschnitt, type FarbZugang } from "./Farbschema";
 import {
-  APP_MODELLE,
+  appModell,
   AUFWAND_STUFEN,
   aufwandAngeboten,
   aufwandAuswahl,
@@ -37,6 +40,7 @@ import {
   profilModell,
   profilvorgabeAktiv,
   profilvorgabeAnwenden,
+  freigegebeneMixe,
   MIX_IDS,
   MIX_PROFILE,
   mixProfilAktiv,
@@ -125,6 +129,36 @@ interface AnbieterInfo {
   hinweise: string[];
 }
 
+/**
+ * Karten der freigegebenen Anbieter mit Schlüssel (seit 0.6.17, TP-2026-W44-48, -49): im Betreiberbuild nur die
+ * freigegebenen, dazu der Endpunkt der Stelle aus der Betreiberkonfiguration.
+ */
+function anbieterInfos(): AnbieterInfo[] {
+  const st = betriebImBuild()?.konfiguration.stelle;
+  const stelle: AnbieterInfo[] = st
+    ? [
+        {
+          id: "stelle",
+          konsole: "",
+          konsoleName: "",
+          host: new URL(st.basisUrl).host,
+          platzhalter: "Schlüssel des Dienstes",
+          testModell: stelleKennung(st.modell),
+          testTokens: 400,
+          hinweise: [
+            `Festgelegt in der Betreiberkonfiguration „${betriebImBuild()!.konfiguration.bezeichnung}“: ${st.basisUrl}, Modell ${st.modell}. Adresse und Modell sind in der App nicht änderbar.`,
+            "Chat Completions ohne Websuche, Seitenabruf und PDF-Material. Wo und wie der Dienst verarbeitet, bestimmt die Stelle.",
+            st.preise
+              ? `Kosten nach den Preisen der Konfiguration: ${st.preise.eingabe} USD Eingabe, ${st.preise.ausgabe} USD Ausgabe je 1 Mio. Token.`
+              : "Ohne Preise in der Konfiguration bleiben die Kosten „unbekannt“.",
+            "Braucht der Dienst keine Anmeldung, genügt ein beliebiger Wert als Schlüssel.",
+          ],
+        },
+      ]
+    : [];
+  return freigegebeneAnbieter().flatMap((id) => (id === "stelle" ? stelle : ANBIETER.filter((a) => a.id === id)));
+}
+
 const ANBIETER: AnbieterInfo[] = [
   {
     id: "anthropic",
@@ -192,7 +226,7 @@ const istMix = (v: Voreinstellung): v is MixId => (MIX_IDS as string[]).includes
 
 function aktiveVoreinstellung(e: E): Voreinstellung {
   if (profilvorgabeAktiv(e)) return "profil";
-  return ANBIETER_IDS.find((a) => standardProfilAktiv(e, a)) ?? MIX_IDS.find((m) => mixProfilAktiv(e, m)) ?? "individuell";
+  return freigegebeneAnbieter().find((a) => standardProfilAktiv(e, a)) ?? freigegebeneMixe().find((m) => mixProfilAktiv(e, m)) ?? "individuell";
 }
 
 function voreinstellungTitel(v: Voreinstellung): string {
@@ -223,7 +257,7 @@ function mixProfilHinweis(id: MixId): string {
 /** Anbieter, die mit den aktuellen Einstellungen genutzt werden, in fester Reihenfolge */
 function genutzteAnbieter(e: E, profil: Profil | null): AnbieterId[] {
   const genutzt = new Set(ROLLEN.map((r) => anbieterVon(wirksam(r.id, e, profil))));
-  return ANBIETER_IDS.filter((a) => genutzt.has(a));
+  return freigegebeneAnbieter().filter((a) => genutzt.has(a));
 }
 
 // ── Übersicht ─────────────────────────────────────────────────────────────────
@@ -264,12 +298,26 @@ function UebersichtBereich({
         <dd>{profil ? `${profil.manifest.name} ${profil.manifest.version}` : "keines"}</dd>
         <dt>KI-Profil</dt>
         <dd>{voreinstellungTitel(aktiveVoreinstellung(e))}</dd>
-        <dt>Mistral-Endpunkt</dt>
-        <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.anbieterOptionen.mistral.endpunkt)?.titel}</dd>
-        <dt>Ollama (lokal)</dt>
-        <dd>
-          {e.anbieterOptionen.ollama.basisUrl}, Modell {e.anbieterOptionen.ollama.modell}
-        </dd>
+        {betriebImBuild() && (
+          <>
+            <dt>Betreiberkonfiguration</dt>
+            <dd>{betriebImBuild()!.konfiguration.bezeichnung}</dd>
+          </>
+        )}
+        {freigegeben("mistral") && (
+          <>
+            <dt>Mistral-Endpunkt</dt>
+            <dd>{MISTRAL_ENDPUNKTE.find((x) => x.id === e.anbieterOptionen.mistral.endpunkt)?.titel}</dd>
+          </>
+        )}
+        {freigegeben("ollama") && (
+          <>
+            <dt>Ollama (lokal)</dt>
+            <dd>
+              {e.anbieterOptionen.ollama.basisUrl}, Modell {e.anbieterOptionen.ollama.modell}
+            </dd>
+          </>
+        )}
         <dt>Ablage der API-Schlüssel</dt>
         <dd>{ablage ? ablageVon(ablage).titel : "–"}</dd>
         <dt>Recherche je Lauf</dt>
@@ -294,7 +342,7 @@ function UebersichtBereich({
           </tr>
         </thead>
         <tbody>
-          {ANBIETER_IDS.map((a) => {
+          {freigegebeneAnbieter().map((a) => {
             const aufgaben = ROLLEN.filter((r) => anbieterVon(wirksam(r.id, e, profil)) === a);
             return (
               <tr key={a}>
@@ -530,11 +578,18 @@ function SchluesselAbschnitt({
     <section className="einstellung-block" aria-labelledby={`schluessel-${a.id}`}>
       <h3 id={`schluessel-${a.id}`}>API-Schlüssel ({name})</h3>
       <p className="einleitung">
-        Eigener Schlüssel aus der{" "}
-        <a href={a.konsole} target="_blank" rel="noopener noreferrer">
-          {a.konsoleName}
-        </a>
-        . Die App schickt ihn nur an {a.host}. Ablage: {ablageVon(ablage).titel}
+        {a.konsole ? (
+          <>
+            Eigener Schlüssel aus der{" "}
+            <a href={a.konsole} target="_blank" rel="noopener noreferrer">
+              {a.konsoleName}
+            </a>
+            .
+          </>
+        ) : (
+          <>Schlüssel für „{stelleName()}“, vergeben von der Stelle.</>
+        )}{" "}
+        Die App schickt ihn nur an {a.host}. Ablage: {ablageVon(ablage).titel}
         {ablage === "geraet" ? " (unverschlüsselt)" : ablage === "passphrase" && passphraseGesperrt() ? " (gesperrt; Passphrase oben eingeben)" : ""}. Empfohlen
         ist ein eigener Schlüssel mit Ausgabenlimit, auf geteilten Geräten nach der Nutzung löschen.
       </p>
@@ -756,7 +811,7 @@ function AnbieterBereich({
         Zugang zu den KI-Anbietern. Ein Schlüssel wird erst mit „Speichern“ übernommen. Welche Modelle die Aufgaben nutzen, steht unter „Modelle & Aufwand“.
       </p>
       {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
-      {ANBIETER.map((a) => (
+      {anbieterInfos().map((a) => (
         <SchluesselAbschnitt
           key={`${a.id}:${ablage}`}
           a={a}
@@ -767,7 +822,7 @@ function AnbieterBereich({
           setEinstellungen={setEinstellungen}
         />
       ))}
-      <OllamaAbschnitt e={e} setEinstellungen={setEinstellungen} />
+      {freigegeben("ollama") && <OllamaAbschnitt e={e} setEinstellungen={setEinstellungen} />}
     </section>
   );
 }
@@ -795,15 +850,17 @@ function KiProfilWahl({ e, setEinstellungen }: { e: E; setEinstellungen: (e: E) 
   };
   const optionen: { v: Voreinstellung; kurz: string; einzeln?: string }[] = [
     { v: "profil", kurz: "Modelle wie im aktiven Profil bzw. in der App vorgegeben.", einzeln: "Aufwand nach den Vorgaben der App." },
-    ...ANBIETER_IDS.map((a) => ({
+    ...freigegebeneAnbieter().map((a) => ({
       v: a,
       kurz:
         a === "ollama"
           ? `Alle Aufgaben mit einem lokalen Modell über Ollama, ohne Schlüssel. ${OLLAMA_HINWEIS}`
-          : `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
+          : a === "stelle"
+            ? `Alle Aufgaben mit dem Modell von „${stelleName()}“ (Betreiberkonfiguration), ohne Websuche und Seitenabruf.`
+            : `Alle Aufgaben mit Modellen von ${ANBIETER_NAME[a]}.`,
       einzeln: modellProfilText(standardProfilFuer(a, e)),
     })),
-    ...MIX_IDS.map((m) => ({ v: m, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
+    ...freigegebeneMixe().map((m) => ({ v: m, kurz: mixProfilHinweis(m), einzeln: modellProfilText(MIX_PROFILE[m]) })),
     { v: "individuell", kurz: "Entsteht, sobald unten einzelne Aufgaben abweichend gewählt sind. Mischen der Anbieter ist möglich." },
   ];
   return (
@@ -874,7 +931,7 @@ function ModelleBereich({
         </thead>
         <tbody>
           {ROLLEN.map((r) => {
-            const vorgabe = profilModell(r.id, profil) || APP_MODELLE[r.id];
+            const vorgabe = profilModell(r.id, profil) || appModell(r.id);
             const modell = wirksam(r.id, e, profil);
             const ohneSchluessel = !hatSchluessel(anbieterVon(modell), schluessel);
             return (
@@ -956,7 +1013,7 @@ const JE_AUFTRAG = "In der KI-Erfassung lassen sich die drei Werte je Auftrag ä
 /** Anbieter der S2-Modelle (Recherche und Verdichtung) in fester Reihenfolge */
 function s2Anbieter(e: E, profil: Profil | null): AnbieterId[] {
   const genutzt = new Set((["erfassung", "verdichtung"] as Rolle[]).map((r) => anbieterVon(wirksam(r, e, profil))));
-  return ANBIETER_IDS.filter((a) => genutzt.has(a));
+  return freigegebeneAnbieter().filter((a) => genutzt.has(a));
 }
 
 function RechercheTiefe({ profil, e, setze }: { profil: Profil | null; e: E; setze: (teil: Partial<E>) => void }) {

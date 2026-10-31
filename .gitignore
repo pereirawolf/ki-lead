@@ -2,6 +2,7 @@
 node_modules/
 dist/
 dist-ssr/
+dist-betrieb/
 *.tsbuildinfo
 .vite/
 coverage/
@@ -55,3 +56,4 @@ playwright-report/
 
 # Mistral-Probe (enthält keine Schlüssel, aber Antworten des Anbieters)
 probe-bericht.md
+probe-bericht-stelle.md

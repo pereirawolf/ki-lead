@@ -3,10 +3,10 @@
 // Modelle am EU-Endpunkt, strukturierte Ausgabe mit dem strengen Schema, Stufen des Nachdenkens, PDF als
 // document_url, Websuche und Nutzungsangaben am globalen Endpunkt. Ergebnis als probe-bericht.md (Zusammenfassung
 // des Workflow-Laufs). Kosten: wenige Cent je Durchgang. Der Schlüssel erscheint in keiner Ausgabe.
-import { writeFileSync } from "node:fs";
+import { appendFileSync, existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { jsPDF } from "jspdf";
-import { MISTRAL_EU_URL, MistralAnbieter, type MistralEndpunkt } from "../../src/anbieter/mistral";
+import { MISTRAL_EU_URL, MistralAnbieter, mistralAufwand, type MistralEndpunkt } from "../../src/anbieter/mistral";
 import type { LlmAnfrage, LlmAntwort } from "../../src/anbieter/typen";
 import { MODELL_GRUPPEN } from "../../src/pipeline/einstellungen";
 
@@ -22,7 +22,8 @@ const kurz = (e: unknown) => String((e as Error)?.message || e).slice(0, 300);
 test.afterAll(() => {
   if (!SCHLUESSEL) return;
   const kopf = [`# Mistral-Probe`, ``, `Stand: ${new Date().toISOString()} · Modelle: ${MODELLE.join(", ")}`, ``];
-  writeFileSync("probe-bericht.md", [...kopf, ...bericht, ""].join("\n"));
+  // Anhängen: Nach einem Fehlschlag startet Playwright einen neuen Worker, der Bericht des alten bleibt so erhalten
+  appendFileSync("probe-bericht.md", [...(existsSync("probe-bericht.md") ? [] : kopf), ...bericht, ""].join("\n"));
 });
 
 const anbieter = (endpunkt: MistralEndpunkt) => new MistralAnbieter(SCHLUESSEL, undefined, undefined, endpunkt);
@@ -102,6 +103,8 @@ test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide
   ];
   for (const [name, url, koerper] of ziele) {
     for (const modell of MODELLE) {
+      // Werte, die die App diesem Modell sendet (seit 0.6.17 je Modell, TP-2026-W44-53); sie müssen angenommen werden
+      const pflicht = new Set(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, modell, name === "EU" ? "eu" : "global")));
       const teile: string[] = [];
       for (const wert of ["none", "low", "medium", "high", "xhigh"]) {
         const r = await fetch(url, {
@@ -111,12 +114,12 @@ test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide
         });
         const text = r.ok ? "" : (await r.text()).slice(0, 200).replace(/\s+/g, " ");
         teile.push(r.ok ? `${wert} ✓` : `${wert} ✗ (HTTP ${r.status}: ${text})`);
-        if (!r.ok && (wert === "high" || wert === "none")) pflichtFehler.push(`${name}/${modell}/${wert}`);
+        if (!r.ok && pflicht.has(wert)) pflichtFehler.push(`${name}/${modell}/${wert}`);
       }
       zeile(`- ${name} ${modell}: ${teile.join(" · ")}`);
     }
   }
-  // Die App sendet nur „none“ und „high“; beide müssen angenommen werden
+  // Jeder Wert, den die App sendet, muss angenommen werden
   expect(pflichtFehler).toEqual([]);
 });
 

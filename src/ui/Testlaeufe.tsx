@@ -9,7 +9,7 @@ import { formatUsd } from "../anbieter/preise";
 import { ANBIETER_NAME, anbieterVon, hatSchluessel, Verteiler, type AnbieterId, type Schluessel } from "../anbieter/verteiler";
 import type { LlmAnbieter } from "../anbieter/typen";
 import type { Profil } from "../kern/typen";
-import { APP_MODELLE, AUFWAND_STUFEN, aufwandAngeboten, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
+import { appModell, AUFWAND_STUFEN, aufwandAngeboten, modellFuer, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { kurzfassungsreihe, kurzfassungsZip, kurzfassungsZipName, MS_EINGABE_TOKEN, type KurzfassungsReihe } from "../forschung/kurzfassungsreihe";
 import {
   DEFEKTE,
@@ -137,7 +137,7 @@ type Zustand =
 /** Einstellungen mit ausdrücklichem Modell je Aufgabe: so, wie sie „Modelle & Aufwand“ für das aktive Profil anzeigt */
 export function vergleichsEinstellungen(e: Einstellungen, profil: Profil | null): Einstellungen {
   const modelle = { ...e.modelle };
-  for (const r of [...VERGLEICH_ROLLEN, "kurzfassung"] as Rolle[]) modelle[r] = profil ? modellFuer(r, e, profil) : e.modelle[r] || APP_MODELLE[r];
+  for (const r of [...VERGLEICH_ROLLEN, "kurzfassung"] as Rolle[]) modelle[r] = profil ? modellFuer(r, e, profil) : e.modelle[r] || appModell(r);
   return { ...e, modelle };
 }
 

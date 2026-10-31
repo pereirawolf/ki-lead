@@ -60,7 +60,7 @@ describe("KP-2026-W44-06: Orientierung und Suchbegriffe im Bestätigungsschritt"
       React.createElement(KiErfassung, {
         profil: p,
         einstellungen: { ...STANDARD, nachforderung: false },
-        schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "", stelle: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
       }),
@@ -101,7 +101,7 @@ describe("KP-2026-W44-06: Orientierung und Suchbegriffe im Bestätigungsschritt"
       React.createElement(KiErfassung, {
         profil: p,
         einstellungen: { ...STANDARD, orientierungJeSachverhalt: 0, nachforderung: false },
-        schluessel: { anthropic: "sk-test", openai: "", mistral: "" },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "", stelle: "" },
         zuEinstellungen: () => {},
         uebernehmen: () => {},
       }),

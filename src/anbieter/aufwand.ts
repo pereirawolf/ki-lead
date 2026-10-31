@@ -6,7 +6,7 @@
 // „none“ und „high“). „high“ ist bei Mistral am EU-Endpunkt erprobt (Vergleichslauf Ilka, 24.10.2026), „none“ nicht.
 // Unbekannte Modelle erhalten alle Stufen; dort entscheidet der Anbieter. Ollama (seit 0.6.3, TP-2026-W44-26): Die App
 // sendet keinen Aufwand, das lokale Modell bestimmt selbst; angeboten wird nur eine feste Stufe („mittel“) für Anzeige,
-// Schätzung und Laufprotokoll.
+// Schätzung und Laufprotokoll. Ebenso der Endpunkt der Stelle (seit 0.6.17, TP-2026-W44-49): kein reasoning_effort.
 
 import type { Aufwand } from "./typen";
 
@@ -16,14 +16,23 @@ export const ALLE_STUFEN: Aufwand[] = ["low", "medium", "high", "xhigh", "max"];
 /** Stufen der Mistral-Modelle: „niedrig“ = ohne Nachdenken (none), „hoch“ = mit Nachdenken (high) */
 export const MISTRAL_STUFEN: Aufwand[] = ["low", "high"];
 
+/**
+ * Stufen von Mistral Large 4 (seit 0.6.17, TP-2026-W44-53): niedrig, mittel und hoch gehen unverändert an die API. Die
+ * Mistral-Probe vom 31.10.2026 zeigte an beiden Endpunkten: Large 4 nimmt low, medium und high an und lehnt none und
+ * xhigh ab; bis 0.6.16 sandte die App für „niedrig“ none, Large 4 lehnte ab und die App wiederholte ohne Angabe.
+ */
+export const MISTRAL_LARGE_STUFEN: Aufwand[] = ["low", "medium", "high"];
+
 /** Feste Stufe lokaler Modelle über Ollama; gesendet wird sie nicht */
 export const OLLAMA_STUFEN: Aufwand[] = ["medium"];
 
 export const AUFWAND_JE_MODELL: { muster: RegExp; stufen: Aufwand[] }[] = [
   { muster: /^claude-(haiku|sonnet|opus)-5-5|^claude-fable-5-1/, stufen: ALLE_STUFEN },
   { muster: /^gpt-6-(luna|astra)|^gpt-6\.1-sol/, stufen: ALLE_STUFEN },
-  { muster: /^mistral-(small-2603|medium-3-5|large-4)/, stufen: MISTRAL_STUFEN },
+  { muster: /^mistral-large-4/, stufen: MISTRAL_LARGE_STUFEN },
+  { muster: /^mistral-(small-2603|medium-3-5)/, stufen: MISTRAL_STUFEN },
   { muster: /^ollama:/, stufen: OLLAMA_STUFEN },
+  { muster: /^stelle:/, stufen: OLLAMA_STUFEN },
 ];
 
 /** Stufen, die das Modell anbietet; unbekannte Modelle: alle */

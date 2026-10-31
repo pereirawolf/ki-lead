@@ -37,7 +37,7 @@ async function zeige(meldung: any): Promise<Profil> {
         setM(stand);
       },
       neu: () => {},
-      ki: { schluessel: { anthropic: "", openai: "", mistral: "" }, einstellungen: STANDARD },
+      ki: { schluessel: { anthropic: "", openai: "", mistral: "", stelle: "" }, einstellungen: STANDARD },
     });
   }
   await einhaengen(React.createElement(Rahmen));
