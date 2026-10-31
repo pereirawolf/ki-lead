@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-10-30",
+  "stand": "2026-11-01",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -1821,6 +1821,297 @@
       "kurz": "Arbeitsanweisung Kurzfassung gilt für die LEAD-Meldevorlage ab 1.2.",
       "status": "umgesetzt",
       "pr": 110
+    },
+    {
+      "id": "UX-2026-W44-01",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/KiSymbol.tsx",
+          "stelle": "kiSymbolText, KiSymbol (Zeile 41–71)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "OfflineHinweis vor dem Startknopf (Zeile 247)"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.1, Absatz „KI-Chip in der Kopfleiste“"
+        }
+      ],
+      "kurz": "KI-Chip „KI ruht“/„KI aktiv“ statt „KI offline“/„KI online“ (Begriffskonflikt mit dem Offline-Betrieb).",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-02",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/KiErfassung.tsx",
+          "stelle": "kannStarten (Zeile 368 f.)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Startknopf „Gegenstand bestimmen (S1)“ (Zeile 249–258)"
+        }
+      ],
+      "kurz": "Offene Voraussetzungen über dem gesperrten Start der KI-Erfassung, je mit Sprung.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-03",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/ModellWahl.tsx",
+          "stelle": "LaufModellWahl, Titel „Modelle und Recherche für diesen Lauf“ (Zeile 216)"
+        },
+        {
+          "datei": "src/ui/LaufSchaetzung.tsx",
+          "stelle": "Schätzungstext (Zeile 25)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Rechercheabsatz unter der Modellwahl"
+        }
+      ],
+      "kurz": "Recherchezeile und Schätzung je Stufe in den aufklappbaren Teil der Modellwahl.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-04",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Hauptnavigation (Zeile 382 ff.)"
+        },
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "schmale Ansicht, .schritte ol (Zeile 461–468)"
+        }
+      ],
+      "kurz": "Hauptnavigation auf dem Smartphone umbrechen; Abschnittsleisten mit Randverlauf und aktivem Abschnitt im Bild.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-05",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/feldBefunde.ts",
+          "stelle": "Feldmeldung Pflicht (Zeile 23)"
+        },
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Schema- und Pflichtbefunde je Stand der Meldung (Zeile 138–146)"
+        }
+      ],
+      "kurz": "Fehlende Pflichtangaben am Feld erst nach Bearbeitung, Prüfschritt oder bei geladener Meldung.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-06",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Schrittleiste (Zeile 252)"
+        }
+      ],
+      "kurz": "Schrittleiste markiert Befunde statt „erledigt“ nach Position.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-07",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Feld.tsx",
+          "stelle": "Objektfelder in Schemareihenfolge (Zeile 147–151)"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "properties.sachverhalte.items: Reihenfolge eintritt, art, ort, bezeichnung, …"
+        }
+      ],
+      "kurz": "Titelfeld eines Listenelements (Bezeichnung) in der Maske zuerst.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-08",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Feld.tsx",
+          "stelle": "Liste der Sachverhalte, Element mit Kopf (Zeile 460 ff.)"
+        }
+      ],
+      "kurz": "Sachverhalte in der Erfassung einklappbar mit Kopf; Sprung aus dem Prüfschritt öffnet.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-09",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Sachverhalte“, Tabelle (Zeile 787 ff.)"
+        }
+      ],
+      "kurz": "Reiter „Sachverhalte“ im Lagebild als kompakte Liste mit Aufklappen und Filter nach Beurteilung und Tendenz.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-10",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Kennzahlen der Übersicht (Zeile 589–628)"
+        }
+      ],
+      "kurz": "Kennzahlen Bewertung und Verschärfung öffnen die gefilterten Sachverhalte.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-11",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Pruefen.tsx",
+          "stelle": "Listen Schemaprüfung und Pflichtangaben (Zeile 160–167)"
+        }
+      ],
+      "kurz": "Pflichtangabe im Prüfschritt nicht zusätzlich zur gleichen Schemaabweichung nennen.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-12",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Pruefen.tsx",
+          "stelle": "Abschnitt „Ausgeben“ (Zeile 113–130)"
+        }
+      ],
+      "kurz": "Ausgabe in Gruppen Entwurf und Final mit Zustandszeile; Hervorhebung nach Prüfstand.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-13",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Lagenradar“, Karte (Zeile 875 ff.)"
+        }
+      ],
+      "kurz": "Lagenradar-Karten mit Radar über die Kartenbreite und Achsenliste darunter.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-14",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Kopfleiste (Zeile 424)"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.1, KI-Chip"
+        }
+      ],
+      "kurz": "Aktives Profil im Seitenkopf der Arbeitsansichten statt Chip in der Kopfleiste.",
+      "status": "umgesetzt",
+      "pr": 123
+    },
+    {
+      "id": "UX-2026-W44-15",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W44.json",
+      "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/BARRIEREFREIHEIT.md",
+          "stelle": "Bekannte Lücken, „Screenreader“ (Zeile 47)"
+        }
+      ],
+      "kurz": "Erprobung mit Screenreader an drei Aufgaben, HTML-Ausgabe und getaggte PDFs.",
+      "status": "abgelehnt",
+      "grund": "Entscheidung des Herausgebers vom 31.10.2026; die Lücke bleibt in docs/BARRIEREFREIHEIT.md dokumentiert."
     }
   ]
 }

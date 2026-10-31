@@ -408,20 +408,129 @@ button.lb-kennzahl:hover {
   font-size: 0.9rem;
 }
 
+/* Radar über die Kartenbreite, Achsen darunter zweispaltig (seit 0.6.20, UX-2026-W44-13) */
 .lb-radar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.75rem;
   align-items: center;
 }
 
+.lb-radar > svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .lb-achsen {
-  list-style: none;
-  padding: 0;
   margin: 0;
-  font-size: 0.8rem;
-  flex: 1;
-  min-width: 160px;
+  width: 100%;
+  font-size: 0.82rem;
+}
+
+.lb-achse {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.2rem 0;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.lb-achse dt {
+  color: var(--tinte-leise);
+}
+
+.lb-achse dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Sachverhalte als kompakte Liste mit Filter (seit 0.6.20, UX-2026-W44-09) */
+.lb-svfilter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.lb-svfilter-feld {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.lb-svfilter-stand {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+}
+
+.lb-svliste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.lb-sv-zeile details {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+}
+
+.lb-sv-zeile summary {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  list-style-position: outside;
+}
+
+.lb-sv-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.lb-sv-name {
+  font-weight: 700;
+}
+
+.lb-sv-meta {
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+  overflow-wrap: anywhere;
+}
+
+.lb-kennung-inline {
+  margin-right: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-sv-details {
+  margin: 0;
+  padding: 0.25rem 0.9rem 0.8rem;
+  border-top: 1px solid var(--linie-zart);
+}
+
+.lb-sv-details dt {
+  margin-top: 0.6rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.lb-sv-details dd {
+  margin: 0.15rem 0 0;
+}
+
+.lb-lang-text {
+  white-space: pre-line;
+  max-width: 80ch;
 }
 
 .lb-rahmen {

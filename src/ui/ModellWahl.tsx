@@ -78,8 +78,10 @@ interface Props {
   websuche?: boolean;
   /** Element vor der aufklappbaren Wahl, im selben Rahmen (Schalter „Recherche durchführen“) */
   kopf?: ReactNode;
-  /** Elemente nach der aufklappbaren Wahl, im selben Rahmen (Recherchezeile, Schätzung) */
+  /** Elemente nach der aufklappbaren Wahl, im selben Rahmen, immer sichtbar */
   children?: ReactNode;
+  /** Erläuterungen im aufklappbaren Teil, am Ende (seit 0.6.20, UX-2026-W44-03: Recherchezeile und Schätzung je Stufe) */
+  erlaeuterung?: ReactNode;
   /** Zu „Einstellungen → Modelle & Aufwand“, um die Vorgaben dauerhaft zu ändern */
   zuEinstellungen?: () => void;
 }
@@ -97,7 +99,20 @@ const profilTitel = (p: AnbieterId | MixId) => (istMix(p) ? MIX_PROFILE[p].titel
 const aufwandTitel = (a: Aufwand) => AUFWAND_STUFEN.find((x) => x.id === a)?.titel || a;
 const rechercheWerte = (e: RechercheWerte): RechercheWerte => ({ websucheMax: e.websucheMax, abrufMax: e.abrufMax, abrufMaxTokens: e.abrufMaxTokens });
 
-function ModellWahlBlock({ stufen, einstellungen, profil, schluessel, wahl, onChange, deaktiviert, websuche, kopf, children, zuEinstellungen }: Props) {
+function ModellWahlBlock({
+  stufen,
+  einstellungen,
+  profil,
+  schluessel,
+  wahl,
+  onChange,
+  deaktiviert,
+  websuche,
+  kopf,
+  children,
+  erlaeuterung,
+  zuEinstellungen,
+}: Props) {
   const id = useId();
   const [profilKlick, setProfilKlick] = useState<ProfilWahl | null>(null);
   const [eigenGewaehlt, setEigenGewaehlt] = useState(false);
@@ -505,6 +520,7 @@ function ModellWahlBlock({ stufen, einstellungen, profil, schluessel, wahl, onCh
             )}
           </div>
         )}
+        {erlaeuterung && <div className="modellwahl-erlaeuterung">{erlaeuterung}</div>}
       </details>
       {children}
     </div>

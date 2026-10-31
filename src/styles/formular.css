@@ -237,6 +237,30 @@ textarea {
   border-bottom: 1px solid var(--linie-zart);
 }
 
+/* Eingeklappter Sachverhalt (seit 0.6.20, UX-2026-W44-08): nur der Kopf */
+.element.zu .element-kopf {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.element-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.element-stand {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--tinte-leise);
+}
+
+.element-befund {
+  color: var(--kritisch);
+  font-weight: 700;
+}
+
 .element-kopf h3 {
   margin: 0;
   font-size: 1.05rem;
@@ -488,6 +512,33 @@ textarea {
 .abschnitt {
   font-size: 1.1rem;
   margin: 1.5rem 0 0.75rem;
+}
+
+/* Ausgabe in zwei Gruppen (seit 0.6.20, UX-2026-W44-12) */
+.ausgabe-gruppen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+
+.ausgabe-gruppe {
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  padding: 0.6rem 0.9rem 0.8rem;
+  background: var(--flaeche);
+}
+
+.ausgabe-gruppe h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.ausgabe-gruppe .hinweis {
+  margin: 0 0 0.6rem;
+}
+
+.ausgabe-stand.offen {
+  color: var(--kritisch);
 }
 
 .uebersicht {

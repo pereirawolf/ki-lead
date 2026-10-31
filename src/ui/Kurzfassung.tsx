@@ -5,7 +5,7 @@
 // andere ersetzt wird (neue Meldung, Meldung öffnen, Übernahme eines KI-Entwurfs) und bei der Übergabe von
 // Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
 // Während der Erstellung (seit 0.6.6) wie die KI-Erfassung: Uhr mit erwarteter Dauer, geschriebene Zeichen und
-// voraussichtliche Kosten; der KI-Chip der Kopfleiste steht auf „KI online“.
+// voraussichtliche Kosten; der KI-Chip der Kopfleiste steht auf „KI aktiv“.
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { anbieterVon, ANBIETER_NAME, hatSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";

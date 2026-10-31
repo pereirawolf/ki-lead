@@ -33,6 +33,8 @@ import { LaufModellWahl } from "./kiErfassung/LaufModellWahl";
 import { usePwaZustand } from "./PwaHinweis";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu } from "./sprung";
+import { useAktivImBild } from "./leiste";
+import { ProfilZeile } from "./ProfilZeile";
 
 export { TEXT_FELD } from "./kiErfassung/texte";
 export { kurzeAdresse } from "./kiErfassung/recherche";
@@ -333,6 +335,7 @@ function Erfassung({
   // Karte oben. Wechselt die Phase, während die KI-Erfassung verborgen ist, holt die App den Sprung beim Zeigen nach.
   const arbeitsbereichRef = useRef<HTMLDivElement>(null);
   const inhaltRef = useRef<HTMLElement>(null);
+  useAktivImBild(arbeitsbereichRef, phase);
   const vorherPhase = useRef(phase);
   /** Sachverhalt (Index ab 0), für den allein die Orientierungssuche läuft */
   const orientierungFuer = useRef<number | null>(null);
@@ -383,6 +386,7 @@ function Erfassung({
           </div>
         )}
       </div>
+      <ProfilZeile profil={profil} />
 
       {fehlend.length > 0 && (
         <div className="kasten kasten-hinweis" role="status">
@@ -423,6 +427,8 @@ function Erfassung({
               kannStarten={kannStarten}
               starten={s1Starten}
               dateienHinzufuegen={dateienHinzufuegen}
+              fehlendeSchluessel={fehlend}
+              zuEinstellungen={() => zuEinstellungen()}
             />
           )}
 

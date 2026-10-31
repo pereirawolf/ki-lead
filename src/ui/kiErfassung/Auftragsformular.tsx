@@ -1,8 +1,9 @@
 // Schritt „Auftrag und Material“ der KI-Erfassung (seit 0.6.5, TP-2026-W44-17 in eigener Datei): Gegenstand,
 // Ausgangsinformationen, Webseiten, Dateien, Stichtag, Prüffrage, Recherche und Modelle, Bestätigung, Start von S1.
+// Seit 0.6.20 (UX-2026-W44-02) nennt eine Zeile über dem gesperrten Startknopf die offenen Voraussetzungen mit Sprung.
 
 import { useMemo, useRef, type Dispatch } from "react";
-import { anbieterListe, anbieterVon } from "../../anbieter/verteiler";
+import { anbieterListe, anbieterVon, type AnbieterId } from "../../anbieter/verteiler";
 import { jetztLokal } from "../../kern/ausgabe";
 import { zoneOder } from "../../kern/zeit";
 import { laufModelle, modellFuer } from "../../pipeline/einstellungen";
@@ -16,6 +17,10 @@ import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from
 import { rechercheZeile } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import { groesse, type Eingabe, type KiAktion } from "./zustand";
+import { springeZu } from "../sprung";
+
+/** Kennung der Liste offener Voraussetzungen am Startknopf (aria-describedby) */
+export const START_OFFEN = "ki-start-offen";
 
 export function Auftragsformular({
   rahmen,
@@ -27,6 +32,8 @@ export function Auftragsformular({
   kannStarten,
   starten,
   dateienHinzufuegen,
+  fehlendeSchluessel = [],
+  zuEinstellungen,
 }: {
   rahmen: LaufRahmen;
   eingabe: Eingabe;
@@ -38,11 +45,18 @@ export function Auftragsformular({
   kannStarten: boolean;
   starten: () => void;
   dateienHinzufuegen: (liste: FileList | File[] | null) => Promise<void>;
+  /** Anbieter der gewählten Modelle ohne API-Schlüssel */
+  fehlendeSchluessel?: AnbieterId[];
+  /** Weg zu „KI-Anbieter & API“ */
+  zuEinstellungen?: () => void;
 }) {
   const { profil, laufEinstellungen, verdichtung, websuche, eingaenge, stufeS2, stufeS3, schaetzS2 } = rahmen;
   const { sachverhalt, stichworte, urlText, stichtag, uhrzeit, prueffrage, material, dateiFehler, datenOk } = eingabe;
   const setze = (teil: Partial<Eingabe>) => dispatch({ typ: "eingabe", teil });
   const dateiRef = useRef<HTMLInputElement>(null);
+  const gegenstandRef = useRef<HTMLTextAreaElement>(null);
+  const bestaetigungRef = useRef<HTMLInputElement>(null);
+  const ohneAuftrag = !(sachverhalt.trim() || stichworte.trim() || urls.gueltig.length || material.length);
   // Gleiche Arrays über Renderläufe (ModellWahl und LaufSchaetzung sind memo, seit 0.6.5, TP-2026-W44-18)
   const modellStufen = useMemo<StufeModell[]>(
     () => [{ rolle: "vorverarbeitung", kurz: "S1", titel: "S1 Gegenstand und SOP-Auswahl", art: "s1" }, stufeS2, stufeS3],
@@ -69,6 +83,7 @@ export function Auftragsformular({
         {(a) => (
           <textarea
             {...a}
+            ref={gegenstandRef}
             rows={3}
             value={sachverhalt}
             onChange={(e) => setze({ sachverhalt: e.target.value })}
@@ -208,7 +223,8 @@ export function Auftragsformular({
           </p>
         </div>
       )}
-      {/* Recherche, Modelle und Schätzung in einem Rahmen, danach die Bestätigung (seit 0.5.22, Punkt 9) */}
+      {/* Recherche, Modelle und Schätzung in einem Rahmen, danach die Bestätigung (seit 0.5.22, Punkt 9); Recherchezeile und
+          Schätzung je Stufe seit 0.6.20 im aufklappbaren Teil, die Kurzzeile nennt Modelle, Dauer und Kosten (UX-2026-W44-03) */}
       <LaufModellWahl
         stufen={modellStufen}
         websuche={websuche}
@@ -226,37 +242,95 @@ export function Auftragsformular({
             </span>
           </label>
         }
-      >
-        <p className="hinweis">
-          {rechercheZeile(
-            websuche,
-            laufEinstellungen,
-            modellFuer(stufeS2.rolle, laufEinstellungen, profil),
-            modellFuer("vorverarbeitung", laufEinstellungen, profil),
-          )}
-        </p>
-        <LaufSchaetzung stufen={schaetzStufen} einstellungen={laufEinstellungen} profil={profil} />
-      </LaufModellWahl>
+        erlaeuterung={
+          <>
+            <p className="hinweis">
+              {rechercheZeile(
+                websuche,
+                laufEinstellungen,
+                modellFuer(stufeS2.rolle, laufEinstellungen, profil),
+                modellFuer("vorverarbeitung", laufEinstellungen, profil),
+              )}
+            </p>
+            <LaufSchaetzung stufen={schaetzStufen} einstellungen={laufEinstellungen} profil={profil} />
+          </>
+        }
+      />
       <label className="bestaetigung">
-        <input type="checkbox" checked={datenOk} onChange={(e) => setze({ datenOk: e.target.checked })} />
+        <input ref={bestaetigungRef} type="checkbox" checked={datenOk} onChange={(e) => setze({ datenOk: e.target.checked })} />
         <span>
           Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Inhalte gehen an{" "}
           {anbieterListe([...new Set(laufModelle(laufEinstellungen, profil, verdichtung).map(anbieterVon))])}.
         </span>
       </label>
       <OfflineHinweis offline={rahmen.offline} />
+      {!kannStarten && (
+        <StartOffen
+          ohneAuftrag={ohneAuftrag}
+          ohneBestaetigung={!datenOk}
+          fehlendeSchluessel={fehlendeSchluessel}
+          zuAuftrag={() => springeZu(gegenstandRef.current, gegenstandRef.current, { fokus: true })}
+          zuBestaetigung={() => springeZu(bestaetigungRef.current, bestaetigungRef.current, { fokus: true })}
+          zuEinstellungen={zuEinstellungen}
+        />
+      )}
       <div className="schritt-nav">
         <span />
         <button
           type="button"
           className="knopf primaer"
           disabled={!kannStarten}
-          aria-describedby={rahmen.offline ? OFFLINE_HINWEIS : undefined}
+          aria-describedby={[rahmen.offline ? OFFLINE_HINWEIS : "", !kannStarten ? START_OFFEN : ""].filter(Boolean).join(" ") || undefined}
           onClick={starten}
         >
           Gegenstand bestimmen (S1)
         </button>
       </div>
     </>
+  );
+}
+
+/** Offene Voraussetzungen des Starts (seit 0.6.20, UX-2026-W44-02); die Netzverbindung nennt der Offline-Hinweis darüber */
+function StartOffen({
+  ohneAuftrag,
+  ohneBestaetigung,
+  fehlendeSchluessel,
+  zuAuftrag,
+  zuBestaetigung,
+  zuEinstellungen,
+}: {
+  ohneAuftrag: boolean;
+  ohneBestaetigung: boolean;
+  fehlendeSchluessel: AnbieterId[];
+  zuAuftrag: () => void;
+  zuBestaetigung: () => void;
+  zuEinstellungen?: () => void;
+}) {
+  const punkte: { text: string; knopf?: string; aktion?: () => void }[] = [];
+  if (ohneAuftrag) punkte.push({ text: "Untersuchungsgegenstand, Stichworte, Webseite oder Datei", knopf: "Zum Auftrag", aktion: zuAuftrag });
+  if (ohneBestaetigung) punkte.push({ text: "Bestätigung zur Weitergabe der Inhalte", knopf: "Zur Bestätigung", aktion: zuBestaetigung });
+  if (fehlendeSchluessel.length)
+    punkte.push({
+      text: `API-Schlüssel von ${anbieterListe(fehlendeSchluessel)}`,
+      knopf: zuEinstellungen ? "Zu den Einstellungen" : undefined,
+      aktion: zuEinstellungen,
+    });
+  if (!punkte.length) return null;
+  return (
+    <div className="start-offen" id={START_OFFEN}>
+      <p>Noch offen:</p>
+      <ul>
+        {punkte.map((p) => (
+          <li key={p.text}>
+            <span>{p.text}</span>
+            {p.knopf && p.aktion && (
+              <button type="button" className="knopf leise klein" onClick={p.aktion}>
+                {p.knopf}
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

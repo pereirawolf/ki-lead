@@ -13,6 +13,7 @@ export function LaufModellWahl({
   setWahl,
   kopf,
   children,
+  erlaeuterung,
 }: {
   stufen: StufeModell[];
   websuche: boolean;
@@ -20,6 +21,8 @@ export function LaufModellWahl({
   setWahl: (w: Modellwahl) => void;
   kopf?: ReactNode;
   children?: ReactNode;
+  /** im aufklappbaren Teil (seit 0.6.20, UX-2026-W44-03) */
+  erlaeuterung?: ReactNode;
 }) {
   const zugang = useKiZugang();
   if (!zugang?.profil) return null;
@@ -33,6 +36,7 @@ export function LaufModellWahl({
       onChange={setWahl}
       websuche={websuche}
       kopf={kopf}
+      erlaeuterung={erlaeuterung}
       zuEinstellungen={() => zugang.zuEinstellungen("modelle")}
     >
       {children}
