@@ -1,0 +1,17 @@
+{
+  "format": "lead-kontakte/1",
+  "stellen": [
+    { "name": "Thüringer Oberlandesgericht", "feld": "meldende_stelle", "email": "olg@beispiel.invalid" },
+    { "name": "Thüringer Generalstaatsanwaltschaft", "feld": "meldende_stelle", "email": "gsta@beispiel.invalid" },
+    { "name": "Thüringer Oberverwaltungsgericht", "feld": "meldende_stelle", "email": "ovg@beispiel.invalid" },
+    { "name": "Thüringer Landessozialgericht", "feld": "meldende_stelle", "email": "lsg@beispiel.invalid" },
+    { "name": "Thüringer Landesarbeitsgericht", "feld": "meldende_stelle", "email": "lag@beispiel.invalid" },
+    { "name": "Thüringer Finanzgericht", "feld": "meldende_stelle", "email": "fg@beispiel.invalid" },
+    { "name": "Justizvollzug (Fachabteilung)", "feld": "meldende_stelle", "email": "vollzug@beispiel.invalid" },
+    { "name": "IT-Stelle der Justiz", "feld": "meldende_stelle", "email": "it@beispiel.invalid" }
+  ],
+  "erinnerung": {
+    "betreff": "Erinnerung: Meldung Lagebild Justiz – {name}",
+    "text": "Für den laufenden Berichtszeitraum liegt noch keine Meldung aus {name} vor. Bitte eine Regelmeldung oder eine ausdrückliche Fehlanzeige übermitteln. Ohne Meldung führt das Lagebild die Funktionen dieser Stelle als „nicht gemeldet“, nicht als „gesichert“."
+  }
+}

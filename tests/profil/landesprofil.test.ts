@@ -61,8 +61,9 @@ describe("TP-2026-W44-55: SOP-Sammelmappe mit dem Beispielprofil geteilt", () =>
 
   it("eingebaute Profile: Beispielprofil bleibt das erste (Vorgabe beim Start), das Landesprofil bringt die SOP-Dateien mit", () => {
     const e = eingebauteProfile();
-    expect(e.map((x) => x.ordner)).toEqual(["lead-beispiel", "lead-thueringen", "muster"]);
-    const land = e[1]!.dateien;
+    expect(e[0]!.ordner).toBe("lead-beispiel");
+    expect(e.map((x) => x.ordner)).toContain("lead-thueringen");
+    const land = e.find((x) => x.ordner === "lead-thueringen")!.dateien;
     const bund = e[0]!.dateien;
     const sop = Object.keys(bund).filter((d) => d.startsWith("sop/"));
     for (const d of sop) expect(land[d], d).toBe(bund[d]);

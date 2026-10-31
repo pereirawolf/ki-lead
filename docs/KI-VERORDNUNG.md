@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.3 vom 28.10.2026, gilt für App-Version 0.6.6 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.4 vom 31.10.2026, gilt für App-Version 0.6.6 und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -49,13 +49,14 @@ KI-LEAD ist ein KI-System im Sinne von Art. 3 Nr. 1 KI-VO. Es nutzt KI-Modelle m
 
 ## 5. Kein Hochrisiko-KI-System bei bestimmungsgemäßer Verwendung
 
-Geprüft werden die Bereiche des Anhangs III, die für den Bevölkerungsschutz naheliegen.
+Geprüft werden die Bereiche des Anhangs III, die für den Bevölkerungsschutz naheliegen, und seit Fassung 1.4 für das Profil „Lagebild Justiz“ (`profile/lead-justiz`) die Rechtspflege.
 
 - **Anhang III Nr. 5 Buchst. d** erfasst KI-Systeme, die Notrufe bewerten und einstufen oder die Entsendung von Not- und Rettungsdiensten einschließlich Polizei und Feuerwehr disponieren oder priorisieren, sowie Triagesysteme der Notfallversorgung. KI-LEAD bewertet keine Notrufe, disponiert und priorisiert keine Einsatzkräfte und triagiert nicht. Es erstellt Lageentwürfe für die Steuerungsebene; Entscheidungen über Einsätze trifft eine Person auf anderem Weg.
 - **Anhang III Nr. 2** erfasst KI-Systeme, die als Sicherheitsbauteile beim Betrieb oder der Steuerung kritischer digitaler Infrastruktur, des Straßenverkehrs oder der Versorgung mit Wasser, Gas, Wärme oder Strom verwendet werden. KI-LEAD ist kein Bauteil einer solchen Anlage und steuert nichts.
+- **Anhang III Nr. 8 Buchst. a** (Rechtspflege) erfasst KI-Systeme, die eine Justizbehörde bei der Ermittlung und Auslegung von Sachverhalten und Rechtsvorschriften und bei der Anwendung des Rechts auf konkrete Sachverhalte unterstützen sollen. Nach Erwägungsgrund 61 gehören rein begleitende Verwaltungstätigkeiten nicht dazu, die die Rechtspflege im Einzelfall nicht beeinträchtigen. Das Profil „Lagebild Justiz“ erstellt Entwürfe eines Verwaltungslagebilds über Voraussetzungen der Aufgabenerfüllung (Personal, Gebäude, IT, Vollzug) auf Ebene von Institutionen und Bezirken. Inhalte richterlicher Entscheidungen, einzelne Verfahren und einzelne Personen sind ausgeschlossen (Profil, Teil A, A.1 und A.2). Damit unterstützt es keine Rechtsanwendung im Einzelfall. Die Einordnung kippt, wenn das Lagebild Verfahren priorisiert, Spruchkörper oder Personen bewertet oder fallbezogene Prognosen liefert; eine Auswertung der Leistung einzelner Beschäftigter berührte zudem Anhang III Nr. 4. Hilfsweise gilt Art. 6 Abs. 3 wie unten.
 - **Art. 6 Abs. 3:** Selbst bei Berührung eines Bereichs wäre ein System kein Hochrisikosystem, wenn es kein erhebliches Risiko birgt, etwa weil es nur eine vorbereitende Aufgabe erfüllt. Der Entwurf der Leitlinien der Kommission nennt als Beispiel vorbereitende Lageinformationen für die Vorplanung von Einsatzmitteln, wenn eine Person die Einsatzentscheidung trifft (McCann FitzGerald, 2026). Die Leitlinien lagen am 24.10.2026 nur als Entwurf vor.
 
-**Ergebnis:** Bei Verwendung nach Abschnitt 1 und 2 ist KI-LEAD kein Hochrisiko-KI-System. Die Grenze ziehen die Zweckbestimmung und die Verwendungsgrenzen.
+**Ergebnis:** Bei Verwendung nach Abschnitt 1 und 2 ist KI-LEAD kein Hochrisiko-KI-System, auch nicht mit dem Profil „Lagebild Justiz“. Die Grenze ziehen die Zweckbestimmung, die Verwendungsgrenzen und beim Justizprofil dessen Ausschlüsse.
 
 ## 6. Transparenz nach Art. 50
 
@@ -174,12 +175,13 @@ Die Kennzahlen der Verdichtung messen Nähe zu einer Redaktionsfassung aus derse
 - nicfab (2026): Digital Omnibus on AI: Regulation (EU) 2026/1744 Is Published in the Official Journal. Online abrufbar unter: https://www.nicfab.eu/en/posts/digital-omnibus-ai-official-journal/ [Zugriff: 24.10.2026]
 - Orrick (2026): EU AI Act – Transparency Obligations for AI-Generated Content (Article 50). Online abrufbar unter: https://www.orrick.com/en/Insights/2026/08/EU-AI-Act-Transparency-Obligations-for-AI-Generated-Content-Article-50 [Zugriff: 24.10.2026]
 
-Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommission. Fundstelle und Fristen des Digital Omnibus sind einer Zusammenfassung mit Verweis auf das Amtsblatt entnommen; die Leitlinien zu Art. 6 und Art. 50 lagen am 24.10.2026 ebenfalls nur in Zusammenfassungen vor. Bei der nächsten Fassung gegen den Text im Amtsblatt und die Originaldokumente der Kommission prüfen.
+Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommission. Fundstelle und Fristen des Digital Omnibus sind einer Zusammenfassung mit Verweis auf das Amtsblatt entnommen; die Leitlinien zu Art. 6 und Art. 50 lagen am 24.10.2026 ebenfalls nur in Zusammenfassungen vor. Bei der nächsten Fassung gegen den Text im Amtsblatt und die Originaldokumente der Kommission prüfen. Anhang III Nr. 8 und Erwägungsgrund 61 sind in Fassung 1.4 nach dem Kenntnisstand des Herausgebers wiedergegeben; der amtliche Wortlaut war am 31.10.2026 nicht abrufbar und ist ebenfalls zu prüfen.
 
 ## Änderungsverlauf
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.4 | 31.10.2026 | Abschnitt 5: Anhang III Nr. 8 Buchst. a (Rechtspflege) und Erwägungsgrund 61 für das neue Profil „Lagebild Justiz“ 0.1.0, Grenze zu Anhang III Nr. 4; Ergebnis und Prüftiefe ergänzt. App unverändert |
 | 1.3 | 28.10.2026 | Stand App 0.6.6: Abschnitt 3 lokales Modell über Ollama (0.6.3) mit Einschätzung der Rollen; Abschnitt 6.1 Stand der Kennzeichnung bestätigt; Abschnitt 9.1 Modelle je Stufe nach `src/pipeline/einstellungen.ts` berichtigt (Verdichtung Opus seit 0.5.10, Reparatur Haiku seit 0.5.15, OpenAI und Mistral „hoch“), Orientierungssuche (0.6.0), Mix-Profile (0.5.15), Standard-Profil Ollama, Datenregel (0.6.4); Abschnitt 9.2 Bestätigung der Suchbegriffe, Pflichtsuchen und einmalige Nachforderung (0.6.0), amtliche Einstiege (0.6.1); Abschnitt 9.3 Fehlerbilder der Vergleichsreihen vom 25.10.2026; Abschnitt 9.4 Grenzen des Pflichtsuchen-Abgleichs und der Datenregel |
 | 1.2 | 24.10.2026 | Abschnitte 3 und 9.1: Mistral als dritter Modellanbieter mit Standard-Profil (App 0.5.6) |
 | 1.1 | 24.10.2026 | Abschnitt 6.1: Kennzeichnung in PDF-Metadaten, Kopfzeile der Management Summary und Profilhinweis (App 0.5.4) |

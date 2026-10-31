@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Lagebild-Justiz-Meldung-v1.schema.json",
+  "title": "Lagebild Justiz – Meldung v1",
+  "description": "Erprobungsentwurf einer LEAD-Meldung zur Funktionsfähigkeit der Justiz eines Landes (Schemakennung Lagebild-Justiz-Meldung-v1). Gegenstand sind Voraussetzungen und Beeinträchtigungen der Aufgabenerfüllung, nicht Inhalte richterlicher Entscheidungen, Einzelverfahren oder Leistungen einzelner Personen. Prüft Struktur, Datentypen, zulässige Werte und – bei _status 'final' – die Pflichtangaben. Inhaltliche Richtigkeit prüft das Schema nicht.",
+  "type": "object",
+  "required": ["schema", "_status", "land", "meldende_stelle", "institutionstyp", "meldeart", "berichtsmodus", "meldezeitpunkt", "meldezeitraum", "funktionslage", "quellen", "sachverhalte", "freigabe"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "Lagebild-Justiz-Meldung-v1" },
+    "_status": { "enum": ["Entwurf", "final"] },
+    "_entstehung": { "$ref": "#/$defs/entstehung" },
+    "land": {
+      "enum": ["", "Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen", "Hamburg", "Hessen", "Mecklenburg-Vorpommern", "Niedersachsen", "Nordrhein-Westfalen", "Rheinland-Pfalz", "Saarland", "Sachsen", "Sachsen-Anhalt", "Schleswig-Holstein", "Thüringen"]
+    },
+    "meldende_stelle": { "type": "string" },
+    "institutionstyp": {
+      "enum": ["", "Justizverwaltung", "Gericht", "Verfassungsgericht", "Staatsanwaltschaft", "Justizvollzug", "Soziale Dienste", "Ausbildungseinrichtung", "IT-Betreiber", "Kammer"],
+      "description": "Art der meldenden Stelle (Herkunft im Lagebild). Kammern und IT-Betreiber melden nur freiwillig bzw. nach Vereinbarung."
+    },
+    "meldeart": {
+      "enum": ["", "Regelmeldung", "Anlassmeldung", "Fehlanzeige", "Berichtigung"],
+      "description": "Regelmeldung: turnusmäßiger Stand; Anlassmeldung: neue oder veränderte Beeinträchtigung; Fehlanzeige: ausdrückliche Erklärung, dass im geprüften Umfang und Zeitraum keine meldepflichtige Beeinträchtigung festgestellt wurde; Berichtigung: Korrektur einer freigegebenen Meldung. Eine fehlende Meldung ist keine Meldeart, sondern eine Datenlücke (Meldestatus der App)."
+    },
+    "berichtsmodus": {
+      "enum": ["", "Funktionslagebild", "Krisenlagebild"],
+      "description": "Funktionslagebild: regelmäßige Beobachtung (monatlich). Krisenlagebild: anlassbezogen je Lagezyklus. Über das Umschalten entscheidet eine Person."
+    },
+    "meldezeitpunkt": { "type": "string", "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$" },
+    "meldezeitraum": {
+      "type": "object",
+      "required": ["von", "bis"],
+      "additionalProperties": false,
+      "properties": {
+        "von": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "bis": { "$ref": "#/$defs/datumOptionalZeitOderLeer" }
+      }
+    },
+    "funktionslage": {
+      "type": "array",
+      "description": "Funktions- und Statusmatrix: je Funktion und Bereich ein Element. Kein Mittelwert, kein Gesamtscore; Nichtwerte sind nie gleichbedeutend mit „gesichert“ (Kodierleitfaden Abschnitt 3).",
+      "items": { "$ref": "#/$defs/funktionsstatus" }
+    },
+    "meldeabdeckung": {
+      "type": "object",
+      "description": "Nur bei zusammenführenden Stellen: erwartete und eingegangene Meldungen im Berichtszeitraum (Nenner der Verdichtung).",
+      "additionalProperties": false,
+      "properties": {
+        "erwartet": { "type": ["integer", "null"], "minimum": 0 },
+        "eingegangen": { "type": ["integer", "null"], "minimum": 0 },
+        "fehlend": { "type": "string" }
+      }
+    },
+    "quellen": { "type": "string" },
+    "zeitstrahl": {
+      "type": "string",
+      "description": "Zeitstrahl je Sachverhalt, eine Zeile je eingetretenem, belegtem Ereignis bis zum Meldezeitpunkt: „[Zn] JJJJ-MM-TT[Thh:mm] · Kennung · Typ – Kurztext [Qn] · aufgenommen JJJJ-MM-TTThh:mm“ (Kodierleitfaden Abschnitt 8)."
+    },
+    "sachverhalte": { "type": "array", "items": { "$ref": "#/$defs/sachverhalt" } },
+    "freigabe": {
+      "type": "object",
+      "required": ["erfassung", "freigabe", "versand"],
+      "additionalProperties": false,
+      "properties": {
+        "erfassung": { "$ref": "#/$defs/zeichnung" },
+        "freigabe": { "$ref": "#/$defs/zeichnung" },
+        "versand": { "$ref": "#/$defs/zeichnung" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "_status": { "const": "final" } }, "required": ["_status"] },
+      "then": {
+        "properties": {
+          "land": { "minLength": 1 },
+          "meldende_stelle": { "pattern": "\\S" },
+          "institutionstyp": { "minLength": 1 },
+          "meldeart": { "minLength": 1 },
+          "berichtsmodus": { "minLength": 1 },
+          "meldezeitpunkt": { "minLength": 1 },
+          "sachverhalte": { "minItems": 1, "items": { "properties": { "bezeichnung": { "pattern": "\\S" } } } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "datumOderLeer": { "type": "string", "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}$" },
+    "datumOptionalZeitOderLeer": {
+      "type": "string",
+      "description": "Tag (JJJJ-MM-TT) oder Tag mit Uhrzeit (JJJJ-MM-TTThh:mm, Wanduhrzeit der Profilzeitzone); leer, wenn unbekannt.",
+      "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2})?$"
+    },
+    "funktion": {
+      "enum": [
+        "F1 Rechtsschutz und Eilrechtsschutz",
+        "F2 Richterlicher Bereitschaftsdienst",
+        "F3 Zeitkritische Strafverfolgung und Haftsachen",
+        "F4 Sicherer und menschenwürdiger Vollzug",
+        "F5 Register und sonstige Rechtspflege",
+        "F6 Vollstreckung",
+        "F7 Ambulante soziale Dienste",
+        "F8 Ausbildung und Nachwuchssicherung",
+        "Sonstiges"
+      ]
+    },
+    "erkenntnissicherheit": { "enum": ["", "bestätigt", "vorläufig", "widersprüchlich", "unzureichend"] },
+    "funktionsstatus": {
+      "type": "object",
+      "required": ["funktion", "bereich", "status", "erkenntnissicherheit", "stand"],
+      "additionalProperties": false,
+      "properties": {
+        "funktion": { "$ref": "#/$defs/funktion" },
+        "bereich": { "type": "string", "description": "Bezirk, Gerichtsbarkeit, Institution oder „landesweit“; keine Personen." },
+        "status": {
+          "enum": ["", "gesichert", "eingeschränkt", "erheblich eingeschränkt", "kritisch", "nicht betroffen", "nicht zuständig", "unbekannt", "nicht gemeldet"]
+        },
+        "erkenntnissicherheit": { "$ref": "#/$defs/erkenntnissicherheit" },
+        "stand": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "hinweis": { "type": "string" }
+      }
+    },
+    "zeichnung": {
+      "type": "object",
+      "required": ["name", "datum", "hz"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "datum": { "$ref": "#/$defs/datumOderLeer" },
+        "hz": { "type": "string" }
+      }
+    },
+    "entstehung": {
+      "type": "object",
+      "required": ["verfahren"],
+      "additionalProperties": false,
+      "properties": {
+        "verfahren": { "enum": ["manuell", "KI-Entwurf"] },
+        "werkzeug": { "type": "string" },
+        "modell": { "type": "string" },
+        "sop": { "type": "array", "items": { "type": "string" } },
+        "kodierleitfaden": { "type": "string" },
+        "erstellt": { "type": "string" }
+      }
+    },
+    "indikator": {
+      "type": "object",
+      "required": ["indikator", "wert", "einheit", "wertart", "stand", "quelle"],
+      "additionalProperties": false,
+      "properties": {
+        "indikator": { "type": "string" },
+        "wert": { "type": ["number", "null"] },
+        "einheit": { "type": "string" },
+        "wertart": { "enum": ["", "beobachtet", "BCM-Planwert", "Prognose", "normative Anforderung"] },
+        "stand": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "quelle": { "type": "string", "description": "Verweis auf das Quellenverzeichnis, z. B. „[Q2]“." }
+      }
+    },
+    "sachverhalt": {
+      "type": "object",
+      "required": ["bezeichnung", "funktionen", "primaerfunktion", "ort", "ressourcen", "eintritt", "betriebsphase", "zeitliche_reichweite", "analyse", "bewertung"],
+      "additionalProperties": false,
+      "properties": {
+        "kennung": {
+          "type": "string",
+          "pattern": "^$|^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$",
+          "description": "Sachverhaltskennung „Präfix-JJJJMMTT-XXXX“; vergibt die App; bleibt bei der Fortschreibung gleich."
+        },
+        "bezug": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4}$" },
+          "description": "Kennungen der Sachverhalte aus Eingangs- oder Vormeldungen, aus denen dieser hervorgeht (Verdichtung, Teilung)."
+        },
+        "bezeichnung": { "type": "string" },
+        "funktionen": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/funktion" } },
+        "primaerfunktion": { "enum": ["", "F1 Rechtsschutz und Eilrechtsschutz", "F2 Richterlicher Bereitschaftsdienst", "F3 Zeitkritische Strafverfolgung und Haftsachen", "F4 Sicherer und menschenwürdiger Vollzug", "F5 Register und sonstige Rechtspflege", "F6 Vollstreckung", "F7 Ambulante soziale Dienste", "F8 Ausbildung und Nachwuchssicherung", "Sonstiges"] },
+        "ort": { "type": "string" },
+        "institutionen": { "type": "string" },
+        "ressourcen": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["Personal", "Gebäude und Liegenschaften", "Energie", "Kommunikation", "Justiz-IT und elektronischer Rechtsverkehr", "Akten und Daten", "Sicherheit", "Gefangenentransporte", "Externe Dienste und Schnittstellen"]
+          }
+        },
+        "eintritt": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "festgestellt": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "notfall_ausgerufen": { "$ref": "#/$defs/datumOptionalZeitOderLeer" },
+        "betriebsphase": { "enum": ["", "Normalbetrieb", "Notbetrieb", "Wiederanlauf", "Störbetrieb"] },
+        "zeitliche_reichweite": { "enum": ["", "Stunden", "Tage", "Wochen", "Monate", "Jahre"] },
+        "analyse": {
+          "type": "object",
+          "required": ["lage", "folgen", "massnahmen", "abhaengigkeiten"],
+          "additionalProperties": false,
+          "properties": {
+            "lage": { "type": "string" },
+            "folgen": { "type": "string" },
+            "massnahmen": { "type": "string" },
+            "abhaengigkeiten": { "type": "string" }
+          }
+        },
+        "indikatoren": { "type": "array", "items": { "$ref": "#/$defs/indikator" } },
+        "bewertung": {
+          "type": "object",
+          "required": ["beurteilung", "dringlichkeit", "tendenz", "erkenntnissicherheit", "bewertung_text"],
+          "additionalProperties": false,
+          "properties": {
+            "beurteilung": { "enum": ["", "geringfügig", "erheblich", "kritisch"] },
+            "dringlichkeit": { "enum": ["", "sofort", "binnen 24 Stunden", "binnen 72 Stunden", "mittelfristig", "langfristig"] },
+            "tendenz": { "enum": ["", "Entspannung", "Stabilisierung", "Verschärfung", "nicht bestimmbar"] },
+            "erkenntnissicherheit": { "$ref": "#/$defs/erkenntnissicherheit" },
+            "bewertung_text": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
