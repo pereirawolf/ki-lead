@@ -25,6 +25,8 @@ Weitere Befehle:
 
 Playwright ist auf 1.57.0 festgelegt. Die zuvor verwendete Version 1.56.1 enthält einen WebKit-Fehler bei wiederholtem Neuladen nach `history.pushState()` ([Playwright #37766](https://github.com/microsoft/playwright/issues/37766)). Er lässt sich ohne KI-LEAD und ohne IndexedDB reproduzieren. Nach einer Änderung der Playwright-Version sind die zugehörigen Browser mit `npx playwright install chromium webkit` neu zu installieren. Der Test `navigation-neuladen.spec.ts` hält das wiederholte Neuladen nach Ansichtswechseln fest.
 
+Seit Playwright 1.57 laufen Anfragen des Service Workers in Chromium über den Browserkontext und unterliegen `context.setOffline`. Der Offline-Start in `pwa.spec.ts` prüft damit tatsächlich den Cache des Service Workers; unter 1.56.1 erreichten dessen Anfragen trotz Offline-Emulation den Server. Die Umgehung `PLAYWRIGHT_DISABLE_SERVICE_WORKER_NETWORK` nicht setzen: Sie würde diese Prüfung wieder aushebeln.
+
 ## Gestaffelte Prüfung in GitHub Actions
 
 Nicht jede Änderung braucht jeden Test. Änderungen an der LEAD-Systematik (SOP, Arbeitsanweisungen, Kodierleitfaden), an der Dokumentation oder an den Bewertungsfällen ändern weder Programmcode noch Bedienoberfläche; ihre Konsistenz prüfen die Vitest-Tests unter `tests/profil/`, `tests/kern/` und `tests/evaluation/`.
