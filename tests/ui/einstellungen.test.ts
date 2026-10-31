@@ -19,6 +19,8 @@ afterEach(async () => {
 });
 
 const OHNE_SCHLUESSEL: Schluessel = { anthropic: "", openai: "", mistral: "" };
+/** Mit eingeschalteten Forschungsfunktionen (seit 0.6.16 Vorgabe aus, TP-2026-W44-46) */
+const MIT_FORSCHUNG: Einstellungen = { ...STANDARD, forschung: true };
 
 /** Bereichsnamen in der Reihenfolge der Navigation (fest, unabhängig von der Implementierung) */
 const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
@@ -62,8 +64,8 @@ const ueberschriften = () => [...document.querySelectorAll(".bereich-inhalt h2")
 const radio = (wert: string) => document.querySelector(`input[name="voreinstellung"][value="${wert}"]`) as HTMLInputElement;
 
 describe("Einstellungen: Navigation in Bereichen", () => {
-  it("zeigt acht Bereiche (seit 0.6.15 mit „Daten“), beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
-    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [] }));
+  it("zeigt mit Forschungsfunktionen acht Bereiche (seit 0.6.15 mit „Daten“), beginnt mit der Übersicht und zeigt immer genau einen Bereich", async () => {
+    await einhaengen(React.createElement(MitZustand, { start: MIT_FORSCHUNG, gesetzt: [] }));
     expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE);
     expect(ueberschriften()).toEqual(["Übersicht"]);
     for (const titel of BEREICHE) {
@@ -90,7 +92,7 @@ describe("Einstellungen: Navigation in Bereichen", () => {
   });
 
   it("ohne Farbschema-Zugang entfällt „Darstellung“", async () => {
-    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [], mitFarben: false }));
+    await einhaengen(React.createElement(MitZustand, { start: MIT_FORSCHUNG, gesetzt: [], mitFarben: false }));
     expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE.filter((b) => b !== "Darstellung"));
   });
 
@@ -325,7 +327,7 @@ describe("Einstellungen: KI-Profil unter „Modelle & Aufwand“", () => {
 describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
   it("„Modelle & Aufwand“ enthält keine Testläufe mehr und verweist auf den Bereich „Testläufe“", async () => {
     const p = await profilPflicht();
-    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [], profil: p }));
+    await einhaengen(React.createElement(MitZustand, { start: MIT_FORSCHUNG, gesetzt: [], profil: p }));
     await klick("Modelle & Aufwand", nav());
     const inhalt = () => document.querySelector(".bereich-inhalt")!;
     expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Modell und Aufwand je Aufgabe"]);
@@ -338,6 +340,31 @@ describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
     // ohne Schlüssel: Hinweis mit Sprung zu den Schlüsseln
     await klick("Schlüssel hinterlegen");
     expect(ueberschriften()).toEqual(["KI-Anbieter & API"]);
+  });
+});
+
+// Erprobungsansicht (seit 0.6.16). Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A5.json vom 31.10.2026
+// (Arbeitspaket A5), TP-2026-W44-46.
+describe("TP-2026-W44-46: Schalter „Forschungsfunktionen anzeigen“", () => {
+  it("Vorgabe aus: sieben Bereiche ohne „Testläufe“, kein Verweis darauf, Adresse auf „Testläufe“ zeigt die Übersicht", async () => {
+    const p = await profilPflicht();
+    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt: [], profil: p, bereich: { wert: "testlaeufe", setzen: () => {} } }));
+    expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE.filter((b) => b !== "Testläufe"));
+    expect(ueberschriften()).toEqual(["Übersicht"]);
+    await klick("Modelle & Aufwand", nav());
+    expect(knopf("Zu den Testläufen")).toBeUndefined();
+  });
+
+  it("Einschalten unter „Übersicht“ speichert die Wahl und zeigt den Bereich „Testläufe“", async () => {
+    const gesetzt: Einstellungen[] = [];
+    await einhaengen(React.createElement(MitZustand, { start: STANDARD, gesetzt }));
+    const schalter = [...document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')].find((i) =>
+      i.closest("label")?.textContent?.includes("Forschungsfunktionen anzeigen"),
+    )!;
+    expect(schalter.checked).toBe(false);
+    await klick(schalter);
+    expect(gesetzt.at(-1)?.forschung).toBe(true);
+    expect(navKnoepfe().map((b) => b.textContent)).toEqual(BEREICHE);
   });
 });
 

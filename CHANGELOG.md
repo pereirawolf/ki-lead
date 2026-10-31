@@ -86,6 +86,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.13 | letzter Commit des Pull Requests „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil; 0.6.13“ |
 | 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
 | 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ (Nachtrag vom 31.10.2026: Pull Request „Lizenzen: Kurzsatz „die Vorlagen“ und REUSE.toml (Issues #88, #89)“; in der App nur der Lizenzsatz unter „Über“) |
+| 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
+
+## [0.6.16] – 31.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A5.json` (Arbeitspaket A5 „Erprobungsansicht“), freigegeben vom Herausgeber am 31.10.2026, mit dessen Entscheidung für die Vorgabe „aus“. Keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+### Neu
+
+- **Schalter „Forschungsfunktionen anzeigen“ (TP-2026-W44-46):** Unter „Einstellungen → Übersicht → Ansicht“. Er blendet den Bereich „Testläufe“, den Verweis darauf unter „Modelle & Aufwand“ und den „Vergleich mit einer Referenzfassung“ im Ergebnis der KI-Erfassung ein. Vorgabe ist aus: Die Erprobung zeigt die Arbeitsfunktionen ohne Forschungswerkzeuge. Ausschalten löscht nichts; das Testlaufarchiv bleibt. Laufprotokoll, KI-Kennzeichnung und `_entstehung` sind unabhängig vom Schalter. Einstellungen tragen Fassung 7 (neues Feld `forschung`); gespeicherte Einstellungen der Fassung 6 erhalten beim Laden „aus“.
+
+### Geändert
+
+- **Kommentare zum Einspielen einer Sicherung (TP-2026-W44-47):** `leeren()` in `src/speicher/sicherung.ts` und der verzögerte Neustart in `src/ui/Daten.tsx` begründen ihr Vorgehen nicht mehr mit einem WebKit-Absturz der App; der Absturz in der CI lag an Playwright 1.56.1 (siehe 0.6.15, Abschnitt „Tests“). Der Code bleibt unverändert.
+- Spezifikation 0.6.16 (Abschnitte 5.1, 5.4, 6), [docs/ERPROBUNG.md](docs/ERPROBUNG.md) 1.3 (Abschnitt 3), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.16 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 616, iOS 616).
+
+### Tests
+
+- `tests/pipeline/einstellungen.test.ts` (1 neu): Vorgabe aus, Umstellung von Fassung 6, gespeicherte Wahl bleibt.
+- `tests/ui/einstellungen.test.ts` (2 neu): ohne Forschungsfunktionen sieben Bereiche ohne Verweis und Adresse; Einschalten speichert die Wahl.
+- `tests/ui/erprobungsansicht.test.ts` (neu, 3): Vergleich mit einer Referenzfassung nur mit Forschungsfunktionen, Laufprotokoll immer.
+- `tests/browser/einstellungen.spec.ts` (1 neu): Vorgabe und Neuladen im echten Browser; `forschungEinschalten` in `tests/browser/hilfen.ts`.
+- `tests/ui/testlaeufe.test.ts`, `tests/browser/testlaeufe.spec.ts`: schalten die Forschungsfunktionen ein.
 
 ## [0.6.15] – 31.10.2026
 

@@ -1,6 +1,6 @@
 # KI-LEAD – Erprobung im Testkreis
 
-Fassung 1.2 vom 28.10.2026, gilt für App-Version 0.5.5 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.3 vom 31.10.2026, gilt für App-Version 0.5.5 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument beschreibt die Erprobung von KI-LEAD in einem Testkreis (Meilenstein M6): Ziel, Fragestellungen, Regeln für die Teilnahme, Rückmeldeweg und Auswertung. Es ist keine Rechtsberatung.
 
@@ -32,6 +32,7 @@ Ziel ist zu erfahren, ob KI-LEAD in der Hand fachkundiger Personen nachvollziehb
 - **Eigener API-Schlüssel** von Anthropic, OpenAI oder Mistral (Mistral seit 0.5.6, im kostenlosen Tarif Trainingsnutzung abschalten), nur für KI-LEAD angelegt und mit **Ausgabenlimit** beim Anbieter. Die Kosten der Läufe trägt die testende Person über ihr Konto beim Anbieter. Der Herausgeber erhält weder Schlüssel noch Inhalte ([Datenschutzhinweise](DATENSCHUTZ.md), Abschnitt 6).
 - **Einstieg ohne KI** mit dem fiktiven Datensatz Orkantief „Ilka“ (README, „Schnellstart“). Für KI-Läufe eignen sich die fiktiven Fälle unter [evaluation/faelle/](../evaluation/faelle/README.md) mit ihrem Material.
 - **Entwürfe bleiben Entwürfe.** Ergebnisse nicht für reale Lagen, Meldungen oder Entscheidungen verwenden. Eine Erprobung im laufenden Lagedienst wäre ein Test unter Realbedingungen und ist nicht Teil dieser Erprobung ([KI-Verordnung](KI-VERORDNUNG.md), Abschnitt 4).
+- **Erprobungsansicht** (seit App-Version 0.6.16): Testläufe und der Vergleich mit einer Referenzfassung sind Forschungsfunktionen und zunächst ausgeblendet. Für die Erprobung bleiben sie aus; wer sie braucht, schaltet sie unter „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“ ein.
 - Hinweise zur sicheren Nutzung: [Sicherheit](SICHERHEIT.md), Abschnitt 4.
 
 ## 4. Nutzungsbedingungen und Haftung
@@ -95,3 +96,4 @@ Aus einer einzelnen Rückmeldung folgt keine Regeländerung. Ereignisfakten geh�
 | 1.1 | 24.10.2026 | Abschnitt 4: Lizenzangabe an LICENSE-CONTENT angeglichen (KP-2026-W43-55, -59) |
 | 1.2 | 28.10.2026 | Abschnitt 1: Verweise auf Anhang D der Datenschutzhinweise und auf die Vorlagen für die Erprobung in einer Stelle (VORLAGEN.md) |
 | 1.2 · Nachtrag | 31.10.2026 | Abschnitt 4: Lizenz-Kurzsatz nennt „die Vorlagen“ (Issue #88) |
+| 1.3 | 31.10.2026 | Abschnitt 3: Erprobungsansicht ohne Forschungsfunktionen (App 0.6.16, TP-2026-W44-46) |

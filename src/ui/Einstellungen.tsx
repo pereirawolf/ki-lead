@@ -231,12 +231,14 @@ function genutzteAnbieter(e: E, profil: Profil | null): AnbieterId[] {
 function UebersichtBereich({
   profil,
   e,
+  setEinstellungen,
   schluessel,
   ablage,
   zeige,
 }: {
   profil: Profil | null;
   e: E;
+  setEinstellungen: (e: E) => void;
   schluessel: Schluessel;
   ablage?: AblageId;
   zeige: (b: EinstellungsBereich) => void;
@@ -329,6 +331,19 @@ function UebersichtBereich({
       <p className="hinweis">
         In der KI-Erfassung lassen sich Modelle, Aufwand und Websuchen je Lauf abweichend wählen. Die tatsächlich verwendeten Werte stehen im Laufprotokoll.
       </p>
+
+      <h3>Ansicht</h3>
+      <label className="feld schalter">
+        <input type="checkbox" checked={e.forschung === true} onChange={(ev) => setEinstellungen({ ...e, forschung: ev.target.checked })} />
+        <span>
+          Forschungsfunktionen anzeigen
+          <span className="hinweis">
+            {" "}
+            Bereich „Testläufe“ und Vergleich eines Laufs mit einer Referenzfassung. Aus: Erprobungsansicht nur mit den Arbeitsschritten; gespeicherte Testläufe
+            und Laufprotokolle bleiben erhalten.
+          </span>
+        </span>
+      </label>
     </section>
   );
 }
@@ -919,12 +934,14 @@ function ModelleBereich({
         ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll. Lokale Modelle über Ollama erhalten keinen
         Aufwand; das lokale Modell steht unter „KI-Anbieter & API“. {OLLAMA_HINWEIS}
       </p>
-      <div className="kasten kasten-info testlauf-verweis">
-        <p>Wie sich eine Änderung auswirkt, zeigt ein Testlauf am fiktiven Fall „Ilka“ mit Ergebnis als ZIP-Datei.</p>
-        <button type="button" className="knopf klein" onClick={() => zeige("testlaeufe")}>
-          Zu den Testläufen
-        </button>
-      </div>
+      {e.forschung && (
+        <div className="kasten kasten-info testlauf-verweis">
+          <p>Wie sich eine Änderung auswirkt, zeigt ein Testlauf am fiktiven Fall „Ilka“ mit Ergebnis als ZIP-Datei.</p>
+          <button type="button" className="knopf klein" onClick={() => zeige("testlaeufe")}>
+            Zu den Testläufen
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -1126,7 +1143,8 @@ export function EinstellungenAnsicht({
     setzeBereich(b);
     sprung(() => springeZu(arbeitsbereichRef.current, ueberschrift(), { fokus: true }));
   };
-  const sichtbar = BEREICHE.filter((b) => b.id !== "darstellung" || farben);
+  // Forschungsfunktionen nur nach Wahl (seit 0.6.16, TP-2026-W44-46); eine Adresse auf „Testläufe“ führt sonst zur Übersicht
+  const sichtbar = BEREICHE.filter((b) => (b.id !== "darstellung" || farben) && (b.id !== "testlaeufe" || e.forschung));
   const aktuell = sichtbar.some((b) => b.id === aktiv) ? aktiv : "uebersicht";
 
   return (
@@ -1158,7 +1176,14 @@ export function EinstellungenAnsicht({
 
         <div className="bereich-inhalt">
           {aktuell === "uebersicht" && (
-            <UebersichtBereich profil={profil} e={e} schluessel={schluessel} ablage={setAblage ? ablage : undefined} zeige={zeige} />
+            <UebersichtBereich
+              profil={profil}
+              e={e}
+              setEinstellungen={setEinstellungen}
+              schluessel={schluessel}
+              ablage={setAblage ? ablage : undefined}
+              zeige={zeige}
+            />
           )}
           {aktuell === "anbieter" && (
             <AnbieterBereich

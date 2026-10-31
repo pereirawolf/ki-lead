@@ -47,7 +47,8 @@ export function DatenBereich({ zeitzone, neuStarten = () => window.location.relo
       if (!ok) return;
       setBeschaeftigt(true);
       await sicherungEinspielen(s);
-      // Neustart erst nach dem Ende des Ereignisses der Dateiauswahl: WebKit stürzte beim sofortigen Neuladen ab
+      // Neustart kurz nach dem Einspielen; der Absturz in der CI während der Fehlersuche lag an Playwright 1.56.1
+      // (CHANGELOG 0.6.15), nicht an der App.
       setTimeout(neuStarten, 100);
     } catch (e) {
       setMeldung({ text: `Die Sicherung wurde nicht eingespielt: ${(e as Error)?.message || String(e)}`, fehler: true });

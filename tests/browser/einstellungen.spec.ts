@@ -2,7 +2,7 @@
 // Tastatur, schmale Ansicht (Smartphone) mit waagerechter Bereichsleiste ohne seitliches Scrollen der Seite,
 // Bereich bleibt beim Wechsel der Ansicht erhalten, Schlüssel bleibt nach dem Neuladen am bisherigen Ort.
 import { expect, test } from "@playwright/test";
-import { bereich, netzVorbereiten, oeffnen } from "./hilfen";
+import { bereich, forschungEinschalten, netzVorbereiten, oeffnen } from "./hilfen";
 
 const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
@@ -10,7 +10,8 @@ const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutto
 test.beforeEach(async ({ page }) => {
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await bereich(page, "Einstellungen");
+  // alle acht Bereiche: Forschungsfunktionen einschalten (Vorgabe aus, seit 0.6.16)
+  await forschungEinschalten(page);
 });
 
 const leiste = (page: import("@playwright/test").Page) => page.getByRole("navigation", { name: "Bereiche der Einstellungen" });
@@ -27,6 +28,16 @@ test("jeder Bereich: genau eine Bereichsüberschrift, alle Bedienelemente mit zu
       b,
     ).toEqual([]);
   }
+});
+
+test("Vorgabe: ohne Forschungsfunktionen kein Bereich „Testläufe“; nach dem Einschalten bleibt er nach dem Neuladen", async ({ page }) => {
+  await page.getByRole("checkbox", { name: "Forschungsfunktionen anzeigen" }).uncheck();
+  await expect(leiste(page).getByRole("button")).toHaveText(BEREICHE.filter((b) => b !== "Testläufe"));
+  await page.getByRole("checkbox", { name: "Forschungsfunktionen anzeigen" }).check();
+  await page.reload();
+  await expect(page.locator(".kopf-ki")).toBeVisible();
+  await bereich(page, "Einstellungen");
+  await expect(leiste(page).getByRole("button")).toHaveText(BEREICHE);
 });
 
 test("Tastatur: Bereich per Tab erreichen und mit Eingabetaste bzw. Leertaste wechseln", async ({ page }) => {

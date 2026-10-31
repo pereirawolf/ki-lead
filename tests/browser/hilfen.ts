@@ -75,6 +75,16 @@ export async function bereich(page: Page, name: "Erfassung" | "KI-Erfassung" | "
   await page.getByRole("button", { name, exact: true }).click();
 }
 
+/**
+ * Forschungsfunktionen unter „Einstellungen → Übersicht“ einschalten (seit 0.6.16, TP-2026-W44-46; Vorgabe aus):
+ * erst dann gibt es den Bereich „Testläufe“ und den Vergleich mit einer Referenzfassung.
+ */
+export async function forschungEinschalten(page: Page): Promise<void> {
+  await bereich(page, "Einstellungen");
+  await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "Übersicht", exact: true }).click();
+  await page.getByRole("checkbox", { name: "Forschungsfunktionen anzeigen" }).check();
+}
+
 /** API-Schlüssel für Anthropic unter „Einstellungen“ speichern */
 export async function schluesselSetzen(page: Page): Promise<void> {
   await bereich(page, "Einstellungen");

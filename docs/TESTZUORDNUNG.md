@@ -834,3 +834,14 @@ Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Z
 | Offline-Start auch bei „Vary: Origin“ des Servers | PWA: stimmige Fassung beim Update › findet vorgehaltene Dateien unabhängig von Vary …; Offline-Start: nach dem ersten Besuch läuft die App ohne Netz | `tests/pwa/pwa.test.ts`, `tests/browser/pwa.spec.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts` und `tests/browser/einstellungen.spec.ts` (acht statt sieben Bereiche).
+
+## Erprobungsansicht (0.6.16, TP-2026-W44-46, -47, Freigabe des Herausgebers vom 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Vorgabe der Forschungsfunktionen aus; Fassung 6 erhält beim Umstellen „aus“, eine gespeicherte Wahl bleibt | TP-2026-W44-46: Forschungsfunktionen › … | `tests/pipeline/einstellungen.test.ts` |
+| Ohne Forschungsfunktionen sieben Bereiche, kein Verweis auf „Testläufe“, Adresse auf „Testläufe“ zeigt die Übersicht; Einschalten speichert die Wahl | TP-2026-W44-46: Schalter „Forschungsfunktionen anzeigen“ › … | `tests/ui/einstellungen.test.ts` |
+| Vergleich mit einer Referenzfassung nur mit Forschungsfunktionen; Laufprotokoll in jedem Fall | TP-2026-W44-46: Vergleich mit einer Referenzfassung nur mit Forschungsfunktionen › … | `tests/ui/erprobungsansicht.test.ts` (neu) |
+| Im echten Browser: ohne Forschungsfunktionen kein Bereich „Testläufe“, die Wahl übersteht ein Neuladen | Vorgabe: ohne Forschungsfunktionen kein Bereich „Testläufe“; nach dem Einschalten bleibt er nach dem Neuladen | `tests/browser/einstellungen.spec.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts`, `tests/ui/testlaeufe.test.ts`, `tests/browser/einstellungen.spec.ts` und `tests/browser/testlaeufe.spec.ts` schalten die Forschungsfunktionen vor den Prüfungen der Testläufe ein. TP-2026-W44-47 berichtigt nur Kommentare in `src/speicher/sicherung.ts` und `src/ui/Daten.tsx` (ohne Test).
