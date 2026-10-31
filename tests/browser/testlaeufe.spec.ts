@@ -5,7 +5,7 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import JSZip from "jszip";
-import { bereich, netzVorbereiten, schluesselSetzen } from "./hilfen";
+import { forschungEinschalten, netzVorbereiten, schluesselSetzen } from "./hilfen";
 
 const REFERENZ = "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const S1 = {
@@ -20,7 +20,7 @@ const S1 = {
 };
 
 async function zuTestlaeufen(page: import("@playwright/test").Page) {
-  await bereich(page, "Einstellungen");
+  await forschungEinschalten(page);
   await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "Testläufe", exact: true }).click();
   await expect(page.getByRole("region", { name: "Archiv" })).toBeVisible();
 }

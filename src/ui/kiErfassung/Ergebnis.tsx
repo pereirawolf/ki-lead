@@ -22,6 +22,7 @@ export function Ergebnis({
   exportieren,
   erneut,
   modellwahl,
+  forschung,
   offline = false,
 }: {
   profil: Profil;
@@ -33,6 +34,8 @@ export function Ergebnis({
   erneut?: () => void;
   /** Modellwahl für „S2 erneut starten“ */
   modellwahl?: ReactNode;
+  /** Forschungsfunktionen anzeigen (Vergleich mit einer Referenzfassung; seit 0.6.16, TP-2026-W44-46) */
+  forschung?: boolean;
   /** ohne Netz: „S2 erneut starten“ gesperrt (seit 0.6.5, TP-2026-W44-20) */
   offline?: boolean;
 }) {
@@ -117,7 +120,7 @@ export function Ergebnis({
         </details>
       )}
 
-      {e && (
+      {e && forschung && (
         <VergleichKasten
           profil={profil}
           meldung={e.meldung}

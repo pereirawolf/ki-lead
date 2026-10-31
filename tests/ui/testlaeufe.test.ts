@@ -66,7 +66,7 @@ describe("Testläufe in den Einstellungen", () => {
     await einhaengen(
       React.createElement(EinstellungenAnsicht, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         setEinstellungen: () => {},
         schluessel: OHNE,
         setSchluessel: () => {},
@@ -116,7 +116,9 @@ describe("Testläufe in den Einstellungen", () => {
 
   it("AV-2026-W43-04: Variante des Plans standardprofile-ilka wählen, ohne die Einstellungen zu ändern", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    await einhaengen(
+      React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: { ...OHNE, anthropic: "x" } }),
+    );
     const auswahl = document.querySelector(".testlauf select") as HTMLSelectElement;
     expect([...auswahl.options].map((o) => o.value)).toEqual([
       "",
@@ -141,7 +143,9 @@ describe("Testläufe in den Einstellungen", () => {
 
   it("AV-2026-W43-23, -24: Mix-Variante M1 mit S1 OpenAI, S2 Anthropic und Reparatur Haiku (seit 0.5.15); fehlender OpenAI-Schlüssel gemeldet", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    await einhaengen(
+      React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: { ...OHNE, anthropic: "x" } }),
+    );
     const auswahl = document.querySelector(".testlauf select") as HTMLSelectElement;
     expect([...auswahl.querySelectorAll("optgroup")].map((g) => g.label)).toEqual(["Bewertungsplan standardprofile-ilka", "Bewertungsplan anbietermix-ilka"]);
     await act(async () => {
@@ -177,7 +181,9 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
 
   it("bietet sechs Testarten als Radiogruppe; Vorgabe ist S1 + S2 + S3 aus Rohdaten", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    await einhaengen(
+      React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: { ...OHNE, anthropic: "x" } }),
+    );
     const gruppe = document.querySelector(".testlauf fieldset")!;
     expect(gruppe.querySelector("legend")?.textContent).toBe("Was wird getestet?");
     const felder = [...gruppe.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
@@ -224,7 +230,9 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
 
   it("eine Variante gilt nur für die Umfänge ihres Plans", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    await einhaengen(
+      React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: { ...OHNE, anthropic: "x" } }),
+    );
     await umfangWaehlen("Management Summary (aus Musterfassung)");
     await act(async () => {
       auswahl().value = "management-summary-ilka/D-openai-standard";
@@ -247,7 +255,7 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         schluessel: { ...OHNE, anthropic: "x" },
         datenLaden: async () => ({ profil, dateien }),
         anbieterFuer: () => anbieter,
@@ -289,7 +297,7 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         schluessel: { ...OHNE, anthropic: "x" },
         datenLaden: async () => ({ profil, dateien }),
         anbieterFuer: () => anbieter,
@@ -317,7 +325,7 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         schluessel: { ...OHNE, anthropic: "x" },
         datenLaden: async () => ({ profil, dateien }),
         anbieterFuer: () => anbieter,
@@ -359,7 +367,7 @@ describe("AV-2026-W43-25: Testart S3 Reparatur (bis 0.5.16 „Prüffall Reparatu
 
   it("Vorgabe: Reparaturmodell der Einstellungen, zwei Läufe; zurück zu einer Kette wieder drei", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: OHNE }));
+    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: OHNE }));
     await reparaturWaehlen();
     expect([...abschnitt().querySelectorAll(".testlauf-konfiguration li")].map((li) => li.textContent)).toEqual([
       "S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic",
@@ -378,7 +386,9 @@ describe("AV-2026-W43-25: Testart S3 Reparatur (bis 0.5.16 „Prüffall Reparatu
 
   it("bietet die sechs Varianten des Plans an (R-F seit Fassung 2, AV-2026-W43-38), ohne die Einstellungen zu ändern; Mistral mit Endpunkt und Aufschlag", async () => {
     const profil = await profilPflicht("lead-beispiel");
-    await einhaengen(React.createElement(TestlaufAbschnitt, { profil, einstellungen: STANDARD, schluessel: { ...OHNE, anthropic: "x" } }));
+    await einhaengen(
+      React.createElement(TestlaufAbschnitt, { profil, einstellungen: { ...STANDARD, forschung: true }, schluessel: { ...OHNE, anthropic: "x" } }),
+    );
     await reparaturWaehlen();
     expect([...auswahl().options].map((o) => o.value)).toEqual([
       "",
@@ -411,7 +421,7 @@ describe("AV-2026-W43-25: Testart S3 Reparatur (bis 0.5.16 „Prüffall Reparatu
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         schluessel: { ...OHNE, anthropic: "x" },
         datenLaden: async () => ({ profil: await profilPflicht("lead-beispiel"), dateien }),
         anbieterFuer: () => att,
@@ -492,7 +502,7 @@ describe("Testläufe: Archiv (seit 0.5.17)", () => {
     await einhaengen(
       React.createElement(EinstellungenAnsicht, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         setEinstellungen: () => {},
         schluessel: OHNE,
         setSchluessel: () => {},
@@ -564,7 +574,7 @@ describe("Testläufe: Archiv (seit 0.5.17)", () => {
     await einhaengen(
       React.createElement(TestlaufAbschnitt, {
         profil,
-        einstellungen: STANDARD,
+        einstellungen: { ...STANDARD, forschung: true },
         schluessel: { ...OHNE, anthropic: "x" },
         datenLaden: async () => ({ profil, dateien }),
         anbieterFuer: () => attrappe(JSON.parse(dateien[REFERENZ])),

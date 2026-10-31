@@ -37,6 +37,12 @@ export interface Einstellungen {
    * Ollama. Fehlende Werte ergänzt die App mit den Vorgaben.
    */
   anbieterOptionen: AnbieterOptionen;
+  /**
+   * Forschungsfunktionen anzeigen (seit 0.6.16, TP-2026-W44-46, Fassung 7): Bereich „Testläufe“ und Vergleich eines
+   * Laufs mit einer Referenzfassung. Vorgabe aus (Erprobungsansicht als Normalfall, Entscheidung des Herausgebers vom
+   * 31.10.2026); Arbeitsschritte, Laufprotokolle und gespeicherte Testläufe bleiben unabhängig davon.
+   */
+  forschung: boolean;
   /** Fassung der gespeicherten Einstellungen (für Umstellungen der Vorgaben) */
   fassung?: number;
 }
@@ -91,7 +97,8 @@ export const STANDARD: Einstellungen = {
   nachforderung: true,
   maxTokensErfassung: 128000,
   anbieterOptionen: STANDARD_ANBIETER_OPTIONEN,
-  fassung: 6,
+  forschung: false,
+  fassung: 7,
 };
 
 /**
@@ -399,6 +406,12 @@ export function einstellungenMigrieren(gespeichert: GespeicherteEinstellungen | 
   if (g && g.fassung === 5) {
     g.anbieterOptionen = { ...g.anbieterOptionen, mistral: { endpunkt: g.mistralEndpunkt ?? "eu", ...g.anbieterOptionen?.mistral } };
     g.fassung = 6;
+  }
+  // Fassung 6 → 7 (0.6.16, TP-2026-W44-46): Schalter „Forschungsfunktionen anzeigen“ mit der Vorgabe aus, auch für
+  // bestehende Einstellungen (Erprobungsansicht als Normalfall); einschalten unter „Einstellungen → Übersicht“.
+  if (g && g.fassung === 6) {
+    g.forschung = false;
+    g.fassung = 7;
   }
   const { mistralEndpunkt: _alt, anbieterOptionen, ...rest } = g ?? {};
   return {

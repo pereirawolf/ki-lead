@@ -122,8 +122,8 @@ export async function sicherungEinspielen(s: Sicherung): Promise<number> {
 }
 
 /**
- * Entfernt die Einträge eines Speichers einzeln statt mit objectStore.clear(): In WebKit (Playwright, CI) stürzte die
- * Seite beim Neuladen ab, wenn ein mit clear() geleerter Speicher neu beschrieben worden war.
+ * Entfernt die Einträge eines Speichers einzeln (delMany), auf Wunsch mit Auswahl; so bleiben Einträge zu Schlüsseln
+ * beim Einspielen erhalten.
  */
 async function leeren(ablage?: UseStore, auswahl: (k: IDBValidKey) => boolean = () => true): Promise<void> {
   const weg = (await keys(ablage)).filter(auswahl);

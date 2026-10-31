@@ -456,6 +456,7 @@ function Erfassung({
               exportieren={() => protokollExport(ablauf.lauf)}
               erneut={s2Starten}
               offline={offline}
+              forschung={einstellungen.forschung}
               modellwahl={
                 <LaufModellWahl
                   stufen={[rahmen.stufeS2, rahmen.stufeS3]}

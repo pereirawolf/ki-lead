@@ -31,9 +31,9 @@ const { alleSchluesselLesen, schluesselLesen, schluesselSchreiben } = await impo
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 6", async () => {
+  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 7 (seit 0.6.16)", async () => {
     expect(STANDARD.aufwand.vorverarbeitung).toBe("high");
-    expect(STANDARD.fassung).toBe(6);
+    expect(STANDARD.fassung).toBe(7);
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
   });
 
@@ -42,7 +42,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const e = await einstellungenLesen();
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt", async () => {
@@ -58,7 +58,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const { anbieterOptionen: _ohne, ...alt } = STANDARD;
     speicher.set("einstellungen", { ...alt, fassung: 5, mistralEndpunkt: "global", websucheMax: 7 });
     const e = await einstellungenLesen();
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
     expect(e.anbieterOptionen).toEqual({
       anthropic: {},
       openai: {},
@@ -78,7 +78,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     // gespeicherte Einstellungen ohne Fassung durchlaufen die ganze Kette
     speicher.set("einstellungen", { modelle: STANDARD.modelle, mistralEndpunkt: "global" });
     const ganz = await einstellungenLesen();
-    expect(ganz.fassung).toBe(6);
+    expect(ganz.fassung).toBe(7);
     expect(ganz.anbieterOptionen.mistral.endpunkt).toBe("global");
   });
 
@@ -112,7 +112,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.maxTokensErfassung).toBe(128000);
     expect(e.aufwand.erfassung).toBe("medium");
     expect(e.aufwand.vorverarbeitung).toBe("high");
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("nach Fassung 3 bleibt „medium“ eine bewusste Wahl", async () => {
@@ -160,7 +160,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual({ ...alt.modelle, ...modelle });
     expect(e.aufwand).toEqual({ ...alt.aufwand, ...aufwand });
     expect(e.websucheMax).toBe(7);
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("AV-2026-W43-39: Fassung 4 mit dem Mistral-Standard aus 0.5.15 (Reparatur Medium) repariert danach mit Small", async () => {
@@ -171,7 +171,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual(ALT_MISTRAL.modelle);
     expect(e.aufwand).toEqual(ALT_MISTRAL.aufwand);
     expect(e.websucheMax).toBe(9);
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("AV-2026-W43-39: eine abweichende Wahl der Fassung 4 bleibt stehen", async () => {
@@ -179,7 +179,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 4, modelle: eigen, aufwand: ALT_MISTRAL.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("AV-2026-W43-32: eine abweichende Wahl der Fassung 3 bleibt stehen", async () => {
@@ -187,14 +187,14 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3, modelle: eigen, aufwand: ALT_ANTHROPIC.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 
   it("AV-2026-W43-32: leere Modellfelder (Vorgaben des Profils) bleiben leer", async () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3 });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(STANDARD.modelle);
-    expect(e.fassung).toBe(6);
+    expect(e.fassung).toBe(7);
   });
 });
 
@@ -362,5 +362,17 @@ describe("Ollama als vierter Anbieter (TP-2026-W44-26)", () => {
     const mitOllama = { ...p, manifest: { ...p.manifest, modelle: { ...p.manifest.modelle, erfassung: "ollama:llama3.1" } } };
     expect(modellFuer("erfassung", STANDARD, mitOllama)).toBe("ollama:llama3.1");
     expect(modellHerkunft("erfassung", STANDARD, mitOllama)).toBe("profil");
+  });
+});
+
+// Schalter „Forschungsfunktionen anzeigen“ (seit 0.6.16). Grundlage: Befunddatei ki-lead-befund_technik_2026-W44-A5.json
+// vom 31.10.2026 (Arbeitspaket A5), TP-2026-W44-46; Vorgabe aus nach Entscheidung des Herausgebers.
+describe("TP-2026-W44-46: Forschungsfunktionen", () => {
+  it("Vorgabe aus; Fassung 6 erhält beim Umstellen „aus“, eine gespeicherte Wahl ab Fassung 7 bleibt", async () => {
+    const { einstellungenMigrieren } = await import("../../src/pipeline/einstellungen");
+    expect(STANDARD.forschung).toBe(false);
+    expect(einstellungenMigrieren(undefined).forschung).toBe(false);
+    expect(einstellungenMigrieren({ ...STANDARD, fassung: 6, forschung: undefined as unknown as boolean }).forschung).toBe(false);
+    expect(einstellungenMigrieren({ ...STANDARD, fassung: 7, forschung: true })).toMatchObject({ forschung: true, fassung: 7 });
   });
 });
