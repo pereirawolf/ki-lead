@@ -7,7 +7,7 @@ import { profil, repoPfad } from "../support/dateien";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
 import { aufwandStufenFuer, naechsteStufe } from "../../src/anbieter/aufwand";
-import { anfrageKoerperMistralChat, mistralAufwand } from "../../src/anbieter/mistral";
+import { anfrageKoerperMistral, anfrageKoerperMistralChat, mistralAufwand } from "../../src/anbieter/mistral";
 import {
   APP_MODELLE,
   AUFWAND_STUFEN,
@@ -58,7 +58,7 @@ describe("AV-2026-W43-01: angebotene Stufen je Modell", () => {
     expect(koerper.reasoning_effort).toBe("high");
   });
 
-  it("TP-2026-W44-53: an Mistral Large 4 gehen low, medium und high unverändert, nie none", () => {
+  it("TP-2026-W44-53: an Mistral Large 4 gehen am EU-Endpunkt low, medium und high unverändert, global nur high, nie none", () => {
     expect(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, "mistral-large-4"))).toEqual([
       "low",
       "medium",
@@ -69,6 +69,11 @@ describe("AV-2026-W43-01: angebotene Stufen je Modell", () => {
     expect(aufwandAuswahl("mistral-large-4").map((a) => a.titel)).toEqual(["niedrig", "mittel", "hoch"]);
     const koerper = anfrageKoerperMistralChat({ modell: "mistral-large-4", aufwand: "low", maxTokens: 10, system: [], nachrichten: [] });
     expect(koerper.reasoning_effort).toBe("low");
+    // Globaler Endpunkt (Conversations-API): nur high (Mistral-Probe vom 31.10.2026)
+    expect(["low", "medium", "high"].map((a) => mistralAufwand(a as any, "mistral-large-4", "global"))).toEqual(["high", "high", "high"]);
+    expect(
+      anfrageKoerperMistral({ modell: "mistral-large-4", aufwand: "low", maxTokens: 10, system: [], nachrichten: [] }).completion_args.reasoning_effort,
+    ).toBe("high");
   });
 });
 

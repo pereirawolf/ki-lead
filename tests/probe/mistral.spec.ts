@@ -104,7 +104,7 @@ test("Nachdenken: welche Werte von reasoning_effort nehmen die Modelle an (beide
   for (const [name, url, koerper] of ziele) {
     for (const modell of MODELLE) {
       // Werte, die die App diesem Modell sendet (seit 0.6.17 je Modell, TP-2026-W44-53); sie müssen angenommen werden
-      const pflicht = new Set(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, modell)));
+      const pflicht = new Set(["low", "medium", "high", "xhigh", "max"].map((a) => mistralAufwand(a as any, modell, name === "EU" ? "eu" : "global")));
       const teile: string[] = [];
       for (const wert of ["none", "low", "medium", "high", "xhigh"]) {
         const r = await fetch(url, {

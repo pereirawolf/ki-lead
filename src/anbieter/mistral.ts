@@ -68,12 +68,14 @@ export function mistralWerkzeuge(endpunkt: MistralEndpunkt): { websuche: boolean
 export const MISTRAL_AUFWAND: Record<"low" | "high", string> = { low: "none", high: "high" };
 
 /**
- * reasoning_effort für eine Stufe der App. Mistral Large 4 (seit 0.6.17, TP-2026-W44-53) nimmt low, medium und high
- * unverändert an und lehnt none ab; die übrigen Modelle kennen nur none und high.
+ * reasoning_effort für eine Stufe der App. Mistral Large 4 (seit 0.6.17, TP-2026-W44-53) nimmt am EU-Endpunkt (Chat
+ * Completions) low, medium und high unverändert an und lehnt none ab; am globalen Endpunkt (Conversations-API) nur high
+ * (Mistral-Probe vom 31.10.2026: none lehnt das Modell ab, low und medium die Schnittstelle). Die übrigen Modelle kennen
+ * nur none und high.
  */
-export function mistralAufwand(aufwand: Aufwand | undefined, modell?: string): string | undefined {
+export function mistralAufwand(aufwand: Aufwand | undefined, modell?: string, endpunkt: MistralEndpunkt = "eu"): string | undefined {
   if (!aufwand) return undefined;
-  if (modell && /^mistral-large-4/.test(modell)) return naechsteStufe(aufwand, MISTRAL_LARGE_STUFEN);
+  if (modell && /^mistral-large-4/.test(modell)) return endpunkt === "global" ? "high" : naechsteStufe(aufwand, MISTRAL_LARGE_STUFEN);
   return MISTRAL_AUFWAND[naechsteStufe(aufwand, MISTRAL_STUFEN) as "low" | "high"];
 }
 
@@ -98,7 +100,7 @@ function inhaltZuMistral(c: string | Inhaltsblock[]): string | any[] {
 
 export function anfrageKoerperMistral(
   a: LlmAnfrage,
-  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = mistralAufwand(a.aufwand, a.modell),
+  /** null: ausdrücklich ohne Angabe */ aufwand: string | null | undefined = mistralAufwand(a.aufwand, a.modell, "global"),
 ): Record<string, any> {
   const args: Record<string, any> = { max_tokens: a.maxTokens };
   if (aufwand) args.reasoning_effort = aufwand;
@@ -343,7 +345,7 @@ export class MistralAnbieter implements LlmAnbieter {
 
   /** Eine Anfrage mit Wiederholung bei Überlastung; liefert den Sammler und die wirksame Stufe des Nachdenkens. */
   private async eineRunde(a: LlmAnfrage): Promise<{ sammler: MistralSammler; aufwand?: string; abgelehnt?: string }> {
-    let aufwand = mistralAufwand(a.aufwand, a.modell);
+    let aufwand = mistralAufwand(a.aufwand, a.modell, this.endpunkt);
     let abgelehnt: string | undefined;
     let body = JSON.stringify(this.koerper(a, aufwand));
     let grobVersucht = false;
