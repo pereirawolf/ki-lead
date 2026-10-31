@@ -862,3 +862,13 @@ Angepasst ohne Änderung des Solls: `tests/ui/einstellungen.test.ts`, `tests/ui/
 | Echte Aufrufe: Policy, nur dieser Anbieter, Verbindungstest aus dem Browser, strenges Schema mit Nutzung und Kosten, falscher Schlüssel | Betreiberbuild: …; Adapter: … | `tests/probe/stelle.spec.ts` (neu, Mistral-Probe) |
 
 Angepasst ohne Änderung des Solls: Schlüsselobjekte in den Tests tragen das Feld `stelle` (`LEERE_SCHLUESSEL`); Prüfungen über alle Standard-Profile lassen den Endpunkt der Stelle aus, der im öffentlichen Build kein Modell hat; die Registry nennt fünf Anbieter (`tests/anbieter/verteiler.test.ts`); der Wächter der Workflows zählt vier Dateien (`tests/ci/actions.test.ts`).
+
+## Landesprofil (0.6.18, TP-2026-W44-54 bis -57, Freigabe des Herausgebers vom 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Abgeleitete Dateien aktuell; Profil lädt ohne Befund; Kreise in Auswahl, Präfixen und Kontakten gleich | TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet › … | `tests/profil/landesprofil.test.ts` (neu) |
+| SOP-Texte gleich, Beispielprofil bleibt erstes eingebautes Profil, eigene Dateien gehen vor | TP-2026-W44-55: SOP-Sammelmappe mit dem Beispielprofil geteilt › … | `tests/profil/landesprofil.test.ts` (neu) |
+| Beispiellage schemakonform, im Lagebild ohne Lesefehler, Meldestatus je Kreis, Kennungen ohne Befund; Verdichtung der drei Kreismeldungen mit Attrappe | TP-2026-W44-56: Beispiellage Hochwasser an der Saale (FIKTIV) › … | `tests/profil/landesprofil.test.ts` (neu) |
+
+Angepasst ohne Änderung des Solls: `tests/support/dateien.ts` lädt Profile mit geteilten Dateien wie die App; `tests/support/pipeline.ts` nimmt einen Profilordner an (Vorgabe Beispielprofil).

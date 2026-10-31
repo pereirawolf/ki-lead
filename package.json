@@ -1,6 +1,6 @@
 {
   "name": "ki-lead",
-  "version": "0.6.17",
+  "version": "0.6.18",
   "description": "KI-LEAD – Forschungsdemonstrator für die LEAD-Systematik (Lageerfassung, -auswertung und -darstellung)",
   "scripts": {
     "dev": "vite",
@@ -21,6 +21,7 @@
     "test:coverage": "vitest run --coverage",
     "pruefe-profile": "vitest run tests/profil",
     "sop:lesefassung": "node scripts/sop-lesefassung.mjs",
+    "profil:land": "node scripts/landesprofil.mjs",
     "vergleich:mehrfach": "node scripts/vergleich-mehrfach.mjs",
     "vergleichslauf:auswerten": "node scripts/vergleichslauf-auswerten.mjs",
     "app:sync": "vite build && cap sync",

@@ -88,6 +88,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ (Nachtrag vom 31.10.2026: Pull Request „Lizenzen: Kurzsatz „die Vorlagen“ und REUSE.toml (Issues #88, #89)“; in der App nur der Lizenzsatz unter „Über“) |
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
 | 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ (Nachtrag vom 31.10.2026: Profil „Lagebild Justiz“ 0.1.0 und docs/KI-VERORDNUNG.md 1.4 mit dem Pull Request „Profil Lagebild Justiz 0.1.0 (Erprobungsentwurf)“, ohne Änderung der App) |
+| 0.6.18 | letzter Commit des Pull Requests „Landesprofil Thüringen (fiktive Inhalte) mit Beispiellage; 0.6.18“ |
+
+## [0.6.18] – 31.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A4.json` (Arbeitspaket A4 „Profil Landesebene“), freigegeben vom Herausgeber am 31.10.2026 mit seinen Entscheidungen: reales Land Thüringen mit fiktiven Inhalten, SOP-Sammelmappe mit dem Beispielprofil geteilt, Beispiellage Hochwasser; Perspektive nach E1 unverändert. Keine Änderung an der KI-Pipeline und am Beispielprofil.
+
+### Neu
+
+- **Landesprofil „LEAD-Beispiel – Land Thüringen (fiktive Inhalte)“ 1.0.0 (TP-2026-W44-54):** `profile/lead-thueringen`, Ebene Land, Referenzraum „Bevölkerungsschutz in Thüringen“, meldende Stelle „Lagezentrum des Landes (Beispiel)“. Schema `LEAD-Meldung-Land-v1` mit dem Feld `kreis` (Land, 17 Landkreise, 5 kreisfreie Städte) statt `land`, als Eingang und Ausgabe; Kennungspräfixe `DE-TH` und `DE-TH-<Kfz-Kennzeichen>`; Kontakte je Kreis. Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden leitet `scripts/landesprofil.mjs` (`npm run profil:land`) aus dem Beispielprofil ab; Manifest, Verlauf, README und Beispiele sind von Hand gepflegt. Keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden, ohne landesrechtliche Bezüge.
+- **Geteilte Dateien eingebauter Profile (TP-2026-W44-55):** `src/profil/geteilt.ts`; das Landesprofil erhält die SOP-Sammelmappe aus dem Beispielprofil, ohne Kopie im Repository und im Programm. Das Profilformat bleibt unverändert; ein Export enthält alle Dateien. Das Haupt-JavaScript wächst um rund 165 KB (Profil und Beispiel) statt um rund 650 KB mit kopierter Sammelmappe.
+- **Beispiellage „Hochwasser an der Saale“ (FIKTIV, TP-2026-W44-56):** drei Kreismeldungen (Landkreis Saalfeld-Rudolstadt, Saale-Holzland-Kreis, Stadt Jena) und die verdichtete Meldung des Landes mit Bezug und Zeitstrahl; die Sperrung der B 88 melden zwei Kreise, die Landesmeldung zählt sie einmal.
+
+### Geändert
+
+- README (Profile), Spezifikation 0.6.18 (Abschnitt 4.6), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.18 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 618, iOS 618).
+
+### Tests
+
+- `tests/profil/landesprofil.test.ts` (neu, 8): Ableitung aktuell, Laden ohne Befund, Kreise, geteilte SOP-Sammelmappe und Reihenfolge der eingebauten Profile, Beispiellage im Lagebild, Verdichtung der drei Kreismeldungen mit Attrappe bis zum schemakonformen, belegten Ergebnis.
 
 ## [0.6.17] – 31.10.2026
 

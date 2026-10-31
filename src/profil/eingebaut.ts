@@ -7,6 +7,8 @@
 // Nicht eingebettet: archivierte SOP-Fassungen und die erzeugte Lesefassung. Die App liest sie nie (maßgeblich für SOPs
 // ist sop.dateien im Manifest); sie würden nur Ladezeit und Profilprüfsumme vergrößern. Die SOP-Übersicht
 // (`sop/README.md`) ist dagegen eingebettet: Die Profilansicht zeigt sie als Lesedokument, nicht als SOP.
+import { mitGeteilten } from "./geteilt";
+
 const oeffentlich = import.meta.glob<string>(["/profile/**/*.{json,md}", "!/profile/**/sop/archiv/**", "!/profile/**/sop/*_Lesefassung.md"], {
   query: "?raw",
   import: "default",
@@ -34,5 +36,10 @@ export function eingebauteProfile(): EingebautesProfil[] {
     if (!nachOrdner.has(ordner)) nachOrdner.set(ordner, {});
     nachOrdner.get(ordner)![datei] = text;
   }
+  for (const [ordner, dateien] of nachOrdner)
+    nachOrdner.set(
+      ordner,
+      mitGeteilten(ordner, dateien, (von) => nachOrdner.get(von)),
+    );
   return [...nachOrdner.entries()].map(([ordner, dateien]) => ({ ordner, dateien }));
 }

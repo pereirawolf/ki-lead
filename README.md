@@ -2,7 +2,7 @@
 
 Forschungsdemonstrator für die KI-gestützte Anwendung der LEAD-Systematik (Lageerfassung, -auswertung und -darstellung) im Bevölkerungsschutz. KI-LEAD unterstützt drei Arbeitsprodukte: einen belegten **Meldungsentwurf** (Erfassung), eine **eigene Meldung aus mehreren Eingangsmeldungen** (Verdichtung) und eine **Kurzfassung für die Leitung** (Management Summary). Profile bündeln die dazugehörigen Regeln, Schemata und Darstellungen. Die fachliche Prüfung und Freigabe bleiben bei der bearbeitenden Person.
 
-**Stand:** Version 0.6.17, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
+**Stand:** Version 0.6.18, Meilenstein 5 in Arbeit: installierbar als App (PWA) mit Offline-Start, native Projekte für iOS und Android angelegt; Meilenstein 4 technisch abgenommen; siehe [Fahrplan](#fahrplan).
 
 ## Abgrenzung
 
@@ -87,6 +87,7 @@ Auf jeder Ebene gilt dieselbe Systematik: Die Meldungen nachgeordneter und later
 Das Format beschreibt [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md). Mitgeliefert werden:
 
 - **`profile/lead-beispiel`:** fiktive Koordinierungsstelle auf Bundesebene mit LEAD-Meldevorlage, Kodierleitfaden mit Lagenradar, den drei Arbeitsanweisungen und der SOP-Sammelmappe: gemeinsame Regeln (Teil A), 17 Dach-SOPs zu den Ereignisarten (B01–B17) und 17 ergänzende Themen- und Querschnittsbausteine (C01–C17). Teil C ist als Inhaltsgerüst gekennzeichnet und dient bis zur fachlichen Konkretisierung und Freigabe als ergänzende Prüfhilfe.
+- **`profile/lead-thueringen`** (seit 0.6.18): Landesebene am Beispiel Thüringen mit fiktiven Inhalten: Lagezentrum des Landes, Meldungen der 17 Landkreise und 5 kreisfreien Städte, Schema `LEAD-Meldung-Land-v1`, fiktive Beispiellage „Hochwasser an der Saale“. Arbeitsanweisungen und Kodierleitfaden aus dem Beispielprofil abgeleitet (`npm run profil:land`), SOP-Sammelmappe mit ihm geteilt. Keine Vorgabe des Landes, ohne Landesrecht.
 - **`profile/muster`:** Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern, schlankes Schema, CC0 1.0.
 - **`profile/lead-justiz`:** Erprobungsentwurf eines Landesprofils zur Funktionsfähigkeit der Justiz (Beispiel Thüringen): Funktionskatalog F1–F8 mit Funktions- und Statusmatrix, getrennter Bewertung von Beurteilung, Dringlichkeit, Tendenz und Erkenntnissicherheit, ohne Lagenradar und ohne ereignisbezogene SOPs; drei fiktive Beispielmeldungen. Fachlich nicht abgenommen.
 
@@ -130,7 +131,7 @@ Die Schemaprüfung der App kommt ohne Codeerzeugung aus und läuft daher unter e
 
 ## Versionen und Änderungen
 
-App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.17), jedes Profil eine eigene Version (Beispielprofil 1.34.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
+App, Profil und Fachdokumente tragen eigene Fassungen: die App eine Versionsnummer (derzeit 0.6.18), jedes Profil eine eigene Version (Beispielprofil 1.34.0), die SOP-Sammelmappe und die Fachdokumente eigene Fassungen. Welche Fassungen zusammengehören, steht im Gültigkeitsstand am Anfang von Teil A der [SOP-Sammelmappe](profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md).
 
 Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abschnitt „Änderungsverlauf“ der [Spezifikation](docs/SPEZIFIKATION.md) und des [Profilformats](docs/PROFILFORMAT.md), in der Datei `CHANGELOG.md` jedes Profils sowie für die SOPs in [profile/lead-beispiel/sop/CHANGELOG.md](profile/lead-beispiel/sop/CHANGELOG.md). Jede Änderung wird im selben Commit dort eingetragen; jede App-Version ist im Änderungsverlauf einem Commit zugeordnet. Das Laufprotokoll jedes KI-Laufs hält zusätzlich die Prüfsumme des verwendeten Profilstands fest.
 
@@ -166,6 +167,6 @@ Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial u
 
 ## Zitiervorschlag
 
-Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.17) [Software]. https://github.com/pereirawolf/ki-lead
+Pereira Wolf, H. (2026). *KI-LEAD: Forschungsdemonstrator für die KI-gestützte Lageerfassung, -auswertung und -darstellung* (Version 0.6.18) [Software]. https://github.com/pereirawolf/ki-lead
 
 Die Zitierangaben stehen maschinenlesbar in [CITATION.cff](CITATION.cff); GitHub zeigt sie unter „Cite this repository“ an. Eine DOI folgt mit dem ersten Release über Zenodo.

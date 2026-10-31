@@ -1,4 +1,5 @@
 // Dateizugriff der Tests: Repositorywurzel an einer Stelle, Profile laden, JSON-Ordner lesen.
+import { mitGeteilten } from "../../src/profil/geteilt";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { ladeProfil } from "../../src/profil/laden";
@@ -31,7 +32,8 @@ export function leseOrdner(ordner: string): Record<string, string> {
 export async function profil(name: string) {
   const oeffentlich = repoPfad("profile", name);
   const ordner = existsSync(oeffentlich) ? oeffentlich : join(PRIVAT, "profile", name);
-  const erg = await ladeProfil(leseOrdner(ordner));
+  // Geteilte Dateien wie bei den eingebauten Profilen (seit 0.6.18, TP-2026-W44-55)
+  const erg = await ladeProfil(mitGeteilten(name, leseOrdner(ordner), (von) => leseOrdner(repoPfad("profile", von))));
   if (!erg.profil) throw new Error(`Profil „${name}“ nicht ladbar: ` + JSON.stringify(erg.befunde, null, 2));
   return erg;
 }

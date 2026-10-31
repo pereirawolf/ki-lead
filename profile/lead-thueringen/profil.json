@@ -1,0 +1,91 @@
+{
+  "format": "lead-profil/1",
+  "id": "lead.beispiel.thueringen",
+  "name": "LEAD-Beispiel – Land Thüringen (fiktive Inhalte)",
+  "beschreibung": "Beispielprofil auf Landesebene: Eigenmeldung eines Lagezentrums des Landes, das die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammenführt. Fiktives Beispiel des Herausgebers mit realen Gebietsnamen; keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden und ohne landesrechtliche Bezüge. Arbeitsweise und SOP-LEAD-Sammelmappe wie im Beispielprofil der Koordinierungsstelle.",
+  "version": "1.0.0",
+  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
+  "lizenz": "CC-BY-4.0",
+  "ebene": "Land",
+  "referenzraum": "Bevölkerungsschutz in Thüringen",
+  "variablen": {
+    "kreis": "Thüringen",
+    "meldende_stelle": "Lagezentrum des Landes (Beispiel)",
+    "kurzname": "Lagezentrum",
+    "zeitzone": "Europe/Berlin",
+    "meldetakt": "wöchentlich",
+    "lageprodukt": "landesweite Lagebild",
+    "rollenprofil": "landesweite Redaktion",
+    "rolle_beschreibung": "Die meldende Stelle (Lagezentrum des Landes (Beispiel)) führt die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammen. Sie ist in diesem Beispiel keine zusätzliche Entscheidungsebene, hat gegenüber den Kreisen keine Weisungsbefugnis und keine eigene operative Einsatzzuständigkeit. Die Zuständigkeiten der Kreise als untere Katastrophenschutzbehörden bleiben unberührt; ihre Empfehlungen richten sich an die zuständigen Stellen."
+  },
+  "eigene_stellen": [
+    "Lagezentrum des Landes (Beispiel) – Redaktionskonferenz"
+  ],
+  "meldung": {
+    "schema": "meldung.schema.json",
+    "ui": "meldung.ui.json",
+    "schema_id": "LEAD-Meldung-Land-v1",
+    "eingang_schema_ids": [
+      "LEAD-Meldung-Land-v1"
+    ]
+  },
+  "anweisungen": {
+    "erfassung": "anweisung-erfassung.md",
+    "kurzfassung": "anweisung-kurzfassung.md",
+    "verdichtung": "anweisung-verdichtung.md"
+  },
+  "sop": {
+    "dateien": [
+      "sop/A_Gemeinsame-Regeln.md",
+      "sop/teil-b/B01_unwetter-sturm.md",
+      "sop/teil-b/B02_hochwasser-ueberschwemmung.md",
+      "sop/teil-b/B03_waldbrand.md",
+      "sop/teil-b/B04_erdbeben.md",
+      "sop/teil-b/B05_extremhitze-duerre.md",
+      "sop/teil-b/B06_wintersturm-schnee-eis.md",
+      "sop/teil-b/B07_industrieunfall-chemieunfall.md",
+      "sop/teil-b/B08_stromausfall-blackout.md",
+      "sop/teil-b/B09_gasversorgungsengpass.md",
+      "sop/teil-b/B10_trinkwasserversorgung.md",
+      "sop/teil-b/B11_gesundheitliche-lage-epidemie.md",
+      "sop/teil-b/B12_kritis-ausfall.md",
+      "sop/teil-b/B13_migrationslage.md",
+      "sop/teil-b/B14_sicherheitslage.md",
+      "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md",
+      "sop/teil-b/B16_sabotage-anschlag-terrorismus.md",
+      "sop/teil-b/B17_sonstiges.md",
+      "sop/teil-c/C01_radiologische-nukleare-lage.md",
+      "sop/teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md",
+      "sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md",
+      "sop/teil-c/C04_vulkanasche.md",
+      "sop/teil-c/C05_grossunfall-unfallfolgen.md",
+      "sop/teil-c/C06_kampfmittelfund.md",
+      "sop/teil-c/C07_infektionslagen.md",
+      "sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+      "sop/teil-c/C09_medizinische-versorgung-manv.md",
+      "sop/teil-c/C10_arzneimittel-medizinisches-material.md",
+      "sop/teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md",
+      "sop/teil-c/C12_kraftstoff-waerme.md",
+      "sop/teil-c/C13_verkehr-transport-logistik.md",
+      "sop/teil-c/C14_lebensmittelversorgung.md",
+      "sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md",
+      "sop/teil-c/C16_evakuierung-schutzunterbringung-betreuung.md",
+      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+    ],
+    "teil_gemeinsam": "teil-a"
+  },
+  "kodierleitfaden": "kodierleitfaden.md",
+  "kontakte": "kontakte.json",
+  "beispiele": [
+    {
+      "titel": "Hochwasser an der Saale (FIKTIV)",
+      "ordner": "beispiele/hochwasser-saale",
+      "hinweis": "Erfundene Lage mit drei Kreismeldungen und der verdichteten Meldung des Landes; keine Meldung stammt von den genannten Stellen."
+    }
+  ],
+  "modelle": {
+    "vorverarbeitung": "claude-haiku-5-5",
+    "erfassung": "claude-opus-5-5",
+    "verdichtung": "claude-opus-5-5"
+  }
+}
