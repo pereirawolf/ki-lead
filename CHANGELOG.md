@@ -84,6 +84,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.11 | letzter Commit des Pull Requests „Zeitstrahl: Lücke im Baukasten unter „Kurztext mit Beleg“; 0.6.11“ |
 | 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
 | 0.6.13 | letzter Commit des Pull Requests „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil; 0.6.13“ |
+| 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
+
+## [0.6.14] – 31.10.2026
+
+Grundlage: Issue #114, Prüfauftrag A2, nach der Ladeprobe des Profilpakets `lead-kritis` aus KRITIS-LEAD (Meilenstein M2, Stand f77ac47); Freigabe des Herausgebers vom 31.10.2026. Die Probe (Betreibermeldung `01_netz…` in Erfassung, Prüfschritt, PDF und Rohtabelle) zeigte drei Lücken: In PDF, Rohtabelle und CSV standen Listen von Objekten (etwa `sachverhalte[].betrieb.ersatzverfahren[]`, `…abhaengigkeiten[]`) als JSON. In der Maske hatten Listen keine Überschrift („Noch kein Bedarf erfasst.“ ohne Bezug), und verschachtelte Objekte ohne `label` (etwa zwei Messwerte mit `wert`, `einheit`, `status`) standen ohne Rahmen untereinander und waren nicht zu unterscheiden. Elemente ohne `titel_feld` hießen „ohne Bezeichnung“. Baut auf 0.6.13 auf.
+
+### Behoben
+
+- **PDF der Meldung** (`src/dokumente/pdf.ts`): Listen von Objekten als Zeilen je Element und Feld („Betreiberangaben › Ersatzverfahren 1 › art“) statt JSON.
+- **Rohtabelle und CSV** (`src/lagebild/ausgabe.ts`): Listen von Objekten als lesbarer Text in ihrer Spalte, je Element „Name n – Titel“ und darunter „Feld: Wert“ (verschachtelte Felder mit „›“, leere Angaben ausgelassen, Zeitfelder deutsch); neue Hilfsfunktionen in `src/kern/listen.ts`.
+- **Erfassungsmaske** (`src/ui/Feld.tsx`): Listen außer der Sachverhaltsliste stehen als Gruppe mit ihrer Bezeichnung als Überschrift (auch leer) und zeigen ihren Hinweis; Objekte ohne `label`, die in einem anderen Objekt stehen, erhalten eine Gruppe mit dem Feldnamen. Objekte der obersten Ebene und Listenelemente bleiben ohne Rahmen. Ohne `titel_feld` trägt ein Listenelement den Wert eines einfachen Elements bzw. seinen ersten nicht leeren Text als Titel (gekürzt); ein leeres `titel_feld` bleibt „ohne Bezeichnung“.
+
+Beispielprofil und Vorlage sehen unverändert aus: Sie haben außer der Sachverhaltsliste keine Liste von Objekten in der Maske und keine verschachtelten Objekte ohne `label`. Feldnamen ohne `label` (etwa `traegerschaft`, `mta_stunden`) zeigt die App weiter als Bezeichnung; Beschriftungen liefert das Profil.
+
+### Geändert
+
+- Profilformat 1.26 (ohne Formatänderung: `label`, `element_label`/`titel_feld`), Spezifikation 0.6.14 (Abschnitte 5.1, 5.2). Versionsangaben 0.6.14 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 614, iOS 614).
+
+### Tests
+
+- `tests/kern/listen.test.ts` (neu, 6): Elementtitel und Name, Liste als Text, Listen einfacher Werte; Rohtabelle/CSV und PDF einer Meldung mit Liste von Objekten ohne JSON.
+- `tests/ui/feld-verschachtelt.test.ts` (neu, 3): Gruppenüberschriften für Listen und verschachtelte Objekte, Elementtitel, leere Liste; Regression Beispielprofil (Sachverhaltsliste ohne eigene Gruppe, keine Feldnamen als Überschrift).
 
 ## [0.6.13] – 31.10.2026
 

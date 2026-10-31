@@ -7,6 +7,7 @@ import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
+import { hatObjekte } from "../kern/listen";
 import { gliedereFeld } from "../kern/kennsaetze";
 import { zeitstrahlOrdnen } from "../kern/zeitstrahl";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
@@ -200,10 +201,15 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
     return;
   }
   if (Array.isArray(wert)) {
-    out.push([label, wert.map((x) => (typeof x === "object" ? JSON.stringify(x) : String(x))).join(", ") || "–"]);
+    // Listen von Objekten: je Element eigene Zeilen „Liste n › Feld“ statt JSON (seit 0.6.14, Issue #114, A2)
+    if (hatObjekte(wert)) {
+      wert.forEach((x, i) => zeilen(profil, k?.items, x, [...segs, i], out));
+      return;
+    }
+    out.push([label, wert.map(String).join(", ") || "–"]);
     return;
   }
-  let text = wert === null || wert === undefined || wert === "" ? "–" : String(wert);
+  let text = wert === null || wert === undefined || wert === "" ? "–" : typeof wert === "object" ? JSON.stringify(wert) : String(wert);
   if (f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit") text = datumDE(text) || "–";
   if (text !== "–") text = gliedereFeld(gen, text, profil.ui);
   out.push([label, text]);

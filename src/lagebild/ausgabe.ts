@@ -5,6 +5,7 @@ import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
+import { listeAlsText } from "../kern/listen";
 import { gliedereAnalyse, gliedereBewertung } from "../kern/kennsaetze";
 import type { Profil, RadarDef } from "../kern/typen";
 import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../kern/zeitstrahl";
@@ -57,6 +58,12 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
   if ((k?.type === "object" || k?.properties) && k?.properties) {
     for (const key of Object.keys(k.properties))
       blaetter(profil, k.properties[key], [...segs, key], [...titel, bezeichnung(profil.ui, generischerPfad([...segs, key]))], relativ, out);
+    return;
+  }
+  // Listen von Objekten lesbar statt als JSON (seit 0.6.14, Issue #114, A2): je Element Kopfzeile und „Feld: Wert“
+  const element = aufloesen(k?.items, profil.schema);
+  if ((k?.type === "array" || (Array.isArray(k?.type) && k.type.includes("array")) || k?.items) && (element?.type === "object" || element?.properties)) {
+    out.push({ titel: titel.join(" › "), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
     return;
   }
   out.push({ titel: titel.join(" › "), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
