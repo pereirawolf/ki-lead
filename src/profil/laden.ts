@@ -216,6 +216,16 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
       optionalerText(m.meldung.schema_id, "meldung.schema_id");
       if (m.meldung.eingang_schema_ids !== undefined && !textListe(m.meldung.eingang_schema_ids))
         fehler("„meldung.eingang_schema_ids“ muss eine Liste von Texten sein.");
+      if (
+        m.meldung.eingang_schemata !== undefined &&
+        !(
+          istObjekt(m.meldung.eingang_schemata) &&
+          Object.values(m.meldung.eingang_schemata).every(
+            (e: any) => istObjekt(e) && istText(e.datei) && !!e.datei && (e.gebiet === undefined || (istText(e.gebiet) && !!e.gebiet)),
+          )
+        )
+      )
+        fehler("„meldung.eingang_schemata“ braucht je Schemakennung ein Objekt mit „datei“ (Pfad) und optional „gebiet“ (Feldname).");
     }
   }
   if (m.anweisungen !== undefined && (!istObjekt(m.anweisungen) || !Object.values(m.anweisungen).every(istText)))
@@ -424,6 +434,37 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
       befunde.push({ stufe: "warnung", text: `Schemakennung im Schema („${kennung}“) weicht von profil.json („${manifest.meldung.schema_id}“) ab.` });
     if (!manifest.meldung.schema_id && kennung) manifest.meldung.schema_id = kennung;
   }
+  // Fremde Schemata für die Prüfung von Meldungen anderer Stellen (seit 0.6.19, TP-2026-W44-59); Fehler betreffen nur
+  // diese Prüfung, das Profil bleibt nutzbar
+  const eingangSchemata: Record<string, { schema: object; gebiet?: string }> = {};
+  for (const [kennung, e] of Object.entries(manifest.meldung.eingang_schemata || {})) {
+    if (kennung === manifest.meldung.schema_id) {
+      befunde.push({ stufe: "warnung", text: `Eingangsschema „${kennung}“ ist das eigene Schema; der Eintrag wird nicht verwendet.` });
+      continue;
+    }
+    let s: unknown;
+    try {
+      if (dateien[e.datei] === undefined) throw new Error("Datei fehlt");
+      s = JSON.parse(dateien[e.datei]!);
+    } catch (x) {
+      befunde.push({
+        stufe: "warnung",
+        text: `Eingangsschema „${kennung}“ (${e.datei}): ${(x as Error).message}. Meldungen dieses Schemas bleiben ungeprüft.`,
+      });
+      continue;
+    }
+    const f = schemaFehler(s);
+    if (f) {
+      befunde.push({
+        stufe: "warnung",
+        text: `Eingangsschema „${kennung}“ (${e.datei}) ist nicht verwendbar: ${f} Meldungen dieses Schemas bleiben ungeprüft.`,
+      });
+      continue;
+    }
+    const k = (s as any)?.properties?.[ui?.rollen?.schema_feld || "schema"]?.const;
+    if (k && k !== kennung) befunde.push({ stufe: "warnung", text: `Eingangsschema ${e.datei}: Schemakennung „${k}“ weicht vom Eintrag „${kennung}“ ab.` });
+    eingangSchemata[kennung] = { schema: s as object, ...(e.gebiet ? { gebiet: e.gebiet } : {}) };
+  }
   const uiOk = ui ? pruefeUiStruktur(ui, befunde) : false;
   // Optionale LEAD-Eingabehilfen: Fehler deaktivieren nur die Hilfen, das Profil bleibt nutzbar
   if (ui && uiOk && ui.feldhilfen !== undefined) {
@@ -511,5 +552,8 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
 
   if (befunde.some((b) => b.stufe === "fehler") || !schema || !ui) return { profil: null, befunde };
   const hash = await profilHash(dateien);
-  return { profil: { manifest, schema, ui, dateien, sops, kontakte, hash }, befunde };
+  return {
+    profil: { manifest, schema, ui, dateien, sops, kontakte, ...(Object.keys(eingangSchemata).length ? { eingangSchemata } : {}), hash },
+    befunde,
+  };
 }

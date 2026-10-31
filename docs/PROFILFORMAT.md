@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.26 vom 31.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.27 vom 31.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -39,7 +39,8 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
     "schema_id": "LEAD-Meldung-v1",
-    "eingang_schema_ids": ["LEAD-Meldung-v1"]
+    "eingang_schema_ids": ["LEAD-Meldung-v1"],
+    "eingang_schemata": { "LEAD-Meldung-Land-v1": { "datei": "eingang/LEAD-Meldung-Land-v1.schema.json", "gebiet": "kreis" } }
   },
   "migrationen": [{ "von": "Alt-v1", "setze": { "schema": "Neu-v2" }, "ergaenze": { "quellen": "" }, "hinweis": "Altformat überführt." }],
   "anweisungen": { "erfassung": "anweisung-erfassung.md", "kurzfassung": "anweisung-kurzfassung.md" },
@@ -54,6 +55,7 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
 
 - `variablen`: Werte, die in neuen Meldungen vorbelegt werden, wenn das Schema ein gleichnamiges Feld der obersten Ebene hat, und die als `{{profil.<name>}}` in Arbeitsanweisungen zur Verfügung stehen. Zusätzlich gibt es `{{profil.referenzraum}}`, `{{profil.ebene}}` und `{{profil.name}}`.
 - `eingang_schema_ids`: Schemakennungen, die die App beim Öffnen ohne Warnung annimmt.
+- `eingang_schemata` (optional, seit Fassung 1.27, App 0.6.19): Schemata anderer Stellen, gegen die das Lagebild deren Meldungen prüft. Je Schemakennung `datei` (Pfad einer Schemadatei im Paket) und optional `gebiet` (Feld, in dem die fremde Meldung ihr Gebiet nennt, etwa `kreis`). Die Meldungen bleiben fremd, gehen also nur in die KI-Verdichtung ein; das Lagebild zeigt ihre Schemabefunde („fremdes Schema ✓“ oder „fremdes Schema: n“) und ihr Gebiet. Eine fehlende oder unbrauchbare Datei, das eigene Schema oder eine abweichende Schemakennung in der Datei ergeben eine Warnung; das Profil bleibt nutzbar. Hintergrund: [AUSTAUSCH.md](AUSTAUSCH.md), Abschnitt 8.
 - `migrationen`: einfache Überführungen älterer Schemakennungen. `setze` überschreibt Felder, `ergaenze` ergänzt fehlende Felder.
 - `eigene_stellen`: weitere Bezeichnungen, unter denen die eigene Stelle meldet. Die App erkennt eigene Meldungen (Vormeldung statt Eingangsmeldung) nur bei exakter Übereinstimmung mit `variablen.meldende_stelle` oder einem dieser Namen, nach Angleichung von Groß-/Kleinschreibung und Leerraum. In KI-Entwürfen setzt sie Land und meldende Stelle aus dem Profil.
 - `farbschema` (optional): Farbschema der Oberfläche, wenn unter „Einstellungen → Darstellung“ „Farben des aktiven Profils“ gewählt ist. `basis` ist eine Kennung des Katalogs (`neutral-hell`, `neutral-dunkel`, `kontrast-hell`, `kontrast-dunkel`, `bund`, `bevoelkerungsschutz`, `de-bw` … `de-th`; bei einer Kontrastbasis gilt für Text 7:1), `name` ein Text bis 80 Zeichen, `farben` einzelne Farbrollen als `#RRGGBB`. Signalfarben, Schrift und CSS sind nicht änderbar; Kontraste werden geprüft. Ein fehlerhaftes Farbschema ergibt eine Warnung und wird nicht verwendet, das Profil bleibt nutzbar. Einzelheiten: [farbschemas.md](farbschemas.md).
@@ -291,3 +293,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.24 | 30.10.2026 | Ohne Formatänderung: `titel` und `lagebild.titel` benennen nur noch die Produkte (Meldung, Lagebild) in den Ausgaben; Bereichsnamen, Überschriften und Kennsätze legt die App fest, `untertitel` ergänzt den Kennsatz der Erfassung (App 0.6.10, OF-2026-W44-03) |
 | 1.25 | 31.10.2026 | Optionale Rollen `herkunft`, `herkunft_standard` und `herkunft_kategorie`: Herkunft der meldenden Stelle im Lagebild mit Kennzeichen, Filter, Spalten in Rohtabelle und CSV, Kopiervorlage und PDF; Prüfung beim Import (Typen als Fehler, Warnungen `HERKUNFT_KATEGORIE_UNBEKANNT` und `HERKUNFT_OHNE_ROLLE`). Ältere Pakete laden unverändert (App 0.6.13, Issue #114, A1) |
 | 1.26 | 31.10.2026 | Ohne Formatänderung: Gruppenüberschriften für Listen und verschachtelte Objekte ohne `label`, Elementtitel ohne `titel_feld`, Listen von Objekten in PDF, Rohtabelle und CSV als lesbarer Text statt JSON (App 0.6.14, Issue #114, A2) |
+| 1.27 | 31.10.2026 | Optionales Feld `meldung.eingang_schemata`: Prüfung fremder Meldungen gegen ein mitgeliefertes Schema, Gebiet aus einem eigenen Feld (App 0.6.19, TP-2026-W44-59) |

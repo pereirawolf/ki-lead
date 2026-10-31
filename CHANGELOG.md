@@ -89,6 +89,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
 | 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ (Nachtrag vom 31.10.2026: Profil „Lagebild Justiz“ 0.1.0 und docs/KI-VERORDNUNG.md 1.4 mit dem Pull Request „Profil Lagebild Justiz 0.1.0 (Erprobungsentwurf)“, ohne Änderung der App) |
 | 0.6.18 | letzter Commit des Pull Requests „Landesprofil Thüringen (fiktive Inhalte) mit Beispiellage; 0.6.18“ |
+| 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ |
+
+## [0.6.19] – 31.10.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A6.json` (Arbeitspaket A6 „Austauschvertrag“), freigegeben vom Herausgeber am 31.10.2026 mit seiner Entscheidung, Vorschläge wie Meldungskennung und Zeitzone in der Meldung nur im Entwurf zu beschreiben. Keine Änderung an Schemata, Arbeitsanweisungen und KI-Pipeline.
+
+### Neu
+
+- **Austauschvertrag, Entwurf 0.1 (TP-2026-W44-58):** [docs/AUSTAUSCH.md](docs/AUSTAUSCH.md) beschreibt für Kennungen, Versionen, Bezugsraum, Zeitstände, Quellen, Freigabestatus, unbekannte Werte und fremde Schemata den heutigen Stand mit Fundstelle, einen Vorschlag und die offene Frage für die Abstimmung in Teil C; im Anhang der Mindestinhalt einer austauschfähigen Meldung.
+- **Prüfung fremder Meldungen (TP-2026-W44-59):** Optionales Manifestfeld `meldung.eingang_schemata` (Profilformat 1.27): je fremder Schemakennung eine Schemadatei im Profil und optional das Feld des Gebiets. Das Lagebild prüft fremde Meldungen mit bekannter Kennung gegen ihr Schema („fremdes Schema ✓“ bzw. „fremdes Schema: n“ mit den Befunden im Redaktionscheck); ohne Eintrag bleibt es bei „fremdes Schema“. Die Meldungen bleiben fremd (nur KI-Verdichtung). Fehlende oder unbrauchbare Schemadateien sind Warnungen beim Laden.
+- **Weg Land → Bund (TP-2026-W44-60):** Beispielprofil 1.35.0 mit `eingang_schemata` für `LEAD-Meldung-Land-v1` (Gebiet `kreis`); das Schema schreibt `npm run profil:land` aus dem Landesprofil mit. Landes- und Kreismeldungen erscheinen im Beispielprofil geprüft und mit ihrem Gebiet, auch als Eingang der Verdichtung.
+
+### Geändert
+
+- Spezifikation 0.6.19 (Abschnitte 4.2, 5.2, offener Punkt 20), [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.27, README (Verweis auf AUSTAUSCH.md, Beispielprofil 1.35.0), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.19 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 619, iOS 619).
+
+### Tests
+
+- `tests/lagebild/fremdschema.test.ts` (neu, 5): Laden und Warnungen, Prüfung im Lagebild mit Gebiet, Befunde und Marken, Eingang der Verdichtung im Beispielprofil.
+- `tests/profil/landesprofil.test.ts`: Ableitung prüft auch das Eingangsschema im Beispielprofil.
 
 ## [0.6.18] – 31.10.2026
 
