@@ -40,6 +40,8 @@ export interface KontextOptionen {
   jetzt?: string;
   /** Abweichende Angaben im Auftrag (gehen den Vorgaben vor, auch Stichtag und t0) */
   auftrag?: Partial<Auftrag>;
+  /** Profilordner (Vorgabe lead-beispiel; seit 0.6.18 auch das Landesprofil lead-thueringen) */
+  profilName?: string;
 }
 
 /**
@@ -50,9 +52,9 @@ export interface KontextOptionen {
 export async function pipelineKontext(
   anbieter: LlmAnbieter,
   material: Material[] = [],
-  { jetzt = "2026-10-14T10:00:00+02:00", auftrag = {} }: KontextOptionen = {},
+  { jetzt = "2026-10-14T10:00:00+02:00", auftrag = {}, profilName = "lead-beispiel" }: KontextOptionen = {},
 ): Promise<{ k: Kontext; protokolle: Lauf[] }> {
-  const { profil: p } = await profil("lead-beispiel");
+  const { profil: p } = await profil(profilName);
   const lauf = neuerLauf(
     p!,
     { sachverhalt: "Orkan in Hessen", stichworte: "Sturm, Bahn", urls: [AUFTRAGS_URL], stichtag: "2026-10-14", prueffrage: "", ...auftrag },

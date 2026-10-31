@@ -1,0 +1,120 @@
+{
+  "format": "lead-kontakte/1",
+  "hinweis": "Platzhalteradressen. Echte Adressen lokal in einer Datei kontakte.lokal.json ablegen (wird nicht eingecheckt) oder in der App ändern.",
+  "stellen": [
+    {
+      "name": "Ilm-Kreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Kyffhäuserkreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Altenburger Land",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Eichsfeld",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Gotha",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Greiz",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Hildburghausen",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Nordhausen",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Saalfeld-Rudolstadt",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Schmalkalden-Meiningen",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Sömmerda",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Sonneberg",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Landkreis Weimarer Land",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Saale-Holzland-Kreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Saale-Orla-Kreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Stadt Erfurt",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Stadt Gera",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Stadt Jena",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Stadt Suhl",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Stadt Weimar",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Unstrut-Hainich-Kreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Wartburgkreis",
+      "feld": "kreis",
+      "email": "lage@beispiel.invalid"
+    }
+  ],
+  "erinnerung": {
+    "betreff": "Erinnerung Meldevorlage: {name}",
+    "text": "Guten Tag,\n\nfür den aktuellen Berichtszeitraum liegt noch keine Meldung aus {name} vor.\nWir nehmen Ihre Meldung noch bis heute Dienstschluss entgegen.\n\nMit freundlichen Grüßen"
+  }
+}
