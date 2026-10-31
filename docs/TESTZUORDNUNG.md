@@ -803,3 +803,13 @@ Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Z
 | Typen der Rollen als Fehler; unbekanntes Feld, unbekannte Kategorie, Angaben ohne Rolle als Warnung | I114-A1: Prüfung der Herkunftsrollen beim Laden › … | `tests/lagebild/herkunft.test.ts` (neu) |
 | Vermerk unter der Kopfzeile des Lagebild-PDF | I114-A1: Vermerk zur Herkunft im Lagebild-PDF › … | `tests/lagebild/herkunft.test.ts` (neu) |
 | Kennzeichen in Übersicht, Meldungen und Sachverhalten; Filter aus und ein; Dateiliste vollständig; ohne Rolle kein Filter (Ilka) | I114-A1: Herkunft im Lagebild › … | `tests/ui/lagebild.test.ts` |
+
+## Verschachtelte Objekte und Listen (0.6.14, Issue #114, A2, nach der Ladeprobe von KRITIS-LEAD M2, freigegeben vom Herausgeber am 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Elementtitel aus `titel_feld`, sonst erster Text bzw. Wert, gekürzt; Name aus `element_label` | I114-A2: Elementtitel und Name › … | `tests/kern/listen.test.ts` (neu) |
+| Liste von Objekten als Text je Element, verschachtelt, leere Angaben ausgelassen, Zeitfelder deutsch; einfache Werte mit „; “ | I114-A2: Liste als lesbarer Text › … | `tests/kern/listen.test.ts` (neu) |
+| Rohtabelle/CSV und PDF einer Meldung mit Liste von Objekten ohne JSON | I114-A2: Ausgaben einer Meldung mit Liste von Objekten › … | `tests/kern/listen.test.ts` (neu) |
+| Listen und verschachtelte Objekte ohne `label` mit Überschrift; Elementtitel; leere Liste | I114-A2: verschachtelte Objekte und Listen in der Erfassungsmaske › … | `tests/ui/feld-verschachtelt.test.ts` (neu) |
+| Sachverhaltsliste ohne eigene Gruppe, keine Feldnamen als Überschrift im Beispielprofil | I114-A2: Regression Beispielprofil › … | `tests/ui/feld-verschachtelt.test.ts` (neu) |
