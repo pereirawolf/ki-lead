@@ -793,3 +793,13 @@ Angepasst ohne Änderung des Solls (neue Bereichsnamen und Texte): `tests/ui/app
 | Vorlage mit Rollen und Abschnitten für Zeitstrahl, Kennung und Bezug, README nennt sie | Vorlage – eigene Organisation (KP-2026-W43-60) › ZS-2026-W44-07: … | `tests/profil/vorlage.test.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/ui/kisymbol.test.ts` (Namen ohne „Zur KI-Erfassung“/„Zur Meldung“, kein Klick; Soll geändert nach KP-2026-W44-01), `tests/browser/kisymbol.spec.ts` (Rolle `img` statt `button`), `tests/lagebild/lagebild.test.ts` (mehrere Meldungen derselben Stelle: mit Kennung über die Kennung, ohne Kennung nach Stelle), `tests/profil/sop-redaktion.test.ts` (Begriff „Beurteilung“), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.7.0).
+
+## Herkunftsrolle im Lagebild (0.6.13, Issue #114, A1, Anforderung aus KRITIS-LEAD, freigegeben vom Herausgeber am 31.10.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Herkunft je Meldung und Sachverhalt, Standard, Kategorie; Filter mit Kennzahlen; „keine Angabe“; ohne Rolle unverändert (Ilka) | I114-A1: Herkunftsrolle im Kern des Lagebilds › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Spalten „Herkunft“ und „Herkunft: Quellenkategorie“ in Rohtabelle und CSV; Kopiervorlage als HTML und Klartext; ohne Rolle keine Spalte | I114-A1: Herkunft in Rohtabelle, CSV und Kopiervorlage › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Typen der Rollen als Fehler; unbekanntes Feld, unbekannte Kategorie, Angaben ohne Rolle als Warnung | I114-A1: Prüfung der Herkunftsrollen beim Laden › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Vermerk unter der Kopfzeile des Lagebild-PDF | I114-A1: Vermerk zur Herkunft im Lagebild-PDF › … | `tests/lagebild/herkunft.test.ts` (neu) |
+| Kennzeichen in Übersicht, Meldungen und Sachverhalten; Filter aus und ein; Dateiliste vollständig; ohne Rolle kein Filter (Ilka) | I114-A1: Herkunft im Lagebild › … | `tests/ui/lagebild.test.ts` |

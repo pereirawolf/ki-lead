@@ -18,11 +18,15 @@ import {
   erinnerungMailto,
   farbeBeurteilung,
   farbeTendenz,
+  herkunftsrolleAnzeige,
+  herkunftsrolleVon,
+  herkunftsrolleWerte,
   inhaltsKennung,
   inTagen,
   istPlatzhalterAdresse,
   kennzahlen,
   meldestatus,
+  nachHerkunftsrolle,
   nachSchwere,
   stelleVon,
   zaehle,
@@ -40,7 +44,7 @@ import type { UebergabeMeldung } from "../pipeline/material";
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
-import { Marken, SvMarken } from "./lagebild/bausteine";
+import { Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
@@ -126,6 +130,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const [ziehen, setZiehen] = useState(false);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const eingabe = useRef<HTMLInputElement>(null);
+  /** Ausgeblendete Werte der Herkunftsrolle (seit 0.6.13, Issue #114, A1); „“ steht für keine Angabe */
+  const [ausgeblendet, setAusgeblendet] = useState<ReadonlySet<string>>(() => new Set());
 
   // Gespeicherten Stand laden. Was vor dem Abschluss schon hinzugefügt wurde, bleibt erhalten (zusammengeführt);
   // ein verspätetes Ergebnis nach Wechsel oder Aushängen wird verworfen. Solange nicht geladen ist, wird nicht
@@ -183,13 +189,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
     };
   }, [stichtag]);
 
-  const { eintraege, fehler: lesefehler } = useMemo(() => einlesen(dateien, profil), [dateien, profil]);
+  const { eintraege: alleEintraege, fehler: lesefehler } = useMemo(() => einlesen(dateien, profil), [dateien, profil]);
+  // Herkunftsfilter (seit 0.6.13, Issue #114, A1): gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage,
+  // Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe sehen alle Meldungen, damit der Filter
+  // weder Erinnerungen auslöst noch Prüfbefunde oder Eingangsmeldungen verschluckt.
+  const herkunftWerte = useMemo(() => herkunftsrolleWerte(alleEintraege, profil), [alleEintraege, profil]);
+  const eintraege = useMemo(() => nachHerkunftsrolle(alleEintraege, profil, ausgeblendet), [alleEintraege, profil, ausgeblendet]);
+  const herkunftGefiltert = herkunftWerte.some((w) => ausgeblendet.has(w));
+  const nAbweichungen = alleEintraege.filter((e) => e.schema.length).length;
   const svs = useMemo(() => alleSachverhalte(eintraege, profil), [eintraege, profil]);
   const kz = useMemo(() => kennzahlen(eintraege, profil), [eintraege, profil]);
-  const status = useMemo(() => meldestatus(eintraege, profil), [eintraege, profil]);
+  const status = useMemo(() => meldestatus(alleEintraege, profil), [alleEintraege, profil]);
   const zone = zoneOder(profil.manifest.variablen?.zeitzone);
   const pruefJetzt = useMemo(() => (stichtag ? isoLokalZuZeitpunkt(stichtag, zone)?.datum : undefined) ?? new Date(uhr), [stichtag, zone, uhr]);
-  const red = useMemo(() => redaktionscheck(eintraege, profil, ausgabeWert, pruefJetzt), [eintraege, profil, ausgabeWert, pruefJetzt]);
+  const red = useMemo(() => redaktionscheck(alleEintraege, profil, ausgabeWert, pruefJetzt), [alleEintraege, profil, ausgabeWert, pruefJetzt]);
   /** Ganze Tage, die ein gesetzter Stichtag hinter der Geräteuhr liegt */
   const stichtagAlter = stichtag ? Math.floor((uhr - red.stand.jetzt.getTime()) / 864e5) : 0;
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
@@ -270,12 +283,34 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
     dateiAnbieten(alsCsv(rohtabelle(eintraege, profil)), mitDatum(exportStempel(zone, new Date(), "tag"), titel, "csv"), "text/csv;charset=utf-8");
 
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
+  /** Vermerk zur Herkunft im Lagebild-PDF: Verteilung der Meldungen, gegebenenfalls die Auswahl des Filters */
+  const herkunftVermerk = () => {
+    if (!r.herkunft) return undefined;
+    const verteilung = zaehle(eintraege.filter((e) => !e.fremd).map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))
+      .map(([w, n]) => `${w}: ${n}`)
+      .join(" · ");
+    const auswahl = herkunftGefiltert
+      ? ` Auswahl nach Herkunft; ausgeblendet: ${herkunftWerte
+          .filter((w) => ausgeblendet.has(w))
+          .map((w) => herkunftsrolleAnzeige(profil, w))
+          .join(", ")}.`
+      : "";
+    return `Herkunft der Meldungen: ${verteilung || "keine"}.${auswahl}`;
+  };
   const pdf = async () => {
     setPdfFehler(null);
     const tag = exportStempel(zone, new Date(), "tag");
-    const kopf = ["Meldung", "Sachverhalt", lBeurteilung, ...(r.sv_tendenz ? [lTendenz] : []), ...(ks.handlungsrelevant ? ["Handlungsrelevant bis"] : [])];
+    const kopf = [
+      "Meldung",
+      ...(r.herkunft ? ["Herkunft"] : []),
+      "Sachverhalt",
+      lBeurteilung,
+      ...(r.sv_tendenz ? [lTendenz] : []),
+      ...(ks.handlungsrelevant ? ["Handlungsrelevant bis"] : []),
+    ];
     const zeilen = sortiert.map((s) => [
       absender(s.eintrag, profil),
+      ...(r.herkunft ? [herkunftsrolleAnzeige(profil, s.herkunftsrolle)] : []),
       s.bezeichnung || "(ohne Bezeichnung)",
       s.beurteilung || "keine Angabe",
       ...(r.sv_tendenz ? [s.tendenz || "keine Angabe"] : []),
@@ -288,13 +323,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
         titel: absender(e, profil),
         zusatz: [
           ["Quelldatei", e.name],
+          ...(r.herkunft ? [["Herkunft", herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))]] : []),
           ["Schemaprüfung", e.schema.length ? `${e.schema.length} Abweichung(en)` : "ohne Befund"],
         ],
       }));
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
       const { lagebildAlsPdf } = await import("../dokumente/pdf");
-      dateiAnbieten(lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE()), mitDatum(tag, titel, "pdf"), "application/pdf");
+      dateiAnbieten(lagebildAlsPdf(profil, titel, [kopf, ...zeilen], meldungen, heuteDE(), herkunftVermerk()), mitDatum(tag, titel, "pdf"), "application/pdf");
     } catch (e) {
       setPdfFehler(`Das PDF konnte nicht erzeugt werden (${(e as Error)?.message || String(e)}).`);
     }
@@ -439,7 +475,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
         </div>
       )}
 
-      {eintraege.length === 0 ? (
+      {alleEintraege.length === 0 ? (
         <p className="leer">Noch keine Meldungen geladen.</p>
       ) : (
         <>
@@ -467,7 +503,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             <LagebildUebergabe
               key={uebergabeOffen}
               profil={profil}
-              eintraege={eintraege}
+              eintraege={alleEintraege}
               eigen={eigen}
               dateiZu={dateiZu}
               uebergeben={(liste) => {
@@ -480,12 +516,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               }}
             />
           )}
-          <details className="lb-dateiliste" open={eintraege.length <= 4}>
+          <details className="lb-dateiliste" open={alleEintraege.length <= 4}>
             <summary>
-              Dateien ({eintraege.length}){kz.schemaAbweichungen ? ` · ${kz.schemaAbweichungen} mit Schemaabweichung` : ""}
+              Dateien ({alleEintraege.length}){nAbweichungen ? ` · ${nAbweichungen} mit Schemaabweichung` : ""}
             </summary>
             <ul className="lb-dateien">
-              {eintraege.map((e) => (
+              {alleEintraege.map((e) => (
                 <li key={e.id} title={e.schema.map((b) => b.text).join("\n") || undefined}>
                   <span className="lb-datei-name">{e.name}</span>
                   <Marken e={e} profil={profil} eigen={eigen(e)} />
@@ -496,6 +532,41 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               ))}
             </ul>
           </details>
+
+          {herkunftWerte.length > 0 && (
+            <fieldset className="lb-herkunft">
+              <legend>Herkunft</legend>
+              <div className="lb-herkunft-werte">
+                {herkunftWerte.map((w) => {
+                  const n = alleEintraege.filter((e) => herkunftsrolleVon(e, profil) === w).length;
+                  return (
+                    <label key={w}>
+                      <input
+                        type="checkbox"
+                        checked={!ausgeblendet.has(w)}
+                        onChange={(ev) => {
+                          const an = ev.target.checked;
+                          setAusgeblendet((alt) => {
+                            const neu = new Set(alt);
+                            if (an) neu.delete(w);
+                            else neu.add(w);
+                            return neu;
+                          });
+                        }}
+                      />{" "}
+                      {herkunftsrolleAnzeige(profil, w)} ({n})
+                    </label>
+                  );
+                })}
+              </div>
+              {herkunftGefiltert && (
+                <p className="hinweis">
+                  Auswahl nach Herkunft: {kz.meldungen + kz.fremd} von {alleEintraege.length} Meldungen in Übersicht, Meldungen, Sachverhalten, Lagenradar,
+                  Kopiervorlage, Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe berücksichtigen alle Meldungen.
+                </p>
+              )}
+            </fieldset>
+          )}
 
           <nav className="lb-reiter" aria-label="Ansichten" ref={reiterRef}>
             {REITER.map((t) => (
@@ -570,6 +641,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                           {z.eintraege.length ? "✓" : "○"}
                         </span>
                         <span className="lb-status-name">{z.name}</span>
+                        {r.herkunft && z.eintraege.length > 0 && (
+                          <Marke farbe="amt">
+                            Herkunft: {[...new Set(z.eintraege.map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))].join(", ")}
+                          </Marke>
+                        )}
                         {z.eintraege.length > 0 && (
                           <span
                             className="lb-status-zahl"
@@ -596,7 +672,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                     ))}
                   </ul>
                   {status.weitere.length > 0 && (
-                    <p className="hinweis">Weitere Meldungen ohne Eintrag in der Kontaktliste: {status.weitere.map((e) => absender(e, profil)).join(" · ")}</p>
+                    <p className="hinweis">
+                      Weitere Meldungen ohne Eintrag in der Kontaktliste:{" "}
+                      {status.weitere
+                        .map((e) => absender(e, profil) + (r.herkunft ? ` (Herkunft: ${herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))})` : ""))
+                        .join(" · ")}
+                    </p>
                   )}
                 </>
               )}
@@ -613,6 +694,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       <Balken
                         titel={`${bezeichnung(ui, `${r.sachverhalte}[].${r.sv_art}`)} (Mehrfachnennung)`}
                         werte={zaehle(svs.flatMap((s) => (s.arten.length ? s.arten : [""])))}
+                      />
+                    )}
+                    {r.herkunft && (
+                      <Balken
+                        titel="Herkunft (Meldungen)"
+                        werte={zaehle(eintraege.filter((e) => !e.fremd).map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))}
                       />
                     )}
                     <Balken titel="Meldende Stellen" werte={zaehle(eintraege.filter((e) => !e.fremd).map((e) => absender(e, profil)))} />
@@ -721,6 +808,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       <tr key={`${s.eintrag.id}-${s.index}`}>
                         <td>
                           <strong>{absender(s.eintrag, profil)}</strong>
+                          {r.herkunft && (
+                            <span className="lb-svmarken">
+                              <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>
+                            </span>
+                          )}
                         </td>
                         <td>
                           {s.bezeichnung || "–"}
@@ -775,7 +867,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       <article key={`${s.eintrag.id}-${s.index}`} className="lb-karte">
                         <header>
                           <p className="lb-karte-titel">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</p>
-                          <p className="lb-karte-meta">{absender(s.eintrag, profil)}</p>
+                          <p className="lb-karte-meta">
+                            {absender(s.eintrag, profil)}
+                            {r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : ""}
+                          </p>
                         </header>
                         <div className="lb-karte-inhalt lb-radar">
                           {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={170} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}

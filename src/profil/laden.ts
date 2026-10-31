@@ -91,6 +91,9 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
     for (const [k, v] of Object.entries(r)) {
       if (["sv_textfelder", "sv_analysefelder", "beurteilung_hoch"].includes(k)) {
         if (!textListe(v)) fehler(`Rolle „${k}“ muss eine Liste von Texten sein.`);
+      } else if (k === "herkunft_kategorie") {
+        // seit 0.6.13 (Issue #114, A1): Herkunft → Quellenkategorie
+        if (!istObjekt(v) || !Object.values(v as object).every(istText)) fehler(`Rolle „${k}“ muss ein Objekt mit Texten sein.`);
       } else if (!istText(v)) fehler(`Rolle „${k}“ muss Text sein.`);
     }
   }
@@ -281,6 +284,25 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
     const pfad = r[rolle];
     if (pfad && !unterSchema(schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(pfad)]))
       befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“ im Sachverhalt.` });
+  }
+  // Herkunftsrolle der meldenden Stelle (seit 0.6.13, Issue #114, A1): Pfad auf Meldungsebene, Kategorien des Profils
+  if (r.herkunft && !unterSchema(schema, teilePfad(r.herkunft)))
+    befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „herkunft“ verweist auf das unbekannte Feld „${r.herkunft}“.` });
+  if (!r.herkunft && (r.herkunft_standard !== undefined || r.herkunft_kategorie !== undefined))
+    befunde.push({
+      stufe: "warnung",
+      code: "HERKUNFT_OHNE_ROLLE",
+      text: "Darstellungsdatei: „herkunft_standard“ oder „herkunft_kategorie“ ohne Rolle „herkunft“; die Angaben bleiben ohne Wirkung.",
+    });
+  if (r.herkunft_kategorie && typeof r.herkunft_kategorie === "object") {
+    const kategorien = Object.keys(ui.quellen?.kategorien || {});
+    const unbekannt = Object.entries(r.herkunft_kategorie).filter(([, k]) => !kategorien.includes(k));
+    if (unbekannt.length)
+      befunde.push({
+        stufe: "warnung",
+        code: "HERKUNFT_KATEGORIE_UNBEKANNT",
+        text: `Darstellungsdatei: „herkunft_kategorie“ nennt Kategorien, die „quellen.kategorien“ nicht führt: ${unbekannt.map(([h, k]) => `${h} → ${k}`).join(", ")}.`,
+      });
   }
   if (r.zeitstrahl && !r.sv_kennung)
     befunde.push({

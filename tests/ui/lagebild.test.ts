@@ -84,3 +84,65 @@ describe("Lagebild: Schreibfehler des Gerätespeichers", () => {
     expect(speicher.werte.get(schluessel)).toEqual(vorhanden);
   });
 });
+
+// Herkunftsrolle der meldenden Stelle (seit 0.6.13, Issue #114, A1): Kennzeichen je Meldung und Sachverhalt, Filter
+describe("I114-A1: Herkunft im Lagebild", () => {
+  async function mitHerkunft(rollen: boolean) {
+    const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
+    const p = (await profil("lead-beispiel")).profil!;
+    if (rollen) {
+      p.schema.properties.kritis = { type: "object", properties: { rolle: { type: "string" } } };
+      Object.assign(p.ui.rollen, { herkunft: "kritis.rolle", herkunft_standard: "Behörde", herkunft_kategorie: { Betreiber: "B", Behörde: "A" } });
+      const ordner = "beispiele/orkantief-ilka/";
+      const erste = Object.keys(p.dateien)
+        .filter((k) => k.startsWith(ordner) && k.endsWith(".json"))
+        .sort()[0]!;
+      const d = JSON.parse(p.dateien[erste]!);
+      d.meldende_stelle = "Netzbetreiber Muster GmbH";
+      d.kritis = { rolle: "Betreiber" };
+      p.dateien[`${ordner}zz-betreiber.json`] = JSON.stringify(d);
+    }
+    await einhaengen(React.createElement(LagebildAnsicht, { profil: p, uebergeben: () => {}, oeffnen: () => {} }));
+    await beispielLaden();
+  }
+  const filter = (name: RegExp) =>
+    [...document.querySelectorAll<HTMLLabelElement>(".lb-herkunft label")].find((l) => name.test(l.textContent || ""))!.querySelector("input")!;
+
+  it("zeigt die Herkunft je Meldung und Sachverhalt und filtert nach Herkunft", async () => {
+    await mitHerkunft(true);
+    expect(seitentext()).toContain("8 Meldungen · 9 Sachverhalte");
+    expect(document.querySelector(".lb-herkunft legend")?.textContent).toBe("Herkunft");
+    expect(seitentext()).toContain("Behörde (A) (7)");
+    expect(seitentext()).toContain("Betreiber (B) (1)");
+    expect(seitentext()).toContain("Herkunft (Meldungen)");
+
+    await klick(knopf("Meldungen"));
+    expect(document.querySelectorAll(".lb-karte .lb-marke.lb-amt")).not.toHaveLength(0);
+    expect(seitentext()).toContain("Herkunft: Betreiber (B)");
+
+    await klick(knopf("Sachverhalte"));
+    const zellen = [...document.querySelectorAll(".lb-tabelle tbody tr td:first-child")].map((td) => td.textContent);
+    expect(zellen.filter((t) => t?.includes("Herkunft: Betreiber (B)"))).toHaveLength(1);
+    expect(zellen.filter((t) => t?.includes("Herkunft: Behörde (A)"))).toHaveLength(8);
+
+    await act(async () => filter(/^\s*Behörde/).click());
+    expect(seitentext()).toContain("1 Meldung · 1 Sachverhalt");
+    expect(seitentext()).toContain("Auswahl nach Herkunft: 1 von 8 Meldungen");
+    expect([...document.querySelectorAll(".lb-tabelle tbody tr")]).toHaveLength(1);
+    // Dateiliste zeigt weiterhin alle Dateien
+    expect(document.querySelector(".lb-dateiliste summary")?.textContent).toContain("Dateien (8)");
+
+    await act(async () => filter(/^\s*Behörde/).click());
+    expect(seitentext()).toContain("8 Meldungen · 9 Sachverhalte");
+    expect(seitentext()).not.toContain("Auswahl nach Herkunft");
+  });
+
+  it("ohne Rolle kein Filter und keine Herkunftskennzeichen (Regression Ilka)", async () => {
+    await mitHerkunft(false);
+    expect(seitentext()).toContain("7 Meldungen · 8 Sachverhalte");
+    expect(document.querySelector(".lb-herkunft")).toBeNull();
+    expect(seitentext()).not.toContain("Herkunft");
+    await klick(knopf("Sachverhalte"));
+    expect(seitentext()).not.toContain("Herkunft");
+  });
+});
