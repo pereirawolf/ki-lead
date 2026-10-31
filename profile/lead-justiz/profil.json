@@ -1,0 +1,50 @@
+{
+  "format": "lead-profil/1",
+  "id": "lead.justiz.landeslagebild",
+  "name": "Lagebild Justiz – Landesprofil (Erprobungsentwurf)",
+  "beschreibung": "Erprobungsentwurf eines Landesprofils zur Funktionsfähigkeit der Justiz eines Landes, Beispiel Thüringen: Funktionskatalog F1–F8 mit Funktions- und Statusmatrix, getrennter Bewertung von Beurteilung, Dringlichkeit, Tendenz und Erkenntnissicherheit, ohne Lagenradar und ohne ereignisbezogene SOPs. Nur fiktive oder offen zugängliche Daten; keine Inhalte richterlicher Entscheidungen, keine Einzelverfahren, keine Personen.",
+  "version": "0.1.0",
+  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
+  "lizenz": "CC-BY-4.0",
+  "ebene": "Land",
+  "referenzraum": "Funktionsfähigkeit der Justiz in Thüringen",
+  "variablen": {
+    "land": "Thüringen",
+    "meldende_stelle": "Lagestelle Justiz (Beispiel)",
+    "institutionstyp": "Justizverwaltung",
+    "kurzname": "Lagestelle Justiz",
+    "zeitzone": "Europe/Berlin",
+    "meldetakt": "monatlich (Funktionslagebild); im Krisenlagebild je Lagezyklus",
+    "lageprodukt": "Lagebild Justiz",
+    "rolle_beschreibung": "Die meldende Stelle (Lagestelle Justiz (Beispiel)) ist eine fiktive Stelle der Landesjustizverwaltung. Sie führt Meldungen der Gerichte, Staatsanwaltschaften, Vollzugseinrichtungen und weiteren Stellen zu einem Lagebild über die Funktionsfähigkeit der Justiz zusammen. Sie hat keine Befugnis gegenüber Spruchkörpern, keine Dienstaufsicht und keine Weisungsbefugnis in Einzelsachen; ihre Hinweise richten sich an die Verwaltung und an die zuständigen Leitungen."
+  },
+  "meldung": {
+    "schema": "meldung.schema.json",
+    "ui": "meldung.ui.json",
+    "schema_id": "Lagebild-Justiz-Meldung-v1",
+    "eingang_schema_ids": ["Lagebild-Justiz-Meldung-v1"]
+  },
+  "anweisungen": {
+    "erfassung": "anweisung-erfassung.md",
+    "kurzfassung": "anweisung-kurzfassung.md",
+    "verdichtung": "anweisung-verdichtung.md"
+  },
+  "sop": {
+    "dateien": ["sop/A_Gemeinsame-Regeln.md"],
+    "teil_gemeinsam": "teil-a"
+  },
+  "kodierleitfaden": "kodierleitfaden.md",
+  "kontakte": "kontakte.json",
+  "beispiele": [
+    {
+      "titel": "Justiz Thüringen, Oktober 2026 (FIKTIV)",
+      "ordner": "beispiele/fiktiv-2026-10",
+      "hinweis": "Erfundene Meldungen: akute Störung des elektronischen Rechtsverkehrs, schleichende Einschränkung im Gerichtsvollzieherdienst und eine Fehlanzeige. Keine Meldung stammt von den genannten Stellen; alle Zahlen sind erfunden."
+    }
+  ],
+  "modelle": {
+    "vorverarbeitung": "claude-haiku-5-5",
+    "erfassung": "claude-opus-5-5",
+    "verdichtung": "claude-opus-5-5"
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "Lagebild-Justiz-Meldung-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell"
+  },
+  "land": "Thüringen",
+  "meldende_stelle": "Thüringer Oberlandesgericht",
+  "institutionstyp": "Gericht",
+  "meldeart": "Regelmeldung",
+  "berichtsmodus": "Funktionslagebild",
+  "meldezeitpunkt": "2026-10-07T10:00",
+  "meldezeitraum": {
+    "von": "2026-09-01",
+    "bis": "2026-09-30"
+  },
+  "funktionslage": [
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "ordentliche Gerichtsbarkeit, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Keine Ausfälle im Berichtszeitraum [Q2]."
+    },
+    {
+      "funktion": "F2 Richterlicher Bereitschaftsdienst",
+      "bereich": "ordentliche Gerichtsbarkeit, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Alle Bereitschaftsbezirke besetzt [Q2]."
+    },
+    {
+      "funktion": "F3 Zeitkritische Strafverfolgung und Haftsachen",
+      "bereich": "ordentliche Gerichtsbarkeit, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV [Q2]."
+    },
+    {
+      "funktion": "F4 Sicherer und menschenwürdiger Vollzug",
+      "bereich": "ordentliche Gerichtsbarkeit, landesweit",
+      "status": "nicht zuständig",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": ""
+    },
+    {
+      "funktion": "F5 Register und sonstige Rechtspflege",
+      "bereich": "ordentliche Gerichtsbarkeit, landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV [Q2]."
+    },
+    {
+      "funktion": "F6 Vollstreckung",
+      "bereich": "LG-Bezirk Meiningen",
+      "status": "eingeschränkt",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Drei Gerichtsvollzieherbezirke in Vertretung [Q1]."
+    },
+    {
+      "funktion": "F6 Vollstreckung",
+      "bereich": "übrige LG-Bezirke",
+      "status": "eingeschränkt",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Zwei Bezirke in Vertretung [Q1]."
+    },
+    {
+      "funktion": "F7 Ambulante soziale Dienste",
+      "bereich": "landesweit",
+      "status": "gesichert",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV [Q2]."
+    },
+    {
+      "funktion": "F8 Ausbildung und Nachwuchssicherung",
+      "bereich": "Gerichtsvollzieherdienst",
+      "status": "eingeschränkt",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-09-30",
+      "hinweis": "FIKTIV. Ausbildung ruht seit 2025 [Q1]."
+    }
+  ],
+  "quellen": "[Q1] A – Thüringer Oberlandesgericht, Präsidialverwaltung (30.09.2026): Quartalsübersicht Gerichtsvollzieherdienst III/2026 (FIKTIV). Dokument ohne URL [Zugriff: 07.10.2026]\n[Q2] A – Thüringer Oberlandesgericht, Präsidialverwaltung (30.09.2026): Geschäftsübersicht ordentliche Gerichtsbarkeit September 2026 (FIKTIV). Dokument ohne URL [Zugriff: 07.10.2026]",
+  "zeitstrahl": "",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-20260707-3RVA",
+      "bezug": [],
+      "bezeichnung": "FIKTIV: Zunehmende Vertretungslagen im Gerichtsvollzieherdienst bei ruhender Ausbildung",
+      "funktionen": [
+        "F6 Vollstreckung",
+        "F8 Ausbildung und Nachwuchssicherung"
+      ],
+      "primaerfunktion": "F6 Vollstreckung",
+      "ort": "ordentliche Gerichtsbarkeit, Schwerpunkt LG-Bezirk Meiningen",
+      "institutionen": "Amtsgerichte (Gerichtsvollzieherdienst)",
+      "ressourcen": [
+        "Personal"
+      ],
+      "eintritt": "",
+      "festgestellt": "2026-07-07",
+      "notfall_ausgerufen": "",
+      "betriebsphase": "Normalbetrieb",
+      "zeitliche_reichweite": "Jahre",
+      "analyse": {
+        "lage": "Kernaussage: Die Zwangsvollstreckung wird erbracht, doch die Zahl der Gerichtsvollzieherbezirke in Vertretung ist von zwei auf fünf gestiegen, drei davon im LG-Bezirk Meiningen [Q1]. Belegt: Die Ausbildung ruht [Q1]. Die übrigen Funktionen der ordentlichen Gerichtsbarkeit waren im Berichtszeitraum gesichert [Q2].",
+        "folgen": "Eingetreten: längere Wege und Vertretungslast in fünf Bezirken [Q1]. Möglich: Bis Ende 2029 erwartet die Präsidialverwaltung 14 Altersabgänge (Prognose) [Q1]; ohne Nachwuchs wären Bezirke ab etwa 2028 nicht mehr dauerhaft zu besetzen. Erledigungsdauern werden nicht erhoben.",
+        "massnahmen": "Bestehende Maßnahmen: Vertretungsregelungen der Amtsgerichte, Status umgesetzt [Q1]. Entscheidungsbedarf: Wiederaufnahme der Ausbildung und Ausbildungskapazität 2027, Justizministerium (Personal), vor der Haushaltsaufstellung, spätestens 31.03.2027.",
+        "abhaengigkeiten": "Die Nachwuchssicherung (F8) hängt von Ausbildungsplätzen ab, die das Land selbst steuert. Eine Ersatzlösung für dauerhaft unbesetzte Bezirke ist nicht belegt."
+      },
+      "indikatoren": [
+        {
+          "indikator": "I8 Gerichtsvollzieherbezirke in Vertretung",
+          "wert": 5,
+          "einheit": "Bezirke",
+          "wertart": "beobachtet",
+          "stand": "2026-09-30",
+          "quelle": "[Q1]"
+        },
+        {
+          "indikator": "I8 Gerichtsvollzieherbezirke in Vertretung (Vorquartal)",
+          "wert": 2,
+          "einheit": "Bezirke",
+          "wertart": "beobachtet",
+          "stand": "2026-06-30",
+          "quelle": "[Q1]"
+        },
+        {
+          "indikator": "Altersabgänge bis 31.12.2029",
+          "wert": 14,
+          "einheit": "Personen",
+          "wertart": "Prognose",
+          "stand": "2026-09-30",
+          "quelle": "[Q1]"
+        },
+        {
+          "indikator": "Mindestbesetzung je Bezirk",
+          "wert": null,
+          "einheit": "Personen",
+          "wertart": "normative Anforderung",
+          "stand": "",
+          "quelle": ""
+        }
+      ],
+      "bewertung": {
+        "beurteilung": "geringfügig",
+        "dringlichkeit": "mittelfristig",
+        "tendenz": "Verschärfung",
+        "erkenntnissicherheit": "bestätigt",
+        "bewertung_text": "Kernaussage: Die Vollstreckung ist gesichert, ihre personelle Grundlage verschlechtert sich.\n\nBeurteilung „geringfügig“: Die Leistung wird im Regelumfang erbracht; ein Fristrisiko ist nicht belegt [Q1].\n\nDringlichkeit „mittelfristig“: Über die Ausbildung 2027 ist vor der Haushaltsaufstellung zu entscheiden.\n\nTendenz „Verschärfung“: Vertretungslagen von zwei auf fünf Bezirke binnen eines Quartals [Q1].\n\nErkenntnissicherheit „bestätigt“: Bestandszahlen der Präsidialverwaltung; Abgänge sind Prognose.\n\nNeubewertung bei: mehr als fünf Bezirken in Vertretung oder einem dauerhaft unbesetzten Bezirk.\nHandlungsrelevant bis: 31.03.2027 – Entscheidung über Ausbildungsbeginn 2027, Justizministerium (Personal)\nÄnderung zur Vormeldung: Bezirke in Vertretung von zwei auf fünf gestiegen.\nErkenntnislücke: Erledigungsdauern im Gerichtsvollzieherdienst werden nicht erhoben."
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "FIKTIV",
+      "datum": "2026-10-07",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "FIKTIV",
+      "datum": "2026-10-07",
+      "hz": ""
+    },
+    "versand": {
+      "name": "FIKTIV",
+      "datum": "2026-10-07",
+      "hz": ""
+    }
+  }
+}

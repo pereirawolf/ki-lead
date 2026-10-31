@@ -1,0 +1,149 @@
+{
+  "schema": "Lagebild-Justiz-Meldung-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell"
+  },
+  "land": "Thüringen",
+  "meldende_stelle": "Thüringer Oberlandesgericht",
+  "institutionstyp": "Gericht",
+  "meldeart": "Anlassmeldung",
+  "berichtsmodus": "Krisenlagebild",
+  "meldezeitpunkt": "2026-10-13T11:30",
+  "meldezeitraum": {
+    "von": "2026-10-13T08:00",
+    "bis": "2026-10-13T11:30"
+  },
+  "funktionslage": [
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "LG-Bezirk Gera",
+      "status": "erheblich eingeschränkt",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-10-13T11:15",
+      "hinweis": "FIKTIV. Kein elektronischer Eingang und keine E-Akte; Eilsachen per Fax und Papier [Q1]."
+    },
+    {
+      "funktion": "F2 Richterlicher Bereitschaftsdienst",
+      "bereich": "LG-Bezirk Gera",
+      "status": "eingeschränkt",
+      "erkenntnissicherheit": "vorläufig",
+      "stand": "2026-10-13T11:15",
+      "hinweis": "FIKTIV. Bereitschaftsdienst erreichbar, arbeitet mit Papiervordrucken ohne Aktenzugriff [Q3]."
+    },
+    {
+      "funktion": "F3 Zeitkritische Strafverfolgung und Haftsachen",
+      "bereich": "LG-Bezirk Gera",
+      "status": "eingeschränkt",
+      "erkenntnissicherheit": "vorläufig",
+      "stand": "2026-10-13T11:15",
+      "hinweis": "FIKTIV. Vorführungen am Vormittag erfolgt; Aktenzugriff für Nachmittagstermine offen [Q3]."
+    },
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "LG-Bezirk Erfurt",
+      "status": "nicht betroffen",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-10-13T10:50",
+      "hinweis": "FIKTIV. Kein Teil des gestörten Netzsegments [Q2]."
+    },
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "LG-Bezirk Mühlhausen",
+      "status": "nicht betroffen",
+      "erkenntnissicherheit": "bestätigt",
+      "stand": "2026-10-13T10:50",
+      "hinweis": "FIKTIV. Kein Teil des gestörten Netzsegments [Q2]."
+    },
+    {
+      "funktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "bereich": "LG-Bezirk Meiningen",
+      "status": "unbekannt",
+      "erkenntnissicherheit": "",
+      "stand": "",
+      "hinweis": "FIKTIV. Rückmeldung steht aus."
+    }
+  ],
+  "quellen": "[Q1] A – Thüringer Oberlandesgericht, IT-Stelle (13.10.2026): Störungsmeldung E-Akte und EGVP-Empfang LG-Bezirk Gera, Stand 11:15 Uhr (FIKTIV). Dokument ohne URL [Zugriff: 13.10.2026]\n[Q2] B – Landes-IT-Dienstleister (13.10.2026): Störungsinformation Netzsegment Ostthüringen, Stand 10:50 Uhr (FIKTIV). Dokument ohne URL [Zugriff: 13.10.2026]\n[Q3] A – Landgericht Gera, Präsidialverwaltung (13.10.2026): Lagemitteilung Bereitschaftsdienst und Vorführungen, Stand 11:15 Uhr (FIKTIV). Dokument ohne URL [Zugriff: 13.10.2026]",
+  "zeitstrahl": "[Z1] 2026-10-13T08:05 · DE-TH-20261013-K7QM · Störung – Netzstörung beim Landes-IT-Dienstleister; E-Akte und EGVP-Empfang im LG-Bezirk Gera nicht verfügbar [Q2] · aufgenommen 2026-10-13T11:30\n[Z2] 2026-10-13T08:45 · DE-TH-20261013-K7QM · Maßnahme – Notbetrieb ausgerufen; Eilsachen per Fax und Papier [Q1] · aufgenommen 2026-10-13T11:30",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-20261013-K7QM",
+      "bezug": [],
+      "bezeichnung": "FIKTIV: Ausfall E-Akte und EGVP-Empfang im LG-Bezirk Gera nach Netzstörung",
+      "funktionen": [
+        "F1 Rechtsschutz und Eilrechtsschutz",
+        "F2 Richterlicher Bereitschaftsdienst",
+        "F3 Zeitkritische Strafverfolgung und Haftsachen"
+      ],
+      "primaerfunktion": "F1 Rechtsschutz und Eilrechtsschutz",
+      "ort": "LG-Bezirk Gera",
+      "institutionen": "Landgericht Gera und die Amtsgerichte des Bezirks (fiktiv betroffen)",
+      "ressourcen": [
+        "Justiz-IT und elektronischer Rechtsverkehr",
+        "Externe Dienste und Schnittstellen"
+      ],
+      "eintritt": "2026-10-13T08:05",
+      "festgestellt": "2026-10-13T08:20",
+      "notfall_ausgerufen": "2026-10-13T08:45",
+      "betriebsphase": "Notbetrieb",
+      "zeitliche_reichweite": "Stunden",
+      "analyse": {
+        "lage": "Kernaussage: Im LG-Bezirk Gera sind elektronischer Eingang und E-Akte seit 08:05 Uhr nicht verfügbar; Eilsachen gehen per Fax ein und werden auf Papier bearbeitet [Q1]. Belegt: Ursache ist eine Netzstörung beim Landes-IT-Dienstleister; die übrigen LG-Bezirke außer Meiningen sind nicht betroffen [Q2]. Nicht belegt ist die Lage im LG-Bezirk Meiningen.",
+        "folgen": "Eingetreten: Elektronische Eingänge werden nicht angenommen; Bereitschaftsdienst und Haftsachen arbeiten ohne Aktenzugriff [Q1, Q3]. Möglich: Dauert der Ausfall über 14:00 Uhr hinaus, sind Vorführungen am Nachmittag ohne Aktenzugriff zu entscheiden (Art. 104 GG, Frist bis Ende des Folgetags).",
+        "massnahmen": "Bestehende Maßnahmen: Notbetrieb mit Fax- und Papierersatz seit 08:45 Uhr, Status umgesetzt, IT-Stelle des Oberlandesgerichts [Q1]. Entscheidungsbedarf: (1) öffentliche Störungsmitteilung mit Beginnzeit für Ersatzeinreichungen, IT-Stelle, bis 12:30 Uhr; (2) Ausweichweg für Aktenzugriff in Haftsachen, Präsidialverwaltung Landgericht Gera mit Staatsanwaltschaft Gera, bis 14:00 Uhr.",
+        "abhaengigkeiten": "Ursache liegt außerhalb des Justizressorts beim Landes-IT-Dienstleister [Q2]. Ersatzlösung Fax ist für den Eingang belegt [Q1]; ein Ersatz für den Aktenzugriff ist nicht belegt."
+      },
+      "indikatoren": [
+        {
+          "indikator": "I2 ERV-Funktionskette: Annahme ausgefallen seit",
+          "wert": 3.4,
+          "einheit": "h",
+          "wertart": "beobachtet",
+          "stand": "2026-10-13T11:30",
+          "quelle": "[Q1]"
+        },
+        {
+          "indikator": "Restdauer bis Wiederanlauf",
+          "wert": 2,
+          "einheit": "h",
+          "wertart": "Prognose",
+          "stand": "2026-10-13T10:50",
+          "quelle": "[Q2]"
+        },
+        {
+          "indikator": "Wiederanlaufzeit laut Notfallkonzept",
+          "wert": null,
+          "einheit": "h",
+          "wertart": "BCM-Planwert",
+          "stand": "",
+          "quelle": ""
+        }
+      ],
+      "bewertung": {
+        "beurteilung": "erheblich",
+        "dringlichkeit": "sofort",
+        "tendenz": "Stabilisierung",
+        "erkenntnissicherheit": "vorläufig",
+        "bewertung_text": "Kernaussage: Eilrechtsschutz und Haftsachen im LG-Bezirk Gera laufen im Notbetrieb; die Zeitanker werden derzeit gehalten.\n\nBeurteilung „erheblich“: Priorisierte Leistungen gelingen nur mit Fax- und Papierersatz und ohne Aktenzugriff [Q1, Q3].\n\nDringlichkeit „sofort“: Störungsmitteilung und Ausweichweg für Haftsachen sind heute zu entscheiden.\n\nTendenz „Stabilisierung“: Der Dienstleister erwartet den Wiederanlauf in rund zwei Stunden [Q2].\n\nErkenntnissicherheit „vorläufig“: Ursache bestätigt, Ausdehnung und Wiederanlauf noch nicht bestätigt.\n\nNeubewertung bei: kein Wiederanlauf bis 14:00 Uhr oder Rückmeldung aus dem LG-Bezirk Meiningen.\nHandlungsrelevant bis: 13.10.2026 14:00 – Ausweichweg für Aktenzugriff in Haftsachen festlegen, Präsidialverwaltung Landgericht Gera mit Staatsanwaltschaft Gera\nErkenntnislücke: Planwert der Wiederanlaufzeit liegt nicht vor."
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "FIKTIV",
+      "datum": "2026-10-13",
+      "hz": ""
+    },
+    "freigabe": {
+      "name": "FIKTIV",
+      "datum": "2026-10-13",
+      "hz": ""
+    },
+    "versand": {
+      "name": "FIKTIV",
+      "datum": "2026-10-13",
+      "hz": ""
+    }
+  }
+}

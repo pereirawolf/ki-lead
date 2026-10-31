@@ -87,7 +87,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
 | 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ (Nachtrag vom 31.10.2026: Pull Request „Lizenzen: Kurzsatz „die Vorlagen“ und REUSE.toml (Issues #88, #89)“; in der App nur der Lizenzsatz unter „Über“) |
 | 0.6.16 | letzter Commit des Pull Requests „Erprobungsansicht: Forschungsfunktionen nur nach Wahl; 0.6.16“ |
-| 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ |
+| 0.6.17 | letzter Commit des Pull Requests „Betreiberkonfiguration und Endpunkt der Stelle; 0.6.17“ (Nachtrag vom 31.10.2026: Profil „Lagebild Justiz“ 0.1.0 und docs/KI-VERORDNUNG.md 1.4 mit dem Pull Request „Profil Lagebild Justiz 0.1.0 (Erprobungsentwurf)“, ohne Änderung der App) |
 
 ## [0.6.17] – 31.10.2026
 

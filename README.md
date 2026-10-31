@@ -88,6 +88,7 @@ Das Format beschreibt [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md). Mitgeliefert
 
 - **`profile/lead-beispiel`:** fiktive Koordinierungsstelle auf Bundesebene mit LEAD-Meldevorlage, Kodierleitfaden mit Lagenradar, den drei Arbeitsanweisungen und der SOP-Sammelmappe: gemeinsame Regeln (Teil A), 17 Dach-SOPs zu den Ereignisarten (B01–B17) und 17 ergänzende Themen- und Querschnittsbausteine (C01–C17). Teil C ist als Inhaltsgerüst gekennzeichnet und dient bis zur fachlichen Konkretisierung und Freigabe als ergänzende Prüfhilfe.
 - **`profile/muster`:** Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern, schlankes Schema, CC0 1.0.
+- **`profile/lead-justiz`:** Erprobungsentwurf eines Landesprofils zur Funktionsfähigkeit der Justiz (Beispiel Thüringen): Funktionskatalog F1–F8 mit Funktions- und Statusmatrix, getrennter Bewertung von Beurteilung, Dringlichkeit, Tendenz und Erkenntnissicherheit, ohne Lagenradar und ohne ereignisbezogene SOPs; drei fiktive Beispielmeldungen. Fachlich nicht abgenommen.
 
 **Eigene Profile** legt man lokal in den Ordner `privat/profile/<name>/`. Der Ordner ist per `.gitignore` vom Repository ausgeschlossen. `npm run dev` lädt ihn mit, ein Produktionsbuild nur mit `KI_LEAD_PRIVAT=1 npm run build`. Alternativ importiert man ein Profil in der App als ZIP-Datei (`.leadprofil`). Kontaktadressen gehören in `kontakte.lokal.json`, das ebenfalls nicht eingecheckt wird.
 
