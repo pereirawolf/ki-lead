@@ -17,7 +17,8 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   timeout: 180_000,
-  reporter: "list",
+  // In der CI zusätzlich „github“: Fehlschläge erscheinen als Annotation am Lauf (seit 0.6.17)
+  reporter: process.env.CI ? [["list"], ["github"]] : "list",
   use: {
     baseURL: `http://localhost:${PORT}/`,
     locale: "de-DE",

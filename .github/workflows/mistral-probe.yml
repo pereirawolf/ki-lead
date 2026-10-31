@@ -68,3 +68,7 @@ jobs:
         run: |
           if [ -f probe-bericht.md ]; then cat probe-bericht.md >> "$GITHUB_STEP_SUMMARY"; else echo "Kein Bericht erzeugt." >> "$GITHUB_STEP_SUMMARY"; fi
           if [ -f probe-bericht-stelle.md ]; then cat probe-bericht-stelle.md >> "$GITHUB_STEP_SUMMARY"; fi
+          # Berichte zusätzlich als Annotation, lesbar auch über die API der Check-Runs (seit 0.6.17)
+          for f in probe-bericht.md probe-bericht-stelle.md; do
+            if [ -f "$f" ]; then echo "::notice title=$f::$(sed 's/%/%25/g' "$f" | awk 'BEGIN{ORS="%0A"} {print}')"; fi
+          done
