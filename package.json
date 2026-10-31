@@ -1,6 +1,6 @@
 {
   "name": "ki-lead",
-  "version": "0.6.14",
+  "version": "0.6.15",
   "description": "KI-LEAD – Forschungsdemonstrator für die LEAD-Systematik (Lageerfassung, -auswertung und -darstellung)",
   "scripts": {
     "dev": "vite",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@capacitor/cli": "8.5.3",
-    "@playwright/test": "^1.56.1",
+    "@playwright/test": "1.57.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.6.5",
     "@types/react": "^18.3.31",

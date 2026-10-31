@@ -64,12 +64,13 @@ import {
   type AblageId,
 } from "../schluessel/ablage";
 import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
+import { DatenBereich } from "./Daten";
 import { UeberAbschnitt } from "./Ueber";
 import { TestlaeufeBereich } from "./Testlaeufe";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
 
-export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "ueber";
+export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "daten" | "ueber";
 
 export const BEREICHE: { id: EinstellungsBereich; titel: string }[] = [
   { id: "uebersicht", titel: "Übersicht" },
@@ -78,6 +79,7 @@ export const BEREICHE: { id: EinstellungsBereich; titel: string }[] = [
   { id: "testlaeufe", titel: "Testläufe" },
   { id: "recherche", titel: "Recherche & Grenzen" },
   { id: "darstellung", titel: "Darstellung" },
+  { id: "daten", titel: "Daten" },
   { id: "ueber", titel: "Über KI-LEAD" },
 ];
 
@@ -1172,6 +1174,7 @@ export function EinstellungenAnsicht({
           {aktuell === "testlaeufe" && <TestlaeufeBereich profil={profil} einstellungen={e} schluessel={schluessel} zeige={zeige} />}
           {aktuell === "recherche" && <RechercheBereich profil={profil} e={e} setEinstellungen={setEinstellungen} />}
           {aktuell === "darstellung" && farben && <FarbschemaAbschnitt profil={profil} zugang={farben} />}
+          {aktuell === "daten" && <DatenBereich zeitzone={profil?.manifest.variablen?.zeitzone} />}
           {aktuell === "ueber" && <UeberAbschnitt />}
         </div>
       </div>

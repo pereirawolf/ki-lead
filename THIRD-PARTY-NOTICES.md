@@ -136,7 +136,7 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 |---|---|---|---|
 | `@axe-core/playwright` | 4.14.0 | MPL-2.0 | Browsertests: automatische Prüfung der Barrierefreiheit mit axe-core (seit 0.6.5; MPL-2.0 wie axe-core, nur im Test, nicht ausgeliefert) |
 | `@capacitor/cli` | 8.5.3 | MIT | native Projekte erzeugen und abgleichen |
-| `@playwright/test` | 1.56.1 | Apache-2.0 | Browsertests |
+| `@playwright/test` | 1.57.0 | Apache-2.0 | Browsertests |
 | `@types/js-yaml` | 4.0.9 | MIT | Typdefinitionen |
 | `@types/node` | 26.6.5 | MIT | Typdefinitionen |
 | `@types/react` | 18.3.31 | MIT | Typdefinitionen |

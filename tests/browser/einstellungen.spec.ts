@@ -4,7 +4,7 @@
 import { expect, test } from "@playwright/test";
 import { bereich, netzVorbereiten, oeffnen } from "./hilfen";
 
-const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Über KI-LEAD"];
+const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
 
 test.beforeEach(async ({ page }) => {

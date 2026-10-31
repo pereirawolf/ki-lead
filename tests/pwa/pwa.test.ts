@@ -117,6 +117,10 @@ describe("PWA: stimmige Fassung beim Update (0.5.2, Startfehler nach 0.5.1)", ()
     expect(vorlage).toContain('new Request(adresse(d), { cache: "reload" })');
   });
 
+  it("findet vorgehaltene Dateien unabhängig von Vary (Modulskripte mit Origin, Server mit „Vary: Origin“)", () => {
+    expect(vorlage).toContain("c.match(anfrage, { ignoreSearch: true, ignoreVary: true })");
+  });
+
   it("erkennt die Verweise einer index.html und meldet Dateien außerhalb der Liste", () => {
     const html =
       '<link rel="manifest" href="./manifest.webmanifest" /><script src="./start-pruefung.js"></script><script type="module" crossorigin src="./assets/index-ALT.js"></script><link rel="stylesheet" href="./assets/index-X.css"><a href="https://example.org/">x</a>';

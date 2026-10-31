@@ -257,6 +257,20 @@ export async function alleSchluesselLesen(): Promise<Schluessel> {
 }
 
 /**
+ * Entfernt alle Schlüssel aus allen hier verfügbaren Ablagen und vergisst die Passphrase (seit 0.6.15, „Alle Daten
+ * dieses Geräts löschen“, TP-2026-W44-45). Der Gerätespeicher wird danach ohnehin geleert; hier zählen vor allem die
+ * Sitzung (Arbeitsspeicher) und der Schlüsselbund des Systems in der nativen App, die außerhalb von IndexedDB liegen.
+ */
+export async function alleSchluesselEntfernen(): Promise<void> {
+  for (const ab of ABLAGEN) {
+    // Die verschlüsselten Schlüssel entfernt passphraseVerwerfen(), auch wenn die Ablage gesperrt ist
+    if (!ab.verfuegbar() || ab.id === "passphrase") continue;
+    for (const a of ANBIETER) await ab.schreiben(a, "");
+  }
+  await passphraseVerwerfen();
+}
+
+/**
  * Wechselt die Ablage und zieht die Schlüssel mit um: erst in die neue schreiben, dann aus der alten entfernen.
  * Scheitert das Schreiben, bleibt alles wie zuvor.
  */

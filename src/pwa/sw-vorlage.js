@@ -104,10 +104,13 @@ self.addEventListener("fetch", (ereignis) => {
 
   // Dateien des Builds: aus dem Cache; Unbekanntes aus dem Netz, ohne es aufzunehmen. Ohne Netz und ohne Eintrag im
   // Cache eine Fehlerantwort statt eines unbehandelten Fehlers im Service Worker (seit 0.6.5, TP-2026-W44-21)
+  // ignoreVary (seit 0.6.15): Liefert der Server „Vary: Origin“ (etwa vite preview), passte die Anfrage eines
+  // Modulskripts (mit Origin) nicht zum vorgehaltenen Eintrag (ohne Origin); ohne Netz startete die App dann nicht.
+  // Der Cache enthält nur die Dateien genau dieser Fassung, eine Unterscheidung nach Kopfzeilen ist nicht nötig.
   ereignis.respondWith(
     caches
       .open(CACHE)
-      .then((c) => c.match(anfrage, { ignoreSearch: true }))
+      .then((c) => c.match(anfrage, { ignoreSearch: true, ignoreVary: true }))
       .then((antwort) => antwort || fetch(anfrage))
       .catch(() => Response.error()),
   );

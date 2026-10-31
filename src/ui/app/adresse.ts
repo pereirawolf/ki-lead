@@ -9,7 +9,16 @@ export type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen
 
 export const ANSICHTEN: readonly Ansicht[] = ["meldung", "ki", "lagebild", "profile", "einstellungen"];
 
-export const EINSTELLUNGS_BEREICHE: readonly EinstellungsBereich[] = ["uebersicht", "anbieter", "modelle", "testlaeufe", "recherche", "darstellung", "ueber"];
+export const EINSTELLUNGS_BEREICHE: readonly EinstellungsBereich[] = [
+  "uebersicht",
+  "anbieter",
+  "modelle",
+  "testlaeufe",
+  "recherche",
+  "darstellung",
+  "daten",
+  "ueber",
+];
 
 export const LAGEBILD_REITER = ["uebersicht", "meldungen", "sachverhalte", "radar", "redaktion", "kopiervorlage", "tabelle"] as const;
 export type LagebildReiter = (typeof LAGEBILD_REITER)[number];

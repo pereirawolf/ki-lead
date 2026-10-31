@@ -21,6 +21,12 @@ Weitere Befehle:
 - `npm run test:coverage` (seit 0.6.2): alle Tests mit Abdeckung (V8) für `src/kern`, `src/pipeline`, `src/anbieter` und seit 0.6.3 `src/forschung` (vorher Teil von `src/pipeline`); scheitert unter den Mindestwerten in `vite.config.ts` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %, knapp unter dem Stand vom 26.10.2026). Nicht Teil von `npm test`; Bericht unter `coverage/`.
 - `npm run lint` und `npm run format:check` (seit 0.6.2): ESLint mit typescript-eslint (`eslint.config.js`) und Prettier für Code, Tests, Skripte und Konfiguration; die CI führt beide vor den Tests aus. `no-explicit-any` ist eine Warnung und lässt den Lauf bestehen.
 
+## WebKit und wiederholtes Neuladen
+
+Playwright ist auf 1.57.0 festgelegt. Die zuvor verwendete Version 1.56.1 enthält einen WebKit-Fehler bei wiederholtem Neuladen nach `history.pushState()` ([Playwright #37766](https://github.com/microsoft/playwright/issues/37766)). Er lässt sich ohne KI-LEAD und ohne IndexedDB reproduzieren. Nach einer Änderung der Playwright-Version sind die zugehörigen Browser mit `npx playwright install chromium webkit` neu zu installieren. Der Test `navigation-neuladen.spec.ts` hält das wiederholte Neuladen nach Ansichtswechseln fest.
+
+Seit Playwright 1.57 laufen Anfragen des Service Workers in Chromium über den Browserkontext und unterliegen `context.setOffline`. Der Offline-Start in `pwa.spec.ts` prüft damit tatsächlich den Cache des Service Workers; unter 1.56.1 erreichten dessen Anfragen trotz Offline-Emulation den Server. Die Umgehung `PLAYWRIGHT_DISABLE_SERVICE_WORKER_NETWORK` nicht setzen: Sie würde diese Prüfung wieder aushebeln.
+
 ## Gestaffelte Prüfung in GitHub Actions
 
 Nicht jede Änderung braucht jeden Test. Änderungen an der LEAD-Systematik (SOP, Arbeitsanweisungen, Kodierleitfaden), an der Dokumentation oder an den Bewertungsfällen ändern weder Programmcode noch Bedienoberfläche; ihre Konsistenz prüfen die Vitest-Tests unter `tests/profil/`, `tests/kern/` und `tests/evaluation/`.
@@ -99,6 +105,7 @@ Wo welcher frühere Test steht, zeigt [TESTZUORDNUNG.md](TESTZUORDNUNG.md).
 - `abbruch.spec.ts`: Abbrechen während S1, Protokoll des abgebrochenen Laufs, keine neue Anfrage
 - `wiederherstellung.spec.ts`: Zwischenstand übersteht ein Neuladen (echte IndexedDB)
 - `speicherfehler.spec.ts`: voller Speicher beim Zwischenstand wird gemeldet, die Eingabe bleibt
+- `daten.spec.ts` (seit 0.6.15): Gerätestand sichern ohne API-Schlüssel, alle Daten löschen, Sicherung einspielen (echte IndexedDB; TP-2026-W44-44, -45)
 - `barrierefreiheit.spec.ts`: zugängliche Namen aller Bedienelemente je Bereich (vom Browser berechnet), Hilfetexte der Auftragsfelder der KI-Erfassung als zugängliche Beschreibung (seit 0.5.18), Tastaturbedienung mit sichtbarem Fokus, erzwungene Farben (nur Chromium); seit 0.6.5 kein Sekundenzähler in einer Live-Region (TP-2026-W44-12), eindeutige Namen je Liste (TP-2026-W44-14) und axe-core (`@axe-core/playwright`) je Bereich mit allen Schritten, Reitern und Bereichen gegen WCAG 2.0/2.1/2.2 A und AA, breit und hell sowie 390 px und dunkel, ohne Ausnahmen (TP-2026-W44-22; Ausnahmen kämen mit Begründung nach [BARRIEREFREIHEIT.md](BARRIEREFREIHEIT.md))
 - `einstellungen.spec.ts`: jeder Bereich mit einer Überschrift und benannten Bedienelementen, Tastatur, schmale Ansicht ohne seitliches Scrollen, Bereich bleibt beim Wechsel der Ansicht, Schlüssel übersteht ein Neuladen; seit 0.6.5 Bereich und Reiter des Lagebilds in der Adresse mit Zurück, Vor und Neuladen (TP-2026-W44-20)
 - `pwa-update.spec.ts`: Versionswechsel mit bestehendem Cache gegen einen Server wie GitHub Pages: Fehler mit dem Service Worker von 0.5.1 (Testvorlage `fixtures/sw-vorlage-0.5.1.js`), Korrektur, Installationsschutz, Wiederherstellung mit erhaltenen IndexedDB-Daten, kein Neuladen laufender Fenster mit ungespeicherten Eingaben, keine Übernahme durch Reste gescheiterter Installationen, Neuladen nur im anfordernden Fenster, Reparaturseite, Startprüfung

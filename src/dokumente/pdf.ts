@@ -395,8 +395,9 @@ function seitenfuss(doc: jsPDF, text: string) {
  * Dokumenteigenschaften, Sprache und XMP-Metadaten mit der KI-Herkunft (KI-Verordnung Art. 50 Abs. 2, seit 0.5.4).
  * Die Herkunft stammt aus dem Entstehungsfeld der Meldung; ohne Angabe steht sie als „unbekannt“ in den Metadaten.
  */
-function kennzeichnen(doc: jsPDF, titel: string, herkunft: KiHerkunft, modell?: string) {
-  doc.setProperties({ title: titel, subject: titel, creator: APP_KENNUNG, keywords: pdfSchluesselwoerter(herkunft) });
+function kennzeichnen(doc: jsPDF, titel: string, herkunft: KiHerkunft, modell?: string, zusatz?: string) {
+  const keywords = [pdfSchluesselwoerter(herkunft), zusatz].filter(Boolean).join("; ");
+  doc.setProperties({ title: titel, subject: titel, creator: APP_KENNUNG, keywords });
   doc.setLanguage("de-DE");
   doc.addMetadata(xmpPaket({ titel, herkunft, modell }), true);
 }
@@ -404,7 +405,22 @@ function kennzeichnen(doc: jsPDF, titel: string, herkunft: KiHerkunft, modell?: 
 /** Sichtbarer Zusatz in der Fußzeile bei KI-Herkunft */
 const fussKi = (herkunft: KiHerkunft) => (herkunft === "ki" ? " · KI-generiert" : "");
 
-export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blob {
+/**
+ * Vermerk einer finalen Ausgabe trotz Schemabefund (seit 0.6.15, TP-2026-W44-42): Der Abschlusscheck (SOP-LEAD A.5)
+ * verlangt eine Schemaprüfung ohne Befund; gibt die Person nach Rückfrage dennoch final aus, steht das sichtbar auf
+ * jeder Seite und in den Schlüsselwörtern. Entwürfe tragen den Vermerk nicht, sie sind ohnehin als Entwurf gekennzeichnet.
+ */
+export function schemaVermerk(befunde: number): string {
+  return `Schemaprüfung mit Befund (${befunde} ${befunde === 1 ? "Abweichung" : "Abweichungen"}) – als final ausgegeben`;
+}
+
+/** Zusätzliche Angaben für die Ausgabe einer Meldung */
+export interface MeldungPdfOptionen {
+  /** Zahl der Abweichungen der Schemaprüfung als finale Meldung; > 0 bei finaler Ausgabe ergibt den Vermerk */
+  schemaBefunde?: number;
+}
+
+export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean, optionen: MeldungPdfOptionen = {}): Blob {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ui = profil.ui;
   doc.setFontSize(14);
@@ -422,7 +438,17 @@ export function meldungAlsPdf(d: Meldung, profil: Profil, entwurf: boolean): Blo
   meldungZeichnen(doc, d, profil, 27);
   const h = herkunftAusMeldung(d, profil);
   seitenfuss(doc, `Erstellt mit KI-LEAD${fussKi(h.herkunft)}`);
-  kennzeichnen(doc, ui.titel, h.herkunft, h.modell);
+  const vermerk = !entwurf && (optionen.schemaBefunde ?? 0) > 0 ? schemaVermerk(optionen.schemaBefunde!) : undefined;
+  if (vermerk) {
+    const seiten = doc.getNumberOfPages();
+    for (let s = 1; s <= seiten; s++) {
+      doc.setPage(s);
+      doc.setFontSize(8.5);
+      doc.setTextColor(170, 30, 30);
+      doc.text(pdfText(vermerk), 196, 8, { align: "right" });
+    }
+  }
+  kennzeichnen(doc, ui.titel, h.herkunft, h.modell, vermerk);
   return doc.output("blob");
 }
 
