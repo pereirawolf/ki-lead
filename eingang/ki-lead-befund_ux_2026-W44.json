@@ -1,0 +1,557 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "ux-pruefung",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-10-31T22:33:19Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "4fe5dbb3d363d200661378c8a35da5e3c67d1b8f",
+  "pruefumfang": "Auftrag des Herausgebers vom 31.10.2026 (kein Wochenlauf): Oberfläche und Bedienung der App 0.6.18. Grundlage: (1) eigene Durchsicht im Browser (Chromium, 1366 px und 390 px) aller Ansichten, Beispiel „Ilka“ in der Auswertung, Schritte 1–4 der Erfassung, KI-Erfassung ohne Schlüssel; (2) Vorschläge einer anderen KI zum selben Commit (8 Punkte), jeder Punkt im Code nachgeprüft; (3) Abgleich mit Spezifikation Abschnitt 5 und Befundregister (frühere Entscheidungen zu KI-Chip und Profil-Chip). Konsolidiert: Dubletten zusammengeführt, Vorschläge auf je eine abgrenzbare Änderung zugeschnitten.",
+  "nicht_geprueft": [
+    "Native Apps (iOS, Android), Dunkelmodus und Länderfarbschemata, Safari/WebKit.",
+    "Screenreader und starke Vergrößerung (siehe UX-2026-W44-15).",
+    "Kein echter KI-Lauf; KI-Erfassung nur bis zum gesperrten Start.",
+    "Kein Nutzertest; Einschätzungen sind fachliche UX-Bewertungen.",
+    "Keine externen Quellen; belege bleiben leer."
+  ],
+  "befunde": [
+    {
+      "id": "UX-2026-W44-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/KiSymbol.tsx",
+          "stelle": "kiSymbolText, KiSymbol (Zeile 41–71)",
+          "ist": "if (!istOnline(lauf, anfragen)) return \"KI offline: keine KI-Anfrage aktiv\";"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "OfflineHinweis vor dem Startknopf (Zeile 247)",
+          "ist": "<OfflineHinweis offline={rahmen.offline} />"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.1, Absatz „KI-Chip in der Kopfleiste“",
+          "ist": "In Ruhe zeigt er „KI offline“"
+        }
+      ],
+      "beobachtung": "Der Chip zeigt in Ruhe „KI offline“. Die App kennt zugleich einen echten Offline-Zustand (PWA-Start ohne Netz, OfflineHinweis in der KI-Erfassung). „Offline“ steht damit für zwei verschiedene Dinge; im Ruhezustand liest sich der Chip wie eine fehlende Verbindung. Beide Prüfungen (eigene und fremde) kamen unabhängig zu dieser Beobachtung. Die Entscheidung aus KP-2026-W44-01 (reine Statusanzeige, nicht anklickbar) bleibt unberührt; neu ist nur der Begriffskonflikt mit dem Offline-Betrieb.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Nur die sichtbaren Texte und Ansagen des Chips ändern: Ruhe „KI ruht“, aktiv „KI aktiv“; zugänglicher Name „KI ruht: keine KI-Anfrage aktiv“ bzw. „KI aktiv: …“. data-zustand, Farben, Rolle und Zähler bleiben.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/KiSymbol.tsx",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)",
+        "tests/ui/kisymbol.test.ts, tests/browser/kisymbol.spec.ts: erwartete Texte"
+      ],
+      "entscheidungsfrage": "Texte „KI ruht“/„KI aktiv“ statt „KI offline“/„KI online“, oder bei der Festlegung aus 0.5.21 bleiben?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Unit-Test: kiSymbolText ohne Anfrage enthält nicht das Wort „offline“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-02",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/KiErfassung.tsx",
+          "stelle": "kannStarten (Zeile 368 f.)",
+          "ist": "!offline && !fehlend.length && eingabe.datenOk && !!(eingabe.sachverhalt.trim() || …)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Startknopf „Gegenstand bestimmen (S1)“ (Zeile 249–258)",
+          "ist": "disabled={!kannStarten}"
+        }
+      ],
+      "beobachtung": "Der Startknopf ist aus vier Gründen gesperrt (offline, API-Schlüssel fehlt, Bestätigung fehlt, kein Auftrag/Material). Am Knopf steht keiner davon; der Hinweis auf den fehlenden Schlüssel steht rund 1.800 px weiter oben, die übrigen Gründe nirgends. Ein ausgegrauter Knopf ohne Grund ist die häufigste Sackgasse beim ersten Versuch.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Unmittelbar über dem Startknopf eine kurze Liste der offenen Voraussetzungen, nur solange der Knopf gesperrt ist, je Punkt mit Sprung zur Stelle (Auftragsfeld, Bestätigung) bzw. „Zu den Einstellungen“; der Knopf verweist mit aria-describedby auf die Liste. Neutral formuliert, z. B. „Noch offen: Auftrag oder Material · Bestätigung zur Datenweitergabe · API-Schlüssel Anthropic“.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/kiErfassung/Auftragsformular.tsx",
+        "src/styles/ki.css",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest: leere KI-Erfassung zeigt am Startknopf die offenen Voraussetzungen; nach Ausfüllen verschwindet die Liste.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-03",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/ModellWahl.tsx",
+          "stelle": "LaufModellWahl, Titel „Modelle und Recherche für diesen Lauf“ (Zeile 216)",
+          "ist": "\"Modelle und Recherche für diesen Lauf\""
+        },
+        {
+          "datei": "src/ui/LaufSchaetzung.tsx",
+          "stelle": "Schätzungstext (Zeile 25)",
+          "ist": "Voraussichtlich (Erfahrungswerte aus Testläufen, vorsichtig gerundet):"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Rechercheabsatz unter der Modellwahl",
+          "ist": "S2: Recherche durchführen (Websuche bis zu 15-mal, Seitenabruf bis zu 10-mal) …"
+        }
+      ],
+      "beobachtung": "Unter „Recherche durchführen“ stehen nach der eingeklappten Modellwahl zwei dichte Absätze (Kontingente, Pflichtsuchen, Orientierung, Kosten je Stufe). Die Kurzzeile der eingeklappten Modellwahl nennt Modelle, Dauer und Kosten bereits. Beide Prüfungen sehen hier zu viel gleichzeitig sichtbaren Erklärtext.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Die Erläuterung zu Kontingenten und die Schätzung je Stufe in den aufklappbaren Bereich „Modelle und Recherche für diesen Lauf“ verschieben; außerhalb bleibt nur die Kurzzeile (Modelle, Recherchetiefe, Dauer, Kosten). Datenweitergabe und Anbieter bleiben vor dem Start sichtbar.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/kiErfassung/Auftragsformular.tsx",
+        "src/ui/LaufSchaetzung.tsx",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-04",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Hauptnavigation (Zeile 382 ff.)",
+          "ist": "<nav className=\"hauptnav\" aria-label=\"Bereiche\">"
+        },
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "schmale Ansicht, .schritte ol (Zeile 461–468)",
+          "ist": "overflow-x: auto; … scrollbar-width: none;"
+        }
+      ],
+      "beobachtung": "Bei 390 px Breite laufen das Hauptmenü („Pro…“) und die Abschnittsleisten von Meldung und Einstellungen („Ereignisse/S…“, „Modelle & Auf…“) rechts aus dem Bild; die Scrollleiste ist ausgeblendet, kein Hinweis zeigt weitere Einträge. „Profile“ und „Einstellungen“ sind auf dem Smartphone kaum auffindbar. Die waagerecht scrollbare Leiste ist laut Spezifikation (Einstellungen: „schmale Ansicht: waagerecht scrollbare Leiste“) gewollt; es fehlt nur der Hinweis darauf.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Hauptmenü in der schmalen Ansicht umbrechen statt abschneiden (fünf kurze Einträge passen in zwei Zeilen). Abschnittsleisten bleiben waagerecht scrollbar, erhalten aber einen Verlauf am Rand, solange rechts bzw. links weitere Einträge liegen, und scrollen den aktiven Abschnitt beim Wechsel ins Bild.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/styles/basis.css",
+        "src/ui/Meldung.tsx, src/ui/Einstellungen.tsx, src/ui/Lagebild.tsx (aktiven Abschnitt ins Bild)",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest bei 390 px: alle Einträge der Hauptnavigation liegen vollständig im Bild.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-05",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/feldBefunde.ts",
+          "stelle": "Feldmeldung Pflicht (Zeile 23)",
+          "ist": "if (art === \"pflicht\") return \"Pflichtangabe fehlt.\";"
+        },
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Schema- und Pflichtbefunde je Stand der Meldung (Zeile 138–146)",
+          "ist": "geprüft wird wie im Prüfschritt als finale Meldung"
+        }
+      ],
+      "beobachtung": "Ein neuer, leerer Sachverhalt zeigt sofort ein rot umrandetes Feld „Bezeichnung“ mit „Pflichtangabe fehlt.“, bevor etwas eingegeben wurde. Fehler vor jeder Eingabe wirken wie eine Rüge und überdecken echte Fehler. Beide Prüfungen melden dies.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Pflichtbefunde am Feld erst zeigen, wenn das Feld bearbeitet und verlassen wurde, wenn der Schritt „Prüfen & Exportieren“ besucht wurde oder wenn eine geöffnete bzw. übernommene Meldung geladen ist. Bis dahin nur die neutrale Kennzeichnung „(Pflicht für finale Meldung)“. Schemaabweichungen anderer Art (Format, Wertebereich) bleiben sofort sichtbar; Sprünge vom Prüfbefund zum Feld zeigen den Befund immer.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/feldBefunde.ts",
+        "src/ui/Meldung.tsx",
+        "src/ui/Feld.tsx",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest: neue Meldung, Schritt 2, kein Element mit Pflichtbefund; nach Besuch von „Prüfen & Exportieren“ und Rücksprung erscheint er.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-06",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Schrittleiste (Zeile 252)",
+          "ist": "className={i === schritt ? \"schritt aktiv\" : i < schritt ? \"schritt erledigt\" : \"schritt\"}"
+        }
+      ],
+      "beobachtung": "Schritte vor dem aktuellen gelten allein wegen ihrer Position als „erledigt“, auch wenn dort Pflichtangaben fehlen. Die Leiste behauptet damit einen Fortschritt, den die Prüfung nicht bestätigt (Hinweis der fremden Prüfung, im Code bestätigt).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Schrittzustand aus den vorhandenen Feldbefunden ableiten: „Befund“ (Schema- oder Pflichtbefund in einem Feld des Schritts, kleines Warnzeichen mit Zahl), sonst neutral. Kein „erledigt“ mehr nach Position; der aktive Schritt bleibt markiert. Zugänglicher Name des Schritts nennt die Zahl der Befunde. Fachliche Richtigkeit wird nicht angezeigt.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Meldung.tsx",
+        "src/styles/formular.css",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Unit- oder Browsertest: Schritt mit fehlender Pflichtangabe trägt die Befundmarke, Schritt ohne Befund nicht, unabhängig von der Position.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-07",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Feld.tsx",
+          "stelle": "Objektfelder in Schemareihenfolge (Zeile 147–151)",
+          "ist": "const kinder = Object.keys(k.properties || {})…"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "properties.sachverhalte.items: Reihenfolge eintritt, art, ort, bezeichnung, …",
+          "ist": "eintritt, art, ort, bezeichnung, analyse, sofort, kennung, bezug"
+        }
+      ],
+      "beobachtung": "Die Pflichtangabe „Bezeichnung“ steht im Sachverhalt erst nach Eintritt, der langen Auswahl „Art“ und Ort. Sie ist zugleich der Titel des Elements (titel_feld). Die Reihenfolge folgt dem Schema.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "In der Maske das titel_feld eines Listenelements zuerst zeigen, unabhängig von der Schemareihenfolge (App-seitig, für alle Profile). Schema, JSON-Ausgabe und PDF bleiben unverändert.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Feld.tsx",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest: erstes Eingabefeld eines neuen Sachverhalts ist die Bezeichnung.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-08",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Feld.tsx",
+          "stelle": "Liste der Sachverhalte, Element mit Kopf (Zeile 460 ff.)",
+          "ist": "<section key={i} className=\"element\" … aria-label={`${elementName} ${i + 1}`}>"
+        }
+      ],
+      "beobachtung": "Jeder Sachverhalt ist mit allen Feldern (Art-Auswahl, vier Analysefelder mit Eingabehilfen, Sofortbereich, acht Radarachsen) dauerhaft aufgeklappt. Bei mehreren Sachverhalten entsteht sehr viel Scrollarbeit; der Überblick über Titel und Bewertung fehlt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Sachverhalte einklappbar: Kopf mit Nummer, Bezeichnung, Bewertung und Tendenz, Zahl der Befunde; ein neuer Sachverhalt öffnet sich, geladene Meldungen mit mehreren Sachverhalten zeigen sie eingeklappt. Sprung vom Prüfbefund öffnet den betroffenen Sachverhalt. Keine eigene Detailansicht, keine Sprungmarken innerhalb (reduzierte Fassung des Fremdvorschlags).",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Feld.tsx",
+        "src/ui/sprung.ts",
+        "src/styles/formular.css",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": "Browsertest: Meldung mit zwei Sachverhalten laden, beide eingeklappt; Sprung aus dem Prüfschritt öffnet den richtigen.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-09",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Sachverhalte“, Tabelle (Zeile 787 ff.)",
+          "ist": "<table className=\"tabelle lb-tabelle\">"
+        }
+      ],
+      "beobachtung": "Im Reiter „Sachverhalte“ stehen alle Volltexte in einer breiten Tabelle; beim Beispiel „Ilka“ (8 Sachverhalte) wird die Seite rund 14.700 px lang, die rechten Spalten werden abgeschnitten. Ein schneller Vergleich nach Bewertung und Tendenz ist so kaum möglich. Beide Prüfungen melden dies als wichtigsten Punkt der Auswertung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Je Sachverhalt eine kompakte Zeile (Bezeichnung, meldende Stelle, Art, Eintritt, Bewertung/Tendenz als Marken), Analyse und Bewertungstext zum Aufklappen. Darüber Filter nach Bewertung und Tendenz (zusätzlich zum vorhandenen Herkunftsfilter seit 0.6.13). Die Volltabelle bleibt unter „Rohtabelle“ und im PDF unverändert. Textsuche vorerst nicht.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Lagebild.tsx",
+        "src/styles/lagebild.css",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Browsertest: Beispiel Ilka, Reiter Sachverhalte: Seitenhöhe unter 3.000 px; Filter „erheblich“ zeigt 5 Sachverhalte.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-10",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Kennzahlen der Übersicht (Zeile 589–628)",
+          "ist": "<div className=\"lb-kennzahl\"> … {lBeurteilung}: {h.stufe}"
+        }
+      ],
+      "beobachtung": "Nur „Redaktionshinweise“ und „Schemaabweichung“ sind als Kacheln anklickbar; die fachlichen Kennzahlen (Bewertung je Stufe, Verschärfung) nicht (Hinweis der fremden Prüfung, im Code bestätigt).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Kacheln „Bewertung: …“ und „Tendenz: Verschärfung“ mit Anzahl > 0 öffnen den Reiter „Sachverhalte“ mit dem passenden Filter aus UX-2026-W44-09. Setzt UX-2026-W44-09 voraus.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Lagebild.tsx",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-11",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Pruefen.tsx",
+          "stelle": "Listen Schemaprüfung und Pflichtangaben (Zeile 160–167)",
+          "ist": "<Liste titel=\"Pflichtangaben\" eintraege={pflicht} art=\"fehler\" zumFeld={zumFeld} />"
+        }
+      ],
+      "beobachtung": "Eine fehlende Bezeichnung erscheint in „Prüfen & Exportieren“ zweimal: als Schemaabweichung und als Pflichtangabe. Die doppelte Meldung lässt mehr Fehler vermuten, als es gibt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Pflichtbefunde, deren Feld bereits eine Schemaabweichung trägt, in der Liste „Pflichtangaben“ nicht wiederholen; bleibt die Liste leer, entfällt sie. Zählungen und Feldmarken unverändert.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Pruefen.tsx",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Unit-Test: Meldung ohne Bezeichnung ergibt genau einen Fehlereintrag im Prüfschritt.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-12",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Pruefen.tsx",
+          "stelle": "Abschnitt „Ausgeben“ (Zeile 113–130)",
+          "ist": "Entwurf als JSON speichern · Final als JSON exportieren (primär) · Entwurf als PDF · Final als PDF"
+        }
+      ],
+      "beobachtung": "Vier gleichrangige Knöpfe; „Final als JSON exportieren“ ist hervorgehoben, auch wenn die Meldung die Schemaprüfung nicht besteht (die Warnung kommt erst nach dem Klick). Die fremde Prüfung schlägt eine Abschlussmaske mit Vorschau vor; das ist für einen Demonstrator zu groß.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Zwei Gruppen „Entwurf“ (JSON, PDF) und „Final“ (JSON, PDF) mit je einer Zeile Zustand: „Final: 1 Abweichung offen – Ausgabe mit Vermerk möglich“ bzw. „Final: Schemaprüfung ohne Befund“. Hervorgehoben ist „Final als JSON“ nur ohne Befund, sonst „Entwurf als JSON“. Die Rückfrage vor einer finalen Ausgabe mit Befund bleibt.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Pruefen.tsx",
+        "src/styles/formular.css",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": "Browsertest: Meldung mit Befund – primärer Knopf ist „Entwurf als JSON speichern“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-13",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter „Lagenradar“, Karte (Zeile 875 ff.)",
+          "ist": "<div className=\"lb-karte-inhalt lb-radar\">"
+        }
+      ],
+      "beobachtung": "Je Karte ein kleines Radar (rund 120 px) neben einer langen Spalte mit allen acht Achsen in Langform; die Karten werden sehr hoch, das Radar ist kaum lesbar.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Radar über die volle Kartenbreite (bis etwa 260 px), darunter die Achsen als kompakte zweispaltige Liste „D1 Räumliche Auswirkung | 4 – landesweit“; „offen“ bleibt sichtbar. Kein Mittelwert, keine Überlagerung.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Lagebild.tsx",
+        "src/styles/lagebild.css",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-14",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "Kopfleiste (Zeile 424)",
+          "ist": "<div className=\"kopf-rechts\" data-profil={profil.manifest.name}>"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.1, KI-Chip",
+          "ist": "der frühere Profil-Chip entfällt (Profilwahl unter „Profile“)"
+        }
+      ],
+      "beobachtung": "Das aktive Profil ist in Erfassung, KI-Erfassung und Auswertung nicht sichtbar (nur in Einstellungen → Übersicht und unter Profile). Seit 0.6.18 gibt es vier eingebaute Profile (Beispiel, Land Thüringen, Justiz, Muster); welche Regeln gelten, ist beim Arbeiten nicht erkennbar. Der Profil-Chip in der Kopfleiste wurde mit 0.5.21 bewusst entfernt; die fremde Prüfung schlägt ihn faktisch wieder vor.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Keine Rückkehr in die Kopfleiste: Im Seitenkopf von Erfassung, KI-Erfassung und Auswertung unter dem Kennsatz eine Zeile „Profil: <Name> <Version>“ mit Link zu „Profile“.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "src/ui/Meldung.tsx",
+        "src/ui/KiErfassung.tsx",
+        "src/ui/Lagebild.tsx",
+        "docs/SPEZIFIKATION.md: betroffener Abschnitt und Änderungsverlauf",
+        "CHANGELOG.md: Eintrag der umsetzenden Version (0.6.19)"
+      ],
+      "entscheidungsfrage": "Profilzeile im Seitenkopf der drei Arbeitsansichten, oder bleibt das Profil wie seit 0.5.21 nur unter „Profile“ sichtbar?",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W44-15",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/BARRIEREFREIHEIT.md",
+          "stelle": "Bekannte Lücken, „Screenreader“ (Zeile 47)",
+          "ist": "nicht mit NVDA, JAWS, VoiceOver oder TalkBack geprüft"
+        }
+      ],
+      "beobachtung": "Die fremde Prüfung empfiehlt Erprobungen mit Tastatur, NVDA und VoiceOver an drei Aufgaben sowie eine semantische HTML-Ausgabe und getaggte PDFs. Die Lücke ist dokumentiert. Eine Screenreader-Erprobung braucht Menschen mit den Hilfsmitteln und lässt sich nicht als Code-Änderung umsetzen; HTML-Ausgabe und getaggte PDFs sind eigene Vorhaben.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "nur_hinweis",
+        "beschreibung": "Nicht in diesem Pull Request. Erprobungsaufgaben in die Planung der Erprobung im Testkreis aufnehmen, sobald Testende mit Screenreader gewonnen sind.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Meldestatus in der Auswertung: „Erinnern“ je Land als mailto mit Kontakt des Profils ist sachgerecht (Empfänger je Land verschieden); eigener früherer Vorschlag eines Sammelknopfs zurückgezogen.",
+    "Kennzahlen-Kacheln: färben nur bei Anzahl > 0; eigener früherer Vorschlag zur Farbgebung zurückgezogen.",
+    "Klammerplural „Abweichung(en)“, „Orientierungssuche(n)“ ist durchgängige Konvention der App; kein Befund.",
+    "„Alle entfernen“ in der Auswertung als leiser Knopf mit Rückfrage: Risiko durch die Bestätigung abgefangen.",
+    "Sprünge vom Prüfbefund zum Feld, Schrittlogik der Erfassung, Kennsätze nach LEAD-Systematik, neutrale Ansprache der Oberfläche."
+  ]
+}
