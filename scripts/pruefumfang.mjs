@@ -19,6 +19,8 @@ export const NUR_INHALT = [
   /^[^/]+\.md$/, // README.md, CHANGELOG.md
   /^CITATION\.cff$/,
   /^LICENSE(-CONTENT|-CC0)?$/,
+  /^LICENSES\/[^/]+\.txt$/, // Lizenztexte nach REUSE (seit Issue #89)
+  /^REUSE\.toml$/,
   /^\.github\/ISSUE_TEMPLATE\//,
   /^profile\/[^/]+\/sop\//, // SOP-Sammelmappe, Quellenregister
   /^profile\/[^/]+\/[^/]+\.md$/, // Arbeitsanweisungen, Kodierleitfaden, Profil-Changelog

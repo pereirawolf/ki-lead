@@ -85,7 +85,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.12 | letzter Commit des Pull Requests „Offene Befunde KW 44: KI-Chip, Redaktionscheck über Kennungen, Kodierleitfaden 1.7.0; Profil 1.34.0; 0.6.12“ (Nachträge vom 30.10.2026: Pull Requests „CI-Lieferkette: Actions per Commit-SHA, npm audit“ und „Fester Erprobungsstand und Dokumentation“, ohne Änderung der App) |
 | 0.6.13 | letzter Commit des Pull Requests „Lagebild: Herkunftsrolle der meldenden Stelle aus dem Profil; 0.6.13“ |
 | 0.6.14 | letzter Commit des Pull Requests „Verschachtelte Objekte und Listen lesbar in Maske, PDF und Rohtabelle; 0.6.14“ |
-| 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ |
+| 0.6.15 | letzter Commit des Pull Requests „Freigabe und Datensicherheit: Schemavermerk, Frist zu t0, Sicherung und Löschen; 0.6.15“ (Nachtrag vom 31.10.2026: Pull Request „Lizenzen: Kurzsatz „die Vorlagen“ und REUSE.toml (Issues #88, #89)“; in der App nur der Lizenzsatz unter „Über“) |
 
 ## [0.6.15] – 31.10.2026
 
@@ -114,6 +114,16 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A3.json` (Arbeitspaket A
 - `tests/dokumente/pdf.test.ts` (4 neu): Text des Vermerks, Vermerk auf jeder Seite und in den Schlüsselwörtern, kein Vermerk ohne Befund und im Entwurf.
 - `tests/browser/daten.spec.ts` (neu, 1): sichern ohne Schlüssel, alles löschen, Sicherung einspielen mit echter IndexedDB.
 - `tests/ui/einstellungen.test.ts`, `tests/browser/einstellungen.spec.ts`: acht Bereiche mit „Daten“.
+
+### Nachtrag vom 31.10.2026 (ohne neue Versionsnummer)
+
+Grundlage: Issues #88 und #89, Entscheidungen des Herausgebers vom 28.10.2026 (keine eigene Version für den Kurzsatz; maschinenlesbare Lizenzzuordnung vor dem ersten Release) und seine Freigabe vom 31.10.2026. Die Lizenzen und ihr Geltungsbereich ändern sich nicht; maßgeblich bleibt `LICENSE-CONTENT`. In der App ändert sich nur ein Satz unter „Über“; keine Änderung an Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Kurzsatz „die Vorlagen“ (Issue #88):** Seit dem 28.10.2026 stehen auch die Vorlagen für Stellen zusätzlich unter CC0 1.0 (`LICENSE-CONTENT`, Nr. 2 d). Der Kurzsatz in README.md, THIRD-PARTY-NOTICES.md, [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md), [docs/ERPROBUNG.md](docs/ERPROBUNG.md) und `public/lizenzen-ergaenzend.md` sowie der Lizenzsatz unter „Über“ (`src/ui/Ueber.tsx`) nennen deshalb „die Vorlagen“ statt „die Vorlage“.
+- **Maschinenlesbare Lizenzzuordnung (Issue #89):** `REUSE.toml` nach der REUSE-Spezifikation 3.3 überträgt `LICENSE-CONTENT` auf Pfade: EUPL-1.2 (Nr. 4), CC BY 4.0 (Nr. 1 a bis c, Quelltext in `evaluation/` nach Nr. 4), App-Symbol mit Symbol- und Startbildern als `EUPL-1.2 OR CC-BY-4.0` (Nr. 1 d), zusätzlich CC0 1.0 als `CC-BY-4.0 OR CC0-1.0` (Nr. 2 a bis c), Gradle-Wrapper Apache-2.0 und die übrigen Dateien der nativen Projekte MIT (Nr. 4, Vorlagen der Capacitor-CLI). Die Vorlagen V1 bis V6 in [docs/VORLAGEN.md](docs/VORLAGEN.md) und Anhang C und D in [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) (Nr. 2 d) tragen eine SPDX-Snippet-Markierung als HTML-Kommentar. Die Lizenztexte stehen nach REUSE zusätzlich unter `LICENSES/` (offizielle SPDX-Fassungen); `LICENSE`, `LICENSE-CC0` und `LICENSE-CONTENT` bleiben unverändert, `reuse` erfasst sie nicht.
+- **CI:** `pages.yml` installiert `reuse` 6.3.0 mit `pipx` und führt `reuse lint` aus; `scripts/pruefumfang.mjs` zählt `REUSE.toml` und `LICENSES/*.txt` zu den reinen Inhalten.
+- THIRD-PARTY-NOTICES.md (Abschnitt 5: Werkzeug `reuse`), Spezifikation (Nachtrag zu 0.6.15), [docs/ERPROBUNG.md](docs/ERPROBUNG.md), [docs/VORLAGEN.md](docs/VORLAGEN.md) und [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) (je Nachtrag im Änderungsverlauf), [docs/TESTS.md](docs/TESTS.md).
+- `tests/lizenzen/reuse.test.ts` (neu, 12): Lizenztexte unter `LICENSES/` wortgleich mit `LICENSE`, `LICENSE-CONTENT`, `LICENSE-CC0` und der Lizenz der Capacitor-CLI; Umfang der beiden Snippets; jede Datei in `android/` und `ios/` stammt aus den Vorlagen der Capacitor-CLI, ist von ihr erzeugt oder ist ein Bild des App-Symbols; Abgleich mit `reuse lint`: für jede Datei dieselben Lizenzen wie ein unabhängig aus `LICENSE-CONTENT` kodiertes Soll (lokal nur mit installiertem `reuse`, in der CI Pflicht). `tests/lizenzen/inhalte.test.ts`: Kurzsatz; `tests/ci/pruefumfang.test.ts` (1 neu).
 
 ## [0.6.14] – 31.10.2026
 

@@ -226,6 +226,11 @@ Antworten für das Formular „Data safety“. Google versteht unter Erhebung je
 | Do you provide a way for users to request that their data is deleted? | Ja: Daten auf dem Gerät löscht die Person selbst; beim Anbieter werden API-Daten nach dessen Fristen gelöscht (Abschnitt 5) |
 | Datenschutzerklärung | Link auf diese Datei im Repository |
 
+<!-- SPDX-SnippetBegin -->
+<!-- SPDX-SnippetCopyrightText: 2026 Heiko Pereira Wolf <https://www.pereirawolf.de> -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 OR CC0-1.0 -->
+<!-- Nach Wahl auch CC0 1.0: LICENSE-CONTENT, Nr. 2 d -->
+
 ## Anhang C: Vorlage Schwellwertanalyse zur Datenschutz-Folgenabschätzung
 
 Für Stellen, die KI-LEAD erproben. Die Vorlage hilft bei der Frage, ob eine Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO nötig ist. **DSFA und Verzeichnis der Verarbeitungstätigkeiten bleiben bei der nutzenden Stelle.** Eine Vorlage für den Eintrag im Verzeichnis steht in Anhang D. Die Vorlage ersetzt keine Beratung durch die eigene Datenschutzbeauftragte oder den eigenen Datenschutzbeauftragten. Sie steht nach Wahl auch unter CC0 1.0 ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 2 d) und kann ohne Namensnennung übernommen werden.
@@ -357,6 +362,8 @@ Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empf
 
 ---
 
+<!-- SPDX-SnippetEnd -->
+
 ## Quellen
 
 Zugriff, soweit nicht anders angegeben, am 24.10.2026.
@@ -399,3 +406,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.8 | 28.10.2026 | Anhang D: Vorlage für einen Eintrag im Verzeichnis von Verarbeitungstätigkeiten nach Art. 30 DSGVO mit Vorbefüllung und Platzhaltern, Hinweisen zu Landesrecht (ThürDSG) und zu § 70 BDSG; Verweise in Abschnitt 2 und Anhang C; Quellen ergänzt (ohne Änderung der App) |
 | 1.9 | 28.10.2026 | Anhang C und D zusätzlich unter CC0 1.0 (LICENSE-CONTENT, Nr. 2 d; ohne Änderung der App) |
 | 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.15) |
+| 1.10 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: Anhang C und D als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |

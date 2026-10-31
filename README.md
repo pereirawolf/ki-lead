@@ -151,7 +151,7 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 
 © 2026 Heiko Pereira Wolf. Licensed under the EUPL-1.2, soweit [LICENSE-CONTENT](LICENSE-CONTENT) nichts anderes bestimmt.
 
-Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT).
+Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT).
 
 - **Code** (Quelltext, Tests, Skripte, Build- und Projektdateien, App), auch Quelltext in `evaluation/`: [EUPL-1.2](LICENSE); ausgenommen Dateien Dritter wie der Gradle-Wrapper (Apache-2.0)
 - **Inhalte** in `profile/`, `evaluation/` und `docs/` sowie README, CHANGELOG, SECURITY.md und THIRD-PARTY-NOTICES.md (Arbeitsanweisungen, SOP, Kodierleitfaden, Darstellungsdateien, Bewertungsfälle, Prüfsteine, Dokumentation): [CC BY 4.0](LICENSE-CONTENT), Namensnennung: Heiko Pereira Wolf. Die Stufentexte des Lagenradars stehen hier bewusst unter CC BY 4.0, auch wenn der Grundlagenbeitrag auf Zenodo unter CC BY-NC-ND 4.0 steht

@@ -1,0 +1,94 @@
+# Maschinenlesbare Fassung der Lizenzzuordnung nach der REUSE-Spezifikation 3.3 (https://reuse.software/spec-3.3/).
+#
+# Maßgeblich ist LICENSE-CONTENT. Diese Datei überträgt dessen Zuordnung nur auf Pfade; sie regelt nichts neu
+# und schränkt keine Rechte ein. Bei einem Widerspruch gilt LICENSE-CONTENT; tests/lizenzen/reuse.test.ts prüft
+# den Abgleich. Die Lizenztexte stehen nach REUSE unter LICENSES/; LICENSE, LICENSE-CC0 und LICENSE-CONTENT im
+# Wurzelverzeichnis bleiben unverändert.
+#
+# Treffen mehrere Abschnitte auf eine Datei zu, gilt der letzte. Deshalb stehen die allgemeinen Regeln vorn und
+# die Ausnahmen danach. "precedence = override": Angaben in den Dateien selbst treten zurück (Ausnahme: der
+# letzte Abschnitt zu Nr. 2 d).
+version = 1
+
+# Nr. 4: Quelltext, Tests, Skripte, Build- und Projektdateien sowie die App
+[[annotations]]
+path = "**"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# Nr. 1 a bis c: Profilpakete, Evaluationsmaterial, Dokumentation und die Markdown-Dateien im Wurzelverzeichnis
+[[annotations]]
+path = [
+  "profile/**",
+  "evaluation/**",
+  "docs/**",
+  "README.md",
+  "CHANGELOG.md",
+  "SECURITY.md",
+  "THIRD-PARTY-NOTICES.md",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# Nr. 1 b: Quelltext in evaluation/ fällt unter Nr. 4
+[[annotations]]
+path = "evaluation/**/*.ts"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# Nr. 4, Dateien Dritter: aus Vorlagen der Capacitor-CLI erzeugte Teile der nativen Projekte (MIT).
+# Die Vorlagen sind nur in Kennungen, Versionsnummern, Namen, einer Farbe, allowBackup und zwei
+# Paketeinträgen angepasst; tests/lizenzen/reuse.test.ts gleicht die Dateien mit den Vorlagen ab.
+[[annotations]]
+path = ["android/**", "ios/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2017-present Drifty Co."
+SPDX-License-Identifier = "MIT"
+
+# Nr. 4, Dateien Dritter: Gradle-Wrapper (Apache-2.0)
+[[annotations]]
+path = ["android/gradlew", "android/gradlew.bat", "android/gradle/wrapper/gradle-wrapper.jar"]
+precedence = "override"
+SPDX-FileCopyrightText = "2015-2021 the original authors"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Nr. 1 d: das App-Symbol zusätzlich zur EUPL-1.2 unter CC BY 4.0, mit den daraus erzeugten Symbol- und
+# Startbildern in android/ und ios/
+[[annotations]]
+path = [
+  "public/icons/**",
+  "public/favicon.ico",
+  "android/app/src/main/res/mipmap-*/*.png",
+  "android/app/src/main/res/drawable*/splash.png",
+  "ios/App/App/Assets.xcassets/AppIcon.appiconset/*.png",
+  "ios/App/App/Assets.xcassets/Splash.imageset/*.png",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "EUPL-1.2 OR CC-BY-4.0"
+
+# Nr. 2 a bis c: zusätzlich CC0 1.0 nach Wahl der Nutzenden (Meldungsschemata, Manifeste, Kontaktlisten,
+# Quellenregister, JSON-Schemata in evaluation/, alle Dateien der Vorlage profile/muster/).
+[[annotations]]
+path = [
+  "profile/*/meldung.schema.json",
+  "profile/*/profil.json",
+  "profile/*/kontakte.json",
+  "profile/*/sop/quellenregister.json",
+  "evaluation/**/*.schema.json",
+  "profile/muster/**",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "CC-BY-4.0 OR CC0-1.0"
+
+# Nr. 2 d: In docs/VORLAGEN.md (Vorlagen V1 bis V6) und docs/DATENSCHUTZ.md (Anhang C und D) gilt CC0 1.0 nur für
+# Teile. Die Teile tragen eine SPDX-Snippet-Markierung; "aggregate" führt sie mit CC BY 4.0 für die Datei zusammen.
+[[annotations]]
+path = ["docs/VORLAGEN.md", "docs/DATENSCHUTZ.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "CC-BY-4.0"

@@ -17,6 +17,7 @@ Weitere Befehle:
 - `npm run test:inhalt`: Profil-, Kern- und Evaluationstests; schnelle Rückmeldung bei Arbeit an SOP, Arbeitsanweisungen oder Profilen.
 - `npm run test:browser:kern` und `npm run test:browser:pwa`: nur eines der beiden Chromium-Projekte (siehe unten).
 - `npm run test:browser:webkit` (seit 0.6.5, TP-2026-W44-22): die Kerntests in WebKit (Safari, auch iOS); braucht einmalig `npx playwright install webkit` und ist nicht Teil von `npm run test:browser`.
+- `reuse lint` (seit Issue #89): Lizenzzuordnung nach REUSE; braucht einmalig `pipx install reuse==6.3.0` (Python). Ohne `reuse` entfällt lokal der Abgleich in `tests/lizenzen/reuse.test.ts`; in der CI ist er Pflicht.
 - `npx vitest run tests/kern/zeit.test.ts`: eine Datei; `npx vitest` für den Beobachtungsmodus.
 - `npm run test:coverage` (seit 0.6.2): alle Tests mit Abdeckung (V8) für `src/kern`, `src/pipeline`, `src/anbieter` und seit 0.6.3 `src/forschung` (vorher Teil von `src/pipeline`); scheitert unter den Mindestwerten in `vite.config.ts` (Anweisungen 93 %, Zweige 78 %, Funktionen 96 %, Zeilen 96 %, knapp unter dem Stand vom 26.10.2026). Nicht Teil von `npm test`; Bericht unter `coverage/`.
 - `npm run lint` und `npm run format:check` (seit 0.6.2): ESLint mit typescript-eslint (`eslint.config.js`) und Prettier für Code, Tests, Skripte und Konfiguration; die CI führt beide vor den Tests aus. `no-explicit-any` ist eine Warnung und lässt den Lauf bestehen.
@@ -40,6 +41,8 @@ Welche Dateien was auslösen, legt `scripts/pruefumfang.mjs` fest; `tests/ci/pru
 
 Vor allen Tests prüft jeder Lauf mit `npm audit --omit=dev --audit-level=high` die ausgelieferten npm-Pakete auf bekannte Schwachstellen und bricht ab hohen Meldungen ab (seit TP-2026-W44-37). Alle Actions sind per Commit-SHA mit Versionskommentar eingebunden (TP-2026-W44-36); beides hält `tests/ci/actions.test.ts` fest.
 
+Danach prüft `reuse lint` (Version 6.3.0, mit `pipx` installiert) die maschinenlesbare Lizenzzuordnung in `REUSE.toml`; der Abgleich mit `LICENSE-CONTENT` steht in `tests/lizenzen/reuse.test.ts` (seit Issue #89).
+
 Was ein Pull Request auslässt, läuft spätestens nach dem Zusammenführen auf `main` vor der Veröffentlichung; scheitert dort ein Test, wird nicht veröffentlicht. Der Wochenlauf veröffentlicht nichts.
 
 Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD_BUILD_VORHANDEN=1`), laufen mit zwei Workern und nehmen Chromium aus dem Cache der Actions. WebKit lädt der Lauf eigens (`npx playwright install --with-deps webkit`), nur wenn die Kerntests anstehen. Die WebKit-Tests blockieren und sind auf 20 Minuten begrenzt. Die Installation ist auf 10 Minuten begrenzt und nicht blockierend, weil sie in der CI wiederholt hing; scheitert sie, entfallen die WebKit-Tests mit einer Warnung am Lauf. Fehlschläge der Browsertests meldet der Reporter „github“ als Annotation.
@@ -62,7 +65,7 @@ Die Browsertests verwenden in der CI den eben erzeugten Ordner `dist/` (`KI_LEAD
 | `tests/schluessel/` | Ablage der API-Schlüssel: Vorgabe, Sitzung, Passphrase (Round-trip, falsche Passphrase, Sperre, Verwerfen; seit 0.6.2), Schlüsselbund (mit Attrappe), Umzug beim Wechsel, Fehlerfälle, Auswahl in den Einstellungen |
 | `tests/nativ/` | Projektdateien der nativen Apps: App-Kennung, Versionen, Plugin eingebunden, Sicherung, Exportangabe, Symbole |
 | `tests/pwa/` | PWA: Dateiliste und Version des Service Workers, Bedingungen der Anmeldung, Hinweise, Manifest und Symbole |
-| `tests/lizenzen/` | Drittkomponenten: Lizenzen der Laufzeitpakete nach `package-lock.json` gegen die Positivliste, Vollständigkeit von THIRD-PARTY-NOTICES.md, native Versionen, Lizenzdateien im Build, SBOM in der CI; Inhalte: Geltungsbereich in `LICENSE-CONTENT`, CC0-Widmung, Kurzsatz in den Dokumenten, Lizenzangaben der Profile |
+| `tests/lizenzen/` | Drittkomponenten: Lizenzen der Laufzeitpakete nach `package-lock.json` gegen die Positivliste, Vollständigkeit von THIRD-PARTY-NOTICES.md, native Versionen, Lizenzdateien im Build, SBOM in der CI; Inhalte: Geltungsbereich in `LICENSE-CONTENT`, CC0-Widmung, Kurzsatz in den Dokumenten, Lizenzangaben der Profile; seit Issue #89 `REUSE.toml` und `LICENSES/` im Abgleich mit `LICENSE-CONTENT` und den Vorlagen der Capacitor-CLI (`reuse.test.ts`) |
 | `tests/browser/` | Hauptablauf, Sprungziele (seit 0.6.7), Abbruch, KI-Chip der Kopfleiste („KI offline“/„KI online“), Wiederherstellung, Speicherfehler, Barrierefreiheit, Einstellungen (Bereiche mit Tastatur und auf dem Smartphone) und Offline-Start der PWA im echten Browser |
 | `tests/ci/` | Prüfumfang der gestaffelten Prüfung (`scripts/pruefumfang.mjs`) mit Wächtern gegen veraltete Pfadlisten |
 | `tests/support/` | gemeinsame Hilfen (keine Tests) |

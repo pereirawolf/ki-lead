@@ -2,7 +2,7 @@
 
 Fassung 0.6.15 vom 31.10.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
-Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
+Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
 Änderungen gegenüber 0.1: Lizenzaufteilung; Ausgabe „Management Summary“ als Klartext; eval-freie Schemaprüfung (Abschnitt 7); fiktiver Datensatz „Ilka“ als Abnahmegrundlage (Abschnitt 9).
 
@@ -477,3 +477,4 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.13 | 31.10.2026 | Herkunft der meldenden Stelle im Lagebild (Abschnitt 5.2): optionale Rolle `herkunft` mit Standard und Quellenkategorie, Kennzeichen je Meldung und Sachverhalt, Filter, Spalten in CSV und Rohtabelle, Kopiervorlage, Vermerk im PDF; Profilformat 1.25 (Issue #114, A1, Anforderung aus KRITIS-LEAD) |
 | 0.6.14 | 31.10.2026 | Verschachtelte Objekte und Listen eines Profilschemas lesbar (Abschnitte 5.1, 5.2): Gruppenüberschriften für Listen und verschachtelte Objekte ohne `label`, Elementtitel ohne `titel_feld`; Listen von Objekten in PDF, Rohtabelle und CSV als Text je Element statt JSON; Profilformat 1.26 (Issue #114, A2, nach der Ladeprobe von KRITIS-LEAD M2) |
 | 0.6.15 | 31.10.2026 | Vermerk „Schemaprüfung mit Befund“ in finalen PDFs und Hinweis bei Frist auf oder vor t0 im Prüfschritt (Abschnitt 5.1, TP-2026-W44-42, -43); Bereich „Daten“ mit Sicherung, Wiederherstellung und Löschen aller Daten (Abschnitt 5.4, TP-2026-W44-44, -45); offener Punkt 11 erledigt, offener Punkt 19 neu; Service Worker findet vorgehaltene Dateien unabhängig von `Vary` (Abschnitt 9, Offline-Start bei „Vary: Origin“) |
+| 0.6.15 · Nachtrag | 31.10.2026 | Ohne neue Versionsnummer: Lizenz-Kurzsatz nennt „die Vorlagen“ (Issue #88); maschinenlesbare Lizenzzuordnung in `REUSE.toml` mit Lizenztexten unter `LICENSES/` (Issue #89) |

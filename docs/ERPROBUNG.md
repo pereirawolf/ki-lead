@@ -36,7 +36,7 @@ Ziel ist zu erfahren, ob KI-LEAD in der Hand fachkundiger Personen nachvollziehb
 
 ## 4. Nutzungsbedingungen und Haftung
 
-- Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlage zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Diese Bedingungen schränken die Lizenzen nicht ein; sie regeln nur die Teilnahme an der Erprobung.
+- Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Diese Bedingungen schränken die Lizenzen nicht ein; sie regeln nur die Teilnahme an der Erprobung.
 - KI-LEAD ist ein Forschungsdemonstrator in Entwicklung. Er wird **ohne Gewähr** bereitgestellt (EUPL-1.2, Art. 7). Fehler, Ausfälle und ungeeignete Entwürfe sind zu erwarten; Inhaltsgerüste der SOP-Sammelmappe sind nicht fachlich freigegeben.
 - Die **Haftung** des Herausgebers ist ausgeschlossen, soweit das Gesetz es zulässt (EUPL-1.2, Art. 8). Unberührt bleibt die Haftung für Vorsatz und grobe Fahrlässigkeit, für Schäden an Leben, Körper und Gesundheit und nach anderen zwingenden Vorschriften.
 - Für die Verarbeitung in der App ist die testende Person oder Stelle verantwortlich, für die Verarbeitung beim KI-Anbieter gelten dessen Bedingungen ([Datenschutzhinweise](DATENSCHUTZ.md), Abschnitte 2 und 5).
@@ -94,3 +94,4 @@ Aus einer einzelnen Rückmeldung folgt keine Regeländerung. Ereignisfakten geh�
 | 1.0 | 24.10.2026 | Erste Fassung (App 0.5.5) |
 | 1.1 | 24.10.2026 | Abschnitt 4: Lizenzangabe an LICENSE-CONTENT angeglichen (KP-2026-W43-55, -59) |
 | 1.2 | 28.10.2026 | Abschnitt 1: Verweise auf Anhang D der Datenschutzhinweise und auf die Vorlagen für die Erprobung in einer Stelle (VORLAGEN.md) |
+| 1.2 · Nachtrag | 31.10.2026 | Abschnitt 4: Lizenz-Kurzsatz nennt „die Vorlagen“ (Issue #88) |
