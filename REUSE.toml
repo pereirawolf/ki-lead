@@ -17,12 +17,14 @@ precedence = "override"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "EUPL-1.2"
 
-# Nr. 1 a bis c: Profilpakete, Evaluationsmaterial, Dokumentation und die Markdown-Dateien im Wurzelverzeichnis
+# Nr. 1 a bis c und e: Profilpakete, Evaluationsmaterial, Dokumentation, Meldungsformate und die Markdown-Dateien im
+# Wurzelverzeichnis
 [[annotations]]
 path = [
   "profile/**",
   "evaluation/**",
   "docs/**",
+  "formate/**",
   "README.md",
   "CHANGELOG.md",
   "SECURITY.md",
@@ -70,8 +72,9 @@ precedence = "override"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "EUPL-1.2 OR CC-BY-4.0"
 
-# Nr. 2 a bis c: zusätzlich CC0 1.0 nach Wahl der Nutzenden (Meldungsschemata, Manifeste, Kontaktlisten,
-# Quellenregister, JSON-Schemata in evaluation/, alle Dateien der Vorlage profile/muster/).
+# Nr. 2 a bis c und e: zusätzlich CC0 1.0 nach Wahl der Nutzenden (Meldungsschemata, Manifeste, Kontaktlisten,
+# Quellenregister, JSON-Schemata in evaluation/, alle Dateien der Vorlage profile/muster/, Schemata und
+# Zusammenstellungen der Meldungsformate in formate/).
 [[annotations]]
 path = [
   "profile/*/meldung.schema.json",
@@ -80,6 +83,8 @@ path = [
   "profile/*/sop/quellenregister.json",
   "evaluation/**/*.schema.json",
   "profile/muster/**",
+  "formate/**/*.schema.json",
+  "formate/**/zusammenstellungen/*.json",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"

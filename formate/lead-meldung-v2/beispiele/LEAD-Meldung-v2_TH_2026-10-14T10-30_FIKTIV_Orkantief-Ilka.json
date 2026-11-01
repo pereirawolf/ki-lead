@@ -1,0 +1,581 @@
+{
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "019a2b4c-6d10-7e3a-9f21-5c8d4e7a1b20",
+  "status": "freigegeben",
+  "absender": {
+    "stelle": "Thüringer Ministerium für Inneres, Kommunales und Landesentwicklung, Lagezentrum",
+    "ebene": "Land",
+    "gebiet": {
+      "name": "Thüringen",
+      "schluessel": "DE-TH"
+    }
+  },
+  "meldezeitpunkt": "2026-10-14T10:30+02:00",
+  "zeitzone": "Europe/Berlin",
+  "meldezeitraum": {
+    "von": "2026-10-13",
+    "bis": "2026-10-14"
+  },
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Deutscher Wetterdienst",
+      "titel": "Warnlagebericht Thüringen, Orkantief „Ilka“, Ausgabe 13:00 mit Folgeprognose bis 16.10. (FIKTIV)",
+      "zugriff": "2026-10-13",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-13"
+    },
+    {
+      "id": "Q2",
+      "kategorie": "A",
+      "herausgeber": "Lagezentrum des TMIKL",
+      "titel": "Lageübersicht Sturm 13./14.10., Fortschreibung 3 (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T08:30+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q3",
+      "kategorie": "A",
+      "herausgeber": "Landratsamt Sonneberg, Krisenstab",
+      "titel": "Lagemeldung Nr. 4 (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T08:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q4",
+      "kategorie": "B",
+      "herausgeber": "Verteilnetzbetreiber Netzgebiet Südthüringen",
+      "titel": "Störungsübersicht und Wiederversorgungsprognose (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "oeffentlich",
+      "datenstand": "2026-10-14T08:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q5",
+      "kategorie": "B",
+      "herausgeber": "Mobilfunknetzbetreiber B",
+      "titel": "Mitteilung an das Landratsamt Sonneberg zu Standortausfällen (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T07:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q6",
+      "kategorie": "A",
+      "herausgeber": "Zentrale Leitstelle Sonneberg",
+      "titel": "Mitteilung zur Notrufabfrage (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q7",
+      "kategorie": "B",
+      "herausgeber": "Erfurter Bahn / DB InfraGO",
+      "titel": "Streckeninformation Südthüringen und Schwarzatal (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "oeffentlich",
+      "datenstand": "2026-10-14T08:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q8",
+      "kategorie": "A",
+      "herausgeber": "Thüringer Landesamt für Bau und Verkehr",
+      "titel": "Verkehrsinformation A 71 und Landesstraßen Thüringer Wald (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-14"
+    }
+  ],
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-20261014-K7QM",
+      "bezeichnung": "Orkantief „Ilka“: Sturmschäden im Thüringer Wald, A 71 wieder frei, Bahnstrecken in Südthüringen mehrere Tage gesperrt",
+      "eintritt": {
+        "zeit": "2026-10-13T19:00+02:00",
+        "genauigkeit": "ungefaehr"
+      },
+      "raum": {
+        "beschreibung": "Thüringen; Thüringer Wald (Ilm-Kreis, Landkreis Schmalkalden-Meiningen, Landkreis Hildburghausen, Landkreis Sonneberg, Landkreis Saalfeld-Rudolstadt)",
+        "gebiete": [
+          {
+            "name": "Ilm-Kreis",
+            "schluessel": "16070"
+          },
+          {
+            "name": "Landkreis Schmalkalden-Meiningen",
+            "schluessel": "16066"
+          },
+          {
+            "name": "Landkreis Hildburghausen",
+            "schluessel": "16069"
+          },
+          {
+            "name": "Landkreis Sonneberg",
+            "schluessel": "16072"
+          },
+          {
+            "name": "Landkreis Saalfeld-Rudolstadt",
+            "schluessel": "16073"
+          }
+        ]
+      },
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Orkantief „Ilka“). Kernaussage: Die Sturmschäden im Thüringer Wald sind außerhalb des Stromausfallgebiets (Sachverhalt 2) überwiegend verkehrlicher Natur und ohne Versorgungsrelevanz. Das Sturmfeld erreichte Thüringen am 13.10. gegen 19:00 Uhr und verließ es gegen 23:30 Uhr nach Osten; Spitzenböen bis 151 km/h an der Schmücke [Q1]. Landesweit rund 1.400 Einsätze, fünf Leichtverletzte [Q2]. Die A 71 war zwischen Ilmenau-Ost und Suhl wegen Baumwürfen von 21:00 Uhr bis 14.10., 05:30 Uhr gesperrt [Q8]. Zwölf Landesstraßen über den Rennsteig sind zu t0 noch gesperrt [Q8]. Bahn: Die Strecken Eisfeld–Sonneberg und die Schwarzatalbahn bleiben bis voraussichtlich 18.10. gesperrt, Ersatzverkehr läuft eingeschränkt [Q7].",
+        "risiken_auswirkungen": "Belegt: Gesperrte Landesstraßen verlängern Anfahrtswege von Rettungsdienst und Pflegediensten in den Kammlagen; Ausweichrouten bestehen [Q2, Q8]. Auswirkungen auf Versorgungsfunktionen außerhalb des Landkreises Sonneberg sind nicht gemeldet [Q2]. Szenario: Der DWD erwartet für die Nacht zum 15.10. leichten Frost in den Kammlagen [Q1]; bei Glätte auf noch nicht vollständig geräumten Straßen steigt das Unfallrisiko. Weitere Sturmböen sind nicht vorhergesagt [Q1].",
+        "abhaengigkeiten_interdependenzen": "Belegte Kopplung: Sperrungen von Landesstraßen → längere Anfahrt Rettungsdienst und Pflegedienste in Kammlagen; Puffer: Ausweichrouten [Q8]. Die Verkehrseinschränkungen erschweren die Anfahrt der Netzmonteure im Landkreis Sonneberg und sind insoweit mit Sachverhalt 2 gekoppelt [Q3]. Weitere Kopplungen sind nicht belegt."
+      },
+      "bewertung": {
+        "kernaussage": "Außerhalb des Stromausfallgebiets im Landkreis Sonneberg hinterlässt der Sturm in Thüringen vor allem Verkehrsbeeinträchtigungen ohne Versorgungsrelevanz; ein Prüfbedarf besteht nur für die Erreichbarkeit der Kammorte durch den Rettungsdienst.",
+        "referenzraum": "Land Thüringen ohne das Stromausfallgebiet (Sachverhalt 2)",
+        "beurteilung": {
+          "stufe": "geringfügig",
+          "begruendung": "keine Versorgungsfunktion eingeschränkt, Ausweichrouten bestehen."
+        },
+        "tendenz": {
+          "richtung": "Stabilisierung",
+          "bezug": "Land, 14.10. 05:30 bis 08:30",
+          "begruendung": "A 71 frei, Zahl gesperrter Landesstraßen seit 06:00 Uhr unverändert bei zwölf."
+        },
+        "neubewertung_bei": [
+          {
+            "indikator": "Glätteunfällen auf ungeräumten Strecken",
+            "stand": "neu"
+          },
+          {
+            "indikator": "Verzögerung der Bahnwiederinbetriebnahme über 18.10. hinaus",
+            "stand": "neu"
+          }
+        ],
+        "erkenntnislage": {
+          "luecken": ["Keine belegte Prognose für die Freigabe der zwölf gesperrten Landesstraßen."],
+          "widersprueche": []
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Räumung von Straßen und Wegen",
+            "stelle": "Straßenmeistereien, Feuerwehren und ThüringenForst in den betroffenen Landkreisen",
+            "status": "begonnen",
+            "stand": "2026-10-14T08:30+02:00",
+            "quellen": ["Q2"]
+          }
+        ],
+        "empfehlungen": [
+          {
+            "id": "E1",
+            "adressat": "Landkreise",
+            "auftrag": "Erreichbarkeit der Kammorte für Rettungsdienst bis zur Freigabe der Landesstraßen in der Rettungsdienstplanung berücksichtigen.",
+            "termin": null,
+            "quellen": []
+          },
+          {
+            "id": "E2",
+            "adressat": "Landesamt für Bau und Verkehr",
+            "auftrag": "Priorisierung der Räumung nach Erreichbarkeit von Versorgungseinrichtungen. Bundes- oder länderübergreifender Abstimmungsbedarf besteht für diesen Sachverhalt nicht.",
+            "termin": null,
+            "quellen": []
+          }
+        ],
+        "fristen": [],
+        "erlaeuterung": "Bundes- oder länderübergreifender Abstimmungsbedarf besteht für diesen Sachverhalt nicht."
+      },
+      "kennzahlen": [
+        {
+          "id": "K1",
+          "gegenstand": "Einsätze landesweit",
+          "einheit": "Einsätze",
+          "art": "kumuliert",
+          "wert": 1400,
+          "mindestwert": false,
+          "erhebung": "amtlich_gemeldet",
+          "raum": "Thüringen",
+          "datenstand": "2026-10-14T08:30+02:00",
+          "quellen": ["Q2"]
+        },
+        {
+          "id": "K2",
+          "gegenstand": "gesperrte Landesstraßen über den Rennsteig",
+          "einheit": "Strecken",
+          "art": "bestand",
+          "wert": 12,
+          "mindestwert": false,
+          "erhebung": "amtlich_gemeldet",
+          "raum": "Thüringer Wald",
+          "datenstand": "2026-10-14T08:00+02:00",
+          "quellen": ["Q8"]
+        }
+      ],
+      "zeitstrahl": [],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": ["Unwetter / Sturm"],
+          "lagenradar": {
+            "d1": {
+              "stufe": 3,
+              "status": "belegt",
+              "begruendung": "Schäden in fünf Landkreisen.",
+              "quellen": ["Q2"]
+            },
+            "d2": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "fünf Leichtverletzte belegt (Bedingung a der Nullregel).",
+              "quellen": ["Q2"]
+            },
+            "d3": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Landkreise und Straßenbaulastträger steuern die Räumung.",
+              "quellen": []
+            },
+            "d4": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "eingesetzt sind örtliche Kräfte und Straßenmeistereien.",
+              "quellen": ["Q2"]
+            },
+            "d5": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "kein Zielzustand mit belegter Prognose für die Landesstraßen.",
+              "quellen": [],
+              "offen_grund": "kein_beleg"
+            },
+            "d6": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "peripherer Bezug über Verkehrsinfrastruktur.",
+              "quellen": []
+            },
+            "d7": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Angaben aktuell und konsistent.",
+              "quellen": []
+            },
+            "d8": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "nach Sturmende nur geringe Veränderungen.",
+              "quellen": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "kennung": "DE-TH-20261014-P5VN",
+      "bezeichnung": "Stromausfall im Landkreis Sonneberg nach Mastschäden: rund 9.800 Personen ohne Strom, Notruf eingeschränkt, Wiederversorgung erst 16.10.",
+      "eintritt": {
+        "zeit": "2026-10-13",
+        "genauigkeit": "belegt"
+      },
+      "raum": {
+        "beschreibung": "Thüringen; Landkreis Sonneberg (Stadt Neuhaus am Rennweg, Gemeinden Frankenblick und Föritztal, Teile der Stadt Sonneberg)",
+        "gebiete": [
+          {
+            "name": "Landkreis Sonneberg",
+            "schluessel": "16072"
+          }
+        ]
+      },
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Orkantief „Ilka“). Kernaussage: Im Landkreis Sonneberg sind rund 9.800 Menschen seit dem späten Abend des 13.10. ohne Strom; wegen Mastschäden ist die Wiederversorgung erst für den Abend des 16.10. angekündigt, und Notstrompuffer in Pflege und Wasserversorgung reichen ohne Nachschub nicht bis dahin. Ursache sind Baumwürfe und zwei gebrochene Masten einer 20-kV-Leitung oberhalb von Neuhaus am Rennweg [Q4]. In der Spitze (13.10., 22:30 Uhr) waren rund 18.000 Anschlüsse ohne Versorgung, zu t0 noch rund 5.300 [Q4]. Der Krisenstab des Landratsamts beziffert die betroffenen Einwohnerinnen und Einwohner auf rund 9.800 [Q3]. 23 Mobilfunkstandorte sind ohne Strom, 17 davon nach Akkuerschöpfung ausgefallen [Q5]. Notrufe aus vier Gemeinden erreichen die Leitstelle nur eingeschränkt [Q6]. Der Landkreis hat am 14.10., 02:00 Uhr ein außergewöhnliches Ereignis festgestellt und den Krisenstab einberufen [Q3].",
+        "risiken_auswirkungen": "Belegt: Zwei Pflegeheime (zusammen 146 Bewohnerinnen und Bewohner) laufen auf Notstrom, die Dieselvorräte reichen nach Angabe der Heime bis 15.10. abends [Q3]. Zwölf Personen mit Heimbeatmung oder Sauerstoffversorgung sind beim Landkreis bekannt; neun wurden in Kliniken in Sonneberg und Coburg aufgenommen, drei werden zu Hause mit Netzersatz versorgt [Q3]. Die Trinkwasserversorgung in Neuhaus am Rennweg läuft über Notstrom, Reichweite nach Angabe des Zweckverbands 60 Stunden ab 13.10., 22:00 Uhr [Q3]. Für die Nacht zum 15.10. erwartet der DWD Frost bis −2 °C in den Kammlagen [Q1]. Szenario: Ohne Nachbetankung erschöpfen sich die Notstrompuffer der Pflegeheime vor der angekündigten Wiederversorgung. Bei weiterer Verzögerung wäre eine vorsorgliche Verlegung von Pflegebedürftigen zu prüfen, und zwei Nächte ohne Heizung erhöhen das Gesundheitsrisiko für ältere Menschen in Privathaushalten.",
+        "abhaengigkeiten_interdependenzen": "Wirkungskette 1: Mastbruch 20-kV → Ortsnetze ohne Strom → Mobilfunkstandorte nach Akkuerschöpfung ausgefallen → Notruf aus vier Gemeinden eingeschränkt [Q4, Q5, Q6]. Puffer: Notfalltreffpunkte mit BOS-Funk, Reichweite bei Besetzung unbegrenzt. Wirkungskette 2: Strom → Pflegeheime auf Notstrom, Puffer bis 15.10. abends [Q3]. Wirkungskette 3: Strom → Trinkwasser Neuhaus am Rennweg auf Notstrom, Puffer bis etwa 16.10., 10:00 Uhr [Q3], also vor der angekündigten Wiederversorgung. Gesundheitsversorgung: Klinikaufnahmen in Sonneberg und Coburg (Bayern) belegen eine länderübergreifende Kopplung [Q3]. Verkehr: Gesperrte Landesstraßen (Sachverhalt 1) verlängern die Anfahrt der Monteure und Tankfahrzeuge. Möglich, nicht belegt: Erschöpfung der Puffer vor Wiederversorgung, wenn die Nachbetankung nicht gelingt."
+      },
+      "bewertung": {
+        "kernaussage": "Im Landkreis Sonneberg sind rund 9.800 Menschen bis voraussichtlich 16.10. ohne Strom; weil Notstrompuffer in Pflege und Wasserversorgung vorher enden, entscheidet die Nachbetankung über den weiteren Verlauf. Prüffrage für Landkreis und Land: Sind Dieselnachschub und zusätzliche Netzersatzanlagen bis 15.10. mittags gesichert?",
+        "referenzraum": "Landkreis Sonneberg im Land Thüringen",
+        "beurteilung": {
+          "stufe": "erheblich",
+          "begruendung": "fast 10.000 Personen, Notruf eingeschränkt, Pflege und Wasser auf Notstrom; Abgrenzung zu „kritisch“: Ersatzwege (Notfalltreffpunkte) bestehen, die Puffer sind durch Nachbetankung verlängerbar."
+        },
+        "tendenz": {
+          "richtung": "Verschärfung",
+          "bezug": "Landkreis Sonneberg, 14.10. bis 16.10.",
+          "begruendung": "Die Wiederversorgung liegt nach dem Ende mehrerer Puffer, zugleich wird Frost erwartet; der Rückgang von 18.000 auf 5.300 Anschlüsse ändert daran nichts."
+        },
+        "neubewertung_bei": [
+          {
+            "indikator": "Ausfall eines Notstromaggregats",
+            "stand": "neu"
+          },
+          {
+            "indikator": "Verschiebung der Prognose über 16.10. hinaus",
+            "stand": "neu"
+          },
+          {
+            "indikator": "Bestätigung einer provisorischen Einspeisung",
+            "stand": "neu"
+          }
+        ],
+        "abweichende_bewertungen": [
+          {
+            "stelle": "Landkreis Sonneberg",
+            "stufe": "kritisch",
+            "grund": "eingeschränkter Notruf und Pflegeheime auf Notstrom",
+            "quellen": ["Q3"],
+            "ursache": "Maßstab",
+            "klaerend": "Bestätigung der Nachbetankung bis 15.10. mittags"
+          }
+        ],
+        "erkenntnislage": {
+          "luecken": ["Der Netzbetreiber meldet nur Anschlüsse; eine Umrechnung in Personen ist nicht belegt (K1 und K2 nicht ineinander überführen)."],
+          "widersprueche": []
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Acht Notfalltreffpunkte mit BOS-Funk, Wärme und Ladestrom",
+            "stelle": "Landratsamt Sonneberg, Krisenstab",
+            "status": "umgesetzt",
+            "stand": "2026-10-14T08:00+02:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M2",
+            "gegenstand": "Warnung der Bevölkerung über Lautsprecherwagen",
+            "stelle": "Landratsamt Sonneberg, Krisenstab",
+            "status": "begonnen",
+            "stand": "2026-10-14T08:00+02:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M3",
+            "gegenstand": "Netzersatzanlagen durch zwei THW-Ortsverbände aus Oberfranken (Bayern)",
+            "stelle": "THW, angefordert über das THW",
+            "status": "umgesetzt",
+            "stand": "2026-10-14T08:30+02:00",
+            "quellen": ["Q2", "Q3"]
+          }
+        ],
+        "empfehlungen": [
+          {
+            "id": "E1",
+            "adressat": "Landkreis Sonneberg",
+            "auftrag": "Dieselnachschub für Pflegeheime und Wasserversorgung bis 15.10. mittags sicherstellen.",
+            "termin": "2026-10-15T12:00+02:00",
+            "quellen": ["Q3"],
+            "anlass": "Dieselvorräte der Pflegeheime reichen bis 15.10. abends, Notstrom der Wasserversorgung bis 16.10. mittags."
+          },
+          {
+            "id": "E2",
+            "adressat": "Lagezentrum TMIKL",
+            "auftrag": "Prüfen, ob weitere Netzersatzanlagen aus anderen Landkreisen oder über das THW benötigt werden, und Anforderungsweg festlegen.",
+            "termin": null,
+            "quellen": []
+          },
+          {
+            "id": "E3",
+            "adressat": "Netzbetreiber und Land",
+            "auftrag": "Prognose 16.10. täglich bestätigen, Möglichkeit einer provisorischen Einspeisung prüfen.",
+            "termin": null,
+            "quellen": [],
+            "bedingung": "täglich bis zur Wiederversorgung"
+          },
+          {
+            "id": "E4",
+            "adressat": "Koordinierungsstelle",
+            "auftrag": "Länderübergreifenden Bedarf an Netzersatzanlagen mit Niedersachsen und Nordrhein-Westfalen abgleichen, wo zeitgleich längere Ausfälle bestehen.",
+            "termin": null,
+            "quellen": [],
+            "bedingung": "solange in Niedersachsen und Nordrhein-Westfalen längere Ausfälle bestehen"
+          }
+        ],
+        "fristen": [
+          {
+            "id": "F1",
+            "bis": "2026-10-15T12:00+02:00",
+            "aufgabe": "Nachbetankung der Notstromaggregate in Pflegeheimen und Wasserversorgung",
+            "adressat": "Landkreis Sonneberg",
+            "bedingung": "vor Ende der Dieselvorräte der Pflegeheime (15.10. abends)",
+            "grundlage": "Angaben der Heime und des Zweckverbands in der Lagemeldung des Landratsamts",
+            "quellen": ["Q3"],
+            "empfehlung": "E1"
+          }
+        ]
+      },
+      "kennzahlen": [
+        {
+          "id": "K1",
+          "gegenstand": "Anschlüsse ohne Stromversorgung",
+          "einheit": "Anschlüsse",
+          "art": "bestand",
+          "wert": 5300,
+          "mindestwert": false,
+          "erhebung": "gezaehlt",
+          "raum": "Netzgebiet Südthüringen, Landkreis Sonneberg",
+          "datenstand": "2026-10-14T08:00+02:00",
+          "quellen": ["Q4"]
+        },
+        {
+          "id": "K2",
+          "gegenstand": "Einwohnerinnen und Einwohner ohne Stromversorgung",
+          "einheit": "Personen",
+          "art": "bestand",
+          "wert": 9800,
+          "mindestwert": false,
+          "erhebung": "amtlich_gemeldet",
+          "raum": "Landkreis Sonneberg",
+          "datenstand": "2026-10-14T08:00+02:00",
+          "quellen": ["Q3"]
+        },
+        {
+          "id": "K3",
+          "gegenstand": "Bewohnerinnen und Bewohner von Pflegeheimen auf Notstrom",
+          "einheit": "Personen",
+          "art": "bestand",
+          "wert": 146,
+          "mindestwert": false,
+          "erhebung": "gezaehlt",
+          "raum": "zwei Pflegeheime im Ausfallgebiet",
+          "datenstand": "2026-10-14T08:00+02:00",
+          "teilmenge_von": "K2",
+          "quellen": ["Q3"]
+        },
+        {
+          "id": "K4",
+          "gegenstand": "Mobilfunkstandorte ohne Strom",
+          "einheit": "Standorte",
+          "art": "bestand",
+          "wert": 23,
+          "mindestwert": false,
+          "erhebung": "gezaehlt",
+          "raum": "Landkreis Sonneberg",
+          "datenstand": "2026-10-14T07:00+02:00",
+          "quellen": ["Q5"]
+        }
+      ],
+      "zeitstrahl": [],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": ["Stromausfall / Blackout", "KRITIS-Ausfall"],
+          "lagenradar": {
+            "d1": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Ausfallraum in einem Landkreis mit mehreren Gemeinden.",
+              "quellen": ["Q3"]
+            },
+            "d2": {
+              "stufe": 3,
+              "status": "belegt",
+              "begruendung": "rund 9.800 Personen laut Krisenstab; Abgrenzung zu 4: unter 10.000.",
+              "quellen": ["Q3"]
+            },
+            "d3": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "der Landkreis steuert über den Krisenstab.",
+              "quellen": ["Q3"]
+            },
+            "d4": {
+              "stufe": 4,
+              "status": "belegt",
+              "begruendung": "eingesetzt sind THW-Kräfte aus Bayern; die Skala kennt keine Stufe „länderübergreifend“. Stufe 5 („bundesweit“) wäre überzeichnet, deshalb die niedrigere Stufe.",
+              "quellen": ["Q3"]
+            },
+            "d5": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Zielzustand vollständige Wiederversorgung Strom, Betreiberprognose 16.10. abends.",
+              "quellen": ["Q4"]
+            },
+            "d6": {
+              "stufe": 4,
+              "status": "belegt",
+              "begruendung": "belegte Kopplungen Strom → Telekommunikation/Notruf, Pflege, Trinkwasser, Gesundheitsversorgung.",
+              "quellen": ["Q3", "Q5", "Q6"]
+            },
+            "d7": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Netzbetreiber liefert nur Anschlusszahlen, vier Gemeinden nur über BOS-Funk erreichbar.",
+              "quellen": ["Q3", "Q4"]
+            },
+            "d8": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "ein Umschlag von der Ausfall- in die Teilwiederversorgungsphase.",
+              "quellen": []
+            }
+          }
+        }
+      },
+      "bekannt_seit": "2026-10-13T22:30+02:00"
+    }
+  ],
+  "freigabe": {
+    "erfasst": {
+      "name": "Sachbearbeitung Lagezentrum (FIKTIV)",
+      "zeitpunkt": "2026-10-14T10:10+02:00",
+      "hz": "FIKTIV"
+    },
+    "freigegeben": {
+      "name": "Lagedienstführung (FIKTIV)",
+      "zeitpunkt": "2026-10-14T10:25+02:00",
+      "hz": "FIKTIV",
+      "funktion": "Lagedienstführung"
+    }
+  },
+  "entstehung": {
+    "verfahren": "KI-Entwurf",
+    "erstellt": "2026-10-14T20:15+02:00",
+    "anmerkung": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive). Aus der v1-Fassung (profile/lead-beispiel/beispiele/orkantief-ilka) mit scripts/lead-meldung-v2.mjs überführt und am 01.11.2026 von Hand vervollständigt: Zugang der Quellen, Gebiete, Kennzahlen, Maßnahmen mit Status, Fristbezug, Erkenntnislage, Gründe offener Achsen.",
+    "modelle": [
+      {
+        "modell": "Claude Opus 5.5"
+      }
+    ],
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B01",
+          "fassung": "2.0",
+          "bezeichnung": "Unwetter / Sturm"
+        },
+        {
+          "kennung": "B08",
+          "fassung": "2.0",
+          "bezeichnung": "Stromausfall / Blackout"
+        },
+        {
+          "kennung": "B12",
+          "fassung": "2.0",
+          "bezeichnung": "KRITIS-Ausfall"
+        }
+      ],
+      "kodierleitfaden": "LEAD v2.0"
+    },
+    "profil": {
+      "id": "lead.beispiel.koordinierungsstelle",
+      "version": "1.35.0"
+    }
+  },
+  "berichtsraum": {
+    "beschreibung": "Land Thüringen",
+    "gebiete": [
+      {
+        "name": "Thüringen",
+        "schluessel": "DE-TH"
+      }
+    ]
+  }
+}

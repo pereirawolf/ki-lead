@@ -18,7 +18,9 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
    c) die Dokumentation im Ordner docs/ sowie README.md, CHANGELOG.md,
       SECURITY.md und THIRD-PARTY-NOTICES.md im Wurzelverzeichnis;
    d) zusätzlich zur EUPL-1.2 das App-Symbol: public/icons/, public/favicon.ico
-      und die daraus erzeugten Symbol- und Startbilder in android/ und ios/.
+      und die daraus erzeugten Symbol- und Startbilder in android/ und ios/;
+   e) alle Dateien im Ordner formate/ (Meldungsformate mit Schemata,
+      Zusammenstellungen, Beispielen und Beschreibung, seit 01.11.2026).
 
 2. Zusätzlich CC0 1.0. Nach Wahl der Nutzenden stehen auch unter CC0 1.0 Universal
    (Datei LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung
@@ -31,7 +33,9 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
    d) die Vorlagen V1 bis V6 in docs/VORLAGEN.md sowie Anhang C und Anhang D in
       docs/DATENSCHUTZ.md (seit 28.10.2026). Ihr Aufbau folgt teils aus Gesetzen;
       Stellen sollen sie ohne Hinweis auf den Herausgeber in eigene Muster
-      übernehmen können.
+      übernehmen können;
+   e) die JSON-Schemata und Zusammenstellungen im Ordner formate/
+      (*.schema.json und zusammenstellungen/*.json, seit 01.11.2026).
    Die Darstellungsdateien der übrigen Profile (meldung.ui.json) enthalten die
    Stufentexte des Lagenradars; für sie gilt allein CC BY 4.0.
 

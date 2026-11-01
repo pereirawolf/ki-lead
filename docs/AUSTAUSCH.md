@@ -1,8 +1,10 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.1 vom 31.10.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.19 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.2 vom 01.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.20 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
+
+**Seit Fassung 0.2:** Die Vorschläge dieses Entwurfs sind in den Entwurf des Meldungsformats `LEAD-Meldung-v2` eingegangen ([LEAD-MELDUNG-V2.md](LEAD-MELDUNG-V2.md), Abwägung in Abschnitt 12): Meldungskennung und Beziehungen (Abschnitt 1), Profil und Version in der Entstehung (2), Gebietsschlüssel (3), Zeitzone und UTC-Versatz (4), Ursprungsquellen (5), vierstufiger Status ohne Versand (6), Wertzustände und Fehlanzeige (7), Fachmodule statt offener Zusatzfelder (2, 8). Für die Abstimmung in Teil C ist v2 die Vorlage; die Beschreibung des heutigen Stands unten gilt für v1.
 
 **Beteiligte Meldungsarten (Stand 0.6.19):** `LEAD-Meldung-v1` (Beispielprofil der Koordinierungsstelle, Bundesebene), `LEAD-Meldung-Land-v1` (Landesprofil Thüringen mit fiktiven Inhalten, Kreise und Land), `Lagebild-Justiz-Meldung-v1` (Profil „Lagebild Justiz“, Erprobungsentwurf) und die Betreibermeldungen des Schwesterprojekts KRITIS-LEAD.
 
@@ -107,3 +109,4 @@ Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Sche
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 0.1 | 31.10.2026 | Erster Entwurf (App 0.6.19, TP-2026-W44-58); Abstimmung in Teil C |
+| 0.2 | 01.11.2026 | Verweis auf den Entwurf des Meldungsformats `LEAD-Meldung-v2`, der die Vorschläge aufnimmt; Inhalt sonst unverändert |
