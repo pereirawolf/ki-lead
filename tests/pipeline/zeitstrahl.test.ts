@@ -323,3 +323,61 @@ describe("ZS-2026-W44-01, -04: ganzer Lauf der Fortschreibung", () => {
     expect(k.lauf.ergebnis!.schemakonform).toBe(true);
   });
 });
+
+describe("GK-2026-W44-02: Quellennummern der Vormeldung bleiben stabil", () => {
+  // Soll: Kodierleitfaden Abschnitt 5 (Nummern der Vormeldung bleiben bei der Fortschreibung) und SOP-LEAD A.5 (Aussage und
+  // Beleg passen zusammen). Eine übernommene Zeile darf nicht still auf eine andere Quelle zeigen.
+  const RP = "Ministerium des Innern und für Sport Rheinland-Pfalz";
+  const NI_NEU =
+    "[Q1] A – Niedersächsisches Innenministerium, Lagezentrum (22.10.2026): Lagemeldung nach LEAD-Meldevorlage, Orkantief „Ilka“, Meldezeitpunkt 05:30 (behördenintern, FIKTIV) [Zugriff: 22.10.2026]";
+  const alteQuellen = () => String(vormeldung().quellen).split("\n");
+
+  it("Quelle Q1 wandert nach Q2, Q1 gehört einem neuen Eingang, [Z1] fehlt im Entwurf: Konflikt statt stiller Wiederherstellung", () => {
+    const d = entwurf();
+    const alt = alteQuellen();
+    expect(alt[0]).toContain(RP);
+    // neuer Eingang vorn, alle früheren Einträge eine Nummer weiter
+    d.quellen = [NI_NEU, ...alt.map((z, i) => z.replace(/^\[Q\d+\]/, `[Q${i + 2}]`))].join("\n");
+    d.zeitstrahl = String(d.zeitstrahl)
+      .split("\n")
+      .filter((z: string) => !z.startsWith("[Z1]"))
+      .join("\n");
+    const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
+    // [Z1] wird wortgleich wiederhergestellt, aber nicht als geklärt ausgewiesen
+    expect(zeilen(d)[0]).toContain("nach Meldung Rheinland-Pfalz [Q1]");
+    const k = b.find((x) => x.code === "ZEITSTRAHL_QUELLE");
+    expect(k?.stufe).toBe("warnung");
+    expect(k!.text).toContain("[Z1] [Q1] (Quelle der Vormeldung jetzt unter [Q2])");
+    expect(k!.text).toMatch(/Zuordnung ungeklärt/);
+  });
+
+  it("gleiche Nummer, andere Quelle: Konflikt, auch wenn die Quelle der Vormeldung fehlt", () => {
+    const d = entwurf();
+    d.quellen = [NI_NEU, ...alteQuellen().slice(1)].join("\n");
+    const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
+    const k = b.find((x) => x.code === "ZEITSTRAHL_QUELLE");
+    expect(k!.text).toContain("[Z1] [Q1] (Quelle der Vormeldung fehlt im Quellenverzeichnis)");
+    expect(k!.text).toContain("[Z2] [Q1] (Quelle der Vormeldung fehlt im Quellenverzeichnis)");
+    expect(k!.text).not.toContain("[Q2]");
+  });
+
+  it("Kontrollfall: nachgeführte Zugriffsdaten und neue Quellen mit der nächsten freien Nummer ergeben keinen Konflikt", () => {
+    const d = entwurf();
+    d.quellen = [
+      ...alteQuellen().map((z) => z.replace("[Zugriff: 14.10.2026]", "[Zugriff: 22.10.2026]. Datenstand: 22.10.2026, 05:00")),
+      NI_NEU.replace("[Q1]", "[Q7]"),
+    ].join("\n");
+    const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
+    expect(b.filter((x) => x.code === "ZEITSTRAHL_QUELLE")).toEqual([]);
+  });
+
+  it("Steuerungsblock nennt die stabile Nummerierung bei der Fortschreibung", () => {
+    const z = { felder: { zeitstrahl: "zeitstrahl" }, kennungenVormeldung: [BUND], naechsteZ: 9, typBewertung: "Bewertung", typBerichtigung: "Berichtigung" };
+    expect(zeitstrahlSteuerung({ vormeldung: true, verdichtung: false }, z as any).join("\n")).toContain(
+      "Die Einträge des Quellenverzeichnisses der Vormeldung behalten ihre Nummern [Qn]; neue Quellen erhalten die nächste freie Nummer.",
+    );
+    expect(zeitstrahlSteuerung({ vormeldung: false, verdichtung: true }, { ...z, kennungenVormeldung: [], naechsteZ: 1 } as any).join("\n")).not.toContain(
+      "behalten ihre Nummern",
+    );
+  });
+});

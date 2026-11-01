@@ -302,7 +302,7 @@ export function zeitstrahlSteuerung(s: Pick<Steuerung, "vormeldung" | "verdichtu
     const teile = ["Form und Regeln nach dem Kodierleitfaden; nur eingetretene, belegte Ereignisse bis t0, chronologisch."];
     if (s.vormeldung)
       teile.push(
-        `Übernimm die Zeilen der Vormeldung wortgleich mit ihren Nummern; neue Zeilen beginnen bei [Z${z.naechsteZ}]. Eine frühere Zeile änderst du nicht, sondern ergänzt eine Zeile vom Typ „${z.typBerichtigung || "Berichtigung"}“ mit „zu [Zn]: …“.`,
+        `Übernimm die Zeilen der Vormeldung wortgleich mit ihren Nummern; neue Zeilen beginnen bei [Z${z.naechsteZ}]. Eine frühere Zeile änderst du nicht, sondern ergänzt eine Zeile vom Typ „${z.typBerichtigung || "Berichtigung"}“ mit „zu [Zn]: …“. Die Einträge des Quellenverzeichnisses der Vormeldung behalten ihre Nummern [Qn]; neue Quellen erhalten die nächste freie Nummer.`,
       );
     if (s.verdichtung)
       teile.push(

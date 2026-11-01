@@ -8,10 +8,13 @@
 //   der Fassung der Vormeldung, die neue Fassung steht als eigene Zeile daneben.
 // - Bewertungszeilen schreibt nur die App: bei der Fortschreibung je geänderter Beurteilung oder Tendenz eine Zeile
 //   zum Meldezeitpunkt. Bewertungszeilen der KI entfallen.
+// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02, Kodierleitfaden Abschnitt 5): Bezeichnet [Qn] in einer
+//   übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung, meldet die App den Konflikt, statt ihn zu lösen.
 
 import { jetztLokal } from "../kern/ausgabe";
 import { bezugVon, istKennung, kennungenDerMeldung, neueKennung, PLATZHALTER_RE } from "../kern/kennung";
 import { holeWert, teilePfad } from "../kern/pfad";
+import { parseQuellen, verweise } from "../kern/quellen";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { istEigeneStelle } from "../kern/ui";
 import { chronologisch, parseZeitstrahl, zeitstrahlKonfig, zeitstrahlZeile, type ZeitstrahlEintrag } from "../kern/zeitstrahl";
@@ -52,6 +55,19 @@ const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 /** Inhalt einer Zeile ohne Nummer, zum Wiedererkennen umnummerierter Zeilen */
 /** Inhalt ohne Nummer und ohne Kenntniszeit (die setzt die App) */
 const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0, aufgenommen: undefined }));
+/**
+ * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02): Kategorie, Herausgeber, Datum, Titel und
+ * Fundstelle, ohne Nummer, Zugriffsdatum und Datenstand (beide darf eine Fortschreibung nachführen).
+ */
+const quellKern = (text: string) =>
+  norm(
+    text
+      .replace(/^\s*\[Q\d+\]\s*/, "")
+      .replace(/\[Zugriff:[^\]]*\]/gi, "")
+      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, ""),
+  )
+    .replace(/[\s.;,]+$/, "")
+    .toLowerCase();
 
 export interface ZeitstrahlUmgebung {
   material: Material[];
@@ -220,6 +236,30 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
       getragen.add(v.nr);
       if (!veraendert.includes(v.nr)) wiederhergestellt.push(v.nr);
     }
+  // Quellenidentität der übernommenen Zeilen: [Qn] muss dieselbe Quelle bezeichnen wie in der Vormeldung
+  if (vor && r.quellen && behalten.length) {
+    const vorQ = new Map(parseQuellen(holeWert(vor, r.quellen)).map((q) => [q.nr, quellKern(q.text)]));
+    const neuListe = parseQuellen(holeWert(d, r.quellen));
+    const neuQ = new Map(neuListe.map((q) => [q.nr, quellKern(q.text)]));
+    const nrVon = new Map(neuListe.map((q) => [quellKern(q.text), q.nr]));
+    const konflikte: string[] = [];
+    for (const e of [...behalten].sort((a, b) => a.nr - b.nr))
+      for (const n of [...verweise(e.text)].sort((a, b) => a - b)) {
+        const alt = vorQ.get(n);
+        if (alt === undefined || neuQ.get(n) === alt) continue;
+        const jetzt = nrVon.get(alt);
+        konflikte.push(
+          `[Z${e.nr}] [Q${n}] (${jetzt !== undefined ? `Quelle der Vormeldung jetzt unter [Q${jetzt}]` : "Quelle der Vormeldung fehlt im Quellenverzeichnis"})`,
+        );
+      }
+    if (konflikte.length)
+      befunde.push({
+        stufe: "warnung",
+        code: "ZEITSTRAHL_QUELLE",
+        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Kodierleitfaden Abschnitt 5). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
+      });
+  }
+
   // Bewertungszeilen der KI entfallen
   const kiBewertung = kz.typ_bewertung ? neue.filter((e) => e.typ === kz.typ_bewertung) : [];
   const zusatz = neue.filter((e) => !kiBewertung.includes(e));
