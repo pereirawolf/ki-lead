@@ -42,7 +42,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
 
   it("Manifest: Version, Lizenz und Herausgeber wie die übrigen Inhalte unter profile/", () => {
     const m = json("profil.json");
-    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.0", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
+    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.1", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
     expect(m.variablen.land).toBe("Thüringen");
     expect(Object.keys(m.anweisungen).sort()).toEqual(["erfassung", "kurzfassung", "verdichtung"]);
   });

@@ -2,6 +2,13 @@
 
 Profil-ID `lead.justiz.landeslagebild`. Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0, siehe `LICENSE-CONTENT`. Versionierung nach Semantic Versioning ([Profilformat](../../docs/PROFILFORMAT.md), Abschnitt „Versionierung und Änderungsverlauf eines Profils“).
 
+## 0.1.1 – 01.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 01.11.2026, die Erklärtexte der Analysefelder wie im Beispielprofil zu fassen (Leitfrage, dann Arbeitshinweise). Nur sprachlich; fachlich weiterhin nicht abgenommen.
+
+- **Darstellungsdatei, Analysebereich:** „Lage & Funktionsfolgen“, „Risiken & Folgen“, „Maßnahmen & Entscheidungsbedarf“ und „Abhängigkeiten & Ersatzlösungen“ beginnen mit einer Leitfrage. „Lage & Funktionsfolgen“ nennt das Kennzeichnen vorläufiger oder widersprüchlicher Angaben; bei den Ersatzlösungen heißt es „als entlastend werten“ statt „als positiv“, wie im Kodierleitfaden, mit Verweis auf Indikator I10.
+- Schema, Arbeitsanweisungen, Kodierleitfaden und Beispiele sind unverändert.
+
 ## 0.1.0 – 31.10.2026
 
 Erprobungsentwurf. Grundlage sind zwei Grundlagenberichte mit Grobkonzept und ihre Konsolidierung (außerhalb des Repositorys) sowie die Entscheidungen des Herausgebers vom 31.10.2026 (README, Abschnitt „Grundentscheidungen“). Fachlich nicht abgenommen.

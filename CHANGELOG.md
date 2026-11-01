@@ -91,6 +91,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.18 | letzter Commit des Pull Requests „Landesprofil Thüringen (fiktive Inhalte) mit Beispiellage; 0.6.18“ |
 | 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ |
 | 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
+| 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
+
+## [0.6.21] – 01.11.2026
+
+Grundlage: Beratung zu den Erklärtexten im Schritt „Ereignisse/Sachverhalte“ mit Entscheidungen des Herausgebers vom 01.11.2026: Hilfetexte in der ganzen App einheitlich zwischen Beschriftung und Eingabe; Erklärtexte im Analysebereich mit Leitfrage und Arbeitshinweisen wie in der KI-Erfassung; ebenso „Bewertung & Tendenz“, Kennung, Bezug und Lagenradar sowie die Analysefelder im Profil „Lagebild Justiz“; keine Platzhalter in den Analysefeldern, stattdessen ein Hinweis auf die LEAD-Eingabehilfen. Keine Änderung an KI-Pipeline, Arbeitsanweisungen, Schemata und Ausgaben.
+
+### Geändert
+
+- **Hilfetexte einheitlich über dem Feld:** In der ganzen App gilt die Reihenfolge Beschriftung, Hilfetext, Eingabe, Fehlertext, weitere Rückmeldungen (Umrechnung, Vermerk, Schätzung, Angaben zum gewählten Modell), LEAD-Eingabehilfen: Anleitung vor der Eingabe, Rückmeldungen und Werkzeuge danach. `HilfeFeld` kennt die Eigenschaft `hilfeNach` nicht mehr; `.feld-hilfe` gilt für alle Hilfetexte zwischen Beschriftung und Eingabe. Bis 0.6.20 standen die Texte in der Meldungsmaske, bei Ollama, Aufwand, Orientierungssuchen, Suchland, Ausgabetoken und t0 unter der Eingabe, in der übrigen KI-Erfassung und bei der Recherchetiefe darüber; die Aufteilung war gewachsen, nicht entworfen. Neu darüber: alle Felder der Meldungsmaske einschließlich Mehrfachauswahl, Optionsfeldern, Lagenradar, Quellen und Zeitstrahl; Ollama-Adresse und -Modell (jetzt `HilfeFeld`, unzulässige Adresse als Fehlertext), Aufwand in der Modellwahl, Orientierungssuchen, Suchland, Ausgabetoken und t0 in „Gegenstand bestätigen“. Mehrfachauswahl, Optionsfelder, Quellen und Zeitstrahl verknüpfen den Hinweis jetzt per `aria-describedby`. Ausnahme: Schalter (Häkchen) behalten den Hinweis unter dem Beschriftungstext neben dem Kästchen.
+- **Erklärtexte im Analysebereich (Profile):** Leitfrage zuerst, dann zwei bis drei Arbeitshinweise; Verweise auf SOP-LEAD und Kodierleitfaden am Ende. Der Analysebereich nennt in einem Gruppenhinweis die LEAD-Eingabehilfen. Einzelheiten in den Verläufen der Profile (Beispielprofil 1.35.1, Thüringen 1.0.1, Lagebild Justiz 0.1.1).
+- Spezifikation 0.6.21 (Abschnitt Bedienung), [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.28 (Stellung von `hinweis`, ohne Formatänderung), README (Beispielprofil 1.35.1), [docs/TESTS.md](docs/TESTS.md). Versionsangaben 0.6.21 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 621, iOS 621).
+
+### Tests
+
+- `tests/ui/erfassung.test.ts`: Erklärtext „Lage & Ereignis“ mit Leitfrage zwischen Beschriftung und Eingabe, LEAD-Eingabehilfen danach, verknüpft; Gruppenhinweis des Analysebereichs; Hinweise von Mehrfachauswahl, Lagenradar, Quellen und Zeitstrahl vor der Eingabe.
+- `tests/ui/ki-erfassung-felder.test.ts`: Hilfetexte der KI-Erfassung zwischen Beschriftung und Eingabe, auch beim Stichtag.
+- `tests/ui/modellwahl.test.ts`: Hilfsfunktion findet die Auswahl auch bei Beschriftung als `label.feld-label` (Aufwand).
+- `tests/profil/lead-justiz.test.ts`: Profilversion 0.1.1.
 
 ## [0.6.20] – 01.11.2026
 

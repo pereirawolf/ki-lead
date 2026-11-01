@@ -126,6 +126,10 @@ export function Bestaetigung({
         </label>
         <label className="feld">
           <span className="feld-label">Meldezeitpunkt (t0)</span>
+          <span className="hinweis feld-hilfe">
+            Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.
+            {vormeldungsStand && ` Stand der Vormeldung: ${zeitAnzeige(vormeldungsStand)} (Ausgangspunkt, nicht t0).`}
+          </span>
           <div className="datum-zeit">
             <input
               type="date"
@@ -150,10 +154,6 @@ export function Bestaetigung({
               Bitte Datum und Uhrzeit des Meldezeitpunkts vollständig angeben; S2 startet erst mit einem gültigen t0.
             </span>
           )}
-          <span className="hinweis">
-            Bezugszeitpunkt der Bewertung. Bei Übungs- oder Altlagen kurz nach dem jüngsten Datenstand des Materials.
-            {vormeldungsStand && ` Stand der Vormeldung: ${zeitAnzeige(vormeldungsStand)} (Ausgangspunkt, nicht t0).`}
-          </span>
         </label>
         <HilfeFeld label={TEXT_FELD.horizont.label} hilfe={TEXT_FELD.horizont.hilfe}>
           {(a) => <input {...a} type="text" value={vorschlag.horizont} onChange={(e) => setVorschlag({ ...vorschlag, horizont: e.target.value })} />}

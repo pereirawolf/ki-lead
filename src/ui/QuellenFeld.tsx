@@ -152,6 +152,11 @@ export function QuellenFeld({ profil, label, pflicht, fehler, feld, hinweis, zei
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
         {label}
       </label>
+      {hinweis && (
+        <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
+          {hinweis}
+        </p>
+      )}
       <textarea
         ref={textRef}
         id={id}
@@ -161,10 +166,9 @@ export function QuellenFeld({ profil, label, pflicht, fehler, feld, hinweis, zei
         onChange={(e) => onChange(e.target.value)}
         spellCheck={false}
         aria-invalid={fehler?.length ? true : undefined}
-        aria-describedby={fehler?.length ? `${id}-fehler` : undefined}
+        aria-describedby={[hinweis && `${id}-hilfe`, fehler?.length && `${id}-fehler`].filter(Boolean).join(" ") || undefined}
       />
       {!!fehler?.length && <FeldFehler id={`${id}-fehler`} texte={fehler} />}
-      {hinweis && <p className="hinweis">{hinweis}</p>}
 
       <fieldset className="quellen-baukasten">
         <legend>Neue Zeile zusammenstellen</legend>

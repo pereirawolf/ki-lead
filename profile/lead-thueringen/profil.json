@@ -3,7 +3,7 @@
   "id": "lead.beispiel.thueringen",
   "name": "LEAD-Beispiel – Land Thüringen (fiktive Inhalte)",
   "beschreibung": "Beispielprofil auf Landesebene: Eigenmeldung eines Lagezentrums des Landes, das die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammenführt. Fiktives Beispiel des Herausgebers mit realen Gebietsnamen; keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden und ohne landesrechtliche Bezüge. Arbeitsweise und SOP-LEAD-Sammelmappe wie im Beispielprofil der Koordinierungsstelle.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Land",

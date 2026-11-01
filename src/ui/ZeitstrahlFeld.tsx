@@ -95,6 +95,11 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
         {label}
       </label>
+      {hinweis && (
+        <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
+          {hinweis}
+        </p>
+      )}
       <textarea
         ref={textRef}
         id={id}
@@ -104,7 +109,7 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
         onChange={(e) => onChange(e.target.value)}
         spellCheck={false}
         aria-invalid={fehler?.length ? true : undefined}
-        aria-describedby={`${id}-stand${fehler?.length ? ` ${id}-fehler` : ""}`}
+        aria-describedby={`${hinweis ? `${id}-hilfe ` : ""}${id}-stand${fehler?.length ? ` ${id}-fehler` : ""}`}
       />
       {!!fehler?.length && <FeldFehler id={`${id}-fehler`} texte={fehler} />}
       <p className="hinweis" id={`${id}-stand`}>
@@ -113,7 +118,6 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
         {ungeordnet ? " · nicht zeitlich geordnet" : ""}
         {ohneAufnahme ? ` · ${ohneAufnahme} ohne Kenntniszeit` : ""}
       </p>
-      {hinweis && <p className="hinweis">{hinweis}</p>}
       <div className="zeitstrahl-knoepfe">
         <button type="button" className="knopf leise klein" disabled={!ungeordnet} onClick={() => onChange(geordnet)}>
           Chronologisch ordnen

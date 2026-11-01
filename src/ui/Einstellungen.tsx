@@ -74,6 +74,7 @@ import { TestlaeufeBereich } from "./Testlaeufe";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
 import { useAktivImBild } from "./leiste";
+import { HilfeFeld } from "./HilfeFeld";
 
 export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testlaeufe" | "recherche" | "darstellung" | "daten" | "ueber";
 
@@ -726,37 +727,26 @@ function OllamaAbschnitt({ e, setEinstellungen }: { e: E; setEinstellungen: (e: 
         ist nicht nötig. {OLLAMA_HINWEIS}
       </p>
       <div className="gruppe-spalten-zwei">
-        <label className="feld">
-          <span className="feld-label">Adresse</span>
-          <input
-            type="url"
-            value={adresse}
-            onChange={(ev) => setAdresse(ev.target.value)}
-            placeholder={OLLAMA_STANDARD_URL}
-            spellCheck={false}
-            aria-invalid={!adresseOk}
-            aria-describedby="ollama-adresse-hilfe"
-          />
-          <span className="hinweis" id="ollama-adresse-hilfe">
-            {adresseOk
-              ? `Vorgabe ${OLLAMA_STANDARD_URL}. Zulässig sind nur http://localhost:11434 und http://127.0.0.1:11434 (Sicherheitsrichtlinie der App).`
-              : "Nicht zulässig: Die Sicherheitsrichtlinie der App erlaubt nur http://localhost:11434 und http://127.0.0.1:11434, jeweils mit Pfad wie /v1."}
-          </span>
-        </label>
-        <label className="feld">
-          <span className="feld-label">Lokales Modell</span>
-          <input
-            type="text"
-            value={modell}
-            onChange={(ev) => setModell(ev.target.value)}
-            placeholder="llama3.1"
-            spellCheck={false}
-            aria-describedby="ollama-modell-hilfe"
-          />
-          <span className="hinweis" id="ollama-modell-hilfe">
-            Name wie in „ollama list“. In der App heißt es „{ollamaKennung(modell || "…")}“; es gilt für das KI-Profil Ollama und steht in der Modellwahl.
-          </span>
-        </label>
+        {/* Hilfetext zwischen Beschriftung und Eingabe, unzulässige Adresse als Fehlertext darunter (seit 0.6.21) */}
+        <HilfeFeld
+          label="Adresse"
+          hilfe={`Vorgabe ${OLLAMA_STANDARD_URL}. Zulässig sind nur http://localhost:11434 und http://127.0.0.1:11434 (Sicherheitsrichtlinie der App).`}
+          fehler={
+            adresseOk
+              ? undefined
+              : ["Nicht zulässig: Die Sicherheitsrichtlinie der App erlaubt nur http://localhost:11434 und http://127.0.0.1:11434, jeweils mit Pfad wie /v1."]
+          }
+        >
+          {(a) => (
+            <input {...a} type="url" value={adresse} onChange={(ev) => setAdresse(ev.target.value)} placeholder={OLLAMA_STANDARD_URL} spellCheck={false} />
+          )}
+        </HilfeFeld>
+        <HilfeFeld
+          label="Lokales Modell"
+          hilfe={`Name wie in „ollama list“. In der App heißt es „${ollamaKennung(modell || "…")}“; es gilt für das KI-Profil Ollama und steht in der Modellwahl.`}
+        >
+          {(a) => <input {...a} type="text" value={modell} onChange={(ev) => setModell(ev.target.value)} placeholder="llama3.1" spellCheck={false} />}
+        </HilfeFeld>
       </div>
       <div className="aktionen">
         <button type="button" className="knopf primaer" disabled={!geaendert || !vollstaendig} onClick={speichern}>
@@ -1096,6 +1086,11 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
       <div className="gruppe-spalten-zwei">
         <label className="feld">
           <span className="feld-label">Orientierungssuchen je Sachverhalt (S1)</span>
+          <span className="hinweis feld-hilfe">
+            Nach der Bestätigung des Gegenstands sucht S1 je Sachverhalt so oft kurz im Web, ohne Seiten zu öffnen, und schlägt Suchbegriffe für S2 vor. Diese
+            Suchen werden getrennt ausgewiesen und nicht auf die Websuchen von S2 angerechnet. 0: keine Orientierungssuche; Suchbegriffe lassen sich dann selbst
+            eintragen.
+          </span>
           <input
             type="number"
             min={0}
@@ -1104,11 +1099,6 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
             value={orientierungJeSachverhalt(e)}
             onChange={(ev) => setze({ orientierungJeSachverhalt: orientierungJeSachverhalt({ orientierungJeSachverhalt: Number(ev.target.value) }) })}
           />
-          <span className="hinweis">
-            Nach der Bestätigung des Gegenstands sucht S1 je Sachverhalt so oft kurz im Web, ohne Seiten zu öffnen, und schlägt Suchbegriffe für S2 vor. Diese
-            Suchen werden getrennt ausgewiesen und nicht auf die Websuchen von S2 angerechnet. 0: keine Orientierungssuche; Suchbegriffe lassen sich dann selbst
-            eintragen.
-          </span>
         </label>
         <label className="feld schalter">
           <input type="checkbox" checked={e.nachforderung !== false} onChange={(ev) => setze({ nachforderung: ev.target.checked })} />
@@ -1124,11 +1114,15 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
       <div className="gruppe-spalten-zwei">
         <label className="feld">
           <span className="feld-label">Land für die Websuche</span>
+          <span className="hinweis feld-hilfe">Zweistelliger Ländercode, z. B. DE, AT, CH. Leer: keine Lokalisierung.</span>
           <input type="text" maxLength={2} value={e.suchland} onChange={(ev) => setze({ suchland: ev.target.value.toUpperCase() })} />
-          <span className="hinweis">Zweistelliger Ländercode, z. B. DE, AT, CH. Leer: keine Lokalisierung.</span>
         </label>
         <label className="feld">
           <span className="feld-label">Maximale Ausgabetoken je KI-Aufruf</span>
+          <span className="hinweis feld-hilfe">
+            Gilt für jeden KI-Aufruf der App (S1, S2, S3 und Management Summary). Nachdenken und Antwort zählen gemeinsam; berechnet wird nur die tatsächliche
+            Ausgabe. Ein kleinerer Wert kann Läufe vor dem Ergebnis abbrechen.
+          </span>
           <input
             type="number"
             min={8000}
@@ -1137,10 +1131,6 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
             value={e.maxTokensErfassung}
             onChange={(ev) => setze({ maxTokensErfassung: Math.min(128000, Math.max(8000, Number(ev.target.value) || STANDARD.maxTokensErfassung)) })}
           />
-          <span className="hinweis">
-            Gilt für jeden KI-Aufruf der App (S1, S2, S3 und Management Summary). Nachdenken und Antwort zählen gemeinsam; berechnet wird nur die tatsächliche
-            Ausgabe. Ein kleinerer Wert kann Läufe vor dem Ergebnis abbrechen.
-          </span>
         </label>
       </div>
       <h3>Unterschiede der Anbieter</h3>
