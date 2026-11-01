@@ -1,0 +1,214 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "gesamtkonsistenz",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-01T23:05:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+  "pruefumfang": "Nachprüfung auf Hinweis des Herausgebers vom 01.11.2026 zu ki-lead-befund_gesamtkonsistenz_2026-W44-b.json (GK-2026-W44-08): angezeigte Texte der Benutzeroberfläche auf Profilneutralität, Schwerpunkt c) Oberfläche, Beschriftungen, Hilfetexte. Modus seit 02a6bd5, Stand main c5a3205. Gemessen an lead-beispiel, lead-thueringen und lead-justiz (eigene Teil A, kein Radar, Kategorien A/B/K/W/V/M/P). Suche in src/ui, src/lagebild, src/kern, src/pipeline und src/profil nach Literalen außerhalb von Kommentaren: Abschnittsverweise (SOP-LEAD, Teil A, A.n, Abschnitt n), Kategorienbuchstaben, D1–D8 und Lagenradar, Fachbegriffe (Bevölkerungsschutz, Länder, Bund, Kreise, BBK, GMLZ), feste Bezeichnungen statt Profilbezeichnungen (Beurteilung, Tendenz, Management Summary, Referenzraum). Treffer einzeln gegen Profilmechanismen (rollen, Feldbezeichnungen, lagebild.verweise, quellen.kategorien, kurzfassung.titel, referenzraum) und Abschnittsüberschriften der Teile A bzw. Kodierleitfäden geprüft. Bereits in GK-2026-W44-08 erfasst und hier nicht erneut gemeldet: MEHRERE_FRISTEN_HINWEIS (A.4), ZEITSTRAHL_QUELLE (Kodierleitfaden Abschnitt 5), Steuerungssatz zu Quellennummern. Keine Ausführung der Oberfläche; npm test im Hauptlauf grün.",
+  "nicht_geprueft": [
+    "KI-Prompts (src/pipeline/kontext.ts, s2s3.ts, s1.ts) nur kursorisch; sie sind keine angezeigten Texte (siehe weitere Beobachtungen).",
+    "Browser-Darstellung, Bildschirmleser-Texte (aria) nur statisch.",
+    "src/forschung/ und Testläufe-Ansicht: ausdrücklich auf das Beispielprofil bezogen, nicht gewertet."
+  ],
+  "befunde": [
+    {
+      "id": "GK-2026-W44-12",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/kiErfassung/texte.ts",
+          "stelle": "TEXT_FELD.gegenstand.hilfe (Z. 37)",
+          "ist": "Ohne Angabe recherchiert die KI aus der allgemeinen Sicht des Bevölkerungsschutzes."
+        },
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "Hinweis „Bewertung ohne Text“ (Z. 185)",
+          "ist": "erster Satz: Was bedeutet das für den Bevölkerungsschutz, und warum jetzt?"
+        },
+        {
+          "datei": "src/ui/kiErfassung/texte.ts",
+          "stelle": "Platzhalter gegenstand, ausgangsinformationen, prueffrage (Z. 38, 43–44, 60)",
+          "ist": "Beispiel: Ist die Notstromversorgung von Krankenhäusern betroffen?"
+        },
+        {
+          "datei": "profile/lead-justiz/profil.json",
+          "stelle": "referenzraum",
+          "ist": "Funktionsfähigkeit der Justiz in Thüringen"
+        }
+      ],
+      "beobachtung": "Widerspruch: Hilfetext und Ausfüllhinweis nennen den Bevölkerungsschutz als festen Bezug, obwohl S1 und S2 den Referenzraum des Profils verwenden (kontext.ts, „Referenzraum: ${m.referenzraum}“) und das Feld „Bezug zum Referenzraum“ daneben den Raum aus dem Profil einsetzt (texte.ts, referenzbezug). Bedingung: Profil lead-justiz (Referenzraum „Funktionsfähigkeit der Justiz in Thüringen“). Auswirkung: Der Hilfetext beschreibt das Verhalten der KI falsch; der Hinweis in der Erfassung fragt nach der Bedeutung für den Bevölkerungsschutz statt für die Justiz; die Platzhalter zeigen nur Bevölkerungsschutzbeispiele. Beim Beispiel- und Landesprofil zutreffend. Maßgeblich: Verhalten der Pipeline (Referenzraum aus profil.json) und das Profil als Träger der Fachperspektive (README: Profile tragen die Fachlichkeit). Prüfweg: statisch; Ergebnis: einzige festen Nennungen des Bevölkerungsschutzes in angezeigten Texten außerhalb der Testläufe und des Farbkatalogs. Herkunft: Commit 07b9f29 vom 17.10.2026 (Hinweis), 9032a75 vom 25.10.2026 (Hilfetext); Justizprofil seit Commit 8d8dbf2 vom 31.10.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Hilfetext und Hinweis setzen den Referenzraum des Profils ein, wie bereits referenzbezug.hilfe; Platzhalter je nach Entscheidung neutral fassen oder aus dem Profil lesen. Abnahme: Mit lead-justiz erscheint in keinem angezeigten Text der KI-Erfassung und der Erfassung das Wort „Bevölkerungsschutz“; mit lead-beispiel lauten die Texte sinngemäß wie bisher.",
+        "neuer_text": "Hilfe: `Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der Sicht des Referenzraums des Profils${raum ? ` (${raum})` : \"\"}.` · Hinweis: `… erster Satz: Was bedeutet das für den Referenzraum${raum ? ` (${raum})` : \"\"}, und warum jetzt?`"
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App)",
+        "docs/SPEZIFIKATION.md, falls die Darstellungsdatei Platzhalter erhält (dann auch docs/PROFILFORMAT.md)"
+      ],
+      "entscheidungsfrage": "(A) Platzhalter-Beispiele neutral fassen (ohne Fachbezug, etwa „Beispiel: Lage, Raum, Zeitraum, Blickwinkel“). (B) Die Darstellungsdatei erhält optionale Platzhalter für die Auftragsfelder; ohne Angabe gelten neutrale Texte, das Beispielprofil übernimmt die bisherigen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/ui/: KI-Erfassung und Erfassung mit lead-justiz rendern; kein angezeigter Text enthält „Bevölkerungsschutz“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-13",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/kiErfassung/Bestaetigung.tsx",
+          "stelle": "Hinweis bei mehr als drei Sachverhalten (Z. 180–182)",
+          "ist": "zusammenführen lassen (SOP-LEAD A.7.1)."
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Kasten „Verdichtung“ (Z. 221–222)",
+          "ist": "möglichst wenigen Sachverhalten (SOP-LEAD A.7)."
+        },
+        {
+          "datei": "src/pipeline/s1.ts",
+          "stelle": "Hinweis zu t0 bei Verdichtung (Z. 184)",
+          "ist": "t0 folgt bei Verdichtung dem jüngsten Eingang (SOP-LEAD A.7)"
+        },
+        {
+          "datei": "src/pipeline/s2s3.ts",
+          "stelle": "Warnung Eingangsmeldung ohne Eintrag (Z. 541)",
+          "ist": "Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (SOP-LEAD A.7; …"
+        },
+        {
+          "datei": "profile/lead-justiz/meldung.ui.json",
+          "stelle": "lagebild.verweise.zusammenhang",
+          "ist": "\"zusammenhang\": \"Teil A, A.7, A.7.1\""
+        },
+        {
+          "datei": "profile/lead-justiz/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.7.1 (Z. 80)",
+          "ist": "#### A.7.1 Teilräume"
+        }
+      ],
+      "beobachtung": "Widerspruch: Vier angezeigte Texte der KI-Erfassung nennen „SOP-LEAD A.7“ bzw. „A.7.1“ fest. Das Justizprofil nennt seinen Teil A nicht SOP-LEAD; dort ist A.7.1 „Teilräume“, die Regel zum Zusammenführen steht in A.7 Nr. 1. Die Profile führen die Verweise bereits in lagebild.verweise.zusammenhang (Beispiel „SOP-LEAD A.7.1, A.7.2“, Justiz „Teil A, A.7, A.7.1“), der Redaktionscheck nutzt sie. Bedingung: Profil lead-justiz, Verdichtung. Auswirkung: Der Hinweis „zusammenführen … (SOP-LEAD A.7.1)“ führt in eine Regel mit anderem Gegenstand; die Bezeichnung passt nicht zum Profil. Maßgeblich: das jeweilige Profil (A.10.1; Mechanismus lagebild.verweise). Prüfweg: statisch; Ergebnis: Abschnittsüberschriften beider Teile A verglichen. Herkunft: Commits 3633f7a vom 18.10.2026, 4166181 vom 22.10.2026; Justizprofil seit 8d8dbf2 vom 31.10.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Die vier Texte übernehmen den Verweis aus lagebild.verweise.zusammenhang des aktiven Profils; ohne Angabe entfällt die Klammer. Gemeinsam mit GK-2026-W44-08 umsetzen (gleicher Mechanismus). Abnahme: Mit lead-justiz zeigen die vier Stellen „Teil A, A.7, A.7.1“ oder keinen Verweis, mit lead-beispiel „SOP-LEAD A.7.1, A.7.2“; kein angezeigter Text der Pipeline enthält mehr ein festes „SOP-LEAD A.“.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/ oder tests/ui/: In src/ui, src/pipeline, src/lagebild und src/kern kommt außerhalb von Kommentaren und KI-Prompts kein Literal „SOP-LEAD A.“ vor.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-14",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/recherchebefunde.ts",
+          "stelle": "Warnung KEINE_PRIMAERQUELLE (Z. 180) und Bedingung primaerquelleBelegt() (Z. 83)",
+          "ist": "Das Quellenverzeichnis enthält nur Medien- oder Plattformquellen (keine Kategorie A oder B)"
+        },
+        {
+          "datei": "src/pipeline/s2s3.ts",
+          "stelle": "Warnung Eingangsmeldung nicht als Kategorie A (Z. 546)",
+          "ist": "Zulässig nur, wenn die meldende Stelle keine Behörde ist (dann B oder P nach ihrer Rolle, Kodierleitfaden Abschnitt 5)."
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "quellen.kategorien",
+          "ist": "\"A\": \"amtlich/zwischenstaatlich\", \"B\": \"Betreiber\", \"W\": \"wissenschaftlich\", \"M\": \"Medien\", \"P\": \"sonstige private Quellen\""
+        },
+        {
+          "datei": "profile/lead-justiz/kodierleitfaden.md",
+          "stelle": "Abschnitt 5 (Z. 85)",
+          "ist": "## 5. Quellenkategorien A/B/K/W/V/M/P"
+        }
+      ],
+      "beobachtung": "Widerspruch: KEINE_PRIMAERQUELLE greift, wenn keine Quelle der Kategorie A oder B vorliegt; der Text behauptet dann „nur Medien- oder Plattformquellen“. Das trifft schon im Beispielprofil nicht zu, wenn W-Quellen vorliegen, und im Justizprofil nicht bei K, W oder V. Die Warnung zu Eingangsmeldungen nennt als Alternative zu A nur „B oder P“; im Beispielprofil kommt W, im Justizprofil kommen K, W und V hinzu. Bedingung: Quellenverzeichnis nur mit W- (bzw. K-, V-)Quellen; Eingangsmeldung einer Kammer oder wissenschaftlichen Stelle. Auswirkung: Die Warnungen beschreiben das Quellenverzeichnis bzw. die zulässigen Kategorien falsch. Maßgeblich: Prüfbedingung im Code (A oder B) und die Kategorien des Profils (quellen.kategorien). Prüfweg: statisch; Ergebnis: Bedingung und Text nebeneinander gelesen. Herkunft: Commits 0ae372b vom 26.10.2026 und 99403c0 vom 19.10.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Texte an die tatsächliche Bedingung und an die Kategorien des Profils angleichen. Abnahme: Der Text von KEINE_PRIMAERQUELLE beschreibt die Prüfbedingung; die Warnung zu Eingangsmeldungen nennt keine feste Kategorienliste.",
+        "neuer_text": "KEINE_PRIMAERQUELLE: „Das Quellenverzeichnis enthält keine Quelle der Kategorie A oder B, und keine Fundstelle stammt aus einem amtlichen Rechercheeinstieg der SOPs. Kernaussagen sind indirekt berichtet; vor der Freigabe die zuständigen Primärquellen prüfen.“ · Eingangsmeldung: „… Zulässig nur, wenn die meldende Stelle keine Behörde ist; dann Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien).“"
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test in tests/pipeline/: Quellenverzeichnis nur mit W-Quelle ergibt KEINE_PRIMAERQUELLE ohne die Wendung „nur Medien“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-15",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/profil/lesen.ts",
+          "stelle": "Lesedokument Kodierleitfaden, zweck (Z. 160)",
+          "ist": "zweck: \"Lagenradar D1–D8, Beurteilung und Tendenz, Quellenkategorien\""
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "REITER (Z. 71) und Reiter „radar“ (Z. 822–824)",
+          "ist": "Dieses Profil sieht kein Lagenradar vor."
+        },
+        {
+          "datei": "profile/lead-justiz/README.md",
+          "stelle": "Dateitabelle, kodierleitfaden.md (Z. 31)",
+          "ist": "Funktionskatalog, Status, Bewertung, Quellen, Belegwerte, Zeitstrahl"
+        }
+      ],
+      "beobachtung": "Widerspruch: Die Profilansicht beschreibt jeden Kodierleitfaden fest als „Lagenradar D1–D8, Beurteilung und Tendenz, Quellenkategorien“; der Kodierleitfaden des Justizprofils hat kein Lagenradar, sondern Funktionskatalog, Funktionsstatus, Belegwerte und sieben Quellenkategorien. Das Lagebild zeigt für Profile ohne Radar dennoch den Reiter „Lagenradar“, der nur „Dieses Profil sieht kein Lagenradar vor“ enthält. Bedingung: Profil lead-justiz (meldung.ui.json ohne radare). Auswirkung: falsche Inhaltsangabe im Profil, leerer Reiter. Maßgeblich: Inhalt des Profils (README Justiz, meldung.ui.json). Prüfweg: statisch; Ergebnis: Profilansicht (Profile.tsx, Aufklapp mit zweck) und Reiterliste ohne Profilbedingung. Herkunft: Commits bbf368b vom 20.10.2026 und 0921679 vom 18.10.2026; Justizprofil seit 8d8dbf2 vom 31.10.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Zweck neutral fassen und den Reiter „Lagenradar“ nur zeigen, wenn das Profil ein Radar definiert (Beschriftung aus dem Radar des Profils, sonst „Lagenradar“). Abnahme: Mit lead-justiz kein Reiter „Lagenradar“ und keine Nennung von D1–D8 in der Profilansicht; mit lead-beispiel unverändert.",
+        "neuer_text": "zweck: \"Kodierregeln, Bewertung, Quellenkategorien und Zeitstrahl des Profils\""
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App)",
+        "docs/SPEZIFIKATION.md (Reiter des Lagebilds), falls dort aufgezählt"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "UI-Test in tests/ui/: Lagebild mit lead-justiz ohne Reiter „Lagenradar“.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Beurteilung, Tendenz und Bewertungstext: Lagebild, Sachverhaltsliste, Redaktionscheck und Kurzfassung lesen die Bezeichnungen aus dem Profil; feste Wörter nur als Rückfall ohne Rolle.",
+    "Bezug zum Referenzraum (texte.ts, referenzbezug) setzt den Raum des Profils ein.",
+    "Redaktionscheck-Verweise je Abschnitt kommen aus lagebild.verweise; Justiz und Beispiel getrennt gepflegt.",
+    "Redaktionscheck „Vergabe prüfen (Kodierleitfaden Abschnitt 8)“: in allen drei eingebauten Profilen ist Abschnitt 8 „Zeitstrahl, Sachverhaltskennung und Bezug“; zutreffend, aber fest verdrahtet.",
+    "Farbschemata „Bund“, „Bevölkerungsschutz · BBK“ und Länderschemata: App-weite Darstellungsauswahl, kein Profilbezug.",
+    "Testläufe-Ansicht nennt Beispielprofil, Orkantief „Ilka“ und Referenzraum ausdrücklich als Grundlage der Testdaten.",
+    "Weitere Beobachtung: „Management Summary“ steht fest in profilbezogenen Texten (Profilansicht „Kurzfassung (Management Summary)“, src/profil/lesen.ts Z. 152 f.; Ladehinweis KENNSATZ_FEHLT, src/profil/laden.ts Z. 345), obwohl das Justizprofil die Kurzfassung „Leitungskurzfassung“ nennt; App-weite Stellen (Einstellungen, KI-Symbol, Offline-Hinweis) bezeichnen die Funktion und sind vertretbar.",
+    "Weitere Beobachtung: KI-Prompts enthalten feste Bezüge des Beispielprofils (VERDICHTUNG_S1 „Stromausfällen in mehreren Ländern“, „SOP-LEAD A.1/A.7/A.8“); nicht angezeigt, aber für Justiz ungenau – Kandidat für einen eigenen Lauf mit Schwerpunkt d)."
+  ]
+}
