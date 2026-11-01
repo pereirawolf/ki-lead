@@ -57,15 +57,19 @@ const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 /** Inhalt ohne Nummer und ohne Kenntniszeit (die setzt die App) */
 const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0, aufgenommen: undefined }));
 /**
- * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02): Kategorie, Herausgeber, Datum, Titel und
- * Fundstelle, ohne Nummer, Zugriffsdatum und Datenstand (beide darf eine Fortschreibung nachführen).
+ * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02, -09): Herausgeber, Datum, Titel und Fundstelle.
+ * Ohne Nummer, Kategorie (Rolle der Quelle für die Aussage), Zugriffsdatum, Datenstand und Zugangsvermerke „(Paywall)“
+ * und „nicht ausgewertet“; diese darf eine Fortschreibung nachführen (Kodierleitfaden Abschnitt 8.3, Regel 8).
  */
 const quellKern = (text: string) =>
   norm(
     text
       .replace(/^\s*\[Q\d+\]\s*/, "")
+      .replace(/^[A-ZÄÖÜ]{1,2}\s+[–-]\s+/, "")
       .replace(/\[Zugriff:[^\]]*\]/gi, "")
-      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, ""),
+      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, "")
+      .replace(/\s*\(Paywall\)/gi, "")
+      .replace(/[.;,]?\s*\(?nicht ausgewertet\)?/gi, ""),
   )
     .replace(/[\s.;,]+$/, "")
     .toLowerCase();
