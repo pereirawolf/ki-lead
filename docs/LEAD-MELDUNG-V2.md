@@ -262,5 +262,6 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
 | 2.0 (Entwurf), Nachtrag | 01.11.2026 | Referenzprüfung nach Abschnitt 8 vervollständigt, Format und Schemata unverändert: „Datenstand nicht nach t0“ auch für `quellen[].datenstand` (GK-2026-W44-03); Zeitvergleiche nach Abschnitt 1 Nr. 4 mit absoluten Zeitpunkten und Kalendertagen in `zeitzone`, Tag gegen Zeitpunkt desselben Tags nicht entscheidbar und ohne Befund (GK-2026-W44-04) |
 | 2.0 (Entwurf) | 01.11.2026 | Erster Entwurf: Kernschema, Modul `lead-bevoelkerungsschutz` 1.0, Zusammenstellungen für Beispiel- und Landesprofil, Migration v1 → v2, Referenzprüfung, Beispiele |

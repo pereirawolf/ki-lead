@@ -2,13 +2,13 @@
 
 ## Teil A – Gemeinsame Regeln Lagebild Justiz
 
-**Gültigkeitsstand.** Erprobungsentwurf, Fassung 0.1.0 vom 31.10.2026. Gültig ist nur das folgende Paket. Die Regeln sind fachlich noch nicht abgenommen; sie dienen der Erprobung mit fiktiven oder offen zugänglichen Daten.
+**Gültigkeitsstand.** Erprobungsentwurf, Fassung 0.2.0 vom 02.11.2026. Gültig ist nur das folgende Paket. Die Regeln sind fachlich noch nicht abgenommen; sie dienen der Erprobung mit fiktiven oder offen zugänglichen Daten.
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich |
 |---|---|---|---|
-| Teil A – Gemeinsame Regeln (diese Datei) | 0.1.0 | 31.10.2026 | Herausgeber des Profils |
-| Kodierleitfaden Lagebild Justiz | 0.1.0 | 31.10.2026 | Herausgeber des Profils |
-| Arbeitsanweisungen Erfassung, Verdichtung, Kurzfassung | je 0.1.0 | 31.10.2026 | Herausgeber des Profils |
+| Teil A – Gemeinsame Regeln (diese Datei) | 0.2.0 | 02.11.2026 | Herausgeber des Profils |
+| Kodierleitfaden Lagebild Justiz | 0.1.1 | 02.11.2026 | Herausgeber des Profils |
+| Arbeitsanweisungen Erfassung, Verdichtung, Kurzfassung | je 0.1.1 | 02.11.2026 | Herausgeber des Profils |
 | Meldungsschema | `Lagebild-Justiz-Meldung-v1` | 31.10.2026 | Herausgeber des Profils |
 
 Dieses Profil kennt keine ereignisbezogenen SOPs. Wo die App von „Ereignisart“ und „SOP“ spricht, gelten die Begriffsbestimmungen in A.1 Nr. 3.

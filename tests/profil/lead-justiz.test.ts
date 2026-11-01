@@ -45,7 +45,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
 
   it("Manifest: Version, Lizenz und Herausgeber wie die übrigen Inhalte unter profile/", () => {
     const m = json("profil.json");
-    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.2", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
+    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.2.0", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
     expect(m.variablen.land).toBe("Thüringen");
     expect(Object.keys(m.anweisungen).sort()).toEqual(["erfassung", "kurzfassung", "verdichtung"]);
   });
@@ -95,7 +95,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
   it("Arbeitsanweisungen ohne laufabhängige Platzhalter; Kurzfassung trägt die Regeln selbst", () => {
     for (const d of ["anweisung-erfassung.md", "anweisung-verdichtung.md", "anweisung-kurzfassung.md"]) {
       expect(dateien[d], d).not.toMatch(/\{\{(auftrag\.|jetzt)/);
-      expect(dateien[d], d).toMatch(/Fassung 0\.1\.0 vom 31\.10\.2026/);
+      expect(dateien[d], d).toMatch(/Fassung 0\.1\.1 vom 02\.11\.2026/);
     }
     expect(dateien["anweisung-erfassung.md"]).toContain("{{app.ausgabevertrag}}");
     const k = dateien["anweisung-kurzfassung.md"];
