@@ -1,6 +1,6 @@
 # Arbeitsanweisung Verdichtung (Modus B)
 
-Beispielfassung für KI-LEAD · Fassung 2.2.0 vom 29.10.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`; Kennung, Bezug und Zeitstrahl ab 1.2) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.20.0, den Kodierleitfaden LEAD ab Fassung 1.6.0 und die Arbeitsanweisung Erfassung ab Fassung 1.8.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 2.3.0 vom 01.11.2026 · gilt für die LEAD-Meldevorlage ab 1.0 (Schemakennung `LEAD-Meldung-v1`; Kennung, Bezug und Zeitstrahl ab 1.2) · abgestimmt auf die SOP-LEAD-Sammelmappe ab Fassung 3.21.0, den Kodierleitfaden LEAD ab Fassung 1.8.0 und die Arbeitsanweisung Erfassung ab Fassung 1.10.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 ## Auftrag
 

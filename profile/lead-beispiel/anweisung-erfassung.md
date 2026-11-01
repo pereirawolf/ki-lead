@@ -1,6 +1,6 @@
 # Arbeitsanweisung Modus A (Erfassung): Eigenmeldung nach der LEAD-Meldevorlage
 
-Beispielfassung für KI-LEAD · Fassung 1.9.0 vom 30.10.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.20.0 und den Kodierleitfaden LEAD ab Fassung 1.7.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.2.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
+Beispielfassung für KI-LEAD · Fassung 1.10.0 vom 01.11.2026 · abgestimmt auf die LEAD-Meldevorlage ab 1.2 (Schemakennung `LEAD-Meldung-v1`), die SOP-LEAD-Sammelmappe ab Fassung 3.21.0 und den Kodierleitfaden LEAD ab Fassung 1.8.0 in der Beispielfassung · gilt mit der Arbeitsanweisung Verdichtung ab 2.3.0 und der Arbeitsanweisung Kurzfassung ab 2.4.0 (Gültigkeitsstand: SOP-LEAD Teil A; Änderungen im Profilverlauf)
 
 Gliederung: 1. Rolle · 2. Arbeitsprodukt · 3. Grundlagen und Rangfolge · 4. Regeln (4.1 SOP-Auswahl und -Anwendung, 4.2 Recherche und Belegbarkeit, 4.3 Meldungszuschnitt, Redaktion und Quellen, 4.4 Bewertung und Lagenradar) · 5. Ausgabe. Achsenregeln, Quellenkategorien und Rangfolge stehen nur im Kodierleitfaden (SOP-LEAD A.10.2); diese Anweisung verweist darauf und nennt nur, was für die KI hinzukommt.
 
@@ -142,7 +142,7 @@ Fülle in `_entstehung`:
 "_entstehung": {
   "verfahren": "KI-Entwurf",
   "sop": ["SOP-LEAD B01 Unwetter / Sturm vX.Y.Z", "SOP-LEAD B08 Stromausfall / Blackout vX.Y.Z"],
-  "kodierleitfaden": "Kodierleitfaden LEAD 1.7.0"
+  "kodierleitfaden": "Kodierleitfaden LEAD 1.8.0"
 }
 ```
 

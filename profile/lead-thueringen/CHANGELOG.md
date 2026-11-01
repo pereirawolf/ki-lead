@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.1.0 – 01.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json`, freigegeben vom Herausgeber am 01.11.2026 (GK-2026-W44-01 und -02, jeweils Option A). Zweite Stelle wie beim Beispielprofil (1.36.0), weil sich Regeln ändern.
+
+- **Darstellungsdatei, Arbeitsanweisungen Erfassung (1.10.0) und Verdichtung (2.3.0), Kodierleitfaden (1.8.0)** neu abgeleitet aus dem Beispielprofil 1.36.0 (`npm run profil:land`): je Frist eine eigene Zeile „Handlungsrelevant bis:“; stabile Quellennummern der eigenen Vormeldung bei Fortschreibungen.
+- **Geteilte SOP-Sammelmappe 3.21.0:** Teil A, A.4, und Gültigkeitsstand (Einzelheiten im Verlauf der Sammelmappe des Beispielprofils).
+- Schema, Kontakte und Beispiellage sind unverändert.
+
 ## 1.0.1 – 01.11.2026
 
 - **Darstellungsdatei** neu abgeleitet aus dem Beispielprofil 1.35.1 (`npm run profil:land`): Erklärtexte im Analysebereich mit Leitfrage, Gruppenhinweis auf die LEAD-Eingabehilfen, „Bewertung & Tendenz“, Kennung, Bezug und Lagenradar sprachlich angeglichen. Adressaten der Empfehlungen wie bisher mit Kreisen und kreisfreien Städten.
