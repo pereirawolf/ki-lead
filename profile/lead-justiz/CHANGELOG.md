@@ -2,6 +2,13 @@
 
 Profil-ID `lead.justiz.landeslagebild`. Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0, siehe `LICENSE-CONTENT`. Versionierung nach Semantic Versioning ([Profilformat](../../docs/PROFILFORMAT.md), Abschnitt „Versionierung und Änderungsverlauf eines Profils“).
 
+## 0.1.2 – 01.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json`, Befund GK-2026-W44-06, freigegeben vom Herausgeber am 01.11.2026. Dritte Stelle: nur redaktionell.
+
+- **README, Kopfzeile (Fassung 0.1.1):** verweist für die Profilversion auf `profil.json`, statt den Paketstand doppelt zu führen; die veraltete Angabe „Profilversion 0.1.0“ entfällt.
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Teil A und Beispiele sind unverändert.
+
 ## 0.1.1 – 01.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 01.11.2026, die Erklärtexte der Analysefelder wie im Beispielprofil zu fassen (Leitfrage, dann Arbeitshinweise). Nur sprachlich; fachlich weiterhin nicht abgenommen.

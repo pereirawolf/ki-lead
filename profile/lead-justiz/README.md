@@ -1,6 +1,6 @@
 # Profil „Lagebild Justiz“ (Erprobungsentwurf)
 
-Fassung 0.1.0 vom 31.10.2026 · Profilversion 0.1.0 · Schemakennung `Lagebild-Justiz-Meldung-v1` · Heiko Pereira Wolf · CC BY 4.0
+Fassung 0.1.1 vom 01.11.2026 · Profilversion siehe [profil.json](profil.json) · Schemakennung `Lagebild-Justiz-Meldung-v1` · Heiko Pereira Wolf · CC BY 4.0
 
 Ein Landesprofil für ein Lagebild über die **Funktionsfähigkeit der Justiz eines Landes**, mit Thüringen als Beispiel. Erfasst werden Voraussetzungen und Beeinträchtigungen der Aufgabenerfüllung. Inhalte richterlicher Entscheidungen, einzelne Verfahren und die Leistung einzelner Personen gehören nicht dazu.
 

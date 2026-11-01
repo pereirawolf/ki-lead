@@ -42,7 +42,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
 
   it("Manifest: Version, Lizenz und Herausgeber wie die übrigen Inhalte unter profile/", () => {
     const m = json("profil.json");
-    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.1", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
+    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.2", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
     expect(m.variablen.land).toBe("Thüringen");
     expect(Object.keys(m.anweisungen).sort()).toEqual(["erfassung", "kurzfassung", "verdichtung"]);
   });
@@ -123,5 +123,16 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
       expect(f.hinweis, f.funktion).toMatch(/\[Q\d+\]/);
     }
     for (const sv of d.sachverhalte) if (sv.primaerfunktion) expect(sv.funktionen).toContain(sv.primaerfunktion);
+  });
+
+  // Soll: docs/PROFILFORMAT.md – die Paketversion steht maßgeblich nur in profil.json; die README darf eine eigene
+  // Dokumentfassung tragen, aber keinen abweichenden statischen Paketstand.
+  it("GK-2026-W44-06: der README-Kopf verweist für die Profilversion auf profil.json und nennt keinen eigenen Paketstand", () => {
+    const kopf = dateien["README.md"].split("\n").find((z: string) => z.startsWith("Fassung "))!;
+    expect(kopf).toContain("Profilversion siehe [profil.json](profil.json)");
+    expect(Object.keys(dateien)).toContain("profil.json");
+    expect(kopf).not.toMatch(/Profilversion\s+\d+\.\d+\.\d+/);
+    // Negativfall: die frühere Kopfzeile wird zurückgewiesen
+    expect("Fassung 0.1.0 vom 31.10.2026 · Profilversion 0.1.0 · Schemakennung").toMatch(/Profilversion\s+\d+\.\d+\.\d+/);
   });
 });

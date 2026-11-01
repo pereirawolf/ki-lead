@@ -3,7 +3,7 @@
   "id": "lead.justiz.landeslagebild",
   "name": "Lagebild Justiz – Landesprofil (Erprobungsentwurf)",
   "beschreibung": "Erprobungsentwurf eines Landesprofils zur Funktionsfähigkeit der Justiz eines Landes, Beispiel Thüringen: Funktionskatalog F1–F8 mit Funktions- und Statusmatrix, getrennter Bewertung von Beurteilung, Dringlichkeit, Tendenz und Erkenntnissicherheit, ohne Lagenradar und ohne ereignisbezogene SOPs. Nur fiktive oder offen zugängliche Daten; keine Inhalte richterlicher Entscheidungen, keine Einzelverfahren, keine Personen.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Land",
