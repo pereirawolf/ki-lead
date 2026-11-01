@@ -91,6 +91,19 @@ describe("KI-Erfassung: Auftrag und Material", () => {
     expect(document.querySelector(`label[for="${f.id}"]`)!.textContent).toBe("Untersuchungsgegenstand und Erkenntnisinteresse");
   });
 
+  it("Hilfetexte stehen wie in der Meldungsmaske zwischen Beschriftung und Eingabe (seit 0.6.21)", async () => {
+    await erfassungZeigen();
+    const vorher = (a: Node, b: Node) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    for (const name of ["Untersuchungsgegenstand und Erkenntnisinteresse", "Ausgangsinformationen und Stichworte", "Besondere Prüffrage (optional)"]) {
+      const f = feld<HTMLElement>(name);
+      const hilfe = document.getElementById(`${f.id}-hilfe`)!;
+      expect(vorher(document.querySelector(`label[for="${f.id}"]`)!, hilfe), name).toBe(true);
+      expect(vorher(hilfe, f), name).toBe(true);
+    }
+    const stichtag = document.querySelector('[aria-labelledby="t0-auftrag"]')!;
+    expect(vorher(document.getElementById("t0-auftrag-hilfe")!, stichtag)).toBe(true);
+  });
+
   it("KP-2026-W43-62: Ausgangsinformationen mit Hilfetext und mehrzeiligem Beispiel", async () => {
     await erfassungZeigen();
     const f = feld<HTMLTextAreaElement>("Ausgangsinformationen und Stichworte");

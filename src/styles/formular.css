@@ -58,8 +58,9 @@ textarea {
   max-width: 78ch;
 }
 
-/* Hilfetext zwischen Beschriftung und Eingabe (KI-Erfassung, KP-2026-W43-61 ff.) */
+/* Hilfetext zwischen Beschriftung und Eingabe, in der ganzen App (seit 0.6.21; zuvor nur KI-Erfassung, KP-2026-W43-61 ff.) */
 .feld-hilfe {
+  display: block;
   margin: 0 0 0.4rem;
 }
 

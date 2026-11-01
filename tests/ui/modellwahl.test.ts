@@ -97,12 +97,9 @@ async function s1Starten() {
   await bisWahr(() => expect(radio("einzeln")).toBeTruthy());
 }
 const auswahl = (titel: string, feld = "Modell") =>
-  [
-    ...[...document.querySelectorAll(".modellwahl fieldset")]
-      .find((f) => f.querySelector("legend")?.textContent?.startsWith(titel))!
-      .querySelectorAll("label.feld"),
-  ]
-    .find((l) => l.textContent?.startsWith(feld))!
+  [...[...document.querySelectorAll(".modellwahl fieldset")].find((f) => f.querySelector("legend")?.textContent?.startsWith(titel))!.querySelectorAll(".feld")]
+    // Beschriftung als umschließendes label oder (Aufwand, seit 0.6.21) als label.feld-label vor Hilfetext und Auswahl
+    .find((l) => (l.querySelector(".feld-label") ?? l).textContent?.startsWith(feld))!
     .querySelector("select, input") as HTMLSelectElement & HTMLInputElement;
 /** Eingabe zur sichtbaren Beschriftung (label for=…), oder null */
 function feld(beschriftung: string): HTMLInputElement | null {

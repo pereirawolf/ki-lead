@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.27 vom 31.10.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.28 vom 01.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -95,7 +95,7 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | Eigenschaft | Bedeutung |
 |---|---|
 | `label` | Bezeichnung. Ohne `label` gilt der Feldname. Seit Fassung 1.26 erscheinen Listen (außer der Rolle `sachverhalte`) und Objekte, die in einem anderen Objekt stehen, als Gruppe mit dieser Bezeichnung als Überschrift; Objekte der obersten Ebene und Listenelemente ohne `label` bleiben ohne Rahmen. Listen von Objekten stehen im PDF der Meldung als Zeilen „Liste n › Feld“, in Rohtabelle und CSV als Text je Element („Name n – Titel“, darunter „Feld: Wert“) |
-| `hinweis` | Ausfüllhinweis unter dem Feld |
+| `hinweis` | Ausfüllhinweis zwischen Beschriftung und Eingabe (seit App 0.6.21; vorher unter dem Feld); bei einer Gruppe Einleitung unter ihrer Überschrift. Bewährt: Leitfrage zuerst, dann wenige Arbeitshinweise |
 | `platzhalter` | Platzhaltertext im Eingabefeld |
 | `widget` | `text`, `text_lang`, `datum` (Tag, Schaltfläche „Heute“), `datumzeit` (Tag und Uhrzeit, Uhrzeit nötig, „Jetzt“), `datum_uhrzeit` (Tag, Uhrzeit optional, „Jetzt“ und „Nur Tag“; Schema-Muster z. B. `^$\|^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$`), `auswahl`, `radio`, `mehrfachauswahl`, `radar`, `quellen`, seit Fassung 1.23 `zeitstrahl` (Textfeld mit Baukasten für Zeilen und „Chronologisch ordnen“), `kennung` (Textfeld mit „Kennung vergeben“, solange leer) und `kennungen` (Liste von Texten als eine Zeile, getrennt durch Komma, Semikolon oder Leerzeichen). Alle Zeitfelder haben „Leeren“; „Jetzt“ gilt in `variablen.zeitzone`. |
 | `leer_label` | Beschriftung für den Leerwert einer Auswahl |
@@ -294,3 +294,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.25 | 31.10.2026 | Optionale Rollen `herkunft`, `herkunft_standard` und `herkunft_kategorie`: Herkunft der meldenden Stelle im Lagebild mit Kennzeichen, Filter, Spalten in Rohtabelle und CSV, Kopiervorlage und PDF; Prüfung beim Import (Typen als Fehler, Warnungen `HERKUNFT_KATEGORIE_UNBEKANNT` und `HERKUNFT_OHNE_ROLLE`). Ältere Pakete laden unverändert (App 0.6.13, Issue #114, A1) |
 | 1.26 | 31.10.2026 | Ohne Formatänderung: Gruppenüberschriften für Listen und verschachtelte Objekte ohne `label`, Elementtitel ohne `titel_feld`, Listen von Objekten in PDF, Rohtabelle und CSV als lesbarer Text statt JSON (App 0.6.14, Issue #114, A2) |
 | 1.27 | 31.10.2026 | Optionales Feld `meldung.eingang_schemata`: Prüfung fremder Meldungen gegen ein mitgeliefertes Schema, Gebiet aus einem eigenen Feld (App 0.6.19, TP-2026-W44-59) |
+| 1.28 | 01.11.2026 | Ohne Formatänderung: `hinweis` steht in der App zwischen Beschriftung und Eingabe, bei Gruppen als Einleitung (App 0.6.21) |

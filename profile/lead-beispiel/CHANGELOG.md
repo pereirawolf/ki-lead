@@ -8,6 +8,14 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.35.1 – 01.11.2026
+
+Grundlage: Beratung zu den Erklärtexten im Schritt „Ereignisse/Sachverhalte“, Entscheidungen des Herausgebers vom 01.11.2026 (Leitfrage und Arbeitshinweise wie in der KI-Erfassung, keine Platzhalter in den Analysefeldern, Hinweis auf die LEAD-Eingabehilfen). Dritte Stelle, weil nur die Hilfetexte der Darstellungsdatei sprachlich überarbeitet sind; keine neue Regel, die Arbeitsanweisungen bleiben maßgeblich. Die App zeigt die Texte seit 0.6.21 zwischen Beschriftung und Eingabe.
+
+- **Darstellungsdatei, Analysebereich:** Gruppenhinweis neu („Vier Blickwinkel auf denselben Sachverhalt …“, mit Verweis auf die LEAD-Eingabehilfen). Hilfetexte von „Lage & Ereignis“, „Risiken & Auswirkungen“, „Maßnahmen & Handlungsempfehlungen“ und „Abhängigkeiten & Interdependenzen“ beginnen mit einer Leitfrage; „Lage & Ereignis“ nennt das Kennzeichnen vorläufiger oder widersprüchlicher Angaben (wie der Baustein „Bestätigt ist“), „Risiken & Auswirkungen“ die Bedingung möglicher Folgen und den Zeithorizont „soweit bekannt“ (wie der Baustein „Mögliche Entwicklungen:“). Bei den Maßnahmen entfällt die Liste der Status im Hilfetext, sie steht im Baustein „Bestehende Maßnahmen:“; der Hinweis auf D6 steht am Ende.
+- **Darstellungsdatei, weitere Felder:** „Bewertung & Tendenz“ mit Leitfrage, Kennsätze unverändert; Kennung (mit „Kennung vergeben“), Bezug (mit Leitfrage) und Lagenradar (Verweis auf den Kodierleitfaden) sprachlich angeglichen.
+- Schema, Arbeitsanweisungen, Kodierleitfaden, SOP-Sammelmappe, Eingabehilfen, Kontakte, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.35.0 – 31.10.2026
 
 Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A6.json` (Arbeitspaket A6 „Austauschvertrag“, TP-2026-W44-60), freigegeben vom Herausgeber am 31.10.2026.

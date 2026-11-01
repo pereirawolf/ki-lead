@@ -1,5 +1,6 @@
 // Eingabefeld mit Beschriftung und Hilfetext (seit 0.6.5, TP-2026-W44-17; bis 0.6.4 nur in der KI-Erfassung).
 // Gemeinsam für die KI-Erfassung, die Grenzfelder der Recherchetiefe und die Eingabefelder der Meldungsmaske (Feld.tsx).
+// Seit 0.6.21 steht der Hilfetext überall zwischen Beschriftung und Eingabe (Entscheidung des Herausgebers vom 01.11.2026).
 
 import { useId, type ReactNode } from "react";
 
@@ -12,14 +13,15 @@ export interface HilfeFeldEingabe {
 
 /**
  * Der Hilfetext ist per aria-describedby verknüpft, nicht Teil des zugänglichen Namens; ein bedingter Zusatz wird mit
- * verknüpft. In der KI-Erfassung und den Einstellungen steht er zwischen Beschriftung und Eingabe, in der
- * Meldungsmaske wie bisher unter der Eingabe (`hilfeNach`). Mit `fehler` trägt die Eingabe aria-invalid, und der
- * Fehlertext steht unter ihr, verknüpft über `${id}-fehler` (seit 0.6.5, TP-2026-W44-15).
+ * verknüpft. Reihenfolge in der ganzen App: Beschriftung, Hilfetext, Eingabe, Fehlertext, `nach`, Zusatz – Anleitung vor
+ * der Eingabe, Rückmeldungen und Werkzeuge danach (seit 0.6.21; bis 0.6.20 stand der Hilfetext in der Meldungsmaske unter
+ * der Eingabe). Mit `fehler`
+ * trägt die Eingabe aria-invalid, und der Fehlertext steht unter ihr, verknüpft über `${id}-fehler` (seit 0.6.5,
+ * TP-2026-W44-15).
  */
 export function HilfeFeld({
   label,
   hilfe,
-  hilfeNach,
   zusatz,
   fehler,
   nach,
@@ -31,14 +33,12 @@ export function HilfeFeld({
   children,
 }: {
   label: string;
-  /** Hilfetext; ohne Angabe entfällt er */
+  /** Hilfetext zwischen Beschriftung und Eingabe; ohne Angabe entfällt er */
   hilfe?: string;
-  /** Hilfetext unter der Eingabe statt darüber (Meldungsmaske) */
-  hilfeNach?: boolean;
   zusatz?: string;
   /** Befunde am Feld (Schema- und Pflichtprüfung) */
   fehler?: string[];
-  /** Unter der Eingabe (und einem Hilfetext darunter), z. B. ein Fehlertext */
+  /** Unter der Eingabe und einem Fehlertext, z. B. Umrechnungen oder die LEAD-Eingabehilfen */
   nach?: ReactNode;
   /** Weitere Kennungen für aria-describedby (Elemente, die das Feld selbst mitbringt) */
   weitere?: (string | false | undefined)[];
@@ -58,7 +58,7 @@ export function HilfeFeld({
     .filter(Boolean)
     .join(" ");
   const hilfetext = hilfe ? (
-    <p className={hilfeNach ? "hinweis" : "hinweis feld-hilfe"} id={`${id}-hilfe`}>
+    <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>
       {hilfe}
     </p>
   ) : null;
@@ -67,10 +67,9 @@ export function HilfeFeld({
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
         {label}
       </label>
-      {!hilfeNach && hilfetext}
+      {hilfetext}
       {children({ id, ...(beschreibung ? { "aria-describedby": beschreibung } : {}), ...(mitFehler ? { "aria-invalid": true as const } : {}) })}
       {mitFehler && <FeldFehler id={`${id}-fehler`} texte={fehler} />}
-      {hilfeNach && hilfetext}
       {nach}
       {zusatz && (
         <p className="kasten kasten-hinweis feld-zusatz" id={`${id}-zusatz`} role="status">

@@ -284,8 +284,14 @@ function ModellWahlBlock({
           {v ? ` Aus den Testläufen: ${v.befund} Gemessen mit „${aufwandTitel(v.aufwand)}“.` : ""}
           {r === "erfassung" ? " Für S2 Recherche und Entwurf liegen noch keine Vergleichsläufe vor." : ""}
         </p>
-        <label className="feld" htmlFor={`${id}-${r}-aufwand`}>
-          <span className="feld-label">Aufwand</span>
+        {/* Hilfetext zwischen Beschriftung und Auswahl (seit 0.6.21); die Angaben zum Modell oben folgen der Auswahl als Rückmeldung */}
+        <div className="feld">
+          <label className="feld-label" htmlFor={`${id}-${r}-aufwand`}>
+            Aufwand
+          </label>
+          <p className="hinweis feld-hilfe" id={`${id}-${r}-aufwand-hilfe`}>
+            Wie lange das Modell vor der Antwort nachdenkt. Höher ist meist sorgfältiger, dauert aber länger und kostet mehr.
+          </p>
           <select
             id={`${id}-${r}-aufwand`}
             value={wahl.aufwand?.[r] || ""}
@@ -300,10 +306,7 @@ function ModellWahlBlock({
               </option>
             ))}
           </select>
-        </label>
-        <p className="hinweis" id={`${id}-${r}-aufwand-hilfe`}>
-          Wie lange das Modell vor der Antwort nachdenkt. Höher ist meist sorgfältiger, dauert aber länger und kostet mehr.
-        </p>
+        </div>
         {angepasst[r] && (
           <p className="kasten kasten-hinweis feld-zusatz" id={`${id}-${r}-angepasst`} role="status">
             {angepasst[r]}

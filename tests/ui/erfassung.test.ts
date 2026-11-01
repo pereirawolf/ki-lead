@@ -127,6 +127,40 @@ describe("Erfassungsmaske", () => {
     expect(bezeichnung().closest(".feld")?.querySelector(".feld-fehler")).toBeNull();
   });
 
+  // Erklärtexte im Analysebereich und Hilfetexte zwischen Beschriftung und Eingabe (seit 0.6.21, Entscheidung des
+  // Herausgebers vom 01.11.2026): Leitfrage zuerst, LEAD-Eingabehilfen nach der Eingabe, per aria-describedby verknüpft.
+  it("Erklärtexte im Analysebereich: Leitfrage, zwischen Beschriftung und Eingabe, Eingabehilfen danach", async () => {
+    await zeigeApp();
+    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    const vorher = (a: Node, b: Node) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const lage = document.querySelector('[data-feld="sachverhalte/0/analyse/lage_ereignis"] textarea') as HTMLTextAreaElement;
+    const hilfe = document.getElementById(`${lage.id}-hilfe`)!;
+    const beschriftung = document.querySelector(`label[for="${lage.id}"]`)!;
+    expect(lage.getAttribute("aria-describedby")?.split(" ")).toContain(hilfe.id);
+    expect(hilfe.textContent).toMatch(/^Was ist geschehen, und was davon ist bestätigt\? /);
+    expect(vorher(beschriftung, hilfe)).toBe(true);
+    expect(vorher(hilfe, lage)).toBe(true);
+    expect(vorher(lage, lage.closest(".feld")!.querySelector(".eingabehilfen")!)).toBe(true);
+    // Gruppenhinweis nennt die Eingabehilfen
+    const gruppe = [...document.querySelectorAll("fieldset")].find((f) => f.querySelector(":scope > legend")?.textContent === "Analysebereich")!;
+    expect(gruppe.querySelector(":scope > .hinweis")?.textContent).toContain("„LEAD-Eingabehilfen“");
+    // Mehrfachauswahl und Lagenradar: Hilfetext ebenfalls vor der Eingabe
+    const art = document.querySelector('[data-feld="sachverhalte/0/art"]') as HTMLFieldSetElement;
+    const artHilfe = art.querySelector(":scope > .hinweis")!;
+    expect(art.getAttribute("aria-describedby")).toBe(artHilfe.id);
+    expect(vorher(artHilfe, art.querySelector(".mehrfach")!)).toBe(true);
+    const radar = document.querySelector('[data-feld="sachverhalte/0/sofort/lagenradar"]') as HTMLElement;
+    expect(radar.children[1]?.classList.contains("feld-hilfe")).toBe(true);
+    // Quellen und Zeitstrahl: Hinweis vor dem Textfeld, verknüpft
+    await zuSchritt(/Quellen/);
+    for (const feld of ["quellen", "zeitstrahl"]) {
+      const t = document.querySelector(`[data-feld="${feld}"] textarea`) as HTMLTextAreaElement;
+      const h = document.getElementById(`${t.id}-hilfe`)!;
+      expect(t.getAttribute("aria-describedby")?.split(" "), feld).toContain(h.id);
+      expect(vorher(h, t), feld).toBe(true);
+    }
+  });
+
   it("UX-2026-W44-05: neue Meldung zeigt fehlende Pflichtangaben erst nach Bearbeiten oder nach dem Prüfschritt", async () => {
     await zeigeApp();
     await zuSchritt(/Ereignisse\/Sachverhalte/);
