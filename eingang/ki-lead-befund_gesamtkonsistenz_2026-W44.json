@@ -1,0 +1,316 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "gesamtkonsistenz",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-01T21:39:55Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+  "pruefumfang": "Modus voll, automatisch gewählt: weder unter den 109 Einträgen des Befundregisters noch unter eingang/ in origin/befunde/eingang eine frühere ki-lead-befund_gesamtkonsistenz_*.json vorhanden. Bezugscommit main: 02a6bd524082311be65e8bcd64a9bd549b0e5a90. Kein Schwerpunkt; keine frühere Befunddatei beigefügt. Vollständiger git clone ohne --depth; git rev-parse --is-shallow-repository: false. main am Ende per git ls-remote unverändert bestätigt. Ausschlussabgleich: Register, README, alle sieben JSON-Befunddateien im Eingang, ihre weiteren Beobachtungen sowie offene_nachpruefung je Quellenregistereintrag und offene_schwerpunkte ausgewertet. Beziehungen: README → SPEZIFIKATION/PROFILFORMAT/AUSTAUSCH; Teil A → Kodierleitfaden → UI/Arbeitsanweisungen; Profilmanifest → Schema/UI/SOPs; Eingabe → Material/S1/Steuerungsblock → S2/Nachbearbeitung → Quellen-/Zeitstrahlprüfung → Kurzfassung/Redaktionscheck; separates v2-Kern-/Modulschema → Zusammenstellung → Migration/Referenzprüfung. Methodik, Arbeitsanweisungen, Profilformat und Spezifikation stichprobenhaft gegengelesen, besonders Fristen, Belegzuordnung, Fortschreibung, Referenzraum und Versionspflege. SOPs/sonstige Fachprofile stichprobenhaft, übrige Teil-B-/Teil-C-Dateien nur Struktur; keine vollständige fachliche Einzelprüfung. src/, scripts/ und Tests stichprobenhaft, Schwerpunkt der Ausführung auf entdeckten Widersprüchen, nicht auf bereits vollständig erzwungenen Strukturregeln. V2-Prüfvertrag und pruefeReferenzen vollständig gelesen; übrige v2-Migration und Kern-/Modulschemata stichprobenhaft. docs/TESTS.md und TESTZUORDNUNG.md als Abdeckungsnachweis ausgewertet; Testnamen/Fixtures zu den Verdachtsfällen gezielt geprüft. Befehle: npm ci && npm test unter vorgefundenem Node 24.22.1: Installation erfolgreich, Engine-Warnung (Vorgabe Node 22), 1598 bestanden, 2 fehlgeschlagen, 1 übersprungen. Kontrolllauf npm exec --yes --package=node@22 -- sh -c 'node --version && npm test': Node 22.23.4, 1600 bestanden, 0 fehlgeschlagen, 1 übersprungen, 115 Testdateien bestanden. npm exec --yes --package=node@22 -- npm run build: Typprüfung und Produktionsbuild erfolgreich, Größenwarnung für Hauptchunk. npm exec --yes --package=node@22 -- node gk-repro-app.mjs und entsprechend gk-repro-v2.mjs (Arbeitsverzeichnis außerhalb des Repositories): Gegenproben mit fiktiven Kopien mitgelieferter Beispiele; Ergebnisse in den jeweiligen Befunden. git log, git blame und gezielte git show zur Entstehung; git status --short am Ende leer. Keine Änderungen an getrackten Repositorydateien, keine Branches, Commits, Issues, PRs oder Pushes. Ausführendes Modell: Codex, GPT-6 laut Systemvorgabe; genaue Modellvariante: null; konfigurierter Aufwand: null (nicht offengelegt).",
+  "nicht_geprueft": [
+    "Keine vollständige fachliche Zeilenprüfung jeder SOP, jedes Themenbausteins und aller Evaluationsberichte; außerhalb der gezielt genannten Abläufe erfolgte eine Stichprobe oder Strukturprüfung. Modus voll bezeichnet den bereichsübergreifenden Umfang, keine lückenlose Einzeldatei-Abnahme.",
+    "Reale KI-Anbieter, Webrecherchewerkzeuge, Ergebnisqualität und Kostenabrechnung: keine API-Schlüssel und kein Auftrag für kostenpflichtige KI-Aufrufe; bestehende Tests verwenden Attrappen.",
+    "Browsermatrix Chromium/WebKit, Screenreader, PWA-Update im Browser sowie native iOS-/Android-Geräte: in diesem Lauf nicht ausgeführt; UI-Prüfung über Vitest/jsdom, Quelltext und Build.",
+    "Externe Rechts- und Fachquellen der SOPs nicht erneut verifiziert; das Quellenregister benennt offene Einzelprüfungen und Schwerpunkte. Diese dokumentierten Grenzen und zurückgestellten Befunde wurden nicht erneut als Defizit vorgelegt.",
+    "V2-App-Unterstützung und KI-Ausgabeschema für v2 nicht praktisch geprüft: nach docs/LEAD-MELDUNG-V2.md ausdrücklich noch nicht umgesetzt; v2-Befunde betreffen ausschließlich das vorhandene separate Formatwerkzeug.",
+    "Private Profile und private Testdaten sind im frischen öffentlichen Clone nicht vorhanden; die zugehörige Testdatei wird übersprungen.",
+    "Die zwei roten UI-Tests des Vorlaufs unter nicht vorgegebener Node-Version wurden im vollständigen Lauf unter Node 22 bestanden. Ursache des Unterschieds nicht ermittelt; eine Node-24-Unterstützung oder vollständige Flakiness-Untersuchung wird nicht behauptet."
+  ],
+  "befunde": [
+    {
+      "id": "GK-2026-W44-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Format des Kennsatzes Handlungsrelevant bis (Z. 119)",
+          "ist": "je Sachverhalt eine Zeile, mehrere unabhängige Fristen in derselben Zeile mit der frühesten zuerst"
+        },
+        {
+          "datei": "src/pipeline/kurzfassung.ts",
+          "stelle": "Funktion fristen (Z. 159–173)",
+          "ist": "const datum = parseDatumDE(wert, zoneOder(profil.manifest.variablen?.zeitzone));"
+        },
+        {
+          "datei": "src/pipeline/kurzfassung.ts",
+          "stelle": "Funktion fristen, Kürzung ab Grundlage (Z. 165–170)",
+          "ist": ".replace(/[;,.]?\\s*Grundlage:.*$/i, \"\")"
+        },
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "Funktion redaktionscheck, Zeitfenster (Z. 193–203)",
+          "ist": "const f = leseFrist(t, zone);"
+        },
+        {
+          "datei": "tests/pipeline/kurzfassung.test.ts",
+          "stelle": "Test übernimmt alle Fristen vollständig (Z. 117–125)",
+          "ist": "übernimmt alle Fristen vollständig, früheste zuerst, und kennzeichnet überfällige"
+        }
+      ],
+      "beobachtung": "Widerspruch: Teil A verlangt mehrere unabhängige Fristen in einer Kennsatzzeile; Kurzfassung und Redaktionscheck lesen nur den ersten Termin. Die Kurzfassung entfernt außerdem alles nach dem ersten „Grundlage:“, einschließlich der nächsten Aufgabe. Bedingung: Eine regelgerechte Zeile enthält zwei Termine mit jeweils eigener Grundlage. Auswirkung: Die zweite Aufgabe fehlt im automatisch gesetzten Fristenblock der Leitungsfassung und erhält im Redaktionscheck keinen eigenen Zeitstatus. Maßgeblich: A.4 und A.7.3 verlangen die Erhaltung des zeitkritischen Handlungsbedarfs (eine Kürzung darf keine unabhängige Aufgabe beseitigen); die technische Zeilenform muss der Herausgeber vereinheitlichen. Prüfweg: Ausführung npm exec --yes --package=node@22 -- node gk-repro-app.mjs; Ergebnis: Bei t0 am 14.10.2026 um 14:00 Uhr und Fristen 14.10.2026 12:00 Uhr sowie 16.10.2026 12:00 Uhr liefert fristen genau einen Eintrag; fristenText enthält nur die erste Aufgabe; redaktionscheck liefert einen gemeinsamen, abgelaufenen Eintrag. Der bestehende Test verwendet getrennte Kennsatzzeilen und deckt die vorgeschriebene gemeinsame Zeile nicht ab. Herkunft: Commit 99403c0 vom 19.10.2026 enthält bereits die Auswertung je Kennsatzzeile und die Kürzung ab „Grundlage:“; Nachweis durch git blame der heutigen Zeilen 160 und 168.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Ein einziges Fristenformat verbindlich festlegen und Eingabehilfe, KI-Anweisung, Parser, Redaktionscheck sowie Leitungsfassung daran ausrichten. Bei Option A auch vorhandene gemeinsame Zeilen verlustfrei erkennen oder ausdrücklich zur Berichtigung markieren. Abnahme: Die beiden unabhängig belegten Aufgaben der Gegenprobe bleiben mit eigenem Termin, Adressat und Überfälligkeitsstatus erhalten; der erste Grundlagenvermerk entfernt keine spätere Aufgabe.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md: A.4 nach Entscheidung, Gültigkeitsstand und redaktionelle oder fachliche Fassung",
+        "profile/lead-beispiel/anweisung-erfassung.md: Abschnitt 4.4; anweisung-verdichtung.md: Regel 8; jeweilige Fassungen und Stände nach Anpassungsbedarf",
+        "profile/lead-beispiel/meldung.ui.json und feldhilfen: Fristvorlage nach Entscheidung",
+        "profile/lead-beispiel/sop/CHANGELOG.md und sop/README.md; Profil-CHANGELOG mit Prüfvermerken nach A.10.2",
+        "Landesprofil durch scripts/landesprofil.mjs nachführen; eigene Fristtexte in profile/lead-justiz und Standardanweisungen auf Anpassungsbedarf prüfen",
+        "SOP-Lesefassung neu erzeugen; App-CHANGELOG und Versionsangaben bei Codeänderung"
+      ],
+      "entscheidungsfrage": "(A) Je unabhängiger Frist eine eigene Zeile mit „Handlungsrelevant bis:“ verbindlich machen und die Fachtexte nachziehen. (B) Mehrere Fristen in einer Zeile beibehalten und beide Auswerter in einzelne Fristen zerlegen lassen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline/kurzfassung.test.ts und tests/lagebild/redaktionscheck.test.ts, Kennung GK-2026-W44-01: fester t0 14.10.2026 14:00 Europe/Berlin; zwei Fristen 14.10.2026 12:00 und 16.10.2026 12:00 samt je eigener Grundlage. Unabhängiges Soll: zwei Aufgaben und zwei getrennte Zeitstatus, ausschließlich die erste Frist überfällig; beide Aufgaben im Fristenblock. Zusätzlich eine durch den Profilvertrag erzeugte bzw. vorgegebene Kennsatzzeile prüfen, damit Regelwerk und Testfixture dieselbe Form verwenden. Anbieter nur als Attrappe, nach docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-02",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format des Quellenverzeichnisses (Z. 191)",
+          "ist": "nummeriert in der Reihenfolge der ersten Nennung"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 5 (Z. 291)",
+          "ist": "Frühere Zeilen bleiben wortgleich mit ihrer Nummer und ihrer Kenntniszeit"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.5, Abschlusscheck (Z. 125)",
+          "ist": "Aussage und Beleg passen zusammen"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "Funktion zeitstrahlNachbearbeiten, Wiederherstellung (Z. 216–221)",
+          "ist": "behalten.push({ ...v });"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "Funktion zeitstrahlNachbearbeiten, Ausgabe (Z. 301–306)",
+          "ist": "if (roh !== undefined || zeilen.length) setze(d, r.zeitstrahl, zeilen.join(\"\\n\"));"
+        }
+      ],
+      "beobachtung": "Widerspruch: Die App stellt frühere Zeitstrahlzeilen samt alter Q-Nummer wortgleich wieder her, sichert aber deren Zuordnung zur ursprünglichen Quelle nicht. Die Nummerierung nach erster Nennung kann sich im neuen Quellenverzeichnis ändern. Bedingung: Eine Fortschreibung ordnet die ursprüngliche Quelle von Q1 nach Q2 um und belegt Q1 mit einem neuen Eingang; eine historische Zeile fehlt im KI-Ergebnis und wird wiederhergestellt. Auswirkung: Die ausgegebene Zeile verweist auf den falschen Eingang, obwohl die Quellenprüfung keinen Befund meldet. Maßgeblich: A.5 verlangt, dass Aussage und Beleg zusammenpassen (Quellennummern sind kein eigenständiger Herkunftsnachweis); für das Verhältnis von Erstnennung und wortgleicher Fortschreibung fehlt eine eindeutige Vorrangregel. Prüfweg: Ausführung npm exec --yes --package=node@22 -- node gk-repro-app.mjs; Ergebnis: Eine fiktive Bundes-Vormeldung aus Ilka hat Q1 Rheinland-Pfalz. Im Folgeentwurf steht derselbe Eintrag unter Q2 und ein neuer niedersächsischer Eingang unter Q1. Die App stellt Z1 mit „Rheinland-Pfalz [Q1]“ wieder her; quellenHinweise liefert eine leere Liste. Ein allgemeiner Wiederherstellungshinweis nennt die falsche Quellenzuordnung nicht. Herkunft: Commit 2c3f8f1 vom 29.10.2026 führte die hier unverändert vorhandene Übernahme ganzer früherer Zeilen ein; Nachweis durch git blame der heutigen Zeilen 216–221.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Quellenidentität bei der Zeitstrahlfortschreibung absichern und die beiden Nummerierungsregeln nach Entscheidung abstimmen. Konflikte dürfen weder als erfolgreiche Wiederherstellung durchlaufen noch eine andere Quelle still zum historischen Beleg machen. Abnahme: Die Gegenprobe erhält für das historische Ereignis genau die ursprüngliche rheinland-pfälzische Quelle oder einen ausdrücklichen, nicht als geklärt ausgewiesenen Zuordnungskonflikt; der neue niedersächsische Eingang wird nicht zum Beleg des historischen Ereignisses.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "profile/lead-beispiel/kodierleitfaden.md: Abschnitte 5 und 8, Fassung und Stand nach Entscheidung",
+        "Teil A: A.8.1 und A.10.2-Verweise auf Anpassungsbedarf prüfen; Gültigkeitsstand, SOP-CHANGELOG und sop/README.md",
+        "Arbeitsanweisungen Erfassung und Verdichtung auf Anpassungsbedarf prüfen und im Profil-CHANGELOG nach A.10.2 vermerken",
+        "Beispielprofilversion sowie abgeleitete Landesprofiltexte fortschreiben; SOP-Lesefassung neu erzeugen",
+        "src/pipeline/zeitstrahl.ts und gegebenenfalls Quellenabgleich; App-CHANGELOG und Versionsangaben"
+      ],
+      "entscheidungsfrage": "(A) Q-Nummern bei Fortschreibungen stabil halten und die Erstnennungsregel dafür ausdrücklich begrenzen. (B) Neu nummerieren dürfen, historische Bezüge anhand einer gesicherten Quellenzuordnung umsetzen und die Wortgleichheitsregel dafür ausdrücklich begrenzen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline/zeitstrahl.test.ts, Kennung GK-2026-W44-02: zwei feste, unterschiedliche Quellenidentitäten; Quelle Rheinland-Pfalz wechselt im Entwurf von Q1 nach Q2, Q1 gehört danach Niedersachsen, frühere Zeitstrahlzeile fehlt. Unabhängiges Soll nach A.5: Die historische Aussage bleibt der ursprünglichen Quelle zugeordnet oder erzeugt einen eindeutigen ungelösten Konflikt. Nicht nur vorhandene Q-Nummern prüfen. Zusätzlicher Fall: Q-Nummer bleibt gleich, aber Quellenidentität wechselt. Kein KI-Aufruf; docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 1, Grundsatz 4 (Z. 30)",
+          "ist": "Datenstand (Quelle, Kennzahl)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Prüfebene 2 (Z. 164)",
+          "ist": "Datenstand nicht nach t0"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Quellenprüfung (Z. 746–751)",
+          "ist": "for (const u of q.ursprung || []) {"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, nur Kennzahlen-Datenstand (Z. 787–794)",
+          "ist": "if (k.datenstand && nachT0(k.datenstand)) fehler(`${pk}.datenstand`, \"Datenstand nach dem Meldezeitpunkt\");"
+        }
+      ],
+      "beobachtung": "Widerspruch: Der v2-Entwurf beschreibt die Prüfung „Datenstand nicht nach t0“ und unterscheidet Datenstände von Quellen und Kennzahlen; das Werkzeug prüft nur Kennzahlen, keine Quellen-Datenstände. Bedingung: Eine ansonsten gültige Meldung enthält quellen[0].datenstand nach ihrem Meldezeitpunkt. Auswirkung: Das Prüfergebnis verschweigt eine ausdrücklich als geprüft beschriebene zeitliche Inkonsistenz. Betroffen ist das separate v2-Werkzeug, noch nicht die v1-App; deshalb mittlere Dringlichkeit. Maßgeblich: Abschnitt 8 des v2-Entwurfs legt den eigenen Prüfvertrag des Werkzeugs fest (es handelt sich nicht um eine noch offene App-Umstellung nach Abschnitt 13). Prüfweg: Ausführung npm exec --yes --package=node@22 -- node gk-repro-v2.mjs; Ergebnis: Im mitgelieferten v2-Beispiel Thüringen mit t0 14.10.2026 10:30 Uhr wird nur quellen[0].datenstand auf 15.10.2026 12:00 Uhr gesetzt; Ajv akzeptiert die Struktur und pruefeReferenzen liefert []. Herkunft: Commit 785b623 vom 01.11.2026 fügte sowohl den Prüfvertrag als auch diese Implementierung hinzu.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Die dokumentierte Prüfung auf Quellen-Datenstände erweitern. Bei einer beabsichtigten Ausnahme für ausdrücklich rückblickende Arbeitsprodukte deren Bedingungen zuerst fachlich definieren und im Prüfvertrag abbilden. Abnahme: Die Quellen-Gegenprobe erzeugt einen Fehler am Pfad quellen[0].datenstand; ein gleicher oder älterer Datenstand und ein zulässiger unbekannter Wert lösen diesen Fehler nicht aus.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "scripts/lead-meldung-v2.mjs: Referenzprüfung und Werkzeugfassung nach bisheriger Praxis",
+        "docs/LEAD-MELDUNG-V2.md: Änderungsverlauf und gegebenenfalls Ausnahme präzisieren",
+        "formate/lead-meldung-v2/README.md und Beispiele nur bei betroffenem Prüfvertrag nachführen; App- und Profilumstellung weiterhin gesondert"
+      ],
+      "entscheidungsfrage": "Soll die dokumentierte Schranke „Datenstand nicht nach t0“ ebenso verbindlich für quellen[].datenstand gelten, einschließlich einer gegebenenfalls ausdrücklich definierten Ausnahme für Rückblicke?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/lead-meldung-v2.test.ts, Kennung GK-2026-W44-03: feste Beispielkopie mit t0 14.10.2026 10:30 Europe/Berlin und Quellen-Datenstand 15.10.2026 12:00; unabhängiges Soll aus docs/LEAD-MELDUNG-V2.md Abschnitt 8: Fehler mit Pfad quellen[0].datenstand. Kontrollfälle gleicher, älterer und unbekannter Stand; Datenstand einer Quelle und Kennzahl getrennt variieren. Tests ohne KI nach docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-04",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 1, Grundsatz 4 (Z. 30)",
+          "ist": "gilt in der Zeitzone der Meldung (`zeitzone`, IANA)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Prüfebene 2 (Z. 164)",
+          "ist": "Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Tagesvergleich und Berichtszeitraum (Z. 753–759)",
+          "ist": "if (m.meldezeitraum?.von && m.meldezeitraum?.bis && m.meldezeitraum.von.slice(0, 10) > m.meldezeitraum.bis.slice(0, 10))"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Chronologie (Z. 807–810)",
+          "ist": "if (vorher && z.zeit.slice(0, 10) < vorher.slice(0, 10)) hinweis(`${pz}.zeit`, \"nicht chronologisch\");"
+        }
+      ],
+      "beobachtung": "Widerspruch: Der v2-Prüfvertrag verwendet Uhrzeiten, UTC-Versätze und die Meldungszeitzone; mehrere Vergleiche im Referenzprüfer reduzieren Zeiten auf Datumspräfixe oder überspringen den Vergleich bei taggenauer Ereigniszeit. Bedingung: Rückwärtslauf innerhalb eines Tages, unterschiedliche Versätze oder erstmals_gemeldet vor einem taggenauen Ereignis. Auswirkung: Unmögliche Reihenfolgen bleiben unbeanstandet; gültige Tagesangaben können bei UTC-t0 fälschlich als zukünftig gelten. Betroffen ist das separate v2-Werkzeug. Maßgeblich: Die Zeitsemantik in Abschnitt 1 Nr. 4 und der Prüfvertrag in Abschnitt 8 (Datumstext und absoluter Zeitpunkt sind bei verschiedenen Versätzen nicht austauschbar). Prüfweg: Ausführung npm exec --yes --package=node@22 -- node gk-repro-v2.mjs; Ergebnis: Ajv und Referenzprüfung akzeptieren den Berichtszeitraum 14.10.2026 10:00 bis 08:00 Uhr und einen Zeitstrahl 09:00 vor 08:00 Uhr ohne Hinweis. Auch erstmals_gemeldet am 13.10.2026 bei Ereignisdatum 14.10.2026 bleibt ohne Befund. Für Europe/Berlin wird ein Ereignisdatum 14.10.2026 bei t0 13.10.2026 23:30 UTC als zukünftig beanstandet, obwohl t0 dort bereits am 14.10.2026 liegt. Herkunft: Commit 785b623 vom 01.11.2026 fügte diese Zeitvergleiche und ihren Prüfvertrag gemeinsam hinzu.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Die bestehenden Zeitvergleiche durch eine gemeinsame Auswertung ersetzen, die UTC-Versatz, Meldungszeitzone und Tagesgenauigkeit berücksichtigt; keine Uhrzeit für taggenaue Ereignisse erfinden. Abnahme: Rückwärts laufende Berichtszeiträume und Kenntniszeiten vor dem Ereignistag erzeugen Fehler, ein umgekehrt sortierter Zeitstrahl innerhalb desselben Tages einen Chronologiehinweis; dieselben absoluten Zeitpunkte mit unterschiedlichen Versätzen werden gleich beurteilt, und ein Tag wird gegen den lokalen t0-Tag der angegebenen Zone verglichen.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "scripts/lead-meldung-v2.mjs: gemeinsame Zeitvergleichsfunktion und Werkzeugfassung",
+        "docs/LEAD-MELDUNG-V2.md: Behandlung gemischter Genauigkeit und Chronologiehinweise präzisieren, Änderungsverlauf",
+        "formate/lead-meldung-v2/README.md bei geändertem Prüfvertrag; keine vorgezogene Umstellung der v1-Profile"
+      ],
+      "entscheidungsfrage": "Soll die Referenzprüfung die dokumentierte Zeitsemantik vollständig anwenden: absolute Zeitpunkte nach Versatz vergleichen, Tagesangaben in zeitzone auswerten und deren geringere Genauigkeit ausdrücklich erhalten?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/lead-meldung-v2.test.ts, Kennung GK-2026-W44-04: unabhängige feste Sollfälle für Zeitraum 14.10.2026 10:00→08:00, Zeitstrahl 09:00→08:00, Ereignistag 14.10.2026 mit erstmals_gemeldet 13.10.2026 sowie UTC-t0 13.10.2026 23:30 bei Europe/Berlin. Zusätzlich absolut rückwärts laufendes Intervall trotz aufsteigender Datumspräfixe und gültiges Gegenbeispiel mit verschiedenen Versätzen. Erwartete Fehler/Hinweise wörtlich aus der Zeitregel festlegen, nicht mit der geprüften Umrechnungsfunktion berechnen; docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-05",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "Gültigkeitsstand, Darstellungsdatei (Z. 11)",
+          "ist": "Profilversion 1.33.1"
+        },
+        {
+          "datei": "profile/lead-beispiel/CHANGELOG.md",
+          "stelle": "Profilversion 1.35.1 (Z. 11–16)",
+          "ist": "Dritte Stelle, weil nur die Hilfetexte der Darstellungsdatei sprachlich überarbeitet sind"
+        },
+        {
+          "datei": "tests/profil/fassungen.test.ts",
+          "stelle": "Gültigkeitsstand, Vergleich der Darstellungsdatei (Z. 27–35)",
+          "ist": "expect(vorOderGleich(zeile(\"Darstellungsdatei\").replace(\"Profilversion \", \"\"), profilVersion)).toBe(true);"
+        }
+      ],
+      "beobachtung": "Widerspruch: Der Gültigkeitsstand bezeichnet 1.33.1 vom 30.10.2026 ausdrücklich als Profilversion der letzten Änderung von meldung.ui.json; der Profilverlauf dokumentiert deren erneute Änderung unter 1.35.1 am 01.11.2026. Bedingung: Der aktuelle Paketstand wird über den Gültigkeitsstand identifiziert. Auswirkung: Pflegende erhalten eine falsche Zuordnung der geltenden Darstellungsdatei. Maßgeblich: Die eigene Bedeutung der Tabellenzeile und A.10.2 (letzte Änderung, nicht bloß eine ältere kompatible Mindestversion). Prüfweg: statisch; Ergebnis: Git-Diff e441bc6 ändert meldung.ui.json und Profilversion, aber nicht die Tabelle; der Test prüft nur Tabellenversion ≤ Profilversion und kann diesen veralteten Wert nicht erkennen. Herkunft: Commit e441bc6 vom 01.11.2026 änderte die Darstellungsdatei auf Profilstand 1.35.1, ohne die Tabellenzeile nachzuziehen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Die Tabellenzeile auf den belegten letzten Änderungsstand der Darstellungsdatei ersetzen. Abnahme: Der Gültigkeitsstand nennt für deren letzte Änderung Profilversion 1.35.1 und Stand 01.11.2026; ein älterer Wert besteht die ergänzte Fortschreibungsprüfung nicht mehr.",
+        "neuer_text": "| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.35.1 | 01.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |"
+      },
+      "folgeaenderungen": [
+        "SOP-Sammelmappe: redaktionelle Fassung und Stand im Gültigkeitsstand sowie sop/README.md und sop/CHANGELOG.md",
+        "Profil-CHANGELOG mit Prüfung der Arbeitsanweisungen nach A.10.2; Profilversion nach bisheriger Praxis fortschreiben",
+        "SOP-Lesefassung neu erzeugen; geteilte SOP-Dateien des Landesprofils werden mitgeführt"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/profil/fassungen.test.ts, Kennung GK-2026-W44-05: unabhängiger Sollstand der letzten dokumentierten UI-Änderung aus dem Profil-CHANGELOG, hier 1.35.1 vom 01.11.2026; den Tabellenwert darauf prüfen. Nicht pauschal Gleichheit mit der aktuellen Manifestversion verlangen, weil reine Schema- oder Dokumentänderungen die UI unverändert lassen können. Negativfall 1.33.1 muss fehlschlagen; docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-06",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-justiz/README.md",
+          "stelle": "Kopfzeile (Z. 3)",
+          "ist": "Profilversion 0.1.0"
+        },
+        {
+          "datei": "profile/lead-justiz/profil.json",
+          "stelle": "Manifest, version (Z. 6)",
+          "ist": "\"version\": \"0.1.1\""
+        },
+        {
+          "datei": "profile/lead-justiz/CHANGELOG.md",
+          "stelle": "Letzte Profiländerung (Z. 5–9)",
+          "ist": "## 0.1.1 – 01.11.2026"
+        }
+      ],
+      "beobachtung": "Widerspruch: Der aktuelle README-Kopf nennt Profilversion 0.1.0, während Manifest und jüngster Änderungsverlauf 0.1.1 ausweisen. Bedingung: Die Profilbeschreibung wird als Beschreibung des ausgelieferten Pakets gelesen. Auswirkung: Die Beschreibung nennt einen anderen Paketstand als die App und das Manifest. Maßgeblich: profil.json bestimmt die Paketversion nach docs/PROFILFORMAT.md (die eigene Dokumentfassung darf davon verschieden sein; der ausdrücklich als Profilversion bezeichnete Wert darf es nicht). Prüfweg: statisch; Ergebnis: Kopfzeile und Manifest direkt verglichen; Git-Diff zeigt die Profilversionserhöhung ohne README-Anpassung. Herkunft: Commit e441bc6 vom 01.11.2026 erhöhte das Justizprofil von 0.1.0 auf 0.1.1 und ließ den README-Kopf unverändert.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Die doppelt gepflegte aktuelle Profilversion in der Kopfzeile durch einen Verweis auf das Manifest ersetzen und die eigene redaktionelle Dokumentfassung nachführen. Abnahme: Der Kopf verweist für die aktuelle Profilversion auf profil.json und nennt keinen davon abweichenden statischen Paketstand.",
+        "neuer_text": "Fassung 0.1.1 vom 01.11.2026 · Profilversion siehe [profil.json](profil.json) · Schemakennung `Lagebild-Justiz-Meldung-v1` · Heiko Pereira Wolf · CC BY 4.0"
+      },
+      "folgeaenderungen": [
+        "profile/lead-justiz/CHANGELOG.md: redaktionelle Korrektur vermerken",
+        "profile/lead-justiz/profil.json: Inhaltsänderung nach der Profilversionierungsregel berücksichtigen"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/profil/lead-justiz.test.ts, Kennung GK-2026-W44-06: README-Kopf enthält einen auf die vorhandene Datei profil.json gerichteten Profilversionsverweis; eine zusätzliche statische Angabe „Profilversion 0.1.0“ wird zurückgewiesen. Dokumentfassung und Paketversion nicht gleichsetzen. Unabhängiges Soll: ein einziger maßgeblicher Paketversionswert im Manifest; docs/TESTS.md.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Auf main und dem reinen Datenbranch befunde/eingang wurden keine früheren GK-Dateien und keine bereits vergebenen GK-IDs dieser Woche gefunden; alle regulären Befund-IDs der sieben Eingangsdateien sind im Register entschieden. Zusätzliche weitere Beobachtungen wurden gesondert gegen die neuen Themen abgeglichen.",
+    "1600 bestehende Vitest-Tests unter Node 22 bestanden. Das belegt deren automatisierte Erwartungen, nicht die fachliche Gesamtkonsistenz. Die sechs Befunde betreffen von diesen Tests nicht erzwungene Beziehungen.",
+    "Typprüfung und Produktionsbuild unter Node 22 erfolgreich; während der Untersuchung keine getrackte Repositorydatei verändert.",
+    "Landesprofilableitung und eingebettetes Fremdschema: bestehende Tests grün; stichprobenhaft stimmen Feldwechsel land → kreis, Rollen und geteilte SOP-Dateien mit der beschriebenen Architektur überein.",
+    "Trennung LEAD-Methode, JSON-Austauschformat und technischer Umsetzung in den gelesenen Grundlagentexten nachvollziehbar; v2 ausdrücklich Entwurf neben der weiterhin verwendeten v1-App, daher keine Inkonsistenz allein aus fehlender v2-App-Unterstützung abgeleitet.",
+    "Stichproben zu Referenzraum, eigenständiger Achsenkodierung und Steuerungsebene ergaben keine zusätzliche belegte Inkonsistenz; keine automatische Übernahme oder Mittelung von Radarwerten als vorgeschriebener Verdichtungsweg gefunden.",
+    "UI-Erklärtexte der jüngsten Änderung und tatsächliche Feldrollen stichprobenhaft gegengelesen; passende Oberflächentests unter Node 22 bestanden. Die Versionszuordnungen sind davon getrennt als Befunde erfasst.",
+    "Bekannte Grenzen des Justiz-Erprobungsprofils, Inhaltsgerüste in Teil C und noch offene native Abnahmen sind ausdrücklich dokumentiert und wurden nicht als neue Befunde wiederholt."
+  ]
+}
