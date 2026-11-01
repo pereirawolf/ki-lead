@@ -45,4 +45,12 @@ describe("Profilneutrale Texte der Oberfläche", () => {
     expect(verweisKlammer(justiz.ui, "zusammenhang")).toBe(" (Teil A, A.7, A.7.1)");
     expect(verweisKlammer({ ...justiz.ui, lagebild: {} }, "zusammenhang")).toBe("");
   });
+
+  // Soll: Kategorien des Profils (quellen.kategorien; Beispiel A/B/W/M/P, Justiz A/B/K/W/V/M/P); Warnungen nennen keine
+  // feste Kategorienliste als Alternative zu A.
+  it("GK-2026-W44-14: die Warnung zu Eingangsmeldungen nennt keine feste Kategorienliste", () => {
+    const s2s3 = readFileSync("src/pipeline/s2s3.ts", "utf8");
+    expect(s2s3).not.toMatch(/dann B oder P/);
+    expect(s2s3).toContain("Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien)");
+  });
 });

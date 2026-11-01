@@ -177,7 +177,7 @@ export function rechercheBefunde(
     b.push({
       stufe: "warnung",
       code: "KEINE_PRIMAERQUELLE",
-      text: "Das Quellenverzeichnis enthält nur Medien- oder Plattformquellen (keine Kategorie A oder B), und keine Fundstelle stammt aus einem amtlichen Rechercheeinstieg der SOPs. Kernaussagen sind indirekt berichtet; vor der Freigabe die zuständigen Primärquellen prüfen.",
+      text: "Das Quellenverzeichnis enthält keine Quelle der Kategorie A oder B, und keine Fundstelle stammt aus einem amtlichen Rechercheeinstieg der SOPs. Kernaussagen sind indirekt berichtet; vor der Freigabe die zuständigen Primärquellen prüfen.",
     });
   if (zusatz.nachgefordert && !ohne && !ausgelassen.length)
     b.push({

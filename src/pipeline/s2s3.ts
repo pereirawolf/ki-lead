@@ -544,7 +544,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     if (liste("kategorie").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist (dann B oder P nach ihrer Rolle, Kodierleitfaden Abschnitt 5).`,
+        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist; dann Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien).`,
       });
     if (liste("unsicher").length)
       befunde.unshift({
