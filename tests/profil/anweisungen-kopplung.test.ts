@@ -1,5 +1,6 @@
 // Kopplung der Arbeitsanweisungen des Beispielprofils an den Code (seit 0.6.4, TP-2026-W44-35): Zahlen, Beispiele und
 // Vokabular, die die App auswertet oder selbst erzeugt, stehen in den Anweisungen so, wie die App sie verwendet.
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { profil } from "../support/dateien";
 import { GRENZEN, fristen } from "../../src/pipeline/kurzfassung";
@@ -85,6 +86,14 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     expect(teilA).toContain("je Frist eine eigene Zeile");
     const zeile = teilA.match(/„(Handlungsrelevant bis: [^“]+)“/)![1]!;
     expect(mehrereFristen(zeile.replace(/^Handlungsrelevant bis:\s*/, ""))).toBe(false);
+  });
+
+  it("GK-2026-W44-07: die Eingabehilfe leitet nicht zu einer Zeile mit mehreren Fristen an (Teil A, A.4)", () => {
+    // Soll: SOP-LEAD Teil A, A.4 (je Frist eine eigene Zeile). Die Meldung der Eingabehilfe bei vorhandenem Kennsatz darf
+    // nicht empfehlen, weitere Fristen in die vorhandene Zeile zu schreiben.
+    const quelle = readFileSync("src/ui/Eingabehilfen.tsx", "utf8");
+    expect(quelle).not.toMatch(/Fristen in dieser Zeile|in derselben Zeile/);
+    expect(quelle).toContain("Je Frist eine eigene Zeile");
   });
 
   it("TP-2026-W44-35: die Beispieleinträge im Kodierleitfaden, Abschnitt 5, sind gültige Quelleneinträge ohne Befund", async () => {
