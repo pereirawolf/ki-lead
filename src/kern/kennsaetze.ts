@@ -167,7 +167,8 @@ export function pflichtHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   return out;
 }
 
-export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): Befund[] {
+/** `referenzraum`: Referenzraum des Profils für die Leitfrage des Bewertungstexts (GK-2026-W44-12); ohne Angabe allgemein. */
+export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, referenzraum?: string): Befund[] {
   const r = ui.rollen;
   const ks = ui.kennsaetze || {};
   const out: Befund[] = [];
@@ -183,7 +184,7 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): B
     if (beurteilung && r.sv_bewertung_text && !bt.trim()) {
       out.push({
         stufe: "hinweis",
-        text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Bevölkerungsschutz, und warum jetzt?`,
+        text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Referenzraum${referenzraum?.trim() ? ` (${referenzraum.trim()})` : ""}, und warum jetzt?`,
       });
     }
     const imFliesstext = kennsaetzeImFliesstext(bt, Object.values(ks));

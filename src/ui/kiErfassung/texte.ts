@@ -33,15 +33,16 @@ export const STATUS_TEXT: Record<Lauf["status"], string> = {
 export const TEXT_FELD = {
   gegenstand: {
     label: "Untersuchungsgegenstand und Erkenntnisinteresse",
-    hilfe:
-      "Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der allgemeinen Sicht des Bevölkerungsschutzes.",
-    platzhalter: "Beispiel: Regionale Störungen der Kraftstoffversorgung seit Wochenbeginn, mit Blick auf Rettungsdienst und Notstromversorgung.",
+    // GK-2026-W44-12: Sicht aus dem Referenzraum des Profils, wie in S1 und S2; Beispiele ohne Fachbezug eines Profils
+    hilfe: (raum?: string) =>
+      `Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der Sicht des Referenzraums des Profils${raum?.trim() ? ` (${raum.trim()})` : ""}.`,
+    platzhalter: "Beispiel: Störung seit Wochenbeginn im eigenen Zuständigkeitsbereich, mit Blick auf die betroffenen Leistungen und ihre Folgen.",
   },
   ausgangsinformationen: {
     label: "Ausgangsinformationen und Stichworte",
     hilfe: "Welche Informationen liegen bereits vor? Eigene Notizen, Zahlen, Beobachtungen. Stichpunkte genügen; Unbestätigtes bitte kennzeichnen.",
     platzhalter:
-      "Beispiel:\n– Dieselengpässe in mehreren Landkreisen gemeldet (unbestätigt)\n– Einzelne Tankstellen wegen Stromausfall außer Betrieb\n– Rettungsdienst meldet Tankprobleme bei Notstromaggregaten",
+      "Beispiel:\n– Störung an mehreren Standorten gemeldet (unbestätigt)\n– Erste Stelle arbeitet im Notbetrieb\n– Rückmeldung der zuständigen Stelle steht aus",
   },
   webseiten: {
     label: "Webseiten (eine Adresse je Zeile)",
@@ -57,7 +58,7 @@ export const TEXT_FELD = {
   prueffrage: {
     label: "Besondere Prüffrage (optional)",
     hilfe: "Ein einzelner Punkt, den die Recherche gezielt prüfen soll, oder ein gewünschter Beobachtungszeitraum.",
-    platzhalter: "Beispiel: Ist die Notstromversorgung von Krankenhäusern betroffen?",
+    platzhalter: "Beispiel: Sind zeitkritische Leistungen betroffen, und gibt es einen Ersatzweg?",
   },
   gegenstandS1: {
     hilfe: "Von der KI aus dem Auftrag abgeleitet. Bei Bedarf anpassen; die Recherche richtet sich nach diesem Text.",

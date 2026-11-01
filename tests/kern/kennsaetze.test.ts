@@ -18,6 +18,21 @@ describe("Quellen und Kennsätze", () => {
   });
 });
 
+// Soll: GK-2026-W44-12 (Option A) – die Leitfrage nennt den Referenzraum des Profils statt eines festen Fachbezugs.
+describe("GK-2026-W44-12: Leitfrage des Bewertungstexts aus dem Referenzraum", () => {
+  it("Bewertung ohne Text: Hinweis mit Referenzraum, ohne Angabe allgemein, nie „Bevölkerungsschutz“ als fester Text", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(he);
+    m.sachverhalte[0].sofort.bewertung_text = "";
+    const text = (raum?: string) => ausfuellHinweise(m, p!.ui, undefined, raum).find((b) => /ohne Text – erster Satz/.test(b.text))!.text;
+    expect(text("Funktionsfähigkeit der Justiz in Thüringen")).toContain(
+      "Was bedeutet das für den Referenzraum (Funktionsfähigkeit der Justiz in Thüringen), und warum jetzt?",
+    );
+    expect(text()).toContain("Was bedeutet das für den Referenzraum, und warum jetzt?");
+    expect(text("Funktionsfähigkeit der Justiz in Thüringen")).not.toContain("Bevölkerungsschutz");
+  });
+});
+
 describe("Kennsätze im Fließtext", () => {
   const ks = ["Neubewertung bei:", "Handlungsrelevant bis:"];
   it("erkennt Kennsätze mitten in einer Zeile", () => {

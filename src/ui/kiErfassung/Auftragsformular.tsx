@@ -79,7 +79,7 @@ export function Auftragsformular({
           )}
         </div>
       )}
-      <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstand.hilfe}>
+      <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstand.hilfe(profil.manifest.referenzraum)}>
         {(a) => (
           <textarea
             {...a}
