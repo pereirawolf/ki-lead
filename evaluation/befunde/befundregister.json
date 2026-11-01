@@ -2112,6 +2112,180 @@
       "kurz": "Erprobung mit Screenreader an drei Aufgaben, HTML-Ausgabe und getaggte PDFs.",
       "status": "abgelehnt",
       "grund": "Entscheidung des Herausgebers vom 31.10.2026; die Lücke bleibt in docs/BARRIEREFREIHEIT.md dokumentiert."
+    },
+    {
+      "id": "GK-2026-W44-01",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Format des Kennsatzes Handlungsrelevant bis (Z. 119)"
+        },
+        {
+          "datei": "src/pipeline/kurzfassung.ts",
+          "stelle": "Funktion fristen (Z. 159–173)"
+        },
+        {
+          "datei": "src/pipeline/kurzfassung.ts",
+          "stelle": "Funktion fristen, Kürzung ab Grundlage (Z. 165–170)"
+        },
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "Funktion redaktionscheck, Zeitfenster (Z. 193–203)"
+        },
+        {
+          "datei": "tests/pipeline/kurzfassung.test.ts",
+          "stelle": "Test übernimmt alle Fristen vollständig (Z. 117–125)"
+        }
+      ],
+      "kurz": "Je Frist eine eigene Zeile „Handlungsrelevant bis:“ (Option A); Redaktionscheck und Management Summary kennzeichnen Zeilen mit mehreren Fristen zur Berichtigung, statt die zweite Aufgabe zu verlieren.",
+      "status": "umgesetzt",
+      "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-02",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format des Quellenverzeichnisses (Z. 191)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 5 (Z. 291)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.5, Abschlusscheck (Z. 125)"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "Funktion zeitstrahlNachbearbeiten, Wiederherstellung (Z. 216–221)"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "Funktion zeitstrahlNachbearbeiten, Ausgabe (Z. 301–306)"
+        }
+      ],
+      "kurz": "Quellennummern der Vormeldung bleiben bei Fortschreibungen stabil (Option A); die App meldet ZEITSTRAHL_QUELLE, wenn [Qn] in einer übernommenen Zeitstrahlzeile eine andere Quelle bezeichnet.",
+      "status": "umgesetzt",
+      "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-03",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 1, Grundsatz 4 (Z. 30)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Prüfebene 2 (Z. 164)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Quellenprüfung (Z. 746–751)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, nur Kennzahlen-Datenstand (Z. 787–794)"
+        }
+      ],
+      "kurz": "Die v2-Referenzprüfung prüft auch quellen[].datenstand gegen t0, ohne Ausnahme für Rückblicke.",
+      "status": "umgesetzt",
+      "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-04",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 1, Grundsatz 4 (Z. 30)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Prüfebene 2 (Z. 164)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Tagesvergleich und Berichtszeitraum (Z. 753–759)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "Funktion pruefeReferenzen, Chronologie (Z. 807–810)"
+        }
+      ],
+      "kurz": "v2-Zeitvergleiche nach UTC-Versatz, Zeitzone der Meldung und Tagesgenauigkeit; Tag und Zeitpunkt desselben Tags nicht entscheidbar.",
+      "status": "umgesetzt",
+      "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-05",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "Gültigkeitsstand, Darstellungsdatei (Z. 11)"
+        },
+        {
+          "datei": "profile/lead-beispiel/CHANGELOG.md",
+          "stelle": "Profilversion 1.35.1 (Z. 11–16)"
+        },
+        {
+          "datei": "tests/profil/fassungen.test.ts",
+          "stelle": "Gültigkeitsstand, Vergleich der Darstellungsdatei (Z. 27–35)"
+        }
+      ],
+      "kurz": "Gültigkeitsstand in Teil A nennt für die Darstellungsdatei die Profilversion ihrer letzten Änderung; Test leitet den Sollstand aus dem Profil-CHANGELOG ab.",
+      "status": "umgesetzt",
+      "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-06",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44.json",
+      "commit": "02a6bd524082311be65e8bcd64a9bd549b0e5a90",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-justiz/README.md",
+          "stelle": "Kopfzeile (Z. 3)"
+        },
+        {
+          "datei": "profile/lead-justiz/profil.json",
+          "stelle": "Manifest, version (Z. 6)"
+        },
+        {
+          "datei": "profile/lead-justiz/CHANGELOG.md",
+          "stelle": "Letzte Profiländerung (Z. 5–9)"
+        }
+      ],
+      "kurz": "README des Justizprofils verweist für die Profilversion auf profil.json statt auf einen veralteten statischen Stand.",
+      "status": "umgesetzt",
+      "pr": 126
     }
   ]
 }
