@@ -113,7 +113,7 @@ Kennzahlen machen unzulässige Summen erkennbar (Einheit, Zeitbasis, Teilmenge, 
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung |
+| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung; bei einer Fortschreibung behalten die Quellen der eigenen Vormeldung ihre ID, neue Quellen erhalten die nächste freie (Kodierleitfaden Abschnitt 5) |
 | `kategorie` | ja | Buchstabe nach dem Kodierleitfaden des Profils (Rolle der Quelle für die Aussage); das Profil legt die zulässigen fest |
 | `herausgeber`, `titel` | ja | |
 | `veroeffentlicht` | – | Tag oder Zeitpunkt |
