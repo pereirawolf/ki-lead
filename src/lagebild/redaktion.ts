@@ -3,7 +3,7 @@
 // der Meldungen belegt keine Verschärfung. Ein Abschnitt ohne Befund heißt nur, dass die automatischen Regeln
 // dieses Abschnitts nichts gefunden haben; nicht konfigurierte Regeln weist die Abdeckung aus.
 
-import { kennsatz, kennsaetzeAlle, KENNSATZ_ERSATZ, leseFrist } from "../kern/kennsaetze";
+import { kennsatz, kennsaetzeAlle, KENNSATZ_ERSATZ, leseFrist, MEHRERE_FRISTEN_HINWEIS, mehrereFristen } from "../kern/kennsaetze";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { holeWert } from "../kern/pfad";
 import { bezugVon, istKennung, kennungenDerMeldung } from "../kern/kennung";
@@ -196,10 +196,13 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     for (const sv of svs)
       for (const t of kennsaetzeAlle(sv.bewertungText, ks.handlungsrelevant)) {
         const f = leseFrist(t, zone);
-        const [status, klasse] = fristEinstufen(f.datum, f.genauigkeit, jetzt, aus, zone);
+        const [status, eingestuft] = fristEinstufen(f.datum, f.genauigkeit, jetzt, aus, zone);
         // Aus einer Vorlage mit noch offenen Stellen ⟦…⟧: als unvollständig kennzeichnen
         const offen = offenePlatzhalter(t).length ? "offene Vorlagenstellen ⟦…⟧ – Angaben unvollständig, bitte ausfüllen oder streichen" : "";
-        const hinweis = [f.hinweis, offen].filter(Boolean).join("; ");
+        // GK-2026-W44-01: mehrere Fristen in einer Zeile erhalten keinen eigenen Zeitstatus; kennzeichnen, nicht zerlegen
+        const mehrere = mehrereFristen(t);
+        const klasse: Klasse = mehrere && eingestuft === "ok" ? "warn" : eingestuft;
+        const hinweis = [f.hinweis, offen, mehrere ? MEHRERE_FRISTEN_HINWEIS : ""].filter(Boolean).join("; ");
         zeit.push({ sv, text: t, datum: f.datum, genauigkeit: f.genauigkeit, ...(hinweis ? { hinweis } : {}), status, klasse });
       }
     // Nicht lesbare Fristen zuerst (sie brauchen Klärung), danach zeitlich

@@ -7,6 +7,7 @@ import { steuerungsBlock, type RechercheModus, type Steuerung } from "../../src/
 import { kodierleitfadenKennung } from "../../src/pipeline/nachbearbeitung";
 import { parseQuellen, quellenHinweise } from "../../src/kern/quellen";
 import { pruefeRoh } from "../../src/kern/validierung";
+import { mehrereFristen } from "../../src/kern/kennsaetze";
 
 const ZAHLWORT: Record<number, string> = { 1: "einen", 2: "zwei", 3: "drei" };
 
@@ -71,6 +72,19 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     expect(f[0]!.datum.toISOString()).toBe("2026-10-09T10:00:00.000Z"); // 12:00 MESZ
     expect(f[0]!.text).toContain("vor Beginn des Sturmflutscheitels");
     expect(f[0]!.text).not.toContain("Grundlage");
+  });
+
+  it("GK-2026-W44-01: Teil A, Arbeitsanweisungen und Eingabehilfe geben je Frist eine eigene Zeile vor; die Formzeile ergibt keine Mehrfachzeile", async () => {
+    const { p } = await beispiel();
+    const teilA = p.sops.find((s) => s.gemeinsam)!.text;
+    const texte: [string, string][] = [
+      ["Teil A", teilA],
+      ...Object.entries(p.dateien).filter(([n]) => /^anweisung-.*\.md$/.test(n) || n === "meldung.ui.json"),
+    ];
+    expect(texte.filter(([, t]) => /in derselben Zeile/.test(t)).map(([n]) => n)).toEqual([]);
+    expect(teilA).toContain("je Frist eine eigene Zeile");
+    const zeile = teilA.match(/„(Handlungsrelevant bis: [^“]+)“/)![1]!;
+    expect(mehrereFristen(zeile.replace(/^Handlungsrelevant bis:\s*/, ""))).toBe(false);
   });
 
   it("TP-2026-W44-35: die Beispieleinträge im Kodierleitfaden, Abschnitt 5, sind gültige Quelleneinträge ohne Befund", async () => {

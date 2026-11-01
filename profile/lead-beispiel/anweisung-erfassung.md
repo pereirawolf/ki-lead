@@ -126,7 +126,7 @@ Am Ende stehen, jeweils in eigener Zeile und nur wenn der Inhalt vorliegt, die K
 Handlungsrelevant bis: TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle
 ```
 
-Je Sachverhalt eine Zeile; mehrere unabhängige Fristen stehen in derselben Zeile, die früheste zuerst. Ohne belegte Uhrzeit entfällt `HH:MM`.
+Je Frist eine eigene Zeile; mehrere unabhängige Fristen eines Sachverhalts stehen untereinander, die früheste zuerst. Ohne belegte Uhrzeit entfällt `HH:MM`.
 
 Trenne (a) den Ereignisraum, (b) die belegte Wirkung im Referenzraum, (c) das Beobachtungsinteresse des Referenzraums und (d) hypothetische Folgen im Referenzraum. Übertrage ausländische Fallzahlen, Mobilisierung oder Störungen nie ungeprüft auf D1-, D2-, D4-, D6- oder D8-Werte des Referenzraums (A.1 Nr. 6). Bei einem Ereignis im Referenzraum gilt dieselbe Trennung zwischen Ursache, betroffenem Raum und lediglich denkbaren Folgen.
 

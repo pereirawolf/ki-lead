@@ -9,7 +9,7 @@ import { datumDE } from "../kern/ausgabe";
 import { holeWert, teilePfad } from "../kern/pfad";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { parseQuellen, sachverhalte } from "../kern/quellen";
-import { kennsaetzeAlle, KENNSATZ_ERSATZ, parseDatumDE } from "../kern/kennsaetze";
+import { kennsaetzeAlle, KENNSATZ_ERSATZ, mehrereFristen, parseDatumDE } from "../kern/kennsaetze";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import type { Meldung, Profil } from "../kern/typen";
 import { kennsatzPlatzhalter, ersetzePlatzhalter, profilPlatzhalter } from "../profil/platzhalter";
@@ -162,15 +162,19 @@ export function fristen(d: Meldung, profil: Profil): Frist[] {
       if (!datum) continue;
       // Offene Vorlagenstellen ⟦…⟧ samt Trennzeichen davor nicht in die Fassung übernehmen, aber kennzeichnen
       const unvollstaendig = offenePlatzhalter(wert).length > 0;
+      // GK-2026-W44-01: Stehen mehrere Fristen in einer Zeile (entgegen A.4), entfällt nur jeder Zusatz „Grundlage: …“
+      // bis zum nächsten „;“, damit keine spätere Aufgabe abgeschnitten wird; die Zeile wird gekennzeichnet, nicht zerlegt.
+      const mehrere = mehrereFristen(wert);
       const text = wert
         .replace(/\s*(?:–|-|;|,)?\s*⟦[^⟦⟧\n]*⟧/g, "")
         .replace(/\s*\[Q[^\]]*\]/g, "")
-        .replace(/[;,.]?\s*Grundlage:.*$/i, "")
+        .replace(mehrere ? /[;,.]?\s*Grundlage:[^;]*/gi : /[;,.]?\s*Grundlage:.*$/i, "")
         .replace(/[\s;,.]+$/, "")
         .trim();
       if (!text || gesehen.has(text)) continue;
       gesehen.add(text);
-      out.push({ datum, text: unvollstaendig ? `${text} (Angaben unvollständig)` : text, ueberfaellig: !!stand && datum < stand });
+      const zusatz = [unvollstaendig ? "Angaben unvollständig" : "", mehrere ? "mehrere Fristen in einer Zeile, Berichtigung nötig" : ""].filter(Boolean);
+      out.push({ datum, text: zusatz.length ? `${text} (${zusatz.join("; ")})` : text, ueberfaellig: !!stand && datum < stand });
     }
   }
   return out.sort((a, b) => a.datum.getTime() - b.datum.getTime());
