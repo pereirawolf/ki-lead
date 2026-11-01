@@ -1,0 +1,263 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "gesamtkonsistenz",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-01T22:40:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+  "pruefumfang": "Modus seit 02a6bd524082311be65e8bcd64a9bd549b0e5a90 (Bezugscommit der Befunddatei ki-lead-befund_gesamtkonsistenz_2026-W44.json im Eingang), Schwerpunkt nach Hinweis des Nutzers: Stand nach PR #126 (Umsetzung GK-2026-W44-01 bis -06). Geprüft zunächst refs/pull/126/merge (241cd97, Baum gleich PR-Kopf c1b199a); PR #126 wurde während des Laufs am 01.11.2026 um 22:32 UTC gemergt, main c5a3205 hat denselben Baum wie c1b199a (git diff leer), daher commit = main. Wechselbereich KW 44 modulo 4 = 0: Methodik ↔ Profile und SOPs. Ausschlussabgleich: befundregister.json (115 Einträge im Merge-Stand, darunter GK-2026-W44-01 bis -06 umgesetzt), README, alle acht Befunddateien im Eingang samt weiteren Beobachtungen (keine offenen IDs), offene_schwerpunkte des Quellenregisters, sop/CHANGELOG.md, offene PR und Befund-Branches (nur befunde/eingang und der PR-#126-Branch). Bereiche: alle 44 im PR geänderten Dateien vollständig gelesen (Diff); abhängige Dateien gezielt: src/ui/Eingabehilfen.tsx, src/ui/Lagebild.tsx, src/ui/lagebild/Kopiervorlage.tsx, src/kern/zeitstrahl.ts, src/kern/quellen.ts (Struktur), Justizprofil (Teil A, Kodierleitfaden, meldung.ui.json), Landesprofil Thüringen (CHANGELOG, Ableitung), docs/LEAD-MELDUNG-V2.md Abschnitte 1, 5, 8, 11, scripts/lead-meldung-v2.mjs (Zeit- und Referenzprüfung, Migration der Quellen-IDs), SOP Teil B/C nur per Suche nach Fristen- und Quellenregeln (stichprobenhaft). Alle JSON- und Markdown-Dateien auf Kennsatzzeilen mit mehreren Fristen durchsucht. Befehle: npm ci (Node 22.23.4) erfolgreich; npm test: 115 Testdateien bestanden, 1 übersprungen, 1624 Tests bestanden, 1 übersprungen; zwei temporäre Vitest-Sonden (Quellenidentität Beispiel- und Justizprofil, danach gelöscht) und eine Node-Sonde gegen pruefeReferenzen().",
+  "nicht_geprueft": [
+    "Browsertests (Playwright), npm run build, lint und reuse lint: nicht ausgeführt; UI-Verhalten nur über Vitest/jsdom und Quelltext.",
+    "Bereiche außerhalb der PR-Änderungen und ihrer Abhängigkeiten nur kursorisch; keine Zeilenprüfung der SOPs, Arbeitsanweisungen und Profile außerhalb der Fristen- und Quellenregeln.",
+    "Echte KI-Läufe zur Wirkung des neuen Steuerungssatzes und der Fristregel: nicht durchgeführt (keine kostenpflichtigen Läufe).",
+    "Externe Quellen: für diesen Teilaspekt nicht erforderlich, nicht geprüft.",
+    "Private Profile und Testdaten: im öffentlichen Klon nicht vorhanden, Testdatei übersprungen."
+  ],
+  "befunde": [
+    {
+      "id": "GK-2026-W44-07",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Eingabehilfen.tsx",
+          "stelle": "einfuegen(), Meldung bei vorhandenem Kennsatz (Z. 117–124)",
+          "ist": "„${prefix}“ steht schon im Text. Weitere Fristen in dieser Zeile ergänzen, die früheste zuerst."
+        },
+        {
+          "datei": "tests/ui/eingabehilfen.test.ts",
+          "stelle": "Test „A05–A07: … Kernaussage und Kennsatz werden nicht gedoppelt …“ (Z. 172–174)",
+          "ist": "toMatch(/Weitere Fristen in dieser Zeile ergänzen, die früheste zuerst/)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Format des Kennsatzes Handlungsrelevant bis (Z. 119)",
+          "ist": "je Frist eine eigene Zeile, bei mehreren unabhängigen Fristen eines Sachverhalts die früheste zuerst"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "feldhilfen, Vorlage handlungsrelevant, hinweis (Z. 592)",
+          "ist": "Je Frist eine eigene Zeile, die früheste zuerst."
+        },
+        {
+          "datei": "tests/profil/anweisungen-kopplung.test.ts",
+          "stelle": "GK-2026-W44-01, Prüfung auf „in derselben Zeile“ (Z. 84)",
+          "ist": "texte.filter(([, t]) => /in derselben Zeile/.test(t))"
+        }
+      ],
+      "beobachtung": "Widerspruch: Teil A A.4 (seit Sammelmappe 3.21.0) und der Hinweis der Eingabehilfe verlangen je Frist eine eigene Zeile „Handlungsrelevant bis:“; die Eingabehilfe meldet bei vorhandenem Kennsatz „Weitere Fristen in dieser Zeile ergänzen“, springt in die vorhandene Zeile und fügt keine zweite Kennsatzzeile ein. Bedingung: Bewertungstext enthält bereits eine Zeile „Handlungsrelevant bis:“, Nutzende klicken die Vorlage erneut für eine weitere Frist. Auswirkung: Die App leitet zu genau der Mehrfachzeile an, die Redaktionscheck und Management Summary seit 0.6.22 als „mehrere Fristen in einer Zeile, Berichtigung nötig“ kennzeichnen; in der Management Summary erscheint dann der Berichtigungsvermerk. Maßgeblich: Teil A A.4 (Entscheidung des Herausgebers vom 01.11.2026 zu GK-2026-W44-01, Option A). Prüfweg: statisch und Test tests/ui/eingabehilfen.test.ts; Ergebnis: der Test erzwingt die alte Meldung (npm test grün), die Kopplungsprüfung erfasst nur die Wendung „in derselben Zeile“, nicht „in dieser Zeile“. Herkunft: Meldetext seit Commit 48747bd vom 21.10.2026; Regel geändert mit Commit 98bad7c vom 01.11.2026, Eingabehilfe dabei nicht nachgezogen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Meldetext der Eingabehilfe an A.4 angleichen; bei (B) zusätzlich das Einfügen einer weiteren Kennsatzzeile unter der vorhandenen zulassen (nur für den Kennsatz handlungsrelevant). Test in tests/ui/eingabehilfen.test.ts auf den neuen Text bzw. das neue Verhalten umstellen; Kopplungsprüfung in tests/profil/anweisungen-kopplung.test.ts um src/ui/Eingabehilfen.tsx und die Wendung „in dieser Zeile“ erweitern. Abnahme: Kein Text der App oder der Profile empfiehlt, weitere Fristen in eine vorhandene Zeile „Handlungsrelevant bis:“ zu schreiben; bei (B) ergibt ein zweiter Klick zwei Kennsatzzeilen, die der Redaktionscheck ohne Hinweis „mehrere Fristen“ auswertet.",
+        "neuer_text": "(A) `„${prefix}“ steht schon im Text. Je Frist eine eigene Zeile: eine weitere Frist als neue Zeile „${prefix}“ darunter ergänzen, die früheste zuerst.`"
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App-Fassung 0.6.23)",
+        "docs/TESTZUORDNUNG.md",
+        "docs/SPEZIFIKATION.md, Abschnitt zu den LEAD-Eingabehilfen, falls das Verhalten nach (B) geändert wird"
+      ],
+      "entscheidungsfrage": "(A) Nur den Meldetext anpassen; eine weitere Frist wird von Hand als neue Zeile ergänzt. (B) Zusätzlich fügt die Eingabehilfe bei vorhandenem Kennsatz „Handlungsrelevant bis:“ eine weitere Kennsatzzeile darunter ein (Ausnahme vom Dopplungsschutz nur für diesen Kennsatz).",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/profil/anweisungen-kopplung.test.ts: src/ui/Eingabehilfen.tsx und alle Profiltexte enthalten weder „in derselben Zeile“ noch „in dieser Zeile“ im Zusammenhang mit Fristen; bei (B) UI-Test in tests/ui/eingabehilfen.test.ts mit zwei Klicks und zwei Kennsatzzeilen.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-08",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "MEHRERE_FRISTEN_HINWEIS (Z. 133–134)",
+          "ist": "je Frist eine eigene Zeile „Handlungsrelevant bis:“ (A.4); ausgewertet ist nur der erste Termin, bitte berichtigen"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten(), Befund ZEITSTRAHL_QUELLE (Z. 255–260)",
+          "ist": "Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Kodierleitfaden Abschnitt 5)."
+        },
+        {
+          "datei": "src/pipeline/kontext.ts",
+          "stelle": "zeitstrahlSteuerung(), Satz bei Vormeldung (Z. 303–306)",
+          "ist": "Die Einträge des Quellenverzeichnisses der Vormeldung behalten ihre Nummern [Qn]; neue Quellen erhalten die nächste freie Nummer."
+        },
+        {
+          "datei": "profile/lead-justiz/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4 Kernaussage und Leitungsbezug (Z. 52); A.5 Nr. 4 Fristgrundlage (Z. 63); A.6 Nr. 1 (Z. 68)",
+          "ist": "Das Quellenverzeichnis führt jede Quelle einmal, nummeriert in der Reihenfolge der ersten Nennung"
+        },
+        {
+          "datei": "profile/lead-justiz/kodierleitfaden.md",
+          "stelle": "Abschnitt 5 (Z. 85)",
+          "ist": "## 5. Quellenkategorien A/B/K/W/V/M/P"
+        },
+        {
+          "datei": "profile/lead-justiz/meldung.ui.json",
+          "stelle": "lagebild.verweise.zeitfenster (Z. 202)",
+          "ist": "\"zeitfenster\": \"Teil A, A.5\""
+        }
+      ],
+      "beobachtung": "Widerspruch: Die mit 0.6.22 eingeführten Texte der App nennen Regeln und Fundstellen des Beispielprofils fest im Code und gelten für jedes Profil. Im Profil Lagebild Justiz ist A.4 die Kernaussage (Fristen stehen in A.5), Kodierleitfaden Abschnitt 5 sind die Quellenkategorien ohne Nummerierungsregel, und A.6 Nr. 1 verlangt die Nummerierung nach erster Nennung ohne Ausnahme für Fortschreibungen. Bedingung: aktives Profil lead-justiz, Fortschreibung mit eigener Vormeldung bzw. Fristzeile mit zwei Terminen. Auswirkung: Redaktionscheck und Warnung ZEITSTRAHL_QUELLE verweisen auf nicht passende Abschnitte; der Steuerungsblock von S2 gibt der KI eine Regel vor, die Teil A des Justizprofils nicht enthält, während dessen Kodierleitfaden und Teil A ihr dem Wortlaut nach widersprechen. Für Verweise des Redaktionschecks gibt es den Profilmechanismus lagebild.verweise (Justiz: „Teil A, A.5“), den die neuen Texte umgehen. Maßgeblich: für die Fundstellen das jeweilige Profil (A.10.1, eigene Teil A des Justizprofils); ob die Regel selbst für Justiz gelten soll, entscheidet der Herausgeber. Prüfweg: Ausführung (Vitest-Sonde mit profilPflicht(\"lead-justiz\"), Vormeldung aus beispiele/fiktiv-2026-10, Q1 und Q2 getauscht); Ergebnis: Warnung ZEITSTRAHL_QUELLE mit „Kodierleitfaden Abschnitt 5“; übrige Stellen statisch. Herkunft: Commits 98bad7c und ff8b78f vom 01.11.2026; im Text von PR #126 als Hinweis zur Abnahme vermerkt, ohne Entscheidung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Feste Fundstellen in den App-Texten profilneutral fassen oder aus lagebild.verweise ableiten; je nach Entscheidung das Justizprofil ergänzen oder die Prüfungen profilabhängig machen. Abnahme: Mit dem Profil lead-justiz nennen Redaktionscheck, Warnung ZEITSTRAHL_QUELLE und Steuerungsblock keine Abschnittsnummer, die im Justizprofil einen anderen Gegenstand hat, und keine Regel, die dessen Teil A widerspricht.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App)",
+        "profile/lead-justiz/CHANGELOG.md und profil.json (bei Option A)",
+        "docs/SPEZIFIKATION.md, Abschnitt KI-Erfassung und Verdichtung",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": "(A) Das Justizprofil übernimmt beide Regeln: Teil A A.6 Nr. 1 und A.8 Nr. 1 um stabile Quellennummern bei der Fortschreibung, A.5 Nr. 4 um „je Frist eine eigene Zeile“ ergänzen; die App-Texte verweisen profilneutral („Teil A des Profils“, „Kodierleitfaden des Profils“) bzw. über lagebild.verweise. (B) Die Regeln bleiben beim Beispiel- und Landesprofil; Prüfung, Hinweis und Steuerungssatz greifen nur, wenn das Profil sie führt (etwa über einen Schalter im Profilmanifest), für Justiz entfallen sie.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/profil/: Für jedes eingebaute Profil enthalten MEHRERE_FRISTEN_HINWEIS, der Text von ZEITSTRAHL_QUELLE und der Steuerungssatz keine Abschnittsangabe, die im Teil A bzw. Kodierleitfaden dieses Profils eine andere Überschrift trägt.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-09",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "quellKern() (Z. 58–70)",
+          "ist": "Quellenidentität … Kategorie, Herausgeber, Datum, Titel und Fundstelle, ohne Nummer, Zugriffsdatum und Datenstand"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 8 (Z. 294)",
+          "ist": "meldet einen Konflikt, wenn ein Quellenverweis einer übernommenen Zeile nicht mehr dieselbe Quelle bezeichnet wie in der Vormeldung"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format (Z. 201)",
+          "ist": "Eine Bezahlschranke wird mit „(Paywall)“ gekennzeichnet, eine unzugängliche Quelle mit „nicht ausgewertet“."
+        }
+      ],
+      "beobachtung": "Widerspruch: Der Kodierleitfaden verlangt einen Konflikt nur, wenn [Qn] nicht mehr dieselbe Quelle bezeichnet; die App vergleicht den Eintragstext ohne Nummer, Zugriff und Datenstand und wertet damit auch Zugangsvermerke („nicht ausgewertet“, „(Paywall)“) und die Kategorie als Identität. Bedingung: Fortschreibung, in der eine zuvor unzugängliche Quelle nun ausgewertet ist, eine Bezahlschranke nachgetragen oder die Kategorie nach der Rolle der Quelle angepasst wird. Auswirkung: Warnung ZEITSTRAHL_QUELLE „Quelle der Vormeldung fehlt im Quellenverzeichnis … bitte Quellenverzeichnis berichtigen“, obwohl Nummer und Quelle stimmen; Nutzende werden angeleitet, eine zutreffende Aktualisierung (etwa das Entfallen von „nicht ausgewertet“, von dem nach Abschnitt 5 die Sicherheit abhängiger Aussagen abhängt) zurückzunehmen. Maßgeblich: Kodierleitfaden 8.3 Regel 8 („dieselbe Quelle“), weil die Herausgeberentscheidung zu GK-2026-W44-02 auf Quellenidentität zielt, nicht auf Textgleichheit. Prüfweg: Ausführung (Vitest-Sonde auf Basis von tests/pipeline/zeitstrahl.test.ts, Bundesmeldung „Ilka“); Ergebnis: „nicht ausgewertet“ entfernt → Warnung; „(Paywall)“ ergänzt → Warnung; Kategorie A → B → Warnung; nur Datenstand ergänzt → keine Warnung (Kontrolle). Herkunft: Commit ff8b78f vom 01.11.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "quellKern() vor dem Vergleich zusätzlich um die Zugangsvermerke „(Paywall)“ und „nicht ausgewertet“ bereinigen; die Kategorie je nach Entscheidung ebenfalls ausnehmen oder mit eigenem Hinweistext („Kategorie geändert“) melden. Kodierleitfaden 8.3 Regel 8 nennt, was zur Identität zählt. Abnahme: Kontrollfälle in tests/pipeline/zeitstrahl.test.ts (Zugangsvermerk entfällt, Paywall nachgetragen, bei (A) Kategorie geändert) ergeben keinen Befund ZEITSTRAHL_QUELLE; Tausch zweier Quellen ergibt ihn weiterhin.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "profile/lead-beispiel/kodierleitfaden.md (Fassung, Änderungsverlauf), Gültigkeitsstand Teil A, Landesprofil neu ableiten",
+        "CHANGELOG.md (App)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": "Zählt die Kategorie zur Quellenidentität? (A) Nein: Kategorie ist die Rolle für die Aussage (Kodierleitfaden Abschnitt 5) und darf sich bei einer Fortschreibung ändern; nur Herausgeber, Datum, Titel und Fundstelle bestimmen die Identität. (B) Ja: eine geänderte Kategorie wird weiter gemeldet, aber mit eigenem Hinweis statt „Quelle der Vormeldung fehlt“.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline/zeitstrahl.test.ts: Kontrollfälle für Zugangsvermerke und Kategorie wie in der Abnahme beschrieben.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-10",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "vergleicheZeit() (Z. 152–172) und Chronologieprüfung in pruefeReferenzen() (Z. 840)",
+          "ist": "if (vorher && vergleicheZeit(z.zeit, vorher, zone) === -1) hinweis(`${pz}.zeit`, \"nicht chronologisch\");"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 4 (Z. 290)",
+          "ist": "ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags."
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Tabelle, Ebene 2 Referenzen (Z. 164)",
+          "ist": "Tag und Zeitpunkt desselben Tags gelten als nicht entscheidbar"
+        },
+        {
+          "datei": "src/kern/zeitstrahl.ts",
+          "stelle": "chronologisch() (Z. 115–118) und Hinweis ZEITSTRAHL_REIHENFOLGE (Z. 263–265)",
+          "ist": "ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags"
+        }
+      ],
+      "beobachtung": "Widerspruch: Für die Reihenfolge des Zeitstrahls gibt der Kodierleitfaden eine feste Regel (Tag ohne Uhrzeit vor den Uhrzeiten desselben Tags), die v1-Prüfung der App setzt sie um; die v2-Referenzprüfung behandelt Tag und Zeitpunkt desselben Tags auch für die Reihenfolge als „nicht entscheidbar“ und meldet nichts. Bedingung: v2-Zeitstrahl mit einer Zeile „2026-10-13T18:00+02:00“ und danach einer Zeile „2026-10-13“. Auswirkung: dieselbe Zeilenfolge ergibt in v1 den Hinweis ZEITSTRAHL_REIHENFOLGE, in v2 keinen; die Migration v1 → v2 verliert die Prüfung. Maßgeblich: Kodierleitfaden 8.3 Regel 4 (einziger Ort für Zeitstrahlregeln nach A.10.2); „nicht entscheidbar“ ist für Zeitvergleiche (nach t0, vor der Ereigniszeit) richtig, für eine Ordnungsregel nicht. Prüfweg: Ausführung node mit pruefeReferenzen() am Beispiel LEAD-Meldung-v2_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json mit zwei eingefügten Zeilen; Ergebnis: 18:00 → Tag desselben Tags: kein Befund; 18:00 → Vortag: „nicht chronologisch“ (Kontrolle). Herkunft: Tagesvergleich seit Commit 785b623 vom 01.11.2026; mit Commit fa36702 vom 01.11.2026 als „nicht entscheidbar“ festgeschrieben.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "In pruefeReferenzen() für die Reihenfolge einen Ordnungsschlüssel nach Regel 4 verwenden: Liefert vergleicheZeit() null, weil Tag und Zeitpunkt auf denselben Kalendertag in zeitzone fallen, gilt der Tag als früher. Klammerzusatz in docs/LEAD-MELDUNG-V2.md Abschnitt 8 entsprechend fassen. Abnahme: Zeitpunkt gefolgt vom Tag desselben Tags ergibt „nicht chronologisch“, Tag gefolgt vom Zeitpunkt desselben Tags ergibt keinen Befund; Vergleiche gegen t0 und erstmals_gemeldet bleiben unverändert.",
+        "neuer_text": "(Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten für Vergleiche mit t0 und `erstmals_gemeldet` als nicht entscheidbar, für die Reihenfolge steht der Tag vor den Uhrzeiten desselben Tags, Kodierleitfaden Abschnitt 8.3 Regel 4)"
+      },
+      "folgeaenderungen": [
+        "docs/LEAD-MELDUNG-V2.md, Änderungsverlauf (Nachtrag 2.0)",
+        "CHANGELOG.md (App)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/lead-meldung-v2.test.ts: Fall „Zeitpunkt, danach Tag desselben Tags“ ergibt Hinweis „nicht chronologisch“; Gegenfall ohne Befund.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "GK-2026-W44-11",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 5.1 Quelle, Feld id (Z. 116)",
+          "ist": "`Q1`, `Q2` … in der Reihenfolge der ersten Nennung"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format (Z. 191)",
+          "ist": "bei einer Fortschreibung jedoch mit stabilen Nummern: Die Einträge der eigenen Vormeldung behalten ihre Nummer"
+        }
+      ],
+      "beobachtung": "Widerspruch: Der v2-Entwurf legt die Quellen-IDs ausnahmslos nach erster Nennung fest; der Kodierleitfaden 1.8.0 verlangt bei einer Fortschreibung stabile Nummern der eigenen Vormeldung. v2 kennt Fortschreibungen (beziehungen fortschreibung_von) und verweist für den Zeitstrahl auf Kodierleitfaden Abschnitt 8, der die stabilen Nummern voraussetzt. Bedingung: v2-Fortschreibung mit neuer, früher genannter Quelle. Auswirkung: Wer v2 in der App umsetzt, folgt einer überholten Regel; übernommene Zeitstrahlzeilen zeigten dann auf andere Quellen. Maßgeblich: Kodierleitfaden Abschnitt 5 (Entscheidung zu GK-2026-W44-02); die Migration (scripts/lead-meldung-v2.mjs, Z. 223) übernimmt die Nummern bereits unverändert. Prüfweg: statisch; Ergebnis: Kernschema und Modulschemata enthalten keine abweichende Regel. Herkunft: Abschnitt 5.1 seit Commit 785b623 vom 01.11.2026; Kodierleitfaden 1.8.0 mit Commit ff8b78f vom 01.11.2026, LEAD-MELDUNG-V2.md dabei nur in Abschnitt 8 nachgezogen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Feldbeschreibung in Abschnitt 5.1 um die Fortschreibungsregel ergänzen. Abnahme: Abschnitt 5.1 und Kodierleitfaden Abschnitt 5 nennen dieselbe Nummerierungsregel.",
+        "neuer_text": "`Q1`, `Q2` … in der Reihenfolge der ersten Nennung; bei einer Fortschreibung behalten die Quellen der eigenen Vormeldung ihre ID, neue Quellen erhalten die nächste freie (Kodierleitfaden Abschnitt 5)"
+      },
+      "folgeaenderungen": [
+        "docs/LEAD-MELDUNG-V2.md, Änderungsverlauf (Nachtrag 2.0)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "npm test auf dem Stand nach PR #126 grün (1624 bestanden, 1 übersprungen); Zahlen wie im PR-Text.",
+    "GK-2026-W44-01: Teil A A.4, Arbeitsanweisungen Erfassung 4.4 und Verdichtung Regel 8, Eingabehilfe-Hinweis in meldung.ui.json, Landesprofil Thüringen und SPEZIFIKATION Funktionsumfang Nr. 5 gleichlautend; Redaktionscheck und Management Summary kennzeichnen Mehrfachzeilen wie beschrieben.",
+    "Suche über alle JSON- und Markdown-Dateien: einzige Kennsatzzeile mit mehreren Fristen ist evaluation/material/ilka-musterfassung.json (im PR #126 als offene Herausgeberentscheidung vermerkt, hier nicht erneut gemeldet).",
+    "GK-2026-W44-02: Kodierleitfaden Abschnitt 5 und 8.3, Erfassung 4.3, Steuerungsblock und SPEZIFIKATION stimmen überein; Verdichtung Regel 15 verweist für Fortschreibungen auf Erfassung 4.3; Migration v1 → v2 übernimmt die Quellennummern unverändert.",
+    "GK-2026-W44-03, -04: Datenstand von Quellen nach t0 wird als Fehler gemeldet; vergleicheZeit() nach Versatz und Zone; Doku Abschnitt 8 und Änderungsverlauf nachgezogen.",
+    "GK-2026-W44-05, -06 und Folgeänderungen: Gültigkeitsstand (Sammelmappe 3.21.0, Kodierleitfaden 1.8.0, Darstellungsdatei Profilversion 1.36.0, Erfassung 1.10.0, Verdichtung 2.3.0, Kurzfassung 2.4.1), Köpfe der Arbeitsanweisungen, profil.json 1.36.0, Landesprofil 1.1.0, Justiz 0.1.2, App 0.6.22 in README, SPEZIFIKATION und CHANGELOG gleichlautend.",
+    "Lagebild-PDF und Kopiervorlage führen mehrere Kennsatzzeilen je Sachverhalt mit „; “ zusammen; reine Anzeige, keine Rückwirkung auf Daten.",
+    "Weitere Beobachtung: Management Summary (Leitungsfassung) zeigt bei Mehrfachzeilen den Redaktionsvermerk „mehrere Fristen in einer Zeile, Berichtigung nötig“; ob ein Bearbeitungsvermerk in einem Produkt für die Behördenleitung erscheinen soll, ist nicht geregelt.",
+    "Weitere Beobachtung: quellKern() entfernt „Datenstand: …“, nicht aber Standangaben im Titel („Stand 11:15 Uhr“, Justizprofil); ob eine fortgeschriebene Fassung derselben Störungsmeldung dieselbe Quelle ist, regelt kein Profil."
+  ]
+}
