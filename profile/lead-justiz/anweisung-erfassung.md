@@ -1,6 +1,6 @@
 # Arbeitsanweisung Erfassung (Modus A): Lagebild Justiz
 
-Erprobungsentwurf · Fassung 0.1.0 vom 31.10.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` · abgestimmt auf Teil A und den Kodierleitfaden Lagebild Justiz, jeweils Fassung 0.1.0
+Erprobungsentwurf · Fassung 0.1.1 vom 02.11.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` · abgestimmt auf Teil A, Fassung 0.2.0, und den Kodierleitfaden Lagebild Justiz, Fassung 0.1.1
 
 **Von der App beigefügt:** JSON-Schema der Meldung, Darstellungsdatei (Bezeichnungen, Kennsätze, Quellenkategorien), Teil A der Regeln, der Kodierleitfaden und das Eingangsmaterial des Auftrags. Ergebnis ist ein prüfbarer **Entwurf**, den eine Person prüft und freigibt.
 

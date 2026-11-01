@@ -93,6 +93,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
 | 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
 | 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
+| 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ |
+
+## [0.6.23] – 02.11.2026
+
+Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` (Gesamtkonsistenz nach PR #126, Commit `c5a3205`, GK-2026-W44-07 bis -11) und `ki-lead-befund_gesamtkonsistenz_2026-W44-c.json` (Nachprüfung der angezeigten Texte auf Profilneutralität, GK-2026-W44-12 bis -15), freigegeben vom Herausgeber am 01.11.2026: alle wie vorgeschlagen, -08 Option A, -09 Option A, -12 Option A.
+
+### Geändert
+
+- **Eingabehilfe „Handlungsrelevant bis:“ (GK-2026-W44-07):** Steht der Kennsatz schon im Text, leitet die Meldung zu einer weiteren eigenen Zeile an („Je Frist eine eigene Zeile: …“) statt dazu, weitere Fristen in die vorhandene Zeile zu schreiben (SOP-LEAD A.4).
+- **Profilneutrale Fundstellen (GK-2026-W44-08, -13):** Der Hinweis zu Zeilen mit mehreren Fristen nennt „Teil A des Profils“ statt „A.4“, die Warnung `ZEITSTRAHL_QUELLE` „Quellenregeln des Profils“ statt „Kodierleitfaden Abschnitt 5“. Die Hinweise der KI-Erfassung zur Verdichtung, zum Zusammenführen von Sachverhalten, zu t0 bei Verdichtung und zu Eingangsmeldungen ohne Eintrag übernehmen den Verweis `lagebild.verweise.zusammenhang` des Profils (neue Hilfsfunktion `verweisKlammer()` in `src/kern/ui.ts`) statt fest „SOP-LEAD A.7/A.7.1“.
+- **Quellenidentität im Zeitstrahl (GK-2026-W44-09):** Kategorie und die Vermerke „(Paywall)“ und „nicht ausgewertet“ zählen nicht mehr zur Identität einer Quelle; nachgeführte Angaben ergeben keine Warnung `ZEITSTRAHL_QUELLE` mehr, getauschte Quellen weiterhin.
+- **LEAD-Meldung-v2, Referenzprüfung (GK-2026-W44-10, -11):** Für den Chronologiehinweis steht ein Tag ohne Uhrzeit vor den Uhrzeiten desselben Tags (`stehtVor()` in `scripts/lead-meldung-v2.mjs`, Kodierleitfaden Abschnitt 8.3, Regel 4); `docs/LEAD-MELDUNG-V2.md` Abschnitt 5.1 nennt stabile Quellen-IDs bei Fortschreibungen und Abschnitt 8 die Reihenfolgeregel.
+- **Referenzraum statt Bevölkerungsschutz (GK-2026-W44-12):** Hilfetext zum Untersuchungsgegenstand und Hinweis „Bewertung ohne Text“ setzen den Referenzraum des Profils ein; die Platzhalter der KI-Erfassung sind ohne Fachbezug eines Profils gefasst.
+- **Quellenkategorien in Warnungen (GK-2026-W44-14):** `KEINE_PRIMAERQUELLE` nennt die geprüfte Bedingung („keine Quelle der Kategorie A oder B“) statt „nur Medien- oder Plattformquellen“; die Warnung zu Eingangsmeldungen verweist für Nicht-Behörden auf die Quellenkategorien des Profils statt auf „B oder P“.
+- **Radar nur mit Radar (GK-2026-W44-15):** Die Profilansicht beschreibt den Kodierleitfaden ohne „Lagenradar D1–D8“; das Lagebild zeigt den Reiter „Lagenradar“ nur bei Profilen mit Radar, beschriftet wie dessen Radarfeld.
+- **Profile:** Beispielprofil 1.36.1 (Kodierleitfaden 1.8.1, Erfassung 1.10.1, Sammelmappe 3.21.1), Landesprofil Thüringen 1.1.1 (abgeleitet), Lagebild Justiz 0.2.0 (Teil A 0.2.0 mit Fristzeile und stabilen Quellennummern, GK-2026-W44-08). Einzelheiten in den Verläufen der Profile.
+- Spezifikation 0.6.23, README, [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md), `docs/LEAD-MELDUNG-V2.md` (Nachtrag zur Fassung 2.0). Versionsangaben 0.6.23 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten.
+
+### Tests
+
+- `tests/profil/anweisungen-kopplung.test.ts`, `tests/ui/eingabehilfen.test.ts`: GK-2026-W44-07.
+- `tests/profil/lead-justiz.test.ts`, `tests/lagebild/redaktionscheck.test.ts`: GK-2026-W44-08 (Warnung mit dem Justizprofil ausgeführt).
+- `tests/pipeline/zeitstrahl.test.ts`: GK-2026-W44-09 mit Gegenprobe; `tests/format/lead-meldung-v2.test.ts`: GK-2026-W44-10.
+- `tests/ui/ki-erfassung-felder.test.ts`, `tests/kern/kennsaetze.test.ts`: GK-2026-W44-12; neu `tests/profil/profilneutral.test.ts`: GK-2026-W44-13 bis -15; `tests/pipeline/recherche-pflicht.test.ts`: GK-2026-W44-14; `tests/ui/lagebild.test.ts`: GK-2026-W44-15.
+- `tests/pipeline/kontext.test.ts`: Kodierleitfaden 1.8.1.
 
 ## [0.6.22] – 01.11.2026
 

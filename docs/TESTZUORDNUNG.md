@@ -894,3 +894,18 @@ Angepasst ohne Änderung des Solls: `tests/support/dateien.ts` lädt Profile mit
 | README Justiz verweist für die Profilversion auf `profil.json` | Profil Lagebild Justiz (Erprobungsentwurf) › GK-2026-W44-06: … | `tests/profil/lead-justiz.test.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/profil/lead-justiz.test.ts` (Profilversion 0.1.2), `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.8.0 und Verdichtung 2.3).
+
+## Gesamtkonsistenz nach PR #126 (0.6.23, Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` und `-c.json`, Freigabe des Herausgebers vom 01.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingabehilfe leitet bei vorhandenem Kennsatz zu einer eigenen Zeile je Frist an | Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35) › GK-2026-W44-07: …; LEAD-Eingabehilfen › A05–A07: … | `tests/profil/anweisungen-kopplung.test.ts`, `tests/ui/eingabehilfen.test.ts` |
+| Justiz Teil A führt Fristzeile und stabile Quellennummern; Hinweis, `ZEITSTRAHL_QUELLE` und Steuerungssatz ohne Abschnittsnummer | Profil Lagebild Justiz (Erprobungsentwurf) › GK-2026-W44-08: … | `tests/profil/lead-justiz.test.ts`, `tests/lagebild/redaktionscheck.test.ts` |
+| Kategorie und Zugangsvermerke ändern die Quellenidentität nicht; Tausch bleibt Konflikt | GK-2026-W44-02: Quellennummern der Vormeldung bleiben stabil › GK-2026-W44-09: … | `tests/pipeline/zeitstrahl.test.ts` |
+| v2: Zeitpunkt, danach Tag desselben Tags ergibt „nicht chronologisch“; umgekehrt nicht | LEAD-Meldung-v2: Datenstand und Zeitvergleiche › GK-2026-W44-10: … | `tests/format/lead-meldung-v2.test.ts` |
+| Auftrag nennt den Referenzraum des Profils, kein „Bevölkerungsschutz“ im Justizprofil; Leitfrage des Bewertungstexts mit Referenzraum | KI-Erfassung: Auftrag und Material › GK-2026-W44-12: …; GK-2026-W44-12: Leitfrage des Bewertungstexts … | `tests/ui/ki-erfassung-felder.test.ts`, `tests/kern/kennsaetze.test.ts` |
+| Kein festes „SOP-LEAD A.“ in angezeigten Texten; Verweis aus `lagebild.verweise` | Profilneutrale Texte der Oberfläche › GK-2026-W44-13: … | `tests/profil/profilneutral.test.ts` |
+| `KEINE_PRIMAERQUELLE` nennt die Prüfbedingung; Warnung zu Eingangsmeldungen ohne feste Kategorienliste | … › GK-2026-W44-14: … | `tests/pipeline/recherche-pflicht.test.ts`, `tests/profil/profilneutral.test.ts` |
+| Profilansicht ohne „Lagenradar D1–D8“; Reiter „Lagenradar“ nur mit Radar im Profil | … › GK-2026-W44-15: … | `tests/profil/profilneutral.test.ts`, `tests/ui/lagebild.test.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/ki-erfassung-felder.test.ts` (Hilfetext mit Referenzraum, neutrale Platzhalter nach GK-2026-W44-12), `tests/profil/lead-justiz.test.ts` (Profilversion 0.2.0, Arbeitsanweisungen 0.1.1), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.8.1).

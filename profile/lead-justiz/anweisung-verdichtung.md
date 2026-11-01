@@ -1,6 +1,6 @@
 # Arbeitsanweisung Verdichtung (Modus B): Lagebild Justiz
 
-Erprobungsentwurf · Fassung 0.1.0 vom 31.10.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` · abgestimmt auf Teil A, den Kodierleitfaden und die Arbeitsanweisung Erfassung Lagebild Justiz, jeweils Fassung 0.1.0
+Erprobungsentwurf · Fassung 0.1.1 vom 02.11.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` · abgestimmt auf Teil A, Fassung 0.2.0, den Kodierleitfaden und die Arbeitsanweisung Erfassung Lagebild Justiz, jeweils Fassung 0.1.1
 
 ## Auftrag
 

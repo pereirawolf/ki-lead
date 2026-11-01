@@ -40,6 +40,7 @@ import { s2UmfangWarnung } from "./schaetzung";
 import { laufabhaengigePlatzhalter } from "../profil/platzhalter";
 import { s2Grenzen, rechercheModus, type Kontext, aufrufen } from "./stufen";
 import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
+import { verweisKlammer } from "../kern/ui";
 
 export const MAX_REPARATUREN = 2;
 
@@ -538,12 +539,12 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     if (liste("fehlt").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (SOP-LEAD A.7; Kategorie nach der Rolle der meldenden Stelle, bei Behörden A): ${liste("fehlt").join("; ")}.`,
+        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis${verweisKlammer(p.ui, "zusammenhang")}; Kategorie nach der Rolle der meldenden Stelle, bei Behörden A: ${liste("fehlt").join("; ")}.`,
       });
     if (liste("kategorie").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist (dann B oder P nach ihrer Rolle, Kodierleitfaden Abschnitt 5).`,
+        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist; dann Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien).`,
       });
     if (liste("unsicher").length)
       befunde.unshift({

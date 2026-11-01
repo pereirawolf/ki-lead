@@ -43,8 +43,8 @@ afterEach(async () => {
   speicherLeeren(db);
 });
 
-async function erfassungZeigen() {
-  const p = (await profil("lead-beispiel")).profil!;
+async function erfassungZeigen(name = "lead-beispiel") {
+  const p = (await profil(name)).profil!;
   const { KiErfassung } = await import("../../src/ui/KiErfassung");
   await einhaengen(
     React.createElement(KiErfassung, {
@@ -81,14 +81,24 @@ describe("KI-Erfassung: Auftrag und Material", () => {
     const f = feld<HTMLTextAreaElement>("Untersuchungsgegenstand und Erkenntnisinteresse");
     expect(f.tagName).toBe("TEXTAREA");
     expect(beschreibung(f)).toBe(
-      "Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der allgemeinen Sicht des Bevölkerungsschutzes.",
+      "Welche Lage oder welches Ereignis soll die KI-Recherche erfassen, für welchen Raum und Zeitraum? Bei Bedarf zusätzlich: aus welcher Perspektive. Ohne Angabe recherchiert die KI aus der Sicht des Referenzraums des Profils (Bevölkerungsschutz in Deutschland).",
     );
     expect(f.placeholder).toBe(
-      "Beispiel: Regionale Störungen der Kraftstoffversorgung seit Wochenbeginn, mit Blick auf Rettungsdienst und Notstromversorgung.",
+      "Beispiel: Störung seit Wochenbeginn im eigenen Zuständigkeitsbereich, mit Blick auf die betroffenen Leistungen und ihre Folgen.",
     );
     expect(f.value).toBe("");
     // Hilfetext gehört nicht zum zugänglichen Namen
     expect(document.querySelector(`label[for="${f.id}"]`)!.textContent).toBe("Untersuchungsgegenstand und Erkenntnisinteresse");
+  });
+
+  // Soll: Entscheidung des Herausgebers vom 01.11.2026 zu GK-2026-W44-12 (Option A): Die KI recherchiert aus dem
+  // Referenzraum des Profils (kontext.ts); Hilfe und Beispiele nennen keinen festen Fachbezug eines anderen Profils.
+  it("GK-2026-W44-12: mit dem Profil Lagebild Justiz nennt der Auftrag dessen Referenzraum und keinen Bevölkerungsschutz", async () => {
+    await erfassungZeigen("lead-justiz");
+    const f = feld<HTMLTextAreaElement>("Untersuchungsgegenstand und Erkenntnisinteresse");
+    expect(beschreibung(f)).toContain("aus der Sicht des Referenzraums des Profils (Funktionsfähigkeit der Justiz in Thüringen).");
+    const platzhalter = [...document.querySelectorAll("textarea, input")].map((e) => (e as HTMLInputElement).placeholder).join(" ");
+    expect(`${seitentext()} ${platzhalter}`).not.toMatch(/Bevölkerungsschutz|Notstrom|Rettungsdienst|Diesel/);
   });
 
   it("Hilfetexte stehen wie in der Meldungsmaske zwischen Beschriftung und Eingabe (seit 0.6.21)", async () => {
@@ -111,7 +121,7 @@ describe("KI-Erfassung: Auftrag und Material", () => {
       "Welche Informationen liegen bereits vor? Eigene Notizen, Zahlen, Beobachtungen. Stichpunkte genügen; Unbestätigtes bitte kennzeichnen.",
     );
     expect(f.placeholder).toBe(
-      "Beispiel:\n– Dieselengpässe in mehreren Landkreisen gemeldet (unbestätigt)\n– Einzelne Tankstellen wegen Stromausfall außer Betrieb\n– Rettungsdienst meldet Tankprobleme bei Notstromaggregaten",
+      "Beispiel:\n– Störung an mehreren Standorten gemeldet (unbestätigt)\n– Erste Stelle arbeitet im Notbetrieb\n– Rückmeldung der zuständigen Stelle steht aus",
     );
     expect(f.value).toBe("");
   });
@@ -155,7 +165,7 @@ describe("KI-Erfassung: Auftrag und Material", () => {
     await erfassungZeigen();
     const f = feld("Besondere Prüffrage (optional)");
     expect(beschreibung(f)).toBe("Ein einzelner Punkt, den die Recherche gezielt prüfen soll, oder ein gewünschter Beobachtungszeitraum.");
-    expect(f.placeholder).toBe("Beispiel: Ist die Notstromversorgung von Krankenhäusern betroffen?");
+    expect(f.placeholder).toBe("Beispiel: Sind zeitkritische Leistungen betroffen, und gibt es einen Ersatzweg?");
     expect(f.value).toBe("");
   });
 });

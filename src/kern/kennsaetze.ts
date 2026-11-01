@@ -121,7 +121,8 @@ export function leseFrist(s: unknown, zeitzone?: string): Frist {
 /**
  * Mehr als eine Frist in einer Kennsatzzeile „Handlungsrelevant bis:“ (GK-2026-W44-01): mehr als ein Zusatz
  * „Grundlage:“ oder mehr als ein Termin im Format „TT.MM.JJJJ [HH:MM] – …“ am Zeilenanfang oder nach „;“. Nach Teil A
- * (A.4) steht je Frist eine eigene Zeile; die App zerlegt solche Zeilen nicht, sondern kennzeichnet sie zur Berichtigung.
+ * (Beispielprofil A.4, Justiz A.5 Nr. 4) steht je Frist eine eigene Zeile; die App zerlegt solche Zeilen nicht, sondern
+ * kennzeichnet sie zur Berichtigung. Der Hinweis nennt keine Abschnittsnummer (GK-2026-W44-08).
  */
 export function mehrereFristen(wert: unknown): boolean {
   const s = String(wert || "");
@@ -131,7 +132,7 @@ export function mehrereFristen(wert: unknown): boolean {
 }
 
 export const MEHRERE_FRISTEN_HINWEIS =
-  "mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (A.4); ausgewertet ist nur der erste Termin, bitte berichtigen";
+  "mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (Teil A des Profils); ausgewertet ist nur der erste Termin, bitte berichtigen";
 
 /** Zeitpunkt einer Frist (siehe leseFrist); null, wenn kein gültiges Datum erkennbar ist. */
 export function parseDatumDE(s: unknown, zeitzone?: string): Date | null {
@@ -166,7 +167,8 @@ export function pflichtHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   return out;
 }
 
-export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): Befund[] {
+/** `referenzraum`: Referenzraum des Profils für die Leitfrage des Bewertungstexts (GK-2026-W44-12); ohne Angabe allgemein. */
+export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, referenzraum?: string): Befund[] {
   const r = ui.rollen;
   const ks = ui.kennsaetze || {};
   const out: Befund[] = [];
@@ -182,7 +184,7 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string): B
     if (beurteilung && r.sv_bewertung_text && !bt.trim()) {
       out.push({
         stufe: "hinweis",
-        text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Bevölkerungsschutz, und warum jetzt?`,
+        text: `${name}: Bewertung „${beurteilung}“ ohne Text – erster Satz: Was bedeutet das für den Referenzraum${referenzraum?.trim() ? ` (${referenzraum.trim()})` : ""}, und warum jetzt?`,
       });
     }
     const imFliesstext = kennsaetzeImFliesstext(bt, Object.values(ks));

@@ -10,6 +10,7 @@ import type { S1Vorschlag } from "./lauf";
 import { hatVormeldung, istVerdichtung, juengsterEingang, materialBloecke, vormeldungStand } from "./material";
 import { s2Grenzen, rechercheModus, type Kontext, aufrufen } from "./stufen";
 import { redaktionsvermerke } from "./vermerke";
+import { verweisKlammer } from "../kern/ui";
 
 const tausender = (n: number) => n.toLocaleString("de-DE");
 
@@ -181,7 +182,7 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
     } else t0 = kiT0 || eingang;
     if (hatVormeldung(k.material) && stichtag === heute && t0.slice(0, 10) < heute)
       appHinweise.push(
-        `t0 folgt bei Verdichtung dem jüngsten Eingang (SOP-LEAD A.7) und liegt vor dem heutigen Stichtag. Soll die Meldung den heutigen Stand der Vormeldung abbilden, ist t0 hier oder im Auftrag vorzugeben.`,
+        `t0 folgt bei Verdichtung dem jüngsten Eingang${verweisKlammer(k.profil.ui, "zusammenhang")} und liegt vor dem heutigen Stichtag. Soll die Meldung den heutigen Stand der Vormeldung abbilden, ist t0 hier oder im Auftrag vorzugeben.`,
       );
   } else if (hatVormeldung(k.material) && stichtag === heute) {
     // R3 Fortschreibung auf heute: neuer Meldezeitpunkt ist die aktuelle Zeit; der Stand der Vormeldung ist Ausgangspunkt

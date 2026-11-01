@@ -75,7 +75,7 @@ export function Pruefen({
     const felder = new Set(schemaBefunde.flatMap((b) => (b.pfad ? [feldSchluessel(b.pfad)] : [])));
     return pflicht.filter((b) => !b.pfad || !felder.has(feldSchluessel(b.pfad)));
   }, [schemaBefunde, pflicht]);
-  const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone), [profil, meldung]);
+  const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone, profil.manifest.referenzraum), [profil, meldung]);
   const ent = r.entstehung_feld ? meldung[r.entstehung_feld] : undefined;
   const svs = sachverhalte(meldung, profil.ui);
   const radarFeld = r.sv_radar ? feldUi(profil.ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;

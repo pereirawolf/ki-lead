@@ -26,7 +26,11 @@
           "description": "ID aus der Befunddatei, z. B. KP-2026-W44-03 oder ET-2026-W44-01"
         },
         "agent": { "type": "string", "minLength": 1, "description": "z. B. quellenwaechter, fristenwaechter, konsistenzpruefer, lernschleife, erfassungstest" },
-        "befunddatei": { "type": "string", "pattern": "^ki-lead-befund_[a-z]+_\\d{4}-W\\d{2}\\.json$" },
+        "befunddatei": {
+          "type": "string",
+          "pattern": "^ki-lead-befund_[a-z]+_\\d{4}-W\\d{2}(-[a-z0-9]+)?\\.json$",
+          "description": "Dateiname im Eingang; ein Zusatz wie „-b“ unterscheidet weitere Läufe desselben Teilaspekts in derselben Kalenderwoche"
+        },
         "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "geprüfter Stand von main" },
         "dringlichkeit": { "enum": ["hoch", "mittel", "niedrig"] },
         "fundstellen": {

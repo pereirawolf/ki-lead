@@ -371,6 +371,26 @@ describe("GK-2026-W44-02: Quellennummern der Vormeldung bleiben stabil", () => {
     expect(b.filter((x) => x.code === "ZEITSTRAHL_QUELLE")).toEqual([]);
   });
 
+  // Soll: Kodierleitfaden Abschnitt 8.3, Regel 8 (Entscheidung des Herausgebers vom 01.11.2026 zu GK-2026-W44-09, Option A):
+  // Kategorie, Zugriff, Datenstand und Zugangsvermerke gehören nicht zur Quellenidentität.
+  it("GK-2026-W44-09: nachgeführte Zugangsvermerke und Kategorie ergeben keinen Konflikt, getauschte Quellen weiterhin", () => {
+    const vor = vormeldung();
+    vor.quellen = alteQuellen()
+      .map((z, i) => (i === 0 ? z.replace(" [Zugriff", " nicht ausgewertet [Zugriff") : i === 1 ? z.replace(" [Zugriff", " (Paywall) [Zugriff") : z))
+      .join("\n");
+    const d = entwurf();
+    d.quellen = alteQuellen()
+      .map((z, i) => (i === 2 ? z.replace(/^\[Q3\] A –/, "[Q3] B –") : z))
+      .join("\n");
+    const b = nachbearbeiten(d, [mat("meldung", vor)]);
+    expect(b.filter((x) => x.code === "ZEITSTRAHL_QUELLE")).toEqual([]);
+    // Gegenprobe: Tausch von Q1 und Q2 bleibt ein Konflikt
+    const t = entwurf();
+    const q = alteQuellen();
+    t.quellen = [q[1]!.replace("[Q2]", "[Q1]"), q[0]!.replace("[Q1]", "[Q2]"), ...q.slice(2)].join("\n");
+    expect(nachbearbeiten(t, [mat("meldung", vor)]).some((x) => x.code === "ZEITSTRAHL_QUELLE")).toBe(true);
+  });
+
   it("Steuerungsblock nennt die stabile Nummerierung bei der Fortschreibung", () => {
     const z = { felder: { zeitstrahl: "zeitstrahl" }, kennungenVormeldung: [BUND], naechsteZ: 9, typBewertung: "Bewertung", typBerichtigung: "Berichtigung" };
     expect(zeitstrahlSteuerung({ vormeldung: true, verdichtung: false }, z as any).join("\n")).toContain(

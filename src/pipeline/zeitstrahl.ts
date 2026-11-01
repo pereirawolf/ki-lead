@@ -8,8 +8,9 @@
 //   der Fassung der Vormeldung, die neue Fassung steht als eigene Zeile daneben.
 // - Bewertungszeilen schreibt nur die App: bei der Fortschreibung je geänderter Beurteilung oder Tendenz eine Zeile
 //   zum Meldezeitpunkt. Bewertungszeilen der KI entfallen.
-// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02, Kodierleitfaden Abschnitt 5): Bezeichnet [Qn] in einer
-//   übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung, meldet die App den Konflikt, statt ihn zu lösen.
+// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02; Beispielprofil Kodierleitfaden Abschnitt 5, Justiz
+//   Teil A, A.6 Nr. 1): Bezeichnet [Qn] in einer übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung,
+//   meldet die App den Konflikt, statt ihn zu lösen. Der Text nennt keine Abschnittsnummer (GK-2026-W44-08).
 
 import { jetztLokal } from "../kern/ausgabe";
 import { bezugVon, istKennung, kennungenDerMeldung, neueKennung, PLATZHALTER_RE } from "../kern/kennung";
@@ -56,15 +57,19 @@ const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 /** Inhalt ohne Nummer und ohne Kenntniszeit (die setzt die App) */
 const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0, aufgenommen: undefined }));
 /**
- * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02): Kategorie, Herausgeber, Datum, Titel und
- * Fundstelle, ohne Nummer, Zugriffsdatum und Datenstand (beide darf eine Fortschreibung nachführen).
+ * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02, -09): Herausgeber, Datum, Titel und Fundstelle.
+ * Ohne Nummer, Kategorie (Rolle der Quelle für die Aussage), Zugriffsdatum, Datenstand und Zugangsvermerke „(Paywall)“
+ * und „nicht ausgewertet“; diese darf eine Fortschreibung nachführen (Kodierleitfaden Abschnitt 8.3, Regel 8).
  */
 const quellKern = (text: string) =>
   norm(
     text
       .replace(/^\s*\[Q\d+\]\s*/, "")
+      .replace(/^[A-ZÄÖÜ]{1,2}\s+[–-]\s+/, "")
       .replace(/\[Zugriff:[^\]]*\]/gi, "")
-      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, ""),
+      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, "")
+      .replace(/\s*\(Paywall\)/gi, "")
+      .replace(/[.;,]?\s*\(?nicht ausgewertet\)?/gi, ""),
   )
     .replace(/[\s.;,]+$/, "")
     .toLowerCase();
@@ -256,7 +261,7 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
       befunde.push({
         stufe: "warnung",
         code: "ZEITSTRAHL_QUELLE",
-        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Kodierleitfaden Abschnitt 5). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
+        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Quellenregeln des Profils). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
       });
   }
 
