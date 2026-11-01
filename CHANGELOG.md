@@ -92,6 +92,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.19 | letzter Commit des Pull Requests „Austauschvertrag (Entwurf) und Prüfung fremder Meldungen; 0.6.19“ |
 | 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
 | 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
+| 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
+
+## [0.6.22] – 01.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json` (Gesamtkonsistenzprüfung KW 44, Commit `02a6bd5`, ausgeführt mit Codex und vor der Ablage stichprobenhaft gegen main geprüft), freigegeben vom Herausgeber am 01.11.2026: GK-2026-W44-01 (Option A), -02 (Option A), -03 (ohne Ausnahme für Rückblicke), -04, -05 und -06.
+
+### Geändert
+
+- **Fristen je Zeile (GK-2026-W44-01):** Der Kennsatz `Handlungsrelevant bis:` steht nach SOP-LEAD A.4 je Frist in einer eigenen Zeile. Eine Zeile mit mehreren Fristen (mehr als ein „Grundlage:“ oder mehr als ein Termin „TT.MM.JJJJ [HH:MM] – …“) zerlegt die App nicht: Der Redaktionscheck nennt den Hinweis zur Berichtigung und stuft sie nie als unkritisch ein; die Management Summary entfernt nur jeden Grundlagenvermerk bis zum nächsten „;“, behält damit alle Aufgaben und kennzeichnet die Zeile („mehrere Fristen in einer Zeile, Berichtigung nötig“). Neue Hilfsfunktion `mehrereFristen()` in `src/kern/kennsaetze.ts`.
+- **Quellenidentität im Zeitstrahl (GK-2026-W44-02):** Bei der Fortschreibung prüft die Nachbearbeitung je übernommener Zeile der Vormeldung, ob `[Qn]` dieselbe Quelle bezeichnet wie im Quellenverzeichnis der Vormeldung (Kategorie, Herausgeber, Datum, Titel und Fundstelle; Zugriff und Datenstand dürfen nachgeführt sein). Sonst Warnung `ZEITSTRAHL_QUELLE` mit Zeile, Nummer und gegebenenfalls neuer Nummer der ursprünglichen Quelle; die App löst den Konflikt nicht selbst. Der Steuerungsblock von S2 nennt die stabile Nummerierung.
+- **LEAD-Meldung-v2, Referenzprüfung (GK-2026-W44-03, -04):** `quellen[].datenstand` nach t0 ist ein Fehler wie bei Kennzahlen. Zeitvergleiche über die neue Funktion `vergleicheZeit()` in `scripts/lead-meldung-v2.mjs`: Zeitpunkte nach UTC-Versatz, Kalendertage gegen den Tag eines Zeitpunkts in `zeitzone`, Tag und Zeitpunkt desselben Tags nicht entscheidbar und ohne Befund. Damit werden rückwärts laufende Berichtszeiträume innerhalb eines Tages, ein rückwärts sortierter Zeitstrahl innerhalb eines Tages und `erstmals_gemeldet` vor einem taggenauen Ereignis erkannt; ein Ereignistag gilt bei UTC-t0 kurz vor Mitternacht nicht mehr fälschlich als zukünftig. Format und Schemata unverändert ([docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md), Nachtrag zur Fassung 2.0).
+- **Profile:** Beispielprofil 1.36.0 (Kodierleitfaden 1.8.0, Erfassung 1.10.0, Verdichtung 2.3.0, Sammelmappe 3.21.0, Gültigkeitsstand nennt die letzte Änderung der Darstellungsdatei, GK-2026-W44-05), Landesprofil Thüringen 1.1.0 (abgeleitet), Lagebild Justiz 0.1.2 (README verweist für die Profilversion auf `profil.json`, GK-2026-W44-06). Einzelheiten in den Verläufen der Profile.
+- Spezifikation 0.6.22 (Funktionsumfang Nr. 5, Nachbearbeitung des Zeitstrahls), README (Beispielprofil 1.36.0), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.6.22 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten.
+
+### Hinweis
+
+- Die Musterfassung `evaluation/material/ilka-musterfassung.json` enthält eine Zeile `Handlungsrelevant bis:` mit fünf Fristen; der Redaktionscheck kennzeichnet sie jetzt. Die Datei bleibt unverändert, weil sie als festes Evaluationsmaterial mit Prüfsumme dient.
+
+### Tests
+
+- `tests/pipeline/kurzfassung.test.ts`, `tests/lagebild/redaktionscheck.test.ts`, `tests/profil/anweisungen-kopplung.test.ts`: GK-2026-W44-01.
+- `tests/pipeline/zeitstrahl.test.ts`: GK-2026-W44-02 (Umnummerierung, gleiche Nummer mit anderer Quelle, Kontrollfall mit nachgeführtem Zugriff, Steuerungsblock).
+- `tests/format/lead-meldung-v2.test.ts`: GK-2026-W44-03 und -04 mit festen Sollfällen.
+- `tests/profil/fassungen.test.ts`: GK-2026-W44-05 mit Negativfall; `tests/profil/lead-justiz.test.ts`: GK-2026-W44-06, Profilversion 0.1.2.
+- `tests/pipeline/kontext.test.ts`: Fassungen Kodierleitfaden 1.8.0 und Verdichtung 2.3.
 
 ## [0.6.21] – 01.11.2026
 

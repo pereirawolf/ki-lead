@@ -140,6 +140,39 @@ describe("Management Summary", () => {
     expect(text).not.toMatch(/Grundlage|\[Q/);
   });
 
+  // Soll: SOP-LEAD A.4 (je Frist eine eigene Zeile) und A.7.3 (keine unabhängige Aufgabe geht verloren); t0 14.10.2026 14:00
+  it("GK-2026-W44-01: zwei Fristen in eigenen Zeilen bleiben mit eigenem Termin und Überfälligkeitsstatus erhalten", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m.meldezeitpunkt = "2026-10-14T14:00";
+    m.sachverhalte = [m.sachverhalte[0]];
+    m.sachverhalte[0].sofort.bewertung_text =
+      "Kernaussage.\nHandlungsrelevant bis: 14.10.2026 12:00 – Abstimmung Notstromversorgung, Landkreis; Grundlage: Lagemeldung [Q1]\nHandlungsrelevant bis: 16.10.2026 12:00 – Rückmeldung Kraftstoffbedarf, Gemeinden; Grundlage: Landratsamt [Q2]";
+    const f = fristen(m, p!);
+    expect(f.map((x) => [x.text, x.ueberfaellig])).toEqual([
+      ["14.10.2026 12:00 – Abstimmung Notstromversorgung, Landkreis", true],
+      ["16.10.2026 12:00 – Rückmeldung Kraftstoffbedarf, Gemeinden", false],
+    ]);
+    const text = fristenText(m, p!);
+    expect(text).toContain("Abstimmung Notstromversorgung");
+    expect(text).toContain("Rückmeldung Kraftstoffbedarf");
+  });
+
+  it("GK-2026-W44-01: zwei Fristen in einer Zeile (entgegen A.4) werden gekennzeichnet; der erste Grundlagenvermerk entfernt die zweite Aufgabe nicht", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = structuredClone(th);
+    m.meldezeitpunkt = "2026-10-14T14:00";
+    m.sachverhalte = [m.sachverhalte[0]];
+    m.sachverhalte[0].sofort.bewertung_text =
+      "Kernaussage.\nHandlungsrelevant bis: 14.10.2026 12:00 – Abstimmung Notstromversorgung, Landkreis; Grundlage: Lagemeldung [Q1]; 16.10.2026 12:00 – Rückmeldung Kraftstoffbedarf, Gemeinden; Grundlage: Landratsamt [Q2]";
+    const f = fristen(m, p!);
+    expect(f).toHaveLength(1);
+    expect(f[0]!.text).toBe(
+      "14.10.2026 12:00 – Abstimmung Notstromversorgung, Landkreis; 16.10.2026 12:00 – Rückmeldung Kraftstoffbedarf, Gemeinden (mehrere Fristen in einer Zeile, Berichtigung nötig)",
+    );
+    expect(fristenText(m, p!)).not.toMatch(/Grundlage|\[Q/);
+  });
+
   it("kennzeichnet Entwürfe im Kopf und verschiebt Kurztitel bei falscher Anzahl nicht", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const m = structuredClone(th);

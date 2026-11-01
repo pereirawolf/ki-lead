@@ -118,6 +118,21 @@ export function leseFrist(s: unknown, zeitzone?: string): Frist {
   return { datum, genauigkeit, ...(hinweis ? { hinweis } : {}) };
 }
 
+/**
+ * Mehr als eine Frist in einer Kennsatzzeile „Handlungsrelevant bis:“ (GK-2026-W44-01): mehr als ein Zusatz
+ * „Grundlage:“ oder mehr als ein Termin im Format „TT.MM.JJJJ [HH:MM] – …“ am Zeilenanfang oder nach „;“. Nach Teil A
+ * (A.4) steht je Frist eine eigene Zeile; die App zerlegt solche Zeilen nicht, sondern kennzeichnet sie zur Berichtigung.
+ */
+export function mehrereFristen(wert: unknown): boolean {
+  const s = String(wert || "");
+  const grundlagen = s.match(/Grundlage:/gi)?.length ?? 0;
+  const termine = s.match(/(?:^|;)\s*\d{1,2}\.\d{1,2}\.\d{4}(?:,?\s+(?:um\s+)?\d{1,2}[:.]\d{2}(?:\s*Uhr)?)?\s+[–-]\s/g)?.length ?? 0;
+  return grundlagen > 1 || termine > 1;
+}
+
+export const MEHRERE_FRISTEN_HINWEIS =
+  "mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (A.4); ausgewertet ist nur der erste Termin, bitte berichtigen";
+
 /** Zeitpunkt einer Frist (siehe leseFrist); null, wenn kein gültiges Datum erkennbar ist. */
 export function parseDatumDE(s: unknown, zeitzone?: string): Date | null {
   return leseFrist(s, zeitzone).datum;

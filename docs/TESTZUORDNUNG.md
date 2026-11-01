@@ -880,3 +880,17 @@ Angepasst ohne Änderung des Solls: `tests/support/dateien.ts` lädt Profile mit
 | Beispielprofil kennt `LEAD-Meldung-Land-v1`; falsche Form Fehler; fehlende, unbrauchbare, eigene oder abweichende Schemata Warnung | TP-2026-W44-59: Eingangsschemata laden › … | `tests/lagebild/fremdschema.test.ts` (neu) |
 | Landes- und Kreismeldungen im Beispielprofil geprüft, mit Gebiet; Befunde einer fehlerhaften Meldung; unbekanntes Schema ungeprüft; Marken; Eingang der Verdichtung mit Land | TP-2026-W44-59, -60: Prüfung im Lagebild, Weg Land → Bund › … | `tests/lagebild/fremdschema.test.ts` (neu) |
 | Eingangsschema im Beispielprofil aus dem Landesprofil abgeleitet | TP-2026-W44-54: … › die abgeleiteten Dateien sind aktuell … | `tests/profil/landesprofil.test.ts` |
+
+## Gesamtkonsistenz KW 44 (0.6.22, Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json`, Freigabe des Herausgebers vom 01.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Zwei Fristen in eigenen Zeilen mit eigenem Termin und Überfälligkeitsstatus; Mehrfachzeile gekennzeichnet, zweite Aufgabe bleibt | Management Summary › GK-2026-W44-01: … | `tests/pipeline/kurzfassung.test.ts` |
+| Zwei Zeilen ergeben zwei Zeitstatus; Mehrfachzeile mit Hinweis zur Berichtigung, nie „ok“ | GK-2026-W44-01: je Frist eine Zeile (A.4) … › … | `tests/lagebild/redaktionscheck.test.ts` |
+| Teil A, Arbeitsanweisungen und Eingabehilfe ohne „in derselben Zeile“; Beispielzeile aus A.4 ist keine Mehrfachzeile | Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35) › GK-2026-W44-01: … | `tests/profil/anweisungen-kopplung.test.ts` |
+| Übernommene Zeitstrahlzeile mit geänderter Quellenidentität ergibt `ZEITSTRAHL_QUELLE`; Kontrollfall ohne Befund; Steuerungsblock | GK-2026-W44-02: Quellennummern der Vormeldung bleiben stabil › … | `tests/pipeline/zeitstrahl.test.ts` |
+| Quellen-Datenstand nach t0 Fehler, Kontrollfälle; Zeitvergleiche nach Versatz, Zone und Genauigkeit | LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04) › … | `tests/format/lead-meldung-v2.test.ts` |
+| Darstellungsdatei im Gültigkeitsstand mit der letzten Änderung laut Profil-CHANGELOG; Negativfall | Gültigkeitsstand in Teil A › GK-2026-W44-05: … | `tests/profil/fassungen.test.ts` |
+| README Justiz verweist für die Profilversion auf `profil.json` | Profil Lagebild Justiz (Erprobungsentwurf) › GK-2026-W44-06: … | `tests/profil/lead-justiz.test.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/profil/lead-justiz.test.ts` (Profilversion 0.1.2), `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.8.0 und Verdichtung 2.3).

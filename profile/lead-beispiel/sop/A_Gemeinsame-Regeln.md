@@ -6,11 +6,11 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.20.2 | 30.10.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.7.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
-| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.33.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.9.0 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
-| Arbeitsanweisung Verdichtung | 2.2.0 | 29.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.21.0 | 01.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.8.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.36.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.10.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Verdichtung | 2.3.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.4.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.2: optionale Felder `kennung` und `bezug` je Sachverhalt und `zeitstrahl` auf Meldungsebene; seit 1.1 `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 29.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
 
@@ -116,7 +116,7 @@ Für jeden übernommenen Befund: Beobachtung und fachliche Einordnung getrennt �
 | `Abweichende Bewertung:` | eine andere Stelle bewertet denselben Sachverhalt erkennbar anders (A.7.2) | „Abweichende Bewertung: Land X ‚kritisch‘ (landesweiter Bezugsraum) – hier ‚erheblich‘ (bundesweiter Bezugsraum)“ |
 | `Abschluss im Lagebild:` | letzte Nennung eines Sachverhalts (A.8.2) | „Abschluss im Lagebild: Ereignis beendet seit 05.10.2026; offen bleiben: Trinkwasserfreigabe in zwei Ortsteilen; Nachsorge bei: Gesundheitsamt Y“ |
 
-Format des Kennsatzes `Handlungsrelevant bis:`: `TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle`, je Sachverhalt eine Zeile, mehrere unabhängige Fristen in derselben Zeile mit der frühesten zuerst; ohne belegte Uhrzeit entfällt `HH:MM`. Redaktionscheck und Management Summary werten Datum, Uhrzeit und Bedingung aus.
+Format des Kennsatzes `Handlungsrelevant bis:`: `TT.MM.JJJJ HH:MM – Aufgabe, Adressat – Bedingung (falls zutreffend); Grundlage: Quelle`, je Frist eine eigene Zeile, bei mehreren unabhängigen Fristen eines Sachverhalts die früheste zuerst; ohne belegte Uhrzeit entfällt `HH:MM`. Redaktionscheck und Management Summary werten jede Zeile mit Datum, Uhrzeit und Bedingung aus; eine Zeile mit mehreren Fristen kennzeichnen sie zur Berichtigung.
 
 **Fristgrundlage.** Eine qualitative Dringlichkeitsangabe wie „unverzüglich“ begründet für sich kein Kalenderdatum und keine Uhrzeit; ohne belegten Termin steht sie im Maßnahmen- und Empfehlungstext, und der Kennsatz wird nicht künstlich gefüllt. Eine eigene Prüf- oder Wiedervorlagefrist der meldenden Stelle wird als deren Vorschlag mit eigener Grundlage gekennzeichnet und nicht der Warnquelle zugeschrieben. Akuter Handlungsbedarf wartet nicht auf die nächste Lagebild-Ausgabe (A.1 Nr. 1, A.7.3).
 

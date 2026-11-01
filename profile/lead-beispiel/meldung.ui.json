@@ -589,7 +589,7 @@
             "label": "Handlungsrelevant bis:",
             "vorlage": "⟦TT.MM.JJJJ HH:MM⟧ – ⟦Aufgabe, Adressat⟧ – ⟦Bedingung, falls zutreffend⟧; Grundlage: ⟦Quellenverweis⟧",
             "kennsatz": "handlungsrelevant",
-            "hinweis": "Nur bei zeitgebundenem Bedarf. Unbelegte Uhrzeit und nicht zutreffende Bedingung von Hand streichen. Mehrere Fristen in derselben Zeile, die früheste zuerst."
+            "hinweis": "Nur bei zeitgebundenem Bedarf. Unbelegte Uhrzeit und nicht zutreffende Bedingung von Hand streichen. Je Frist eine eigene Zeile, die früheste zuerst."
           },
           {
             "id": "aenderung",

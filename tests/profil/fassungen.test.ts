@@ -34,4 +34,37 @@ describe("Gültigkeitsstand in Teil A", () => {
     };
     expect(vorOderGleich(zeile("Darstellungsdatei").replace("Profilversion ", ""), profilVersion)).toBe(true);
   });
+
+  // GK-2026-W44-05: Die Zeile nennt die Profilversion der letzten Änderung der Darstellungsdatei. Soll ist die jüngste
+  // Profilversion, deren Eintrag im Profil-CHANGELOG eine Änderung der Darstellungsdatei aufführt („- **Darstellungsdatei“);
+  // nicht pauschal die Manifestversion, denn reine Schema- oder Dokumentänderungen lassen die Darstellungsdatei unverändert.
+  const letzteUiAenderung = (changelog: string): { version: string; stand: string } | null => {
+    for (const abschnitt of changelog.split(/^## /m).slice(1)) {
+      const kopf = abschnitt.match(/^(\d+\.\d+\.\d+) – (\d{2}\.\d{2}\.\d{4})/);
+      if (kopf && /^- \*\*Darstellungsdatei/m.test(abschnitt)) return { version: kopf[1]!, stand: kopf[2]! };
+    }
+    return null;
+  };
+  const uiZeile = (teilA: string) =>
+    teilA
+      .split("\n")
+      .find((z) => z.startsWith("| Darstellungsdatei"))!
+      .split("|")
+      .map((x) => x.trim());
+
+  it("GK-2026-W44-05: Darstellungsdatei mit Profilversion und Stand ihrer letzten Änderung laut Profil-CHANGELOG", () => {
+    const ordner = repoPfad("profile/lead-beispiel");
+    const soll = letzteUiAenderung(readFileSync(join(ordner, "CHANGELOG.md"), "utf8"))!;
+    expect(soll).not.toBeNull();
+    const z = uiZeile(readFileSync(join(ordner, "sop/A_Gemeinsame-Regeln.md"), "utf8"));
+    expect([z[2], z[3]]).toEqual([`Profilversion ${soll.version}`, soll.stand]);
+  });
+
+  it("GK-2026-W44-05: Negativfall – ein veralteter Stand besteht die Prüfung nicht", () => {
+    const changelog =
+      "# V\n\n## 1.35.1 – 01.11.2026\n\n- **Darstellungsdatei, Analysebereich:** x\n\n## 1.34.0 – 30.10.2026\n\n- Schema, Darstellungsdatei sind unverändert.\n\n## 1.33.1 – 30.10.2026\n\n- **Darstellungsdatei (Profilversion 1.33.1):** y\n";
+    expect(letzteUiAenderung(changelog)).toEqual({ version: "1.35.1", stand: "01.11.2026" });
+    const z = uiZeile("| Darstellungsdatei `meldung.ui.json` (…) | Profilversion 1.33.1 | 30.10.2026 | H | K |");
+    expect(z[2]).not.toBe(`Profilversion ${letzteUiAenderung(changelog)!.version}`);
+  });
 });

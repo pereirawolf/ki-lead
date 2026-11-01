@@ -187,6 +187,114 @@ describe("LEAD-Meldung-v2: Referenzprüfung (Prüfebene 2)", () => {
   });
 });
 
+// Soll: docs/LEAD-MELDUNG-V2.md, Abschnitt 1 Nr. 4 (Zeitsemantik) und Abschnitt 8, Prüfebene 2. Erwartete Befunde stehen
+// wörtlich fest; sie werden nicht mit der geprüften Vergleichsfunktion berechnet. Beispiel TH: t0 14.10.2026 10:30 +02:00.
+describe("LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04)", () => {
+  const befunde = (m: unknown) => pruefeReferenzen(m) as { stufe: string; pfad: string; text: string }[];
+  const zeile = (id: string, zeit: string, erstmals: string | null = null) => ({
+    id,
+    zeit,
+    typ: "Ereignis",
+    text: "x",
+    quellen: ["Q3"],
+    erstmals_gemeldet: erstmals,
+  });
+
+  it("GK-2026-W44-03: Datenstand einer Quelle nach t0 ist ein Fehler am Pfad der Quelle", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.quellen[0].datenstand = "2026-10-15T12:00+02:00";
+    expect(
+      befunde(m)
+        .filter((b) => b.stufe === "fehler")
+        .map((b) => [b.pfad, b.text]),
+    ).toEqual([["quellen[0].datenstand", "Datenstand nach dem Meldezeitpunkt"]]);
+  });
+
+  it.each([
+    ["gleicher Zeitpunkt", "2026-10-14T10:30+02:00"],
+    ["gleicher Zeitpunkt mit anderem Versatz", "2026-10-14T08:30Z"],
+    ["älterer Stand", "2026-10-14T09:00+02:00"],
+    ["Tag von t0", "2026-10-14"],
+    ["unbekannt", null],
+  ])("GK-2026-W44-03: kein Fehler bei %s", (_n, stand) => {
+    const m = kopie(BEISPIEL_TH);
+    m.quellen[0].datenstand = stand;
+    expect(befunde(m).filter((b) => b.pfad.startsWith("quellen[0]"))).toEqual([]);
+  });
+
+  it("GK-2026-W44-03: Datenstand von Quelle und Kennzahl werden getrennt geprüft", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].kennzahlen[0].datenstand = "2026-10-15";
+    const pfade = befunde(m)
+      .filter((b) => b.stufe === "fehler")
+      .map((b) => b.pfad);
+    expect(pfade).toEqual(["sachverhalte[1].kennzahlen[0].datenstand"]);
+  });
+
+  it("GK-2026-W44-04: Berichtszeitraum am selben Tag rückwärts ist ein Fehler, auch bei aufsteigendem Datumstext", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.meldezeitraum = { von: "2026-10-14T10:00+02:00", bis: "2026-10-14T08:00+02:00" };
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad === "meldezeitraum")
+        .map((b) => b.text),
+    ).toEqual(["von liegt nach bis"]);
+    const n = kopie(BEISPIEL_TH);
+    // 13.10.2026 23:30 −10:00 ist 14.10.2026 09:30 UTC, also nach 14.10.2026 01:00 +02:00 (13.10.2026 23:00 UTC)
+    n.meldezeitraum = { von: "2026-10-13T23:30-10:00", bis: "2026-10-14T01:00+02:00" };
+    expect(
+      befunde(n)
+        .filter((b) => b.pfad === "meldezeitraum")
+        .map((b) => b.text),
+    ).toEqual(["von liegt nach bis"]);
+  });
+
+  it("GK-2026-W44-04: gleiche Zeitpunkte mit verschiedenen Versätzen sind gleich, kein Befund", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.meldezeitraum = { von: "2026-10-14T08:00Z", bis: "2026-10-14T10:00+02:00" };
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-14T07:00Z"), zeile("Z2", "2026-10-14T09:00+02:00")];
+    expect(befunde(m).filter((b) => b.pfad === "meldezeitraum" || b.pfad.includes("zeitstrahl"))).toEqual([]);
+  });
+
+  it("GK-2026-W44-04: Zeitstrahl innerhalb eines Tages rückwärts ergibt einen Chronologiehinweis", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-14T09:00+02:00"), zeile("Z2", "2026-10-14T08:00+02:00")];
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad.includes("zeitstrahl"))
+        .map((b) => [b.stufe, b.pfad, b.text]),
+    ).toEqual([["hinweis", "sachverhalte[1].zeitstrahl[1].zeit", "nicht chronologisch"]]);
+  });
+
+  it("GK-2026-W44-04: erstmals_gemeldet vor einem taggenauen Ereignis ist ein Fehler, am selben Tag nicht entscheidbar", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-14", "2026-10-13T20:00+02:00")];
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad.includes("zeitstrahl"))
+        .map((b) => [b.pfad, b.text]),
+    ).toEqual([["sachverhalte[1].zeitstrahl[0].erstmals_gemeldet", "vor der Ereigniszeit"]]);
+    const n = kopie(BEISPIEL_TH);
+    n.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-14", "2026-10-14T06:00+02:00")];
+    expect(befunde(n).filter((b) => b.pfad.includes("zeitstrahl"))).toEqual([]);
+  });
+
+  it("GK-2026-W44-04: ein Kalendertag gilt in der Zeitzone der Meldung, nicht im UTC-Datum von t0", () => {
+    const m = kopie(BEISPIEL_TH);
+    // t0 13.10.2026 23:30 UTC ist in Europe/Berlin bereits der 14.10.2026 01:30
+    m.meldezeitpunkt = "2026-10-13T23:30Z";
+    m.meldezeitraum = { von: "2026-10-13", bis: "2026-10-14" };
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-14")];
+    expect(befunde(m).filter((b) => b.pfad.includes("zeitstrahl"))).toEqual([]);
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-15")];
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad.includes("zeitstrahl"))
+        .map((b) => b.text),
+    ).toEqual(["Ereigniszeit nach dem Meldezeitpunkt (nur Eingetretenes bis t0)"]);
+  });
+});
+
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
   it("Zeitpunkte erhalten den Versatz der Zone, auch über die Umstellung am 25.10.2026", () => {
     expect(mitVersatz("2026-10-24T13:00", "Europe/Berlin")).toBe("2026-10-24T13:00+02:00");

@@ -8,6 +8,18 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.36.0 – 01.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json` (Gesamtkonsistenzprüfung KW 44, Commit `02a6bd5`), freigegeben vom Herausgeber am 01.11.2026: GK-2026-W44-01 (Option A), -02 (Option A), -05. Zweite Stelle, weil sich die Regeln zum Fristenkennsatz und zur Quellennummerierung bei Fortschreibungen ändern; Schema unverändert, bestehende Meldungen werden nicht umkodiert.
+
+- **Darstellungsdatei, Eingabehilfe „Handlungsrelevant bis:“ (GK-2026-W44-01):** Hinweis „Je Frist eine eigene Zeile, die früheste zuerst.“ statt „Mehrere Fristen in derselben Zeile …“.
+- **Kodierleitfaden 1.8.0 (GK-2026-W44-02):** Abschnitt 5 Nummerierung nach erster Nennung nur für die Erstmeldung, bei Fortschreibungen stabile Nummern der eigenen Vormeldung und nächste freie Nummer für neue Quellen; Abschnitt 8.3, Regeln 5 und 8.
+- **Arbeitsanweisung Erfassung 1.10.0:** 4.4 je Frist eine eigene Zeile (GK-2026-W44-01); 4.3 Einträge des Quellenverzeichnisses der Vormeldung behalten ihre Nummern (GK-2026-W44-02); Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.8.0“; Kopf nennt Sammelmappe ab 3.21.0, Kodierleitfaden ab 1.8.0 und Verdichtung ab 2.3.0.
+- **Arbeitsanweisung Verdichtung 2.3.0:** Regel 8 je Frist eine eigene Zeile (GK-2026-W44-01); Kopf nennt Sammelmappe ab 3.21.0, Kodierleitfaden ab 1.8.0 und Erfassung ab 1.10.0.
+- **SOP-LEAD-Sammelmappe 3.21.0:** Teil A, A.4, und Gültigkeitsstand (GK-2026-W44-01, -05). Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Erfassung und Verdichtung auf Grundlage von Teil A 3.21.0 und Kodierleitfaden 1.8.0 geprüft und angepasst; für die Quellennummern verweist die Verdichtung über Regel 15 auf die Erfassung (4.3), kein weiterer Anpassungsbedarf. Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf: Den Fristenblock setzt die App aus den Kennsätzen.
+- Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert; der Beispieldatensatz „Ilka“ führt je Frist bereits eine eigene Zeile.
+
 ## 1.35.1 – 01.11.2026
 
 Grundlage: Beratung zu den Erklärtexten im Schritt „Ereignisse/Sachverhalte“, Entscheidungen des Herausgebers vom 01.11.2026 (Leitfrage und Arbeitshinweise wie in der KI-Erfassung, keine Platzhalter in den Analysefeldern, Hinweis auf die LEAD-Eingabehilfen). Dritte Stelle, weil nur die Hilfetexte der Darstellungsdatei sprachlich überarbeitet sind; keine neue Regel, die Arbeitsanweisungen bleiben maßgeblich. Die App zeigt die Texte seit 0.6.21 zwischen Beschriftung und Eingabe.

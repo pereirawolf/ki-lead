@@ -297,6 +297,33 @@ describe("F07: Redaktionscheck wertet jede Frist eines Sachverhalts aus", () => 
   });
 });
 
+describe("GK-2026-W44-01: je Frist eine Zeile (A.4), mehrere Fristen in einer Zeile werden gekennzeichnet", () => {
+  // Prüfzeitpunkt 14.10.2026 14:00, nächste Ausgabe 15.10.2026 10:00 (Europe/Berlin)
+  const zwei = "Handlungsrelevant bis: 14.10.2026 12:00 – Abstimmung Notstromversorgung, Landkreis; Grundlage: Lagemeldung [Q1]";
+  const zweite = "16.10.2026 12:00 – Rückmeldung Kraftstoffbedarf, Gemeinden; Grundlage: Landratsamt [Q1]";
+
+  it("zwei Zeilen: zwei Zeitstatus, nur die erste Frist abgelaufen", () => {
+    const red = check([eintrag("a", `Kernaussage: Z.\n${zwei}\nHandlungsrelevant bis: ${zweite}`)], "2026-10-15T10:00", berlin(14, 14));
+    expect(red.zeit.map((z) => [z.datum?.toISOString(), z.klasse])).toEqual([
+      ["2026-10-14T10:00:00.000Z", "warn"],
+      ["2026-10-16T10:00:00.000Z", "ok"],
+    ]);
+    expect(red.zeit[0].status).toMatch(/abgelaufen/);
+    expect(red.zeit.some((z) => z.hinweis?.includes("mehrere Fristen"))).toBe(false);
+  });
+
+  it("eine Zeile mit zwei Fristen: ein Eintrag mit Hinweis zur Berichtigung, nie als unkritisch eingestuft", () => {
+    const red = check(
+      [eintrag("a", `Kernaussage: Z.\nHandlungsrelevant bis: ${zweite}; 17.10.2026 12:00 – Bericht, Land; Grundlage: [Q1]`)],
+      "2026-10-15T10:00",
+      berlin(14, 14),
+    );
+    expect(red.zeit).toHaveLength(1);
+    expect(red.zeit[0].hinweis).toContain("mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (A.4)");
+    expect(red.zeit[0].klasse).toBe("warn");
+  });
+});
+
 // LEAD-Eingabehilfen (Umsetzungsbeschreibung vom 21.10.2026, A11): Vorlagen mit offenen Stellen ⟦…⟧
 describe("Redaktionscheck: Kennsätze aus Vorlagen mit offenen Stellen", () => {
   it("Abschluss, Änderung, Abweichung und Neubewertung mit ⟦…⟧ zählen nicht als Vermerk", () => {
