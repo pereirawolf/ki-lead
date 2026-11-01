@@ -22,9 +22,11 @@ async function ansEnde(page: Page): Promise<number> {
 }
 
 async function weiterOben(page: Page, knopf: RegExp, titel: string, ziel: string, { langerSchritt = true } = {}) {
-  // Ausgangslage wie in der Rückmeldung: am Ende eines langen Schritts
-  const y = await ansEnde(page);
-  if (langerSchritt) expect(y, `Seitenende vor „${knopf.source}“`).toBeGreaterThan(200);
+  // Ausgangslage wie in der Rückmeldung: am Ende eines langen Schritts. Gewartet wird, bis der Schritt aufgebaut ist
+  // und über das Fenster hinausreicht; ein einzelner Versuch scheiterte in WebKit in der CI (Pull Request #124,
+  // 01.11.2026: Scrollhöhe 0 nach 0,7 s), obwohl derselbe Stand auf main bestand.
+  if (langerSchritt) await expect.poll(() => ansEnde(page), { message: `Seitenende vor „${knopf.source}“`, timeout: 5000 }).toBeGreaterThan(200);
+  else await ansEnde(page);
   await page.getByRole("button", { name: knopf }).click();
   const h2 = page.getByRole("heading", { level: 2, name: titel, exact: true });
   await expect(h2).toBeFocused();
@@ -36,8 +38,10 @@ async function weiterOben(page: Page, knopf: RegExp, titel: string, ziel: string
   if (!amEnde) expect(abstand, `Anfang von ${ziel} nach „${titel}“`).toBeLessThan(40);
 }
 
+// Breit mit 720 px Höhe: Der erste Schritt ist seit 0.6.20 kürzer (Pflichtbefunde erst nach Bearbeitung,
+// UX-2026-W44-05) und reichte bei 800 px nur knapp über das Fenster hinaus (in Chromium 247 px Scrollweg).
 for (const breite of [
-  { name: "breit", viewport: { width: 1280, height: 800 } },
+  { name: "breit", viewport: { width: 1280, height: 720 } },
   { name: "390 px", viewport: { width: 390, height: 780 } },
 ]) {
   test(`Meldung (${breite.name}): „Weiter“ und „Zurück“ zeigen den Anfang des neuen Schritts`, async ({ page }) => {
