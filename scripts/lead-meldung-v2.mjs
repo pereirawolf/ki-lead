@@ -754,6 +754,10 @@ export function pruefeReferenzen(m) {
   const t0ms = ms(t0);
   const t0Tag = typeof t0 === "string" ? t0.slice(0, 10) : null;
   const nachT0 = (z) => (z && t0 ? (/^\d{4}-\d{2}-\d{2}$/.test(z) ? z > t0Tag : ms(z) > t0ms) : false);
+  // Datenstand einer Quelle wie der einer Kennzahl nicht nach t0 (GK-2026-W44-03); unbekannt (null) bleibt zulässig
+  (m.quellen || []).forEach((q, i) => {
+    if (q.datenstand && nachT0(q.datenstand)) fehler(`quellen[${i}].datenstand`, "Datenstand nach dem Meldezeitpunkt");
+  });
 
   if (m.meldezeitraum?.von && m.meldezeitraum?.bis && m.meldezeitraum.von.slice(0, 10) > m.meldezeitraum.bis.slice(0, 10))
     fehler("meldezeitraum", "von liegt nach bis");

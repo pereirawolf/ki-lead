@@ -187,6 +187,51 @@ describe("LEAD-Meldung-v2: Referenzprüfung (Prüfebene 2)", () => {
   });
 });
 
+// Soll: docs/LEAD-MELDUNG-V2.md, Abschnitt 1 Nr. 4 (Zeitsemantik) und Abschnitt 8, Prüfebene 2. Erwartete Befunde stehen
+// wörtlich fest; sie werden nicht mit der geprüften Vergleichsfunktion berechnet. Beispiel TH: t0 14.10.2026 10:30 +02:00.
+describe("LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04)", () => {
+  const befunde = (m: unknown) => pruefeReferenzen(m) as { stufe: string; pfad: string; text: string }[];
+  const zeile = (id: string, zeit: string, erstmals: string | null = null) => ({
+    id,
+    zeit,
+    typ: "Ereignis",
+    text: "x",
+    quellen: ["Q3"],
+    erstmals_gemeldet: erstmals,
+  });
+
+  it("GK-2026-W44-03: Datenstand einer Quelle nach t0 ist ein Fehler am Pfad der Quelle", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.quellen[0].datenstand = "2026-10-15T12:00+02:00";
+    expect(
+      befunde(m)
+        .filter((b) => b.stufe === "fehler")
+        .map((b) => [b.pfad, b.text]),
+    ).toEqual([["quellen[0].datenstand", "Datenstand nach dem Meldezeitpunkt"]]);
+  });
+
+  it.each([
+    ["gleicher Zeitpunkt", "2026-10-14T10:30+02:00"],
+    ["gleicher Zeitpunkt mit anderem Versatz", "2026-10-14T08:30Z"],
+    ["älterer Stand", "2026-10-14T09:00+02:00"],
+    ["Tag von t0", "2026-10-14"],
+    ["unbekannt", null],
+  ])("GK-2026-W44-03: kein Fehler bei %s", (_n, stand) => {
+    const m = kopie(BEISPIEL_TH);
+    m.quellen[0].datenstand = stand;
+    expect(befunde(m).filter((b) => b.pfad.startsWith("quellen[0]"))).toEqual([]);
+  });
+
+  it("GK-2026-W44-03: Datenstand von Quelle und Kennzahl werden getrennt geprüft", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].kennzahlen[0].datenstand = "2026-10-15";
+    const pfade = befunde(m)
+      .filter((b) => b.stufe === "fehler")
+      .map((b) => b.pfad);
+    expect(pfade).toEqual(["sachverhalte[1].kennzahlen[0].datenstand"]);
+  });
+});
+
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
   it("Zeitpunkte erhalten den Versatz der Zone, auch über die Umstellung am 25.10.2026", () => {
     expect(mitVersatz("2026-10-24T13:00", "Europe/Berlin")).toBe("2026-10-24T13:00+02:00");
