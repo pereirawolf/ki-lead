@@ -6,6 +6,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { verweisKlammer } from "../../src/kern/ui";
+import { arbeitsgrundlagen } from "../../src/profil/lesen";
 import { profil } from "../support/dateien";
 
 function dateien(ordner: string): string[] {
@@ -52,5 +53,14 @@ describe("Profilneutrale Texte der Oberfläche", () => {
     const s2s3 = readFileSync("src/pipeline/s2s3.ts", "utf8");
     expect(s2s3).not.toMatch(/dann B oder P/);
     expect(s2s3).toContain("Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien)");
+  });
+
+  // Soll: Inhalt des Profils (README Lagebild Justiz: Kodierleitfaden ohne Lagenradar, eigene Quellenkategorien).
+  it("GK-2026-W44-15: die Profilansicht beschreibt den Kodierleitfaden ohne Lagenradar D1–D8", async () => {
+    for (const name of ["lead-beispiel", "lead-justiz"]) {
+      const p = (await profil(name)).profil!;
+      const kl = arbeitsgrundlagen(p).find((d) => d.rolle === "kodierleitfaden")!;
+      expect(kl.zweck, name).not.toMatch(/Lagenradar|D1–D8/);
+    }
   });
 });

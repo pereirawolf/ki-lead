@@ -215,6 +215,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
 
   const radarFeld = r.sv_radar ? feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;
   const radarDef = radarFeld ? radarFuer(ui, radarFeld) : undefined;
+  // GK-2026-W44-15: Reiter „Lagenradar“ nur bei einem Radar im Profil, beschriftet wie das Radarfeld des Profils
+  const reiterListe = REITER.flatMap((t) => (t.id !== "radar" ? [t] : radarDef ? [{ ...t, titel: radarFeld?.label || t.titel }] : []));
   const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
   const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
   const ks = ui.kennsaetze || {};
@@ -575,7 +577,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
           )}
 
           <nav className="lb-reiter" aria-label="Ansichten" ref={reiterRef}>
-            {REITER.map((t) => (
+            {reiterListe.map((t) => (
               <button
                 key={t.id}
                 type="button"
