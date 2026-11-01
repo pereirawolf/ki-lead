@@ -8,8 +8,9 @@
 //   der Fassung der Vormeldung, die neue Fassung steht als eigene Zeile daneben.
 // - Bewertungszeilen schreibt nur die App: bei der Fortschreibung je geänderter Beurteilung oder Tendenz eine Zeile
 //   zum Meldezeitpunkt. Bewertungszeilen der KI entfallen.
-// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02, Kodierleitfaden Abschnitt 5): Bezeichnet [Qn] in einer
-//   übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung, meldet die App den Konflikt, statt ihn zu lösen.
+// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02; Beispielprofil Kodierleitfaden Abschnitt 5, Justiz
+//   Teil A, A.6 Nr. 1): Bezeichnet [Qn] in einer übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung,
+//   meldet die App den Konflikt, statt ihn zu lösen. Der Text nennt keine Abschnittsnummer (GK-2026-W44-08).
 
 import { jetztLokal } from "../kern/ausgabe";
 import { bezugVon, istKennung, kennungenDerMeldung, neueKennung, PLATZHALTER_RE } from "../kern/kennung";
@@ -256,7 +257,7 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
       befunde.push({
         stufe: "warnung",
         code: "ZEITSTRAHL_QUELLE",
-        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Kodierleitfaden Abschnitt 5). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
+        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Quellenregeln des Profils). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
       });
   }
 

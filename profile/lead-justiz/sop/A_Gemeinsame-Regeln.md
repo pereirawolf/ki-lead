@@ -60,12 +60,12 @@ Dieses Profil kennt keine ereignisbezogenen SOPs. Wo die App von „Ereignisart�
 1. **Funktionslagebild:** Regelmeldung monatlich. Arbeitsannahme für die Erprobung ist eine Meldung bis zum 5. Arbeitstag des Folgemonats; das ist ein Vorschlag, keine Vorgabe.
 2. **Krisenlagebild:** je Lagezyklus. Als Testparameter dient ein Zyklus von vier Stunden; daneben gibt es Anlassmeldungen.
 3. **Anlassmeldung:** unverzüglich bei neuer oder veränderter Beeinträchtigung. Akut erforderliche Hilfe wartet nie auf einen Berichtslauf.
-4. **Fristgrundlage.** Rechtsfristen und verfassungsrechtliche Zeitanker (Kodierleitfaden Abschnitt 2) sind keine frei verfügbaren BCM-Toleranzen. Fristen im Kennsatz „Handlungsrelevant bis:“ nennen Datum, Uhrzeit, Aufgabe und Adressat. Sie leiten sich aus belegten Zeitankern, aus Entscheidungsterminen der Verwaltung oder aus belegten Prognosen ab. Eine erfundene Frist ist ein Fehler.
+4. **Fristgrundlage.** Rechtsfristen und verfassungsrechtliche Zeitanker (Kodierleitfaden Abschnitt 2) sind keine frei verfügbaren BCM-Toleranzen. Fristen im Kennsatz „Handlungsrelevant bis:“ nennen Datum, Uhrzeit, Aufgabe und Adressat. Sie leiten sich aus belegten Zeitankern, aus Entscheidungsterminen der Verwaltung oder aus belegten Prognosen ab. Eine erfundene Frist ist ein Fehler. Je Frist steht eine eigene Zeile „Handlungsrelevant bis:“; bei mehreren Fristen eines Sachverhalts steht die früheste zuerst.
 5. **Zeitfenster der Darstellung:** Berichtszeitraum der Meldung. Ältere Angaben bleiben mit ihrem Stand erkennbar.
 
 ### A.6 Quellenregister
 
-1. Das Quellenverzeichnis führt jede Quelle einmal, nummeriert in der Reihenfolge der ersten Nennung, im Format „[Qn] Kategorie – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ]“.
+1. Das Quellenverzeichnis führt jede Quelle einmal, nummeriert in der Reihenfolge der ersten Nennung, bei einer Fortschreibung jedoch mit stabilen Nummern (die Einträge der eigenen Vormeldung behalten ihre Nummer, neue Quellen erhalten die nächste freie Nummer), im Format „[Qn] Kategorie – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: TT.MM.JJJJ]“.
 2. Interne Unterlagen stehen als „Dokument ohne URL“ mit Herausgeber und Stand. Personen- und Verfahrensdaten gehören nicht ins Verzeichnis.
 3. Nicht ausgewertete Quellen werden als „nicht ausgewertet“ markiert. Bezahlschranken werden mit „(Paywall)“ gekennzeichnet.
 
@@ -83,7 +83,7 @@ Teilräume eines verdichteten Sachverhalts sind Bezirke, Gerichtsbarkeiten oder 
 
 ### A.8 Fortschreibung
 
-1. Bei der Fortschreibung bleibt die Kennung eines Sachverhalts gleich. Was sich geändert hat, nennt der Kennsatz „Änderung zur Vormeldung:“. Frühere Zeilen im Zeitstrahl bleiben unverändert.
+1. Bei der Fortschreibung bleibt die Kennung eines Sachverhalts gleich. Was sich geändert hat, nennt der Kennsatz „Änderung zur Vormeldung:“. Frühere Zeilen im Zeitstrahl bleiben unverändert; ihre Quellenverweise behalten ihre Bedeutung, weil die Nummern der Vormeldung im Quellenverzeichnis stabil bleiben (A.6 Nr. 1).
 2. **Datenalter.** Ist eine Angabe älter als ein Berichtsintervall, wird ihr Stand genannt und sie wird neu bewertet. Datenalter verschärft nicht automatisch und bestätigt nichts als unverändert.
 3. **Prognosen** werden mit dem Eintreten oder Nichteintreten fortgeschrieben, nicht still ersetzt.
 
