@@ -136,10 +136,39 @@ function deutschesDatum(tag, monat, jahr, stunde, minute, zone) {
   return mitVersatz(`${d}T${zweistellig(stunde)}:${zweistellig(minute)}`, zone);
 }
 
-/** Zeitpunkt (mit Versatz) oder Tag → Millisekunden; Tag = Tagesbeginn UTC (nur für Reihenfolge innerhalb gleicher Art). */
-function ms(z) {
-  if (!z) return NaN;
-  return /^\d{4}-\d{2}-\d{2}$/.test(z) ? Date.parse(`${z}T00:00Z`) : Date.parse(z);
+const IST_TAG = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Kalendertag „JJJJ-MM-TT“ eines Zeitpunkts mit Versatz in der Zone; null bei ungültiger Angabe oder Zone. */
+function tagIn(zeitpunkt, zone) {
+  const t = Date.parse(zeitpunkt);
+  if (Number.isNaN(t)) return null;
+  try {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: zone || "UTC", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(t));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Vergleich zweier v2-Zeitangaben nach Abschnitt 1 Nr. 4 des Entwurfs (GK-2026-W44-04): Zeitpunkte nach ihrem absoluten
+ * Wert (UTC-Versatz), Kalendertage gegen den Tag eines Zeitpunkts in der Zeitzone der Meldung. Ergebnis -1 (a früher),
+ * 0 (gleich), 1 (a später) oder null (nicht entscheidbar: fehlende oder ungültige Angabe, oder Tag und Zeitpunkt
+ * desselben Tags – eine Uhrzeit wird nicht erfunden).
+ */
+export function vergleicheZeit(a, b, zone) {
+  if (typeof a !== "string" || typeof b !== "string" || !a || !b) return null;
+  const ta = IST_TAG.test(a);
+  const tb = IST_TAG.test(b);
+  if (!ta && !tb) {
+    const x = Date.parse(a);
+    const y = Date.parse(b);
+    return Number.isNaN(x) || Number.isNaN(y) ? null : Math.sign(x - y);
+  }
+  const da = ta ? a : tagIn(a, zone);
+  const db = tb ? b : tagIn(b, zone);
+  if (!da || !db) return null;
+  if (da === db) return ta && tb ? 0 : null;
+  return da < db ? -1 : 1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -751,16 +780,15 @@ export function pruefeReferenzen(m) {
   });
 
   const t0 = m.meldezeitpunkt;
-  const t0ms = ms(t0);
-  const t0Tag = typeof t0 === "string" ? t0.slice(0, 10) : null;
-  const nachT0 = (z) => (z && t0 ? (/^\d{4}-\d{2}-\d{2}$/.test(z) ? z > t0Tag : ms(z) > t0ms) : false);
+  const zone = m.zeitzone;
+  // Zeitvergleiche nach der Zeitsemantik (GK-2026-W44-04): absolute Zeitpunkte, Tage in der Zone der Meldung
+  const nachT0 = (z) => vergleicheZeit(z, t0, zone) === 1;
+
+  if (vergleicheZeit(m.meldezeitraum?.von, m.meldezeitraum?.bis, zone) === 1) fehler("meldezeitraum", "von liegt nach bis");
   // Datenstand einer Quelle wie der einer Kennzahl nicht nach t0 (GK-2026-W44-03); unbekannt (null) bleibt zulässig
   (m.quellen || []).forEach((q, i) => {
     if (q.datenstand && nachT0(q.datenstand)) fehler(`quellen[${i}].datenstand`, "Datenstand nach dem Meldezeitpunkt");
   });
-
-  if (m.meldezeitraum?.von && m.meldezeitraum?.bis && m.meldezeitraum.von.slice(0, 10) > m.meldezeitraum.bis.slice(0, 10))
-    fehler("meldezeitraum", "von liegt nach bis");
 
   const kennungen = new Set();
   const zeilenIds = new Set();
@@ -808,9 +836,8 @@ export function pruefeReferenzen(m) {
       pruefeIds(z.quellen, `${pz}.quellen`);
       if (nachT0(z.zeit)) fehler(`${pz}.zeit`, "Ereigniszeit nach dem Meldezeitpunkt (nur Eingetretenes bis t0)");
       if (z.erstmals_gemeldet && nachT0(z.erstmals_gemeldet)) fehler(`${pz}.erstmals_gemeldet`, "nach dem Meldezeitpunkt");
-      if (z.erstmals_gemeldet && !/^\d{4}-\d{2}-\d{2}$/.test(z.zeit) && ms(z.erstmals_gemeldet) < ms(z.zeit))
-        fehler(`${pz}.erstmals_gemeldet`, "vor der Ereigniszeit");
-      if (vorher && z.zeit.slice(0, 10) < vorher.slice(0, 10)) hinweis(`${pz}.zeit`, "nicht chronologisch");
+      if (z.erstmals_gemeldet && vergleicheZeit(z.erstmals_gemeldet, z.zeit, zone) === -1) fehler(`${pz}.erstmals_gemeldet`, "vor der Ereigniszeit");
+      if (vorher && vergleicheZeit(z.zeit, vorher, zone) === -1) hinweis(`${pz}.zeit`, "nicht chronologisch");
       vorher = z.zeit;
     });
     if ((s.zeitstrahl || []).length > 12) hinweis(`${p}.zeitstrahl`, `${s.zeitstrahl.length} Zeilen; Richtwert 12`);
