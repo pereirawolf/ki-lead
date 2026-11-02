@@ -1,0 +1,127 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "konsistenzpruefer",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-02T22:45:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+  "pruefumfang": "Gezielter Lauf auf Anforderung des Herausgebers (Hinweis geht der Standardauswahl vor): Landesprofil profile/lead-thueringen (profil.json, CHANGELOG.md, README.md, beispiele/hochwasser-saale vollständig gelesen), Ilka-Meldung des Landes Thüringen im Beispielprofil (profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json vollständig), Abgleich mit dem Szenario und den Kennzahlen-Bausteinen von Thessa (pereirawolf/thessa, Zweig szenario/ilka-angleich-uebergabe, Pull Request #11). Statisch: src/lagebild/lagebild.ts (beispielDateien), src/kern/eingang.ts (eingangsInfo), src/pipeline/material.ts (JSON-Material), scripts/landesprofil.mjs, tests/profil/landesprofil.test.ts. Ausgeführt: npx vitest run tests/profil – 14 Dateien bestanden, 1 übersprungen, 286 Tests bestanden. Offene Befunde: 9; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "Gesamte Testsuite (npm test) nicht ausgeführt; nur tests/profil, weil der Lauf auf das Landesprofil beschränkt ist.",
+    "Offene Pull Requests über die GitHub-API nicht abrufbar (403, Repository in dieser Sitzung nur lesend eingebunden); über die Remote-Branches eingegrenzt: offen ist befunde/gesamtkonsistenz-2026-W44-b, ohne Bezug zum Landesprofil.",
+    "Kein KI-Lauf der KI-Erfassung oder KI-Verdichtung mit den Thessa-Bausteinen (kein Schlüssel, keine kostenpflichtigen Läufe); die Annahme als JSON-Material ist nur statisch belegt."
+  ],
+  "befunde": [
+    {
+      "id": "KP-2026-W45-01",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/profil.json",
+          "stelle": "beispiele",
+          "ist": "[{\"titel\": \"Hochwasser an der Saale (FIKTIV)\", \"ordner\": \"beispiele/hochwasser-saale\", …}]"
+        },
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[kennung=DE-TH-20261014-P5VN].sofort.bewertung_text",
+          "ist": "Abweichende Bewertung: Landkreis Sonneberg „kritisch“ … Land „erheblich“ … Ursache: Maßstab."
+        },
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "quellen, Q3",
+          "ist": "Landratsamt Sonneberg, Krisenstab (14.10.2026): Lagemeldung Nr. 4 … Datenstand: 14.10.2026, 08:00"
+        }
+      ],
+      "beobachtung": "Das Landesprofil hat mit „Hochwasser an der Saale“ nur eine Beispiellage. Die Thüringer Ilka-Meldung gibt es nur im Beispielprofil und dort nur in Länderperspektive; die Kreismeldungen, auf die sie sich stützt, fehlen. Sie verweist auf eine Kreismeldung („Landkreis Sonneberg ‚kritisch‘“) und auf die Lagemeldung Nr. 4 des Krisenstabs, die im Datensatz nicht vorliegen. Damit lässt sich die Verdichtung Kreis → Land für diese Lage nicht durchspielen. Ebenso wenig die Übernahme der Kräftelage der Feuerwehren, die Thessa seit dem Pull Request #11 für Kreise um 10:00 Uhr und für das Land um 10:30 Uhr als Kennzahlen-Baustein liefert. Thessa hat sein Szenario dafür an die Thüringer Meldung angeglichen: zwei Pflegeheime mit zusammen 146 Bewohnerinnen und Bewohnern; THW aus Oberfranken nur als Hinweis; überörtliche Hilfe der Feuerwehr Hildburghausen.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/thessa/pull/11",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "Thessa: Szenario an die Thüringer Ilka-Meldung angleichen, Baustein 0.2, Übergabe an KI-LEAD",
+          "fassung_oder_stand": "Commit bffb667, 02.11.2026",
+          "abgerufen_utc": "2026-11-02T22:40:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Neue Bausteine um 10:00 Uhr: Landkreis Sonneberg, Landkreis Hildburghausen und Ilm-Kreis, als Eingang der Kreismeldungen."
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Neue Beispiellage im Ordner profile/lead-thueringen/beispiele/orkantief-ilka mit vier Meldungen im Schema LEAD-Meldung-Land-v1, von Hand verfasst nach Kodierleitfaden 1.8.0 und den SOP B01 2.2.0, B08 2.2.0 und B12 2.1.0. Jeder Sachverhalt beginnt mit „FIKTIV“; Quellen, Zeichnungen und Dateinamen tragen „FIKTIV“. (1) LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json: Landratsamt Sonneberg, Krisenstab, Lagemeldung Nr. 5. Sachverhalt Stromausfall (Stromausfall / Blackout, KRITIS-Ausfall) mit den Tatsachen der Landesmeldung: rund 9.800 Personen, zwei Pflegeheime mit 146 Bewohnerinnen und Bewohnern und Diesel bis 15.10. abends, 23 bzw. 17 Mobilfunkstandorte, Notruf aus vier Gemeinden, Trinkwasser Neuhaus 60 Stunden, acht Notfalltreffpunkte, Krisenstab seit 02:00 Uhr. Dazu als Bestehende Maßnahmen die Kräftelage aus dem Thessa-Baustein (Datenstand 10:00 Uhr): 12 von 55 Einsatzmitteln gebunden, 21 frei verfügbar, 6 lagerelevante laufende Einsätze zum Stromausfall einschließlich der überörtlichen Hilfe aus Hildburghausen, zwei THW-Ortsverbände aus Oberfranken. Beurteilung „kritisch“, Tendenz „Verschärfung“. Ein zweiter Sachverhalt Sturmschäden im Kreis. (2) LEAD-Meldung_HBN_2026-10-14T10-00_…: Sturmschäden um Schleusingen, abgearbeitet; überörtliche Hilfe nach Sonneberg; Kräftelage: 2 von 23 Einsatzmitteln gebunden, 19 frei verfügbar. (3) LEAD-Meldung_IK_2026-10-14T10-00_…: Sturmschäden; A 71 Ilmenau-Ost–Suhl von 21:00 bis 05:30 Uhr gesperrt, Räumarbeiten an Landesstraßen; 3 laufende Einsätze, 16 von 28 Einsatzmitteln frei verfügbar. (4) LEAD-Meldung_TH_Lagezentrum_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json: meldende Stelle wie im Hochwasser-Beispiel (Lagezentrum des Landes (Beispiel) – Redaktionskonferenz). Die Sachverhalte DE-TH-20261014-K7QM (Sturm) und DE-TH-20261014-P5VN (Stromausfall) sind inhaltlich gleich der Thüringer Meldung des Beispielprofils, mit diesen Ergänzungen: Bezug auf die Kreis-Sachverhalte, Zeitstrahl, die drei Kreismeldungen als Quellen statt der Lagemeldung Nr. 4 und eine Angabe zur Kräftelage aus dem Land-Baustein (18 von 151 Einsatzmitteln gebunden, 98 frei verfügbar). Die Angabe zur Kräftelage ist ausdrücklich auf den erfassten Ausschnitt von fünf Kreisen begrenzt und nicht landesweit; die Abweichende Bewertung Kreis „kritisch“ / Land „erheblich“ bleibt. Alle Zahlen zur Kräftelage stammen unverändert aus den Thessa-Bausteinen; Quellenangabe wie im Baustein: „Kräftelage der Feuerwehren aus <n> Einsatzmitteln, Thessa (FIKTIV)“, Kategorie A, behördenintern, mit Datenstand. Dazu ein LIESMICH.md nach dem Muster des Hochwasser-Beispiels mit dem Abgleich zur Ilka-Meldung des Beispielprofils (Kennungen, Quellenbasis, Ausschnitt). Abnahme: vier Meldungen schemakonform; im Lagebild ohne Lesefehler; Meldestatus für Ilm-Kreis, Landkreis Hildburghausen und Landkreis Sonneberg; Kennungen ohne Befund; Verdichtung mit Attrappe erkennt drei Eingänge; Kräftezahlen gleich den Bausteinen.",
+        "neuer_text": "profil.json, beispiele (anfügen): {\"titel\": \"Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV)\", \"ordner\": \"beispiele/orkantief-ilka\", \"hinweis\": \"Erfundene Sturmlage mit drei Kreismeldungen (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und der verdichteten Meldung des Landes; die Zahlen zur Kräftelage stammen aus fiktiven Kennzahlen-Bausteinen von Thessa. Keine Meldung stammt von den genannten Stellen.\"}"
+      },
+      "folgeaenderungen": [
+        "profile/lead-thueringen/profil.json: version 1.2.0",
+        "profile/lead-thueringen/CHANGELOG.md: Eintrag 1.2.0 mit Grundlage KP-2026-W45-01",
+        "profile/lead-thueringen/README.md: Zeile „Beispiel“ um beispiele/orkantief-ilka ergänzen",
+        "CHANGELOG.md (Wurzel): Eintrag in der nächsten Fassung nach bisheriger Praxis",
+        "README.md (Wurzel), Abschnitt Profile: Beispiellagen des Landesprofils",
+        "docs/TESTZUORDNUNG.md: Zeile für den neuen Test",
+        "docs/LEAD-MELDUNG-V2.md, Abschnitt zu den Tests: Liste der überführten v1-Meldungen, falls sie Beispiellagen einzeln nennt",
+        "profile/lead-beispiel/beispiele/orkantief-ilka/LIESMICH.md: Hinweis auf die Kreisperspektive im Landesprofil (optional)"
+      ],
+      "entscheidungsfrage": "(1) Kennungen der Landesmeldung: (A) dieselben wie in der Thüringer Meldung des Beispielprofils (DE-TH-20261014-K7QM und -P5VN), damit der LEAD-Bezug der Thessa-Einsatzmeldungen (bezug_lead) unmittelbar trifft – empfohlen; (B) eigene Kennungen, Zuordnung nur über das LIESMICH. (2) Quellenbasis Sonneberg: (A) Kreismeldung 10:00 Uhr als Lagemeldung Nr. 5, die die Tatsachen der Nr. 4 (08:00 Uhr) fortschreibt; die Landesmeldung zitiert die Kreismeldung – empfohlen; (B) Kreismeldung um 08:00 Uhr wie Q3, dann mit einem Thessa-Baustein um 08:00 Uhr. (3) Dritter Kreis: Ilm-Kreis (A71, laufende Räumarbeiten) – empfohlen – oder Landkreis Schmalkalden-Meiningen bzw. Saalfeld-Rudolstadt?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/profil/landesprofil.test.ts, neuer Block nach TP-2026-W44-56: beispielDateien(p, \"beispiele/orkantief-ilka\") liefert vier Meldungen; pruefeRoh ohne Befund; einlesen ohne fehler; meldestatus zeigt Ilm-Kreis, Landkreis Hildburghausen und Landkreis Sonneberg und die Landesmeldung unter weitere; redaktionscheck ohne Kennungsbefund; jede Datei enthält „FIKTIV“; die Landesmeldung führt die Kennungen der Thüringer Meldung des Beispielprofils und dieselben Kernzahlen (9.800, 146); Verdichtung der drei Kreismeldungen mit Attrappe wie TP-2026-W44-56. Mit KP-2026-W45-02 zusätzlich: Zahlen zur Kräftelage in den Meldungen gleich den Werten der Bausteine.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W45-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "beispielDateien (Z. 173–180)",
+          "ist": ".filter((p) => p.startsWith(praefix) && p.toLowerCase().endsWith(\".json\"))"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "eingangsInfo",
+          "ist": "if (!Array.isArray(svs) || !svs.length || typeof svs[0] !== \"object\") return null;"
+        }
+      ],
+      "beobachtung": "Zur Beispiellage aus KP-2026-W45-01 gehört das Material, aus dem die Kreismeldungen entstehen: die Kennzahlen-Bausteine von Thessa. Liegen sie im Ordner der Beispiellage, lädt „Beispiel laden“ sie mit ins Lagebild. Dort erkennt eingangsInfo() sie nicht als Meldung, weil `sachverhalte` fehlt; sie erscheinen als nicht eingelesen. In der KI-Erfassung kommen sie dagegen als JSON-Material an (src/pipeline/material.ts; 15 bis 35 kB je Datei, Grenze 400.000 Zeichen). Ohne die Bausteine in KI-LEAD lässt sich der Weg „Baustein → KI-Erfassung → Kreismeldung“ nur mit dem Thessa-Repository nachvollziehen; ein Test der Materialannahme fehlt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/thessa/pull/11",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "Thessa: Kennzahlen-Baustein Fassung 0.2",
+          "fassung_oder_stand": "Commit bffb667, 02.11.2026",
+          "abgerufen_utc": "2026-11-02T22:40:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Neuer Block einsatzmeldungen … ohne Ortslage, Hinweise und die Kennungen der Einsatzmittel."
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Begleitordner profile/lead-thueringen/beispiele/orkantief-ilka-thessa mit den fünf Bausteinen aus Thessa (Sonneberg, Hildburghausen und Ilm-Kreis um 10:00 Uhr; Sonneberg und Land um 10:30 Uhr). Die Dateien bleiben unverändert und tragen Herkunft und Commit im LIESMICH. Lizenz: Herausgeber identisch, Inhalte CC BY 4.0. Der Ordner liegt neben dem Beispiel, nicht darin, damit „Beispiel laden“ ihn nicht ins Lagebild holt; er steht nicht in profil.json „beispiele“. Das LIESMICH nennt die Schritte zur Übergabe nach dem Thessa-README („Übergabe an KI-LEAD“) mit der vorgeschlagenen Prüffrage. Abnahme: Test liest jeden Baustein mit dateiLesen als Material ohne Eingangsmeldung (eingang nicht gesetzt) und unter der Zeichengrenze; Kräftezahlen der Kreismeldungen aus KP-2026-W45-01 stimmen mit K-Werten der Bausteine überein.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "profile/lead-thueringen/CHANGELOG.md (im Eintrag 1.2.0 mit KP-2026-W45-01)",
+        "docs/TESTZUORDNUNG.md",
+        "LICENSE-CONTENT bzw. REUSE-Angaben, falls Dateien außerhalb der bisherigen Muster liegen"
+      ],
+      "entscheidungsfrage": "(A) Bausteine im Begleitordner mitliefern (empfohlen, Beispiel in sich geschlossen und testbar); (B) nur auf Thessa verweisen, kein Begleitordner und kein Test der Materialannahme.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/profil/landesprofil.test.ts: für jede Datei in beispiele/orkantief-ilka-thessa dateiLesen → kein eingang, Text ≤ MAX_TEXT_ZEICHEN, format \"Thessa-Kennzahlen\"; beispielDateien(p, \"beispiele/orkantief-ilka\") enthält keine dieser Dateien.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Landesprofil lädt ohne Befund; tests/profil grün (286 Tests).",
+    "Schema LEAD-Meldung-Land-v1 kennt Bezug und Zeitstrahl wie im Hochwasser-Beispiel; beides für die neue Landesmeldung nutzbar.",
+    "Kennungspräfixe für Ilm-Kreis (IK), Landkreis Hildburghausen (HBN) und Landkreis Sonneberg (SON) in scripts/landesprofil.mjs vorhanden.",
+    "Weitere Beobachtung: Die Thüringer Ilka-Meldung des Beispielprofils nennt in _entstehung SOP-LEAD 2.0 und Kodierleitfaden 1.2; die neue Beispiellage folgt den heutigen Fassungen. Abweichungen der Kodierung zwischen beiden Datensätzen sind dadurch erklärbar und gehören ins LIESMICH.",
+    "Weitere Beobachtung: Die strukturierte Übernahme der Kennzahlen (sachverhalte[].kennzahlen, LEAD-Meldung-v2) bleibt offener Punkt 1 in docs/LEAD-MELDUNG-V2.md, Abschnitt 13; die Beispiellage nutzt v1 und gibt die Zahlen im Text mit Quellenangabe wieder."
+  ]
+}
