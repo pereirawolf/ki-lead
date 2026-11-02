@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.2.0 – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W45.json`, freigegeben vom Herausgeber am 02.11.2026 (KP-2026-W45-01 und -02, jeweils wie empfohlen). Zweite Stelle, weil eine Beispiellage hinzukommt; Regeln und abgeleitete Dateien bleiben unverändert.
+
+- **Beispiellage „Orkantief ‚Ilka‘ mit Kräftelage der Feuerwehren“ (FIKTIV, KP-2026-W45-01):** drei Kreismeldungen um 10:00 Uhr (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und die verdichtete Meldung des Lagezentrums des Landes um 10:30 Uhr mit Bezug und Zeitstrahl. Die Landesmeldung führt dieselben Kennungen und Kernzahlen wie die Thüringer Meldung im Beispielprofil der Koordinierungsstelle. Die Kräftelage der Feuerwehren stammt aus Kennzahlen-Bausteinen von Thessa; die Zahl des Landes ist ausdrücklich ein Ausschnitt aus fünf Kreisen. Kodiert nach Kodierleitfaden 1.8.1; Abweichungen zur Meldung im Beispielprofil erläutert das LIESMICH.
+- **Begleitordner `beispiele/orkantief-ilka-thessa` (KP-2026-W45-02):** fünf unveränderte Kennzahlen-Bausteine aus Thessa (Fassung 0.2) als Material für die KI-Erfassung, nicht in „beispiele“ eingetragen und deshalb nicht im Lagebild geladen; LIESMICH mit Herkunft und den Schritten der Übergabe.
+- Schema, Darstellungsdatei, Arbeitsanweisungen, Kodierleitfaden, Kontakte und die Beispiellage „Hochwasser an der Saale“ sind unverändert.
+
 ## 1.1.1 – 02.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json`, GK-2026-W44-09 (Option A), freigegeben vom Herausgeber am 01.11.2026. Dritte Stelle wie beim Beispielprofil (1.36.1).

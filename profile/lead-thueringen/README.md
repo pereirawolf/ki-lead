@@ -6,6 +6,6 @@ Beispielprofil auf Landesebene: Ein Lagezentrum des Landes führt die Lagemeldun
 - **Meldung:** Schema `LEAD-Meldung-Land-v1`; das Feld `kreis` nennt die meldende Gebietskörperschaft, bei der eigenen Meldung das Land.
 - **Abgeleitet:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden erzeugt `npm run profil:land` aus dem Beispielprofil; nicht von Hand ändern.
 - **SOP-Sammelmappe:** liegt nicht in diesem Ordner. Die App ergänzt sie beim Laden aus `profile/lead-beispiel/sop/` (`src/profil/geteilt.ts`); ein Export des Profils aus der App enthält sie vollständig.
-- **Beispiel:** `beispiele/hochwasser-saale` (FIKTIV), im Lagebild ladbar.
+- **Beispiele:** `beispiele/hochwasser-saale` und `beispiele/orkantief-ilka` (FIKTIV), im Lagebild ladbar; zur Ilka-Lage die Kennzahlen-Bausteine aus Thessa in `beispiele/orkantief-ilka-thessa` als Material für die KI-Erfassung.
 
 Lizenz: CC BY 4.0 (`LICENSE-CONTENT`); Schema, Manifest und Kontakte zusätzlich CC0 1.0.

@@ -93,7 +93,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
 | 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
 | 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
-| 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ |
+| 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 
 ## [0.6.23] – 02.11.2026
 
@@ -118,6 +118,14 @@ Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` (Gesa
 - `tests/pipeline/zeitstrahl.test.ts`: GK-2026-W44-09 mit Gegenprobe; `tests/format/lead-meldung-v2.test.ts`: GK-2026-W44-10.
 - `tests/ui/ki-erfassung-felder.test.ts`, `tests/kern/kennsaetze.test.ts`: GK-2026-W44-12; neu `tests/profil/profilneutral.test.ts`: GK-2026-W44-13 bis -15; `tests/pipeline/recherche-pflicht.test.ts`: GK-2026-W44-14; `tests/ui/lagebild.test.ts`: GK-2026-W44-15.
 - `tests/pipeline/kontext.test.ts`: Kodierleitfaden 1.8.1.
+
+### Nachtrag vom 03.11.2026 (ohne Änderung der App)
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W45.json` (gezielte Konsistenzprüfung des Landesprofils auf Anforderung des Herausgebers, Commit `c5a3205`, umgesetzt auf `508c64c`), freigegeben vom Herausgeber am 02.11.2026: KP-2026-W45-01 und -02 wie empfohlen.
+
+- **Landesprofil Thüringen 1.2.0:** Beispiellage „Orkantief ‚Ilka‘ mit Kräftelage der Feuerwehren“ (FIKTIV, KP-2026-W45-01). Sie besteht aus drei Kreismeldungen (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und der verdichteten Meldung des Landes. Diese führt dieselben Kennungen wie die Thüringer Meldung im Beispielprofil. Die Zahlen zur Kräftelage kommen aus Kennzahlen-Bausteinen des Demonstrators [Thessa](https://github.com/pereirawolf/thessa). Dazu der Begleitordner `beispiele/orkantief-ilka-thessa` mit den unveränderten Bausteinen als Material für die KI-Erfassung (KP-2026-W45-02). Einzelheiten im Verlauf des Profils.
+- README (Profile), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- **Tests:** `tests/profil/landesprofil.test.ts` (KP-2026-W45-01, -02), `tests/format/lead-meldung-v2.test.ts` (Migration auch der neuen Beispiellage).
 
 ## [0.6.22] – 01.11.2026
 
