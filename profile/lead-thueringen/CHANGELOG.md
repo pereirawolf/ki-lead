@@ -4,6 +4,12 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.2.1 – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-01, freigegeben vom Herausgeber am 03.11.2026. Dritte Stelle: nur Begleittext.
+
+- **LIESMICH des Begleitordners `beispiele/orkantief-ilka-thessa`:** Ein Baustein erscheint ab App 0.6.24 als „Kennzahlen-Baustein“ statt als JSON-Material; an die KI geht er ohne Herleitung, nach dem Lauf gleicht die App die Zahlen im Text ab. Bausteine und Beispielmeldungen unverändert.
+
 ## 1.2.0 – 03.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W45.json`, freigegeben vom Herausgeber am 02.11.2026 (KP-2026-W45-01 und -02, jeweils wie empfohlen). Zweite Stelle, weil eine Beispiellage hinzukommt; Regeln und abgeleitete Dateien bleiben unverändert.
