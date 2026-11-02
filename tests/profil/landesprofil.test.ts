@@ -157,6 +157,125 @@ const thessaBausteine = (p: { dateien: Record<string, string | undefined> }) =>
 /** Kennzahl eines Thessa-Bausteins nach Gegenstand (die Kennungen nach K5 hängen vom Gebiet ab) */
 const kennzahl = (b: any, anfang: string) => b.kennzahlen.find((k: any) => k.gegenstand.startsWith(anfang))!.wert as number;
 
+describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV)", () => {
+  it("vier schemakonforme Meldungen; Lagebild ohne Lesefehler, Meldestatus je Kreis, Kennungen ohne Befund, FIKTIV", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    expect(p.manifest.beispiele!.map((b) => b.ordner)).toEqual([ORDNER, ILKA]);
+    const dateien = beispielDateien(p, ILKA);
+    expect(dateien).toHaveLength(4);
+    for (const d of dateien) expect(pruefeRoh(p.schema as object, JSON.parse(d.text)), d.name).toEqual([]);
+    const { eintraege, fehler } = einlesen(dateien, p);
+    expect(fehler).toEqual([]);
+    expect(eintraege.every((e) => e.schema.length === 0 && !e.fremd)).toBe(true);
+    const status = meldestatus(eintraege, p)!;
+    expect(status.zeilen.filter((z) => z.eintraege.length).map((z) => z.name)).toEqual(["Ilm-Kreis", "Landkreis Hildburghausen", "Landkreis Sonneberg"]);
+    expect(status.weitere.map((e) => e.name)).toEqual([expect.stringContaining("_TH_Lagezentrum_")]);
+    const r = redaktionscheck(eintraege, p, "2026-10-21", new Date("2026-10-14T10:30:00+02:00"));
+    expect(r.kennungen).toEqual([]);
+    for (const d of dateien) expect(d.text).toContain("FIKTIV");
+  });
+
+  it("Landesmeldung: Kennungen und Kernzahlen der Thüringer Meldung im Beispielprofil, Bezug auf alle Kreis-Sachverhalte", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const alle = beispielDateien(p, ILKA).map((d) => ({ name: d.name, m: JSON.parse(d.text) }));
+    const land = alle.find((d) => d.name.includes("_TH_"))!.m;
+    const kreise = alle.filter((d) => !d.name.includes("_TH_")).map((d) => d.m);
+    const bund = JSON.parse(
+      readFileSync(repoPfad("profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json"), "utf-8"),
+    );
+    expect(land.sachverhalte.map((s: any) => s.kennung)).toEqual(bund.sachverhalte.map((s: any) => s.kennung));
+    expect(land.meldezeitpunkt).toBe(bund.meldezeitpunkt);
+    const strom = JSON.stringify(land.sachverhalte[1]);
+    for (const zahl of ["9.800", "146 Bewohnerinnen und Bewohner", "vier Gemeinden", "16.10."]) expect(strom).toContain(zahl);
+    const kreisKennungen = kreise.flatMap((m: any) => m.sachverhalte.map((s: any) => s.kennung));
+    expect(land.sachverhalte.flatMap((s: any) => s.bezug).sort()).toEqual([...kreisKennungen].sort());
+    expect(kreise.every((m: any) => m.meldezeitpunkt === "2026-10-14T10:00")).toBe(true);
+    // Abweichende Bewertung von Kreis und Land wie in der Thüringer Meldung
+    const son = kreise.find((m: any) => m.kreis === "Landkreis Sonneberg")!;
+    expect(son.sachverhalte[0].sofort.beurteilung).toBe("kritisch");
+    expect(land.sachverhalte[1].sofort.beurteilung).toBe("erheblich");
+    expect(land.sachverhalte[1].sofort.bewertung_text).toMatch(/Abweichende Bewertung: Landkreis Sonneberg „kritisch“/);
+  });
+
+  it("Kräftelage: Zahlen und Datenstand wie in den Thessa-Bausteinen, Landeszahl als Ausschnitt gekennzeichnet", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const meldungen = beispielDateien(p, ILKA).map((d) => ({ name: d.name, text: d.text, m: JSON.parse(d.text) }));
+    const bausteine = thessaBausteine(p);
+    const paare: [string, string][] = [
+      ["Ilm-Kreis", "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json"],
+      ["Landkreis Hildburghausen", "kennzahlen_Landkreis-Hildburghausen_2026-10-14T10-00_FIKTIV.json"],
+      ["Landkreis Sonneberg", "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-00_FIKTIV.json"],
+      ["Thüringen", "kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json"],
+    ];
+    for (const [kreis, datei] of paare) {
+      const b = bausteine.find((x) => x.name === datei)!.daten;
+      const m = meldungen.find((x) => x.m.kreis === kreis)!;
+      const gesamt = kennzahl(b, "Einsatzmittel der Feuerwehren");
+      const frei = kennzahl(b, "frei verfügbar für überörtliche Hilfe");
+      expect(m.text, `${kreis}: gesamt`).toContain(`${gesamt} Einsatzmitteln`);
+      expect(m.text, `${kreis}: frei`).toMatch(new RegExp(`\\b${frei} frei`));
+      // Quelle mit dem Titel und Datenstand des Bausteins
+      const titel = b.quellen[0].titel.replace(" (FIKTIV)", "");
+      const [tag, zeit] = [b.datenstand.slice(0, 10).split("-").reverse().join("."), b.datenstand.slice(11, 16)];
+      expect(m.m.quellen, kreis).toMatch(new RegExp(`${titel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}.*Datenstand: ${tag}, ${zeit}`));
+    }
+    const land = meldungen.find((x) => x.m.kreis === "Thüringen")!;
+    const tb = bausteine.find((x) => x.name.startsWith("kennzahlen_Thueringen"))!.daten;
+    expect(land.text).toContain(`${kennzahl(tb, "im Einsatz gebunden")} von ${kennzahl(tb, "Einsatzmittel der Feuerwehren")} Einsatzmitteln`);
+    expect(land.text).toMatch(/Ausschnitt von fünf Kreisen – kein landesweiter Wert/);
+  });
+
+  it("verdichtet die drei Kreismeldungen (Attrappe): als Eingang erkannt, t0 aus dem jüngsten Eingang, Ergebnis schemakonform und belegt", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const alle = beispielDateien(p, ILKA);
+    const kreise = alle.filter((d) => !d.name.includes("_TH_"));
+    const land = JSON.parse(alle.find((d) => d.name.includes("_TH_"))!.text);
+    const eingaenge: Material[] = [];
+    for (const d of kreise) eingaenge.push(await dateiLesen(new File([d.text], d.name), p));
+    expect(eingaenge.every((m) => m.eingang)).toBe(true);
+    const vorschlag = {
+      gegenstand: "Orkantief Ilka",
+      stichtag: "2026-10-14",
+      meldezeitpunkt: "",
+      referenzbezug: "Land Thüringen",
+      horizont: "bis 16.10.2026",
+      sachverhalte: [
+        {
+          titel: "Sturmschäden im Thüringer Wald",
+          ereignisarten: ["Unwetter / Sturm"],
+          sops: ["b01"],
+          begruendung: "drei Kreise",
+          eingangsmeldungen: eingaenge.map((m) => m.name),
+        },
+        {
+          titel: "Stromausfall im Landkreis Sonneberg",
+          ereignisarten: ["Stromausfall / Blackout"],
+          sops: ["b08"],
+          begruendung: "Sonneberg",
+          eingangsmeldungen: [eingaenge.find((m) => m.name.includes("_SON_"))!.name],
+        },
+      ],
+      prueffrage: "",
+      hinweise: "",
+    };
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(vorschlag)), llmAntwort("Kurz.\n```json\n" + JSON.stringify(land) + "\n```")]);
+    const { k } = await pipelineKontext(att, eingaenge, {
+      profilName: "lead-thueringen",
+      jetzt: "2026-10-14T10:20:00+02:00",
+      auftrag: { stichtag: "2026-10-14" },
+    });
+    k.lauf.auftrag.websuche = false;
+    const v = await stufe1(k);
+    expect(att.anfragen[0].system[0].text).toContain("Verdichtung von Eingangsmeldungen");
+    expect((att.anfragen[0].jsonSchema as any).properties.sachverhalte.items.properties.eingangsmeldungen.items.enum).toHaveLength(3);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T10:00");
+    const e = await stufe2und3(k, v);
+    expect(k.lauf.ergebnis!.schemakonform).toBe(true);
+    expect(e.meldung!.kreis).toBe("Thüringen");
+    expect(eingangsquellenPruefen(eingaenge, e.meldung!, p).map((x) => x.status)).toEqual(Array(3).fill("nachgewiesen"));
+  });
+});
+
 describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
   it("fünf Bausteine der Fassung 0.2, als JSON-Material ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
     const p = (await profil("lead-thueringen")).profil!;

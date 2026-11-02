@@ -81,6 +81,11 @@
       "titel": "Hochwasser an der Saale (FIKTIV)",
       "ordner": "beispiele/hochwasser-saale",
       "hinweis": "Erfundene Lage mit drei Kreismeldungen und der verdichteten Meldung des Landes; keine Meldung stammt von den genannten Stellen."
+    },
+    {
+      "titel": "Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV)",
+      "ordner": "beispiele/orkantief-ilka",
+      "hinweis": "Erfundene Sturmlage mit drei Kreismeldungen (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und der verdichteten Meldung des Landes; die Zahlen zur Kräftelage stammen aus fiktiven Kennzahlen-Bausteinen von Thessa. Keine Meldung stammt von den genannten Stellen."
     }
   ],
   "modelle": {

@@ -1,0 +1,71 @@
+{
+  "schema": "LEAD-Meldung-Land-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell",
+    "werkzeug": "Fiktiver Datensatz Orkantief „Ilka“ für den KI-LEAD-Demonstrator (Kreisperspektive) mit der Kräftelage der Feuerwehren aus einem Kennzahlen-Baustein von Thessa, von Hand verfasst",
+    "sop": [
+      "SOP-LEAD B01 Unwetter / Sturm 2.2.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden 1.8.0",
+    "erstellt": "2026-11-03T00:30"
+  },
+  "kreis": "Ilm-Kreis",
+  "meldende_stelle": "Landratsamt Ilm-Kreis, Brand- und Katastrophenschutz",
+  "meldezeitpunkt": "2026-10-14T10:00",
+  "meldezeitraum": {
+    "von": "2026-10-13",
+    "bis": "2026-10-14"
+  },
+  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Thüringen, Orkantief „Ilka“, Ausgabe 13:00 mit Folgeprognose bis 16.10. (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Landratsamt Ilm-Kreis, Brand- und Katastrophenschutz (14.10.2026): Lagebericht Sturm 13./14.10. (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 09:00\n[Q3] A – Ilm-Kreis, Bereitschaftsübersicht der Feuerwehren (14.10.2026): Kräftelage der Feuerwehren aus 28 Einsatzmitteln, Thessa (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 10:00\n[Q4] A – Thüringer Landesamt für Bau und Verkehr (14.10.2026): Verkehrsinformation A 71 und Landesstraßen Thüringer Wald (FIKTIV) [Zugriff: 14.10.2026]",
+  "zeitstrahl": "[Z1] 2026-10-13T13:00 · DE-TH-IK-20261014-6NQD · Warnung – DWD-Warnlagebericht vor Orkanböen im Thüringer Wald mit Folgeprognose bis 16.10. [Q1] · aufgenommen 2026-10-14T10:00\n[Z2] 2026-10-13T21:00 · DE-TH-IK-20261014-6NQD · Maßnahme – A 71 zwischen Ilmenau-Ost und Suhl wegen Baumwürfen gesperrt [Q4] · aufgenommen 2026-10-14T10:00\n[Z3] 2026-10-14T05:30 · DE-TH-IK-20261014-6NQD · Wiederherstellung – A 71 zwischen Ilmenau-Ost und Suhl wieder frei [Q4] · aufgenommen 2026-10-14T10:00",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-IK-20261014-6NQD",
+      "eintritt": "2026-10-13",
+      "art": [
+        "Unwetter / Sturm"
+      ],
+      "ort": "Ilm-Kreis; Stadt Arnstadt, Stadt Ilmenau, Stadt Plaue und Kammlagen",
+      "bezeichnung": "Sturmschäden: A 71 seit 05:30 Uhr wieder frei, Räumarbeiten an Landesstraßen und Waldwegen dauern an",
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Orkantief „Ilka“, Kreisperspektive). Kernaussage: Die Sturmschäden im Ilm-Kreis sind verkehrlicher Natur; die A 71 ist wieder frei, Landesstraßen und Waldwege werden noch geräumt. Das Sturmfeld erreichte den Kreis am 13.10. gegen 19:00 Uhr [Q1]. Die A 71 war zwischen Ilmenau-Ost und Suhl wegen Baumwürfen von 21:00 Uhr bis 14.10., 05:30 Uhr gesperrt [Q4]. In Arnstadt wurde in der Nacht ein teilweise abgedecktes Dach gesichert; zwei Personen wurden dabei leicht verletzt [Q2]. Um 10:00 Uhr laufen drei Einsätze der Feuerwehren [Q3]: Räumarbeiten an Landesstraßen bei Arnstadt und Ilmenau und das Freischneiden von Waldwegen für Versorgungsfahrzeuge bei Plaue [Q2].",
+        "risiken_auswirkungen": "Belegt: Gesperrte Landesstraßen in den Kammlagen verlängern Anfahrtswege des Rettungsdienstes; Ausweichrouten bestehen [Q2, Q4]. Szenario: Für die Nacht zum 15.10. erwartet der DWD Frost in den Kammlagen [Q1]; bei Glätte auf noch nicht vollständig geräumten Straßen steigt das Unfallrisiko.",
+        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Feuerwehren, Straßenmeistereien und ThüringenForst räumen [Q2]. Von 28 Einsatzmitteln der Feuerwehren sind drei gebunden und 16 frei für überörtliche Hilfe verfügbar [Q3]. Prüf- und Abstimmungsbedarf: (1) Landkreis: Erreichbarkeit der Kammorte für den Rettungsdienst bis zur Freigabe der Landesstraßen in der Rettungsdienstplanung berücksichtigen. Unterstützungsbedarf besteht nicht.",
+        "abhaengigkeiten_interdependenzen": "Belegte Kopplung: Sperrungen von Landesstraßen → längere Anfahrt des Rettungsdienstes in Kammlagen; Puffer: Ausweichrouten [Q4]. Weitere Kopplungen sind nicht belegt [Q2]."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "Stabilisierung",
+        "bewertung_text": "Kernaussage: Der Sturm hinterlässt im Ilm-Kreis Verkehrsbeeinträchtigungen ohne Versorgungsrelevanz; Prüfbedarf besteht nur für die Erreichbarkeit der Kammorte durch den Rettungsdienst.\nReferenzraum: Ilm-Kreis. t0: 14.10.2026, 10:00 Uhr.\nBeurteilung „geringfügig“: keine Versorgungsfunktion eingeschränkt, Ausweichrouten bestehen.\nTendenz „Stabilisierung“ (Ilm-Kreis, 14.10. 05:30 bis 10:00): A 71 frei, es laufen nur noch Räumarbeiten [Q3, Q4].\nD1 = 2, Schäden in mehreren Gemeinden [Q2]. D2 = 0, zwei Leichtverletzte belegt [Q2] (Bedingung a der Nullregel). D3 = 2, Landkreis und Straßenbaulastträger steuern die Räumung [Q2]. D4 = 1, eingesetzt sind örtliche Kräfte [Q2]. D5 offen: keine belegte Prognose für die Freigabe der Landesstraßen. D6 = 1, verlängerte Anfahrt des Rettungsdienstes in Kammlagen [Q2]. D7 = 0, Angaben aktuell und konsistent. D8 = 1, nach Sturmende nur geringe Veränderungen.\nNeubewertung bei: Glätteunfällen auf ungeräumten Strecken; erneuter Sperrung der A 71",
+        "lagenradar": {
+          "d1": 2,
+          "d2": 0,
+          "d3": 2,
+          "d4": 1,
+          "d5": null,
+          "d6": 1,
+          "d7": 0,
+          "d8": 1
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "Sachbearbeitung Brand- und Katastrophenschutz Landratsamt Ilm-Kreis (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    },
+    "freigabe": {
+      "name": "Leitung Brand- und Katastrophenschutz Landratsamt Ilm-Kreis (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    },
+    "versand": {
+      "name": "Brand- und Katastrophenschutz Landratsamt Ilm-Kreis (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    }
+  }
+}
