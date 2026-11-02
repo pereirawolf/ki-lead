@@ -1,0 +1,629 @@
+{
+  "format": "Thessa-Kennzahlen",
+  "fassung": "0.2",
+  "erzeugt": "2026-10-14T10:00+02:00",
+  "datenstand": "2026-10-14T10:00+02:00",
+  "raum": {
+    "name": "Ilm-Kreis",
+    "schluessel": "16070"
+  },
+  "fiktiv": true,
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Ilm-Kreis, Bereitschaftsübersicht der Feuerwehren (FIKTIV)",
+      "titel": "Kräftelage der Feuerwehren aus 28 Einsatzmitteln, Thessa (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T10:00+02:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Einsatzmittel der Feuerwehren gesamt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 28,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 22,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K3",
+      "gegenstand": "eingeschränkt einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K4",
+      "gegenstand": "im Einsatz gebunden",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K5",
+      "gegenstand": "nicht einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K6",
+      "gegenstand": "im Einsatz gebunden: am Einsatzort",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K7",
+      "gegenstand": "frei verfügbar für überörtliche Hilfe (einsatzbereit, ohne Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 16,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K8",
+      "gegenstand": "einsatzbereit, vorgehalten für Katastrophenschutz (Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 6,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K9",
+      "gegenstand": "Einsatzmittel der ergänzenden Ausstattung des Bundes (Zivilschutz, § 13 ZSKG)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K10",
+      "gegenstand": "ergänzende Ausstattung des Bundes: einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K9"
+    },
+    {
+      "id": "K11",
+      "gegenstand": "laufende Einsätze im Gebiet (nach Einsatzort)",
+      "einheit": "Einsätze",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K12",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte werktags tagsüber (7 von 8 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 38,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K13",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte abends, nachts und am Wochenende (7 von 8 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 97,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K14",
+      "gegenstand": "Ausrückebereiche mit erfasster Risikoklasse (Mindestbedarf nach ThürFwOrgVO geprüft)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 8,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "Mindestbedarf Stufe 1 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K16",
+      "gegenstand": "Mindestbedarf Stufe 1 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Mindestbedarf Stufe 2 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Mindestbedarf Stufe 2 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K19",
+      "gegenstand": "Einheiten des Katastrophenschutzes nach ThürKatSVO erfasst",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K20",
+      "gegenstand": "Einheiten des Katastrophenschutzes: eingeschränkt einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K19"
+    },
+    {
+      "id": "K21",
+      "gegenstand": "frei verfügbar: Brandbekämpfung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K22",
+      "gegenstand": "frei verfügbar: Technische Hilfe",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K23",
+      "gegenstand": "frei verfügbar: Wasserförderung über lange Wegstrecken",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K24",
+      "gegenstand": "frei verfügbar: Stromerzeugung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K25",
+      "gegenstand": "frei verfügbar: Hubrettung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K26",
+      "gegenstand": "frei verfügbar: Führung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Ilm-Kreis",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "einsatzmeldungen": [],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "einsatzmittel": [
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-hlf10",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow2-tsf",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070029-ow1-lfkats",
+        "16070029-ow2-klfth",
+        "16070029-ow3-tsf",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw",
+        "16070043-ow2-tsf",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-lf20kats-2",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "einsatzmittel": [
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070029-ow1-lfkats",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "einsatzmittel": [
+        "16070029-ow1-lf20kats-2"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "einsatzmittel": [
+        "16070004-ow2-tsf",
+        "16070029-ow2-klfth",
+        "16070043-ow2-tsf"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "einsatzmittel": [
+        "16070004-ow1-hlf10",
+        "16070029-ow3-tsf"
+      ]
+    },
+    {
+      "kennzahl": "K6",
+      "einsatzmittel": [
+        "16070004-ow2-tsf",
+        "16070029-ow2-klfth",
+        "16070043-ow2-tsf"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "einsatzmittel": [
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "einsatzmittel": [
+        "16070029-ow1-lfkats",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "einsatzmittel": [
+        "16070029-ow1-lfkats",
+        "16070029-ow1-swkats"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "einsatzmittel": [
+        "16070029-ow1-lfkats",
+        "16070029-ow1-swkats"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "einsatzmittel": [],
+      "einsatzmeldungen": [
+        "EM-20261014-R8BH",
+        "EM-20261014-YQZC",
+        "EM-20261014-2AB5"
+      ]
+    },
+    {
+      "kennzahl": "K12",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K13",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K14",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K15",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K16",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K17",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K18",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K19",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K20",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K21",
+      "einsatzmittel": [
+        "16070004-ow1-hlf20",
+        "16070004-ow1-tlf3000",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070043-ow1-lf10"
+      ]
+    },
+    {
+      "kennzahl": "K22",
+      "einsatzmittel": [
+        "16070004-ow1-hlf20",
+        "16070004-ow1-rw",
+        "16070029-ow1-hlf10"
+      ]
+    },
+    {
+      "kennzahl": "K23",
+      "einsatzmittel": [
+        "16070-gwl2"
+      ]
+    },
+    {
+      "kennzahl": "K24",
+      "einsatzmittel": [
+        "16070-anhsea",
+        "16070004-ow1-rw"
+      ]
+    },
+    {
+      "kennzahl": "K25",
+      "einsatzmittel": [
+        "16070004-ow1-dlak2312"
+      ]
+    },
+    {
+      "kennzahl": "K26",
+      "einsatzmittel": [
+        "16070-elw2",
+        "16070004-ow1-elw1"
+      ]
+    }
+  ]
+}

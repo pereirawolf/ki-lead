@@ -1,0 +1,599 @@
+{
+  "format": "Thessa-Kennzahlen",
+  "fassung": "0.2",
+  "erzeugt": "2026-10-14T10:00+02:00",
+  "datenstand": "2026-10-14T10:00+02:00",
+  "raum": {
+    "name": "Landkreis Hildburghausen",
+    "schluessel": "16069"
+  },
+  "fiktiv": true,
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Landkreis Hildburghausen, Bereitschaftsübersicht der Feuerwehren (FIKTIV)",
+      "titel": "Kräftelage der Feuerwehren aus 23 Einsatzmitteln, Thessa (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T10:00+02:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Einsatzmittel der Feuerwehren gesamt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 23,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 20,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K3",
+      "gegenstand": "eingeschränkt einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K4",
+      "gegenstand": "im Einsatz gebunden",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K5",
+      "gegenstand": "nicht einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K6",
+      "gegenstand": "im Einsatz gebunden: am Einsatzort",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K7",
+      "gegenstand": "frei verfügbar für überörtliche Hilfe (einsatzbereit, ohne Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 19,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K8",
+      "gegenstand": "einsatzbereit, vorgehalten für Katastrophenschutz (Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K9",
+      "gegenstand": "Einsatzmittel der ergänzenden Ausstattung des Bundes (Zivilschutz, § 13 ZSKG)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K10",
+      "gegenstand": "ergänzende Ausstattung des Bundes: einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K9"
+    },
+    {
+      "id": "K11",
+      "gegenstand": "laufende Einsätze im Gebiet (nach Einsatzort)",
+      "einheit": "Einsätze",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K12",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte werktags tagsüber (7 von 8 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 31,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K13",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte abends, nachts und am Wochenende (7 von 8 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 87,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K14",
+      "gegenstand": "Ausrückebereiche mit erfasster Risikoklasse (Mindestbedarf nach ThürFwOrgVO geprüft)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 8,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "Mindestbedarf Stufe 1 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K16",
+      "gegenstand": "Mindestbedarf Stufe 1 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Mindestbedarf Stufe 2 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Mindestbedarf Stufe 2 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K14"
+    },
+    {
+      "id": "K19",
+      "gegenstand": "frei verfügbar: Brandbekämpfung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 9,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K20",
+      "gegenstand": "frei verfügbar: Technische Hilfe",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K21",
+      "gegenstand": "frei verfügbar: Wasserförderung über lange Wegstrecken",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K22",
+      "gegenstand": "frei verfügbar: Stromerzeugung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K23",
+      "gegenstand": "frei verfügbar: Hubrettung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K24",
+      "gegenstand": "frei verfügbar: Führung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Hildburghausen",
+      "datenstand": "2026-10-14T10:00+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "einsatzmeldungen": [
+    {
+      "id": "EM-20261014-UNBF",
+      "einsatzart": "bereitstellung_ueberoertlich",
+      "stichwort": "Überörtliche Hilfe: Dieseltransport für Netzersatzanlagen",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-14T08:00+02:00",
+      "status": "laufend",
+      "im_gebiet": false,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 6,
+      "ueberoertlich": {
+        "von": {
+          "name": "Landkreis Hildburghausen",
+          "schluessel": "16069"
+        }
+      },
+      "bezug_lead": "DE-TH-20261014-P5VN"
+    }
+  ],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "einsatzmittel": [
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-rw",
+        "16069012-ow1-gwl1",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow1-lfkats",
+        "16069024-ow2-klfth",
+        "16069043-ow1-hlf10",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "einsatzmittel": [
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-rw",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow1-lfkats",
+        "16069024-ow2-klfth",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "einsatzmittel": [
+        "16069043-ow1-hlf10"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "einsatzmittel": [
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-gwl1"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K6",
+      "einsatzmittel": [
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-gwl1"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "einsatzmittel": [
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-rw",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow2-klfth",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "einsatzmittel": [
+        "16069024-ow1-lfkats"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "einsatzmittel": [
+        "16069024-ow1-lfkats"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "einsatzmittel": [
+        "16069024-ow1-lfkats"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "einsatzmittel": [],
+      "einsatzmeldungen": []
+    },
+    {
+      "kennzahl": "K12",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K13",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K14",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K15",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K16",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K17",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K18",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K19",
+      "einsatzmittel": [
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow2-klfth",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K20",
+      "einsatzmittel": [
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-rw",
+        "16069024-ow1-hlf10"
+      ]
+    },
+    {
+      "kennzahl": "K21",
+      "einsatzmittel": [
+        "16069-gwl2"
+      ]
+    },
+    {
+      "kennzahl": "K22",
+      "einsatzmittel": [
+        "16069-anhsea",
+        "16069012-ow1-rw"
+      ]
+    },
+    {
+      "kennzahl": "K23",
+      "einsatzmittel": [
+        "16069012-ow1-dlak2312"
+      ]
+    },
+    {
+      "kennzahl": "K24",
+      "einsatzmittel": [
+        "16069-elw2",
+        "16069012-ow1-elw1"
+      ]
+    }
+  ]
+}

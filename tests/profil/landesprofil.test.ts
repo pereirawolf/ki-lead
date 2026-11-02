@@ -146,3 +146,40 @@ describe("TP-2026-W44-56: Beispiellage Hochwasser an der Saale (FIKTIV)", () => 
     expect(dateiname(e.meldung!, p, false)).toMatch(/^.*Thüringen_Lagezentrum/);
   });
 });
+
+const ILKA = "beispiele/orkantief-ilka";
+const THESSA = "beispiele/orkantief-ilka-thessa/";
+const thessaBausteine = (p: { dateien: Record<string, string | undefined> }) =>
+  Object.keys(p.dateien)
+    .filter((d) => d.startsWith(THESSA) && d.endsWith(".json"))
+    .sort()
+    .map((d) => ({ name: d.slice(THESSA.length), text: p.dateien[d] ?? "", daten: JSON.parse(p.dateien[d] ?? "{}") }));
+/** Kennzahl eines Thessa-Bausteins nach Gegenstand (die Kennungen nach K5 hängen vom Gebiet ab) */
+const kennzahl = (b: any, anfang: string) => b.kennzahlen.find((k: any) => k.gegenstand.startsWith(anfang))!.wert as number;
+
+describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
+  it("fünf Bausteine der Fassung 0.2, als JSON-Material ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const bausteine = thessaBausteine(p);
+    expect(bausteine.map((b) => b.name)).toEqual([
+      "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Hildburghausen_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-30_FIKTIV.json",
+      "kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json",
+    ]);
+    for (const b of bausteine) {
+      expect(b.daten).toMatchObject({ format: "Thessa-Kennzahlen", fassung: "0.2", fiktiv: true });
+      const m = await dateiLesen(new File([b.text], b.name), p);
+      expect(m.eingang, b.name).toBeUndefined();
+      expect(m.meldung, b.name).toBeUndefined();
+      expect(m.hinweis ?? "", b.name).not.toMatch(/gekürzt/);
+      expect(JSON.parse(m.text!), b.name).toEqual(b.daten);
+      // Einsatzmeldungen ohne Ortslage und Hinweise
+      for (const em of b.daten.einsatzmeldungen) expect(Object.keys(em)).not.toEqual(expect.arrayContaining(["ortslage"]));
+      expect(b.text).not.toMatch(/"(ortslage|hinweis)"/);
+    }
+    expect(beispielDateien(p, ILKA).some((d) => d.name.includes("kennzahlen_"))).toBe(false);
+    expect(p.manifest.beispiele!.some((b) => b.ordner.includes("thessa"))).toBe(false);
+  });
+});
