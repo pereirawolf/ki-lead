@@ -171,6 +171,16 @@ export function vergleicheZeit(a, b, zone) {
   return da < db ? -1 : 1;
 }
 
+/**
+ * Reihenfolge im Zeitstrahl (GK-2026-W44-10, Kodierleitfaden Abschnitt 8.3, Regel 4): true, wenn a vor b einzuordnen
+ * ist. Wie vergleicheZeit(); zusätzlich steht ein Tag ohne Uhrzeit vor den Uhrzeiten desselben Tags in `zone`.
+ */
+export function stehtVor(a, b, zone) {
+  const c = vergleicheZeit(a, b, zone);
+  if (c !== null) return c === -1;
+  return typeof a === "string" && typeof b === "string" && IST_TAG.test(a) && !IST_TAG.test(b) && tagIn(b, zone) === a;
+}
+
 // ---------------------------------------------------------------------------------------------------------------
 // 3. Migration v1 → v2
 // ---------------------------------------------------------------------------------------------------------------
@@ -837,7 +847,7 @@ export function pruefeReferenzen(m) {
       if (nachT0(z.zeit)) fehler(`${pz}.zeit`, "Ereigniszeit nach dem Meldezeitpunkt (nur Eingetretenes bis t0)");
       if (z.erstmals_gemeldet && nachT0(z.erstmals_gemeldet)) fehler(`${pz}.erstmals_gemeldet`, "nach dem Meldezeitpunkt");
       if (z.erstmals_gemeldet && vergleicheZeit(z.erstmals_gemeldet, z.zeit, zone) === -1) fehler(`${pz}.erstmals_gemeldet`, "vor der Ereigniszeit");
-      if (vorher && vergleicheZeit(z.zeit, vorher, zone) === -1) hinweis(`${pz}.zeit`, "nicht chronologisch");
+      if (vorher && stehtVor(z.zeit, vorher, zone)) hinweis(`${pz}.zeit`, "nicht chronologisch");
       vorher = z.zeit;
     });
     if ((s.zeitstrahl || []).length > 12) hinweis(`${p}.zeitstrahl`, `${s.zeitstrahl.length} Zeilen; Richtwert 12`);

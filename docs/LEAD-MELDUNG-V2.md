@@ -113,7 +113,7 @@ Kennzahlen machen unzulässige Summen erkennbar (Einheit, Zeitbasis, Teilmenge, 
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung |
+| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung; bei einer Fortschreibung behalten die Quellen der eigenen Vormeldung ihre ID, neue Quellen erhalten die nächste freie (Kodierleitfaden Abschnitt 5) |
 | `kategorie` | ja | Buchstabe nach dem Kodierleitfaden des Profils (Rolle der Quelle für die Aussage); das Profil legt die zulässigen fest |
 | `herausgeber`, `titel` | ja | |
 | `veroeffentlicht` | – | Tag oder Zeitpunkt |
@@ -161,7 +161,7 @@ Weitere Module (etwa Funktionsmatrix des Profils „Lagebild Justiz“, Betreibe
 | Ebene | prüft | Werkzeug |
 |---|---|---|
 | 1 Schema | Struktur, Typen, Aufzählungen, Muster für IDs und Zeiten, Bedingungen (offene Achse ohne Stufe, Berichtigung mit Bezug, Zeitstrahl mit Beleg, Fehlanzeige ohne Sachverhalt), Vollständigkeit je Status | zusammengestelltes Profilschema; Ajv oder der eigene, eval-freie Prüfer der App (`src/kern/validierung.ts`, die Tests prüfen den Gleichlauf) |
-| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten als nicht entscheidbar), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `scripts/lead-meldung-v2.mjs`; in der App später neben der Schemaprüfung |
+| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten für Vergleiche mit t0 und `erstmals_gemeldet` als nicht entscheidbar, für die Reihenfolge steht der Tag vor den Uhrzeiten desselben Tags, Kodierleitfaden Abschnitt 8.3 Regel 4), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `scripts/lead-meldung-v2.mjs`; in der App später neben der Schemaprüfung |
 | 3 Mensch | Inhalt, Belegqualität, Kodierung, Freigabe | Abschlusscheck SOP-LEAD A.5 |
 
 ## 9. Profile auf v2 aufbauen
@@ -262,5 +262,6 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
 | 2.0 (Entwurf), Nachtrag | 01.11.2026 | Referenzprüfung nach Abschnitt 8 vervollständigt, Format und Schemata unverändert: „Datenstand nicht nach t0“ auch für `quellen[].datenstand` (GK-2026-W44-03); Zeitvergleiche nach Abschnitt 1 Nr. 4 mit absoluten Zeitpunkten und Kalendertagen in `zeitzone`, Tag gegen Zeitpunkt desselben Tags nicht entscheidbar und ohne Befund (GK-2026-W44-04) |
 | 2.0 (Entwurf) | 01.11.2026 | Erster Entwurf: Kernschema, Modul `lead-bevoelkerungsschutz` 1.0, Zusammenstellungen für Beispiel- und Landesprofil, Migration v1 → v2, Referenzprüfung, Beispiele |

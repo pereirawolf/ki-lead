@@ -482,6 +482,19 @@ describe("KP-2026-W44-15 bis -19: amtliche Einstiege, Primärquelle, Orientierun
     expect(rechercheBefunde("nur-material", false, { nutzung: { websuchen: 0, abrufe: 0 } }, undefined, { primaerquelle: false })).toEqual([]);
   });
 
+  // Soll: Prüfbedingung von primaerquelleBelegt() (keine Quelle der Kategorie A oder B, keine amtliche Fundstelle);
+  // der Text darf nicht mehr behaupten, als die Bedingung prüft (GK-2026-W44-14).
+  it("GK-2026-W44-14: KEINE_PRIMAERQUELLE bei einer W-Quelle; der Text nennt die Bedingung, nicht „nur Medien“", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("HE");
+    m.quellen = "[Q1] W – Institut (FIKTIV) (14.10.2026): Studie. Online abrufbar unter: https://institut.invalid/a [Zugriff: 14.10.2026]";
+    const leer = { fundstellen: [], abrufe: [], abrufFehler: [] };
+    expect(primaerquelleBelegt(m, p!, leer, amtlicheEinstiege(p!, ["b01"]))).toBe(false);
+    const [b] = rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: 2, abrufe: 0 }, suchen: ["a", "b"] }, undefined, { primaerquelle: false });
+    expect(b!.text).toContain("keine Quelle der Kategorie A oder B");
+    expect(b!.text).not.toMatch(/nur Medien/);
+  });
+
   it("W44-18: je abgerechnetem Suchaufruf ein Eintrag; gebündelte Teilabfragen stehen zusammen", () => {
     const t = [{ titel: "T", url: "https://beispiel.invalid/t" }];
     const z = "2026-10-26T21:00:00.000Z";

@@ -8,7 +8,10 @@ import { leseOrdner, profil, repoPfad } from "../support/dateien";
 import { pruefeGegenSchema } from "../../src/kern/validierung";
 import { migriere } from "../../src/kern/migration";
 import { quellenHinweise } from "../../src/kern/quellen";
-import { pflichtHinweise } from "../../src/kern/kennsaetze";
+import { MEHRERE_FRISTEN_HINWEIS, pflichtHinweise } from "../../src/kern/kennsaetze";
+import { zeitstrahlNachbearbeiten } from "../../src/pipeline/zeitstrahl";
+import { zeitstrahlSteuerung } from "../../src/pipeline/kontext";
+import type { Befund } from "../../src/kern/typen";
 
 const NAME = "lead-justiz";
 const dateien = leseOrdner(repoPfad("profile", NAME));
@@ -42,7 +45,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
 
   it("Manifest: Version, Lizenz und Herausgeber wie die übrigen Inhalte unter profile/", () => {
     const m = json("profil.json");
-    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.1.2", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
+    expect([m.version, m.lizenz, m.herausgeber]).toEqual(["0.2.0", "CC-BY-4.0", "Heiko Pereira Wolf (https://www.pereirawolf.de)"]);
     expect(m.variablen.land).toBe("Thüringen");
     expect(Object.keys(m.anweisungen).sort()).toEqual(["erfassung", "kurzfassung", "verdichtung"]);
   });
@@ -92,7 +95,7 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
   it("Arbeitsanweisungen ohne laufabhängige Platzhalter; Kurzfassung trägt die Regeln selbst", () => {
     for (const d of ["anweisung-erfassung.md", "anweisung-verdichtung.md", "anweisung-kurzfassung.md"]) {
       expect(dateien[d], d).not.toMatch(/\{\{(auftrag\.|jetzt)/);
-      expect(dateien[d], d).toMatch(/Fassung 0\.1\.0 vom 31\.10\.2026/);
+      expect(dateien[d], d).toMatch(/Fassung 0\.1\.1 vom 02\.11\.2026/);
     }
     expect(dateien["anweisung-erfassung.md"]).toContain("{{app.ausgabevertrag}}");
     const k = dateien["anweisung-kurzfassung.md"];
@@ -134,5 +137,36 @@ describe("Profil Lagebild Justiz (Erprobungsentwurf)", () => {
     expect(kopf).not.toMatch(/Profilversion\s+\d+\.\d+\.\d+/);
     // Negativfall: die frühere Kopfzeile wird zurückgewiesen
     expect("Fassung 0.1.0 vom 31.10.2026 · Profilversion 0.1.0 · Schemakennung").toMatch(/Profilversion\s+\d+\.\d+\.\d+/);
+  });
+
+  // Soll: Entscheidung des Herausgebers vom 01.11.2026 zu GK-2026-W44-08 (Option A): Das Justizprofil führt die Regeln
+  // „je Frist eine eigene Zeile“ und „stabile Quellennummern bei der Fortschreibung“ in seinem Teil A; die Texte der App
+  // nennen keine Abschnittsnummer, weil die Abschnitte je Profil verschieden sind (A.10.1).
+  it("GK-2026-W44-08: Teil A führt beide Regeln, die Texte der App nennen keine Abschnittsnummer", async () => {
+    const teilA = dateien["sop/A_Gemeinsame-Regeln.md"];
+    expect(teilA).toContain("Je Frist steht eine eigene Zeile „Handlungsrelevant bis:“");
+    expect(teilA).toContain("bei einer Fortschreibung jedoch mit stabilen Nummern");
+    const { profil: p } = await profil(NAME);
+    // Fortschreibung der eigenen Vormeldung, in der Q1 und Q2 die Plätze tauschen
+    const datei = beispiele.find((b) => b.includes("ERV-Stoerung"))!;
+    const vor = { ...json(datei), meldende_stelle: "Lagestelle Justiz (Beispiel)" };
+    const d = { ...json(datei), meldende_stelle: "Lagestelle Justiz (Beispiel)", meldezeitpunkt: "2026-10-13T15:30" };
+    const q = String(d.quellen).split("\n");
+    d.quellen = q.map((z: string) => (z.startsWith("[Q1]") ? z.replace("[Q1]", "[Q2]") : z.startsWith("[Q2]") ? z.replace("[Q2]", "[Q1]") : z)).join("\n");
+    const befunde: Befund[] = [];
+    const material = [{ id: "v", art: "meldung" as const, name: "v.json", groesse: 1, hash: "v", meldung: vor }];
+    zeitstrahlNachbearbeiten(d, p!, { material, jetzt: new Date("2026-10-13T13:31:00Z"), zufall: () => 0.3 }, befunde);
+    const konflikt = befunde.find((b) => b.code === "ZEITSTRAHL_QUELLE");
+    expect(konflikt).toBeDefined();
+    const steuerung = zeitstrahlSteuerung({ vormeldung: true, verdichtung: false }, {
+      felder: { zeitstrahl: "zeitstrahl" },
+      kennungenVormeldung: ["DE-TH-20261013-K7QM"],
+      naechsteZ: 5,
+      typBewertung: "Bewertung",
+      typBerichtigung: "Berichtigung",
+    } as any).join("\n");
+    for (const text of [MEHRERE_FRISTEN_HINWEIS, konflikt!.text, steuerung]) expect(text).not.toMatch(/\bA\.\d|Abschnitt \d/);
+    // Gegenprobe: der frühere Hinweis mit Abschnittsnummer wird erkannt
+    expect("je Frist eine eigene Zeile (A.4)").toMatch(/\bA\.\d|Abschnitt \d/);
   });
 });

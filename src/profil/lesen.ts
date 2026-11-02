@@ -157,7 +157,7 @@ export function arbeitsgrundlagen(profil: Profil): Lesedokument[] {
     out.push(
       dokument(m.kodierleitfaden!, "Kodierleitfaden", GRUPPE_ARBEIT, kl, "paket", {
         rolle: "kodierleitfaden",
-        zweck: "Lagenradar D1–D8, Beurteilung und Tendenz, Quellenkategorien",
+        zweck: "Kodierregeln, Bewertung, Quellenkategorien und Zeitstrahl des Profils",
       }),
     );
   return out;

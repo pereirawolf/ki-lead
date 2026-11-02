@@ -18,6 +18,7 @@ import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from
 import { absenderZeile, kurzeAdresse, rechercheZeile, zeitAnzeige } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import type { KiAktion } from "./zustand";
+import { verweisKlammer } from "../../kern/ui";
 
 export function Bestaetigung({
   rahmen,
@@ -179,7 +180,7 @@ export function Bestaetigung({
         <div className="kasten kasten-hinweis" role="status">
           <p>
             {vorschlag.sachverhalte.length} Sachverhalte bei einer Verdichtung: prüfen, ob mehrere Meldungen dasselbe Ereignis beschreiben und sich
-            zusammenführen lassen (SOP-LEAD A.7.1).
+            zusammenführen lassen{verweisKlammer(profil.ui, "zusammenhang")}.
           </p>
         </div>
       )}

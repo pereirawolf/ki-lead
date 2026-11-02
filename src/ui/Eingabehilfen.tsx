@@ -118,7 +118,7 @@ export function Eingabehilfen({ profil, segs, label, textId, hilfe, wert }: Prop
       springen(vorhanden.pos);
       return melden(
         v.kennsatz === "handlungsrelevant"
-          ? `„${prefix}“ steht schon im Text. Weitere Fristen in dieser Zeile ergänzen, die früheste zuerst.`
+          ? `„${prefix}“ steht schon im Text. Je Frist eine eigene Zeile: eine weitere Frist als neue Zeile „${prefix}“ darunter ergänzen, die früheste zuerst.`
           : prefix
             ? `„${prefix}“ steht schon im Text. Weitere Angaben in dieser Zeile ergänzen.`
             : `„${v.label}“ steht schon am Anfang. Bitte dort ergänzen.`,

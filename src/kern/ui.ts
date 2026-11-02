@@ -1,7 +1,7 @@
 // Zugriff auf die Darstellungsdatei: Feldeinstellungen, Bezeichnungen, Radare.
 
 import { generischerPfad, passtMuster, teilePfad, type Segment } from "./pfad";
-import type { FeldUi, RadarDef, UiKonfig } from "./typen";
+import type { FeldUi, LagebildVerweis, RadarDef, UiKonfig } from "./typen";
 
 export function feldUi(ui: UiKonfig, generisch: string): FeldUi {
   const direkt = ui.felder[generisch];
@@ -93,4 +93,13 @@ export function alsText(v: unknown): string {
   if (typeof v === "string") return v;
   if (typeof v === "number" || typeof v === "boolean") return String(v);
   return "";
+}
+
+/**
+ * Fundstelle des Profils für einen Prüfabschnitt als Klammerzusatz „ (…)“, z. B. „ (SOP-LEAD A.7.1, A.7.2)“ oder
+ * „ (Teil A, A.7, A.7.1)“; ohne Angabe im Profil leer. Angezeigte Texte nennen Abschnitte nur so (GK-2026-W44-13).
+ */
+export function verweisKlammer(ui: UiKonfig, art: LagebildVerweis): string {
+  const v = ui.lagebild?.verweise?.[art]?.trim();
+  return v ? ` (${v})` : "";
 }

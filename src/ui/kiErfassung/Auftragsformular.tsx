@@ -18,6 +18,7 @@ import { rechercheZeile } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import { groesse, type Eingabe, type KiAktion } from "./zustand";
 import { springeZu } from "../sprung";
+import { verweisKlammer } from "../../kern/ui";
 
 /** Kennung der Liste offener Voraussetzungen am Startknopf (aria-describedby) */
 export const START_OFFEN = "ki-start-offen";
@@ -79,7 +80,7 @@ export function Auftragsformular({
           )}
         </div>
       )}
-      <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstand.hilfe}>
+      <HilfeFeld lang label={TEXT_FELD.gegenstand.label} hilfe={TEXT_FELD.gegenstand.hilfe(profil.manifest.referenzraum)}>
         {(a) => (
           <textarea
             {...a}
@@ -219,7 +220,7 @@ export function Auftragsformular({
           <h3>Verdichtung</h3>
           <p>
             {eingaenge.length} Eingangsmeldung{eingaenge.length === 1 ? "" : "en"} anderer Stellen erkannt. Die KI verdichtet sie zu einer eigenen Meldung mit
-            möglichst wenigen Sachverhalten (SOP-LEAD A.7).
+            möglichst wenigen Sachverhalten{verweisKlammer(profil.ui, "zusammenhang")}.
           </p>
         </div>
       )}

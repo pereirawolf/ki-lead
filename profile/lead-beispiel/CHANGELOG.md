@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.36.1 – 02.11.2026
+
+Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` und `-c.json` (Gesamtkonsistenz nach PR #126, Commit `c5a3205`), freigegeben vom Herausgeber am 01.11.2026. Dritte Stelle: Präzisierung ohne neue Kodierregel; Schema und Darstellungsdatei unverändert.
+
+- **Kodierleitfaden 1.8.1 (GK-2026-W44-09, Option A):** Abschnitt 8.3, Regel 8, nennt, was „dieselbe Quelle“ ist; Kategorie, Zugriff, Datenstand und Zugangsvermerke darf die Fortschreibung nachführen.
+- **Arbeitsanweisung Erfassung 1.10.1:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.8.1“.
+- **SOP-LEAD-Sammelmappe 3.21.1:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend).
+- Die übrigen Befunde dieser Dateien betreffen Texte der App (0.6.23) und das Profil Lagebild Justiz; Darstellungsdatei, Schema, Kontakte, Quellenregister und Beispiele bleiben unverändert.
+
 ## 1.36.0 – 01.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json` (Gesamtkonsistenzprüfung KW 44, Commit `02a6bd5`), freigegeben vom Herausgeber am 01.11.2026: GK-2026-W44-01 (Option A), -02 (Option A), -05. Zweite Stelle, weil sich die Regeln zum Fristenkennsatz und zur Quellennummerierung bei Fortschreibungen ändern; Schema unverändert, bestehende Meldungen werden nicht umkodiert.

@@ -171,7 +171,9 @@ describe("LEAD-Eingabehilfen in der Meldungsmaske", () => {
     await klick(vorlage(label, "Kernaussage:"));
     await klick(vorlage(label, "Handlungsrelevant bis:"));
     expect(textfeld(label).value).toBe(sv.sofort.bewertung_text);
-    expect(bereich(label).querySelector("[role=status]")!.textContent).toMatch(/Weitere Fristen in dieser Zeile ergänzen, die früheste zuerst/);
+    expect(bereich(label).querySelector("[role=status]")!.textContent).toMatch(
+      /Je Frist eine eigene Zeile: eine weitere Frist als neue Zeile „Handlungsrelevant bis:“ darunter ergänzen, die früheste zuerst/,
+    );
 
     await klick(vorlage(label, "Neubewertung bei:"));
     expect(textfeld(label).value).toBe(

@@ -16,9 +16,9 @@ afterEach(async () => {
   vi.resetModules();
 });
 
-async function lagebildZeigen() {
+async function lagebildZeigen(name = "lead-beispiel") {
   const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
-  const { profil: p } = await profil("lead-beispiel");
+  const { profil: p } = await profil(name);
   await einhaengen(React.createElement(LagebildAnsicht, { profil: p!, uebergeben: () => {}, oeffnen: () => {} }));
   return { p: p!, schluessel: "lagebild:" + p!.manifest.id };
 }
@@ -167,6 +167,20 @@ describe("UX-2026-W44-09, -10, -13: Sachverhalte kompakt mit Filter, Kennzahlen 
     await klick(knopf("Übersicht"));
     await klick(knopf(/Tendenz: Verschärfung/));
     expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(1);
+  });
+
+  // Soll: GK-2026-W44-15 – der Reiter „Lagenradar“ erscheint nur, wenn das Profil ein Radar definiert (Justiz: keins).
+  it("GK-2026-W44-15: ohne Radar im Profil kein Reiter „Lagenradar“, mit Radar weiterhin", async () => {
+    await lagebildZeigen("lead-justiz");
+    await beispielLaden();
+    const reiter = () => [...document.querySelectorAll(".lb-reiter button")].map((b) => b.textContent?.trim());
+    await bisWahr(() => expect(reiter().length).toBeGreaterThan(0));
+    expect(reiter().some((t) => t?.startsWith("Redaktionscheck"))).toBe(true);
+    expect(reiter()).not.toContain("Lagenradar");
+    await aushaengen();
+    await lagebildZeigen();
+    await beispielLaden();
+    await bisWahr(() => expect(reiter()).toContain("Lagenradar"));
   });
 
   it("Lagenradar: Achsen als Liste aus Bezeichnung und Stufe", async () => {

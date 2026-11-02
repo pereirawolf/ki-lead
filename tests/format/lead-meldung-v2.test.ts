@@ -293,6 +293,20 @@ describe("LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04)",
         .map((b) => b.text),
     ).toEqual(["Ereigniszeit nach dem Meldezeitpunkt (nur Eingetretenes bis t0)"]);
   });
+  // Soll: Kodierleitfaden Abschnitt 8.3, Regel 4 – ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags (wie in v1,
+  // Hinweis ZEITSTRAHL_REIHENFOLGE); „nicht entscheidbar“ gilt nur für Zeitvergleiche, nicht für die Reihenfolge.
+  it("GK-2026-W44-10: Zeitpunkt, danach der Tag desselben Tags, ergibt einen Chronologiehinweis; umgekehrt nicht", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-13T18:00+02:00"), zeile("Z2", "2026-10-13")];
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad.includes("zeitstrahl"))
+        .map((b) => [b.stufe, b.pfad, b.text]),
+    ).toEqual([["hinweis", "sachverhalte[1].zeitstrahl[1].zeit", "nicht chronologisch"]]);
+    const n = kopie(BEISPIEL_TH);
+    n.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-13"), zeile("Z2", "2026-10-13T18:00+02:00")];
+    expect(befunde(n).filter((b) => b.pfad.includes("zeitstrahl"))).toEqual([]);
+  });
 });
 
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
