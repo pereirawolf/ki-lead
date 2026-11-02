@@ -3,7 +3,7 @@
   "id": "lead.beispiel.thueringen",
   "name": "LEAD-Beispiel – Land Thüringen (fiktive Inhalte)",
   "beschreibung": "Beispielprofil auf Landesebene: Eigenmeldung eines Lagezentrums des Landes, das die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammenführt. Fiktives Beispiel des Herausgebers mit realen Gebietsnamen; keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden und ohne landesrechtliche Bezüge. Arbeitsweise und SOP-LEAD-Sammelmappe wie im Beispielprofil der Koordinierungsstelle.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Land",
@@ -81,6 +81,11 @@
       "titel": "Hochwasser an der Saale (FIKTIV)",
       "ordner": "beispiele/hochwasser-saale",
       "hinweis": "Erfundene Lage mit drei Kreismeldungen und der verdichteten Meldung des Landes; keine Meldung stammt von den genannten Stellen."
+    },
+    {
+      "titel": "Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV)",
+      "ordner": "beispiele/orkantief-ilka",
+      "hinweis": "Erfundene Sturmlage mit drei Kreismeldungen (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und der verdichteten Meldung des Landes; die Zahlen zur Kräftelage stammen aus fiktiven Kennzahlen-Bausteinen von Thessa. Keine Meldung stammt von den genannten Stellen."
     }
   ],
   "modelle": {

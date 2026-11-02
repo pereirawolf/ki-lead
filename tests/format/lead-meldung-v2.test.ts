@@ -380,6 +380,9 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
     ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/hochwasser-saale"))
       .filter((d) => d.endsWith(".json"))
       .map((d) => [`profile/lead-thueringen/beispiele/hochwasser-saale/${d}`, "land"]),
+    ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/orkantief-ilka"))
+      .filter((d) => d.endsWith(".json"))
+      .map((d) => [`profile/lead-thueringen/beispiele/orkantief-ilka/${d}`, "land"]),
     ["evaluation/material/ilka-musterfassung.json", "bund"],
     ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
       .filter((d) => d.isDirectory())

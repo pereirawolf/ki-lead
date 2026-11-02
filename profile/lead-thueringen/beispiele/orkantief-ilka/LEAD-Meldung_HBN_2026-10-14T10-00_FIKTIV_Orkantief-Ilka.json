@@ -1,0 +1,71 @@
+{
+  "schema": "LEAD-Meldung-Land-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell",
+    "werkzeug": "Fiktiver Datensatz Orkantief „Ilka“ für den KI-LEAD-Demonstrator (Kreisperspektive) mit der Kräftelage der Feuerwehren aus einem Kennzahlen-Baustein von Thessa, von Hand verfasst",
+    "sop": [
+      "SOP-LEAD B01 Unwetter / Sturm 2.2.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden 1.8.1",
+    "erstellt": "2026-11-03T00:30"
+  },
+  "kreis": "Landkreis Hildburghausen",
+  "meldende_stelle": "Landratsamt Hildburghausen, Brand- und Katastrophenschutz",
+  "meldezeitpunkt": "2026-10-14T10:00",
+  "meldezeitraum": {
+    "von": "2026-10-13",
+    "bis": "2026-10-14"
+  },
+  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Thüringen, Orkantief „Ilka“, Ausgabe 13:00 mit Folgeprognose bis 16.10. (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Landratsamt Hildburghausen, Brand- und Katastrophenschutz (14.10.2026): Lagebericht Sturm 13./14.10. (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q3] A – Landkreis Hildburghausen, Bereitschaftsübersicht der Feuerwehren (14.10.2026): Kräftelage der Feuerwehren aus 23 Einsatzmitteln, Thessa (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 10:00\n[Q4] B – Erfurter Bahn / DB InfraGO (14.10.2026): Streckeninformation Südthüringen und Schwarzatal (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00",
+  "zeitstrahl": "[Z1] 2026-10-13T13:00 · DE-TH-HBN-20261014-3FMX · Warnung – DWD-Warnlagebericht vor Orkanböen im Thüringer Wald mit Folgeprognose bis 16.10. [Q1] · aufgenommen 2026-10-14T10:00\n[Z2] 2026-10-14T05:39 · DE-TH-HBN-20261014-3FMX · Wiederherstellung – Letzte Sturmeinsätze der Feuerwehren abgeschlossen, Gefahrenabwehr beendet [Q2] · aufgenommen 2026-10-14T10:00\n[Z3] 2026-10-14T08:00 · DE-TH-HBN-20261014-3FMX · Maßnahme – Überörtliche Hilfe im Landkreis Sonneberg mit Dieseltransport für Netzersatzanlagen beginnt [Q3] · aufgenommen 2026-10-14T10:00",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-HBN-20261014-3FMX",
+      "eintritt": "2026-10-13",
+      "art": [
+        "Unwetter / Sturm"
+      ],
+      "ort": "Landkreis Hildburghausen; Stadt Schleusingen, Stadt Eisfeld und Kammlagen am Rennsteig",
+      "bezeichnung": "Sturmschäden abgearbeitet, Bahnstrecke Eisfeld–Sonneberg gesperrt; Feuerwehr leistet überörtliche Hilfe im Landkreis Sonneberg",
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Orkantief „Ilka“, Kreisperspektive). Kernaussage: Die Sturmschäden im Landkreis sind abgearbeitet; die Feuerwehren haben Kräfte frei und unterstützen den Landkreis Sonneberg beim Stromausfall. Das Sturmfeld zog am Abend des 13.10. über den Landkreis [Q1]. Die Feuerwehren beseitigten in der Nacht umgestürzte Bäume, unter anderem an einem Bahnübergang und auf Straßen in Schleusingen; die letzten Sturmeinsätze endeten um 05:39 Uhr [Q2]. Um 10:00 Uhr läuft im Kreisgebiet kein Einsatz [Q3]. Verletzte sind nicht gemeldet (Fehlanzeige im Lagebericht) [Q2]. Die Bahnstrecke Eisfeld–Sonneberg bleibt bis voraussichtlich 18.10. gesperrt [Q4].",
+        "risiken_auswirkungen": "Belegt: Mit der gesperrten Bahnstrecke fehlt die Verbindung nach Sonneberg; Ersatzverkehr läuft eingeschränkt [Q4]. Szenario: Für die Nacht zum 15.10. erwartet der DWD Frost in den Kammlagen [Q1]; weitere Sturmböen sind nicht vorhergesagt [Q1].",
+        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Seit 08:00 Uhr leistet eine Feuerwehr des Landkreises mit zwei Fahrzeugen überörtliche Hilfe im Landkreis Sonneberg (Dieseltransport für Netzersatzanlagen nach Neuhaus am Rennweg), angefordert vom Krisenstab Sonneberg [Q3]. Von 23 Einsatzmitteln der Feuerwehren sind diese zwei gebunden und 19 frei für überörtliche Hilfe verfügbar [Q3]. Prüf- und Abstimmungsbedarf: (1) Landkreis: Bereitschaft für weitere überörtliche Hilfe nach Sonneberg mit dem Landkreis Sonneberg und dem Land abstimmen. Unterstützungsbedarf für den eigenen Landkreis besteht nicht.",
+        "abhaengigkeiten_interdependenzen": "Belegte Kopplung: Bahnstrecke Eisfeld–Sonneberg gesperrt → eingeschränkter Ersatzverkehr [Q4]. Kopplungen an weitere kritische Infrastrukturen im Landkreis sind nicht belegt [Q2]. Die überörtliche Hilfe bindet zwei Fahrzeuge; die Reserve im Landkreis bleibt groß [Q3]."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "Entspannung",
+        "bewertung_text": "Kernaussage: Der Sturm hat im Landkreis nur Verkehrsschäden hinterlassen, die Gefahrenabwehr ist beendet; der Landkreis kann weitere überörtliche Hilfe leisten.\nReferenzraum: Landkreis Hildburghausen. t0: 14.10.2026, 10:00 Uhr.\nBeurteilung „geringfügig“: keine Versorgungsfunktion im Landkreis eingeschränkt außer der Bahnverbindung mit Ersatzverkehr.\nTendenz „Entspannung“ (Landkreis Hildburghausen, 13.10. abends bis 14.10., 10:00): Alle Sturmeinsätze sind seit 05:39 Uhr abgeschlossen [Q2, Q3].\nD1 = 2, Schäden in mehreren Gemeinden [Q2]. D2 = 0, Fehlanzeige Verletzter im Lagebericht [Q2] (Bedingung b der Nullregel). D3 = 1, die Gemeinden haben die Schäden mit ihren Feuerwehren beseitigt [Q2]. D4 = 1, eingesetzt waren örtliche Kräfte [Q2]. D5 = 0, Zielzustand Gefahrenabwehr beendet ist erreicht [Q2]; die Wiederinbetriebnahme der Bahnstrecke ist ein eigener Zielzustand bis voraussichtlich 18.10. [Q4]. D6 = 1, Bahnstrecke mit eingeschränktem Ersatzverkehr [Q4]. D7 = 0, Angaben aktuell und konsistent. D8 = 1, nach Sturmende nur geringe Veränderungen.\nNeubewertung bei: Anforderung weiterer überörtlicher Hilfe; Verzögerung der Bahnwiederinbetriebnahme über 18.10. hinaus",
+        "lagenradar": {
+          "d1": 2,
+          "d2": 0,
+          "d3": 1,
+          "d4": 1,
+          "d5": 0,
+          "d6": 1,
+          "d7": 0,
+          "d8": 1
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "Sachbearbeitung Brand- und Katastrophenschutz Landratsamt Hildburghausen (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    },
+    "freigabe": {
+      "name": "Leitung Brand- und Katastrophenschutz Landratsamt Hildburghausen (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    },
+    "versand": {
+      "name": "Brand- und Katastrophenschutz Landratsamt Hildburghausen (FIKTIV)",
+      "datum": "2026-10-14",
+      "hz": "FIKTIV"
+    }
+  }
+}

@@ -909,3 +909,14 @@ Angepasst ohne Änderung des Solls: `tests/profil/lead-justiz.test.ts` (Profilve
 | Profilansicht ohne „Lagenradar D1–D8“; Reiter „Lagenradar“ nur mit Radar im Profil | … › GK-2026-W44-15: … | `tests/profil/profilneutral.test.ts`, `tests/ui/lagebild.test.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/ui/ki-erfassung-felder.test.ts` (Hilfetext mit Referenzraum, neutrale Platzhalter nach GK-2026-W44-12), `tests/profil/lead-justiz.test.ts` (Profilversion 0.2.0, Arbeitsanweisungen 0.1.1), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.8.1).
+
+## Landesprofil 1.2.0: Beispiellage Orkantief „Ilka“ (Nachtrag zu 0.6.23, Befunddatei `ki-lead-befund_konsistenz_2026-W45.json`, Freigabe des Herausgebers vom 02.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Vier Meldungen schemakonform, im Lagebild ohne Lesefehler, Meldestatus für drei Kreise, Kennungen ohne Befund, FIKTIV | KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV) › vier schemakonforme Meldungen … | `tests/profil/landesprofil.test.ts` |
+| Landesmeldung mit Kennungen, Meldezeitpunkt und Kernzahlen der Thüringer Meldung im Beispielprofil; Bezug auf alle Kreis-Sachverhalte; abweichende Bewertung Kreis/Land | KP-2026-W45-01: … › Landesmeldung: Kennungen und Kernzahlen … | `tests/profil/landesprofil.test.ts` |
+| Zahlen zur Kräftelage und Datenstand der Quelle wie in den Thessa-Bausteinen; Landeszahl als Ausschnitt gekennzeichnet | KP-2026-W45-01: … › Kräftelage: Zahlen und Datenstand … | `tests/profil/landesprofil.test.ts` |
+| Verdichtung der drei Kreismeldungen mit Attrappe: Eingänge erkannt, t0 aus dem jüngsten Eingang, Ergebnis schemakonform, Eingänge nachgewiesen | KP-2026-W45-01: … › verdichtet die drei Kreismeldungen (Attrappe) … | `tests/profil/landesprofil.test.ts` |
+| Fünf Thessa-Bausteine der Fassung 0.2 als JSON-Material ohne Eingangsrolle und ungekürzt; ohne Ortslage und Hinweise; nicht im Lagebild-Beispiel | KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner › … | `tests/profil/landesprofil.test.ts` |
+| Die Kreis- und Landesmeldungen der neuen Beispiellage lassen sich nach v2 migrieren | LEAD-Meldung-v2 › …: migriert schemagültig und ohne Fehler der Referenzprüfung | `tests/format/lead-meldung-v2.test.ts` |
