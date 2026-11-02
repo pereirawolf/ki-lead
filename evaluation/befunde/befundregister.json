@@ -2593,6 +2593,56 @@
       "kurz": "Kennzahlen-Bausteine aus Thessa unverändert im Begleitordner des Landesprofils, nicht im Lagebild geladen; Test der Annahme als JSON-Material.",
       "status": "umgesetzt",
       "pr": 131
+    },
+    {
+      "id": "UP-2026-W45-01",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion dateiLesen, JSON ohne Meldung (Z. 228)"
+        },
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Typ MaterialArt (Z. 12)"
+        },
+        {
+          "datei": "src/kern/schema.ts",
+          "stelle": "Funktion aufloesen (Z. 10)"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 4, „Was an den Anbieter geht“ (Z. 62)"
+        }
+      ],
+      "kurz": "Thessa-Kennzahlen-Baustein als eigene Materialart: eingebettetes, gebündeltes Schema mit Herkunft und Prüfsumme, Anzeige im Auftrag, an die KI ohne herleitung, Quellenzeile, Regel im Steuerungsblock und Abgleich der Zahlen im Text (Übergangsregel h).",
+      "status": "umgesetzt",
+      "pr": 132
+    },
+    {
+      "id": "UP-2026-W45-07",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 8, Offen für Teil C"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl.raum"
+        }
+      ],
+      "kurz": "Rückmeldeliste an Thessa für Fassung 0.3 (stabile Kennzahl-Schlüssel, Meldequote als Feld, Raum mit Schlüssel, Abdeckung, Schemata je Fassung, Baustein-Kennung, README, Neupinnen) an den Herausgeber übergeben; keine Änderung in KI-LEAD.",
+      "status": "umgesetzt",
+      "pr": 132
     }
   ]
 }
