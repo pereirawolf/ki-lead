@@ -2,6 +2,7 @@
 // abgeschnittenen Antwort, Schemaprüfung und höchstens zwei Reparaturen. Seit 0.6.2 eigene Datei (TP-2026-W44-06),
 // vorher in stufen.ts.
 
+import { bausteinAbgleich, type AbgleichBaustein } from "../kern/bausteinabgleich";
 import { addiereNutzung, type LlmAntwort, type SystemTeil } from "../anbieter/typen";
 import { jetztLokal } from "../kern/ausgabe";
 import { pflichtHinweise } from "../kern/kennsaetze";
@@ -305,6 +306,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Laufabhängiger Schluss: Redaktionsvermerke und zuletzt der Steuerungsblock mit Auftrag, Zeit und Recherchemodus,
   // damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
+  const bausteine = bausteineAus(k.material);
   const zv = zeitstrahlVorgaben(k.material, p);
   const steuerung = steuerungsBlock({
     auftrag,
@@ -321,6 +323,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
     kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
     absender: absenderFuer(k.material, p),
+    ...(bausteine.length ? { bausteine: bausteine.length } : {}),
     ...(p.ui.rollen.sv_kennung || p.ui.rollen.zeitstrahl
       ? {
           zeitstrahl: {
@@ -509,6 +512,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       ...zeitstrahlBefunde,
       ...zeitstrahlHinweise(meldung, p.ui).filter((b) => !zeitstrahlBefunde.some((x) => x.code === b.code && x.text === b.text)),
     );
+  // Kennzahlen-Bausteine (seit 0.6.24, UP-2026-W45-01, Übergangsregel h): Zahlen im Text gegen den Baustein
+  if (meldung) befunde.push(...bausteinAbgleich(meldung, p.ui, bausteineAus(k.material)));
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
   if (meldung && korrekturen.length)
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });
@@ -598,4 +603,11 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   k.lauf.aktualisiert = new Date().toISOString();
   await k.aktualisiert(k.lauf);
   return { meldung, kurzantwort, schemaBefunde, befunde };
+}
+
+/** Kennzahlen-Bausteine des Materials für Abgleich und Steuerung */
+function bausteineAus(material: Material[]): AbgleichBaustein[] {
+  return material.flatMap((m) =>
+    m.art === "kennzahlen-baustein" && m.baustein ? [{ name: m.name, info: m.baustein.info, daten: m.baustein.daten as Record<string, any> }] : [],
+  );
 }

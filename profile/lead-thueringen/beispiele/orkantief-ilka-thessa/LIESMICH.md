@@ -15,7 +15,7 @@ Ein Baustein enthält eine Quellenangabe und Kennzahlen im Format von LEAD-Meldu
 Verwendung, wie im README von Thessa unter „Übergabe an KI-LEAD“ beschrieben:
 
 1. Profil „LEAD-Beispiel – Land Thüringen (fiktive Inhalte)“ verwenden.
-2. „KI-Erfassung“ → „Auftrag und Material“: Gegenstand und Stichtag 14.10.2026 eintragen, einen Kreis-Baustein mit „Dateien hinzufügen“ aufnehmen. Er kommt als JSON-Material an.
+2. „KI-Erfassung“ → „Auftrag und Material“: Gegenstand und Stichtag 14.10.2026 eintragen, einen Kreis-Baustein mit „Dateien hinzufügen“ aufnehmen. Er erscheint seit App 0.6.24 als „Kennzahlen-Baustein“ mit Raum, Datenstand und Zahl der Kennzahlen und Einsatzmeldungen; an die KI geht er ohne Herleitung, nach dem Lauf gleicht die App die Zahlen im Text mit dem Baustein ab.
 3. „Besondere Prüffrage (optional)“, Vorschlag: „Kennzahlen aus der Thessa-Datei mit Gegenstand, Einheit, Art und Datenstand unverändert übernehmen und die Datei als Quelle angeben. Kennzahlen verschiedener Einheiten nicht addieren. Einsatzmeldungen über ihren LEAD-Bezug dem Sachverhalt zuordnen; Einsatzmittel zählen am Standort, Einsätze am Einsatzort.“
 4. Für die Verdichtung im „Lagebild“ die Beispiellage laden, „An KI-Verdichtung übergeben“ und den Baustein des Landes ergänzen. Die Zahlen des Ausschnitts nicht als landesweite Zahlen ausgeben.
 

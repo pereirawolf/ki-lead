@@ -277,7 +277,7 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
 });
 
 describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
-  it("fünf Bausteine der Fassung 0.2, als JSON-Material ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
+  it("fünf Bausteine der Fassung 0.2, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
     const p = (await profil("lead-thueringen")).profil!;
     const bausteine = thessaBausteine(p);
     expect(bausteine.map((b) => b.name)).toEqual([
@@ -293,7 +293,10 @@ describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () 
       expect(m.eingang, b.name).toBeUndefined();
       expect(m.meldung, b.name).toBeUndefined();
       expect(m.hinweis ?? "", b.name).not.toMatch(/gekürzt/);
-      expect(JSON.parse(m.text!), b.name).toEqual(b.daten);
+      // seit 0.6.24 (UP-2026-W45-01) eigene Materialart; an die KI ohne herleitung
+      expect(m.art, b.name).toBe("kennzahlen-baustein");
+      const { herleitung: _h, ...ohneHerleitung } = b.daten;
+      expect(JSON.parse(m.text!), b.name).toEqual(ohneHerleitung);
       // Einsatzmeldungen ohne Ortslage und Hinweise
       for (const em of b.daten.einsatzmeldungen) expect(Object.keys(em)).not.toEqual(expect.arrayContaining(["ortslage"]));
       expect(b.text).not.toMatch(/"(ortslage|hinweis)"/);

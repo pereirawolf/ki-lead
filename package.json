@@ -22,6 +22,7 @@
     "pruefe-profile": "vitest run tests/profil",
     "sop:lesefassung": "node scripts/sop-lesefassung.mjs",
     "profil:land": "node scripts/landesprofil.mjs",
+    "fremdschemata": "node scripts/fremdschemata.mjs",
     "meldung:v2": "node scripts/lead-meldung-v2.mjs",
     "vergleich:mehrfach": "node scripts/vergleich-mehrfach.mjs",
     "vergleichslauf:auswerten": "node scripts/vergleichslauf-auswerten.mjs",
