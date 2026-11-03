@@ -113,7 +113,7 @@ Stand nach der Verordnung (EU) 2026/1744, veröffentlicht im Amtsblatt der EU am
 | S3 | Reparatur von Schemafehlern, ohne Recherche | claude-haiku-5-5, niedrig (seit 0.5.15; vorher Sonnet) | gpt-6.1-sol, niedrig | mistral-small-2603, niedrig |
 | Management Summary | Kurzfassung ohne Recherche | claude-sonnet-5-5, mittel | gpt-6.1-sol, mittel | mistral-medium-3-5, hoch |
 
-Mistral kennt nur „niedrig“ (ohne Nachdenken) und „hoch“ (mit Nachdenken); seit 0.5.10 stehen die Mistral-Stufen deshalb auf „hoch“. Gewählt wurden die Standard-Profile OpenAI und Mistral nach dem Vergleichslauf Ilka vom 25.10.2026, die Reparatur nach dem Prüffall Reparatur, die Management Summary nach ihrem Prüffall (Abschnitt 9.3). Die Erfassung ist in keinem Profil gemessen; sie folgt Modell und Stufe der Verdichtung (`src/pipeline/einstellungen.ts`). Mistral über den EU-Endpunkt (Vorgabe) hat keine Websuche; Orientierungssuche und Recherche in S2 entfallen dann.
+Mistral Small und Medium kennen nur „niedrig“ (ohne Nachdenken) und „hoch“ (mit Nachdenken), Large 4 seit App 0.6.17 auch „mittel“ (am globalen Endpunkt immer „hoch“); seit 0.5.10 stehen die Mistral-Stufen der Standard-Profile auf „hoch“. Gewählt wurden die Standard-Profile OpenAI und Mistral nach dem Vergleichslauf Ilka vom 25.10.2026, die Reparatur nach dem Prüffall Reparatur, die Management Summary nach ihrem Prüffall (Abschnitt 9.3). Die Erfassung ist in keinem Profil gemessen; sie folgt Modell und Stufe der Verdichtung (`src/pipeline/einstellungen.ts`). Mistral über den EU-Endpunkt (Vorgabe) hat keine Websuche; Orientierungssuche und Recherche in S2 entfallen dann.
 
 Weitere Modellprofile, keine Vorgabe der App:
 
