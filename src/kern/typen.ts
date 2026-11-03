@@ -118,7 +118,7 @@ export interface Rollen {
   status_entwurf: string;
   status_final: string;
   /**
-   * Status einer freigegebenen Fassung (seit 0.7.1, UP-2026-W45-03; LEAD-Meldung-v2: „freigegeben“). Die finale
+   * Status einer freigegebenen Fassung (seit 0.7.3, UP-2026-W45-03; LEAD-Meldung-v2: „freigegeben“). Die finale
    * Ausgabe trägt ihn, wenn im Freigabeblock „freigegeben“ Name und Zeitpunkt stehen; sonst gilt status_final.
    */
   status_freigegeben?: string;

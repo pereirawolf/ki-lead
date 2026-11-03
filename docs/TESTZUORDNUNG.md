@@ -945,7 +945,36 @@ Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahle
 
 Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `scripts/lead-meldung-v2.mjs`, das die Funktionen aus `src/kern/meldung-v2.js` durchreicht).
 
-## LEAD-Meldung-v2 in Maske und Ausgabe (0.7.1, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, Freigabe des Herausgebers vom 03.11.2026)
+## Dokumentationsprüfung KW 45 (0.7.1, Befunddatei `ki-lead-befund_dokumentation_2026-W45.json`, DK-2026-W45-01, -04, -07, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Management Summary ohne Bestätigung gesperrt, mit `aria-describedby` auf die Bestätigung; ohne Haken keine Anfrage, mit Haken genau eine | DK-2026-W45-01: Management Summary nur nach Bestätigung zur Weitergabe › … | `tests/ui/kurzfassung-lauf.test.ts` |
+| Systemaufträge von S1, S2 und Orientierungssuche nennen `MATERIAL_DATENREGEL`; Stichworte der Orientierungssuche in `<stichworte>` mit neutralisierten Schließtags | DK-2026-W45-04: Orientierungssuche mit Datenhülle und Datenregel wie S1 und S2 › … | `tests/pipeline/orientierung-datenhuelle.test.ts` (neu) |
+| axe-core prüft alle acht Bereiche der Einstellungen einschließlich „Testläufe“ | TP-2026-W44-22: axe-core je Bereich … › Einstellungen: alle Bereiche | `tests/browser/barrierefreiheit.spec.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/kurzfassung-lauf.test.ts` (Laufanzeige und KI-Chip: zuerst die Bestätigung setzen).
+
+## Fallreihe unter „Testläufe“ (0.7.2, Befunddatei `ki-lead-befund_technik_2026-W44-A8.json`, TP-2026-W44-62 bis -67, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Alle mitgelieferten Fälle schemakonform; zulässig bis auf Management Summary und Reparatur (mit Grund); Ilka als Verdichtung mit Beispielprofil | TP-2026-W44-63: alle mitgelieferten Fälle sind schemakonform … | `tests/forschung/fallreihe.test.ts` |
+| Drei Prüfstein-Fälle mit Websuche, ohne Material und URLs, t0, Referenzraum und Ereignisart wie in der Begleitnotiz | TP-2026-W44-63: drei Prüfstein-Fälle mit Websuche … | `tests/forschung/fallreihe.test.ts` |
+| Feld „profil“ wählt das Profil; unbekanntes Profil, fehlendes oder externes Material sperren mit Grund; Feld ist eine Manifest-ID und verweist auf ein mitgeliefertes Profil | TP-2026-W44-63: Feld „profil“ … | `tests/forschung/fallreihe.test.ts`, `tests/evaluation/schemata.test.ts` |
+| Fallpaket: Fälle und Material auch unter einem Oberordner, SHA-256 der ZIP-Datei, Dubletten und Schemafehler mit Hinweis; leeres und beschädigtes Paket | TP-2026-W44-63: liest Fälle und Material …; ein Paket ohne Fall … | `tests/forschung/fallreihe.test.ts` |
+| Plan: Vorbelegung von Fällen, Varianten, Wiederholungen, Recherche und Deckel, Prüfsumme der Plandatei; fehlendes oder abweichendes Paket sperrt; Ablehnung von Nicht-Plänen, Schemafehlern, festen Meldungen, Varianten ohne Modell und doppelten Kennungen; Beispielplan ladbar | TP-2026-W44-64: … | `tests/forschung/fallreihe.test.ts` |
+| Planschema: `ki_profil`, `mistral_endpunkt`, `recherche`, `fallpaket` mit SHA-256; Pläne mit Fallpaket dürfen Fälle nennen, die noch nicht eingecheckt sind | TP-2026-W44-64: Plan für die Fallreihe …; LS-2026-W43-03: … | `tests/evaluation/schemata.test.ts` |
+| Einstellungen je Variante: Standardprofil, Endpunkt und Recherchetiefe; S1/S2 der Variante gehen vor; Matrix-Varianten in fester Reihenfolge | TP-2026-W44-64: Einstellungen je Variante … | `tests/forschung/fallreihe.test.ts` |
+| Reihenfolge je Fall alle Varianten; Obergrenze aus Schätzung, teuerstem Lauf oder Vorbehalt; Bremse hält vor dem Lauf, der den Deckel überschreiten würde; Abbruch | TP-2026-W44-65: … | `tests/forschung/fallreihe.test.ts` |
+| Lauf: Auftrag und Material wie im Fall, Rolle „eingang“ gesetzt, S2 Verdichtung bzw. Recherche und Entwurf, Modelle der Variante; automatische Prüfungen mit Sollwerten aus dem Entwurf; Reihendatei und ZIP-Inhalt mit Übersicht und Prüfliste | TP-2026-W44-62: Auftrag und Material wie im Fall … | `tests/forschung/fallreihe.test.ts` |
+| Bewertungsvorlage erst nach dem Ausfüllen schemakonform (Ajv), nicht verblindet | TP-2026-W44-66: Bewertungsvorlage … | `tests/forschung/fallreihe.test.ts` |
+| Oberfläche: Gruppen, Prüfsteine mit Websuche, gesperrter Reparaturfall, Start erst mit Fall und Anbieter, fehlender Schlüssel; Paket-Import mit SHA-256, Ablage und Löschen, Paket nach dem Neuladen; Plan mit Vorbelegung, Prüfsumme und Abweichung; Sperre bei fehlendem Paket; Start, Kostenbremse, ZIP und Archiveintrag | TP-2026-W44-62 bis -66: … | `tests/ui/fallreihe.test.ts` |
+| Im Browser: Paket und Plan aus Dateien, Prüfsummen, Vorbelegung, Bremse vor dem ersten Lauf ohne Anfrage, Start mit einem Klick, ZIP-Inhalt, nur die simulierte API, Archiv | Fallreihe: Fallpaket und Plan laden, … | `tests/browser/testlaeufe.spec.ts` |
+
+Angepasst: `tests/ui/einstellungen.test.ts` (Überschriften des Bereichs „Testläufe“ mit „Fallreihe“, nachgeladen), `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (alle Fälle, ihr Material und `plan.schema.json` sind in die App eingebettet und lösen die Kern-Browsertests aus).
+
+## LEAD-Meldung-v2 in Maske und Ausgabe (0.7.3, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, Freigabe des Herausgebers vom 03.11.2026)
 
 | Soll | Test | Datei |
 |---|---|---|
@@ -956,4 +985,4 @@ Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `s
 | Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis und Kennzahlen; PDF mit Quellenverzeichnis, „mindestens 53 Einsatzkräfte“, Entstehung, Bewertungsfeldern | UP-2026-W45-03: Kopiervorlage des Lagebilds › …; PDF einer Meldung nach LEAD-Meldung-v2 › … | `tests/kern/v2-darstellung.test.ts` |
 
 
-Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.1).
+Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.3).

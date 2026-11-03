@@ -82,7 +82,7 @@ export function Feld(props: FeldProps) {
         <div className={labelKlasse}>{label}</div>
         <Hinweis text={f.hinweis} id={hilfeId} feld />
         <RadarFeld def={def} wert={wert} idPraefix={id} onChange={(neu) => setze(segs, neu)} />
-        {/* Achsen als Objekte (LEAD-Meldung-v2, seit 0.7.1, UP-2026-W45-03): Status, Grund, Begründung und Belege je Achse */}
+        {/* Achsen als Objekte (LEAD-Meldung-v2, seit 0.7.3, UP-2026-W45-03): Status, Grund, Begründung und Belege je Achse */}
         {def.achsen.map((a) => {
           const achse = aufloesen(k?.properties?.[a.key], profil.schema);
           if (!achse?.properties) return null;
@@ -344,7 +344,7 @@ export function Feld(props: FeldProps) {
   const gemeinsam = {
     value: text,
     placeholder: f.platzhalter,
-    // Wert oder null (seit 0.7.1, UP-2026-W45-03): leere Eingabe heißt „unbekannt“, nicht leerer Text
+    // Wert oder null (seit 0.7.3, UP-2026-W45-03): leere Eingabe heißt „unbekannt“, nicht leerer Text
     onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value === "" && t.includes("null") && !e ? null : ev.target.value),
   };
   return (

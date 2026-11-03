@@ -2674,6 +2674,287 @@
       "pr": 133
     },
     {
+      "id": "DK-2026-W45-01",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 1, Grundsatz (Z. 11)"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Anhang D, D7 Technische und organisatorische Maßnahmen (Z. 346)"
+        },
+        {
+          "datei": "src/ui/Kurzfassung.tsx",
+          "stelle": "Funktion erstellen (Z. 137–163), Knopf „… erstellen“ (Z. 271)"
+        }
+      ],
+      "kurz": "Management Summary sendete die Meldung ohne die in DATENSCHUTZ.md zugesicherte Bestätigung zur Weitergabe; Bestätigung wie in der KI-Erfassung ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-02",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/VORLAGEN.md",
+          "stelle": "V1 Anordnung, Nr. 7 „Laufprotokolle, Meldungen, Löschung“ (Z. 78)"
+        }
+      ],
+      "kurz": "VORLAGEN V1 Nr. 7 nannte „keinen eigenen Löschweg“; Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ eingetragen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-03",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 10, Löschen, Zeile „archivierte Testläufe“ (Z. 142)"
+        }
+      ],
+      "kurz": "DATENSCHUTZ Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen sichtbar; Voraussetzung und Weg über „Daten“ ergänzt.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-04",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitt 3.1, Tabelle, Zeile „Datenhülle“ (Z. 38)"
+        },
+        {
+          "datei": "src/pipeline/kontext.ts",
+          "stelle": "Funktion orientierungSystem (Z. 573–590)"
+        },
+        {
+          "datei": "src/pipeline/orientierung.ts",
+          "stelle": "Funktion einzeln, Nutzertext (Z. 110)"
+        }
+      ],
+      "kurz": "Orientierungssuche ohne Datenhülle und Datenregel entgegen SICHERHEIT.md 3.1; Hülle <stichworte> und MATERIAL_DATENREGEL ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-05",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/NATIV.md",
+          "stelle": "Abschnitte „iOS und iPadOS (Mac)“ (Z. 32) und „Android“ (Z. 42)"
+        },
+        {
+          "datei": "docs/BETRIEB.md",
+          "stelle": "Abschnitt Bauen (Z. 38)"
+        }
+      ],
+      "kurz": "NATIV.md und BETRIEB.md nannten Node.js „22 oder neuer“; an engines und .nvmrc (Node 22) angeglichen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-06",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/KI-VERORDNUNG.md",
+          "stelle": "Abschnitt 9.1, Absatz nach der Modelltabelle (Z. 116)"
+        }
+      ],
+      "kurz": "KI-VERORDNUNG 9.1: Mistral-Stufen nach Modell unterschieden, Large 4 seit 0.6.17 mit „mittel“.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-07",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/BARRIEREFREIHEIT.md",
+          "stelle": "Tabelle, Zeile „Automatische Prüfung“ (Z. 27)"
+        },
+        {
+          "datei": "tests/browser/barrierefreiheit.spec.ts",
+          "stelle": "Test „Einstellungen: alle Bereiche“ (Z. 278–288)"
+        }
+      ],
+      "kurz": "axe-Prüfung der Einstellungen ließ „Testläufe“ aus; Browsertest schaltet Forschungsfunktionen ein, BARRIEREFREIHEIT.md mit Bereichsnamen seit 0.6.10.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "TP-2026-W44-62",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Testlaeufe.tsx",
+          "stelle": "Zeilen 62–77 (Testart, TESTARTEN)"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 47–98, 497–500 (FALL, fallAuftrag, fallMaterial, einLauf)"
+        },
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "53 Fälle sop-*, zaehlregel-*, Ilka"
+        }
+      ],
+      "kurz": "Fallreihe unter „Einstellungen → Testläufe“: beliebige Erfassungs- und Verdichtungsfälle mit denselben Pipeline-Funktionen wie die App (S1, unveränderte Bestätigung, S2 mit S3); Management Summary und Reparatur bleiben eigene Testarten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-63",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "—"
+        },
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties"
+        },
+        {
+          "datei": "evaluation/plaene/2026-10-25-kontrollsatz.md",
+          "stelle": "Verfahren 2"
+        }
+      ],
+      "kurz": "Fälle für die Fallreihe: mitgelieferte Fälle mit Material nachgeladen, Fallpaket (ZIP) mit SHA-256 bis zur Löschung auf dem Gerät, Feld profil im Fall, drei Prüfstein-Fälle mit Websuche.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-64",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/plan.schema.json",
+          "stelle": "varianten[].s1/s2"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 128–167"
+        }
+      ],
+      "kurz": "plan.schema.json um ki_profil, mistral_endpunkt, recherche und fallpaket.sha256 erweitert; Plan belegt die Fallreihe vor, abweichendes Paket sperrt den Start; Matrix ohne Plan; B4 und B5 als zwei Pläne bei R1.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-65",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 713–721 (vergleichsreihe)"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "schaetzeStufe"
+        }
+      ],
+      "kurz": "Kostenbremse vor dem Lauf, der den Deckel überschreiten würde (obere Schätzung oder teuerster bisheriger Lauf derselben Variante, sonst 5 USD); Reihenfolge je Fall alle Varianten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-66",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf-export.ts",
+          "stelle": "reiheZip, uebersichtZeilen"
+        },
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "Zeilen 183–194 (ausfuellHinweise)"
+        },
+        {
+          "datei": "evaluation/bewertungsschema.json",
+          "stelle": "required"
+        }
+      ],
+      "kurz": "Ergebnis-ZIP der Fallreihe mit Reihendatei, Übersicht der automatischen Prüfungen (v1 und v2), Laufprotokollen, Entwürfen und leerer Bewertungsvorlage mit Prüfliste je Entwurf.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-67",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "tests/browser/testlaeufe.spec.ts",
+          "stelle": "—"
+        },
+        {
+          "datei": "docs/TESTZUORDNUNG.md",
+          "stelle": "—"
+        }
+      ],
+      "kurz": "Tests der Fallreihe in Vitest (Logik, Oberfläche) und im Browser mit Attrappe für Import, Prüfsumme, Vorbelegung, Start, Kostenbremse und ZIP-Inhalt; App 0.7.2.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
       "id": "UP-2026-W45-03",
       "agent": "umstellungsplan",
       "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",

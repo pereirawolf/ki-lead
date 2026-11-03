@@ -23,7 +23,7 @@ function Feld({ start }: { start?: Record<string, number | null> }) {
     def: DEF,
     wert,
     idPraefix: "t",
-    // seit 0.7.1 (UP-2026-W45-03) allgemein typisiert; bei Zahlen bleibt der Wert eine Zahlenliste
+    // seit 0.7.3 (UP-2026-W45-03) allgemein typisiert; bei Zahlen bleibt der Wert eine Zahlenliste
     onChange: (n: Record<string, unknown>) => {
       zuletzt = n as Record<string, number | null>;
       setWert(n as Record<string, number | null>);

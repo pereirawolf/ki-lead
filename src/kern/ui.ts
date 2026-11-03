@@ -58,7 +58,7 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
 
 /** Radarwerte als Klartext je Achse: „D1 Räumliche Auswirkung: 4 – landesweit“, offene Achsen als „offen“. */
 /**
- * Stufen eines Radars je Achse. Ein Wert ist eine ganze Zahl (LEAD-Meldung-v1) oder seit 0.7.1 (UP-2026-W45-03) ein
+ * Stufen eines Radars je Achse. Ein Wert ist eine ganze Zahl (LEAD-Meldung-v1) oder seit 0.7.3 (UP-2026-W45-03) ein
  * Objekt mit „stufe“ (Radarachse nach LEAD-Meldung-v2, Modul lead-bevoelkerungsschutz); sonst offen (null).
  */
 export function radarWerte(wert: unknown): Record<string, number | null> {

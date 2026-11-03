@@ -96,11 +96,13 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
-| 0.7.1 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.1“ |
+| 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
+| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ |
 
-## [0.7.1] – 03.11.2026
+## [0.7.3] – 03.11.2026
 
-Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6).
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6). Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) und #136 (0.7.2) als 0.7.3 umnummeriert.
 
 ### Neu
 
@@ -112,7 +114,7 @@ Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W
 
 ### Geändert
 
-- Profilformat 1.30, Spezifikation 0.7.1, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 3), `formate/lead-meldung-v2/README.md`. Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- Profilformat 1.30, Spezifikation 0.7.3, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 3), `formate/lead-meldung-v2/README.md`. Versionsangaben 0.7.3 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ### Offen für die folgenden Pakete
 
@@ -122,6 +124,45 @@ Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W
 
 - Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
 - `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
+
+## [0.7.2] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A8.json` (Arbeitspaket A8 des Arbeitskonzepts Erprobungsreife), TP-2026-W44-62 bis -67, freigegeben vom Herausgeber am 03.11.2026: alle sechs; Profil eines Falls im Feld `profil`; B4 und B5 als zwei Pläne mit je einem Klick, die Abbruchregel des Erprobungsplans entscheidet der Herausgeber an der angezeigten Summe; importierte Fallpakete bleiben bis zur Löschung auf dem Gerät. Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) als 0.7.2 umnummeriert.
+
+### Neu
+
+- **Fallreihe unter „Einstellungen → Testläufe“ (TP-2026-W44-62):** eigener Abschnitt neben dem Testlauf am Fall Ilka. Beliebige Erfassungs- und Verdichtungsfälle laufen nacheinander mit denselben Pipeline-Funktionen wie eine Erfassung in der App: S1, Bestätigung ohne Änderung, S2 mit Prüfung und Reparatur bei Bedarf. Auftrag und Material kommen aus dem Fall (Rolle „eingang“ bzw. „vormeldung“ ausdrücklich gesetzt). Fälle mit Management Summary oder Reparatur bleiben bei ihren Testarten und sind ausgegraut mit Grund. Der Abschnitt wird erst beim Öffnen der Testläufe geladen.
+- **Fälle aus dem Repository und aus Fallpaketen (TP-2026-W44-63):** alle Fälle unter `evaluation/faelle/` mit ihrem Material in einem eigenen, nachgeladenen Teil des Builds; ein Fallpaket als ZIP (etwa der Kontrollsatz) mit Anzeige der SHA-256, Prüfung jeder Falldatei gegen `fall.schema.json`, Hinweisen zu Dubletten und fehlendem Material. Pakete bleiben bis zur Löschung auf dem Gerät (`fallpaket:<sha256>` in der Datenbank des Testlaufarchivs, auch in Sicherung und „Alle Daten löschen“). Neues Feld `profil` im Fall (Manifest-ID, Vorgabe Beispielprofil), damit Landesfälle mit dem Landesprofil laufen. Drei neue Fälle `pruefstein-*` zu den Prüfsteinen der KW 43 mit `websuche: true`, ohne Material und URLs (für B5).
+- **Plan mit Vorbelegung (TP-2026-W44-64):** Ein Bewertungsplan als JSON-Datei belegt Fälle, Varianten, Wiederholungen, Recherchetiefe und Deckel vor; die App zeigt seine SHA-256 und vermerkt Abweichungen in der Reihe. `plan.schema.json` erweitert um `varianten[].ki_profil` (Standardprofil eines Anbieters), `varianten[].mistral_endpunkt`, `recherche` und `fallpaket.sha256`; ein Paket mit anderer Prüfsumme sperrt den Start. Ohne Plan: Matrix Fälle × Anbieter mit dem Standardprofil der freigegebenen Anbieter. Beispielplan `evaluation/plaene/beispiel-fallreihe.json`.
+- **Kostenbremse (TP-2026-W44-65):** vor jedem Lauf Ist-Kosten plus Obergrenze des nächsten Laufs (größerer Wert aus oberer Schätzung und teuerstem bisherigem Lauf derselben Variante, sonst 5 USD) gegen den Deckel; die Reihe endet mit Grund, die bisherigen Läufe bleiben im Ergebnis. Reihenfolge je Fall alle Varianten.
+- **Ergebnis-ZIP mit automatischen Prüfungen (TP-2026-W44-66):** `fallreihe.json` (`ki-lead-fallreihe/1`), `uebersicht.csv` je Lauf mit schemakonform, Kosten (Ist und Schätzung), Dauer, Fristen auf oder vor t0 ohne „überfällig“ (Prüfung des Redaktionschecks), Anteil Sachverhalte mit Tendenz, Zahl der Quellen, Websuchen und Abrufen (Felder nach den Rollen des Profils, für LEAD-Meldung-v1 und v2), Laufprotokolle, Entwürfe und je Entwurf eine leere Bewertungsvorlage nach `evaluation/bewertungsschema.json` (nicht verblindet) mit Prüfliste der Muss- und Darf-nicht-Punkte und der K.-o.-Fehler. Archiv wie die übrigen Testläufe.
+
+### Geändert
+
+- **Zielgröße in der Fallreihe:** Die Ankreuzfelder der Fallgruppen haben Abstand zur Gruppenüberschrift und untereinander (`src/styles/einstellungen.css`), damit axe-core keine Verletzung von WCAG 2.5.8 meldet. Sichtbar wurde das nach dem Zusammenführen mit Pull Request #134, der den Bereich „Testläufe“ in die axe-Prüfung aufnimmt (DK-2026-W45-07).
+- `scripts/pruefumfang.mjs`: Alle Bewertungsfälle, ihr Material und `plan.schema.json` lösen die Kern-Browsertests aus, weil die App sie einbettet.
+- `evaluation/README.md`, `evaluation/faelle/README.md` (Prüfstein-Fälle, Profil eines Falls, Fallpaket), Spezifikation 0.7.2 (Abschnitt 5.4), `docs/DATENSCHUTZ.md` 1.14 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md). Versionsangaben 0.7.2 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- Neu `tests/forschung/fallreihe.test.ts` (Katalog, Prüfstein-Fälle, Profil je Fall, Fallpaket, Plan, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe, ZIP und Bewertungsvorlage gegen Ajv) und `tests/ui/fallreihe.test.ts` (Auswahl, Paket mit Prüfsumme und Ablage, Vorbelegung aus dem Plan, Start, Kostenbremse, Archiv); Browsertest der Fallreihe in `tests/browser/testlaeufe.spec.ts`; Planschema und Feld `profil` in `tests/evaluation/schemata.test.ts`.
+
+## [0.7.1] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_dokumentation_2026-W45.json` (Dokumentationsprüfung KW 45, Commit `246591e`), freigegeben vom Herausgeber am 03.11.2026: alle sieben Befunde, DK-2026-W45-01 und -04 mit Option B (Verhalten an die Dokumentation angleichen), -07 mit erweitertem Test. Umgesetzt auf main nach dem Zusammenführen von Pull Request #132 und #133.
+
+### Geändert
+
+- **Bestätigung vor der Management Summary (DK-2026-W45-01):** Der Schritt „Management Summary“ der Erfassung sendet die Meldung erst, wenn die Person wie in der KI-Erfassung bestätigt, nur fiktive oder offen zugängliche Inhalte weiterzugeben; bis dahin ist „… erstellen“ gesperrt und per `aria-describedby` mit der Bestätigung verknüpft (`src/ui/Kurzfassung.tsx`). Bis 0.7.0 ging die Meldung ohne Bestätigung an den Anbieter, obwohl [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) (Abschnitt 1, Anhang D, D7) die Bestätigung vor jedem KI-Lauf nennt.
+- **Datenhülle der Orientierungssuche (DK-2026-W45-04):** Die Stichworte stehen in `<stichworte>` mit neutralisierten Schließtags (`huellenInhalt`), der Systemauftrag nennt `MATERIAL_DATENREGEL` wie S1 und S2 (`src/pipeline/orientierung.ts`, `orientierungSystem` in `src/pipeline/kontext.ts`); damit trifft [docs/SICHERHEIT.md](docs/SICHERHEIT.md), Abschnitt 3.1, zu. Der Auftrag der Orientierungssuche wird dadurch etwas länger.
+- **Dokumentation nachgezogen:** [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.13 (Abschnitt 10: „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“, DK-2026-W45-03), [docs/VORLAGEN.md](docs/VORLAGEN.md) 1.3 (V1 Nr. 7: Löschweg „Einstellungen → Daten“, DK-2026-W45-02), [docs/NATIV.md](docs/NATIV.md) und [docs/BETRIEB.md](docs/BETRIEB.md) 1.1 (Node.js 22 nach `.nvmrc`, DK-2026-W45-05), [docs/KI-VERORDNUNG.md](docs/KI-VERORDNUNG.md) 1.5 (Mistral-Stufen nach Modell, DK-2026-W45-06), [docs/BARRIEREFREIHEIT.md](docs/BARRIEREFREIHEIT.md) 1.4 (axe-Prüfung mit „Testläufe“, Bereichsnamen seit 0.6.10, DK-2026-W45-07), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.8 (Änderungsverlauf).
+- Spezifikation 0.7.1 (Abschnitt 5.1, Management Summary), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 701, iOS 701).
+
+### Tests
+
+- `tests/ui/kurzfassung-lauf.test.ts`: neuer Abschnitt DK-2026-W45-01; die Laufanzeige-Tests setzen zuerst die Bestätigung (Soll unverändert).
+- Neu `tests/pipeline/orientierung-datenhuelle.test.ts`: DK-2026-W45-04 (Gegenprobe ohne die Änderung: beide Fälle rot).
+- `tests/browser/barrierefreiheit.spec.ts`: „Einstellungen: alle Bereiche“ schaltet die Forschungsfunktionen ein und erwartet acht Bereiche (DK-2026-W45-07).
 
 ## [0.7.0] – 03.11.2026
 

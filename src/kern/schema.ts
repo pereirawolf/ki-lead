@@ -20,7 +20,7 @@ export function aufloesen(knoten: any, wurzel: any): any {
 
 /**
  * „anyOf: [X, {type: null}]“ (Wert oder null, LEAD-Meldung-v2) wird für Maske und Darstellung zu X mit zusätzlichem
- * Typ „null“ (seit 0.7.1, UP-2026-W45-03). Andere anyOf-Formen bleiben unverändert; die Prüfung übernimmt ohnehin
+ * Typ „null“ (seit 0.7.3, UP-2026-W45-03). Andere anyOf-Formen bleiben unverändert; die Prüfung übernimmt ohnehin
  * der eigene Prüfer in validierung.ts.
  */
 function nullbarAufloesen(k: any, wurzel: any): any {
@@ -74,7 +74,7 @@ export function leererWert(knoten: any, wurzel: any): any {
     return e[0];
   }
   const t = typen(k);
-  // Wert oder null (seit 0.7.1): leer heißt „unbekannt“ (LEAD-Meldung-v2, Abschnitt 1 Nr. 3)
+  // Wert oder null (seit 0.7.3): leer heißt „unbekannt“ (LEAD-Meldung-v2, Abschnitt 1 Nr. 3)
   if (k.nullbar) return null;
   if (t.includes("null") && t.length <= 2 && !t.includes("object") && !t.includes("array") && !t.includes("string")) return null;
   if (t.includes("object")) {

@@ -134,7 +134,7 @@ export function spalten(profil: Profil): Spalte[] {
       ? [
           {
             titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)",
-            // LEAD-Meldung-v2 (seit 0.7.1): Quellenobjekte als lesbares Verzeichnis
+            // LEAD-Meldung-v2 (seit 0.7.3): Quellenobjekte als lesbares Verzeichnis
             wert: (e: LagebildEintrag) => {
               const q = holeWert(e.daten, r.quellen!);
               return Array.isArray(q) ? quellenverzeichnisV2(q) : alsText(q);
@@ -258,7 +258,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     if (eintraege.length) zeile(bezeichnung(ui, r.zeitstrahl), html(eintraege.map(zeitstrahlAnzeige).join("\n")), "font-size:8.5pt;");
   }
 
-  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Zeitstrahl und Kennzahlen im Sachverhalt, Quellen als Objekte
+  // LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Zeitstrahl und Kennzahlen im Sachverhalt, Quellen als Objekte
   if (Array.isArray(s.sv?.zeitstrahl) && s.sv.zeitstrahl.length)
     zeile(bezeichnung(ui, `${r.sachverhalte}[].zeitstrahl`), html(zeitstrahlTextV2(s.sv.zeitstrahl)), "font-size:8.5pt;");
   if (Array.isArray(s.sv?.kennzahlen) && s.sv.kennzahlen.length)

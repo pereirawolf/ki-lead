@@ -90,7 +90,7 @@ export function altQuellenZeilen(d: Meldung, ui: UiKonfig): { sv: number; feld: 
  * dessen Text übergeben wird.
  */
 export function quellenFuerSachverhalt(quellenText: unknown, sv: any, ui: UiKonfig, zeitstrahl?: unknown): QuellenEintrag[] | null {
-  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Quellenobjekte; zitiert ist, was Texte und Belege des Sachverhalts nennen
+  // LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Quellenobjekte; zitiert ist, was Texte und Belege des Sachverhalts nennen
   if (Array.isArray(quellenText)) {
     const ids = zitierteQuellen(sv);
     const hit = quellenText

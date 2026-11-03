@@ -202,7 +202,7 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
     }
     return;
   }
-  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Zeitstrahl und Kennzahlen eines Sachverhalts als lesbare Zeilen
+  // LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Zeitstrahl und Kennzahlen eines Sachverhalts als lesbare Zeilen
   if (Array.isArray(wert) && hatObjekte(wert) && (gen.endsWith(".zeitstrahl") || gen.endsWith(".kennzahlen"))) {
     out.push([label, (gen.endsWith(".zeitstrahl") ? zeitstrahlTextV2(wert) : kennzahlenTextV2(wert)) || "–"]);
     return;
@@ -335,7 +335,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     });
   });
 
-  // Quellenverzeichnis: Text (v1) oder seit 0.7.1 aus den Quellenobjekten erzeugt (LEAD-Meldung-v2)
+  // Quellenverzeichnis: Text (v1) oder seit 0.7.3 aus den Quellenobjekten erzeugt (LEAD-Meldung-v2)
   const quellenRoh = r.quellen ? holeWert(d, r.quellen) : undefined;
   const quellenText = Array.isArray(quellenRoh) ? quellenverzeichnisV2(quellenRoh) : String(quellenRoh || "");
   if (r.quellen && quellenText.trim()) {

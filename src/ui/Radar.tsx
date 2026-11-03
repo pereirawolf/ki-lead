@@ -6,7 +6,7 @@ import { radarMitStufe, radarWerte } from "../kern/ui";
 
 interface Props {
   def: RadarDef;
-  /** Stufen je Achse (v1) oder Achsen als Objekte mit „stufe“ (LEAD-Meldung-v2, seit 0.7.1) */
+  /** Stufen je Achse (v1) oder Achsen als Objekte mit „stufe“ (LEAD-Meldung-v2, seit 0.7.3) */
   wert: Record<string, unknown> | undefined;
   onChange?: (neu: Record<string, unknown>) => void;
   idPraefix: string;
@@ -92,7 +92,7 @@ export function zielIndex(taste: string, aktuell: number, anzahl: number): numbe
 }
 
 export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
-  // Seit 0.7.1 (UP-2026-W45-03) auch Achsen als Objekte (LEAD-Meldung-v2): Begründung und Belege bleiben erhalten
+  // Seit 0.7.3 (UP-2026-W45-03) auch Achsen als Objekte (LEAD-Meldung-v2): Begründung und Belege bleiben erhalten
   const setze = (key: string, v: number | null) => onChange?.(radarMitStufe(def, wert, key, v));
   const stufen = radarWerte(wert);
   return (

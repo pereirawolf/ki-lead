@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Erfassungsmaske für LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Darstellungsdatei formate/lead-meldung-v2/beispiel/
+// Erfassungsmaske für LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Darstellungsdatei formate/lead-meldung-v2/beispiel/
 // meldung.ui.json mit dem zusammengestellten Schema; Werte oder null (anyOf mit null), Listen von Objekten, Radarachsen
 // als Objekte. Abnahme: Die vervollständigte Beispielmeldung TH 10:30 Uhr lässt sich öffnen, ändern und unverändert
 // speichern.

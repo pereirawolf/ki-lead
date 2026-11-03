@@ -1,6 +1,6 @@
 // Testprofil nach LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Beispiel- bzw. Landesprofil mit dem zusammengestellten
 // v2-Schema (formate/lead-meldung-v2/beispiel bzw. beispiel-land), Migration „lead-meldung-v2“ und Rollen als Pfade.
-// Seit 0.7.1 (UP-2026-W45-03) mit der Darstellungsdatei formate/lead-meldung-v2/beispiel/meldung.ui.json (Vorlage für
+// Seit 0.7.3 (UP-2026-W45-03) mit der Darstellungsdatei formate/lead-meldung-v2/beispiel/meldung.ui.json (Vorlage für
 // die Umstellung der Profile in Paket 6); ohne Darstellung (`mitDarstellung: false`) nur die Rollen, wie in Paket 2.
 import { readFileSync } from "node:fs";
 import type { Profil } from "../../src/kern/typen";

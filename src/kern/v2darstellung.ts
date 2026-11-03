@@ -1,4 +1,4 @@
-// Darstellung von Feldern nach LEAD-Meldung-v2 als lesbarer Text (seit 0.7.1, UP-2026-W45-03): Quellenverzeichnis,
+// Darstellung von Feldern nach LEAD-Meldung-v2 als lesbarer Text (seit 0.7.3, UP-2026-W45-03): Quellenverzeichnis,
 // Zeitstrahl, Kennzahlen und Entstehung für PDF, Kopiervorlage und Anzeige. Grundsatz 1 des Formats: Was strukturiert
 // erfasst ist, steht nur dort; die lesbaren Zeilen erzeugt die Darstellung (docs/LEAD-MELDUNG-V2.md, Abschnitt 1).
 // Die Quellenzeile folgt der Form des Kodierleitfadens (Abschnitt 5) und lässt sich mit quellenV1() zurücklesen.

@@ -1,4 +1,4 @@
-// Darstellung und Ausgabe für LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Quellenverzeichnis, Zeitstrahl,
+// Darstellung und Ausgabe für LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Quellenverzeichnis, Zeitstrahl,
 // Kennzahlen und Entstehung als Text, Radarachsen als Objekte, Ausgabestatus mit Freigabe, Werte oder null im Schema,
 // Dateiname mit Pfad-Platzhaltern, PDF. Unabhängiges Soll für die Quellenzeile: Das Werkzeug liest sie mit
 // quellenV1() wieder in dieselben Felder zurück.
