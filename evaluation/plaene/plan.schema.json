@@ -30,12 +30,31 @@
           "s2": { "$ref": "#/$defs/stufe" },
           "material": { "enum": ["ohne", "pdf", "eingaenge", "meldung"] },
           "kurzfassung": { "$ref": "#/$defs/stufe" },
-          "reparatur": { "$ref": "#/$defs/stufe", "description": "Modell und Aufwand der Reparatur (S3) im Prüffall Reparatur (Fälle mit auftrag.reparatur)" }
+          "reparatur": { "$ref": "#/$defs/stufe", "description": "Modell und Aufwand der Reparatur (S3) im Prüffall Reparatur (Fälle mit auftrag.reparatur)" },
+          "ki_profil": {
+            "enum": ["anthropic", "openai", "mistral"],
+            "description": "Standardprofil des Anbieters in der laufenden App (Fallreihe, seit 0.7.2); s1 und s2 gehen ihm vor, wenn sie zusätzlich stehen. Modellkennungen und Aufwand stehen danach im Laufprotokoll."
+          },
+          "mistral_endpunkt": { "enum": ["eu", "global"], "description": "Endpunkt für Aufgaben bei Mistral (Fallreihe); ohne Angabe wie in den Einstellungen" }
         }
       }
     },
     "wiederholungen": { "type": "integer", "minimum": 1 },
-    "budget_usd": { "type": "number", "minimum": 0 },
+    "budget_usd": { "type": "number", "minimum": 0, "description": "Kostendeckel; die Fallreihe hält vor dem Lauf an, der ihn überschreiten würde" },
+    "recherche": {
+      "enum": ["sparsam", "standard", "gruendlich"],
+      "description": "Recherchetiefe für Fälle mit Websuche (Fallreihe, seit 0.7.2); ohne Angabe wie in den Einstellungen"
+    },
+    "fallpaket": {
+      "type": "object",
+      "description": "Fallpaket als ZIP, aus dem Fälle des Plans stammen (etwa der Kontrollsatz); die Fallreihe startet nur mit einem Paket dieser Prüfsumme (SHA-256 der ZIP-Datei)",
+      "required": ["sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
     "meldung_fest": {
       "type": "object",
       "description": "Feste, fertige Meldung als einzige Eingabe für Bewertungen der Management Summary (Fälle mit auftrag.kurzfassung) oder als Grundlage des Prüffalls Reparatur (Fälle mit auftrag.reparatur). Datei unter evaluation/material/, Prüfsumme sha256 des Dateiinhalts.",

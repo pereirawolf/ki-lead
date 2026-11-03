@@ -11,8 +11,17 @@
     "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
     "titel": { "type": "string", "minLength": 1 },
     "stand": { "type": "string", "format": "date" },
+    "profil": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+([.-][a-z0-9]+)*$",
+      "description": "Manifest-ID des Profils, mit dem der Fall läuft (Fallreihe unter „Einstellungen → Testläufe“); ohne Angabe das Beispielprofil lead.beispiel.koordinierungsstelle"
+    },
     "fiktiv": { "type": "boolean", "description": "true, wenn Auftrag und Material vollständig erfunden sind" },
-    "variante_von": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "ID des Ausgangsfalls, wenn dieser Fall eine gezielte Abwandlung ist" },
+    "variante_von": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "ID des Ausgangsfalls, wenn dieser Fall eine gezielte Abwandlung ist"
+    },
     "abwandlung": { "type": "string", "minLength": 1, "description": "Was gegenüber dem Ausgangsfall geändert wurde, möglichst genau eine Stellgröße" },
     "auftrag": {
       "type": "object",
