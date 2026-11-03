@@ -3,5 +3,6 @@
 // herkunft.json); Prüfung in src/kern/baustein.ts.
 import S01 from "../../formate/fremd/thessa-kennzahlen/gebuendelt/0.1.schema.json";
 import S02 from "../../formate/fremd/thessa-kennzahlen/gebuendelt/0.2.schema.json";
+import S03 from "../../formate/fremd/thessa-kennzahlen/gebuendelt/0.3.schema.json";
 
-export const BAUSTEIN_SCHEMATA: Record<string, object> = { "0.1": S01, "0.2": S02 };
+export const BAUSTEIN_SCHEMATA: Record<string, object> = { "0.1": S01, "0.2": S02, "0.3": S03 };

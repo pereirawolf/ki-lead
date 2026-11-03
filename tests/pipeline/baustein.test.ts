@@ -29,16 +29,16 @@ function meldungZu(raum: string) {
 }
 
 describe("UP-2026-W45-01: Erkennung als Materialart „kennzahlen-baustein“", () => {
-  it("gültiger Baustein 0.2: Materialart, Anzeige im Auftrag mit Raum, Datenstand, Zahlen und Satz zur Übernahme", async () => {
+  it("gültiger Baustein 0.3: Materialart, Anzeige im Auftrag mit Raum, Datenstand, Zahlen und Satz zur Übernahme", async () => {
     const b = sonneberg();
     const m = await alsMaterial(b.name, b.daten);
     expect(m.art).toBe("kennzahlen-baustein");
     expect(m.eingang).toBeUndefined();
     expect(m.meldung).toBeUndefined();
     expect(m.hinweis).toBe(
-      "Kennzahlen-Baustein (Thessa 0.2, FIKTIV): Landkreis Sonneberg (16072), Datenstand 14.10.2026, 10:00, 29 Kennzahlen, 6 Einsatzmeldungen. Kennzahlen werden unverändert übernommen.",
+      "Kennzahlen-Baustein (Thessa 0.3, FIKTIV): Landkreis Sonneberg (16072), Datenstand 14.10.2026, 10:00, 29 Kennzahlen, 6 Einsatzmeldungen. Kennzahlen werden unverändert übernommen.",
     );
-    expect(m.baustein!.info).toMatchObject({ fassung: "0.2", kennzahlen: 29, einsatzmeldungen: 6, raum: { name: "Landkreis Sonneberg", schluessel: "16072" } });
+    expect(m.baustein!.info).toMatchObject({ fassung: "0.3", kennzahlen: 29, einsatzmeldungen: 6, raum: { name: "Landkreis Sonneberg", schluessel: "16072" } });
   });
 
   it("alle fünf Bausteine des Begleitordners werden erkannt; Zahl der Kennzahlen und Einsatzmeldungen wie in der Datei", async () => {
@@ -58,10 +58,10 @@ describe("UP-2026-W45-01: Erkennung als Materialart „kennzahlen-baustein“", 
   });
 
   it("unbekannte Fassung: JSON-Material wie bisher, mit Hinweis", async () => {
-    const m = await alsMaterial("neu.json", { ...kopie(sonneberg().daten), fassung: "0.3" });
+    const m = await alsMaterial("neu.json", { ...kopie(sonneberg().daten), fassung: "0.9" });
     expect(m.art).toBe("json");
     expect(m.baustein).toBeUndefined();
-    expect(m.hinweis).toMatch(/Fassung „0\.3“ ist unbekannt \(bekannt: 0\.2, 0\.1\); als JSON-Material übernommen/);
+    expect(m.hinweis).toMatch(/Fassung „0\.9“ ist unbekannt \(bekannt: 0\.3, 0\.2, 0\.1\); als JSON-Material übernommen/);
   });
 
   it("beschädigter Baustein: JSON-Material mit Hinweis auf die Schemabefunde, kein Absturz", async () => {

@@ -1,21 +1,31 @@
 {
   "format": "Thessa-Kennzahlen",
   "repository": "https://github.com/pereirawolf/thessa",
-  "commit": "b4344c85df3e89d1d8eeb0900a31bfddfb0105ff",
-  "abgerufen": "2026-11-03",
+  "commit": "a614ed46d1bced68e674b8ec83628af72a35861d",
+  "abgerufen": "2026-11-04",
   "lizenz": "CC-BY-4.0 OR CC0-1.0 (Thessa, LICENSE-CONTENT Nr. 1 b und 2 a)",
   "kernschema": {
     "hinweis": "Das Thessa-Schema verweist auf das Kernschema von LEAD-Meldung-v2 und pinnt es in Thessa unter kern/quelle.json. Die Bündelung verlangt, dass formate/lead-meldung-v2/kern.schema.json diese Prüfsumme hat; ändert sich das Kernschema, muss Thessa neu pinnen und diese Angabe nachgezogen werden.",
-    "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
-    "sha256": "a4aa182e53d3d88cb7107d909cd345e827cae50da4554338fba1309f96fcb808"
+    "commit": "a614ed46d1bced68e674b8ec83628af72a35861d",
+    "sha256": "dec787a9025f747643645b21dbd986f5e8a7d5c5f562d2bbd2c438cdcf680161"
   },
   "fassungen": [
+    {
+      "fassung": "0.3",
+      "datei": "0.3/kennzahlen-baustein.schema.json",
+      "quelle": "schema/kennzahlen-baustein.schema.json",
+      "commit": "a614ed46d1bced68e674b8ec83628af72a35861d",
+      "sha256": "e05e4e4a3188d5e32de87bdd987b9736c255fd0ac3cbd1d14d736f16ac3f4c5a",
+      "gebuendelt": "gebuendelt/0.3.schema.json",
+      "hinweis": "Einsatzmeldungen ohne bezug_lead (Thessa G12): die Lagemeldung ordnet sie über ihre Kennung zu (SR-2026-W45-02)."
+    },
     {
       "fassung": "0.2",
       "datei": "0.2/kennzahlen-baustein.schema.json",
       "quelle": "schema/kennzahlen-baustein.schema.json",
       "sha256": "30ea7222866a8451d6ef836e85d7e7a10cdf35bfa11e8f50d8ffb830263d816c",
-      "gebuendelt": "gebuendelt/0.2.schema.json"
+      "gebuendelt": "gebuendelt/0.2.schema.json",
+      "commit": "b4344c85df3e89d1d8eeb0900a31bfddfb0105ff"
     },
     {
       "fassung": "0.1",

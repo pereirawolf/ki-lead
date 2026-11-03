@@ -1,6 +1,6 @@
 {
   "format": "Thessa-Kennzahlen",
-  "fassung": "0.2",
+  "fassung": "0.3",
   "erzeugt": "2026-10-14T10:00+02:00",
   "datenstand": "2026-10-14T10:00+02:00",
   "raum": {
@@ -389,8 +389,7 @@
           "name": "Landkreis Hildburghausen",
           "schluessel": "16069"
         }
-      },
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      }
     }
   ],
   "herleitung": [
