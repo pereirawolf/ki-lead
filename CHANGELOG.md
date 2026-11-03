@@ -95,6 +95,31 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
+| 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
+
+## [0.7.0] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-02, freigegeben vom Herausgeber am 03.11.2026 wie empfohlen. Die Voraussetzung aus der Entscheidungsfrage (GK-2026-W44-08, -12, -13 vor Paket 2) ist mit Pull Request #127 erfüllt. Neue Nebenversion, weil die App erstmals Meldungen nach LEAD-Meldung-v2 liest; die mitgelieferten Profile arbeiten unverändert mit v1 (Umstellung in Paket 6).
+
+### Neu
+
+- **Eine Umsetzung von LEAD-Meldung-v2 für App und Werkzeug:** Zusammenstellung, Zeitvergleiche, Migration v1 → v2 und Referenzprüfung stehen in `src/kern/meldung-v2.js` (mit Typen in `meldung-v2.d.ts`); `scripts/lead-meldung-v2.mjs` ist nur noch die Kommandozeile dazu und reicht die Funktionen durch. Ausgaben des Werkzeugs unverändert.
+- **Migration beim Einlesen:** Ein Eintrag in `migrationen` mit `verfahren` „lead-meldung-v2“ überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` beim Einlesen in Lagebild, Meldungsmaske und Material nach v2 (Zeitzone aus dem Profil); die Hinweise der Überführung erscheinen wie bisher, eine nicht überführbare Meldung bleibt unbekannt mit Grund (Profilformat 1.29).
+- **Referenzprüfung (Prüfebene 2) in der App:** Für Meldungen nach v2 zeigt das Lagebild die Fehler als Marke „Referenzen: n“, der Prüfschritt der Meldung und die Hinweise nach S2 nennen sie mit Pfad (`REFERENZ_FEHLER`, `REFERENZ_HINWEIS`; `src/kern/referenzen.ts`). Die Textprüfung der Quellenverweise entfällt für v2, weil die Referenzprüfung sie übernimmt.
+- **Grundform v2 für Eingänge:** Fremde Meldungen nach v2 werden mit `absender.stelle`, `absender.gebiet.name`, Meldezeitpunkt und `meldung_id` erkannt.
+
+### Geändert
+
+- **Rollen als Pfade:** Rollen auf Meldungsebene (`status_feld`, `land`, `meldende_stelle`, `meldezeitpunkt`, `entstehung_feld` …) und Profilvariablen dürfen Pfade wie `absender.stelle` nennen; Lesen und Setzen laufen über `holeWert`, `setzeWert` und `mitFeld` (`src/kern/pfad.ts`) in Nachbearbeitung, neuer Meldung, Maske, Prüfschritt, PDF und Profilprüfung.
+- Profilformat 1.29, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 2 zur Fassung 2.0, Abschnitte 8, 11, 13), `docs/AUSTAUSCH.md` 0.4, Spezifikation 0.7.0. Versionsangaben 0.7.0 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Offen für die folgenden Pakete
+
+- Erfassungsmaske, Darstellung, PDF und Kopiervorlage für v2, Statusfolge mit vier Stufen und Freigabeblock (Paket 3); Ausgabeschema, Nachbearbeitung und Entstehung nach v2 in der KI-Pipeline (Paket 4); Lagebild und Verdichtung mit Kennzahlen (Paket 5); Umstellung der Profile (Paket 6).
+
+### Tests
+
+- Neu `tests/kern/v2-app.test.ts` mit Testprofil `tests/support/v2profil.ts`: Werkzeug reicht die Funktionen des Kerns durch; Migration in der App gleich dem Werkzeug für alle mitgelieferten v1-Meldungen (Ilka Bund und Länder, Hochwasser Saale, Ilka Kreise und Land, Musterfassung, Prüfsteine), schemagültig und ohne Fehler der Referenzprüfung; Lagebild unter v2-Profil; Profilprüfung des Verfahrens; Grundform v2; Referenzprüfung in Lagebild und Prüfschritt; Rollen als Pfade.
 
 ## [0.6.24] – 03.11.2026
 

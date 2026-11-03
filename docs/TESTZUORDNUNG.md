@@ -932,3 +932,16 @@ Angepasst ohne Änderung des Solls: `tests/ui/ki-erfassung-felder.test.ts` (Hilf
 | Abgleich der Zahlen im Text: Paare erkannt, kein Hinweis an der Beispiellage, `BAUSTEIN_ZAHL_ABWEICHEND` bei geänderter Zahl, `BAUSTEIN_OHNE_BELEG` ohne Verweis bzw. ohne Quelle | UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h) › … | `tests/pipeline/baustein.test.ts` |
 
 Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahlen-Baustein“ statt „als JSON-Material“, Text an die KI ohne `herleitung`), `tests/kern/schichten.test.ts` (Positivliste `pipeline` um `../formate`).
+
+## LEAD-Meldung-v2 in Kern und Prüfung (0.7.0, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-02, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Werkzeug und App teilen die Umsetzung (gleiche Funktionen, gleiche Zusammenstellung) | UP-2026-W45-02: eine Umsetzung für App und Werkzeug › … | `tests/kern/v2-app.test.ts` |
+| Migration beim Einlesen gleich dem Werkzeug für alle mitgelieferten v1-Meldungen, schemagültig, ohne Fehler der Referenzprüfung; Lagebild unter v2-Profil; nicht überführbare Meldung mit Grund; Profilprüfung des Verfahrens | UP-2026-W45-02: Migration v1 → v2 beim Einlesen › … | `tests/kern/v2-app.test.ts` |
+| Grundform v2 für Eingänge unter v1-Profil, eigene Meldung unter v2-Profil | UP-2026-W45-02: Grundform v2 für Eingänge › … | `tests/kern/v2-app.test.ts` |
+| Referenzprüfung mit Pfad und Code nur für v2; im Lagebild, im Prüfschritt und nach S2; Textprüfung der Quellen entfällt für v2 | UP-2026-W45-02: Referenzprüfung in Lagebild, Maske und Pipeline › … | `tests/kern/v2-app.test.ts` |
+| Rollen auf Meldungsebene als Pfade: Setzen, Kopieren, Prüfung beim Laden | UP-2026-W45-02: Rollen als Pfade › … | `tests/kern/v2-app.test.ts` |
+
+Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `scripts/lead-meldung-v2.mjs`, das die Funktionen aus `src/kern/meldung-v2.js` durchreicht).
+
