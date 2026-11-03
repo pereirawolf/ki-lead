@@ -945,3 +945,15 @@ Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahle
 
 Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `scripts/lead-meldung-v2.mjs`, das die Funktionen aus `src/kern/meldung-v2.js` durchreicht).
 
+## LEAD-Meldung-v2 in Maske und Ausgabe (0.7.1, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Beispielmeldung öffnen ohne Änderung, ohne rohe Objekte, mit den Bezeichnungen der Darstellungsdatei; leere Zeitangabe wird `null`; eine Änderung betrifft nur ihr Feld; Radarachse als Objekt | UP-2026-W45-03: Erfassungsmaske für LEAD-Meldung-v2 › … | `tests/ui/maske-v2.test.ts` |
+| Quellenzeile in der Form des Kodierleitfadens, vom Werkzeug zurücklesbar; Zeitstrahlzeile; Kennzahlen mit Teilmengen, Mindestwert, Bandbreite; Entstehung; zitierte Quellen | UP-2026-W45-03: Quellenverzeichnis, Zeitstrahl, Kennzahlen, Entstehung › … | `tests/kern/v2-darstellung.test.ts` |
+| Radarachsen als Objekte: Stufen, Legende mit Mindestwert und Grund, Stufe setzen mit Status; v1 unverändert | UP-2026-W45-03: Radarachsen als Objekte › … | `tests/kern/v2-darstellung.test.ts` |
+| Werte oder null im Schema; Ausgabestatus mit Freigabe; Dateiname mit Pfad-Platzhaltern | UP-2026-W45-03: Schema, Status und Dateiname › … | `tests/kern/v2-darstellung.test.ts` |
+| Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis und Kennzahlen; PDF mit Quellenverzeichnis, „mindestens 53 Einsatzkräfte“, Entstehung, Bewertungsfeldern | UP-2026-W45-03: Kopiervorlage des Lagebilds › …; PDF einer Meldung nach LEAD-Meldung-v2 › … | `tests/kern/v2-darstellung.test.ts` |
+
+
+Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.1).

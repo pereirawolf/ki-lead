@@ -96,6 +96,32 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
+| 0.7.1 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.1“ |
+
+## [0.7.1] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6).
+
+### Neu
+
+- **Erfassungsmaske für LEAD-Meldung-v2:** Felder „Wert oder null“ (`anyOf` mit `{"type": "null"}`, etwa Zeitangaben) erscheinen als Eingabe ihres Typs; eine leere Eingabe heißt „unbekannt“ (`null`), nicht leerer Text (`src/kern/schema.ts`, `src/ui/Feld.tsx`). Listen von Objekten (Quellen, Zeitstrahl, Maßnahmen, Empfehlungen, Fristen, Kennzahlen, Indikatoren, abweichende Bewertungen) nutzen die vorhandenen Listenbausteine.
+- **Lagenradar mit Achsen als Objekten:** Grafik, Auswahl, Legende, PDF, Lagebild und Kopiervorlage lesen die Stufe aus `stufe`; eine geänderte Stufe setzt `status` (belegt, offen mit Grund, ein Mindestwert bleibt einer) und behält Begründung und Belege. Unter der Grafik stehen je Achse Status, Grund, Begründung und Belege (`radarWerte`, `radarMitStufe` in `src/kern/ui.ts`). v1 bleibt eine Liste von Zahlen.
+- **Darstellung aus den Feldern:** PDF, Kopiervorlage und Rohtabelle erzeugen bei v2 das Quellenverzeichnis in der Form des Kodierleitfadens, den Zeitstrahl je Sachverhalt, die Kennzahlen (Teilmengen eingerückt unter ihrer Obermenge, Mindestwert als „mindestens“, Bandbreite, unbekannt) und die Entstehung als Zeile (`src/kern/v2darstellung.ts`). Die Kopiervorlage nennt die Quellen, die der Sachverhalt in Texten und Belegen zitiert.
+- **Ausgabestatus mit Freigabe:** Neue optionale Rolle `status_freigegeben`; die finale Ausgabe trägt sie, wenn im Freigabeblock unter `freigegeben` Name und Zeitpunkt stehen, sonst `status_final` (`ausgabeStatus` in `src/kern/ausgabe.ts`). Dateinamenvorlagen dürfen Pfade nennen (`{absender.stelle}`).
+- **Vorlage der Darstellungsdatei für v2:** `formate/lead-meldung-v2/beispiel/meldung.ui.json` mit Schritten, Bezeichnungen und Hinweisen der v2-Felder, Rollen als Pfade und dem Lagenradar des Beispielprofils; Grundlage der Umstellung der Profile in Paket 6.
+
+### Geändert
+
+- Profilformat 1.30, Spezifikation 0.7.1, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 3), `formate/lead-meldung-v2/README.md`. Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Offen für die folgenden Pakete
+
+- Ausgabeschema, Nachbearbeitung, Kennungsvergabe und Entstehung nach v2 in der KI-Pipeline sowie Übernahme aus Kennzahlen-Bausteinen (Paket 4); Lagebild und Verdichtung mit Kennzahlen (Paket 5); Management Summary und Redaktionscheck auf v2-Feldern sowie Umstellung der Profile (Paket 6).
+
+### Tests
+
+- Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
+- `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
 
 ## [0.7.0] – 03.11.2026
 
