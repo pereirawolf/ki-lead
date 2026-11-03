@@ -144,7 +144,13 @@ export function Auftragsformular({
               <li key={m.id}>
                 <span className="material-name">{m.name}</span>
                 <span className="material-meta">
-                  {m.art === "meldung" ? "Vormeldung" : m.art === "eingang" ? "Eingang" : m.art.toUpperCase()}
+                  {m.art === "meldung"
+                    ? "Vormeldung"
+                    : m.art === "eingang"
+                      ? "Eingang"
+                      : m.art === "kennzahlen-baustein"
+                        ? "Kennzahlen-Baustein"
+                        : m.art.toUpperCase()}
                   {m.art === "meldung" || m.art === "eingang" ? (m.rolleGewaehlt ? " (Rolle festgelegt)" : " (automatisch erkannt)") : ""} ·{" "}
                   {groesse(m.groesse)}
                   {m.hinweis ? ` · ${m.hinweis}` : ""}

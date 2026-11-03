@@ -920,3 +920,15 @@ Angepasst ohne Änderung des Solls: `tests/ui/ki-erfassung-felder.test.ts` (Hilf
 | Verdichtung der drei Kreismeldungen mit Attrappe: Eingänge erkannt, t0 aus dem jüngsten Eingang, Ergebnis schemakonform, Eingänge nachgewiesen | KP-2026-W45-01: … › verdichtet die drei Kreismeldungen (Attrappe) … | `tests/profil/landesprofil.test.ts` |
 | Fünf Thessa-Bausteine der Fassung 0.2 als JSON-Material ohne Eingangsrolle und ungekürzt; ohne Ortslage und Hinweise; nicht im Lagebild-Beispiel | KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner › … | `tests/profil/landesprofil.test.ts` |
 | Die Kreis- und Landesmeldungen der neuen Beispiellage lassen sich nach v2 migrieren | LEAD-Meldung-v2 › …: migriert schemagültig und ohne Fehler der Referenzprüfung | `tests/format/lead-meldung-v2.test.ts` |
+
+## Kennzahlen-Bausteine aus Thessa als Materialart (0.6.24, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-01, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingebettetes Original unverändert, Kernschema mit der von Thessa gepinnten Prüfsumme; gebündelte Schemata aktuell | UP-2026-W45-01: eingebettetes Schema der Thessa-Kennzahlen-Bausteine › Original unverändert …; › gebündelte Schemata aktuell … | `tests/format/thessa-baustein.test.ts` |
+| Original für den eigenen Prüfer unbrauchbar (absolute Verweise), gebündelte Schemata verwendbar; Bausteine und beschädigte Bausteine im Gleichlauf mit Ajv auf dem Original; Fassung 0.1 ohne Einsatzmeldungen | UP-2026-W45-01: eingebettetes Schema … › Original mit absoluten Verweisen …; › fünf Bausteine …; › beschädigte Bausteine …; › Fassung 0.1 … | `tests/format/thessa-baustein.test.ts` |
+| Materialart „kennzahlen-baustein“ mit Anzeige im Auftrag; 0.1 toleriert; unbekannte Fassung und Schemabefund bleiben JSON mit Hinweis | UP-2026-W45-01: Erkennung als Materialart „kennzahlen-baustein“ › … | `tests/pipeline/baustein.test.ts` |
+| An die KI ohne `herleitung`; Quellenzeile gleich der von Hand verfassten Zeile der Kreismeldungen; Regel im Steuerungsblock nur mit Bausteinen | UP-2026-W45-01: was an die KI geht › … | `tests/pipeline/baustein.test.ts` |
+| Abgleich der Zahlen im Text: Paare erkannt, kein Hinweis an der Beispiellage, `BAUSTEIN_ZAHL_ABWEICHEND` bei geänderter Zahl, `BAUSTEIN_OHNE_BELEG` ohne Verweis bzw. ohne Quelle | UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h) › … | `tests/pipeline/baustein.test.ts` |
+
+Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahlen-Baustein“ statt „als JSON-Material“, Text an die KI ohne `herleitung`), `tests/kern/schichten.test.ts` (Positivliste `pipeline` um `../formate`).

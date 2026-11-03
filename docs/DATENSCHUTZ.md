@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.11 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.12 vom 03.11.2026, gilt für App-Version 0.6.24 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -59,7 +59,7 @@ Browser ──(Aufruf der Web-App)──▶ GitHub Pages (Programmdateien)
 
 - **Betreiberbuild (seit 0.6.17):** Baut eine Stelle KI-LEAD mit einer Betreiberkonfiguration ([BETRIEB.md](BETRIEB.md)), lässt die Policy nur die dort freigegebenen Ziele zu; ein „Endpunkt der Stelle“ erhält dann die Inhalte wie sonst ein Anbieter. Die Programmdateien kommen vom Server der Stelle statt von GitHub Pages. „Einstellungen → Über KI-LEAD“ und jedes Laufprotokoll nennen die Konfiguration.
 - **Andere Verbindungen gibt es nicht.** Die Content-Security-Policy der App (`index.html`) erlaubt Verbindungen nur zur eigenen Adresse, zu den drei Cloud-Anbietern und seit 0.6.3 zu Ollama auf dem eigenen Gerät (`http://localhost:11434`, `http://127.0.0.1:11434`; Begründung in [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.9). Es gibt keine Telemetrie, keine Analytics, keine Absturzberichte, kein CDN und keine nachgeladenen Schriften; alle Bibliotheken und die Schrift sind gebündelt.
-- **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
+- **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Kennzahlen-Bausteine aus Thessa (seit 0.6.24) gehen ohne ihre Herleitung (`herleitung`, Kennungen einzelner Einsatzmittel) an den Anbieter; sie enthalten nach ihrem Schema keine Personen, sondern Zahlen, Gemeinden und Stichworte der Einsätze. In der Erprobung nur fiktive Bausteine verwenden. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
 - **Websuche und Seitenabruf** führt der Anbieter aus, nicht das Gerät. Suchanfragen gehen an den Anbieter und gegebenenfalls an dessen Suchdienst. Abgerufene Webseiten sehen eine Anfrage des Anbieters. Anthropic weist darauf hin, dass Seitenbetreiber abgerufene Adressen und Anfragedaten nach eigenen Regeln speichern können (Anthropic, o. J. a). Recherche ist nur aktiv, wenn der Auftrag sie erlaubt; die Verdichtung startet ohne Websuche.
 - **Erinnerungen an meldende Stellen** öffnen nur das Mailprogramm des Geräts (mailto). Die App versendet selbst nichts. Kontaktadressen stammen aus `kontakte.json` des Profils oder aus der nicht eingecheckten `kontakte.lokal.json`.
 
@@ -410,3 +410,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.15) |
 | 1.10 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: Anhang C und D als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.11 | 31.10.2026 | Abschnitte 2 und 4: Betreiberbuild mit Betreiberkonfiguration und Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48, -49) |
+| 1.12 | 03.11.2026 | Abschnitt 4: Kennzahlen-Bausteine aus Thessa gehen ohne Herleitung an den Anbieter (App 0.6.24, UP-2026-W45-01) |

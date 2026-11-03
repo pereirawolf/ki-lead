@@ -94,6 +94,26 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
 | 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
+| 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
+
+## [0.6.24] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json` (Planbefund zur Umstellung auf LEAD-Meldung-v2 und zur Verarbeitung von Thessa-Kennzahlen-Bausteinen, Commit `c5a3205`), freigegeben vom Herausgeber am 03.11.2026: alle Pakete wie empfohlen. Dieser Stand setzt Paket 1 um (UP-2026-W45-01: eingebettetes Schema, Paket 1 vor v2); die Pakete 2 bis 6 folgen als eigene Pull Requests.
+
+### Neu
+
+- **Kennzahlen-Bausteine aus Thessa als Materialart (UP-2026-W45-01):** Eine JSON-Datei mit `format` „Thessa-Kennzahlen“ erscheint in der KI-Erfassung unter „Auftrag und Material“ als „Kennzahlen-Baustein“ mit Raum und Schlüssel, Datenstand, Zahl der Kennzahlen und Einsatzmeldungen und dem Satz „Kennzahlen werden unverändert übernommen.“ Geprüft wird gegen eine eingebettete Kopie des Thessa-Schemas (`formate/fremd/thessa-kennzahlen/`, Herkunft, Commit und Prüfsummen in `herkunft.json`); `npm run fremdschemata` bündelt die Verweise auf das Kernschema von LEAD-Meldung-v2 für den eigenen Prüfer und bricht ab, wenn das Kernschema nicht mehr die von Thessa gepinnte Prüfsumme hat. Fassung 0.1 (ohne Einsatzmeldungen) wird toleriert; eine unbekannte Fassung oder ein Schemabefund lässt die Datei JSON-Material wie bisher, mit Hinweis.
+- **Datenminimierung:** An die KI geht der Baustein ohne `herleitung` (Kennungen einzelner Einsatzmittel, rund ein Drittel bis die Hälfte der Datei); die Hülle nennt Raum, Datenstand, Prüfsumme und einen Vorschlag der Quellenzeile im Format der Quellenverzeichnisse.
+- **Übergangsregel für Profile mit LEAD-Meldung-v1:** Der Steuerungsblock von S2 nennt bei Bausteinen im Material die Regel für Kennzahlen im Text (Wert, Einheit, Gegenstand und Datenstand unverändert, Beleg je Satz, keine Summen über Einheit, Art oder Datenstand, Mindestwert bleibt Mindestwert). Nach S2 gleicht die App Zahl-Einheit-Paare im Text mit den Bausteinen ab und meldet Hinweise `BAUSTEIN_ZAHL_ABWEICHEND` (Satz mit Verweis auf den Baustein nennt eine Zahl, die er mit dieser Einheit nicht enthält) und `BAUSTEIN_OHNE_BELEG` (Baustein nicht im Quellenverzeichnis oder Wert des Bausteins ohne Verweis).
+
+### Geändert
+
+- `docs/DATENSCHUTZ.md` 1.12 (Abschnitt 4), `docs/AUSTAUSCH.md` 0.3 (Abschnitt 8: Material-Formate), Spezifikation 0.6.24 (Abschnitt 5.1, S0), LIESMICH des Begleitordners im Landesprofil 1.2.1. Versionsangaben 0.6.24 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- Neu `tests/format/thessa-baustein.test.ts` (Herkunft und Prüfsummen, Bündelung aktuell, gebündeltes Schema im Gleichlauf mit Ajv auf dem Original, beschädigte Bausteine, Fassung 0.1) und `tests/pipeline/baustein.test.ts` (Erkennung und Ablehnung, Anzeige, Projektion ohne `herleitung`, Quellenzeile gleich den von Hand verfassten Kreismeldungen, Steuerungsblock, Abgleich ohne Fehlalarm an der Beispiellage und mit geänderten Zahlen).
+- `tests/profil/landesprofil.test.ts` (KP-2026-W45-02): Bausteine des Begleitordners als Materialart „kennzahlen-baustein“, Text an die KI ohne `herleitung`. `tests/kern/schichten.test.ts`: `pipeline` darf aus `../formate` importieren (gebündelte Schemata).
 
 ## [0.6.23] – 02.11.2026
 

@@ -66,8 +66,9 @@ function graph(): { intern: Kante[]; extern: Kante[] } {
 const { intern, extern } = graph();
 
 /**
- * Positivliste: Verzeichnis → Verzeichnisse, aus denen es importieren darf. „../evaluation“ und „../profile“ sind
- * Ordner außerhalb von src/ (Evaluationsmaterial, eingebaute Profile per ?raw).
+ * Positivliste: Verzeichnis → Verzeichnisse, aus denen es importieren darf. „../evaluation“, „../profile“ und
+ * „../formate“ sind Ordner außerhalb von src/ (Evaluationsmaterial, eingebaute Profile per ?raw, seit 0.6.24 die
+ * gebündelten Schemata der Kennzahlen-Bausteine für die Materialannahme, UP-2026-W45-01).
  */
 const ERLAUBT: Record<string, string[]> = {
   kern: [],
@@ -77,7 +78,7 @@ const ERLAUBT: Record<string, string[]> = {
   lagebild: ["kern"],
   dokumente: ["kern"],
   profil: ["kern", "anbieter", "../profile"],
-  pipeline: ["kern", "anbieter", "profil", "lagebild"],
+  pipeline: ["kern", "anbieter", "profil", "lagebild", "../formate"],
   forschung: ["kern", "anbieter", "profil", "pipeline", "../evaluation"],
   schluessel: ["anbieter", "pwa"],
   speicher: ["kern", "pipeline"],

@@ -265,7 +265,13 @@ export interface Steuerung {
   amtlich?: boolean;
   /** Kennung, Bezug und Zeitstrahl, soweit das Profil die Rollen führt (seit 0.6.9, ZS-2026-W44-01 bis -04) */
   zeitstrahl?: ZeitstrahlSteuerung;
+  /** Zahl der Kennzahlen-Bausteine im Material (seit 0.6.24, UP-2026-W45-01) */
+  bausteine?: number;
 }
+
+/** Regel für Kennzahlen-Bausteine im Material (Übergangsregel h, solange Kennzahlen im Fließtext stehen) */
+export const BAUSTEIN_REGEL =
+  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Gib übernommene Kennzahlen mit Wert, Einheit, Gegenstand und Datenstand unverändert wieder und belege jeden Satz mit dem Eintrag des Bausteins im Quellenverzeichnis (Vorschlag im Attribut `quellenzeile`, Nummer nach deinem Verzeichnis). Addiere keine Kennzahlen verschiedener Einheit, Art oder verschiedenen Datenstands; ein Mindestwert bleibt ein Mindestwert, eine Summe kennzeichnest du als Summe. Einsatzmittel zählen am Standort, Einsätze am Einsatzort. Die App gleicht die Zahlen im Text mit dem Baustein ab.';
 
 export interface ZeitstrahlSteuerung {
   /** Feldpfade aus den Rollen des Profils */
@@ -428,6 +434,7 @@ export function steuerungsBlock(s: Steuerung): string {
     z.push(
       "- Fristen und Indikatoren der Vormeldung führst du nach Teil A (Fristgrundlage) und A.8.1 fort; ohne Prüfung sind Indikatoren „nicht überprüfbar“.",
     );
+  if (s.bausteine) z.push(BAUSTEIN_REGEL);
   z.push("- Nenne Recherche nur, wenn sie in diesem Lauf tatsächlich erfolgt ist.");
   z.push(...zeitstrahlSteuerung(s, s.zeitstrahl));
   return z.join("\n");

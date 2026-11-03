@@ -1,0 +1,27 @@
+{
+  "format": "Thessa-Kennzahlen",
+  "repository": "https://github.com/pereirawolf/thessa",
+  "commit": "b4344c85df3e89d1d8eeb0900a31bfddfb0105ff",
+  "abgerufen": "2026-11-03",
+  "lizenz": "CC-BY-4.0 OR CC0-1.0 (Thessa, LICENSE-CONTENT Nr. 1 b und 2 a)",
+  "kernschema": {
+    "hinweis": "Das Thessa-Schema verweist auf das Kernschema von LEAD-Meldung-v2 und pinnt es in Thessa unter kern/quelle.json. Die Bündelung verlangt, dass formate/lead-meldung-v2/kern.schema.json diese Prüfsumme hat; ändert sich das Kernschema, muss Thessa neu pinnen und diese Angabe nachgezogen werden.",
+    "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+    "sha256": "a4aa182e53d3d88cb7107d909cd345e827cae50da4554338fba1309f96fcb808"
+  },
+  "fassungen": [
+    {
+      "fassung": "0.2",
+      "datei": "0.2/kennzahlen-baustein.schema.json",
+      "quelle": "schema/kennzahlen-baustein.schema.json",
+      "sha256": "30ea7222866a8451d6ef836e85d7e7a10cdf35bfa11e8f50d8ffb830263d816c",
+      "gebuendelt": "gebuendelt/0.2.schema.json"
+    },
+    {
+      "fassung": "0.1",
+      "abgeleitet_von": "0.2",
+      "hinweis": "Ein Schema der Fassung 0.1 ist in Thessa nicht mehr überliefert. Abgeleitet als Fassung 0.2 ohne Pflicht für einsatzmeldungen (eingeführt mit 0.2, Thessa-CHANGELOG 0.0.3); Toleranz nach UP-2026-W45-01, nicht durch einen Baustein 0.1 belegt.",
+      "gebuendelt": "gebuendelt/0.1.schema.json"
+    }
+  ]
+}
