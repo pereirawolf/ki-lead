@@ -41,6 +41,8 @@ export const SEMANTIK_TOKENS = [
   "kritisch-zart",
   "ok",
   "ok-zart",
+  "einsatz",
+  "einsatz-zart",
   "radar-linie",
   "radar-ring",
 ] as const;

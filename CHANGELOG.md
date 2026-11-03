@@ -98,7 +98,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
-| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`, Fassung 1.0 und 1.1, ohne sichtbare Änderung der App) |
 
 ## [0.7.3] – 03.11.2026
 
@@ -124,6 +124,13 @@ Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W
 
 - Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
 - `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
+
+### Nachtrag vom 03.11.2026: Grunddesign 1.1 (ohne neue Versionsnummer)
+
+Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von Thessa mit Fassung 1.0 (pereirawolf/thessa, Pull Request #16, `docs/design-abweichungen.md`, offene Fragen OF-1 bis OF-5). Kennungen und Zahl der Regeln bleiben; die Oberfläche von KI-LEAD ändert sich nicht.
+
+- **Grunddesign der App-Familie, Fassung 1.1** ([design/README.md](design/README.md), `design/rahmen.json`): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog und übernimmt nur dessen Werte (LD-F01, LD-F02); LD-F04 nennt den Status der Einsatzbereitschaft und die Zuordnung der Ampel (einsatzbereit `ok`, eingeschränkt `gering`, im Einsatz `einsatz`, nicht einsatzbereit `kritisch`).
+- **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
 
 ### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
 

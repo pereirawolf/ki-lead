@@ -64,6 +64,8 @@ export const SIGNALE = {
   "kritisch-zart": "Fläche zu „kritisch“ und zum Fehlerkasten",
   ok: "Entspannung, gelungene Prüfung, verwendetes Profil (keine fachliche Freigabe)",
   "ok-zart": "Fläche zu „ok“",
+  einsatz: "Status „im Einsatz“ der Ampel der Einsatzbereitschaft (Schwester-Apps wie Thessa; in KI-LEAD ungenutzt)",
+  "einsatz-zart": "Fläche zu „im Einsatz“",
   "radar-linie": "Linie des Lagenradars",
   "radar-ring": "Ringe und Achsen des Lagenradars",
   "radar-flaeche": "Fläche des Lagenradars",

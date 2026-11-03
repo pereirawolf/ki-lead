@@ -556,6 +556,38 @@
         }
       }
     },
+    "einsatz": {
+      "$type": "color",
+      "$value": "#5B3A9E",
+      "$description": "Status „im Einsatz“ der Ampel der Einsatzbereitschaft (Schwester-Apps wie Thessa; in KI-LEAD ungenutzt)",
+      "$extensions": {
+        "de.pereirawolf.lead-design": {
+          "modi": {
+            "dunkel": "#CDB8FF",
+            "kontrast-hell": "#3D1F7A",
+            "kontrast-dunkel": "#E0D4FF"
+          },
+          "css": "--einsatz",
+          "profil": false
+        }
+      }
+    },
+    "einsatz-zart": {
+      "$type": "color",
+      "$value": "#F1ECFA",
+      "$description": "Fläche zu „im Einsatz“",
+      "$extensions": {
+        "de.pereirawolf.lead-design": {
+          "modi": {
+            "dunkel": "#2C2440",
+            "kontrast-hell": "#FFFFFF",
+            "kontrast-dunkel": "#000000"
+          },
+          "css": "--einsatz-zart",
+          "profil": false
+        }
+      }
+    },
     "radar-linie": {
       "$type": "color",
       "$value": "#1F4F82",
