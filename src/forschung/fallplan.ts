@@ -1,4 +1,4 @@
-// Bewertungsplan für die Fallreihe (seit 0.7.1, TP-2026-W44-64): Plan nach evaluation/plaene/plan.schema.json laden,
+// Bewertungsplan für die Fallreihe (seit 0.7.2, TP-2026-W44-64): Plan nach evaluation/plaene/plan.schema.json laden,
 // prüfen und in eine Auswahl aus Fällen, Varianten, Wiederholungen, Recherchetiefe und Deckel übersetzen. Ohne Plan
 // bilden die gewählten Anbieter die Varianten (Matrix Fälle × Anbieter).
 

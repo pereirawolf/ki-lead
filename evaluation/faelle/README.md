@@ -26,7 +26,7 @@ Mehrere Fälle zu einem Testset fasst ein Bewertungsplan unter `../plaene/` zusa
 
 ## Profil eines Falls
 
-`profil` nennt die Manifest-ID des Profils, mit dem der Fall in der Fallreihe läuft (seit 0.7.1, TP-2026-W44-63), etwa `lead.beispiel.thueringen` für Landesfälle; ohne Angabe das Beispielprofil `lead.beispiel.koordinierungsstelle`. Die Fallreihe sperrt einen Fall, dessen Profil die App nicht mitliefert.
+`profil` nennt die Manifest-ID des Profils, mit dem der Fall in der Fallreihe läuft (seit 0.7.2, TP-2026-W44-63), etwa `lead.beispiel.thueringen` für Landesfälle; ohne Angabe das Beispielprofil `lead.beispiel.koordinierungsstelle`. Die Fallreihe sperrt einen Fall, dessen Profil die App nicht mitliefert.
 
 ## Fallpaket
 

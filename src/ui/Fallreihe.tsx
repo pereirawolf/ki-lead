@@ -1,4 +1,4 @@
-// Abschnitt „Fallreihe“ unter „Einstellungen → Testläufe“ (seit 0.7.1, TP-2026-W44-62 bis -66): mitgelieferte Fälle
+// Abschnitt „Fallreihe“ unter „Einstellungen → Testläufe“ (seit 0.7.2, TP-2026-W44-62 bis -66): mitgelieferte Fälle
 // und Fälle aus einem Fallpaket, Auswahl aus einem Bewertungsplan oder als Matrix Fälle × Anbieter, Start mit einem
 // Klick, Kostenbremse, Ergebnis als ZIP-Datei im Archiv der Testläufe.
 

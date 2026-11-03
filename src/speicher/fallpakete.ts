@@ -1,4 +1,4 @@
-// Importierte Fallpakete der Fallreihe (seit 0.7.1, TP-2026-W44-63; Entscheidung des Herausgebers: bis zur Löschung
+// Importierte Fallpakete der Fallreihe (seit 0.7.2, TP-2026-W44-63; Entscheidung des Herausgebers: bis zur Löschung
 // auf dem Gerät). Ablage in der Datenbank des Testlaufarchivs unter „fallpaket:<sha256>“ mit der ZIP-Datei, wie sie
 // importiert wurde; so gelten Sicherung und „Gerätestand löschen“ auch für die Pakete. Das Paket verlässt das Gerät nur
 // in den Anfragen an die gewählten Anbieter.

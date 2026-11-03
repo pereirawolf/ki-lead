@@ -1,4 +1,4 @@
-// Ergebnis-ZIP der Fallreihe (seit 0.7.1, TP-2026-W44-66): Reihendatei, Übersicht mit den automatischen Prüfungen,
+// Ergebnis-ZIP der Fallreihe (seit 0.7.2, TP-2026-W44-66): Reihendatei, Übersicht mit den automatischen Prüfungen,
 // Laufprotokolle, Entwürfe und je Entwurf eine leere Bewertungsvorlage nach evaluation/bewertungsschema.json mit
 // Prüfliste. Muss-Punkte, Darf-nicht-Punkte und K.-o.-Fehler bleiben Sichtung von Hand.
 

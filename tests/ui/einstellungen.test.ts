@@ -335,7 +335,7 @@ describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
     await klick("Zu den Testläufen");
     expect(ueberschriften()).toEqual(["Testläufe"]);
     expect(navKnoepfe().find((b) => b.getAttribute("aria-current") === "page")?.textContent).toBe("Testläufe");
-    // seit 0.7.1 mit der Fallreihe, nachgeladen (TP-2026-W44-62)
+    // seit 0.7.2 mit der Fallreihe, nachgeladen (TP-2026-W44-62)
     await bisWahr(() => expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Neuer Testlauf", "Fallreihe", "Archiv"]));
     expect(knopf("Testlauf starten")?.disabled).toBe(true);
     // ohne Schlüssel: Hinweis mit Sprung zu den Schlüsseln

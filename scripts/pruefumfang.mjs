@@ -28,7 +28,7 @@ export const NUR_INHALT = [
 
 /**
  * Ausnahmen von NUR_INHALT: Dateien unter evaluation/, die die App einbettet (Vergleichslauf Ilka, seit 0.5.12 auch
- * Musterfassung und Zuschnitt, seit 0.5.13 Plan des Prüffalls Reparatur, seit 0.7.1 alle Fälle, ihr Material und das
+ * Musterfassung und Zuschnitt, seit 0.5.13 Plan des Prüffalls Reparatur, seit 0.7.2 alle Fälle, ihr Material und das
  * Planschema für die Fallreihe, TP-2026-W44-63, -64). Ein Wächter in tests/ci/pruefumfang.test.ts prüft, dass jeder
  * Import aus evaluation/ unter src/ hier steht und jede Regel mindestens einen Import trifft.
  */

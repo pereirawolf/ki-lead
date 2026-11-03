@@ -1,4 +1,4 @@
-// Bereich „Einstellungen → Testläufe“ (seit 0.5.17; seit 0.7.1 mit der Fallreihe, Fallreihe.tsx): standardisierte Testläufe am fiktiven Fall „Ilka“ in einem
+// Bereich „Einstellungen → Testläufe“ (seit 0.5.17; seit 0.7.2 mit der Fallreihe, Fallreihe.tsx): standardisierte Testläufe am fiktiven Fall „Ilka“ in einem
 // Formular und das Archiv der Testläufe. Bis 0.5.16 standen unter „Modelle & Verarbeitung“ zwei Abschnitte,
 // „Vergleichslauf Ilka“ (seit 0.5.8; Umfänge seit 0.5.12) und „Prüffall Reparatur“ (seit 0.5.13); der Prüffall ist
 // jetzt die Testart „S3 Reparatur (aus Musterfassung)“. Ein Testlauf besteht aus einem oder mehreren Läufen; das
@@ -59,7 +59,7 @@ import { useWachhalten } from "./wachhalten";
 import type { KatalogDaten } from "./Fallreihe";
 import { nachladbar } from "./nachladen";
 
-// Fallreihe in einem eigenen Teil des Builds (seit 0.7.1): erst beim Öffnen der Testläufe geladen
+// Fallreihe in einem eigenen Teil des Builds (seit 0.7.2): erst beim Öffnen der Testläufe geladen
 const Fallreihe = nachladbar(() => import("./Fallreihe").then((m) => m.FallreiheAbschnitt));
 import { bestaetigen } from "./bestaetigung";
 
@@ -128,7 +128,7 @@ export interface TestlaeufeProps {
   datenLaden?: () => Promise<FallDaten>;
   musterLaden?: () => Promise<MusterDaten>;
   anbieterFuer?: (schluessel: Schluessel, e: Einstellungen) => LlmAnbieter;
-  /** für Tests: mitgelieferte Fälle der Fallreihe (seit 0.7.1) */
+  /** für Tests: mitgelieferte Fälle der Fallreihe (seit 0.7.2) */
   katalogLaden?: () => Promise<KatalogDaten>;
 }
 

@@ -21,7 +21,7 @@ describe("Prüfumfang je Änderung", () => {
     ["Profil-Changelog", ["profile/muster/CHANGELOG.md"], KEINE],
     ["Dokumentation und Changelog", ["docs/TESTS.md", "CHANGELOG.md", "README.md"], KEINE],
     ["Beschreibung der Bewertung", ["evaluation/README.md", "evaluation/faelle/README.md", "evaluation/plaene/2026-10-25-kontrollsatz.md"], KEINE],
-    // seit 0.7.1 (TP-2026-W44-63) bettet die Fallreihe alle Fälle und ihr Material ein
+    // seit 0.7.2 (TP-2026-W44-63) bettet die Fallreihe alle Fälle und ihr Material ein
     ["Bewertungsfälle, in die Fallreihe eingebettet", ["evaluation/faelle/f01.json"], NUR_KERN],
     ["Schema des Bewertungsplans (Fallreihe)", ["evaluation/plaene/plan.schema.json"], NUR_KERN],
     ["anderer Bewertungsplan", ["evaluation/plaene/beispiel-fallreihe.json"], KEINE],

@@ -97,7 +97,7 @@ test("S3 Reparatur: ein Lauf mit Haiku, fünf Reparaturen, nur S3 ruft die API a
   await expect(page.getByRole("region", { name: "Archiv" }).getByRole("listitem")).toContainText("1 von 1 Läufen");
 });
 
-// Fallreihe (seit 0.7.1, TP-2026-W44-62 bis -67): Fallpaket mit Prüfsumme, Plan mit Vorbelegung, Kostenbremse vor dem
+// Fallreihe (seit 0.7.2, TP-2026-W44-62 bis -67): Fallpaket mit Prüfsumme, Plan mit Vorbelegung, Kostenbremse vor dem
 // ersten Lauf, dann Start mit einem Klick und ZIP-Inhalt; nur die simulierte API wird angesprochen.
 test("Fallreihe: Fallpaket und Plan laden, Kostenbremse, Start mit einem Klick, ZIP mit Übersicht und Bewertungsvorlagen", async ({ page }) => {
   const referenz = await readFile(REFERENZ, "utf-8");

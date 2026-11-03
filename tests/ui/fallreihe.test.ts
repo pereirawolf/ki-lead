@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Fallreihe unter „Einstellungen → Testläufe“ (seit 0.7.1, TP-2026-W44-62 bis -67): Auswahl der Fälle, Fallpaket mit
+// Fallreihe unter „Einstellungen → Testläufe“ (seit 0.7.2, TP-2026-W44-62 bis -67): Auswahl der Fälle, Fallpaket mit
 // Prüfsumme und Ablage auf dem Gerät, Vorbelegung aus dem Plan, Start mit einem Klick, Kostenbremse, ZIP und Archiv.
 // Mit Anbieterattrappe, ohne KI-Aufrufe.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";

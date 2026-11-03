@@ -1,4 +1,4 @@
-// Fälle für die Fallreihe (seit 0.7.1, TP-2026-W44-62, -63): mitgelieferte Bewertungsfälle aus evaluation/faelle/ und
+// Fälle für die Fallreihe (seit 0.7.2, TP-2026-W44-62, -63): mitgelieferte Bewertungsfälle aus evaluation/faelle/ und
 // Fälle aus einem importierten Fallpaket (ZIP, etwa der Kontrollsatz). Reine Logik ohne Vite-Importe, damit Tests und
 // Werkzeuge sie direkt nutzen können; die eingebetteten Dateien liefert fallkatalog-daten.ts.
 

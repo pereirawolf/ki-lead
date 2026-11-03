@@ -1,4 +1,4 @@
-// Fallreihe (seit 0.7.1, TP-2026-W44-62, -65, -66): beliebige Erfassungs- und Verdichtungsfälle nacheinander mit
+// Fallreihe (seit 0.7.2, TP-2026-W44-62, -65, -66): beliebige Erfassungs- und Verdichtungsfälle nacheinander mit
 // denselben Pipeline-Funktionen wie eine Erfassung in der App (S1, unveränderte Bestätigung, S2 mit S3 bei Bedarf).
 // Reihenfolge: je Fall alle Varianten, dann die nächste Wiederholung, dann der nächste Fall; so hinterlässt eine
 // gebremste oder abgebrochene Reihe vollständige Fälle. Die Kostenbremse hält vor dem Lauf an, der den Deckel

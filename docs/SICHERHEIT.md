@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.7 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.8 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -156,3 +156,4 @@ Eine Stelle kann KI-LEAD mit einer Betreiberkonfiguration bauen und selbst ausli
 | 1.5 | 27.10.2026 | Abschnitt 3.1: Datenhülle für Material mit neutralisierten Schließtags, Datenregel auch im Systemauftrag von S1, Kurzantwort mit nicht befolgten Aufforderungen; Grenze der Hülle bei Suchergebnissen, abgerufenen Seiten und PDFs (TP-2026-W44-29, App 0.6.4) |
 | 1.6 | 30.10.2026 | Abschnitt 3.7 Lieferkette: GitHub Actions per Commit-SHA (TP-2026-W44-36) und `npm audit` für ausgelieferte Pakete in der CI (TP-2026-W44-37) von „offen“ nach „vorhanden“; Grenze des Audits bei Entwicklungsabhängigkeiten als offen ergänzt (App 0.6.12, ohne Änderung der App) |
 | 1.7 | 31.10.2026 | Abschnitte 3.3, 3.4 und 3.10: Betreiberbuild mit Betreiberkonfiguration, Policy und Zulassung der Anbieter aus einer Quelle, Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48 bis -51) |
+| 1.8 | 03.11.2026 | Abschnitt 3.1 unverändert: Datenhülle `<stichworte>` und Datenregel gelten seit App 0.7.1 auch für die Orientierungssuche (bis 0.7.0 ohne Hülle und ohne Datenregel, DK-2026-W45-04) |

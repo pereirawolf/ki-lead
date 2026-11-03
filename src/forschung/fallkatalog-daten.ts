@@ -1,4 +1,4 @@
-// Mitgelieferte Bewertungsfälle und ihr Material für die Fallreihe (seit 0.7.1, TP-2026-W44-63). Eigenes Modul, das
+// Mitgelieferte Bewertungsfälle und ihr Material für die Fallreihe (seit 0.7.2, TP-2026-W44-63). Eigenes Modul, das
 // die Oberfläche erst beim Öffnen der Fallreihe dynamisch lädt: So bleiben Fälle (rund 60 Dateien) und Material
 // unter evaluation/material/ (rund 250 KB) in einem eigenen Teil des Builds und nicht im Haupt-JavaScript. Material
 // aus den Profilordnern (Ilka-Eingänge) liefern die eingebauten Profile.

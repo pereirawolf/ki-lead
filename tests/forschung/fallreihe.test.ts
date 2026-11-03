@@ -1,4 +1,4 @@
-// Fallreihe (seit 0.7.1, TP-2026-W44-62 bis -67): Katalog der mitgelieferten Fälle, Fallpaket mit Prüfsumme, Plan mit
+// Fallreihe (seit 0.7.2, TP-2026-W44-62 bis -67): Katalog der mitgelieferten Fälle, Fallpaket mit Prüfsumme, Plan mit
 // Vorbelegung, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe und Inhalt der Ergebnis-ZIP. Ohne KI-Aufrufe.
 import { describe, expect, it } from "vitest";
 import JSZip from "jszip";
