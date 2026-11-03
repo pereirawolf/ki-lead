@@ -2,15 +2,17 @@
 
 import type { KeyboardEvent } from "react";
 import type { RadarDef } from "../kern/typen";
+import { radarMitStufe, radarWerte } from "../kern/ui";
 
 interface Props {
   def: RadarDef;
-  wert: Record<string, number | null> | undefined;
-  onChange?: (neu: Record<string, number | null>) => void;
+  /** Stufen je Achse (v1) oder Achsen als Objekte mit „stufe“ (LEAD-Meldung-v2, seit 0.7.3) */
+  wert: Record<string, unknown> | undefined;
+  onChange?: (neu: Record<string, unknown>) => void;
   idPraefix: string;
 }
 
-export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert: Record<string, number | null> | undefined; groesse?: number }) {
+export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert: Record<string, unknown> | undefined; groesse?: number }) {
   const n = def.achsen.length;
   const c = groesse / 2;
   const rMax = groesse * 0.36;
@@ -29,10 +31,8 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
       .join(" ");
     ringe.push(<polygon key={s} points={pts} className={s === def.max ? "radar-ring radar-ring-aussen" : "radar-ring"} />);
   }
-  const werte = def.achsen.map((a) => {
-    const v = wert?.[a.key];
-    return Number.isInteger(v) ? (v as number) : null;
-  });
+  const stufen = radarWerte(wert);
+  const werte = def.achsen.map((a) => stufen[a.key] ?? null);
   const gesetzt = werte.some((v) => v !== null);
   const flaeche = def.achsen
     .map((_, i) =>
@@ -92,12 +92,9 @@ export function zielIndex(taste: string, aktuell: number, anzahl: number): numbe
 }
 
 export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
-  const setze = (key: string, v: number | null) => {
-    const basis: Record<string, number | null> = {};
-    for (const a of def.achsen) basis[a.key] = Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null;
-    basis[key] = v;
-    onChange?.(basis);
-  };
+  // Seit 0.7.3 (UP-2026-W45-03) auch Achsen als Objekte (LEAD-Meldung-v2): Begründung und Belege bleiben erhalten
+  const setze = (key: string, v: number | null) => onChange?.(radarMitStufe(def, wert, key, v));
+  const stufen = radarWerte(wert);
   return (
     <div className="radar">
       <div className="radar-grafik">
@@ -105,7 +102,7 @@ export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
       </div>
       <div className="radar-achsen">
         {def.achsen.map((a) => {
-          const v = Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null;
+          const v = stufen[a.key] ?? null;
           const gruppe = `${idPraefix}-${a.key}`;
           const werte = achsenWerte(a.stufen.length);
           const optionId = (w: number | null) => `${gruppe}-${w === null ? "offen" : w}`;

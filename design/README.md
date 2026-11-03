@@ -219,4 +219,4 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 
 | Fassung | Datum | Änderung |
 |---|---|---|
-| 1.0 | 03.11.2026 | Erste Fassung nach dem Stand von KI-LEAD 0.7.2: 47 Regeln, Wireframes, Tokens im Format der DTCG |
+| 1.0 | 03.11.2026 | Erste Fassung nach dem Stand von KI-LEAD 0.7.3: 47 Regeln, Wireframes, Tokens im Format der DTCG |

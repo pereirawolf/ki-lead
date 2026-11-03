@@ -97,7 +97,43 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
-| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
+| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
+
+## [0.7.3] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6). Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) und #136 (0.7.2) als 0.7.3 umnummeriert.
+
+### Neu
+
+- **Erfassungsmaske für LEAD-Meldung-v2:** Felder „Wert oder null“ (`anyOf` mit `{"type": "null"}`, etwa Zeitangaben) erscheinen als Eingabe ihres Typs; eine leere Eingabe heißt „unbekannt“ (`null`), nicht leerer Text (`src/kern/schema.ts`, `src/ui/Feld.tsx`). Listen von Objekten (Quellen, Zeitstrahl, Maßnahmen, Empfehlungen, Fristen, Kennzahlen, Indikatoren, abweichende Bewertungen) nutzen die vorhandenen Listenbausteine.
+- **Lagenradar mit Achsen als Objekten:** Grafik, Auswahl, Legende, PDF, Lagebild und Kopiervorlage lesen die Stufe aus `stufe`; eine geänderte Stufe setzt `status` (belegt, offen mit Grund, ein Mindestwert bleibt einer) und behält Begründung und Belege. Unter der Grafik stehen je Achse Status, Grund, Begründung und Belege (`radarWerte`, `radarMitStufe` in `src/kern/ui.ts`). v1 bleibt eine Liste von Zahlen.
+- **Darstellung aus den Feldern:** PDF, Kopiervorlage und Rohtabelle erzeugen bei v2 das Quellenverzeichnis in der Form des Kodierleitfadens, den Zeitstrahl je Sachverhalt, die Kennzahlen (Teilmengen eingerückt unter ihrer Obermenge, Mindestwert als „mindestens“, Bandbreite, unbekannt) und die Entstehung als Zeile (`src/kern/v2darstellung.ts`). Die Kopiervorlage nennt die Quellen, die der Sachverhalt in Texten und Belegen zitiert.
+- **Ausgabestatus mit Freigabe:** Neue optionale Rolle `status_freigegeben`; die finale Ausgabe trägt sie, wenn im Freigabeblock unter `freigegeben` Name und Zeitpunkt stehen, sonst `status_final` (`ausgabeStatus` in `src/kern/ausgabe.ts`). Dateinamenvorlagen dürfen Pfade nennen (`{absender.stelle}`).
+- **Vorlage der Darstellungsdatei für v2:** `formate/lead-meldung-v2/beispiel/meldung.ui.json` mit Schritten, Bezeichnungen und Hinweisen der v2-Felder, Rollen als Pfade und dem Lagenradar des Beispielprofils; Grundlage der Umstellung der Profile in Paket 6.
+
+### Geändert
+
+- Profilformat 1.30, Spezifikation 0.7.3, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 3), `formate/lead-meldung-v2/README.md`. Versionsangaben 0.7.3 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Offen für die folgenden Pakete
+
+- Ausgabeschema, Nachbearbeitung, Kennungsvergabe und Entstehung nach v2 in der KI-Pipeline sowie Übernahme aus Kennzahlen-Bausteinen (Paket 4); Lagebild und Verdichtung mit Kennzahlen (Paket 5); Management Summary und Redaktionscheck auf v2-Feldern sowie Umstellung der Profile (Paket 6).
+
+### Tests
+
+- Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
+- `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
+
+### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, Lizenz CC BY 4.0 wie die übrige Dokumentation (ein zunächst vorgesehener Rechtevorbehalt ist auf Entscheidung des Herausgebers vom selben Tag entfallen). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Grunddesign der App-Familie, Fassung 1.0** ([design/README.md](design/README.md)): 47 Regeln mit Kennung (`LD-R01` …), Stufe MUSS, SOLL oder KANN und Fundstelle in KI-LEAD zu Rahmen, Navigation, Seitenaufbau, Farbe, Schrift und Sprache, Bedienelementen, Eingabe, Rückmeldung, Zugänglichkeit und Plattform; Wireframes als Text, Entsprechung zur Office-Suite, Hinweise zur Übernahme mit `design-abweichungen.md` in der Schwester-App.
+- **Maschinenlesbar:** `design/rahmen.json` mit Schema `rahmen.schema.json` (Rahmen, Leisten, Komponenten, Regeln), `design/lead-design.tokens.json` (Farbrollen, Signalfarben, Schrift, Radien, Maße, Umbrüche, Kontraste) und `design/lead-farbschemata.tokens.json` (alle 22 Farbschemata des Katalogs), Wireframes `wireframe-breit.svg` und `wireframe-schmal.svg`.
+- **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
+- **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
+- **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.2] – 03.11.2026
 
@@ -120,16 +156,6 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A8.json` (Arbeitspaket A
 ### Tests
 
 - Neu `tests/forschung/fallreihe.test.ts` (Katalog, Prüfstein-Fälle, Profil je Fall, Fallpaket, Plan, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe, ZIP und Bewertungsvorlage gegen Ajv) und `tests/ui/fallreihe.test.ts` (Auswahl, Paket mit Prüfsumme und Ablage, Vorbelegung aus dem Plan, Start, Kostenbremse, Archiv); Browsertest der Fallreihe in `tests/browser/testlaeufe.spec.ts`; Planschema und Feld `profil` in `tests/evaluation/schemata.test.ts`.
-
-### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
-
-Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, Lizenz CC BY 4.0 wie die übrige Dokumentation (ein zunächst vorgesehener Rechtevorbehalt ist auf Entscheidung des Herausgebers vom selben Tag entfallen). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
-
-- **Grunddesign der App-Familie, Fassung 1.0** ([design/README.md](design/README.md)): 47 Regeln mit Kennung (`LD-R01` …), Stufe MUSS, SOLL oder KANN und Fundstelle in KI-LEAD zu Rahmen, Navigation, Seitenaufbau, Farbe, Schrift und Sprache, Bedienelementen, Eingabe, Rückmeldung, Zugänglichkeit und Plattform; Wireframes als Text, Entsprechung zur Office-Suite, Hinweise zur Übernahme mit `design-abweichungen.md` in der Schwester-App.
-- **Maschinenlesbar:** `design/rahmen.json` mit Schema `rahmen.schema.json` (Rahmen, Leisten, Komponenten, Regeln), `design/lead-design.tokens.json` (Farbrollen, Signalfarben, Schrift, Radien, Maße, Umbrüche, Kontraste) und `design/lead-farbschemata.tokens.json` (alle 22 Farbschemata des Katalogs), Wireframes `wireframe-breit.svg` und `wireframe-schmal.svg`.
-- **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
-- **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
-- **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.1] – 03.11.2026
 

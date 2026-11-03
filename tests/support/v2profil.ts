@@ -1,7 +1,7 @@
 // Testprofil nach LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Beispiel- bzw. Landesprofil mit dem zusammengestellten
 // v2-Schema (formate/lead-meldung-v2/beispiel bzw. beispiel-land), Migration „lead-meldung-v2“ und Rollen als Pfade.
-// Nur für Tests der Kernunterstützung; die Erfassungsmaske (felder, schritte) folgt mit Paket 3, die Umstellung der
-// mitgelieferten Profile mit Paket 6.
+// Seit 0.7.3 (UP-2026-W45-03) mit der Darstellungsdatei formate/lead-meldung-v2/beispiel/meldung.ui.json (Vorlage für
+// die Umstellung der Profile in Paket 6); ohne Darstellung (`mitDarstellung: false`) nur die Rollen, wie in Paket 2.
 import { readFileSync } from "node:fs";
 import type { Profil } from "../../src/kern/typen";
 import { profilPflicht, repoPfad } from "./dateien";
@@ -30,7 +30,9 @@ export const ROLLEN_V2 = {
   tendenz_verschaerfung: "Verschärfung",
 };
 
-export async function v2Profil(ebene: "bund" | "land" = "bund"): Promise<Profil> {
+export const DARSTELLUNG_V2 = "formate/lead-meldung-v2/beispiel/meldung.ui.json";
+
+export async function v2Profil(ebene: "bund" | "land" = "bund", { mitDarstellung = false } = {}): Promise<Profil> {
   const p = structuredClone(await profilPflicht(ebene === "land" ? "lead-thueringen" : "lead-beispiel"));
   const ordner = ebene === "land" ? "beispiel-land" : "beispiel";
   p.schema = JSON.parse(readFileSync(repoPfad(`formate/lead-meldung-v2/${ordner}/meldung.schema.json`), "utf-8"));
@@ -40,6 +42,8 @@ export async function v2Profil(ebene: "bund" | "land" = "bund"): Promise<Profil>
     { von: "LEAD-Meldung-v1", verfahren: "lead-meldung-v2" },
     { von: "LEAD-Meldung-Land-v1", verfahren: "lead-meldung-v2" },
   ];
-  p.ui = { ...p.ui, rollen: ROLLEN_V2 as any, felder: {}, schritte: [] };
+  p.ui = mitDarstellung
+    ? { ...JSON.parse(readFileSync(repoPfad(DARSTELLUNG_V2), "utf-8")), kennung: p.ui.kennung }
+    : { ...p.ui, rollen: ROLLEN_V2 as any, felder: {}, schritte: [] };
   return p;
 }

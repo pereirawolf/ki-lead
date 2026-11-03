@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.7.2 vom 03.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.7.3 vom 03.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -497,5 +497,6 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.7.0 | 03.11.2026 | LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung `src/kern/meldung-v2.js` für App und Werkzeug, Migration beim Einlesen (`migrationen[].verfahren`), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen und Profilvariablen als Pfade (UP-2026-W45-02) |
 | 0.7.1 | 03.11.2026 | Management Summary sendet erst nach der Bestätigung zur Weitergabe der Inhalte (Abschnitt 5.1, DK-2026-W45-01); Orientierungssuche mit Datenhülle `<stichworte>` und Datenregel wie S1 und S2 (DK-2026-W45-04) |
 | 0.7.2 | 03.11.2026 | Abschnitt 5.4 (Einstellungen, Testläufe): Fallreihe über mitgelieferte Fälle und Fallpakete mit Plan, Kostenbremse und Ergebnis-ZIP (TP-2026-W44-62 bis -67) |
+| 0.7.3 | 03.11.2026 | LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte mit Status und Begründung je Achse, Ausgabestatus mit Freigabe (Rolle `status_freigegeben`), PDF, Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis, Zeitstrahl und Kennzahlen (Teilmengen eingerückt, Mindestwert als „mindestens“), Vorlage der v2-Darstellungsdatei (UP-2026-W45-03) |
 | 0.6.22 | 01.11.2026 | Gesamtkonsistenz KW 44: Fristenkennsatz je Frist eine Zeile, Mehrfachzeilen im Redaktionscheck und in der Management Summary gekennzeichnet (Funktionsumfang Nr. 5); Prüfung der Quellenidentität bei der Zeitstrahl-Fortschreibung, Warnung `ZEITSTRAHL_QUELLE` (Abschnitt KI-Erfassung und Verdichtung); Beispielprofil 1.36.0, Landesprofil Thüringen 1.1.0, Lagebild Justiz 0.1.2 |
 | 0.6.21 | 01.11.2026 | Hilfetexte in der ganzen App zwischen Beschriftung und Eingabe (Abschnitt Bedienung); Erklärtexte im Analysebereich mit Leitfrage (Beispielprofil 1.35.1, Landesprofil Thüringen 1.0.1, Lagebild Justiz 0.1.1) |

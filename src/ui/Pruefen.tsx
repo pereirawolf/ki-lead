@@ -4,7 +4,7 @@
 import { useMemo, useState } from "react";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
-import { dateiname } from "../kern/ausgabe";
+import { ausgabeStatus, dateiname } from "../kern/ausgabe";
 import { holeWert, mitFeld } from "../kern/pfad";
 import { alsText, feldUi, radarFuer } from "../kern/ui";
 import { sachverhalte } from "../kern/quellen";
@@ -65,7 +65,7 @@ export function Pruefen({
   zumFeld?: (pfad: string) => void;
 }) {
   const r = profil.ui.rollen;
-  const alsFinal = useMemo(() => mitFeld(meldung, r.status_feld, r.status_final), [meldung, r]);
+  const alsFinal = useMemo(() => mitFeld(meldung, r.status_feld, ausgabeStatus(meldung, profil.ui, true)), [meldung, r, profil.ui]);
   const eigeneSchema = useMemo(() => (befunde ? null : pruefeGegenSchema(profil.schema, alsFinal, profil.ui)), [befunde, profil, alsFinal]);
   const eigenePflicht = useMemo(() => (befunde ? null : pflichtHinweise(meldung, profil.ui)), [befunde, profil, meldung]);
   const schemaBefunde = befunde?.schema ?? eigeneSchema ?? [];
@@ -92,7 +92,7 @@ export function Pruefen({
     );
   const exportiere = async (final: boolean) => {
     const jetzt = new Date();
-    const daten = mitFeld(meldung, r.status_feld, final ? r.status_final : r.status_entwurf);
+    const daten = mitFeld(meldung, r.status_feld, ausgabeStatus(meldung, profil.ui, final));
     if (!(await finalFreigeben(final))) return;
     dateiAnbieten(JSON.stringify(daten, null, 2) + "\n", dateiname(daten, profil, !final, jetzt) + ".json", "application/json");
   };
@@ -102,7 +102,7 @@ export function Pruefen({
     // Exportzeitpunkt vor dem Nachladen der PDF-Ausgabe festhalten (Rückfall, wenn kein Meldezeitpunkt angegeben ist)
     const jetzt = new Date();
     if (!(await finalFreigeben(final))) return;
-    const daten = mitFeld(meldung, r.status_feld, final ? r.status_final : r.status_entwurf);
+    const daten = mitFeld(meldung, r.status_feld, ausgabeStatus(meldung, profil.ui, final));
     try {
       // Die PDF-Bibliothek wird erst bei Bedarf geladen (kleineres Haupt-JavaScript)
       const { meldungAlsPdf } = await import("../dokumente/pdf");

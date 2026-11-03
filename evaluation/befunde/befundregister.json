@@ -2953,6 +2953,27 @@
       "kurz": "Tests der Fallreihe in Vitest (Logik, Oberfläche) und im Browser mit Attrappe für Import, Prüfsumme, Vorbelegung, Start, Kostenbremse und ZIP-Inhalt; App 0.7.2.",
       "status": "umgesetzt",
       "pr": 136
+    },
+    {
+      "id": "UP-2026-W45-03",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 10 (Z. 189)"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "rollen (Z. 306–318)"
+        }
+      ],
+      "kurz": "LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte, Quellenverzeichnis, Zeitstrahl und Kennzahlen aus den Feldern in PDF, Kopiervorlage und Rohtabelle, Ausgabestatus mit Freigabe, Vorlage der v2-Darstellungsdatei.",
+      "status": "umgesetzt",
+      "pr": 135
     }
   ]
 }
