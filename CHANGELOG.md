@@ -98,7 +98,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
-| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
 
 ## [0.7.3] – 03.11.2026
 
@@ -134,6 +134,13 @@ Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- un
 - **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
 - **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
 - **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Nachtrag vom 03.11.2026: Quelle der Thüringer Kreisnamen (ohne Änderung der App)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, die Gebietsquelle in KI-LEAD, KRITIS-LEAD und Thessa einheitlich anzugeben.
+
+- **Landesprofil Thüringen 1.2.2:** Namen und Kreisschlüssel der 17 Landkreise und 5 kreisfreien Städte nach dem CSV-Export der Verwaltungsstruktur des Thüringer Landesamts für Statistik (Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026), wie der Gebietskatalog von Thessa und das Betreiberformular von KRITIS-LEAD. Die Liste in `scripts/landesprofil.mjs` nennt die Quelle und je Kreis den Schlüssel (`ags`); die Namen sind unverändert, Schema, Darstellungsdatei, Kontakte und Beispiele ebenso. Quelle auch im README des Profils.
+- **Tests:** `tests/profil/landesprofil.test.ts` (Schlüssel und Namen gegen den Export, Quelle in Kreisliste und README); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.2] – 03.11.2026
 
