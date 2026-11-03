@@ -1,6 +1,6 @@
 # Grunddesign der App-Familie
 
-Fassung 1.1 vom 03.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
+Fassung 1.1 vom 04.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
 
 Diese Beschreibung legt das gemeinsame Grunddesign der Apps **KI-LEAD**, **KRITIS-LEAD** und **Thessa** fest. Es geht um Rahmen, Navigation, Seitenaufbau, Bedienmuster, Farbrollen, Schrift und Zugänglichkeit. Referenzumsetzung ist KI-LEAD. Jede Regel nennt ihre Fundstelle dort, Tests halten Beschreibung und Code im Gleichlauf.
 
@@ -126,7 +126,7 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | <a id="ld-a02"></a>**LD-A02** | SOLL | Die Kennsätze der Bereiche sind parallel gebaut (<Tätigkeit> nach <Methode>, gegebenenfalls mit Zusatz), etwa „Erfassung einer Meldung nach LEAD-Systematik“. | `CHANGELOG.md` |
 | <a id="ld-a03"></a>**LD-A03** | MUSS | Mehrteilige Bereiche haben einen Arbeitsbereich aus Leiste (15 rem, links, mitlaufend) und Arbeitsfläche. Bis zum Umbruch „breit“ steht die Leiste waagerecht über dem Inhalt, ist scrollbar, zeigt am Rand einen Verlauf, solange dort weitere Abschnitte liegen, und rückt den aktiven Abschnitt ins Bild. | `src/styles/basis.css`, `src/ui/leiste.ts` |
 | <a id="ld-a04"></a>**LD-A04** | MUSS | Schrittfolgen sind nummeriert. Ein Schritt mit angezeigtem Befund trägt einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen. Schritte werden nicht nach ihrer Position als „erledigt“ gekennzeichnet. | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
-| <a id="ld-a05"></a>**LD-A05** | MUSS | Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung, den Inhalten und am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf). | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
+| <a id="ld-a05"></a>**LD-A05** | MUSS | Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung und den Inhalten. In Schrittfolgen (LD-A04) stehen am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf); Bereiche ohne Reihenfolge haben keine Blätterknöpfe. | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
 | <a id="ld-a06"></a>**LD-A06** | SOLL | Gleichrangige Ansichten eines Ergebnisses stehen als Reiterleiste über dem Inhalt statt in einer seitlichen Leiste (KI-LEAD: Auswertung). | `src/ui/Lagebild.tsx` |
 | <a id="ld-a07"></a>**LD-A07** | MUSS | Nach einem Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht beginnt der neue Inhalt oben unter der Kopfleiste, ohne Animation, und der Fokus liegt auf der neuen Überschrift. Knöpfe von Leisten, die stehen bleiben, behalten den Fokus. | `src/ui/sprung.ts`, `docs/BARRIEREFREIHEIT.md` |
 
@@ -166,7 +166,7 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | <a id="ld-e01"></a>**LD-E01** | MUSS | Ein Feld hat die Reihenfolge Beschriftung, Hilfetext, Eingabe, Fehlertext, Rückmeldungen, Werkzeuge: Anleitung vor der Eingabe, Rückmeldungen und Werkzeuge danach. Der Hilfetext ist per aria-describedby verknüpft. | `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e02"></a>**LD-E02** | MUSS | Eine fehlende Pflichtangabe erscheint am Feld erst, wenn es bearbeitet und verlassen wurde, nach dem Besuch des Prüfschritts oder bei einer geöffneten Datei; andere Befunde sofort. Ein Feld mit Befund trägt aria-invalid. | `src/ui/feldBefunde.ts`, `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e03"></a>**LD-E03** | SOLL | Listen gleichartiger Einträge lassen sich je Eintrag ein- und aufklappen; der Kopf zeigt Bezeichnung und Befundzahl, der Knopf trägt aria-expanded. | `src/ui/Feld.tsx` |
-| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. | `src/ui/Pruefen.tsx` |
+| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht. | `src/ui/Pruefen.tsx` |
 
 ### Rückmeldung
 
@@ -220,4 +220,4 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 03.11.2026 | Erste Fassung nach dem Stand von KI-LEAD 0.7.3: 47 Regeln, Wireframes, Tokens im Format der DTCG |
-| 1.1 | 03.11.2026 | Nach dem Abgleich mit Thessa ([thessa#16](https://github.com/pereirawolf/thessa/pull/16)): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem Katalog (LD-F01, LD-F02); neue Signalfarben `einsatz` und `einsatz-zart` für den Status „im Einsatz“, Zuordnung der Ampel der Einsatzbereitschaft (LD-F04). Kennungen und Zahl der Regeln unverändert. |
+| 1.1 | 04.11.2026 | Nach dem Abgleich mit Thessa ([thessa#16](https://github.com/pereirawolf/thessa/pull/16)): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem Katalog (LD-F01, LD-F02); neue Signalfarben `einsatz` und `einsatz-zart` für den Status „im Einsatz“, Zuordnung der Ampel der Einsatzbereitschaft (LD-F04); „Zurück“ und „Weiter“ nur in Schrittfolgen (LD-A05); Befunde mit Sprung nur für Eingaben in Formularen (LD-E04). Kennungen und Zahl der Regeln unverändert. |

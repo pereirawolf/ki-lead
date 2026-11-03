@@ -98,7 +98,19 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
-| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`, Fassung 1.0 und 1.1, ohne sichtbare Änderung der App) |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
+| 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
+
+## [0.7.4] – 04.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von Thessa mit Fassung 1.0 (pereirawolf/thessa, Pull Request #16, `docs/design-abweichungen.md`, offene Fragen OF-1 bis OF-5), ergänzt am 04.11.2026 um OF-7 und OF-9 und die Führung als eigene Version 0.7.4. Kennungen und Zahl der Regeln bleiben; die Oberfläche von KI-LEAD ändert sich nicht.
+
+### Geändert
+
+- **Grunddesign der App-Familie, Fassung 1.1** ([design/README.md](design/README.md), `design/rahmen.json`): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog und übernimmt nur dessen Werte (LD-F01, LD-F02); LD-F04 nennt den Status der Einsatzbereitschaft und die Zuordnung der Ampel (einsatzbereit `ok`, eingeschränkt `gering`, im Einsatz `einsatz`, nicht einsatzbereit `kritisch`).
+- **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
+- **Grunddesign, Klarstellungen zu OF-7 und OF-9:** „Zurück: …“ und „Weiter: …“ stehen nur in Schrittfolgen, Bereiche ohne Reihenfolge haben keine Blätterknöpfe (LD-A05); Befunde mit Sprung zum Feld gelten für Eingaben in Formularen, nicht für die Prüfung eines geladenen Datenstands (LD-E04). Beides entspricht der Referenzumsetzung: „Weiter: …“ gibt es nur in der Erfassung (`src/ui/Meldung.tsx`), Befunde mit Sprung nur im Prüfschritt (`src/ui/Pruefen.tsx`).
+- Versionsangaben 0.7.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 704).
 
 ## [0.7.3] – 03.11.2026
 
@@ -125,13 +137,6 @@ Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W
 - Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
 - `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
 
-### Nachtrag vom 03.11.2026: Grunddesign 1.1 (ohne neue Versionsnummer)
-
-Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von Thessa mit Fassung 1.0 (pereirawolf/thessa, Pull Request #16, `docs/design-abweichungen.md`, offene Fragen OF-1 bis OF-5). Kennungen und Zahl der Regeln bleiben; die Oberfläche von KI-LEAD ändert sich nicht.
-
-- **Grunddesign der App-Familie, Fassung 1.1** ([design/README.md](design/README.md), `design/rahmen.json`): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog und übernimmt nur dessen Werte (LD-F01, LD-F02); LD-F04 nennt den Status der Einsatzbereitschaft und die Zuordnung der Ampel (einsatzbereit `ok`, eingeschränkt `gering`, im Einsatz `einsatz`, nicht einsatzbereit `kritisch`).
-- **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
-
 ### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
 
 Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, Lizenz CC BY 4.0 wie die übrige Dokumentation (ein zunächst vorgesehener Rechtevorbehalt ist auf Entscheidung des Herausgebers vom selben Tag entfallen). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
@@ -141,6 +146,13 @@ Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- un
 - **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
 - **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
 - **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Nachtrag vom 03.11.2026: Quelle der Thüringer Kreisnamen (ohne Änderung der App)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, die Gebietsquelle in KI-LEAD, KRITIS-LEAD und Thessa einheitlich anzugeben.
+
+- **Landesprofil Thüringen 1.2.2:** Namen und Kreisschlüssel der 17 Landkreise und 5 kreisfreien Städte nach dem CSV-Export der Verwaltungsstruktur des Thüringer Landesamts für Statistik (Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026), wie der Gebietskatalog von Thessa und das Betreiberformular von KRITIS-LEAD. Die Liste in `scripts/landesprofil.mjs` nennt die Quelle und je Kreis den Schlüssel (`ags`); die Namen sind unverändert, Schema, Darstellungsdatei, Kontakte und Beispiele ebenso. Quelle auch im README des Profils.
+- **Tests:** `tests/profil/landesprofil.test.ts` (Schlüssel und Namen gegen den Export, Quelle in Kreisliste und README); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.2] – 03.11.2026
 

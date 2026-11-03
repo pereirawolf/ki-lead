@@ -4,6 +4,12 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.2.2 – 03.11.2026
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, die Gebietsquelle in KI-LEAD, KRITIS-LEAD und Thessa einheitlich anzugeben. Dritte Stelle: nur Begleittext.
+
+- **Quelle der Kreisnamen:** Namen und Kreisschlüssel der Kreise und kreisfreien Städte nach dem CSV-Export der Verwaltungsstruktur des Thüringer Landesamts für Statistik (Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026), genannt im README und in der Kreisliste von `scripts/landesprofil.mjs` (dort mit Schlüssel je Kreis). Namen, Schema, Darstellungsdatei, Kontakte und Beispiele unverändert.
+
 ## 1.2.1 – 03.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-01, freigegeben vom Herausgeber am 03.11.2026. Dritte Stelle: nur Begleittext.

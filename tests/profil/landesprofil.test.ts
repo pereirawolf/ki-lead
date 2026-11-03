@@ -51,6 +51,48 @@ describe("TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet", () =>
   });
 });
 
+describe("Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik (Auftrag des Herausgebers vom 03.11.2026)", () => {
+  // Soll: Kreisschlüssel und Name aus dem CSV-Export der Verwaltungsstruktur (Kreisdatei, Spalten F1 und F2),
+  // Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026; kreisfrei sind die Schlüssel 16051 bis 16055
+  const TLS: [string, string][] = [
+    ["16051", "Stadt Erfurt"],
+    ["16052", "Stadt Gera"],
+    ["16053", "Stadt Jena"],
+    ["16054", "Stadt Suhl"],
+    ["16055", "Stadt Weimar"],
+    ["16061", "Eichsfeld"],
+    ["16062", "Nordhausen"],
+    ["16063", "Wartburgkreis"],
+    ["16064", "Unstrut-Hainich-Kreis"],
+    ["16065", "Kyffhäuserkreis"],
+    ["16066", "Schmalkalden-Meiningen"],
+    ["16067", "Gotha"],
+    ["16068", "Sömmerda"],
+    ["16069", "Hildburghausen"],
+    ["16070", "Ilm-Kreis"],
+    ["16071", "Weimarer Land"],
+    ["16072", "Sonneberg"],
+    ["16073", "Saalfeld-Rudolstadt"],
+    ["16074", "Saale-Holzland-Kreis"],
+    ["16075", "Saale-Orla-Kreis"],
+    ["16076", "Greiz"],
+    ["16077", "Altenburger Land"],
+  ];
+
+  it("Schlüssel und Namen der 22 Gebietskörperschaften wie im Export; Landkreise mit „Landkreis“, sofern der Name nicht auf „kreis“ endet", () => {
+    const soll = TLS.map(([ags, n]) => [ags, n.startsWith("Stadt ") || /kreis$/i.test(n) ? n : `Landkreis ${n}`]);
+    expect(KREISE.map((k) => [k.ags, k.name]).sort()).toEqual(soll.sort());
+    expect(LAND.ags).toBe("16");
+  });
+
+  it("Quelle mit Stand und Abruf im Kopf der Kreisliste und im README des Profils", () => {
+    const quelle =
+      /CSV-Export der Verwaltungsstruktur[\s\S]*statistik\.thueringen\.de\/datenbank\/verwaltungsstruktur\.asp[\s\S]*Stand 01\.01\.2026, abgerufen[\s\S]*am 02\.11\.2026/;
+    expect(readFileSync(repoPfad("scripts/landesprofil.mjs"), "utf-8")).toMatch(quelle);
+    expect(readFileSync(repoPfad("profile/lead-thueringen/README.md"), "utf-8")).toMatch(quelle);
+  });
+});
+
 describe("TP-2026-W44-55: SOP-Sammelmappe mit dem Beispielprofil geteilt", () => {
   it("dieselben SOP-Texte wie im Beispielprofil, ohne Kopie im Ordner des Landesprofils", async () => {
     const land = (await profil("lead-thueringen")).profil!;

@@ -18,32 +18,38 @@ import { pathToFileURL } from "node:url";
 export const QUELLE = "profile/lead-beispiel";
 export const ZIEL = "profile/lead-thueringen";
 
-/** Land und Kreise mit Kennungspräfix; die Reihenfolge ist die der Auswahl (Land, dann alphabetisch) */
-export const LAND = { name: "Thüringen", praefix: "DE-TH" };
+/**
+ * Land und Kreise mit Kennungspräfix und Kreisschlüssel; die Reihenfolge ist die der Auswahl (Land, dann alphabetisch).
+ * Namen und Schlüssel: Thüringer Landesamt für Statistik, CSV-Export der Verwaltungsstruktur
+ * (https://statistik.thueringen.de/datenbank/verwaltungsstruktur.asp), Gemeindestruktur Stand 01.01.2026, abgerufen
+ * am 02.11.2026. Kreisfreie Städte wie im Export („Stadt Erfurt“), Landkreise mit „Landkreis“ vor dem Namen, sofern er
+ * nicht auf „kreis“ endet (wie der Gebietskatalog von Thessa). Das Kürzel des Kennungspräfixes ist das Kfz-Kennzeichen.
+ */
+export const LAND = { name: "Thüringen", praefix: "DE-TH", ags: "16" };
 export const KREISE = [
-  ["Ilm-Kreis", "IK"],
-  ["Kyffhäuserkreis", "KYF"],
-  ["Landkreis Altenburger Land", "ABG"],
-  ["Landkreis Eichsfeld", "EIC"],
-  ["Landkreis Gotha", "GTH"],
-  ["Landkreis Greiz", "GRZ"],
-  ["Landkreis Hildburghausen", "HBN"],
-  ["Landkreis Nordhausen", "NDH"],
-  ["Landkreis Saalfeld-Rudolstadt", "SLF"],
-  ["Landkreis Schmalkalden-Meiningen", "SM"],
-  ["Landkreis Sömmerda", "SOEM"],
-  ["Landkreis Sonneberg", "SON"],
-  ["Landkreis Weimarer Land", "AP"],
-  ["Saale-Holzland-Kreis", "SHK"],
-  ["Saale-Orla-Kreis", "SOK"],
-  ["Stadt Erfurt", "EF"],
-  ["Stadt Gera", "G"],
-  ["Stadt Jena", "J"],
-  ["Stadt Suhl", "SHL"],
-  ["Stadt Weimar", "WE"],
-  ["Unstrut-Hainich-Kreis", "UH"],
-  ["Wartburgkreis", "WAK"],
-].map(([name, kuerzel]) => ({ name, praefix: `${LAND.praefix}-${kuerzel}` }));
+  ["Ilm-Kreis", "IK", "16070"],
+  ["Kyffhäuserkreis", "KYF", "16065"],
+  ["Landkreis Altenburger Land", "ABG", "16077"],
+  ["Landkreis Eichsfeld", "EIC", "16061"],
+  ["Landkreis Gotha", "GTH", "16067"],
+  ["Landkreis Greiz", "GRZ", "16076"],
+  ["Landkreis Hildburghausen", "HBN", "16069"],
+  ["Landkreis Nordhausen", "NDH", "16062"],
+  ["Landkreis Saalfeld-Rudolstadt", "SLF", "16073"],
+  ["Landkreis Schmalkalden-Meiningen", "SM", "16066"],
+  ["Landkreis Sömmerda", "SOEM", "16068"],
+  ["Landkreis Sonneberg", "SON", "16072"],
+  ["Landkreis Weimarer Land", "AP", "16071"],
+  ["Saale-Holzland-Kreis", "SHK", "16074"],
+  ["Saale-Orla-Kreis", "SOK", "16075"],
+  ["Stadt Erfurt", "EF", "16051"],
+  ["Stadt Gera", "G", "16052"],
+  ["Stadt Jena", "J", "16053"],
+  ["Stadt Suhl", "SHL", "16054"],
+  ["Stadt Weimar", "WE", "16055"],
+  ["Unstrut-Hainich-Kreis", "UH", "16064"],
+  ["Wartburgkreis", "WAK", "16063"],
+].map(([name, kuerzel, ags]) => ({ name, praefix: `${LAND.praefix}-${kuerzel}`, ags }));
 
 export const SCHEMA_ID = "LEAD-Meldung-Land-v1";
 
