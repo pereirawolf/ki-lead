@@ -99,6 +99,18 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
 | 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
+| 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
+
+## [0.7.4] – 04.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von Thessa mit Fassung 1.0 (pereirawolf/thessa, Pull Request #16, `docs/design-abweichungen.md`, offene Fragen OF-1 bis OF-5), ergänzt am 04.11.2026 um OF-7 und OF-9 und die Führung als eigene Version 0.7.4. Kennungen und Zahl der Regeln bleiben; die Oberfläche von KI-LEAD ändert sich nicht.
+
+### Geändert
+
+- **Grunddesign der App-Familie, Fassung 1.1** ([design/README.md](design/README.md), `design/rahmen.json`): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog und übernimmt nur dessen Werte (LD-F01, LD-F02); LD-F04 nennt den Status der Einsatzbereitschaft und die Zuordnung der Ampel (einsatzbereit `ok`, eingeschränkt `gering`, im Einsatz `einsatz`, nicht einsatzbereit `kritisch`).
+- **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
+- **Grunddesign, Klarstellungen zu OF-7 und OF-9:** „Zurück: …“ und „Weiter: …“ stehen nur in Schrittfolgen, Bereiche ohne Reihenfolge haben keine Blätterknöpfe (LD-A05); Befunde mit Sprung zum Feld gelten für Eingaben in Formularen, nicht für die Prüfung eines geladenen Datenstands (LD-E04). Beides entspricht der Referenzumsetzung: „Weiter: …“ gibt es nur in der Erfassung (`src/ui/Meldung.tsx`), Befunde mit Sprung nur im Prüfschritt (`src/ui/Pruefen.tsx`).
+- Versionsangaben 0.7.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 704).
 
 ## [0.7.3] – 03.11.2026
 
