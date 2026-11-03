@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.6.24 vom 03.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.7.0 vom 03.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -318,7 +318,8 @@ Seit 0.5.6 in Bereichen (seit 0.5.17 sieben, seit 0.6.15 acht; „Testläufe“ 
 
 ```
 src/
-  kern/        Schemaprüfung, Migration, Quellen, Kennsätze, Zeit, Eingangsmeldung, Version (importiert nichts außerhalb)
+  kern/        Schemaprüfung, Migration, Quellen, Kennsätze, Zeit, Eingangsmeldung, Version (importiert nichts außerhalb);
+               seit 0.6.24 Kennzahlen-Bausteine, seit 0.7.0 LEAD-Meldung-v2 (meldung-v2.js, auch für scripts/)
   profil/      Laden, Prüfen, Versionieren, SOP-Zerlegung und -Einteilung, Platzhalter, Standardtexte der App
   pipeline/    Stufen S0–S3, Management Summary, Laufformat, Einstellungen (ohne Speicher), Schätzung
   forschung/   Vergleichslauf, Reparaturtest, Management-Summary-Reihe, Auswertung, Plausibilität (an das Beispielprofil
@@ -492,5 +493,6 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.6.20 · Nachtrag | 01.11.2026 | Ohne neue Versionsnummer und ohne Änderung der App: Meldungsformat `LEAD-Meldung-v2` als Entwurf mit Kern- und Modulschema, Zusammenstellung, Migration und Referenzprüfung (offener Punkt 21, [LEAD-MELDUNG-V2.md](LEAD-MELDUNG-V2.md)) |
 | 0.6.23 | 02.11.2026 | Gesamtkonsistenz nach PR #126: Eingabehilfe zum Fristenkennsatz, profilneutrale Texte (Verweise aus `lagebild.verweise`, Referenzraum statt Bevölkerungsschutz, Quellenkategorien, Reiter „Lagenradar“ nur mit Radar), Quellenidentität ohne Kategorie und Zugangsvermerke, v2-Chronologie; Beispielprofil 1.36.1, Landesprofil Thüringen 1.1.1, Lagebild Justiz 0.2.0 |
 | 0.6.24 | 03.11.2026 | Kennzahlen-Bausteine aus Thessa als eigene Materialart in der KI-Erfassung (Abschnitt 5.1, S0): Prüfung gegen eingebettetes Schema, Anzeige im Auftrag, Übergabe ohne Herleitung, Regel im Steuerungsblock und Abgleich der Zahlen im Text (UP-2026-W45-01) |
+| 0.7.0 | 03.11.2026 | LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung `src/kern/meldung-v2.js` für App und Werkzeug, Migration beim Einlesen (`migrationen[].verfahren`), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen und Profilvariablen als Pfade (UP-2026-W45-02) |
 | 0.6.22 | 01.11.2026 | Gesamtkonsistenz KW 44: Fristenkennsatz je Frist eine Zeile, Mehrfachzeilen im Redaktionscheck und in der Management Summary gekennzeichnet (Funktionsumfang Nr. 5); Prüfung der Quellenidentität bei der Zeitstrahl-Fortschreibung, Warnung `ZEITSTRAHL_QUELLE` (Abschnitt KI-Erfassung und Verdichtung); Beispielprofil 1.36.0, Landesprofil Thüringen 1.1.0, Lagebild Justiz 0.1.2 |
 | 0.6.21 | 01.11.2026 | Hilfetexte in der ganzen App zwischen Beschriftung und Eingabe (Abschnitt Bedienung); Erklärtexte im Analysebereich mit Leitfrage (Beispielprofil 1.35.1, Landesprofil Thüringen 1.0.1, Lagebild Justiz 0.1.1) |

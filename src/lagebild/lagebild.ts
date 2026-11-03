@@ -8,7 +8,8 @@ import { holeWert, teilePfad } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
-import type { Kontakte, Meldung, Profil } from "../kern/typen";
+import { referenzBefunde } from "../kern/referenzen";
+import type { Befund, Kontakte, Meldung, Profil } from "../kern/typen";
 
 export interface LagebildDatei {
   name: string;
@@ -32,6 +33,8 @@ export interface LagebildEintrag {
   fremd: EingangsInfo | null;
   /** Fremde Meldung gegen ihr Schema aus `meldung.eingang_schemata` geprüft (seit 0.6.19, TP-2026-W44-59); Befunde in `schema` */
   fremdGeprueft?: boolean;
+  /** Referenzprüfung (Prüfebene 2) bei Meldungen nach LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02); fehlt ohne Befund */
+  referenzen?: Befund[];
 }
 
 export interface LagebildFehler {
@@ -91,7 +94,15 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
     const mig = migriere(obj, profil);
     const basis = { id, name: datei.name, importiertAm: datei.importiertAm, herkunft: mig.herkunft };
     if (mig.bekannt) {
-      eintraege.push({ ...basis, daten: mig.daten, hinweise: mig.hinweise, schema: pruefeGegenSchema(profil.schema, mig.daten, profil.ui), fremd: null });
+      const referenzen = referenzBefunde(mig.daten, profil.ui);
+      eintraege.push({
+        ...basis,
+        daten: mig.daten,
+        hinweise: mig.hinweise,
+        schema: pruefeGegenSchema(profil.schema, mig.daten, profil.ui),
+        fremd: null,
+        ...(referenzen.length ? { referenzen } : {}),
+      });
       continue;
     }
     const info = eingangsInfo(obj, profil);
@@ -107,6 +118,7 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
       schema: es ? pruefeGegenSchema(es.schema, obj, profil.ui) : [],
       fremd: info,
       ...(es ? { fremdGeprueft: true } : {}),
+      ...(referenzBefunde(obj).length ? { referenzen: referenzBefunde(obj) } : {}),
     });
   }
   return { eintraege, fehler };

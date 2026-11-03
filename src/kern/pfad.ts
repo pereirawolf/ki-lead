@@ -58,6 +58,26 @@ export function mitWert<T>(obj: T, segs: Segment[], wert: unknown): T {
   return basis;
 }
 
+/**
+ * Setzt den Wert am Pfad und legt fehlende Zwischenobjekte an (seit 0.7.0, UP-2026-W45-02: Rollen dürfen Pfade wie
+ * „absender.stelle“ nennen, nicht nur Felder der obersten Ebene).
+ */
+export function setzeWert(obj: Record<string, any>, pfad: string | Segment[], wert: unknown): void {
+  const segs = typeof pfad === "string" ? teilePfad(pfad) : pfad;
+  if (!segs.length) return;
+  let cur: any = obj;
+  for (const seg of segs.slice(0, -1)) {
+    if (cur[seg as any] === null || typeof cur[seg as any] !== "object") cur[seg as any] = {};
+    cur = cur[seg as any];
+  }
+  cur[segs[segs.length - 1] as any] = wert;
+}
+
+/** Kopie mit ersetztem Wert am Pfad (Kurzform von mitWert für Rollen als Pfad). */
+export function mitFeld<T>(obj: T, pfad: string, wert: unknown): T {
+  return mitWert(obj, teilePfad(pfad), wert);
+}
+
 /** Prüft, ob ein generischer Pfad zu einem Muster mit „*“-Platzhaltern passt. */
 export function passtMuster(generisch: string, muster: string): boolean {
   if (generisch === muster) return true;

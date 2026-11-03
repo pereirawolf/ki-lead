@@ -2,9 +2,9 @@
 
 Formatfassung 2.0 vom 01.11.2026, **Entwurf zur fachlichen Abnahme** · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
-Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/lead-meldung-v2/README.md). Werkzeug: `npm run meldung:v2` ([scripts/lead-meldung-v2.mjs](../scripts/lead-meldung-v2.mjs)).
+Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/lead-meldung-v2/README.md). Werkzeug: `npm run meldung:v2` ([scripts/lead-meldung-v2.mjs](../scripts/lead-meldung-v2.mjs)); die Umsetzung teilen App und Werkzeug seit App 0.7.0 in [src/kern/meldung-v2.js](../src/kern/meldung-v2.js).
 
-**Stand:** Das Format liegt neben `LEAD-Meldung-v1`. App und Profile arbeiten weiter mit v1, bis die App v2 lesen, erfassen und ausgeben kann (Abschnitt 10). Abwärtskompatibilität zu v1 ist ausdrücklich kein Ziel (Vorgabe des Herausgebers vom 01.11.2026); v1-Meldungen werden einmalig überführt (Abschnitt 11).
+**Stand:** Das Format liegt neben `LEAD-Meldung-v1`. Die Profile arbeiten weiter mit v1, bis die App v2 lesen, erfassen und ausgeben kann (Abschnitt 10). Seit App 0.7.0 (UP-2026-W45-02) liest die App v2: Überführung beim Einlesen, Grundform für Eingänge und Referenzprüfung in Lagebild, Prüfschritt und KI-Erfassung; Erfassungsmaske, Ausgabe und KI-Pipeline folgen. Abwärtskompatibilität zu v1 ist ausdrücklich kein Ziel (Vorgabe des Herausgebers vom 01.11.2026); v1-Meldungen werden einmalig überführt (Abschnitt 11).
 
 **Anlass:** Die Regeln der LEAD-Systematik (Kodierleitfaden, SOP-LEAD Teil A) sind differenzierter als das Datenmodell von v1. Quellenverzeichnis und Zeitstrahl sind dort Zeichenketten; Fristen, Bewertungsgründe, Radarbegründungen, abweichende Bewertungen und Änderungen stehen als Kennsätze im Fließtext und werden von der App aus Satzanfängen rekonstruiert (`src/kern/quellen.ts`, `zeitstrahl.ts`, `kennsaetze.ts`). Eine finale v1-Meldung besteht die Schemaprüfung auch mit leeren Analysefeldern, leerem Quellenverzeichnis und leerem Freigabeblock. v2 macht das, was die Regeln bereits verlangen, eindeutig darstellbar und prüfbar, ohne den Erfassungsaufwand über das fachlich Verlangte zu heben.
 
@@ -161,7 +161,7 @@ Weitere Module (etwa Funktionsmatrix des Profils „Lagebild Justiz“, Betreibe
 | Ebene | prüft | Werkzeug |
 |---|---|---|
 | 1 Schema | Struktur, Typen, Aufzählungen, Muster für IDs und Zeiten, Bedingungen (offene Achse ohne Stufe, Berichtigung mit Bezug, Zeitstrahl mit Beleg, Fehlanzeige ohne Sachverhalt), Vollständigkeit je Status | zusammengestelltes Profilschema; Ajv oder der eigene, eval-freie Prüfer der App (`src/kern/validierung.ts`, die Tests prüfen den Gleichlauf) |
-| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten für Vergleiche mit t0 und `erstmals_gemeldet` als nicht entscheidbar, für die Reihenfolge steht der Tag vor den Uhrzeiten desselben Tags, Kodierleitfaden Abschnitt 8.3 Regel 4), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `scripts/lead-meldung-v2.mjs`; in der App später neben der Schemaprüfung |
+| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten für Vergleiche mit t0 und `erstmals_gemeldet` als nicht entscheidbar, für die Reihenfolge steht der Tag vor den Uhrzeiten desselben Tags, Kodierleitfaden Abschnitt 8.3 Regel 4), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `src/kern/meldung-v2.js` (Werkzeug `npm run meldung:v2 -- pruefe`); in der App seit 0.7.0 neben der Schemaprüfung: Lagebild (Marke „Referenzen“), Prüfschritt der Meldung, Hinweise nach S2 (Codes `REFERENZ_FEHLER`, `REFERENZ_HINWEIS`; `src/kern/referenzen.ts`) |
 | 3 Mensch | Inhalt, Belegqualität, Kodierung, Freigabe | Abschlusscheck SOP-LEAD A.5 |
 
 ## 9. Profile auf v2 aufbauen
@@ -201,7 +201,7 @@ Danach je Profil (`profile/lead-beispiel`, `profile/lead-thueringen`, `profile/m
 
 ## 11. Migration v1 → v2
 
-`migriereV1()` bzw. `npm run meldung:v2 -- migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1`. Grundsatz: **nichts erfinden.** Was der Text nicht sicher hergibt, bleibt Text oder `null` und steht als Hinweis in `entstehung.migration.hinweise`. Eine überführte Meldung ist zur Durchsicht bestimmt, keine neue Freigabe.
+`migriereV1()` bzw. `npm run meldung:v2 -- migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1`; in der App seit 0.7.0 beim Einlesen, wenn das Profil eine Migration mit `verfahren` „lead-meldung-v2“ führt ([PROFILFORMAT.md](PROFILFORMAT.md)). Grundsatz: **nichts erfinden.** Was der Text nicht sicher hergibt, bleibt Text oder `null` und steht als Hinweis in `entstehung.migration.hinweise`. Eine überführte Meldung ist zur Durchsicht bestimmt, keine neue Freigabe.
 
 | v1 | v2 | Art |
 |---|---|---|
@@ -248,7 +248,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 ## 13. Offene Punkte
 
-1. **App-Unterstützung** (Abschnitt 10) als Voraussetzung für die Umstellung der Profile; Reihenfolge und Umfang entscheidet der Herausgeber.
+1. **App-Unterstützung** (Abschnitt 10) als Voraussetzung für die Umstellung der Profile. Reihenfolge nach dem Umstellungsplan vom 03.11.2026 (Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`): Kennzahlen-Bausteine (0.6.24), Kern und Prüfung (0.7.0), dann Erfassungsmaske und Ausgabe, KI-Pipeline, Lagebild und Verdichtung, Umstellung der Profile.
 2. **Ausgabeschema für die KI:** Ableitung ohne Bedingungen, Prüfung danach; Kosten und Fehlerquote der tieferen Struktur in einem Vergleichslauf messen.
 3. **Versand und Empfang** als eigenes Protokoll zur Meldungsfassung.
 4. **Bestätigungsgrad je Aussage** (SOP-LEAD A.3): bisher nur über Kennzahl (`erhebung`), Quelle (`zugang`, `ursprung`) und Erkenntnislage abbildbar.
@@ -263,5 +263,6 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
+| 2.0 (Entwurf), Nachtrag 2 | 03.11.2026 | Format und Schemata unverändert: Umsetzung in `src/kern/meldung-v2.js` für App und Werkzeug; Migration beim Einlesen über `migrationen[].verfahren`, Referenzprüfung in der App (Abschnitte 8, 11, 13 Nr. 1; App 0.7.0, UP-2026-W45-02) |
 | 2.0 (Entwurf), Nachtrag | 01.11.2026 | Referenzprüfung nach Abschnitt 8 vervollständigt, Format und Schemata unverändert: „Datenstand nicht nach t0“ auch für `quellen[].datenstand` (GK-2026-W44-03); Zeitvergleiche nach Abschnitt 1 Nr. 4 mit absoluten Zeitpunkten und Kalendertagen in `zeitzone`, Tag gegen Zeitpunkt desselben Tags nicht entscheidbar und ohne Befund (GK-2026-W44-04) |
 | 2.0 (Entwurf) | 01.11.2026 | Erster Entwurf: Kernschema, Modul `lead-bevoelkerungsschutz` 1.0, Zusammenstellungen für Beispiel- und Landesprofil, Migration v1 → v2, Referenzprüfung, Beispiele |

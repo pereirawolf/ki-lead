@@ -353,7 +353,7 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   }
   // Freigabe & Versand als eigener Block am Ende, vor der Entstehungszeile
   if (r.freigabe && d[r.freigabe] !== undefined) freigabeZeichnen(doc, profil, d, platz(doc, (doc as any).lastAutoTable.finalY + 6, 42));
-  const ent = r.entstehung_feld ? d[r.entstehung_feld] : undefined;
+  const ent = r.entstehung_feld ? holeWert(d, r.entstehung_feld) : undefined;
   if (ent) {
     autoTable(doc, {
       didParseCell: zellText,

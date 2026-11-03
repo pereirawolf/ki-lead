@@ -1,6 +1,6 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.3 vom 03.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.24 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.4 vom 03.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.7.0 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
 
@@ -80,8 +80,8 @@ LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler 
 |---|---|---|
 | eigene Schemakennung | voll verwendet und geprüft | `meldung.schema_id` |
 | `eingang_schema_ids` | wie eigene Meldungen behandelt | `src/kern/migration.ts` |
-| `migrationen` | überführt, dann wie eigene Meldungen | `src/kern/migration.ts` |
-| sonst | fremde Meldung, nur für die KI-Verdichtung, an der Grundform erkannt (Sachverhalte und Stelle) | `src/kern/eingang.ts` |
+| `migrationen` | überführt, dann wie eigene Meldungen; seit 0.7.0 auch mit `verfahren` „lead-meldung-v2“ nach LEAD-Meldung-v2 | `src/kern/migration.ts`, `src/kern/meldung-v2.js` |
+| sonst | fremde Meldung, nur für die KI-Verdichtung, an der Grundform erkannt (Sachverhalte und Stelle; seit 0.7.0 auch `absender.stelle` und `absender.gebiet.name` von LEAD-Meldung-v2) | `src/kern/eingang.ts` |
 | Material-Format (seit 0.6.24) | kein Meldungsformat, sondern strukturiertes Material: Kennzahlen-Bausteine aus Thessa (`format` „Thessa-Kennzahlen“), profilunabhängig gegen ein eingebettetes Schema mit Herkunft und Prüfsumme geprüft (`formate/fremd/`); in der KI-Erfassung eigene Materialart | `src/kern/baustein.ts`, `src/pipeline/material.ts` |
 
 Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Schema, das das empfangende Profil unter `meldung.eingang_schemata` mitbringt, und zeigt die Befunde („fremdes Schema ✓“ oder „fremdes Schema: n“). Ohne Eintrag bleibt eine fremde Meldung ungeprüft („fremdes Schema“). Beispiel: Das Beispielprofil der Koordinierungsstelle prüft Meldungen nach `LEAD-Meldung-Land-v1` und liest ihr Gebiet aus `kreis` (TP-2026-W44-60); damit ist der Weg Kreis → Land → Bund mit den mitgelieferten Profilen durchgängig.
@@ -112,3 +112,4 @@ Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Sche
 | 0.1 | 31.10.2026 | Erster Entwurf (App 0.6.19, TP-2026-W44-58); Abstimmung in Teil C |
 | 0.2 | 01.11.2026 | Verweis auf den Entwurf des Meldungsformats `LEAD-Meldung-v2`, der die Vorschläge aufnimmt; Inhalt sonst unverändert |
 | 0.3 | 03.11.2026 | Abschnitt 8: Material-Formate als fünfter Weg (Kennzahlen-Bausteine aus Thessa, App 0.6.24, UP-2026-W45-01) |
+| 0.4 | 03.11.2026 | Abschnitt 8: Migration nach LEAD-Meldung-v2 beim Einlesen, Grundform v2 für fremde Meldungen (App 0.7.0, UP-2026-W45-02) |

@@ -1,7 +1,8 @@
 // Kennsätze (SOP-LEAD A.4) und unverbindliche Ausfüllhinweise (A.4/A.5/A.8).
 
+import { referenzBefunde } from "./referenzen";
 import { feldhilfeFelder, offenePlatzhalter } from "./feldhilfen";
-import { holeWert } from "./pfad";
+import { holeWert, mitFeld } from "./pfad";
 import { quellenHinweise, sachverhalte } from "./quellen";
 import { zeitstrahlHinweise } from "./zeitstrahl";
 import { feldUi } from "./ui";
@@ -228,10 +229,12 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, re
       });
     }
   });
-  const finalSicht = { ...d, [r.status_feld]: r.status_final };
+  const finalSicht = mitFeld(d, r.status_feld, r.status_final);
   quellenHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: "Quellen: " + b.text }));
   // Zeitstrahl, Kennungen und Bezug (seit 0.6.9)
   zeitstrahlHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: `${b.code?.startsWith("ZEITSTRAHL") ? "Zeitstrahl" : "Kennung"}: ${b.text}` }));
+  // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Prüfebene 2 im Prüfschritt der Maske
+  out.push(...referenzBefunde(d, ui));
   return out;
 }
 

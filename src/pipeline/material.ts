@@ -116,7 +116,7 @@ export async function docxText(daten: ArrayBuffer): Promise<string> {
 /** Erkennt eine Meldung nach dem Profil (Schemakennung im Feld der Rolle schema_feld). */
 export function istMeldung(obj: unknown, profil: Profil): boolean {
   if (!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
-  const kennung = (obj as any)[profil.ui.rollen.schema_feld];
+  const kennung = holeWert(obj, profil.ui.rollen.schema_feld);
   if (typeof kennung !== "string") return false;
   const bekannt = [
     profil.manifest.meldung.schema_id,

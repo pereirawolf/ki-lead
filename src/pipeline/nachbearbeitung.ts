@@ -2,8 +2,8 @@
 // vorgesehenen Stelle, SOP-Nachweis und Kodierleitfaden, seit 0.6.9 Kennungen, Bezug und Zeitstrahl (zeitstrahl.ts). Seit 0.6.2 eigene Datei (TP-2026-W44-06), vorher in stufen.ts.
 
 import { jetztLokal } from "../kern/ausgabe";
-import { holeWert } from "../kern/pfad";
-import { aufloesen } from "../kern/schema";
+import { holeWert, setzeWert, teilePfad } from "../kern/pfad";
+import { aufloesen, unterSchema } from "../kern/schema";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { istEigeneStelle } from "../kern/ui";
 import { sopKennung } from "../profil/sop";
@@ -38,7 +38,9 @@ export function nachbearbeiten(
   const d: Meldung = structuredClone(roh as Meldung);
   const props = p.schema.properties || {};
   d[r.schema_feld] = aufloesen(props[r.schema_feld], p.schema)?.const ?? p.manifest.meldung.schema_id;
-  d[r.status_feld] = r.status_entwurf;
+  // Rollen und Variablen dürfen Pfade nennen (seit 0.7.0, UP-2026-W45-02), etwa „absender.stelle“
+  setzeWert(d, r.status_feld, r.status_entwurf);
+  const imSchema = (key: string) => (key.includes(".") ? !!unterSchema(p.schema, teilePfad(key)) : key in props);
   const identitaet = identitaetsFelder(p);
   const absender = absenderFuer(k.material, p);
   const soll = (key: string, profilWert: string) =>
@@ -48,19 +50,21 @@ export function nachbearbeiten(
         ? absender.stelle
         : profilWert;
   for (const [key, profilWert] of Object.entries(p.manifest.variablen)) {
-    if (!(key in props)) continue;
+    if (!imSchema(key)) continue;
+    const ist = holeWert(d, key);
     if (identitaet.includes(key)) {
       const wert = soll(key, profilWert);
       // Ohne Vormeldung bleiben hinterlegte Aliasnamen der eigenen Stelle stehen; mit Vormeldung gilt deren Name
-      if (absender.herkunft === "profil" && key === r.meldende_stelle && istEigeneStelle(d[key], p.manifest)) continue;
-      if (d[key] !== undefined && d[key] !== "" && d[key] !== wert) korrekturen.push(`${key}: „${String(d[key])}“ → „${wert}“`);
-      d[key] = wert;
-    } else if (d[key] === undefined || d[key] === "") d[key] = profilWert;
+      if (absender.herkunft === "profil" && key === r.meldende_stelle && istEigeneStelle(ist, p.manifest)) continue;
+      if (ist !== undefined && ist !== "" && ist !== wert) korrekturen.push(`${key}: „${String(ist)}“ → „${wert}“`);
+      setzeWert(d, key, wert);
+    } else if (ist === undefined || ist === "") setzeWert(d, key, profilWert);
   }
   radarUmhaengen(d, p, umhaengungen);
   const t0 = k.lauf.bestaetigt?.meldezeitpunkt;
-  if (r.meldezeitpunkt && t0) d[r.meldezeitpunkt] = t0;
-  else if (r.meldezeitpunkt && !d[r.meldezeitpunkt]) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date());
+  if (r.meldezeitpunkt && t0) setzeWert(d, r.meldezeitpunkt, t0);
+  else if (r.meldezeitpunkt && !holeWert(d, r.meldezeitpunkt))
+    setzeWert(d, r.meldezeitpunkt, jetztLokal(p.manifest.variablen.zeitzone, k.jetzt?.() ?? new Date()));
   if (r.entstehung_feld && props[r.entstehung_feld]) {
     const def = aufloesen(props[r.entstehung_feld], p.schema);
     const erlaubt = def?.properties || {};

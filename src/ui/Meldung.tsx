@@ -4,7 +4,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FocusEvent } from "react";
 import { leererWert, unterSchema } from "../kern/schema";
-import { holeWert, teilePfad, mitWert, type Segment } from "../kern/pfad";
+import { holeWert, teilePfad, mitWert, mitFeld, setzeWert, type Segment } from "../kern/pfad";
 import { migriere } from "../kern/migration";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { pflichtHinweise } from "../kern/kennsaetze";
@@ -120,7 +120,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     }
     const mig = migriere(roh, profil);
     const d = mig.daten;
-    if (!d[ui.rollen.status_feld]) d[ui.rollen.status_feld] = ui.rollen.status_entwurf;
+    if (!holeWert(d, ui.rollen.status_feld)) setzeWert(d, ui.rollen.status_feld, ui.rollen.status_entwurf);
     const schema = pruefeGegenSchema(profil.schema, d, ui);
     // Falsche Datentypen (Objekt statt Text, Text statt Liste …) erst nach Rückfrage in die Maske übernehmen
     const typfehler = schema.filter((b) => b.keyword === "type");
@@ -143,7 +143,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     else setMeldung(d);
     setSchritt(0);
     sprung(statusZeigen);
-    const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${d[ui.rollen.status_feld]}).`, ...mig.hinweise];
+    const zeilen = [`${datei.name} geladen (Schema: ${mig.herkunft}, Status: ${holeWert(d, ui.rollen.status_feld)}).`, ...mig.hinweise];
     const pruefschritt = ui.schritte.find((s) => s.pruefung) ?? ui.schritte[ui.schritte.length - 1];
     if (schema.length) zeilen.push(`Schemaprüfung: ${schema.length} Abweichung(en) – Einzelheiten im Schritt „${pruefschritt?.titel ?? ""}“.`);
     else zeilen.push("Schemaprüfung ohne Befund.");
@@ -155,7 +155,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
   // geprüft wird wie im Prüfschritt als finale Meldung
   const r = ui.rollen;
   const schemaBefunde = useMemo(
-    () => pruefeGegenSchema(profil.schema, { ...meldung, [r.status_feld]: r.status_final }, ui),
+    () => pruefeGegenSchema(profil.schema, mitFeld(meldung, r.status_feld, r.status_final), ui),
     [profil.schema, meldung, r.status_feld, r.status_final, ui],
   );
   const pflicht = useMemo(() => pflichtHinweise(meldung, ui), [meldung, ui]);
