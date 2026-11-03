@@ -2672,6 +2672,144 @@
       "kurz": "LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung src/kern/meldung-v2.js, Migration beim Einlesen (migrationen[].verfahren), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen als Pfade.",
       "status": "umgesetzt",
       "pr": 133
+    },
+    {
+      "id": "TP-2026-W44-62",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Testlaeufe.tsx",
+          "stelle": "Zeilen 62–77 (Testart, TESTARTEN)"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 47–98, 497–500 (FALL, fallAuftrag, fallMaterial, einLauf)"
+        },
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "53 Fälle sop-*, zaehlregel-*, Ilka"
+        }
+      ],
+      "kurz": "Fallreihe unter „Einstellungen → Testläufe“: beliebige Erfassungs- und Verdichtungsfälle mit denselben Pipeline-Funktionen wie die App (S1, unveränderte Bestätigung, S2 mit S3); Management Summary und Reparatur bleiben eigene Testarten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-63",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "—"
+        },
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties"
+        },
+        {
+          "datei": "evaluation/plaene/2026-10-25-kontrollsatz.md",
+          "stelle": "Verfahren 2"
+        }
+      ],
+      "kurz": "Fälle für die Fallreihe: mitgelieferte Fälle mit Material nachgeladen, Fallpaket (ZIP) mit SHA-256 bis zur Löschung auf dem Gerät, Feld profil im Fall, drei Prüfstein-Fälle mit Websuche.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-64",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/plan.schema.json",
+          "stelle": "varianten[].s1/s2"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 128–167"
+        }
+      ],
+      "kurz": "plan.schema.json um ki_profil, mistral_endpunkt, recherche und fallpaket.sha256 erweitert; Plan belegt die Fallreihe vor, abweichendes Paket sperrt den Start; Matrix ohne Plan; B4 und B5 als zwei Pläne bei R1.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-65",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 713–721 (vergleichsreihe)"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "schaetzeStufe"
+        }
+      ],
+      "kurz": "Kostenbremse vor dem Lauf, der den Deckel überschreiten würde (obere Schätzung oder teuerster bisheriger Lauf derselben Variante, sonst 5 USD); Reihenfolge je Fall alle Varianten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-66",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf-export.ts",
+          "stelle": "reiheZip, uebersichtZeilen"
+        },
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "Zeilen 183–194 (ausfuellHinweise)"
+        },
+        {
+          "datei": "evaluation/bewertungsschema.json",
+          "stelle": "required"
+        }
+      ],
+      "kurz": "Ergebnis-ZIP der Fallreihe mit Reihendatei, Übersicht der automatischen Prüfungen (v1 und v2), Laufprotokollen, Entwürfen und leerer Bewertungsvorlage mit Prüfliste je Entwurf.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-67",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "tests/browser/testlaeufe.spec.ts",
+          "stelle": "—"
+        },
+        {
+          "datei": "docs/TESTZUORDNUNG.md",
+          "stelle": "—"
+        }
+      ],
+      "kurz": "Tests der Fallreihe in Vitest (Logik, Oberfläche) und im Browser mit Attrappe für Import, Prüfsumme, Vorbelegung, Start, Kostenbremse und ZIP-Inhalt; App 0.7.1.",
+      "status": "umgesetzt",
+      "pr": 136
     }
   ]
 }
