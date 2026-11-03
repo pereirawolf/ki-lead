@@ -126,9 +126,19 @@ textarea {
   color: var(--auf-amt);
 }
 
+/* Fokus wie überall (Grunddesign LD-Z02, seit 0.7.5): 3 px Ring in „fokus“ mit 2 px Abstand und zweitem Ring in
+   „fokus-abstand“; bis 0.7.4 Ring in „amt“ ohne zweiten Ring */
 .chip:has(input:focus-visible) {
-  outline: 3px solid var(--amt);
+  outline: 3px solid var(--fokus);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--fokus-abstand);
+}
+
+/* Bei grober Zeigereingabe 44 px hoch wie alle Bedienelemente (Grunddesign LD-B01, seit 0.7.5; bis 0.7.4 40 px) */
+@media (pointer: coarse) {
+  .chip {
+    min-height: 44px;
+  }
 }
 
 /* Einfachauswahl als Segmente */
@@ -163,9 +173,12 @@ textarea {
   pointer-events: none;
 }
 
+/* Fokus nach LD-Z02 (seit 0.7.5): Die Leiste schneidet Überstand ab, deshalb nach innen, mit 2 px Abstand in
+   „fokus-abstand“ am Rand und 3 px Ring in „fokus“; bis 0.7.4 Ring in „amt“ ohne zweiten Ring */
 .segment:has(input:focus-visible) {
-  outline: 3px solid var(--amt);
-  outline-offset: -3px;
+  outline: 3px solid var(--fokus);
+  outline-offset: -5px;
+  box-shadow: inset 0 0 0 2px var(--fokus-abstand);
 }
 
 .segment.an {

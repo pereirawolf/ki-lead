@@ -1003,3 +1003,10 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 |---|---|---|
 | Kreisschlüssel und Namen der 22 Gebietskörperschaften wie im CSV-Export der Verwaltungsstruktur des Landesamts (Stand 01.01.2026), Landkreise mit „Landkreis“ | Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik … › Schlüssel und Namen der 22 Gebietskörperschaften … | `tests/profil/landesprofil.test.ts` |
 | Quelle mit URL, Stand und Abruf im Kopf der Kreisliste und im README des Profils | … › Quelle mit Stand und Abruf … | `tests/profil/landesprofil.test.ts` |
+
+## Grunddesign 1.2: Ergänzungen nach dem Abgleich mit KRITIS-LEAD (0.7.5, Entscheidungen des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Chips und Segmente zeigen den Fokus als 3 px Ring in „fokus“ mit zweitem Ring in „fokus-abstand“; Chips bei grober Zeigereingabe mindestens 44 px | Grunddesign: rahmen.json › Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.5 | `tests/format/lead-design.test.ts` |
+| Fassung im Kopf von `design/README.md` gleich `rahmen.json` und im Änderungsverlauf eingetragen | Grunddesign: rahmen.json › Fassung in Beschreibung und rahmen.json gleich, mit Eintrag im Änderungsverlauf | `tests/format/lead-design.test.ts` |

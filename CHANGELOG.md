@@ -100,6 +100,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
 | 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
 | 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
+| 0.7.5 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.5“ |
+
+## [0.7.5] – 04.11.2026
+
+Grundlage: Abgleich von KRITIS-LEAD mit dem Grunddesign (pereirawolf/kritis-lead#18, `docs/design-abweichungen.md`) und Entscheidungen des Herausgebers vom 03.11.2026: LD-N01 für Apps aus mehreren Seiten ergänzen; Farbschema eines beim Bau eingebetteten Profils aus dem Profil, LD-F01 und LD-F03 entsprechend ergänzen; LD-B01 und LD-Z02 gelten, die Referenzumsetzung zieht bei Chips und Segmenten nach. Ergänzt die Fassung 1.1 aus dem Abgleich mit Thessa (#139).
+
+### Geändert
+
+- **Grunddesign der App-Familie, Fassung 1.2** ([design/README.md](design/README.md), `design/rahmen.json`): Eine App aus mehreren Seiten nennt diese in der Hauptnavigation, die Arbeitsschritte stehen in der Schrittleiste (LD-N01). Bettet eine App ihr Profil beim Bau ein, ist dessen `farbschema.basis` das feste Schema nach LD-F01; dunkel „Neutral · Night Mode“, bei „mehr Kontrast“ das Kontrastschema, wie bei „Automatisch“. Setzt eine App ihr Farbschema beim Bau, prüft der Bau die Kontraste aller gesetzten Schemata und bricht ab, wenn eines sie verfehlt (LD-F03). Kennungen, Zahl der Regeln und Tokens unverändert.
+- **Chips und Segmente nach LD-B01 und LD-Z02** (`src/styles/formular.css`): Fokus als 3 px Ring in „fokus“ mit zweitem Ring in „fokus-abstand“, bei Segmenten nach innen, weil die Leiste Überstand abschneidet (bisher Ring in „amt“ ohne zweiten Ring); Chips bei grober Zeigereingabe 44 px hoch (bisher 40 px).
+- Versionsangaben 0.7.5 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 705); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: Fokus und Zielgröße von Chips und Segmenten (LD-B01, LD-Z02); Fassung in Beschreibung, `rahmen.json` und Änderungsverlauf gleich.
 
 ## [0.7.4] – 04.11.2026
 
