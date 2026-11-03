@@ -97,3 +97,11 @@ path = ["docs/VORLAGEN.md", "docs/DATENSCHUTZ.md"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+# Nr. 8: Grunddesign der App-Familie im Ordner design/, alle Rechte vorbehalten (seit 03.11.2026). Steht zuletzt,
+# damit es den allgemeinen Abschnitten vorgeht.
+[[annotations]]
+path = "design/**"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "LicenseRef-KI-LEAD-Rechtevorbehalt"

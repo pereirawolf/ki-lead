@@ -1,0 +1,17 @@
+KI-LEAD – Rechtevorbehalt für das Grunddesign
+
+© 2026 Heiko Pereira Wolf, https://www.pereirawolf.de
+
+Alle Rechte vorbehalten. Maßgeblich ist LICENSE-CONTENT, Nr. 8:
+
+8. Vorbehalt für das Grunddesign (seit 03.11.2026). An den Dateien im Ordner
+   design/ (Beschreibung des Grunddesigns der App-Familie, rahmen.json mit
+   Schema, Design Tokens und Wireframes) behält sich der Herausgeber alle Rechte
+   vor. Erlaubt sind das Lesen dieser Dateien und das Verweisen auf sie; jede
+   weitere Nutzung, insbesondere Vervielfältigung, Bearbeitung und Übernahme in
+   andere Projekte, bedarf seiner Zustimmung. Die Rechte, die die
+   Nutzungsbedingungen von GitHub anderen Nutzenden an öffentlichen Repositorys
+   einräumen, bleiben unberührt. Der Vorbehalt betrifft nur diese Dateien und
+   schränkt keine Rechte ein, die nach Nr. 1 bis 4 für andere Dateien bestehen,
+   insbesondere nicht die EUPL-1.2 für Quelltext und Stylesheets der App, aus
+   denen die Design Tokens erzeugt sind.

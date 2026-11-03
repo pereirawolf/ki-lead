@@ -15,6 +15,7 @@ import { pathToFileURL } from "node:url";
 /** Reine Inhalte: ändern weder Programmcode noch Bedienoberfläche des Builds */
 export const NUR_INHALT = [
   /^docs\//,
+  /^design\//, // Grunddesign der App-Familie (seit 03.11.2026; Gleichlauf mit dem Code prüft Vitest)
   /^evaluation\//,
   /^[^/]+\.md$/, // README.md, CHANGELOG.md
   /^CITATION\.cff$/,

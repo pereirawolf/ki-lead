@@ -97,7 +97,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
-| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
+| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
 
 ## [0.7.2] – 03.11.2026
 
@@ -120,6 +120,16 @@ Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A8.json` (Arbeitspaket A
 ### Tests
 
 - Neu `tests/forschung/fallreihe.test.ts` (Katalog, Prüfstein-Fälle, Profil je Fall, Fallpaket, Plan, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe, ZIP und Bewertungsvorlage gegen Ajv) und `tests/ui/fallreihe.test.ts` (Auswahl, Paket mit Prüfsumme und Ablage, Vorbelegung aus dem Plan, Start, Kostenbremse, Archiv); Browsertest der Fallreihe in `tests/browser/testlaeufe.spec.ts`; Planschema und Feld `profil` in `tests/evaluation/schemata.test.ts`.
+
+### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, alle Rechte am Grunddesign vorbehalten. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Grunddesign der App-Familie, Fassung 1.0** ([design/README.md](design/README.md)): 47 Regeln mit Kennung (`LD-R01` …), Stufe MUSS, SOLL oder KANN und Fundstelle in KI-LEAD zu Rahmen, Navigation, Seitenaufbau, Farbe, Schrift und Sprache, Bedienelementen, Eingabe, Rückmeldung, Zugänglichkeit und Plattform; Wireframes als Text, Entsprechung zur Office-Suite, Hinweise zur Übernahme mit `design-abweichungen.md` in der Schwester-App.
+- **Maschinenlesbar:** `design/rahmen.json` mit Schema `rahmen.schema.json` (Rahmen, Leisten, Komponenten, Regeln), `design/lead-design.tokens.json` (Farbrollen, Signalfarben, Schrift, Radien, Maße, Umbrüche, Kontraste) und `design/lead-farbschemata.tokens.json` (alle 22 Farbschemata des Katalogs), Wireframes `wireframe-breit.svg` und `wireframe-schmal.svg`.
+- **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
+- **Rechte:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 8: An den Dateien in `design/` behält sich der Herausgeber alle Rechte vor; erlaubt sind Lesen und Verweisen. Der Vorbehalt schränkt keine bestehenden Rechte an anderen Dateien ein, insbesondere nicht die EUPL-1.2 für Quelltext und Stylesheets. `REUSE.toml` und `LICENSES/LicenseRef-KI-LEAD-Rechtevorbehalt.txt`; README (Dokumentation, Lizenz).
+- **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (Rechtevorbehalt, sechs Lizenztexte); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.1] – 03.11.2026
 

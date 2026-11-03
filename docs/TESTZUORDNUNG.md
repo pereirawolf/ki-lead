@@ -973,3 +973,13 @@ Angepasst ohne Änderung des Solls: `tests/ui/kurzfassung-lauf.test.ts` (Laufanz
 | Im Browser: Paket und Plan aus Dateien, Prüfsummen, Vorbelegung, Bremse vor dem ersten Lauf ohne Anfrage, Start mit einem Klick, ZIP-Inhalt, nur die simulierte API, Archiv | Fallreihe: Fallpaket und Plan laden, … | `tests/browser/testlaeufe.spec.ts` |
 
 Angepasst: `tests/ui/einstellungen.test.ts` (Überschriften des Bereichs „Testläufe“ mit „Fallreihe“, nachgeladen), `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (alle Fälle, ihr Material und `plan.schema.json` sind in die App eingebettet und lösen die Kern-Browsertests aus).
+
+## Grunddesign der App-Familie (Nachtrag vom 03.11.2026 zu 0.7.2, Auftrag des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| `design/lead-design.tokens.json`, `design/lead-farbschemata.tokens.json` und die Regeltabellen in `design/README.md` entsprechen Code und `rahmen.json` | Grunddesign: erzeugte Dateien aktuell › … | `tests/format/lead-design.test.ts` (neu) |
+| Tokens im Format der DTCG: zulässige `$type`, Hexfarben, Maße in px oder rem; jede Rolle und Signalfarbe beschrieben; Rollen aus dem Profil, Signalfarben nie; Kennungen der Farbschemata wie im Katalog; Umbrüche, Zielgröße, Band und Schrift unabhängig gegen die Stylesheets | Grunddesign: Design Tokens im Format der DTCG › … | `tests/format/lead-design.test.ts` |
+| `rahmen.json` gültig nach Schema, Schema lehnt ungültige Regeln ab; Regelkennungen eindeutig, Fundstellen vorhanden, Verweise und Token-Verweise aufgelöst; Hauptnavigation, Bereiche der Einstellungen, Reiter, Phasen der KI-Erfassung und Kennsätze wie im Quelltext; Knopf- und Kastenvarianten im Stylesheet; Wireframes mit Titel und Rechtevermerk | Grunddesign: rahmen.json › … | `tests/format/lead-design.test.ts` |
+| Rechtevorbehalt nach LICENSE-CONTENT, Nr. 8, nur für `design/`; sechs Lizenztexte unter `LICENSES/` | Lizenztexte unter LICENSES/ › …; Abgleich mit reuse lint | `tests/lizenzen/reuse.test.ts` |
+| `design/` ist reiner Inhalt (keine Browsertests), `scripts/lead-design.mjs` löst die Kern-Browsertests aus | Prüfumfang je Änderung › Grunddesign …; Generator … | `tests/ci/pruefumfang.test.ts` |

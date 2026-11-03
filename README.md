@@ -74,6 +74,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | Meldungen zwischen Stellen austauschen: Kennungen, Versionen, Zeitstände, fremde Schemata (Entwurf) | [Austausch](docs/AUSTAUSCH.md) |
 | Meldungsformat LEAD-Meldung-v2: Kern, Fachmodule, Migration aus v1 (Entwurf) | [LEAD-Meldung v2](docs/LEAD-MELDUNG-V2.md) |
 | Selbst betreiben: Betreiberkonfiguration, eigener KI-Endpunkt (Chat Completions), Auslieferung | [Betrieb](docs/BETRIEB.md) |
+| Grunddesign der App-Familie (KI-LEAD, KRITIS-LEAD, Thessa): Regeln, Wireframes, Design Tokens | [Grunddesign](design/README.md) (alle Rechte vorbehalten) |
 | Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 
 ## Profile
@@ -164,6 +165,7 @@ Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial u
 - **Maschinenlesbare Dateien** (Meldungsschemata, Manifeste, Kontaktlisten, Quellenregister, JSON-Schemata der Modellbewertung), die **Vorlage** `profile/muster/` und die **Vorlagen für Stellen** ([docs/VORLAGEN.md](docs/VORLAGEN.md), Anhang C und D der [Datenschutzhinweise](docs/DATENSCHUTZ.md)): zusätzlich [CC0 1.0](LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung übernehmen können
 - **Ausgaben der App** (Meldungen, Lagebilder, Kurzfassungen): Profiltexte, die die App dorthin übernimmt, dürfen ohne Namensnennung verwendet werden; an Eingaben und Ergebnissen beansprucht der Herausgeber keine Rechte
 - **Eigene und importierte Profile:** die Lizenz, die ihr Herausgeber im Manifest angibt
+- **Grunddesign der App-Familie** (`design/`: Beschreibung, `rahmen.json`, Design Tokens, Wireframes): alle Rechte vorbehalten; erlaubt sind Lesen und Verweisen (LICENSE-CONTENT, Nr. 8). Code und übrige Dokumentation behalten ihre Lizenzen
 - Begleitende Aufsätze außerhalb des Repositorys (Zenodo, pereirawolf.de): CC BY-NC-ND 4.0
 - Drittkomponenten (Bibliotheken, Schrift Atkinson Hyperlegible, native Plugins) mit Lizenz, Urheber und Verträglichkeit: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Der Build legt ihre Lizenztexte als `lizenzen.md` und `lizenzen-ergaenzend.md` in die App.
 
