@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.12 vom 03.11.2026, gilt für App-Version 0.6.24 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.13 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -139,7 +139,7 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 |---|---|
 | ein Laufprotokoll | KI-Erfassung, Liste der Läufe, „Löschen“ |
 | Management Summary | „Leeren“ in der Ansicht |
-| archivierte Testläufe | Einstellungen, „Testläufe“, Archiv: „Ausgewählte löschen“ oder „Alle löschen“ |
+| archivierte Testläufe | Einstellungen, „Testläufe“ (sichtbar nur mit „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“; Ausschalten löscht das Archiv nicht), Archiv: „Ausgewählte löschen“ oder „Alle löschen“; außerdem mit „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ |
 | API-Schlüssel | Feld leeren und speichern; bei Wechsel der Ablage zieht er um und wird in der alten entfernt |
 | alle Daten dieses Geräts (seit 0.6.15) | Einstellungen, „Daten“, „Alle Daten dieses Geräts löschen“: Gerätespeicher einschließlich API-Schlüssel, Testlaufarchiv, Farbschema, in der nativen App auch der Schlüsselbund; vorher lässt sich der Stand sichern |
 | alle Daten der Web-App | auch: Websitedaten von `pereirawolf.github.io` in den Browsereinstellungen löschen |
@@ -411,3 +411,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.10 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: Anhang C und D als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.11 | 31.10.2026 | Abschnitte 2 und 4: Betreiberbuild mit Betreiberkonfiguration und Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48, -49) |
 | 1.12 | 03.11.2026 | Abschnitt 4: Kennzahlen-Bausteine aus Thessa gehen ohne Herleitung an den Anbieter (App 0.6.24, UP-2026-W45-01) |
+| 1.13 | 03.11.2026 | Abschnitt 1 und Anhang D, D7: Die Bestätigung vor jedem KI-Lauf gilt seit App 0.7.1 auch für die Management Summary (bis 0.7.0 sendete sie ohne Bestätigung, DK-2026-W45-01); Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“ (DK-2026-W45-03) |

@@ -2672,6 +2672,149 @@
       "kurz": "LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung src/kern/meldung-v2.js, Migration beim Einlesen (migrationen[].verfahren), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen als Pfade.",
       "status": "umgesetzt",
       "pr": 133
+    },
+    {
+      "id": "DK-2026-W45-01",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 1, Grundsatz (Z. 11)"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Anhang D, D7 Technische und organisatorische Maßnahmen (Z. 346)"
+        },
+        {
+          "datei": "src/ui/Kurzfassung.tsx",
+          "stelle": "Funktion erstellen (Z. 137–163), Knopf „… erstellen“ (Z. 271)"
+        }
+      ],
+      "kurz": "Management Summary sendete die Meldung ohne die in DATENSCHUTZ.md zugesicherte Bestätigung zur Weitergabe; Bestätigung wie in der KI-Erfassung ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-02",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/VORLAGEN.md",
+          "stelle": "V1 Anordnung, Nr. 7 „Laufprotokolle, Meldungen, Löschung“ (Z. 78)"
+        }
+      ],
+      "kurz": "VORLAGEN V1 Nr. 7 nannte „keinen eigenen Löschweg“; Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ eingetragen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-03",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 10, Löschen, Zeile „archivierte Testläufe“ (Z. 142)"
+        }
+      ],
+      "kurz": "DATENSCHUTZ Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen sichtbar; Voraussetzung und Weg über „Daten“ ergänzt.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-04",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitt 3.1, Tabelle, Zeile „Datenhülle“ (Z. 38)"
+        },
+        {
+          "datei": "src/pipeline/kontext.ts",
+          "stelle": "Funktion orientierungSystem (Z. 573–590)"
+        },
+        {
+          "datei": "src/pipeline/orientierung.ts",
+          "stelle": "Funktion einzeln, Nutzertext (Z. 110)"
+        }
+      ],
+      "kurz": "Orientierungssuche ohne Datenhülle und Datenregel entgegen SICHERHEIT.md 3.1; Hülle <stichworte> und MATERIAL_DATENREGEL ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-05",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/NATIV.md",
+          "stelle": "Abschnitte „iOS und iPadOS (Mac)“ (Z. 32) und „Android“ (Z. 42)"
+        },
+        {
+          "datei": "docs/BETRIEB.md",
+          "stelle": "Abschnitt Bauen (Z. 38)"
+        }
+      ],
+      "kurz": "NATIV.md und BETRIEB.md nannten Node.js „22 oder neuer“; an engines und .nvmrc (Node 22) angeglichen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-06",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/KI-VERORDNUNG.md",
+          "stelle": "Abschnitt 9.1, Absatz nach der Modelltabelle (Z. 116)"
+        }
+      ],
+      "kurz": "KI-VERORDNUNG 9.1: Mistral-Stufen nach Modell unterschieden, Large 4 seit 0.6.17 mit „mittel“.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-07",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/BARRIEREFREIHEIT.md",
+          "stelle": "Tabelle, Zeile „Automatische Prüfung“ (Z. 27)"
+        },
+        {
+          "datei": "tests/browser/barrierefreiheit.spec.ts",
+          "stelle": "Test „Einstellungen: alle Bereiche“ (Z. 278–288)"
+        }
+      ],
+      "kurz": "axe-Prüfung der Einstellungen ließ „Testläufe“ aus; Browsertest schaltet Forschungsfunktionen ein, BARRIEREFREIHEIT.md mit Bereichsnamen seit 0.6.10.",
+      "status": "umgesetzt",
+      "pr": 134
     }
   ]
 }

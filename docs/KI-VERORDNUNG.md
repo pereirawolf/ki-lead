@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.4 vom 31.10.2026, gilt für App-Version 0.6.6 und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.5 vom 03.11.2026, gilt für App-Version 0.6.6 und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -113,7 +113,7 @@ Stand nach der Verordnung (EU) 2026/1744, veröffentlicht im Amtsblatt der EU am
 | S3 | Reparatur von Schemafehlern, ohne Recherche | claude-haiku-5-5, niedrig (seit 0.5.15; vorher Sonnet) | gpt-6.1-sol, niedrig | mistral-small-2603, niedrig |
 | Management Summary | Kurzfassung ohne Recherche | claude-sonnet-5-5, mittel | gpt-6.1-sol, mittel | mistral-medium-3-5, hoch |
 
-Mistral kennt nur „niedrig“ (ohne Nachdenken) und „hoch“ (mit Nachdenken); seit 0.5.10 stehen die Mistral-Stufen deshalb auf „hoch“. Gewählt wurden die Standard-Profile OpenAI und Mistral nach dem Vergleichslauf Ilka vom 25.10.2026, die Reparatur nach dem Prüffall Reparatur, die Management Summary nach ihrem Prüffall (Abschnitt 9.3). Die Erfassung ist in keinem Profil gemessen; sie folgt Modell und Stufe der Verdichtung (`src/pipeline/einstellungen.ts`). Mistral über den EU-Endpunkt (Vorgabe) hat keine Websuche; Orientierungssuche und Recherche in S2 entfallen dann.
+Mistral Small und Medium kennen nur „niedrig“ (ohne Nachdenken) und „hoch“ (mit Nachdenken), Large 4 seit App 0.6.17 auch „mittel“ (am globalen Endpunkt immer „hoch“); seit 0.5.10 stehen die Mistral-Stufen der Standard-Profile auf „hoch“. Gewählt wurden die Standard-Profile OpenAI und Mistral nach dem Vergleichslauf Ilka vom 25.10.2026, die Reparatur nach dem Prüffall Reparatur, die Management Summary nach ihrem Prüffall (Abschnitt 9.3). Die Erfassung ist in keinem Profil gemessen; sie folgt Modell und Stufe der Verdichtung (`src/pipeline/einstellungen.ts`). Mistral über den EU-Endpunkt (Vorgabe) hat keine Websuche; Orientierungssuche und Recherche in S2 entfallen dann.
 
 Weitere Modellprofile, keine Vorgabe der App:
 
@@ -181,6 +181,7 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.5 | 03.11.2026 | Abschnitt 9.1: Aufwandsstufen von Mistral nach Modell, Large 4 seit App 0.6.17 mit „mittel“ (DK-2026-W45-06). App unverändert |
 | 1.4 | 31.10.2026 | Abschnitt 5: Anhang III Nr. 8 Buchst. a (Rechtspflege) und Erwägungsgrund 61 für das neue Profil „Lagebild Justiz“ 0.1.0, Grenze zu Anhang III Nr. 4; Ergebnis und Prüftiefe ergänzt. App unverändert |
 | 1.3 | 28.10.2026 | Stand App 0.6.6: Abschnitt 3 lokales Modell über Ollama (0.6.3) mit Einschätzung der Rollen; Abschnitt 6.1 Stand der Kennzeichnung bestätigt; Abschnitt 9.1 Modelle je Stufe nach `src/pipeline/einstellungen.ts` berichtigt (Verdichtung Opus seit 0.5.10, Reparatur Haiku seit 0.5.15, OpenAI und Mistral „hoch“), Orientierungssuche (0.6.0), Mix-Profile (0.5.15), Standard-Profil Ollama, Datenregel (0.6.4); Abschnitt 9.2 Bestätigung der Suchbegriffe, Pflichtsuchen und einmalige Nachforderung (0.6.0), amtliche Einstiege (0.6.1); Abschnitt 9.3 Fehlerbilder der Vergleichsreihen vom 25.10.2026; Abschnitt 9.4 Grenzen des Pflichtsuchen-Abgleichs und der Datenregel |
 | 1.2 | 24.10.2026 | Abschnitte 3 und 9.1: Mistral als dritter Modellanbieter mit Standard-Profil (App 0.5.6) |
