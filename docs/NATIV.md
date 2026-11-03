@@ -29,7 +29,7 @@ Die Version der Apps folgt `package.json`: Versionsname wie die App (`0.5.1`), B
 
 ## iOS und iPadOS (Mac)
 
-Voraussetzungen: macOS mit aktuellem Xcode, Node.js 22 oder neuer, Apple-Developer-Konto.
+Voraussetzungen: macOS mit aktuellem Xcode, Node.js 22 (siehe `.nvmrc`), Apple-Developer-Konto.
 
 1. `npm ci`
 2. `npm run app:ios` baut die Web-App, überträgt sie ins Xcode-Projekt und öffnet Xcode.
@@ -39,7 +39,7 @@ Voraussetzungen: macOS mit aktuellem Xcode, Node.js 22 oder neuer, Apple-Develop
 
 ## Android
 
-Voraussetzungen: Android Studio mit Android SDK, JDK 21, Node.js 22 oder neuer.
+Voraussetzungen: Android Studio mit Android SDK, JDK 21, Node.js 22 (siehe `.nvmrc`).
 
 1. `npm ci`
 2. `npm run app:android` baut die Web-App, überträgt sie ins Gradle-Projekt und öffnet Android Studio.

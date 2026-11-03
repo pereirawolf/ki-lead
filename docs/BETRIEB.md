@@ -35,7 +35,7 @@ Beispiele im Repository:
 
 ## 3. Bauen
 
-**Mit Node.js (22 oder neuer):**
+**Mit Node.js 22 (siehe `.nvmrc`):**
 
 ```sh
 npm ci
