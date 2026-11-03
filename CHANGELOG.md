@@ -96,6 +96,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
+| 0.7.1 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.1“ |
+
+## [0.7.1] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A8.json` (Arbeitspaket A8 des Arbeitskonzepts Erprobungsreife), TP-2026-W44-62 bis -67, freigegeben vom Herausgeber am 03.11.2026: alle sechs; Profil eines Falls im Feld `profil`; B4 und B5 als zwei Pläne mit je einem Klick, die Abbruchregel des Erprobungsplans entscheidet der Herausgeber an der angezeigten Summe; importierte Fallpakete bleiben bis zur Löschung auf dem Gerät.
+
+### Neu
+
+- **Fallreihe unter „Einstellungen → Testläufe“ (TP-2026-W44-62):** eigener Abschnitt neben dem Testlauf am Fall Ilka. Beliebige Erfassungs- und Verdichtungsfälle laufen nacheinander mit denselben Pipeline-Funktionen wie eine Erfassung in der App: S1, Bestätigung ohne Änderung, S2 mit Prüfung und Reparatur bei Bedarf. Auftrag und Material kommen aus dem Fall (Rolle „eingang“ bzw. „vormeldung“ ausdrücklich gesetzt). Fälle mit Management Summary oder Reparatur bleiben bei ihren Testarten und sind ausgegraut mit Grund. Der Abschnitt wird erst beim Öffnen der Testläufe geladen.
+- **Fälle aus dem Repository und aus Fallpaketen (TP-2026-W44-63):** alle Fälle unter `evaluation/faelle/` mit ihrem Material in einem eigenen, nachgeladenen Teil des Builds; ein Fallpaket als ZIP (etwa der Kontrollsatz) mit Anzeige der SHA-256, Prüfung jeder Falldatei gegen `fall.schema.json`, Hinweisen zu Dubletten und fehlendem Material. Pakete bleiben bis zur Löschung auf dem Gerät (`fallpaket:<sha256>` in der Datenbank des Testlaufarchivs, auch in Sicherung und „Alle Daten löschen“). Neues Feld `profil` im Fall (Manifest-ID, Vorgabe Beispielprofil), damit Landesfälle mit dem Landesprofil laufen. Drei neue Fälle `pruefstein-*` zu den Prüfsteinen der KW 43 mit `websuche: true`, ohne Material und URLs (für B5).
+- **Plan mit Vorbelegung (TP-2026-W44-64):** Ein Bewertungsplan als JSON-Datei belegt Fälle, Varianten, Wiederholungen, Recherchetiefe und Deckel vor; die App zeigt seine SHA-256 und vermerkt Abweichungen in der Reihe. `plan.schema.json` erweitert um `varianten[].ki_profil` (Standardprofil eines Anbieters), `varianten[].mistral_endpunkt`, `recherche` und `fallpaket.sha256`; ein Paket mit anderer Prüfsumme sperrt den Start. Ohne Plan: Matrix Fälle × Anbieter mit dem Standardprofil der freigegebenen Anbieter. Beispielplan `evaluation/plaene/beispiel-fallreihe.json`.
+- **Kostenbremse (TP-2026-W44-65):** vor jedem Lauf Ist-Kosten plus Obergrenze des nächsten Laufs (größerer Wert aus oberer Schätzung und teuerstem bisherigem Lauf derselben Variante, sonst 5 USD) gegen den Deckel; die Reihe endet mit Grund, die bisherigen Läufe bleiben im Ergebnis. Reihenfolge je Fall alle Varianten.
+- **Ergebnis-ZIP mit automatischen Prüfungen (TP-2026-W44-66):** `fallreihe.json` (`ki-lead-fallreihe/1`), `uebersicht.csv` je Lauf mit schemakonform, Kosten (Ist und Schätzung), Dauer, Fristen auf oder vor t0 ohne „überfällig“ (Prüfung des Redaktionschecks), Anteil Sachverhalte mit Tendenz, Zahl der Quellen, Websuchen und Abrufen (Felder nach den Rollen des Profils, für LEAD-Meldung-v1 und v2), Laufprotokolle, Entwürfe und je Entwurf eine leere Bewertungsvorlage nach `evaluation/bewertungsschema.json` (nicht verblindet) mit Prüfliste der Muss- und Darf-nicht-Punkte und der K.-o.-Fehler. Archiv wie die übrigen Testläufe.
+
+### Geändert
+
+- `scripts/pruefumfang.mjs`: Alle Bewertungsfälle, ihr Material und `plan.schema.json` lösen die Kern-Browsertests aus, weil die App sie einbettet.
+- `evaluation/README.md`, `evaluation/faelle/README.md` (Prüfstein-Fälle, Profil eines Falls, Fallpaket), Spezifikation 0.7.1 (Abschnitt 5.4), `docs/DATENSCHUTZ.md` 1.13 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md). Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- Neu `tests/forschung/fallreihe.test.ts` (Katalog, Prüfstein-Fälle, Profil je Fall, Fallpaket, Plan, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe, ZIP und Bewertungsvorlage gegen Ajv) und `tests/ui/fallreihe.test.ts` (Auswahl, Paket mit Prüfsumme und Ablage, Vorbelegung aus dem Plan, Start, Kostenbremse, Archiv); Browsertest der Fallreihe in `tests/browser/testlaeufe.spec.ts`; Planschema und Feld `profil` in `tests/evaluation/schemata.test.ts`.
 
 ## [0.7.0] – 03.11.2026
 
