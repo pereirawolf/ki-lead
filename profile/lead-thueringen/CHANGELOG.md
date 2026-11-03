@@ -4,6 +4,12 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.2.3 – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-02, freigegeben vom Herausgeber am 03.11.2026. Dritte Stelle: nur Begleitmaterial.
+
+- **Begleitordner `beispiele/orkantief-ilka-thessa`:** Bausteine in Fassung 0.3 aus Thessa (Commit `a614ed4`), inhaltsgleich bis auf das entfallene Feld `bezug_lead` der Einsatzmeldungen (Thessa G12: Zuordnung durch die Lagemeldung). LIESMICH und Vorschlag für die Prüffrage nachgezogen. Beispielmeldungen, Schema und Darstellungsdatei unverändert.
+
 ## 1.2.2 – 03.11.2026
 
 Grundlage: Auftrag des Herausgebers vom 03.11.2026, die Gebietsquelle in KI-LEAD, KRITIS-LEAD und Thessa einheitlich anzugeben. Dritte Stelle: nur Begleittext.

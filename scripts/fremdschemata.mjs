@@ -80,7 +80,10 @@ export function fassung01(gebuendelt02) {
   return s;
 }
 
-/** Erzeugt die gebündelten Schemata; prüft vorher die Prüfsummen aus herkunft.json. */
+/**
+ * Erzeugt die gebündelten Schemata; prüft vorher die Prüfsummen aus herkunft.json.
+ * @returns {Record<string, any>} Dateiname → Schema
+ */
 export function erzeuge() {
   const herkunft = JSON.parse(readFileSync(join(THESSA_ORDNER, "herkunft.json"), "utf8"));
   const kernText = readFileSync(KERN_DATEI, "utf8");
