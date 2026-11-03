@@ -1,6 +1,6 @@
 # KI-LEAD – Barrierefreiheit
 
-Fassung 1.3 vom 29.10.2026, gilt für App-Version 0.6.7 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.4 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsdemonstrator; eine gesetzliche Pflicht zu dieser Erklärung besteht nicht (Abschnitt 6). Keine Rechtsberatung.
 
@@ -75,6 +75,7 @@ Eine Schlichtungsstelle gibt es für dieses private Vorhaben nicht.
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.4 | 03.11.2026 | Automatische Prüfung mit dem Bereich „Testläufe“ (Forschungsfunktionen eingeschaltet, DK-2026-W45-07); Bereichsnamen „Erfassung“ und „Auswertung“ (seit App 0.6.10) |
 | 1.3 | 29.10.2026 | Sprungziele und Fokusführung nach Schritt-, Bereichs-, Reiter- und Ansichtswechsel (App 0.6.7) |
 | 1.2 | 27.10.2026 | Statusregion der Laufanzeige, Fokusführung, eindeutige Namen, `aria-current`, Schrift in rem, Zielgrößen, Fehler am Feld, Rückfragedialog, fokussierbare Scrollbereiche, axe-core je Bereich (App 0.6.5; TP-2026-W44-12 bis -15, -20, -22) |
 | 1.1 | 24.10.2026 | Lagenradar als Radiogruppe; PDF mit Dokumentsprache und Titel (App 0.5.4) |

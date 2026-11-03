@@ -1,6 +1,6 @@
 # KI-LEAD – Vorlagen für die Erprobung in einer Stelle
 
-Fassung 1.2 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.3 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Arbeitshilfen für Stellen, die KI-LEAD dienstlich erproben wollen. Die Vorlagen übernehmen, was die Dokumentation über KI-LEAD schon sagt, und verweisen auf die Fundstelle. Felder in eckigen Klammern füllt die Stelle selbst. Anwendungsbeispiele sind das Bundesrecht und das Thüringer Landesrecht; in anderen Ländern gelten die entsprechenden Vorschriften des Landes.
 
@@ -276,3 +276,4 @@ Zugriff jeweils am 28.10.2026.
 | 1.1 | 28.10.2026 | V5 Nr. 3: Verweis auf die Systemkarte in KI-VERORDNUNG.md 1.3 statt auf die Spezifikation |
 | 1.1 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: V1 bis V6 als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.2 | 31.10.2026 | V3 Teil 1: Selbstbetrieb mit Betreiberkonfiguration (Betriebsform, Verbindungen, Vorgabe der Schlüsselablage; App 0.6.17, TP-2026-W44-51) |
+| 1.3 | 03.11.2026 | V1 Nr. 7: Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ statt „kein eigener Löschweg“ (seit App 0.6.15; DK-2026-W45-02) |

@@ -96,6 +96,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
 | 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
+| 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
+
+## [0.7.1] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_dokumentation_2026-W45.json` (Dokumentationsprüfung KW 45, Commit `246591e`), freigegeben vom Herausgeber am 03.11.2026: alle sieben Befunde, DK-2026-W45-01 und -04 mit Option B (Verhalten an die Dokumentation angleichen), -07 mit erweitertem Test. Umgesetzt auf main nach dem Zusammenführen von Pull Request #132 und #133.
+
+### Geändert
+
+- **Bestätigung vor der Management Summary (DK-2026-W45-01):** Der Schritt „Management Summary“ der Erfassung sendet die Meldung erst, wenn die Person wie in der KI-Erfassung bestätigt, nur fiktive oder offen zugängliche Inhalte weiterzugeben; bis dahin ist „… erstellen“ gesperrt und per `aria-describedby` mit der Bestätigung verknüpft (`src/ui/Kurzfassung.tsx`). Bis 0.7.0 ging die Meldung ohne Bestätigung an den Anbieter, obwohl [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) (Abschnitt 1, Anhang D, D7) die Bestätigung vor jedem KI-Lauf nennt.
+- **Datenhülle der Orientierungssuche (DK-2026-W45-04):** Die Stichworte stehen in `<stichworte>` mit neutralisierten Schließtags (`huellenInhalt`), der Systemauftrag nennt `MATERIAL_DATENREGEL` wie S1 und S2 (`src/pipeline/orientierung.ts`, `orientierungSystem` in `src/pipeline/kontext.ts`); damit trifft [docs/SICHERHEIT.md](docs/SICHERHEIT.md), Abschnitt 3.1, zu. Der Auftrag der Orientierungssuche wird dadurch etwas länger.
+- **Dokumentation nachgezogen:** [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.13 (Abschnitt 10: „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“, DK-2026-W45-03), [docs/VORLAGEN.md](docs/VORLAGEN.md) 1.3 (V1 Nr. 7: Löschweg „Einstellungen → Daten“, DK-2026-W45-02), [docs/NATIV.md](docs/NATIV.md) und [docs/BETRIEB.md](docs/BETRIEB.md) 1.1 (Node.js 22 nach `.nvmrc`, DK-2026-W45-05), [docs/KI-VERORDNUNG.md](docs/KI-VERORDNUNG.md) 1.5 (Mistral-Stufen nach Modell, DK-2026-W45-06), [docs/BARRIEREFREIHEIT.md](docs/BARRIEREFREIHEIT.md) 1.4 (axe-Prüfung mit „Testläufe“, Bereichsnamen seit 0.6.10, DK-2026-W45-07), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.8 (Änderungsverlauf).
+- Spezifikation 0.7.1 (Abschnitt 5.1, Management Summary), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 701, iOS 701).
+
+### Tests
+
+- `tests/ui/kurzfassung-lauf.test.ts`: neuer Abschnitt DK-2026-W45-01; die Laufanzeige-Tests setzen zuerst die Bestätigung (Soll unverändert).
+- Neu `tests/pipeline/orientierung-datenhuelle.test.ts`: DK-2026-W45-04 (Gegenprobe ohne die Änderung: beide Fälle rot).
+- `tests/browser/barrierefreiheit.spec.ts`: „Einstellungen: alle Bereiche“ schaltet die Forschungsfunktionen ein und erwartet acht Bereiche (DK-2026-W45-07).
 
 ## [0.7.0] – 03.11.2026
 

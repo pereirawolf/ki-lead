@@ -945,3 +945,12 @@ Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahle
 
 Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `scripts/lead-meldung-v2.mjs`, das die Funktionen aus `src/kern/meldung-v2.js` durchreicht).
 
+## Dokumentationsprüfung KW 45 (0.7.1, Befunddatei `ki-lead-befund_dokumentation_2026-W45.json`, DK-2026-W45-01, -04, -07, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Management Summary ohne Bestätigung gesperrt, mit `aria-describedby` auf die Bestätigung; ohne Haken keine Anfrage, mit Haken genau eine | DK-2026-W45-01: Management Summary nur nach Bestätigung zur Weitergabe › … | `tests/ui/kurzfassung-lauf.test.ts` |
+| Systemaufträge von S1, S2 und Orientierungssuche nennen `MATERIAL_DATENREGEL`; Stichworte der Orientierungssuche in `<stichworte>` mit neutralisierten Schließtags | DK-2026-W45-04: Orientierungssuche mit Datenhülle und Datenregel wie S1 und S2 › … | `tests/pipeline/orientierung-datenhuelle.test.ts` (neu) |
+| axe-core prüft alle acht Bereiche der Einstellungen einschließlich „Testläufe“ | TP-2026-W44-22: axe-core je Bereich … › Einstellungen: alle Bereiche | `tests/browser/barrierefreiheit.spec.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/kurzfassung-lauf.test.ts` (Laufanzeige und KI-Chip: zuerst die Bestätigung setzen).
