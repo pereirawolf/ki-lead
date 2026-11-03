@@ -116,6 +116,8 @@ export function quellenHinweise(d: Meldung, ui: UiKonfig): Befund[] {
   const out: Befund[] = [];
   const rolle = ui.rollen.quellen;
   if (!rolle) return out;
+  // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Quellen sind Objekte; Verweise prüft die Referenzprüfung (referenzen.ts)
+  if (Array.isArray(holeWert(d, rolle))) return out;
   const quellenText = String(holeWert(d, rolle) || "");
   const kategorien = ui.quellen?.kategorien || {};
   const alt = ui.quellen?.altkategorien || {};

@@ -122,6 +122,10 @@ export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profi
       ) : (
         <Marke farbe="gruen">Schema ✓</Marke>
       )}
+      {e.referenzen?.some((b) => b.stufe === "fehler") && (
+        // seit 0.7.0 (UP-2026-W45-02): Prüfebene 2 bei LEAD-Meldung-v2
+        <Marke farbe="rot">Referenzen: {e.referenzen.filter((b) => b.stufe === "fehler").length}</Marke>
+      )}
       {e.hinweise.length > 0 && <Marke farbe="orange">migriert</Marke>}
       {eigen && <Marke farbe="amt">eigene Meldung</Marke>}
       {!e.fremd && statusVon(e, profil) === r.status_entwurf && <Marke farbe="gelb">{r.status_entwurf}</Marke>}

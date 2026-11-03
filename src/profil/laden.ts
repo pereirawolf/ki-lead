@@ -244,11 +244,12 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
           istText(g.von) &&
           (g.setze === undefined || istObjekt(g.setze)) &&
           (g.ergaenze === undefined || istObjekt(g.ergaenze)) &&
-          (g.hinweis === undefined || istText(g.hinweis)),
+          (g.hinweis === undefined || istText(g.hinweis)) &&
+          (g.verfahren === undefined || g.verfahren === "lead-meldung-v2"),
       )
     )
   )
-    fehler("„migrationen“ braucht je Eintrag „von“ (Text) und gegebenenfalls „setze“ und „ergaenze“ als Objekte.");
+    fehler("„migrationen“ braucht je Eintrag „von“ (Text) und gegebenenfalls „setze“ und „ergaenze“ als Objekte oder „verfahren“ „lead-meldung-v2“.");
   if (m.variablen !== undefined && (!istObjekt(m.variablen) || !Object.values(m.variablen).every(istText)))
     fehler("„variablen“ muss ein Objekt mit Texten sein.");
   if (m.eigene_stellen !== undefined && !textListe(m.eigene_stellen)) fehler("„eigene_stellen“ muss eine Liste von Texten sein.");
@@ -259,7 +260,7 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
   return befunde.filter((b) => b.stufe === "fehler").length === vorher;
 }
 
-function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
+export function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
   for (const pfad of Object.keys(ui.felder || {})) {
     if (pfad.includes("*")) continue;
     const knoten = unterSchema(
@@ -286,7 +287,8 @@ function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]) {
       !/^(schema_feld|status_feld|entstehung_feld|land|meldende_stelle|meldezeitpunkt|quellen|zeitstrahl|sachverhalte)$/.test(rolle)
     )
       continue;
-    if (!wurzel?.properties?.[pfad])
+    // seit 0.7.0 (UP-2026-W45-02) auch Pfade wie „absender.stelle“
+    if (!(pfad.includes(".") ? unterSchema(schema, teilePfad(pfad)) : wurzel?.properties?.[pfad]))
       befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“.` });
   }
   // Rollen der Sachverhaltskennung und des Bezugs (seit 0.6.9): Felder im Element der Sachverhaltsliste

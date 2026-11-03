@@ -11,6 +11,11 @@ export interface Migration {
   /** Felder, die nur ergänzt werden, wenn sie fehlen */
   ergaenze?: Record<string, unknown>;
   hinweis?: string;
+  /**
+   * Verfahren statt Feldsetzungen (seit 0.7.0, UP-2026-W45-02): „lead-meldung-v2“ überführt LEAD-Meldung-v1 und
+   * LEAD-Meldung-Land-v1 nach docs/LEAD-MELDUNG-V2.md, Abschnitt 11; setze und ergaenze gelten dann nicht.
+   */
+  verfahren?: "lead-meldung-v2";
 }
 
 export interface ProfilManifest {

@@ -2643,6 +2643,35 @@
       "kurz": "Rückmeldeliste an Thessa für Fassung 0.3 (stabile Kennzahl-Schlüssel, Meldequote als Feld, Raum mit Schlüssel, Abdeckung, Schemata je Fassung, Baustein-Kennung, README, Neupinnen) an den Herausgeber übergeben; keine Änderung in KI-LEAD.",
       "status": "umgesetzt",
       "pr": 132
+    },
+    {
+      "id": "UP-2026-W45-02",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/kern/migration.ts",
+          "stelle": "Funktion migriere (Z. 14–33)"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "Funktion eingangsInfo (Z. 18–37)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "migriereV1, pruefeReferenzen, vergleicheZeit, stelleSchemaZusammen"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Ebene 2 (Z. 164)"
+        }
+      ],
+      "kurz": "LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung src/kern/meldung-v2.js, Migration beim Einlesen (migrationen[].verfahren), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen als Pfade.",
+      "status": "umgesetzt",
+      "pr": 133
     }
   ]
 }

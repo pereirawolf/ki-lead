@@ -3,6 +3,7 @@ import { ladeProfil } from "./profil/laden";
 import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
 import { jetztLokal } from "./kern/ausgabe";
+import { holeWert, setzeWert } from "./kern/pfad";
 import type { Meldung, Profil, ProfilEintrag } from "./kern/typen";
 import { aktivesProfilLesen, dateiAnbieten, aktivesProfilSetzen, profileLaden, profilLoeschen, profilSpeichern, profilArchivieren } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
@@ -60,10 +61,10 @@ const LADEN = { farbschemaFehler: profilFarbschemaFehler };
 function neueMeldung(p: Profil): Meldung {
   const d = leererWert(p.schema, p.schema) as Meldung;
   const r = p.ui.rollen;
-  d[r.status_feld] = r.status_entwurf;
-  const props = p.schema.properties || {};
-  for (const [k, v] of Object.entries(p.manifest.variablen)) if (k in props && k in d) d[k] = v;
-  if (r.meldezeitpunkt && r.meldezeitpunkt in d) d[r.meldezeitpunkt] = jetztLokal(p.manifest.variablen.zeitzone);
+  // Rollen und Variablen als Pfade (seit 0.7.0, UP-2026-W45-02)
+  setzeWert(d, r.status_feld, r.status_entwurf);
+  for (const [k, v] of Object.entries(p.manifest.variablen)) if (holeWert(d, k) !== undefined) setzeWert(d, k, v);
+  if (r.meldezeitpunkt && holeWert(d, r.meldezeitpunkt) !== undefined) setzeWert(d, r.meldezeitpunkt, jetztLokal(p.manifest.variablen.zeitzone));
   const liste = d[r.sachverhalte];
   if (Array.isArray(liste) && liste.length === 0) {
     const el = leererWert(p.schema.properties?.[r.sachverhalte]?.items, p.schema);
