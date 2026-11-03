@@ -20,7 +20,10 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
    d) zusätzlich zur EUPL-1.2 das App-Symbol: public/icons/, public/favicon.ico
       und die daraus erzeugten Symbol- und Startbilder in android/ und ios/;
    e) alle Dateien im Ordner formate/ (Meldungsformate mit Schemata,
-      Zusammenstellungen, Beispielen und Beschreibung, seit 01.11.2026).
+      Zusammenstellungen, Beispielen und Beschreibung, seit 01.11.2026);
+   f) alle Dateien im Ordner design/ (Grunddesign der App-Familie mit
+      Beschreibung, Regeln, Schema, Design Tokens und Wireframes, seit
+      03.11.2026).
 
 2. Zusätzlich CC0 1.0. Nach Wahl der Nutzenden stehen auch unter CC0 1.0 Universal
    (Datei LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung

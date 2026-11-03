@@ -986,3 +986,13 @@ Angepasst: `tests/ui/einstellungen.test.ts` (Überschriften des Bereichs „Test
 
 
 Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.3).
+
+## Grunddesign der App-Familie (Nachtrag vom 03.11.2026 zu 0.7.3, Auftrag des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| `design/lead-design.tokens.json`, `design/lead-farbschemata.tokens.json` und die Regeltabellen in `design/README.md` entsprechen Code und `rahmen.json` | Grunddesign: erzeugte Dateien aktuell › … | `tests/format/lead-design.test.ts` (neu) |
+| Tokens im Format der DTCG: zulässige `$type`, Hexfarben, Maße in px oder rem; jede Rolle und Signalfarbe beschrieben; Rollen aus dem Profil, Signalfarben nie; Kennungen der Farbschemata wie im Katalog; Umbrüche, Zielgröße, Band und Schrift unabhängig gegen die Stylesheets | Grunddesign: Design Tokens im Format der DTCG › … | `tests/format/lead-design.test.ts` |
+| `rahmen.json` gültig nach Schema, Schema lehnt ungültige Regeln ab; Regelkennungen eindeutig, Fundstellen vorhanden, Verweise und Token-Verweise aufgelöst; Hauptnavigation, Bereiche der Einstellungen, Reiter, Phasen der KI-Erfassung und Kennsätze wie im Quelltext; Knopf- und Kastenvarianten im Stylesheet; Wireframes mit Titel und Lizenzvermerk | Grunddesign: rahmen.json › … | `tests/format/lead-design.test.ts` |
+| `design/` unter CC BY 4.0 nach LICENSE-CONTENT, Nr. 1 f | Abgleich mit reuse lint (Soll aus sollLizenzen) | `tests/lizenzen/reuse.test.ts` |
+| `design/` ist reiner Inhalt (keine Browsertests), `scripts/lead-design.mjs` löst die Kern-Browsertests aus | Prüfumfang je Änderung › Grunddesign …; Generator … | `tests/ci/pruefumfang.test.ts` |

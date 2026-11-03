@@ -98,7 +98,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
 | 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
-| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachtrag vom 03.11.2026: Grunddesign der App-Familie in `design/`, ohne Änderung der App) |
 
 ## [0.7.3] – 03.11.2026
 
@@ -124,6 +124,16 @@ Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W
 
 - Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
 - `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
+
+### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, Lizenz CC BY 4.0 wie die übrige Dokumentation (ein zunächst vorgesehener Rechtevorbehalt ist auf Entscheidung des Herausgebers vom selben Tag entfallen). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Grunddesign der App-Familie, Fassung 1.0** ([design/README.md](design/README.md)): 47 Regeln mit Kennung (`LD-R01` …), Stufe MUSS, SOLL oder KANN und Fundstelle in KI-LEAD zu Rahmen, Navigation, Seitenaufbau, Farbe, Schrift und Sprache, Bedienelementen, Eingabe, Rückmeldung, Zugänglichkeit und Plattform; Wireframes als Text, Entsprechung zur Office-Suite, Hinweise zur Übernahme mit `design-abweichungen.md` in der Schwester-App.
+- **Maschinenlesbar:** `design/rahmen.json` mit Schema `rahmen.schema.json` (Rahmen, Leisten, Komponenten, Regeln), `design/lead-design.tokens.json` (Farbrollen, Signalfarben, Schrift, Radien, Maße, Umbrüche, Kontraste) und `design/lead-farbschemata.tokens.json` (alle 22 Farbschemata des Katalogs), Wireframes `wireframe-breit.svg` und `wireframe-schmal.svg`.
+- **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
+- **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
+- **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ## [0.7.2] – 03.11.2026
 

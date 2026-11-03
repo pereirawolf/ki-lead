@@ -28,7 +28,8 @@
     "vergleichslauf:auswerten": "node scripts/vergleichslauf-auswerten.mjs",
     "app:sync": "vite build && cap sync",
     "app:ios": "vite build && cap sync ios && cap open ios",
-    "app:android": "vite build && cap sync android && cap open android"
+    "app:android": "vite build && cap sync android && cap open android",
+    "design:tokens": "node scripts/lead-design.mjs"
   },
   "author": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "license": "EUPL-1.2",

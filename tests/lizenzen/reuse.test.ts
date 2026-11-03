@@ -52,8 +52,8 @@ function sollLizenzen(pfad: string): string[] {
   if (/^(android|ios)\//.test(pfad)) return ["MIT"];
   // Nr. 1 b: Quelltext in evaluation/ fällt unter Nr. 4
   if (/^evaluation\/.*\.ts$/.test(pfad)) return [EUPL];
-  // Nr. 1 a bis c und e
-  if (/^(profile|evaluation|docs|formate)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
+  // Nr. 1 a bis c, e und f
+  if (/^(profile|evaluation|docs|formate|design)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
   // Nr. 4
   return [EUPL];
 }

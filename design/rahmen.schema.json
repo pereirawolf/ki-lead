@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/design/rahmen.schema.json",
+  "title": "Grunddesign der App-Familie: Rahmen, Leisten, Komponenten und Regeln",
+  "description": "Maschinenlesbarer Teil von design/README.md. Werte in geschweiften Klammern ({gruppe.name}) verweisen auf Tokens in lead-design.tokens.json (Alias-Schreibweise der DTCG). © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "fassung", "stand", "familie", "referenzumsetzung", "tokens", "farbschemata", "rahmen", "hauptnavigation", "seitenkopf", "arbeitsbereich", "leisten", "komponenten", "wireframes", "regeln"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "format": { "const": "lead-design-rahmen/1" },
+    "fassung": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "stand": { "type": "string", "format": "date" },
+    "familie": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+    "referenzumsetzung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["app", "repository"],
+      "properties": { "app": { "type": "string" }, "repository": { "type": "string", "pattern": "^[\\w.-]+/[\\w.-]+$" } }
+    },
+    "tokens": { "type": "string" },
+    "farbschemata": { "type": "string" },
+    "rahmen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "element", "regel"],
+        "properties": { "id": { "type": "string" }, "element": { "type": "string" }, "regel": { "$ref": "#/$defs/regelId" } }
+      }
+    },
+    "hauptnavigation": {
+      "type": "object",
+      "required": ["aria_label", "muster", "adresse", "regeln"],
+      "properties": {
+        "aria_label": { "type": "string" },
+        "muster": { "$ref": "#/$defs/texte" },
+        "adresse": { "type": "string" },
+        "regeln": { "type": "array", "items": { "$ref": "#/$defs/regelId" } }
+      }
+    },
+    "seitenkopf": { "type": "object", "required": ["elemente", "regeln"] },
+    "arbeitsbereich": { "type": "object", "required": ["spalten", "leiste", "arbeitsflaeche", "regeln"] },
+    "leisten": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "aria_label", "aria_current", "nummeriert"],
+        "properties": {
+          "id": { "type": "string" },
+          "aria_label": { "type": "string" },
+          "aria_current": { "enum": ["page", "step"] },
+          "nummeriert": { "type": "boolean" }
+        }
+      }
+    },
+    "komponenten": {
+      "type": "object",
+      "additionalProperties": { "type": "object" }
+    },
+    "wireframes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["datei", "ansicht", "abschnitt"],
+        "properties": { "datei": { "type": "string", "pattern": "\\.svg$" }, "ansicht": { "type": "string" }, "abschnitt": { "type": "string" } }
+      }
+    },
+    "regeln": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "stufe", "thema", "text", "referenz"],
+        "properties": {
+          "id": { "$ref": "#/$defs/regelId" },
+          "stufe": { "enum": ["MUSS", "SOLL", "KANN"], "description": "Verbindlichkeit für Apps der Familie: MUSS ohne Ausnahme, SOLL mit begründeter Ausnahme, KANN nach Wahl" },
+          "thema": { "type": "string" },
+          "text": { "type": "string", "minLength": 10 },
+          "referenz": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "Fundstellen in der Referenzumsetzung, Pfade relativ zur Wurzel des Repositorys" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "regelId": { "type": "string", "pattern": "^LD-[A-Z]\\d{2}$" },
+    "texte": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+  }
+}
