@@ -1,0 +1,880 @@
+{
+  "format": "lead-ui/1",
+  "titel": "Meldung",
+  "ausblenden": [
+    "schema",
+    "fassung",
+    "status",
+    "entstehung"
+  ],
+  "schritte": [
+    {
+      "id": "meta",
+      "titel": "Meldungsmetadaten",
+      "felder": [
+        "absender",
+        "meldezeitpunkt",
+        "zeitzone",
+        "meldezeitraum",
+        "berichtsraum",
+        "meldung_id",
+        "beziehungen",
+        "fehlanzeige"
+      ]
+    },
+    {
+      "id": "sachverhalte",
+      "titel": "Ereignisse/Sachverhalte",
+      "felder": [
+        "sachverhalte"
+      ]
+    },
+    {
+      "id": "quellen",
+      "titel": "Quellen & Referenzen",
+      "felder": [
+        "quellen"
+      ],
+      "einleitung": "Zentrales Quellenverzeichnis für alle Ereignisse/Sachverhalte dieser Meldung (SOP-LEAD Teil A.3), je Quelle ein Eintrag. Den Zeitstrahl führt jeder Sachverhalt selbst."
+    },
+    {
+      "id": "pruefen",
+      "titel": "Prüfen & Exportieren",
+      "felder": [
+        "freigabe"
+      ],
+      "pruefung": true
+    }
+  ],
+  "felder": {
+    "meldung_id": {
+      "label": "Kennung dieser Fassung",
+      "hinweis": "UUID der Meldungsfassung. Jede Fortschreibung oder Berichtigung erhält eine neue Kennung; die App überträgt sie unverändert."
+    },
+    "beziehungen": {
+      "label": "Beziehungen zu früheren Fassungen",
+      "element_label": "Beziehung",
+      "hinzufuegen": "Beziehung hinzufügen"
+    },
+    "beziehungen[].art": {
+      "label": "Art",
+      "hinweis": "Fortschreibung: neuer Stand derselben Stelle. Berichtigung: ersetzt eine Fassung desselben Stands."
+    },
+    "beziehungen[].meldung_id": {
+      "label": "Kennung der früheren Fassung"
+    },
+    "absender": {
+      "label": "Absender"
+    },
+    "absender.stelle": {
+      "label": "Meldende Stelle",
+      "pflicht": true
+    },
+    "absender.stelle_id": {
+      "label": "Stellenkennung (optional)"
+    },
+    "absender.ebene": {
+      "label": "Ebene",
+      "pflicht": true
+    },
+    "absender.gebiet": {
+      "label": "Gebiet der meldenden Stelle"
+    },
+    "absender.gebiet.name": {
+      "label": "Name",
+      "pflicht": true
+    },
+    "absender.gebiet.schluessel": {
+      "label": "Schlüssel",
+      "hinweis": "ISO 3166-2 für Länder (DE-TH) oder amtlicher Gemeinde- bzw. Regionalschlüssel (16072)."
+    },
+    "berichtsraum": {
+      "label": "Berichtsraum (optional)"
+    },
+    "berichtsraum.beschreibung": {
+      "label": "Beschreibung"
+    },
+    "berichtsraum.gebiete": {
+      "label": "Gebiete",
+      "element_label": "Gebiet",
+      "hinzufuegen": "Gebiet hinzufügen"
+    },
+    "meldezeitpunkt": {
+      "label": "Meldezeitpunkt (t0)",
+      "pflicht": true,
+      "platzhalter": "2026-10-14T10:30+02:00",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (RFC 3339). Im Entwurf darf er fehlen."
+    },
+    "zeitzone": {
+      "label": "Zeitzone",
+      "platzhalter": "Europe/Berlin",
+      "hinweis": "IANA-Zeitzone; Kalendertage ohne Uhrzeit gelten in dieser Zone."
+    },
+    "meldezeitraum": {
+      "label": "Meldezeitraum"
+    },
+    "meldezeitraum.von": {
+      "label": "von",
+      "platzhalter": "2026-10-13",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "meldezeitraum.bis": {
+      "label": "bis",
+      "platzhalter": "2026-10-14T10:30+02:00",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "fehlanzeige": {
+      "label": "Fehlanzeige",
+      "hinweis": "Nur ohne Sachverhalt: Umfang, Zeitraum und Erklärung, warum nichts zu melden ist."
+    },
+    "fehlanzeige.erklaerung": {
+      "label": "Erklärung",
+      "widget": "text_lang"
+    },
+    "quellen": {
+      "label": "Quellen & Referenzen",
+      "element_label": "Quelle",
+      "titel_feld": "titel",
+      "hinzufuegen": "Quelle hinzufügen",
+      "hinweis": "Je Quelle ein Eintrag. In den Texten wird mit [Q1], [Q2, Q4] oder [Q1–Q3] verwiesen; die Referenzprüfung löst jeden Verweis auf. Das lesbare Quellenverzeichnis erzeugt die Ausgabe."
+    },
+    "quellen[].id": {
+      "label": "Nummer",
+      "platzhalter": "Q1"
+    },
+    "quellen[].kategorie": {
+      "label": "Kategorie",
+      "hinweis": "A amtlich/zwischenstaatlich, B Betreiber, W wissenschaftlich, M Medien, P sonstige private Quellen (Kodierleitfaden Abschnitt 5)."
+    },
+    "quellen[].herausgeber": {
+      "label": "Herausgeber"
+    },
+    "quellen[].titel": {
+      "label": "Titel"
+    },
+    "quellen[].veroeffentlicht": {
+      "label": "Veröffentlicht",
+      "platzhalter": "2026-10-14",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "quellen[].url": {
+      "label": "Adresse (URL)"
+    },
+    "quellen[].zugriff": {
+      "label": "Zugriff",
+      "platzhalter": "2026-10-14",
+      "hinweis": "Tag des Abrufs; leer = nicht angegeben."
+    },
+    "quellen[].datenstand": {
+      "label": "Datenstand",
+      "platzhalter": "2026-10-14T08:00+02:00",
+      "hinweis": "Stand der Angaben, getrennt vom Veröffentlichungsdatum."
+    },
+    "quellen[].zugang": {
+      "label": "Zugang"
+    },
+    "quellen[].meldung_id": {
+      "label": "Fassung der Eingangsmeldung (UUID)"
+    },
+    "quellen[].ursprung": {
+      "label": "Ursprung (weiterverbreitet aus)",
+      "widget": "kennungen",
+      "hinweis": "Quellen-IDs der Ursprungsquelle(n); eine Weiterverbreitung ist keine unabhängige Bestätigung."
+    },
+    "quellen[].anmerkung": {
+      "label": "Anmerkung",
+      "widget": "text_lang"
+    },
+    "sachverhalte": {
+      "label": "Ereignisse/Sachverhalte",
+      "element_label": "Ereignis/Sachverhalt",
+      "titel_feld": "bezeichnung",
+      "hinzufuegen": "Ereignis/Sachverhalt hinzufügen"
+    },
+    "sachverhalte[].kennung": {
+      "label": "Kennung",
+      "widget": "kennung",
+      "hinweis": "Die App vergibt die Kennung beim Anlegen oder mit „Kennung vergeben“ (Herkunft, Anlagedatum, vier Zeichen). Bei der Fortschreibung bleibt sie unverändert; der Zeitstrahl ordnet seine Zeilen über sie zu."
+    },
+    "sachverhalte[].bezug": {
+      "label": "Bezug",
+      "element_label": "Bezug",
+      "hinzufuegen": "Bezug hinzufügen",
+      "hinweis": "Kennungen früherer Sachverhalte, aus denen dieser hervorgeht (Verdichtung, Teilung, Zusammenführung)."
+    },
+    "sachverhalte[].bezeichnung": {
+      "label": "Bezeichnung",
+      "pflicht": true
+    },
+    "sachverhalte[].eintritt": {
+      "label": "Eintritt"
+    },
+    "sachverhalte[].eintritt.zeit": {
+      "label": "Zeit",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].eintritt.genauigkeit": {
+      "label": "Genauigkeit"
+    },
+    "sachverhalte[].bekannt_seit": {
+      "label": "Bekannt seit",
+      "hinweis": "Erstes Bekanntwerden, nicht der Beginn. Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].raum": {
+      "label": "Raum"
+    },
+    "sachverhalte[].raum.beschreibung": {
+      "label": "Beschreibung"
+    },
+    "sachverhalte[].raum.gebiete": {
+      "label": "Gebiete",
+      "element_label": "Gebiet",
+      "hinzufuegen": "Gebiet hinzufügen"
+    },
+    "sachverhalte[].analyse": {
+      "label": "Analyse"
+    },
+    "sachverhalte[].analyse.lage_ereignis": {
+      "label": "Lage & Ereignis",
+      "widget": "text_lang",
+      "hinweis": "Was ist geschehen, und was davon ist bestätigt? Mit der Kernaussage beginnen, dann den bestätigten Sachstand mit Datenstand. Vorläufiges oder Widersprüchliches als solches kennzeichnen. Belege mit [Q1] usw.; das Quellenverzeichnis steht im Schritt „Quellen & Referenzen“.",
+      "pflicht": true
+    },
+    "sachverhalte[].analyse.risiken_auswirkungen": {
+      "label": "Risiken & Auswirkungen",
+      "widget": "text_lang",
+      "hinweis": "Was hat sich bereits ausgewirkt, und was kann noch folgen? Eingetretene Auswirkungen und mögliche Entwicklungen getrennt darstellen. Bei möglichen Folgen die Bedingung und, soweit bekannt, den Zeithorizont nennen (z. B. „in 24 h“, „ab Tag 3“)."
+    },
+    "sachverhalte[].analyse.abhaengigkeiten_interdependenzen": {
+      "label": "Abhängigkeiten & Interdependenzen",
+      "widget": "text_lang",
+      "hinweis": "Worauf wirkt das Ereignis weiter, und was hält die Folgen derzeit auf? Nur belegte Kopplungen: Welche Funktion wirkt über welche Abhängigkeit auf welchen Bereich, und welcher Puffer (Notstrom, Vorräte, Ausweichweg) trägt wie lange? Mögliche Folgeschritte ausdrücklich als „möglich“ kennzeichnen. Die belegten Kopplungen begründen D6 im Lagenradar."
+    },
+    "sachverhalte[].bewertung": {
+      "label": "Bewertung"
+    },
+    "sachverhalte[].bewertung.kernaussage": {
+      "label": "Kernaussage",
+      "widget": "text_lang",
+      "pflicht": true,
+      "hinweis": "Bedeutung für den Referenzraum, Veränderung, Prüf- oder Abstimmungsfrage (SOP-LEAD A.4)."
+    },
+    "sachverhalte[].bewertung.referenzraum": {
+      "label": "Referenzraum",
+      "pflicht": true
+    },
+    "sachverhalte[].bewertung.beurteilung": {
+      "label": "Beurteilung"
+    },
+    "sachverhalte[].bewertung.beurteilung.stufe": {
+      "label": "Stufe",
+      "widget": "radio"
+    },
+    "sachverhalte[].bewertung.beurteilung.begruendung": {
+      "label": "Begründung",
+      "widget": "text_lang",
+      "hinweis": "Eigenständig begründet, nicht aus dem höchsten Radarwert abgeleitet (Kodierleitfaden Abschnitt 4)."
+    },
+    "sachverhalte[].bewertung.tendenz": {
+      "label": "Tendenz"
+    },
+    "sachverhalte[].bewertung.tendenz.richtung": {
+      "label": "Richtung",
+      "widget": "radio"
+    },
+    "sachverhalte[].bewertung.tendenz.bezug": {
+      "label": "Bezugsraum und Zeitfenster"
+    },
+    "sachverhalte[].bewertung.tendenz.begruendung": {
+      "label": "Begründung",
+      "widget": "text_lang"
+    },
+    "sachverhalte[].bewertung.erlaeuterung": {
+      "label": "Erläuterung",
+      "widget": "text_lang"
+    },
+    "sachverhalte[].bewertung.aenderung_zur_vormeldung": {
+      "label": "Änderung zur Vormeldung",
+      "widget": "text_lang"
+    },
+    "sachverhalte[].bewertung.neubewertung_bei": {
+      "label": "Neubewertung bei",
+      "element_label": "Neubewertung bei",
+      "titel_feld": "indikator",
+      "hinzufuegen": "Indikator hinzufügen"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen": {
+      "label": "Abweichende Bewertung",
+      "element_label": "Abweichende Bewertung",
+      "titel_feld": "stelle",
+      "hinzufuegen": "Abweichende Bewertung hinzufügen"
+    },
+    "sachverhalte[].bewertung.erkenntnislage": {
+      "label": "Erkenntnislage"
+    },
+    "sachverhalte[].bewertung.erkenntnislage.luecken": {
+      "label": "Lücken"
+    },
+    "sachverhalte[].bewertung.erkenntnislage.widersprueche": {
+      "label": "Widersprüche",
+      "element_label": "Widerspruch",
+      "titel_feld": "gegenstand",
+      "hinzufuegen": "Widerspruch hinzufügen"
+    },
+    "sachverhalte[].bewertung.abschluss": {
+      "label": "Abschluss im Lagebild"
+    },
+    "sachverhalte[].handlungsbedarf": {
+      "label": "Maßnahmen & Handlungsempfehlungen"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen": {
+      "label": "Bestehende Maßnahmen",
+      "element_label": "Maßnahme",
+      "titel_feld": "gegenstand",
+      "hinzufuegen": "Maßnahme hinzufügen"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen": {
+      "label": "Empfehlungen",
+      "element_label": "Empfehlung",
+      "titel_feld": "auftrag",
+      "hinzufuegen": "Empfehlung hinzufügen"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].termin": {
+      "label": "Termin",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].handlungsbedarf.fristen": {
+      "label": "Handlungsrelevant bis",
+      "element_label": "Frist",
+      "titel_feld": "aufgabe",
+      "hinzufuegen": "Frist hinzufügen"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].bis": {
+      "label": "bis",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].handlungsbedarf.erlaeuterung": {
+      "label": "Erläuterung",
+      "widget": "text_lang"
+    },
+    "sachverhalte[].kennzahlen": {
+      "label": "Kennzahlen",
+      "element_label": "Kennzahl",
+      "titel_feld": "gegenstand",
+      "hinzufuegen": "Kennzahl hinzufügen",
+      "hinweis": "Einheit, Art, Erhebung und Datenstand je Kennzahl; Kennzahlen verschiedener Einheit, Art oder verschiedenen Datenstands nicht addieren."
+    },
+    "sachverhalte[].kennzahlen[].datenstand": {
+      "label": "Datenstand",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].zeitstrahl": {
+      "label": "Zeitstrahl",
+      "element_label": "Zeile",
+      "titel_feld": "text",
+      "hinzufuegen": "Zeile hinzufügen",
+      "hinweis": "Nur eingetretene, belegte Ereignisse bis zum Meldezeitpunkt (Kodierleitfaden Abschnitt 8); Zeilen vom Typ „Bewertung“ trägt die App ein."
+    },
+    "sachverhalte[].zeitstrahl[].zeit": {
+      "label": "Zeit",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "sachverhalte[].zeitstrahl[].text": {
+      "label": "Text"
+    },
+    "sachverhalte[].module": {
+      "label": "Fachmodule"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz": {
+      "label": "Bevölkerungsschutz (Modul)"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.ereignisarten": {
+      "label": "Ereignisart(en)",
+      "pflicht": true
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar": {
+      "label": "Lagenradar",
+      "widget": "radar",
+      "radar": "lagenradar",
+      "hinweis": "Je Dimension eine Stufe von 0 bis 6 oder offen. Status, Grund einer offenen Achse, Begründung und Belege stehen unter der Grafik je Achse (Kodierleitfaden Abschnitte 1 bis 3)."
+    },
+    "sachverhalte[].kennzahlen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].zeitstrahl[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].bewertung.erkenntnislage.widersprueche[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "freigabe": {
+      "label": "Freigabe"
+    },
+    "freigabe.erfasst": {
+      "label": "Erfasst"
+    },
+    "freigabe.freigegeben": {
+      "label": "Freigegeben"
+    },
+    "freigabe.*.name": {
+      "label": "Name"
+    },
+    "freigabe.*.funktion": {
+      "label": "Funktion"
+    },
+    "freigabe.*.hz": {
+      "label": "Handzeichen"
+    },
+    "freigabe.*.zeitpunkt": {
+      "label": "Zeitpunkt",
+      "platzhalter": "2026-10-14T10:25+02:00"
+    },
+    "sachverhalte[].bezug[].kennung": {
+      "label": "Kennung"
+    },
+    "sachverhalte[].bezug[].meldung_id": {
+      "label": "Fassung (UUID)"
+    },
+    "sachverhalte[].bezug[].art": {
+      "label": "Art des Bezugs"
+    },
+    "sachverhalte[].raum.gebiete[].name": {
+      "label": "Name"
+    },
+    "sachverhalte[].raum.gebiete[].schluessel": {
+      "label": "Schlüssel"
+    },
+    "berichtsraum.gebiete[].name": {
+      "label": "Name"
+    },
+    "berichtsraum.gebiete[].schluessel": {
+      "label": "Schlüssel"
+    },
+    "sachverhalte[].bewertung.neubewertung_bei[].indikator": {
+      "label": "Indikator"
+    },
+    "sachverhalte[].bewertung.neubewertung_bei[].stand": {
+      "label": "Stand"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].stelle": {
+      "label": "Stelle"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].stufe": {
+      "label": "Stufe"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].grund": {
+      "label": "Grund"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].ursache": {
+      "label": "Ursache der Abweichung"
+    },
+    "sachverhalte[].bewertung.abweichende_bewertungen[].klaerend": {
+      "label": "Klärend wäre"
+    },
+    "sachverhalte[].bewertung.erkenntnislage.widersprueche[].gegenstand": {
+      "label": "Gegenstand"
+    },
+    "sachverhalte[].bewertung.erkenntnislage.widersprueche[].beschreibung": {
+      "label": "Beschreibung"
+    },
+    "sachverhalte[].bewertung.abschluss.ende": {
+      "label": "Ende"
+    },
+    "sachverhalte[].bewertung.abschluss.offene_punkte": {
+      "label": "Offene Punkte"
+    },
+    "sachverhalte[].bewertung.abschluss.nachsorge": {
+      "label": "Nachsorge"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].id": {
+      "label": "Nummer"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].gegenstand": {
+      "label": "Maßnahme"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].stelle": {
+      "label": "Stelle"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].status": {
+      "label": "Status"
+    },
+    "sachverhalte[].handlungsbedarf.massnahmen[].stand": {
+      "label": "Stand",
+      "hinweis": "Zeitpunkt des Stands, z. B. 2026-10-14T08:00+02:00."
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].id": {
+      "label": "Nummer"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].adressat": {
+      "label": "Adressat"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].auftrag": {
+      "label": "Auftrag"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].anlass": {
+      "label": "Anlass"
+    },
+    "sachverhalte[].handlungsbedarf.empfehlungen[].bedingung": {
+      "label": "Bedingung oder nächster Prüfanlass"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].id": {
+      "label": "Nummer"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].aufgabe": {
+      "label": "Aufgabe"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].adressat": {
+      "label": "Adressat"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].bedingung": {
+      "label": "Bedingung"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].grundlage": {
+      "label": "Grundlage"
+    },
+    "sachverhalte[].handlungsbedarf.fristen[].empfehlung": {
+      "label": "Zugehörige Empfehlung"
+    },
+    "sachverhalte[].kennzahlen[].id": {
+      "label": "Nummer"
+    },
+    "sachverhalte[].kennzahlen[].gegenstand": {
+      "label": "Gegenstand"
+    },
+    "sachverhalte[].kennzahlen[].einheit": {
+      "label": "Einheit"
+    },
+    "sachverhalte[].kennzahlen[].art": {
+      "label": "Art"
+    },
+    "sachverhalte[].kennzahlen[].wert": {
+      "label": "Wert"
+    },
+    "sachverhalte[].kennzahlen[].bandbreite": {
+      "label": "Bandbreite"
+    },
+    "sachverhalte[].kennzahlen[].mindestwert": {
+      "label": "Mindestwert"
+    },
+    "sachverhalte[].kennzahlen[].erhebung": {
+      "label": "Erhebung"
+    },
+    "sachverhalte[].kennzahlen[].raum": {
+      "label": "Raum"
+    },
+    "sachverhalte[].kennzahlen[].teilmenge_von": {
+      "label": "Teilmenge von"
+    },
+    "sachverhalte[].zeitstrahl[].id": {
+      "label": "Nummer"
+    },
+    "sachverhalte[].zeitstrahl[].typ": {
+      "label": "Typ"
+    },
+    "sachverhalte[].zeitstrahl[].erstmals_gemeldet": {
+      "label": "Erstmals gemeldet",
+      "hinweis": "Setzt die App: Meldezeitpunkt der ersten eigenen Meldung mit dieser Zeile."
+    },
+    "sachverhalte[].zeitstrahl[].berichtigt": {
+      "label": "Berichtigt Zeile"
+    },
+    "fehlanzeige.umfang": {
+      "label": "Umfang"
+    },
+    "fehlanzeige.zeitraum": {
+      "label": "Zeitraum"
+    },
+    "fehlanzeige.zeitraum.von": {
+      "label": "von"
+    },
+    "fehlanzeige.zeitraum.bis": {
+      "label": "bis"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.fassung": {
+      "label": "Fassung des Moduls"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.status": {
+      "label": "Status"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.offen_grund": {
+      "label": "Grund (offen)"
+    },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.begruendung": {
+      "label": "Begründung",
+      "widget": "text_lang"
+    }
+  },
+  "radare": {
+    "lagenradar": {
+      "max": 6,
+      "achsen": [
+        {
+          "key": "d1",
+          "label": "D1 Räumliche Auswirkung / Impact-Raum",
+          "stufen": [
+            "punktuell/kleinflächig",
+            "kommunal",
+            "überörtlich (mehrere Kommunen/Kreis)",
+            "regional (mehrere Kreise/Region)",
+            "landesweit",
+            "bundesweit",
+            "international"
+          ]
+        },
+        {
+          "key": "d2",
+          "label": "D2 Personelle Direktbetroffenheit",
+          "stufen": [
+            "unter 10 Personen",
+            "10–99 Personen",
+            "100–999 Personen",
+            "1.000–9.999 Personen",
+            "10.000–99.999 Personen",
+            "100.000–999.999 Personen",
+            "1 Mio. oder mehr"
+          ]
+        },
+        {
+          "key": "d3",
+          "label": "D3 Verantwortungszurechnung / Zurechnungszentrum",
+          "stufen": [
+            "Betreiber",
+            "Kommune",
+            "Kreis/Bezirk",
+            "Region/Regierungsbezirk",
+            "Land",
+            "Bund",
+            "International"
+          ]
+        },
+        {
+          "key": "d4",
+          "label": "D4 Unterstützungsreichweite / Mobilisierung",
+          "stufen": [
+            "keine externe Hilfe",
+            "örtlich",
+            "überörtlich",
+            "regional",
+            "landesweit",
+            "bundesweit",
+            "international"
+          ]
+        },
+        {
+          "key": "d5",
+          "label": "D5 Zeit bis Zielzustand / Übergangsdauer",
+          "stufen": [
+            "unter 6 Stunden",
+            "6–24 Stunden",
+            "1–3 Tage",
+            "4–7 Tage",
+            "1–4 Wochen",
+            "1–3 Monate",
+            "mehr als 3 Monate"
+          ]
+        },
+        {
+          "key": "d6",
+          "label": "D6 KRITIS-Bezug / Interdependenzgrad",
+          "stufen": [
+            "keine KRITIS-Bezüge",
+            "peripher",
+            "sektoral begrenzt",
+            "regional zentral",
+            "sektorenübergreifend gekoppelt",
+            "multiple KRITIS-Sektoren",
+            "systemisch/überregional"
+          ]
+        },
+        {
+          "key": "d7",
+          "label": "D7 Kommunikation / Informationslage",
+          "stufen": [
+            "stabil/hoch verlässlich",
+            "leichte Verzögerungen",
+            "relevante Lücken",
+            "fragmentiert",
+            "stark eingeschränkt",
+            "massiv eingeschränkt",
+            "nahezu ausgefallen"
+          ]
+        },
+        {
+          "key": "d8",
+          "label": "D8 Dynamik",
+          "stufen": [
+            "stabil",
+            "geringe Schwankungen",
+            "einzelne Umschläge",
+            "wiederholte Phasenwechsel",
+            "hohe Planungsinstabilität",
+            "sehr hohe Dynamik",
+            "chaotisch"
+          ]
+        }
+      ]
+    }
+  },
+  "rollen": {
+    "schema_feld": "schema",
+    "status_feld": "status",
+    "status_entwurf": "entwurf",
+    "status_final": "zur_freigabe",
+    "status_freigegeben": "freigegeben",
+    "entstehung_feld": "entstehung",
+    "land": "absender.gebiet.name",
+    "meldende_stelle": "absender.stelle",
+    "meldezeitpunkt": "meldezeitpunkt",
+    "quellen": "quellen",
+    "sachverhalte": "sachverhalte",
+    "sv_kennung": "kennung",
+    "sv_bezeichnung": "bezeichnung",
+    "sv_art": "module.lead-bevoelkerungsschutz.ereignisarten",
+    "sv_ort": "raum.beschreibung",
+    "sv_eintritt": "eintritt.zeit",
+    "sv_beurteilung": "bewertung.beurteilung.stufe",
+    "sv_tendenz": "bewertung.tendenz.richtung",
+    "sv_radar": "module.lead-bevoelkerungsschutz.lagenradar",
+    "freigabe": "freigabe",
+    "sv_textfelder": [
+      "analyse.lage_ereignis",
+      "analyse.risiken_auswirkungen",
+      "analyse.abhaengigkeiten_interdependenzen",
+      "bewertung.kernaussage",
+      "bewertung.beurteilung.begruendung",
+      "bewertung.tendenz.begruendung",
+      "bewertung.erlaeuterung",
+      "handlungsbedarf.erlaeuterung"
+    ],
+    "sv_analysefelder": [
+      "analyse.lage_ereignis",
+      "analyse.risiken_auswirkungen",
+      "analyse.abhaengigkeiten_interdependenzen"
+    ],
+    "beurteilung_hoch": [
+      "erheblich",
+      "kritisch"
+    ],
+    "tendenz_entspannung": "Entspannung",
+    "tendenz_verschaerfung": "Verschärfung"
+  },
+  "quellen": {
+    "kategorien": {
+      "A": "amtlich/zwischenstaatlich",
+      "B": "Betreiber",
+      "W": "wissenschaftlich",
+      "M": "Medien",
+      "P": "sonstige private Quellen"
+    },
+    "rangfolge": [
+      "A",
+      "B",
+      "W",
+      "M",
+      "P"
+    ],
+    "rangfolge_hinweis": "Quellenpriorität bei Widersprüchen zu demselben Sachverhalt: A > B > W > M > P. Bestimmung der Kategorie, Prüfung vor dem Vergleich und Abweichungen: Kodierleitfaden Abschnitt 5.",
+    "vorlage": "[Q{n}] A – Herausgeber (Datum): Titel. Online abrufbar unter: URL [Zugriff: {heute}]"
+  },
+  "kennung": {
+    "praefixe": {
+      "Bund": "DE",
+      "Baden-Württemberg": "DE-BW",
+      "Bayern": "DE-BY",
+      "Berlin": "DE-BE",
+      "Brandenburg": "DE-BB",
+      "Bremen": "DE-HB",
+      "Hamburg": "DE-HH",
+      "Hessen": "DE-HE",
+      "Mecklenburg-Vorpommern": "DE-MV",
+      "Niedersachsen": "DE-NI",
+      "Nordrhein-Westfalen": "DE-NW",
+      "Rheinland-Pfalz": "DE-RP",
+      "Saarland": "DE-SL",
+      "Sachsen": "DE-SN",
+      "Sachsen-Anhalt": "DE-ST",
+      "Schleswig-Holstein": "DE-SH",
+      "Thüringen": "DE-TH"
+    },
+    "standard": "DE"
+  },
+  "lagebild": {
+    "titel": "Lagebild",
+    "ausgabe_label": "Nächste Lagebild-Ausgabe",
+    "ausgabe_tage": 7,
+    "verweise": {
+      "zeitfenster": "SOP-LEAD A.5 Nr. 2, A.7.3",
+      "zusammenhang": "SOP-LEAD A.7.1, A.7.2",
+      "fortschreibung": "SOP-LEAD A.7.1, A.8.1, A.8.2",
+      "kernaussage": "SOP-LEAD A.4, A.5",
+      "quellen": "SOP-LEAD A.3, A.4",
+      "rueckblick": "SOP-LEAD A.8.3"
+    }
+  },
+  "analyse_gliederung": {
+    "absatz": [
+      "Kernaussage:",
+      "Bestätigt ist",
+      "Einordnung „",
+      "Eingetretene Wirkungen",
+      "Belegte (Wirkungen?|Kopplungen)",
+      "Belegt:",
+      "Nicht belegt",
+      "(Mögliche|Plausible|Denkbare) (Entwicklungen|Folgen|Wirkungen)",
+      "Möglich, (aber )?nicht belegt",
+      "Szenario:",
+      "Einschätzung( \\(| der | von )",
+      "Bestehende Maßnahmen",
+      "Prüf- und Abstimmungsbedarf",
+      "Abstimmungen ",
+      "Wirkungskette( \\d+)?:",
+      "Länderübergreifend"
+    ],
+    "zeile": [
+      "\\(\\d+\\) ",
+      "Empfehlung \\d+:",
+      "(Erstens|Zweitens|Drittens|Viertens|Fünftens|Sechstens),"
+    ],
+    "kurzlabel": 3
+  },
+  "dateiname": "LEAD-Meldung-v2_{absender.gebiet.name}_{absender.stelle}_{meldezeitpunkt}"
+}

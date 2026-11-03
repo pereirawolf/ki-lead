@@ -1,6 +1,7 @@
 // Lagenradar als PNG (Daten-URL) für die Kopiervorlage: Word übernimmt eingefügtes SVG nicht zuverlässig.
 
 import type { RadarDef } from "../kern/typen";
+import { radarWerte } from "../kern/ui";
 
 export function radarPng(def: RadarDef, wert: Record<string, number | null> | undefined, groesse = 340): string | null {
   if (typeof document === "undefined") return null;
@@ -41,7 +42,8 @@ export function radarPng(def: RadarDef, wert: Record<string, number | null> | un
     const [lx, ly] = punkt(i, rMax + groesse / 14);
     ctx.fillText(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0] ?? "", lx, ly);
   });
-  const werte = def.achsen.map((a) => (Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null));
+  const stufen = radarWerte(wert);
+  const werte = def.achsen.map((a) => stufen[a.key] ?? null);
   if (werte.some((v) => v !== null)) {
     ctx.beginPath();
     werte.forEach((v, i) => {

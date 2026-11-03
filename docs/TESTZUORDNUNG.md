@@ -973,3 +973,16 @@ Angepasst ohne Änderung des Solls: `tests/ui/kurzfassung-lauf.test.ts` (Laufanz
 | Im Browser: Paket und Plan aus Dateien, Prüfsummen, Vorbelegung, Bremse vor dem ersten Lauf ohne Anfrage, Start mit einem Klick, ZIP-Inhalt, nur die simulierte API, Archiv | Fallreihe: Fallpaket und Plan laden, … | `tests/browser/testlaeufe.spec.ts` |
 
 Angepasst: `tests/ui/einstellungen.test.ts` (Überschriften des Bereichs „Testläufe“ mit „Fallreihe“, nachgeladen), `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (alle Fälle, ihr Material und `plan.schema.json` sind in die App eingebettet und lösen die Kern-Browsertests aus).
+
+## LEAD-Meldung-v2 in Maske und Ausgabe (0.7.3, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Beispielmeldung öffnen ohne Änderung, ohne rohe Objekte, mit den Bezeichnungen der Darstellungsdatei; leere Zeitangabe wird `null`; eine Änderung betrifft nur ihr Feld; Radarachse als Objekt | UP-2026-W45-03: Erfassungsmaske für LEAD-Meldung-v2 › … | `tests/ui/maske-v2.test.ts` |
+| Quellenzeile in der Form des Kodierleitfadens, vom Werkzeug zurücklesbar; Zeitstrahlzeile; Kennzahlen mit Teilmengen, Mindestwert, Bandbreite; Entstehung; zitierte Quellen | UP-2026-W45-03: Quellenverzeichnis, Zeitstrahl, Kennzahlen, Entstehung › … | `tests/kern/v2-darstellung.test.ts` |
+| Radarachsen als Objekte: Stufen, Legende mit Mindestwert und Grund, Stufe setzen mit Status; v1 unverändert | UP-2026-W45-03: Radarachsen als Objekte › … | `tests/kern/v2-darstellung.test.ts` |
+| Werte oder null im Schema; Ausgabestatus mit Freigabe; Dateiname mit Pfad-Platzhaltern | UP-2026-W45-03: Schema, Status und Dateiname › … | `tests/kern/v2-darstellung.test.ts` |
+| Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis und Kennzahlen; PDF mit Quellenverzeichnis, „mindestens 53 Einsatzkräfte“, Entstehung, Bewertungsfeldern | UP-2026-W45-03: Kopiervorlage des Lagebilds › …; PDF einer Meldung nach LEAD-Meldung-v2 › … | `tests/kern/v2-darstellung.test.ts` |
+
+
+Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.3).

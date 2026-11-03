@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, istEigeneStelle, radarFuer } from "../kern/ui";
+import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarWerte } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE } from "../kern/ausgabe";
 import { kennsaetzeAlle } from "../kern/kennsaetze";
@@ -833,7 +833,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 <div className="lb-karten">
                   {sortiert.map((s) => {
                     const wert = holeWert(s.sv, r.sv_radar!);
-                    const gesetzt = radarDef.achsen.some((a) => Number.isInteger(wert?.[a.key]));
+                    const stufen = radarWerte(wert);
+                    const gesetzt = radarDef.achsen.some((a) => Number.isInteger(stufen[a.key]));
                     return (
                       <article key={`${s.eintrag.id}-${s.index}`} className="lb-karte">
                         <header>
@@ -848,7 +849,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                           {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={260} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}
                           <dl className="lb-achsen">
                             {radarDef.achsen.map((a) => {
-                              const v = wert?.[a.key];
+                              const v = stufen[a.key];
                               return (
                                 <div key={a.key} className="lb-achse">
                                   <dt>{a.label}</dt>

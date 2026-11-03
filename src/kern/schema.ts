@@ -15,7 +15,24 @@ export function aufloesen(knoten: any, wurzel: any): any {
     const { $ref: _ignoriert, ...rest } = k;
     k = Object.keys(rest).length ? { ...ziel, ...rest } : ziel;
   }
-  return k;
+  return nullbarAufloesen(k, wurzel);
+}
+
+/**
+ * „anyOf: [X, {type: null}]“ (Wert oder null, LEAD-Meldung-v2) wird für Maske und Darstellung zu X mit zusätzlichem
+ * Typ „null“ (seit 0.7.3, UP-2026-W45-03). Andere anyOf-Formen bleiben unverändert; die Prüfung übernimmt ohnehin
+ * der eigene Prüfer in validierung.ts.
+ */
+function nullbarAufloesen(k: any, wurzel: any): any {
+  if (!k || typeof k !== "object" || !Array.isArray(k.anyOf) || k.anyOf.length !== 2) return k;
+  const istNull = (x: any) => x && typeof x === "object" && x.type === "null" && Object.keys(x).length === 1;
+  const i = k.anyOf.findIndex(istNull);
+  if (i < 0) return k;
+  const anderer = aufloesen(k.anyOf[1 - i], wurzel);
+  if (!anderer || typeof anderer !== "object" || Array.isArray(anderer.anyOf)) return k;
+  const { anyOf: _a, ...rest } = k;
+  const typ = anderer.type !== undefined ? [...new Set([...([] as string[]).concat(anderer.type), "null"])] : undefined;
+  return { ...anderer, ...rest, ...(typ ? { type: typ } : {}), nullbar: true };
 }
 
 /** Unterschema an einem Instanzpfad (Zahlen = Array-Index). */
@@ -57,6 +74,8 @@ export function leererWert(knoten: any, wurzel: any): any {
     return e[0];
   }
   const t = typen(k);
+  // Wert oder null (seit 0.7.3): leer heißt „unbekannt“ (LEAD-Meldung-v2, Abschnitt 1 Nr. 3)
+  if (k.nullbar) return null;
   if (t.includes("null") && t.length <= 2 && !t.includes("object") && !t.includes("array") && !t.includes("string")) return null;
   if (t.includes("object")) {
     const o: Record<string, unknown> = {};
