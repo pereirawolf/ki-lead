@@ -1,6 +1,6 @@
 # Grunddesign der App-Familie
 
-Fassung 1.0 vom 03.11.2026 · Heiko Pereira Wolf · © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (siehe [Rechte](#rechte))
+Fassung 1.0 vom 03.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
 
 Diese Beschreibung legt das gemeinsame Grunddesign der Apps **KI-LEAD**, **KRITIS-LEAD** und **Thessa** fest. Es geht um Rahmen, Navigation, Seitenaufbau, Bedienmuster, Farbrollen, Schrift und Zugänglichkeit. Referenzumsetzung ist KI-LEAD. Jede Regel nennt ihre Fundstelle dort, Tests halten Beschreibung und Code im Gleichlauf.
 
@@ -211,11 +211,9 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 
 Änderungen am Grunddesign entstehen in diesem Repository. Jede neue Fassung steht unten im Änderungsverlauf; erhöht wird die Fassung in dieser Datei und in `rahmen.json`.
 
-## Rechte
+## Lizenz
 
-© 2026 Heiko Pereira Wolf. **Alle Rechte vorbehalten** an dieser Beschreibung, an `rahmen.json` mit Schema, an den Wireframes und an den Token-Dateien in diesem Ordner ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 7). Erlaubt ist das Lesen und das Verweisen auf diese Dateien. Jede andere Nutzung bedarf der Zustimmung des Herausgebers, insbesondere die Übernahme in eigene Projekte.
-
-Der Vorbehalt gilt nur für die Dateien in diesem Ordner. Er schränkt keine Rechte ein, die für andere Dateien schon bestehen (LICENSE-CONTENT, Grundsatz): Programmcode und Stylesheets von KI-LEAD bleiben unter der EUPL-1.2, die übrige Dokumentation unter CC BY 4.0, darunter [docs/farbschemas.md](../docs/farbschemas.md) und [docs/BARRIEREFREIHEIT.md](../docs/BARRIEREFREIHEIT.md). Diese Hinweise sind keine Rechtsberatung.
+© 2026 Heiko Pereira Wolf. Alle Dateien in diesem Ordner stehen wie die übrige Dokumentation unter [CC BY 4.0](../LICENSE-CONTENT) ([LICENSE-CONTENT](../LICENSE-CONTENT), Nr. 1 f). Wer sie übernimmt oder bearbeitet, nennt den Herausgeber und macht Änderungen kenntlich. Vorschlag für die Namensnennung: „Grunddesign der App-Familie, Fassung <x.y>, Heiko Pereira Wolf, KI-LEAD, https://github.com/pereirawolf/ki-lead, CC BY 4.0“. Programmcode und Stylesheets von KI-LEAD stehen weiter unter der EUPL-1.2.
 
 ## Änderungsverlauf
 

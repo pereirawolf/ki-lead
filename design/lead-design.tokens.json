@@ -1,5 +1,5 @@
 {
-  "$description": "Design Tokens der App-Familie KI-LEAD, KRITIS-LEAD und Thessa (design/README.md). Erzeugt mit „npm run design:tokens“ aus der Referenzumsetzung KI-LEAD; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (LICENSE-CONTENT, Nr. 8).",
+  "$description": "Design Tokens der App-Familie KI-LEAD, KRITIS-LEAD und Thessa (design/README.md). Erzeugt mit „npm run design:tokens“ aus der Referenzumsetzung KI-LEAD; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
   "$extensions": {
     "de.pereirawolf.lead-design": {
       "format": "lead-design-tokens/1",

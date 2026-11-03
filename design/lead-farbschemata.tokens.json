@@ -1,5 +1,5 @@
 {
-  "$description": "Farbschemata der App-Familie. Die Kennung ist der Wert von farbschema.basis im Profilmanifest. Erzeugt mit „npm run design:tokens“ aus src/darstellung/katalog.ts; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (LICENSE-CONTENT, Nr. 8).",
+  "$description": "Farbschemata der App-Familie. Die Kennung ist der Wert von farbschema.basis im Profilmanifest. Erzeugt mit „npm run design:tokens“ aus src/darstellung/katalog.ts; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
   "$extensions": {
     "de.pereirawolf.lead-design": {
       "format": "lead-farbschemata/1"

@@ -163,7 +163,7 @@ export function designTokens() {
   const kontrast = [...new Set(KONTRASTPAARE.map((p) => p[2]))].sort((a, b) => b - a);
   return {
     $description:
-      "Design Tokens der App-Familie KI-LEAD, KRITIS-LEAD und Thessa (design/README.md). Erzeugt mit „npm run design:tokens“ aus der Referenzumsetzung KI-LEAD; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (LICENSE-CONTENT, Nr. 8).",
+      "Design Tokens der App-Familie KI-LEAD, KRITIS-LEAD und Thessa (design/README.md). Erzeugt mit „npm run design:tokens“ aus der Referenzumsetzung KI-LEAD; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
     $extensions: { [ERWEITERUNG]: { format: "lead-design-tokens/1", rahmen: "rahmen.json", farbschemata: "lead-farbschemata.tokens.json" } },
     farbrolle,
     signal,
@@ -226,7 +226,7 @@ export function designTokens() {
 export function farbschemaTokens() {
   const out = {
     $description:
-      "Farbschemata der App-Familie. Die Kennung ist der Wert von farbschema.basis im Profilmanifest. Erzeugt mit „npm run design:tokens“ aus src/darstellung/katalog.ts; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (LICENSE-CONTENT, Nr. 8).",
+      "Farbschemata der App-Familie. Die Kennung ist der Wert von farbschema.basis im Profilmanifest. Erzeugt mit „npm run design:tokens“ aus src/darstellung/katalog.ts; nicht von Hand ändern. © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
     $extensions: { [ERWEITERUNG]: { format: "lead-farbschemata/1" } },
   };
   for (const e of FARBSCHEMAS) {

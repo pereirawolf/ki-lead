@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" role="img" aria-labelledby="t d" font-family="Atkinson Hyperlegible, system-ui, sans-serif">
   <title id="t">Wireframe: Bereich mit Schrittfolge, schmale Ansicht (390 px)</title>
-  <desc id="d">Grunddesign der App-Familie (design/README.md). Unter 640 px steht die Hauptnavigation in einer eigenen Zeile und bricht um; unter 860 px steht die Schrittleiste waagerecht über der Arbeitsfläche, ist scrollbar und zeigt am Rand einen Verlauf. Graustufen, keine Farbwerte. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten.</desc>
+  <desc id="d">Grunddesign der App-Familie (design/README.md). Unter 640 px steht die Hauptnavigation in einer eigenen Zeile und bricht um; unter 860 px steht die Schrittleiste waagerecht über der Arbeitsfläche, ist scrollbar und zeigt am Rand einen Verlauf. Graustufen, keine Farbwerte. © 2026 Heiko Pereira Wolf, CC BY 4.0.</desc>
   <style>
     .papier { fill: #F5F6F7 } .flaeche { fill: #FFFFFF; stroke: #CFD5DB } .linie { stroke: #CFD5DB; fill: none }
     .tinte { fill: #20252B } .leise { fill: #4F5965 } .amt { fill: #3D4A59 } .amt-zart { fill: #E3E7EC } .auf-amt { fill: #FFFFFF }

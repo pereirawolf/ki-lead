@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t d" font-family="Atkinson Hyperlegible, system-ui, sans-serif">
   <title id="t">Wireframe: Bereich mit Schrittfolge, breite Ansicht (1280 px)</title>
-  <desc id="d">Grunddesign der App-Familie (design/README.md). Kopfleiste mit Produktname, Hauptnavigation und Statusanzeige; Identitätsband; Hinweisband; Seitenkopf mit Überschrift, Kennsatz, Aktionen und Profilzeile; Arbeitsbereich mit nummerierter Schrittleiste links und Arbeitsfläche als Karte; Fußzeile. Graustufen, keine Farbwerte: Farben kommen aus den Farbrollen. © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten.</desc>
+  <desc id="d">Grunddesign der App-Familie (design/README.md). Kopfleiste mit Produktname, Hauptnavigation und Statusanzeige; Identitätsband; Hinweisband; Seitenkopf mit Überschrift, Kennsatz, Aktionen und Profilzeile; Arbeitsbereich mit nummerierter Schrittleiste links und Arbeitsfläche als Karte; Fußzeile. Graustufen, keine Farbwerte: Farben kommen aus den Farbrollen. © 2026 Heiko Pereira Wolf, CC BY 4.0.</desc>
   <style>
     .papier { fill: #F5F6F7 } .flaeche { fill: #FFFFFF; stroke: #CFD5DB } .linie { stroke: #CFD5DB; fill: none }
     .tinte { fill: #20252B } .leise { fill: #4F5965 } .amt { fill: #3D4A59 } .amt-zart { fill: #E3E7EC } .auf-amt { fill: #FFFFFF }

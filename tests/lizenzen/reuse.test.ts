@@ -21,7 +21,6 @@ const CC_BY = "CC-BY-4.0";
 const CC_BY_ODER_CC0 = "CC-BY-4.0 OR CC0-1.0";
 const EUPL = "EUPL-1.2";
 const EUPL_ODER_CC_BY = "EUPL-1.2 OR CC-BY-4.0";
-const VORBEHALT = "LicenseRef-KI-LEAD-Rechtevorbehalt";
 
 /** Aus dem App-Symbol erzeugte Symbol- und Startbilder (LICENSE-CONTENT, Nr. 1 d) */
 const APP_SYMBOL = [
@@ -34,8 +33,6 @@ const APP_SYMBOL = [
 
 /** Soll je Datei nach LICENSE-CONTENT, vom Besonderen zum Allgemeinen */
 function sollLizenzen(pfad: string): string[] {
-  // Nr. 8: Grunddesign der App-Familie, alle Rechte vorbehalten (seit 03.11.2026)
-  if (/^design\//.test(pfad)) return [VORBEHALT];
   // Nr. 2 d: CC0 1.0 nur für Teile der Datei (Snippets), die Datei selbst nach Nr. 1 c
   if (pfad === "docs/VORLAGEN.md" || pfad === "docs/DATENSCHUTZ.md") return [CC_BY, CC_BY_ODER_CC0];
   // Nr. 2 a bis c und e
@@ -55,22 +52,15 @@ function sollLizenzen(pfad: string): string[] {
   if (/^(android|ios)\//.test(pfad)) return ["MIT"];
   // Nr. 1 b: Quelltext in evaluation/ fällt unter Nr. 4
   if (/^evaluation\/.*\.ts$/.test(pfad)) return [EUPL];
-  // Nr. 1 a bis c und e
-  if (/^(profile|evaluation|docs|formate)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
+  // Nr. 1 a bis c, e und f
+  if (/^(profile|evaluation|docs|formate|design)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
   // Nr. 4
   return [EUPL];
 }
 
 describe("Lizenztexte unter LICENSES/ (Issue #89)", () => {
-  it("genau die sechs verwendeten Lizenzen (seit 03.11.2026 mit dem Rechtevorbehalt nach Nr. 8)", () => {
-    expect(readdirSync(repoPfad("LICENSES")).sort()).toEqual(["Apache-2.0.txt", "CC-BY-4.0.txt", "CC0-1.0.txt", "EUPL-1.2.txt", `${VORBEHALT}.txt`, "MIT.txt"]);
-  });
-
-  it("Rechtevorbehalt: wortgleich mit LICENSE-CONTENT, Nr. 8, und nur für design/", () => {
-    const text = ab(norm(lies("LICENSES", `${VORBEHALT}.txt`)), "8. Vorbehalt für das Grunddesign");
-    expect(norm(lies("LICENSE-CONTENT"))).toContain(text);
-    expect(text).toContain("design/");
-    expect(text).toContain("schränkt keine Rechte ein");
+  it("genau die fünf verwendeten Lizenzen", () => {
+    expect(readdirSync(repoPfad("LICENSES")).sort()).toEqual(["Apache-2.0.txt", "CC-BY-4.0.txt", "CC0-1.0.txt", "EUPL-1.2.txt", "MIT.txt"]);
   });
 
   it("EUPL-1.2 wortgleich mit LICENSE", () => {

@@ -161,12 +161,12 @@ describe("Grunddesign: rahmen.json", () => {
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI aktiv");
   });
 
-  it("Wireframes vorhanden, mit Titel und Rechtevermerk", () => {
+  it("Wireframes vorhanden, mit Titel und Lizenzvermerk", () => {
     for (const w of rahmen.wireframes) {
       const svg = text(`design/${w.datei}`);
       expect(svg.startsWith("<svg "), w.datei).toBe(true);
       expect(svg).toMatch(/<title id="t">Wireframe: /);
-      expect(svg).toContain("alle Rechte vorbehalten");
+      expect(svg).toContain("CC BY 4.0");
       expect(text("design/README.md")).toContain(w.datei);
       expect(text("design/README.md")).toMatch(new RegExp(`^#+ ${w.abschnitt}$`, "m"));
     }

@@ -74,7 +74,7 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | Meldungen zwischen Stellen austauschen: Kennungen, Versionen, Zeitstände, fremde Schemata (Entwurf) | [Austausch](docs/AUSTAUSCH.md) |
 | Meldungsformat LEAD-Meldung-v2: Kern, Fachmodule, Migration aus v1 (Entwurf) | [LEAD-Meldung v2](docs/LEAD-MELDUNG-V2.md) |
 | Selbst betreiben: Betreiberkonfiguration, eigener KI-Endpunkt (Chat Completions), Auslieferung | [Betrieb](docs/BETRIEB.md) |
-| Grunddesign der App-Familie (KI-LEAD, KRITIS-LEAD, Thessa): Regeln, Wireframes, Design Tokens | [Grunddesign](design/README.md) (alle Rechte vorbehalten) |
+| Grunddesign der App-Familie (KI-LEAD, KRITIS-LEAD, Thessa): Regeln, Wireframes, Design Tokens | [Grunddesign](design/README.md) |
 | Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 
 ## Profile
@@ -160,12 +160,11 @@ Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 Code unter EUPL-1.2 ([LICENSE](LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](LICENSE-CONTENT).
 
 - **Code** (Quelltext, Tests, Skripte, Build- und Projektdateien, App), auch Quelltext in `evaluation/`: [EUPL-1.2](LICENSE); ausgenommen Dateien Dritter wie der Gradle-Wrapper (Apache-2.0)
-- **Inhalte** in `profile/`, `evaluation/` und `docs/` sowie README, CHANGELOG, SECURITY.md und THIRD-PARTY-NOTICES.md (Arbeitsanweisungen, SOP, Kodierleitfaden, Darstellungsdateien, Bewertungsfälle, Prüfsteine, Dokumentation): [CC BY 4.0](LICENSE-CONTENT), Namensnennung: Heiko Pereira Wolf. Die Stufentexte des Lagenradars stehen hier bewusst unter CC BY 4.0, auch wenn der Grundlagenbeitrag auf Zenodo unter CC BY-NC-ND 4.0 steht
+- **Inhalte** in `profile/`, `evaluation/`, `docs/` und `design/` sowie README, CHANGELOG, SECURITY.md und THIRD-PARTY-NOTICES.md (Arbeitsanweisungen, SOP, Kodierleitfaden, Darstellungsdateien, Bewertungsfälle, Prüfsteine, Dokumentation): [CC BY 4.0](LICENSE-CONTENT), Namensnennung: Heiko Pereira Wolf. Die Stufentexte des Lagenradars stehen hier bewusst unter CC BY 4.0, auch wenn der Grundlagenbeitrag auf Zenodo unter CC BY-NC-ND 4.0 steht
 - **App-Symbol** (`public/icons/`, Favicon, Symbol- und Startbilder der nativen Apps): zusätzlich zur EUPL-1.2 unter CC BY 4.0
 - **Maschinenlesbare Dateien** (Meldungsschemata, Manifeste, Kontaktlisten, Quellenregister, JSON-Schemata der Modellbewertung), die **Vorlage** `profile/muster/` und die **Vorlagen für Stellen** ([docs/VORLAGEN.md](docs/VORLAGEN.md), Anhang C und D der [Datenschutzhinweise](docs/DATENSCHUTZ.md)): zusätzlich [CC0 1.0](LICENSE-CC0), damit Fachverfahren und Stellen sie ohne Namensnennung übernehmen können
 - **Ausgaben der App** (Meldungen, Lagebilder, Kurzfassungen): Profiltexte, die die App dorthin übernimmt, dürfen ohne Namensnennung verwendet werden; an Eingaben und Ergebnissen beansprucht der Herausgeber keine Rechte
 - **Eigene und importierte Profile:** die Lizenz, die ihr Herausgeber im Manifest angibt
-- **Grunddesign der App-Familie** (`design/`: Beschreibung, `rahmen.json`, Design Tokens, Wireframes): alle Rechte vorbehalten; erlaubt sind Lesen und Verweisen (LICENSE-CONTENT, Nr. 8). Code und übrige Dokumentation behalten ihre Lizenzen
 - Begleitende Aufsätze außerhalb des Repositorys (Zenodo, pereirawolf.de): CC BY-NC-ND 4.0
 - Drittkomponenten (Bibliotheken, Schrift Atkinson Hyperlegible, native Plugins) mit Lizenz, Urheber und Verträglichkeit: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Der Build legt ihre Lizenztexte als `lizenzen.md` und `lizenzen-ergaenzend.md` in die App.
 

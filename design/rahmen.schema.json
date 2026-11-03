@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/pereirawolf/ki-lead/design/rahmen.schema.json",
   "title": "Grunddesign der App-Familie: Rahmen, Leisten, Komponenten und Regeln",
-  "description": "Maschinenlesbarer Teil von design/README.md. Werte in geschweiften Klammern ({gruppe.name}) verweisen auf Tokens in lead-design.tokens.json (Alias-Schreibweise der DTCG). © 2026 Heiko Pereira Wolf, alle Rechte vorbehalten (LICENSE-CONTENT, Nr. 8).",
+  "description": "Maschinenlesbarer Teil von design/README.md. Werte in geschweiften Klammern ({gruppe.name}) verweisen auf Tokens in lead-design.tokens.json (Alias-Schreibweise der DTCG). © 2026 Heiko Pereira Wolf, CC BY 4.0 (LICENSE-CONTENT, Nr. 1 f).",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "fassung", "stand", "familie", "referenzumsetzung", "tokens", "farbschemata", "rahmen", "hauptnavigation", "seitenkopf", "arbeitsbereich", "leisten", "komponenten", "wireframes", "regeln"],
