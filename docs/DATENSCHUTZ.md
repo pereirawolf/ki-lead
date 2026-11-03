@@ -139,7 +139,7 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 |---|---|
 | ein Laufprotokoll | KI-Erfassung, Liste der Läufe, „Löschen“ |
 | Management Summary | „Leeren“ in der Ansicht |
-| archivierte Testläufe | Einstellungen, „Testläufe“, Archiv: „Ausgewählte löschen“ oder „Alle löschen“ |
+| archivierte Testläufe | Einstellungen, „Testläufe“ (sichtbar nur mit „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“; Ausschalten löscht das Archiv nicht), Archiv: „Ausgewählte löschen“ oder „Alle löschen“; außerdem mit „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ |
 | API-Schlüssel | Feld leeren und speichern; bei Wechsel der Ablage zieht er um und wird in der alten entfernt |
 | alle Daten dieses Geräts (seit 0.6.15) | Einstellungen, „Daten“, „Alle Daten dieses Geräts löschen“: Gerätespeicher einschließlich API-Schlüssel, Testlaufarchiv, Farbschema, in der nativen App auch der Schlüsselbund; vorher lässt sich der Stand sichern |
 | alle Daten der Web-App | auch: Websitedaten von `pereirawolf.github.io` in den Browsereinstellungen löschen |
