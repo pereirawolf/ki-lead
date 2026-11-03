@@ -996,3 +996,10 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 | `rahmen.json` gültig nach Schema, Schema lehnt ungültige Regeln ab; Regelkennungen eindeutig, Fundstellen vorhanden, Verweise und Token-Verweise aufgelöst; Hauptnavigation, Bereiche der Einstellungen, Reiter, Phasen der KI-Erfassung und Kennsätze wie im Quelltext; Knopf- und Kastenvarianten im Stylesheet; Wireframes mit Titel und Lizenzvermerk | Grunddesign: rahmen.json › … | `tests/format/lead-design.test.ts` |
 | `design/` unter CC BY 4.0 nach LICENSE-CONTENT, Nr. 1 f | Abgleich mit reuse lint (Soll aus sollLizenzen) | `tests/lizenzen/reuse.test.ts` |
 | `design/` ist reiner Inhalt (keine Browsertests), `scripts/lead-design.mjs` löst die Kern-Browsertests aus | Prüfumfang je Änderung › Grunddesign …; Generator … | `tests/ci/pruefumfang.test.ts` |
+
+## Landesprofil 1.2.2: Quelle der Thüringer Kreisnamen (Nachtrag zu 0.7.3, Auftrag des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kreisschlüssel und Namen der 22 Gebietskörperschaften wie im CSV-Export der Verwaltungsstruktur des Landesamts (Stand 01.01.2026), Landkreise mit „Landkreis“ | Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik … › Schlüssel und Namen der 22 Gebietskörperschaften … | `tests/profil/landesprofil.test.ts` |
+| Quelle mit URL, Stand und Abruf im Kopf der Kreisliste und im README des Profils | … › Quelle mit Stand und Abruf … | `tests/profil/landesprofil.test.ts` |
