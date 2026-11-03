@@ -4,6 +4,7 @@
 // mit nachträglichem Herunterladen und Löschen. Reparaturmodell der App-Vorgabe seit 0.5.15: Haiku (AV-2026-W43-32).
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import JSZip from "jszip";
 import { forschungEinschalten, netzVorbereiten, schluesselSetzen } from "./hilfen";
 
@@ -94,4 +95,89 @@ test("S3 Reparatur: ein Lauf mit Haiku, fünf Reparaturen, nur S3 ruft die API a
   expect(netz.ki.every((k) => k.koerper.model === "claude-haiku-5-5")).toBe(true);
   expect(netz.fremd).toEqual([]);
   await expect(page.getByRole("region", { name: "Archiv" }).getByRole("listitem")).toContainText("1 von 1 Läufen");
+});
+
+// Fallreihe (seit 0.7.1, TP-2026-W44-62 bis -67): Fallpaket mit Prüfsumme, Plan mit Vorbelegung, Kostenbremse vor dem
+// ersten Lauf, dann Start mit einem Klick und ZIP-Inhalt; nur die simulierte API wird angesprochen.
+test("Fallreihe: Fallpaket und Plan laden, Kostenbremse, Start mit einem Klick, ZIP mit Übersicht und Bewertungsvorlagen", async ({ page }) => {
+  const referenz = await readFile(REFERENZ, "utf-8");
+  const netz = await netzVorbereiten(page, (_nr, koerper) => (koerper?.output_config?.format ? JSON.stringify(S1) : "Kurz.\n\n```json\n" + referenz + "\n```"));
+  const paket = new JSZip();
+  paket.file(
+    "kontrollsatz/faelle/k1-browser.json",
+    JSON.stringify({
+      format: "ki-lead-evaluationsfall/1",
+      id: "k1-browser",
+      titel: "Kontrollfall Browser (FIKTIV)",
+      stand: "2026-11-03",
+      fiktiv: true,
+      auftrag: { sachverhalt: "Fiktive Lage im Browsertest", stichtag: "2026-11-03", meldezeitpunkt: "2026-11-03T12:00", websuche: false },
+      material: [{ datei: "evaluation/material/k1-browser.md", rolle: "material" }],
+      erwartungen: { muss: ["Fiktive Lage erfasst."] },
+    }),
+  );
+  paket.file("kontrollsatz/evaluation/material/k1-browser.md", "FIKTIVES ÜBUNGSMATERIAL – keine reale Lage");
+  const zipBytes = Buffer.from(await paket.generateAsync({ type: "uint8array" }));
+  const paketSha = createHash("sha256").update(zipBytes).digest("hex");
+  const plan = JSON.stringify({
+    format: "ki-lead-bewertungsplan/1",
+    id: "browser-b4",
+    stand: "2026-11-03",
+    fragestellung: "Browsertest",
+    faelle: ["k1-browser", "sop-gas-stabil"],
+    varianten: [{ kennung: "anthropic", ki_profil: "anthropic" }],
+    wiederholungen: 1,
+    budget_usd: 1,
+    fallpaket: { name: "kontrollsatz.zip", sha256: paketSha },
+  });
+  const planSha = createHash("sha256").update(plan).digest("hex");
+
+  await page.goto("./");
+  await schluesselSetzen(page);
+  await zuTestlaeufen(page);
+  const reihe = page.getByRole("region", { name: "Fallreihe" });
+  await expect(reihe.getByText("SOP-Fälle", { exact: false }).first()).toBeVisible();
+  await reihe.getByLabel("Fallpaket importieren (ZIP)").setInputFiles({ name: "kontrollsatz.zip", mimeType: "application/zip", buffer: zipBytes });
+  await expect(reihe.getByText("kontrollsatz.zip importiert: 1 Fall")).toBeVisible();
+  await expect(reihe.getByRole("list", { name: "Fallpakete" })).toContainText(`SHA-256 ${paketSha}`);
+  await reihe.getByLabel("Bewertungsplan laden (JSON)").setInputFiles({ name: "browser-b4.json", mimeType: "application/json", buffer: Buffer.from(plan) });
+  await expect(reihe.getByText(`SHA-256 ${planSha}`)).toBeVisible();
+  await expect(reihe.getByRole("checkbox", { name: /Kontrollfall Browser/ })).toBeChecked();
+  await expect(reihe.getByRole("checkbox", { name: /Niedriger Speicherstand bei stabiler Gasversorgung/ })).toBeChecked();
+  await expect(reihe.getByRole("checkbox", { name: "anthropic: Standardprofil Anthropic" })).toBeChecked();
+  await expect(reihe.getByLabel("Kostendeckel (USD)")).toHaveValue("1");
+  await expect(reihe.getByText("2 Läufe (2 × 1 × 1)", { exact: false })).toBeVisible();
+
+  // Deckel 1 USD: Die Schätzung des ersten Laufs liegt darüber, die Bremse hält vor Lauf 1
+  await reihe.getByRole("button", { name: "Fallreihe starten" }).click();
+  await expect(reihe.getByText(/Fallreihe beendet: 0 von 2 Läufen \(Kostenbremse vor Lauf 1/)).toBeVisible();
+  expect(netz.ki).toHaveLength(0);
+
+  // ohne Deckel: beide Läufe, ZIP-Datei mit Plan- und Paketprüfsumme
+  await reihe.getByLabel("Kostendeckel (USD)").fill("");
+  await expect(reihe.getByText("Auswahl weicht vom Plan ab", { exact: false })).toBeVisible();
+  const download = page.waitForEvent("download");
+  await reihe.getByRole("button", { name: "Fallreihe starten" }).click();
+  const datei = await download;
+  expect(datei.suggestedFilename()).toMatch(/^KI-LEAD_Fallreihe_browser-b4_\d{8}-\d{4}\.zip$/);
+  const zip = await JSZip.loadAsync(await readFile(await datei.path()));
+  const r = JSON.parse(await zip.file("fallreihe.json")!.async("string"));
+  expect(r).toMatchObject({
+    format: "ki-lead-fallreihe/1",
+    plan: { id: "browser-b4", sha256: planSha, abweichend: true },
+    fallpakete: [{ name: "kontrollsatz.zip", sha256: paketSha }],
+    laeufe_geplant: 2,
+    budget_usd: null,
+  });
+  expect(r.laeufe.map((l: any) => [l.fall, l.variante, l.pruefungen.status])).toEqual([
+    ["k1-browser", "anthropic", "fertig"],
+    ["sop-gas-stabil", "anthropic", "fertig"],
+  ]);
+  const namen = Object.keys(zip.files).filter((n) => !zip.files[n].dir);
+  for (const n of ["uebersicht.csv", "LIESMICH.txt", "bewertungen/E001.bewertung.json", "bewertungen/E002.pruefliste.md"]) expect(namen).toContain(n);
+  expect(namen.filter((n) => n.startsWith("laeufe/"))).toHaveLength(2);
+  expect(namen.filter((n) => n.startsWith("entwuerfe/"))).toHaveLength(2);
+  expect(netz.ki).toHaveLength(4);
+  expect(netz.fremd).toEqual([]);
+  await expect(page.getByRole("region", { name: "Archiv" }).getByRole("listitem")).toContainText("Fallreihe");
 });
