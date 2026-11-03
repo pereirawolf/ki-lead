@@ -1,8 +1,9 @@
 // Ausgaben des Lagebilds: Rohtabelle und CSV (generisch aus dem Schema), Kopiervorlage für Word.
 
+import { kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { aufloesen } from "../kern/schema";
 import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
 import { listeAlsText } from "../kern/listen";
@@ -48,7 +49,7 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
       out.push({
         titel: a.label,
         wert: (e, sv) => {
-          const v = holeWert(relativ ? sv : e.daten, [...pfad, a.key]);
+          const v = radarWerte(holeWert(relativ ? sv : e.daten, pfad))[a.key];
           return Number.isInteger(v) ? String(v) : "";
         },
       });
@@ -129,7 +130,18 @@ export function spalten(profil: Profil): Spalte[] {
           },
         ]
       : []),
-    ...(r.quellen ? [{ titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, r.quellen!)) }] : []),
+    ...(r.quellen
+      ? [
+          {
+            titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)",
+            // LEAD-Meldung-v2 (seit 0.7.1): Quellenobjekte als lesbares Verzeichnis
+            wert: (e: LagebildEintrag) => {
+              const q = holeWert(e.daten, r.quellen!);
+              return Array.isArray(q) ? quellenverzeichnisV2(q) : alsText(q);
+            },
+          },
+        ]
+      : []),
     {
       titel: "Schemaprüfung",
       wert: (e) => (e.schema.length ? `${e.schema.length} Abweichung(en): ${e.schema.map((b) => b.text).join(" | ")}` : "ohne Befund"),
@@ -229,7 +241,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     const def = radarFuer(ui, f);
     if (def) {
       const wert = holeWert(s.sv, r.sv_radar);
-      const gesetzt = def.achsen.some((a) => Number.isInteger(wert?.[a.key]));
+      const gesetzt = def.achsen.some((a) => Number.isInteger(radarWerte(wert)[a.key]));
       const legende = radarZeilen(def, wert).map(html).join("<br>");
       const bild = gesetzt && radarBild ? radarBild(def, wert) : null;
       const inhalt = gesetzt
@@ -246,8 +258,17 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     if (eintraege.length) zeile(bezeichnung(ui, r.zeitstrahl), html(eintraege.map(zeitstrahlAnzeige).join("\n")), "font-size:8.5pt;");
   }
 
-  if (r.quellen) {
-    const qText = String(holeWert(s.eintrag.daten, r.quellen) || "");
+  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Zeitstrahl und Kennzahlen im Sachverhalt, Quellen als Objekte
+  if (Array.isArray(s.sv?.zeitstrahl) && s.sv.zeitstrahl.length)
+    zeile(bezeichnung(ui, `${r.sachverhalte}[].zeitstrahl`), html(zeitstrahlTextV2(s.sv.zeitstrahl)), "font-size:8.5pt;");
+  if (Array.isArray(s.sv?.kennzahlen) && s.sv.kennzahlen.length)
+    zeile(bezeichnung(ui, `${r.sachverhalte}[].kennzahlen`), html(kennzahlenTextV2(s.sv.kennzahlen)), "font-size:8.5pt;white-space:pre-wrap;");
+  const qRoh = r.quellen ? holeWert(s.eintrag.daten, r.quellen) : undefined;
+  if (r.quellen && Array.isArray(qRoh)) {
+    const zitiert = quellenFuerSachverhalt(qRoh, s.sv, ui);
+    if (zitiert) zeile(bezeichnung(ui, r.quellen), html(zitiert.map((q) => q.text).join("\n")), "font-size:8.5pt;");
+  } else if (r.quellen) {
+    const qText = String(qRoh || "");
     if (qText.trim()) {
       const zitiert = quellenFuerSachverhalt(qText, s.sv, ui, zs);
       zeile(bezeichnung(ui, r.quellen), html(zitiert ? zitiert.map((q) => q.text).join("\n") : qText), "font-size:8.5pt;");

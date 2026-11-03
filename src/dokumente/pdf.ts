@@ -1,10 +1,11 @@
 // PDF-Ausgabe einer Meldung, generisch aus Schema und Darstellungsdatei erzeugt.
 
+import { entstehungTextV2, kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { aufloesen } from "../kern/schema";
 import { holeWert, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import { hatObjekte } from "../kern/listen";
@@ -127,7 +128,8 @@ export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, un
     const [lx, ly] = punkt(i, rMax + 4.2);
     doc.text(a.label.match(/^(D\d+)\b/)?.[1] ?? a.label.split(/\s+/)[0] ?? "", lx, ly, { align: "center", baseline: "middle" });
   });
-  const werte = def.achsen.map((a) => (Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null));
+  const stufen = radarWerte(wert);
+  const werte = def.achsen.map((a) => stufen[a.key] ?? null);
   if (werte.some((v) => v !== null)) {
     doc.setFillColor(214, 226, 238);
     doc.setDrawColor(...BLAU);
@@ -198,6 +200,11 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
       if (wert?.[key] === undefined) continue;
       zeilen(profil, k.properties[key], wert[key], [...segs, key], out);
     }
+    return;
+  }
+  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Zeitstrahl und Kennzahlen eines Sachverhalts als lesbare Zeilen
+  if (Array.isArray(wert) && hatObjekte(wert) && (gen.endsWith(".zeitstrahl") || gen.endsWith(".kennzahlen"))) {
+    out.push([label, (gen.endsWith(".zeitstrahl") ? zeitstrahlTextV2(wert) : kennzahlenTextV2(wert)) || "–"]);
     return;
   }
   if (Array.isArray(wert)) {
@@ -328,12 +335,15 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     });
   });
 
-  if (r.quellen && String(holeWert(d, r.quellen) || "").trim()) {
+  // Quellenverzeichnis: Text (v1) oder seit 0.7.1 aus den Quellenobjekten erzeugt (LEAD-Meldung-v2)
+  const quellenRoh = r.quellen ? holeWert(d, r.quellen) : undefined;
+  const quellenText = Array.isArray(quellenRoh) ? quellenverzeichnisV2(quellenRoh) : String(quellenRoh || "");
+  if (r.quellen && quellenText.trim()) {
     autoTable(doc, {
       didParseCell: zellText,
       startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 22),
       head: [[bezeichnung(ui, r.quellen)]],
-      body: [[String(holeWert(d, r.quellen))]],
+      body: [[quellenText]],
       theme: "grid",
       headStyles: { fillColor: BLAU },
       styles: { fontSize: 7.5, cellPadding: 1.8 },
@@ -361,16 +371,18 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
       body: [
         [
           "Entstehung",
-          [
-            ent.verfahren,
-            ent.werkzeug,
-            ent.modell,
-            Array.isArray(ent.sop) && ent.sop.length ? `Beigefügte SOP: ${ent.sop.join("; ")}` : "",
-            ent.kodierleitfaden,
-            ent.erstellt,
-          ]
-            .filter(Boolean)
-            .join(" · "),
+          ent.werkzeug && typeof ent.werkzeug === "object"
+            ? entstehungTextV2(ent)
+            : [
+                ent.verfahren,
+                ent.werkzeug,
+                ent.modell,
+                Array.isArray(ent.sop) && ent.sop.length ? `Beigefügte SOP: ${ent.sop.join("; ")}` : "",
+                ent.kodierleitfaden,
+                ent.erstellt,
+              ]
+                .filter(Boolean)
+                .join(" · "),
         ],
       ],
       theme: "grid",

@@ -82,6 +82,22 @@ export function Feld(props: FeldProps) {
         <div className={labelKlasse}>{label}</div>
         <Hinweis text={f.hinweis} id={hilfeId} feld />
         <RadarFeld def={def} wert={wert} idPraefix={id} onChange={(neu) => setze(segs, neu)} />
+        {/* Achsen als Objekte (LEAD-Meldung-v2, seit 0.7.1, UP-2026-W45-03): Status, Grund, Begründung und Belege je Achse */}
+        {def.achsen.map((a) => {
+          const achse = aufloesen(k?.properties?.[a.key], profil.schema);
+          if (!achse?.properties) return null;
+          const aw = wert && typeof wert === "object" ? (wert as Record<string, any>)[a.key] : undefined;
+          return (
+            <details key={a.key} className="radar-achse-details">
+              <summary>{a.label}: Status, Begründung und Belege</summary>
+              {Object.keys(achse.properties)
+                .filter((p) => p !== "stufe")
+                .map((p) => (
+                  <Feld key={p} {...props} knoten={achse.properties[p]} segs={[...segs, a.key, p]} wert={aw?.[p]} />
+                ))}
+            </details>
+          );
+        })}
         {fehlerText}
       </div>
     );
@@ -328,7 +344,8 @@ export function Feld(props: FeldProps) {
   const gemeinsam = {
     value: text,
     placeholder: f.platzhalter,
-    onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value),
+    // Wert oder null (seit 0.7.1, UP-2026-W45-03): leere Eingabe heißt „unbekannt“, nicht leerer Text
+    onChange: (ev: { target: { value: string } }) => setze(segs, ev.target.value === "" && t.includes("null") && !e ? null : ev.target.value),
   };
   return (
     <HilfeFeld

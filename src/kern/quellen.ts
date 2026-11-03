@@ -1,6 +1,7 @@
 // Zentrales Quellenverzeichnis: Einträge „[Qn] K – …“, Verweise „[Q1]“, „[Q2, Q4]“, „[Q1–Q3]“.
 // Generische Quellenlogik, gesteuert über Rollen und Kategorien des Profils.
 
+import { quellenZeileV2, zitierteQuellen } from "./v2darstellung";
 import { holeWert } from "./pfad";
 import type { Befund, Meldung, UiKonfig } from "./typen";
 import { eintraegeFuer, parseZeitstrahl, zeitstrahlText } from "./zeitstrahl";
@@ -89,6 +90,14 @@ export function altQuellenZeilen(d: Meldung, ui: UiKonfig): { sv: number; feld: 
  * dessen Text übergeben wird.
  */
 export function quellenFuerSachverhalt(quellenText: unknown, sv: any, ui: UiKonfig, zeitstrahl?: unknown): QuellenEintrag[] | null {
+  // LEAD-Meldung-v2 (seit 0.7.1, UP-2026-W45-03): Quellenobjekte; zitiert ist, was Texte und Belege des Sachverhalts nennen
+  if (Array.isArray(quellenText)) {
+    const ids = zitierteQuellen(sv);
+    const hit = quellenText
+      .filter((q: any) => q && typeof q === "object" && ids.has(q.id))
+      .map((q: any) => ({ nr: Number(String(q.id).slice(1)), code: String(q.kategorie ?? ""), text: quellenZeileV2(q) }));
+    return hit.length ? hit : null;
+  }
   const entries = parseQuellen(quellenText);
   if (!entries.length) return null;
   const kennung = ui.rollen.sv_kennung ? String(holeWert(sv, ui.rollen.sv_kennung) ?? "") : "";

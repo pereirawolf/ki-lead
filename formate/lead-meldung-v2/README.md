@@ -2,7 +2,7 @@
 
 Meldungsformat `LEAD-Meldung-v2`, Formatfassung 2.0, **Entwurf zur fachlichen Abnahme** vom 01.11.2026. Beschreibung, Grundsätze, Migration und Abwägung: [docs/LEAD-MELDUNG-V2.md](../../docs/LEAD-MELDUNG-V2.md).
 
-App und mitgelieferte Profile arbeiten bis zur Umstellung weiter mit `LEAD-Meldung-v1`.
+Die mitgelieferten Profile arbeiten bis zur Umstellung weiter mit `LEAD-Meldung-v1`. Die App liest v2 seit 0.7.0 (Migration, Referenzprüfung) und erfasst und gibt v2 seit 0.7.1 aus (Maske, PDF, Kopiervorlage).
 
 | Datei | Inhalt |
 |---|---|
@@ -10,10 +10,11 @@ App und mitgelieferte Profile arbeiten bis zur Umstellung weiter mit `LEAD-Meldu
 | `module/lead-bevoelkerungsschutz.schema.json` | Fachmodul 1.0: Ereignisarten des Katalogs und Lagenradar D1–D8 je Achse mit Stufe, Status, Grund und Belegen |
 | `zusammenstellungen/*.json` | Zusammenstellung je Profil: Kern, Module, Einschränkungen (Gebiete, Ebenen, Quellenkategorien) |
 | `beispiel/meldung.schema.json` | erzeugtes Schema für das Beispielprofil (Bund und Länder) |
+| `beispiel/meldung.ui.json` | Vorlage der Darstellungsdatei für v2 (seit App 0.7.1): Schritte, Bezeichnungen und Hinweise der Felder, Rollen als Pfade, Lagenradar; Grundlage der Umstellung der Profile |
 | `beispiel-land/meldung.schema.json` | erzeugtes Schema für das Landesprofil Thüringen (Land und Kreise) |
 | `beispiele/` | fiktive Meldungen: Thüringen zum Orkantief „Ilka“ (aus v1 überführt und von Hand vervollständigt) und eine Fehlanzeige |
 
-Die Dateien in `beispiel/` und `beispiel-land/` werden erzeugt, nicht von Hand geändert; ein Test prüft, dass sie aktuell sind.
+Die Schemata in `beispiel/` und `beispiel-land/` werden erzeugt, nicht von Hand geändert; ein Test prüft, dass sie aktuell sind. Die Darstellungsdatei `beispiel/meldung.ui.json` wird von Hand gepflegt; Tests laden sie mit dem Schema und prüfen Maske, PDF und Kopiervorlage.
 
 ## Werkzeug
 

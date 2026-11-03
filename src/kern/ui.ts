@@ -57,10 +57,57 @@ export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string 
 }
 
 /** Radarwerte als Klartext je Achse: „D1 Räumliche Auswirkung: 4 – landesweit“, offene Achsen als „offen“. */
+/**
+ * Stufen eines Radars je Achse. Ein Wert ist eine ganze Zahl (LEAD-Meldung-v1) oder seit 0.7.1 (UP-2026-W45-03) ein
+ * Objekt mit „stufe“ (Radarachse nach LEAD-Meldung-v2, Modul lead-bevoelkerungsschutz); sonst offen (null).
+ */
+export function radarWerte(wert: unknown): Record<string, number | null> {
+  const out: Record<string, number | null> = {};
+  if (!wert || typeof wert !== "object" || Array.isArray(wert)) return out;
+  for (const [k, v] of Object.entries(wert as Record<string, unknown>)) {
+    const s = v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>).stufe : v;
+    out[k] = Number.isInteger(s) ? (s as number) : null;
+  }
+  return out;
+}
+
+/** true, wenn die Achsen Objekte nach LEAD-Meldung-v2 sind (mindestens eine Achse ist ein Objekt) */
+export function radarAlsObjekte(wert: unknown): boolean {
+  return !!wert && typeof wert === "object" && Object.values(wert as Record<string, unknown>).some((v) => !!v && typeof v === "object" && !Array.isArray(v));
+}
+
+/**
+ * Neuer Radarwert mit geänderter Stufe einer Achse. Bei v2-Achsen bleiben Begründung und Belege erhalten; „status“
+ * folgt der Stufe (null → offen mit bisherigem oder „sonstiges“ Grund, Zahl → belegt, ein Mindestwert bleibt einer).
+ */
+export function radarMitStufe(def: RadarDef, wert: unknown, key: string, stufe: number | null): Record<string, unknown> {
+  if (!radarAlsObjekte(wert)) {
+    const basis: Record<string, number | null> = {};
+    const w = radarWerte(wert);
+    for (const a of def.achsen) basis[a.key] = w[a.key] ?? null;
+    basis[key] = stufe;
+    return basis;
+  }
+  const alt = (wert as Record<string, any>)[key] ?? {};
+  const achse: Record<string, unknown> = { ...alt, stufe };
+  if (stufe === null) {
+    achse.status = "offen";
+    achse.offen_grund = alt.offen_grund ?? "sonstiges";
+  } else {
+    achse.status = alt.status === "mindestwert" ? "mindestwert" : "belegt";
+    delete achse.offen_grund;
+  }
+  return { ...(wert as Record<string, unknown>), [key]: achse };
+}
+
 export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undefined): string[] {
+  const w = radarWerte(wert);
   return def.achsen.map((a) => {
-    const v = wert?.[a.key];
-    return `${a.label}: ${Number.isInteger(v) ? `${String(v)}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}`;
+    const v = w[a.key] ?? null;
+    const o = wert?.[a.key] && typeof wert[a.key] === "object" ? (wert[a.key] as Record<string, unknown>) : undefined;
+    const zusatz =
+      o?.status === "mindestwert" ? " (Mindestwert)" : v === null && typeof o?.offen_grund === "string" ? ` (${o.offen_grund.replace(/_/g, " ")})` : "";
+    return `${a.label}: ${v !== null ? `${String(v)}${a.stufen[v] ? ` – ${a.stufen[v]}` : ""}` : "offen"}${zusatz}`;
   });
 }
 
