@@ -134,6 +134,9 @@
     "fehlanzeige": {
       "$ref": "#/$defs/fehlanzeige"
     },
+    "module": {
+      "$ref": "#/$defs/meldungsmodule"
+    },
     "freigabe": {
       "type": "object",
       "required": [],
@@ -993,6 +996,24 @@
     "module": {
       "type": "object",
       "description": "Fachmodule je Sachverhalt, Schlüssel = Modulkennung. Bekannte Module legt die Zusammenstellung des Profils fest; unbekannte bleiben erhalten und gelten als ungeprüft.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["fassung"],
+        "properties": {
+          "fassung": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          }
+        }
+      },
+      "properties": {}
+    },
+    "meldungsmodule": {
+      "type": "object",
+      "description": "Fachmodule für Angaben, die für die ganze Meldung gelten (etwa Meldeanlass, Vertraulichkeit, Empfänger), Schlüssel = Modulkennung. Optional; Regeln wie bei den Modulen je Sachverhalt.",
       "propertyNames": {
         "pattern": "^[a-z][a-z0-9-]*$"
       },
