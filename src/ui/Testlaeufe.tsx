@@ -1,4 +1,4 @@
-// Bereich „Einstellungen → Testläufe“ (seit 0.5.17): standardisierte Testläufe am fiktiven Fall „Ilka“ in einem
+// Bereich „Einstellungen → Testläufe“ (seit 0.5.17; seit 0.7.1 mit der Fallreihe, Fallreihe.tsx): standardisierte Testläufe am fiktiven Fall „Ilka“ in einem
 // Formular und das Archiv der Testläufe. Bis 0.5.16 standen unter „Modelle & Verarbeitung“ zwei Abschnitte,
 // „Vergleichslauf Ilka“ (seit 0.5.8; Umfänge seit 0.5.12) und „Prüffall Reparatur“ (seit 0.5.13); der Prüffall ist
 // jetzt die Testart „S3 Reparatur (aus Musterfassung)“. Ein Testlauf besteht aus einem oder mehreren Läufen; das
@@ -56,6 +56,11 @@ import {
   type TestlaufEintrag,
 } from "../speicher/testlaufarchiv";
 import { useWachhalten } from "./wachhalten";
+import type { KatalogDaten } from "./Fallreihe";
+import { nachladbar } from "./nachladen";
+
+// Fallreihe in einem eigenen Teil des Builds (seit 0.7.1): erst beim Öffnen der Testläufe geladen
+const Fallreihe = nachladbar(() => import("./Fallreihe").then((m) => m.FallreiheAbschnitt));
 import { bestaetigen } from "./bestaetigung";
 
 /** Art eines Testlaufs: ein Umfang der Kette oder die Reparatur aus der beschädigten Musterfassung */
@@ -123,6 +128,8 @@ export interface TestlaeufeProps {
   datenLaden?: () => Promise<FallDaten>;
   musterLaden?: () => Promise<MusterDaten>;
   anbieterFuer?: (schluessel: Schluessel, e: Einstellungen) => LlmAnbieter;
+  /** für Tests: mitgelieferte Fälle der Fallreihe (seit 0.7.1) */
+  katalogLaden?: () => Promise<KatalogDaten>;
 }
 
 type Ergebnis =
@@ -152,10 +159,19 @@ export function TestlaeufeBereich(props: TestlaeufeProps) {
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
       <h2 id="einstellungen-bereich-titel">Testläufe</h2>
       <p className="einleitung">
-        Standardisierte Testläufe am fiktiven Fall „Ilka“, um Modelle und Aufwand nach einer Änderung zu vergleichen und auszuwerten. Ein Testlauf besteht aus
-        einem oder mehreren Läufen. Das Ergebnis kommt als ZIP-Datei und bleibt bis zur Löschung im Archiv auf diesem Gerät.
+        Standardisierte Testläufe am fiktiven Fall „Ilka“, um Modelle und Aufwand nach einer Änderung zu vergleichen und auszuwerten, und Fallreihen über
+        beliebige Bewertungsfälle. Ein Testlauf besteht aus einem oder mehreren Läufen. Das Ergebnis kommt als ZIP-Datei und bleibt bis zur Löschung im Archiv
+        auf diesem Gerät.
       </p>
       <TestlaufAbschnitt {...props} archiviert={() => setArchiviert((n) => n + 1)} />
+      <Fallreihe.Komponente
+        einstellungen={props.einstellungen}
+        schluessel={props.schluessel}
+        zeige={props.zeige}
+        archiviert={() => setArchiviert((n) => n + 1)}
+        {...(props.katalogLaden ? { katalogLaden: props.katalogLaden } : {})}
+        {...(props.anbieterFuer ? { anbieterFuer: props.anbieterFuer } : {})}
+      />
       <TestlaufArchiv aktualisierung={archiviert} />
     </section>
   );
