@@ -13,6 +13,8 @@ Je Datei ein Fall nach `fall.schema.json` (`format: "ki-lead-evaluationsfall/1"`
 - `ilka-management-summary.json` (25.10.2026): Management Summary aus einer festen Meldung (`auftrag.kurzfassung`, Material mit Rolle `meldung`): der [Musterfassung Ilka](../material/ilka-musterfassung.json). Alle KI-Profile gehen von derselben Eingabe aus; Plan `../plaene/management-summary-ilka.json` mit Prüfsumme der Meldung (`meldung_fest`).
 - `ilka-reparatur.json` (25.10.2026): Prüffall Reparatur (S3) (`auftrag.reparatur`, Material mit Rolle `meldung`): Die App beschädigt die Musterfassung Ilka nach den Defekten R1–R5 in `src/forschung/reparaturtest.ts` (bis 0.6.2 `src/pipeline/`) und lässt sie mit dem gewählten Modell reparieren; S1 fest (`ilka-s1-zuschnitt-a.json`), S2 ohne KI-Aufruf. Plan `../plaene/reparatur-ilka.json` mit Prüfsummen von Meldung und S1-Gegenstand.
 
+- `pruefstein-*.json` (3 Fälle vom 03.11.2026, TP-2026-W44-63): Erfassung der drei Prüfsteine aus KW 43 (`../pruefsteine/`) als reale Lagen mit `websuche: true`, ohne Material und ohne URLs im Auftrag: Die Recherche soll die Quellen selbst finden (Frage K3 des Erprobungsplans, Reihe B5). t0, Referenzraum und Ereignisart stammen aus der Begleitnotiz, die Erwartungen aus deren Lage und bekannten Mängeln (diese als `darf_nicht`). Seiten, die nach t0 erschienen sind, kann die Recherche finden; die Bewertung prüft den Datenstand zu t0. Gehören zum Entwicklungssatz.
+
 Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) nennt die URL und die Prüfsumme der verwendeten Fassung, aber nie den Text.
 
 ## Erwartete Radarwerte und Abwandlungen
@@ -21,6 +23,14 @@ Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) n
 - `variante_von` und `abwandlung`: kennzeichnen einen Fall als gezielte Abwandlung eines vorhandenen Falls. `abwandlung` nennt die geänderte Stellgröße, möglichst genau eine; alles Übrige bleibt gleich. Beide Felder stehen nur gemeinsam.
 
 Mehrere Fälle zu einem Testset fasst ein Bewertungsplan unter `../plaene/` zusammen (`plan.schema.json`). Mehrere Kodierungen derselben Lage vergleicht `npm run vergleich:mehrfach` (siehe [../README.md](../README.md)).
+
+## Profil eines Falls
+
+`profil` nennt die Manifest-ID des Profils, mit dem der Fall in der Fallreihe läuft (seit 0.7.1, TP-2026-W44-63), etwa `lead.beispiel.thueringen` für Landesfälle; ohne Angabe das Beispielprofil `lead.beispiel.koordinierungsstelle`. Die Fallreihe sperrt einen Fall, dessen Profil die App nicht mitliefert.
+
+## Fallpaket
+
+Fälle, die nicht im Repository liegen sollen (Kontrollsatz bis zum Kontrolllauf), kommen als ZIP-Datei in die Fallreihe: je Fall eine JSON-Datei nach `fall.schema.json` (Ort im Paket beliebig), Material unter dem Pfad aus `datei`, wahlweise unter einem gemeinsamen Oberordner (z. B. `kontrollsatz/faelle/k1.json` und `kontrollsatz/evaluation/material/k1.md`). Die SHA-256 der ZIP-Datei steht im Plan unter `fallpaket.sha256`; eine Abweichung sperrt den Start. Fälle mit derselben ID wie ein mitgelieferter Fall übergeht die App mit Hinweis.
 
 ## Neuen fiktiven Fall anlegen
 

@@ -1,0 +1,34 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "pruefstein-ebola-kenia-nigeria",
+  "titel": "Prüfstein: Ebola (Bundibugyo-Virus) in Kenia und Nigeria, Bezug zu Deutschland (reale Lage)",
+  "stand": "2026-11-03",
+  "fiktiv": false,
+  "auftrag": {
+    "sachverhalt": "Ebola-Geschehen (Bundibugyo-Virus): Übertragungskette in Kenia und Fall in Nigeria; Relevanz für den Bevölkerungsschutz in Deutschland",
+    "stichworte": "Ebola, Bundibugyo, Kenia, Nigeria, Reisende",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T13:00",
+    "prueffrage": "Lage zu t0 mit öffentlich zugänglichen, vorrangig amtlichen Quellen erfassen. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen.",
+    "websuche": true,
+    "verdichtung": false
+  },
+  "material": [],
+  "erwartungen": {
+    "muss": [
+      "Übertragungskette in Kenia und Fall in Nigeria (Bundibugyo-Virus) mit Datenstand der Quellen.",
+      "Kein belegter Übertragungspfad nach Deutschland, sofern die Quellen keinen nennen.",
+      "Reisehinweise des Auswärtigen Amts aus der Originalseite oder als nicht abgerufen gekennzeichnet.",
+      "Jede urteilsprägende Aussage ist mit einer tatsächlich abgerufenen, öffentlich zugänglichen Quelle belegt; Datenstand der Quellen zu t0 angegeben."
+    ],
+    "darf_nicht": [
+      "Eintritt auf das Datum des Bekanntwerdens setzen, ohne dass ein Beginn belegt ist.",
+      "Empfehlungen zum räumlichen Zuschnitt ohne Anker in der SOP frei ableiten.",
+      "Eine Quelle als gelesen ausgeben, die nicht abgerufen wurde, oder eine Fundstelle erfinden.",
+      "Informationen nach t0 (24.10.2026, 13:00) als Lage zu t0 ausgeben."
+    ],
+    "t0": "2026-10-24T13:00",
+    "referenzraum": "Bund (Bevölkerungsschutz in Deutschland)",
+    "ereignisarten": ["Gesundheitliche Lage / Epidemie"]
+  }
+}

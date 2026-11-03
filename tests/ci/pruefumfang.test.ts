@@ -20,7 +20,11 @@ describe("Prüfumfang je Änderung", () => {
     ["Arbeitsanweisung und Kodierleitfaden", ["profile/lead-beispiel/anweisung-erfassung.md", "profile/lead-beispiel/kodierleitfaden.md"], KEINE],
     ["Profil-Changelog", ["profile/muster/CHANGELOG.md"], KEINE],
     ["Dokumentation und Changelog", ["docs/TESTS.md", "CHANGELOG.md", "README.md"], KEINE],
-    ["Bewertungsfälle", ["evaluation/faelle/f01.json", "evaluation/README.md"], KEINE],
+    ["Beschreibung der Bewertung", ["evaluation/README.md", "evaluation/faelle/README.md", "evaluation/plaene/2026-10-25-kontrollsatz.md"], KEINE],
+    // seit 0.7.1 (TP-2026-W44-63) bettet die Fallreihe alle Fälle und ihr Material ein
+    ["Bewertungsfälle, in die Fallreihe eingebettet", ["evaluation/faelle/f01.json"], NUR_KERN],
+    ["Schema des Bewertungsplans (Fallreihe)", ["evaluation/plaene/plan.schema.json"], NUR_KERN],
+    ["anderer Bewertungsplan", ["evaluation/plaene/beispiel-fallreihe.json"], KEINE],
     [
       "Plan und Material, die die App einbindet (AV-2026-W43-25)",
       ["evaluation/plaene/reparatur-ilka.json", "evaluation/material/ilka-musterfassung.json"],
@@ -31,7 +35,7 @@ describe("Prüfumfang je Änderung", () => {
     ["Lizenzzuordnung nach REUSE (Issue #89)", ["REUSE.toml", "LICENSES/EUPL-1.2.txt"], KEINE],
     ["Musterfassung, in die App eingebettet (seit 0.5.12)", ["evaluation/material/ilka-musterfassung.json"], NUR_KERN],
     ["Bewertungsplan des Vergleichslaufs", ["evaluation/plaene/management-summary-ilka.json", "docs/TESTS.md"], NUR_KERN],
-    ["Material eines anderen Bewertungsfalls", ["evaluation/material/sop-gas-stabil.md"], KEINE],
+    ["Material eines Bewertungsfalls, in die Fallreihe eingebettet", ["evaluation/material/sop-gas-stabil.md"], NUR_KERN],
     ["Bedienoberfläche aus dem Profil", ["profile/lead-beispiel/meldung.ui.json"], NUR_KERN],
     ["Schema des Profils", ["profile/lead-beispiel/meldung.schema.json"], NUR_KERN],
     ["Manifest des Profils", ["profile/lead-beispiel/profil.json"], NUR_KERN],

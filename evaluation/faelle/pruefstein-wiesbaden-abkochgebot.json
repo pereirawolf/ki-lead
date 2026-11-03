@@ -1,0 +1,34 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "pruefstein-wiesbaden-abkochgebot",
+  "titel": "Prüfstein: Abkochgebot Wiesbadener Innenstadt nach Pseudomonas-Befund, Meldung im Nachlauf (reale Lage)",
+  "stand": "2026-11-03",
+  "fiktiv": false,
+  "auftrag": {
+    "sachverhalt": "Abkochgebot für Trinkwasser in Teilen der Wiesbadener Innenstadt nach Pseudomonas-Befund (ab 25.09.2026) und seine Aufhebung; Meldung im Nachlauf",
+    "stichworte": "Wiesbaden, Trinkwasser, Abkochgebot, Pseudomonas",
+    "stichtag": "2026-10-24",
+    "meldezeitpunkt": "2026-10-24T13:00",
+    "prueffrage": "Lage zu t0 mit öffentlich zugänglichen, vorrangig amtlichen Quellen erfassen. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen.",
+    "websuche": true,
+    "verdichtung": false
+  },
+  "material": [],
+  "erwartungen": {
+    "muss": [
+      "Abkochgebot für Teile der Wiesbadener Innenstadt nach Pseudomonas-Befund, Beginn 25.09.2026.",
+      "Aufhebung des Abkochgebots am 17.10.2026; zu t0 als Nachlauf eingeordnet.",
+      "Betroffenes Gebiet nach den Angaben der Stadt beschrieben oder als nicht ermittelt gekennzeichnet.",
+      "Jede urteilsprägende Aussage ist mit einer tatsächlich abgerufenen, öffentlich zugänglichen Quelle belegt; Datenstand der Quellen zu t0 angegeben."
+    ],
+    "darf_nicht": [
+      "Quellen in einer anderen Sprachfassung der städtischen Seite statt der deutschen Ausgangsseite zitieren.",
+      "Eine Warnlücke allein mit einem Ausschussprotokoll belegen, das Bürgerbeschwerden wiedergibt.",
+      "Eine Quelle als gelesen ausgeben, die nicht abgerufen wurde, oder eine Fundstelle erfinden.",
+      "Informationen nach t0 (24.10.2026, 13:00) als Lage zu t0 ausgeben."
+    ],
+    "t0": "2026-10-24T13:00",
+    "referenzraum": "Bund (Bevölkerungsschutz in Deutschland)",
+    "ereignisarten": ["Trinkwasserversorgung"]
+  }
+}
