@@ -1004,7 +1004,7 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 | Kreisschlüssel und Namen der 22 Gebietskörperschaften wie im CSV-Export der Verwaltungsstruktur des Landesamts (Stand 01.01.2026), Landkreise mit „Landkreis“ | Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik … › Schlüssel und Namen der 22 Gebietskörperschaften … | `tests/profil/landesprofil.test.ts` |
 | Quelle mit URL, Stand und Abruf im Kopf der Kreisliste und im README des Profils | … › Quelle mit Stand und Abruf … | `tests/profil/landesprofil.test.ts` |
 
-## Schwester-Repos (0.7.4, Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-01, -02 und -04, Freigabe des Herausgebers vom 03.11.2026)
+## Schwester-Repos (0.7.5, Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-01, -02 und -04, Freigabe des Herausgebers vom 03.11.2026)
 
 | Soll | Test | Datei |
 |---|---|---|

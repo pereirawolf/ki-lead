@@ -1,10 +1,10 @@
 # Grunddesign der App-Familie
 
-Fassung 1.0 vom 03.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
+Fassung 1.1 vom 04.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
 
 Diese Beschreibung legt das gemeinsame Grunddesign der Apps **KI-LEAD**, **KRITIS-LEAD** und **Thessa** fest. Es geht um Rahmen, Navigation, Seitenaufbau, Bedienmuster, Farbrollen, Schrift und Zugänglichkeit. Referenzumsetzung ist KI-LEAD. Jede Regel nennt ihre Fundstelle dort, Tests halten Beschreibung und Code im Gleichlauf.
 
-Die Familie folgt dem Vorbild einer Office-Suite: Textverarbeitung, Tabellenkalkulation und Präsentation sehen verschieden aus, weil ihr Inhalt verschieden ist. Rahmen, Menüs, Dialoge und Bedienung sind dagegen gleich, deshalb findet man sich in jeder App sofort zurecht. Anders als bei einer Office-Suite hat hier **keine App eine eigene Produktfarbe**. Die Farbgebung bestimmt allein das Profil, mit dem die App arbeitet (LD-F01).
+Die Familie folgt dem Vorbild einer Office-Suite: Textverarbeitung, Tabellenkalkulation und Präsentation sehen verschieden aus, weil ihr Inhalt verschieden ist. Rahmen, Menüs, Dialoge und Bedienung sind dagegen gleich, deshalb findet man sich in jeder App sofort zurecht. Anders als bei einer Office-Suite hat hier **keine App eine eigene Produktfarbe**. Die Farbgebung bestimmt das Profil, mit dem die App arbeitet; eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog (LD-F01).
 
 | Datei | Inhalt | lesbar für |
 |---|---|---|
@@ -20,7 +20,7 @@ Die Familie folgt dem Vorbild einer Office-Suite: Textverarbeitung, Tabellenkalk
 - **SOLL**: gilt, außer eine App begründet die Abweichung (siehe [Übernahme](#übernahme-in-eine-schwester-app)).
 - **KANN**: freigestellt.
 
-Regeln sind mit Kennungen `LD-<Gruppe><Nr>` versehen. Die Kennung einer Regel ändert sich nie, eine entfallene Regel wird nicht neu vergeben. Wo eine Regel Namen aus KI-LEAD nennt (Bereiche, Kennsätze, „KI ruht“), sind das Beispiele der Referenzumsetzung. Jede App setzt ihre eigenen Arbeitsschritte ein.
+Regeln sind mit Kennungen `LD-<Gruppe><Nr>` versehen. Die Kennung einer Regel ändert sich nie, eine entfallene Regel wird nicht neu vergeben. Regeln zu Profilen, Einstellungen, Statusanzeige, Laufanzeige und KI gelten nur für Apps, die diesen Bestandteil haben (seit Fassung 1.1). Wo eine Regel Namen aus KI-LEAD nennt (Bereiche, Kennsätze, „KI ruht“), sind das Beispiele der Referenzumsetzung. Jede App setzt ihre eigenen Arbeitsschritte ein.
 
 ## Aufbau einer Ansicht
 
@@ -101,7 +101,7 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | Kennung | Stufe | Regel | Fundstelle in KI-LEAD |
 |---|---|---|---|
 | <a id="ld-r01"></a>**LD-R01** | MUSS | Die App besteht aus Kopfleiste, Identitätsband, Hinweisband, Inhalt und Fußzeile, in dieser Reihenfolge. Die Kopfleiste bleibt beim Scrollen oben stehen. | `src/App.tsx`, `src/styles/basis.css` |
-| <a id="ld-r02"></a>**LD-R02** | MUSS | Die Kopfleiste zeigt links den Produktnamen (mit Zusatz, der bis zum Umbruch „breit“ entfällt), daneben die Hauptnavigation und rechts die Statusanzeige. Das aktive Profil steht nicht in der Kopfleiste, sondern in der Profilzeile (LD-A01). | `src/App.tsx`, `src/styles/basis.css` |
+| <a id="ld-r02"></a>**LD-R02** | MUSS | Die Kopfleiste zeigt links den Produktnamen (mit Zusatz, der bis zum Umbruch „breit“ entfällt), daneben die Hauptnavigation und rechts die Statusanzeige, wenn die App Anfragen stellt (LD-M03); eine App ohne Anfragen kann dort einen Anzeiger der Anmeldung oder Sicht führen. Das aktive Profil steht nicht in der Kopfleiste, sondern in der Profilzeile (LD-A01). | `src/App.tsx`, `src/styles/basis.css` |
 | <a id="ld-r03"></a>**LD-R03** | MUSS | Unter der Kopfleiste liegt ein dekoratives Identitätsband von 8 px aus den Farbrollen marke-akzent-1 bis -3. Es trägt keine Information und entfällt bei erzwungenen Farben. | `src/styles.css`, `src/styles/a11y.css` |
 | <a id="ld-r04"></a>**LD-R04** | SOLL | Ein Hinweisband unter dem Kopf nennt in einem Satz die Einsatzgrenzen der App (Rolle note), etwa nur fiktive oder offen zugängliche Inhalte. | `src/App.tsx` |
 | <a id="ld-r05"></a>**LD-R05** | MUSS | Die Fußzeile nennt Produktname mit Fassung, wohin Daten gehen, und verweist extern auf Lizenzen, Impressum und Datenschutz. | `src/App.tsx` |
@@ -111,22 +111,22 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 
 | Kennung | Stufe | Regel | Fundstelle in KI-LEAD |
 |---|---|---|---|
-| <a id="ld-n01"></a>**LD-N01** | MUSS | Die Hauptnavigation nennt die Arbeitsschritte der App in fachlicher Reihenfolge, danach immer „Profile“ und „Einstellungen“. KI-LEAD: Erfassung, KI-Erfassung, Auswertung, Profile, Einstellungen. | `src/App.tsx`, `docs/SPEZIFIKATION.md` |
+| <a id="ld-n01"></a>**LD-N01** | MUSS | Die Hauptnavigation nennt die Arbeitsschritte der App in fachlicher Reihenfolge, danach „Profile“ und „Einstellungen“, soweit die App Profile und Einstellungen hat; diese stehen dann immer am Ende. KI-LEAD: Erfassung, KI-Erfassung, Auswertung, Profile, Einstellungen. | `src/App.tsx`, `docs/SPEZIFIKATION.md` |
 | <a id="ld-n02"></a>**LD-N02** | MUSS | Bereichsnamen, Überschriften und Kennsätze legt die App fest, nicht das Profil. Das Profil liefert Produkttitel für Ausgaben wie PDF und Dateinamen. | `CHANGELOG.md` |
 | <a id="ld-n03"></a>**LD-N03** | MUSS | Die aktive Stelle trägt aria-current (page in Navigation, Bereichsleiste und Reitern, step in Schrittfolgen) und ist nicht nur über Farbe erkennbar, sondern zusätzlich über Unterstreichung, Rand oder gefüllte Nummer. | `src/styles/basis.css`, `src/ui/Meldung.tsx` |
 | <a id="ld-n04"></a>**LD-N04** | MUSS | Ansicht, Bereich und Reiter stehen im Hash der Adresse (#/<ansicht>/<teil>), Inhalte nie. Neuladen behält die Ansicht, Zurück und Vor wechseln sie, Tiefenlinks öffnen sie. | `src/ui/app/adresse.ts` |
 | <a id="ld-n05"></a>**LD-N05** | MUSS | Bis zum Umbruch „mittel“ steht die Hauptnavigation in einer eigenen Zeile und bricht um; alle Bereiche bleiben sichtbar, ohne Menüknopf und ohne Abschneiden. | `src/styles/basis.css` |
-| <a id="ld-n06"></a>**LD-N06** | SOLL | Die Einstellungen sind in Bereiche geteilt: „Übersicht“ zuerst, dann die Bereiche der App, am Ende „Darstellung“, „Daten“ und „Über <Produktname>“. | `src/ui/Einstellungen.tsx` |
+| <a id="ld-n06"></a>**LD-N06** | SOLL | Hat die App Einstellungen, sind sie in Bereiche geteilt: „Übersicht“ zuerst, dann die Bereiche der App, am Ende „Darstellung“, „Daten“ und „Über <Produktname>“. | `src/ui/Einstellungen.tsx` |
 
 ### Seitenaufbau
 
 | Kennung | Stufe | Regel | Fundstelle in KI-LEAD |
 |---|---|---|---|
-| <a id="ld-a01"></a>**LD-A01** | MUSS | Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs. Darunter steht die Profilzeile mit Name und Fassung des aktiven Profils und einem Verweis auf „Profile“. | `src/ui/Meldung.tsx`, `src/ui/Lagebild.tsx`, `src/ui/ProfilZeile.tsx` |
+| <a id="ld-a01"></a>**LD-A01** | MUSS | Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs. Arbeitet die App mit Profilen, steht darunter die Profilzeile mit Name und Fassung des aktiven Profils und einem Verweis auf „Profile“. | `src/ui/Meldung.tsx`, `src/ui/Lagebild.tsx`, `src/ui/ProfilZeile.tsx` |
 | <a id="ld-a02"></a>**LD-A02** | SOLL | Die Kennsätze der Bereiche sind parallel gebaut (<Tätigkeit> nach <Methode>, gegebenenfalls mit Zusatz), etwa „Erfassung einer Meldung nach LEAD-Systematik“. | `CHANGELOG.md` |
 | <a id="ld-a03"></a>**LD-A03** | MUSS | Mehrteilige Bereiche haben einen Arbeitsbereich aus Leiste (15 rem, links, mitlaufend) und Arbeitsfläche. Bis zum Umbruch „breit“ steht die Leiste waagerecht über dem Inhalt, ist scrollbar, zeigt am Rand einen Verlauf, solange dort weitere Abschnitte liegen, und rückt den aktiven Abschnitt ins Bild. | `src/styles/basis.css`, `src/ui/leiste.ts` |
 | <a id="ld-a04"></a>**LD-A04** | MUSS | Schrittfolgen sind nummeriert. Ein Schritt mit angezeigtem Befund trägt einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen. Schritte werden nicht nach ihrer Position als „erledigt“ gekennzeichnet. | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
-| <a id="ld-a05"></a>**LD-A05** | MUSS | Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung, den Inhalten und am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf). | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
+| <a id="ld-a05"></a>**LD-A05** | MUSS | Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung und den Inhalten. In Schrittfolgen (LD-A04) stehen am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf); Bereiche ohne Reihenfolge haben keine Blätterknöpfe. | `src/ui/Meldung.tsx`, `src/styles/basis.css` |
 | <a id="ld-a06"></a>**LD-A06** | SOLL | Gleichrangige Ansichten eines Ergebnisses stehen als Reiterleiste über dem Inhalt statt in einer seitlichen Leiste (KI-LEAD: Auswertung). | `src/ui/Lagebild.tsx` |
 | <a id="ld-a07"></a>**LD-A07** | MUSS | Nach einem Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht beginnt der neue Inhalt oben unter der Kopfleiste, ohne Animation, und der Fokus liegt auf der neuen Überschrift. Knöpfe von Leisten, die stehen bleiben, behalten den Fokus. | `src/ui/sprung.ts`, `docs/BARRIEREFREIHEIT.md` |
 
@@ -134,10 +134,10 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 
 | Kennung | Stufe | Regel | Fundstelle in KI-LEAD |
 |---|---|---|---|
-| <a id="ld-f01"></a>**LD-F01** | MUSS | Farben werden nur über die Farbrollen gesetzt (CSS-Variablen --<rolle>). Es gibt keine Produktfarbe je App: Die Werte bestimmt allein das aktive Profil (farbschema.basis aus dem gemeinsamen Katalog, einzelne Rollen in farbschema.farben), sonst die Wahl unter „Einstellungen → Darstellung“. | `src/darstellung/thema.ts`, `docs/PROFILFORMAT.md`, `docs/farbschemas.md` |
-| <a id="ld-f02"></a>**LD-F02** | MUSS | Alle Apps führen denselben Katalog der Farbschemata mit denselben Kennungen (Neutral, Kontrast, Bund, Bevölkerungsschutz, 16 Länder), damit ein Profil in jeder App gleich aussieht. | `src/darstellung/katalog.ts`, `design/lead-farbschemata.tokens.json` |
+| <a id="ld-f01"></a>**LD-F01** | MUSS | Farben werden nur über die Farbrollen gesetzt (CSS-Variablen --<rolle>). Es gibt keine Produktfarbe je App: Die Werte bestimmt das aktive Profil (farbschema.basis aus dem gemeinsamen Katalog, einzelne Rollen in farbschema.farben), sonst die Wahl unter „Einstellungen → Darstellung“. Eine App ohne Profile und ohne diese Wahl setzt ein festes Farbschema aus dem gemeinsamen Katalog, hell und dunkel; Werte außerhalb des Katalogs gibt es nicht. | `src/darstellung/thema.ts`, `docs/PROFILFORMAT.md`, `docs/farbschemas.md` |
+| <a id="ld-f02"></a>**LD-F02** | MUSS | Alle Apps beziehen ihre Farbschemata aus demselben Katalog mit denselben Kennungen (Neutral, Kontrast, Bund, Bevölkerungsschutz, 16 Länder), damit ein Profil in jeder App gleich aussieht. Apps mit Profilen oder einer Wahl unter „Darstellung“ führen den ganzen Katalog; eine App mit festem Farbschema (LD-F01) übernimmt nur die Schemata, die sie setzt, mit Kennung und unveränderten Werten. | `src/darstellung/katalog.ts`, `design/lead-farbschemata.tokens.json` |
 | <a id="ld-f03"></a>**LD-F03** | MUSS | Kontraste werden für jedes Schema und jedes Profilschema geprüft: Text 4,5:1, Konturen und Bedienelemente 3:1, Text in Kontrastschemata 7:1. Ein Profilschema, das sie verfehlt, wird mit Warnung verworfen; das Profil bleibt nutzbar. | `src/darstellung/thema.ts` |
-| <a id="ld-f04"></a>**LD-F04** | MUSS | Signalfarben tragen ausschließlich Bewertung und Prüfergebnis, sind in allen Apps gleich, hängen nur von hell, dunkel und Kontrast ab und kommen nie aus einem Profil. Eine Bewertung ist nie nur über Farbe erkennbar. | `src/darstellung/thema.ts`, `src/styles.css` |
+| <a id="ld-f04"></a>**LD-F04** | MUSS | Signalfarben tragen ausschließlich Bewertung, Prüfergebnis und den Status der Einsatzbereitschaft, sind in allen Apps gleich, hängen nur von hell, dunkel und Kontrast ab und kommen nie aus einem Profil. Eine Bewertung oder ein Status ist nie nur über Farbe erkennbar. Die Ampel der Einsatzbereitschaft nutzt: einsatzbereit ok, eingeschränkt gering, im Einsatz einsatz, nicht einsatzbereit kritisch. | `src/darstellung/thema.ts`, `src/styles.css` |
 | <a id="ld-f05"></a>**LD-F05** | MUSS | Die Vorgabe „Automatisch“ folgt hell und dunkel des Systems und bei „mehr Kontrast“ dem Kontrastschema. Erzwungene Farben (forced-colors) werden mit Systemfarben unterstützt. | `src/darstellung/thema.ts`, `src/styles/a11y.css` |
 | <a id="ld-f06"></a>**LD-F06** | SOLL | Farbwerte stehen an einer Stelle (Katalog); die Stylesheets setzen keine Farbwerte. Ohne JavaScript gilt ein Fallback aus demselben Katalog. | `src/styles/basis.css`, `src/darstellung/fallback.ts` |
 
@@ -166,15 +166,15 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | <a id="ld-e01"></a>**LD-E01** | MUSS | Ein Feld hat die Reihenfolge Beschriftung, Hilfetext, Eingabe, Fehlertext, Rückmeldungen, Werkzeuge: Anleitung vor der Eingabe, Rückmeldungen und Werkzeuge danach. Der Hilfetext ist per aria-describedby verknüpft. | `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e02"></a>**LD-E02** | MUSS | Eine fehlende Pflichtangabe erscheint am Feld erst, wenn es bearbeitet und verlassen wurde, nach dem Besuch des Prüfschritts oder bei einer geöffneten Datei; andere Befunde sofort. Ein Feld mit Befund trägt aria-invalid. | `src/ui/feldBefunde.ts`, `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e03"></a>**LD-E03** | SOLL | Listen gleichartiger Einträge lassen sich je Eintrag ein- und aufklappen; der Kopf zeigt Bezeichnung und Befundzahl, der Knopf trägt aria-expanded. | `src/ui/Feld.tsx` |
-| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. | `src/ui/Pruefen.tsx` |
+| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht. | `src/ui/Pruefen.tsx` |
 
 ### Rückmeldung
 
 | Kennung | Stufe | Regel | Fundstelle in KI-LEAD |
 |---|---|---|---|
 | <a id="ld-m01"></a>**LD-M01** | MUSS | Meldungen der App stehen in Kästen mit Randstreifen links: Information (Aktionsfarbe), Hinweis (gering), Fehler (kritisch, Rolle alert) und Erfolg (ok). | `src/styles/formular.css` |
-| <a id="ld-m02"></a>**LD-M02** | MUSS | Laufende Vorgänge zeigen eine Laufanzeige mit Uhr, erwarteter Dauer und voraussichtlichen Kosten. Sie werden über eine eigene Statusregion höchstens alle 5 s angesagt; der Sekundenzähler steht außerhalb jeder Live-Region. | `src/ui/kiErfassung/Laufanzeige.tsx`, `docs/BARRIEREFREIHEIT.md` |
-| <a id="ld-m03"></a>**LD-M03** | MUSS | Die Statusanzeige rechts in der Kopfleiste ist eine reine Anzeige (kein Knopf, kein Tabstopp) und zeigt, ob Anfragen laufen; ihr zugänglicher Name nennt die Zahl gleichzeitiger Anfragen. KI-LEAD: „KI ruht“ und „KI aktiv“. | `src/ui/KiSymbol.tsx`, `src/styles/basis.css` |
+| <a id="ld-m02"></a>**LD-M02** | MUSS | Laufende Vorgänge (Anfragen an einen Dienst) zeigen eine Laufanzeige mit Uhr, erwarteter Dauer und voraussichtlichen Kosten. Sie werden über eine eigene Statusregion höchstens alle 5 s angesagt; der Sekundenzähler steht außerhalb jeder Live-Region. | `src/ui/kiErfassung/Laufanzeige.tsx`, `docs/BARRIEREFREIHEIT.md` |
+| <a id="ld-m03"></a>**LD-M03** | MUSS | Stellt die App Anfragen, zeigt sie rechts in der Kopfleiste eine Statusanzeige. Sie ist eine reine Anzeige (kein Knopf, kein Tabstopp) und zeigt, ob Anfragen laufen; ihr zugänglicher Name nennt die Zahl gleichzeitiger Anfragen. KI-LEAD: „KI ruht“ und „KI aktiv“. | `src/ui/KiSymbol.tsx`, `src/styles/basis.css` |
 | <a id="ld-m04"></a>**LD-M04** | MUSS | Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; nicht freigegebene Ausgaben tragen „ENTWURF“. | `docs/KI-VERORDNUNG.md` |
 
 ### Zugänglichkeit und Plattform
@@ -205,7 +205,7 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 ## Übernahme in eine Schwester-App
 
 1. Auf eine **feste Fassung** verweisen, nicht auf `main`: einen Permalink mit Commit oder Tag, etwa `https://github.com/pereirawolf/ki-lead/blob/<commit>/design/README.md`. Die Fassung steht im Kopf dieser Datei und in `rahmen.json` (`fassung`).
-2. Die Tokens aus `lead-design.tokens.json` übernehmen, mit derselben Fassung. Die App setzt ihre Farben ausschließlich über die Farbrollen und bezieht die Werte aus dem Profil (LD-F01, LD-F02).
+2. Die Tokens aus `lead-design.tokens.json` übernehmen, mit derselben Fassung. Die App setzt ihre Farben ausschließlich über die Farbrollen und bezieht die Werte aus dem Profil oder, ohne Profile, aus einem festen Schema des Katalogs (LD-F01, LD-F02). Signalfarben übernimmt sie unverändert, auch „einsatz“ für den Status „im Einsatz“ (LD-F04).
 3. In der Schwester-App eine Datei `design-abweichungen.md` führen: je abweichender SOLL-Regel die Kennung, die Begründung und gegebenenfalls ein Datum, bis zu dem sie gilt. MUSS-Regeln kennen keine Abweichung; passt eine nicht, wird sie hier geändert.
 4. Für Prüfungen durch eine KI genügt der Verweis auf `rahmen.json`. Die Regeln haben dort Kennung, Stufe, Text und Fundstelle in KI-LEAD.
 
@@ -220,3 +220,4 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 03.11.2026 | Erste Fassung nach dem Stand von KI-LEAD 0.7.3: 47 Regeln, Wireframes, Tokens im Format der DTCG |
+| 1.1 | 04.11.2026 | Nach dem Abgleich mit Thessa ([thessa#16](https://github.com/pereirawolf/thessa/pull/16)): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem Katalog (LD-F01, LD-F02); neue Signalfarben `einsatz` und `einsatz-zart` für den Status „im Einsatz“, Zuordnung der Ampel der Einsatzbereitschaft (LD-F04); „Zurück“ und „Weiter“ nur in Schrittfolgen (LD-A05); Befunde mit Sprung nur für Eingaben in Formularen (LD-E04). Kennungen und Zahl der Regeln unverändert. |
