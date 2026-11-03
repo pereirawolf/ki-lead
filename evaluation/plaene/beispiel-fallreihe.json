@@ -1,0 +1,15 @@
+{
+  "format": "ki-lead-bewertungsplan/1",
+  "id": "beispiel-fallreihe",
+  "stand": "2026-11-03",
+  "fragestellung": "Beispiel für die Fallreihe unter „Einstellungen → Testläufe“ (TP-2026-W44-64): drei mitgelieferte Fälle aus dem Entwicklungssatz mit den Standardprofilen der drei Anbieter, ohne Fallpaket. Kein Bewertungsplan einer Erprobung; die Pläne für B4 und B5 entstehen bei R1.",
+  "faelle": ["orkantief-ilka-verdichtung", "sop-gas-stabil", "zaehlregel-teilmenge"],
+  "varianten": [
+    { "kennung": "anthropic", "ki_profil": "anthropic" },
+    { "kennung": "openai", "ki_profil": "openai" },
+    { "kennung": "mistral-eu", "ki_profil": "mistral", "mistral_endpunkt": "eu" }
+  ],
+  "wiederholungen": 1,
+  "budget_usd": 15,
+  "hinweis": "Läufe sind kostenpflichtig (Schätzung je Lauf in der App). Ergebnisse gehören nicht ins Repository, nur zusammengefasste Bewertungen unter evaluation/ergebnisse/."
+}
