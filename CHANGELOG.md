@@ -100,6 +100,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
 | 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
 | 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
+| 0.7.5 | letzter Commit des Pull Requests „Schwester-Repos: Meldungsmodule, Thessa-Kennzahlen 0.3, Austauschvertrag 0.5; 0.7.5“ |
+
+## [0.7.5] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json` (Beurteilung des Zusammenspiels von KI-LEAD, KRITIS-LEAD und Thessa vom 03.11.2026), SR-2026-W45-01, -02 und -04, freigegeben vom Herausgeber am 03.11.2026 mit den Entscheidungen: Meldungsmodule im Kern; Präfix `KRITIS-` mit selbst gewähltem Betreiberkürzel; Zuordnung von Einsatzmeldungen zu Lagemeldungen von oben, n:m. Thessa bleibt während der Entwicklung nicht öffentlich. Vorbereitet als 0.7.4 und nach dem Zusammenführen von Pull Request #139 (0.7.4) als 0.7.5 umnummeriert. SR-2026-W45-03 (Grunddesign für Apps ohne Profile und für Statusfarben) ist durch Pull Request #139 (Grunddesign 1.1) überholt.
+
+### Neu
+
+- **Meldungsmodule (SR-2026-W45-01):** Das Kernschema von LEAD-Meldung-v2 kennt ein optionales Feld `module` auf oberster Ebene für Angaben, die für die ganze Meldung gelten (etwa Meldeanlass, Vertraulichkeit und Empfänger einer Betreibermeldung). Die Zusammenstellung eines Profils bindet sie unter `meldungsmodule` ein; ein Pflicht-Meldungsmodul macht `module` zur Pflicht; dasselbe Modul auf beiden Ebenen ist ein Fehler der Zusammenstellung. Die Referenzprüfung nennt unbekannte Meldungsmodule als Hinweis (`src/kern/meldung-v2.js`). Bestehende Meldungen bleiben gültig. Voraussetzung für die Umstellung von KRITIS-LEAD auf v2.
+- **Kennzahlen-Bausteine 0.3 (SR-2026-W45-02):** Thessa streicht den LEAD-Bezug der Einsatzmeldungen (`bezug_lead`, Thessa G12); die Lagemeldung ordnet sie zu. Eingebettet unter `formate/fremd/thessa-kennzahlen/0.3/` (Thessa `a614ed4`); 0.2 und 0.1 bleiben lesbar. `npm run fremdschemata` bündelt jede überlieferte Fassung mit ihrem eigenen Thessa-Commit (`herkunft.json`, `fassungen[].commit`).
+
+### Geändert
+
+- Kernschema-Pin in `herkunft.json` nachgezogen (Thessa pinnt das Kernschema mit Meldungsmodulen); gebündelte Schemata 0.1 und 0.2 nur im Vermerk geändert.
+- Landesprofil 1.2.3: Bausteine im Begleitordner `orkantief-ilka-thessa` in Fassung 0.3, LIESMICH und Vorschlag für die Prüffrage ohne LEAD-Bezug.
+- **Austauschvertrag 0.5 (SR-2026-W45-04):** Abschnitt 9 „Zulieferer aus der App-Familie“: Meldungen aus KRITIS-LEAD, Material aus Thessa, Zuordnung von oben (n:m), Präfix `KRITIS-` für Sachverhalte von Betreibern.
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 4), Spezifikation 0.7.5. Versionsangaben 0.7.5 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 705); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-meldung-v2.test.ts`: Meldungsmodule optional und mit Hinweis, Pflicht-Meldungsmodul aus der Zusammenstellung, Doppeleinbindung abgelehnt; Kennungen mit Präfix `KRITIS-` (gültig und ungültig).
+- `tests/format/thessa-baustein.test.ts`: Herkunft je Fassung mit Commit, Bündelung 0.3/0.2/0.1 aktuell, Begleitbausteine 0.3 nach Original und gebündeltem Schema, 0.3 ohne `bezug_lead`, 0.2 weiter mit; `tests/pipeline/baustein.test.ts` und `tests/profil/landesprofil.test.ts` auf 0.3.
 
 ## [0.7.4] – 04.11.2026
 
@@ -111,7 +133,6 @@ Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von 
 - **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
 - **Grunddesign, Klarstellungen zu OF-7 und OF-9:** „Zurück: …“ und „Weiter: …“ stehen nur in Schrittfolgen, Bereiche ohne Reihenfolge haben keine Blätterknöpfe (LD-A05); Befunde mit Sprung zum Feld gelten für Eingaben in Formularen, nicht für die Prüfung eines geladenen Datenstands (LD-E04). Beides entspricht der Referenzumsetzung: „Weiter: …“ gibt es nur in der Erfassung (`src/ui/Meldung.tsx`), Befunde mit Sprung nur im Prüfschritt (`src/ui/Pruefen.tsx`).
 - Versionsangaben 0.7.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 704).
-
 ## [0.7.3] – 03.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6). Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) und #136 (0.7.2) als 0.7.3 umnummeriert.

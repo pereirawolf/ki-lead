@@ -6,8 +6,8 @@
 import { pruefeRoh } from "./validierung";
 
 export const BAUSTEIN_FORMAT = "Thessa-Kennzahlen";
-/** Bekannte Fassungen; 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
-export const BAUSTEIN_FASSUNGEN = ["0.2", "0.1"] as const;
+/** Bekannte Fassungen; 0.3 ohne bezug_lead (Thessa G12, SR-2026-W45-02), 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
+export const BAUSTEIN_FASSUNGEN = ["0.3", "0.2", "0.1"] as const;
 export type BausteinFassung = (typeof BAUSTEIN_FASSUNGEN)[number];
 /** Einheiten der Kennzahlen eines Bausteins (Thessa, docs/DATENMODELL.md) */
 export const BAUSTEIN_EINHEITEN = ["Einsatzmittel", "Einsätze", "Einsatzkräfte", "Ausrückebereiche", "Einheiten"] as const;

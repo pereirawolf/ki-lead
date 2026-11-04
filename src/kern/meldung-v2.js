@@ -43,20 +43,31 @@ export function stelleSchemaZusammen(z, lade) {
   s.title = z.title;
   if (z.description) s.description = z.description;
   const teile = [`Kern ${kern.properties.schema.const} ${z.kern || "kern.schema.json"}`];
-  const modulSlot = s.$defs.module;
-  const pflicht = [];
-  for (const [name, angabe] of Object.entries(z.module || {})) {
-    const m = lade(angabe.datei);
-    const praefix = `modul_${name.replace(/-/g, "_")}_`;
-    const { $schema: _s, $id: _i, title, $defs, ...wurzel } = m;
-    for (const [k, v] of Object.entries($defs || {})) s.$defs[praefix + k] = verweiseUmbenennen(v, praefix);
-    s.$defs[`modul_${name.replace(/-/g, "_")}`] = { title, ...verweiseUmbenennen(wurzel, praefix) };
-    modulSlot.properties[name] = { $ref: `#/$defs/modul_${name.replace(/-/g, "_")}` };
-    if (angabe.pflicht) pflicht.push(name);
-    teile.push(`Modul ${name} ${m.properties?.fassung?.const ?? ""}`.trim());
+  // Module je Sachverhalt ("module") und für die ganze Meldung ("meldungsmodule", seit SR-2026-W45-01)
+  for (const [schluessel, slotName, art] of [
+    ["module", "module", "Modul"],
+    ["meldungsmodule", "meldungsmodule", "Meldungsmodul"],
+  ]) {
+    const modulSlot = s.$defs[slotName];
+    const pflicht = [];
+    for (const [name, angabe] of Object.entries(z[schluessel] || {})) {
+      const m = lade(angabe.datei);
+      const praefix = `modul_${name.replace(/-/g, "_")}_`;
+      if (s.$defs[`modul_${name.replace(/-/g, "_")}`]) throw new Error(`Modul ${name} ist mehrfach eingebunden`);
+      const { $schema: _s, $id: _i, title, $defs, ...wurzel } = m;
+      for (const [k, v] of Object.entries($defs || {})) s.$defs[praefix + k] = verweiseUmbenennen(v, praefix);
+      s.$defs[`modul_${name.replace(/-/g, "_")}`] = { title, ...verweiseUmbenennen(wurzel, praefix) };
+      modulSlot.properties[name] = { $ref: `#/$defs/modul_${name.replace(/-/g, "_")}` };
+      if (angabe.pflicht) pflicht.push(name);
+      teile.push(`${art} ${name} ${m.properties?.fassung?.const ?? ""}`.trim());
+    }
+    if (pflicht.length) {
+      modulSlot.required = pflicht;
+      // Ein Pflichtmodul auf Meldungsebene macht das sonst optionale Feld "module" der Meldung zur Pflicht
+      if (slotName === "meldungsmodule") s.required = [...s.required, "module"];
+    }
+    if (z.weitere_module === false) modulSlot.additionalProperties = false;
   }
-  if (pflicht.length) modulSlot.required = pflicht;
-  if (z.weitere_module === false) modulSlot.additionalProperties = false;
 
   const e = z.einschraenkungen || {};
   if (e.absender_gebiete) {
@@ -849,6 +860,8 @@ export function pruefeReferenzen(m) {
     } else if (bevs) for (const [k, a] of Object.entries(bevs.lagenradar || {})) pruefeIds(a.quellen, `${p}.module.${MODUL_BEVS}.lagenradar.${k}.quellen`);
     for (const name of Object.keys(s.module || {})) if (name !== MODUL_BEVS) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
   });
+  // Meldungsmodule (SR-2026-W45-01): die App kennt noch keines; Inhalt bleibt erhalten, ohne eigene Prüfung
+  for (const name of Object.keys(m.module || {})) hinweis(`module.${name}`, "unbekanntes Meldungsmodul, ungeprüft übernommen");
   for (const id of quellIds) if (!zitiert.has(id)) hinweis("quellen", `${id} verzeichnet, aber nicht zitiert`);
   return b;
 }

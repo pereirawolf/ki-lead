@@ -319,7 +319,7 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
 });
 
 describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
-  it("fünf Bausteine der Fassung 0.2, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
+  it("fünf Bausteine der Fassung 0.3, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
     const p = (await profil("lead-thueringen")).profil!;
     const bausteine = thessaBausteine(p);
     expect(bausteine.map((b) => b.name)).toEqual([
@@ -330,7 +330,7 @@ describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () 
       "kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json",
     ]);
     for (const b of bausteine) {
-      expect(b.daten).toMatchObject({ format: "Thessa-Kennzahlen", fassung: "0.2", fiktiv: true });
+      expect(b.daten).toMatchObject({ format: "Thessa-Kennzahlen", fassung: "0.3", fiktiv: true });
       const m = await dateiLesen(new File([b.text], b.name), p);
       expect(m.eingang, b.name).toBeUndefined();
       expect(m.meldung, b.name).toBeUndefined();

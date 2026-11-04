@@ -1003,3 +1003,13 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 |---|---|---|
 | Kreisschlüssel und Namen der 22 Gebietskörperschaften wie im CSV-Export der Verwaltungsstruktur des Landesamts (Stand 01.01.2026), Landkreise mit „Landkreis“ | Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik … › Schlüssel und Namen der 22 Gebietskörperschaften … | `tests/profil/landesprofil.test.ts` |
 | Quelle mit URL, Stand und Abruf im Kopf der Kreisliste und im README des Profils | … › Quelle mit Stand und Abruf … | `tests/profil/landesprofil.test.ts` |
+
+## Schwester-Repos (0.7.5, Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-01, -02 und -04, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Meldungsmodule optional, unbekannte zulässig mit Hinweis, `fassung` Pflicht; Pflicht-Meldungsmodul der Zusammenstellung macht `module` zur Pflicht und wird geprüft; Doppeleinbindung ist ein Fehler | LEAD-Meldung-v2: Meldungsmodule (SR-2026-W45-01) › … | `tests/format/lead-meldung-v2.test.ts` |
+| Präfix `KRITIS-` mit ein bis drei Segmenten des Betreiberkürzels gültig; Umlaut, vier Segmente, Segment über acht Zeichen ungültig | LEAD-Meldung-v2: Kennungen der Betreiber (SR-2026-W45-04, …) › … | `tests/format/lead-meldung-v2.test.ts` |
+| Herkunft je überlieferter Fassung mit Prüfsumme und Commit; Bündelung 0.3, 0.2, 0.1 aktuell; Begleitbausteine 0.3 gültig, auch als 0.2; 0.3 lehnt `bezug_lead` ab, 0.2 nimmt es an | UP-2026-W45-01: eingebettetes Schema … › …; SR-2026-W45-02: Fassung 0.3 kennt kein bezug_lead mehr … | `tests/format/thessa-baustein.test.ts` |
+| Baustein 0.3 als Materialart, unbekannte Fassung mit Liste 0.3, 0.2, 0.1 | UP-2026-W45-01: Erkennung als Materialart … › … | `tests/pipeline/baustein.test.ts` |
+| Begleitordner des Landesprofils mit Bausteinen 0.3 | KP-2026-W45-02: … › fünf Bausteine der Fassung 0.3 … | `tests/profil/landesprofil.test.ts` |
