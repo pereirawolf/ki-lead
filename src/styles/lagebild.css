@@ -1100,3 +1100,40 @@ fieldset.lb-herkunft {
 .lb-karte header .lb-absender-voll {
   color: inherit;
 }
+
+/* Kennzahlen in zwei Gruppen „Lage“ und „Redaktion“ (seit UX-2026-W45-06) */
+.lb-kennzahl-gruppen {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+  gap: 0.6rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.lb-kennzahl-gruppe .lb-kennzahlen {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  margin-bottom: 0;
+}
+
+.lb-kennzahl-titel {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+.lb-kennzahl.lb-kennzahl-null {
+  border-left-color: var(--linie);
+  background: transparent;
+}
+
+.lb-kennzahl.lb-kennzahl-null b {
+  color: var(--tinte-leise);
+}
+
+@media (max-width: 860px) {
+  .lb-kennzahl-gruppen {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

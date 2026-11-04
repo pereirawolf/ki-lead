@@ -103,6 +103,18 @@ function Balken({ titel, werte, farbe }: { titel: string; werte: [string, number
   );
 }
 
+/** Kennzahl als Knopf; mit 0 zurückgenommen, die Randfarbe nur bei Anzahl (seit UX-2026-W45-06) */
+function Kachel({ zahl, text, rand, gutBeiNull, onClick }: { zahl: number; text: string; rand?: Farbe; gutBeiNull?: boolean; onClick: () => void }) {
+  const zusatz = zahl ? (rand ? `lb-rand-${rand}` : "") : gutBeiNull ? "lb-rand-gruen" : "lb-kennzahl-null";
+  const klasse = ["lb-kennzahl", zusatz].filter(Boolean).join(" ");
+  return (
+    <button type="button" className={klasse} onClick={onClick}>
+      <b>{zahl}</b>
+      <span>{text} →</span>
+    </button>
+  );
+}
+
 /** Hängt neue Dateien an, ohne inhaltsgleiche zu verdoppeln; die Reihenfolge des Bestands bleibt. */
 export function zusammenfuehren(bestand: LagebildDatei[], neu: LagebildDatei[]): LagebildDatei[] {
   const ids = new Set(bestand.map((d) => inhaltsKennung(d.text)));
@@ -632,74 +644,49 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
 
           {reiter === "uebersicht" && (
             <div>
-              <div className="lb-kennzahlen">
-                <div className="lb-kennzahl">
-                  <b>{kz.meldungen}</b>
-                  <span>Meldungen</span>
-                </div>
-                <div className="lb-kennzahl">
-                  <b>{kz.sachverhalte}</b>
-                  <span>Sachverhalte</span>
-                </div>
-                {/* Mit Anzahl öffnen sie die passenden Sachverhalte (seit 0.6.20, UX-2026-W44-10) */}
-                {kz.hoch.map((h) =>
-                  h.anzahl ? (
-                    <button
-                      key={h.stufe}
-                      type="button"
-                      className={`lb-kennzahl lb-rand-${h.farbe}`}
-                      onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, beurteilung: h.stufe })}
-                    >
-                      <b>{h.anzahl}</b>
-                      <span>
-                        {lBeurteilung}: {h.stufe} →
-                      </span>
-                    </button>
-                  ) : (
-                    <div key={h.stufe} className="lb-kennzahl">
-                      <b>{h.anzahl}</b>
-                      <span>
-                        {lBeurteilung}: {h.stufe}
-                      </span>
-                    </div>
-                  ),
-                )}
-                {kz.verschaerfung &&
-                  (kz.verschaerfung.anzahl ? (
-                    <button
-                      type="button"
-                      className="lb-kennzahl lb-rand-rot"
-                      onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, tendenz: kz.verschaerfung!.wert })}
-                    >
-                      <b>{kz.verschaerfung.anzahl}</b>
-                      <span>
-                        {lTendenz}: {kz.verschaerfung.wert} →
-                      </span>
-                    </button>
-                  ) : (
-                    <div className="lb-kennzahl">
-                      <b>{kz.verschaerfung.anzahl}</b>
-                      <span>
-                        {lTendenz}: {kz.verschaerfung.wert}
-                      </span>
-                    </div>
-                  ))}
-                <button
-                  type="button"
-                  className={red.anzahl ? "lb-kennzahl lb-rand-orange" : "lb-kennzahl lb-rand-gruen"}
-                  onClick={() => reiterZeigen("redaktion")}
-                >
-                  <b>{red.anzahl}</b>
-                  <span>Redaktionshinweise →</span>
-                </button>
-                <button
-                  type="button"
-                  className={kz.schemaAbweichungen ? "lb-kennzahl lb-rand-rot" : "lb-kennzahl lb-rand-gruen"}
-                  onClick={() => reiterZeigen("redaktion")}
-                >
-                  <b>{kz.schemaAbweichungen}</b>
-                  <span>Meldungen mit Schemaabweichung →</span>
-                </button>
+              {/* Zwei Gruppen, jede Kachel führt zur passenden Ansicht; Kacheln mit 0 zurückgenommen (seit UX-2026-W45-06) */}
+              <div className="lb-kennzahl-gruppen">
+                <section className="lb-kennzahl-gruppe" aria-label="Lage">
+                  <h3 className="lb-kennzahl-titel" aria-hidden="true">
+                    Lage
+                  </h3>
+                  <div className="lb-kennzahlen">
+                    <Kachel zahl={kz.meldungen} text="Meldungen" onClick={() => reiterZeigen("meldungen")} />
+                    <Kachel zahl={kz.sachverhalte} text="Sachverhalte" onClick={() => sachverhalteZeigen(KEIN_FILTER)} />
+                    {kz.hoch.map((h) => (
+                      <Kachel
+                        key={h.stufe}
+                        zahl={h.anzahl}
+                        text={`${lBeurteilung}: ${h.stufe}`}
+                        rand={h.farbe}
+                        onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, beurteilung: h.stufe })}
+                      />
+                    ))}
+                    {kz.verschaerfung && (
+                      <Kachel
+                        zahl={kz.verschaerfung.anzahl}
+                        text={`${lTendenz}: ${kz.verschaerfung.wert}`}
+                        rand="rot"
+                        onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, tendenz: kz.verschaerfung!.wert })}
+                      />
+                    )}
+                  </div>
+                </section>
+                <section className="lb-kennzahl-gruppe" aria-label="Redaktion">
+                  <h3 className="lb-kennzahl-titel" aria-hidden="true">
+                    Redaktion
+                  </h3>
+                  <div className="lb-kennzahlen">
+                    <Kachel zahl={red.anzahl} text="Redaktionshinweise" rand="orange" gutBeiNull onClick={() => reiterZeigen("redaktion")} />
+                    <Kachel
+                      zahl={kz.schemaAbweichungen}
+                      text="Meldungen mit Schemaabweichung"
+                      rand="rot"
+                      gutBeiNull
+                      onClick={() => reiterZeigen("redaktion")}
+                    />
+                  </div>
+                </section>
               </div>
 
               {status && (
