@@ -3202,6 +3202,35 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
       "pr": 145
+    },
+    {
+      "id": "KL-2026-W45-01",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "entschieden_am": "2026-11-04",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt, required (Z. 1034)"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.bewertung, required (Z. 697)"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt_vollstaendig, bewertung (Z. 1110–1120)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 6, zur_freigabe und freigegeben (Z. 138)"
+        }
+      ],
+      "kurz": "Bewertung je Sachverhalt bei absender.ebene „Betreiber“ nicht Pflicht (fehlt = nicht erhoben), für alle übrigen Ebenen unverändert; Variante A, Voraussetzung für KRITIS-LEAD auf v2; Thessa pinnt das Kernschema neu.",
+      "status": "umgesetzt",
+      "pr": 146
     }
   ]
 }
