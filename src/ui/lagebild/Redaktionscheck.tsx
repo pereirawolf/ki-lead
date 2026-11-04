@@ -7,7 +7,7 @@ import { bezeichnung } from "../../kern/ui";
 import { datumDE, exportStempel, jetztLokal, mitDatum } from "../../kern/ausgabe";
 import { zeitpunktDE } from "../../kern/zeit";
 import { APP_KENNUNG } from "../../kern/version";
-import { svKennung, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
+import { svKennung, zeitpunktVon, type LagebildEintrag, type SvEintrag } from "../../lagebild/lagebild";
 import {
   ABSCHNITTE,
   befundListe,
@@ -37,6 +37,7 @@ export function Redaktionscheck({
   setStichtag,
   stichtagAlter,
   zurMeldung,
+  zumSachverhalt,
   bearbeitung,
   setBearbeitung,
 }: {
@@ -57,6 +58,8 @@ export function Redaktionscheck({
   stichtagAlter: number;
   /** Schaltfläche „Meldung in der Liste zeigen“ */
   zurMeldung: (id: string, bezug?: string) => ReactNode;
+  /** Schaltflächen „Zum Sachverhalt“ und „In der Erfassung öffnen“ (seit UX-2026-W45-22) */
+  zumSachverhalt: (s: SvEintrag) => ReactNode;
   /** Bearbeitungsstand der Befunde (seit UX-2026-W45-19) */
   bearbeitung: Record<string, Bearbeitung>;
   setBearbeitung: (b: Record<string, Bearbeitung>) => void;
@@ -89,6 +92,13 @@ export function Redaktionscheck({
   };
 
   const offen = offeneBefunde(red, profil, bearbeitung);
+  /** Folgeaktionen eines Befunds zu einem Sachverhalt: Meldung, Sachverhalt, Erfassung */
+  const svAktion = (x: SvEintrag) => (
+    <>
+      {zurMeldung(x.eintrag.id, svKennung(x, profil))}
+      {zumSachverhalt(x)}
+    </>
+  );
   // Filter nach Einstufung und Bearbeitung (seit UX-2026-W45-21)
   const [stufe, setStufe] = useState<"" | "alert" | "warn" | "info">("");
   const [bearbeiteteAusblenden, setBearbeiteteAusblenden] = useState(false);
@@ -252,7 +262,7 @@ export function Redaktionscheck({
                 titel={<SvTitel s={z.sv} profil={profil} />}
                 schluessel={befundSchluessel.zeit(z)}
                 name={svKennung(z.sv, profil)}
-                aktion={zurMeldung(z.sv.eintrag.id, svKennung(z.sv, profil))}
+                aktion={svAktion(z.sv)}
               >
                 {ks.handlungsrelevant} {z.text}
                 {z.datum ? `\nGewertet: ${zeitpunktDE(z.datum, zone)}${z.genauigkeit === "tag" ? " (ohne Uhrzeit: Tagesende angenommen)" : ""}` : ""}
@@ -371,7 +381,7 @@ export function Redaktionscheck({
               name={k.kennung}
               marke={k.art === "fortschreibung" ? "Fortschreibung (Kennung)" : k.art === "doppelt" ? "Kennung mehrfach" : "Bezug nicht geladen"}
               titel={k.kennung}
-              aktion={zurMeldung(k.sachverhalte[0]?.eintrag.id ?? "", k.sachverhalte[0] ? svKennung(k.sachverhalte[0], profil) : undefined)}
+              aktion={k.sachverhalte[0] ? svAktion(k.sachverhalte[0]) : undefined}
             >
               {kennungsText(k, profil)}
               {k.art === "fortschreibung"
@@ -389,7 +399,7 @@ export function Redaktionscheck({
               schluessel={befundSchluessel.marker(x)}
               name={svKennung(x.sv, profil)}
               titel={<SvTitel s={x.sv} profil={profil} />}
-              aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}
+              aktion={svAktion(x.sv)}
             >
               {x.kennsatz} – {x.text}
             </Punkt>
@@ -402,7 +412,7 @@ export function Redaktionscheck({
               schluessel={befundSchluessel.nachlauf(s)}
               name={svKennung(s, profil)}
               titel={<SvTitel s={s} profil={profil} />}
-              aktion={zurMeldung(s.eintrag.id, svKennung(s, profil))}
+              aktion={svAktion(s)}
             >
               {lTendenz} „{s.tendenz}“ ohne Abschlussvermerk. Ist der Zielzustand erreicht, bestehen Folgewirkungen fort?
               {ks.abschluss
@@ -459,7 +469,7 @@ export function Redaktionscheck({
                 titel={<SvTitel s={x.sv} profil={profil} />}
                 schluessel={befundSchluessel.kern(x)}
                 name={svKennung(x.sv, profil)}
-                aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}
+                aktion={svAktion(x.sv)}
               >
                 {x.fehlt.join(" · ")} – ggf. bei der meldenden Stelle nachfragen oder in der eigenen Fassung ergänzen.
               </Punkt>

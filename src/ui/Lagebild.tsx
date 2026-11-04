@@ -31,6 +31,7 @@ import {
   sammelErinnerungMailto,
   schwere,
   stelleVon,
+  svKennung,
   tendenzStufen,
   zaehle,
   zeitpunktVon,
@@ -39,6 +40,7 @@ import {
   type LagebildEintrag,
   type LagebildFehler,
   type StatusZeile,
+  type SvEintrag,
 } from "../lagebild/lagebild";
 import { befundListe, offeneBefunde, redaktionscheck, type Bearbeitung } from "../lagebild/redaktion";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
@@ -383,6 +385,33 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
       Meldung in der Liste zeigen
     </button>
   );
+
+  // Vom Befund zum Sachverhalt (gefiltert und aufgeklappt) oder in die Erfassung (seit UX-2026-W45-22)
+  const [svOffen, setSvOffen] = useState<string | null>(null);
+  const zumSachverhalt = (s: SvEintrag) => {
+    const kennung = r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "";
+    const name = svKennung(s, profil);
+    return (
+      <>
+        <button
+          type="button"
+          className="knopf leise klein"
+          aria-label={`Zum Sachverhalt: ${name}`}
+          onClick={() => {
+            setSvOffen(`${s.eintrag.id}-${s.index}`);
+            sachverhalteZeigen({ ...KEIN_FILTER, suche: kennung || s.bezeichnung });
+          }}
+        >
+          Zum Sachverhalt
+        </button>
+        {!s.eintrag.fremd && (
+          <button type="button" className="knopf leise klein" aria-label={`In der Erfassung öffnen: ${name}`} onClick={() => oeffnen(s.eintrag.daten)}>
+            In der Erfassung öffnen
+          </button>
+        )}
+      </>
+    );
+  };
 
   const csv = () =>
     dateiAnbieten(alsCsv(rohtabelle(eintraege, profil)), mitDatum(exportStempel(zone, new Date(), "tag"), titel, "csv"), "text/csv;charset=utf-8");
@@ -1038,7 +1067,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             (sortiert.length === 0 ? (
               <p className="leer">Keine Sachverhalte in den geladenen Meldungen.</p>
             ) : (
-              <Sachverhaltsliste profil={profil} sortiert={sortiert} filter={svFilter} setFilter={setSvFilter} kennungsStelle={kennungsStelle} />
+              <Sachverhaltsliste
+                profil={profil}
+                sortiert={sortiert}
+                filter={svFilter}
+                setFilter={setSvFilter}
+                kennungsStelle={kennungsStelle}
+                offen={svOffen}
+              />
             ))}
 
           {reiter === "radar" &&
@@ -1093,6 +1129,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               setStichtag={setStichtag}
               stichtagAlter={stichtagAlter}
               zurMeldung={zurMeldung}
+              zumSachverhalt={zumSachverhalt}
               bearbeitung={bearbeitung}
               setBearbeitung={setBearbeitung}
             />

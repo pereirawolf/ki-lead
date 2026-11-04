@@ -61,6 +61,7 @@ export function Sachverhaltsliste({
   filter,
   setFilter,
   kennungsStelle,
+  offen,
 }: {
   profil: Profil;
   /** nach Schwere sortiert, bereits nach Herkunft gefiltert */
@@ -69,6 +70,8 @@ export function Sachverhaltsliste({
   setFilter: (f: SvFilter) => void;
   /** Kennung → meldende Stelle, zum Auflösen des Bezugs */
   kennungsStelle: Map<string, string>;
+  /** Schlüssel „<Meldung>-<Index>“ eines aufgeklappt zu zeigenden Sachverhalts (Sprung aus dem Redaktionscheck) */
+  offen?: string | null;
 }) {
   const ui = profil.ui;
   const r = ui.rollen;
@@ -120,7 +123,7 @@ export function Sachverhaltsliste({
     const lOrt = r.sv_ort ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`) : "Ort";
     return (
       <li key={`${s.eintrag.id}-${s.index}`} className="lb-sv-zeile">
-        <details>
+        <details key={offen === `${s.eintrag.id}-${s.index}` ? "ziel" : "liste"} open={offen === `${s.eintrag.id}-${s.index}` || undefined}>
           {/* Kopf gegliedert: Bezeichnung mit Marken, Angaben einzeln, Ort eigene Zeile gekürzt (seit UX-2026-W45-13) */}
           <summary>
             <span className="lb-sv-kopf">

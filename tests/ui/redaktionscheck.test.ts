@@ -213,3 +213,23 @@ it("UX-2026-W45-21: Filter nach Einstufung, Bearbeitete ausblenden, Textbaustein
   expect(punkte()).toBe(alle - 1);
   for (const d of document.querySelectorAll<HTMLDetailsElement>(".lb-baustein-text")) expect(d.open).toBe(false);
 });
+
+it("UX-2026-W45-22: vom Befund zum Sachverhalt (gefiltert und aufgeklappt) und in die Erfassung", async () => {
+  ablegen([
+    { id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" },
+    { id: "b", text: "Lage" },
+  ]);
+  const geoeffnet: any[] = [];
+  const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
+  await einhaengen(React.createElement(LagebildAnsicht, { profil: p, uebergeben: () => {}, oeffnen: (m: any) => void geoeffnet.push(m) }));
+  await bisWahr(() => document.body.textContent!.includes("b.json"));
+  await redaktionscheck();
+  await klick(document.querySelector<HTMLButtonElement>('[aria-label^="Zum Sachverhalt: "]')!);
+  await bisWahr(() => expect(document.querySelector(".lb-reiter [aria-current]")?.textContent).toBe("Sachverhalte"));
+  expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile").length).toBeGreaterThanOrEqual(1);
+  expect(document.querySelector(".lb-sv-zeile details[open]")).not.toBeNull();
+  await redaktionscheck();
+  await klick(document.querySelector<HTMLButtonElement>('.lb-redaktion [aria-label^="In der Erfassung öffnen: "]')!);
+  expect(geoeffnet).toHaveLength(1);
+  expect(geoeffnet[0].meldende_stelle).toBe("Stelle a");
+});
