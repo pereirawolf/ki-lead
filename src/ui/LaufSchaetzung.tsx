@@ -24,8 +24,8 @@ function LaufSchaetzungText({ stufen, einstellungen, profil }: { stufen: Schaetz
     <p className="hinweis laufschaetzung">
       Voraussichtlich (Erfahrungswerte aus Testläufen, vorsichtig gerundet):{" "}
       {werte.map((w) => stufenText(w.s.kurz, w.modell, w.aufwand, w.sch) + (w.eu && w.sch.usd ? " inkl. 10 % EU-Aufschlag" : "")).join("; ")}.
-      {werte.length > 1 && gesamt ? ` Zusammen etwa ${kostenText(gesamt)}.` : ""} Viel Material, viele Websuchen und Seitenabrufe oder eine Reparatur in S3
-      können den Lauf verlängern; maßgeblich ist die Abrechnung des Anbieters.
+      {werte.length > 1 && gesamt ? ` Zusammen etwa ${kostenText(gesamt)}.` : ""} Viel Material, viele Sachverhalte, viele Websuchen und Seitenabrufe oder eine
+      Reparatur in S3 können den Lauf verlängern; maßgeblich ist die Abrechnung des Anbieters.
     </p>
   );
 }

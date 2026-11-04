@@ -224,9 +224,9 @@ describe("Punkte 1, 2, 7, 9, 10: Kopfzeile, Rahmen, S3, Zurücksetzen", () => {
   it("Kopfzeile mit Anzeigenamen und Schätzung, ohne S3; Schalter und Schätzung im Rahmen vor der Bestätigung", async () => {
     await erfassungZeigen();
     expect(document.querySelector(".modellwahl-titel")!.textContent).toBe("Modelle und Recherche für diesen Lauf");
-    // S1 Haiku „hoch“ 15–150 s, 0–0,03 USD; S2 Erfassung Opus „mittel“ 200–360 s, 1,40–2,30 USD
+    // S1 Haiku „hoch“ 15–150 s, 0–0,03 USD; S2 Erfassung Opus „mittel“ 200–810 s, 1,40–3,35 USD (seit 0.7.9, AV-2026-W45-01)
     expect(document.querySelector(".modellwahl-kurz")!.textContent!.trim()).toBe(
-      "S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–9 Minuten, 1,40–2,33 USD",
+      "S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–16 Minuten, 1,40–3,38 USD",
     );
     expect(kopfzeile()).not.toContain("abweichend");
     // Punkt 9: Schalter zuerst im Rahmen, Schätzung im Rahmen, Bestätigung danach

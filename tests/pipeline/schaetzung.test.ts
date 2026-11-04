@@ -5,15 +5,16 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AUFWAND_STUFEN, STANDARD, STANDARD_PROFILE } from "../../src/pipeline/einstellungen";
 import { ausgabePreis } from "../../src/anbieter/preise";
-import { dauerText, kostenText, MESSWERTE, MS_DAUER, schaetzeKurzfassung, schaetzeStufe, summe } from "../../src/pipeline/schaetzung";
+import { dauerText, gueteText, kostenText, MESSWERTE, MS_DAUER, schaetzeKurzfassung, schaetzeStufe, stufenText, summe } from "../../src/pipeline/schaetzung";
 import { LaufSchaetzung } from "../../src/ui/LaufSchaetzung";
 
 describe("Schätzung von Dauer und Kosten", () => {
   it("nutzt Messwerte für gemessene Kombinationen", () => {
+    // Obergrenze seit 0.7.9 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01)
     const s = schaetzeStufe("erfassung", "claude-opus-5-5", "medium");
-    expect(s).toEqual({ sekunden: [200, 360], usd: [1.4, 2.3], gemessen: true });
-    expect(dauerText(s.sekunden)).toBe("3–6 Minuten");
-    expect(kostenText(s.usd)).toBe("1,40–2,30 USD");
+    expect(s).toEqual({ sekunden: [200, 810], usd: [1.4, 3.35], gemessen: true });
+    expect(dauerText(s.sekunden)).toBe("3–14 Minuten");
+    expect(kostenText(s.usd)).toBe("1,40–3,35 USD");
     // S1 Haiku high: Verdichtungen „Ilka“ 88–95 s und höchstens 0,020 USD (0.4.27)
     expect(schaetzeStufe("s1", "claude-haiku-5-5", "high")).toEqual({ sekunden: [15, 150], usd: [0, 0.03], gemessen: true });
     expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "high").sekunden)).toBe("bis 3 Minuten");
@@ -39,10 +40,13 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(f.sekunden).toBeNull();
     // Fable kostet je Ausgabetoken das 2,5-Fache von Opus
     expect(f.usd![0]).toBeCloseTo(1.4 * 2.5);
-    expect(f.usd![1]).toBeCloseTo(2.3 * 2.5);
+    expect(f.usd![1]).toBeCloseTo(3.35 * 2.5);
     // nicht gemessener Aufwand: Basis „medium“, Obergrenze verdoppelt
     const hoch = schaetzeStufe("erfassung", "claude-opus-5-5", "high");
-    expect(hoch.usd).toEqual([1.4, 4.6]);
+    expect(hoch.usd).toEqual([1.4, 6.7]);
+    // AV-2026-W45-02: dasselbe Modell mit anderer Stufe vor fremden Modellen gleicher Stufe (sonst Opus „high“ aus Astra)
+    expect(schaetzeStufe("erfassung", "gpt-6-astra", "medium")).toEqual({ sekunden: null, usd: [0.75, 2.8], gemessen: false });
+    expect(schaetzeStufe("erfassung", "claude-opus-5-5", "xhigh").usd![0]).toBeGreaterThanOrEqual(MESSWERTE["erfassung|claude-opus-5-5|medium"].usd[0]);
     expect(schaetzeStufe("erfassung", "unbekannt-1", "medium")).toEqual({ sekunden: null, usd: null, gemessen: false });
     expect(dauerText(null)).toBe("Dauer ohne Messwert");
     // Gleitkommawerte am Cent werden nicht über die Grenze hinaus gerundet (0.4.31)
@@ -97,8 +101,9 @@ describe("Schätzung von Dauer und Kosten", () => {
       }),
     );
     expect(html).toContain("S1 (claude-haiku-5-5, high): bis 3 Minuten, bis 0,03 USD");
-    expect(html).toContain("S2 (claude-opus-5-5, medium): 3–6 Minuten, 1,40–2,30 USD");
-    expect(html).toContain("Zusammen etwa 1,40–2,33 USD");
+    expect(html).toContain("S2 (claude-opus-5-5, medium): 3–14 Minuten, 1,40–3,35 USD");
+    expect(html).toContain("Zusammen etwa 1,40–3,38 USD");
+    expect(html).toContain("viele Sachverhalte");
   });
 
   // Gemessene Spannen je Kombination aus dem Vergleichslauf Ilka vom 24./25.10.2026 (Ergebnisbericht
@@ -138,6 +143,48 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(MESSWERTE["verdichtung|mistral-medium-3-5|high"]).toEqual({ sekunden: [90, 240], usd: [0.2, 0.45] });
     expect(MESSWERTE["verdichtung|mistral-large-4|high"]).toEqual({ sekunden: [150, 270], usd: [0.1, 0.25] });
     expect(MESSWERTE["verdichtung|gpt-6-astra|xhigh"]).toEqual({ sekunden: [330, 540], usd: [0.9, 2.3] });
+  });
+
+  // Anbietervergleich vom 04.11.2026 (App 0.7.7, Profil 1.38.0): je ein interner Erfassungslauf der Standard-Profile, gleiches
+  // Material, ohne Recherche. Unabhängiges Soll: Kenndaten der Laufprotokolle (Mistral ohne EU-Aufschlag, Protokollwert ÷ 1,1).
+  const ANBIETERVERGLEICH: [string, number, number][] = [
+    ["s1|claude-haiku-5-5|high", 19.2, 0.0134], // 20261104-204127-m8r4
+    ["erfassung|claude-opus-5-5|medium", 636.3, 2.659], // 20261104-204127-m8r4
+    ["s1|gpt-6-luna|high", 90.9, 0.0099], // 20261104-202739-9snj
+    ["erfassung|gpt-6-astra|high", 619.9, 2.2155], // 20261104-202739-9snj
+    ["s1|mistral-small-2603|high", 31.2, 0.0112], // 20261104-202022-mfpv
+    ["erfassung|mistral-medium-3-5|high", 278.5, 0.4816], // 20261104-202022-mfpv
+  ];
+
+  it("AV-2026-W45-01 bis -03: Messwerte des Anbietervergleichs liegen in den Spannen, Einzelmessungen vorläufig", () => {
+    for (const [schluessel, sek, usd] of ANBIETERVERGLEICH) {
+      const m = MESSWERTE[schluessel];
+      expect(m, schluessel).toBeDefined();
+      expect(m.sekunden[0], `${schluessel}: Dauer von`).toBeLessThanOrEqual(sek);
+      expect(m.sekunden[1], `${schluessel}: Dauer bis`).toBeGreaterThanOrEqual(sek * 1.25);
+      expect(m.usd[0], `${schluessel}: USD von`).toBeLessThanOrEqual(usd);
+      expect(m.usd[1], `${schluessel}: USD bis`).toBeGreaterThanOrEqual(schluessel.startsWith("s1") ? usd : usd * 1.25);
+    }
+    // Werte von Hand nach der Regel (Maximum + 25 %, nach außen gerundet; Untergrenze aus der Verdichtung)
+    expect(MESSWERTE["erfassung|claude-opus-5-5|medium"]).toEqual({ sekunden: [200, 810], usd: [1.4, 3.35] });
+    expect(MESSWERTE["erfassung|gpt-6-astra|high"]).toEqual({ sekunden: [240, 780], usd: [1.5, 2.8], vorlaeufig: true });
+    expect(MESSWERTE["erfassung|mistral-medium-3-5|high"]).toEqual({ sekunden: [90, 360], usd: [0.2, 0.65], vorlaeufig: true });
+    // Anzeige: Einzelmessung als vorläufig gekennzeichnet, Hochrechnung als grob
+    const astra = schaetzeStufe("erfassung", "gpt-6-astra", "high");
+    expect(astra).toEqual({ sekunden: [240, 780], usd: [1.5, 2.8], gemessen: true, vorlaeufig: true });
+    expect(stufenText("S2", "gpt-6-astra", "high", astra)).toBe("S2 (gpt-6-astra, high): 4–13 Minuten, 1,50–2,80 USD (vorläufig, ein Messlauf)");
+    const mistral = schaetzeStufe("erfassung", "mistral-medium-3-5", "high", { mistral: { endpunkt: "eu" } });
+    expect(mistral.usd![0]).toBeCloseTo(0.22);
+    expect(mistral.usd![1]).toBeCloseTo(0.715);
+    expect(stufenText("S2", "mistral-medium-3-5", "high", mistral)).toBe("S2 (mistral-medium-3-5, high): 1–6 Minuten, 0,22–0,72 USD (vorläufig, ein Messlauf)");
+    expect(gueteText({ gemessen: true })).toBe("");
+    expect(gueteText({ gemessen: false })).toBe(" (grob, ohne Messwert)");
+    // Die Erfassung jedes Cloud-Standard-Profils hat seither eine Spanne mit Dauer
+    for (const [anbieter, p] of Object.entries(STANDARD_PROFILE).filter(([a]) => a !== "ollama" && a !== "stelle")) {
+      const e = schaetzeStufe("erfassung", p.modelle.erfassung, p.aufwand.erfassung);
+      expect(e.gemessen, `${anbieter} Erfassung`).toBe(true);
+      expect(e.sekunden, `${anbieter} Erfassung Dauer`).not.toBeNull();
+    }
   });
 
   it("TP-2026-W44-26: lokale Modelle über Ollama ohne Kosten und ohne Dauer", () => {

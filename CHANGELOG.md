@@ -104,6 +104,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ (Nachtrag vom 04.11.2026: Beispielprofil 1.38.0 und Landesprofil Thüringen 1.4.0 mit dem Pull Request „Lernschleife KW 45: Arbeitsanweisung Erfassung 1.11.0, Kodierleitfaden 1.9.0, Sammelmappe 3.23.0“, ohne Änderung der App) |
 | 0.7.7 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 45: Platzhalter im Zeitstrahl zuordnen; 0.7.7“ |
 | 0.7.8 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Betreibermeldungen ohne Bewertung; 0.7.8“ |
+| 0.7.9 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Schätzung von Dauer und Kosten der Erfassung; 0.7.9“ |
+
+## [0.7.9] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schaetzung_2026-W45.json` (Anbietervergleich vom 04.11.2026, Commit `6302c14`), AV-2026-W45-01 bis -03, freigegeben vom Herausgeber am 04.11.2026 (Erweiterung und vorläufige Einzelmessungen; Kenndaten mit Lauf-IDs). Messgrundlage: je ein interner Erfassungslauf der drei Standard-Profile mit demselben Material (Text, rund 74 kB, sechs Sachverhalte, ohne Recherche; App 0.7.7, Profil 1.38.0). Material, Laufprotokolle und Inhalte bleiben nach der Entscheidung vom 04.11.2026 intern; hier stehen nur Kenndaten.
+
+| Lauf | S1 | S2 | Dauer S2 | Kosten gesamt | Schätzung S2 bis 0.7.8 |
+|---|---|---|---|---|---|
+| 20261104-202022-mfpv | mistral-small-2603 „hoch“, 31 s | mistral-medium-3-5 „hoch“ (EU) | 279 s | 0,54 USD | 0,12–0,99 USD, grob |
+| 20261104-202739-9snj | gpt-6-luna „hoch“, 91 s | gpt-6-astra „hoch“ | 620 s | 2,23 USD | 3,50–11,50 USD, grob |
+| 20261104-204127-m8r4 | claude-haiku-5-5 „hoch“, 19 s | claude-opus-5-5 „mittel“ | 636 s | 2,67 USD | 3–6 Minuten, 1,40–2,30 USD (überschritten) |
+
+### Geändert
+
+- **Erfassung mit Opus „mittel“ (AV-2026-W45-01):** Obergrenze 810 s und 3,35 USD (Messwert plus 25 %, nach außen gerundet), Untergrenze unverändert; Anzeige „3–14 Minuten, 1,40–3,35 USD“.
+- **Vorläufige Einzelmessungen (AV-2026-W45-02, -03):** Erfassung mit gpt-6-astra „hoch“ 4–13 Minuten, 1,50–2,80 USD und mit Mistral Medium 3.5 „hoch“ 1–6 Minuten, 0,20–0,65 USD (am EU-Endpunkt 0,22–0,72 USD); Untergrenze aus der Verdichtung derselben Kombination, Obergrenze Messwert plus 25 %. Ausnahme von der Regel „Messwerte erst ab drei Läufen“, weil die Hochrechnung bei gpt-6-astra schon mit der Untergrenze um mehr als die Hälfte über dem Messwert lag und keine Dauer nannte; die Anzeige kennzeichnet sie als „vorläufig, ein Messlauf“ (`gueteText`, auch in der Wahl je Lauf). Ab drei Läufen werden die Spannen nach der Regel neu bestimmt.
+- **Hochrechnung zuerst aus demselben Modell:** Ist ein Modell nur mit anderer Stufe gemessen, geht diese Stufe dem Preisvergleich mit fremden Modellen vor (höherer Aufwand: doppelte Obergrenze, niedrigerer: halbe Untergrenze). Sonst hätte die neue Spanne von gpt-6-astra „hoch“ Opus „hoch“ unter Opus „mittel“ geschätzt.
+- Laufschätzung nennt viele Sachverhalte als Grund für längere Läufe. S1 lag bei allen drei Läufen in den Spannen (unverändert).
+- Spezifikation 0.7.9 (Abschnitt 5.1, Umsetzung M2 und Kostenanzeige). Versionsangaben 0.7.9 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 709); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/pipeline/schaetzung.test.ts`: Kenndaten der drei Läufe als unabhängiges Soll in den Spannen, Spannen von Hand nach der Regel, Kennzeichnung „vorläufig“, EU-Aufschlag, Hochrechnung aus demselben Modell, Laufschätzung mit neuen Werten.
 
 ## [0.7.8] – 04.11.2026
 

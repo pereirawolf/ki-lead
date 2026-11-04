@@ -50,7 +50,7 @@ import {
   type RechercheWerte,
   type StufeId,
 } from "../pipeline/recherchetiefe";
-import { dauerText, kostenText, schaetzeStufe, summe, type SchaetzArt } from "../pipeline/schaetzung";
+import { dauerText, gueteText, kostenText, schaetzeStufe, summe, type SchaetzArt } from "../pipeline/schaetzung";
 import type { Profil } from "../kern/typen";
 import { GrenzFeld, RECHERCHE_FELDER } from "./GrenzFeld";
 
@@ -316,7 +316,7 @@ function ModellWahlBlock({
           <p className="hinweis modellwahl-schaetzung" id={`${id}-${r}-schaetzung`}>
             Voraussichtlich {sch.sekunden ? `${dauerText(sch.sekunden)}, ` : ""}
             {kostenText(sch.usd)}
-            {sch.gemessen ? "" : " (grob, ohne Messwert)"}.
+            {gueteText(sch)}.
           </p>
         )}
       </fieldset>
