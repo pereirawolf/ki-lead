@@ -3054,6 +3054,133 @@
       "kurz": "Austauschvertrag 0.5: Zulieferer der App-Familie, Zuordnung von oben n:m, Präfix KRITIS- mit selbst gewähltem Betreiberkürzel.",
       "status": "umgesetzt",
       "pr": 140
+    },
+    {
+      "id": "LS-2026-W45-01",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Redaktionsmaßstab (Z. 115)"
+        }
+      ],
+      "kurz": "Arbeitsanweisung Erfassung 4.3: Richtwert keine Obergrenze; bei vorstrukturiertem Material gehen vollständige Maßnahmen und Empfehlungen vor, gekürzt wird zuerst die Lagebeschreibung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-02",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "5, Kurzantwort, Zeile ‚Nicht übernommen‘ (Z. 173)"
+        }
+      ],
+      "kurz": "Kurzantwortzeile „Nicht übernommen“ nennt auch gekürzte, zusammengefasste oder nicht zugeordnete Materialteile (bei Kennungen nur die Kennungen).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-03",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Meldungszuschnitt (Z. 98)"
+        }
+      ],
+      "kurz": "Sachverhaltsübergreifende Materialteile (Maßnahmen, Entscheidungsbedarfe, Szenarien, offene Fragen) den Sachverhalten zuordnen; Feld für übergreifende Lage in LEAD-Meldung-v2 vorgemerkt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-04",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 1, Grundregel 6 (Z. 18)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 1, Prüfreihenfolge Schritt 3 (Z. 30)"
+        }
+      ],
+      "kurz": "Kodierleitfaden Grundregel 6: gerundete amtliche Zählangaben an einer Stufengrenze tragen die niedrigere Stufe als Mindestwert.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-05",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 3, Beurteilung/Tendenz (Z. 65)"
+        }
+      ],
+      "kurz": "B05 Abschnitt 3: Prüfpunkt zum Zielkonflikt zwischen Hitzeschutz (5a) und Wasserspar- oder Nutzungsvorgaben (5b).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-06",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 5, Ansprechstellen (Z. 82)"
+        }
+      ],
+      "kurz": "B05 Abschnitt 5: Ansprechstellen für Teilprofil 5a um Gesundheits- und Sozialressorts, Rettungsdienstträger und Arbeitsschutz ergänzt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-07",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "2, Zeitmodus (Z. 37–45)"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.2 (Z. 94)"
+        }
+      ],
+      "kurz": "Zeitmodus „Übungslage“ mit fiktiver Zeitachse und Übungskennzeichnung in der Arbeitsanweisung Erfassung.",
+      "status": "abgelehnt",
+      "entschieden_am": "2026-11-04",
+      "grund": "Übungsläufe bleiben außerhalb des Regelwerks (Entscheidung des Herausgebers)."
     }
   ]
 }

@@ -1020,3 +1020,13 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 |---|---|---|
 | Chips und Segmente zeigen den Fokus als 3 px Ring in „fokus“ mit zweitem Ring in „fokus-abstand“; Chips bei grober Zeigereingabe mindestens 44 px | Grunddesign: rahmen.json › Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.6 | `tests/format/lead-design.test.ts` |
 | Fassung im Kopf von `design/README.md` gleich `rahmen.json` und im Änderungsverlauf eingetragen | Grunddesign: rahmen.json › Fassung in Beschreibung und rahmen.json gleich, mit Eintrag im Änderungsverlauf | `tests/format/lead-design.test.ts` |
+
+## Lernschleife KW 45 (Nachtrag vom 04.11.2026 zu 0.7.6, Befunddatei `ki-lead-befund_lernschleife_2026-W45.json`, LS-2026-W45-01 bis -06, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Arbeitsanweisung Erfassung (Beispiel- und Landesprofil): Richtwert keine Obergrenze, gekürzt wird zuerst die Lagebeschreibung | Lernschleife KW 45 › LS-2026-W45-01: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+| Kurzantwortzeile „Nicht übernommen“ nennt gekürzte, zusammengefasste oder nicht zugeordnete Materialteile, bei Kennungen nur die Kennungen | Lernschleife KW 45 › LS-2026-W45-02: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+| Kodierleitfaden (Beispiel- und Landesprofil) Grundregel 6 und Prüfreihenfolge: gerundete amtliche Zählangaben an einer Stufengrenze als Mindestwert, Schätzungen nach der Bandbreitenregel | Lernschleife KW 45, Kodierleitfaden › LS-2026-W45-04: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.9.0). LS-2026-W45-03, -05 und -06 sind Text- und Zuordnungsregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und der abgeleiteten Landesdateien prüfen die bestehenden Tests.

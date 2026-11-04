@@ -259,11 +259,13 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 7. **Abstimmung in Teil C** nach [AUSTAUSCH.md](AUSTAUSCH.md); dieser Entwurf ist die Vorlage dafür.
 8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet.
 9. **Lizenz:** Kern-, Modul- und zusammengestellte Schemata stehen wie die Meldungsschemata der Profile zusätzlich unter CC0 1.0 (LICENSE-CONTENT Nr. 2 e); zur Bestätigung durch den Herausgeber.
+10. **Sachverhaltsübergreifende Lage:** optionales Feld für Angaben, die für alle Sachverhalte einer Meldung gelten (übergreifende Kernaussage, übergreifende Maßnahmen und Entscheidungsbedarfe), vorgemerkt für die Umstellung der Profile (LS-2026-W45-03, Entscheidung des Herausgebers vom 04.11.2026). Zu klären: eigenes Kernfeld oder Meldungsmodul (Abschnitt 7); bis dahin ordnet die Arbeitsanweisung Erfassung (4.3) solche Teile den Sachverhalten zu.
 
 ## Änderungsverlauf
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
 | 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |
 | 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
 | 2.0 (Entwurf), Nachtrag 3 | 03.11.2026 | Format und Schemata unverändert: Stand der App-Unterstützung (Maske, Darstellung und Ausgabe, App 0.7.3, UP-2026-W45-03); Vorlage der Darstellungsdatei |

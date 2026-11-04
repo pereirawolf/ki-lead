@@ -8,6 +8,18 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.38.0 – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45.json` (Lernschleife KW 45 zu einem internen Erfassungslauf vom 04.11.2026 mit vorstrukturiertem Analysematerial, Commit `b4d35be`), Entscheidungen des Herausgebers vom 04.11.2026: LS-2026-W45-01, -02, -04, -05 angenommen; -03 und -06 angepasst; -07 abgelehnt. Zweite Stelle, weil sich Regeln der Arbeitsanweisung Erfassung und eine Kodierregel ändern; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert. Material, Laufprotokoll und Rückmeldungen des Laufs bleiben intern.
+
+- **Arbeitsanweisung Erfassung 1.11.0:** 4.3 Redaktionsmaßstab: Der Richtwert ist keine Obergrenze; bei Material mit ausgearbeiteten Maßnahmen und Empfehlungen gehen deren Vollständigkeit und Zuordnung vor, gekürzt wird zuerst die Lagebeschreibung (LS-2026-W45-01). 4.3 Zuschnitt: sachverhaltsübergreifende Teile des Materials (übergreifende Maßnahmen, Entscheidungsbedarfe, Szenarien, offene Fragen) werden den Sachverhalten zugeordnet (LS-2026-W45-03). 5 Kurzantwort: „Nicht übernommen“ nennt auch gekürzte, zusammengefasste oder nicht zugeordnete Materialteile, bei Kennungen im Material nur die Kennungen (LS-2026-W45-02). Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.9.0“.
+- **Kodierleitfaden 1.9.0 (LS-2026-W45-04, Option A):** Grundregel 6 und Prüfreihenfolge Schritt 3: Gerundete amtliche Zählangaben („rund“, „etwa“) an einer Stufengrenze tragen die niedrigere, sicher getragene Stufe als Mindestwert; modellierte Schätzungen und Hochrechnungen bleiben unter der Bandbreitenregel. Ein Kurzbeispiel in Abschnitt 7.
+- **SOP-LEAD-Sammelmappe 3.23.0:** B05 2.3.0 mit Prüfpunkt zum Zielkonflikt der Teilprofile 5a und 5b (LS-2026-W45-05) und ergänzten Ansprechstellen für 5a (LS-2026-W45-06); Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **LEAD-Meldung-v2 (Folgeaufgabe zu LS-2026-W45-03):** optionales Feld für die sachverhaltsübergreifende Lage in `docs/LEAD-MELDUNG-V2.md`, Abschnitt 13 Nr. 10, für die Umstellung der Profile vorgemerkt.
+- **Nicht übernommen:** LS-2026-W45-07 (Zeitmodus „Übungslage“); Übungsläufe bleiben außerhalb des Regelwerks.
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Teil A 3.23.0 und Kodierleitfaden 1.9.0 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend; die Kodierregel gilt über den Verweis auf Grundregel 6).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.37.0 – 04.11.2026
 
 Grundlage: Konzeptvorschlag „Querschnittsbaustein C18 – Besondere Belange und Schutzbedarfe von Menschen“, Entscheidungen des Herausgebers vom 04.11.2026 (BB-2026-W45-01 bis -06). Zweite Stelle: neuer Baustein und geänderte Querschnittsprüfung A.9.2; Schema, Darstellungsdatei und Kodierleitfaden unverändert, bestehende Meldungen werden nicht umkodiert.

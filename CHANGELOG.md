@@ -101,7 +101,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
 | 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
 | 0.7.5 | letzter Commit des Pull Requests „Schwester-Repos: Meldungsmodule, Thessa-Kennzahlen 0.3, Austauschvertrag 0.5; 0.7.5“ |
-| 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ |
+| 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ (Nachtrag vom 04.11.2026: Beispielprofil 1.38.0 und Landesprofil Thüringen 1.4.0 mit dem Pull Request „Lernschleife KW 45: Arbeitsanweisung Erfassung 1.11.0, Kodierleitfaden 1.9.0, Sammelmappe 3.23.0“, ohne Änderung der App) |
 
 ## [0.7.6] – 04.11.2026
 

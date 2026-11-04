@@ -10,13 +10,28 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.22.0 vom 04.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.23.0 vom 04.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.22.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.23.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.23.0] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45.json` (Lernschleife KW 45 zu einem internen Erfassungslauf vom 04.11.2026, Commit `b4d35be`), Entscheidungen des Herausgebers vom 04.11.2026. Zweite Stelle nach der Versionierungsregel: neuer Prüfpunkt und ergänzte Ansprechstellen in B05. Material, Laufprotokoll und Rückmeldungen des Laufs bleiben intern und sind nicht Teil des Repositorys. Die Kodierregel zu gerundeten Angaben (LS-2026-W45-04) steht nach A.10.2 nur im Kodierleitfaden (1.9.0).
+
+### Geändert
+
+- **B05 Extremhitze / Dürre 2.3.0 (auf 2.2.1 mit dem Verweis auf C18), Abschnitt 3 (LS-2026-W45-05):** Prüfpunkt „Zielkonflikt der Teilprofile“: Bei Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum prüfen, ob Trinken und Körperkühlung ausgenommen sind und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Erledigungsnachweis: B05, Abschnitt 3, Absatz nach „Beurteilung/Tendenz“.
+- **B05, Abschnitt 5 (LS-2026-W45-06, gemeinsam mit -05):** Ansprechstellen für Teilprofil 5a um Gesundheits- und Sozialressorts von Bund und Ländern, Träger des Rettungsdienstes und Arbeitsschutzbehörden ergänzt. Erledigungsnachweis: B05, Abschnitt 5, Zeile „Ansprechstellen“.
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.23.0, Kodierleitfaden 1.9.0 (LS-2026-W45-04), Arbeitsanweisung Erfassung 1.11.0 (LS-2026-W45-01 bis -03). Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- Übersicht (`README.md`) mit B05 2.3.0; Lesefassung neu erzeugt. Quellenregister unverändert (keine neue URL).
+
+### Nicht übernommen
+
+- **LS-2026-W45-07** (Zeitmodus „Übungslage“ mit fiktiver Zeitachse): abgelehnt, Übungsläufe bleiben außerhalb des Regelwerks.
 
 ## [3.22.0] – 04.11.2026
 
