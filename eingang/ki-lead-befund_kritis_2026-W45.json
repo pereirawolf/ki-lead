@@ -1,0 +1,72 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "kritis-lead",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-04T18:45:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+  "pruefumfang": "Vorgezogener Einzelbefund zur Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2 (Auftrag des Herausgebers vom 03.11.2026, Entscheidung Nr. 5; Vorziehen vor Meilenstein M1 entschieden am 04.11.2026). Weitere Befunde KL-2026-W45-02 ff. (Einbettung der KRITIS-Module, Bezug von R4WP, Präfixregel in den Kodierleitfäden) folgen mit dem Abschluss der Umstellung. Gelesen: docs/LEAD-MELDUNG-V2.md (Abschnitte 1, 3, 4.1, 6, 7, 13), docs/AUSTAUSCH.md (Abschnitt 9), formate/lead-meldung-v2/kern.schema.json ($defs.sachverhalt, $defs.bewertung, $defs.sachverhalt_vollstaendig, allOf der Wurzel), src/kern/meldung-v2.js (pruefeReferenzen). KRITIS-LEAD (main b29caaf): erweiterung/lead-kritis.defs.json (kritis_meldekopf, kritis_betrieb), profil/lead-kritis/profil.json, Leitlinien zum Betreiberformular.",
+  "nicht_geprueft": [
+    "npm test nicht ausgeführt (reiner Befund ohne Codeänderung)",
+    "Darstellung, PDF, Kopiervorlage und Lagebild der App mit einer v2-Meldung ohne bewertung nicht ausprobiert; nur statisch nach Zugriffen auf bewertung gesucht",
+    "Offene Pull Requests (GraphQL-Zugriff aus der Sitzung gesperrt)"
+  ],
+  "befunde": [
+    {
+      "id": "KL-2026-W45-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt, required (Z. 1034)",
+          "ist": "\"required\": [\"kennung\", \"bezeichnung\", \"eintritt\", \"raum\", \"analyse\", \"bewertung\", \"handlungsbedarf\", \"module\"]"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.bewertung, required (Z. 697)",
+          "ist": "\"required\": [\"kernaussage\", \"referenzraum\", \"beurteilung\", \"tendenz\", \"neubewertung_bei\"]"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt_vollstaendig, bewertung (Z. 1110–1120)",
+          "ist": "\"kernaussage\": {\"type\": \"string\", \"pattern\": \"\\\\S\"}, \"referenzraum\": {\"type\": \"string\", \"pattern\": \"\\\\S\"}"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 6, zur_freigabe und freigegeben (Z. 138)",
+          "ist": "je Sachverhalt vergebene Kennung, Bezeichnung, Lagetext, Kernaussage, Referenzraum"
+        }
+      ],
+      "beobachtung": "Ab Status „zur_freigabe“ verlangt das Kernschema je Sachverhalt eine nicht leere Kernaussage und einen nicht leeren Referenzraum; im Entwurf ist der Block bewertung mit allen fünf Feldern Pflicht. Die Kernaussage ist nach SOP-LEAD A.4 die Bedeutung des Sachverhalts für den Bevölkerungsschutz, der Referenzraum der Raum, für den bewertet und kodiert wird. Beides setzt nach der Entscheidung des Herausgebers vom 31.10./03.11.2026 die Behörde, nicht der KRITIS-Betreiber (keine Beurteilung, keine Tendenz, kein Lagenradar, kein Satz „Betriebliche Einschätzung …“). Folge: Eine Betreibermeldung nach LEAD-Meldung-v2 kann nicht „zur_freigabe“ oder „freigegeben“ werden, ohne etwas zu erfinden. Eine leere Hülle (\"\" und null) wäre im Entwurf gültig, widerspricht aber Grundsatz 3 (\"\" = „noch nicht geschrieben“, nur im Entwurf) und behauptet eine Bewertung, die es nicht gibt. Unproblematisch sind Lagenradar und Ereignisart: pruefeReferenzen() prüft sie nur, wenn das Modul lead-bevoelkerungsschutz vorhanden ist. Lagetext (analyse.lage_ereignis), Bezeichnung, Kennung, Quellen und Freigabe kann ein Betreiber sinnvoll füllen; handlungsbedarf mit leeren Listen ist gültig. Prüfweg: statisch.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Variante A (empfohlen): Für absender.ebene „Betreiber“ ist bewertung im Sachverhalt nicht Pflicht; fehlt der Block, ist keine Bewertung erhoben (Grundsatz 3, „Feld fehlt“). Ist er vorhanden, gelten die üblichen Regeln einschließlich der Pflichten ab „zur_freigabe“. Umsetzung im Kernschema als Bedingung an der Wurzel (if absender.ebene = Betreiber, then sachverhalte[] ohne required bewertung; $defs.sachverhalt nimmt bewertung aus required, eine zweite Bedingung verlangt sie für alle übrigen Ebenen), damit Behördenmeldungen unverändert streng bleiben. Die Verdichtung ordnet die Betreibermeldung wie bisher einem eigenen Sachverhalt der Behörde zu, der Kernaussage und Referenzraum trägt (Zuordnung von oben, AUSTAUSCH.md Abschnitt 9).",
+        "neuer_text": "LEAD-MELDUNG-V2.md, Abschnitt 3, Zeile bewertung: „ja, außer bei absender.ebene „Betreiber“: fehlt der Block, ist keine Bewertung erhoben (Abschnitt 1 Nr. 3); die Bewertung setzt die verarbeitende Stelle in ihrem eigenen Sachverhalt“. Abschnitt 6, zur_freigabe: „… Lagetext, Kernaussage, Referenzraum (bei Betreibern nur, wenn bewertung vorhanden ist) …“."
+      },
+      "folgeaenderungen": [
+        "formate/lead-meldung-v2/kern.schema.json: Bedingung nach Ebene; zusammengestellte Schemata beispiel/ und beispiel-land/ mit npm run meldung:v2 -- schema neu erzeugen",
+        "docs/LEAD-MELDUNG-V2.md: Abschnitte 3 und 6, Abschnitt 13 Nr. 8, Änderungsverlauf „Nachtrag 6“",
+        "App: Zugriffe auf sachverhalte[].bewertung in Darstellung, PDF, Kopiervorlage, Lagebild und Redaktionscheck null-sicher (fehlender Block ohne Befund, Anzeige „keine Bewertung (Betreibermeldung)“ nur in der Behördensicht)",
+        "tests/format/lead-meldung-v2.test.ts: Betreibermeldung „freigegeben“ ohne bewertung gültig; Behördenmeldung ohne bewertung ungültig; Betreibermeldung mit bewertung und leerer Kernaussage ab „zur_freigabe“ ungültig",
+        "Thessa: Kernschema neu pinnen (Pin-Wächter meldet den Abstand; die vom Baustein genutzten Definitionen quelle, kennzahl, zeitangabe bleiben unverändert)",
+        "Spezifikation, CHANGELOG, Versionsangaben (eigene Patch-Version), docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": "Soll eine Betreibermeldung (A) ohne Block bewertung auskommen, (B) die leere Hülle mit null-Stufen behalten und Kernaussage und Referenzraum für die Ebene „Betreiber“ ab „zur_freigabe“ nicht verlangen, oder (C) sollen diese Pflichten über die Zusammenstellung abschaltbar sein und KRITIS-LEAD sie für Behörden über seine Rollenregeln wieder verlangen? Empfehlung A: entspricht Grundsatz 3 (nicht erhoben = Feld fehlt), vermeidet in freigegebenen Meldungen leere Texte, die „noch nicht geschrieben“ bedeuten, und hält Behördenmeldungen im Kern unverändert streng. B ist die kleinste Änderung, trägt aber eine scheinbare Bewertung in jede Betreibermeldung. C verlagert eine Kernregel in jedes Profil.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Schematest: Jede Meldung mit absender.ebene „Betreiber“ und Status „freigegeben“ ist ohne bewertung gültig; jede andere Ebene ohne bewertung ist ungültig. Läuft in KI-LEAD (tests/format/lead-meldung-v2.test.ts) und im zweiten Prüfweg von KRITIS-LEAD gegen die Konformitätsfälle.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigabe des Herausgebers vom 04.11.2026: Variante A; Umfang Kern, App und Dokumentation als 0.7.8 (pereirawolf/ki-lead#146)."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Kennungen mit Präfix KRITIS- sind nach dem Muster des Kerns gültig (AUSTAUSCH.md Abschnitt 9, Tests seit 0.7.5)",
+    "Meldungsmodule auf oberster Ebene (SR-2026-W45-01) tragen die meldungsweiten Betreiberangaben ohne Kernänderung",
+    "Lagenradar und Ereignisart werden ab „zur_freigabe“ nur geprüft, wenn das Modul lead-bevoelkerungsschutz vorhanden ist; Betreibermeldungen ohne das Modul sind insoweit gültig",
+    "absender.ebene kennt „Betreiber“ bereits"
+  ]
+}
