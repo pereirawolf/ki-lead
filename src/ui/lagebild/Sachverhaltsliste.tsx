@@ -3,7 +3,7 @@
 // und Zeitstrahl zum Aufklappen. Darüber Filter nach Beurteilung und Tendenz (zusätzlich zum Herkunftsfilter). Bis
 // 0.6.18 stand hier eine breite Tabelle mit allen Volltexten; sie bleibt als Rohtabelle, im PDF und in der CSV.
 
-import { useId } from "react";
+import { useId, useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
 import { bezeichnung } from "../../kern/ui";
@@ -73,6 +73,7 @@ export function Sachverhaltsliste({
   const ui = profil.ui;
   const r = ui.rollen;
   const id = useId();
+  const [nachBezug, setNachBezug] = useState(false);
   const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
   const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
   const kennungVon = (s: SvEintrag) => (r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "");
@@ -103,6 +104,105 @@ export function Sachverhaltsliste({
       </div>
     );
   };
+  // Bezug zwischen geladenen Sachverhalten (seit UX-2026-W45-15): in jeder Zeile als Hinweis, auf Wunsch als Baum
+  const nachKennung = new Map<string, SvEintrag>();
+  for (const x of sortiert) if (kennungVon(x) && !nachKennung.has(kennungVon(x))) nachKennung.set(kennungVon(x), x);
+  const bezugGeladen = (x: SvEintrag) => bezugVon(x.sv, ui).filter((k) => nachKennung.has(k) && k !== kennungVon(x));
+  const genanntIn = new Map<string, SvEintrag[]>();
+  for (const x of sortiert) for (const k of bezugGeladen(x)) genanntIn.set(k, [...(genanntIn.get(k) ?? []), x]);
+  const baumMoeglich = sortiert.some((x) => bezugGeladen(x).length > 0);
+  const baum = nachBezug && baumMoeglich;
+
+  const zeile = (s: SvEintrag, unter?: ReactNode) => {
+    const kennung = kennungVon(s);
+    const bezug = bezugVon(s.sv, ui);
+    const zeilen = r.zeitstrahl && r.sv_kennung ? eintraegeFuer(zeitstrahlText(s.eintrag.daten, ui), kennung).map(zeitstrahlAnzeige) : [];
+    const lOrt = r.sv_ort ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`) : "Ort";
+    return (
+      <li key={`${s.eintrag.id}-${s.index}`} className="lb-sv-zeile">
+        <details>
+          {/* Kopf gegliedert: Bezeichnung mit Marken, Angaben einzeln, Ort eigene Zeile gekürzt (seit UX-2026-W45-13) */}
+          <summary>
+            <span className="lb-sv-kopf">
+              <span className="lb-sv-name">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</span>
+              <SvMarken s={s} profil={profil} />
+            </span>
+            <span className="lb-sv-angaben">
+              <Absender e={s.eintrag} profil={profil} zeile />
+              {s.arten.length > 0 && <span className="lb-sv-angabe">{s.arten.join(", ")}</span>}
+              {s.eintritt && <span className="lb-sv-angabe">Eintritt {datumDE(s.eintritt)}</span>}
+              {kennung && <span className="lb-kennung-inline">{kennung}</span>}
+              {r.herkunft && <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>}
+              {bezugGeladen(s).length > 0 && <span className="lb-sv-bezug">Bezug auf {bezugGeladen(s).length} geladene</span>}
+              {kennung && (genanntIn.get(kennung)?.length ?? 0) > 0 && (
+                <span className="lb-sv-bezug">genannt in {genanntIn.get(kennung)!.map(kennungVon).join(", ")}</span>
+              )}
+            </span>
+            {s.ort && (
+              <span className="lb-sv-ort" title={s.ort}>
+                <span className="sr-only">{lOrt}: </span>
+                {s.ort}
+              </span>
+            )}
+          </summary>
+          <dl className="lb-sv-details">
+            {s.ort && (
+              <>
+                <dt>{lOrt}</dt>
+                <dd className="lb-lang-text">{s.ort}</dd>
+              </>
+            )}
+            {bezug.length > 0 && (
+              <>
+                <dt>Bezug</dt>
+                <dd>{bezug.map((k) => (kennungsStelle.has(k) ? `${k} (${kennungsStelle.get(k)})` : k)).join("; ")}</dd>
+              </>
+            )}
+            {r.sv_bewertung_text && (
+              <>
+                <dt>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_bewertung_text}`)}</dt>
+                <dd className="lb-lang-text">{gliedereBewertung(s.bewertungText, ui) || "–"}</dd>
+              </>
+            )}
+            {(r.sv_analysefelder || []).map((f) => (
+              <div key={f} className="lb-sv-paar">
+                <dt>{bezeichnung(ui, `${r.sachverhalte}[].${f}`)}</dt>
+                <dd className="lb-lang-text">{gliedereAnalyse(holeWert(s.sv, f), ui) || "–"}</dd>
+              </div>
+            ))}
+            {zeilen.length > 0 && r.zeitstrahl && (
+              <>
+                <dt>{bezeichnung(ui, r.zeitstrahl)}</dt>
+                <dd className="lb-lang-text">{zeilen.join("\n")}</dd>
+              </>
+            )}
+          </dl>
+        </details>
+        {unter}
+      </li>
+    );
+  };
+
+  /** Im Baum: Sachverhalte mit Bezug oben, die genannten darunter (je nur einmal); übrige danach */
+  const baumZeilen = () => {
+    const vergeben = new Set<SvEintrag>();
+    const eltern = gezeigt.filter((x) => bezugGeladen(x).length > 0);
+    eltern.forEach((x) => vergeben.add(x));
+    const knoten = eltern.map((x) => {
+      const kinder = gezeigt.filter((k) => !vergeben.has(k) && bezugGeladen(x).includes(kennungVon(k)));
+      kinder.forEach((k) => vergeben.add(k));
+      return zeile(
+        x,
+        kinder.length > 0 && (
+          <ul className="lb-svliste lb-svliste-unter" aria-label={`Bezug von ${kennungVon(x) || x.bezeichnung}`}>
+            {kinder.map((k) => zeile(k))}
+          </ul>
+        ),
+      );
+    });
+    return [...knoten, ...gezeigt.filter((x) => !vergeben.has(x)).map((x) => zeile(x))];
+  };
+
   return (
     <div className="lb-svliste-rahmen">
       <div className="lb-svfilter" role="group" aria-label="Sachverhalte filtern">
@@ -131,75 +231,15 @@ export function Sachverhaltsliste({
         {r.sv_art && chips("art", bezeichnung(ui, `${r.sachverhalte}[].${r.sv_art}`), (s) => s.arten)}
         {r.land && chips("land", bezeichnung(ui, r.land), (s) => s.land)}
       </div>
+      {baumMoeglich && (
+        <label className="lb-wahl lb-svbaum-schalter">
+          <input type="checkbox" checked={nachBezug} onChange={(e) => setNachBezug(e.target.checked)} /> Nach Bezug ordnen
+        </label>
+      )}
       {gezeigt.length === 0 ? (
         <p className="leer">Kein Sachverhalt entspricht dem Filter.</p>
       ) : (
-        <ul className="lb-svliste">
-          {gezeigt.map((s) => {
-            const kennung = r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "";
-            const bezug = bezugVon(s.sv, ui);
-            const zeilen = r.zeitstrahl && r.sv_kennung ? eintraegeFuer(zeitstrahlText(s.eintrag.daten, ui), kennung).map(zeitstrahlAnzeige) : [];
-            const lOrt = r.sv_ort ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`) : "Ort";
-            return (
-              <li key={`${s.eintrag.id}-${s.index}`} className="lb-sv-zeile">
-                <details>
-                  {/* Kopf gegliedert: Bezeichnung mit Marken, Angaben einzeln, Ort eigene Zeile gekürzt (seit UX-2026-W45-13) */}
-                  <summary>
-                    <span className="lb-sv-kopf">
-                      <span className="lb-sv-name">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</span>
-                      <SvMarken s={s} profil={profil} />
-                    </span>
-                    <span className="lb-sv-angaben">
-                      <Absender e={s.eintrag} profil={profil} zeile />
-                      {s.arten.length > 0 && <span className="lb-sv-angabe">{s.arten.join(", ")}</span>}
-                      {s.eintritt && <span className="lb-sv-angabe">Eintritt {datumDE(s.eintritt)}</span>}
-                      {kennung && <span className="lb-kennung-inline">{kennung}</span>}
-                      {r.herkunft && <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>}
-                    </span>
-                    {s.ort && (
-                      <span className="lb-sv-ort" title={s.ort}>
-                        <span className="sr-only">{lOrt}: </span>
-                        {s.ort}
-                      </span>
-                    )}
-                  </summary>
-                  <dl className="lb-sv-details">
-                    {s.ort && (
-                      <>
-                        <dt>{lOrt}</dt>
-                        <dd className="lb-lang-text">{s.ort}</dd>
-                      </>
-                    )}
-                    {bezug.length > 0 && (
-                      <>
-                        <dt>Bezug</dt>
-                        <dd>{bezug.map((k) => (kennungsStelle.has(k) ? `${k} (${kennungsStelle.get(k)})` : k)).join("; ")}</dd>
-                      </>
-                    )}
-                    {r.sv_bewertung_text && (
-                      <>
-                        <dt>{bezeichnung(ui, `${r.sachverhalte}[].${r.sv_bewertung_text}`)}</dt>
-                        <dd className="lb-lang-text">{gliedereBewertung(s.bewertungText, ui) || "–"}</dd>
-                      </>
-                    )}
-                    {(r.sv_analysefelder || []).map((f) => (
-                      <div key={f} className="lb-sv-paar">
-                        <dt>{bezeichnung(ui, `${r.sachverhalte}[].${f}`)}</dt>
-                        <dd className="lb-lang-text">{gliedereAnalyse(holeWert(s.sv, f), ui) || "–"}</dd>
-                      </div>
-                    ))}
-                    {zeilen.length > 0 && r.zeitstrahl && (
-                      <>
-                        <dt>{bezeichnung(ui, r.zeitstrahl)}</dt>
-                        <dd className="lb-lang-text">{zeilen.join("\n")}</dd>
-                      </>
-                    )}
-                  </dl>
-                </details>
-              </li>
-            );
-          })}
-        </ul>
+        <ul className="lb-svliste">{baum ? baumZeilen() : gezeigt.map((x) => zeile(x))}</ul>
       )}
     </div>
   );

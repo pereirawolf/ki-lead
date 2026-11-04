@@ -1258,3 +1258,20 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
     flex-basis: 100%;
   }
 }
+
+/* Bezug zwischen geladenen Sachverhalten (seit UX-2026-W45-15) */
+.lb-sv-bezug {
+  font-style: italic;
+}
+
+.lb-svbaum-schalter {
+  display: inline-flex;
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lb-svliste-unter {
+  margin: 0.4rem 0 0.2rem 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--linie);
+}

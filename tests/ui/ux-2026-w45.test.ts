@@ -172,3 +172,16 @@ describe("UX-2026-W45-14: Filter der Sachverhalte", () => {
     expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
   });
 });
+
+describe("UX-2026-W45-15: Bezug zwischen Sachverhalten", () => {
+  it("Beispiel Ilka: Hinweis in den Zeilen, nach Bezug geordnet sieben Sachverhalte unter DE-20261014-7QKD", async () => {
+    await ilka();
+    await klick(knopf("Sachverhalte"));
+    expect(seitentext()).toContain("Bezug auf 7 geladene");
+    expect(seitentext()).toContain("genannt in DE-20261014-7QKD");
+    await klick(document.querySelector<HTMLInputElement>(".lb-svbaum-schalter input")!);
+    const unter = document.querySelector('.lb-svliste-unter[aria-label="Bezug von DE-20261014-7QKD"]')!;
+    expect(unter.querySelectorAll(":scope > .lb-sv-zeile")).toHaveLength(7);
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
+  });
+});
