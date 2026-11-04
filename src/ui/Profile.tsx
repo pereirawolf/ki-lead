@@ -419,6 +419,24 @@ function KartenInhalt({ children }: { children: ReactNode }) {
   );
 }
 
+/** Text mit Adressen als Verweis, etwa „Name (https://…)“ beim Herausgeber (seit UX-2026-W45-31) */
+function MitVerweis({ text }: { text: string }) {
+  const teile = text.split(/(https?:\/\/[^\s()]+)/);
+  return (
+    <>
+      {teile.map((t, i) =>
+        i % 2 ? (
+          <a key={i} href={t} target="_blank" rel="noopener noreferrer">
+            {t.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+          </a>
+        ) : (
+          t
+        ),
+      )}
+    </>
+  );
+}
+
 /** Name ohne Klammerzusatz am Ende und der Zusatz als Kennzeichen, z. B. „(Erprobungsentwurf)“ (seit UX-2026-W45-30) */
 export function nameUndZusatz(name: string): { name: string; zusatz?: string } {
   const m = name.match(/^(.*\S)\s*\(([^()]+)\)\s*$/);
@@ -690,7 +708,9 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                       {m?.herausgeber && (
                         <div className="profil-daten-breit">
                           <dt>Herausgeber</dt>
-                          <dd>{m.herausgeber}</dd>
+                          <dd>
+                            <MitVerweis text={m.herausgeber} />
+                          </dd>
                         </div>
                       )}
                     </dl>
@@ -711,38 +731,42 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   <h3 id={`${praefix}-pruefen`} tabIndex={-1}>
                     Prüfen
                   </h3>
-                  {p.profil && (
-                    <>
-                      <dl className="profil-daten profil-technik">
-                        <div>
-                          <dt>Schema</dt>
-                          <dd className="technisch">{m?.meldung.schema_id}</dd>
-                        </div>
-                        {m?.lizenz && (
+                  {/* Technisches gebündelt und zugeklappt (seit UX-2026-W45-31); Sprünge zum Prüfbericht öffnen es */}
+                  <details className="profil-technik-details">
+                    <summary>Technische Angaben: Schema, Lizenz, Prüfsumme, Prüfbericht, Dateien</summary>
+                    {p.profil && (
+                      <>
+                        <dl className="profil-daten profil-technik">
                           <div>
-                            <dt>Lizenz</dt>
-                            <dd>{m.lizenz}</dd>
+                            <dt>Schema</dt>
+                            <dd className="technisch">{m?.meldung.schema_id}</dd>
                           </div>
-                        )}
-                        <div className="profil-daten-breit">
-                          <dt>Prüfsumme</dt>
-                          <Pruefsumme hash={p.profil.hash} />
-                        </div>
-                      </dl>
-                      <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
-                    </>
-                  )}
-                  <details id={`${praefix}-bericht`}>
-                    <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
-                    <Befunde befunde={p.befunde} />
-                  </details>
-                  <details>
-                    <summary>Dateien ({dateien.length})</summary>
-                    <ul className="dateiliste">
-                      {dateien.map((d) => (
-                        <li key={d}>{d}</li>
-                      ))}
-                    </ul>
+                          {m?.lizenz && (
+                            <div>
+                              <dt>Lizenz</dt>
+                              <dd>{m.lizenz}</dd>
+                            </div>
+                          )}
+                          <div className="profil-daten-breit">
+                            <dt>Prüfsumme</dt>
+                            <Pruefsumme hash={p.profil.hash} />
+                          </div>
+                        </dl>
+                        <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
+                      </>
+                    )}
+                    <details id={`${praefix}-bericht`}>
+                      <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
+                      <Befunde befunde={p.befunde} />
+                    </details>
+                    <details>
+                      <summary>Dateien ({dateien.length})</summary>
+                      <ul className="dateiliste">
+                        {dateien.map((d) => (
+                          <li key={d}>{d}</li>
+                        ))}
+                      </ul>
+                    </details>
                   </details>
                 </section>
               </KartenInhalt>

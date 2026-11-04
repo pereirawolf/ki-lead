@@ -95,8 +95,10 @@ describe("Profilansicht: Gruppen „Lesen“ und „Prüfen“", () => {
       "SOP-Katalog lesen",
       "Dokumentation lesen",
     ]);
-    expect(summaries(pruefen)[0]).toMatch(/^Prüfbericht/);
-    expect(summaries(pruefen)[1]).toMatch(/^Dateien \(\d+\)$/);
+    // seit UX-2026-W45-31 gebündelt unter „Technische Angaben“
+    expect(summaries(pruefen)[0]).toMatch(/^Technische Angaben/);
+    expect(summaries(pruefen)[1]).toMatch(/^Prüfbericht/);
+    expect(summaries(pruefen)[2]).toMatch(/^Dateien \(\d+\)$/);
   });
 
   it("öffnet beim Sprung zum Prüfbericht auch den zugeklappten Inhalt eines nicht verwendeten Profils", async () => {
@@ -304,5 +306,19 @@ describe("UX-2026-W45-30: Name, Kennzeichen und Farben der Karte", () => {
     expect(b!.querySelector(".profil-zusatz")?.textContent).toBe("Erprobungsentwurf");
     expect(a!.querySelector(".profil-band")).not.toBeNull();
     expect(b!.querySelector(".profil-band")).toBeNull();
+  });
+});
+
+describe("UX-2026-W45-31: Technische Angaben und Herausgeber", () => {
+  it("bündelt Technisches zugeklappt und verweist auf die Adresse des Herausgebers", async () => {
+    await ansicht("lead-beispiel");
+    const k = karten()[0];
+    const technik = k.querySelector<HTMLDetailsElement>(".profil-technik-details")!;
+    expect(technik.open).toBe(false);
+    expect(technik.querySelector("dl.profil-technik")).not.toBeNull();
+    expect(technik.querySelector('details[id$="-bericht"]')).not.toBeNull();
+    const a = k.querySelector<HTMLAnchorElement>('section[aria-labelledby$="-angaben"] a[href^="https://"]')!;
+    expect(a.getAttribute("href")).toBe("https://www.pereirawolf.de");
+    expect(a.textContent).toBe("pereirawolf.de");
   });
 });
