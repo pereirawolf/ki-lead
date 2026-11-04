@@ -140,6 +140,7 @@ Grundlage: Befunddatei `ki-lead-befund_ux_2026-W45.json` (Oberfläche der Ansich
 
 ### Tests
 
+- `tests/browser/ux-2026-w45.spec.ts` (neu): Reiter bei 390 px nach dem Laden im ersten Bildschirm und einzeilig scrollbar, Reiter bleiben unter dem Kopf stehen, Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px.
 - `tests/ui/ux-2026-w45.test.ts` (neu): Adresse, Meldestatus, Ablage, Ausgaben und Reiter, Kennzahlen und eigene Meldung, Meldungen, Filter und Bezug der Sachverhalte, Matrix, offene Achse und Überlagerung im Radar, Kopiervorlage, Rohtabelle und Spaltengruppen.
 - `tests/ui/redaktionscheck.test.ts`: Bearbeitungsstand (Zahl, Speicher, Bericht, neu bei geänderter Meldung), Filter und Textbaustein, Sprung zum Sachverhalt und in die Erfassung; RV07 öffnet das Menü „Ausgeben“.
 - `tests/ui/profile.test.ts`: Karten, Eckdaten, „Verwenden“, Befundchip, Namenszusatz und Farbband, technische Angaben, „Exportieren“; angepasst an die neuen Texte.

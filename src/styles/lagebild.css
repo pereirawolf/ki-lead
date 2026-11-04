@@ -1646,3 +1646,45 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   margin: 0 0 0 0.5rem;
   font-size: 0.82rem;
 }
+
+/* Schmale Bildschirme: Ablage und Aktionen kompakt, damit die Reiter im ersten Bildschirm stehen (UX-2026-W45-01) */
+@media (max-width: 640px) {
+  .lb-ablage-kompakt {
+    padding: 0.4rem 0.5rem;
+  }
+
+  .lb-ablage-kompakt .aktionen {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+  }
+
+  .lb-ablage-kompakt .knopf,
+  .lb-leiste .werkzeugleiste-knoepfe .knopf {
+    font-size: 0.85rem;
+    padding-inline: 0.6rem;
+  }
+
+  .lb-ablage-zusatz {
+    display: none;
+  }
+
+  .lb-leiste .werkzeugleiste-knoepfe {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (pointer: coarse) {
+  .lb-ablage-zusatz {
+    display: none;
+  }
+}
+
+/* Tabellen im Redaktionscheck: Sachverhalt und Ort auf zwei Zeilen gekürzt, voll im Titel (UX-2026-W45-20) */
+.lb-zelle-kurz {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-width: 10rem;
+}

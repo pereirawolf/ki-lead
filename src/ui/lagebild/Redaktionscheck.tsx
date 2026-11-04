@@ -309,11 +309,21 @@ export function Redaktionscheck({
                       {g.liste.map((s) => (
                         <tr key={`${s.eintrag.id}-${s.index}`}>
                           <td>
-                            <Absender e={s.eintrag} profil={profil} zeile />
+                            <Absender e={s.eintrag} profil={profil} nurKurz />
                           </td>
                           <td>{datumDE(zeitpunktVon(s.eintrag, profil)) || "–"}</td>
-                          <td>{s.bezeichnung || "–"}</td>
-                          {r.sv_ort && <td>{s.ort || "–"}</td>}
+                          <td>
+                            <div className="lb-zelle-kurz" title={s.bezeichnung || undefined}>
+                              {s.bezeichnung || "–"}
+                            </div>
+                          </td>
+                          {r.sv_ort && (
+                            <td>
+                              <div className="lb-zelle-kurz" title={s.ort || undefined}>
+                                {s.ort || "–"}
+                              </div>
+                            </td>
+                          )}
                           <td>
                             <SvMarken s={s} profil={profil} />
                           </td>

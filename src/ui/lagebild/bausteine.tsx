@@ -19,8 +19,15 @@ import {
 import { bearbeitungText, type Bearbeitung, type Klasse } from "../../lagebild/redaktion";
 
 /** Absender in Überschriften: Land/Bund, darunter bzw. daneben der volle Name klein und einzeilig (seit UX-2026-W45-04) */
-export function Absender({ e, profil, zeile = false }: { e: LagebildEintrag; profil: Profil; zeile?: boolean }) {
+export function Absender({ e, profil, zeile = false, nurKurz = false }: { e: LagebildEintrag; profil: Profil; zeile?: boolean; nurKurz?: boolean }) {
   const { kurz, zusatz } = absenderTeile(e, profil);
+  // In Tabellenzellen nur Land/Bund, der volle Name als Titel: eine nicht umbrechende Zeile verbreiterte sonst die Spalte
+  if (nurKurz)
+    return (
+      <span className="lb-absender" title={zusatz || undefined}>
+        <span className="lb-absender-kurz">{kurz}</span>
+      </span>
+    );
   return (
     <span className={zeile ? "lb-absender lb-absender-zeile" : "lb-absender"}>
       <span className="lb-absender-kurz">{kurz}</span>

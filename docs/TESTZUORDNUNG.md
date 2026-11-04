@@ -1089,3 +1089,5 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Kopiervorlage eingeklappt, Auswahl kopieren, Kopf gegliedert | UX-2026-W45-23, -24: … | `tests/ui/ux-2026-w45.test.ts` |
 | Rohtabelle: Kernspalten vorn, Zeile aufklappbar; Spaltengruppen kompakt, zuschaltbar, gespeichert | UX-2026-W45-25, -26: … | `tests/ui/ux-2026-w45.test.ts` |
 | Profilkarten einheitlich zugeklappt, Eckdaten, „Verwenden“ ohne Sprung, Chip nur bei Befund, Namenszusatz, Farbband, technische Angaben, „Exportieren“ | UX-2026-W45-27 bis -32: … | `tests/ui/profile.test.ts` |
+| Reiter bei 390 px nach dem Laden im ersten Bildschirm, einzeilig und waagerecht scrollbar; mitlaufend unter dem Kopf | UX-2026-W45-01, -03: Smartphone › … ; UX-2026-W45-03: … | `tests/browser/ux-2026-w45.spec.ts` |
+| Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px | UX-2026-W45-23, -25: … | `tests/browser/ux-2026-w45.spec.ts` |
