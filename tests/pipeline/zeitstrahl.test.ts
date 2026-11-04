@@ -83,6 +83,30 @@ describe("ZS-2026-W44-02: Kennungen vergibt nur die App", () => {
     expect(b[0]!.text).toContain("„DE-TH-20261001-ZZZZ“");
   });
 
+  it("GK-2026-W45-01: Platzhalter nur im Zeitstrahl gehen an den Sachverhalt derselben Reihenfolge, mit Hinweis", () => {
+    const d = ilkaMeldung("TH");
+    d.sachverhalte[0].kennung = "";
+    d.sachverhalte[1].kennung = "";
+    d.zeitstrahl =
+      "[Z1] 2026-10-13T21:00 · NEU-1 · Maßnahme – A 71 gesperrt [Q8]\n[Z2] 2026-10-13T22:30 · NEU-2 · Ereignis – Höchststand 18.000 Anschlüsse [Q4]\n[Z3] 2026-10-14T05:00 · NEU-1 · Wiederherstellung – A 71 frei [Q8]";
+    const b = nachbearbeiten(d, []);
+    expect(d.sachverhalte.map((sv: any) => sv.kennung)).toEqual(["DE-TH-20261022-ABCD", "DE-TH-20261022-BCDE"]);
+    expect(zeilen(d).map((z) => z.split(" · ")[1])).toEqual(["DE-TH-20261022-ABCD", "DE-TH-20261022-BCDE", "DE-TH-20261022-ABCD"]);
+    expect(b.map((x) => x.code)).toEqual(["KENNUNG_PLATZHALTER_ZUGEORDNET"]);
+    expect(b[0]!.text).toContain("[Z2] NEU-2 → DE-TH-20261022-BCDE");
+  });
+
+  it("GK-2026-W45-01: ein Platzhalter ohne passenden Sachverhalt bleibt stehen und wird genannt", () => {
+    const d = ilkaMeldung("TH");
+    d.sachverhalte[0].kennung = "";
+    d.sachverhalte[1].kennung = "";
+    d.zeitstrahl = "[Z1] 2026-10-13T21:00 · NEU-3 · Maßnahme – A 71 gesperrt [Q8]";
+    const b = nachbearbeiten(d, []);
+    expect(zeilen(d)[0]).toContain(" · NEU-3 · ");
+    expect(b.map((x) => x.code)).toEqual(["KENNUNG_PLATZHALTER_OFFEN"]);
+    expect(b[0]!.text).toContain("[Z1] NEU-3");
+  });
+
   it("Fortschreibung: die Kennung der eigenen Vormeldung bleibt", () => {
     const d = entwurf();
     const b = nachbearbeiten(d, [mat("meldung", vormeldung())]);
