@@ -1,0 +1,42 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-belange-kaeltewelle-wohnungslos",
+  "titel": "Strenger Frost mit wohnungslosen Menschen und tagsüber geschlossener Notübernachtung (FIKTIV)",
+  "stand": "2026-11-04",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Strenger Frost mit wohnungslosen Menschen ohne gesicherten Schutzort",
+    "stichworte": "B06, C18, C16",
+    "stichtag": "2026-11-04",
+    "meldezeitpunkt": "2026-11-04T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-belange-kaeltewelle-wohnungslos.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die Befassung vorsorglich begründen (Warnung für die kommenden Nächte), ohne die Warnung als eingetretene Wirkung zu kodieren.",
+      "Belegung der Notübernachtung nicht mit Bedarf gleichsetzen; die Schätzung 60 bis 90 als Schätzung des Trägers mit Bandbreite führen (C18/R8).",
+      "Die Tagesschließung als Lücke beim Schutzort benennen und die geprüfte Erweiterung als nicht beschlossen darstellen.",
+      "Als direkt betroffen nur die bestätigte Person mit Unterkühlung führen; D2 nicht aus der Schätzung ableiten.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Wohnungslose Menschen als Ursache oder Störfaktor darstellen.",
+      "Die Erweiterung um 50 Plätze als beschlossen oder wirksam darstellen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-04T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Wintersturm / Schnee / Eis"
+    ]
+  }
+}

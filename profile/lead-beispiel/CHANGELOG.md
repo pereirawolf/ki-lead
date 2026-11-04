@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.37.0 – 04.11.2026
+
+Grundlage: Konzeptvorschlag „Querschnittsbaustein C18 – Besondere Belange und Schutzbedarfe von Menschen“, Entscheidungen des Herausgebers vom 04.11.2026 (BB-2026-W45-01 bis -06). Zweite Stelle: neuer Baustein und geänderte Querschnittsprüfung A.9.2; Schema, Darstellungsdatei und Kodierleitfaden unverändert, bestehende Meldungen werden nicht umkodiert.
+
+- **SOP-LEAD-Sammelmappe 3.22.0:** neuer Querschnittsbaustein C18, Neufassung A.9.2, Anschlüsse in A.1 Nr. 2, B05, B06, B08, B10, C09, C11 und C16. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md). `profil.json` bindet `sop/teil-c/C18_besondere-belange-schutzbedarfe.md` ein.
+- **Arbeitsanweisung Erfassung 1.10.2:** Bausteine „C01 … C18“; Kopf nennt die Sammelmappe ab 3.22.0.
+- **Prüfvermerk nach A.10.2:** Erfassung auf Grundlage von Teil A 3.22.0 geprüft und angepasst (Kennungsbereich). Verdichtung 2.3.0 und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf: Sie nennen keine Bausteinliste und keine Querschnittsprüfung im Einzelnen. Kodierleitfaden 1.8.1 unverändert; C18 verweist für D2, D6 und D7 auf ihn.
+- **Bewertungsfälle (BB-2026-W45-06):** drei fiktive Prüffälle `sop-belange-stromausfall-heimbeatmung`, `sop-belange-kaeltewelle-wohnungslos` und `sop-belange-evakuierung-assistenz` unter `evaluation/`, Soll-Abdeckung fortgeschrieben (Stand 04.11.2026). Keine KI-Läufe.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister und Beispiele sind unverändert.
+
 ## 1.36.1 – 02.11.2026
 
 Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` und `-c.json` (Gesamtkonsistenz nach PR #126, Commit `c5a3205`), freigegeben vom Herausgeber am 01.11.2026. Dritte Stelle: Präzisierung ohne neue Kodierregel; Schema und Darstellungsdatei unverändert.

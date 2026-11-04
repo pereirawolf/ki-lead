@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.3.0 – 04.11.2026
+
+Grundlage: Beispielprofil 1.37.0 (BB-2026-W45-01 bis -04). Zweite Stelle: neuer Baustein der geteilten SOP-Sammelmappe.
+
+- **SOP-Sammelmappe 3.22.0 (geteilt):** `profil.json` bindet den Querschnittsbaustein C18 „Besondere Belange und Schutzbedarfe von Menschen“ ein; Einzelheiten im `sop/CHANGELOG.md` des Beispielprofils.
+- **Arbeitsanweisung Erfassung:** mit `npm run profil:land` neu abgeleitet (Bausteine „C01 … C18“, Sammelmappe ab 3.22.0).
+- Schema, Darstellungsdatei, Kontakte, Kodierleitfaden und Beispielmeldungen unverändert.
+
 ## 1.2.3 – 04.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-02, freigegeben vom Herausgeber am 03.11.2026. Dritte Stelle: nur Begleitmaterial.

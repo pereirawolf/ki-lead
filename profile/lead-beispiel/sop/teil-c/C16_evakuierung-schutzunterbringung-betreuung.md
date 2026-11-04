@@ -10,11 +10,11 @@ lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
 art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
-anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion"
+anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; C18 bei besonderen Belangen der Betroffenen"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.2.1"
+version: "1.2.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – BBK „Mobile Betreuungsmodule 5.000“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -26,7 +26,7 @@ bisherige_ids: ["baustein-n03"]
 
 **Umfasst / grenzt ab von:** Evakuierungen, Schutz in Gebäuden, Unterkunftsverlust und Betreuungslagen aus jedem Anlass (Hochwasser, Industrieunfall, Kampfmittelfund, Stromausfall u. a.); Migration ist nur ein möglicher Anlass (B13). Keine operative Evakuierungsplanung durch die Redaktion. Schutz in Gebäuden und Evakuierung werden als unterschiedliche behördliche Maßnahmen dokumentiert.
 
-**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
+**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion; C18 vertieft besondere Belange der Betroffenen, die Eignung der Maßnahmen für sie und Nebenfolgen wie die Trennung von Bezugspersonen oder Assistenz. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
 
 **Befassungsanlässe:** Angeordnete oder konkret vorbereitete Evakuierung · Unterkunftsverlust oder größerer Schutz- bzw. Betreuungsbedarf · länderübergreifende Aufnahme- oder Transportabstimmung.
 

@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.3.0"
+version: "2.3.1"
 status: "Beispielfassung"
-stand: "26.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -35,7 +35,7 @@ bisherige_ids: ["sop-06"]
 | R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
 | R2 | Welche Orte und Strecken sind abgeschnitten oder gesperrt? | Lagemeldungen (A.3); Autobahn GmbH, DB | L/R; D1/D2 | Sperrung einer Route belegt nicht Isolation. Im Stau oder in Zügen Eingeschlossene zählen für D2, wenn eine unmittelbare Beeinträchtigung belegt ist (z. B. fehlender Kälteschutz oder fehlende Versorgung über Stunden), nicht bei bloßer Verspätung oder erschwerter Weiterreise (Kodierleitfaden D2); Zahl, Bezugszeit und Quelle nennen. |
 | R3 | Welche Strom-, Wärme- und Kommunikationsdienste fallen aus? | Betreibermeldungen (A.3) | R/I; D6 | Eislast-Ausfälle ziehen nach; frühe Entwarnung nicht als final werten. |
-| R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2). |
+| R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2, vertiefend C18). |
 | R5 | Welche Räum-, Transport- und Ersatzversorgungshilfe besteht? | Lagemeldungen (A.3); THW, Bundeswehr | M; D4 | Regulärer Winterdienst ≠ zusätzliche Hilfe; Nachbarschaftshilfe ist keine behördliche Mobilisierung. |
 | R6 | Welche Wiederherstellung ist wann absehbar? | Betreibermeldungen (A.3) | M/R; D5 | Tauwetter kann neue Risiken erzeugen (Hochwasser, Dachlast) – bedingt formulieren. |
 | R7 | Sind Gebäude, Hallen oder Verkehrswege wegen Schneelast oder Lawinengefahr gesperrt oder geschädigt? | Bauaufsicht und Kommune; in einschlägigen Regionen Lawinenlageberichte und behördliche Sperrungen | R; D1/D2 | Schneehöhe nicht selbst in Gebäudesicherheit umrechnen; Fachbewertung von Last und Standsicherheit verwenden. |
