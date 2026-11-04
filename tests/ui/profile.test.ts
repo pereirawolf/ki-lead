@@ -241,3 +241,15 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
 function knopfMitText(text: string) {
   return [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === text);
 }
+
+describe("UX-2026-W45-28: Eckdaten jeder Karte", () => {
+  it("nennt Ebene, Referenzraum, Schema, Lagenradar und SOPs auch bei zugeklappter Karte", async () => {
+    await ansicht("lead-beispiel");
+    for (const k of karten()) {
+      const dl = k.querySelector(":scope > .profil-eckdaten")!;
+      expect([...dl.querySelectorAll("dt")].map((d) => d.textContent)).toEqual(["Ebene", "Referenzraum", "Schema", "Lagenradar", "SOPs"]);
+    }
+    const lead = karten()[0].querySelector(".profil-eckdaten")!;
+    expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual(["Bund", "Bevölkerungsschutz in Deutschland", "LEAD-Meldung-v1", "ja", "17 Dach-SOPs · 18 ergänzende Bausteine"]);
+  });
+});

@@ -566,6 +566,31 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 {m ? `Profilversion ${m.version} · ` : ""}
                 {herkunft(p)}
               </p>
+              {/* Eckdaten zum Vergleich auch bei zugeklappter Karte (seit UX-2026-W45-28) */}
+              {p.profil && m && (
+                <dl className="profil-eckdaten" aria-label={`Eckdaten von Profil „${m.name}“`}>
+                  <div>
+                    <dt>Ebene</dt>
+                    <dd>{m.ebene || "–"}</dd>
+                  </div>
+                  <div>
+                    <dt>Referenzraum</dt>
+                    <dd>{m.referenzraum || "–"}</dd>
+                  </div>
+                  <div>
+                    <dt>Schema</dt>
+                    <dd className="technisch">{m.meldung.schema_id}</dd>
+                  </div>
+                  <div>
+                    <dt>Lagenradar</dt>
+                    <dd>{p.profil.ui.rollen.sv_radar ? "ja" : "nein"}</dd>
+                  </div>
+                  <div>
+                    <dt>SOPs</dt>
+                    <dd>{sopAnzahl(p.profil).split(",")[0]}</dd>
+                  </div>
+                </dl>
+              )}
               <KartenInhalt>
                 {p.profil && (
                   <nav className="profil-sprungleiste" aria-label={`Abschnitte von Profil „${m?.name || p.schluessel}“`}>
