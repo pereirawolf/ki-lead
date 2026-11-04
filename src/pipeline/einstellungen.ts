@@ -141,8 +141,9 @@ export const STANDARD: Einstellungen = {
  *   und strich Textzeilen; Medium löscht nichts, setzte aber D2 am Skalenrand. Seit 0.5.16 wieder mit mistral-small-2603
  *   „low“ (AV-2026-W43-39): Mit der geschärften Anweisung (AV-2026-W43-34) reparierten Small und Medium im Nachtest je 10/10
  *   fehlerfrei; Small kostet 0,008 statt 0,10 USD je Fall.
- * - Erfassung OpenAI mit gpt-6-astra „high“ wie die Verdichtung (AV-2026-W43-37). Die Erfassung ist in keinem Profil gemessen;
- *   sie folgt dem Modell und der Stufe der Verdichtung.
+ * - Erfassung OpenAI mit gpt-6-astra „high“ wie die Verdichtung (AV-2026-W43-37). Die Erfassung folgt dem Modell und der Stufe
+ *   der Verdichtung; gemessen ist sie mit je einem Lauf je Standard-Profil im Anbietervergleich vom 04.11.2026 (AV-2026-W45-01
+ *   bis -03, nur Schätzung, keine Bewertung der Modelle).
  * - Management Summary bestätigt: Sonnet „medium“, gpt-6.1-sol „medium“, Mistral Medium 3.5 „high“ (Large 4 nicht besser).
  */
 export interface ModellProfil {

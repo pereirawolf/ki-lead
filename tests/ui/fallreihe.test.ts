@@ -214,20 +214,21 @@ describe("Fallreihe: Plan, Start, Kostenbremse (TP-2026-W44-64, -65, -66)", () =
   });
 
   it("TP-2026-W44-65, -66: ein Klick startet alle Läufe; Kostenbremse; ZIP mit Übersicht und Vorlagen; Eintrag im Archiv", async () => {
-    // 1 USD je Aufruf, zwei Aufrufe je Lauf: 2 USD; Deckel 3 → der zweite Lauf würde ihn überschreiten
+    // 1 USD je Aufruf, zwei Aufrufe je Lauf: 2 USD; Deckel 4 → der zweite Lauf würde ihn überschreiten (obere Schätzung
+    // für Anthropic seit 0.7.9 3,38 USD, AV-2026-W45-01; der erste Lauf liegt darunter)
     await anzeigen(MIT, attrappe(1));
-    await dateiWaehlen("fallreihe-plan", new File([plan({ wiederholungen: 1, budget_usd: 3 })], "test-b5.json"));
+    await dateiWaehlen("fallreihe-plan", new File([plan({ wiederholungen: 1, budget_usd: 4 })], "test-b5.json"));
     await bisWahr(() => seitentext().includes("2 Läufe (2 × 1 × 1)"));
     await klick("Fallreihe starten");
     await bisWahr(() => seitentext().includes("Fallreihe beendet"));
     // nächster Lauf: obere Schätzung der App für Anthropic, mindestens die 2 USD des ersten Laufs
-    expect(seitentext()).toMatch(/Fallreihe beendet: 1 von 2 Läufen \(Kostenbremse vor Lauf 2: bisher 2 USD, nächster Lauf bis \d+(,\d+)? USD, Deckel 3 USD\)/);
+    expect(seitentext()).toMatch(/Fallreihe beendet: 1 von 2 Läufen \(Kostenbremse vor Lauf 2: bisher 2 USD, nächster Lauf bis \d+(,\d+)? USD, Deckel 4 USD\)/);
     expect(downloads.liste).toHaveLength(1);
     expect(downloads.liste[0]!.name).toMatch(/^KI-LEAD_Fallreihe_test-b5_\d{8}-\d{4}\.zip$/);
     const zip = await JSZip.loadAsync(await downloads.liste[0]!.inhalt.arrayBuffer());
     const reihe = JSON.parse(await zip.file("fallreihe.json")!.async("string"));
-    expect(reihe.plan).toEqual({ id: "test-b5", name: "test-b5.json", sha256: sha(plan({ wiederholungen: 1, budget_usd: 3 })) });
-    expect([reihe.recherche, reihe.budget_usd, reihe.laeufe.length]).toEqual(["sparsam", 3, 1]);
+    expect(reihe.plan).toEqual({ id: "test-b5", name: "test-b5.json", sha256: sha(plan({ wiederholungen: 1, budget_usd: 4 })) });
+    expect([reihe.recherche, reihe.budget_usd, reihe.laeufe.length]).toEqual(["sparsam", 4, 1]);
     expect(zip.file("bewertungen/E001.bewertung.json")).toBeTruthy();
     expect(zip.file("bewertungen/E001.pruefliste.md")).toBeTruthy();
     expect(zip.file("uebersicht.csv")).toBeTruthy();

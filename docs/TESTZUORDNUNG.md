@@ -1047,3 +1047,12 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Ist `bewertung` bei einem Betreiber vorhanden, gelten die üblichen Regeln (leere Kernaussage ab „zur_freigabe“ ungültig) | … › KL-2026-W45-01: Betreibermeldung mit bewertung folgt den üblichen Regeln | `tests/format/lead-meldung-v2.test.ts` |
 | Die Schemata der mitgelieferten Profile verlangen die Bewertung unverändert | … › KL-2026-W45-01: Behördenschemata der mitgelieferten Profile … | `tests/format/lead-meldung-v2.test.ts` |
 | Lagebild, Kopiervorlage, Rohtabelle und PDF lesen eine Betreibermeldung ohne `bewertung` ohne Fehler und ohne rohe Werte | KL-2026-W45-01: Betreibermeldung ohne bewertung in Lagebild und Ausgabe | `tests/kern/v2-darstellung.test.ts` |
+
+## Schätzung nach dem Anbietervergleich (0.7.9, Befunddatei `ki-lead-befund_schaetzung_2026-W45.json`, AV-2026-W45-01 bis -03, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kenndaten der drei internen Erfassungsläufe vom 04.11.2026 liegen in den Spannen, S2 mit 25 % Reserve; Spannen nach der Regel von Hand nachgerechnet | Schätzung von Dauer und Kosten › AV-2026-W45-01 bis -03: Messwerte des Anbietervergleichs … | `tests/pipeline/schaetzung.test.ts` |
+| Einzelmessungen (gpt-6-astra „hoch“, Mistral Medium 3.5 „hoch“) tragen den Zusatz „vorläufig, ein Messlauf“, Mistral mit EU-Aufschlag; jede Erfassung eines Cloud-Standard-Profils hat eine Spanne mit Dauer | … › AV-2026-W45-01 bis -03: … Einzelmessungen vorläufig | `tests/pipeline/schaetzung.test.ts` |
+| Nicht gemessene Stufe eines gemessenen Modells wird aus demselben Modell hochgerechnet, nicht aus einem fremden Modell gleicher Stufe | … › rechnet nicht gemessene Modelle über den Preis hoch, ohne Dauer | `tests/pipeline/schaetzung.test.ts` |
+| Laufschätzung zeigt Opus „mittel“ mit 3–14 Minuten und 1,40–3,35 USD und nennt viele Sachverhalte als Grund für längere Läufe | … › zeigt die Schätzung je Stufe nach Modell und Aufwand an | `tests/pipeline/schaetzung.test.ts` |

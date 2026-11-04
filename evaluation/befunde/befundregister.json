@@ -3231,6 +3231,61 @@
       "kurz": "Bewertung je Sachverhalt bei absender.ebene „Betreiber“ nicht Pflicht (fehlt = nicht erhoben), für alle übrigen Ebenen unverändert; Variante A, Voraussetzung für KRITIS-LEAD auf v2; Thessa pinnt das Kernschema neu.",
       "status": "umgesetzt",
       "pr": 146
+    },
+    {
+      "id": "AV-2026-W45-01",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|claude-opus-5-5|medium"
+        }
+      ],
+      "kurz": "Obergrenze der Erfassung mit Opus „mittel“ nach Überschreitung im Anbietervergleich vom 04.11.2026 auf 810 s und 3,35 USD (Messwert plus 25 %).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
+    },
+    {
+      "id": "AV-2026-W45-02",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|gpt-6-astra|high; schaetzeOhneAufschlag"
+        },
+        {
+          "datei": "src/ui/ModellWahl.tsx",
+          "stelle": "Schätzung je Rolle"
+        }
+      ],
+      "kurz": "Erfassung gpt-6-astra „hoch“ als vorläufige Einzelmessung (4–13 Minuten, 1,50–2,80 USD) statt Hochrechnung, gekennzeichnet; Hochrechnung zuerst aus demselben Modell.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
+    },
+    {
+      "id": "AV-2026-W45-03",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|mistral-medium-3-5|high"
+        }
+      ],
+      "kurz": "Erfassung Mistral Medium 3.5 „hoch“ als vorläufige Einzelmessung (1–6 Minuten, 0,20–0,65 USD ohne EU-Aufschlag) statt Hochrechnung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
     }
   ]
 }
