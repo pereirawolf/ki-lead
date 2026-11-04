@@ -3400,6 +3400,550 @@
       "status": "abgelehnt",
       "entschieden_am": "2026-11-04",
       "grund": "Vom Herausgeber nicht freigegeben; geringe Wirkung (rund 6 % eines Opus-Laufs ohne Recherche)."
+    },
+    {
+      "id": "UX-2026-W45-01",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Ablage (section.lb-ablage)"
+        }
+      ],
+      "kurz": "Sind Meldungen geladen, die Ablage auf eine Zeile „+ Meldungen hinzufügen“ (Dateien wählen, Beispiel) einklappen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-02",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Leiste über den Reitern (lb-leiste)"
+        }
+      ],
+      "kurz": "PDF und CSV in ein Menü „Ausgeben“, „An KI-Verdichtung übergeben“ bleibt Hauptknopf.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-03",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "nav.lb-reiter"
+        }
+      ],
+      "kurz": "Reiterleiste beim Scrollen unter dem Seitenkopf halten.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-04",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "absender()"
+        }
+      ],
+      "kurz": "In Überschriften der Oberfläche den Wert der Rolle „land“ (Land/Bund) zeigen, darunter den vollen Namen einzeilig klein, vollständig im Detail.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-05",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/app/adresse.ts",
+          "stelle": "adresseLesen, adresseText"
+        }
+      ],
+      "kurz": "Adresse #/auswertung/<reiter>.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-06",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, lb-kennzahlen"
+        }
+      ],
+      "kurz": "Kennzahlen in zwei beschriftete Gruppen „Lage“ und „Redaktion“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-07",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, Meldestatus"
+        }
+      ],
+      "kurz": "Offene Stellen zuerst mit Zahl, darunter gemeldete mit Meldezeitpunkt und Alter („vor 2 Tagen“).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-08",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, Verteilungen (Balken)"
+        }
+      ],
+      "kurz": "Beurteilung und Tendenz mit allen Stufen des Schemas in fester Reihenfolge, auch 0.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-09",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "kennzahlen()"
+        }
+      ],
+      "kurz": "Filter „Eigene Meldung“ neben dem Herkunftsfilter, standardmäßig einbezogen, mit derselben Wirkung (Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF, CSV).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-10",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Meldungen, Kartenkopf"
+        }
+      ],
+      "kurz": "Heller, schlanker Kopf mit Land/Bund, Stelle klein und Meldezeitpunkt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-11",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/bausteine.tsx",
+          "stelle": "Marken()"
+        }
+      ],
+      "kurz": "Schemamarke nur bei Abweichung (oder fremdem Schema) zeigen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-12",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Meldungen"
+        }
+      ],
+      "kurz": "Auswahl „Sortieren nach“ Land/Stelle, Meldezeitpunkt (neueste zuerst) oder höchster Beurteilung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-13",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "lb-sv-meta"
+        }
+      ],
+      "kurz": "Stelle (Land/Bund), Art und Eintritt als eigene, kurze Angaben.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-14",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "Filter (lb-svfilter)"
+        }
+      ],
+      "kurz": "Filter als Chips mit Anzahl für Beurteilung, Tendenz, Art (Mehrfachnennung) und Land/Bund, dazu eine Textsuche über Bezeichnung, Ort und Kennung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-15",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "Details, Bezug"
+        }
+      ],
+      "kurz": "Schalter „Nach Bezug ordnen“: Sachverhalte, die geladene Sachverhalte über „Bezug“ nennen, stehen oben, die genannten eingerückt darunter.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-16",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Lagenradar"
+        }
+      ],
+      "kurz": "Vergleichsmatrix (Zeilen Sachverhalte, Spalten Achsen, Zelle mit Stufe und Farbstufe, „offen“ eigens gekennzeichnet, kein Mittelwert) als Standard mit Umschalter „Matrix | Karten“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-17",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Radar.tsx",
+          "stelle": "RadarGrafik, Fläche"
+        }
+      ],
+      "kurz": "Fläche nur, wenn alle Achsen gesetzt sind.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-18",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Lagenradar"
+        }
+      ],
+      "kurz": "In der Matrix bis zu drei Sachverhalte markieren.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-19",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Punkt"
+        }
+      ],
+      "kurz": "Je Befund (zeitkritisch, zu klären) „Erledigt“ oder „Bewusst belassen“ mit freiwilliger Begründung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-20",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Abschnitte 1–5"
+        }
+      ],
+      "kurz": "Abschnitte aufklappbar, ohne Befund eingeklappt zu einer Zeile.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-21",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Textbaustein (Entwurf)"
+        }
+      ],
+      "kurz": "Textbaustein standardmäßig zugeklappt (Kopieren bleibt sichtbar).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-22",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "zurMeldung"
+        }
+      ],
+      "kurz": "Bei Befunden zu einem Sachverhalt zusätzlich „Zum Sachverhalt“ (Reiter Sachverhalte, gefiltert und aufgeklappt) und „In der Erfassung öffnen“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-23",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Kopiervorlage.tsx",
+          "stelle": "Blöcke"
+        }
+      ],
+      "kurz": "Blöcke eingeklappt mit Kopfzeile, „Kopieren“ und Vorschau bei Bedarf.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-24",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Kopiervorlage.tsx",
+          "stelle": "lb-vorlage-kopf"
+        }
+      ],
+      "kurz": "Kopf gegliedert: Bezeichnung, darunter Land/Bund, Beurteilung und Tendenz als Marken, Frist und Abschlussvermerk als eigene Angabe.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-25",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Rohtabelle"
+        }
+      ],
+      "kurz": "Zellen auf drei Zeilen kürzen, per Klick aufklappbar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-26",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/ausgabe.ts",
+          "stelle": "spalten()"
+        }
+      ],
+      "kurz": "Spaltengruppen ein- und ausblendbar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-27",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "KartenInhalt"
+        }
+      ],
+      "kurz": "Alle Karten gleich aufgebaut und zugeklappt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-28",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "profil-meta"
+        }
+      ],
+      "kurz": "Unter dem Titel eine Zeile Eckdaten: Ebene · Referenzraum · Schema · Lagenradar ja/nein · SOPs.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-29",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Knopf Verwenden"
+        }
+      ],
+      "kurz": "Schlichter Knopf „Verwenden“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-30",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "BefundChip, Titel"
+        }
+      ],
+      "kurz": "Befundchip nur bei Fehlern oder Warnungen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-31",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Bereich Prüfen"
+        }
+      ],
+      "kurz": "Schema, Lizenz, Prüfsumme, Prüfbericht und Dateien unter „Technische Angaben“ (aufklappbar) zusammenfassen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-32",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Menü Mehr"
+        }
+      ],
+      "kurz": "Mit nur einem Eintrag ein direkter Knopf „Exportieren“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
     }
   ]
 }
