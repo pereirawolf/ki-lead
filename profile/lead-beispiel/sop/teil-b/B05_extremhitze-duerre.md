@@ -64,6 +64,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Beurteilung/Tendenz:** Tendenzen je Teilprofil mit Raum und Horizont ausweisen: Abkühlung kann die Gesundheitsbelastung senken, während Wasserdefizite fortbestehen. Erneute Verschärfung nur benennen, wenn Prognose oder belegte Saisonalität sie stützt.
 
+**Zielkonflikt der Teilprofile:** Gelten Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum, prüfen, ob die Vorgaben Trinken und Körperkühlung ausdrücklich ausnehmen und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Belegte Widersprüche gehören als Risiko für Befolgung und Warnakzeptanz in „Risiken & Auswirkungen“ (A.9.3, A.9.5); eine fehlende Ausnahme ist eine benennbare Lücke für „Maßnahmen & Handlungsempfehlungen“.
+
 **Offenlassen:** D2 bei unzureichender Datenbasis; D5 ohne definierten Zielzustand; D4 meist ohne Beleg für externe Hilfe.
 
 ### 4. Darstellung
