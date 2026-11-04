@@ -102,6 +102,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
 | 0.7.5 | letzter Commit des Pull Requests „Schwester-Repos: Meldungsmodule, Thessa-Kennzahlen 0.3, Austauschvertrag 0.5; 0.7.5“ |
 | 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ (Nachtrag vom 04.11.2026: Beispielprofil 1.38.0 und Landesprofil Thüringen 1.4.0 mit dem Pull Request „Lernschleife KW 45: Arbeitsanweisung Erfassung 1.11.0, Kodierleitfaden 1.9.0, Sammelmappe 3.23.0“, ohne Änderung der App) |
+| 0.7.7 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 45: Platzhalter im Zeitstrahl zuordnen; 0.7.7“ |
+
+## [0.7.7] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W45.json` (Schwerpunkt Kennungsvergabe und Zeitstrahl nach S2, Commit `94a5dac`), GK-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 (Variante A). Anlass war ein interner Erfassungslauf, in dem Zeitstrahlzeilen den Platzhalter behielten.
+
+### Behoben
+
+- **Platzhalter nur im Zeitstrahl (GK-2026-W45-01):** Setzt die KI `NEU-n` nur in Zeilen des Zeitstrahls und lässt das Feld der Kennung leer, ordnete die Nachbearbeitung die Zeilen keinem Sachverhalt zu; sie behielten „NEU-n“, und erst die Schemaprüfung warnte (`ZEITSTRAHL_KENNUNG_UNBEKANNT`). Jetzt gilt `NEU-n` für den n-ten Sachverhalt, der ohne Kennung kam, wie es die Arbeitsanweisung für die Reihenfolge der Platzhalter vorsieht; der Hinweis `KENNUNG_PLATZHALTER_ZUGEORDNET` nennt jede Zeile zur Prüfung. Ein Platzhalter ohne passenden Sachverhalt bleibt stehen und wird mit `KENNUNG_PLATZHALTER_OFFEN` genannt (`src/pipeline/zeitstrahl.ts`).
+
+### Geändert
+
+- Spezifikation 0.7.7. Versionsangaben 0.7.7 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 707); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/pipeline/zeitstrahl.test.ts`: Platzhalter nur im Zeitstrahl werden in Reihenfolge zugeordnet, mehrfache Zeilen desselben Platzhalters eingeschlossen, mit Hinweis; ein Platzhalter ohne passenden Sachverhalt bleibt mit Hinweis stehen.
 
 ## [0.7.6] – 04.11.2026
 

@@ -3181,6 +3181,27 @@
       "status": "abgelehnt",
       "entschieden_am": "2026-11-04",
       "grund": "Übungsläufe bleiben außerhalb des Regelwerks (Entscheidung des Herausgebers)."
+    },
+    {
+      "id": "GK-2026-W45-01",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W45.json",
+      "commit": "94a5dac12863404faf091963a7559a66972d705a",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten, Schritt 1 Kennungen (Z. 115–138, insbesondere Z. 124 „if (!roh) return;“)"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Absatz „Zeitstrahl, Kennung und Bezug“ (Z. 113)"
+        }
+      ],
+      "kurz": "Platzhalter NEU-n, die die KI nur im Zeitstrahl setzt, dem n-ten Sachverhalt ohne Kennung zuordnen und mit Hinweis nennen; nicht zuordenbare Platzhalter melden.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 145
     }
   ]
 }

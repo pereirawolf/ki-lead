@@ -1030,3 +1030,10 @@ Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des R
 | Kodierleitfaden (Beispiel- und Landesprofil) Grundregel 6 und Prüfreihenfolge: gerundete amtliche Zählangaben an einer Stufengrenze als Mindestwert, Schätzungen nach der Bandbreitenregel | Lernschleife KW 45, Kodierleitfaden › LS-2026-W45-04: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.9.0). LS-2026-W45-03, -05 und -06 sind Text- und Zuordnungsregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und der abgeleiteten Landesdateien prüfen die bestehenden Tests.
+
+## Gesamtkonsistenz KW 45 (0.7.7, Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W45.json`, GK-2026-W45-01, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Platzhalter `NEU-n` nur im Zeitstrahl gehen an den n-ten Sachverhalt ohne Kennung, auch bei mehreren Zeilen desselben Platzhalters; Hinweis `KENNUNG_PLATZHALTER_ZUGEORDNET` nennt jede Zeile | ZS-2026-W44-02: Kennungen vergibt nur die App › GK-2026-W45-01: Platzhalter nur im Zeitstrahl … | `tests/pipeline/zeitstrahl.test.ts` |
+| Platzhalter ohne passenden Sachverhalt bleibt stehen, Hinweis `KENNUNG_PLATZHALTER_OFFEN` | ZS-2026-W44-02: … › GK-2026-W45-01: ein Platzhalter ohne passenden Sachverhalt … | `tests/pipeline/zeitstrahl.test.ts` |
