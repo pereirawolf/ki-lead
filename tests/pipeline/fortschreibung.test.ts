@@ -160,13 +160,15 @@ describe("Fortschreibung auf den heutigen Stand", () => {
     expect(att.anfragen[1].system.at(-1)!.text).toContain("- Stichtag: 2026-10-22");
   });
 
-  it("Stichtag in der Zukunft: t0 nicht nach der aktuellen Zeit, mit Hinweis zum Stichtag", async () => {
+  it("AV-2026-W45-07: Stichtag in der Zukunft: t0 bleibt leer (sperrt S2), Hinweis nennt den Vorschlag aus S1", async () => {
     const { k } = await fortschreibung([llmAntwort(s1Fortschreibung({ stichtag: "2026-10-23", meldezeitpunkt: "2026-10-23T08:00" }))], {
       stichtag: "2026-10-23",
     });
     const v = await stufe1(k);
-    expect(v.meldezeitpunkt).toBe("2026-10-22T06:06");
-    expect(v.appHinweise![0]).toContain("Der Stichtag 23.10.2026 liegt nach dem heutigen Tag");
+    // bis 0.7.9 die aktuelle Zeit (2026-10-22T06:06), die vor allen Ereignissen am Stichtag lag
+    expect(v.meldezeitpunkt).toBe("");
+    expect(v.appHinweise![0]).toContain("Der Stichtag 23.10.2026 liegt nach dem heutigen Tag. t0 ist deshalb nicht vorbelegt (Vorschlag aus S1: 23.10.2026");
+    expect(v.appHinweise![0]).toContain("S2 startet erst mit einem gültigen t0");
   });
 });
 

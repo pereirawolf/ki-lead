@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import JSZip from "jszip";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
-import { leseOrdner, profilPflicht, repoPfad } from "../support/dateien";
+import { leseOrdner, profil, profilPflicht, repoPfad } from "../support/dateien";
 import { llmAntwort, meldungsAntwort } from "../support/anbieter";
 import { referenzAjv } from "../support/ajv";
 import type { LlmAnbieter, LlmAnfrage } from "../../src/anbieter/typen";
@@ -20,7 +20,7 @@ import {
   type KatalogFall,
 } from "../../src/forschung/fallkatalog";
 import { einstellungenFuerLauf, matrixVarianten, planAbgleichen, planLesen } from "../../src/forschung/fallplan";
-import { bremseGreift, fallreihe, laufplan, obergrenze, VORBEHALT_USD } from "../../src/forschung/fallreihe";
+import { bremseGreift, fallreihe, laufplan, obergrenze, radarKennzahlen, VORBEHALT_USD } from "../../src/forschung/fallreihe";
 import { bewertungsvorlage, fallreiheZip, UEBERSICHT_KOPF } from "../../src/forschung/fallreihe-export";
 import type { Profil } from "../../src/kern/typen";
 
@@ -346,6 +346,12 @@ describe("Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66)", () => {
       quellen: quellenSoll,
       websuchen: 0,
     });
+    // AV-2026-W45-08: Anteil offener Radarachsen, von Hand aus dem Entwurf gezählt; Prüfmuster mit Wortlaut je Treffer
+    const achsen = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"];
+    const offenSoll = sv.reduce((n, s) => n + achsen.filter((a) => !Number.isInteger(s.sofort?.lagenradar?.[a])).length, 0) / (sv.length * 8);
+    expect(gas!.pruefungen.radar_offen).toBeCloseTo(offenSoll, 3);
+    expect(gas!.pruefungen.radar_pruefmuster).toBe(gas!.pruefungen.radar_hinweise!.length);
+    for (const h of gas!.pruefungen.radar_hinweise!) expect(h).toMatch(/^Sachverhalt \d+: D[35] = \d/);
     expect(gas!.pruefungen.fristen_vor_t0).toEqual(expect.any(Number));
     expect(reihe).toMatchObject({ format: "ki-lead-fallreihe/1", laeufe_geplant: 2, plan: null, recherche: null, budget_usd: null });
     expect(reihe.faelle.map((f) => [f.id, f.profil, f.art])).toEqual([
@@ -432,5 +438,30 @@ describe("Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66)", () => {
       signal: ctrl.signal,
     });
     expect([abgebrochen.ergebnisse.length, abgebrochen.reihe.beendet]).toEqual([0, "abgebrochen"]);
+  });
+});
+
+describe("AV-2026-W45-08: Radarkennzahlen je Lauf", () => {
+  it("zählt offene Achsen über alle Sachverhalte und Treffer des Prüfmusters; ohne Meldung null", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const sv = (radar: Record<string, number | null>, text: string) => ({ sofort: { lagenradar: radar, bewertung_text: text }, analyse: {} });
+    const voll = { d1: 2, d2: null, d3: 2, d4: null, d5: 3, d6: 1, d7: 0, d8: null };
+    const meldung = {
+      sachverhalte: [
+        sv(voll, "D3 = 2, D3 Funktion: Gefahrenabwehr, Kreis. D5 = 3: Zielzustand Versorgung wiederhergestellt."),
+        sv({ d1: null, d2: null, d3: 5, d4: null, d5: 6, d6: null, d7: null, d8: null }, "D3 = 5 (Bund). D5 = 6, weil es lange dauert."),
+      ],
+    } as any;
+    // offen: 3 von 8 im ersten, 6 von 8 im zweiten Sachverhalt → 9 / 16
+    expect(radarKennzahlen(meldung, p!)).toEqual({
+      offen: 0.563,
+      pruefmuster: 2,
+      hinweise: [
+        "Sachverhalt 2: D3 = 5 ohne Kennzeichnung der bewerteten Funktion („D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“)",
+        "Sachverhalt 2: D5 = 6, ohne dass ein Zielzustand genannt ist",
+      ],
+    });
+    expect(radarKennzahlen(undefined, p!)).toEqual({ offen: null, pruefmuster: null, hinweise: [] });
+    expect(UEBERSICHT_KOPF).toEqual(expect.arrayContaining(["radar_offen", "radar_pruefmuster"]));
   });
 });

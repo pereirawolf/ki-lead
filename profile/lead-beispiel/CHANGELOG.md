@@ -8,6 +8,18 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.39.0 – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json` (Anbietervergleich vom 04.11.2026: je ein interner Erfassungslauf der Standard-Profile von Anthropic, OpenAI und Mistral mit demselben Material, ohne Recherche; Commit `6302c14`), freigegeben vom Herausgeber am 04.11.2026: AV-2026-W45-04 bis -08 angenommen, -09 nicht freigegeben. Material, Laufprotokolle und Inhalte der Läufe bleiben intern. Zweite Stelle, weil der Kodierleitfaden neue Regeln erhält; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert.
+
+Befund aus dem Vergleich: Beurteilung und Zuschnitt der sechs Sachverhalte stimmten bei allen drei Anbietern überein, das Lagenradar streute stark (Anteil offener Achsen 29 bis 73 %, D3 desselben Sachverhalts 0, 2 und 5). Ein Anbieter führte ein Sammeldokument als einzige Quelle; ein anderer setzte D1, D3 und D5 ohne die verlangten Bezugsgegenstände.
+
+- **Kodierleitfaden 1.10.0:** Abschnitt 5: Sammel- und Auswertungsdokumente mit eigenem Eintrag je verwendetem Ursprungsdokument, Kategorie nach Herkunft und „(Eingangsmaterial, enthalten in [Qn])“ (AV-2026-W45-04). D3: Auswahl der Funktion bei mehreren Ebenen (Kernaussage und Beurteilung, sonst staatliche Steuerung vor Betrieb) und Kennzeichnung „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“ (AV-2026-W45-05). Abschnitt 7: drei Kurzbeispiele für Sachverhalte ohne eigenen Schadensraum zu D1, D3 und D5 (AV-2026-W45-06).
+- **Arbeitsanweisung Erfassung 1.11.1:** Kopf nennt den Kodierleitfaden ab 1.10.0; Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.10.0“.
+- **SOP-LEAD-Sammelmappe 3.23.1:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Kodierleitfaden 1.10.0 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend; die neuen Regeln gelten über den Verweis). Die Prüfmuster der Fallreihe (App 0.7.10, AV-2026-W45-08) setzen die Kennzeichnung nach D3 voraus.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.38.0 – 04.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45.json` (Lernschleife KW 45 zu einem internen Erfassungslauf vom 04.11.2026 mit vorstrukturiertem Analysematerial, Commit `b4d35be`), Entscheidungen des Herausgebers vom 04.11.2026: LS-2026-W45-01, -02, -04, -05 angenommen; -03 und -06 angepasst; -07 abgelehnt. Zweite Stelle, weil sich Regeln der Arbeitsanweisung Erfassung und eine Kodierregel ändern; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert. Material, Laufprotokoll und Rückmeldungen des Laufs bleiben intern.

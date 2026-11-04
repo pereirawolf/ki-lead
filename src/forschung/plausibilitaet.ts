@@ -178,3 +178,21 @@ export function plausibilitaetPruefen(meldung: Meldung): PlausibilitaetsBefund[]
   });
   return out;
 }
+
+/**
+ * Prüfmuster der Radarbegründung (seit 0.7.10, AV-2026-W45-08), vorerst nur in der Fallreihe: Übernahme in die App wie bei
+ * der D2-Plausibilität erst nach Bewährung (Entscheidung vom 25.10.2026). Der Text ist alles, was ein Sachverhalt zur
+ * Begründung trägt (Analysefelder, Bewertungstext, bei LEAD-Meldung-v2 die Begründung je Achse).
+ * - D3 gesetzt ohne Kennzeichnung der bewerteten Funktion („D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“;
+ *   Kodierleitfaden ab 1.10.0, D3)
+ * - D5 gesetzt, ohne dass der Text einen Zielzustand nennt (Kodierleitfaden, D5: Zielzustand ausdrücklich benennen)
+ */
+export const D3_KENNZEICHNUNG = /\bD3\s+(?:Funktion|strukturell|Vorsorge)\s*:/i;
+
+export function radarBegruendungPruefen(text: string, werte: Record<string, number | null>): { achse: "d3" | "d5"; text: string }[] {
+  const out: { achse: "d3" | "d5"; text: string }[] = [];
+  if (Number.isInteger(werte.d3) && !D3_KENNZEICHNUNG.test(text))
+    out.push({ achse: "d3", text: `D3 = ${werte.d3} ohne Kennzeichnung der bewerteten Funktion („D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“)` });
+  if (Number.isInteger(werte.d5) && !/Zielzustand/i.test(text)) out.push({ achse: "d5", text: `D5 = ${werte.d5}, ohne dass ein Zielzustand genannt ist` });
+  return out;
+}

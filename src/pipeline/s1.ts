@@ -208,10 +208,13 @@ function bereinigeVorschlag(v: S1Vorschlag, k: Kontext): S1Vorschlag {
         );
     }
   } else if (stichtag > heute) {
-    // R5 Stichtag in der Zukunft: t0 nie nach der aktuellen Zeit
-    t0 = kiT0 && kiT0 <= jetzt ? kiT0 : jetzt;
+    // R5 Stichtag in der Zukunft: t0 bleibt leer und sperrt S2, bis die Person t0 oder den Stichtag festlegt (seit 0.7.10,
+    // AV-2026-W45-07). Bis 0.7.9 setzte die App die aktuelle Zeit; die Meldung lag dann vor allen Ereignissen am Stichtag.
+    t0 = "";
     appHinweise.push(
-      `Der Stichtag ${tagText(stichtag)} liegt nach dem heutigen Tag; ein Meldezeitpunkt in der Zukunft ist nicht zulässig. t0 steht auf ${zeitText(t0)}. Bitte Stichtag prüfen.`,
+      `Der Stichtag ${tagText(stichtag)} liegt nach dem heutigen Tag. t0 ist deshalb nicht vorbelegt${
+        kiT0 ? ` (Vorschlag aus S1: ${zeitText(kiT0)})` : ""
+      }: Bitte t0 angeben oder den Stichtag im Auftrag korrigieren; S2 startet erst mit einem gültigen t0.`,
     );
   } else {
     // R5 zurückliegender Stichtag (Übung, Rückblick): S1-Vorschlag gilt, aber nicht in der Zukunft

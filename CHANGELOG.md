@@ -105,6 +105,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.7 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 45: Platzhalter im Zeitstrahl zuordnen; 0.7.7“ |
 | 0.7.8 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Betreibermeldungen ohne Bewertung; 0.7.8“ |
 | 0.7.9 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Schätzung von Dauer und Kosten der Erfassung; 0.7.9“ |
+| 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
+
+## [0.7.10] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json` (Anbietervergleich vom 04.11.2026: je ein interner Erfassungslauf der Standard-Profile von Anthropic, OpenAI und Mistral mit demselben Material, ohne Recherche; Commit `6302c14`), freigegeben vom Herausgeber am 04.11.2026: AV-2026-W45-04 bis -08 angenommen, -09 nicht freigegeben. Material, Laufprotokolle und Inhalte der Läufe bleiben intern. Setzt 0.7.9 (Pull Request #147) voraus.
+
+### Geändert
+
+- **t0 bei Stichtag in der Zukunft (AV-2026-W45-07):** Die App belegt t0 nicht mehr mit der aktuellen Zeit, sondern lässt es leer; der Hinweis nennt einen Vorschlag aus S1, und S2 bleibt gesperrt, bis t0 angegeben oder der Stichtag korrigiert ist (`src/pipeline/s1.ts`, Regel R5). Ein leeres t0 sperrt S2 im Bestätigungsschritt jetzt wie ein unvollständiges (`src/ui/kiErfassung/Bestaetigung.tsx`). Anlass: Im Vergleich lief ein Lauf mit t0 am Tag der Bearbeitung, gut acht Monate vor dem Stichtag und allen Ereignissen der Meldung.
+- **Radarkennzahlen der Fallreihe (AV-2026-W45-08):** `uebersicht.csv` nennt je Lauf den Anteil offener Radarachsen über alle Sachverhalte (`radar_offen`) und die Treffer des Prüfmusters der Radarbegründung (`radar_pruefmuster`: D3 gesetzt ohne „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“, D5 gesetzt ohne genannten Zielzustand); der Wortlaut je Treffer steht in `fallreihe.json` (`radar_hinweise`). Nur in der Fallreihe; in die App kommt das Prüfmuster wie die D2-Plausibilität erst nach Bewährung (Entscheidung vom 25.10.2026). `radarBegruendungPruefen` in `src/forschung/plausibilitaet.ts`, `radarKennzahlen` in `src/forschung/fallreihe.ts`, LEAD-Meldung-v1 und -v2.
+- **Beispielprofil 1.39.0 und Landesprofil 1.5.0** mit Kodierleitfaden 1.10.0 (AV-2026-W45-04 bis -06), Arbeitsanweisung Erfassung 1.11.1 und Sammelmappe 3.23.1; Einzelheiten in den Profilverläufen.
+- **Nicht übernommen:** AV-2026-W45-09 (Cache-Haltepunkte in S2 nur bei möglicher Wiederverwendung; rund 6 % der Kosten eines Opus-Laufs ohne Recherche), vom Herausgeber nicht freigegeben.
+- Spezifikation 0.7.10 (Abschnitt 5.1, S1; Abschnitt 5.4, Fallreihe). Versionsangaben 0.7.10 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 710); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/pipeline/fortschreibung.test.ts`: Stichtag in der Zukunft lässt t0 leer, Hinweis mit Vorschlag aus S1 (bisheriges Soll „aktuelle Zeit“ ersetzt).
+- `tests/ui/fortschreibung.test.ts`: Bestätigung mit leerem t0, S2 gesperrt, nach Eingabe von t0 frei.
+- `tests/forschung/plausibilitaet.test.ts`: Prüfmuster D3 und D5 mit und ohne Kennzeichnung, offene Achsen und D5 = 0 ohne Treffer.
+- `tests/forschung/fallreihe.test.ts`: Radarkennzahlen von Hand gezählt; Spalten der Übersicht; Lauf der Fallreihe mit `radar_offen` aus dem Entwurf.
+- `tests/pipeline/kontext.test.ts`: Kennung „Kodierleitfaden LEAD 1.10.0“.
 
 ## [0.7.9] – 04.11.2026
 

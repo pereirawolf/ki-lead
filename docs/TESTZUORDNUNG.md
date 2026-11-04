@@ -1056,3 +1056,15 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Einzelmessungen (gpt-6-astra „hoch“, Mistral Medium 3.5 „hoch“) tragen den Zusatz „vorläufig, ein Messlauf“, Mistral mit EU-Aufschlag; jede Erfassung eines Cloud-Standard-Profils hat eine Spanne mit Dauer | … › AV-2026-W45-01 bis -03: … Einzelmessungen vorläufig | `tests/pipeline/schaetzung.test.ts` |
 | Nicht gemessene Stufe eines gemessenen Modells wird aus demselben Modell hochgerechnet, nicht aus einem fremden Modell gleicher Stufe | … › rechnet nicht gemessene Modelle über den Preis hoch, ohne Dauer | `tests/pipeline/schaetzung.test.ts` |
 | Laufschätzung zeigt Opus „mittel“ mit 3–14 Minuten und 1,40–3,35 USD und nennt viele Sachverhalte als Grund für längere Läufe | … › zeigt die Schätzung je Stufe nach Modell und Aufwand an | `tests/pipeline/schaetzung.test.ts` |
+
+## Anbietervergleich: t0, Radarkennzahlen, Kodierleitfaden 1.10.0 (0.7.10, Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json`, AV-2026-W45-04 bis -08, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Stichtag in der Zukunft: t0 bleibt leer, Hinweis nennt den Vorschlag aus S1 und die Sperre von S2 | Fortschreibung auf den heutigen Stand › AV-2026-W45-07: Stichtag in der Zukunft … | `tests/pipeline/fortschreibung.test.ts` |
+| Bestätigung mit leerem t0: Datum und Uhrzeit leer, S2 gesperrt mit Begründung, nach Eingabe von t0 frei | Fortschreibung in der KI-Erfassung › AV-2026-W45-07: … sperrt S2, bis t0 angegeben ist | `tests/ui/fortschreibung.test.ts` |
+| Prüfmuster: D3 ohne „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“ und D5 ohne Zielzustand werden gemeldet, offene Achsen und D5 = 0 mit Zielzustand nicht | AV-2026-W45-08: Prüfmuster der Radarbegründung › … | `tests/forschung/plausibilitaet.test.ts` |
+| Anteil offener Achsen über alle Sachverhalte und Treffer mit Wortlaut, von Hand gezählt; ohne Meldung null; Spalten `radar_offen` und `radar_pruefmuster` in der Übersicht | AV-2026-W45-08: Radarkennzahlen je Lauf › … | `tests/forschung/fallreihe.test.ts` |
+| Lauf der Fallreihe trägt `radar_offen` gleich der Zählung aus dem Entwurf und `radar_pruefmuster` gleich der Zahl der Hinweise | Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66) › … | `tests/forschung/fallreihe.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.10.0). AV-2026-W45-04 bis -06 sind Kodierregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und des abgeleiteten Landesprofils prüfen die bestehenden Profiltests.

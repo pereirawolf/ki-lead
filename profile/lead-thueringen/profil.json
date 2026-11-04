@@ -3,7 +3,7 @@
   "id": "lead.beispiel.thueringen",
   "name": "LEAD-Beispiel – Land Thüringen (fiktive Inhalte)",
   "beschreibung": "Beispielprofil auf Landesebene: Eigenmeldung eines Lagezentrums des Landes, das die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammenführt. Fiktives Beispiel des Herausgebers mit realen Gebietsnamen; keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden und ohne landesrechtliche Bezüge. Arbeitsweise und SOP-LEAD-Sammelmappe wie im Beispielprofil der Koordinierungsstelle.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Land",
@@ -18,16 +18,12 @@
     "rollenprofil": "landesweite Redaktion",
     "rolle_beschreibung": "Die meldende Stelle (Lagezentrum des Landes (Beispiel)) führt die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammen. Sie ist in diesem Beispiel keine zusätzliche Entscheidungsebene, hat gegenüber den Kreisen keine Weisungsbefugnis und keine eigene operative Einsatzzuständigkeit. Die Zuständigkeiten der Kreise als untere Katastrophenschutzbehörden bleiben unberührt; ihre Empfehlungen richten sich an die zuständigen Stellen."
   },
-  "eigene_stellen": [
-    "Lagezentrum des Landes (Beispiel) – Redaktionskonferenz"
-  ],
+  "eigene_stellen": ["Lagezentrum des Landes (Beispiel) – Redaktionskonferenz"],
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
     "schema_id": "LEAD-Meldung-Land-v1",
-    "eingang_schema_ids": [
-      "LEAD-Meldung-Land-v1"
-    ]
+    "eingang_schema_ids": ["LEAD-Meldung-Land-v1"]
   },
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md",

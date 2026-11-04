@@ -56,7 +56,8 @@ export function Bestaetigung({
     () => s2UmfangWarnung(s2Umfang(profil, material, lauf.auftrag.urls, lauf.auftrag.stichworte, vorschlag)),
     [profil, material, lauf, vorschlag],
   );
-  const t0Ungueltig = !!vorschlag.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
+  // Auch ein leeres t0 sperrt S2 (seit 0.7.10, AV-2026-W45-07: Stichtag in der Zukunft lässt t0 leer)
+  const t0Ungueltig = !gueltigerZeitpunkt(vorschlag.meldezeitpunkt || "");
   /** Verweis der Startknöpfe auf den Grund der Sperre */
   const beschreibung = [t0Ungueltig && "t0-ungueltig", offline && OFFLINE_HINWEIS].filter(Boolean).join(" ") || undefined;
   // Orientierungssuche und Pflichtsuchen (seit 0.6.0, KP-2026-W44-06)
