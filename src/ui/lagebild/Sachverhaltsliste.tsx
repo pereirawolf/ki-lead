@@ -98,27 +98,37 @@ export function Sachverhaltsliste({
             const kennung = r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "";
             const bezug = bezugVon(s.sv, ui);
             const zeilen = r.zeitstrahl && r.sv_kennung ? eintraegeFuer(zeitstrahlText(s.eintrag.daten, ui), kennung).map(zeitstrahlAnzeige) : [];
-            const meta = [s.arten.join(", "), s.ort, s.eintritt && `Eintritt ${datumDE(s.eintritt)}`].filter(Boolean);
+            const lOrt = r.sv_ort ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_ort}`) : "Ort";
             return (
               <li key={`${s.eintrag.id}-${s.index}`} className="lb-sv-zeile">
                 <details>
+                  {/* Kopf gegliedert: Bezeichnung mit Marken, Angaben einzeln, Ort eigene Zeile gekürzt (seit UX-2026-W45-13) */}
                   <summary>
                     <span className="lb-sv-kopf">
                       <span className="lb-sv-name">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</span>
                       <SvMarken s={s} profil={profil} />
                     </span>
-                    <span className="lb-sv-meta">
+                    <span className="lb-sv-angaben">
                       <Absender e={s.eintrag} profil={profil} zeile />
-                      {meta.length ? ` · ${meta.join(" · ")}` : ""}
+                      {s.arten.length > 0 && <span className="lb-sv-angabe">{s.arten.join(", ")}</span>}
+                      {s.eintritt && <span className="lb-sv-angabe">Eintritt {datumDE(s.eintritt)}</span>}
+                      {kennung && <span className="lb-kennung-inline">{kennung}</span>}
+                      {r.herkunft && <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>}
                     </span>
-                    {(kennung || r.herkunft) && (
-                      <span className="lb-sv-meta">
-                        {kennung && <span className="lb-kennung-inline">{kennung}</span>}
-                        {r.herkunft && <Marke farbe="amt">Herkunft: {herkunftsrolleAnzeige(profil, s.herkunftsrolle)}</Marke>}
+                    {s.ort && (
+                      <span className="lb-sv-ort" title={s.ort}>
+                        <span className="sr-only">{lOrt}: </span>
+                        {s.ort}
                       </span>
                     )}
                   </summary>
                   <dl className="lb-sv-details">
+                    {s.ort && (
+                      <>
+                        <dt>{lOrt}</dt>
+                        <dd className="lb-lang-text">{s.ort}</dd>
+                      </>
+                    )}
                     {bezug.length > 0 && (
                       <>
                         <dt>Bezug</dt>

@@ -553,12 +553,6 @@ button.lb-kennzahl:hover {
   font-weight: 700;
 }
 
-.lb-sv-meta {
-  font-size: 0.82rem;
-  color: var(--tinte-leise);
-  overflow-wrap: anywhere;
-}
-
 .lb-kennung-inline {
   margin-right: 0.5rem;
   font-variant-numeric: tabular-nums;
@@ -1169,4 +1163,38 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
 .lb-karte.lb-karte-eigen {
   border-color: var(--amt);
   box-shadow: inset 0 0 0 1px var(--amt);
+}
+
+/* Sachverhaltszeile gegliedert (seit UX-2026-W45-13) */
+.lb-sv-angaben {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.9rem;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-sv-angaben .lb-absender-zeile {
+  max-width: min(100%, 40rem);
+}
+
+.lb-sv-angaben .lb-absender-kurz {
+  color: var(--tinte);
+}
+
+.lb-sv-ort {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-sv-zeile details[open] .lb-sv-ort {
+  display: none;
 }
