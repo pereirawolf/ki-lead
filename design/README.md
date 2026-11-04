@@ -1,6 +1,6 @@
 # Grunddesign der App-Familie
 
-Fassung 1.2 vom 04.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
+Fassung 1.3 vom 04.11.2026 · Heiko Pereira Wolf · Lizenz CC BY 4.0 (siehe [Lizenz](#lizenz))
 
 Diese Beschreibung legt das gemeinsame Grunddesign der Apps **KI-LEAD**, **KRITIS-LEAD** und **Thessa** fest. Es geht um Rahmen, Navigation, Seitenaufbau, Bedienmuster, Farbrollen, Schrift und Zugänglichkeit. Referenzumsetzung ist KI-LEAD. Jede Regel nennt ihre Fundstelle dort, Tests halten Beschreibung und Code im Gleichlauf.
 
@@ -222,3 +222,4 @@ Die Token-Dateien sind **erzeugt**. `npm run design:tokens` liest Farbrollen, Si
 | 1.0 | 03.11.2026 | Erste Fassung nach dem Stand von KI-LEAD 0.7.3: 47 Regeln, Wireframes, Tokens im Format der DTCG |
 | 1.1 | 04.11.2026 | Nach dem Abgleich mit Thessa ([thessa#16](https://github.com/pereirawolf/thessa/pull/16)): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem Katalog (LD-F01, LD-F02); neue Signalfarben `einsatz` und `einsatz-zart` für den Status „im Einsatz“, Zuordnung der Ampel der Einsatzbereitschaft (LD-F04); „Zurück“ und „Weiter“ nur in Schrittfolgen (LD-A05); Befunde mit Sprung nur für Eingaben in Formularen (LD-E04). Kennungen und Zahl der Regeln unverändert. |
 | 1.2 | 04.11.2026 | Nach dem Abgleich mit KRITIS-LEAD ([kritis-lead#18](https://github.com/pereirawolf/kritis-lead/pull/18)), Entscheidungen des Herausgebers vom 03.11.2026: Hauptnavigation einer App aus mehreren Seiten (LD-N01); Farbschema eines beim Bau eingebetteten Profils, dunkel und bei „mehr Kontrast“ wie „Automatisch“ (LD-F01); Kontrastprüfung beim Bau mit Abbruch (LD-F03); Referenzumsetzung zu LD-B01 und LD-Z02 nachgezogen (Chips und Segmente, KI-LEAD 0.7.6). Kennungen, Zahl der Regeln und Tokens unverändert. |
+| 1.3 | 04.11.2026 | Referenzumsetzung nach der Durchsicht der Oberfläche (Befunddatei `ki-lead-befund_ux_2026-W45.json`, KI-LEAD 0.7.11): Reiter der Auswertung in der Reihenfolge Lage, Redaktion, Ausgabe mit feinen Trennern und unter dem Kopf stehend (UX-2026-W45-03, Beispiel zu LD-A06 und LD-A07); Adresse der Auswertung `#/auswertung/<reiter>` (UX-2026-W45-05, Beispiel zu LD-N04). Regeln, Kennungen und Tokens unverändert. |

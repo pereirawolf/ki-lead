@@ -106,6 +106,44 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.8 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Betreibermeldungen ohne Bewertung; 0.7.8“ |
 | 0.7.9 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Schätzung von Dauer und Kosten der Erfassung; 0.7.9“ |
 | 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
+| 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
+
+## [0.7.11] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_ux_2026-W45.json` (Oberfläche der Ansichten „Profile“ und „Auswertung“, eigene Durchsicht am Build 0.7.7 bei 1366 px und 390 px mit dem Beispiel „Ilka“, Commit `1395a76`), UX-2026-W45-01 bis -32, alle freigegeben vom Herausgeber am 04.11.2026 mit den Entscheidungen zu -03, -04, -05, -09, -16, -17, -19 und -26. Keine Änderung an KI-Pipeline, Profilen, Schemata und Inhalten der Ausgaben; PDF und Kopiervorlage zeichnen das Lagenradar mit offener Achse anders (-17), das Lagebild-PDF vermerkt eine ausgeblendete eigene Meldung (-09), der Redaktionsbericht nennt den Bearbeitungsstand (-19).
+
+### Geändert – Auswertung
+
+- **Ablage einzeilig (UX-2026-W45-01):** Sind Meldungen geladen, wird die Ablage zu einer Zeile („+ Meldungen hinzufügen“, Beispiel); Ziehen und Ablegen gilt für die ganze Ansicht.
+- **Ausgaben gebündelt (UX-2026-W45-02):** PDF und CSV im Menü „Ausgeben“ (`src/ui/Menue.tsx`, aus der Profilansicht), „An KI-Verdichtung übergeben“ bleibt Hauptknopf, „Alle entfernen“ am Ende der Dateiliste.
+- **Reiter (UX-2026-W45-03):** Reihenfolge Übersicht, Sachverhalte, Lagenradar, Meldungen | Redaktionscheck | Kopiervorlage, Rohtabelle mit feinen Trennern; die Leiste bleibt unter dem Kopf stehen, ist einzeilig und schmal waagerecht scrollbar (`useKopfHoehe` in `src/ui/kopfHoehe.ts`).
+- **Kurzer Absender (UX-2026-W45-04):** Überschriften nennen Land/Bund und den vollen Namen der Stelle klein (`absenderTeile`, Komponenten `Absender` und `SvTitel`); Ausgaben unverändert.
+- **Adresse (UX-2026-W45-05):** `#/auswertung/<reiter>`; `#/lagebild/…` wird gelesen und ohne neuen Verlaufseintrag ersetzt.
+- **Übersicht (UX-2026-W45-06 bis -08):** Kennzahlen in den Gruppen „Lage“ und „Redaktion“, jede als Knopf („Meldungen“ und „Sachverhalte“ öffnen ihre Reiter), mit 0 zurückgenommen. Meldestatus mit offenen Stellen zuerst und „Alle offenen erinnern“ (ein Entwurf, echte Adressen in Bcc; der im Durchgang W44 verworfene Sammelknopf scheiterte an verschiedenen Empfängern, Bcc löst das), gemeldete Stellen mit jüngstem Zeitpunkt und Alter. Verteilungen von Beurteilung und Tendenz mit allen Stufen in fester Reihenfolge; „Meldende Stellen“ entfällt.
+- **Eigene Meldung (UX-2026-W45-09):** Schalter „Eigene Meldung – einbeziehen“ neben dem Herkunftsfilter, standardmäßig an, mit dessen Reichweite; Kennzahlen nennen „davon … aus eigener Meldung“, das PDF vermerkt die Auswahl. Anlass: Im Beispiel Ilka verdichtet der Bundessachverhalt die sieben Ländersachverhalte und zählte doppelt.
+- **Meldungen (UX-2026-W45-10 bis -12):** heller Kartenkopf mit Akzentlinie, Dateiname unter „Entstehung“; Schemamarke nur bei Abweichung; Sortierung nach Land/Stelle, Meldezeitpunkt oder höchster Beurteilung, eigene Meldung zuerst und abgesetzt.
+- **Sachverhalte (UX-2026-W45-13 bis -15):** gegliederte Zeile (Stelle, Art, Eintritt, Kennung einzeln, Ort eigene Zeile auf zwei Zeilen gekürzt); Filter als Chips mit Anzahl für Beurteilung, Tendenz, Art und Land/Bund, dazu Textsuche über Bezeichnung, Ort und Kennung (`svFiltern`); Hinweise „Bezug auf n geladene“ und „genannt in …“, Schalter „Nach Bezug ordnen“.
+- **Lagenradar (UX-2026-W45-16, -18):** Vergleichsmatrix (Sachverhalte × Achsen, Stufe und Farbstufe, offen als „U“, ohne Mittelwert) als Standard mit Umschalter „Matrix | Karten“, Zeile öffnet die Karte (`src/ui/lagebild/Radarvergleich.tsx`); bis zu drei Sachverhalte in einem Radar überlagert (durchgezogen, gestrichelt, gepunktet; `RadarGrafik` mit `reihen`).
+- **Redaktionscheck (UX-2026-W45-19 bis -22):** „Erledigt“ und „Bewusst belassen …“ (Begründung freiwillig) je Befund „zeitkritisch“ oder „zu klären“; Stand je Befundschlüssel (`befundSchluessel` in `src/lagebild/redaktion.ts`: Inhaltskennung der Meldungen und Gegenstand, nicht Uhrzeit), gespeichert in `LagebildStand.bearbeitung`, im Redaktionsbericht als `uebersicht.offen` und `befunde[].bearbeitung`; Reiter und Kennzahl zählen offene Befunde. Abschnitte aufklappbar mit Befundzahl, ohne Befund eingeklappt; Befundtext zweizeilig mit „mehr“; Filter nach Einstufung und „Bearbeitete ausblenden“; Textbausteine zugeklappt; „Zum Sachverhalt“ und „In der Erfassung öffnen“.
+- **Kopiervorlage (UX-2026-W45-23, -24):** Blöcke eingeklappt mit Vorschau, Häkchen und „Auswahl kopieren (n)“; Kopf mit Bezeichnung, Absender, Marken, Frist und Abschlussvermerk.
+- **Rohtabelle (UX-2026-W45-25, -26):** Kernspalten vorn, Kopf und erste Spalte stehend, Zellen auf drei Zeilen gekürzt und je Zeile aufklappbar (`src/ui/lagebild/Rohtabelle.tsx`); Spaltengruppen als Chips (`SPALTENGRUPPEN`, `Spalte.gruppe` in `src/lagebild/ausgabe.ts`), Standard „kompakt“, Auswahl in `LagebildStand.rohtabelle`; CSV und PDF unverändert vollständig.
+
+### Behoben
+
+- **Offene Radarachse (UX-2026-W45-17):** Eine offene Achse ging mit 0 in die Fläche ein und sah aus wie Stufe 0. Oberfläche, Kopiervorlage und PDF zeichnen jetzt eine Fläche nur bei vollständigem Radar, sonst Kanten zwischen benachbarten gesetzten Achsen und einen hohlen Ring am Rand (`src/kern/radarGeometrie.ts`).
+
+### Geändert – Profile
+
+- **Karten (UX-2026-W45-27 bis -32):** alle Karten gleich aufgebaut und zugeklappt, das verwendete Profil hervorgehoben; Eckdaten (Ebene, Referenzraum, Schema, Lagenradar, SOPs) auch zugeklappt; schlichter Knopf „Verwenden“, die Ansicht bleibt nach dem Wechsel stehen und bietet „Zur Erfassung“ an (`aktivieren` in `src/App.tsx` springt nicht mehr); Befundchip nur bei Fehlern oder Warnungen, Klammerzusatz des Namens als Kennzeichen, Farbband eines Profilfarbschemas; „Technische Angaben“ zugeklappt, Herausgeber-Adresse als Verweis; mitgelieferte Profile mit Knopf „Exportieren“ statt Menü mit einem Eintrag.
+- Grunddesign der App-Familie Fassung 1.3 (`design/`): Reiterfolge der Referenzumsetzung und Adresse der Auswertung als Beispiele zu LD-A06, LD-A07 und LD-N04; Regeln und Tokens unverändert.
+- Spezifikation 0.7.11 (4.6, 5.1, 5.2). Versionsangaben 0.7.11 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 711); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/ui/ux-2026-w45.test.ts` (neu): Adresse, Meldestatus, Ablage, Ausgaben und Reiter, Kennzahlen und eigene Meldung, Meldungen, Filter und Bezug der Sachverhalte, Matrix, offene Achse und Überlagerung im Radar, Kopiervorlage, Rohtabelle und Spaltengruppen.
+- `tests/ui/redaktionscheck.test.ts`: Bearbeitungsstand (Zahl, Speicher, Bericht, neu bei geänderter Meldung), Filter und Textbaustein, Sprung zum Sachverhalt und in die Erfassung; RV07 öffnet das Menü „Ausgeben“.
+- `tests/ui/profile.test.ts`: Karten, Eckdaten, „Verwenden“, Befundchip, Namenszusatz und Farbband, technische Angaben, „Exportieren“; angepasst an die neuen Texte.
+- Angepasst: `tests/ui/lagebild.test.ts` (Karten des Radars über den Umschalter), `tests/browser/hauptablauf.spec.ts`, `pwa.spec.ts` (Menü „Ausgeben“), `einstellungen.spec.ts` (Adresse), `ux-2026-w44.spec.ts` (Chips).
 
 ## [0.7.10] – 04.11.2026
 
