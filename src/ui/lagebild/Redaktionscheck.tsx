@@ -244,7 +244,7 @@ export function Redaktionscheck({
 
         <Abschnitt
           nr={1}
-          anzahl={jeAbschnitt[0]!}
+          anzahl={jeAbschnitt[0]}
           id="lb-red-1"
           titel={`Zeitfenster „${ks.handlungsrelevant || "Handlungsrelevant bis:"}“`}
           verweis={v.zeitfenster}
@@ -272,7 +272,7 @@ export function Redaktionscheck({
           )}
         </Abschnitt>
 
-        <Abschnitt nr={2} anzahl={jeAbschnitt[1]!} id="lb-red-2" titel="Zusammenhang und abweichende Bewertungen" verweis={v.zusammenhang}>
+        <Abschnitt nr={2} anzahl={jeAbschnitt[1]} id="lb-red-2" titel="Zusammenhang und abweichende Bewertungen" verweis={v.zusammenhang}>
           {red.gruppen.length === 0 ? (
             <p className="leer">Keine Ereignisart wird in mehr als einer Meldung genannt.</p>
           ) : (
@@ -355,7 +355,7 @@ export function Redaktionscheck({
           )}
         </Abschnitt>
 
-        <Abschnitt nr={3} anzahl={jeAbschnitt[2]!} id="lb-red-3" titel="Fortschreibung, Nachlauf und Abschluss" verweis={v.fortschreibung}>
+        <Abschnitt nr={3} anzahl={jeAbschnitt[2]} id="lb-red-3" titel="Fortschreibung, Nachlauf und Abschluss" verweis={v.fortschreibung}>
           {!red.nachlauf.length && !red.abschluss.length && !red.aenderung.length && !red.mehrfach.length && !red.kennungen.length && !red.marker.length && (
             <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
           )}
@@ -447,7 +447,7 @@ export function Redaktionscheck({
 
         <Abschnitt
           nr={4}
-          anzahl={jeAbschnitt[3]!}
+          anzahl={jeAbschnitt[3]}
           id="lb-red-4"
           titel={`Formale Vollständigkeit bei ${red.hoch.stufen.map((b) => `„${b}“`).join(" / ") || "hoher Beurteilung"}`}
           verweis={v.kernaussage}
@@ -477,7 +477,7 @@ export function Redaktionscheck({
           )}
         </Abschnitt>
 
-        <Abschnitt nr={5} anzahl={jeAbschnitt[4]!} id="lb-red-5" titel="Quellen, Schema und Status" verweis={v.quellen}>
+        <Abschnitt nr={5} anzahl={jeAbschnitt[4]} id="lb-red-5" titel="Quellen, Schema und Status" verweis={v.quellen}>
           {red.quellen.length === 0 ? (
             <p className="leer">
               {red.abdeckung.meldungen

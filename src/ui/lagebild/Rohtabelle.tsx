@@ -28,7 +28,7 @@ export function Rohtabelle({
     const t = rohtabelle(eintraege, profil);
     // Kernspalten zuerst, sonst die Reihenfolge des Schemas; übrige nur aus zugeschalteten Gruppen
     const folge = [...sp.keys()]
-      .filter((i) => sp[i]!.gruppe === "kern" || !sp[i]!.gruppe || gruppen.includes(sp[i]!.gruppe!))
+      .filter((i) => sp[i]!.gruppe === "kern" || !sp[i]!.gruppe || gruppen.includes(sp[i]!.gruppe))
       .sort((a, b) => Number(sp[b]!.gruppe === "kern") - Number(sp[a]!.gruppe === "kern") || a - b);
     return { kopf: folge.map((i) => t[0]![i]!), zeilen: t.slice(1).map((z) => folge.map((i) => z[i] ?? "")) };
   }, [eintraege, profil, sp, gruppen]);

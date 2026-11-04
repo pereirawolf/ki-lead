@@ -251,7 +251,13 @@ describe("UX-2026-W45-28: Eckdaten jeder Karte", () => {
       expect([...dl.querySelectorAll("dt")].map((d) => d.textContent)).toEqual(["Ebene", "Referenzraum", "Schema", "Lagenradar", "SOPs"]);
     }
     const lead = karten()[0].querySelector(".profil-eckdaten")!;
-    expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual(["Bund", "Bevölkerungsschutz in Deutschland", "LEAD-Meldung-v1", "ja", "17 Dach-SOPs · 18 ergänzende Bausteine"]);
+    expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual([
+      "Bund",
+      "Bevölkerungsschutz in Deutschland",
+      "LEAD-Meldung-v1",
+      "ja",
+      "17 Dach-SOPs · 18 ergänzende Bausteine",
+    ]);
   });
 });
 
@@ -287,7 +293,10 @@ describe("UX-2026-W45-29: Verwenden ohne Sprung", () => {
 describe("UX-2026-W45-30: Name, Kennzeichen und Farben der Karte", () => {
   it("trennt den Klammerzusatz als Kennzeichen ab", async () => {
     const { nameUndZusatz } = await import("../../src/ui/Profile");
-    expect(nameUndZusatz("Lagebild Justiz – Landesprofil (Erprobungsentwurf)")).toEqual({ name: "Lagebild Justiz – Landesprofil", zusatz: "Erprobungsentwurf" });
+    expect(nameUndZusatz("Lagebild Justiz – Landesprofil (Erprobungsentwurf)")).toEqual({
+      name: "Lagebild Justiz – Landesprofil",
+      zusatz: "Erprobungsentwurf",
+    });
     expect(nameUndZusatz("LEAD-Beispiel – Koordinierungsstelle")).toEqual({ name: "LEAD-Beispiel – Koordinierungsstelle" });
     const justiz = await eintrag("lead-justiz");
     const lead = await eintrag("lead-beispiel");

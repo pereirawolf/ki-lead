@@ -125,8 +125,7 @@ export function spalten(profil: Profil): Spalte[] {
     : [];
   // Gruppen für die Rohtabelle (seit UX-2026-W45-26)
   const unter = (pfad: string | undefined, rolle: string | undefined) => !!pfad && !!rolle && (pfad === rolle || pfad.startsWith(rolle + "."));
-  for (const k of kopf)
-    k.gruppe = [r.land, r.meldende_stelle, r.meldezeitpunkt].includes(k.pfad) ? "kern" : unter(k.pfad, r.freigabe) ? "freigabe" : "meldung";
+  for (const k of kopf) k.gruppe = [r.land, r.meldende_stelle, r.meldezeitpunkt].includes(k.pfad) ? "kern" : unter(k.pfad, r.freigabe) ? "freigabe" : "meldung";
   for (const k of sv)
     k.gruppe = [r.sv_kennung, r.sv_bezeichnung, r.sv_art, r.sv_ort, r.sv_beurteilung, r.sv_tendenz].includes(k.pfad)
       ? "kern"

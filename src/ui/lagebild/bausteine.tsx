@@ -222,7 +222,7 @@ export function Punkt({
   useLayoutEffect(() => {
     const el = textRef.current;
     if (el && kuerzen && !auf) setUeberlauf(el.scrollHeight > el.clientHeight + 1);
-  });
+  }, [kuerzen, auf, children]);
   const stand = schluessel && k ? k.bearbeitung[schluessel] : undefined;
   const bearbeitbar = !!(schluessel && k && (klasse === "alert" || klasse === "warn"));
   // Filter nach Einstufung und Bearbeitung (UX-2026-W45-21)
@@ -254,7 +254,7 @@ export function Punkt({
       {(aktion || bearbeitbar) && (
         <div className="lb-punkt-aktionen">
           {aktion}
-          {bearbeitbar && <Bearbeiten schluessel={schluessel!} titel={titelText} />}
+          {bearbeitbar && <Bearbeiten schluessel={schluessel} titel={titelText} />}
         </div>
       )}
     </div>

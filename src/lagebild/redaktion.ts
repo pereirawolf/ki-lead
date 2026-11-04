@@ -499,7 +499,8 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
         .join("; ")}`,
     });
   }
-  for (const x of red.vermerkt) out.push({ schluessel: befundSchluessel.vermerkt(x), abschnitt: 2, klasse: "info", ...sv(x.sv), text: `${ks.abweichung} ${x.text}` });
+  for (const x of red.vermerkt)
+    out.push({ schluessel: befundSchluessel.vermerkt(x), abschnitt: 2, klasse: "info", ...sv(x.sv), text: `${ks.abweichung} ${x.text}` });
   for (const m of red.mehrfach)
     out.push({
       schluessel: befundSchluessel.mehrfach(m),
@@ -509,12 +510,34 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
       text: `Mehrere Meldungen derselben Stelle: ${m.eintraege.map((e) => `${e.name} (${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"})`).join(", ")}`,
     });
   for (const k of red.kennungen)
-    out.push({ schluessel: befundSchluessel.kennung(k), abschnitt: 3, klasse: k.art === "bezug" ? "info" : "warn", ...sv(k.sachverhalte[0]!), bezug: k.kennung, text: kennungsText(k, profil) });
-  for (const x of red.marker) out.push({ schluessel: befundSchluessel.marker(x), abschnitt: 3, klasse: "warn", ...sv(x.sv), text: `„${x.kennsatz}“ – ${x.text}` });
-  for (const x of red.nachlauf) out.push({ schluessel: befundSchluessel.nachlauf(x), abschnitt: 3, klasse: "warn", ...sv(x), text: `Tendenz „${x.tendenz}“ ohne Abschlussvermerk – Nachlauf prüfen` });
+    out.push({
+      schluessel: befundSchluessel.kennung(k),
+      abschnitt: 3,
+      klasse: k.art === "bezug" ? "info" : "warn",
+      ...sv(k.sachverhalte[0]!),
+      bezug: k.kennung,
+      text: kennungsText(k, profil),
+    });
+  for (const x of red.marker)
+    out.push({ schluessel: befundSchluessel.marker(x), abschnitt: 3, klasse: "warn", ...sv(x.sv), text: `„${x.kennsatz}“ – ${x.text}` });
+  for (const x of red.nachlauf)
+    out.push({
+      schluessel: befundSchluessel.nachlauf(x),
+      abschnitt: 3,
+      klasse: "warn",
+      ...sv(x),
+      text: `Tendenz „${x.tendenz}“ ohne Abschlussvermerk – Nachlauf prüfen`,
+    });
   for (const x of red.abschluss)
-    out.push({ schluessel: befundSchluessel.abschluss(x), abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.abschluss} ${x.text}${x.rueckblick ? " – Rückblick einplanen" : ""}` });
-  for (const x of red.aenderung) out.push({ schluessel: befundSchluessel.aenderung(x), abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.aenderung} ${x.text}` });
+    out.push({
+      schluessel: befundSchluessel.abschluss(x),
+      abschnitt: 3,
+      klasse: "info",
+      ...sv(x.sv),
+      text: `${ks.abschluss} ${x.text}${x.rueckblick ? " – Rückblick einplanen" : ""}`,
+    });
+  for (const x of red.aenderung)
+    out.push({ schluessel: befundSchluessel.aenderung(x), abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.aenderung} ${x.text}` });
   for (const x of red.kern) out.push({ schluessel: befundSchluessel.kern(x), abschnitt: 4, klasse: "warn", ...sv(x.sv), text: x.fehlt.join(" · ") });
   for (const q of red.quellen)
     out.push({
