@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "30.04.2027"
@@ -42,7 +42,7 @@ Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewer
 |---|---|---|---|---|
 | R1 | Welche Hitzeintensität und -dauer sind prognostiziert, wie ist die nächtliche Entlastung? | [DWD](https://www.dwd.de/), Hitzewarnungen; laufend; Ausgabe und Gültigkeit prüfen | L/R | Warnstufe ist Prognose, keine Mortalitätsaussage; sie kann Prüf- oder Handlungsbedarf auslösen, begründet aber keinen Ist-Wert auf D1 oder D8. |
 | R2 | Welche hitzebedingte Mortalität wird geschätzt? | [RKI Hitzemortalität](https://www.rki.de/DE/Themen/Gesundheit-und-Gesellschaft/Gesundheitliche-Einflussfaktoren-A-Z/H/Hitze/Bericht_Hitzemortalitaet.html); saisonal wöchentlich; Destatis/EuroMOMO zum Vergleich | R; D2 | Modellbasierte, zeitverzögerte Schätzung mit Prädiktionsintervall und kumulativem Berichtsbezug; Bezugswoche und Revisionsstand angeben; nicht mit aktuellen Erkrankten addieren und nicht ungeprüft als Direktbetroffenheit zum Stichtag kodieren (A.2). |
-| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2). |
+| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2, vertiefend C18). |
 | R4 | Welche Hitzeschutzmaßnahmen gelten und wirken? | Hitzeaktionspläne der Länder und Kommunen, Gesundheitsbehörden; anlassbezogen | M | Plan, umgesetzte Maßnahme und belegte Wirkung trennen. |
 
 #### Teilprofil 5b: Trockenheit/Niedrigwasser (R5–R8)

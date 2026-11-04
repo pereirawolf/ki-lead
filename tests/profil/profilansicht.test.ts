@@ -26,10 +26,10 @@ import { sopGruppen } from "../../src/pipeline/kontext";
 
 import { repoPfad } from "../support/dateien";
 describe("Anzeigetitel und Versions-Tags", () => {
-  it("alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag", async () => {
+  it("alle 35 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const fach = fachSops(p!);
-    expect(fach).toHaveLength(34);
+    expect(fach).toHaveLength(35);
     for (const s of fach) {
       const a = sopAnzeige(s);
       expect(a.kennung).toMatch(/^[BC]\d{2}$/);
@@ -37,7 +37,7 @@ describe("Anzeigetitel und Versions-Tags", () => {
       expect(`${a.kennung} ${a.name}`).not.toContain(s.version!);
       expect(a.name).not.toMatch(/SOP LEAD|Baustein LEAD/);
     }
-    expect(sopAnzeige(fach.find((s) => s.nummer === "B08")!)).toEqual({ kennung: "B08", name: "Stromausfall / Blackout", tag: "v2.2.0" });
+    expect(sopAnzeige(fach.find((s) => s.nummer === "B08")!)).toEqual({ kennung: "B08", name: "Stromausfall / Blackout", tag: "v2.2.1" });
   });
 
   it("Teil A trägt „gilt immer“, fehlende Version „ohne Version“; der Nachweis bleibt unverändert", async () => {
@@ -46,12 +46,12 @@ describe("Anzeigetitel und Versions-Tags", () => {
     expect(sopAnzeige(a)).toEqual({ name: "Teil A – Gemeinsame Regeln", tag: "gilt immer" });
     const b08 = fachSops(p!).find((s) => s.nummer === "B08")!;
     expect(sopAnzeige({ ...b08, version: undefined }).tag).toBe("ohne Version");
-    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.2.0");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.2.1");
   });
 
   it("Anzahl und Gruppenhinweis nennen die Inhaltsgerüste", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(sopAnzahl(p!)).toBe("17 Dach-SOPs · 17 ergänzende Bausteine, davon 15 Inhaltsgerüste");
+    expect(sopAnzahl(p!)).toBe("17 Dach-SOPs · 18 ergänzende Bausteine, davon 16 Inhaltsgerüste");
     const gruppen = sopGruppen(p!);
     expect(gruppenHinweis(gruppen[0].sops)).toBeUndefined();
     // Leseblöcke mit einem ausgearbeiteten Baustein (Beispielfassung, z. B. C01, C12) tragen keinen Inhaltsgerüst-Hinweis
@@ -70,7 +70,7 @@ describe("Steckbrief und Lesetext", () => {
     const { profil: p } = await profil("lead-beispiel");
     const c11 = fachSops(p!).find((s) => s.nummer === "C11")!;
     const sb = Object.fromEntries(sopSteckbrief(c11).map((a) => [a.label, a.wert]));
-    expect(sb.Version).toBe("1.2.2");
+    expect(sb.Version).toBe("1.2.3");
     expect(sb.Bearbeitungsstand).toMatch(/^Inhaltsgerüst/);
     expect(sb.Ereignisart).toBe("KRITIS-Ausfall, Cyberangriff / IT-Sicherheitsvorfall");
     expect(sb["Frühere Kennung"]).toBe("N02");
@@ -210,7 +210,7 @@ describe("Katalogsuche", () => {
     expect([...sopSuche(p!, "telekommunikation")]).toContain("c11");
     expect([...sopSuche(p!, "N02")]).toEqual(["c11"]);
     expect([...sopSuche(p!, "sop-08")]).toEqual(["b08"]);
-    expect(sopSuche(p!, "").size).toBe(35);
+    expect(sopSuche(p!, "").size).toBe(36);
     expect(sopSuche(p!, "gibtesnicht").size).toBe(0);
     expect(sopSuche(p!, "Lastabschaltung").size).toBe(0);
     expect([...sopSuche(p!, "Lastabschaltung", true)]).toContain("b08");

@@ -31,9 +31,9 @@ function kontext(p: any, sops: string[]): Kontext {
 }
 
 describe("SOP-Integration laut SOP-Übersicht", () => {
-  it("die Übersicht nennt 17 Dach-SOPs und 17 Bausteine", () => {
+  it("die Übersicht nennt 17 Dach-SOPs und 18 Bausteine", () => {
     expect(register.filter((r) => r.kennung.startsWith("B"))).toHaveLength(17);
-    expect(register.filter((r) => r.kennung.startsWith("C"))).toHaveLength(17);
+    expect(register.filter((r) => r.kennung.startsWith("C"))).toHaveLength(18);
   });
 
   it.each(register)("$kennung ist geladen, im S1-Schema und -Katalog und geht an S2", async ({ kennung, datei }) => {
@@ -59,7 +59,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
       ["Ergänzende Bausteine: Besondere Ereignis- und Gefahrenlagen", 6],
       ["Ergänzende Bausteine: Gesundheit und medizinische Versorgung", 4],
       ["Ergänzende Bausteine: Versorgung, Kommunikation und Logistik", 5],
-      ["Ergänzende Bausteine: Lageübergreifende Querschnitte", 2],
+      ["Ergänzende Bausteine: Lageübergreifende Querschnitte", 3],
     ]);
   });
 
@@ -79,7 +79,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
   it("leere Menge beigefügter SOPs lässt nichts durch (SOP-CODE-01)", async () => {
     const { profil: p } = await profil("lead-beispiel");
     expect(sopKennungenAbgleichen(["SOP-LEAD C11 x"], p!, new Set())).toEqual([]);
-    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.2.0"]);
+    expect(sopKennungenAbgleichen(["SOP-LEAD B08 x", "SOP-LEAD C11 x"], p!, new Set(["b08"]))).toEqual(["SOP-LEAD B08 Stromausfall / Blackout v2.2.1"]);
   });
 
   it("Nachweis = beigefügte SOPs, unabhängig vom Antwortformat; Abweichungen als Hinweis (SOP-CODE-02)", async () => {
