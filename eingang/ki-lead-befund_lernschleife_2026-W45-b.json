@@ -1,0 +1,61 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "lernschleife",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-04T18:25:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+  "pruefumfang": "Lernschleife auf Hinweis des Herausgebers (Nachtrag zu ki-lead-befund_lernschleife_2026-W45.json): Vergleich von vier internen Erfassungsläufen vom 04.11.2026 mit demselben Material (Profil 1.36.1, 1.37.0, 1.38.0 zweimal; nur Material). Gelesen: Kodierleitfaden Abschnitt 1, 4 und 7, B05 Abschnitt 3. Weitere Streuung bei Radarwerten (D1, D6, D7 bei Folgesachverhalten) als Beobachtung, nicht als Befund. Material, Protokolle und Meldungen bleiben intern. Offene Befunde: 0; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "npm test nicht ausgeführt (keine Änderung)",
+    "Kein Kalibrierbeispiel angelegt (würde Inhalte der internen Läufe tragen)"
+  ],
+  "befunde": [
+    {
+      "id": "LS-2026-W45-08",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 4, Tendenz (Z. 144)",
+          "ist": "Tendenz (Entspannung / Stabilisierung / Verschärfung) wird mit ausdrücklich benanntem Bezugsraum und Zeitfenster begründet. Fehlende neue Erkenntnisse sind kein Beleg für Stabilisierung."
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 3, Beurteilung/Tendenz (Z. 65)",
+          "ist": "Erneute Verschärfung nur benennen, wenn Prognose oder belegte Saisonalität sie stützt."
+        }
+      ],
+      "beobachtung": "Anlass: vier interne Erfassungsläufe vom 04.11.2026 mit demselben Material (Profil 1.36.1 bis 1.38.0, nur Material); Material, Protokolle und Meldungen bleiben intern. Beobachtung: Für denselben Sachverhalt mit derselben Beleglage setzten zwei Läufe „Verschärfung“ (gestützt auf eine amtliche Prognose für das Zeitfenster), zwei ließen die Tendenz offen (Begründung: kein belegter Verlauf gegenüber einem früheren Stand, die Entwicklung sei nur Szenario). Beide Lesarten sind mit Abschnitt 4 vereinbar: Er verlangt Bezugsraum und Zeitfenster, sagt aber nicht, ob die Tendenz einen beobachteten Verlauf bis t0 beschreibt oder die erwartete Entwicklung im Zeitfenster, und welche Grundlage eine erwartete Entwicklung tragen darf. B05 setzt die Prognose als zulässige Grundlage voraus, der Kodierleitfaden als einziger Ort für die Regel (A.10.2) nennt sie nicht. Folge: uneinheitliche Tendenzen bei gleicher Beleglage, besonders bei Folgesachverhalten (Kommunikation, Versorgung), deren Verlauf von einer Gefahrenprognose abhängt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Kodierleitfaden Abschnitt 4, Spiegelstrich Tendenz, um zwei Sätze zur Grundlage ergänzen; ein Kurzbeispiel in Abschnitt 7. Abnahme: Satz in Abschnitt 4 und Beispiel in Abschnitt 7; Kodierleitfaden 1.10.0; Arbeitsanweisungen Erfassung und Verdichtung auf Anpassungsbedarf geprüft und im Profilverlauf vermerkt (A.10.2).",
+        "neuer_text": "Die Tendenz beschreibt die erwartete Entwicklung des Sachverhalts im benannten Zeitfenster ab t0. Sie stützt sich auf einen belegten Verlauf bis t0 oder auf eine Prognose einer zuständigen Stelle oder Fachbehörde, die das Zeitfenster abdeckt (bei Folgesachverhalten die Prognose der auslösenden Gefahr, wenn die Kopplung belegt ist); ein Szenario der meldenden Stelle allein trägt keine Tendenz. Der Bewertungstext nennt, worauf sich die Tendenz stützt."
+      },
+      "folgeaenderungen": [
+        "profile/lead-beispiel/kodierleitfaden.md: Fassung 1.10.0, Änderungsverlauf Abschnitt 9",
+        "Gültigkeitsstand Teil A (Kodierleitfaden), Sammelmappe dritte Stelle",
+        "Arbeitsanweisungen Erfassung (4.4) und Verdichtung auf Anpassungsbedarf prüfen; Beispielwert _entstehung.kodierleitfaden",
+        "profile/lead-thueringen/kodierleitfaden.md neu ableiten (npm run profil:land); Landesprofil-Version",
+        "B05, Abschnitt 3: Verweis auf Kodierleitfaden Abschnitt 4 prüfen",
+        "tests/pipeline/kontext.test.ts (Fassung des Kodierleitfadens)"
+      ],
+      "entscheidungsfrage": "(A) Tendenz als erwartete Entwicklung im Zeitfenster, getragen von belegtem Verlauf oder Prognose einer zuständigen Stelle, bei belegter Kopplung auch für Folgesachverhalte (Vorschlag); (B) Tendenz nur aus belegtem Verlauf bis t0, Prognosen gehören nur in Risiken und „Neubewertung bei:“; (C) wie (A), aber ohne Übertragung auf Folgesachverhalte.",
+      "sicherheit": "mittel",
+      "automatisierbar": "Textprüfung in tests/profil/ (Beispiel- und Landesprofil): Abschnitt 4 nennt die Grundlage der Tendenz; zusätzlich ein Kalibrierbeispiel nach A.10.3 in evaluation/bewertungshilfen.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Rundungsregel (Kodierleitfaden 1.9.0, Grundregel 6): ein Lauf setzte die niedrigere Stufe als Mindestwert regelkonform, ein anderer die höhere; Regeltext eindeutig, kein Befund.",
+    "Weitere Beobachtung: Radarwerte von Folgesachverhalten (Verhalten, Kommunikation) schwanken zwischen Läufen bei gleicher Beleglage (D1 offen oder 3, D6 offen oder 0, D7 offen, 2 oder 3); Kandidat für eine Kalibrierung nach A.10.3 mit mehreren Läufen.",
+    "Weitere Beobachtung: Ein Lauf ließ eine dokumentierte Maßnahme wegen widersprüchlicher Datierung ganz weg, statt den Widerspruch nach A.3 sichtbar zu lassen; Regel eindeutig, Modellverhalten.",
+    "Weitere Beobachtung: Die Kurzantwortzeile „Nicht übernommen“ nennt in zwei Läufen keine Kennungen des Materials, obwohl die Arbeitsanweisung 1.11.0 das verlangt; nach weiteren Läufen prüfen, ob die Regel geschärft werden muss."
+  ]
+}
