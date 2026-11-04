@@ -11,6 +11,20 @@
   margin-bottom: 1rem;
 }
 
+/* Eine Zeile, sobald Meldungen geladen sind (seit UX-2026-W45-01) */
+.lb-ablage-kompakt {
+  border-width: 1px;
+  padding: 0.5rem 0.75rem;
+}
+
+.lb-ablage-kompakt .aktionen {
+  align-items: center;
+}
+
+.lb-ablage-zusatz {
+  font-size: 0.82rem;
+}
+
 .lb-ablage-aktiv {
   border-color: var(--amt);
   background: var(--amt-zart);

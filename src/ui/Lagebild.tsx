@@ -390,8 +390,27 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const beispiele = profil.manifest.beispiele || [];
   const fehlerListe = [...importFehler, ...lesefehler];
 
+  // Seit UX-2026-W45-01: Sind Meldungen geladen, ist die Ablage eine Zeile; Ziehen und Ablegen gilt für die ganze Ansicht
+  const kompakt = alleEintraege.length > 0;
+
   return (
-    <div className="lagebild">
+    <div
+      className="lagebild"
+      onDragOver={(e) => {
+        if (!e.dataTransfer?.types?.includes("Files")) return;
+        e.preventDefault();
+        setZiehen(true);
+      }}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setZiehen(false);
+      }}
+      onDrop={(e) => {
+        if (!e.dataTransfer?.files?.length) return;
+        e.preventDefault();
+        setZiehen(false);
+        void auswahl(e.dataTransfer.files);
+      }}
+    >
       <div className="werkzeugleiste">
         <div className="werkzeugleiste-text">
           <h1>Auswertung</h1>
@@ -400,31 +419,28 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
       </div>
       <ProfilZeile profil={profil} />
 
-      <section
-        className={ziehen ? "lb-ablage lb-ablage-aktiv" : "lb-ablage"}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setZiehen(true);
-        }}
-        onDragLeave={() => setZiehen(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setZiehen(false);
-          void auswahl(e.dataTransfer.files);
-        }}
-      >
-        <p>
-          <strong>Meldungen hier ablegen</strong> (JSON-Dateien oder ZIP-Archive)
-        </p>
+      <section className={["lb-ablage", kompakt ? "lb-ablage-kompakt" : "", ziehen ? "lb-ablage-aktiv" : ""].filter(Boolean).join(" ")}>
+        {!kompakt && (
+          <p>
+            <strong>Meldungen hier ablegen</strong> (JSON-Dateien oder ZIP-Archive)
+          </p>
+        )}
         <div className="aktionen">
-          <button type="button" className="knopf primaer" onClick={() => eingabe.current?.click()}>
-            Dateien wählen
+          <button type="button" className={kompakt ? "knopf" : "knopf primaer"} onClick={() => eingabe.current?.click()}>
+            {kompakt ? "+ Meldungen hinzufügen" : "Dateien wählen"}
           </button>
           {beispiele.map((b) => (
-            <button key={b.ordner} type="button" className="knopf" title={b.hinweis} onClick={() => hinzufuegen(beispielDateien(profil, b.ordner))}>
+            <button
+              key={b.ordner}
+              type="button"
+              className={kompakt ? "knopf leise" : "knopf"}
+              title={b.hinweis}
+              onClick={() => hinzufuegen(beispielDateien(profil, b.ordner))}
+            >
               Beispiel laden: {b.titel}
             </button>
           ))}
+          {kompakt && <span className="hinweis lb-ablage-zusatz">oder JSON-/ZIP-Dateien in die Ansicht ziehen</span>}
         </div>
         <input
           ref={eingabe}
@@ -437,10 +453,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             e.target.value = "";
           }}
         />
-        <p className="hinweis">
-          Jede Datei wird nach dem Profil {profil.manifest.name} migriert und gegen das Schema {profil.manifest.meldung.schema_id} geprüft. Meldungen in fremdem
-          Schema werden erkannt, aber nur für die KI-Verdichtung vorgehalten. Gleiche Dateiinhalte werden nur einmal geführt.
-        </p>
+        {!kompakt && (
+          <p className="hinweis">
+            Jede Datei wird nach dem Profil {profil.manifest.name} migriert und gegen das Schema {profil.manifest.meldung.schema_id} geprüft. Meldungen in
+            fremdem Schema werden erkannt, aber nur für die KI-Verdichtung vorgehalten. Gleiche Dateiinhalte werden nur einmal geführt.
+          </p>
+        )}
       </section>
 
       {ladeFehler && (
