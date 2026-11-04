@@ -677,3 +677,8 @@
   margin: 0;
   font-weight: 700;
 }
+
+.profil-gewechselt:focus {
+  outline: 2px solid var(--amt);
+  outline-offset: 2px;
+}

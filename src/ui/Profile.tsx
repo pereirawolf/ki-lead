@@ -1,6 +1,7 @@
 // Profilverwaltung: eingebaute und importierte Profilpakete, Prüfbericht, Aktivieren, Export.
 // Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
-// Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
+// Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden“ (bis UX-2026-W45-29 „Verwenden und
+// Meldung öffnen“ mit Sprung zur Erfassung).
 
 import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, ProfilEintrag, Sop } from "../kern/typen";
@@ -44,7 +45,10 @@ export interface ImportErgebnis {
 interface Props {
   profile: ProfilEintrag[];
   aktiv?: string;
-  aktivieren: (schluessel: string) => void;
+  /** Wechselt das Profil; false, wenn der Wechsel abgelehnt wurde (seit UX-2026-W45-29 ohne Sprung zur Erfassung) */
+  aktivieren: (schluessel: string) => void | boolean | Promise<void | boolean>;
+  /** Öffnet die Erfassung (Hinweis nach einem Wechsel, seit UX-2026-W45-29) */
+  zurErfassung?: () => void;
   importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<ImportErgebnis>;
   loeschen: (schluessel: string) => void;
 }
@@ -417,7 +421,15 @@ function herkunft(p: ProfilEintrag): string {
   return p.quelle === "eingebaut" ? "Mitgeliefert" : `Importiert${p.importiertAm ? " am " + new Date(p.importiertAm).toLocaleDateString("de-DE") : ""}`;
 }
 
-export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loeschen }: Props) {
+export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loeschen, zurErfassung }: Props) {
+  // Nach dem Wechsel bleibt die Ansicht stehen; ein Hinweis bestätigt ihn und führt zur Erfassung (UX-2026-W45-29)
+  const [gewechselt, setGewechselt] = useState<string | null>(null);
+  const wechselHinweis = useRef<HTMLDivElement>(null);
+  const verwenden = async (schluessel: string) => {
+    if ((await aktivieren(schluessel)) === false) return;
+    setGewechselt(schluessel);
+    requestAnimationFrame(() => wechselHinweis.current?.focus());
+  };
   const zipRef = useRef<HTMLInputElement>(null);
   const ordnerRef = useRef<HTMLInputElement>(null);
   const [bericht, setBericht] = useState<ImportErgebnis | null>(null);
@@ -503,11 +515,30 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           <Befunde befunde={bericht.befunde} />
           <div className="aktionen">
             {bericht.ok && bericht.schluessel && !importiertAktiv && (
-              <button type="button" className="knopf primaer" onClick={() => aktivieren(bericht.schluessel!)}>
+              <button type="button" className="knopf primaer" onClick={() => void verwenden(bericht.schluessel!)}>
                 Jetzt verwenden
               </button>
             )}
             <button type="button" className="knopf leise klein" onClick={() => setBericht(null)}>
+              Ausblenden
+            </button>
+          </div>
+        </div>
+      )}
+
+      {gewechselt && gewechselt === aktiv && (
+        <div className="kasten kasten-ok profil-gewechselt" role="status" tabIndex={-1} ref={wechselHinweis}>
+          <p>
+            Profil „{profile.find((x) => x.schluessel === gewechselt)?.profil?.manifest.name || gewechselt}“ ist in Verwendung. Jedes Profil behält seinen
+            eigenen Meldungs-Zwischenstand.
+          </p>
+          <div className="aktionen">
+            {zurErfassung && (
+              <button type="button" className="knopf primaer" onClick={zurErfassung}>
+                Zur Erfassung
+              </button>
+            )}
+            <button type="button" className="knopf leise klein" onClick={() => setGewechselt(null)}>
               Ausblenden
             </button>
           </div>
@@ -532,8 +563,13 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 </div>
                 <div className="profil-kopf-aktionen">
                   {p.profil && !istAktiv && (
-                    <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
-                      Verwenden und Meldung öffnen
+                    <button
+                      type="button"
+                      className="knopf"
+                      aria-label={`Profil „${m?.name || p.schluessel}“ verwenden`}
+                      onClick={() => void verwenden(p.schluessel)}
+                    >
+                      Verwenden
                     </button>
                   )}
                   <Menue

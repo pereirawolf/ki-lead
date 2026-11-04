@@ -58,10 +58,10 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
     expect(zu.querySelector(":scope > summary")?.textContent).toBe("Angaben, Lesetexte und Prüfung");
     // Kopf bleibt sichtbar: Name, Version und Herkunft, Knopf zum Verwenden
     expect(ander.querySelector(".profil-meta")?.textContent).toMatch(/^Profilversion .+ · Mitgeliefert$/);
-    expect([...ander.querySelectorAll("header button")].map((b) => b.textContent)).toContain("Verwenden und Meldung öffnen");
+    expect([...ander.querySelectorAll("header button")].map((b) => b.textContent)).toContain("Verwenden");
   });
 
-  it("aktiviert nur über „Verwenden und Meldung öffnen“; Aufklappen aktiviert nichts", async () => {
+  it("UX-2026-W45-29: aktiviert nur über „Verwenden“; Aufklappen aktiviert nichts", async () => {
     const { aktivieren } = await ansicht("lead-beispiel");
     const ander = karten()[1];
     const zu = ander.querySelector<HTMLDetailsElement>("details.profil-details")!;
@@ -69,7 +69,7 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
       zu.open = true;
     });
     expect(aktivieren).not.toHaveBeenCalled();
-    await klick("Verwenden und Meldung öffnen", ander);
+    await klick("Profil „Vorlage – eigene Organisation“ verwenden", ander);
     expect(aktivieren).toHaveBeenCalledWith("muster");
   });
 });
@@ -251,5 +251,34 @@ describe("UX-2026-W45-28: Eckdaten jeder Karte", () => {
     }
     const lead = karten()[0].querySelector(".profil-eckdaten")!;
     expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual(["Bund", "Bevölkerungsschutz in Deutschland", "LEAD-Meldung-v1", "ja", "17 Dach-SOPs · 18 ergänzende Bausteine"]);
+  });
+});
+
+describe("UX-2026-W45-29: Verwenden ohne Sprung", () => {
+  it("bleibt nach dem Wechsel in der Profilansicht und bietet „Zur Erfassung“ an", async () => {
+    const lead = await eintrag("lead-beispiel");
+    const muster = await eintrag("muster");
+    const zurErfassung = vi.fn();
+    function Rahmen() {
+      const [aktiv, setAktiv] = React.useState("lead-beispiel");
+      return React.createElement(ProfileAnsicht, {
+        profile: [lead, muster],
+        aktiv,
+        aktivieren: async (s: string) => {
+          setAktiv(s);
+          return true;
+        },
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+        zurErfassung,
+      });
+    }
+    await einhaengen(React.createElement(Rahmen));
+    const knopf = [...document.querySelectorAll<HTMLButtonElement>("header button")].find((b) => b.textContent === "Verwenden")!;
+    expect(knopf.classList.contains("primaer")).toBe(false);
+    await klick(knopf);
+    expect(document.querySelector(".profil-gewechselt")?.textContent).toContain("ist in Verwendung");
+    await klick("Zur Erfassung");
+    expect(zurErfassung).toHaveBeenCalledOnce();
   });
 });
