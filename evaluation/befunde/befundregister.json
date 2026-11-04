@@ -3247,7 +3247,7 @@
       "kurz": "Obergrenze der Erfassung mit Opus „mittel“ nach Überschreitung im Anbietervergleich vom 04.11.2026 auf 810 s und 3,35 USD (Messwert plus 25 %).",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 147
     },
     {
       "id": "AV-2026-W45-02",
@@ -3268,7 +3268,7 @@
       "kurz": "Erfassung gpt-6-astra „hoch“ als vorläufige Einzelmessung (4–13 Minuten, 1,50–2,80 USD) statt Hochrechnung, gekennzeichnet; Hochrechnung zuerst aus demselben Modell.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 147
     },
     {
       "id": "AV-2026-W45-03",
@@ -3285,7 +3285,7 @@
       "kurz": "Erfassung Mistral Medium 3.5 „hoch“ als vorläufige Einzelmessung (1–6 Minuten, 0,20–0,65 USD ohne EU-Aufschlag) statt Hochrechnung.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 147
     }
   ]
 }
