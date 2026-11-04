@@ -108,6 +108,11 @@ function Balken({ titel, werte, farbe }: { titel: string; werte: [string, number
   );
 }
 
+/** „davon n aus eigener Meldung“; leer bei 0 */
+function davonEigen(n: number, wort = "aus eigener Meldung"): string | undefined {
+  return n ? `davon ${n} ${wort}` : undefined;
+}
+
 /** Anzahl je Stufe in der Reihenfolge der Stufen, auch 0; Werte außerhalb der Stufen (und keine Angabe) danach */
 function stufenZaehlen(werte: string[], stufen: string[]): [string, number][] {
   const gezaehlt = new Map(zaehle(werte));
@@ -116,13 +121,29 @@ function stufenZaehlen(werte: string[], stufen: string[]): [string, number][] {
 }
 
 /** Kennzahl als Knopf; mit 0 zurückgenommen, die Randfarbe nur bei Anzahl (seit UX-2026-W45-06) */
-function Kachel({ zahl, text, rand, gutBeiNull, onClick }: { zahl: number; text: string; rand?: Farbe; gutBeiNull?: boolean; onClick: () => void }) {
-  const zusatz = zahl ? (rand ? `lb-rand-${rand}` : "") : gutBeiNull ? "lb-rand-gruen" : "lb-kennzahl-null";
-  const klasse = ["lb-kennzahl", zusatz].filter(Boolean).join(" ");
+function Kachel({
+  zahl,
+  text,
+  rand,
+  gutBeiNull,
+  zusatz,
+  onClick,
+}: {
+  zahl: number;
+  text: string;
+  rand?: Farbe;
+  gutBeiNull?: boolean;
+  /** z. B. „davon 1 aus eigener Meldung“ (UX-2026-W45-09) */
+  zusatz?: string;
+  onClick: () => void;
+}) {
+  const rahmen = zahl ? (rand ? `lb-rand-${rand}` : "") : gutBeiNull ? "lb-rand-gruen" : "lb-kennzahl-null";
+  const klasse = ["lb-kennzahl", rahmen].filter(Boolean).join(" ");
   return (
     <button type="button" className={klasse} onClick={onClick}>
       <b>{zahl}</b>
       <span>{text} →</span>
+      {zusatz && <span className="lb-kennzahl-zusatz">{zusatz}</span>}
     </button>
   );
 }
@@ -226,8 +247,19 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   // Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe sehen alle Meldungen, damit der Filter
   // weder Erinnerungen auslöst noch Prüfbefunde oder Eingangsmeldungen verschluckt.
   const herkunftWerte = useMemo(() => herkunftsrolleWerte(alleEintraege, profil), [alleEintraege, profil]);
-  const eintraege = useMemo(() => nachHerkunftsrolle(alleEintraege, profil, ausgeblendet), [alleEintraege, profil, ausgeblendet]);
+  // Filter „Eigene Meldung“ (seit UX-2026-W45-09): Die eigene Meldung einer Koordinierungsstelle verdichtet oft die
+  // Eingangsmeldungen; sie bleibt standardmäßig einbezogen und lässt sich mit derselben Reichweite wie der
+  // Herkunftsfilter ausblenden, damit Kennzahlen und Verteilungen nicht doppelt zählen.
+  const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
+  const [eigeneAusblenden, setEigeneAusblenden] = useState(false);
+  const nEigene = alleEintraege.filter(eigen).length;
+  const eintraege = useMemo(
+    () => nachHerkunftsrolle(alleEintraege, profil, ausgeblendet).filter((e) => !(eigeneAusblenden && eigen(e))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [alleEintraege, profil, ausgeblendet, eigeneAusblenden],
+  );
   const herkunftGefiltert = herkunftWerte.some((w) => ausgeblendet.has(w));
+  const eigeneGefiltert = eigeneAusblenden && nEigene > 0;
   const nAbweichungen = alleEintraege.filter((e) => e.schema.length).length;
   const svs = useMemo(() => alleSachverhalte(eintraege, profil), [eintraege, profil]);
   const kz = useMemo(() => kennzahlen(eintraege, profil), [eintraege, profil]);
@@ -273,7 +305,6 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   /** Übergabedialog an die KI-Verdichtung: 0 = geschlossen; jedes Öffnen zählt hoch und beginnt mit dem Vorschlag */
   const [uebergabeOffen, setUebergabeOffen] = useState(0);
   const uebergabeKnopf = useRef<HTMLButtonElement>(null);
-  const eigen = (e: LagebildEintrag) => !e.fremd && istEigeneStelle(stelleVon(e, profil), profil.manifest);
   const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
   // Sprungziele beim Reiterwechsel (seit 0.6.7): Die Reiterleiste steht über dem Inhalt. Aus der Leiste nur bei Bedarf
@@ -328,7 +359,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const [pdfFehler, setPdfFehler] = useState<string | null>(null);
   /** Vermerk zur Herkunft im Lagebild-PDF: Verteilung der Meldungen, gegebenenfalls die Auswahl des Filters */
   const herkunftVermerk = () => {
-    if (!r.herkunft) return undefined;
+    const eigeneVermerk = eigeneGefiltert ? " Eigene Meldung ausgeblendet." : "";
+    if (!r.herkunft) return eigeneVermerk.trim() || undefined;
     const verteilung = zaehle(eintraege.filter((e) => !e.fremd).map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))
       .map(([w, n]) => `${w}: ${n}`)
       .join(" · ");
@@ -338,7 +370,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
           .map((w) => herkunftsrolleAnzeige(profil, w))
           .join(", ")}.`
       : "";
-    return `Herkunft der Meldungen: ${verteilung || "keine"}.${auswahl}`;
+    return `Herkunft der Meldungen: ${verteilung || "keine"}.${auswahl}${eigeneVermerk}`;
   };
   const pdf = async () => {
     setPdfFehler(null);
@@ -599,39 +631,56 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             </button>
           </details>
 
-          {herkunftWerte.length > 0 && (
-            <fieldset className="lb-herkunft">
-              <legend>Herkunft</legend>
-              <div className="lb-herkunft-werte">
-                {herkunftWerte.map((w) => {
-                  const n = alleEintraege.filter((e) => herkunftsrolleVon(e, profil) === w).length;
-                  return (
-                    <label key={w}>
-                      <input
-                        type="checkbox"
-                        checked={!ausgeblendet.has(w)}
-                        onChange={(ev) => {
-                          const an = ev.target.checked;
-                          setAusgeblendet((alt) => {
-                            const neu = new Set(alt);
-                            if (an) neu.delete(w);
-                            else neu.add(w);
-                            return neu;
-                          });
-                        }}
-                      />{" "}
-                      {herkunftsrolleAnzeige(profil, w)} ({n})
+          {(herkunftWerte.length > 0 || nEigene > 0) && (
+            <div className="lb-auswahlfilter">
+              {herkunftWerte.length > 0 && (
+                <fieldset className="lb-herkunft">
+                  <legend>Herkunft</legend>
+                  <div className="lb-herkunft-werte">
+                    {herkunftWerte.map((w) => {
+                      const n = alleEintraege.filter((e) => herkunftsrolleVon(e, profil) === w).length;
+                      return (
+                        <label key={w}>
+                          <input
+                            type="checkbox"
+                            checked={!ausgeblendet.has(w)}
+                            onChange={(ev) => {
+                              const an = ev.target.checked;
+                              setAusgeblendet((alt) => {
+                                const neu = new Set(alt);
+                                if (an) neu.delete(w);
+                                else neu.add(w);
+                                return neu;
+                              });
+                            }}
+                          />{" "}
+                          {herkunftsrolleAnzeige(profil, w)} ({n})
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              )}
+              {nEigene > 0 && (
+                <fieldset className="lb-herkunft lb-eigene">
+                  <legend>Eigene Meldung</legend>
+                  <div className="lb-herkunft-werte">
+                    <label>
+                      <input type="checkbox" checked={!eigeneAusblenden} onChange={(ev) => setEigeneAusblenden(!ev.target.checked)} /> einbeziehen ({nEigene})
                     </label>
-                  );
-                })}
-              </div>
-              {herkunftGefiltert && (
+                  </div>
+                </fieldset>
+              )}
+              {(herkunftGefiltert || eigeneGefiltert) && (
                 <p className="hinweis">
-                  Auswahl nach Herkunft: {kz.meldungen + kz.fremd} von {alleEintraege.length} Meldungen in Übersicht, Meldungen, Sachverhalten, Lagenradar,
-                  Kopiervorlage, Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe berücksichtigen alle Meldungen.
+                  Auswahl{herkunftGefiltert ? " nach Herkunft" : ""}
+                  {herkunftGefiltert && eigeneGefiltert ? " und" : ""}
+                  {eigeneGefiltert ? " ohne eigene Meldung" : ""}: {kz.meldungen + kz.fremd} von {alleEintraege.length} Meldungen in Übersicht, Meldungen,
+                  Sachverhalten, Lagenradar, Kopiervorlage, Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe berücksichtigen alle
+                  Meldungen.
                 </p>
               )}
-            </fieldset>
+            </div>
           )}
 
           <div ref={reiterAnker} className="lb-reiter-anker" aria-hidden="true" />
@@ -663,14 +712,25 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                     Lage
                   </h3>
                   <div className="lb-kennzahlen">
-                    <Kachel zahl={kz.meldungen} text="Meldungen" onClick={() => reiterZeigen("meldungen")} />
-                    <Kachel zahl={kz.sachverhalte} text="Sachverhalte" onClick={() => sachverhalteZeigen(KEIN_FILTER)} />
+                    <Kachel
+                      zahl={kz.meldungen}
+                      text="Meldungen"
+                      zusatz={davonEigen(eintraege.filter((e) => eigen(e)).length, "eigene")}
+                      onClick={() => reiterZeigen("meldungen")}
+                    />
+                    <Kachel
+                      zahl={kz.sachverhalte}
+                      text="Sachverhalte"
+                      zusatz={davonEigen(svs.filter((x) => eigen(x.eintrag)).length)}
+                      onClick={() => sachverhalteZeigen(KEIN_FILTER)}
+                    />
                     {kz.hoch.map((h) => (
                       <Kachel
                         key={h.stufe}
                         zahl={h.anzahl}
                         text={`${lBeurteilung}: ${h.stufe}`}
                         rand={h.farbe}
+                        zusatz={davonEigen(svs.filter((x) => x.beurteilung === h.stufe && eigen(x.eintrag)).length)}
                         onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, beurteilung: h.stufe })}
                       />
                     ))}
@@ -679,6 +739,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         zahl={kz.verschaerfung.anzahl}
                         text={`${lTendenz}: ${kz.verschaerfung.wert}`}
                         rand="rot"
+                        zusatz={davonEigen(svs.filter((x) => x.tendenz === kz.verschaerfung!.wert && eigen(x.eintrag)).length)}
                         onClick={() => sachverhalteZeigen({ ...KEIN_FILTER, tendenz: kz.verschaerfung!.wert })}
                       />
                     )}

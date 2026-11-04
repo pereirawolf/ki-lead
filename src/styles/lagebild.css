@@ -1152,3 +1152,20 @@ fieldset.lb-herkunft {
   margin: 0.25rem 0 0.4rem;
   font-size: 0.9rem;
 }
+
+/* Auswahl nach Herkunft und eigener Meldung nebeneinander (seit UX-2026-W45-09) */
+.lb-auswahlfilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  align-items: flex-start;
+}
+
+.lb-auswahlfilter > .hinweis {
+  flex-basis: 100%;
+}
+
+.lb-kennzahl .lb-kennzahl-zusatz {
+  font-size: 0.75rem;
+  font-style: italic;
+}
