@@ -146,9 +146,9 @@ test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen 
   await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
   await page.getByRole("navigation", { name: "Ansichten" }).getByRole("button", { name: "Redaktionscheck" }).click();
-  await expect(page).toHaveURL(/#\/lagebild\/redaktion$/);
+  await expect(page).toHaveURL(/#\/auswertung\/redaktion$/);
   await page.goBack();
-  await expect(page).toHaveURL(/#\/lagebild\/uebersicht$/);
+  await expect(page).toHaveURL(/#\/auswertung\/uebersicht$/);
   await page.goBack();
   await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
 });

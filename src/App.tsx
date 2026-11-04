@@ -114,7 +114,9 @@ export default function App() {
   useEffect(() => {
     const text = adresseText({ ansicht, bereich: einstellungsBereich, reiter: lagebildReiter });
     if (window.location.hash === text || (!window.location.hash && text === "#/meldung")) return;
-    window.history.pushState(null, "", text);
+    // Eine frühere Schreibweise derselben Stelle (etwa „#/lagebild/…“, UX-2026-W45-05) wird ersetzt, nicht neu eingetragen
+    if (adresseText(adresseLesen(window.location.hash)) === text) window.history.replaceState(null, "", text);
+    else window.history.pushState(null, "", text);
   }, [ansicht, einstellungsBereich, lagebildReiter]);
   // Sprungziele beim Wechsel der Ansicht (seit 0.6.7): bis 0.6.6 blieb die Scrollhöhe der vorigen Ansicht stehen.
   // Die KI-Erfassung bleibt im Hintergrund eingehängt (ein Lauf geht weiter); für sie merkt sich die App die Stelle.
