@@ -260,6 +260,17 @@ export function absender(e: LagebildEintrag, profil: Profil): string {
   return stelle || land || e.name;
 }
 
+/**
+ * Absender für Überschriften der Oberfläche (seit UX-2026-W45-04): kurz der Wert der Rolle „land“ (Land/Bund), als
+ * Zusatz der volle Name der Stelle; ohne Land die Stelle bzw. der Dateiname. Ausgaben verwenden weiter absender().
+ */
+export function absenderTeile(e: LagebildEintrag, profil: Profil): { kurz: string; zusatz: string } {
+  const land = landVon(e, profil);
+  const stelle = stelleVon(e, profil);
+  if (land) return { kurz: land, zusatz: stelle && stelle !== land ? stelle : "" };
+  return { kurz: stelle || e.name, zusatz: "" };
+}
+
 function arten(v: unknown): string[] {
   if (Array.isArray(v)) return v.map(text).filter(Boolean);
   return text(v) ? [text(v)] : [];

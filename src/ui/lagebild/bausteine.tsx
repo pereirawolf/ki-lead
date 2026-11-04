@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
 import {
+  absenderTeile,
   farbeBeurteilung,
   farbeTendenz,
   herkunftsrolleAnzeige,
@@ -16,6 +17,31 @@ import {
   type SvEintrag,
 } from "../../lagebild/lagebild";
 import type { Klasse } from "../../lagebild/redaktion";
+
+/** Absender in Überschriften: Land/Bund, darunter bzw. daneben der volle Name klein und einzeilig (seit UX-2026-W45-04) */
+export function Absender({ e, profil, zeile = false }: { e: LagebildEintrag; profil: Profil; zeile?: boolean }) {
+  const { kurz, zusatz } = absenderTeile(e, profil);
+  return (
+    <span className={zeile ? "lb-absender lb-absender-zeile" : "lb-absender"}>
+      <span className="lb-absender-kurz">{kurz}</span>
+      {zusatz && (
+        <span className="lb-absender-voll" title={zusatz}>
+          {zusatz}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** Überschrift eines Sachverhalts: Bezeichnung, darunter der Absender (seit UX-2026-W45-04) */
+export function SvTitel({ s, profil }: { s: SvEintrag; profil: Profil }) {
+  return (
+    <span className="lb-svtitel">
+      <span className="lb-svtitel-name">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</span>
+      <Absender e={s.eintrag} profil={profil} zeile />
+    </span>
+  );
+}
 
 export function Marke({ farbe, children }: { farbe: Farbe | "amt"; children: ReactNode }) {
   return <span className={`lb-marke lb-${farbe}`}>{children}</span>;
@@ -84,7 +110,7 @@ export function Punkt({
   /** Text der Einstufung für Screenreader, wenn er von der Farbklasse abweicht */
   einstufung?: string;
   marke?: string;
-  titel: string;
+  titel: ReactNode;
   aktion?: ReactNode;
   children?: ReactNode;
 }) {

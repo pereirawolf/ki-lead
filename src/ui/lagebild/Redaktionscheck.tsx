@@ -7,11 +7,11 @@ import { bezeichnung } from "../../kern/ui";
 import { datumDE, exportStempel, jetztLokal, mitDatum } from "../../kern/ausgabe";
 import { zeitpunktDE } from "../../kern/zeit";
 import { APP_KENNUNG } from "../../kern/version";
-import { absender, svKennung, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
+import { svKennung, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
 import { ABSCHNITTE, kennungsText, redaktionsbericht, type redaktionscheck } from "../../lagebild/redaktion";
 import { html as esc } from "../../lagebild/ausgabe";
 import { dateiAnbieten } from "../../speicher/speicher";
-import { Abschnitt, KopierKnopf, Punkt, SvMarken } from "./bausteine";
+import { Absender, Abschnitt, KopierKnopf, Punkt, SvMarken, SvTitel } from "./bausteine";
 import { scrollVerhalten } from "../bewegung";
 
 export function Redaktionscheck({
@@ -177,7 +177,7 @@ export function Redaktionscheck({
           <p className="leer">Kein Sachverhalt mit diesem Kennsatz.</p>
         ) : (
           red.zeit.map((z, i) => (
-            <Punkt key={i} klasse={z.klasse} marke={z.status} titel={svKennung(z.sv, profil)} aktion={zurMeldung(z.sv.eintrag.id, svKennung(z.sv, profil))}>
+            <Punkt key={i} klasse={z.klasse} marke={z.status} titel={<SvTitel s={z.sv} profil={profil} />} aktion={zurMeldung(z.sv.eintrag.id, svKennung(z.sv, profil))}>
               {ks.handlungsrelevant} {z.text}
               {z.datum ? `\nGewertet: ${zeitpunktDE(z.datum, zone)}${z.genauigkeit === "tag" ? " (ohne Uhrzeit: Tagesende angenommen)" : ""}` : ""}
               {z.hinweis ? `\n${z.hinweis}` : ""}
@@ -220,7 +220,9 @@ export function Redaktionscheck({
                   <tbody>
                     {g.liste.map((s) => (
                       <tr key={`${s.eintrag.id}-${s.index}`}>
-                        <td>{absender(s.eintrag, profil)}</td>
+                        <td>
+                          <Absender e={s.eintrag} profil={profil} zeile />
+                        </td>
                         <td>{datumDE(zeitpunktVon(s.eintrag, profil)) || "–"}</td>
                         <td>{s.bezeichnung || "–"}</td>
                         {r.sv_ort && <td>{s.ort || "–"}</td>}
@@ -253,7 +255,7 @@ export function Redaktionscheck({
           <>
             <h4>Bereits in Meldungen vermerkt („{ks.abweichung}“)</h4>
             {red.vermerkt.map((x, i) => (
-              <Punkt key={i} klasse="" titel={svKennung(x.sv, profil)}>
+              <Punkt key={i} klasse="" titel={<SvTitel s={x.sv} profil={profil} />}>
                 {ks.abweichung} {x.text}
               </Punkt>
             ))}
@@ -293,7 +295,7 @@ export function Redaktionscheck({
             key={`k-${x.sv.eintrag.id}-${x.sv.index}-${x.kennsatz}`}
             klasse="warn"
             marke={x.art === "leer" ? "Kennsatz ohne Inhalt" : "Kennsatz ohne Aussage"}
-            titel={svKennung(x.sv, profil)}
+            titel={<SvTitel s={x.sv} profil={profil} />}
             aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}
           >
             {x.kennsatz} – {x.text}
@@ -304,7 +306,7 @@ export function Redaktionscheck({
             key={`n-${s.eintrag.id}-${s.index}`}
             klasse="warn"
             marke="Nachlauf prüfen"
-            titel={svKennung(s, profil)}
+            titel={<SvTitel s={s} profil={profil} />}
             aktion={zurMeldung(s.eintrag.id, svKennung(s, profil))}
           >
             {lTendenz} „{s.tendenz}“ ohne Abschlussvermerk. Ist der Zielzustand erreicht, bestehen Folgewirkungen fort?
@@ -314,13 +316,13 @@ export function Redaktionscheck({
           </Punkt>
         ))}
         {red.abschluss.map((x) => (
-          <Punkt key={`a-${x.sv.eintrag.id}-${x.sv.index}`} klasse="ok" marke="Abschluss vermerkt" titel={svKennung(x.sv, profil)}>
+          <Punkt key={`a-${x.sv.eintrag.id}-${x.sv.index}`} klasse="ok" marke="Abschluss vermerkt" titel={<SvTitel s={x.sv} profil={profil} />}>
             {ks.abschluss} {x.text}
             {x.rueckblick ? `\nRückblick einplanen${v.rueckblick ? ` (${v.rueckblick})` : ""}.` : ""}
           </Punkt>
         ))}
         {red.aenderung.map((x) => (
-          <Punkt key={`f-${x.sv.eintrag.id}-${x.sv.index}`} klasse="info" marke="Fortschreibung" titel={svKennung(x.sv, profil)}>
+          <Punkt key={`f-${x.sv.eintrag.id}-${x.sv.index}`} klasse="info" marke="Fortschreibung" titel={<SvTitel s={x.sv} profil={profil} />}>
             {ks.aenderung} {x.text}
           </Punkt>
         ))}
@@ -343,7 +345,7 @@ export function Redaktionscheck({
           <p className="leer">Keine Befunde der automatischen Prüfungen dieses Abschnitts.</p>
         ) : (
           red.kern.map((x, i) => (
-            <Punkt key={i} klasse="warn" titel={svKennung(x.sv, profil)} aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}>
+            <Punkt key={i} klasse="warn" titel={<SvTitel s={x.sv} profil={profil} />} aktion={zurMeldung(x.sv.eintrag.id, svKennung(x.sv, profil))}>
               {x.fehlt.join(" · ")} – ggf. bei der meldenden Stelle nachfragen oder in der eigenen Fassung ergänzen.
             </Punkt>
           ))
@@ -374,7 +376,11 @@ export function Redaktionscheck({
                       ? `Quellen: ${q.quellen} Hinweis(e)`
                       : "Hinweis"
               }
-              titel={`${absender(q.eintrag, profil)} · ${q.eintrag.name}`}
+              titel={
+                <>
+                  <Absender e={q.eintrag} profil={profil} /> <span className="lb-dateiname">{q.eintrag.name}</span>
+                </>
+              }
               aktion={zurMeldung(q.eintrag.id)}
             >
               {q.zeilen.slice(0, 8).join("\n")}

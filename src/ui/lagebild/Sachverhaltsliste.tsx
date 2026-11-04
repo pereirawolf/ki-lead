@@ -11,8 +11,8 @@ import { bezugVon } from "../../kern/kennung";
 import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../../kern/zeitstrahl";
 import { datumDE } from "../../kern/ausgabe";
 import { gliedereAnalyse, gliedereBewertung } from "../../kern/kennsaetze";
-import { absender, herkunftsrolleAnzeige, type SvEintrag } from "../../lagebild/lagebild";
-import { Marke, SvMarken } from "./bausteine";
+import { herkunftsrolleAnzeige, type SvEintrag } from "../../lagebild/lagebild";
+import { Absender, Marke, SvMarken } from "./bausteine";
 
 /** Filter der Sachverhalte; leer = alle */
 export interface SvFilter {
@@ -108,7 +108,7 @@ export function Sachverhaltsliste({
                       <SvMarken s={s} profil={profil} />
                     </span>
                     <span className="lb-sv-meta">
-                      {absender(s.eintrag, profil)}
+                      <Absender e={s.eintrag} profil={profil} zeile />
                       {meta.length ? ` · ${meta.join(" · ")}` : ""}
                     </span>
                     {(kennung || r.herkunft) && (

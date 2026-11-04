@@ -1050,3 +1050,53 @@ fieldset.lb-herkunft {
 .lb-alle-entfernen {
   margin-top: 0.5rem;
 }
+
+/* Absender in Überschriften: Land/Bund, voller Name klein und einzeilig (seit UX-2026-W45-04) */
+.lb-absender {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.lb-absender-zeile {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.lb-absender-kurz {
+  font-weight: 700;
+}
+
+.lb-absender-voll {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--tinte-leise);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.lb-svtitel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.lb-svtitel .lb-absender-zeile {
+  font-size: 0.85rem;
+}
+
+.lb-dateiname {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--tinte-leise);
+  overflow-wrap: anywhere;
+}
+
+.lb-karte header .lb-absender-voll {
+  color: inherit;
+}

@@ -42,7 +42,7 @@ import type { UebergabeMeldung } from "../pipeline/material";
 import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
-import { Marke, Marken, SvMarken } from "./lagebild/bausteine";
+import { Absender, Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
@@ -790,7 +790,9 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 return (
                   <article key={e.id} id={`lb-meldung-${e.id}`} tabIndex={-1} className={markiert === e.id ? "lb-karte lb-karte-markiert" : "lb-karte"}>
                     <header>
-                      <p className="lb-karte-titel">{absender(e, profil)}</p>
+                      <p className="lb-karte-titel">
+                        <Absender e={e} profil={profil} />
+                      </p>
                       <p className="lb-karte-meta">
                         {zeitpunktVon(e, profil) ? datumDE(zeitpunktVon(e, profil)) : "ohne Meldezeitpunkt"} · {e.name}
                       </p>
@@ -878,7 +880,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         <header>
                           <p className="lb-karte-titel">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</p>
                           <p className="lb-karte-meta">
-                            {absender(s.eintrag, profil)}
+                            <Absender e={s.eintrag} profil={profil} zeile />
                             {r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : ""}
                           </p>
                         </header>
