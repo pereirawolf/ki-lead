@@ -1,0 +1,56 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "gesamtkonsistenz",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-04T17:45:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "94a5dac12863404faf091963a7559a66972d705a",
+  "pruefumfang": "Modus: Schwerpunkt auf Hinweis des Herausgebers (Kennungsvergabe und Zeitstrahl nach S2) anlässlich zweier interner Erfassungsläufe vom 04.11.2026; Bezugscommit 94a5dac (main nach PR #142). Bereiche: src/pipeline/zeitstrahl.ts Schritt 1 und 3 vollständig gelesen, src/kern/zeitstrahl.ts (Prüfung ZEITSTRAHL_KENNUNG_UNBEKANNT) stichprobenhaft, Arbeitsanweisung Erfassung 4.3 gelesen; übrige Ebenen nicht geprüft. Ausgeführt: temporäre Vitest-Sonde (danach gelöscht) – bestätigt das Verhalten. Material, Laufprotokolle und Meldungen der Läufe bleiben intern. Offene Befunde: 3; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "npm test nicht erneut ausgeführt (main zuletzt grün mit PR #142)",
+    "übrige Wechselbereiche der Gesamtkonsistenz (nur Schwerpunkt)"
+  ],
+  "befunde": [
+    {
+      "id": "GK-2026-W45-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten, Schritt 1 Kennungen (Z. 115–138, insbesondere Z. 124 „if (!roh) return;“)",
+          "ist": "setze(sv, r.sv_kennung!, neu); vergeben.add(neu); if (!roh) return; if (PLATZHALTER_RE.test(roh)) { … zuordnung.set(roh, neu);"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Absatz „Zeitstrahl, Kennung und Bezug“ (Z. 113)",
+          "ist": "ein neuer Sachverhalt erhält den Platzhalter `NEU-1`, `NEU-2` usw., den du auch in seinen Zeilen des Zeitstrahls verwendest; die App vergibt danach die Kennung."
+        }
+      ],
+      "beobachtung": "Widerspruch: Die Dokumentation im Dateikopf sagt, neue Sachverhalte („Platzhalter NEU-n, leer, erfunden …“) erhalten eine Kennung, „die die App auch in Zeitstrahl und Bezug einsetzt“; bei leerem Feld `kennung` vergibt die App aber eine Kennung, ohne den Platzhalter des Zeitstrahls zuzuordnen. Bedingung: Die KI setzt den Platzhalter NEU-n nur im Zeitstrahl, nicht im Feld `kennung` des Sachverhalts. Auswirkung: Die Zeilen behalten „NEU-n“, gehören zu keinem Sachverhalt und fehlen in Zeitstrahlansicht, Fortschreibung und Verdichtung; die Nachbearbeitung meldet nichts, erst die Schemaprüfung warnt mit ZEITSTRAHL_KENNUNG_UNBEKANNT. Beobachtet in einem internen Erfassungslauf vom 04.11.2026 (App 0.7.6, Profil 1.37.0; Zeilen mit NEU-1, NEU-2 und NEU-5 bei vergebenen Kennungen aller sechs Sachverhalte); ein Folgelauf mit Platzhaltern im Feld `kennung` war korrekt. Maßgeblich: der Dateikopf von src/pipeline/zeitstrahl.ts und die Arbeitsanweisung (Platzhalter NEU-n in Reihenfolge der neuen Sachverhalte); die App soll ohne Urteil festlegbare Zuordnungen selbst vornehmen. Prüfweg: Ausführung einer temporären Vitest-Sonde gegen zeitstrahlNachbearbeiten (zwei Sachverhalte, Zeitstrahlzeile mit NEU-1); Ergebnis: bei kennung \"\" bleibt „NEU-1“ stehen, keine Befunde; bei kennung \"NEU-1\" wird ersetzt. Herkunft: nicht ermittelt (Verhalten seit Einführung der Kennungen 0.6.9).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "In zeitstrahlNachbearbeiten nach Schritt 1: Sind im Zeitstrahl Platzhalter NEU-n ohne Zuordnung und haben Sachverhalte mit leerer Kennung eine neue Kennung erhalten, wird NEU-n dem n-ten dieser Sachverhalte (in Reihenfolge der Liste) zugeordnet, sofern n nicht größer als ihre Zahl ist; die Zuordnung steht als Hinweis KENNUNG_PLATZHALTER_ZUGEORDNET mit Zeilennummern im Ergebnis. Bleiben danach Platzhalter übrig, erscheint ein Hinweis in der Nachbearbeitung statt erst in der Schemaprüfung. Abnahme: Test in tests/pipeline/zeitstrahl.test.ts – zwei Sachverhalte ohne Kennung, Zeilen mit NEU-1 und NEU-2 → Zeilen tragen die Kennungen der Sachverhalte 1 und 2, Hinweis vorhanden; NEU-3 ohne dritten Sachverhalt bleibt mit Hinweis.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (App-Version)",
+        "docs/SPEZIFIKATION.md, Abschnitt KI-Erfassung (Nachbearbeitung Kennung und Zeitstrahl)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": "(A) Positionale Zuordnung NEU-n → n-ter Sachverhalt ohne Kennung mit Hinweis (Vorschlag); (B) keine Zuordnung, nur früher und deutlicher Hinweis in der Nachbearbeitung; (C) zusätzlich Nachforderung an die KI, wenn Platzhalter im Zeitstrahl keinem Sachverhalt entsprechen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Vitest in tests/pipeline/zeitstrahl.test.ts nach der Abnahme oben, Kennung GK-2026-W45-01 im Namen.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Platzhalter im Feld `kennung` werden korrekt in Zeitstrahl ersetzt (Folgelauf und Sonde).",
+    "Die Schemaprüfung meldet nicht zugeordnete Zeitstrahlzeilen als Warnung ZEITSTRAHL_KENNUNG_UNBEKANNT (src/kern/zeitstrahl.ts)."
+  ]
+}
