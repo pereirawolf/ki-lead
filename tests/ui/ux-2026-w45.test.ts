@@ -268,7 +268,7 @@ describe("UX-2026-W45-23, -24: Kopiervorlage", () => {
 });
 
 describe("UX-2026-W45-25: Rohtabelle", () => {
-  it("Kernspalten vorn, Dateiname weiter als Spalte, Zellen gekürzt und je Zeile aufklappbar", async () => {
+  it("Kernspalten vorn, Zellen gekürzt und je Zeile aufklappbar", async () => {
     await ilka();
     await klick(knopf("Rohtabelle"));
     const kopf = [...document.querySelectorAll(".lb-rohtabelle thead th")].map((t) => t.textContent);
@@ -279,5 +279,22 @@ describe("UX-2026-W45-25: Rohtabelle", () => {
     expect(zeile.querySelectorAll(".lb-zelle").length).toBe(kopf.length);
     await klick(zeile.querySelector<HTMLButtonElement>(".lb-zeile-knopf")!);
     expect(zeile.classList.contains("lb-zeile-offen")).toBe(true);
+  });
+});
+
+describe("UX-2026-W45-26: Spaltengruppen der Rohtabelle", () => {
+  it("kompakt als Standard, Gruppen zuschaltbar und gespeichert, Dateiname in „Kopf, Status und Prüfung“", async () => {
+    const p = await ilka();
+    await klick(knopf("Rohtabelle"));
+    const kopf = () => [...document.querySelectorAll(".lb-rohtabelle thead th")].map((t) => t.textContent);
+    expect(kopf()).toHaveLength(9);
+    expect(kopf()).not.toContain("Datei");
+    await klick(knopf(/^Kopf, Status und Prüfung \(/));
+    expect(kopf()).toContain("Datei");
+    await bisWahr(() => expect(speicher.werte.get("lagebild:" + p.manifest.id)?.rohtabelle).toEqual(["meldung"]));
+    await klick(knopf("Alle Spalten"));
+    expect(kopf().length).toBeGreaterThan(40);
+    await klick(knopf("Kompakt"));
+    expect(kopf()).toHaveLength(9);
   });
 });

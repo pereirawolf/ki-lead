@@ -190,6 +190,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const eingabe = useRef<HTMLInputElement>(null);
   /** Bearbeitungsstand der Befunde des Redaktionschecks (seit UX-2026-W45-19), gespeichert mit dem Lagebild */
   const [bearbeitung, setBearbeitung] = useState<Record<string, Bearbeitung>>({});
+  /** Zugeschaltete Spaltengruppen der Rohtabelle (seit UX-2026-W45-26); leer = kompakt */
+  const [rohGruppen, setRohGruppen] = useState<string[]>([]);
   /** Ausgeblendete Werte der Herkunftsrolle (seit 0.6.13, Issue #114, A1); „“ steht für keine Angabe */
   const [ausgeblendet, setAusgeblendet] = useState<ReadonlySet<string>>(() => new Set());
 
@@ -212,6 +214,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
         }
         if (s?.pruefstand) setStichtag(s.pruefstand);
         if (s?.bearbeitung) setBearbeitung((neu) => ({ ...s.bearbeitung, ...neu }));
+        if (Array.isArray(s?.rohtabelle)) setRohGruppen(s.rohtabelle);
         setGeladen(true);
       })
       .catch((e) => {
@@ -233,11 +236,12 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
         naechsteAusgabe: ausgabeWert,
         ...(stichtag ? { pruefstand: stichtag } : {}),
         ...(Object.keys(bearbeitung).length ? { bearbeitung } : {}),
+        ...(rohGruppen.length ? { rohtabelle: rohGruppen } : {}),
       })
         .then(() => setSpeicherFehler(null))
         .catch((e) => setSpeicherFehler(`Der Stand des Lagebilds konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}).`));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateien, ausgabe, ausgabeZeit, stichtag, bearbeitung, geladen, profil.manifest.id]);
+  }, [dateien, ausgabe, ausgabeZeit, stichtag, bearbeitung, rohGruppen, geladen, profil.manifest.id]);
 
   // Echtzeitmodus: Fristen werden mit fortschreitender Zeit neu eingestuft (alle 30 s und bei Rückkehr zur Seite)
   useEffect(() => {
@@ -1085,7 +1089,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               <Radarvergleich profil={profil} sortiert={sortiert} def={radarDef} feld={r.sv_radar!} />
             ))}
 
-          {reiter === "tabelle" && <Rohtabelle profil={profil} eintraege={eintraege} />}
+          {reiter === "tabelle" && <Rohtabelle profil={profil} eintraege={eintraege} gruppen={rohGruppen} setGruppen={setRohGruppen} />}
 
           {reiter === "redaktion" && (
             <Redaktionscheck

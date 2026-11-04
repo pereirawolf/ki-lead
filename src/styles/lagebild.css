@@ -1636,3 +1636,13 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   line-height: 1.3;
   cursor: pointer;
 }
+
+/* Spaltengruppen der Rohtabelle (seit UX-2026-W45-26) */
+.lb-spaltengruppen {
+  margin-bottom: 0.6rem;
+}
+
+.lb-spaltengruppen .hinweis {
+  margin: 0 0 0 0.5rem;
+  font-size: 0.82rem;
+}
