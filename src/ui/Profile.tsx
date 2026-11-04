@@ -586,6 +586,10 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           const zahl = befundZahl(p.befunde);
           const dateien = Object.keys(p.dateien).sort();
           const titel = nameUndZusatz(m?.name || p.schluessel);
+          const exportieren = async () => {
+            const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
+            dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+          };
           const band = profilBand(m?.farbschema);
           return (
             <article key={p.schluessel} className={istAktiv ? "profil aktiv" : "profil"} aria-label={m?.name || p.schluessel}>
@@ -609,30 +613,32 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                       Verwenden
                     </button>
                   )}
-                  <Menue
-                    text="Mehr"
-                    label={`Mehr zu Profil „${m?.name || p.schluessel}“`}
-                    klasse="knopf leise"
-                    eintraege={[
-                      {
-                        text: "Als Paket exportieren",
-                        aktion: async () => {
-                          const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
-                          dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+                  {/* Mit nur einem Eintrag ein direkter Knopf statt „Mehr“ (seit UX-2026-W45-32) */}
+                  {p.quelle === "importiert" ? (
+                    <Menue
+                      text="Mehr"
+                      label={`Mehr zu Profil „${m?.name || p.schluessel}“`}
+                      klasse="knopf leise"
+                      eintraege={[
+                        { text: "Als Paket exportieren", aktion: exportieren },
+                        {
+                          text: "Entfernen",
+                          aktion: async () => {
+                            if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
+                          },
                         },
-                      },
-                      ...(p.quelle === "importiert"
-                        ? [
-                            {
-                              text: "Entfernen",
-                              aktion: async () => {
-                                if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
-                              },
-                            },
-                          ]
-                        : []),
-                    ]}
-                  />
+                      ]}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="knopf leise"
+                      aria-label={`Profil „${m?.name || p.schluessel}“ als Paket exportieren`}
+                      onClick={() => void exportieren()}
+                    >
+                      Exportieren
+                    </button>
+                  )}
                 </div>
               </header>
               <p className="profil-meta">

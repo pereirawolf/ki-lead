@@ -172,7 +172,7 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     expect(document.activeElement).toBe(k);
   });
 
-  it("legt Export und Entfernen ins Menü „Mehr“ der Karte; Entfernen nur bei importierten Profilen", async () => {
+  it("UX-2026-W45-32: mitgeliefert ein Knopf „Exportieren“, importiert Export und Entfernen im Menü „Mehr“", async () => {
     const lead = await eintrag("lead-beispiel");
     const imp = { ...(await eintrag("muster", "importiert-x")), quelle: "importiert" as const };
     const loeschen = vi.fn();
@@ -187,10 +187,10 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     );
     expect(document.querySelector(".aktionen-nachrangig")).toBeNull();
     const [a, b] = karten();
-    const mehrA = menueKnopf("Mehr zu Profil", a);
-    expect(mehrA.getAttribute("aria-label")).toBe("Mehr zu Profil „LEAD-Beispiel – Koordinierungsstelle“");
-    await klick(mehrA);
-    expect(eintraege(mehrA)).toEqual(["Als Paket exportieren"]);
+    expect(menueKnopf("Mehr zu Profil", a)).toBeUndefined();
+    expect([...a.querySelectorAll("header button")].map((b) => b.getAttribute("aria-label"))).toContain(
+      "Profil „LEAD-Beispiel – Koordinierungsstelle“ als Paket exportieren",
+    );
     const mehrB = menueKnopf("Mehr zu Profil", b);
     await klick(mehrB);
     expect(eintraege(mehrB)).toEqual(["Als Paket exportieren", "Entfernen"]);
