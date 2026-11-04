@@ -1037,3 +1037,13 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 |---|---|---|
 | Platzhalter `NEU-n` nur im Zeitstrahl gehen an den n-ten Sachverhalt ohne Kennung, auch bei mehreren Zeilen desselben Platzhalters; Hinweis `KENNUNG_PLATZHALTER_ZUGEORDNET` nennt jede Zeile | ZS-2026-W44-02: Kennungen vergibt nur die App › GK-2026-W45-01: Platzhalter nur im Zeitstrahl … | `tests/pipeline/zeitstrahl.test.ts` |
 | Platzhalter ohne passenden Sachverhalt bleibt stehen, Hinweis `KENNUNG_PLATZHALTER_OFFEN` | ZS-2026-W44-02: … › GK-2026-W45-01: ein Platzhalter ohne passenden Sachverhalt … | `tests/pipeline/zeitstrahl.test.ts` |
+
+## Betreibermeldungen ohne Bewertung (0.7.8, Befunddatei `ki-lead-befund_kritis_2026-W45.json`, KL-2026-W45-01, Freigabe des Herausgebers vom 04.11.2026, Variante A)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Meldung mit `absender.ebene` „Betreiber“ ist in jedem Status ohne `bewertung` gültig (Ajv und eigener Prüfer), ohne Fehler der Referenzprüfung | LEAD-Meldung-v2: Meldungen von Betreibern ohne Bewertung › KL-2026-W45-01: Betreibermeldung … ohne bewertung ist gültig | `tests/format/lead-meldung-v2.test.ts` |
+| Jede andere Ebene ohne `bewertung` ist ungültig, auch im Entwurf | … › KL-2026-W45-01: Absender der Ebene … ohne bewertung ist ungültig | `tests/format/lead-meldung-v2.test.ts` |
+| Ist `bewertung` bei einem Betreiber vorhanden, gelten die üblichen Regeln (leere Kernaussage ab „zur_freigabe“ ungültig) | … › KL-2026-W45-01: Betreibermeldung mit bewertung folgt den üblichen Regeln | `tests/format/lead-meldung-v2.test.ts` |
+| Die Schemata der mitgelieferten Profile verlangen die Bewertung unverändert | … › KL-2026-W45-01: Behördenschemata der mitgelieferten Profile … | `tests/format/lead-meldung-v2.test.ts` |
+| Lagebild, Kopiervorlage, Rohtabelle und PDF lesen eine Betreibermeldung ohne `bewertung` ohne Fehler und ohne rohe Werte | KL-2026-W45-01: Betreibermeldung ohne bewertung in Lagebild und Ausgabe | `tests/kern/v2-darstellung.test.ts` |

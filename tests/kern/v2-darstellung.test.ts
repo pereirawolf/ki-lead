@@ -205,3 +205,43 @@ describe("UP-2026-W45-03: PDF einer Meldung nach LEAD-Meldung-v2", () => {
     expect(text).toMatch(/D1 R.umliche Auswirkung \/ Impact-Raum: \d/);
   });
 });
+
+describe("KL-2026-W45-01: Betreibermeldung ohne bewertung in Lagebild und Ausgabe", () => {
+  it("einlesen, Kopiervorlage, Rohtabelle und PDF ohne Fehler und ohne rohe Werte", async () => {
+    const { alleSachverhalte, einlesen } = await import("../../src/lagebild/lagebild");
+    const { kopiervorlageHtml, rohtabelle } = await import("../../src/lagebild/ausgabe");
+    const { stelleSchemaZusammen } = await import("../../src/kern/meldung-v2.js");
+    const p = await v2Profil("land", { mitDarstellung: true });
+    p.schema = stelleSchemaZusammen(
+      {
+        format: "lead-meldung-v2-zusammenstellung/1",
+        $id: "https://example.org/test/meldung.schema.json",
+        title: "Test: Kern ohne Einschränkungen",
+        kern: "kern.schema.json",
+        module: { "lead-bevoelkerungsschutz": { datei: "module/lead-bevoelkerungsschutz.schema.json", pflicht: false } },
+      },
+      (d: string) => JSON.parse(readFileSync(repoPfad(`formate/lead-meldung-v2/${d}`), "utf-8")),
+    );
+    const m = TH();
+    m.status = "freigegeben";
+    m.absender = { stelle: "Netzbetreiber Süd (FIKTIV)", ebene: "Betreiber", gebiet: { name: "Thüringen" } };
+    for (const s of m.sachverhalte) {
+      delete s.bewertung;
+      delete s.module["lead-bevoelkerungsschutz"];
+    }
+    expect(pruefeRoh(p.schema, m)).toEqual([]);
+    const { eintraege, fehler } = einlesen([{ name: "betreiber.json", text: JSON.stringify(m), importiertAm: "" }], p);
+    expect(fehler).toEqual([]);
+    const svs = alleSachverhalte(eintraege, p);
+    expect(svs).toHaveLength(2);
+    for (const sv of svs) {
+      expect(sv.beurteilung).toBe("");
+      const h = kopiervorlageHtml(sv, p);
+      expect(h).not.toContain("undefined");
+      expect(h).not.toContain("object Object");
+    }
+    expect(rohtabelle(eintraege, p).flat().join(" ")).not.toMatch(/undefined|object Object/);
+    const text = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(m, p, false).arrayBuffer()));
+    expect(text).not.toMatch(/undefined|object Object/);
+  });
+});
