@@ -40,7 +40,7 @@ import {
   type LagebildFehler,
   type StatusZeile,
 } from "../lagebild/lagebild";
-import { redaktionscheck } from "../lagebild/redaktion";
+import { befundListe, offeneBefunde, redaktionscheck, type Bearbeitung } from "../lagebild/redaktion";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import { alsCsv, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
@@ -185,6 +185,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const [ziehen, setZiehen] = useState(false);
   const [speicherFehler, setSpeicherFehler] = useState<string | null>(null);
   const eingabe = useRef<HTMLInputElement>(null);
+  /** Bearbeitungsstand der Befunde des Redaktionschecks (seit UX-2026-W45-19), gespeichert mit dem Lagebild */
+  const [bearbeitung, setBearbeitung] = useState<Record<string, Bearbeitung>>({});
   /** Ausgeblendete Werte der Herkunftsrolle (seit 0.6.13, Issue #114, A1); „“ steht für keine Angabe */
   const [ausgeblendet, setAusgeblendet] = useState<ReadonlySet<string>>(() => new Set());
 
@@ -206,6 +208,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
           setAusgabeZeit(zeit || "");
         }
         if (s?.pruefstand) setStichtag(s.pruefstand);
+        if (s?.bearbeitung) setBearbeitung((neu) => ({ ...s.bearbeitung, ...neu }));
         setGeladen(true);
       })
       .catch((e) => {
@@ -222,11 +225,16 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const ausgabeWert = ausgabeZeit ? `${ausgabe}T${ausgabeZeit}` : ausgabe;
   useEffect(() => {
     if (geladen)
-      lagebildSchreiben(profil.manifest.id, { dateien, naechsteAusgabe: ausgabeWert, ...(stichtag ? { pruefstand: stichtag } : {}) })
+      lagebildSchreiben(profil.manifest.id, {
+        dateien,
+        naechsteAusgabe: ausgabeWert,
+        ...(stichtag ? { pruefstand: stichtag } : {}),
+        ...(Object.keys(bearbeitung).length ? { bearbeitung } : {}),
+      })
         .then(() => setSpeicherFehler(null))
         .catch((e) => setSpeicherFehler(`Der Stand des Lagebilds konnte nicht im Gerät gespeichert werden (${(e as Error).message || "Speicherfehler"}).`));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateien, ausgabe, ausgabeZeit, stichtag, geladen, profil.manifest.id]);
+  }, [dateien, ausgabe, ausgabeZeit, stichtag, bearbeitung, geladen, profil.manifest.id]);
 
   // Echtzeitmodus: Fristen werden mit fortschreitender Zeit neu eingestuft (alle 30 s und bei Rückkehr zur Seite)
   useEffect(() => {
@@ -269,6 +277,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const zone = zoneOder(profil.manifest.variablen?.zeitzone);
   const pruefJetzt = useMemo(() => (stichtag ? isoLokalZuZeitpunkt(stichtag, zone)?.datum : undefined) ?? new Date(uhr), [stichtag, zone, uhr]);
   const red = useMemo(() => redaktionscheck(alleEintraege, profil, ausgabeWert, pruefJetzt), [alleEintraege, profil, ausgabeWert, pruefJetzt]);
+  // Stand nur für vorhandene Befunde behalten: Ändert oder entfernt sich eine Meldung, ist ihr Befund wieder offen
+  const befundSchluesselListe = useMemo(() => befundListe(red, profil).map((b) => b.schluessel), [red, profil]);
+  useEffect(() => {
+    if (!geladen) return;
+    const gueltig = new Set(befundSchluesselListe);
+    if (Object.keys(bearbeitung).some((k) => !gueltig.has(k))) setBearbeitung((alt) => Object.fromEntries(Object.entries(alt).filter(([k]) => gueltig.has(k))));
+  }, [befundSchluesselListe, bearbeitung, geladen]);
+  const offen = useMemo(() => offeneBefunde(red, profil, bearbeitung), [red, profil, bearbeitung]);
   /** Ganze Tage, die ein gesetzter Stichtag hinter der Geräteuhr liegt */
   const stichtagAlter = stichtag ? Math.floor((uhr - red.stand.jetzt.getTime()) / 864e5) : 0;
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
@@ -713,7 +729,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                     onClick={() => reiterWaehlen(t.id)}
                   >
                     {t.titel}
-                    {t.id === "redaktion" && red.anzahl > 0 && <span className="lb-zaehler">{red.anzahl}</span>}
+                    {t.id === "redaktion" && offen > 0 && <span className="lb-zaehler">{offen}</span>}
                     {t.id === "redaktion" && stichtag && <span className="lb-stichtag-marke"> · Stichtag</span>}
                   </button>
                 </li>
@@ -768,7 +784,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                     Redaktion
                   </h3>
                   <div className="lb-kennzahlen">
-                    <Kachel zahl={red.anzahl} text="Redaktionshinweise" rand="orange" gutBeiNull onClick={() => reiterZeigen("redaktion")} />
+                    <Kachel
+                      zahl={offen}
+                      text="offene Redaktionshinweise"
+                      rand="orange"
+                      gutBeiNull
+                      zusatz={red.anzahl > offen ? `${red.anzahl - offen} bearbeitet` : undefined}
+                      onClick={() => reiterZeigen("redaktion")}
+                    />
                     <Kachel
                       zahl={kz.schemaAbweichungen}
                       text="Meldungen mit Schemaabweichung"
@@ -1070,6 +1093,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               setStichtag={setStichtag}
               stichtagAlter={stichtagAlter}
               zurMeldung={zurMeldung}
+              bearbeitung={bearbeitung}
+              setBearbeitung={setBearbeitung}
             />
           )}
 

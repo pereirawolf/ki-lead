@@ -1425,3 +1425,51 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   text-align: center;
   vertical-align: middle;
 }
+
+/* Bearbeitungsstand der Befunde im Redaktionscheck (seit UX-2026-W45-19) */
+.lb-punkt-aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.lb-punkt-aktionen .lb-zur-meldung {
+  margin: 0;
+}
+
+.lb-bearbeitung {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lb-bearbeitung-grund {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.lb-bearbeitung-grund input {
+  min-width: 14rem;
+}
+
+.lb-punkt-bearbeitet {
+  opacity: 0.8;
+  border-left-style: dashed;
+}
+
+.lb-mehr-knopf {
+  padding: 0;
+  margin-top: 0.15rem;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+  text-decoration: underline;
+  cursor: pointer;
+}

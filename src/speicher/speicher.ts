@@ -72,6 +72,8 @@ export interface LagebildStand {
   naechsteAusgabe?: string;
   /** Stichtag des Redaktionschecks „JJJJ-MM-TTThh:mm“; fehlt: Echtzeit */
   pruefstand?: string;
+  /** Bearbeitungsstand der Befunde des Redaktionschecks je Befundschlüssel (seit UX-2026-W45-19) */
+  bearbeitung?: Record<string, { status: "erledigt" | "belassen"; begruendung?: string; am: string }>;
 }
 
 export async function lagebildLesen(profilId: string): Promise<LagebildStand | undefined> {

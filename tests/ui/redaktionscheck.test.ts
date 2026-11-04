@@ -156,3 +156,40 @@ it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   expect(j.pruefstand.geprueft_fuer).toBe("20.10.2026, 08:00 Uhr");
   expect(j.befunde[0].einstufung).toBe("zeitkritisch");
 });
+
+it("UX-2026-W45-19: Befund als erledigt kennzeichnen – Zahl sinkt, Stand gespeichert und im Bericht, neu bei geänderter Meldung", async () => {
+  ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
+  await zeige();
+  const zaehler = () => Number(document.querySelector(".lb-reiter .lb-zaehler")?.textContent ?? 0);
+  const vorher = zaehler();
+  expect(vorher).toBeGreaterThan(0);
+  await redaktionscheck();
+  await klick(knopf(/^Erledigt$/));
+  await bisWahr(() => expect(zaehler()).toBe(vorher - 1));
+  expect(document.querySelector(".lb-punkt-bearbeitet")?.textContent).toContain("erledigt");
+  await bisWahr(() => expect(Object.keys(gespeichert().bearbeitung ?? {})).toHaveLength(1));
+  const schluessel = Object.keys(gespeichert().bearbeitung)[0]!;
+  expect(gespeichert().bearbeitung[schluessel].status).toBe("erledigt");
+
+  await klick(knopf(beginntMit("Redaktionsbericht (JSON)")));
+  await bisWahr(() => downloads.length === 1);
+  const j = JSON.parse(downloads[0].inhalt);
+  expect(j.befunde.filter((b: any) => b.bearbeitung?.status === "erledigt")).toHaveLength(1);
+  expect(j.uebersicht.offen).toBe(vorher - 1);
+
+  // Bewusst belassen mit Begründung, dann zurücksetzen
+  if (knopf(/^Bewusst belassen …$/)) {
+    await klick(knopf(/^Bewusst belassen …$/));
+    await eingeben(document.querySelector<HTMLInputElement>(".lb-bearbeitung-grund input")!, "an Ausgabe gebunden");
+    await klick(knopf("Bewusst belassen"));
+    expect(document.body.textContent).toContain("bewusst belassen: an Ausgabe gebunden");
+  }
+
+  // Geänderte Meldung: anderer Inhalt, anderer Schlüssel – der Stand der alten Fassung fällt weg
+  await aushaengen();
+  ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:30" }]);
+  db.werte.set("lagebild:" + p.manifest.id, { ...gespeichert(), bearbeitung: { [schluessel]: { status: "erledigt", am: "2026-10-20T06:00:00Z" } } });
+  await zeige();
+  await bisWahr(() => expect(zaehler()).toBe(vorher));
+  await bisWahr(() => expect(gespeichert().bearbeitung).toBeUndefined());
+});

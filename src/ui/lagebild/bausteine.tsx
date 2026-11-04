@@ -2,7 +2,7 @@
 // Befundpunkt des Redaktionschecks. Unverändert übernommen; die Marken einer Meldung und eines Sachverhalts sind jetzt
 // Komponenten statt Hilfsfunktionen der Ansicht.
 
-import { useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
 import {
@@ -16,7 +16,7 @@ import {
   type LagebildEintrag,
   type SvEintrag,
 } from "../../lagebild/lagebild";
-import type { Klasse } from "../../lagebild/redaktion";
+import { bearbeitungText, type Bearbeitung, type Klasse } from "../../lagebild/redaktion";
 
 /** Absender in Überschriften: Land/Bund, darunter bzw. daneben der volle Name klein und einzeilig (seit UX-2026-W45-04) */
 export function Absender({ e, profil, zeile = false }: { e: LagebildEintrag; profil: Profil; zeile?: boolean }) {
@@ -98,12 +98,84 @@ export function Abschnitt({ nr, id, titel, verweis, children }: { nr: number; id
 
 export const EINSTUFUNG: Record<Klasse, string> = { alert: "zeitkritisch", warn: "zu klären", info: "Information", ok: "ohne Befund" };
 
+/**
+ * Bearbeitungsstand der Befunde im Redaktionscheck (seit UX-2026-W45-19): Ein Punkt mit Schlüssel und Einstufung
+ * zeitkritisch oder zu klären bietet „Erledigt“ und „Bewusst belassen“ (Begründung freiwillig) an.
+ */
+export interface BearbeitungKontextWert {
+  bearbeitung: Record<string, Bearbeitung>;
+  setzen: (schluessel: string, b: Bearbeitung | null) => void;
+  zone: string;
+  /** Sichtbare Einstufungen (UX-2026-W45-21); leer = alle */
+  einstufungen?: ReadonlySet<"alert" | "warn" | "info">;
+  bearbeiteteAusblenden?: boolean;
+}
+
+export const BearbeitungKontext = createContext<BearbeitungKontextWert | null>(null);
+
+function Bearbeiten({ schluessel, titel }: { schluessel: string; titel: string }) {
+  const k = useContext(BearbeitungKontext)!;
+  const [grundOffen, setGrundOffen] = useState(false);
+  const [grund, setGrund] = useState("");
+  const stand = k.bearbeitung[schluessel];
+  if (stand)
+    return (
+      <div className="lb-bearbeitung">
+        <span className={`lb-marke lb-${stand.status === "erledigt" ? "gruen" : "grau"}`}>{bearbeitungText(stand, k.zone)}</span>
+        <button type="button" className="knopf leise klein" aria-label={`Bearbeitungsstand zurücksetzen: ${titel}`} onClick={() => k.setzen(schluessel, null)}>
+          Zurücksetzen
+        </button>
+      </div>
+    );
+  if (grundOffen)
+    return (
+      <form
+        className="lb-bearbeitung"
+        onSubmit={(e) => {
+          e.preventDefault();
+          k.setzen(schluessel, { status: "belassen", ...(grund.trim() ? { begruendung: grund.trim() } : {}), am: new Date().toISOString() });
+          setGrundOffen(false);
+        }}
+      >
+        <label className="lb-bearbeitung-grund">
+          <span>Begründung (freiwillig)</span>
+          <input type="text" value={grund} maxLength={300} onChange={(e) => setGrund(e.target.value)} autoFocus />
+        </label>
+        <button type="submit" className="knopf klein">
+          Bewusst belassen
+        </button>
+        <button type="button" className="knopf leise klein" onClick={() => setGrundOffen(false)}>
+          Abbrechen
+        </button>
+      </form>
+    );
+  return (
+    <div className="lb-bearbeitung">
+      <button
+        type="button"
+        className="knopf klein"
+        aria-label={`Erledigt: ${titel}`}
+        onClick={() => k.setzen(schluessel, { status: "erledigt", am: new Date().toISOString() })}
+      >
+        Erledigt
+      </button>
+      <button type="button" className="knopf leise klein" aria-label={`Bewusst belassen: ${titel}`} onClick={() => setGrundOffen(true)}>
+        Bewusst belassen …
+      </button>
+    </div>
+  );
+}
+
 export function Punkt({
   klasse,
   einstufung,
   marke,
   titel,
   aktion,
+  schluessel,
+  name,
+  stufe: stufeVorgabe,
+  kuerzen = false,
   children,
 }: {
   klasse: Klasse | "";
@@ -112,10 +184,29 @@ export function Punkt({
   marke?: string;
   titel: ReactNode;
   aktion?: ReactNode;
+  /** Schlüssel für den Bearbeitungsstand (UX-2026-W45-19) */
+  schluessel?: string;
+  /** Gegenstand in Worten für zugängliche Namen der Knöpfe */
+  name?: string;
+  /** Einstufung für Filter und Zählung, wenn sie von der Farbklasse abweicht (Schemaabweichung: rot, aber zu klären) */
+  stufe?: "alert" | "warn" | "info";
+  /** Text auf zwei Zeilen kürzen, mit „mehr“ (UX-2026-W45-20); aus bei Tabellen */
+  kuerzen?: boolean;
   children?: ReactNode;
 }) {
+  const k = useContext(BearbeitungKontext);
+  const [auf, setAuf] = useState(false);
+  const stand = schluessel && k ? k.bearbeitung[schluessel] : undefined;
+  const bearbeitbar = !!(schluessel && k && (klasse === "alert" || klasse === "warn"));
+  // Filter nach Einstufung und Bearbeitung (UX-2026-W45-21)
+  const stufe = stufeVorgabe ?? (klasse === "alert" || klasse === "warn" ? klasse : "info");
+  if (k?.einstufungen?.size && !k.einstufungen.has(stufe)) return null;
+  if (k?.bearbeiteteAusblenden && stand) return null;
+  const titelText = name ?? (typeof titel === "string" ? titel : "Befund");
+  // Bearbeitete Befunde zeigen nur Kopf und Stand (UX-2026-W45-20)
+  const zeigeText = !!children && (!stand || auf);
   return (
-    <div className={`lb-punkt lb-punkt-${klasse || "leer"}`}>
+    <div className={`lb-punkt lb-punkt-${klasse || "leer"}${stand ? " lb-punkt-bearbeitet" : ""}`}>
       {marke && (
         <span className={`lb-flag lb-flag-${klasse || "info"}`}>
           {klasse && <span className="sr-only">{einstufung || EINSTUFUNG[klasse]}: </span>}
@@ -123,8 +214,18 @@ export function Punkt({
         </span>
       )}
       <p className="lb-punkt-titel">{titel}</p>
-      {children && <div className="lb-punkt-text">{children}</div>}
-      {aktion}
+      {zeigeText && <div className={kuerzen && !auf ? "lb-punkt-text lb-punkt-gekuerzt" : "lb-punkt-text"}>{children}</div>}
+      {!!children && (kuerzen || stand) && (
+        <button type="button" className="lb-mehr-knopf" aria-expanded={zeigeText && (auf || !kuerzen)} onClick={() => setAuf((a) => !a)}>
+          {auf ? "weniger" : stand ? "Text zeigen" : "mehr"}
+        </button>
+      )}
+      {(aktion || bearbeitbar) && (
+        <div className="lb-punkt-aktionen">
+          {aktion}
+          {bearbeitbar && <Bearbeiten schluessel={schluessel!} titel={titelText} />}
+        </div>
+      )}
     </div>
   );
 }
