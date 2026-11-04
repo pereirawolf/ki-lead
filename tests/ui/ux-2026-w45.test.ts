@@ -214,3 +214,20 @@ describe("UX-2026-W45-17: offene Achse im Lagenradar", () => {
     expect(voll).toContain("radar-flaeche");
   });
 });
+
+describe("UX-2026-W45-16: Vergleichsmatrix des Lagenradars", () => {
+  it("Matrix als Standard mit 8 Zeilen × 8 Achsen, offen als „U“, Zeile öffnet die Karte, Umschalter auf Karten", async () => {
+    await ilka();
+    await klick(knopf("Lagenradar"));
+    const zeilen = document.querySelectorAll(".lb-radarmatrix tbody tr");
+    expect(zeilen).toHaveLength(8);
+    expect(zeilen[0]!.querySelectorAll("td")).toHaveLength(8);
+    expect(document.querySelectorAll(".lb-radarmatrix .lb-stufe-offen").length).toBeGreaterThan(0);
+    expect(document.querySelector(".lb-stufe-offen")?.textContent).toContain("U");
+    expect(document.querySelector(".lb-karte")).toBeNull();
+    await klick(zeilen[0]!.querySelector<HTMLButtonElement>(".lb-matrix-zeile")!);
+    expect(document.querySelectorAll(".lb-matrix-karte .lb-karte")).toHaveLength(1);
+    await klick(knopf("Karten"));
+    expect(document.querySelectorAll(".lb-karte")).toHaveLength(8);
+  });
+});

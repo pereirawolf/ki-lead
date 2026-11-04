@@ -1275,3 +1275,115 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   padding-left: 0.75rem;
   border-left: 2px solid var(--linie);
 }
+
+/* Lagenradar: Umschalter Matrix | Karten und Vergleichsmatrix (seit UX-2026-W45-16) */
+.lb-radar-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.lb-radar-kopf .hinweis {
+  flex: 1 1 24rem;
+  margin: 0;
+}
+
+.lb-radar-kopf .segment {
+  font: inherit;
+  color: var(--tinte);
+  border: none;
+  border-right: 1px solid var(--linie);
+}
+
+.lb-radar-kopf .segment:last-child {
+  border-right: none;
+}
+
+.lb-radar-kopf .segment.aktiv {
+  background: var(--amt);
+  color: var(--auf-amt);
+  font-weight: 700;
+}
+
+.lb-radarmatrix {
+  min-width: 640px;
+}
+
+.lb-radarmatrix th[scope="row"] {
+  min-width: 14rem;
+  max-width: 26rem;
+  font-weight: 400;
+  color: var(--tinte);
+}
+
+.lb-radarmatrix thead th:not(:first-child) {
+  text-align: center;
+  width: 3rem;
+}
+
+.lb-radarmatrix abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+.lb-matrix-zeile {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinte);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--linie);
+  text-underline-offset: 0.2em;
+}
+
+.lb-matrix-zeile:hover,
+.lb-matrix-zeile[aria-expanded="true"] {
+  text-decoration-color: currentColor;
+}
+
+.lb-matrix-gewaehlt th[scope="row"] {
+  box-shadow: inset 4px 0 0 var(--amt);
+}
+
+.lb-stufe {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--radar-linie) var(--anteil, 10%), var(--flaeche));
+  border: 2px solid var(--flaeche);
+}
+
+.lb-stufe-dunkel {
+  color: var(--flaeche);
+}
+
+.lb-stufe-offen {
+  color: var(--tinte-leise);
+  background: repeating-linear-gradient(135deg, var(--flaeche) 0 4px, var(--linie-zart) 4px 7px);
+}
+
+.lb-matrix-legende {
+  margin-top: 0.4rem;
+}
+
+.lb-matrix-karte {
+  max-width: 40rem;
+  margin-top: 0.75rem;
+}
+
+@media (forced-colors: active) {
+  .lb-stufe,
+  .lb-stufe-offen {
+    background: Canvas;
+    color: CanvasText;
+  }
+}

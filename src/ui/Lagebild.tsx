@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, istEigeneStelle, radarFuer, radarWerte } from "../kern/ui";
+import { bezeichnung, feldUi, istEigeneStelle, radarFuer } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE } from "../kern/ausgabe";
 import { kennsaetzeAlle } from "../kern/kennsaetze";
@@ -45,13 +45,13 @@ import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import { alsCsv, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
 import type { UebergabeMeldung } from "../pipeline/material";
-import { RadarGrafik } from "./Radar";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { Absender, Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
+import { Radarvergleich } from "./lagebild/Radarvergleich";
 import { KEIN_FILTER, Sachverhaltsliste, type SvFilter } from "./lagebild/Sachverhaltsliste";
 import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
@@ -1022,45 +1022,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             (!radarDef ? (
               <p className="leer">Dieses Profil sieht kein Lagenradar vor.</p>
             ) : (
-              <>
-                <p className="hinweis">
-                  Bewusst ohne Mittelwert über mehrere Sachverhalte: Ein Durchschnitt über Stufen verschiedener, nicht vergleichbarer Ereignisse wäre nicht
-                  aussagekräftig. Die Werte stehen daher je Sachverhalt einzeln.
-                </p>
-                <div className="lb-karten">
-                  {sortiert.map((s) => {
-                    const wert = holeWert(s.sv, r.sv_radar!);
-                    const stufen = radarWerte(wert);
-                    const gesetzt = radarDef.achsen.some((a) => Number.isInteger(stufen[a.key]));
-                    return (
-                      <article key={`${s.eintrag.id}-${s.index}`} className="lb-karte">
-                        <header>
-                          <p className="lb-karte-titel">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</p>
-                          <p className="lb-karte-meta">
-                            <Absender e={s.eintrag} profil={profil} zeile />
-                            {r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : ""}
-                          </p>
-                        </header>
-                        {/* Radar über die Kartenbreite, darunter die Achsen zweispaltig (seit 0.6.20, UX-2026-W44-13) */}
-                        <div className="lb-karte-inhalt lb-radar">
-                          {gesetzt ? <RadarGrafik def={radarDef} wert={wert} groesse={260} /> : <p className="hinweis">Kein Lagenradar ausgefüllt.</p>}
-                          <dl className="lb-achsen">
-                            {radarDef.achsen.map((a) => {
-                              const v = stufen[a.key];
-                              return (
-                                <div key={a.key} className="lb-achse">
-                                  <dt>{a.label}</dt>
-                                  <dd>{Number.isInteger(v) ? `${String(v)}${a.stufen[v as number] ? ` – ${a.stufen[v as number]}` : ""}` : "offen"}</dd>
-                                </div>
-                              );
-                            })}
-                          </dl>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </>
+              <Radarvergleich profil={profil} sortiert={sortiert} def={radarDef} feld={r.sv_radar!} />
             ))}
 
           {reiter === "tabelle" && (
