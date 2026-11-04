@@ -107,7 +107,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 
 ## [0.7.8] – 04.11.2026
 
-Grundlage: Befunddatei `ki-lead-befund_kritis-lead_2026-W45.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, vorgezogener Befund, Commit `1395a76`), KL-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 mit Variante A. Voraussetzung für die Umstellung von KRITIS-LEAD: Ein KRITIS-Betreiber setzt keine LEAD-Bewertung (Entscheidungen vom 31.10. und 03.11.2026), das Kernschema verlangte aber je Sachverhalt den Block `bewertung` und ab „zur_freigabe“ Kernaussage und Referenzraum.
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, vorgezogener Befund, Commit `1395a76`), KL-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 mit Variante A. Voraussetzung für die Umstellung von KRITIS-LEAD: Ein KRITIS-Betreiber setzt keine LEAD-Bewertung (Entscheidungen vom 31.10. und 03.11.2026), das Kernschema verlangte aber je Sachverhalt den Block `bewertung` und ab „zur_freigabe“ Kernaussage und Referenzraum.
 
 ### Geändert
 

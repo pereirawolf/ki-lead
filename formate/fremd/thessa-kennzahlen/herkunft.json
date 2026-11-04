@@ -6,8 +6,8 @@
   "lizenz": "CC-BY-4.0 OR CC0-1.0 (Thessa, LICENSE-CONTENT Nr. 1 b und 2 a)",
   "kernschema": {
     "hinweis": "Das Thessa-Schema verweist auf das Kernschema von LEAD-Meldung-v2 und pinnt es in Thessa unter kern/quelle.json. Die Bündelung verlangt, dass formate/lead-meldung-v2/kern.schema.json diese Prüfsumme hat; ändert sich das Kernschema, muss Thessa neu pinnen und diese Angabe nachgezogen werden.",
-    "commit": "a614ed46d1bced68e674b8ec83628af72a35861d",
-    "sha256": "dec787a9025f747643645b21dbd986f5e8a7d5c5f562d2bbd2c438cdcf680161"
+    "commit": "21c7f0e28a38398ed7dacab43ad4da0a36312754",
+    "sha256": "46158e0bf5cbbb6905e6d7a2a0f053c48a4b5f246bac69d54568c5d3e050d25e"
   },
   "fassungen": [
     {

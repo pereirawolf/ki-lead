@@ -3,7 +3,7 @@
   "$id": "https://github.com/pereirawolf/ki-lead/formate/fremd/thessa-kennzahlen/gebuendelt/0.3.schema.json",
   "title": "Thessa – Kennzahlen-Baustein 0.3 (Entwurf)",
   "description": "Verdichtete Kräftelage eines Raums als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, dazu die lagerelevanten Einsatzmeldungen ohne Ortslage und ohne Freitext-Hinweise. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Einsatzmittel, Einsätze, Einsatzkräfte, Ausrückebereiche, Einheiten des Katastrophenschutzes) werden nicht addiert.",
-  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.3/kennzahlen-baustein.schema.json (Thessa a614ed4, SHA-256 e05e4e4a3188…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 dec787a9025f…). Nicht von Hand ändern.",
+  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.3/kennzahlen-baustein.schema.json (Thessa a614ed4, SHA-256 e05e4e4a3188…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 46158e0bf5cb…). Nicht von Hand ändern.",
   "type": "object",
   "additionalProperties": false,
   "required": [
