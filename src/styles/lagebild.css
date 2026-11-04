@@ -416,14 +416,13 @@ button.lb-kennzahl:hover {
   overflow: hidden;
 }
 
+/* Heller, schlanker Kopf (seit UX-2026-W45-10; bis dahin in der Hauptfarbe) */
 .lb-karte header {
-  background: var(--amt);
-  color: var(--auf-amt);
-  padding: 0.6rem 0.9rem;
-}
-
-.lb-karte header .lb-karte-meta {
-  color: var(--auf-amt);
+  background: var(--papier);
+  color: var(--tinte);
+  border-bottom: 1px solid var(--linie-zart);
+  border-top: 3px solid var(--amt);
+  padding: 0.5rem 0.9rem;
 }
 
 .lb-karte-titel {
@@ -871,7 +870,7 @@ fieldset.lb-ausgabe {
 }
 
 /* Herkunftsfilter (seit 0.6.13, Issue #114, A1) */
-fieldset.lb-herkunft {
+fieldset:is(.lb-herkunft, .lb-eigene) {
   margin: 0 0 1rem;
   min-width: 0;
   border: 1px solid var(--linie);
@@ -879,7 +878,7 @@ fieldset.lb-herkunft {
   padding: 0.4rem 0.9rem 0.6rem;
 }
 
-.lb-herkunft legend {
+:is(.lb-herkunft, .lb-eigene) legend {
   font-weight: 700;
   padding: 0 0.2rem;
 }
@@ -1095,10 +1094,6 @@ fieldset.lb-herkunft {
   font-weight: 400;
   color: var(--tinte-leise);
   overflow-wrap: anywhere;
-}
-
-.lb-karte header .lb-absender-voll {
-  color: inherit;
 }
 
 /* Kennzahlen in zwei Gruppen „Lage“ und „Redaktion“ (seit UX-2026-W45-06) */

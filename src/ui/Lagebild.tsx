@@ -412,14 +412,17 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   };
 
   // Entstehung der Meldung, so wie gespeichert; die SOP-Angaben gelten für die ganze Meldung
+  // Seit UX-2026-W45-10 steht der Dateiname hier statt im Kartenkopf; ohne Entstehung als kleine Zeile
   const entstehungBlock = (e: LagebildEintrag) => {
     const ent = r.entstehung_feld ? holeWert(e.daten, r.entstehung_feld) : undefined;
-    if (!ent || typeof ent !== "object") return null;
+    if (!ent || typeof ent !== "object") return <p className="lb-karte-meta lb-dateiname">Datei: {e.name}</p>;
     const sop = sopNachweis(ent);
     return (
       <details className="lb-entstehung">
         <summary>Entstehung{sop ? ` · SOP: ${Array.isArray(ent.sop) ? ent.sop.length : "–"}` : ""}</summary>
         <dl>
+          <dt>Datei</dt>
+          <dd className="lb-dateiname">{e.name}</dd>
           {ent.verfahren && (
             <>
               <dt>Verfahren</dt>
@@ -662,7 +665,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 </fieldset>
               )}
               {nEigene > 0 && (
-                <fieldset className="lb-herkunft lb-eigene">
+                <fieldset className="lb-eigene">
                   <legend>Eigene Meldung</legend>
                   <div className="lb-herkunft-werte">
                     <label>
@@ -769,7 +772,11 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                   const gemeldet = status.zeilen.filter((z) => z.eintraege.length);
                   const sammel = sammelErinnerungMailto(status.zeilen, profil.kontakte);
                   const letzte = (z: StatusZeile) =>
-                    z.eintraege.map((e) => zeitpunktVon(e, profil)).filter(Boolean).sort().at(-1) ?? "";
+                    z.eintraege
+                      .map((e) => zeitpunktVon(e, profil))
+                      .filter(Boolean)
+                      .sort()
+                      .at(-1) ?? "";
                   return (
                     <>
                       <h3 className="abschnitt">
@@ -847,9 +854,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         <p className="hinweis">
                           Weitere Meldungen ohne Eintrag in der Kontaktliste:{" "}
                           {status.weitere
-                            .map(
-                              (e) => absender(e, profil) + (r.herkunft ? ` (Herkunft: ${herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))})` : ""),
-                            )
+                            .map((e) => absender(e, profil) + (r.herkunft ? ` (Herkunft: ${herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))})` : ""))
                             .join(" · ")}
                         </p>
                       )}
@@ -873,7 +878,14 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       />
                     )}
                     {r.sv_tendenz && (
-                      <Balken titel={lTendenz} werte={stufenZaehlen(svs.map((s) => s.tendenz), tendenzStufen(profil))} farbe={(w) => farbeTendenz(profil, w)} />
+                      <Balken
+                        titel={lTendenz}
+                        werte={stufenZaehlen(
+                          svs.map((s) => s.tendenz),
+                          tendenzStufen(profil),
+                        )}
+                        farbe={(w) => farbeTendenz(profil, w)}
+                      />
                     )}
                     {r.sv_art && (
                       <Balken
@@ -904,19 +916,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                       <p className="lb-karte-titel">
                         <Absender e={e} profil={profil} />
                       </p>
-                      <p className="lb-karte-meta">
-                        {zeitpunktVon(e, profil) ? datumDE(zeitpunktVon(e, profil)) : "ohne Meldezeitpunkt"} · {e.name}
-                      </p>
+                      <p className="lb-karte-meta">{zeitpunktVon(e, profil) ? datumDE(zeitpunktVon(e, profil)) : "ohne Meldezeitpunkt"}</p>
                     </header>
                     <div className="lb-karte-inhalt">
                       <p className="lb-marken">
                         <Marken e={e} profil={profil} eigen={eigen(e)} />
                       </p>
                       {e.fremd ? (
-                        <p className="hinweis">
-                          Schema „{e.herkunft}“ mit {e.fremd.sachverhalte} Sachverhalt(en). Nicht auswertbar nach diesem Profil, aber an die KI-Verdichtung
-                          übergebbar.
-                        </p>
+                        <>
+                          <p className="hinweis">
+                            Schema „{e.herkunft}“ mit {e.fremd.sachverhalte} Sachverhalt(en). Nicht auswertbar nach diesem Profil, aber an die KI-Verdichtung
+                            übergebbar.
+                          </p>
+                          <p className="lb-karte-meta lb-dateiname">Datei: {e.name}</p>
+                        </>
                       ) : (
                         <>
                           <p className="lb-karte-meta">
