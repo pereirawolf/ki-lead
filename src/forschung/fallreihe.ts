@@ -8,7 +8,8 @@ import type { Fortschritt, LlmAnbieter } from "../anbieter/typen";
 import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { ausfuellHinweise } from "../kern/kennsaetze";
 import { holeWert } from "../kern/pfad";
-import { parseQuellen, sachverhalte } from "../kern/quellen";
+import { parseQuellen, sachverhalte, svTexte } from "../kern/quellen";
+import { feldUi, radarFuer, radarWerte } from "../kern/ui";
 import type { Meldung, Profil } from "../kern/typen";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { APP_KENNUNG } from "../kern/version";
@@ -23,6 +24,7 @@ import type { Kontext } from "../pipeline/stufen";
 import type { StufeId } from "../pipeline/recherchetiefe";
 import type { Fall, KatalogFall } from "./fallkatalog";
 import { einstellungenFuerLauf, s2Rolle, type ReihenVariante } from "./fallplan";
+import { radarBegruendungPruefen } from "./plausibilitaet";
 
 export const REIHE_FORMAT = "ki-lead-fallreihe/1";
 
@@ -113,6 +115,12 @@ export interface Pruefungen {
   /** Anteil der Sachverhalte mit Tendenz (0–1) */
   tendenz_gesetzt: number | null;
   quellen: number | null;
+  /** Anteil offener Radarachsen über alle Sachverhalte (0–1; seit 0.7.10, AV-2026-W45-08) */
+  radar_offen?: number | null;
+  /** Treffer des Prüfmusters der Radarbegründung (D3 ohne Funktion, D5 ohne Zielzustand; seit 0.7.10, AV-2026-W45-08) */
+  radar_pruefmuster?: number | null;
+  /** Wortlaut der Treffer mit Sachverhalt, für die Sichtung von Hand */
+  radar_hinweise?: string[];
   websuchen: number;
   abrufe: number;
 }
@@ -129,6 +137,36 @@ export function quellenZahl(m: Meldung, profil: Profil): number | null {
   return q == null ? 0 : null;
 }
 
+/** Begründungen je Achse bei LEAD-Meldung-v2 (Objekte mit „begruendung“); bei v1 leer */
+function achsenBegruendungen(wert: unknown): string {
+  if (!wert || typeof wert !== "object") return "";
+  return Object.values(wert as Record<string, unknown>)
+    .map((v) => (v && typeof v === "object" ? String((v as { begruendung?: unknown }).begruendung ?? "") : ""))
+    .filter(Boolean)
+    .join("\n");
+}
+
+/**
+ * Radarkennzahlen je Lauf (seit 0.7.10, AV-2026-W45-08): Anteil offener Achsen über alle Sachverhalte und Treffer des
+ * Prüfmusters der Radarbegründung. null ohne Meldung, ohne Sachverhalte oder ohne Radar im Profil.
+ */
+export function radarKennzahlen(meldung: Meldung | undefined, profil: Profil): { offen: number | null; pruefmuster: number | null; hinweise: string[] } {
+  const ui = profil.ui;
+  const r = ui.rollen;
+  const def = r.sv_radar && r.sachverhalte ? radarFuer(ui, feldUi(ui, `${r.sachverhalte}[].${r.sv_radar}`)) : undefined;
+  const sv = meldung ? sachverhalte(meldung, ui) : [];
+  if (!meldung || !def || !def.achsen.length || !sv.length) return { offen: null, pruefmuster: null, hinweise: [] };
+  let offen = 0;
+  const hinweise: string[] = [];
+  sv.forEach((s, i) => {
+    const roh = holeWert(s, r.sv_radar!);
+    const werte = radarWerte(roh);
+    offen += def.achsen.filter((a) => !Number.isInteger(werte[a.key])).length;
+    for (const b of radarBegruendungPruefen(`${svTexte(s, ui)}\n${achsenBegruendungen(roh)}`, werte)) hinweise.push(`Sachverhalt ${i + 1}: ${b.text}`);
+  });
+  return { offen: Math.round((offen / (sv.length * def.achsen.length)) * 1000) / 1000, pruefmuster: hinweise.length, hinweise };
+}
+
 /** Tendenz je Sachverhalt: Text (v1) oder Objekt mit Richtung (v2) */
 function tendenzGesetzt(wert: unknown): boolean {
   if (wert && typeof wert === "object") return !!(wert as { richtung?: unknown }).richtung;
@@ -143,6 +181,7 @@ export function pruefungen(l: Lauf, meldung: Meldung | undefined, profil: Profil
   const s2 = l.stufen.filter((s) => s.stufe.startsWith("S2"));
   const recherche = l.ergebnis?.recherche ?? rechercheNachweis({ nutzung: s2[s2.length - 1]?.nutzung, suchen: l.ergebnis?.suchen });
   const fristPruefbar = !!meldung && !!ui.kennsaetze?.handlungsrelevant && !!r.sv_bewertung_text;
+  const radar = radarKennzahlen(meldung, profil);
   return {
     status: l.status,
     schemakonform: l.ergebnis ? l.ergebnis.schemakonform : meldung ? null : false,
@@ -157,6 +196,9 @@ export function pruefungen(l: Lauf, meldung: Meldung | undefined, profil: Profil
     tendenz_gesetzt:
       meldung && tendenzPfad && sv.length ? Math.round((sv.filter((s) => tendenzGesetzt(holeWert(s, tendenzPfad))).length / sv.length) * 1000) / 1000 : null,
     quellen: meldung ? quellenZahl(meldung, profil) : null,
+    radar_offen: radar.offen,
+    radar_pruefmuster: radar.pruefmuster,
+    radar_hinweise: radar.hinweise,
     websuchen: recherche.websuchen,
     abrufe: recherche.abrufe,
   };
