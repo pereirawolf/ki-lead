@@ -1198,3 +1198,63 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
 .lb-sv-zeile details[open] .lb-sv-ort {
   display: none;
 }
+
+/* Filter der Sachverhalte als Chips mit Anzahl, dazu Suche (seit UX-2026-W45-14) */
+.lb-chipgruppen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.lb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.lb-chips-titel {
+  min-width: 7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+.lb-chip {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  background: var(--flaeche);
+  color: var(--tinte);
+  cursor: pointer;
+}
+
+.lb-chip:hover {
+  background: var(--amt-zart);
+}
+
+.lb-chip.aktiv {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--auf-amt);
+  font-weight: 700;
+}
+
+.lb-svsuche input {
+  min-width: 16rem;
+}
+
+@media (max-width: 640px) {
+  .lb-svsuche,
+  .lb-svsuche input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lb-chips-titel {
+    flex-basis: 100%;
+  }
+}

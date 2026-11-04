@@ -8,7 +8,8 @@ import { profil } from "../support/dateien";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext, setzen } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { adresseLesen, adresseText } from "../../src/ui/app/adresse";
-import { alterText, sammelErinnerungMailto, type StatusZeile } from "../../src/lagebild/lagebild";
+import { alterText, sammelErinnerungMailto, type StatusZeile, type SvEintrag } from "../../src/lagebild/lagebild";
+import { KEIN_FILTER, svFiltern, type SvFilter } from "../../src/ui/lagebild/Sachverhaltsliste";
 
 describe("UX-2026-W45-05: Adresse der Auswertung", () => {
   it("liest #/auswertung/… und weiterhin #/lagebild/…, schreibt #/auswertung/…", () => {
@@ -137,5 +138,37 @@ describe("UX-2026-W45-10 bis -12: Meldungen", () => {
       setzen(wahl, "zeit");
     });
     expect(titel()).toEqual(["Bund", "Sachsen-Anhalt", "Thüringen", "Hessen", "Nordrhein-Westfalen", "Niedersachsen", "Rheinland-Pfalz"]);
+  });
+});
+
+describe("UX-2026-W45-14: Filter der Sachverhalte", () => {
+  const sv = (x: Partial<SvEintrag>) => ({ bezeichnung: "", ort: "", arten: [], land: "", beurteilung: "", tendenz: "", ...x }) as SvEintrag;
+  const liste = [
+    sv({ bezeichnung: "Sturm im Harz", ort: "Landkreis Harz", arten: ["Unwetter / Sturm"], land: "Sachsen-Anhalt", beurteilung: "geringfügig" }),
+    sv({ bezeichnung: "Stromausfall Sonneberg", ort: "Landkreis Sonneberg", arten: ["Stromausfall / Blackout", "KRITIS-Ausfall"], land: "Thüringen" }),
+    sv({ bezeichnung: "Ohne Art", land: "Thüringen" }),
+  ];
+  const f = (x: Partial<SvFilter>) => ({ ...KEIN_FILTER, ...x });
+
+  it("Art aus der Mehrfachnennung, Land und Textsuche (alle Wörter, ohne Groß- und Kleinschreibung)", () => {
+    expect(svFiltern(liste, f({ art: "KRITIS-Ausfall" })).map((s) => s.bezeichnung)).toEqual(["Stromausfall Sonneberg"]);
+    expect(svFiltern(liste, f({ land: "Thüringen" }))).toHaveLength(2);
+    expect(svFiltern(liste, f({ suche: "landkreis SONNEBERG" })).map((s) => s.bezeichnung)).toEqual(["Stromausfall Sonneberg"]);
+    expect(svFiltern(liste, f({ suche: "DE-TH-1" }), (s) => (s.bezeichnung === "Ohne Art" ? "DE-TH-1" : ""))).toHaveLength(1);
+    expect(svFiltern(liste, f({ land: "Thüringen", suche: "harz" }))).toHaveLength(0);
+  });
+
+  it("Chips mit Anzahl im Beispiel Ilka", async () => {
+    await ilka();
+    await klick(knopf("Sachverhalte"));
+    const gruppe = (name: string) => document.querySelector<HTMLElement>(`.lb-chips[aria-label="${name}"]`)!;
+    expect([...gruppe("Art").querySelectorAll("button")].map((b) => b.textContent)).toEqual(
+      expect.arrayContaining(["Unwetter / Sturm (7)", "Stromausfall / Blackout (6)", "KRITIS-Ausfall (2)"]),
+    );
+    await klick(knopf("KRITIS-Ausfall (2)"));
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(2);
+    expect(knopf("KRITIS-Ausfall (2)")?.getAttribute("aria-pressed")).toBe("true");
+    await klick(knopf("Filter aufheben"));
+    expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
   });
 });
