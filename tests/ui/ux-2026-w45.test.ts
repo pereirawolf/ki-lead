@@ -248,3 +248,17 @@ describe("UX-2026-W45-18: Sachverhalte im Radar überlagern", () => {
     expect(document.querySelector(".lb-ueberlagert")).toBeNull();
   });
 });
+
+describe("UX-2026-W45-23, -24: Kopiervorlage", () => {
+  it("Blöcke eingeklappt, Auswahl kopieren, Kopf gegliedert", async () => {
+    await ilka();
+    await klick(knopf("Kopiervorlage"));
+    const bloecke = document.querySelectorAll(".lb-vorlage");
+    expect(bloecke).toHaveLength(8);
+    expect([...document.querySelectorAll<HTMLDetailsElement>(".lb-vorlage-vorschau")].every((d) => !d.open)).toBe(true);
+    expect(knopf("Auswahl kopieren (0)")?.disabled).toBe(true);
+    await klick(document.querySelector<HTMLInputElement>(".lb-vorlage-kopf input")!);
+    expect(knopf("Auswahl kopieren (1)")).toBeTruthy();
+    expect(document.querySelectorAll(".lb-vorlage-gewaehlt")).toHaveLength(1);
+  });
+});

@@ -1522,3 +1522,37 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   font-size: 0.88rem;
   color: var(--tinte-leise);
 }
+
+/* Kopiervorlage: Blöcke eingeklappt, Auswahl zum gemeinsamen Kopieren (seit UX-2026-W45-23) */
+.lb-vorlage {
+  margin-bottom: 0.5rem;
+}
+
+.lb-vorlage-kopf {
+  flex-wrap: nowrap;
+}
+
+.lb-vorlage-kopf > span,
+.lb-vorlage-titel {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-vorlage-gewaehlt {
+  border-color: var(--amt);
+  box-shadow: inset 4px 0 0 var(--amt);
+}
+
+.lb-vorlage-vorschau > summary {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  cursor: pointer;
+}
+
+.lb-vorlage .werkzeugleiste-knoepfe,
+.lb-leiste .werkzeugleiste-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
