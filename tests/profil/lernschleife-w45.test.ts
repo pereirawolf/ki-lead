@@ -26,3 +26,18 @@ describe("Lernschleife KW 45", () => {
     expect(zeile).toContain("nur die Kennungen");
   });
 });
+
+describe("Lernschleife KW 45, Kodierleitfaden", () => {
+  it.each(["profile/lead-beispiel/kodierleitfaden.md", "profile/lead-thueringen/kodierleitfaden.md"])(
+    "LS-2026-W45-04: gerundete amtliche Zählangaben an einer Stufengrenze tragen die niedrigere Stufe als Mindestwert (%s)",
+    (pfad) => {
+      const text = lies(pfad);
+      const regel = text.split("\n").find((z) => z.startsWith("6. **Keine unbelegte Präzision.**"));
+      expect(regel).toBeDefined();
+      expect(regel).toContain("**Gerundete Angaben:**");
+      expect(regel).toContain("wird die niedrigere, sicher getragene Stufe als Mindestwert gesetzt");
+      expect(regel).toContain("für modellierte Schätzungen und Hochrechnungen gilt die Bandbreitenregel");
+      expect(text).toContain("oder einer gerundeten amtlichen Zählangabe an der Stufengrenze (Mindestkodierung, Grundregel 6)");
+    },
+  );
+});
