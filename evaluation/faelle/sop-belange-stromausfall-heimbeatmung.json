@@ -1,0 +1,43 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-belange-stromausfall-heimbeatmung",
+  "titel": "Stromausfall mit häuslich beatmeten Menschen und Hochhaus ohne Wasserdruck (FIKTIV)",
+  "stand": "2026-11-04",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Stromausfall mit häuslich beatmeten Menschen, Pflegeheim im Notstrombetrieb und Hochhaus ohne Wasserdruck",
+    "stichworte": "B08, C18, C12, C09",
+    "stichtag": "2026-11-04",
+    "meldezeitpunkt": "2026-11-04T12:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-belange-stromausfall-heimbeatmung.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die Batteriereichweite bis etwa 16:00 Uhr als Puffer mit Reichweite benennen und die 5 Personen mit unbekannter Reichweite als offene Frage führen (C18/R2, R7).",
+      "Einen Kennsatz „Handlungsrelevant bis:“ vor 16:00 Uhr nur mit der Angabe der Pflegedienste als Grundlage setzen und die Empfehlung an zuständige Stellen adressieren.",
+      "Notstrom des Pflegeheims als vorhanden und betrieben, die Nachbetankung als offen darstellen (C18/R6).",
+      "Den Ausfall von Aufzügen und Druckerhöhung im Hochhaus als besonderen Belang ohne erfundene Personenzahl darstellen (C18/R9).",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Haushaltsanschlüsse ohne begründeten Faktor in Personen umrechnen oder eine Gesamtzahl „vulnerabler“ Menschen aus der Einwohnerzahl hochrechnen.",
+      "Die 5 Personen mit unbekannter Reichweite als versorgt oder als bereits geschädigt darstellen.",
+      "Namen, Adressen oder Gesundheitsangaben einzelner Personen nennen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-04T12:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Stromausfall / Blackout"
+    ]
+  }
+}
