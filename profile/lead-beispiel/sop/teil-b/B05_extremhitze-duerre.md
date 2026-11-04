@@ -81,6 +81,6 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder
+**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder · für 5a zusätzlich: Gesundheits- und Sozialressorts von Bund und Ländern (öffentlicher Gesundheitsdienst, Pflege und Heimaufsicht), Träger des Rettungsdienstes, Arbeitsschutzbehörden
 
 **Offene Punkte:** Entspannungsindikatoren für Teilprofil 5b (Wiederauffüllung) fachlich abstimmen.
