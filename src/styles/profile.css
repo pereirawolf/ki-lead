@@ -682,3 +682,21 @@
   outline: 2px solid var(--amt);
   outline-offset: 2px;
 }
+
+/* Klammerzusatz des Namens als Kennzeichen, Farbband eines Profilfarbschemas (seit UX-2026-W45-30) */
+.profil-zusatz {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+  white-space: nowrap;
+}
+
+.profil-band {
+  height: 6px;
+  margin: -1px -1px 0.5rem;
+  border-radius: var(--r-mittel) var(--r-mittel) 0 0;
+}

@@ -31,6 +31,7 @@ import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { Menue } from "./Menue";
 import { useKopfHoehe } from "./kopfHoehe";
+import { aufloesen as themaAufloesen, bandVerlauf, PROFIL } from "../darstellung/thema";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -378,10 +379,11 @@ function abschnittZeigen(id: string) {
   el.focus({ preventScroll: true });
 }
 
-/** Befundstatus am Kartentitel; führt zum Prüfbericht. Ohne Fehler und Warnungen „Geprüft“. */
+/** Befundstatus am Kartentitel; führt zum Prüfbericht. Seit UX-2026-W45-30 nur bei Fehlern oder Warnungen (bis dahin „✓ Geprüft“). */
 function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
   const zahl = befundZahl(befunde);
   const stufe = befunde.some((b) => b.stufe === "fehler") ? "fehler" : befunde.some((b) => b.stufe === "warnung") ? "warnung" : "ok";
+  if (stufe === "ok") return null;
   return (
     <a
       className={`befund-chip befund-chip-${stufe}`}
@@ -391,7 +393,7 @@ function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
         bereichOeffnen(ziel);
       }}
     >
-      {stufe === "ok" ? "✓ Geprüft" : zahl}
+      {zahl}
     </a>
   );
 }
@@ -415,6 +417,19 @@ function KartenInhalt({ children }: { children: ReactNode }) {
       {children}
     </details>
   );
+}
+
+/** Name ohne Klammerzusatz am Ende und der Zusatz als Kennzeichen, z. B. „(Erprobungsentwurf)“ (seit UX-2026-W45-30) */
+export function nameUndZusatz(name: string): { name: string; zusatz?: string } {
+  const m = name.match(/^(.*\S)\s*\(([^()]+)\)\s*$/);
+  return m ? { name: m[1]!, zusatz: m[2]!.trim() } : { name };
+}
+
+/** Farbband des Profils, wenn es ein gültiges Farbschema mitbringt (seit UX-2026-W45-30); sonst nichts */
+function profilBand(farbschema: unknown): string | undefined {
+  if (farbschema === undefined || farbschema === null) return undefined;
+  const t = themaAufloesen(PROFIL, farbschema);
+  return t.quelle === "profil" && t.band.length ? bandVerlauf(t.band) : undefined;
 }
 
 function herkunft(p: ProfilEintrag): string {
@@ -552,11 +567,15 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           const praefix = domId("profil", p.schluessel);
           const zahl = befundZahl(p.befunde);
           const dateien = Object.keys(p.dateien).sort();
+          const titel = nameUndZusatz(m?.name || p.schluessel);
+          const band = profilBand(m?.farbschema);
           return (
             <article key={p.schluessel} className={istAktiv ? "profil aktiv" : "profil"} aria-label={m?.name || p.schluessel}>
+              {band && <div className="profil-band" style={{ background: band }} aria-hidden="true" title="Farben des Profils" />}
               <header className="profil-kopf">
                 <div className="profil-titel">
-                  <h2>{m?.name || p.schluessel}</h2>
+                  <h2>{titel.name}</h2>
+                  {titel.zusatz && <span className="profil-zusatz">{titel.zusatz}</span>}
                   {istAktiv && <span className="aktiv-marke">✓ In Verwendung</span>}
                   {!p.profil && <span className="marke-fehler">nicht verwendbar</span>}
                   <BefundChip befunde={p.befunde} ziel={`${praefix}-bericht`} />

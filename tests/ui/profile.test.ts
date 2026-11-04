@@ -196,7 +196,7 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     expect(loeschen).toHaveBeenCalledWith("importiert-x");
   });
 
-  it("zeigt den Befundstatus als Chip: „✓ Geprüft“ ohne Fehler und Warnungen, sonst die Zahl", async () => {
+  it("UX-2026-W45-30: zeigt den Befundstatus als Chip nur bei Fehlern oder Warnungen", async () => {
     const lead = await eintrag("lead-beispiel");
     lead.befunde = [{ stufe: "hinweis", text: "nur ein Hinweis" }];
     const muster = await eintrag("muster");
@@ -213,12 +213,11 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
         loeschen: () => {},
       }),
     );
-    const [a, b] = karten().map((k) => k.querySelector<HTMLAnchorElement>("header .befund-chip")!);
-    expect(a.textContent).toBe("✓ Geprüft");
-    expect(a.classList.contains("befund-chip-ok")).toBe(true);
-    expect(b.textContent).toBe("1 Fehler, 1 Warnung");
-    expect(b.classList.contains("befund-chip-fehler")).toBe(true);
-    expect(a.getAttribute("href")).toMatch(/-bericht$/);
+    const [a, b] = karten().map((k) => k.querySelector<HTMLAnchorElement>("header .befund-chip"));
+    expect(a).toBeNull();
+    expect(b!.textContent).toBe("1 Fehler, 1 Warnung");
+    expect(b!.classList.contains("befund-chip-fehler")).toBe(true);
+    expect(b!.getAttribute("href")).toMatch(/-bericht$/);
   });
 
   it("führt die Sprungleiste zu Angaben, Lesen und Prüfen und setzt den Fokus auf die Überschrift", async () => {
@@ -280,5 +279,30 @@ describe("UX-2026-W45-29: Verwenden ohne Sprung", () => {
     expect(document.querySelector(".profil-gewechselt")?.textContent).toContain("ist in Verwendung");
     await klick("Zur Erfassung");
     expect(zurErfassung).toHaveBeenCalledOnce();
+  });
+});
+
+describe("UX-2026-W45-30: Name, Kennzeichen und Farben der Karte", () => {
+  it("trennt den Klammerzusatz als Kennzeichen ab", async () => {
+    const { nameUndZusatz } = await import("../../src/ui/Profile");
+    expect(nameUndZusatz("Lagebild Justiz – Landesprofil (Erprobungsentwurf)")).toEqual({ name: "Lagebild Justiz – Landesprofil", zusatz: "Erprobungsentwurf" });
+    expect(nameUndZusatz("LEAD-Beispiel – Koordinierungsstelle")).toEqual({ name: "LEAD-Beispiel – Koordinierungsstelle" });
+    const justiz = await eintrag("lead-justiz");
+    const lead = await eintrag("lead-beispiel");
+    lead.profil = { ...lead.profil!, manifest: { ...lead.profil!.manifest, farbschema: { basis: "de-th" } } };
+    await einhaengen(
+      React.createElement(ProfileAnsicht, {
+        profile: [lead, justiz],
+        aktiv: "lead-beispiel",
+        aktivieren: () => {},
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+      }),
+    );
+    const [a, b] = karten();
+    expect(b!.querySelector("h2")?.textContent).toBe("Lagebild Justiz – Landesprofil");
+    expect(b!.querySelector(".profil-zusatz")?.textContent).toBe("Erprobungsentwurf");
+    expect(a!.querySelector(".profil-band")).not.toBeNull();
+    expect(b!.querySelector(".profil-band")).toBeNull();
   });
 });
