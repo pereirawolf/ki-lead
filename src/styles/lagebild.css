@@ -141,11 +141,50 @@
   gap: 0.3rem;
 }
 
+/* Reiter: unter dem Kopf stehen bleibend, einzeilig und auf schmalen Bildschirmen waagerecht scrollbar, Gruppen mit
+   feinem Trenner (seit UX-2026-W45-03) */
 .lb-reiter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  position: sticky;
+  top: var(--kopf-hoehe, 4.5rem);
+  z-index: 5;
   margin: 0 0 1rem;
+  padding: 0.4rem 0;
+  background: var(--papier);
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.lb-reiter ol {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Verlauf am Rand wie bei den Schrittleisten (UX-2026-W44-04) */
+  background:
+    linear-gradient(to right, var(--papier) 40%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--papier) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+    linear-gradient(to right, var(--linie), transparent) left center / 1rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--linie), transparent) right center / 1rem 100% no-repeat scroll;
+}
+
+.lb-reiter li {
+  flex: 0 0 auto;
+}
+
+.lb-reiter .lb-reiter-gruppe {
+  margin-left: 0.35rem;
+  padding-left: 0.7rem;
+  border-left: 1px solid var(--linie);
+}
+
+.lb-reiter .segment {
+  white-space: nowrap;
+}
+
+.lb-reiter-anker {
+  height: 0;
 }
 
 .lb-reiter .segment {

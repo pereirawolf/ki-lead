@@ -51,6 +51,8 @@ import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
+import { useAktivImBild } from "./leiste";
+import { useKopfHoehe } from "./kopfHoehe";
 import { ProfilZeile } from "./ProfilZeile";
 import { Menue } from "./Menue";
 
@@ -65,14 +67,19 @@ interface Props {
 
 type Reiter = LagebildReiter;
 
-const REITER: { id: Reiter; titel: string }[] = [
-  { id: "uebersicht", titel: "Übersicht" },
-  { id: "meldungen", titel: "Meldungen" },
-  { id: "sachverhalte", titel: "Sachverhalte" },
-  { id: "radar", titel: "Lagenradar" },
-  { id: "redaktion", titel: "Redaktionscheck" },
-  { id: "kopiervorlage", titel: "Kopiervorlage" },
-  { id: "tabelle", titel: "Rohtabelle" },
+/**
+ * Reiter in drei Gruppen (seit UX-2026-W45-03): Lage (1), Redaktion (2), Ausgabe (3); zwischen den Gruppen ein feiner
+ * Trenner ohne Überschrift. Bis dahin Übersicht, Meldungen, Sachverhalte, Lagenradar, Redaktionscheck, Kopiervorlage,
+ * Rohtabelle.
+ */
+const REITER: { id: Reiter; titel: string; gruppe: 1 | 2 | 3 }[] = [
+  { id: "uebersicht", titel: "Übersicht", gruppe: 1 },
+  { id: "sachverhalte", titel: "Sachverhalte", gruppe: 1 },
+  { id: "radar", titel: "Lagenradar", gruppe: 1 },
+  { id: "meldungen", titel: "Meldungen", gruppe: 1 },
+  { id: "redaktion", titel: "Redaktionscheck", gruppe: 2 },
+  { id: "kopiervorlage", titel: "Kopiervorlage", gruppe: 3 },
+  { id: "tabelle", titel: "Rohtabelle", gruppe: 3 },
 ];
 
 function Balken({ titel, werte, farbe }: { titel: string; werte: [string, number][]; farbe?: (w: string) => Farbe }) {
@@ -248,11 +255,15 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   // Sprungziele beim Reiterwechsel (seit 0.6.7): Die Reiterleiste steht über dem Inhalt. Aus der Leiste nur bei Bedarf
   // und ohne Fokuswechsel; aus einer Kennzahl der Übersicht heraus mit Fokus auf den gewählten Reiter, weil die Kennzahl
   // mit der Übersicht verschwindet.
+  // Die Leiste bleibt seit UX-2026-W45-03 unter dem Kopf stehen; Sprungziel ist darum ein Anker an ihrer Ruhelage
   const reiterRef = useRef<HTMLElement>(null);
+  const reiterAnker = useRef<HTMLDivElement>(null);
+  useAktivImBild(reiterRef, reiter);
+  useKopfHoehe();
   const sprung = useSprung();
   const reiterWaehlen = (r: Reiter) => {
     setReiter(r);
-    sprung(() => springeZu(reiterRef.current, null, { nurWennNoetig: true }));
+    sprung(() => springeZu(reiterAnker.current, null, { nurWennNoetig: true }));
   };
   // Filter des Reiters „Sachverhalte“ (seit 0.6.20, UX-2026-W44-09); die fachlichen Kennzahlen setzen ihn (UX-2026-W44-10)
   const [svFilter, setSvFilter] = useState<SvFilter>(KEIN_FILTER);
@@ -262,7 +273,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   };
   const reiterZeigen = (r: Reiter) => {
     setReiter(r);
-    sprung(() => springeZu(reiterRef.current, reiterRef.current?.querySelector<HTMLElement>("[aria-current]"), { fokus: true }));
+    sprung(() => springeZu(reiterAnker.current, reiterRef.current?.querySelector<HTMLElement>("[aria-current]"), { fokus: true }));
   };
 
   // Vom Befund zur Meldung in der Liste „Meldungen“ (nur lesen; die Meldungsmaske bleibt unberührt)
@@ -599,20 +610,24 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
             </fieldset>
           )}
 
+          <div ref={reiterAnker} className="lb-reiter-anker" aria-hidden="true" />
           <nav className="lb-reiter" aria-label="Ansichten" ref={reiterRef}>
-            {reiterListe.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className={reiter === t.id ? "segment aktiv" : "segment"}
-                aria-current={reiter === t.id ? "page" : undefined}
-                onClick={() => reiterWaehlen(t.id)}
-              >
-                {t.titel}
-                {t.id === "redaktion" && red.anzahl > 0 && <span className="lb-zaehler">{red.anzahl}</span>}
-                {t.id === "redaktion" && stichtag && <span className="lb-stichtag-marke"> · Stichtag</span>}
-              </button>
-            ))}
+            <ol>
+              {reiterListe.map((t, i) => (
+                <li key={t.id} className={i > 0 && reiterListe[i - 1]!.gruppe !== t.gruppe ? "lb-reiter-gruppe" : undefined}>
+                  <button
+                    type="button"
+                    className={reiter === t.id ? "segment aktiv" : "segment"}
+                    aria-current={reiter === t.id ? "page" : undefined}
+                    onClick={() => reiterWaehlen(t.id)}
+                  >
+                    {t.titel}
+                    {t.id === "redaktion" && red.anzahl > 0 && <span className="lb-zaehler">{red.anzahl}</span>}
+                    {t.id === "redaktion" && stichtag && <span className="lb-stichtag-marke"> · Stichtag</span>}
+                  </button>
+                </li>
+              ))}
+            </ol>
           </nav>
 
           {reiter === "uebersicht" && (

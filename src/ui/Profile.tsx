@@ -2,7 +2,7 @@
 // Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
 // Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
 
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, ProfilEintrag, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
 import {
@@ -29,6 +29,7 @@ import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { Menue } from "./Menue";
+import { useKopfHoehe } from "./kopfHoehe";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -441,16 +442,8 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
     }
   };
 
-  // Höhe des Kopfs der App als --kopf-hoehe für die Sprungleiste; der Kopf bricht je nach Breite um
-  useEffect(() => {
-    const kopf = document.querySelector<HTMLElement>(".kopf");
-    if (!kopf || typeof ResizeObserver === "undefined") return;
-    const setzen = () => document.documentElement.style.setProperty("--kopf-hoehe", `${kopf.getBoundingClientRect().height}px`);
-    setzen();
-    const beobachter = new ResizeObserver(setzen);
-    beobachter.observe(kopf);
-    return () => beobachter.disconnect();
-  }, []);
+  // Höhe des Kopfs der App als --kopf-hoehe für die Sprungleiste (seit UX-2026-W45-03 gemeinsam mit der Auswertung)
+  useKopfHoehe();
 
   const importiertAktiv = bericht?.schluessel !== undefined && bericht.schluessel === aktiv;
   /** Das verwendete Profil zuerst, die übrigen in bisheriger Reihenfolge */
