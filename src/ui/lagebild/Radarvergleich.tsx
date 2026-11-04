@@ -13,6 +13,9 @@ import { Absender } from "./bausteine";
 
 type Ansicht = "matrix" | "karten";
 
+const MAX_UEBERLAGERT = 3;
+const STRICH = ["durchgezogen", "gestrichelt", "gepunktet"];
+
 const schluessel = (s: SvEintrag) => `${s.eintrag.id}-${s.index}`;
 const kurz = (label: string) => label.match(/^(D\d+)\b/)?.[1] ?? label.split(/\s+/)[0] ?? label;
 
@@ -59,6 +62,11 @@ export function Radarvergleich({ profil, sortiert, def, feld }: { profil: Profil
   const [ansicht, setAnsicht] = useState<Ansicht>("matrix");
   const [gewaehlt, setGewaehlt] = useState<string | null>(null);
   const auswahl = sortiert.find((s) => schluessel(s) === gewaehlt);
+  // Bis zu drei Sachverhalte übereinanderlegen (seit UX-2026-W45-18); nur noch geladene bleiben markiert
+  const [markiert, setMarkiert] = useState<string[]>([]);
+  const ueberlagert = markiert.map((k) => sortiert.find((s) => schluessel(s) === k)).filter((s): s is SvEintrag => !!s);
+  const markieren = (k: string, an: boolean) =>
+    setMarkiert((alt) => (an ? [...alt.filter((x) => x !== k), k].slice(-MAX_UEBERLAGERT) : alt.filter((x) => x !== k)));
 
   return (
     <>
@@ -74,7 +82,13 @@ export function Radarvergleich({ profil, sortiert, def, feld }: { profil: Profil
               ["karten", "Karten"],
             ] as const
           ).map(([id, text]) => (
-            <button key={id} type="button" className={ansicht === id ? "segment aktiv" : "segment"} aria-pressed={ansicht === id} onClick={() => setAnsicht(id)}>
+            <button
+              key={id}
+              type="button"
+              className={ansicht === id ? "segment aktiv" : "segment"}
+              aria-pressed={ansicht === id}
+              onClick={() => setAnsicht(id)}
+            >
               {text}
             </button>
           ))}
@@ -89,13 +103,44 @@ export function Radarvergleich({ profil, sortiert, def, feld }: { profil: Profil
         </div>
       ) : (
         <>
+          {ueberlagert.length > 0 && (
+            <figure className="lb-ueberlagert">
+              <RadarGrafik
+                def={def}
+                groesse={280}
+                reihen={ueberlagert.map((s) => ({
+                  name: s.bezeichnung || `Sachverhalt ${s.index + 1}`,
+                  wert: holeWert(s.sv, feld) as Record<string, unknown>,
+                }))}
+              />
+              <figcaption>
+                <p className="lb-ueberlagert-titel">Überlagert (ohne Mittelwert)</p>
+                <ul className="lb-ueberlagert-legende">
+                  {ueberlagert.map((s, i) => (
+                    <li key={schluessel(s)}>
+                      <svg width="28" height="10" aria-hidden="true">
+                        <line x1="1" y1="5" x2="27" y2="5" className={`radar-linie radar-reihe radar-reihe-${i + 1}`} />
+                      </svg>{" "}
+                      <span className="sr-only">{STRICH[i]}: </span>
+                      {s.bezeichnung || `Sachverhalt ${s.index + 1}`}
+                    </li>
+                  ))}
+                </ul>
+                <button type="button" className="knopf leise klein" onClick={() => setMarkiert([])}>
+                  Überlagerung aufheben
+                </button>
+              </figcaption>
+            </figure>
+          )}
           <div className="lb-rahmen" tabIndex={0} role="group" aria-label="Vergleichsmatrix des Lagenradars (waagerecht scrollbar)">
             <table className="tabelle lb-tabelle lb-radarmatrix">
-              <caption className="sr-only">
-                Stufen je Sachverhalt und Achse, 0 bis {def.max}; U = offen. Eine Zeile öffnet die Karte des Sachverhalts.
-              </caption>
+              <caption className="sr-only">Stufen je Sachverhalt und Achse, 0 bis {def.max}; U = offen. Eine Zeile öffnet die Karte des Sachverhalts.</caption>
               <thead>
                 <tr>
+                  <th scope="col" className="lb-matrix-wahl">
+                    <span className="sr-only">Überlagern (bis {MAX_UEBERLAGERT})</span>
+                    <span aria-hidden="true">⊕</span>
+                  </th>
                   <th scope="col">Sachverhalt</th>
                   {def.achsen.map((a) => (
                     <th key={a.key} scope="col" title={a.label}>
@@ -110,6 +155,15 @@ export function Radarvergleich({ profil, sortiert, def, feld }: { profil: Profil
                   const offen = schluessel(s) === gewaehlt;
                   return (
                     <tr key={schluessel(s)} className={offen ? "lb-matrix-gewaehlt" : undefined}>
+                      <td className="lb-matrix-wahl">
+                        <input
+                          type="checkbox"
+                          checked={markiert.includes(schluessel(s))}
+                          disabled={!markiert.includes(schluessel(s)) && markiert.length >= MAX_UEBERLAGERT}
+                          aria-label={`${s.bezeichnung || `Sachverhalt ${s.index + 1}`} überlagern`}
+                          onChange={(e) => markieren(schluessel(s), e.target.checked)}
+                        />
+                      </td>
                       <th scope="row">
                         <button
                           type="button"
@@ -151,8 +205,8 @@ export function Radarvergleich({ profil, sortiert, def, feld }: { profil: Profil
             </table>
           </div>
           <p className="hinweis lb-matrix-legende">
-            Zelle: Stufe 0 bis {def.max}, je höher, desto kräftiger; U = offen (schraffiert). Achsen:{" "}
-            {def.achsen.map((a) => `${kurz(a.label)} ${a.label.replace(/^D\d+\s*/, "")}`).join(" · ")}
+            Zelle: Stufe 0 bis {def.max}, je höher, desto kräftiger; U = offen (schraffiert). ⊕ legt bis zu {MAX_UEBERLAGERT} Sachverhalte in einem Radar
+            übereinander. Achsen: {def.achsen.map((a) => `${kurz(a.label)} ${a.label.replace(/^D\d+\s*/, "")}`).join(" · ")}
           </p>
           {auswahl && (
             <div className="lb-matrix-karte">

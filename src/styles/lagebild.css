@@ -1353,7 +1353,7 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   box-shadow: inset 4px 0 0 var(--amt);
 }
 
-.lb-stufe {
+.lb-radarmatrix .lb-stufe {
   text-align: center;
   vertical-align: middle;
   font-weight: 700;
@@ -1362,11 +1362,11 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   border: 2px solid var(--flaeche);
 }
 
-.lb-stufe-dunkel {
+.lb-radarmatrix .lb-stufe-dunkel {
   color: var(--flaeche);
 }
 
-.lb-stufe-offen {
+.lb-radarmatrix .lb-stufe-offen {
   color: var(--tinte-leise);
   background: repeating-linear-gradient(135deg, var(--flaeche) 0 4px, var(--linie-zart) 4px 7px);
 }
@@ -1386,4 +1386,42 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
     background: Canvas;
     color: CanvasText;
   }
+}
+
+/* Überlagertes Radar (seit UX-2026-W45-18) */
+.lb-ueberlagert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+}
+
+.lb-ueberlagert > svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.lb-ueberlagert-titel {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+}
+
+.lb-ueberlagert-legende {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.lb-radarmatrix .lb-matrix-wahl {
+  width: 2rem;
+  text-align: center;
+  vertical-align: middle;
 }

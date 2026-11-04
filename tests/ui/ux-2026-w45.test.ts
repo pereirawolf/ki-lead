@@ -221,7 +221,7 @@ describe("UX-2026-W45-16: Vergleichsmatrix des Lagenradars", () => {
     await klick(knopf("Lagenradar"));
     const zeilen = document.querySelectorAll(".lb-radarmatrix tbody tr");
     expect(zeilen).toHaveLength(8);
-    expect(zeilen[0]!.querySelectorAll("td")).toHaveLength(8);
+    expect(zeilen[0]!.querySelectorAll("td.lb-stufe")).toHaveLength(8);
     expect(document.querySelectorAll(".lb-radarmatrix .lb-stufe-offen").length).toBeGreaterThan(0);
     expect(document.querySelector(".lb-stufe-offen")?.textContent).toContain("U");
     expect(document.querySelector(".lb-karte")).toBeNull();
@@ -229,5 +229,22 @@ describe("UX-2026-W45-16: Vergleichsmatrix des Lagenradars", () => {
     expect(document.querySelectorAll(".lb-matrix-karte .lb-karte")).toHaveLength(1);
     await klick(knopf("Karten"));
     expect(document.querySelectorAll(".lb-karte")).toHaveLength(8);
+  });
+});
+
+describe("UX-2026-W45-18: Sachverhalte im Radar überlagern", () => {
+  it("bis zu drei markieren, Radar mit drei Reihen und Legende, der vierte gesperrt", async () => {
+    await ilka();
+    await klick(knopf("Lagenradar"));
+    const wahl = () => [...document.querySelectorAll<HTMLInputElement>(".lb-matrix-wahl input")];
+    for (const i of [0, 1, 2]) await klick(wahl()[i]!);
+    const svg = document.querySelector(".lb-ueberlagert svg")!;
+    for (const nr of [1, 2, 3]) expect(svg.querySelector(`.radar-reihe-${nr}`)).not.toBeNull();
+    expect(svg.querySelector(".radar-reihe-4")).toBeNull();
+    expect(document.querySelectorAll(".lb-ueberlagert-legende li")).toHaveLength(3);
+    expect(wahl()[3]!.disabled).toBe(true);
+    expect(svg.getAttribute("aria-label")).toMatch(/^Lagenradar, überlagert: /);
+    await klick(knopf("Überlagerung aufheben"));
+    expect(document.querySelector(".lb-ueberlagert")).toBeNull();
   });
 });
