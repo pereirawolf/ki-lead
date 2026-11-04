@@ -129,7 +129,7 @@ export function Punkt({
   );
 }
 
-/** Marken einer Meldung: Schema, Migration, eigene Meldung, Entwurf, KI-Entwurf; seit 0.6.13 Herkunft (Rolle „herkunft“) */
+/** Marken einer Meldung: Schema (nur bei Abweichung oder fremdem Schema), Migration, eigene Meldung, Entwurf, KI-Entwurf; seit 0.6.13 Herkunft (Rolle „herkunft“) */
 export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profil; eigen: boolean }) {
   const r = profil.ui.rollen;
   return (
@@ -145,9 +145,7 @@ export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profi
         <Marke farbe="grau">fremdes Schema</Marke>
       ) : e.schema.length ? (
         <Marke farbe="rot">Schema: {e.schema.length}</Marke>
-      ) : (
-        <Marke farbe="gruen">Schema ✓</Marke>
-      )}
+      ) : null /* ohne Abweichung keine Marke (seit UX-2026-W45-11) */}
       {e.referenzen?.some((b) => b.stufe === "fehler") && (
         // seit 0.7.0 (UP-2026-W45-02): Prüfebene 2 bei LEAD-Meldung-v2
         <Marke farbe="rot">Referenzen: {e.referenzen.filter((b) => b.stufe === "fehler").length}</Marke>
