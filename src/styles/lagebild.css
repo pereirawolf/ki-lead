@@ -1556,3 +1556,27 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   flex-wrap: wrap;
   gap: 0.4rem;
 }
+
+/* Kopfzeile der Kopiervorlage gegliedert (seit UX-2026-W45-24) */
+.lb-vorlage-titel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-weight: 400;
+  color: var(--tinte);
+  font-size: 0.9rem;
+}
+
+.lb-vorlage-angaben {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-vorlage-frist {
+  font-weight: 700;
+  color: var(--tinte);
+}

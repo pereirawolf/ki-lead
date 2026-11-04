@@ -1,6 +1,7 @@
 // Reiter „Kopiervorlage“ des Lagebilds (seit 0.6.5, TP-2026-W44-17 aus Lagebild.tsx): je Sachverhalt ein Block mit
 // Tabellenlayout für Word, nach Schwere der Beurteilung sortiert. Seit UX-2026-W45-23 sind die Blöcke eingeklappt
-// (Kopfzeile, „Kopieren“, Vorschau bei Bedarf) und lassen sich zum gemeinsamen Kopieren auswählen.
+// (Kopfzeile, „Kopieren“, Vorschau bei Bedarf) und lassen sich zum gemeinsamen Kopieren auswählen; seit UX-2026-W45-24
+// ist die Kopfzeile gegliedert (Bezeichnung, Absender, Marken, Frist, Abschlussvermerk).
 
 import { useMemo, useState } from "react";
 import type { Profil } from "../../kern/typen";
@@ -8,7 +9,7 @@ import { kennsatz, kennsaetzeAlle } from "../../kern/kennsaetze";
 import { svKennung, type SvEintrag } from "../../lagebild/lagebild";
 import { kopiervorlageHtml, kopiervorlageText } from "../../lagebild/ausgabe";
 import { radarPng } from "../radarBild";
-import { KopierKnopf } from "./bausteine";
+import { Absender, KopierKnopf, Marke, SvMarken } from "./bausteine";
 
 const TRENNER_HTML = "<p>&nbsp;</p>";
 const TRENNER_TEXT = "\n\n――――――――――\n\n";
@@ -66,11 +67,19 @@ export function Kopiervorlage({ profil, sortiert }: { profil: Profil; sortiert: 
                 aria-label={`Auswählen: ${name}`}
                 onChange={(e) => umschalten(schluessel, e.target.checked)}
               />
-              <span>
-                {name} · {s.beurteilung || "keine Angabe"}
-                {fristen.length ? ` · handlungsrelevant bis ${fristen.join("; ")}` : ""}
-                {abs !== null ? " · Abschluss vermerkt" : ""}
-              </span>
+              <div className="lb-vorlage-titel">
+                <strong>{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</strong>
+                <span className="lb-vorlage-angaben">
+                  <Absender e={s.eintrag} profil={profil} zeile />
+                  <SvMarken s={s} profil={profil} />
+                  {fristen.length > 0 && (
+                    <span className="lb-vorlage-frist">
+                      {ks.handlungsrelevant || "Handlungsrelevant bis:"} {fristen.join("; ")}
+                    </span>
+                  )}
+                  {abs !== null && <Marke farbe="gruen">Abschluss vermerkt</Marke>}
+                </span>
+              </div>
               <KopierKnopf html={html} text={text} was={name} />
             </div>
             <details className="lb-vorlage-vorschau">

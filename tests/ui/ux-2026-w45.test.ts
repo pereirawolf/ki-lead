@@ -260,5 +260,9 @@ describe("UX-2026-W45-23, -24: Kopiervorlage", () => {
     await klick(document.querySelector<HTMLInputElement>(".lb-vorlage-kopf input")!);
     expect(knopf("Auswahl kopieren (1)")).toBeTruthy();
     expect(document.querySelectorAll(".lb-vorlage-gewaehlt")).toHaveLength(1);
+    const kopf = document.querySelector(".lb-vorlage-titel")!;
+    expect(kopf.querySelector("strong")?.textContent).toMatch(/^Orkantief „Ilka“: Sturmfolgen/);
+    expect(kopf.querySelector(".lb-absender-kurz")?.textContent).toBe("Bund");
+    expect(kopf.querySelector(".lb-vorlage-frist")?.textContent).toMatch(/15\.10\.2026/);
   });
 });
