@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-sop-abdeckung/1",
-  "stand": "2026-10-25",
+  "stand": "2026-11-04",
   "hinweis": "Soll-Abdeckung vorbereiteter Fälle, keine Ergebnis- oder Freigabeaussage.",
   "faelle": {
     "sop-gas-stabil": [
@@ -246,6 +246,22 @@
     "zaehlregel-fortgeltung": [
       "B06",
       "B08"
+    ],
+    "sop-belange-stromausfall-heimbeatmung": [
+      "B08",
+      "C18",
+      "C12",
+      "C09"
+    ],
+    "sop-belange-kaeltewelle-wohnungslos": [
+      "B06",
+      "C18",
+      "C16"
+    ],
+    "sop-belange-evakuierung-assistenz": [
+      "B02",
+      "C16",
+      "C18"
     ]
   }
 }

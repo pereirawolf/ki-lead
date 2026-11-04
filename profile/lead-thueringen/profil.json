@@ -3,7 +3,7 @@
   "id": "lead.beispiel.thueringen",
   "name": "LEAD-Beispiel – Land Thüringen (fiktive Inhalte)",
   "beschreibung": "Beispielprofil auf Landesebene: Eigenmeldung eines Lagezentrums des Landes, das die Lagemeldungen der Landkreise und kreisfreien Städte zu einem landesweiten Lagebild zusammenführt. Fiktives Beispiel des Herausgebers mit realen Gebietsnamen; keine Vorgabe des Freistaats Thüringen oder einer seiner Behörden und ohne landesrechtliche Bezüge. Arbeitsweise und SOP-LEAD-Sammelmappe wie im Beispielprofil der Koordinierungsstelle.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Land",
@@ -70,7 +70,8 @@
       "sop/teil-c/C14_lebensmittelversorgung.md",
       "sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md",
       "sop/teil-c/C16_evakuierung-schutzunterbringung-betreuung.md",
-      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md",
+      "sop/teil-c/C18_besondere-belange-schutzbedarfe.md"
     ],
     "teil_gemeinsam": "teil-a"
   },

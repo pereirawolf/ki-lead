@@ -3,7 +3,7 @@
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
   "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
-  "version": "1.37.0",
+  "version": "1.38.0",
   "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
   "lizenz": "CC-BY-4.0",
   "ebene": "Bund",
@@ -76,7 +76,8 @@
       "sop/teil-c/C14_lebensmittelversorgung.md",
       "sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md",
       "sop/teil-c/C16_evakuierung-schutzunterbringung-betreuung.md",
-      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md"
+      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md",
+      "sop/teil-c/C18_besondere-belange-schutzbedarfe.md"
     ],
     "teil_gemeinsam": "teil-a"
   },

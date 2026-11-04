@@ -17,17 +17,17 @@ describe("Beispielprofil LEAD", () => {
     expect(befunde.filter((b) => b.stufe !== "hinweis")).toEqual([]);
   });
 
-  it("lädt Teil A, 17 SOPs und 17 Bausteine aus je einer Datei in Katalogreihenfolge", async () => {
+  it("lädt Teil A, 17 SOPs und 18 Bausteine aus je einer Datei in Katalogreihenfolge", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    expect(p!.manifest.sop!.dateien).toHaveLength(35);
+    expect(p!.manifest.sop!.dateien).toHaveLength(36);
     const ids = p!.sops.map((s) => s.id);
     const erwartet = [
       "teil-a",
       ...Array.from({ length: 17 }, (_, i) => `b${String(i + 1).padStart(2, "0")}`),
-      ...Array.from({ length: 17 }, (_, i) => `c${String(i + 1).padStart(2, "0")}`),
+      ...Array.from({ length: 18 }, (_, i) => `c${String(i + 1).padStart(2, "0")}`),
     ];
     expect(ids).toEqual(erwartet);
-    expect(new Set(p!.sops.map((s) => s.datei)).size).toBe(35);
+    expect(new Set(p!.sops.map((s) => s.datei)).size).toBe(36);
     const teilA = p!.sops.find((s) => s.id === "teil-a")!;
     expect(teilA.gemeinsam).toBe(true);
     const b08 = p!.sops.find((s) => s.id === "b08")!;
@@ -35,7 +35,7 @@ describe("Beispielprofil LEAD", () => {
     expect(b08.art_vorschlag).toEqual(["Stromausfall / Blackout"]);
     expect(b08.alias).toEqual(["sop-08"]);
     expect(b08.bisherigeKennung).toBe("08");
-    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.2.0");
+    expect(sopKennung(b08)).toBe("SOP-LEAD B08 Stromausfall / Blackout v2.2.1");
   });
 
   it("gliedert jede SOP und jeden Baustein nach demselben Schema", async () => {
@@ -61,13 +61,13 @@ describe("Beispielprofil LEAD", () => {
   it("führt Bausteine aus Teil C ohne eigene Ereignisart", async () => {
     const { profil: p } = await profil("lead-beispiel");
     const bausteine = p!.sops.filter((s) => /^c\d\d$/.test(s.id));
-    expect(bausteine.map((s) => s.nummer)).toEqual(Array.from({ length: 17 }, (_, i) => `C${String(i + 1).padStart(2, "0")}`));
+    expect(bausteine.map((s) => s.nummer)).toEqual(Array.from({ length: 18 }, (_, i) => `C${String(i + 1).padStart(2, "0")}`));
     // Bausteine werden nicht automatisch über eine Ereignisart vorgeschlagen
     expect(bausteine.every((s) => !s.art_vorschlag)).toBe(true);
     const c11 = bausteine.find((s) => s.id === "c11")!;
     expect(c11.bisherigeKennung).toBe("N02");
     expect(c11.alias).toEqual(["baustein-n02"]);
-    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.2");
+    expect(sopKennung(c11)).toBe("SOP-LEAD C11 Telekommunikation, Notruf, BOS-Kommunikation und Warnfähigkeit v1.2.3");
     // N13 → C17, N03 → C16 (Register v2.1)
     expect(bausteine.find((s) => s.id === "c17")!.bisherigeKennung).toBe("N13");
     expect(bausteine.find((s) => s.id === "c16")!.bisherigeKennung).toBe("N03");

@@ -401,7 +401,7 @@ Ziel: `tests/profil/profilansicht.test.ts`
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| Anzeigetitel und Versions-Tags › alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag | `tests/profil/profilansicht.test.ts` |  |
+| Anzeigetitel und Versions-Tags › alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag | `tests/profil/profilansicht.test.ts` || umbenannt in „alle 35 Fachzeilen …“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | Anzeigetitel und Versions-Tags › Teil A trägt „gilt immer“, fehlende Version „ohne Version“; der Nachweis bleibt unverändert | `tests/profil/profilansicht.test.ts` |  |
 | Anzeigetitel und Versions-Tags › Anzahl und Gruppenhinweis nennen die Inhaltsgerüste | `tests/profil/profilansicht.test.ts` |  |
 | Steckbrief und Lesetext › Steckbrief aus dem Kopf, Lesetext ohne Überschrift und YAML | `tests/profil/profilansicht.test.ts` |  |
@@ -430,7 +430,7 @@ Ziel: `tests/profil/profile.test.ts`
 | Test | Neue Datei | Änderung |
 |---|---|---|
 | Beispielprofil LEAD › lädt ohne Fehler und ohne Warnungen | `tests/profil/profile.test.ts` |  |
-| Beispielprofil LEAD › lädt Teil A, 17 SOPs und 17 Bausteine aus je einer Datei in Katalogreihenfolge | `tests/profil/profile.test.ts` |  |
+| Beispielprofil LEAD › lädt Teil A, 17 SOPs und 17 Bausteine aus je einer Datei in Katalogreihenfolge | `tests/profil/profile.test.ts` || umbenannt in „… 17 SOPs und 18 Bausteine …“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | Beispielprofil LEAD › gliedert jede SOP und jeden Baustein nach demselben Schema | `tests/profil/profile.test.ts` |  |
 | Beispielprofil LEAD › führt Bausteine aus Teil C ohne eigene Ereignisart | `tests/profil/profile.test.ts` |  |
 | Beispielprofil LEAD › Lesefassung und README passen zu den Einzeldateien | `tests/profil/profile.test.ts` |  |
@@ -517,7 +517,7 @@ Ziel: `tests/profil/sop-integration.test.ts`
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| SOP-Integration laut SOP-Übersicht › die Übersicht nennt 17 Dach-SOPs und 17 Bausteine | `tests/profil/sop-integration.test.ts` |  |
+| SOP-Integration laut SOP-Übersicht › die Übersicht nennt 17 Dach-SOPs und 17 Bausteine | `tests/profil/sop-integration.test.ts` || umbenannt in „… 17 Dach-SOPs und 18 Bausteine“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | SOP-Integration laut SOP-Übersicht › B01 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |
 | SOP-Integration laut SOP-Übersicht › B02 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |
 | SOP-Integration laut SOP-Übersicht › B03 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |

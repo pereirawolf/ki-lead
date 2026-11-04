@@ -1,6 +1,6 @@
 # SOP-LEAD – Sammelmappe (Lesefassung)
 
-> Erzeugt aus den 35 Einzeldateien unter `sop/` in der Reihenfolge von `profil.json` (`npm run sop:lesefassung`). Nicht von Hand bearbeiten: Änderungen gehören in die Einzeldateien. Die App liest diese Datei nicht. Fassungen und Gültigkeitsstand: Teil A.
+> Erzeugt aus den 36 Einzeldateien unter `sop/` in der Reihenfolge von `profil.json` (`npm run sop:lesefassung`). Nicht von Hand bearbeiten: Änderungen gehören in die Einzeldateien. Die App liest diese Datei nicht. Fassungen und Gültigkeitsstand: Teil A.
 
 ## Inhaltsverzeichnis
 
@@ -45,6 +45,7 @@
   - Leseblock: Lageübergreifende Querschnitte
     - [C16 Evakuierung, Schutzunterbringung und Betreuung](#c16)
     - [C17 Zivile Verteidigung – zivile Schutz- und Versorgungsfolgen](#c17)
+    - [C18 Besondere Belange und Schutzbedarfe von Menschen (vulnerable Gruppen)](#c18)
 
 ---
 
@@ -58,7 +59,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.22.0 | 04.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.23.0 | 04.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 1.9.0 | 04.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.36.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 1.11.0 | 04.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -83,12 +84,12 @@
    | B02 Hochwasser / Überschwemmung | B10, B08, B07, C15, C16; C02 bei Hangrutschung, Unterspülung oder Bauwerksschaden |
    | B03 Waldbrand | B08, B12 (C13), C16; C09 bei eigener medizinischer Versorgungsfolge |
    | B04 Erdbeben | C02, B07, B12 |
-   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13); C12 bei Kraftstoffengpass nach Niedrigwasser; C14 bei Lücke der Lebensmittelversorgung |
-   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), C16; C02 bei Schnee- oder Eislast; B09 bei Gasursache des Wärmeausfalls; B02 bei Tauwetter |
+   | B05 Extremhitze / Dürre | B10, B11 (C09), B03, B12 (C13); C12 bei Kraftstoffengpass nach Niedrigwasser; C14 bei Lücke der Lebensmittelversorgung; C18 bei besonderen Belangen (A.9.2) |
+   | B06 Wintersturm / Schnee / Eis | B08, B12 (C12, C13), C16; C02 bei Schnee- oder Eislast; B09 bei Gasursache des Wärmeausfalls; B02 bei Tauwetter; C18 bei besonderen Belangen (A.9.2) |
    | B07 Industrieunfall / Chemieunfall | B10, B11, C05, C16; C02 bei Bauwerksversagen; radiologische Lagen C01 |
-   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09) |
+   | B08 Stromausfall / Blackout | B10, B12 (C11, C12, C14, C15), B11 (C09); C18 bei besonderen Belangen (A.9.2) |
    | B09 Gasversorgungsengpass | B08, B12; C12 für die Wärmefunktion |
-   | B10 Trinkwasserversorgung | C15, B11 (C09) bei Kliniken, Pflege oder Dialyse, C16 |
+   | B10 Trinkwasserversorgung | C15, B11 (C09) bei Kliniken, Pflege oder Dialyse, C16; C18 bei besonderen Belangen (A.9.2) |
    | B11 Gesundheitliche Lage / Epidemie | C09, C07, C10, C08 |
    | B13 Migrationslage | C16 für Unterbringung und Betreuung; B11 (C07, C09) bei eigener Gesundheitsfrage |
    | B14 Sicherheitslage | C05, C06, C16; C17 bei konkretem zivilen Wirkungsbezug; B16 nach eingetretener Tat |
@@ -105,7 +106,7 @@
    In beiden Profilen werden Empfehlungen, Entscheidungen und Umsetzung getrennt dargestellt (A.4). Befugnisse ergeben sich aus dem jeweiligen Auftrag und den geltenden Regelungen, nicht aus dieser SOP.
 5. **Sachlichkeit:** Keine Dramatisierung, keine Spekulation über Ursachen, Täter oder Motive, keine Zuschreibungen an Personengruppen. Beobachtete Lage, prognostizierte Entwicklung und Maßnahme sind sprachlich unterscheidbar. Glaubwürdigkeit entsteht über Verifizierbarkeit. Umgang mit Falsch- und Desinformation: A.9.5.
 6. **Auslandsbezug:** Für Auslandsereignisse den konkreten Deutschlandbezug ausweisen: unmittelbare grenzüberschreitende Wirkung, Auswirkungen auf Personen oder Einrichtungen mit Deutschlandbezug, kritische Liefer- oder Verkehrsbeziehungen oder konkret angeforderte bzw. geleistete Hilfe. Diese Gegenstände werden getrennt behandelt, und je Gegenstand wird der bewertete Referenzraum festgehalten. Ausländische Schäden, Fallzahlen oder Mobilisierung werden nicht in deutsche Radarwerte übertragen (Kodierleitfaden D2, D8).
-7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet und vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. **Status:** Er steht im Kopf jeder Datei und wird nicht für einen ganzen Teil angenommen. Ein Baustein im Status „Inhaltsgerüst“ ergänzt die Dach-SOP nur als Prüfhinweis; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Eine „Beispielfassung“ (in dieser Sammelmappe die Dach-SOPs sowie C01 und C12) ist ausgearbeitet, aber nicht organisationsspezifisch freigegeben. Für einen Baustein im Status „Beispielfassung“ gilt bis zur Freigabe dieselbe Vorrangregel wie für ein Inhaltsgerüst: Bei Widerspruch geht die Dach-SOP vor; wer eine Beispielfassung anwendet, nennt den Status in der Kurzantwort. Der Vorrang bestimmt das anzuwendende Regelwerk, nicht die Richtigkeit einer Aussage: Ein erkannter fachlicher oder quellenbezogener Widerspruch wird mit Aussage, Gegenbeleg und entscheidungsrelevanter Unsicherheit sichtbar gemacht; unstrittige, tragfähig belegte Lagefolgen bleiben bearbeitbar. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; die gemeinsamen Kodier-, Quellen- und Referenzraumregeln (A.1 Nr. 6, A.2, A.3, A.6, Kodierleitfaden) gehen auch ihm vor. Widersprüche zwischen Dach-SOP und Baustein werden zur Pflege gemeldet (A.10.2). Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. **Kopfangaben:** `art_zuordnung` nennt Katalogwerte, unter denen der Baustein typischerweise geführt wird; bei Querschnittsbausteinen (C16, C17) nur die Werte, die neben der vorrangigen Ursachen- oder Funktionsart in Betracht kommen. Die Liste ist keine Ausschlussliste; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“. `anschluss` nennt bedingte Bezüge im Sinne von Nr. 2. Beide Angaben begründen keine automatische Auswahl.
+7. **Aufbau und Bausteine:** Die 17 SOPs in Teil B sind die Einstiege je Ereignisart. Die Bausteine in Teil C sind **keine Ereignisarten**: Sie werden unter einer bestehenden Ereignisart des Katalogs verwendet und vertiefen die Dach-SOP; Abgrenzung und gemeinsame Prüfpunkte der Dach-SOP bleiben maßgeblich. **Status:** Er steht im Kopf jeder Datei und wird nicht für einen ganzen Teil angenommen. Ein Baustein im Status „Inhaltsgerüst“ ergänzt die Dach-SOP nur als Prüfhinweis; bei Widerspruch gilt die Dach-SOP, bis der Baustein fachlich und organisatorisch konkretisiert und freigegeben ist. Wer ein Inhaltsgerüst anwendet, nennt das in der Kurzantwort. Eine „Beispielfassung“ (in dieser Sammelmappe die Dach-SOPs sowie C01 und C12) ist ausgearbeitet, aber nicht organisationsspezifisch freigegeben. Für einen Baustein im Status „Beispielfassung“ gilt bis zur Freigabe dieselbe Vorrangregel wie für ein Inhaltsgerüst: Bei Widerspruch geht die Dach-SOP vor; wer eine Beispielfassung anwendet, nennt den Status in der Kurzantwort. Der Vorrang bestimmt das anzuwendende Regelwerk, nicht die Richtigkeit einer Aussage: Ein erkannter fachlicher oder quellenbezogener Widerspruch wird mit Aussage, Gegenbeleg und entscheidungsrelevanter Unsicherheit sichtbar gemacht; unstrittige, tragfähig belegte Lagefolgen bleiben bearbeitbar. Ein fachlich freigegebener Baustein geht der Dach-SOP im Detail vor; die gemeinsamen Kodier-, Quellen- und Referenzraumregeln (A.1 Nr. 6, A.2, A.3, A.6, Kodierleitfaden) gehen auch ihm vor. Widersprüche zwischen Dach-SOP und Baustein werden zur Pflege gemeldet (A.10.2). Prüffragen sind Recherchehinweise, kein auszufüllendes Formular. **Kopfangaben:** `art_zuordnung` nennt Katalogwerte, unter denen der Baustein typischerweise geführt wird; bei Querschnittsbausteinen (C16–C18) nur die Werte, die neben der vorrangigen Ursachen- oder Funktionsart in Betracht kommen. Die Liste ist keine Ausschlussliste; die Bedingungen stehen in `art_hinweis` und im Abschnitt „Zuordnung im Schema“. `anschluss` nennt bedingte Bezüge im Sinne von Nr. 2. Beide Angaben begründen keine automatische Auswahl.
 8. **Ebene und Geltungsraum:** Die SOPs dienen der Lagearbeit auf der Steuerungsebene kommunaler und staatlicher Behördenleitungen (Lagebild nach Nr. 1), nicht der Lagearbeit auf operativer Einsatzebene. Die Beispielfassung ist in ganz Deutschland nutzbar und stützt sich deshalb nur auf Fachgrundlagen (A.6) des Bundes, gemeinsame Grundlagen von Bund und Ländern, Rechtsakte und Agenturen der EU sowie internationale Stellen. Landesrecht und landesspezifische Produkte werden in dieser Beispielfassung nicht als Fachgrundlage (A.6) zitiert; ihre Konkretisierung bleibt landesrechtlichen SOPs vorbehalten. Als Ereignisbeleg einer konkreten Meldung sind Landesprodukte und behördliche Anordnungen zulässig und mit Land, Herausgeber, Fundstelle und Stand zu zitieren (A.3); Begriffe und Rechtsfolgen werden nicht ungeprüft auf andere Länder übertragen. Wo Zuständigkeit, Stufenbegriff oder Anordnungsform nach Landesrecht maßgeblich sind (z. B. Feststellung des Katastrophenfalls, Evakuierungsanordnung, Hochwassermeldestufen, Kampfmittelbeseitigung, Rettungsdienst, Bauaufsicht), gilt: Stelle, Stufe bzw. Anordnung werden mit Land, Fundstelle und Stand wiedergegeben; die landesrechtliche SOP konkretisiert sie. Einsatz- und Betriebsvorschriften (z. B. Feuerwehr-Dienstvorschriften, Technische Regeln, Normen) werden nicht als Fachgrundlage herangezogen; die SOP hält fest, dass die zuständige Stelle nach ihrem Regelwerk bewertet, und übernimmt deren Ergebnis. **Übernahme:** Eine übernehmende Stelle legt vor der Anwendung Auftrag, adressierte Leitung bzw. Stab, Verantwortungsraum, Betrachtungshorizont und Fortschreibungsrhythmus fest; die Werte des Beispielprofils (Nr. 1, Nr. 4) übernimmt sie nur, soweit ihr Auftrag dazu passt. Relevanz bemisst sich am konkreten Entscheidungs-, Schutz-, Versorgungs- oder Abstimmungsbedarf der adressierten Stelle (Nr. 3); ein örtlich begrenztes Ereignis kann dafür erheblich sein, und die zeitkritische Weitergabe nach A.7.3 gilt unabhängig vom Ausgaberhythmus.
 
 ### A.2 Kodierregeln Lagenradar (verbindlich für alle SOPs)
@@ -251,7 +252,7 @@ Die folgenden Prüfungen sind eine kurze Relevanzprüfung für jede Lage, kein V
 
 **A.9.1 Bedarfsdeckung.** Welche lebenswichtige Leistung wird in welchem Raum und Zeitraum in welchem Umfang benötigt? Welche davon ist unter den aktuellen Bedingungen tatsächlich verfügbar? Welche Versorgungslücke bleibt, welche Ausweichmöglichkeit ist nachweislich nutzbar, und wann reicht sie voraussichtlich nicht mehr? Soll, Bestand, einsatzfähige Kapazität, bereits gebundene Kapazität und Zuführung getrennt halten; vorhanden, betriebsbereit, eingesetzt und wirksam unterscheiden. Ohne belastbare Angaben die Lücke als ungeklärt benennen. Der Herkunftsraum der Hilfe (D4) beschreibt keine ausreichende Versorgung; auch eine kleine Lage kann bei fehlender Spezialfähigkeit erheblich sein.
 
-**A.9.2 Besondere Bedarfe und Zugänglichkeit.** Wer kann Warnung, Schutzort, Transport, Ersatzversorgung oder medizinisch-pflegerische Hilfe nicht selbstständig erreichen oder nutzen? Barrieren, häusliche Versorgung und Abhängigkeit von Hilfsmitteln (z. B. Strom für Beatmung oder Dialyse) berücksichtigen; bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung. Bei Freiluftveranstaltungen, Campingplätzen und anderen exponierten Gruppen Warnvorlauf, Erreichbarkeit und tatsächliche Schutzmöglichkeiten erfassen. Nur verfügbare aggregierte Angaben verwenden; Gruppen nicht allein aufgrund von Alter, Behinderung oder Herkunft als betroffen zählen. Bedarf, erreichbare Hilfe und verbleibende Lücke benennen.
+**A.9.2 Besondere Belange und Zugänglichkeit.** Benötigen Menschen unter den konkreten Lagebedingungen zusätzliche oder anders gestaltete Unterstützung, um Warnung, Schutz, Transport, Unterkunft oder Versorgung zu erreichen und zu nutzen? Dazu gehören Barrieren, häusliche Versorgung und Abhängigkeit von Hilfsmitteln (z. B. Strom für Beatmung oder Dialyse), bei Einrichtungen Selbstrettungsfähigkeit, Transport, Aufnahmeort und Betreuung. Bei konkreten Hinweisen – auch vorsorglich und auch, wenn bestehende Unterstützung eine Lücke bislang verhindert – wird Baustein C18 herangezogen; die bloße Anwesenheit einer Gruppe im Gebiet genügt nicht. Bei Freiluftveranstaltungen, Campingplätzen und anderen exponierten Gruppen Warnvorlauf, Erreichbarkeit und tatsächliche Schutzmöglichkeiten erfassen. Nur verfügbare aggregierte Angaben verwenden; Gruppen nicht allein aufgrund von Alter, Behinderung oder Herkunft als betroffen zählen. Bedarf, erreichbare Hilfe und verbleibende Lücke benennen. Die Befassung darf vorsorglich sein, Beurteilung und Radarwerte brauchen Belege (A.3).
 
 **A.9.3 Warnlage und Erreichbarkeit.** Ist eine amtliche Warnung, Entwarnung oder eine konkrete Warnlücke für die Beurteilung relevant? Falls ja: herausgebende Stelle, Geltungsgebiet, Zeitstand, Kernaussage, angesprochene Personen, verwendete Kanäle und belegte Erreichbarkeitsprobleme erfassen. Den Unterschied zwischen ausgelöster, übertragener und tatsächlich wahrgenommener Warnung erhalten. Das Modulare Warnsystem (MoWaS) ist das zentrale Auslösesystem für die angeschlossenen Warnmultiplikatoren (u. a. Warn-Apps, Warnportal, Rundfunk, Cell Broadcast und angebundene Sirenen); daneben bestehen örtliche Wege (z. B. Lautsprecherdurchsagen, nicht angebundene Sirenen). Eine Auslösung über MoWaS belegt noch nicht die Übertragung über jeden Kanal. Handlungsanweisungen nur mit eindeutigem Ursprung und Geltungsstand wiedergeben. Ausfälle von Warnkanälen gehören in den Text und zu D6 (A.2 D7); vertiefend Baustein C11.
 
@@ -261,7 +262,7 @@ Die folgenden Prüfungen sind eine kurze Relevanzprüfung für jede Lage, kein V
 
 ### A.10 Aufbau, Gültigkeit und Pflege
 
-**A.10.1 Aufbau.** Allgemeine Kodier- und Quellenregeln stehen im Kodierleitfaden (A.2, A.3, A.10.2), allgemeine Befundnachweis-, Weitergabe- und Fortschreibungsregeln nur in Teil A. Jede SOP und jeder Baustein nennt ihre Abweichungen, Prüffragen und Stolperstellen und verweist auf Teil A; wird eine SOP einzeln weitergegeben, muss Teil A verfügbar sein. Befassungsanlässe vom Typ „Monitoring“ nennen das beobachtete Signal; die übernehmende Stelle legt verantwortliche Funktion, Prüfanlass und erwartete Folgeentscheidung fest. **Gliederung und Kennungen:** Teil A steht in einer eigenen Datei, jede SOP und jeder Baustein in einer eigenen Datei, die mit ihrem Anker beginnt. Teil B zählt die Dach-SOPs B01–B17 in der Reihenfolge des Ereigniskatalogs; Teil C zählt die Themen- und Querschnittsbausteine C01–C17. Teil C ist zum Lesen in vier Leseblöcke gegliedert (Besondere Ereignis- und Gefahrenlagen C01–C06, Gesundheit und medizinische Versorgung C07–C10, Versorgung, Kommunikation und Logistik C11–C15, Lageübergreifende Querschnitte C16–C17); die Leseblöcke sind Navigation, keine Zuständigkeiten und keine zweite Nummernebene. Alle Abschnitte folgen demselben Schema: 1. Anwendungsbereich und Befassungsanlässe, 2. Erfassung: Prüffragen, 3. Auswertung: Prüfpunkte, 4. Darstellung, 5. Ansprechstellen und Pflege. Zitiert wird mit Kennung und Abschnitt („C17, Abschnitt 3“) bzw. Kennung und Prüffrage („C17/R2“). Fachgrundlagen und Rechercheeinstiege werden mit Kurzbezeichnung und Fundstelle angegeben (z. B. „ANoPl-Bund, Tabelle 3.4“); nummerierte Quellenverweise sind ausschließlich dem Quellenverzeichnis der Meldung vorbehalten (Kodierleitfaden Abschnitt 5); Kennungen des Quellenregisters (z. B. „S007“, „IFSG-5“) sind keine solchen Verweise und dürfen als Registerverweis genannt werden. **Typologietabellen:** Übernimmt eine SOP Stufen oder Kategorien einer Fachgrundlage, steht die Tabelle in Abschnitt 2 mit den Spalten „Stufe bzw. Kategorie (Fachgrundlage)“, „Fallgruppe“ – bei Rechts- und Feststellungsstufen stattdessen „Feststellende Stelle und Voraussetzung“ – und „Abgrenzung für die Befassung“ (Muster: C01, Referenzszenarien des ANoPl-Bund; B11 und C17 für Feststellungsstufen); sie endet mit dem Satz, dass die Stufen keine Ereignisarten, Radarstufen oder SOP-Kennungen sind. Im Meldungstext wird die Stufe stets mit Fachgrundlage und feststellender Stelle genannt (z. B. „Referenzszenario S2 (ANoPl-Bund) laut Fachstelle“). **Gleichlautende Begriffe:** Begriffe, die in mehreren Fachgrundlagen Verschiedenes bedeuten (z. B. „Alarmstufe“, „Notfall“, „Kaskade“), werden mit ihrer Fachgrundlage geschrieben; „Kaskade“ ohne Zusatz bezeichnet in dieser Mappe Folgewirkungen im Sinne der Wirkungskette (Kodierleitfaden D6); eine Kaskade begründet für sich keinen höheren D6-Wert, maßgeblich bleiben belegte Kopplungen. Gemeinsame Engpässe aus mehreren Lagen regelt A.7.4. Der Kopf nennt `kennung`, `typ` und `lesegruppe`; frühere Nummern und technische Kennungen stehen in `bisherige_kennung` und `bisherige_ids`. **Feste Kennungen:** Kennungen werden nach Fassung 3.0 nicht neu vergeben. Neue SOPs und Bausteine erhalten die nächste freie Nummer (B18, C18); ihre Stelle in der Lesereihenfolge bestimmt die Lesegruppe. Eine stillgelegte Kennung wird nicht wieder belegt; die Stilllegung wird mit Grund oder Nachfolger im Änderungsverlauf vermerkt.
+**A.10.1 Aufbau.** Allgemeine Kodier- und Quellenregeln stehen im Kodierleitfaden (A.2, A.3, A.10.2), allgemeine Befundnachweis-, Weitergabe- und Fortschreibungsregeln nur in Teil A. Jede SOP und jeder Baustein nennt ihre Abweichungen, Prüffragen und Stolperstellen und verweist auf Teil A; wird eine SOP einzeln weitergegeben, muss Teil A verfügbar sein. Befassungsanlässe vom Typ „Monitoring“ nennen das beobachtete Signal; die übernehmende Stelle legt verantwortliche Funktion, Prüfanlass und erwartete Folgeentscheidung fest. **Gliederung und Kennungen:** Teil A steht in einer eigenen Datei, jede SOP und jeder Baustein in einer eigenen Datei, die mit ihrem Anker beginnt. Teil B zählt die Dach-SOPs B01–B17 in der Reihenfolge des Ereigniskatalogs; Teil C zählt die Themen- und Querschnittsbausteine C01–C18. Teil C ist zum Lesen in vier Leseblöcke gegliedert (Besondere Ereignis- und Gefahrenlagen C01–C06, Gesundheit und medizinische Versorgung C07–C10, Versorgung, Kommunikation und Logistik C11–C15, Lageübergreifende Querschnitte C16–C18); die Leseblöcke sind Navigation, keine Zuständigkeiten und keine zweite Nummernebene. Alle Abschnitte folgen demselben Schema: 1. Anwendungsbereich und Befassungsanlässe, 2. Erfassung: Prüffragen, 3. Auswertung: Prüfpunkte, 4. Darstellung, 5. Ansprechstellen und Pflege. Zitiert wird mit Kennung und Abschnitt („C17, Abschnitt 3“) bzw. Kennung und Prüffrage („C17/R2“). Fachgrundlagen und Rechercheeinstiege werden mit Kurzbezeichnung und Fundstelle angegeben (z. B. „ANoPl-Bund, Tabelle 3.4“); nummerierte Quellenverweise sind ausschließlich dem Quellenverzeichnis der Meldung vorbehalten (Kodierleitfaden Abschnitt 5); Kennungen des Quellenregisters (z. B. „S007“, „IFSG-5“) sind keine solchen Verweise und dürfen als Registerverweis genannt werden. **Typologietabellen:** Übernimmt eine SOP Stufen oder Kategorien einer Fachgrundlage, steht die Tabelle in Abschnitt 2 mit den Spalten „Stufe bzw. Kategorie (Fachgrundlage)“, „Fallgruppe“ – bei Rechts- und Feststellungsstufen stattdessen „Feststellende Stelle und Voraussetzung“ – und „Abgrenzung für die Befassung“ (Muster: C01, Referenzszenarien des ANoPl-Bund; B11 und C17 für Feststellungsstufen); sie endet mit dem Satz, dass die Stufen keine Ereignisarten, Radarstufen oder SOP-Kennungen sind. Im Meldungstext wird die Stufe stets mit Fachgrundlage und feststellender Stelle genannt (z. B. „Referenzszenario S2 (ANoPl-Bund) laut Fachstelle“). **Gleichlautende Begriffe:** Begriffe, die in mehreren Fachgrundlagen Verschiedenes bedeuten (z. B. „Alarmstufe“, „Notfall“, „Kaskade“), werden mit ihrer Fachgrundlage geschrieben; „Kaskade“ ohne Zusatz bezeichnet in dieser Mappe Folgewirkungen im Sinne der Wirkungskette (Kodierleitfaden D6); eine Kaskade begründet für sich keinen höheren D6-Wert, maßgeblich bleiben belegte Kopplungen. Gemeinsame Engpässe aus mehreren Lagen regelt A.7.4. Der Kopf nennt `kennung`, `typ` und `lesegruppe`; frühere Nummern und technische Kennungen stehen in `bisherige_kennung` und `bisherige_ids`. **Feste Kennungen:** Kennungen werden nach Fassung 3.0 nicht neu vergeben. Neue SOPs und Bausteine erhalten die nächste freie Nummer (B18, C19); ihre Stelle in der Lesereihenfolge bestimmt die Lesegruppe. Eine stillgelegte Kennung wird nicht wieder belegt; die Stilllegung wird mit Grund oder Nachfolger im Änderungsverlauf vermerkt.
 
 **A.10.2 Gültigkeit und Pflege.** Die Bestandteile tragen eigene Fassungen; das gültige Paket steht im Gültigkeitsstand am Anfang von Teil A. Je SOP und Baustein sind eine fachlich verantwortliche Funktion (`pflegeverantwortlich`) und ein nächstes Prüfdatum im Format TT.MM.JJJJ (`naechste_pruefung_faellig`) festgelegt, je SOP zusätzlich anlassbezogene Prüfauslöser (`pruefausloeser`); Bausteine erhalten Prüfauslöser spätestens mit ihrer fachlichen Freigabe, Prüfauslöser für aufgenommene Fachgrundlagen bereits mit deren Aufnahme (A.6). `quellen_geprueft_am` entfällt, solange ein Inhaltsgerüst keine einzelquellenbezogen geprüften Rechercheeinstiege oder Fachgrundlagen führt. Als einzelquellenbezogene Prüfung genügt ein gezielter Inhaltsabgleich, wenn Datum, Prüfgegenstand und Prüftiefe angegeben sind; ein erfolgreicher Abruf allein genügt nicht. Ein Prüfauslöser für eine noch nicht am Normtext geprüfte Fachgrundlage weist diese nicht als geprüft aus. In dieser Beispielfassung ist der Herausgeber der Beispielfassung eingetragen; eine übernehmende Stelle ersetzt ihn durch die eigene Funktion. Überfällige Termine werden sachlich geprüft und mit Ergebnis aktualisiert, nicht bloß verschoben. Jede Änderung wird im Änderungsverlauf der SOP-Mappe (`CHANGELOG.md` dieses Ordners) mit Datum, Review- bzw. Anlasskennung und Erledigungsnachweis eingetragen. **Ein Ort, Verweise sonst:** Achsenregeln, Quellenkategorien, die Rangfolge bei Widersprüchen sowie Form und Regeln von Zeitstrahl, Sachverhaltskennung und Bezug stehen nur im Kodierleitfaden; Teil A, Darstellungsdatei und Arbeitsanweisungen verweisen verbindlich darauf und wiederholen sie nicht. Die Darstellungsdatei führt zusätzlich Stufentexte und Kategorienamen, weil die App sie anzeigt und auswertet; sie werden mit dem Kodierleitfaden geändert (die App prüft die Stufentexte auf Gleichlaut). Arbeitsanweisungen nennen nur Abweichungen und Arbeitsschritte der KI. Fachänderungen dürfen Kodierdefinitionen nicht stillschweigend überschreiben: Eine Änderung an Achsenregeln oder Quellenkategorien wird im Kodierleitfaden vorgenommen, und die Verweise in Teil A, Darstellungsdatei und Arbeitsanweisungen werden auf Anpassungsbedarf geprüft. Bei jeder Änderung an Teil A vermerkt der Profilverlauf je Arbeitsanweisung, ob sie geprüft wurde, welche Fassung zugrunde lag und ob Anpassungsbedarf besteht; eine Prüfung erfordert nicht schon eine neue Fassung.
 
@@ -619,7 +620,7 @@ Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewer
 |---|---|---|---|---|
 | R1 | Welche Hitzeintensität und -dauer sind prognostiziert, wie ist die nächtliche Entlastung? | [DWD](https://www.dwd.de/), Hitzewarnungen; laufend; Ausgabe und Gültigkeit prüfen | L/R | Warnstufe ist Prognose, keine Mortalitätsaussage; sie kann Prüf- oder Handlungsbedarf auslösen, begründet aber keinen Ist-Wert auf D1 oder D8. |
 | R2 | Welche hitzebedingte Mortalität wird geschätzt? | [RKI Hitzemortalität](https://www.rki.de/DE/Themen/Gesundheit-und-Gesellschaft/Gesundheitliche-Einflussfaktoren-A-Z/H/Hitze/Bericht_Hitzemortalitaet.html); saisonal wöchentlich; Destatis/EuroMOMO zum Vergleich | R; D2 | Modellbasierte, zeitverzögerte Schätzung mit Prädiktionsintervall und kumulativem Berichtsbezug; Bezugswoche und Revisionsstand angeben; nicht mit aktuellen Erkrankten addieren und nicht ungeprüft als Direktbetroffenheit zum Stichtag kodieren (A.2). |
-| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2). |
+| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2, vertiefend C18). |
 | R4 | Welche Hitzeschutzmaßnahmen gelten und wirken? | Hitzeaktionspläne der Länder und Kommunen, Gesundheitsbehörden; anlassbezogen | M | Plan, umgesetzte Maßnahme und belegte Wirkung trennen. |
 
 #### Teilprofil 5b: Trockenheit/Niedrigwasser (R5–R8)
@@ -675,9 +676,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Wintersturm / Schnee / Eis (Starkschneefall, Eisregen, Glatteis, Eislast, extreme Kälte)"
 art_vorschlag: ["Wintersturm / Schnee / Eis"]
 zweck: "Reproduzierbare Erfassung winterlicher Extremwetter- und Kältelagen mit Folgen für Verkehr, Energie- und Wärmeversorgung sowie Erreichbarkeit."
-version: "2.3.0"
+version: "2.3.1"
 status: "Beispielfassung"
-stand: "26.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "01.10.2027"
@@ -701,7 +702,7 @@ bisherige_ids: ["sop-06"]
 | R1 | Welche Schneefall-, Eis-, Wind- oder Kältephase ist zu erwarten? | [DWD-Warnlagebericht](https://www.wettergefahren.de/warnungen/warnsituation/warnlagebericht.html) und Warnungen des [DWD](https://www.dwd.de/); laufend; Ausgabe und Gültigkeit prüfen | L/R | Neuschnee, Schneehöhe und Eislast nicht gleichsetzen; eine erwartete Phase begründet keinen Ist-Wert auf D8. |
 | R2 | Welche Orte und Strecken sind abgeschnitten oder gesperrt? | Lagemeldungen (A.3); Autobahn GmbH, DB | L/R; D1/D2 | Sperrung einer Route belegt nicht Isolation. Im Stau oder in Zügen Eingeschlossene zählen für D2, wenn eine unmittelbare Beeinträchtigung belegt ist (z. B. fehlender Kälteschutz oder fehlende Versorgung über Stunden), nicht bei bloßer Verspätung oder erschwerter Weiterreise (Kodierleitfaden D2); Zahl, Bezugszeit und Quelle nennen. |
 | R3 | Welche Strom-, Wärme- und Kommunikationsdienste fallen aus? | Betreibermeldungen (A.3) | R/I; D6 | Eislast-Ausfälle ziehen nach; frühe Entwarnung nicht als final werten. |
-| R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2). |
+| R4 | Welche Personen benötigen besondere Versorgung, welche Wärmeschutzorte sind nutzbar? | Lagemeldungen (A.3) | R/M; D2 | Heizungsausfall bei Frost ist gesundheitsrelevant; Einwohnerzahl ≠ Betroffene; Erreichbarkeit häuslich versorgter Menschen, Ersatztransport und tatsächlich nutzbare Wärmeschutzorte prüfen (A.9.2, vertiefend C18). |
 | R5 | Welche Räum-, Transport- und Ersatzversorgungshilfe besteht? | Lagemeldungen (A.3); THW, Bundeswehr | M; D4 | Regulärer Winterdienst ≠ zusätzliche Hilfe; Nachbarschaftshilfe ist keine behördliche Mobilisierung. |
 | R6 | Welche Wiederherstellung ist wann absehbar? | Betreibermeldungen (A.3) | M/R; D5 | Tauwetter kann neue Risiken erzeugen (Hochwasser, Dachlast) – bedingt formulieren. |
 | R7 | Sind Gebäude, Hallen oder Verkehrswege wegen Schneelast oder Lawinengefahr gesperrt oder geschädigt? | Bauaufsicht und Kommune; in einschlägigen Regionen Lawinenlageberichte und behördliche Sperrungen | R; D1/D2 | Schneehöhe nicht selbst in Gebäudesicherheit umrechnen; Fachbewertung von Last und Standsicherheit verwenden. |
@@ -840,9 +841,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Stromausfall / Blackout (großflächiger oder langandauernder Netzausfall)"
 art_vorschlag: ["Stromausfall / Blackout"]
 zweck: "Reproduzierbare Erfassung großflächiger oder langandauernder Stromausfälle, ihrer Ersatzversorgung und ihrer zeitverzögerten Kaskadeneffekte."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – Art. 18 VO (EU) 2017/1485 und § 13 EnWG am Normtext gelesen; Rechercheeinstiege 26.09.2026 teilweise, Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -901,7 +902,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 | Meldungsbereich | Lageart-spezifische Leitfrage |
 |---|---|
 | Lage & Ereignis | Raum, Anschlüsse/Personen, Ursache (belegt/vorläufig), Wiederversorgungsstand mit Zeitachse |
-| Risiken & Auswirkungen | Kaskade mit Zeitverzug; Menschen mit besonderen Bedarfen (Heimbeatmung, Pflege) – belegt vs. mit Dauer erwartbar |
+| Risiken & Auswirkungen | Kaskade mit Zeitverzug; Menschen mit besonderen Belangen (Heimbeatmung, Pflege; A.9.2, vertiefend C18) – belegt vs. mit Dauer erwartbar |
 | Maßnahmen & Handlungsempfehlungen | Betriebsfähigkeit der Notstromversorgung kritischer Einrichtungen, Kraftstoffnachschub, Anlaufstellen, länderübergreifender Lageabgleich |
 | Abhängigkeiten & Interdependenzen | Folgekette Strom → Wasser/Abwasser/TK/Gesundheit/Verkehr; Ursache-SOP benennen |
 
@@ -1011,9 +1012,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Trinkwasserversorgung (Unterbrechung, Mengeneinschränkung, Qualitätsproblem)"
 art_vorschlag: ["Trinkwasserversorgung"]
 zweck: "Reproduzierbare Erfassung von Unterbrechungen, Mengeneinschränkungen und Qualitätsproblemen der öffentlichen Trinkwasserversorgung (KRITIS-Sektor Wasser, Branche öffentliche Wasserversorgung) einschließlich der tatsächlich wirksamen Ersatzversorgung."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
-stand: "24.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1038,7 +1039,7 @@ bisherige_ids: ["sop-10"]
 | R4 | Welche Ersatzversorgung ist tatsächlich versorgungswirksam? | Lagemeldungen (A.3); THW, Hilfsorganisationen; Trinkwassernotbrunnen (BBK) | M; D4 | Benötigte und tatsächlich bereitgestellte Menge, zulässiger Verwendungszweck, gesicherte Qualität, Verteilpunkte, Transport und Zugänglichkeit beschreiben; bereitgestellte Menge ist erst nach erreichbarer und geeigneter Abgabe versorgungswirksam (A.9.1). Trinkwassernotbrunnen nicht allein aus ihrer Existenz als betriebsbereite Versorgung werten. Herkunft eingesetzter Ersatzversorgung bleibt für D4 maßgeblich. |
 | R5 | Welche Reparatur- und Freigabeschritte sind bekannt? | Wasserversorger, Gesundheitsamt | M/R; D5 | Technische Reparatur beendet das Qualitätsproblem nicht; Freigabe erst durch Gesundheitsamt. |
 | R6 | Welche fachlichen Anforderungen erklären die Bewertung? | [UBA Trinkwasser](https://www.umweltbundesamt.de/themen/wasser/trinkwasser); [UBA-Empfehlungen zu Maßnahmen bei Abweichungen der Trinkwasserbeschaffenheit (2026)](https://www.umweltbundesamt.de/system/files/document/260417_UBA_Empfehlungen_%C2%A7%C2%A762-68_nach_Freigabe_final_clean.pdf); Fachgrundlage | R/I | Grundlagenwissen ersetzt keinen örtlichen Befund; Abkochen nicht als allgemeine Lösung für jede Verunreinigung darstellen. |
-| R7 | Welche Einrichtungen (Pflege, Kliniken, Dialyse) und welche Löschwasserversorgung sind betroffen? | Gesundheitsamt; Lagemeldungen (A.3); Feuerwehr | R/I; D6 | Bedarf von Einrichtungen und Löschwasser getrennt prüfen; Abwasser- und Hygienefolgen mitprüfen (C15). |
+| R7 | Welche Einrichtungen (Pflege, Kliniken, Dialyse) und welche Löschwasserversorgung sind betroffen? | Gesundheitsamt; Lagemeldungen (A.3); Feuerwehr | R/I; D6 | Bedarf von Einrichtungen und Löschwasser getrennt prüfen; Abwasser- und Hygienefolgen mitprüfen (C15); besondere Belange nach A.9.2, vertiefend C18. |
 
 ### 3. Auswertung: Prüfpunkte
 
@@ -2306,11 +2307,11 @@ lesegruppe: "Gesundheit und medizinische Versorgung"
 lageart: "Missverhältnis zwischen medizinischem oder pflegerischem Bedarf und tatsächlich nutzbaren präklinischen, klinischen, pflegerischen oder häuslichen Versorgungsleistungen; Ausfall oder Evakuierung von Einrichtungen; MANV-Folgen"
 art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn neben der medizinisch-pflegerischen Versorgung eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht; der Versorgungsausfall selbst bleibt unter „Gesundheitliche Lage / Epidemie“"
-anschluss: "B11, C05; C07 bei Infektionsgeschehen; C10, C11, C12, C16, B15, C17 nach konkretem Bezug"
+anschluss: "B11, C05; C07 bei Infektionsgeschehen; C10, C11, C12, C16, B15, C17 nach konkretem Bezug; C18 bei besonderen Belangen der Betroffenen"
 zweck: "Erfassung nutzbarer medizinischer und pflegerischer Leistung und des Ausfalls der Regelversorgung nach Versorgungsfunktion, unabhängig von der Ursache."
-version: "1.3.0"
+version: "1.3.1"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "27.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – BBK „MANV“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2320,7 +2321,7 @@ bisherige_ids: ["baustein-n04"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Eigenständig relevante medizinische und pflegerische Versorgungslagen: Missverhältnis zwischen benötigter und tatsächlich nutzbarer Behandlung, Pflege oder Transportleistung; MANV-Folgen; Ausfall oder Evakuierung von Kliniken, Pflege- und Dialyseeinrichtungen; Engpässe im Rettungsdienst; länger dauernde Engpässe einschließlich ambulanter und häuslicher Versorgung. Abgegrenzt wird nach der Versorgungsfunktion, nicht nach der Ursache: Bei Infektionsgeschehen bleiben Epidemiologie und Erregerfragen bei B11 und C07; C09 wird nur ergänzt, wenn ein eigenständiger Versorgungsbefund oder Abstimmungsbedarf besteht. Frühe Befassung nach A.1 Nr. 1 ist bei begründetem Vorbereitungsbedarf auch vor dem ersten Versorgungsausfall möglich. MANV-Einstufung und Alarmstufe werden mit Gebiet und Stand von der zuständigen Stelle übernommen, nicht aus Patientenzahlen selbst abgeleitet. Keine klinische Sichtungs-, Triage-, Therapie- oder Verteilungsentscheidung durch die Lagebildredaktion. Unfallgeschehen selbst C05; Evakuierung und Betreuung C16; Arzneimittel und Material C10; Leitstellen und Notruf C11; Notstrom und Kraftstoff C12; IT-Ausfall von Einrichtungen B15; zivile Verteidigung C17.
+**Umfasst / grenzt ab von:** Eigenständig relevante medizinische und pflegerische Versorgungslagen: Missverhältnis zwischen benötigter und tatsächlich nutzbarer Behandlung, Pflege oder Transportleistung; MANV-Folgen; Ausfall oder Evakuierung von Kliniken, Pflege- und Dialyseeinrichtungen; Engpässe im Rettungsdienst; länger dauernde Engpässe einschließlich ambulanter und häuslicher Versorgung. Abgegrenzt wird nach der Versorgungsfunktion, nicht nach der Ursache: Bei Infektionsgeschehen bleiben Epidemiologie und Erregerfragen bei B11 und C07; C09 wird nur ergänzt, wenn ein eigenständiger Versorgungsbefund oder Abstimmungsbedarf besteht. Frühe Befassung nach A.1 Nr. 1 ist bei begründetem Vorbereitungsbedarf auch vor dem ersten Versorgungsausfall möglich. MANV-Einstufung und Alarmstufe werden mit Gebiet und Stand von der zuständigen Stelle übernommen, nicht aus Patientenzahlen selbst abgeleitet. Keine klinische Sichtungs-, Triage-, Therapie- oder Verteilungsentscheidung durch die Lagebildredaktion. Unfallgeschehen selbst C05; Evakuierung und Betreuung C16; Arzneimittel und Material C10; Leitstellen und Notruf C11; Notstrom und Kraftstoff C12; IT-Ausfall von Einrichtungen B15; zivile Verteidigung C17; besondere Belange der Betroffenen außerhalb der Versorgungskapazität (Erreichbarkeit, Eignung und Nebenfolgen von Verlegungen) C18.
 
 **Befassungsanlässe:** Belegtes Missverhältnis zwischen Patientenbedarf und einsetzbaren präklinischen bzw. klinischen Fähigkeiten · Ausfall oder Evakuierung von Klinik-, Pflege-, Dialyse- oder Rettungsdienstfunktionen · länger andauernde Abmeldung von Notaufnahmen oder Fachgebieten in einer Region · Gefährdung häuslich versorgter Menschen (z. B. Beatmung, Sauerstoff, Pflegedienste) · länderübergreifender Verlegungs- oder Unterstützungsbedarf.
 
@@ -2481,11 +2482,11 @@ lesegruppe: "Versorgung, Kommunikation und Logistik"
 lageart: "Ausfall oder Störung von Telefonie, Daten, Notruf 110/112, Leitstellen, BOS-Funk, Warnmitteln oder amtlichen Informationsangeboten mit Schutzbezug"
 art_zuordnung: ["KRITIS-Ausfall", "Cyberangriff / IT-Sicherheitsvorfall"]
 art_hinweis: "„KRITIS-Ausfall“ bei belegtem Ausfall oder wesentlicher Einschränkung einer kritischen Dienstleistung; „Cyberangriff / IT-Sicherheitsvorfall“ bei belegtem Vorfall oder als Prüfhilfe zu B15 bei begründeter Vorsorgebefassung"
-anschluss: "B12, B15"
+anschluss: "B12, B15; C18 für die Nutzbarkeit von Warnung und Information bei besonderen Belangen"
 zweck: "Getrennte Erfassung von Netzzugang, Notrufvermittlung, Leitstelle, BOS-Funk, Warnung und Informationsversorgung."
-version: "1.2.2"
+version: "1.2.3"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – BBK „So werden Sie gewarnt“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2495,7 +2496,7 @@ bisherige_ids: ["baustein-n02"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nach A.2 (Informationslage der Befassung einschließlich entscheidungsrelevanter Lücken zur gestörten Funktion); die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2, A.9.3). Ursache zusätzlich über B08, B15 oder B16.
+**Umfasst / grenzt ab von:** Einschränkungen von 110/112, Telefonie und Datendiensten, Leitstellen, BOS-Funk und Warnmitteln (einschließlich technisch ausgefallener Warnmittel). 110/112, BOS-Kommunikation und öffentliche Warnung haben unterschiedliche Zuständigkeiten. D7 nach A.2 (Informationslage der Befassung einschließlich entscheidungsrelevanter Lücken zur gestörten Funktion); die Kommunikation mit der Bevölkerung gehört in den Folgentext und zu D6 (A.2, A.9.3). Ursache zusätzlich über B08, B15 oder B16. Ob Warnung und Information für Menschen mit besonderen Belangen nutzbar sind, vertieft C18.
 
 **Öffentliche Informationsversorgung:** Ergänzend den Wegfall amtlicher Informationsangebote prüfen, soweit er einen konkreten Schutz-, Orientierungs- oder Hilfszugangsbezug hat, etwa wenn etablierte Informationsseiten während einer Gefahrenlage fehlen. Ein ausgefallener Behörden- oder Polizei-Webauftritt belegt keine Störung von 110/112, Leitstellen, BOS-Funk, MoWaS oder angeschlossenen Warnmultiplikatoren. Rein repräsentative Website-Ausfälle ohne solchen Funktionsbezug werden nicht zur Warnfähigkeits- oder KRITIS-Lage.
 
@@ -2888,11 +2889,11 @@ lesegruppe: "Lageübergreifende Querschnitte"
 lageart: "Angeordnete oder vorbereitete Evakuierung, Schutz in Gebäuden, Unterkunftsverlust und größerer Betreuungsbedarf"
 art_zuordnung: ["Migrationslage", "Sonstiges"]
 art_hinweis: "vorrangig die Ereignisart des Anlasses, ohne Beschränkung auf die hier genannten Werte (A.1 Nr. 7); „Migrationslage“ nur bei Flucht- bzw. Aufnahmezusammenhang; „Sonstiges“ nur, falls kein passender Ursachenwert besteht"
-anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion"
+anschluss: "Ursachen-SOP des Anlasses; B13 bei Flucht- oder Aufnahmezusammenhang; C09 für klinische und pflegerische Verlegung und Versorgung; B10, C14, C15 bei eigener Wasser-, Ernährungs- oder Sanitärlücke; C13 bei kritischer Transportfunktion; C18 bei besonderen Belangen der Betroffenen"
 zweck: "Einheitliche Erfassung von Schutzbedarf, Transport, nutzbarer Unterkunft, Pflege und Versorgung unabhängig vom Anlass."
-version: "1.2.1"
+version: "1.2.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – BBK „Mobile Betreuungsmodule 5.000“: gezielter Inhaltsabgleich (sichtbare, für den Zweck einschlägige Passagen; keine Vollprüfung der Unterseiten); übrige Ansprechstellen vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2904,7 +2905,7 @@ bisherige_ids: ["baustein-n03"]
 
 **Umfasst / grenzt ab von:** Evakuierungen, Schutz in Gebäuden, Unterkunftsverlust und Betreuungslagen aus jedem Anlass (Hochwasser, Industrieunfall, Kampfmittelfund, Stromausfall u. a.); Migration ist nur ein möglicher Anlass (B13). Keine operative Evakuierungsplanung durch die Redaktion. Schutz in Gebäuden und Evakuierung werden als unterschiedliche behördliche Maßnahmen dokumentiert.
 
-**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
+**Arbeitsteilung:** C16 führt Schutzbedarf, Transport, Unterbringung, Betreuung und Rückkehr; C09 vertieft die medizinisch-pflegerische Eignung von Transport, Aufnahme und Versorgung; B10, C14 und C15 vertiefen eigene Lücken bei Wasser, Ernährung und Sanitärversorgung, C13 die kritische Transportfunktion; C18 vertieft besondere Belange der Betroffenen, die Eignung der Maßnahmen für sie und Nebenfolgen wie die Trennung von Bezugspersonen oder Assistenz. Dieselbe Personengruppe und dieselben Ressourcen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass (z. B. Hochwasser, Kampfmittelfund, Stromausfall) bleibt bei seiner SOP.
 
 **Befassungsanlässe:** Angeordnete oder konkret vorbereitete Evakuierung · Unterkunftsverlust oder größerer Schutz- bzw. Betreuungsbedarf · länderübergreifende Aufnahme- oder Transportabstimmung.
 
@@ -3026,3 +3027,101 @@ Nach der jeweiligen Dach-SOP; ziviler Wirkungsbezug, betroffene Funktion und Abs
 - Sicherstellungsgesetze (ausgewählte, nicht abschließende Übersicht: WasSiG, ESVG, VerkSiG, EnSiG, WiSiG, ArbSiG): Maßnahmenrahmen. Fundstellen: EnSiG und WiSiG in C12, ESVG in C14; WasSiG, VerkSiG und ArbSiG sind in dieser Fassung ohne Fundstelle (B10 bzw. C13 nennen den Ergänzungsbedarf) und vor Verwendung am Normtext zu prüfen (A.6); bis dahin werden daraus keine Befugnisse oder Aktivierungsvoraussetzungen behauptet.
 
 **Offene Punkte:** Schnittstellen der zivilen Verteidigung mit der zuständigen Stelle konkretisieren; Umgang mit eingestuften Informationen wie in B14 klären. Kontrastfälle: verteidigungsbezogener Transportbedarf ohne festgestellten Rechtszustand · Katastrophennotstand nach Art. 35 GG ohne Verteidigungsbezug · festgestellter Spannungsfall ohne belegte zivile Wirkung im Referenzraum.
+
+<!-- Quelle: sop/teil-c/C18_besondere-belange-schutzbedarfe.md -->
+
+<a id="c18"></a>
+
+## C18. Baustein LEAD: Besondere Belange und Schutzbedarfe von Menschen (vulnerable Gruppen)
+
+```yaml
+kennung: "C18"
+typ: "Querschnittsbaustein"
+bausteintyp: "Querschnittsbaustein"
+lesegruppe: "Lageübergreifende Querschnitte"
+lageart: "Lagen, in denen Menschen unter den konkreten Bedingungen zusätzliche oder anders gestaltete Unterstützung benötigen, um Warnung, Schutz, Transport, Unterkunft oder Versorgung zu erreichen und zu nutzen"
+art_zuordnung: []
+art_hinweis: "stets die Ereignisart des Anlasses (A.1 Nr. 7); C18 fügt weder Ereignisart noch Sachverhalt hinzu und wird nie allein geführt"
+anschluss: "C09 für die medizinisch-pflegerische Versorgung; C16 für Evakuierung, Schutzunterbringung und Betreuung; C11 für Warnkanäle; B10, C14, C15 bei eigener Versorgungsfrage; B13 bei Aufnahmezusammenhang"
+zweck: "Durchgehende Prüfung, ob die Lagebewältigung den unterschiedlichen Voraussetzungen der Menschen gerecht wird: besondere Belange, eigene Möglichkeiten, Eignung der Maßnahmen, Nebenfolgen und Handlungsbedarf."
+version: "1.0.0"
+status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
+stand: "04.11.2026"
+pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
+naechste_pruefung_faellig: "31.03.2027"
+```
+
+### 1. Anwendungsbereich und Befassungsanlässe
+
+**Umfasst / grenzt ab von:** Besondere Schutz- und Unterstützungsbedarfe von Menschen in jeder Lage, unabhängig von der Ereignisart. C18 fragt durchgehend, ob Warnung, Schutz, Transport, Unterkunft und Versorgung den unterschiedlichen Voraussetzungen der Menschen gerecht werden. Eine Versorgungslücke ist ein mögliches Ergebnis der Prüfung, keine Voraussetzung. Keine operative Einzelfallhilfe durch die Redaktion.
+
+**Arbeitsteilung:** A.9.2 ist die Relevanzprüfung für jede Lage; C18 vertieft sie. C09 vertieft die medizinisch-pflegerische Versorgung, C16 Evakuierung, Schutzunterbringung und Betreuung; C18 ergänzt beide, ohne ihre Inhalte neu abzubilden. Dieselben Personen werden einmal mit Stand geführt (A.3, A.7.4); ein Bausteinwechsel erzeugt keine zweite Personenzahl. Der Anlass bleibt bei seiner SOP.
+
+**Befassungsanlässe:** Konkrete Hinweise auf besondere Belange, auch vorsorglich (A.1 Nr. 1) und auch, wenn bestehende Unterstützung eine Lücke bislang verhindert · Maßnahmen wie Warnung, Räumung, Schließung oder Schutzunterbringung, deren Nutzbarkeit für bestimmte Menschen fraglich ist · belegte Nebenfolgen von Schutzmaßnahmen. Die bloße Anwesenheit einer Gruppe im Gebiet genügt nicht; es gibt keine automatische Mitwahl (A.1 Nr. 2 und Nr. 3).
+
+**Zuordnung im Schema:** Ereignisart des Anlasses; C18 wird nie allein geführt.
+
+### 2. Erfassung: Prüffragen
+
+**Gruppen und Lebenssituationen (Einstieg, nicht abschließend).** Genannt werden nur Gruppen, bei denen ein Belang in der konkreten Lage begründet ist; die Tabelle ist kein auszufüllendes Formular (A.1 Nr. 7). Alter, Behinderung oder Herkunft allein begründen keinen Belang (A.9.2). Gruppen überschneiden sich; gezählt wird nur einmal (A.3).
+
+| Kennung | Gruppe bzw. Lebenssituation | Besondere Belange | Vertiefend | Stolperstelle |
+|---|---|---|---|---|
+| G01 | Wohnungs- und obdachlose Menschen | Erreichbarkeit von Warnungen, Schutz vor Witterung, geeignete und tatsächlich zugängliche Aufenthalts- und Übernachtungsmöglichkeiten | M1, M5, M8 | Belegung von Notunterkünften ≠ Bedarf; Öffnungszeiten tagsüber |
+| G02 | Menschen mit Behinderungen | Nutzbare Warnung und Information, Mobilität, Orientierung, Assistenz, Hilfsmittel und geeignete Schutzangebote | M1, M2, M4 | Barrierefreiheit von Warnung und Unterkunft getrennt prüfen; Assistenzhunde |
+| G03 | Bewohner:innen von Pflegeeinrichtungen, besonderen Wohnformen und Hospizen (einschließlich älterer Menschen in Einrichtungen) | Versorgungskontinuität, Personal, technische Abhängigkeiten, geeignete Verlegung und Anschlussversorgung | M2, M3, M4, M6 | Notstrom vorhanden ≠ betriebsbereit ≠ ausreichend; Verlegung aus Hospizen besonders abwägen |
+| G04 | Stationäre Patient:innen (Krankenhäuser, Psychiatrie) | Fortführung erforderlicher Versorgung, Schutz bei Ausfall oder Räumung, geeignete Verlegung | M2, M3, M6 | Kapazitätsfrage bleibt in C09 |
+| G05 | Ambulant und häuslich versorgte Patient:innen (ambulante Pflege, Heimbeatmung, Sauerstoff, Heimdialyse, Palliativversorgung, Substitution) | Fortführung erforderlicher Versorgung, Erreichbarkeit von Diensten und Einrichtungen, Geräte-, Arzneimittel- und Transportabhängigkeiten | M3, M4, M7 | Kein Zentralregister; fehlende Zahl ist kein Nullbefund |
+| G06 | Kinder und Jugendliche | Aufsicht, altersgerechte Information, Schutz, Betreuung und Zusammenbleiben mit Bezugspersonen | M1, M6 | Trennung bei Schließung, Evakuierung oder Verlegung (C18/R4) |
+| G07 | Menschen in Gemeinschaftseinrichtungen (Geflüchtete, Obdachlosenunterkünfte, Justiz- und Maßregelvollzug, Abschiebungshaft) | Schutzmöglichkeiten unter den jeweiligen Unterbringungsbedingungen, Verantwortung des Trägers, Verständlichkeit von Informationen, eingeschränkte Bewegungsmöglichkeiten | M1, M6, M8 | Dichte (Infektion, Hitze); Standorte nicht ohne Not veröffentlichen |
+| G08 | Ältere Menschen außerhalb von Einrichtungen, insbesondere alleinlebend | Konkrete Unterstützungsmöglichkeiten, soziale Erreichbarkeit und Versorgung | M1, M2, M7, M8 | In Einrichtungen → G03, keine Doppelzählung (A.3) |
+| G09 | Menschen in Hochhäusern und anderen vertikal erschlossenen Gebäuden | Abhängigkeit von Aufzügen und Gebäudetechnik, Erreichbarkeit der Wohnung, Selbstrettung und Versorgung bei Funktionsausfällen | M2, M3 | Druckerhöhung für Trinkwasser, Lüftung; Brandschutz bewertet die zuständige Stelle |
+| G10 | Schwangere, Gebärende und Neugeborene | Erreichbarkeit von Geburtshilfe und Nachsorge; Wärme, Ernährung und Hygiene für Neugeborene | M3, M4, M8 | Kapazität der Geburtshilfe → C09; Säuglingsnahrung → C14 |
+| G11 | Menschen mit geringen materiellen Mitteln | Vorrat, Mobilität, Kühlung bzw. Heizung, Mittel für eine Ausweichunterkunft | M2, M5 | Nur aggregierte Raumangaben; keine Zuschreibung |
+| G12 | Menschen in Gewaltschutzunterkünften | Wahrung der Anonymität bei Räumung und Unterbringung, Fortführung der Betreuung | M5, M6, M7 | Adressen nie in der Meldung |
+| G13 | Sprachlich schwer erreichbare und ortsunkundige Menschen (Reisende, Gäste, Saisonkräfte) | Verständliche Warnung, Orientierung, Kenntnis von Anlaufstellen | M1, M5, M7 | Bevölkerungszahl ohne Gäste unterschätzt (A.3) |
+| G14 | Personen mit Sorgeverantwortung (pflegende Angehörige, Eltern, Betreuende) | Vereinbarkeit von Schutzmaßnahmen mit Pflege- und Betreuungspflichten; Ausfall der Sorge für abhängige Menschen | M4, M6 | Betrifft auch Personal kritischer Dienste, etwa bei Kita-Schließung |
+| G15 | Menschen in exponierten Aufenthalts- und Arbeitssituationen (Freiluftveranstaltung, Camping, Arbeit im Freien) | Warnvorlauf, Erreichbarkeit, tatsächliche Schutzmöglichkeiten | M1, M5, M8 | Beispiel auch in A.9.2 |
+
+Die Liste bleibt offen; weitere Lebenssituationen (etwa Menschen in psychischen Krisen, Tierhaltende mit Evakuierungsvorbehalt, Pendelnde und Gestrandete mit C13) erschließen die gemeinsamen Prüffragen und die Mechanismen.
+
+**Gemeinsame Prüffragen (für jede Gruppe und jede Lage)**
+
+| ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
+|---|---|---|---|---|
+| R1 | Besondere Belange: Welche Menschen benötigen unter den konkreten Lagebedingungen zusätzliche oder anders gestaltete Unterstützung? | Lagemeldungen (A.3); Gruppenübersicht als Einstieg | L/R | Nur lagebezogen begründete Belange; keine pauschale Aufzählung; Gruppenzugehörigkeit allein ist kein Befund. |
+| R2 | Eigene Möglichkeiten und Unterstützung: Was können sie selbst, mit Bezugspersonen oder mit bestehenden Diensten bewältigen, und wie lange trägt das? | Einrichtungsträger und Dienste (B); Lagemeldungen (A.3) | R/I; D6 | Tragende Unterstützung als Puffer mit Reichweite benennen (A.5 Nr. 3); „ist versorgt“ ohne Reichweite genügt nicht. Selbsthilfefähigkeit weder unterstellen noch absprechen. |
+| R3 | Eignung der Maßnahmen: Sind Warnung, Schutz, Transport, Unterkunft und Versorgung für sie tatsächlich nutzbar? | Herausgebende bzw. anordnende Behörde; Lagemeldungen (A.3) | R/M; D6 | Nur bewerten, soweit Angaben vorliegen; sonst offene Prüffrage an die zuständige Stelle, kein Urteil. Warnlücken nach A.9.3 und C11. |
+| R4 | Nebenfolgen: Erzeugen die Schutzmaßnahmen selbst zusätzliche Belastungen, etwa durch Trennung von Bezugspersonen, Verlust von Assistenz oder Unterbrechung der Versorgung? | Anordnende Behörde, Träger | R/M | Maßnahme und Nebenfolge getrennt darstellen; eine Nebenfolge ist kein Einwand gegen die Maßnahme. |
+| R5 | Handlungsbedarf: Was ist gesichert, was fehlt oder ist ungeklärt, und wer sollte bis wann prüfen oder entscheiden? | Lagemeldungen (A.3); Fristgrundlage nach A.4 | M | Empfehlung an zuständige Stellen (A.1 Nr. 4, A.4); Frist nur mit belegter Grundlage, sonst Bedingung oder nächster Prüfanlass. |
+
+**Lagetypische Prüffragen**
+
+| ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
+|---|---|---|---|---|
+| R6 | Ist die Notfallvorsorge von Einrichtungen im Wirkungsraum (Notstrom, Personal, Räumungsfähigkeit) funktionsfähig? | Heim- und Pflegeaufsicht, Einrichtungsträger (B) | R/I; D6 | Vorhanden ≠ betriebsbereit ≠ ausreichend. |
+| R7 | Ist die häusliche Versorgung geräte- oder dienstabhängiger Menschen gesichert? | Pflegedienste, Hilfsmittelversorger, Gesundheitsamt; fallbezogen | R/M; D6 | Kein Zentralregister; fehlende Zahl ist kein Nullbefund (A.3). |
+| R8 | Haben Menschen ohne Wohnung einen erreichbaren, geeigneten Schutzort? | Ordnungs- und Sozialbehörde, Träger | R/M; D2 | Belegung ≠ Bedarf. |
+| R9 | Fallen gebäudebezogene Funktionen aus (Aufzug, Druckerhöhung, Lüftung, Heizung), und wer ist dadurch eingeschlossen oder unversorgt? | Wohnungsunternehmen, Wasserversorger (B); Lagemeldungen (A.3) | R/I; D6 | Brandschutz bewertet die zuständige Stelle nach ihrem Regelwerk (A.1 Nr. 8). |
+| R10 | Welche besonderen Belange bestehen bei Rückkehr, Nachsorge und Wiederaufnahme der Dienste? | Zuständige Behörde, Träger | M; D5 | Aufhebung der Maßnahme ≠ Wiederherstellung der Versorgung (C16/R6). |
+
+**Mechanismen (vertiefende Suchhilfe):** M1 Warnung und Information · M2 Selbstschutz, Selbstrettung, Selbsthilfe · M3 Geräte- und Infrastrukturabhängigkeit (Strom, Aufzug, Wasserdruck, Kühlung, Wärme) · M4 Personal- und Dienstabhängigkeit (Pflege, Assistenz, Betreuung, Aufsicht) · M5 Schutzort und Unterkunft · M6 Institutionelle Bindung (ein Träger entscheidet statt der Person) · M7 Sichtbarkeit und Erreichbarkeit für Hilfe · M8 Exposition und Empfindlichkeit. Sie helfen, Menschen zu berücksichtigen, die in keiner Liste stehen; sie sind keine Kategorien der Meldung und keine Radarachsen.
+
+### 3. Auswertung: Prüfpunkte
+
+- **Befassung und Bewertung:** Die Befassung darf vorsorglich sein; Beurteilung, Tendenz und Radarwerte stützen sich nur auf Belege (A.3). Eine vorsorgliche Prüfung ergibt Prüfaufträge und Empfehlungen, keine Ist-Werte.
+- **D2:** nach Kodierleitfaden D2 und A.3; Gruppenzugehörigkeit begründet keine Direktbetroffenheit.
+- **D6:** belegte Abhängigkeit (M3, M4) als Kopplung mit Puffer und voraussichtlicher Erschöpfung (C18/R2, A.5 Nr. 3); trägt ein belegter Ersatz die Funktion vollständig, nach Kodierleitfaden D6 Stufe 0 mit Puffer und Reichweite im Text. Belegte Warn- und Erreichbarkeitslücken für die Bevölkerung gehören in den Text und zu D6, nicht zu D7 (Kodierleitfaden D7; A.9.3).
+- **Beurteilung:** Eine belegte Lücke bei Menschen, die sich nicht selbst helfen können, kann auch bei kleiner Zahl „erheblich“ oder „kritisch“ tragen (A.1 Nr. 8, A.9.1). Abstrakte Verletzlichkeit begründet keine Höherstufung, aber einen Prüfauftrag. Belegte Nebenfolgen (C18/R4) fließen in Risiken und Empfehlungen ein.
+
+**Offenlassen:** D2 ohne belegte Personengrundlage; D5 ohne Prognose für den benannten Zielzustand (C18/R10). Ein belegter Belang kann beurteilt werden, auch wenn D2 nicht bezifferbar ist.
+
+### 4. Darstellung
+
+Nach der Dach-SOP. Je berührter Gruppe: Belang, tragende Unterstützung mit Reichweite, Eignung der Maßnahmen, Nebenfolgen und Handlungsbedarf mit Stand; Ungeklärtes als offene Prüffrage an die zuständige Stelle. Nur aggregierte Angaben (Anzahl, Einrichtungsart, Raum, Stand); keine personenbezogenen Daten, keine Adressen von Gewaltschutzunterkünften; Standorte von Gemeinschaftseinrichtungen nur, soweit öffentlich und unbedenklich. Operative Register (etwa kommunale Listen beatmeter Menschen) bleiben bei der zuständigen Stelle; die Meldung nennt nur, ob sie genutzt werden und wie weit sie reichen. Personenzentrierte Sprache („Menschen mit …“, „Bewohner:innen von …“); Gruppen erscheinen nur als Trägerinnen eines Belangs, nie als Ursache oder Störfaktor (A.1 Nr. 5). Endet ein Puffer vor der nächsten Ausgabe: Kennsatz `Handlungsrelevant bis:` und A.7.3.
+
+### 5. Ansprechstellen und Pflege
+
+**Ansprechstellen (funktional):** Heim- und Pflegeaufsicht, Einrichtungsträger (B) · Gesundheitsamt · Sozial- und Ordnungsbehörde der Kommune · Schul- und Jugendbehörde · Aufnahme- und Vollzugsbehörden · Beauftragte für Menschen mit Behinderungen und Selbstvertretungen. Zuständigkeiten landes- und fallbezogen prüfen.
+
+**Offene Punkte:** Fachgrundlagen des Bundes und internationale Grundlagen vor Aufnahme nach A.6 prüfen (Kandidaten: UN-Behindertenrechtskonvention Art. 11, Sendai-Rahmenwerk der Vereinten Nationen, Hitzeschutzplan für Deutschland des BMG, einschlägige BBK-Veröffentlichungen); Abgleich mit Hitze- und Kälteschutzkonzepten der übernehmenden Stelle; Prüfauslöser spätestens mit fachlicher Freigabe (A.10.2).

@@ -10,28 +10,49 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.22.0 vom 04.11.2026 | gültig, Pflegequelle; 35 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.23.0 vom 04.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.22.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.23.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
 
-## [3.22.0] – 04.11.2026
+## [3.23.0] – 04.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45.json` (Lernschleife KW 45 zu einem internen Erfassungslauf vom 04.11.2026, Commit `b4d35be`), Entscheidungen des Herausgebers vom 04.11.2026. Zweite Stelle nach der Versionierungsregel: neuer Prüfpunkt und ergänzte Ansprechstellen in B05. Material, Laufprotokoll und Rückmeldungen des Laufs bleiben intern und sind nicht Teil des Repositorys. Die Kodierregel zu gerundeten Angaben (LS-2026-W45-04) steht nach A.10.2 nur im Kodierleitfaden (1.9.0).
 
 ### Geändert
 
-- **B05 Extremhitze / Dürre 2.3.0, Abschnitt 3 (LS-2026-W45-05):** Prüfpunkt „Zielkonflikt der Teilprofile“: Bei Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum prüfen, ob Trinken und Körperkühlung ausgenommen sind und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Erledigungsnachweis: B05, Abschnitt 3, Absatz nach „Beurteilung/Tendenz“.
+- **B05 Extremhitze / Dürre 2.3.0 (auf 2.2.1 mit dem Verweis auf C18), Abschnitt 3 (LS-2026-W45-05):** Prüfpunkt „Zielkonflikt der Teilprofile“: Bei Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum prüfen, ob Trinken und Körperkühlung ausgenommen sind und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Erledigungsnachweis: B05, Abschnitt 3, Absatz nach „Beurteilung/Tendenz“.
 - **B05, Abschnitt 5 (LS-2026-W45-06, gemeinsam mit -05):** Ansprechstellen für Teilprofil 5a um Gesundheits- und Sozialressorts von Bund und Ländern, Träger des Rettungsdienstes und Arbeitsschutzbehörden ergänzt. Erledigungsnachweis: B05, Abschnitt 5, Zeile „Ansprechstellen“.
-- **Teil A, Gültigkeitsstand:** Sammelmappe 3.22.0, Kodierleitfaden 1.9.0 (LS-2026-W45-04), Arbeitsanweisung Erfassung 1.11.0 (LS-2026-W45-01 bis -03). Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.23.0, Kodierleitfaden 1.9.0 (LS-2026-W45-04), Arbeitsanweisung Erfassung 1.11.0 (LS-2026-W45-01 bis -03). Erledigungsnachweis: Tabelle am Anfang von Teil A.
 - Übersicht (`README.md`) mit B05 2.3.0; Lesefassung neu erzeugt. Quellenregister unverändert (keine neue URL).
 
 ### Nicht übernommen
 
 - **LS-2026-W45-07** (Zeitmodus „Übungslage“ mit fiktiver Zeitachse): abgelehnt, Übungsläufe bleiben außerhalb des Regelwerks.
+
+## [3.22.0] – 04.11.2026
+
+Grundlage: Konzeptvorschlag „Querschnittsbaustein C18 – Besondere Belange und Schutzbedarfe von Menschen“ (Fassung vom 04.11.2026, überarbeitet nach fachlicher Rückmeldung), Entscheidungen des Herausgebers vom 04.11.2026 (Anlasskennungen BB-2026-W45-01 bis -06). Zweite Stelle nach der Versionierungsregel: neuer Baustein und geänderte Querschnittsprüfung A.9.2; Kodier- und Quellenregeln, Kodierleitfaden, Schema und Quellenregister bleiben unverändert.
+
+### Hinzugefügt
+
+- **C18 Besondere Belange und Schutzbedarfe von Menschen (vulnerable Gruppen) 1.0.0, Querschnittsbaustein, Inhaltsgerüst (BB-2026-W45-01, -02):** Leseblock „Lageübergreifende Querschnitte“. Gruppen und Lebenssituationen G01–G15 als offener Einstieg mit besonderen Belangen; fünf gemeinsame Prüffragen R1–R5 (Belange, eigene Möglichkeiten und Unterstützung, Eignung der Maßnahmen, Nebenfolgen, Handlungsbedarf); lagetypische Prüffragen R6–R10; Mechanismen M1–M8 als vertiefende Suchhilfe. Befassung darf vorsorglich sein, Bewertung braucht Belege; Gruppenzugehörigkeit begründet weder Direktbetroffenheit noch einen höheren Radarwert; nur aggregierte Angaben. Warn- und Erreichbarkeitslücken der Bevölkerung zu D6 und in den Text, nicht zu D7 (Kodierleitfaden D7). Fachgrundlagen noch nicht aufgenommen (offene Punkte, A.6). Erledigungsnachweis: `teil-c/C18_besondere-belange-schutzbedarfe.md`.
+
+### Geändert
+
+- **Teil A, A.9.2 (BB-2026-W45-03):** „Besondere Belange und Zugänglichkeit“ als kurze Relevanzprüfung mit ausdrücklichem Auswahlhinweis für C18 (bei konkreten Hinweisen, auch vorsorglich und auch, wenn bestehende Unterstützung eine Lücke bislang verhindert; die bloße Anwesenheit einer Gruppe genügt nicht); Befassung vorsorglich, Beurteilung und Radarwerte mit Belegen. Beispiele zu Hilfsmitteln, Einrichtungen und exponierten Gruppen bleiben. Erledigungsnachweis: Teil A, A.9.2.
+- **Teil A, A.1 Nr. 2 (BB-2026-W45-04):** Ursache-Folge-Tabelle nennt C18 bei B05, B06, B08 und B10 („bei besonderen Belangen (A.9.2)“). A.1 Nr. 7 Querschnittsbausteine C16–C18; A.10.1 Teil C C01–C18, Leseblock C16–C18, Beispiel der nächsten freien Nummer (B18, C19), ebenso in der Übersicht. Gültigkeitsstand: Sammelmappe 3.22.0, Arbeitsanweisung Erfassung 1.10.2.
+- **B05 2.2.1, B06 2.3.1, B08 2.2.1, B10 2.2.1 (BB-2026-W45-04):** bestehende Hinweise auf häusliche Versorgung, Heimbeatmung, Pflege und Einrichtungen verweisen auf „A.9.2, vertiefend C18“, statt Inhalte zu doppeln.
+- **C09 1.3.1, C11 1.2.3, C16 1.2.2:** Arbeitsteilung bzw. Abgrenzung zu C18 und Eintrag in `anschluss` (C09: Kapazität der Versorgung; C16: Maßnahme Evakuierung und Betreuung; C11: Warnkanäle; C18 ergänzt beide, ohne ihre Inhalte neu abzubilden).
+- **Übersicht `README.md`:** Zeile C18, geänderte Fassungen.
+- Lesefassung neu erzeugt. Quellenregister unverändert (C18 führt noch keine URL).
+
+### Zurückgestellt
+
+- **Strukturierte Erfassung besonderer Belange in LEAD-Meldung-v2 (BB-2026-W45-05):** optionales Fachmodul je Sachverhalt erst nach Erfahrungen mit C18 und im Zuge der v2-Umstellung prüfen.
 
 ## [3.21.1] – 02.11.2026
 

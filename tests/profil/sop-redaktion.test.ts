@@ -15,7 +15,8 @@ function dateien(teil: "teil-b" | "teil-c") {
   const namen = readdirSync(repoPfad(`${SOP}/${teil}`))
     .filter((n) => n.endsWith(".md"))
     .sort();
-  if (namen.length !== 17) throw new Error(`${teil}: 17 Dateien erwartet, gefunden ${namen.length}`);
+  const soll = teil === "teil-b" ? 17 : 18;
+  if (namen.length !== soll) throw new Error(`${teil}: ${soll} Dateien erwartet, gefunden ${namen.length}`);
   return namen.map((n) => ({ name: n, text: readFileSync(repoPfad(`${SOP}/${teil}/${n}`), "utf-8") }));
 }
 
