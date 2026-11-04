@@ -14,6 +14,7 @@ import {
   dateienAusAuswahl,
   einlesen,
   alterText,
+  beurteilungsStufen,
   erinnerungMailto,
   farbeBeurteilung,
   farbeTendenz,
@@ -29,6 +30,7 @@ import {
   nachSchwere,
   sammelErinnerungMailto,
   stelleVon,
+  tendenzStufen,
   zaehle,
   zeitpunktVon,
   type Farbe,
@@ -87,7 +89,7 @@ const REITER: { id: Reiter; titel: string; gruppe: 1 | 2 | 3 }[] = [
 
 function Balken({ titel, werte, farbe }: { titel: string; werte: [string, number][]; farbe?: (w: string) => Farbe }) {
   if (!werte.length) return null;
-  const max = Math.max(...werte.map((w) => w[1]));
+  const max = Math.max(1, ...werte.map((w) => w[1]));
   return (
     <div className="lb-balken">
       <h4>{titel}</h4>
@@ -104,6 +106,13 @@ function Balken({ titel, werte, farbe }: { titel: string; werte: [string, number
       ))}
     </div>
   );
+}
+
+/** Anzahl je Stufe in der Reihenfolge der Stufen, auch 0; Werte außerhalb der Stufen (und keine Angabe) danach */
+function stufenZaehlen(werte: string[], stufen: string[]): [string, number][] {
+  const gezaehlt = new Map(zaehle(werte));
+  const rest = [...gezaehlt].filter(([w]) => !stufen.includes(w));
+  return [...stufen.map((st): [string, number] => [st, gezaehlt.get(st) ?? 0]), ...rest];
 }
 
 /** Kennzahl als Knopf; mit 0 zurückgenommen, die Randfarbe nur bei Anzahl (seit UX-2026-W45-06) */
@@ -791,10 +800,20 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 <>
                   <h3 className="abschnitt">Verteilungen</h3>
                   <div className="lb-verteilungen">
+                    {/* Beurteilung und Tendenz mit allen Stufen des Schemas, auch 0 (seit UX-2026-W45-08) */}
                     {r.sv_beurteilung && (
-                      <Balken titel={lBeurteilung} werte={zaehle(svs.map((s) => s.beurteilung))} farbe={(w) => farbeBeurteilung(profil, w)} />
+                      <Balken
+                        titel={lBeurteilung}
+                        werte={stufenZaehlen(
+                          svs.map((s) => s.beurteilung),
+                          [...beurteilungsStufen(profil)].reverse(),
+                        )}
+                        farbe={(w) => farbeBeurteilung(profil, w)}
+                      />
                     )}
-                    {r.sv_tendenz && <Balken titel={lTendenz} werte={zaehle(svs.map((s) => s.tendenz))} farbe={(w) => farbeTendenz(profil, w)} />}
+                    {r.sv_tendenz && (
+                      <Balken titel={lTendenz} werte={stufenZaehlen(svs.map((s) => s.tendenz), tendenzStufen(profil))} farbe={(w) => farbeTendenz(profil, w)} />
+                    )}
                     {r.sv_art && (
                       <Balken
                         titel={`${bezeichnung(ui, `${r.sachverhalte}[].${r.sv_art}`)} (Mehrfachnennung)`}
@@ -807,7 +826,6 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                         werte={zaehle(eintraege.filter((e) => !e.fremd).map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))}
                       />
                     )}
-                    <Balken titel="Meldende Stellen" werte={zaehle(eintraege.filter((e) => !e.fremd).map((e) => absender(e, profil)))} />
                   </div>
                 </>
               )}
