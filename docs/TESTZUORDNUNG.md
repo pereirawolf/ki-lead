@@ -1068,3 +1068,26 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Lauf der Fallreihe trägt `radar_offen` gleich der Zählung aus dem Entwurf und `radar_pruefmuster` gleich der Zahl der Hinweise | Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66) › … | `tests/forschung/fallreihe.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.10.0). AV-2026-W45-04 bis -06 sind Kodierregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und des abgeleiteten Landesprofils prüfen die bestehenden Profiltests.
+
+## Oberfläche von Profilen und Auswertung (0.7.11, Befunddatei `ki-lead-befund_ux_2026-W45.json`, UX-2026-W45-01 bis -32, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| `#/auswertung/…` und `#/lagebild/…` ergeben dieselbe Adresse, geschrieben wird `#/auswertung/…` | UX-2026-W45-05: Adresse der Auswertung › … | `tests/ui/ux-2026-w45.test.ts` |
+| Sammelerinnerung nur an echte Adressen offener Stellen, in Bcc; Alter in Worten | UX-2026-W45-07: Meldestatus › … | `tests/ui/ux-2026-w45.test.ts` |
+| Ablage einzeilig, Ausgaben im Menü, „Alle entfernen“ in der Dateiliste, Reiter geordnet mit Trennern | UX-2026-W45-01 bis -03: … | `tests/ui/ux-2026-w45.test.ts` |
+| Kennzahlen in zwei Gruppen als Knöpfe, volle Skala, eigene Meldung gekennzeichnet und abwählbar | UX-2026-W45-06, -08, -09: Übersicht › … | `tests/ui/ux-2026-w45.test.ts` |
+| Eigene Meldung zuerst, Sortierung, Schemamarke nur bei Abweichung, Dateiname nicht im Kopf | UX-2026-W45-10 bis -12: Meldungen › … | `tests/ui/ux-2026-w45.test.ts` |
+| Filter nach Art, Land und Text; Chips mit Anzahl | UX-2026-W45-14: Filter der Sachverhalte › … | `tests/ui/ux-2026-w45.test.ts` |
+| Bezug sichtbar, Baum mit sieben Ländersachverhalten unter DE-20261014-7QKD | UX-2026-W45-15: … | `tests/ui/ux-2026-w45.test.ts` |
+| Matrix 8 × 8 mit „U“ für offen, Zeile öffnet Karte, Umschalter auf Karten | UX-2026-W45-16: … | `tests/ui/ux-2026-w45.test.ts` |
+| Offene Achse: keine Fläche, keine Kante dorthin, Ring am Rand | UX-2026-W45-17: … | `tests/ui/ux-2026-w45.test.ts` |
+| Überlagerung bis drei Sachverhalte mit Legende | UX-2026-W45-18: … | `tests/ui/ux-2026-w45.test.ts` |
+| Bearbeitungsstand senkt die Zahl, wird gespeichert, steht im Bericht und fällt bei geänderter Meldung weg | UX-2026-W45-19: … | `tests/ui/redaktionscheck.test.ts` |
+| Filter nach Einstufung, Bearbeitete ausblenden, Textbaustein zugeklappt | UX-2026-W45-21: … | `tests/ui/redaktionscheck.test.ts` |
+| Vom Befund zum Sachverhalt (gefiltert, aufgeklappt) und in die Erfassung | UX-2026-W45-22: … | `tests/ui/redaktionscheck.test.ts` |
+| Kopiervorlage eingeklappt, Auswahl kopieren, Kopf gegliedert | UX-2026-W45-23, -24: … | `tests/ui/ux-2026-w45.test.ts` |
+| Rohtabelle: Kernspalten vorn, Zeile aufklappbar; Spaltengruppen kompakt, zuschaltbar, gespeichert | UX-2026-W45-25, -26: … | `tests/ui/ux-2026-w45.test.ts` |
+| Profilkarten einheitlich zugeklappt, Eckdaten, „Verwenden“ ohne Sprung, Chip nur bei Befund, Namenszusatz, Farbband, technische Angaben, „Exportieren“ | UX-2026-W45-27 bis -32: … | `tests/ui/profile.test.ts` |
+| Reiter bei 390 px nach dem Laden im ersten Bildschirm, einzeilig und waagerecht scrollbar; mitlaufend unter dem Kopf | UX-2026-W45-01, -03: Smartphone › … ; UX-2026-W45-03: … | `tests/browser/ux-2026-w45.spec.ts` |
+| Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px | UX-2026-W45-23, -25: … | `tests/browser/ux-2026-w45.spec.ts` |

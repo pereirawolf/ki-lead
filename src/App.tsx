@@ -114,7 +114,9 @@ export default function App() {
   useEffect(() => {
     const text = adresseText({ ansicht, bereich: einstellungsBereich, reiter: lagebildReiter });
     if (window.location.hash === text || (!window.location.hash && text === "#/meldung")) return;
-    window.history.pushState(null, "", text);
+    // Eine frühere Schreibweise derselben Stelle (etwa „#/lagebild/…“, UX-2026-W45-05) wird ersetzt, nicht neu eingetragen
+    if (adresseText(adresseLesen(window.location.hash)) === text) window.history.replaceState(null, "", text);
+    else window.history.pushState(null, "", text);
   }, [ansicht, einstellungsBereich, lagebildReiter]);
   // Sprungziele beim Wechsel der Ansicht (seit 0.6.7): bis 0.6.6 blieb die Scrollhöhe der vorigen Ansicht stehen.
   // Die KI-Erfassung bleibt im Hintergrund eingehängt (ein Lauf geht weiter); für sie merkt sich die App die Stelle.
@@ -302,7 +304,9 @@ export default function App() {
     return () => window.removeEventListener("beforeunload", warnen);
   }, []);
 
-  const aktivieren = async (schluessel: string) => {
+  // Seit UX-2026-W45-29 bleibt die Profilansicht nach dem Wechsel stehen; sie bietet „Zur Erfassung“ an. Ergebnis:
+  // false, wenn der Wechsel abgelehnt wurde
+  const aktivieren = async (schluessel: string): Promise<boolean> => {
     if (
       schluessel !== aktiv &&
       (kiLaeuft.current || msLaeuft.current) &&
@@ -313,7 +317,7 @@ export default function App() {
         { ja: "Trotzdem wechseln" },
       ))
     )
-      return;
+      return false;
     setAktiv(schluessel);
     // Eine noch nicht verarbeitete Übergabe gehört zum bisherigen Profil; das Lagebild beginnt wieder mit der Übersicht
     if (schluessel !== aktiv) {
@@ -321,8 +325,7 @@ export default function App() {
       setLagebildReiter("uebersicht");
     }
     await aktivesProfilSetzen(schluessel).catch((e) => speicherProblem("Das gewählte Profil konnte nicht als Startprofil gespeichert werden", e));
-    // Der Knopf „Verwenden“ verschwindet mit der Profilansicht: Fokus auf die Überschrift der Meldung
-    zeigeAnsicht("meldung", { fokus: ".meldung h1" });
+    return true;
   };
 
   const importieren = async (dateien: Record<string, string>, ersetzen = false) => {
@@ -441,7 +444,16 @@ export default function App() {
         )}
 
         <main className="inhalt">
-          {ansicht === "profile" && <ProfileAnsicht profile={profile} aktiv={aktiv} aktivieren={aktivieren} importieren={importieren} loeschen={loeschen} />}
+          {ansicht === "profile" && (
+            <ProfileAnsicht
+              profile={profile}
+              aktiv={aktiv}
+              aktivieren={aktivieren}
+              importieren={importieren}
+              loeschen={loeschen}
+              zurErfassung={() => zeigeAnsicht("meldung", { fokus: ".meldung h1" })}
+            />
+          )}
           {ansicht === "meldung" && profil && meldung && (
             <Fehlergrenze
               schluessel={profil.hash}

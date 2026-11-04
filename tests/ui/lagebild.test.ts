@@ -187,6 +187,7 @@ describe("UX-2026-W44-09, -10, -13: Sachverhalte kompakt mit Filter, Kennzahlen 
     await lagebildZeigen();
     await beispielLaden();
     await klick(knopf("Lagenradar"));
+    await klick(knopf("Karten")); // seit UX-2026-W45-16 ist die Matrix Standard
     const karte = document.querySelector(".lb-karte")!;
     expect(karte.querySelectorAll(".lb-achse")).toHaveLength(8);
     expect(karte.querySelector(".lb-achse dt")?.textContent).toMatch(/^D1 /);

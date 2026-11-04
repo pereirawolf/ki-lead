@@ -143,6 +143,8 @@ it("RV05: vom Befund zur Meldung in der Liste, ohne die Meldungsmaske zu berühr
 it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
   await zeige();
+  // Seit UX-2026-W45-02 im Menü „Ausgeben“
+  await klick(knopf(beginntMit("Ausgeben")));
   expect([...document.querySelectorAll("button")].map((b) => b.textContent?.trim())).toEqual(
     expect.arrayContaining(["Lagebild als PDF", "Rohtabelle als CSV"]),
   );
@@ -153,4 +155,81 @@ it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   expect(downloads[0].name).toBe("2026-10-20T08-00_Redaktionsbericht_Lagebild.json");
   expect(j.pruefstand.geprueft_fuer).toBe("20.10.2026, 08:00 Uhr");
   expect(j.befunde[0].einstufung).toBe("zeitkritisch");
+});
+
+it("UX-2026-W45-19: Befund als erledigt kennzeichnen – Zahl sinkt, Stand gespeichert und im Bericht, neu bei geänderter Meldung", async () => {
+  ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
+  await zeige();
+  const zaehler = () => Number(document.querySelector(".lb-reiter .lb-zaehler")?.textContent ?? 0);
+  const vorher = zaehler();
+  expect(vorher).toBeGreaterThan(0);
+  await redaktionscheck();
+  await klick(knopf(/^Erledigt$/));
+  await bisWahr(() => expect(zaehler()).toBe(vorher - 1));
+  expect(document.querySelector(".lb-punkt-bearbeitet")?.textContent).toContain("erledigt");
+  await bisWahr(() => expect(Object.keys(gespeichert().bearbeitung ?? {})).toHaveLength(1));
+  const schluessel = Object.keys(gespeichert().bearbeitung)[0]!;
+  expect(gespeichert().bearbeitung[schluessel].status).toBe("erledigt");
+
+  await klick(knopf(beginntMit("Redaktionsbericht (JSON)")));
+  await bisWahr(() => downloads.length === 1);
+  const j = JSON.parse(downloads[0].inhalt);
+  expect(j.befunde.filter((b: any) => b.bearbeitung?.status === "erledigt")).toHaveLength(1);
+  expect(j.uebersicht.offen).toBe(vorher - 1);
+
+  // Bewusst belassen mit Begründung, dann zurücksetzen
+  if (knopf(/^Bewusst belassen …$/)) {
+    await klick(knopf(/^Bewusst belassen …$/));
+    await eingeben(document.querySelector<HTMLInputElement>(".lb-bearbeitung-grund input")!, "an Ausgabe gebunden");
+    await klick(knopf("Bewusst belassen"));
+    expect(document.body.textContent).toContain("bewusst belassen: an Ausgabe gebunden");
+  }
+
+  // Geänderte Meldung: anderer Inhalt, anderer Schlüssel – der Stand der alten Fassung fällt weg
+  await aushaengen();
+  ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:30" }]);
+  db.werte.set("lagebild:" + p.manifest.id, { ...gespeichert(), bearbeitung: { [schluessel]: { status: "erledigt", am: "2026-10-20T06:00:00Z" } } });
+  await zeige();
+  await bisWahr(() => expect(zaehler()).toBe(vorher));
+  await bisWahr(() => expect(gespeichert().bearbeitung).toBeUndefined());
+});
+
+it("UX-2026-W45-21: Filter nach Einstufung, Bearbeitete ausblenden, Textbaustein zugeklappt", async () => {
+  ablegen([
+    { id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" },
+    { id: "b", text: "Lage", tendenz: "Verschärfung" },
+  ]);
+  await zeige();
+  await redaktionscheck();
+  const punkte = () => document.querySelectorAll(".lb-redaktion .lb-punkt").length;
+  const alle = punkte();
+  await klick(knopf(/^zeitkritisch \(/));
+  expect(punkte()).toBeLessThan(alle);
+  expect([...document.querySelectorAll(".lb-redaktion .lb-punkt")].every((p) => p.classList.contains("lb-punkt-alert"))).toBe(true);
+  await klick(knopf("alle"));
+  expect(punkte()).toBe(alle);
+  await klick(knopf(/^Erledigt$/));
+  await klick(document.querySelector<HTMLInputElement>(".lb-red-filter input")!);
+  expect(punkte()).toBe(alle - 1);
+  for (const d of document.querySelectorAll<HTMLDetailsElement>(".lb-baustein-text")) expect(d.open).toBe(false);
+});
+
+it("UX-2026-W45-22: vom Befund zum Sachverhalt (gefiltert und aufgeklappt) und in die Erfassung", async () => {
+  ablegen([
+    { id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" },
+    { id: "b", text: "Lage" },
+  ]);
+  const geoeffnet: any[] = [];
+  const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
+  await einhaengen(React.createElement(LagebildAnsicht, { profil: p, uebergeben: () => {}, oeffnen: (m: any) => void geoeffnet.push(m) }));
+  await bisWahr(() => document.body.textContent!.includes("b.json"));
+  await redaktionscheck();
+  await klick(document.querySelector<HTMLButtonElement>('[aria-label^="Zum Sachverhalt: "]')!);
+  await bisWahr(() => expect(document.querySelector(".lb-reiter [aria-current]")?.textContent).toBe("Sachverhalte"));
+  expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile").length).toBeGreaterThanOrEqual(1);
+  expect(document.querySelector(".lb-sv-zeile details[open]")).not.toBeNull();
+  await redaktionscheck();
+  await klick(document.querySelector<HTMLButtonElement>('.lb-redaktion [aria-label^="In der Erfassung öffnen: "]')!);
+  expect(geoeffnet).toHaveLength(1);
+  expect(geoeffnet[0].meldende_stelle).toBe("Stelle a");
 });

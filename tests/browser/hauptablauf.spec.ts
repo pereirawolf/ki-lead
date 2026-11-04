@@ -61,6 +61,7 @@ test("Lagebild: Beispiel laden, Redaktionscheck öffnen und PDF erzeugen", async
   await page.getByRole("button", { name: /^Redaktionscheck/ }).click();
   await expect(page.locator(".lb-redaktion")).toBeVisible();
 
+  await page.getByRole("button", { name: /^Ausgeben/ }).click();
   const [pdf] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Lagebild als PDF" }).click()]);
   expect(pdf.suggestedFilename()).toMatch(/\.pdf$/);
   expect((await downloadText(pdf)).startsWith("%PDF-")).toBe(true);

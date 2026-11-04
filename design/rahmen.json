@@ -1,7 +1,7 @@
 {
   "$schema": "./rahmen.schema.json",
   "format": "lead-design-rahmen/1",
-  "fassung": "1.2",
+  "fassung": "1.3",
   "stand": "2026-11-04",
   "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
   "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
@@ -64,7 +64,7 @@
       "aria_label": "Ansichten",
       "aria_current": "page",
       "nummeriert": false,
-      "ki-lead": ["Übersicht", "Meldungen", "Sachverhalte", "Lagenradar", "Redaktionscheck", "Kopiervorlage", "Rohtabelle"]
+      "ki-lead": ["Übersicht", "Sachverhalte", "Lagenradar", "Meldungen", "Redaktionscheck", "Kopiervorlage", "Rohtabelle"]
     }
   ],
   "komponenten": {

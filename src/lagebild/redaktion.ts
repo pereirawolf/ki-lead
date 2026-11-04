@@ -410,8 +410,39 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   };
 }
 
+/** Bearbeitungsstand eines Befunds (seit UX-2026-W45-19): erledigt oder bewusst belassen, Begründung freiwillig */
+export interface Bearbeitung {
+  status: "erledigt" | "belassen";
+  begruendung?: string;
+  /** ISO-Zeitpunkt der Kennzeichnung */
+  am: string;
+}
+
+const svId = (s: SvEintrag) => `${s.eintrag.id}#${s.index}`;
+
+/**
+ * Schlüssel eines Befunds für den Bearbeitungsstand (seit UX-2026-W45-19). Er hängt an der Inhaltskennung der
+ * beteiligten Meldungen und am Gegenstand des Befunds, nicht an Uhrzeit oder Einstufung: Ändert sich eine Meldung,
+ * entsteht ein neuer Schlüssel und der Befund ist wieder offen; das Fortschreiten der Zeit allein ändert ihn nicht.
+ */
+export const befundSchluessel = {
+  zeit: (z: Zeitfenster) => `1|${svId(z.sv)}|${z.text}`,
+  gruppe: (g: ArtGruppe) => `2|${g.art}|${g.liste.map(svId).join(",")}`,
+  vermerkt: (x: { sv: SvEintrag }) => `2v|${svId(x.sv)}`,
+  mehrfach: (m: { stelle: string; eintraege: LagebildEintrag[] }) => `3m|${m.stelle}|${m.eintraege.map((e) => e.id).join(",")}`,
+  kennung: (k: KennungsBefund) => `3k|${k.art}|${k.kennung}|${k.sachverhalte.map(svId).join(",")}`,
+  marker: (x: MarkerBefund) => `3s|${svId(x.sv)}|${x.kennsatz}`,
+  nachlauf: (s: SvEintrag) => `3n|${svId(s)}`,
+  abschluss: (x: { sv: SvEintrag }) => `3a|${svId(x.sv)}`,
+  aenderung: (x: { sv: SvEintrag }) => `3f|${svId(x.sv)}`,
+  kern: (x: { sv: SvEintrag }) => `4|${svId(x.sv)}`,
+  quellen: (q: QuellenBefund) => `5|${q.eintrag.id}`,
+};
+
 /** Ein einzelner Befund des Redaktionschecks (für Bericht, Zählung und Export) */
 export interface Befundzeile {
+  /** Schlüssel für den Bearbeitungsstand (seit UX-2026-W45-19) */
+  schluessel: string;
   abschnitt: 1 | 2 | 3 | 4 | 5;
   klasse: Klasse;
   /** Meldung (Dateiname), auf die sich der Befund bezieht; bei Gruppen leer */
@@ -447,6 +478,7 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
   const out: Befundzeile[] = [];
   for (const z of red.zeit)
     out.push({
+      schluessel: befundSchluessel.zeit(z),
       abschnitt: 1,
       klasse: z.klasse,
       ...sv(z.sv),
@@ -458,6 +490,7 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
       g.tendenzGegenlaeufig ? "Tendenzen gegenläufig" : g.tendenzAbweichend ? "Tendenzen unterschiedlich" : "",
     ].filter(Boolean);
     out.push({
+      schluessel: befundSchluessel.gruppe(g),
       abschnitt: 2,
       klasse: g.abweichend || g.tendenzGegenlaeufig ? "warn" : "info",
       bezug: g.art,
@@ -466,24 +499,49 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
         .join("; ")}`,
     });
   }
-  for (const x of red.vermerkt) out.push({ abschnitt: 2, klasse: "info", ...sv(x.sv), text: `${ks.abweichung} ${x.text}` });
+  for (const x of red.vermerkt)
+    out.push({ schluessel: befundSchluessel.vermerkt(x), abschnitt: 2, klasse: "info", ...sv(x.sv), text: `${ks.abweichung} ${x.text}` });
   for (const m of red.mehrfach)
     out.push({
+      schluessel: befundSchluessel.mehrfach(m),
       abschnitt: 3,
       klasse: "warn",
       bezug: m.stelle,
       text: `Mehrere Meldungen derselben Stelle: ${m.eintraege.map((e) => `${e.name} (${datumDE(zeitpunktVon(e, profil)) || "ohne Zeitpunkt"})`).join(", ")}`,
     });
   for (const k of red.kennungen)
-    out.push({ abschnitt: 3, klasse: k.art === "bezug" ? "info" : "warn", ...sv(k.sachverhalte[0]!), bezug: k.kennung, text: kennungsText(k, profil) });
-  for (const x of red.marker) out.push({ abschnitt: 3, klasse: "warn", ...sv(x.sv), text: `„${x.kennsatz}“ – ${x.text}` });
-  for (const x of red.nachlauf) out.push({ abschnitt: 3, klasse: "warn", ...sv(x), text: `Tendenz „${x.tendenz}“ ohne Abschlussvermerk – Nachlauf prüfen` });
+    out.push({
+      schluessel: befundSchluessel.kennung(k),
+      abschnitt: 3,
+      klasse: k.art === "bezug" ? "info" : "warn",
+      ...sv(k.sachverhalte[0]!),
+      bezug: k.kennung,
+      text: kennungsText(k, profil),
+    });
+  for (const x of red.marker)
+    out.push({ schluessel: befundSchluessel.marker(x), abschnitt: 3, klasse: "warn", ...sv(x.sv), text: `„${x.kennsatz}“ – ${x.text}` });
+  for (const x of red.nachlauf)
+    out.push({
+      schluessel: befundSchluessel.nachlauf(x),
+      abschnitt: 3,
+      klasse: "warn",
+      ...sv(x),
+      text: `Tendenz „${x.tendenz}“ ohne Abschlussvermerk – Nachlauf prüfen`,
+    });
   for (const x of red.abschluss)
-    out.push({ abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.abschluss} ${x.text}${x.rueckblick ? " – Rückblick einplanen" : ""}` });
-  for (const x of red.aenderung) out.push({ abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.aenderung} ${x.text}` });
-  for (const x of red.kern) out.push({ abschnitt: 4, klasse: "warn", ...sv(x.sv), text: x.fehlt.join(" · ") });
+    out.push({
+      schluessel: befundSchluessel.abschluss(x),
+      abschnitt: 3,
+      klasse: "info",
+      ...sv(x.sv),
+      text: `${ks.abschluss} ${x.text}${x.rueckblick ? " – Rückblick einplanen" : ""}`,
+    });
+  for (const x of red.aenderung)
+    out.push({ schluessel: befundSchluessel.aenderung(x), abschnitt: 3, klasse: "info", ...sv(x.sv), text: `${ks.aenderung} ${x.text}` });
+  for (const x of red.kern) out.push({ schluessel: befundSchluessel.kern(x), abschnitt: 4, klasse: "warn", ...sv(x.sv), text: x.fehlt.join(" · ") });
   for (const q of red.quellen)
     out.push({
+      schluessel: befundSchluessel.quellen(q),
       abschnitt: 5,
       // Schemaabweichungen sind schwer, aber nicht zeitkritisch: in der Liste „zu klären“ (die Anzeige bleibt rot markiert)
       klasse: q.klasse === "info" ? "info" : "warn",
@@ -495,15 +553,30 @@ export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
   return out;
 }
 
+/** Zu bearbeitende Befunde (zeitkritisch, zu klären) ohne Bearbeitungsstand (seit UX-2026-W45-19) */
+export function offeneBefunde(red: Redaktion, profil: Profil, bearbeitung: Record<string, Bearbeitung> = {}): number {
+  return befundListe(red, profil).filter((b) => (b.klasse === "alert" || b.klasse === "warn") && !bearbeitung[b.schluessel]).length;
+}
+
+const BEARBEITUNG_TEXT: Record<Bearbeitung["status"], string> = { erledigt: "erledigt", belassen: "bewusst belassen" };
+
+/** „erledigt (04.11.2026, 21:30 Uhr)“ bzw. „bewusst belassen: Grund (…)“ */
+export function bearbeitungText(b: Bearbeitung, zone: string): string {
+  const d = new Date(b.am);
+  const wann = Number.isNaN(d.getTime()) ? "" : ` (${zeitpunktDE(d, zone)})`;
+  return `${BEARBEITUNG_TEXT[b.status]}${b.begruendung ? `: ${b.begruendung}` : ""}${wann}`;
+}
+
 const KLASSE_TEXT: Record<Klasse, string> = { alert: "zeitkritisch", warn: "zu klären", info: "Information", ok: "ohne Befund" };
 
 /**
  * Redaktionsbericht zum Ablegen: Prüfstand, Profil (mit Prüfsumme), berücksichtigte Meldungen (mit Inhaltskennung),
  * Abdeckung und alle Befunde. Er dokumentiert den automatischen Check, keine fachliche Freigabe.
  */
-export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], profil: Profil, app: string) {
+export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], profil: Profil, app: string, bearbeitung: Record<string, Bearbeitung> = {}) {
   const zone = red.stand.zeitzone;
   const befunde = befundListe(red, profil);
+  const offen = offeneBefunde(red, profil, bearbeitung);
   const daten = {
     format: "ki-lead-redaktionsbericht/1",
     app,
@@ -518,7 +591,7 @@ export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], 
       zeitzone: zone,
     },
     abdeckung: red.abdeckung,
-    uebersicht: red.uebersicht,
+    uebersicht: { ...red.uebersicht, offen },
     meldungen: eintraege.map((e) => ({
       datei: e.name,
       kennung: e.id,
@@ -526,7 +599,12 @@ export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], 
       zeitpunkt: zeitpunktVon(e, profil),
       ausgewertet: !e.fremd,
     })),
-    befunde: befunde.map((b) => ({ ...b, abschnitt: `${b.abschnitt} ${ABSCHNITTE[b.abschnitt - 1]}`, einstufung: KLASSE_TEXT[b.klasse] })),
+    befunde: befunde.map(({ schluessel, ...b }) => ({
+      ...b,
+      abschnitt: `${b.abschnitt} ${ABSCHNITTE[b.abschnitt - 1]}`,
+      einstufung: KLASSE_TEXT[b.klasse],
+      ...(bearbeitung[schluessel] ? { bearbeitung: bearbeitung[schluessel] } : {}),
+    })),
     hinweis: "Automatischer Redaktionscheck nach Feldern und Kennsätzen. Keine fachliche Prüfung oder Freigabe.",
   };
   const z: string[] = [
@@ -536,14 +614,15 @@ export function redaktionsbericht(red: Redaktion, eintraege: LagebildEintrag[], 
     `Ausgewertet: ${red.abdeckung.meldungen} Meldung(en) nach Profilschema${red.abdeckung.fremd ? `; ${red.abdeckung.fremd} in fremdem Schema nicht ausgewertet` : ""}`,
     ...red.abdeckung.nichtKonfiguriert.map((x) => `Nicht geprüft: ${x}`),
     ...red.abdeckung.hinweise.map((x) => `Hinweis: ${x}`),
-    `Befunde: ${red.uebersicht.zeitkritisch} zeitkritisch · ${red.uebersicht.zuKlaeren} zu klären · ${red.uebersicht.info} Information(en)`,
+    `Befunde: ${red.uebersicht.zeitkritisch} zeitkritisch · ${red.uebersicht.zuKlaeren} zu klären · ${red.uebersicht.info} Information(en); offen: ${offen}`,
     "",
   ];
   ABSCHNITTE.forEach((titel, i) => {
     const liste = befunde.filter((b) => b.abschnitt === i + 1);
     z.push(`${i + 1} ${titel}`);
     if (!liste.length) z.push("  – keine Befunde der automatischen Prüfungen");
-    for (const b of liste) z.push(`  [${KLASSE_TEXT[b.klasse]}] ${b.bezug}: ${b.text}`);
+    for (const b of liste)
+      z.push(`  [${KLASSE_TEXT[b.klasse]}] ${b.bezug}: ${b.text}${bearbeitung[b.schluessel] ? ` – ${bearbeitungText(bearbeitung[b.schluessel]!, zone)}` : ""}`);
     z.push("");
   });
   z.push(

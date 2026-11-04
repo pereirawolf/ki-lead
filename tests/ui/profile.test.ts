@@ -45,10 +45,12 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
     expect(karten()[0].querySelector("h2")?.textContent).toMatch(/Vorlage/);
   });
 
-  it("zeigt den Inhalt des verwendeten Profils offen, den der übrigen hinter einem Aufklappelement", async () => {
+  // Seit UX-2026-W45-27 sind alle Karten gleich aufgebaut und zugeklappt; das verwendete Profil ist nur hervorgehoben
+  it("UX-2026-W45-27: zeigt den Inhalt aller Profile hinter demselben Aufklappelement", async () => {
     await ansicht("lead-beispiel");
     const [aktiv, ander] = karten();
-    expect(aktiv.querySelector(":scope > details.profil-details")).toBeNull();
+    const aktivZu = aktiv.querySelector<HTMLDetailsElement>(":scope > details.profil-details")!;
+    expect(aktivZu.open).toBe(false);
     expect(ueberschriften(aktiv)).toEqual(["Angaben", "Lesen", "Prüfen"]);
     const zu = ander.querySelector<HTMLDetailsElement>(":scope > details.profil-details")!;
     expect(zu).toBeTruthy();
@@ -56,10 +58,10 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
     expect(zu.querySelector(":scope > summary")?.textContent).toBe("Angaben, Lesetexte und Prüfung");
     // Kopf bleibt sichtbar: Name, Version und Herkunft, Knopf zum Verwenden
     expect(ander.querySelector(".profil-meta")?.textContent).toMatch(/^Profilversion .+ · Mitgeliefert$/);
-    expect([...ander.querySelectorAll("header button")].map((b) => b.textContent)).toContain("Verwenden und Meldung öffnen");
+    expect([...ander.querySelectorAll("header button")].map((b) => b.textContent)).toContain("Verwenden");
   });
 
-  it("aktiviert nur über „Verwenden und Meldung öffnen“; Aufklappen aktiviert nichts", async () => {
+  it("UX-2026-W45-29: aktiviert nur über „Verwenden“; Aufklappen aktiviert nichts", async () => {
     const { aktivieren } = await ansicht("lead-beispiel");
     const ander = karten()[1];
     const zu = ander.querySelector<HTMLDetailsElement>("details.profil-details")!;
@@ -67,7 +69,7 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
       zu.open = true;
     });
     expect(aktivieren).not.toHaveBeenCalled();
-    await klick("Verwenden und Meldung öffnen", ander);
+    await klick("Profil „Vorlage – eigene Organisation“ verwenden", ander);
     expect(aktivieren).toHaveBeenCalledWith("muster");
   });
 });
@@ -93,8 +95,10 @@ describe("Profilansicht: Gruppen „Lesen“ und „Prüfen“", () => {
       "SOP-Katalog lesen",
       "Dokumentation lesen",
     ]);
-    expect(summaries(pruefen)[0]).toMatch(/^Prüfbericht/);
-    expect(summaries(pruefen)[1]).toMatch(/^Dateien \(\d+\)$/);
+    // seit UX-2026-W45-31 gebündelt unter „Technische Angaben“
+    expect(summaries(pruefen)[0]).toMatch(/^Technische Angaben/);
+    expect(summaries(pruefen)[1]).toMatch(/^Prüfbericht/);
+    expect(summaries(pruefen)[2]).toMatch(/^Dateien \(\d+\)$/);
   });
 
   it("öffnet beim Sprung zum Prüfbericht auch den zugeklappten Inhalt eines nicht verwendeten Profils", async () => {
@@ -168,7 +172,7 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     expect(document.activeElement).toBe(k);
   });
 
-  it("legt Export und Entfernen ins Menü „Mehr“ der Karte; Entfernen nur bei importierten Profilen", async () => {
+  it("UX-2026-W45-32: mitgeliefert ein Knopf „Exportieren“, importiert Export und Entfernen im Menü „Mehr“", async () => {
     const lead = await eintrag("lead-beispiel");
     const imp = { ...(await eintrag("muster", "importiert-x")), quelle: "importiert" as const };
     const loeschen = vi.fn();
@@ -183,10 +187,10 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     );
     expect(document.querySelector(".aktionen-nachrangig")).toBeNull();
     const [a, b] = karten();
-    const mehrA = menueKnopf("Mehr zu Profil", a);
-    expect(mehrA.getAttribute("aria-label")).toBe("Mehr zu Profil „LEAD-Beispiel – Koordinierungsstelle“");
-    await klick(mehrA);
-    expect(eintraege(mehrA)).toEqual(["Als Paket exportieren"]);
+    expect(menueKnopf("Mehr zu Profil", a)).toBeUndefined();
+    expect([...a.querySelectorAll("header button")].map((b) => b.getAttribute("aria-label"))).toContain(
+      "Profil „LEAD-Beispiel – Koordinierungsstelle“ als Paket exportieren",
+    );
     const mehrB = menueKnopf("Mehr zu Profil", b);
     await klick(mehrB);
     expect(eintraege(mehrB)).toEqual(["Als Paket exportieren", "Entfernen"]);
@@ -194,7 +198,7 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     expect(loeschen).toHaveBeenCalledWith("importiert-x");
   });
 
-  it("zeigt den Befundstatus als Chip: „✓ Geprüft“ ohne Fehler und Warnungen, sonst die Zahl", async () => {
+  it("UX-2026-W45-30: zeigt den Befundstatus als Chip nur bei Fehlern oder Warnungen", async () => {
     const lead = await eintrag("lead-beispiel");
     lead.befunde = [{ stufe: "hinweis", text: "nur ein Hinweis" }];
     const muster = await eintrag("muster");
@@ -211,12 +215,11 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
         loeschen: () => {},
       }),
     );
-    const [a, b] = karten().map((k) => k.querySelector<HTMLAnchorElement>("header .befund-chip")!);
-    expect(a.textContent).toBe("✓ Geprüft");
-    expect(a.classList.contains("befund-chip-ok")).toBe(true);
-    expect(b.textContent).toBe("1 Fehler, 1 Warnung");
-    expect(b.classList.contains("befund-chip-fehler")).toBe(true);
-    expect(a.getAttribute("href")).toMatch(/-bericht$/);
+    const [a, b] = karten().map((k) => k.querySelector<HTMLAnchorElement>("header .befund-chip"));
+    expect(a).toBeNull();
+    expect(b!.textContent).toBe("1 Fehler, 1 Warnung");
+    expect(b!.classList.contains("befund-chip-fehler")).toBe(true);
+    expect(b!.getAttribute("href")).toMatch(/-bericht$/);
   });
 
   it("führt die Sprungleiste zu Angaben, Lesen und Prüfen und setzt den Fokus auf die Überschrift", async () => {
@@ -239,3 +242,92 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
 function knopfMitText(text: string) {
   return [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === text);
 }
+
+describe("UX-2026-W45-28: Eckdaten jeder Karte", () => {
+  it("nennt Ebene, Referenzraum, Schema, Lagenradar und SOPs auch bei zugeklappter Karte", async () => {
+    await ansicht("lead-beispiel");
+    for (const k of karten()) {
+      const dl = k.querySelector(":scope > .profil-eckdaten")!;
+      expect([...dl.querySelectorAll("dt")].map((d) => d.textContent)).toEqual(["Ebene", "Referenzraum", "Schema", "Lagenradar", "SOPs"]);
+    }
+    const lead = karten()[0].querySelector(".profil-eckdaten")!;
+    expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual([
+      "Bund",
+      "Bevölkerungsschutz in Deutschland",
+      "LEAD-Meldung-v1",
+      "ja",
+      "17 Dach-SOPs · 18 ergänzende Bausteine",
+    ]);
+  });
+});
+
+describe("UX-2026-W45-29: Verwenden ohne Sprung", () => {
+  it("bleibt nach dem Wechsel in der Profilansicht und bietet „Zur Erfassung“ an", async () => {
+    const lead = await eintrag("lead-beispiel");
+    const muster = await eintrag("muster");
+    const zurErfassung = vi.fn();
+    function Rahmen() {
+      const [aktiv, setAktiv] = React.useState("lead-beispiel");
+      return React.createElement(ProfileAnsicht, {
+        profile: [lead, muster],
+        aktiv,
+        aktivieren: async (s: string) => {
+          setAktiv(s);
+          return true;
+        },
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+        zurErfassung,
+      });
+    }
+    await einhaengen(React.createElement(Rahmen));
+    const knopf = [...document.querySelectorAll<HTMLButtonElement>("header button")].find((b) => b.textContent === "Verwenden")!;
+    expect(knopf.classList.contains("primaer")).toBe(false);
+    await klick(knopf);
+    expect(document.querySelector(".profil-gewechselt")?.textContent).toContain("ist in Verwendung");
+    await klick("Zur Erfassung");
+    expect(zurErfassung).toHaveBeenCalledOnce();
+  });
+});
+
+describe("UX-2026-W45-30: Name, Kennzeichen und Farben der Karte", () => {
+  it("trennt den Klammerzusatz als Kennzeichen ab", async () => {
+    const { nameUndZusatz } = await import("../../src/ui/Profile");
+    expect(nameUndZusatz("Lagebild Justiz – Landesprofil (Erprobungsentwurf)")).toEqual({
+      name: "Lagebild Justiz – Landesprofil",
+      zusatz: "Erprobungsentwurf",
+    });
+    expect(nameUndZusatz("LEAD-Beispiel – Koordinierungsstelle")).toEqual({ name: "LEAD-Beispiel – Koordinierungsstelle" });
+    const justiz = await eintrag("lead-justiz");
+    const lead = await eintrag("lead-beispiel");
+    lead.profil = { ...lead.profil!, manifest: { ...lead.profil!.manifest, farbschema: { basis: "de-th" } } };
+    await einhaengen(
+      React.createElement(ProfileAnsicht, {
+        profile: [lead, justiz],
+        aktiv: "lead-beispiel",
+        aktivieren: () => {},
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+      }),
+    );
+    const [a, b] = karten();
+    expect(b!.querySelector("h2")?.textContent).toBe("Lagebild Justiz – Landesprofil");
+    expect(b!.querySelector(".profil-zusatz")?.textContent).toBe("Erprobungsentwurf");
+    expect(a!.querySelector(".profil-band")).not.toBeNull();
+    expect(b!.querySelector(".profil-band")).toBeNull();
+  });
+});
+
+describe("UX-2026-W45-31: Technische Angaben und Herausgeber", () => {
+  it("bündelt Technisches zugeklappt und verweist auf die Adresse des Herausgebers", async () => {
+    await ansicht("lead-beispiel");
+    const k = karten()[0];
+    const technik = k.querySelector<HTMLDetailsElement>(".profil-technik-details")!;
+    expect(technik.open).toBe(false);
+    expect(technik.querySelector("dl.profil-technik")).not.toBeNull();
+    expect(technik.querySelector('details[id$="-bericht"]')).not.toBeNull();
+    const a = k.querySelector<HTMLAnchorElement>('section[aria-labelledby$="-angaben"] a[href^="https://"]')!;
+    expect(a.getAttribute("href")).toBe("https://www.pereirawolf.de");
+    expect(a.textContent).toBe("pereirawolf.de");
+  });
+});

@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.2 vom 04.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.3 vom 04.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.

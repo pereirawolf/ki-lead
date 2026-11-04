@@ -44,6 +44,7 @@ test("Offline-Start: nach dem ersten Besuch läuft die App ohne Netz", async ({ 
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
 
   // Nachgeladener Teil (PDF) kommt ebenfalls aus dem Cache
+  await page.getByRole("button", { name: /^Ausgeben/ }).click();
   const [pdf] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Lagebild als PDF" }).click()]);
   expect(pdf.suggestedFilename()).toMatch(/\.pdf$/);
 
