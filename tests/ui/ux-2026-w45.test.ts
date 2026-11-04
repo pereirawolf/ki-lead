@@ -3,9 +3,9 @@
 // Befunds im Namen; das Soll steht im Befund, nicht im Code.
 
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import React from "react";
+import React, { act } from "react";
 import { profil } from "../support/dateien";
-import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
+import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext, setzen } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { adresseLesen, adresseText } from "../../src/ui/app/adresse";
 import { alterText, sammelErinnerungMailto, type StatusZeile } from "../../src/lagebild/lagebild";
@@ -117,5 +117,25 @@ describe("UX-2026-W45-06, -08, -09: Übersicht", () => {
     await ilka();
     await klick(knopf(/^7Meldungen/));
     expect(document.querySelector(".lb-reiter [aria-current]")?.textContent).toBe("Meldungen");
+  });
+});
+
+describe("UX-2026-W45-10 bis -12: Meldungen", () => {
+  const titel = () => [...document.querySelectorAll(".lb-karte .lb-absender-kurz")].map((k) => k.textContent);
+
+  it("eigene Meldung zuerst und abgesetzt, Sortierung nach Stelle und Zeitpunkt, Schemamarke nur bei Abweichung", async () => {
+    await ilka();
+    await klick(knopf("Meldungen"));
+    expect(titel()).toEqual(["Bund", "Hessen", "Niedersachsen", "Nordrhein-Westfalen", "Rheinland-Pfalz", "Sachsen-Anhalt", "Thüringen"]);
+    expect(document.querySelectorAll(".lb-karte-eigen")).toHaveLength(1);
+    expect(seitentext()).not.toContain("Schema ✓");
+    const kopf = document.querySelector(".lb-karte header")!.textContent!;
+    expect(kopf).not.toContain(".json");
+
+    const wahl = document.querySelector<HTMLSelectElement>(".lb-svfilter select")!;
+    await act(async () => {
+      setzen(wahl, "zeit");
+    });
+    expect(titel()).toEqual(["Bund", "Sachsen-Anhalt", "Thüringen", "Hessen", "Nordrhein-Westfalen", "Niedersachsen", "Rheinland-Pfalz"]);
   });
 });

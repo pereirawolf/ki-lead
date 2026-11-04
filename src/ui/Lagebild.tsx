@@ -29,6 +29,7 @@ import {
   nachHerkunftsrolle,
   nachSchwere,
   sammelErinnerungMailto,
+  schwere,
   stelleVon,
   tendenzStufen,
   zaehle,
@@ -71,6 +72,7 @@ interface Props {
 }
 
 type Reiter = LagebildReiter;
+type MeldungsFolge = "stelle" | "zeit" | "beurteilung";
 
 /**
  * Reiter in drei Gruppen (seit UX-2026-W45-03): Lage (1), Redaktion (2), Ausgabe (3); zwischen den Gruppen ein feiner
@@ -270,6 +272,19 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   /** Ganze Tage, die ein gesetzter Stichtag hinter der Geräteuhr liegt */
   const stichtagAlter = stichtag ? Math.floor((uhr - red.stand.jetzt.getTime()) / 864e5) : 0;
   const sortiert = useMemo(() => nachSchwere(svs, profil), [svs, profil]);
+  const [meldungsFolge, setMeldungsFolge] = useState<MeldungsFolge>("stelle");
+  const meldungenGeordnet = useMemo(() => {
+    const hoechste = (e: LagebildEintrag) => Math.max(-1, ...svs.filter((x) => x.eintrag.id === e.id).map((x) => schwere(profil, x.beurteilung)));
+    const nachStelle = (a: LagebildEintrag, b: LagebildEintrag) => absender(a, profil).localeCompare(absender(b, profil), "de");
+    const vergleich =
+      meldungsFolge === "zeit"
+        ? (a: LagebildEintrag, b: LagebildEintrag) => zeitpunktVon(b, profil).localeCompare(zeitpunktVon(a, profil)) || nachStelle(a, b)
+        : meldungsFolge === "beurteilung"
+          ? (a: LagebildEintrag, b: LagebildEintrag) => hoechste(b) - hoechste(a) || nachStelle(a, b)
+          : nachStelle;
+    return [...eintraege].sort((a, b) => Number(eigen(b)) - Number(eigen(a)) || vergleich(a, b));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eintraege, svs, profil, meldungsFolge]);
   /** Kennung → meldende Stelle aller geladenen Sachverhalte, zum Auflösen des Bezugs (seit 0.6.9) */
   const kennungsStelle = useMemo(() => {
     const m = new Map<string, string>();
@@ -906,76 +921,94 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
           )}
 
           {reiter === "meldungen" && (
-            <div className="lb-karten">
-              {eintraege.map((e) => {
-                const eigene = svs.filter((s) => s.eintrag.id === e.id);
-                const nQuellen = r.quellen ? parseQuellen(holeWert(e.daten, r.quellen)).length : 0;
-                return (
-                  <article key={e.id} id={`lb-meldung-${e.id}`} tabIndex={-1} className={markiert === e.id ? "lb-karte lb-karte-markiert" : "lb-karte"}>
-                    <header>
-                      <p className="lb-karte-titel">
-                        <Absender e={e} profil={profil} />
-                      </p>
-                      <p className="lb-karte-meta">{zeitpunktVon(e, profil) ? datumDE(zeitpunktVon(e, profil)) : "ohne Meldezeitpunkt"}</p>
-                    </header>
-                    <div className="lb-karte-inhalt">
-                      <p className="lb-marken">
-                        <Marken e={e} profil={profil} eigen={eigen(e)} />
-                      </p>
-                      {e.fremd ? (
-                        <>
-                          <p className="hinweis">
-                            Schema „{e.herkunft}“ mit {e.fremd.sachverhalte} Sachverhalt(en). Nicht auswertbar nach diesem Profil, aber an die KI-Verdichtung
-                            übergebbar.
-                          </p>
-                          <p className="lb-karte-meta lb-dateiname">Datei: {e.name}</p>
-                        </>
-                      ) : (
-                        <>
-                          <p className="lb-karte-meta">
-                            {eigene.length} Sachverhalt{eigene.length === 1 ? "" : "e"}
-                            {r.quellen ? ` · ${nQuellen} Quelle${nQuellen === 1 ? "" : "n"}` : ""}
-                          </p>
-                          {eigene.map((s) => (
-                            <div key={s.index} className={`lb-sv lb-rand-${farbeBeurteilung(profil, s.beurteilung)}`}>
-                              <p className="lb-sv-titel">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</p>
-                              {(s.ort || s.arten.length > 0) && <p className="lb-karte-meta">{[s.arten.join(", "), s.ort].filter(Boolean).join(" · ")}</p>}
-                              <SvMarken s={s} profil={profil} />
-                            </div>
-                          ))}
-                          {e.hinweise.map((h, i) => (
-                            <p key={i} className="hinweis">
-                              {h}
+            <>
+              {/* Sortierung, eigene Meldung zuerst und abgesetzt (seit UX-2026-W45-12) */}
+              <div className="lb-svfilter" role="group" aria-label="Meldungen ordnen">
+                <label className="lb-svfilter-feld">
+                  <span>Sortieren nach</span>
+                  <select value={meldungsFolge} onChange={(ev) => setMeldungsFolge(ev.target.value as MeldungsFolge)}>
+                    <option value="stelle">Land/Stelle</option>
+                    <option value="zeit">Meldezeitpunkt (neueste zuerst)</option>
+                    <option value="beurteilung">höchster {lBeurteilung}</option>
+                  </select>
+                </label>
+              </div>
+              <div className="lb-karten">
+                {meldungenGeordnet.map((e) => {
+                  const eigene = svs.filter((s) => s.eintrag.id === e.id);
+                  const nQuellen = r.quellen ? parseQuellen(holeWert(e.daten, r.quellen)).length : 0;
+                  return (
+                    <article
+                      key={e.id}
+                      id={`lb-meldung-${e.id}`}
+                      tabIndex={-1}
+                      className={["lb-karte", eigen(e) ? "lb-karte-eigen" : "", markiert === e.id ? "lb-karte-markiert" : ""].filter(Boolean).join(" ")}
+                    >
+                      <header>
+                        <p className="lb-karte-titel">
+                          <Absender e={e} profil={profil} />
+                        </p>
+                        <p className="lb-karte-meta">{zeitpunktVon(e, profil) ? datumDE(zeitpunktVon(e, profil)) : "ohne Meldezeitpunkt"}</p>
+                      </header>
+                      <div className="lb-karte-inhalt">
+                        <p className="lb-marken">
+                          <Marken e={e} profil={profil} eigen={eigen(e)} />
+                        </p>
+                        {e.fremd ? (
+                          <>
+                            <p className="hinweis">
+                              Schema „{e.herkunft}“ mit {e.fremd.sachverhalte} Sachverhalt(en). Nicht auswertbar nach diesem Profil, aber an die KI-Verdichtung
+                              übergebbar.
                             </p>
-                          ))}
-                          {entstehungBlock(e)}
-                        </>
-                      )}
-                    </div>
-                    <footer className="aktionen">
-                      {!e.fremd && (
+                            <p className="lb-karte-meta lb-dateiname">Datei: {e.name}</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="lb-karte-meta">
+                              {eigene.length} Sachverhalt{eigene.length === 1 ? "" : "e"}
+                              {r.quellen ? ` · ${nQuellen} Quelle${nQuellen === 1 ? "" : "n"}` : ""}
+                            </p>
+                            {eigene.map((s) => (
+                              <div key={s.index} className={`lb-sv lb-rand-${farbeBeurteilung(profil, s.beurteilung)}`}>
+                                <p className="lb-sv-titel">{s.bezeichnung || `Sachverhalt ${s.index + 1}`}</p>
+                                {(s.ort || s.arten.length > 0) && <p className="lb-karte-meta">{[s.arten.join(", "), s.ort].filter(Boolean).join(" · ")}</p>}
+                                <SvMarken s={s} profil={profil} />
+                              </div>
+                            ))}
+                            {e.hinweise.map((h, i) => (
+                              <p key={i} className="hinweis">
+                                {h}
+                              </p>
+                            ))}
+                            {entstehungBlock(e)}
+                          </>
+                        )}
+                      </div>
+                      <footer className="aktionen">
+                        {!e.fremd && (
+                          <button
+                            type="button"
+                            className="knopf klein"
+                            aria-label={`${absender(e, profil)} · ${e.name} in der Erfassung öffnen`}
+                            onClick={() => oeffnen(e.daten)}
+                          >
+                            In der Erfassung öffnen
+                          </button>
+                        )}
                         <button
                           type="button"
-                          className="knopf klein"
-                          aria-label={`${absender(e, profil)} · ${e.name} in der Erfassung öffnen`}
-                          onClick={() => oeffnen(e.daten)}
+                          className="knopf klein leise"
+                          aria-label={`${absender(e, profil)} · ${e.name} aus dem Lagebild entfernen`}
+                          onClick={() => entfernen(e.id)}
                         >
-                          In der Erfassung öffnen
+                          Entfernen
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        className="knopf klein leise"
-                        aria-label={`${absender(e, profil)} · ${e.name} aus dem Lagebild entfernen`}
-                        onClick={() => entfernen(e.id)}
-                      >
-                        Entfernen
-                      </button>
-                    </footer>
-                  </article>
-                );
-              })}
-            </div>
+                      </footer>
+                    </article>
+                  );
+                })}
+              </div>
+            </>
           )}
 
           {reiter === "sachverhalte" &&
