@@ -52,6 +52,7 @@ import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
 import { ProfilZeile } from "./ProfilZeile";
+import { Menue } from "./Menue";
 
 interface Props {
   profil: Profil;
@@ -510,18 +511,19 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               {kz.meldungen} Meldung{kz.meldungen === 1 ? "" : "en"}
               {kz.fremd ? ` und ${kz.fremd} in fremdem Schema` : ""} · {kz.sachverhalte} Sachverhalt{kz.sachverhalte === 1 ? "" : "e"}
             </p>
+            {/* Ausgaben gebündelt, Übergabe als Hauptknopf; „Alle entfernen“ steht seit UX-2026-W45-02 in der Dateiliste */}
             <div className="werkzeugleiste-knoepfe">
-              <button type="button" className="knopf" onClick={pdf} onPointerEnter={pdfVorladen} onFocus={pdfVorladen} disabled={!kz.meldungen}>
-                Lagebild als PDF
-              </button>
-              <button type="button" className="knopf" onClick={csv} disabled={!kz.meldungen}>
-                Rohtabelle als CSV
-              </button>
+              <Menue
+                text="Ausgeben"
+                klasse="knopf"
+                beimOeffnen={pdfVorladen}
+                eintraege={[
+                  { text: "Lagebild als PDF", aktion: () => void pdf(), deaktiviert: !kz.meldungen },
+                  { text: "Rohtabelle als CSV", aktion: csv, deaktiviert: !kz.meldungen },
+                ]}
+              />
               <button type="button" className="knopf primaer" ref={uebergabeKnopf} onClick={() => setUebergabeOffen((n) => n + 1)}>
                 An KI-Verdichtung übergeben
-              </button>
-              <button type="button" className="knopf leise" onClick={alleEntfernen}>
-                Alle entfernen
               </button>
             </div>
           </div>
@@ -557,6 +559,9 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 </li>
               ))}
             </ul>
+            <button type="button" className="knopf leise klein lb-alle-entfernen" onClick={alleEntfernen}>
+              Alle entfernen
+            </button>
           </details>
 
           {herkunftWerte.length > 0 && (

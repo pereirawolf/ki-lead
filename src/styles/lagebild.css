@@ -1006,3 +1006,8 @@ fieldset.lb-herkunft {
   width: auto;
   flex: 1 1 9rem;
 }
+
+/* „Alle entfernen“ am Ende der Dateiliste (seit UX-2026-W45-02) */
+.lb-alle-entfernen {
+  margin-top: 0.5rem;
+}

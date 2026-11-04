@@ -143,6 +143,8 @@ it("RV05: vom Befund zur Meldung in der Liste, ohne die Meldungsmaske zu berühr
 it("RV07: Redaktionsbericht und präzise Exportbeschriftungen", async () => {
   ablegen([{ id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" }]);
   await zeige();
+  // Seit UX-2026-W45-02 im Menü „Ausgeben“
+  await klick(knopf(beginntMit("Ausgeben")));
   expect([...document.querySelectorAll("button")].map((b) => b.textContent?.trim())).toEqual(
     expect.arrayContaining(["Lagebild als PDF", "Rohtabelle als CSV"]),
   );

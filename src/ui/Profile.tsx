@@ -2,7 +2,7 @@
 // Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
 // Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, ProfilEintrag, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
 import {
@@ -28,6 +28,7 @@ const Lesetext = LesetextTeil.Komponente;
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
+import { Menue } from "./Menue";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -361,88 +362,6 @@ function Befunde({ befunde }: { befunde: Befund[] }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-interface MenueEintrag {
-  text: string;
-  aktion: () => void;
-}
-
-/**
- * Aufklappmenü nach dem Disclosure-Muster: ein Knopf mit aria-expanded, darunter eine Liste gewöhnlicher Knöpfe.
- * Schließt nach der Auswahl, mit Escape (Fokus zurück auf den Knopf), beim Klick außerhalb und wenn der Fokus das Menü verlässt.
- */
-function Menue({ text, label, klasse, eintraege }: { text: string; label?: string; klasse: string; eintraege: MenueEintrag[] }) {
-  const [offen, setOffen] = useState(false);
-  const listId = useId();
-  const wurzel = useRef<HTMLDivElement>(null);
-  const knopfRef = useRef<HTMLButtonElement>(null);
-  /** Liste am linken Rand des Knopfs ausrichten, wenn sie rechtsbündig links aus dem Bild liefe (schmale Bildschirme) */
-  const [links, setLinks] = useState(false);
-  useLayoutEffect(() => {
-    if (!offen) return setLinks(false);
-    const k = knopfRef.current?.getBoundingClientRect();
-    const liste = wurzel.current?.querySelector(".menue-liste")?.getBoundingClientRect();
-    if (k && liste) setLinks(k.right - liste.width < 8);
-  }, [offen]);
-  useEffect(() => {
-    if (!offen) return;
-    const aussen = (e: PointerEvent) => {
-      if (!wurzel.current?.contains(e.target as Node)) setOffen(false);
-    };
-    document.addEventListener("pointerdown", aussen);
-    return () => document.removeEventListener("pointerdown", aussen);
-  }, [offen]);
-  return (
-    <div
-      className="menue"
-      ref={wurzel}
-      onKeyDown={(e) => {
-        if (e.key !== "Escape" || !offen) return;
-        e.stopPropagation();
-        setOffen(false);
-        knopfRef.current?.focus();
-      }}
-      onBlur={(e) => {
-        // Nur bei einem Fokuswechsel auf ein anderes Element; Safari fokussiert angeklickte Knöpfe nicht (relatedTarget leer)
-        const ziel = e.relatedTarget as Node | null;
-        if (ziel && !wurzel.current?.contains(ziel)) setOffen(false);
-      }}
-    >
-      <button
-        ref={knopfRef}
-        type="button"
-        className={klasse}
-        aria-expanded={offen}
-        aria-controls={offen ? listId : undefined}
-        aria-label={label}
-        onClick={() => setOffen((o) => !o)}
-      >
-        {text}
-        <span className="menue-pfeil" aria-hidden="true">
-          ▾
-        </span>
-      </button>
-      {offen && (
-        <ul id={listId} className={links ? "menue-liste menue-links" : "menue-liste"}>
-          {eintraege.map((m) => (
-            <li key={m.text}>
-              <button
-                type="button"
-                className="menue-eintrag"
-                onClick={() => {
-                  setOffen(false);
-                  m.aktion();
-                }}
-              >
-                {m.text}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
   );
 }
 
