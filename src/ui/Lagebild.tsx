@@ -54,6 +54,7 @@ import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
 import { Radarvergleich } from "./lagebild/Radarvergleich";
+import { Rohtabelle } from "./lagebild/Rohtabelle";
 import { KEIN_FILTER, Sachverhaltsliste, type SvFilter } from "./lagebild/Sachverhaltsliste";
 import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
@@ -1084,35 +1085,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               <Radarvergleich profil={profil} sortiert={sortiert} def={radarDef} feld={r.sv_radar!} />
             ))}
 
-          {reiter === "tabelle" && (
-            <div className="lb-rahmen" tabIndex={0} role="group" aria-label="Rohtabelle (waagerecht scrollbar)">
-              {(() => {
-                const t = rohtabelle(eintraege, profil);
-                return (
-                  <table className="tabelle lb-tabelle">
-                    <thead>
-                      <tr>
-                        {(t[0] ?? []).map((h, i) => (
-                          <th key={i}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {t.slice(1).map((z, i) => (
-                        <tr key={i}>
-                          {z.map((c, j) => (
-                            <td key={j} className="lb-lang">
-                              {c}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                );
-              })()}
-            </div>
-          )}
+          {reiter === "tabelle" && <Rohtabelle profil={profil} eintraege={eintraege} />}
 
           {reiter === "redaktion" && (
             <Redaktionscheck

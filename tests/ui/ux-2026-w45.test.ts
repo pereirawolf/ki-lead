@@ -266,3 +266,18 @@ describe("UX-2026-W45-23, -24: Kopiervorlage", () => {
     expect(kopf.querySelector(".lb-vorlage-frist")?.textContent).toMatch(/15\.10\.2026/);
   });
 });
+
+describe("UX-2026-W45-25: Rohtabelle", () => {
+  it("Kernspalten vorn, Dateiname weiter als Spalte, Zellen gekürzt und je Zeile aufklappbar", async () => {
+    await ilka();
+    await klick(knopf("Rohtabelle"));
+    const kopf = [...document.querySelectorAll(".lb-rohtabelle thead th")].map((t) => t.textContent);
+    expect(kopf[0]).toBe("Auswahl Land/Bund");
+    expect(kopf.slice(0, 9)).toEqual(expect.arrayContaining(["Name der meldenden Stelle", "Meldezeitpunkt", "Kennung", "Bezeichnung", "Art", "Ort"]));
+    expect(document.querySelectorAll(".lb-rohtabelle tbody tr")).toHaveLength(8);
+    const zeile = document.querySelector(".lb-rohtabelle tbody tr")!;
+    expect(zeile.querySelectorAll(".lb-zelle").length).toBe(kopf.length);
+    await klick(zeile.querySelector<HTMLButtonElement>(".lb-zeile-knopf")!);
+    expect(zeile.classList.contains("lb-zeile-offen")).toBe(true);
+  });
+});

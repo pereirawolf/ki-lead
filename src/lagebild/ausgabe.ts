@@ -28,7 +28,25 @@ export interface Spalte {
   titel: string;
   /** Wert für Meldung und (optional) Sachverhalt */
   wert: (e: LagebildEintrag, sv?: any) => string;
+  /** Pfad des Felds relativ zur Meldung bzw. zum Sachverhalt (seit UX-2026-W45-26) */
+  pfad?: string;
+  /** Gruppe für die Auswahl der Spalten in der Rohtabelle (seit UX-2026-W45-26); CSV und PDF bleiben vollständig */
+  gruppe?: SpaltenGruppe;
 }
+
+/**
+ * Spaltengruppen der Rohtabelle (seit UX-2026-W45-26). „kern“ steht immer (Land/Bund, Stelle, Zeitpunkt, Kennung,
+ * Bezeichnung, Art, Ort, Beurteilung, Tendenz), die übrigen sind zuschaltbar.
+ */
+export const SPALTENGRUPPEN = [
+  { id: "meldung", titel: "Kopf, Status und Prüfung" },
+  { id: "freigabe", titel: "Freigabe & Versand" },
+  { id: "sachverhalt", titel: "Weitere Angaben zum Sachverhalt" },
+  { id: "analyse", titel: "Analyse und Bewertungstext" },
+  { id: "radar", titel: "Lagenradar" },
+  { id: "quellen", titel: "Zeitstrahl und Quellen" },
+] as const;
+export type SpaltenGruppe = "kern" | (typeof SPALTENGRUPPEN)[number]["id"];
 
 function alsText(v: unknown): string {
   if (v === null || v === undefined) return "";
@@ -48,6 +66,7 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
     for (const a of def?.achsen || []) {
       out.push({
         titel: a.label,
+        pfad: pfad.join("."),
         wert: (e, sv) => {
           const v = radarWerte(holeWert(relativ ? sv : e.daten, pfad))[a.key];
           return Number.isInteger(v) ? String(v) : "";
@@ -64,10 +83,10 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
   // Listen von Objekten lesbar statt als JSON (seit 0.6.14, Issue #114, A2): je Element Kopfzeile und „Feld: Wert“
   const element = aufloesen(k?.items, profil.schema);
   if ((k?.type === "array" || (Array.isArray(k?.type) && k.type.includes("array")) || k?.items) && (element?.type === "object" || element?.properties)) {
-    out.push({ titel: titel.join(" › "), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
+    out.push({ titel: titel.join(" › "), pfad: pfad.join("."), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
     return;
   }
-  out.push({ titel: titel.join(" › "), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
+  out.push({ titel: titel.join(" › "), pfad: pfad.join("."), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
 }
 
 /**
@@ -104,15 +123,28 @@ export function spalten(profil: Profil): Spalte[] {
           : []),
       ]
     : [];
+  // Gruppen für die Rohtabelle (seit UX-2026-W45-26)
+  const unter = (pfad: string | undefined, rolle: string | undefined) => !!pfad && !!rolle && (pfad === rolle || pfad.startsWith(rolle + "."));
+  for (const k of kopf)
+    k.gruppe = [r.land, r.meldende_stelle, r.meldezeitpunkt].includes(k.pfad) ? "kern" : unter(k.pfad, r.freigabe) ? "freigabe" : "meldung";
+  for (const k of sv)
+    k.gruppe = [r.sv_kennung, r.sv_bezeichnung, r.sv_art, r.sv_ort, r.sv_beurteilung, r.sv_tendenz].includes(k.pfad)
+      ? "kern"
+      : unter(k.pfad, r.sv_radar)
+        ? "radar"
+        : [...(r.sv_textfelder || []), ...(r.sv_analysefelder || []), r.sv_bewertung_text].some((f) => unter(k.pfad, f))
+          ? "analyse"
+          : "sachverhalt";
+  for (const h of herkunft) h.gruppe = "meldung";
   return [
-    { titel: "Datei", wert: (e) => e.name },
+    { titel: "Datei", wert: (e) => e.name, gruppe: "meldung" },
     ...herkunft,
     ...kopf,
-    { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)) },
+    { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)), gruppe: "meldung" },
     ...(r.entstehung_feld
       ? [
-          { titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])) },
-          { titel: "SOP (Entstehung)", wert: (e: LagebildEintrag) => sopNachweis(holeWert(e.daten, r.entstehung_feld!)) },
+          { titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])), gruppe: "meldung" as const },
+          { titel: "SOP (Entstehung)", wert: (e: LagebildEintrag) => sopNachweis(holeWert(e.daten, r.entstehung_feld!)), gruppe: "meldung" as const },
         ]
       : []),
     ...sv,
@@ -121,6 +153,7 @@ export function spalten(profil: Profil): Spalte[] {
       ? [
           {
             titel: bezeichnung(profil.ui, r.zeitstrahl) + " (Sachverhalt)",
+            gruppe: "quellen" as const,
             wert: (e: LagebildEintrag, s?: any) =>
               s
                 ? eintraegeFuer(zeitstrahlText(e.daten, profil.ui), String(holeWert(s, r.sv_kennung!) ?? ""))
@@ -134,6 +167,7 @@ export function spalten(profil: Profil): Spalte[] {
       ? [
           {
             titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)",
+            gruppe: "quellen" as const,
             // LEAD-Meldung-v2 (seit 0.7.3): Quellenobjekte als lesbares Verzeichnis
             wert: (e: LagebildEintrag) => {
               const q = holeWert(e.daten, r.quellen!);
@@ -144,6 +178,7 @@ export function spalten(profil: Profil): Spalte[] {
       : []),
     {
       titel: "Schemaprüfung",
+      gruppe: "meldung",
       wert: (e) => (e.schema.length ? `${e.schema.length} Abweichung(en): ${e.schema.map((b) => b.text).join(" | ")}` : "ohne Befund"),
     },
   ];
