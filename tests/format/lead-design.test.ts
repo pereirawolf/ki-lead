@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.1 vom 03.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.2 vom 04.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -159,6 +159,22 @@ describe("Grunddesign: rahmen.json", () => {
     for (const v of Object.keys(rahmen.komponenten.kasten.varianten)) expect(css).toContain(`.kasten-${v}`);
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI ruht");
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI aktiv");
+  });
+
+  it("Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.6", () => {
+    const css = text("src/styles/formular.css");
+    const regel = (sel: string) => css.match(new RegExp(`(^|\\n)${sel.replace(/[.()]/g, "\\$&")} \\{([^}]*)\\}`))?.[2] ?? "";
+    for (const sel of [".chip:has(input:focus-visible)", ".segment:has(input:focus-visible)"]) {
+      expect(regel(sel), sel).toMatch(/outline: 3px solid var\(--fokus\);/);
+      expect(regel(sel), sel).toMatch(/box-shadow: (inset )?0 0 0 2px var\(--fokus-abstand\);/);
+    }
+    expect(css).toMatch(/@media \(pointer: coarse\) \{\s*\.chip \{\s*min-height: 44px;/);
+  });
+
+  it("Fassung in Beschreibung und rahmen.json gleich, mit Eintrag im Änderungsverlauf", () => {
+    const readme = text("design/README.md");
+    expect(readme).toContain(`Fassung ${rahmen.fassung} vom `);
+    expect(readme).toMatch(new RegExp(`^\\| ${rahmen.fassung.replace(".", "\\.")} \\| `, "m"));
   });
 
   it("Wireframes vorhanden, mit Titel und Lizenzvermerk", () => {
