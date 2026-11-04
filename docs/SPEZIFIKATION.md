@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.7.7 vom 04.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.7.8 vom 04.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -499,6 +499,7 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.7.2 | 03.11.2026 | Abschnitt 5.4 (Einstellungen, Testläufe): Fallreihe über mitgelieferte Fälle und Fallpakete mit Plan, Kostenbremse und Ergebnis-ZIP (TP-2026-W44-62 bis -67) |
 | 0.7.3 | 03.11.2026 | LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte mit Status und Begründung je Achse, Ausgabestatus mit Freigabe (Rolle `status_freigegeben`), PDF, Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis, Zeitstrahl und Kennzahlen (Teilmengen eingerückt, Mindestwert als „mindestens“), Vorlage der v2-Darstellungsdatei (UP-2026-W45-03) |
 | 0.7.7 | 04.11.2026 | Nachbearbeitung nach S2: Platzhalter `NEU-n` nur im Zeitstrahl dem n-ten Sachverhalt ohne Kennung zugeordnet, Hinweise `KENNUNG_PLATZHALTER_ZUGEORDNET` und `KENNUNG_PLATZHALTER_OFFEN` (Abschnitt Zeitstrahl und Kennung; GK-2026-W45-01) |
+| 0.7.8 | 04.11.2026 | Meldungen von Betreibern (`absender.ebene` „Betreiber“) kommen im Kernschema von LEAD-Meldung-v2 ohne Bewertung je Sachverhalt aus; für alle übrigen Ebenen bleibt sie Pflicht (KL-2026-W45-01, LEAD-MELDUNG-V2.md Nachtrag 6); sonst unverändert |
 | 0.7.5 | 04.11.2026 | Kennzahlen-Bausteine aus Thessa auch in Fassung 0.3 (ohne LEAD-Bezug der Einsatzmeldungen, Abschnitt 5.1, S0; SR-2026-W45-02); Meldungsmodule im Kernschema von LEAD-Meldung-v2 (SR-2026-W45-01, LEAD-MELDUNG-V2.md Nachtrag 4); sonst unverändert |
 | 0.6.22 | 01.11.2026 | Gesamtkonsistenz KW 44: Fristenkennsatz je Frist eine Zeile, Mehrfachzeilen im Redaktionscheck und in der Management Summary gekennzeichnet (Funktionsumfang Nr. 5); Prüfung der Quellenidentität bei der Zeitstrahl-Fortschreibung, Warnung `ZEITSTRAHL_QUELLE` (Abschnitt KI-Erfassung und Verdichtung); Beispielprofil 1.36.0, Landesprofil Thüringen 1.1.0, Lagebild Justiz 0.1.2 |
 | 0.6.21 | 01.11.2026 | Hilfetexte in der ganzen App zwischen Beschriftung und Eingabe (Abschnitt Bedienung); Erklärtexte im Analysebereich mit Leitfrage (Beispielprofil 1.35.1, Landesprofil Thüringen 1.0.1, Lagebild Justiz 0.1.1) |

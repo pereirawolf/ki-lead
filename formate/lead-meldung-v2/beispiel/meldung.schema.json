@@ -211,6 +211,31 @@
   },
   "allOf": [
     {
+      "$comment": "Bewertung je Sachverhalt ist Pflicht, außer bei Meldungen von Betreibern (KL-2026-W45-01, LEAD-MELDUNG-V2.md Abschnitt 3).",
+      "if": {
+        "properties": {
+          "absender": {
+            "properties": {
+              "ebene": {
+                "const": "Betreiber"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "sachverhalte": {
+            "items": {
+              "required": [
+                "bewertung"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
       "if": {
         "required": [
           "fehlanzeige"
@@ -1300,7 +1325,6 @@
         "eintritt",
         "raum",
         "analyse",
-        "bewertung",
         "handlungsbedarf",
         "module"
       ],
@@ -1339,6 +1363,7 @@
           "$ref": "#/$defs/analyse"
         },
         "bewertung": {
+          "description": "Pflicht außer bei absender.ebene „Betreiber“: Dort setzt die verarbeitende Stelle die Bewertung in ihrem eigenen Sachverhalt; fehlt der Block, ist keine Bewertung erhoben (KL-2026-W45-01).",
           "$ref": "#/$defs/bewertung"
         },
         "handlungsbedarf": {

@@ -116,6 +116,71 @@ describe("LEAD-Meldung-v2: Kennungen der Betreiber (SR-2026-W45-04, AUSTAUSCH.md
   );
 });
 
+describe("LEAD-Meldung-v2: Meldungen von Betreibern ohne Bewertung (KL-2026-W45-01)", () => {
+  // Zusammenstellung ohne Einschränkungen der Ebenen: das Modul lead-bevoelkerungsschutz optional, wie in einem
+  // Profil, das Behörden- und Betreibermeldungen führt (KRITIS-LEAD).
+  const SCHEMA_OFFEN = stelleSchemaZusammen({
+    format: "lead-meldung-v2-zusammenstellung/1",
+    $id: "https://example.org/test/meldung.schema.json",
+    title: "Test: Kern ohne Einschränkungen",
+    kern: "kern.schema.json",
+    module: { "lead-bevoelkerungsschutz": { datei: "module/lead-bevoelkerungsschutz.schema.json", pflicht: false } },
+  });
+  const betreiber = (status: string) => {
+    const m = kopie(BEISPIEL_TH);
+    m.status = status;
+    m.absender = { stelle: "Netzbetreiber Süd (FIKTIV)", ebene: "Betreiber", gebiet: { name: "Thüringen" } };
+    for (const s of m.sachverhalte) {
+      delete s.bewertung;
+      delete s.module["lead-bevoelkerungsschutz"];
+    }
+    return m;
+  };
+
+  it.each(["entwurf", "zur_freigabe", "freigegeben"])(
+    "KL-2026-W45-01: Betreibermeldung „%s“ ohne bewertung ist gültig, ohne Fehler der Referenzprüfung",
+    (status) => {
+      const m = betreiber(status);
+      gleichWieAjv(SCHEMA_OFFEN, m, true);
+      expect(fehlerDerReferenzpruefung(m)).toEqual([]);
+    },
+  );
+
+  it.each(["Bund", "Land", "Kreis", "Gemeinde", "Einsatzstelle", "Sonstige"])(
+    "KL-2026-W45-01: Absender der Ebene „%s“ ohne bewertung ist ungültig, auch im Entwurf",
+    (ebene) => {
+      for (const status of ["entwurf", "freigegeben"]) {
+        const m = betreiber(status);
+        m.absender.ebene = ebene;
+        gleichWieAjv(SCHEMA_OFFEN, m, false);
+      }
+    },
+  );
+
+  it("KL-2026-W45-01: Betreibermeldung mit bewertung folgt den üblichen Regeln (leere Kernaussage erst ab „zur_freigabe“ ungültig)", () => {
+    const mitHuelle = (status: string, kernaussage: string) => {
+      const m = betreiber(status);
+      m.sachverhalte[0].bewertung = { ...kopie(BEISPIEL_TH.sachverhalte[0].bewertung), kernaussage };
+      return m;
+    };
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("entwurf", ""), true);
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("zur_freigabe", ""), false);
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("zur_freigabe", "Versorgung im Netzgebiet eingeschränkt."), true);
+  });
+
+  it("KL-2026-W45-01: Behördenschemata der mitgelieferten Profile verlangen die Bewertung unverändert", () => {
+    for (const [schema, ebene] of [
+      [SCHEMA_BUND, "Land"],
+      [SCHEMA_LAND, "Land"],
+    ] as const) {
+      const m = kopie(BEISPIEL_TH);
+      m.absender.ebene = ebene;
+      delete m.sachverhalte[0].bewertung;
+      gleichWieAjv(schema, m, false);
+    }
+  });
+});
+
 describe("LEAD-Meldung-v2: Beispiele", () => {
   it.each([
     ["Thüringen, zwei Sachverhalte", BEISPIEL_TH],

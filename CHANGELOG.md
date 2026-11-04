@@ -103,6 +103,23 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.5 | letzter Commit des Pull Requests „Schwester-Repos: Meldungsmodule, Thessa-Kennzahlen 0.3, Austauschvertrag 0.5; 0.7.5“ |
 | 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ (Nachtrag vom 04.11.2026: Beispielprofil 1.38.0 und Landesprofil Thüringen 1.4.0 mit dem Pull Request „Lernschleife KW 45: Arbeitsanweisung Erfassung 1.11.0, Kodierleitfaden 1.9.0, Sammelmappe 3.23.0“, ohne Änderung der App) |
 | 0.7.7 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 45: Platzhalter im Zeitstrahl zuordnen; 0.7.7“ |
+| 0.7.8 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Betreibermeldungen ohne Bewertung; 0.7.8“ |
+
+## [0.7.8] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis-lead_2026-W45.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, vorgezogener Befund, Commit `1395a76`), KL-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 mit Variante A. Voraussetzung für die Umstellung von KRITIS-LEAD: Ein KRITIS-Betreiber setzt keine LEAD-Bewertung (Entscheidungen vom 31.10. und 03.11.2026), das Kernschema verlangte aber je Sachverhalt den Block `bewertung` und ab „zur_freigabe“ Kernaussage und Referenzraum.
+
+### Geändert
+
+- **Bewertung bei Betreibermeldungen nicht Pflicht (KL-2026-W45-01):** Im Kernschema von LEAD-Meldung-v2 ist `sachverhalte[].bewertung` bei `absender.ebene` „Betreiber“ nicht Pflicht; fehlt der Block, ist keine Bewertung erhoben (Grundsatz 3). Für alle übrigen Ebenen verlangt eine Bedingung an der Wurzel die Bewertung unverändert, auch im Entwurf. Ist sie bei einem Betreiber vorhanden, gelten die üblichen Regeln einschließlich der Pflichten ab „zur_freigabe“. Die Bewertung setzt die verarbeitende Stelle in ihrem eigenen Sachverhalt (Zuordnung von oben, AUSTAUSCH.md Abschnitt 9). Bestehende Meldungen bleiben gültig. Zusammengestellte Schemata `formate/lead-meldung-v2/beispiel/` und `beispiel-land/` neu erzeugt; deren Ebenen schließen Betreiber weiter aus.
+- **Kernschema-Pin der Thessa-Bausteine:** Thessa pinnt das geänderte Kernschema neu (pereirawolf/thessa, eigener Pull Request); `formate/fremd/thessa-kennzahlen/herkunft.json` und die gebündelten Schemata sind nachgezogen (nur Vermerk und Prüfsumme; die von den Bausteinen genutzten Definitionen `quelle`, `kennzahl` und `zeitangabe` sind unverändert).
+- App: keine Codeänderung; Lagebild, Kopiervorlage, Rohtabelle und PDF lesen eine Meldung ohne `bewertung` bereits ohne Fehler (Test ergänzt). Eine eigene Anzeige „keine Bewertung (Betreibermeldung)“ folgt mit der Umstellung von Lagebild und Profilen (Pakete 5 und 6).
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 6: Abschnitte 3, 6 und 13 Nr. 8), Spezifikation 0.7.8. Versionsangaben 0.7.8 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 708); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/format/lead-meldung-v2.test.ts`: Betreibermeldung ohne `bewertung` in jedem Status gültig (Ajv und eigener Prüfer im Gleichlauf) und ohne Fehler der Referenzprüfung; jede andere Ebene ohne `bewertung` ungültig; mit `bewertung` gelten die üblichen Regeln; die Profilschemata verlangen die Bewertung unverändert.
+- `tests/kern/v2-darstellung.test.ts`: Betreibermeldung ohne `bewertung` in Lagebild, Kopiervorlage, Rohtabelle und PDF.
 
 ## [0.7.7] – 04.11.2026
 

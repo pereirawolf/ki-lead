@@ -66,11 +66,13 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 | `bekannt_seit` | – | erstes Bekanntwerden, nicht der Beginn |
 | `raum` | ja | `beschreibung` (bisher `ort`), `gebiete[]` |
 | `analyse` | ja | `lage_ereignis`, `risiken_auswirkungen`, `abhaengigkeiten_interdependenzen` (Texte mit `[Qn]`) |
-| `bewertung` | ja | Abschnitt 4.1 (bisher `sofort`) |
+| `bewertung` | ja¹ | Abschnitt 4.1 (bisher `sofort`) |
 | `handlungsbedarf` | ja | Abschnitt 4.2 (bisher `analyse.massnahmen_empfehlungen` und Kennsatz „Handlungsrelevant bis:“) |
 | `kennzahlen` | – | Abschnitt 4.3 |
 | `zeitstrahl` | – | Abschnitt 5.2 (bisher meldungsweite Zeichenkette) |
 | `module` | ja | Fachmodule, Schlüssel = Modulkennung (Abschnitt 7) |
+
+¹ Außer bei `absender.ebene` „Betreiber“: Die Bewertung setzt die verarbeitende Stelle in ihrem eigenen Sachverhalt, dem sie die Betreibermeldung zuordnet ([AUSTAUSCH.md](AUSTAUSCH.md), Abschnitt 9). Fehlt der Block, ist keine Bewertung erhoben (Abschnitt 1 Nr. 3); ist er vorhanden, gelten die übrigen Regeln (seit KL-2026-W45-01).
 
 ## 4. Bewertung, Handlungsbedarf, Kennzahlen
 
@@ -135,7 +137,7 @@ Kategorie (Herkunft bzw. Rolle), Zugang und Aussagekompetenz sind verschiedene D
 ## 6. Status, Freigabe, Entstehung
 
 - `entwurf`: Pflichtfelder vorhanden, Inhalte dürfen leer sein.
-- `zur_freigabe` und `freigegeben`: Absender mit Stelle und Gebiet, Meldezeitpunkt, mindestens ein Sachverhalt mit Quellenverzeichnis **oder** eine Fehlanzeige; je Sachverhalt vergebene Kennung, Bezeichnung, Lagetext, Kernaussage, Referenzraum und eine Begründung, sobald eine Beurteilungsstufe gesetzt ist. Die Referenzprüfung verlangt zusätzlich je Radarachse eine Begründung und mindestens eine Ereignisart.
+- `zur_freigabe` und `freigegeben`: Absender mit Stelle und Gebiet, Meldezeitpunkt, mindestens ein Sachverhalt mit Quellenverzeichnis **oder** eine Fehlanzeige; je Sachverhalt vergebene Kennung, Bezeichnung, Lagetext, Kernaussage, Referenzraum und eine Begründung, sobald eine Beurteilungsstufe gesetzt ist; bei Betreibern Kernaussage, Referenzraum und Begründung nur, wenn `bewertung` vorhanden ist (Abschnitt 3). Die Referenzprüfung verlangt zusätzlich je Radarachse eine Begründung und mindestens eine Ereignisart.
 - `freigegeben`: zusätzlich `freigabe.freigegeben` mit Name und Zeitpunkt. Ein Name oder Handzeichen ist kein technischer Authentizitätsnachweis.
 - `zurueckgezogen`: eine neue Fassung mit `beziehungen` `berichtigung_von`, die die frühere zurücknimmt.
 - **Versand** gehört nicht mehr in die Meldung: Eine freigegebene Fassung ist unveränderlich, Versand und Empfang sind Ereignisse danach (offener Punkt 3).
@@ -257,7 +259,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 5. **Stellenkennung** (`stelle_id`): Register oder Schema der Kennungen.
 6. **Gebietsschlüssel der Kreise:** Die Migration setzt nur Länderschlüssel; Kreisschlüssel im Landesprofil ergänzen und prüfen.
 7. **Abstimmung in Teil C** nach [AUSTAUSCH.md](AUSTAUSCH.md); dieser Entwurf ist die Vorlage dafür.
-8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet.
+8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet. Betreibermeldungen kommen ohne Bewertung aus (Abschnitt 3, KL-2026-W45-01).
 9. **Lizenz:** Kern-, Modul- und zusammengestellte Schemata stehen wie die Meldungsschemata der Profile zusätzlich unter CC0 1.0 (LICENSE-CONTENT Nr. 2 e); zur Bestätigung durch den Herausgeber.
 10. **Sachverhaltsübergreifende Lage:** optionales Feld für Angaben, die für alle Sachverhalte einer Meldung gelten (übergreifende Kernaussage, übergreifende Maßnahmen und Entscheidungsbedarfe), vorgemerkt für die Umstellung der Profile (LS-2026-W45-03, Entscheidung des Herausgebers vom 04.11.2026). Zu klären: eigenes Kernfeld oder Meldungsmodul (Abschnitt 7); bis dahin ordnet die Arbeitsanweisung Erfassung (4.3) solche Teile den Sachverhalten zu.
 
@@ -265,6 +267,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 6 | 04.11.2026 | Kernschema: `bewertung` im Sachverhalt ist bei `absender.ebene` „Betreiber“ nicht Pflicht; für alle übrigen Ebenen bleibt sie Pflicht (Bedingung an der Wurzel), ist sie vorhanden, gelten die üblichen Regeln (Abschnitte 3 und 6; KL-2026-W45-01, Voraussetzung für die Umstellung von KRITIS-LEAD). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
 | 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |
 | 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
