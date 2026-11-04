@@ -458,6 +458,36 @@ export function erinnerungMailto(zeile: StatusZeile, kontakte?: Kontakte): strin
   return `mailto:${encodeURIComponent(zeile.email || "")}?subject=${encodeURIComponent(ersetze(vorlage.betreff))}&body=${encodeURIComponent(ersetze(vorlage.text))}`;
 }
 
+/**
+ * Eine Erinnerung an alle offenen Stellen (seit UX-2026-W45-07): ein E-Mail-Entwurf mit allen echten Adressen in Bcc,
+ * damit die Stellen einander nicht sehen. {name}/{land} der Vorlage werden zu „Ihrer Stelle“. Ohne echte Adresse null.
+ */
+export function sammelErinnerungMailto(zeilen: StatusZeile[], kontakte?: Kontakte): { href: string; anzahl: number } | null {
+  const adressen = [...new Set(zeilen.filter((z) => !z.eintraege.length && !istPlatzhalterAdresse(z.email)).map((z) => z.email!.trim()))];
+  if (!adressen.length) return null;
+  const vorlage = kontakte?.erinnerung || {
+    betreff: "Erinnerung: Meldung {name}",
+    text: "Guten Tag,\n\nfür den aktuellen Berichtszeitraum liegt noch keine Meldung aus {name} vor.\n\nMit freundlichen Grüßen",
+  };
+  const ersetze = (t: string) => t.replace(/\{name\}|\{land\}/g, "Ihrer Stelle");
+  return {
+    href: `mailto:?bcc=${adressen.map(encodeURIComponent).join(",")}&subject=${encodeURIComponent(ersetze(vorlage.betreff))}&body=${encodeURIComponent(ersetze(vorlage.text))}`,
+    anzahl: adressen.length,
+  };
+}
+
+/** Alter einer Meldung in Worten („vor 3 Stunden“, „vor 2 Tagen“); leer ohne lesbaren Zeitpunkt oder in der Zukunft */
+export function alterText(zeitpunkt: Date | null | undefined, jetzt: Date): string {
+  if (!zeitpunkt) return "";
+  const minuten = Math.floor((jetzt.getTime() - zeitpunkt.getTime()) / 60000);
+  if (minuten < 0) return "";
+  if (minuten < 60) return "vor weniger als 1 Stunde";
+  const stunden = Math.floor(minuten / 60);
+  if (stunden < 24) return `vor ${stunden} Stunde${stunden === 1 ? "" : "n"}`;
+  const tage = Math.floor(stunden / 24);
+  return `vor ${tage} Tag${tage === 1 ? "" : "en"}`;
+}
+
 /** Mehrere Meldungen derselben Stelle: mögliche Fortschreibung, Gefahr der Doppelzählung (A.7.1). */
 export function mehrfachMeldungen(eintraege: LagebildEintrag[], profil: Profil): { stelle: string; eintraege: LagebildEintrag[] }[] {
   const gruppen = new Map<string, LagebildEintrag[]>();

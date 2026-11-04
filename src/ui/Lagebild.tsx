@@ -13,6 +13,7 @@ import {
   beispielDateien,
   dateienAusAuswahl,
   einlesen,
+  alterText,
   erinnerungMailto,
   farbeBeurteilung,
   farbeTendenz,
@@ -26,6 +27,7 @@ import {
   meldestatus,
   nachHerkunftsrolle,
   nachSchwere,
+  sammelErinnerungMailto,
   stelleVon,
   zaehle,
   zeitpunktVon,
@@ -33,6 +35,7 @@ import {
   type LagebildDatei,
   type LagebildEintrag,
   type LagebildFehler,
+  type StatusZeile,
 } from "../lagebild/lagebild";
 import { redaktionscheck } from "../lagebild/redaktion";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
@@ -689,58 +692,100 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                 </section>
               </div>
 
-              {status && (
-                <>
-                  <h3 className="abschnitt">
-                    Meldestatus ({status.zeilen.filter((z) => z.eintraege.length).length} von {status.zeilen.length} gemeldet)
-                  </h3>
-                  <ul className="lb-status">
-                    {status.zeilen.map((z) => (
-                      <li key={z.name} className={z.eintraege.length ? "lb-status-da" : "lb-status-offen"}>
-                        <span className="lb-status-zeichen" aria-hidden="true">
-                          {z.eintraege.length ? "✓" : "○"}
-                        </span>
-                        <span className="lb-status-name">{z.name}</span>
-                        {r.herkunft && z.eintraege.length > 0 && (
-                          <Marke farbe="amt">
-                            Herkunft: {[...new Set(z.eintraege.map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))].join(", ")}
-                          </Marke>
-                        )}
-                        {z.eintraege.length > 0 && (
-                          <span
-                            className="lb-status-zahl"
-                            title={z.eintraege.map((e) => `${absender(e, profil)} (${datumDE(zeitpunktVon(e, profil))})`).join("\n")}
-                          >
-                            {z.eintraege.length} Meldung{z.eintraege.length === 1 ? "" : "en"}
-                          </span>
-                        )}
-                        {!z.eintraege.length && (
-                          <a
-                            className="knopf klein"
-                            aria-label={`${z.name} erinnern`}
-                            href={erinnerungMailto(z, profil.kontakte)}
-                            title={
-                              istPlatzhalterAdresse(z.email)
-                                ? "Platzhalteradresse – echte Adressen in kontakte.lokal.json des Profils hinterlegen"
-                                : `Erinnerung an ${z.email}`
-                            }
-                          >
-                            Erinnern
-                          </a>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                  {status.weitere.length > 0 && (
-                    <p className="hinweis">
-                      Weitere Meldungen ohne Eintrag in der Kontaktliste:{" "}
-                      {status.weitere
-                        .map((e) => absender(e, profil) + (r.herkunft ? ` (Herkunft: ${herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))})` : ""))
-                        .join(" · ")}
-                    </p>
-                  )}
-                </>
-              )}
+              {/* Offene Stellen zuerst mit Sammelerinnerung, gemeldete mit Zeitpunkt und Alter (seit UX-2026-W45-07) */}
+              {status &&
+                (() => {
+                  const offen = status.zeilen.filter((z) => !z.eintraege.length);
+                  const gemeldet = status.zeilen.filter((z) => z.eintraege.length);
+                  const sammel = sammelErinnerungMailto(status.zeilen, profil.kontakte);
+                  const letzte = (z: StatusZeile) =>
+                    z.eintraege.map((e) => zeitpunktVon(e, profil)).filter(Boolean).sort().at(-1) ?? "";
+                  return (
+                    <>
+                      <h3 className="abschnitt">
+                        Meldestatus ({gemeldet.length} von {status.zeilen.length} gemeldet)
+                      </h3>
+                      {offen.length > 0 && (
+                        <>
+                          <div className="lb-status-kopf">
+                            <h4>Offen ({offen.length})</h4>
+                            {sammel ? (
+                              <a className="knopf klein" href={sammel.href} title={`Ein E-Mail-Entwurf an ${sammel.anzahl} Stelle(n), Adressen in Bcc`}>
+                                Alle offenen erinnern
+                              </a>
+                            ) : (
+                              <span className="hinweis">Für eine Sammelerinnerung fehlen echte Adressen (kontakte.lokal.json des Profils).</span>
+                            )}
+                          </div>
+                          <ul className="lb-status">
+                            {offen.map((z) => (
+                              <li key={z.name} className="lb-status-offen">
+                                <span className="lb-status-zeichen" aria-hidden="true">
+                                  ○
+                                </span>
+                                <span className="lb-status-name">{z.name}</span>
+                                <a
+                                  className="knopf klein"
+                                  aria-label={`${z.name} erinnern`}
+                                  href={erinnerungMailto(z, profil.kontakte)}
+                                  title={
+                                    istPlatzhalterAdresse(z.email)
+                                      ? "Platzhalteradresse – echte Adressen in kontakte.lokal.json des Profils hinterlegen"
+                                      : `Erinnerung an ${z.email}`
+                                  }
+                                >
+                                  Erinnern
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      {gemeldet.length > 0 && (
+                        <>
+                          <h4 className="lb-status-titel">Gemeldet ({gemeldet.length})</h4>
+                          <ul className="lb-status">
+                            {gemeldet.map((z) => {
+                              const zp = letzte(z);
+                              const alter = alterText(zp ? isoLokalZuZeitpunkt(zp, zone)?.datum : null, new Date(uhr));
+                              return (
+                                <li key={z.name} className="lb-status-da">
+                                  <span className="lb-status-zeichen" aria-hidden="true">
+                                    ✓
+                                  </span>
+                                  <span className="lb-status-name">{z.name}</span>
+                                  {r.herkunft && (
+                                    <Marke farbe="amt">
+                                      Herkunft: {[...new Set(z.eintraege.map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))].join(", ")}
+                                    </Marke>
+                                  )}
+                                  <span
+                                    className="lb-status-zahl"
+                                    title={z.eintraege.map((e) => `${absender(e, profil)} (${datumDE(zeitpunktVon(e, profil))})`).join("\n")}
+                                  >
+                                    {zp ? datumDE(zp) : "ohne Zeitpunkt"}
+                                    {alter ? ` · ${alter}` : ""}
+                                    {z.eintraege.length > 1 ? ` · ${z.eintraege.length} Meldungen` : ""}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </>
+                      )}
+                      {status.weitere.length > 0 && (
+                        <p className="hinweis">
+                          Weitere Meldungen ohne Eintrag in der Kontaktliste:{" "}
+                          {status.weitere
+                            .map(
+                              (e) => absender(e, profil) + (r.herkunft ? ` (Herkunft: ${herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))})` : ""),
+                            )
+                            .join(" · ")}
+                        </p>
+                      )}
+                    </>
+                  );
+                })()}
 
               {svs.length > 0 && (
                 <>

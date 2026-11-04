@@ -1137,3 +1137,18 @@ fieldset.lb-herkunft {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Meldestatus: offene Stellen zuerst mit Sammelerinnerung (seit UX-2026-W45-07) */
+.lb-status-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 0.25rem 0 0.4rem;
+}
+
+.lb-status-kopf h4,
+.lb-status-titel {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 0.9rem;
+}
