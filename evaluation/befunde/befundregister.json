@@ -3302,7 +3302,7 @@
       "kurz": "Sammel- und Auswertungsdokumente im Eingangsmaterial: eigener Eintrag je verwendetem Ursprungsdokument mit Kategorie nach Herkunft und „(Eingangsmaterial, enthalten in [Qn])“.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 148
     },
     {
       "id": "AV-2026-W45-05",
@@ -3319,7 +3319,7 @@
       "kurz": "D3: Funktion nach Kernaussage und Beurteilung wählen, sonst staatliche Steuerung vor Betrieb; Kennzeichnung „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 148
     },
     {
       "id": "AV-2026-W45-06",
@@ -3336,7 +3336,7 @@
       "kurz": "Drei Kurzbeispiele für Sachverhalte ohne eigenen Schadensraum: D1 nicht aus „bundesweit relevant“, D3 strukturell nur mit belegter Ebene, Ende der Warnung kein Zielzustand für D5.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 148
     },
     {
       "id": "AV-2026-W45-07",
@@ -3357,7 +3357,7 @@
       "kurz": "Stichtag in der Zukunft: t0 leer lassen statt aktueller Zeit; leeres t0 sperrt S2 im Bestätigungsschritt.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 148
     },
     {
       "id": "AV-2026-W45-08",
@@ -3382,7 +3382,7 @@
       "kurz": "Fallreihe: Anteil offener Radarachsen und Prüfmuster der Radarbegründung (D3 ohne Funktion, D5 ohne Zielzustand) je Lauf, nur in der Fallreihe bis zur Bewährung.",
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
-      "pr": 1
+      "pr": 148
     },
     {
       "id": "AV-2026-W45-09",
