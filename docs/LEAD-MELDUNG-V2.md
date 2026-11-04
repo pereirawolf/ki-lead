@@ -49,6 +49,7 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 | `quellen` | ja | Liste der Quellen (Abschnitt 5) |
 | `sachverhalte` | ja | Liste der Sachverhalte (Abschnitt 3); leer nur bei `fehlanzeige` |
 | `fehlanzeige` | – | `umfang`, `zeitraum {von, bis}`, `erklaerung`; schließt Sachverhalte aus |
+| `module` | – | Meldungsmodule für Angaben, die für die ganze Meldung gelten, Schlüssel = Modulkennung (Abschnitt 7) |
 | `freigabe` | ja | `erfasst`, `freigegeben`: je `{name, funktion?, hz?, zeitpunkt}` |
 | `entstehung` | ja | Herkunftsnachweis (Abschnitt 6) |
 
@@ -142,7 +143,7 @@ Kategorie (Herkunft bzw. Rolle), Zugang und Aussagekompetenz sind verschiedene D
 
 ## 7. Fachmodule
 
-Ein Modul ist ein JSON-Schema für den Inhalt von `sachverhalte[].module.<kennung>`, mit Pflichtfeld `fassung`. Die Zusammenstellung eines Profils (Abschnitt 9) bindet bekannte Module ein und macht sie gegebenenfalls zur Pflicht. Unbekannte Module bleiben zulässig, gelten als ungeprüft und werden nicht auf eigene Kategorien abgebildet; die Referenzprüfung nennt sie als Hinweis.
+Ein Modul ist ein JSON-Schema für den Inhalt von `sachverhalte[].module.<kennung>`, mit Pflichtfeld `fassung`. Angaben, die für die ganze Meldung gelten und nicht je Sachverhalt wiederholt werden sollen (etwa Meldeanlass, Vertraulichkeit, Empfänger einer Betreibermeldung), stehen in einem **Meldungsmodul** unter `module.<kennung>` auf oberster Ebene (seit SR-2026-W45-01). Meldungsmodule folgen denselben Regeln: eigene Kennung und Fassung, Einbindung über die Zusammenstellung (Schlüssel `meldungsmodule`), unbekannte bleiben zulässig. Eine Modulkennung gehört zu genau einer Ebene. Die Zusammenstellung eines Profils (Abschnitt 9) bindet bekannte Module ein und macht sie gegebenenfalls zur Pflicht. Unbekannte Module bleiben zulässig, gelten als ungeprüft und werden nicht auf eigene Kategorien abgebildet; die Referenzprüfung nennt sie als Hinweis.
 
 **Modul `lead-bevoelkerungsschutz` 1.0** ([Schema](../formate/lead-meldung-v2/module/lead-bevoelkerungsschutz.schema.json)):
 
@@ -175,6 +176,7 @@ Die App prüft nur selbsttragende Schemata mit internen Verweisen. Deshalb entst
   "title": "…",
   "kern": "kern.schema.json",
   "module": { "lead-bevoelkerungsschutz": { "datei": "module/lead-bevoelkerungsschutz.schema.json", "pflicht": true } },
+  "meldungsmodule": {},
   "weitere_module": true,
   "einschraenkungen": { "absender_gebiete": ["…"], "ebenen": ["Land", "Kreis"], "quellenkategorien": ["A", "B", "W", "M", "P"] }
 }
@@ -255,13 +257,14 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 5. **Stellenkennung** (`stelle_id`): Register oder Schema der Kennungen.
 6. **Gebietsschlüssel der Kreise:** Die Migration setzt nur Länderschlüssel; Kreisschlüssel im Landesprofil ergänzen und prüfen.
 7. **Abstimmung in Teil C** nach [AUSTAUSCH.md](AUSTAUSCH.md); dieser Entwurf ist die Vorlage dafür.
-8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7.
+8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet.
 9. **Lizenz:** Kern-, Modul- und zusammengestellte Schemata stehen wie die Meldungsschemata der Profile zusätzlich unter CC0 1.0 (LICENSE-CONTENT Nr. 2 e); zur Bestätigung durch den Herausgeber.
 
 ## Änderungsverlauf
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |
 | 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
 | 2.0 (Entwurf), Nachtrag 3 | 03.11.2026 | Format und Schemata unverändert: Stand der App-Unterstützung (Maske, Darstellung und Ausgabe, App 0.7.3, UP-2026-W45-03); Vorlage der Darstellungsdatei |
 | 2.0 (Entwurf), Nachtrag 2 | 03.11.2026 | Format und Schemata unverändert: Umsetzung in `src/kern/meldung-v2.js` für App und Werkzeug; Migration beim Einlesen über `migrationen[].verfahren`, Referenzprüfung in der App (Abschnitte 8, 11, 13 Nr. 1; App 0.7.0, UP-2026-W45-02) |

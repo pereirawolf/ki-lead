@@ -161,7 +161,7 @@ describe("Grunddesign: rahmen.json", () => {
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI aktiv");
   });
 
-  it("Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.5", () => {
+  it("Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.6", () => {
     const css = text("src/styles/formular.css");
     const regel = (sel: string) => css.match(new RegExp(`(^|\\n)${sel.replace(/[.()]/g, "\\$&")} \\{([^}]*)\\}`))?.[2] ?? "";
     for (const sel of [".chip:has(input:focus-visible)", ".segment:has(input:focus-visible)"]) {

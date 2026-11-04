@@ -1,6 +1,6 @@
 {
   "format": "Thessa-Kennzahlen",
-  "fassung": "0.2",
+  "fassung": "0.3",
   "erzeugt": "2026-10-14T10:30+02:00",
   "datenstand": "2026-10-14T10:30+02:00",
   "raum": {
@@ -487,8 +487,7 @@
       "status": "laufend",
       "im_gebiet": true,
       "einsatzmittel": 2,
-      "einsatzkraefte": 8,
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      "einsatzkraefte": 8
     },
     {
       "id": "EM-20261014-KUGL",
@@ -502,8 +501,7 @@
       "status": "laufend",
       "im_gebiet": true,
       "einsatzmittel": 2,
-      "einsatzkraefte": 6,
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      "einsatzkraefte": 6
     },
     {
       "id": "EM-20261014-VTP2",
@@ -523,8 +521,7 @@
           "art": "betreut",
           "anzahl": 88
         }
-      ],
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      ]
     },
     {
       "id": "EM-20261014-N5X2",
@@ -538,8 +535,7 @@
       "status": "laufend",
       "im_gebiet": true,
       "einsatzmittel": 2,
-      "einsatzkraefte": 3,
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      "einsatzkraefte": 3
     },
     {
       "id": "EM-20261014-KBH7",
@@ -559,8 +555,7 @@
           "art": "betreut",
           "anzahl": 58
         }
-      ],
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      ]
     },
     {
       "id": "EM-20261014-UNBF",
@@ -580,8 +575,7 @@
           "name": "Landkreis Hildburghausen",
           "schluessel": "16069"
         }
-      },
-      "bezug_lead": "DE-TH-20261014-P5VN"
+      }
     }
   ],
   "herleitung": [

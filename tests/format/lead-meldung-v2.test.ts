@@ -51,6 +51,71 @@ describe("LEAD-Meldung-v2: Schemata", () => {
   });
 });
 
+describe("LEAD-Meldung-v2: Meldungsmodule (SR-2026-W45-01)", () => {
+  const MELDUNGSMODUL = {
+    title: "Testmodul Meldungsebene",
+    type: "object",
+    required: ["fassung", "meldeanlass"],
+    additionalProperties: false,
+    properties: { fassung: { const: "0.1" }, meldeanlass: { type: "array", items: { type: "string" } } },
+  };
+  const lade = (d: string) => (d === "test/meldungsmodul.schema.json" ? MELDUNGSMODUL : json(`${ORDNER}/${d}`));
+  const mitPflicht = stelleSchemaZusammen(
+    {
+      ...json(`${ORDNER}/zusammenstellungen/lead-beispiel.json`),
+      meldungsmodule: { "test-meldung": { datei: "test/meldungsmodul.schema.json", pflicht: true } },
+    },
+    lade,
+  );
+
+  it("SR-2026-W45-01: Meldungsmodule sind optional; unbekannte bleiben zulässig und ergeben einen Hinweis", () => {
+    gleichWieAjv(SCHEMA_BUND, BEISPIEL_TH, true);
+    const fremd = kopie(BEISPIEL_TH);
+    fremd.module = { "lead-kritis-meldung": { fassung: "0.3", meldeanlass: ["drohende Beeinträchtigung"] } };
+    gleichWieAjv(SCHEMA_BUND, fremd, true);
+    expect(pruefeReferenzen(fremd).some((b: { pfad: string; stufe: string }) => b.stufe === "hinweis" && b.pfad === "module.lead-kritis-meldung")).toBe(true);
+    const ohneFassung = kopie(BEISPIEL_TH);
+    ohneFassung.module = { "lead-kritis-meldung": { meldeanlass: [] } };
+    gleichWieAjv(SCHEMA_BUND, ohneFassung, false);
+  });
+
+  it("SR-2026-W45-01: ein Pflicht-Meldungsmodul der Zusammenstellung macht module Pflicht und wird geprüft", () => {
+    expect(schemaFehler(mitPflicht)).toBeNull();
+    gleichWieAjv(mitPflicht, BEISPIEL_TH, false);
+    const mit = kopie(BEISPIEL_TH);
+    mit.module = { "test-meldung": { fassung: "0.1", meldeanlass: ["neuer Unterstützungsbedarf"] } };
+    gleichWieAjv(mitPflicht, mit, true);
+    const falsch = kopie(mit);
+    falsch.module["test-meldung"].meldeanlass = "kein Array";
+    gleichWieAjv(mitPflicht, falsch, false);
+  });
+
+  it("SR-2026-W45-01: dasselbe Modul in beiden Ebenen einzubinden ist ein Fehler der Zusammenstellung", () => {
+    const z = {
+      ...json(`${ORDNER}/zusammenstellungen/lead-beispiel.json`),
+      meldungsmodule: { "lead-bevoelkerungsschutz": { datei: "module/lead-bevoelkerungsschutz.schema.json" } },
+    };
+    expect(() => stelleSchemaZusammen(z)).toThrow(/mehrfach/);
+  });
+});
+
+describe("LEAD-Meldung-v2: Kennungen der Betreiber (SR-2026-W45-04, AUSTAUSCH.md Abschnitt 9)", () => {
+  const mitKennung = (kennung: string) => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[0].kennung = kennung;
+    return m;
+  };
+  it.each(["KRITIS-ZVTN-20261014-7KQ2MD", "KRITIS-NETZ-SUED-20261013-K2M9", "KRITIS-A1-B2-C3-20261014-7KQ2MD"])("%s ist eine gültige Kennung", (k) => {
+    gleichWieAjv(SCHEMA_BUND, mitKennung(k), true);
+  });
+  it.each(["KRITIS-ZVTÖ-20261014-7KQ2MD", "KRITIS-A-B-C-D-20261014-7KQ2MD", "KRITIS-ZWECKVERBAND-20261014-7KQ2MD"])(
+    "%s ist ungültig (Umlaut, mehr als drei Segmente nach KRITIS, Segment über acht Zeichen)",
+    (k) => {
+      gleichWieAjv(SCHEMA_BUND, mitKennung(k), false);
+    },
+  );
+});
+
 describe("LEAD-Meldung-v2: Beispiele", () => {
   it.each([
     ["Thüringen, zwei Sachverhalte", BEISPIEL_TH],

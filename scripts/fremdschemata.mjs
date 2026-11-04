@@ -80,7 +80,10 @@ export function fassung01(gebuendelt02) {
   return s;
 }
 
-/** Erzeugt die gebündelten Schemata; prüft vorher die Prüfsummen aus herkunft.json. */
+/**
+ * Erzeugt die gebündelten Schemata; prüft vorher die Prüfsummen aus herkunft.json.
+ * @returns {Record<string, any>} Dateiname → Schema
+ */
 export function erzeuge() {
   const herkunft = JSON.parse(readFileSync(join(THESSA_ORDNER, "herkunft.json"), "utf8"));
   const kernText = readFileSync(KERN_DATEI, "utf8");
@@ -89,22 +92,28 @@ export function erzeuge() {
       `Kernschema hat nicht die von Thessa gepinnte Prüfsumme (${herkunft.kernschema.sha256.slice(0, 12)}…); Thessa neu pinnen und herkunft.json nachziehen.`,
     );
   const kern = JSON.parse(kernText);
-  const f02 = herkunft.fassungen.find((f) => f.fassung === "0.2");
-  const original = readFileSync(join(THESSA_ORDNER, f02.datei), "utf8");
-  if (sha256(original) !== f02.sha256) throw new Error(`${f02.datei}: Prüfsumme weicht von herkunft.json ab.`);
-  const vermerk = (fassung, zusatz) =>
-    `Erzeugt mit scripts/fremdschemata.mjs aus ${f02.datei} (Thessa ${herkunft.commit.slice(0, 7)}, SHA-256 ${f02.sha256.slice(0, 12)}…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 ${herkunft.kernschema.sha256.slice(0, 12)}…)${zusatz}. Nicht von Hand ändern.`;
-  const g02 = buendeln(JSON.parse(original), kern);
-  const g01 = fassung01(g02);
-  const mitKopf = (s, fassung, zusatz) => {
+  // Je überlieferte Fassung ein Original mit eigenem Thessa-Commit (seit SR-2026-W45-02; vorher nur 0.2 mit herkunft.commit)
+  const vermerk = (f, zusatz) =>
+    `Erzeugt mit scripts/fremdschemata.mjs aus ${f.datei} (Thessa ${(f.commit || herkunft.commit).slice(0, 7)}, SHA-256 ${f.sha256.slice(0, 12)}…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 ${herkunft.kernschema.sha256.slice(0, 12)}…)${zusatz}. Nicht von Hand ändern.`;
+  const mitKopf = (s, fassung, kommentar) => {
     const { $schema, $id: _original, title, description, ...rest } = s;
     const $id = `https://github.com/pereirawolf/ki-lead/formate/fremd/thessa-kennzahlen/gebuendelt/${fassung}.schema.json`;
-    return { $schema, $id, title, description, $comment: vermerk(fassung, zusatz), ...rest };
+    return { $schema, $id, title, description, $comment: kommentar, ...rest };
   };
-  return {
-    "0.2.schema.json": mitKopf(g02, "0.2", ""),
-    "0.1.schema.json": mitKopf(g01, "0.1", "; Fassung 0.1 abgeleitet: einsatzmeldungen nicht Pflicht"),
-  };
+  const gebuendelt = {};
+  const aus = {};
+  for (const f of herkunft.fassungen.filter((x) => x.datei)) {
+    const original = readFileSync(join(THESSA_ORDNER, f.datei), "utf8");
+    if (sha256(original) !== f.sha256) throw new Error(`${f.datei}: Prüfsumme weicht von herkunft.json ab.`);
+    aus[f.fassung] = f;
+    gebuendelt[f.fassung] = buendeln(JSON.parse(original), kern);
+  }
+  const ergebnis = {};
+  for (const [fassung, g] of Object.entries(gebuendelt)) ergebnis[`${fassung}.schema.json`] = mitKopf(g, fassung, vermerk(aus[fassung], ""));
+  // Fassung 0.1 ist nicht überliefert und wird aus 0.2 abgeleitet
+  if (gebuendelt["0.2"] && herkunft.fassungen.some((f) => f.fassung === "0.1" && f.abgeleitet_von === "0.2"))
+    ergebnis["0.1.schema.json"] = mitKopf(fassung01(gebuendelt["0.2"]), "0.1", vermerk(aus["0.2"], "; Fassung 0.1 abgeleitet: einsatzmeldungen nicht Pflicht"));
+  return ergebnis;
 }
 
 const text = (s) => `${JSON.stringify(s, null, 2)}\n`;
