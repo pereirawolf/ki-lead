@@ -58,10 +58,10 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.21.1 | 02.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.8.1 | 02.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.22.0 | 04.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.9.0 | 04.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.36.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.10.1 | 02.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.11.0 | 04.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 2.3.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.4.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.2: optionale Felder `kennung` und `bezug` je Sachverhalt und `zeitstrahl` auf Meldungsebene; seit 1.1 `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 29.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
@@ -586,9 +586,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.2.0"
+version: "2.3.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "30.04.2027"
@@ -641,6 +641,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Beurteilung/Tendenz:** Tendenzen je Teilprofil mit Raum und Horizont ausweisen: Abkühlung kann die Gesundheitsbelastung senken, während Wasserdefizite fortbestehen. Erneute Verschärfung nur benennen, wenn Prognose oder belegte Saisonalität sie stützt.
 
+**Zielkonflikt der Teilprofile:** Gelten Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum, prüfen, ob die Vorgaben Trinken und Körperkühlung ausdrücklich ausnehmen und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Belegte Widersprüche gehören als Risiko für Befolgung und Warnakzeptanz in „Risiken & Auswirkungen“ (A.9.3, A.9.5); eine fehlende Ausnahme ist eine benennbare Lücke für „Maßnahmen & Handlungsempfehlungen“.
+
 **Offenlassen:** D2 bei unzureichender Datenbasis; D5 ohne definierten Zielzustand; D4 meist ohne Beleg für externe Hilfe.
 
 ### 4. Darstellung
@@ -656,7 +658,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder
+**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder · für 5a zusätzlich: Gesundheits- und Sozialressorts von Bund und Ländern (öffentlicher Gesundheitsdienst, Pflege und Heimaufsicht), Träger des Rettungsdienstes, Arbeitsschutzbehörden
 
 **Offene Punkte:** Entspannungsindikatoren für Teilprofil 5b (Wiederauffüllung) fachlich abstimmen.
 
