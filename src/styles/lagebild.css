@@ -1506,3 +1506,19 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   line-clamp: 2;
   overflow: hidden;
 }
+
+/* Filter des Redaktionschecks und zugeklappter Textbaustein (seit UX-2026-W45-21) */
+.lb-red-filter {
+  margin: 0.5rem 0;
+}
+
+.lb-red-filter .lb-wahl {
+  margin-left: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.lb-baustein-text summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--tinte-leise);
+}

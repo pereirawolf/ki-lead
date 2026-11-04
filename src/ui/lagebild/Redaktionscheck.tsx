@@ -1,7 +1,7 @@
 // Reiter „Redaktionscheck“ des Lagebilds (seit 0.6.5, TP-2026-W44-17 aus Lagebild.tsx): Prüfstand (nächste Ausgabe,
 // jetzt oder Stichtag), Übersicht, Sprungleiste, Redaktionsbericht und die fünf Abschnitte der Prüfung.
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { bezeichnung } from "../../kern/ui";
 import { datumDE, exportStempel, jetztLokal, mitDatum } from "../../kern/ausgabe";
@@ -89,12 +89,17 @@ export function Redaktionscheck({
   };
 
   const offen = offeneBefunde(red, profil, bearbeitung);
+  // Filter nach Einstufung und Bearbeitung (seit UX-2026-W45-21)
+  const [stufe, setStufe] = useState<"" | "alert" | "warn" | "info">("");
+  const [bearbeiteteAusblenden, setBearbeiteteAusblenden] = useState(false);
   // Befunde je Abschnitt (alle Einstufungen); ohne Befund ist der Abschnitt eingeklappt (UX-2026-W45-20)
   const liste = befundListe(red, profil);
   const jeAbschnitt = [1, 2, 3, 4, 5].map((n) => liste.filter((b) => b.abschnitt === n).length);
   const kontext = {
     bearbeitung,
     zone,
+    einstufungen: stufe ? new Set([stufe]) : undefined,
+    bearbeiteteAusblenden,
     setzen: (k: string, b: Bearbeitung | null) => {
       const neu = { ...bearbeitung };
       if (b) neu[k] = b;
@@ -193,6 +198,30 @@ export function Redaktionscheck({
               </a>
             ))}
           </nav>
+          <div className="lb-chips lb-red-filter" role="group" aria-label="Befunde filtern">
+            <span className="lb-chips-titel">Zeigen</span>
+            {(
+              [
+                ["", "alle"],
+                ["alert", `zeitkritisch (${red.uebersicht.zeitkritisch})`],
+                ["warn", `zu klären (${red.uebersicht.zuKlaeren})`],
+                ["info", `Information (${red.uebersicht.info})`],
+              ] as const
+            ).map(([wert, text]) => (
+              <button
+                key={wert || "alle"}
+                type="button"
+                className={stufe === wert ? "lb-chip aktiv" : "lb-chip"}
+                aria-pressed={stufe === wert}
+                onClick={() => setStufe(wert)}
+              >
+                {text}
+              </button>
+            ))}
+            <label className="lb-wahl">
+              <input type="checkbox" checked={bearbeiteteAusblenden} onChange={(e) => setBearbeiteteAusblenden(e.target.checked)} /> Bearbeitete ausblenden
+            </label>
+          </div>
           <div className="aktionen">
             <button type="button" className="knopf klein" onClick={() => berichtSpeichern("txt")}>
               Redaktionsbericht (TXT)
@@ -293,8 +322,12 @@ export function Redaktionscheck({
                         was={`Textbaustein ${g.art}`}
                       />
                     </div>
-                    <p className="hinweis">Nur verwenden, wenn es sich um denselben Sachverhalt handelt; Platzhalter in eckigen Klammern fachlich füllen.</p>
-                    <p>{g.baustein}</p>
+                    {/* Standardmäßig zugeklappt, Kopieren bleibt sichtbar (seit UX-2026-W45-21) */}
+                    <details className="lb-baustein-text">
+                      <summary>Text anzeigen</summary>
+                      <p className="hinweis">Nur verwenden, wenn es sich um denselben Sachverhalt handelt; Platzhalter in eckigen Klammern fachlich füllen.</p>
+                      <p>{g.baustein}</p>
+                    </details>
                   </div>
                 )}
               </Punkt>

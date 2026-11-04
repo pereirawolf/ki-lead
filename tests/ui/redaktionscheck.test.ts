@@ -193,3 +193,23 @@ it("UX-2026-W45-19: Befund als erledigt kennzeichnen – Zahl sinkt, Stand gespe
   await bisWahr(() => expect(zaehler()).toBe(vorher));
   await bisWahr(() => expect(gespeichert().bearbeitung).toBeUndefined());
 });
+
+it("UX-2026-W45-21: Filter nach Einstufung, Bearbeitete ausblenden, Textbaustein zugeklappt", async () => {
+  ablegen([
+    { id: "a", text: "Handlungsrelevant bis: 20.10.2026 09:00" },
+    { id: "b", text: "Lage", tendenz: "Verschärfung" },
+  ]);
+  await zeige();
+  await redaktionscheck();
+  const punkte = () => document.querySelectorAll(".lb-redaktion .lb-punkt").length;
+  const alle = punkte();
+  await klick(knopf(/^zeitkritisch \(/));
+  expect(punkte()).toBeLessThan(alle);
+  expect([...document.querySelectorAll(".lb-redaktion .lb-punkt")].every((p) => p.classList.contains("lb-punkt-alert"))).toBe(true);
+  await klick(knopf("alle"));
+  expect(punkte()).toBe(alle);
+  await klick(knopf(/^Erledigt$/));
+  await klick(document.querySelector<HTMLInputElement>(".lb-red-filter input")!);
+  expect(punkte()).toBe(alle - 1);
+  for (const d of document.querySelectorAll<HTMLDetailsElement>(".lb-baustein-text")) expect(d.open).toBe(false);
+});
