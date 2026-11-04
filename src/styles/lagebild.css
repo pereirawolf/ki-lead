@@ -1473,3 +1473,36 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* Redaktionscheck kompakt (seit UX-2026-W45-20): Abschnitte aufklappbar, Befundtext auf zwei Zeilen */
+.lb-abschnitt > details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.lb-abschnitt > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lb-abschnitt > details > summary .abschnitt::before {
+  content: "▸ ";
+  color: var(--tinte-leise);
+}
+
+.lb-abschnitt > details[open] > summary .abschnitt::before {
+  content: "▾ ";
+}
+
+.lb-abschnitt-zahl {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+}
+
+.lb-punkt-gekuerzt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}

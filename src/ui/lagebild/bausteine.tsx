@@ -2,7 +2,7 @@
 // Befundpunkt des Redaktionschecks. Unverändert übernommen; die Marken einer Meldung und eines Sachverhalts sind jetzt
 // Komponenten statt Hilfsfunktionen der Ansicht.
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
 import {
@@ -84,14 +84,35 @@ export function KopierKnopf({ html, text, titel = "Kopieren", was }: { html: str
   );
 }
 
-export function Abschnitt({ nr, id, titel, verweis, children }: { nr: number; id?: string; titel: string; verweis?: string; children: ReactNode }) {
+/** Abschnitt des Redaktionschecks; aufklappbar, ohne Befund eingeklappt zu einer Zeile (seit UX-2026-W45-20) */
+export function Abschnitt({
+  nr,
+  id,
+  titel,
+  verweis,
+  anzahl,
+  children,
+}: {
+  nr: number;
+  id?: string;
+  titel: string;
+  verweis?: string;
+  /** Befunde des Abschnitts (alle Einstufungen); ohne Angabe immer offen */
+  anzahl?: number;
+  children: ReactNode;
+}) {
   return (
     <section className="lb-abschnitt" id={id} tabIndex={-1}>
-      <h3 className="abschnitt">
-        {nr} · {titel}
-        {verweis && <span className="lb-verweis"> ({verweis})</span>}
-      </h3>
-      {children}
+      <details open={anzahl === undefined || anzahl > 0}>
+        <summary>
+          <h3 className="abschnitt">
+            {nr} · {titel}
+            {verweis && <span className="lb-verweis"> ({verweis})</span>}
+            {anzahl !== undefined && <span className="lb-abschnitt-zahl">{anzahl ? ` · ${anzahl} Befund${anzahl === 1 ? "" : "e"}` : " · ohne Befund"}</span>}
+          </h3>
+        </summary>
+        {children}
+      </details>
     </section>
   );
 }
@@ -175,7 +196,7 @@ export function Punkt({
   schluessel,
   name,
   stufe: stufeVorgabe,
-  kuerzen = false,
+  kuerzen = true,
   children,
 }: {
   klasse: Klasse | "";
@@ -190,12 +211,18 @@ export function Punkt({
   name?: string;
   /** Einstufung für Filter und Zählung, wenn sie von der Farbklasse abweicht (Schemaabweichung: rot, aber zu klären) */
   stufe?: "alert" | "warn" | "info";
-  /** Text auf zwei Zeilen kürzen, mit „mehr“ (UX-2026-W45-20); aus bei Tabellen */
+  /** Text auf zwei Zeilen kürzen, mit „mehr“, wenn er länger ist (UX-2026-W45-20); aus bei Tabellen */
   kuerzen?: boolean;
   children?: ReactNode;
 }) {
   const k = useContext(BearbeitungKontext);
   const [auf, setAuf] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [ueberlauf, setUeberlauf] = useState(false);
+  useLayoutEffect(() => {
+    const el = textRef.current;
+    if (el && kuerzen && !auf) setUeberlauf(el.scrollHeight > el.clientHeight + 1);
+  });
   const stand = schluessel && k ? k.bearbeitung[schluessel] : undefined;
   const bearbeitbar = !!(schluessel && k && (klasse === "alert" || klasse === "warn"));
   // Filter nach Einstufung und Bearbeitung (UX-2026-W45-21)
@@ -214,8 +241,12 @@ export function Punkt({
         </span>
       )}
       <p className="lb-punkt-titel">{titel}</p>
-      {zeigeText && <div className={kuerzen && !auf ? "lb-punkt-text lb-punkt-gekuerzt" : "lb-punkt-text"}>{children}</div>}
-      {!!children && (kuerzen || stand) && (
+      {zeigeText && (
+        <div ref={textRef} className={kuerzen && !auf ? "lb-punkt-text lb-punkt-gekuerzt" : "lb-punkt-text"}>
+          {children}
+        </div>
+      )}
+      {!!children && ((kuerzen && (ueberlauf || auf)) || stand) && (
         <button type="button" className="lb-mehr-knopf" aria-expanded={zeigeText && (auf || !kuerzen)} onClick={() => setAuf((a) => !a)}>
           {auf ? "weniger" : stand ? "Text zeigen" : "mehr"}
         </button>
@@ -235,18 +266,20 @@ export function Marken({ e, profil, eigen }: { e: LagebildEintrag; profil: Profi
   const r = profil.ui.rollen;
   return (
     <>
-      {e.fremd && e.fremdGeprueft ? (
-        // Seit 0.6.19 (TP-2026-W44-59): geprüft gegen das Schema aus „meldung.eingang_schemata“
-        e.schema.length ? (
-          <Marke farbe="rot">fremdes Schema: {e.schema.length}</Marke>
-        ) : (
-          <Marke farbe="gruen">fremdes Schema ✓</Marke>
-        )
-      ) : e.fremd ? (
-        <Marke farbe="grau">fremdes Schema</Marke>
-      ) : e.schema.length ? (
-        <Marke farbe="rot">Schema: {e.schema.length}</Marke>
-      ) : null /* ohne Abweichung keine Marke (seit UX-2026-W45-11) */}
+      {
+        e.fremd && e.fremdGeprueft ? (
+          // Seit 0.6.19 (TP-2026-W44-59): geprüft gegen das Schema aus „meldung.eingang_schemata“
+          e.schema.length ? (
+            <Marke farbe="rot">fremdes Schema: {e.schema.length}</Marke>
+          ) : (
+            <Marke farbe="gruen">fremdes Schema ✓</Marke>
+          )
+        ) : e.fremd ? (
+          <Marke farbe="grau">fremdes Schema</Marke>
+        ) : e.schema.length ? (
+          <Marke farbe="rot">Schema: {e.schema.length}</Marke>
+        ) : null /* ohne Abweichung keine Marke (seit UX-2026-W45-11) */
+      }
       {e.referenzen?.some((b) => b.stufe === "fehler") && (
         // seit 0.7.0 (UP-2026-W45-02): Prüfebene 2 bei LEAD-Meldung-v2
         <Marke farbe="rot">Referenzen: {e.referenzen.filter((b) => b.stufe === "fehler").length}</Marke>
