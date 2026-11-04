@@ -6,6 +6,7 @@ import { autoTable } from "jspdf-autotable";
 import { aufloesen } from "../kern/schema";
 import { holeWert, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
+import { radarForm } from "../kern/radarGeometrie";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
 import { hatObjekte } from "../kern/listen";
@@ -92,7 +93,8 @@ const RADAR_RAND = RADAR_MM + 6;
 
 /**
  * Zeichnet das Lagenradar als Vektorgrafik: Ringe je Stufe, Achsen mit Kurzbezeichnung, Fläche der
- * gesetzten Werte. Offene Achsen (null) erscheinen als hohler Punkt im Zentrum, nicht als Stufe 0.
+ * gesetzten Werte. Offene Achsen (null) erscheinen seit UX-2026-W45-17 als hohler Ring am Rand und unterbrechen die
+ * Fläche (bis dahin hohler Punkt im Zentrum bei geschlossener Fläche).
  */
 export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, unknown> | undefined, x: number, y: number, groesse: number) {
   const n = def.achsen.length;
@@ -130,23 +132,31 @@ export function radarZeichnen(doc: jsPDF, def: RadarDef, wert: Record<string, un
   });
   const stufen = radarWerte(wert);
   const werte = def.achsen.map((a) => stufen[a.key] ?? null);
-  if (werte.some((v) => v !== null)) {
+  // Seit UX-2026-W45-17: Fläche nur bei vollständigem Radar, sonst Kanten zwischen gesetzten Nachbarn; offen als Ring am Rand
+  const form = radarForm(werte);
+  doc.setDrawColor(...BLAU);
+  doc.setLineWidth(0.5);
+  if (form.voll) {
     doc.setFillColor(214, 226, 238);
-    doc.setDrawColor(...BLAU);
-    doc.setLineWidth(0.5);
     vieleck(
       werte.map((v) => (rMax * (v ?? 0)) / def.max),
       "FD",
     );
-  }
+  } else
+    for (const [i, j] of form.kanten) {
+      const [x1, y1] = punkt(i, (rMax * werte[i]!) / def.max);
+      const [x2, y2] = punkt(j, (rMax * werte[j]!) / def.max);
+      doc.line(x1, y1, x2, y2);
+    }
   werte.forEach((v, i) => {
-    const [px, py] = punkt(i, (rMax * (v ?? 0)) / def.max);
     if (v === null) {
+      const [px, py] = punkt(i, rMax);
       doc.setDrawColor(150, 160, 155);
       doc.setFillColor(255, 255, 255);
       doc.setLineWidth(0.3);
       doc.circle(px, py, 0.9, "FD");
     } else {
+      const [px, py] = punkt(i, (rMax * v) / def.max);
       doc.setFillColor(...BLAU);
       doc.circle(px, py, 0.9, "F");
     }

@@ -1,8 +1,10 @@
-// Lagenradar: Netzgrafik plus Stufenwahl je Achse. „Offen“ (null) ist sichtbar etwas anderes als Stufe 0.
+// Lagenradar: Netzgrafik plus Stufenwahl je Achse. „Offen“ (null) ist sichtbar etwas anderes als Stufe 0: seit
+// UX-2026-W45-17 ein hohler Ring am Rand und keine Fläche, solange eine Achse offen ist (src/kern/radarGeometrie.ts).
 
 import type { KeyboardEvent } from "react";
 import type { RadarDef } from "../kern/typen";
 import { radarMitStufe, radarWerte } from "../kern/ui";
+import { radarForm } from "../kern/radarGeometrie";
 
 interface Props {
   def: RadarDef;
@@ -34,6 +36,7 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
   const stufen = radarWerte(wert);
   const werte = def.achsen.map((a) => stufen[a.key] ?? null);
   const gesetzt = werte.some((v) => v !== null);
+  const form = radarForm(werte);
   const flaeche = def.achsen
     .map((_, i) =>
       punkt(i, (rMax * (werte[i] ?? 0)) / def.max)
@@ -59,15 +62,22 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
           </g>
         );
       })}
-      {gesetzt && <polygon points={flaeche} className="radar-flaeche" />}
+      {/* Fläche nur bei vollständigem Radar; sonst Kanten zwischen gesetzten Nachbarn, offen als Ring am Rand (UX-2026-W45-17) */}
+      {gesetzt && form.voll && <polygon points={flaeche} className="radar-flaeche" />}
+      {gesetzt &&
+        form.kanten.map(([i, j]) => {
+          const [x1, y1] = punkt(i, (rMax * werte[i]!) / def.max);
+          const [x2, y2] = punkt(j, (rMax * werte[j]!) / def.max);
+          return <line key={`k-${i}-${j}`} x1={x1} y1={y1} x2={x2} y2={y2} className="radar-linie" />;
+        })}
       {def.achsen.map((a, i) => {
         const v = werte[i];
-        const [x, y] = punkt(i, (rMax * (v ?? 0)) / def.max);
-        return v === null ? (
-          <circle key={a.key} cx={x} cy={y} r={3.5} className="radar-punkt-offen" />
-        ) : (
-          <circle key={a.key} cx={x} cy={y} r={4.5} className="radar-punkt" />
-        );
+        if (v === null || v === undefined) {
+          const [x, y] = punkt(i, rMax);
+          return <circle key={a.key} cx={x} cy={y} r={4.5} className="radar-punkt-offen" />;
+        }
+        const [x, y] = punkt(i, (rMax * v) / def.max);
+        return <circle key={a.key} cx={x} cy={y} r={4.5} className="radar-punkt" />;
       })}
     </svg>
   );

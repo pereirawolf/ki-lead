@@ -361,6 +361,13 @@ textarea {
   stroke-linejoin: round;
 }
 
+/* Kanten zwischen gesetzten Achsen, solange eine Achse offen ist (seit UX-2026-W45-17) */
+.radar-linie {
+  stroke: var(--radar-linie);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
 .radar-punkt {
   fill: var(--radar-linie);
   stroke: var(--flaeche);

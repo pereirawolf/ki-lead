@@ -10,6 +10,7 @@ import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { adresseLesen, adresseText } from "../../src/ui/app/adresse";
 import { alterText, sammelErinnerungMailto, type StatusZeile, type SvEintrag } from "../../src/lagebild/lagebild";
 import { KEIN_FILTER, svFiltern, type SvFilter } from "../../src/ui/lagebild/Sachverhaltsliste";
+import { radarForm } from "../../src/kern/radarGeometrie";
 
 describe("UX-2026-W45-05: Adresse der Auswertung", () => {
   it("liest #/auswertung/… und weiterhin #/lagebild/…, schreibt #/auswertung/…", () => {
@@ -183,5 +184,33 @@ describe("UX-2026-W45-15: Bezug zwischen Sachverhalten", () => {
     const unter = document.querySelector('.lb-svliste-unter[aria-label="Bezug von DE-20261014-7QKD"]')!;
     expect(unter.querySelectorAll(":scope > .lb-sv-zeile")).toHaveLength(7);
     expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(8);
+  });
+});
+
+describe("UX-2026-W45-17: offene Achse im Lagenradar", () => {
+  it("Geometrie: keine Fläche und keine Kante zur offenen Achse", () => {
+    expect(radarForm([1, 2, 3, 4])).toEqual({ voll: true, kanten: [], offen: [] });
+    const f = radarForm([2, null, 3, 4, 1]);
+    expect(f.voll).toBe(false);
+    expect(f.offen).toEqual([1]);
+    expect(f.kanten).toEqual([
+      [2, 3],
+      [3, 4],
+      [4, 0],
+    ]);
+    expect(radarForm([null, null, null]).kanten).toEqual([]);
+  });
+
+  it("Grafik: offene Achse als Ring am Rand, ohne Fläche", async () => {
+    const { RadarGrafik } = await import("../../src/ui/Radar");
+    const def = { max: 4, achsen: ["a", "b", "c", "d"].map((key) => ({ key, label: key.toUpperCase(), stufen: [] })) } as any;
+    const { renderToStaticMarkup } = await import("react-dom/server");
+    const html = renderToStaticMarkup(React.createElement(RadarGrafik, { def, wert: { a: 2, b: null, c: 3, d: 4 }, groesse: 100 }));
+    expect(html).not.toContain("radar-flaeche");
+    expect(html.match(/class="radar-linie"/g)).toHaveLength(2);
+    // Ring der offenen Achse B am Rand (rechts der Mitte: x = 50 + 36)
+    expect(html).toMatch(/<circle cx="86" cy="50" r="4.5" class="radar-punkt-offen"/);
+    const voll = renderToStaticMarkup(React.createElement(RadarGrafik, { def, wert: { a: 2, b: 1, c: 3, d: 4 }, groesse: 100 }));
+    expect(voll).toContain("radar-flaeche");
   });
 });
