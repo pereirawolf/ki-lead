@@ -400,12 +400,11 @@ function befundZahl(befunde: Befund[]): string {
 }
 
 /**
- * Inhalt einer Profilkarte: beim verwendeten Profil offen, bei den übrigen hinter „Angaben, Lesetexte und Prüfung“,
- * damit die Liste auch mit mehreren importierten Profilen überschaubar bleibt. Sprünge (Befunde, Verweise in Lesetexten)
- * öffnen das umgebende Element über bereichOeffnen().
+ * Inhalt einer Profilkarte hinter „Angaben, Lesetexte und Prüfung“, bei allen Karten gleich und zugeklappt (seit
+ * UX-2026-W45-27; bis dahin beim verwendeten Profil offen). Das verwendete Profil ist nur hervorgehoben. Sprünge
+ * (Befunde, Verweise in Lesetexten) öffnen das umgebende Element über bereichOeffnen().
  */
-function KartenInhalt({ offen, children }: { offen: boolean; children: ReactNode }) {
-  if (offen) return <>{children}</>;
+function KartenInhalt({ children }: { children: ReactNode }) {
   return (
     <details className="profil-details">
       <summary>Angaben, Lesetexte und Prüfung</summary>
@@ -567,7 +566,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 {m ? `Profilversion ${m.version} · ` : ""}
                 {herkunft(p)}
               </p>
-              <KartenInhalt offen={istAktiv}>
+              <KartenInhalt>
                 {p.profil && (
                   <nav className="profil-sprungleiste" aria-label={`Abschnitte von Profil „${m?.name || p.schluessel}“`}>
                     {[

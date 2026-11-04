@@ -45,10 +45,12 @@ describe("Profilansicht: Reihenfolge und kompakte Zeilen", () => {
     expect(karten()[0].querySelector("h2")?.textContent).toMatch(/Vorlage/);
   });
 
-  it("zeigt den Inhalt des verwendeten Profils offen, den der übrigen hinter einem Aufklappelement", async () => {
+  // Seit UX-2026-W45-27 sind alle Karten gleich aufgebaut und zugeklappt; das verwendete Profil ist nur hervorgehoben
+  it("UX-2026-W45-27: zeigt den Inhalt aller Profile hinter demselben Aufklappelement", async () => {
     await ansicht("lead-beispiel");
     const [aktiv, ander] = karten();
-    expect(aktiv.querySelector(":scope > details.profil-details")).toBeNull();
+    const aktivZu = aktiv.querySelector<HTMLDetailsElement>(":scope > details.profil-details")!;
+    expect(aktivZu.open).toBe(false);
     expect(ueberschriften(aktiv)).toEqual(["Angaben", "Lesen", "Prüfen"]);
     const zu = ander.querySelector<HTMLDetailsElement>(":scope > details.profil-details")!;
     expect(zu).toBeTruthy();
