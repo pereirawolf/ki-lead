@@ -93,7 +93,7 @@ const ohneFiktiv = (s: string) => s.replace(/\s*\(FIKTIV\)\s*$/, "").trim();
 
 /** Zugangsvermerk der Quellenzeile nach dem Kodierleitfaden (Abschnitt 5) */
 function zugangVermerk(zugang: string | null, fiktiv: boolean): string {
-  const teile = [zugang === "behoerdenintern" ? "behördenintern" : zugang === "paywall" ? "Paywall" : "", fiktiv ? "FIKTIV" : ""].filter(Boolean);
+  const teile = [zugang === "behoerdenintern" ? "behördenintern" : zugang === "betriebsintern" ? "betriebsintern" : zugang === "paywall" ? "Paywall" : "", fiktiv ? "FIKTIV" : ""].filter(Boolean);
   return teile.length ? ` (${teile.join(", ")})` : "";
 }
 

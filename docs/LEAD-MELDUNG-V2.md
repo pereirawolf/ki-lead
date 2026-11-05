@@ -123,7 +123,7 @@ Kennzahlen machen unzulässige Summen erkennbar (Einheit, Zeitbasis, Teilmenge, 
 | `url` | – | |
 | `zugriff` | ja | Tag des Abrufs, `null` = nicht angegeben |
 | `datenstand` | – | Stand der Angaben, getrennt vom Veröffentlichungsdatum |
-| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
+| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `betriebsintern` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt), `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
 | `meldung_id` | – | bei Eingangsmeldungen die verwendete Fassung |
 | `ursprung` | – | Ursprungsquelle(n), wenn diese Quelle eine Angabe nur weiterverbreitet; Weiterverbreitungen sind keine unabhängige Bestätigung |
 | `anmerkung` | – | |
@@ -267,6 +267,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 7 | 05.11.2026 | Kernschema: zusätzlicher Wert `betriebsintern` für `quellen[].zugang` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt); bestehende Meldungen bleiben gültig (Abschnitt 4; KL-2026-W45-06). Abschnitt 3: Kennungen der Betreiber mit Präfix `KRITIS-` (KL-2026-W45-05); Abschnitt 13 Nr. 8: Module von KRITIS-LEAD eingebettet (KL-2026-W45-02) |
 | 2.0 (Entwurf), Nachtrag 6 | 04.11.2026 | Kernschema: `bewertung` im Sachverhalt ist bei `absender.ebene` „Betreiber“ nicht Pflicht; für alle übrigen Ebenen bleibt sie Pflicht (Bedingung an der Wurzel), ist sie vorhanden, gelten die üblichen Regeln (Abschnitte 3 und 6; KL-2026-W45-01, Voraussetzung für die Umstellung von KRITIS-LEAD). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
 | 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |

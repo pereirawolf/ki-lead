@@ -244,6 +244,7 @@ function quelleV1(zeile, folgezeilen, zone, hinweise) {
   else if (/Eingangsmeldung/i.test(voll)) q.zugang = "eingangsmeldung";
   else if (/\(Eingangsmaterial\)/i.test(voll)) q.zugang = "eingangsmaterial";
   else if (/behördenintern/i.test(voll)) q.zugang = "behoerdenintern";
+  else if (/betriebsintern/i.test(voll)) q.zugang = "betriebsintern";
   else if (q.url) q.zugang = "oeffentlich";
 
   const hd = /^(.*?)\s*\((\d{1,2})\.(\d{1,2})\.(\d{4})\):\s*(.*)$/.exec(rest);
@@ -266,6 +267,7 @@ function quelleV1(zeile, folgezeilen, zone, hinweise) {
     .replace(/\s*\(Paywall\)/gi, "")
     .replace(/\s*\(Eingangsmaterial\)/gi, "")
     .replace(/\(behördenintern(?:,\s*)?/gi, "(")
+    .replace(/\(betriebsintern(?:,\s*)?/gi, "(")
     .replace(/\s*\(\)/g, "")
     .replace(/\s*https?:\/\/\S+/g, "")
     .trim()

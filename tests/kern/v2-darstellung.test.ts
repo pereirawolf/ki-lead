@@ -245,3 +245,33 @@ describe("KL-2026-W45-01: Betreibermeldung ohne bewertung in Lagebild und Ausgab
     expect(text).not.toMatch(/undefined|object Object/);
   });
 });
+
+describe("KL-2026-W45-06: Zugang „betriebsintern“", () => {
+  const KERN = JSON.parse(readFileSync(repoPfad("formate/lead-meldung-v2/kern.schema.json"), "utf-8"));
+  const BUND = JSON.parse(readFileSync(repoPfad("formate/lead-meldung-v2/beispiel/meldung.schema.json"), "utf-8"));
+  const quelle = {
+    id: "Q1",
+    kategorie: "B",
+    herausgeber: "Zweckverband Trinkwasser (FIKTIV)",
+    titel: "Betriebstagebuch der Leitwarte",
+    zugriff: "2026-10-14",
+    zugang: "betriebsintern",
+  };
+
+  it("zulässiger Wert im Kern und in den zusammengestellten Schemata, neben „behoerdenintern“", () => {
+    const werte = KERN.$defs.quelle.properties.zugang.enum;
+    expect(werte).toEqual(expect.arrayContaining(["behoerdenintern", "betriebsintern", null]));
+    expect(BUND.$defs.quelle.properties.zugang.enum).toEqual(werte);
+    const m = TH();
+    m.quellen[0] = { ...m.quellen[0], zugang: "betriebsintern" };
+    expect(pruefeRoh(BUND, m)).toEqual([]);
+    m.quellen[0].zugang = "betriebsinterne Unterlage";
+    expect(pruefeRoh(BUND, m).length).toBeGreaterThan(0);
+  });
+
+  it("Quellenzeile mit Vermerk; das Werkzeug liest ihn zurück", () => {
+    const zeile = quellenZeileV2(quelle);
+    expect(zeile).toBe("[Q1] B – Zweckverband Trinkwasser (FIKTIV): Betriebstagebuch der Leitwarte (betriebsintern) [Zugriff: 14.10.2026]");
+    expect(quellenV1(zeile, "Europe/Berlin", [])[0]).toEqual(quelle);
+  });
+});
