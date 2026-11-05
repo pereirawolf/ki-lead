@@ -11,6 +11,7 @@ type Obj = Record<string, any>;
 const ZUGANG: Record<string, string> = {
   paywall: " (Paywall)",
   behoerdenintern: " (behördenintern)",
+  betriebsintern: " (betriebsintern)",
   eingangsmeldung: " (Eingangsmeldung)",
   eingangsmaterial: " (Eingangsmaterial)",
 };

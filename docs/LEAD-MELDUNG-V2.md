@@ -59,7 +59,7 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
+| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1; bei Betreibern Präfix `KRITIS-` mit Kürzel, [AUSTAUSCH.md](AUSTAUSCH.md) Abschnitt 9); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
 | `bezug` | – | `[{kennung, meldung_id?, art?: verdichtung \| teilung \| zusammenfuehrung}]` |
 | `bezeichnung` | ja | Kurztitel |
 | `eintritt` | ja | `{zeit, genauigkeit: belegt \| ungefaehr \| unbekannt}`; `unbekannt` verlangt `zeit: null` |
@@ -123,7 +123,7 @@ Kennzahlen machen unzulässige Summen erkennbar (Einheit, Zeitbasis, Teilmenge, 
 | `url` | – | |
 | `zugriff` | ja | Tag des Abrufs, `null` = nicht angegeben |
 | `datenstand` | – | Stand der Angaben, getrennt vom Veröffentlichungsdatum |
-| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
+| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `betriebsintern` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt), `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
 | `meldung_id` | – | bei Eingangsmeldungen die verwendete Fassung |
 | `ursprung` | – | Ursprungsquelle(n), wenn diese Quelle eine Angabe nur weiterverbreitet; Weiterverbreitungen sind keine unabhängige Bestätigung |
 | `anmerkung` | – | |
@@ -259,7 +259,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 5. **Stellenkennung** (`stelle_id`): Register oder Schema der Kennungen.
 6. **Gebietsschlüssel der Kreise:** Die Migration setzt nur Länderschlüssel; Kreisschlüssel im Landesprofil ergänzen und prüfen.
 7. **Abstimmung in Teil C** nach [AUSTAUSCH.md](AUSTAUSCH.md); dieser Entwurf ist die Vorlage dafür.
-8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet. Betreibermeldungen kommen ohne Bewertung aus (Abschnitt 3, KL-2026-W45-01).
+8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und sind hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet: `lead-kritis-meldung` und `lead-kritis-betrieb` 0.3 unter `formate/fremd/kritis-lead/` (KRITIS-LEAD `206d574`, KL-2026-W45-02); ein Profil bindet sie über seine Zusammenstellung ein. Betreibermeldungen kommen ohne Bewertung aus (Abschnitt 3, KL-2026-W45-01).
 9. **Lizenz:** Kern-, Modul- und zusammengestellte Schemata stehen wie die Meldungsschemata der Profile zusätzlich unter CC0 1.0 (LICENSE-CONTENT Nr. 2 e); zur Bestätigung durch den Herausgeber.
 10. **Sachverhaltsübergreifende Lage:** optionales Feld für Angaben, die für alle Sachverhalte einer Meldung gelten (übergreifende Kernaussage, übergreifende Maßnahmen und Entscheidungsbedarfe), vorgemerkt für die Umstellung der Profile (LS-2026-W45-03, Entscheidung des Herausgebers vom 04.11.2026). Zu klären: eigenes Kernfeld oder Meldungsmodul (Abschnitt 7); bis dahin ordnet die Arbeitsanweisung Erfassung (4.3) solche Teile den Sachverhalten zu.
 
@@ -267,6 +267,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 7 | 05.11.2026 | Kernschema: zusätzlicher Wert `betriebsintern` für `quellen[].zugang` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt); bestehende Meldungen bleiben gültig (Abschnitt 4; KL-2026-W45-06). Abschnitt 3: Kennungen der Betreiber mit Präfix `KRITIS-` (KL-2026-W45-05); Abschnitt 13 Nr. 8: Module von KRITIS-LEAD eingebettet (KL-2026-W45-02) |
 | 2.0 (Entwurf), Nachtrag 6 | 04.11.2026 | Kernschema: `bewertung` im Sachverhalt ist bei `absender.ebene` „Betreiber“ nicht Pflicht; für alle übrigen Ebenen bleibt sie Pflicht (Bedingung an der Wurzel), ist sie vorhanden, gelten die üblichen Regeln (Abschnitte 3 und 6; KL-2026-W45-01, Voraussetzung für die Umstellung von KRITIS-LEAD). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
 | 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |

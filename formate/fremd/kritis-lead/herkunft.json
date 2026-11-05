@@ -1,0 +1,28 @@
+{
+  "format": "KRITIS-LEAD-Module",
+  "hinweis": "Module von KRITIS-LEAD für LEAD-Meldung-v2 (Abschnitt 7): Meldungsmodul lead-kritis-meldung für meldungsweite Angaben eines KRITIS-Betreibers und Fachmodul lead-kritis-betrieb je Sachverhalt einer Betreibermeldung. Unverändert kopiert; die Module sind in sich geschlossen (eigene Definitionen für Text, Zeitpunkt und Zeitangabe) und brauchen keine Bündelung. Eingebunden werden sie über die Zusammenstellung eines Profils (module bzw. meldungsmodule). Eine neue Modulfassung in KRITIS-LEAD wird bewusst neu gepinnt; der Pin-Wächter von KRITIS-LEAD (werkzeuge/pruefen/pin-abstand.mjs) vergleicht quelle und sha256 mit dem aktuellen Stand dort.",
+  "repository": "https://github.com/pereirawolf/kritis-lead",
+  "commit": "206d574bfdddaecfddff28650aa95aec9accb145",
+  "abgerufen": "2026-11-05",
+  "lizenz": "CC-BY-4.0 OR CC0-1.0 (KRITIS-LEAD, LICENSE-CONTENT Nr. 1 b und 2 a)",
+  "module": [
+    {
+      "modul": "lead-kritis-meldung",
+      "art": "meldungsmodul",
+      "fassung": "0.3",
+      "datei": "0.3/lead-kritis-meldung.schema.json",
+      "quelle": "formate/lead-kritis-v2/module/lead-kritis-meldung.schema.json",
+      "commit": "206d574bfdddaecfddff28650aa95aec9accb145",
+      "sha256": "27594a023e081fa2a35ec46ddb89125cb9f2102f3f496741e6f1cba22b2837ce"
+    },
+    {
+      "modul": "lead-kritis-betrieb",
+      "art": "fachmodul",
+      "fassung": "0.3",
+      "datei": "0.3/lead-kritis-betrieb.schema.json",
+      "quelle": "formate/lead-kritis-v2/module/lead-kritis-betrieb.schema.json",
+      "commit": "206d574bfdddaecfddff28650aa95aec9accb145",
+      "sha256": "308d481290c4c41046a2d6a92779677a7a516627e2096aedefbe11b36bafd027"
+    }
+  ]
+}

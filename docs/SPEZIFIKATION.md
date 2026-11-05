@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.7.11 vom 04.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.7.12 vom 05.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -81,7 +81,7 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.39.0",
+  "version": "1.40.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
@@ -500,6 +500,7 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.7.2 | 03.11.2026 | Abschnitt 5.4 (Einstellungen, Testläufe): Fallreihe über mitgelieferte Fälle und Fallpakete mit Plan, Kostenbremse und Ergebnis-ZIP (TP-2026-W44-62 bis -67) |
 | 0.7.3 | 03.11.2026 | LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte mit Status und Begründung je Achse, Ausgabestatus mit Freigabe (Rolle `status_freigegeben`), PDF, Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis, Zeitstrahl und Kennzahlen (Teilmengen eingerückt, Mindestwert als „mindestens“), Vorlage der v2-Darstellungsdatei (UP-2026-W45-03) |
 | 0.7.7 | 04.11.2026 | Nachbearbeitung nach S2: Platzhalter `NEU-n` nur im Zeitstrahl dem n-ten Sachverhalt ohne Kennung zugeordnet, Hinweise `KENNUNG_PLATZHALTER_ZUGEORDNET` und `KENNUNG_PLATZHALTER_OFFEN` (Abschnitt Zeitstrahl und Kennung; GK-2026-W45-01) |
+| 0.7.12 | 05.11.2026 | Module von KRITIS-LEAD (`lead-kritis-meldung`, `lead-kritis-betrieb` 0.3) eingebettet unter `formate/fremd/kritis-lead/` (KL-2026-W45-02); Kernschema von LEAD-Meldung-v2 mit Zugang `betriebsintern` für Quellen, Vermerk in Quellenzeile und Baustein (KL-2026-W45-06); Beispielprofil 1.40.0 mit Kodierleitfaden 1.11.0 (Kennungen der Betreiber, KL-2026-W45-05) |
 | 0.7.11 | 04.11.2026 | Oberfläche von Profilen und Auswertung nach der Befunddatei `ki-lead-befund_ux_2026-W45.json` (UX-2026-W45-01 bis -32): Abschnitte 4.6, 5.2 und Adresse in 5.1; offene Radarachse nicht als Stufe 0 gezeichnet; Bearbeitungsstand im Redaktionscheck; sonst unverändert |
 | 0.7.10 | 04.11.2026 | Stichtag in der Zukunft: t0 bleibt leer und sperrt S2 (Abschnitt 5.1, S1; AV-2026-W45-07); Fallreihe mit Anteil offener Radarachsen und Prüfmuster der Radarbegründung (Abschnitt 5.4; AV-2026-W45-08); Beispielprofil 1.39.0 mit Kodierleitfaden 1.10.0 (AV-2026-W45-04 bis -06) |
 | 0.7.9 | 04.11.2026 | Schätzung von Dauer und Kosten nach dem Anbietervergleich vom 04.11.2026: Obergrenze der Erfassung mit Opus „mittel“, vorläufige Spannen der Erfassung mit gpt-6-astra „hoch“ und Mistral Medium 3.5 „hoch“, Hochrechnung zuerst aus demselben Modell (Abschnitt 5.1, Umsetzung M2; AV-2026-W45-01 bis -03) |
