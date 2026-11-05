@@ -135,25 +135,25 @@ Werkzeuge für Build, Tests und Formatierung. Sie gelangen nicht in die App; ihr
 | Paket | Version | Lizenz | Zweck |
 |---|---|---|---|
 | `@axe-core/playwright` | 4.14.0 | MPL-2.0 | Browsertests: automatische Prüfung der Barrierefreiheit mit axe-core (seit 0.6.5; MPL-2.0 wie axe-core, nur im Test, nicht ausgeliefert) |
-| `@capacitor/cli` | 8.5.3 | MIT | native Projekte erzeugen und abgleichen |
-| `@playwright/test` | 1.57.0 | Apache-2.0 | Browsertests |
+| `@capacitor/cli` | 8.6.0 | MIT | native Projekte erzeugen und abgleichen |
+| `@playwright/test` | 1.64.1 | Apache-2.0 | Browsertests |
 | `@types/js-yaml` | 4.0.9 | MIT | Typdefinitionen |
-| `@types/node` | 26.6.5 | MIT | Typdefinitionen |
+| `@types/node` | 26.6.6 | MIT | Typdefinitionen |
 | `@types/react` | 18.3.31 | MIT | Typdefinitionen |
 | `@types/react-dom` | 18.3.7 | MIT | Typdefinitionen |
 | `@typescript/native` | 7.0.2 | Apache-2.0 | Typprüfung (`tsc`, TypeScript 7; Alias auf das Paket `typescript`, seit 0.6.2) |
-| `@vitejs/plugin-react` | 6.1.2 | MIT | Build |
-| `@vitest/coverage-v8` | 5.0.5 | MIT | Testabdeckung (`npm run test:coverage`, seit 0.6.2) |
+| `@vitejs/plugin-react` | 6.2.1 | MIT | Build |
+| `@vitest/coverage-v8` | 5.1.0 | MIT | Testabdeckung (`npm run test:coverage`, seit 0.6.2) |
 | `ajv` | 8.20.0 | MIT | Referenz für die Schemaprüfung in Tests |
-| `eslint` | 10.13.0 | MIT | Linting (seit 0.6.2) |
+| `eslint` | 10.14.0 | MIT | Linting (seit 0.6.2) |
 | `eslint-plugin-react-hooks` | 7.1.1 | MIT | Linting: Regeln für React-Hooks (seit 0.6.2) |
-| `globals` | 17.13.0 | MIT | Linting: globale Namen von Browser und Node (seit 0.6.2) |
+| `globals` | 17.14.0 | MIT | Linting: globale Namen von Browser und Node (seit 0.6.2) |
 | `jsdom` | 30.1.3 | MIT | Oberflächentests |
 | `prettier` | 3.9.10 | MIT | Formatierung |
 | `typescript` | 6.0.2 | Apache-2.0 | TypeScript-API für typescript-eslint (Alias auf `@typescript/typescript6`, seit 0.6.2; vorher TypeScript 7.0.2 direkt) |
 | `typescript-eslint` | 8.72.1 | MIT | Linting mit Typinformationen (seit 0.6.2) |
-| `vite` | 8.3.4 | MIT | Build, Lizenzdatei im Build |
-| `vitest` | 5.0.5 | MIT | Tests |
+| `vite` | 8.3.5 | MIT | Build, Lizenzdatei im Build |
+| `vitest` | 5.1.0 | MIT | Tests |
 
 Gradle, das Android-Gradle-Plugin und Xcode sind ebenfalls nur Werkzeuge. Dasselbe gilt für `reuse` 6.3.0 (GPL-3.0-or-later, Python, kein npm-Paket): Die CI installiert es mit `pipx` und prüft damit die maschinenlesbare Lizenzzuordnung in `REUSE.toml` (seit Issue #89).
 
