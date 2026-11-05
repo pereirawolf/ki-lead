@@ -26,3 +26,109 @@ keywords:
   - Lagenradar
   - künstliche Intelligenz
   - Forschungsdemonstrator
+references:
+  - type: article
+    title: "Blackout Berlin: Zwischen Konzept und Krisenrealität"
+    authors:
+      - given-names: Heiko
+        family-names: Pereira Wolf
+        orcid: "https://orcid.org/0009-0004-0014-7616"
+    year: 2026
+    date-published: "2026-01-15"
+    doi: "10.5281/zenodo.18262696"
+    url: "https://www.pereirawolf.de/beitrag/2026-01-15-beitrag-1.html"
+  - type: article
+    title: "Hybride Zwischenlagen im Bevölkerungsschutz. Eine mehrdimensionale Klassifikation jenseits binärer Schwellen"
+    authors:
+      - given-names: Heiko
+        family-names: Pereira Wolf
+        orcid: "https://orcid.org/0009-0004-0014-7616"
+    year: 2026
+    date-published: "2026-01-20"
+    doi: "10.5281/zenodo.18305827"
+    url: "https://www.pereirawolf.de/beitrag/2026-01-20-beitrag-1.html"
+  - type: article
+    title: "LEAD und KI-LEAD. Lagearbeit als belegte, nachvollziehbare Entscheidungsvorbereitung"
+    authors:
+      - given-names: Heiko
+        family-names: Pereira Wolf
+        orcid: "https://orcid.org/0009-0004-0014-7616"
+    year: 2026
+    date-published: "2026-10-24"
+    doi: "10.5281/zenodo.23619671"
+    url: "https://www.pereirawolf.de/beitrag/2026-10-24-beitrag-1.html"
+  - type: article
+    title: "Toward a Theory of Situation Awareness in Dynamic Systems"
+    authors:
+      - given-names: Mica R.
+        family-names: Endsley
+    year: 1995
+    journal: "Human Factors"
+    volume: 37
+    issue: "1"
+    start: 32
+    end: 64
+    doi: "10.1518/001872095779049543"
+  - type: book
+    title: "Sensemaking in Organizations"
+    authors:
+      - given-names: Karl E.
+        family-names: Weick
+    year: 1995
+    publisher:
+      name: "Sage"
+      city: "Thousand Oaks"
+  - type: article
+    title: "Institutional Ecology, 'Translations' and Boundary Objects: Amateurs and Professionals in Berkeley's Museum of Vertebrate Zoology, 1907-39"
+    authors:
+      - given-names: Susan Leigh
+        family-names: Star
+      - given-names: James R.
+        family-names: Griesemer
+    year: 1989
+    journal: "Social Studies of Science"
+    volume: 19
+    issue: "3"
+    start: 387
+    end: 420
+    doi: "10.1177/030631289019003001"
+  - type: article
+    title: "Krise zwischen Alltag und Alarmstufe. Eine Replik auf Nicolas Lot und ein Impuls zur Weiterentwicklung im THW-Hauptamt"
+    authors:
+      - given-names: Heiko
+        family-names: Pereira Wolf
+        orcid: "https://orcid.org/0009-0004-0014-7616"
+    year: 2025
+    date-published: "2025-07-21"
+    doi: "10.5281/zenodo.15767316"
+    url: "https://www.pereirawolf.de/beitrag/2025-07-21-beitrag-1.html"
+  - type: article
+    title: "Koordination im föderalen Bevölkerungsschutz. Zur Rolle des Gemeinsamen Kompetenzzentrums Bevölkerungsschutz"
+    authors:
+      - given-names: Heiko
+        family-names: Pereira Wolf
+        orcid: "https://orcid.org/0009-0004-0014-7616"
+    year: 2025
+    date-published: "2025-12-18"
+    doi: "10.5281/zenodo.17977457"
+    url: "https://www.pereirawolf.de/beitrag/2025-12-18-beitrag-1.html"
+  - type: book
+    title: "Organisation und Entscheidung"
+    authors:
+      - given-names: Niklas
+        family-names: Luhmann
+    year: 2011
+    edition: "3"
+    publisher:
+      name: "VS Verlag"
+      city: "Wiesbaden"
+  - type: book
+    title: "Soziale Systeme. Grundriß einer allgemeinen Theorie"
+    authors:
+      - given-names: Niklas
+        family-names: Luhmann
+    year: 2021
+    edition: "18"
+    publisher:
+      name: "Suhrkamp"
+      city: "Frankfurt am Main"
