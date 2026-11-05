@@ -59,7 +59,7 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
+| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1; bei Betreibern Präfix `KRITIS-` mit Kürzel, [AUSTAUSCH.md](AUSTAUSCH.md) Abschnitt 9); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
 | `bezug` | – | `[{kennung, meldung_id?, art?: verdichtung \| teilung \| zusammenfuehrung}]` |
 | `bezeichnung` | ja | Kurztitel |
 | `eintritt` | ja | `{zeit, genauigkeit: belegt \| ungefaehr \| unbekannt}`; `unbekannt` verlangt `zeit: null` |

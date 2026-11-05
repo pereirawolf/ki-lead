@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.6.0 – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json`, KL-2026-W45-05, freigegeben vom Herausgeber am 05.11.2026. Zweite Stelle wie beim Beispielprofil (1.40.0).
+
+- **Kodierleitfaden (1.11.0) und Arbeitsanweisung Erfassung (1.11.2)** neu abgeleitet aus dem Beispielprofil 1.40.0 (`npm run profil:land`): Kennungen der Betreiber mit Präfix `KRITIS-` in Abschnitt 8.1.
+- **Geteilte SOP-Sammelmappe 3.23.2:** Gültigkeitsstand in Teil A.
+- Schema, Darstellungsdatei, Kontakte und Beispiellagen sind unverändert.
+
 ## 1.5.0 – 04.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json`, AV-2026-W45-04 bis -06, freigegeben vom Herausgeber am 04.11.2026. Zweite Stelle wie beim Beispielprofil (1.39.0).

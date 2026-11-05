@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.40.0 – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, Commit `8faa547`), KL-2026-W45-05, freigegeben vom Herausgeber am 05.11.2026. Zweite Stelle: neue Regel im Kodierleitfaden.
+
+- **Kodierleitfaden 1.11.0:** Abschnitt 8.1 nennt die Kennungen der Betreiber (`KRITIS-<Kürzel>-JJJJMMTT-<Zufall>` mit sechsstelligem Zufallsteil, Regel in `docs/AUSTAUSCH.md`, Abschnitt 9): nie als eigene geführt; im Bezug einer Meldung nach LEAD-Meldevorlage 1.2 lässt das Schema nur vierstellige Zufallsteile zu, deshalb steht eine Betreibermeldung bis zur Umstellung auf LEAD-Meldung-v2 nur im Quellenverzeichnis.
+- **Arbeitsanweisung Erfassung 1.11.2:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.11.0“; Regeln unverändert.
+- **SOP-LEAD-Sammelmappe 3.23.2:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Kodierleitfaden 1.11.0 geprüft, kein Anpassungsbedarf (die Regeln zu Kennung und Bezug gelten über den Verweis auf Abschnitt 8).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.39.0 – 04.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json` (Anbietervergleich vom 04.11.2026: je ein interner Erfassungslauf der Standard-Profile von Anthropic, OpenAI und Mistral mit demselben Material, ohne Recherche; Commit `6302c14`), freigegeben vom Herausgeber am 04.11.2026: AV-2026-W45-04 bis -08 angenommen, -09 nicht freigegeben. Material, Laufprotokolle und Inhalte der Läufe bleiben intern. Zweite Stelle, weil der Kodierleitfaden neue Regeln erhält; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert.
