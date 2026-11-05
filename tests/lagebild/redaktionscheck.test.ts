@@ -319,7 +319,7 @@ describe("GK-2026-W44-01: je Frist eine Zeile (A.4), mehrere Fristen in einer Ze
       berlin(14, 14),
     );
     expect(red.zeit).toHaveLength(1);
-    expect(red.zeit[0].hinweis).toContain("mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (A.4)");
+    expect(red.zeit[0].hinweis).toContain("mehrere Fristen in einer Zeile – je Frist eine eigene Zeile „Handlungsrelevant bis:“ (Teil A des Profils)");
     expect(red.zeit[0].klasse).toBe("warn");
   });
 });

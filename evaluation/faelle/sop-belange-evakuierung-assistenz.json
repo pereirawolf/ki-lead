@@ -1,0 +1,43 @@
+{
+  "format": "ki-lead-evaluationsfall/1",
+  "id": "sop-belange-evakuierung-assistenz",
+  "titel": "Evakuierung mit Trennung von Assistenz und Warnlücke für hörbehinderte Menschen (FIKTIV)",
+  "stand": "2026-11-04",
+  "fiktiv": true,
+  "auftrag": {
+    "sachverhalt": "Hochwasserbedingte Evakuierung mit besonderen Belangen bei Verlegung und Warnung",
+    "stichworte": "B02, C16, C18",
+    "stichtag": "2026-11-04",
+    "meldezeitpunkt": "2026-11-04T16:00",
+    "prueffrage": "Nur das beigefügte Übungsmaterial auswerten. Relevanz für den Bevölkerungsschutz in Deutschland, belegte Wirkungen und offene Fragen getrennt darstellen. Keine Live-Recherche und keine erfundenen Ergänzungen.",
+    "websuche": false,
+    "verdichtung": false
+  },
+  "material": [
+    {
+      "datei": "evaluation/material/sop-belange-evakuierung-assistenz.md",
+      "rolle": "material",
+      "hinweis": "Vollständig erfundene Übungsnachrichten; Rollen und Zeitstände stehen im Text."
+    }
+  ],
+  "erwartungen": {
+    "muss": [
+      "Die Trennung von Assistenz und fehlende Medikationspläne als Nebenfolge der Verlegung darstellen, ohne die Evakuierung selbst in Frage zu stellen (C18/R4).",
+      "Die Warnlücke für hörbehinderte Menschen auf die belegte Angabe der Selbstvertretung beschränken und die Nutzbarkeit der Warnung als Prüffrage an die zuständige Stelle richten (C18/R3).",
+      "Die 35 verlegten Personen nicht zu den 1.900 addieren, solange die Überschneidung unbekannt ist (A.3).",
+      "Empfehlungen an Träger und Stadt adressieren, ohne erfundene Frist.",
+      "Alle urteilsprägenden Aussagen sind auf tatsächlich vorliegendes Übungsmaterial zurückführbar; offene Achsen werden begründet."
+    ],
+    "darf_nicht": [
+      "Die Evakuierung als Fehlentscheidung bewerten.",
+      "Behaupten, alle hörbehinderten Menschen im Ortsteil seien nicht erreicht worden.",
+      "Die 2.400 Einwohnerinnen und Einwohner als Evakuierte zählen.",
+      "Eine aktuelle Webprüfung, fremde Quelleninhalte, reale Alarmierungen oder zusätzliche bestätigte Zahlen erfinden."
+    ],
+    "t0": "2026-11-04T16:00",
+    "referenzraum": "Bund",
+    "ereignisarten": [
+      "Hochwasser / Überschwemmung"
+    ]
+  }
+}

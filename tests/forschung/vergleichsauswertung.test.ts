@@ -102,6 +102,17 @@ describe("Auswertung der Vergleichsläufe", () => {
     expect(() => auswerten([X1, A], "gibt-es-nicht")).toThrow(/gibt-es-nicht/);
   });
 
+  it("seit 0.7.13: das heutige Standard-Profil (S1 Sonnet „mittel“) geht vor, das bis 0.7.12 gültige (S1 Haiku „hoch“) bleibt Ersatzbezug", () => {
+    const S = reihe(["claude-sonnet-5-5", "medium"], ["claude-opus-5-5", "medium"], [lauf("s1", 2.0, 2, 0, { d1: 4, d2: 3, d3: 2 })], {
+      variante: "anthropic-heute",
+    });
+    expect(auswerten([A, S, X1]).bezug).toBe("anthropic-heute");
+    expect(auswerten([X1, A]).bezug).toBe("claude-opus-5-5-medium");
+    // ein anderes S1 trägt den Bezug nicht
+    const L = reihe(["gpt-6-luna", "high"], ["claude-opus-5-5", "medium"], [lauf("l1", 2.0, 2, 0, { d1: 4 })], { variante: "mix" });
+    expect(auswerten([L, X1]).bezug).toBeNull();
+  });
+
   it("Bericht nennt Bezug, Konfigurationen und Abstände", () => {
     const md = berichtMarkdown(auswerten([A, X1, X2]));
     expect(md).toContain("| claude-opus-5-5-medium (Bezug) | S1 claude-haiku-5-5 (high) · S2 claude-opus-5-5 (medium) | 2 (2) |");

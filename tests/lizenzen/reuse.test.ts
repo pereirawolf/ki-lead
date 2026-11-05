@@ -21,6 +21,7 @@ const CC_BY = "CC-BY-4.0";
 const CC_BY_ODER_CC0 = "CC-BY-4.0 OR CC0-1.0";
 const EUPL = "EUPL-1.2";
 const EUPL_ODER_CC_BY = "EUPL-1.2 OR CC-BY-4.0";
+const CC_BY_NC_ND = "CC-BY-NC-ND-4.0";
 
 /** Aus dem App-Symbol erzeugte Symbol- und Startbilder (LICENSE-CONTENT, Nr. 1 d) */
 const APP_SYMBOL = [
@@ -33,6 +34,8 @@ const APP_SYMBOL = [
 
 /** Soll je Datei nach LICENSE-CONTENT, vom Besonderen zum Allgemeinen */
 function sollLizenzen(pfad: string): string[] {
+  // Nr. 5 e: Grundlagen und Genese wie die begleitenden Aufsätze
+  if (pfad === "docs/GRUNDLAGEN.md") return [CC_BY_NC_ND];
   // Nr. 2 d: CC0 1.0 nur für Teile der Datei (Snippets), die Datei selbst nach Nr. 1 c
   if (pfad === "docs/VORLAGEN.md" || pfad === "docs/DATENSCHUTZ.md") return [CC_BY, CC_BY_ODER_CC0];
   // Nr. 2 a bis c und e
@@ -52,15 +55,22 @@ function sollLizenzen(pfad: string): string[] {
   if (/^(android|ios)\//.test(pfad)) return ["MIT"];
   // Nr. 1 b: Quelltext in evaluation/ fällt unter Nr. 4
   if (/^evaluation\/.*\.ts$/.test(pfad)) return [EUPL];
-  // Nr. 1 a bis c und e
-  if (/^(profile|evaluation|docs|formate)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
+  // Nr. 1 a bis c, e und f
+  if (/^(profile|evaluation|docs|formate|design)\//.test(pfad) || /^(README|CHANGELOG|SECURITY|THIRD-PARTY-NOTICES)\.md$/.test(pfad)) return [CC_BY];
   // Nr. 4
   return [EUPL];
 }
 
 describe("Lizenztexte unter LICENSES/ (Issue #89)", () => {
-  it("genau die fünf verwendeten Lizenzen", () => {
-    expect(readdirSync(repoPfad("LICENSES")).sort()).toEqual(["Apache-2.0.txt", "CC-BY-4.0.txt", "CC0-1.0.txt", "EUPL-1.2.txt", "MIT.txt"]);
+  it("genau die sechs verwendeten Lizenzen", () => {
+    expect(readdirSync(repoPfad("LICENSES")).sort()).toEqual([
+      "Apache-2.0.txt",
+      "CC-BY-4.0.txt",
+      "CC-BY-NC-ND-4.0.txt",
+      "CC0-1.0.txt",
+      "EUPL-1.2.txt",
+      "MIT.txt",
+    ]);
   });
 
   it("EUPL-1.2 wortgleich mit LICENSE", () => {

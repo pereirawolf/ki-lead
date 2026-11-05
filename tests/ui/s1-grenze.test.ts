@@ -62,10 +62,10 @@ describe("S1 an der Ausgabegrenze", () => {
     await klick(document.querySelector(".bestaetigung input") as HTMLInputElement);
     await klick(knopf("Gegenstand bestimmen (S1)"));
     await bisWahr(() => expect(seitentext()).toContain("S1 hat die Ausgabegrenze von 128.000 Token erreicht"));
-    expect(seitentext()).toContain("(Modell claude-haiku-5-5, Aufwand high)");
+    expect(seitentext()).toContain("(Modell claude-sonnet-5-5, Aufwand medium)");
     // Zurück im Auftrag, kein Vorschlag zur Bestätigung
     expect(document.querySelector("section.schritt-inhalt h2")!.textContent).toBe("Auftrag und Material");
-    expect(anfragen.liste).toEqual([{ modell: "claude-haiku-5-5", aufwand: "high", maxTokens: 128000 }]);
+    expect(anfragen.liste).toEqual([{ modell: "claude-sonnet-5-5", aufwand: "medium", maxTokens: 128000 }]);
     expect((document.querySelector("textarea") as HTMLTextAreaElement).value).toBe("Orkan in Hessen");
 
     // Laufprotokoll mit Grenze, Abbruchgrund und Notiz

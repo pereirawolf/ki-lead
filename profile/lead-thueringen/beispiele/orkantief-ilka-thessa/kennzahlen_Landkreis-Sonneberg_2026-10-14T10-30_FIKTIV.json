@@ -1,0 +1,921 @@
+{
+  "format": "Thessa-Kennzahlen",
+  "fassung": "0.3",
+  "erzeugt": "2026-10-14T10:30+02:00",
+  "datenstand": "2026-10-14T10:30+02:00",
+  "raum": {
+    "name": "Landkreis Sonneberg",
+    "schluessel": "16072"
+  },
+  "fiktiv": true,
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Landkreis Sonneberg, Bereitschaftsübersicht der Feuerwehren (FIKTIV)",
+      "titel": "Kräftelage der Feuerwehren aus 55 Einsatzmitteln, Thessa (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T10:30+02:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Einsatzmittel der Feuerwehren und der Einrichtungen ohne Feuerwehr gesamt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 55,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 36,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K3",
+      "gegenstand": "eingeschränkt einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K4",
+      "gegenstand": "im Einsatz gebunden",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 13,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K5",
+      "gegenstand": "nicht einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K6",
+      "gegenstand": "im Einsatz gebunden: auf Anfahrt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K7",
+      "gegenstand": "im Einsatz gebunden: am Einsatzort",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 11,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K8",
+      "gegenstand": "im Einsatz gebunden: Einsatz beendet, Einsatzbereitschaft wird hergestellt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K9",
+      "gegenstand": "frei verfügbar für überörtliche Hilfe (einsatzbereit, ohne Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 20,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K10",
+      "gegenstand": "einsatzbereit, vorgehalten für Katastrophenschutz (Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 12,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K11",
+      "gegenstand": "einsatzbereit, aber ohne verfügbares Trägerfahrzeug (Abrollbehälter, verlastete Geräte; nicht als Reserve gezählt)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K12",
+      "gegenstand": "Einsatzmittel der ergänzenden Ausstattung des Bundes (Zivilschutz, § 13 ZSKG)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K13",
+      "gegenstand": "ergänzende Ausstattung des Bundes: einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K12"
+    },
+    {
+      "id": "K14",
+      "gegenstand": "laufende Einsätze im Gebiet (nach Einsatzort)",
+      "einheit": "Einsätze",
+      "art": "bestand",
+      "wert": 8,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte werktags tagsüber (11 von 12 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 53,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K16",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte abends, nachts und am Wochenende (11 von 12 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 149,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Ausrückebereiche mit erfasster Risikoklasse (Mindestbedarf nach ThürFwOrgVO geprüft)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 12,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Mindestbedarf Stufe 1 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K19",
+      "gegenstand": "Mindestbedarf Stufe 1 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K20",
+      "gegenstand": "Mindestbedarf Stufe 2 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 0,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K21",
+      "gegenstand": "Mindestbedarf Stufe 2 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K22",
+      "gegenstand": "Einheiten des Katastrophenschutzes nach ThürKatSVO erfasst",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 3,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K23",
+      "gegenstand": "Einheiten des Katastrophenschutzes: einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K24",
+      "gegenstand": "Einheiten des Katastrophenschutzes: teilweise im Einsatz gebunden",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K25",
+      "gegenstand": "Einheiten des Katastrophenschutzes: nicht einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K26",
+      "gegenstand": "frei verfügbar: Brandbekämpfung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 8,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K27",
+      "gegenstand": "frei verfügbar: Technische Hilfe",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K28",
+      "gegenstand": "frei verfügbar: Wasserförderung über lange Wegstrecken",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K29",
+      "gegenstand": "frei verfügbar: Stromerzeugung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K30",
+      "gegenstand": "frei verfügbar: Hubrettung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K31",
+      "gegenstand": "frei verfügbar: Führung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 2,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Landkreis Sonneberg",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "einsatzmeldungen": [
+    {
+      "id": "EM-20261013-5KFK",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Notstromeinspeisung Pumpwerk Trinkwasser",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-13T23:30+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 8
+    },
+    {
+      "id": "EM-20261014-KUGL",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Führungsunterstützung Krisenstab, Koordinierung Netzersatz",
+      "gemeinde": {
+        "name": "Stadt Sonneberg",
+        "schluessel": "16072018"
+      },
+      "beginn": "2026-10-14T02:00+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 6
+    },
+    {
+      "id": "EM-20261014-VTP2",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Unterstützung Pflegeheim: Beleuchtung, Betankung Netzersatz",
+      "gemeinde": {
+        "name": "Frankenblick",
+        "schluessel": "16072023"
+      },
+      "beginn": "2026-10-14T03:15+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 8,
+      "betroffene": [
+        {
+          "art": "betreut",
+          "anzahl": 88
+        }
+      ]
+    },
+    {
+      "id": "EM-20261014-N5X2",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Kraftstofftransport für Netzersatzanlagen mit Abrollbehälter Logistik",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-14T07:30+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 3
+    },
+    {
+      "id": "EM-20261014-KBH7",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Unterstützung Pflegeheim: Betankung Netzersatz, Beleuchtung",
+      "gemeinde": {
+        "name": "Stadt Sonneberg",
+        "schluessel": "16072018"
+      },
+      "beginn": "2026-10-14T07:45+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 1,
+      "einsatzkraefte": 3,
+      "betroffene": [
+        {
+          "art": "betreut",
+          "anzahl": 58
+        }
+      ]
+    },
+    {
+      "id": "EM-20261014-UNBF",
+      "einsatzart": "bereitstellung_ueberoertlich",
+      "stichwort": "Überörtliche Hilfe: Dieseltransport für Netzersatzanlagen",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-14T08:00+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 6,
+      "ueberoertlich": {
+        "von": {
+          "name": "Landkreis Hildburghausen",
+          "schluessel": "16069"
+        }
+      }
+    }
+  ],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-gwl2",
+        "16072-gwas",
+        "16072-anhsea",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-dlak2312",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow1-mtw",
+        "16072018-ow2-lf10",
+        "16072018-ow2-lfkats",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072018-ow3-tsa",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-rw",
+        "16072013-ow1-mtw",
+        "16072013-ow1-anhsea",
+        "16072013-ow2-mlf",
+        "16072013-ow3-tsfw",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072023-ow1-swkats",
+        "16072023-ow2-tsf",
+        "16072023-ow3-klfth",
+        "16072024-ow1-lf10",
+        "16072024-ow1-mtw",
+        "16072024-ow1-anhlima",
+        "16072024-ow2-mlf",
+        "16072024-ow3-tsf",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-e1-ktw-4",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2",
+        "16072-wlf",
+        "16072-ablogistik",
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072-sfm",
+        "16072013-ow1-se",
+        "16072024-ow1-mks",
+        "16072018-ow3-tp"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "einsatzmittel": [
+        "16072-gwl2",
+        "16072-gwas",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow2-lf10",
+        "16072018-ow2-lfkats",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-mtw",
+        "16072023-ow1-swkats",
+        "16072024-ow1-mtw",
+        "16072024-ow2-mlf",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2",
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072-sfm",
+        "16072013-ow1-se",
+        "16072024-ow1-mks",
+        "16072018-ow3-tp"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "einsatzmittel": [
+        "16072018-ow1-dlak2312",
+        "16072018-ow3-tsa",
+        "16072023-ow2-tsf"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-anhsea",
+        "16072018-ow1-mtw",
+        "16072013-ow1-rw",
+        "16072013-ow1-anhsea",
+        "16072013-ow2-mlf",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072023-ow3-klfth",
+        "16072024-ow1-lf10",
+        "16072024-ow1-anhlima",
+        "16072-wlf",
+        "16072-ablogistik"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "einsatzmittel": [
+        "16072013-ow3-tsfw",
+        "16072024-ow3-tsf",
+        "16072018-e1-ktw-4"
+      ]
+    },
+    {
+      "kennzahl": "K6",
+      "einsatzmittel": [
+        "16072023-ow3-klfth"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-anhsea",
+        "16072018-ow1-mtw",
+        "16072013-ow1-rw",
+        "16072013-ow1-anhsea",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072024-ow1-lf10",
+        "16072024-ow1-anhlima",
+        "16072-wlf",
+        "16072-ablogistik"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "einsatzmittel": [
+        "16072013-ow2-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "einsatzmittel": [
+        "16072-gwl2",
+        "16072-gwas",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow2-lf10",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-mtw",
+        "16072024-ow1-mtw",
+        "16072024-ow2-mlf",
+        "16072-sfm",
+        "16072018-ow3-tp"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "einsatzmittel": [
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072013-ow1-se",
+        "16072024-ow1-mks"
+      ]
+    },
+    {
+      "kennzahl": "K12",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16072018-e1-gwsan",
+        "16072018-e1-ktw-3",
+        "16072018-e1-ktw-4"
+      ]
+    },
+    {
+      "kennzahl": "K13",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16072018-e1-gwsan",
+        "16072018-e1-ktw-3"
+      ]
+    },
+    {
+      "kennzahl": "K14",
+      "einsatzmittel": [],
+      "einsatzmeldungen": [
+        "EM-20261013-5KFK",
+        "EM-20261014-KUGL",
+        "EM-20261014-VTP2",
+        "EM-20261014-N5X2",
+        "EM-20261014-KKQK",
+        "EM-20261014-KBH7",
+        "EM-20261014-UNBF",
+        "EM-20261014-5PWM"
+      ]
+    },
+    {
+      "kennzahl": "K15",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K16",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K17",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K18",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K19",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K20",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K21",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K22",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K23",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K24",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K25",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K26",
+      "einsatzmittel": [
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-tlf4000",
+        "16072018-ow2-lf10",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072024-ow2-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K27",
+      "einsatzmittel": [
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072013-ow1-hlf20"
+      ]
+    },
+    {
+      "kennzahl": "K28",
+      "einsatzmittel": [
+        "16072-gwl2"
+      ]
+    },
+    {
+      "kennzahl": "K29",
+      "einsatzmittel": [
+        "16072018-ow1-rw"
+      ]
+    },
+    {
+      "kennzahl": "K30",
+      "einsatzmittel": [
+        "16072013-ow1-dlak1812"
+      ]
+    },
+    {
+      "kennzahl": "K31",
+      "einsatzmittel": [
+        "16072018-ow1-elw1",
+        "16072013-ow1-elw1"
+      ]
+    }
+  ]
+}

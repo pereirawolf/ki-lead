@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.11 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.14 vom 03.11.2026, gilt für App-Version 0.7.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -39,7 +39,8 @@ Alles, was die App speichert, liegt **auf dem Gerät**: im Browser (IndexedDB, f
 | Laufprotokolle | `lauf:<id>` | siehe Abschnitt 8 | bis zur Löschung durch die Person |
 | Profile und Profilarchiv | `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme | bis zur Löschung |
 | Management Summary | je Profil | zuletzt erstellte Fassung | bis zum Leeren oder Ersetzen |
-| Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
+| Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ oder je Fallreihe (seit 0.7.2) mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
+| Fallpakete der Fallreihe (seit 0.7.2) | Datenbank `ki-lead-testlaeufe`: `fallpaket:<sha256>` | importierte ZIP-Datei mit Bewertungsfällen und Material (etwa der Kontrollsatz), wie importiert; an einen Anbieter gehen nur die Fälle eines gestarteten Laufs | bis zur Löschung durch die Person |
 | API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
 | Sicherung (nur auf Wunsch) | Datei `<Datum>_KI-LEAD_Sicherung.json` im Download-Ordner | alle Einträge der Zeilen oben außer API-Schlüsseln und ihrer Ablage (seit 0.6.15) | bis die Person die Datei löscht; sie liegt außerhalb der App und enthält die Inhalte im Klartext |
 | Programmdateien (nur PWA) | Caches `ki-lead-…` | HTML, Skripte, Symbole der App | bis zur nächsten Fassung |
@@ -59,7 +60,7 @@ Browser ──(Aufruf der Web-App)──▶ GitHub Pages (Programmdateien)
 
 - **Betreiberbuild (seit 0.6.17):** Baut eine Stelle KI-LEAD mit einer Betreiberkonfiguration ([BETRIEB.md](BETRIEB.md)), lässt die Policy nur die dort freigegebenen Ziele zu; ein „Endpunkt der Stelle“ erhält dann die Inhalte wie sonst ein Anbieter. Die Programmdateien kommen vom Server der Stelle statt von GitHub Pages. „Einstellungen → Über KI-LEAD“ und jedes Laufprotokoll nennen die Konfiguration.
 - **Andere Verbindungen gibt es nicht.** Die Content-Security-Policy der App (`index.html`) erlaubt Verbindungen nur zur eigenen Adresse, zu den drei Cloud-Anbietern und seit 0.6.3 zu Ollama auf dem eigenen Gerät (`http://localhost:11434`, `http://127.0.0.1:11434`; Begründung in [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.9). Es gibt keine Telemetrie, keine Analytics, keine Absturzberichte, kein CDN und keine nachgeladenen Schriften; alle Bibliotheken und die Schrift sind gebündelt.
-- **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
+- **Was an den Anbieter geht:** die für die Stufe zusammengestellten Inhalte. Das sind Arbeitsanweisung, Profilregeln, gewählte SOPs, Kodierleitfaden, Schema, der Auftrag und das bereitgestellte Material. PDF-Dateien gehen unverändert als Dokument mit, DOCX-Dateien als Text. Kennzahlen-Bausteine aus Thessa (seit 0.6.24) gehen ohne ihre Herleitung (`herleitung`, Kennungen einzelner Einsatzmittel) an den Anbieter; sie enthalten nach ihrem Schema keine Personen, sondern Zahlen, Gemeinden und Stichworte der Einsätze. In der Erprobung nur fiktive Bausteine verwenden. Die App begrenzt PDF auf 30 MB und andere Dateien auf 20 MB (`src/pipeline/material.ts`).
 - **Websuche und Seitenabruf** führt der Anbieter aus, nicht das Gerät. Suchanfragen gehen an den Anbieter und gegebenenfalls an dessen Suchdienst. Abgerufene Webseiten sehen eine Anfrage des Anbieters. Anthropic weist darauf hin, dass Seitenbetreiber abgerufene Adressen und Anfragedaten nach eigenen Regeln speichern können (Anthropic, o. J. a). Recherche ist nur aktiv, wenn der Auftrag sie erlaubt; die Verdichtung startet ohne Websuche.
 - **Erinnerungen an meldende Stellen** öffnen nur das Mailprogramm des Geräts (mailto). Die App versendet selbst nichts. Kontaktadressen stammen aus `kontakte.json` des Profils oder aus der nicht eingecheckten `kontakte.lokal.json`.
 
@@ -139,7 +140,8 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 |---|---|
 | ein Laufprotokoll | KI-Erfassung, Liste der Läufe, „Löschen“ |
 | Management Summary | „Leeren“ in der Ansicht |
-| archivierte Testläufe | Einstellungen, „Testläufe“, Archiv: „Ausgewählte löschen“ oder „Alle löschen“ |
+| archivierte Testläufe | Einstellungen, „Testläufe“ (sichtbar nur mit „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“; Ausschalten löscht das Archiv nicht), Archiv: „Ausgewählte löschen“ oder „Alle löschen“; außerdem mit „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ |
+| Fallpakete der Fallreihe (seit 0.7.2) | Einstellungen, „Testläufe“, Fallreihe: „Löschen“ am Paket |
 | API-Schlüssel | Feld leeren und speichern; bei Wechsel der Ablage zieht er um und wird in der alten entfernt |
 | alle Daten dieses Geräts (seit 0.6.15) | Einstellungen, „Daten“, „Alle Daten dieses Geräts löschen“: Gerätespeicher einschließlich API-Schlüssel, Testlaufarchiv, Farbschema, in der nativen App auch der Schlüsselbund; vorher lässt sich der Stand sichern |
 | alle Daten der Web-App | auch: Websitedaten von `pereirawolf.github.io` in den Browsereinstellungen löschen |
@@ -410,3 +412,6 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.10 | 30.10.2026 | Abschnitte 3 und 10: Sicherung des Gerätestands ohne API-Schlüssel und „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ (TP-2026-W44-44, -45; App 0.6.15) |
 | 1.10 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: Anhang C und D als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.11 | 31.10.2026 | Abschnitte 2 und 4: Betreiberbuild mit Betreiberkonfiguration und Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48, -49) |
+| 1.12 | 03.11.2026 | Abschnitt 4: Kennzahlen-Bausteine aus Thessa gehen ohne Herleitung an den Anbieter (App 0.6.24, UP-2026-W45-01) |
+| 1.13 | 03.11.2026 | Abschnitt 1 und Anhang D, D7: Die Bestätigung vor jedem KI-Lauf gilt seit App 0.7.1 auch für die Management Summary (bis 0.7.0 sendete sie ohne Bestätigung, DK-2026-W45-01); Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“ (DK-2026-W45-03) |
+| 1.14 | 03.11.2026 | Abschnitte 3 und 10: Fallpakete der Fallreihe bleiben bis zur Löschung auf dem Gerät, Archiv auch für Fallreihen (App 0.7.2, TP-2026-W44-63) |

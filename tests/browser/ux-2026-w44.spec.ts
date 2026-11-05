@@ -75,6 +75,7 @@ test("UX-2026-W44-09: Beispiel Ilka – Reiter „Sachverhalte“ kompakt statt 
   await expect(page.locator(".lb-sv-zeile")).toHaveCount(8);
   const hoehe = await page.evaluate(() => document.documentElement.scrollHeight);
   expect(hoehe).toBeLessThan(3000);
-  await page.locator(".lb-svfilter select").first().selectOption({ label: "erheblich (5)" });
+  // seit UX-2026-W45-14 Chips statt Auswahlliste
+  await page.getByRole("group", { name: "Bewertung" }).getByRole("button", { name: "erheblich (5)" }).click();
   await expect(page.locator(".lb-sv-zeile")).toHaveCount(5);
 });

@@ -3,7 +3,7 @@
 import { kennsatz } from "./kennsaetze";
 import { holeWert } from "./pfad";
 import { sachverhalte } from "./quellen";
-import type { Meldung, Profil } from "./typen";
+import type { Meldung, Profil, UiKonfig } from "./typen";
 import { zoneOder } from "./zeit";
 
 export function datumDE(s: unknown): string {
@@ -109,11 +109,26 @@ export function dateiname(d: Meldung, profil: Profil, entwurf: boolean, jetzt = 
   const zeitwert = holeWert(d, r.meldezeitpunkt || "meldezeitpunkt");
   const stempel = dateistempel(zeitwert, zone) ?? exportStempel(zone, jetzt);
   const vorlage = ohneDatumsplatzhalter(profil.ui.dateiname || "{schema}", datumsfelder);
-  const rumpf = vorlage.replace(/\{([a-z_]+)\}/g, (_, feld: string) => {
+  // Platzhalter dürfen seit 0.7.3 Pfade nennen ({absender.stelle}, LEAD-Meldung-v2)
+  const rumpf = vorlage.replace(/\{([a-z_.]+)\}/g, (_, feld: string) => {
     const wert = feld === "schema" ? holeWert(d, r.schema_feld) : holeWert(d, feld);
     return bereinige(String(wert || `ohne_${feld}`));
   });
   return mitDatum(stempel, rumpf || bereinige(String(holeWert(d, r.schema_feld) || "Meldung"))) + (entwurf ? "_ENTWURF" : "");
+}
+
+/**
+ * Status der Ausgabe (seit 0.7.3, UP-2026-W45-03): Entwurf; final mit status_final; mit der Rolle status_freigegeben
+ * und gezeichneter Freigabe („freigabe.freigegeben“ mit Name und Zeitpunkt, LEAD-Meldung-v2) deren Status.
+ */
+export function ausgabeStatus(d: Meldung, ui: UiKonfig, final: boolean): string {
+  const r = ui.rollen;
+  if (!final) return r.status_entwurf;
+  if (r.status_freigegeben && r.freigabe) {
+    const f = holeWert(d, `${r.freigabe}.freigegeben`);
+    if (f && typeof f === "object" && String(f.name ?? "").trim() && f.zeitpunkt) return r.status_freigegeben;
+  }
+  return r.status_final;
 }
 
 /** Klartext-Kurzfassung ohne Quellenverweise, zum Kopieren in Mail oder Vermerk. */

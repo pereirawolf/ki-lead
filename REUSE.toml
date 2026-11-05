@@ -17,14 +17,15 @@ precedence = "override"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "EUPL-1.2"
 
-# Nr. 1 a bis c und e: Profilpakete, Evaluationsmaterial, Dokumentation, Meldungsformate und die Markdown-Dateien im
-# Wurzelverzeichnis
+# Nr. 1 a bis c, e und f: Profilpakete, Evaluationsmaterial, Dokumentation, Meldungsformate, Grunddesign und die
+# Markdown-Dateien im Wurzelverzeichnis
 [[annotations]]
 path = [
   "profile/**",
   "evaluation/**",
   "docs/**",
   "formate/**",
+  "design/**",
   "README.md",
   "CHANGELOG.md",
   "SECURITY.md",
@@ -97,3 +98,11 @@ path = ["docs/VORLAGEN.md", "docs/DATENSCHUTZ.md"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+# Nr. 5 e: docs/GRUNDLAGEN.md (Theoretische Grundlagen und Genese) steht wie die begleitenden Aufsätze unter
+# CC BY-NC-ND 4.0, nicht unter CC BY 4.0 nach Nr. 1 c.
+[[annotations]]
+path = "docs/GRUNDLAGEN.md"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "CC-BY-NC-ND-4.0"

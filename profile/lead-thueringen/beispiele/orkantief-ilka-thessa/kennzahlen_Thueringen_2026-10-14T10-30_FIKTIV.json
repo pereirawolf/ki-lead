@@ -1,0 +1,1327 @@
+{
+  "format": "Thessa-Kennzahlen",
+  "fassung": "0.3",
+  "erzeugt": "2026-10-14T10:30+02:00",
+  "datenstand": "2026-10-14T10:30+02:00",
+  "raum": {
+    "name": "Thüringen",
+    "schluessel": "16"
+  },
+  "fiktiv": true,
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Thüringen, Bereitschaftsübersicht der Feuerwehren (FIKTIV)",
+      "titel": "Kräftelage der Feuerwehren aus 151 Einsatzmitteln, Thessa (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T10:30+02:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Einsatzmittel der Feuerwehren und der Einrichtungen ohne Feuerwehr gesamt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 151,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 123,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K3",
+      "gegenstand": "eingeschränkt einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K4",
+      "gegenstand": "im Einsatz gebunden",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 18,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K5",
+      "gegenstand": "nicht einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K6",
+      "gegenstand": "im Einsatz gebunden: auf Anfahrt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K7",
+      "gegenstand": "im Einsatz gebunden: am Einsatzort",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 16,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K8",
+      "gegenstand": "im Einsatz gebunden: Einsatz beendet, Einsatzbereitschaft wird hergestellt",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K4"
+    },
+    {
+      "id": "K9",
+      "gegenstand": "frei verfügbar für überörtliche Hilfe (einsatzbereit, ohne Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 98,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K10",
+      "gegenstand": "einsatzbereit, vorgehalten für Katastrophenschutz (Einsatzvorbehalt)",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 21,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K11",
+      "gegenstand": "einsatzbereit, aber ohne verfügbares Trägerfahrzeug (Abrollbehälter, verlastete Geräte; nicht als Reserve gezählt)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K2"
+    },
+    {
+      "id": "K12",
+      "gegenstand": "Einsatzmittel der ergänzenden Ausstattung des Bundes (Zivilschutz, § 13 ZSKG)",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 10,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K1"
+    },
+    {
+      "id": "K13",
+      "gegenstand": "ergänzende Ausstattung des Bundes: einsatzbereit",
+      "einheit": "Einsatzmittel",
+      "art": "bestand",
+      "wert": 9,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K12"
+    },
+    {
+      "id": "K14",
+      "gegenstand": "laufende Einsätze im Gebiet (nach Einsatzort)",
+      "einheit": "Einsätze",
+      "art": "bestand",
+      "wert": 11,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte werktags tagsüber (39 von 44 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 197,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K16",
+      "gegenstand": "regelmäßig verfügbare Einsatzkräfte abends, nachts und am Wochenende (39 von 44 Feuerwehren gemeldet)",
+      "einheit": "Einsatzkräfte",
+      "art": "kapazitaet",
+      "wert": 521,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Ausrückebereiche mit erfasster Risikoklasse (Mindestbedarf nach ThürFwOrgVO geprüft)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 44,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Mindestbedarf Stufe 1 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 8,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K19",
+      "gegenstand": "Mindestbedarf Stufe 1 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K20",
+      "gegenstand": "Mindestbedarf Stufe 2 derzeit nicht gedeckt (Fahrzeuge vorgehalten, aber nicht einsatzbereit)",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K21",
+      "gegenstand": "Mindestbedarf Stufe 2 nur mit eingeschränkt einsatzbereiten Fahrzeugen gedeckt",
+      "einheit": "Ausrückebereiche",
+      "art": "bestand",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K17"
+    },
+    {
+      "id": "K22",
+      "gegenstand": "Einheiten des Katastrophenschutzes nach ThürKatSVO erfasst",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 4,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K23",
+      "gegenstand": "Einheiten des Katastrophenschutzes: einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K24",
+      "gegenstand": "Einheiten des Katastrophenschutzes: eingeschränkt einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K25",
+      "gegenstand": "Einheiten des Katastrophenschutzes: teilweise im Einsatz gebunden",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K26",
+      "gegenstand": "Einheiten des Katastrophenschutzes: nicht einsatzbereit",
+      "einheit": "Einheiten",
+      "art": "bestand",
+      "wert": 1,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ],
+      "teilmenge_von": "K22"
+    },
+    {
+      "id": "K27",
+      "gegenstand": "frei verfügbar: Brandbekämpfung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 43,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K28",
+      "gegenstand": "frei verfügbar: Technische Hilfe",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 20,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K29",
+      "gegenstand": "frei verfügbar: Wasserförderung über lange Wegstrecken",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K30",
+      "gegenstand": "frei verfügbar: Stromerzeugung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 9,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K31",
+      "gegenstand": "frei verfügbar: Hubrettung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 5,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K32",
+      "gegenstand": "frei verfügbar: Führung",
+      "einheit": "Einsatzmittel",
+      "art": "kapazitaet",
+      "wert": 10,
+      "mindestwert": false,
+      "erhebung": "gezaehlt",
+      "raum": "Thüringen",
+      "datenstand": "2026-10-14T10:30+02:00",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "einsatzmeldungen": [
+    {
+      "id": "EM-20261013-ZFB2",
+      "einsatzart": "unwetter_sturm",
+      "stichwort": "Baumwürfe auf Landesstraße",
+      "gemeinde": {
+        "name": "Stadt Gräfenthal",
+        "schluessel": "16073028"
+      },
+      "beginn": "2026-10-13T22:50+02:00",
+      "status": "abgeschlossen",
+      "im_gebiet": true,
+      "einsatzmittel": 1,
+      "ende": "2026-10-14T08:12+02:00",
+      "einsatzkraefte": 6
+    },
+    {
+      "id": "EM-20261013-5KFK",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Notstromeinspeisung Pumpwerk Trinkwasser",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-13T23:30+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 8
+    },
+    {
+      "id": "EM-20261014-KUGL",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Führungsunterstützung Krisenstab, Koordinierung Netzersatz",
+      "gemeinde": {
+        "name": "Stadt Sonneberg",
+        "schluessel": "16072018"
+      },
+      "beginn": "2026-10-14T02:00+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 6
+    },
+    {
+      "id": "EM-20261014-VTP2",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Unterstützung Pflegeheim: Beleuchtung, Betankung Netzersatz",
+      "gemeinde": {
+        "name": "Frankenblick",
+        "schluessel": "16072023"
+      },
+      "beginn": "2026-10-14T03:15+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 8,
+      "betroffene": [
+        {
+          "art": "betreut",
+          "anzahl": 88
+        }
+      ]
+    },
+    {
+      "id": "EM-20261014-N5X2",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Kraftstofftransport für Netzersatzanlagen mit Abrollbehälter Logistik",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-14T07:30+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 3
+    },
+    {
+      "id": "EM-20261014-KBH7",
+      "einsatzart": "versorgung_notstrom",
+      "stichwort": "Unterstützung Pflegeheim: Betankung Netzersatz, Beleuchtung",
+      "gemeinde": {
+        "name": "Stadt Sonneberg",
+        "schluessel": "16072018"
+      },
+      "beginn": "2026-10-14T07:45+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 1,
+      "einsatzkraefte": 3,
+      "betroffene": [
+        {
+          "art": "betreut",
+          "anzahl": 58
+        }
+      ]
+    },
+    {
+      "id": "EM-20261014-UNBF",
+      "einsatzart": "bereitstellung_ueberoertlich",
+      "stichwort": "Überörtliche Hilfe: Dieseltransport für Netzersatzanlagen",
+      "gemeinde": {
+        "name": "Stadt Neuhaus am Rennweg",
+        "schluessel": "16072013"
+      },
+      "beginn": "2026-10-14T08:00+02:00",
+      "status": "laufend",
+      "im_gebiet": true,
+      "einsatzmittel": 2,
+      "einsatzkraefte": 6,
+      "ueberoertlich": {
+        "von": {
+          "name": "Landkreis Hildburghausen",
+          "schluessel": "16069"
+        }
+      }
+    }
+  ],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-gwl2",
+        "16072-gwas",
+        "16072-anhsea",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-dlak2312",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow1-mtw",
+        "16072018-ow2-lf10",
+        "16072018-ow2-lfkats",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072018-ow3-tsa",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-rw",
+        "16072013-ow1-mtw",
+        "16072013-ow1-anhsea",
+        "16072013-ow2-mlf",
+        "16072013-ow3-tsfw",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072023-ow1-swkats",
+        "16072023-ow2-tsf",
+        "16072023-ow3-klfth",
+        "16072024-ow1-lf10",
+        "16072024-ow1-mtw",
+        "16072024-ow1-anhlima",
+        "16072024-ow2-mlf",
+        "16072024-ow3-tsf",
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-rw",
+        "16069012-ow1-gwl1",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow1-lfkats",
+        "16069024-ow2-klfth",
+        "16069043-ow1-hlf10",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf",
+        "16066-elw2",
+        "16066-gwl2",
+        "16066-gwas",
+        "16066-anhsea",
+        "16066042-ow1-elw1",
+        "16066042-ow1-hlf20",
+        "16066042-ow1-hlf10",
+        "16066042-ow1-dlak2312",
+        "16066042-ow1-tlf3000",
+        "16066042-ow1-rw",
+        "16066042-ow1-gwl1",
+        "16066042-ow1-mtw",
+        "16066042-ow2-tsf",
+        "16066042-ow3-tsf",
+        "16066047-ow1-hlf10",
+        "16066047-ow1-mtw",
+        "16066047-ow1-tlf3000",
+        "16066047-ow1-lfkats",
+        "16066047-ow2-tsf",
+        "16066047-ow3-tsfw",
+        "16066063-ow1-lf10",
+        "16066063-ow1-mtw",
+        "16066063-ow2-mlf",
+        "16066063-ow3-klfth",
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-hlf10",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow2-tsf",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070029-ow1-lfkats",
+        "16070029-ow2-klfth",
+        "16070029-ow3-tsf",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw",
+        "16070043-ow2-tsf",
+        "16073-elw2",
+        "16073-gwl2",
+        "16073-gwas",
+        "16073-anhsea",
+        "16073005-ow1-elw1",
+        "16073005-ow1-hlf20",
+        "16073005-ow1-hlf10",
+        "16073005-ow1-dlak2312",
+        "16073005-ow1-tlf4000",
+        "16073005-ow1-rw",
+        "16073005-ow1-gwl1",
+        "16073005-ow1-mtw",
+        "16073005-ow2-klfth",
+        "16073028-ow1-hlf10",
+        "16073028-ow1-mtw",
+        "16073028-ow1-lfkats",
+        "16073028-ow2-klfth",
+        "16073046-ow1-hlf10",
+        "16073046-ow1-mtw",
+        "16073046-ow2-mlf",
+        "16073046-ow3-tsf",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-e1-ktw-4",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2",
+        "16072-wlf",
+        "16072-ablogistik",
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072-sfm",
+        "16072013-ow1-se",
+        "16072024-ow1-mks",
+        "16072018-ow3-tp",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-lf20kats-2",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "einsatzmittel": [
+        "16072-gwl2",
+        "16072-gwas",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow2-lf10",
+        "16072018-ow2-lfkats",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-mtw",
+        "16072023-ow1-swkats",
+        "16072024-ow1-mtw",
+        "16072024-ow2-mlf",
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-rw",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow1-lfkats",
+        "16069024-ow2-klfth",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf",
+        "16066-elw2",
+        "16066-gwl2",
+        "16066-gwas",
+        "16066-anhsea",
+        "16066042-ow1-elw1",
+        "16066042-ow1-hlf20",
+        "16066042-ow1-hlf10",
+        "16066042-ow1-dlak2312",
+        "16066042-ow1-tlf3000",
+        "16066042-ow1-rw",
+        "16066042-ow1-gwl1",
+        "16066042-ow1-mtw",
+        "16066042-ow2-tsf",
+        "16066042-ow3-tsf",
+        "16066047-ow1-hlf10",
+        "16066047-ow1-mtw",
+        "16066047-ow1-tlf3000",
+        "16066047-ow1-lfkats",
+        "16066047-ow2-tsf",
+        "16066047-ow3-tsfw",
+        "16066063-ow1-lf10",
+        "16066063-ow1-mtw",
+        "16066063-ow2-mlf",
+        "16066063-ow3-klfth",
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070029-ow1-lfkats",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw",
+        "16073-elw2",
+        "16073-gwl2",
+        "16073-gwas",
+        "16073-anhsea",
+        "16073005-ow1-elw1",
+        "16073005-ow1-hlf20",
+        "16073005-ow1-hlf10",
+        "16073005-ow1-dlak2312",
+        "16073005-ow1-tlf4000",
+        "16073005-ow1-rw",
+        "16073005-ow1-gwl1",
+        "16073005-ow1-mtw",
+        "16073005-ow2-klfth",
+        "16073028-ow1-hlf10",
+        "16073028-ow1-mtw",
+        "16073028-ow1-lfkats",
+        "16073028-ow2-klfth",
+        "16073046-ow1-hlf10",
+        "16073046-ow1-mtw",
+        "16073046-ow2-mlf",
+        "16073046-ow3-tsf",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2",
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072-sfm",
+        "16072013-ow1-se",
+        "16072024-ow1-mks",
+        "16072018-ow3-tp",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "einsatzmittel": [
+        "16072018-ow1-dlak2312",
+        "16072018-ow3-tsa",
+        "16072023-ow2-tsf",
+        "16069043-ow1-hlf10",
+        "16070029-ow1-lf20kats-2"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-anhsea",
+        "16072018-ow1-mtw",
+        "16072013-ow1-rw",
+        "16072013-ow1-anhsea",
+        "16072013-ow2-mlf",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072023-ow3-klfth",
+        "16072024-ow1-lf10",
+        "16072024-ow1-anhlima",
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-gwl1",
+        "16070004-ow2-tsf",
+        "16070029-ow2-klfth",
+        "16070043-ow2-tsf",
+        "16072-wlf",
+        "16072-ablogistik"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "einsatzmittel": [
+        "16072013-ow3-tsfw",
+        "16072024-ow3-tsf",
+        "16070004-ow1-hlf10",
+        "16070029-ow3-tsf",
+        "16072018-e1-ktw-4"
+      ]
+    },
+    {
+      "kennzahl": "K6",
+      "einsatzmittel": [
+        "16072023-ow3-klfth"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "einsatzmittel": [
+        "16072-elw2",
+        "16072-anhsea",
+        "16072018-ow1-mtw",
+        "16072013-ow1-rw",
+        "16072013-ow1-anhsea",
+        "16072023-ow1-hlf10",
+        "16072023-ow1-mtw",
+        "16072024-ow1-lf10",
+        "16072024-ow1-anhlima",
+        "16069012-ow1-tlf4000",
+        "16069012-ow1-gwl1",
+        "16070004-ow2-tsf",
+        "16070029-ow2-klfth",
+        "16070043-ow2-tsf",
+        "16072-wlf",
+        "16072-ablogistik"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "einsatzmittel": [
+        "16072013-ow2-mlf"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "einsatzmittel": [
+        "16072-gwl2",
+        "16072-gwas",
+        "16072018-ow1-elw1",
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072018-ow1-tlf4000",
+        "16072018-ow1-gwl1",
+        "16072018-ow2-lf10",
+        "16072018-ow2-mtw",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-elw1",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072013-ow1-dlak1812",
+        "16072013-ow1-mtw",
+        "16072024-ow1-mtw",
+        "16072024-ow2-mlf",
+        "16069-elw2",
+        "16069-gwl2",
+        "16069-gwas",
+        "16069-anhsea",
+        "16069012-ow1-elw1",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-dlak2312",
+        "16069012-ow1-rw",
+        "16069012-ow1-mtw",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow1-mtw",
+        "16069024-ow2-klfth",
+        "16069043-ow1-mtw",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf",
+        "16066-elw2",
+        "16066-gwl2",
+        "16066-gwas",
+        "16066-anhsea",
+        "16066042-ow1-elw1",
+        "16066042-ow1-hlf20",
+        "16066042-ow1-hlf10",
+        "16066042-ow1-dlak2312",
+        "16066042-ow1-tlf3000",
+        "16066042-ow1-rw",
+        "16066042-ow1-gwl1",
+        "16066042-ow1-mtw",
+        "16066042-ow2-tsf",
+        "16066042-ow3-tsf",
+        "16066047-ow1-hlf10",
+        "16066047-ow1-mtw",
+        "16066047-ow1-tlf3000",
+        "16066047-ow2-tsf",
+        "16066047-ow3-tsfw",
+        "16066063-ow1-lf10",
+        "16066063-ow1-mtw",
+        "16066063-ow2-mlf",
+        "16066063-ow3-klfth",
+        "16070-elw2",
+        "16070-gwl2",
+        "16070-gwas",
+        "16070-anhsea",
+        "16070004-ow1-elw1",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-dlak2312",
+        "16070004-ow1-tlf3000",
+        "16070004-ow1-rw",
+        "16070004-ow1-gwl1",
+        "16070004-ow1-mtw",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070029-ow1-mtw",
+        "16070043-ow1-lf10",
+        "16070043-ow1-mtw",
+        "16073-elw2",
+        "16073-gwl2",
+        "16073-gwas",
+        "16073-anhsea",
+        "16073005-ow1-elw1",
+        "16073005-ow1-hlf20",
+        "16073005-ow1-hlf10",
+        "16073005-ow1-dlak2312",
+        "16073005-ow1-tlf4000",
+        "16073005-ow1-rw",
+        "16073005-ow1-gwl1",
+        "16073005-ow1-mtw",
+        "16073005-ow2-klfth",
+        "16073028-ow1-hlf10",
+        "16073028-ow1-mtw",
+        "16073028-ow2-klfth",
+        "16073046-ow1-hlf10",
+        "16073046-ow1-mtw",
+        "16073046-ow2-mlf",
+        "16073046-ow3-tsf",
+        "16072-sfm",
+        "16072018-ow3-tp"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16069024-ow1-lfkats",
+        "16066047-ow1-lfkats",
+        "16070029-ow1-lfkats",
+        "16073028-ow1-lfkats",
+        "16072018-ow2-elw1",
+        "16072013-ow1-lf20kats",
+        "16072018-e1-elw1",
+        "16072018-e1-gwsan",
+        "16072018-e1-mtw",
+        "16072018-e1-ktw",
+        "16072018-e1-ktw-2",
+        "16072018-e1-ktw-3",
+        "16072018-ow3-gwl1",
+        "16072018-ow3-gwl2",
+        "16070029-ow1-elw1",
+        "16070029-ow1-lf20kats",
+        "16070029-ow1-tlf3000",
+        "16070029-ow1-swkats",
+        "16070029-ow1-mtw-2"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "einsatzmittel": [
+        "16072-abhochwasser",
+        "16072-abschlauch",
+        "16072013-ow1-se",
+        "16072024-ow1-mks"
+      ]
+    },
+    {
+      "kennzahl": "K12",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16069024-ow1-lfkats",
+        "16066047-ow1-lfkats",
+        "16070029-ow1-lfkats",
+        "16073028-ow1-lfkats",
+        "16072018-e1-gwsan",
+        "16072018-e1-ktw-3",
+        "16072018-e1-ktw-4",
+        "16070029-ow1-swkats"
+      ]
+    },
+    {
+      "kennzahl": "K13",
+      "einsatzmittel": [
+        "16072018-ow2-lfkats",
+        "16072023-ow1-swkats",
+        "16069024-ow1-lfkats",
+        "16066047-ow1-lfkats",
+        "16070029-ow1-lfkats",
+        "16073028-ow1-lfkats",
+        "16072018-e1-gwsan",
+        "16072018-e1-ktw-3",
+        "16070029-ow1-swkats"
+      ]
+    },
+    {
+      "kennzahl": "K14",
+      "einsatzmittel": [],
+      "einsatzmeldungen": [
+        "EM-20261013-5KFK",
+        "EM-20261014-KUGL",
+        "EM-20261014-VTP2",
+        "EM-20261014-R8BH",
+        "EM-20261014-N5X2",
+        "EM-20261014-KKQK",
+        "EM-20261014-KBH7",
+        "EM-20261014-UNBF",
+        "EM-20261014-YQZC",
+        "EM-20261014-2AB5",
+        "EM-20261014-5PWM"
+      ]
+    },
+    {
+      "kennzahl": "K15",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K16",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K17",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K18",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K19",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K20",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K21",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K22",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K23",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K24",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K25",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K26",
+      "einsatzmittel": []
+    },
+    {
+      "kennzahl": "K27",
+      "einsatzmittel": [
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-tlf4000",
+        "16072018-ow2-lf10",
+        "16072018-ow3-tsfw",
+        "16072013-ow1-hlf20",
+        "16072013-ow1-tlf3000",
+        "16072024-ow2-mlf",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow2-tsf",
+        "16069012-ow3-mlf",
+        "16069024-ow1-hlf10",
+        "16069024-ow2-klfth",
+        "16069043-ow1-tlf3000",
+        "16069043-ow2-tsfw",
+        "16069043-ow3-mlf",
+        "16066042-ow1-hlf20",
+        "16066042-ow1-hlf10",
+        "16066042-ow1-tlf3000",
+        "16066042-ow2-tsf",
+        "16066042-ow3-tsf",
+        "16066047-ow1-hlf10",
+        "16066047-ow1-tlf3000",
+        "16066047-ow2-tsf",
+        "16066047-ow3-tsfw",
+        "16066063-ow1-lf10",
+        "16066063-ow2-mlf",
+        "16066063-ow3-klfth",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-tlf3000",
+        "16070004-ow3-klfth",
+        "16070029-ow1-hlf10",
+        "16070043-ow1-lf10",
+        "16073005-ow1-hlf20",
+        "16073005-ow1-hlf10",
+        "16073005-ow1-tlf4000",
+        "16073005-ow2-klfth",
+        "16073028-ow1-hlf10",
+        "16073028-ow2-klfth",
+        "16073046-ow1-hlf10",
+        "16073046-ow2-mlf",
+        "16073046-ow3-tsf"
+      ]
+    },
+    {
+      "kennzahl": "K28",
+      "einsatzmittel": [
+        "16072018-ow1-hlf20",
+        "16072018-ow1-hlf10",
+        "16072018-ow1-rw",
+        "16072013-ow1-hlf20",
+        "16069012-ow1-hlf20",
+        "16069012-ow1-hlf10",
+        "16069012-ow1-rw",
+        "16069024-ow1-hlf10",
+        "16066042-ow1-hlf20",
+        "16066042-ow1-hlf10",
+        "16066042-ow1-rw",
+        "16066047-ow1-hlf10",
+        "16070004-ow1-hlf20",
+        "16070004-ow1-rw",
+        "16070029-ow1-hlf10",
+        "16073005-ow1-hlf20",
+        "16073005-ow1-hlf10",
+        "16073005-ow1-rw",
+        "16073028-ow1-hlf10",
+        "16073046-ow1-hlf10"
+      ]
+    },
+    {
+      "kennzahl": "K29",
+      "einsatzmittel": [
+        "16072-gwl2",
+        "16069-gwl2",
+        "16066-gwl2",
+        "16070-gwl2",
+        "16073-gwl2"
+      ]
+    },
+    {
+      "kennzahl": "K30",
+      "einsatzmittel": [
+        "16072018-ow1-rw",
+        "16069-anhsea",
+        "16069012-ow1-rw",
+        "16066-anhsea",
+        "16066042-ow1-rw",
+        "16070-anhsea",
+        "16070004-ow1-rw",
+        "16073-anhsea",
+        "16073005-ow1-rw"
+      ]
+    },
+    {
+      "kennzahl": "K31",
+      "einsatzmittel": [
+        "16072013-ow1-dlak1812",
+        "16069012-ow1-dlak2312",
+        "16066042-ow1-dlak2312",
+        "16070004-ow1-dlak2312",
+        "16073005-ow1-dlak2312"
+      ]
+    },
+    {
+      "kennzahl": "K32",
+      "einsatzmittel": [
+        "16072018-ow1-elw1",
+        "16072013-ow1-elw1",
+        "16069-elw2",
+        "16069012-ow1-elw1",
+        "16066-elw2",
+        "16066042-ow1-elw1",
+        "16070-elw2",
+        "16070004-ow1-elw1",
+        "16073-elw2",
+        "16073005-ow1-elw1"
+      ]
+    }
+  ]
+}

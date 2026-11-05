@@ -1,6 +1,6 @@
 # Kodierleitfaden Lagebild Justiz – Funktionen, Status, Bewertung und Quellen
 
-Erprobungsentwurf · Fassung 0.1.0 vom 31.10.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` und die Darstellungsdatei des Profils · abgestimmt auf Teil A, Fassung 0.1.0
+Erprobungsentwurf · Fassung 0.1.1 vom 02.11.2026 · gilt für das Schema `Lagebild-Justiz-Meldung-v1` und die Darstellungsdatei des Profils · abgestimmt auf Teil A, Fassung 0.2.0
 
 Bei Widersprüchen gilt diese Rangfolge der Regelquellen: Schema und Darstellungsdatei, dieser Kodierleitfaden, Teil A, Arbeitsanweisungen. Thüringer Angaben sind als [TH] gekennzeichnete Beispiele; der Kern gilt länderübergreifend.
 
@@ -199,3 +199,4 @@ Der Herausgeber pflegt den Kodierleitfaden. Änderungen an Funktionen, Status, S
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 0.1.0 | 31.10.2026 | Erprobungsentwurf |
+| 0.1.1 | 02.11.2026 | Abstimmung auf Teil A 0.2.0 (stabile Quellennummern bei der Fortschreibung, je Frist eine eigene Zeile; GK-2026-W44-08); Inhalt unverändert |

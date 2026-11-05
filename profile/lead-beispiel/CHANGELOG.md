@@ -8,6 +8,66 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.41.0 – 05.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Zweite Stelle, weil sich die Modellvorgabe des Profils ändert; Regeln, Schema, Darstellungsdatei und Inhalte bleiben unverändert.
+
+- **Modellvorgabe:** `modelle.vorverarbeitung` jetzt `claude-sonnet-5-5` (bisher `claude-haiku-5-5`), wie Standard-Profil und Vorgabe der App seit App 0.7.13; Aufwand nach der Vorgabe der App „mittel“. Erfassung und Verdichtung unverändert. Einzelheiten im [App-Verlauf](../../CHANGELOG.md).
+
+## 1.40.0 – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, Commit `8faa547`), KL-2026-W45-05, freigegeben vom Herausgeber am 05.11.2026. Zweite Stelle: neue Regel im Kodierleitfaden.
+
+- **Kodierleitfaden 1.11.0:** Abschnitt 8.1 nennt die Kennungen der Betreiber (`KRITIS-<Kürzel>-JJJJMMTT-<Zufall>` mit sechsstelligem Zufallsteil, Regel in `docs/AUSTAUSCH.md`, Abschnitt 9): nie als eigene geführt; im Bezug einer Meldung nach LEAD-Meldevorlage 1.2 lässt das Schema nur vierstellige Zufallsteile zu, deshalb steht eine Betreibermeldung bis zur Umstellung auf LEAD-Meldung-v2 nur im Quellenverzeichnis.
+- **Arbeitsanweisung Erfassung 1.11.2:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.11.0“; Regeln unverändert.
+- **SOP-LEAD-Sammelmappe 3.23.2:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Kodierleitfaden 1.11.0 geprüft, kein Anpassungsbedarf (die Regeln zu Kennung und Bezug gelten über den Verweis auf Abschnitt 8).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
+## 1.39.0 – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json` (Anbietervergleich vom 04.11.2026: je ein interner Erfassungslauf der Standard-Profile von Anthropic, OpenAI und Mistral mit demselben Material, ohne Recherche; Commit `6302c14`), freigegeben vom Herausgeber am 04.11.2026: AV-2026-W45-04 bis -08 angenommen, -09 nicht freigegeben. Material, Laufprotokolle und Inhalte der Läufe bleiben intern. Zweite Stelle, weil der Kodierleitfaden neue Regeln erhält; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert.
+
+Befund aus dem Vergleich: Beurteilung und Zuschnitt der sechs Sachverhalte stimmten bei allen drei Anbietern überein, das Lagenradar streute stark (Anteil offener Achsen 29 bis 73 %, D3 desselben Sachverhalts 0, 2 und 5). Ein Anbieter führte ein Sammeldokument als einzige Quelle; ein anderer setzte D1, D3 und D5 ohne die verlangten Bezugsgegenstände.
+
+- **Kodierleitfaden 1.10.0:** Abschnitt 5: Sammel- und Auswertungsdokumente mit eigenem Eintrag je verwendetem Ursprungsdokument, Kategorie nach Herkunft und „(Eingangsmaterial, enthalten in [Qn])“ (AV-2026-W45-04). D3: Auswahl der Funktion bei mehreren Ebenen (Kernaussage und Beurteilung, sonst staatliche Steuerung vor Betrieb) und Kennzeichnung „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“ (AV-2026-W45-05). Abschnitt 7: drei Kurzbeispiele für Sachverhalte ohne eigenen Schadensraum zu D1, D3 und D5 (AV-2026-W45-06).
+- **Arbeitsanweisung Erfassung 1.11.1:** Kopf nennt den Kodierleitfaden ab 1.10.0; Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.10.0“.
+- **SOP-LEAD-Sammelmappe 3.23.1:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Kodierleitfaden 1.10.0 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend; die neuen Regeln gelten über den Verweis). Die Prüfmuster der Fallreihe (App 0.7.10, AV-2026-W45-08) setzen die Kennzeichnung nach D3 voraus.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
+## 1.38.0 – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45.json` (Lernschleife KW 45 zu einem internen Erfassungslauf vom 04.11.2026 mit vorstrukturiertem Analysematerial, Commit `b4d35be`), Entscheidungen des Herausgebers vom 04.11.2026: LS-2026-W45-01, -02, -04, -05 angenommen; -03 und -06 angepasst; -07 abgelehnt. Zweite Stelle, weil sich Regeln der Arbeitsanweisung Erfassung und eine Kodierregel ändern; Schema, Stufentexte und Darstellungsdatei unverändert, bestehende Meldungen werden nicht umkodiert. Material, Laufprotokoll und Rückmeldungen des Laufs bleiben intern.
+
+- **Arbeitsanweisung Erfassung 1.11.0:** 4.3 Redaktionsmaßstab: Der Richtwert ist keine Obergrenze; bei Material mit ausgearbeiteten Maßnahmen und Empfehlungen gehen deren Vollständigkeit und Zuordnung vor, gekürzt wird zuerst die Lagebeschreibung (LS-2026-W45-01). 4.3 Zuschnitt: sachverhaltsübergreifende Teile des Materials (übergreifende Maßnahmen, Entscheidungsbedarfe, Szenarien, offene Fragen) werden den Sachverhalten zugeordnet (LS-2026-W45-03). 5 Kurzantwort: „Nicht übernommen“ nennt auch gekürzte, zusammengefasste oder nicht zugeordnete Materialteile, bei Kennungen im Material nur die Kennungen (LS-2026-W45-02). Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.9.0“.
+- **Kodierleitfaden 1.9.0 (LS-2026-W45-04, Option A):** Grundregel 6 und Prüfreihenfolge Schritt 3: Gerundete amtliche Zählangaben („rund“, „etwa“) an einer Stufengrenze tragen die niedrigere, sicher getragene Stufe als Mindestwert; modellierte Schätzungen und Hochrechnungen bleiben unter der Bandbreitenregel. Ein Kurzbeispiel in Abschnitt 7.
+- **SOP-LEAD-Sammelmappe 3.23.0:** B05 2.3.0 mit Prüfpunkt zum Zielkonflikt der Teilprofile 5a und 5b (LS-2026-W45-05) und ergänzten Ansprechstellen für 5a (LS-2026-W45-06); Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **LEAD-Meldung-v2 (Folgeaufgabe zu LS-2026-W45-03):** optionales Feld für die sachverhaltsübergreifende Lage in `docs/LEAD-MELDUNG-V2.md`, Abschnitt 13 Nr. 10, für die Umstellung der Profile vorgemerkt.
+- **Nicht übernommen:** LS-2026-W45-07 (Zeitmodus „Übungslage“); Übungsläufe bleiben außerhalb des Regelwerks.
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 auf Grundlage von Teil A 3.23.0 und Kodierleitfaden 1.9.0 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend; die Kodierregel gilt über den Verweis auf Grundregel 6).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
+## 1.37.0 – 04.11.2026
+
+Grundlage: Konzeptvorschlag „Querschnittsbaustein C18 – Besondere Belange und Schutzbedarfe von Menschen“, Entscheidungen des Herausgebers vom 04.11.2026 (BB-2026-W45-01 bis -06). Zweite Stelle: neuer Baustein und geänderte Querschnittsprüfung A.9.2; Schema, Darstellungsdatei und Kodierleitfaden unverändert, bestehende Meldungen werden nicht umkodiert.
+
+- **SOP-LEAD-Sammelmappe 3.22.0:** neuer Querschnittsbaustein C18, Neufassung A.9.2, Anschlüsse in A.1 Nr. 2, B05, B06, B08, B10, C09, C11 und C16. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md). `profil.json` bindet `sop/teil-c/C18_besondere-belange-schutzbedarfe.md` ein.
+- **Arbeitsanweisung Erfassung 1.10.2:** Bausteine „C01 … C18“; Kopf nennt die Sammelmappe ab 3.22.0.
+- **Prüfvermerk nach A.10.2:** Erfassung auf Grundlage von Teil A 3.22.0 geprüft und angepasst (Kennungsbereich). Verdichtung 2.3.0 und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf: Sie nennen keine Bausteinliste und keine Querschnittsprüfung im Einzelnen. Kodierleitfaden 1.8.1 unverändert; C18 verweist für D2, D6 und D7 auf ihn.
+- **Bewertungsfälle (BB-2026-W45-06):** drei fiktive Prüffälle `sop-belange-stromausfall-heimbeatmung`, `sop-belange-kaeltewelle-wohnungslos` und `sop-belange-evakuierung-assistenz` unter `evaluation/`, Soll-Abdeckung fortgeschrieben (Stand 04.11.2026). Keine KI-Läufe.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister und Beispiele sind unverändert.
+
+## 1.36.1 – 02.11.2026
+
+Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` und `-c.json` (Gesamtkonsistenz nach PR #126, Commit `c5a3205`), freigegeben vom Herausgeber am 01.11.2026. Dritte Stelle: Präzisierung ohne neue Kodierregel; Schema und Darstellungsdatei unverändert.
+
+- **Kodierleitfaden 1.8.1 (GK-2026-W44-09, Option A):** Abschnitt 8.3, Regel 8, nennt, was „dieselbe Quelle“ ist; Kategorie, Zugriff, Datenstand und Zugangsvermerke darf die Fortschreibung nachführen.
+- **Arbeitsanweisung Erfassung 1.10.1:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.8.1“.
+- **SOP-LEAD-Sammelmappe 3.21.1:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf (Verweise „ab Kodierleitfaden 1.8.0“ bleiben zutreffend).
+- Die übrigen Befunde dieser Dateien betreffen Texte der App (0.6.23) und das Profil Lagebild Justiz; Darstellungsdatei, Schema, Kontakte, Quellenregister und Beispiele bleiben unverändert.
+
 ## 1.36.0 – 01.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44.json` (Gesamtkonsistenzprüfung KW 44, Commit `02a6bd5`), freigegeben vom Herausgeber am 01.11.2026: GK-2026-W44-01 (Option A), -02 (Option A), -05. Zweite Stelle, weil sich die Regeln zum Fristenkennsatz und zur Quellennummerierung bei Fortschreibungen ändern; Schema unverändert, bestehende Meldungen werden nicht umkodiert.

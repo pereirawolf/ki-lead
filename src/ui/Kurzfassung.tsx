@@ -6,6 +6,8 @@
 // Meldungen an die KI-Verdichtung, sowie von Hand über „Leeren“.
 // Während der Erstellung (seit 0.6.6) wie die KI-Erfassung: Uhr mit erwarteter Dauer, geschriebene Zeichen und
 // voraussichtliche Kosten; der KI-Chip der Kopfleiste steht auf „KI aktiv“.
+// Vor dem Senden bestätigt die Person wie in der KI-Erfassung, nur fiktive oder offen zugängliche Inhalte weiterzugeben
+// (seit 0.7.1, DK-2026-W45-01; docs/DATENSCHUTZ.md, Abschnitt 1). Bis 0.7.0 ging die Meldung ohne Bestätigung an den Anbieter.
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { anbieterVon, ANBIETER_NAME, hatSchluessel, Verteiler, type Schluessel } from "../anbieter/verteiler";
@@ -87,6 +89,8 @@ export function KurzfassungKasten({
   const [kfWahl, setKfWahl] = useState<Modellwahl>({});
   const [laeuft, setLaeuft] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
+  /** Bestätigung zur Weitergabe der Inhalte (DK-2026-W45-01); gilt, solange der Schritt angezeigt wird */
+  const [datenOk, setDatenOk] = useState(false);
   const abbruch = useRef<AbortController | null>(null);
   // Laufende Anfrage beim Verlassen (z. B. Profilwechsel) kontrolliert abbrechen
   useEffect(() => () => abbruch.current?.abort(), []);
@@ -136,7 +140,7 @@ export function KurzfassungKasten({
   const schluesselDa = !!ki && hatSchluessel(anbieterVon(kfModell), ki.schluessel);
 
   const erstellen = async () => {
-    if (!schluesselDa) return;
+    if (!schluesselDa || !datenOk) return;
     setFehler(null);
     setLaeuft(true);
     const ctrl = new AbortController();
@@ -258,6 +262,15 @@ export function KurzfassungKasten({
       {laeuft && (
         <MsLaufzeile stand={anzeige} erwartet={schaetzung ? dauerText(schaetzung.sekunden) : null} kosten={schaetzung ? kostenText(schaetzung.usd) : null} />
       )}
+      {schluesselDa && !laeuft && (
+        <label className="bestaetigung">
+          <input type="checkbox" checked={datenOk} onChange={(e) => setDatenOk(e.target.checked)} />
+          <span id="kurzfassung-bestaetigung">
+            Ich gebe nur fiktive oder offen zugängliche Inhalte weiter, keine personenbezogenen und keine eingestuften Daten. Die Meldung geht an{" "}
+            {ANBIETER_NAME[anbieterVon(kfModell)]}.
+          </span>
+        </label>
+      )}
       <div className="aktionen">
         {schluesselDa ? (
           laeuft ? (
@@ -268,7 +281,13 @@ export function KurzfassungKasten({
               </button>
             </>
           ) : (
-            <button type="button" className={kf && !veraltet ? "knopf" : "knopf primaer"} onClick={erstellen}>
+            <button
+              type="button"
+              className={kf && !veraltet ? "knopf" : "knopf primaer"}
+              onClick={erstellen}
+              disabled={!datenOk}
+              aria-describedby={datenOk ? undefined : "kurzfassung-bestaetigung"}
+            >
               {titel} erstellen
             </button>
           )

@@ -11,6 +11,11 @@ export interface Migration {
   /** Felder, die nur ergänzt werden, wenn sie fehlen */
   ergaenze?: Record<string, unknown>;
   hinweis?: string;
+  /**
+   * Verfahren statt Feldsetzungen (seit 0.7.0, UP-2026-W45-02): „lead-meldung-v2“ überführt LEAD-Meldung-v1 und
+   * LEAD-Meldung-Land-v1 nach docs/LEAD-MELDUNG-V2.md, Abschnitt 11; setze und ergaenze gelten dann nicht.
+   */
+  verfahren?: "lead-meldung-v2";
 }
 
 export interface ProfilManifest {
@@ -112,6 +117,11 @@ export interface Rollen {
   status_feld: string;
   status_entwurf: string;
   status_final: string;
+  /**
+   * Status einer freigegebenen Fassung (seit 0.7.3, UP-2026-W45-03; LEAD-Meldung-v2: „freigegeben“). Die finale
+   * Ausgabe trägt ihn, wenn im Freigabeblock „freigegeben“ Name und Zeitpunkt stehen; sonst gilt status_final.
+   */
+  status_freigegeben?: string;
   entstehung_feld?: string;
   /** Freigabeblock (Zeichnungen); in Ausgaben als eigener Block am Ende */
   freigabe?: string;

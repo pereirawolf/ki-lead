@@ -11,6 +11,20 @@
   margin-bottom: 1rem;
 }
 
+/* Eine Zeile, sobald Meldungen geladen sind (seit UX-2026-W45-01) */
+.lb-ablage-kompakt {
+  border-width: 1px;
+  padding: 0.5rem 0.75rem;
+}
+
+.lb-ablage-kompakt .aktionen {
+  align-items: center;
+}
+
+.lb-ablage-zusatz {
+  font-size: 0.82rem;
+}
+
 .lb-ablage-aktiv {
   border-color: var(--amt);
   background: var(--amt-zart);
@@ -127,11 +141,50 @@
   gap: 0.3rem;
 }
 
+/* Reiter: unter dem Kopf stehen bleibend, einzeilig und auf schmalen Bildschirmen waagerecht scrollbar, Gruppen mit
+   feinem Trenner (seit UX-2026-W45-03) */
 .lb-reiter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  position: sticky;
+  top: var(--kopf-hoehe, 4.5rem);
+  z-index: 5;
   margin: 0 0 1rem;
+  padding: 0.4rem 0;
+  background: var(--papier);
+  border-bottom: 1px solid var(--linie-zart);
+}
+
+.lb-reiter ol {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Verlauf am Rand wie bei den Schrittleisten (UX-2026-W44-04) */
+  background:
+    linear-gradient(to right, var(--papier) 40%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--papier) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+    linear-gradient(to right, var(--linie), transparent) left center / 1rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--linie), transparent) right center / 1rem 100% no-repeat scroll;
+}
+
+.lb-reiter li {
+  flex: 0 0 auto;
+}
+
+.lb-reiter .lb-reiter-gruppe {
+  margin-left: 0.35rem;
+  padding-left: 0.7rem;
+  border-left: 1px solid var(--linie);
+}
+
+.lb-reiter .segment {
+  white-space: nowrap;
+}
+
+.lb-reiter-anker {
+  height: 0;
 }
 
 .lb-reiter .segment {
@@ -363,14 +416,13 @@ button.lb-kennzahl:hover {
   overflow: hidden;
 }
 
+/* Heller, schlanker Kopf (seit UX-2026-W45-10; bis dahin in der Hauptfarbe) */
 .lb-karte header {
-  background: var(--amt);
-  color: var(--auf-amt);
-  padding: 0.6rem 0.9rem;
-}
-
-.lb-karte header .lb-karte-meta {
-  color: var(--auf-amt);
+  background: var(--papier);
+  color: var(--tinte);
+  border-bottom: 1px solid var(--linie-zart);
+  border-top: 3px solid var(--amt);
+  padding: 0.5rem 0.9rem;
 }
 
 .lb-karte-titel {
@@ -499,12 +551,6 @@ button.lb-kennzahl:hover {
 
 .lb-sv-name {
   font-weight: 700;
-}
-
-.lb-sv-meta {
-  font-size: 0.82rem;
-  color: var(--tinte-leise);
-  overflow-wrap: anywhere;
 }
 
 .lb-kennung-inline {
@@ -818,7 +864,7 @@ fieldset.lb-ausgabe {
 }
 
 /* Herkunftsfilter (seit 0.6.13, Issue #114, A1) */
-fieldset.lb-herkunft {
+fieldset:is(.lb-herkunft, .lb-eigene) {
   margin: 0 0 1rem;
   min-width: 0;
   border: 1px solid var(--linie);
@@ -826,7 +872,7 @@ fieldset.lb-herkunft {
   padding: 0.4rem 0.9rem 0.6rem;
 }
 
-.lb-herkunft legend {
+:is(.lb-herkunft, .lb-eigene) legend {
   font-weight: 700;
   padding: 0 0.2rem;
 }
@@ -991,4 +1037,654 @@ fieldset.lb-herkunft {
 .lb-pruefstand input[type="datetime-local"] {
   width: auto;
   flex: 1 1 9rem;
+}
+
+/* „Alle entfernen“ am Ende der Dateiliste (seit UX-2026-W45-02) */
+.lb-alle-entfernen {
+  margin-top: 0.5rem;
+}
+
+/* Absender in Überschriften: Land/Bund, voller Name klein und einzeilig (seit UX-2026-W45-04) */
+.lb-absender {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.lb-absender-zeile {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.lb-absender-kurz {
+  font-weight: 700;
+}
+
+.lb-absender-voll {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--tinte-leise);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.lb-svtitel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.lb-svtitel .lb-absender-zeile {
+  font-size: 0.85rem;
+}
+
+.lb-dateiname {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--tinte-leise);
+  overflow-wrap: anywhere;
+}
+
+/* Kennzahlen in zwei Gruppen „Lage“ und „Redaktion“ (seit UX-2026-W45-06) */
+.lb-kennzahl-gruppen {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+  gap: 0.6rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.lb-kennzahl-gruppe .lb-kennzahlen {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  margin-bottom: 0;
+}
+
+.lb-kennzahl-titel {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+.lb-kennzahl.lb-kennzahl-null {
+  border-left-color: var(--linie);
+  background: transparent;
+}
+
+.lb-kennzahl.lb-kennzahl-null b {
+  color: var(--tinte-leise);
+}
+
+@media (max-width: 860px) {
+  .lb-kennzahl-gruppen {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Meldestatus: offene Stellen zuerst mit Sammelerinnerung (seit UX-2026-W45-07) */
+.lb-status-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 0.25rem 0 0.4rem;
+}
+
+.lb-status-kopf h4,
+.lb-status-titel {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* Auswahl nach Herkunft und eigener Meldung nebeneinander (seit UX-2026-W45-09) */
+.lb-auswahlfilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  align-items: flex-start;
+}
+
+.lb-auswahlfilter > .hinweis {
+  flex-basis: 100%;
+}
+
+.lb-kennzahl .lb-kennzahl-zusatz {
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+/* Eigene Meldung abgesetzt (seit UX-2026-W45-12) */
+.lb-karte.lb-karte-eigen {
+  border-color: var(--amt);
+  box-shadow: inset 0 0 0 1px var(--amt);
+}
+
+/* Sachverhaltszeile gegliedert (seit UX-2026-W45-13) */
+.lb-sv-angaben {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.9rem;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-sv-angaben .lb-absender-zeile {
+  max-width: min(100%, 40rem);
+}
+
+.lb-sv-angaben .lb-absender-kurz {
+  color: var(--tinte);
+}
+
+.lb-sv-ort {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-sv-zeile details[open] .lb-sv-ort {
+  display: none;
+}
+
+/* Filter der Sachverhalte als Chips mit Anzahl, dazu Suche (seit UX-2026-W45-14) */
+.lb-chipgruppen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.lb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.lb-chips-titel {
+  min-width: 7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--tinte-leise);
+}
+
+.lb-chip {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--linie);
+  border-radius: 999px;
+  background: var(--flaeche);
+  color: var(--tinte);
+  cursor: pointer;
+}
+
+.lb-chip:hover {
+  background: var(--amt-zart);
+}
+
+.lb-chip.aktiv {
+  background: var(--amt);
+  border-color: var(--amt);
+  color: var(--auf-amt);
+  font-weight: 700;
+}
+
+.lb-svsuche input {
+  min-width: 16rem;
+}
+
+@media (max-width: 640px) {
+  .lb-svsuche,
+  .lb-svsuche input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lb-chips-titel {
+    flex-basis: 100%;
+  }
+}
+
+/* Bezug zwischen geladenen Sachverhalten (seit UX-2026-W45-15) */
+.lb-sv-bezug {
+  font-style: italic;
+}
+
+.lb-svbaum-schalter {
+  display: inline-flex;
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lb-svliste-unter {
+  margin: 0.4rem 0 0.2rem 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--linie);
+}
+
+/* Lagenradar: Umschalter Matrix | Karten und Vergleichsmatrix (seit UX-2026-W45-16) */
+.lb-radar-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.lb-radar-kopf .hinweis {
+  flex: 1 1 24rem;
+  margin: 0;
+}
+
+.lb-radar-kopf .segment {
+  font: inherit;
+  color: var(--tinte);
+  border: none;
+  border-right: 1px solid var(--linie);
+}
+
+.lb-radar-kopf .segment:last-child {
+  border-right: none;
+}
+
+.lb-radar-kopf .segment.aktiv {
+  background: var(--amt);
+  color: var(--auf-amt);
+  font-weight: 700;
+}
+
+.lb-radarmatrix {
+  min-width: 640px;
+}
+
+.lb-radarmatrix th[scope="row"] {
+  min-width: 14rem;
+  max-width: 26rem;
+  font-weight: 400;
+  color: var(--tinte);
+}
+
+.lb-radarmatrix thead th:not(:first-child) {
+  text-align: center;
+  width: 3rem;
+}
+
+.lb-radarmatrix abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+.lb-matrix-zeile {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinte);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--linie);
+  text-underline-offset: 0.2em;
+}
+
+.lb-matrix-zeile:hover,
+.lb-matrix-zeile[aria-expanded="true"] {
+  text-decoration-color: currentColor;
+}
+
+.lb-matrix-gewaehlt th[scope="row"] {
+  box-shadow: inset 4px 0 0 var(--amt);
+}
+
+.lb-radarmatrix .lb-stufe {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--radar-linie) var(--anteil, 10%), var(--flaeche));
+  border: 2px solid var(--flaeche);
+}
+
+.lb-radarmatrix .lb-stufe-dunkel {
+  color: var(--flaeche);
+}
+
+.lb-radarmatrix .lb-stufe-offen {
+  color: var(--tinte-leise);
+  background: repeating-linear-gradient(135deg, var(--flaeche) 0 4px, var(--linie-zart) 4px 7px);
+}
+
+.lb-matrix-legende {
+  margin-top: 0.4rem;
+}
+
+.lb-matrix-karte {
+  max-width: 40rem;
+  margin-top: 0.75rem;
+}
+
+@media (forced-colors: active) {
+  .lb-stufe,
+  .lb-stufe-offen {
+    background: Canvas;
+    color: CanvasText;
+  }
+}
+
+/* Überlagertes Radar (seit UX-2026-W45-18) */
+.lb-ueberlagert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+}
+
+.lb-ueberlagert > svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.lb-ueberlagert-titel {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+}
+
+.lb-ueberlagert-legende {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.lb-radarmatrix .lb-matrix-wahl {
+  width: 2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Bearbeitungsstand der Befunde im Redaktionscheck (seit UX-2026-W45-19) */
+.lb-punkt-aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.lb-punkt-aktionen .lb-zur-meldung {
+  margin: 0;
+}
+
+.lb-bearbeitung {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lb-bearbeitung-grund {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.lb-bearbeitung-grund input {
+  min-width: 14rem;
+}
+
+.lb-punkt-bearbeitet {
+  opacity: 0.8;
+  border-left-style: dashed;
+}
+
+.lb-mehr-knopf {
+  padding: 0;
+  margin-top: 0.15rem;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Redaktionscheck kompakt (seit UX-2026-W45-20): Abschnitte aufklappbar, Befundtext auf zwei Zeilen */
+.lb-abschnitt > details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.lb-abschnitt > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lb-abschnitt > details > summary .abschnitt::before {
+  content: "▸ ";
+  color: var(--tinte-leise);
+}
+
+.lb-abschnitt > details[open] > summary .abschnitt::before {
+  content: "▾ ";
+}
+
+.lb-abschnitt-zahl {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+}
+
+.lb-punkt-gekuerzt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Filter des Redaktionschecks und zugeklappter Textbaustein (seit UX-2026-W45-21) */
+.lb-red-filter {
+  margin: 0.5rem 0;
+}
+
+.lb-red-filter .lb-wahl {
+  margin-left: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.lb-baustein-text summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--tinte-leise);
+}
+
+/* Kopiervorlage: Blöcke eingeklappt, Auswahl zum gemeinsamen Kopieren (seit UX-2026-W45-23) */
+.lb-vorlage {
+  margin-bottom: 0.5rem;
+}
+
+.lb-vorlage-kopf {
+  flex-wrap: nowrap;
+}
+
+.lb-vorlage-kopf > span,
+.lb-vorlage-titel {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-vorlage-gewaehlt {
+  border-color: var(--amt);
+  box-shadow: inset 4px 0 0 var(--amt);
+}
+
+.lb-vorlage-vorschau > summary {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--tinte-leise);
+  cursor: pointer;
+}
+
+.lb-vorlage .werkzeugleiste-knoepfe,
+.lb-leiste .werkzeugleiste-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Kopfzeile der Kopiervorlage gegliedert (seit UX-2026-W45-24) */
+.lb-vorlage-titel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-weight: 400;
+  color: var(--tinte);
+  font-size: 0.9rem;
+}
+
+.lb-vorlage-angaben {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--tinte-leise);
+}
+
+.lb-vorlage-frist {
+  font-weight: 700;
+  color: var(--tinte);
+}
+
+/* Rohtabelle: Kopf und erste Spalte stehen, Zellen auf drei Zeilen gekürzt, je Zeile aufklappbar (seit UX-2026-W45-25) */
+.lb-rohtabelle {
+  max-height: calc(100vh - var(--kopf-hoehe, 4.5rem) - 7rem);
+  overflow: auto;
+}
+
+.lb-rohtabelle thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--flaeche);
+}
+
+.lb-rohtabelle :is(th, td):first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--flaeche);
+  box-shadow: 1px 0 0 var(--linie);
+}
+
+.lb-rohtabelle thead th:first-child {
+  z-index: 3;
+}
+
+.lb-rohtabelle .lb-erste {
+  display: flex;
+  gap: 0.3rem;
+  align-items: flex-start;
+}
+
+.lb-zelle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.lb-zeile-offen .lb-zelle {
+  display: block;
+  overflow: visible;
+}
+
+.lb-zeile-knopf {
+  flex: 0 0 auto;
+  padding: 0 0.2rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  color: var(--tinte);
+  font: inherit;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+/* Spaltengruppen der Rohtabelle (seit UX-2026-W45-26) */
+.lb-spaltengruppen {
+  margin-bottom: 0.6rem;
+}
+
+.lb-spaltengruppen .hinweis {
+  margin: 0 0 0 0.5rem;
+  font-size: 0.82rem;
+}
+
+/* Schmale Bildschirme: Ablage und Aktionen kompakt, damit die Reiter im ersten Bildschirm stehen (UX-2026-W45-01) */
+@media (max-width: 640px) {
+  .lb-ablage-kompakt {
+    padding: 0.4rem 0.5rem;
+  }
+
+  .lb-ablage-kompakt .aktionen {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+  }
+
+  .lb-ablage-kompakt .knopf,
+  .lb-leiste .werkzeugleiste-knoepfe .knopf {
+    font-size: 0.85rem;
+    padding-inline: 0.6rem;
+  }
+
+  .lb-ablage-zusatz {
+    display: none;
+  }
+
+  .lb-leiste .werkzeugleiste-knoepfe {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (pointer: coarse) {
+  .lb-ablage-zusatz {
+    display: none;
+  }
+}
+
+/* Tabellen im Redaktionscheck: Sachverhalt und Ort auf zwei Zeilen gekürzt, voll im Titel (UX-2026-W45-20) */
+.lb-zelle-kurz {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-width: 10rem;
 }

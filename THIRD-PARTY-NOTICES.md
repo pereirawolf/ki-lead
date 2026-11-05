@@ -26,10 +26,10 @@ Einbindung:
 |---|---|---|---|---|---|
 | `@aparajita/capacitor-secure-storage` | 8.0.1 | MIT | MIT | Aparajita Fishman | Web-Build, nativ |
 | `@babel/runtime` | 7.29.10 | MIT | MIT | Sebastian McKenzie und Mitwirkende | Web-Build |
-| `@capacitor/android` | 8.5.3 | MIT | MIT | Drifty Co. (Ionic) | nativ |
+| `@capacitor/android` | 8.6.0 | MIT | MIT | Drifty Co. (Ionic) | nativ |
 | `@capacitor/app` | 8.1.2 | MIT | MIT | Ionic | nicht ausgeliefert |
-| `@capacitor/core` | 8.5.3 | MIT | MIT | Drifty Co. (Ionic) | Web-Build |
-| `@capacitor/ios` | 8.5.3 | MIT | MIT | Drifty Co. (Ionic) | nativ |
+| `@capacitor/core` | 8.6.0 | MIT | MIT | Drifty Co. (Ionic) | Web-Build |
+| `@capacitor/ios` | 8.6.0 | MIT | MIT | Drifty Co. (Ionic) | nativ |
 | `@capacitor/keyboard` | 8.0.6 | MIT | MIT | Ionic | nicht ausgeliefert |
 | `@fontsource/atkinson-hyperlegible` | 5.3.0 | OFL-1.1 | OFL-1.1 | Braille Institute of America, Inc. (Schrift) | Web-Build |
 | `@types/pako` | 2.0.4 | MIT | MIT | Microsoft Corporation | nicht ausgeliefert |
@@ -99,8 +99,8 @@ Nicht im npm-Lockfile, sondern in den nativen Projekten festgelegt. Die Versione
 
 | Komponente | Version | Lizenz | Urheber | Plattform |
 |---|---|---|---|---|
-| Capacitor (Android) | 8.5.3 | MIT | Drifty Co. (Ionic) | Android |
-| Capacitor (iOS, über `capacitor-swift-pm`) | 8.5.3 | MIT; enthält Teile von Apache Cordova iOS unter Apache-2.0 | Drifty Co. (Ionic); The Apache Software Foundation | iOS |
+| Capacitor (Android) | 8.6.0 | MIT | Drifty Co. (Ionic) | Android |
+| Capacitor (iOS, über `capacitor-swift-pm`) | 8.6.0 | MIT; enthält Teile von Apache Cordova iOS unter Apache-2.0 | Drifty Co. (Ionic); The Apache Software Foundation | iOS |
 | Schlüsselbund-Plugin `@aparajita/capacitor-secure-storage` | 8.0.1 | MIT | Aparajita Fishman | Android, iOS |
 | KeychainSwift | ab 21.0.0, nicht festgelegt | MIT | Evgenii Neumerzhitckii (evgenyneu) | iOS |
 | Apache Cordova Android framework (`org.apache.cordova:framework`) | 14.0.1 | Apache-2.0 | The Apache Software Foundation | Android |

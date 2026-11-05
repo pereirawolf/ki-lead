@@ -1,16 +1,40 @@
-// Lagenradar: Netzgrafik plus Stufenwahl je Achse. „Offen“ (null) ist sichtbar etwas anderes als Stufe 0.
+// Lagenradar: Netzgrafik plus Stufenwahl je Achse. „Offen“ (null) ist sichtbar etwas anderes als Stufe 0: seit
+// UX-2026-W45-17 ein hohler Ring am Rand und keine Fläche, solange eine Achse offen ist (src/kern/radarGeometrie.ts).
 
 import type { KeyboardEvent } from "react";
 import type { RadarDef } from "../kern/typen";
+import { radarMitStufe, radarWerte } from "../kern/ui";
+import { radarForm } from "../kern/radarGeometrie";
 
 interface Props {
   def: RadarDef;
-  wert: Record<string, number | null> | undefined;
-  onChange?: (neu: Record<string, number | null>) => void;
+  /** Stufen je Achse (v1) oder Achsen als Objekte mit „stufe“ (LEAD-Meldung-v2, seit 0.7.3) */
+  wert: Record<string, unknown> | undefined;
+  onChange?: (neu: Record<string, unknown>) => void;
   idPraefix: string;
 }
 
-export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert: Record<string, number | null> | undefined; groesse?: number }) {
+/** Eine Linie im überlagerten Radar (seit UX-2026-W45-18) */
+export interface RadarReihe {
+  name: string;
+  wert: Record<string, unknown> | undefined;
+}
+
+/**
+ * Netzgrafik des Lagenradars. Mit `reihen` (seit UX-2026-W45-18) zeichnet sie bis zu drei Sachverhalte übereinander,
+ * je mit eigenem Strich (durchgezogen, gestrichelt, gepunktet) und ohne Füllung; einen Mittelwert bildet sie nie.
+ */
+export function RadarGrafik({
+  def,
+  wert,
+  groesse = 220,
+  reihen,
+}: {
+  def: RadarDef;
+  wert?: Record<string, unknown> | undefined;
+  groesse?: number;
+  reihen?: RadarReihe[];
+}) {
   const n = def.achsen.length;
   const c = groesse / 2;
   const rMax = groesse * 0.36;
@@ -29,21 +53,54 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
       .join(" ");
     ringe.push(<polygon key={s} points={pts} className={s === def.max ? "radar-ring radar-ring-aussen" : "radar-ring"} />);
   }
-  const werte = def.achsen.map((a) => {
-    const v = wert?.[a.key];
-    return Number.isInteger(v) ? (v as number) : null;
-  });
-  const gesetzt = werte.some((v) => v !== null);
-  const flaeche = def.achsen
-    .map((_, i) =>
-      punkt(i, (rMax * (werte[i] ?? 0)) / def.max)
-        .map((x) => x.toFixed(1))
-        .join(","),
-    )
-    .join(" ");
+  const ueberlagert = !!reihen;
+  const liste: RadarReihe[] = reihen ?? [{ name: "", wert }];
+  const werteVon = (w: Record<string, unknown> | undefined) => {
+    const st = radarWerte(w);
+    return def.achsen.map((a) => st[a.key] ?? null);
+  };
   const kurz = (label: string) => label.match(/^(D\d+)\b/)?.[1] ?? label.split(/\s+/)[0];
   // Werte auch ohne Grafik zugänglich (Screenreader, Systemfarben): „D1 Gefahrenlage: 2 von 4; D2 …: offen“
-  const beschreibung = `Lagenradar: ${def.achsen.map((a, i) => `${a.label}: ${werte[i] === null ? "offen" : `${werte[i]} von ${def.max}`}`).join("; ")}`;
+  const text = (werte: (number | null)[]) => def.achsen.map((a, i) => `${a.label}: ${werte[i] === null ? "offen" : `${werte[i]} von ${def.max}`}`).join("; ");
+  const beschreibung = ueberlagert
+    ? `Lagenradar, überlagert: ${liste.map((r) => `${r.name} – ${text(werteVon(r.wert))}`).join(" | ")}`
+    : `Lagenradar: ${text(werteVon(wert))}`;
+
+  /** Fläche bzw. Kanten und Punkte einer Reihe; offen als Ring am Rand (UX-2026-W45-17) */
+  const zeichnen = (reihe: RadarReihe, nr: number) => {
+    const werte = werteVon(reihe.wert);
+    const gesetzt = werte.some((v) => v !== null);
+    const form = radarForm(werte);
+    const zusatz = ueberlagert ? ` radar-reihe radar-reihe-${nr + 1}` : "";
+    const flaeche = def.achsen
+      .map((_, i) =>
+        punkt(i, (rMax * (werte[i] ?? 0)) / def.max)
+          .map((x) => x.toFixed(1))
+          .join(","),
+      )
+      .join(" ");
+    return (
+      <g key={nr}>
+        {gesetzt && form.voll && <polygon points={flaeche} className={`radar-flaeche${zusatz}`} />}
+        {gesetzt &&
+          form.kanten.map(([i, j]) => {
+            const [x1, y1] = punkt(i, (rMax * werte[i]!) / def.max);
+            const [x2, y2] = punkt(j, (rMax * werte[j]!) / def.max);
+            return <line key={`k-${i}-${j}`} x1={x1} y1={y1} x2={x2} y2={y2} className={`radar-linie${zusatz}`} />;
+          })}
+        {def.achsen.map((a, i) => {
+          const v = werte[i];
+          if (v === null || v === undefined) {
+            const [x, y] = punkt(i, rMax);
+            return <circle key={a.key} cx={x} cy={y} r={4.5} className={`radar-punkt-offen${zusatz}`} />;
+          }
+          const [x, y] = punkt(i, (rMax * v) / def.max);
+          return <circle key={a.key} cx={x} cy={y} r={ueberlagert ? 3.5 : 4.5} className={`radar-punkt${zusatz}`} />;
+        })}
+      </g>
+    );
+  };
+
   return (
     <svg viewBox={`0 0 ${groesse} ${groesse}`} width={groesse} height={groesse} role="img" aria-label={beschreibung}>
       {ringe}
@@ -59,16 +116,7 @@ export function RadarGrafik({ def, wert, groesse = 220 }: { def: RadarDef; wert:
           </g>
         );
       })}
-      {gesetzt && <polygon points={flaeche} className="radar-flaeche" />}
-      {def.achsen.map((a, i) => {
-        const v = werte[i];
-        const [x, y] = punkt(i, (rMax * (v ?? 0)) / def.max);
-        return v === null ? (
-          <circle key={a.key} cx={x} cy={y} r={3.5} className="radar-punkt-offen" />
-        ) : (
-          <circle key={a.key} cx={x} cy={y} r={4.5} className="radar-punkt" />
-        );
-      })}
+      {liste.map(zeichnen)}
     </svg>
   );
 }
@@ -92,12 +140,9 @@ export function zielIndex(taste: string, aktuell: number, anzahl: number): numbe
 }
 
 export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
-  const setze = (key: string, v: number | null) => {
-    const basis: Record<string, number | null> = {};
-    for (const a of def.achsen) basis[a.key] = Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null;
-    basis[key] = v;
-    onChange?.(basis);
-  };
+  // Seit 0.7.3 (UP-2026-W45-03) auch Achsen als Objekte (LEAD-Meldung-v2): Begründung und Belege bleiben erhalten
+  const setze = (key: string, v: number | null) => onChange?.(radarMitStufe(def, wert, key, v));
+  const stufen = radarWerte(wert);
   return (
     <div className="radar">
       <div className="radar-grafik">
@@ -105,7 +150,7 @@ export function RadarFeld({ def, wert, onChange, idPraefix }: Props) {
       </div>
       <div className="radar-achsen">
         {def.achsen.map((a) => {
-          const v = Number.isInteger(wert?.[a.key]) ? (wert![a.key] as number) : null;
+          const v = stufen[a.key] ?? null;
           const gruppe = `${idPraefix}-${a.key}`;
           const werte = achsenWerte(a.stufen.length);
           const optionId = (w: number | null) => `${gruppe}-${w === null ? "offen" : w}`;

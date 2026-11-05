@@ -93,6 +93,382 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.6.20 | letzter Commit des Pull Requests „Oberfläche nach der UX-Prüfung 2026-W44; 0.6.20“ (Nachtrag vom 01.11.2026: Pull Request „LEAD-Meldung-v2: Entwurf des Meldungsformats mit Migration“, ohne Änderung der App) |
 | 0.6.21 | letzter Commit des Pull Requests „Erklärtexte im Analysebereich, Hilfetexte einheitlich über dem Feld; 0.6.21“ |
 | 0.6.22 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 44: Fristen, Quellennummern, v2-Zeitprüfung; 0.6.22“ |
+| 0.6.23 | letzter Commit des Pull Requests „Gesamtkonsistenz nach PR #126: profilneutrale Texte, Quellenidentität, v2-Chronologie; 0.6.23“ (Nachtrag vom 03.11.2026: Pull Request „Landesprofil 1.2.0: Beispiellage Orkantief Ilka mit Kräftelage aus Thessa“, ohne Änderung der App) |
+| 0.6.24 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus Thessa als Materialart (Umstellungsplan, Paket 1); 0.6.24“ |
+| 0.7.0 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Kern und Prüfung (Umstellungsplan, Paket 2); 0.7.0“ |
+| 0.7.1 | letzter Commit des Pull Requests „Dokumentationsprüfung KW 45: Bestätigung der Management Summary, Datenhülle der Orientierungssuche, Doku nachgezogen; 0.7.1“ |
+| 0.7.2 | letzter Commit des Pull Requests „Fallreihen unter Testläufe: Fallpakete, Plan, Kostenbremse, Ergebnis-ZIP; 0.7.2“ |
+| 0.7.3 | letzter Commit des Pull Requests „LEAD-Meldung-v2 in Maske und Ausgabe (Umstellungsplan, Paket 3); 0.7.3“ (Nachträge vom 03.11.2026: Grunddesign der App-Familie in `design/`; Landesprofil 1.2.2 mit Quelle der Kreisnamen; jeweils ohne Änderung der App) |
+| 0.7.4 | letzter Commit des Pull Requests „Grunddesign der App-Familie, Fassung 1.1; 0.7.4“ |
+| 0.7.5 | letzter Commit des Pull Requests „Schwester-Repos: Meldungsmodule, Thessa-Kennzahlen 0.3, Austauschvertrag 0.5; 0.7.5“ |
+| 0.7.6 | letzter Commit des Pull Requests „Grunddesign 1.2 nach dem Abgleich mit KRITIS-LEAD; Chips und Segmente nach LD-B01 und LD-Z02; 0.7.6“ (Nachtrag vom 04.11.2026: Beispielprofil 1.38.0 und Landesprofil Thüringen 1.4.0 mit dem Pull Request „Lernschleife KW 45: Arbeitsanweisung Erfassung 1.11.0, Kodierleitfaden 1.9.0, Sammelmappe 3.23.0“, ohne Änderung der App) |
+| 0.7.7 | letzter Commit des Pull Requests „Gesamtkonsistenz KW 45: Platzhalter im Zeitstrahl zuordnen; 0.7.7“ |
+| 0.7.8 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Betreibermeldungen ohne Bewertung; 0.7.8“ |
+| 0.7.9 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Schätzung von Dauer und Kosten der Erfassung; 0.7.9“ |
+| 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
+| 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
+| 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
+| 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ |
+
+## [0.7.13] – 05.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af; dazu für die Schätzung eine Fortschreibung desselben Materials mit Vormeldung, Lauf 20261105-173747-v8w6). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Entscheidungen des Herausgebers vom 05.11.2026 zu den offenen Punkten des Pull Requests: vorläufige Spanne für S1 Sonnet „hoch“, Untergrenze vorläufiger Spannen aus der nächstniedrigeren gemessenen Stufe, Orientierungssuche weiter mit dem S1-Modell, kein Hinweis für Profile mit Haiku in S1. Qualitative Einschätzung nach einem Lauf je Modell und Aufwand, keine Bewertungsreihe; die Bestätigung am Kontrollsatz steht aus.
+
+### Geändert
+
+- **Standard-Profil Anthropic und Vorgabe der App: S1 mit claude-sonnet-5-5 „mittel“** statt claude-haiku-5-5 „hoch“ (`STANDARD_PROFILE.anthropic`, `APP_MODELLE`, `STANDARD.aufwand` in `src/pipeline/einstellungen.ts`). Anlass: Haiku „hoch“ führte in einem Lauf in der SOP-Liste Bausteine und eine Ereignisart, die die eigene Begründung ausschloss; S2 übernimmt die bestätigte Gliederung verbindlich. Sonnet „mittel“ hielt Liste und Begründung deckungsgleich, wandte die Zuordnung hitzebedingter Gesundheitsfolgen zu B05 richtig an und kennzeichnete den Zeitbezug eindeutig; gpt-6-luna „hoch“ (Mix-Profil) war in der SOP-Begründung gleichwertig, wählte aber in drei Läufen unterschiedlich. Kosten von S1 rund 0,26 statt 0,01 USD je Lauf (Schreiben des SOP-Blocks in den Cache), rund 10 % eines Erfassungslaufs mit Opus.
+- **Folge für die Orientierungssuche:** Sie nutzt das Modell von S1; mit Sonnet 5.5 lässt sich die Websuche nicht erzwingen (KP-2026-W44-05). Die App zählt die Suchen nach und wiederholt einmal; mit Haiku 5.5 als eigener Wahl bleibt die Suche erzwungen.
+- **Beispielprofil 1.41.0, Landesprofil Thüringen 1.7.0, Lagebild Justiz 0.3.0, Vorlage 0.8.0:** `modelle.vorverarbeitung` `claude-sonnet-5-5`; sonst unverändert. Profile außerhalb des Repositorys, die Haiku für S1 vorgeben, laufen ohne eigene Wahl seither mit Haiku „mittel“; die Fassung 2 → 3 der Einstellungen hatte diese Stufe für Haiku wegen der Regeln zu t0 und Prüffrage angehoben.
+- **Fassung 8 der Einstellungen:** Wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen (`STANDARD_PROFIL_ANTHROPIC_FASSUNG_7`). Ohne eigenes S1-Modell wird der bisherige Vorgabeaufwand „hoch“ für S1 zur neuen Vorgabe „mittel“. Eine abweichende Wahl bleibt. `STANDARD_PROFILE_FASSUNG_3.anthropic` führt S1 jetzt ausdrücklich mit Haiku „hoch“.
+- **Bezug der Vergleichsauswertung:** `istAnthropicStandard` vergleicht mit dem heutigen Standard-Profil, ersatzweise mit dem bis 0.7.12 gültigen; bisherige Vergleichsreihen (S1 Haiku „hoch“) behalten so ihren Bezug (`src/forschung/vergleichsauswertung.ts`).
+- **Schätzung von Dauer und Kosten** (`src/pipeline/schaetzung.ts`): S1 Sonnet „mittel“ mit Kostenobergrenze 0,35 statt 0,15 USD (gemessen 24 s, 0,26 USD, 60 346 Token neu in den Cache; Lauf -l8af). Erfassung Opus „hoch“ als vorläufige Einzelmessung 200–960 s, 1,40–3,55 USD (gemessen 767 s, 2,81 USD; Lauf -5iuf); die Untergrenze stammt aus der Erfassung mit Opus „mittel“, weil eine Verdichtung mit Opus „hoch“ nicht gemessen ist (Regel im Dateikopf ergänzt). Bisher aus Opus „mittel“ hochgerechnet (1,40–6,70 USD, ohne Dauer); die Fortschreibung -v8w6 lag mit 816 s und 3,36 USD in der Spanne (zwei Messläufe, weiter vorläufig). S1 Sonnet „hoch“ als vorläufige Einzelmessung 10–90 s, 0,02–0,55 USD (gemessen bei der Fortschreibung 60 s, 0,43 USD), bisher aus Sonnet „mittel“ hochgerechnet (0,02–0,70 USD, ohne Dauer). In den Spannen und nur als Kenndaten nachgetragen: Erfassung Opus „mittel“ 665–666 s, 2,53–2,58 USD (Läufe -pyor, -l8af); S1 gpt-6-luna „hoch“ 99–112 s, 0,008–0,010 USD (Läufe -pyor, -5iuf).
+- Spezifikation 0.7.13 (Abschnitte 5.1 und 5.4), KI-Verordnung und Systemkarte 1.6 (Abschnitt 9.1). Versionsangaben 0.7.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 713); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/pipeline/einstellungen.test.ts`: Fassung 8 (Standard-Profil bis 0.7.12 → heutiges, Vorgabeaufwand „hoch“ ohne eigenes S1-Modell → „mittel“, abweichende Wahl bleibt); Ketten aus Fassung 1 bis 3 mit dem neuen Ergebnis.
+- `tests/pipeline/schaetzung.test.ts`: Kenndaten der Folgereihe in den Spannen, neue Spannen von Hand nach der Regel; Hochrechnung an Sonnet „hoch“ statt Opus „hoch“.
+- `tests/forschung/vergleichsauswertung.test.ts`: heutiges Standard-Profil als Bezug vor dem bis 0.7.12 gültigen.
+- `tests/pipeline/recherche-pflicht.test.ts`: Fälle mit erzwungener Suche wählen Haiku ausdrücklich; Vorgabe sucht mit Sonnet ohne Zwang.
+- Angepasst an die neue Vorgabe: `tests/pipeline/vorgaben.test.ts`, `stufen.test.ts`, `tests/ui/modellwahl.test.ts`, `testlaeufe.test.ts`, `s1-grenze.test.ts`, `orientierung.test.ts`.
+
+## [0.7.12] – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, Meilensteine M1 bis M3, Commit `8faa547`), KL-2026-W45-02 bis -06, freigegeben vom Herausgeber am 05.11.2026 mit den Fassungen vom selben Tag. Umgesetzt: -02, -05, -06; zurückgestellt: -03 und -04 (siehe unten). Keine Änderung an KI-Pipeline, Oberfläche und Lagebild außer dem Vermerk „(betriebsintern)“.
+
+### Hinzugefügt
+
+- **Module von KRITIS-LEAD eingebettet (KL-2026-W45-02):** `lead-kritis-meldung` (Meldungsmodul) und `lead-kritis-betrieb` (Fachmodul je Sachverhalt) 0.3 unverändert aus KRITIS-LEAD `206d574` unter `formate/fremd/kritis-lead/0.3/`, mit `herkunft.json` (Commit, Quellpfad, Prüfsumme). Die Module sind in sich geschlossen und brauchen keine Bündelung; ein Profil bindet sie über seine Zusammenstellung ein (Paket 6). Der Pin-Wächter von KRITIS-LEAD liest dieselbe Herkunftsangabe.
+
+### Geändert
+
+- **Zugang „betriebsintern“ (KL-2026-W45-06):** Kernschema von LEAD-Meldung-v2: zusätzlicher Wert für `quellen[].zugang` für nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt (Betriebstagebuch, Leitwarte); bestehende Meldungen bleiben gültig. Zusammengestellte Schemata `beispiel/` und `beispiel-land/` neu erzeugt; Quellenzeile und Baustein zeigen „(betriebsintern)“, die Überführung aus v1 erkennt den Vermerk. Thessa pinnt das Kernschema neu (pereirawolf/thessa, eigener Pull Request); `formate/fremd/thessa-kennzahlen/herkunft.json` und die gebündelten Schemata sind nachgezogen.
+- **Kennungen der Betreiber (KL-2026-W45-05):** Kodierleitfaden 1.11.0, Abschnitt 8.1: Präfix `KRITIS-` mit Kürzel und sechsstelligem Zufallsteil, nie als eigene geführt; im Bezug nach LEAD-Meldevorlage 1.2 lässt das Schema nur vierstellige Zufallsteile zu, daher bis zur Umstellung auf v2 nur im Quellenverzeichnis. Beispielprofil 1.40.0, Landesprofil 1.6.0 (Arbeitsanweisung Erfassung 1.11.2, Sammelmappe 3.23.2).
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 7: Abschnitte 3, 4 und 13 Nr. 8), `docs/AUSTAUSCH.md` Abschnitt 9, Spezifikation 0.7.12. Versionsangaben 0.7.12 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 712); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Zurückgestellt
+
+- **KL-2026-W45-03 (Bezug in SON 10:00):** Die Kennungen der Betreiber haben einen sechsstelligen Zufallsteil; das Schema `LEAD-Meldung-Land-v1` lässt im Bezug nur vierstellige zu. Umsetzung mit der Umstellung des Landesprofils auf v2 (Paket 6).
+- **KL-2026-W45-04 (Frist der Trinkwasserversorgung in SON 10:00):** Hinweis ohne Änderung; aufgreifen, wenn das Beispiel auf v2 umgestellt wird (Fristen als Liste mit Bedingung und Grundlage).
+
+### Tests
+
+- `tests/format/kritis-module.test.ts` (neu): Kopien unverändert (Prüfsumme, Commit, Quellpfad, Fassung 0.3), Module in sich geschlossen, Zusammenstellung mit dem Kern für den eigenen Prüfer verwendbar, Betreibermeldung gültig und Modulregeln wirksam (eigener Prüfer gleich Ajv).
+- `tests/kern/v2-darstellung.test.ts`: Zugang „betriebsintern“ im Kern und in den zusammengestellten Schemata, unbekannter Wert ungültig; Quellenzeile mit Vermerk und Rücklesen durch das Werkzeug.
+- Angepasst: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.11.0).
+
+## [0.7.11] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_ux_2026-W45.json` (Oberfläche der Ansichten „Profile“ und „Auswertung“, eigene Durchsicht am Build 0.7.7 bei 1366 px und 390 px mit dem Beispiel „Ilka“, Commit `1395a76`), UX-2026-W45-01 bis -32, alle freigegeben vom Herausgeber am 04.11.2026 mit den Entscheidungen zu -03, -04, -05, -09, -16, -17, -19 und -26. Keine Änderung an KI-Pipeline, Profilen, Schemata und Inhalten der Ausgaben; PDF und Kopiervorlage zeichnen das Lagenradar mit offener Achse anders (-17), das Lagebild-PDF vermerkt eine ausgeblendete eigene Meldung (-09), der Redaktionsbericht nennt den Bearbeitungsstand (-19).
+
+### Geändert – Auswertung
+
+- **Ablage einzeilig (UX-2026-W45-01):** Sind Meldungen geladen, wird die Ablage zu einer Zeile („+ Meldungen hinzufügen“, Beispiel); Ziehen und Ablegen gilt für die ganze Ansicht.
+- **Ausgaben gebündelt (UX-2026-W45-02):** PDF und CSV im Menü „Ausgeben“ (`src/ui/Menue.tsx`, aus der Profilansicht), „An KI-Verdichtung übergeben“ bleibt Hauptknopf, „Alle entfernen“ am Ende der Dateiliste.
+- **Reiter (UX-2026-W45-03):** Reihenfolge Übersicht, Sachverhalte, Lagenradar, Meldungen | Redaktionscheck | Kopiervorlage, Rohtabelle mit feinen Trennern; die Leiste bleibt unter dem Kopf stehen, ist einzeilig und schmal waagerecht scrollbar (`useKopfHoehe` in `src/ui/kopfHoehe.ts`).
+- **Kurzer Absender (UX-2026-W45-04):** Überschriften nennen Land/Bund und den vollen Namen der Stelle klein (`absenderTeile`, Komponenten `Absender` und `SvTitel`); Ausgaben unverändert.
+- **Adresse (UX-2026-W45-05):** `#/auswertung/<reiter>`; `#/lagebild/…` wird gelesen und ohne neuen Verlaufseintrag ersetzt.
+- **Übersicht (UX-2026-W45-06 bis -08):** Kennzahlen in den Gruppen „Lage“ und „Redaktion“, jede als Knopf („Meldungen“ und „Sachverhalte“ öffnen ihre Reiter), mit 0 zurückgenommen. Meldestatus mit offenen Stellen zuerst und „Alle offenen erinnern“ (ein Entwurf, echte Adressen in Bcc; der im Durchgang W44 verworfene Sammelknopf scheiterte an verschiedenen Empfängern, Bcc löst das), gemeldete Stellen mit jüngstem Zeitpunkt und Alter. Verteilungen von Beurteilung und Tendenz mit allen Stufen in fester Reihenfolge; „Meldende Stellen“ entfällt.
+- **Eigene Meldung (UX-2026-W45-09):** Schalter „Eigene Meldung – einbeziehen“ neben dem Herkunftsfilter, standardmäßig an, mit dessen Reichweite; Kennzahlen nennen „davon … aus eigener Meldung“, das PDF vermerkt die Auswahl. Anlass: Im Beispiel Ilka verdichtet der Bundessachverhalt die sieben Ländersachverhalte und zählte doppelt.
+- **Meldungen (UX-2026-W45-10 bis -12):** heller Kartenkopf mit Akzentlinie, Dateiname unter „Entstehung“; Schemamarke nur bei Abweichung; Sortierung nach Land/Stelle, Meldezeitpunkt oder höchster Beurteilung, eigene Meldung zuerst und abgesetzt.
+- **Sachverhalte (UX-2026-W45-13 bis -15):** gegliederte Zeile (Stelle, Art, Eintritt, Kennung einzeln, Ort eigene Zeile auf zwei Zeilen gekürzt); Filter als Chips mit Anzahl für Beurteilung, Tendenz, Art und Land/Bund, dazu Textsuche über Bezeichnung, Ort und Kennung (`svFiltern`); Hinweise „Bezug auf n geladene“ und „genannt in …“, Schalter „Nach Bezug ordnen“.
+- **Lagenradar (UX-2026-W45-16, -18):** Vergleichsmatrix (Sachverhalte × Achsen, Stufe und Farbstufe, offen als „U“, ohne Mittelwert) als Standard mit Umschalter „Matrix | Karten“, Zeile öffnet die Karte (`src/ui/lagebild/Radarvergleich.tsx`); bis zu drei Sachverhalte in einem Radar überlagert (durchgezogen, gestrichelt, gepunktet; `RadarGrafik` mit `reihen`).
+- **Redaktionscheck (UX-2026-W45-19 bis -22):** „Erledigt“ und „Bewusst belassen …“ (Begründung freiwillig) je Befund „zeitkritisch“ oder „zu klären“; Stand je Befundschlüssel (`befundSchluessel` in `src/lagebild/redaktion.ts`: Inhaltskennung der Meldungen und Gegenstand, nicht Uhrzeit), gespeichert in `LagebildStand.bearbeitung`, im Redaktionsbericht als `uebersicht.offen` und `befunde[].bearbeitung`; Reiter und Kennzahl zählen offene Befunde. Abschnitte aufklappbar mit Befundzahl, ohne Befund eingeklappt; Befundtext zweizeilig mit „mehr“; Filter nach Einstufung und „Bearbeitete ausblenden“; Textbausteine zugeklappt; „Zum Sachverhalt“ und „In der Erfassung öffnen“.
+- **Kopiervorlage (UX-2026-W45-23, -24):** Blöcke eingeklappt mit Vorschau, Häkchen und „Auswahl kopieren (n)“; Kopf mit Bezeichnung, Absender, Marken, Frist und Abschlussvermerk.
+- **Rohtabelle (UX-2026-W45-25, -26):** Kernspalten vorn, Kopf und erste Spalte stehend, Zellen auf drei Zeilen gekürzt und je Zeile aufklappbar (`src/ui/lagebild/Rohtabelle.tsx`); Spaltengruppen als Chips (`SPALTENGRUPPEN`, `Spalte.gruppe` in `src/lagebild/ausgabe.ts`), Standard „kompakt“, Auswahl in `LagebildStand.rohtabelle`; CSV und PDF unverändert vollständig.
+
+### Behoben
+
+- **Offene Radarachse (UX-2026-W45-17):** Eine offene Achse ging mit 0 in die Fläche ein und sah aus wie Stufe 0. Oberfläche, Kopiervorlage und PDF zeichnen jetzt eine Fläche nur bei vollständigem Radar, sonst Kanten zwischen benachbarten gesetzten Achsen und einen hohlen Ring am Rand (`src/kern/radarGeometrie.ts`).
+
+### Geändert – Profile
+
+- **Karten (UX-2026-W45-27 bis -32):** alle Karten gleich aufgebaut und zugeklappt, das verwendete Profil hervorgehoben; Eckdaten (Ebene, Referenzraum, Schema, Lagenradar, SOPs) auch zugeklappt; schlichter Knopf „Verwenden“, die Ansicht bleibt nach dem Wechsel stehen und bietet „Zur Erfassung“ an (`aktivieren` in `src/App.tsx` springt nicht mehr); Befundchip nur bei Fehlern oder Warnungen, Klammerzusatz des Namens als Kennzeichen, Farbband eines Profilfarbschemas; „Technische Angaben“ zugeklappt, Herausgeber-Adresse als Verweis; mitgelieferte Profile mit Knopf „Exportieren“ statt Menü mit einem Eintrag.
+- Grunddesign der App-Familie Fassung 1.3 (`design/`): Reiterfolge der Referenzumsetzung und Adresse der Auswertung als Beispiele zu LD-A06, LD-A07 und LD-N04; Regeln und Tokens unverändert.
+- Spezifikation 0.7.11 (4.6, 5.1, 5.2). Versionsangaben 0.7.11 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 711); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/browser/ux-2026-w45.spec.ts` (neu): Reiter bei 390 px nach dem Laden im ersten Bildschirm und einzeilig scrollbar, Reiter bleiben unter dem Kopf stehen, Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px.
+- `tests/ui/ux-2026-w45.test.ts` (neu): Adresse, Meldestatus, Ablage, Ausgaben und Reiter, Kennzahlen und eigene Meldung, Meldungen, Filter und Bezug der Sachverhalte, Matrix, offene Achse und Überlagerung im Radar, Kopiervorlage, Rohtabelle und Spaltengruppen.
+- `tests/ui/redaktionscheck.test.ts`: Bearbeitungsstand (Zahl, Speicher, Bericht, neu bei geänderter Meldung), Filter und Textbaustein, Sprung zum Sachverhalt und in die Erfassung; RV07 öffnet das Menü „Ausgeben“.
+- `tests/ui/profile.test.ts`: Karten, Eckdaten, „Verwenden“, Befundchip, Namenszusatz und Farbband, technische Angaben, „Exportieren“; angepasst an die neuen Texte.
+- Angepasst: `tests/ui/lagebild.test.ts` (Karten des Radars über den Umschalter), `tests/browser/hauptablauf.spec.ts`, `pwa.spec.ts` (Menü „Ausgeben“), `einstellungen.spec.ts` (Adresse), `ux-2026-w44.spec.ts` (Chips).
+
+## [0.7.10] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json` (Anbietervergleich vom 04.11.2026: je ein interner Erfassungslauf der Standard-Profile von Anthropic, OpenAI und Mistral mit demselben Material, ohne Recherche; Commit `6302c14`), freigegeben vom Herausgeber am 04.11.2026: AV-2026-W45-04 bis -08 angenommen, -09 nicht freigegeben. Material, Laufprotokolle und Inhalte der Läufe bleiben intern. Setzt 0.7.9 (Pull Request #147) voraus.
+
+### Geändert
+
+- **t0 bei Stichtag in der Zukunft (AV-2026-W45-07):** Die App belegt t0 nicht mehr mit der aktuellen Zeit, sondern lässt es leer; der Hinweis nennt einen Vorschlag aus S1, und S2 bleibt gesperrt, bis t0 angegeben oder der Stichtag korrigiert ist (`src/pipeline/s1.ts`, Regel R5). Ein leeres t0 sperrt S2 im Bestätigungsschritt jetzt wie ein unvollständiges (`src/ui/kiErfassung/Bestaetigung.tsx`). Anlass: Im Vergleich lief ein Lauf mit t0 am Tag der Bearbeitung, gut acht Monate vor dem Stichtag und allen Ereignissen der Meldung.
+- **Radarkennzahlen der Fallreihe (AV-2026-W45-08):** `uebersicht.csv` nennt je Lauf den Anteil offener Radarachsen über alle Sachverhalte (`radar_offen`) und die Treffer des Prüfmusters der Radarbegründung (`radar_pruefmuster`: D3 gesetzt ohne „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“, D5 gesetzt ohne genannten Zielzustand); der Wortlaut je Treffer steht in `fallreihe.json` (`radar_hinweise`). Nur in der Fallreihe; in die App kommt das Prüfmuster wie die D2-Plausibilität erst nach Bewährung (Entscheidung vom 25.10.2026). `radarBegruendungPruefen` in `src/forschung/plausibilitaet.ts`, `radarKennzahlen` in `src/forschung/fallreihe.ts`, LEAD-Meldung-v1 und -v2.
+- **Beispielprofil 1.39.0 und Landesprofil 1.5.0** mit Kodierleitfaden 1.10.0 (AV-2026-W45-04 bis -06), Arbeitsanweisung Erfassung 1.11.1 und Sammelmappe 3.23.1; Einzelheiten in den Profilverläufen.
+- **Nicht übernommen:** AV-2026-W45-09 (Cache-Haltepunkte in S2 nur bei möglicher Wiederverwendung; rund 6 % der Kosten eines Opus-Laufs ohne Recherche), vom Herausgeber nicht freigegeben.
+- Spezifikation 0.7.10 (Abschnitt 5.1, S1; Abschnitt 5.4, Fallreihe). Versionsangaben 0.7.10 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 710); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/pipeline/fortschreibung.test.ts`: Stichtag in der Zukunft lässt t0 leer, Hinweis mit Vorschlag aus S1 (bisheriges Soll „aktuelle Zeit“ ersetzt).
+- `tests/ui/fortschreibung.test.ts`: Bestätigung mit leerem t0, S2 gesperrt, nach Eingabe von t0 frei.
+- `tests/forschung/plausibilitaet.test.ts`: Prüfmuster D3 und D5 mit und ohne Kennzeichnung, offene Achsen und D5 = 0 ohne Treffer.
+- `tests/forschung/fallreihe.test.ts`: Radarkennzahlen von Hand gezählt; Spalten der Übersicht; Lauf der Fallreihe mit `radar_offen` aus dem Entwurf.
+- `tests/pipeline/kontext.test.ts`: Kennung „Kodierleitfaden LEAD 1.10.0“.
+
+## [0.7.9] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schaetzung_2026-W45.json` (Anbietervergleich vom 04.11.2026, Commit `6302c14`), AV-2026-W45-01 bis -03, freigegeben vom Herausgeber am 04.11.2026 (Erweiterung und vorläufige Einzelmessungen; Kenndaten mit Lauf-IDs). Messgrundlage: je ein interner Erfassungslauf der drei Standard-Profile mit demselben Material (Text, rund 74 kB, sechs Sachverhalte, ohne Recherche; App 0.7.7, Profil 1.38.0). Material, Laufprotokolle und Inhalte bleiben nach der Entscheidung vom 04.11.2026 intern; hier stehen nur Kenndaten.
+
+| Lauf | S1 | S2 | Dauer S2 | Kosten gesamt | Schätzung S2 bis 0.7.8 |
+|---|---|---|---|---|---|
+| 20261104-202022-mfpv | mistral-small-2603 „hoch“, 31 s | mistral-medium-3-5 „hoch“ (EU) | 279 s | 0,54 USD | 0,12–0,99 USD, grob |
+| 20261104-202739-9snj | gpt-6-luna „hoch“, 91 s | gpt-6-astra „hoch“ | 620 s | 2,23 USD | 3,50–11,50 USD, grob |
+| 20261104-204127-m8r4 | claude-haiku-5-5 „hoch“, 19 s | claude-opus-5-5 „mittel“ | 636 s | 2,67 USD | 3–6 Minuten, 1,40–2,30 USD (überschritten) |
+
+### Geändert
+
+- **Erfassung mit Opus „mittel“ (AV-2026-W45-01):** Obergrenze 810 s und 3,35 USD (Messwert plus 25 %, nach außen gerundet), Untergrenze unverändert; Anzeige „3–14 Minuten, 1,40–3,35 USD“.
+- **Vorläufige Einzelmessungen (AV-2026-W45-02, -03):** Erfassung mit gpt-6-astra „hoch“ 4–13 Minuten, 1,50–2,80 USD und mit Mistral Medium 3.5 „hoch“ 1–6 Minuten, 0,20–0,65 USD (am EU-Endpunkt 0,22–0,72 USD); Untergrenze aus der Verdichtung derselben Kombination, Obergrenze Messwert plus 25 %. Ausnahme von der Regel „Messwerte erst ab drei Läufen“, weil die Hochrechnung bei gpt-6-astra schon mit der Untergrenze um mehr als die Hälfte über dem Messwert lag und keine Dauer nannte; die Anzeige kennzeichnet sie als „vorläufig, ein Messlauf“ (`gueteText`, auch in der Wahl je Lauf). Ab drei Läufen werden die Spannen nach der Regel neu bestimmt.
+- **Hochrechnung zuerst aus demselben Modell:** Ist ein Modell nur mit anderer Stufe gemessen, geht diese Stufe dem Preisvergleich mit fremden Modellen vor (höherer Aufwand: doppelte Obergrenze, niedrigerer: halbe Untergrenze). Sonst hätte die neue Spanne von gpt-6-astra „hoch“ Opus „hoch“ unter Opus „mittel“ geschätzt.
+- Laufschätzung nennt viele Sachverhalte als Grund für längere Läufe. S1 lag bei allen drei Läufen in den Spannen (unverändert).
+- Spezifikation 0.7.9 (Abschnitt 5.1, Umsetzung M2 und Kostenanzeige). Versionsangaben 0.7.9 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 709); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/pipeline/schaetzung.test.ts`: Kenndaten der drei Läufe als unabhängiges Soll in den Spannen, Spannen von Hand nach der Regel, Kennzeichnung „vorläufig“, EU-Aufschlag, Hochrechnung aus demselben Modell, Laufschätzung mit neuen Werten.
+
+## [0.7.8] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, vorgezogener Befund, Commit `1395a76`), KL-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 mit Variante A. Voraussetzung für die Umstellung von KRITIS-LEAD: Ein KRITIS-Betreiber setzt keine LEAD-Bewertung (Entscheidungen vom 31.10. und 03.11.2026), das Kernschema verlangte aber je Sachverhalt den Block `bewertung` und ab „zur_freigabe“ Kernaussage und Referenzraum.
+
+### Geändert
+
+- **Bewertung bei Betreibermeldungen nicht Pflicht (KL-2026-W45-01):** Im Kernschema von LEAD-Meldung-v2 ist `sachverhalte[].bewertung` bei `absender.ebene` „Betreiber“ nicht Pflicht; fehlt der Block, ist keine Bewertung erhoben (Grundsatz 3). Für alle übrigen Ebenen verlangt eine Bedingung an der Wurzel die Bewertung unverändert, auch im Entwurf. Ist sie bei einem Betreiber vorhanden, gelten die üblichen Regeln einschließlich der Pflichten ab „zur_freigabe“. Die Bewertung setzt die verarbeitende Stelle in ihrem eigenen Sachverhalt (Zuordnung von oben, AUSTAUSCH.md Abschnitt 9). Bestehende Meldungen bleiben gültig. Zusammengestellte Schemata `formate/lead-meldung-v2/beispiel/` und `beispiel-land/` neu erzeugt; deren Ebenen schließen Betreiber weiter aus.
+- **Kernschema-Pin der Thessa-Bausteine:** Thessa pinnt das geänderte Kernschema neu (pereirawolf/thessa, eigener Pull Request); `formate/fremd/thessa-kennzahlen/herkunft.json` und die gebündelten Schemata sind nachgezogen (nur Vermerk und Prüfsumme; die von den Bausteinen genutzten Definitionen `quelle`, `kennzahl` und `zeitangabe` sind unverändert).
+- App: keine Codeänderung; Lagebild, Kopiervorlage, Rohtabelle und PDF lesen eine Meldung ohne `bewertung` bereits ohne Fehler (Test ergänzt). Eine eigene Anzeige „keine Bewertung (Betreibermeldung)“ folgt mit der Umstellung von Lagebild und Profilen (Pakete 5 und 6).
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 6: Abschnitte 3, 6 und 13 Nr. 8), Spezifikation 0.7.8. Versionsangaben 0.7.8 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 708); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Tests
+
+- `tests/format/lead-meldung-v2.test.ts`: Betreibermeldung ohne `bewertung` in jedem Status gültig (Ajv und eigener Prüfer im Gleichlauf) und ohne Fehler der Referenzprüfung; jede andere Ebene ohne `bewertung` ungültig; mit `bewertung` gelten die üblichen Regeln; die Profilschemata verlangen die Bewertung unverändert.
+- `tests/kern/v2-darstellung.test.ts`: Betreibermeldung ohne `bewertung` in Lagebild, Kopiervorlage, Rohtabelle und PDF.
+
+## [0.7.7] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W45.json` (Schwerpunkt Kennungsvergabe und Zeitstrahl nach S2, Commit `94a5dac`), GK-2026-W45-01, freigegeben vom Herausgeber am 04.11.2026 (Variante A). Anlass war ein interner Erfassungslauf, in dem Zeitstrahlzeilen den Platzhalter behielten.
+
+### Behoben
+
+- **Platzhalter nur im Zeitstrahl (GK-2026-W45-01):** Setzt die KI `NEU-n` nur in Zeilen des Zeitstrahls und lässt das Feld der Kennung leer, ordnete die Nachbearbeitung die Zeilen keinem Sachverhalt zu; sie behielten „NEU-n“, und erst die Schemaprüfung warnte (`ZEITSTRAHL_KENNUNG_UNBEKANNT`). Jetzt gilt `NEU-n` für den n-ten Sachverhalt, der ohne Kennung kam, wie es die Arbeitsanweisung für die Reihenfolge der Platzhalter vorsieht; der Hinweis `KENNUNG_PLATZHALTER_ZUGEORDNET` nennt jede Zeile zur Prüfung. Ein Platzhalter ohne passenden Sachverhalt bleibt stehen und wird mit `KENNUNG_PLATZHALTER_OFFEN` genannt (`src/pipeline/zeitstrahl.ts`).
+
+### Geändert
+
+- Spezifikation 0.7.7. Versionsangaben 0.7.7 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 707); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/pipeline/zeitstrahl.test.ts`: Platzhalter nur im Zeitstrahl werden in Reihenfolge zugeordnet, mehrfache Zeilen desselben Platzhalters eingeschlossen, mit Hinweis; ein Platzhalter ohne passenden Sachverhalt bleibt mit Hinweis stehen.
+
+## [0.7.6] – 04.11.2026
+
+Grundlage: Abgleich von KRITIS-LEAD mit dem Grunddesign (pereirawolf/kritis-lead#18, `docs/design-abweichungen.md`) und Entscheidungen des Herausgebers vom 03.11.2026: LD-N01 für Apps aus mehreren Seiten ergänzen; Farbschema eines beim Bau eingebetteten Profils aus dem Profil, LD-F01 und LD-F03 entsprechend ergänzen; LD-B01 und LD-Z02 gelten, die Referenzumsetzung zieht bei Chips und Segmenten nach. Ergänzt die Fassung 1.1 aus dem Abgleich mit Thessa (#139). Vorbereitet als 0.7.5 und nach dem Zusammenführen von Pull Request #140 (0.7.5) als 0.7.6 umnummeriert.
+
+### Geändert
+
+- **Grunddesign der App-Familie, Fassung 1.2** ([design/README.md](design/README.md), `design/rahmen.json`): Eine App aus mehreren Seiten nennt diese in der Hauptnavigation, die Arbeitsschritte stehen in der Schrittleiste (LD-N01). Bettet eine App ihr Profil beim Bau ein, ist dessen `farbschema.basis` das feste Schema nach LD-F01; dunkel „Neutral · Night Mode“, bei „mehr Kontrast“ das Kontrastschema, wie bei „Automatisch“. Setzt eine App ihr Farbschema beim Bau, prüft der Bau die Kontraste aller gesetzten Schemata und bricht ab, wenn eines sie verfehlt (LD-F03). Kennungen, Zahl der Regeln und Tokens unverändert.
+- **Chips und Segmente nach LD-B01 und LD-Z02** (`src/styles/formular.css`): Fokus als 3 px Ring in „fokus“ mit zweitem Ring in „fokus-abstand“, bei Segmenten nach innen, weil die Leiste Überstand abschneidet (bisher Ring in „amt“ ohne zweiten Ring); Chips bei grober Zeigereingabe 44 px hoch (bisher 40 px).
+- Versionsangaben 0.7.6 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 706); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: Fokus und Zielgröße von Chips und Segmenten (LD-B01, LD-Z02); Fassung in Beschreibung, `rahmen.json` und Änderungsverlauf gleich.
+
+## [0.7.5] – 04.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json` (Beurteilung des Zusammenspiels von KI-LEAD, KRITIS-LEAD und Thessa vom 03.11.2026), SR-2026-W45-01, -02 und -04, freigegeben vom Herausgeber am 03.11.2026 mit den Entscheidungen: Meldungsmodule im Kern; Präfix `KRITIS-` mit selbst gewähltem Betreiberkürzel; Zuordnung von Einsatzmeldungen zu Lagemeldungen von oben, n:m. Thessa bleibt während der Entwicklung nicht öffentlich. Vorbereitet als 0.7.4 und nach dem Zusammenführen von Pull Request #139 (0.7.4) als 0.7.5 umnummeriert. SR-2026-W45-03 (Grunddesign für Apps ohne Profile und für Statusfarben) ist durch Pull Request #139 (Grunddesign 1.1) überholt.
+
+### Neu
+
+- **Meldungsmodule (SR-2026-W45-01):** Das Kernschema von LEAD-Meldung-v2 kennt ein optionales Feld `module` auf oberster Ebene für Angaben, die für die ganze Meldung gelten (etwa Meldeanlass, Vertraulichkeit und Empfänger einer Betreibermeldung). Die Zusammenstellung eines Profils bindet sie unter `meldungsmodule` ein; ein Pflicht-Meldungsmodul macht `module` zur Pflicht; dasselbe Modul auf beiden Ebenen ist ein Fehler der Zusammenstellung. Die Referenzprüfung nennt unbekannte Meldungsmodule als Hinweis (`src/kern/meldung-v2.js`). Bestehende Meldungen bleiben gültig. Voraussetzung für die Umstellung von KRITIS-LEAD auf v2.
+- **Kennzahlen-Bausteine 0.3 (SR-2026-W45-02):** Thessa streicht den LEAD-Bezug der Einsatzmeldungen (`bezug_lead`, Thessa G12); die Lagemeldung ordnet sie zu. Eingebettet unter `formate/fremd/thessa-kennzahlen/0.3/` (Thessa `a614ed4`); 0.2 und 0.1 bleiben lesbar. `npm run fremdschemata` bündelt jede überlieferte Fassung mit ihrem eigenen Thessa-Commit (`herkunft.json`, `fassungen[].commit`).
+
+### Geändert
+
+- Kernschema-Pin in `herkunft.json` nachgezogen (Thessa pinnt das Kernschema mit Meldungsmodulen); gebündelte Schemata 0.1 und 0.2 nur im Vermerk geändert.
+- Landesprofil 1.2.3: Bausteine im Begleitordner `orkantief-ilka-thessa` in Fassung 0.3, LIESMICH und Vorschlag für die Prüffrage ohne LEAD-Bezug.
+- **Austauschvertrag 0.5 (SR-2026-W45-04):** Abschnitt 9 „Zulieferer aus der App-Familie“: Meldungen aus KRITIS-LEAD, Material aus Thessa, Zuordnung von oben (n:m), Präfix `KRITIS-` für Sachverhalte von Betreibern.
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 4), Spezifikation 0.7.5. Versionsangaben 0.7.5 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 705); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-meldung-v2.test.ts`: Meldungsmodule optional und mit Hinweis, Pflicht-Meldungsmodul aus der Zusammenstellung, Doppeleinbindung abgelehnt; Kennungen mit Präfix `KRITIS-` (gültig und ungültig).
+- `tests/format/thessa-baustein.test.ts`: Herkunft je Fassung mit Commit, Bündelung 0.3/0.2/0.1 aktuell, Begleitbausteine 0.3 nach Original und gebündeltem Schema, 0.3 ohne `bezug_lead`, 0.2 weiter mit; `tests/pipeline/baustein.test.ts` und `tests/profil/landesprofil.test.ts` auf 0.3.
+
+## [0.7.4] – 04.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 03.11.2026 nach dem Abgleich von Thessa mit Fassung 1.0 (pereirawolf/thessa, Pull Request #16, `docs/design-abweichungen.md`, offene Fragen OF-1 bis OF-5), ergänzt am 04.11.2026 um OF-7 und OF-9 und die Führung als eigene Version 0.7.4. Kennungen und Zahl der Regeln bleiben; die Oberfläche von KI-LEAD ändert sich nicht.
+
+### Geändert
+
+- **Grunddesign der App-Familie, Fassung 1.1** ([design/README.md](design/README.md), `design/rahmen.json`): Regeln zu Profilen, Einstellungen, Statusanzeige und Laufanzeige gelten nur, wo eine App den Bestandteil hat (LD-R02, LD-N01, LD-N06, LD-A01, LD-M02, LD-M03); eine App ohne Profile setzt ein festes Farbschema aus dem gemeinsamen Katalog und übernimmt nur dessen Werte (LD-F01, LD-F02); LD-F04 nennt den Status der Einsatzbereitschaft und die Zuordnung der Ampel (einsatzbereit `ok`, eingeschränkt `gering`, im Einsatz `einsatz`, nicht einsatzbereit `kritisch`).
+- **Neue Signalfarben `einsatz` und `einsatz-zart`** in `src/darstellung/thema.ts` (alle vier Semantikbasen) und `src/darstellung/typen.ts`, mit Kontrastpaar `einsatz` auf `flaeche` (4,5:1; erreicht 8,3:1 bis 15,0:1); in `design/lead-design.tokens.json` erzeugt. KI-LEAD setzt die Variablen, verwendet sie aber nicht. [docs/farbschemas.md](docs/farbschemas.md) ergänzt.
+- **Grunddesign, Klarstellungen zu OF-7 und OF-9:** „Zurück: …“ und „Weiter: …“ stehen nur in Schrittfolgen, Bereiche ohne Reihenfolge haben keine Blätterknöpfe (LD-A05); Befunde mit Sprung zum Feld gelten für Eingaben in Formularen, nicht für die Prüfung eines geladenen Datenstands (LD-E04). Beides entspricht der Referenzumsetzung: „Weiter: …“ gibt es nur in der Erfassung (`src/ui/Meldung.tsx`), Befunde mit Sprung nur im Prüfschritt (`src/ui/Pruefen.tsx`).
+- Versionsangaben 0.7.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 704).
+## [0.7.3] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, freigegeben vom Herausgeber am 03.11.2026. Dazu aus Paket 2 übernommen: Statusfolge mit Freigabe. Die mitgelieferten Profile arbeiten weiter mit v1 (Umstellung in Paket 6). Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) und #136 (0.7.2) als 0.7.3 umnummeriert.
+
+### Neu
+
+- **Erfassungsmaske für LEAD-Meldung-v2:** Felder „Wert oder null“ (`anyOf` mit `{"type": "null"}`, etwa Zeitangaben) erscheinen als Eingabe ihres Typs; eine leere Eingabe heißt „unbekannt“ (`null`), nicht leerer Text (`src/kern/schema.ts`, `src/ui/Feld.tsx`). Listen von Objekten (Quellen, Zeitstrahl, Maßnahmen, Empfehlungen, Fristen, Kennzahlen, Indikatoren, abweichende Bewertungen) nutzen die vorhandenen Listenbausteine.
+- **Lagenradar mit Achsen als Objekten:** Grafik, Auswahl, Legende, PDF, Lagebild und Kopiervorlage lesen die Stufe aus `stufe`; eine geänderte Stufe setzt `status` (belegt, offen mit Grund, ein Mindestwert bleibt einer) und behält Begründung und Belege. Unter der Grafik stehen je Achse Status, Grund, Begründung und Belege (`radarWerte`, `radarMitStufe` in `src/kern/ui.ts`). v1 bleibt eine Liste von Zahlen.
+- **Darstellung aus den Feldern:** PDF, Kopiervorlage und Rohtabelle erzeugen bei v2 das Quellenverzeichnis in der Form des Kodierleitfadens, den Zeitstrahl je Sachverhalt, die Kennzahlen (Teilmengen eingerückt unter ihrer Obermenge, Mindestwert als „mindestens“, Bandbreite, unbekannt) und die Entstehung als Zeile (`src/kern/v2darstellung.ts`). Die Kopiervorlage nennt die Quellen, die der Sachverhalt in Texten und Belegen zitiert.
+- **Ausgabestatus mit Freigabe:** Neue optionale Rolle `status_freigegeben`; die finale Ausgabe trägt sie, wenn im Freigabeblock unter `freigegeben` Name und Zeitpunkt stehen, sonst `status_final` (`ausgabeStatus` in `src/kern/ausgabe.ts`). Dateinamenvorlagen dürfen Pfade nennen (`{absender.stelle}`).
+- **Vorlage der Darstellungsdatei für v2:** `formate/lead-meldung-v2/beispiel/meldung.ui.json` mit Schritten, Bezeichnungen und Hinweisen der v2-Felder, Rollen als Pfade und dem Lagenradar des Beispielprofils; Grundlage der Umstellung der Profile in Paket 6.
+
+### Geändert
+
+- Profilformat 1.30, Spezifikation 0.7.3, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 3), `formate/lead-meldung-v2/README.md`. Versionsangaben 0.7.3 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Offen für die folgenden Pakete
+
+- Ausgabeschema, Nachbearbeitung, Kennungsvergabe und Entstehung nach v2 in der KI-Pipeline sowie Übernahme aus Kennzahlen-Bausteinen (Paket 4); Lagebild und Verdichtung mit Kennzahlen (Paket 5); Management Summary und Redaktionscheck auf v2-Feldern sowie Umstellung der Profile (Paket 6).
+
+### Tests
+
+- Neu `tests/ui/maske-v2.test.ts` (Beispielmeldung TH öffnen ohne Änderung und ohne rohe Objekte, leere Zeitangabe wird `null`, eine Änderung betrifft nur ihr Feld und bleibt schemagültig, Radarachse als Objekt mit Angaben je Achse) und `tests/kern/v2-darstellung.test.ts` (Quellenzeile mit Rücklesen durch `quellenV1`, Zeitstrahl, Kennzahlen mit Teilmengen und Mindestwert, Entstehung, zitierte Quellen, Radarachsen, Werte oder null, Ausgabestatus, Dateiname, Kopiervorlage und Rohtabelle, PDF mit „mindestens 53 Einsatzkräfte“ aus einem Thessa-Baustein).
+- `tests/support/v2profil.ts`: Testprofil wahlweise mit der Vorlage der Darstellungsdatei.
+
+### Nachtrag vom 03.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, das Grunddesign menschen- und maschinenlesbar zu beschreiben, damit die Schwester-Apps KRITIS-LEAD und Thessa darauf verweisen können; Entscheidungen: normativ mit KI-LEAD als Referenzumsetzung, gemeinsamer Rahmen ohne Produktfarbe (die Farbgebung bestimmt allein das Profil), Design Tokens im Format der W3C Design Tokens Community Group mit Layout-JSON, Wireframes als Text und SVG, Lizenz CC BY 4.0 wie die übrige Dokumentation (ein zunächst vorgesehener Rechtevorbehalt ist auf Entscheidung des Herausgebers vom selben Tag entfallen). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Grunddesign der App-Familie, Fassung 1.0** ([design/README.md](design/README.md)): 47 Regeln mit Kennung (`LD-R01` …), Stufe MUSS, SOLL oder KANN und Fundstelle in KI-LEAD zu Rahmen, Navigation, Seitenaufbau, Farbe, Schrift und Sprache, Bedienelementen, Eingabe, Rückmeldung, Zugänglichkeit und Plattform; Wireframes als Text, Entsprechung zur Office-Suite, Hinweise zur Übernahme mit `design-abweichungen.md` in der Schwester-App.
+- **Maschinenlesbar:** `design/rahmen.json` mit Schema `rahmen.schema.json` (Rahmen, Leisten, Komponenten, Regeln), `design/lead-design.tokens.json` (Farbrollen, Signalfarben, Schrift, Radien, Maße, Umbrüche, Kontraste) und `design/lead-farbschemata.tokens.json` (alle 22 Farbschemata des Katalogs), Wireframes `wireframe-breit.svg` und `wireframe-schmal.svg`.
+- **Werkzeug `npm run design:tokens`** (`scripts/lead-design.mjs`): erzeugt die Token-Dateien aus `src/darstellung/` und den Stylesheets und die Regeltabellen der Beschreibung aus `rahmen.json`; `-- pruefe` meldet veraltete Dateien.
+- **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 1 f: alle Dateien in `design/` unter CC BY 4.0; `REUSE.toml` entsprechend; README (Dokumentation, Lizenz).
+- **Tests:** neu `tests/format/lead-design.test.ts`; `tests/lizenzen/reuse.test.ts` (`design/` unter CC BY 4.0); `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (`design/` als reiner Inhalt); [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Nachtrag vom 03.11.2026: Quelle der Thüringer Kreisnamen (ohne Änderung der App)
+
+Grundlage: Auftrag des Herausgebers vom 03.11.2026, die Gebietsquelle in KI-LEAD, KRITIS-LEAD und Thessa einheitlich anzugeben.
+
+- **Landesprofil Thüringen 1.2.2:** Namen und Kreisschlüssel der 17 Landkreise und 5 kreisfreien Städte nach dem CSV-Export der Verwaltungsstruktur des Thüringer Landesamts für Statistik (Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026), wie der Gebietskatalog von Thessa und das Betreiberformular von KRITIS-LEAD. Die Liste in `scripts/landesprofil.mjs` nennt die Quelle und je Kreis den Schlüssel (`ags`); die Namen sind unverändert, Schema, Darstellungsdatei, Kontakte und Beispiele ebenso. Quelle auch im README des Profils.
+- **Tests:** `tests/profil/landesprofil.test.ts` (Schlüssel und Namen gegen den Export, Quelle in Kreisliste und README); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+## [0.7.2] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_technik_2026-W44-A8.json` (Arbeitspaket A8 des Arbeitskonzepts Erprobungsreife), TP-2026-W44-62 bis -67, freigegeben vom Herausgeber am 03.11.2026: alle sechs; Profil eines Falls im Feld `profil`; B4 und B5 als zwei Pläne mit je einem Klick, die Abbruchregel des Erprobungsplans entscheidet der Herausgeber an der angezeigten Summe; importierte Fallpakete bleiben bis zur Löschung auf dem Gerät. Vorbereitet als 0.7.1 und nach dem Zusammenführen von Pull Request #134 (0.7.1) als 0.7.2 umnummeriert.
+
+### Neu
+
+- **Fallreihe unter „Einstellungen → Testläufe“ (TP-2026-W44-62):** eigener Abschnitt neben dem Testlauf am Fall Ilka. Beliebige Erfassungs- und Verdichtungsfälle laufen nacheinander mit denselben Pipeline-Funktionen wie eine Erfassung in der App: S1, Bestätigung ohne Änderung, S2 mit Prüfung und Reparatur bei Bedarf. Auftrag und Material kommen aus dem Fall (Rolle „eingang“ bzw. „vormeldung“ ausdrücklich gesetzt). Fälle mit Management Summary oder Reparatur bleiben bei ihren Testarten und sind ausgegraut mit Grund. Der Abschnitt wird erst beim Öffnen der Testläufe geladen.
+- **Fälle aus dem Repository und aus Fallpaketen (TP-2026-W44-63):** alle Fälle unter `evaluation/faelle/` mit ihrem Material in einem eigenen, nachgeladenen Teil des Builds; ein Fallpaket als ZIP (etwa der Kontrollsatz) mit Anzeige der SHA-256, Prüfung jeder Falldatei gegen `fall.schema.json`, Hinweisen zu Dubletten und fehlendem Material. Pakete bleiben bis zur Löschung auf dem Gerät (`fallpaket:<sha256>` in der Datenbank des Testlaufarchivs, auch in Sicherung und „Alle Daten löschen“). Neues Feld `profil` im Fall (Manifest-ID, Vorgabe Beispielprofil), damit Landesfälle mit dem Landesprofil laufen. Drei neue Fälle `pruefstein-*` zu den Prüfsteinen der KW 43 mit `websuche: true`, ohne Material und URLs (für B5).
+- **Plan mit Vorbelegung (TP-2026-W44-64):** Ein Bewertungsplan als JSON-Datei belegt Fälle, Varianten, Wiederholungen, Recherchetiefe und Deckel vor; die App zeigt seine SHA-256 und vermerkt Abweichungen in der Reihe. `plan.schema.json` erweitert um `varianten[].ki_profil` (Standardprofil eines Anbieters), `varianten[].mistral_endpunkt`, `recherche` und `fallpaket.sha256`; ein Paket mit anderer Prüfsumme sperrt den Start. Ohne Plan: Matrix Fälle × Anbieter mit dem Standardprofil der freigegebenen Anbieter. Beispielplan `evaluation/plaene/beispiel-fallreihe.json`.
+- **Kostenbremse (TP-2026-W44-65):** vor jedem Lauf Ist-Kosten plus Obergrenze des nächsten Laufs (größerer Wert aus oberer Schätzung und teuerstem bisherigem Lauf derselben Variante, sonst 5 USD) gegen den Deckel; die Reihe endet mit Grund, die bisherigen Läufe bleiben im Ergebnis. Reihenfolge je Fall alle Varianten.
+- **Ergebnis-ZIP mit automatischen Prüfungen (TP-2026-W44-66):** `fallreihe.json` (`ki-lead-fallreihe/1`), `uebersicht.csv` je Lauf mit schemakonform, Kosten (Ist und Schätzung), Dauer, Fristen auf oder vor t0 ohne „überfällig“ (Prüfung des Redaktionschecks), Anteil Sachverhalte mit Tendenz, Zahl der Quellen, Websuchen und Abrufen (Felder nach den Rollen des Profils, für LEAD-Meldung-v1 und v2), Laufprotokolle, Entwürfe und je Entwurf eine leere Bewertungsvorlage nach `evaluation/bewertungsschema.json` (nicht verblindet) mit Prüfliste der Muss- und Darf-nicht-Punkte und der K.-o.-Fehler. Archiv wie die übrigen Testläufe.
+
+### Geändert
+
+- **Zielgröße in der Fallreihe:** Die Ankreuzfelder der Fallgruppen haben Abstand zur Gruppenüberschrift und untereinander (`src/styles/einstellungen.css`), damit axe-core keine Verletzung von WCAG 2.5.8 meldet. Sichtbar wurde das nach dem Zusammenführen mit Pull Request #134, der den Bereich „Testläufe“ in die axe-Prüfung aufnimmt (DK-2026-W45-07).
+- `scripts/pruefumfang.mjs`: Alle Bewertungsfälle, ihr Material und `plan.schema.json` lösen die Kern-Browsertests aus, weil die App sie einbettet.
+- `evaluation/README.md`, `evaluation/faelle/README.md` (Prüfstein-Fälle, Profil eines Falls, Fallpaket), Spezifikation 0.7.2 (Abschnitt 5.4), `docs/DATENSCHUTZ.md` 1.14 (Abschnitte 3 und 10), [docs/TESTS.md](docs/TESTS.md). Versionsangaben 0.7.2 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- Neu `tests/forschung/fallreihe.test.ts` (Katalog, Prüfstein-Fälle, Profil je Fall, Fallpaket, Plan, Einstellungen je Variante, Kostenbremse, Lauf mit Attrappe, ZIP und Bewertungsvorlage gegen Ajv) und `tests/ui/fallreihe.test.ts` (Auswahl, Paket mit Prüfsumme und Ablage, Vorbelegung aus dem Plan, Start, Kostenbremse, Archiv); Browsertest der Fallreihe in `tests/browser/testlaeufe.spec.ts`; Planschema und Feld `profil` in `tests/evaluation/schemata.test.ts`.
+
+## [0.7.1] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_dokumentation_2026-W45.json` (Dokumentationsprüfung KW 45, Commit `246591e`), freigegeben vom Herausgeber am 03.11.2026: alle sieben Befunde, DK-2026-W45-01 und -04 mit Option B (Verhalten an die Dokumentation angleichen), -07 mit erweitertem Test. Umgesetzt auf main nach dem Zusammenführen von Pull Request #132 und #133.
+
+### Geändert
+
+- **Bestätigung vor der Management Summary (DK-2026-W45-01):** Der Schritt „Management Summary“ der Erfassung sendet die Meldung erst, wenn die Person wie in der KI-Erfassung bestätigt, nur fiktive oder offen zugängliche Inhalte weiterzugeben; bis dahin ist „… erstellen“ gesperrt und per `aria-describedby` mit der Bestätigung verknüpft (`src/ui/Kurzfassung.tsx`). Bis 0.7.0 ging die Meldung ohne Bestätigung an den Anbieter, obwohl [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) (Abschnitt 1, Anhang D, D7) die Bestätigung vor jedem KI-Lauf nennt.
+- **Datenhülle der Orientierungssuche (DK-2026-W45-04):** Die Stichworte stehen in `<stichworte>` mit neutralisierten Schließtags (`huellenInhalt`), der Systemauftrag nennt `MATERIAL_DATENREGEL` wie S1 und S2 (`src/pipeline/orientierung.ts`, `orientierungSystem` in `src/pipeline/kontext.ts`); damit trifft [docs/SICHERHEIT.md](docs/SICHERHEIT.md), Abschnitt 3.1, zu. Der Auftrag der Orientierungssuche wird dadurch etwas länger.
+- **Dokumentation nachgezogen:** [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md) 1.13 (Abschnitt 10: „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“, DK-2026-W45-03), [docs/VORLAGEN.md](docs/VORLAGEN.md) 1.3 (V1 Nr. 7: Löschweg „Einstellungen → Daten“, DK-2026-W45-02), [docs/NATIV.md](docs/NATIV.md) und [docs/BETRIEB.md](docs/BETRIEB.md) 1.1 (Node.js 22 nach `.nvmrc`, DK-2026-W45-05), [docs/KI-VERORDNUNG.md](docs/KI-VERORDNUNG.md) 1.5 (Mistral-Stufen nach Modell, DK-2026-W45-06), [docs/BARRIEREFREIHEIT.md](docs/BARRIEREFREIHEIT.md) 1.4 (axe-Prüfung mit „Testläufe“, Bereichsnamen seit 0.6.10, DK-2026-W45-07), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.8 (Änderungsverlauf).
+- Spezifikation 0.7.1 (Abschnitt 5.1, Management Summary), [docs/TESTS.md](docs/TESTS.md), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.7.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Android versionCode 701, iOS 701).
+
+### Tests
+
+- `tests/ui/kurzfassung-lauf.test.ts`: neuer Abschnitt DK-2026-W45-01; die Laufanzeige-Tests setzen zuerst die Bestätigung (Soll unverändert).
+- Neu `tests/pipeline/orientierung-datenhuelle.test.ts`: DK-2026-W45-04 (Gegenprobe ohne die Änderung: beide Fälle rot).
+- `tests/browser/barrierefreiheit.spec.ts`: „Einstellungen: alle Bereiche“ schaltet die Forschungsfunktionen ein und erwartet acht Bereiche (DK-2026-W45-07).
+
+## [0.7.0] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-02, freigegeben vom Herausgeber am 03.11.2026 wie empfohlen. Die Voraussetzung aus der Entscheidungsfrage (GK-2026-W44-08, -12, -13 vor Paket 2) ist mit Pull Request #127 erfüllt. Neue Nebenversion, weil die App erstmals Meldungen nach LEAD-Meldung-v2 liest; die mitgelieferten Profile arbeiten unverändert mit v1 (Umstellung in Paket 6).
+
+### Neu
+
+- **Eine Umsetzung von LEAD-Meldung-v2 für App und Werkzeug:** Zusammenstellung, Zeitvergleiche, Migration v1 → v2 und Referenzprüfung stehen in `src/kern/meldung-v2.js` (mit Typen in `meldung-v2.d.ts`); `scripts/lead-meldung-v2.mjs` ist nur noch die Kommandozeile dazu und reicht die Funktionen durch. Ausgaben des Werkzeugs unverändert.
+- **Migration beim Einlesen:** Ein Eintrag in `migrationen` mit `verfahren` „lead-meldung-v2“ überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` beim Einlesen in Lagebild, Meldungsmaske und Material nach v2 (Zeitzone aus dem Profil); die Hinweise der Überführung erscheinen wie bisher, eine nicht überführbare Meldung bleibt unbekannt mit Grund (Profilformat 1.29).
+- **Referenzprüfung (Prüfebene 2) in der App:** Für Meldungen nach v2 zeigt das Lagebild die Fehler als Marke „Referenzen: n“, der Prüfschritt der Meldung und die Hinweise nach S2 nennen sie mit Pfad (`REFERENZ_FEHLER`, `REFERENZ_HINWEIS`; `src/kern/referenzen.ts`). Die Textprüfung der Quellenverweise entfällt für v2, weil die Referenzprüfung sie übernimmt.
+- **Grundform v2 für Eingänge:** Fremde Meldungen nach v2 werden mit `absender.stelle`, `absender.gebiet.name`, Meldezeitpunkt und `meldung_id` erkannt.
+
+### Geändert
+
+- **Rollen als Pfade:** Rollen auf Meldungsebene (`status_feld`, `land`, `meldende_stelle`, `meldezeitpunkt`, `entstehung_feld` …) und Profilvariablen dürfen Pfade wie `absender.stelle` nennen; Lesen und Setzen laufen über `holeWert`, `setzeWert` und `mitFeld` (`src/kern/pfad.ts`) in Nachbearbeitung, neuer Meldung, Maske, Prüfschritt, PDF und Profilprüfung.
+- Profilformat 1.29, `docs/LEAD-MELDUNG-V2.md` (Nachtrag 2 zur Fassung 2.0, Abschnitte 8, 11, 13), `docs/AUSTAUSCH.md` 0.4, Spezifikation 0.7.0. Versionsangaben 0.7.0 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Offen für die folgenden Pakete
+
+- Erfassungsmaske, Darstellung, PDF und Kopiervorlage für v2, Statusfolge mit vier Stufen und Freigabeblock (Paket 3); Ausgabeschema, Nachbearbeitung und Entstehung nach v2 in der KI-Pipeline (Paket 4); Lagebild und Verdichtung mit Kennzahlen (Paket 5); Umstellung der Profile (Paket 6).
+
+### Tests
+
+- Neu `tests/kern/v2-app.test.ts` mit Testprofil `tests/support/v2profil.ts`: Werkzeug reicht die Funktionen des Kerns durch; Migration in der App gleich dem Werkzeug für alle mitgelieferten v1-Meldungen (Ilka Bund und Länder, Hochwasser Saale, Ilka Kreise und Land, Musterfassung, Prüfsteine), schemagültig und ohne Fehler der Referenzprüfung; Lagebild unter v2-Profil; Profilprüfung des Verfahrens; Grundform v2; Referenzprüfung in Lagebild und Prüfschritt; Rollen als Pfade.
+
+## [0.6.24] – 03.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json` (Planbefund zur Umstellung auf LEAD-Meldung-v2 und zur Verarbeitung von Thessa-Kennzahlen-Bausteinen, Commit `c5a3205`), freigegeben vom Herausgeber am 03.11.2026: alle Pakete wie empfohlen. Dieser Stand setzt Paket 1 um (UP-2026-W45-01: eingebettetes Schema, Paket 1 vor v2); die Pakete 2 bis 6 folgen als eigene Pull Requests.
+
+### Neu
+
+- **Kennzahlen-Bausteine aus Thessa als Materialart (UP-2026-W45-01):** Eine JSON-Datei mit `format` „Thessa-Kennzahlen“ erscheint in der KI-Erfassung unter „Auftrag und Material“ als „Kennzahlen-Baustein“ mit Raum und Schlüssel, Datenstand, Zahl der Kennzahlen und Einsatzmeldungen und dem Satz „Kennzahlen werden unverändert übernommen.“ Geprüft wird gegen eine eingebettete Kopie des Thessa-Schemas (`formate/fremd/thessa-kennzahlen/`, Herkunft, Commit und Prüfsummen in `herkunft.json`); `npm run fremdschemata` bündelt die Verweise auf das Kernschema von LEAD-Meldung-v2 für den eigenen Prüfer und bricht ab, wenn das Kernschema nicht mehr die von Thessa gepinnte Prüfsumme hat. Fassung 0.1 (ohne Einsatzmeldungen) wird toleriert; eine unbekannte Fassung oder ein Schemabefund lässt die Datei JSON-Material wie bisher, mit Hinweis.
+- **Datenminimierung:** An die KI geht der Baustein ohne `herleitung` (Kennungen einzelner Einsatzmittel, rund ein Drittel bis die Hälfte der Datei); die Hülle nennt Raum, Datenstand, Prüfsumme und einen Vorschlag der Quellenzeile im Format der Quellenverzeichnisse.
+- **Übergangsregel für Profile mit LEAD-Meldung-v1:** Der Steuerungsblock von S2 nennt bei Bausteinen im Material die Regel für Kennzahlen im Text (Wert, Einheit, Gegenstand und Datenstand unverändert, Beleg je Satz, keine Summen über Einheit, Art oder Datenstand, Mindestwert bleibt Mindestwert). Nach S2 gleicht die App Zahl-Einheit-Paare im Text mit den Bausteinen ab und meldet Hinweise `BAUSTEIN_ZAHL_ABWEICHEND` (Satz mit Verweis auf den Baustein nennt eine Zahl, die er mit dieser Einheit nicht enthält) und `BAUSTEIN_OHNE_BELEG` (Baustein nicht im Quellenverzeichnis oder Wert des Bausteins ohne Verweis).
+
+### Geändert
+
+- `docs/DATENSCHUTZ.md` 1.12 (Abschnitt 4), `docs/AUSTAUSCH.md` 0.3 (Abschnitt 8: Material-Formate), Spezifikation 0.6.24 (Abschnitt 5.1, S0), LIESMICH des Begleitordners im Landesprofil 1.2.1. Versionsangaben 0.6.24 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- Neu `tests/format/thessa-baustein.test.ts` (Herkunft und Prüfsummen, Bündelung aktuell, gebündeltes Schema im Gleichlauf mit Ajv auf dem Original, beschädigte Bausteine, Fassung 0.1) und `tests/pipeline/baustein.test.ts` (Erkennung und Ablehnung, Anzeige, Projektion ohne `herleitung`, Quellenzeile gleich den von Hand verfassten Kreismeldungen, Steuerungsblock, Abgleich ohne Fehlalarm an der Beispiellage und mit geänderten Zahlen).
+- `tests/profil/landesprofil.test.ts` (KP-2026-W45-02): Bausteine des Begleitordners als Materialart „kennzahlen-baustein“, Text an die KI ohne `herleitung`. `tests/kern/schichten.test.ts`: `pipeline` darf aus `../formate` importieren (gebündelte Schemata).
+
+## [0.6.23] – 02.11.2026
+
+Grundlage: Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` (Gesamtkonsistenz nach PR #126, Commit `c5a3205`, GK-2026-W44-07 bis -11) und `ki-lead-befund_gesamtkonsistenz_2026-W44-c.json` (Nachprüfung der angezeigten Texte auf Profilneutralität, GK-2026-W44-12 bis -15), freigegeben vom Herausgeber am 01.11.2026: alle wie vorgeschlagen, -08 Option A, -09 Option A, -12 Option A.
+
+### Geändert
+
+- **Eingabehilfe „Handlungsrelevant bis:“ (GK-2026-W44-07):** Steht der Kennsatz schon im Text, leitet die Meldung zu einer weiteren eigenen Zeile an („Je Frist eine eigene Zeile: …“) statt dazu, weitere Fristen in die vorhandene Zeile zu schreiben (SOP-LEAD A.4).
+- **Profilneutrale Fundstellen (GK-2026-W44-08, -13):** Der Hinweis zu Zeilen mit mehreren Fristen nennt „Teil A des Profils“ statt „A.4“, die Warnung `ZEITSTRAHL_QUELLE` „Quellenregeln des Profils“ statt „Kodierleitfaden Abschnitt 5“. Die Hinweise der KI-Erfassung zur Verdichtung, zum Zusammenführen von Sachverhalten, zu t0 bei Verdichtung und zu Eingangsmeldungen ohne Eintrag übernehmen den Verweis `lagebild.verweise.zusammenhang` des Profils (neue Hilfsfunktion `verweisKlammer()` in `src/kern/ui.ts`) statt fest „SOP-LEAD A.7/A.7.1“.
+- **Quellenidentität im Zeitstrahl (GK-2026-W44-09):** Kategorie und die Vermerke „(Paywall)“ und „nicht ausgewertet“ zählen nicht mehr zur Identität einer Quelle; nachgeführte Angaben ergeben keine Warnung `ZEITSTRAHL_QUELLE` mehr, getauschte Quellen weiterhin.
+- **LEAD-Meldung-v2, Referenzprüfung (GK-2026-W44-10, -11):** Für den Chronologiehinweis steht ein Tag ohne Uhrzeit vor den Uhrzeiten desselben Tags (`stehtVor()` in `scripts/lead-meldung-v2.mjs`, Kodierleitfaden Abschnitt 8.3, Regel 4); `docs/LEAD-MELDUNG-V2.md` Abschnitt 5.1 nennt stabile Quellen-IDs bei Fortschreibungen und Abschnitt 8 die Reihenfolgeregel.
+- **Referenzraum statt Bevölkerungsschutz (GK-2026-W44-12):** Hilfetext zum Untersuchungsgegenstand und Hinweis „Bewertung ohne Text“ setzen den Referenzraum des Profils ein; die Platzhalter der KI-Erfassung sind ohne Fachbezug eines Profils gefasst.
+- **Quellenkategorien in Warnungen (GK-2026-W44-14):** `KEINE_PRIMAERQUELLE` nennt die geprüfte Bedingung („keine Quelle der Kategorie A oder B“) statt „nur Medien- oder Plattformquellen“; die Warnung zu Eingangsmeldungen verweist für Nicht-Behörden auf die Quellenkategorien des Profils statt auf „B oder P“.
+- **Radar nur mit Radar (GK-2026-W44-15):** Die Profilansicht beschreibt den Kodierleitfaden ohne „Lagenradar D1–D8“; das Lagebild zeigt den Reiter „Lagenradar“ nur bei Profilen mit Radar, beschriftet wie dessen Radarfeld.
+- **Profile:** Beispielprofil 1.36.1 (Kodierleitfaden 1.8.1, Erfassung 1.10.1, Sammelmappe 3.21.1), Landesprofil Thüringen 1.1.1 (abgeleitet), Lagebild Justiz 0.2.0 (Teil A 0.2.0 mit Fristzeile und stabilen Quellennummern, GK-2026-W44-08). Einzelheiten in den Verläufen der Profile.
+- Spezifikation 0.6.23, README, [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md), `docs/LEAD-MELDUNG-V2.md` (Nachtrag zur Fassung 2.0). Versionsangaben 0.6.23 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten.
+
+### Tests
+
+- `tests/profil/anweisungen-kopplung.test.ts`, `tests/ui/eingabehilfen.test.ts`: GK-2026-W44-07.
+- `tests/profil/lead-justiz.test.ts`, `tests/lagebild/redaktionscheck.test.ts`: GK-2026-W44-08 (Warnung mit dem Justizprofil ausgeführt).
+- `tests/pipeline/zeitstrahl.test.ts`: GK-2026-W44-09 mit Gegenprobe; `tests/format/lead-meldung-v2.test.ts`: GK-2026-W44-10.
+- `tests/ui/ki-erfassung-felder.test.ts`, `tests/kern/kennsaetze.test.ts`: GK-2026-W44-12; neu `tests/profil/profilneutral.test.ts`: GK-2026-W44-13 bis -15; `tests/pipeline/recherche-pflicht.test.ts`: GK-2026-W44-14; `tests/ui/lagebild.test.ts`: GK-2026-W44-15.
+- `tests/pipeline/kontext.test.ts`: Kodierleitfaden 1.8.1.
+
+### Nachtrag vom 03.11.2026 (ohne Änderung der App)
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W45.json` (gezielte Konsistenzprüfung des Landesprofils auf Anforderung des Herausgebers, Commit `c5a3205`, umgesetzt auf `508c64c`), freigegeben vom Herausgeber am 02.11.2026: KP-2026-W45-01 und -02 wie empfohlen.
+
+- **Landesprofil Thüringen 1.2.0:** Beispiellage „Orkantief ‚Ilka‘ mit Kräftelage der Feuerwehren“ (FIKTIV, KP-2026-W45-01). Sie besteht aus drei Kreismeldungen (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und der verdichteten Meldung des Landes. Diese führt dieselben Kennungen wie die Thüringer Meldung im Beispielprofil. Die Zahlen zur Kräftelage kommen aus Kennzahlen-Bausteinen des Demonstrators [Thessa](https://github.com/pereirawolf/thessa). Dazu der Begleitordner `beispiele/orkantief-ilka-thessa` mit den unveränderten Bausteinen als Material für die KI-Erfassung (KP-2026-W45-02). Einzelheiten im Verlauf des Profils.
+- README (Profile), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- **Tests:** `tests/profil/landesprofil.test.ts` (KP-2026-W45-01, -02), `tests/format/lead-meldung-v2.test.ts` (Migration auch der neuen Beispiellage).
 
 ## [0.6.22] – 01.11.2026
 

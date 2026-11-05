@@ -157,7 +157,46 @@ describe("Modellbewertung: Schemata", () => {
         expect(plan(p), `${name}: ${JSON.stringify(plan.errors)}`).toBe(true);
         expect(name).toBe(`${p.id}.json`);
       }
-      for (const id of verweise) expect(ids.has(id), `${name}: Fall ${id} fehlt`).toBe(true);
+      // Fälle eines Fallpakets (Kontrollsatz) werden erst nach dem Lauf eingecheckt (2026-10-25-kontrollsatz.md, TP-2026-W44-64)
+      if (!p.fallpaket) for (const id of verweise) expect(ids.has(id), `${name}: Fall ${id} fehlt`).toBe(true);
+    }
+  });
+
+  it("TP-2026-W44-64: Plan für die Fallreihe: KI-Profil, Mistral-Endpunkt, Recherchetiefe und Fallpaket mit Prüfsumme", () => {
+    const { plan } = pruefer();
+    const p = (x: object) => ({
+      format: "ki-lead-bewertungsplan/1",
+      id: "b5",
+      stand: "2026-11-03",
+      fragestellung: "B5",
+      faelle: ["pruefstein-wiesbaden-abkochgebot"],
+      ...x,
+    });
+    const gut = p({
+      varianten: [{ kennung: "mistral-global", ki_profil: "mistral", mistral_endpunkt: "global" }],
+      recherche: "sparsam",
+      budget_usd: 100,
+      fallpaket: { name: "kontrollsatz.zip", sha256: "0".repeat(64) },
+    });
+    expect(plan(gut), JSON.stringify(plan.errors)).toBe(true);
+    const falsch: [string, object][] = [
+      ["KI-Profil unbekannt", { varianten: [{ kennung: "x", ki_profil: "ollama" }] }],
+      ["Endpunkt unbekannt", { varianten: [{ kennung: "x", ki_profil: "mistral", mistral_endpunkt: "us" }] }],
+      ["Recherche unbekannt", { recherche: "maximal" }],
+      ["Paket ohne Prüfsumme", { fallpaket: { name: "x.zip" } }],
+      ["Prüfsumme kein SHA-256", { fallpaket: { sha256: "abc" } }],
+    ];
+    for (const [name, x] of falsch) expect(plan(p(x)), name).toBe(false);
+  });
+
+  it("TP-2026-W44-63: Feld „profil“ im Fall ist eine Manifest-ID; ohne Angabe gilt das Beispielprofil", () => {
+    const { fall } = pruefer();
+    expect(fall({ ...fallMinimal(), profil: "lead.beispiel.thueringen" }), JSON.stringify(fall.errors)).toBe(true);
+    expect(fall({ ...fallMinimal(), profil: "Landesprofil Thüringen" })).toBe(false);
+    const manifestIds = new Set(["lead-beispiel", "lead-thueringen", "lead-justiz", "muster"].map((o) => lies(`profile/${o}/profil.json`).id));
+    for (const name of jsonIn("evaluation/faelle")) {
+      const f = lies(`evaluation/faelle/${name}`);
+      if (f.profil) expect(manifestIds.has(f.profil), `${name}: Profil ${f.profil}`).toBe(true);
     }
   });
 

@@ -2,6 +2,8 @@
 // abgeschnittenen Antwort, Schemaprüfung und höchstens zwei Reparaturen. Seit 0.6.2 eigene Datei (TP-2026-W44-06),
 // vorher in stufen.ts.
 
+import { referenzBefunde } from "../kern/referenzen";
+import { bausteinAbgleich, type AbgleichBaustein } from "../kern/bausteinabgleich";
 import { addiereNutzung, type LlmAntwort, type SystemTeil } from "../anbieter/typen";
 import { jetztLokal } from "../kern/ausgabe";
 import { pflichtHinweise } from "../kern/kennsaetze";
@@ -40,6 +42,7 @@ import { s2UmfangWarnung } from "./schaetzung";
 import { laufabhaengigePlatzhalter } from "../profil/platzhalter";
 import { s2Grenzen, rechercheModus, type Kontext, aufrufen } from "./stufen";
 import { eingangsquellenPruefen, redaktionsvermerke } from "./vermerke";
+import { verweisKlammer } from "../kern/ui";
 
 export const MAX_REPARATUREN = 2;
 
@@ -304,6 +307,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Laufabhängiger Schluss: Redaktionsvermerke und zuletzt der Steuerungsblock mit Auftrag, Zeit und Recherchemodus,
   // damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
+  const bausteine = bausteineAus(k.material);
   const zv = zeitstrahlVorgaben(k.material, p);
   const steuerung = steuerungsBlock({
     auftrag,
@@ -320,6 +324,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     ...(grenzen.grund ? { ohneWerkzeugeGrund: grenzen.grund } : {}),
     kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
     absender: absenderFuer(k.material, p),
+    ...(bausteine.length ? { bausteine: bausteine.length } : {}),
     ...(p.ui.rollen.sv_kennung || p.ui.rollen.zeitstrahl
       ? {
           zeitstrahl: {
@@ -508,6 +513,10 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       ...zeitstrahlBefunde,
       ...zeitstrahlHinweise(meldung, p.ui).filter((b) => !zeitstrahlBefunde.some((x) => x.code === b.code && x.text === b.text)),
     );
+  // Kennzahlen-Bausteine (seit 0.6.24, UP-2026-W45-01, Übergangsregel h): Zahlen im Text gegen den Baustein
+  if (meldung) befunde.push(...bausteinAbgleich(meldung, p.ui, bausteineAus(k.material)));
+  // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Prüfebene 2 nach der Antwort
+  if (meldung) befunde.push(...referenzBefunde(meldung, p.ui));
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
   if (meldung && korrekturen.length)
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });
@@ -538,12 +547,12 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     if (liste("fehlt").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis (SOP-LEAD A.7; Kategorie nach der Rolle der meldenden Stelle, bei Behörden A): ${liste("fehlt").join("; ")}.`,
+        text: `Eingangsmeldung ohne eigenen Eintrag im Quellenverzeichnis${verweisKlammer(p.ui, "zusammenhang")}; Kategorie nach der Rolle der meldenden Stelle, bei Behörden A: ${liste("fehlt").join("; ")}.`,
       });
     if (liste("kategorie").length)
       befunde.unshift({
         stufe: "warnung",
-        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist (dann B oder P nach ihrer Rolle, Kodierleitfaden Abschnitt 5).`,
+        text: `Eingangsmeldung im Quellenverzeichnis nicht als Kategorie A geführt: ${liste("kategorie").join("; ")}. Zulässig nur, wenn die meldende Stelle keine Behörde ist; dann Kategorie nach ihrer Rolle (Kodierleitfaden des Profils, Quellenkategorien).`,
       });
     if (liste("unsicher").length)
       befunde.unshift({
@@ -597,4 +606,11 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   k.lauf.aktualisiert = new Date().toISOString();
   await k.aktualisiert(k.lauf);
   return { meldung, kurzantwort, schemaBefunde, befunde };
+}
+
+/** Kennzahlen-Bausteine des Materials für Abgleich und Steuerung */
+function bausteineAus(material: Material[]): AbgleichBaustein[] {
+  return material.flatMap((m) =>
+    m.art === "kennzahlen-baustein" && m.baustein ? [{ name: m.name, info: m.baustein.info, daten: m.baustein.daten as Record<string, any> }] : [],
+  );
 }

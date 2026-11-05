@@ -1,8 +1,9 @@
 // Ausgaben des Lagebilds: Rohtabelle und CSV (generisch aus dem Schema), Kopiervorlage für Word.
 
+import { kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { aufloesen } from "../kern/schema";
 import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
 import { listeAlsText } from "../kern/listen";
@@ -27,7 +28,25 @@ export interface Spalte {
   titel: string;
   /** Wert für Meldung und (optional) Sachverhalt */
   wert: (e: LagebildEintrag, sv?: any) => string;
+  /** Pfad des Felds relativ zur Meldung bzw. zum Sachverhalt (seit UX-2026-W45-26) */
+  pfad?: string;
+  /** Gruppe für die Auswahl der Spalten in der Rohtabelle (seit UX-2026-W45-26); CSV und PDF bleiben vollständig */
+  gruppe?: SpaltenGruppe;
 }
+
+/**
+ * Spaltengruppen der Rohtabelle (seit UX-2026-W45-26). „kern“ steht immer (Land/Bund, Stelle, Zeitpunkt, Kennung,
+ * Bezeichnung, Art, Ort, Beurteilung, Tendenz), die übrigen sind zuschaltbar.
+ */
+export const SPALTENGRUPPEN = [
+  { id: "meldung", titel: "Kopf, Status und Prüfung" },
+  { id: "freigabe", titel: "Freigabe & Versand" },
+  { id: "sachverhalt", titel: "Weitere Angaben zum Sachverhalt" },
+  { id: "analyse", titel: "Analyse und Bewertungstext" },
+  { id: "radar", titel: "Lagenradar" },
+  { id: "quellen", titel: "Zeitstrahl und Quellen" },
+] as const;
+export type SpaltenGruppe = "kern" | (typeof SPALTENGRUPPEN)[number]["id"];
 
 function alsText(v: unknown): string {
   if (v === null || v === undefined) return "";
@@ -47,8 +66,9 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
     for (const a of def?.achsen || []) {
       out.push({
         titel: a.label,
+        pfad: pfad.join("."),
         wert: (e, sv) => {
-          const v = holeWert(relativ ? sv : e.daten, [...pfad, a.key]);
+          const v = radarWerte(holeWert(relativ ? sv : e.daten, pfad))[a.key];
           return Number.isInteger(v) ? String(v) : "";
         },
       });
@@ -63,10 +83,10 @@ function blaetter(profil: Profil, knoten: any, segs: Segment[], titel: string[],
   // Listen von Objekten lesbar statt als JSON (seit 0.6.14, Issue #114, A2): je Element Kopfzeile und „Feld: Wert“
   const element = aufloesen(k?.items, profil.schema);
   if ((k?.type === "array" || (Array.isArray(k?.type) && k.type.includes("array")) || k?.items) && (element?.type === "object" || element?.properties)) {
-    out.push({ titel: titel.join(" › "), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
+    out.push({ titel: titel.join(" › "), pfad: pfad.join("."), wert: (e, sv) => listeAlsText(profil, knoten, holeWert(relativ ? sv : e.daten, pfad), segs) });
     return;
   }
-  out.push({ titel: titel.join(" › "), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
+  out.push({ titel: titel.join(" › "), pfad: pfad.join("."), wert: (e, sv) => alsText(holeWert(relativ ? sv : e.daten, pfad)) });
 }
 
 /**
@@ -103,15 +123,27 @@ export function spalten(profil: Profil): Spalte[] {
           : []),
       ]
     : [];
+  // Gruppen für die Rohtabelle (seit UX-2026-W45-26)
+  const unter = (pfad: string | undefined, rolle: string | undefined) => !!pfad && !!rolle && (pfad === rolle || pfad.startsWith(rolle + "."));
+  for (const k of kopf) k.gruppe = [r.land, r.meldende_stelle, r.meldezeitpunkt].includes(k.pfad) ? "kern" : unter(k.pfad, r.freigabe) ? "freigabe" : "meldung";
+  for (const k of sv)
+    k.gruppe = [r.sv_kennung, r.sv_bezeichnung, r.sv_art, r.sv_ort, r.sv_beurteilung, r.sv_tendenz].includes(k.pfad)
+      ? "kern"
+      : unter(k.pfad, r.sv_radar)
+        ? "radar"
+        : [...(r.sv_textfelder || []), ...(r.sv_analysefelder || []), r.sv_bewertung_text].some((f) => unter(k.pfad, f))
+          ? "analyse"
+          : "sachverhalt";
+  for (const h of herkunft) h.gruppe = "meldung";
   return [
-    { titel: "Datei", wert: (e) => e.name },
+    { titel: "Datei", wert: (e) => e.name, gruppe: "meldung" },
     ...herkunft,
     ...kopf,
-    { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)) },
+    { titel: "Status", wert: (e) => alsText(holeWert(e.daten, r.status_feld)), gruppe: "meldung" },
     ...(r.entstehung_feld
       ? [
-          { titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])) },
-          { titel: "SOP (Entstehung)", wert: (e: LagebildEintrag) => sopNachweis(holeWert(e.daten, r.entstehung_feld!)) },
+          { titel: "Entstehung", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, [r.entstehung_feld!, "verfahren"])), gruppe: "meldung" as const },
+          { titel: "SOP (Entstehung)", wert: (e: LagebildEintrag) => sopNachweis(holeWert(e.daten, r.entstehung_feld!)), gruppe: "meldung" as const },
         ]
       : []),
     ...sv,
@@ -120,6 +152,7 @@ export function spalten(profil: Profil): Spalte[] {
       ? [
           {
             titel: bezeichnung(profil.ui, r.zeitstrahl) + " (Sachverhalt)",
+            gruppe: "quellen" as const,
             wert: (e: LagebildEintrag, s?: any) =>
               s
                 ? eintraegeFuer(zeitstrahlText(e.daten, profil.ui), String(holeWert(s, r.sv_kennung!) ?? ""))
@@ -129,9 +162,22 @@ export function spalten(profil: Profil): Spalte[] {
           },
         ]
       : []),
-    ...(r.quellen ? [{ titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)", wert: (e: LagebildEintrag) => alsText(holeWert(e.daten, r.quellen!)) }] : []),
+    ...(r.quellen
+      ? [
+          {
+            titel: bezeichnung(profil.ui, r.quellen) + " (Meldung)",
+            gruppe: "quellen" as const,
+            // LEAD-Meldung-v2 (seit 0.7.3): Quellenobjekte als lesbares Verzeichnis
+            wert: (e: LagebildEintrag) => {
+              const q = holeWert(e.daten, r.quellen!);
+              return Array.isArray(q) ? quellenverzeichnisV2(q) : alsText(q);
+            },
+          },
+        ]
+      : []),
     {
       titel: "Schemaprüfung",
+      gruppe: "meldung",
       wert: (e) => (e.schema.length ? `${e.schema.length} Abweichung(en): ${e.schema.map((b) => b.text).join(" | ")}` : "ohne Befund"),
     },
   ];
@@ -229,7 +275,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     const def = radarFuer(ui, f);
     if (def) {
       const wert = holeWert(s.sv, r.sv_radar);
-      const gesetzt = def.achsen.some((a) => Number.isInteger(wert?.[a.key]));
+      const gesetzt = def.achsen.some((a) => Number.isInteger(radarWerte(wert)[a.key]));
       const legende = radarZeilen(def, wert).map(html).join("<br>");
       const bild = gesetzt && radarBild ? radarBild(def, wert) : null;
       const inhalt = gesetzt
@@ -246,8 +292,17 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     if (eintraege.length) zeile(bezeichnung(ui, r.zeitstrahl), html(eintraege.map(zeitstrahlAnzeige).join("\n")), "font-size:8.5pt;");
   }
 
-  if (r.quellen) {
-    const qText = String(holeWert(s.eintrag.daten, r.quellen) || "");
+  // LEAD-Meldung-v2 (seit 0.7.3, UP-2026-W45-03): Zeitstrahl und Kennzahlen im Sachverhalt, Quellen als Objekte
+  if (Array.isArray(s.sv?.zeitstrahl) && s.sv.zeitstrahl.length)
+    zeile(bezeichnung(ui, `${r.sachverhalte}[].zeitstrahl`), html(zeitstrahlTextV2(s.sv.zeitstrahl)), "font-size:8.5pt;");
+  if (Array.isArray(s.sv?.kennzahlen) && s.sv.kennzahlen.length)
+    zeile(bezeichnung(ui, `${r.sachverhalte}[].kennzahlen`), html(kennzahlenTextV2(s.sv.kennzahlen)), "font-size:8.5pt;white-space:pre-wrap;");
+  const qRoh = r.quellen ? holeWert(s.eintrag.daten, r.quellen) : undefined;
+  if (r.quellen && Array.isArray(qRoh)) {
+    const zitiert = quellenFuerSachverhalt(qRoh, s.sv, ui);
+    if (zitiert) zeile(bezeichnung(ui, r.quellen), html(zitiert.map((q) => q.text).join("\n")), "font-size:8.5pt;");
+  } else if (r.quellen) {
+    const qText = String(qRoh || "");
     if (qText.trim()) {
       const zitiert = quellenFuerSachverhalt(qText, s.sv, ui, zs);
       zeile(bezeichnung(ui, r.quellen), html(zitiert ? zitiert.map((q) => q.text).join("\n") : qText), "font-size:8.5pt;");

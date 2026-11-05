@@ -378,7 +378,7 @@ Ziel: `tests/pipeline/eingangsquellen.test.ts`, `tests/pipeline/json.test.ts`, `
 | Verdichtung von Eingangsmeldungen › verdichtet ohne Websuche, mit t0 aus den Eingängen und verbindlicher Gliederung | `tests/pipeline/verdichtung.test.ts` |  |
 | Abgeschnittene Antworten und t0 › vervollständigt eine an der Token-Grenze abgeschnittene Meldung ohne neue Recherche | `tests/pipeline/stufen.test.ts` |  |
 | Abgeschnittene Antworten und t0 › übernimmt einen im Auftrag vorgegebenen t0 in S1 | `tests/pipeline/stufen.test.ts` |  |
-| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.25 (fa19eb8): „ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“ |
+| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.25 (fa19eb8): „ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“; in 0.7.13: „ruft S1 mit dem Vorgabeaufwand auf, seit 0.7.13 „mittel“ (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“ |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 weit nach dem jüngsten Eingang auf den Eingang zurück und sagt es | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 vor dem jüngsten Eingang ebenfalls zurück | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: lässt einen t0 kurz nach dem jüngsten Eingang stehen | `tests/pipeline/verdichtung.test.ts` |  |
@@ -401,7 +401,7 @@ Ziel: `tests/profil/profilansicht.test.ts`
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| Anzeigetitel und Versions-Tags › alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag | `tests/profil/profilansicht.test.ts` |  |
+| Anzeigetitel und Versions-Tags › alle 34 Fachzeilen: Kennung und Name ohne Version, Version genau einmal im Tag | `tests/profil/profilansicht.test.ts` || umbenannt in „alle 35 Fachzeilen …“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | Anzeigetitel und Versions-Tags › Teil A trägt „gilt immer“, fehlende Version „ohne Version“; der Nachweis bleibt unverändert | `tests/profil/profilansicht.test.ts` |  |
 | Anzeigetitel und Versions-Tags › Anzahl und Gruppenhinweis nennen die Inhaltsgerüste | `tests/profil/profilansicht.test.ts` |  |
 | Steckbrief und Lesetext › Steckbrief aus dem Kopf, Lesetext ohne Überschrift und YAML | `tests/profil/profilansicht.test.ts` |  |
@@ -430,7 +430,7 @@ Ziel: `tests/profil/profile.test.ts`
 | Test | Neue Datei | Änderung |
 |---|---|---|
 | Beispielprofil LEAD › lädt ohne Fehler und ohne Warnungen | `tests/profil/profile.test.ts` |  |
-| Beispielprofil LEAD › lädt Teil A, 17 SOPs und 17 Bausteine aus je einer Datei in Katalogreihenfolge | `tests/profil/profile.test.ts` |  |
+| Beispielprofil LEAD › lädt Teil A, 17 SOPs und 17 Bausteine aus je einer Datei in Katalogreihenfolge | `tests/profil/profile.test.ts` || umbenannt in „… 17 SOPs und 18 Bausteine …“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | Beispielprofil LEAD › gliedert jede SOP und jeden Baustein nach demselben Schema | `tests/profil/profile.test.ts` |  |
 | Beispielprofil LEAD › führt Bausteine aus Teil C ohne eigene Ereignisart | `tests/profil/profile.test.ts` |  |
 | Beispielprofil LEAD › Lesefassung und README passen zu den Einzeldateien | `tests/profil/profile.test.ts` |  |
@@ -517,7 +517,7 @@ Ziel: `tests/profil/sop-integration.test.ts`
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| SOP-Integration laut SOP-Übersicht › die Übersicht nennt 17 Dach-SOPs und 17 Bausteine | `tests/profil/sop-integration.test.ts` |  |
+| SOP-Integration laut SOP-Übersicht › die Übersicht nennt 17 Dach-SOPs und 17 Bausteine | `tests/profil/sop-integration.test.ts` || umbenannt in „… 17 Dach-SOPs und 18 Bausteine“ (Profil 1.37.0, Baustein C18, BB-2026-W45-01) |
 | SOP-Integration laut SOP-Übersicht › B01 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |
 | SOP-Integration laut SOP-Übersicht › B02 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |
 | SOP-Integration laut SOP-Übersicht › B03 ist geladen, im S1-Schema und -Katalog und geht an S2 | `tests/profil/sop-integration.test.ts` |  |
@@ -565,7 +565,7 @@ Herkunft: Testreihe 20.10.2026 (0.4.21). Ziel: `tests/kern/kennsaetze.test.ts`, 
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| Vorgaben nach der Testreihe › Erfassung mit Opus in App und Beispielprofil, S1 bleibt Haiku mit hohem Aufwand | `tests/pipeline/vorgaben.test.ts` |  |
+| Vorgaben nach der Testreihe › Erfassung mit Opus in App und Beispielprofil, S1 bleibt Haiku mit hohem Aufwand | `tests/pipeline/vorgaben.test.ts` | umbenannt in 0.7.13: „Erfassung mit Opus in App und Beispielprofil, S1 seit 0.7.13 Sonnet mit mittlerem Aufwand“ |
 | Lagenradar an der vorgesehenen Stelle › verschiebt ein eine Ebene zu hoch abgelegtes Radar und meldet es | `tests/pipeline/nachbearbeitung.test.ts` |  |
 | Lagenradar an der vorgesehenen Stelle › überschreibt keinen vorhandenen Radarwert und lässt Nicht-Objekte stehen | `tests/pipeline/nachbearbeitung.test.ts` |  |
 | Lagenradar an der vorgesehenen Stelle › die Nachbearbeitung macht den Entwurf ohne Reparaturaufruf schemakonform | `tests/pipeline/nachbearbeitung.test.ts` |  |
@@ -894,3 +894,225 @@ Angepasst ohne Änderung des Solls: `tests/support/dateien.ts` lädt Profile mit
 | README Justiz verweist für die Profilversion auf `profil.json` | Profil Lagebild Justiz (Erprobungsentwurf) › GK-2026-W44-06: … | `tests/profil/lead-justiz.test.ts` |
 
 Angepasst ohne Änderung des Solls: `tests/profil/lead-justiz.test.ts` (Profilversion 0.1.2), `tests/pipeline/kontext.test.ts` (Fassungen Kodierleitfaden 1.8.0 und Verdichtung 2.3).
+
+## Gesamtkonsistenz nach PR #126 (0.6.23, Befunddateien `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json` und `-c.json`, Freigabe des Herausgebers vom 01.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingabehilfe leitet bei vorhandenem Kennsatz zu einer eigenen Zeile je Frist an | Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35) › GK-2026-W44-07: …; LEAD-Eingabehilfen › A05–A07: … | `tests/profil/anweisungen-kopplung.test.ts`, `tests/ui/eingabehilfen.test.ts` |
+| Justiz Teil A führt Fristzeile und stabile Quellennummern; Hinweis, `ZEITSTRAHL_QUELLE` und Steuerungssatz ohne Abschnittsnummer | Profil Lagebild Justiz (Erprobungsentwurf) › GK-2026-W44-08: … | `tests/profil/lead-justiz.test.ts`, `tests/lagebild/redaktionscheck.test.ts` |
+| Kategorie und Zugangsvermerke ändern die Quellenidentität nicht; Tausch bleibt Konflikt | GK-2026-W44-02: Quellennummern der Vormeldung bleiben stabil › GK-2026-W44-09: … | `tests/pipeline/zeitstrahl.test.ts` |
+| v2: Zeitpunkt, danach Tag desselben Tags ergibt „nicht chronologisch“; umgekehrt nicht | LEAD-Meldung-v2: Datenstand und Zeitvergleiche › GK-2026-W44-10: … | `tests/format/lead-meldung-v2.test.ts` |
+| Auftrag nennt den Referenzraum des Profils, kein „Bevölkerungsschutz“ im Justizprofil; Leitfrage des Bewertungstexts mit Referenzraum | KI-Erfassung: Auftrag und Material › GK-2026-W44-12: …; GK-2026-W44-12: Leitfrage des Bewertungstexts … | `tests/ui/ki-erfassung-felder.test.ts`, `tests/kern/kennsaetze.test.ts` |
+| Kein festes „SOP-LEAD A.“ in angezeigten Texten; Verweis aus `lagebild.verweise` | Profilneutrale Texte der Oberfläche › GK-2026-W44-13: … | `tests/profil/profilneutral.test.ts` |
+| `KEINE_PRIMAERQUELLE` nennt die Prüfbedingung; Warnung zu Eingangsmeldungen ohne feste Kategorienliste | … › GK-2026-W44-14: … | `tests/pipeline/recherche-pflicht.test.ts`, `tests/profil/profilneutral.test.ts` |
+| Profilansicht ohne „Lagenradar D1–D8“; Reiter „Lagenradar“ nur mit Radar im Profil | … › GK-2026-W44-15: … | `tests/profil/profilneutral.test.ts`, `tests/ui/lagebild.test.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/ki-erfassung-felder.test.ts` (Hilfetext mit Referenzraum, neutrale Platzhalter nach GK-2026-W44-12), `tests/profil/lead-justiz.test.ts` (Profilversion 0.2.0, Arbeitsanweisungen 0.1.1), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.8.1).
+
+## Landesprofil 1.2.0: Beispiellage Orkantief „Ilka“ (Nachtrag zu 0.6.23, Befunddatei `ki-lead-befund_konsistenz_2026-W45.json`, Freigabe des Herausgebers vom 02.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Vier Meldungen schemakonform, im Lagebild ohne Lesefehler, Meldestatus für drei Kreise, Kennungen ohne Befund, FIKTIV | KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV) › vier schemakonforme Meldungen … | `tests/profil/landesprofil.test.ts` |
+| Landesmeldung mit Kennungen, Meldezeitpunkt und Kernzahlen der Thüringer Meldung im Beispielprofil; Bezug auf alle Kreis-Sachverhalte; abweichende Bewertung Kreis/Land | KP-2026-W45-01: … › Landesmeldung: Kennungen und Kernzahlen … | `tests/profil/landesprofil.test.ts` |
+| Zahlen zur Kräftelage und Datenstand der Quelle wie in den Thessa-Bausteinen; Landeszahl als Ausschnitt gekennzeichnet | KP-2026-W45-01: … › Kräftelage: Zahlen und Datenstand … | `tests/profil/landesprofil.test.ts` |
+| Verdichtung der drei Kreismeldungen mit Attrappe: Eingänge erkannt, t0 aus dem jüngsten Eingang, Ergebnis schemakonform, Eingänge nachgewiesen | KP-2026-W45-01: … › verdichtet die drei Kreismeldungen (Attrappe) … | `tests/profil/landesprofil.test.ts` |
+| Fünf Thessa-Bausteine der Fassung 0.2 als JSON-Material ohne Eingangsrolle und ungekürzt; ohne Ortslage und Hinweise; nicht im Lagebild-Beispiel | KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner › … | `tests/profil/landesprofil.test.ts` |
+| Die Kreis- und Landesmeldungen der neuen Beispiellage lassen sich nach v2 migrieren | LEAD-Meldung-v2 › …: migriert schemagültig und ohne Fehler der Referenzprüfung | `tests/format/lead-meldung-v2.test.ts` |
+
+## Kennzahlen-Bausteine aus Thessa als Materialart (0.6.24, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-01, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingebettetes Original unverändert, Kernschema mit der von Thessa gepinnten Prüfsumme; gebündelte Schemata aktuell | UP-2026-W45-01: eingebettetes Schema der Thessa-Kennzahlen-Bausteine › Original unverändert …; › gebündelte Schemata aktuell … | `tests/format/thessa-baustein.test.ts` |
+| Original für den eigenen Prüfer unbrauchbar (absolute Verweise), gebündelte Schemata verwendbar; Bausteine und beschädigte Bausteine im Gleichlauf mit Ajv auf dem Original; Fassung 0.1 ohne Einsatzmeldungen | UP-2026-W45-01: eingebettetes Schema … › Original mit absoluten Verweisen …; › fünf Bausteine …; › beschädigte Bausteine …; › Fassung 0.1 … | `tests/format/thessa-baustein.test.ts` |
+| Materialart „kennzahlen-baustein“ mit Anzeige im Auftrag; 0.1 toleriert; unbekannte Fassung und Schemabefund bleiben JSON mit Hinweis | UP-2026-W45-01: Erkennung als Materialart „kennzahlen-baustein“ › … | `tests/pipeline/baustein.test.ts` |
+| An die KI ohne `herleitung`; Quellenzeile gleich der von Hand verfassten Zeile der Kreismeldungen; Regel im Steuerungsblock nur mit Bausteinen | UP-2026-W45-01: was an die KI geht › … | `tests/pipeline/baustein.test.ts` |
+| Abgleich der Zahlen im Text: Paare erkannt, kein Hinweis an der Beispiellage, `BAUSTEIN_ZAHL_ABWEICHEND` bei geänderter Zahl, `BAUSTEIN_OHNE_BELEG` ohne Verweis bzw. ohne Quelle | UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h) › … | `tests/pipeline/baustein.test.ts` |
+
+Angepasst: `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: „als Kennzahlen-Baustein“ statt „als JSON-Material“, Text an die KI ohne `herleitung`), `tests/kern/schichten.test.ts` (Positivliste `pipeline` um `../formate`).
+
+## LEAD-Meldung-v2 in Kern und Prüfung (0.7.0, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-02, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Werkzeug und App teilen die Umsetzung (gleiche Funktionen, gleiche Zusammenstellung) | UP-2026-W45-02: eine Umsetzung für App und Werkzeug › … | `tests/kern/v2-app.test.ts` |
+| Migration beim Einlesen gleich dem Werkzeug für alle mitgelieferten v1-Meldungen, schemagültig, ohne Fehler der Referenzprüfung; Lagebild unter v2-Profil; nicht überführbare Meldung mit Grund; Profilprüfung des Verfahrens | UP-2026-W45-02: Migration v1 → v2 beim Einlesen › … | `tests/kern/v2-app.test.ts` |
+| Grundform v2 für Eingänge unter v1-Profil, eigene Meldung unter v2-Profil | UP-2026-W45-02: Grundform v2 für Eingänge › … | `tests/kern/v2-app.test.ts` |
+| Referenzprüfung mit Pfad und Code nur für v2; im Lagebild, im Prüfschritt und nach S2; Textprüfung der Quellen entfällt für v2 | UP-2026-W45-02: Referenzprüfung in Lagebild, Maske und Pipeline › … | `tests/kern/v2-app.test.ts` |
+| Rollen auf Meldungsebene als Pfade: Setzen, Kopieren, Prüfung beim Laden | UP-2026-W45-02: Rollen als Pfade › … | `tests/kern/v2-app.test.ts` |
+
+Unverändert grün: `tests/format/lead-meldung-v2.test.ts` (importiert weiter `scripts/lead-meldung-v2.mjs`, das die Funktionen aus `src/kern/meldung-v2.js` durchreicht).
+
+## Dokumentationsprüfung KW 45 (0.7.1, Befunddatei `ki-lead-befund_dokumentation_2026-W45.json`, DK-2026-W45-01, -04, -07, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Management Summary ohne Bestätigung gesperrt, mit `aria-describedby` auf die Bestätigung; ohne Haken keine Anfrage, mit Haken genau eine | DK-2026-W45-01: Management Summary nur nach Bestätigung zur Weitergabe › … | `tests/ui/kurzfassung-lauf.test.ts` |
+| Systemaufträge von S1, S2 und Orientierungssuche nennen `MATERIAL_DATENREGEL`; Stichworte der Orientierungssuche in `<stichworte>` mit neutralisierten Schließtags | DK-2026-W45-04: Orientierungssuche mit Datenhülle und Datenregel wie S1 und S2 › … | `tests/pipeline/orientierung-datenhuelle.test.ts` (neu) |
+| axe-core prüft alle acht Bereiche der Einstellungen einschließlich „Testläufe“ | TP-2026-W44-22: axe-core je Bereich … › Einstellungen: alle Bereiche | `tests/browser/barrierefreiheit.spec.ts` |
+
+Angepasst ohne Änderung des Solls: `tests/ui/kurzfassung-lauf.test.ts` (Laufanzeige und KI-Chip: zuerst die Bestätigung setzen).
+
+## Fallreihe unter „Testläufe“ (0.7.2, Befunddatei `ki-lead-befund_technik_2026-W44-A8.json`, TP-2026-W44-62 bis -67, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Alle mitgelieferten Fälle schemakonform; zulässig bis auf Management Summary und Reparatur (mit Grund); Ilka als Verdichtung mit Beispielprofil | TP-2026-W44-63: alle mitgelieferten Fälle sind schemakonform … | `tests/forschung/fallreihe.test.ts` |
+| Drei Prüfstein-Fälle mit Websuche, ohne Material und URLs, t0, Referenzraum und Ereignisart wie in der Begleitnotiz | TP-2026-W44-63: drei Prüfstein-Fälle mit Websuche … | `tests/forschung/fallreihe.test.ts` |
+| Feld „profil“ wählt das Profil; unbekanntes Profil, fehlendes oder externes Material sperren mit Grund; Feld ist eine Manifest-ID und verweist auf ein mitgeliefertes Profil | TP-2026-W44-63: Feld „profil“ … | `tests/forschung/fallreihe.test.ts`, `tests/evaluation/schemata.test.ts` |
+| Fallpaket: Fälle und Material auch unter einem Oberordner, SHA-256 der ZIP-Datei, Dubletten und Schemafehler mit Hinweis; leeres und beschädigtes Paket | TP-2026-W44-63: liest Fälle und Material …; ein Paket ohne Fall … | `tests/forschung/fallreihe.test.ts` |
+| Plan: Vorbelegung von Fällen, Varianten, Wiederholungen, Recherche und Deckel, Prüfsumme der Plandatei; fehlendes oder abweichendes Paket sperrt; Ablehnung von Nicht-Plänen, Schemafehlern, festen Meldungen, Varianten ohne Modell und doppelten Kennungen; Beispielplan ladbar | TP-2026-W44-64: … | `tests/forschung/fallreihe.test.ts` |
+| Planschema: `ki_profil`, `mistral_endpunkt`, `recherche`, `fallpaket` mit SHA-256; Pläne mit Fallpaket dürfen Fälle nennen, die noch nicht eingecheckt sind | TP-2026-W44-64: Plan für die Fallreihe …; LS-2026-W43-03: … | `tests/evaluation/schemata.test.ts` |
+| Einstellungen je Variante: Standardprofil, Endpunkt und Recherchetiefe; S1/S2 der Variante gehen vor; Matrix-Varianten in fester Reihenfolge | TP-2026-W44-64: Einstellungen je Variante … | `tests/forschung/fallreihe.test.ts` |
+| Reihenfolge je Fall alle Varianten; Obergrenze aus Schätzung, teuerstem Lauf oder Vorbehalt; Bremse hält vor dem Lauf, der den Deckel überschreiten würde; Abbruch | TP-2026-W44-65: … | `tests/forschung/fallreihe.test.ts` |
+| Lauf: Auftrag und Material wie im Fall, Rolle „eingang“ gesetzt, S2 Verdichtung bzw. Recherche und Entwurf, Modelle der Variante; automatische Prüfungen mit Sollwerten aus dem Entwurf; Reihendatei und ZIP-Inhalt mit Übersicht und Prüfliste | TP-2026-W44-62: Auftrag und Material wie im Fall … | `tests/forschung/fallreihe.test.ts` |
+| Bewertungsvorlage erst nach dem Ausfüllen schemakonform (Ajv), nicht verblindet | TP-2026-W44-66: Bewertungsvorlage … | `tests/forschung/fallreihe.test.ts` |
+| Oberfläche: Gruppen, Prüfsteine mit Websuche, gesperrter Reparaturfall, Start erst mit Fall und Anbieter, fehlender Schlüssel; Paket-Import mit SHA-256, Ablage und Löschen, Paket nach dem Neuladen; Plan mit Vorbelegung, Prüfsumme und Abweichung; Sperre bei fehlendem Paket; Start, Kostenbremse, ZIP und Archiveintrag | TP-2026-W44-62 bis -66: … | `tests/ui/fallreihe.test.ts` |
+| Im Browser: Paket und Plan aus Dateien, Prüfsummen, Vorbelegung, Bremse vor dem ersten Lauf ohne Anfrage, Start mit einem Klick, ZIP-Inhalt, nur die simulierte API, Archiv | Fallreihe: Fallpaket und Plan laden, … | `tests/browser/testlaeufe.spec.ts` |
+
+Angepasst: `tests/ui/einstellungen.test.ts` (Überschriften des Bereichs „Testläufe“ mit „Fallreihe“, nachgeladen), `tests/ci/pruefumfang.test.ts` und `scripts/pruefumfang.mjs` (alle Fälle, ihr Material und `plan.schema.json` sind in die App eingebettet und lösen die Kern-Browsertests aus).
+
+## LEAD-Meldung-v2 in Maske und Ausgabe (0.7.3, Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-03, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Beispielmeldung öffnen ohne Änderung, ohne rohe Objekte, mit den Bezeichnungen der Darstellungsdatei; leere Zeitangabe wird `null`; eine Änderung betrifft nur ihr Feld; Radarachse als Objekt | UP-2026-W45-03: Erfassungsmaske für LEAD-Meldung-v2 › … | `tests/ui/maske-v2.test.ts` |
+| Quellenzeile in der Form des Kodierleitfadens, vom Werkzeug zurücklesbar; Zeitstrahlzeile; Kennzahlen mit Teilmengen, Mindestwert, Bandbreite; Entstehung; zitierte Quellen | UP-2026-W45-03: Quellenverzeichnis, Zeitstrahl, Kennzahlen, Entstehung › … | `tests/kern/v2-darstellung.test.ts` |
+| Radarachsen als Objekte: Stufen, Legende mit Mindestwert und Grund, Stufe setzen mit Status; v1 unverändert | UP-2026-W45-03: Radarachsen als Objekte › … | `tests/kern/v2-darstellung.test.ts` |
+| Werte oder null im Schema; Ausgabestatus mit Freigabe; Dateiname mit Pfad-Platzhaltern | UP-2026-W45-03: Schema, Status und Dateiname › … | `tests/kern/v2-darstellung.test.ts` |
+| Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis und Kennzahlen; PDF mit Quellenverzeichnis, „mindestens 53 Einsatzkräfte“, Entstehung, Bewertungsfeldern | UP-2026-W45-03: Kopiervorlage des Lagebilds › …; PDF einer Meldung nach LEAD-Meldung-v2 › … | `tests/kern/v2-darstellung.test.ts` |
+
+
+Angepasst ohne Änderung des Solls: `tests/ui/radar-tastatur.test.ts` (Typ des Rückrufs `onChange` von `RadarFeld` allgemein, seit 0.7.3).
+
+## Grunddesign der App-Familie (Nachtrag vom 03.11.2026 zu 0.7.3, Auftrag des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| `design/lead-design.tokens.json`, `design/lead-farbschemata.tokens.json` und die Regeltabellen in `design/README.md` entsprechen Code und `rahmen.json` | Grunddesign: erzeugte Dateien aktuell › … | `tests/format/lead-design.test.ts` (neu) |
+| Tokens im Format der DTCG: zulässige `$type`, Hexfarben, Maße in px oder rem; jede Rolle und Signalfarbe beschrieben; Rollen aus dem Profil, Signalfarben nie; Kennungen der Farbschemata wie im Katalog; Umbrüche, Zielgröße, Band und Schrift unabhängig gegen die Stylesheets | Grunddesign: Design Tokens im Format der DTCG › … | `tests/format/lead-design.test.ts` |
+| `rahmen.json` gültig nach Schema, Schema lehnt ungültige Regeln ab; Regelkennungen eindeutig, Fundstellen vorhanden, Verweise und Token-Verweise aufgelöst; Hauptnavigation, Bereiche der Einstellungen, Reiter, Phasen der KI-Erfassung und Kennsätze wie im Quelltext; Knopf- und Kastenvarianten im Stylesheet; Wireframes mit Titel und Lizenzvermerk | Grunddesign: rahmen.json › … | `tests/format/lead-design.test.ts` |
+| `design/` unter CC BY 4.0 nach LICENSE-CONTENT, Nr. 1 f | Abgleich mit reuse lint (Soll aus sollLizenzen) | `tests/lizenzen/reuse.test.ts` |
+| `design/` ist reiner Inhalt (keine Browsertests), `scripts/lead-design.mjs` löst die Kern-Browsertests aus | Prüfumfang je Änderung › Grunddesign …; Generator … | `tests/ci/pruefumfang.test.ts` |
+
+## Landesprofil 1.2.2: Quelle der Thüringer Kreisnamen (Nachtrag zu 0.7.3, Auftrag des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kreisschlüssel und Namen der 22 Gebietskörperschaften wie im CSV-Export der Verwaltungsstruktur des Landesamts (Stand 01.01.2026), Landkreise mit „Landkreis“ | Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik … › Schlüssel und Namen der 22 Gebietskörperschaften … | `tests/profil/landesprofil.test.ts` |
+| Quelle mit URL, Stand und Abruf im Kopf der Kreisliste und im README des Profils | … › Quelle mit Stand und Abruf … | `tests/profil/landesprofil.test.ts` |
+
+## Schwester-Repos (0.7.5, Befunddatei `ki-lead-befund_schwesterrepos_2026-W45.json`, SR-2026-W45-01, -02 und -04, Freigabe des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Meldungsmodule optional, unbekannte zulässig mit Hinweis, `fassung` Pflicht; Pflicht-Meldungsmodul der Zusammenstellung macht `module` zur Pflicht und wird geprüft; Doppeleinbindung ist ein Fehler | LEAD-Meldung-v2: Meldungsmodule (SR-2026-W45-01) › … | `tests/format/lead-meldung-v2.test.ts` |
+| Präfix `KRITIS-` mit ein bis drei Segmenten des Betreiberkürzels gültig; Umlaut, vier Segmente, Segment über acht Zeichen ungültig | LEAD-Meldung-v2: Kennungen der Betreiber (SR-2026-W45-04, …) › … | `tests/format/lead-meldung-v2.test.ts` |
+| Herkunft je überlieferter Fassung mit Prüfsumme und Commit; Bündelung 0.3, 0.2, 0.1 aktuell; Begleitbausteine 0.3 gültig, auch als 0.2; 0.3 lehnt `bezug_lead` ab, 0.2 nimmt es an | UP-2026-W45-01: eingebettetes Schema … › …; SR-2026-W45-02: Fassung 0.3 kennt kein bezug_lead mehr … | `tests/format/thessa-baustein.test.ts` |
+| Baustein 0.3 als Materialart, unbekannte Fassung mit Liste 0.3, 0.2, 0.1 | UP-2026-W45-01: Erkennung als Materialart … › … | `tests/pipeline/baustein.test.ts` |
+| Begleitordner des Landesprofils mit Bausteinen 0.3 | KP-2026-W45-02: … › fünf Bausteine der Fassung 0.3 … | `tests/profil/landesprofil.test.ts` |
+
+## Grunddesign 1.2: Ergänzungen nach dem Abgleich mit KRITIS-LEAD (0.7.6, Entscheidungen des Herausgebers vom 03.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Chips und Segmente zeigen den Fokus als 3 px Ring in „fokus“ mit zweitem Ring in „fokus-abstand“; Chips bei grober Zeigereingabe mindestens 44 px | Grunddesign: rahmen.json › Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.6 | `tests/format/lead-design.test.ts` |
+| Fassung im Kopf von `design/README.md` gleich `rahmen.json` und im Änderungsverlauf eingetragen | Grunddesign: rahmen.json › Fassung in Beschreibung und rahmen.json gleich, mit Eintrag im Änderungsverlauf | `tests/format/lead-design.test.ts` |
+
+## Lernschleife KW 45 (Nachtrag vom 04.11.2026 zu 0.7.6, Befunddatei `ki-lead-befund_lernschleife_2026-W45.json`, LS-2026-W45-01 bis -06, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Arbeitsanweisung Erfassung (Beispiel- und Landesprofil): Richtwert keine Obergrenze, gekürzt wird zuerst die Lagebeschreibung | Lernschleife KW 45 › LS-2026-W45-01: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+| Kurzantwortzeile „Nicht übernommen“ nennt gekürzte, zusammengefasste oder nicht zugeordnete Materialteile, bei Kennungen nur die Kennungen | Lernschleife KW 45 › LS-2026-W45-02: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+| Kodierleitfaden (Beispiel- und Landesprofil) Grundregel 6 und Prüfreihenfolge: gerundete amtliche Zählangaben an einer Stufengrenze als Mindestwert, Schätzungen nach der Bandbreitenregel | Lernschleife KW 45, Kodierleitfaden › LS-2026-W45-04: … | `tests/profil/lernschleife-w45.test.ts` (neu) |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.9.0). LS-2026-W45-03, -05 und -06 sind Text- und Zuordnungsregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und der abgeleiteten Landesdateien prüfen die bestehenden Tests.
+
+## Gesamtkonsistenz KW 45 (0.7.7, Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W45.json`, GK-2026-W45-01, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Platzhalter `NEU-n` nur im Zeitstrahl gehen an den n-ten Sachverhalt ohne Kennung, auch bei mehreren Zeilen desselben Platzhalters; Hinweis `KENNUNG_PLATZHALTER_ZUGEORDNET` nennt jede Zeile | ZS-2026-W44-02: Kennungen vergibt nur die App › GK-2026-W45-01: Platzhalter nur im Zeitstrahl … | `tests/pipeline/zeitstrahl.test.ts` |
+| Platzhalter ohne passenden Sachverhalt bleibt stehen, Hinweis `KENNUNG_PLATZHALTER_OFFEN` | ZS-2026-W44-02: … › GK-2026-W45-01: ein Platzhalter ohne passenden Sachverhalt … | `tests/pipeline/zeitstrahl.test.ts` |
+
+## Betreibermeldungen ohne Bewertung (0.7.8, Befunddatei `ki-lead-befund_kritis_2026-W45.json`, KL-2026-W45-01, Freigabe des Herausgebers vom 04.11.2026, Variante A)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Meldung mit `absender.ebene` „Betreiber“ ist in jedem Status ohne `bewertung` gültig (Ajv und eigener Prüfer), ohne Fehler der Referenzprüfung | LEAD-Meldung-v2: Meldungen von Betreibern ohne Bewertung › KL-2026-W45-01: Betreibermeldung … ohne bewertung ist gültig | `tests/format/lead-meldung-v2.test.ts` |
+| Jede andere Ebene ohne `bewertung` ist ungültig, auch im Entwurf | … › KL-2026-W45-01: Absender der Ebene … ohne bewertung ist ungültig | `tests/format/lead-meldung-v2.test.ts` |
+| Ist `bewertung` bei einem Betreiber vorhanden, gelten die üblichen Regeln (leere Kernaussage ab „zur_freigabe“ ungültig) | … › KL-2026-W45-01: Betreibermeldung mit bewertung folgt den üblichen Regeln | `tests/format/lead-meldung-v2.test.ts` |
+| Die Schemata der mitgelieferten Profile verlangen die Bewertung unverändert | … › KL-2026-W45-01: Behördenschemata der mitgelieferten Profile … | `tests/format/lead-meldung-v2.test.ts` |
+| Lagebild, Kopiervorlage, Rohtabelle und PDF lesen eine Betreibermeldung ohne `bewertung` ohne Fehler und ohne rohe Werte | KL-2026-W45-01: Betreibermeldung ohne bewertung in Lagebild und Ausgabe | `tests/kern/v2-darstellung.test.ts` |
+
+## Schätzung nach dem Anbietervergleich (0.7.9, Befunddatei `ki-lead-befund_schaetzung_2026-W45.json`, AV-2026-W45-01 bis -03, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kenndaten der drei internen Erfassungsläufe vom 04.11.2026 liegen in den Spannen, S2 mit 25 % Reserve; Spannen nach der Regel von Hand nachgerechnet | Schätzung von Dauer und Kosten › AV-2026-W45-01 bis -03: Messwerte des Anbietervergleichs … | `tests/pipeline/schaetzung.test.ts` |
+| Einzelmessungen (gpt-6-astra „hoch“, Mistral Medium 3.5 „hoch“) tragen den Zusatz „vorläufig, ein Messlauf“, Mistral mit EU-Aufschlag; jede Erfassung eines Cloud-Standard-Profils hat eine Spanne mit Dauer | … › AV-2026-W45-01 bis -03: … Einzelmessungen vorläufig | `tests/pipeline/schaetzung.test.ts` |
+| Nicht gemessene Stufe eines gemessenen Modells wird aus demselben Modell hochgerechnet, nicht aus einem fremden Modell gleicher Stufe | … › rechnet nicht gemessene Modelle über den Preis hoch, ohne Dauer | `tests/pipeline/schaetzung.test.ts` |
+| Laufschätzung zeigt Opus „mittel“ mit 3–14 Minuten und 1,40–3,35 USD und nennt viele Sachverhalte als Grund für längere Läufe | … › zeigt die Schätzung je Stufe nach Modell und Aufwand an | `tests/pipeline/schaetzung.test.ts` |
+
+## Anbietervergleich: t0, Radarkennzahlen, Kodierleitfaden 1.10.0 (0.7.10, Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json`, AV-2026-W45-04 bis -08, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Stichtag in der Zukunft: t0 bleibt leer, Hinweis nennt den Vorschlag aus S1 und die Sperre von S2 | Fortschreibung auf den heutigen Stand › AV-2026-W45-07: Stichtag in der Zukunft … | `tests/pipeline/fortschreibung.test.ts` |
+| Bestätigung mit leerem t0: Datum und Uhrzeit leer, S2 gesperrt mit Begründung, nach Eingabe von t0 frei | Fortschreibung in der KI-Erfassung › AV-2026-W45-07: … sperrt S2, bis t0 angegeben ist | `tests/ui/fortschreibung.test.ts` |
+| Prüfmuster: D3 ohne „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“ und D5 ohne Zielzustand werden gemeldet, offene Achsen und D5 = 0 mit Zielzustand nicht | AV-2026-W45-08: Prüfmuster der Radarbegründung › … | `tests/forschung/plausibilitaet.test.ts` |
+| Anteil offener Achsen über alle Sachverhalte und Treffer mit Wortlaut, von Hand gezählt; ohne Meldung null; Spalten `radar_offen` und `radar_pruefmuster` in der Übersicht | AV-2026-W45-08: Radarkennzahlen je Lauf › … | `tests/forschung/fallreihe.test.ts` |
+| Lauf der Fallreihe trägt `radar_offen` gleich der Zählung aus dem Entwurf und `radar_pruefmuster` gleich der Zahl der Hinweise | Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66) › … | `tests/forschung/fallreihe.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.10.0). AV-2026-W45-04 bis -06 sind Kodierregeln ohne maschinell prüfbares Soll; Gleichstand der Lesefassung und des abgeleiteten Landesprofils prüfen die bestehenden Profiltests.
+
+## Oberfläche von Profilen und Auswertung (0.7.11, Befunddatei `ki-lead-befund_ux_2026-W45.json`, UX-2026-W45-01 bis -32, Freigabe des Herausgebers vom 04.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| `#/auswertung/…` und `#/lagebild/…` ergeben dieselbe Adresse, geschrieben wird `#/auswertung/…` | UX-2026-W45-05: Adresse der Auswertung › … | `tests/ui/ux-2026-w45.test.ts` |
+| Sammelerinnerung nur an echte Adressen offener Stellen, in Bcc; Alter in Worten | UX-2026-W45-07: Meldestatus › … | `tests/ui/ux-2026-w45.test.ts` |
+| Ablage einzeilig, Ausgaben im Menü, „Alle entfernen“ in der Dateiliste, Reiter geordnet mit Trennern | UX-2026-W45-01 bis -03: … | `tests/ui/ux-2026-w45.test.ts` |
+| Kennzahlen in zwei Gruppen als Knöpfe, volle Skala, eigene Meldung gekennzeichnet und abwählbar | UX-2026-W45-06, -08, -09: Übersicht › … | `tests/ui/ux-2026-w45.test.ts` |
+| Eigene Meldung zuerst, Sortierung, Schemamarke nur bei Abweichung, Dateiname nicht im Kopf | UX-2026-W45-10 bis -12: Meldungen › … | `tests/ui/ux-2026-w45.test.ts` |
+| Filter nach Art, Land und Text; Chips mit Anzahl | UX-2026-W45-14: Filter der Sachverhalte › … | `tests/ui/ux-2026-w45.test.ts` |
+| Bezug sichtbar, Baum mit sieben Ländersachverhalten unter DE-20261014-7QKD | UX-2026-W45-15: … | `tests/ui/ux-2026-w45.test.ts` |
+| Matrix 8 × 8 mit „U“ für offen, Zeile öffnet Karte, Umschalter auf Karten | UX-2026-W45-16: … | `tests/ui/ux-2026-w45.test.ts` |
+| Offene Achse: keine Fläche, keine Kante dorthin, Ring am Rand | UX-2026-W45-17: … | `tests/ui/ux-2026-w45.test.ts` |
+| Überlagerung bis drei Sachverhalte mit Legende | UX-2026-W45-18: … | `tests/ui/ux-2026-w45.test.ts` |
+| Bearbeitungsstand senkt die Zahl, wird gespeichert, steht im Bericht und fällt bei geänderter Meldung weg | UX-2026-W45-19: … | `tests/ui/redaktionscheck.test.ts` |
+| Filter nach Einstufung, Bearbeitete ausblenden, Textbaustein zugeklappt | UX-2026-W45-21: … | `tests/ui/redaktionscheck.test.ts` |
+| Vom Befund zum Sachverhalt (gefiltert, aufgeklappt) und in die Erfassung | UX-2026-W45-22: … | `tests/ui/redaktionscheck.test.ts` |
+| Kopiervorlage eingeklappt, Auswahl kopieren, Kopf gegliedert | UX-2026-W45-23, -24: … | `tests/ui/ux-2026-w45.test.ts` |
+| Rohtabelle: Kernspalten vorn, Zeile aufklappbar; Spaltengruppen kompakt, zuschaltbar, gespeichert | UX-2026-W45-25, -26: … | `tests/ui/ux-2026-w45.test.ts` |
+| Profilkarten einheitlich zugeklappt, Eckdaten, „Verwenden“ ohne Sprung, Chip nur bei Befund, Namenszusatz, Farbband, technische Angaben, „Exportieren“ | UX-2026-W45-27 bis -32: … | `tests/ui/profile.test.ts` |
+| Reiter bei 390 px nach dem Laden im ersten Bildschirm, einzeilig und waagerecht scrollbar; mitlaufend unter dem Kopf | UX-2026-W45-01, -03: Smartphone › … ; UX-2026-W45-03: … | `tests/browser/ux-2026-w45.spec.ts` |
+| Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px | UX-2026-W45-23, -25: … | `tests/browser/ux-2026-w45.spec.ts` |
+
+## KRITIS-LEAD: Module, Kennungen der Betreiber, Zugang „betriebsintern“ (0.7.12, Befunddatei `ki-lead-befund_kritis_2026-W45-b.json`, KL-2026-W45-02, -05, -06, Freigabe des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kopien der Module unverändert (Prüfsumme wie herkunft.json), Fassung 0.3, voller Commit und Quellpfad in KRITIS-LEAD | KL-2026-W45-02: eingebettete Module von KRITIS-LEAD › Kopien unverändert … | `tests/format/kritis-module.test.ts` |
+| Module gültig nach Draft 2020-12, nur interne Verweise | KL-2026-W45-02: … › Module sind gültige Schemata … | `tests/format/kritis-module.test.ts` |
+| Kern mit beiden Modulen zusammengestellt: für den eigenen Prüfer verwendbar | KL-2026-W45-02: … › Zusammenstellung mit dem Kern … | `tests/format/kritis-module.test.ts` |
+| Betreibermeldung gültig; falsche Modulfassung, fehlender Sektor und Echtdaten ungültig (eigener Prüfer gleich Ajv) | KL-2026-W45-02: … › Betreibermeldung gültig … | `tests/format/kritis-module.test.ts` |
+| `betriebsintern` zulässig in Kern und zusammengestellten Schemata, unbekannter Wert ungültig | KL-2026-W45-06: Zugang „betriebsintern“ › zulässiger Wert … | `tests/kern/v2-darstellung.test.ts` |
+| Quellenzeile mit „(betriebsintern)“, das Werkzeug liest dieselben Felder zurück | KL-2026-W45-06: … › Quellenzeile mit Vermerk … | `tests/kern/v2-darstellung.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.11.0). KL-2026-W45-05 ist eine Kodierregel ohne maschinell prüfbares Soll; die Fassungen prüft `tests/profil/fassungen.test.ts`.
+
+## Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe (0.7.13, Entscheidung des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Standard-Profil, Vorgabe der App und Vorgabeaufwand führen S1 mit Sonnet „mittel“; das bis 0.7.12 gültige Profil ist unabhängig festgehalten | Fassung 7 → 8 (0.7.13): S1 Anthropic mit Sonnet „mittel“ › das heutige Standard-Profil und die Vorgaben der App führen S1 mit Sonnet „mittel“ | `tests/pipeline/einstellungen.test.ts` |
+| Gespeicherte Einstellungen genau nach dem bisherigen Standard-Profil Anthropic folgen danach dem heutigen | … › wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen | `tests/pipeline/einstellungen.test.ts` |
+| Ohne eigenes S1-Modell wird der bisherige Vorgabeaufwand „hoch“ zu „mittel“; andere Aufgaben bleiben | … › Vorgaben des Profils mit dem bisherigen Vorgabeaufwand „hoch“ erhalten „mittel“; Modellfelder bleiben leer | `tests/pipeline/einstellungen.test.ts` |
+| Eigenes S1-Modell, anderer S1-Aufwand, Abweichung in einer anderen Aufgabe und Fassung 8 bleiben unverändert | … › eine abweichende Wahl bleibt: … | `tests/pipeline/einstellungen.test.ts` |
+| Kenndaten der Folgereihe vom 05.11.2026 liegen in den Spannen; S1 Sonnet „mittel“ und „hoch“ sowie Erfassung Opus „hoch“ nach der Regel von Hand nachgerechnet, Sonnet „hoch“ und Opus „hoch“ als vorläufig gekennzeichnet | Schätzung von Dauer und Kosten › Folgereihe 05.11.2026: … | `tests/pipeline/schaetzung.test.ts` |
+| Vergleichsauswertung: heutiges Standard-Profil Anthropic vor dem bis 0.7.12 gültigen als Bezug, anderes S1 ohne Bezug | Auswertung der Vergleichsläufe › seit 0.7.13: das heutige Standard-Profil … | `tests/forschung/vergleichsauswertung.test.ts` |
+| Orientierungssuche mit dem S1-Modell der Vorgaben (Sonnet) ohne erzwungene Suche, Aufwand „niedrig“ | KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1 › kein erzwungener Modellwechsel: … | `tests/pipeline/recherche-pflicht.test.ts` |

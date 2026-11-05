@@ -51,6 +51,48 @@ describe("TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet", () =>
   });
 });
 
+describe("Kreise nach dem Verzeichnis des Thüringer Landesamts für Statistik (Auftrag des Herausgebers vom 03.11.2026)", () => {
+  // Soll: Kreisschlüssel und Name aus dem CSV-Export der Verwaltungsstruktur (Kreisdatei, Spalten F1 und F2),
+  // Gemeindestruktur Stand 01.01.2026, abgerufen am 02.11.2026; kreisfrei sind die Schlüssel 16051 bis 16055
+  const TLS: [string, string][] = [
+    ["16051", "Stadt Erfurt"],
+    ["16052", "Stadt Gera"],
+    ["16053", "Stadt Jena"],
+    ["16054", "Stadt Suhl"],
+    ["16055", "Stadt Weimar"],
+    ["16061", "Eichsfeld"],
+    ["16062", "Nordhausen"],
+    ["16063", "Wartburgkreis"],
+    ["16064", "Unstrut-Hainich-Kreis"],
+    ["16065", "Kyffhäuserkreis"],
+    ["16066", "Schmalkalden-Meiningen"],
+    ["16067", "Gotha"],
+    ["16068", "Sömmerda"],
+    ["16069", "Hildburghausen"],
+    ["16070", "Ilm-Kreis"],
+    ["16071", "Weimarer Land"],
+    ["16072", "Sonneberg"],
+    ["16073", "Saalfeld-Rudolstadt"],
+    ["16074", "Saale-Holzland-Kreis"],
+    ["16075", "Saale-Orla-Kreis"],
+    ["16076", "Greiz"],
+    ["16077", "Altenburger Land"],
+  ];
+
+  it("Schlüssel und Namen der 22 Gebietskörperschaften wie im Export; Landkreise mit „Landkreis“, sofern der Name nicht auf „kreis“ endet", () => {
+    const soll = TLS.map(([ags, n]) => [ags, n.startsWith("Stadt ") || /kreis$/i.test(n) ? n : `Landkreis ${n}`]);
+    expect(KREISE.map((k) => [k.ags, k.name]).sort()).toEqual(soll.sort());
+    expect(LAND.ags).toBe("16");
+  });
+
+  it("Quelle mit Stand und Abruf im Kopf der Kreisliste und im README des Profils", () => {
+    const quelle =
+      /CSV-Export der Verwaltungsstruktur[\s\S]*statistik\.thueringen\.de\/datenbank\/verwaltungsstruktur\.asp[\s\S]*Stand 01\.01\.2026, abgerufen[\s\S]*am 02\.11\.2026/;
+    expect(readFileSync(repoPfad("scripts/landesprofil.mjs"), "utf-8")).toMatch(quelle);
+    expect(readFileSync(repoPfad("profile/lead-thueringen/README.md"), "utf-8")).toMatch(quelle);
+  });
+});
+
 describe("TP-2026-W44-55: SOP-Sammelmappe mit dem Beispielprofil geteilt", () => {
   it("dieselben SOP-Texte wie im Beispielprofil, ohne Kopie im Ordner des Landesprofils", async () => {
     const land = (await profil("lead-thueringen")).profil!;
@@ -144,5 +186,164 @@ describe("TP-2026-W44-56: Beispiellage Hochwasser an der Saale (FIKTIV)", () => 
     expect(e.meldung!.kreis).toBe("Thüringen");
     expect(eingangsquellenPruefen(eingaenge, e.meldung!, p).map((x) => x.status)).toEqual(Array(3).fill("nachgewiesen"));
     expect(dateiname(e.meldung!, p, false)).toMatch(/^.*Thüringen_Lagezentrum/);
+  });
+});
+
+const ILKA = "beispiele/orkantief-ilka";
+const THESSA = "beispiele/orkantief-ilka-thessa/";
+const thessaBausteine = (p: { dateien: Record<string, string | undefined> }) =>
+  Object.keys(p.dateien)
+    .filter((d) => d.startsWith(THESSA) && d.endsWith(".json"))
+    .sort()
+    .map((d) => ({ name: d.slice(THESSA.length), text: p.dateien[d] ?? "", daten: JSON.parse(p.dateien[d] ?? "{}") }));
+/** Kennzahl eines Thessa-Bausteins nach Gegenstand (die Kennungen nach K5 hängen vom Gebiet ab) */
+const kennzahl = (b: any, anfang: string) => b.kennzahlen.find((k: any) => k.gegenstand.startsWith(anfang))!.wert as number;
+
+describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der Feuerwehren (FIKTIV)", () => {
+  it("vier schemakonforme Meldungen; Lagebild ohne Lesefehler, Meldestatus je Kreis, Kennungen ohne Befund, FIKTIV", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    expect(p.manifest.beispiele!.map((b) => b.ordner)).toEqual([ORDNER, ILKA]);
+    const dateien = beispielDateien(p, ILKA);
+    expect(dateien).toHaveLength(4);
+    for (const d of dateien) expect(pruefeRoh(p.schema as object, JSON.parse(d.text)), d.name).toEqual([]);
+    const { eintraege, fehler } = einlesen(dateien, p);
+    expect(fehler).toEqual([]);
+    expect(eintraege.every((e) => e.schema.length === 0 && !e.fremd)).toBe(true);
+    const status = meldestatus(eintraege, p)!;
+    expect(status.zeilen.filter((z) => z.eintraege.length).map((z) => z.name)).toEqual(["Ilm-Kreis", "Landkreis Hildburghausen", "Landkreis Sonneberg"]);
+    expect(status.weitere.map((e) => e.name)).toEqual([expect.stringContaining("_TH_Lagezentrum_")]);
+    const r = redaktionscheck(eintraege, p, "2026-10-21", new Date("2026-10-14T10:30:00+02:00"));
+    expect(r.kennungen).toEqual([]);
+    for (const d of dateien) expect(d.text).toContain("FIKTIV");
+  });
+
+  it("Landesmeldung: Kennungen und Kernzahlen der Thüringer Meldung im Beispielprofil, Bezug auf alle Kreis-Sachverhalte", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const alle = beispielDateien(p, ILKA).map((d) => ({ name: d.name, m: JSON.parse(d.text) }));
+    const land = alle.find((d) => d.name.includes("_TH_"))!.m;
+    const kreise = alle.filter((d) => !d.name.includes("_TH_")).map((d) => d.m);
+    const bund = JSON.parse(
+      readFileSync(repoPfad("profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json"), "utf-8"),
+    );
+    expect(land.sachverhalte.map((s: any) => s.kennung)).toEqual(bund.sachverhalte.map((s: any) => s.kennung));
+    expect(land.meldezeitpunkt).toBe(bund.meldezeitpunkt);
+    const strom = JSON.stringify(land.sachverhalte[1]);
+    for (const zahl of ["9.800", "146 Bewohnerinnen und Bewohner", "vier Gemeinden", "16.10."]) expect(strom).toContain(zahl);
+    const kreisKennungen = kreise.flatMap((m: any) => m.sachverhalte.map((s: any) => s.kennung));
+    expect(land.sachverhalte.flatMap((s: any) => s.bezug).sort()).toEqual([...kreisKennungen].sort());
+    expect(kreise.every((m: any) => m.meldezeitpunkt === "2026-10-14T10:00")).toBe(true);
+    // Abweichende Bewertung von Kreis und Land wie in der Thüringer Meldung
+    const son = kreise.find((m: any) => m.kreis === "Landkreis Sonneberg")!;
+    expect(son.sachverhalte[0].sofort.beurteilung).toBe("kritisch");
+    expect(land.sachverhalte[1].sofort.beurteilung).toBe("erheblich");
+    expect(land.sachverhalte[1].sofort.bewertung_text).toMatch(/Abweichende Bewertung: Landkreis Sonneberg „kritisch“/);
+  });
+
+  it("Kräftelage: Zahlen und Datenstand wie in den Thessa-Bausteinen, Landeszahl als Ausschnitt gekennzeichnet", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const meldungen = beispielDateien(p, ILKA).map((d) => ({ name: d.name, text: d.text, m: JSON.parse(d.text) }));
+    const bausteine = thessaBausteine(p);
+    const paare: [string, string][] = [
+      ["Ilm-Kreis", "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json"],
+      ["Landkreis Hildburghausen", "kennzahlen_Landkreis-Hildburghausen_2026-10-14T10-00_FIKTIV.json"],
+      ["Landkreis Sonneberg", "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-00_FIKTIV.json"],
+      ["Thüringen", "kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json"],
+    ];
+    for (const [kreis, datei] of paare) {
+      const b = bausteine.find((x) => x.name === datei)!.daten;
+      const m = meldungen.find((x) => x.m.kreis === kreis)!;
+      const gesamt = kennzahl(b, "Einsatzmittel der Feuerwehren");
+      const frei = kennzahl(b, "frei verfügbar für überörtliche Hilfe");
+      expect(m.text, `${kreis}: gesamt`).toContain(`${gesamt} Einsatzmitteln`);
+      expect(m.text, `${kreis}: frei`).toMatch(new RegExp(`\\b${frei} frei`));
+      // Quelle mit dem Titel und Datenstand des Bausteins
+      const titel = b.quellen[0].titel.replace(" (FIKTIV)", "");
+      const [tag, zeit] = [b.datenstand.slice(0, 10).split("-").reverse().join("."), b.datenstand.slice(11, 16)];
+      expect(m.m.quellen, kreis).toMatch(new RegExp(`${titel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}.*Datenstand: ${tag}, ${zeit}`));
+    }
+    const land = meldungen.find((x) => x.m.kreis === "Thüringen")!;
+    const tb = bausteine.find((x) => x.name.startsWith("kennzahlen_Thueringen"))!.daten;
+    expect(land.text).toContain(`${kennzahl(tb, "im Einsatz gebunden")} von ${kennzahl(tb, "Einsatzmittel der Feuerwehren")} Einsatzmitteln`);
+    expect(land.text).toMatch(/Ausschnitt von fünf Kreisen – kein landesweiter Wert/);
+  });
+
+  it("verdichtet die drei Kreismeldungen (Attrappe): als Eingang erkannt, t0 aus dem jüngsten Eingang, Ergebnis schemakonform und belegt", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const alle = beispielDateien(p, ILKA);
+    const kreise = alle.filter((d) => !d.name.includes("_TH_"));
+    const land = JSON.parse(alle.find((d) => d.name.includes("_TH_"))!.text);
+    const eingaenge: Material[] = [];
+    for (const d of kreise) eingaenge.push(await dateiLesen(new File([d.text], d.name), p));
+    expect(eingaenge.every((m) => m.eingang)).toBe(true);
+    const vorschlag = {
+      gegenstand: "Orkantief Ilka",
+      stichtag: "2026-10-14",
+      meldezeitpunkt: "",
+      referenzbezug: "Land Thüringen",
+      horizont: "bis 16.10.2026",
+      sachverhalte: [
+        {
+          titel: "Sturmschäden im Thüringer Wald",
+          ereignisarten: ["Unwetter / Sturm"],
+          sops: ["b01"],
+          begruendung: "drei Kreise",
+          eingangsmeldungen: eingaenge.map((m) => m.name),
+        },
+        {
+          titel: "Stromausfall im Landkreis Sonneberg",
+          ereignisarten: ["Stromausfall / Blackout"],
+          sops: ["b08"],
+          begruendung: "Sonneberg",
+          eingangsmeldungen: [eingaenge.find((m) => m.name.includes("_SON_"))!.name],
+        },
+      ],
+      prueffrage: "",
+      hinweise: "",
+    };
+    const att = skriptAnbieter([llmAntwort(JSON.stringify(vorschlag)), llmAntwort("Kurz.\n```json\n" + JSON.stringify(land) + "\n```")]);
+    const { k } = await pipelineKontext(att, eingaenge, {
+      profilName: "lead-thueringen",
+      jetzt: "2026-10-14T10:20:00+02:00",
+      auftrag: { stichtag: "2026-10-14" },
+    });
+    k.lauf.auftrag.websuche = false;
+    const v = await stufe1(k);
+    expect(att.anfragen[0].system[0].text).toContain("Verdichtung von Eingangsmeldungen");
+    expect((att.anfragen[0].jsonSchema as any).properties.sachverhalte.items.properties.eingangsmeldungen.items.enum).toHaveLength(3);
+    expect(v.meldezeitpunkt).toBe("2026-10-14T10:00");
+    const e = await stufe2und3(k, v);
+    expect(k.lauf.ergebnis!.schemakonform).toBe(true);
+    expect(e.meldung!.kreis).toBe("Thüringen");
+    expect(eingangsquellenPruefen(eingaenge, e.meldung!, p).map((x) => x.status)).toEqual(Array(3).fill("nachgewiesen"));
+  });
+});
+
+describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
+  it("fünf Bausteine der Fassung 0.3, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
+    const p = (await profil("lead-thueringen")).profil!;
+    const bausteine = thessaBausteine(p);
+    expect(bausteine.map((b) => b.name)).toEqual([
+      "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Hildburghausen_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-00_FIKTIV.json",
+      "kennzahlen_Landkreis-Sonneberg_2026-10-14T10-30_FIKTIV.json",
+      "kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json",
+    ]);
+    for (const b of bausteine) {
+      expect(b.daten).toMatchObject({ format: "Thessa-Kennzahlen", fassung: "0.3", fiktiv: true });
+      const m = await dateiLesen(new File([b.text], b.name), p);
+      expect(m.eingang, b.name).toBeUndefined();
+      expect(m.meldung, b.name).toBeUndefined();
+      expect(m.hinweis ?? "", b.name).not.toMatch(/gekürzt/);
+      // seit 0.6.24 (UP-2026-W45-01) eigene Materialart; an die KI ohne herleitung
+      expect(m.art, b.name).toBe("kennzahlen-baustein");
+      const { herleitung: _h, ...ohneHerleitung } = b.daten;
+      expect(JSON.parse(m.text!), b.name).toEqual(ohneHerleitung);
+      // Einsatzmeldungen ohne Ortslage und Hinweise
+      for (const em of b.daten.einsatzmeldungen) expect(Object.keys(em)).not.toEqual(expect.arrayContaining(["ortslage"]));
+      expect(b.text).not.toMatch(/"(ortslage|hinweis)"/);
+    }
+    expect(beispielDateien(p, ILKA).some((d) => d.name.includes("kennzahlen_"))).toBe(false);
+    expect(p.manifest.beispiele!.some((b) => b.ordner.includes("thessa"))).toBe(false);
   });
 });

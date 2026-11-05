@@ -1,8 +1,9 @@
 // Profilverwaltung: eingebaute und importierte Profilpakete, Prüfbericht, Aktivieren, Export.
 // Die Profilansicht ist eine reine Leseansicht: Öffnen, Suchen und Lesen verändern weder das aktive Profil noch eine
-// Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden und Meldung öffnen“.
+// Meldung oder einen Nachweis. Aktiviert wird ausschließlich über „Verwenden“ (bis UX-2026-W45-29 „Verwenden und
+// Meldung öffnen“ mit Sprung zur Erfassung).
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Befund, Profil, ProfilEintrag, Sop } from "../kern/typen";
 import { gemeinsameSops, sopGruppen } from "../pipeline/kontext";
 import {
@@ -28,6 +29,9 @@ const Lesetext = LesetextTeil.Komponente;
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
+import { Menue } from "./Menue";
+import { useKopfHoehe } from "./kopfHoehe";
+import { aufloesen as themaAufloesen, bandVerlauf, PROFIL } from "../darstellung/thema";
 
 export interface ImportErgebnis {
   ok: boolean;
@@ -42,7 +46,10 @@ export interface ImportErgebnis {
 interface Props {
   profile: ProfilEintrag[];
   aktiv?: string;
-  aktivieren: (schluessel: string) => void;
+  /** Wechselt das Profil; false, wenn der Wechsel abgelehnt wurde (seit UX-2026-W45-29 ohne Sprung zur Erfassung) */
+  aktivieren: (schluessel: string) => void | boolean | Promise<void | boolean>;
+  /** Öffnet die Erfassung (Hinweis nach einem Wechsel, seit UX-2026-W45-29) */
+  zurErfassung?: () => void;
   importieren: (dateien: Record<string, string>, ersetzen?: boolean) => Promise<ImportErgebnis>;
   loeschen: (schluessel: string) => void;
 }
@@ -364,88 +371,6 @@ function Befunde({ befunde }: { befunde: Befund[] }) {
   );
 }
 
-interface MenueEintrag {
-  text: string;
-  aktion: () => void;
-}
-
-/**
- * Aufklappmenü nach dem Disclosure-Muster: ein Knopf mit aria-expanded, darunter eine Liste gewöhnlicher Knöpfe.
- * Schließt nach der Auswahl, mit Escape (Fokus zurück auf den Knopf), beim Klick außerhalb und wenn der Fokus das Menü verlässt.
- */
-function Menue({ text, label, klasse, eintraege }: { text: string; label?: string; klasse: string; eintraege: MenueEintrag[] }) {
-  const [offen, setOffen] = useState(false);
-  const listId = useId();
-  const wurzel = useRef<HTMLDivElement>(null);
-  const knopfRef = useRef<HTMLButtonElement>(null);
-  /** Liste am linken Rand des Knopfs ausrichten, wenn sie rechtsbündig links aus dem Bild liefe (schmale Bildschirme) */
-  const [links, setLinks] = useState(false);
-  useLayoutEffect(() => {
-    if (!offen) return setLinks(false);
-    const k = knopfRef.current?.getBoundingClientRect();
-    const liste = wurzel.current?.querySelector(".menue-liste")?.getBoundingClientRect();
-    if (k && liste) setLinks(k.right - liste.width < 8);
-  }, [offen]);
-  useEffect(() => {
-    if (!offen) return;
-    const aussen = (e: PointerEvent) => {
-      if (!wurzel.current?.contains(e.target as Node)) setOffen(false);
-    };
-    document.addEventListener("pointerdown", aussen);
-    return () => document.removeEventListener("pointerdown", aussen);
-  }, [offen]);
-  return (
-    <div
-      className="menue"
-      ref={wurzel}
-      onKeyDown={(e) => {
-        if (e.key !== "Escape" || !offen) return;
-        e.stopPropagation();
-        setOffen(false);
-        knopfRef.current?.focus();
-      }}
-      onBlur={(e) => {
-        // Nur bei einem Fokuswechsel auf ein anderes Element; Safari fokussiert angeklickte Knöpfe nicht (relatedTarget leer)
-        const ziel = e.relatedTarget as Node | null;
-        if (ziel && !wurzel.current?.contains(ziel)) setOffen(false);
-      }}
-    >
-      <button
-        ref={knopfRef}
-        type="button"
-        className={klasse}
-        aria-expanded={offen}
-        aria-controls={offen ? listId : undefined}
-        aria-label={label}
-        onClick={() => setOffen((o) => !o)}
-      >
-        {text}
-        <span className="menue-pfeil" aria-hidden="true">
-          ▾
-        </span>
-      </button>
-      {offen && (
-        <ul id={listId} className={links ? "menue-liste menue-links" : "menue-liste"}>
-          {eintraege.map((m) => (
-            <li key={m.text}>
-              <button
-                type="button"
-                className="menue-eintrag"
-                onClick={() => {
-                  setOffen(false);
-                  m.aktion();
-                }}
-              >
-                {m.text}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
 /** Scrollt zu einem Abschnitt der Karte und setzt den Fokus auf seine Überschrift (Sprungleiste). */
 function abschnittZeigen(id: string) {
   const el = document.getElementById(id);
@@ -454,10 +379,11 @@ function abschnittZeigen(id: string) {
   el.focus({ preventScroll: true });
 }
 
-/** Befundstatus am Kartentitel; führt zum Prüfbericht. Ohne Fehler und Warnungen „Geprüft“. */
+/** Befundstatus am Kartentitel; führt zum Prüfbericht. Seit UX-2026-W45-30 nur bei Fehlern oder Warnungen (bis dahin „✓ Geprüft“). */
 function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
   const zahl = befundZahl(befunde);
   const stufe = befunde.some((b) => b.stufe === "fehler") ? "fehler" : befunde.some((b) => b.stufe === "warnung") ? "warnung" : "ok";
+  if (stufe === "ok") return null;
   return (
     <a
       className={`befund-chip befund-chip-${stufe}`}
@@ -467,7 +393,7 @@ function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
         bereichOeffnen(ziel);
       }}
     >
-      {stufe === "ok" ? "✓ Geprüft" : zahl}
+      {zahl}
     </a>
   );
 }
@@ -480,12 +406,11 @@ function befundZahl(befunde: Befund[]): string {
 }
 
 /**
- * Inhalt einer Profilkarte: beim verwendeten Profil offen, bei den übrigen hinter „Angaben, Lesetexte und Prüfung“,
- * damit die Liste auch mit mehreren importierten Profilen überschaubar bleibt. Sprünge (Befunde, Verweise in Lesetexten)
- * öffnen das umgebende Element über bereichOeffnen().
+ * Inhalt einer Profilkarte hinter „Angaben, Lesetexte und Prüfung“, bei allen Karten gleich und zugeklappt (seit
+ * UX-2026-W45-27; bis dahin beim verwendeten Profil offen). Das verwendete Profil ist nur hervorgehoben. Sprünge
+ * (Befunde, Verweise in Lesetexten) öffnen das umgebende Element über bereichOeffnen().
  */
-function KartenInhalt({ offen, children }: { offen: boolean; children: ReactNode }) {
-  if (offen) return <>{children}</>;
+function KartenInhalt({ children }: { children: ReactNode }) {
   return (
     <details className="profil-details">
       <summary>Angaben, Lesetexte und Prüfung</summary>
@@ -494,11 +419,50 @@ function KartenInhalt({ offen, children }: { offen: boolean; children: ReactNode
   );
 }
 
+/** Text mit Adressen als Verweis, etwa „Name (https://…)“ beim Herausgeber (seit UX-2026-W45-31) */
+function MitVerweis({ text }: { text: string }) {
+  const teile = text.split(/(https?:\/\/[^\s()]+)/);
+  return (
+    <>
+      {teile.map((t, i) =>
+        i % 2 ? (
+          <a key={i} href={t} target="_blank" rel="noopener noreferrer">
+            {t.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+          </a>
+        ) : (
+          t
+        ),
+      )}
+    </>
+  );
+}
+
+/** Name ohne Klammerzusatz am Ende und der Zusatz als Kennzeichen, z. B. „(Erprobungsentwurf)“ (seit UX-2026-W45-30) */
+export function nameUndZusatz(name: string): { name: string; zusatz?: string } {
+  const m = name.match(/^(.*\S)\s*\(([^()]+)\)\s*$/);
+  return m ? { name: m[1]!, zusatz: m[2]!.trim() } : { name };
+}
+
+/** Farbband des Profils, wenn es ein gültiges Farbschema mitbringt (seit UX-2026-W45-30); sonst nichts */
+function profilBand(farbschema: unknown): string | undefined {
+  if (farbschema === undefined || farbschema === null) return undefined;
+  const t = themaAufloesen(PROFIL, farbschema);
+  return t.quelle === "profil" && t.band.length ? bandVerlauf(t.band) : undefined;
+}
+
 function herkunft(p: ProfilEintrag): string {
   return p.quelle === "eingebaut" ? "Mitgeliefert" : `Importiert${p.importiertAm ? " am " + new Date(p.importiertAm).toLocaleDateString("de-DE") : ""}`;
 }
 
-export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loeschen }: Props) {
+export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loeschen, zurErfassung }: Props) {
+  // Nach dem Wechsel bleibt die Ansicht stehen; ein Hinweis bestätigt ihn und führt zur Erfassung (UX-2026-W45-29)
+  const [gewechselt, setGewechselt] = useState<string | null>(null);
+  const wechselHinweis = useRef<HTMLDivElement>(null);
+  const verwenden = async (schluessel: string) => {
+    if ((await aktivieren(schluessel)) === false) return;
+    setGewechselt(schluessel);
+    requestAnimationFrame(() => wechselHinweis.current?.focus());
+  };
   const zipRef = useRef<HTMLInputElement>(null);
   const ordnerRef = useRef<HTMLInputElement>(null);
   const [bericht, setBericht] = useState<ImportErgebnis | null>(null);
@@ -522,16 +486,8 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
     }
   };
 
-  // Höhe des Kopfs der App als --kopf-hoehe für die Sprungleiste; der Kopf bricht je nach Breite um
-  useEffect(() => {
-    const kopf = document.querySelector<HTMLElement>(".kopf");
-    if (!kopf || typeof ResizeObserver === "undefined") return;
-    const setzen = () => document.documentElement.style.setProperty("--kopf-hoehe", `${kopf.getBoundingClientRect().height}px`);
-    setzen();
-    const beobachter = new ResizeObserver(setzen);
-    beobachter.observe(kopf);
-    return () => beobachter.disconnect();
-  }, []);
+  // Höhe des Kopfs der App als --kopf-hoehe für die Sprungleiste (seit UX-2026-W45-03 gemeinsam mit der Auswertung)
+  useKopfHoehe();
 
   const importiertAktiv = bericht?.schluessel !== undefined && bericht.schluessel === aktiv;
   /** Das verwendete Profil zuerst, die übrigen in bisheriger Reihenfolge */
@@ -592,11 +548,30 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           <Befunde befunde={bericht.befunde} />
           <div className="aktionen">
             {bericht.ok && bericht.schluessel && !importiertAktiv && (
-              <button type="button" className="knopf primaer" onClick={() => aktivieren(bericht.schluessel!)}>
+              <button type="button" className="knopf primaer" onClick={() => void verwenden(bericht.schluessel!)}>
                 Jetzt verwenden
               </button>
             )}
             <button type="button" className="knopf leise klein" onClick={() => setBericht(null)}>
+              Ausblenden
+            </button>
+          </div>
+        </div>
+      )}
+
+      {gewechselt && gewechselt === aktiv && (
+        <div className="kasten kasten-ok profil-gewechselt" role="status" tabIndex={-1} ref={wechselHinweis}>
+          <p>
+            Profil „{profile.find((x) => x.schluessel === gewechselt)?.profil?.manifest.name || gewechselt}“ ist in Verwendung. Jedes Profil behält seinen
+            eigenen Meldungs-Zwischenstand.
+          </p>
+          <div className="aktionen">
+            {zurErfassung && (
+              <button type="button" className="knopf primaer" onClick={zurErfassung}>
+                Zur Erfassung
+              </button>
+            )}
+            <button type="button" className="knopf leise klein" onClick={() => setGewechselt(null)}>
               Ausblenden
             </button>
           </div>
@@ -610,52 +585,92 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
           const praefix = domId("profil", p.schluessel);
           const zahl = befundZahl(p.befunde);
           const dateien = Object.keys(p.dateien).sort();
+          const titel = nameUndZusatz(m?.name || p.schluessel);
+          const exportieren = async () => {
+            const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
+            dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+          };
+          const band = profilBand(m?.farbschema);
           return (
             <article key={p.schluessel} className={istAktiv ? "profil aktiv" : "profil"} aria-label={m?.name || p.schluessel}>
+              {band && <div className="profil-band" style={{ background: band }} aria-hidden="true" title="Farben des Profils" />}
               <header className="profil-kopf">
                 <div className="profil-titel">
-                  <h2>{m?.name || p.schluessel}</h2>
+                  <h2>{titel.name}</h2>
+                  {titel.zusatz && <span className="profil-zusatz">{titel.zusatz}</span>}
                   {istAktiv && <span className="aktiv-marke">✓ In Verwendung</span>}
                   {!p.profil && <span className="marke-fehler">nicht verwendbar</span>}
                   <BefundChip befunde={p.befunde} ziel={`${praefix}-bericht`} />
                 </div>
                 <div className="profil-kopf-aktionen">
                   {p.profil && !istAktiv && (
-                    <button type="button" className="knopf primaer" onClick={() => aktivieren(p.schluessel)}>
-                      Verwenden und Meldung öffnen
+                    <button
+                      type="button"
+                      className="knopf"
+                      aria-label={`Profil „${m?.name || p.schluessel}“ verwenden`}
+                      onClick={() => void verwenden(p.schluessel)}
+                    >
+                      Verwenden
                     </button>
                   )}
-                  <Menue
-                    text="Mehr"
-                    label={`Mehr zu Profil „${m?.name || p.schluessel}“`}
-                    klasse="knopf leise"
-                    eintraege={[
-                      {
-                        text: "Als Paket exportieren",
-                        aktion: async () => {
-                          const stempel = exportStempel(p.profil?.manifest.variablen?.zeitzone);
-                          dateiAnbieten(await alsZip(p.dateien, p.schluessel), mitDatum(stempel, p.schluessel, "leadprofil"), "application/zip");
+                  {/* Mit nur einem Eintrag ein direkter Knopf statt „Mehr“ (seit UX-2026-W45-32) */}
+                  {p.quelle === "importiert" ? (
+                    <Menue
+                      text="Mehr"
+                      label={`Mehr zu Profil „${m?.name || p.schluessel}“`}
+                      klasse="knopf leise"
+                      eintraege={[
+                        { text: "Als Paket exportieren", aktion: exportieren },
+                        {
+                          text: "Entfernen",
+                          aktion: async () => {
+                            if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
+                          },
                         },
-                      },
-                      ...(p.quelle === "importiert"
-                        ? [
-                            {
-                              text: "Entfernen",
-                              aktion: async () => {
-                                if (await bestaetigen(`Profil „${m?.name || p.schluessel}“ entfernen?`, { ja: "Entfernen" })) loeschen(p.schluessel);
-                              },
-                            },
-                          ]
-                        : []),
-                    ]}
-                  />
+                      ]}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="knopf leise"
+                      aria-label={`Profil „${m?.name || p.schluessel}“ als Paket exportieren`}
+                      onClick={() => void exportieren()}
+                    >
+                      Exportieren
+                    </button>
+                  )}
                 </div>
               </header>
               <p className="profil-meta">
                 {m ? `Profilversion ${m.version} · ` : ""}
                 {herkunft(p)}
               </p>
-              <KartenInhalt offen={istAktiv}>
+              {/* Eckdaten zum Vergleich auch bei zugeklappter Karte (seit UX-2026-W45-28) */}
+              {p.profil && m && (
+                <dl className="profil-eckdaten" aria-label={`Eckdaten von Profil „${m.name}“`}>
+                  <div>
+                    <dt>Ebene</dt>
+                    <dd>{m.ebene || "–"}</dd>
+                  </div>
+                  <div>
+                    <dt>Referenzraum</dt>
+                    <dd>{m.referenzraum || "–"}</dd>
+                  </div>
+                  <div>
+                    <dt>Schema</dt>
+                    <dd className="technisch">{m.meldung.schema_id}</dd>
+                  </div>
+                  <div>
+                    <dt>Lagenradar</dt>
+                    <dd>{p.profil.ui.rollen.sv_radar ? "ja" : "nein"}</dd>
+                  </div>
+                  <div>
+                    <dt>SOPs</dt>
+                    <dd>{sopAnzahl(p.profil).split(",")[0]}</dd>
+                  </div>
+                </dl>
+              )}
+              <KartenInhalt>
                 {p.profil && (
                   <nav className="profil-sprungleiste" aria-label={`Abschnitte von Profil „${m?.name || p.schluessel}“`}>
                     {[
@@ -699,7 +714,9 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                       {m?.herausgeber && (
                         <div className="profil-daten-breit">
                           <dt>Herausgeber</dt>
-                          <dd>{m.herausgeber}</dd>
+                          <dd>
+                            <MitVerweis text={m.herausgeber} />
+                          </dd>
                         </div>
                       )}
                     </dl>
@@ -720,38 +737,42 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                   <h3 id={`${praefix}-pruefen`} tabIndex={-1}>
                     Prüfen
                   </h3>
-                  {p.profil && (
-                    <>
-                      <dl className="profil-daten profil-technik">
-                        <div>
-                          <dt>Schema</dt>
-                          <dd className="technisch">{m?.meldung.schema_id}</dd>
-                        </div>
-                        {m?.lizenz && (
+                  {/* Technisches gebündelt und zugeklappt (seit UX-2026-W45-31); Sprünge zum Prüfbericht öffnen es */}
+                  <details className="profil-technik-details">
+                    <summary>Technische Angaben: Schema, Lizenz, Prüfsumme, Prüfbericht, Dateien</summary>
+                    {p.profil && (
+                      <>
+                        <dl className="profil-daten profil-technik">
                           <div>
-                            <dt>Lizenz</dt>
-                            <dd>{m.lizenz}</dd>
+                            <dt>Schema</dt>
+                            <dd className="technisch">{m?.meldung.schema_id}</dd>
                           </div>
-                        )}
-                        <div className="profil-daten-breit">
-                          <dt>Prüfsumme</dt>
-                          <Pruefsumme hash={p.profil.hash} />
-                        </div>
-                      </dl>
-                      <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
-                    </>
-                  )}
-                  <details id={`${praefix}-bericht`}>
-                    <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
-                    <Befunde befunde={p.befunde} />
-                  </details>
-                  <details>
-                    <summary>Dateien ({dateien.length})</summary>
-                    <ul className="dateiliste">
-                      {dateien.map((d) => (
-                        <li key={d}>{d}</li>
-                      ))}
-                    </ul>
+                          {m?.lizenz && (
+                            <div>
+                              <dt>Lizenz</dt>
+                              <dd>{m.lizenz}</dd>
+                            </div>
+                          )}
+                          <div className="profil-daten-breit">
+                            <dt>Prüfsumme</dt>
+                            <Pruefsumme hash={p.profil.hash} />
+                          </div>
+                        </dl>
+                        <p className="hinweis">Die Profilversion nennt den Stand des Pakets, die Prüfsumme seinen konkreten Inhalt.</p>
+                      </>
+                    )}
+                    <details id={`${praefix}-bericht`}>
+                      <summary>Prüfbericht{zahl ? ` (${zahl})` : ""}</summary>
+                      <Befunde befunde={p.befunde} />
+                    </details>
+                    <details>
+                      <summary>Dateien ({dateien.length})</summary>
+                      <ul className="dateiliste">
+                        {dateien.map((d) => (
+                          <li key={d}>{d}</li>
+                        ))}
+                      </ul>
+                    </details>
                   </details>
                 </section>
               </KartenInhalt>

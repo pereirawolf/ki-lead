@@ -1,0 +1,140 @@
+{
+  "$schema": "./rahmen.schema.json",
+  "format": "lead-design-rahmen/1",
+  "fassung": "1.3",
+  "stand": "2026-11-04",
+  "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
+  "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
+  "tokens": "lead-design.tokens.json",
+  "farbschemata": "lead-farbschemata.tokens.json",
+  "rahmen": [
+    { "id": "kopf", "element": "header", "mitlaufend": true, "inhalt": ["marke", "hauptnavigation", "status"], "regel": "LD-R02" },
+    { "id": "identitaetsband", "element": "Rand der Kopfleiste", "hoehe": "{mass.band}", "farben": ["{farbrolle.marke-akzent-1}", "{farbrolle.marke-akzent-2}", "{farbrolle.marke-akzent-3}"], "dekorativ": true, "regel": "LD-R03" },
+    { "id": "hinweisband", "element": "div", "rolle": "note", "regel": "LD-R04" },
+    { "id": "inhalt", "element": "main", "max_breite": "{mass.inhaltsbreite}", "inhalt": ["seitenkopf", "profilzeile", "statusmeldungen", "arbeitsbereich"], "regel": "LD-R06" },
+    { "id": "fuss", "element": "footer", "inhalt": ["kennung", "datenhinweis", "verweise"], "verweise": ["Lizenzen", "Impressum", "Datenschutz"], "regel": "LD-R05" }
+  ],
+  "hauptnavigation": {
+    "aria_label": "Bereiche",
+    "muster": ["<Arbeitsschritte der App in fachlicher Reihenfolge>", "Profile (wenn vorhanden)", "Einstellungen (wenn vorhanden)"],
+    "ki-lead": ["Erfassung", "KI-Erfassung", "Auswertung", "Profile", "Einstellungen"],
+    "adresse": "#/<ansicht>[/<bereich oder reiter>]",
+    "regeln": ["LD-N01", "LD-N02", "LD-N03", "LD-N04", "LD-N05"]
+  },
+  "seitenkopf": {
+    "elemente": [
+      { "id": "titel", "element": "h1", "inhalt": "Bereichsname" },
+      { "id": "kennsatz", "element": "p", "inhalt": "ein Satz: <Tätigkeit> nach <Methode>" },
+      { "id": "aktionen", "anordnung": "rechts, umbrechend" },
+      { "id": "profilzeile", "inhalt": "Profil: <Name> <Fassung> · Profile", "bedingung": "nur bei Apps mit Profilen" }
+    ],
+    "ki-lead": {
+      "Erfassung": "Erfassung einer Meldung nach LEAD-Systematik",
+      "KI-Erfassung": "Erfassung einer Meldung nach LEAD-Systematik mit KI-Unterstützung",
+      "Auswertung": "Auswertung von Meldungen mehrerer Stellen nach LEAD-Systematik"
+    },
+    "regeln": ["LD-A01", "LD-A02"]
+  },
+  "arbeitsbereich": {
+    "spalten": ["{mass.leistenbreite}", "1fr"],
+    "abstand": "{mass.spaltenabstand}",
+    "leiste": { "position": "links, mitlaufend", "bis_umbruch": "{umbruch.breit}", "danach": "waagerecht über dem Inhalt, scrollbar, Verlauf am Rand" },
+    "arbeitsflaeche": { "art": "Karte", "flaeche": "{farbrolle.flaeche}", "rand": "{farbrolle.linie}", "radius": "{radius.mittel}", "inhalt": ["h2 (Fokusziel)", "einleitung", "inhalte", "schrittnavigation"] },
+    "regeln": ["LD-A03", "LD-A04", "LD-A05"]
+  },
+  "leisten": [
+    {
+      "id": "schritte",
+      "aria_label": "Schritte",
+      "aria_current": "step",
+      "nummeriert": true,
+      "befundmarke": true,
+      "ki-lead": { "Erfassung": "Schritte aus der Darstellungsdatei des Profils", "KI-Erfassung": ["Auftrag und Material", "Gegenstand bestätigen", "Recherche und Entwurf", "Prüfung und Übergabe"] }
+    },
+    {
+      "id": "bereiche",
+      "aria_label": "Bereiche der Einstellungen",
+      "aria_current": "page",
+      "nummeriert": false,
+      "muster": ["Übersicht", "<Bereiche der App>", "Darstellung", "Daten", "Über <Produktname>"],
+      "ki-lead": ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"]
+    },
+    {
+      "id": "reiter",
+      "aria_label": "Ansichten",
+      "aria_current": "page",
+      "nummeriert": false,
+      "ki-lead": ["Übersicht", "Sachverhalte", "Lagenradar", "Meldungen", "Redaktionscheck", "Kopiervorlage", "Rohtabelle"]
+    }
+  ],
+  "komponenten": {
+    "knopf": { "varianten": { "primaer": "gefüllt in der Aktionsfarbe", "standard": "Umriss in der Aktionsfarbe", "leise": "ohne Umriss", "klein": "Zeilenaktionen" }, "mindesthoehe": "{mass.zielgroesse}", "regeln": ["LD-B01", "LD-B02", "LD-B03"] },
+    "rueckfrage": { "element": "dialog (modal)", "knoepfe": ["Abbrechen", "<Verb der Aktion>"], "erster_fokus": "Abbrechen", "escape": "Abbrechen", "regel": "LD-B04" },
+    "feld": { "reihenfolge": ["Beschriftung", "Hilfetext", "Eingabe", "Fehlertext", "Rückmeldungen", "Werkzeuge"], "hilfetext": "aria-describedby", "fehler": "aria-invalid", "regeln": ["LD-E01", "LD-E02"] },
+    "befund": { "stufen": ["Fehler", "Warnung", "Hinweis"], "sprung": "zum Feld im zugehörigen Schritt", "regel": "LD-E04" },
+    "kasten": {
+      "varianten": {
+        "info": { "rand": "{farbrolle.amt}", "flaeche": "{farbrolle.amt-zart}" },
+        "hinweis": { "rand": "{signal.gering}" },
+        "fehler": { "rand": "{signal.kritisch}", "flaeche": "{signal.kritisch-zart}", "rolle": "alert" },
+        "ok": { "rand": "{signal.ok}", "flaeche": "{signal.ok-zart}" }
+      },
+      "regel": "LD-M01"
+    },
+    "laufanzeige": { "inhalt": ["Uhr", "erwartete Dauer", "geschriebene Zeichen", "voraussichtliche Kosten"], "ansage": "eigene Statusregion, höchstens alle 5 s", "regel": "LD-M02" },
+    "status": { "ort": "Kopfleiste rechts", "zustaende": { "ki-lead": ["KI ruht", "KI aktiv"] }, "rolle": "img", "bedienbar": false, "bedingung": "nur bei Apps mit Anfragen", "regel": "LD-M03" }
+  },
+  "wireframes": [
+    { "datei": "wireframe-breit.svg", "ansicht": "Bereich mit Schrittfolge, breit (1280 px)", "abschnitt": "Aufbau einer Ansicht" },
+    { "datei": "wireframe-schmal.svg", "ansicht": "Bereich mit Schrittfolge, schmal (390 px)", "abschnitt": "Wireframe: schmal" }
+  ],
+  "regeln": [
+    { "id": "LD-R01", "stufe": "MUSS", "thema": "Rahmen", "text": "Die App besteht aus Kopfleiste, Identitätsband, Hinweisband, Inhalt und Fußzeile, in dieser Reihenfolge. Die Kopfleiste bleibt beim Scrollen oben stehen.", "referenz": ["src/App.tsx", "src/styles/basis.css"] },
+    { "id": "LD-R02", "stufe": "MUSS", "thema": "Rahmen", "text": "Die Kopfleiste zeigt links den Produktnamen (mit Zusatz, der bis zum Umbruch „breit“ entfällt), daneben die Hauptnavigation und rechts die Statusanzeige, wenn die App Anfragen stellt (LD-M03); eine App ohne Anfragen kann dort einen Anzeiger der Anmeldung oder Sicht führen. Das aktive Profil steht nicht in der Kopfleiste, sondern in der Profilzeile (LD-A01).", "referenz": ["src/App.tsx", "src/styles/basis.css"] },
+    { "id": "LD-R03", "stufe": "MUSS", "thema": "Rahmen", "text": "Unter der Kopfleiste liegt ein dekoratives Identitätsband von 8 px aus den Farbrollen marke-akzent-1 bis -3. Es trägt keine Information und entfällt bei erzwungenen Farben.", "referenz": ["src/styles.css", "src/styles/a11y.css"] },
+    { "id": "LD-R04", "stufe": "SOLL", "thema": "Rahmen", "text": "Ein Hinweisband unter dem Kopf nennt in einem Satz die Einsatzgrenzen der App (Rolle note), etwa nur fiktive oder offen zugängliche Inhalte.", "referenz": ["src/App.tsx"] },
+    { "id": "LD-R05", "stufe": "MUSS", "thema": "Rahmen", "text": "Die Fußzeile nennt Produktname mit Fassung, wohin Daten gehen, und verweist extern auf Lizenzen, Impressum und Datenschutz.", "referenz": ["src/App.tsx"] },
+    { "id": "LD-R06", "stufe": "MUSS", "thema": "Rahmen", "text": "Der Inhalt ist höchstens 1180 px breit und mittig. Abstände am Rand berücksichtigen die sicheren Bereiche des Geräts (env(safe-area-inset-*)).", "referenz": ["src/styles/basis.css"] },
+    { "id": "LD-N01", "stufe": "MUSS", "thema": "Navigation", "text": "Die Hauptnavigation nennt die Arbeitsschritte der App in fachlicher Reihenfolge, danach „Profile“ und „Einstellungen“, soweit die App Profile und Einstellungen hat; diese stehen dann immer am Ende. Besteht eine App aus mehreren Seiten (etwa Start, Formular, Beschreibung einer Schnittstelle), nennt die Hauptnavigation diese Seiten, und die Arbeitsschritte stehen in der Schrittleiste. KI-LEAD: Erfassung, KI-Erfassung, Auswertung, Profile, Einstellungen.", "referenz": ["src/App.tsx", "docs/SPEZIFIKATION.md"] },
+    { "id": "LD-N02", "stufe": "MUSS", "thema": "Navigation", "text": "Bereichsnamen, Überschriften und Kennsätze legt die App fest, nicht das Profil. Das Profil liefert Produkttitel für Ausgaben wie PDF und Dateinamen.", "referenz": ["CHANGELOG.md"] },
+    { "id": "LD-N03", "stufe": "MUSS", "thema": "Navigation", "text": "Die aktive Stelle trägt aria-current (page in Navigation, Bereichsleiste und Reitern, step in Schrittfolgen) und ist nicht nur über Farbe erkennbar, sondern zusätzlich über Unterstreichung, Rand oder gefüllte Nummer.", "referenz": ["src/styles/basis.css", "src/ui/Meldung.tsx"] },
+    { "id": "LD-N04", "stufe": "MUSS", "thema": "Navigation", "text": "Ansicht, Bereich und Reiter stehen im Hash der Adresse (#/<ansicht>/<teil>), Inhalte nie. Neuladen behält die Ansicht, Zurück und Vor wechseln sie, Tiefenlinks öffnen sie.", "referenz": ["src/ui/app/adresse.ts"] },
+    { "id": "LD-N05", "stufe": "MUSS", "thema": "Navigation", "text": "Bis zum Umbruch „mittel“ steht die Hauptnavigation in einer eigenen Zeile und bricht um; alle Bereiche bleiben sichtbar, ohne Menüknopf und ohne Abschneiden.", "referenz": ["src/styles/basis.css"] },
+    { "id": "LD-N06", "stufe": "SOLL", "thema": "Navigation", "text": "Hat die App Einstellungen, sind sie in Bereiche geteilt: „Übersicht“ zuerst, dann die Bereiche der App, am Ende „Darstellung“, „Daten“ und „Über <Produktname>“.", "referenz": ["src/ui/Einstellungen.tsx"] },
+    { "id": "LD-A01", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs. Arbeitet die App mit Profilen, steht darunter die Profilzeile mit Name und Fassung des aktiven Profils und einem Verweis auf „Profile“.", "referenz": ["src/ui/Meldung.tsx", "src/ui/Lagebild.tsx", "src/ui/ProfilZeile.tsx"] },
+    { "id": "LD-A02", "stufe": "SOLL", "thema": "Seitenaufbau", "text": "Die Kennsätze der Bereiche sind parallel gebaut (<Tätigkeit> nach <Methode>, gegebenenfalls mit Zusatz), etwa „Erfassung einer Meldung nach LEAD-Systematik“.", "referenz": ["CHANGELOG.md"] },
+    { "id": "LD-A03", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Mehrteilige Bereiche haben einen Arbeitsbereich aus Leiste (15 rem, links, mitlaufend) und Arbeitsfläche. Bis zum Umbruch „breit“ steht die Leiste waagerecht über dem Inhalt, ist scrollbar, zeigt am Rand einen Verlauf, solange dort weitere Abschnitte liegen, und rückt den aktiven Abschnitt ins Bild.", "referenz": ["src/styles/basis.css", "src/ui/leiste.ts"] },
+    { "id": "LD-A04", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Schrittfolgen sind nummeriert. Ein Schritt mit angezeigtem Befund trägt einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen. Schritte werden nicht nach ihrer Position als „erledigt“ gekennzeichnet.", "referenz": ["src/ui/Meldung.tsx", "src/styles/basis.css"] },
+    { "id": "LD-A05", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung und den Inhalten. In Schrittfolgen (LD-A04) stehen am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf); Bereiche ohne Reihenfolge haben keine Blätterknöpfe.", "referenz": ["src/ui/Meldung.tsx", "src/styles/basis.css"] },
+    { "id": "LD-A06", "stufe": "SOLL", "thema": "Seitenaufbau", "text": "Gleichrangige Ansichten eines Ergebnisses stehen als Reiterleiste über dem Inhalt statt in einer seitlichen Leiste (KI-LEAD: Auswertung).", "referenz": ["src/ui/Lagebild.tsx"] },
+    { "id": "LD-A07", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Nach einem Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht beginnt der neue Inhalt oben unter der Kopfleiste, ohne Animation, und der Fokus liegt auf der neuen Überschrift. Knöpfe von Leisten, die stehen bleiben, behalten den Fokus.", "referenz": ["src/ui/sprung.ts", "docs/BARRIEREFREIHEIT.md"] },
+    { "id": "LD-F01", "stufe": "MUSS", "thema": "Farbe", "text": "Farben werden nur über die Farbrollen gesetzt (CSS-Variablen --<rolle>). Es gibt keine Produktfarbe je App: Die Werte bestimmt das aktive Profil (farbschema.basis aus dem gemeinsamen Katalog, einzelne Rollen in farbschema.farben), sonst die Wahl unter „Einstellungen → Darstellung“. Eine App ohne Profile und ohne diese Wahl setzt ein festes Farbschema aus dem gemeinsamen Katalog, hell und dunkel; Werte außerhalb des Katalogs gibt es nicht. Bettet eine App ihr Profil beim Bau ein, ist das feste Schema das des Profils (farbschema.basis); dunkel gilt dann „Neutral · Night Mode“, bei „mehr Kontrast“ das Kontrastschema, wie bei „Automatisch“ (LD-F05).", "referenz": ["src/darstellung/thema.ts", "docs/PROFILFORMAT.md", "docs/farbschemas.md"] },
+    { "id": "LD-F02", "stufe": "MUSS", "thema": "Farbe", "text": "Alle Apps beziehen ihre Farbschemata aus demselben Katalog mit denselben Kennungen (Neutral, Kontrast, Bund, Bevölkerungsschutz, 16 Länder), damit ein Profil in jeder App gleich aussieht. Apps mit Profilen oder einer Wahl unter „Darstellung“ führen den ganzen Katalog; eine App mit festem Farbschema (LD-F01) übernimmt nur die Schemata, die sie setzt, mit Kennung und unveränderten Werten.", "referenz": ["src/darstellung/katalog.ts", "design/lead-farbschemata.tokens.json"] },
+    { "id": "LD-F03", "stufe": "MUSS", "thema": "Farbe", "text": "Kontraste werden für jedes Schema und jedes Profilschema geprüft: Text 4,5:1, Konturen und Bedienelemente 3:1, Text in Kontrastschemata 7:1. Ein Profilschema, das sie verfehlt, wird mit Warnung verworfen; das Profil bleibt nutzbar. Setzt eine App ihr Farbschema beim Bau, prüft der Bau die Kontraste aller Schemata, die sie setzt, und bricht ab, wenn eines sie verfehlt.", "referenz": ["src/darstellung/thema.ts"] },
+    { "id": "LD-F04", "stufe": "MUSS", "thema": "Farbe", "text": "Signalfarben tragen ausschließlich Bewertung, Prüfergebnis und den Status der Einsatzbereitschaft, sind in allen Apps gleich, hängen nur von hell, dunkel und Kontrast ab und kommen nie aus einem Profil. Eine Bewertung oder ein Status ist nie nur über Farbe erkennbar. Die Ampel der Einsatzbereitschaft nutzt: einsatzbereit ok, eingeschränkt gering, im Einsatz einsatz, nicht einsatzbereit kritisch.", "referenz": ["src/darstellung/thema.ts", "src/styles.css"] },
+    { "id": "LD-F05", "stufe": "MUSS", "thema": "Farbe", "text": "Die Vorgabe „Automatisch“ folgt hell und dunkel des Systems und bei „mehr Kontrast“ dem Kontrastschema. Erzwungene Farben (forced-colors) werden mit Systemfarben unterstützt.", "referenz": ["src/darstellung/thema.ts", "src/styles/a11y.css"] },
+    { "id": "LD-F06", "stufe": "SOLL", "thema": "Farbe", "text": "Farbwerte stehen an einer Stelle (Katalog); die Stylesheets setzen keine Farbwerte. Ohne JavaScript gilt ein Fallback aus demselben Katalog.", "referenz": ["src/styles/basis.css", "src/darstellung/fallback.ts"] },
+    { "id": "LD-T01", "stufe": "MUSS", "thema": "Schrift und Sprache", "text": "Schrift ist Atkinson Hyperlegible in den Gewichten 400 und 700, mit der App gebündelt.", "referenz": ["src/main.tsx", "src/styles/basis.css"] },
+    { "id": "LD-T02", "stufe": "MUSS", "thema": "Schrift und Sprache", "text": "Schriftgrößen und Maße von Text stehen in rem und folgen der Schriftgröße des Systems: Grundschrift 1,0625 rem (bis zum Umbruch „breit“ 1 rem), Zeilenhöhe 1,5, h1 1,6 rem, h2 1,35 rem.", "referenz": ["src/styles/basis.css"] },
+    { "id": "LD-T03", "stufe": "MUSS", "thema": "Schrift und Sprache", "text": "Die Oberfläche spricht neutral an, ohne „du“ und ohne „Sie“: Infinitiv, Passiv oder sachlicher Bezug.", "referenz": ["CHANGELOG.md"] },
+    { "id": "LD-T04", "stufe": "SOLL", "thema": "Schrift und Sprache", "text": "Daten und Uhrzeiten stehen in der Oberfläche deutsch (TT.MM.JJJJ, hh:mm). Dateinamen von Downloads beginnen mit dem Datum, damit sie im Ordner zeitlich sortiert stehen.", "referenz": ["docs/SPEZIFIKATION.md", "src/kern/ausgabe.ts"] },
+    { "id": "LD-B01", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Knöpfe gibt es als Hauptknopf (gefüllt in der Aktionsfarbe, für die vorgesehene nächste Aktion), Standard (Umriss) und leise, dazu klein für Zeilenaktionen. Knöpfe sind mindestens 44 px hoch; bei grober Zeigereingabe gilt das für alle Bedienelemente.", "referenz": ["src/styles/basis.css"] },
+    { "id": "LD-B02", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Knöpfe sind mit einem Verb oder Verb und Gegenstand beschriftet (etwa „In die Erfassung übernehmen“). Knöpfe zum Blättern nennen ihr Ziel (etwa „Weiter: Quellen & Referenzen“).", "referenz": ["src/ui/Meldung.tsx"] },
+    { "id": "LD-B03", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Ist eine Hauptaktion gesperrt, nennt die App darüber, was noch fehlt („Noch offen“ mit Sprung zur Stelle), und verknüpft den Knopf per aria-describedby damit.", "referenz": ["src/ui/kiErfassung/Auftragsformular.tsx", "src/ui/Kurzfassung.tsx"] },
+    { "id": "LD-B04", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Rückfragen stehen in einem modalen Dialog der App, nie in window.confirm: Text, „Abbrechen“ mit dem ersten Fokus und die bestätigende Aktion mit eigenem Verb. Escape bricht ab, danach kehrt der Fokus zum Auslöser zurück.", "referenz": ["src/ui/bestaetigung.ts"] },
+    { "id": "LD-E01", "stufe": "MUSS", "thema": "Eingabe", "text": "Ein Feld hat die Reihenfolge Beschriftung, Hilfetext, Eingabe, Fehlertext, Rückmeldungen, Werkzeuge: Anleitung vor der Eingabe, Rückmeldungen und Werkzeuge danach. Der Hilfetext ist per aria-describedby verknüpft.", "referenz": ["src/ui/HilfeFeld.tsx"] },
+    { "id": "LD-E02", "stufe": "MUSS", "thema": "Eingabe", "text": "Eine fehlende Pflichtangabe erscheint am Feld erst, wenn es bearbeitet und verlassen wurde, nach dem Besuch des Prüfschritts oder bei einer geöffneten Datei; andere Befunde sofort. Ein Feld mit Befund trägt aria-invalid.", "referenz": ["src/ui/feldBefunde.ts", "src/ui/HilfeFeld.tsx"] },
+    { "id": "LD-E03", "stufe": "SOLL", "thema": "Eingabe", "text": "Listen gleichartiger Einträge lassen sich je Eintrag ein- und aufklappen; der Kopf zeigt Bezeichnung und Befundzahl, der Knopf trägt aria-expanded.", "referenz": ["src/ui/Feld.tsx"] },
+    { "id": "LD-E04", "stufe": "MUSS", "thema": "Eingabe", "text": "Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht.", "referenz": ["src/ui/Pruefen.tsx"] },
+    { "id": "LD-M01", "stufe": "MUSS", "thema": "Rückmeldung", "text": "Meldungen der App stehen in Kästen mit Randstreifen links: Information (Aktionsfarbe), Hinweis (gering), Fehler (kritisch, Rolle alert) und Erfolg (ok).", "referenz": ["src/styles/formular.css"] },
+    { "id": "LD-M02", "stufe": "MUSS", "thema": "Rückmeldung", "text": "Laufende Vorgänge (Anfragen an einen Dienst) zeigen eine Laufanzeige mit Uhr, erwarteter Dauer und voraussichtlichen Kosten. Sie werden über eine eigene Statusregion höchstens alle 5 s angesagt; der Sekundenzähler steht außerhalb jeder Live-Region.", "referenz": ["src/ui/kiErfassung/Laufanzeige.tsx", "docs/BARRIEREFREIHEIT.md"] },
+    { "id": "LD-M03", "stufe": "MUSS", "thema": "Rückmeldung", "text": "Stellt die App Anfragen, zeigt sie rechts in der Kopfleiste eine Statusanzeige. Sie ist eine reine Anzeige (kein Knopf, kein Tabstopp) und zeigt, ob Anfragen laufen; ihr zugänglicher Name nennt die Zahl gleichzeitiger Anfragen. KI-LEAD: „KI ruht“ und „KI aktiv“.", "referenz": ["src/ui/KiSymbol.tsx", "src/styles/basis.css"] },
+    { "id": "LD-M04", "stufe": "MUSS", "thema": "Rückmeldung", "text": "Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; nicht freigegebene Ausgaben tragen „ENTWURF“.", "referenz": ["docs/KI-VERORDNUNG.md"] },
+    { "id": "LD-Z01", "stufe": "MUSS", "thema": "Zugänglichkeit und Plattform", "text": "Die Oberfläche erfüllt WCAG 2.2 Stufe AA. Jeder Bereich wird mit axe-core geprüft, breit und hell sowie 390 px breit und dunkel, ohne Ausnahmen.", "referenz": ["tests/browser/barrierefreiheit.spec.ts", "docs/BARRIEREFREIHEIT.md"] },
+    { "id": "LD-Z02", "stufe": "MUSS", "thema": "Zugänglichkeit und Plattform", "text": "Der Fokus ist sichtbar: 3 px Ring in der Farbrolle fokus mit 2 px Abstand und einem zweiten Ring in fokus-abstand.", "referenz": ["src/styles/basis.css"] },
+    { "id": "LD-Z03", "stufe": "MUSS", "thema": "Zugänglichkeit und Plattform", "text": "Bewegung gibt es nur, wenn das System sie nicht reduziert (prefers-reduced-motion); Sprünge nach LD-A07 sind nie animiert.", "referenz": ["src/ui/bewegung.ts", "src/styles.css"] },
+    { "id": "LD-Z04", "stufe": "MUSS", "thema": "Zugänglichkeit und Plattform", "text": "Die Ansicht bricht an drei Breiten um (860, 640 und 480 px) und richtet sich sonst nach Eigenschaften statt nach Geräten: grobe Zeigereingabe, reduzierte Bewegung, erzwungene Farben und Druck.", "referenz": ["src/styles.css"] },
+    { "id": "LD-Z05", "stufe": "SOLL", "thema": "Zugänglichkeit und Plattform", "text": "Beim Drucken entfallen Kopfleiste, Hinweisband, Fußzeile und Bedienleisten.", "referenz": ["src/styles/lagebild.css"] },
+    { "id": "LD-Z06", "stufe": "SOLL", "thema": "Zugänglichkeit und Plattform", "text": "Die App lädt nichts nach (keine fremden Schriften, kein CDN, keine Telemetrie) und startet als installierte App auch ohne Netz.", "referenz": ["docs/DATENSCHUTZ.md", "src/pwa/sw-vorlage.js"] }
+  ]
+}

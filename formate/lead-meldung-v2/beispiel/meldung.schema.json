@@ -37,11 +37,17 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["art", "meldung_id"],
+        "required": [
+          "art",
+          "meldung_id"
+        ],
         "additionalProperties": false,
         "properties": {
           "art": {
-            "enum": ["fortschreibung_von", "berichtigung_von"]
+            "enum": [
+              "fortschreibung_von",
+              "berichtigung_von"
+            ]
           },
           "meldung_id": {
             "$ref": "#/$defs/uuid"
@@ -51,11 +57,20 @@
       "description": "fortschreibung_von: Vormeldung derselben Stelle (neuer Stand); berichtigung_von: ersetzte Fassung desselben Stands."
     },
     "status": {
-      "enum": ["entwurf", "zur_freigabe", "freigegeben", "zurueckgezogen"]
+      "enum": [
+        "entwurf",
+        "zur_freigabe",
+        "freigegeben",
+        "zurueckgezogen"
+      ]
     },
     "absender": {
       "type": "object",
-      "required": ["stelle", "ebene", "gebiet"],
+      "required": [
+        "stelle",
+        "ebene",
+        "gebiet"
+      ],
       "additionalProperties": false,
       "properties": {
         "stelle": {
@@ -67,12 +82,17 @@
           "description": "Optionale stabile Stellenkennung."
         },
         "ebene": {
-          "enum": ["Bund", "Land"]
+          "enum": [
+            "Bund",
+            "Land"
+          ]
         },
         "gebiet": {
           "type": "object",
           "description": "Gebiet mit Name und optionalem amtlichem Schlüssel. Nicht jeder Wirkungsraum folgt Verwaltungsgrenzen; dafür steht die Beschreibung im Raum.",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "additionalProperties": false,
           "properties": {
             "name": {
@@ -126,7 +146,10 @@
     },
     "meldezeitraum": {
       "type": "object",
-      "required": ["von", "bis"],
+      "required": [
+        "von",
+        "bis"
+      ],
       "additionalProperties": false,
       "properties": {
         "von": {
@@ -166,6 +189,9 @@
     "fehlanzeige": {
       "$ref": "#/$defs/fehlanzeige"
     },
+    "module": {
+      "$ref": "#/$defs/meldungsmodule"
+    },
     "freigabe": {
       "type": "object",
       "required": [],
@@ -185,8 +211,35 @@
   },
   "allOf": [
     {
+      "$comment": "Bewertung je Sachverhalt ist Pflicht, außer bei Meldungen von Betreibern (KL-2026-W45-01, LEAD-MELDUNG-V2.md Abschnitt 3).",
       "if": {
-        "required": ["fehlanzeige"]
+        "properties": {
+          "absender": {
+            "properties": {
+              "ebene": {
+                "const": "Betreiber"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "sachverhalte": {
+            "items": {
+              "required": [
+                "bewertung"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "fehlanzeige"
+        ]
       },
       "then": {
         "properties": {
@@ -200,10 +253,15 @@
       "if": {
         "properties": {
           "status": {
-            "enum": ["zur_freigabe", "freigegeben"]
+            "enum": [
+              "zur_freigabe",
+              "freigegeben"
+            ]
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "then": {
         "properties": {
@@ -244,7 +302,9 @@
             }
           },
           {
-            "required": ["fehlanzeige"]
+            "required": [
+              "fehlanzeige"
+            ]
           }
         ]
       }
@@ -256,12 +316,16 @@
             "const": "freigegeben"
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "then": {
         "properties": {
           "freigabe": {
-            "required": ["freigegeben"],
+            "required": [
+              "freigegeben"
+            ],
             "properties": {
               "freigegeben": {
                 "properties": {
@@ -346,7 +410,9 @@
     "gebiet": {
       "type": "object",
       "description": "Gebiet mit Name und optionalem amtlichem Schlüssel. Nicht jeder Wirkungsraum folgt Verwaltungsgrenzen; dafür steht die Beschreibung im Raum.",
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -362,7 +428,10 @@
     },
     "raum": {
       "type": "object",
-      "required": ["beschreibung", "gebiete"],
+      "required": [
+        "beschreibung",
+        "gebiete"
+      ],
       "additionalProperties": false,
       "properties": {
         "beschreibung": {
@@ -380,7 +449,10 @@
     "zeichnung": {
       "type": "object",
       "description": "Zeichnung. Ein Name oder Handzeichen ist kein technischer Authentizitätsnachweis.",
-      "required": ["name", "zeitpunkt"],
+      "required": [
+        "name",
+        "zeitpunkt"
+      ],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -408,7 +480,14 @@
     },
     "quelle": {
       "type": "object",
-      "required": ["id", "kategorie", "herausgeber", "titel", "zugriff", "zugang"],
+      "required": [
+        "id",
+        "kategorie",
+        "herausgeber",
+        "titel",
+        "zugriff",
+        "zugang"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -417,7 +496,13 @@
         "kategorie": {
           "type": "string",
           "description": "Quellenkategorie nach dem Kodierleitfaden des Profils (Rolle der Quelle für die verwendete Aussage); das Profil legt die zulässigen Buchstaben fest.",
-          "enum": ["A", "B", "W", "M", "P"]
+          "enum": [
+            "A",
+            "B",
+            "W",
+            "M",
+            "P"
+          ]
         },
         "herausgeber": {
           "type": "string"
@@ -462,8 +547,17 @@
           "description": "Stand der Angaben in der Quelle, getrennt vom Veröffentlichungsdatum."
         },
         "zugang": {
-          "enum": ["oeffentlich", "paywall", "behoerdenintern", "eingangsmaterial", "eingangsmeldung", "nicht_ausgewertet", null],
-          "description": "Tatsächlicher Zugang: öffentlich, hinter Bezahlschranke, behördenintern, beigefügtes Material, Meldung einer anderen Stelle, nicht ausgewertet (davon abhängige Aussagen gelten nicht als gesichert); null = nicht angegeben."
+          "enum": [
+            "oeffentlich",
+            "paywall",
+            "behoerdenintern",
+            "betriebsintern",
+            "eingangsmaterial",
+            "eingangsmeldung",
+            "nicht_ausgewertet",
+            null
+          ],
+          "description": "Tatsächlicher Zugang: öffentlich, hinter Bezahlschranke, behördenintern, betriebsintern (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt), beigefügtes Material, Meldung einer anderen Stelle, nicht ausgewertet (davon abhängige Aussagen gelten nicht als gesichert); null = nicht angegeben."
         },
         "meldung_id": {
           "$ref": "#/$defs/uuid",
@@ -485,7 +579,14 @@
     "zeitstrahl_zeile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "zeit", "typ", "text", "quellen", "erstmals_gemeldet"],
+      "required": [
+        "id",
+        "zeit",
+        "typ",
+        "text",
+        "quellen",
+        "erstmals_gemeldet"
+      ],
       "properties": {
         "id": {
           "$ref": "#/$defs/zeile_id"
@@ -495,7 +596,15 @@
           "description": "Ereigniszeit (nicht Kenntniszeit)."
         },
         "typ": {
-          "enum": ["Ereignis", "Warnung", "Maßnahme", "Wendepunkt", "Wiederherstellung", "Bewertung", "Berichtigung"]
+          "enum": [
+            "Ereignis",
+            "Warnung",
+            "Maßnahme",
+            "Wendepunkt",
+            "Wiederherstellung",
+            "Bewertung",
+            "Berichtigung"
+          ]
         },
         "text": {
           "type": "string",
@@ -528,10 +637,14 @@
                 "const": "Berichtigung"
               }
             },
-            "required": ["typ"]
+            "required": [
+              "typ"
+            ]
           },
           "then": {
-            "required": ["berichtigt"]
+            "required": [
+              "berichtigt"
+            ]
           }
         },
         {
@@ -543,7 +656,9 @@
                 }
               }
             },
-            "required": ["typ"]
+            "required": [
+              "typ"
+            ]
           },
           "then": {
             "properties": {
@@ -557,7 +672,10 @@
     },
     "eintritt": {
       "type": "object",
-      "required": ["zeit", "genauigkeit"],
+      "required": [
+        "zeit",
+        "genauigkeit"
+      ],
       "additionalProperties": false,
       "properties": {
         "zeit": {
@@ -571,7 +689,11 @@
           ]
         },
         "genauigkeit": {
-          "enum": ["belegt", "ungefaehr", "unbekannt"],
+          "enum": [
+            "belegt",
+            "ungefaehr",
+            "unbekannt"
+          ],
           "description": "belegt: Beginn durch Quelle belegt; ungefaehr: nur eingrenzbar (Erläuterung in Lage & Ereignis); unbekannt: zeit ist null."
         }
       },
@@ -583,7 +705,9 @@
                 "const": "unbekannt"
               }
             },
-            "required": ["genauigkeit"]
+            "required": [
+              "genauigkeit"
+            ]
           },
           "then": {
             "properties": {
@@ -597,10 +721,15 @@
           "if": {
             "properties": {
               "genauigkeit": {
-                "enum": ["belegt", "ungefaehr"]
+                "enum": [
+                  "belegt",
+                  "ungefaehr"
+                ]
               }
             },
-            "required": ["genauigkeit"]
+            "required": [
+              "genauigkeit"
+            ]
           },
           "then": {
             "properties": {
@@ -614,7 +743,9 @@
     },
     "bezug": {
       "type": "object",
-      "required": ["kennung"],
+      "required": [
+        "kennung"
+      ],
       "additionalProperties": false,
       "properties": {
         "kennung": {
@@ -625,17 +756,29 @@
           "description": "Meldungsfassung, aus der die Kennung stammt; macht den damals gemeinten Stand eindeutig."
         },
         "art": {
-          "enum": ["verdichtung", "teilung", "zusammenfuehrung"]
+          "enum": [
+            "verdichtung",
+            "teilung",
+            "zusammenfuehrung"
+          ]
         }
       }
     },
     "beurteilung": {
       "type": "object",
-      "required": ["stufe", "begruendung"],
+      "required": [
+        "stufe",
+        "begruendung"
+      ],
       "additionalProperties": false,
       "properties": {
         "stufe": {
-          "enum": ["geringfügig", "erheblich", "kritisch", null],
+          "enum": [
+            "geringfügig",
+            "erheblich",
+            "kritisch",
+            null
+          ],
           "description": "null = keine Angabe (keine Stufe tragfähig)."
         },
         "begruendung": {
@@ -646,11 +789,20 @@
     },
     "tendenz": {
       "type": "object",
-      "required": ["richtung", "bezug", "begruendung"],
+      "required": [
+        "richtung",
+        "bezug",
+        "begruendung"
+      ],
       "additionalProperties": false,
       "properties": {
         "richtung": {
-          "enum": ["Entspannung", "Stabilisierung", "Verschärfung", null]
+          "enum": [
+            "Entspannung",
+            "Stabilisierung",
+            "Verschärfung",
+            null
+          ]
         },
         "bezug": {
           "type": "string",
@@ -663,14 +815,24 @@
     },
     "abweichende_bewertung": {
       "type": "object",
-      "required": ["stelle", "stufe", "grund", "quellen"],
+      "required": [
+        "stelle",
+        "stufe",
+        "grund",
+        "quellen"
+      ],
       "additionalProperties": false,
       "properties": {
         "stelle": {
           "type": "string"
         },
         "stufe": {
-          "enum": ["geringfügig", "erheblich", "kritisch", null]
+          "enum": [
+            "geringfügig",
+            "erheblich",
+            "kritisch",
+            null
+          ]
         },
         "grund": {
           "type": "string",
@@ -691,7 +853,9 @@
     },
     "neubewertungsanlass": {
       "type": "object",
-      "required": ["indikator"],
+      "required": [
+        "indikator"
+      ],
       "additionalProperties": false,
       "properties": {
         "indikator": {
@@ -699,14 +863,23 @@
           "description": "Beobachtbares Kriterium, gegebenenfalls mit Schwelle."
         },
         "stand": {
-          "enum": ["neu", "veraendert", "unveraendert", "nicht_ueberpruefbar"],
+          "enum": [
+            "neu",
+            "veraendert",
+            "unveraendert",
+            "nicht_ueberpruefbar"
+          ],
           "description": "Fortschreibung nach SOP-LEAD A.8.1."
         }
       }
     },
     "widerspruch": {
       "type": "object",
-      "required": ["gegenstand", "beschreibung", "quellen"],
+      "required": [
+        "gegenstand",
+        "beschreibung",
+        "quellen"
+      ],
       "additionalProperties": false,
       "properties": {
         "gegenstand": {
@@ -723,7 +896,13 @@
     },
     "bewertung": {
       "type": "object",
-      "required": ["kernaussage", "referenzraum", "beurteilung", "tendenz", "neubewertung_bei"],
+      "required": [
+        "kernaussage",
+        "referenzraum",
+        "beurteilung",
+        "tendenz",
+        "neubewertung_bei"
+      ],
       "additionalProperties": false,
       "properties": {
         "kernaussage": {
@@ -762,7 +941,10 @@
         },
         "erkenntnislage": {
           "type": "object",
-          "required": ["luecken", "widersprueche"],
+          "required": [
+            "luecken",
+            "widersprueche"
+          ],
           "additionalProperties": false,
           "properties": {
             "luecken": {
@@ -782,7 +964,11 @@
         "abschluss": {
           "type": "object",
           "description": "Letzte Nennung im Lagebild (A.8.2).",
-          "required": ["ende", "offene_punkte", "nachsorge"],
+          "required": [
+            "ende",
+            "offene_punkte",
+            "nachsorge"
+          ],
           "additionalProperties": false,
           "properties": {
             "ende": {
@@ -809,7 +995,14 @@
     },
     "massnahme": {
       "type": "object",
-      "required": ["id", "gegenstand", "stelle", "status", "stand", "quellen"],
+      "required": [
+        "id",
+        "gegenstand",
+        "stelle",
+        "status",
+        "stand",
+        "quellen"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -823,7 +1016,15 @@
           "description": "Verantwortliche Stelle."
         },
         "status": {
-          "enum": ["geplant", "angefordert", "angeordnet", "begonnen", "umgesetzt", "wirksam", "beendet"],
+          "enum": [
+            "geplant",
+            "angefordert",
+            "angeordnet",
+            "begonnen",
+            "umgesetzt",
+            "wirksam",
+            "beendet"
+          ],
           "description": "SOP-LEAD A.4; „wirksam“ nur mit Wirkungsbeleg."
         },
         "stand": {
@@ -843,7 +1044,13 @@
     },
     "empfehlung": {
       "type": "object",
-      "required": ["id", "adressat", "auftrag", "termin", "quellen"],
+      "required": [
+        "id",
+        "adressat",
+        "auftrag",
+        "termin",
+        "quellen"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -882,7 +1089,14 @@
     "frist": {
       "type": "object",
       "description": "Zeitgebundener Handlungsbedarf (bisher Kennsatz „Handlungsrelevant bis:“, SOP-LEAD A.7.3).",
-      "required": ["id", "bis", "aufgabe", "adressat", "grundlage", "quellen"],
+      "required": [
+        "id",
+        "bis",
+        "aufgabe",
+        "adressat",
+        "grundlage",
+        "quellen"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -914,7 +1128,11 @@
     },
     "handlungsbedarf": {
       "type": "object",
-      "required": ["massnahmen", "empfehlungen", "fristen"],
+      "required": [
+        "massnahmen",
+        "empfehlungen",
+        "fristen"
+      ],
       "additionalProperties": false,
       "properties": {
         "massnahmen": {
@@ -944,7 +1162,17 @@
     "kennzahl": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "gegenstand", "einheit", "art", "wert", "mindestwert", "erhebung", "datenstand", "quellen"],
+      "required": [
+        "id",
+        "gegenstand",
+        "einheit",
+        "art",
+        "wert",
+        "mindestwert",
+        "erhebung",
+        "datenstand",
+        "quellen"
+      ],
       "properties": {
         "id": {
           "$ref": "#/$defs/kennzahl_id"
@@ -958,15 +1186,26 @@
           "description": "Personen, Haushalte, Anschlüsse, Betten … – Einheiten nicht ineinander umetikettieren."
         },
         "art": {
-          "enum": ["bestand", "kumuliert", "kapazitaet", "bedarf"]
+          "enum": [
+            "bestand",
+            "kumuliert",
+            "kapazitaet",
+            "bedarf"
+          ]
         },
         "wert": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "description": "Zahl oder null (unbekannt); 0 nur als belegter Nullwert."
         },
         "bandbreite": {
           "type": "object",
-          "required": ["von", "bis"],
+          "required": [
+            "von",
+            "bis"
+          ],
           "additionalProperties": false,
           "properties": {
             "von": {
@@ -982,7 +1221,13 @@
           "description": "Bestätigte Mindestzahl, nicht die vollständige Zahl."
         },
         "erhebung": {
-          "enum": ["gezaehlt", "amtlich_gemeldet", "geschaetzt", "hochgerechnet", "prognostiziert"]
+          "enum": [
+            "gezaehlt",
+            "amtlich_gemeldet",
+            "geschaetzt",
+            "hochgerechnet",
+            "prognostiziert"
+          ]
         },
         "raum": {
           "type": "string"
@@ -1008,7 +1253,11 @@
     "analyse": {
       "type": "object",
       "description": "Lesbare Analysetexte mit Belegverweisen [Qn]. Maßnahmen und Empfehlungen stehen im Handlungsbedarf.",
-      "required": ["lage_ereignis", "risiken_auswirkungen", "abhaengigkeiten_interdependenzen"],
+      "required": [
+        "lage_ereignis",
+        "risiken_auswirkungen",
+        "abhaengigkeiten_interdependenzen"
+      ],
       "additionalProperties": false,
       "properties": {
         "lage_ereignis": {
@@ -1030,7 +1279,9 @@
       },
       "additionalProperties": {
         "type": "object",
-        "required": ["fassung"],
+        "required": [
+          "fassung"
+        ],
         "properties": {
           "fassung": {
             "type": "string",
@@ -1043,11 +1294,41 @@
           "$ref": "#/$defs/modul_lead_bevoelkerungsschutz"
         }
       },
-      "required": ["lead-bevoelkerungsschutz"]
+      "required": [
+        "lead-bevoelkerungsschutz"
+      ]
+    },
+    "meldungsmodule": {
+      "type": "object",
+      "description": "Fachmodule für Angaben, die für die ganze Meldung gelten (etwa Meldeanlass, Vertraulichkeit, Empfänger), Schlüssel = Modulkennung. Optional; Regeln wie bei den Modulen je Sachverhalt.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "fassung"
+        ],
+        "properties": {
+          "fassung": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          }
+        }
+      },
+      "properties": {}
     },
     "sachverhalt": {
       "type": "object",
-      "required": ["kennung", "bezeichnung", "eintritt", "raum", "analyse", "bewertung", "handlungsbedarf", "module"],
+      "required": [
+        "kennung",
+        "bezeichnung",
+        "eintritt",
+        "raum",
+        "analyse",
+        "handlungsbedarf",
+        "module"
+      ],
       "additionalProperties": false,
       "properties": {
         "kennung": {
@@ -1083,6 +1364,7 @@
           "$ref": "#/$defs/analyse"
         },
         "bewertung": {
+          "description": "Pflicht außer bei absender.ebene „Betreiber“: Dort setzt die verarbeitende Stelle die Bewertung in ihrem eigenen Sachverhalt; fehlt der Block, ist keine Bewertung erhoben (KL-2026-W45-01).",
           "$ref": "#/$defs/bewertung"
         },
         "handlungsbedarf": {
@@ -1167,11 +1449,16 @@
     "entstehung": {
       "type": "object",
       "description": "Herkunftsnachweis; keine Freigabe. Bleibt bei weiterer Bearbeitung erhalten (KI-Kennzeichnung).",
-      "required": ["verfahren"],
+      "required": [
+        "verfahren"
+      ],
       "additionalProperties": false,
       "properties": {
         "verfahren": {
-          "enum": ["manuell", "KI-Entwurf"]
+          "enum": [
+            "manuell",
+            "KI-Entwurf"
+          ]
         },
         "erstellt": {
           "anyOf": [
@@ -1185,7 +1472,9 @@
         },
         "werkzeug": {
           "type": "object",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "additionalProperties": false,
           "properties": {
             "name": {
@@ -1198,7 +1487,9 @@
         },
         "profil": {
           "type": "object",
-          "required": ["id"],
+          "required": [
+            "id"
+          ],
           "additionalProperties": false,
           "properties": {
             "id": {
@@ -1218,7 +1509,9 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "required": ["kennung"],
+                "required": [
+                  "kennung"
+                ],
                 "additionalProperties": false,
                 "properties": {
                   "kennung": {
@@ -1249,7 +1542,9 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["modell"],
+            "required": [
+              "modell"
+            ],
             "additionalProperties": false,
             "properties": {
               "stufe": {
@@ -1273,7 +1568,11 @@
         },
         "migration": {
           "type": "object",
-          "required": ["von", "am", "hinweise"],
+          "required": [
+            "von",
+            "am",
+            "hinweise"
+          ],
           "additionalProperties": false,
           "properties": {
             "von": {
@@ -1299,7 +1598,11 @@
     "fehlanzeige": {
       "type": "object",
       "description": "Ausdrückliche Fehlanzeige: im geprüften Umfang und Zeitraum kein meldepflichtiger Sachverhalt.",
-      "required": ["umfang", "zeitraum", "erklaerung"],
+      "required": [
+        "umfang",
+        "zeitraum",
+        "erklaerung"
+      ],
       "additionalProperties": false,
       "properties": {
         "umfang": {
@@ -1308,7 +1611,10 @@
         },
         "zeitraum": {
           "type": "object",
-          "required": ["von", "bis"],
+          "required": [
+            "von",
+            "bis"
+          ],
           "additionalProperties": false,
           "properties": {
             "von": {
@@ -1348,20 +1654,37 @@
     "modul_lead_bevoelkerungsschutz_achse": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["stufe", "status", "begruendung", "quellen"],
+      "required": [
+        "stufe",
+        "status",
+        "begruendung",
+        "quellen"
+      ],
       "properties": {
         "stufe": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0,
           "maximum": 6,
           "description": "Stufe nach Stufentext; 0 ist ein belegter Wert, nie „unbekannt“."
         },
         "status": {
-          "enum": ["belegt", "mindestwert", "offen"],
+          "enum": [
+            "belegt",
+            "mindestwert",
+            "offen"
+          ],
           "description": "mindestwert: bestätigte Mindestzahl bzw. Mindestprognose (Kodierleitfaden Grundregel 6, D5); offen: keine tragfähige Stufe."
         },
         "offen_grund": {
-          "enum": ["kein_bezugsgegenstand", "kein_beleg", "bandbreite_ueber_stufengrenze", "sonstiges"],
+          "enum": [
+            "kein_bezugsgegenstand",
+            "kein_beleg",
+            "bandbreite_ueber_stufengrenze",
+            "sonstiges"
+          ],
           "description": "Nur bei status offen: Prüfreihenfolge des Kodierleitfadens (Bezugsgegenstand, Beleg, Stufe)."
         },
         "begruendung": {
@@ -1385,10 +1708,14 @@
                 "const": "offen"
               }
             },
-            "required": ["status"]
+            "required": [
+              "status"
+            ]
           },
           "then": {
-            "required": ["offen_grund"],
+            "required": [
+              "offen_grund"
+            ],
             "properties": {
               "stufe": {
                 "type": "null"
@@ -1411,7 +1738,11 @@
       "description": "Fachmodul Bevölkerungsschutz je Sachverhalt: Ereignisarten des Katalogs und Lagenradar D1–D8 (Pereira Wolf 2026, https://doi.org/10.5281/zenodo.18305827). Stufentexte und Regeln: Kodierleitfaden des Profils. Kein Gesamtscore.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["fassung", "ereignisarten", "lagenradar"],
+      "required": [
+        "fassung",
+        "ereignisarten",
+        "lagenradar"
+      ],
       "properties": {
         "fassung": {
           "const": "1.0"
@@ -1427,7 +1758,16 @@
         "lagenradar": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"],
+          "required": [
+            "d1",
+            "d2",
+            "d3",
+            "d4",
+            "d5",
+            "d6",
+            "d7",
+            "d8"
+          ],
           "properties": {
             "d1": {
               "$ref": "#/$defs/modul_lead_bevoelkerungsschutz_achse"

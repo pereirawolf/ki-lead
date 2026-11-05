@@ -7,9 +7,14 @@ import { holeWert } from "../kern/pfad";
 import type { Meldung, Profil } from "../kern/typen";
 import type { Inhaltsblock } from "../anbieter/typen";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
+import { bausteinAblehnung, bausteinHinweis, bausteinProjektion, erkenneBaustein, quellenzeileV1, zeitDE, type BausteinInfo } from "../kern/baustein";
+import { BAUSTEIN_SCHEMATA } from "./bausteinschemata";
 
-/** meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung) */
-export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "eingang" | "docx" | "pdf";
+/**
+ * meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung),
+ * kennzahlen-baustein = Kennzahlen-Baustein aus Thessa (seit 0.6.24, UP-2026-W45-01)
+ */
+export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "eingang" | "kennzahlen-baustein" | "docx" | "pdf";
 
 export interface Material {
   id: string;
@@ -23,6 +28,8 @@ export interface Material {
   base64?: string;
   meldung?: Meldung;
   eingang?: EingangsInfo;
+  /** Nur Kennzahlen-Baustein: Angaben aus der Prüfung und der vollständige Baustein (mit herleitung, nur für die Prüfung) */
+  baustein?: { info: BausteinInfo; daten: Record<string, unknown> };
   hinweis?: string;
   /** true, wenn die Rolle (Eingang/Vormeldung) von der Person gewählt wurde statt automatisch erkannt */
   rolleGewaehlt?: boolean;
@@ -109,7 +116,7 @@ export async function docxText(daten: ArrayBuffer): Promise<string> {
 /** Erkennt eine Meldung nach dem Profil (Schemakennung im Feld der Rolle schema_feld). */
 export function istMeldung(obj: unknown, profil: Profil): boolean {
   if (!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
-  const kennung = (obj as any)[profil.ui.rollen.schema_feld];
+  const kennung = holeWert(obj, profil.ui.rollen.schema_feld);
   if (typeof kennung !== "string") return false;
   const bekannt = [
     profil.manifest.meldung.schema_id,
@@ -203,6 +210,21 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
     } catch {
       throw new Error(`${name}: kein gültiges JSON.`);
     }
+    // Kennzahlen-Baustein (seit 0.6.24, UP-2026-W45-01): an die KI ohne herleitung; unbekannte Fassung oder
+    // Schemabefund: JSON-Material wie bisher, mit Hinweis
+    const baustein = erkenneBaustein(obj, BAUSTEIN_SCHEMATA);
+    if (baustein?.status === "gueltig")
+      return {
+        ...basis,
+        art: "kennzahlen-baustein",
+        baustein: { info: baustein.info, daten: obj as Record<string, unknown> },
+        ...kuerzen(JSON.stringify(bausteinProjektion(obj as Record<string, unknown>), null, 2)),
+        hinweis: bausteinHinweis(baustein.info),
+      };
+    if (baustein) {
+      const k = kuerzen(JSON.stringify(obj, null, 2));
+      return { ...basis, art: "json", text: k.text, hinweis: [bausteinAblehnung(baustein), k.hinweis].filter(Boolean).join(" ") };
+    }
     const info = eingangsInfo(obj, profil);
     if (istMeldung(obj, profil) && (!info || !info.stelle || istEigeneStelle(info.stelle, profil.manifest))) {
       return {
@@ -280,9 +302,12 @@ export function materialBloecke(material: Material[], urls: string[], stichworte
   for (const m of material) {
     if (m.art === "pdf") continue;
     const art = m.art === "meldung" ? "vormeldung" : m.art === "eingang" ? "eingangsmeldung" : m.art;
+    const b = m.baustein?.info;
     const zusatz = m.eingang
       ? ` stelle="${escapeAttr([m.eingang.land, m.eingang.stelle].filter(Boolean).join(", "))}" meldezeitpunkt="${escapeAttr(m.eingang.zeitpunkt)}"`
-      : "";
+      : b
+        ? ` raum="${escapeAttr(b.raum.name)}" datenstand="${escapeAttr(b.datenstand)}" sha256="${m.hash}" quellenzeile="${escapeAttr(quellenzeileV1(b))}"`
+        : "";
     teile.push(`<material name="${escapeAttr(m.name)}" art="${art}"${zusatz}>\n${huellenInhalt(m.text || "")}\n</material>`);
   }
   if (teile.length) bloecke.push({ type: "text", text: teile.join("\n\n") });
@@ -302,7 +327,9 @@ export function materialUebersicht(material: Material[], urls: string[], stichwo
     t.push(
       m.eingang
         ? `Eingangsmeldung ${[m.eingang.land, m.eingang.stelle].filter(Boolean).join(", ")}${m.eingang.zeitpunkt ? ` (${m.eingang.zeitpunkt.replace("T", " ")})` : ""}`
-        : `${m.name} (${m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()})`,
+        : m.baustein
+          ? `Kennzahlen-Baustein ${m.baustein.info.raum.name} (Datenstand ${zeitDE(m.baustein.info.datenstand)}; ${m.name})`
+          : `${m.name} (${m.art === "meldung" ? "Vormeldung" : m.art.toUpperCase()})`,
     );
   return t.length ? t.join("; ") : "keine; eigene Recherche in offenen Quellen";
 }

@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-11-01",
+  "stand": "2026-11-05",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -2286,6 +2286,1775 @@
       "kurz": "README des Justizprofils verweist für die Profilversion auf profil.json statt auf einen veralteten statischen Stand.",
       "status": "umgesetzt",
       "pr": 126
+    },
+    {
+      "id": "GK-2026-W44-07",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-b.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Eingabehilfen.tsx",
+          "stelle": "einfuegen(), Meldung bei vorhandenem Kennsatz (Z. 117–124)"
+        },
+        {
+          "datei": "tests/ui/eingabehilfen.test.ts",
+          "stelle": "Test „A05–A07: … Kernaussage und Kennsatz werden nicht gedoppelt …“ (Z. 172–174)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4, Format des Kennsatzes Handlungsrelevant bis (Z. 119)"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "feldhilfen, Vorlage handlungsrelevant, hinweis (Z. 592)"
+        },
+        {
+          "datei": "tests/profil/anweisungen-kopplung.test.ts",
+          "stelle": "GK-2026-W44-01, Prüfung auf „in derselben Zeile“ (Z. 84)"
+        }
+      ],
+      "kurz": "Meldung der Eingabehilfe bei vorhandenem Kennsatz „Handlungsrelevant bis:“ leitet zu einer eigenen Zeile je Frist an (Option A, nur Meldetext).",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-08",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-b.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "MEHRERE_FRISTEN_HINWEIS (Z. 133–134)"
+        },
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten(), Befund ZEITSTRAHL_QUELLE (Z. 255–260)"
+        },
+        {
+          "datei": "src/pipeline/kontext.ts",
+          "stelle": "zeitstrahlSteuerung(), Satz bei Vormeldung (Z. 303–306)"
+        },
+        {
+          "datei": "profile/lead-justiz/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.4 Kernaussage und Leitungsbezug (Z. 52); A.5 Nr. 4 Fristgrundlage (Z. 63); A.6 Nr. 1 (Z. 68)"
+        },
+        {
+          "datei": "profile/lead-justiz/kodierleitfaden.md",
+          "stelle": "Abschnitt 5 (Z. 85)"
+        },
+        {
+          "datei": "profile/lead-justiz/meldung.ui.json",
+          "stelle": "lagebild.verweise.zeitfenster (Z. 202)"
+        }
+      ],
+      "kurz": "Justiz Teil A führt Fristzeile und stabile Quellennummern (Option A); Hinweis zu Mehrfachfristen und Warnung ZEITSTRAHL_QUELLE ohne feste Abschnittsnummer.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-09",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-b.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "quellKern() (Z. 58–70)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 8 (Z. 294)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format (Z. 201)"
+        }
+      ],
+      "kurz": "Quellenidentität im Zeitstrahl ohne Kategorie und Zugangsvermerke (Option A); Kodierleitfaden 8.3 Regel 8 nennt, was dieselbe Quelle ist.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-10",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-b.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "vergleicheZeit() (Z. 152–172) und Chronologieprüfung in pruefeReferenzen() (Z. 840)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.3, Regel 4 (Z. 290)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Tabelle, Ebene 2 Referenzen (Z. 164)"
+        },
+        {
+          "datei": "src/kern/zeitstrahl.ts",
+          "stelle": "chronologisch() (Z. 115–118) und Hinweis ZEITSTRAHL_REIHENFOLGE (Z. 263–265)"
+        }
+      ],
+      "kurz": "v2-Referenzprüfung: Tag ohne Uhrzeit steht in der Reihenfolge vor den Uhrzeiten desselben Tags (Kodierleitfaden 8.3 Regel 4).",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-11",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-b.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 5.1 Quelle, Feld id (Z. 116)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format (Z. 191)"
+        }
+      ],
+      "kurz": "v2-Entwurf Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil wie im Kodierleitfaden Abschnitt 5.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-12",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-c.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/kiErfassung/texte.ts",
+          "stelle": "TEXT_FELD.gegenstand.hilfe (Z. 37)"
+        },
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "Hinweis „Bewertung ohne Text“ (Z. 185)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/texte.ts",
+          "stelle": "Platzhalter gegenstand, ausgangsinformationen, prueffrage (Z. 38, 43–44, 60)"
+        },
+        {
+          "datei": "profile/lead-justiz/profil.json",
+          "stelle": "referenzraum"
+        }
+      ],
+      "kurz": "Hilfetext und Hinweis der Erfassung nennen den Referenzraum des Profils statt Bevölkerungsschutz; Platzhalter neutral (Option A).",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-13",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-c.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/kiErfassung/Bestaetigung.tsx",
+          "stelle": "Hinweis bei mehr als drei Sachverhalten (Z. 180–182)"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Auftragsformular.tsx",
+          "stelle": "Kasten „Verdichtung“ (Z. 221–222)"
+        },
+        {
+          "datei": "src/pipeline/s1.ts",
+          "stelle": "Hinweis zu t0 bei Verdichtung (Z. 184)"
+        },
+        {
+          "datei": "src/pipeline/s2s3.ts",
+          "stelle": "Warnung Eingangsmeldung ohne Eintrag (Z. 541)"
+        },
+        {
+          "datei": "profile/lead-justiz/meldung.ui.json",
+          "stelle": "lagebild.verweise.zusammenhang"
+        },
+        {
+          "datei": "profile/lead-justiz/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.7.1 (Z. 80)"
+        }
+      ],
+      "kurz": "Hinweise der KI-Erfassung übernehmen den Verweis lagebild.verweise.zusammenhang des Profils statt fest „SOP-LEAD A.7/A.7.1“.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-14",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-c.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/recherchebefunde.ts",
+          "stelle": "Warnung KEINE_PRIMAERQUELLE (Z. 180) und Bedingung primaerquelleBelegt() (Z. 83)"
+        },
+        {
+          "datei": "src/pipeline/s2s3.ts",
+          "stelle": "Warnung Eingangsmeldung nicht als Kategorie A (Z. 546)"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "quellen.kategorien"
+        },
+        {
+          "datei": "profile/lead-justiz/kodierleitfaden.md",
+          "stelle": "Abschnitt 5 (Z. 85)"
+        }
+      ],
+      "kurz": "Warnung KEINE_PRIMAERQUELLE nennt die geprüfte Bedingung; Warnung zu Eingangsmeldungen ohne feste Kategorienliste.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "GK-2026-W44-15",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W44-c.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-01",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/profil/lesen.ts",
+          "stelle": "Lesedokument Kodierleitfaden, zweck (Z. 160)"
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "REITER (Z. 71) und Reiter „radar“ (Z. 822–824)"
+        },
+        {
+          "datei": "profile/lead-justiz/README.md",
+          "stelle": "Dateitabelle, kodierleitfaden.md (Z. 31)"
+        }
+      ],
+      "kurz": "Profilansicht ohne „Lagenradar D1–D8“; Reiter „Lagenradar“ im Lagebild nur bei Profilen mit Radar.",
+      "status": "umgesetzt",
+      "pr": 127
+    },
+    {
+      "id": "KP-2026-W45-01",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-02",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/profil.json",
+          "stelle": "beispiele"
+        },
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[kennung=DE-TH-20261014-P5VN].sofort.bewertung_text; quellen, Q3"
+        }
+      ],
+      "kurz": "Landesprofil um die Beispiellage Orkantief „Ilka“ mit drei Kreismeldungen und der Landesmeldung ergänzt; gleiche Kennungen wie die Thüringer Meldung im Beispielprofil, Kräftelage aus Thessa-Bausteinen.",
+      "status": "umgesetzt",
+      "pr": 131
+    },
+    {
+      "id": "KP-2026-W45-02",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-02",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "beispielDateien (Z. 173–180)"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "eingangsInfo"
+        }
+      ],
+      "kurz": "Kennzahlen-Bausteine aus Thessa unverändert im Begleitordner des Landesprofils, nicht im Lagebild geladen; Test der Annahme als JSON-Material.",
+      "status": "umgesetzt",
+      "pr": 131
+    },
+    {
+      "id": "UP-2026-W45-01",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion dateiLesen, JSON ohne Meldung (Z. 228)"
+        },
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Typ MaterialArt (Z. 12)"
+        },
+        {
+          "datei": "src/kern/schema.ts",
+          "stelle": "Funktion aufloesen (Z. 10)"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 4, „Was an den Anbieter geht“ (Z. 62)"
+        }
+      ],
+      "kurz": "Thessa-Kennzahlen-Baustein als eigene Materialart: eingebettetes, gebündeltes Schema mit Herkunft und Prüfsumme, Anzeige im Auftrag, an die KI ohne herleitung, Quellenzeile, Regel im Steuerungsblock und Abgleich der Zahlen im Text (Übergangsregel h).",
+      "status": "umgesetzt",
+      "pr": 132
+    },
+    {
+      "id": "UP-2026-W45-07",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 8, Offen für Teil C"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl.raum"
+        }
+      ],
+      "kurz": "Rückmeldeliste an Thessa für Fassung 0.3 (stabile Kennzahl-Schlüssel, Meldequote als Feld, Raum mit Schlüssel, Abdeckung, Schemata je Fassung, Baustein-Kennung, README, Neupinnen) an den Herausgeber übergeben; keine Änderung in KI-LEAD.",
+      "status": "umgesetzt",
+      "pr": 132
+    },
+    {
+      "id": "UP-2026-W45-02",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/kern/migration.ts",
+          "stelle": "Funktion migriere (Z. 14–33)"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "Funktion eingangsInfo (Z. 18–37)"
+        },
+        {
+          "datei": "scripts/lead-meldung-v2.mjs",
+          "stelle": "migriereV1, pruefeReferenzen, vergleicheZeit, stelleSchemaZusammen"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 8, Ebene 2 (Z. 164)"
+        }
+      ],
+      "kurz": "LEAD-Meldung-v2 in Kern und Prüfung: gemeinsame Umsetzung src/kern/meldung-v2.js, Migration beim Einlesen (migrationen[].verfahren), Grundform v2 für Eingänge, Referenzprüfung in Lagebild, Prüfschritt und nach S2, Rollen als Pfade.",
+      "status": "umgesetzt",
+      "pr": 133
+    },
+    {
+      "id": "DK-2026-W45-01",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 1, Grundsatz (Z. 11)"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Anhang D, D7 Technische und organisatorische Maßnahmen (Z. 346)"
+        },
+        {
+          "datei": "src/ui/Kurzfassung.tsx",
+          "stelle": "Funktion erstellen (Z. 137–163), Knopf „… erstellen“ (Z. 271)"
+        }
+      ],
+      "kurz": "Management Summary sendete die Meldung ohne die in DATENSCHUTZ.md zugesicherte Bestätigung zur Weitergabe; Bestätigung wie in der KI-Erfassung ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-02",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/VORLAGEN.md",
+          "stelle": "V1 Anordnung, Nr. 7 „Laufprotokolle, Meldungen, Löschung“ (Z. 78)"
+        }
+      ],
+      "kurz": "VORLAGEN V1 Nr. 7 nannte „keinen eigenen Löschweg“; Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ eingetragen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-03",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 10, Löschen, Zeile „archivierte Testläufe“ (Z. 142)"
+        }
+      ],
+      "kurz": "DATENSCHUTZ Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen sichtbar; Voraussetzung und Weg über „Daten“ ergänzt.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-04",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitt 3.1, Tabelle, Zeile „Datenhülle“ (Z. 38)"
+        },
+        {
+          "datei": "src/pipeline/kontext.ts",
+          "stelle": "Funktion orientierungSystem (Z. 573–590)"
+        },
+        {
+          "datei": "src/pipeline/orientierung.ts",
+          "stelle": "Funktion einzeln, Nutzertext (Z. 110)"
+        }
+      ],
+      "kurz": "Orientierungssuche ohne Datenhülle und Datenregel entgegen SICHERHEIT.md 3.1; Hülle <stichworte> und MATERIAL_DATENREGEL ergänzt (Option B).",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-05",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/NATIV.md",
+          "stelle": "Abschnitte „iOS und iPadOS (Mac)“ (Z. 32) und „Android“ (Z. 42)"
+        },
+        {
+          "datei": "docs/BETRIEB.md",
+          "stelle": "Abschnitt Bauen (Z. 38)"
+        }
+      ],
+      "kurz": "NATIV.md und BETRIEB.md nannten Node.js „22 oder neuer“; an engines und .nvmrc (Node 22) angeglichen.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-06",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/KI-VERORDNUNG.md",
+          "stelle": "Abschnitt 9.1, Absatz nach der Modelltabelle (Z. 116)"
+        }
+      ],
+      "kurz": "KI-VERORDNUNG 9.1: Mistral-Stufen nach Modell unterschieden, Large 4 seit 0.6.17 mit „mittel“.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "DK-2026-W45-07",
+      "agent": "dokumentation",
+      "befunddatei": "ki-lead-befund_dokumentation_2026-W45.json",
+      "commit": "246591e00dabbc26e682cdb091e4237ae6b80e35",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/BARRIEREFREIHEIT.md",
+          "stelle": "Tabelle, Zeile „Automatische Prüfung“ (Z. 27)"
+        },
+        {
+          "datei": "tests/browser/barrierefreiheit.spec.ts",
+          "stelle": "Test „Einstellungen: alle Bereiche“ (Z. 278–288)"
+        }
+      ],
+      "kurz": "axe-Prüfung der Einstellungen ließ „Testläufe“ aus; Browsertest schaltet Forschungsfunktionen ein, BARRIEREFREIHEIT.md mit Bereichsnamen seit 0.6.10.",
+      "status": "umgesetzt",
+      "pr": 134
+    },
+    {
+      "id": "TP-2026-W44-62",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Testlaeufe.tsx",
+          "stelle": "Zeilen 62–77 (Testart, TESTARTEN)"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 47–98, 497–500 (FALL, fallAuftrag, fallMaterial, einLauf)"
+        },
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "53 Fälle sop-*, zaehlregel-*, Ilka"
+        }
+      ],
+      "kurz": "Fallreihe unter „Einstellungen → Testläufe“: beliebige Erfassungs- und Verdichtungsfälle mit denselben Pipeline-Funktionen wie die App (S1, unveränderte Bestätigung, S2 mit S3); Management Summary und Reparatur bleiben eigene Testarten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-63",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/faelle/",
+          "stelle": "—"
+        },
+        {
+          "datei": "evaluation/faelle/fall.schema.json",
+          "stelle": "properties"
+        },
+        {
+          "datei": "evaluation/plaene/2026-10-25-kontrollsatz.md",
+          "stelle": "Verfahren 2"
+        }
+      ],
+      "kurz": "Fälle für die Fallreihe: mitgelieferte Fälle mit Material nachgeladen, Fallpaket (ZIP) mit SHA-256 bis zur Löschung auf dem Gerät, Feld profil im Fall, drei Prüfstein-Fälle mit Websuche.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-64",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/plaene/plan.schema.json",
+          "stelle": "varianten[].s1/s2"
+        },
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 128–167"
+        }
+      ],
+      "kurz": "plan.schema.json um ki_profil, mistral_endpunkt, recherche und fallpaket.sha256 erweitert; Plan belegt die Fallreihe vor, abweichendes Paket sperrt den Start; Matrix ohne Plan; B4 und B5 als zwei Pläne bei R1.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-65",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf.ts",
+          "stelle": "Zeilen 713–721 (vergleichsreihe)"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "schaetzeStufe"
+        }
+      ],
+      "kurz": "Kostenbremse vor dem Lauf, der den Deckel überschreiten würde (obere Schätzung oder teuerster bisheriger Lauf derselben Variante, sonst 5 USD); Reihenfolge je Fall alle Varianten.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-66",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/vergleichslauf-export.ts",
+          "stelle": "reiheZip, uebersichtZeilen"
+        },
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "Zeilen 183–194 (ausfuellHinweise)"
+        },
+        {
+          "datei": "evaluation/bewertungsschema.json",
+          "stelle": "required"
+        }
+      ],
+      "kurz": "Ergebnis-ZIP der Fallreihe mit Reihendatei, Übersicht der automatischen Prüfungen (v1 und v2), Laufprotokollen, Entwürfen und leerer Bewertungsvorlage mit Prüfliste je Entwurf.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "TP-2026-W44-67",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
+      "commit": "e202075",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "tests/browser/testlaeufe.spec.ts",
+          "stelle": "—"
+        },
+        {
+          "datei": "docs/TESTZUORDNUNG.md",
+          "stelle": "—"
+        }
+      ],
+      "kurz": "Tests der Fallreihe in Vitest (Logik, Oberfläche) und im Browser mit Attrappe für Import, Prüfsumme, Vorbelegung, Start, Kostenbremse und ZIP-Inhalt; App 0.7.2.",
+      "status": "umgesetzt",
+      "pr": 136
+    },
+    {
+      "id": "UP-2026-W45-03",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 10 (Z. 189)"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "rollen (Z. 306–318)"
+        }
+      ],
+      "kurz": "LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte, Quellenverzeichnis, Zeitstrahl und Kennzahlen aus den Feldern in PDF, Kopiervorlage und Rohtabelle, Ausgabestatus mit Freigabe, Vorlage der v2-Darstellungsdatei.",
+      "status": "umgesetzt",
+      "pr": 135
+    },
+    {
+      "id": "SR-2026-W45-01",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W45.json",
+      "commit": "635239448576a54f999bbbb74c838b15ac746e0e",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "Wurzel, additionalProperties: false"
+        },
+        {
+          "datei": "src/kern/meldung-v2.js",
+          "stelle": "Funktion stelleSchemaZusammen"
+        }
+      ],
+      "kurz": "Optionale Meldungsmodule im Kernschema von LEAD-Meldung-v2 für meldungsweite Angaben, Zusammenstellung mit meldungsmodule; Voraussetzung für KRITIS-LEAD auf v2.",
+      "status": "umgesetzt",
+      "pr": 140
+    },
+    {
+      "id": "SR-2026-W45-02",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W45.json",
+      "commit": "635239448576a54f999bbbb74c838b15ac746e0e",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "formate/fremd/thessa-kennzahlen/herkunft.json",
+          "stelle": "fassungen"
+        },
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka-thessa/LIESMICH.md",
+          "stelle": "Absatz 2 und Prüffrage"
+        }
+      ],
+      "kurz": "Thessa-Kennzahlen 0.3 ohne bezug_lead eingebettet (Zuordnung von oben, n:m), 0.2 und 0.1 lesbar, Kern-Pin und Begleitordner des Landesprofils nachgezogen.",
+      "status": "umgesetzt",
+      "pr": 140
+    },
+    {
+      "id": "SR-2026-W45-03",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W45.json",
+      "commit": "635239448576a54f999bbbb74c838b15ac746e0e",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-F01]"
+        },
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-F04]"
+        }
+      ],
+      "kurz": "Grunddesign 1.1: LD-F01 für Apps ohne Profile, neue Regel LD-F07 für fachliche Statusfarben.",
+      "status": "ueberholt",
+      "grund": "Vor der Umsetzung durch Pull Request #139 (Grunddesign 1.1, Entscheidungen des Herausgebers vom 03.11.2026) erledigt: LD-F01 mit festem Katalogschema, Status der Einsatzbereitschaft über Signalfarben (LD-F04, „einsatz“)."
+    },
+    {
+      "id": "SR-2026-W45-04",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W45.json",
+      "commit": "635239448576a54f999bbbb74c838b15ac746e0e",
+      "entschieden_am": "2026-11-03",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 8"
+        }
+      ],
+      "kurz": "Austauschvertrag 0.5: Zulieferer der App-Familie, Zuordnung von oben n:m, Präfix KRITIS- mit selbst gewähltem Betreiberkürzel.",
+      "status": "umgesetzt",
+      "pr": 140
+    },
+    {
+      "id": "LS-2026-W45-01",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Redaktionsmaßstab (Z. 115)"
+        }
+      ],
+      "kurz": "Arbeitsanweisung Erfassung 4.3: Richtwert keine Obergrenze; bei vorstrukturiertem Material gehen vollständige Maßnahmen und Empfehlungen vor, gekürzt wird zuerst die Lagebeschreibung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-02",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "5, Kurzantwort, Zeile ‚Nicht übernommen‘ (Z. 173)"
+        }
+      ],
+      "kurz": "Kurzantwortzeile „Nicht übernommen“ nennt auch gekürzte, zusammengefasste oder nicht zugeordnete Materialteile (bei Kennungen nur die Kennungen).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-03",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Meldungszuschnitt (Z. 98)"
+        }
+      ],
+      "kurz": "Sachverhaltsübergreifende Materialteile (Maßnahmen, Entscheidungsbedarfe, Szenarien, offene Fragen) den Sachverhalten zuordnen; Feld für übergreifende Lage in LEAD-Meldung-v2 vorgemerkt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-04",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 1, Grundregel 6 (Z. 18)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 1, Prüfreihenfolge Schritt 3 (Z. 30)"
+        }
+      ],
+      "kurz": "Kodierleitfaden Grundregel 6: gerundete amtliche Zählangaben an einer Stufengrenze tragen die niedrigere Stufe als Mindestwert.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-05",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 3, Beurteilung/Tendenz (Z. 65)"
+        }
+      ],
+      "kurz": "B05 Abschnitt 3: Prüfpunkt zum Zielkonflikt zwischen Hitzeschutz (5a) und Wasserspar- oder Nutzungsvorgaben (5b).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-06",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 5, Ansprechstellen (Z. 82)"
+        }
+      ],
+      "kurz": "B05 Abschnitt 5: Ansprechstellen für Teilprofil 5a um Gesundheits- und Sozialressorts, Rettungsdienstträger und Arbeitsschutz ergänzt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 142
+    },
+    {
+      "id": "LS-2026-W45-07",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45.json",
+      "commit": "b4d35be4aa33191670810cdfc36c401d55a61a1b",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "2, Zeitmodus (Z. 37–45)"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.2 (Z. 94)"
+        }
+      ],
+      "kurz": "Zeitmodus „Übungslage“ mit fiktiver Zeitachse und Übungskennzeichnung in der Arbeitsanweisung Erfassung.",
+      "status": "abgelehnt",
+      "entschieden_am": "2026-11-04",
+      "grund": "Übungsläufe bleiben außerhalb des Regelwerks (Entscheidung des Herausgebers)."
+    },
+    {
+      "id": "GK-2026-W45-01",
+      "agent": "gesamtkonsistenz",
+      "befunddatei": "ki-lead-befund_gesamtkonsistenz_2026-W45.json",
+      "commit": "94a5dac12863404faf091963a7559a66972d705a",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/zeitstrahl.ts",
+          "stelle": "zeitstrahlNachbearbeiten, Schritt 1 Kennungen (Z. 115–138, insbesondere Z. 124 „if (!roh) return;“)"
+        },
+        {
+          "datei": "profile/lead-beispiel/anweisung-erfassung.md",
+          "stelle": "4.3, Absatz „Zeitstrahl, Kennung und Bezug“ (Z. 113)"
+        }
+      ],
+      "kurz": "Platzhalter NEU-n, die die KI nur im Zeitstrahl setzt, dem n-ten Sachverhalt ohne Kennung zuordnen und mit Hinweis nennen; nicht zuordenbare Platzhalter melden.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 145
+    },
+    {
+      "id": "KL-2026-W45-01",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "entschieden_am": "2026-11-04",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt, required (Z. 1034)"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.bewertung, required (Z. 697)"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.sachverhalt_vollstaendig, bewertung (Z. 1110–1120)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 6, zur_freigabe und freigegeben (Z. 138)"
+        }
+      ],
+      "kurz": "Bewertung je Sachverhalt bei absender.ebene „Betreiber“ nicht Pflicht (fehlt = nicht erhoben), für alle übrigen Ebenen unverändert; Variante A, Voraussetzung für KRITIS-LEAD auf v2; Thessa pinnt das Kernschema neu.",
+      "status": "umgesetzt",
+      "pr": 146
+    },
+    {
+      "id": "AV-2026-W45-01",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|claude-opus-5-5|medium"
+        }
+      ],
+      "kurz": "Obergrenze der Erfassung mit Opus „mittel“ nach Überschreitung im Anbietervergleich vom 04.11.2026 auf 810 s und 3,35 USD (Messwert plus 25 %).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
+    },
+    {
+      "id": "AV-2026-W45-02",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|gpt-6-astra|high; schaetzeOhneAufschlag"
+        },
+        {
+          "datei": "src/ui/ModellWahl.tsx",
+          "stelle": "Schätzung je Rolle"
+        }
+      ],
+      "kurz": "Erfassung gpt-6-astra „hoch“ als vorläufige Einzelmessung (4–13 Minuten, 1,50–2,80 USD) statt Hochrechnung, gekennzeichnet; Hochrechnung zuerst aus demselben Modell.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
+    },
+    {
+      "id": "AV-2026-W45-03",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_schaetzung_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE, erfassung|mistral-medium-3-5|high"
+        }
+      ],
+      "kurz": "Erfassung Mistral Medium 3.5 „hoch“ als vorläufige Einzelmessung (1–6 Minuten, 0,20–0,65 USD ohne EU-Aufschlag) statt Hochrechnung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 147
+    },
+    {
+      "id": "AV-2026-W45-04",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 5, Format, Absatz „Beigefügtes Material ohne URL“"
+        }
+      ],
+      "kurz": "Sammel- und Auswertungsdokumente im Eingangsmaterial: eigener Eintrag je verwendetem Ursprungsdokument mit Kategorie nach Herkunft und „(Eingangsmaterial, enthalten in [Qn])“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 148
+    },
+    {
+      "id": "AV-2026-W45-05",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D3, nach „Bewertete Funktion benennen“"
+        }
+      ],
+      "kurz": "D3: Funktion nach Kernaussage und Beurteilung wählen, sonst staatliche Steuerung vor Betrieb; Kennzeichnung „D3 Funktion:“, „D3 strukturell:“ oder „D3 Vorsorge:“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 148
+    },
+    {
+      "id": "AV-2026-W45-06",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 7, Kurzbeispiele"
+        }
+      ],
+      "kurz": "Drei Kurzbeispiele für Sachverhalte ohne eigenen Schadensraum: D1 nicht aus „bundesweit relevant“, D3 strukturell nur mit belegter Ebene, Ende der Warnung kein Zielzustand für D5.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 148
+    },
+    {
+      "id": "AV-2026-W45-07",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/s1.ts",
+          "stelle": "bereinigeVorschlag, Regel R5 Stichtag in der Zukunft"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Bestaetigung.tsx",
+          "stelle": "t0Ungueltig"
+        }
+      ],
+      "kurz": "Stichtag in der Zukunft: t0 leer lassen statt aktueller Zeit; leeres t0 sperrt S2 im Bestätigungsschritt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 148
+    },
+    {
+      "id": "AV-2026-W45-08",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/forschung/fallreihe.ts",
+          "stelle": "pruefungen"
+        },
+        {
+          "datei": "src/forschung/plausibilitaet.ts",
+          "stelle": "neu: radarBegruendungPruefen"
+        },
+        {
+          "datei": "src/forschung/fallreihe-export.ts",
+          "stelle": "UEBERSICHT_KOPF"
+        }
+      ],
+      "kurz": "Fallreihe: Anteil offener Radarachsen und Prüfmuster der Radarbegründung (D3 ohne Funktion, D5 ohne Zielzustand) je Lauf, nur in der Fallreihe bis zur Bewährung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 148
+    },
+    {
+      "id": "AV-2026-W45-09",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_anbietervergleich_2026-W45.json",
+      "commit": "6302c14fef6e6a8647554141949987d0ddbd055d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/s2s3.ts",
+          "stelle": "Systemauftrag S2, cache: true"
+        }
+      ],
+      "kurz": "Cache-Haltepunkte in S2 nur setzen, wenn eine Wiederverwendung möglich ist (Recherche mit Nachforderung); im Vergleich 215 Tsd. Token geschrieben, keine gelesen.",
+      "status": "abgelehnt",
+      "entschieden_am": "2026-11-04",
+      "grund": "Vom Herausgeber nicht freigegeben; geringe Wirkung (rund 6 % eines Opus-Laufs ohne Recherche)."
+    },
+    {
+      "id": "UX-2026-W45-01",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Ablage (section.lb-ablage)"
+        }
+      ],
+      "kurz": "Sind Meldungen geladen, die Ablage auf eine Zeile „+ Meldungen hinzufügen“ (Dateien wählen, Beispiel) einklappen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-02",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Leiste über den Reitern (lb-leiste)"
+        }
+      ],
+      "kurz": "PDF und CSV in ein Menü „Ausgeben“, „An KI-Verdichtung übergeben“ bleibt Hauptknopf.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-03",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "nav.lb-reiter"
+        }
+      ],
+      "kurz": "Reiterleiste beim Scrollen unter dem Seitenkopf halten.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-04",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "absender()"
+        }
+      ],
+      "kurz": "In Überschriften der Oberfläche den Wert der Rolle „land“ (Land/Bund) zeigen, darunter den vollen Namen einzeilig klein, vollständig im Detail.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-05",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/app/adresse.ts",
+          "stelle": "adresseLesen, adresseText"
+        }
+      ],
+      "kurz": "Adresse #/auswertung/<reiter>.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-06",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, lb-kennzahlen"
+        }
+      ],
+      "kurz": "Kennzahlen in zwei beschriftete Gruppen „Lage“ und „Redaktion“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-07",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, Meldestatus"
+        }
+      ],
+      "kurz": "Offene Stellen zuerst mit Zahl, darunter gemeldete mit Meldezeitpunkt und Alter („vor 2 Tagen“).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-08",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Übersicht, Verteilungen (Balken)"
+        }
+      ],
+      "kurz": "Beurteilung und Tendenz mit allen Stufen des Schemas in fester Reihenfolge, auch 0.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-09",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "kennzahlen()"
+        }
+      ],
+      "kurz": "Filter „Eigene Meldung“ neben dem Herkunftsfilter, standardmäßig einbezogen, mit derselben Wirkung (Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF, CSV).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-10",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Meldungen, Kartenkopf"
+        }
+      ],
+      "kurz": "Heller, schlanker Kopf mit Land/Bund, Stelle klein und Meldezeitpunkt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-11",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/bausteine.tsx",
+          "stelle": "Marken()"
+        }
+      ],
+      "kurz": "Schemamarke nur bei Abweichung (oder fremdem Schema) zeigen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-12",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Meldungen"
+        }
+      ],
+      "kurz": "Auswahl „Sortieren nach“ Land/Stelle, Meldezeitpunkt (neueste zuerst) oder höchster Beurteilung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-13",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "lb-sv-meta"
+        }
+      ],
+      "kurz": "Stelle (Land/Bund), Art und Eintritt als eigene, kurze Angaben.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-14",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "Filter (lb-svfilter)"
+        }
+      ],
+      "kurz": "Filter als Chips mit Anzahl für Beurteilung, Tendenz, Art (Mehrfachnennung) und Land/Bund, dazu eine Textsuche über Bezeichnung, Ort und Kennung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-15",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Sachverhaltsliste.tsx",
+          "stelle": "Details, Bezug"
+        }
+      ],
+      "kurz": "Schalter „Nach Bezug ordnen“: Sachverhalte, die geladene Sachverhalte über „Bezug“ nennen, stehen oben, die genannten eingerückt darunter.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-16",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Lagenradar"
+        }
+      ],
+      "kurz": "Vergleichsmatrix (Zeilen Sachverhalte, Spalten Achsen, Zelle mit Stufe und Farbstufe, „offen“ eigens gekennzeichnet, kein Mittelwert) als Standard mit Umschalter „Matrix | Karten“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-17",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Radar.tsx",
+          "stelle": "RadarGrafik, Fläche"
+        }
+      ],
+      "kurz": "Fläche nur, wenn alle Achsen gesetzt sind.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-18",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Lagenradar"
+        }
+      ],
+      "kurz": "In der Matrix bis zu drei Sachverhalte markieren.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-19",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Punkt"
+        }
+      ],
+      "kurz": "Je Befund (zeitkritisch, zu klären) „Erledigt“ oder „Bewusst belassen“ mit freiwilliger Begründung.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-20",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Abschnitte 1–5"
+        }
+      ],
+      "kurz": "Abschnitte aufklappbar, ohne Befund eingeklappt zu einer Zeile.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-21",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Redaktionscheck.tsx",
+          "stelle": "Textbaustein (Entwurf)"
+        }
+      ],
+      "kurz": "Textbaustein standardmäßig zugeklappt (Kopieren bleibt sichtbar).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-22",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "zurMeldung"
+        }
+      ],
+      "kurz": "Bei Befunden zu einem Sachverhalt zusätzlich „Zum Sachverhalt“ (Reiter Sachverhalte, gefiltert und aufgeklappt) und „In der Erfassung öffnen“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-23",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Kopiervorlage.tsx",
+          "stelle": "Blöcke"
+        }
+      ],
+      "kurz": "Blöcke eingeklappt mit Kopfzeile, „Kopieren“ und Vorschau bei Bedarf.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-24",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/lagebild/Kopiervorlage.tsx",
+          "stelle": "lb-vorlage-kopf"
+        }
+      ],
+      "kurz": "Kopf gegliedert: Bezeichnung, darunter Land/Bund, Beurteilung und Tendenz als Marken, Frist und Abschlussvermerk als eigene Angabe.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-25",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Reiter Rohtabelle"
+        }
+      ],
+      "kurz": "Zellen auf drei Zeilen kürzen, per Klick aufklappbar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-26",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/ausgabe.ts",
+          "stelle": "spalten()"
+        }
+      ],
+      "kurz": "Spaltengruppen ein- und ausblendbar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-27",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "KartenInhalt"
+        }
+      ],
+      "kurz": "Alle Karten gleich aufgebaut und zugeklappt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-28",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "profil-meta"
+        }
+      ],
+      "kurz": "Unter dem Titel eine Zeile Eckdaten: Ebene · Referenzraum · Schema · Lagenradar ja/nein · SOPs.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-29",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Knopf Verwenden"
+        }
+      ],
+      "kurz": "Schlichter Knopf „Verwenden“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-30",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "BefundChip, Titel"
+        }
+      ],
+      "kurz": "Befundchip nur bei Fehlern oder Warnungen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-31",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Bereich Prüfen"
+        }
+      ],
+      "kurz": "Schema, Lizenz, Prüfsumme, Prüfbericht und Dateien unter „Technische Angaben“ (aufklappbar) zusammenfassen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "UX-2026-W45-32",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W45.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Menü Mehr"
+        }
+      ],
+      "kurz": "Mit nur einem Eintrag ein direkter Knopf „Exportieren“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-04",
+      "pr": 149
+    },
+    {
+      "id": "KL-2026-W45-02",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 13 Nr. 8 (Z. 262)"
+        },
+        {
+          "datei": "formate/fremd/",
+          "stelle": "Ordner"
+        }
+      ],
+      "kurz": "Module lead-kritis-meldung und lead-kritis-betrieb 0.3 aus KRITIS-LEAD 206d574 mit Herkunft und Prüfsumme unter formate/fremd/kritis-lead/ eingebettet; Prüfsummentest, Pin-Wächter von KRITIS-LEAD liest dieselbe Herkunft.",
+      "status": "umgesetzt",
+      "pr": 151
+    },
+    {
+      "id": "KL-2026-W45-03",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0] (Z. 26)"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.2 Bezug (Z. 272–276)"
+        }
+      ],
+      "kurz": "Bezug von DE-TH-SON-20261014-R4WP in SON 10:00 auf die fünf verdichteten Sachverhalte (vier Betreiber, Leitstelle) ergänzen.",
+      "status": "zurueckgestellt",
+      "grund": "Die Betreiberkennungen haben einen sechsstelligen Zufallsteil; das Schema LEAD-Meldung-Land-v1 lässt im Bezug nur vierstellige zu. Umsetzung mit der Umstellung des Landesprofils auf v2 (Paket 6).",
+      "wieder_vorlegen_ab": "2026-11-09"
+    },
+    {
+      "id": "KL-2026-W45-04",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0].sofort.bewertung_text, Kennsätze „Handlungsrelevant bis:“ (Z. 43)"
+        }
+      ],
+      "kurz": "Hinweis: Frist der Trinkwasserversorgung (16.10., 10:00) liegt nach der Diesel-Anforderung des Betreibers (15.10., 12:00); prüfen, ob beabsichtigt, und dann begründen.",
+      "status": "zurueckgestellt",
+      "grund": "Nur Hinweis ohne Änderung; aufgreifen, wenn das Beispiel auf v2 umgestellt wird (Fristen als Liste mit Bedingung und Grundlage).",
+      "wieder_vorlegen_ab": "2026-11-09"
+    },
+    {
+      "id": "KL-2026-W45-05",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 3, Zeile kennung (Z. 62)"
+        },
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 9, „Kennungen der Betreiber“ (Z. 104)"
+        }
+      ],
+      "kurz": "Kodierleitfaden 1.11.0, Abschnitt 8.1: Kennungen der Betreiber mit Präfix KRITIS-, nie als eigene geführt; im v1-Bezug wegen vierstelligem Zufallsteil erst nach der Umstellung auf v2; Verweise in LEAD-MELDUNG-V2.md und AUSTAUSCH.md.",
+      "status": "umgesetzt",
+      "pr": 151
+    },
+    {
+      "id": "KL-2026-W45-06",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.quelle.properties.zugang (Z. 458–461)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 4, Quellenverzeichnis, Zeile zugang (Z. 126)"
+        }
+      ],
+      "kurz": "Zusätzlicher Wert „betriebsintern“ für quellen[].zugang im Kernschema (Nachtrag 7), Vermerk in Quellenzeile und Baustein, Überführung aus v1; Thessa und KRITIS-LEAD pinnen neu.",
+      "status": "umgesetzt",
+      "pr": 151
     }
   ]
 }

@@ -6,7 +6,7 @@ Code unter EUPL-1.2 (LICENSE); Beispielprofile, Evaluationsmaterial und Dokument
 
 ## Native Apps
 
-### Capacitor (Android) - 8.5.3 (MIT)
+### Capacitor (Android) - 8.6.0 (MIT)
 
 ```
 MIT License
@@ -32,7 +32,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### Capacitor (iOS, capacitor-swift-pm) - 8.5.3 (MIT; enthält Teile von Apache Cordova iOS unter Apache-2.0 (Lizenztext unten))
+### Capacitor (iOS, capacitor-swift-pm) - 8.6.0 (MIT; enthält Teile von Apache Cordova iOS unter Apache-2.0 (Lizenztext unten))
 
 ```
 MIT License

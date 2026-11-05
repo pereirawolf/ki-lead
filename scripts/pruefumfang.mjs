@@ -15,6 +15,7 @@ import { pathToFileURL } from "node:url";
 /** Reine Inhalte: ändern weder Programmcode noch Bedienoberfläche des Builds */
 export const NUR_INHALT = [
   /^docs\//,
+  /^design\//, // Grunddesign der App-Familie (seit 03.11.2026; Gleichlauf mit dem Code prüft Vitest)
   /^evaluation\//,
   /^[^/]+\.md$/, // README.md, CHANGELOG.md
   /^CITATION\.cff$/,
@@ -28,13 +29,14 @@ export const NUR_INHALT = [
 
 /**
  * Ausnahmen von NUR_INHALT: Dateien unter evaluation/, die die App einbettet (Vergleichslauf Ilka, seit 0.5.12 auch
- * Musterfassung und Zuschnitt, seit 0.5.13 Plan des Prüffalls Reparatur). Ein Wächter in tests/ci/pruefumfang.test.ts
- * prüft, dass jeder Import aus evaluation/ unter src/ hier steht und jede Regel mindestens einen Import trifft.
+ * Musterfassung und Zuschnitt, seit 0.5.13 Plan des Prüffalls Reparatur, seit 0.7.2 alle Fälle, ihr Material und das
+ * Planschema für die Fallreihe, TP-2026-W44-63, -64). Ein Wächter in tests/ci/pruefumfang.test.ts prüft, dass jeder
+ * Import aus evaluation/ unter src/ hier steht und jede Regel mindestens einen Import trifft.
  */
 export const IN_DER_APP = [
-  /^evaluation\/faelle\/(orkantief-ilka-verdichtung|ilka-management-summary)\.json$/,
-  /^evaluation\/plaene\/(standardprofile-ilka|anbietermix-ilka|s2-isoliert-ilka|management-summary-ilka|reparatur-ilka)\.json$/,
-  /^evaluation\/material\/(ilka-musterfassung|ilka-s1-zuschnitt-a)\.json$/,
+  /^evaluation\/faelle\/[^/]+\.json$/,
+  /^evaluation\/plaene\/(standardprofile-ilka|anbietermix-ilka|s2-isoliert-ilka|management-summary-ilka|reparatur-ilka|plan\.schema)\.json$/,
+  /^evaluation\/material\/[^/]+\.(md|json|txt)$/,
 ];
 
 /** PWA-Mechanismus und alles, wovon die PWA-Browsertests unmittelbar abhängen */

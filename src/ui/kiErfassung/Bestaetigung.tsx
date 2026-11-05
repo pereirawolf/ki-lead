@@ -18,6 +18,7 @@ import { OFFLINE_HINWEIS, OfflineHinweis, ProtokollKnopf, type LaufRahmen } from
 import { absenderZeile, kurzeAdresse, rechercheZeile, zeitAnzeige } from "./recherche";
 import { TEXT_FELD } from "./texte";
 import type { KiAktion } from "./zustand";
+import { verweisKlammer } from "../../kern/ui";
 
 export function Bestaetigung({
   rahmen,
@@ -55,7 +56,8 @@ export function Bestaetigung({
     () => s2UmfangWarnung(s2Umfang(profil, material, lauf.auftrag.urls, lauf.auftrag.stichworte, vorschlag)),
     [profil, material, lauf, vorschlag],
   );
-  const t0Ungueltig = !!vorschlag.meldezeitpunkt && !gueltigerZeitpunkt(vorschlag.meldezeitpunkt);
+  // Auch ein leeres t0 sperrt S2 (seit 0.7.10, AV-2026-W45-07: Stichtag in der Zukunft lässt t0 leer)
+  const t0Ungueltig = !gueltigerZeitpunkt(vorschlag.meldezeitpunkt || "");
   /** Verweis der Startknöpfe auf den Grund der Sperre */
   const beschreibung = [t0Ungueltig && "t0-ungueltig", offline && OFFLINE_HINWEIS].filter(Boolean).join(" ") || undefined;
   // Orientierungssuche und Pflichtsuchen (seit 0.6.0, KP-2026-W44-06)
@@ -179,7 +181,7 @@ export function Bestaetigung({
         <div className="kasten kasten-hinweis" role="status">
           <p>
             {vorschlag.sachverhalte.length} Sachverhalte bei einer Verdichtung: prüfen, ob mehrere Meldungen dasselbe Ereignis beschreiben und sich
-            zusammenführen lassen (SOP-LEAD A.7.1).
+            zusammenführen lassen{verweisKlammer(profil.ui, "zusammenhang")}.
           </p>
         </div>
       )}

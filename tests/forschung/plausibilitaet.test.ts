@@ -3,7 +3,15 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { repoPfad } from "../support/dateien";
-import { d2Pruefen, d2Stufe, plausibilitaetPruefen, summanden, summenPruefen } from "../../src/forschung/plausibilitaet";
+import {
+  D3_KENNZEICHNUNG,
+  d2Pruefen,
+  d2Stufe,
+  plausibilitaetPruefen,
+  radarBegruendungPruefen,
+  summanden,
+  summenPruefen,
+} from "../../src/forschung/plausibilitaet";
 
 describe("Plausibilität: Summen in Klammern", () => {
   it("meldet eine Angabe, die nicht der Summe der Klammerwerte entspricht", () => {
@@ -121,5 +129,25 @@ describe("Plausibilität: D2", () => {
       ["d2", 1, "sofort.lagenradar.d2"],
       ["summe", 2, "analyse.risiken_auswirkungen"],
     ]);
+  });
+});
+
+// Prüfmuster der Radarbegründung (AV-2026-W45-08, seit 0.7.10): nur in der Fallreihe. Sätze fiktiv, nach den Mustern des
+// Anbietervergleichs vom 04.11.2026 (D3 ohne bewertete Funktion, D5 ohne Zielzustand).
+describe("AV-2026-W45-08: Prüfmuster der Radarbegründung", () => {
+  it("meldet D3 ohne Kennzeichnung der Funktion und D5 ohne Zielzustand", () => {
+    const ohne = "D3 = 5 (Bund), weil das Thema bundesweit relevant ist. D5 = 6 (mehr als 3 Monate), weil die Pegel lange niedrig bleiben.";
+    expect(radarBegruendungPruefen(ohne, { d3: 5, d5: 6 }).map((b) => b.achse)).toEqual(["d3", "d5"]);
+    for (const mit of [
+      "D3 = 2, D3 Funktion: Anordnung von Entnahmebeschränkungen, untere Wasserbehörden (Kreis).",
+      "D3 = 5, D3 strukturell: Warnsysteme, Bundesamt.",
+      "D3 = 1, D3 Vorsorge: Sandsackausgabe, Stadt.",
+    ])
+      expect(radarBegruendungPruefen(mit, { d3: 1 }), mit).toEqual([]);
+    expect(radarBegruendungPruefen("D5 = 2: Zielzustand Versorgung wiederhergestellt, Prognose des Betreibers.", { d5: 2 })).toEqual([]);
+    // offene Achsen und D5 = 0 mit Zielzustand lösen nichts aus
+    expect(radarBegruendungPruefen("D3 offen. D5 offen: kein Zielzustand.", { d3: null, d5: null })).toEqual([]);
+    expect(radarBegruendungPruefen("D5 = 0, Zielzustand erreicht.", { d5: 0 })).toEqual([]);
+    expect(D3_KENNZEICHNUNG.test("ED3 Funktion:")).toBe(false);
   });
 });

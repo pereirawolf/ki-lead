@@ -8,7 +8,8 @@ import { holeWert, teilePfad } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
-import type { Kontakte, Meldung, Profil } from "../kern/typen";
+import { referenzBefunde } from "../kern/referenzen";
+import type { Befund, Kontakte, Meldung, Profil } from "../kern/typen";
 
 export interface LagebildDatei {
   name: string;
@@ -32,6 +33,8 @@ export interface LagebildEintrag {
   fremd: EingangsInfo | null;
   /** Fremde Meldung gegen ihr Schema aus `meldung.eingang_schemata` geprüft (seit 0.6.19, TP-2026-W44-59); Befunde in `schema` */
   fremdGeprueft?: boolean;
+  /** Referenzprüfung (Prüfebene 2) bei Meldungen nach LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02); fehlt ohne Befund */
+  referenzen?: Befund[];
 }
 
 export interface LagebildFehler {
@@ -91,7 +94,15 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
     const mig = migriere(obj, profil);
     const basis = { id, name: datei.name, importiertAm: datei.importiertAm, herkunft: mig.herkunft };
     if (mig.bekannt) {
-      eintraege.push({ ...basis, daten: mig.daten, hinweise: mig.hinweise, schema: pruefeGegenSchema(profil.schema, mig.daten, profil.ui), fremd: null });
+      const referenzen = referenzBefunde(mig.daten, profil.ui);
+      eintraege.push({
+        ...basis,
+        daten: mig.daten,
+        hinweise: mig.hinweise,
+        schema: pruefeGegenSchema(profil.schema, mig.daten, profil.ui),
+        fremd: null,
+        ...(referenzen.length ? { referenzen } : {}),
+      });
       continue;
     }
     const info = eingangsInfo(obj, profil);
@@ -107,6 +118,7 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
       schema: es ? pruefeGegenSchema(es.schema, obj, profil.ui) : [],
       fremd: info,
       ...(es ? { fremdGeprueft: true } : {}),
+      ...(referenzBefunde(obj).length ? { referenzen: referenzBefunde(obj) } : {}),
     });
   }
   return { eintraege, fehler };
@@ -246,6 +258,17 @@ export function absender(e: LagebildEintrag, profil: Profil): string {
   const stelle = stelleVon(e, profil);
   if (land && stelle && !stelle.startsWith(land)) return `${land} · ${stelle}`;
   return stelle || land || e.name;
+}
+
+/**
+ * Absender für Überschriften der Oberfläche (seit UX-2026-W45-04): kurz der Wert der Rolle „land“ (Land/Bund), als
+ * Zusatz der volle Name der Stelle; ohne Land die Stelle bzw. der Dateiname. Ausgaben verwenden weiter absender().
+ */
+export function absenderTeile(e: LagebildEintrag, profil: Profil): { kurz: string; zusatz: string } {
+  const land = landVon(e, profil);
+  const stelle = stelleVon(e, profil);
+  if (land) return { kurz: land, zusatz: stelle && stelle !== land ? stelle : "" };
+  return { kurz: stelle || e.name, zusatz: "" };
 }
 
 function arten(v: unknown): string[] {
@@ -433,6 +456,36 @@ export function erinnerungMailto(zeile: StatusZeile, kontakte?: Kontakte): strin
   };
   const ersetze = (s: string) => s.replace(/\{name\}|\{land\}/g, zeile.name);
   return `mailto:${encodeURIComponent(zeile.email || "")}?subject=${encodeURIComponent(ersetze(vorlage.betreff))}&body=${encodeURIComponent(ersetze(vorlage.text))}`;
+}
+
+/**
+ * Eine Erinnerung an alle offenen Stellen (seit UX-2026-W45-07): ein E-Mail-Entwurf mit allen echten Adressen in Bcc,
+ * damit die Stellen einander nicht sehen. {name}/{land} der Vorlage werden zu „Ihrer Stelle“. Ohne echte Adresse null.
+ */
+export function sammelErinnerungMailto(zeilen: StatusZeile[], kontakte?: Kontakte): { href: string; anzahl: number } | null {
+  const adressen = [...new Set(zeilen.filter((z) => !z.eintraege.length && !istPlatzhalterAdresse(z.email)).map((z) => z.email!.trim()))];
+  if (!adressen.length) return null;
+  const vorlage = kontakte?.erinnerung || {
+    betreff: "Erinnerung: Meldung {name}",
+    text: "Guten Tag,\n\nfür den aktuellen Berichtszeitraum liegt noch keine Meldung aus {name} vor.\n\nMit freundlichen Grüßen",
+  };
+  const ersetze = (t: string) => t.replace(/\{name\}|\{land\}/g, "Ihrer Stelle");
+  return {
+    href: `mailto:?bcc=${adressen.map(encodeURIComponent).join(",")}&subject=${encodeURIComponent(ersetze(vorlage.betreff))}&body=${encodeURIComponent(ersetze(vorlage.text))}`,
+    anzahl: adressen.length,
+  };
+}
+
+/** Alter einer Meldung in Worten („vor 3 Stunden“, „vor 2 Tagen“); leer ohne lesbaren Zeitpunkt oder in der Zukunft */
+export function alterText(zeitpunkt: Date | null | undefined, jetzt: Date): string {
+  if (!zeitpunkt) return "";
+  const minuten = Math.floor((jetzt.getTime() - zeitpunkt.getTime()) / 60000);
+  if (minuten < 0) return "";
+  if (minuten < 60) return "vor weniger als 1 Stunde";
+  const stunden = Math.floor(minuten / 60);
+  if (stunden < 24) return `vor ${stunden} Stunde${stunden === 1 ? "" : "n"}`;
+  const tage = Math.floor(stunden / 24);
+  return `vor ${tage} Tag${tage === 1 ? "" : "en"}`;
 }
 
 /** Mehrere Meldungen derselben Stelle: mögliche Fortschreibung, Gefahr der Doppelzählung (A.7.1). */

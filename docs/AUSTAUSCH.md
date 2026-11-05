@@ -1,6 +1,6 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.2 vom 01.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.6.20 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.5 vom 04.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.7.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
 
@@ -74,20 +74,36 @@ LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler 
 
 ## 8. Fremde Schemata
 
-**Heute.** Ein Profil kennt vier Wege:
+**Heute.** Ein Profil kennt vier Wege für Meldungen; dazu kommt seit 0.6.24 ein profilunabhängiger Weg für strukturiertes Material:
 
 | Weg | Wirkung | Fundstelle |
 |---|---|---|
 | eigene Schemakennung | voll verwendet und geprüft | `meldung.schema_id` |
 | `eingang_schema_ids` | wie eigene Meldungen behandelt | `src/kern/migration.ts` |
-| `migrationen` | überführt, dann wie eigene Meldungen | `src/kern/migration.ts` |
-| sonst | fremde Meldung, nur für die KI-Verdichtung, an der Grundform erkannt (Sachverhalte und Stelle) | `src/kern/eingang.ts` |
+| `migrationen` | überführt, dann wie eigene Meldungen; seit 0.7.0 auch mit `verfahren` „lead-meldung-v2“ nach LEAD-Meldung-v2 | `src/kern/migration.ts`, `src/kern/meldung-v2.js` |
+| sonst | fremde Meldung, nur für die KI-Verdichtung, an der Grundform erkannt (Sachverhalte und Stelle; seit 0.7.0 auch `absender.stelle` und `absender.gebiet.name` von LEAD-Meldung-v2) | `src/kern/eingang.ts` |
+| Material-Format (seit 0.6.24) | kein Meldungsformat, sondern strukturiertes Material: Kennzahlen-Bausteine aus Thessa (`format` „Thessa-Kennzahlen“), profilunabhängig gegen ein eingebettetes Schema mit Herkunft und Prüfsumme geprüft (`formate/fremd/`); in der KI-Erfassung eigene Materialart | `src/kern/baustein.ts`, `src/pipeline/material.ts` |
 
 Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Schema, das das empfangende Profil unter `meldung.eingang_schemata` mitbringt, und zeigt die Befunde („fremdes Schema ✓“ oder „fremdes Schema: n“). Ohne Eintrag bleibt eine fremde Meldung ungeprüft („fremdes Schema“). Beispiel: Das Beispielprofil der Koordinierungsstelle prüft Meldungen nach `LEAD-Meldung-Land-v1` und liest ihr Gebiet aus `kreis` (TP-2026-W44-60); damit ist der Weg Kreis → Land → Bund mit den mitgelieferten Profilen durchgängig.
 
 **Vorschlag.** Jede Stelle, die Meldungen abgibt, veröffentlicht ihr Schema mit Kennung und Version. Empfangende Profile nehmen es unter `eingang_schemata` auf. Nächste Kandidaten sind das Schema von KRITIS-LEAD (Landesprofil) und das Schema des Profils Justiz (Landesprofil, gegebenenfalls Bundesprofil).
 
 **Offen für Teil C:** Ort und Pflege der veröffentlichten Schemata; ob eine geprüfte fremde Meldung mehr kann als die KI-Verdichtung (etwa Kennzahlen im Lagebild).
+
+## 9. Zulieferer aus der App-Familie
+
+Zwei Schwesterdemonstratoren liefern KI-LEAD zu, auf verschiedenen Wegen. Beide sind gewollt, weil sie Verschiedenes liefern (Entscheidung des Herausgebers vom 03.11.2026):
+
+| Zulieferer | liefert | Weg | Format |
+|---|---|---|---|
+| [KRITIS-LEAD](https://github.com/pereirawolf/kritis-lead) | **Meldungen**: Sachverhalte von KRITIS-Betreibern neben den Meldungen der Behörden | Profilpaket `lead-kritis`; Meldungen nach `LEAD-Meldung-v2` mit `absender.ebene` „Betreiber“, Betreiberangaben je Sachverhalt als Modul und meldungsweite Angaben als Meldungsmodul ([LEAD-MELDUNG-V2.md](LEAD-MELDUNG-V2.md), Abschnitt 7; Umstellung von v1 läuft) | Modulschemata in KRITIS-LEAD, eingebettet unter `formate/fremd/kritis-lead/` (Fassung 0.3) |
+| Thessa (Repository während der Entwicklung nicht öffentlich) | **Material**: Kennzahlen zur Kräftelage der Feuerwehren und die lagerelevanten Einsatzmeldungen eines Raums | Materialart „Kennzahlen-Baustein“ (Abschnitt 8) | `Thessa-Kennzahlen`, eingebettet unter `formate/fremd/thessa-kennzahlen/` |
+
+**Zuordnung von oben.** Weder Einsatzmeldungen aus Thessa noch Betreibermeldungen kennen die Sachverhalte der Stellen, die sie später verarbeiten. Die Stelle, die das Lagebild erstellt, ordnet zu: Ihr Sachverhalt nennt die Kennungen der Sachverhalte, die er verdichtet (`bezug`), und die Kennungen der Einsatzmeldungen, auf die er sich stützt. Die Zuordnung ist n:m; eine Einsatzmeldung kann mehreren Sachverhalten und Lagemeldungen zugeordnet sein (Thessa, Grundentscheidung G12; Feld `bezug_lead` seit `Thessa-Kennzahlen` 0.3 entfallen). Wo die Kennungen der Einsatzmeldungen im Sachverhalt stehen, legt das Paket „Kennzahl → Baustein“ des Umstellungsplans fest (Verweis über ein Fachmodul, nicht über ein Kernfeld).
+
+**Kennungen der Betreiber.** Sachverhalte von KRITIS-Betreibern tragen das Präfix `KRITIS-` und danach ein Kürzel, das der Betreiber selbst wählt: ein bis drei Segmente aus Großbuchstaben A–Z und Ziffern, je höchstens acht Zeichen, ohne Umlaute, Sonder- und Leerzeichen (etwa `KRITIS-ZVTN-20261014-7KQ2MD`). Das Präfix ordnet den Sachverhalt der KRITIS-Sphäre zu, unabhängig von Verwaltungsgrenzen, die Netz- und Versorgungsgebiete oft überschreiten; eindeutig bleibt die Kennung durch Datum und Zufallsteil, ohne Register. Das Muster der Kennung im Kernschema von v2 lässt das zu, verlangt das Kürzel aber nicht; das tut das Schema von KRITIS-LEAD. Die Regel steht in KRITIS-LEAD (Kodierleitfaden, Anhang K) und in Abschnitt 8.1 der Kodierleitfäden des Beispiel- und des Landesprofils (ab 1.11.0, KL-2026-W45-05); im Bezug nach LEAD-Meldevorlage 1.2 lässt deren Schema nur vierstellige Zufallsteile zu, Betreiberkennungen stehen dort erst nach der Umstellung auf v2.
+
+**Offen für Teil C:** ob Betreiberkürzel gegen Verwechslung abgestimmt werden (Register oder Empfehlung); wie eine Lagemeldung Einsatzmeldungen zitiert, die sie nur verdichtet erhalten hat.
 
 ## Anhang: Mindestinhalt einer austauschfähigen Meldung (Entwurf)
 
@@ -110,3 +126,6 @@ Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Sche
 |---|---|---|
 | 0.1 | 31.10.2026 | Erster Entwurf (App 0.6.19, TP-2026-W44-58); Abstimmung in Teil C |
 | 0.2 | 01.11.2026 | Verweis auf den Entwurf des Meldungsformats `LEAD-Meldung-v2`, der die Vorschläge aufnimmt; Inhalt sonst unverändert |
+| 0.3 | 03.11.2026 | Abschnitt 8: Material-Formate als fünfter Weg (Kennzahlen-Bausteine aus Thessa, App 0.6.24, UP-2026-W45-01) |
+| 0.5 | 04.11.2026 | Abschnitt 9: Zulieferer aus der App-Familie (Meldungen aus KRITIS-LEAD, Material aus Thessa), Zuordnung von oben n:m, Präfix `KRITIS-` für Sachverhalte von Betreibern (SR-2026-W45-04) |
+| 0.4 | 03.11.2026 | Abschnitt 8: Migration nach LEAD-Meldung-v2 beim Einlesen, Grundform v2 für fremde Meldungen (App 0.7.0, UP-2026-W45-02) |

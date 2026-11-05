@@ -134,6 +134,9 @@
     "fehlanzeige": {
       "$ref": "#/$defs/fehlanzeige"
     },
+    "module": {
+      "$ref": "#/$defs/meldungsmodule"
+    },
     "freigabe": {
       "type": "object",
       "required": [],
@@ -152,6 +155,29 @@
     }
   },
   "allOf": [
+    {
+      "$comment": "Bewertung je Sachverhalt ist Pflicht, außer bei Meldungen von Betreibern (KL-2026-W45-01, LEAD-MELDUNG-V2.md Abschnitt 3).",
+      "if": {
+        "properties": {
+          "absender": {
+            "properties": {
+              "ebene": {
+                "const": "Betreiber"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "sachverhalte": {
+            "items": {
+              "required": ["bewertung"]
+            }
+          }
+        }
+      }
+    },
     {
       "if": {
         "required": ["fehlanzeige"]
@@ -430,8 +456,8 @@
           "description": "Stand der Angaben in der Quelle, getrennt vom Veröffentlichungsdatum."
         },
         "zugang": {
-          "enum": ["oeffentlich", "paywall", "behoerdenintern", "eingangsmaterial", "eingangsmeldung", "nicht_ausgewertet", null],
-          "description": "Tatsächlicher Zugang: öffentlich, hinter Bezahlschranke, behördenintern, beigefügtes Material, Meldung einer anderen Stelle, nicht ausgewertet (davon abhängige Aussagen gelten nicht als gesichert); null = nicht angegeben."
+          "enum": ["oeffentlich", "paywall", "behoerdenintern", "betriebsintern", "eingangsmaterial", "eingangsmeldung", "nicht_ausgewertet", null],
+          "description": "Tatsächlicher Zugang: öffentlich, hinter Bezahlschranke, behördenintern, betriebsintern (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt), beigefügtes Material, Meldung einer anderen Stelle, nicht ausgewertet (davon abhängige Aussagen gelten nicht als gesichert); null = nicht angegeben."
         },
         "meldung_id": {
           "$ref": "#/$defs/uuid",
@@ -1008,9 +1034,27 @@
       },
       "properties": {}
     },
+    "meldungsmodule": {
+      "type": "object",
+      "description": "Fachmodule für Angaben, die für die ganze Meldung gelten (etwa Meldeanlass, Vertraulichkeit, Empfänger), Schlüssel = Modulkennung. Optional; Regeln wie bei den Modulen je Sachverhalt.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["fassung"],
+        "properties": {
+          "fassung": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          }
+        }
+      },
+      "properties": {}
+    },
     "sachverhalt": {
       "type": "object",
-      "required": ["kennung", "bezeichnung", "eintritt", "raum", "analyse", "bewertung", "handlungsbedarf", "module"],
+      "required": ["kennung", "bezeichnung", "eintritt", "raum", "analyse", "handlungsbedarf", "module"],
       "additionalProperties": false,
       "properties": {
         "kennung": {
@@ -1046,6 +1090,7 @@
           "$ref": "#/$defs/analyse"
         },
         "bewertung": {
+          "description": "Pflicht außer bei absender.ebene „Betreiber“: Dort setzt die verarbeitende Stelle die Bewertung in ihrem eigenen Sachverhalt; fehlt der Block, ist keine Bewertung erhoben (KL-2026-W45-01).",
           "$ref": "#/$defs/bewertung"
         },
         "handlungsbedarf": {

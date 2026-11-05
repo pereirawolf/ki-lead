@@ -2,9 +2,9 @@
 
 Formatfassung 2.0 vom 01.11.2026, **Entwurf zur fachlichen Abnahme** · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
-Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/lead-meldung-v2/README.md). Werkzeug: `npm run meldung:v2` ([scripts/lead-meldung-v2.mjs](../scripts/lead-meldung-v2.mjs)).
+Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/lead-meldung-v2/README.md). Werkzeug: `npm run meldung:v2` ([scripts/lead-meldung-v2.mjs](../scripts/lead-meldung-v2.mjs)); die Umsetzung teilen App und Werkzeug seit App 0.7.0 in [src/kern/meldung-v2.js](../src/kern/meldung-v2.js).
 
-**Stand:** Das Format liegt neben `LEAD-Meldung-v1`. App und Profile arbeiten weiter mit v1, bis die App v2 lesen, erfassen und ausgeben kann (Abschnitt 10). Abwärtskompatibilität zu v1 ist ausdrücklich kein Ziel (Vorgabe des Herausgebers vom 01.11.2026); v1-Meldungen werden einmalig überführt (Abschnitt 11).
+**Stand:** Das Format liegt neben `LEAD-Meldung-v1`. Die Profile arbeiten weiter mit v1, bis die App v2 lesen, erfassen und ausgeben kann (Abschnitt 10). Seit App 0.7.0 (UP-2026-W45-02) liest die App v2: Überführung beim Einlesen, Grundform für Eingänge und Referenzprüfung in Lagebild, Prüfschritt und KI-Erfassung. Seit 0.7.3 (UP-2026-W45-03) erfasst und gibt sie v2 aus: Maske mit Listen von Objekten, Werten oder null und Radarachsen als Objekten; PDF, Kopiervorlage und Rohtabelle erzeugen Quellenverzeichnis, Zeitstrahl und Kennzahlen aus den Feldern; Vorlage der Darstellungsdatei in `formate/lead-meldung-v2/beispiel/meldung.ui.json`. Die KI-Pipeline folgt. Abwärtskompatibilität zu v1 ist ausdrücklich kein Ziel (Vorgabe des Herausgebers vom 01.11.2026); v1-Meldungen werden einmalig überführt (Abschnitt 11).
 
 **Anlass:** Die Regeln der LEAD-Systematik (Kodierleitfaden, SOP-LEAD Teil A) sind differenzierter als das Datenmodell von v1. Quellenverzeichnis und Zeitstrahl sind dort Zeichenketten; Fristen, Bewertungsgründe, Radarbegründungen, abweichende Bewertungen und Änderungen stehen als Kennsätze im Fließtext und werden von der App aus Satzanfängen rekonstruiert (`src/kern/quellen.ts`, `zeitstrahl.ts`, `kennsaetze.ts`). Eine finale v1-Meldung besteht die Schemaprüfung auch mit leeren Analysefeldern, leerem Quellenverzeichnis und leerem Freigabeblock. v2 macht das, was die Regeln bereits verlangen, eindeutig darstellbar und prüfbar, ohne den Erfassungsaufwand über das fachlich Verlangte zu heben.
 
@@ -49,6 +49,7 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 | `quellen` | ja | Liste der Quellen (Abschnitt 5) |
 | `sachverhalte` | ja | Liste der Sachverhalte (Abschnitt 3); leer nur bei `fehlanzeige` |
 | `fehlanzeige` | – | `umfang`, `zeitraum {von, bis}`, `erklaerung`; schließt Sachverhalte aus |
+| `module` | – | Meldungsmodule für Angaben, die für die ganze Meldung gelten, Schlüssel = Modulkennung (Abschnitt 7) |
 | `freigabe` | ja | `erfasst`, `freigegeben`: je `{name, funktion?, hz?, zeitpunkt}` |
 | `entstehung` | ja | Herkunftsnachweis (Abschnitt 6) |
 
@@ -58,18 +59,20 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
+| `kennung` | ja | `Präfix-JJJJMMTT-Zufall` (Kodierleitfaden 8.1; bei Betreibern Präfix `KRITIS-` mit Kürzel, [AUSTAUSCH.md](AUSTAUSCH.md) Abschnitt 9); Zufallsteil 4–8 Zeichen, neu vergebene Kennungen 6 Zeichen; im Entwurf auch `""` oder Platzhalter `NEU-n` |
 | `bezug` | – | `[{kennung, meldung_id?, art?: verdichtung \| teilung \| zusammenfuehrung}]` |
 | `bezeichnung` | ja | Kurztitel |
 | `eintritt` | ja | `{zeit, genauigkeit: belegt \| ungefaehr \| unbekannt}`; `unbekannt` verlangt `zeit: null` |
 | `bekannt_seit` | – | erstes Bekanntwerden, nicht der Beginn |
 | `raum` | ja | `beschreibung` (bisher `ort`), `gebiete[]` |
 | `analyse` | ja | `lage_ereignis`, `risiken_auswirkungen`, `abhaengigkeiten_interdependenzen` (Texte mit `[Qn]`) |
-| `bewertung` | ja | Abschnitt 4.1 (bisher `sofort`) |
+| `bewertung` | ja¹ | Abschnitt 4.1 (bisher `sofort`) |
 | `handlungsbedarf` | ja | Abschnitt 4.2 (bisher `analyse.massnahmen_empfehlungen` und Kennsatz „Handlungsrelevant bis:“) |
 | `kennzahlen` | – | Abschnitt 4.3 |
 | `zeitstrahl` | – | Abschnitt 5.2 (bisher meldungsweite Zeichenkette) |
 | `module` | ja | Fachmodule, Schlüssel = Modulkennung (Abschnitt 7) |
+
+¹ Außer bei `absender.ebene` „Betreiber“: Die Bewertung setzt die verarbeitende Stelle in ihrem eigenen Sachverhalt, dem sie die Betreibermeldung zuordnet ([AUSTAUSCH.md](AUSTAUSCH.md), Abschnitt 9). Fehlt der Block, ist keine Bewertung erhoben (Abschnitt 1 Nr. 3); ist er vorhanden, gelten die übrigen Regeln (seit KL-2026-W45-01).
 
 ## 4. Bewertung, Handlungsbedarf, Kennzahlen
 
@@ -113,14 +116,14 @@ Kennzahlen machen unzulässige Summen erkennbar (Einheit, Zeitbasis, Teilmenge, 
 
 | Feld | Pflicht | Inhalt |
 |---|---|---|
-| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung |
+| `id` | ja | `Q1`, `Q2` … in der Reihenfolge der ersten Nennung; bei einer Fortschreibung behalten die Quellen der eigenen Vormeldung ihre ID, neue Quellen erhalten die nächste freie (Kodierleitfaden Abschnitt 5) |
 | `kategorie` | ja | Buchstabe nach dem Kodierleitfaden des Profils (Rolle der Quelle für die Aussage); das Profil legt die zulässigen fest |
 | `herausgeber`, `titel` | ja | |
 | `veroeffentlicht` | – | Tag oder Zeitpunkt |
 | `url` | – | |
 | `zugriff` | ja | Tag des Abrufs, `null` = nicht angegeben |
 | `datenstand` | – | Stand der Angaben, getrennt vom Veröffentlichungsdatum |
-| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
+| `zugang` | ja | `oeffentlich`, `paywall`, `behoerdenintern`, `betriebsintern` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt), `eingangsmaterial`, `eingangsmeldung`, `nicht_ausgewertet`, `null` |
 | `meldung_id` | – | bei Eingangsmeldungen die verwendete Fassung |
 | `ursprung` | – | Ursprungsquelle(n), wenn diese Quelle eine Angabe nur weiterverbreitet; Weiterverbreitungen sind keine unabhängige Bestätigung |
 | `anmerkung` | – | |
@@ -134,7 +137,7 @@ Kategorie (Herkunft bzw. Rolle), Zugang und Aussagekompetenz sind verschiedene D
 ## 6. Status, Freigabe, Entstehung
 
 - `entwurf`: Pflichtfelder vorhanden, Inhalte dürfen leer sein.
-- `zur_freigabe` und `freigegeben`: Absender mit Stelle und Gebiet, Meldezeitpunkt, mindestens ein Sachverhalt mit Quellenverzeichnis **oder** eine Fehlanzeige; je Sachverhalt vergebene Kennung, Bezeichnung, Lagetext, Kernaussage, Referenzraum und eine Begründung, sobald eine Beurteilungsstufe gesetzt ist. Die Referenzprüfung verlangt zusätzlich je Radarachse eine Begründung und mindestens eine Ereignisart.
+- `zur_freigabe` und `freigegeben`: Absender mit Stelle und Gebiet, Meldezeitpunkt, mindestens ein Sachverhalt mit Quellenverzeichnis **oder** eine Fehlanzeige; je Sachverhalt vergebene Kennung, Bezeichnung, Lagetext, Kernaussage, Referenzraum und eine Begründung, sobald eine Beurteilungsstufe gesetzt ist; bei Betreibern Kernaussage, Referenzraum und Begründung nur, wenn `bewertung` vorhanden ist (Abschnitt 3). Die Referenzprüfung verlangt zusätzlich je Radarachse eine Begründung und mindestens eine Ereignisart.
 - `freigegeben`: zusätzlich `freigabe.freigegeben` mit Name und Zeitpunkt. Ein Name oder Handzeichen ist kein technischer Authentizitätsnachweis.
 - `zurueckgezogen`: eine neue Fassung mit `beziehungen` `berichtigung_von`, die die frühere zurücknimmt.
 - **Versand** gehört nicht mehr in die Meldung: Eine freigegebene Fassung ist unveränderlich, Versand und Empfang sind Ereignisse danach (offener Punkt 3).
@@ -142,7 +145,7 @@ Kategorie (Herkunft bzw. Rolle), Zugang und Aussagekompetenz sind verschiedene D
 
 ## 7. Fachmodule
 
-Ein Modul ist ein JSON-Schema für den Inhalt von `sachverhalte[].module.<kennung>`, mit Pflichtfeld `fassung`. Die Zusammenstellung eines Profils (Abschnitt 9) bindet bekannte Module ein und macht sie gegebenenfalls zur Pflicht. Unbekannte Module bleiben zulässig, gelten als ungeprüft und werden nicht auf eigene Kategorien abgebildet; die Referenzprüfung nennt sie als Hinweis.
+Ein Modul ist ein JSON-Schema für den Inhalt von `sachverhalte[].module.<kennung>`, mit Pflichtfeld `fassung`. Angaben, die für die ganze Meldung gelten und nicht je Sachverhalt wiederholt werden sollen (etwa Meldeanlass, Vertraulichkeit, Empfänger einer Betreibermeldung), stehen in einem **Meldungsmodul** unter `module.<kennung>` auf oberster Ebene (seit SR-2026-W45-01). Meldungsmodule folgen denselben Regeln: eigene Kennung und Fassung, Einbindung über die Zusammenstellung (Schlüssel `meldungsmodule`), unbekannte bleiben zulässig. Eine Modulkennung gehört zu genau einer Ebene. Die Zusammenstellung eines Profils (Abschnitt 9) bindet bekannte Module ein und macht sie gegebenenfalls zur Pflicht. Unbekannte Module bleiben zulässig, gelten als ungeprüft und werden nicht auf eigene Kategorien abgebildet; die Referenzprüfung nennt sie als Hinweis.
 
 **Modul `lead-bevoelkerungsschutz` 1.0** ([Schema](../formate/lead-meldung-v2/module/lead-bevoelkerungsschutz.schema.json)):
 
@@ -161,7 +164,7 @@ Weitere Module (etwa Funktionsmatrix des Profils „Lagebild Justiz“, Betreibe
 | Ebene | prüft | Werkzeug |
 |---|---|---|
 | 1 Schema | Struktur, Typen, Aufzählungen, Muster für IDs und Zeiten, Bedingungen (offene Achse ohne Stufe, Berichtigung mit Bezug, Zeitstrahl mit Beleg, Fehlanzeige ohne Sachverhalt), Vollständigkeit je Status | zusammengestelltes Profilschema; Ajv oder der eigene, eval-freie Prüfer der App (`src/kern/validierung.ts`, die Tests prüfen den Gleichlauf) |
-| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten als nicht entscheidbar), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `scripts/lead-meldung-v2.mjs`; in der App später neben der Schemaprüfung |
+| 2 Referenzen | jeder `[Qn]` und jede Quellen-ID aufgelöst, Ursprung nicht auf sich selbst, IDs eindeutig, Kennungen eindeutig, Zeitstrahl nicht nach t0 und chronologisch, `erstmals_gemeldet` zwischen Ereignis und t0 (Zeitvergleiche nach Abschnitt 1 Nr. 4: Zeitpunkte absolut, Kalendertage in `zeitzone`; Tag und Zeitpunkt desselben Tags gelten für Vergleiche mit t0 und `erstmals_gemeldet` als nicht entscheidbar, für die Reihenfolge steht der Tag vor den Uhrzeiten desselben Tags, Kodierleitfaden Abschnitt 8.3 Regel 4), Berichtigung auf frühere Zeile, Frist auf vorhandene Empfehlung, Teilmenge auf andere Kennzahl, Mindestwert mit Wert, Datenstand von Quelle und Kennzahl nicht nach t0; ab `zur_freigabe` Radarbegründungen und Ereignisart; Hinweise auf unzitierte Quellen, unbekannte Module, mehr als 12 Zeitstrahlzeilen | `pruefeReferenzen()` in `src/kern/meldung-v2.js` (Werkzeug `npm run meldung:v2 -- pruefe`); in der App seit 0.7.0 neben der Schemaprüfung: Lagebild (Marke „Referenzen“), Prüfschritt der Meldung, Hinweise nach S2 (Codes `REFERENZ_FEHLER`, `REFERENZ_HINWEIS`; `src/kern/referenzen.ts`) |
 | 3 Mensch | Inhalt, Belegqualität, Kodierung, Freigabe | Abschlusscheck SOP-LEAD A.5 |
 
 ## 9. Profile auf v2 aufbauen
@@ -175,6 +178,7 @@ Die App prüft nur selbsttragende Schemata mit internen Verweisen. Deshalb entst
   "title": "…",
   "kern": "kern.schema.json",
   "module": { "lead-bevoelkerungsschutz": { "datei": "module/lead-bevoelkerungsschutz.schema.json", "pflicht": true } },
+  "meldungsmodule": {},
   "weitere_module": true,
   "einschraenkungen": { "absender_gebiete": ["…"], "ebenen": ["Land", "Kreis"], "quellenkategorien": ["A", "B", "W", "M", "P"] }
 }
@@ -201,7 +205,7 @@ Danach je Profil (`profile/lead-beispiel`, `profile/lead-thueringen`, `profile/m
 
 ## 11. Migration v1 → v2
 
-`migriereV1()` bzw. `npm run meldung:v2 -- migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1`. Grundsatz: **nichts erfinden.** Was der Text nicht sicher hergibt, bleibt Text oder `null` und steht als Hinweis in `entstehung.migration.hinweise`. Eine überführte Meldung ist zur Durchsicht bestimmt, keine neue Freigabe.
+`migriereV1()` bzw. `npm run meldung:v2 -- migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1`; in der App seit 0.7.0 beim Einlesen, wenn das Profil eine Migration mit `verfahren` „lead-meldung-v2“ führt ([PROFILFORMAT.md](PROFILFORMAT.md)). Grundsatz: **nichts erfinden.** Was der Text nicht sicher hergibt, bleibt Text oder `null` und steht als Hinweis in `entstehung.migration.hinweise`. Eine überführte Meldung ist zur Durchsicht bestimmt, keine neue Freigabe.
 
 | v1 | v2 | Art |
 |---|---|---|
@@ -248,19 +252,27 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 ## 13. Offene Punkte
 
-1. **App-Unterstützung** (Abschnitt 10) als Voraussetzung für die Umstellung der Profile; Reihenfolge und Umfang entscheidet der Herausgeber.
+1. **App-Unterstützung** (Abschnitt 10) als Voraussetzung für die Umstellung der Profile. Reihenfolge nach dem Umstellungsplan vom 03.11.2026 (Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`): Kennzahlen-Bausteine (0.6.24), Kern und Prüfung (0.7.0), dann Erfassungsmaske und Ausgabe, KI-Pipeline, Lagebild und Verdichtung, Umstellung der Profile.
 2. **Ausgabeschema für die KI:** Ableitung ohne Bedingungen, Prüfung danach; Kosten und Fehlerquote der tieferen Struktur in einem Vergleichslauf messen.
 3. **Versand und Empfang** als eigenes Protokoll zur Meldungsfassung.
 4. **Bestätigungsgrad je Aussage** (SOP-LEAD A.3): bisher nur über Kennzahl (`erhebung`), Quelle (`zugang`, `ursprung`) und Erkenntnislage abbildbar.
 5. **Stellenkennung** (`stelle_id`): Register oder Schema der Kennungen.
 6. **Gebietsschlüssel der Kreise:** Die Migration setzt nur Länderschlüssel; Kreisschlüssel im Landesprofil ergänzen und prüfen.
 7. **Abstimmung in Teil C** nach [AUSTAUSCH.md](AUSTAUSCH.md); dieser Entwurf ist die Vorlage dafür.
-8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7.
+8. **Module für „Lagebild Justiz“ und KRITIS-LEAD** nach dem Muster in Abschnitt 7. KRITIS-LEAD stellt als nächstes um (Entscheidung des Herausgebers vom 03.11.2026): Betreiberangaben je Sachverhalt als Modul, meldungsweite Angaben als Meldungsmodul; die Modulschemata liegen in KRITIS-LEAD und sind hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet: `lead-kritis-meldung` und `lead-kritis-betrieb` 0.3 unter `formate/fremd/kritis-lead/` (KRITIS-LEAD `206d574`, KL-2026-W45-02); ein Profil bindet sie über seine Zusammenstellung ein. Betreibermeldungen kommen ohne Bewertung aus (Abschnitt 3, KL-2026-W45-01).
 9. **Lizenz:** Kern-, Modul- und zusammengestellte Schemata stehen wie die Meldungsschemata der Profile zusätzlich unter CC0 1.0 (LICENSE-CONTENT Nr. 2 e); zur Bestätigung durch den Herausgeber.
+10. **Sachverhaltsübergreifende Lage:** optionales Feld für Angaben, die für alle Sachverhalte einer Meldung gelten (übergreifende Kernaussage, übergreifende Maßnahmen und Entscheidungsbedarfe), vorgemerkt für die Umstellung der Profile (LS-2026-W45-03, Entscheidung des Herausgebers vom 04.11.2026). Zu klären: eigenes Kernfeld oder Meldungsmodul (Abschnitt 7); bis dahin ordnet die Arbeitsanweisung Erfassung (4.3) solche Teile den Sachverhalten zu.
 
 ## Änderungsverlauf
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 7 | 05.11.2026 | Kernschema: zusätzlicher Wert `betriebsintern` für `quellen[].zugang` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt); bestehende Meldungen bleiben gültig (Abschnitt 4; KL-2026-W45-06). Abschnitt 3: Kennungen der Betreiber mit Präfix `KRITIS-` (KL-2026-W45-05); Abschnitt 13 Nr. 8: Module von KRITIS-LEAD eingebettet (KL-2026-W45-02) |
+| 2.0 (Entwurf), Nachtrag 6 | 04.11.2026 | Kernschema: `bewertung` im Sachverhalt ist bei `absender.ebene` „Betreiber“ nicht Pflicht; für alle übrigen Ebenen bleibt sie Pflicht (Bedingung an der Wurzel), ist sie vorhanden, gelten die üblichen Regeln (Abschnitte 3 und 6; KL-2026-W45-01, Voraussetzung für die Umstellung von KRITIS-LEAD). Bestehende Meldungen bleiben gültig |
+| 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
+| 2.0 (Entwurf), Nachtrag 4 | 04.11.2026 | Kernschema: optionales Feld `module` für Meldungsmodule (Abschnitte 2 und 7), Zusammenstellung mit `meldungsmodule` (Abschnitt 9), Hinweis der Referenzprüfung auf unbekannte Meldungsmodule; bestehende Meldungen bleiben gültig (SR-2026-W45-01) |
+| 2.0 (Entwurf), Nachtrag | 02.11.2026 | Abschnitt 5.1: Quellen-IDs bleiben bei Fortschreibungen stabil (GK-2026-W44-11); Abschnitt 8 und Referenzprüfung: für die Reihenfolge des Zeitstrahls steht ein Tag vor den Uhrzeiten desselben Tags (GK-2026-W44-10); Format und Schemata unverändert |
+| 2.0 (Entwurf), Nachtrag 3 | 03.11.2026 | Format und Schemata unverändert: Stand der App-Unterstützung (Maske, Darstellung und Ausgabe, App 0.7.3, UP-2026-W45-03); Vorlage der Darstellungsdatei |
+| 2.0 (Entwurf), Nachtrag 2 | 03.11.2026 | Format und Schemata unverändert: Umsetzung in `src/kern/meldung-v2.js` für App und Werkzeug; Migration beim Einlesen über `migrationen[].verfahren`, Referenzprüfung in der App (Abschnitte 8, 11, 13 Nr. 1; App 0.7.0, UP-2026-W45-02) |
 | 2.0 (Entwurf), Nachtrag | 01.11.2026 | Referenzprüfung nach Abschnitt 8 vervollständigt, Format und Schemata unverändert: „Datenstand nicht nach t0“ auch für `quellen[].datenstand` (GK-2026-W44-03); Zeitvergleiche nach Abschnitt 1 Nr. 4 mit absoluten Zeitpunkten und Kalendertagen in `zeitzone`, Tag gegen Zeitpunkt desselben Tags nicht entscheidbar und ohne Befund (GK-2026-W44-04) |
 | 2.0 (Entwurf) | 01.11.2026 | Erster Entwurf: Kernschema, Modul `lead-bevoelkerungsschutz` 1.0, Zusammenstellungen für Beispiel- und Landesprofil, Migration v1 → v2, Referenzprüfung, Beispiele |

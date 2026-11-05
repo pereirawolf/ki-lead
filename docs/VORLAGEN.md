@@ -1,6 +1,6 @@
 # KI-LEAD – Vorlagen für die Erprobung in einer Stelle
 
-Fassung 1.2 vom 31.10.2026, gilt für App-Version 0.6.17 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.3 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Arbeitshilfen für Stellen, die KI-LEAD dienstlich erproben wollen. Die Vorlagen übernehmen, was die Dokumentation über KI-LEAD schon sagt, und verweisen auf die Fundstelle. Felder in eckigen Klammern füllt die Stelle selbst. Anwendungsbeispiele sind das Bundesrecht und das Thüringer Landesrecht; in anderen Ländern gelten die entsprechenden Vorschriften des Landes.
 
@@ -75,7 +75,7 @@ Das gilt für Auftrag, Material, Eingaben, eigene Profile und Rückmeldungen.
 
 **6. Umgang mit Ergebnissen.** Ergebnisse sind Entwürfe. Sie werden nicht für reale Lagen, Meldungen oder Entscheidungen verwendet. Die KI-Kennzeichnung und der Entwurfsvermerk werden nicht entfernt; wer Text kopiert, etwa den Text der Management Summary, der ohne Kennzeichnungszeile kopiert wird, ergänzt die Kennzeichnung ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitt 6.1). Eine Veröffentlichung außerhalb der Stelle bedarf der fachlichen Prüfung und der Zustimmung von [Funktion].
 
-**7. Laufprotokolle, Meldungen, Löschung.** KI-LEAD löscht nichts selbsttätig ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Die Teilnehmenden löschen Laufprotokolle, Management Summary, archivierte Testläufe und API-Schlüssel [nach … / spätestens mit Ende der Erprobung], mit Ende der Erprobung auch Zwischenstände, Meldungen und Lagebild; für diese gibt es keinen eigenen Löschweg, gelöscht werden die Websitedaten von `pereirawolf.github.io` im Browser oder die App ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Exportierte Protokolle und Meldungen werden nur in [Ablage] gespeichert. Laufprotokolle und Kenndaten werden nicht zur Kontrolle von Verhalten oder Leistung einzelner Beschäftigter ausgewertet (V2).
+**7. Laufprotokolle, Meldungen, Löschung.** KI-LEAD löscht nichts selbsttätig ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Die Teilnehmenden löschen Laufprotokolle, Management Summary, archivierte Testläufe und API-Schlüssel [nach … / spätestens mit Ende der Erprobung], mit Ende der Erprobung auch Zwischenstände, Meldungen und Lagebild, gemeinsam mit allen übrigen Daten über „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ (in der nativen App einschließlich Schlüsselbund) oder durch Löschen der Websitedaten von `pereirawolf.github.io` im Browser bzw. der App ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitte 3 und 10). Exportierte Protokolle und Meldungen werden nur in [Ablage] gespeichert. Laufprotokolle und Kenndaten werden nicht zur Kontrolle von Verhalten oder Leistung einzelner Beschäftigter ausgewertet (V2).
 
 **8. Rückmeldungen.** Rückmeldungen gehen an [Ansprechperson]. Rückmeldungen an den Herausgeber über Issues im Repository sind öffentlich; sie sind nur nach [Zustimmung von …] und nur nach den Regeln von ERPROBUNG.md, Abschnitte 5 und 6, zulässig. Sicherheitslücken werden vertraulich nach SECURITY.md gemeldet und [IT-Sicherheit der Stelle] informiert.
 
@@ -276,3 +276,4 @@ Zugriff jeweils am 28.10.2026.
 | 1.1 | 28.10.2026 | V5 Nr. 3: Verweis auf die Systemkarte in KI-VERORDNUNG.md 1.3 statt auf die Spezifikation |
 | 1.1 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: V1 bis V6 als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.2 | 31.10.2026 | V3 Teil 1: Selbstbetrieb mit Betreiberkonfiguration (Betriebsform, Verbindungen, Vorgabe der Schlüsselablage; App 0.6.17, TP-2026-W44-51) |
+| 1.3 | 03.11.2026 | V1 Nr. 7: Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ statt „kein eigener Löschweg“ (seit App 0.6.15; DK-2026-W45-02) |

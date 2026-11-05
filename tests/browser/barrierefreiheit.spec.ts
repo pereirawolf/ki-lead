@@ -3,7 +3,7 @@
 // Chromium), axe-core je Bereich (seit 0.6.5).
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { bereich, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";
+import { bereich, forschungEinschalten, netzVorbereiten, oeffnen, S1_VORSCHLAG, schluesselSetzen } from "./hilfen";
 
 const BEREICHE = ["Erfassung", "KI-Erfassung", "Auswertung", "Profile", "Einstellungen"] as const;
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
@@ -276,8 +276,12 @@ test.describe("TP-2026-W44-22: axe-core je Bereich ohne Verstöße gegen WCAG 2.
   });
 
   test("Einstellungen: alle Bereiche", async ({ page }) => {
-    await bereich(page, "Einstellungen");
+    // Mit Forschungsfunktionen, damit auch „Testläufe“ geprüft wird (DK-2026-W45-07; bis 0.7.0 fehlte der Bereich, weil
+    // der Schalter seit 0.6.16 standardmäßig aus ist)
+    await forschungEinschalten(page);
     const bereiche = page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button");
+    // DK-2026-W45-07: alle acht Bereiche nach BEREICHE in src/ui/Einstellungen.tsx
+    await expect(bereiche).toHaveCount(8);
     const v = await jeVariante(page, async (pruefen) => {
       for (let i = 0; i < (await bereiche.count()); i++) {
         await bereiche.nth(i).click();

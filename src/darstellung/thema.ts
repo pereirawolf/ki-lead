@@ -11,6 +11,8 @@ export const STANDARD_AUSWAHL = AUTOMATISCH;
 /**
  * Signalfarben je Basis: hell und dunkel für alle Länder-, Bund- und Neutralschemata (unabhängig von Land und
  * Profil), dazu je eine feste Palette für die Kontrastschemata (gleiche Bedeutung, nur kräftiger).
+ * „einsatz“ (seit Grunddesign 1.1) ist der Status „im Einsatz“ der Ampel der Einsatzbereitschaft in Schwester-Apps
+ * wie Thessa; KI-LEAD selbst verwendet ihn nicht.
  */
 export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
   hell: {
@@ -23,6 +25,8 @@ export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
     "kritisch-zart": "#FBE4E2",
     ok: "#2E6B3E",
     "ok-zart": "#E3F1E6",
+    einsatz: "#5B3A9E",
+    "einsatz-zart": "#F1ECFA",
     "radar-linie": "#1F4F82",
     "radar-ring": "#69737D",
     "radar-flaeche": "rgba(31, 79, 130, 0.2)",
@@ -37,6 +41,8 @@ export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
     "kritisch-zart": "#361615",
     ok: "#7FC28F",
     "ok-zart": "#15291B",
+    einsatz: "#CDB8FF",
+    "einsatz-zart": "#2C2440",
     "radar-linie": "#86B3E6",
     "radar-ring": "#83909E",
     "radar-flaeche": "rgba(134, 179, 230, 0.25)",
@@ -51,6 +57,8 @@ export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
     "kritisch-zart": "#FFFFFF",
     ok: "#00592E",
     "ok-zart": "#FFFFFF",
+    einsatz: "#3D1F7A",
+    "einsatz-zart": "#FFFFFF",
     "radar-linie": "#000000",
     "radar-ring": "#555555",
     "radar-flaeche": "transparent",
@@ -65,6 +73,8 @@ export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
     "kritisch-zart": "#000000",
     ok: "#80E0A0",
     "ok-zart": "#000000",
+    einsatz: "#E0D4FF",
+    "einsatz-zart": "#000000",
     "radar-linie": "#FFFFFF",
     "radar-ring": "#B3B3B3",
     "radar-flaeche": "transparent",
@@ -121,6 +131,7 @@ export const KONTRASTPAARE: [string, string, number][] = [
   ["erheblich", "flaeche", 4.5],
   ["gering", "flaeche", 4.5],
   ["ok", "flaeche", 4.5],
+  ["einsatz", "flaeche", 4.5],
   ["auf-erheblich", "erheblich", 4.5],
 ];
 

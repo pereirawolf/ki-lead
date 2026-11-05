@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/thessa/schema/kennzahlen-baustein.schema.json",
+  "title": "Thessa – Kennzahlen-Baustein 0.2 (Entwurf)",
+  "description": "Verdichtete Kräftelage eines Raums als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, dazu die lagerelevanten Einsatzmeldungen ohne Ortslage und ohne Freitext-Hinweise. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Einsatzmittel, Einsätze, Einsatzkräfte, Ausrückebereiche, Einheiten des Katastrophenschutzes) werden nicht addiert.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "fassung",
+    "erzeugt",
+    "datenstand",
+    "raum",
+    "fiktiv",
+    "quellen",
+    "kennzahlen",
+    "einsatzmeldungen"
+  ],
+  "properties": {
+    "format": {
+      "const": "Thessa-Kennzahlen"
+    },
+    "fassung": {
+      "const": "0.2"
+    },
+    "erzeugt": {
+      "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe"
+    },
+    "datenstand": {
+      "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe"
+    },
+    "raum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "schluessel": {
+          "type": "string"
+        }
+      }
+    },
+    "fiktiv": {
+      "type": "boolean"
+    },
+    "quellen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/quelle"
+      }
+    },
+    "kennzahlen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/kennzahl"
+      }
+    },
+    "einsatzmeldungen": {
+      "type": "array",
+      "description": "Lagerelevante Einsatzmeldungen mit Einsatzort im Raum oder mit überörtlicher Hilfe aus dem Raum, nach Beginn geordnet. Ohne Ortslage, ohne Freitext-Hinweise, ohne Kennungen der Einsatzmittel.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "einsatzart",
+          "stichwort",
+          "gemeinde",
+          "beginn",
+          "status",
+          "im_gebiet",
+          "einsatzmittel"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EM-[0-9]{8}-[A-Z0-9]{4}$"
+          },
+          "einsatzart": {
+            "type": "string",
+            "description": "Code aus katalog/einsatzarten.json."
+          },
+          "stichwort": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "gemeinde": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "schluessel": {
+                "type": "string",
+                "pattern": "^16[0-9]{0,6}$"
+              }
+            },
+            "description": "Gemeinde des Einsatzorts."
+          },
+          "beginn": {
+            "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe"
+          },
+          "ende": {
+            "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe"
+          },
+          "status": {
+            "enum": [
+              "laufend",
+              "abgeschlossen"
+            ]
+          },
+          "im_gebiet": {
+            "type": "boolean",
+            "description": "Einsatzort liegt im Raum des Bausteins. Nur solche laufenden Einsätze zählen in der Kennzahl der laufenden Einsätze (Zählregel)."
+          },
+          "einsatzmittel": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Anzahl der beteiligten Einsatzmittel."
+          },
+          "einsatzkraefte": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "betroffene": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "art",
+                "anzahl"
+              ],
+              "properties": {
+                "art": {
+                  "enum": [
+                    "verletzt",
+                    "gerettet",
+                    "evakuiert",
+                    "betreut"
+                  ]
+                },
+                "anzahl": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "ueberoertlich": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "von"
+            ],
+            "properties": {
+              "von": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "schluessel": {
+                    "type": "string",
+                    "pattern": "^16[0-9]{0,6}$"
+                  }
+                },
+                "description": "Kreis oder kreisfreie Stadt der helfenden Feuerwehr."
+              }
+            }
+          },
+          "bezug_lead": {
+            "type": "string",
+            "description": "Kennung des Sachverhalts der Lagemeldung, zu dem der Einsatz gehört (z. B. DE-TH-20261014-P5VN)."
+          }
+        }
+      }
+    },
+    "herleitung": {
+      "type": "array",
+      "description": "Je Kennzahl die Kennungen der Einsatzmittel und gegebenenfalls der Einsatzmeldungen, aus denen sie entsteht (Rückverfolgbarkeit).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kennzahl",
+          "einsatzmittel"
+        ],
+        "properties": {
+          "kennzahl": {
+            "type": "string",
+            "pattern": "^K[1-9][0-9]*$"
+          },
+          "einsatzmittel": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "einsatzmeldungen": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

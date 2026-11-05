@@ -51,6 +51,136 @@ describe("LEAD-Meldung-v2: Schemata", () => {
   });
 });
 
+describe("LEAD-Meldung-v2: Meldungsmodule (SR-2026-W45-01)", () => {
+  const MELDUNGSMODUL = {
+    title: "Testmodul Meldungsebene",
+    type: "object",
+    required: ["fassung", "meldeanlass"],
+    additionalProperties: false,
+    properties: { fassung: { const: "0.1" }, meldeanlass: { type: "array", items: { type: "string" } } },
+  };
+  const lade = (d: string) => (d === "test/meldungsmodul.schema.json" ? MELDUNGSMODUL : json(`${ORDNER}/${d}`));
+  const mitPflicht = stelleSchemaZusammen(
+    {
+      ...json(`${ORDNER}/zusammenstellungen/lead-beispiel.json`),
+      meldungsmodule: { "test-meldung": { datei: "test/meldungsmodul.schema.json", pflicht: true } },
+    },
+    lade,
+  );
+
+  it("SR-2026-W45-01: Meldungsmodule sind optional; unbekannte bleiben zulässig und ergeben einen Hinweis", () => {
+    gleichWieAjv(SCHEMA_BUND, BEISPIEL_TH, true);
+    const fremd = kopie(BEISPIEL_TH);
+    fremd.module = { "lead-kritis-meldung": { fassung: "0.3", meldeanlass: ["drohende Beeinträchtigung"] } };
+    gleichWieAjv(SCHEMA_BUND, fremd, true);
+    expect(pruefeReferenzen(fremd).some((b: { pfad: string; stufe: string }) => b.stufe === "hinweis" && b.pfad === "module.lead-kritis-meldung")).toBe(true);
+    const ohneFassung = kopie(BEISPIEL_TH);
+    ohneFassung.module = { "lead-kritis-meldung": { meldeanlass: [] } };
+    gleichWieAjv(SCHEMA_BUND, ohneFassung, false);
+  });
+
+  it("SR-2026-W45-01: ein Pflicht-Meldungsmodul der Zusammenstellung macht module Pflicht und wird geprüft", () => {
+    expect(schemaFehler(mitPflicht)).toBeNull();
+    gleichWieAjv(mitPflicht, BEISPIEL_TH, false);
+    const mit = kopie(BEISPIEL_TH);
+    mit.module = { "test-meldung": { fassung: "0.1", meldeanlass: ["neuer Unterstützungsbedarf"] } };
+    gleichWieAjv(mitPflicht, mit, true);
+    const falsch = kopie(mit);
+    falsch.module["test-meldung"].meldeanlass = "kein Array";
+    gleichWieAjv(mitPflicht, falsch, false);
+  });
+
+  it("SR-2026-W45-01: dasselbe Modul in beiden Ebenen einzubinden ist ein Fehler der Zusammenstellung", () => {
+    const z = {
+      ...json(`${ORDNER}/zusammenstellungen/lead-beispiel.json`),
+      meldungsmodule: { "lead-bevoelkerungsschutz": { datei: "module/lead-bevoelkerungsschutz.schema.json" } },
+    };
+    expect(() => stelleSchemaZusammen(z)).toThrow(/mehrfach/);
+  });
+});
+
+describe("LEAD-Meldung-v2: Kennungen der Betreiber (SR-2026-W45-04, AUSTAUSCH.md Abschnitt 9)", () => {
+  const mitKennung = (kennung: string) => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[0].kennung = kennung;
+    return m;
+  };
+  it.each(["KRITIS-ZVTN-20261014-7KQ2MD", "KRITIS-NETZ-SUED-20261013-K2M9", "KRITIS-A1-B2-C3-20261014-7KQ2MD"])("%s ist eine gültige Kennung", (k) => {
+    gleichWieAjv(SCHEMA_BUND, mitKennung(k), true);
+  });
+  it.each(["KRITIS-ZVTÖ-20261014-7KQ2MD", "KRITIS-A-B-C-D-20261014-7KQ2MD", "KRITIS-ZWECKVERBAND-20261014-7KQ2MD"])(
+    "%s ist ungültig (Umlaut, mehr als drei Segmente nach KRITIS, Segment über acht Zeichen)",
+    (k) => {
+      gleichWieAjv(SCHEMA_BUND, mitKennung(k), false);
+    },
+  );
+});
+
+describe("LEAD-Meldung-v2: Meldungen von Betreibern ohne Bewertung (KL-2026-W45-01)", () => {
+  // Zusammenstellung ohne Einschränkungen der Ebenen: das Modul lead-bevoelkerungsschutz optional, wie in einem
+  // Profil, das Behörden- und Betreibermeldungen führt (KRITIS-LEAD).
+  const SCHEMA_OFFEN = stelleSchemaZusammen({
+    format: "lead-meldung-v2-zusammenstellung/1",
+    $id: "https://example.org/test/meldung.schema.json",
+    title: "Test: Kern ohne Einschränkungen",
+    kern: "kern.schema.json",
+    module: { "lead-bevoelkerungsschutz": { datei: "module/lead-bevoelkerungsschutz.schema.json", pflicht: false } },
+  });
+  const betreiber = (status: string) => {
+    const m = kopie(BEISPIEL_TH);
+    m.status = status;
+    m.absender = { stelle: "Netzbetreiber Süd (FIKTIV)", ebene: "Betreiber", gebiet: { name: "Thüringen" } };
+    for (const s of m.sachverhalte) {
+      delete s.bewertung;
+      delete s.module["lead-bevoelkerungsschutz"];
+    }
+    return m;
+  };
+
+  it.each(["entwurf", "zur_freigabe", "freigegeben"])(
+    "KL-2026-W45-01: Betreibermeldung „%s“ ohne bewertung ist gültig, ohne Fehler der Referenzprüfung",
+    (status) => {
+      const m = betreiber(status);
+      gleichWieAjv(SCHEMA_OFFEN, m, true);
+      expect(fehlerDerReferenzpruefung(m)).toEqual([]);
+    },
+  );
+
+  it.each(["Bund", "Land", "Kreis", "Gemeinde", "Einsatzstelle", "Sonstige"])(
+    "KL-2026-W45-01: Absender der Ebene „%s“ ohne bewertung ist ungültig, auch im Entwurf",
+    (ebene) => {
+      for (const status of ["entwurf", "freigegeben"]) {
+        const m = betreiber(status);
+        m.absender.ebene = ebene;
+        gleichWieAjv(SCHEMA_OFFEN, m, false);
+      }
+    },
+  );
+
+  it("KL-2026-W45-01: Betreibermeldung mit bewertung folgt den üblichen Regeln (leere Kernaussage erst ab „zur_freigabe“ ungültig)", () => {
+    const mitHuelle = (status: string, kernaussage: string) => {
+      const m = betreiber(status);
+      m.sachverhalte[0].bewertung = { ...kopie(BEISPIEL_TH.sachverhalte[0].bewertung), kernaussage };
+      return m;
+    };
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("entwurf", ""), true);
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("zur_freigabe", ""), false);
+    gleichWieAjv(SCHEMA_OFFEN, mitHuelle("zur_freigabe", "Versorgung im Netzgebiet eingeschränkt."), true);
+  });
+
+  it("KL-2026-W45-01: Behördenschemata der mitgelieferten Profile verlangen die Bewertung unverändert", () => {
+    for (const [schema, ebene] of [
+      [SCHEMA_BUND, "Land"],
+      [SCHEMA_LAND, "Land"],
+    ] as const) {
+      const m = kopie(BEISPIEL_TH);
+      m.absender.ebene = ebene;
+      delete m.sachverhalte[0].bewertung;
+      gleichWieAjv(schema, m, false);
+    }
+  });
+});
+
 describe("LEAD-Meldung-v2: Beispiele", () => {
   it.each([
     ["Thüringen, zwei Sachverhalte", BEISPIEL_TH],
@@ -293,6 +423,20 @@ describe("LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04)",
         .map((b) => b.text),
     ).toEqual(["Ereigniszeit nach dem Meldezeitpunkt (nur Eingetretenes bis t0)"]);
   });
+  // Soll: Kodierleitfaden Abschnitt 8.3, Regel 4 – ein Tag ohne Uhrzeit steht vor den Uhrzeiten desselben Tags (wie in v1,
+  // Hinweis ZEITSTRAHL_REIHENFOLGE); „nicht entscheidbar“ gilt nur für Zeitvergleiche, nicht für die Reihenfolge.
+  it("GK-2026-W44-10: Zeitpunkt, danach der Tag desselben Tags, ergibt einen Chronologiehinweis; umgekehrt nicht", () => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-13T18:00+02:00"), zeile("Z2", "2026-10-13")];
+    expect(
+      befunde(m)
+        .filter((b) => b.pfad.includes("zeitstrahl"))
+        .map((b) => [b.stufe, b.pfad, b.text]),
+    ).toEqual([["hinweis", "sachverhalte[1].zeitstrahl[1].zeit", "nicht chronologisch"]]);
+    const n = kopie(BEISPIEL_TH);
+    n.sachverhalte[1].zeitstrahl = [zeile("Z1", "2026-10-13"), zeile("Z2", "2026-10-13T18:00+02:00")];
+    expect(befunde(n).filter((b) => b.pfad.includes("zeitstrahl"))).toEqual([]);
+  });
 });
 
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
@@ -366,6 +510,9 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
     ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/hochwasser-saale"))
       .filter((d) => d.endsWith(".json"))
       .map((d) => [`profile/lead-thueringen/beispiele/hochwasser-saale/${d}`, "land"]),
+    ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/orkantief-ilka"))
+      .filter((d) => d.endsWith(".json"))
+      .map((d) => [`profile/lead-thueringen/beispiele/orkantief-ilka/${d}`, "land"]),
     ["evaluation/material/ilka-musterfassung.json", "bund"],
     ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
       .filter((d) => d.isDirectory())

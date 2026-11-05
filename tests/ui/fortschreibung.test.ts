@@ -87,4 +87,35 @@ describe("Fortschreibung in der KI-Erfassung", () => {
     expect(anfragen.liste).toHaveLength(2);
     expect(anfragen.liste[1].werkzeuge).toBeTruthy();
   });
+
+  it("AV-2026-W45-07: Stichtag in der Zukunft lässt t0 leer und sperrt S2, bis t0 angegeben ist", async () => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const vormeldung = ilkaMeldung("Bund");
+    const { KiErfassung } = await import("../../src/ui/KiErfassung");
+    await einhaengen(
+      React.createElement(KiErfassung, {
+        profil: p,
+        einstellungen: { ...STANDARD, orientierungJeSachverhalt: 0, nachforderung: false },
+        schluessel: { anthropic: "sk-test", openai: "", mistral: "", stelle: "" },
+        zuEinstellungen: () => {},
+        uebernehmen: () => {},
+        uebergabe: { nr: 1, profilHash: p.hash, dateien: [{ id: "v1", name: "Vormeldung_FIKTIV.json", text: JSON.stringify(vormeldung), rolle: "meldung" }] },
+      }),
+    );
+    await bisWahr(() => expect(seitentext()).toContain("Vormeldung_FIKTIV.json"));
+    await eingeben(document.querySelector<HTMLInputElement>('input[aria-label="Stichtag"]')!, "2099-07-20");
+    await klick(document.querySelector(".bestaetigung input") as HTMLInputElement);
+    await klick(knopf("Gegenstand bestimmen (S1)"));
+    await bisWahr(() => knopf("Bestätigen und recherchieren (S2)") !== undefined);
+    expect(seitentext()).toContain("Der Stichtag 20.07.2099 liegt nach dem heutigen Tag. t0 ist deshalb nicht vorbelegt");
+    const datum = [...document.querySelectorAll<HTMLInputElement>('input[aria-label="Datum t0"]')].at(-1)!;
+    const uhr = [...document.querySelectorAll<HTMLInputElement>('input[aria-label="Uhrzeit t0"]')].at(-1)!;
+    expect([datum.value, uhr.value]).toEqual(["", ""]);
+    expect(knopf("Bestätigen und recherchieren (S2)")!.disabled).toBe(true);
+    expect(seitentext()).toContain("S2 startet erst mit einem gültigen t0");
+    await eingeben(datum, "2099-07-20");
+    await eingeben(uhr, "14:00");
+    expect(knopf("Bestätigen und recherchieren (S2)")!.disabled).toBe(false);
+    expect(anfragen.liste).toHaveLength(1);
+  });
 });

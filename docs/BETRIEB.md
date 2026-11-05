@@ -1,6 +1,6 @@
 # KI-LEAD – Selbstbetrieb und Betreiberkonfiguration
 
-Fassung 1.0 vom 31.10.2026, gilt für App-Version 0.6.17 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.1 vom 03.11.2026, gilt für App-Version 0.6.17 und folgende · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument richtet sich an den IT-Betrieb einer Stelle, die KI-LEAD selbst ausliefern will, statt die öffentliche Fassung auf GitHub Pages zu nutzen. Es beschreibt die Betreiberkonfiguration, das Bauen mit ihr, den Endpunkt der Stelle und die Auslieferung als statische Dateien. Es ist keine Freigabe und kein Sicherheitskonzept; dafür sind [V3 in den Vorlagen](VORLAGEN.md#v3-steckbrief-für-die-it-freigabe) und [SICHERHEIT.md](SICHERHEIT.md) da.
 
@@ -35,7 +35,7 @@ Beispiele im Repository:
 
 ## 3. Bauen
 
-**Mit Node.js (22 oder neuer):**
+**Mit Node.js 22 (siehe `.nvmrc`):**
 
 ```sh
 npm ci
@@ -109,3 +109,4 @@ AddType text/javascript .js
 | Fassung | Datum | Änderung |
 |---|---|---|
 | 1.0 | 31.10.2026 | Erste Fassung (App 0.6.17, TP-2026-W44-48 bis -52) |
+| 1.1 | 03.11.2026 | Abschnitt Bauen: Node.js 22 nach `.nvmrc` und `engines` statt „22 oder neuer“ (DK-2026-W45-05) |

@@ -91,6 +91,10 @@
     stroke: CanvasText;
   }
 
+  .radar-linie {
+    stroke: CanvasText;
+  }
+
   .radar-punkt {
     fill: CanvasText;
   }

@@ -8,10 +8,14 @@ Je Datei ein Fall nach `fall.schema.json` (`format: "ki-lead-evaluationsfall/1"`
 
 - `sop-*.json` (8 Fälle vom 24.10.2026, Befunde LS-2026-W43-06 bis -13): weitere vollständig fiktive Prüffälle für bis dahin nur einmal abgedeckte SOPs und Bausteine (B03, B04, B13, B15, B16, C03, C04, C05, C08, C17), gestreut über Referenzraum (Kreis, Land, Bund, Ausland mit Deutschlandbezug), Schwierigkeit und Phase (Vorwarnung, akute Lage, Nachlauf); alle mit erwarteten Radarwerten, zwei davon als Abwandlung (`sop-weltraumwetter-warnung-unbestaetigt`, `sop-vulkanasche-transport-zeitluecke`). Insgesamt 48 `sop-*`-Fälle; Soll-Abdeckung in `../plaene/2026-10-21-sop-abdeckung.json` (Stand 24.10.2026). Nicht Teil von Bewertungsplan 1 vom 21.10.2026; Bewertungen liegen noch nicht vor.
 
+- `sop-belange-*.json` (3 Fälle vom 04.11.2026, Anlass BB-2026-W45-06): vollständig fiktive Prüffälle zum Querschnittsbaustein C18 „Besondere Belange und Schutzbedarfe von Menschen“: Puffer mit Reichweite und Fristgrundlage bei häuslich beatmeten Menschen, Pflegeheim im Notstrombetrieb und Hochhaus ohne Wasserdruck (`sop-belange-stromausfall-heimbeatmung`); vorsorgliche Befassung, Belegung gegenüber Bedarf und D2-Abgrenzung bei wohnungslosen Menschen im Frost (`sop-belange-kaeltewelle-wohnungslos`); Nebenfolgen einer Verlegung und belegte Warnlücke für hörbehinderte Menschen ohne Doppelzählung (`sop-belange-evakuierung-assistenz`). Ohne erwartete Radarwerte; Soll-Abdeckung in `../plaene/2026-10-21-sop-abdeckung.json` (Stand 04.11.2026, insgesamt 56 Fälle). Gehören zum Entwicklungssatz; Bewertungen liegen noch nicht vor.
+
 - `zaehlregel-*.json` (5 Fälle vom 25.10.2026, Befund LS-2026-W43-17): kleine, vollständig fiktive Fälle zu je einem Fehlermuster der Zählregeln aus dem Vergleichslauf Ilka: gezählte gegenüber hochgerechneten Werten (`zaehlregel-hochrechnung`), direkte gegenüber mittelbarer Betroffenheit (`zaehlregel-mittelbar`), Gesamtzahl gegenüber Teilmenge (`zaehlregel-teilmenge`), Quellen- und Länderzuordnung (`zaehlregel-laenderzuordnung`), Datenstand und Fortgeltung zu t0 (`zaehlregel-fortgeltung`). Personen gegenüber Anschlüssen decken die vorhandenen Fälle `sop-gas-netzbetreiber`, `sop-hochwasser-abschaltung` und `sop-sturm-winter-uebergang` ab. Alle gehören zum Entwicklungssatz (siehe `../plaene/2026-10-25-kontrollsatz.md`). Insgesamt 53 Fälle in der Soll-Abdeckung (Stand 25.10.2026).
 
 - `ilka-management-summary.json` (25.10.2026): Management Summary aus einer festen Meldung (`auftrag.kurzfassung`, Material mit Rolle `meldung`): der [Musterfassung Ilka](../material/ilka-musterfassung.json). Alle KI-Profile gehen von derselben Eingabe aus; Plan `../plaene/management-summary-ilka.json` mit Prüfsumme der Meldung (`meldung_fest`).
 - `ilka-reparatur.json` (25.10.2026): Prüffall Reparatur (S3) (`auftrag.reparatur`, Material mit Rolle `meldung`): Die App beschädigt die Musterfassung Ilka nach den Defekten R1–R5 in `src/forschung/reparaturtest.ts` (bis 0.6.2 `src/pipeline/`) und lässt sie mit dem gewählten Modell reparieren; S1 fest (`ilka-s1-zuschnitt-a.json`), S2 ohne KI-Aufruf. Plan `../plaene/reparatur-ilka.json` mit Prüfsummen von Meldung und S1-Gegenstand.
+
+- `pruefstein-*.json` (3 Fälle vom 03.11.2026, TP-2026-W44-63): Erfassung der drei Prüfsteine aus KW 43 (`../pruefsteine/`) als reale Lagen mit `websuche: true`, ohne Material und ohne URLs im Auftrag: Die Recherche soll die Quellen selbst finden (Frage K3 des Erprobungsplans, Reihe B5). t0, Referenzraum und Ereignisart stammen aus der Begleitnotiz, die Erwartungen aus deren Lage und bekannten Mängeln (diese als `darf_nicht`). Seiten, die nach t0 erschienen sind, kann die Recherche finden; die Bewertung prüft den Datenstand zu t0. Gehören zum Entwicklungssatz.
 
 Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) nennt die URL und die Prüfsumme der verwendeten Fassung, aber nie den Text.
 
@@ -21,6 +25,14 @@ Ein Fall mit urheberrechtlich geschütztem Material (etwa ein Zeitungsartikel) n
 - `variante_von` und `abwandlung`: kennzeichnen einen Fall als gezielte Abwandlung eines vorhandenen Falls. `abwandlung` nennt die geänderte Stellgröße, möglichst genau eine; alles Übrige bleibt gleich. Beide Felder stehen nur gemeinsam.
 
 Mehrere Fälle zu einem Testset fasst ein Bewertungsplan unter `../plaene/` zusammen (`plan.schema.json`). Mehrere Kodierungen derselben Lage vergleicht `npm run vergleich:mehrfach` (siehe [../README.md](../README.md)).
+
+## Profil eines Falls
+
+`profil` nennt die Manifest-ID des Profils, mit dem der Fall in der Fallreihe läuft (seit 0.7.2, TP-2026-W44-63), etwa `lead.beispiel.thueringen` für Landesfälle; ohne Angabe das Beispielprofil `lead.beispiel.koordinierungsstelle`. Die Fallreihe sperrt einen Fall, dessen Profil die App nicht mitliefert.
+
+## Fallpaket
+
+Fälle, die nicht im Repository liegen sollen (Kontrollsatz bis zum Kontrolllauf), kommen als ZIP-Datei in die Fallreihe: je Fall eine JSON-Datei nach `fall.schema.json` (Ort im Paket beliebig), Material unter dem Pfad aus `datei`, wahlweise unter einem gemeinsamen Oberordner (z. B. `kontrollsatz/faelle/k1.json` und `kontrollsatz/evaluation/material/k1.md`). Die SHA-256 der ZIP-Datei steht im Plan unter `fallpaket.sha256`; eine Abweichung sperrt den Start. Fälle mit derselben ID wie ein mitgelieferter Fall übergeht die App mit Hinweis.
 
 ## Neuen fiktiven Fall anlegen
 

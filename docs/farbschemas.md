@@ -1,6 +1,6 @@
 # Farbschemata der Oberfläche
 
-Stand 27.10.2026, App 0.6.5 (Abschnitt „Pflege“: eine Farbquelle; Katalog sonst Stand 21.10.2026, App 0.4.22). Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
+Stand 27.10.2026, App 0.6.5 (Abschnitt „Pflege“: eine Farbquelle; Katalog sonst Stand 21.10.2026, App 0.4.22). Die Farbschemata ändern nur die Bildschirmdarstellung. Signalfarben der Bewertungen (geringfügig, erheblich, kritisch, Entspannung) und das Lagenradar hängen nur von der Semantikbasis ab (hell, dunkel, Kontrast hell, Kontrast dunkel), nie vom Land oder vom Profil. Ihre Bedeutung und Bezeichnung bleiben in allen Schemata gleich. Seit Grunddesign 1.1 gibt es zusätzlich die Signalfarben `einsatz` und `einsatz-zart` für den Status „im Einsatz“ der Ampel der Einsatzbereitschaft in Schwester-Apps wie Thessa (hell `#5B3A9E`/`#F1ECFA`, dunkel `#CDB8FF`/`#2C2440`, Kontrast hell `#3D1F7A`/`#FFFFFF`, Kontrast dunkel `#E0D4FF`/`#000000`; auf der Arbeitsfläche 8,3:1, 9,1:1, 12,5:1 und 15,0:1); KI-LEAD verwendet sie nicht. PDF, Word-Kopiervorlage, Canvas-Radar und andere Ausgaben behalten ihre eigene, helle Gestaltung.
 
 ## Grundsätze
 

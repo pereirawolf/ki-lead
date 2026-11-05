@@ -46,7 +46,9 @@ test("Nach S1 ist die Anfrage beendet: KI ruht, bis S2 startet", async ({ page }
   await page.getByRole("button", { name: "Gegenstand bestätigen und Orientierung suchen (S1)" }).click();
   await expect(page.getByRole("button", { name: "Bestätigen und recherchieren (S2)" })).toBeVisible();
   expect(netz.ki).toHaveLength(3);
-  expect(netz.ki[1].koerper.tool_choice).toEqual({ type: "tool", name: "web_search" });
+  // seit 0.7.13 S1 mit Sonnet 5.5: Websuche angeboten, aber nicht erzwungen (Zwang nur mit Haiku, KP-2026-W44-05)
+  expect(netz.ki[1].koerper.model).toBe("claude-sonnet-5-5");
+  expect(netz.ki[1].koerper.tool_choice).toBeUndefined();
   expect(netz.ki[1].koerper.tools.map((t: { name: string }) => t.name)).toEqual(["web_search"]);
   await expect(chip).toHaveText("KI ruht");
 

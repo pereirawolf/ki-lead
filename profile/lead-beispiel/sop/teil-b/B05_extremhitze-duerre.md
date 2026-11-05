@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Extremhitze / Dürre (Hitzeperioden; meteorologische, Boden- und hydrologische Trockenheit, Niedrigwasser)"
 art_vorschlag: ["Extremhitze / Dürre"]
 zweck: "Reproduzierbare Erfassung akuter Hitzeperioden und langsam verlaufender Trockenheit in zwei Teilprofilen mit Folgen für Gesundheit, Wasserversorgung, Wasserstraßen, Energie und Vegetationsbrandgefahr."
-version: "2.2.0"
+version: "2.3.0"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "04.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "30.04.2027"
@@ -42,7 +42,7 @@ Ein Sachverhalt kann beide Teilprofile berühren; dann werden sie getrennt bewer
 |---|---|---|---|---|
 | R1 | Welche Hitzeintensität und -dauer sind prognostiziert, wie ist die nächtliche Entlastung? | [DWD](https://www.dwd.de/), Hitzewarnungen; laufend; Ausgabe und Gültigkeit prüfen | L/R | Warnstufe ist Prognose, keine Mortalitätsaussage; sie kann Prüf- oder Handlungsbedarf auslösen, begründet aber keinen Ist-Wert auf D1 oder D8. |
 | R2 | Welche hitzebedingte Mortalität wird geschätzt? | [RKI Hitzemortalität](https://www.rki.de/DE/Themen/Gesundheit-und-Gesellschaft/Gesundheitliche-Einflussfaktoren-A-Z/H/Hitze/Bericht_Hitzemortalitaet.html); saisonal wöchentlich; Destatis/EuroMOMO zum Vergleich | R; D2 | Modellbasierte, zeitverzögerte Schätzung mit Prädiktionsintervall und kumulativem Berichtsbezug; Bezugswoche und Revisionsstand angeben; nicht mit aktuellen Erkrankten addieren und nicht ungeprüft als Direktbetroffenheit zum Stichtag kodieren (A.2). |
-| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2). |
+| R3 | Welche Rettungs-, Pflege- und Versorgungsbelastungen sind belegt? | Lagemeldungen (A.3); Gesundheitsbehörden | R/M; D2/D4 | Einsatzaufkommen ≠ Personalüberlastung; Personalausfälle nur mit eigener Quelle; häusliche Versorgung mitprüfen (A.9.2, vertiefend C18). |
 | R4 | Welche Hitzeschutzmaßnahmen gelten und wirken? | Hitzeaktionspläne der Länder und Kommunen, Gesundheitsbehörden; anlassbezogen | M | Plan, umgesetzte Maßnahme und belegte Wirkung trennen. |
 
 #### Teilprofil 5b: Trockenheit/Niedrigwasser (R5–R8)
@@ -64,6 +64,8 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Beurteilung/Tendenz:** Tendenzen je Teilprofil mit Raum und Horizont ausweisen: Abkühlung kann die Gesundheitsbelastung senken, während Wasserdefizite fortbestehen. Erneute Verschärfung nur benennen, wenn Prognose oder belegte Saisonalität sie stützt.
 
+**Zielkonflikt der Teilprofile:** Gelten Hitzewarnung (5a) und Wasserspar- oder Nutzungsvorgaben (5b) im selben Raum, prüfen, ob die Vorgaben Trinken und Körperkühlung ausdrücklich ausnehmen und ob Warnung, Allgemeinverfügungen und Bevölkerungsinformation einander widersprechen. Belegte Widersprüche gehören als Risiko für Befolgung und Warnakzeptanz in „Risiken & Auswirkungen“ (A.9.3, A.9.5); eine fehlende Ausnahme ist eine benennbare Lücke für „Maßnahmen & Handlungsempfehlungen“.
+
 **Offenlassen:** D2 bei unzureichender Datenbasis; D5 ohne definierten Zielzustand; D4 meist ohne Beleg für externe Hilfe.
 
 ### 4. Darstellung
@@ -79,6 +81,6 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 ### 5. Ansprechstellen und Pflege
 
-**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder
+**Ansprechstellen:** DWD · RKI · UFZ · BGR · Bundesanstalt für Gewässerkunde · Wasserbehörden und -versorger der Länder · für 5a zusätzlich: Gesundheits- und Sozialressorts von Bund und Ländern (öffentlicher Gesundheitsdienst, Pflege und Heimaufsicht), Träger des Rettungsdienstes, Arbeitsschutzbehörden
 
 **Offene Punkte:** Entspannungsindikatoren für Teilprofil 5b (Wiederauffüllung) fachlich abstimmen.

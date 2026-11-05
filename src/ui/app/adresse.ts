@@ -1,13 +1,20 @@
 // Adresse der Ansicht im Hash (seit 0.6.5, TP-2026-W44-20): Ansicht, Bereich der Einstellungen und Reiter des Lagebilds
-// stehen in der Adresse, etwa „#/einstellungen/modelle“ oder „#/lagebild/redaktion“. Neuladen behält die Ansicht,
+// stehen in der Adresse, etwa „#/einstellungen/modelle“ oder „#/auswertung/redaktion“. Neuladen behält die Ansicht,
 // Zurück und Vor im Browser wechseln sie, Tiefenlinks öffnen sie. Bis 0.6.4 hielt die App sie nur im Speicher; ein
 // Neuladen sprang auf „Meldung“. Inhalte (Meldungen, Profile) stehen nie in der Adresse.
+// Seit UX-2026-W45-05 heißt die Auswertung auch in der Adresse so („#/auswertung/redaktion“); „#/lagebild/…“ wird weiter
+// gelesen und von der App durch die neue Adresse ersetzt. Intern bleibt die Ansicht „lagebild“.
 
 import type { EinstellungsBereich } from "../Einstellungen";
 
 export type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen";
 
 export const ANSICHTEN: readonly Ansicht[] = ["meldung", "ki", "lagebild", "profile", "einstellungen"];
+
+/** Wort der Ansicht in der Adresse, wo es vom internen Namen abweicht */
+const IN_DER_ADRESSE: Partial<Record<Ansicht, string>> = { lagebild: "auswertung" };
+/** Frühere Wörter, die weiter gelesen werden */
+const FRUEHER: Record<string, Ansicht> = { auswertung: "lagebild", lagebild: "lagebild" };
 
 export const EINSTELLUNGS_BEREICHE: readonly EinstellungsBereich[] = [
   "uebersicht",
@@ -35,7 +42,8 @@ const enthalten = <T extends string>(liste: readonly T[], wert: string | undefin
 
 /** Liest „#/ansicht/teil“; Unbekanntes ergibt die Meldung bzw. lässt den Teil weg */
 export function adresseLesen(hash: string): Adresse {
-  const [ansicht, teil] = hash.replace(/^#\/?/, "").split("/");
+  const [wort, teil] = hash.replace(/^#\/?/, "").split("/");
+  const ansicht = (wort && FRUEHER[wort]) || wort;
   if (!enthalten(ANSICHTEN, ansicht)) return { ansicht: "meldung" };
   if (ansicht === "einstellungen") return enthalten(EINSTELLUNGS_BEREICHE, teil) ? { ansicht, bereich: teil } : { ansicht };
   if (ansicht === "lagebild") return enthalten(LAGEBILD_REITER, teil) ? { ansicht, reiter: teil } : { ansicht };
@@ -45,5 +53,5 @@ export function adresseLesen(hash: string): Adresse {
 /** Hash zur Adresse: „#/einstellungen/modelle“ */
 export function adresseText(a: Adresse): string {
   const teil = a.ansicht === "einstellungen" ? a.bereich : a.ansicht === "lagebild" ? a.reiter : undefined;
-  return `#/${a.ansicht}${teil ? `/${teil}` : ""}`;
+  return `#/${IN_DER_ADRESSE[a.ansicht] ?? a.ansicht}${teil ? `/${teil}` : ""}`;
 }

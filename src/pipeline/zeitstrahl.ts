@@ -8,8 +8,9 @@
 //   der Fassung der Vormeldung, die neue Fassung steht als eigene Zeile daneben.
 // - Bewertungszeilen schreibt nur die App: bei der Fortschreibung je geänderter Beurteilung oder Tendenz eine Zeile
 //   zum Meldezeitpunkt. Bewertungszeilen der KI entfallen.
-// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02, Kodierleitfaden Abschnitt 5): Bezeichnet [Qn] in einer
-//   übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung, meldet die App den Konflikt, statt ihn zu lösen.
+// - Quellennummern der Vormeldung bleiben stabil (GK-2026-W44-02; Beispielprofil Kodierleitfaden Abschnitt 5, Justiz
+//   Teil A, A.6 Nr. 1): Bezeichnet [Qn] in einer übernommenen Zeile nicht mehr dieselbe Quelle wie in der Vormeldung,
+//   meldet die App den Konflikt, statt ihn zu lösen. Der Text nennt keine Abschnittsnummer (GK-2026-W44-08).
 
 import { jetztLokal } from "../kern/ausgabe";
 import { bezugVon, istKennung, kennungenDerMeldung, neueKennung, PLATZHALTER_RE } from "../kern/kennung";
@@ -56,15 +57,19 @@ const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 /** Inhalt ohne Nummer und ohne Kenntniszeit (die setzt die App) */
 const inhalt = (e: Pick<ZeitstrahlEintrag, "zeit" | "kennung" | "typ" | "text">) => norm(zeitstrahlZeile({ ...e, nr: 0, aufgenommen: undefined }));
 /**
- * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02): Kategorie, Herausgeber, Datum, Titel und
- * Fundstelle, ohne Nummer, Zugriffsdatum und Datenstand (beide darf eine Fortschreibung nachführen).
+ * Quellenidentität eines Eintrags im Quellenverzeichnis (GK-2026-W44-02, -09): Herausgeber, Datum, Titel und Fundstelle.
+ * Ohne Nummer, Kategorie (Rolle der Quelle für die Aussage), Zugriffsdatum, Datenstand und Zugangsvermerke „(Paywall)“
+ * und „nicht ausgewertet“; diese darf eine Fortschreibung nachführen (Kodierleitfaden Abschnitt 8.3, Regel 8).
  */
 const quellKern = (text: string) =>
   norm(
     text
       .replace(/^\s*\[Q\d+\]\s*/, "")
+      .replace(/^[A-ZÄÖÜ]{1,2}\s+[–-]\s+/, "")
       .replace(/\[Zugriff:[^\]]*\]/gi, "")
-      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, ""),
+      .replace(/[.;,]?\s*Datenstand:[^\n[]*/gi, "")
+      .replace(/\s*\(Paywall\)/gi, "")
+      .replace(/[.;,]?\s*\(?nicht ausgewertet\)?/gi, ""),
   )
     .replace(/[\s.;,]+$/, "")
     .toLowerCase();
@@ -101,6 +106,8 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
   // im Zeitstrahl (im Bezug bleibt sie als Herkunft stehen)
   const zuordnung = new Map<string, string>();
   const fremdZuordnung = new Map<string, string>();
+  /** Neue Kennungen der Sachverhalte, die ohne Kennung und ohne Platzhalter kamen, in Reihenfolge der Liste */
+  const ohneKennung: string[] = [];
   if (r.sv_kennung) {
     const datum = jetztLokal(p.manifest.variablen.zeitzone || "Europe/Berlin", u.jetzt);
     const herkunft = r.land ? holeWert(d, r.land) : "";
@@ -116,7 +123,10 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
       const neu = neueKennung(ui, herkunft, datum, [...vergeben, ...eigeneKennungen, ...fremdeKennungen], u.zufall);
       setze(sv, r.sv_kennung!, neu);
       vergeben.add(neu);
-      if (!roh) return;
+      if (!roh) {
+        ohneKennung.push(neu);
+        return;
+      }
       if (PLATZHALTER_RE.test(roh)) {
         if (zuordnung.has(roh)) ersetzt.push(`${svName(i)}: Platzhalter „${roh}“ doppelt`);
         else zuordnung.set(roh, neu);
@@ -144,6 +154,33 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
         stufe: "hinweis",
         code: "KENNUNG_ERSETZT",
         text: `Kennungen vergibt die App; ersetzt, weil nicht aus der eigenen Vormeldung: ${ersetzt.join("; ")}.`,
+      });
+  }
+  // 1a. Platzhalter nur im Zeitstrahl (GK-2026-W45-01): Setzt die KI NEU-n nur in Zeitstrahlzeilen, nicht im Feld der
+  // Kennung, gilt NEU-n für den n-ten Sachverhalt, der ohne Kennung kam (Arbeitsanweisung: Platzhalter in Reihenfolge der
+  // neuen Sachverhalte). Was sich so nicht zuordnen lässt, nennt ein Hinweis, statt erst die Schemaprüfung zu warnen.
+  if (r.sv_kennung && r.zeitstrahl) {
+    const zeilen = parseZeitstrahl(holeWert(d, r.zeitstrahl)).eintraege.filter((e) => PLATZHALTER_RE.test(e.kennung) && !zuordnung.has(e.kennung));
+    const zugeordnet: string[] = [];
+    const offen: string[] = [];
+    for (const e of zeilen) {
+      const n = Number(PLATZHALTER_RE.exec(e.kennung)![1]);
+      const ziel = n >= 1 ? ohneKennung[n - 1] : undefined;
+      if (ziel && ![...zuordnung.values()].includes(ziel)) zuordnung.set(e.kennung, ziel);
+      if (zuordnung.has(e.kennung)) zugeordnet.push(`[Z${e.nr}] ${e.kennung} → ${zuordnung.get(e.kennung)}`);
+      else offen.push(`[Z${e.nr}] ${e.kennung}`);
+    }
+    if (zugeordnet.length)
+      befunde.push({
+        stufe: "hinweis",
+        code: "KENNUNG_PLATZHALTER_ZUGEORDNET",
+        text: `Platzhalter nur im Zeitstrahl, dem Sachverhalt in derselben Reihenfolge zugeordnet; bitte prüfen: ${zugeordnet.join("; ")}.`,
+      });
+    if (offen.length)
+      befunde.push({
+        stufe: "hinweis",
+        code: "KENNUNG_PLATZHALTER_OFFEN",
+        text: `Platzhalter im Zeitstrahl ohne passenden Sachverhalt; die Zeilen bitte einem Sachverhalt zuordnen: ${offen.join("; ")}.`,
       });
   }
   const umsetzen = (k: string) => zuordnung.get(k) ?? k;
@@ -256,7 +293,7 @@ export function zeitstrahlNachbearbeiten(d: Meldung, p: Profil, u: ZeitstrahlUmg
       befunde.push({
         stufe: "warnung",
         code: "ZEITSTRAHL_QUELLE",
-        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Kodierleitfaden Abschnitt 5). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
+        text: `Quellennummern der Vormeldung bleiben bei der Fortschreibung stabil (Quellenregeln des Profils). In übernommenen Zeilen bezeichnet die Nummer nicht mehr dieselbe Quelle; Zuordnung ungeklärt, bitte Quellenverzeichnis berichtigen: ${konflikte.join("; ")}.`,
       });
   }
 

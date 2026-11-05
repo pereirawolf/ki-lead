@@ -5,7 +5,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
-import { aushaengen, dialogAntwort, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
+import { aushaengen, bisWahr, dialogAntwort, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { STANDARD, STANDARD_PROFILE, type Einstellungen } from "../../src/pipeline/einstellungen";
 import { EinstellungenAnsicht, type EinstellungsBereich } from "../../src/ui/Einstellungen";
 import type { AnbieterId, Schluessel } from "../../src/anbieter/verteiler";
@@ -335,7 +335,8 @@ describe("Einstellungen: Testläufe als eigener Bereich (seit 0.5.17)", () => {
     await klick("Zu den Testläufen");
     expect(ueberschriften()).toEqual(["Testläufe"]);
     expect(navKnoepfe().find((b) => b.getAttribute("aria-current") === "page")?.textContent).toBe("Testläufe");
-    expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Neuer Testlauf", "Archiv"]);
+    // seit 0.7.2 mit der Fallreihe, nachgeladen (TP-2026-W44-62)
+    await bisWahr(() => expect([...inhalt().querySelectorAll("h3")].map((h) => h.textContent)).toEqual(["Neuer Testlauf", "Fallreihe", "Archiv"]));
     expect(knopf("Testlauf starten")?.disabled).toBe(true);
     // ohne Schlüssel: Hinweis mit Sprung zu den Schlüsseln
     await klick("Schlüssel hinterlegen");

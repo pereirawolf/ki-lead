@@ -47,9 +47,16 @@ const orientierungsAntwort = (a: LlmAnfrage) => {
 };
 
 describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => {
+  // Seit 0.7.13 ist Sonnet 5.5 (ohne erzwingbare Suche) das S1-Modell der Vorgaben; die Fälle mit erzwungener Suche wählen
+  // Haiku 5.5 deshalb ausdrücklich.
+  const mitHaiku = (k: { einstellungen: typeof STANDARD }) => {
+    k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, vorverarbeitung: "claude-haiku-5-5" } };
+  };
+
   it("sucht je bestätigtem Sachverhalt einmal, ohne Seitenabruf, mit erzwungener Suche beim S1-Modell Haiku 5.5", async () => {
     const att = skriptAnbieter([orientierungsAntwort, orientierungsAntwort]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     k.lauf.status = "bestaetigen";
     const v = await orientierungssuche(k, zweiSachverhalte());
     expect(att.anfragen).toHaveLength(2);
@@ -86,6 +93,7 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
   it("ohne Suche wird einmal wiederholt; bleibt es dabei, nennt ein Hinweis den Sachverhalt", async () => {
     const att = skriptAnbieter([llmAntwort("Keine Suche."), llmAntwort("Wieder keine.")]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     const v = await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen).toHaveLength(2);
     expect(k.lauf.stufen.map((s) => s.stufe)).toEqual(["S1 Orientierungssuche – Sachverhalt 1", "S1 Orientierungssuche – Sachverhalt 1 (Wiederholung)"]);
@@ -99,6 +107,7 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
   it("lehnt der Anbieter die erzwungene Suche ab (400), folgt ein Versuch ohne Zwang", async () => {
     const att = skriptAnbieter([new AnbieterFehler("tool_choice nicht erlaubt", 400), orientierungsAntwort]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     const v = await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen.map((a) => a.werkzeuge?.erzwingen)).toEqual(["websuche", undefined]);
     expect(v.sachverhalte[0].orientierung).toHaveLength(1);
@@ -111,6 +120,11 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
     await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen[0].modell).toBe("claude-sonnet-5-5");
     expect(att.anfragen[0].werkzeuge?.erzwingen).toBeUndefined();
+    // seit 0.7.13 auch ohne eigene Wahl: Sonnet ist das S1-Modell der Vorgaben, die App zählt die Suchen nach
+    const att2 = skriptAnbieter([orientierungsAntwort]);
+    const { k: k2 } = await pipelineKontext(att2);
+    await orientierungssuche(k2, bestaetigterVorschlag());
+    expect([att2.anfragen[0].modell, att2.anfragen[0].aufwand, att2.anfragen[0].werkzeuge?.erzwingen]).toEqual(["claude-sonnet-5-5", "low", undefined]);
   });
 
   it("von der Person eingetragene Suchbegriffe bleiben bei erneuter Orientierung erhalten", async () => {
@@ -480,6 +494,19 @@ describe("KP-2026-W44-15 bis -19: amtliche Einstiege, Primärquelle, Orientierun
     const b = rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: 2, abrufe: 0 }, suchen: ["a", "b"] }, undefined, { primaerquelle: false });
     expect(b.map((x) => [x.code, x.stufe])).toEqual([["KEINE_PRIMAERQUELLE", "warnung"]]);
     expect(rechercheBefunde("nur-material", false, { nutzung: { websuchen: 0, abrufe: 0 } }, undefined, { primaerquelle: false })).toEqual([]);
+  });
+
+  // Soll: Prüfbedingung von primaerquelleBelegt() (keine Quelle der Kategorie A oder B, keine amtliche Fundstelle);
+  // der Text darf nicht mehr behaupten, als die Bedingung prüft (GK-2026-W44-14).
+  it("GK-2026-W44-14: KEINE_PRIMAERQUELLE bei einer W-Quelle; der Text nennt die Bedingung, nicht „nur Medien“", async () => {
+    const { profil: p } = await profil("lead-beispiel");
+    const m = ilkaMeldung("HE");
+    m.quellen = "[Q1] W – Institut (FIKTIV) (14.10.2026): Studie. Online abrufbar unter: https://institut.invalid/a [Zugriff: 14.10.2026]";
+    const leer = { fundstellen: [], abrufe: [], abrufFehler: [] };
+    expect(primaerquelleBelegt(m, p!, leer, amtlicheEinstiege(p!, ["b01"]))).toBe(false);
+    const [b] = rechercheBefunde("durchfuehren", false, { nutzung: { websuchen: 2, abrufe: 0 }, suchen: ["a", "b"] }, undefined, { primaerquelle: false });
+    expect(b!.text).toContain("keine Quelle der Kategorie A oder B");
+    expect(b!.text).not.toMatch(/nur Medien/);
   });
 
   it("W44-18: je abgerechnetem Suchaufruf ein Eintrag; gebündelte Teilabfragen stehen zusammen", () => {
