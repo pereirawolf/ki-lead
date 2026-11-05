@@ -41,3 +41,22 @@ describe("Lernschleife KW 45, Kodierleitfaden", () => {
     },
   );
 });
+
+// Nachtrag: Befunddatei ki-lead-befund_lernschleife_2026-W45-b.json, LS-2026-W45-08 (Option A), freigegeben am 05.11.2026.
+describe("Lernschleife KW 45 (Nachtrag), Kodierleitfaden", () => {
+  it.each(["profile/lead-beispiel/kodierleitfaden.md", "profile/lead-thueringen/kodierleitfaden.md"])(
+    "LS-2026-W45-08: Abschnitt 4 nennt die Grundlage der Tendenz (%s)",
+    (pfad) => {
+      const text = lies(pfad);
+      const regel = text.split("\n").find((z) => z.startsWith("- **Tendenz** ("));
+      expect(regel).toBeDefined();
+      expect(regel).toContain("Die Tendenz beschreibt die erwartete Entwicklung des Sachverhalts im benannten Zeitfenster ab t0.");
+      expect(regel).toContain("auf einen belegten Verlauf bis t0 oder auf eine Prognose einer zuständigen Stelle oder Fachbehörde");
+      expect(regel).toContain("bei Folgesachverhalten die Prognose der auslösenden Gefahr, wenn die Kopplung belegt ist");
+      expect(regel).toContain("ein Szenario der meldenden Stelle allein trägt keine Tendenz");
+      expect(regel).toContain("Der Bewertungstext nennt, worauf sich die Tendenz stützt.");
+      const beispiel = text.split("\n").find((z) => z.startsWith("| Mobilfunk im Ausfallgebiet über Notstrom;"));
+      expect(beispiel).toContain("Tendenz Verschärfung");
+    },
+  );
+});
