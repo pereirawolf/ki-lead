@@ -1091,3 +1091,16 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Profilkarten einheitlich zugeklappt, Eckdaten, „Verwenden“ ohne Sprung, Chip nur bei Befund, Namenszusatz, Farbband, technische Angaben, „Exportieren“ | UX-2026-W45-27 bis -32: … | `tests/ui/profile.test.ts` |
 | Reiter bei 390 px nach dem Laden im ersten Bildschirm, einzeilig und waagerecht scrollbar; mitlaufend unter dem Kopf | UX-2026-W45-01, -03: Smartphone › … ; UX-2026-W45-03: … | `tests/browser/ux-2026-w45.spec.ts` |
 | Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px | UX-2026-W45-23, -25: … | `tests/browser/ux-2026-w45.spec.ts` |
+
+## KRITIS-LEAD: Module, Kennungen der Betreiber, Zugang „betriebsintern“ (0.7.12, Befunddatei `ki-lead-befund_kritis_2026-W45-b.json`, KL-2026-W45-02, -05, -06, Freigabe des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kopien der Module unverändert (Prüfsumme wie herkunft.json), Fassung 0.3, voller Commit und Quellpfad in KRITIS-LEAD | KL-2026-W45-02: eingebettete Module von KRITIS-LEAD › Kopien unverändert … | `tests/format/kritis-module.test.ts` |
+| Module gültig nach Draft 2020-12, nur interne Verweise | KL-2026-W45-02: … › Module sind gültige Schemata … | `tests/format/kritis-module.test.ts` |
+| Kern mit beiden Modulen zusammengestellt: für den eigenen Prüfer verwendbar | KL-2026-W45-02: … › Zusammenstellung mit dem Kern … | `tests/format/kritis-module.test.ts` |
+| Betreibermeldung gültig; falsche Modulfassung, fehlender Sektor und Echtdaten ungültig (eigener Prüfer gleich Ajv) | KL-2026-W45-02: … › Betreibermeldung gültig … | `tests/format/kritis-module.test.ts` |
+| `betriebsintern` zulässig in Kern und zusammengestellten Schemata, unbekannter Wert ungültig | KL-2026-W45-06: Zugang „betriebsintern“ › zulässiger Wert … | `tests/kern/v2-darstellung.test.ts` |
+| Quellenzeile mit „(betriebsintern)“, das Werkzeug liest dieselben Felder zurück | KL-2026-W45-06: … › Quellenzeile mit Vermerk … | `tests/kern/v2-darstellung.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.11.0). KL-2026-W45-05 ist eine Kodierregel ohne maschinell prüfbares Soll; die Fassungen prüft `tests/profil/fassungen.test.ts`.

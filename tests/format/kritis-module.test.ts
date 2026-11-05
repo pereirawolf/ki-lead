@@ -65,10 +65,24 @@ const BETREIBERMELDUNG = {
       bezeichnung: "FIKTIV – Stromausfall 20 kV oberhalb Neuhaus am Rennweg",
       eintritt: { zeit: "2026-10-13T21:40+02:00", genauigkeit: "belegt" },
       raum: { beschreibung: "Teilnetz oberhalb Neuhaus am Rennweg", gebiete: [{ name: "Landkreis Sonneberg", schluessel: "16072" }] },
-      analyse: { lage_ereignis: "FIKTIV – Seit 21:40 Uhr sind mehrere Abgänge der 20-kV-Leitung ausgefallen [Q1].", risiken_auswirkungen: "", abhaengigkeiten_interdependenzen: "" },
+      analyse: {
+        lage_ereignis: "FIKTIV – Seit 21:40 Uhr sind mehrere Abgänge der 20-kV-Leitung ausgefallen [Q1].",
+        risiken_auswirkungen: "",
+        abhaengigkeiten_interdependenzen: "",
+      },
       handlungsbedarf: { massnahmen: [], empfehlungen: [], fristen: [] },
       kennzahlen: [
-        { id: "K1", gegenstand: "Netzanschlüsse ohne Versorgung", einheit: "Anschlüsse", art: "bestand", wert: 18000, mindestwert: false, erhebung: "gezaehlt", datenstand: "2026-10-13T22:30+02:00", quellen: ["Q1"] },
+        {
+          id: "K1",
+          gegenstand: "Netzanschlüsse ohne Versorgung",
+          einheit: "Anschlüsse",
+          art: "bestand",
+          wert: 18000,
+          mindestwert: false,
+          erhebung: "gezaehlt",
+          datenstand: "2026-10-13T22:30+02:00",
+          quellen: ["Q1"],
+        },
       ],
       module: {
         "lead-kritis-betrieb": {

@@ -107,6 +107,32 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.9 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Schätzung von Dauer und Kosten der Erfassung; 0.7.9“ |
 | 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
+| 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
+
+## [0.7.12] – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json` (Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2, Meilensteine M1 bis M3, Commit `8faa547`), KL-2026-W45-02 bis -06, freigegeben vom Herausgeber am 05.11.2026 mit den Fassungen vom selben Tag. Umgesetzt: -02, -05, -06; zurückgestellt: -03 und -04 (siehe unten). Keine Änderung an KI-Pipeline, Oberfläche und Lagebild außer dem Vermerk „(betriebsintern)“.
+
+### Hinzugefügt
+
+- **Module von KRITIS-LEAD eingebettet (KL-2026-W45-02):** `lead-kritis-meldung` (Meldungsmodul) und `lead-kritis-betrieb` (Fachmodul je Sachverhalt) 0.3 unverändert aus KRITIS-LEAD `206d574` unter `formate/fremd/kritis-lead/0.3/`, mit `herkunft.json` (Commit, Quellpfad, Prüfsumme). Die Module sind in sich geschlossen und brauchen keine Bündelung; ein Profil bindet sie über seine Zusammenstellung ein (Paket 6). Der Pin-Wächter von KRITIS-LEAD liest dieselbe Herkunftsangabe.
+
+### Geändert
+
+- **Zugang „betriebsintern“ (KL-2026-W45-06):** Kernschema von LEAD-Meldung-v2: zusätzlicher Wert für `quellen[].zugang` für nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt (Betriebstagebuch, Leitwarte); bestehende Meldungen bleiben gültig. Zusammengestellte Schemata `beispiel/` und `beispiel-land/` neu erzeugt; Quellenzeile und Baustein zeigen „(betriebsintern)“, die Überführung aus v1 erkennt den Vermerk. Thessa pinnt das Kernschema neu (pereirawolf/thessa, eigener Pull Request); `formate/fremd/thessa-kennzahlen/herkunft.json` und die gebündelten Schemata sind nachgezogen.
+- **Kennungen der Betreiber (KL-2026-W45-05):** Kodierleitfaden 1.11.0, Abschnitt 8.1: Präfix `KRITIS-` mit Kürzel und sechsstelligem Zufallsteil, nie als eigene geführt; im Bezug nach LEAD-Meldevorlage 1.2 lässt das Schema nur vierstellige Zufallsteile zu, daher bis zur Umstellung auf v2 nur im Quellenverzeichnis. Beispielprofil 1.40.0, Landesprofil 1.6.0 (Arbeitsanweisung Erfassung 1.11.2, Sammelmappe 3.23.2).
+- `docs/LEAD-MELDUNG-V2.md` (Nachtrag 7: Abschnitte 3, 4 und 13 Nr. 8), `docs/AUSTAUSCH.md` Abschnitt 9, Spezifikation 0.7.12. Versionsangaben 0.7.12 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 712); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Befundregister fortgeschrieben.
+
+### Zurückgestellt
+
+- **KL-2026-W45-03 (Bezug in SON 10:00):** Die Kennungen der Betreiber haben einen sechsstelligen Zufallsteil; das Schema `LEAD-Meldung-Land-v1` lässt im Bezug nur vierstellige zu. Umsetzung mit der Umstellung des Landesprofils auf v2 (Paket 6).
+- **KL-2026-W45-04 (Frist der Trinkwasserversorgung in SON 10:00):** Hinweis ohne Änderung; aufgreifen, wenn das Beispiel auf v2 umgestellt wird (Fristen als Liste mit Bedingung und Grundlage).
+
+### Tests
+
+- `tests/format/kritis-module.test.ts` (neu): Kopien unverändert (Prüfsumme, Commit, Quellpfad, Fassung 0.3), Module in sich geschlossen, Zusammenstellung mit dem Kern für den eigenen Prüfer verwendbar, Betreibermeldung gültig und Modulregeln wirksam (eigener Prüfer gleich Ajv).
+- `tests/kern/v2-darstellung.test.ts`: Zugang „betriebsintern“ im Kern und in den zusammengestellten Schemata, unbekannter Wert ungültig; Quellenzeile mit Vermerk und Rücklesen durch das Werkzeug.
+- Angepasst: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.11.0).
 
 ## [0.7.11] – 04.11.2026
 
