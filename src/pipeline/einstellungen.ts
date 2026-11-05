@@ -55,10 +55,12 @@ export interface Einstellungen {
  * von Opus nahe, ließ aber die Tendenz im Stromausfall-Sachverhalt in zwei von drei Läufen offen; Bezug, Messwerte und
  * Standard-Profil beruhen auf Opus (evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md). Reparatur seit
  * 0.5.15 mit Haiku statt Sonnet (AV-2026-W43-32, Prüffall Reparatur vom 25.10.2026: beide 10/10 fehlerfrei, Haiku zu
- * rund einem Zwanzigstel der Kosten; evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md).
+ * rund einem Zwanzigstel der Kosten; evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md). S1 seit 0.7.13 mit Sonnet
+ * „mittel“ statt Haiku „hoch“ (Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 und
+ * seiner Folgereihe vom 05.11.2026; Begründung beim Standard-Profil Anthropic).
  */
 export const APP_MODELLE: Record<Rolle, string> = {
-  vorverarbeitung: "claude-haiku-5-5",
+  vorverarbeitung: "claude-sonnet-5-5",
   erfassung: "claude-opus-5-5",
   verdichtung: "claude-opus-5-5",
   reparatur: "claude-haiku-5-5",
@@ -96,7 +98,7 @@ export function modellGruppen(e: Pick<Einstellungen, "anbieterOptionen" | "model
 
 export const STANDARD: Einstellungen = {
   modelle: { vorverarbeitung: "", erfassung: "", verdichtung: "", reparatur: "", kurzfassung: "" },
-  aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  aufwand: { vorverarbeitung: "medium", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   websucheMax: 15,
   abrufMax: 10,
   abrufMaxTokens: 15000,
@@ -106,7 +108,7 @@ export const STANDARD: Einstellungen = {
   maxTokensErfassung: 128000,
   anbieterOptionen: STANDARD_ANBIETER_OPTIONEN,
   forschung: false,
-  fassung: 7,
+  fassung: 8,
 };
 
 /**
@@ -145,6 +147,16 @@ export const STANDARD: Einstellungen = {
  *   der Verdichtung; gemessen ist sie mit je einem Lauf je Standard-Profil im Anbietervergleich vom 04.11.2026 (AV-2026-W45-01
  *   bis -03, nur Schätzung, keine Bewertung der Modelle).
  * - Management Summary bestätigt: Sonnet „medium“, gpt-6.1-sol „medium“, Mistral Medium 3.5 „high“ (Large 4 nicht besser).
+ *
+ * Seit 0.7.13 (Entscheidung des Herausgebers vom 05.11.2026): S1 Anthropic mit claude-sonnet-5-5 „medium“ statt
+ * claude-haiku-5-5 „high“. Grundlage sind fünf interne Erfassungsläufe mit demselben Material (sechs Sachverhalte, ohne
+ * Recherche; Material und Inhalte bleiben intern): Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und Folgereihe
+ * vom 05.11.2026 (Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Haiku „high“ wich in einem Lauf in der
+ * SOP-Liste von der eigenen Begründung ab (ausgeschlossene Bausteine dennoch geführt, Ereignisart ohne Beleg); S2 übernimmt
+ * die bestätigte Gliederung verbindlich. Sonnet „medium“ hielt Liste und Begründung in einem Lauf deckungsgleich, wandte die
+ * SOP-Zuordnung (B11 → B05) richtig an und kennzeichnete den Zeitbezug eindeutig. Qualitative Einschätzung nach einem
+ * Lauf je Modell, keine Bewertungsreihe; Bestätigung am Kontrollsatz steht aus. Kosten S1 rund 0,26 statt 0,01 USD je Lauf
+ * (Schreiben des SOP-Blocks in den Cache), bei rund 10 % der Gesamtkosten der Erfassung mit Opus.
  */
 export interface ModellProfil {
   modelle: Record<Rolle, string>;
@@ -154,13 +166,13 @@ export interface ModellProfil {
 export const STANDARD_PROFILE: Record<AnbieterId, ModellProfil> = {
   anthropic: {
     modelle: {
-      vorverarbeitung: "claude-haiku-5-5",
+      vorverarbeitung: "claude-sonnet-5-5",
       erfassung: "claude-opus-5-5",
       verdichtung: "claude-opus-5-5",
       reparatur: "claude-haiku-5-5",
       kurzfassung: "claude-sonnet-5-5",
     },
-    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+    aufwand: { vorverarbeitung: "medium", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   },
   openai: {
     modelle: {
@@ -315,8 +327,9 @@ export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
  */
 export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama" | "stelle">, ModellProfil> = {
   anthropic: {
-    modelle: { ...STANDARD_PROFILE.anthropic.modelle, reparatur: "claude-sonnet-5-5" },
-    aufwand: { ...STANDARD_PROFILE.anthropic.aufwand },
+    // S1 seit 0.7.13 abweichend vom heutigen Standard-Profil: bis dahin Haiku „hoch“
+    modelle: { ...STANDARD_PROFILE.anthropic.modelle, vorverarbeitung: "claude-haiku-5-5", reparatur: "claude-sonnet-5-5" },
+    aufwand: { ...STANDARD_PROFILE.anthropic.aufwand, vorverarbeitung: "high" },
   },
   openai: {
     modelle: { ...STANDARD_PROFILE.openai.modelle },
@@ -335,6 +348,15 @@ export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama" | "
 export const STANDARD_PROFIL_MISTRAL_FASSUNG_4: ModellProfil = {
   modelle: { ...STANDARD_PROFILE.mistral.modelle, reparatur: "mistral-medium-3-5" },
   aufwand: { ...STANDARD_PROFILE.mistral.aufwand },
+};
+
+/**
+ * Standard-Profil Anthropic der Fassung 7 der Einstellungen (bis 0.7.12): S1 mit Haiku „hoch“. Gespeicherte Einstellungen,
+ * die genau ihm entsprechen, stellt einstellungenMigrieren auf das heutige Standard-Profil um (seit 0.7.13).
+ */
+export const STANDARD_PROFIL_ANTHROPIC_FASSUNG_7: ModellProfil = {
+  modelle: { ...STANDARD_PROFILE.anthropic.modelle, vorverarbeitung: "claude-haiku-5-5" },
+  aufwand: { ...STANDARD_PROFILE.anthropic.aufwand, vorverarbeitung: "high" },
 };
 
 /**
@@ -461,6 +483,21 @@ export function einstellungenMigrieren(gespeichert: GespeicherteEinstellungen | 
   if (g && g.fassung === 6) {
     g.forschung = false;
     g.fassung = 7;
+  }
+  // Fassung 7 → 8 (0.7.13): S1 Anthropic mit Sonnet „mittel“ statt Haiku „hoch“. Wer genau dem bisherigen Standard-Profil
+  // Anthropic folgt, folgt danach dem heutigen. Wer den Vorgaben des Profils folgt (kein eigenes Modell für S1) und den
+  // bisherigen Vorgabeaufwand „hoch“ für S1 gespeichert hat, erhält die neue Vorgabe „mittel“. Eine abweichende Wahl bleibt.
+  if (g && g.fassung === 7) {
+    const voll = {
+      ...STANDARD,
+      ...g,
+      modelle: { ...STANDARD.modelle, ...(g.modelle || {}) },
+      aufwand: { ...STANDARD.aufwand, ...(g.aufwand || {}) },
+      anbieterOptionen: STANDARD.anbieterOptionen,
+    };
+    if (modellProfilAktiv(voll, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7)) Object.assign(g, modellProfilAnwenden(voll, STANDARD_PROFILE.anthropic));
+    else if (!voll.modelle.vorverarbeitung && voll.aufwand.vorverarbeitung === "high") g.aufwand = { ...voll.aufwand, vorverarbeitung: "medium" };
+    g.fassung = 8;
   }
   const { mistralEndpunkt: _alt, anbieterOptionen, ...rest } = g ?? {};
   return {

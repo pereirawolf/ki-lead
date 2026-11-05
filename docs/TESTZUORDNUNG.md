@@ -378,7 +378,7 @@ Ziel: `tests/pipeline/eingangsquellen.test.ts`, `tests/pipeline/json.test.ts`, `
 | Verdichtung von Eingangsmeldungen › verdichtet ohne Websuche, mit t0 aus den Eingängen und verbindlicher Gliederung | `tests/pipeline/verdichtung.test.ts` |  |
 | Abgeschnittene Antworten und t0 › vervollständigt eine an der Token-Grenze abgeschnittene Meldung ohne neue Recherche | `tests/pipeline/stufen.test.ts` |  |
 | Abgeschnittene Antworten und t0 › übernimmt einen im Auftrag vorgegebenen t0 in S1 | `tests/pipeline/stufen.test.ts` |  |
-| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.25 (fa19eb8): „ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“ |
+| S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › ruft S1 mit hohem Aufwand und 16 000 Ausgabetoken auf | `tests/pipeline/stufen.test.ts` | umbenannt in 0.4.25 (fa19eb8): „ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“; in 0.7.13: „ruft S1 mit dem Vorgabeaufwand auf, seit 0.7.13 „mittel“ (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)“ |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 weit nach dem jüngsten Eingang auf den Eingang zurück und sagt es | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: setzt einen t0 vor dem jüngsten Eingang ebenfalls zurück | `tests/pipeline/verdichtung.test.ts` |  |
 | S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19) › Verdichtung: lässt einen t0 kurz nach dem jüngsten Eingang stehen | `tests/pipeline/verdichtung.test.ts` |  |
@@ -565,7 +565,7 @@ Herkunft: Testreihe 20.10.2026 (0.4.21). Ziel: `tests/kern/kennsaetze.test.ts`, 
 
 | Test | Neue Datei | Änderung |
 |---|---|---|
-| Vorgaben nach der Testreihe › Erfassung mit Opus in App und Beispielprofil, S1 bleibt Haiku mit hohem Aufwand | `tests/pipeline/vorgaben.test.ts` |  |
+| Vorgaben nach der Testreihe › Erfassung mit Opus in App und Beispielprofil, S1 bleibt Haiku mit hohem Aufwand | `tests/pipeline/vorgaben.test.ts` | umbenannt in 0.7.13: „Erfassung mit Opus in App und Beispielprofil, S1 seit 0.7.13 Sonnet mit mittlerem Aufwand“ |
 | Lagenradar an der vorgesehenen Stelle › verschiebt ein eine Ebene zu hoch abgelegtes Radar und meldet es | `tests/pipeline/nachbearbeitung.test.ts` |  |
 | Lagenradar an der vorgesehenen Stelle › überschreibt keinen vorhandenen Radarwert und lässt Nicht-Objekte stehen | `tests/pipeline/nachbearbeitung.test.ts` |  |
 | Lagenradar an der vorgesehenen Stelle › die Nachbearbeitung macht den Entwurf ohne Reparaturaufruf schemakonform | `tests/pipeline/nachbearbeitung.test.ts` |  |
@@ -1104,3 +1104,15 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Quellenzeile mit „(betriebsintern)“, das Werkzeug liest dieselben Felder zurück | KL-2026-W45-06: … › Quellenzeile mit Vermerk … | `tests/kern/v2-darstellung.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.11.0). KL-2026-W45-05 ist eine Kodierregel ohne maschinell prüfbares Soll; die Fassungen prüft `tests/profil/fassungen.test.ts`.
+
+## Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe (0.7.13, Entscheidung des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Standard-Profil, Vorgabe der App und Vorgabeaufwand führen S1 mit Sonnet „mittel“; das bis 0.7.12 gültige Profil ist unabhängig festgehalten | Fassung 7 → 8 (0.7.13): S1 Anthropic mit Sonnet „mittel“ › das heutige Standard-Profil und die Vorgaben der App führen S1 mit Sonnet „mittel“ | `tests/pipeline/einstellungen.test.ts` |
+| Gespeicherte Einstellungen genau nach dem bisherigen Standard-Profil Anthropic folgen danach dem heutigen | … › wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen | `tests/pipeline/einstellungen.test.ts` |
+| Ohne eigenes S1-Modell wird der bisherige Vorgabeaufwand „hoch“ zu „mittel“; andere Aufgaben bleiben | … › Vorgaben des Profils mit dem bisherigen Vorgabeaufwand „hoch“ erhalten „mittel“; Modellfelder bleiben leer | `tests/pipeline/einstellungen.test.ts` |
+| Eigenes S1-Modell, anderer S1-Aufwand, Abweichung in einer anderen Aufgabe und Fassung 8 bleiben unverändert | … › eine abweichende Wahl bleibt: … | `tests/pipeline/einstellungen.test.ts` |
+| Kenndaten der Folgereihe vom 05.11.2026 liegen in den Spannen; S1 Sonnet „mittel“ und „hoch“ sowie Erfassung Opus „hoch“ nach der Regel von Hand nachgerechnet, Sonnet „hoch“ und Opus „hoch“ als vorläufig gekennzeichnet | Schätzung von Dauer und Kosten › Folgereihe 05.11.2026: … | `tests/pipeline/schaetzung.test.ts` |
+| Vergleichsauswertung: heutiges Standard-Profil Anthropic vor dem bis 0.7.12 gültigen als Bezug, anderes S1 ohne Bezug | Auswertung der Vergleichsläufe › seit 0.7.13: das heutige Standard-Profil … | `tests/forschung/vergleichsauswertung.test.ts` |
+| Orientierungssuche mit dem S1-Modell der Vorgaben (Sonnet) ohne erzwungene Suche, Aufwand „niedrig“ | KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1 › kein erzwungener Modellwechsel: … | `tests/pipeline/recherche-pflicht.test.ts` |

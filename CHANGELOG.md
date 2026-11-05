@@ -108,6 +108,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
+| 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ |
+
+## [0.7.13] – 05.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af; dazu für die Schätzung eine Fortschreibung desselben Materials mit Vormeldung, Lauf 20261105-173747-v8w6). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Entscheidungen des Herausgebers vom 05.11.2026 zu den offenen Punkten des Pull Requests: vorläufige Spanne für S1 Sonnet „hoch“, Untergrenze vorläufiger Spannen aus der nächstniedrigeren gemessenen Stufe, Orientierungssuche weiter mit dem S1-Modell, kein Hinweis für Profile mit Haiku in S1. Qualitative Einschätzung nach einem Lauf je Modell und Aufwand, keine Bewertungsreihe; die Bestätigung am Kontrollsatz steht aus.
+
+### Geändert
+
+- **Standard-Profil Anthropic und Vorgabe der App: S1 mit claude-sonnet-5-5 „mittel“** statt claude-haiku-5-5 „hoch“ (`STANDARD_PROFILE.anthropic`, `APP_MODELLE`, `STANDARD.aufwand` in `src/pipeline/einstellungen.ts`). Anlass: Haiku „hoch“ führte in einem Lauf in der SOP-Liste Bausteine und eine Ereignisart, die die eigene Begründung ausschloss; S2 übernimmt die bestätigte Gliederung verbindlich. Sonnet „mittel“ hielt Liste und Begründung deckungsgleich, wandte die Zuordnung hitzebedingter Gesundheitsfolgen zu B05 richtig an und kennzeichnete den Zeitbezug eindeutig; gpt-6-luna „hoch“ (Mix-Profil) war in der SOP-Begründung gleichwertig, wählte aber in drei Läufen unterschiedlich. Kosten von S1 rund 0,26 statt 0,01 USD je Lauf (Schreiben des SOP-Blocks in den Cache), rund 10 % eines Erfassungslaufs mit Opus.
+- **Folge für die Orientierungssuche:** Sie nutzt das Modell von S1; mit Sonnet 5.5 lässt sich die Websuche nicht erzwingen (KP-2026-W44-05). Die App zählt die Suchen nach und wiederholt einmal; mit Haiku 5.5 als eigener Wahl bleibt die Suche erzwungen.
+- **Beispielprofil 1.41.0, Landesprofil Thüringen 1.7.0, Lagebild Justiz 0.3.0, Vorlage 0.8.0:** `modelle.vorverarbeitung` `claude-sonnet-5-5`; sonst unverändert. Profile außerhalb des Repositorys, die Haiku für S1 vorgeben, laufen ohne eigene Wahl seither mit Haiku „mittel“; die Fassung 2 → 3 der Einstellungen hatte diese Stufe für Haiku wegen der Regeln zu t0 und Prüffrage angehoben.
+- **Fassung 8 der Einstellungen:** Wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen (`STANDARD_PROFIL_ANTHROPIC_FASSUNG_7`). Ohne eigenes S1-Modell wird der bisherige Vorgabeaufwand „hoch“ für S1 zur neuen Vorgabe „mittel“. Eine abweichende Wahl bleibt. `STANDARD_PROFILE_FASSUNG_3.anthropic` führt S1 jetzt ausdrücklich mit Haiku „hoch“.
+- **Bezug der Vergleichsauswertung:** `istAnthropicStandard` vergleicht mit dem heutigen Standard-Profil, ersatzweise mit dem bis 0.7.12 gültigen; bisherige Vergleichsreihen (S1 Haiku „hoch“) behalten so ihren Bezug (`src/forschung/vergleichsauswertung.ts`).
+- **Schätzung von Dauer und Kosten** (`src/pipeline/schaetzung.ts`): S1 Sonnet „mittel“ mit Kostenobergrenze 0,35 statt 0,15 USD (gemessen 24 s, 0,26 USD, 60 346 Token neu in den Cache; Lauf -l8af). Erfassung Opus „hoch“ als vorläufige Einzelmessung 200–960 s, 1,40–3,55 USD (gemessen 767 s, 2,81 USD; Lauf -5iuf); die Untergrenze stammt aus der Erfassung mit Opus „mittel“, weil eine Verdichtung mit Opus „hoch“ nicht gemessen ist (Regel im Dateikopf ergänzt). Bisher aus Opus „mittel“ hochgerechnet (1,40–6,70 USD, ohne Dauer); die Fortschreibung -v8w6 lag mit 816 s und 3,36 USD in der Spanne (zwei Messläufe, weiter vorläufig). S1 Sonnet „hoch“ als vorläufige Einzelmessung 10–90 s, 0,02–0,55 USD (gemessen bei der Fortschreibung 60 s, 0,43 USD), bisher aus Sonnet „mittel“ hochgerechnet (0,02–0,70 USD, ohne Dauer). In den Spannen und nur als Kenndaten nachgetragen: Erfassung Opus „mittel“ 665–666 s, 2,53–2,58 USD (Läufe -pyor, -l8af); S1 gpt-6-luna „hoch“ 99–112 s, 0,008–0,010 USD (Läufe -pyor, -5iuf).
+- Spezifikation 0.7.13 (Abschnitte 5.1 und 5.4), KI-Verordnung und Systemkarte 1.6 (Abschnitt 9.1). Versionsangaben 0.7.13 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 713); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/pipeline/einstellungen.test.ts`: Fassung 8 (Standard-Profil bis 0.7.12 → heutiges, Vorgabeaufwand „hoch“ ohne eigenes S1-Modell → „mittel“, abweichende Wahl bleibt); Ketten aus Fassung 1 bis 3 mit dem neuen Ergebnis.
+- `tests/pipeline/schaetzung.test.ts`: Kenndaten der Folgereihe in den Spannen, neue Spannen von Hand nach der Regel; Hochrechnung an Sonnet „hoch“ statt Opus „hoch“.
+- `tests/forschung/vergleichsauswertung.test.ts`: heutiges Standard-Profil als Bezug vor dem bis 0.7.12 gültigen.
+- `tests/pipeline/recherche-pflicht.test.ts`: Fälle mit erzwungener Suche wählen Haiku ausdrücklich; Vorgabe sucht mit Sonnet ohne Zwang.
+- Angepasst an die neue Vorgabe: `tests/pipeline/vorgaben.test.ts`, `stufen.test.ts`, `tests/ui/modellwahl.test.ts`, `testlaeufe.test.ts`, `s1-grenze.test.ts`, `orientierung.test.ts`.
 
 ## [0.7.12] – 05.11.2026
 

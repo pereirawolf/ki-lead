@@ -2,6 +2,12 @@
 
 Profil-ID `lead.justiz.landeslagebild`. Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0, siehe `LICENSE-CONTENT`. Versionierung nach Semantic Versioning ([Profilformat](../../docs/PROFILFORMAT.md), Abschnitt „Versionierung und Änderungsverlauf eines Profils“).
 
+## 0.3.0 – 05.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Zweite Stelle, weil sich die Modellvorgabe des Profils ändert; Regeln, Schema, Darstellungsdatei und Inhalte bleiben unverändert.
+
+- **Modellvorgabe:** `modelle.vorverarbeitung` jetzt `claude-sonnet-5-5` (bisher `claude-haiku-5-5`), wie Standard-Profil und Vorgabe der App seit App 0.7.13; Aufwand nach der Vorgabe der App „mittel“. Erfassung und Verdichtung unverändert. Einzelheiten im [App-Verlauf](../../CHANGELOG.md). Fachlich weiterhin nicht abgenommen.
+
 ## 0.2.0 – 02.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_gesamtkonsistenz_2026-W44-b.json`, Befund GK-2026-W44-08 (Option A), freigegeben vom Herausgeber am 01.11.2026. Zweite Stelle: zwei Regeln in Teil A neu; fachlich weiterhin nicht abgenommen.

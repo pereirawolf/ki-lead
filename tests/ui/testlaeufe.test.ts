@@ -74,7 +74,7 @@ describe("Testläufe in den Einstellungen", () => {
       }),
     );
     expect(document.querySelector("#testlauf-titel")?.textContent).toBe("Neuer Testlauf");
-    expect(text()).toContain("S1: claude-haiku-5-5 (hoch) · Anthropic");
+    expect(text()).toContain("S1: claude-sonnet-5-5 (mittel) · Anthropic");
     expect(text()).toContain("S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic");
     expect(anzahlFeld().value).toBe("3");
     // ohne Schlüssel nicht startbar, mit Hinweis auf den fehlenden Anbieter
@@ -197,18 +197,18 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
     ]);
     expect(felder.filter((f) => f.checked).map((f) => f.value)).toEqual(["s1-s2-s3"]);
     expect(konfiguration()).toEqual([
-      "S1: claude-haiku-5-5 (hoch) · Anthropic",
+      "S1: claude-sonnet-5-5 (mittel) · Anthropic",
       "S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic",
       "S3 Reparatur: claude-haiku-5-5 (niedrig) · Anthropic · nur bei Schemafehlern",
     ]);
 
     await umfangWaehlen("S1 (aus Rohdaten)");
-    expect(konfiguration()).toEqual(["S1: claude-haiku-5-5 (hoch) · Anthropic"]);
+    expect(konfiguration()).toEqual(["S1: claude-sonnet-5-5 (mittel) · Anthropic"]);
     expect(text()).toContain("verglichen mit dem Zuschnitt der Musterfassung");
 
     await umfangWaehlen("S1 + S2 (aus Rohdaten)");
     expect(konfiguration()).toEqual([
-      "S1: claude-haiku-5-5 (hoch) · Anthropic",
+      "S1: claude-sonnet-5-5 (mittel) · Anthropic",
       "S2 Verdichtung: claude-opus-5-5 (mittel) · Anthropic",
       "S3: entfällt, Entwurf ohne Vervollständigung und Reparatur",
     ]);
@@ -268,7 +268,7 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
     expect(senden).toHaveBeenCalledTimes(2);
     expect(senden.mock.calls.every(([a]) => !!a.jsonSchema)).toBe(true);
     const { name, inhalt } = downloads.liste[0];
-    expect(name).toMatch(/^KI-LEAD_Testlauf_Ilka_S1_claude-haiku-5-5-high_\d{8}-\d{4}\.zip$/);
+    expect(name).toMatch(/^KI-LEAD_Testlauf_Ilka_S1_claude-sonnet-5-5-medium_\d{8}-\d{4}\.zip$/);
     const zip = await JSZip.loadAsync(await inhalt.arrayBuffer());
     expect(JSON.parse(await zip.file("reihe.json")!.async("string")).umfang).toBe("s1");
     expect(Object.keys(zip.files).filter((n) => n.startsWith("s1/") && !zip.files[n].dir)).toHaveLength(2);

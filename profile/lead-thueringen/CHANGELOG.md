@@ -4,6 +4,12 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.7.0 – 05.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Zweite Stelle, weil sich die Modellvorgabe des Profils ändert; Regeln, Schema, Darstellungsdatei und Inhalte bleiben unverändert.
+
+- **Modellvorgabe:** `modelle.vorverarbeitung` jetzt `claude-sonnet-5-5` (bisher `claude-haiku-5-5`), wie Standard-Profil und Vorgabe der App seit App 0.7.13; Aufwand nach der Vorgabe der App „mittel“. Erfassung und Verdichtung unverändert. Einzelheiten im [App-Verlauf](../../CHANGELOG.md).
+
 ## 1.6.0 – 05.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W45-b.json`, KL-2026-W45-05, freigegeben vom Herausgeber am 05.11.2026. Zweite Stelle wie beim Beispielprofil (1.40.0).

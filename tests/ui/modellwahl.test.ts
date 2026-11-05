@@ -123,14 +123,14 @@ describe("KI-Erfassung", () => {
     await einzeln();
     const s1 = auswahl("S1");
     // Punkt 1 und 4: Anzeigenamen, Kostenklasse, Vermerk; Modelle ohne Schlüssel sind gesperrt
-    expect(s1.options[0].textContent).toBe("Wie in den Einstellungen: Haiku 5.5");
+    expect(s1.options[0].textContent).toBe("Wie in den Einstellungen: Sonnet 5.5");
     const luna = [...s1.options].find((o) => o.value === "gpt-6-luna")!;
     expect(luna.textContent).toBe("GPT-6 Luna · Kosten niedrig · im Test vorn mit hoch – kein Schlüssel für OpenAI");
     expect(luna.disabled).toBe(true);
     expect([...s1.options].find((o) => o.value === "claude-opus-5-5")!.textContent).toBe("Opus 5.5 · Kosten hoch");
 
     await eingeben(s1, "claude-opus-5-5");
-    expect(kopfzeile()).toContain("S1 Opus 5.5 (hoch)");
+    expect(kopfzeile()).toContain("S1 Opus 5.5 (mittel)");
     expect(kopfzeile()).toContain("abweichend");
 
     await s1Starten();
@@ -183,7 +183,7 @@ describe("KI-Erfassung", () => {
     await erfassungZeigen();
     await einzeln();
     const a1 = auswahl("S1", "Aufwand");
-    expect(a1.options[0].textContent).toBe("Wie in den Einstellungen: hoch");
+    expect(a1.options[0].textContent).toBe("Wie in den Einstellungen: mittel");
     expect([...a1.options].map((o) => o.value)).toEqual(["", "low", "medium", "high", "xhigh", "max"]);
     await eingeben(a1, "low");
     await eingeben(auswahl("S2", "Aufwand"), "high");
@@ -195,7 +195,7 @@ describe("KI-Erfassung", () => {
     expect([feld(WEBSUCHEN)!.value, feld(SEITEN)!.value, feld(LESEMENGE)!.value]).toEqual(["15", "10", "15000"]);
     await eingeben(feld(WEBSUCHEN)!, "5");
     const zusammenfassung = kopfzeile();
-    expect(zusammenfassung).toContain("S1 Haiku 5.5 (niedrig)");
+    expect(zusammenfassung).toContain("S1 Sonnet 5.5 (niedrig)");
     expect(zusammenfassung).toContain("S2 Opus 5.5 (hoch)");
     expect(zusammenfassung).toContain("Recherche eigene Werte (bis 5 Websuchen)");
     expect(seitentext()).toContain("S2: Recherche durchführen (Websuche bis zu 5-mal, Seitenabruf bis zu 10-mal).");
@@ -224,9 +224,9 @@ describe("Punkte 1, 2, 7, 9, 10: Kopfzeile, Rahmen, S3, Zurücksetzen", () => {
   it("Kopfzeile mit Anzeigenamen und Schätzung, ohne S3; Schalter und Schätzung im Rahmen vor der Bestätigung", async () => {
     await erfassungZeigen();
     expect(document.querySelector(".modellwahl-titel")!.textContent).toBe("Modelle und Recherche für diesen Lauf");
-    // S1 Haiku „hoch“ 15–150 s, 0–0,03 USD; S2 Erfassung Opus „mittel“ 200–810 s, 1,40–3,35 USD (seit 0.7.9, AV-2026-W45-01)
+    // S1 Sonnet „mittel“ 10–30 s, 0,02–0,35 USD (seit 0.7.13); S2 Erfassung Opus „mittel“ 200–810 s, 1,40–3,35 USD (seit 0.7.9)
     expect(document.querySelector(".modellwahl-kurz")!.textContent!.trim()).toBe(
-      "S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–16 Minuten, 1,40–3,38 USD",
+      "S1 Sonnet 5.5 (mittel) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–14 Minuten, 1,42–3,70 USD",
     );
     expect(kopfzeile()).not.toContain("abweichend");
     // Punkt 9: Schalter zuerst im Rahmen, Schätzung im Rahmen, Bestätigung danach
@@ -298,7 +298,7 @@ describe("Punkte 3 und 5: KI-Profil je Lauf und zusätzliche Anbieter", () => {
     expect(kopfzeile()).toContain("S1 GPT-6 Luna (hoch) · S2 GPT-6 Astra (hoch)");
     await klick(profilWahl("einstellungen"));
     expect(gewaehlt("modellwahl-profil")).toBe("einstellungen");
-    expect(kopfzeile()).toContain("S1 Haiku 5.5 (hoch) · S2 Opus 5.5 (mittel)");
+    expect(kopfzeile()).toContain("S1 Sonnet 5.5 (mittel) · S2 Opus 5.5 (mittel)");
     expect(kopfzeile()).not.toContain("abweichend");
     expect(document.querySelector(".modellwahl [role=status]")).toBeNull();
   });
