@@ -5,7 +5,7 @@
 //
 // Aufruf über scripts/vergleichslauf-auswerten.mjs (npm run vergleichslauf:auswerten -- <ZIP-Dateien oder Ordner>).
 
-import { STANDARD_PROFILE } from "../pipeline/einstellungen";
+import { type ModellProfil, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7, STANDARD_PROFILE } from "../pipeline/einstellungen";
 import type { Kennzahlen, Reihe } from "./vergleichslauf";
 import { reiheUmfang, umfangInfo } from "./vergleichsumfang";
 
@@ -104,9 +104,11 @@ function konfigText(r: Reihe): string {
   return `${s1} · S2 ${m.s2.modell} (${m.s2.aufwand})${u === "s1-s2" ? " ohne S3" : ""}${r.mistral_endpunkt ? ` · Mistral ${r.mistral_endpunkt}` : ""}`;
 }
 
-/** Standard-Profil Anthropic als Bezug (S1 und Verdichtung nach STANDARD_PROFILE.anthropic) */
-export function istAnthropicStandard(r: Reihe): boolean {
-  const s = STANDARD_PROFILE.anthropic;
+/**
+ * Standard-Profil Anthropic als Bezug (S1 und Verdichtung nach STANDARD_PROFILE.anthropic). Seit 0.7.12 gilt ersatzweise
+ * das bis 0.7.11 gültige Standard-Profil (S1 Haiku „hoch“), damit die bisherigen Vergleichsreihen ihren Bezug behalten.
+ */
+export function istAnthropicStandard(r: Reihe, s: ModellProfil = STANDARD_PROFILE.anthropic): boolean {
   const m = r.modelle;
   return (
     m.s1.modell === s.modelle.vorverarbeitung &&
@@ -217,7 +219,11 @@ export function auswerten(reihen: Reihe[], bezugKennung?: string): Auswertung {
   const zusammenfassungen = zusammenfassen(reihen);
   const bezug =
     (bezugKennung ? zusammenfassungen.find((z) => z.kennung === bezugKennung) : undefined) ??
-    (bezugKennung ? undefined : zusammenfassungen.find((z) => reihen.some((r) => konfigSchluessel(r) === z.schluessel && istAnthropicStandard(r))));
+    (bezugKennung
+      ? undefined
+      : [STANDARD_PROFILE.anthropic, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7]
+          .map((s) => zusammenfassungen.find((z) => reihen.some((r) => konfigSchluessel(r) === z.schluessel && istAnthropicStandard(r, s))))
+          .find(Boolean));
   if (bezugKennung && !bezug) throw new Error(`Bezug „${bezugKennung}“ nicht unter den Reihen (${zusammenfassungen.map((z) => z.kennung).join(", ")})`);
   const abstaende = bezug
     ? zusammenfassungen

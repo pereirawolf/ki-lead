@@ -47,9 +47,16 @@ const orientierungsAntwort = (a: LlmAnfrage) => {
 };
 
 describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => {
+  // Seit 0.7.12 ist Sonnet 5.5 (ohne erzwingbare Suche) das S1-Modell der Vorgaben; die Fälle mit erzwungener Suche wählen
+  // Haiku 5.5 deshalb ausdrücklich.
+  const mitHaiku = (k: { einstellungen: typeof STANDARD }) => {
+    k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, vorverarbeitung: "claude-haiku-5-5" } };
+  };
+
   it("sucht je bestätigtem Sachverhalt einmal, ohne Seitenabruf, mit erzwungener Suche beim S1-Modell Haiku 5.5", async () => {
     const att = skriptAnbieter([orientierungsAntwort, orientierungsAntwort]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     k.lauf.status = "bestaetigen";
     const v = await orientierungssuche(k, zweiSachverhalte());
     expect(att.anfragen).toHaveLength(2);
@@ -86,6 +93,7 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
   it("ohne Suche wird einmal wiederholt; bleibt es dabei, nennt ein Hinweis den Sachverhalt", async () => {
     const att = skriptAnbieter([llmAntwort("Keine Suche."), llmAntwort("Wieder keine.")]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     const v = await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen).toHaveLength(2);
     expect(k.lauf.stufen.map((s) => s.stufe)).toEqual(["S1 Orientierungssuche – Sachverhalt 1", "S1 Orientierungssuche – Sachverhalt 1 (Wiederholung)"]);
@@ -99,6 +107,7 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
   it("lehnt der Anbieter die erzwungene Suche ab (400), folgt ein Versuch ohne Zwang", async () => {
     const att = skriptAnbieter([new AnbieterFehler("tool_choice nicht erlaubt", 400), orientierungsAntwort]);
     const { k } = await pipelineKontext(att);
+    mitHaiku(k);
     const v = await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen.map((a) => a.werkzeuge?.erzwingen)).toEqual(["websuche", undefined]);
     expect(v.sachverhalte[0].orientierung).toHaveLength(1);
@@ -111,6 +120,11 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
     await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen[0].modell).toBe("claude-sonnet-5-5");
     expect(att.anfragen[0].werkzeuge?.erzwingen).toBeUndefined();
+    // seit 0.7.12 auch ohne eigene Wahl: Sonnet ist das S1-Modell der Vorgaben, die App zählt die Suchen nach
+    const att2 = skriptAnbieter([orientierungsAntwort]);
+    const { k: k2 } = await pipelineKontext(att2);
+    await orientierungssuche(k2, bestaetigterVorschlag());
+    expect([att2.anfragen[0].modell, att2.anfragen[0].aufwand, att2.anfragen[0].werkzeuge?.erzwingen]).toEqual(["claude-sonnet-5-5", "low", undefined]);
   });
 
   it("von der Person eingetragene Suchbegriffe bleiben bei erneuter Orientierung erhalten", async () => {

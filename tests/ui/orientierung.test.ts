@@ -77,7 +77,8 @@ describe("KP-2026-W44-06: Orientierung und Suchbegriffe im Bestätigungsschritt"
 
     const begriff = () => document.querySelector('input[aria-label="Suchbegriff 1 für Sachverhalt 1"]') as HTMLInputElement | null;
     await bisWahr(() => begriff() !== null);
-    expect(anfragen.liste[1].werkzeuge).toEqual({ websuche: { maxUses: 1, land: "DE", zeitzone: "Europe/Berlin" }, erzwingen: "websuche" });
+    // seit 0.7.12 S1 mit Sonnet 5.5: Suche nicht erzwingbar, die App zählt nach (erzwungene Suche mit Haiku: recherche-pflicht.test.ts)
+    expect(anfragen.liste[1].werkzeuge).toEqual({ websuche: { maxUses: 1, land: "DE", zeitzone: "Europe/Berlin" } });
     expect(seitentext()).toContain("Orkanlage Ilka (FIKTIV)");
     expect(seitentext()).toContain("Orientierungssuche: „Orkan Ilka Hessen“");
     expect(begriff()!.value).toBe("Orkan Ilka Hessen Warnung");

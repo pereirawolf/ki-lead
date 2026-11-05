@@ -31,18 +31,25 @@ const { alleSchluesselLesen, schluesselLesen, schluesselSchreiben } = await impo
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet ab Fassung 3 mit hohem Aufwand; neue Einstellungen tragen Fassung 7 (seit 0.6.16)", async () => {
-    expect(STANDARD.aufwand.vorverarbeitung).toBe("high");
-    expect(STANDARD.fassung).toBe(7);
-    expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
+  it("S1 arbeitet seit 0.7.12 mit dem Aufwand „mittel“ als Vorgabe; neue Einstellungen tragen Fassung 8", async () => {
+    expect(STANDARD.aufwand.vorverarbeitung).toBe("medium");
+    expect(STANDARD.fassung).toBe(8);
+    expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("medium");
   });
 
-  it("hebt die alte Vorgabe „medium“ aus Fassung 2 an", async () => {
-    speicher.set("einstellungen", { ...STANDARD, fassung: 2, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", verdichtung: "low" } });
+  it("hebt die alte Vorgabe „medium“ aus Fassung 2 an; ohne eigenes S1-Modell gilt danach die Vorgabe „mittel“ (Fassung 8)", async () => {
+    // mit eigenem S1-Modell bleibt die Anhebung auf „high“ stehen
+    const haiku = { ...STANDARD.modelle, vorverarbeitung: "claude-haiku-5-5" };
+    speicher.set("einstellungen", { ...STANDARD, fassung: 2, modelle: haiku, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", verdichtung: "low" } });
     const e = await einstellungenLesen();
     expect(e.aufwand.vorverarbeitung).toBe("high");
     expect(e.aufwand.verdichtung).toBe("low");
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
+    // ohne eigenes S1-Modell folgt S1 den Vorgaben; die frühere Vorgabe „high“ wird zur heutigen Vorgabe „medium“
+    speicher.set("einstellungen", { ...STANDARD, fassung: 2, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", verdichtung: "low" } });
+    const v = await einstellungenLesen();
+    expect(v.aufwand.vorverarbeitung).toBe("medium");
+    expect(v.aufwand.verdichtung).toBe("low");
   });
 
   it("Mistral-Endpunkt (seit 0.5.6): ohne gespeicherten Wert EU, eine Wahl bleibt", async () => {
@@ -58,7 +65,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     const { anbieterOptionen: _ohne, ...alt } = STANDARD;
     speicher.set("einstellungen", { ...alt, fassung: 5, mistralEndpunkt: "global", websucheMax: 7 });
     const e = await einstellungenLesen();
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
     expect(e.anbieterOptionen).toEqual({
       anthropic: {},
       openai: {},
@@ -78,7 +85,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     // gespeicherte Einstellungen ohne Fassung durchlaufen die ganze Kette
     speicher.set("einstellungen", { modelle: STANDARD.modelle, mistralEndpunkt: "global" });
     const ganz = await einstellungenLesen();
-    expect(ganz.fassung).toBe(7);
+    expect(ganz.fassung).toBe(8);
     expect(ganz.anbieterOptionen.mistral.endpunkt).toBe("global");
   });
 
@@ -106,13 +113,14 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("low");
   });
 
-  it("stellt Fassung 1 in einem Schritt auf Fassung 5 um", async () => {
+  it("stellt Fassung 1 in einem Schritt auf die heutige Fassung um", async () => {
     speicher.set("einstellungen", { maxTokensErfassung: 64000, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "medium", erfassung: "high" } });
     const e = await einstellungenLesen();
     expect(e.maxTokensErfassung).toBe(128000);
     expect(e.aufwand.erfassung).toBe("medium");
-    expect(e.aufwand.vorverarbeitung).toBe("high");
-    expect(e.fassung).toBe(7);
+    // Fassung 3 hob auf „high“, Fassung 8 setzt ohne eigenes S1-Modell die heutige Vorgabe „medium“
+    expect(e.aufwand.vorverarbeitung).toBe("medium");
+    expect(e.fassung).toBe(8);
   });
 
   it("nach Fassung 3 bleibt „medium“ eine bewusste Wahl", async () => {
@@ -151,7 +159,8 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
   });
 
   it.each([
-    ["anthropic", ALT_ANTHROPIC, { reparatur: "claude-haiku-5-5" }, {}],
+    // seit 0.7.12 S1 mit Sonnet „medium“ (Fassung 8)
+    ["anthropic", ALT_ANTHROPIC, { reparatur: "claude-haiku-5-5", vorverarbeitung: "claude-sonnet-5-5" }, { vorverarbeitung: "medium" }],
     ["openai", ALT_OPENAI, {}, { erfassung: "high" }],
     ["mistral", ALT_MISTRAL, {}, {}], // seit 0.5.16 wieder wie bis 0.5.14 (AV-2026-W43-39)
   ] as const)("AV-2026-W43-32, -33, -37: Fassung 3 mit dem alten Standard-Profil %s folgt danach dem heutigen", async (_a, alt, modelle, aufwand) => {
@@ -160,7 +169,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual({ ...alt.modelle, ...modelle });
     expect(e.aufwand).toEqual({ ...alt.aufwand, ...aufwand });
     expect(e.websucheMax).toBe(7);
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
   });
 
   it("AV-2026-W43-39: Fassung 4 mit dem Mistral-Standard aus 0.5.15 (Reparatur Medium) repariert danach mit Small", async () => {
@@ -171,7 +180,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     expect(e.modelle).toEqual(ALT_MISTRAL.modelle);
     expect(e.aufwand).toEqual(ALT_MISTRAL.aufwand);
     expect(e.websucheMax).toBe(9);
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
   });
 
   it("AV-2026-W43-39: eine abweichende Wahl der Fassung 4 bleibt stehen", async () => {
@@ -179,7 +188,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 4, modelle: eigen, aufwand: ALT_MISTRAL.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
   });
 
   it("AV-2026-W43-32: eine abweichende Wahl der Fassung 3 bleibt stehen", async () => {
@@ -187,14 +196,77 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3, modelle: eigen, aufwand: ALT_ANTHROPIC.aufwand });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(eigen);
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
   });
 
   it("AV-2026-W43-32: leere Modellfelder (Vorgaben des Profils) bleiben leer", async () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 3 });
     const e = await einstellungenLesen();
     expect(e.modelle).toEqual(STANDARD.modelle);
-    expect(e.fassung).toBe(7);
+    expect(e.fassung).toBe(8);
+  });
+});
+
+describe("Fassung 7 → 8 (0.7.12): S1 Anthropic mit Sonnet „mittel“", () => {
+  beforeEach(() => speicher.clear());
+  // Soll unabhängig vom Code: Standard-Profil Anthropic bis 0.7.11 (Spezifikation 0.7.11, Abschnitt 5.4) und ab 0.7.12
+  const ANTHROPIC_0711 = {
+    modelle: {
+      vorverarbeitung: "claude-haiku-5-5",
+      erfassung: "claude-opus-5-5",
+      verdichtung: "claude-opus-5-5",
+      reparatur: "claude-haiku-5-5",
+      kurzfassung: "claude-sonnet-5-5",
+    },
+    aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
+  };
+  const ANTHROPIC_0712 = {
+    modelle: { ...ANTHROPIC_0711.modelle, vorverarbeitung: "claude-sonnet-5-5" },
+    aufwand: { ...ANTHROPIC_0711.aufwand, vorverarbeitung: "medium" },
+  };
+
+  it("das heutige Standard-Profil und die Vorgaben der App führen S1 mit Sonnet „mittel“", async () => {
+    const { STANDARD_PROFILE, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7, APP_MODELLE } = await import("../../src/pipeline/einstellungen");
+    expect(STANDARD_PROFILE.anthropic).toEqual(ANTHROPIC_0712);
+    expect(STANDARD_PROFIL_ANTHROPIC_FASSUNG_7).toEqual(ANTHROPIC_0711);
+    expect(APP_MODELLE.vorverarbeitung).toBe("claude-sonnet-5-5");
+    expect(STANDARD.aufwand.vorverarbeitung).toBe("medium");
+  });
+
+  it("wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen", async () => {
+    speicher.set("einstellungen", { ...STANDARD, fassung: 7, websucheMax: 7, modelle: ANTHROPIC_0711.modelle, aufwand: ANTHROPIC_0711.aufwand });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(ANTHROPIC_0712.modelle);
+    expect(e.aufwand).toEqual(ANTHROPIC_0712.aufwand);
+    expect(e.websucheMax).toBe(7);
+    expect(e.fassung).toBe(8);
+    expect(standardProfilAktiv(e, "anthropic")).toBe(true);
+  });
+
+  it("Vorgaben des Profils mit dem bisherigen Vorgabeaufwand „hoch“ erhalten „mittel“; Modellfelder bleiben leer", async () => {
+    speicher.set("einstellungen", { ...STANDARD, fassung: 7, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "high", verdichtung: "high" } });
+    const e = await einstellungenLesen();
+    expect(e.modelle).toEqual(STANDARD.modelle);
+    expect(e.aufwand.vorverarbeitung).toBe("medium");
+    expect(e.aufwand.verdichtung).toBe("high");
+  });
+
+  it("eine abweichende Wahl bleibt: eigenes S1-Modell, anderer S1-Aufwand, Abweichung in einer anderen Aufgabe, Fassung 8", async () => {
+    const faelle = [
+      { modelle: { ...STANDARD.modelle, vorverarbeitung: "claude-haiku-5-5" }, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "high" } },
+      { modelle: STANDARD.modelle, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "low" } },
+      { modelle: { ...ANTHROPIC_0711.modelle, kurzfassung: "claude-opus-5-5" }, aufwand: ANTHROPIC_0711.aufwand },
+      { modelle: { ...STANDARD.modelle, vorverarbeitung: "gpt-6-luna" }, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "high" } },
+    ];
+    for (const f of faelle) {
+      speicher.set("einstellungen", { ...STANDARD, fassung: 7, ...f });
+      const e = await einstellungenLesen();
+      expect(e.modelle, JSON.stringify(f)).toEqual(f.modelle);
+      expect(e.aufwand, JSON.stringify(f)).toEqual(f.aufwand);
+    }
+    // ab Fassung 8 ist „hoch“ ohne eigenes Modell eine bewusste Wahl
+    speicher.set("einstellungen", { ...STANDARD, fassung: 8, aufwand: { ...STANDARD.aufwand, vorverarbeitung: "high" } });
+    expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("high");
   });
 });
 
@@ -373,6 +445,6 @@ describe("TP-2026-W44-46: Forschungsfunktionen", () => {
     expect(STANDARD.forschung).toBe(false);
     expect(einstellungenMigrieren(undefined).forschung).toBe(false);
     expect(einstellungenMigrieren({ ...STANDARD, fassung: 6, forschung: undefined as unknown as boolean }).forschung).toBe(false);
-    expect(einstellungenMigrieren({ ...STANDARD, fassung: 7, forschung: true })).toMatchObject({ forschung: true, fassung: 7 });
+    expect(einstellungenMigrieren({ ...STANDARD, fassung: 7, forschung: true })).toMatchObject({ forschung: true, fassung: 8 });
   });
 });

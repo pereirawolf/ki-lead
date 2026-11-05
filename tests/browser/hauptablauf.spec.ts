@@ -80,7 +80,7 @@ test("KI-Erfassung: S1 mit simuliertem Anbieter bis zur Bestätigung, Protokoll 
   await expect(page.getByRole("heading", { name: "Gegenstand bestätigen" })).toBeVisible();
   expect(netz.ki).toHaveLength(1);
   expect(netz.ki[0].schluessel).toBe(SCHLUESSEL);
-  expect(netz.ki[0].koerper.model).toBe("claude-haiku-5-5");
+  expect(netz.ki[0].koerper.model).toBe("claude-sonnet-5-5"); // S1 seit 0.7.12 mit Sonnet
 
   const [protokoll] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Laufprotokoll exportieren (S1)" }).click()]);
   const inhalt = await downloadText(protokoll);

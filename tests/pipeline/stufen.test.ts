@@ -24,7 +24,7 @@ describe("Pipeline S1–S3 mit Attrappe", () => {
     const { k } = await pipelineKontext(att);
     const v = await stufe1(k);
     expect(att.anfragen[0].jsonSchema).toBeTruthy();
-    expect(att.anfragen[0].modell).toBe("claude-haiku-5-5");
+    expect(att.anfragen[0].modell).toBe("claude-sonnet-5-5");
     expect(v.sachverhalte[0].sops).toEqual(["b01"]); // frühere ID „sop-01“ aufgelöst, unbekannte Kennung entfernt
     expect(k.lauf.status).toBe("bestaetigen");
     expect(k.lauf.stufen[0].anfrage?.system[0]).toContain("Katalog der Ereignisarten");
@@ -132,11 +132,11 @@ describe("Abgeschnittene Antworten und t0", () => {
 });
 
 describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
-  it("ruft S1 mit hohem Aufwand auf (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)", async () => {
+  it("ruft S1 mit dem Vorgabeaufwand auf, seit 0.7.12 „mittel“ (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)", async () => {
     const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
     const { k } = await pipelineKontext(att);
     await stufe1(k);
-    expect(att.anfragen[0].aufwand).toBe("high");
+    expect(att.anfragen[0].aufwand).toBe("medium");
   });
 
   it("Erfassung ohne Eingänge: ein t0 aus S1 am heutigen Stichtag vor der aktuellen Zeit bleibt unverändert", async () => {
@@ -233,11 +233,11 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
       kostenUsd: 0.07,
     });
 
-  it("T01: Standard: Haiku mit Aufwand high erhält beim ersten und einzigen S1-Aufruf die Vorgabe 128 000", async () => {
+  it("T01: Standard (seit 0.7.12 Sonnet mit Aufwand medium) erhält beim ersten und einzigen S1-Aufruf die Vorgabe 128 000", async () => {
     const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))]);
     await stufe1(k);
     expect(att.anfragen).toHaveLength(1);
-    expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual(["claude-haiku-5-5", "high", 128000]);
+    expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual(["claude-sonnet-5-5", "medium", 128000]);
     expect(k.lauf.stufen[0].anfrage?.maxTokens).toBe(128000);
   });
 
@@ -247,19 +247,19 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
     expect(att.anfragen[0].maxTokens).toBe(32000);
   });
 
-  it.each(["claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-luna"])(
+  it.each(["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-luna"])(
     "T03: auch mit %s gilt die eingestellte Grenze, Aufwand unverändert",
     async (modell) => {
       const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))], modell, 64000);
       await stufe1(k);
-      expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual([modell, "high", 64000]);
+      expect([att.anfragen[0].modell, att.anfragen[0].aufwand, att.anfragen[0].maxTokens]).toEqual([modell, STANDARD.aufwand.vorverarbeitung, 64000]);
     },
   );
 
   it("T04/T14: max_tokens nur mit Denkblock: Budgetfehler mit Grenze, Modell und Aufwand; kein Vorschlag, kein zweiter Aufruf; Protokoll vollständig", async () => {
     const { att, k, protokolle } = await kontext([abgeschnitten("", [{ type: "thinking" }])]);
     await expect(stufe1(k)).rejects.toThrow(
-      "S1 hat die Ausgabegrenze von 128.000 Token erreicht, bevor ein vollständiger Vorschlag vorlag (Modell claude-haiku-5-5, Aufwand high). Eingaben und Laufprotokoll bleiben erhalten. Technisch: Die Antwort enthält keinen JSON-Block.",
+      "S1 hat die Ausgabegrenze von 128.000 Token erreicht, bevor ein vollständiger Vorschlag vorlag (Modell claude-sonnet-5-5, Aufwand medium). Eingaben und Laufprotokoll bleiben erhalten. Technisch: Die Antwort enthält keinen JSON-Block.",
     );
     expect(att.anfragen).toHaveLength(1);
     expect(k.lauf.vorschlag).toBeUndefined();
@@ -314,7 +314,7 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
   it("T09: end_turn mit leerer Antwort: leere Antwort, keine Budgetdiagnose", async () => {
     const { k } = await kontext([llmAntwort("", { inhalt: [] })]);
     await expect(stufe1(k)).rejects.toThrow(
-      "Stufe S1 lieferte eine leere Antwort (Modell claude-haiku-5-5, Abbruchgrund end_turn). Eingaben und Laufprotokoll bleiben erhalten.",
+      "Stufe S1 lieferte eine leere Antwort (Modell claude-sonnet-5-5, Abbruchgrund end_turn). Eingaben und Laufprotokoll bleiben erhalten.",
     );
     expect(k.lauf.stufen[0].notiz).toBe("Leere Antwort (stopGrund end_turn).");
   });

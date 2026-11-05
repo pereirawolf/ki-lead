@@ -41,9 +41,9 @@ describe("Schätzung von Dauer und Kosten", () => {
     // Fable kostet je Ausgabetoken das 2,5-Fache von Opus
     expect(f.usd![0]).toBeCloseTo(1.4 * 2.5);
     expect(f.usd![1]).toBeCloseTo(3.35 * 2.5);
-    // nicht gemessener Aufwand: Basis „medium“, Obergrenze verdoppelt
-    const hoch = schaetzeStufe("erfassung", "claude-opus-5-5", "high");
-    expect(hoch.usd).toEqual([1.4, 6.7]);
+    // nicht gemessener Aufwand: Basis „medium“, Obergrenze verdoppelt (seit 0.7.12 an Sonnet, weil Opus „high“ gemessen ist)
+    const hoch = schaetzeStufe("erfassung", "claude-sonnet-5-5", "high");
+    expect(hoch).toEqual({ sekunden: null, usd: [0.15, 1.2], gemessen: false });
     // AV-2026-W45-02: dasselbe Modell mit anderer Stufe vor fremden Modellen gleicher Stufe (sonst Opus „high“ aus Astra)
     expect(schaetzeStufe("erfassung", "gpt-6-astra", "medium")).toEqual({ sekunden: null, usd: [0.75, 2.8], gemessen: false });
     expect(schaetzeStufe("erfassung", "claude-opus-5-5", "xhigh").usd![0]).toBeGreaterThanOrEqual(MESSWERTE["erfassung|claude-opus-5-5|medium"].usd[0]);
@@ -100,9 +100,10 @@ describe("Schätzung von Dauer und Kosten", () => {
         profil: p!,
       }),
     );
-    expect(html).toContain("S1 (claude-haiku-5-5, high): bis 3 Minuten, bis 0,03 USD");
+    // seit 0.7.12 S1 mit Sonnet „medium“ (Vorgabe von App und Beispielprofil)
+    expect(html).toContain("S1 (claude-sonnet-5-5, medium): unter 1 Minute, 0,02–0,35 USD");
     expect(html).toContain("S2 (claude-opus-5-5, medium): 3–14 Minuten, 1,40–3,35 USD");
-    expect(html).toContain("Zusammen etwa 1,40–3,38 USD");
+    expect(html).toContain("Zusammen etwa 1,42–3,70 USD");
     expect(html).toContain("viele Sachverhalte");
   });
 
@@ -185,6 +186,40 @@ describe("Schätzung von Dauer und Kosten", () => {
       expect(e.gemessen, `${anbieter} Erfassung`).toBe(true);
       expect(e.sekunden, `${anbieter} Erfassung Dauer`).not.toBeNull();
     }
+  });
+
+  // Folgereihe zum Anbietervergleich vom 05.11.2026 (App 0.7.9, Profil 1.38.0): drei interne Erfassungsläufe mit demselben
+  // Material und Opus in S2. Unabhängiges Soll: Kenndaten der Laufprotokolle (Dauer in s, Kosten in USD).
+  const FOLGEREIHE: [string, number, number][] = [
+    ["s1|gpt-6-luna|high", 99.4, 0.0098], // 20261105-141838-pyor
+    ["erfassung|claude-opus-5-5|medium", 666.0, 2.5812], // 20261105-141838-pyor
+    ["s1|gpt-6-luna|high", 111.9, 0.0077], // 20261105-143746-5iuf
+    ["erfassung|claude-opus-5-5|high", 766.7, 2.8063], // 20261105-143746-5iuf
+    ["s1|claude-sonnet-5-5|medium", 23.6, 0.2609], // 20261105-150440-l8af
+    ["erfassung|claude-opus-5-5|medium", 664.7, 2.5309], // 20261105-150440-l8af
+  ];
+
+  it("Folgereihe 05.11.2026: Messwerte liegen in den Spannen; Sonnet S1 erweitert, Opus „hoch“ in der Erfassung vorläufig", () => {
+    for (const [schluessel, sek, usd] of FOLGEREIHE) {
+      const m = MESSWERTE[schluessel];
+      expect(m, schluessel).toBeDefined();
+      expect(m.sekunden[0], `${schluessel}: Dauer von`).toBeLessThanOrEqual(sek);
+      expect(m.sekunden[1], `${schluessel}: Dauer bis`).toBeGreaterThanOrEqual(sek);
+      expect(m.usd[0], `${schluessel}: USD von`).toBeLessThanOrEqual(usd);
+      expect(m.usd[1], `${schluessel}: USD bis`).toBeGreaterThanOrEqual(usd);
+    }
+    // Werte von Hand nach der Regel: überschrittene Obergrenze = Messwert plus 25 %, auf 0,05 USD bzw. 30 s nach außen
+    // gerundet (0,2609 × 1,25 = 0,326 → 0,35; 766,7 s × 1,25 = 958 → 960 s; 2,8063 × 1,25 = 3,51 → 3,55); bestehende
+    // Spannen nicht verengt; Untergrenze der vorläufigen Spanne aus der Erfassung mit Opus „mittel“
+    expect(MESSWERTE["s1|claude-sonnet-5-5|medium"]).toEqual({ sekunden: [10, 30], usd: [0.02, 0.35] });
+    expect(MESSWERTE["erfassung|claude-opus-5-5|medium"]).toEqual({ sekunden: [200, 810], usd: [1.4, 3.35] });
+    expect(MESSWERTE["s1|gpt-6-luna|high"]).toEqual({ sekunden: [30, 120], usd: [0, 0.02] });
+    expect(MESSWERTE["erfassung|claude-opus-5-5|high"]).toEqual({ sekunden: [200, 960], usd: [1.4, 3.55], vorlaeufig: true });
+    const hoch = schaetzeStufe("erfassung", "claude-opus-5-5", "high");
+    expect(stufenText("S2", "claude-opus-5-5", "high", hoch)).toBe("S2 (claude-opus-5-5, high): 3–16 Minuten, 1,40–3,55 USD (vorläufig, ein Messlauf)");
+    expect(stufenText("S1", "claude-sonnet-5-5", "medium", schaetzeStufe("s1", "claude-sonnet-5-5", "medium"))).toBe(
+      "S1 (claude-sonnet-5-5, medium): unter 1 Minute, 0,02–0,35 USD",
+    );
   });
 
   it("TP-2026-W44-26: lokale Modelle über Ollama ohne Kosten und ohne Dauer", () => {
