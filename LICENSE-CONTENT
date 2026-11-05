@@ -71,7 +71,10 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
       Repository nicht ein. Bitte, ohne rechtliche Bindung: abgewandelte Stufentexte
       nicht als Fassung des Kodierleitfadens oder des Beispielprofils ausgeben;
       Änderungen sind nach CC BY 4.0, Abschnitt 3(a)(1)(B), ohnehin kenntlich zu
-      machen, und Abschnitt 2(a)(6) schließt den Eindruck einer Billigung aus.
+      machen, und Abschnitt 2(a)(6) schließt den Eindruck einer Billigung aus;
+   e) docs/GRUNDLAGEN.md (Theoretische Grundlagen und Genese, seit 05.11.2026); es
+      steht wie die begleitenden Aufsätze unter CC BY-NC-ND 4.0 (Datei
+      LICENSES/CC-BY-NC-ND-4.0.txt).
    Soweit Inhalte keinen urheberrechtlichen Schutz genießen, etwa überwiegend
    maschinell erzeugte Prüfsteine, begründet die Lizenz keine Pflichten
    (CC BY 4.0, Abschnitt 1(g)).
