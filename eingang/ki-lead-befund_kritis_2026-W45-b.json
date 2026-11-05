@@ -1,0 +1,263 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "kritis-lead",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-05T13:20:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+  "pruefumfang": "Befunde KL-2026-W45-02 bis -06 aus der Umstellung von KRITIS-LEAD auf LEAD-Meldung-v2 (Auftrag des Herausgebers vom 03.11.2026; Meilensteine M1 bis M3, pereirawolf/kritis-lead#21, #22, #23), angekündigt in KL-2026-W45-01. Fassung der Vorschläge nach den Entscheidungen des Herausgebers vom 05.11.2026 (Pin der Module auf main nach #22; bezug als Änderung, Frist nur als Hinweis; Präfixregel in Doku und Kodierleitfäden; Zugang „betriebsintern“ ergänzen). Gelesen in KI-LEAD (main 8faa547): docs/LEAD-MELDUNG-V2.md (Abschnitte 3, 4, 13), docs/AUSTAUSCH.md (Abschnitt 9), formate/lead-meldung-v2/kern.schema.json ($defs.quelle), formate/fremd/thessa-kennzahlen/herkunft.json, profile/lead-beispiel/kodierleitfaden.md und profile/lead-thueringen/kodierleitfaden.md (Abschnitt 8), profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json, src/kern/meldung-v2.js, src/kern/v2darstellung.ts, src/kern/baustein.ts. In KRITIS-LEAD (main 206d574): formate/lead-kritis-v2/ (Module, Zusammenstellung, Szenario), werkzeuge/pruefen/pin-abstand.mjs.",
+  "nicht_geprueft": [
+    "npm test in KI-LEAD nicht ausgeführt (reiner Befund ohne Codeänderung)",
+    "Ob Lagebild, Referenzprüfung oder Redaktionscheck einen bezug auf Kennungen melden, deren Meldungen nicht im Beispielsatz des Profils liegen (KL-2026-W45-03), nicht ausprobiert",
+    "Ob die App mit dem Profilpaket lead-kritis 0.3.x eine Betreibermeldung nach LEAD-Meldung-v2 ins Lagebild übernimmt, nicht ausprobiert (Übergang bis zur Umstellung des Profilpakets, KRITIS-LEAD M4)",
+    "Offene Pull Requests (GraphQL-Zugriff aus der Sitzung gesperrt)"
+  ],
+  "befunde": [
+    {
+      "id": "KL-2026-W45-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 13 Nr. 8 (Z. 262)",
+          "ist": "die Modulschemata liegen in KRITIS-LEAD und werden hier wie das Thessa-Schema als Kopie mit Herkunft und Prüfsumme eingebettet"
+        },
+        {
+          "datei": "formate/fremd/",
+          "stelle": "Ordner",
+          "ist": "nur thessa-kennzahlen/ (herkunft.json, 0.2/, 0.3/, gebuendelt/); kein Ordner kritis-lead/"
+        }
+      ],
+      "beobachtung": "Die Module von KRITIS-LEAD liegen seit pereirawolf/kritis-lead#22 auf main und sind mit M3 (#23) unverändert: lead-kritis-meldung 0.3 (Meldungsmodul) und lead-kritis-betrieb 0.3 (Fachmodul je Sachverhalt). KI-LEAD kündigt die Einbettung an, führt sie aber noch nicht. Ohne Einbettung gelten die Module in KI-LEAD als unbekannt und ungeprüft ($defs.module: „unbekannte bleiben erhalten und gelten als ungeprüft“); die Umstellung der Profile (Paket 6) kann Betreibermeldungen nach v2 dann nicht gegen die Module prüfen. Der Pin-Wächter von KRITIS-LEAD (werkzeuge/pruefen/pin-abstand.mjs) erwartet die Herkunftsangabe unter formate/fremd/kritis-lead/herkunft.json mit Einträgen, die je Modul den Quellpfad in KRITIS-LEAD (quelle) und die Prüfsumme (sha256) tragen; solange sie fehlt, meldet er einen Hinweis. Die Module sind in sich geschlossen (eigene $defs für Text, Zeitpunkt und Zeitangabe mit denselben Mustern wie der Kern) und hängen nicht von der Prüfsumme des Kernschemas ab. Prüfweg: statisch und Prüfsummen am Commit 206d574.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/206d574bfdddaecfddff28650aa95aec9accb145/formate/lead-kritis-v2/module/lead-kritis-meldung.schema.json",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "KRITIS-LEAD: Meldungsmodul lead-kritis-meldung 0.3",
+          "fassung_oder_stand": "Commit 206d574, 05.11.2026, SHA-256 27594a023e081fa2a35ec46ddb89125cb9f2102f3f496741e6f1cba22b2837ce",
+          "abgerufen_utc": "2026-11-05T13:15:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Fassung 0.3, Meldungsmodul für Angaben, die für die ganze Meldung eines KRITIS-Betreibers gelten."
+        },
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/206d574bfdddaecfddff28650aa95aec9accb145/formate/lead-kritis-v2/module/lead-kritis-betrieb.schema.json",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "KRITIS-LEAD: Fachmodul lead-kritis-betrieb 0.3",
+          "fassung_oder_stand": "Commit 206d574, 05.11.2026, SHA-256 308d481290c4c41046a2d6a92779677a7a516627e2096aedefbe11b36bafd027",
+          "abgerufen_utc": "2026-11-05T13:15:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Fassung 0.3, Fachmodul je Sachverhalt einer Betreibermeldung."
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Beide Module am Commit 206d574bfdddaecfddff28650aa95aec9accb145 von pereirawolf/kritis-lead unverändert nach formate/fremd/kritis-lead/0.3/ kopieren und eine Herkunftsangabe nach dem Muster von thessa-kennzahlen anlegen. Eine Bündelung entfällt, weil die Module keine Verweise nach außen haben; eingebunden werden sie über die Zusammenstellung des Profils (module bzw. meldungsmodule).",
+        "neuer_text": "formate/fremd/kritis-lead/herkunft.json: {\"format\": \"KRITIS-LEAD-Module\", \"repository\": \"https://github.com/pereirawolf/kritis-lead\", \"commit\": \"206d574bfdddaecfddff28650aa95aec9accb145\", \"abgerufen\": \"2026-11-05\", \"lizenz\": \"CC-BY-4.0 OR CC0-1.0 (KRITIS-LEAD, LICENSE-CONTENT Nr. 1 b und 2 a)\", \"module\": [{\"modul\": \"lead-kritis-meldung\", \"art\": \"meldungsmodul\", \"fassung\": \"0.3\", \"datei\": \"0.3/lead-kritis-meldung.schema.json\", \"quelle\": \"formate/lead-kritis-v2/module/lead-kritis-meldung.schema.json\", \"sha256\": \"27594a023e081fa2a35ec46ddb89125cb9f2102f3f496741e6f1cba22b2837ce\"}, {\"modul\": \"lead-kritis-betrieb\", \"art\": \"fachmodul\", \"fassung\": \"0.3\", \"datei\": \"0.3/lead-kritis-betrieb.schema.json\", \"quelle\": \"formate/lead-kritis-v2/module/lead-kritis-betrieb.schema.json\", \"sha256\": \"308d481290c4c41046a2d6a92779677a7a516627e2096aedefbe11b36bafd027\"}]}"
+      },
+      "folgeaenderungen": [
+        "Test analog tests/format/thessa-baustein.test.ts: Prüfsumme jeder Kopie gleich herkunft.json; Module nach Draft 2020-12 gültig; Zusammenstellung mit beiden Modulen ergibt ein kompilierbares Schema",
+        "docs/LEAD-MELDUNG-V2.md: Abschnitt 13 Nr. 8 von „werden … eingebettet“ auf den Stand mit Commit und Fassung; Änderungsverlauf (Nachtrag)",
+        "docs/AUSTAUSCH.md, Abschnitt 9, Tabelle der Zulieferer: Verweis auf formate/fremd/kritis-lead/",
+        "REUSE bzw. Lizenzangaben für den neuen Ordner; CHANGELOG, Versionsangaben (eigene Patch-Version)",
+        "Neuer Pin bei jeder neuen Modulfassung in KRITIS-LEAD; der Pin-Wächter von KRITIS-LEAD meldet dann einen Abstand"
+      ],
+      "entscheidungsfrage": "Sollen die Module lead-kritis-meldung und lead-kritis-betrieb 0.3 am Stand von KRITIS-LEAD main 206d574 (nach #22) jetzt mit Herkunft und Prüfsumme eingebettet werden? Empfehlung ja: Der Stand ist gemergt und durch M3 unverändert, Paket 6 kann darauf aufbauen; ein Warten auf #23 brächte keine andere Fassung.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Prüfsummentest in KI-LEAD (Kopie = herkunft.json) und in Gegenrichtung der Pin-Wächter von KRITIS-LEAD (npm run pin-abstand: Prüfsumme der Einbettung = aktuelles Modul).",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Pin auf main nach #22 vom Herausgeber am 05.11.2026 für die Fassung des Befunds gewählt; Freigabe der Umsetzung steht aus."
+      }
+    },
+    {
+      "id": "KL-2026-W45-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0] (Z. 26)",
+          "ist": "\"kennung\": \"DE-TH-SON-20261014-R4WP\" ohne Feld bezug"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.2 Bezug (Z. 272–276)",
+          "ist": "bei der Verdichtung alle eingehenden Sachverhalte (A.7.1) … Nur Kennungen, die in einer vorliegenden Meldung stehen."
+        }
+      ],
+      "beobachtung": "SON 10:00 schreibt den Sachverhalt DE-TH-SON-20261014-R4WP der Lagemeldung Nr. 4 des Krisenstabs fort (Quelle Q2) und stützt sich auf Eingänge von Betreibern und Leitstelle (Q3 Netzbetreiber, Q4 Mobilfunknetzbetreiber, Q5 Leitstelle; Pflegeheime und Trinkwasser über Q2). Im Szenario von KRITIS-LEAD trägt derselbe Sachverhalt in der Lagemeldung Nr. 4 (14.10., 08:30 Uhr) den bezug auf die fünf eingehenden Sachverhalte mit Art „verdichtung“: KRITIS-NETZSUED-20261013-N4ST7Q, KRITIS-MOBILB-20261014-M7FB9X, KRITIS-ZVTN-20261014-W2ZV3M, KRITIS-PFLEGEOL-20261014-P8HM4D und DE-TH-SON-20261014-G5RS6T. In SON 10:00 fehlt der bezug, obwohl Abschnitt 8.2 ihn bei der Verdichtung verlangt; die Zuordnung von oben (AUSTAUSCH.md Abschnitt 9, Rollenregel R2 von KRITIS-LEAD) ist im Lagebild damit nicht nachvollziehbar. Die übrigen Angaben stimmen mit der Lagemeldung Nr. 4 überein (D4 = 2 seit KRITIS-LEAD M2). Zu beachten: Die Betreibermeldungen liegen nicht im Beispielsatz von lead-thueringen; „vorliegend“ sind sie für den Krisenstab im Szenario. Prüfweg: Vergleich der Dateien.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/206d574bfdddaecfddff28650aa95aec9accb145/formate/lead-kritis-v2/szenario/orkantief-ilka-sonneberg/07_krisenstab_2026-10-14T08-30_lagemeldung-nr-4.json",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "KRITIS-LEAD: Lagemeldung Nr. 4 des Krisenstabs Sonneberg nach LEAD-Meldung-v2 (FIKTIV)",
+          "fassung_oder_stand": "Commit 206d574, 05.11.2026",
+          "abgerufen_utc": "2026-11-05T13:15:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "sachverhalte[DE-TH-SON-20261014-R4WP].bezug: fünf Einträge mit art „verdichtung“ und meldung_id"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Im Sachverhalt DE-TH-SON-20261014-R4WP von SON 10:00 den bezug auf die fünf eingehenden Sachverhalte ergänzen, in der Form, die das Profil dann führt: in LEAD-Meldung-Land-v1 als Liste der Kennungen, nach der Umstellung auf v2 als Einträge mit art „verdichtung“ und meldung_id der Eingangsmeldung wie in KRITIS-LEAD.",
+        "neuer_text": "\"bezug\": [\"KRITIS-NETZSUED-20261013-N4ST7Q\", \"KRITIS-MOBILB-20261014-M7FB9X\", \"KRITIS-ZVTN-20261014-W2ZV3M\", \"KRITIS-PFLEGEOL-20261014-P8HM4D\", \"DE-TH-SON-20261014-G5RS6T\"]"
+      },
+      "folgeaenderungen": [
+        "Prüfen, ob Lagebild, Referenzprüfung und Redaktionscheck einen bezug auf Kennungen ohne Meldung im geladenen Satz als Hinweis oder als Fehler führen; ein Fehler wäre für Eingänge aus Fachverfahren unpassend",
+        "LIESMICH.md des Beispiels: Herkunft der Kennungen (Szenario KRITIS-LEAD) nennen",
+        "Bei der Umstellung des Profils auf v2 (Paket 6) dieselben Kennungen mit meldung_id übernehmen; KRITIS-LEAD M4 lädt die Betreibermeldungen dann im selben Lagebild",
+        "CHANGELOG des Profils lead-thueringen"
+      ],
+      "entscheidungsfrage": "Soll SON 10:00 den bezug auf die fünf verdichteten Sachverhalte erhalten? Empfehlung ja: bezug ist nach Abschnitt 8.2 bei der Verdichtung Pflicht, ist prüfbar und macht die Zuordnung der Betreibermeldungen im Lagebild sichtbar; die fachlichen Setzungen der Meldung bleiben unberührt.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Satztest über das Szenario von KRITIS-LEAD und die Beispiele von lead-thueringen: Jede Kreismeldung, deren Quellen Eingangsmeldungen sind, führt deren Kennungen im bezug.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Fassung „bezug als Änderung, Frist nur als Hinweis“ vom Herausgeber am 05.11.2026 gewählt; Freigabe der Umsetzung steht aus."
+      }
+    },
+    {
+      "id": "KL-2026-W45-04",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0].sofort.bewertung_text, Kennsätze „Handlungsrelevant bis:“ (Z. 43)",
+          "ist": "Handlungsrelevant bis: 16.10.2026 10:00 – Nachbetankung oder Ersatzeinspeisung der Trinkwasserversorgung Neuhaus am Rennweg, Landkreis und Zweckverband – vor dem Ende der Notstromreichweite"
+        }
+      ],
+      "beobachtung": "SON 10:00 setzt die Frist für die Trinkwasserversorgung auf das Ende der Notstromreichweite (16.10., 10:00 Uhr). Der Zweckverband fordert in seiner Erstmeldung (14.10., 06:30 Uhr) 2.000 l Diesel bis 15.10., 12:00 Uhr an, und die Lagemeldung Nr. 4 führt eine gemeinsame Frist für Pumpwerk und Pflegeheime bis 15.10., 12:00 Uhr. Die Behörde darf eine eigene Frist setzen; ob die spätere Frist beabsichtigt ist (etwa weil die Reichweite die Nachbetankung bis zum Ende abdeckt) oder die Anforderung des Betreibers übersehen wurde, geht aus der Meldung nicht hervor. Prüfweg: Vergleich der Dateien.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/206d574bfdddaecfddff28650aa95aec9accb145/formate/lead-kritis-v2/szenario/orkantief-ilka-sonneberg/02_wasser_2026-10-14T06-30_erstmeldung.json",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "KRITIS-LEAD: Erstmeldung des Zweckverbands Trinkwasser Neuhaus am Rennweg (FIKTIV)",
+          "fassung_oder_stand": "Commit 206d574, 05.11.2026",
+          "abgerufen_utc": "2026-11-05T13:15:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "unterstuetzungsbedarf: Dieselkraftstoff, 2.000 l, bis 2026-10-15T12:00+02:00, angefordert; Frist F1 bis 2026-10-15T12:00+02:00"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "nur_hinweis",
+        "beschreibung": "Keine Änderung vorgeschlagen. Bei der nächsten Bearbeitung des Beispiels prüfen, ob die Frist für die Trinkwasserversorgung bewusst später liegt als die Anforderung des Betreibers; wenn ja, die Begründung im Kennsatz (Bedingung oder Grundlage) nennen.",
+        "neuer_text": ""
+      },
+      "folgeaenderungen": [],
+      "entscheidungsfrage": "Zur Kenntnis; keine Entscheidung über eine Änderung erforderlich. Soll der Hinweis bei der Umstellung des Beispiels auf v2 (Fristen als Liste mit bedingung und grundlage) aufgegriffen werden?",
+      "sicherheit": "mittel",
+      "automatisierbar": "Plausibilitätshinweis im Lagebild: Frist einer Behörde später als ein angeforderter Bedarf desselben Gegenstands in einer verdichteten Eingangsmeldung.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Vom Herausgeber am 05.11.2026 als Hinweis zur Prüfung, nicht als Änderung gefasst."
+      }
+    },
+    {
+      "id": "KL-2026-W45-05",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)",
+          "ist": "Präfix nach der Herkunft der meldenden Stelle (Darstellungsdatei, kennung.praefixe; in diesem Profil nach ISO 3166 …)"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)",
+          "ist": "Präfix nach der Herkunft der meldenden Stelle (… in diesem Profil DE-TH für das Land und DE-TH- mit dem Kfz-Kennzeichen für Kreise und kreisfreie Städte …)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 3, Zeile kennung (Z. 62)",
+          "ist": "Präfix-JJJJMMTT-Zufall (Kodierleitfaden 8.1)"
+        },
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 9, „Kennungen der Betreiber“ (Z. 104)",
+          "ist": "Die Regel steht in KRITIS-LEAD (Kodierleitfaden, Anhang K) und kommt mit der Umstellung der Profile in die Kodierleitfäden."
+        }
+      ],
+      "beobachtung": "AUSTAUSCH.md beschreibt die Kennungen der Betreiber (KRITIS-<Kürzel>-JJJJMMTT-<Zufall>) und kündigt die Übernahme in die Kodierleitfäden an. Die Kodierleitfäden der Profile, die Betreibermeldungen empfangen, leiten das Präfix weiter nur aus der Herkunft der meldenden Stelle ab; LEAD-MELDUNG-V2.md verweist für die Form nur auf Kodierleitfaden 8.1. Wer einen Sachverhalt verdichtet und im bezug eine Kennung KRITIS-… findet, liest im Kodierleitfaden nichts dazu. Das Muster des Kernschemas lässt die Kennung zu; das Kürzel verlangt das Schema von KRITIS-LEAD. Eine Kennung einer anderen Stelle wird nach 8.1 nie als eigene geführt; das gilt auch für Kennungen der Betreiber. Prüfweg: statisch.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "In Abschnitt 8.1 der Kodierleitfäden von lead-beispiel und lead-thueringen einen Punkt zu Kennungen anderer Herkunft ergänzen und in LEAD-MELDUNG-V2.md, Zeile kennung, auf AUSTAUSCH.md Abschnitt 9 verweisen. lead-justiz bleibt unberührt, weil dort keine Betreibermeldungen eingehen.",
+        "neuer_text": "Kodierleitfaden 8.1, neuer Punkt nach „Form“: „**Kennungen der Betreiber:** Sachverhalte von KRITIS-Betreibern tragen das Präfix KRITIS- mit einem Kürzel, das der Betreiber selbst wählt (etwa KRITIS-ZVTN-20261014-W2ZV3M; AUSTAUSCH.md Abschnitt 9). Sie stehen im Bezug wie jede Kennung einer Eingangsmeldung und werden nie als eigene geführt; die App vergibt für eigene Sachverhalte weiter Kennungen nach der Herkunft der meldenden Stelle.“ LEAD-MELDUNG-V2.md, Abschnitt 3, Zeile kennung: „Präfix-JJJJMMTT-Zufall (Kodierleitfaden 8.1; Präfix KRITIS- mit Kürzel für Betreiber, AUSTAUSCH.md Abschnitt 9) …“"
+      },
+      "folgeaenderungen": [
+        "Änderungsverlauf beider Kodierleitfäden (Abschnitt 9) und Versionsangaben der Profile lead-beispiel und lead-thueringen",
+        "docs/AUSTAUSCH.md Abschnitt 9: Satz „kommt mit der Umstellung der Profile in die Kodierleitfäden“ auf den neuen Stand",
+        "Falls die Arbeitsanweisungen der Profile die Kennungsform wiederholen: gleichlautend ergänzen"
+      ],
+      "entscheidungsfrage": "Soll die Präfixregel für Betreiber in Abschnitt 8.1 der Kodierleitfäden von lead-beispiel und lead-thueringen stehen und LEAD-MELDUNG-V2.md auf AUSTAUSCH.md verweisen? Empfehlung ja: Wer kodiert, liest den Kodierleitfaden; die Regel bleibt an einer Stelle beschrieben (AUSTAUSCH.md), die Leitfäden verweisen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "Dokumententest: Kodierleitfäden der empfangenden Profile nennen das Präfix KRITIS-; Beispielkennungen in Leitfäden entsprechen dem Muster des Kerns.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Fassung „Doku und Leitfäden“ vom Herausgeber am 05.11.2026 gewählt; Freigabe der Umsetzung steht aus. Kann mit Paket 6 umgesetzt werden."
+      }
+    },
+    {
+      "id": "KL-2026-W45-06",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.quelle.properties.zugang (Z. 458–461)",
+          "ist": "\"enum\": [\"oeffentlich\", \"paywall\", \"behoerdenintern\", \"eingangsmaterial\", \"eingangsmeldung\", \"nicht_ausgewertet\", null]"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 4, Quellenverzeichnis, Zeile zugang (Z. 126)",
+          "ist": "oeffentlich, paywall, behoerdenintern, eingangsmaterial, eingangsmeldung, nicht_ausgewertet, null"
+        }
+      ],
+      "beobachtung": "Für eigene, nicht öffentliche Unterlagen der meldenden Stelle kennt der Kern nur „behoerdenintern“. Betreiber stützen ihre Angaben fast immer auf solche Unterlagen (Betriebstagebuch, Leitwarte, Störungsübersicht); weder „behoerdenintern“ noch „eingangsmaterial“ passt. Die Überführung des Szenarios und das Betreiberformular von KRITIS-LEAD setzen den Zugang deshalb auf null („nicht angegeben“); in allen zwölf Betreibermeldungen des Szenarios ist das so. Damit sieht eine Behörde nicht, dass die Angabe aus nicht öffentlichen Unterlagen des Betreibers stammt, und unterscheidet sie nicht von einer Quelle, deren Zugang niemand angegeben hat. Prüfweg: statisch und Durchsicht des überführten Szenarios.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/pull/23",
+          "herausgeber": "Heiko Pereira Wolf",
+          "titel": "KRITIS-LEAD M3: Betreiberformular und Schnittstelle auf LEAD-Meldung-v2",
+          "fassung_oder_stand": "Commit 9c979d9, 05.11.2026",
+          "abgerufen_utc": "2026-11-05T13:15:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Zugang im Quellenverzeichnis: „Betriebsinterne Angaben: nicht angegeben.“"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Wert „betriebsintern“ in $defs.quelle.properties.zugang ergänzen: nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt. Zusätzlicher Wert innerhalb der Hauptversion 2; bestehende Meldungen bleiben gültig. „behoerdenintern“ bleibt unverändert.",
+        "neuer_text": "\"enum\": [\"oeffentlich\", \"paywall\", \"behoerdenintern\", \"betriebsintern\", \"eingangsmaterial\", \"eingangsmeldung\", \"nicht_ausgewertet\", null], description: „… behördenintern, betriebsintern (nicht öffentliche Unterlagen eines Betreibers), beigefügtes Material …“"
+      },
+      "folgeaenderungen": [
+        "docs/LEAD-MELDUNG-V2.md: Abschnitt 4, Zeile zugang; Änderungsverlauf (Nachtrag, Formatfassung)",
+        "src/kern/v2darstellung.ts (Z. 13) und src/kern/baustein.ts (Z. 96): Anzeige „(betriebsintern)“",
+        "src/kern/meldung-v2.js (Z. 246): Überführung aus v1, Text „betriebsintern“ erkennen",
+        "Zusammengestellte Schemata beispiel/ und beispiel-land/ neu erzeugen; Tests in tests/format/lead-meldung-v2.test.ts",
+        "Thessa und KRITIS-LEAD pinnen das Kernschema neu (Pin-Wächter melden den Abstand); KRITIS-LEAD stellt Formular und Überführung danach auf den neuen Wert um"
+      ],
+      "entscheidungsfrage": "Soll der Kern für quellen[].zugang den Wert „betriebsintern“ erhalten? Empfehlung ja: additiv und ohne Bruch innerhalb der Hauptversion 2; die Herkunft der Angaben eines Betreibers wird sichtbar statt „nicht angegeben“. Eine Umdeutung von „behoerdenintern“ wäre kleiner, passt für Betreiber aber nicht zum Namen.",
+      "sicherheit": "mittel",
+      "automatisierbar": "Schematest: Quelle mit zugang „betriebsintern“ gültig; Darstellungstest für die Anzeige.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Fassung „betriebsintern ergänzen“ vom Herausgeber am 05.11.2026 gewählt; Freigabe der Umsetzung steht aus. Ändert das Kernschema; Thessa muss neu pinnen."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Betreibermeldungen ohne bewertung sind seit KI-LEAD 0.7.8 gültig (KL-2026-W45-01); alle zwölf Betreibermeldungen des Szenarios von KRITIS-LEAD bestehen Schema und Referenzprüfung von KI-LEAD am Pin 9907f64 (zweiter Prüfweg, kritis-lead#22)",
+    "Das Werkzeug stelleSchemaZusammen() von KI-LEAD baut das Schema von KRITIS-LEAD mit Kern, lead-bevoelkerungsschutz und beiden Modulen ohne Anpassung",
+    "Lagemeldung Nr. 4 (KRITIS-LEAD) und SON 10:00 stimmen außer bezug und Frist überein; D4 = 2 in beiden",
+    "Kennungen mit Präfix KRITIS- sind nach dem Muster des Kerns gültig und in AUSTAUSCH.md Abschnitt 9 beschrieben"
+  ]
+}
