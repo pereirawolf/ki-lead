@@ -207,6 +207,8 @@ Danach je Profil (`profile/lead-beispiel`, `profile/lead-thueringen`, `profile/m
 
 `migriereV1()` bzw. `npm run meldung:v2 -- migriere` überführt `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1`; in der App seit 0.7.0 beim Einlesen, wenn das Profil eine Migration mit `verfahren` „lead-meldung-v2“ führt ([PROFILFORMAT.md](PROFILFORMAT.md)). Grundsatz: **nichts erfinden.** Was der Text nicht sicher hergibt, bleibt Text oder `null` und steht als Hinweis in `entstehung.migration.hinweise`. Eine überführte Meldung ist zur Durchsicht bestimmt, keine neue Freigabe.
 
+Die Felder `_status` und `_entstehung` behalten in `LEAD-Meldung-v1` ihren Unterstrich; eine Umbenennung schon dort wäre eine Schemaänderung mit Migration (SOP-LEAD A.10.4) und machte alle vorhandenen v1-Meldungen ungültig. Der Unterstrich entfällt mit der Überführung nach v2 (`status`, `entstehung`, Tabelle unten). Unterstriche im Code (ungenutzte Parameter, `_blank`) sind davon nicht berührt.
+
 | v1 | v2 | Art |
 |---|---|---|
 | `schema`, `_status` | `schema`, `fassung`, `status` | „final“ → `freigegeben` nur mit Zeichnung und Datum der Freigabe, sonst `zur_freigabe` |
@@ -267,6 +269,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 8 | 05.11.2026 | Format und Schemata unverändert: Abschnitt 11 hält fest, dass `_status` und `_entstehung` in v1 nicht umbenannt werden und der Unterstrich erst mit v2 entfällt (Entscheidung des Herausgebers vom 05.11.2026, Anlass Lernschleife KW 45) |
 | 2.0 (Entwurf), Nachtrag 7 | 05.11.2026 | Kernschema: zusätzlicher Wert `betriebsintern` für `quellen[].zugang` (nicht öffentliche Unterlagen eines Betreibers, die die meldende Stelle selbst führt); bestehende Meldungen bleiben gültig (Abschnitt 4; KL-2026-W45-06). Abschnitt 3: Kennungen der Betreiber mit Präfix `KRITIS-` (KL-2026-W45-05); Abschnitt 13 Nr. 8: Module von KRITIS-LEAD eingebettet (KL-2026-W45-02) |
 | 2.0 (Entwurf), Nachtrag 6 | 04.11.2026 | Kernschema: `bewertung` im Sachverhalt ist bei `absender.ebene` „Betreiber“ nicht Pflicht; für alle übrigen Ebenen bleibt sie Pflicht (Bedingung an der Wurzel), ist sie vorhanden, gelten die üblichen Regeln (Abschnitte 3 und 6; KL-2026-W45-01, Voraussetzung für die Umstellung von KRITIS-LEAD). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 5 | 04.11.2026 | Format und Schemata unverändert: Abschnitt 13 Nr. 10 merkt ein optionales Feld für die sachverhaltsübergreifende Lage für die Umstellung der Profile vor (LS-2026-W45-03) |
