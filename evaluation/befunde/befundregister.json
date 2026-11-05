@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-11-04",
+  "stand": "2026-11-05",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -3944,6 +3944,117 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-04",
       "pr": 149
+    },
+    {
+      "id": "KL-2026-W45-02",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 13 Nr. 8 (Z. 262)"
+        },
+        {
+          "datei": "formate/fremd/",
+          "stelle": "Ordner"
+        }
+      ],
+      "kurz": "Module lead-kritis-meldung und lead-kritis-betrieb 0.3 aus KRITIS-LEAD 206d574 mit Herkunft und Prüfsumme unter formate/fremd/kritis-lead/ eingebettet; Prüfsummentest, Pin-Wächter von KRITIS-LEAD liest dieselbe Herkunft.",
+      "status": "umgesetzt",
+      "pr": 151
+    },
+    {
+      "id": "KL-2026-W45-03",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0] (Z. 26)"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.2 Bezug (Z. 272–276)"
+        }
+      ],
+      "kurz": "Bezug von DE-TH-SON-20261014-R4WP in SON 10:00 auf die fünf verdichteten Sachverhalte (vier Betreiber, Leitstelle) ergänzen.",
+      "status": "zurueckgestellt",
+      "grund": "Die Betreiberkennungen haben einen sechsstelligen Zufallsteil; das Schema LEAD-Meldung-Land-v1 lässt im Bezug nur vierstellige zu. Umsetzung mit der Umstellung des Landesprofils auf v2 (Paket 6).",
+      "wieder_vorlegen_ab": "2026-11-09"
+    },
+    {
+      "id": "KL-2026-W45-04",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-thueringen/beispiele/orkantief-ilka/LEAD-Meldung_SON_2026-10-14T10-00_FIKTIV_Orkantief-Ilka.json",
+          "stelle": "sachverhalte[0].sofort.bewertung_text, Kennsätze „Handlungsrelevant bis:“ (Z. 43)"
+        }
+      ],
+      "kurz": "Hinweis: Frist der Trinkwasserversorgung (16.10., 10:00) liegt nach der Diesel-Anforderung des Betreibers (15.10., 12:00); prüfen, ob beabsichtigt, und dann begründen.",
+      "status": "zurueckgestellt",
+      "grund": "Nur Hinweis ohne Änderung; aufgreifen, wenn das Beispiel auf v2 umgestellt wird (Fristen als Liste mit Bedingung und Grundlage).",
+      "wieder_vorlegen_ab": "2026-11-09"
+    },
+    {
+      "id": "KL-2026-W45-05",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)"
+        },
+        {
+          "datei": "profile/lead-thueringen/kodierleitfaden.md",
+          "stelle": "Abschnitt 8.1 Sachverhaltskennung, Form (Z. 267)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 3, Zeile kennung (Z. 62)"
+        },
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 9, „Kennungen der Betreiber“ (Z. 104)"
+        }
+      ],
+      "kurz": "Kodierleitfaden 1.11.0, Abschnitt 8.1: Kennungen der Betreiber mit Präfix KRITIS-, nie als eigene geführt; im v1-Bezug wegen vierstelligem Zufallsteil erst nach der Umstellung auf v2; Verweise in LEAD-MELDUNG-V2.md und AUSTAUSCH.md.",
+      "status": "umgesetzt",
+      "pr": 151
+    },
+    {
+      "id": "KL-2026-W45-06",
+      "agent": "kritis-lead",
+      "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
+      "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
+      "entschieden_am": "2026-11-05",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.quelle.properties.zugang (Z. 458–461)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 4, Quellenverzeichnis, Zeile zugang (Z. 126)"
+        }
+      ],
+      "kurz": "Zusätzlicher Wert „betriebsintern“ für quellen[].zugang im Kernschema (Nachtrag 7), Vermerk in Quellenzeile und Baustein, Überführung aus v1; Thessa und KRITIS-LEAD pinnen neu.",
+      "status": "umgesetzt",
+      "pr": 151
     }
   ]
 }
