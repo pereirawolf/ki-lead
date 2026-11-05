@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.3 vom 04.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.4 vom 05.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -135,6 +135,14 @@ describe("Grunddesign: rahmen.json", () => {
     expect(BEREICHE.map((b) => b.titel)).toEqual(leiste["ki-lead"]);
     expect(leiste["ki-lead"][0]).toBe("Übersicht");
     expect(leiste["ki-lead"].slice(-3)).toEqual(["Darstellung", "Daten", "Über KI-LEAD"]);
+  });
+
+  it("LD-T05: Bereiche der Einstellungen verbinden mit „und“, nicht mit „&“ (seit Grunddesign 1.4, KI-LEAD 0.7.14)", () => {
+    // Soll unabhängig von rahmen.json: Entscheidung des Herausgebers vom 05.11.2026
+    const titel = BEREICHE.map((b) => b.titel);
+    expect(titel.filter((t) => t.includes("&"))).toEqual([]);
+    expect(titel).toEqual(expect.arrayContaining(["KI-Anbieter und API", "Modelle und Aufwand", "Recherche und Grenzen"]));
+    expect(rahmen.regeln.find((r: any) => r.id === "LD-T05")?.stufe).toBe("SOLL");
   });
 
   it("Reiter der Auswertung und Phasen der KI-Erfassung wie im Quelltext", () => {

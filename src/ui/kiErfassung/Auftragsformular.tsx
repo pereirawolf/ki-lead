@@ -48,7 +48,7 @@ export function Auftragsformular({
   dateienHinzufuegen: (liste: FileList | File[] | null) => Promise<void>;
   /** Anbieter der gewählten Modelle ohne API-Schlüssel */
   fehlendeSchluessel?: AnbieterId[];
-  /** Weg zu „KI-Anbieter & API“ */
+  /** Weg zu „KI-Anbieter und API“ */
   zuEinstellungen?: () => void;
 }) {
   const { profil, laufEinstellungen, verdichtung, websuche, eingaenge, stufeS2, stufeS3, schaetzS2 } = rahmen;

@@ -1,6 +1,6 @@
 // Eingabefeld für einen Wert der Recherchetiefe (Websuchen, ganz gelesene Seiten, Lesemenge je Seite) mit
 // verknüpftem Hilfetext, Umrechnung, Vermerk zur Wirkung je Anbieter und Prüfung getippter Werte. Seit 0.5.19 unter
-// „Einstellungen → Recherche & Grenzen“ (KP-2026-W43-70 bis -76), seit 0.5.22 auch in der Wahl je Lauf der KI-Erfassung.
+// „Einstellungen → Recherche und Grenzen“ (KP-2026-W43-70 bis -76), seit 0.5.22 auch in der Wahl je Lauf der KI-Erfassung.
 
 import { useId, useState } from "react";
 import { HilfeFeld } from "./HilfeFeld";

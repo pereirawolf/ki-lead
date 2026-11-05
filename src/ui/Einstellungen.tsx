@@ -1,6 +1,6 @@
 // Einstellungen in Bereichen mit Abschnittsnavigation wie bei Meldung und Lagebild (seit 0.5.6): Übersicht,
-// KI-Anbieter & API, Modelle & Aufwand, Testläufe, Recherche & Grenzen, Darstellung, Über KI-LEAD.
-// Seit 0.5.17 heißt „Modelle & Verarbeitung“ „Modelle & Aufwand“ und enthält nur noch die Wahl von KI-Profil, Modell und
+// KI-Anbieter und API, Modelle und Aufwand, Testläufe, Recherche und Grenzen, Darstellung, Über KI-LEAD.
+// Seit 0.5.17 heißt „Modelle & Verarbeitung“ „Modelle & Aufwand“ (seit 0.7.14 „Modelle und Aufwand“, LD-T05) und enthält nur noch die Wahl von KI-Profil, Modell und
 // Aufwand; Vergleichslauf Ilka und Prüffall Reparatur stehen zusammengeführt im eigenen Bereich „Testläufe“.
 // Reine Umgliederung der Oberfläche: Einstellungen, Vorgaben, Speicherorte und Schlüssel bleiben, wie sie sind.
 
@@ -80,10 +80,10 @@ export type EinstellungsBereich = "uebersicht" | "anbieter" | "modelle" | "testl
 
 export const BEREICHE: { id: EinstellungsBereich; titel: string }[] = [
   { id: "uebersicht", titel: "Übersicht" },
-  { id: "anbieter", titel: "KI-Anbieter & API" },
-  { id: "modelle", titel: "Modelle & Aufwand" },
+  { id: "anbieter", titel: "KI-Anbieter und API" },
+  { id: "modelle", titel: "Modelle und Aufwand" },
   { id: "testlaeufe", titel: "Testläufe" },
-  { id: "recherche", titel: "Recherche & Grenzen" },
+  { id: "recherche", titel: "Recherche und Grenzen" },
   { id: "darstellung", titel: "Darstellung" },
   { id: "daten", titel: "Daten" },
   { id: "ueber", titel: "Über KI-LEAD" },
@@ -398,7 +398,7 @@ function UebersichtBereich({
   );
 }
 
-// ── KI-Anbieter & API ─────────────────────────────────────────────────────────
+// ── KI-Anbieter und API ─────────────────────────────────────────────────────────
 
 function AblageAbschnitt({ ablage, setAblage }: { ablage: AblageId; setAblage: (id: AblageId) => Promise<void> }) {
   const [laeuft, setLaeuft] = useState(false);
@@ -797,9 +797,9 @@ function AnbieterBereich({
 }) {
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
-      <h2 id="einstellungen-bereich-titel">KI-Anbieter & API</h2>
+      <h2 id="einstellungen-bereich-titel">KI-Anbieter und API</h2>
       <p className="einleitung">
-        Zugang zu den KI-Anbietern. Ein Schlüssel wird erst mit „Speichern“ übernommen. Welche Modelle die Aufgaben nutzen, steht unter „Modelle & Aufwand“.
+        Zugang zu den KI-Anbietern. Ein Schlüssel wird erst mit „Speichern“ übernommen. Welche Modelle die Aufgaben nutzen, steht unter „Modelle und Aufwand“.
       </p>
       {setAblage && <AblageAbschnitt ablage={ablage} setAblage={setAblage} />}
       {anbieterInfos().map((a) => (
@@ -818,7 +818,7 @@ function AnbieterBereich({
   );
 }
 
-// ── Modelle & Aufwand ─────────────────────────────────────────────────────────
+// ── Modelle und Aufwand ─────────────────────────────────────────────────────────
 
 /**
  * Auswahl des KI-Profils (bis 0.5.16 „Voreinstellung“): je Option eine Kurzzeile; die Modelle je Aufgabe erscheinen nur
@@ -905,7 +905,7 @@ function ModelleBereich({
   const setze = (teil: Partial<E>) => setEinstellungen({ ...e, ...teil });
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
-      <h2 id="einstellungen-bereich-titel">Modelle & Aufwand</h2>
+      <h2 id="einstellungen-bereich-titel">Modelle und Aufwand</h2>
       <p className="einleitung">
         KI-Profil wählen oder Modell und Aufwand je Aufgabe selbst zusammenstellen. Höherer Aufwand bedeutet gründlichere Arbeit, aber mehr Token und längere
         Laufzeit. Für jeden genutzten Anbieter braucht es einen Schlüssel.
@@ -980,7 +980,7 @@ function ModelleBereich({
       <p className="hinweis">
         Zur Wahl stehen je Modell nur die Stufen, die der Anbieter anbietet; Mistral kennt nur „niedrig – ohne Nachdenken“ und „hoch – mit Nachdenken“. Lehnt
         ein Mistral-Modell die Angabe ab, versucht die App es einmal ohne sie und vermerkt das im Laufprotokoll. Lokale Modelle über Ollama erhalten keinen
-        Aufwand; das lokale Modell steht unter „KI-Anbieter & API“. {OLLAMA_HINWEIS}
+        Aufwand; das lokale Modell steht unter „KI-Anbieter und API“. {OLLAMA_HINWEIS}
       </p>
       {e.forschung && (
         <div className="kasten kasten-info testlauf-verweis">
@@ -994,7 +994,7 @@ function ModelleBereich({
   );
 }
 
-// ── Recherche & Grenzen ───────────────────────────────────────────────────────
+// ── Recherche und Grenzen ───────────────────────────────────────────────────────
 
 // Recherchetiefe mit Stufen und eigenen Werten (seit 0.5.19, KP-2026-W43-69 bis -76); Logik in src/pipeline/recherchetiefe.ts
 
@@ -1072,7 +1072,7 @@ function RechercheBereich({ profil, e, setEinstellungen }: { profil: Profil | nu
   const genutzt = genutzteAnbieter(e, profil);
   return (
     <section className="schritt-inhalt" aria-labelledby="einstellungen-bereich-titel">
-      <h2 id="einstellungen-bereich-titel">Recherche & Grenzen</h2>
+      <h2 id="einstellungen-bereich-titel">Recherche und Grenzen</h2>
       <p className="einleitung">
         Allgemeine Grenzen für Umfang, Laufzeit und Kosten. Ob ein Lauf recherchieren darf, entscheidet die KI-Erfassung je Auftrag; das Laufprotokoll hält die
         wirksamen Werte fest.

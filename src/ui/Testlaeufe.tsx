@@ -141,7 +141,7 @@ type Zustand =
   | { art: "fertig"; ergebnis: Ergebnis; zip: Uint8Array; name: string; archivFehler?: string }
   | { art: "fehler"; text: string };
 
-/** Einstellungen mit ausdrücklichem Modell je Aufgabe: so, wie sie „Modelle & Aufwand“ für das aktive Profil anzeigt */
+/** Einstellungen mit ausdrücklichem Modell je Aufgabe: so, wie sie „Modelle und Aufwand“ für das aktive Profil anzeigt */
 export function vergleichsEinstellungen(e: Einstellungen, profil: Profil | null): Einstellungen {
   const modelle = { ...e.modelle };
   for (const r of [...VERGLEICH_ROLLEN, "kurzfassung"] as Rolle[]) modelle[r] = profil ? modellFuer(r, e, profil) : e.modelle[r] || appModell(r);
@@ -405,7 +405,7 @@ export function TestlaufAbschnitt({
       <label className="feld">
         <span className="feld-label">Konfiguration</span>
         <select value={kennung ?? ""} disabled={laeuft} aria-describedby="testlauf-plan-hinweis" onChange={(ev) => setVariante(ev.target.value)}>
-          <option value="">Aktuelle Einstellungen (Modelle & Aufwand)</option>
+          <option value="">Aktuelle Einstellungen (Modelle und Aufwand)</option>
           {reparatur ? (
             <optgroup label={`Bewertungsplan ${PLAN_REPARATUR.id}`}>
               {PLAN_REPARATUR.varianten.map((v) => (
@@ -470,7 +470,7 @@ export function TestlaufAbschnitt({
       )}
       {fehlend.length > 0 && (
         <p className="hinweis" role="status">
-          Für den Testlauf fehlt der Schlüssel für {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")} (Bereich „KI-Anbieter & API“).{" "}
+          Für den Testlauf fehlt der Schlüssel für {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")} (Bereich „KI-Anbieter und API“).{" "}
           {zeige && (
             <button type="button" className="knopf leise klein" onClick={() => zeige("anbieter")}>
               Schlüssel hinterlegen

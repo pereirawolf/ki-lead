@@ -109,6 +109,22 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
+| 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ |
+
+## [0.7.14] – 05.11.2026
+
+Grundlage: Prüfung der Menübeschriftungen in KI-LEAD, KRITIS-LEAD und Thessa vom 04.11.2026 und Entscheidung des Herausgebers vom 05.11.2026: „&“ nur in Feld- und Schrittnamen der LEAD-Meldevorlage und der Darstellungsdatei eines Profils, sonst „und“; als Regel des Grunddesigns.
+
+### Geändert
+
+- **Bereiche der Einstellungen:** „KI-Anbieter und API“, „Modelle und Aufwand“ und „Recherche und Grenzen“ statt mit „&“; Verweistexte in KI-Erfassung, Modellwahl, Recherchegrenzen, Fallreihe und Testläufen entsprechend. Adressen (`#/einstellungen/<bereich>`) und Funktion unverändert. Die Schritte der Meldung („Quellen & Referenzen“, „Prüfen & Exportieren“) folgen weiter der Darstellungsdatei des Profils.
+- **Grunddesign 1.4** (`design/`): neue SOLL-Regel LD-T05 in „Schrift und Sprache“, Bereichsliste der Referenzumsetzung in `rahmen.json`; Thessa und KRITIS-LEAD erfüllen die Regel bereits.
+- Spezifikation 0.7.14 (Abschnitt 5.4), `docs/TESTS.md`, README. Versionsangaben 0.7.14 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 714); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Ältere Einträge dieses Verlaufs behalten die bisherigen Namen.
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: LD-T05, Bereiche ohne „&“.
+- Angepasst ohne Änderung des Solls (neue Namen): Unit-, UI- und Browsertests zu Einstellungen, Modellwahl, Recherchetiefe, Sprungzielen, Betrieb und Testläufen.
 
 ## [0.7.13] – 05.11.2026
 

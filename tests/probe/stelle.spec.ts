@@ -51,7 +51,7 @@ test("Betreiberbuild: Policy nur mit dem Endpunkt, nur dieser Anbieter, Verbindu
   expect(connect).toBe("connect-src 'self' https://api.eu.mistral.ai");
 
   await page.getByRole("button", { name: "Einstellungen", exact: true }).click();
-  await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "KI-Anbieter und API", exact: true }).click();
   const titel = await page.locator("section[aria-labelledby^='schluessel-'] h3").allInnerTexts();
   zeile(`- Karten: ${titel.join(", ")}`);
   expect(titel).toEqual(["API-Schlüssel (Endpunkt der Stelle)"]);

@@ -1,5 +1,5 @@
 // Recherchetiefe (seit 0.5.19): Stufen, Prüfung getippter Werte, Umrechnung der Lesemenge, Höchstkosten, Wirkung je Anbieter.
-// Befunde KP-2026-W43-69 bis -76 (Prüfung „Recherche & Grenzen“ vom 25.10.2026, Herausgeber-Freigabe vom selben Tag).
+// Befunde KP-2026-W43-69 bis -76 (Prüfung „Recherche und Grenzen“ vom 25.10.2026, Herausgeber-Freigabe vom selben Tag).
 // Soll als feste Werte; Kosten nach den Listenpreisen der Tabelle (claude-opus-5-5: 4 USD je Million Eingabetoken,
 // Websuche 0,01 USD; gpt-6.1-sol: 0,01 USD je Werkzeugaufruf; mistral-medium-3-5: 0,03 USD je Suche).
 import { describe, expect, it } from "vitest";

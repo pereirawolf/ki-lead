@@ -1,4 +1,4 @@
-/* Einstellungen: Bereiche, Ablage der Schlüssel, Anbieter, Modelle & Aufwand, Recherche & Grenzen, Darstellung
+/* Einstellungen: Bereiche, Ablage der Schlüssel, Anbieter, Modelle und Aufwand, Recherche und Grenzen, Darstellung
    (Farbschema-Editor), Testläufe und Archiv.
    Seit 0.6.5 (TP-2026-W44-19) eigene Datei; eingebunden über src/styles.css. */
 
@@ -280,7 +280,7 @@
   font-size: 0.85rem;
 }
 
-/* Modelle & Aufwand: Modelle des gewählten KI-Profils, Verweis auf die Testläufe (seit 0.5.17) */
+/* Modelle und Aufwand: Modelle des gewählten KI-Profils, Verweis auf die Testläufe (seit 0.5.17) */
 .ki-profil-modelle {
   display: inline-block;
   margin-top: 0.15rem;

@@ -13,7 +13,7 @@ export interface KiZugangWert {
   profil: Profil | null;
   einstellungen: Einstellungen;
   schluessel: Schluessel;
-  /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter & API“ */
+  /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter und API“ */
   zuEinstellungen: (bereich?: EinstellungsBereich) => void;
   /**
    * Laufende Anfrage der Management Summary an die Kopfleiste melden, null bei Ende (seit 0.6.6): Titel im zugänglichen

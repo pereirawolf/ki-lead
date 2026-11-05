@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-// Einstellungen → „Recherche & Grenzen“: Recherchetiefe mit Stufen und eigenen Werten (seit 0.5.19).
-// Befunde KP-2026-W43-69 bis -76 (Prüfung „Recherche & Grenzen“ vom 25.10.2026, Herausgeber-Freigabe vom selben Tag).
+// Einstellungen → „Recherche und Grenzen“: Recherchetiefe mit Stufen und eigenen Werten (seit 0.5.19).
+// Befunde KP-2026-W43-69 bis -76 (Prüfung „Recherche und Grenzen“ vom 25.10.2026, Herausgeber-Freigabe vom selben Tag).
 // Ohne Profil gelten die Vorgaben der App (S2 mit claude-opus-5-5); Soll als feste Texte.
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import React, { act } from "react";

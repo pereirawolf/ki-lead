@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Betreiberbuild in der Oberfläche (seit 0.6.17, TP-2026-W44-48 bis -50): nur freigegebene Anbieter in Übersicht,
-// „KI-Anbieter & API“ und KI-Profilen, Karte des Endpunkts der Stelle ohne änderbare Adresse, Angaben unter „Über“,
+// „KI-Anbieter und API“ und KI-Profilen, Karte des Endpunkts der Stelle ohne änderbare Adresse, Angaben unter „Über“,
 // Vorgabe der Schlüsselablage und Laufprotokoll. Der öffentliche Build bleibt unverändert (übrige Tests).
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
@@ -49,7 +49,7 @@ const text = () => document.body.textContent ?? "";
 const schluesselTitel = () => [...document.querySelectorAll(".einstellung-block h3")].map((h) => h.textContent);
 
 describe("TP-2026-W44-48, -49: Betreiberbuild nur mit dem Endpunkt der Stelle", () => {
-  it("„KI-Anbieter & API“: nur die Karte des Endpunkts, Adresse aus der Konfiguration, kein Ollama", async () => {
+  it("„KI-Anbieter und API“: nur die Karte des Endpunkts, Adresse aus der Konfiguration, kein Ollama", async () => {
     betriebFuerTests({ konfiguration: PROBE, sha256: SHA });
     await zeige("anbieter");
     expect(schluesselTitel()).toEqual(["API-Schlüssel (Endpunkt der Stelle)"]);

@@ -1,8 +1,8 @@
 {
   "$schema": "./rahmen.schema.json",
   "format": "lead-design-rahmen/1",
-  "fassung": "1.3",
-  "stand": "2026-11-04",
+  "fassung": "1.4",
+  "stand": "2026-11-05",
   "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
   "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
   "tokens": "lead-design.tokens.json",
@@ -57,7 +57,7 @@
       "aria_current": "page",
       "nummeriert": false,
       "muster": ["Übersicht", "<Bereiche der App>", "Darstellung", "Daten", "Über <Produktname>"],
-      "ki-lead": ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"]
+      "ki-lead": ["Übersicht", "KI-Anbieter und API", "Modelle und Aufwand", "Testläufe", "Recherche und Grenzen", "Darstellung", "Daten", "Über KI-LEAD"]
     },
     {
       "id": "reiter",
@@ -118,6 +118,7 @@
     { "id": "LD-T02", "stufe": "MUSS", "thema": "Schrift und Sprache", "text": "Schriftgrößen und Maße von Text stehen in rem und folgen der Schriftgröße des Systems: Grundschrift 1,0625 rem (bis zum Umbruch „breit“ 1 rem), Zeilenhöhe 1,5, h1 1,6 rem, h2 1,35 rem.", "referenz": ["src/styles/basis.css"] },
     { "id": "LD-T03", "stufe": "MUSS", "thema": "Schrift und Sprache", "text": "Die Oberfläche spricht neutral an, ohne „du“ und ohne „Sie“: Infinitiv, Passiv oder sachlicher Bezug.", "referenz": ["CHANGELOG.md"] },
     { "id": "LD-T04", "stufe": "SOLL", "thema": "Schrift und Sprache", "text": "Daten und Uhrzeiten stehen in der Oberfläche deutsch (TT.MM.JJJJ, hh:mm). Dateinamen von Downloads beginnen mit dem Datum, damit sie im Ordner zeitlich sortiert stehen.", "referenz": ["docs/SPEZIFIKATION.md", "src/kern/ausgabe.ts"] },
+    { "id": "LD-T05", "stufe": "SOLL", "thema": "Schrift und Sprache", "text": "Beschriftungen der Oberfläche verbinden mit „und“, nicht mit „&“. „&“ steht nur in Feld- und Schrittnamen der LEAD-Meldevorlage und der Darstellungsdatei eines Profils (etwa „Lage & Ereignis“, „Quellen & Referenzen“), damit sie gleich lauten wie in Vorlage, SOPs und Kodierleitfaden.", "referenz": ["src/ui/Einstellungen.tsx", "profile/lead-beispiel/meldung.ui.json"] },
     { "id": "LD-B01", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Knöpfe gibt es als Hauptknopf (gefüllt in der Aktionsfarbe, für die vorgesehene nächste Aktion), Standard (Umriss) und leise, dazu klein für Zeilenaktionen. Knöpfe sind mindestens 44 px hoch; bei grober Zeigereingabe gilt das für alle Bedienelemente.", "referenz": ["src/styles/basis.css"] },
     { "id": "LD-B02", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Knöpfe sind mit einem Verb oder Verb und Gegenstand beschriftet (etwa „In die Erfassung übernehmen“). Knöpfe zum Blättern nennen ihr Ziel (etwa „Weiter: Quellen & Referenzen“).", "referenz": ["src/ui/Meldung.tsx"] },
     { "id": "LD-B03", "stufe": "MUSS", "thema": "Bedienelemente", "text": "Ist eine Hauptaktion gesperrt, nennt die App darüber, was noch fehlt („Noch offen“ mit Sprung zur Stelle), und verknüpft den Knopf per aria-describedby damit.", "referenz": ["src/ui/kiErfassung/Auftragsformular.tsx", "src/ui/Kurzfassung.tsx"] },
