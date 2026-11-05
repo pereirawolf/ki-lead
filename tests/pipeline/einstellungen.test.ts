@@ -31,7 +31,7 @@ const { alleSchluesselLesen, schluesselLesen, schluesselSchreiben } = await impo
 describe("Vorgaben und Umstellung der Einstellungen", () => {
   beforeEach(() => speicher.clear());
 
-  it("S1 arbeitet seit 0.7.12 mit dem Aufwand „mittel“ als Vorgabe; neue Einstellungen tragen Fassung 8", async () => {
+  it("S1 arbeitet seit 0.7.13 mit dem Aufwand „mittel“ als Vorgabe; neue Einstellungen tragen Fassung 8", async () => {
     expect(STANDARD.aufwand.vorverarbeitung).toBe("medium");
     expect(STANDARD.fassung).toBe(8);
     expect((await einstellungenLesen()).aufwand.vorverarbeitung).toBe("medium");
@@ -159,7 +159,7 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
   });
 
   it.each([
-    // seit 0.7.12 S1 mit Sonnet „medium“ (Fassung 8)
+    // seit 0.7.13 S1 mit Sonnet „medium“ (Fassung 8)
     ["anthropic", ALT_ANTHROPIC, { reparatur: "claude-haiku-5-5", vorverarbeitung: "claude-sonnet-5-5" }, { vorverarbeitung: "medium" }],
     ["openai", ALT_OPENAI, {}, { erfassung: "high" }],
     ["mistral", ALT_MISTRAL, {}, {}], // seit 0.5.16 wieder wie bis 0.5.14 (AV-2026-W43-39)
@@ -207,9 +207,9 @@ describe("Vorgaben und Umstellung der Einstellungen", () => {
   });
 });
 
-describe("Fassung 7 → 8 (0.7.12): S1 Anthropic mit Sonnet „mittel“", () => {
+describe("Fassung 7 → 8 (0.7.13): S1 Anthropic mit Sonnet „mittel“", () => {
   beforeEach(() => speicher.clear());
-  // Soll unabhängig vom Code: Standard-Profil Anthropic bis 0.7.11 (Spezifikation 0.7.11, Abschnitt 5.4) und ab 0.7.12
+  // Soll unabhängig vom Code: Standard-Profil Anthropic bis 0.7.12 (Spezifikation 0.7.12, Abschnitt 5.4) und ab 0.7.13
   const ANTHROPIC_0711 = {
     modelle: {
       vorverarbeitung: "claude-haiku-5-5",
@@ -220,14 +220,14 @@ describe("Fassung 7 → 8 (0.7.12): S1 Anthropic mit Sonnet „mittel“", () =>
     },
     aufwand: { vorverarbeitung: "high", erfassung: "medium", verdichtung: "medium", reparatur: "low", kurzfassung: "medium" },
   };
-  const ANTHROPIC_0712 = {
+  const ANTHROPIC_0713 = {
     modelle: { ...ANTHROPIC_0711.modelle, vorverarbeitung: "claude-sonnet-5-5" },
     aufwand: { ...ANTHROPIC_0711.aufwand, vorverarbeitung: "medium" },
   };
 
   it("das heutige Standard-Profil und die Vorgaben der App führen S1 mit Sonnet „mittel“", async () => {
     const { STANDARD_PROFILE, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7, APP_MODELLE } = await import("../../src/pipeline/einstellungen");
-    expect(STANDARD_PROFILE.anthropic).toEqual(ANTHROPIC_0712);
+    expect(STANDARD_PROFILE.anthropic).toEqual(ANTHROPIC_0713);
     expect(STANDARD_PROFIL_ANTHROPIC_FASSUNG_7).toEqual(ANTHROPIC_0711);
     expect(APP_MODELLE.vorverarbeitung).toBe("claude-sonnet-5-5");
     expect(STANDARD.aufwand.vorverarbeitung).toBe("medium");
@@ -236,8 +236,8 @@ describe("Fassung 7 → 8 (0.7.12): S1 Anthropic mit Sonnet „mittel“", () =>
   it("wer genau dem bisherigen Standard-Profil Anthropic folgt, folgt danach dem heutigen", async () => {
     speicher.set("einstellungen", { ...STANDARD, fassung: 7, websucheMax: 7, modelle: ANTHROPIC_0711.modelle, aufwand: ANTHROPIC_0711.aufwand });
     const e = await einstellungenLesen();
-    expect(e.modelle).toEqual(ANTHROPIC_0712.modelle);
-    expect(e.aufwand).toEqual(ANTHROPIC_0712.aufwand);
+    expect(e.modelle).toEqual(ANTHROPIC_0713.modelle);
+    expect(e.aufwand).toEqual(ANTHROPIC_0713.aufwand);
     expect(e.websucheMax).toBe(7);
     expect(e.fassung).toBe(8);
     expect(standardProfilAktiv(e, "anthropic")).toBe(true);

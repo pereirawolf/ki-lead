@@ -41,7 +41,7 @@ describe("Schätzung von Dauer und Kosten", () => {
     // Fable kostet je Ausgabetoken das 2,5-Fache von Opus
     expect(f.usd![0]).toBeCloseTo(1.4 * 2.5);
     expect(f.usd![1]).toBeCloseTo(3.35 * 2.5);
-    // nicht gemessener Aufwand: Basis „medium“, Obergrenze verdoppelt (seit 0.7.12 an Sonnet, weil Opus „high“ gemessen ist)
+    // nicht gemessener Aufwand: Basis „medium“, Obergrenze verdoppelt (seit 0.7.13 an Sonnet, weil Opus „high“ gemessen ist)
     const hoch = schaetzeStufe("erfassung", "claude-sonnet-5-5", "high");
     expect(hoch).toEqual({ sekunden: null, usd: [0.15, 1.2], gemessen: false });
     // AV-2026-W45-02: dasselbe Modell mit anderer Stufe vor fremden Modellen gleicher Stufe (sonst Opus „high“ aus Astra)
@@ -100,7 +100,7 @@ describe("Schätzung von Dauer und Kosten", () => {
         profil: p!,
       }),
     );
-    // seit 0.7.12 S1 mit Sonnet „medium“ (Vorgabe von App und Beispielprofil)
+    // seit 0.7.13 S1 mit Sonnet „medium“ (Vorgabe von App und Beispielprofil)
     expect(html).toContain("S1 (claude-sonnet-5-5, medium): unter 1 Minute, 0,02–0,35 USD");
     expect(html).toContain("S2 (claude-opus-5-5, medium): 3–14 Minuten, 1,40–3,35 USD");
     expect(html).toContain("Zusammen etwa 1,42–3,70 USD");
@@ -197,9 +197,12 @@ describe("Schätzung von Dauer und Kosten", () => {
     ["erfassung|claude-opus-5-5|high", 766.7, 2.8063], // 20261105-143746-5iuf
     ["s1|claude-sonnet-5-5|medium", 23.6, 0.2609], // 20261105-150440-l8af
     ["erfassung|claude-opus-5-5|medium", 664.7, 2.5309], // 20261105-150440-l8af
+    // Fortschreibung desselben Materials mit Vormeldung
+    ["s1|claude-sonnet-5-5|high", 59.5, 0.4306], // 20261105-173747-v8w6
+    ["erfassung|claude-opus-5-5|high", 815.8, 3.3613], // 20261105-173747-v8w6
   ];
 
-  it("Folgereihe 05.11.2026: Messwerte liegen in den Spannen; Sonnet S1 erweitert, Opus „hoch“ in der Erfassung vorläufig", () => {
+  it("Folgereihe 05.11.2026: Messwerte liegen in den Spannen; Sonnet S1 erweitert, Sonnet S1 „hoch“ und Opus „hoch“ in der Erfassung vorläufig", () => {
     for (const [schluessel, sek, usd] of FOLGEREIHE) {
       const m = MESSWERTE[schluessel];
       expect(m, schluessel).toBeDefined();
@@ -215,6 +218,11 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(MESSWERTE["erfassung|claude-opus-5-5|medium"]).toEqual({ sekunden: [200, 810], usd: [1.4, 3.35] });
     expect(MESSWERTE["s1|gpt-6-luna|high"]).toEqual({ sekunden: [30, 120], usd: [0, 0.02] });
     expect(MESSWERTE["erfassung|claude-opus-5-5|high"]).toEqual({ sekunden: [200, 960], usd: [1.4, 3.55], vorlaeufig: true });
+    // 59,5 s × 1,25 = 74 → 90 s; 0,4306 × 1,25 = 0,538 → 0,55 USD; Untergrenze aus Sonnet „mittel“
+    expect(MESSWERTE["s1|claude-sonnet-5-5|high"]).toEqual({ sekunden: [10, 90], usd: [0.02, 0.55], vorlaeufig: true });
+    expect(stufenText("S1", "claude-sonnet-5-5", "high", schaetzeStufe("s1", "claude-sonnet-5-5", "high"))).toBe(
+      "S1 (claude-sonnet-5-5, high): bis 2 Minuten, 0,02–0,55 USD (vorläufig, ein Messlauf)",
+    );
     const hoch = schaetzeStufe("erfassung", "claude-opus-5-5", "high");
     expect(stufenText("S2", "claude-opus-5-5", "high", hoch)).toBe("S2 (claude-opus-5-5, high): 3–16 Minuten, 1,40–3,55 USD (vorläufig, ein Messlauf)");
     expect(stufenText("S1", "claude-sonnet-5-5", "medium", schaetzeStufe("s1", "claude-sonnet-5-5", "medium"))).toBe(

@@ -17,14 +17,16 @@
 // - Folgereihe zum Anbietervergleich vom 05.11.2026 (App 0.7.9, Profil 1.38.0): drei interne Erfassungsläufe mit demselben
 //   Material und Opus in S2 (S1 gpt-6-luna „hoch“ mit Opus „mittel“ und „hoch“, S1 Sonnet „mittel“ mit Opus „mittel“);
 //   nur Kenndaten. Neu: S1 Sonnet „mittel“ mit dem heutigen SOP-Block (Kostenobergrenze erweitert), Erfassung Opus „hoch“
-//   (vorläufig, ein Messlauf); Erfassung Opus „mittel“ und S1 gpt-6-luna „hoch“ lagen in den Spannen.
+//   (vorläufig, ein Messlauf); Erfassung Opus „mittel“ und S1 gpt-6-luna „hoch“ lagen in den Spannen. Dazu eine
+//   Fortschreibung desselben Materials mit Vormeldung (Lauf 20261105-173747-v8w6, S1 Sonnet „hoch“, S2 Opus „hoch“): neu S1
+//   Sonnet „hoch“ (vorläufig), Erfassung Opus „hoch“ in der Spanne.
 // Spannen nach außen gerundet (Sekunden auf 30 s, unter 60 s auf 10 s; USD auf 0,05, unter 0,10 USD auf 0,01). Neue oder
 // überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); bestehende Spannen
 // werden nicht verengt. Messwerte erst ab drei Läufen. Kosten nach Listenpreisen (preise.ts) ohne den Aufschlag des
 // EU-Endpunkts von Mistral; `schaetzeStufe` schlägt ihn auf (seit 0.5.10, AV-2026-W43-06).
 // Ausnahme (seit 0.7.9, AV-2026-W45-02, -03): Eine Kombination mit nur einem Messlauf erhält eine vorläufige Spanne
 // (`vorlaeufig`), wenn die Hochrechnung sonst irreführt; Untergrenze aus der Verdichtung derselben Kombination (ist sie
-// nicht gemessen, seit 0.7.12 aus derselben Art und demselben Modell mit der nächstniedrigeren gemessenen Stufe),
+// nicht gemessen, seit 0.7.13 aus derselben Art und demselben Modell mit der nächstniedrigeren gemessenen Stufe),
 // Obergrenze Messwert plus 25 %. Sie ersetzt die Hochrechnung und wird ab drei Läufen nach der Regel neu bestimmt.
 // Für nicht gemessene Kombinationen wird nur der Preis aus einer gemessenen Variante gleicher Art hochgerechnet;
 // eine Dauer wird dann nicht angegeben.
@@ -69,6 +71,11 @@ export const MESSWERTE: Record<string, Messwert> = {
   // 3 254 Ausgabetoken, 60 346 Token neu in den Cache, keine gelesen (Lauf 20261105-150440-l8af); Obergrenze der Kosten
   // seither 0,35 USD (Messwert plus 25 %), Dauer und Untergrenze bleiben
   "s1|claude-sonnet-5-5|medium": { sekunden: [10, 30], usd: [0.02, 0.35] },
+  // vorläufig (ein Messlauf): Fortschreibung vom 05.11.2026 mit Vormeldung (App 0.7.9, Profil 1.38.0) 60 s, 0,43 USD,
+  // 8 429 Ausgabetoken, 97 705 Token Eingabe, 60 346 Token neu in den Cache (Lauf 20261105-173747-v8w6). Untergrenze aus S1
+  // Sonnet „mittel“ (keine Verdichtung gemessen), Obergrenze Messwert plus 25 %. Bis 0.7.12 aus Sonnet „mittel“
+  // hochgerechnet (0,02–0,70 USD, ohne Dauer)
+  "s1|claude-sonnet-5-5|high": { sekunden: [10, 90], usd: [0.02, 0.55], vorlaeufig: true },
   // gemessen 46–168 s, 0,18–0,43 USD (mit PDF 168 s)
   "erfassung|claude-sonnet-5-5|medium": { sekunden: [45, 180], usd: [0.15, 0.6] },
   // gemessen 61–95 s, 0,42–0,74 USD
@@ -80,8 +87,10 @@ export const MESSWERTE: Record<string, Messwert> = {
   "erfassung|claude-opus-5-5|medium": { sekunden: [200, 810], usd: [1.4, 3.35] },
   // vorläufig (ein Messlauf): Folgereihe 05.11.2026 (App 0.7.9, Profil 1.38.0) 767 s, 2,81 USD, 102 241 Ausgabetoken,
   // 118 988 Token neu in den Cache (Lauf 20261105-143746-5iuf). Eine Verdichtung mit Opus „hoch“ ist nicht gemessen; die
-  // Untergrenze stammt deshalb aus der Erfassung mit Opus „mittel“, die Obergrenze ist Messwert plus 25 %. Bis 0.7.11 aus
-  // Opus „mittel“ hochgerechnet (1,40–6,70 USD, ohne Dauer)
+  // Untergrenze stammt deshalb aus der Erfassung mit Opus „mittel“, die Obergrenze ist Messwert plus 25 %. Bis 0.7.12 aus
+  // Opus „mittel“ hochgerechnet (1,40–6,70 USD, ohne Dauer). Fortschreibung vom 05.11.2026 mit Vormeldung: 816 s,
+  // 3,36 USD, 114 542 Ausgabetoken, 132 317 Token neu in den Cache (Lauf 20261105-173747-v8w6); in der Spanne, weiter
+  // vorläufig (zwei Messläufe)
   "erfassung|claude-opus-5-5|high": { sekunden: [200, 960], usd: [1.4, 3.55], vorlaeufig: true },
   // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch); Vergleichslauf Ilka 287–381 s,
   // 0,82–0,96 USD, 45 361–61 598 Ausgabetoken (Läufe 20261025-001616-n4c8, -002256-e85u, -002923-kg0c); Plan

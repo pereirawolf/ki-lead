@@ -105,8 +105,8 @@ function konfigText(r: Reihe): string {
 }
 
 /**
- * Standard-Profil Anthropic als Bezug (S1 und Verdichtung nach STANDARD_PROFILE.anthropic). Seit 0.7.12 gilt ersatzweise
- * das bis 0.7.11 gültige Standard-Profil (S1 Haiku „hoch“), damit die bisherigen Vergleichsreihen ihren Bezug behalten.
+ * Standard-Profil Anthropic als Bezug (S1 und Verdichtung nach STANDARD_PROFILE.anthropic). Seit 0.7.13 gilt ersatzweise
+ * das bis 0.7.12 gültige Standard-Profil (S1 Haiku „hoch“), damit die bisherigen Vergleichsreihen ihren Bezug behalten.
  */
 export function istAnthropicStandard(r: Reihe, s: ModellProfil = STANDARD_PROFILE.anthropic): boolean {
   const m = r.modelle;

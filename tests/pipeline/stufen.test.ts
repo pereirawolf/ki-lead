@@ -132,7 +132,7 @@ describe("Abgeschnittene Antworten und t0", () => {
 });
 
 describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
-  it("ruft S1 mit dem Vorgabeaufwand auf, seit 0.7.12 „mittel“ (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)", async () => {
+  it("ruft S1 mit dem Vorgabeaufwand auf, seit 0.7.13 „mittel“ (Ausgabegrenze siehe „S1-Ausgabegrenze“, 0.4.25)", async () => {
     const att = skriptAnbieter([llmAntwort(JSON.stringify(s1Vorschlag()))]);
     const { k } = await pipelineKontext(att);
     await stufe1(k);
@@ -233,7 +233,7 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
       kostenUsd: 0.07,
     });
 
-  it("T01: Standard (seit 0.7.12 Sonnet mit Aufwand medium) erhält beim ersten und einzigen S1-Aufruf die Vorgabe 128 000", async () => {
+  it("T01: Standard (seit 0.7.13 Sonnet mit Aufwand medium) erhält beim ersten und einzigen S1-Aufruf die Vorgabe 128 000", async () => {
     const { att, k } = await kontext([llmAntwort(JSON.stringify(s1Vorschlag()))]);
     await stufe1(k);
     expect(att.anfragen).toHaveLength(1);

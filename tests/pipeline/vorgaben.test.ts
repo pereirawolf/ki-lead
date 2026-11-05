@@ -4,7 +4,7 @@ import { profil } from "../support/dateien";
 import { APP_MODELLE, modellFuer, STANDARD } from "../../src/pipeline/einstellungen";
 
 describe("Vorgaben nach der Testreihe", () => {
-  it("Erfassung mit Opus in App und Beispielprofil, S1 seit 0.7.12 Sonnet mit mittlerem Aufwand", async () => {
+  it("Erfassung mit Opus in App und Beispielprofil, S1 seit 0.7.13 Sonnet mit mittlerem Aufwand", async () => {
     const { profil: p } = await profil("lead-beispiel");
     expect(APP_MODELLE.erfassung).toBe("claude-opus-5-5");
     expect(p!.manifest.modelle?.erfassung).toBe("claude-opus-5-5");

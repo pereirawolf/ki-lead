@@ -55,7 +55,7 @@ export interface Einstellungen {
  * von Opus nahe, ließ aber die Tendenz im Stromausfall-Sachverhalt in zwei von drei Läufen offen; Bezug, Messwerte und
  * Standard-Profil beruhen auf Opus (evaluation/abnahmen/2026-10-25-standardprofile-ilka-ergebnis.md). Reparatur seit
  * 0.5.15 mit Haiku statt Sonnet (AV-2026-W43-32, Prüffall Reparatur vom 25.10.2026: beide 10/10 fehlerfrei, Haiku zu
- * rund einem Zwanzigstel der Kosten; evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md). S1 seit 0.7.12 mit Sonnet
+ * rund einem Zwanzigstel der Kosten; evaluation/abnahmen/2026-10-25-reparatur-ilka-ergebnis.md). S1 seit 0.7.13 mit Sonnet
  * „mittel“ statt Haiku „hoch“ (Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 und
  * seiner Folgereihe vom 05.11.2026; Begründung beim Standard-Profil Anthropic).
  */
@@ -148,7 +148,7 @@ export const STANDARD: Einstellungen = {
  *   bis -03, nur Schätzung, keine Bewertung der Modelle).
  * - Management Summary bestätigt: Sonnet „medium“, gpt-6.1-sol „medium“, Mistral Medium 3.5 „high“ (Large 4 nicht besser).
  *
- * Seit 0.7.12 (Entscheidung des Herausgebers vom 05.11.2026): S1 Anthropic mit claude-sonnet-5-5 „medium“ statt
+ * Seit 0.7.13 (Entscheidung des Herausgebers vom 05.11.2026): S1 Anthropic mit claude-sonnet-5-5 „medium“ statt
  * claude-haiku-5-5 „high“. Grundlage sind fünf interne Erfassungsläufe mit demselben Material (sechs Sachverhalte, ohne
  * Recherche; Material und Inhalte bleiben intern): Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und Folgereihe
  * vom 05.11.2026 (Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Haiku „high“ wich in einem Lauf in der
@@ -327,7 +327,7 @@ export function mixProfilAktiv(e: Einstellungen, id: MixId): boolean {
  */
 export const STANDARD_PROFILE_FASSUNG_3: Record<Exclude<AnbieterId, "ollama" | "stelle">, ModellProfil> = {
   anthropic: {
-    // S1 seit 0.7.12 abweichend vom heutigen Standard-Profil: bis dahin Haiku „hoch“
+    // S1 seit 0.7.13 abweichend vom heutigen Standard-Profil: bis dahin Haiku „hoch“
     modelle: { ...STANDARD_PROFILE.anthropic.modelle, vorverarbeitung: "claude-haiku-5-5", reparatur: "claude-sonnet-5-5" },
     aufwand: { ...STANDARD_PROFILE.anthropic.aufwand, vorverarbeitung: "high" },
   },
@@ -351,8 +351,8 @@ export const STANDARD_PROFIL_MISTRAL_FASSUNG_4: ModellProfil = {
 };
 
 /**
- * Standard-Profil Anthropic der Fassung 7 der Einstellungen (bis 0.7.11): S1 mit Haiku „hoch“. Gespeicherte Einstellungen,
- * die genau ihm entsprechen, stellt einstellungenMigrieren auf das heutige Standard-Profil um (seit 0.7.12).
+ * Standard-Profil Anthropic der Fassung 7 der Einstellungen (bis 0.7.12): S1 mit Haiku „hoch“. Gespeicherte Einstellungen,
+ * die genau ihm entsprechen, stellt einstellungenMigrieren auf das heutige Standard-Profil um (seit 0.7.13).
  */
 export const STANDARD_PROFIL_ANTHROPIC_FASSUNG_7: ModellProfil = {
   modelle: { ...STANDARD_PROFILE.anthropic.modelle, vorverarbeitung: "claude-haiku-5-5" },
@@ -484,7 +484,7 @@ export function einstellungenMigrieren(gespeichert: GespeicherteEinstellungen | 
     g.forschung = false;
     g.fassung = 7;
   }
-  // Fassung 7 → 8 (0.7.12): S1 Anthropic mit Sonnet „mittel“ statt Haiku „hoch“. Wer genau dem bisherigen Standard-Profil
+  // Fassung 7 → 8 (0.7.13): S1 Anthropic mit Sonnet „mittel“ statt Haiku „hoch“. Wer genau dem bisherigen Standard-Profil
   // Anthropic folgt, folgt danach dem heutigen. Wer den Vorgaben des Profils folgt (kein eigenes Modell für S1) und den
   // bisherigen Vorgabeaufwand „hoch“ für S1 gespeichert hat, erhält die neue Vorgabe „mittel“. Eine abweichende Wahl bleibt.
   if (g && g.fassung === 7) {

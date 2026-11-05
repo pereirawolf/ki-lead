@@ -47,7 +47,7 @@ const orientierungsAntwort = (a: LlmAnfrage) => {
 };
 
 describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => {
-  // Seit 0.7.12 ist Sonnet 5.5 (ohne erzwingbare Suche) das S1-Modell der Vorgaben; die Fälle mit erzwungener Suche wählen
+  // Seit 0.7.13 ist Sonnet 5.5 (ohne erzwingbare Suche) das S1-Modell der Vorgaben; die Fälle mit erzwungener Suche wählen
   // Haiku 5.5 deshalb ausdrücklich.
   const mitHaiku = (k: { einstellungen: typeof STANDARD }) => {
     k.einstellungen = { ...k.einstellungen, modelle: { ...k.einstellungen.modelle, vorverarbeitung: "claude-haiku-5-5" } };
@@ -120,7 +120,7 @@ describe("KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1", () => 
     await orientierungssuche(k, bestaetigterVorschlag());
     expect(att.anfragen[0].modell).toBe("claude-sonnet-5-5");
     expect(att.anfragen[0].werkzeuge?.erzwingen).toBeUndefined();
-    // seit 0.7.12 auch ohne eigene Wahl: Sonnet ist das S1-Modell der Vorgaben, die App zählt die Suchen nach
+    // seit 0.7.13 auch ohne eigene Wahl: Sonnet ist das S1-Modell der Vorgaben, die App zählt die Suchen nach
     const att2 = skriptAnbieter([orientierungsAntwort]);
     const { k: k2 } = await pipelineKontext(att2);
     await orientierungssuche(k2, bestaetigterVorschlag());

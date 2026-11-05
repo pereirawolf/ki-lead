@@ -102,7 +102,7 @@ describe("Auswertung der Vergleichsläufe", () => {
     expect(() => auswerten([X1, A], "gibt-es-nicht")).toThrow(/gibt-es-nicht/);
   });
 
-  it("seit 0.7.12: das heutige Standard-Profil (S1 Sonnet „mittel“) geht vor, das bis 0.7.11 gültige (S1 Haiku „hoch“) bleibt Ersatzbezug", () => {
+  it("seit 0.7.13: das heutige Standard-Profil (S1 Sonnet „mittel“) geht vor, das bis 0.7.12 gültige (S1 Haiku „hoch“) bleibt Ersatzbezug", () => {
     const S = reihe(["claude-sonnet-5-5", "medium"], ["claude-opus-5-5", "medium"], [lauf("s1", 2.0, 2, 0, { d1: 4, d2: 3, d3: 2 })], {
       variante: "anthropic-heute",
     });

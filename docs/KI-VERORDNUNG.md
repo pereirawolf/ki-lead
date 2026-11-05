@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.6 vom 05.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.12) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.6 vom 05.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.13) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -106,8 +106,8 @@ Stand nach der Verordnung (EU) 2026/1744, veröffentlicht im Amtsblatt der EU am
 
 | Stufe | Aufgabe | Vorgabe der App = Standard-Profil Anthropic | Standard-Profil OpenAI | Standard-Profil Mistral (seit 0.5.6) |
 |---|---|---|---|---|
-| S1 | Gegenstand und SOP-Auswahl vorschlagen | claude-sonnet-5-5, Aufwand mittel (seit 0.7.12; vorher Haiku, hoch) | gpt-6-luna, hoch | mistral-small-2603, hoch |
-| S1 Orientierungssuche (seit 0.6.0) | bei „Recherche durchführen“ je Sachverhalt eine kurze Websuche ohne Seitenabruf, Vorschlag von Suchbegriffen | claude-sonnet-5-5 (Modell von S1), niedrig; Suche nicht erzwingbar, die App zählt nach und wiederholt einmal (seit 0.7.12; mit Haiku erzwungen) | gpt-6-luna, niedrig | mistral-small-2603, niedrig (ohne Nachdenken); nur am globalen Endpunkt |
+| S1 | Gegenstand und SOP-Auswahl vorschlagen | claude-sonnet-5-5, Aufwand mittel (seit 0.7.13; vorher Haiku, hoch) | gpt-6-luna, hoch | mistral-small-2603, hoch |
+| S1 Orientierungssuche (seit 0.6.0) | bei „Recherche durchführen“ je Sachverhalt eine kurze Websuche ohne Seitenabruf, Vorschlag von Suchbegriffen | claude-sonnet-5-5 (Modell von S1), niedrig; Suche nicht erzwingbar, die App zählt nach und wiederholt einmal (seit 0.7.13; mit Haiku erzwungen) | gpt-6-luna, niedrig | mistral-small-2603, niedrig (ohne Nachdenken); nur am globalen Endpunkt |
 | S2 Erfassung | Recherche und Entwurf | claude-opus-5-5, mittel | gpt-6-astra, hoch | mistral-medium-3-5, hoch |
 | S2 Verdichtung | Entwurf aus Eingangsmeldungen | claude-opus-5-5, mittel (seit 0.5.10; vorher Sonnet) | gpt-6-astra, hoch | mistral-medium-3-5, hoch |
 | S3 | Reparatur von Schemafehlern, ohne Recherche | claude-haiku-5-5, niedrig (seit 0.5.15; vorher Sonnet) | gpt-6.1-sol, niedrig | mistral-small-2603, niedrig |
@@ -181,7 +181,7 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
-| 1.6 | 05.11.2026 | Abschnitt 9.1: S1 der Vorgabe der App und des Standard-Profils Anthropic mit claude-sonnet-5-5 „mittel“ statt claude-haiku-5-5 „hoch“; Orientierungssuche damit ohne erzwungene Suche (App 0.7.12). Einordnung unverändert |
+| 1.6 | 05.11.2026 | Abschnitt 9.1: S1 der Vorgabe der App und des Standard-Profils Anthropic mit claude-sonnet-5-5 „mittel“ statt claude-haiku-5-5 „hoch“; Orientierungssuche damit ohne erzwungene Suche (App 0.7.13). Einordnung unverändert |
 | 1.5 | 03.11.2026 | Abschnitt 9.1: Aufwandsstufen von Mistral nach Modell, Large 4 seit App 0.6.17 mit „mittel“ (DK-2026-W45-06). App unverändert |
 | 1.4 | 31.10.2026 | Abschnitt 5: Anhang III Nr. 8 Buchst. a (Rechtspflege) und Erwägungsgrund 61 für das neue Profil „Lagebild Justiz“ 0.1.0, Grenze zu Anhang III Nr. 4; Ergebnis und Prüftiefe ergänzt. App unverändert |
 | 1.3 | 28.10.2026 | Stand App 0.6.6: Abschnitt 3 lokales Modell über Ollama (0.6.3) mit Einschätzung der Rollen; Abschnitt 6.1 Stand der Kennzeichnung bestätigt; Abschnitt 9.1 Modelle je Stufe nach `src/pipeline/einstellungen.ts` berichtigt (Verdichtung Opus seit 0.5.10, Reparatur Haiku seit 0.5.15, OpenAI und Mistral „hoch“), Orientierungssuche (0.6.0), Mix-Profile (0.5.15), Standard-Profil Ollama, Datenregel (0.6.4); Abschnitt 9.2 Bestätigung der Suchbegriffe, Pflichtsuchen und einmalige Nachforderung (0.6.0), amtliche Einstiege (0.6.1); Abschnitt 9.3 Fehlerbilder der Vergleichsreihen vom 25.10.2026; Abschnitt 9.4 Grenzen des Pflichtsuchen-Abgleichs und der Datenregel |
