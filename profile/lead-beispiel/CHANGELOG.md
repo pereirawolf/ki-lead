@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.42.0 – 05.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45-b.json` (Nachtrag zur Lernschleife KW 45: vier interne Erfassungsläufe vom 04.11.2026 mit demselben Material, Commit `1395a76`), LS-2026-W45-08, freigegeben vom Herausgeber am 05.11.2026 als Option A. Material, Protokolle und Meldungen der Läufe bleiben intern. Zweite Stelle: neue Regel im Kodierleitfaden.
+
+- **Kodierleitfaden 1.12.0:** Abschnitt 4 nennt die Grundlage der Tendenz: erwartete Entwicklung im Zeitfenster ab t0, getragen von belegtem Verlauf bis t0 oder einer Prognose einer zuständigen Stelle oder Fachbehörde, bei belegter Kopplung auch für Folgesachverhalte; ein Szenario der meldenden Stelle allein trägt keine Tendenz; der Bewertungstext nennt die Grundlage. Ein Kurzbeispiel in Abschnitt 7.
+- **Arbeitsanweisung Erfassung 1.11.3:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.12.0“; Regeln unverändert.
+- **SOP-LEAD-Sammelmappe 3.23.3:** Gültigkeitsstand in Teil A; B05 geprüft und unverändert. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Erfassung (4.4) und Verdichtung 2.3.0 verweisen für Beurteilung und Tendenz auf den Kodierleitfaden und wiederholen die Regel nicht; kein Anpassungsbedarf. Kurzfassung 2.4.1 übernimmt die Tendenz nur.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.41.0 – 05.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 05.11.2026 nach dem Anbietervergleich vom 04.11.2026 (AV-2026-W45-01 bis -03) und seiner Folgereihe vom 05.11.2026 (drei interne Erfassungsläufe mit demselben Material, sechs Sachverhalte, ohne Recherche: Läufe 20261105-141838-pyor, -143746-5iuf, -150440-l8af). Material, Laufprotokolle und Inhalte der Läufe bleiben intern; hier stehen nur Kenndaten. Zweite Stelle, weil sich die Modellvorgabe des Profils ändert; Regeln, Schema, Darstellungsdatei und Inhalte bleiben unverändert.

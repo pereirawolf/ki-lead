@@ -1116,3 +1116,11 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Kenndaten der Folgereihe vom 05.11.2026 liegen in den Spannen; S1 Sonnet „mittel“ und „hoch“ sowie Erfassung Opus „hoch“ nach der Regel von Hand nachgerechnet, Sonnet „hoch“ und Opus „hoch“ als vorläufig gekennzeichnet | Schätzung von Dauer und Kosten › Folgereihe 05.11.2026: … | `tests/pipeline/schaetzung.test.ts` |
 | Vergleichsauswertung: heutiges Standard-Profil Anthropic vor dem bis 0.7.12 gültigen als Bezug, anderes S1 ohne Bezug | Auswertung der Vergleichsläufe › seit 0.7.13: das heutige Standard-Profil … | `tests/forschung/vergleichsauswertung.test.ts` |
 | Orientierungssuche mit dem S1-Modell der Vorgaben (Sonnet) ohne erzwungene Suche, Aufwand „niedrig“ | KP-2026-W44-04/-05: Orientierungssuche als Bestandteil von S1 › kein erzwungener Modellwechsel: … | `tests/pipeline/recherche-pflicht.test.ts` |
+
+## Lernschleife KW 45, Nachtrag (Nachtrag vom 05.11.2026 zu 0.7.13, Befunddatei `ki-lead-befund_lernschleife_2026-W45-b.json`, LS-2026-W45-08, Freigabe des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kodierleitfaden (Beispiel- und Landesprofil) Abschnitt 4: Tendenz als erwartete Entwicklung ab t0, getragen von belegtem Verlauf oder Prognose einer zuständigen Stelle, bei belegter Kopplung auch für Folgesachverhalte, Szenario allein trägt nicht, Grundlage im Bewertungstext; Kurzbeispiel in Abschnitt 7 | Lernschleife KW 45 (Nachtrag), Kodierleitfaden › LS-2026-W45-08: … | `tests/profil/lernschleife-w45.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.12.0).
