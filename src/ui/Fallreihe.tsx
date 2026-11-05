@@ -501,7 +501,7 @@ export function FallreiheAbschnitt({
           )}
           {fehlend.length > 0 && (
             <p className="hinweis" role="status">
-              Für die Fallreihe fehlt der Schlüssel für {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")} (Bereich „KI-Anbieter & API“).{" "}
+              Für die Fallreihe fehlt der Schlüssel für {fehlend.map((a) => ANBIETER_NAME[a]).join(" und ")} (Bereich „KI-Anbieter und API“).{" "}
               {zeige && (
                 <button type="button" className="knopf leise klein" onClick={() => zeige("anbieter")}>
                   Schlüssel hinterlegen

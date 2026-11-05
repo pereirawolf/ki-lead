@@ -88,7 +88,7 @@ export async function forschungEinschalten(page: Page): Promise<void> {
 /** API-Schlüssel für Anthropic unter „Einstellungen“ speichern */
 export async function schluesselSetzen(page: Page): Promise<void> {
   await bereich(page, "Einstellungen");
-  await page.getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  await page.getByRole("button", { name: "KI-Anbieter und API", exact: true }).click();
   const feld = page.getByLabel("API-Schlüssel Anthropic");
   await feld.fill(SCHLUESSEL);
   await feld.locator("xpath=ancestor::section[1]").getByRole("button", { name: "Speichern" }).click();

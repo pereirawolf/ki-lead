@@ -43,7 +43,7 @@ async function verbindungPruefen(page: Page, endpunkt: MistralEndpunkt): Promise
   await page.goto("./");
   await expect(page.locator(".kopf-ki")).toBeVisible();
   await page.getByRole("button", { name: "Einstellungen", exact: true }).click();
-  await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  await page.getByRole("navigation", { name: "Bereiche der Einstellungen" }).getByRole("button", { name: "KI-Anbieter und API", exact: true }).click();
   const abschnitt = page.locator("section[aria-labelledby='schluessel-mistral']");
   await abschnitt.locator(`input[name="mistral-endpunkt"][value="${endpunkt}"]`).check();
   await abschnitt.getByLabel("API-Schlüssel Mistral").fill(SCHLUESSEL);

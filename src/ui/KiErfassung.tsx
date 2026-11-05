@@ -44,7 +44,7 @@ interface Props {
   profil?: Profil;
   einstellungen?: Einstellungen;
   schluessel?: Schluessel;
-  /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter & API“ */
+  /** Zu den Einstellungen, ohne Angabe in den Bereich „KI-Anbieter und API“ */
   zuEinstellungen?: (bereich?: EinstellungsBereich) => void;
   uebernehmen: (m: Meldung) => void;
   /** Meldungen, die das Lagebild zur Verdichtung übergibt (nr wechselt je Übergabe) */

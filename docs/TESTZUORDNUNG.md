@@ -1124,3 +1124,11 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Kodierleitfaden (Beispiel- und Landesprofil) Abschnitt 4: Tendenz als erwartete Entwicklung ab t0, getragen von belegtem Verlauf oder Prognose einer zuständigen Stelle, bei belegter Kopplung auch für Folgesachverhalte, Szenario allein trägt nicht, Grundlage im Bewertungstext; Kurzbeispiel in Abschnitt 7 | Lernschleife KW 45 (Nachtrag), Kodierleitfaden › LS-2026-W45-08: … | `tests/profil/lernschleife-w45.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.12.0).
+
+## Grunddesign 1.4: „und“ statt „&“ (0.7.14, Entscheidung des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Bereiche der Einstellungen ohne „&“, mit „KI-Anbieter und API“, „Modelle und Aufwand“, „Recherche und Grenzen“; LD-T05 als SOLL-Regel in rahmen.json | Grunddesign: rahmen.json › LD-T05: Bereiche der Einstellungen verbinden mit „und“ … | `tests/format/lead-design.test.ts` |
+
+Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstellungen.test.ts`, `tests/ui/modellwahl.test.ts`, `tests/ui/recherchetiefe.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/betrieb.test.ts`, `tests/ui/testlaeufe.test.ts`, `tests/pipeline/einstellungen.test.ts`, `tests/pipeline/recherchetiefe.test.ts`, `tests/browser/einstellungen.spec.ts`, `tests/browser/hilfen.ts`, `tests/browser/kisymbol.spec.ts`, `tests/probe/mistral.spec.ts`, `tests/probe/stelle.spec.ts`.

@@ -327,7 +327,7 @@ describe("mitModellwahl", () => {
     expect(laufModelle(m, p, false)).toContain("gpt-6-luna");
   });
 
-  it("Punkt 8 (0.5.22): Recherchetiefe je Lauf mit allen drei Werten, in den Bereichen wie unter „Recherche & Grenzen“", () => {
+  it("Punkt 8 (0.5.22): Recherchetiefe je Lauf mit allen drei Werten, in den Bereichen wie unter „Recherche und Grenzen“", () => {
     const e = STANDARD;
     const r = mitModellwahl(e, { websucheMax: 30, abrufMax: 20, abrufMaxTokens: 30000 });
     expect([r.websucheMax, r.abrufMax, r.abrufMaxTokens]).toEqual([30, 20, 30000]);

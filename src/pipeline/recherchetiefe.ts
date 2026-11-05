@@ -1,4 +1,4 @@
-// Recherchetiefe unter „Einstellungen → Recherche & Grenzen“ (seit 0.5.19, Befunde KP-2026-W43-69 bis -76 vom 25.10.2026):
+// Recherchetiefe unter „Einstellungen → Recherche und Grenzen“ (seit 0.5.19, Befunde KP-2026-W43-69 bis -76 vom 25.10.2026):
 // Stufen für Websuchen, Seitenabrufe und Lesemenge je Seite, Übernahme getippter Werte, Umrechnung der Lesemenge,
 // Höchstkosten für Suchen und Seitenlesen und Wirkung je Anbieter. Reine Funktionen; die Oberfläche steht in
 // src/ui/Einstellungen.tsx. Gespeichert werden wie bisher nur websucheMax, abrufMax und abrufMaxTokens.

@@ -216,7 +216,7 @@ describe("Einstellungen: Sprungziele der Bereiche", () => {
     scrollAufrufe();
     await klick("Schlüssel hinterlegen");
     const h2 = document.querySelector(".bereich-inhalt h2");
-    expect(h2?.textContent).toBe("KI-Anbieter & API");
+    expect(h2?.textContent).toBe("KI-Anbieter und API");
     expect(scrollAufrufe()).toHaveLength(1);
     expect(document.activeElement).toBe(h2);
   });
@@ -224,7 +224,7 @@ describe("Einstellungen: Sprungziele der Bereiche", () => {
   it("über die Bereichsleiste: Fokus bleibt auf dem Knopf", async () => {
     await einhaengen(React.createElement(MitZustand, { profil: null }));
     const nav = document.querySelector('nav[aria-label="Bereiche der Einstellungen"]') as HTMLElement;
-    const k = knopf("Recherche & Grenzen", nav)!;
+    const k = knopf("Recherche und Grenzen", nav)!;
     k.focus();
     await klick(k);
     expect(document.activeElement).toBe(k);

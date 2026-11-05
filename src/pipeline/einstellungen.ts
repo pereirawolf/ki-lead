@@ -216,7 +216,7 @@ export function stelleProfil(): ModellProfil {
 
 /**
  * Schlichtes Standard-Profil Ollama (seit 0.6.3, TP-2026-W44-26): ein lokales Modell für alle Aufgaben, feste Stufe
- * „mittel“ (die App sendet keinen Aufwand). Das Modell ist frei wählbar (Einstellungen → KI-Anbieter & API); nicht erprobt,
+ * „mittel“ (die App sendet keinen Aufwand). Das Modell ist frei wählbar (Einstellungen → KI-Anbieter und API); nicht erprobt,
  * keine Websuche.
  */
 export function ollamaProfil(modell: string): ModellProfil {
@@ -580,7 +580,7 @@ export function wahlAbweichend(wahl: ModellWahl, rollen: Rolle[] = ROLLEN, mitWe
   return rollen.some((r) => !!wahl[r] || !!wahl.aufwand?.[r]) || (mitWebsuche && WAHL_RECHERCHE.some((f) => wahl[f] !== undefined));
 }
 
-/** Gültiger Wert eines Recherchefelds der Wahl je Lauf (Bereiche wie unter „Recherche & Grenzen“), sonst undefined */
+/** Gültiger Wert eines Recherchefelds der Wahl je Lauf (Bereiche wie unter „Recherche und Grenzen“), sonst undefined */
 function rechercheWert(feld: (typeof WAHL_RECHERCHE)[number], w: number | undefined): number | undefined {
   if (w === undefined || !Number.isFinite(w)) return undefined;
   const n = Math.round(w);

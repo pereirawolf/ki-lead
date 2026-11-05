@@ -399,7 +399,7 @@ describe("AV-2026-W43-25: Testart S3 Reparatur (bis 0.5.16 „Prüffall Reparatu
       "reparatur-ilka/R-E-mistral-small",
       "reparatur-ilka/R-F-mistral-medium-niedrig",
     ]);
-    expect(auswahl().options[0].textContent).toBe("Aktuelle Einstellungen (Modelle & Aufwand)");
+    expect(auswahl().options[0].textContent).toBe("Aktuelle Einstellungen (Modelle und Aufwand)");
     expect(knopf("Testlauf starten")?.disabled).toBe(false);
     await eingeben(auswahl(), "reparatur-ilka/R-E-mistral-small");
     expect(text()).toContain("S3 Reparatur: mistral-small-2603 (niedrig) · Mistral");

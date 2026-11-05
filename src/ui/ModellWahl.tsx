@@ -1,7 +1,7 @@
 // Wahl für einen einzelnen Lauf, abweichend von „Einstellungen“: KI-Profil oder Modell und Aufwand je KI-Stufe und,
 // wenn der Lauf recherchiert, die Recherchetiefe. Seit 0.5.22 nach den Vorschlägen zu „Modelle für diesen Lauf“ vom
 // 25.10.2026 (Punkte 1–10): Anzeigenamen, Kostenklasse und Vermerke aus den Testläufen (src/pipeline/modellkunde.ts),
-// KI-Profil je Lauf, Recherchetiefe mit allen drei Werten wie unter „Recherche & Grenzen“, Schätzung je Stufe,
+// KI-Profil je Lauf, Recherchetiefe mit allen drei Werten wie unter „Recherche und Grenzen“, Schätzung je Stufe,
 // Hinweis auf zusätzliche Anbieter, Kennzeichnung abweichender Felder und Zurücksetzen.
 
 import { memo, useId, useState, type ReactNode } from "react";
@@ -82,7 +82,7 @@ interface Props {
   children?: ReactNode;
   /** Erläuterungen im aufklappbaren Teil, am Ende (seit 0.6.20, UX-2026-W44-03: Recherchezeile und Schätzung je Stufe) */
   erlaeuterung?: ReactNode;
-  /** Zu „Einstellungen → Modelle & Aufwand“, um die Vorgaben dauerhaft zu ändern */
+  /** Zu „Einstellungen → Modelle und Aufwand“, um die Vorgaben dauerhaft zu ändern */
   zuEinstellungen?: () => void;
 }
 

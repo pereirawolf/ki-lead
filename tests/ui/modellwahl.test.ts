@@ -187,7 +187,7 @@ describe("KI-Erfassung", () => {
     expect([...a1.options].map((o) => o.value)).toEqual(["", "low", "medium", "high", "xhigh", "max"]);
     await eingeben(a1, "low");
     await eingeben(auswahl("S2", "Aufwand"), "high");
-    // Punkt 8: Recherchetiefe wie unter „Recherche & Grenzen“; die Stufe der Einstellungen steht nur einmal da
+    // Punkt 8: Recherchetiefe wie unter „Recherche und Grenzen“; die Stufe der Einstellungen steht nur einmal da
     expect(radios("modellwahl-recherche")).toEqual(["einstellungen", "sparsam", "gruendlich", "eigen"]);
     expect(gewaehlt("modellwahl-recherche")).toBe("einstellungen");
     expect(tiefe("einstellungen").closest("label")!.textContent).toBe("Wie in den EinstellungenStandard (15 Websuchen, 10 Seiten, 15.000 Token je Seite)");

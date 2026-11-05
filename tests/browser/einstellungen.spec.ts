@@ -4,7 +4,7 @@
 import { expect, test } from "@playwright/test";
 import { bereich, forschungEinschalten, netzVorbereiten, oeffnen } from "./hilfen";
 
-const BEREICHE = ["Übersicht", "KI-Anbieter & API", "Modelle & Aufwand", "Testläufe", "Recherche & Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
+const BEREICHE = ["Übersicht", "KI-Anbieter und API", "Modelle und Aufwand", "Testläufe", "Recherche und Grenzen", "Darstellung", "Daten", "Über KI-LEAD"];
 const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "spinbutton", "slider", "switch", "link", "searchbox", "listbox"];
 
 test.beforeEach(async ({ page }) => {
@@ -58,16 +58,16 @@ test("Vorgabe: ohne Forschungsfunktionen kein Bereich „Testläufe“; nach dem
 });
 
 test("Tastatur: Bereich per Tab erreichen und mit Eingabetaste bzw. Leertaste wechseln", async ({ page }) => {
-  const ziel = leiste(page).getByRole("button", { name: "Modelle & Aufwand", exact: true });
+  const ziel = leiste(page).getByRole("button", { name: "Modelle und Aufwand", exact: true });
   let gefunden = false;
   for (let i = 0; i < 40 && !gefunden; i++) {
     await page.keyboard.press("Tab");
     gefunden = await ziel.evaluate((el) => el === document.activeElement);
   }
-  expect(gefunden, "„Modelle & Aufwand“ per Tab erreichbar").toBe(true);
+  expect(gefunden, "„Modelle und Aufwand“ per Tab erreichbar").toBe(true);
   expect(await ziel.evaluate((el) => el.matches(":focus-visible"))).toBe(true);
   await page.keyboard.press("Enter");
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle und Aufwand"]);
   await page.keyboard.press("Tab");
   await page.keyboard.press("Space");
   await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Testläufe"]);
@@ -118,14 +118,14 @@ test("Smartphone: Bereichsleiste waagerecht über dem Inhalt, Seite ohne seitlic
 });
 
 test("der gewählte Bereich bleibt beim Wechsel der Ansicht erhalten", async ({ page }) => {
-  await leiste(page).getByRole("button", { name: "Recherche & Grenzen", exact: true }).click();
+  await leiste(page).getByRole("button", { name: "Recherche und Grenzen", exact: true }).click();
   await bereich(page, "Auswertung");
   await bereich(page, "Einstellungen");
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Recherche & Grenzen"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Recherche und Grenzen"]);
 });
 
 test("Mistral-Schlüssel: Speichern, Übersicht zeigt ihn als hinterlegt, nach dem Neuladen noch da", async ({ page }) => {
-  await leiste(page).getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  await leiste(page).getByRole("button", { name: "KI-Anbieter und API", exact: true }).click();
   const feld = page.getByLabel("API-Schlüssel Mistral");
   await feld.fill("mistral-TEST-NICHT-EXPORTIEREN");
   await feld.locator("xpath=ancestor::section[1]").getByRole("button", { name: "Speichern" }).click();
@@ -138,10 +138,10 @@ test("Mistral-Schlüssel: Speichern, Übersicht zeigt ihn als hinterlegt, nach d
 
 // Adresse (seit 0.6.5): Ansicht, Bereich und Reiter stehen im Hash; Neuladen behält sie, Zurück wechselt
 test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen in der Adresse", async ({ page }) => {
-  await leiste(page).getByRole("button", { name: "Modelle & Aufwand", exact: true }).click();
+  await leiste(page).getByRole("button", { name: "Modelle und Aufwand", exact: true }).click();
   await expect(page).toHaveURL(/#\/einstellungen\/modelle$/);
   await page.reload();
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle und Aufwand"]);
 
   await bereich(page, "Auswertung");
   await page.getByRole("button", { name: /Beispiel laden:/ }).click();
@@ -150,5 +150,5 @@ test("TP-2026-W44-20: Bereich der Einstellungen und Reiter des Lagebilds stehen 
   await page.goBack();
   await expect(page).toHaveURL(/#\/auswertung\/uebersicht$/);
   await page.goBack();
-  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle & Aufwand"]);
+  await expect(page.locator(".bereich-inhalt h2")).toHaveText(["Modelle und Aufwand"]);
 });

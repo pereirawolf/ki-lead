@@ -77,7 +77,7 @@ test("KP-2026-W44-01: Verbindungstest der API-Schlüssel setzt den Chip auf „K
   await oeffnen(page);
   const chip = page.locator(".kopf-ki");
   await bereich(page, "Einstellungen");
-  await page.getByRole("button", { name: "KI-Anbieter & API", exact: true }).click();
+  await page.getByRole("button", { name: "KI-Anbieter und API", exact: true }).click();
   const feld = page.getByLabel("API-Schlüssel Anthropic");
   await feld.fill("sk-ant-test");
   await expect(chip).toHaveText("KI ruht");
