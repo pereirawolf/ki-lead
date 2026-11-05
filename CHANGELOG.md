@@ -108,7 +108,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.10 | letzter Commit des Pull Requests „Anbietervergleich KW 45: Kodierleitfaden 1.10.0, t0 bei Stichtag in der Zukunft, Radarkennzahlen der Fallreihe; 0.7.10“ |
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
-| 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ |
+| 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
 
 ## [0.7.13] – 05.11.2026
 

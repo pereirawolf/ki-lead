@@ -4055,6 +4055,27 @@
       "kurz": "Zusätzlicher Wert „betriebsintern“ für quellen[].zugang im Kernschema (Nachtrag 7), Vermerk in Quellenzeile und Baustein, Überführung aus v1; Thessa und KRITIS-LEAD pinnen neu.",
       "status": "umgesetzt",
       "pr": 151
+    },
+    {
+      "id": "LS-2026-W45-08",
+      "agent": "lernschleife",
+      "befunddatei": "ki-lead-befund_lernschleife_2026-W45-b.json",
+      "commit": "1395a76233ea02854b208645999a02ed43b97d5d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 4, Tendenz (Z. 144)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B05_extremhitze-duerre.md",
+          "stelle": "Abschnitt 3, Beurteilung/Tendenz (Z. 65)"
+        }
+      ],
+      "kurz": "Grundlage der Tendenz: erwartete Entwicklung ab t0 aus belegtem Verlauf oder Prognose einer zuständigen Stelle, bei belegter Kopplung auch für Folgesachverhalte (Option A); Kodierleitfaden 1.12.0.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-05",
+      "pr": 154
     }
   ]
 }
