@@ -8,7 +8,7 @@ Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsde
 
 ## 1. Geltungsbereich
 
-Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in Version 0.6.5. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
+Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in der im Kopf genannten Version. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
 
 ## 2. Stand der Vereinbarkeit
 
@@ -22,7 +22,7 @@ Die Bewertung ist eine Selbstbewertung des Herausgebers. Eine Prüfung durch Dri
 |---|---|---|
 | Kontraste | Text mindestens 4,5:1, Bedienelemente und Konturen mindestens 3:1 in allen Farbschemata, auch für Profilfarben | [farbschemas.md](farbschemas.md); `tests/darstellung/farbschemas.test.ts` |
 | Kontrastschemata | „Kontrast · Hell“ und „Kontrast · Dunkel“ mit mindestens 7:1 für Text | [farbschemas.md](farbschemas.md) |
-| Systemeinstellungen | erzwungene Systemfarben gehen vor; „mehr Kontrast“ wählt bei „Automatisch“ das Kontrastschema | [farbschemas.md](farbschemas.md); Browsertest `barrierefreiheit.spec.ts` |
+| Systemeinstellungen | erzwungene Systemfarben gehen vor; „mehr Kontrast“ wählt bei „Automatisch“ das Kontrastschema | [farbschemas.md](farbschemas.md); erzwungene Farben im Browsertest `barrierefreiheit.spec.ts`, „mehr Kontrast“ im Test `tests/ui/farbschemas.test.ts` |
 | Nicht nur Farbe | Auswahl, Reiter und Radarstufen zusätzlich unterstrichen; Bewertungen immer als Wort | [farbschemas.md](farbschemas.md) |
 | Automatische Prüfung | axe-core prüft je Bereich alle Schritte der Erfassung, Auftrag und Bestätigung der KI-Erfassung, alle Reiter der Auswertung mit Beispiel samt Übergabedialog, Profile und alle Bereiche der Einstellungen (mit eingeschalteten Forschungsfunktionen, damit auch „Testläufe“ geprüft wird; seit 0.7.1, DK-2026-W45-07) gegen die Regeln zu WCAG 2.0, 2.1 und 2.2, Stufen A und AA; breit und hell sowie 390 px breit und dunkel; keine Ausnahmen (seit 0.6.5, TP-2026-W44-22) | Browsertest `barrierefreiheit.spec.ts` |
 | Zugängliche Namen | alle Bedienelemente je Bereich mit zugänglichem Namen, vom Browser berechnet; seit 0.6.5 je Liste eindeutig (etwa „Löschen: Lauf 2 vom …“, „Kopieren: “ mit der Kennung des Sachverhalts) und mit dem sichtbaren Text am Anfang (TP-2026-W44-14, -22; Knöpfe der früheren Läufe seit 0.7.15, OB-2026-W45-05) | Browsertest `barrierefreiheit.spec.ts`; Test `tests/ui/ki-erfassung-laeufe.test.ts` |
