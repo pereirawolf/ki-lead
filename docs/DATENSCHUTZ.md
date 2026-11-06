@@ -339,7 +339,7 @@ Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empf
 
 | Vorbefüllung | Eintrag der Stelle |
 |---|---|
-| Auf dem Gerät bleibt alles bis zur Löschung durch die Person; die App löscht nichts selbsttätig (Abschnitte 3 und 10). Beim Anbieter: bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5). Exportierte Laufprotokolle sind wie das verwendete Material zu behandeln (Abschnitt 8). | [Frist der Stelle, z. B. Laufprotokolle und Lagebilder löschen nach …], [Zuständigkeit für die Löschung], [Aufbewahrung nach Aktenordnung oder Fachrecht] |
+| Auf dem Gerät bleibt alles bis zur Löschung durch die Person; die App löscht nichts selbsttätig; ausgenommen ist die gespeicherte Management Summary, die beim Ersetzen der Meldung und bei der Übergabe an die KI-Verdichtung geleert wird (Abschnitte 3 und 10). Beim Anbieter: bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5). Exportierte Laufprotokolle sind wie das verwendete Material zu behandeln (Abschnitt 8). | [Frist der Stelle, z. B. Laufprotokolle und Lagebilder löschen nach …], [Zuständigkeit für die Löschung], [Aufbewahrung nach Aktenordnung oder Fachrecht] |
 
 ### D7 Technische und organisatorische Maßnahmen (Art. 30 Abs. 1 Buchst. g, Art. 32 DSGVO)
 
