@@ -37,11 +37,11 @@ Alles, was die App speichert, liegt **auf dem Gerät**: im Browser (IndexedDB, f
 | Zwischenstand der Meldung | `entwurf:<profil>` | die gerade bearbeitete Meldung | bis zur Änderung oder Löschung |
 | Lagebild | `lagebild:<profil>` | eingelesene Meldungen, Prüfstand | bis zur Änderung oder Löschung |
 | Laufprotokolle | `lauf:<id>` | siehe Abschnitt 8 | bis zur Löschung durch die Person |
-| Profile und Profilarchiv | `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme | bis zur Löschung |
+| Profile und Profilarchiv | `profil:<schlüssel>`, `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme, gewähltes Profil, ersetzte Profilstände | bis zur Löschung |
 | Management Summary | je Profil | zuletzt erstellte Fassung | bis zum Leeren oder Ersetzen |
 | Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ oder je Fallreihe (seit 0.7.2) mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
 | Fallpakete der Fallreihe (seit 0.7.2) | Datenbank `ki-lead-testlaeufe`: `fallpaket:<sha256>` | importierte ZIP-Datei mit Bewertungsfällen und Material (etwa der Kontrollsatz), wie importiert; an einen Anbieter gehen nur die Fälle eines gestarteten Laufs | bis zur Löschung durch die Person |
-| API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
+| API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund; gewählte Ablage unter `schluessel-ablage` | siehe Abschnitt 9 | bis zur Löschung |
 | Sicherung (nur auf Wunsch) | Datei `<Datum>_KI-LEAD_Sicherung.json` im Download-Ordner | alle Einträge der Zeilen oben außer API-Schlüsseln und ihrer Ablage (seit 0.6.15) | bis die Person die Datei löscht; sie liegt außerhalb der App und enthält die Inhalte im Klartext |
 | Programmdateien (nur PWA) | Caches `ki-lead-…` | HTML, Skripte, Symbole der App | bis zur nächsten Fassung |
 
@@ -138,7 +138,7 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 
 | Was | Wie |
 |---|---|
-| ein Laufprotokoll | KI-Erfassung, Liste der Läufe, „Löschen“ |
+| ein Laufprotokoll | KI-Erfassung, „Frühere Läufe mit diesem Profil“, „Löschen“ |
 | Management Summary | „Leeren“ in der Ansicht |
 | archivierte Testläufe | Einstellungen, „Testläufe“ (sichtbar nur mit „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“; Ausschalten löscht das Archiv nicht), Archiv: „Ausgewählte löschen“ oder „Alle löschen“; außerdem mit „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ |
 | Fallpakete der Fallreihe (seit 0.7.2) | Einstellungen, „Testläufe“, Fallreihe: „Löschen“ am Paket |
