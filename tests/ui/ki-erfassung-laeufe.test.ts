@@ -133,3 +133,25 @@ describe("KI-Erfassung: frühere Läufe gesammelt sichern und löschen", () => {
     expect(frage.mock.calls[0][0]).toContain("Den einen früheren Lauf");
   });
 });
+
+// Zugängliche Namen beginnen mit dem sichtbaren Text (docs/BARRIEREFREIHEIT.md, „Zugängliche Namen“; seit 0.7.15)
+describe("OB-2026-W45-05: Knöpfe je früherem Lauf nennen den sichtbaren Text zuerst", () => {
+  it("„Übernehmen“, „Protokoll“ und „Löschen“ beginnen ihren zugänglichen Namen mit der Beschriftung", async () => {
+    const p = (await profil("lead-beispiel")).profil!;
+    const a = lauf(p, "20261020-101500-aaaa", "2026-10-20T10:15:00.000Z", "Kraftstoff");
+    a.status = "fertig";
+    a.ergebnis = { meldung: {}, kurzantwort: "", befunde: [], fundstellen: [], suchen: [], schemakonform: true };
+    db.werte.set(`lauf:${a.id}`, a);
+    lauf(p, "20261021-091500-bbbb", "2026-10-21T09:15:00.000Z", "Pegel");
+    await erfassungZeigen(p);
+    await bisWahr(() => seitentext().includes("Frühere Läufe mit diesem Profil (2)"));
+    const knoepfe = [...document.querySelectorAll<HTMLButtonElement>(".tabelle-aktionen button")];
+    const beschriftungen = knoepfe.map((k) => k.textContent!.trim());
+    expect(beschriftungen.filter((b) => b === "Übernehmen")).toHaveLength(1);
+    expect(beschriftungen.filter((b) => b === "Löschen")).toHaveLength(2);
+    for (const k of knoepfe) {
+      const name = k.getAttribute("aria-label") ?? "";
+      expect(name.startsWith(`${k.textContent!.trim()}: Lauf `), name).toBe(true);
+    }
+  });
+});
