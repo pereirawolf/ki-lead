@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.7.14 vom 05.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.7.15 vom 06.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -500,6 +500,7 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.7.2 | 03.11.2026 | Abschnitt 5.4 (Einstellungen, Testläufe): Fallreihe über mitgelieferte Fälle und Fallpakete mit Plan, Kostenbremse und Ergebnis-ZIP (TP-2026-W44-62 bis -67) |
 | 0.7.3 | 03.11.2026 | LEAD-Meldung-v2 in Maske und Ausgabe: Werte oder null, Radarachsen als Objekte mit Status und Begründung je Achse, Ausgabestatus mit Freigabe (Rolle `status_freigegeben`), PDF, Kopiervorlage und Rohtabelle mit erzeugtem Quellenverzeichnis, Zeitstrahl und Kennzahlen (Teilmengen eingerückt, Mindestwert als „mindestens“), Vorlage der v2-Darstellungsdatei (UP-2026-W45-03) |
 | 0.7.7 | 04.11.2026 | Nachbearbeitung nach S2: Platzhalter `NEU-n` nur im Zeitstrahl dem n-ten Sachverhalt ohne Kennung zugeordnet, Hinweise `KENNUNG_PLATZHALTER_ZUGEORDNET` und `KENNUNG_PLATZHALTER_OFFEN` (Abschnitt Zeitstrahl und Kennung; GK-2026-W45-01) |
+| 0.7.15 | 06.11.2026 | KI-Erfassung, frühere Läufe: zugängliche Namen „Übernehmen: Lauf n vom …“ und „Löschen: Lauf n vom …“ mit dem sichtbaren Text am Anfang (OB-2026-W45-05); Funktion unverändert |
 | 0.7.14 | 05.11.2026 | Bereiche der Einstellungen „KI-Anbieter und API“, „Modelle und Aufwand“ und „Recherche und Grenzen“ (bisher mit „&“) nach Grunddesign 1.4, Regel LD-T05; Funktion unverändert |
 | 0.7.13 | 05.11.2026 | Standard-Profil Anthropic und Vorgabe der App: S1 mit claude-sonnet-5-5 „mittel“ statt claude-haiku-5-5 „hoch“, Fassung 8 der Einstellungen, Bezug der Vergleichsauswertung (Abschnitt 5.4); Schätzung nach der Folgereihe vom 05.11.2026: Kostenobergrenze von S1 mit Sonnet „mittel“, vorläufige Spannen von S1 mit Sonnet „hoch“ und der Erfassung mit Opus „hoch“ (Abschnitt 5.1, Umsetzung M2) |
 | 0.7.12 | 05.11.2026 | Module von KRITIS-LEAD (`lead-kritis-meldung`, `lead-kritis-betrieb` 0.3) eingebettet unter `formate/fremd/kritis-lead/` (KL-2026-W45-02); Kernschema von LEAD-Meldung-v2 mit Zugang `betriebsintern` für Quellen, Vermerk in Quellenzeile und Baustein (KL-2026-W45-06); Beispielprofil 1.40.0 mit Kodierleitfaden 1.11.0 (Kennungen der Betreiber, KL-2026-W45-05) |

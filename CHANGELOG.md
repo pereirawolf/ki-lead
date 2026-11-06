@@ -110,6 +110,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
 | 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ |
+| 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ |
+
+## [0.7.15] – 06.11.2026
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json` (Sammellauf offener Befunde KW 45, Commit `fd452dc`), Entscheidungen des Herausgebers vom 06.11.2026: OB-2026-W45-01 bis -07 angenommen bzw. angepasst; UP-2026-W45-04 freigegeben (eigener Pull Request), UP-2026-W45-05 und -06 bis 20.11.2026 zurückgestellt.
+
+### Geändert
+
+- **Frühere Läufe, zugängliche Namen:** Die Knöpfe je Lauf heißen für Hilfstechnik „Übernehmen: Lauf n vom …“ und „Löschen: Lauf n vom …“ statt „Lauf n vom … übernehmen/löschen“; der sichtbare Text steht damit wie bei „Protokoll: “ und „Kopieren: “ am Anfang (OB-2026-W45-05, `docs/BARRIEREFREIHEIT.md` 1.5).
+- **Dokumentation:** `docs/KI-VERORDNUNG.md` 1.7 ordnet den Endpunkt der Stelle ein (OB-2026-W45-01); `docs/DATENSCHUTZ.md` 1.15 mit vollständigem Speicherverzeichnis und der Ausnahme Management Summary bei „löscht nichts selbsttätig“ (OB-2026-W45-02, -03); `docs/VORLAGEN.md` 1.4 (OB-2026-W45-02, -04); `docs/BARRIEREFREIHEIT.md` 1.5 (OB-2026-W45-05, -06).
+- **Beispielprofil 1.42.1, Landesprofil Thüringen 1.8.1:** Kodierleitfaden 1.12.1 mit Kurzbeispiel zur Nullregel (b) von D2 (OB-2026-W45-07); Einzelheiten in den Profilverläufen.
+- **Befundregister:** Entscheidungen zu OB-2026-W45-01 bis -07 und UP-2026-W45-05/-06 (`evaluation/befunde/befundregister.json`).
+- Spezifikation 0.7.15, README. Versionsangaben 0.7.15 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 715); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/ui/ki-erfassung-laeufe.test.ts`: Knöpfe der früheren Läufe beginnen ihren zugänglichen Namen mit der Beschriftung (OB-2026-W45-05).
+- `tests/pipeline/kontext.test.ts`: Kodierleitfaden 1.12.1.
 
 ## [0.7.14] – 05.11.2026
 

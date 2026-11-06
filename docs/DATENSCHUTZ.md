@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.14 vom 03.11.2026, gilt für App-Version 0.7.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.15 vom 06.11.2026, gilt für App-Version 0.7.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -415,3 +415,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.12 | 03.11.2026 | Abschnitt 4: Kennzahlen-Bausteine aus Thessa gehen ohne Herleitung an den Anbieter (App 0.6.24, UP-2026-W45-01) |
 | 1.13 | 03.11.2026 | Abschnitt 1 und Anhang D, D7: Die Bestätigung vor jedem KI-Lauf gilt seit App 0.7.1 auch für die Management Summary (bis 0.7.0 sendete sie ohne Bestätigung, DK-2026-W45-01); Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“ (DK-2026-W45-03) |
 | 1.14 | 03.11.2026 | Abschnitte 3 und 10: Fallpakete der Fallreihe bleiben bis zur Löschung auf dem Gerät, Archiv auch für Fallreihen (App 0.7.2, TP-2026-W44-63) |
+| 1.15 | 06.11.2026 | Abschnitt 3: Speicherschlüssel `profil:<schlüssel>` und `schluessel-ablage`; Abschnitt 10: „Frühere Läufe mit diesem Profil“ (OB-2026-W45-03); Anhang D, D6: Ausnahme Management Summary bei „löscht nichts selbsttätig“ (OB-2026-W45-02) |
