@@ -38,7 +38,10 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
       Stellen sollen sie ohne Hinweis auf den Herausgeber in eigene Muster
       übernehmen können;
    e) die JSON-Schemata und Zusammenstellungen im Ordner formate/
-      (*.schema.json und zusammenstellungen/*.json, seit 01.11.2026).
+      (*.schema.json und zusammenstellungen/*.json, seit 01.11.2026);
+   f) das Muster einer Leistungsbeschreibung in docs/LEISTUNGSBESCHREIBUNG.md
+      (seit 09.11.2026). Stellen sollen es ohne Hinweis auf den Herausgeber in
+      eigene Vergabeunterlagen übernehmen können.
    Die Darstellungsdateien der übrigen Profile (meldung.ui.json) enthalten die
    Stufentexte des Lagenradars; für sie gilt allein CC BY 4.0.
 

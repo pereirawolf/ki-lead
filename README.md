@@ -74,6 +74,8 @@ Schema- und Redaktionsprüfungen unterstützen die Bearbeitung, belegen aber wed
 | Meldungen zwischen Stellen austauschen: Kennungen, Versionen, Zeitstände, fremde Schemata (Entwurf) | [Austausch](docs/AUSTAUSCH.md) |
 | Meldungsformat LEAD-Meldung-v2: Kern, Fachmodule, Migration aus v1 (Entwurf) | [LEAD-Meldung v2](docs/LEAD-MELDUNG-V2.md) |
 | Selbst betreiben: Betreiberkonfiguration, eigener KI-Endpunkt (Chat Completions), Auslieferung | [Betrieb](docs/BETRIEB.md) |
+| Überführung in einen Wirkbetrieb: Leistungen, Dauer, Kosten (Spannen) | [Überführung](docs/UEBERFUEHRUNG.md) |
+| Muster einer Leistungsbeschreibung (Lastenheft) für die Überführung | [Leistungsbeschreibung](docs/LEISTUNGSBESCHREIBUNG.md) |
 | Grunddesign der App-Familie (KI-LEAD, KRITIS-LEAD, Thessa): Regeln, Wireframes, Design Tokens | [Grunddesign](design/README.md) |
 | Drittkomponenten, Lizenzen, SBOM | [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
 
@@ -150,6 +152,8 @@ Was sich wann geändert hat, steht in [CHANGELOG.md](CHANGELOG.md) (App), im Abs
 | M6 | Erprobung im Testkreis auf einem Release-Kandidaten ([Konzept](docs/ERPROBUNG.md)), danach erster veröffentlichter Release mit DOI; die Versionsnummer wird bei der Freigabe festgelegt | geplant |
 
 „Umgesetzt“ heißt: Funktion vorhanden und durch Regressionstests belegt. „Abgenommen“ heißt: Abnahmekriterium der Spezifikation mit echten KI-Läufen geprüft und dokumentiert. KI-LEAD bleibt ein Forschungsdemonstrator; eine Abnahme ist keine fachliche Freigabe der Methodik.
+
+Was nach dem Fahrplan für einen Wirkbetrieb nötig wäre, beschreibt [UEBERFUEHRUNG.md](docs/UEBERFUEHRUNG.md).
 
 Einzelheiten stehen in der [Spezifikation](docs/SPEZIFIKATION.md).
 

@@ -91,6 +91,13 @@ precedence = "override"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "CC-BY-4.0 OR CC0-1.0"
 
+# Nr. 2 f: das Muster einer Leistungsbeschreibung, die ganze Datei zusätzlich unter CC0 1.0
+[[annotations]]
+path = "docs/LEISTUNGSBESCHREIBUNG.md"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
+SPDX-License-Identifier = "CC-BY-4.0 OR CC0-1.0"
+
 # Nr. 2 d: In docs/VORLAGEN.md (Vorlagen V1 bis V6) und docs/DATENSCHUTZ.md (Anhang C und D) gilt CC0 1.0 nur für
 # Teile. Die Teile tragen eine SPDX-Snippet-Markierung; "aggregate" führt sie mit CC BY 4.0 für die Datei zusammen.
 [[annotations]]

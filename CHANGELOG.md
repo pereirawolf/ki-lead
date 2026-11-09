@@ -109,9 +109,19 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
-| 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ |
+| 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“, ohne Änderung der App) |
 
 ## [0.7.14] – 05.11.2026
+
+### Nachtrag vom 09.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Fragen des Herausgebers vom 09.11.2026 nach Aufwand, Dauer und Kosten einer Überführung in einen Wirkbetrieb; Designentscheidung vom selben Tag: dezentraler Betrieb ohne zentralen Anwendungsserver, KI im eigenen Rechenzentrum und lokal, Cloud-Anbieter nur im Forschungsdemonstrator; Fassung 0.2 nach einer externen Rückmeldung (Befunde B01–B18), freigegeben am 09.11.2026. Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Überführung in einen Wirkbetrieb, Fassung 0.2** ([docs/UEBERFUEHRUNG.md](docs/UEBERFUEHRUNG.md)): Ausgangslage mit Nachweisstand, Betriebsmodell mit Austausch und Vertrauenswürdigkeit von Meldungen, notwendige Leistungen nach Auftrag und Stelle, Stufen mit Arbeitspaketen und Personentagen, Kostenarten, Dauer mit Abhängigkeiten, Eigenleistungen, Alternativen, Beauftragung und Entscheidungen, Rechte, Methodik und Grenzen; Spannen als Orientierungsrechnung.
+- **Muster einer Leistungsbeschreibung (Lastenheft), Fassung 0.2** ([docs/LEISTUNGSBESCHREIBUNG.md](docs/LEISTUNGSBESCHREIBUNG.md)): verbindliche Grundsätze und Referenzstand, Leistungen L1–L5 und Optionen, funktionale und nichtfunktionale Anforderungen mit Kern und Optionen, Qualitätsnachweis der KI, Mitwirkung der Stelle, Abnahme und Entscheidungen, Rechte und Übergabe, Mengengerüst.
+- **Lizenz:** [LICENSE-CONTENT](LICENSE-CONTENT), neu Nr. 2 f: das Muster zusätzlich unter CC0 1.0; `REUSE.toml` entsprechend.
+- **Verweise:** README (Dokumentation, Fahrplan), [docs/VORLAGEN.md](docs/VORLAGEN.md) (V6, Option D).
+- **Tests:** `tests/lizenzen/reuse.test.ts` und `tests/lizenzen/inhalte.test.ts` (Nr. 2 f).
 
 Grundlage: Prüfung der Menübeschriftungen in KI-LEAD, KRITIS-LEAD und Thessa vom 04.11.2026 und Entscheidung des Herausgebers vom 05.11.2026: „&“ nur in Feld- und Schrittnamen der LEAD-Meldevorlage und der Darstellungsdatei eines Profils, sonst „und“; als Regel des Grunddesigns.
 
