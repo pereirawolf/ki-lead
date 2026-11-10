@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.4 vom 05.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.5 vom 05.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -58,6 +58,28 @@ describe("Grunddesign: Design Tokens im Format der DTCG", () => {
     expect(Object.keys(SIGNALE).sort()).toEqual(Object.keys(SEMANTIK.hell).sort());
     for (const r of UI_TOKENS) expect(tokens.farbrolle[r].$extensions["de.pereirawolf.lead-design"].profil, r).toBe(true);
     for (const s of Object.keys(SEMANTIK.hell)) expect(tokens.signal[s].$extensions["de.pereirawolf.lead-design"].profil, s).toBe(false);
+  });
+
+  it("Füllfarben für Diagramme wie in Thessa übernommen, nie aus einem Profil (LD-F04, seit Grunddesign 1.5)", () => {
+    // Soll unabhängig vom Code: Werte aus Thessa (werkzeuge/lib/farben.mjs, FUELL, Stand 05.11.2026); Kontrast wie hell bzw. dunkel
+    const hell = { "fuell-ok": "#1F8A4C", "fuell-gering": "#D99A00", "fuell-einsatz": "#7048C0", "fuell-kritisch": "#CF3A32" };
+    const dunkel = { "fuell-ok": "#23936A", "fuell-gering": "#C27C00", "fuell-einsatz": "#8763DC", "fuell-kritisch": "#DB4F46" };
+    const fuell = tokens.fuell;
+    expect(
+      Object.keys(fuell)
+        .filter((k) => !k.startsWith("$"))
+        .sort(),
+    ).toEqual(Object.keys(hell).sort());
+    for (const [name, wert] of Object.entries(hell)) {
+      const t = fuell[name];
+      const erw = t.$extensions["de.pereirawolf.lead-design"];
+      expect(t.$value).toBe(wert);
+      expect(erw.modi).toEqual({ dunkel: dunkel[name as keyof typeof dunkel], "kontrast-hell": wert, "kontrast-dunkel": dunkel[name as keyof typeof dunkel] });
+      expect(erw.css).toBe(`--${name}`);
+      expect(erw.profil).toBe(false);
+      expect(t.$description).toBeTruthy();
+    }
+    expect(rahmen.regeln.find((r: any) => r.id === "LD-F04").text).toContain("fuell-ok, fuell-gering, fuell-einsatz und fuell-kritisch");
   });
 
   it("Farbschemata mit denselben Kennungen wie der Katalog (LD-F02)", () => {

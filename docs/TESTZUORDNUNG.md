@@ -1133,6 +1133,12 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 
 Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstellungen.test.ts`, `tests/ui/modellwahl.test.ts`, `tests/ui/recherchetiefe.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/betrieb.test.ts`, `tests/ui/testlaeufe.test.ts`, `tests/pipeline/einstellungen.test.ts`, `tests/pipeline/recherchetiefe.test.ts`, `tests/browser/einstellungen.spec.ts`, `tests/browser/hilfen.ts`, `tests/browser/kisymbol.spec.ts`, `tests/probe/mistral.spec.ts`, `tests/probe/stelle.spec.ts`.
 
+## Grunddesign 1.5: Füllfarben für Diagramme (Nachtrag vom 05.11.2026 zu 0.7.14, Entscheidung des Herausgebers vom 05.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Token-Gruppe `fuell` mit vier Füllfarben in den Werten von Thessa, Kontrastschemata wie hell bzw. dunkel, CSS-Name, nie aus einem Profil; LD-F04 nennt sie | Grunddesign: Design Tokens im Format der DTCG › Füllfarben für Diagramme wie in Thessa übernommen … | `tests/format/lead-design.test.ts` |
+
 ## Offene Befunde KW 45 (0.7.15, Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json`, Freigabe des Herausgebers vom 06.11.2026)
 
 | Soll | Test | Datei |

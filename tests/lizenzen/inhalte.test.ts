@@ -110,6 +110,7 @@ describe("CC0 1.0 zusätzlich für maschinenlesbare Dateien und die Vorlage (KP-
       "profile/muster/",
       "docs/VORLAGEN.md",
       "Anhang C und Anhang D",
+      "docs/LEISTUNGSBESCHREIBUNG.md",
     ])
       expect(nr2, muster).toContain(muster);
     expect(nr2).toMatch(/meldung\.ui\.json\)[\s\S]*allein CC BY 4\.0/);
@@ -118,6 +119,7 @@ describe("CC0 1.0 zusätzlich für maschinenlesbare Dateien und die Vorlage (KP-
   // Vorlagen für Stellen zusätzlich unter CC0 1.0: Entscheidung des Herausgebers vom 28.10.2026
   it("die Vorlagen für Stellen nennen ihre CC0-Widmung, die Anhänge C und D gibt es", () => {
     expect(lies("docs", "VORLAGEN.md")).toContain("nach Wahl auch unter CC0 1.0");
+    expect(lies("docs", "LEISTUNGSBESCHREIBUNG.md")).toContain("nach Wahl auch unter CC0 1.0");
     const ds = lies("docs", "DATENSCHUTZ.md");
     for (const anhang of ["## Anhang C:", "## Anhang D:"]) {
       const ab = ds.indexOf(anhang);

@@ -38,6 +38,8 @@ function sollLizenzen(pfad: string): string[] {
   if (pfad === "docs/GRUNDLAGEN.md") return [CC_BY_NC_ND];
   // Nr. 2 d: CC0 1.0 nur für Teile der Datei (Snippets), die Datei selbst nach Nr. 1 c
   if (pfad === "docs/VORLAGEN.md" || pfad === "docs/DATENSCHUTZ.md") return [CC_BY, CC_BY_ODER_CC0];
+  // Nr. 2 f: Muster einer Leistungsbeschreibung
+  if (pfad === "docs/LEISTUNGSBESCHREIBUNG.md") return [CC_BY_ODER_CC0];
   // Nr. 2 a bis c und e
   if (
     /^formate\/.*\.schema\.json$/.test(pfad) ||

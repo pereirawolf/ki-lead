@@ -243,7 +243,7 @@ Unterweisung zu KI-LEAD, Version [App-Version], am [Datum]. Mit der Unterschrift
 | A: Erprobung beenden | Schlüssel widerrufen, Daten nach V1 Nr. 7 löschen, Rückmeldung an den Herausgeber [ja / nein] |
 | B: verlängern im selben Rahmen | neue Frist in V1; Personalvertretung nach V2 erneut beteiligen |
 | C: ausweiten (weitere Teilnehmende, Profile, Anbieter) | V3 und V4 ergänzen, V5 für neue Teilnehmende, V2 erneut |
-| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Dient KI-LEAD nicht mehr allein der Forschung oder wird es unter Realbedingungen eingesetzt, tragen die Ausnahmen der KI-Verordnung voraussichtlich nicht mehr; personenbezogene Daten oder reale Lagen überschreiten zudem die Verwendungsgrenzen. Die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support |
+| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Dient KI-LEAD nicht mehr allein der Forschung oder wird es unter Realbedingungen eingesetzt, tragen die Ausnahmen der KI-Verordnung voraussichtlich nicht mehr; personenbezogene Daten oder reale Lagen überschreiten zudem die Verwendungsgrenzen. Die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support; Leistungen, Dauer und Kosten einer Überführung: [UEBERFUEHRUNG.md](UEBERFUEHRUNG.md) |
 
 **Empfehlung:** [Option, Begründung]
 
@@ -277,4 +277,5 @@ Zugriff jeweils am 28.10.2026.
 | 1.1 · Nachtrag | 31.10.2026 | Ohne inhaltliche Änderung: V1 bis V6 als SPDX-Snippet mit CC0 1.0 nach Wahl markiert (unsichtbarer Kommentar, REUSE, Issue #89) |
 | 1.2 | 31.10.2026 | V3 Teil 1: Selbstbetrieb mit Betreiberkonfiguration (Betriebsform, Verbindungen, Vorgabe der Schlüsselablage; App 0.6.17, TP-2026-W44-51) |
 | 1.3 | 03.11.2026 | V1 Nr. 7: Löschweg „Einstellungen → Daten → Alle Daten dieses Geräts löschen“ statt „kein eigener Löschweg“ (seit App 0.6.15; DK-2026-W45-02) |
+| 1.3 · Nachtrag | 09.11.2026 | V6 Option D: Verweis auf UEBERFUEHRUNG.md (Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“) |
 | 1.4 | 06.11.2026 | V1 Nr. 7: Ausnahme Management Summary bei „löscht nichts selbsttätig“ (OB-2026-W45-02); V3 Teil 1: Risiken mit SICHERHEIT.md 3.10, Betreiberbuild und Endpunkt der Stelle (OB-2026-W45-04) |
