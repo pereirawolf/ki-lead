@@ -243,7 +243,7 @@ Unterweisung zu KI-LEAD, Version [App-Version], am [Datum]. Mit der Unterschrift
 | A: Erprobung beenden | Schlüssel widerrufen, Daten nach V1 Nr. 7 löschen, Rückmeldung an den Herausgeber [ja / nein] |
 | B: verlängern im selben Rahmen | neue Frist in V1; Personalvertretung nach V2 erneut beteiligen |
 | C: ausweiten (weitere Teilnehmende, Profile, Anbieter) | V3 und V4 ergänzen, V5 für neue Teilnehmende, V2 erneut |
-| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Dient KI-LEAD nicht mehr allein der Forschung oder wird es unter Realbedingungen eingesetzt, tragen die Ausnahmen der KI-Verordnung voraussichtlich nicht mehr; personenbezogene Daten oder reale Lagen überschreiten zudem die Verwendungsgrenzen. Die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support |
+| D: in den Dienstbetrieb überführen | Neue Prüfung erforderlich: Dient KI-LEAD nicht mehr allein der Forschung oder wird es unter Realbedingungen eingesetzt, tragen die Ausnahmen der KI-Verordnung voraussichtlich nicht mehr; personenbezogene Daten oder reale Lagen überschreiten zudem die Verwendungsgrenzen. Die Einordnung ist neu vorzunehmen ([KI-VERORDNUNG.md](KI-VERORDNUNG.md), Abschnitte 2, 4 und 5); Anhang C und D, V3 mit neuem Schutzbedarf, V2 als Einführung. KI-LEAD ist ein Forschungsdemonstrator ohne Support; Leistungen, Dauer und Kosten einer Überführung: [UEBERFUEHRUNG.md](UEBERFUEHRUNG.md) |
 
 **Empfehlung:** [Option, Begründung]
 
