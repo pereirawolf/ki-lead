@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { FARBSCHEMAS } from "../src/darstellung/katalog.ts";
-import { KONTRASTPAARE, SEMANTIK } from "../src/darstellung/thema.ts";
+import { FUELL, KONTRASTPAARE, SEMANTIK } from "../src/darstellung/thema.ts";
 import { UI_TOKENS } from "../src/darstellung/typen.ts";
 
 const WURZEL = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -69,6 +69,14 @@ export const SIGNALE = {
   "radar-linie": "Linie des Lagenradars",
   "radar-ring": "Ringe und Achsen des Lagenradars",
   "radar-flaeche": "Fläche des Lagenradars",
+};
+
+/** Bedeutung der Füllfarben für Diagramme (seit Grunddesign 1.5, LD-F04) */
+export const FUELLFARBEN = {
+  "fuell-ok": "Fläche zu „einsatzbereit“ bzw. „ok“ in Balken und Linien",
+  "fuell-gering": "Fläche zu „eingeschränkt“ bzw. „geringfügig“ in Balken und Linien",
+  "fuell-einsatz": "Fläche zu „im Einsatz“ in Balken und Linien",
+  "fuell-kritisch": "Fläche zu „nicht einsatzbereit“ bzw. „kritisch“ in Balken und Linien",
 };
 
 const lies = (pfad) => readFileSync(join(WURZEL, pfad), "utf-8");
@@ -160,6 +168,22 @@ export function designTokens() {
       profil: false,
     });
   }
+  const fuell = {
+    $description:
+      "Füllfarben für Balken, Linien und Flächen in Diagrammen, gleiche Bedeutung wie die Signalfarben; in den Kontrastschemata die Werte von hell bzw. dunkel. Tragen nie allein Bedeutung: Zahl oder Beschriftung stehen daneben (Regel LD-F04). In KI-LEAD ungenutzt.",
+  };
+  for (const name of Object.keys(FUELL.hell)) {
+    if (!FUELLFARBEN[name]) throw new Error(`Bedeutung der Füllfarbe ${name} fehlt in FUELLFARBEN`);
+    fuell[name] = farbe(FUELL.hell[name], FUELLFARBEN[name], {
+      modi: {
+        dunkel: hexFarbe(FUELL.dunkel[name]),
+        "kontrast-hell": hexFarbe(FUELL["kontrast-hell"][name]),
+        "kontrast-dunkel": hexFarbe(FUELL["kontrast-dunkel"][name]),
+      },
+      css: `--${name}`,
+      profil: false,
+    });
+  }
   const [breit, mittel, schmal, ...rest] = umbrueche();
   if (rest.length || schmal === undefined) throw new Error(`erwartet genau drei Umbrüche, gefunden: ${umbrueche().join(", ")}`);
   const kontrast = [...new Set(KONTRASTPAARE.map((p) => p[2]))].sort((a, b) => b - a);
@@ -169,6 +193,7 @@ export function designTokens() {
     $extensions: { [ERWEITERUNG]: { format: "lead-design-tokens/1", rahmen: "rahmen.json", farbschemata: "lead-farbschemata.tokens.json" } },
     farbrolle,
     signal,
+    fuell,
     schrift: {
       familie: {
         $type: "fontFamily",
