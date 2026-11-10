@@ -109,7 +109,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.11 | letzter Commit des Pull Requests „Oberfläche KW 45: Profile und Auswertung; 0.7.11“ |
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
-| 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“, ohne Änderung der App) |
+| 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 05.11.2026: Grunddesign 1.5 mit Füllfarben für Diagramme, Pull Request „Grunddesign 1.5: Füllfarben für Diagramme (LD-F04)“; Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“; jeweils ohne Änderung der App) |
 
 ## [0.7.14] – 05.11.2026
 

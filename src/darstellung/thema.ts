@@ -81,6 +81,21 @@ export const SEMANTIK: Record<SemantikBasis, Record<string, string>> = {
   },
 };
 
+/**
+ * Füllfarben für Balken, Linien und Flächen in Diagrammen (seit Grunddesign 1.5): gleiche Bedeutung wie die
+ * Signalfarben, für Flächen abgestimmt; aus Thessa übernommen (dort je Modus mit dem Palettenprüfer geprüft). In den
+ * Kontrastschemata gelten die Werte von hell bzw. dunkel. Sie tragen nie allein Bedeutung: Zahl oder Beschriftung
+ * stehen daneben (LD-F04). KI-LEAD selbst verwendet sie nicht.
+ */
+const FUELL_HELL = { "fuell-ok": "#1F8A4C", "fuell-gering": "#D99A00", "fuell-einsatz": "#7048C0", "fuell-kritisch": "#CF3A32" };
+const FUELL_DUNKEL = { "fuell-ok": "#23936A", "fuell-gering": "#C27C00", "fuell-einsatz": "#8763DC", "fuell-kritisch": "#DB4F46" };
+export const FUELL: Record<SemantikBasis, Record<string, string>> = {
+  hell: FUELL_HELL,
+  dunkel: FUELL_DUNKEL,
+  "kontrast-hell": FUELL_HELL,
+  "kontrast-dunkel": FUELL_DUNKEL,
+};
+
 /** Signalfarben eines Katalogeintrags */
 export function semantikVon(e: FarbschemaEintrag): Record<string, string> {
   return SEMANTIK[e.semantik ?? e.modus];
