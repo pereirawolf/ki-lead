@@ -114,7 +114,8 @@ export function FruehereLaeufe({
         </thead>
         <tbody>
           {laeufe.map((l, i) => {
-            // Zugängliche Namen je Zeile eindeutig (seit 0.6.5, TP-2026-W44-14): laufende Nummer und Beginn
+            // Zugängliche Namen je Zeile eindeutig (seit 0.6.5, TP-2026-W44-14): laufende Nummer und Beginn; der sichtbare Text
+            // steht am Anfang, etwa „Löschen: Lauf 2 vom …“ (seit 0.7.15, OB-2026-W45-05)
             const lauf = `Lauf ${i + 1} vom ${new Date(l.erstellt).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}`;
             return (
               <tr key={l.id}>
@@ -124,7 +125,7 @@ export function FruehereLaeufe({
                 <td>{laufKostenText(l)}</td>
                 <td className="tabelle-aktionen">
                   {l.ergebnis && (
-                    <button type="button" className="knopf klein" aria-label={`${lauf} übernehmen`} onClick={() => uebernehmen(l.ergebnis!.meldung)}>
+                    <button type="button" className="knopf klein" aria-label={`Übernehmen: ${lauf}`} onClick={() => uebernehmen(l.ergebnis!.meldung)}>
                       Übernehmen
                     </button>
                   )}
@@ -134,7 +135,7 @@ export function FruehereLaeufe({
                   <button
                     type="button"
                     className="knopf leise klein"
-                    aria-label={`${lauf} löschen`}
+                    aria-label={`Löschen: ${lauf}`}
                     onClick={async () => {
                       if (await bestaetigen("Diesen Lauf mit Protokoll löschen?", { ja: "Lauf löschen" })) {
                         await laufLoeschen(l.id).catch((e) => fehlerMelden(speicherText("Der Lauf konnte nicht gelöscht werden", e)));

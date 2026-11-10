@@ -1,6 +1,6 @@
 # KI-LEAD – Datenschutzerklärung, Datenschutzhinweise und Verarbeitungsbeschreibung
 
-Fassung 1.14 vom 03.11.2026, gilt für App-Version 0.7.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.15 vom 06.11.2026, gilt für App-Version 0.7.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Diese Hinweise beschreiben, welche Daten KI-LEAD wo verarbeitet und wohin sie gehen. **Die Datenschutzerklärung nach Art. 13 DSGVO für alles, was der Herausgeber selbst verantwortet, steht in [Abschnitt 12](#12-datenschutzerklärung).** Verantwortlicher und Kontakt: [Impressum](https://www.pereirawolf.de/impressum.html). Die Hinweise sind keine Rechtsberatung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung mit der eigenen Datenschutzbeauftragten oder dem eigenen Datenschutzbeauftragten.
 
@@ -37,11 +37,11 @@ Alles, was die App speichert, liegt **auf dem Gerät**: im Browser (IndexedDB, f
 | Zwischenstand der Meldung | `entwurf:<profil>` | die gerade bearbeitete Meldung | bis zur Änderung oder Löschung |
 | Lagebild | `lagebild:<profil>` | eingelesene Meldungen, Prüfstand | bis zur Änderung oder Löschung |
 | Laufprotokolle | `lauf:<id>` | siehe Abschnitt 8 | bis zur Löschung durch die Person |
-| Profile und Profilarchiv | `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme | bis zur Löschung |
+| Profile und Profilarchiv | `profil:<schlüssel>`, `aktives-profil`, `profilarchiv:…` | importierte Profile mit Prüfsumme, gewähltes Profil, ersetzte Profilstände | bis zur Löschung |
 | Management Summary | je Profil | zuletzt erstellte Fassung | bis zum Leeren oder Ersetzen |
 | Archiv der Testläufe | eigene Datenbank `ki-lead-testlaeufe`: `eintrag:<id>`, `zip:<id>` | ZIP-Datei je Testlauf am fiktiven Fall „Ilka“ oder je Fallreihe (seit 0.7.2) mit Laufprotokollen (seit 0.5.17) | bis zur Löschung durch die Person |
 | Fallpakete der Fallreihe (seit 0.7.2) | Datenbank `ki-lead-testlaeufe`: `fallpaket:<sha256>` | importierte ZIP-Datei mit Bewertungsfällen und Material (etwa der Kontrollsatz), wie importiert; an einen Anbieter gehen nur die Fälle eines gestarteten Laufs | bis zur Löschung durch die Person |
-| API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund | siehe Abschnitt 9 | bis zur Löschung |
+| API-Schlüssel | `schluessel:<anbieter>`, verschlüsselt `schluessel-verschluesselt:<anbieter>` mit `schluessel-passphrase` (Salz, Iterationen, Prüfwert; keine Passphrase) oder Schlüsselbund; gewählte Ablage unter `schluessel-ablage` | siehe Abschnitt 9 | bis zur Löschung |
 | Sicherung (nur auf Wunsch) | Datei `<Datum>_KI-LEAD_Sicherung.json` im Download-Ordner | alle Einträge der Zeilen oben außer API-Schlüsseln und ihrer Ablage (seit 0.6.15) | bis die Person die Datei löscht; sie liegt außerhalb der App und enthält die Inhalte im Klartext |
 | Programmdateien (nur PWA) | Caches `ki-lead-…` | HTML, Skripte, Symbole der App | bis zur nächsten Fassung |
 
@@ -138,7 +138,7 @@ Die App für Android schließt App-Daten von der Sicherung aus (`android:allowBa
 
 | Was | Wie |
 |---|---|
-| ein Laufprotokoll | KI-Erfassung, Liste der Läufe, „Löschen“ |
+| ein Laufprotokoll | KI-Erfassung, „Frühere Läufe mit diesem Profil“, „Löschen“ |
 | Management Summary | „Leeren“ in der Ansicht |
 | archivierte Testläufe | Einstellungen, „Testläufe“ (sichtbar nur mit „Einstellungen → Übersicht → Forschungsfunktionen anzeigen“; Ausschalten löscht das Archiv nicht), Archiv: „Ausgewählte löschen“ oder „Alle löschen“; außerdem mit „Alle Daten dieses Geräts löschen“ unter „Einstellungen → Daten“ |
 | Fallpakete der Fallreihe (seit 0.7.2) | Einstellungen, „Testläufe“, Fallreihe: „Löschen“ am Paket |
@@ -339,7 +339,7 @@ Art. 30 DSGVO verlangt keine Angabe der Rechtsgrundlage. Aufsichtsbehörden empf
 
 | Vorbefüllung | Eintrag der Stelle |
 |---|---|
-| Auf dem Gerät bleibt alles bis zur Löschung durch die Person; die App löscht nichts selbsttätig (Abschnitte 3 und 10). Beim Anbieter: bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5). Exportierte Laufprotokolle sind wie das verwendete Material zu behandeln (Abschnitt 8). | [Frist der Stelle, z. B. Laufprotokolle und Lagebilder löschen nach …], [Zuständigkeit für die Löschung], [Aufbewahrung nach Aktenordnung oder Fachrecht] |
+| Auf dem Gerät bleibt alles bis zur Löschung durch die Person; die App löscht nichts selbsttätig; ausgenommen ist die gespeicherte Management Summary, die beim Ersetzen der Meldung und bei der Übergabe an die KI-Verdichtung geleert wird (Abschnitte 3 und 10). Beim Anbieter: bis 30 Tage, bei Verstößen gegen dessen Richtlinien länger (Abschnitt 5). Exportierte Laufprotokolle sind wie das verwendete Material zu behandeln (Abschnitt 8). | [Frist der Stelle, z. B. Laufprotokolle und Lagebilder löschen nach …], [Zuständigkeit für die Löschung], [Aufbewahrung nach Aktenordnung oder Fachrecht] |
 
 ### D7 Technische und organisatorische Maßnahmen (Art. 30 Abs. 1 Buchst. g, Art. 32 DSGVO)
 
@@ -415,3 +415,4 @@ Zugriff, soweit nicht anders angegeben, am 24.10.2026.
 | 1.12 | 03.11.2026 | Abschnitt 4: Kennzahlen-Bausteine aus Thessa gehen ohne Herleitung an den Anbieter (App 0.6.24, UP-2026-W45-01) |
 | 1.13 | 03.11.2026 | Abschnitt 1 und Anhang D, D7: Die Bestätigung vor jedem KI-Lauf gilt seit App 0.7.1 auch für die Management Summary (bis 0.7.0 sendete sie ohne Bestätigung, DK-2026-W45-01); Abschnitt 10: Bereich „Testläufe“ nur mit Forschungsfunktionen, Löschen auch über „Daten“ (DK-2026-W45-03) |
 | 1.14 | 03.11.2026 | Abschnitte 3 und 10: Fallpakete der Fallreihe bleiben bis zur Löschung auf dem Gerät, Archiv auch für Fallreihen (App 0.7.2, TP-2026-W44-63) |
+| 1.15 | 06.11.2026 | Abschnitt 3: Speicherschlüssel `profil:<schlüssel>` und `schluessel-ablage`; Abschnitt 10: „Frühere Läufe mit diesem Profil“ (OB-2026-W45-03); Anhang D, D6: Ausnahme Management Summary bei „löscht nichts selbsttätig“ (OB-2026-W45-02) |

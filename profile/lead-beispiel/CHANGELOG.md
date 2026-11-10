@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.42.1 – 06.11.2026
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json` (Sammellauf offener Befunde KW 45, Commit `fd452dc`), OB-2026-W45-07, freigegeben vom Herausgeber am 06.11.2026 als Variante A. Anlass: Prüfstein `2026-W43_ebola-kenia-nigeria` (Auslegung der Nullregel (b) ungeklärt), vorgelegt im Erfassungstest KW 43 und in der Konsistenzprüfung KW 44. Dritte Stelle: Präzisierung ohne neue Kodierregel; Schema und Darstellungsdatei unverändert.
+
+- **Kodierleitfaden 1.12.1:** Kurzbeispiel in Abschnitt 7: Bekannte Fälle eines meldepflichtigen Erregers sind entlassen, eine ausdrückliche Fehlanzeige der Surveillance liegt nicht vor – D2 offen; die Entlassung belegt keinen Nullbefund der Erhebung nach Nullregel (b).
+- **Arbeitsanweisung Erfassung 1.11.4:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.12.1“.
+- **SOP-LEAD-Sammelmappe 3.23.4:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Verdichtung 2.3.0 und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf (sie verweisen für die Achsen auf den Kodierleitfaden).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.42.0 – 05.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45-b.json` (Nachtrag zur Lernschleife KW 45: vier interne Erfassungsläufe vom 04.11.2026 mit demselben Material, Commit `1395a76`), LS-2026-W45-08, freigegeben vom Herausgeber am 05.11.2026 als Option A. Material, Protokolle und Meldungen der Läufe bleiben intern. Zweite Stelle: neue Regel im Kodierleitfaden.

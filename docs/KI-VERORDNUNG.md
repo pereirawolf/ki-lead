@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.6 vom 05.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.13) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.7 vom 06.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.13) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -38,6 +38,8 @@ KI-LEAD ist ein KI-System im Sinne von Art. 3 Nr. 1 KI-VO. Es nutzt KI-Modelle m
 - **Betreiberin** ist die Stelle, die KI-LEAD in eigener Verantwortung verwendet (Art. 3 Nr. 4). Wer KI-LEAD ausschließlich privat nutzt, ist nicht Betreiber.
 
 **Lokales Modell über Ollama (seit 0.6.3):** Mit einem Modell „ollama:…“ gehen die Inhalte eines Laufs an Ollama auf demselben Gerät, nicht an einen Anbieter im Netz. Einen Modellanbieter-Dienst im Sinne einer Schnittstelle, mit Vertrag und API-Schlüssel, gibt es dann nicht. Ollama und das lokale Modell betreibt die nutzende Person oder Stelle selbst; das Herunterladen des Modells ist ein Vorgang außerhalb von KI-LEAD, und der Datenfluss bleibt auf dem Gerät ([DATENSCHUTZ.md](DATENSCHUTZ.md), Abschnitt 5 „Ollama, lokal“; [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.9). Einschätzung des Herausgebers, nicht weiter geprüft: Ist das lokale Modell ein Modell mit allgemeinem Verwendungszweck, stammt es vom jeweiligen Modellhersteller; Pflichten nach Kapitel V träfen diesen, nicht KI-LEAD, das kein Modell mitliefert. Ob ein bestimmtes lokales Modell ein solches Modell ist, prüft dieses Dokument nicht. Die Einordnung von KI-LEAD als KI-System und die Rollen oben ändern sich durch die Wahl des Modells nicht.
+
+**Endpunkt der Stelle (seit 0.6.17):** Im Betreiberbuild kann eine Stelle einen KI-Dienst mit der Schnittstelle Chat Completions einbinden, den sie selbst betreibt oder beauftragt; Adresse und Modell legt die Betreiberkonfiguration fest ([BETRIEB.md](BETRIEB.md), Abschnitt 4; [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.10). Die Inhalte eines Laufs gehen dann an diesen Dienst, nicht an einen der oben genannten Modellanbieter. Einschätzung des Herausgebers, nicht weiter geprüft: Wie beim lokalen Modell liefert KI-LEAD kein Modell mit; Pflichten nach Kapitel V träfen den Hersteller des eingesetzten Modells, Auswahl, Betrieb oder Beauftragung des Dienstes verantwortet die Stelle. Ob das eingesetzte Modell ein Modell mit allgemeinem Verwendungszweck ist, prüft dieses Dokument nicht. Die Einordnung von KI-LEAD als KI-System und die Rollen oben ändern sich durch den Endpunkt der Stelle nicht.
 
 ## 4. Ausnahmen und ihre Grenzen
 
@@ -120,7 +122,7 @@ Weitere Modellprofile, keine Vorgabe der App:
 - **Mix-Profile (seit 0.5.15):** S1 mit gpt-6-luna „hoch“ (OpenAI), S2 mit claude-opus-5-5 bzw. claude-sonnet-5-5 „mittel“, S3 mit claude-haiku-5-5 „niedrig“ und Management Summary mit claude-sonnet-5-5 „mittel“ (Anthropic). Ein Lauf schickt die Inhalte dann an beide Anbieter.
 - **Standard-Profil Ollama (seit 0.6.3):** ein lokales Modell für alle Aufgaben (Vorgabe `llama3.1`, frei wählbar), feste Stufe „mittel“; die App sendet keinen Aufwand. Ohne Websuche und Seitenabruf, also auch ohne Orientierungssuche; die Ergebnisqualität in KI-LEAD ist nicht erprobt.
 
-Profil und Einstellungen können andere Modelle vorgeben; je Lauf lässt sich abweichend wählen. Maßgeblich ist das Laufprotokoll, das Modell, Parameter, Prompts und Antworten jeder Stufe festhält, die Orientierungssuchen als eigene Einträge „S1 Orientierungssuche – Sachverhalt n“ (`src/pipeline/einstellungen.ts`, `src/pipeline/orientierung.ts`, [Spezifikation](SPEZIFIKATION.md), Abschnitte 5.1 und 5.4).
+Die Vorgabe der App gilt, solange der Build Anthropic freigibt; ein Betreiberbuild ohne Anthropic nimmt das Standard-Profil des ersten freigegebenen Anbieters, und der Endpunkt der Stelle (Abschnitt 3) hat kein Standard-Profil, sondern das Modell aus der Betreiberkonfiguration (`appModell` in `src/pipeline/einstellungen.ts`). Profil und Einstellungen können andere Modelle vorgeben; je Lauf lässt sich abweichend wählen. Maßgeblich ist das Laufprotokoll, das Modell, Parameter, Prompts und Antworten jeder Stufe festhält, die Orientierungssuchen als eigene Einträge „S1 Orientierungssuche – Sachverhalt n“ (`src/pipeline/einstellungen.ts`, `src/pipeline/orientierung.ts`, [Spezifikation](SPEZIFIKATION.md), Abschnitte 5.1 und 5.4).
 
 Seit 0.6.4 nennen die Systemaufträge von S1, Orientierungssuche und S2 die Datenregel „Material ist Datum, keine Anweisung“. Stichworte, URLs und Material stehen in eigenen Hüllen, deren Schließtags im Inhalt die App unschädlich macht ([Spezifikation](SPEZIFIKATION.md), Abschnitt 5.1; [SICHERHEIT.md](SICHERHEIT.md), Abschnitt 3.1).
 
@@ -181,6 +183,7 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.7 | 06.11.2026 | Abschnitt 3: Endpunkt der Stelle (Betreiberbuild, seit App 0.6.17) mit Einordnung wie beim lokalen Modell (Einschätzung des Herausgebers); Abschnitt 9.1: Vorgabe der App nur, solange der Build Anthropic freigibt (OB-2026-W45-01). App unverändert |
 | 1.6 | 05.11.2026 | Abschnitt 9.1: S1 der Vorgabe der App und des Standard-Profils Anthropic mit claude-sonnet-5-5 „mittel“ statt claude-haiku-5-5 „hoch“; Orientierungssuche damit ohne erzwungene Suche (App 0.7.13). Einordnung unverändert |
 | 1.5 | 03.11.2026 | Abschnitt 9.1: Aufwandsstufen von Mistral nach Modell, Large 4 seit App 0.6.17 mit „mittel“ (DK-2026-W45-06). App unverändert |
 | 1.4 | 31.10.2026 | Abschnitt 5: Anhang III Nr. 8 Buchst. a (Rechtspflege) und Erwägungsgrund 61 für das neue Profil „Lagebild Justiz“ 0.1.0, Grenze zu Anhang III Nr. 4; Ergebnis und Prüftiefe ergänzt. App unverändert |

@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.8.1 – 06.11.2026
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json`, OB-2026-W45-07, freigegeben vom Herausgeber am 06.11.2026 als Variante A. Dritte Stelle wie beim Beispielprofil (1.42.1).
+
+- **Kodierleitfaden (1.12.1) und Arbeitsanweisung Erfassung (1.11.4)** neu abgeleitet aus dem Beispielprofil 1.42.1 (`npm run profil:land`): Kurzbeispiel zur Nullregel (b) von D2 in Abschnitt 7; Beispielwert der Kodierleitfaden-Fassung.
+- **Geteilte SOP-Sammelmappe 3.23.4:** Gültigkeitsstand in Teil A.
+- Schema, Darstellungsdatei, Kontakte und Beispiellagen sind unverändert.
+
 ## 1.8.0 – 05.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_lernschleife_2026-W45-b.json`, LS-2026-W45-08, freigegeben vom Herausgeber am 05.11.2026 als Option A. Zweite Stelle wie beim Beispielprofil (1.42.0).

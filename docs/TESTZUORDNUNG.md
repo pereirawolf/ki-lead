@@ -1138,3 +1138,11 @@ Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstell
 | Soll | Test | Datei |
 |---|---|---|
 | Token-Gruppe `fuell` mit vier Füllfarben in den Werten von Thessa, Kontrastschemata wie hell bzw. dunkel, CSS-Name, nie aus einem Profil; LD-F04 nennt sie | Grunddesign: Design Tokens im Format der DTCG › Füllfarben für Diagramme wie in Thessa übernommen … | `tests/format/lead-design.test.ts` |
+
+## Offene Befunde KW 45 (0.7.15, Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json`, Freigabe des Herausgebers vom 06.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Knöpfe „Übernehmen“, „Protokoll“ und „Löschen“ der früheren Läufe beginnen ihren zugänglichen Namen mit der Beschriftung, gefolgt von „: Lauf n vom …“ | OB-2026-W45-05: Knöpfe je früherem Lauf nennen den sichtbaren Text zuerst › … | `tests/ui/ki-erfassung-laeufe.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.12.1). OB-2026-W45-01 bis -04, -06 und -07 ändern nur Dokumentation bzw. Kodierleitfaden ohne eigenen Test.
