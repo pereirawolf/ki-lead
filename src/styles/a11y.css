@@ -50,6 +50,11 @@
     border-image: none;
   }
 
+  /* Hinweisband: Systemfarben mit Trennlinie zum Inhalt (seit 0.7.16) */
+  .kopfbereich > .hinweisband {
+    border-bottom: 2px solid CanvasText;
+  }
+
   .kopf-ki.online {
     forced-color-adjust: none;
     background: Highlight;

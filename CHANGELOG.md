@@ -111,6 +111,24 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
 | 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 05.11.2026: Grunddesign 1.5 mit Füllfarben für Diagramme, Pull Request „Grunddesign 1.5: Füllfarben für Diagramme (LD-F04)“; Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“; jeweils ohne Änderung der App) |
 | 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ (Nachtrag vom 10.11.2026: Pull Request „CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10)“, ohne Änderung der App) |
+| 0.7.16 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.16“ |
+## [0.7.16] – 10.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 10.11.2026 nach dem Vorschlag zum Hinweisband der App-Familie: einheitlicher, prägnanter Hinweis in KI-LEAD, KRITIS-LEAD und Thessa, am Kopf der Seite stehend und beim Scrollen schmaler, in einer Akzentfarbe des Farbschemas; vor und nach dem Mittelpunkt gleicher Abstand; der Satz darf nach Bedarf natürlich umbrechen, aber nicht an einer festen Stelle wie direkt hinter dem Mittelpunkt (Klarstellung vom selben Tag).
+
+### Geändert
+
+- **Hinweisband** (`src/App.tsx`, `src/ui/hinweisband.ts`, `src/styles/basis.css`): Wortlaut „**Forschungsdemonstrator** · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.“ (bisher „Forschungsdemonstrator. Nur …“), Mittelpunkt mit geschützten Leerzeichen, für Screenreader ein Punkt. Fläche in der tiefen Aktionsfarbe (`--amt-tief`), Text in `--auf-amt-hover` – das Paar ist für jedes Schema und Profil auf Kontrast geprüft; keine Signalfarbe (LD-F04). Bisher grauer Text auf Papier.
+- **Kopfbereich** (`.kopfbereich`): Kopfleiste, Identitätsband und Hinweisband bleiben gemeinsam oben stehen (bisher nur die Kopfleiste). Ab 96 px Scrollhöhe, mindestens aber eine volle Bandhöhe über 8 px, wird das Band schmaler (weniger Innenabstand, kleinere Schrift), unter 8 px wieder wie zuvor; der ganze Wortlaut bleibt immer sichtbar und bricht bei Bedarf um (`src/ui/kopfKompakt.ts`); während des Wechsels ist Scroll-Anchoring aus, damit die Position nicht springt. Übergang 0,18 s, bei reduzierter Bewegung ohne; erzwungene Farben mit Trennlinie; beim Drucken ausgeblendet.
+- **Stehende Leisten nach der gemessenen Höhe** (`--kopf-hoehe`, jetzt für die ganze App aus `src/ui/kopfHoehe.ts`): Schrittleiste (bisher fest 5 rem) und Lagenradar (bisher fest 6 rem) stehen unter dem Kopfbereich, ebenso Reiter der Auswertung und Sprungleiste der Profile; Sprungziele richten sich nach dem Kopfbereich (`src/ui/sprung.ts`).
+- **Grunddesign 1.6** (`design/`): LD-R04 von SOLL zu MUSS mit einheitlichem Wortlaut, Farbrollen, Verhalten beim Scrollen und dem Grundsatz, dass Hinweise einer einzelnen App in Fußzeile, Startseite oder „Über“ stehen; LD-R01 mit dem mitlaufenden Kopfbereich; `rahmen.json` (Komponente `hinweisband`), Wireframes als Text und SVG. Kennungen, Zahl der Regeln und Tokens unverändert.
+- Spezifikation 0.7.16 (Abschnitt 5.1, „Kopfbereich und Hinweisband“), `docs/TESTS.md`. Versionsangaben 0.7.16 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 716); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: LD-R04 (Wortlaut unabhängig vom Code, MUSS, Farbrollen, keine Signalfarbe, Kopfbereich mitlaufend, kompakt ohne Abschneiden).
+- Neu: `tests/ui/kopfkompakt.test.ts` (Hysterese, Klasse am Kopfbereich), `tests/browser/hinweisband.spec.ts` (390 und 1280 px sowie 300 bis 1400 px in Schritten: natürlicher Umbruch, nie am Mittelpunkt; Farbe, nach dem Scrollen schmaler bei vollständig sichtbarem Wortlaut, Reiter unter dem Kopfbereich, kein Flackern, Schrittleiste).
+- Angepasst ohne Änderung des Solls: `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts` (Kopfbereich als Bezug), `tests/browser/sprungziele.spec.ts` (Abstand ab dem Kopfbereich; Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist).
 
 ## [0.7.15] – 06.11.2026
 

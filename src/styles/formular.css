@@ -329,7 +329,8 @@ textarea {
 
 .radar-grafik {
   position: sticky;
-  top: 6rem;
+  /* unter dem Kopfbereich (seit 0.7.16 gemessen, vorher fest 6rem) */
+  top: calc(var(--kopf-hoehe, 4.5rem) + 1.5rem);
 }
 
 .radar-ring {

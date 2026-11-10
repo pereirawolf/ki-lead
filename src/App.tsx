@@ -33,6 +33,9 @@ import { HERAUSGEBER, VERWEISE } from "./kern/herausgeber";
 import { APP_KENNUNG } from "./kern/version";
 import { KiZugangContext, type KiZugangWert } from "./ui/kiZugang";
 import { useFarbschema } from "./ui/app/useFarbschema";
+import { useKopfHoehe } from "./ui/kopfHoehe";
+import { useKopfKompakt } from "./ui/kopfKompakt";
+import { HINWEIS_KENNUNG, HINWEIS_TEXT, HINWEIS_TRENNER } from "./ui/hinweisband";
 import { useZwischenstand } from "./ui/app/useZwischenstand";
 import { useKiUebergabe } from "./ui/app/useKiUebergabe";
 import { adresseLesen, adresseText, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
@@ -185,6 +188,9 @@ export default function App() {
 
   // Farbschema, Zwischenstand und Übergabe an die KI (seit 0.6.5, TP-2026-W44-17 als eigene Hooks)
   const farben = useFarbschema(aktiv, profil, speicherProblem);
+  // Kopfbereich: Höhe als --kopf-hoehe für stehende Leisten, kompakt beim Scrollen (seit 0.7.16, Grunddesign 1.6)
+  useKopfHoehe();
+  useKopfKompakt();
   const { meldung, setMeldung, dokumentNr, neuesDokument, gesichert } = useZwischenstand(profil, profile, neueMeldung, setSpeicherFehler, speicherProblem);
   const ki = useKiUebergabe(profil, () => zeigeAnsicht("ki", { ziel: ".ki .arbeitsbereich", fokus: ".ki .schritt-inhalt h2" }));
 
@@ -378,62 +384,68 @@ export default function App() {
   return (
     <KiZugangContext.Provider value={kiZugang}>
       <div className="app">
-        <header className="kopf">
-          <div className="marke">
-            <span className="marke-name">KI-LEAD</span>
-            <span className="marke-zusatz">Demonstrator</span>
-          </div>
-          <nav className="hauptnav" aria-label="Bereiche">
-            <button
-              type="button"
-              className={ansicht === "meldung" ? "nav aktiv" : "nav"}
-              aria-current={ansicht === "meldung" ? "page" : undefined}
-              onClick={() => zeigeAnsicht("meldung")}
-            >
-              Erfassung
-            </button>
-            <button
-              type="button"
-              className={ansicht === "ki" ? "nav aktiv" : "nav"}
-              aria-current={ansicht === "ki" ? "page" : undefined}
-              onClick={() => zeigeAnsicht("ki")}
-            >
-              KI-Erfassung
-            </button>
-            <button
-              type="button"
-              className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
-              aria-current={ansicht === "lagebild" ? "page" : undefined}
-              onClick={() => zeigeAnsicht("lagebild")}
-            >
-              Auswertung
-            </button>
-            <button
-              type="button"
-              className={ansicht === "profile" ? "nav aktiv" : "nav"}
-              aria-current={ansicht === "profile" ? "page" : undefined}
-              onClick={() => zeigeAnsicht("profile")}
-            >
-              Profile
-            </button>
-            <button
-              type="button"
-              className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
-              aria-current={ansicht === "einstellungen" ? "page" : undefined}
-              onClick={() => zeigeAnsicht("einstellungen")}
-            >
-              Einstellungen
-            </button>
-          </nav>
-          {profil && (
-            <div className="kopf-rechts" data-profil={profil.manifest.name}>
-              <KiSymbol lauf={chipLauf} />
+        {/* Kopfbereich (seit 0.7.16, Grunddesign 1.6, LD-R01): Kopfleiste mit Identitätsband und Hinweisband laufen gemeinsam mit */}
+        <div className="kopfbereich">
+          <header className="kopf">
+            <div className="marke">
+              <span className="marke-name">KI-LEAD</span>
+              <span className="marke-zusatz">Demonstrator</span>
             </div>
-          )}
-        </header>
+            <nav className="hauptnav" aria-label="Bereiche">
+              <button
+                type="button"
+                className={ansicht === "meldung" ? "nav aktiv" : "nav"}
+                aria-current={ansicht === "meldung" ? "page" : undefined}
+                onClick={() => zeigeAnsicht("meldung")}
+              >
+                Erfassung
+              </button>
+              <button
+                type="button"
+                className={ansicht === "ki" ? "nav aktiv" : "nav"}
+                aria-current={ansicht === "ki" ? "page" : undefined}
+                onClick={() => zeigeAnsicht("ki")}
+              >
+                KI-Erfassung
+              </button>
+              <button
+                type="button"
+                className={ansicht === "lagebild" ? "nav aktiv" : "nav"}
+                aria-current={ansicht === "lagebild" ? "page" : undefined}
+                onClick={() => zeigeAnsicht("lagebild")}
+              >
+                Auswertung
+              </button>
+              <button
+                type="button"
+                className={ansicht === "profile" ? "nav aktiv" : "nav"}
+                aria-current={ansicht === "profile" ? "page" : undefined}
+                onClick={() => zeigeAnsicht("profile")}
+              >
+                Profile
+              </button>
+              <button
+                type="button"
+                className={ansicht === "einstellungen" ? "nav aktiv" : "nav"}
+                aria-current={ansicht === "einstellungen" ? "page" : undefined}
+                onClick={() => zeigeAnsicht("einstellungen")}
+              >
+                Einstellungen
+              </button>
+            </nav>
+            {profil && (
+              <div className="kopf-rechts" data-profil={profil.manifest.name}>
+                <KiSymbol lauf={chipLauf} />
+              </div>
+            )}
+          </header>
 
-        <div className="hinweisband" role="note">
-          Forschungsdemonstrator. Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.
+          <p className="hinweisband" role="note">
+            <strong>{HINWEIS_KENNUNG}</strong>
+            <span aria-hidden="true">{HINWEIS_TRENNER}</span>
+            <span className="sr-only">. </span>
+            {HINWEIS_TEXT}
+          </p>
         </div>
         <PwaHinweis />
 

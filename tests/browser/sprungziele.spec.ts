@@ -8,7 +8,8 @@ import { bereich, netzVorbereiten, oeffnen } from "./hilfen";
 /** Abstand des Elements vom unteren Rand des Kopfs der App (Pixel; negativ: unter dem Kopf verdeckt) */
 async function abstandZumKopf(page: Page, selektor: string): Promise<number> {
   return page.evaluate((sel) => {
-    const kopf = document.querySelector(".kopf")!.getBoundingClientRect().bottom;
+    // seit 0.7.16 (Grunddesign 1.6): Unterkante des Kopfbereichs aus Kopfleiste, Identitätsband und Hinweisband
+    const kopf = document.querySelector(".kopfbereich")!.getBoundingClientRect().bottom;
     return document.querySelector(sel)!.getBoundingClientRect().top - kopf;
   }, selektor);
 }
@@ -68,7 +69,12 @@ test("Hauptnavigation: neue Ansicht beginnt oben; die KI-Erfassung kehrt an die 
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
   await bereich(page, "KI-Erfassung");
-  const kiStelle = await ansEnde(page);
+  await ansEnde(page);
+  // Seit 0.7.16 wird das Hinweisband nach dem Scrollen schmaler (Grunddesign 1.6, LD-R04); das Seitenende rückt dadurch
+  // nach oben. Maßgeblich ist die Stelle, an der die Ansicht danach steht.
+  await expect.poll(() => page.locator(".kopfbereich").evaluate((b) => b.classList.contains("kompakt"))).toBe(true);
+  await page.waitForTimeout(300);
+  const kiStelle = await page.evaluate(() => window.scrollY);
   expect(kiStelle).toBeGreaterThan(200);
   await bereich(page, "Einstellungen");
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);

@@ -1155,3 +1155,13 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | minimatch ab 11.0.1 und glob ab 14.0.2 (Dependabot-Warnung #10) | Lieferkette der Entwicklungsabhängigkeiten › Dependabot-Warnung #10 … | `tests/ci/actions.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/ci/actions.test.ts` (18 statt 15 Einbindungen von Actions).
+
+## Grunddesign 1.6: Hinweisband der App-Familie (0.7.16, Entscheidung des Herausgebers vom 10.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| LD-R04 als MUSS mit einheitlichem Wortlaut, Mittelpunkt mit geschützten Leerzeichen (kein Umbruch am Mittelpunkt), nicht ausblendbar; Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe; Kopfbereich mitlaufend, kompakt ohne Abschneiden | Grunddesign: rahmen.json › LD-R04: einheitliches Hinweisband … | `tests/format/lead-design.test.ts` |
+| Hysterese 96 px (mindestens volle Bandhöhe über 8 px) und 8 px, Klasse „kompakt“ am Kopfbereich, Wortlaut bleibt | kompaktNach …, useKopfKompakt … | `tests/ui/kopfkompakt.test.ts` |
+| Im Browser (390 und 1280 px, Umbruch zusätzlich von 300 bis 1400 px): Hinweis mit Wortlaut, kein Umbruch am Mittelpunkt, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen schmaler, ganzer Wortlaut sichtbar (kein Abschneiden), Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
+
+Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` misst den Abstand ab dem Kopfbereich und liest die Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist.

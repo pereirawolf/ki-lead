@@ -1,8 +1,8 @@
 {
   "$schema": "./rahmen.schema.json",
   "format": "lead-design-rahmen/1",
-  "fassung": "1.5",
-  "stand": "2026-11-05",
+  "fassung": "1.6",
+  "stand": "2026-11-10",
   "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
   "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
   "tokens": "lead-design.tokens.json",
@@ -10,7 +10,7 @@
   "rahmen": [
     { "id": "kopf", "element": "header", "mitlaufend": true, "inhalt": ["marke", "hauptnavigation", "status"], "regel": "LD-R02" },
     { "id": "identitaetsband", "element": "Rand der Kopfleiste", "hoehe": "{mass.band}", "farben": ["{farbrolle.marke-akzent-1}", "{farbrolle.marke-akzent-2}", "{farbrolle.marke-akzent-3}"], "dekorativ": true, "regel": "LD-R03" },
-    { "id": "hinweisband", "element": "div", "rolle": "note", "regel": "LD-R04" },
+    { "id": "hinweisband", "element": "p", "rolle": "note", "mitlaufend": true, "kennung": "Forschungsdemonstrator", "trenner": "\u00a0·\u00a0", "wortlaut": "Forschungsdemonstrator · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.", "flaeche": "{farbrolle.amt-tief}", "text": "{farbrolle.auf-amt-hover}", "kompakt": { "ab_px": 96, "ab_mindestens": "volle Bandhöhe + 24 px", "bis_px": 8, "darstellung": "weniger Innenabstand, kleinere Schrift; ganzer Wortlaut sichtbar, Umbruch nach Bedarf" }, "ausblendbar": false, "regel": "LD-R04" },
     { "id": "inhalt", "element": "main", "max_breite": "{mass.inhaltsbreite}", "inhalt": ["seitenkopf", "profilzeile", "statusmeldungen", "arbeitsbereich"], "regel": "LD-R06" },
     { "id": "fuss", "element": "footer", "inhalt": ["kennung", "datenhinweis", "verweise"], "verweise": ["Lizenzen", "Impressum", "Datenschutz"], "regel": "LD-R05" }
   ],
@@ -89,10 +89,10 @@
     { "datei": "wireframe-schmal.svg", "ansicht": "Bereich mit Schrittfolge, schmal (390 px)", "abschnitt": "Wireframe: schmal" }
   ],
   "regeln": [
-    { "id": "LD-R01", "stufe": "MUSS", "thema": "Rahmen", "text": "Die App besteht aus Kopfleiste, Identitätsband, Hinweisband, Inhalt und Fußzeile, in dieser Reihenfolge. Die Kopfleiste bleibt beim Scrollen oben stehen.", "referenz": ["src/App.tsx", "src/styles/basis.css"] },
+    { "id": "LD-R01", "stufe": "MUSS", "thema": "Rahmen", "text": "Die App besteht aus Kopfleiste, Identitätsband, Hinweisband, Inhalt und Fußzeile, in dieser Reihenfolge. Kopfleiste, Identitätsband und Hinweisband bilden den Kopfbereich; er bleibt beim Scrollen oben stehen, und Leisten, die unter ihm stehen bleiben, richten sich nach seiner gemessenen Höhe.", "referenz": ["src/App.tsx", "src/styles/basis.css", "src/ui/kopfHoehe.ts"] },
     { "id": "LD-R02", "stufe": "MUSS", "thema": "Rahmen", "text": "Die Kopfleiste zeigt links den Produktnamen (mit Zusatz, der bis zum Umbruch „breit“ entfällt), daneben die Hauptnavigation und rechts die Statusanzeige, wenn die App Anfragen stellt (LD-M03); eine App ohne Anfragen kann dort einen Anzeiger der Anmeldung oder Sicht führen. Das aktive Profil steht nicht in der Kopfleiste, sondern in der Profilzeile (LD-A01).", "referenz": ["src/App.tsx", "src/styles/basis.css"] },
     { "id": "LD-R03", "stufe": "MUSS", "thema": "Rahmen", "text": "Unter der Kopfleiste liegt ein dekoratives Identitätsband von 8 px aus den Farbrollen marke-akzent-1 bis -3. Es trägt keine Information und entfällt bei erzwungenen Farben.", "referenz": ["src/styles.css", "src/styles/a11y.css"] },
-    { "id": "LD-R04", "stufe": "SOLL", "thema": "Rahmen", "text": "Ein Hinweisband unter dem Kopf nennt in einem Satz die Einsatzgrenzen der App (Rolle note), etwa nur fiktive oder offen zugängliche Inhalte.", "referenz": ["src/App.tsx"] },
+    { "id": "LD-R04", "stufe": "MUSS", "thema": "Rahmen", "text": "Unter dem Identitätsband steht ein Hinweisband (Rolle note) mit dem Wortlaut „Forschungsdemonstrator · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.“: Kennung fett, Mittelpunkt mit gleichem Abstand davor und danach, natürlicher Umbruch im Satz, aber nie direkt vor oder nach dem Mittelpunkt. Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe (LD-F04). Ab 96 px Scrollhöhe, mindestens aber eine volle Bandhöhe über 8 px, wird es schmaler (weniger Innenabstand, kleinere Schrift), unter 8 px wieder wie zuvor; der ganze Wortlaut bleibt immer sichtbar und bricht bei Bedarf um, nichts wird abgeschnitten. Es lässt sich nicht ausblenden. Hinweise, die nur eine App betreffen, stehen nicht im Band, sondern in Fußzeile (LD-R05), Startseite oder „Über“.", "referenz": ["src/App.tsx", "src/ui/hinweisband.ts", "src/ui/kopfKompakt.ts", "src/styles/basis.css"] },
     { "id": "LD-R05", "stufe": "MUSS", "thema": "Rahmen", "text": "Die Fußzeile nennt Produktname mit Fassung, wohin Daten gehen, und verweist extern auf Lizenzen, Impressum und Datenschutz.", "referenz": ["src/App.tsx"] },
     { "id": "LD-R06", "stufe": "MUSS", "thema": "Rahmen", "text": "Der Inhalt ist höchstens 1180 px breit und mittig. Abstände am Rand berücksichtigen die sicheren Bereiche des Geräts (env(safe-area-inset-*)).", "referenz": ["src/styles/basis.css"] },
     { "id": "LD-N01", "stufe": "MUSS", "thema": "Navigation", "text": "Die Hauptnavigation nennt die Arbeitsschritte der App in fachlicher Reihenfolge, danach „Profile“ und „Einstellungen“, soweit die App Profile und Einstellungen hat; diese stehen dann immer am Ende. Besteht eine App aus mehreren Seiten (etwa Start, Formular, Beschreibung einer Schnittstelle), nennt die Hauptnavigation diese Seiten, und die Arbeitsschritte stehen in der Schrittleiste. KI-LEAD: Erfassung, KI-Erfassung, Auswertung, Profile, Einstellungen.", "referenz": ["src/App.tsx", "docs/SPEZIFIKATION.md"] },

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t d" font-family="Atkinson Hyperlegible, system-ui, sans-serif">
   <title id="t">Wireframe: Bereich mit Schrittfolge, breite Ansicht (1280 px)</title>
-  <desc id="d">Grunddesign der App-Familie (design/README.md). Kopfleiste mit Produktname, Hauptnavigation und Statusanzeige; Identitätsband; Hinweisband; Seitenkopf mit Überschrift, Kennsatz, Aktionen und Profilzeile; Arbeitsbereich mit nummerierter Schrittleiste links und Arbeitsfläche als Karte; Fußzeile. Graustufen, keine Farbwerte: Farben kommen aus den Farbrollen. © 2026 Heiko Pereira Wolf, CC BY 4.0.</desc>
+  <desc id="d">Grunddesign der App-Familie (design/README.md). Kopfleiste mit Produktname, Hauptnavigation und Statusanzeige; Identitätsband; Hinweisband in der tiefen Aktionsfarbe, mit der Kopfleiste mitlaufend; Seitenkopf mit Überschrift, Kennsatz, Aktionen und Profilzeile; Arbeitsbereich mit nummerierter Schrittleiste links und Arbeitsfläche als Karte; Fußzeile. Graustufen, keine Farbwerte: Farben kommen aus den Farbrollen. © 2026 Heiko Pereira Wolf, CC BY 4.0.</desc>
   <style>
     .papier { fill: #F5F6F7 } .flaeche { fill: #FFFFFF; stroke: #CFD5DB } .linie { stroke: #CFD5DB; fill: none }
     .tinte { fill: #20252B } .leise { fill: #4F5965 } .amt { fill: #3D4A59 } .amt-zart { fill: #E3E7EC } .auf-amt { fill: #FFFFFF }
@@ -22,10 +22,10 @@
   <text class="regel" x="716" y="34">LD-R02, LD-N01, LD-M03</text>
   <!-- Identitätsband (LD-R03) -->
   <rect x="0" y="56" width="427" height="8" fill="#6B7785"/><rect x="427" y="56" width="426" height="8" fill="#A3ADB8"/><rect x="853" y="56" width="427" height="8" fill="#6B7785"/>
-  <!-- Hinweisband (LD-R04) -->
-  <rect x="0" y="64" width="1280" height="28" fill="#EDEFF2"/>
-  <text class="leise k" x="16" y="83">Hinweisband: Einsatzgrenzen in einem Satz</text>
-  <text class="regel" x="300" y="83">LD-R04</text>
+  <!-- Hinweisband (LD-R04), Fläche amt-tief, Text auf-amt-hover; mit Kopfleiste und Identitätsband mitlaufend (LD-R01) -->
+  <rect x="0" y="64" width="1280" height="28" fill="#30363D"/>
+  <text class="k" x="16" y="83" fill="#FFFFFF"><tspan font-weight="700">Forschungsdemonstrator</tspan> · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.</text>
+  <text class="k" x="1264" y="83" fill="#FFFFFF" text-anchor="end">LD-R01, LD-R04</text>
   <!-- Inhalt, höchstens 1180 px (LD-R06) -->
   <line class="linie" x1="50" y1="100" x2="50" y2="760" stroke-dasharray="4 4"/><line class="linie" x1="1230" y1="100" x2="1230" y2="760" stroke-dasharray="4 4"/>
   <text class="regel" x="1100" y="114">Inhalt ≤ 1180 px (LD-R06)</text>

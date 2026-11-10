@@ -5,6 +5,7 @@
 // setzt den Fokus auf dessen Überschrift, wenn der auslösende Knopf verschwindet oder an anderer Stelle steht.
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { KOPFBEREICH } from "./kopfHoehe";
 
 export interface SprungOptionen {
   /**
@@ -21,9 +22,9 @@ const ABSTAND = 12;
 /** Mit `nurWennNoetig` bleibt die Ansicht stehen, wenn der Anfang des Ziels im oberen Anteil des Fensters steht */
 const OBERER_ANTEIL = 0.4;
 
-/** Höhe des mitlaufenden Kopfs der App (ein- oder zweizeilig je nach Breite) */
+/** Höhe des mitlaufenden Kopfbereichs der App (ein- oder zweizeilig je nach Breite; seit 0.7.15 mit Hinweisband) */
 export function kopfHoehe(): number {
-  const kopf = document.querySelector<HTMLElement>(".kopf");
+  const kopf = document.querySelector<HTMLElement>(KOPFBEREICH);
   return kopf ? kopf.getBoundingClientRect().height : 0;
 }
 
