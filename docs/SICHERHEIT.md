@@ -1,6 +1,6 @@
 # KI-LEAD – Bedrohungsmodell
 
-Fassung 1.8 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.9 vom 10.11.2026, gilt für App-Version 0.7.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein schlankes Bedrohungsmodell für den Forschungsdemonstrator. Es ist **kein Sicherheitskonzept nach IT-Grundschutz** und ersetzt keines. Eine Stelle, die KI-LEAD dienstlich erprobt, bewertet es in ihrem eigenen Rahmen. Schwachstellen melden: [SECURITY.md](../SECURITY.md).
 
@@ -88,7 +88,7 @@ Ein Profil enthält Arbeitsanweisungen, also die Prompts der KI-Läufe. Ein mani
 |---|---|
 | `npm ci` installiert genau nach `package-lock.json` | übrige Abhängigkeiten in `package.json` mit Bereichsangabe (`^`); fest ist nur der Lockfile |
 | Capacitor und das Plugin für den Schlüsselbund exakt gepinnt; GitHub Actions per Commit-SHA mit Versionskommentar, fortgeschrieben durch Dependabot (seit TP-2026-W44-36, geprüft in `tests/ci/actions.test.ts`) | |
-| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob; `npm audit --omit=dev --audit-level=high` nach `npm ci` bricht bei hohen und kritischen Meldungen zu ausgelieferten Paketen ab (seit TP-2026-W44-37) | Entwicklungsabhängigkeiten nicht im Audit (Stand 30.10.2026: drei mittlere Meldungen über `@capacitor/cli` → `xcode` → `uuid`); mittlere Meldungen ausgelieferter Pakete brechen nicht ab |
+| CI mit Grundrecht `contents: read`; Schreibrechte für Pages nur im Veröffentlichungsjob; `npm audit --omit=dev --audit-level=high` nach `npm ci` bricht bei hohen und kritischen Meldungen zu ausgelieferten Paketen ab (seit TP-2026-W44-37) | Entwicklungsabhängigkeiten nicht im Audit (Stand 10.11.2026: keine Meldung; minimatch per `overrides` auf 11.x, bis ESLint und typescript-eslint es selbst verlangen, Dependabot-Warnung #10); mittlere Meldungen ausgelieferter Pakete brechen nicht ab |
 | Dependabot schlägt wöchentlich Aktualisierungen für npm-Pakete und GitHub Actions vor (`.github/dependabot.yml`, seit 0.6.2); Node-Version festgelegt (`engines`, `.nvmrc`) | |
 | Veröffentlichung nur von `main` nach Tests, Build und Browsertests | Version von KeychainSwift nicht festgelegt, bis `Package.resolved` eingecheckt ist |
 | Wenige Abhängigkeiten, nur permissive Lizenzen; `tests/lizenzen/` scheitert bei unzulässiger Lizenz oder fehlendem Eintrag in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md) | SBOM erfasst nur npm-Pakete, nicht die nativen Bibliotheken |
@@ -157,3 +157,4 @@ Eine Stelle kann KI-LEAD mit einer Betreiberkonfiguration bauen und selbst ausli
 | 1.6 | 30.10.2026 | Abschnitt 3.7 Lieferkette: GitHub Actions per Commit-SHA (TP-2026-W44-36) und `npm audit` für ausgelieferte Pakete in der CI (TP-2026-W44-37) von „offen“ nach „vorhanden“; Grenze des Audits bei Entwicklungsabhängigkeiten als offen ergänzt (App 0.6.12, ohne Änderung der App) |
 | 1.7 | 31.10.2026 | Abschnitte 3.3, 3.4 und 3.10: Betreiberbuild mit Betreiberkonfiguration, Policy und Zulassung der Anbieter aus einer Quelle, Endpunkt der Stelle (App 0.6.17, TP-2026-W44-48 bis -51) |
 | 1.8 | 03.11.2026 | Abschnitt 3.1 unverändert: Datenhülle `<stichworte>` und Datenregel gelten seit App 0.7.1 auch für die Orientierungssuche (bis 0.7.0 ohne Hülle und ohne Datenregel, DK-2026-W45-04) |
+| 1.9 | 10.11.2026 | Abschnitt 3.7 Lieferkette: Stand der Entwicklungsabhängigkeiten nach der Dependabot-Warnung #10 (minimatch 11 per `overrides`, glob 14 über rimraf 6.1.4; App 0.7.15, ohne Änderung der App) |

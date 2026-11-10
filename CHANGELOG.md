@@ -110,9 +110,18 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
 | 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 05.11.2026: Grunddesign 1.5 mit Füllfarben für Diagramme, Pull Request „Grunddesign 1.5: Füllfarben für Diagramme (LD-F04)“; Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“; jeweils ohne Änderung der App) |
-| 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ |
+| 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ (Nachtrag vom 10.11.2026: Pull Request „CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10)“, ohne Änderung der App) |
 
 ## [0.7.15] – 06.11.2026
+
+### Nachtrag vom 10.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auswertung der CI-Laufzeiten vom 10.11.2026 (üblich 6–8 Minuten, Ausreißer bis 29 Minuten durch die Installation der Systembibliotheken für die Browser über apt) und Dependabot-Warnung #10 (mittlere Stufe, nur Entwicklungsabhängigkeiten). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Browsertests im Containerbild von Playwright:** `pages.yml` teilt die Prüfung in die Jobs „pruefen“ (Audit, REUSE, Linting, Vitest, Build) und „browser“. „browser“ läuft im offiziellen Bild `mcr.microsoft.com/playwright:v<Version>-noble` mit Chromium, WebKit und ihren Systembibliotheken; die Version kommt aus dem installierten `@playwright/test`. Entfallen: Browser-Cache, `playwright install-deps chromium` und die zeitbegrenzte, nicht blockierende Installation von WebKit; die WebKit-Tests laufen damit, wann immer die Kerntests anstehen. `dist/` geht als Artefakt von „pruefen“ an „browser“; veröffentlicht wird erst nach beiden Jobs.
+- **minimatch 11.0.6, glob 14.0.4** (Dependabot-Warnung #10; GHSA-g3hv-75wg-m249, GHSA-3g3m-2fjr-6pw4): `overrides` in `package.json` hebt minimatch über ESLint und typescript-eslint auf 11.x, bis beide es selbst verlangen; glob 14 kommt mit rimraf 6.1.4 (über `@capacitor/cli`). `npm audit` meldet danach nichts mehr.
+- [docs/TESTS.md](docs/TESTS.md) (Abschnitt „Gestaffelte Prüfung in GitHub Actions“), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.9 (Abschnitt 3.7), Kommentar in `playwright.config.ts`, [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- `tests/ci/actions.test.ts`: Wächter auf 18 Einbindungen; Containerbild in der installierten Version, keine Installation über apt, Veröffentlichung nach „browser“; Mindestversionen von minimatch und glob.
 
 Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json` (Sammellauf offener Befunde KW 45, Commit `fd452dc`), Entscheidungen des Herausgebers vom 06.11.2026: OB-2026-W45-01 bis -07 angenommen bzw. angepasst; UP-2026-W45-04 freigegeben (eigener Pull Request), UP-2026-W45-05 und -06 bis 20.11.2026 zurückgestellt.
 

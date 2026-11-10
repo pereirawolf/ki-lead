@@ -1146,3 +1146,12 @@ Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstell
 | Knöpfe „Übernehmen“, „Protokoll“ und „Löschen“ der früheren Läufe beginnen ihren zugänglichen Namen mit der Beschriftung, gefolgt von „: Lauf n vom …“ | OB-2026-W45-05: Knöpfe je früherem Lauf nennen den sichtbaren Text zuerst › … | `tests/ui/ki-erfassung-laeufe.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.12.1). OB-2026-W45-01 bis -04, -06 und -07 ändern nur Dokumentation bzw. Kodierleitfaden ohne eigenen Test.
+
+## CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10) (Nachtrag vom 10.11.2026 zu 0.7.15)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Browsertests im Job „browser“ im Containerbild `mcr.microsoft.com/playwright:v<Version>-noble` mit der Version aus „pruefen“; keine Installation von Browsern oder Systempaketen; Veröffentlichung erst nach „pruefen“ und „browser“ | GitHub Actions › Containerbild: pages.yml führt die Browsertests im Bild von Playwright in der installierten Version aus … | `tests/ci/actions.test.ts` |
+| minimatch ab 11.0.1 und glob ab 14.0.2 (Dependabot-Warnung #10) | Lieferkette der Entwicklungsabhängigkeiten › Dependabot-Warnung #10 … | `tests/ci/actions.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/ci/actions.test.ts` (18 statt 15 Einbindungen von Actions).

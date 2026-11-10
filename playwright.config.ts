@@ -7,7 +7,7 @@
 // - pwa:    Chromium; Service Worker, Offline-Start und Versionswechsel (pwa.spec.ts, pwa-update.spec.ts)
 // - webkit: WebKit (Safari, auch iOS); dieselben Dateien wie kern (seit 0.6.5, TP-2026-W44-22)
 // `npm run test:browser` führt kern und pwa aus und braucht damit nur Chromium; WebKit läuft eigens mit
-// `npm run test:browser:webkit` (in der CI nach `npx playwright install --with-deps webkit`).
+// `npm run test:browser:webkit` (in der CI im Containerbild von Playwright, das WebKit enthält; seit 10.11.2026).
 //
 // KI_LEAD_BUILD_VORHANDEN=1 verwendet einen bereits erzeugten Ordner dist/ (in der CI direkt nach `npm run build`),
 // statt vor den Tests erneut zu bauen. Getestet wird damit genau der Build, der auch veröffentlicht wird.
