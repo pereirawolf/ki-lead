@@ -29,7 +29,8 @@ test("UX-2026-W45-03: die Reiter bleiben beim Scrollen unter dem Kopf stehen", a
   await ilka(page);
   await page.locator(".lb-reiter").getByRole("button", { name: "Meldungen", exact: true }).click();
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  const kopf = (await page.locator(".kopf").boundingBox())!;
+  // seit 0.7.15 (Grunddesign 1.6): unter dem Kopfbereich aus Kopfleiste, Identitätsband und Hinweisband
+  const kopf = (await page.locator(".kopfbereich").boundingBox())!;
   const leiste = (await page.locator("nav.lb-reiter").boundingBox())!;
   expect(Math.abs(leiste.y - (kopf.y + kopf.height))).toBeLessThan(3);
 });

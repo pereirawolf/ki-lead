@@ -68,7 +68,12 @@ test("Hauptnavigation: neue Ansicht beginnt oben; die KI-Erfassung kehrt an die 
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
   await bereich(page, "KI-Erfassung");
-  const kiStelle = await ansEnde(page);
+  await ansEnde(page);
+  // Seit 0.7.15 wird das Hinweisband nach dem Scrollen einzeilig (Grunddesign 1.6, LD-R04); das Seitenende rückt dadurch
+  // nach oben. Maßgeblich ist die Stelle, an der die Ansicht danach steht.
+  await expect.poll(() => page.locator(".kopfbereich").evaluate((b) => b.classList.contains("kompakt"))).toBe(true);
+  await page.waitForTimeout(300);
+  const kiStelle = await page.evaluate(() => window.scrollY);
   expect(kiStelle).toBeGreaterThan(200);
   await bereich(page, "Einstellungen");
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);

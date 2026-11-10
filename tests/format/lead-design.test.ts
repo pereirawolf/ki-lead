@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.5 vom 05.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.6 vom 10.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -9,6 +9,7 @@ import { FARBSCHEMAS } from "../../src/darstellung/katalog";
 import { SEMANTIK } from "../../src/darstellung/thema";
 import { UI_TOKENS } from "../../src/darstellung/typen";
 import { BEREICHE } from "../../src/ui/Einstellungen";
+import { HINWEIS_KENNUNG, HINWEIS_TEXT, HINWEIS_TRENNER } from "../../src/ui/hinweisband";
 import { ajvGueltig, referenzAjv } from "../support/ajv";
 import { repoPfad } from "../support/dateien";
 
@@ -165,6 +166,29 @@ describe("Grunddesign: rahmen.json", () => {
     expect(titel.filter((t) => t.includes("&"))).toEqual([]);
     expect(titel).toEqual(expect.arrayContaining(["KI-Anbieter und API", "Modelle und Aufwand", "Recherche und Grenzen"]));
     expect(rahmen.regeln.find((r: any) => r.id === "LD-T05")?.stufe).toBe("SOLL");
+  });
+
+  it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.15)", () => {
+    // Soll unabhängig von rahmen.json und Quelltext: Entscheidung des Herausgebers vom 10.11.2026
+    const WORTLAUT = "Forschungsdemonstrator · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.";
+    expect(`${HINWEIS_KENNUNG}${HINWEIS_TRENNER}${HINWEIS_TEXT}`.replace(/\u00a0/g, " ")).toBe(WORTLAUT);
+    // gleicher, geschützter Abstand vor und nach dem Mittelpunkt: kein Umbruch nach der Kennung
+    expect(HINWEIS_TRENNER).toBe("\u00a0·\u00a0");
+    const band = rahmen.rahmen.find((r: any) => r.id === "hinweisband");
+    expect(band.wortlaut).toBe(WORTLAUT);
+    expect(band.trenner).toBe(HINWEIS_TRENNER);
+    expect(band.ausblendbar).toBe(false);
+    const r04 = rahmen.regeln.find((r: any) => r.id === "LD-R04");
+    expect(r04.stufe).toBe("MUSS");
+    expect(r04.text).toContain(`„${WORTLAUT}“`);
+    // Fläche in der tiefen Aktionsfarbe, keine Signalfarbe (LD-F04)
+    const css = text("src/styles/basis.css");
+    const regel = css.match(/\n\.kopfbereich > \.hinweisband \{([^}]*)\}/)?.[1] ?? "";
+    expect(regel).toMatch(/background: var\(--amt-tief\);/);
+    expect(regel).toMatch(/color: var\(--auf-amt-hover\);/);
+    for (const s of Object.keys(SEMANTIK.hell)) expect(regel, s).not.toContain(`--${s})`);
+    expect(css).toMatch(/\n\.kopfbereich \{\s*position: sticky;\s*top: 0;/);
+    expect(css).toMatch(/\n\.kopfbereich\.kompakt > \.hinweisband \{[^}]*white-space: nowrap;[^}]*text-overflow: ellipsis;/);
   });
 
   it("Reiter der Auswertung und Phasen der KI-Erfassung wie im Quelltext", () => {

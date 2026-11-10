@@ -1138,3 +1138,13 @@ Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstell
 | Soll | Test | Datei |
 |---|---|---|
 | Token-Gruppe `fuell` mit vier Füllfarben in den Werten von Thessa, Kontrastschemata wie hell bzw. dunkel, CSS-Name, nie aus einem Profil; LD-F04 nennt sie | Grunddesign: Design Tokens im Format der DTCG › Füllfarben für Diagramme wie in Thessa übernommen … | `tests/format/lead-design.test.ts` |
+
+## Grunddesign 1.6: Hinweisband der App-Familie (0.7.15, Entscheidung des Herausgebers vom 10.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| LD-R04 als MUSS mit einheitlichem Wortlaut, Mittelpunkt mit geschützten Leerzeichen (kein Umbruch nach der Kennung), nicht ausblendbar; Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe; Kopfbereich mitlaufend, kompakt einzeilig | Grunddesign: rahmen.json › LD-R04: einheitliches Hinweisband … | `tests/format/lead-design.test.ts` |
+| Hysterese 96 px (mindestens volle Bandhöhe über 8 px) und 8 px, Klasse „kompakt“ am Kopfbereich, Wortlaut bleibt | kompaktNach …, useKopfKompakt … | `tests/ui/kopfkompakt.test.ts` |
+| Im Browser (390 und 1280 px): Hinweis mit Wortlaut, Kennung und Text in einer Zeile, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen einzeilig, Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
+
+Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` liest die Stelle der KI-Erfassung, nachdem das Band einzeilig geworden ist.

@@ -65,6 +65,11 @@ a {
   background: var(--header-hintergrund);
   color: var(--header-text);
   /* Identitätsband des Farbschemas (dekorativ): in src/styles.css */
+}
+
+/* Kopfbereich (seit 0.7.15, Grunddesign 1.6, LD-R01): Kopfleiste, Identitätsband und Hinweisband bleiben gemeinsam
+   oben stehen; seine Höhe steht in --kopf-hoehe (src/ui/kopfHoehe.ts) */
+.kopfbereich {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -164,6 +169,32 @@ a {
   padding: 0.45rem 1rem;
   color: var(--tinte-leise);
   border-bottom: 1px solid var(--linie-zart);
+}
+
+/* Hinweisband der App-Familie (seit 0.7.15, Grunddesign 1.6, LD-R04): Fläche in der tiefen Aktionsfarbe – keine
+   Signalfarbe (LD-F04); das Paar auf-amt-hover/amt-tief ist für jedes Schema und Profil geprüft (LD-F03). Kennung und
+   Text fließen in einer Zeile weiter, ohne Umbruch nach der Kennung. Beim Scrollen einzeilig mit Auslassungspunkten
+   (src/ui/kopfKompakt.ts); der Übergang entfällt bei reduzierter Bewegung (a11y.css). */
+.kopfbereich > .hinweisband {
+  margin: 0;
+  padding: 0.55rem max(1rem, env(safe-area-inset-right)) 0.55rem max(1rem, env(safe-area-inset-left));
+  background: var(--amt-tief);
+  color: var(--auf-amt-hover);
+  border-bottom: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  transition:
+    padding 0.18s ease,
+    font-size 0.18s ease;
+}
+
+.kopfbereich.kompakt > .hinweisband {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .standard-profil {
@@ -369,7 +400,8 @@ a {
   margin: 0;
   padding: 0;
   position: sticky;
-  top: 5rem;
+  /* unter dem Kopfbereich (seit 0.7.15 gemessen, vorher fest 5rem) */
+  top: calc(var(--kopf-hoehe, 4.5rem) + 0.75rem);
   border-left: 2px solid var(--linie);
 }
 

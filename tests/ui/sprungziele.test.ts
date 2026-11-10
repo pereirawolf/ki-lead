@@ -50,8 +50,8 @@ function lage(el: Element, top: number, hoehe = 40) {
 
 describe("springeZu", () => {
   function aufbau() {
-    document.body.innerHTML = `<header class="kopf"></header><main><button id="knopf">Knopf</button><section id="ziel"><h2 id="titel">Titel</h2></section></main>`;
-    lage(document.querySelector(".kopf")!, 0, 60);
+    document.body.innerHTML = `<div class="kopfbereich"><header class="kopf"></header><p class="hinweisband"></p></div><main><button id="knopf">Knopf</button><section id="ziel"><h2 id="titel">Titel</h2></section></main>`;
+    lage(document.querySelector(".kopfbereich")!, 0, 60);
     return { ziel: document.getElementById("ziel")!, titel: document.getElementById("titel")!, knopf: document.getElementById("knopf")! };
   }
 

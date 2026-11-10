@@ -19,8 +19,8 @@
   <text class="regel" x="130" y="95">umbrechend, vollständig (LD-N05)</text>
   <!-- Identitätsband, Hinweisband -->
   <rect x="0" y="106" width="130" height="8" fill="#6B7785"/><rect x="130" y="106" width="130" height="8" fill="#A3ADB8"/><rect x="260" y="106" width="130" height="8" fill="#6B7785"/>
-  <rect x="0" y="114" width="390" height="40" fill="#EDEFF2"/>
-  <text class="leise k" x="16" y="131">Hinweisband: Einsatzgrenzen</text><text class="leise k" x="16" y="146">in einem Satz</text>
+  <rect x="0" y="114" width="390" height="40" fill="#30363D"/>
+  <text class="k" x="16" y="131" fill="#FFFFFF"><tspan font-weight="700">Forschungsdemonstrator</tspan> · Nur fiktive oder</text><text class="k" x="16" y="146" fill="#FFFFFF">offen zugängliche Inhalte verwenden – …</text>
   <!-- Seitenkopf -->
   <text class="tinte h1" x="16" y="186">Bereichsname</text>
   <text class="leise t" x="16" y="208">Kennsatz: Tätigkeit nach Methode</text>
