@@ -67,7 +67,7 @@ a {
   /* Identitätsband des Farbschemas (dekorativ): in src/styles.css */
 }
 
-/* Kopfbereich (seit 0.7.15, Grunddesign 1.6, LD-R01): Kopfleiste, Identitätsband und Hinweisband bleiben gemeinsam
+/* Kopfbereich (seit 0.7.16, Grunddesign 1.6, LD-R01): Kopfleiste, Identitätsband und Hinweisband bleiben gemeinsam
    oben stehen; seine Höhe steht in --kopf-hoehe (src/ui/kopfHoehe.ts) */
 .kopfbereich {
   position: sticky;
@@ -171,7 +171,7 @@ a {
   border-bottom: 1px solid var(--linie-zart);
 }
 
-/* Hinweisband der App-Familie (seit 0.7.15, Grunddesign 1.6, LD-R04): Fläche in der tiefen Aktionsfarbe – keine
+/* Hinweisband der App-Familie (seit 0.7.16, Grunddesign 1.6, LD-R04): Fläche in der tiefen Aktionsfarbe – keine
    Signalfarbe (LD-F04); das Paar auf-amt-hover/amt-tief ist für jedes Schema und Profil geprüft (LD-F03). Kennung und
    Text fließen zusammen und brechen nach Bedarf natürlich um, nie direkt am Mittelpunkt. Beim Scrollen schmaler (weniger
    Innenabstand, kleinere Schrift, src/ui/kopfKompakt.ts); der ganze Wortlaut bleibt immer sichtbar, nichts wird
@@ -398,7 +398,7 @@ a {
   margin: 0;
   padding: 0;
   position: sticky;
-  /* unter dem Kopfbereich (seit 0.7.15 gemessen, vorher fest 5rem) */
+  /* unter dem Kopfbereich (seit 0.7.16 gemessen, vorher fest 5rem) */
   top: calc(var(--kopf-hoehe, 4.5rem) + 0.75rem);
   border-left: 2px solid var(--linie);
 }

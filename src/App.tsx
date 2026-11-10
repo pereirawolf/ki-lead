@@ -188,7 +188,7 @@ export default function App() {
 
   // Farbschema, Zwischenstand und Übergabe an die KI (seit 0.6.5, TP-2026-W44-17 als eigene Hooks)
   const farben = useFarbschema(aktiv, profil, speicherProblem);
-  // Kopfbereich: Höhe als --kopf-hoehe für stehende Leisten, kompakt beim Scrollen (seit 0.7.15, Grunddesign 1.6)
+  // Kopfbereich: Höhe als --kopf-hoehe für stehende Leisten, kompakt beim Scrollen (seit 0.7.16, Grunddesign 1.6)
   useKopfHoehe();
   useKopfKompakt();
   const { meldung, setMeldung, dokumentNr, neuesDokument, gesichert } = useZwischenstand(profil, profile, neueMeldung, setSpeicherFehler, speicherProblem);
@@ -384,7 +384,7 @@ export default function App() {
   return (
     <KiZugangContext.Provider value={kiZugang}>
       <div className="app">
-        {/* Kopfbereich (seit 0.7.15, Grunddesign 1.6, LD-R01): Kopfleiste mit Identitätsband und Hinweisband laufen gemeinsam mit */}
+        {/* Kopfbereich (seit 0.7.16, Grunddesign 1.6, LD-R01): Kopfleiste mit Identitätsband und Hinweisband laufen gemeinsam mit */}
         <div className="kopfbereich">
           <header className="kopf">
             <div className="marke">

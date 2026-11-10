@@ -1,6 +1,6 @@
 # KI-LEAD – Barrierefreiheit
 
-Fassung 1.4 vom 03.11.2026, gilt für App-Version 0.7.1 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.5 vom 06.11.2026, gilt für App-Version 0.7.15 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsdemonstrator; eine gesetzliche Pflicht zu dieser Erklärung besteht nicht (Abschnitt 6). Keine Rechtsberatung.
 
@@ -8,7 +8,7 @@ Aufgebaut wie eine Erklärung zur Barrierefreiheit. KI-LEAD ist ein Forschungsde
 
 ## 1. Geltungsbereich
 
-Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in Version 0.6.5. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
+Diese Erklärung gilt für die Web-App KI-LEAD (auch als installierte PWA, `https://pereirawolf.github.io/ki-lead/`) in der im Kopf genannten Version. Die Apps für iOS und Android verwenden dieselbe Oberfläche; sie sind noch nicht auf Geräten geprüft.
 
 ## 2. Stand der Vereinbarkeit
 
@@ -22,10 +22,10 @@ Die Bewertung ist eine Selbstbewertung des Herausgebers. Eine Prüfung durch Dri
 |---|---|---|
 | Kontraste | Text mindestens 4,5:1, Bedienelemente und Konturen mindestens 3:1 in allen Farbschemata, auch für Profilfarben | [farbschemas.md](farbschemas.md); `tests/darstellung/farbschemas.test.ts` |
 | Kontrastschemata | „Kontrast · Hell“ und „Kontrast · Dunkel“ mit mindestens 7:1 für Text | [farbschemas.md](farbschemas.md) |
-| Systemeinstellungen | erzwungene Systemfarben gehen vor; „mehr Kontrast“ wählt bei „Automatisch“ das Kontrastschema | [farbschemas.md](farbschemas.md); Browsertest `barrierefreiheit.spec.ts` |
+| Systemeinstellungen | erzwungene Systemfarben gehen vor; „mehr Kontrast“ wählt bei „Automatisch“ das Kontrastschema | [farbschemas.md](farbschemas.md); erzwungene Farben im Browsertest `barrierefreiheit.spec.ts`, „mehr Kontrast“ im Test `tests/ui/farbschemas.test.ts` |
 | Nicht nur Farbe | Auswahl, Reiter und Radarstufen zusätzlich unterstrichen; Bewertungen immer als Wort | [farbschemas.md](farbschemas.md) |
 | Automatische Prüfung | axe-core prüft je Bereich alle Schritte der Erfassung, Auftrag und Bestätigung der KI-Erfassung, alle Reiter der Auswertung mit Beispiel samt Übergabedialog, Profile und alle Bereiche der Einstellungen (mit eingeschalteten Forschungsfunktionen, damit auch „Testläufe“ geprüft wird; seit 0.7.1, DK-2026-W45-07) gegen die Regeln zu WCAG 2.0, 2.1 und 2.2, Stufen A und AA; breit und hell sowie 390 px breit und dunkel; keine Ausnahmen (seit 0.6.5, TP-2026-W44-22) | Browsertest `barrierefreiheit.spec.ts` |
-| Zugängliche Namen | alle Bedienelemente je Bereich mit zugänglichem Namen, vom Browser berechnet; seit 0.6.5 je Liste eindeutig (etwa „Lauf 2 vom … löschen“, „Kopieren: “ mit der Kennung des Sachverhalts) und mit dem sichtbaren Text am Anfang (TP-2026-W44-14, -22) | Browsertest `barrierefreiheit.spec.ts` |
+| Zugängliche Namen | alle Bedienelemente je Bereich mit zugänglichem Namen, vom Browser berechnet; seit 0.6.5 je Liste eindeutig (etwa „Löschen: Lauf 2 vom …“, „Kopieren: “ mit der Kennung des Sachverhalts) und mit dem sichtbaren Text am Anfang (TP-2026-W44-14, -22; Knöpfe der früheren Läufe seit 0.7.15, OB-2026-W45-05) | Browsertest `barrierefreiheit.spec.ts`; Test `tests/ui/ki-erfassung-laeufe.test.ts` |
 | Statusmeldungen | Die Laufanzeige sagt Stufe, Protokollschritte und Ende über eine eigene Statusregion an, höchstens alle 5 s; der Sekundenzähler steht außerhalb jeder Live-Region (seit 0.6.5, TP-2026-W44-12) | Browsertest `barrierefreiheit.spec.ts` |
 | Fokusführung | nach einem Phasenwechsel der KI-Erfassung und beim Schrittwechsel der Erfassung liegt der Fokus auf der neuen Überschrift; der Übergabedialog in der Auswertung übernimmt den Fokus, schließt mit Escape und gibt ihn an den Auslöser zurück; Rückfragen in einem modalen Dialog mit Fokus zuerst auf „Abbrechen“ statt `window.confirm` (seit 0.6.5, TP-2026-W44-13, -20). Seit 0.6.7 gilt das für „Weiter: …“ und „Zurück: …“ der Erfassung tatsächlich (bis 0.6.6 blieb der Fokus dort am Knopf), außerdem für Bereichswechsel aus einem Bereich der Einstellungen heraus, Übernahmen in die Erfassung und Einträge, die hinzukommen oder entfallen; Knöpfe, die stehen bleiben (Schritt-, Bereichs- und Reiterleiste, Hauptnavigation), behalten den Fokus | Browsertests `hauptablauf.spec.ts`, `sprungziele.spec.ts`; `tests/ui/sprungziele.test.ts` |
 | Sprungziele | nach einem Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht steht der Anfang des neuen Inhalts unter dem mitlaufenden Kopf, nicht verdeckt und ohne Animation; die KI-Erfassung kehrt an die zuletzt gesehene Stelle zurück (seit 0.6.7; WCAG 2.4.3 Fokus-Reihenfolge, 2.4.11 Fokus nicht verdeckt) | Browsertest `sprungziele.spec.ts` (breit und 390 px) |
@@ -75,6 +75,7 @@ Eine Schlichtungsstelle gibt es für dieses private Vorhaben nicht.
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.5 | 06.11.2026 | Zugängliche Namen: Knöpfe der früheren Läufe „Übernehmen: …“ und „Löschen: …“ mit dem sichtbaren Text am Anfang (App 0.7.15, OB-2026-W45-05); Geltungsbereich ohne zweite Versionsangabe, Nachweis für „mehr Kontrast“ (OB-2026-W45-06) |
 | 1.4 | 03.11.2026 | Automatische Prüfung mit dem Bereich „Testläufe“ (Forschungsfunktionen eingeschaltet, DK-2026-W45-07); Bereichsnamen „Erfassung“ und „Auswertung“ (seit App 0.6.10) |
 | 1.3 | 29.10.2026 | Sprungziele und Fokusführung nach Schritt-, Bereichs-, Reiter- und Ansichtswechsel (App 0.6.7) |
 | 1.2 | 27.10.2026 | Statusregion der Laufanzeige, Fokusführung, eindeutige Namen, `aria-current`, Schrift in rem, Zielgrößen, Fehler am Feld, Rückfragedialog, fokussierbare Scrollbereiche, axe-core je Bereich (App 0.6.5; TP-2026-W44-12 bis -15, -20, -22) |

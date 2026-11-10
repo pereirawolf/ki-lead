@@ -110,9 +110,9 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.12 | letzter Commit des Pull Requests „KRITIS-LEAD KW 45: Module eingebettet, Kennungen der Betreiber, Zugang „betriebsintern“; 0.7.12“ |
 | 0.7.13 | letzter Commit des Pull Requests „Standard-Profil Anthropic: S1 mit Sonnet „mittel“, Schätzung nach der Folgereihe; 0.7.13“ (Nachtrag vom 05.11.2026: Beispielprofil 1.42.0 und Landesprofil Thüringen 1.8.0 mit dem Pull Request „Lernschleife KW 45, Nachtrag: Grundlage der Tendenz, Kodierleitfaden 1.12.0, Sammelmappe 3.23.3“, ohne Änderung der App) |
 | 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 05.11.2026: Grunddesign 1.5 mit Füllfarben für Diagramme, Pull Request „Grunddesign 1.5: Füllfarben für Diagramme (LD-F04)“; Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“; jeweils ohne Änderung der App) |
-| 0.7.15 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.15“ |
-
-## [0.7.15] – 10.11.2026
+| 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ (Nachtrag vom 10.11.2026: Pull Request „CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10)“, ohne Änderung der App) |
+| 0.7.16 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.16“ |
+## [0.7.16] – 10.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 10.11.2026 nach dem Vorschlag zum Hinweisband der App-Familie: einheitlicher, prägnanter Hinweis in KI-LEAD, KRITIS-LEAD und Thessa, am Kopf der Seite stehend und beim Scrollen schmaler, in einer Akzentfarbe des Farbschemas; vor und nach dem Mittelpunkt gleicher Abstand; der Satz darf nach Bedarf natürlich umbrechen, aber nicht an einer festen Stelle wie direkt hinter dem Mittelpunkt (Klarstellung vom selben Tag).
 
@@ -122,13 +122,39 @@ Grundlage: Entscheidung des Herausgebers vom 10.11.2026 nach dem Vorschlag zum H
 - **Kopfbereich** (`.kopfbereich`): Kopfleiste, Identitätsband und Hinweisband bleiben gemeinsam oben stehen (bisher nur die Kopfleiste). Ab 96 px Scrollhöhe, mindestens aber eine volle Bandhöhe über 8 px, wird das Band schmaler (weniger Innenabstand, kleinere Schrift), unter 8 px wieder wie zuvor; der ganze Wortlaut bleibt immer sichtbar und bricht bei Bedarf um (`src/ui/kopfKompakt.ts`); während des Wechsels ist Scroll-Anchoring aus, damit die Position nicht springt. Übergang 0,18 s, bei reduzierter Bewegung ohne; erzwungene Farben mit Trennlinie; beim Drucken ausgeblendet.
 - **Stehende Leisten nach der gemessenen Höhe** (`--kopf-hoehe`, jetzt für die ganze App aus `src/ui/kopfHoehe.ts`): Schrittleiste (bisher fest 5 rem) und Lagenradar (bisher fest 6 rem) stehen unter dem Kopfbereich, ebenso Reiter der Auswertung und Sprungleiste der Profile; Sprungziele richten sich nach dem Kopfbereich (`src/ui/sprung.ts`).
 - **Grunddesign 1.6** (`design/`): LD-R04 von SOLL zu MUSS mit einheitlichem Wortlaut, Farbrollen, Verhalten beim Scrollen und dem Grundsatz, dass Hinweise einer einzelnen App in Fußzeile, Startseite oder „Über“ stehen; LD-R01 mit dem mitlaufenden Kopfbereich; `rahmen.json` (Komponente `hinweisband`), Wireframes als Text und SVG. Kennungen, Zahl der Regeln und Tokens unverändert.
-- Spezifikation 0.7.15 (Abschnitt 5.1, „Kopfbereich und Hinweisband“), `docs/TESTS.md`. Versionsangaben 0.7.15 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 715); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- Spezifikation 0.7.16 (Abschnitt 5.1, „Kopfbereich und Hinweisband“), `docs/TESTS.md`. Versionsangaben 0.7.16 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 716); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
 
 ### Tests
 
 - `tests/format/lead-design.test.ts`: LD-R04 (Wortlaut unabhängig vom Code, MUSS, Farbrollen, keine Signalfarbe, Kopfbereich mitlaufend, kompakt ohne Abschneiden).
 - Neu: `tests/ui/kopfkompakt.test.ts` (Hysterese, Klasse am Kopfbereich), `tests/browser/hinweisband.spec.ts` (390 und 1280 px sowie 300 bis 1400 px in Schritten: natürlicher Umbruch, nie am Mittelpunkt; Farbe, nach dem Scrollen schmaler bei vollständig sichtbarem Wortlaut, Reiter unter dem Kopfbereich, kein Flackern, Schrittleiste).
 - Angepasst ohne Änderung des Solls: `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts` (Kopfbereich als Bezug), `tests/browser/sprungziele.spec.ts` (Abstand ab dem Kopfbereich; Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist).
+
+## [0.7.15] – 06.11.2026
+
+### Nachtrag vom 10.11.2026 (ohne neue Versionsnummer)
+
+Grundlage: Auswertung der CI-Laufzeiten vom 10.11.2026 (üblich 6–8 Minuten, Ausreißer bis 29 Minuten durch die Installation der Systembibliotheken für die Browser über apt) und Dependabot-Warnung #10 (mittlere Stufe, nur Entwicklungsabhängigkeiten). Keine Änderung an App, Profilen, SOPs, Arbeitsanweisungen oder KI-Pipeline.
+
+- **Browsertests im Containerbild von Playwright:** `pages.yml` teilt die Prüfung in die Jobs „pruefen“ (Audit, REUSE, Linting, Vitest, Build) und „browser“. „browser“ läuft im offiziellen Bild `mcr.microsoft.com/playwright:v<Version>-noble` mit Chromium, WebKit und ihren Systembibliotheken; die Version kommt aus dem installierten `@playwright/test`. Entfallen: Browser-Cache, `playwright install-deps chromium` und die zeitbegrenzte, nicht blockierende Installation von WebKit; die WebKit-Tests laufen damit, wann immer die Kerntests anstehen. `dist/` geht als Artefakt von „pruefen“ an „browser“; veröffentlicht wird erst nach beiden Jobs.
+- **minimatch 11.0.6, glob 14.0.4** (Dependabot-Warnung #10; GHSA-g3hv-75wg-m249, GHSA-3g3m-2fjr-6pw4): `overrides` in `package.json` hebt minimatch über ESLint und typescript-eslint auf 11.x, bis beide es selbst verlangen; glob 14 kommt mit rimraf 6.1.4 (über `@capacitor/cli`). `npm audit` meldet danach nichts mehr.
+- [docs/TESTS.md](docs/TESTS.md) (Abschnitt „Gestaffelte Prüfung in GitHub Actions“), [docs/SICHERHEIT.md](docs/SICHERHEIT.md) 1.9 (Abschnitt 3.7), Kommentar in `playwright.config.ts`, [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- `tests/ci/actions.test.ts`: Wächter auf 18 Einbindungen; Containerbild in der installierten Version, keine Installation über apt, Veröffentlichung nach „browser“; Mindestversionen von minimatch und glob.
+
+Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json` (Sammellauf offener Befunde KW 45, Commit `fd452dc`), Entscheidungen des Herausgebers vom 06.11.2026: OB-2026-W45-01 bis -07 angenommen bzw. angepasst; UP-2026-W45-04 freigegeben (eigener Pull Request), UP-2026-W45-05 und -06 bis 20.11.2026 zurückgestellt.
+
+### Geändert
+
+- **Frühere Läufe, zugängliche Namen:** Die Knöpfe je Lauf heißen für Hilfstechnik „Übernehmen: Lauf n vom …“ und „Löschen: Lauf n vom …“ statt „Lauf n vom … übernehmen/löschen“; der sichtbare Text steht damit wie bei „Protokoll: “ und „Kopieren: “ am Anfang (OB-2026-W45-05, `docs/BARRIEREFREIHEIT.md` 1.5).
+- **Dokumentation:** `docs/KI-VERORDNUNG.md` 1.7 ordnet den Endpunkt der Stelle ein (OB-2026-W45-01); `docs/DATENSCHUTZ.md` 1.15 mit vollständigem Speicherverzeichnis und der Ausnahme Management Summary bei „löscht nichts selbsttätig“ (OB-2026-W45-02, -03); `docs/VORLAGEN.md` 1.4 (OB-2026-W45-02, -04); `docs/BARRIEREFREIHEIT.md` 1.5 (OB-2026-W45-05, -06).
+- **Beispielprofil 1.42.1, Landesprofil Thüringen 1.8.1:** Kodierleitfaden 1.12.1 mit Kurzbeispiel zur Nullregel (b) von D2 (OB-2026-W45-07); Einzelheiten in den Profilverläufen.
+- **Befundregister:** Entscheidungen zu OB-2026-W45-01 bis -07 und UP-2026-W45-05/-06 (`evaluation/befunde/befundregister.json`).
+- Spezifikation 0.7.15, README. Versionsangaben 0.7.15 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 715); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/ui/ki-erfassung-laeufe.test.ts`: Knöpfe der früheren Läufe beginnen ihren zugänglichen Namen mit der Beschriftung (OB-2026-W45-05).
+- `tests/pipeline/kontext.test.ts`: Kodierleitfaden 1.12.1.
 
 ## [0.7.14] – 05.11.2026
 

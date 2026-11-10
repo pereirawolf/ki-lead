@@ -1,4 +1,4 @@
-// Kompakter Kopfbereich beim Scrollen (seit 0.7.15, Grunddesign 1.6, LD-R04): Am Seitenanfang steht das Hinweisband
+// Kompakter Kopfbereich beim Scrollen (seit 0.7.16, Grunddesign 1.6, LD-R04): Am Seitenanfang steht das Hinweisband
 // mit vollem Innenabstand, nach dem Scrollen schmaler (weniger Innenabstand, kleinere Schrift). Der ganze Wortlaut bleibt
 // immer sichtbar und bricht bei Bedarf um; nichts wird abgeschnitten (Klarstellung des Herausgebers vom 10.11.2026).
 //

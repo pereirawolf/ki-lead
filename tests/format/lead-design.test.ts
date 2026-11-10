@@ -168,7 +168,7 @@ describe("Grunddesign: rahmen.json", () => {
     expect(rahmen.regeln.find((r: any) => r.id === "LD-T05")?.stufe).toBe("SOLL");
   });
 
-  it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.15)", () => {
+  it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.16)", () => {
     // Soll unabhängig von rahmen.json und Quelltext: Entscheidung des Herausgebers vom 10.11.2026
     const WORTLAUT = "Forschungsdemonstrator · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.";
     expect(`${HINWEIS_KENNUNG}${HINWEIS_TRENNER}${HINWEIS_TEXT}`.replace(/\u00a0/g, " ")).toBe(WORTLAUT);

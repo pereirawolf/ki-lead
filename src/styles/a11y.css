@@ -50,7 +50,7 @@
     border-image: none;
   }
 
-  /* Hinweisband: Systemfarben mit Trennlinie zum Inhalt (seit 0.7.15) */
+  /* Hinweisband: Systemfarben mit Trennlinie zum Inhalt (seit 0.7.16) */
   .kopfbereich > .hinweisband {
     border-bottom: 2px solid CanvasText;
   }

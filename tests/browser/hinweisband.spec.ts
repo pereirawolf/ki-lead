@@ -1,4 +1,4 @@
-// Hinweisband der App-Familie (seit 0.7.15, Grunddesign 1.6, LD-R01, LD-R04) im echten Browser: Wortlaut mit natürlichem
+// Hinweisband der App-Familie (seit 0.7.16, Grunddesign 1.6, LD-R01, LD-R04) im echten Browser: Wortlaut mit natürlichem
 // Umbruch, nie am Mittelpunkt; Kopfbereich mitlaufend, nach dem Scrollen schmaler ohne Flackern und ohne Abschneiden,
 // stehende Leisten unter dem Kopfbereich, wie zuvor am Seitenanfang.
 import { expect, test, type Page } from "@playwright/test";
