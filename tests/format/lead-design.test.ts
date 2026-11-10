@@ -172,7 +172,7 @@ describe("Grunddesign: rahmen.json", () => {
     // Soll unabhängig von rahmen.json und Quelltext: Entscheidung des Herausgebers vom 10.11.2026
     const WORTLAUT = "Forschungsdemonstrator · Nur fiktive oder offen zugängliche Inhalte verwenden – keine personenbezogenen und keine eingestuften Daten.";
     expect(`${HINWEIS_KENNUNG}${HINWEIS_TRENNER}${HINWEIS_TEXT}`.replace(/\u00a0/g, " ")).toBe(WORTLAUT);
-    // gleicher, geschützter Abstand vor und nach dem Mittelpunkt: kein Umbruch nach der Kennung
+    // gleicher, geschützter Abstand vor und nach dem Mittelpunkt: kein Umbruch am Mittelpunkt
     expect(HINWEIS_TRENNER).toBe("\u00a0·\u00a0");
     const band = rahmen.rahmen.find((r: any) => r.id === "hinweisband");
     expect(band.wortlaut).toBe(WORTLAUT);
@@ -188,7 +188,11 @@ describe("Grunddesign: rahmen.json", () => {
     expect(regel).toMatch(/color: var\(--auf-amt-hover\);/);
     for (const s of Object.keys(SEMANTIK.hell)) expect(regel, s).not.toContain(`--${s})`);
     expect(css).toMatch(/\n\.kopfbereich \{\s*position: sticky;\s*top: 0;/);
-    expect(css).toMatch(/\n\.kopfbereich\.kompakt > \.hinweisband \{[^}]*white-space: nowrap;[^}]*text-overflow: ellipsis;/);
+    // kompakt nur schmaler, nie abgeschnitten: der ganze Wortlaut bleibt sichtbar (Klarstellung vom 10.11.2026)
+    const kompakt = css.match(/\n\.kopfbereich\.kompakt > \.hinweisband \{([^}]*)\}/)?.[1] ?? "";
+    expect(kompakt).toMatch(/padding-top: /);
+    expect(kompakt).not.toMatch(/white-space|overflow|text-overflow|ellipsis|line-clamp|max-height/);
+    expect(regel).not.toMatch(/white-space: nowrap|overflow: hidden|text-overflow/);
   });
 
   it("Reiter der Auswertung und Phasen der KI-Erfassung wie im Quelltext", () => {

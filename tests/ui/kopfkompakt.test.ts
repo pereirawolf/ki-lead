@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Kompakter Kopfbereich beim Scrollen (seit 0.7.15, Grunddesign 1.6, LD-R04): Hysterese zwischen 96 px (mindestens eine
 // volle Bandhöhe über 8 px) und 8 px, Klasse am Kopfbereich, Wortlaut bleibt vollständig. Die echte Darstellung im
-// Browser (einzeilig, Leisten unter dem Kopfbereich) prüft tests/browser/hinweisband.spec.ts.
+// Browser (schmaler, Wortlaut vollständig sichtbar, Leisten unter dem Kopfbereich) prüft tests/browser/hinweisband.spec.ts.
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import React from "react";
 import { aushaengen, einhaengen, reactUmgebung, takt } from "../support/dom";

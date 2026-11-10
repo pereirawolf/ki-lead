@@ -1,6 +1,6 @@
 // Kompakter Kopfbereich beim Scrollen (seit 0.7.15, Grunddesign 1.6, LD-R04): Am Seitenanfang steht das Hinweisband
-// vollständig, nach dem Scrollen einzeilig mit Auslassungspunkten. Der Wortlaut bleibt im DOM vollständig (Screenreader,
-// Suche); gekürzt wird nur die Darstellung.
+// mit vollem Innenabstand, nach dem Scrollen schmaler (weniger Innenabstand, kleinere Schrift). Der ganze Wortlaut bleibt
+// immer sichtbar und bricht bei Bedarf um; nichts wird abgeschnitten (Klarstellung des Herausgebers vom 10.11.2026).
 //
 // Hysterese: kompakt ab EIN_MIN px (mindestens eine volle Bandhöhe über AUS), wieder voll erst unter AUS px. Schrumpft der
 // Kopfbereich, rückt der Inhalt um den Höhenunterschied nach oben. Damit der Browser dabei die Scrollposition nicht

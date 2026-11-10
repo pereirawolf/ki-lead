@@ -1143,8 +1143,8 @@ Angepasst ohne Änderung des Solls (neue Namen der Bereiche): `tests/ui/einstell
 
 | Soll | Test | Datei |
 |---|---|---|
-| LD-R04 als MUSS mit einheitlichem Wortlaut, Mittelpunkt mit geschützten Leerzeichen (kein Umbruch nach der Kennung), nicht ausblendbar; Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe; Kopfbereich mitlaufend, kompakt einzeilig | Grunddesign: rahmen.json › LD-R04: einheitliches Hinweisband … | `tests/format/lead-design.test.ts` |
+| LD-R04 als MUSS mit einheitlichem Wortlaut, Mittelpunkt mit geschützten Leerzeichen (kein Umbruch am Mittelpunkt), nicht ausblendbar; Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe; Kopfbereich mitlaufend, kompakt ohne Abschneiden | Grunddesign: rahmen.json › LD-R04: einheitliches Hinweisband … | `tests/format/lead-design.test.ts` |
 | Hysterese 96 px (mindestens volle Bandhöhe über 8 px) und 8 px, Klasse „kompakt“ am Kopfbereich, Wortlaut bleibt | kompaktNach …, useKopfKompakt … | `tests/ui/kopfkompakt.test.ts` |
-| Im Browser (390 und 1280 px): Hinweis mit Wortlaut, Kennung und Text in einer Zeile, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen einzeilig, Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
+| Im Browser (390 und 1280 px, Umbruch zusätzlich von 300 bis 1400 px): Hinweis mit Wortlaut, kein Umbruch am Mittelpunkt, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen schmaler, ganzer Wortlaut sichtbar (kein Abschneiden), Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
 
-Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` liest die Stelle der KI-Erfassung, nachdem das Band einzeilig geworden ist.
+Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` misst den Abstand ab dem Kopfbereich und liest die Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist.

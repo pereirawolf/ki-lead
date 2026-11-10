@@ -173,8 +173,9 @@ a {
 
 /* Hinweisband der App-Familie (seit 0.7.15, Grunddesign 1.6, LD-R04): Fläche in der tiefen Aktionsfarbe – keine
    Signalfarbe (LD-F04); das Paar auf-amt-hover/amt-tief ist für jedes Schema und Profil geprüft (LD-F03). Kennung und
-   Text fließen in einer Zeile weiter, ohne Umbruch nach der Kennung. Beim Scrollen einzeilig mit Auslassungspunkten
-   (src/ui/kopfKompakt.ts); der Übergang entfällt bei reduzierter Bewegung (a11y.css). */
+   Text fließen zusammen und brechen nach Bedarf natürlich um, nie direkt am Mittelpunkt. Beim Scrollen schmaler (weniger
+   Innenabstand, kleinere Schrift, src/ui/kopfKompakt.ts); der ganze Wortlaut bleibt immer sichtbar, nichts wird
+   abgeschnitten. Der Übergang entfällt bei reduzierter Bewegung (a11y.css). */
 .kopfbereich > .hinweisband {
   margin: 0;
   padding: 0.55rem max(1rem, env(safe-area-inset-right)) 0.55rem max(1rem, env(safe-area-inset-left));
@@ -192,9 +193,6 @@ a {
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
   font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .standard-profil {
