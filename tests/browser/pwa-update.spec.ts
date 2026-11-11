@@ -296,7 +296,7 @@ test("Reparaturseite: entfernt nur eigene Registrierung und Programm-Caches; Dat
   await erstbesuch(page);
   await testdatenSchreiben(page);
   await page.goto(server.url + "reparatur.html");
-  await expect(page).toHaveTitle("KI-LEAD reparieren");
+  await expect(page).toHaveTitle("Reparatur – KI-LEAD");
   await expect(page.locator("#zustand")).toContainText("Service Worker angemeldet");
   // Nichts geschieht ohne ausdrückliche Betätigung
   expect(await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)).toBe(1);

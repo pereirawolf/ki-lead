@@ -38,7 +38,7 @@ import { useKopfKompakt } from "./ui/kopfKompakt";
 import { HINWEIS_KENNUNG, HINWEIS_TEXT, HINWEIS_TRENNER } from "./ui/hinweisband";
 import { useZwischenstand } from "./ui/app/useZwischenstand";
 import { useKiUebergabe } from "./ui/app/useKiUebergabe";
-import { adresseLesen, adresseText, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
+import { adresseLesen, adresseText, seitentitel, type Ansicht, type LagebildReiter } from "./ui/app/adresse";
 import { bestaetigen } from "./ui/bestaetigung";
 import { ausstehendenSprungAusfuehren, fensterScrollen, springeZu, zumSeitenanfang } from "./ui/sprung";
 
@@ -121,6 +121,10 @@ export default function App() {
     if (adresseText(adresseLesen(window.location.hash)) === text) window.history.replaceState(null, "", text);
     else window.history.pushState(null, "", text);
   }, [ansicht, einstellungsBereich, lagebildReiter]);
+  // Seitentitel je Ansicht (seit 0.7.18, Grunddesign 1.8, LD-N07): Tabs, Lesezeichen und Screenreader nennen die Ansicht zuerst
+  useEffect(() => {
+    document.title = seitentitel(ansicht);
+  }, [ansicht]);
   // Sprungziele beim Wechsel der Ansicht (seit 0.6.7): bis 0.6.6 blieb die Scrollhöhe der vorigen Ansicht stehen.
   // Die KI-Erfassung bleibt im Hintergrund eingehängt (ein Lauf geht weiter); für sie merkt sich die App die Stelle.
   const ansichtSprung = useRef<AnsichtSprung | null>(null);
@@ -389,7 +393,7 @@ export default function App() {
           <header className="kopf">
             <div className="marke">
               <span className="marke-name">KI-LEAD</span>
-              <span className="marke-zusatz">Demonstrator</span>
+              <span className="marke-zusatz">Lagemeldungen mit KI-Unterstützung</span>
             </div>
             <nav className="hauptnav" aria-label="Bereiche">
               <button

@@ -138,3 +138,28 @@ describe("Zwischenstand je Profil", () => {
     await bisWahr(() => expect(textfeld().value).toBe("Entwurf nur für A"));
   });
 });
+
+describe("Seitentitel und Kopfleiste (seit 0.7.18, Grunddesign 1.8)", () => {
+  it("LD-N07: der Seitentitel nennt die Ansicht vor dem Produktnamen und folgt jedem Wechsel", async () => {
+    const { default: App } = await import("../../src/App");
+    await einhaengen(React.createElement(App));
+    await bisWahr(() => expect(document.title).toBe("Erfassung – KI-LEAD"));
+    const knopf = (name: string) => [...document.querySelectorAll<HTMLButtonElement>("nav.hauptnav button")].find((b) => b.textContent === name)!;
+    for (const [name, titel] of [
+      ["Auswertung", "Auswertung – KI-LEAD"],
+      ["KI-Erfassung", "KI-Erfassung – KI-LEAD"],
+      ["Profile", "Profile – KI-LEAD"],
+      ["Einstellungen", "Einstellungen – KI-LEAD"],
+      ["Erfassung", "Erfassung – KI-LEAD"],
+    ]) {
+      await klick(knopf(name));
+      await bisWahr(() => expect(document.title).toBe(titel));
+    }
+  });
+
+  it("LD-R02: Zusatz zum Produktnamen nennt den Gegenstand, nicht den Status", async () => {
+    const { default: App } = await import("../../src/App");
+    await einhaengen(React.createElement(App));
+    expect(document.querySelector(".marke-zusatz")?.textContent).toBe("Lagemeldungen mit KI-Unterstützung");
+  });
+});

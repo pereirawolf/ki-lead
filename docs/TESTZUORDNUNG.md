@@ -1175,3 +1175,14 @@ Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `te
 Umbenannt (nur Schrittname im Testnamen): „Meldung: Management Summary als eigener Schritt › „Prüfen & Exportieren“ ohne Management Summary …“ → „… „Prüfen und Exportieren“ ohne Management Summary …“ (`tests/ui/meldung-schritte.test.ts`); „ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen““ → „… „Quellen und Referenzen““ (`tests/ui/zeitstrahl.test.ts`); „Meldung: fünfter Schritt „Management Summary“ nach „Prüfen & Exportieren“ …“ → „… nach „Prüfen und Exportieren“ …“ (`tests/browser/hauptablauf.spec.ts`).
 
 Angepasst ohne Änderung des Solls (neue Schrittnamen): `tests/ui/erfassung.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/browser/sprungziele.spec.ts`, `tests/browser/baukasten.spec.ts`, `tests/browser/ux-2026-w44.spec.ts`, `tests/browser/eingabehilfen.spec.ts`; `tests/profil/lead-justiz.test.ts` (Profilversion 0.3.1).
+
+## Grunddesign 1.8: Seitentitel und Kopfleiste (0.7.18, Entscheidung des Herausgebers vom 11.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Seitentitel „<Ansicht> – KI-LEAD“ beim Start und nach jedem Wechsel der Ansicht | Seitentitel und Kopfleiste (seit 0.7.18, Grunddesign 1.8) › LD-N07: der Seitentitel nennt die Ansicht vor dem Produktnamen und folgt jedem Wechsel | `tests/ui/app.test.ts` |
+| Zusatz „Lagemeldungen mit KI-Unterstützung“ | Seitentitel und Kopfleiste (seit 0.7.18, Grunddesign 1.8) › LD-R02: Zusatz zum Produktnamen nennt den Gegenstand, nicht den Status | `tests/ui/app.test.ts` |
+| Titel aus den Namen der Hauptnavigation, Reparaturseite „Reparatur – KI-LEAD“, `index.html` „KI-LEAD“; LD-N07 und LD-N08 als MUSS | Grunddesign › LD-N07: Seitentitel „<Ansicht> – KI-LEAD“ mit den Namen der Hauptnavigation (seit Grunddesign 1.8, KI-LEAD 0.7.18) | `tests/format/lead-design.test.ts` |
+| Einträge der Hauptnavigation mindestens 44 px hoch, Überfahren auf zarter Fläche | Grunddesign › LD-N08: Einträge der Hauptnavigation mit Überfahren und mindestens 44 px Höhe (seit Grunddesign 1.8, KI-LEAD 0.7.18) | `tests/format/lead-design.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/browser/pwa-update.spec.ts` (Titel der Reparaturseite „Reparatur – KI-LEAD“).
