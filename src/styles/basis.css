@@ -102,10 +102,17 @@ a {
   background: none;
   border: none;
   padding: 0.45rem 0.8rem;
+  /* Zielgröße (seit 0.7.18, Grunddesign 1.8, LD-N08) */
+  min-height: 44px;
   border-radius: var(--r-klein);
   cursor: pointer;
   color: var(--tinte-leise);
   font-weight: 700;
+}
+
+.nav:hover {
+  color: var(--amt-tief);
+  background: var(--amt-zart);
 }
 
 .nav.aktiv {

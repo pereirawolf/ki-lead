@@ -113,6 +113,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ (Nachtrag vom 10.11.2026: Pull Request „CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10)“, ohne Änderung der App) |
 | 0.7.16 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.16“ |
 | 0.7.17 | letzter Commit des Pull Requests „Grunddesign 1.7: Schrittnamen mit „und“ (LD-T05); 0.7.17“ |
+| 0.7.18 | letzter Commit des Pull Requests „Grunddesign 1.8: Seitentitel und Kopfleiste der App-Familie; 0.7.18“ |
+## [0.7.18] – 11.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 11.11.2026 nach dem Abgleich von Seitentiteln und Kopfleisten in KI-LEAD, KRITIS-LEAD und Thessa: Titel nach einem Muster, Kopfleiste gleich gegliedert, Navigation in einer Bauart, Zusatz zum Produktnamen fest und ohne Status.
+
+### Geändert
+
+- **Seitentitel je Ansicht** (`src/ui/app/adresse.ts`, `src/App.tsx`): „Erfassung – KI-LEAD“, „KI-Erfassung – KI-LEAD“, „Auswertung – KI-LEAD“, „Profile – KI-LEAD“, „Einstellungen – KI-LEAD“; bisher stand immer „KI-LEAD“. Die Ansicht steht vorn, damit Tabs und Lesezeichen sie auch gekürzt zeigen; Screenreader nennen beim Wechsel den neuen Titel. Vor dem Start der App bleibt „KI-LEAD“ (`index.html`). Reparaturseite: „Reparatur – KI-LEAD“ (bisher „KI-LEAD reparieren“).
+- **Zusatz zum Produktnamen:** „Lagemeldungen mit KI-Unterstützung“ statt „Demonstrator“; den Status nennt das Hinweisband. Unter 860 px entfällt der Zusatz wie bisher.
+- **Hauptnavigation** (`src/styles/basis.css`): Einträge mindestens 44 px hoch und beim Überfahren in der Aktionsfarbe auf zarter Fläche, wie in Thessa.
+- **Grunddesign 1.8** (`design/`): neue MUSS-Regeln LD-N07 (Seitentitel) und LD-N08 (Einträge der Hauptnavigation, links neben dem Produktnamen); LD-R02 mit festem Zusatz ohne Versionsnummer und ohne Status. 50 statt 48 Regeln; Tokens unverändert.
+- Spezifikation 0.7.18 (Abschnitt 5.1, „Seitentitel und Kopfleiste“; offener Punkt 1 mit Stand), `docs/TESTS.md`. Versionsangaben 0.7.18 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 718); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/ui/app.test.ts`: Seitentitel folgt jedem Wechsel der Ansicht (LD-N07); Zusatz zum Produktnamen (LD-R02).
+- `tests/format/lead-design.test.ts`: LD-N07 (Titel aus den Namen der Hauptnavigation, Reparaturseite, `index.html`), LD-N08 (44 px, Überfahren).
+- Angepasst mit geändertem Soll: `tests/browser/pwa-update.spec.ts` (Titel der Reparaturseite).
+
 ## [0.7.17] – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026: In der Schrittleiste („Seitenkategorien“) verbinden die Schrittnamen einheitlich mit „und“; die Feldnamen der LEAD-Meldevorlage bleiben unverändert. Anlass: In „Ereignisse/Sachverhalte“ brach die Schrittleiste auf schmalen Bildschirmen hinter dem Schrägstrich um, der dann am Zeilenende stand.

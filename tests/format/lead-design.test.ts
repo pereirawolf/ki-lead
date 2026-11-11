@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.7 vom 11.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.8 vom 11.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -9,6 +9,7 @@ import { FARBSCHEMAS } from "../../src/darstellung/katalog";
 import { SEMANTIK } from "../../src/darstellung/thema";
 import { UI_TOKENS } from "../../src/darstellung/typen";
 import { BEREICHE } from "../../src/ui/Einstellungen";
+import { ANSICHTEN, seitentitel } from "../../src/ui/app/adresse";
 import { HINWEIS_KENNUNG, HINWEIS_TEXT, HINWEIS_TRENNER } from "../../src/ui/hinweisband";
 import { ajvGueltig, referenzAjv } from "../support/ajv";
 import { repoPfad } from "../support/dateien";
@@ -183,6 +184,21 @@ describe("Grunddesign: rahmen.json", () => {
     // Feldnamen der Meldevorlage bleiben unverändert
     expect(json("profile/lead-beispiel/meldung.ui.json").felder.quellen.label).toBe("Quellen & Referenzen");
     expect(json("profile/lead-beispiel/meldung.ui.json").felder.sachverhalte.label).toBe("Ereignisse/Sachverhalte");
+  });
+
+  it("LD-N07: Seitentitel „<Ansicht> – KI-LEAD“ mit den Namen der Hauptnavigation (seit Grunddesign 1.8, KI-LEAD 0.7.18)", () => {
+    // Soll unabhängig von rahmen.json: Entscheidung des Herausgebers vom 11.11.2026
+    expect(ANSICHTEN.map(seitentitel)).toEqual(rahmen.hauptnavigation["ki-lead"].map((n: string) => `${n} – KI-LEAD`));
+    expect(text("public/reparatur.html")).toContain("<title>Reparatur – KI-LEAD</title>");
+    expect(text("index.html")).toContain("<title>KI-LEAD</title>");
+    for (const id of ["LD-N07", "LD-N08"]) expect(rahmen.regeln.find((r: any) => r.id === id)?.stufe).toBe("MUSS");
+  });
+
+  it("LD-N08: Einträge der Hauptnavigation mit Überfahren und mindestens 44 px Höhe (seit Grunddesign 1.8, KI-LEAD 0.7.18)", () => {
+    const css = text("src/styles/basis.css");
+    const nav = css.match(/\n\.nav \{[^}]*\}/)?.[0] ?? "";
+    expect(nav).toMatch(/min-height: 44px/);
+    expect(css).toMatch(/\n\.nav:hover \{[^}]*background: var\(--amt-zart\)/);
   });
 
   it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.16)", () => {

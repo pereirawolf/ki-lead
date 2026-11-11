@@ -11,6 +11,18 @@ export type Ansicht = "meldung" | "ki" | "lagebild" | "profile" | "einstellungen
 
 export const ANSICHTEN: readonly Ansicht[] = ["meldung", "ki", "lagebild", "profile", "einstellungen"];
 
+/** Namen der Ansichten wie in der Hauptnavigation (LD-N01) */
+export const ANSICHT_NAMEN: Record<Ansicht, string> = {
+  meldung: "Erfassung",
+  ki: "KI-Erfassung",
+  lagebild: "Auswertung",
+  profile: "Profile",
+  einstellungen: "Einstellungen",
+};
+
+/** Seitentitel „<Ansicht> – KI-LEAD“ (seit 0.7.18, Grunddesign 1.8, LD-N07) */
+export const seitentitel = (a: Ansicht): string => `${ANSICHT_NAMEN[a]} – KI-LEAD`;
+
 /** Wort der Ansicht in der Adresse, wo es vom internen Namen abweicht */
 const IN_DER_ADRESSE: Partial<Record<Ansicht, string>> = { lagebild: "auswertung" };
 /** Frühere Wörter, die weiter gelesen werden */
