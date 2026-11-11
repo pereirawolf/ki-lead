@@ -7,7 +7,7 @@ test("Meldung: Entwurf als JSON speichern und die heruntergeladene Datei wieder 
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
   await page.getByLabel("Name der meldenden Stelle").fill("Teststelle Browser");
-  await page.getByRole("button", { name: /Prüfen & Exportieren/ }).click();
+  await page.getByRole("button", { name: /Prüfen und Exportieren/ }).click();
 
   const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Entwurf als JSON speichern" }).click()]);
   expect(download.suggestedFilename()).toMatch(/\.json$/);
@@ -30,14 +30,14 @@ test("Meldung: Entwurf als JSON speichern und die heruntergeladene Datei wieder 
   expect(netz.fremd).toEqual([]);
 });
 
-test("Meldung: fünfter Schritt „Management Summary“ nach „Prüfen & Exportieren“ (seit 0.5.17), Feldauszug ohne KI", async ({ page }) => {
+test("Meldung: fünfter Schritt „Management Summary“ nach „Prüfen und Exportieren“ (seit 0.5.17), Feldauszug ohne KI", async ({ page }) => {
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
   const schritte = page.getByRole("navigation", { name: "Schritte" }).getByRole("button");
   await expect(schritte).toHaveCount(5);
   await expect(schritte.last()).toHaveText(/Management Summary/);
   await page
-    .getByRole("button", { name: /Prüfen & Exportieren/ })
+    .getByRole("button", { name: /Prüfen und Exportieren/ })
     .first()
     .click();
   await expect(page.getByRole("button", { name: "Final als JSON exportieren" })).toBeVisible();

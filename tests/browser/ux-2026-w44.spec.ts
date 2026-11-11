@@ -46,7 +46,7 @@ test.describe("UX-2026-W44-04: Smartphone", () => {
     await page.getByRole("button", { name: /^Weiter:/ }).click();
     await page.getByRole("button", { name: /^Weiter:/ }).click();
     const aktiv = page.locator('.meldung .schritte [aria-current="step"]');
-    await expect(aktiv).toContainText("Prüfen & Exportieren");
+    await expect(aktiv).toContainText("Prüfen und Exportieren");
     const box = (await aktiv.boundingBox())!;
     expect(box.x + box.width).toBeLessThanOrEqual(390);
   });

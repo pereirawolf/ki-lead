@@ -1,6 +1,6 @@
 // Meldungsmaske: Schritte aus der Darstellungsdatei, Formular aus dem Schema. Seit 0.5.17 hängt die App für jedes Profil
 // einen eigenen Schritt „Management Summary“ an (Titel aus kurzfassung.titel); bis 0.5.16 stand sie im Schritt
-// „Prüfen & Exportieren“.
+// „Prüfen und Exportieren“.
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FocusEvent } from "react";
 import { leererWert, unterSchema } from "../kern/schema";

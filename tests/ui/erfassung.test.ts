@@ -109,7 +109,7 @@ describe("Erfassungsmaske", () => {
   // Befunde am Feld (seit 0.6.5): Pflicht- und Schemabefunde erscheinen am Feld, nicht nur im Prüfschritt
   it("TP-2026-W44-15: leeres Pflichtfeld trägt aria-invalid und einen per aria-describedby verknüpften Fehlertext", async () => {
     await zeigeApp();
-    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    await zuSchritt(/Ereignisse und Sachverhalte/);
     const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
     // seit 0.6.20 (UX-2026-W44-05) erst nach dem Verlassen des Feldes
     await act(async () => {
@@ -131,7 +131,7 @@ describe("Erfassungsmaske", () => {
   // Herausgebers vom 01.11.2026): Leitfrage zuerst, LEAD-Eingabehilfen nach der Eingabe, per aria-describedby verknüpft.
   it("Erklärtexte im Analysebereich: Leitfrage, zwischen Beschriftung und Eingabe, Eingabehilfen danach", async () => {
     await zeigeApp();
-    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    await zuSchritt(/Ereignisse und Sachverhalte/);
     const vorher = (a: Node, b: Node) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
     const lage = document.querySelector('[data-feld="sachverhalte/0/analyse/lage_ereignis"] textarea') as HTMLTextAreaElement;
     const hilfe = document.getElementById(`${lage.id}-hilfe`)!;
@@ -163,18 +163,18 @@ describe("Erfassungsmaske", () => {
 
   it("UX-2026-W44-05: neue Meldung zeigt fehlende Pflichtangaben erst nach Bearbeiten oder nach dem Prüfschritt", async () => {
     await zeigeApp();
-    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    await zuSchritt(/Ereignisse und Sachverhalte/);
     const bezeichnung = () => document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input') as HTMLInputElement;
     expect(bezeichnung().hasAttribute("aria-invalid")).toBe(false);
     expect(document.querySelector(".feld-fehler")).toBeNull();
-    await zuSchritt(/Prüfen & Exportieren/);
-    await zuSchritt(/Ereignisse\/Sachverhalte/);
+    await zuSchritt(/Prüfen und Exportieren/);
+    await zuSchritt(/Ereignisse und Sachverhalte/);
     expect(bezeichnung().getAttribute("aria-invalid")).toBe("true");
   });
 
   it("UX-2026-W44-11/-12: fehlende Bezeichnung einmal im Prüfschritt; ohne bestandene Prüfung ist der Entwurf hervorgehoben", async () => {
     await zeigeApp();
-    await zuSchritt(/Prüfen & Exportieren/);
+    await zuSchritt(/Prüfen und Exportieren/);
     const sprung = [...document.querySelectorAll("button.befund-sprung")].filter((b) => /Bezeichnung/.test(b.textContent || ""));
     expect(sprung).toHaveLength(1);
     expect(knopf("Entwurf als JSON speichern")?.classList.contains("primaer")).toBe(true);
@@ -184,21 +184,21 @@ describe("Erfassungsmaske", () => {
 
   it("UX-2026-W44-06: Schrittleiste zeigt Befunde je Schritt statt „erledigt“ nach Position", async () => {
     await zeigeApp();
-    await zuSchritt(/Prüfen & Exportieren/);
+    await zuSchritt(/Prüfen und Exportieren/);
     const knopf = (re: RegExp) => [...document.querySelectorAll<HTMLButtonElement>(".schritte .schritt")].find((b) => re.test(b.textContent || ""))!;
-    expect(knopf(/Ereignisse\/Sachverhalte/).querySelector(".schritt-befund")).toBeTruthy();
-    expect(knopf(/Ereignisse\/Sachverhalte/).textContent).toMatch(/1 Feld mit Befund/);
+    expect(knopf(/Ereignisse und Sachverhalte/).querySelector(".schritt-befund")).toBeTruthy();
+    expect(knopf(/Ereignisse und Sachverhalte/).textContent).toMatch(/1 Feld mit Befund/);
     expect(knopf(/Meldungsmetadaten/).querySelector(".schritt-befund")).toBeNull();
     expect(document.querySelector(".schritte .erledigt")).toBeNull();
   });
 
   it("TP-2026-W44-15: ein Befund im Prüfschritt wechselt in den Schritt und fokussiert das Feld", async () => {
     await zeigeApp();
-    await zuSchritt(/Prüfen & Exportieren/);
+    await zuSchritt(/Prüfen und Exportieren/);
     const befund = [...document.querySelectorAll("button.befund-sprung")].find((b) => /Bezeichnung/.test(b.textContent || "")) as HTMLButtonElement;
     expect(befund, "Befund zur Bezeichnung als Schaltfläche").toBeTruthy();
     await klick(befund);
-    expect(document.querySelector("#schritt-titel")?.textContent).toBe("Ereignisse/Sachverhalte");
+    expect(document.querySelector("#schritt-titel")?.textContent).toBe("Ereignisse und Sachverhalte");
     expect(document.activeElement).toBe(document.querySelector('[data-feld="sachverhalte/0/bezeichnung"] input'));
   });
 

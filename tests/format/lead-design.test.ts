@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.6 vom 10.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.7 vom 11.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -166,6 +166,23 @@ describe("Grunddesign: rahmen.json", () => {
     expect(titel.filter((t) => t.includes("&"))).toEqual([]);
     expect(titel).toEqual(expect.arrayContaining(["KI-Anbieter und API", "Modelle und Aufwand", "Recherche und Grenzen"]));
     expect(rahmen.regeln.find((r: any) => r.id === "LD-T05")?.stufe).toBe("SOLL");
+  });
+
+  it("LD-T05: Schrittnamen der Profile verbinden mit „und“, nicht mit „&“ oder „/“ (seit Grunddesign 1.7, KI-LEAD 0.7.17)", () => {
+    // Soll unabhängig von rahmen.json: Entscheidung des Herausgebers vom 11.11.2026 (Umbruch hinter „/“ in der Schrittleiste)
+    const dateien = [
+      "profile/lead-beispiel/meldung.ui.json",
+      "profile/lead-thueringen/meldung.ui.json",
+      "profile/lead-justiz/meldung.ui.json",
+      "profile/muster/meldung.ui.json",
+      "formate/lead-meldung-v2/beispiel/meldung.ui.json",
+    ];
+    const titel = dateien.flatMap((d) => (json(d).schritte as { titel: string }[]).map((s) => s.titel));
+    expect(titel.filter((t) => /[&/]/.test(t))).toEqual([]);
+    expect(titel).toEqual(expect.arrayContaining(["Ereignisse und Sachverhalte", "Quellen und Referenzen", "Prüfen und Exportieren"]));
+    // Feldnamen der Meldevorlage bleiben unverändert
+    expect(json("profile/lead-beispiel/meldung.ui.json").felder.quellen.label).toBe("Quellen & Referenzen");
+    expect(json("profile/lead-beispiel/meldung.ui.json").felder.sachverhalte.label).toBe("Ereignisse/Sachverhalte");
   });
 
   it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.16)", () => {

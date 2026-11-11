@@ -7,7 +7,7 @@
     { "id": "meta", "titel": "Kopf", "felder": ["meldende_stelle", "meldezeitpunkt"] },
     { "id": "sachverhalte", "titel": "Sachverhalte", "felder": ["sachverhalte"] },
     { "id": "quellen", "titel": "Quellen", "felder": ["quellen", "zeitstrahl"] },
-    { "id": "pruefen", "titel": "Prüfen & Exportieren", "felder": [], "pruefung": true }
+    { "id": "pruefen", "titel": "Prüfen und Exportieren", "felder": [], "pruefung": true }
   ],
   "felder": {
     "meldende_stelle": { "label": "Meldende Stelle", "pflicht": true },

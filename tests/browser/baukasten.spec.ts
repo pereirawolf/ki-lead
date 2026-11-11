@@ -14,8 +14,8 @@ for (const breite of [
     await page.setViewportSize(breite.viewport);
     await netzVorbereiten(page, () => "haengen");
     await oeffnen(page);
-    await page.getByRole("button", { name: /^Weiter: Ereignisse\/Sachverhalte/ }).click();
-    await page.getByRole("button", { name: /^Weiter: Quellen & Referenzen/ }).click();
+    await page.getByRole("button", { name: /^Weiter: Ereignisse und Sachverhalte/ }).click();
+    await page.getByRole("button", { name: /^Weiter: Quellen und Referenzen/ }).click();
     await expect(page.getByText("Kurztext mit Beleg", { exact: true })).toBeVisible();
     const felder = await page.evaluate(() =>
       [...document.querySelectorAll(".quellen-baukasten > .quellen-lagemeldung")].map((feld) => {

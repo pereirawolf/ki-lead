@@ -1,4 +1,4 @@
-// Management Summary im eigenen Schritt der Meldung (seit 0.5.17, vorher im Schritt „Prüfen & Exportieren“): KI-Fassung für die Leitung
+// Management Summary im eigenen Schritt der Meldung (seit 0.5.17, vorher im Schritt „Prüfen und Exportieren“): KI-Fassung für die Leitung
 // (gespeichert je Profil, mit Hinweis, wenn die Meldung sich seither geändert hat) und
 // der bisherige Feldauszug ohne Quellenverweise als Rückfallebene ohne KI.
 // Die Fassung wird nur auf Knopfdruck erstellt. Sie wird geleert, wenn die Meldung in der Maske durch eine

@@ -1,4 +1,4 @@
-// Zeitstrahl auf der Seite „Quellen & Referenzen“ (seit 0.6.9, ZS-2026-W44-01): Textfeld mit einer Zeile je Ereignis
+// Zeitstrahl auf der Seite „Quellen und Referenzen“ (seit 0.6.9, ZS-2026-W44-01): Textfeld mit einer Zeile je Ereignis
 // in fester Form und ein Baukasten für neue Zeilen (Sachverhalt über seine Kennung, Typ, Zeitpunkt, Kurztext).
 // „Chronologisch ordnen“ sortiert die Zeilen; Zeilen außerhalb der Form bleiben am Ende stehen.
 

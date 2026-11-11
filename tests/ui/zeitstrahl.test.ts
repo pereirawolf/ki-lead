@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Zeitstrahl und Sachverhaltskennung in der Meldungsmaske (seit 0.6.9, ZS-2026-W44-01, -02): Kennung beim Anlegen,
-// „Kennung vergeben“ für ältere Sachverhalte, Zeitstrahl als eigener Bereich auf der Seite „Quellen & Referenzen“.
+// „Kennung vergeben“ für ältere Sachverhalte, Zeitstrahl als eigener Bereich auf der Seite „Quellen und Referenzen“.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { useState } from "react";
 import { KENNUNG_RE } from "../../src/kern/kennung";
@@ -49,7 +49,7 @@ const schritt = (titel: RegExp) =>
 describe("ZS-2026-W44-02: Sachverhaltskennung in der Maske", () => {
   it("ein neuer Sachverhalt erhält sofort eine Kennung mit dem Präfix des Felds „Land“; der Kopf zeigt sie", async () => {
     await zeige(ilkaMeldung("Bund"));
-    await schritt(/Ereignisse\/Sachverhalte/);
+    await schritt(/Ereignisse und Sachverhalte/);
     await klick("Ereignis/Sachverhalt hinzufügen");
     await bisWahr(() => stand.sachverhalte.length === 2);
     const k = stand.sachverhalte[1].kennung;
@@ -64,7 +64,7 @@ describe("ZS-2026-W44-02: Sachverhaltskennung in der Maske", () => {
     const m = ilkaMeldung("TH");
     delete m.sachverhalte[0].kennung;
     await zeige(m);
-    await schritt(/Ereignisse\/Sachverhalte/);
+    await schritt(/Ereignisse und Sachverhalte/);
     // geladene Meldung mit mehreren Sachverhalten: eingeklappt (seit 0.6.20, UX-2026-W44-08)
     await klick(/^Aufklappen$/);
     await klick("Kennung vergeben");
@@ -74,10 +74,10 @@ describe("ZS-2026-W44-02: Sachverhaltskennung in der Maske", () => {
   });
 });
 
-describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", () => {
+describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen und Referenzen“", () => {
   it("eigener Bereich unter dem Quellenverzeichnis mit Zähler; „Chronologisch ordnen“ nur bei Bedarf", async () => {
     await zeige(ilkaMeldung("Bund"));
-    await schritt(/Quellen & Referenzen/);
+    await schritt(/Quellen und Referenzen/);
     const felder = [...document.querySelectorAll("section.schritt-inhalt .feld-label")].map((l) => l.textContent);
     expect(felder.indexOf("Quellen & Referenzen")).toBeLessThan(felder.indexOf("Zeitstrahl"));
     const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
@@ -88,7 +88,7 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
 
   it("„Zeile anfügen“ hängt eine Zeile in fester Form mit der nächsten Nummer und der Kennung des gewählten Sachverhalts an", async () => {
     await zeige(ilkaMeldung("Bund"));
-    await schritt(/Quellen & Referenzen/);
+    await schritt(/Quellen und Referenzen/);
     const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
     const sachverhalt = bereich.querySelector("select") as HTMLSelectElement;
     expect([...sachverhalt.options].map((o) => o.value)).toEqual(["DE-20261014-7QKD"]);
@@ -103,7 +103,7 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     const m = ilkaMeldung("Bund");
     m.zeitstrahl = m.zeitstrahl.split("\n").reverse().join("\n");
     await zeige(m);
-    await schritt(/Quellen & Referenzen/);
+    await schritt(/Quellen und Referenzen/);
     const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
     expect(bereich.textContent).toContain("nicht zeitlich geordnet");
     await klick("Chronologisch ordnen", bereich);
@@ -115,7 +115,7 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     const m = ilkaMeldung("Bund");
     m.zeitstrahl = m.zeitstrahl.replace(/ · aufgenommen \S+/g, "");
     await zeige(m);
-    await schritt(/Quellen & Referenzen/);
+    await schritt(/Quellen und Referenzen/);
     const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
     expect(bereich.textContent).toContain("8 ohne Kenntniszeit");
     await klick("Aufnahmezeit ergänzen", bereich);
@@ -128,7 +128,7 @@ describe("ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen“", 
     const m = ilkaMeldung("Bund");
     delete m.sachverhalte[0].kennung;
     await zeige(m);
-    await schritt(/Quellen & Referenzen/);
+    await schritt(/Quellen und Referenzen/);
     const bereich = document.querySelector(".feld-zeitstrahl") as HTMLElement;
     expect(bereich.querySelector("select")).toBeNull();
     expect(bereich.textContent).toContain("Noch kein Sachverhalt mit Kennung");
@@ -142,11 +142,11 @@ describe("UX-2026-W44-08: Sachverhalte einklappbar", () => {
     expect(m.sachverhalte.length).toBeGreaterThan(1);
     m.sachverhalte[1].bezeichnung = "";
     await zeige(m);
-    await schritt(/Ereignisse\/Sachverhalte/);
+    await schritt(/Ereignisse und Sachverhalte/);
     const elemente = () => [...document.querySelectorAll<HTMLElement>(".liste > .element")];
     expect(elemente().every((e) => e.classList.contains("zu"))).toBe(true);
     expect(elemente()[1]!.querySelector(".element-stand")?.textContent).toMatch(/1 Feld mit Befund/);
-    await schritt(/Prüfen & Exportieren/);
+    await schritt(/Prüfen und Exportieren/);
     const befund = [...document.querySelectorAll("button.befund-sprung")].find((b) => /Bezeichnung/.test(b.textContent || "")) as HTMLButtonElement;
     await klick(befund);
     await bisWahr(() => !elemente()[1]!.classList.contains("zu"));

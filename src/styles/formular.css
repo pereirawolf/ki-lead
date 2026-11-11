@@ -861,7 +861,7 @@ textarea[aria-invalid="true"] {
   align-self: flex-start;
 }
 
-/* Zeitstrahl auf der Seite „Quellen & Referenzen“ (seit 0.6.9) */
+/* Zeitstrahl auf der Seite „Quellen und Referenzen“ (seit 0.6.9) */
 .feld-zeitstrahl {
   margin-top: 1.5rem;
 }
