@@ -114,6 +114,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.16 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.16“ |
 | 0.7.17 | letzter Commit des Pull Requests „Grunddesign 1.7: Schrittnamen mit „und“ (LD-T05); 0.7.17“ |
 | 0.7.18 | letzter Commit des Pull Requests „Grunddesign 1.8: Seitentitel und Kopfleiste der App-Familie; 0.7.18“ |
+| 0.7.19 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus KSNV als Materialart; 0.7.19“ |
+## [0.7.19] – 12.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 12.11.2026: KI-LEAD soll die Kennzahlen-Bausteine des Schwesterdemonstrators KSNV (Kraftstoffnotversorgung) wie die Bausteine aus Thessa als eigene Materialart erkennen, damit ein LEAD-Lagebild die Bedarfslage an Kraftstoff im Notbetrieb ohne Umformatierung übernimmt.
+
+### Hinzugefügt
+
+- **Kennzahlen-Bausteine aus KSNV** (`format` „KSNV-Kennzahlen“, Fassung 0.1) als Materialart „Kennzahlen-Baustein“ in der KI-Erfassung: Prüfung gegen das eingebettete, gebündelte Schema (`formate/fremd/ksnv-kennzahlen/`, Herkunft und Prüfsumme in `herkunft.json`, Kernschema von LEAD-Meldung-v2 mit derselben Prüfsumme wie bei Thessa), Anzeige im Auftrag mit liefernder App, Raum, Datenstand und Zahl der Kennzahlen, Übergabe an die KI ohne `herleitung` (Kennungen der Bedarfsmeldungen). Kennzahlen: Tagesbedarf Diesel und Ottokraftstoff (Art „bedarf“, Einheit „Liter je Tag“) mit Teilmengen, Zählwerte und Teilräume; Mindestwerte, solange Meldungen fehlen. Zwei unveränderte, fiktive Bausteine aus KSNV unter `formate/fremd/ksnv-kennzahlen/beispiele/`.
+
+### Geändert
+
+- **Baustein-Erkennung verallgemeinert** (`src/kern/baustein.ts`, `src/pipeline/bausteinschemata.ts`): bekannte Formate mit liefernder App und Fassungen (`BAUSTEIN_FORMATE`), Schemata je Format und Fassung; `BausteinInfo` nennt Format und App; Ablehnungen nennen das Format. Anzeige und Hinweise für Bausteine aus Thessa unverändert. Der Abgleich der Zahlen im Text (Übergangsregel h) bleibt auf die Einheiten der Thessa-Bausteine beschränkt.
+- **`npm run fremdschemata`** bündelt die Schemata beider Ordner (`scripts/fremdschemata.mjs`, `erzeuge(ordner)`).
+- Spezifikation 0.7.19 (Abschnitt 5.1, S0), [docs/AUSTAUSCH.md](docs/AUSTAUSCH.md) 0.6 (Abschnitte 8 und 9). Versionsangaben 0.7.19 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 719); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/ksnv-baustein.test.ts`: Herkunft und Prüfsummen, Bündelung aktuell, gebündeltes Schema verwendbar, beide Bausteine gültig und beschädigte Bausteine ungültig im Gleichlauf mit Ajv auf dem Original.
+- `tests/pipeline/baustein.test.ts`: KSNV-Baustein als Materialart mit Anzeige, Übergabe ohne `herleitung`, unbekannte Fassung und Schemabefund als JSON-Material.
+- Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (unbekannte Fassung nennt das Format).
+
 ## [0.7.18] – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026 nach dem Abgleich von Seitentiteln und Kopfleisten in KI-LEAD, KRITIS-LEAD und Thessa: Titel nach einem Muster, Kopfleiste gleich gegliedert, Navigation in einer Bauart, Zusatz zum Produktnamen fest und ohne Status.

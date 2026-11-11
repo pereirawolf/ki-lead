@@ -1,4 +1,5 @@
-// Kennzahlen-Bausteine aus Thessa (format „Thessa-Kennzahlen“) als eigene Materialart (seit 0.6.24, UP-2026-W45-01).
+// Kennzahlen-Bausteine als eigene Materialart: aus Thessa (format „Thessa-Kennzahlen“, seit 0.6.24, UP-2026-W45-01;
+// Kräftelage der Feuerwehren) und aus KSNV (format „KSNV-Kennzahlen“, seit 0.7.19; Kraftstoffbedarf im Notbetrieb).
 // Profilneutral: Erkennung, Prüfung gegen das eingebettete, gebündelte Schema (formate/fremd/thessa-kennzahlen/), die
 // Projektion für die KI ohne „herleitung“ und der Vorschlag einer Quellenzeile für Profile mit LEAD-Meldung-v1
 // (Übergangsregel h). Die Schemata reicht der Aufrufer herein, weil kern aus keinem anderen Verzeichnis importiert.
@@ -6,9 +7,14 @@
 import { pruefeRoh } from "./validierung";
 
 export const BAUSTEIN_FORMAT = "Thessa-Kennzahlen";
-/** Bekannte Fassungen; 0.3 ohne bezug_lead (Thessa G12, SR-2026-W45-02), 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
+/** Bekannte Fassungen von Thessa; 0.3 ohne bezug_lead (Thessa G12, SR-2026-W45-02), 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
 export const BAUSTEIN_FASSUNGEN = ["0.3", "0.2", "0.1"] as const;
-export type BausteinFassung = (typeof BAUSTEIN_FASSUNGEN)[number];
+/** Bekannte Formate mit liefernder App und Fassungen (neueste zuerst) */
+export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly string[] }> = {
+  [BAUSTEIN_FORMAT]: { app: "Thessa", fassungen: BAUSTEIN_FASSUNGEN },
+  "KSNV-Kennzahlen": { app: "KSNV", fassungen: ["0.1"] },
+};
+export type BausteinFassung = string;
 /** Einheiten der Kennzahlen eines Bausteins (Thessa, docs/DATENMODELL.md) */
 export const BAUSTEIN_EINHEITEN = ["Einsatzmittel", "Einsätze", "Einsatzkräfte", "Ausrückebereiche", "Einheiten"] as const;
 
@@ -27,6 +33,10 @@ export interface BausteinKennzahl {
 }
 
 export interface BausteinInfo {
+  /** Format, etwa „Thessa-Kennzahlen“ oder „KSNV-Kennzahlen“ */
+  format: string;
+  /** liefernde App, etwa „Thessa“ oder „KSNV“ */
+  app: string;
   fassung: BausteinFassung;
   raum: { name: string; schluessel?: string };
   datenstand: string;
@@ -38,26 +48,33 @@ export interface BausteinInfo {
 }
 
 export type BausteinErkennung =
-  { status: "gueltig"; info: BausteinInfo } | { status: "unbekannte_fassung"; fassung: string } | { status: "befunde"; fassung: string; befunde: string[] };
+  | { status: "gueltig"; info: BausteinInfo }
+  | { status: "unbekannte_fassung"; fassung: string; format: string }
+  | { status: "befunde"; fassung: string; format: string; befunde: string[] };
 
 const istObjekt = (x: unknown): x is Record<string, any> => !!x && typeof x === "object" && !Array.isArray(x);
 
 /**
  * Erkennt einen Kennzahlen-Baustein. null: kein Baustein (anderes JSON). Sonst gültig, unbekannte Fassung oder
  * Schemabefunde; in den beiden letzten Fällen bleibt das Material JSON wie bisher.
+ * @param schemata gebündelte Schemata je Format und Fassung (src/pipeline/bausteinschemata.ts)
  */
-export function erkenneBaustein(obj: unknown, schemata: Record<string, object>): BausteinErkennung | null {
-  if (!istObjekt(obj) || obj.format !== BAUSTEIN_FORMAT) return null;
+export function erkenneBaustein(obj: unknown, schemata: Record<string, Record<string, object>>): BausteinErkennung | null {
+  if (!istObjekt(obj) || !BAUSTEIN_FORMATE[obj.format]) return null;
+  const format = obj.format as string;
+  const { app, fassungen } = BAUSTEIN_FORMATE[format]!;
   const fassung = String(obj.fassung ?? "");
-  const schema = (BAUSTEIN_FASSUNGEN as readonly string[]).includes(fassung) ? schemata[fassung] : undefined;
-  if (!schema) return { status: "unbekannte_fassung", fassung };
+  const schema = fassungen.includes(fassung) ? schemata[format]?.[fassung] : undefined;
+  if (!schema) return { status: "unbekannte_fassung", fassung, format };
   const fehler = pruefeRoh(schema, obj);
-  if (fehler.length) return { status: "befunde", fassung, befunde: fehler.map((f) => `${f.pfad || "(Wurzel)"}: ${f.text}`) };
+  if (fehler.length) return { status: "befunde", fassung, format, befunde: fehler.map((f) => `${f.pfad || "(Wurzel)"}: ${f.text}`) };
   const q = obj.quellen[0];
   return {
     status: "gueltig",
     info: {
-      fassung: fassung as BausteinFassung,
+      format,
+      app,
+      fassung,
       raum: { name: obj.raum.name, ...(obj.raum.schluessel ? { schluessel: obj.raum.schluessel } : {}) },
       datenstand: obj.datenstand,
       erzeugt: obj.erzeugt,
@@ -116,14 +133,19 @@ export function quellenzeileV1(info: BausteinInfo): string {
 /** Kurzbeschreibung für die Anzeige im Auftrag (Anforderung b). */
 export function bausteinHinweis(info: BausteinInfo): string {
   const raum = info.raum.schluessel ? `${info.raum.name} (${info.raum.schluessel})` : info.raum.name;
+  // Einsatzmeldungen gibt es nur in Bausteinen aus Thessa (ab 0.2)
   const em =
-    info.fassung === "0.1" ? "Fassung 0.1 – keine Einsatzmeldungen" : `${info.einsatzmeldungen} Einsatzmeldung${info.einsatzmeldungen === 1 ? "" : "en"}`;
-  return `Kennzahlen-Baustein (Thessa ${info.fassung}${info.fiktiv ? ", FIKTIV" : ""}): ${raum}, Datenstand ${zeitDE(info.datenstand)}, ${info.kennzahlen} Kennzahl${info.kennzahlen === 1 ? "" : "en"}, ${em}. Kennzahlen werden unverändert übernommen.`;
+    info.app !== "Thessa"
+      ? ""
+      : info.fassung === "0.1"
+        ? ", Fassung 0.1 – keine Einsatzmeldungen"
+        : `, ${info.einsatzmeldungen} Einsatzmeldung${info.einsatzmeldungen === 1 ? "" : "en"}`;
+  return `Kennzahlen-Baustein (${info.app} ${info.fassung}${info.fiktiv ? ", FIKTIV" : ""}): ${raum}, Datenstand ${zeitDE(info.datenstand)}, ${info.kennzahlen} Kennzahl${info.kennzahlen === 1 ? "" : "en"}${em}. Kennzahlen werden unverändert übernommen.`;
 }
 
 /** Hinweis, wenn ein Baustein nicht verwendet werden kann und als JSON-Material bleibt. */
 export function bausteinAblehnung(e: Exclude<BausteinErkennung, { status: "gueltig" }>): string {
   if (e.status === "unbekannte_fassung")
-    return `Kennzahlen-Baustein der Fassung „${e.fassung || "ohne Angabe"}“ ist unbekannt (bekannt: ${BAUSTEIN_FASSUNGEN.join(", ")}); als JSON-Material übernommen, Kennzahlen ohne Prüfung.`;
+    return `Kennzahlen-Baustein der Fassung „${e.fassung || "ohne Angabe"}“ ist unbekannt (bekannt: ${(BAUSTEIN_FORMATE[e.format]?.fassungen ?? BAUSTEIN_FASSUNGEN).join(", ")}); als JSON-Material übernommen, Kennzahlen ohne Prüfung.`;
   return `Kennzahlen-Baustein (Fassung ${e.fassung}) entspricht nicht dem Schema (${e.befunde.length} Befund${e.befunde.length === 1 ? "" : "e"}, etwa ${e.befunde[0]}); als JSON-Material übernommen, Kennzahlen ohne Prüfung.`;
 }

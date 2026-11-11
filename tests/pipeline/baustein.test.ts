@@ -71,7 +71,47 @@ describe("UP-2026-W45-01: Erkennung als Materialart „kennzahlen-baustein“", 
     expect(m.art).toBe("json");
     expect(m.hinweis).toMatch(/entspricht nicht dem Schema \(\d+ Befund/);
     expect(erkenneBaustein({ format: "anderes" }, BAUSTEIN_SCHEMATA)).toBeNull();
-    expect(erkenneBaustein({ format: "Thessa-Kennzahlen" }, BAUSTEIN_SCHEMATA)).toEqual({ status: "unbekannte_fassung", fassung: "" });
+    expect(erkenneBaustein({ format: "Thessa-Kennzahlen" }, BAUSTEIN_SCHEMATA)).toEqual({
+      status: "unbekannte_fassung",
+      fassung: "",
+      format: "Thessa-Kennzahlen",
+    });
+  });
+});
+
+describe("KSNV-Kennzahlen (0.7.19): Erkennung als Materialart „kennzahlen-baustein“", () => {
+  const ksnv = () => jsonDateien("formate/fremd/ksnv-kennzahlen/beispiele", { pflicht: true });
+  const land = () => ksnv().find((b) => b.daten.raum.ebene === "land")!;
+
+  it("Baustein des Landes: Materialart, Anzeige mit App, Raum, Datenstand und Zahl der Kennzahlen, ohne Einsatzmeldungen", async () => {
+    const b = land();
+    const m = await alsMaterial(b.name, b.daten);
+    expect(m.art).toBe("kennzahlen-baustein");
+    expect(m.hinweis).toBe(
+      `Kennzahlen-Baustein (KSNV 0.1, FIKTIV): Thüringen (16), Datenstand 05.11.2026, 15:10, ${b.daten.kennzahlen.length} Kennzahlen. Kennzahlen werden unverändert übernommen.`,
+    );
+    expect(m.baustein!.info).toMatchObject({ format: "KSNV-Kennzahlen", app: "KSNV", fassung: "0.1", einsatzmeldungen: 0 });
+  });
+
+  it("an die KI ohne herleitung: keine Kennung einer Bedarfsmeldung im Text, Kennzahlen vollständig", async () => {
+    const b = land();
+    const m = await alsMaterial(b.name, b.daten);
+    const text = (materialBloecke([m], [], "")[0] as { text: string }).text;
+    expect(text).toContain('art="kennzahlen-baustein"');
+    expect(text).not.toContain('"herleitung"');
+    for (const h of b.daten.herleitung) for (const id of h.bedarfsmeldungen) expect(text).not.toContain(`"${id}"`);
+    expect(JSON.parse(m.text!).kennzahlen).toEqual(b.daten.kennzahlen);
+  });
+
+  it("unbekannte Fassung und beschädigter Baustein: JSON-Material mit Hinweis", async () => {
+    const neu = await alsMaterial("neu.json", { ...kopie(land().daten), fassung: "0.9" });
+    expect(neu.art).toBe("json");
+    expect(neu.hinweis).toMatch(/Fassung „0\.9“ ist unbekannt \(bekannt: 0\.1\)/);
+    const d = kopie(land().daten);
+    d.kennzahlen[0].einheit = 7;
+    const kaputt = await alsMaterial("kaputt.json", d);
+    expect(kaputt.art).toBe("json");
+    expect(kaputt.hinweis).toMatch(/entspricht nicht dem Schema/);
   });
 });
 

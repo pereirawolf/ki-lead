@@ -12,7 +12,7 @@ import { BAUSTEIN_SCHEMATA } from "./bausteinschemata";
 
 /**
  * meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung),
- * kennzahlen-baustein = Kennzahlen-Baustein aus Thessa (seit 0.6.24, UP-2026-W45-01)
+ * kennzahlen-baustein = Kennzahlen-Baustein aus Thessa (seit 0.6.24, UP-2026-W45-01) oder KSNV (seit 0.7.19)
  */
 export type MaterialArt = "notiz" | "url" | "text" | "json" | "meldung" | "eingang" | "kennzahlen-baustein" | "docx" | "pdf";
 

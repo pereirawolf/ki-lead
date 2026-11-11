@@ -1,0 +1,479 @@
+{
+  "format": "KSNV-Kennzahlen",
+  "fassung": "0.1",
+  "erzeugt": "2026-11-06T09:05:00+01:00",
+  "datenstand": "2026-11-04T14:30:00+01:00",
+  "raum": {
+    "name": "Wartburgkreis",
+    "schluessel": "16063",
+    "ebene": "kreis"
+  },
+  "fiktiv": true,
+  "szenario": "Notbetrieb ab 72 Stunden Stromausfall",
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Wartburgkreis, untere Katastrophenschutzbehörde (FIKTIV)",
+      "titel": "Bedarfslage Kraftstoff im Notbetrieb aus 6 Bedarfsmeldungen, KSNV (FIKTIV)",
+      "zugriff": "2026-11-06",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-11-04T14:30:00+01:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Tagesbedarf Diesel (Notbetrieb ab 72 Stunden Stromausfall)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 7563,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "davon Netzersatzanlagen (Anlieferung)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 7329,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K3",
+      "gegenstand": "davon Fahrzeuge (Betankung an Tankstellen)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 234,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K4",
+      "gegenstand": "Tagesbedarf Ottokraftstoff (Notbetrieb ab 72 Stunden Stromausfall)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 29,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K5",
+      "gegenstand": "davon Netzersatzanlagen (Anlieferung)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 22,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K6",
+      "gegenstand": "davon Fahrzeuge (Betankung an Tankstellen)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 7,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K7",
+      "gegenstand": "Bedarfsträger mit Bedarfsmeldung",
+      "einheit": "Bedarfsträger",
+      "art": "bestand",
+      "wert": 6,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K8",
+      "gegenstand": "Netzersatzanlagen der Bedarfsträger",
+      "einheit": "Anlagen",
+      "art": "bestand",
+      "wert": 9,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K9",
+      "gegenstand": "installierte Leistung der Netzersatzanlagen",
+      "einheit": "kVA",
+      "art": "kapazitaet",
+      "wert": 1438,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K10",
+      "gegenstand": "Fahrzeuge im Notbetrieb unter 7,5 t zGG",
+      "einheit": "Fahrzeuge",
+      "art": "bestand",
+      "wert": 28,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K11",
+      "gegenstand": "Fahrzeuge im Notbetrieb ab 7,5 t zGG",
+      "einheit": "Fahrzeuge",
+      "art": "bestand",
+      "wert": 7,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K12",
+      "gegenstand": "Tagesbedarf Diesel in Stadt Bad Salzungen",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 1850,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Bad Salzungen",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K13",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Stadt Bad Salzungen",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 29,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Bad Salzungen",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K14",
+      "gegenstand": "Tagesbedarf Diesel in Stadt Eisenach",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 4172,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Eisenach",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Stadt Eisenach",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 0,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Eisenach",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K16",
+      "gegenstand": "Tagesbedarf Diesel in Verwaltungsgemeinschaft Hainich-Werratal",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 656,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Verwaltungsgemeinschaft Hainich-Werratal",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Verwaltungsgemeinschaft Hainich-Werratal",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 0,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Verwaltungsgemeinschaft Hainich-Werratal",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Tagesbedarf Diesel in Wartburgkreis (Kreisebene)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 885,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis (Kreisebene)",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K19",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Wartburgkreis (Kreisebene)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 0,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis (Kreisebene)",
+      "datenstand": "2026-11-04T14:30:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K6",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01",
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01",
+        "16063008-WW-HAINICHBLICK-v01",
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K12",
+      "bedarfsmeldungen": [
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01"
+      ]
+    },
+    {
+      "kennzahl": "K13",
+      "bedarfsmeldungen": [
+        "16063003-SW-WERRA-SOLE-v01",
+        "16063003-PFLEGE-BURGSEE-v01"
+      ]
+    },
+    {
+      "kennzahl": "K14",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01"
+      ]
+    },
+    {
+      "kennzahl": "K15",
+      "bedarfsmeldungen": [
+        "16063105-KLINIKUM-HOERSELUFER-v02",
+        "16063105-LZ-NORDSTADT-v01"
+      ]
+    },
+    {
+      "kennzahl": "K16",
+      "bedarfsmeldungen": [
+        "16063008-WW-HAINICHBLICK-v01"
+      ]
+    },
+    {
+      "kennzahl": "K17",
+      "bedarfsmeldungen": [
+        "16063008-WW-HAINICHBLICK-v01"
+      ]
+    },
+    {
+      "kennzahl": "K18",
+      "bedarfsmeldungen": [
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    },
+    {
+      "kennzahl": "K19",
+      "bedarfsmeldungen": [
+        "16063003-KATS-ZENTRUM-v01"
+      ]
+    }
+  ]
+}
