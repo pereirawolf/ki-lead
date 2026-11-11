@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.42.2 – 11.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 11.11.2026 zur Darstellung der Schrittleiste (Grunddesign 1.7, Regel LD-T05; App 0.7.17). Dritte Stelle: nur Beschriftung der Oberfläche, Feldnamen, Schema, Arbeitsanweisungen, Kodierleitfaden und SOP-Texte unverändert.
+
+- **Darstellungsdatei** (`meldung.ui.json`): Schrittnamen „Ereignisse und Sachverhalte“, „Quellen und Referenzen“ und „Prüfen und Exportieren“ (bisher „Ereignisse/Sachverhalte“, „Quellen & Referenzen“, „Prüfen & Exportieren“); Ausfüllhinweis zu „Lage & Ereignis“ nennt den Schritt „Quellen und Referenzen“. Die Feldnamen „Ereignisse/Sachverhalte“ und „Quellen & Referenzen“ bleiben, wie sie in Meldevorlage, SOPs und Kodierleitfaden heißen.
+- **SOP-LEAD-Sammelmappe 3.23.5:** Gültigkeitsstand in Teil A (Darstellungsdatei). Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+
 ## 1.42.1 – 06.11.2026
 
 Grundlage: Sammelbefunddatei `ki-lead-befund_offen_2026-W45.json` (Sammellauf offener Befunde KW 45, Commit `fd452dc`), OB-2026-W45-07, freigegeben vom Herausgeber am 06.11.2026 als Variante A. Anlass: Prüfstein `2026-W43_ebola-kenia-nigeria` (Auslegung der Nullregel (b) ungeklärt), vorgelegt im Erfassungstest KW 43 und in der Konsistenzprüfung KW 44. Dritte Stelle: Präzisierung ohne neue Kodierregel; Schema und Darstellungsdatei unverändert.

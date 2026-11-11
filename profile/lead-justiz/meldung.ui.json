@@ -11,14 +11,14 @@
       "felder": ["funktionslage", "meldeabdeckung"],
       "einleitung": "Funktions- und Statusmatrix: je Funktion und Bereich ein Eintrag mit Quelle und Stand. „gesichert“ nur nach positiver Feststellung; „unbekannt“, „nicht gemeldet“, „nicht betroffen“ und „nicht zuständig“ sind nie gleichbedeutend mit „gesichert“ (Kodierleitfaden Abschnitt 3)."
     },
-    { "id": "sachverhalte", "titel": "Beeinträchtigungen/Sachverhalte", "felder": ["sachverhalte"] },
+    { "id": "sachverhalte", "titel": "Beeinträchtigungen und Sachverhalte", "felder": ["sachverhalte"] },
     {
       "id": "quellen",
-      "titel": "Quellen & Referenzen",
+      "titel": "Quellen und Referenzen",
       "felder": ["quellen", "zeitstrahl"],
       "einleitung": "Zentrales Quellenverzeichnis für alle Sachverhalte dieser Meldung (Teil A, A.3 und A.6). In Texten nur mit [Q1], [Q2, Q4] oder [Q1–Q3] verweisen. Darunter der Zeitstrahl je Sachverhalt (Kodierleitfaden Abschnitt 8)."
     },
-    { "id": "pruefen", "titel": "Prüfen & Exportieren", "felder": ["freigabe"], "pruefung": true }
+    { "id": "pruefen", "titel": "Prüfen und Exportieren", "felder": ["freigabe"], "pruefung": true }
   ],
   "felder": {
     "land": { "label": "Land", "widget": "auswahl", "leer_label": "– bitte wählen –", "pflicht": true },

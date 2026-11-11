@@ -1165,3 +1165,13 @@ Angepasst mit geändertem Soll: `tests/ci/actions.test.ts` (18 statt 15 Einbindu
 | Im Browser (390 und 1280 px, Umbruch zusätzlich von 300 bis 1400 px): Hinweis mit Wortlaut, kein Umbruch am Mittelpunkt, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen schmaler, ganzer Wortlaut sichtbar (kein Abschneiden), Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
 
 Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` misst den Abstand ab dem Kopfbereich und liest die Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist.
+
+## Grunddesign 1.7: Schrittnamen mit „und“ (0.7.17, Entscheidung des Herausgebers vom 11.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Schrittnamen aller mitgelieferten Profile ohne „&“ und „/“, darunter „Ereignisse und Sachverhalte“, „Quellen und Referenzen“, „Prüfen und Exportieren“; Feldnamen „Quellen & Referenzen“ und „Ereignisse/Sachverhalte“ unverändert | Grunddesign › LD-T05: Schrittnamen der Profile verbinden mit „und“, nicht mit „&“ oder „/“ (seit Grunddesign 1.7, KI-LEAD 0.7.17) | `tests/format/lead-design.test.ts` |
+
+Umbenannt (nur Schrittname im Testnamen): „Meldung: Management Summary als eigener Schritt › „Prüfen & Exportieren“ ohne Management Summary …“ → „… „Prüfen und Exportieren“ ohne Management Summary …“ (`tests/ui/meldung-schritte.test.ts`); „ZS-2026-W44-01: Zeitstrahl auf der Seite „Quellen & Referenzen““ → „… „Quellen und Referenzen““ (`tests/ui/zeitstrahl.test.ts`); „Meldung: fünfter Schritt „Management Summary“ nach „Prüfen & Exportieren“ …“ → „… nach „Prüfen und Exportieren“ …“ (`tests/browser/hauptablauf.spec.ts`).
+
+Angepasst ohne Änderung des Solls (neue Schrittnamen): `tests/ui/erfassung.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/browser/sprungziele.spec.ts`, `tests/browser/baukasten.spec.ts`, `tests/browser/ux-2026-w44.spec.ts`, `tests/browser/eingabehilfen.spec.ts`; `tests/profil/lead-justiz.test.ts` (Profilversion 0.3.1).

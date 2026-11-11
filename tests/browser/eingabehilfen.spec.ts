@@ -8,7 +8,7 @@ const ROLLEN = ["button", "textbox", "combobox", "checkbox", "radio", "link"];
 test("Tastatur: Bereich öffnen, Vorlage einfügen, erste offene Stelle markiert; keine Anfrage nach außen", async ({ page }) => {
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await page.locator("nav.schritte button", { hasText: "Ereignisse/Sachverhalte" }).click();
+  await page.locator("nav.schritte button", { hasText: "Ereignisse und Sachverhalte" }).click();
 
   const summary = page.locator("summary", { hasText: "LEAD-Eingabehilfen: Lage & Ereignis, Ereignis/Sachverhalt 1" });
   await summary.focus();
@@ -38,7 +38,7 @@ test("Tastatur: Bereich öffnen, Vorlage einfügen, erste offene Stelle markiert
 test("geöffnete Bereiche: alle Bedienelemente haben einen zugänglichen Namen", async ({ page }) => {
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await page.locator("nav.schritte button", { hasText: "Ereignisse/Sachverhalte" }).click();
+  await page.locator("nav.schritte button", { hasText: "Ereignisse und Sachverhalte" }).click();
   const bereiche = page.locator("details.eingabehilfen");
   await expect(bereiche).toHaveCount(5);
   for (const b of await bereiche.all()) await b.evaluate((el: HTMLDetailsElement) => (el.open = true));

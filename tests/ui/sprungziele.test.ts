@@ -135,18 +135,18 @@ describe("Meldung: Sprungziele der Schritte", () => {
     await zeigeMeldung(ilkaMeldung("Bund"));
     setzeScrollY(3000);
     lage(document.querySelector(".meldung .arbeitsbereich")!, -2500);
-    await klick(/^Weiter: Ereignisse\/Sachverhalte/);
-    expect(titel()?.textContent).toBe("Ereignisse/Sachverhalte");
+    await klick(/^Weiter: Ereignisse und Sachverhalte/);
+    expect(titel()?.textContent).toBe("Ereignisse und Sachverhalte");
     expect(scrollAufrufe()).toEqual([3000 - 2500 - 12]);
     expect(document.activeElement).toBe(titel());
 
-    await klick(/^Weiter: Quellen & Referenzen/);
-    expect(titel()?.textContent).toBe("Quellen & Referenzen");
+    await klick(/^Weiter: Quellen und Referenzen/);
+    expect(titel()?.textContent).toBe("Quellen und Referenzen");
     expect(scrollAufrufe()).toHaveLength(1);
     expect(document.activeElement).toBe(titel());
 
-    await klick(/^Zurück: Ereignisse\/Sachverhalte/);
-    expect(titel()?.textContent).toBe("Ereignisse/Sachverhalte");
+    await klick(/^Zurück: Ereignisse und Sachverhalte/);
+    expect(titel()?.textContent).toBe("Ereignisse und Sachverhalte");
     expect(scrollAufrufe()).toHaveLength(1);
     expect(document.activeElement).toBe(titel());
   });
@@ -167,7 +167,7 @@ describe("Meldung: Sprungziele der Schritte", () => {
     await zeigeMeldung(ilkaMeldung("Bund"));
     const bereich = document.querySelector(".meldung .arbeitsbereich")!;
     lage(bereich, 150);
-    const k = schrittKnopf(/Quellen & Referenzen/);
+    const k = schrittKnopf(/Quellen und Referenzen/);
     k.focus();
     await klick(k);
     expect(scrollAufrufe()).toEqual([]);
@@ -182,7 +182,7 @@ describe("Meldung: Sprungziele der Schritte", () => {
 
   it("„Ereignis/Sachverhalt hinzufügen“ fokussiert das erste Feld des neuen Eintrags; „Entfernen“ den vorigen Eintrag", async () => {
     await zeigeMeldung(ilkaMeldung("Bund"));
-    await klick(schrittKnopf(/Ereignisse\/Sachverhalte/));
+    await klick(schrittKnopf(/Ereignisse und Sachverhalte/));
     const eintraege = () => [...document.querySelectorAll<HTMLElement>(".schritt-inhalt .liste > .element")];
     const vorher = eintraege().length;
     scrollAufrufe();

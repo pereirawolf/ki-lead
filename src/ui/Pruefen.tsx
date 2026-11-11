@@ -1,4 +1,4 @@
-// Schritt „Prüfen & Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe. Die Management Summary hat seit 0.5.17
+// Schritt „Prüfen und Exportieren“: Schemaprüfung, Hinweise, Übersicht und Ausgabe. Die Management Summary hat seit 0.5.17
 // einen eigenen Schritt danach (Meldung.tsx).
 
 import { useMemo, useState } from "react";

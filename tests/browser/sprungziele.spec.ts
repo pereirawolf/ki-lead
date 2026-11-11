@@ -50,13 +50,13 @@ for (const breite of [
     await netzVorbereiten(page, () => "haengen");
     await oeffnen(page);
     const ziel = ".meldung .arbeitsbereich";
-    await weiterOben(page, /^Weiter: Ereignisse\/Sachverhalte/, "Ereignisse/Sachverhalte", ziel);
-    await weiterOben(page, /^Weiter: Quellen & Referenzen/, "Quellen & Referenzen", ziel);
-    await weiterOben(page, /^Zurück: Ereignisse\/Sachverhalte/, "Ereignisse/Sachverhalte", ziel);
-    await weiterOben(page, /^Weiter: Quellen & Referenzen/, "Quellen & Referenzen", ziel);
-    await weiterOben(page, /^Weiter: Prüfen & Exportieren/, "Prüfen & Exportieren", ziel);
+    await weiterOben(page, /^Weiter: Ereignisse und Sachverhalte/, "Ereignisse und Sachverhalte", ziel);
+    await weiterOben(page, /^Weiter: Quellen und Referenzen/, "Quellen und Referenzen", ziel);
+    await weiterOben(page, /^Zurück: Ereignisse und Sachverhalte/, "Ereignisse und Sachverhalte", ziel);
+    await weiterOben(page, /^Weiter: Quellen und Referenzen/, "Quellen und Referenzen", ziel);
+    await weiterOben(page, /^Weiter: Prüfen und Exportieren/, "Prüfen und Exportieren", ziel);
     await weiterOben(page, /^Weiter: Management Summary/, "Management Summary", ziel);
-    await weiterOben(page, /^Zurück: Prüfen & Exportieren/, "Prüfen & Exportieren", ziel, { langerSchritt: breite.name === "390 px" });
+    await weiterOben(page, /^Zurück: Prüfen und Exportieren/, "Prüfen und Exportieren", ziel, { langerSchritt: breite.name === "390 px" });
     if (breite.name === "390 px") {
       // Schmal steht die Schrittleiste über dem Inhalt und bleibt nach dem Sprung im Bild
       await expect(page.getByRole("navigation", { name: "Schritte" })).toBeInViewport();

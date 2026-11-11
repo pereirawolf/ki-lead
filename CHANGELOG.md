@@ -112,6 +112,22 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.14 | letzter Commit des Pull Requests „Grunddesign 1.4: „und“ statt „&“ in Beschriftungen (LD-T05), Bereiche der Einstellungen; 0.7.14“ (Nachtrag vom 05.11.2026: Grunddesign 1.5 mit Füllfarben für Diagramme, Pull Request „Grunddesign 1.5: Füllfarben für Diagramme (LD-F04)“; Nachtrag vom 09.11.2026: Pull Request „Überführung in einen Wirkbetrieb: Orientierung und Muster einer Leistungsbeschreibung“; jeweils ohne Änderung der App) |
 | 0.7.15 | letzter Commit des Pull Requests „Offene Befunde KW 45: Dokumentation, Barrierefreiheit, Nullregel D2; 0.7.15“ (Nachtrag vom 10.11.2026: Pull Request „CI-Lieferkette: Browsertests im Containerbild von Playwright, minimatch 11 (Dependabot #10)“, ohne Änderung der App) |
 | 0.7.16 | letzter Commit des Pull Requests „Grunddesign 1.6: einheitliches Hinweisband der App-Familie, mitlaufender Kopfbereich; 0.7.16“ |
+| 0.7.17 | letzter Commit des Pull Requests „Grunddesign 1.7: Schrittnamen mit „und“ (LD-T05); 0.7.17“ |
+## [0.7.17] – 11.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 11.11.2026: In der Schrittleiste („Seitenkategorien“) verbinden die Schrittnamen einheitlich mit „und“; die Feldnamen der LEAD-Meldevorlage bleiben unverändert. Anlass: In „Ereignisse/Sachverhalte“ brach die Schrittleiste auf schmalen Bildschirmen hinter dem Schrägstrich um, der dann am Zeilenende stand.
+
+### Geändert
+
+- **Schrittnamen der Profile** (`meldung.ui.json`, nur `schritte[].titel`): „Ereignisse und Sachverhalte“ (Justiz: „Beeinträchtigungen und Sachverhalte“), „Quellen und Referenzen“, „Prüfen und Exportieren“ – Beispielprofil 1.42.2, Landesprofil Thüringen 1.8.2 (abgeleitet mit `npm run profil:land`), Lagebild Justiz 0.3.1, Vorlage 0.8.1 und `formate/lead-meldung-v2/beispiel/meldung.ui.json`. Feldnamen („Ereignisse/Sachverhalte“, „Quellen & Referenzen“, „Lage & Ereignis“ usw.), Schemata, Arbeitsanweisungen, Kodierleitfaden und SOP-Texte unverändert; Gültigkeitsstand in Teil A (Sammelmappe 3.23.5) nennt die Darstellungsdatei mit Profilversion 1.42.2.
+- **Grunddesign 1.7** (`design/`): LD-T05 gilt auch für die Schrittnamen der Schrittleiste, wenn der gleichnamige Feldname „&“ oder „/“ trägt; „&“ bleibt nur in Feldnamen der Meldevorlage. Kennungen, Zahl der Regeln und Tokens unverändert.
+- Kommentare in `src/ui/` und `src/styles/formular.css`, README und Spezifikation (Abschnitte zu Management Summary und Zeitstrahl) nennen die Schritte mit den neuen Namen. Versionsangaben 0.7.17 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 717); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: LD-T05 für die Schrittnamen aller mitgelieferten Profile (kein „&“, kein „/“), Feldnamen unverändert.
+- Angepasst ohne Änderung des Solls (neue Schrittnamen): `tests/ui/erfassung.test.ts`, `tests/ui/meldung-schritte.test.ts`, `tests/ui/sprungziele.test.ts`, `tests/ui/zeitstrahl.test.ts`, `tests/browser/hauptablauf.spec.ts`, `tests/browser/sprungziele.spec.ts`, `tests/browser/baukasten.spec.ts`, `tests/browser/ux-2026-w44.spec.ts`, `tests/browser/eingabehilfen.spec.ts`; `tests/profil/lead-justiz.test.ts` (Profilversion 0.3.1).
+
 ## [0.7.16] – 10.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 10.11.2026 nach dem Vorschlag zum Hinweisband der App-Familie: einheitlicher, prägnanter Hinweis in KI-LEAD, KRITIS-LEAD und Thessa, am Kopf der Seite stehend und beim Scrollen schmaler, in einer Akzentfarbe des Farbschemas; vor und nach dem Mittelpunkt gleicher Abstand; der Satz darf nach Bedarf natürlich umbrechen, aber nicht an einer festen Stelle wie direkt hinter dem Mittelpunkt (Klarstellung vom selben Tag).

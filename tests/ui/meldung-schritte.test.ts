@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Schritte der Meldungsmaske (seit 0.5.17): Die App hängt für jedes Profil einen fünften Schritt „Management Summary“
-// an; „Prüfen & Exportieren“ behält Prüfung und Ausgabe, die Management Summary steht nur noch im eigenen Schritt.
+// an; „Prüfen und Exportieren“ behält Prüfung und Ausgabe, die Management Summary steht nur noch im eigenen Schritt.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
@@ -53,10 +53,10 @@ describe("Meldung: Management Summary als eigener Schritt", () => {
     expect(schritte()).toHaveLength(profil.ui.schritte.length + 1);
   });
 
-  it("„Prüfen & Exportieren“ ohne Management Summary, mit „Weiter: Management Summary“; dort KI-Fassung und Feldauszug", async () => {
+  it("„Prüfen und Exportieren“ ohne Management Summary, mit „Weiter: Management Summary“; dort KI-Fassung und Feldauszug", async () => {
     await zeige("lead-beispiel", ilkaMeldung("Bund"));
-    await klick([...document.querySelectorAll("nav.schritte button")].find((b) => /Prüfen & Exportieren/.test(b.textContent || "")) as HTMLButtonElement);
-    expect(schrittTitel()).toBe("Prüfen & Exportieren");
+    await klick([...document.querySelectorAll("nav.schritte button")].find((b) => /Prüfen und Exportieren/.test(b.textContent || "")) as HTMLButtonElement);
+    expect(schrittTitel()).toBe("Prüfen und Exportieren");
     expect(knopf("Final als JSON exportieren")).toBeTruthy();
     expect(inhalt().querySelector(".kurzfassung")).toBeNull();
     expect(inhalt().textContent).not.toContain("Feldauszug ohne KI");
@@ -73,7 +73,7 @@ describe("Meldung: Management Summary als eigener Schritt", () => {
     expect(kasten.textContent).toContain("API-Schlüssel für Anthropic hinterlegen");
     expect(knopf("Final als JSON exportieren")).toBeUndefined();
     expect(knopf(/^Weiter:/)).toBeUndefined();
-    expect(knopf("Zurück: Prüfen & Exportieren")).toBeTruthy();
+    expect(knopf("Zurück: Prüfen und Exportieren")).toBeTruthy();
     await bisWahr(() => db.werte.size === 0);
   });
 });
