@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/pereirawolf/ksnv/schema/kennzahlen-baustein.schema.json",
   "title": "KSNV-Kennzahlen, Fassung 0.1 (Entwurf)",
-  "description": "Bedarfslage eines Raums (Stelle der Gemeindeebene, Landkreis oder kreisfreie Stadt, Land) als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, als Material für ein LEAD-Lagebild (KI-LEAD). Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Liter je Tag, Bedarfsträger, Anlagen, kVA, Fahrzeuge) werden nicht addiert; Diesel und Ottokraftstoff stehen getrennt.",
+  "description": "Bedarfslage eines Raums (Stelle der Gemeindeebene, Landkreis oder kreisfreie Stadt, Land) als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, als Material für ein LEAD-Lagebild. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Liter je Tag, Bedarfsträger, Anlagen, kVA, Fahrzeuge) werden nicht addiert; Diesel und Ottokraftstoff stehen getrennt.",
   "type": "object",
   "additionalProperties": false,
   "required": [
