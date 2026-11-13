@@ -115,6 +115,22 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.17 | letzter Commit des Pull Requests „Grunddesign 1.7: Schrittnamen mit „und“ (LD-T05); 0.7.17“ |
 | 0.7.18 | letzter Commit des Pull Requests „Grunddesign 1.8: Seitentitel und Kopfleiste der App-Familie; 0.7.18“ |
 | 0.7.19 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus KSNV als Materialart; 0.7.19“ |
+| 0.7.20 | letzter Commit des Pull Requests „Schätzung der Erfassung nach der Fallreihe vom 13.11.2026; 0.7.20“ |
+## [0.7.20] – 14.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach einer Fallreihe vom 13.11.2026 (App 0.7.18, Beispielprofil 1.42.2, Standard-Profil Anthropic: S1 claude-sonnet-5-5 „mittel“, S2 claude-opus-5-5 „mittel“): zwölf Erfassungsläufe zu fiktiven Kurzfällen mit je einem Sachverhalt (Text, 1,3–1,8 kB), ohne Recherche, nacheinander in einer Reihe (Läufe 20261113-141612-y633 bis 20261113-144936-dvul). Alle Läufe waren schemakonform; je Lauf 0,49–0,99 USD und 150–231 s, zusammen 7,95 USD. Die App hatte je Lauf 1,42–3,70 USD geschätzt; alle zwölf lagen darunter. Material, Laufprotokolle und Inhalte bleiben außerhalb des Repositorys; hier stehen nur Kenndaten.
+
+### Geändert
+
+- **Schätzung von Dauer und Kosten** (`src/pipeline/schaetzung.ts`): Erfassung mit Opus „mittel“ 120–810 s und 0,45–3,35 USD statt 200–810 s und 1,40–3,35 USD (gemessen in S2 136–217 s, 0,47–0,81 USD, 16 235–26 099 Ausgabetoken; 0,81 USD im ersten Lauf der Reihe ohne gelesenen Cache). Die Anzeige vor dem Start nennt für das Standard-Profil Anthropic damit „≈ 2–14 Minuten, 0,47–3,70 USD“ statt „≈ 3–14 Minuten, 1,42–3,70 USD“. Die Obergrenzen bleiben; sie decken große Materialmengen mit mehreren Sachverhalten (bis 666 s und 2,66 USD gemessen) und Läufe mit Recherche. Die vorläufige Spanne für Opus „hoch“ übernimmt nach der Regel seit 0.7.13 die Untergrenze von Opus „mittel“ (120–960 s, 0,45–3,55 USD). S1 Sonnet „mittel“ lag mit 13–18 s und 0,026–0,174 USD in der Spanne (0,174 USD im ersten Lauf ohne Cache). Eine Reparatur in S3 (Haiku „niedrig“, ein Lauf) kostete 0,006 USD in 26 s.
+- **Regel im Dateikopf ergänzt:** Eine unterschrittene Untergrenze ist der kleinste Messwert, nach außen gerundet, ohne Reserve; bestehende Spannen werden weiterhin nicht verengt.
+- Spezifikation 0.7.20 (Abschnitt 5.4, M2; offener Punkt 6 mit Stand). Versionsangaben 0.7.20 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 720); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/pipeline/schaetzung.test.ts`: Kenndaten der Fallreihe (S1 und S2 je Lauf) in den Spannen, Obergrenze von S2 mit 25 % Reserve; neue Untergrenzen von Hand nach der Regel (136,3 s → 120 s, 0,4655 USD → 0,45 USD), vorläufige Spanne für Opus „hoch“ und Anzeigetext.
+- Angepasst mit geändertem Soll: `tests/pipeline/schaetzung.test.ts` (Messwerte, Anzeige, Hochrechnung für Fable aus Opus „mittel“, frühere Reihen mit den heutigen Untergrenzen), `tests/ui/modellwahl.test.ts` (Kopfzeile „≈ 2–14 Minuten, 0,47–3,70 USD“).
+
 ## [0.7.19] – 13.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 12.11.2026: KI-LEAD soll die Kennzahlen-Bausteine des Schwesterdemonstrators KSNV (Kraftstoff-Notversorgung) wie die Bausteine aus Thessa als eigene Materialart erkennen, damit ein LEAD-Lagebild die Bedarfslage an Kraftstoff im Notbetrieb ohne Umformatierung übernimmt.
