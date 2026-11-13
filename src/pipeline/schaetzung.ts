@@ -20,9 +20,13 @@
 //   (vorläufig, ein Messlauf); Erfassung Opus „mittel“ und S1 gpt-6-luna „hoch“ lagen in den Spannen. Dazu eine
 //   Fortschreibung desselben Materials mit Vormeldung (Lauf 20261105-173747-v8w6, S1 Sonnet „hoch“, S2 Opus „hoch“): neu S1
 //   Sonnet „hoch“ (vorläufig), Erfassung Opus „hoch“ in der Spanne.
+// - Fallreihe vom 13.11.2026 (App 0.7.18, Profil 1.42.2, Standard-Profil Anthropic): zwölf Erfassungsläufe zu fiktiven
+//   Kurzfällen mit je einem Sachverhalt (Text, 1,3–1,8 kB, ohne Recherche), nacheinander in einer Reihe; nur Kenndaten.
+//   Neu: Untergrenzen der Erfassung mit Opus „mittel“ (kleines Material); S1 Sonnet „mittel“ lag in der Spanne.
 // Spannen nach außen gerundet (Sekunden auf 30 s, unter 60 s auf 10 s; USD auf 0,05, unter 0,10 USD auf 0,01). Neue oder
-// überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); bestehende Spannen
-// werden nicht verengt. Messwerte erst ab drei Läufen. Kosten nach Listenpreisen (preise.ts) ohne den Aufschlag des
+// überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); unterschrittene
+// Untergrenzen: kleinster Messwert, ohne Reserve (seit 0.7.20); bestehende Spannen werden nicht verengt. Messwerte erst ab
+// drei Läufen. Kosten nach Listenpreisen (preise.ts) ohne den Aufschlag des
 // EU-Endpunkts von Mistral; `schaetzeStufe` schlägt ihn auf (seit 0.5.10, AV-2026-W43-06).
 // Ausnahme (seit 0.7.9, AV-2026-W45-02, -03): Eine Kombination mit nur einem Messlauf erhält eine vorläufige Spanne
 // (`vorlaeufig`), wenn die Hochrechnung sonst irreführt; Untergrenze aus der Verdichtung derselben Kombination (ist sie
@@ -83,15 +87,19 @@ export const MESSWERTE: Record<string, Messwert> = {
   // gemessen 209–285 s, 1,45–1,82 USD (Testreihe mit Websuche); Anbietervergleich 04.11.2026 (AV-2026-W45-01): 636 s,
   // 2,66 USD, 85 555 Ausgabetoken, 155 453 Token neu in den Cache, keine gelesen (Lauf 20261104-204127-m8r4); Obergrenze
   // seither 810 s und 3,35 USD (Messwert plus 25 %), Untergrenze bleibt. Folgereihe 05.11.2026 (App 0.7.9): 665–666 s,
-  // 2,53–2,58 USD, 89 234–89 492 Ausgabetoken (Läufe 20261105-141838-pyor, -150440-l8af); in der Spanne
-  "erfassung|claude-opus-5-5|medium": { sekunden: [200, 810], usd: [1.4, 3.35] },
+  // 2,53–2,58 USD, 89 234–89 492 Ausgabetoken (Läufe 20261105-141838-pyor, -150440-l8af); in der Spanne. Fallreihe
+  // 13.11.2026 (App 0.7.18, zwölf Kurzfälle, je ein Sachverhalt, ohne Recherche): 136–217 s, 0,47–0,81 USD, 16 235–26 099
+  // Ausgabetoken (Läufe 20261113-141612-y633 bis 20261113-144936-dvul; 0,81 USD im ersten Lauf ohne gelesenen Cache);
+  // Untergrenzen seither 120 s und 0,45 USD (bis 0.7.19: 200 s, 1,40 USD), Obergrenzen bleiben
+  "erfassung|claude-opus-5-5|medium": { sekunden: [120, 810], usd: [0.45, 3.35] },
   // vorläufig (ein Messlauf): Folgereihe 05.11.2026 (App 0.7.9, Profil 1.38.0) 767 s, 2,81 USD, 102 241 Ausgabetoken,
   // 118 988 Token neu in den Cache (Lauf 20261105-143746-5iuf). Eine Verdichtung mit Opus „hoch“ ist nicht gemessen; die
   // Untergrenze stammt deshalb aus der Erfassung mit Opus „mittel“, die Obergrenze ist Messwert plus 25 %. Bis 0.7.12 aus
   // Opus „mittel“ hochgerechnet (1,40–6,70 USD, ohne Dauer). Fortschreibung vom 05.11.2026 mit Vormeldung: 816 s,
   // 3,36 USD, 114 542 Ausgabetoken, 132 317 Token neu in den Cache (Lauf 20261105-173747-v8w6); in der Spanne, weiter
-  // vorläufig (zwei Messläufe)
-  "erfassung|claude-opus-5-5|high": { sekunden: [200, 960], usd: [1.4, 3.55], vorlaeufig: true },
+  // vorläufig (zwei Messläufe). Seit 0.7.20 folgt die Untergrenze der Erfassung mit Opus „mittel“ (120 s, 0,45 USD;
+  // bis 0.7.19: 200 s, 1,40 USD)
+  "erfassung|claude-opus-5-5|high": { sekunden: [120, 960], usd: [0.45, 3.55], vorlaeufig: true },
   // gemessen 161–298 s, 0,57–0,74 USD (298 s mit Neustart nach Verbindungsabbruch); Vergleichslauf Ilka 287–381 s,
   // 0,82–0,96 USD, 45 361–61 598 Ausgabetoken (Läufe 20261025-001616-n4c8, -002256-e85u, -002923-kg0c); Plan
   // anbietermix-ilka (M2, App 0.5.10, S1 gpt-6-luna) 218–273 s, 0,68–0,76 USD, 32 916–45 985 Ausgabetoken (Läufe
@@ -260,7 +268,7 @@ export function gueteText(s: Pick<Schaetzung, "gemessen" | "vorlaeufig">): strin
   return s.vorlaeufig ? " (vorläufig, ein Messlauf)" : "";
 }
 
-/** Kurztext einer Stufe, z. B. „S2 (claude-opus-5-5, medium): 3–14 Minuten, 1,40–3,35 USD“. */
+/** Kurztext einer Stufe, z. B. „S2 (claude-opus-5-5, medium): 2–14 Minuten, 0,45–3,35 USD“. */
 export function stufenText(kurz: string, modell: string, aufwand: Aufwand, s: Schaetzung): string {
   return `${kurz} (${modell}, ${aufwand}): ${s.sekunden ? dauerText(s.sekunden) + ", " : ""}${kostenText(s.usd)}${gueteText(s)}`;
 }

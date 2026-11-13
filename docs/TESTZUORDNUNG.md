@@ -1055,7 +1055,7 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Kenndaten der drei internen Erfassungsläufe vom 04.11.2026 liegen in den Spannen, S2 mit 25 % Reserve; Spannen nach der Regel von Hand nachgerechnet | Schätzung von Dauer und Kosten › AV-2026-W45-01 bis -03: Messwerte des Anbietervergleichs … | `tests/pipeline/schaetzung.test.ts` |
 | Einzelmessungen (gpt-6-astra „hoch“, Mistral Medium 3.5 „hoch“) tragen den Zusatz „vorläufig, ein Messlauf“, Mistral mit EU-Aufschlag; jede Erfassung eines Cloud-Standard-Profils hat eine Spanne mit Dauer | … › AV-2026-W45-01 bis -03: … Einzelmessungen vorläufig | `tests/pipeline/schaetzung.test.ts` |
 | Nicht gemessene Stufe eines gemessenen Modells wird aus demselben Modell hochgerechnet, nicht aus einem fremden Modell gleicher Stufe | … › rechnet nicht gemessene Modelle über den Preis hoch, ohne Dauer | `tests/pipeline/schaetzung.test.ts` |
-| Laufschätzung zeigt Opus „mittel“ mit 3–14 Minuten und 1,40–3,35 USD und nennt viele Sachverhalte als Grund für längere Läufe | … › zeigt die Schätzung je Stufe nach Modell und Aufwand an | `tests/pipeline/schaetzung.test.ts` |
+| Laufschätzung zeigt Opus „mittel“ mit 2–14 Minuten und 0,45–3,35 USD (seit 0.7.20; bis 0.7.19 3–14 Minuten und 1,40–3,35 USD) und nennt viele Sachverhalte als Grund für längere Läufe | … › zeigt die Schätzung je Stufe nach Modell und Aufwand an | `tests/pipeline/schaetzung.test.ts` |
 
 ## Anbietervergleich: t0, Radarkennzahlen, Kodierleitfaden 1.10.0 (0.7.10, Befunddatei `ki-lead-befund_anbietervergleich_2026-W45.json`, AV-2026-W45-04 bis -08, Freigabe des Herausgebers vom 04.11.2026)
 
@@ -1197,3 +1197,11 @@ Angepasst mit geändertem Soll: `tests/browser/pwa-update.spec.ts` (Titel der Re
 | Materialart „kennzahlen-baustein“ mit Anzeige (App, Raum, Datenstand, Kennzahlen, ohne Einsatzmeldungen); an die KI ohne `herleitung`; unbekannte Fassung und Schemabefund bleiben JSON mit Hinweis | KSNV-Kennzahlen (0.7.19): Erkennung als Materialart … › … | `tests/pipeline/baustein.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (UP-2026-W45-01: unbekannte Fassung nennt das Format).
+
+## Schätzung der Erfassung nach der Fallreihe vom 13.11.2026 (0.7.20, Entscheidung des Herausgebers vom 14.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kenndaten der zwölf Läufe (S1 Sonnet „mittel“, S2 Opus „mittel“) liegen in den Spannen, S2 mit 25 % Reserve zur Obergrenze; Untergrenzen der Erfassung mit Opus „mittel“ 120 s und 0,45 USD von Hand nach der Regel; vorläufige Spanne für Opus „hoch“ mit derselben Untergrenze; Anzeige „2–14 Minuten, 0,45–3,35 USD“ | Schätzung von Dauer und Kosten › Fallreihe 13.11.2026: Messwerte liegen in den Spannen; Untergrenzen der Erfassung mit Opus erweitert | `tests/pipeline/schaetzung.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/schaetzung.test.ts` (Messwerte, Anzeige, Hochrechnung für Fable, frühere Reihen), `tests/ui/modellwahl.test.ts` (Kopfzeile der Wahl je Lauf).

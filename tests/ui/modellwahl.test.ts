@@ -224,9 +224,9 @@ describe("Punkte 1, 2, 7, 9, 10: Kopfzeile, Rahmen, S3, Zurücksetzen", () => {
   it("Kopfzeile mit Anzeigenamen und Schätzung, ohne S3; Schalter und Schätzung im Rahmen vor der Bestätigung", async () => {
     await erfassungZeigen();
     expect(document.querySelector(".modellwahl-titel")!.textContent).toBe("Modelle und Recherche für diesen Lauf");
-    // S1 Sonnet „mittel“ 10–30 s, 0,02–0,35 USD (seit 0.7.13); S2 Erfassung Opus „mittel“ 200–810 s, 1,40–3,35 USD (seit 0.7.9)
+    // S1 Sonnet „mittel“ 10–30 s, 0,02–0,35 USD (seit 0.7.13); S2 Erfassung Opus „mittel“ 120–810 s, 0,45–3,35 USD (seit 0.7.20)
     expect(document.querySelector(".modellwahl-kurz")!.textContent!.trim()).toBe(
-      "S1 Sonnet 5.5 (mittel) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 3–14 Minuten, 1,42–3,70 USD",
+      "S1 Sonnet 5.5 (mittel) · S2 Opus 5.5 (mittel) · Recherche Standard (bis 15 Websuchen) · Orientierung 1 Suche je Sachverhalt · ≈ 2–14 Minuten, 0,47–3,70 USD",
     );
     expect(kopfzeile()).not.toContain("abweichend");
     // Punkt 9: Schalter zuerst im Rahmen, Schätzung im Rahmen, Bestätigung danach
