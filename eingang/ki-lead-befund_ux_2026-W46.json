@@ -1,0 +1,288 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "ux-pruefung",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-13T23:43:32Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+  "pruefumfang": "UX-Durchsicht auf Anforderung des Herausgebers vom 14.11.2026: Ansichten #/auswertung/uebersicht (leer und mit Beispiel „Ilka“) und #/profile (zugeklappt, erste Karte aufgeklappt, Menü „Profil hinzufügen“) in KI-LEAD 0.7.20. Build aus main (npm ci, vite build), vite preview, Playwright mit Chrome bei 1440 × 900 und 390 × 844 px; axe-core 4 auf beiden Ansichten in beiden Breiten. Register (212 Einträge, darunter UX-2026-W44-01 bis -15 und UX-2026-W45-01 bis -32), Eingang (befunde/eingang) und offene Pull Requests (keine) abgeglichen; Bezüge auf frühere Entscheidungen je Befund genannt. Offene Befunde: 1 (UP-2026-W45-04); Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "Ausgelieferte Fassung auf pereirawolf.github.io: aus der Prüfumgebung nicht erreichbar; geprüft wurde der Build aus main.",
+    "Dunkelmodus, Kontrastschema, Länderfarbschemata; Safari/WebKit, native Apps.",
+    "Screenreader und Tastaturbedienung über axe hinaus (siehe UX-2026-W44-15).",
+    "Übrige Reiter der Auswertung, Erfassung, KI-Erfassung, Einstellungen.",
+    "npm test nicht ausgeführt (kein Code geändert).",
+    "Kein Nutzertest; Einschätzungen sind fachliche UX-Bewertungen. Keine externen Quellen; belege bleiben leer."
+  ],
+  "befunde": [
+    {
+      "id": "UX-2026-W46-01",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, offene Stellen, Link „Erinnern“ (Z. 875–887)",
+          "ist": "href={erinnerungMailto(z, profil.kontakte)} title={istPlatzhalterAdresse(z.email) ? \"Platzhalteradresse – echte Adressen …\""
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, Kopf „Offen“ (Z. 866)",
+          "ist": "Für eine Sammelerinnerung fehlen echte Adressen (kontakte.lokal.json des Profils)."
+        }
+      ],
+      "beobachtung": "Seit UX-2026-W45-07 entfällt die Sammelerinnerung, wenn echte Adressen fehlen; der Hinweis steht dann am Kopf. Neu: Jede offene Stelle behält trotzdem einen Knopf „Erinnern“, der einen E-Mail-Entwurf an die Platzhalteradresse (lage@beispiel.invalid) öffnet. Im Beispiel „Ilka“ sind das zehn gleichartige Knöpfe, die ins Leere führen. Der Grund steht nur im title-Attribut und ist auf Touchgeräten und für viele Screenreader-Einstellungen nicht erreichbar. Hinweis am Kopf und Knöpfe widersprechen sich für Nutzende. Prüfweg: Build und Playwright (390 und 1440 px), Beispiel „Ilka“ geladen, href des ersten Links gelesen.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Bei Platzhalteradresse keinen mailto-Link je Stelle zeigen. Variante nach Entscheidung (A): je Stelle „Text kopieren“ (Erinnerungstext in die Zwischenablage, Bestätigung „kopiert“), Hinweis am Kopf bleibt. (B): Knöpfe entfallen ganz, Hinweis am Kopf ergänzt um „Einzelerinnerungen ebenfalls erst mit echten Adressen“. Mit echten Adressen bleibt alles wie bisher. Abnahme: Mit dem mitgelieferten Profil lead-beispiel enthält der Meldestatus keinen Link auf eine Adresse unter .invalid.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)",
+        "docs/SPEZIFIKATION.md, Absatz „Oberfläche der Auswertung seit 0.7.11“ (UX-2026-W45-07)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": "(A) Je Stelle „Text kopieren“ statt mailto, solange Platzhalteradressen gelten, oder (B) Einzelknöpfe ohne echte Adressen ganz ausblenden?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/ui: Lagebild mit Profil lead-beispiel und Beispiel Ilka rendern; kein Element mit href, das „beispiel.invalid“ enthält.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "@media (max-width: 640px), .hauptnav (Z. 636–650)",
+          "ist": "seit 0.6.20 (UX-2026-W44-04) umbrechen statt abschneiden: alle fünf Bereiche bleiben sichtbar … flex-wrap: wrap;"
+        },
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-reiter (Z. 146–154)",
+          "ist": "position: sticky; top: var(--kopf-hoehe, 4.5rem);"
+        }
+      ],
+      "beobachtung": "Auf 390 × 844 px belegt der mitlaufende Bereich nach dem Scrollen 273 px (32 % der Höhe): Kopfleiste mit zweizeiliger Hauptnavigation 155 px, Hinweisband (schmal, dreizeilig) 60 px, Reiterleiste 58 px. Für die Übersicht bleiben rund 570 px. Die Einzelentscheidungen sind je für sich stimmig (Navigation umbrechen UX-2026-W44-04, Reiter stehend UX-2026-W45-03, Hinweisband vollständig LD-R04); neu ist nur ihre Summe auf kleinen Bildschirmen. Das Hinweisband ist ausdrücklich nicht Gegenstand dieses Befunds. Prüfweg: Build und Playwright, Höhen über getBoundingClientRect nach 1400 px Scrollweg; Ergebnis: Kopf 0–155, Band 155–215, Reiter 215–273.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Den mitlaufenden Bereich auf schmalen Bildschirmen verkleinern, ohne das Hinweisband anzutasten. Variante nach Entscheidung. Abnahme: Bei 390 × 844 px belegt der mitlaufende Bereich nach dem Scrollen in der Auswertung höchstens 220 px; alle fünf Bereiche der Hauptnavigation bleiben erreichbar.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)",
+        "docs/SPEZIFIKATION.md (UX-2026-W44-04, UX-2026-W45-03)",
+        "design/README.md LD-R01, falls die Referenzumsetzung sich ändert",
+        "design/wireframe-schmal.svg"
+      ],
+      "entscheidungsfrage": "(A) Hauptnavigation bis 640 px einzeilig und waagerecht scrollbar mit Randverlauf wie die Abschnittsleisten (rund 45 px weniger; nimmt UX-2026-W44-04 für die Hauptnavigation teilweise zurück), (B) Reiterleiste bis 640 px nicht stehend (58 px weniger; nimmt UX-2026-W45-03 für schmale Bildschirme zurück) oder (C) beides?",
+      "sicherheit": "hoch",
+      "automatisierbar": "Playwright-Test (Projekt kern, 390 × 844): nach Scrollen Summe der Höhen von Kopf, Hinweisband und .lb-reiter ≤ 220 px.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-03",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-reiter ol, Randverlauf (Z. 156–170)",
+          "ist": "/* Verlauf am Rand wie bei den Schrittleisten (UX-2026-W44-04) */ background: linear-gradient(…) … no-repeat local, …"
+        },
+        {
+          "datei": "src/styles/formular.css",
+          "stelle": ".segment (Z. 155–164)",
+          "ist": "min-height: 44px; … background: var(--flaeche);"
+        }
+      ],
+      "beobachtung": "Der Randverlauf aus UX-2026-W44-04 liegt als Hintergrund der Liste ol. Die Reiter (.segment) haben eine deckende Fläche (berechnet rgb(255, 255, 255)) und überdecken den Verlauf genau dort, wo er sichtbar sein soll. Auf 390 px endet die Leiste am rechten Rand mit einem abgeschnittenen Reiter „Me…“ ohne Verlauf. Die Leiste ist 870 px breit bei 358 px Sichtbreite; der Reiter „Redaktionscheck“ mit der Zahl offener Befunde beginnt bei x = 468 und ist ohne Wischen nicht zu sehen. Bei den Schrittleisten (.schritt, transparent) wirkt derselbe Verlauf. Prüfweg: Build und Playwright (390 × 844), getComputedStyle und scrollWidth; Bildschirmfoto zur eigenen Prüfung. Herkunft: nicht ermittelt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Verlauf als Überlagerung über den Reitern statt als Hintergrund der Liste, etwa mit mask-image am ol oder je einem Pseudo-Element an .lb-reiter, das nur bei weiterem Inhalt in Scrollrichtung erscheint. Abnahme: Auf 390 px ist am rechten Rand der Reiterleiste ein Verlauf sichtbar, solange weitere Reiter folgen, und am Ende der Leiste keiner.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Playwright-Test (390 px): am rechten Rand der Reiterleiste weicht die Pixelfarbe im Randbereich von der Fläche des angeschnittenen Reiters ab, solange scrollLeft + clientWidth < scrollWidth.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-04",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "farbeTendenz (Z. 365–370)",
+          "ist": "return tendenzStufen(profil).includes(tendenz) ? \"gelb\" : \"grau\";"
+        },
+        {
+          "datei": "design/README.md",
+          "stelle": "LD-F04 (Z. 147)",
+          "ist": "Signalfarben tragen ausschließlich Bewertung, Prüfergebnis und den Status der Einsatzbereitschaft"
+        },
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Abschnitt zu sv_beurteilung (Z. 138)",
+          "ist": "die gewählte Tendenz ist rot bei der Verschärfung und grün bei tendenz_entspannung"
+        }
+      ],
+      "beobachtung": "In den Verteilungen der Übersicht trägt „Stabilisierung“ (Tendenz) dieselbe Farbe gelb wie „geringfügig“ (Beurteilung); nebeneinander liest sich das als gleiche Schwere. PROFILFORMAT.md dokumentiert für die Tendenz nur rot und grün; die gelbe Mittelstufe ist dort nicht beschrieben. LD-F04 beschränkt Signalfarben auf Bewertung, Prüfergebnis und Einsatzbereitschaft; ob die Tendenz als Bewertung gilt, ist nicht ausdrücklich geregelt. Prüfweg: statisch und Bildschirmfoto (Beispiel Ilka, 1440 px).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Mittlere Tendenzstufen nach Entscheidung färben. Abnahme: In der Übersicht hat keine Tendenzstufe dieselbe Farbe wie eine Beurteilungsstufe, außer der Herausgeber entscheidet (C).",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "docs/PROFILFORMAT.md Z. 138",
+        "CHANGELOG.md (Wurzel)"
+      ],
+      "entscheidungsfrage": "(A) Mittlere Tendenzstufen neutral (grau) statt gelb; rot und grün bleiben, (B) Tendenz ganz ohne Signalfarben, Unterscheidung über Beschriftung und Zeichen (↑ → ↓), oder (C) bleibt so, LD-F04 und PROFILFORMAT.md nennen die Tendenz ausdrücklich?",
+      "sicherheit": "mittel",
+      "automatisierbar": "Unit-Test zu farbeTendenz: für jede Stufe außer Entspannung und Verschärfung „grau“ (bei Entscheidung A).",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-05",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/styles/profile.css",
+          "stelle": ".profil-details > summary (Z. 158–160)",
+          "ist": "font-size: 0.92rem;"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "summary der Lesebereiche (Z. 184, 294, 742)",
+          "ist": "<summary>SOP-Katalog lesen</summary>"
+        }
+      ],
+      "beobachtung": "Die äußere Aufklappzeile einer Profilkarte („Angaben, Lesetexte und Prüfung“) ist auf 0,92 rem verkleinert; die inneren Aufklappzeilen („Arbeitsanweisungen und Kodierleitfaden lesen“, „SOP-Katalog lesen“, „Dokumentation lesen“, „Technische Angaben …“) erben die Grundgröße und sind damit größer als die Zeile, in der sie stehen. Die Rangfolge ist optisch umgekehrt. Prüfweg: statisch und Bildschirmfoto (1440 px, erste Karte aufgeklappt).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Innere Aufklappzeilen in der Profilkarte höchstens so groß wie die äußere, etwa .profil-details details > summary { font-size: 0.92rem; } oder die äußere auf Grundgröße. Abnahme: In einer aufgeklappten Profilkarte ist keine innere summary größer als die äußere.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-06",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Sprungleiste in KartenInhalt (Z. 672–692)",
+          "ist": "[\"angaben\", \"Angaben\"], [\"lesen\", \"Lesen\"], [\"pruefen\", \"Prüfen\"]"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Bereich „Angaben“, dl.profil-daten (Z. 700–712)",
+          "ist": "<dt>Ebene</dt> … <dt>Referenzraum</dt>"
+        }
+      ],
+      "beobachtung": "Die aufgeklappte Profilkarte wiederholt Ebene und Referenzraum, die seit UX-2026-W45-28 schon in der Eckdatenzeile unter dem Titel stehen, und stellt drei Sprunglinks („Angaben · Lesen · Prüfen“) vor drei kurze Abschnitte, die zusammen meist auf eine Bildschirmhöhe passen. Neu gegenüber W45-28 und W45-31: die Dopplung entsteht erst im Zusammenspiel beider. Prüfweg: Bildschirmfoto (1440 und 390 px, erste Karte aufgeklappt).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "streichen",
+        "beschreibung": "Im Bereich „Angaben“ Ebene und Referenzraum streichen; Beschreibung, „SOPs und Bausteine“ (mit Zahl der Inhaltsgerüste) und Herausgeber bleiben. Sprungleiste nach Entscheidung. Abnahme: Ebene und Referenzraum stehen je Karte nur einmal.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)",
+        "docs/SPEZIFIKATION.md, Abschnitt 4.6 (Profilansicht)"
+      ],
+      "entscheidungsfrage": "(A) Dopplung und Sprungleiste streichen oder (B) nur die Dopplung streichen, Sprungleiste behalten?",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "UX-2026-W46-07",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, gemeldete Stellen (Z. 901–915)",
+          "ist": "<span className=\"lb-status-name\">{z.name}</span> … <span className=\"lb-status-zahl\" …>"
+        },
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-status li, .lb-status-name, .lb-status-zahl (Z. 289–330)",
+          "ist": ""
+        }
+      ],
+      "beobachtung": "In den Kacheln der gemeldeten Stellen stehen Name und Zeitpunkt nebeneinander. Bei vier Spalten (1440 px) brechen „Nordrhein-Westfalen“, „Rheinland-Pfalz“ und „Sachsen-Anhalt“ am Bindestrich um, bei 390 px zusätzlich die Zeitangabe; die Kacheln werden unterschiedlich hoch. Prüfweg: Bildschirmfotos (Beispiel Ilka, 1440 und 390 px).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Name in der ersten Zeile ohne Umbruch, Zeitpunkt und Alter klein darunter. Abnahme: Bei 1440 und 390 px bricht kein Ländername um, alle Kacheln einer Zeile sind gleich hoch.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md (Wurzel)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Leerzustand der Auswertung: Ablage, Beispiel und Erläuterung klar; nach dem Laden einzeilig (UX-2026-W45-01).",
+    "Kennzahlen in den Gruppen „Lage“ und „Redaktion“, 0 zurückgenommen (UX-2026-W45-06); Reiter mit aria-current.",
+    "Profile: aktives Profil durch Rand und Kennzeichen klar erkennbar; Aktionen je Karte gleich aufgebaut (UX-2026-W45-27, -29).",
+    "axe-core: keine Verstöße der Schwere „serious“ oder „critical“ in beiden Ansichten und Breiten.",
+    "Weitere Beobachtung: Filter „Eigene Meldung“ (UX-2026-W45-09) steht als eigener Rahmen mit einer einzigen Checkbox zwischen Aktionen und Reitern und wirkt wie ein Formular; kompakter als Schalter in der Zeile „7 Meldungen · 8 Sachverhalte“.",
+    "Weitere Beobachtung: KI-Chip „KI ruht“ ist reine Statusanzeige (KP-2026-W44-01), hat aber Pillenform mit Rahmen wie ein Knopf; flache Darstellung ohne Rahmen würde die fehlende Bedienbarkeit zeigen.",
+    "Weitere Beobachtung: Menü „Profil hinzufügen“ – „Ordner wählen“ nennt nicht, welcher Ordner (Vorschlag „Profilordner wählen“); „Profilpaket importieren (ZIP)“ bricht im Menü um.",
+    "Weitere Beobachtung: Vorlage „eigene Organisation“ zeigt in der Eckdatenzeile „[Ebene]“ und „[Referenzraum]“; das wirkt wie ein Darstellungsfehler. Kennzeichen „Vorlage“ und „– auszufüllen“ wären klarer (Inhalt von profile/muster/profil.json).",
+    "Weitere Beobachtung: axe (moderat) – in der Auswertung folgen auf die H1 H3-Überschriften (heading-order); Hinweisband außerhalb eines Landmarks (region); Checkboxen 13 × 13 px.",
+    "Weitere Beobachtung: Eckdatenzeile der Profilkarten bricht bei 390 px ungleichmäßig um (Schema und Lagenradar in einer Zeile, Referenzraum hängend); ein Raster mit festen Spalten wäre ruhiger (UX-2026-W45-28)."
+  ]
+}
