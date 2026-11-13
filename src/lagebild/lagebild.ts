@@ -449,13 +449,19 @@ export function istPlatzhalterAdresse(email?: string): boolean {
   return !email || /\.invalid$|@beispiel\.|example\./i.test(email);
 }
 
-export function erinnerungMailto(zeile: StatusZeile, kontakte?: Kontakte): string {
+/** Betreff und Text der Erinnerung an eine Stelle nach der Vorlage des Profils ({name}/{land} = Name der Stelle) */
+export function erinnerungText(zeile: StatusZeile, kontakte?: Kontakte): { betreff: string; text: string } {
   const vorlage = kontakte?.erinnerung || {
     betreff: "Erinnerung: Meldung {name}",
     text: "Guten Tag,\n\nfür den aktuellen Berichtszeitraum liegt noch keine Meldung aus {name} vor.\n\nMit freundlichen Grüßen",
   };
   const ersetze = (s: string) => s.replace(/\{name\}|\{land\}/g, zeile.name);
-  return `mailto:${encodeURIComponent(zeile.email || "")}?subject=${encodeURIComponent(ersetze(vorlage.betreff))}&body=${encodeURIComponent(ersetze(vorlage.text))}`;
+  return { betreff: ersetze(vorlage.betreff), text: ersetze(vorlage.text) };
+}
+
+export function erinnerungMailto(zeile: StatusZeile, kontakte?: Kontakte): string {
+  const { betreff, text } = erinnerungText(zeile, kontakte);
+  return `mailto:${encodeURIComponent(zeile.email || "")}?subject=${encodeURIComponent(betreff)}&body=${encodeURIComponent(text)}`;
 }
 
 /**

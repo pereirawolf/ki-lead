@@ -16,6 +16,7 @@ import {
   alterText,
   beurteilungsStufen,
   erinnerungMailto,
+  erinnerungText,
   farbeBeurteilung,
   farbeTendenz,
   herkunftsrolleAnzeige,
@@ -49,7 +50,7 @@ import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/spe
 import type { UebergabeMeldung } from "../pipeline/material";
 import { pdfVorladen } from "../dokumente/vorladen";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
-import { Absender, Marke, Marken, SvMarken } from "./lagebild/bausteine";
+import { Absender, KopierKnopf, Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
@@ -873,18 +874,25 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                                   ○
                                 </span>
                                 <span className="lb-status-name">{z.name}</span>
-                                <a
-                                  className="knopf klein"
-                                  aria-label={`${z.name} erinnern`}
-                                  href={erinnerungMailto(z, profil.kontakte)}
-                                  title={
-                                    istPlatzhalterAdresse(z.email)
-                                      ? "Platzhalteradresse – echte Adressen in kontakte.lokal.json des Profils hinterlegen"
-                                      : `Erinnerung an ${z.email}`
-                                  }
-                                >
-                                  Erinnern
-                                </a>
+                                {istPlatzhalterAdresse(z.email) ? (
+                                  // Ohne echte Adresse kein E-Mail-Entwurf an eine Platzhalteradresse, sondern der Text zum
+                                  // Kopieren (seit UX-2026-W46-01)
+                                  <KopierKnopf
+                                    titel="Text kopieren"
+                                    was={`Erinnerung an ${z.name}`}
+                                    text={erinnerungKlartext(z, profil.kontakte)}
+                                    html={erinnerungHtml(z, profil.kontakte)}
+                                  />
+                                ) : (
+                                  <a
+                                    className="knopf klein"
+                                    aria-label={`${z.name} erinnern`}
+                                    href={erinnerungMailto(z, profil.kontakte)}
+                                    title={`Erinnerung an ${z.email}`}
+                                  >
+                                    Erinnern
+                                  </a>
+                                )}
                               </li>
                             ))}
                           </ul>
@@ -1118,4 +1126,15 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
       )}
     </div>
   );
+}
+
+/** Erinnerung als Klartext zum Kopieren: Betreff, Leerzeile, Text (seit UX-2026-W46-01) */
+function erinnerungKlartext(zeile: StatusZeile, kontakte?: Profil["kontakte"]): string {
+  const { betreff, text } = erinnerungText(zeile, kontakte);
+  return `${betreff}\n\n${text}`;
+}
+
+function erinnerungHtml(zeile: StatusZeile, kontakte?: Profil["kontakte"]): string {
+  const maskiert = erinnerungKlartext(zeile, kontakte).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return maskiert.replace(/\n/g, "<br>");
 }
