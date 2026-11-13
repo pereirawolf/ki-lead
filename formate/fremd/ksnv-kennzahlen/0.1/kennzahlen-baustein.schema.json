@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ksnv/schema/kennzahlen-baustein.schema.json",
+  "title": "KSNV-Kennzahlen, Fassung 0.1",
+  "description": "Bedarfslage eines Raums (Gebiet einer Stelle der Meldekette nach dem Landesprofil) als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, als Material für ein LEAD-Lagebild. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Liter je Tag, Bedarfsträger, Anlagen, kVA, Fahrzeuge) werden nicht addiert; Diesel und Ottokraftstoff stehen getrennt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "fassung",
+    "erzeugt",
+    "datenstand",
+    "raum",
+    "fiktiv",
+    "szenario",
+    "quellen",
+    "kennzahlen",
+    "herleitung",
+    "land"
+  ],
+  "properties": {
+    "format": {
+      "const": "KSNV-Kennzahlen"
+    },
+    "fassung": {
+      "const": "0.1"
+    },
+    "erzeugt": {
+      "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe"
+    },
+    "datenstand": {
+      "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/zeitangabe",
+      "description": "Zeitpunkt der jüngsten einbezogenen Bedarfsmeldung"
+    },
+    "raum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "ebene"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "schluessel": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z][0-9A-Za-z-]{0,19}$"
+        },
+        "ebene": {
+          "type": "string",
+          "pattern": "^[a-z][a-z_]{1,19}$",
+          "description": "Kennung einer Ebene aus dem Landesprofil, etwa gemeinde, kreis, bezirk, land"
+        }
+      }
+    },
+    "fiktiv": {
+      "type": "boolean"
+    },
+    "szenario": {
+      "const": "Notbetrieb ab 72 Stunden Stromausfall"
+    },
+    "quellen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/quelle"
+      }
+    },
+    "kennzahlen": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/kern.schema.json#/$defs/kennzahl"
+      }
+    },
+    "herleitung": {
+      "type": "array",
+      "description": "Je Kennzahl die Kennungen der Bedarfsmeldungen, aus denen sie entsteht (Rückverfolgbarkeit); geht nicht an eine KI.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kennzahl",
+          "bedarfsmeldungen"
+        ],
+        "properties": {
+          "kennzahl": {
+            "type": "string",
+            "pattern": "^K[1-9][0-9]*$"
+          },
+          "bedarfsmeldungen": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9A-Za-z][0-9A-Za-z-]{0,19}-v\\d{2,}$"
+            }
+          }
+        }
+      }
+    },
+    "land": {
+      "$ref": "bedarfsmeldung.schema.json#/$defs/land"
+    }
+  }
+}

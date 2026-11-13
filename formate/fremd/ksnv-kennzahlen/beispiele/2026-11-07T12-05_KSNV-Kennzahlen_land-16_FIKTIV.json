@@ -1,0 +1,512 @@
+{
+  "format": "KSNV-Kennzahlen",
+  "fassung": "0.1",
+  "erzeugt": "2026-11-07T12:05:00+01:00",
+  "datenstand": "2026-11-07T11:50:00+01:00",
+  "land": {
+    "schluessel": "16",
+    "kuerzel": "TH",
+    "name": "Thüringen",
+    "profil": "thueringen",
+    "profil_stand": "2026-11-13"
+  },
+  "raum": {
+    "name": "Land Thüringen",
+    "schluessel": "16",
+    "ebene": "land"
+  },
+  "fiktiv": true,
+  "szenario": "Notbetrieb ab 72 Stunden Stromausfall",
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Land Thüringen, oberste Katastrophenschutzbehörde (FIKTIV)",
+      "titel": "Bedarfslage Kraftstoff im Notbetrieb aus 8 Bedarfsmeldungen, KSNV (FIKTIV)",
+      "zugriff": "2026-11-07",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-11-07T11:50:00+01:00"
+    }
+  ],
+  "kennzahlen": [
+    {
+      "id": "K1",
+      "gegenstand": "Tagesbedarf Diesel (Notbetrieb ab 72 Stunden Stromausfall)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 20114,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K2",
+      "gegenstand": "davon Netzersatzanlagen (Anlieferung)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 18346,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K3",
+      "gegenstand": "davon Fahrzeuge (Betankung an Tankstellen)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 1768,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K4",
+      "gegenstand": "Tagesbedarf Ottokraftstoff (Notbetrieb ab 72 Stunden Stromausfall)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 152,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K5",
+      "gegenstand": "davon Netzersatzanlagen (Anlieferung)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 69,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K6",
+      "gegenstand": "davon Fahrzeuge (Betankung an Tankstellen)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 83,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K7",
+      "gegenstand": "Stellen mit Bedarfsmeldung",
+      "einheit": "Stellen",
+      "art": "bestand",
+      "wert": 8,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K8",
+      "gegenstand": "Netzersatzanlagen",
+      "einheit": "Anlagen",
+      "art": "bestand",
+      "wert": 22,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K9",
+      "gegenstand": "installierte Leistung der Netzersatzanlagen",
+      "einheit": "kVA",
+      "art": "kapazitaet",
+      "wert": 4091,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K10",
+      "gegenstand": "Fahrzeuge im Notbetrieb unter 7,5 t zGG",
+      "einheit": "Fahrzeuge",
+      "art": "bestand",
+      "wert": 86,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K11",
+      "gegenstand": "Fahrzeuge im Notbetrieb ab 7,5 t zGG",
+      "einheit": "Fahrzeuge",
+      "art": "bestand",
+      "wert": 52,
+      "mindestwert": true,
+      "erhebung": "gezaehlt",
+      "raum": "Land Thüringen",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K12",
+      "gegenstand": "Tagesbedarf Diesel in Land Thüringen (eigener Bedarf)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 1293,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen (eigener Bedarf)",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K13",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Land Thüringen (eigener Bedarf)",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 0,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Land Thüringen (eigener Bedarf)",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K14",
+      "gegenstand": "Tagesbedarf Diesel in Landkreis Gotha",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 1928,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Gotha",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K15",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Landkreis Gotha",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 123,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Landkreis Gotha",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K16",
+      "gegenstand": "Tagesbedarf Diesel in Stadt Erfurt",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 4777,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Erfurt",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K17",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Stadt Erfurt",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 0,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Stadt Erfurt",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K18",
+      "gegenstand": "Tagesbedarf Diesel in Wartburgkreis",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 12116,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K1",
+      "quellen": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "K19",
+      "gegenstand": "Tagesbedarf Ottokraftstoff in Wartburgkreis",
+      "einheit": "Liter je Tag",
+      "art": "bedarf",
+      "wert": 29,
+      "mindestwert": true,
+      "erhebung": "amtlich_gemeldet",
+      "raum": "Wartburgkreis",
+      "datenstand": "2026-11-07T11:50:00+01:00",
+      "teilmenge_von": "K4",
+      "quellen": [
+        "Q1"
+      ]
+    }
+  ],
+  "herleitung": [
+    {
+      "kennzahl": "K1",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K2",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K3",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K4",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K5",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K6",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K7",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K8",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K9",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K10",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K11",
+      "bedarfsmeldungen": [
+        "16-v01",
+        "16051-v01",
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01",
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K12",
+      "bedarfsmeldungen": [
+        "16-v01"
+      ]
+    },
+    {
+      "kennzahl": "K13",
+      "bedarfsmeldungen": [
+        "16-v01"
+      ]
+    },
+    {
+      "kennzahl": "K14",
+      "bedarfsmeldungen": [
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K15",
+      "bedarfsmeldungen": [
+        "16067-v01",
+        "16067029-v01"
+      ]
+    },
+    {
+      "kennzahl": "K16",
+      "bedarfsmeldungen": [
+        "16051-v01"
+      ]
+    },
+    {
+      "kennzahl": "K17",
+      "bedarfsmeldungen": [
+        "16051-v01"
+      ]
+    },
+    {
+      "kennzahl": "K18",
+      "bedarfsmeldungen": [
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01"
+      ]
+    },
+    {
+      "kennzahl": "K19",
+      "bedarfsmeldungen": [
+        "16063-v01",
+        "16063105-v02",
+        "160635006-v01",
+        "160635051-v01"
+      ]
+    }
+  ]
+}
