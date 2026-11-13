@@ -1,6 +1,6 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.5 vom 04.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.7.5 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.6 vom 13.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.7.19 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
 
@@ -82,7 +82,7 @@ LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler 
 | `eingang_schema_ids` | wie eigene Meldungen behandelt | `src/kern/migration.ts` |
 | `migrationen` | überführt, dann wie eigene Meldungen; seit 0.7.0 auch mit `verfahren` „lead-meldung-v2“ nach LEAD-Meldung-v2 | `src/kern/migration.ts`, `src/kern/meldung-v2.js` |
 | sonst | fremde Meldung, nur für die KI-Verdichtung, an der Grundform erkannt (Sachverhalte und Stelle; seit 0.7.0 auch `absender.stelle` und `absender.gebiet.name` von LEAD-Meldung-v2) | `src/kern/eingang.ts` |
-| Material-Format (seit 0.6.24) | kein Meldungsformat, sondern strukturiertes Material: Kennzahlen-Bausteine aus Thessa (`format` „Thessa-Kennzahlen“), profilunabhängig gegen ein eingebettetes Schema mit Herkunft und Prüfsumme geprüft (`formate/fremd/`); in der KI-Erfassung eigene Materialart | `src/kern/baustein.ts`, `src/pipeline/material.ts` |
+| Material-Format (seit 0.6.24) | kein Meldungsformat, sondern strukturiertes Material: Kennzahlen-Bausteine aus Thessa (`format` „Thessa-Kennzahlen“) und seit 0.7.19 aus KSNV (`format` „KSNV-Kennzahlen“), profilunabhängig gegen ein eingebettetes Schema mit Herkunft und Prüfsumme geprüft (`formate/fremd/`); in der KI-Erfassung eigene Materialart | `src/kern/baustein.ts`, `src/pipeline/material.ts` |
 
 Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Schema, das das empfangende Profil unter `meldung.eingang_schemata` mitbringt, und zeigt die Befunde („fremdes Schema ✓“ oder „fremdes Schema: n“). Ohne Eintrag bleibt eine fremde Meldung ungeprüft („fremdes Schema“). Beispiel: Das Beispielprofil der Koordinierungsstelle prüft Meldungen nach `LEAD-Meldung-Land-v1` und liest ihr Gebiet aus `kreis` (TP-2026-W44-60); damit ist der Weg Kreis → Land → Bund mit den mitgelieferten Profilen durchgängig.
 
@@ -92,12 +92,13 @@ Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Sche
 
 ## 9. Zulieferer aus der App-Familie
 
-Zwei Schwesterdemonstratoren liefern KI-LEAD zu, auf verschiedenen Wegen. Beide sind gewollt, weil sie Verschiedenes liefern (Entscheidung des Herausgebers vom 03.11.2026):
+Drei Schwesterdemonstratoren liefern KI-LEAD zu, auf verschiedenen Wegen. Alle sind gewollt, weil sie Verschiedenes liefern (Entscheidungen des Herausgebers vom 03.11.2026 und 12.11.2026):
 
 | Zulieferer | liefert | Weg | Format |
 |---|---|---|---|
 | [KRITIS-LEAD](https://github.com/pereirawolf/kritis-lead) | **Meldungen**: Sachverhalte von KRITIS-Betreibern neben den Meldungen der Behörden | Profilpaket `lead-kritis`; Meldungen nach `LEAD-Meldung-v2` mit `absender.ebene` „Betreiber“, Betreiberangaben je Sachverhalt als Modul und meldungsweite Angaben als Meldungsmodul ([LEAD-MELDUNG-V2.md](LEAD-MELDUNG-V2.md), Abschnitt 7; Umstellung von v1 läuft) | Modulschemata in KRITIS-LEAD, eingebettet unter `formate/fremd/kritis-lead/` (Fassung 0.3) |
 | Thessa (Repository während der Entwicklung nicht öffentlich) | **Material**: Kennzahlen zur Kräftelage der Feuerwehren und die lagerelevanten Einsatzmeldungen eines Raums | Materialart „Kennzahlen-Baustein“ (Abschnitt 8) | `Thessa-Kennzahlen`, eingebettet unter `formate/fremd/thessa-kennzahlen/` |
+| KSNV (Kraftstoff-Notversorgung; Repository während der Entwicklung nicht öffentlich) | **Material**: Bedarfslage an Kraftstoff im Notbetrieb ab 72 Stunden Stromausfall für das Gebiet einer Stelle nach dem Landesprofil (etwa Gemeinde, Kreis oder Land; länderneutral, mit Angabe von Land und Landesprofil): Tagesbedarf Diesel und Ottokraftstoff (Art „bedarf“, Liter je Tag) mit Teilmengen, Zählwerte und Teilräume, Mindestwerte bei fehlenden Meldungen | Materialart „Kennzahlen-Baustein“ (Abschnitt 8), seit 0.7.19 | `KSNV-Kennzahlen`, eingebettet unter `formate/fremd/ksnv-kennzahlen/` |
 
 **Zuordnung von oben.** Weder Einsatzmeldungen aus Thessa noch Betreibermeldungen kennen die Sachverhalte der Stellen, die sie später verarbeiten. Die Stelle, die das Lagebild erstellt, ordnet zu: Ihr Sachverhalt nennt die Kennungen der Sachverhalte, die er verdichtet (`bezug`), und die Kennungen der Einsatzmeldungen, auf die er sich stützt. Die Zuordnung ist n:m; eine Einsatzmeldung kann mehreren Sachverhalten und Lagemeldungen zugeordnet sein (Thessa, Grundentscheidung G12; Feld `bezug_lead` seit `Thessa-Kennzahlen` 0.3 entfallen). Wo die Kennungen der Einsatzmeldungen im Sachverhalt stehen, legt das Paket „Kennzahl → Baustein“ des Umstellungsplans fest (Verweis über ein Fachmodul, nicht über ein Kernfeld).
 
@@ -128,4 +129,5 @@ Zwei Schwesterdemonstratoren liefern KI-LEAD zu, auf verschiedenen Wegen. Beide 
 | 0.2 | 01.11.2026 | Verweis auf den Entwurf des Meldungsformats `LEAD-Meldung-v2`, der die Vorschläge aufnimmt; Inhalt sonst unverändert |
 | 0.3 | 03.11.2026 | Abschnitt 8: Material-Formate als fünfter Weg (Kennzahlen-Bausteine aus Thessa, App 0.6.24, UP-2026-W45-01) |
 | 0.5 | 04.11.2026 | Abschnitt 9: Zulieferer aus der App-Familie (Meldungen aus KRITIS-LEAD, Material aus Thessa), Zuordnung von oben n:m, Präfix `KRITIS-` für Sachverhalte von Betreibern (SR-2026-W45-04) |
+| 0.6 | 13.11.2026 | Abschnitte 8 und 9: Kennzahlen-Bausteine aus KSNV als dritter Zulieferer (App 0.7.19) |
 | 0.4 | 03.11.2026 | Abschnitt 8: Migration nach LEAD-Meldung-v2 beim Einlesen, Grundform v2 für fremde Meldungen (App 0.7.0, UP-2026-W45-02) |

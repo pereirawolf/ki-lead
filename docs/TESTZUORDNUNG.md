@@ -1186,3 +1186,14 @@ Angepasst ohne Änderung des Solls (neue Schrittnamen): `tests/ui/erfassung.test
 | Einträge der Hauptnavigation mindestens 44 px hoch, Überfahren auf zarter Fläche | Grunddesign › LD-N08: Einträge der Hauptnavigation mit Überfahren und mindestens 44 px Höhe (seit Grunddesign 1.8, KI-LEAD 0.7.18) | `tests/format/lead-design.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/browser/pwa-update.spec.ts` (Titel der Reparaturseite „Reparatur – KI-LEAD“).
+
+## Kennzahlen-Bausteine aus KSNV als Materialart (0.7.19, Entscheidung des Herausgebers vom 12.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingebettetes Original und Begleitschema unverändert, Kernschema mit der von KSNV gepinnten Prüfsumme; gebündeltes Schema aktuell | KSNV-Kennzahlen: eingebettetes Schema … › Original unverändert …; › gebündeltes Schema aktuell … | `tests/format/ksnv-baustein.test.ts` |
+| Original für den eigenen Prüfer unbrauchbar, gebündeltes Schema verwendbar und ohne äußere Verweise (`land` aus dem Begleitschema); zwei Bausteine gültig und beschädigte Bausteine ungültig im Gleichlauf mit Ajv | KSNV-Kennzahlen: … › Original mit absoluten Verweisen …; › zwei Bausteine …; › beschädigte Bausteine … | `tests/format/ksnv-baustein.test.ts` |
+| Länderneutral: Baustein nach einem anderen Landesprofil (Ebene „bezirk“) gültig, im Gleichlauf mit Ajv | KSNV-Kennzahlen: … › länderneutral … | `tests/format/ksnv-baustein.test.ts` |
+| Materialart „kennzahlen-baustein“ mit Anzeige (App, Raum, Datenstand, Kennzahlen, ohne Einsatzmeldungen); an die KI ohne `herleitung`; unbekannte Fassung und Schemabefund bleiben JSON mit Hinweis | KSNV-Kennzahlen (0.7.19): Erkennung als Materialart … › … | `tests/pipeline/baustein.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (UP-2026-W45-01: unbekannte Fassung nennt das Format).
