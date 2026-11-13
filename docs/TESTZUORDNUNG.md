@@ -1205,3 +1205,9 @@ Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (UP-2026-W45-0
 | Kenndaten der zwölf Läufe (S1 Sonnet „mittel“, S2 Opus „mittel“) liegen in den Spannen, S2 mit 25 % Reserve zur Obergrenze; Untergrenzen der Erfassung mit Opus „mittel“ 120 s und 0,45 USD von Hand nach der Regel; vorläufige Spanne für Opus „hoch“ mit derselben Untergrenze; Anzeige „2–14 Minuten, 0,45–3,35 USD“ | Schätzung von Dauer und Kosten › Fallreihe 13.11.2026: Messwerte liegen in den Spannen; Untergrenzen der Erfassung mit Opus erweitert | `tests/pipeline/schaetzung.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/schaetzung.test.ts` (Messwerte, Anzeige, Hochrechnung für Fable, frühere Reihen), `tests/ui/modellwahl.test.ts` (Kopfzeile der Wahl je Lauf).
+
+## Grunddesign 1.9: Schrittleiste nur mit dem Punkt (0.7.21, Entscheidung des Herausgebers vom 14.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Ein Schritt mit Befund trägt nur den Punkt in „kritisch“; keine Regel färbt Rand oder Ziffer der Nummer, kein Haken je Schritt; LD-A04 nennt den Punkt als einzige Markierung | Grunddesign › LD-A04: Punkt als einzige Befundmarke, Rand und Ziffer der Nummer ohne Farbe (seit Grunddesign 1.9, KI-LEAD 0.7.21) | `tests/format/lead-design.test.ts` |

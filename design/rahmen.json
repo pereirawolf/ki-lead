@@ -1,7 +1,7 @@
 {
   "$schema": "./rahmen.schema.json",
   "format": "lead-design-rahmen/1",
-  "fassung": "1.8",
+  "fassung": "1.9",
   "stand": "2026-11-10",
   "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
   "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
@@ -106,7 +106,7 @@
     { "id": "LD-A01", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs. Arbeitet die App mit Profilen, steht darunter die Profilzeile mit Name und Fassung des aktiven Profils und einem Verweis auf „Profile“.", "referenz": ["src/ui/Meldung.tsx", "src/ui/Lagebild.tsx", "src/ui/ProfilZeile.tsx"] },
     { "id": "LD-A02", "stufe": "SOLL", "thema": "Seitenaufbau", "text": "Die Kennsätze der Bereiche sind parallel gebaut (<Tätigkeit> nach <Methode>, gegebenenfalls mit Zusatz), etwa „Erfassung einer Meldung nach LEAD-Systematik“.", "referenz": ["CHANGELOG.md"] },
     { "id": "LD-A03", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Mehrteilige Bereiche haben einen Arbeitsbereich aus Leiste (15 rem, links, mitlaufend) und Arbeitsfläche. Bis zum Umbruch „breit“ steht die Leiste waagerecht über dem Inhalt, ist scrollbar, zeigt am Rand einen Verlauf, solange dort weitere Abschnitte liegen, und rückt den aktiven Abschnitt ins Bild.", "referenz": ["src/styles/basis.css", "src/ui/leiste.ts"] },
-    { "id": "LD-A04", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Schrittfolgen sind nummeriert. Ein Schritt mit angezeigtem Befund trägt einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen. Schritte werden nicht nach ihrer Position als „erledigt“ gekennzeichnet.", "referenz": ["src/ui/Meldung.tsx", "src/styles/basis.css"] },
+    { "id": "LD-A04", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Schrittfolgen sind nummeriert. Ein Schritt mit angezeigtem Befund trägt einen Punkt an der Nummer, die Zahl steht im zugänglichen Namen. Der Punkt ist die einzige Markierung: Rand und Ziffer der Nummer färben sich nicht. Schritte werden nicht nach ihrer Position als „erledigt“ gekennzeichnet; auch Haken oder „vollständig“ je Schritt gibt es nicht.", "referenz": ["src/ui/Meldung.tsx", "src/styles/basis.css"] },
     { "id": "LD-A05", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Die Arbeitsfläche ist eine Karte mit Überschrift h2 als Fokusziel, optional einer Einleitung und den Inhalten. In Schrittfolgen (LD-A04) stehen am Ende „Zurück: <Titel>“ links (leiser Knopf) und „Weiter: <Titel>“ rechts (Hauptknopf); Bereiche ohne Reihenfolge haben keine Blätterknöpfe.", "referenz": ["src/ui/Meldung.tsx", "src/styles/basis.css"] },
     { "id": "LD-A06", "stufe": "SOLL", "thema": "Seitenaufbau", "text": "Gleichrangige Ansichten eines Ergebnisses stehen als Reiterleiste über dem Inhalt statt in einer seitlichen Leiste (KI-LEAD: Auswertung).", "referenz": ["src/ui/Lagebild.tsx"] },
     { "id": "LD-A07", "stufe": "MUSS", "thema": "Seitenaufbau", "text": "Nach einem Wechsel von Schritt, Phase, Bereich, Reiter oder Ansicht beginnt der neue Inhalt oben unter der Kopfleiste, ohne Animation, und der Fokus liegt auf der neuen Überschrift. Knöpfe von Leisten, die stehen bleiben, behalten den Fokus.", "referenz": ["src/ui/sprung.ts", "docs/BARRIEREFREIHEIT.md"] },

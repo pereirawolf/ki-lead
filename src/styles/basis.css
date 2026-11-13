@@ -446,15 +446,11 @@ a {
   padding: 0 0.5rem;
 }
 
-/* Befundmarke je Schritt (seit 0.6.20, UX-2026-W44-06): roter Punkt an der Schrittnummer, Zahl im zugänglichen Namen
-   und im Tooltip; ersetzt „erledigt“ nach Position */
+/* Befundmarke je Schritt (seit 0.6.20, UX-2026-W44-06): Punkt an der Schrittnummer, Zahl im zugänglichen Namen;
+   ersetzt „erledigt“ nach Position. Seit 0.7.21 (Grunddesign 1.9) ist der Punkt die einzige Markierung: Rand und
+   Ziffer der Nummer bleiben wie bei Schritten ohne Befund (bis 0.7.20 in „kritisch“, bei Farbschwäche kaum erkennbar) */
 .schritt-nr {
   position: relative;
-}
-
-.schritt.mit-befund .schritt-nr {
-  border-color: var(--kritisch);
-  color: var(--kritisch);
 }
 
 .schritt-befund {
