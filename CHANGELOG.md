@@ -116,6 +116,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.18 | letzter Commit des Pull Requests „Grunddesign 1.8: Seitentitel und Kopfleiste der App-Familie; 0.7.18“ |
 | 0.7.19 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus KSNV als Materialart; 0.7.19“ |
 | 0.7.20 | letzter Commit des Pull Requests „Schätzung der Erfassung nach der Fallreihe vom 13.11.2026; 0.7.20“ |
+| 0.7.21 | letzter Commit des Pull Requests „Schrittleiste nur mit dem Punkt, Grunddesign 1.9; 0.7.21“ |
+## [0.7.21] – 14.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach der Durchsicht der Symbole in KRITIS-LEAD ([kritis-lead#28](https://github.com/pereirawolf/kritis-lead/pull/28)): Die Schrittleiste soll ruhiger werden. Dünne farbige Umrandungen und Ziffern sind bei Farbschwäche kaum zu erkennen; entscheidend ist der Kontrast.
+
+### Geändert
+
+- **Schrittleiste** (`src/styles/basis.css`): Ein Schritt mit angezeigtem Befund trägt nur noch den Punkt an der Nummer. Rand und Ziffer der Nummer färben sich nicht mehr in „kritisch“, sie bleiben wie bei Schritten ohne Befund; der aktive Schritt bleibt gefüllt. Zugänglicher Name („, 1 Feld mit Befund“) unverändert.
+- **Grunddesign 1.9** (`design/`): LD-A04 präzisiert: Der Punkt ist die einzige Markierung, Rand und Ziffer der Nummer färben sich nicht; auch Haken oder „vollständig“ je Schritt gibt es nicht. Zahl der Regeln und Tokens unverändert.
+- Spezifikation 0.7.21 (Abschnitt 5.1, „Schrittleiste“). Versionsangaben 0.7.21 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 721); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/format/lead-design.test.ts`: LD-A04 (keine Regel färbt die Nummer eines Schritts mit Befund, Punkt in „kritisch“, kein Haken; Regeltext).
+
 ## [0.7.20] – 14.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach einer Fallreihe vom 13.11.2026 (App 0.7.18, Beispielprofil 1.42.2, Standard-Profil Anthropic: S1 claude-sonnet-5-5 „mittel“, S2 claude-opus-5-5 „mittel“): zwölf Erfassungsläufe zu fiktiven Kurzfällen mit je einem Sachverhalt (Text, 1,3–1,8 kB), ohne Recherche, nacheinander in einer Reihe (Läufe 20261113-141612-y633 bis 20261113-144936-dvul). Alle Läufe waren schemakonform; je Lauf 0,49–0,99 USD und 150–231 s, zusammen 7,95 USD. Die App hatte je Lauf 1,42–3,70 USD geschätzt; alle zwölf lagen darunter. Material, Laufprotokolle und Inhalte bleiben außerhalb des Repositorys; hier stehen nur Kenndaten.

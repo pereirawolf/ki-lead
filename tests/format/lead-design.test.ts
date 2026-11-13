@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.8 vom 11.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.9 vom 14.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -199,6 +199,15 @@ describe("Grunddesign: rahmen.json", () => {
     const nav = css.match(/\n\.nav \{[^}]*\}/)?.[0] ?? "";
     expect(nav).toMatch(/min-height: 44px/);
     expect(css).toMatch(/\n\.nav:hover \{[^}]*background: var\(--amt-zart\)/);
+  });
+
+  it("LD-A04: Punkt als einzige Befundmarke, Rand und Ziffer der Nummer ohne Farbe (seit Grunddesign 1.9, KI-LEAD 0.7.21)", () => {
+    // Soll unabhängig von rahmen.json: Entscheidung des Herausgebers vom 14.11.2026
+    const css = ["src/styles.css", "src/styles/basis.css", "src/styles/formular.css", "src/styles/a11y.css"].map(text).join("\n");
+    expect(css).not.toMatch(/\.mit-befund[^{]*\.schritt-nr/);
+    expect(css).toMatch(/\n\.schritt-befund \{[^}]*background: var\(--kritisch\)/);
+    expect(css).not.toMatch(/schritt-fertig|\.schritt\.fertig/);
+    expect(rahmen.regeln.find((r: any) => r.id === "LD-A04")?.text).toMatch(/Der Punkt ist die einzige Markierung/);
   });
 
   it("LD-R04: einheitliches Hinweisband, MUSS, Wortlaut wie in der Oberfläche (seit Grunddesign 1.6, KI-LEAD 0.7.16)", () => {
