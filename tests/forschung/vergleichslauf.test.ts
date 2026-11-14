@@ -170,6 +170,9 @@ describe("Vergleichslauf Ilka", () => {
     );
     const r = JSON.parse(await zip.file("reihe.json")!.async("string"));
     expect(r.laeufe.map((l: any) => l.lauf)).toEqual(ids);
+    // seit 0.9.1: LIESMICH nennt die Schemakennung der Entwürfe statt fest „LEAD-Meldung-v1“
+    const schema = (ergebnisse[0].meldung as unknown as { schema: string }).schema;
+    expect(await zip.file("LIESMICH.txt")!.async("string")).toContain(`- meldungen/<lauf>.meldung.json: Entwürfe (${schema})`);
     const lauf = JSON.parse(await zip.file(`laeufe/${ids[0]}.lauf.json`)!.async("string"));
     expect(lauf.format).toBe("ki-lead-lauf/1");
     const csvText = (await zip.file("uebersicht.csv")!.async("string")).replace(/^﻿/, "");

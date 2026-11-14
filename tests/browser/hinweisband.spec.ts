@@ -133,8 +133,15 @@ for (const breite of [390, 1280]) {
 test("Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich (gemessene Höhe statt fester Werte)", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await oeffnen(page);
-  await page.evaluate(() => window.scrollTo(0, 400));
-  await expect.poll(() => kompakt(page)).toBe(true);
+  // Erst scrollen, wenn die Maske steht: Vorher ist die Seite in WebKit mitunter noch zu kurz, scrollTo bleibt bei 0 und
+  // der Kopf wird nie kompakt (CI zu PR #175, 14.11.2026). Das Scrollen wiederholt sich deshalb, bis der Kopf kompakt ist.
+  await expect(page.locator(".meldung .schritte ol")).toBeVisible();
+  await expect
+    .poll(async () => {
+      await page.evaluate(() => window.scrollTo(0, 400));
+      return kompakt(page);
+    })
+    .toBe(true);
   await page.waitForTimeout(300);
   const kopf = (await page.locator(".kopfbereich").boundingBox())!.height;
   const oben = await page.locator(".meldung .schritte ol").evaluate((ol) => parseFloat(getComputedStyle(ol).top));

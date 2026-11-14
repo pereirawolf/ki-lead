@@ -1340,3 +1340,14 @@ Soll unabhängig von `design/rahmen.json`: Entscheidung des Herausgebers vom 14.
 | Soll | Test | Datei |
 |---|---|---|
 | „Automatisch“ setzt in KI-LEAD hell „Neutral · Hell“, dunkel „Neutral · Night Mode“, bei „mehr Kontrast“ das Kontrastschema, auch mit aktivem Profil mit eigenem Farbschema; LD-F05 nennt den Normalfall und den Vorrang eines eingebetteten oder festen Schemas, LD-F01 das feste Schema einer App ohne Profile als Schema von „Automatisch“ hell und behält „Werte außerhalb des Katalogs gibt es nicht“ | Grunddesign › LD-F05: „Automatisch“ hell „Neutral · Hell“, festes oder eingebettetes Schema geht vor (seit Grunddesign 1.11, OF-10 aus Thessa) | `tests/format/lead-design.test.ts` |
+
+## Vergleichslauf Ilka vor und nach der Umstellung auf LEAD-Meldung-v2 (0.9.1, offener Punkt 2 in LEAD-MELDUNG-V2.md)
+
+Soll unabhängig vom Code: die beiden Reihendateien des Herausgebers vom 14.11.2026 (dieselbe Variante `A-anthropic-standard` mit App 0.8.3/Profil 1.44.0 und App 0.9.0/Profil 2.0.0) und das Ergebnis unter `evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md`.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Dieselbe Konfiguration aus zwei Ständen bleibt getrennt, Kennung und Konfiguration nennen App- und Profilversion; Bezug die erste passende Reihe, `--bezug` wählt den anderen Stand; Hinweis im Bericht; ein Stand allein behält die bisherige Kennung, zwei Dateien desselben Stands werden vereinigt | Auswertung der Vergleichsläufe › seit 0.9.1: dieselbe Konfiguration aus verschiedenen App- oder Profilversionen bleibt getrennt | `tests/forschung/vergleichsauswertung.test.ts` |
+| LIESMICH der ZIP-Datei nennt die Schemakennung der Entwürfe | Vergleichslauf Ilka › ZIP enthält Reihendatei, Übersicht, Laufprotokolle, Entwürfe und Vergleiche | `tests/forschung/vergleichslauf.test.ts` |
+
+Stabilisiert ohne geändertes Soll: `tests/browser/hinweisband.spec.ts` › Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich (scrollt erst nach dem Laden der Maske und wiederholt das Scrollen bis zum kompakten Kopf; Fehlschlag in WebKit in der CI zu PR #175).

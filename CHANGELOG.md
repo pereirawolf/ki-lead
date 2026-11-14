@@ -124,6 +124,28 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.8.2 | letzter Commit des Pull Requests „Kennzahlen-Bausteine in Lagebild und Verdichtung (UP-2026-W45-05); 0.8.2“ |
 | 0.8.3 | letzter Commit des Pull Requests „Paket 6, Teil App: Redaktionscheck auf v2-Feldern, übergreifende Lage, Eingangsschema (UP-2026-W45-06); 0.8.3“ |
 | 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
+| 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ |
+## [0.9.1] – 14.11.2026
+
+Grundlage: Vergleichslauf Ilka vor und nach der Umstellung auf LEAD-Meldung-v2 (offener Punkt 2 in [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md), entschieden am 14.11.2026), ausgeführt vom Herausgeber am 14.11.2026 mit App 0.8.3/Beispielprofil 1.44.0 und App 0.9.0/Beispielprofil 2.0.0, je drei Läufe (Läufe 20261114-201209-jfhj, -202340-i5q5, -203507-940l und 20261114-212312-o7hv, -213436-m8s6, -214703-7mqq). Laufprotokolle und Entwürfe bleiben außerhalb des Repositorys; hier stehen nur Kenndaten. Entscheidung des Herausgebers vom 14.11.2026: Ergebnisbericht und die beiden Nebenbefunde der Auswertung in einem Pull Request; offener Punkt 2 und das Befundregister werden erst nach seiner Freigabe fortgeschrieben. Dritte Stelle: Ergänzung der Forschungsfunktionen.
+
+### Neu
+
+- **Ergebnis** [evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md](evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md): v2 im Mittel 2,66 statt 2,30 USD und 698 statt 660 s je Lauf; keine Reparatur, keine Schemabefunde, keine Fehler der Referenzprüfung (v1: eine Reparatur in drei Läufen). Mehrkosten zu rund einem Drittel aus S1 (Prompt über der Schwelle für den Preis langer Prompts bei Haiku), sonst aus Eingangsmaterial und Systemauftrag von S2; Anteil des Ausgabeschemas geschätzt 0,05 USD je Lauf.
+
+### Geändert
+
+- **Auswertung der Vergleichsläufe nach Stand getrennt** (`src/forschung/vergleichsauswertung.ts`): Reihen derselben Konfiguration aus verschiedenen App- oder Profilversionen werden nicht mehr vereinigt (`gruppenSchluessel()`, `reiheStand()`); Kennung und Konfiguration nennen dann den Stand, z. B. `A-anthropic-standard@0.9.0/2.0.0` mit „KI-LEAD 0.9.0 · Profil 2.0.0“. Bezug bleibt die erste passende Reihe; `--bezug` wählt einen anderen Stand. Ein Stand allein behält die bisherige Kennung. Bisher fasste `npm run vergleichslauf:auswerten` die Reihen vor und nach der Umstellung zu einer Konfiguration mit sechs Läufen zusammen.
+- **LIESMICH der ZIP-Datei** (`src/forschung/vergleichslauf-export.ts`): nennt die Schemakennung der Entwürfe statt fest „LEAD-Meldung-v1“.
+
+### Tests
+
+- `tests/forschung/vergleichsauswertung.test.ts` (1 neu): zwei Stände derselben Variante getrennt, Bezug, `--bezug`, Hinweis, ein Stand mit bisheriger Kennung; `tests/forschung/vergleichslauf.test.ts` (1 Prüfung ergänzt): Schemakennung im LIESMICH. Stabilisiert ohne geändertes Soll: `tests/browser/hinweisband.spec.ts` (Schrittleiste unter dem Kopfbereich) scrollt erst, wenn die Maske steht, und wiederholt das Scrollen, bis der Kopf kompakt ist; in WebKit blieb `scrollTo` in der CI zu diesem Pull Request bei noch zu kurzer Seite bei 0.
+
+### Dokumentation
+
+- [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.1 (Abschnitt 5.4), `evaluation/README.md` (Verweis auf das Ergebnis). Versionsangaben 0.9.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 901); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
 ## [0.9.0] – 14.11.2026
 
 ### Nachtrag vom 14.11.2026 (ohne Änderung der App)

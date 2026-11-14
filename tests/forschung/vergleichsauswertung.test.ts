@@ -140,6 +140,36 @@ describe("Auswertung der Vergleichsläufe", () => {
     expect(berichtMarkdown(auswerten([A]))).not.toContain("ohne Gegenstück");
   });
 
+  // Vergleichslauf Ilka vor und nach der Umstellung auf LEAD-Meldung-v2 (14.11.2026): dieselbe Plan-Variante in zwei Ständen
+  it("seit 0.9.1: dieselbe Konfiguration aus verschiedenen App- oder Profilversionen bleibt getrennt", () => {
+    const v = "standardprofile-ilka/A-anthropic-standard";
+    const vorher = reihe(["claude-haiku-5-5", "high"], ["claude-opus-5-5", "medium"], [lauf("v1", 2.3, 2, 1, { d1: 4, d2: 3 })], {
+      variante: v,
+      app: "KI-LEAD 0.8.3",
+      profil: { id: "p", version: "1.44.0", hash: "h1" },
+    });
+    const nachher = reihe(["claude-haiku-5-5", "high"], ["claude-opus-5-5", "medium"], [lauf("v2", 2.7, 2, 0, { d1: 3, d2: 3 })], {
+      variante: v,
+      app: "KI-LEAD 0.9.0",
+      profil: { id: "p", version: "2.0.0", hash: "h2" },
+    });
+    const z = zusammenfassen([vorher, nachher]);
+    expect(z.map((s) => [s.kennung, s.laeufe])).toEqual([
+      ["A-anthropic-standard@0.8.3/1.44.0", 1],
+      ["A-anthropic-standard@0.9.0/2.0.0", 1],
+    ]);
+    expect(z[1].konfiguration).toBe("S1 claude-haiku-5-5 (high) · S2 claude-opus-5-5 (medium) · KI-LEAD 0.9.0 · Profil 2.0.0");
+    // Bezug ist die erste passende Reihe; mit --bezug lässt sich der andere Stand wählen
+    const a = auswerten([vorher, nachher]);
+    expect(a.bezug).toBe("A-anthropic-standard@0.8.3/1.44.0");
+    expect(a.abstaende).toMatchObject([{ kennung: "A-anthropic-standard@0.9.0/2.0.0", radar: 0.5 }]);
+    expect(auswerten([vorher, nachher], "A-anthropic-standard@0.9.0/2.0.0").bezug).toBe("A-anthropic-standard@0.9.0/2.0.0");
+    expect(berichtMarkdown(a)).toContain("Dieselbe Konfiguration aus verschiedenen Ständen steht getrennt");
+    // Ein Stand allein behält die bisherige Kennung; zwei Dateien desselben Stands werden weiter vereinigt
+    const zweiteDatei = { ...vorher, laeufe: [lauf("v1b", 2.4, 2, 0, { d1: 4 })] } as Reihe;
+    expect(zusammenfassen([vorher, zweiteDatei]).map((s) => [s.kennung, s.laeufe])).toEqual([["A-anthropic-standard", 2]]);
+  });
+
   it("LS-2026-W43-15: Bericht sagt, ob die Zahl der Sachverhalte S1 misst oder S1 fest vorgegeben war", () => {
     expect(berichtMarkdown(auswerten([A]))).toContain("Die Zahl der Sachverhalte übernimmt S2 aus der bestätigten S1-Gliederung");
     const fest = { datei: "evaluation/material/x.json", sha256: "ab".repeat(32) };
