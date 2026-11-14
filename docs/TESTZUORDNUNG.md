@@ -1253,3 +1253,13 @@ Testprofil: Landes- und Beispielprofil mit der Zusammenstellung unter `formate/l
 | Modul `lead-baustein` ist ein gültiges Schema nach Draft 2020-12; erzeugte Profilschemata aktuell | LEAD-Meldung-v2: Schemata › Kern- und Modulschema …, Zusammenstellung … | `tests/format/lead-meldung-v2.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.13.0). Angepasst ohne geändertes Soll: `tests/format/lead-meldung-v2.test.ts` (Modul `lead-baustein` in der Liste der Schemata).
+
+## Grunddesign 1.10, Schrittleiste und Fehlerkästen (0.8.1, KP-2026-W46-01 bis -06)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Auf breiten Bildschirmen steht die Leiste nach dem Scrollen in die Mitte des Arbeitsbereichs 0 bis 24 px unter dem Kopfbereich, in Erfassung, KI-Erfassung und Einstellungen (LD-A03) | KP-2026-W46-01: Leiste von „…“ läuft unter dem Kopfbereich mit (LD-A03) | `tests/browser/hinweisband.spec.ts` |
+| Kein Kasten, der `kasten-fehler` tragen kann, mit fester Rolle `status`; LD-M01 nennt die Rolle alert | Grunddesign › KP-2026-W46-02: Kästen, die Fehler zeigen können, tragen dann die Rolle alert, nie fest status (LD-M01, seit 0.8.1) | `tests/format/lead-design.test.ts` |
+| Eine ungültige Datei in der Erfassung erscheint als Kasten „Fehler“ mit Rolle `alert` | KP-2026-W46-02: ungültige Datei in der Erfassung erscheint als Fehler mit Rolle alert | `tests/browser/barrierefreiheit.spec.ts` |
+
+Die Regeltexte von LD-F05, LD-A01, LD-E04 und LD-M04 (KP-2026-W46-03 bis -06) prüfen die vorhandenen Tests zu `design/rahmen.json` und `design/README.md` (Gleichlauf, Fassung mit Eintrag im Änderungsverlauf).
