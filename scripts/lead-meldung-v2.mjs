@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Werkzeug für das Meldungsformat LEAD-Meldung-v2 (Entwurf, docs/LEAD-MELDUNG-V2.md):
-//   schema   – Kernschema und Fachmodule zu einem selbsttragenden Profilschema zusammenstellen
+//   schema   – Kernschema und Fachmodule zu einem selbsttragenden Profilschema zusammenstellen (Dateien zuerst neben
+//              der Zusammenstellung, sonst aus formate/lead-meldung-v2/)
 //   migriere – Meldungen nach LEAD-Meldung-v1 oder LEAD-Meldung-Land-v1 nach v2 überführen
 //   pruefe   – v2-Meldungen gegen ein Schema (Prüfebene 1) und auf Verweise und Konsistenz (Prüfebene 2) prüfen
 //
@@ -14,7 +15,7 @@
 
 // Seit 0.7.0 (UP-2026-W45-02) steht die Umsetzung in src/kern/meldung-v2.js; dieses Skript ist die Kommandozeile dazu.
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { migriereV1, pruefeReferenzen, stelleSchemaZusammen as zusammenstellen } from "../src/kern/meldung-v2.js";
@@ -29,6 +30,14 @@ const leseJson = (pfad) => JSON.parse(readFileSync(pfad, "utf8"));
 /** Zusammenstellung mit Dateien aus formate/lead-meldung-v2/ (Vorgabe) oder einer eigenen Ladefunktion */
 export function stelleSchemaZusammen(z, lade = (d) => leseJson(join(FORMATORDNER, d))) {
   return zusammenstellen(z, lade);
+}
+
+/**
+ * Ladefunktion für eine Zusammenstellung außerhalb von formate/ (seit 0.9.0, etwa die Vorlage profile/muster): Dateien
+ * zuerst relativ zum Ordner der Zusammenstellung (eigene Module), sonst aus formate/lead-meldung-v2/ (Kern, Module).
+ */
+export function ladeNeben(ordner) {
+  return (d) => (existsSync(join(ordner, d)) ? leseJson(join(ordner, d)) : leseJson(join(FORMATORDNER, d)));
 }
 
 function argumente(argv) {
@@ -54,7 +63,7 @@ async function main() {
     const [quelle, ziel] = pos;
     if (!quelle) throw new Error("Aufruf: schema <zusammenstellung.json> [ziel]");
     const z = leseJson(quelle);
-    const s = stelleSchemaZusammen(z);
+    const s = stelleSchemaZusammen(z, ladeNeben(dirname(resolve(quelle))));
     const text = JSON.stringify(s, null, 2) + "\n";
     if (ziel) {
       writeFileSync(ziel, text);
@@ -78,12 +87,15 @@ async function main() {
     if (!pos.length || !opt.schema) throw new Error("Aufruf: pruefe <v2.json …> --schema <schema.json>");
     const { default: Ajv2020 } = await import("ajv/dist/2020.js");
     const ajv = new Ajv2020({ allErrors: true, strict: false });
-    const pruefe = ajv.compile(leseJson(opt.schema));
+    const schema = leseJson(opt.schema);
+    const pruefe = ajv.compile(schema);
+    // Module des Profilschemas gelten in der Referenzprüfung als bekannt (seit 0.9.0)
+    const module = [...Object.keys(schema.$defs?.module?.properties ?? {}), ...Object.keys(schema.$defs?.meldungsmodule?.properties ?? {})];
     let fehlerGesamt = 0;
     for (const datei of pos) {
       const m = leseJson(datei);
       const ok = pruefe(m);
-      const ref = pruefeReferenzen(m);
+      const ref = pruefeReferenzen(m, { module });
       const f = (ok ? 0 : pruefe.errors.length) + ref.filter((r) => r.stufe === "fehler").length;
       fehlerGesamt += f;
       console.log(`${datei}: ${f ? `${f} Fehler` : "ohne Fehler"}`);

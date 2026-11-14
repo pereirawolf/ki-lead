@@ -2,7 +2,7 @@
 // abgeschnittenen Antwort, Schemaprüfung und höchstens zwei Reparaturen. Seit 0.6.2 eigene Datei (TP-2026-W44-06),
 // vorher in stufen.ts.
 
-import { referenzBefunde } from "../kern/referenzen";
+import { moduleImSchema, referenzBefunde } from "../kern/referenzen";
 import { bausteinAbgleich, type AbgleichBaustein } from "../kern/bausteinabgleich";
 import { addiereNutzung, type LlmAntwort, type SystemTeil } from "../anbieter/typen";
 import { jetztLokal } from "../kern/ausgabe";
@@ -541,7 +541,7 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // Bei LEAD-Meldung-v2 stehen Kennzahlen in Feldern; die Übernahme aus dem Baustein prüft die Nachbearbeitung (seit 0.8.0)
   if (meldung && !v2) befunde.push(...bausteinAbgleich(meldung, p.ui, bausteineAus(k.material)));
   // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Prüfebene 2 nach der Antwort
-  if (meldung) befunde.push(...referenzBefunde(meldung, p.ui));
+  if (meldung) befunde.push(...referenzBefunde(meldung, p.ui, moduleImSchema(p.schema)));
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
   if (meldung && korrekturen.length)
     befunde.unshift({ stufe: "warnung", text: `Absender auf die eigene Stelle korrigiert (der Entwurf nannte eine andere): ${korrekturen.join("; ")}.` });

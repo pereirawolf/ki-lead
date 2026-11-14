@@ -37,4 +37,4 @@ export function quellenV1(text: unknown, zone: string, hinweise: string[]): Reco
 export function zeitstrahlV1(text: unknown, zone: string, hinweise: string[]): Record<string, any>[];
 export function bewertungV1(sofort: unknown, zone: string, hinweise: string[], pfad: string): Record<string, any>;
 export function migriereV1(v1: unknown, opt?: MigrationsOptionen): { meldung: MeldungV2; hinweise: string[] };
-export function pruefeReferenzen(m: unknown): ReferenzBefund[];
+export function pruefeReferenzen(m: unknown, opt?: { module?: string[] }): ReferenzBefund[];
