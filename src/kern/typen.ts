@@ -52,7 +52,8 @@ export interface ProfilManifest {
   /** Optionales Farbschema der Oberfläche (Basis aus dem Katalog, einzelne Farbrollen änderbar) */
   farbschema?: { basis: string; name?: string; farben?: Record<string, string> };
   /** Beispieldatensätze im Paket, z. B. eine fiktive Lage zum Ausprobieren des Lagebilds */
-  beispiele?: { titel: string; ordner: string; hinweis?: string }[];
+  /** `material` (seit Profilformat 1.32): Ordner mit Kennzahlen-Bausteinen, die „Beispiel laden“ zusätzlich holt */
+  beispiele?: { titel: string; ordner: string; hinweis?: string; material?: string[] }[];
 }
 
 export type Widget =

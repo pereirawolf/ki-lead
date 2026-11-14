@@ -319,7 +319,8 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
 });
 
 describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () => {
-  it("fünf Bausteine der Fassung 0.3, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, nicht im Lagebild-Beispiel", async () => {
+  // Geändertes Soll seit 0.8.2 (UP-2026-W45-05): Das Beispiel „Ilka“ lädt die Bausteine als Material mit
+  it("fünf Bausteine der Fassung 0.3, als Kennzahlen-Baustein ohne Eingangsrolle gelesen, im Lagebild-Beispiel nur als Material", async () => {
     const p = (await profil("lead-thueringen")).profil!;
     const bausteine = thessaBausteine(p);
     expect(bausteine.map((b) => b.name)).toEqual([
@@ -345,5 +346,6 @@ describe("KP-2026-W45-02: Kennzahlen-Bausteine aus Thessa im Begleitordner", () 
     }
     expect(beispielDateien(p, ILKA).some((d) => d.name.includes("kennzahlen_"))).toBe(false);
     expect(p.manifest.beispiele!.some((b) => b.ordner.includes("thessa"))).toBe(false);
+    expect(p.manifest.beispiele!.find((b) => b.ordner === ILKA)!.material).toEqual([THESSA.replace(/\/$/, "")]);
   });
 });

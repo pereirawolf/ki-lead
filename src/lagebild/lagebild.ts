@@ -9,6 +9,7 @@ import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
 import { referenzBefunde } from "../kern/referenzen";
+import { erkenneBaustein, type BausteinErkennung, type BausteinInfo } from "../kern/baustein";
 import type { Befund, Kontakte, Meldung, Profil } from "../kern/typen";
 
 export interface LagebildDatei {
@@ -42,6 +43,21 @@ export interface LagebildFehler {
   text: string;
 }
 
+/**
+ * Material im Lagebild (seit 0.8.2, UP-2026-W45-05): Kennzahlen-Bausteine (Thessa, KSNV). Sie sind keine Meldungen:
+ * nicht in Meldestatus, Zählern, Sachverhalten, Ausgaben und Redaktionscheck; sie gehen mit der Rolle „material“ an die
+ * KI-Verdichtung.
+ */
+export interface LagebildMaterial {
+  /** Inhaltskennung wie bei den Meldungen */
+  id: string;
+  name: string;
+  importiertAm: string;
+  /** Prüfung gegen das eingebettete Schema: gültig, unbekannte Fassung oder Schemabefunde */
+  erkennung: BausteinErkennung;
+  daten: Record<string, unknown>;
+}
+
 export interface SvEintrag {
   eintrag: LagebildEintrag;
   index: number;
@@ -71,10 +87,19 @@ export function inhaltsKennung(text: string): string {
   return `${h.toString(16).padStart(8, "0")}-${text.length.toString(16)}`;
 }
 
-/** Liest Meldungsdateien ein: Migration und Schemaprüfung nach dem Profil, fremde Schemata erkennen. */
-export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege: LagebildEintrag[]; fehler: LagebildFehler[] } {
+/**
+ * Liest Meldungsdateien ein: Migration und Schemaprüfung nach dem Profil, fremde Schemata erkennen. Kennzahlen-Bausteine
+ * stehen seit 0.8.2 (UP-2026-W45-05) als Material in einer eigenen Liste; ihre Schemata reicht der Aufrufer herein
+ * (`BAUSTEIN_SCHEMATA` aus src/pipeline/bausteinschemata.ts), ohne sie gilt jede Fassung als unbekannt.
+ */
+export function einlesen(
+  dateien: LagebildDatei[],
+  profil: Profil,
+  bausteinSchemata: Record<string, Record<string, object>> = {},
+): { eintraege: LagebildEintrag[]; fehler: LagebildFehler[]; material: LagebildMaterial[] } {
   const eintraege: LagebildEintrag[] = [];
   const fehler: LagebildFehler[] = [];
+  const material: LagebildMaterial[] = [];
   const gesehen = new Set<string>();
   for (const datei of dateien) {
     const id = inhaltsKennung(datei.text);
@@ -89,6 +114,12 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
     }
     if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
       fehler.push({ name: datei.name, text: "keine Meldung (erwartet ein JSON-Objekt)" });
+      continue;
+    }
+    // Kennzahlen-Baustein: Material, keine Meldung (vor der Migration, damit er nicht als fremde Meldung gilt)
+    const baustein = erkenneBaustein(obj, bausteinSchemata);
+    if (baustein) {
+      material.push({ id, name: datei.name, importiertAm: datei.importiertAm, erkennung: baustein, daten: obj as Record<string, unknown> });
       continue;
     }
     const mig = migriere(obj, profil);
@@ -121,7 +152,20 @@ export function einlesen(dateien: LagebildDatei[], profil: Profil): { eintraege:
       ...(referenzBefunde(obj).length ? { referenzen: referenzBefunde(obj) } : {}),
     });
   }
-  return { eintraege, fehler };
+  return { eintraege, fehler, material };
+}
+
+/** Prüfstand eines Bausteins in Worten */
+export function materialPruefstand(m: LagebildMaterial): string {
+  const e = m.erkennung;
+  if (e.status === "gueltig") return "Schema erfüllt";
+  if (e.status === "unbekannte_fassung") return `Fassung „${e.fassung || "ohne Angabe"}“ unbekannt, nicht geprüft`;
+  return `${e.befunde.length} Schemabefund${e.befunde.length === 1 ? "" : "e"}`;
+}
+
+/** Gültige Bausteine für die Rechenhilfe (Reihenfolge wie geladen) */
+export function bausteineFuerLagebild(material: LagebildMaterial[]): { name: string; info: BausteinInfo; daten: Record<string, any> }[] {
+  return material.flatMap((m) => (m.erkennung.status === "gueltig" ? [{ name: m.name, info: m.erkennung.info, daten: m.daten as Record<string, any> }] : []));
 }
 
 const IGNORIEREN = /(^|\/)(__MACOSX|\.)/;
@@ -179,6 +223,14 @@ export async function dateienAusAuswahl(liste: File[]): Promise<{ dateien: Lageb
     }
   }
   return { dateien, fehler };
+}
+
+/**
+ * Beispiel mit Meldungen und, seit 0.8.2 (Profilformat 1.32, UP-2026-W45-05), den Ordnern unter „material“
+ * (Kennzahlen-Bausteine), die „Beispiel laden“ zusätzlich holt.
+ */
+export function beispielMitMaterial(profil: Profil, b: { ordner: string; material?: string[] }): LagebildDatei[] {
+  return [b.ordner, ...(b.material ?? [])].flatMap((o) => beispielDateien(profil, o));
 }
 
 /** Beispieldatensätze aus dem Profilpaket (Manifest „beispiele“). */

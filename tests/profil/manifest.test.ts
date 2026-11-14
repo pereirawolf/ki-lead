@@ -24,6 +24,7 @@ describe("F05: Profilmanifest mit falschen Datentypen", () => {
     ["anweisungen als Text", (m) => (m.anweisungen = "x"), /„anweisungen“ muss ein Objekt/],
     ["meldung.schema als Zahl", (m) => (m.meldung.schema = 5), /„meldung.schema“ muss ein Dateipfad/],
     ["beispiele mit null", (m) => (m.beispiele = [null]), /„beispiele“ braucht/],
+    ["UP-2026-W45-05: beispiele[].material als Text", (m) => (m.beispiele[0].material = "beispiele/x"), /„beispiele\[\]\.material“ ist eine Liste/],
     ["migrationen als Text", (m) => (m.migrationen = "x"), /„migrationen“ braucht/],
     ["kodierleitfaden als Zahl", (m) => (m.kodierleitfaden = 1), /„kodierleitfaden“ muss ein Text sein/],
   ])("%s: abgewiesen mit Befund, ohne Ausnahme", async (_, aendern, meldung) => {
@@ -35,6 +36,14 @@ describe("F05: Profilmanifest mit falschen Datentypen", () => {
         .map((b) => b.text)
         .join("\n"),
     ).toMatch(meldung);
+  });
+
+  it("UP-2026-W45-05: Materialordner eines Beispiels ohne JSON-Dateien ergibt eine Warnung, das Profil bleibt nutzbar", async () => {
+    const e = await mit((m) => (m.beispiele[0].material = ["beispiele/gibt-es-nicht"]));
+    expect(e.profil).not.toBeNull();
+    expect(e.befunde.filter((b) => b.stufe === "warnung").map((b) => b.text)).toContain(
+      `Beispiel „${JSON.parse(basis()["profil.json"]).beispiele[0].titel}“: Im Materialordner beispiele/gibt-es-nicht liegen keine JSON-Dateien.`,
+    );
   });
 
   it("null bei optionalen Texten gilt wie eine fehlende Angabe", async () => {

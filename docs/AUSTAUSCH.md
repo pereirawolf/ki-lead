@@ -1,6 +1,6 @@
 # KI-LEAD – Austauschvertrag für LEAD-Meldungen (Entwurf)
 
-Fassung 0.7 vom 14.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.8.0 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 0.8 vom 14.11.2026, **Entwurf, nicht abgestimmt** · gilt für App-Version 0.8.2 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 LEAD folgt einem rekursiven Prinzip: Die Meldungen nachgeordneter und lateraler Stellen ergeben die eigene Meldung, die wiederum andere Stellen nutzen ([SPEZIFIKATION.md](SPEZIFIKATION.md), Abschnitt 3). Dafür muss eine Meldung mehr tragen als ihren Inhalt. Dieser Entwurf beschreibt, was eine Meldung mitbringen soll, damit eine andere Stelle oder ein anderes System sie verlässlich übernehmen kann. Er beschreibt zuerst, wie KI-LEAD heute arbeitet, und macht dann Vorschläge. Abgestimmt wird er erst in der Erprobung mit anderen Stellen (Teil C des Arbeitskonzepts). Bis dahin ändern seine Vorschläge keine Schemata.
 
@@ -88,7 +88,9 @@ Seit 0.6.19 (TP-2026-W44-59) prüft das Lagebild fremde Meldungen gegen ein Sche
 
 **Vorschlag.** Jede Stelle, die Meldungen abgibt, veröffentlicht ihr Schema mit Kennung und Version. Empfangende Profile nehmen es unter `eingang_schemata` auf. Nächste Kandidaten sind das Schema von KRITIS-LEAD (Landesprofil) und das Schema des Profils Justiz (Landesprofil, gegebenenfalls Bundesprofil).
 
-**Offen für Teil C:** Ort und Pflege der veröffentlichten Schemata; ob eine geprüfte fremde Meldung mehr kann als die KI-Verdichtung (etwa Kennzahlen im Lagebild).
+Seit App 0.8.2 (UP-2026-W45-05) liest auch das Lagebild Kennzahlen-Bausteine: als Material in einer eigenen Liste, nicht als Meldung, mit einer Rechenhilfe der App (zulässige Summen, Vorrang der übergeordneten Erhebung, Ausschnitt eines Landes, Einsatzmeldungen je Kennung einmal); die Übergabe an die KI-Verdichtung führt sie mit der Rolle „material“. Die Regeln stehen im Kodierleitfaden des Profils, Abschnitt 6.
+
+**Offen für Teil C:** Ort und Pflege der veröffentlichten Schemata; ob eine geprüfte fremde Meldung mehr kann als die KI-Verdichtung; ob das Lagebild Kennzahlen aus Bausteinen über die Rechenhilfe hinaus eigens darstellen soll.
 
 ## 9. Zulieferer aus der App-Familie
 
@@ -130,5 +132,6 @@ Drei Schwesterdemonstratoren liefern KI-LEAD zu, auf verschiedenen Wegen. Alle s
 | 0.3 | 03.11.2026 | Abschnitt 8: Material-Formate als fünfter Weg (Kennzahlen-Bausteine aus Thessa, App 0.6.24, UP-2026-W45-01) |
 | 0.5 | 04.11.2026 | Abschnitt 9: Zulieferer aus der App-Familie (Meldungen aus KRITIS-LEAD, Material aus Thessa), Zuordnung von oben n:m, Präfix `KRITIS-` für Sachverhalte von Betreibern (SR-2026-W45-04) |
 | 0.6 | 13.11.2026 | Abschnitte 8 und 9: Kennzahlen-Bausteine aus KSNV als dritter Zulieferer (App 0.7.19) |
+| 0.8 | 14.11.2026 | Abschnitt 8: Kennzahlen-Bausteine als Material im Lagebild mit Rechenhilfe und Rolle „material“ in der Übergabe (App 0.8.2, UP-2026-W45-05); offener Punkt zu Kennzahlen im Lagebild eingegrenzt |
 | 0.7 | 14.11.2026 | Abschnitt 9: Kennungen der Einsatzmeldungen und Verweis Kennzahl → Baustein im Fachmodul `lead-baustein` (App 0.8.0, UP-2026-W45-04) |
 | 0.4 | 03.11.2026 | Abschnitt 8: Migration nach LEAD-Meldung-v2 beim Einlesen, Grundform v2 für fremde Meldungen (App 0.7.0, UP-2026-W45-02) |

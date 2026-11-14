@@ -335,16 +335,25 @@ export interface V2Steuerung {
 }
 
 /**
+ * Zusatz zu den Baustein-Regeln (seit 0.8.2, UP-2026-W45-05): Die Rechenhilfe der App ist bei Summen, Ausschnitten und
+ * der Zählung der Einsatzmeldungen maßgeblich; die fachlichen Regeln bleiben im Kodierleitfaden (Abschnitt 6).
+ */
+export const RECHENHILFE_REGEL =
+  ' Liegt eine Rechenhilfe der App bei (`<rechenhilfe art="kennzahlen">`), bildest du Summen nur, wo sie „Summe zulässig“ nennt, gibst Werte eines erfassten Ausschnitts nicht als landesweite Werte aus und zählst Einsatzmeldungen je Kennung einmal an ihrem Zählort. Kennzahlen sind Belege für Beurteilung und Lagenradar, keine Kodierung.';
+
+/**
  * Regel für Kennzahlen-Bausteine im Material bei LEAD-Meldung-v1 (Übergangsregel h, solange Kennzahlen im Fließtext
  * stehen). Seit 0.8.0 (UP-2026-W45-04) stehen die fachlichen Kennzahlregeln nur im Kodierleitfaden des Profils
  * (Abschnitt 6, Kennzahlen); hier steht nur noch die Mechanik der App.
  */
 export const BAUSTEIN_REGEL =
-  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens und belege jeden Satz mit dem Eintrag des Bausteins im Quellenverzeichnis (Vorschlag im Attribut `quellenzeile`, Nummer nach deinem Verzeichnis). Die App gleicht die Zahlen im Text mit dem Baustein ab.';
+  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens und belege jeden Satz mit dem Eintrag des Bausteins im Quellenverzeichnis (Vorschlag im Attribut `quellenzeile`, Nummer nach deinem Verzeichnis). Die App gleicht die Zahlen im Text mit dem Baustein ab.' +
+  RECHENHILFE_REGEL;
 
 /** Regel für Kennzahlen-Bausteine bei LEAD-Meldung-v2 mit Modul lead-baustein (seit 0.8.0, UP-2026-W45-04) */
 export const BAUSTEIN_REGEL_V2 =
-  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens als Objekte in `kennzahlen` des Sachverhalts, mit den Angaben des Bausteins und eigener ID (K1, K2 … je Sachverhalt). Nimm den Baustein mit dem Quellenobjekt aus seinem Feld `quellen` in dein Quellenverzeichnis auf (ID nach deinem Verzeichnis). Verweise im Modul `lead-baustein` des Sachverhalts darauf: je Baustein `format`, `fassung`, `quelle` (ID in deinem Verzeichnis) und `kennzahlen` mit `{kennzahl: ID in der Meldung, baustein_kennzahl: ID im Baustein}`; Einsatzmeldungen des Bausteins, auf die sich der Sachverhalt stützt, nennst du mit ihrer Kennung unter `einsatzmeldungen`; Maßnahme und Zeitstrahlzeile dazu legt die App aus dem Baustein an, du schreibst sie nicht selbst. Die App setzt Datei und Prüfsumme und stellt Werte, die vom Baustein abweichen, aus dem Baustein wieder her.';
+  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens als Objekte in `kennzahlen` des Sachverhalts, mit den Angaben des Bausteins und eigener ID (K1, K2 … je Sachverhalt). Nimm den Baustein mit dem Quellenobjekt aus seinem Feld `quellen` in dein Quellenverzeichnis auf (ID nach deinem Verzeichnis). Verweise im Modul `lead-baustein` des Sachverhalts darauf: je Baustein `format`, `fassung`, `quelle` (ID in deinem Verzeichnis) und `kennzahlen` mit `{kennzahl: ID in der Meldung, baustein_kennzahl: ID im Baustein}`; Einsatzmeldungen des Bausteins, auf die sich der Sachverhalt stützt, nennst du mit ihrer Kennung unter `einsatzmeldungen`; Maßnahme und Zeitstrahlzeile dazu legt die App aus dem Baustein an, du schreibst sie nicht selbst. Die App setzt Datei und Prüfsumme und stellt Werte, die vom Baustein abweichen, aus dem Baustein wieder her.' +
+  RECHENHILFE_REGEL;
 
 /** Regeln der App zu Kennung, Bezug, Zeitstrahl und Quellen-IDs bei LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04) */
 export function v2Steuerung(s: Pick<Steuerung, "vormeldung" | "verdichtung" | "bausteine">, v: V2Steuerung | undefined): string[] {

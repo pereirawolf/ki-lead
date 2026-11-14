@@ -702,7 +702,13 @@ describe("UP-2026-W45-04: Kennzahlregeln an einer Stelle (Kodierleitfaden Abschn
         "**Keine unzulässigen Summen.**",
         "**Mindestwert und Teilmenge.**",
         "Einsatzmittel zählen am Standort, Einsätze am Einsatzort.",
-        "**Beleg.**",
+        // seit Kodierleitfaden 1.14.0 (UP-2026-W45-05) mit überlappenden Räumen, übergeordneter Erhebung, Ausschnitt und
+        // Beleg statt Kodierung; geändertes Soll für „Beleg“
+        "**Beleg, keine Kodierung.**",
+        "**Übergeordnete Erhebung.**",
+        "**Ausschnitt kennzeichnen.**",
+        "(erfasster Ausschnitt, Vollständigkeit nicht angegeben)",
+        "zählt einmal, im Raum, in dem sie im Gebiet liegt",
       ])
         expect(abschnitt6, `${name}: ${regel}`).toContain(regel);
     }
@@ -726,5 +732,73 @@ describe("UP-2026-W45-04: KI-Kennzeichnung aus der Entstehung nach v2", () => {
       werkzeug: `KI-LEAD ${d.entstehung.werkzeug.version}`,
       erstellt: "2026-10-14T10:40+02:00",
     });
+  });
+});
+
+describe("UP-2026-W45-05: Verdichtung mit mehreren Kennzahlen-Bausteinen (Rechenhilfe, Ausschnitt, Prüfungen nach S2)", () => {
+  const THESSA = "profile/lead-thueringen/beispiele/orkantief-ilka-thessa/";
+  const LAND = `${THESSA}kennzahlen_Thueringen_2026-10-14T10-30_FIKTIV.json`;
+  const SON1030 = `${THESSA}kennzahlen_Landkreis-Sonneberg_2026-10-14T10-30_FIKTIV.json`;
+
+  it("Rechenhilfe im Material; Land-Kennzahl mit Zusatz „erfasster Ausschnitt“, Summe Land + Kreis als unzulässig, Beleg-Hinweis mit Belegachsen", async () => {
+    const mLand = await bausteinMaterial(LAND);
+    const mSon = await bausteinMaterial(SON1030);
+    const b = json(LAND);
+    const roh = kiAusgabe();
+    roh.quellen.push({ id: "Q9", ...(({ id: _i, ...r }) => r)(b.quellen[0]) });
+    const k1 = b.kennzahlen.find((x: any) => x.id === "K1");
+    roh.sachverhalte[0].kennzahlen = [
+      ...roh.sachverhalte[0].kennzahlen,
+      // wie im Baustein, Raum ohne Kennzeichnung des Ausschnitts
+      { ...k1, id: "K3", quellen: ["Q9"] },
+      // Summe Land (151) + Sonneberg (55): überlappende Räume
+      { ...k1, id: "K4", gegenstand: "Einsatzmittel zusammen", wert: 206, quellen: ["Q9"] },
+    ];
+    roh.sachverhalte[0].module["lead-baustein"] = {
+      fassung: "1.0",
+      bausteine: [{ format: "Thessa-Kennzahlen", fassung: "0.3", quelle: "Q9", kennzahlen: [{ kennzahl: "K3", baustein_kennzahl: "K1" }] }],
+    };
+    const anbieter = skriptAnbieter([meldungsAntwort(roh)]);
+    const k = await kontextV2(land, [mSon, mLand]);
+    k.anbieter = anbieter;
+    const r = await stufe2und3(k, k.lauf.bestaetigt!);
+    // an die KI: Rechenhilfe mit Land statt Summe und Ausschnitt
+    const nutzer = JSON.stringify(anbieter.anfragen[0]!.nachrichten);
+    expect(nutzer).toContain('<rechenhilfe art=\\"kennzahlen\\" quelle=\\"App\\">');
+    expect(nutzer).toContain("Thüringen (erfasster Ausschnitt, Vollständigkeit nicht angegeben) 151 [B2 K1]");
+    expect(JSON.stringify(anbieter.anfragen[0]!.system)).toContain("Liegt eine Rechenhilfe der App bei");
+    // Übernahme: Wert unverändert, Raum mit Zusatz; der Zusatz ist keine Abweichung
+    const sv = r.meldung!.sachverhalte[0];
+    expect(sv.kennzahlen.find((x: any) => x.id === "K3")).toMatchObject({
+      wert: 151,
+      raum: "Thüringen (erfasster Ausschnitt, Vollständigkeit nicht angegeben)",
+    });
+    expect(codes(r.befunde)).not.toContain("KENNZAHL_BAUSTEIN_ABWEICHUNG");
+    expect(r.befunde.find((x) => x.code === "BAUSTEIN_AUSSCHNITT")?.text).toContain("Sachverhalt 1 K3");
+    const summe = r.befunde.find((x) => x.code === "KENNZAHL_SUMME_UNZULAESSIG")!;
+    expect(summe.stufe).toBe("warnung");
+    expect(summe.text).toContain("Sachverhalt 1 K4: 206 = ");
+    expect(summe.text).toContain("überlappende Räume");
+    // K4 steht ohne Kennzeichnung für Thüringen und belegt den Land-Baustein
+    expect(r.befunde.find((x) => x.code === "KENNZAHL_LANDESWEIT")?.text).toContain("Sachverhalt 1 K4 (Thüringen");
+    expect(r.befunde.find((x) => x.code === "KENNZAHL_BELEG")?.text).toContain("Sachverhalt 1 (mögliche Belegachsen nach Thessa: D1, D4, D5, D8)");
+  });
+
+  it("KI übernimmt den Zusatz selbst: kein Hinweis BAUSTEIN_AUSSCHNITT, keine Abweichung", async () => {
+    const mLand = await bausteinMaterial(LAND);
+    const b = json(LAND);
+    const d = kiAusgabe();
+    d.quellen.push({ id: "Q9", ...(({ id: _i, ...r }) => r)(b.quellen[0]) });
+    const k2 = b.kennzahlen.find((x: any) => x.id === "K2");
+    const { teilmenge_von: _t, ...ohneTeilmenge } = k2;
+    d.sachverhalte[0].kennzahlen = [{ ...ohneTeilmenge, id: "K9", raum: "Thüringen (erfasster Ausschnitt, Vollständigkeit nicht angegeben)", quellen: ["Q9"] }];
+    d.sachverhalte[0].module["lead-baustein"] = {
+      fassung: "1.0",
+      bausteine: [{ format: "Thessa-Kennzahlen", fassung: "0.3", quelle: "Q9", kennzahlen: [{ kennzahl: "K9", baustein_kennzahl: "K2" }] }],
+    };
+    const befunde = bausteineUebernehmen(d, bausteineImMaterial([mLand]));
+    expect(codes(befunde)).not.toContain("BAUSTEIN_AUSSCHNITT");
+    expect(codes(befunde)).not.toContain("KENNZAHL_BAUSTEIN_ABWEICHUNG");
+    expect(d.sachverhalte[0].kennzahlen[0].raum).toBe("Thüringen (erfasster Ausschnitt, Vollständigkeit nicht angegeben)");
   });
 });

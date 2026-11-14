@@ -290,7 +290,8 @@ function Erfassung({
       for (const d of uebergabe.dateien) {
         try {
           const m = await dateiLesen(new File([d.text], d.name.replace(/\//g, " › "), { type: "application/json" }), profil);
-          neu.push(rolleSetzen(m, d.rolle, profil));
+          // Material (Kennzahlen-Bausteine, seit 0.8.2) bleibt, wie die Materialannahme es erkennt
+          neu.push(d.rolle === "material" ? m : rolleSetzen(m, d.rolle, profil));
         } catch (e) {
           fehlerListe.push((e as Error).message);
         }
@@ -299,9 +300,15 @@ function Erfassung({
       dispatch({ typ: "eingabe", teil: { dateiFehler: fehlerListe } });
     })();
     const eingaengeN = uebergabe.dateien.filter((d) => d.rolle === "eingang").length;
+    // nur Material (Kennzahlen-Bausteine, seit 0.8.2): weder Verdichtung noch Fortschreibung
+    const nurMaterial = uebergabe.dateien.every((d) => d.rolle === "material");
     dispatch({
       typ: "sachverhaltVorschlagen",
-      text: eingaengeN ? `Lagebild aus ${eingaengeN} Eingangsmeldung${eingaengeN === 1 ? "" : "en"} verdichten` : "Eigene Meldung fortschreiben",
+      text: eingaengeN
+        ? `Lagebild aus ${eingaengeN} Eingangsmeldung${eingaengeN === 1 ? "" : "en"} verdichten`
+        : nurMaterial
+          ? "Lage aus Kennzahlen-Bausteinen erfassen"
+          : "Eigene Meldung fortschreiben",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uebergabe?.nr]);

@@ -10,13 +10,23 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.23.5 vom 11.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.23.7 vom 14.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.23.5 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.23.7 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.23.7] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-05 (Paket 5 des Umstellungsplans: Lagebild und Verdichtung mit Kennzahlen-Bausteinen, App 0.8.2); Zurückstellung vom Herausgeber am 14.11.2026 aufgehoben, Entscheidungen vom 06.11.2026 (Regeln im Kodierleitfaden Abschnitt 6, profilneutral; Land als Raum = erfasster Ausschnitt) und 14.11.2026 (Meldequote je Raum). Dritte Stelle: SOP-Texte unverändert; die Regeln stehen im Kodierleitfaden (A.10.2).
+
+### Geändert
+
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.23.7, Kodierleitfaden 1.14.0 (Abschnitt 6: überlappende Räume, übergeordnete Erhebung, Ausschnitt, Einsatzmeldung je Kennung einmal, Beleg statt Kodierung), Arbeitsanweisung Erfassung 1.12.0 und Verdichtung 2.4.0 (Verweise auf Abschnitt 6 und die Rechenhilfe der App). Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- **Prüfvermerk nach A.10.2:** A.3 „Teilmenge, Summe, Hochrechnung“ verweist bereits auf Abschnitt 6 des Kodierleitfadens; A.9.1 (Bedarfsdeckung: Soll, Bestand, einsatzfähige Kapazität, gebundene Kapazität und Zuführung getrennt) bleibt unverändert und ist mit den Regeln 1 und 2 vereinbar. Kein Anpassungsbedarf in den SOPs.
+- Tabelle „Dateien in diesem Ordner“ auf 3.23.7 nachgezogen (stand seit 3.23.6 noch auf 3.23.5). Lesefassung neu erzeugt. Quellenregister unverändert (keine neue URL).
 
 ## [3.23.6] – 14.11.2026
 

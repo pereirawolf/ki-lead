@@ -9,6 +9,7 @@ import type { Inhaltsblock } from "../anbieter/typen";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
 import { bausteinAblehnung, bausteinHinweis, bausteinProjektion, erkenneBaustein, quellenzeileV1, zeitDE, type BausteinInfo } from "../kern/baustein";
 import { BAUSTEIN_SCHEMATA } from "./bausteinschemata";
+import { rechenhilfe, rechenhilfeNoetig, rechenhilfeText, type VerdichtungsBaustein } from "../kern/bausteinverdichtung";
 
 /**
  * meldung = eigene Vormeldung (Fortschreibung), eingang = Meldung einer anderen Stelle (Verdichtung),
@@ -38,13 +39,19 @@ export interface Material {
 /** Rolle einer Meldung im KI-Auftrag: Eingang (wird verdichtet) oder eigene Vormeldung (wird fortgeschrieben). */
 export type MeldungsRolle = "eingang" | "meldung";
 
-/** Eine Meldung, die das Lagebild an die KI-Erfassung übergibt, mit ausdrücklich gewählter Rolle. */
+/**
+ * Rolle einer Datei in der Übergabe aus dem Lagebild: eine der Rollen einer Meldung oder seit 0.8.2 (UP-2026-W45-05)
+ * „material“ für Kennzahlen-Bausteine. Material wird ausgewertet, aber nicht verdichtet und nicht fortgeschrieben.
+ */
+export type UebergabeRolle = MeldungsRolle | "material";
+
+/** Eine Datei (Meldung oder Kennzahlen-Baustein), die das Lagebild an die KI-Erfassung übergibt, mit ihrer Rolle. */
 export interface UebergabeMeldung {
   /** Stabile Kennung aus dem Lagebild (Inhaltskennung) */
   id: string;
   name: string;
   text: string;
-  rolle: MeldungsRolle;
+  rolle: UebergabeRolle;
 }
 
 /**
@@ -278,8 +285,8 @@ function escapeAttr(s: string) {
   return s.replace(/"/g, "'").replace(/[<>]/g, "");
 }
 
-/** Elemente, mit denen die App Material in der Nutzernachricht umhüllt */
-export const HUELLEN = ["material", "stichworte", "urls"] as const;
+/** Elemente, mit denen die App Material in der Nutzernachricht umhüllt; seit 0.8.2 auch die Rechenhilfe der App */
+export const HUELLEN = ["material", "stichworte", "urls", "rechenhilfe"] as const;
 
 /**
  * Inhalt für eine Hülle: Schließtags der Hüllen im Text werden zu „<\/material“ usw. neutralisiert (seit 0.6.4,
@@ -310,12 +317,24 @@ export function materialBloecke(material: Material[], urls: string[], stichworte
         : "";
     teile.push(`<material name="${escapeAttr(m.name)}" art="${art}"${zusatz}>\n${huellenInhalt(m.text || "")}\n</material>`);
   }
+  // Rechenhilfe der App zu den Kennzahlen-Bausteinen (seit 0.8.2, UP-2026-W45-05): bei mindestens zwei Bausteinen oder
+  // einem Ausschnitt; deterministisch, Regeln im Kodierleitfaden (Abschnitt 6)
+  const bausteine = bausteineFuerRechenhilfe(material);
+  if (rechenhilfeNoetig(bausteine))
+    teile.push(`<rechenhilfe art="kennzahlen" quelle="App">\n${huellenInhalt(rechenhilfeText(rechenhilfe(bausteine)))}\n</rechenhilfe>`);
   if (teile.length) bloecke.push({ type: "text", text: teile.join("\n\n") });
   for (const m of material) {
     if (m.art === "pdf" && m.base64)
       bloecke.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: m.base64 }, title: m.name });
   }
   return bloecke;
+}
+
+/** Gültige Kennzahlen-Bausteine des Materials in der Reihenfolge des Materials (für die Rechenhilfe) */
+export function bausteineFuerRechenhilfe(material: Material[]): VerdichtungsBaustein[] {
+  return material.flatMap((m) =>
+    m.art === "kennzahlen-baustein" && m.baustein ? [{ name: m.name, info: m.baustein.info, daten: m.baustein.daten as Record<string, any> }] : [],
+  );
 }
 
 /** Kurzbeschreibung des Materials für den Platzhalter {{auftrag.ausgangsquellen}}. */

@@ -12,7 +12,8 @@
 
 import { bekannterAnbieter } from "../anbieter/verteiler";
 import { jetztLokal } from "../kern/ausgabe";
-import { bausteineUebernehmen, type UebernahmeBaustein } from "../kern/bausteinuebernahme";
+import { bausteineUebernehmen, MODUL_BAUSTEIN, type UebernahmeBaustein } from "../kern/bausteinuebernahme";
+import { kennzahlPruefungV2 } from "../kern/bausteinverdichtung";
 import { istKennungV2, neueKennung, PLATZHALTER_RE, ZUFALL_V2 } from "../kern/kennung";
 import { FASSUNG, LAENDER, mitVersatz, SCHEMA_ID, stehtVor } from "../kern/meldung-v2.js";
 import { holeWert } from "../kern/pfad";
@@ -242,7 +243,10 @@ export function nachbearbeitenV2(roh: unknown, k: Kontext, modell: string, aus: 
   kennungenUndZeitstrahlV2(d, p, { vor, eigene, fremde, jetzt, zone, zufall: opt.zufall }, aus.befunde);
 
   // 4. Kennzahlen-Bausteine
-  aus.befunde.push(...bausteineUebernehmen(d, bausteineImMaterial(k.material)));
+  const bausteine = bausteineImMaterial(k.material);
+  aus.befunde.push(...bausteineUebernehmen(d, bausteine));
+  // Summen, Ausschnitte und Beleg nach der Rechenhilfe (seit 0.8.2, UP-2026-W45-05)
+  aus.befunde.push(...kennzahlPruefungV2(d, bausteine, MODUL_BAUSTEIN, !!p.ui.rollen.sv_radar));
   return d;
 }
 

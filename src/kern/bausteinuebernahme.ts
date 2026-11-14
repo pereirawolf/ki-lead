@@ -12,11 +12,14 @@
 // - Kennungen der Einsatzmeldungen nur, wenn der Baustein sie enthält; je zugeordneter Einsatzmeldung legt die App eine
 //   Maßnahme (Stichwort, Feuerwehren der Gemeinde bzw. überörtlich helfende, Status laufend → begonnen, abgeschlossen →
 //   beendet, Stand = Datenstand des Bausteins) und eine Zeitstrahlzeile vom Typ „Maßnahme“ zum Beginn an, ohne Doppelung;
-//   ein Beginn nach t0 entfällt mit Hinweis.
+//   ein Beginn nach t0 entfällt mit Hinweis;
+// - seit 0.8.2 (UP-2026-W45-05): Kennzahlen eines Bausteins, dessen Raum ein Land ist, erhalten im Raum den Zusatz
+//   „erfasster Ausschnitt, Vollständigkeit nicht angegeben“ (Entscheidung des Herausgebers vom 06.11.2026).
 // Hinweise auf Kennzahlen, die den Baustein belegen, ohne im Modul zu stehen, und auf Bausteine ohne Übernahme. Codes
 // nach der Befunddatei (KENNZAHL_BAUSTEIN_ABWEICHUNG, KENNZAHL_OHNE_VERWEIS, KENNZAHL_OBERMENGE_FEHLT, EINSATZ_NACH_T0).
 
 import type { AbgleichBaustein } from "./bausteinabgleich";
+import { ausschnittRaum, istAusschnitt, AUSSCHNITT_ZUSATZ } from "./bausteinverdichtung";
 import { MODUL_BAUSTEIN, stehtVor, vergleicheZeit } from "./meldung-v2.js";
 import type { Befund, Meldung } from "./typen";
 
@@ -101,6 +104,7 @@ export function bausteineUebernehmen(d: Meldung, bausteine: UebernahmeBaustein[]
   const obermengeFehlt: string[] = [];
   const einsatzNachT0: string[] = [];
   const einsatzAngelegt: string[] = [];
+  const ausschnitt: string[] = [];
   const verwendet = new Set<UebernahmeBaustein>();
   const t0 = typeof d.meldezeitpunkt === "string" ? d.meldezeitpunkt : null;
   const zone = typeof d.zeitzone === "string" ? d.zeitzone : "Europe/Berlin";
@@ -163,11 +167,15 @@ export function bausteineUebernehmen(d: Meldung, bausteine: UebernahmeBaustein[]
           angelegt.push(`${sn} ${u.kennzahl}`);
         }
         const abw: string[] = [];
+        // Land als Raum: erfasster Ausschnitt (seit 0.8.2, UP-2026-W45-05); der Zusatz ist keine Abweichung
+        const landRaum = istAusschnitt(b.info) && (bk.raum === undefined || bk.raum === b.info.raum.name);
         for (const f of BAUSTEIN_FELDER) {
-          if (gleich(mk[f], bk[f])) continue;
-          if (!angelegt.includes(`${sn} ${u.kennzahl}`)) abw.push(`${f} ${anzeige(mk[f])} → ${anzeige(bk[f])}`);
-          if (bk[f] === undefined) delete mk[f];
-          else mk[f] = structuredClone(bk[f]);
+          const soll = f === "raum" && landRaum ? ausschnittRaum(b.info.raum.name) : bk[f];
+          if (gleich(mk[f], soll)) continue;
+          if (f === "raum" && landRaum && (mk[f] === undefined || mk[f] === bk[f])) ausschnitt.push(`${sn} ${u.kennzahl}`);
+          else if (!angelegt.includes(`${sn} ${u.kennzahl}`)) abw.push(`${f} ${anzeige(mk[f])} → ${anzeige(soll)}`);
+          if (soll === undefined) delete mk[f];
+          else mk[f] = structuredClone(soll);
         }
         const teil = bk.teilmenge_von ? zuordnung.get(bk.teilmenge_von) : undefined;
         if (bk.teilmenge_von && !teil) obermengeFehlt.push(`${sn} ${u.kennzahl} (Obermenge ${bk.teilmenge_von} im Baustein nicht übernommen)`);
@@ -251,6 +259,12 @@ export function bausteineUebernehmen(d: Meldung, bausteine: UebernahmeBaustein[]
       stufe: "warnung",
       code: "KENNZAHL_BAUSTEIN_ABWEICHUNG",
       text: `Werte aus dem Kennzahlen-Baustein wiederhergestellt (der Entwurf wich ab): ${zurueckgesetzt.join("; ")}.`,
+    });
+  if (ausschnitt.length)
+    befunde.push({
+      stufe: "hinweis",
+      code: "BAUSTEIN_AUSSCHNITT",
+      text: `Raum eines Bausteins, dessen Raum ein Land ist, als „${AUSSCHNITT_ZUSATZ}“ gekennzeichnet: ${ausschnitt.join("; ")}.`,
     });
   if (angelegt.length)
     befunde.push({
