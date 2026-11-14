@@ -4,7 +4,7 @@
 // Das Soll steht unabhängig im Test: Herkunftswerte und Kategorien sind hier gesetzt, nicht aus dem Code abgeleitet.
 import { describe, expect, test } from "vitest";
 import { ladeProfil } from "../../src/profil/laden";
-import { leseOrdner, profil, repoPfad } from "../support/dateien";
+import { leseOrdner, profil, repoPfad, V1_PROFIL } from "../support/dateien";
 import {
   alleSachverhalte,
   beispielDateien,
@@ -24,7 +24,7 @@ const ROLLEN = { herkunft: "kritis.rolle", herkunft_standard: "Behörde", herkun
 
 /** Beispielprofil mit optionalem Meldekopf „kritis“ im Schema und den Herkunftsrollen (allgemeines Feld, kein KRITIS-Text in der App) */
 async function mitHerkunft(rollen: Record<string, unknown> = ROLLEN): Promise<Profil> {
-  const p = (await profil("lead-beispiel")).profil!;
+  const p = (await profil(V1_PROFIL)).profil!;
   p.schema.properties.kritis = {
     type: "object",
     additionalProperties: false,
@@ -84,7 +84,7 @@ describe("I114-A1: Herkunftsrolle im Kern des Lagebilds", () => {
   });
 
   test("Regression Ilka: ohne Rolle keine Herkunft, Filter ohne Wirkung", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const ilka = beispielDateien(p, "beispiele/orkantief-ilka");
     const { eintraege } = einlesen(ilka, p);
     expect(herkunftsrolleWerte(eintraege, p)).toEqual([]);
@@ -115,7 +115,7 @@ describe("I114-A1: Herkunft in Rohtabelle, CSV und Kopiervorlage", () => {
         .map((s) => s.titel)
         .filter((t) => t.startsWith("Herkunft")),
     ).toEqual(["Herkunft"]);
-    const ohne = (await profil("lead-beispiel")).profil!;
+    const ohne = (await profil(V1_PROFIL)).profil!;
     expect(spalten(ohne).some((s) => s.titel.startsWith("Herkunft"))).toBe(false);
   });
 
@@ -126,7 +126,7 @@ describe("I114-A1: Herkunft in Rohtabelle, CSV und Kopiervorlage", () => {
     const s = alleSachverhalte(eintraege, p)[0];
     expect(kopiervorlageHtml(s, p)).toContain("Netzbetreiber Muster GmbH · Herkunft: Betreiber (B)");
     expect(kopiervorlageText(s, p).split("\n")[0]).toContain("Herkunft: Betreiber (B)");
-    const ohne = (await profil("lead-beispiel")).profil!;
+    const ohne = (await profil(V1_PROFIL)).profil!;
     const s0 = alleSachverhalte(einlesen(beispielDateien(ohne, "beispiele/orkantief-ilka"), ohne).eintraege, ohne)[0];
     expect(kopiervorlageHtml(s0, ohne)).not.toContain("Herkunft:");
     expect(kopiervorlageText(s0, ohne)).not.toContain("Herkunft:");

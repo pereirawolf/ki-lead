@@ -4,7 +4,7 @@ import { STANDARD } from "../../src/pipeline/einstellungen";
 import { neuerLauf, type Auftrag, type Lauf } from "../../src/pipeline/lauf";
 import type { Material } from "../../src/pipeline/material";
 import type { Kontext } from "../../src/pipeline/stufen";
-import { profil } from "./dateien";
+import { profil, V1_PROFIL } from "./dateien";
 
 /** URL im Auftrag der Testläufe */
 export const AUFTRAGS_URL = "https://beispiel.invalid/lage";
@@ -40,7 +40,7 @@ export interface KontextOptionen {
   jetzt?: string;
   /** Abweichende Angaben im Auftrag (gehen den Vorgaben vor, auch Stichtag und t0) */
   auftrag?: Partial<Auftrag>;
-  /** Profilordner (Vorgabe lead-beispiel; seit 0.6.18 auch das Landesprofil lead-thueringen) */
+  /** Profilordner (Vorgabe: eingefrorenes v1-Beispielprofil, seit 0.9.0; seit 0.6.18 auch das Landesprofil lead-thueringen) */
   profilName?: string;
 }
 
@@ -52,7 +52,7 @@ export interface KontextOptionen {
 export async function pipelineKontext(
   anbieter: LlmAnbieter,
   material: Material[] = [],
-  { jetzt = "2026-10-14T10:00:00+02:00", auftrag = {}, profilName = "lead-beispiel" }: KontextOptionen = {},
+  { jetzt = "2026-10-14T10:00:00+02:00", auftrag = {}, profilName = V1_PROFIL }: KontextOptionen = {},
 ): Promise<{ k: Kontext; protokolle: Lauf[] }> {
   const { profil: p } = await profil(profilName);
   const lauf = neuerLauf(

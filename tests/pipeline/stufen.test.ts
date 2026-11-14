@@ -8,7 +8,7 @@ import { begrenztParallel, ORIENTIERUNG_PARALLEL } from "../../src/pipeline/orie
 import { auftragsAbrufFehler } from "../../src/pipeline/recherchebefunde";
 import { s1Strukturfehler, stufe1 } from "../../src/pipeline/s1";
 import { reparaturSystem, stufe2und3 } from "../../src/pipeline/s2s3";
-import { profil as profilLaden } from "../support/dateien";
+import { profil as profilLaden, V1_PROFIL } from "../support/dateien";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import { istBestaetigen, istFertig, istGescheitert } from "../../src/pipeline/lauf";
 import { pruefeRoh } from "../../src/kern/validierung";
@@ -327,7 +327,7 @@ describe("S1-Ausgabegrenze und Abbruch an der Grenze (0.4.25)", () => {
 
 describe("AV-2026-W43-34: Anweisung der Reparatur", () => {
   it("nennt die Begründung als Herkunft korrigierter Werte, den Leerwert als Ausweg und verbietet Skalenrand und Kürzung", async () => {
-    const p = (await profilLaden("lead-beispiel")).profil!;
+    const p = (await profilLaden(V1_PROFIL)).profil!;
     const a = reparaturSystem(p);
     expect(a).toContain("übernimm den Wert, den die Begründung desselben Sachverhalts nennt");
     expect(a).toContain("verwende den Leerwert, nie den Rand der Skala");
@@ -437,7 +437,7 @@ describe("Offene Platzhalter der Arbeitsanweisungen (TP-2026-W44-33)", () => {
   it("TP-2026-W44-33: das Beispielprofil hat keine offenen Platzhalter, auch nicht in Verdichtung und Kurzfassung", async () => {
     const { anweisungErfassungErsetzt, verdichtungsAnweisungErsetzt, auftragAusBestaetigung } = await import("../../src/pipeline/kontext");
     const { kurzfassungAnweisungErsetzt } = await import("../../src/pipeline/kurzfassung");
-    const p = (await profilLaden("lead-beispiel")).profil!;
+    const p = (await profilLaden(V1_PROFIL)).profil!;
     const auftrag = auftragAusBestaetigung(bestaetigterVorschlag() as any, p, "keine");
     expect(anweisungErfassungErsetzt(p, auftrag, "2026-10-14T14:00").offen).toEqual([]);
     expect(verdichtungsAnweisungErsetzt(p).offen).toEqual([]);

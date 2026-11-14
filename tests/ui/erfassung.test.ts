@@ -3,13 +3,15 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { act } from "react";
-import { profil, profilPflicht } from "../support/dateien";
+import { profil, profilPflicht, V1_PROFIL } from "../support/dateien";
 import { ilkaDatei } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 
 const speicher = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
 vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(speicher));
+// Maske am eingefrorenen v1-Beispielprofil (seit 0.9.0); die v2-Maske prüfen tests/kern/v2-app.test.ts und tests/profil/v2-umstellung.test.ts
+vi.mock("../../src/profil/eingebaut", async () => (await import("../support/eingebaut")).mitV1Beispiel());
 
 beforeAll(reactUmgebung);
 afterEach(async () => {
@@ -86,7 +88,7 @@ describe("Erfassungsmaske", () => {
   });
 
   it("Quellen: Meldung aus dem gespeicherten Lagebild übernehmen", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const { name, daten } = ilkaDatei("HE");
     speicher.werte.set(`lagebild:${p.manifest.id}`, { dateien: [{ name, text: JSON.stringify(daten, null, 2), importiertAm: "2026-10-20T10:00:00Z" }] });
     await zeigeApp();
@@ -204,11 +206,13 @@ describe("Erfassungsmaske", () => {
 
   // Farben der Bewertung nach Rang (seit 0.6.5): Ein Profil mit anderen Stufenwörtern behält die Farben
   it("TP-2026-W44-16: Vorlage profile/muster: Bewertungsfeld und Sachverhalt tragen data-rang, auch bei anderen Stufenwörtern", async () => {
+    // Seit 0.9.0 (UP-2026-W45-06) steht die Vorlage auf LEAD-Meldung-v2: Stufe unter bewertung.beurteilung.stufe
     const { MeldungAnsicht } = await import("../../src/ui/Meldung");
     const muster = await profilPflicht("muster");
-    const zeigen = async (p: typeof muster, bewertung: string) => {
-      await einhaengen(React.createElement(MeldungAnsicht, { profil: p, meldung: { sachverhalte: [{ bewertung }] }, setMeldung: () => {}, neu: () => {} }));
-      await zuSchritt(/^2?Sachverhalte/);
+    const zeigen = async (p: typeof muster, stufe: string) => {
+      const meldung = { sachverhalte: [{ bewertung: { beurteilung: { stufe } } }] };
+      await einhaengen(React.createElement(MeldungAnsicht, { profil: p, meldung, setMeldung: () => {}, neu: () => {} }));
+      await zuSchritt(/^2?Ereignisse und Sachverhalte/);
     };
     const gewaehlt = () => document.querySelector(".segmente .segment.an") as HTMLElement;
     const element = () => document.querySelector("section.element") as HTMLElement;
@@ -226,7 +230,8 @@ describe("Erfassungsmaske", () => {
 
     // Gleiche Vorlage mit eigenen Stufenwörtern: Rang nach der Reihenfolge der Aufzählung
     const eigene = structuredClone(muster);
-    eigene.schema.properties.sachverhalte.items.properties.bewertung.enum = ["", "niedrig", "mittel", "hoch"];
+    eigene.schema.$defs.beurteilung.properties.stufe.enum = ["niedrig", "mittel", "hoch", null];
+    eigene.ui.rollen.beurteilung_hoch = ["mittel", "hoch"];
     await zeigen(eigene, "mittel");
     expect(gewaehlt().textContent).toBe("mittel");
     expect(gewaehlt().dataset.rang).toBe("2");

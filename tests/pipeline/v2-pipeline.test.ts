@@ -29,7 +29,7 @@ import {
 import { reparaturSystem, stufe2und3 } from "../../src/pipeline/s2s3";
 import type { Kontext } from "../../src/pipeline/stufen";
 import { meldungsAntwort, skriptAnbieter } from "../support/anbieter";
-import { profilPflicht, repoPfad } from "../support/dateien";
+import { profilPflicht, repoPfad, V1_PROFIL } from "../support/dateien";
 import { pipelineKontext } from "../support/pipeline";
 import { v2Profil } from "../support/v2profil";
 
@@ -150,7 +150,7 @@ describe("UP-2026-W45-04: Ausgabeschema für die KI (LEAD-MELDUNG-V2.md Abschnit
   });
 
   it("v1: das Profilschema bleibt unverändert (Profile bleiben bis Paket 6 auf v1)", async () => {
-    const v1 = await profilPflicht("lead-beispiel");
+    const v1 = await profilPflicht(V1_PROFIL);
     expect(istV2Profil(v1)).toBe(false);
     expect(ausgabeSchemaKi(v1)).toBe(v1.schema);
   });
@@ -160,9 +160,11 @@ describe("UP-2026-W45-04: Ausgabeschema für die KI (LEAD-MELDUNG-V2.md Abschnit
     expect(g).toContain("## Ausgabeschema der Meldung (Schemakennung LEAD-Meldung-v2, von der App abgeleitet)");
     expect(g).toContain("## Ausgabe nach LEAD-Meldung-v2 (von der App vorgegeben)");
     expect(g).not.toContain('"allOf"');
-    // Die Arbeitsanweisung des Testprofils nennt noch v1-Felder: Zuordnung der Kennsätze zu Feldern
-    expect(v2Ausgaberegeln(land)).toContain("„Handlungsrelevant bis:“ → `handlungsbedarf.fristen`");
-    const v1 = await profilPflicht("lead-beispiel");
+    // Seit 0.9.0 steht die Arbeitsanweisung des Landesprofils auf Feldern: keine Zuordnung der Kennsätze; die Testfassung aus
+    // dem v1-Beispielprofil nennt noch v1-Felder und erhält sie
+    expect(v2Ausgaberegeln(land)).not.toContain("„Handlungsrelevant bis:“ → `handlungsbedarf.fristen`");
+    expect(v2Ausgaberegeln(await v2Profil("bund"))).toContain("„Handlungsrelevant bis:“ → `handlungsbedarf.fristen`");
+    const v1 = await profilPflicht(V1_PROFIL);
     expect(profilGrundlagen(v1)).toContain("## JSON-Schema der Meldung (Schemakennung LEAD-Meldung-v1)");
   });
 
@@ -171,7 +173,7 @@ describe("UP-2026-W45-04: Ausgabeschema für die KI (LEAD-MELDUNG-V2.md Abschnit
     expect(r).toContain("Ausgabeschema der KI");
     expect(r).not.toContain('"allOf"');
     expect(r).toContain("Befunde zu ihnen behebt die App");
-    expect(reparaturSystem(await profilPflicht("lead-beispiel"))).not.toContain("Ausgabeschema");
+    expect(reparaturSystem(await profilPflicht(V1_PROFIL))).not.toContain("Ausgabeschema");
   });
 });
 
@@ -695,7 +697,7 @@ describe("UP-2026-W45-04: Kennzahlregeln an einer Stelle (Kodierleitfaden Abschn
   it("Kodierleitfaden von Beispiel- und Landesprofil führt die Regeln in Abschnitt 6; die App verweist nur darauf", async () => {
     for (const name of ["lead-beispiel", "lead-thueringen"]) {
       const text = readFileSync(repoPfad(`profile/${name}/kodierleitfaden.md`), "utf-8");
-      const abschnitt6 = text.slice(text.indexOf("## 6. Leerwerte und JSON"), text.indexOf("## 7. "));
+      const abschnitt6 = text.slice(text.indexOf("## 6. Wertzustände und Leerwerte"), text.indexOf("## 7. "));
       expect(abschnitt6, name).toContain("### Kennzahlen aus Kennzahlen-Bausteinen");
       for (const regel of [
         "**Unverändert übernehmen.**",

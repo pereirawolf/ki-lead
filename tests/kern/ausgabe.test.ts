@@ -1,13 +1,13 @@
 // Ausgaben: Dateinamen, Management Summary, CSV ohne Formelinterpretation (Review 18.10.2026, F13).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { dateiname, managementSummary } from "../../src/kern/ausgabe";
 import { alsCsv } from "../../src/lagebild/ausgabe";
 
 describe("Ausgabe", () => {
   it("bildet Dateinamen nach der Vorlage des Profils", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const d = ilkaMeldung("HE");
     expect(dateiname(d, p!, true)).toBe(
       d.meldezeitpunkt.replace(/:/g, "-") + "_LEAD-Meldung_Hessen_" + d.meldende_stelle.replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, "_") + "_ENTWURF",
@@ -15,7 +15,7 @@ describe("Ausgabe", () => {
   });
 
   it("erzeugt eine Management Summary ohne Quellenverweise", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const bund = ilkaMeldung("Bund");
     const text = managementSummary(bund, p!);
     expect(text).toMatch(/Management Summary/);

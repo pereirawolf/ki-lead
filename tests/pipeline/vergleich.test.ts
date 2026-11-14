@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { kernaussage, krippendorffAlphaOrdinal, vergleiche, vergleicheMehrere, vergleichTabelle, zuordnen } from "../../src/pipeline/vergleich";
 
-const p = (await profil("lead-beispiel")).profil!;
+const p = (await profil(V1_PROFIL)).profil!;
 const bund = ilkaMeldung("Bund");
 const th = ilkaMeldung("TH");
 

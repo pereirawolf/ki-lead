@@ -3,7 +3,7 @@
 // stimmig, Beispiellage lädt im Lagebild und lässt sich (mit Attrappe) verdichten.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ableitenImRepo, EINGANG_IM_BEISPIEL, KREISE, LAND, SCHEMA_ID } from "../../scripts/landesprofil.mjs";
+import { ableitenImRepo, KREISE, LAND, SCHEMA_ID } from "../../scripts/landesprofil.mjs";
 import { GETEILT, mitGeteilten } from "../../src/profil/geteilt";
 import { eingebauteProfile } from "../../src/profil/eingebaut";
 import { beispielDateien, einlesen, meldestatus } from "../../src/lagebild/lagebild";
@@ -21,13 +21,16 @@ import { pipelineKontext } from "../support/pipeline";
 const ORDNER = "beispiele/hochwasser-saale";
 
 describe("TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet", () => {
-  it("die abgeleiteten Dateien sind aktuell (sonst „npm run profil:land“), seit 0.6.19 auch das Eingangsschema im Beispielprofil", () => {
+  // Seit 0.9.0 (UP-2026-W45-06): Schema aus der Zusammenstellung lead-thueringen; ein abgeleitetes Eingangsschema im
+  // Beispielprofil entfällt (das Beispielprofil prüft Eingänge mit dem Eingangsschema ohne Absendergrenzen)
+  it("die abgeleiteten Dateien sind aktuell (sonst „npm run profil:land“)", () => {
     const alle = ableitenImRepo();
-    expect(Object.keys(alle)).toContain(EINGANG_IM_BEISPIEL);
+    expect(Object.keys(alle)).toContain("profile/lead-thueringen/meldung.schema.json");
+    expect(Object.keys(alle).some((d) => d.startsWith("profile/lead-beispiel/"))).toBe(false);
     for (const [pfad, inhalt] of Object.entries(alle)) expect(readFileSync(repoPfad(pfad), "utf-8"), pfad).toBe(inhalt);
   });
 
-  it("lädt ohne Befund: Ebene Land, Referenzraum Thüringen, Schema LEAD-Meldung-Land-v1 als Eingang und Ausgabe", async () => {
+  it("lädt ohne Befund: Ebene Land, Referenzraum Thüringen, Schema LEAD-Meldung-v2 als Eingang und Ausgabe", async () => {
     const { profil: p, befunde } = await profil("lead-thueringen");
     expect(befunde).toEqual([]);
     expect(p!.manifest.ebene).toBe("Land");
@@ -40,14 +43,15 @@ describe("TP-2026-W44-54: Landesprofil aus dem Beispielprofil abgeleitet", () =>
 
   it("Kreise: Auswahl, Kennungspräfixe und Kontakte decken dieselben 22 Gebietskörperschaften ab", async () => {
     const p = (await profil("lead-thueringen")).profil!;
-    const auswahl = (p.schema as any).properties.kreis.enum as string[];
-    expect(auswahl).toEqual(["", LAND.name, ...KREISE.map((k) => k.name)]);
+    // Seit 0.9.0: Gebiet des Absenders (absender.gebiet.name) statt Feld „kreis“
+    const auswahl = (p.schema as any).properties.absender.properties.gebiet.properties.name.enum as string[];
+    expect(auswahl).toEqual([LAND.name, ...KREISE.map((k) => k.name)]);
     expect(KREISE).toHaveLength(22);
-    expect(Object.keys(p.ui.kennung!.praefixe!)).toEqual(auswahl.slice(1));
+    expect(Object.keys(p.ui.kennung!.praefixe!)).toEqual(auswahl);
     expect(new Set(Object.values(p.ui.kennung!.praefixe!)).size).toBe(23);
     expect(p.kontakte!.stellen.map((s) => s.name)).toEqual(KREISE.map((k) => k.name));
-    expect(p.kontakte!.stellen.every((s) => s.feld === "kreis")).toBe(true);
-    expect(p.ui.rollen.land).toBe("kreis");
+    expect(p.kontakte!.stellen.every((s) => s.feld === "absender.gebiet.name")).toBe(true);
+    expect(p.ui.rollen.land).toBe("absender.gebiet.name");
   });
 });
 
@@ -183,9 +187,9 @@ describe("TP-2026-W44-56: Beispiellage Hochwasser an der Saale (FIKTIV)", () => 
     const e = await stufe2und3(k, v);
     expect(att.anfragen[1].system.map((s) => s.text).join("\n")).toContain("Bevölkerungsschutz in Thüringen");
     expect(k.lauf.ergebnis!.schemakonform).toBe(true);
-    expect(e.meldung!.kreis).toBe("Thüringen");
+    expect(e.meldung!.absender.gebiet.name).toBe("Thüringen");
     expect(eingangsquellenPruefen(eingaenge, e.meldung!, p).map((x) => x.status)).toEqual(Array(3).fill("nachgewiesen"));
-    expect(dateiname(e.meldung!, p, false)).toMatch(/^.*Thüringen_Lagezentrum/);
+    expect(dateiname(e.meldung!, p, false)).toMatch(/^.*Lagezentrum/);
   });
 });
 
@@ -213,7 +217,10 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
     expect(status.zeilen.filter((z) => z.eintraege.length).map((z) => z.name)).toEqual(["Ilm-Kreis", "Landkreis Hildburghausen", "Landkreis Sonneberg"]);
     expect(status.weitere.map((e) => e.name)).toEqual([expect.stringContaining("_TH_Lagezentrum_")]);
     const r = redaktionscheck(eintraege, p, "2026-10-21", new Date("2026-10-14T10:30:00+02:00"));
-    expect(r.kennungen).toEqual([]);
+    // Seit 0.9.0 (KL-2026-W45-03): Der Stromausfall in Sonneberg bezieht sich auf die Betreibermeldungen und die Meldung der
+    // Leitstelle aus KRITIS-LEAD, die im Beispiel nicht geladen sind; nur diese fünf Bezüge nennt der Redaktionscheck
+    expect(r.kennungen.map((b: any) => b.art)).toEqual(Array(5).fill("bezug"));
+    expect(r.kennungen.map((b: any) => JSON.stringify(b)).join(" ")).toMatch(/KRITIS-NETZSUED-20261013-N4ST7Q/);
     for (const d of dateien) expect(d.text).toContain("FIKTIV");
   });
 
@@ -229,14 +236,17 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
     expect(land.meldezeitpunkt).toBe(bund.meldezeitpunkt);
     const strom = JSON.stringify(land.sachverhalte[1]);
     for (const zahl of ["9.800", "146 Bewohnerinnen und Bewohner", "vier Gemeinden", "16.10."]) expect(strom).toContain(zahl);
+    // Bezug seit 0.9.0 als Objekt mit Art und meldung_id der Kreismeldung
     const kreisKennungen = kreise.flatMap((m: any) => m.sachverhalte.map((s: any) => s.kennung));
-    expect(land.sachverhalte.flatMap((s: any) => s.bezug).sort()).toEqual([...kreisKennungen].sort());
-    expect(kreise.every((m: any) => m.meldezeitpunkt === "2026-10-14T10:00")).toBe(true);
+    const bezug = land.sachverhalte.flatMap((s: any) => s.bezug);
+    expect(bezug.map((b: any) => b.kennung).sort()).toEqual([...kreisKennungen].sort());
+    expect(bezug.every((b: any) => b.art === "verdichtung" && kreise.some((m: any) => m.meldung_id === b.meldung_id))).toBe(true);
+    expect(kreise.every((m: any) => m.meldezeitpunkt === "2026-10-14T10:00+02:00")).toBe(true);
     // Abweichende Bewertung von Kreis und Land wie in der Thüringer Meldung
-    const son = kreise.find((m: any) => m.kreis === "Landkreis Sonneberg")!;
-    expect(son.sachverhalte[0].sofort.beurteilung).toBe("kritisch");
-    expect(land.sachverhalte[1].sofort.beurteilung).toBe("erheblich");
-    expect(land.sachverhalte[1].sofort.bewertung_text).toMatch(/Abweichende Bewertung: Landkreis Sonneberg „kritisch“/);
+    const son = kreise.find((m: any) => m.absender.gebiet.name === "Landkreis Sonneberg")!;
+    expect(son.sachverhalte[0].bewertung.beurteilung.stufe).toBe("kritisch");
+    expect(land.sachverhalte[1].bewertung.beurteilung.stufe).toBe("erheblich");
+    expect(land.sachverhalte[1].bewertung.abweichende_bewertungen).toEqual([expect.objectContaining({ stelle: "Landkreis Sonneberg", stufe: "kritisch" })]);
   });
 
   it("Kräftelage: Zahlen und Datenstand wie in den Thessa-Bausteinen, Landeszahl als Ausschnitt gekennzeichnet", async () => {
@@ -251,17 +261,18 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
     ];
     for (const [kreis, datei] of paare) {
       const b = bausteine.find((x) => x.name === datei)!.daten;
-      const m = meldungen.find((x) => x.m.kreis === kreis)!;
+      const m = meldungen.find((x) => x.m.absender.gebiet.name === kreis)!;
       const gesamt = kennzahl(b, "Einsatzmittel der Feuerwehren");
       const frei = kennzahl(b, "frei verfügbar für überörtliche Hilfe");
       expect(m.text, `${kreis}: gesamt`).toContain(`${gesamt} Einsatzmitteln`);
       expect(m.text, `${kreis}: frei`).toMatch(new RegExp(`\\b${frei} frei`));
-      // Quelle mit dem Titel und Datenstand des Bausteins
-      const titel = b.quellen[0].titel.replace(" (FIKTIV)", "");
-      const [tag, zeit] = [b.datenstand.slice(0, 10).split("-").reverse().join("."), b.datenstand.slice(11, 16)];
-      expect(m.m.quellen, kreis).toMatch(new RegExp(`${titel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}.*Datenstand: ${tag}, ${zeit}`));
+      // Quelle mit dem Titel und Datenstand des Bausteins (seit 0.9.0 als Eintrag im Quellenverzeichnis)
+      expect(
+        m.m.quellen.some((q: any) => q.titel === b.quellen[0].titel && q.datenstand === b.datenstand),
+        kreis,
+      ).toBe(true);
     }
-    const land = meldungen.find((x) => x.m.kreis === "Thüringen")!;
+    const land = meldungen.find((x) => x.m.absender.gebiet.name === "Thüringen")!;
     const tb = bausteine.find((x) => x.name.startsWith("kennzahlen_Thueringen"))!.daten;
     expect(land.text).toContain(`${kennzahl(tb, "im Einsatz gebunden")} von ${kennzahl(tb, "Einsatzmittel der Feuerwehren")} Einsatzmitteln`);
     expect(land.text).toMatch(/Ausschnitt von fünf Kreisen – kein landesweiter Wert/);
@@ -313,7 +324,7 @@ describe("KP-2026-W45-01: Beispiellage Orkantief „Ilka“ mit Kräftelage der 
     expect(v.meldezeitpunkt).toBe("2026-10-14T10:00");
     const e = await stufe2und3(k, v);
     expect(k.lauf.ergebnis!.schemakonform).toBe(true);
-    expect(e.meldung!.kreis).toBe("Thüringen");
+    expect(e.meldung!.absender.gebiet.name).toBe("Thüringen");
     expect(eingangsquellenPruefen(eingaenge, e.meldung!, p).map((x) => x.status)).toEqual(Array(3).fill("nachgewiesen"));
   });
 });

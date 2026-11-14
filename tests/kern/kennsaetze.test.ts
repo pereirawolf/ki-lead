@@ -1,6 +1,6 @@
 // Kennsätze und Ausfüllhinweise, auch mitten im Fließtext.
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaDateien, ilkaMeldung } from "../support/fixtures";
 import { ausfuellHinweise, kennsatz, kennsaetzeImFliesstext } from "../../src/kern/kennsaetze";
 
@@ -13,7 +13,7 @@ describe("Quellen und Kennsätze", () => {
   });
 
   it("gibt Ausfüllhinweise ohne Absturz", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     for (const { daten } of ilka) expect(Array.isArray(ausfuellHinweise(daten, p!.ui))).toBe(true);
   });
 });
@@ -21,7 +21,7 @@ describe("Quellen und Kennsätze", () => {
 // Soll: GK-2026-W44-12 (Option A) – die Leitfrage nennt den Referenzraum des Profils statt eines festen Fachbezugs.
 describe("GK-2026-W44-12: Leitfrage des Bewertungstexts aus dem Referenzraum", () => {
   it("Bewertung ohne Text: Hinweis mit Referenzraum, ohne Angabe allgemein, nie „Bevölkerungsschutz“ als fester Text", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(he);
     m.sachverhalte[0].sofort.bewertung_text = "";
     const text = (raum?: string) => ausfuellHinweise(m, p!.ui, undefined, raum).find((b) => /ohne Text – erster Satz/.test(b.text))!.text;
@@ -43,7 +43,7 @@ describe("Kennsätze im Fließtext", () => {
   });
 
   it("meldet sie als Ausfüllhinweis", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(he);
     m.sachverhalte[0].sofort.bewertung_text = "Kernaussage: Lage ruhig. Neubewertung bei: erneuter Sturmwarnung";
     const h = ausfuellHinweise(m, p!.ui);
@@ -63,7 +63,7 @@ describe("TP-2026-W44-43: Frist auf oder vor dem Meldezeitpunkt", () => {
     return m;
   };
   const frist = async (m: unknown, zone: string | undefined = ZONE) => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     return ausfuellHinweise(m as never, p!.ui, zone).filter((b) => /liegt auf oder vor dem Meldezeitpunkt/.test(b.text));
   };
 

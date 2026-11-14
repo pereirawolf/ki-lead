@@ -1,0 +1,95 @@
+{
+  "format": "lead-kontakte/1",
+  "hinweis": "Platzhalteradressen. Echte Adressen lokal in einer Datei kontakte.lokal.json ablegen (wird nicht eingecheckt) oder in der App ändern.",
+  "stellen": [
+    {
+      "name": "Baden-Württemberg",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Bayern",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Berlin",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Brandenburg",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Bremen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Hamburg",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Hessen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Mecklenburg-Vorpommern",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Niedersachsen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Nordrhein-Westfalen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Rheinland-Pfalz",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Saarland",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Sachsen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Sachsen-Anhalt",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Schleswig-Holstein",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Thüringen",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    },
+    {
+      "name": "Bund",
+      "feld": "land",
+      "email": "lage@beispiel.invalid"
+    }
+  ],
+  "erinnerung": {
+    "betreff": "Erinnerung Meldevorlage: {name}",
+    "text": "Guten Tag,\n\nfür den aktuellen Berichtszeitraum liegt noch keine Meldung aus {name} vor.\nWir nehmen Ihre Meldung noch bis heute Dienstschluss entgegen.\n\nMit freundlichen Grüßen"
+  }
+}

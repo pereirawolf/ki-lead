@@ -1,7 +1,7 @@
 // Eval-freier Schemaprüfer: Referenzvergleich mit Ajv, verständliche Fehlermeldungen, Regressionen aus
 // Review 18.10.2026 (F04 Verweise, F11 strukturelle Gleichheit) und Review 20.10.2026 (F04 eigene JSON-Schlüssel).
 import { describe, expect, it } from "vitest";
-import { leseOrdner, profil, repoPfad } from "../support/dateien";
+import { leseOrdner, profil, repoPfad, V1_PROFIL } from "../support/dateien";
 import { ilkaDateien, ilkaMeldung } from "../support/fixtures";
 import { gleichWieAjv, referenzAjv } from "../support/ajv";
 import { pruefeRoh, pruefeGegenSchema, schemaHinweise } from "../../src/kern/validierung";
@@ -46,7 +46,7 @@ const VARIANTEN: { name: string; gueltig: boolean; aendern: (x: any) => void }[]
 
 describe("eval-freier Schemaprüfer gegen Ajv", () => {
   it("fällt bei allen Varianten dasselbe Urteil", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const fn = referenzAjv().compile(p!.schema);
     let n = 0;
     for (const { name: datei, daten } of ilka) {
@@ -87,7 +87,7 @@ describe("eval-freier Schemaprüfer gegen Ajv", () => {
 
 describe("Schemaprüfung", () => {
   it("meldet Fehler mit verständlichen Bezeichnungen", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const d = ilkaMeldung("Bund");
     d.sachverhalte[0].sofort.lagenradar.d1 = "U";
     d.sachverhalte[0].sofort.beurteilung = "hoch";
@@ -102,7 +102,7 @@ describe("Schemaprüfung", () => {
   });
 
   it("bezeichnet Freigabefelder über Platzhalter-Muster", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(pfadBezeichnung(p!.ui, "/freigabe/versand/hz")).toBe("Freigabe & Versand › Versand › Handzeichen");
   });
 });
@@ -192,7 +192,7 @@ describe("TP-2026-W44-10: Hinweis auf ungeprüftes „format“", () => {
     expect(h[0]).toMatch(/nicht geprüft/);
     // Der eigene Prüfer und Ajv (ohne ajv-formats) lassen einen ungültigen Wert tatsächlich durch
     gleichWieAjv(schema, { mail: "kein-mail" }, true);
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(schemaHinweise(p!.schema)).toEqual([]);
   });
 

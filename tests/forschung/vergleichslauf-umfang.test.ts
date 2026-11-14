@@ -31,7 +31,7 @@ import { schaetzeKurzfassung } from "../../src/pipeline/schaetzung";
 const PLAN_S2 = JSON.parse(readFileSync(repoPfad("evaluation/plaene/s2-isoliert-ilka.json"), "utf-8"));
 const PLAN_MS = JSON.parse(readFileSync(repoPfad("evaluation/plaene/management-summary-ilka.json"), "utf-8"));
 const ZUSCHNITT = JSON.parse(readFileSync(repoPfad("evaluation/material/ilka-s1-zuschnitt-a.json"), "utf-8"));
-const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.json"), "utf-8");
+const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.v2.json"), "utf-8");
 const REFERENZ = "beispiele/orkantief-ilka/LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json";
 const EINGAENGE = [
   "LEAD-Meldung_HE_2026-10-14T10-15_FIKTIV_Orkantief-Ilka.json",

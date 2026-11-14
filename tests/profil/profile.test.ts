@@ -6,6 +6,7 @@ import { readFileSync } from "node:fs";
 import { ladeProfil } from "../../src/profil/laden";
 import { sopKennung } from "../../src/profil/sop";
 import { ersetzePlatzhalter } from "../../src/profil/platzhalter";
+import { v2KopfSetzen } from "../../src/kern/referenzen";
 import { leererWert } from "../../src/kern/schema";
 import { pruefeGegenSchema } from "../../src/kern/validierung";
 
@@ -115,7 +116,8 @@ describe("Beispielprofil LEAD", () => {
 
   it("jede Ereignisart des Schemas hat eine SOP", async () => {
     const { profil: p } = await profil("lead-beispiel");
-    const katalog: string[] = p!.schema.$defs.sachverhalt.properties.art.items.enum;
+    // Seit 0.9.0 (LEAD-Meldung-v2): Ereignisarten im Modul lead-bevoelkerungsschutz
+    const katalog: string[] = p!.schema.$defs.modul_lead_bevoelkerungsschutz_ereignisart.enum;
     const abgedeckt = new Set(p!.sops.flatMap((s) => s.art_vorschlag || []));
     expect(katalog.filter((a) => !abgedeckt.has(a))).toEqual([]);
   });
@@ -130,7 +132,7 @@ describe("Beispielprofil LEAD", () => {
       jetzt: "2026-10-17T20:00",
     });
     expect(offen).toEqual([]);
-    expect(fertig).toContain("`land` ist `Bund`");
+    expect(fertig).toContain("Meldende Stelle ist Koordinierungsstelle (Beispiel) (Bund)");
     expect(fertig).not.toMatch(/\{\{/);
   });
 
@@ -138,6 +140,8 @@ describe("Beispielprofil LEAD", () => {
     // Soll: die Überschriften und Hüllen, mit denen kontext.ts und material.ts die Dokumente beilegen
     const ERZEUGT: [RegExp, string][] = [
       [/JSON-Schema/, "## JSON-Schema der Meldung"],
+      // LEAD-Meldung-v2 (seit 0.8.0): abgeleitetes Ausgabeschema statt des vollständigen Profilschemas
+      [/Ausgabeschema/, "## Ausgabeschema der Meldung"],
       [/Darstellungsdatei/, "## Darstellungsdatei"],
       [/Teil A/, "## SOP-Sammelmappe: Teil A"],
       [/ausgewählten SOPs|^Bausteine$/, "# Ausgewählte SOPs"],
@@ -208,8 +212,10 @@ describe("Beispielprofil LEAD", () => {
 
   it("eine leere Meldung ist als Entwurf schemakonform", async () => {
     const { profil: p } = await profil("lead-beispiel");
+    // Seit 0.9.0 (LEAD-Meldung-v2): Status über die Rolle, Kopf (Fassung, meldung_id, Zeitzone) wie beim Anlegen in der App
     const leer = leererWert(p!.schema, p!.schema);
-    leer._status = "Entwurf";
+    leer.status = p!.ui.rollen.status_entwurf;
+    v2KopfSetzen(leer, "Europe/Berlin");
     expect(pruefeGegenSchema(p!.schema, leer, p!.ui)).toEqual([]);
   });
 });
@@ -217,9 +223,11 @@ describe("Beispielprofil LEAD", () => {
 describe("Musterprofil", () => {
   it("lädt mit eigenem Schema ohne Länderliste", async () => {
     const { profil: p, befunde } = await profil("muster");
-    expect(p!.manifest.meldung.schema_id).toBe("Muster-LEAD-Meldung-v1");
+    // Seit Vorlage 1.0.0 (UP-2026-W45-06): LEAD-Meldung-v2 mit eigenem Modul „muster-lageprofil“
+    expect(p!.manifest.meldung.schema_id).toBe("LEAD-Meldung-v2");
     expect(befunde.filter((b) => b.stufe === "fehler" || b.stufe === "warnung")).toEqual([]);
     const leer = leererWert(p!.schema, p!.schema);
+    v2KopfSetzen(leer, "Europe/Berlin");
     expect(pruefeGegenSchema(p!.schema, leer, p!.ui)).toEqual([]);
   });
 });

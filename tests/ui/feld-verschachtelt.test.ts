@@ -6,7 +6,7 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import React from "react";
 import { aushaengen, einhaengen, reactUmgebung } from "../support/dom";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { Feld } from "../../src/ui/Feld";
 
 beforeAll(reactUmgebung);
@@ -60,7 +60,7 @@ describe("I114-A2: verschachtelte Objekte und Listen in der Erfassungsmaske", ()
 
 describe("I114-A2: Regression Beispielprofil", () => {
   it("Sachverhaltsliste ohne eigene Gruppe, Listenelemente und oberste Ebene ohne Rahmen wie bisher", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const r = p.ui.rollen;
     const knoten = p.schema.properties[r.sachverhalte];
     await einhaengen(React.createElement(Feld, { profil: p, knoten, segs: [r.sachverhalte], wert: [{}], setze: () => {} }));

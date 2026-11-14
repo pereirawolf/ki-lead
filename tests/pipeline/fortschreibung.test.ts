@@ -11,13 +11,13 @@ import { stufe1 } from "../../src/pipeline/s1";
 import { stufe2und3 } from "../../src/pipeline/s2s3";
 import type { Kontext } from "../../src/pipeline/stufen";
 import { llmAntwort, meldungsAntwort, skriptAnbieter } from "../support/anbieter";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaEingaenge, ilkaMeldung } from "../support/fixtures";
 import { bestaetigterVorschlag, pipelineKontext, s1Vorschlag } from "../support/pipeline";
 
 /** Fiktive Vormeldung vom 21.10.2026 19:40 mit einer belegten Frist am 21.10.2026 18:00 */
 async function vormeldung(): Promise<Material> {
-  const { profil: p } = await profil("lead-beispiel");
+  const { profil: p } = await profil(V1_PROFIL);
   const m = ilkaMeldung("Bund");
   m.meldezeitpunkt = "2026-10-21T19:40";
   m.meldezeitraum = { von: "2026-10-20", bis: "2026-10-21" };
@@ -134,7 +134,7 @@ describe("Fortschreibung auf den heutigen Stand", () => {
   });
 
   it("Vormeldung und Eingang vom Vortag: t0 folgt der Verdichtung (A.7), mit Hinweis auf die Vorgabe eines heutigen t0", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const eingaenge: Material[] = [];
     for (const x of ilkaEingaenge()) eingaenge.push(await dateiLesen(new File([JSON.stringify(x.daten)], x.name), p!));
     const material = [await vormeldung(), ...eingaenge];
@@ -333,7 +333,7 @@ describe("Redaktionsvermerke bei eigener Vormeldung", () => {
 describe("Absender der Fortschreibung aus der eigenen Vormeldung (0.4.30)", () => {
   /** Fiktive eigene Vormeldung mit wählbarem Land, Stelle und Meldezeitpunkt */
   async function meldungAls(land: string, stelle: string, zeit = "2026-10-21T19:40", name = "Vormeldung_FIKTIV.json"): Promise<Material> {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = ilkaMeldung("Bund");
     Object.assign(m, { land, meldende_stelle: stelle, meldezeitpunkt: zeit });
     return rolleSetzen(await dateiLesen(new File([JSON.stringify(m)], name), p!), "meldung", p!);
@@ -379,7 +379,7 @@ describe("Absender der Fortschreibung aus der eigenen Vormeldung (0.4.30)", () =
   });
 
   it("mehrere eigene Vormeldungen: Der Absender der jüngsten gilt, Abweichungen werden genannt", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const alt = await meldungAls("Bund", "Koordinierungsstelle (Beispiel)", "2026-10-20T09:00", "alt.json");
     const neu = await meldungAls("Thüringen", "Koordinierungsstelle (Beispiel)", "2026-10-21T19:40", "neu.json");
     const a = absenderFuer([neu, alt], p!);

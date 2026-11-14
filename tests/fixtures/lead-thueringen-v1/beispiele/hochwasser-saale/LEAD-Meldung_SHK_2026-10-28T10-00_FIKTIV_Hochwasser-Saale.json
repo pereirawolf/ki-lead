@@ -1,0 +1,70 @@
+{
+  "schema": "LEAD-Meldung-Land-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell",
+    "werkzeug": "Fiktiver Datensatz Hochwasser an der Saale für den KI-LEAD-Demonstrator (Kreisperspektive), von Hand verfasst",
+    "sop": [
+      "SOP-LEAD B02 Hochwasser / Überschwemmung 2.2.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden 1.7.0",
+    "erstellt": "2026-10-31T21:00"
+  },
+  "kreis": "Saale-Holzland-Kreis",
+  "meldende_stelle": "Landratsamt Saale-Holzland-Kreis, Krisenstab",
+  "meldezeitpunkt": "2026-10-28T10:00",
+  "meldezeitraum": {
+    "von": "2026-10-26",
+    "bis": "2026-10-28"
+  },
+  "quellen": "[Q1] A – Deutscher Wetterdienst (27.10.2026): Unwetterwarnung Dauerregen Thüringer Wald und Thüringer Schiefergebirge, Ausgabe 27.10., 06:00 (FIKTIV) [Zugriff: 28.10.2026]\n[Q2] A – Hochwassermeldedienst des Landes (28.10.2026): Hochwasserbericht Saale Nr. 4 mit Pegelvorhersage (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 07:00\n[Q3] A – Landratsamt Saale-Holzland-Kreis, Krisenstab (28.10.2026): Lagemeldung Nr. 3 (behördenintern, FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 09:00\n[Q4] B – Abwasserzweckverband im Saaletal (28.10.2026): Mitteilung zur Kläranlage Kahla (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 08:00\n[Q5] A – Straßenbauamt Ostthüringen (28.10.2026): Sperrungen B 88 und Kreisstraßen im Saaletal (FIKTIV) [Zugriff: 28.10.2026]",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-SHK-20261028-7HKD",
+      "eintritt": "2026-10-27",
+      "art": [
+        "Hochwasser / Überschwemmung"
+      ],
+      "ort": "Saale-Holzland-Kreis; Saaletal mit Kahla, Orlamünde und Dornburg-Camburg",
+      "bezeichnung": "Hochwasser der Saale: 60 Menschen in Kahla evakuiert, Kläranlage Kahla teilweise überflutet, Scheitel am Nachmittag erwartet",
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Hochwasser an der Saale). Kernaussage: Die Saale steigt im Kreisgebiet noch; der Scheitel wird am 28.10. nachmittags erwartet, und in Kahla ist die Kläranlage teilweise überflutet. Der Hochwassermeldedienst erwartet am Pegel Kahla den Scheitel gegen 15:00 Uhr, rund 30 cm über dem Stand von 07:00 Uhr [Q2]. In Kahla wurden 60 Menschen aus einem Wohngebiet an der Saale evakuiert, 21 sind in einer Notunterkunft [Q3]. Die Kläranlage Kahla arbeitet nur noch mechanisch; ungeklärtes Abwasser gelangt verdünnt in die Saale [Q4]. Die B 88 ist zwischen der Kreisgrenze bei Uhlstädt und Kahla gesperrt [Q5].",
+        "risiken_auswirkungen": "Belegt: Bis zum Scheitel können weitere Keller und Gärten in Orlamünde und Dornburg-Camburg volllaufen [Q3]. Die eingeschränkte Abwasserreinigung dauert nach Angabe des Verbands bis zum Rückgang unter den Ablaufpegel, voraussichtlich zwei Tage [Q4]. Szenario: Steigt der Scheitel höher als vorhergesagt, wären nach Krisenstab weitere rund 80 Personen in Kahla zu evakuieren [Q3].",
+        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Krisenstab seit 27.10., 18:00 Uhr; Sandsackverbau in Kahla und Orlamünde mit Feuerwehren und THW-Ortsverband aus dem Kreis [Q3]. Prüf- und Abstimmungsbedarf: (1) Landkreis: Evakuierung weiterer rund 80 Personen vorbereiten, falls der Scheitel über der Vorhersage liegt. (2) Untere Wasserbehörde: Hinweise zur Wasserqualität unterhalb Kahla prüfen.",
+        "abhaengigkeiten_interdependenzen": "Wirkungskette: Hochwasser → Kläranlage Kahla überflutet → eingeschränkte Abwasserreinigung [Q4]; Puffer: Verdünnung im Hochwasserabfluss. B 88 gesperrt; dieselbe Sperrung meldet auch der Landkreis Saalfeld-Rudolstadt für seinen Abschnitt [Q5]."
+      },
+      "sofort": {
+        "beurteilung": "erheblich",
+        "tendenz": "Verschärfung",
+        "bewertung_text": "Kernaussage: Bis zum Scheitel am Nachmittag steigt die Saale weiter; Evakuierung und eingeschränkte Abwasserreinigung in Kahla prägen die Lage.\nReferenzraum: Saale-Holzland-Kreis. t0: 28.10.2026, 10:00 Uhr.\nBeurteilung „erheblich“: 60 Evakuierte, Abwasserreinigung eingeschränkt; Abgrenzung zu „kritisch“: Trinkwasser nicht betroffen, Unterbringung gesichert.\nTendenz „Verschärfung“ (Landkreis, 28.10. 07:00 bis 15:00): Pegel Kahla steigt bis zum erwarteten Scheitel [Q2].\nD1 = 2, mehrere Gemeinden im Saaletal [Q3]. D2 = 1, 60 Evakuierte [Q3]; Abgrenzung zu 2: unter 100. D3 = 2, der Landkreis steuert über den Krisenstab [Q3]. D4 = 1, örtliche Kräfte und THW aus dem Kreis [Q3]. D5 = 2, Rückgang unter den Ablaufpegel in etwa zwei Tagen [Q4]. D6 = 2, Abwasserbeseitigung eingeschränkt [Q4]. D7 = 1, Vorhersage des Scheitels mit Unsicherheit [Q2]. D8 = 2, Anstieg bis zum Scheitel, danach Umschlag.\nNeubewertung bei: Scheitel über der Vorhersage; Ausfall der Kläranlage\nHandlungsrelevant bis: 28.10.2026 14:00 – Entscheidung über weitere Evakuierung in Kahla, Landkreis – vor dem Scheitel; Grundlage: Pegelvorhersage [Q2]",
+        "lagenradar": {
+          "d1": 2,
+          "d2": 1,
+          "d3": 2,
+          "d4": 1,
+          "d5": 2,
+          "d6": 2,
+          "d7": 1,
+          "d8": 2
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "Sachbearbeitung Krisenstab Landratsamt Saale-Holzland-Kreis (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "freigabe": {
+      "name": "Leitung Krisenstab Landratsamt Saale-Holzland-Kreis (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "versand": {
+      "name": "Krisenstab Landratsamt Saale-Holzland-Kreis (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    }
+  }
+}

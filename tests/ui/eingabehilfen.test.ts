@@ -11,6 +11,8 @@ import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 
 const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
 vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(db));
+// Maske am eingefrorenen v1-Beispielprofil (seit 0.9.0); die v2-Maske prüfen tests/kern/v2-app.test.ts und tests/profil/v2-umstellung.test.ts
+vi.mock("../../src/profil/eingebaut", async () => (await import("../support/eingebaut")).mitV1Beispiel());
 
 /** Jeder Anbieteraufruf wird gezählt und scheitert */
 const aufrufe = vi.hoisted(() => ({ zahl: 0 }));

@@ -1,6 +1,6 @@
 // Verdichtung von Eingangsmeldungen: ohne Websuche, t0 aus den Eingängen und t0-Absicherung (0.4.19).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaEingaenge, ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
@@ -11,7 +11,7 @@ import { dateiLesen, type Material } from "../../src/pipeline/material";
 
 describe("Verdichtung von Eingangsmeldungen", () => {
   it("verdichtet ohne Websuche, mit t0 aus den Eingängen und verbindlicher Gliederung", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const eingaenge: Material[] = [];
     for (const x of ilkaEingaenge()) eingaenge.push(await dateiLesen(new File([JSON.stringify(x.daten)], x.name), p!));
     const ohneT0 = {
@@ -57,7 +57,7 @@ describe("Verdichtung von Eingangsmeldungen", () => {
 
 describe("S1-Vorgaben, t0-Absicherung und Prüffrage (0.4.19)", () => {
   async function eingaengeLesen(): Promise<Material[]> {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const out: Material[] = [];
     for (const x of ilkaEingaenge()) out.push(await dateiLesen(new File([JSON.stringify(x.daten)], x.name), p!));
     return out;

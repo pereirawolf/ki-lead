@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import {
   alleSachverhalte,
   beispielDateien,
@@ -19,7 +19,7 @@ import {
 import { redaktionscheck } from "../../src/lagebild/redaktion";
 import { alsCsv, kopiervorlageHtml, rohtabelle } from "../../src/lagebild/ausgabe";
 
-const p = (await profil("lead-beispiel")).profil!;
+const p = (await profil(V1_PROFIL)).profil!;
 const muster = (await profil("muster")).profil!;
 const ilka = beispielDateien(p, "beispiele/orkantief-ilka");
 const datei = (name: string, obj: unknown): LagebildDatei => ({
@@ -207,22 +207,29 @@ describe("Lagebild: Ausgabe", () => {
     expect(ohneBild).not.toMatch(/D1: \d/);
   });
 
-  test("schlankes Musterprofil ohne Tendenz und Land", () => {
+  test("schlankes Profil ohne Tendenz und Land", () => {
+    // Seit Vorlage 1.0.0 (UP-2026-W45-06) steht profile/muster auf LEAD-Meldung-v2 mit Tendenz; das schlanke Profil entsteht
+    // hier aus der Vorlage ohne die Rollen Tendenz und Land
+    const schlank = structuredClone(muster);
+    delete (schlank.ui.rollen as any).sv_tendenz;
+    delete (schlank.ui.rollen as any).tendenz_verschaerfung;
+    delete (schlank.ui.rollen as any).tendenz_entspannung;
+    delete (schlank.ui.rollen as any).land;
     const m = {
-      schema: "Muster-LEAD-Meldung-v1",
-      _status: "final",
-      meldende_stelle: "Einsatzleitung A",
-      meldezeitpunkt: "2026-10-14T10:00",
-      quellen: "",
-      sachverhalte: [{ bezeichnung: "Brand Lagerhalle", art: [], bewertung: "erheblich", bewertung_text: "Kernaussage.", lage: "Text", radar: {} }],
+      schema: "LEAD-Meldung-v2",
+      status: "zur_freigabe",
+      absender: { stelle: "Einsatzleitung A", ebene: "Einsatzstelle", gebiet: { name: "Gebiet A" } },
+      meldezeitpunkt: "2026-10-14T10:00+02:00",
+      quellen: [],
+      sachverhalte: [{ kennung: "NEU-1", bezeichnung: "Brand Lagerhalle", bewertung: { kernaussage: "Kernaussage.", beurteilung: { stufe: "erheblich" } } }],
     };
-    const { eintraege: e } = einlesen([datei("m.json", m)], muster);
-    expect(verschaerfungsWert(muster)).toBeUndefined();
-    expect(kennzahlen(e, muster).verschaerfung).toBeUndefined();
-    expect(meldestatus(e, muster)).toBeNull();
-    expect(() => redaktionscheck(e, muster, new Date())).not.toThrow();
-    expect(rohtabelle(e, muster)).toHaveLength(2);
-    expect(kopiervorlageHtml(alleSachverhalte(e, muster)[0], muster)).toContain("Brand Lagerhalle");
+    const { eintraege: e } = einlesen([datei("m.json", m)], schlank);
+    expect(verschaerfungsWert(schlank)).toBeUndefined();
+    expect(kennzahlen(e, schlank).verschaerfung).toBeUndefined();
+    expect(meldestatus(e, schlank)).toBeNull();
+    expect(() => redaktionscheck(e, schlank, new Date())).not.toThrow();
+    expect(rohtabelle(e, schlank)).toHaveLength(2);
+    expect(kopiervorlageHtml(alleSachverhalte(e, schlank)[0], schlank)).toContain("Brand Lagerhalle");
   });
 });
 

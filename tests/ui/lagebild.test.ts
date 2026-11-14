@@ -2,7 +2,7 @@
 // Lagebild: Laden des gespeicherten Stands (Review 20.10.2026, F03 und F13) und Schreibfehler des Gerätespeichers.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { act } from "react";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, speicherVoll, type SpeicherZustand } from "../support/speicher";
 
@@ -47,7 +47,7 @@ describe("Lagebild: Laden des gespeicherten Stands (F03, F13)", () => {
   });
 
   it("überschreibt bei einem Lesefehler den gespeicherten Stand nicht und bietet erneutes Laden an", async () => {
-    const { p } = await profil("lead-beispiel").then((e) => ({ p: e.profil! }));
+    const { p } = await profil(V1_PROFIL).then((e) => ({ p: e.profil! }));
     const schluessel = "lagebild:" + p.manifest.id;
     const vorhanden = { dateien: [{ name: "alt.json", text: "{}", importiertAm: "2026-10-01T00:00:00Z" }] };
     speicher.werte.set(schluessel, vorhanden);
@@ -68,7 +68,7 @@ describe("Lagebild: Laden des gespeicherten Stands (F03, F13)", () => {
 
 describe("Lagebild: Schreibfehler des Gerätespeichers", () => {
   it("zeigt einen vollen Speicher als Fehler, behält den gespeicherten Stand und arbeitet im Fenster weiter", async () => {
-    const { p } = await profil("lead-beispiel").then((e) => ({ p: e.profil! }));
+    const { p } = await profil(V1_PROFIL).then((e) => ({ p: e.profil! }));
     const schluessel = "lagebild:" + p.manifest.id;
     const vorhanden = { dateien: [{ name: "alt.json", text: "{}", importiertAm: "2026-10-01T00:00:00Z" }] };
     speicher.werte.set(schluessel, vorhanden);
@@ -89,7 +89,7 @@ describe("Lagebild: Schreibfehler des Gerätespeichers", () => {
 describe("I114-A1: Herkunft im Lagebild", () => {
   async function mitHerkunft(rollen: boolean) {
     const { LagebildAnsicht } = await import("../../src/ui/Lagebild");
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     if (rollen) {
       p.schema.properties.kritis = { type: "object", properties: { rolle: { type: "string" } } };
       Object.assign(p.ui.rollen, { herkunft: "kritis.rolle", herkunft_standard: "Behörde", herkunft_kategorie: { Betreiber: "B", Behörde: "A" } });
@@ -158,7 +158,7 @@ describe("UX-2026-W44-09, -10, -13: Sachverhalte kompakt mit Filter, Kennzahlen 
     expect(document.querySelectorAll(".lb-sv-zeile details[open]")).toHaveLength(0);
 
     await klick(knopf("Übersicht"));
-    await klick(knopf(/Bewertung: erheblich/));
+    await klick(knopf(/Beurteilung: erheblich/));
     expect(document.querySelectorAll(".lb-svliste .lb-sv-zeile")).toHaveLength(5);
     expect(seitentext()).toContain("5 von 8 Sachverhalten");
     await klick(knopf("Filter aufheben"));

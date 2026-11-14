@@ -1,0 +1,70 @@
+{
+  "schema": "LEAD-Meldung-Land-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell",
+    "werkzeug": "Fiktiver Datensatz Hochwasser an der Saale für den KI-LEAD-Demonstrator (Kreisperspektive), von Hand verfasst",
+    "sop": [
+      "SOP-LEAD B02 Hochwasser / Überschwemmung 2.2.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden 1.7.0",
+    "erstellt": "2026-10-31T21:00"
+  },
+  "kreis": "Stadt Jena",
+  "meldende_stelle": "Stadtverwaltung Jena, Stab für außergewöhnliche Ereignisse",
+  "meldezeitpunkt": "2026-10-28T10:30",
+  "meldezeitraum": {
+    "von": "2026-10-26",
+    "bis": "2026-10-28"
+  },
+  "quellen": "[Q1] A – Deutscher Wetterdienst (27.10.2026): Unwetterwarnung Dauerregen Thüringer Wald und Thüringer Schiefergebirge, Ausgabe 27.10., 06:00 (FIKTIV) [Zugriff: 28.10.2026]\n[Q2] A – Hochwassermeldedienst des Landes (28.10.2026): Hochwasserbericht Saale Nr. 4 mit Pegelvorhersage (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 07:00\n[Q3] A – Stadtverwaltung Jena, Stab für außergewöhnliche Ereignisse (28.10.2026): Lagemeldung Hochwasser (behördenintern, FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 10:00\n[Q4] B – Stadtwerke Jena (28.10.2026): Mitteilung zu Pumpwerken und Trinkwasser (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 09:00",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-J-20261028-5MZR",
+      "eintritt": "2026-10-27",
+      "art": [
+        "Hochwasser / Überschwemmung"
+      ],
+      "ort": "Stadt Jena; Saaleaue mit Paradiespark, Burgau und Lobeda-West",
+      "bezeichnung": "Hochwasser der Saale in Jena: Aue und Uferwege überflutet, keine Evakuierung, Scheitel am Abend erwartet",
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Hochwasser an der Saale). Kernaussage: In Jena überflutet die Saale die Aue; bebaute Bereiche sind bisher nicht betroffen, der Scheitel wird am Abend des 28.10. erwartet. Der Hochwassermeldedienst erwartet am Pegel Jena den Scheitel gegen 19:00 Uhr [Q2]. Paradiespark, Uferwege und Kleingartenanlagen in Burgau sind überflutet und gesperrt [Q3]. Eine Evakuierung ist nicht erforderlich [Q3]. Die Pumpwerke der Stadtwerke arbeiten, die Trinkwasserversorgung ist nicht betroffen [Q4].",
+        "risiken_auswirkungen": "Belegt: Bis zum Scheitel kann Wasser in Keller tief liegender Häuser in Burgau drücken [Q3]. Szenario: Liegt der Scheitel 20 cm über der Vorhersage, wäre nach Stab die Unterführung Burgauer Brücke zu sperren [Q3].",
+        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Stab für außergewöhnliche Ereignisse seit 28.10., 06:00 Uhr; Sperrung der Aue und Kontrollfahrten der Feuerwehr [Q3]. Prüf- und Abstimmungsbedarf: (1) Stadt: Sperrung der Unterführung Burgauer Brücke bei steigendem Scheitel vorbereiten.",
+        "abhaengigkeiten_interdependenzen": "Keine belegten Kopplungen; die Pumpwerke arbeiten [Q4]."
+      },
+      "sofort": {
+        "beurteilung": "geringfügig",
+        "tendenz": "Verschärfung",
+        "bewertung_text": "Kernaussage: Die Saale überflutet in Jena die Aue; bebaute Bereiche sind bis zum Scheitel am Abend nur in Burgau gefährdet.\nReferenzraum: Stadt Jena. t0: 28.10.2026, 10:30 Uhr.\nBeurteilung „geringfügig“: keine Evakuierung, keine Versorgungsfunktion betroffen.\nTendenz „Verschärfung“ (Stadt, 28.10. bis zum Scheitel am Abend): Pegel Jena steigt [Q2].\nD1 = 1, Aue innerhalb der Stadt [Q3]. D2 = 0, ausdrückliche Fehlanzeige: keine Evakuierung, keine Betroffenen in bebauten Bereichen [Q3] (Bedingung b der Nullregel). D3 = 1, die Stadt steuert [Q3]. D4 = 1, örtliche Kräfte [Q3]. D5 = 2, Ablauf nach dem Scheitel in ein bis drei Tagen [Q2]. D6 = 0, keine KRITIS-Bezüge [Q4]. D7 = 0, Angaben aktuell. D8 = 1, gleichmäßiger Anstieg.\nNeubewertung bei: Scheitel über der Vorhersage; Wasser in bebauten Bereichen",
+        "lagenradar": {
+          "d1": 1,
+          "d2": 0,
+          "d3": 1,
+          "d4": 1,
+          "d5": 2,
+          "d6": 0,
+          "d7": 0,
+          "d8": 1
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "Sachbearbeitung Stab für außergewöhnliche Ereignisse Jena (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "freigabe": {
+      "name": "Leitung Stab für außergewöhnliche Ereignisse Jena (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "versand": {
+      "name": "Stab für außergewöhnliche Ereignisse Jena (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    }
+  }
+}

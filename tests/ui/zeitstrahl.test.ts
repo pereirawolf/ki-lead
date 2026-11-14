@@ -5,7 +5,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { useState } from "react";
 import { KENNUNG_RE } from "../../src/kern/kennung";
 import type { Profil } from "../../src/kern/typen";
-import { profilPflicht } from "../support/dateien";
+import { profilPflicht, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -25,7 +25,7 @@ afterEach(async () => {
 let stand: any;
 /** Maske mit eigenem Zustand, damit Änderungen ankommen; `stand` hält den letzten Stand der Meldung */
 async function zeige(meldung: any): Promise<Profil> {
-  const profil = await profilPflicht("lead-beispiel");
+  const profil = await profilPflicht(V1_PROFIL);
   stand = meldung;
   function Rahmen() {
     const [m, setM] = useState<any>(meldung);

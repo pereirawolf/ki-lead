@@ -3,19 +3,26 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { beispielDateien, einlesen, type LagebildDatei } from "../../src/lagebild/lagebild";
+import { einlesen, type LagebildDatei } from "../../src/lagebild/lagebild";
 import { dateiLesen } from "../../src/pipeline/material";
 import { ladeProfil } from "../../src/profil/laden";
 import { Marken } from "../../src/ui/lagebild/bausteine";
 import { redaktionscheck } from "../../src/lagebild/redaktion";
-import { leseOrdner, profil, repoPfad } from "../support/dateien";
+import { jsonDateien, profil, V1_PROFIL, v1ProfilDateien } from "../support/dateien";
 
-const bund = async () => (await profil("lead-beispiel")).profil!;
-const saale = async () => beispielDateien((await profil("lead-thueringen")).profil!, "beispiele/hochwasser-saale");
+// Weg Land → Bund unter LEAD-Meldung-v1 am eingefrorenen Stand (seit 0.9.0, UP-2026-W45-06): Beispielprofil 1.44.0 mit dem
+// Eingangsschema LEAD-Meldung-Land-v1 und die v1-Meldungen der Saale-Lage; den v2-Weg prüft tests/profil/v2-umstellung.test.ts
+const bund = async () => (await profil(V1_PROFIL)).profil!;
+const saale = async (): Promise<LagebildDatei[]> =>
+  jsonDateien("tests/fixtures/lead-thueringen-v1/beispiele/hochwasser-saale", { pflicht: true }).map((x) => ({
+    name: x.name,
+    text: JSON.stringify(x.daten),
+    importiertAm: "",
+  }));
 const landesmeldung = async () => (await saale()).find((d) => d.name.includes("_TH_"))!;
 
 async function mitManifest(aendern: (m: any) => void, dateien: Record<string, string> = {}) {
-  const d = { ...leseOrdner(repoPfad("profile", "lead-beispiel")), ...dateien };
+  const d = { ...v1ProfilDateien(), ...dateien };
   const m = JSON.parse(d["profil.json"]!);
   aendern(m);
   d["profil.json"] = JSON.stringify(m);
@@ -24,7 +31,7 @@ async function mitManifest(aendern: (m: any) => void, dateien: Record<string, st
 
 describe("TP-2026-W44-59: Eingangsschemata laden", () => {
   it("das Beispielprofil kennt LEAD-Meldung-Land-v1 mit Gebiet „kreis“ und lädt ohne Befund", async () => {
-    const { profil: p, befunde } = await profil("lead-beispiel");
+    const { profil: p, befunde } = await profil(V1_PROFIL);
     expect(befunde).toEqual([]);
     expect(Object.keys(p!.eingangSchemata!)).toEqual(["LEAD-Meldung-Land-v1"]);
     expect(p!.eingangSchemata!["LEAD-Meldung-Land-v1"]!.gebiet).toBe("kreis");

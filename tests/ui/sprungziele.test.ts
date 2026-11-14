@@ -5,7 +5,7 @@
 // Ausrichtung im Browser prüft tests/browser/sprungziele.spec.ts.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { profilPflicht } from "../support/dateien";
+import { profilPflicht, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung, scrollAufrufe } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -112,7 +112,7 @@ describe("springeZu", () => {
 });
 
 async function zeigeMeldung(meldung: Meldung) {
-  const profil = await profilPflicht("lead-beispiel");
+  const profil = await profilPflicht(V1_PROFIL);
   function Halter() {
     const [m, setM] = React.useState(meldung);
     return React.createElement(MeldungAnsicht, {

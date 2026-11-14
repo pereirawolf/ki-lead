@@ -1,6 +1,6 @@
 // Kontext aus dem Profil: Ereignisarten, SOP-Zuordnung, Arbeitsanweisungen und Platzhalter.
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { kodierleitfadenKennung, sopKennungenAbgleichen } from "../../src/pipeline/nachbearbeitung";
 import {
   sopIdsAufloesen,
@@ -19,7 +19,7 @@ import { STANDARD_ANWEISUNG } from "../../src/profil/standardtexte";
 
 describe("Kontext aus dem Profil", () => {
   it("liest Ereignisarten und ordnet SOPs zu", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const arten = ereignisarten(p!);
     expect(arten).toHaveLength(17);
     expect(arten).toContain("Stromausfall / Blackout");
@@ -30,7 +30,7 @@ describe("Kontext aus dem Profil", () => {
   });
 
   it("ersetzt alle Platzhalter der Arbeitsanweisung und hängt den Ausgabevertrag an", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const t = anweisungErfassung(
       p!,
       { sachverhalt: "X", ausgangsquellen: "Y", stichtag: "2026-10-14", prueffrage: "keine", ereignisarten: "Z" },
@@ -42,7 +42,7 @@ describe("Kontext aus dem Profil", () => {
   });
 
   it("setzt die Fassung des Kodierleitfadens aus dem Profil und gleicht SOP-Kennungen ab", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(kodierleitfadenKennung(p!)).toBe("Kodierleitfaden LEAD 1.14.0");
     // frühere Kennungen (01, N02) und aktuelle (B08) werden auf die gültige Kennung abgebildet
     const liste = [
@@ -62,12 +62,12 @@ describe("Kontext aus dem Profil", () => {
   });
 
   it("löst frühere SOP-IDs gespeicherter Läufe auf", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(sopIdsAufloesen(p!, ["sop-08", "baustein-n05", "b08", "c99", "baustein-n14"])).toEqual(["b08", "c12"]);
   });
 
   it("Verdichtung: Profilanweisung ohne offene Platzhalter, Ersatzfassung ohne Altregeln", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const v = verdichtungsAnweisung(p!);
     expect(v).not.toMatch(/\{\{|\[nicht angegeben\]/);
     expect(v).toContain("Fassung 2.4");
@@ -95,7 +95,7 @@ describe("Standardtexte der App (TP-2026-W44-27)", () => {
     expect(verdichtungsAnweisung(eigen)).toContain("im Kennsatz „Andere Einschätzung:“");
     const ohne = { ...m!, ui: { ...m!.ui, kennsaetze: {} } };
     expect(verdichtungsAnweisung(ohne)).toContain("im Kennsatz „Abweichende Bewertung:“");
-    const { profil: b } = await profil("lead-beispiel");
+    const { profil: b } = await profil(V1_PROFIL);
     const datei = b!.dateien[b!.manifest.anweisungen!.verdichtung!]!;
     expect(verdichtungsAnweisung(b!).slice(0, 200)).toBe(datei.slice(0, 200));
   });
@@ -140,7 +140,7 @@ describe("Steuerung durch die App und Zeitfelder von S1 (0.4.28)", () => {
   });
 
   it("S1-Schema: t0 bei Fortschreibung auf heute ist die aktuelle Zeit; Arbeitsmodus gehört nicht in den Gegenstand", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const props = (s1Schema(p!) as any).properties;
     expect(props.meldezeitpunkt.description).toContain("Fortschreibung einer eigenen Vormeldung mit heutigem Stichtag: der aktuelle Zeitpunkt");
     expect(props.meldezeitpunkt.description).toContain("Nie ein Zeitpunkt in der Zukunft");

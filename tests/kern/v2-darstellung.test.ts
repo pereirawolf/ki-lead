@@ -20,7 +20,7 @@ import {
 } from "../../src/kern/v2darstellung";
 import { pruefeRoh } from "../../src/kern/validierung";
 import { meldungAlsPdf } from "../../src/dokumente/pdf";
-import { jsonDateien, profilPflicht, repoPfad } from "../support/dateien";
+import { jsonDateien, profilPflicht, repoPfad, V1_PROFIL } from "../support/dateien";
 import { v2Profil } from "../support/v2profil";
 
 const TH = () =>
@@ -152,7 +152,7 @@ describe("UP-2026-W45-03: Schema, Status und Dateiname", () => {
       [ohne, "zur_freigabe"],
     ] as const)
       expect(pruefeRoh(p.schema, { ...d, status: st }), st).toEqual([]);
-    const v1 = await profilPflicht("lead-beispiel");
+    const v1 = await profilPflicht(V1_PROFIL);
     expect(ausgabeStatus({}, v1.ui, true)).toBe("final");
   });
 

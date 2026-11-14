@@ -4,7 +4,7 @@
 // Vormeldung: fiktive Beispielmeldung „Ilka“ mit verschobenem Meldezeitpunkt.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { aushaengen, bisWahr, eingeben, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -12,6 +12,8 @@ import { STANDARD } from "../../src/pipeline/einstellungen";
 
 const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
 vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(db));
+// KI-Erfassung am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
+vi.mock("../../src/profil/eingebaut", async () => (await import("../support/eingebaut")).mitV1Beispiel());
 
 const anfragen = vi.hoisted(() => ({ liste: [] as { werkzeuge?: unknown }[] }));
 vi.mock("../../src/anbieter/verteiler", async (original) => {
@@ -46,7 +48,7 @@ afterEach(async () => {
 
 describe("Fortschreibung in der KI-Erfassung", () => {
   it("zeigt Recherchemodus und Stand der Vormeldung vor S2 und die ausgebliebene Aktualisierung danach", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const vormeldung = ilkaMeldung("Bund");
     vormeldung.meldezeitpunkt = "2026-10-21T19:40";
     const { KiErfassung } = await import("../../src/ui/KiErfassung");
@@ -89,7 +91,7 @@ describe("Fortschreibung in der KI-Erfassung", () => {
   });
 
   it("AV-2026-W45-07: Stichtag in der Zukunft lässt t0 leer und sperrt S2, bis t0 angegeben ist", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const vormeldung = ilkaMeldung("Bund");
     const { KiErfassung } = await import("../../src/ui/KiErfassung");
     await einhaengen(

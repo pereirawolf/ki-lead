@@ -12,13 +12,13 @@ import { stufe1 } from "../../src/pipeline/s1";
 import { stufe2und3 } from "../../src/pipeline/s2s3";
 import { zeitstrahlNachbearbeiten, zeitstrahlVorgaben } from "../../src/pipeline/zeitstrahl";
 import { llmAntwort, meldungsAntwort, skriptAnbieter } from "../support/anbieter";
-import { profilPflicht } from "../support/dateien";
+import { profilPflicht, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { pipelineKontext, s1Vorschlag } from "../support/pipeline";
 
 let p: Profil;
 beforeAll(async () => {
-  p = await profilPflicht("lead-beispiel");
+  p = await profilPflicht(V1_PROFIL);
 });
 
 const BUND = "DE-20261014-7QKD";

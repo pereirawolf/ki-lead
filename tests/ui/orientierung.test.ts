@@ -4,13 +4,15 @@
 // gehen als Pflichtsuchen an S2; das Ergebnis weist Orientierung und Pflichtsuchen getrennt aus. Alle Inhalte sind fiktiv.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { aushaengen, bisWahr, eingeben, einhaengen, klick, knopf, reactUmgebung, seitentext } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 
 const db = vi.hoisted(() => ({ werte: new Map<string, any>() }) as SpeicherZustand);
 vi.mock("idb-keyval", async () => (await import("../support/speicher")).idbAttrappe(db));
+// KI-Erfassung am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
+vi.mock("../../src/profil/eingebaut", async () => (await import("../support/eingebaut")).mitV1Beispiel());
 
 const anfragen = vi.hoisted(() => ({ liste: [] as { system: { text: string }[]; werkzeuge?: any; nachrichten: unknown[] }[] }));
 vi.mock("../../src/anbieter/verteiler", async (original) => {
@@ -54,7 +56,7 @@ afterEach(async () => {
 
 describe("KP-2026-W44-06: Orientierung und Suchbegriffe im Bestätigungsschritt", () => {
   it("sucht nach der Bestätigung je Sachverhalt, zeigt Treffer und Begriffe, gibt geänderte Begriffe als Pflichtsuchen an S2", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const { KiErfassung } = await import("../../src/ui/KiErfassung");
     await einhaengen(
       React.createElement(KiErfassung, {
@@ -96,7 +98,7 @@ describe("KP-2026-W44-06: Orientierung und Suchbegriffe im Bestätigungsschritt"
   });
 
   it("ohne Orientierung (0 je Sachverhalt) bleibt der Schritt einstufig; Suchbegriffe lassen sich selbst eintragen", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const { KiErfassung } = await import("../../src/ui/KiErfassung");
     await einhaengen(
       React.createElement(KiErfassung, {
