@@ -18,6 +18,16 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
 
+## [3.23.6] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-04 (Paket 4 des Umstellungsplans), freigegeben vom Herausgeber am 06.11.2026; Entscheidung vom 14.11.2026, die Kennzahlregeln für Kennzahlen-Bausteine jetzt in Abschnitt 6 des Kodierleitfadens zu führen (Entscheidung vom 03.11.2026: Kennzahlregeln an einer Stelle). Dritte Stelle: Verweis ergänzt, Regeln der SOPs und Bausteine unverändert.
+
+### Geändert
+
+- **Teil A, A.3 „Teilmenge, Summe, Hochrechnung“:** Verweis auf die Regeln für Kennzahlen aus Kennzahlen-Bausteinen im Kodierleitfaden, Abschnitt 6 (A.10.2: ein Ort, Verweise sonst). Erledigungsnachweis: letzter Satz des Absatzes.
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.23.6, Kodierleitfaden 1.13.0 (UP-2026-W45-04: Kennzahlen aus Kennzahlen-Bausteinen in Abschnitt 6), Arbeitsanweisung Erfassung 1.11.5. Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- Lesefassung neu erzeugt. Quellenregister unverändert (keine neue URL).
+
 ## [3.23.5] – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026 zur Darstellung der Schrittleiste (Grunddesign 1.7, LD-T05; Beispielprofil 1.42.2). Dritte Stelle: SOP-Texte unverändert.

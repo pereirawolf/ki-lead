@@ -17,6 +17,19 @@ export const PRAEFIX_RE = /^[A-Z0-9]{1,8}(?:-[A-Z0-9]{1,8}){0,3}$/;
 /** Vollständige Kennung; dasselbe Muster steht im Schema des Beispielprofils */
 export const KENNUNG_RE = /^[A-Z0-9]{1,8}(?:-[A-Z0-9]{1,8}){0,3}-\d{8}-[0-9A-HJKMNP-TV-Z]{4}$/;
 
+/**
+ * Kennung nach LEAD-Meldung-v2 (Abschnitt 3): Zufallsteil 4 bis 8 Zeichen; neu vergebene Kennungen erhalten 6 Zeichen
+ * (seit 0.8.0, UP-2026-W45-04). Bestehende Kennungen mit vier Zeichen bleiben gültig.
+ */
+export const KENNUNG_V2_RE = /^[A-Z0-9]{1,8}(?:-[A-Z0-9]{1,8}){0,3}-\d{8}-[0-9A-HJKMNP-TV-Z]{4,8}$/;
+
+/** Länge des Zufallsteils neu vergebener Kennungen nach LEAD-Meldung-v2 */
+export const ZUFALL_V2 = 6;
+
+export function istKennungV2(s: unknown): s is string {
+  return typeof s === "string" && KENNUNG_V2_RE.test(s);
+}
+
 /** Platzhalter der KI für neue Sachverhalte; die App ersetzt sie nach S2 durch vergebene Kennungen */
 export const PLATZHALTER_RE = /^NEU-(\d{1,3})$/;
 
@@ -35,14 +48,14 @@ export function praefixFuer(ui: UiKonfig, herkunft: unknown): string {
   return PRAEFIX_RE.test(p) ? p : STANDARD_PRAEFIX;
 }
 
-/** Vier Zufallszeichen; `zufall` liefert Zahlen in [0, 1) (Tests), sonst kryptografischer Zufall des Geräts */
-export function zufallsteil(zufall?: () => number): string {
+/** Zufallszeichen (Vorgabe vier); `zufall` liefert Zahlen in [0, 1) (Tests), sonst kryptografischer Zufall des Geräts */
+export function zufallsteil(zufall?: () => number, laenge = 4): string {
   let out = "";
   if (zufall) {
-    for (let i = 0; i < 4; i++) out += KENNUNG_ALPHABET[Math.floor(zufall() * 32) % 32];
+    for (let i = 0; i < laenge; i++) out += KENNUNG_ALPHABET[Math.floor(zufall() * 32) % 32];
     return out;
   }
-  const z = new Uint8Array(4);
+  const z = new Uint8Array(laenge);
   globalThis.crypto.getRandomValues(z);
   for (const b of z) out += KENNUNG_ALPHABET[b % 32];
   return out;
@@ -52,13 +65,13 @@ export function zufallsteil(zufall?: () => number): string {
  * Neue Kennung. `datum` ist das Anlagedatum als „JJJJ-MM-TT“ (oder Zeitstempel „JJJJ-MM-TTThh:mm“) in der Zeitzone
  * des Profils. `vergeben` verhindert eine Doppelung innerhalb derselben Meldung (bei vier Zeichen ohnehin selten).
  */
-export function neueKennung(ui: UiKonfig, herkunft: unknown, datum: string, vergeben: Iterable<string> = [], zufall?: () => number): string {
+export function neueKennung(ui: UiKonfig, herkunft: unknown, datum: string, vergeben: Iterable<string> = [], zufall?: () => number, laenge = 4): string {
   const tag = (datum.match(/^(\d{4})-(\d{2})-(\d{2})/) || []).slice(1).join("");
   if (tag.length !== 8) throw new Error(`Anlagedatum „${datum}“ ist kein Datum im Format JJJJ-MM-TT.`);
   const belegt = new Set(vergeben);
   const praefix = praefixFuer(ui, herkunft);
   for (let versuch = 0; versuch < 64; versuch++) {
-    const k = `${praefix}-${tag}-${zufallsteil(zufall)}`;
+    const k = `${praefix}-${tag}-${zufallsteil(zufall, laenge)}`;
     if (!belegt.has(k)) return k;
   }
   throw new Error("Keine freie Kennung gefunden.");

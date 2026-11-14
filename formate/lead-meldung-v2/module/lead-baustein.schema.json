@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/module/lead-baustein.schema.json",
+  "title": "LEAD-Meldung v2 – Modul lead-baustein 1.0",
+  "description": "Profilneutrales Fachmodul je Sachverhalt: Herkunft von Kennzahlen aus Kennzahlen-Bausteinen der App-Familie (etwa Thessa-Kennzahlen, KSNV-Kennzahlen) und Kennungen der Einsatzmeldungen eines Bausteins, auf die sich der Sachverhalt stützt (Zuordnung von oben, docs/AUSTAUSCH.md Abschnitt 9). Die Kennzahl selbst steht im Kern (sachverhalte[].kennzahlen); das Modul verweist nur auf sie. Weicht ein KI-Entwurf von den Werten des Bausteins ab, stellt die App die Werte des Bausteins wieder her (docs/LEAD-MELDUNG-V2.md Abschnitt 7).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fassung", "bausteine"],
+  "properties": {
+    "fassung": {
+      "const": "1.0"
+    },
+    "bausteine": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/baustein"
+      },
+      "description": "Je verwendetem Kennzahlen-Baustein ein Eintrag."
+    }
+  },
+  "$defs": {
+    "baustein": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "fassung", "quelle", "kennzahlen"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Format des Bausteins, z. B. „Thessa-Kennzahlen“ oder „KSNV-Kennzahlen“."
+        },
+        "fassung": {
+          "type": "string",
+          "description": "Fassung des Bausteinformats, z. B. „0.3“."
+        },
+        "datei": {
+          "type": "string",
+          "description": "Dateiname des Bausteins; setzt die App aus dem Material."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 der Bausteindatei; setzt die App aus dem Material."
+        },
+        "quelle": {
+          "type": "string",
+          "pattern": "^Q[1-9][0-9]*$",
+          "description": "ID des Bausteins im Quellenverzeichnis der Meldung."
+        },
+        "kennzahlen": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/uebernahme"
+          },
+          "description": "Übernommene Kennzahlen: ID in der Meldung und ID im Baustein."
+        },
+        "einsatzmeldungen": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Kennungen von Einsatzmeldungen des Bausteins (Thessa, Feld einsatzmeldungen[].id), auf die sich der Sachverhalt stützt; n:m, eine Einsatzmeldung kann mehreren Sachverhalten zugeordnet sein. Maßnahme und Zeitstrahlzeile dazu legt die App aus dem Baustein an."
+        }
+      }
+    },
+    "uebernahme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kennzahl", "baustein_kennzahl"],
+      "properties": {
+        "kennzahl": {
+          "type": "string",
+          "pattern": "^K[1-9][0-9]*$",
+          "description": "ID der Kennzahl in sachverhalte[].kennzahlen dieses Sachverhalts."
+        },
+        "baustein_kennzahl": {
+          "type": "string",
+          "pattern": "^K[1-9][0-9]*$",
+          "description": "ID der Kennzahl im Baustein."
+        }
+      }
+    }
+  }
+}

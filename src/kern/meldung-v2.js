@@ -11,6 +11,9 @@ export const SCHEMA_ID = "LEAD-Meldung-v2";
 export const FASSUNG = "2.0";
 export const WERKZEUG = "scripts/lead-meldung-v2.mjs 2.0";
 const MODUL_BEVS = "lead-bevoelkerungsschutz";
+/** Profilneutrales Modul für Kennzahlen aus Kennzahlen-Bausteinen (seit App 0.8.0, UP-2026-W45-04) */
+export const MODUL_BAUSTEIN = "lead-baustein";
+const BEKANNTE_MODULE = new Set([MODUL_BEVS, MODUL_BAUSTEIN]);
 
 const kopie = (x) => JSON.parse(JSON.stringify(x));
 
@@ -182,7 +185,7 @@ export function stehtVor(a, b, zone) {
 // 3. Migration v1 → v2
 // ---------------------------------------------------------------------------------------------------------------
 
-const LAENDER = {
+export const LAENDER = {
   Bund: "DE",
   "Baden-Württemberg": "DE-BW",
   Bayern: "DE-BY",
@@ -860,7 +863,23 @@ export function pruefeReferenzen(m) {
         pruefeIds(a.quellen, `${p}.module.${MODUL_BEVS}.lagenradar.${k}.quellen`);
       }
     } else if (bevs) for (const [k, a] of Object.entries(bevs.lagenradar || {})) pruefeIds(a.quellen, `${p}.module.${MODUL_BEVS}.lagenradar.${k}.quellen`);
-    for (const name of Object.keys(s.module || {})) if (name !== MODUL_BEVS) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
+    // Modul lead-baustein (seit App 0.8.0, UP-2026-W45-04): Verweise auf Kennzahlen dieses Sachverhalts und auf Quellen
+    (s.module?.[MODUL_BAUSTEIN]?.bausteine || []).forEach((bs, j) => {
+      const pb = `${p}.module.${MODUL_BAUSTEIN}.bausteine[${j}]`;
+      pruefeIds(bs.quelle ? [bs.quelle] : [], `${pb}.quelle`);
+      const gesehen = new Set();
+      (bs.kennzahlen || []).forEach((u, n) => {
+        const pu = `${pb}.kennzahlen[${n}]`;
+        if (!kz.has(u.kennzahl)) fehler(`${pu}.kennzahl`, `${u.kennzahl} ist keine Kennzahl dieses Sachverhalts`);
+        else if (gesehen.has(u.kennzahl)) fehler(`${pu}.kennzahl`, `${u.kennzahl} mehrfach übernommen`);
+        else {
+          const k = (s.kennzahlen || []).find((x) => x.id === u.kennzahl);
+          if (bs.quelle && !(k.quellen || []).includes(bs.quelle)) hinweis(`${pu}.kennzahl`, `${u.kennzahl} nennt den Baustein (${bs.quelle}) nicht als Beleg`);
+        }
+        gesehen.add(u.kennzahl);
+      });
+    });
+    for (const name of Object.keys(s.module || {})) if (!BEKANNTE_MODULE.has(name)) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
   });
   // Meldungsmodule (SR-2026-W45-01): die App kennt noch keines; Inhalt bleibt erhalten, ohne eigene Prüfung
   for (const name of Object.keys(m.module || {})) hinweis(`module.${name}`, "unbekanntes Meldungsmodul, ungeprüft übernommen");
@@ -871,4 +890,3 @@ export function pruefeReferenzen(m) {
 // ---------------------------------------------------------------------------------------------------------------
 // 5. Kommandozeile
 // ---------------------------------------------------------------------------------------------------------------
-

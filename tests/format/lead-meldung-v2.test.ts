@@ -27,7 +27,7 @@ const fehlerDerReferenzpruefung = (m: unknown) => pruefeReferenzen(m).filter((b:
 
 describe("LEAD-Meldung-v2: Schemata", () => {
   it("Kern- und Modulschema sind gültige Schemata nach Draft 2020-12", () => {
-    for (const datei of ["kern.schema.json", "module/lead-bevoelkerungsschutz.schema.json"])
+    for (const datei of ["kern.schema.json", "module/lead-bevoelkerungsschutz.schema.json", "module/lead-baustein.schema.json"])
       expect(() => referenzAjv().compile(json(`${ORDNER}/${datei}`)), datei).not.toThrow();
   });
 

@@ -99,6 +99,22 @@ export function redaktionsvermerke(material: Material[], profil: Profil, t0: str
     .trim();
 }
 
+/**
+ * Einträge des Quellenverzeichnisses in einer Form für v1 (Text, `parseQuellen`) und LEAD-Meldung-v2 (Objekte, seit
+ * 0.8.0): Nummer, Kategorie, Text aus Herausgeber, Titel, Datenstand und Anmerkung, Meldungsfassung einer Eingangsmeldung.
+ */
+export function quellenEintraege(wert: unknown): { nr: number; code: string; text: string; meldungId?: string }[] {
+  if (!Array.isArray(wert)) return parseQuellen(wert);
+  return wert
+    .filter((q) => q && typeof q === "object")
+    .map((q: any) => ({
+      nr: Number(/^Q(\d+)$/.exec(String(q.id ?? ""))?.[1] ?? 0),
+      code: String(q.kategorie ?? ""),
+      text: [q.herausgeber, q.titel, q.datenstand, q.anmerkung].filter((x) => typeof x === "string" && x).join(" "),
+      ...(typeof q.meldung_id === "string" ? { meldungId: q.meldung_id } : {}),
+    }));
+}
+
 export interface QuellenZuordnung {
   /** Dateiname der Eingangsmeldung */
   material: string;
@@ -127,7 +143,7 @@ export function eingangsquellenPruefen(material: Material[], meldung: Meldung, p
   const rolle = profil.ui.rollen.quellen;
   const eingaenge = material.filter((m) => m.art === "eingang" && m.eingang);
   if (!rolle || !eingaenge.length) return [];
-  const eintraege = parseQuellen(holeWert(meldung, rolle)).map((e) => ({ ...e, norm: normal(e.text) }));
+  const eintraege = quellenEintraege(holeWert(meldung, rolle)).map((e) => ({ ...e, norm: normal(e.text) }));
   const id = (m: Material) => {
     const stelle = normal(m.eingang!.stelle);
     return {
@@ -135,6 +151,7 @@ export function eingangsquellenPruefen(material: Material[], meldung: Meldung, p
       kern: (stelle.split(/[,(]| - /)[0] ?? "").trim(),
       land: normal(m.eingang!.land),
       zeit: (m.eingang!.zeitpunkt.match(/T(\d{2}:\d{2})/) || [])[1] || "",
+      meldungId: m.eingang!.meldung_id || "",
     };
   };
   const ids = eingaenge.map(id);
@@ -143,12 +160,15 @@ export function eingangsquellenPruefen(material: Material[], meldung: Meldung, p
   ids.forEach((x, i) => {
     eintraege.forEach((e, j) => {
       let punkte = 0;
-      if (x.stelle && e.norm.includes(x.stelle)) punkte = 3;
+      // LEAD-Meldung-v2: die verwendete Meldungsfassung ist eindeutig (seit 0.8.0, UP-2026-W45-04)
+      if (x.meldungId && e.meldungId === x.meldungId) punkte = 3;
+      else if (x.stelle && e.norm.includes(x.stelle)) punkte = 3;
       else if (x.land && x.kern.length >= 6 && e.norm.includes(x.land) && e.norm.includes(x.kern)) punkte = 2;
       else if (x.kern.length >= 10 && zaehle((y) => y.kern, x.kern) === 1 && e.norm.includes(x.kern)) punkte = 1;
       else if (x.land.length >= 3 && zaehle((y) => y.land, x.land) === 1 && e.norm.includes(x.land)) punkte = 1;
-      // Mehrere Meldungen derselben Stelle: Zeitstand muss den Eintrag unterscheiden
-      if (punkte >= 2 && zaehle((y) => y.stelle, x.stelle) > 1 && !(x.zeit && e.norm.includes(x.zeit))) punkte = 1;
+      // Mehrere Meldungen derselben Stelle: Zeitstand muss den Eintrag unterscheiden (außer bei gleicher Meldungsfassung)
+      if (!(x.meldungId && e.meldungId === x.meldungId) && punkte >= 2 && zaehle((y) => y.stelle, x.stelle) > 1 && !(x.zeit && e.norm.includes(x.zeit)))
+        punkte = 1;
       if (punkte) paare.push({ i, j, punkte: punkte + (e.code === "A" ? 0.5 : 0) });
     });
   });

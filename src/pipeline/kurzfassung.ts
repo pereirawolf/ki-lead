@@ -16,6 +16,9 @@ import { kennsatzPlatzhalter, ersetzePlatzhalter, profilPlatzhalter } from "../p
 import { STANDARD_ANWEISUNG } from "../profil/standardtexte";
 import { aufwandFuer, modellFuer, type Einstellungen } from "./einstellungen";
 import { zerlegeAntwort } from "./json";
+import { istV2 } from "../kern/referenzen";
+import { zeitDE } from "../kern/baustein";
+import { MODUL_BAUSTEIN } from "../kern/meldung-v2.js";
 import type { StufenEintrag } from "./lauf";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { anweisungPlatzhalterText } from "./kontext";
@@ -86,6 +89,12 @@ export function meldungFuerKurzfassung(d: Meldung, profil: Profil): Meldung {
   const r = profil.ui.rollen;
   const kopie: Meldung = structuredClone(d);
   for (const k of [r.quellen, r.zeitstrahl, r.entstehung_feld, "freigabe", r.status_feld]) if (k) delete kopie[k];
+  // LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04): Zeitstrahl je Sachverhalt und Herkunft der Kennzahlen wie in v1 ohne
+  if (istV2(kopie, profil.ui))
+    for (const sv of sachverhalte(kopie, profil.ui)) {
+      delete sv.zeitstrahl;
+      if (sv.module && typeof sv.module === "object") delete sv.module[MODUL_BAUSTEIN];
+    }
   return kopie;
 }
 
@@ -149,6 +158,7 @@ function meldestand(d: Meldung, profil: Profil): Date | null {
  * Meldezeitpunkt gelten als überfällig.
  */
 export function fristen(d: Meldung, profil: Profil): Frist[] {
+  if (istV2(d, profil.ui)) return fristenV2(d, profil);
   const ui = profil.ui;
   const prefix = ui.kennsaetze?.handlungsrelevant;
   const feld = ui.rollen.sv_bewertung_text;
@@ -180,6 +190,30 @@ export function fristen(d: Meldung, profil: Profil): Frist[] {
   return out.sort((a, b) => a.datum.getTime() - b.datum.getTime());
 }
 
+/**
+ * Fristen bei LEAD-Meldung-v2 aus `handlungsbedarf.fristen` (seit 0.8.0, UP-2026-W45-04): Termin, Aufgabe, Adressat
+ * und Bedingung; ein Kalendertag gilt bis zum Tagesende in der Zeitzone des Profils, wie bei „Handlungsrelevant bis:“.
+ */
+function fristenV2(d: Meldung, profil: Profil): Frist[] {
+  const zone = zoneOder(profil.manifest.variablen?.zeitzone);
+  const stand = meldestand(d, profil);
+  const gesehen = new Set<string>();
+  const out: Frist[] = [];
+  for (const sv of sachverhalte(d, profil.ui))
+    for (const f of Array.isArray(sv?.handlungsbedarf?.fristen) ? sv.handlungsbedarf.fristen : []) {
+      const bis = typeof f?.bis === "string" ? f.bis : "";
+      const tag = /^(\d{4})-(\d{2})-(\d{2})$/.exec(bis);
+      const datum = tag ? (isoLokalZuZeitpunkt(`${bis}T23:59`, zone)?.datum ?? null) : Number.isNaN(Date.parse(bis)) ? null : new Date(Date.parse(bis));
+      if (!datum) continue;
+      const zusatz = [f.adressat, f.bedingung ? `Bedingung: ${f.bedingung}` : ""].filter((x) => typeof x === "string" && x.trim()).join("; ");
+      const text = bereinigeAbsatz(`${zeitDE(bis)} – ${String(f.aufgabe ?? "").trim()}${zusatz ? ` (${zusatz})` : ""}`).text;
+      if (!text || gesehen.has(text)) continue;
+      gesehen.add(text);
+      out.push({ datum, text, ueberfaellig: !!stand && datum < stand });
+    }
+  return out.sort((a, b) => a.datum.getTime() - b.datum.getTime());
+}
+
 function fristZeile(f: Frist): string {
   return f.ueberfaellig ? `${f.text} – vor dem Meldestand abgelaufen; Erledigung prüfen` : f.text;
 }
@@ -187,7 +221,7 @@ function fristZeile(f: Frist): string {
 /** Früheste Frist als Zeile „Handlungsrelevant bis: …“ (leer, wenn keine). */
 export function fruehesteFrist(d: Meldung, profil: Profil): string {
   const f = fristen(d, profil)[0];
-  return f ? `${profil.ui.kennsaetze?.handlungsrelevant} ${fristZeile(f)}` : "";
+  return f ? `${profil.ui.kennsaetze?.handlungsrelevant || KENNSATZ_ERSATZ.handlungsrelevant} ${fristZeile(f)}` : "";
 }
 
 /** Fristenblock der Leitungsfassung: eine Zeile bei einer Frist, sonst bis zu drei Punkte, früheste zuerst. */
@@ -307,9 +341,17 @@ export function kurzfassungTreue(k: KurzfassungStruktur, d: Meldung, profil: Pro
   const meldungstexte = texteIn(meldungFuerKurzfassung(d, profil));
   const svs = sachverhalte(d, profil.ui);
   const abweichung = profil.ui.kennsaetze?.abweichung || KENNSATZ_ERSATZ.abweichung;
-  const vermerkt = meldungstexte
-    .flatMap((t) => t.split("\n"))
-    .filter((z) => z.trim().startsWith(abweichung))
+  // v1: Kennsatz im Text; LEAD-Meldung-v2 (seit 0.8.0): bewertung.abweichende_bewertungen
+  const vermerkt = [
+    ...meldungstexte.flatMap((t) => t.split("\n")).filter((z) => z.trim().startsWith(abweichung)),
+    ...(istV2(d, profil.ui)
+      ? svs.flatMap((sv) =>
+          (Array.isArray(sv?.bewertung?.abweichende_bewertungen) ? sv.bewertung.abweichende_bewertungen : []).map((a: any) =>
+            [a?.stelle, a?.stufe, a?.grund].filter((x) => typeof x === "string").join(" "),
+          ),
+        )
+      : []),
+  ]
     .join(" ")
     .toLowerCase();
   for (const [rolle, art] of [

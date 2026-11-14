@@ -23,6 +23,9 @@ export interface MigrationsOptionen {
 export const SCHEMA_ID: "LEAD-Meldung-v2";
 export const FASSUNG: string;
 export const WERKZEUG: string;
+export const MODUL_BAUSTEIN: "lead-baustein";
+/** ISO 3166-1/-2 für Bund und Länder (Gebietsschlüssel im Absender) */
+export const LAENDER: Record<string, string>;
 
 export function stelleSchemaZusammen(z: Record<string, any>, lade: (datei: string) => Record<string, any>): Record<string, any>;
 export function mitVersatz(lokal: string, zone: string): string;
