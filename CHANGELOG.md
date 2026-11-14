@@ -132,6 +132,7 @@ Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach einem roten Prüfla
 
 - `tests/ui/app.test.ts`: „Zwischenstand beim Aushängen“ – eine ausstehende Änderung steht nach dem Aushängen im Speicher, danach schreibt kein Zeitgeber mehr (Zeitgeber gefälscht nach docs/TESTS.md, Regel 3). Scheitert ohne die Änderung.
 - `tests/ui/ueber.test.ts`: „Über KI-LEAD“ wird erst geklickt, wenn die Einstellungen stehen (scheiterte in der CI an #167).
+- `tests/browser/ux-2026-w45.spec.ts`: „UX-2026-W45-03“ prüft die Lage der Reiter unter dem Kopfbereich wiederholt, bis das schmaler werdende Hinweisband und die Reiter stehen (scheiterte in der CI mit 4 px Abstand).
 
 ## [0.7.22] – 14.11.2026
 

@@ -1232,4 +1232,4 @@ Angepasst mit geändertem Soll: `tests/lagebild/lagebild.test.ts` (Tendenz „St
 |---|---|---|
 | Eine ausstehende Änderung steht nach dem Aushängen der App sofort im Speicher; danach schreibt kein Zeitgeber mehr | Zwischenstand beim Aushängen (seit 0.7.23) › … | `tests/ui/app.test.ts` |
 
-Angepasst ohne geändertes Soll: `tests/ui/ueber.test.ts` (wartet, bis die Einstellungen stehen, bevor „Über KI-LEAD“ geklickt wird).
+Angepasst ohne geändertes Soll: `tests/ui/ueber.test.ts` (wartet, bis die Einstellungen stehen, bevor „Über KI-LEAD“ geklickt wird), `tests/browser/ux-2026-w45.spec.ts` (Lage der Reiter unter dem Kopfbereich wiederholt geprüft, bis das Hinweisband schmaler geworden ist).

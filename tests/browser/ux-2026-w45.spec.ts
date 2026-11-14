@@ -29,10 +29,16 @@ test("UX-2026-W45-03: die Reiter bleiben beim Scrollen unter dem Kopf stehen", a
   await ilka(page);
   await page.locator(".lb-reiter").getByRole("button", { name: "Meldungen", exact: true }).click();
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  // seit 0.7.15 (Grunddesign 1.6): unter dem Kopfbereich aus Kopfleiste, Identitätsband und Hinweisband
-  const kopf = (await page.locator(".kopfbereich").boundingBox())!;
-  const leiste = (await page.locator("nav.lb-reiter").boundingBox())!;
-  expect(Math.abs(leiste.y - (kopf.y + kopf.height))).toBeLessThan(3);
+  // seit 0.7.15 (Grunddesign 1.6): unter dem Kopfbereich aus Kopfleiste, Identitätsband und Hinweisband. Das Hinweisband
+  // wird nach dem Scrollen schmaler und die Reiter folgen der gemessenen Höhe einen Moment später; deshalb wiederholt
+  // geprüft, bis beides steht (seit 0.7.23, scheiterte in der CI mit 4 px Abstand)
+  await expect
+    .poll(async () => {
+      const kopf = (await page.locator(".kopfbereich").boundingBox())!;
+      const leiste = (await page.locator("nav.lb-reiter").boundingBox())!;
+      return Math.abs(leiste.y - (kopf.y + kopf.height));
+    })
+    .toBeLessThan(3);
 });
 
 test("UX-2026-W45-23, -25: Kopiervorlage und Rohtabelle beim Beispiel Ilka unter 3.000 px", async ({ page }) => {
