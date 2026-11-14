@@ -134,6 +134,9 @@
     "fehlanzeige": {
       "$ref": "#/$defs/fehlanzeige"
     },
+    "uebergreifende_lage": {
+      "$ref": "#/$defs/uebergreifende_lage"
+    },
     "module": {
       "$ref": "#/$defs/meldungsmodule"
     },
@@ -223,6 +226,14 @@
           "sachverhalte": {
             "items": {
               "$ref": "#/$defs/sachverhalt_vollstaendig"
+            }
+          },
+          "uebergreifende_lage": {
+            "properties": {
+              "kernaussage": {
+                "type": "string",
+                "pattern": "\\S"
+              }
             }
           }
         },
@@ -1329,6 +1340,40 @@
         },
         "erklaerung": {
           "type": "string"
+        }
+      }
+    },
+    "uebergreifende_lage": {
+      "type": "object",
+      "description": "Sachverhaltsübergreifende Lage (optional, seit Nachtrag 11): Angaben, die für mehrere oder alle Sachverhalte der Meldung gelten und keinem einzelnen zugeordnet werden können. Ersetzt keine Bewertung je Sachverhalt.",
+      "required": ["kernaussage"],
+      "additionalProperties": false,
+      "properties": {
+        "kernaussage": {
+          "type": "string",
+          "description": "Was die Sachverhalte zusammen für den Bevölkerungsschutz bedeuten, mit Veränderung oder Prüf- und Abstimmungsfrage (SOP-LEAD A.4); Belege als [Qn]."
+        },
+        "sachverhalte": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/kennung_oder_platzhalter"
+          },
+          "description": "Kennungen der Sachverhalte dieser Meldung, für die die Angaben gelten; fehlt die Liste, gelten sie für alle."
+        },
+        "handlungsbedarf": {
+          "$ref": "#/$defs/handlungsbedarf"
+        },
+        "offene_fragen": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Offene Fragen und Entscheidungsbedarfe über die Sachverhalte hinweg, je Eintrag ein Satz; Belege als [Qn]."
+        },
+        "erlaeuterung": {
+          "type": "string",
+          "description": "Einordnung in Worten, etwa Szenarien; Status, Adressaten und Termine stehen nur im Handlungsbedarf."
         }
       }
     }
