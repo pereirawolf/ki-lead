@@ -39,3 +39,13 @@ test.describe("UX-2026-W46-02, -03: Smartphone", () => {
     await expect(ol).toHaveAttribute("data-rest-links", "");
   });
 });
+
+test("UX-2026-W46-05: in der aufgeklappten Profilkarte ist keine innere Aufklappzeile größer als die äußere", async ({ page }) => {
+  await oeffnen(page);
+  await bereich(page, "Profile");
+  const karte = page.locator("article.profil").first();
+  await karte.locator("summary").first().click();
+  const groessen = await karte.locator("summary").evaluateAll((s) => s.map((e) => parseFloat(getComputedStyle(e).fontSize)));
+  expect(groessen.length).toBeGreaterThan(3);
+  expect(Math.max(...groessen.slice(1))).toBeLessThanOrEqual(groessen[0]!);
+});
