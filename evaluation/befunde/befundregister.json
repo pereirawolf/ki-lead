@@ -5057,6 +5057,124 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-14",
       "pr": 167
+    },
+    {
+      "id": "KP-2026-W46-01",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "Arbeitsbereich mit Schritten (Z. 396–411): .arbeitsbereich, .schritte ol"
+        },
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Z. 286: <nav className=\"schritte\" aria-label=\"Schritte\">"
+        },
+        {
+          "datei": "tests/browser/hinweisband.spec.ts",
+          "stelle": "Test „Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich“ (Z. 133–143)"
+        }
+      ],
+      "kurz": "Schrittleiste läuft auf breiten Bildschirmen mit: nav über die ganze Höhe des Arbeitsbereichs (LD-A03), mit Browsertest der Lage nach dem Scrollen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
+    },
+    {
+      "id": "KP-2026-W46-02",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Statuskasten nach „Meldung öffnen“ (Z. 273)"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Prüfbericht beim Import (Z. 533)"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "Ergebnis der Verbindungstests (Z. 643 und Z. 761)"
+        }
+      ],
+      "kurz": "Kästen, die je nach Ergebnis einen Fehler zeigen, tragen dann die Rolle alert statt status (LD-M01).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
+    },
+    {
+      "id": "KP-2026-W46-03",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-F05] (Z. 117); erzeugt die Tabelle in design/README.md"
+        }
+      ],
+      "kurz": "Grunddesign 1.10, LD-F05: „Automatisch“ verwendet hell das Schema eines beim Bau eingebetteten Profils, auch mit Wahl unter „Darstellung“.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
+    },
+    {
+      "id": "KP-2026-W46-04",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-A01] (Z. 106); erzeugt die Tabelle in design/README.md"
+        }
+      ],
+      "kurz": "Grunddesign 1.10, LD-A01: Startseite einer App aus mehreren Seiten mit dem Gegenstand als h1 und Einstiegen unter dem Seitenkopf.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
+    },
+    {
+      "id": "KP-2026-W46-05",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-E04] (Z. 131); erzeugt die Tabelle in design/README.md"
+        }
+      ],
+      "kurz": "Grunddesign 1.10, LD-E04: keine anderen Stufen als Fehler, Warnung und Hinweis, nicht alle drei Pflicht, sprechende Namen zulässig.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
+    },
+    {
+      "id": "KP-2026-W46-06",
+      "agent": "konsistenzpruefer",
+      "befunddatei": "ki-lead-befund_konsistenz_2026-W46.json",
+      "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-M04] (Z. 135); erzeugt die Tabelle in design/README.md"
+        }
+      ],
+      "kurz": "Grunddesign 1.10, LD-M04: „ENTWURF“ für nicht freigegebene Ausgaben mit KI; ohne KI genügt der maschinenlesbare Status.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 171
     }
   ]
 }

@@ -134,7 +134,7 @@ Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W46.json` (auf `befunde/e
 
 - **Grunddesign 1.10** (`design/`, KP-2026-W46-03 bis -06): LD-F05 (bettet eine App ihr Profil beim Bau ein, verwendet „Automatisch“ hell dessen Schema, auch mit einer Wahl unter „Darstellung“; KI-LEAD bettet kein Profil ein und bleibt unberührt), LD-A01 (Startseite einer App aus mehreren Seiten mit dem Gegenstand als h1 und Einstiegen unter dem Seitenkopf), LD-E04 (keine anderen Stufen als Fehler, Warnung und Hinweis, nicht alle drei Pflicht, sprechende Namen zulässig), LD-M04 („ENTWURF“ für nicht freigegebene Ausgaben mit KI; ohne KI genügt der maschinenlesbare Status; KI-LEAD kennzeichnet das PDF weiter bei jeder nicht freigegebenen Meldung). Kennungen, Zahl der Regeln und Tokens unverändert.
 - Spezifikation 0.8.1 (Abschnitt 5.1, „Schrittleiste“, „Fehlerkästen“). Versionsangaben 0.8.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 801); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
-- **Befundregister:** KP-2026-W46-01 bis -06 umgesetzt (`evaluation/befunde/befundregister.json`).
+- **Befundregister:** KP-2026-W46-01 bis -06 umgesetzt (`evaluation/befunde/befundregister.json`, Pull Request #171).
 
 ### Tests
 
