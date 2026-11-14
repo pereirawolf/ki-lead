@@ -1289,3 +1289,25 @@ Soll unabhängig vom Code: die unveränderten fiktiven Bausteine aus Thessa (Ork
 | `beispiele[].material` als Text abgewiesen; leerer Materialordner als Warnung | F05: Profilmanifest … › UP-2026-W45-05: … | `tests/profil/manifest.test.ts` |
 
 Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (UP-2026-W45-01: Hinweis `KENNZAHL_BELEG` bei zitiertem Baustein, Anzeige eines Land-Bausteins mit Ausschnitt), `tests/pipeline/v2-pipeline.test.ts` (UP-2026-W45-04: Regeln des Kodierleitfadens 1.14.0), `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.14.0, Arbeitsanweisung Verdichtung 2.4), `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: Bausteine im Beispiel „Ilka“ als Material).
+
+## Paket 6, Teil App: Redaktionscheck auf v2-Feldern, übergreifende Lage, Eingangsschema (0.8.3, UP-2026-W45-06)
+
+Soll unabhängig vom Code: die feste fiktive Beispielmeldung `formate/lead-meldung-v2/beispiele/LEAD-Meldung-v2_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json` (zwei Sachverhalte, Frist F1 15.10.2026, 12:00 Uhr) und von Hand gesetzte Abwandlungen (übergreifende Lage mit Frist zum Kalendertag 16.10., Abschluss, Änderungsvermerk, leere Neubewertung, Kennzahl aus einem Thessa-Baustein); Zeitpunkte von Hand in UTC umgerechnet. Testprofil: `tests/support/v2profil.ts`.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Übergreifende Lage optional; mit Feld nach Ajv und eigenem Prüfer gültig, ohne Fehler der Referenzprüfung | UP-2026-W45-06: übergreifende Lage im Kernschema (Nachtrag 11) › optional; mit Feld schemagültig … | `tests/lagebild/v2-redaktion.test.ts` |
+| Kernaussage Pflicht, ab „zur_freigabe“ nicht leer, im Entwurf leer zulässig | … › Kernaussage ist Pflicht … | `tests/lagebild/v2-redaktion.test.ts` |
+| Referenzprüfung: [Q9], Frist auf E7, unbekannte Kennung als Fehler; neben Fehlanzeige Fehler; ein Sachverhalt Hinweis | … › Referenzprüfung: … | `tests/lagebild/v2-redaktion.test.ts` |
+| Ausgabeschema für die KI mit dem Feld ohne Muster; Platzhalter NEU-n durch vergebene Kennungen ersetzt, fremde Kennung entfernt (`UEBERGREIFEND_VERWEIS`) | … › Ausgabeschema für die KI … | `tests/lagebild/v2-redaktion.test.ts` |
+| Bewertungstext aus den Feldern in Kennsatzform; Frist „15.10.2026, 12:00“ mit `leseFrist` gleich 10:00 UTC; abweichende Bewertung mit Ursache und „Klärend wäre“ | UP-2026-W45-06: Bewertungstext und Handlungsbedarf aus v2-Feldern › … | `tests/lagebild/v2-redaktion.test.ts` |
+| Handlungsbedarf als Zeilen mit Stelle, Status und Stand; Lagebild und Kopiervorlage mit Kernaussage, Block „Maßnahmen & Handlungsempfehlungen“ und Frist | … › Handlungsbedarf …; … › Lagebild und Kopiervorlage … | `tests/lagebild/v2-redaktion.test.ts` |
+| Zeitfenster: F1 15.10. 10:00 UTC zeitkritisch vor der Ausgabe 15.10. 18:00; Frist der übergreifenden Lage 16.10. 21:59 UTC (Tagesende) ohne Anlass; keine „nicht konfigurierten“ Regeln | UP-2026-W45-06: Redaktionscheck auf v2-Feldern › Zeitfenster … | `tests/lagebild/v2-redaktion.test.ts` |
+| Abweichung, Abschluss (Ende 14.10.), Änderung und formale Vollständigkeit (nur Sachverhalt 2 ohne Neubewertung) aus Feldern; keine Texte mit „undefined“ ohne Kennsätze im Profil | … › Abweichung, Abschluss, Änderung … | `tests/lagebild/v2-redaktion.test.ts` |
+| „Kennzahl als Beleg prüfen“ als Information in Abschnitt 5 mit D1, D4, D5, D8; ohne Radar ohne Belegachsen | … › Hinweis „Kennzahl als Beleg prüfen“ … | `tests/lagebild/v2-redaktion.test.ts` |
+| Fehler der Referenzprüfung in Abschnitt 5; Kennung mit sechs Zeichen, Bezug als Objekt auf eine Betreiberkennung als Information | … › Fehler der Referenzprüfung … | `tests/lagebild/v2-redaktion.test.ts` |
+| `fristV2`: Kalendertag 23:59 in der Zone, Versatz, unbekannter Termin | … › fristV2 … | `tests/lagebild/v2-redaktion.test.ts` |
+| Kreismeldung im Beispielprofil: ohne Eingangsschema Schemabefund, mit Eingangsschema der eigenen Kennung ohne Befund und nicht fremd | UP-2026-W45-06: Eingangsschema der eigenen Kennung (Profilformat 1.33) › … | `tests/lagebild/v2-redaktion.test.ts` |
+| Eingangsschema aus der Zusammenstellung erzeugt, alle Ebenen, Quellenkategorien A/B/W/M/P | … › das Eingangsschema ist aus der Zusammenstellung erzeugt … | `tests/lagebild/v2-redaktion.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/lagebild/fremdschema.test.ts` (Eingangsschema der eigenen Kennung ist seit Profilformat 1.33 zulässig, ohne Warnung). Stabilisiert ohne geändertes Soll: `tests/lagebild/baustein.test.ts` (Vergleich der Beispieldateien ohne den Zeitstempel `importiertAm`, der bei zwei Aufrufen an einer Millisekundengrenze verschieden sein kann). `tests/format/thessa-baustein.test.ts` und `tests/format/ksnv-baustein.test.ts` unverändert; sie prüfen die neu gepinnte Prüfsumme des Kernschemas.
