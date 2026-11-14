@@ -5190,7 +5190,8 @@
       ],
       "kurz": "JSON-Material (Eingang, Vormeldung, sonstiges JSON, Kennzahlen-Baustein) ohne Einrückung an S1 und S2, damit S1 mit Haiku möglichst unter der Schwelle für den Preis langer Prompts bleibt; bleibt unabhängig vom Messergebnis.",
       "status": "umgesetzt",
-      "entschieden_am": "2026-11-14"
+      "entschieden_am": "2026-11-14",
+      "pr": 178
     }
   ]
 }
