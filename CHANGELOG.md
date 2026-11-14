@@ -125,6 +125,25 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.8.3 | letzter Commit des Pull Requests „Paket 6, Teil App: Redaktionscheck auf v2-Feldern, übergreifende Lage, Eingangsschema (UP-2026-W45-06); 0.8.3“ |
 | 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
 | 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ (Nachtrag vom 14.11.2026: Pull Request „LEAD-Meldung-v2: offener Punkt 2 erledigt (Kosten und Fehlerquote)“, ohne Änderung der App) |
+| 0.9.2 | letzter Commit des Pull Requests „Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2; 0.9.2“ |
+## [0.9.2] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kosten_2026-W46.json` (auf `befunde/eingang`, Commit `0c15f74`), AV-2026-W46-01 und -02 aus dem Ergebnisbericht [evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md](evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md). Freigabe des Herausgebers vom 14.11.2026: alle JSON-Arten ohne Einrückung, die Änderung bleibt unabhängig vom Ergebnis der Messung; Messwerte der Schätzung nach der Regel nachziehen. Messung: Vergleichslauf Ilka wie am 14.11.2026 nach dem Merge, ausgeführt vom Herausgeber (Messweg in der Befunddatei).
+
+### Geändert
+
+- **JSON-Material ohne Einrückung** (`src/pipeline/material.ts`, `jsonText()`; AV-2026-W46-01): Eingangsmeldungen, Vormeldung, sonstiges JSON und die Projektion eines Kennzahlen-Bausteins gehen ohne Einrückung und Zeilenumbrüche an S1 und S2. Das Eingangsmaterial des Vergleichslaufs Ilka in der v2-Fassung schrumpft von 89 803 auf 67 656 Zeichen (−24,7 %); Inhalt und Reihenfolge bleiben gleich, die Prüfsumme stammt weiter aus den Rohbytes. Bisher hob der Leerraum S1 mit Haiku über die Schwelle von 100 000 Token für den Preis langer Prompts. Wie viele Token wegfallen, zeigt erst der Vergleichslauf; Folgen von Leerzeichen kosten meist wenige Token.
+- **Schätzung nach dem Vergleichslauf mit LEAD-Meldung-v2** (`src/pipeline/schaetzung.ts`; AV-2026-W46-02): Obergrenzen nach der Regel (größter Messwert plus 25 %) aus den Läufen 20261114-212312-o7hv, -213436-m8s6 und -214703-7mqq (App 0.9.0, Beispielprofil 2.0.0). S1 mit Haiku „high“ bis 4 Minuten und bis 0,25 USD statt bis 3 Minuten und bis 0,03 USD (gemessen 115–170 s, 0,132–0,166 USD; der Prompt lag mit 109 811 Token über der Schwelle für den Preis langer Prompts, den die Ist-Kosten schon abbildeten, die Schätzung nicht). Verdichtung mit Opus „medium“ 300–780 s und 1,20–3,35 USD statt 300–540 s und 1,20–2,20 USD (gemessen 514–617 s, 2,41–2,67 USD). Untergrenzen unverändert; die Kostenbremse der Fallreihen rechnet damit vorsichtiger.
+
+### Tests
+
+- `tests/pipeline/material.test.ts` (3 neu, AV-2026-W46-01): Eingangsmeldungen Ilka (v2) ohne Zeilenumbruch mit unverändertem Inhalt, auch im Prompt; sonstiges JSON ohne Leerraum; Kennzahlen-Baustein ohne Zeilenumbruch. `tests/pipeline/schaetzung.test.ts` (AV-2026-W46-02): neue Spannen für S1 Haiku „high“ und die Verdichtung mit Opus „medium“; die Kenndaten der drei Läufe vom 14.11.2026 als unabhängiges Soll in der Liste der gemessenen Spannen.
+
+### Dokumentation
+
+- [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.2 (Abschnitt 5.1, S0). Versionsangaben 0.9.2 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 902); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- **Befundregister:** AV-2026-W46-01 und -02 umgesetzt (`evaluation/befunde/befundregister.json`).
+
 ## [0.9.1] – 14.11.2026
 
 ### Nachtrag vom 14.11.2026 (ohne Änderung der App)

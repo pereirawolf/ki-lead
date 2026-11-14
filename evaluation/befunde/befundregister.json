@@ -5171,6 +5171,52 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-14",
       "pr": 171
+    },
+    {
+      "id": "AV-2026-W46-01",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_kosten_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion dateiLesen, JSON-Zweig (Z. 228, 232, 241, 253, 257)"
+        },
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion materialBloecke (Z. 318)"
+        }
+      ],
+      "kurz": "JSON-Material (Eingang, Vormeldung, sonstiges JSON, Kennzahlen-Baustein) ohne Einrückung an S1 und S2, damit S1 mit Haiku möglichst unter der Schwelle für den Preis langer Prompts bleibt; bleibt unabhängig vom Messergebnis.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 178
+    },
+    {
+      "id": "AV-2026-W46-02",
+      "agent": "anbietervergleich",
+      "befunddatei": "ki-lead-befund_kosten_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE[\"s1|claude-haiku-5-5|high\"] (Z. 73)"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE[\"verdichtung|claude-opus-5-5|medium\"] (Z. 113)"
+        },
+        {
+          "datei": "src/anbieter/preise.ts",
+          "stelle": "REGELN, claude-haiku-5-5 (Z. 41); kostenAnfrage (Z. 101)"
+        }
+      ],
+      "kurz": "Obergrenzen der Schätzung für S1 Haiku „high“ (Preis langer Prompts) und die Verdichtung mit Opus „medium“ nach der Regel aus dem Vergleichslauf mit LEAD-Meldung-v2 vom 14.11.2026 nachziehen.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 178
     }
   ]
 }
