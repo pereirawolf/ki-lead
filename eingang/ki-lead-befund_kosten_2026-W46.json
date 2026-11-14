@@ -1,0 +1,109 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "anbietervergleich",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-14T22:25:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+  "pruefumfang": "Befund auf Anforderung des Herausgebers (Auftrag vom 14.11.2026; außerhalb der sechs Standard-Teilaspekte, Agent „anbietervergleich“, Kürzel AV) aus dem Ergebnisbericht evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md (PR #175, App 0.9.1): Übergabe des Eingangsmaterials an S1 und S2 (src/pipeline/material.ts, dateiLesen und materialBloecke, vollständig gelesen), Kostenschätzung (src/pipeline/schaetzung.ts, vollständig gelesen) gegen die Preisregel für lange Prompts (src/anbieter/preise.ts, vollständig gelesen), Verwendung der Schätzung in der Kostenbremse (src/forschung/fallreihe.ts, obergrenze(), stichprobenhaft). Zeichenzählung des Ilka-Materials (sechs Eingangsmeldungen des Beispielprofils 2.0.0) eingerückt und kompakt mit Python nachgerechnet. npm ci und npm test (Vitest): 137 Testdateien bestanden, 1 übersprungen. Keine KI-Aufrufe. Offene Befunde: 0; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "Tokenzahl des kompakten Materials: kein Tokenizer des Anbieters in der Umgebung, Token-Zählung über die API wäre ein KI-Aufruf; die Ersparnis in Token ist deshalb nur abgeschätzt (AV-2026-W46-01).",
+    "Kennzahlen je Stufe und Lauf (größter S1- und S2-Wert): Laufprotokolle und ZIP-Dateien liegen nicht im Repository; der Ergebnisbericht nennt je Stufe nur Mittelwerte (AV-2026-W46-02).",
+    "Browsertests (Playwright): für einen Befund ohne Änderung nicht ausgeführt."
+  ],
+  "befunde": [
+    {
+      "id": "AV-2026-W46-01",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion dateiLesen, JSON-Zweig (Z. 228, 232, 241, 253, 257)",
+          "ist": "text: JSON.stringify(obj, null, 2),"
+        },
+        {
+          "datei": "src/pipeline/material.ts",
+          "stelle": "Funktion materialBloecke (Z. 318)",
+          "ist": "teile.push(`<material name=\"${escapeAttr(m.name)}\" art=\"${art}\"${zusatz}>\\n${huellenInhalt(m.text || \"\")}\\n</material>`);"
+        },
+        {
+          "datei": "evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md",
+          "stelle": "Abschnitt „Woher die Mehrkosten kommen“, Zeile S1; Folgerungen, „Eingangsmaterial für S1 und S2“",
+          "ist": "Ohne Einrückung ließe sich S1 voraussichtlich wieder unter die Schwelle von 100 000 Token bringen"
+        }
+      ],
+      "beobachtung": "Ist: dateiLesen() serialisiert JSON-Material (Eingangsmeldung, Vormeldung, sonstiges JSON, Projektion eines Kennzahlen-Bausteins) mit zwei Leerzeichen Einrückung; materialBloecke() übergibt diesen Text unverändert in der Materialhülle an S1 (s1.ts) und S2 einschließlich Vervollständigung (s2s3.ts). Ilka in der v2-Fassung: 89 803 Zeichen eingerückt, 67 656 kompakt (JSON.stringify ohne Leerraum), also −22 147 Zeichen (−24,7 %): 18 622 Einrückung, 2 114 Zeilenumbrüche, der Rest Leerzeichen nach dem Doppelpunkt. Wirkung: S1 lag in der v2-Reihe bei 109 811 Token Prompt (Eingabe 47 258, Cache 62 553) und damit über der Schwelle von 100 000 Token, ab der preise.ts für Haiku den Preis langer Prompts (Faktor 5) ansetzt; S1 kostete im Mittel 0,145 statt rund 0,029 USD. Vorbehalt: Ob die rund 9 800 fehlenden Token erreicht werden, ist offen. Folgen von Leerzeichen fassen Tokenizer meist zu wenigen Token zusammen; die Ersparnis in Token kann deshalb deutlich unter dem Anteil an Zeichen liegen (grobe Abschätzung bei 2 115 Zeilen: einige tausend Token, nicht nachgezählt). Unabhängig von der Schwelle sinken Eingabe und Dauer von S1 und S2 etwas; der Inhalt ist derselbe. Nebenwirkung: Die Kürzungsgrenze von 400 000 Zeichen je Datei (MAX_TEXT_ZEICHEN) fasst kompakt mehr Inhalt; Prüfsumme (aus den Rohbytes), Redaktionsvermerke und JSON.parse(m.text) bleiben unberührt.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "In dateiLesen() JSON-Material ohne Einrückung serialisieren (JSON.stringify(obj) statt JSON.stringify(obj, null, 2)) an allen fünf Stellen, am besten über eine kleine Hilfsfunktion mit Kommentar zum Grund (Preis langer Prompts, Ergebnisbericht vom 14.11.2026). Materialhülle, Reihenfolge und Inhalt bleiben gleich; Profile, Arbeitsanweisungen und Systemauftrag sind nicht betroffen. Test in tests/pipeline/material.test.ts. Version 0.9.2 (dritte Stelle: kleinere Änderung innerhalb des Meilensteins). Messweg (ausgeführt vom Herausgeber nach dem Merge): Vergleichslauf Ilka wie am 14.11.2026 – App unter „Einstellungen → Testläufe“, Plan standardprofile-ilka, Variante A-anthropic-standard, Testart „S1 + S2 + S3 (aus Rohdaten)“, S1 claude-haiku-5-5 „high“, S2 claude-opus-5-5 „medium“, Reparatur claude-haiku-5-5 „low“, t0 14.10.2026 14:00, ohne Websuche, S1-Vorschlag unverändert übernommen, je drei Läufe, Obergrenze 10 USD. Bezug ist die v2-Reihe vom 14.11.2026 (20261114-212312-o7hv, -213436-m8s6, -214703-7mqq); Auswertung mit npm run vergleichslauf:auswerten (nach Stand getrennt). Abnahme: S1-Prompt (Eingabe + Cache) in allen drei Läufen unter 100 000 Token; keine Zunahme von Reparaturen, Schemabefunden oder Fehlern der Referenzprüfung; Ergebnis als kurzer Nachtrag zum Ergebnisbericht oder eigener Bericht unter evaluation/abnahmen/ (nur Kenndaten mit Lauf-IDs). Abnahme: Test grün; Vergleichslauf nach dem Messweg mit S1 unter 100 000 Token in allen drei Läufen.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "tests/pipeline/material.test.ts",
+        "docs/TESTZUORDNUNG.md",
+        "docs/SPEZIFIKATION.md (Änderungsverlauf 0.9.2, ggf. Abschnitt zur Materialübergabe)",
+        "CHANGELOG.md 0.9.2",
+        "Versionsangaben 0.9.2 (package.json, package-lock.json, README, CITATION.cff, Android, iOS)",
+        "nach dem Vergleichslauf: Ergebnis unter evaluation/abnahmen/"
+      ],
+      "entscheidungsfrage": "(A) Alle JSON-Arten kompakt übergeben (Eingang, Vormeldung, sonstiges JSON, Kennzahlen-Baustein) – empfohlen, ein Ort und gleiche Regel für alles Material. (B) Nur Eingangsmeldungen und Vormeldung. Und: Bleibt die Änderung auch dann, wenn S1 die Schwelle verfehlt? Empfehlung ja, weil sie bei gleichem Inhalt Eingabe in S1 und S2 spart.",
+      "sicherheit": "mittel",
+      "automatisierbar": "tests/pipeline/material.test.ts: dateiLesen() liefert für JSON-Material (Eingang, Vormeldung, JSON, Baustein) einen Text ohne Zeilenumbruch, und JSON.parse(text) ergibt das eingelesene Objekt bzw. die Projektion; materialBloecke() enthält für das Ilka-Material keinen eingerückten JSON-Text.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "AV-2026-W46-02",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE[\"s1|claude-haiku-5-5|high\"] (Z. 73)",
+          "ist": "\"s1|claude-haiku-5-5|high\": { sekunden: [15, 150], usd: [0, 0.03] },"
+        },
+        {
+          "datei": "src/pipeline/schaetzung.ts",
+          "stelle": "MESSWERTE[\"verdichtung|claude-opus-5-5|medium\"] (Z. 113)",
+          "ist": "\"verdichtung|claude-opus-5-5|medium\": { sekunden: [300, 540], usd: [1.2, 2.2] },"
+        },
+        {
+          "datei": "src/anbieter/preise.ts",
+          "stelle": "REGELN, claude-haiku-5-5 (Z. 41); kostenAnfrage (Z. 101)",
+          "ist": "langAb: 100_000,"
+        }
+      ],
+      "beobachtung": "Ist: Die Ist-Kosten bilden den Preis langer Prompts ab (kostenAnfrage() wählt bei Prompt über langAb die Preise lang), die Schätzung nicht: schaetzeStufe() liest feste Spannen aus MESSWERTE, die aus Läufen unter der Schwelle stammen (S1 Haiku „hoch“ höchstens 0,027 USD, Vergleichslauf vom 24./25.10.2026). Gemessen am 14.11.2026 (App 0.9.0, Beispielprofil 2.0.0): S1 Haiku „hoch“ im Mittel 0,145 USD und 138 s, also das Fünffache der Obergrenze von 0,03 USD; die Verdichtung mit Opus „mittel“ im Mittel 2,52 USD und 560 s, über der Obergrenze von 2,20 USD und 540 s (schon v1 mit App 0.8.3: im Mittel 2,27 USD). Auswirkung: Die Anzeige vor dem Lauf unterschätzt S1 und S2; die Kostenbremse der Fallreihe (fallreihe.ts, obergrenze()) rechnet mit der oberen Schätzung, solange noch kein teurerer Lauf vorliegt. Nach der Regel im Kopf von schaetzung.ts sind überschrittene Obergrenzen neu zu setzen (größter Messwert plus 25 %). Die größten Werte je Stufe stehen in den Laufprotokollen, nicht im Repository; der Bericht nennt je Lauf nur die Summe (bis 2,81 USD und 747 s).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "MESSWERTE nach der Regel in schaetzung.ts aus der v2-Reihe vom 14.11.2026 nachziehen: S1 claude-haiku-5-5 „high“ und Verdichtung claude-opus-5-5 „medium“, Obergrenzen von Kosten und Dauer je größter Messwert der Stufe plus 25 %, Untergrenzen unverändert, Kommentar mit Lauf-IDs und dem Hinweis, dass S1 über 100 000 Token Prompt den Preis langer Prompts trägt. Voraussetzung: die größten Werte je Stufe aus der Auswertung (npm run vergleichslauf:auswerten über die ZIP-Dateien) oder vom Herausgeber. Gemeinsam mit AV-2026-W46-01 in einem Pull Request (0.9.2); der Vergleichslauf zu AV-2026-W46-01 verengt die Spannen nicht (Regel „bestehende Spannen werden nicht verengt“). Abnahme: Test, dass die Schätzung für S1 Haiku „hoch“ und die Verdichtung Opus „mittel“ die Messwerte vom 14.11.2026 einschließt.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "tests/pipeline/schaetzung.test.ts",
+        "docs/TESTZUORDNUNG.md",
+        "CHANGELOG.md 0.9.2"
+      ],
+      "entscheidungsfrage": "(A) Messwerte nach der Regel nachziehen – empfohlen, einfach und wie bisher (AV-2026-W43-15, AV-2026-W45-01). (B) Zusätzlich rechnet die Schätzung den Preis langer Prompts aus der geschätzten Promptlänge (tokenAusZeichen) und weist darauf hin – genauer, aber neue Logik. Liefert der Herausgeber die größten Werte je Stufe, oder soll die Umsetzung sie aus den ZIP-Dateien der Reihe bestimmen?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/pipeline: schaetzeStufe(\"s1\", \"claude-haiku-5-5\", \"high\").usd[1] ≥ 0,145 und schaetzeStufe(\"verdichtung\", \"claude-opus-5-5\", \"medium\").usd[1] ≥ 2,52 sowie sekunden[1] ≥ 560 (Mittelwerte vom 14.11.2026 als Mindestanforderung).",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Preisregel für lange Prompts bei Haiku in preise.ts (langAb 100 000 Token, Eingabe, Cache und Ausgabe je Faktor 5) wird in kostenAnfrage() auf den gesamten Prompt einschließlich Cache angewandt, wie im Ergebnisbericht vorausgesetzt.",
+    "Eingangsmaterial des Vergleichslaufs: fallMaterial() liest die Falldateien über dateiLesen() wie beim Hochladen; eine Änderung dort wirkt im Vergleichslauf und in der App gleich.",
+    "Weitere Beobachtung: Der Systemauftrag von S2 enthält Ausgabeschema und Darstellungsdatei mit einem Leerzeichen Einrückung (kontext.ts Z. 96 und 100, s2s3.ts Z. 173); kompakt ließe sich auch der Cache von S2 verkleinern – nicht Teil dieses Auftrags, erst nach dem Ergebnis zu AV-2026-W46-01 erwägen.",
+    "Weitere Beobachtung: Erreicht S1 die Schwelle trotz AV-2026-W46-01 nicht, wären andere Hebel zu prüfen (Umfang des Systemauftrags von S1); nicht Gegenstand dieses Befunds."
+  ]
+}
