@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meldung, Profil } from "../kern/typen";
 import { holeWert } from "../kern/pfad";
-import { bezeichnung, feldUi, istEigeneStelle, radarFuer } from "../kern/ui";
+import { bezeichnung, feldUi, istEigeneStelle, radarFuer, rollenBezeichnung } from "../kern/ui";
 import { parseQuellen } from "../kern/quellen";
 import { datumDE, heuteDE } from "../kern/ausgabe";
 import { kennsaetzeAlle } from "../kern/kennsaetze";
@@ -323,8 +323,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const radarDef = radarFeld ? radarFuer(ui, radarFeld) : undefined;
   // GK-2026-W44-15: Reiter „Lagenradar“ nur bei einem Radar im Profil, beschriftet wie das Radarfeld des Profils
   const reiterListe = REITER.flatMap((t) => (t.id !== "radar" ? [t] : radarDef ? [{ ...t, titel: radarFeld?.label || t.titel }] : []));
-  const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
-  const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
+  const lBeurteilung = r.sv_beurteilung ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
+  const lTendenz = r.sv_tendenz ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
   const ks = kennsaetzeFuer(profil);
 
   const hinzufuegen = (neu: LagebildDatei[]) => setDateien((alt) => zusammenfuehren(alt, neu));

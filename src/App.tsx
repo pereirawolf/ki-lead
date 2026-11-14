@@ -4,6 +4,7 @@ import { eingebauteProfile } from "./profil/eingebaut";
 import { leererWert } from "./kern/schema";
 import { jetztLokal } from "./kern/ausgabe";
 import { holeWert, setzeWert } from "./kern/pfad";
+import { v2KopfSetzen } from "./kern/referenzen";
 import type { Meldung, Profil, ProfilEintrag } from "./kern/typen";
 import { aktivesProfilLesen, dateiAnbieten, aktivesProfilSetzen, profileLaden, profilLoeschen, profilSpeichern, profilArchivieren } from "./speicher/speicher";
 import { MeldungAnsicht } from "./ui/Meldung";
@@ -68,6 +69,8 @@ function neueMeldung(p: Profil): Meldung {
   setzeWert(d, r.status_feld, r.status_entwurf);
   for (const [k, v] of Object.entries(p.manifest.variablen)) if (holeWert(d, k) !== undefined) setzeWert(d, k, v);
   if (r.meldezeitpunkt && holeWert(d, r.meldezeitpunkt) !== undefined) setzeWert(d, r.meldezeitpunkt, jetztLokal(p.manifest.variablen.zeitzone));
+  // LEAD-Meldung-v2 (seit 0.9.0): Formatfassung, meldung_id, Zeitzone und t0 mit UTC-Versatz
+  v2KopfSetzen(d, p.manifest.variablen.zeitzone || undefined, r.meldezeitpunkt ? jetztLokal(p.manifest.variablen.zeitzone) : undefined);
   const liste = d[r.sachverhalte];
   if (Array.isArray(liste) && liste.length === 0) {
     const el = leererWert(p.schema.properties?.[r.sachverhalte]?.items, p.schema);

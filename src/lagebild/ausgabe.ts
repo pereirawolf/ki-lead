@@ -3,7 +3,7 @@
 import { handlungsbedarfTextV2, kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { aufloesen } from "../kern/schema";
 import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
+import { bezeichnung, rollenBezeichnung, feldUi, istAusgeblendet, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
 import { quellenFuerSachverhalt, sachverhalte } from "../kern/quellen";
 import { datumDE } from "../kern/ausgabe";
 import { listeAlsText } from "../kern/listen";
@@ -267,7 +267,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     if (r.sv_tendenz) teile.push(`${quadrat(farbeTendenz(profil, s.tendenz))}<b>${html(s.tendenz || "keine Angabe")}</b>`);
     const label = [r.sv_beurteilung, r.sv_tendenz]
       .filter(Boolean)
-      .map((p) => bezeichnung(ui, `${sv}.${p}`))
+      .map((p) => rollenBezeichnung(ui, `${sv}.${p}`))
       .join(" & ");
     const text = s.bewertungText.trim() ? `${teile.length ? "<br><br>" : ""}${html(gliedereBewertung(s.bewertungText, ui))}` : "";
     zeile(label || bezeichnung(ui, `${sv}.${r.sv_bewertung_text}`), teile.join(" &nbsp;/&nbsp; ") + text);

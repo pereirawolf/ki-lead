@@ -13,7 +13,7 @@
   },
   "material": [
     {
-      "datei": "evaluation/material/ilka-musterfassung.json",
+      "datei": "evaluation/material/ilka-musterfassung.v2.json",
       "rolle": "meldung",
       "hinweis": "Feste Musterfassung (LEAD-Meldung-v1, zwei Sachverhalte); die App beschädigt sie je Fall nach den Defekten R1–R5 (src/pipeline/reparaturtest.ts). Prüfsumme im Plan reparatur-ilka."
     },

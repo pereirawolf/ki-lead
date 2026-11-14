@@ -5,7 +5,7 @@
 
 import { holeWert } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
-import { feldUi, radarFuer } from "../kern/ui";
+import { feldUi, radarFuer, radarWerte } from "../kern/ui";
 import type { Meldung, Profil, RadarDef } from "../kern/typen";
 
 export interface SvKurz {
@@ -108,9 +108,10 @@ function kurz(m: Meldung, profil: Profil): SvKurz[] {
   const t = (sv: any, p?: string) => (p ? String(holeWert(sv, p) ?? "") : "");
   return sachverhalte(m, profil.ui).map((sv, index) => {
     const art = r.sv_art ? holeWert(sv, r.sv_art) : [];
-    const roh = r.sv_radar ? holeWert(sv, r.sv_radar) || {} : {};
+    // Achsen als Zahl (v1) oder als Objekt mit Stufe (LEAD-Meldung-v2, seit 0.9.0)
+    const roh = radarWerte(r.sv_radar ? holeWert(sv, r.sv_radar) : undefined);
     const radar: Record<string, number | null> = {};
-    for (const a of def?.achsen || []) radar[a.key] = Number.isInteger(roh[a.key]) ? roh[a.key] : null;
+    for (const a of def?.achsen || []) radar[a.key] = roh[a.key] ?? null;
     return {
       index,
       bezeichnung: t(sv, r.sv_bezeichnung),
@@ -128,6 +129,8 @@ function kurz(m: Meldung, profil: Profil): SvKurz[] {
  */
 export function kernaussage(sv: any, profil: Profil): string {
   const r = profil.ui.rollen;
+  // LEAD-Meldung-v2 (seit 0.9.0): Kernaussage als eigenes Feld
+  if (!r.sv_bewertung_text && typeof sv?.bewertung?.kernaussage === "string") return sv.bewertung.kernaussage;
   const t = r.sv_bewertung_text ? String(holeWert(sv, r.sv_bewertung_text) ?? "") : "";
   return (t.split("\n")[0] ?? "").replace(/^\s*Kernaussage:\s*/i, "").split(/\s+Referenzraum:/)[0] ?? "";
 }

@@ -1,7 +1,7 @@
 {
   "format": "ki-lead-bewertungsplan/1",
   "id": "management-summary-ilka",
-  "stand": "2026-10-25",
+  "stand": "2026-11-14",
   "fragestellung": "Wie gut fassen die KI-Profile dieselbe fertige Meldung für die Behördenleitung zusammen? Alle Varianten erhalten die Musterfassung Ilka (meldung_fest) als einzige Eingabe; S1 und S2 entfallen. Geprüft werden die Muss- und Darf-nicht-Punkte des Falls, die Richtwerte der App (Hinweise der Kurzfassung) und die Treue zur Meldung (keine neuen Angaben, Mindestwert erhalten, offene Aufgaben offen); Kosten und Dauer werden berichtet, entscheiden aber nicht. Kein Gesamtwert.",
   "faelle": [
     "ilka-management-summary"
@@ -59,8 +59,8 @@
   "wiederholungen": 3,
   "budget_usd": 5,
   "meldung_fest": {
-    "datei": "evaluation/material/ilka-musterfassung.json",
-    "sha256": "953f7682838c10f84458312bc563cf9d0f17b16bd715fd27ad9cb26ff84de4cf"
+    "datei": "evaluation/material/ilka-musterfassung.v2.json",
+    "sha256": "db14650f85782850827d125ff794203a05567e84ed428a73636667bd6263d92e"
   },
-  "hinweis": "Durchführung nur auf ausdrücklichen Auftrag, seit App 0.5.12 in der App (Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Umfang „MS (aus Musterfassung)“, Konfiguration „Plan management-summary-ilka, Variante …“, Anzahl 3; Ergebnis als ZIP) oder über das Skript evaluation/abnahmen/kurzfassung.lauf.ts: Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_KURZFASSUNG, KI_LEAD_AUFWAND_KURZFASSUNG, KI_LEAD_VARIANTE=management-summary-ilka/<Kennung>, KI_LEAD_LAEUFE=3, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts evaluation/abnahmen/kurzfassung.lauf.ts; Mistral über den EU-Endpunkt. Ergebnisse unter privat/kurzfassung-ilka/ (nicht eingecheckt). Ein Aufruf je Lauf; Kosten je Lauf nach Listenpreisen grob 0,02 bis 0,30 USD, ohne Gewähr. Fassung 2 vom 25.10.2026 (AV-2026-W43-38): Variante F (mistral-large-4 „high“) nachträglich aufgenommen, nachdem Variante E Faktenfehler zeigte; die Läufe aller Varianten vom 25.10.2026 wurden mit „Aktuelle Einstellungen“ gestartet und tragen keine Variantenkennung. Ergebnis: evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md."
+  "hinweis": "Durchführung nur auf ausdrücklichen Auftrag, seit App 0.5.12 in der App (Einstellungen → Modelle & Verarbeitung → Vergleichslauf Ilka, Umfang „MS (aus Musterfassung)“, Konfiguration „Plan management-summary-ilka, Variante …“, Anzahl 3; Ergebnis als ZIP) oder über das Skript evaluation/abnahmen/kurzfassung.lauf.ts: Schlüssel des Anbieters, KI_LEAD_ANBIETER, KI_LEAD_MODELL_KURZFASSUNG, KI_LEAD_AUFWAND_KURZFASSUNG, KI_LEAD_VARIANTE=management-summary-ilka/<Kennung>, KI_LEAD_LAEUFE=3, dann npx vitest run --config evaluation/abnahmen/vitest.config.ts evaluation/abnahmen/kurzfassung.lauf.ts; Mistral über den EU-Endpunkt. Ergebnisse unter privat/kurzfassung-ilka/ (nicht eingecheckt). Ein Aufruf je Lauf; Kosten je Lauf nach Listenpreisen grob 0,02 bis 0,30 USD, ohne Gewähr. Fassung 2 vom 25.10.2026 (AV-2026-W43-38): Variante F (mistral-large-4 „high“) nachträglich aufgenommen, nachdem Variante E Faktenfehler zeigte; die Läufe aller Varianten vom 25.10.2026 wurden mit „Aktuelle Einstellungen“ gestartet und tragen keine Variantenkennung. Ergebnis: evaluation/abnahmen/2026-10-25-management-summary-ilka-ergebnis.md. Fassung 3 vom 14.11.2026 (UP-2026-W45-06): Mit der Umstellung des Beispielprofils auf LEAD-Meldung-v2 ist die feste Meldung die v2-Fassung der Musterfassung (evaluation/material/ilka-musterfassung.v2.json, neue Prüfsumme); die v1-Fassung bleibt für frühere Läufe im Repository. Läufe vor dieser Fassung sind mit späteren nicht unmittelbar vergleichbar."
 }

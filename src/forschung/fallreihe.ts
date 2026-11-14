@@ -7,6 +7,8 @@
 import type { Fortschritt, LlmAnbieter } from "../anbieter/typen";
 import { anbieterVon, type AnbieterId } from "../anbieter/verteiler";
 import { ausfuellHinweise } from "../kern/kennsaetze";
+import { vergleicheZeit } from "../kern/meldung-v2.js";
+import { istV2 } from "../kern/referenzen";
 import { holeWert } from "../kern/pfad";
 import { parseQuellen, sachverhalte, svTexte } from "../kern/quellen";
 import { feldUi, radarFuer, radarWerte } from "../kern/ui";
@@ -173,6 +175,19 @@ function tendenzGesetzt(wert: unknown): boolean {
   return typeof wert === "string" ? !!wert.trim() : false;
 }
 
+/**
+ * Fristen vor t0 in einer Meldung nach LEAD-Meldung-v2 (seit 0.9.0): Fristen der Sachverhalte und der übergreifenden
+ * Lage, deren Zeitpunkt vor dem Meldezeitpunkt liegt; bei v1 zählt der Hinweis des Redaktionschecks auf den Kennsatz.
+ */
+function fristenVorT0V2(meldung: Meldung, zone: string): number {
+  const m = meldung as any;
+  const listen = [
+    ...(Array.isArray(m.sachverhalte) ? m.sachverhalte : []).map((s: any) => s?.handlungsbedarf?.fristen),
+    m.uebergreifende_lage?.handlungsbedarf?.fristen,
+  ];
+  return listen.flatMap((f) => (Array.isArray(f) ? f : [])).filter((f: any) => vergleicheZeit(f?.bis, m.meldezeitpunkt, zone) === -1).length;
+}
+
 export function pruefungen(l: Lauf, meldung: Meldung | undefined, profil: Profil, schaetzung: [number, number] | null): Pruefungen {
   const ui = profil.ui;
   const r = ui.rollen;
@@ -181,6 +196,7 @@ export function pruefungen(l: Lauf, meldung: Meldung | undefined, profil: Profil
   const s2 = l.stufen.filter((s) => s.stufe.startsWith("S2"));
   const recherche = l.ergebnis?.recherche ?? rechercheNachweis({ nutzung: s2[s2.length - 1]?.nutzung, suchen: l.ergebnis?.suchen });
   const fristPruefbar = !!meldung && !!ui.kennsaetze?.handlungsrelevant && !!r.sv_bewertung_text;
+  const v2Meldung = meldung && istV2(meldung) ? meldung : undefined;
   const radar = radarKennzahlen(meldung, profil);
   return {
     status: l.status,
@@ -189,9 +205,11 @@ export function pruefungen(l: Lauf, meldung: Meldung | undefined, profil: Profil
     kosten_usd: l.kostenUsd ?? l.kostenBekanntUsd ?? null,
     schaetzung_usd: schaetzung,
     dauer_s: Math.round((Date.parse(l.aktualisiert) - Date.parse(l.erstellt)) / 1000),
-    fristen_vor_t0: fristPruefbar
-      ? ausfuellHinweise(meldung, ui, profil.manifest.variablen?.zeitzone, profil.manifest.referenzraum).filter((b) => b.text.includes(FRIST_HINWEIS)).length
-      : null,
+    fristen_vor_t0: v2Meldung
+      ? fristenVorT0V2(v2Meldung, (v2Meldung as { zeitzone?: string }).zeitzone ?? profil.manifest.variablen?.zeitzone ?? "Europe/Berlin")
+      : fristPruefbar
+        ? ausfuellHinweise(meldung, ui, profil.manifest.variablen?.zeitzone, profil.manifest.referenzraum).filter((b) => b.text.includes(FRIST_HINWEIS)).length
+        : null,
     sachverhalte: meldung ? sv.length : null,
     tendenz_gesetzt:
       meldung && tendenzPfad && sv.length ? Math.round((sv.filter((s) => tendenzGesetzt(holeWert(s, tendenzPfad))).length / sv.length) * 1000) / 1000 : null,

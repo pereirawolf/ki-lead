@@ -13,7 +13,7 @@
   },
   "material": [
     {
-      "datei": "evaluation/material/ilka-musterfassung.json",
+      "datei": "evaluation/material/ilka-musterfassung.v2.json",
       "rolle": "meldung",
       "hinweis": "Feste Musterfassung (LEAD-Meldung-v1, zwei Sachverhalte), konsolidiert aus 21 Läufen der Vergleichsreihen A–G; alle Varianten erhalten genau diese Meldung. Prüfsumme im Plan management-summary-ilka."
     }

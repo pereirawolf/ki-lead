@@ -4,7 +4,7 @@
 // `s1Vergleich` bleiben statisch eingebunden, weil die Auswahl unter „Testläufe“ und die Prüfpunkte sie ohne Warten brauchen.
 
 export interface MusterTexte {
-  /** evaluation/material/ilka-musterfassung.json als Text (die Prüfsumme gilt für die Datei im Repository) */
+  /** evaluation/material/ilka-musterfassung.v2.json als Text (seit 0.9.0 die v2-Fassung; die Prüfsumme gilt für die Datei im Repository) */
   muster: string;
   /** evaluation/material/ilka-s1-zuschnitt-a.json als Text */
   zuschnitt: string;
@@ -15,7 +15,7 @@ let geladen: Promise<MusterTexte> | undefined;
 /** Musterfassung und Zuschnitt als Text, einmal je Sitzung geladen */
 export function musterTexte(): Promise<MusterTexte> {
   geladen ??= Promise.all([
-    import("../../evaluation/material/ilka-musterfassung.json?raw"),
+    import("../../evaluation/material/ilka-musterfassung.v2.json?raw"),
     import("../../evaluation/material/ilka-s1-zuschnitt-a.json?raw"),
   ]).then(([m, z]) => ({ muster: m.default, zuschnitt: z.default }));
   return geladen;
