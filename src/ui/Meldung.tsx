@@ -270,7 +270,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
           <ProfilZeile profil={profil} />
           {zwischenstand && <p className="zwischenstand">Zwischenstand automatisch gesichert: {zwischenstand}</p>}
           {meldungen && (
-            <div ref={statusRef} className={`kasten kasten-${meldungen.art}`} role="status">
+            <div ref={statusRef} className={`kasten kasten-${meldungen.art}`} role={meldungen.art === "fehler" ? "alert" : "status"}>
               <ul>
                 {meldungen.zeilen.map((z, i) => (
                   <li key={i}>{z}</li>

@@ -640,7 +640,10 @@ function SchluesselAbschnitt({
             : "Kein Schlüssel hinterlegt."}
       </p>
       {test && (
-        <div className={`kasten ${test.art === "ok" ? "kasten-ok" : test.art === "fehler" ? "kasten-fehler" : "kasten-info"}`} role="status">
+        <div
+          className={`kasten ${test.art === "ok" ? "kasten-ok" : test.art === "fehler" ? "kasten-fehler" : "kasten-info"}`}
+          role={test.art === "fehler" ? "alert" : "status"}
+        >
           <p>{test.text}</p>
         </div>
       )}
@@ -758,7 +761,10 @@ function OllamaAbschnitt({ e, setEinstellungen }: { e: E; setEinstellungen: (e: 
       </div>
       <p className="material-meta">{geaendert ? "Eingabe geändert, noch nicht gespeichert." : "Gespeichert."}</p>
       {test && (
-        <div className={`kasten ${test.art === "ok" ? "kasten-ok" : test.art === "fehler" ? "kasten-fehler" : "kasten-info"}`} role="status">
+        <div
+          className={`kasten ${test.art === "ok" ? "kasten-ok" : test.art === "fehler" ? "kasten-fehler" : "kasten-info"}`}
+          role={test.art === "fehler" ? "alert" : "status"}
+        >
           <p>{test.text}</p>
         </div>
       )}

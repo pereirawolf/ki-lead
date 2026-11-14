@@ -530,7 +530,7 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
       </div>
 
       {bericht && (
-        <div className={`kasten ${bericht.ok ? "kasten-ok" : "kasten-fehler"}`} role="status">
+        <div className={`kasten ${bericht.ok ? "kasten-ok" : "kasten-fehler"}`} role={bericht.ok ? "status" : "alert"}>
           <h3>
             {bericht.ok
               ? `Profil importiert: ${bericht.name ?? bericht.schluessel}${bericht.version ? `, Profilversion ${bericht.version}` : ""}`

@@ -291,3 +291,16 @@ test.describe("TP-2026-W44-22: axe-core je Bereich ohne Verstöße gegen WCAG 2.
     expect(v).toEqual([]);
   });
 });
+
+// KP-2026-W46-02 (Grunddesign LD-M01, seit 0.8.1): Ein Fehler beim Öffnen einer Meldung steht im Kasten „Fehler“ mit der
+// Rolle alert und wird sofort angesagt; bis 0.8.0 trug der Kasten auch dann die Rolle status.
+test("KP-2026-W46-02: ungültige Datei in der Erfassung erscheint als Fehler mit Rolle alert", async ({ page }) => {
+  await oeffnen(page);
+  await page
+    .locator('.werkzeugleiste input[type="file"]')
+    .first()
+    .setInputFiles({ name: "kaputt.json", mimeType: "application/json", buffer: Buffer.from("{ kein JSON") });
+  const kasten = page.getByRole("alert").filter({ hasText: "kaputt.json ist keine gültige JSON-Datei." });
+  await expect(kasten).toBeVisible();
+  await expect(kasten).toHaveClass(/\bkasten-fehler\b/);
+});
