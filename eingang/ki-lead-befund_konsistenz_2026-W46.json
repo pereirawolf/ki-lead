@@ -1,0 +1,294 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "konsistenzpruefer",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-14T13:55:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "edbac393db25e7bc77694a5bc66860c24042f2d5",
+  "pruefumfang": "Auf Hinweis des Herausgebers eingegrenzt: Grunddesign (design/rahmen.json, Fassung 1.9) und seine Referenzumsetzung zu LD-A03, LD-M01, LD-F05, LD-A01, LD-E04 und LD-M04, Anlass Abgleich von KRITIS-LEAD 0.3.7 (docs/design-abweichungen.md, Vorschläge V1–V6). Kein Wechselbereich. src/styles/basis.css, Meldung.tsx, Profile.tsx, Einstellungen.tsx und design/ vollständig gelesen; übrige src/ui/*.tsx per grep nach Kästen und Rollen. Ausgeführt: npm ci (ok), npm test (1900 bestanden, 1 übersprungen); Browsermessung zu LD-A03 mit Build 167bc55 (Stile bis edbac39 unverändert). Offene Befunde: 0; Staugrenze nicht aktiv",
+  "nicht_geprueft": [
+    "Wechselbereich nach Z modulo 3 und in den letzten 28 Tagen geänderte Dateien unter profile/ und docs/: auf Hinweis ausgelassen",
+    "Browsermessung der Schrittleiste in KI-Erfassung und Einstellungen: nur statisch (gleiche Klasse und gleiches Raster wie die Erfassung)"
+  ],
+  "befunde": [
+    {
+      "id": "KP-2026-W46-01",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "Arbeitsbereich mit Schritten (Z. 396–411): .arbeitsbereich, .schritte ol",
+          "ist": ".arbeitsbereich { … align-items: start; } .schritte ol { … position: sticky; top: calc(var(--kopf-hoehe, 4.5rem) + 0.75rem); }"
+        },
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Z. 286: <nav className=\"schritte\" aria-label=\"Schritte\">",
+          "ist": "<nav className=\"schritte\" aria-label=\"Schritte\"> <ol> …"
+        },
+        {
+          "datei": "tests/browser/hinweisband.spec.ts",
+          "stelle": "Test „Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich“ (Z. 133–143)",
+          "ist": "const oben = await page.locator(\".meldung .schritte ol\").evaluate((ol) => parseFloat(getComputedStyle(ol).top));"
+        }
+      ],
+      "beobachtung": "Widerspruch: LD-A03 verlangt eine mitlaufende Leiste (15 rem, links); die Referenzumsetzung lässt sie mit der Seite aus dem Bild rollen. Bedingung: Breite über 860 px, Schritt länger als das Fenster. Die Liste ist sticky, ihr Element nav ist im Raster mit align-items: start aber nur so hoch wie die Liste und begrenzt sie. Gilt ebenso für die Stufen der KI-Erfassung (src/ui/KiErfassung.tsx, Z. 401) und die Bereiche der Einstellungen (src/ui/Einstellungen.tsx, Z. 1209). Auswirkung: Bei langen Schritten ist die Schrittleiste mit den Befundmarken nicht zu sehen. Maßgeblich: LD-A03 (Regel des Grunddesigns; KRITIS-LEAD 0.3.7 erfüllt sie mit derselben Ergänzung). Prüfweg: Ausführung (Build 167bc55, vite preview, Playwright Chromium 1280 × 600 px, #/meldung, 440 px gescrollt); Ergebnis: Oberkante der Liste von 233 px auf −221 px, Kopfbereich endet bei 95 px. basis.css und Meldung.tsx sind bis edbac39 unverändert. Der vorhandene Test misst nur den berechneten Wert von top, nicht die Lage. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V1 … Schrittleiste läuft auf breiten Bildschirmen nicht mit"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "In src/styles/basis.css nach .arbeitsbereich die Leiste über die ganze Höhe des Arbeitsbereichs strecken, damit die stehende Liste darin Platz hat; unter 860 px ohne Wirkung (eine Spalte). Den Browsertest um eine Messung der Lage nach dem Scrollen ergänzen, in der Mitte eines langen Schritts (am Ende des Arbeitsbereichs schiebt dessen Ende die Liste regelgerecht nach oben). Abnahme: Bei 1280 × 600 px steht die Oberkante der Liste nach dem Scrollen in der Mitte des Schritts 0 bis 24 px unter dem Kopfbereich, in Erfassung, KI-Erfassung und Einstellungen.",
+        "neuer_text": "/* Die Leiste läuft mit (LD-A03): nav reicht über die ganze Höhe des Arbeitsbereichs, damit die stehende Liste darin Platz hat */\n.arbeitsbereich > .schritte {\n  align-self: stretch;\n}"
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md",
+        "docs/TESTZUORDNUNG.md",
+        "Versionsangaben (Patch)"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/browser/hinweisband.spec.ts: Lage der Liste (getBoundingClientRect().top) nach dem Scrollen in die Mitte eines langen Schritts gegen die Unterkante des Kopfbereichs, je Ansicht mit Schrittleiste",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W46-02",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Meldung.tsx",
+          "stelle": "Statuskasten nach „Meldung öffnen“ (Z. 273)",
+          "ist": "<div ref={statusRef} className={`kasten kasten-${meldungen.art}`} role=\"status\">"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Prüfbericht beim Import (Z. 533)",
+          "ist": "<div className={`kasten ${bericht.ok ? \"kasten-ok\" : \"kasten-fehler\"}`} role=\"status\">"
+        },
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "Ergebnis der Verbindungstests (Z. 643 und Z. 761)",
+          "ist": "test.art === \"fehler\" ? \"kasten-fehler\" : \"kasten-info\"}`} role=\"status\">"
+        }
+      ],
+      "beobachtung": "Widerspruch: LD-M01 verlangt für Fehler die Rolle alert; vier Kästen wechseln ihre Art je nach Ergebnis und tragen auch als kasten-fehler die Rolle status. Bedingung: Fehler beim Öffnen einer Meldung („… ist keine gültige JSON-Datei“), fehlgeschlagener Profilimport, fehlgeschlagener Verbindungstest. Feste Fehlerkästen tragen bereits alert (Fehlergrenze.tsx, Kurzfassung.tsx, Lagebild.tsx, Farbschema.tsx). Auswirkung: Bildschirmleser sagen den Fehler höflich statt sofort an; die Referenz verfehlt die eigene Regel. Maßgeblich: LD-M01. Prüfweg: statisch (grep nach kasten-fehler mit role=\"status\"); Ergebnis: vier Fundstellen. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V2 … trägt auch als Fehler die Rolle status"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "An den vier Stellen die Rolle aus der Art ableiten: alert bei Fehler, sonst status. Abnahme: Ein Komponententest öffnet eine ungültige Datei in der Erfassung und findet den Kasten über getByRole(\"alert\"); ein statischer Test findet keinen kasten-fehler mehr mit role=\"status\".",
+        "neuer_text": "role={meldungen.art === \"fehler\" ? \"alert\" : \"status\"}"
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md",
+        "docs/BARRIEREFREIHEIT.md (falls die Rollen dort genannt sind)",
+        "docs/TESTZUORDNUNG.md"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/lead-design.test.ts: kein Element mit kasten-fehler (auch bedingt) und role=\"status\" in src/ui/**/*.tsx",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W46-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-F05] (Z. 117); erzeugt die Tabelle in design/README.md",
+          "ist": "Die Vorgabe „Automatisch“ folgt hell und dunkel des Systems und bei „mehr Kontrast“ dem Kontrastschema."
+        }
+      ],
+      "beobachtung": "Lücke: LD-F05 sagt nicht, welches helle Schema „Automatisch“ verwendet. KI-LEAD löst es mit „Neutral · Hell“ auf (src/darstellung/thema.ts, aufloesen); KRITIS-LEAD bettet sein Profil beim Bau ein und verwendet hell dessen Schema. LD-F01 legt das Profilschema als festes Schema nur für Apps ohne Wahl unter „Darstellung“ fest; KRITIS-LEAD hat die Wahl seit 0.3.6. Bedingung: App mit beim Bau eingebettetem Profil und Wahl. Auswirkung: offene Frage in KRITIS-LEAD; Entscheidung des Herausgebers vom 14.11.2026, das Verhalten bis zur Regelung beizubehalten. Maßgeblich: Entscheidung des Herausgebers. Prüfweg: statisch. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V3 … „Automatisch“ hell das Schema des Profils"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "LD-F05 um einen Satz ergänzen (Grunddesign 1.10); KI-LEAD bleibt unberührt, weil es kein Profil beim Bau einbettet. Abnahme: rahmen.json und design/README.md (npm run design:tokens) nennen den Satz; Fassung 1.10 im Änderungsverlauf.",
+        "neuer_text": "Die Vorgabe „Automatisch“ folgt hell und dunkel des Systems und bei „mehr Kontrast“ dem Kontrastschema. Bettet eine App ihr Profil beim Bau ein, verwendet „Automatisch“ hell das Schema des Profils (LD-F01), auch wenn die App eine Wahl unter „Darstellung“ bietet. Erzwungene Farben (forced-colors) werden mit Systemfarben unterstützt."
+      },
+      "folgeaenderungen": [
+        "design/README.md (erzeugt)",
+        "design/README.md Änderungsverlauf Fassung 1.10",
+        "rahmen.json fassung",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "(A) LD-F05 wie vorgeschlagen ergänzen: Profilschema hell bei beim Bau eingebettetem Profil. (B) „Automatisch“ in allen Apps gleich als „Neutral · Hell“ auflösen; KRITIS-LEAD passt sich an.",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W46-04",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-A01] (Z. 106); erzeugt die Tabelle in design/README.md",
+          "ist": "Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs."
+        }
+      ],
+      "beobachtung": "Lücke: Für die Startseite einer App aus mehreren Seiten (LD-N01, seit Fassung 1.2) regelt LD-A01 nicht, ob die h1 den Bereichsnamen „Start“ tragen muss und wo die Aktionen stehen. KRITIS-LEAD nennt dort den Gegenstand („Betreiber- und Behördenmeldungen in einem Lagebild“) und führt drei Einstiege als Karten mit je einem Knopf. Bedingung: App aus mehreren Seiten. Auswirkung: offene Frage in KRITIS-LEAD. Maßgeblich: Entscheidung des Herausgebers. Prüfweg: statisch. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V4 … Startseite einer App aus mehreren Seiten"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "LD-A01 um einen Satz ergänzen (Grunddesign 1.10). Abnahme: rahmen.json und design/README.md nennen den Satz.",
+        "neuer_text": "Jeder Bereich beginnt mit einem Seitenkopf: Überschrift h1 mit dem Bereichsnamen, Kennsatz in einem Satz und rechts den Aktionen des Bereichs. Die Startseite einer App aus mehreren Seiten (LD-N01) kann statt des Bereichsnamens den Gegenstand der App als h1 nennen; ihre Aktionen können als Einstiege unter dem Seitenkopf stehen, je Einstieg ein Knopf. Arbeitet die App mit Profilen, steht darunter die Profilzeile mit Name und Fassung des aktiven Profils und einem Verweis auf „Profile“."
+      },
+      "folgeaenderungen": [
+        "design/README.md (erzeugt)",
+        "Änderungsverlauf Fassung 1.10",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "(A) LD-A01 wie vorgeschlagen ergänzen. (B) Auch die Startseite trägt den Bereichsnamen „Start“ als h1 und Aktionen rechts; KRITIS-LEAD passt sich an.",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W46-05",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-E04] (Z. 131); erzeugt die Tabelle in design/README.md",
+          "ist": "Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld …"
+        }
+      ],
+      "beobachtung": "Mehrdeutigkeit: Unklar ist, ob jede App alle drei Stufen führen muss oder nur keine anderen verwenden darf, und ob die Oberfläche eine Stufe anders benennen darf. Das Betreiberformular von KRITIS-LEAD kennt Fehler und Warnungen; Warnungen heißen dort „Hinweise zur Stimmigkeit“, ihr zugänglicher Name nennt „Warnung“. Die Stufe Hinweis entsteht nur im Prüfwerkzeug beim Abgleich mehrerer Dateien. Auswirkung: offene Frage in KRITIS-LEAD. Maßgeblich: Entscheidung des Herausgebers. Prüfweg: statisch. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V5 … nicht alle drei führen"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "LD-E04 um einen Satz ergänzen (Grunddesign 1.10). Abnahme: rahmen.json und design/README.md nennen den Satz.",
+        "neuer_text": "Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Eine App verwendet keine anderen Stufen, muss aber nicht alle drei führen; die Oberfläche kann eine Stufe sprechend benennen (etwa „Hinweise zur Stimmigkeit“ für Warnungen), wenn der zugängliche Name die Stufe nennt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht."
+      },
+      "folgeaenderungen": [
+        "design/README.md (erzeugt)",
+        "Änderungsverlauf Fassung 1.10",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "(A) LD-E04 wie vorgeschlagen klarstellen. (B) Jede App führt alle drei Stufen mit den Namen Fehler, Warnung und Hinweis; KRITIS-LEAD benennt um und ergänzt Hinweise.",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KP-2026-W46-06",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "design/rahmen.json",
+          "stelle": "regeln[id=LD-M04] (Z. 135); erzeugt die Tabelle in design/README.md",
+          "ist": "Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; nicht freigegebene Ausgaben tragen „ENTWURF“."
+        }
+      ],
+      "beobachtung": "Mehrdeutigkeit: Der zweite Halbsatz lässt offen, ob „ENTWURF“ nur für Ausgaben mit KI gilt oder für jede Ausgabe vor der Freigabe. Das Betreiberformular von KRITIS-LEAD (ohne KI) gibt seit der Umstellung auf LEAD-Meldung-v2 eine Meldung mit status „zur_freigabe“ aus und druckt die Zusammenfassung jederzeit, beides ohne „ENTWURF“. Auswirkung: offene Frage in KRITIS-LEAD; je nach Lesart auch Folgen für die manuelle Erfassung in KI-LEAD. Maßgeblich: Entscheidung des Herausgebers. Prüfweg: statisch. Herkunft: nicht ermittelt.",
+      "belege": [
+        {
+          "url": "https://github.com/pereirawolf/kritis-lead/blob/03acc8b79e9d6c5d0be872c71098b9907c67df93/docs/design-abweichungen.md#vorschläge-für-das-grunddesign",
+          "herausgeber": "Heiko Pereira Wolf (KRITIS-LEAD)",
+          "titel": "KRITIS-LEAD – Abweichungen vom Grunddesign der App-Familie, Fassung 1.7",
+          "fassung_oder_stand": "KRITIS-LEAD 0.3.7, Commit 03acc8b",
+          "abgerufen_utc": "2026-11-14T13:50:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "V6 … ENTWURF gilt für Ausgaben, an denen eine KI mitgewirkt hat"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "LD-M04 klarstellen (Grunddesign 1.10). Abnahme: rahmen.json und design/README.md nennen die neue Fassung.",
+        "neuer_text": "Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; solange sie nicht freigegeben sind, tragen sie „ENTWURF“. Für Ausgaben ohne KI genügt der maschinenlesbare Status (etwa status „zur_freigabe“ in LEAD-Meldung-v2)."
+      },
+      "folgeaenderungen": [
+        "design/README.md (erzeugt)",
+        "Änderungsverlauf Fassung 1.10",
+        "docs/KI-VERORDNUNG.md prüfen",
+        "CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "(A) LD-M04 wie vorgeschlagen auf Ausgaben mit KI beschränken. (B) Jede nicht freigegebene Ausgabe trägt „ENTWURF“, auch ohne KI; KRITIS-LEAD kennzeichnet Datei und Ausdruck.",
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Feste Fehlerkästen tragen die Rolle alert (Fehlergrenze.tsx, Kurzfassung.tsx, Lesetext.tsx, Einstellungen.tsx Z. 534, Farbschema.tsx, Lagebild.tsx)",
+    "LD-A07 in der Erfassung: Schrittleiste behält den Fokus, Blättern setzt ihn auf die Überschrift (Meldung.tsx, schrittWaehlen, schrittBlaettern)",
+    "LD-R06: sichere Bereiche in basis.css an Kopf, Hinweisband, Inhalt und Fuß; viewport-fit=cover in index.html"
+  ]
+}
