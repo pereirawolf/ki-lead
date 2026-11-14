@@ -124,8 +124,15 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.8.2 | letzter Commit des Pull Requests „Kennzahlen-Bausteine in Lagebild und Verdichtung (UP-2026-W45-05); 0.8.2“ |
 | 0.8.3 | letzter Commit des Pull Requests „Paket 6, Teil App: Redaktionscheck auf v2-Feldern, übergreifende Lage, Eingangsschema (UP-2026-W45-06); 0.8.3“ |
 | 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
-| 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ |
+| 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ (Nachtrag vom 14.11.2026: Pull Request „LEAD-Meldung-v2: offener Punkt 2 erledigt (Kosten und Fehlerquote)“, ohne Änderung der App) |
 ## [0.9.1] – 14.11.2026
+
+### Nachtrag vom 14.11.2026 (ohne Änderung der App)
+
+Grundlage: Ergebnisbericht [evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md](evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md) (Pull Request #175). Entscheidungen des Herausgebers vom 14.11.2026: offener Punkt 2 wird als erledigt geschlossen, v2 ist bei Kosten und Fehlerquote vertretbar; die Übergabe des Eingangsmaterials an S1 und S2 ohne Einrückung wird ein eigener Befund (zur Freigabe vorgelegt, nicht umgesetzt). Das Befundregister bleibt unverändert: Hinter offenem Punkt 2 steht keine Befund-ID, und offene Befunde stehen nicht im Register.
+
+- [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md), Nachtrag 13: offener Punkt 2 (Ausgabeschema für die KI) erledigt, mit Ergebnis und Verweis auf den Bericht; Format und Schemata unverändert.
+- `src/pipeline/ausgabeschema.ts`: Kopfkommentar nennt das Ergebnis statt des ausstehenden Vergleichslaufs (nur Kommentar).
 
 Grundlage: Vergleichslauf Ilka vor und nach der Umstellung auf LEAD-Meldung-v2 (offener Punkt 2 in [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md), entschieden am 14.11.2026), ausgeführt vom Herausgeber am 14.11.2026 mit App 0.8.3/Beispielprofil 1.44.0 und App 0.9.0/Beispielprofil 2.0.0, je drei Läufe (Läufe 20261114-201209-jfhj, -202340-i5q5, -203507-940l und 20261114-212312-o7hv, -213436-m8s6, -214703-7mqq). Laufprotokolle und Entwürfe bleiben außerhalb des Repositorys; hier stehen nur Kenndaten. Entscheidung des Herausgebers vom 14.11.2026: Ergebnisbericht und die beiden Nebenbefunde der Auswertung in einem Pull Request; offener Punkt 2 und das Befundregister werden erst nach seiner Freigabe fortgeschrieben. Dritte Stelle: Ergänzung der Forschungsfunktionen.
 
