@@ -371,14 +371,6 @@ function Befunde({ befunde }: { befunde: Befund[] }) {
   );
 }
 
-/** Scrollt zu einem Abschnitt der Karte und setzt den Fokus auf seine Überschrift (Sprungleiste). */
-function abschnittZeigen(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ block: "start", behavior: scrollVerhalten() });
-  el.focus({ preventScroll: true });
-}
-
 /** Befundstatus am Kartentitel; führt zum Prüfbericht. Seit UX-2026-W45-30 nur bei Fehlern oder Warnungen (bis dahin „✓ Geprüft“). */
 function BefundChip({ befunde, ziel }: { befunde: Befund[]; ziel: string }) {
   const zahl = befundZahl(befunde);
@@ -671,26 +663,6 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                 </dl>
               )}
               <KartenInhalt>
-                {p.profil && (
-                  <nav className="profil-sprungleiste" aria-label={`Abschnitte von Profil „${m?.name || p.schluessel}“`}>
-                    {[
-                      ["angaben", "Angaben"],
-                      ["lesen", "Lesen"],
-                      ["pruefen", "Prüfen"],
-                    ].map(([teil, text]) => (
-                      <a
-                        key={teil}
-                        href={`#${praefix}-${teil}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          abschnittZeigen(`${praefix}-${teil}`);
-                        }}
-                      >
-                        {text}
-                      </a>
-                    ))}
-                  </nav>
-                )}
                 {!p.profil && m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
                 {p.profil && (
                   <section className="profil-bereich profil-angaben" aria-labelledby={`${praefix}-angaben`}>
@@ -698,15 +670,9 @@ export function ProfileAnsicht({ profile, aktiv, aktivieren, importieren, loesch
                       Angaben
                     </h3>
                     {m?.beschreibung && <p className="profil-beschreibung">{m.beschreibung}</p>}
+                    {/* Ebene und Referenzraum stehen nur in der Eckdatenzeile (UX-2026-W45-28), nicht noch einmal hier;
+                        ebenso entfällt die Sprungleiste „Angaben · Lesen · Prüfen“ (seit UX-2026-W46-06) */}
                     <dl className="profil-daten">
-                      <div>
-                        <dt>Ebene</dt>
-                        <dd>{m?.ebene || "–"}</dd>
-                      </div>
-                      <div>
-                        <dt>Referenzraum</dt>
-                        <dd>{m?.referenzraum || "–"}</dd>
-                      </div>
                       <div className="profil-daten-breit">
                         <dt>SOPs und Bausteine</dt>
                         <dd>{sopAnzahl(p.profil)}</dd>

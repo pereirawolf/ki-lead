@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-11-06",
+  "stand": "2026-11-14",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -4279,6 +4279,157 @@
       "entschieden_am": "2026-11-06",
       "grund": "Vom Herausgeber am 06.11.2026 im Sammellauf KW 45 zurückgestellt; nach UP-2026-W45-05, dann gemeinsam mit KL-2026-W45-03/-04. Entscheidungsfrage überholt (KP-2026-W45-01/-02 in v1 umgesetzt, PR #131).",
       "wieder_vorlegen_ab": "2026-11-20"
+    },
+    {
+      "id": "UX-2026-W46-01",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, offene Stellen, Link „Erinnern“ (Z. 875–887)"
+        },
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, Kopf „Offen“ (Z. 866)"
+        }
+      ],
+      "kurz": "Erinnerung an eine offene Stelle mit Platzhalteradresse als „Text kopieren“ statt mailto an die Platzhalteradresse (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-02",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/basis.css",
+          "stelle": "@media (max-width: 640px), .hauptnav (Z. 636–650)"
+        },
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-reiter (Z. 146–154)"
+        }
+      ],
+      "kurz": "Reiter der Auswertung unter 640 px nicht stehend, mitlaufender Bereich auf 390 × 844 px höchstens 230 px (Variante B statt A, weil A der MUSS-Regel LD-N05 widerspricht).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-03",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-reiter ol, Randverlauf (Z. 156–170)"
+        },
+        {
+          "datei": "src/styles/formular.css",
+          "stelle": ".segment (Z. 155–164)"
+        }
+      ],
+      "kurz": "Randverlauf der Reiterleiste als Maske über den Reitern statt im Hintergrund der Liste, den die deckenden Reiter verdeckten.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-04",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "farbeTendenz (Z. 365–370)"
+        },
+        {
+          "datei": "design/README.md",
+          "stelle": "LD-F04 (Z. 147)"
+        },
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Abschnitt zu sv_beurteilung (Z. 138)"
+        }
+      ],
+      "kurz": "Mittlere Stufen der Tendenz grau statt gelb; Rot und Grün für Verschärfung und Entspannung bleiben (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-05",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/styles/profile.css",
+          "stelle": ".profil-details > summary (Z. 158–160)"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "summary der Lesebereiche (Z. 184, 294, 742)"
+        }
+      ],
+      "kurz": "Äußere Aufklappzeile der Profilkarte in der Schriftgröße der Karte, nicht kleiner als die inneren.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-06",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Sprungleiste in KartenInhalt (Z. 672–692)"
+        },
+        {
+          "datei": "src/ui/Profile.tsx",
+          "stelle": "Bereich „Angaben“, dl.profil-daten (Z. 700–712)"
+        }
+      ],
+      "kurz": "Profilkarte: Ebene und Referenzraum nicht doppelt im Bereich „Angaben“, Sprungleiste entfällt (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
+    },
+    {
+      "id": "UX-2026-W46-07",
+      "agent": "ux-pruefung",
+      "befunddatei": "ki-lead-befund_ux_2026-W46.json",
+      "commit": "c2868f712970f05feddea51f0f0ea0474f10226d",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Lagebild.tsx",
+          "stelle": "Meldestatus, gemeldete Stellen (Z. 901–915)"
+        },
+        {
+          "datei": "src/styles/lagebild.css",
+          "stelle": ".lb-status li, .lb-status-name, .lb-status-zahl (Z. 289–330)"
+        }
+      ],
+      "kurz": "Gemeldete Stellen im Meldestatus mit Namen in der ersten Zeile ohne Umbruch, Zeitpunkt und Alter darunter.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 167
     }
   ]
 }

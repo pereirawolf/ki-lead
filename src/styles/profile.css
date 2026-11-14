@@ -155,8 +155,10 @@
   margin-bottom: 0;
 }
 
+/* Äußere Aufklappzeile in der Schriftgröße der Karte wie die inneren („… lesen“, „Technische Angaben“), damit diese
+   nicht größer sind als sie (seit UX-2026-W46-05; bis 0.7.21 0,92 rem) */
 .profil-details > summary {
-  font-size: 0.92rem;
+  font-size: inherit;
 }
 
 .profil summary {
@@ -283,34 +285,6 @@
 .menue-eintrag:focus-visible {
   outline: 2px solid var(--amt);
   outline-offset: -2px;
-}
-
-/* Sprungleiste innerhalb einer geöffneten Profilkarte; bleibt unter dem Kopf der App stehen */
-.profil-sprungleiste {
-  position: sticky;
-  /* Höhe des Kopfs der App, gemessen in der Profilansicht (ein- oder zweizeilig je nach Breite) */
-  top: var(--kopf-hoehe, 4.5rem);
-  z-index: 5;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
-  margin: 0.5rem -0.5rem 0;
-  padding: 0.35rem 0.5rem;
-  background: var(--flaeche);
-  border-bottom: 1px solid var(--linie-zart);
-  font-size: 0.9rem;
-}
-
-.profil-sprungleiste a {
-  color: var(--lese-farbe);
-  font-weight: 700;
-  padding-block: 0.2rem;
-}
-
-@media (pointer: coarse) {
-  .profil-sprungleiste a {
-    padding-block: 0.6rem;
-  }
 }
 
 .profil-bereich h3 {

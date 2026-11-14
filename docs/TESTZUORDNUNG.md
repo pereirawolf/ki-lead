@@ -1162,7 +1162,7 @@ Angepasst mit geändertem Soll: `tests/ci/actions.test.ts` (18 statt 15 Einbindu
 |---|---|---|
 | LD-R04 als MUSS mit einheitlichem Wortlaut, Mittelpunkt mit geschützten Leerzeichen (kein Umbruch am Mittelpunkt), nicht ausblendbar; Fläche amt-tief, Text auf-amt-hover, keine Signalfarbe; Kopfbereich mitlaufend, kompakt ohne Abschneiden | Grunddesign: rahmen.json › LD-R04: einheitliches Hinweisband … | `tests/format/lead-design.test.ts` |
 | Hysterese 96 px (mindestens volle Bandhöhe über 8 px) und 8 px, Klasse „kompakt“ am Kopfbereich, Wortlaut bleibt | kompaktNach …, useKopfKompakt … | `tests/ui/kopfkompakt.test.ts` |
-| Im Browser (390 und 1280 px, Umbruch zusätzlich von 300 bis 1400 px): Hinweis mit Wortlaut, kein Umbruch am Mittelpunkt, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen schmaler, ganzer Wortlaut sichtbar (kein Abschneiden), Reiter der Auswertung unter dem Kopfbereich, am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
+| Im Browser (390 und 1280 px, Umbruch zusätzlich von 300 bis 1400 px): Hinweis mit Wortlaut, kein Umbruch am Mittelpunkt, Fläche in der tiefen Aktionsfarbe; nach dem Scrollen schmaler, ganzer Wortlaut sichtbar (kein Abschneiden), Reiter der Auswertung unter dem Kopfbereich (seit 0.7.22 nur ab 640 px, UX-2026-W46-02), am Seitenanfang wieder vollständig; kein Flackern knapp über der Schwelle; Schrittleiste nach der gemessenen Höhe | Hinweisband … | `tests/browser/hinweisband.spec.ts` |
 
 Angepasst ohne Änderung des Solls (Kopfbereich statt Kopfleiste als Bezug): `tests/ui/sprungziele.test.ts`, `tests/browser/ux-2026-w45.spec.ts`; `tests/browser/sprungziele.spec.ts` misst den Abstand ab dem Kopfbereich und liest die Stelle der KI-Erfassung, nachdem das Band schmaler geworden ist.
 
@@ -1211,3 +1211,17 @@ Angepasst mit geändertem Soll: `tests/pipeline/schaetzung.test.ts` (Messwerte, 
 | Soll | Test | Datei |
 |---|---|---|
 | Ein Schritt mit Befund trägt nur den Punkt in „kritisch“; keine Regel färbt Rand oder Ziffer der Nummer, kein Haken je Schritt; LD-A04 nennt den Punkt als einzige Markierung | Grunddesign › LD-A04: Punkt als einzige Befundmarke, Rand und Ziffer der Nummer ohne Farbe (seit Grunddesign 1.9, KI-LEAD 0.7.21) | `tests/format/lead-design.test.ts` |
+
+## Auswertung und Profile nach der UX-Prüfung 2026-W46 (0.7.22, Befunddatei `ki-lead-befund_ux_2026-W46.json`, UX-2026-W46-01 bis -07, Freigabe des Herausgebers vom 14.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Ohne echte Adresse kein Link auf eine Platzhalteradresse; je offene Stelle „Text kopieren“ mit Betreff und Text der Erinnerung | UX-2026-W46-01: Erinnerung ohne echte Adressen › … | `tests/ui/ux-2026-w46.test.ts` |
+| Bei 390 × 844 px belegt der mitlaufende Bereich nach dem Scrollen höchstens 230 px; Reiter scrollen mit; alle fünf Bereiche der Hauptnavigation im Bild | UX-2026-W46-02, -03: Smartphone › UX-2026-W46-02: … | `tests/browser/ux-2026-w46.spec.ts` |
+| Randverlauf als Maske, solange am Rand weitere Reiter liegen; am Ende der Leiste keiner | UX-2026-W46-02, -03: Smartphone › UX-2026-W46-03: … | `tests/browser/ux-2026-w46.spec.ts` |
+| Mittlere Stufen der Tendenz grau, keine in einer Farbe der Beurteilung; Rot und Grün für Verschärfung und Entspannung | UX-2026-W46-04: Farben der Tendenz › … | `tests/ui/ux-2026-w46.test.ts` |
+| In der aufgeklappten Profilkarte keine innere Aufklappzeile größer als die äußere | UX-2026-W46-05: … | `tests/browser/ux-2026-w46.spec.ts` |
+| Ebene und Referenzraum je Profilkarte nur einmal, keine Sprungleiste | UX-2026-W46-06: aufgeklappte Profilkarte ohne Dopplung › … | `tests/ui/ux-2026-w46.test.ts` |
+| Gemeldete Stellen bei 1440 und 390 px: Name ohne Umbruch und ungekürzt, Zeitpunkt darunter, Kacheln einer Zeile gleich hoch | UX-2026-W46-07: gemeldete Stellen bei … px › … | `tests/browser/ux-2026-w46.spec.ts` |
+
+Angepasst mit geändertem Soll: `tests/lagebild/lagebild.test.ts` (Tendenz „Stabilisierung“ grau), `tests/ui/profile.test.ts` (Angaben ohne Ebene und Referenzraum; Test der Sprungleiste entfällt), `tests/browser/hinweisband.spec.ts` (bei 390 px scrollen die Reiter mit).

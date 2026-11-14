@@ -2,7 +2,7 @@
 // Profilansicht (seit 0.5.20): verwendetes Profil zuerst und offen, übrige Profile als kompakte Zeile mit
 // aufklappbarem Inhalt; fachliche Angaben getrennt von technischen; Lesetexte unter „Lesen“, Prüfbericht und
 // Dateien unter „Prüfen“; ein Satz im Kopf statt Begriffserklärung (Teil 1). Menüs „Profil hinzufügen“ und „Mehr“,
-// Befundstatus als Chip, Sprungleiste innerhalb der Karte (Teil 2).
+// Befundstatus als Chip (Teil 2; die Sprungleiste innerhalb der Karte entfiel mit UX-2026-W46-06).
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { act } from "react";
 import { aushaengen, einhaengen, klick, reactUmgebung } from "../support/dom";
@@ -79,7 +79,7 @@ describe("Profilansicht: Gruppen „Lesen“ und „Prüfen“", () => {
     await ansicht("lead-beispiel");
     const k = karten()[0];
     const fachlich = [...k.querySelectorAll(`section[aria-labelledby$="-angaben"] dl.profil-daten dt`)].map((d) => d.textContent);
-    expect(fachlich).toEqual(["Ebene", "Referenzraum", "SOPs und Bausteine", "Herausgeber"]);
+    expect(fachlich).toEqual(["SOPs und Bausteine", "Herausgeber"]); // seit UX-2026-W46-06 ohne Ebene und Referenzraum
     const pruefen = k.querySelector(`section[aria-labelledby$="-pruefen"]`)!;
     const technisch = [...pruefen.querySelectorAll("dl.profil-technik dt")].map((d) => d.textContent);
     expect(technisch).toEqual(["Schema", "Lizenz", "Prüfsumme"]);
@@ -220,22 +220,6 @@ describe("Profilansicht: Menüs, Befundstatus und Sprungleiste (Teil 2)", () => 
     expect(b!.textContent).toBe("1 Fehler, 1 Warnung");
     expect(b!.classList.contains("befund-chip-fehler")).toBe(true);
     expect(b!.getAttribute("href")).toMatch(/-bericht$/);
-  });
-
-  it("führt die Sprungleiste zu Angaben, Lesen und Prüfen und setzt den Fokus auf die Überschrift", async () => {
-    await ansicht("lead-beispiel");
-    Element.prototype.scrollIntoView = () => {};
-    const k = karten()[0];
-    const nav = k.querySelector("nav.profil-sprungleiste")!;
-    expect(nav.getAttribute("aria-label")).toBe("Abschnitte von Profil „LEAD-Beispiel – Koordinierungsstelle“");
-    const links = [...nav.querySelectorAll<HTMLAnchorElement>("a")];
-    expect(links.map((l) => l.textContent)).toEqual(["Angaben", "Lesen", "Prüfen"]);
-    for (const l of links) {
-      const ziel = document.getElementById(l.getAttribute("href")!.slice(1))!;
-      expect(ziel.tagName).toBe("H3");
-      await act(async () => l.click());
-      expect(document.activeElement).toBe(ziel);
-    }
   });
 });
 

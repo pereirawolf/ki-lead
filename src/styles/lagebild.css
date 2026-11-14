@@ -153,6 +153,14 @@
   border-bottom: 1px solid var(--linie-zart);
 }
 
+/* Unter 640 px stehen die Reiter nicht fest, damit der mitlaufende Bereich auf kleinen Bildschirmen nicht ein Drittel
+   der Höhe belegt; der Kopfbereich bleibt stehen (seit UX-2026-W46-02, nimmt UX-2026-W45-03 dort zurück) */
+@media (max-width: 640px) {
+  .lb-reiter {
+    position: static;
+  }
+}
+
 .lb-reiter ol {
   display: flex;
   gap: 0.35rem;
@@ -161,12 +169,20 @@
   list-style: none;
   overflow-x: auto;
   scrollbar-width: none;
-  /* Verlauf am Rand wie bei den Schrittleisten (UX-2026-W44-04) */
-  background:
-    linear-gradient(to right, var(--papier) 40%, transparent) left center / 2.5rem 100% no-repeat local,
-    linear-gradient(to left, var(--papier) 40%, transparent) right center / 2.5rem 100% no-repeat local,
-    linear-gradient(to right, var(--linie), transparent) left center / 1rem 100% no-repeat scroll,
-    linear-gradient(to left, var(--linie), transparent) right center / 1rem 100% no-repeat scroll;
+}
+
+/* Verlauf am Rand, solange dort weitere Reiter liegen (UX-2026-W44-04): seit UX-2026-W46-03 als Maske über den Reitern,
+   weil deren deckende Fläche einen Verlauf im Hintergrund der Liste verdeckte; Attribute aus useRandVerlauf() */
+.lb-reiter ol[data-rest-rechts] {
+  mask-image: linear-gradient(to left, transparent, #000 2.5rem);
+}
+
+.lb-reiter ol[data-rest-links] {
+  mask-image: linear-gradient(to right, transparent, #000 2.5rem);
+}
+
+.lb-reiter ol[data-rest-links][data-rest-rechts] {
+  mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
 }
 
 .lb-reiter li {
@@ -324,6 +340,26 @@ button.lb-kennzahl:hover {
 .lb-status-zahl {
   font-size: 0.78rem;
   color: var(--tinte-leise);
+}
+
+/* Gemeldete Stellen: Name in der ersten Zeile ohne Umbruch, Zeitpunkt und Alter klein darunter (seit UX-2026-W46-07) */
+.lb-status li.lb-status-da {
+  display: grid;
+  grid-template-columns: 1.2rem minmax(0, 1fr);
+  column-gap: 0.5rem;
+  row-gap: 0.1rem;
+}
+
+.lb-status-da > :not(.lb-status-zeichen) {
+  grid-column: 2;
+  justify-self: start;
+  max-width: 100%;
+}
+
+.lb-status-da .lb-status-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lb-verteilungen {
