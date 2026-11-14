@@ -1,0 +1,16 @@
+{
+  "format": "lead-meldung-v2-zusammenstellung/1",
+  "$id": "https://github.com/pereirawolf/ki-lead/profile/muster/meldung.schema.json",
+  "title": "LEAD-Meldung v2 – Vorlage eigene Organisation",
+  "description": "Schema LEAD-Meldung-v2 (Formatfassung 2.0, Entwurf) der Vorlage „eigene Organisation“: Kernschema mit dem eigenen Pflichtmodul muster-lageprofil 0.1 (Arten, Lageprofil mit drei Achsen), Quellenkategorien A/B/W/M/P, ohne Liste der Gebiete und Ebenen. Erzeugt mit npm run meldung:v2 -- schema profile/muster/zusammenstellung.json profile/muster/meldung.schema.json; Pfade der Module relativ zu dieser Datei, der Kern aus formate/lead-meldung-v2/.",
+  "kern": "kern.schema.json",
+  "module": {
+    "muster-lageprofil": {
+      "datei": "module/muster-lageprofil.schema.json",
+      "pflicht": true
+    }
+  },
+  "einschraenkungen": {
+    "quellenkategorien": ["A", "B", "W", "M", "P"]
+  }
+}

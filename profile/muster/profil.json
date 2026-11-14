@@ -2,8 +2,8 @@
   "format": "lead-profil/1",
   "id": "muster.einsatzstelle",
   "name": "Vorlage – eigene Organisation",
-  "beschreibung": "Vorlage für ein eigenes Profilpaket: alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern und ein schlankes Beispielschema (Einsatzstelle, ohne Länderliste und Freigabeblock). Vor der Verwendung Platzhalter ersetzen sowie Herausgeber und Lizenz setzen.",
-  "version": "0.8.1",
+  "beschreibung": "Vorlage für ein eigenes Profilpaket nach LEAD-Meldung-v2: alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern, eine eigene Zusammenstellung und ein eigenes schlankes Fachmodul (Arten und Lageprofil mit drei Achsen). Vor der Verwendung Platzhalter ersetzen sowie Herausgeber und Lizenz setzen.",
+  "version": "1.0.0",
   "herausgeber": "[Herausgeber]",
   "lizenz": "CC0-1.0",
   "ebene": "[Ebene]",
@@ -13,13 +13,16 @@
     "kurzname": "[Kurzname]",
     "zeitzone": "Europe/Berlin",
     "meldetakt": "[Meldetakt]",
-    "lageprodukt": "[Lageprodukt]"
+    "lageprodukt": "[Lageprodukt]",
+    "absender.stelle": "[Meldende Stelle]",
+    "absender.ebene": "Einsatzstelle",
+    "absender.gebiet.name": "[Gebiet]"
   },
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
-    "schema_id": "Muster-LEAD-Meldung-v1",
-    "eingang_schema_ids": ["Muster-LEAD-Meldung-v1"]
+    "schema_id": "LEAD-Meldung-v2",
+    "eingang_schema_ids": ["LEAD-Meldung-v2"]
   },
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md"

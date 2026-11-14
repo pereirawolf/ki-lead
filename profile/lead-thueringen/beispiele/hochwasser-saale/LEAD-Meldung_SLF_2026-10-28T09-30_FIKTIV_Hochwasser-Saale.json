@@ -1,70 +1,254 @@
 {
-  "schema": "LEAD-Meldung-Land-v1",
-  "_status": "final",
-  "_entstehung": {
-    "verfahren": "manuell",
-    "werkzeug": "Fiktiver Datensatz Hochwasser an der Saale für den KI-LEAD-Demonstrator (Kreisperspektive), von Hand verfasst",
-    "sop": [
-      "SOP-LEAD B02 Hochwasser / Überschwemmung 2.2.0"
-    ],
-    "kodierleitfaden": "Kodierleitfaden 1.7.0",
-    "erstellt": "2026-10-31T21:00"
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "aa4fe147-8647-50cf-b074-0f5d1cf52f10",
+  "status": "freigegeben",
+  "absender": {
+    "stelle": "Landratsamt Saalfeld-Rudolstadt, Krisenstab",
+    "ebene": "Kreis",
+    "gebiet": {
+      "name": "Landkreis Saalfeld-Rudolstadt",
+      "schluessel": "16073"
+    }
   },
-  "kreis": "Landkreis Saalfeld-Rudolstadt",
-  "meldende_stelle": "Landratsamt Saalfeld-Rudolstadt, Krisenstab",
-  "meldezeitpunkt": "2026-10-28T09:30",
+  "meldezeitpunkt": "2026-10-28T09:30+01:00",
+  "zeitzone": "Europe/Berlin",
   "meldezeitraum": {
     "von": "2026-10-26",
     "bis": "2026-10-28"
   },
-  "quellen": "[Q1] A – Deutscher Wetterdienst (27.10.2026): Unwetterwarnung Dauerregen Thüringer Wald und Thüringer Schiefergebirge, Ausgabe 27.10., 06:00 (FIKTIV) [Zugriff: 28.10.2026]\n[Q2] A – Hochwassermeldedienst des Landes (28.10.2026): Hochwasserbericht Saale Nr. 4 mit Pegelvorhersage (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 07:00\n[Q3] A – Landratsamt Saalfeld-Rudolstadt, Krisenstab (28.10.2026): Lageübersicht Hochwasser, Fortschreibung 2 (behördenintern, FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 08:30\n[Q4] B – Betreiber der Saaletalsperren (28.10.2026): Mitteilung zur Abgabe der Talsperre Hohenwarte (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 06:00\n[Q5] A – Straßenbauamt Ostthüringen (28.10.2026): Sperrungen B 88 und Kreisstraßen im Saaletal (FIKTIV) [Zugriff: 28.10.2026]",
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Deutscher Wetterdienst",
+      "titel": "Unwetterwarnung Dauerregen Thüringer Wald und Thüringer Schiefergebirge, Ausgabe 27.10., 06:00 (FIKTIV)",
+      "zugriff": "2026-10-28",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-27"
+    },
+    {
+      "id": "Q2",
+      "kategorie": "A",
+      "herausgeber": "Hochwassermeldedienst des Landes",
+      "titel": "Hochwasserbericht Saale Nr. 4 mit Pegelvorhersage (FIKTIV)",
+      "zugriff": "2026-10-28",
+      "zugang": "oeffentlich",
+      "datenstand": "2026-10-28T07:00+01:00",
+      "veroeffentlicht": "2026-10-28"
+    },
+    {
+      "id": "Q3",
+      "kategorie": "A",
+      "herausgeber": "Landratsamt Saalfeld-Rudolstadt, Krisenstab",
+      "titel": "Lageübersicht Hochwasser, Fortschreibung 2 (FIKTIV)",
+      "zugriff": "2026-10-28",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-28T08:30+01:00",
+      "veroeffentlicht": "2026-10-28"
+    },
+    {
+      "id": "Q4",
+      "kategorie": "B",
+      "herausgeber": "Betreiber der Saaletalsperren",
+      "titel": "Mitteilung zur Abgabe der Talsperre Hohenwarte (FIKTIV)",
+      "zugriff": "2026-10-28",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-28T06:00+01:00",
+      "veroeffentlicht": "2026-10-28"
+    },
+    {
+      "id": "Q5",
+      "kategorie": "A",
+      "herausgeber": "Straßenbauamt Ostthüringen",
+      "titel": "Sperrungen B 88 und Kreisstraßen im Saaletal (FIKTIV)",
+      "zugriff": "2026-10-28",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-28"
+    }
+  ],
   "sachverhalte": [
     {
       "kennung": "DE-TH-SLF-20261028-3QWA",
-      "eintritt": "2026-10-26",
-      "art": [
-        "Hochwasser / Überschwemmung"
-      ],
-      "ort": "Landkreis Saalfeld-Rudolstadt; Saaletal zwischen Saalfeld und Uhlstädt-Kirchhasel, Schwarzatal",
       "bezeichnung": "Hochwasser der Saale und der Schwarza: 140 Menschen in Uhlstädt-Kirchhasel evakuiert, B 88 gesperrt, Scheitel durchgelaufen",
+      "eintritt": {
+        "zeit": "2026-10-26",
+        "genauigkeit": "belegt"
+      },
+      "raum": {
+        "beschreibung": "Landkreis Saalfeld-Rudolstadt; Saaletal zwischen Saalfeld und Uhlstädt-Kirchhasel, Schwarzatal",
+        "gebiete": [
+          {
+            "name": "Landkreis Saalfeld-Rudolstadt",
+            "schluessel": "16073"
+          }
+        ]
+      },
       "analyse": {
         "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Hochwasser an der Saale). Kernaussage: Nach drei Tagen Dauerregen hat die Saale im Landkreis den Scheitel in der Nacht zum 28.10. erreicht; die Wasserstände fallen langsam, betroffen sind vor allem tief liegende Ortsteile im Saaletal. Im Thüringer Wald fielen vom 25. bis 27.10. verbreitet 80 bis 120 l/m² [Q1]. Der Pegel Rudolstadt erreichte am 28.10. gegen 01:00 Uhr seinen Höchststand und fällt seitdem [Q2]. Die Talsperre Hohenwarte gibt seit dem 27.10., 12:00 Uhr erhöht ab, um Rückhalteraum zu sichern [Q4]. In Uhlstädt-Kirchhasel wurden 62 Wohngebäude überflutet; 140 Bewohnerinnen und Bewohner wurden am 27.10. abends evakuiert, 38 sind in einer Notunterkunft in Rudolstadt untergebracht [Q3]. Die B 88 ist zwischen Rudolstadt und Uhlstädt gesperrt [Q5].",
         "risiken_auswirkungen": "Belegt: Die Evakuierten können frühestens nach Ablauf und Prüfung der Gebäude zurück, der Krisenstab rechnet mit zwei bis drei Tagen [Q3]. Die Sperrung der B 88 verlängert Wege nach Jena und in den Saale-Holzland-Kreis [Q5]. Szenario: Erneuter Niederschlag ist nach DWD bis 30.10. nicht vorhergesagt [Q1]; eine zweite Welle ist deshalb unwahrscheinlich.",
-        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Krisenstab seit 27.10., 14:00 Uhr; Feuerwehren aus dem Landkreis pumpen Keller ab; Notunterkunft in Rudolstadt mit Betreuung durch Hilfsorganisationen [Q3]. Prüf- und Abstimmungsbedarf: (1) Landkreis: Rückkehr der Evakuierten nach Gebäudeprüfung planen. (2) Straßenbauamt: Freigabe der B 88 nach Ablauf und Prüfung der Fahrbahn bekanntgeben.",
         "abhaengigkeiten_interdependenzen": "Belegte Kopplung: Talsperrenabgabe → Abfluss der Saale unterhalb Hohenwarte; Puffer: Steuerung durch den Betreiber [Q4]. B 88 gesperrt → längere Wege für Rettungsdienst im Saaletal; Ausweichrouten über die Höhen bestehen [Q5]. Weitere Kopplungen sind nicht belegt."
       },
-      "sofort": {
-        "beurteilung": "erheblich",
-        "tendenz": "Entspannung",
-        "bewertung_text": "Kernaussage: Der Scheitel ist im Landkreis durchgelaufen; offen sind die Rückkehr von 140 Evakuierten und die Freigabe der B 88.\nReferenzraum: Landkreis Saalfeld-Rudolstadt. t0: 28.10.2026, 09:30 Uhr.\nBeurteilung „erheblich“: 140 Evakuierte und 62 überflutete Wohngebäude; Abgrenzung zu „kritisch“: keine Versorgungsfunktion ausgefallen, Unterbringung gesichert.\nTendenz „Entspannung“ (Landkreis, 28.10. 01:00 bis 09:30): Pegel Rudolstadt fällt seit dem Scheitel [Q2].\nD1 = 2, mehrere Gemeinden im Saaletal [Q3]. D2 = 2, 140 Evakuierte [Q3]. D3 = 2, der Landkreis steuert über den Krisenstab [Q3]. D4 = 1, eingesetzt sind örtliche Kräfte [Q3]. D5 = 2, Rückkehr der Evakuierten in zwei bis drei Tagen [Q3]. D6 = 1, peripherer Bezug über Verkehr [Q5]. D7 = 0, Angaben aktuell und konsistent. D8 = 2, Umschlag vom Anstieg in den Ablauf.\nNeubewertung bei: erneutem Anstieg der Talsperrenabgabe; Schäden an Gebäuden, die eine längere Unterbringung erfordern",
-        "lagenradar": {
-          "d1": 2,
-          "d2": 2,
-          "d3": 2,
-          "d4": 1,
-          "d5": 2,
-          "d6": 1,
-          "d7": 0,
-          "d8": 2
+      "bewertung": {
+        "kernaussage": "Der Scheitel ist im Landkreis durchgelaufen; offen sind die Rückkehr von 140 Evakuierten und die Freigabe der B 88.",
+        "referenzraum": "Landkreis Saalfeld-Rudolstadt",
+        "beurteilung": {
+          "stufe": "erheblich",
+          "begruendung": "140 Evakuierte und 62 überflutete Wohngebäude; Abgrenzung zu „kritisch“: keine Versorgungsfunktion ausgefallen, Unterbringung gesichert."
+        },
+        "tendenz": {
+          "richtung": "Entspannung",
+          "bezug": "Landkreis, 28.10. 01:00 bis 09:30",
+          "begruendung": "Pegel Rudolstadt fällt seit dem Scheitel [Q2]."
+        },
+        "neubewertung_bei": [
+          {
+            "indikator": "erneutem Anstieg der Talsperrenabgabe"
+          },
+          {
+            "indikator": "Schäden an Gebäuden, die eine längere Unterbringung erfordern"
+          }
+        ]
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Krisenstab",
+            "stelle": "Landratsamt Saalfeld-Rudolstadt, Krisenstab",
+            "status": "begonnen",
+            "stand": "2026-10-27T14:00+01:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M2",
+            "gegenstand": "Keller abpumpen",
+            "stelle": "Feuerwehren aus dem Landkreis",
+            "status": "begonnen",
+            "stand": "2026-10-28T08:30+01:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M3",
+            "gegenstand": "Notunterkunft in Rudolstadt mit Betreuung durch Hilfsorganisationen",
+            "stelle": "Landratsamt Saalfeld-Rudolstadt, Krisenstab",
+            "status": "umgesetzt",
+            "stand": "2026-10-28T08:30+01:00",
+            "quellen": ["Q3"]
+          }
+        ],
+        "empfehlungen": [
+          {
+            "id": "E1",
+            "adressat": "Landkreis",
+            "auftrag": "Rückkehr der Evakuierten nach Gebäudeprüfung planen.",
+            "termin": null,
+            "quellen": []
+          },
+          {
+            "id": "E2",
+            "adressat": "Straßenbauamt",
+            "auftrag": "Freigabe der B 88 nach Ablauf und Prüfung der Fahrbahn bekanntgeben.",
+            "termin": null,
+            "quellen": []
+          }
+        ],
+        "fristen": []
+      },
+      "kennzahlen": [],
+      "zeitstrahl": [],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": ["Hochwasser / Überschwemmung"],
+          "lagenradar": {
+            "d1": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "mehrere Gemeinden im Saaletal.",
+              "quellen": ["Q3"]
+            },
+            "d2": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "140 Evakuierte.",
+              "quellen": ["Q3"]
+            },
+            "d3": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "der Landkreis steuert über den Krisenstab.",
+              "quellen": ["Q3"]
+            },
+            "d4": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "eingesetzt sind örtliche Kräfte.",
+              "quellen": ["Q3"]
+            },
+            "d5": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Rückkehr der Evakuierten in zwei bis drei Tagen.",
+              "quellen": ["Q3"]
+            },
+            "d6": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "peripherer Bezug über Verkehr.",
+              "quellen": ["Q5"]
+            },
+            "d7": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Angaben aktuell und konsistent.",
+              "quellen": []
+            },
+            "d8": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Umschlag vom Anstieg in den Ablauf.",
+              "quellen": []
+            }
+          }
         }
       }
     }
   ],
   "freigabe": {
-    "erfassung": {
+    "erfasst": {
       "name": "Sachbearbeitung Krisenstab Landratsamt Saalfeld-Rudolstadt (FIKTIV)",
-      "datum": "2026-10-28",
+      "zeitpunkt": "2026-10-28",
       "hz": "FIKTIV"
     },
-    "freigabe": {
+    "freigegeben": {
       "name": "Leitung Krisenstab Landratsamt Saalfeld-Rudolstadt (FIKTIV)",
-      "datum": "2026-10-28",
+      "zeitpunkt": "2026-10-28",
       "hz": "FIKTIV"
+    }
+  },
+  "entstehung": {
+    "verfahren": "manuell",
+    "erstellt": "2026-10-31T21:00+01:00",
+    "anmerkung": "Fiktiver Datensatz Hochwasser an der Saale für den KI-LEAD-Demonstrator (Kreisperspektive), von Hand verfasst",
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B02",
+          "bezeichnung": "Hochwasser / Überschwemmung 2.2.0"
+        }
+      ],
+      "kodierleitfaden": "Kodierleitfaden 1.7.0"
     },
-    "versand": {
-      "name": "Krisenstab Landratsamt Saalfeld-Rudolstadt (FIKTIV)",
-      "datum": "2026-10-28",
-      "hz": "FIKTIV"
+    "migration": {
+      "von": "LEAD-Meldung-Land-v1",
+      "am": "2026-11-14T18:16+01:00",
+      "werkzeug": "scripts/lead-meldung-v2.mjs 2.0",
+      "hinweise": [
+        "sachverhalte[*].kennzahlen: entscheidungsrelevante Zahlen stehen nur im Text – bei Bedarf als Kennzahlen erfassen",
+        "sachverhalte[*].eintritt.genauigkeit: aus v1 als „belegt“ übernommen (Regel v1: nur belegter Beginn) – prüfen",
+        "freigabe: Versandvermerk aus v1 nicht übernommen (Versand ist in v2 ein eigenes Protokoll): Krisenstab Landratsamt Saalfeld-Rudolstadt (FIKTIV), 2026-10-28, FIKTIV"
+      ]
     }
   }
 }

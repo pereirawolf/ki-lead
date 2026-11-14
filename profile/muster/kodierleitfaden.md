@@ -1,13 +1,14 @@
 # Kodierleitfaden (Vorlage): Lageprofil und Quellenkategorien
 
-Vorlagefassung · Fassung 0.5 vom 24.10.2026 · gilt für das Schema `Muster-LEAD-Meldung-v1` und die Darstellungsdatei der Vorlage · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
+Vorlagefassung · Fassung 1.0 vom 14.11.2026 · gilt für das Schema der Vorlage nach LEAD-Meldung-v2 mit dem Modul `muster-lageprofil` 0.1 und die Darstellungsdatei der Vorlage · Platzhalter in eckigen Klammern vor der Verwendung ersetzen
 
 Ersetze die Abschnitte durch die Regeln deiner Organisation. Die Stufentexte in Abschnitt 2 müssen wortgleich in der Darstellungsdatei stehen.
 
 ## 1. Grundregeln
 
 - Höhere Stufe = stärkere Ausprägung.
-- Offen (`null`), wenn kein Beleg vorliegt.
+- Offen, wenn kein Beleg vorliegt: Status `offen`, `stufe: null`, Grund (`offen_grund`) und kurze Begründung.
+- Jede gesetzte Stufe wird in `begruendung` der Achse begründet, Belege zusätzlich in `quellen`; eine bestätigte Mindestzahl trägt den Status `mindestwert`.
 - Trägt der Beleg die höhere Stufe nicht vollständig, gilt die niedrigere; die niedrigere Stufe ist keine Vorsichtswahl.
 
 ## 2. Stufentexte (Referenz)
@@ -34,7 +35,7 @@ Ersetze die Abschnitte durch die Regeln deiner Organisation. Die Stufentexte in 
 
 ## 4. Bewertung
 
-[Kriterien für geringfügig, erheblich und kritisch.]
+[Kriterien für geringfügig, erheblich und kritisch.] Die Stufe steht in `bewertung.beurteilung.stufe` mit Begründung, keine Angabe ist `null`.
 
 ## 5. Quellenkategorien
 
@@ -46,7 +47,7 @@ Ersetze die Abschnitte durch die Regeln deiner Organisation. Die Stufentexte in 
 | M | Medien |
 | P | sonstige private Quellen |
 
-Rangfolge bei widersprüchlichen Angaben: A vor B vor W vor M vor P. [Ergänzende Regeln der Organisation.]
+Rangfolge bei widersprüchlichen Angaben: A vor B vor W vor M vor P. Jede Quelle ist ein Eintrag in `quellen` mit ID, Kategorie, Herausgeber, Titel, Zugriff und Zugang (LEAD-MELDUNG-V2.md, Abschnitt 5.1). [Ergänzende Regeln der Organisation.]
 
 ## 6. Pflege
 

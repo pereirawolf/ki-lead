@@ -1,67 +1,268 @@
 {
-  "schema": "LEAD-Meldung-v1",
-  "_status": "final",
-  "_entstehung": {
-    "verfahren": "KI-Entwurf",
-    "werkzeug": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen",
-    "modell": "Claude Opus 5.5",
-    "sop": ["SOP-LEAD 01 Unwetter / Sturm v2.0"],
-    "kodierleitfaden": "LEAD v2.0",
-    "erstellt": "2026-10-14T20:15"
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "293e2350-6ef4-54f3-af5d-bd0af5a9494f",
+  "status": "freigegeben",
+  "absender": {
+    "stelle": "Ministerium für Inneres und Sport des Landes Sachsen-Anhalt, Lagezentrum",
+    "ebene": "Land",
+    "gebiet": {
+      "name": "Sachsen-Anhalt",
+      "schluessel": "DE-ST"
+    }
   },
-  "land": "Sachsen-Anhalt",
-  "meldende_stelle": "Ministerium für Inneres und Sport des Landes Sachsen-Anhalt, Lagezentrum",
-  "meldezeitpunkt": "2026-10-14T11:00",
+  "meldezeitpunkt": "2026-10-14T11:00+02:00",
+  "zeitzone": "Europe/Berlin",
   "meldezeitraum": {
     "von": "2026-10-13",
     "bis": "2026-10-14"
   },
-  "quellen": "[Q1] A – Deutscher Wetterdienst (13.10.2026): Warnlagebericht Sachsen-Anhalt, Orkantief „Ilka“, Ausgabe 13:15 (FIKTIV) [Zugriff: 13.10.2026]\n[Q2] A – Lagezentrum des Ministeriums für Inneres und Sport Sachsen-Anhalt (14.10.2026): Lageübersicht Sturm (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 09:00\n[Q3] A – Landkreis Harz (14.10.2026): Lagemeldung Nr. 2 (behördenintern, FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:00\n[Q4] P – Bergwacht Harz (14.10.2026): Einsatzbericht Brockengebiet (FIKTIV) [Zugriff: 14.10.2026]\n[Q5] B – Harzer Schmalspurbahnen (14.10.2026): Betriebsinformation (FIKTIV) [Zugriff: 14.10.2026]\n[Q6] B – Verteilnetzbetreiber Netzgebiet Harz Ost (14.10.2026): Störungsübersicht (FIKTIV) [Zugriff: 14.10.2026]. Datenstand: 14.10.2026, 08:30",
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Deutscher Wetterdienst",
+      "titel": "Warnlagebericht Sachsen-Anhalt, Orkantief „Ilka“, Ausgabe 13:15 (FIKTIV)",
+      "zugriff": "2026-10-13",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-13"
+    },
+    {
+      "id": "Q2",
+      "kategorie": "A",
+      "herausgeber": "Lagezentrum des Ministeriums für Inneres und Sport Sachsen-Anhalt",
+      "titel": "Lageübersicht Sturm (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T09:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q3",
+      "kategorie": "A",
+      "herausgeber": "Landkreis Harz",
+      "titel": "Lagemeldung Nr. 2 (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "datenstand": "2026-10-14T08:00+02:00",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q4",
+      "kategorie": "P",
+      "herausgeber": "Bergwacht Harz",
+      "titel": "Einsatzbericht Brockengebiet (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "behoerdenintern",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q5",
+      "kategorie": "B",
+      "herausgeber": "Harzer Schmalspurbahnen",
+      "titel": "Betriebsinformation (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "oeffentlich",
+      "veroeffentlicht": "2026-10-14"
+    },
+    {
+      "id": "Q6",
+      "kategorie": "B",
+      "herausgeber": "Verteilnetzbetreiber Netzgebiet Harz Ost",
+      "titel": "Störungsübersicht (FIKTIV)",
+      "zugriff": "2026-10-14",
+      "zugang": "oeffentlich",
+      "datenstand": "2026-10-14T08:30+02:00",
+      "veroeffentlicht": "2026-10-14"
+    }
+  ],
   "sachverhalte": [
     {
       "kennung": "DE-ST-20261014-2JFE",
-      "eintritt": "2026-10-13",
-      "art": ["Unwetter / Sturm"],
-      "ort": "Sachsen-Anhalt; Landkreis Harz (Brockengebiet, Wernigerode, Oberharz am Brocken)",
       "bezeichnung": "Orkantief „Ilka“: Rettung von 14 Wanderern am Brocken, Harzer Schmalspurbahnen eingestellt, nur geringe Stromausfälle",
+      "eintritt": {
+        "zeit": "2026-10-13",
+        "genauigkeit": "belegt"
+      },
+      "raum": {
+        "beschreibung": "Sachsen-Anhalt; Landkreis Harz (Brockengebiet, Wernigerode, Oberharz am Brocken)",
+        "gebiete": [
+          {
+            "name": "Sachsen-Anhalt",
+            "schluessel": "DE-ST"
+          }
+        ]
+      },
       "analyse": {
         "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Orkantief „Ilka“). Kernaussage: Sachsen-Anhalt war am Rand des Sturmfelds betroffen; die Folgen beschränken sich auf den Landkreis Harz und sind überwiegend abgearbeitet. Das Sturmfeld erreichte den Harz am 13.10. gegen 20:00 Uhr, Spitzenböen bis 158 km/h auf dem Brocken [Q1]. Landesweit rund 480 Einsätze, davon rund 390 im Landkreis Harz [Q2]. Die Bergwacht hat am Abend 14 Wandernde aus dem Brockengebiet geholt, drei davon leicht verletzt [Q4]. Die Harzer Schmalspurbahnen haben den Betrieb auf allen Strecken eingestellt; die Brockenbahn bleibt wegen Baumwürfen auf der Strecke bis auf Weiteres gesperrt [Q5]. Strom: In der Spitze rund 6.000 Anschlüsse ohne Versorgung, zu t0 noch rund 300 in Oberharz am Brocken [Q6].",
         "risiken_auswirkungen": "Belegt: Keine Einschränkungen von Wasser-, Telekommunikations- oder Gesundheitsdiensten gemeldet [Q3]. Die Sperrung der Brockenbahn trifft den Tourismus, eine Versorgungsfunktion hat sie nicht [Q5]. Die Waldflächen im Nationalpark sind durch Trockenheit, Borkenkäfer und frühere Brände geschädigt; Wege bleiben wegen Bruchgefahr gesperrt [Q3]. Szenario: Bei der Gewitterlage am 14.10. [Q1] können weitere Bäume fallen; Wandernde, die Sperrungen missachten, wären gefährdet. Bei Folgestürmen im Herbst bleibt das Brockengebiet ein Schwerpunkt für Bergwacht und Feuerwehr.",
-        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Der Landkreis Harz hat Wanderwege im Brockengebiet gesperrt und warnt über Warn-App und Nationalparkverwaltung [Q3]. Eingesetzt sind örtliche Feuerwehren und die Bergwacht [Q3, Q4]. Prüf- und Abstimmungsbedarf: (1) Landkreis und Nationalparkverwaltung: Dauer der Wegesperrungen festlegen und kommunizieren. (2) Koordinierungsstelle: Abgleich mit Niedersachsen zur Harzlage, da dort das gleiche Waldbild zu längeren Stromausfällen führt; für Sachsen-Anhalt besteht derzeit kein Unterstützungsbedarf.",
         "abhaengigkeiten_interdependenzen": "Belegte Kopplungen: geringer Stromausfall ohne Folgewirkung; Bahnsperrung ohne Versorgungsfunktion [Q3, Q5, Q6]. Keine Wirkungskette mit Bewertungsrelevanz. Länderübergreifend: Waldschadenslage im Harz verbindet die Lage mit Niedersachsen; operative Kopplungen bestehen nicht."
       },
-      "sofort": {
-        "beurteilung": "geringfügig",
-        "tendenz": "Entspannung",
-        "bewertung_text": "Kernaussage: Sachsen-Anhalt meldet eine abgearbeitete, auf den Landkreis Harz begrenzte Sturmlage ohne Versorgungsrelevanz; zu prüfen ist nur die Dauer der Wegesperrungen im Brockengebiet.\nReferenzraum: Land Sachsen-Anhalt. t0: 14.10.2026, 11:00 Uhr.\nBeurteilung „geringfügig“: keine kritischen Dienste eingeschränkt, Restausfall von 300 Anschlüssen. Tendenz „Entspannung“ (Land, 13.10. 23:00 bis 14.10. 08:30): Rückgang von 6.000 auf 300 Anschlüsse, keine neuen Einsätze mit Personenbezug.\nD1 = 2, Wirkungsraum ein Landkreis mit mehreren Gemeinden [Q2]. D2 = 1, 14 gerettete Wandernde, davon drei verletzt [Q4]; Personen ohne Strom nur als Anschlusszahl und daher nicht gezählt. D3 = 2, Landkreis Harz steuert [Q3]. D4 = 1, örtliche Feuerwehren und Bergwacht [Q3, Q4]. D5 offen: Zielzustand Freigabe der Wanderwege und Brockenbahn ohne belegte Prognose. D6 = 1, peripherer Bezug (Strom ohne Folgewirkung). D7 = 0, Angaben aktuell und konsistent. D8 = 1, geringe Veränderung seit Sturmende.\nAbschluss im Lagebild: voraussichtlich mit dieser Meldung; offen bleibt die Freigabe der Wege und der Brockenbahn; Nachsorge bei: Landkreis Harz und Nationalparkverwaltung",
-        "lagenradar": {
-          "d1": 2,
-          "d2": 1,
-          "d3": 2,
-          "d4": 1,
-          "d5": null,
-          "d6": 1,
-          "d7": 0,
-          "d8": 1
+      "bewertung": {
+        "kernaussage": "Sachsen-Anhalt meldet eine abgearbeitete, auf den Landkreis Harz begrenzte Sturmlage ohne Versorgungsrelevanz; zu prüfen ist nur die Dauer der Wegesperrungen im Brockengebiet.",
+        "referenzraum": "Land Sachsen-Anhalt",
+        "beurteilung": {
+          "stufe": "geringfügig",
+          "begruendung": "keine kritischen Dienste eingeschränkt, Restausfall von 300 Anschlüssen."
+        },
+        "tendenz": {
+          "richtung": "Entspannung",
+          "bezug": "Land, 13.10. 23:00 bis 14.10. 08:30",
+          "begruendung": "Rückgang von 6.000 auf 300 Anschlüsse, keine neuen Einsätze mit Personenbezug."
+        },
+        "neubewertung_bei": [],
+        "abschluss": {
+          "ende": null,
+          "offene_punkte": "die Freigabe der Wege und der Brockenbahn",
+          "nachsorge": "Landkreis Harz und Nationalparkverwaltung"
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Sperrung von Wanderwegen im Brockengebiet",
+            "stelle": "Landkreis Harz",
+            "status": "umgesetzt",
+            "stand": "2026-10-14T08:00+02:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M2",
+            "gegenstand": "Warnung über Warn-App und Nationalparkverwaltung",
+            "stelle": "Landkreis Harz",
+            "status": "begonnen",
+            "stand": "2026-10-14T08:00+02:00",
+            "quellen": ["Q3"]
+          },
+          {
+            "id": "M3",
+            "gegenstand": "Einsatz örtlicher Feuerwehren und der Bergwacht",
+            "stelle": "Landkreis Harz",
+            "status": "begonnen",
+            "stand": null,
+            "quellen": ["Q3", "Q4"]
+          }
+        ],
+        "empfehlungen": [
+          {
+            "id": "E1",
+            "adressat": "Landkreis und Nationalparkverwaltung",
+            "auftrag": "Dauer der Wegesperrungen festlegen und kommunizieren.",
+            "termin": null,
+            "quellen": []
+          },
+          {
+            "id": "E2",
+            "adressat": "Koordinierungsstelle",
+            "auftrag": "Abgleich mit Niedersachsen zur Harzlage, da dort das gleiche Waldbild zu längeren Stromausfällen führt; für Sachsen-Anhalt besteht derzeit kein Unterstützungsbedarf.",
+            "termin": null,
+            "quellen": []
+          }
+        ],
+        "fristen": []
+      },
+      "kennzahlen": [],
+      "zeitstrahl": [],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": ["Unwetter / Sturm"],
+          "lagenradar": {
+            "d1": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Wirkungsraum ein Landkreis mit mehreren Gemeinden.",
+              "quellen": ["Q2"]
+            },
+            "d2": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "14 gerettete Wandernde, davon drei verletzt; Personen ohne Strom nur als Anschlusszahl und daher nicht gezählt.",
+              "quellen": ["Q4"]
+            },
+            "d3": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Landkreis Harz steuert.",
+              "quellen": ["Q3"]
+            },
+            "d4": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "örtliche Feuerwehren und Bergwacht.",
+              "quellen": ["Q3", "Q4"]
+            },
+            "d5": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Zielzustand Freigabe der Wanderwege und Brockenbahn ohne belegte Prognose.",
+              "quellen": [],
+              "offen_grund": "kein_beleg"
+            },
+            "d6": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "peripherer Bezug (Strom ohne Folgewirkung).",
+              "quellen": []
+            },
+            "d7": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Angaben aktuell und konsistent.",
+              "quellen": []
+            },
+            "d8": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "geringe Veränderung seit Sturmende.",
+              "quellen": []
+            }
+          }
         }
       }
     }
   ],
   "freigabe": {
-    "erfassung": {
+    "erfasst": {
       "name": "Sachbearbeitung Lagezentrum (FIKTIV)",
-      "datum": "2026-10-14",
+      "zeitpunkt": "2026-10-14",
       "hz": "FIKTIV"
     },
-    "freigabe": {
+    "freigegeben": {
       "name": "Lagedienstführung (FIKTIV)",
-      "datum": "2026-10-14",
+      "zeitpunkt": "2026-10-14",
       "hz": "FIKTIV"
+    }
+  },
+  "entstehung": {
+    "verfahren": "KI-Entwurf",
+    "erstellt": "2026-10-14T20:15+02:00",
+    "anmerkung": "Fiktiver Datensatz Sturmlage für den KI-LEAD-Demonstrator (Länderperspektive); Kodierung am 19.10.2026 an SOP-LEAD 2.0 und Kodierleitfaden 1.2 angeglichen",
+    "modelle": [
+      {
+        "modell": "Claude Opus 5.5"
+      }
+    ],
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B01",
+          "fassung": "2.0",
+          "bezeichnung": "Unwetter / Sturm"
+        }
+      ],
+      "kodierleitfaden": "LEAD v2.0"
     },
-    "versand": {
-      "name": "Lagezentrum (FIKTIV)",
-      "datum": "2026-10-14",
-      "hz": "FIKTIV"
+    "migration": {
+      "von": "LEAD-Meldung-v1",
+      "am": "2026-11-14T18:16+01:00",
+      "werkzeug": "scripts/lead-meldung-v2.mjs 2.0",
+      "hinweise": [
+        "sachverhalte[*].kennzahlen: entscheidungsrelevante Zahlen stehen nur im Text – bei Bedarf als Kennzahlen erfassen",
+        "sachverhalte[*].eintritt.genauigkeit: aus v1 als „belegt“ übernommen (Regel v1: nur belegter Beginn) – prüfen",
+        "freigabe: Versandvermerk aus v1 nicht übernommen (Versand ist in v2 ein eigenes Protokoll): Lagezentrum (FIKTIV), 2026-10-14, FIKTIV"
+      ]
     }
   }
 }

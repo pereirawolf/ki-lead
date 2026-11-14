@@ -1,23 +1,23 @@
 # Vorlage – eigene Organisation
 
-Fassung 0.7 vom 30.10.2026 · Lizenz CC0 1.0: ohne Namensnennung übernehmbar
+Fassung 1.0 vom 14.11.2026 · Lizenz CC0 1.0: ohne Namensnennung übernehmbar
 
-Diese Vorlage zeigt alle Bestandteile eines Profilpakets als Gerüst. Platzhalter stehen in eckigen Klammern, etwa [Meldende Stelle]. Das Schema ist ein schlankes Beispiel einer Einsatzstelle ohne Länderliste und ohne Freigabeblock. Ein ausgearbeitetes Profil mit vollständiger SOP-Sammlung ist das Beispielprofil „LEAD-Beispiel – Koordinierungsstelle“.
+Diese Vorlage zeigt alle Bestandteile eines Profilpakets als Gerüst. Platzhalter stehen in eckigen Klammern, etwa [Meldende Stelle]. Das Schema folgt LEAD-Meldung-v2 ([docs/LEAD-MELDUNG-V2.md](../../docs/LEAD-MELDUNG-V2.md)): Kernschema mit einem eigenen, schlanken Fachmodul (Arten und Lageprofil mit drei Achsen) einer Einsatzstelle, ohne Liste der Gebiete und Ebenen; es entsteht aus der Zusammenstellung `zusammenstellung.json` (Abschnitt 9 der Beschreibung). Ein ausgearbeitetes Profil mit vollständiger SOP-Sammlung ist das Beispielprofil „LEAD-Beispiel – Koordinierungsstelle“.
 
 ## Übernehmen
 
 1. Ordner kopieren und in `profil.json` eine eigene `id` vergeben (z. B. `de.beispiel.kreis-x`), dazu `name`, `herausgeber`, `lizenz`, `ebene`, `referenzraum` und `variablen` setzen.
-2. Schema (`meldung.schema.json`) und Darstellungsdatei (`meldung.ui.json`) an die eigene Meldung anpassen; die Stufentexte des Kodierleitfadens müssen wortgleich in der Darstellungsdatei stehen.
+2. Eigenes Fachmodul (`module/muster-lageprofil.schema.json`: Arten, Achsen, Stufen) und Zusammenstellung (`zusammenstellung.json`: Module, Einschränkungen wie Gebiete, Ebenen und Quellenkategorien) anpassen, das Schema mit `npm run meldung:v2 -- schema <ordner>/zusammenstellung.json <ordner>/meldung.schema.json` erzeugen und die Darstellungsdatei (`meldung.ui.json`) nachziehen; die Stufentexte des Kodierleitfadens müssen wortgleich in der Darstellungsdatei stehen. Das Schema wird nicht von Hand geändert.
 3. Arbeitsanweisung, Kodierleitfaden, Teil A und SOPs ausfüllen; für jede weitere Lageart eine Datei nach dem Muster von `sop/teil-b/B01_lageart.md` anlegen und in `sop.dateien` eintragen.
 4. Jede Änderung in `CHANGELOG.md` festhalten und die Version erhöhen.
 
 ## Kennsätze
 
-Die Darstellungsdatei nennt unter `kennsaetze` feste Satzanfänge für den Bewertungstext. Drei davon wertet die App selbst aus und sind Pflicht (Profilformat 1.20): `handlungsrelevant` (Fristen für Management Summary und Redaktionscheck), `aenderung` (Änderungsvermerk einer Fortschreibung) und `abweichung` (abweichende Bewertungen bei der Verdichtung). Die Vorlage bringt die Texte des Beispielprofils mit; wer sie ändert, gleicht Arbeitsanweisung und Kodierleitfaden an. Fehlt ein Pflichtkennsatz, warnt die App beim Laden.
+In LEAD-Meldung-v2 sind die bisherigen Kennsätze Felder der Meldung (Fristen im Handlungsbedarf, Änderung zur Vormeldung, abweichende Bewertungen, Neubewertung, Abschluss). Die Darstellungsdatei nennt unter `kennsaetze` nur noch ihre Beschriftungen; sie sind optional (Profilformat 1.33), ohne Angabe verwendet die App die Texte des Beispielprofils.
 
 ## Zeitstrahl, Kennung und Bezug
 
-Die Vorlage enthält die optionalen Bestandteile des Profilformats 1.23 als Gerüst: das Feld `zeitstrahl` (Rolle `zeitstrahl`, Abschnitt `zeitstrahl` mit den Typen des Beispielprofils), die Sachverhaltskennung `kennung` (Rolle `sv_kennung`, Abschnitt `kennung`) und den Bezug `bezug` (Rolle `sv_bezug`). Die Kennung vergibt die App; ohne Länderliste gilt das Präfix aus `kennung.standard` (in der Vorlage „SV“, z. B. durch ein eigenes Kürzel ersetzen). Wer die Funktionen nicht braucht, entfernt Felder, Rollen und Abschnitte gemeinsam; der Zeitstrahl setzt die Kennung voraus. Regeln zu Form und Typen stehen im Kodierleitfaden des Beispielprofils, Abschnitt 8.
+Zeitstrahl, Sachverhaltskennung und Bezug gehören in LEAD-Meldung-v2 zum Kernschema: Der Zeitstrahl (`zeitstrahl`) steht je Sachverhalt, die Kennung vergibt die App (Rolle `sv_kennung`; ohne Länderliste mit dem Präfix aus `kennung.standard`, in der Vorlage „SV“, z. B. durch ein eigenes Kürzel ersetzen), der Bezug (Rolle `sv_bezug`) nennt Kennung, Fassung und Art. Regeln zu Form und Typen stehen im Kodierleitfaden des Beispielprofils, Abschnitt 8.
 
 ## Verdichtung und Kurzfassung
 

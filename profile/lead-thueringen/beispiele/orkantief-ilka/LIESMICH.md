@@ -2,7 +2,7 @@
 
 Alle Dateien in diesem Ordner beschreiben eine **erfundene Lage**. Das Orkantief „Ilka“ vom Oktober 2026 hat es nicht gegeben. Keine der Meldungen wurde von den darin genannten Stellen erstellt, abgegeben oder freigegeben. Behörden, Unternehmen, Orte, Strecken und Einrichtungen sind nur genannt, damit der Datensatz realistisch durchgespielt werden kann; die Zahlen sind erfunden.
 
-Inhalt: drei Kreismeldungen mit Meldezeitpunkt 14.10.2026, 10:00 Uhr (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und die daraus verdichtete Meldung des Lagezentrums des Landes um 10:30 Uhr, jeweils im Schema `LEAD-Meldung-Land-v1` des Profils `profile/lead-thueringen`. Jeder Sachverhalt beginnt mit „FIKTIV“, Quellen und Zeichnungen tragen den Vermerk „FIKTIV“. Die verdichtete Meldung nennt im Bezug die vier Sachverhalte der Kreise und führt einen Zeitstrahl.
+Inhalt: drei Kreismeldungen mit Meldezeitpunkt 14.10.2026, 10:00 Uhr (Ilm-Kreis, Landkreis Hildburghausen, Landkreis Sonneberg) und die daraus verdichtete Meldung des Lagezentrums des Landes um 10:30 Uhr, jeweils im Schema `LEAD-Meldung-v2` des Profils `profile/lead-thueringen` (bis Profilversion 1.10.0 `LEAD-Meldung-Land-v1`). Jeder Sachverhalt beginnt mit „FIKTIV“, Quellen und Zeichnungen tragen den Vermerk „FIKTIV“. Die verdichtete Meldung nennt im Bezug die vier Sachverhalte der Kreise und führt einen Zeitstrahl.
 
 Kräftelage der Feuerwehren: Die Kreismeldungen und die Landesmeldung geben Zahlen aus fiktiven Kennzahlen-Bausteinen des Demonstrators [Thessa](https://github.com/pereirawolf/thessa) wieder (Quelle „Kräftelage der Feuerwehren aus … Einsatzmitteln, Thessa“). Die Werte stehen unverändert mit Einheit und Datenstand im Text. Kennzahlen verschiedener Einheiten (Einsatzmittel, Einsätze) und verschiedener Datenstände (Kreise 10:00 Uhr, Land 10:30 Uhr) sind nicht zusammengezählt. Der Baustein des Landes ist ein Ausschnitt aus fünf Kreisen; die Landesmeldung kennzeichnet ihn so und nennt keine landesweite Zahl. Die Bausteine liegen unverändert im Begleitordner [`../orkantief-ilka-thessa/`](../orkantief-ilka-thessa/LIESMICH.md).
 
@@ -14,6 +14,14 @@ Bezug zur Thüringer Meldung im Beispielprofil der Koordinierungsstelle (`profil
 - Der Landkreis Sonneberg bewertet den Stromausfall „kritisch“, das Lagezentrum „erheblich“; die Landesmeldung vermerkt das als abweichende Bewertung.
 - Die Landesmeldung nennt landesweit rund 1.400 Einsätze nach der Lageübersicht des Lagezentrums; Thessa bildet davon nur einen Ausschnitt mit wenigen Feuerwehren je Kreis ab.
 
+Seit Profilversion 2.0.0 (LEAD-Meldung-v2):
+
+- **Kräftelage als Kennzahlen:** Die Landesmeldung führt beim Stromausfall vier Kennzahlen aus dem Baustein Thüringen 10:30 Uhr (gesamt, einsatzbereit, im Einsatz gebunden, frei für überörtliche Hilfe) mit dem Verweis im Modul `lead-baustein`; der Raum ist als erfasster Ausschnitt gekennzeichnet. Die Kreismeldungen nennen die Zahlen weiter nur im Text.
+- **Bezug auf die Betreiber (KL-2026-W45-03):** Der Stromausfall des Landkreises Sonneberg bezieht sich wie dessen Lagemeldung Nr. 4 im Szenario von [KRITIS-LEAD](https://github.com/pereirawolf/kritis-lead) (`formate/lead-kritis-v2/szenario/orkantief-ilka-sonneberg`) auf die Sachverhalte von Netzbetreiber, Mobilfunkbetreiber, Zweckverband, Pflegeträger und Leitstelle, mit der `meldung_id` der verwendeten Fassung. Diese Meldungen gehören nicht zum Beispiel; der Redaktionscheck nennt die fünf Bezüge deshalb als nicht geladen.
+- **Frist der Nachbetankung (KL-2026-W45-04):** eine Frist 15.10., 12:00 Uhr für Pflegeheime und Trinkwasserversorgung nach der Anforderung in Lagemeldung Nr. 4; das Ende der Notstromreichweite der Trinkwasserversorgung (16.10., 10:00 Uhr) steht als spätester Zeitpunkt in der Bedingung.
+
 Zweck: Demonstration und automatisierte Tests von KI-LEAD (Prüfung, Lagebild, Verdichtung) und der Übergabe von Kennzahlen aus Thessa. Der Kontrollsatz der Erprobung verwendet eine andere Ereignisart.
+
+**LEAD-Meldung-v2** (seit 14.11.2026, Profilversion 2.0.0, App 0.9.0): Die Meldungen sind mit `scripts/lead-meldung-v2.mjs` aus der v1-Fassung überführt und pflichtnah ergänzt: feste `meldung_id`, Zugang jeder Quelle, Meldungen anderer Stellen als Eingangsmeldung mit `meldung_id`, Gebiete mit amtlichem Schlüssel, Maßnahmen mit Status (nur wo der Text ihn nennt), Fristen und Empfehlungen mit Adressat, Bezug mit Art und `meldung_id`. Dateinamen und Sachverhaltskennungen sind unverändert; `entstehung.migration` nennt Werkzeug und offene Hinweise der Migration. Die v1-Fassung steht im Git-Verlauf und eingefroren unter `tests/fixtures/`. Die Kreismeldungen tragen Ebene „Kreis“ und den amtlichen Kreisschlüssel.
 
 Lizenz: CC BY 4.0, siehe `LICENSE-CONTENT`.

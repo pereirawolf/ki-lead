@@ -4,112 +4,112 @@
   "stellen": [
     {
       "name": "Ilm-Kreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Kyffhäuserkreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Altenburger Land",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Eichsfeld",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Gotha",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Greiz",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Hildburghausen",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Nordhausen",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Saalfeld-Rudolstadt",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Schmalkalden-Meiningen",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Sömmerda",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Sonneberg",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Landkreis Weimarer Land",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Saale-Holzland-Kreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Saale-Orla-Kreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Stadt Erfurt",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Stadt Gera",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Stadt Jena",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Stadt Suhl",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Stadt Weimar",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Unstrut-Hainich-Kreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Wartburgkreis",
-      "feld": "kreis",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     }
   ],
