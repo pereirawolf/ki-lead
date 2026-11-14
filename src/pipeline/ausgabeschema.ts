@@ -7,8 +7,9 @@
 //   die Angabe der angewandten SOPs, erstmals_gemeldet im Zeitstrahl, Prüfsumme eines Bausteins);
 // - Fachmodule nur mit den bekannten Modulen der Zusammenstellung, jedes Objekt geschlossen.
 // Das Schema steht im Systemauftrag von S2, der Vervollständigung und der Reparatur; Structured Outputs nutzt S2
-// weiterhin nicht (Kurzantwort und Werkzeuge). Ob die tiefere Struktur Kosten und Fehlerquote ändert, misst ein
-// Vergleichslauf (offener Punkt 2).
+// weiterhin nicht (Kurzantwort und Werkzeuge). Kosten und Fehlerquote der tieferen Struktur hat der Vergleichslauf Ilka
+// vom 14.11.2026 gemessen: keine Reparatur, Anteil des Schemas geschätzt 0,05 USD je Lauf (offener Punkt 2, erledigt;
+// evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md).
 
 import type { Profil } from "../kern/typen";
 
