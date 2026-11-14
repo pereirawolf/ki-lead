@@ -61,7 +61,7 @@ import type { LagebildReiter } from "./app/adresse";
 import { scrollVerhalten } from "./bewegung";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
-import { useAktivImBild } from "./leiste";
+import { useAktivImBild, useRandVerlauf } from "./leiste";
 import { useKopfHoehe } from "./kopfHoehe";
 import { ProfilZeile } from "./ProfilZeile";
 import { Menue } from "./Menue";
@@ -353,6 +353,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const reiterRef = useRef<HTMLElement>(null);
   const reiterAnker = useRef<HTMLDivElement>(null);
   useAktivImBild(reiterRef, reiter);
+  useRandVerlauf(reiterRef, `${reiter}|${eintraege.length}`);
   useKopfHoehe();
   const sprung = useSprung();
   const reiterWaehlen = (r: Reiter) => {

@@ -10,7 +10,7 @@ async function ilka(page: import("@playwright/test").Page) {
   await expect(page.getByText("7 Meldungen · 8 Sachverhalte")).toBeVisible();
 }
 
-test.describe("UX-2026-W46-02: Smartphone", () => {
+test.describe("UX-2026-W46-02, -03: Smartphone", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
   test("UX-2026-W46-02: nach dem Scrollen belegt der mitlaufende Bereich höchstens 230 px, die Reiter scrollen mit", async ({ page }) => {
@@ -26,5 +26,16 @@ test.describe("UX-2026-W46-02: Smartphone", () => {
     for (const name of ["Erfassung", "KI-Erfassung", "Auswertung", "Profile", "Einstellungen"]) {
       await expect(page.locator(".hauptnav").getByRole("button", { name, exact: true })).toBeInViewport({ ratio: 1 });
     }
+  });
+
+  test("UX-2026-W46-03: Randverlauf über den Reitern, solange dort weitere liegen", async ({ page }) => {
+    await ilka(page);
+    const ol = page.locator("nav.lb-reiter ol");
+    await expect(ol).toHaveAttribute("data-rest-rechts", "");
+    await expect(ol).not.toHaveAttribute("data-rest-links", "");
+    expect(await ol.evaluate((e) => getComputedStyle(e).maskImage || getComputedStyle(e).webkitMaskImage)).toContain("linear-gradient");
+    await ol.evaluate((e) => e.scrollTo({ left: e.scrollWidth }));
+    await expect(ol).not.toHaveAttribute("data-rest-rechts", "");
+    await expect(ol).toHaveAttribute("data-rest-links", "");
   });
 });

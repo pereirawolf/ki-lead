@@ -169,12 +169,20 @@
   list-style: none;
   overflow-x: auto;
   scrollbar-width: none;
-  /* Verlauf am Rand wie bei den Schrittleisten (UX-2026-W44-04) */
-  background:
-    linear-gradient(to right, var(--papier) 40%, transparent) left center / 2.5rem 100% no-repeat local,
-    linear-gradient(to left, var(--papier) 40%, transparent) right center / 2.5rem 100% no-repeat local,
-    linear-gradient(to right, var(--linie), transparent) left center / 1rem 100% no-repeat scroll,
-    linear-gradient(to left, var(--linie), transparent) right center / 1rem 100% no-repeat scroll;
+}
+
+/* Verlauf am Rand, solange dort weitere Reiter liegen (UX-2026-W44-04): seit UX-2026-W46-03 als Maske über den Reitern,
+   weil deren deckende Fläche einen Verlauf im Hintergrund der Liste verdeckte; Attribute aus useRandVerlauf() */
+.lb-reiter ol[data-rest-rechts] {
+  mask-image: linear-gradient(to left, transparent, #000 2.5rem);
+}
+
+.lb-reiter ol[data-rest-links] {
+  mask-image: linear-gradient(to right, transparent, #000 2.5rem);
+}
+
+.lb-reiter ol[data-rest-links][data-rest-rechts] {
+  mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
 }
 
 .lb-reiter li {
