@@ -881,6 +881,32 @@ export function pruefeReferenzen(m) {
     });
     for (const name of Object.keys(s.module || {})) if (!BEKANNTE_MODULE.has(name)) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
   });
+  // Sachverhaltsübergreifende Lage (Nachtrag 11, UP-2026-W45-06): Belege, Handlungsbedarf und Verweise auf Sachverhalte
+  const ul = m.uebergreifende_lage;
+  if (ul && typeof ul === "object") {
+    const p = "uebergreifende_lage";
+    for (const [pfad, text] of texteMitPfad(ul, p, [])) pruefeIds(verweise(text), pfad);
+    const lokal = (liste, name) => {
+      const ids = new Set();
+      (liste || []).forEach((x, j) => {
+        if (ids.has(x.id)) fehler(`${p}.${name}[${j}].id`, `doppelte ID ${x.id}`);
+        ids.add(x.id);
+        pruefeIds(x.quellen, `${p}.${name}[${j}].quellen`);
+      });
+      return ids;
+    };
+    lokal(ul.handlungsbedarf?.massnahmen, "handlungsbedarf.massnahmen");
+    const empf = lokal(ul.handlungsbedarf?.empfehlungen, "handlungsbedarf.empfehlungen");
+    lokal(ul.handlungsbedarf?.fristen, "handlungsbedarf.fristen");
+    (ul.handlungsbedarf?.fristen || []).forEach((f, j) => {
+      if (f.empfehlung && !empf.has(f.empfehlung)) fehler(`${p}.handlungsbedarf.fristen[${j}].empfehlung`, `${f.empfehlung} gibt es nicht`);
+    });
+    (ul.sachverhalte || []).forEach((k, j) => {
+      if (!kennungen.has(k)) fehler(`${p}.sachverhalte[${j}]`, `${k} ist kein Sachverhalt dieser Meldung`);
+    });
+    if (m.fehlanzeige) fehler(p, "übergreifende Lage neben einer Fehlanzeige");
+    else if ((m.sachverhalte || []).length < 2) hinweis(p, "übergreifende Lage bei weniger als zwei Sachverhalten – Angaben dem Sachverhalt zuordnen");
+  }
   // Meldungsmodule (SR-2026-W45-01): die App kennt noch keines; Inhalt bleibt erhalten, ohne eigene Prüfung
   for (const name of Object.keys(m.module || {})) hinweis(`module.${name}`, "unbekanntes Meldungsmodul, ungeprüft übernommen");
   for (const id of quellIds) if (!zitiert.has(id)) hinweis("quellen", `${id} verzeichnet, aber nicht zitiert`);

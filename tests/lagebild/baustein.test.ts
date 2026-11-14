@@ -77,6 +77,8 @@ describe("UP-2026-W45-05: Kennzahlen-Bausteine als Material im Lagebild", () => 
     expect(text.match(/EM-20261014-UNBF/g)).toHaveLength(1);
     // Beispiel ohne „material“ bleibt wie bisher
     const saale = p.manifest.beispiele!.find((b) => b.ordner !== ILKA)!;
-    expect(beispielMitMaterial(p, saale)).toEqual(beispielDateien(p, saale.ordner));
+    // ohne Zeitstempel verglichen: beide Aufrufe setzen „importiertAm“ selbst, an einer Millisekundengrenze verschieden
+    const ohneZeit = (l: { name: string; text: string }[]) => l.map(({ name, text }) => ({ name, text }));
+    expect(ohneZeit(beispielMitMaterial(p, saale))).toEqual(ohneZeit(beispielDateien(p, saale.ordner)));
   });
 });

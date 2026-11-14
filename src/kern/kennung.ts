@@ -91,5 +91,8 @@ export function bezugVon(sv: unknown, ui: UiKonfig): string[] {
   const rolle = ui.rollen.sv_bezug;
   if (!rolle || !sv || typeof sv !== "object") return [];
   const wert = holeWert(sv, rolle);
-  return Array.isArray(wert) ? wert.map((x) => String(x ?? "").trim()).filter(Boolean) : [];
+  // LEAD-Meldung-v2: Einträge als Objekte {kennung, meldung_id?, art?} (seit 0.8.3, UP-2026-W45-06)
+  return Array.isArray(wert)
+    ? wert.map((x) => String((x && typeof x === "object" ? (x as Record<string, unknown>).kennung : x) ?? "").trim()).filter(Boolean)
+    : [];
 }

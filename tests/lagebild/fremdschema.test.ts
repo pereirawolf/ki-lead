@@ -30,7 +30,7 @@ describe("TP-2026-W44-59: Eingangsschemata laden", () => {
     expect(p!.eingangSchemata!["LEAD-Meldung-Land-v1"]!.gebiet).toBe("kreis");
   });
 
-  it("falsche Form ist ein Fehler; fehlende oder unbrauchbare Datei, eigenes Schema und abweichende Kennung sind Warnungen", async () => {
+  it("falsche Form ist ein Fehler; fehlende oder unbrauchbare Datei und abweichende Kennung sind Warnungen; das eigene Schema ist seit Profilformat 1.33 zulässig", async () => {
     const form = await mitManifest((m) => (m.meldung.eingang_schemata = { X: { gebiet: "kreis" } }));
     expect(form.profil).toBeNull();
     expect(form.befunde.map((b) => b.text).join(" ")).toContain("„meldung.eingang_schemata“ braucht");
@@ -43,8 +43,10 @@ describe("TP-2026-W44-59: Eingangsschemata laden", () => {
     expect(kaputt.befunde.map((b) => b.stufe)).toEqual(["warnung"]);
     expect(kaputt.befunde[0]!.text).toContain("nicht verwendbar");
 
+    // UP-2026-W45-06 (0.8.3): Eingangsschema der eigenen Kennung wird verwendet, ohne Warnung (geändertes Soll; bis 0.8.2 Warnung)
     const eigen = await mitManifest((m) => (m.meldung.eingang_schemata = { "LEAD-Meldung-v1": { datei: "meldung.schema.json" } }));
-    expect(eigen.befunde[0]!.text).toContain("ist das eigene Schema");
+    expect(eigen.befunde).toEqual([]);
+    expect(Object.keys(eigen.profil!.eingangSchemata!)).toEqual(["LEAD-Meldung-v1"]);
 
     const abweichend = await mitManifest((m) => (m.meldung.eingang_schemata = { "Anders-v1": { datei: "eingang/LEAD-Meldung-Land-v1.schema.json" } }));
     expect(abweichend.befunde[0]!.text).toContain("Schemakennung „LEAD-Meldung-Land-v1“ weicht vom Eintrag „Anders-v1“ ab");

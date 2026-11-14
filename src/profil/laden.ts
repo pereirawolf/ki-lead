@@ -441,11 +441,10 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
   // Fremde Schemata für die Prüfung von Meldungen anderer Stellen (seit 0.6.19, TP-2026-W44-59); Fehler betreffen nur
   // diese Prüfung, das Profil bleibt nutzbar
   const eingangSchemata: Record<string, { schema: object; gebiet?: string }> = {};
+  // Seit Profilformat 1.33 (App 0.8.3, UP-2026-W45-06) auch für die eigene Schemakennung: Das Lagebild prüft Meldungen
+  // dieser Kennung dann gegen das Eingangsschema (etwa ohne Liste der Ebenen und Gebiete des Absenders), die Erfassung
+  // bleibt beim Profilschema.
   for (const [kennung, e] of Object.entries(manifest.meldung.eingang_schemata || {})) {
-    if (kennung === manifest.meldung.schema_id) {
-      befunde.push({ stufe: "warnung", text: `Eingangsschema „${kennung}“ ist das eigene Schema; der Eintrag wird nicht verwendet.` });
-      continue;
-    }
     let s: unknown;
     try {
       if (dateien[e.datei] === undefined) throw new Error("Datei fehlt");
@@ -479,7 +478,8 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
     }
   }
   if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
-  if (ui && uiOk) pruefePflichtKennsaetze(ui, befunde);
+  // Bei LEAD-Meldung-v2 sind Kennsätze Felder; die Darstellungsdatei braucht keine (Profilformat 1.33, App 0.8.3)
+  if (ui && uiOk && manifest.meldung.schema_id !== "LEAD-Meldung-v2") pruefePflichtKennsaetze(ui, befunde);
 
   for (const [art, pfad] of Object.entries(manifest.anweisungen || {})) {
     if (pfad && dateien[pfad] === undefined) befunde.push({ stufe: art === "erfassung" ? "fehler" : "warnung", text: `Arbeitsanweisung fehlt: ${pfad}` });

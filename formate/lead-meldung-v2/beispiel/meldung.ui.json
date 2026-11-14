@@ -30,6 +30,14 @@
       ]
     },
     {
+      "id": "uebergreifend",
+      "titel": "Übergreifende Lage",
+      "felder": [
+        "uebergreifende_lage"
+      ],
+      "einleitung": "Optional und nur bei mehreren Sachverhalten: Angaben, die für mehrere oder alle Sachverhalte gelten und keinem einzelnen zugeordnet werden können (übergreifende Kernaussage, Maßnahmen, Empfehlungen, Fristen, offene Fragen). Was zu einem Sachverhalt gehört, steht dort."
+    },
+    {
       "id": "quellen",
       "titel": "Quellen und Referenzen",
       "felder": [
@@ -641,6 +649,130 @@
     "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.begruendung": {
       "label": "Begründung",
       "widget": "text_lang"
+    },
+    "uebergreifende_lage": {
+      "label": "Übergreifende Lage (optional)",
+      "hinweis": "Leer lassen, wenn alles einem Sachverhalt zugeordnet werden kann."
+    },
+    "uebergreifende_lage.kernaussage": {
+      "label": "Übergreifende Kernaussage",
+      "widget": "text_lang",
+      "hinweis": "Was die Sachverhalte zusammen für den Bevölkerungsschutz bedeuten, mit Veränderung oder Prüf- und Abstimmungsfrage (SOP-LEAD A.4); Belege als [Qn]."
+    },
+    "uebergreifende_lage.sachverhalte": {
+      "label": "Betroffene Sachverhalte",
+      "widget": "kennungen",
+      "platzhalter": "DE-TH-20261014-K7QM",
+      "hinweis": "Kennungen der Sachverhalte dieser Meldung, mit Komma getrennt; leer = alle."
+    },
+    "uebergreifende_lage.handlungsbedarf": {
+      "label": "Übergreifende Maßnahmen & Handlungsempfehlungen"
+    },
+    "uebergreifende_lage.offene_fragen": {
+      "label": "Offene Fragen und Entscheidungsbedarfe",
+      "element_label": "Frage",
+      "hinzufuegen": "Frage hinzufügen"
+    },
+    "uebergreifende_lage.erlaeuterung": {
+      "label": "Erläuterung",
+      "widget": "text_lang"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen": {
+      "label": "Bestehende Maßnahmen",
+      "element_label": "Maßnahme",
+      "titel_feld": "gegenstand",
+      "hinzufuegen": "Maßnahme hinzufügen"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen": {
+      "label": "Empfehlungen",
+      "element_label": "Empfehlung",
+      "titel_feld": "auftrag",
+      "hinzufuegen": "Empfehlung hinzufügen"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].termin": {
+      "label": "Termin",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen": {
+      "label": "Handlungsrelevant bis",
+      "element_label": "Frist",
+      "titel_feld": "aufgabe",
+      "hinzufuegen": "Frist hinzufügen"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].bis": {
+      "label": "bis",
+      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+    },
+    "uebergreifende_lage.handlungsbedarf.erlaeuterung": {
+      "label": "Erläuterung",
+      "widget": "text_lang"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].quellen": {
+      "label": "Belege",
+      "widget": "kennungen",
+      "platzhalter": "Q1, Q2",
+      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].id": {
+      "label": "Nummer"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].gegenstand": {
+      "label": "Maßnahme"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].stelle": {
+      "label": "Stelle"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].status": {
+      "label": "Status"
+    },
+    "uebergreifende_lage.handlungsbedarf.massnahmen[].stand": {
+      "label": "Stand",
+      "hinweis": "Zeitpunkt des Stands, z. B. 2026-10-14T08:00+02:00."
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].id": {
+      "label": "Nummer"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].adressat": {
+      "label": "Adressat"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].auftrag": {
+      "label": "Auftrag"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].anlass": {
+      "label": "Anlass"
+    },
+    "uebergreifende_lage.handlungsbedarf.empfehlungen[].bedingung": {
+      "label": "Bedingung oder nächster Prüfanlass"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].id": {
+      "label": "Nummer"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].aufgabe": {
+      "label": "Aufgabe"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].adressat": {
+      "label": "Adressat"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].bedingung": {
+      "label": "Bedingung"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].grundlage": {
+      "label": "Grundlage"
+    },
+    "uebergreifende_lage.handlungsbedarf.fristen[].empfehlung": {
+      "label": "Zugehörige Empfehlung"
     }
   },
   "radare": {

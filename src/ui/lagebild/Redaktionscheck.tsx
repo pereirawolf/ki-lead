@@ -9,6 +9,7 @@ import { zeitpunktDE } from "../../kern/zeit";
 import { APP_KENNUNG } from "../../kern/version";
 import { svKennung, zeitpunktVon, type LagebildEintrag, type SvEintrag } from "../../lagebild/lagebild";
 import {
+  kennsaetzeFuer,
   ABSCHNITTE,
   befundListe,
   befundSchluessel,
@@ -67,7 +68,7 @@ export function Redaktionscheck({
   const ui = profil.ui;
   const r = ui.rollen;
   const lb = ui.lagebild || {};
-  const ks = ui.kennsaetze || {};
+  const ks = kennsaetzeFuer(profil);
   const v = lb.verweise || {};
   const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
   const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";

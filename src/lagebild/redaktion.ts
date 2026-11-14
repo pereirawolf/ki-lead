@@ -6,11 +6,17 @@
 import { kennsatz, kennsaetzeAlle, KENNSATZ_ERSATZ, leseFrist, MEHRERE_FRISTEN_HINWEIS, mehrereFristen } from "../kern/kennsaetze";
 import { offenePlatzhalter } from "../kern/feldhilfen";
 import { holeWert } from "../kern/pfad";
-import { bezugVon, istKennung, kennungenDerMeldung } from "../kern/kennung";
+import { bezugVon, istKennungV2 } from "../kern/kennung";
 import { quellenHinweise } from "../kern/quellen";
 import { bezeichnung } from "../kern/ui";
 import { datumDE } from "../kern/ausgabe";
 import { isoLokalZuZeitpunkt, tagInZone, zeitpunktDE, zeitpunktInZone, zoneOder } from "../kern/zeit";
+import { istV2 } from "../kern/referenzen";
+import { BAUSTEIN_FORMATE } from "../kern/baustein";
+import { belegachsen } from "../kern/bausteinverdichtung";
+import { MODUL_BAUSTEIN, SCHEMA_ID as SCHEMA_V2 } from "../kern/meldung-v2.js";
+import { UEBERGREIFEND } from "../kern/v2darstellung";
+import { zeitDE } from "../kern/baustein";
 import type { Profil } from "../kern/typen";
 import {
   absender,
@@ -175,6 +181,119 @@ function fristEinstufen(
   return ["nach der nächsten Ausgabe – aus dieser Frist kein Anlass für eine frühere Weitergabe", "ok"];
 }
 
+/** Beschriftungen der v2-Felder, die bei v1 Kennsätze waren (seit 0.8.3, UP-2026-W45-06) */
+export const LABEL_V2 = {
+  handlungsrelevant: "Handlungsrelevant bis:",
+  abweichung: "Abweichende Bewertung:",
+  abschluss: "Abschluss im Lagebild:",
+  aenderung: "Änderung zur Vormeldung:",
+  neubewertung: "Neubewertung bei",
+} as const;
+
+/**
+ * Kennsätze für Anzeige und Auswertung: bei Profilen nach LEAD-Meldung-v2 die Beschriftungen der Felder als Vorgabe
+ * (Kennsätze sind dort Beschriftungen der Darstellung, Profilformat 1.33), ergänzt um die des Profils; sonst die des Profils.
+ */
+export function kennsaetzeFuer(profil: Pick<Profil, "manifest" | "ui">): Record<string, string> {
+  const eigene = profil.ui.kennsaetze || {};
+  return profil.manifest?.meldung?.schema_id === SCHEMA_V2 ? { ...LABEL_V2, ...eigene } : eigene;
+}
+
+const listeVon = (x: unknown): any[] => (Array.isArray(x) ? x.filter((y) => y && typeof y === "object") : []);
+
+/** Frist nach LEAD-Meldung-v2 als Zeile und Zeitpunkt; ein Kalendertag gilt bis 23:59 in der Zeitzone */
+export function fristV2(f: Record<string, any>, zone: string): { text: string; datum: Date | null; genauigkeit: "minute" | "tag" } {
+  const bis = typeof f.bis === "string" ? f.bis.trim() : "";
+  let datum: Date | null = null;
+  let genauigkeit: "minute" | "tag" = "minute";
+  const tag = /^(\d{4})-(\d{2})-(\d{2})$/.exec(bis);
+  if (tag) {
+    datum = zeitpunktInZone(+tag[1]!, +tag[2]!, +tag[3]!, 23, 59, zone);
+    genauigkeit = "tag";
+  } else if (bis) {
+    const d = new Date(bis);
+    datum = Number.isNaN(d.getTime()) ? null : d;
+  }
+  const teile = [
+    `${f.id ? `${f.id}: ` : ""}${zeitDE(bis) || "Termin unbekannt"} – ${String(f.aufgabe ?? "").trim() || "ohne Aufgabe"}`,
+    f.adressat ? `, ${String(f.adressat).trim()}` : "",
+    f.bedingung ? ` – ${String(f.bedingung).trim()}` : "",
+    f.grundlage ? `; Grundlage: ${String(f.grundlage).trim()}` : "",
+  ];
+  return { text: teile.join(""), datum, genauigkeit };
+}
+
+function abweichungTextV2(a: Record<string, any>): string {
+  return [
+    `${String(a.stelle ?? "").trim() || "Stelle ohne Angabe"} „${a.stufe ?? "keine Angabe"}“ – ${String(a.grund).trim()}`,
+    a.ursache ? `Ursache: ${String(a.ursache).trim()}` : "",
+    a.klaerend ? `klärend: ${String(a.klaerend).trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join(". ");
+}
+
+function abschlussTextV2(a: Record<string, any>): string {
+  return [
+    a.ende ? `Ende ${zeitDE(a.ende)}` : "",
+    a.offene_punkte ? `offen: ${String(a.offene_punkte).trim()}` : "",
+    a.nachsorge ? `Nachsorge: ${String(a.nachsorge).trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join("; ");
+}
+
+/**
+ * Übergreifende Lage einer v2-Meldung als Pseudo-Sachverhalt (Index −1) für Fristen und Zuordnung im Redaktionscheck
+ * (seit 0.8.3, UP-2026-W45-06; LEAD-MELDUNG-V2.md Abschnitt 2, offener Punkt 10).
+ */
+export function uebergreifendeEintraege(eintraege: LagebildEintrag[], profil: Profil): SvEintrag[] {
+  return eintraege.flatMap((e) => {
+    const ul = e.fremd || !istV2(e.daten, profil.ui) ? null : e.daten?.[UEBERGREIFEND];
+    if (!ul || typeof ul !== "object") return [];
+    return [
+      {
+        eintrag: e,
+        index: -1,
+        sv: ul,
+        land: "",
+        stelle: "",
+        herkunftsrolle: "",
+        bezeichnung: "Übergreifende Lage",
+        arten: [],
+        ort: "",
+        eintritt: "",
+        beurteilung: "",
+        tendenz: "",
+        bewertungText: "",
+      },
+    ];
+  });
+}
+
+/**
+ * Hinweis „Kennzahl als Beleg prüfen“ (KENNZAHL_BELEG) für eine v2-Meldung mit Kennzahlen aus Kennzahlen-Bausteinen
+ * (Modul lead-baustein): je Sachverhalt mit übernommenen Kennzahlen, mit den möglichen Belegachsen der liefernden App,
+ * wenn das Profil ein Lagenradar führt. Die App setzt keine Stufe. Leer ohne solche Kennzahlen.
+ */
+export function kennzahlBelegHinweis(e: LagebildEintrag, profil: Profil): string {
+  if (e.fremd || !istV2(e.daten, profil.ui)) return "";
+  const mitRadar = !!profil.ui.rollen.sv_radar;
+  const teile: string[] = [];
+  listeVon(e.daten?.sachverhalte).forEach((sv, i) => {
+    const eintraege = listeVon(sv?.module?.[MODUL_BAUSTEIN]?.bausteine).filter((b) => listeVon(b.kennzahlen).length);
+    if (!eintraege.length) return;
+    const formate = [...new Set(eintraege.map((b) => String(b.format ?? "")))];
+    const achsen = mitRadar ? [...new Set(formate.flatMap((f) => belegachsen(f)))] : [];
+    const name = String(sv.bezeichnung ?? "").trim() || `Sachverhalt ${i + 1}`;
+    teile.push(
+      `${name}${achsen.length ? ` (mögliche Belegachsen nach ${formate.map((f) => BAUSTEIN_FORMATE[f]?.app ?? f).join(", ")}: ${achsen.join(", ")})` : ""}`,
+    );
+  });
+  if (!teile.length) return "";
+  return `Kennzahl als Beleg prüfen: Kennzahlen aus Kennzahlen-Bausteinen übernommen in ${teile.join("; ")}. Beurteilung${mitRadar ? " und Lagenradar" : ""} bleiben eine Entscheidung nach Kodierleitfaden und SOP; die App setzt keine Stufe.`;
+}
+
 /**
  * Redaktionscheck. naechsteAusgabe als „JJJJ-MM-TT[Thh:mm]“ in der Zeitzone des Profils (oder als Zeitpunkt),
  * jetzt ist der Prüfzeitpunkt (Echtzeit oder ausdrücklich gewählter Stichtag).
@@ -182,7 +301,7 @@ function fristEinstufen(
 export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, naechsteAusgabe: string | Date, jetzt = new Date()): Redaktion {
   const ui = profil.ui;
   const r = ui.rollen;
-  const ks = ui.kennsaetze || {};
+  const ks = kennsaetzeFuer(profil);
   const zone = zoneOder(profil.manifest.variablen?.zeitzone);
   const aus = ausgabeAufloesen(naechsteAusgabe, zone);
   const svs = alleSachverhalte(eintraege, profil);
@@ -190,10 +309,21 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   const hochSet = new Set(hoch.stufen);
   const marker: MarkerBefund[] = [];
 
-  // 1) Zeitfenster „Handlungsrelevant bis“ (A.5 Nr. 2, A.7.3). Jede Kennsatzzeile zählt einzeln.
+  // 1) Zeitfenster „Handlungsrelevant bis“ (A.5 Nr. 2, A.7.3). Jede Kennsatzzeile zählt einzeln. Bei LEAD-Meldung-v2
+  // (seit 0.8.3, UP-2026-W45-06) jede Frist der Liste handlungsbedarf.fristen, auch in der übergreifenden Lage.
   const zeit: Zeitfenster[] = [];
+  const v2 = (s: SvEintrag) => istV2(s.eintrag.daten, ui);
+  const ueber = uebergreifendeEintraege(eintraege, profil);
+  for (const sv of [...svs.filter(v2), ...ueber])
+    for (const f of listeVon(sv.sv?.handlungsbedarf?.fristen)) {
+      const g = fristV2(f, zone);
+      const [status, klasse] = g.datum
+        ? fristEinstufen(g.datum, g.genauigkeit, jetzt, aus, zone)
+        : ["Termin unbekannt – Bedingung oder nächsten Prüfanlass prüfen", "warn" as Klasse];
+      zeit.push({ sv, text: g.text, datum: g.datum, genauigkeit: g.genauigkeit, status, klasse });
+    }
   if (ks.handlungsrelevant) {
-    for (const sv of svs)
+    for (const sv of svs.filter((s) => !v2(s)))
       for (const t of kennsaetzeAlle(sv.bewertungText, ks.handlungsrelevant)) {
         const f = leseFrist(t, zone);
         const [status, eingestuft] = fristEinstufen(f.datum, f.genauigkeit, jetzt, aus, zone);
@@ -205,9 +335,9 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
         const hinweis = [f.hinweis, offen, mehrere ? MEHRERE_FRISTEN_HINWEIS : ""].filter(Boolean).join("; ");
         zeit.push({ sv, text: t, datum: f.datum, genauigkeit: f.genauigkeit, ...(hinweis ? { hinweis } : {}), status, klasse });
       }
-    // Nicht lesbare Fristen zuerst (sie brauchen Klärung), danach zeitlich
-    zeit.sort((a, b) => (a.datum?.getTime() ?? -Infinity) - (b.datum?.getTime() ?? -Infinity));
   }
+  // Nicht lesbare Fristen zuerst (sie brauchen Klärung), danach zeitlich
+  zeit.sort((a, b) => (a.datum?.getTime() ?? -Infinity) - (b.datum?.getTime() ?? -Infinity));
 
   // 2) Zusammenhang und abweichende Bewertungen (A.7.1, A.7.2)
   const entspannung = r.tendenz_entspannung;
@@ -238,8 +368,17 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
         a.art.localeCompare(b.art, "de"),
     );
   const vermerkt: Redaktion["vermerkt"] = [];
+  // LEAD-Meldung-v2: Liste bewertung.abweichende_bewertungen (A.7.2)
+  for (const sv of svs.filter(v2)) {
+    const liste = listeVon(sv.sv?.bewertung?.abweichende_bewertungen);
+    if (!liste.length) continue;
+    const ohneGrund = liste.filter((a) => !String(a?.grund ?? "").trim());
+    if (ohneGrund.length) marker.push({ sv, kennsatz: LABEL_V2.abweichung, art: "leer", text: `${ohneGrund.length} Eintrag/Einträge ohne tragenden Grund` });
+    const texte = liste.filter((a) => String(a?.grund ?? "").trim()).map(abweichungTextV2);
+    if (texte.length) vermerkt.push({ sv, text: texte.join("; ") });
+  }
   if (ks.abweichung)
-    for (const sv of svs) {
+    for (const sv of svs.filter((s) => !v2(s))) {
       const t = kennsatz(sv.bewertungText, ks.abweichung);
       if (t === null) continue;
       if (offenePlatzhalter(t).length) marker.push({ sv, kennsatz: ks.abweichung, art: "offen", text: "offene Vorlagenstellen ⟦…⟧ – noch kein Vermerk" });
@@ -256,6 +395,26 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   /** Sachverhalte mit inhaltlichem Abschluss: keine Vollständigkeitsprüfung mehr */
   const abgeschlossen = new Set<SvEintrag>();
   for (const sv of svs) {
+    // LEAD-Meldung-v2 (seit 0.8.3): Abschluss und Änderung als Felder der Bewertung (A.8.1, A.8.2)
+    if (v2(sv)) {
+      const nachlaufZusatz = entspannung && sv.tendenz === entspannung ? `; Tendenz „${entspannung}“ – Nachlauf prüfen` : "";
+      const a = sv.sv?.bewertung?.abschluss;
+      if (a && typeof a === "object") {
+        abschlussZeile.add(sv);
+        const t = abschlussTextV2(a);
+        if (!a.ende) marker.push({ sv, kennsatz: LABEL_V2.abschluss, art: "offen", text: `kein Ende angegeben – kein Abschluss ausgesagt${nachlaufZusatz}` });
+        else {
+          abschluss.push({ sv, text: t, rueckblick: hochSet.has(sv.beurteilung) });
+          abgeschlossen.add(sv);
+        }
+      } else if (entspannung && sv.tendenz === entspannung) nachlauf.push(sv);
+      const aen = sv.sv?.bewertung?.aenderung_zur_vormeldung;
+      if (typeof aen === "string") {
+        if (aen.trim()) aenderung.push({ sv, text: aen.trim() });
+        else marker.push({ sv, kennsatz: LABEL_V2.aenderung, art: "leer", text: "Feld ohne Inhalt" });
+      }
+      continue;
+    }
     const abs = ks.abschluss ? kennsatz(sv.bewertungText, ks.abschluss) : null;
     if (abs !== null && ks.abschluss) {
       // Bei Tendenz Entspannung schließt der Markerbefund die Nachlauffrage ein (ein Befund, nicht zwei)
@@ -288,9 +447,12 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     const nachKennung = new Map<string, SvEintrag[]>();
     for (const sv of svs) {
       const k = String(holeWert(sv.sv, r.sv_kennung) ?? "").trim();
-      if (istKennung(k)) nachKennung.set(k, [...(nachKennung.get(k) || []), sv]);
+      // Zufallsteil 4 bis 8 Zeichen (LEAD-Meldung-v2; v1 hat 4), seit 0.8.3
+      if (istKennungV2(k)) {
+        nachKennung.set(k, [...(nachKennung.get(k) || []), sv]);
+        mitKennung.add(sv.eintrag.id);
+      }
     }
-    for (const e of eintraege) if (!e.fremd && kennungenDerMeldung(e.daten, ui).length) mitKennung.add(e.id);
     const zeit = (s: SvEintrag) => zeitpunktVon(s.eintrag, profil);
     for (const [kennung, liste] of nachKennung) {
       if (liste.length < 2) continue;
@@ -301,17 +463,30 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
     }
     if (r.sv_bezug)
       for (const sv of svs)
-        for (const b of bezugVon(sv.sv, ui)) if (istKennung(b) && !nachKennung.has(b)) kennungen.push({ art: "bezug", kennung: b, sachverhalte: [sv] });
+        for (const b of bezugVon(sv.sv, ui)) if (istKennungV2(b) && !nachKennung.has(b)) kennungen.push({ art: "bezug", kennung: b, sachverhalte: [sv] });
   }
   // Rückfall: Gruppen nach Stelle nur, wenn mindestens eine Meldung der Gruppe keine Kennung trägt
   const mehrfach = mehrfachMeldungen(eintraege, profil).filter((m) => m.eintraege.some((e) => !mitKennung.has(e.id)));
 
   // 4) Formale Vollständigkeit bei hoher Beurteilung (A.4, A.5): Bewertungstext, Neubewertung, Maßnahmen
   const kern: Redaktion["kern"] = [];
+  const feldLabel = (pfad: string, ersatz: string) => ui.felder?.[`${r.sachverhalte}[].${pfad}`]?.label || ersatz;
   const massnahmenLabel = r.sv_massnahmen ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_massnahmen}`) : "";
   for (const sv of svs) {
     if (!hochSet.has(sv.beurteilung) || abgeschlossen.has(sv)) continue;
     const fehlt: string[] = [];
+    if (v2(sv)) {
+      // LEAD-Meldung-v2 (seit 0.8.3): Kernaussage, Neubewertungsanlässe, Maßnahmen oder Empfehlungen als Felder
+      const b = sv.sv?.bewertung;
+      if (!String(b?.kernaussage ?? "").trim()) fehlt.push(`keine ${feldLabel("bewertung.kernaussage", "Kernaussage")}`);
+      if (!listeVon(b?.neubewertung_bei).some((x) => String(x?.indikator ?? "").trim()))
+        fehlt.push(`keine Angaben in „${feldLabel("bewertung.neubewertung_bei", LABEL_V2.neubewertung)}“`);
+      const h = sv.sv?.handlungsbedarf;
+      if (!listeVon(h?.massnahmen).length && !listeVon(h?.empfehlungen).length)
+        fehlt.push(`keine ${feldLabel("handlungsbedarf.massnahmen", "Maßnahmen")} oder ${feldLabel("handlungsbedarf.empfehlungen", "Empfehlungen")}`);
+      if (fehlt.length) kern.push({ sv, fehlt });
+      continue;
+    }
     if (r.sv_bewertung_text && !sv.bewertungText.trim()) fehlt.push("kein Bewertungstext");
     else if (ks.neubewertung) {
       const nb = kennsatz(sv.bewertungText, ks.neubewertung);
@@ -341,25 +516,36 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
       });
       continue;
     }
-    const q = quellenHinweise(e.daten, ui).filter((h) => h.stufe !== "hinweis");
+    // LEAD-Meldung-v2 (seit 0.8.3): Fehler der Referenzprüfung (Prüfebene 2) statt der Textregeln für Quellen
+    const q = [...quellenHinweise(e.daten, ui), ...(e.referenzen ?? [])].filter((h) => h.stufe !== "hinweis");
     const zeilen = [
       ...e.hinweise,
       ...(statusVon(e, profil) === r.status_entwurf ? [`Status „${r.status_entwurf}“: Die Meldung ist nicht als final gekennzeichnet.`] : []),
       ...e.schema.map((b) => `Schema: ${b.text}`),
-      ...q.map((h) => `Quellen: ${h.text}`),
+      ...q.map((h) => (h.code?.startsWith("REFERENZ") ? h.text : `Quellen: ${h.text}`)),
     ];
-    if (zeilen.length) quellen.push({ eintrag: e, zeilen, schema: e.schema.length, quellen: q.length, klasse: e.schema.length ? "alert" : "warn" });
+    // Hinweis „Kennzahl als Beleg prüfen“ (KENNZAHL_BELEG; Entscheidung des Herausgebers vom 14.11.2026 zu UP-2026-W45-05)
+    const beleg = kennzahlBelegHinweis(e, profil);
+    if (zeilen.length || beleg)
+      quellen.push({
+        eintrag: e,
+        zeilen: [...zeilen, ...(beleg ? [beleg] : [])],
+        schema: e.schema.length,
+        quellen: q.length,
+        klasse: e.schema.length ? "alert" : zeilen.length ? "warn" : "info",
+      });
   }
 
   // Abdeckung: welche Regeln mangels Profilangabe nicht laufen
   const nichtKonfiguriert: string[] = [];
-  if (!ks.handlungsrelevant) nichtKonfiguriert.push("Zeitfenster: kein Kennsatz „Handlungsrelevant bis“ im Profil");
+  const alleV2 = svs.length > 0 && svs.every(v2);
+  if (!ks.handlungsrelevant && !alleV2) nichtKonfiguriert.push("Zeitfenster: kein Kennsatz „Handlungsrelevant bis“ im Profil");
   else if (!aus) nichtKonfiguriert.push("Zeitfenster: nächste Ausgabe nicht lesbar – Fristen nur gegen den Prüfzeitpunkt eingestuft");
   if (!r.sv_beurteilung) nichtKonfiguriert.push("Abweichende Bewertungen: keine Beurteilung im Profil");
-  if (!ks.abschluss) nichtKonfiguriert.push("Abschluss: kein Abschlusskennsatz im Profil");
+  if (!ks.abschluss && !alleV2) nichtKonfiguriert.push("Abschluss: kein Abschlusskennsatz im Profil");
   if (!entspannung) nichtKonfiguriert.push("Nachlauf: keine Tendenz „Entspannung“ im Profil");
   if (!hoch.stufen.length) nichtKonfiguriert.push("Formale Vollständigkeit: keine hohen Beurteilungsstufen bestimmbar");
-  else if (!r.sv_bewertung_text && !ks.neubewertung && !r.sv_massnahmen)
+  else if (!alleV2 && !r.sv_bewertung_text && !ks.neubewertung && !r.sv_massnahmen)
     nichtKonfiguriert.push("Formale Vollständigkeit: weder Bewertungstext, Neubewertung noch Maßnahmen im Profil");
   if (!r.quellen) nichtKonfiguriert.push("Quellen: kein Quellenverzeichnis im Profil");
   const hinweise: string[] = [];
@@ -473,7 +659,7 @@ export function kennungsText(k: KennungsBefund, profil: Profil): string {
 
 /** Alle Befunde als Zeilen; zeitkritisch und zu klären ergeben zusammen die Anzahl des Checks. */
 export function befundListe(red: Redaktion, profil: Profil): Befundzeile[] {
-  const ks = profil.ui.kennsaetze || {};
+  const ks = kennsaetzeFuer(profil);
   const sv = (x: SvEintrag) => ({ datei: x.eintrag.name, meldung: x.eintrag.id, bezug: svKennung(x, profil) });
   const out: Befundzeile[] = [];
   for (const z of red.zeit)
