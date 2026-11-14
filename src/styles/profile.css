@@ -156,7 +156,7 @@
 }
 
 /* Äußere Aufklappzeile in der Schriftgröße der Karte wie die inneren („… lesen“, „Technische Angaben“), damit diese
-   nicht größer sind als sie (seit UX-2026-W46-05; bis 0.7.20 0,92 rem) */
+   nicht größer sind als sie (seit UX-2026-W46-05; bis 0.7.21 0,92 rem) */
 .profil-details > summary {
   font-size: inherit;
 }

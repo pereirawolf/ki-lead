@@ -1,4 +1,4 @@
-// Oberfläche nach der UX-Prüfung 2026-W46 (seit 0.7.21) im echten Browser: mitlaufender Bereich auf dem Smartphone
+// Oberfläche nach der UX-Prüfung 2026-W46 (seit 0.7.22) im echten Browser: mitlaufender Bereich auf dem Smartphone
 // (UX-2026-W46-02), Randverlauf der Reiterleiste (-03), Kacheln der gemeldeten Stellen (-07).
 import { expect, test } from "@playwright/test";
 import { bereich, oeffnen } from "./hilfen";

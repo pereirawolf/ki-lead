@@ -71,7 +71,7 @@ for (const breite of [390, 1280]) {
       expect(farben.flaeche).toBe(farben.tief);
     });
 
-    test("nach dem Scrollen schmaler, ganzer Wortlaut sichtbar, Reiter darunter, am Seitenanfang wieder wie zuvor", async ({ page }) => {
+    test("nach dem Scrollen schmaler, ganzer Wortlaut sichtbar, Reiter darunter (ab 640 px), am Seitenanfang wieder wie zuvor", async ({ page }) => {
       await ilka(page);
       const band = page.locator(".kopfbereich > .hinweisband");
       const voll = (await band.boundingBox())!.height;
@@ -94,11 +94,12 @@ for (const breite of [390, 1280]) {
         };
       });
       expect(sichtbar).toEqual({ umbruch: true, ueberlauf: false, innen: true });
-      // Kopfbereich oben, Reiter der Auswertung direkt darunter
+      // Kopfbereich oben, Reiter der Auswertung direkt darunter; unter 640 px scrollen die Reiter mit (seit UX-2026-W46-02)
       const kopf = (await page.locator(".kopfbereich").boundingBox())!;
       expect(kopf.y).toBe(0);
       const leiste = (await page.locator("nav.lb-reiter").boundingBox())!;
-      expect(Math.abs(leiste.y - (kopf.y + kopf.height))).toBeLessThan(3);
+      if (breite >= 640) expect(Math.abs(leiste.y - (kopf.y + kopf.height))).toBeLessThan(3);
+      else expect(leiste.y + leiste.height).toBeLessThanOrEqual(kopf.y + kopf.height);
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect.poll(() => kompakt(page)).toBe(false);
     });

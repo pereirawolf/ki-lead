@@ -117,6 +117,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.19 | letzter Commit des Pull Requests „Kennzahlen-Bausteine aus KSNV als Materialart; 0.7.19“ |
 | 0.7.20 | letzter Commit des Pull Requests „Schätzung der Erfassung nach der Fallreihe vom 13.11.2026; 0.7.20“ |
 | 0.7.21 | letzter Commit des Pull Requests „Schrittleiste nur mit dem Punkt, Grunddesign 1.9; 0.7.21“ |
+| 0.7.22 | letzter Commit des Pull Requests „UX-Prüfung 2026-W46: Auswertung und Profile; 0.7.22“ |
+## [0.7.22] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_ux_2026-W46.json` (UX-Durchsicht der Übersicht der Auswertung und der Profile, App 0.7.20), Freigabe des Herausgebers vom 14.11.2026: alle sieben Befunde, UX-2026-W46-01 Variante A, -02 Variante B (statt A, weil A der MUSS-Regel LD-N05 widerspricht; Abnahme höchstens 230 px), -04 Variante A, -06 Variante A.
+
+### Geändert
+
+- **Erinnerung ohne echte Adressen** (UX-2026-W46-01, `src/ui/Lagebild.tsx`, `src/lagebild/lagebild.ts`): Im Meldestatus öffnet eine offene Stelle mit Platzhalteradresse keinen E-Mail-Entwurf mehr an diese Adresse, sondern bietet „Text kopieren“ (Betreff und Text der Erinnerung nach der Vorlage des Profils; zugänglicher Name „Text kopieren: Erinnerung an <Stelle>“). Mit echter Adresse bleibt „Erinnern“ als E-Mail-Entwurf. Neue Funktion `erinnerungText()`; `erinnerungMailto()` nutzt sie.
+- **Reiter der Auswertung auf schmalen Bildschirmen** (UX-2026-W46-02, `src/styles/lagebild.css`): Unter 640 px stehen die Reiter nicht mehr unter dem Kopf, sondern scrollen mit; der Kopfbereich bleibt stehen. Auf 390 × 844 px belegt der mitlaufende Bereich nach dem Scrollen damit rund 215 statt 273 px. Ab 640 px bleibt es bei UX-2026-W45-03. Hauptnavigation und Hinweisband unverändert (LD-N05, LD-R04).
+- **Randverlauf der Reiterleiste** (UX-2026-W46-03, `src/ui/leiste.ts`, `src/styles/lagebild.css`): Der Verlauf am Rand, solange dort weitere Reiter liegen (UX-2026-W44-04), lag im Hintergrund der Liste und wurde von der deckenden Fläche der Reiter verdeckt. Er ist jetzt eine Maske über den Reitern; `useRandVerlauf()` setzt dafür an der Liste `data-rest-links` und `data-rest-rechts`.
+- **Farben der Tendenz** (UX-2026-W46-04, `src/lagebild/lagebild.ts`): Mittlere Stufen der Tendenz (im Beispielprofil „Stabilisierung“) sind in Marken, Verteilung und Kopiervorlage grau statt gelb, damit sie nicht wie die Beurteilung „geringfügig“ gelesen werden; Rot bei Verschärfung und Grün bei Entspannung bleiben. [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.31.
+- **Profilkarte** (UX-2026-W46-05, -06, `src/styles/profile.css`, `src/ui/Profile.tsx`): Die Aufklappzeile „Angaben, Lesetexte und Prüfung“ steht in der Schriftgröße der Karte wie die inneren Aufklappzeilen (bis 0.7.21 0,92 rem und damit kleiner als diese). Im Bereich „Angaben“ entfallen Ebene und Referenzraum, die schon in der Eckdatenzeile stehen (UX-2026-W45-28), und die Sprungleiste „Angaben · Lesen · Prüfen“.
+- **Gemeldete Stellen im Meldestatus** (UX-2026-W46-07, `src/ui/Lagebild.tsx`, `src/styles/lagebild.css`): Name in der ersten Zeile ohne Umbruch, Zeitpunkt und Alter klein darunter; lange Ländernamen brechen bei 1440 und 390 px nicht mehr um.
+- Spezifikation 0.7.22 (Abschnitte 4.6, 5.1 und 5.2). Versionsangaben 0.7.22 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 722); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/ui/ux-2026-w46.test.ts`: UX-2026-W46-01 (kein Link auf eine Platzhalteradresse, zehn Knöpfe „Text kopieren“ beim Beispiel Ilka, kopierter Text für Bayern), -04 (Verteilung der Tendenz grün, grau, rot; keine mittlere Stufe in einer Farbe der Beurteilung), -06 (Ebene und Referenzraum je Karte einmal, keine Sprungleiste).
+- `tests/browser/ux-2026-w46.spec.ts`: UX-2026-W46-02 (390 × 844: mitlaufender Bereich nach dem Scrollen höchstens 230 px, Reiter scrollen mit, alle fünf Bereiche der Hauptnavigation im Bild), -03 (Randattribute und Maske am Anfang und am Ende der Reiterleiste), -05 (keine innere Aufklappzeile größer als die äußere), -07 (bei 1440 und 390 px kein Ländername umbrochen oder gekürzt, Zeitpunkt darunter, Kacheln einer Zeile gleich hoch).
+- Angepasst mit geändertem Soll: `tests/lagebild/lagebild.test.ts` (Tendenz „Stabilisierung“ grau), `tests/ui/profile.test.ts` (Angaben ohne Ebene und Referenzraum; Test der Sprungleiste entfällt), `tests/browser/hinweisband.spec.ts` (bei 390 px scrollen die Reiter mit, statt unter dem Kopfbereich zu stehen).
+
 ## [0.7.21] – 14.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach der Durchsicht der Symbole in KRITIS-LEAD ([kritis-lead#28](https://github.com/pereirawolf/kritis-lead/pull/28)): Die Schrittleiste soll ruhiger werden. Dünne farbige Umrandungen und Ziffern sind bei Farbschwäche kaum zu erkennen; entscheidend ist der Kontrast.
