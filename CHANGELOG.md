@@ -123,8 +123,16 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.8.1 | letzter Commit des Pull Requests „Grunddesign 1.10, Schrittleiste und Fehlerkästen (KP-2026-W46-01 bis -06); 0.8.1“ |
 | 0.8.2 | letzter Commit des Pull Requests „Kennzahlen-Bausteine in Lagebild und Verdichtung (UP-2026-W45-05); 0.8.2“ |
 | 0.8.3 | letzter Commit des Pull Requests „Paket 6, Teil App: Redaktionscheck auf v2-Feldern, übergreifende Lage, Eingangsschema (UP-2026-W45-06); 0.8.3“ |
-| 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ |
+| 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
 ## [0.9.0] – 14.11.2026
+
+### Nachtrag vom 14.11.2026 (ohne Änderung der App)
+
+Grundlage: offene Frage OF-10 aus dem Abgleich von Thessa mit dem Grunddesign ([thessa#35](https://github.com/pereirawolf/thessa/pull/35), `docs/design-abweichungen.md`): Darf eine App ohne Profile ihr festes Schema aus dem Katalog als Schema von „Automatisch“ hell behalten, wenn sie eine Wahl unter „Darstellung“ anbietet? Entscheidungen des Herausgebers vom 14.11.2026: Vorschlag aus OF-10 mit ausdrücklichem Normalfall, Referenzumsetzung nicht betroffen, nur Übernahmehinweis 2 nachziehen.
+
+- **Grunddesign 1.11** (`design/`): LD-F05 nennt den Normalfall von „Automatisch“ (hell „Neutral · Hell“, dunkel „Neutral · Night Mode“, bei „mehr Kontrast“ das Kontrastschema); bettet eine App ihr Profil beim Bau ein oder setzt sie ohne Profile ein festes Schema aus dem Katalog, verwendet „Automatisch“ hell dieses Schema, auch mit einer Wahl unter „Darstellung“ (Thessa: „Thüringen“, KRITIS-LEAD: Schema des eingebetteten Profils). LD-F01: Das feste Schema einer App ohne Profile ist bei einer Wahl unter „Darstellung“ das Schema von „Automatisch“ hell; „Werte außerhalb des Katalogs gibt es nicht“ bleibt. Übernahmehinweis 2 entsprechend. KI-LEAD hat Profile, bettet keins ein und setzt hell weiter „Neutral · Hell“. Kennungen, Zahl der Regeln und Tokens unverändert.
+- **Test:** `tests/format/lead-design.test.ts` hält das Verhalten von „Automatisch“ in KI-LEAD (auch mit aktivem Profil mit eigenem Farbschema) und die Wortlaute von LD-F05 und LD-F01 fest; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json` (auf `befunde/eingang`), UP-2026-W45-06 (Paket 6 des Umstellungsplans), **Teil Profile**, dazu KL-2026-W45-03 und KL-2026-W45-04 aus `ki-lead-befund_kritis_2026-W45-b.json`. Die Zurückstellung hat der Herausgeber am 14.11.2026 aufgehoben; Entscheidungen vom 14.11.2026: zwei Pull Requests (App 0.8.3, dann Profile), Beispiele pflichtnah, gemeinsame Frist 15.10., 12:00 Uhr für Pflegeheime und Trinkwasser, Musterfassung als v2-Fassung neben v1 mit Plänen in neuer Fassung, eigenes Modul der Vorlage, Vergleichslauf vor und nach der Umstellung durch den Herausgeber. Zweite Stelle, weil die mitgelieferten Profile das Meldungsformat wechseln.
 
