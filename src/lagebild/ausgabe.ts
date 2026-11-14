@@ -1,6 +1,6 @@
 // Ausgaben des Lagebilds: Rohtabelle und CSV (generisch aus dem Schema), Kopiervorlage für Word.
 
-import { kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
+import { handlungsbedarfTextV2, kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { aufloesen } from "../kern/schema";
 import { holeWert, generischerPfad, type Segment } from "../kern/pfad";
 import { bezeichnung, feldUi, istAusgeblendet, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
@@ -257,6 +257,9 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
   zeilen.push(`<tr><td colspan="2" style="${S.titel}"><b>${html(s.bezeichnung || "(ohne Bezeichnung)")}</b>${zusatz}</td></tr>`);
 
   for (const feld of r.sv_analysefelder || []) zeile(bezeichnung(ui, `${sv}.${feld}`), html(gliedereAnalyse(holeWert(s.sv, feld), ui) || "–"));
+  // LEAD-Meldung-v2 (seit 0.8.3, UP-2026-W45-06): Maßnahmen und Empfehlungen aus dem Block handlungsbedarf
+  const hb = handlungsbedarfTextV2(s.sv?.handlungsbedarf);
+  if (hb) zeile(bezeichnung(ui, `${sv}.handlungsbedarf`), html(hb));
 
   if (r.sv_beurteilung || r.sv_tendenz || r.sv_bewertung_text) {
     const teile: string[] = [];
@@ -323,6 +326,8 @@ export function kopiervorlageText(s: SvEintrag, profil: Profil): string {
   const herkunft = r.herkunft ? ` · Herkunft: ${herkunftsrolleAnzeige(profil, s.herkunftsrolle)}` : "";
   const z: string[] = [absender(s.eintrag, profil) + herkunft, s.bezeichnung || "(ohne Bezeichnung)"];
   for (const feld of r.sv_analysefelder || []) z.push("", bezeichnung(ui, `${r.sachverhalte}[].${feld}`), gliedereAnalyse(holeWert(s.sv, feld), ui) || "–");
+  const hb = handlungsbedarfTextV2(s.sv?.handlungsbedarf);
+  if (hb) z.push("", bezeichnung(ui, `${r.sachverhalte}[].handlungsbedarf`), hb);
   const bt = [s.beurteilung, s.tendenz].filter(Boolean).join(" / ");
   if (bt || s.bewertungText) z.push("", bt, gliedereBewertung(s.bewertungText, ui));
   return z.join("\n").trim();

@@ -43,7 +43,7 @@ import {
   type StatusZeile,
   type SvEintrag,
 } from "../lagebild/lagebild";
-import { befundListe, offeneBefunde, redaktionscheck, type Bearbeitung } from "../lagebild/redaktion";
+import { befundListe, kennsaetzeFuer, offeneBefunde, redaktionscheck, type Bearbeitung } from "../lagebild/redaktion";
 import { isoLokalZuZeitpunkt, zoneOder } from "../kern/zeit";
 import { alsCsv, rohtabelle, sopNachweis } from "../lagebild/ausgabe";
 import { dateiAnbieten, lagebildLesen, lagebildSchreiben } from "../speicher/speicher";
@@ -325,7 +325,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const reiterListe = REITER.flatMap((t) => (t.id !== "radar" ? [t] : radarDef ? [{ ...t, titel: radarFeld?.label || t.titel }] : []));
   const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
   const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
-  const ks = ui.kennsaetze || {};
+  const ks = kennsaetzeFuer(profil);
 
   const hinzufuegen = (neu: LagebildDatei[]) => setDateien((alt) => zusammenfuehren(alt, neu));
 
@@ -401,6 +401,13 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const zumSachverhalt = (s: SvEintrag) => {
     const kennung = r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "";
     const name = svKennung(s, profil);
+    // Übergreifende Lage (Index −1, seit 0.8.3): kein eigener Sachverhalt in der Liste, nur „In der Erfassung öffnen“
+    if (s.index < 0)
+      return s.eintrag.fremd ? null : (
+        <button type="button" className="knopf leise klein" aria-label={`In der Erfassung öffnen: ${name}`} onClick={() => oeffnen(s.eintrag.daten)}>
+          In der Erfassung öffnen
+        </button>
+      );
     return (
       <>
         <button

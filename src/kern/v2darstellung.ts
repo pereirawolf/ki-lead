@@ -8,6 +8,9 @@ import { verweise } from "./meldung-v2.js";
 
 type Obj = Record<string, any>;
 
+/** Feld der sachverhaltsübergreifenden Lage im Kernschema (Nachtrag 11, seit 0.8.3, UP-2026-W45-06) */
+export const UEBERGREIFEND = "uebergreifende_lage";
+
 const ZUGANG: Record<string, string> = {
   paywall: " (Paywall)",
   behoerdenintern: " (behördenintern)",
@@ -126,4 +129,70 @@ export function zitierteQuellen(wert: unknown): Set<string> {
   };
   lauf(wert, "");
   return ids;
+}
+
+const t = (x: unknown) => (typeof x === "string" ? x.trim() : "");
+const belegeText = (q: unknown) => (Array.isArray(q) && q.length ? ` [${q.join(", ")}]` : "");
+
+/**
+ * Bewertung und Fristen eines Sachverhalts nach LEAD-Meldung-v2 als lesbarer Bewertungstext in der Form der Kennsätze
+ * von v1 (seit 0.8.3, UP-2026-W45-06): für Lagebild, Kopiervorlage und Redaktionsvermerke. Die Zeilen lassen sich mit
+ * bewertungV1() zurücklesen; maßgeblich bleiben die Felder (Grundsatz 1).
+ */
+export function bewertungTextV2(sv: Obj | null | undefined): string {
+  const b: Obj = sv?.bewertung && typeof sv.bewertung === "object" ? sv.bewertung : {};
+  const h: Obj = sv?.handlungsbedarf && typeof sv.handlungsbedarf === "object" ? sv.handlungsbedarf : {};
+  const z: string[] = [];
+  if (t(b.kernaussage)) z.push(`Kernaussage: ${t(b.kernaussage)}`);
+  if (t(b.referenzraum)) z.push(`Referenzraum: ${t(b.referenzraum)}`);
+  if (b.beurteilung?.stufe) z.push(`Beurteilung „${b.beurteilung.stufe}“${t(b.beurteilung.begruendung) ? `: ${t(b.beurteilung.begruendung)}` : ""}`);
+  if (b.tendenz?.richtung)
+    z.push(
+      `Tendenz „${b.tendenz.richtung}“${t(b.tendenz.bezug) ? ` (${t(b.tendenz.bezug)})` : ""}${t(b.tendenz.begruendung) ? `: ${t(b.tendenz.begruendung)}` : ""}`,
+    );
+  if (t(b.erlaeuterung)) z.push(t(b.erlaeuterung));
+  const nb = (Array.isArray(b.neubewertung_bei) ? b.neubewertung_bei : []).map((x: Obj) => t(x?.indikator)).filter(Boolean);
+  if (nb.length) z.push(`Neubewertung bei: ${nb.join("; ")}`);
+  for (const f of Array.isArray(h.fristen) ? h.fristen : []) {
+    if (!f || typeof f !== "object") continue;
+    const teile = [
+      `Handlungsrelevant bis: ${zeitDE(f.bis) || "Termin unbekannt"} – ${t(f.aufgabe)}`,
+      t(f.adressat) ? `, ${t(f.adressat)}` : "",
+      t(f.bedingung) ? ` – ${t(f.bedingung)}` : "",
+      t(f.grundlage) ? `; Grundlage: ${t(f.grundlage)}` : "",
+      belegeText(f.quellen),
+    ];
+    z.push(teile.join(""));
+  }
+  if (t(b.aenderung_zur_vormeldung)) z.push(`Änderung zur Vormeldung: ${t(b.aenderung_zur_vormeldung)}`);
+  for (const a of Array.isArray(b.abweichende_bewertungen) ? b.abweichende_bewertungen : []) {
+    if (!a || typeof a !== "object") continue;
+    z.push(
+      `Abweichende Bewertung: ${t(a.stelle)} „${a.stufe ?? "keine Angabe"}“ – ${t(a.grund)}${belegeText(a.quellen)}.${t(a.ursache) ? ` Ursache: ${t(a.ursache)}.` : ""}${t(a.klaerend) ? ` Klärend wäre: ${t(a.klaerend)}.` : ""}`,
+    );
+  }
+  const ab = b.abschluss;
+  if (ab && typeof ab === "object")
+    z.push(
+      `Abschluss im Lagebild: ${[ab.ende ? `beendet am ${zeitDE(ab.ende)}` : "kein Ende angegeben", t(ab.offene_punkte) ? `offen bleiben: ${t(ab.offene_punkte)}` : "", t(ab.nachsorge) ? `Nachsorge bei: ${t(ab.nachsorge)}` : ""].filter(Boolean).join("; ")}`,
+    );
+  return z.join("\n");
+}
+
+/** Maßnahmen und Empfehlungen eines Handlungsbedarfs als Zeilen (Fristen stehen im Bewertungstext), dazu die Erläuterung */
+export function handlungsbedarfTextV2(h: Obj | null | undefined): string {
+  if (!h || typeof h !== "object") return "";
+  const z: string[] = [];
+  for (const m of Array.isArray(h.massnahmen) ? h.massnahmen : []) {
+    if (!m || typeof m !== "object") continue;
+    const angaben = [t(m.stelle), t(m.status), m.stand ? `Stand ${zeitDE(m.stand)}` : ""].filter(Boolean).join(", ");
+    z.push(`[${m.id}] ${t(m.gegenstand)}${angaben ? ` (${angaben})` : ""}${belegeText(m.quellen)}`);
+  }
+  for (const e of Array.isArray(h.empfehlungen) ? h.empfehlungen : []) {
+    if (!e || typeof e !== "object") continue;
+    const wann = [e.termin ? `bis ${zeitDE(e.termin)}` : "", t(e.bedingung)].filter(Boolean).join("; ");
+    z.push(`[${e.id}] ${t(e.adressat)}: ${t(e.auftrag)}${wann ? ` (${wann})` : ""}${belegeText(e.quellen)}`);
+  }
+  if (t(h.erlaeuterung)) z.push(t(h.erlaeuterung));
+  return z.join("\n");
 }

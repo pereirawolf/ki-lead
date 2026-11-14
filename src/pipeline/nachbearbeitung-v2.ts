@@ -195,7 +195,16 @@ export function nachbearbeitenV2(roh: unknown, k: Kontext, modell: string, aus: 
   if (!Array.isArray(d.quellen)) d.quellen = [];
   if (!Array.isArray(d.sachverhalte)) d.sachverhalte = [];
   radarUmhaengen(d, p, aus.umhaengungen);
-  const zeiten = zeitenErgaenzen({ meldezeitraum: d.meldezeitraum, quellen: d.quellen, sachverhalte: d.sachverhalte, fehlanzeige: d.fehlanzeige }, zone);
+  const zeiten = zeitenErgaenzen(
+    {
+      meldezeitraum: d.meldezeitraum,
+      quellen: d.quellen,
+      sachverhalte: d.sachverhalte,
+      fehlanzeige: d.fehlanzeige,
+      uebergreifende_lage: d.uebergreifende_lage,
+    },
+    zone,
+  );
   if (zeiten)
     aus.befunde.push({
       stufe: "hinweis",
@@ -402,6 +411,23 @@ export function kennungenUndZeitstrahlV2(d: Meldung, p: Profil, u: KennungsUmgeb
       code: "BEZUG_FEHLT",
       text: `Sachverhalt ${ohneBezug.join(", ")} ohne Bezug, obwohl Eingänge mit Kennung vorliegen; bitte die eingehenden Sachverhalte nennen.`,
     });
+
+  // 2a. Übergreifende Lage (seit 0.8.3, UP-2026-W45-06): Verweise auf Sachverhalte dieser Meldung, Platzhalter wie oben
+  const ul = d.uebergreifende_lage;
+  if (istObjekt(ul) && Array.isArray(ul.sachverhalte)) {
+    const eigeneSv = new Set(svs.map((sv) => sv.kennung));
+    const roh = ul.sachverhalte.map((x: unknown) => String(x ?? "").trim());
+    const neu = [...new Set(roh.map((x: string) => zuordnung.get(x) ?? x))].filter((x) => eigeneSv.has(x));
+    const weg = roh.filter((x: string) => !eigeneSv.has(zuordnung.get(x) ?? x));
+    if (weg.length)
+      befunde.push({
+        stufe: "hinweis",
+        code: "UEBERGREIFEND_VERWEIS",
+        text: `Übergreifende Lage: Verweis auf Sachverhalte, die es in dieser Meldung nicht gibt, entfernt: ${weg.map((x: string) => `„${x}“`).join(", ")}.`,
+      });
+    if (neu.length) ul.sachverhalte = neu;
+    else delete ul.sachverhalte;
+  }
 
   // 3. Zeitstrahl je Sachverhalt
   const t0 = typeof d.meldezeitpunkt === "string" ? d.meldezeitpunkt : null;

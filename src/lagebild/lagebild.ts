@@ -8,7 +8,8 @@ import { holeWert, teilePfad } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
-import { referenzBefunde } from "../kern/referenzen";
+import { istV2, referenzBefunde } from "../kern/referenzen";
+import { bewertungTextV2 } from "../kern/v2darstellung";
 import { erkenneBaustein, type BausteinErkennung, type BausteinInfo } from "../kern/baustein";
 import type { Befund, Kontakte, Meldung, Profil } from "../kern/typen";
 
@@ -130,7 +131,8 @@ export function einlesen(
         ...basis,
         daten: mig.daten,
         hinweise: mig.hinweise,
-        schema: pruefeGegenSchema(profil.schema, mig.daten, profil.ui),
+        // Eingangsschema der eigenen Kennung, falls das Profil eines nennt (seit 0.8.3, Profilformat 1.33)
+        schema: pruefeGegenSchema(eigenesEingangsschema(profil) ?? profil.schema, mig.daten, profil.ui),
         fremd: null,
         ...(referenzen.length ? { referenzen } : {}),
       });
@@ -153,6 +155,15 @@ export function einlesen(
     });
   }
   return { eintraege, fehler, material };
+}
+
+/**
+ * Eingangsschema für Meldungen der eigenen Schemakennung (seit 0.8.3, Profilformat 1.33, UP-2026-W45-06): weiter gefasst
+ * als das Profilschema, etwa ohne Liste der Ebenen und Gebiete des Absenders; ohne Eintrag undefined.
+ */
+export function eigenesEingangsschema(profil: Profil): object | undefined {
+  const id = profil.manifest.meldung?.schema_id;
+  return id ? profil.eingangSchemata?.[id]?.schema : undefined;
 }
 
 /** Prüfstand eines Bausteins in Worten */
@@ -349,7 +360,8 @@ export function alleSachverhalte(eintraege: LagebildEintrag[], profil: Profil): 
         eintritt: wert(sv, r.sv_eintritt),
         beurteilung: wert(sv, r.sv_beurteilung),
         tendenz: wert(sv, r.sv_tendenz),
-        bewertungText: wert(sv, r.sv_bewertung_text),
+        // LEAD-Meldung-v2 (seit 0.8.3, UP-2026-W45-06): ohne Textfeld aus den Feldern erzeugt, in der Form der Kennsätze
+        bewertungText: r.sv_bewertung_text ? wert(sv, r.sv_bewertung_text) : istV2(e.daten, profil.ui) ? bewertungTextV2(sv) : "",
       });
     });
   }

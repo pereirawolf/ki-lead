@@ -1,6 +1,6 @@
 // PDF-Ausgabe einer Meldung, generisch aus Schema und Darstellungsdatei erzeugt.
 
-import { entstehungTextV2, kennzahlenTextV2, quellenverzeichnisV2, zeitstrahlTextV2 } from "../kern/v2darstellung";
+import { entstehungTextV2, kennzahlenTextV2, quellenverzeichnisV2, UEBERGREIFEND, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { aufloesen } from "../kern/schema";
@@ -287,7 +287,8 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
   const wurzel = aufloesen(profil.schema, profil.schema);
   const kopf: Zelle[][] = [];
   for (const key of Object.keys(wurzel.properties || {})) {
-    if (key === r.sachverhalte || key === r.quellen || key === r.zeitstrahl || key === r.freigabe || istAusgeblendet(ui, key)) continue;
+    if (key === r.sachverhalte || key === r.quellen || key === r.zeitstrahl || key === r.freigabe || key === UEBERGREIFEND || istAusgeblendet(ui, key))
+      continue;
     if (d[key] === undefined) continue;
     zeilen(profil, wurzel.properties[key], d[key], [key], kopf);
   }
@@ -303,6 +304,27 @@ function meldungZeichnen(doc: jsPDF, d: Meldung, profil: Profil, startY: number,
     columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
     didDrawCell: radarHaken(doc),
   });
+
+  // Sachverhaltsübergreifende Lage (LEAD-Meldung-v2, seit 0.8.3, UP-2026-W45-06): eigener Block vor den Sachverhalten
+  const uebergreifend = d[UEBERGREIFEND];
+  if (uebergreifend && typeof uebergreifend === "object" && wurzel.properties?.[UEBERGREIFEND] && !istAusgeblendet(ui, UEBERGREIFEND)) {
+    const body: Zelle[][] = [];
+    zeilen(profil, wurzel.properties[UEBERGREIFEND], uebergreifend, [UEBERGREIFEND], body);
+    const titel = feldUi(ui, UEBERGREIFEND).label?.replace(/\s*\(optional\)\s*$/, "") || "Übergreifende Lage";
+    // Zeilen ohne den Blocktitel vorn („Übergreifende Lage › Kernaussage“ → „Kernaussage“)
+    for (const z of body) if (typeof z[0] === "string") z[0] = z[0].replace(/^[^›]*›\s*/, "");
+    autoTable(doc, {
+      didParseCell: zellText,
+      startY: platz(doc, (doc as any).lastAutoTable.finalY + 6, 30),
+      head: [[{ content: titel, colSpan: 2 }]],
+      body,
+      theme: "grid",
+      headStyles: { fillColor: BLAU },
+      styles: { fontSize: 8, cellPadding: 1.8, overflow: "linebreak", valign: "top" },
+      columnStyles: { 0: { cellWidth: 52, fontStyle: "bold" } },
+      rowPageBreak: "avoid",
+    });
+  }
 
   // Eine importierte Meldung kann trotz Typfehler übernommen worden sein: Statt abzubrechen oder die Angabe still
   // zu übergehen, steht im PDF ein deutlich markierter Hinweis mit dem gefundenen Inhalt.

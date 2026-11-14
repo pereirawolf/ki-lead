@@ -8,6 +8,7 @@ import type { Profil } from "../../kern/typen";
 import { kennsatz, kennsaetzeAlle } from "../../kern/kennsaetze";
 import { svKennung, type SvEintrag } from "../../lagebild/lagebild";
 import { kopiervorlageHtml, kopiervorlageText } from "../../lagebild/ausgabe";
+import { kennsaetzeFuer } from "../../lagebild/redaktion";
 import { radarPng } from "../radarBild";
 import { Absender, KopierKnopf, Marke, SvMarken } from "./bausteine";
 
@@ -15,7 +16,7 @@ const TRENNER_HTML = "<p>&nbsp;</p>";
 const TRENNER_TEXT = "\n\n――――――――――\n\n";
 
 export function Kopiervorlage({ profil, sortiert }: { profil: Profil; sortiert: SvEintrag[] }) {
-  const ks = profil.ui.kennsaetze || {};
+  const ks = kennsaetzeFuer(profil);
   // Radarbilder (Canvas) und HTML nur bei geänderten Sachverhalten neu erzeugen, nicht bei jedem Zeichnen (seit 0.6.5, TP-2026-W44-18)
   const bloecke = useMemo(
     () =>
