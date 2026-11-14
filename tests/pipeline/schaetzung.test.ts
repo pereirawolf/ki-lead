@@ -16,13 +16,14 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(s).toEqual({ sekunden: [120, 810], usd: [0.45, 3.35], gemessen: true });
     expect(dauerText(s.sekunden)).toBe("2–14 Minuten");
     expect(kostenText(s.usd)).toBe("0,45–3,35 USD");
-    // S1 Haiku high: Verdichtungen „Ilka“ 88–95 s und höchstens 0,020 USD (0.4.27)
-    expect(schaetzeStufe("s1", "claude-haiku-5-5", "high")).toEqual({ sekunden: [15, 150], usd: [0, 0.03], gemessen: true });
-    expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "high").sekunden)).toBe("bis 3 Minuten");
-    expect(kostenText(schaetzeStufe("s1", "claude-haiku-5-5", "high").usd)).toBe("bis 0,03 USD");
-    // Verdichtung mit Opus medium: bis 1,91 USD in der Abnahme M4 gemessen (0.4.31)
-    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium")).toEqual({ sekunden: [300, 540], usd: [1.2, 2.2], gemessen: true });
-    expect(kostenText(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium").usd)).toBe("1,20–2,20 USD");
+    // S1 Haiku high: seit 0.9.2 nach dem Vergleichslauf mit LEAD-Meldung-v2 vom 14.11.2026, Prompt über der Schwelle für
+    // den Preis langer Prompts, höchstens 170 s und 0,166 USD (AV-2026-W46-02; bis 0.9.1 bis 150 s, bis 0,03 USD)
+    expect(schaetzeStufe("s1", "claude-haiku-5-5", "high")).toEqual({ sekunden: [15, 240], usd: [0, 0.25], gemessen: true });
+    expect(dauerText(schaetzeStufe("s1", "claude-haiku-5-5", "high").sekunden)).toBe("bis 4 Minuten");
+    expect(kostenText(schaetzeStufe("s1", "claude-haiku-5-5", "high").usd)).toBe("bis 0,25 USD");
+    // Verdichtung mit Opus medium: seit 0.9.2 höchstens 617 s und 2,67 USD gemessen (AV-2026-W46-02; bis 0.9.1 2,20 USD)
+    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium")).toEqual({ sekunden: [300, 780], usd: [1.2, 3.35], gemessen: true });
+    expect(kostenText(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium").usd)).toBe("1,20–3,35 USD");
     // OpenAI aus der Abnahme M4 (0.4.31): Messwerte statt Hochrechnung
     expect(schaetzeStufe("s1", "gpt-6-luna", "high")).toEqual({ sekunden: [30, 120], usd: [0, 0.02], gemessen: true });
     expect(dauerText(schaetzeStufe("s1", "gpt-6-luna", "high").sekunden)).toBe("bis 2 Minuten");
@@ -129,6 +130,10 @@ describe("Schätzung von Dauer und Kosten", () => {
     ["s1|mistral-small-2603|high", [23.3, 37.4], [0.0102, 0.0116]],
     ["verdichtung|mistral-medium-3-5|high", [109.0, 189.0], [0.2275, 0.3355]],
     ["verdichtung|mistral-large-4|high", [165.4, 212.9], [0.1216, 0.178]],
+    // Vergleichslauf Ilka mit LEAD-Meldung-v2 vom 14.11.2026, App 0.9.0, Läufe 20261114-212312-o7hv, -213436-m8s6,
+    // -214703-7mqq (AV-2026-W46-02); S1 über der Schwelle für den Preis langer Prompts
+    ["s1|claude-haiku-5-5|high", [115.1, 169.6], [0.1316, 0.1664]],
+    ["verdichtung|claude-opus-5-5|medium", [514.4, 616.5], [2.4051, 2.6681]],
   ];
 
   it("AV-2026-W43-05, -15: Messwerte des Vergleichslaufs liegen in den Spannen", () => {
@@ -300,7 +305,7 @@ describe("Schätzung von Dauer und Kosten", () => {
     expect(eu.usd![1]).toBeCloseTo(0.495, 10);
     expect(schaetzeStufe("verdichtung", "mistral-medium-3-5", "high", { mistral: { endpunkt: "global" } }).usd).toEqual([0.2, 0.45]);
     // Anthropic und OpenAI: Endpunkt ohne Wirkung
-    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium", { mistral: { endpunkt: "eu" } }).usd).toEqual([1.2, 2.2]);
+    expect(schaetzeStufe("verdichtung", "claude-opus-5-5", "medium", { mistral: { endpunkt: "eu" } }).usd).toEqual([1.2, 3.35]);
     expect(schaetzeStufe("verdichtung", "gpt-6-astra", "high", { mistral: { endpunkt: "eu" } }).usd).toEqual([1.5, 2.15]);
   });
 

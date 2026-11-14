@@ -23,6 +23,10 @@
 // - Fallreihe vom 13.11.2026 (App 0.7.18, Profil 1.42.2, Standard-Profil Anthropic): zwölf Erfassungsläufe zu fiktiven
 //   Kurzfällen mit je einem Sachverhalt (Text, 1,3–1,8 kB, ohne Recherche), nacheinander in einer Reihe; nur Kenndaten.
 //   Neu: Untergrenzen der Erfassung mit Opus „mittel“ (kleines Material); S1 Sonnet „mittel“ lag in der Spanne.
+// - Vergleichslauf Ilka vor und nach der Umstellung auf LEAD-Meldung-v2 vom 14.11.2026 (App 0.9.0, Beispielprofil 2.0.0,
+//   Variante A-anthropic-standard, drei Läufe; evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md,
+//   AV-2026-W46-02). Neu: Obergrenzen von S1 Haiku „high“ (Prompt über 100 000 Token, Preis langer Prompts nach
+//   preise.ts) und der Verdichtung mit Opus „medium“; Untergrenzen bleiben. Nur Kenndaten.
 // Spannen nach außen gerundet (Sekunden auf 30 s, unter 60 s auf 10 s; USD auf 0,05, unter 0,10 USD auf 0,01). Neue oder
 // überschrittene Obergrenzen: größter Messwert plus 25 % (Reserve, u. a. für eine Reparatur in S3); unterschrittene
 // Untergrenzen: kleinster Messwert, ohne Reserve (seit 0.7.20); bestehende Spannen werden nicht verengt. Messwerte erst ab
@@ -69,8 +73,12 @@ export const MESSWERTE: Record<string, Messwert> = {
   // gemessen: Erfassung 18–37 s, höchstens 0,008 USD; Verdichtung „Ilka“ mit sechs Eingängen 88–95 s,
   // 0,019–0,020 USD, 20 821–22 134 Ausgabetoken (Läufe 20261021-163738-9s7d, -164604-u1kb, -165220-1hmp);
   // Vergleichslauf Ilka 19–132 s, 0,013–0,027 USD, 3 015–31 261 Ausgabetoken (Läufe 20261024-234833-ikph,
-  // -235739-ifu7, 20261025-000620-07bh, -001616-n4c8, -002256-e85u, -002923-kg0c)
-  "s1|claude-haiku-5-5|high": { sekunden: [15, 150], usd: [0, 0.03] },
+  // -235739-ifu7, 20261025-000620-07bh, -001616-n4c8, -002256-e85u, -002923-kg0c). Vergleichslauf Ilka mit
+  // LEAD-Meldung-v2 vom 14.11.2026 (App 0.9.0): 115–170 s, 0,132–0,166 USD, 27 548–41 479 Ausgabetoken, Prompt 109 811
+  // Token (Eingabe und Cache) und damit über der Schwelle für den Preis langer Prompts (Läufe 20261114-212312-o7hv,
+  // -213436-m8s6, -214703-7mqq); Obergrenzen seither 240 s und 0,25 USD (Messwert plus 25 %; bis 0.9.1: 150 s,
+  // 0,03 USD), Untergrenzen bleiben (AV-2026-W46-02)
+  "s1|claude-haiku-5-5|high": { sekunden: [15, 240], usd: [0, 0.25] },
   // gemessen 9–12 s, 0,02–0,12 USD (0,12 ohne Cache); Folgereihe 05.11.2026 (App 0.7.9, Profil 1.38.0): 24 s, 0,26 USD,
   // 3 254 Ausgabetoken, 60 346 Token neu in den Cache, keine gelesen (Lauf 20261105-150440-l8af); Obergrenze der Kosten
   // seither 0,35 USD (Messwert plus 25 %), Dauer und Untergrenze bleiben
@@ -109,8 +117,11 @@ export const MESSWERTE: Record<string, Messwert> = {
   // 20261021-165220-1hmp, 408 s); Vergleichslauf Ilka 405–440 s, 1,74–1,88 USD, 50 060–54 484 Ausgabetoken (Läufe
   // 20261024-234833-ikph, -235739-ifu7, 20261025-000620-07bh). Obergrenze 2,20 USD (seit 0.4.31) bleibt als Reserve.
   // Plan anbietermix-ilka (M1, App 0.5.10, S1 gpt-6-luna) 302–316 s, 1,48–1,53 USD, 37 345–38 117 Ausgabetoken (Läufe
-  // 20261025-021825-5rbg, -022443-2kjh, -023038-8o79); Untergrenze 300 s bleibt (keine Verengung)
-  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 540], usd: [1.2, 2.2] },
+  // 20261025-021825-5rbg, -022443-2kjh, -023038-8o79); Untergrenze 300 s bleibt (keine Verengung). Vergleichslauf Ilka
+  // mit LEAD-Meldung-v2 vom 14.11.2026 (App 0.9.0): 514–617 s, 2,41–2,67 USD, 64 696–77 880 Ausgabetoken, 180 891 Token
+  // neu in den Cache, keine gelesen (Läufe 20261114-212312-o7hv, -213436-m8s6, -214703-7mqq); Obergrenzen seither 780 s
+  // und 3,35 USD (Messwert plus 25 %; bis 0.9.1: 540 s, 2,20 USD), Untergrenzen bleiben (AV-2026-W46-02)
+  "verdichtung|claude-opus-5-5|medium": { sekunden: [300, 780], usd: [1.2, 3.35] },
   // Vergleichslauf Ilka 42–69 s, 0,005–0,008 USD, 4 659–6 856 Ausgabetoken (Läufe 20261024-232917-m97k,
   // -233231-qjlg, -233518-4god, -231048-0gjp, -231723-etee, -232232-l69n; Folgereihe 25.10.2026, App 0.5.10:
   // 20261025-013359-jytv, -014153-g3m8, -014823-0eu1 mit 52–58 s, 0,005–0,008 USD; Plan anbietermix-ilka, App 0.5.10:
