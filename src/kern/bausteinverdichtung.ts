@@ -9,7 +9,7 @@
 // - Gegenstände mit Meldequote („11 von 12 Feuerwehren gemeldet“) bleiben je Raum, weil die Quote Teil der Aussage ist
 //   (Entscheidung des Herausgebers vom 14.11.2026);
 // - Verhältniswerte (Art „verhaeltnis“) und berechnete Werte (Erhebung „berechnet“) nie summieren; Werte verschiedener
-//   Beobachtungszeiträume stehen in getrennten Gruppen (seit 0.9.2, SR-2026-W46-05);
+//   Beobachtungszeiträume stehen in getrennten Gruppen (seit 0.9.3, SR-2026-W46-05);
 // - Bausteine mit einem Land als Raum gelten als erfasster Ausschnitt, Vollständigkeit nicht angegeben (Entscheidung
 //   vom 06.11.2026), außer das Format deckt den Raum vollständig ab (raum_vollstaendig, SR-2026-W46-06); die App
 //   kennzeichnet den Raum;
@@ -49,7 +49,7 @@ const ohneQuote = (s: unknown) => norm(String(s ?? "").replace(new RegExp(QUOTE_
 const zahlDE = (n: number) => n.toLocaleString("de-DE");
 /** Erhebungsarten, die summiert werden dürfen (SOP-LEAD A.3: Hochgerechnetes nie in einer Summe mit Gezähltem) */
 const SUMMIERBAR = new Set(["gezaehlt", "amtlich_gemeldet"]);
-/** Verhältniswert oder berechneter Wert: nie summierbar (SOP-LEAD A.3; seit 0.9.2, SR-2026-W46-05) */
+/** Verhältniswert oder berechneter Wert: nie summierbar (SOP-LEAD A.3; seit 0.9.3, SR-2026-W46-05) */
 const nieSummierbar = (art: string, erhebung: string) => art === "verhaeltnis" || erhebung === "berechnet";
 /** Beobachtungszeitraum als Text für Gruppenschlüssel und Anzeige; leer ohne Angabe */
 const zeitraumSchluessel = (z: unknown): string => {
@@ -88,7 +88,7 @@ export interface RhGruppe {
   einheit: string;
   art: string;
   datenstand: string;
-  /** Beobachtungszeitraum „von/bis“ oder leer (seit 0.9.2) */
+  /** Beobachtungszeitraum „von/bis“ oder leer (seit 0.9.3) */
   zeitraum: string;
   eintraege: RhEintrag[];
   ergebnis: RhErgebnis;

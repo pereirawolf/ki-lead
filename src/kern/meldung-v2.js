@@ -848,7 +848,7 @@ export function pruefeReferenzen(m, opt = {}) {
       if (k.bandbreite && k.bandbreite.von > k.bandbreite.bis) fehler(`${pk}.bandbreite`, "von größer als bis");
       if (k.mindestwert && k.wert === null) fehler(`${pk}.mindestwert`, "Mindestwert ohne Wert");
       if (k.datenstand && nachT0(k.datenstand)) fehler(`${pk}.datenstand`, "Datenstand nach dem Meldezeitpunkt");
-      // Beobachtungszeitraum und Bezugsgröße (seit App 0.9.2, SR-2026-W46-01 und -03): von nicht nach bis; bis nicht
+      // Beobachtungszeitraum und Bezugsgröße (seit App 0.9.3, SR-2026-W46-01 und -03): von nicht nach bis; bis nicht
       // nach t0, außer bei prognostizierten Werten; Bezugsgröße gehört zu einem Verhältniswert
       const bz = k.beobachtungszeitraum;
       if (bz && vergleicheZeit(bz.von, bz.bis, zone) === 1) fehler(`${pk}.beobachtungszeitraum`, "von liegt nach bis");

@@ -5217,6 +5217,154 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-14",
       "pr": 178
+    },
+    {
+      "id": "SR-2026-W46-01",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl.properties.art (Z. 965–972)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 4.3 (Z. 110)"
+        },
+        {
+          "datei": "src/kern/meldung-v2.js",
+          "stelle": "pruefeReferenzen, Kennzahlen (Z. 843–851)"
+        }
+      ],
+      "kurz": "Kernschema: kennzahl.art „verhaeltnis“ und optional beobachtungszeitraum (Kalendertage) mit Referenzprüfung; bis nicht nach t0 außer bei prognostizierten Werten.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-02",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl.properties.erhebung (Z. 989–997)"
+        }
+      ],
+      "kurz": "Kernschema: kennzahl.erhebung „berechnet“ für aus Werten einer Quelle abgeleitete Werte; nicht summierbar.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-03",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl (Z. 949 ff.)"
+        }
+      ],
+      "kurz": "Kernschema: optional kennzahl.bezug {gegenstand, wert, einheit, beobachtungszeitraum} als Bezugsgröße; Hinweis außerhalb eines Verhältniswerts.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-04",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl (Z. 949 ff.)"
+        }
+      ],
+      "kurz": "Kernschema: optional kennzahl.vorlaeufig für vorläufige Werte der Quelle.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-05",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/kern/bausteinverdichtung.ts",
+          "stelle": "rechenhilfe, Gruppenschlüssel (Z. 202)"
+        },
+        {
+          "datei": "src/kern/bausteinverdichtung.ts",
+          "stelle": "ergebnis(), Summierbarkeit (Z. 51, 168–169)"
+        },
+        {
+          "datei": "src/kern/bausteinuebernahme.ts",
+          "stelle": "BAUSTEIN_FELDER (Z. 30)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 6, Kennzahlen aus Kennzahlen-Bausteinen, Regeln 1 und 2 (Z. 240–241)"
+        }
+      ],
+      "kurz": "Rechenhilfe summiert Verhältniswerte und berechnete Werte nie und trennt Beobachtungszeiträume; Übernahme mit neuen Feldern; Zählregel in SOP-LEAD A.3.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-06",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/bausteinverdichtung.ts",
+          "stelle": "istAusschnitt (Z. 32)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 6, Kennzahlen aus Kennzahlen-Bausteinen, Regel 5 (Z. 244)"
+        }
+      ],
+      "kurz": "Ausschnittregel (Land = erfasster Ausschnitt) nicht für Formate mit raum_vollstaendig; Kodierleitfaden Abschnitt 6 Regel 5.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 179
+    },
+    {
+      "id": "SR-2026-W46-07",
+      "agent": "schwesterrepos",
+      "befunddatei": "ki-lead-befund_schwesterrepos_2026-W46.json",
+      "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/kern/baustein.ts",
+          "stelle": "BAUSTEIN_FORMATE (Z. 18–21)"
+        },
+        {
+          "datei": "docs/AUSTAUSCH.md",
+          "stelle": "Abschnitt 9, Tabelle Zulieferer"
+        }
+      ],
+      "kurz": "Format STATIS-LEAD einbetten (formate/fremd/statis-lead-kennzahlen/, BAUSTEIN_FORMATE) und Zeile im Austauschvertrag Abschnitt 9.",
+      "status": "zurueckgestellt",
+      "entschieden_am": "2026-11-14",
+      "grund": "Baustein-Schema 0.1 von STATIS-LEAD liegt noch nicht vor (STATIS-LEAD 1d9d749); Umsetzung von B1 und B6 in einem Folge-PR, sobald es vorliegt (Entscheidung des Herausgebers vom 14.11.2026).",
+      "wieder_vorlegen_ab": "2026-11-28"
     }
   ]
 }

@@ -20,7 +20,7 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 ## [3.25.0] – 14.11.2026
 
-Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, SR-2026-W46-05 (Vorschlag aus STATIS-LEAD; Entscheidung des Herausgebers vom 14.11.2026: allgemeine Zählregel in A.3, weil Verhältniswerte künftig auch ohne Kennzahlen-Baustein in Meldungen stehen; Profil 2.1.0, App 0.9.2). Zweite Stelle: geänderte fachliche Regel in Teil A, Gliederung und Kodierregeln unverändert.
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, SR-2026-W46-05 (Vorschlag aus STATIS-LEAD; Entscheidung des Herausgebers vom 14.11.2026: allgemeine Zählregel in A.3, weil Verhältniswerte künftig auch ohne Kennzahlen-Baustein in Meldungen stehen; Profil 2.1.0, App 0.9.3). Zweite Stelle: geänderte fachliche Regel in Teil A, Gliederung und Kodierregeln unverändert.
 
 ### Geändert
 

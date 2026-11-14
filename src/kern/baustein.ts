@@ -12,7 +12,7 @@ export const BAUSTEIN_FASSUNGEN = ["0.3", "0.2", "0.1"] as const;
 /**
  * Bekannte Formate mit liefernder App und Fassungen (neueste zuerst). `belegachsen` (seit 0.8.2, UP-2026-W45-05): Achsen
  * des Lagenradars, für die Kennzahlen des Formats nach dem Datenmodell der liefernden App als Beleg in Frage kommen
- * (Thessa, docs/DATENMODELL.md); nur ein Prüfhinweis, die App setzt keine Stufe. `raum_vollstaendig` (seit 0.9.2,
+ * (Thessa, docs/DATENMODELL.md); nur ein Prüfhinweis, die App setzt keine Stufe. `raum_vollstaendig` (seit 0.9.3,
  * SR-2026-W46-06): Werte des Formats decken ihren Raum vollständig ab (etwa amtliche Statistik eines Landes); ein
  * Baustein mit einem Land als Raum gilt dann nicht als erfasster Ausschnitt (Kodierleitfaden Abschnitt 6, Regel 5).
  */
@@ -25,7 +25,7 @@ export type BausteinFassung = string;
 export const istLandSchluessel = (s: unknown): boolean => typeof s === "string" && /^(0[1-9]|1[0-6])$/.test(s);
 /**
  * Ein Baustein, dessen Raum ein Land ist, gilt als erfasster Ausschnitt (Entscheidung vom 06.11.2026), außer sein Format
- * deckt den Raum vollständig ab (`raum_vollstaendig`, seit 0.9.2, SR-2026-W46-06).
+ * deckt den Raum vollständig ab (`raum_vollstaendig`, seit 0.9.3, SR-2026-W46-06).
  */
 export const istAusschnitt = (info: Pick<BausteinInfo, "format" | "raum">): boolean =>
   istLandSchluessel(info.raum.schluessel) && !BAUSTEIN_FORMATE[info.format]?.raum_vollstaendig;
@@ -42,7 +42,7 @@ export interface BausteinKennzahl {
   erhebung: string;
   raum?: string;
   datenstand: string | null;
-  /** seit 0.9.2 (SR-2026-W46-01, -03, -04) */
+  /** seit 0.9.3 (SR-2026-W46-01, -03, -04) */
   beobachtungszeitraum?: { von: string; bis: string };
   bezug?: { gegenstand: string; wert?: number | null; einheit?: string; beobachtungszeitraum?: { von: string; bis: string } };
   vorlaeufig?: boolean;

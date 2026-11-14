@@ -27,7 +27,7 @@ export { MODUL_BAUSTEIN };
 export const MODUL_BAUSTEIN_FASSUNG = "1.0";
 
 /**
- * Felder einer Kennzahl, die aus dem Baustein stammen (ID, Belege und Teilmenge setzt die Meldung); seit 0.9.2 auch
+ * Felder einer Kennzahl, die aus dem Baustein stammen (ID, Belege und Teilmenge setzt die Meldung); seit 0.9.3 auch
  * Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit (SR-2026-W46-05)
  */
 export const BAUSTEIN_FELDER = [

@@ -6,7 +6,7 @@ Die mitgelieferten Profile arbeiten bis zur Umstellung weiter mit `LEAD-Meldung-
 
 | Datei | Inhalt |
 |---|---|
-| `kern.schema.json` | Kernschema: Identität, Absender, Zeit und Raum, Quellen, Sachverhalte mit Analyse, Bewertung, Handlungsbedarf, Kennzahlen und Zeitstrahl, Fehlanzeige, sachverhaltsübergreifende Lage (seit Nachtrag 11), Freigabe, Entstehung; Fachmodule offen |
+| `kern.schema.json` | Kernschema: Identität, Absender, Zeit und Raum, Quellen, Sachverhalte mit Analyse, Bewertung, Handlungsbedarf, Kennzahlen (seit Nachtrag 14 auch Verhältniswerte mit Beobachtungszeitraum und Bezugsgröße) und Zeitstrahl, Fehlanzeige, sachverhaltsübergreifende Lage (seit Nachtrag 11), Freigabe, Entstehung; Fachmodule offen |
 | `module/lead-bevoelkerungsschutz.schema.json` | Fachmodul 1.0: Ereignisarten des Katalogs und Lagenradar D1–D8 je Achse mit Stufe, Status, Grund und Belegen |
 | `module/lead-baustein.schema.json` | Fachmodul 1.0 (seit App 0.8.0), profilneutral: Verweis Kennzahl → Kennzahlen-Baustein (Format, Fassung, Prüfsumme, Quelle, Kennzahl-IDs) und Kennungen von Einsatzmeldungen |
 | `zusammenstellungen/*.json` | Zusammenstellung je Profil: Kern, Module, Einschränkungen (Gebiete, Ebenen, Quellenkategorien) |

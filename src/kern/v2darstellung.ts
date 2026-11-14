@@ -67,7 +67,7 @@ export function kennzahlWert(k: Obj): string {
   return `${k.mindestwert && wert !== "unbekannt" ? "mindestens " : ""}${wert}`;
 }
 
-/** Beobachtungszeitraum „Zeitraum 01.10.2026–31.10.2026“ bzw. „Zeitraum 14.10.2026“ (seit 0.9.2, SR-2026-W46-01) */
+/** Beobachtungszeitraum „Zeitraum 01.10.2026–31.10.2026“ bzw. „Zeitraum 14.10.2026“ (seit 0.9.3, SR-2026-W46-01) */
 export function zeitraumText(z: unknown, wort = "Zeitraum"): string {
   if (!z || typeof z !== "object") return "";
   const { von, bis } = z as Obj;
@@ -75,7 +75,7 @@ export function zeitraumText(z: unknown, wort = "Zeitraum"): string {
   return von === bis ? `${wort} ${zeitDE(von)}` : `${wort} ${zeitDE(von)}–${zeitDE(bis)}`;
 }
 
-/** Bezugsgröße eines Verhältniswerts: „Bezug: Durchschnitt KW 42 2016–2019 (1.234 Sterbefälle; Zeitraum …)“ (seit 0.9.2, SR-2026-W46-03) */
+/** Bezugsgröße eines Verhältniswerts: „Bezug: Durchschnitt KW 42 2016–2019 (1.234 Sterbefälle; Zeitraum …)“ (seit 0.9.3, SR-2026-W46-03) */
 export function bezugText(b: unknown): string {
   if (!b || typeof b !== "object") return "";
   const x = b as Obj;
