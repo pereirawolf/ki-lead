@@ -118,6 +118,21 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.20 | letzter Commit des Pull Requests „Schätzung der Erfassung nach der Fallreihe vom 13.11.2026; 0.7.20“ |
 | 0.7.21 | letzter Commit des Pull Requests „Schrittleiste nur mit dem Punkt, Grunddesign 1.9; 0.7.21“ |
 | 0.7.22 | letzter Commit des Pull Requests „UX-Prüfung 2026-W46: Auswertung und Profile; 0.7.22“ |
+| 0.7.23 | letzter Commit des Pull Requests „Zwischenstand beim Aushängen schreiben, Oberflächentests stabil; 0.7.23“ |
+## [0.7.23] – 14.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach einem roten Prüflauf an Pull Request #167: Oberflächentests, die in der CI gelegentlich scheitern, werden stabilisiert. Ursache war in den meisten Fällen kein Testfehler, sondern ein Zeitgeber der App, der über ihr Aushängen hinaus lief.
+
+### Behoben
+
+- **Zwischenstand beim Aushängen** (`src/ui/app/useZwischenstand.ts`): Eine Änderung in der Maske wird 1,2 s nach der letzten Eingabe gespeichert. Wurde die App vorher ausgehängt, lief der Zeitgeber weiter und schrieb später in den Speicher. In den Tests landete so der Entwurf eines Tests im nächsten (etwa ein Meldezeitpunkt ohne Uhrzeit oder eine schon ausgefüllte Bezeichnung) und ließ dort `tests/ui/erfassung.test.ts` („UX-2026-W44-06“, „TP-2026-W44-15“) und `tests/ui/eingabehilfen.test.ts` scheitern; auf main zuletzt am 05.11. und 10.11.2026. Jetzt werden ausstehende Speicherungen beim Aushängen sofort geschrieben, wie schon beim Verlassen der Seite und beim Profilwechsel. Unter Last (`npx vitest run tests/ui`, achtmal) vorher in rund jedem zweiten Lauf ein Fehlschlag, danach keiner.
+- Versionsangaben 0.7.23 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 723); Spezifikation 0.7.23; [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+
+### Tests
+
+- `tests/ui/app.test.ts`: „Zwischenstand beim Aushängen“ – eine ausstehende Änderung steht nach dem Aushängen im Speicher, danach schreibt kein Zeitgeber mehr (Zeitgeber gefälscht nach docs/TESTS.md, Regel 3). Scheitert ohne die Änderung.
+- `tests/ui/ueber.test.ts`: „Über KI-LEAD“ wird erst geklickt, wenn die Einstellungen stehen (scheiterte in der CI an #167).
+
 ## [0.7.22] – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_ux_2026-W46.json` (UX-Durchsicht der Übersicht der Auswertung und der Profile, App 0.7.20), Freigabe des Herausgebers vom 14.11.2026: alle sieben Befunde, UX-2026-W46-01 Variante A, -02 Variante B (statt A, weil A der MUSS-Regel LD-N05 widerspricht; Abnahme höchstens 230 px), -04 Variante A, -06 Variante A.
