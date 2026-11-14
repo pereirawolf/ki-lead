@@ -570,6 +570,39 @@ describe("UP-2026-W45-04: Übernahme aus Kennzahlen-Bausteinen (Modul lead-baust
     expect(referenzFehler(r.meldung!, land)).toEqual([]);
   });
 
+  it("SR-2026-W46-05: Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit werden aus dem Baustein wiederhergestellt", async () => {
+    const b = json(SONNEBERG);
+    const bk = b.kennzahlen[1];
+    Object.assign(bk, {
+      beobachtungszeitraum: { von: "2026-10-12", bis: "2026-10-14" },
+      bezug: { gegenstand: "Durchschnitt Oktober 2025", wert: 40, einheit: "Einsatzmittel" },
+      vorlaeufig: true,
+    });
+    const m = await dateiLesen(
+      new File([JSON.stringify(b, null, 2)], "abgewandelt.json", { type: "application/json" }),
+      await profilPflicht("lead-thueringen"),
+    );
+    const d = kiAusgabe();
+    d.meldezeitpunkt = "2026-10-14T10:30+02:00";
+    d.zeitzone = "Europe/Berlin";
+    d.quellen.push({ id: "Q9", ...(({ id: _i, ...r }) => r)(b.quellen[0]) });
+    // KI-Entwurf ohne Beobachtungszeitraum und Bezug, Vorläufigkeit geändert
+    const { beobachtungszeitraum: _z, bezug: _b, ...ohne } = bk;
+    d.sachverhalte[1].kennzahlen = [{ ...ohne, id: "K1", vorlaeufig: false, quellen: ["Q9"] }];
+    d.sachverhalte[1].module["lead-baustein"] = {
+      fassung: "1.0",
+      bausteine: [{ format: "Thessa-Kennzahlen", fassung: "0.3", quelle: "Q9", kennzahlen: [{ kennzahl: "K1", baustein_kennzahl: bk.id }] }],
+    };
+    const befunde = bausteineUebernehmen(d, bausteineImMaterial([m]));
+    expect(d.sachverhalte[1].kennzahlen[0]).toMatchObject({
+      beobachtungszeitraum: { von: "2026-10-12", bis: "2026-10-14" },
+      bezug: { gegenstand: "Durchschnitt Oktober 2025", wert: 40, einheit: "Einsatzmittel" },
+      vorlaeufig: true,
+    });
+    const text = befunde.find((x) => x.code === "KENNZAHL_BAUSTEIN_ABWEICHUNG")?.text ?? "";
+    for (const f of ["beobachtungszeitraum", "bezug", "vorlaeufig"]) expect(text).toContain(f);
+  });
+
   it("Einsatzmeldung mit Beginn nach t0 wird nicht übernommen; Teilmenge ohne übernommene Obermenge wird genannt", async () => {
     const m = await bausteinMaterial(SONNEBERG);
     const b = json(SONNEBERG);

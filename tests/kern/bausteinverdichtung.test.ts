@@ -3,7 +3,7 @@
 // (Orkantief „Ilka“) und KSNV, von Hand gerechnete Summen und von Hand abgewandelte Kopien.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { erkenneBaustein, type BausteinInfo } from "../../src/kern/baustein";
+import { BAUSTEIN_FORMATE, erkenneBaustein, type BausteinInfo } from "../../src/kern/baustein";
 import { bausteinAbgleich, bausteinQuellen } from "../../src/kern/bausteinabgleich";
 import {
   AUSSCHNITT_ZUSATZ,
@@ -166,6 +166,66 @@ describe("UP-2026-W45-05: Regeln der Rechenhilfe an abgewandelten Bausteinen", (
     expect(doppelt.ergebnis).toMatchObject({ art: "uebergeordnet", eintrag: { wert: 22 }, grund: "derselbe Raum in mehreren Bausteinen; einmal zählen" });
   });
 });
+
+describe("SR-2026-W46-05 und -06: Verhältniswerte, Beobachtungszeitraum und vollständig abgedeckte Räume", () => {
+  /** Kopie eines Bausteins mit anderem Raum und abgewandelten Kennzahlen (wie oben) */
+  function abwandeln(name: string, raum: { name: string; schluessel: string }, k: (liste: any[]) => void): VerdichtungsBaustein {
+    const d = kopie(JSON.parse(readFileSync(repoPfad(THESSA + name), "utf-8")));
+    d.raum = raum;
+    for (const x of d.kennzahlen) x.raum = raum.name;
+    k(d.kennzahlen);
+    return baustein(`${raum.name}.json`, d);
+  }
+  /** Erste Kennzahl als Niveau relativ zur Baseline (Prozent) für September 2026 */
+  const alsNiveau = (l: any[], wert: number) =>
+    Object.assign(l[0], { art: "verhaeltnis", einheit: "%", wert, beobachtungszeitraum: { von: "2026-09-01", bis: "2026-09-30" } });
+  const G = "Einsatzmittel der Feuerwehren gesamt";
+
+  it("SR-2026-W46-05: zwei amtlich gemeldete Verhältniswerte überschneidungsfreier Räume werden nicht summiert", () => {
+    const a = abwandeln(ILM, { name: "Kreis A", schluessel: "16071" }, (l) => alsNiveau(l, 94));
+    const b = abwandeln(HBN, { name: "Kreis B", schluessel: "16066" }, (l) => alsNiveau(l, 97));
+    const g = gruppe(rechenhilfe([a, b]).gruppen, G, "2026-10-14T10:00")!;
+    expect(g.ergebnis).toEqual({ art: "getrennt", grund: "Verhältniswerte und berechnete Werte nicht summieren" });
+    expect(gruppeTextVon(a, b)).toContain("(%, verhaeltnis, Zeitraum 01.09.2026–30.09.2026, 14.10.2026, 10:00)");
+    expect(unzulaessigeSumme(summenpruefung([a, b]), 191, "%")?.gruende).toEqual(["Verhältniswerte oder berechnete Werte"]);
+  });
+
+  it("SR-2026-W46-05: berechnete Werte werden nicht summiert, mit eigenem Grund", () => {
+    const a = abwandeln(ILM, { name: "Kreis A", schluessel: "16071" }, (l) => (l[0].erhebung = "berechnet"));
+    const b = abwandeln(HBN, { name: "Kreis B", schluessel: "16066" }, () => {});
+    expect(gruppe(rechenhilfe([a, b]).gruppen, G, "2026-10-14T10:00")!.ergebnis).toEqual({
+      art: "getrennt",
+      grund: "Verhältniswerte und berechnete Werte nicht summieren",
+    });
+    expect(unzulaessigeSumme(summenpruefung([a, b]), 51, "Einsatzmittel")?.gruende).toEqual(["Verhältniswerte oder berechnete Werte"]);
+  });
+
+  it("SR-2026-W46-05: verschiedene Beobachtungszeiträume bilden getrennte Gruppen und sind keine zulässige Summe", () => {
+    const sep = abwandeln(ILM, { name: "Kreis A", schluessel: "16071" }, (l) => (l[0].beobachtungszeitraum = { von: "2026-09-01", bis: "2026-09-30" }));
+    const okt = abwandeln(HBN, { name: "Kreis B", schluessel: "16066" }, (l) => (l[0].beobachtungszeitraum = { von: "2026-10-01", bis: "2026-10-31" }));
+    expect(rechenhilfe([sep, okt]).gruppen.filter((g) => g.gegenstand === G)).toEqual([]);
+    expect(unzulaessigeSumme(summenpruefung([sep, okt]), 51, "Einsatzmittel")?.gruende).toEqual(["verschiedene Beobachtungszeiträume"]);
+  });
+
+  it("SR-2026-W46-06: ein Land-Baustein ist ein erfasster Ausschnitt, außer sein Format deckt den Raum vollständig ab", () => {
+    const land = { name: "Thüringen", schluessel: "16" };
+    expect(istAusschnitt({ format: "Thessa-Kennzahlen", raum: land })).toBe(true);
+    expect(istAusschnitt({ format: "KSNV-Kennzahlen", raum: land })).toBe(true);
+    BAUSTEIN_FORMATE["Test-Kennzahlen"] = { app: "Test", fassungen: ["0.1"], raum_vollstaendig: true };
+    try {
+      expect(istAusschnitt({ format: "Test-Kennzahlen", raum: land })).toBe(false);
+      expect(istAusschnitt({ format: "Test-Kennzahlen", raum: { name: "Ilm-Kreis", schluessel: "16070" } })).toBe(false);
+    } finally {
+      delete BAUSTEIN_FORMATE["Test-Kennzahlen"];
+    }
+    expect(Object.values(BAUSTEIN_FORMATE).filter((f) => f.raum_vollstaendig)).toEqual([]);
+  });
+});
+
+/** Text der ersten Gruppe der Rechenhilfe aus zwei Bausteinen */
+function gruppeTextVon(a: VerdichtungsBaustein, b: VerdichtungsBaustein): string {
+  return rechenhilfeText(rechenhilfe([a, b]));
+}
 
 describe("UP-2026-W45-05: Prüfungen nach S2", () => {
   it("unzulässige Summen über Datenstand, überlappende Räume und Meldequote; zulässige Summen und Einzelwerte bleiben frei", () => {

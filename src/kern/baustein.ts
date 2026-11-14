@@ -12,15 +12,23 @@ export const BAUSTEIN_FASSUNGEN = ["0.3", "0.2", "0.1"] as const;
 /**
  * Bekannte Formate mit liefernder App und Fassungen (neueste zuerst). `belegachsen` (seit 0.8.2, UP-2026-W45-05): Achsen
  * des Lagenradars, für die Kennzahlen des Formats nach dem Datenmodell der liefernden App als Beleg in Frage kommen
- * (Thessa, docs/DATENMODELL.md); nur ein Prüfhinweis, die App setzt keine Stufe.
+ * (Thessa, docs/DATENMODELL.md); nur ein Prüfhinweis, die App setzt keine Stufe. `raum_vollstaendig` (seit 0.9.2,
+ * SR-2026-W46-06): Werte des Formats decken ihren Raum vollständig ab (etwa amtliche Statistik eines Landes); ein
+ * Baustein mit einem Land als Raum gilt dann nicht als erfasster Ausschnitt (Kodierleitfaden Abschnitt 6, Regel 5).
  */
-export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly string[]; belegachsen?: readonly string[] }> = {
+export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly string[]; belegachsen?: readonly string[]; raum_vollstaendig?: boolean }> = {
   [BAUSTEIN_FORMAT]: { app: "Thessa", fassungen: BAUSTEIN_FASSUNGEN, belegachsen: ["D1", "D4", "D5", "D8"] },
   "KSNV-Kennzahlen": { app: "KSNV", fassungen: ["0.1"] },
 };
 export type BausteinFassung = string;
 /** Länderschlüssel nach dem amtlichen Gemeindeschlüssel (01 Schleswig-Holstein … 16 Thüringen); seit 0.8.2 */
 export const istLandSchluessel = (s: unknown): boolean => typeof s === "string" && /^(0[1-9]|1[0-6])$/.test(s);
+/**
+ * Ein Baustein, dessen Raum ein Land ist, gilt als erfasster Ausschnitt (Entscheidung vom 06.11.2026), außer sein Format
+ * deckt den Raum vollständig ab (`raum_vollstaendig`, seit 0.9.2, SR-2026-W46-06).
+ */
+export const istAusschnitt = (info: Pick<BausteinInfo, "format" | "raum">): boolean =>
+  istLandSchluessel(info.raum.schluessel) && !BAUSTEIN_FORMATE[info.format]?.raum_vollstaendig;
 /** Einheiten der Kennzahlen eines Bausteins (Thessa, docs/DATENMODELL.md) */
 export const BAUSTEIN_EINHEITEN = ["Einsatzmittel", "Einsätze", "Einsatzkräfte", "Ausrückebereiche", "Einheiten"] as const;
 
@@ -34,6 +42,10 @@ export interface BausteinKennzahl {
   erhebung: string;
   raum?: string;
   datenstand: string | null;
+  /** seit 0.9.2 (SR-2026-W46-01, -03, -04) */
+  beobachtungszeitraum?: { von: string; bis: string };
+  bezug?: { gegenstand: string; wert?: number | null; einheit?: string; beobachtungszeitraum?: { von: string; bis: string } };
+  vorlaeufig?: boolean;
   teilmenge_von?: string;
   quellen: string[];
 }
@@ -147,7 +159,7 @@ export function bausteinHinweis(info: BausteinInfo): string {
         ? ", Fassung 0.1 – keine Einsatzmeldungen"
         : `, ${info.einsatzmeldungen} Einsatzmeldung${info.einsatzmeldungen === 1 ? "" : "en"}`;
   // Land als Raum: erfasster Ausschnitt (seit 0.8.2, UP-2026-W45-05, Entscheidung des Herausgebers vom 06.11.2026)
-  const ausschnitt = istLandSchluessel(info.raum.schluessel) ? " Raum gilt als erfasster Ausschnitt, Vollständigkeit nicht angegeben." : "";
+  const ausschnitt = istAusschnitt(info) ? " Raum gilt als erfasster Ausschnitt, Vollständigkeit nicht angegeben." : "";
   return `Kennzahlen-Baustein (${info.app} ${info.fassung}${info.fiktiv ? ", FIKTIV" : ""}): ${raum}, Datenstand ${zeitDE(info.datenstand)}, ${info.kennzahlen} Kennzahl${info.kennzahlen === 1 ? "" : "en"}${em}. Kennzahlen werden unverändert übernommen.${ausschnitt}`;
 }
 

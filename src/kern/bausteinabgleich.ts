@@ -10,6 +10,8 @@
 // Summe gilt nicht als Abweichung; eine Zahl, die einer unzulässigen Summe entspricht, meldet KENNZAHL_SUMME_UNZULAESSIG.
 // Ein Satz mit einem Wert eines Ausschnitt-Bausteins (Land) ohne Kennzeichnung als Ausschnitt meldet KENNZAHL_LANDESWEIT;
 // zitierte Bausteine ergeben den Hinweis KENNZAHL_BELEG.
+// Die Einheitenprüfung bleibt formatbezogen (seit 0.9.2, SR-2026-W46-05): Sie kennt nur die Einheiten aus Thessa;
+// Werte anderer Formate (KSNV, Verhältniswerte) werden im Text nicht abgeglichen und erzeugen keine Befunde.
 
 import { BAUSTEIN_EINHEITEN, BAUSTEIN_FORMATE, zeitDE, type BausteinInfo } from "./baustein";
 import { belegachsen, istAusschnitt, summenpruefung, summeText, unzulaessigeSumme } from "./bausteinverdichtung";

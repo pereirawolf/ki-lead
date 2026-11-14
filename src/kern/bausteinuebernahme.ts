@@ -26,8 +26,24 @@ import type { Befund, Meldung } from "./typen";
 export { MODUL_BAUSTEIN };
 export const MODUL_BAUSTEIN_FASSUNG = "1.0";
 
-/** Felder einer Kennzahl, die aus dem Baustein stammen (ID, Belege und Teilmenge setzt die Meldung) */
-export const BAUSTEIN_FELDER = ["gegenstand", "einheit", "art", "wert", "bandbreite", "mindestwert", "erhebung", "raum", "datenstand"] as const;
+/**
+ * Felder einer Kennzahl, die aus dem Baustein stammen (ID, Belege und Teilmenge setzt die Meldung); seit 0.9.2 auch
+ * Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit (SR-2026-W46-05)
+ */
+export const BAUSTEIN_FELDER = [
+  "gegenstand",
+  "einheit",
+  "art",
+  "wert",
+  "bandbreite",
+  "mindestwert",
+  "erhebung",
+  "raum",
+  "datenstand",
+  "beobachtungszeitraum",
+  "bezug",
+  "vorlaeufig",
+] as const;
 
 export interface UebernahmeBaustein extends AbgleichBaustein {
   /** SHA-256 der Datei (Material) */
