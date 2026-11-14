@@ -122,8 +122,10 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
     const d = mig.daten;
     if (!holeWert(d, ui.rollen.status_feld)) setzeWert(d, ui.rollen.status_feld, ui.rollen.status_entwurf);
     const schema = pruefeGegenSchema(profil.schema, d, ui);
-    // Falsche Datentypen (Objekt statt Text, Text statt Liste …) erst nach Rückfrage in die Maske übernehmen
-    const typfehler = schema.filter((b) => b.keyword === "type");
+    // Falsche Datentypen (Objekt statt Text, Text statt Liste …) erst nach Rückfrage in die Maske übernehmen. Ein leerer Wert
+    // (null) ist kein falscher Datentyp: In LEAD-Meldung-v2 heißt null „unbekannt“, die Maske zeigt das Feld leer; der
+    // Befund bleibt im Prüfschritt (seit 0.9.0, sonst fragte schon ein frisch gespeicherter v2-Entwurf nach)
+    const typfehler = schema.filter((b) => b.keyword === "type" && !/Datentyp „null“/.test(b.text));
     if (typfehler.length) {
       const beispiele = typfehler
         .slice(0, 5)

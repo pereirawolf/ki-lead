@@ -6,14 +6,15 @@ import { bereich, downloadText, netzVorbereiten, oeffnen, S1_VORSCHLAG, SCHLUESS
 test("Meldung: Entwurf als JSON speichern und die heruntergeladene Datei wieder öffnen", async ({ page }) => {
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await page.getByLabel("Name der meldenden Stelle").fill("Teststelle Browser");
+  // Seit 0.9.0 (Beispielprofil 2.0.0, LEAD-Meldung-v2): Feld „Meldende Stelle“ im Absender
+  await page.getByLabel("Meldende Stelle", { exact: true }).fill("Teststelle Browser");
   await page.getByRole("button", { name: /Prüfen und Exportieren/ }).click();
 
   const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Entwurf als JSON speichern" }).click()]);
   expect(download.suggestedFilename()).toMatch(/\.json$/);
   const text = await downloadText(download);
   const meldung = JSON.parse(text);
-  expect(meldung.meldende_stelle).toBe("Teststelle Browser");
+  expect(meldung.absender.stelle).toBe("Teststelle Browser");
   expect(meldung.schema).toMatch(/^LEAD-Meldung/);
 
   await page.getByRole("button", { name: "Neue Meldung" }).click();
@@ -21,20 +22,21 @@ test("Meldung: Entwurf als JSON speichern und die heruntergeladene Datei wieder 
   await page.getByRole("dialog").getByRole("button", { name: "Neu beginnen" }).click();
   await page.getByRole("button", { name: /Meldungsmetadaten/ }).click();
   // Neue Meldung: Vorgabe des Profils statt der eigenen Eingabe
-  await expect(page.getByLabel("Name der meldenden Stelle")).not.toHaveValue("Teststelle Browser");
+  await expect(page.getByLabel("Meldende Stelle", { exact: true })).not.toHaveValue("Teststelle Browser");
 
   // Dieselbe Datei, die der Browser heruntergeladen hat
   await page.locator('.werkzeugleiste input[type="file"]').setInputFiles((await download.path())!);
-  await expect(page.getByLabel("Name der meldenden Stelle")).toHaveValue("Teststelle Browser");
+  await expect(page.getByLabel("Meldende Stelle", { exact: true })).toHaveValue("Teststelle Browser");
   expect(netz.ki).toHaveLength(0);
   expect(netz.fremd).toEqual([]);
 });
 
-test("Meldung: fünfter Schritt „Management Summary“ nach „Prüfen und Exportieren“ (seit 0.5.17), Feldauszug ohne KI", async ({ page }) => {
+// Seit 0.9.0 sechs Schritte (mit „Übergreifende Lage“), Management Summary bleibt der letzte
+test("Meldung: letzter Schritt „Management Summary“ nach „Prüfen und Exportieren“ (seit 0.5.17), Feldauszug ohne KI", async ({ page }) => {
   const netz = await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
   const schritte = page.getByRole("navigation", { name: "Schritte" }).getByRole("button");
-  await expect(schritte).toHaveCount(5);
+  await expect(schritte).toHaveCount(6);
   await expect(schritte.last()).toHaveText(/Management Summary/);
   await page
     .getByRole("button", { name: /Prüfen und Exportieren/ })

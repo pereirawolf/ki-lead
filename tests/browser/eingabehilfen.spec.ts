@@ -24,7 +24,8 @@ test("Tastatur: Bereich öffnen, Vorlage einfügen, erste offene Stelle markiert
   expect(gefunden, "Vorlage per Tab erreichbar").toBe(true);
   await page.keyboard.press("Enter");
 
-  const feld = page.getByRole("textbox", { name: "Lage & Ereignis", exact: true }).first();
+  // Seit 0.9.0 (Beispielprofil 2.0.0) ist das Feld Pflicht für die finale Meldung; der Name trägt den Zusatz
+  const feld = page.getByRole("textbox", { name: /^Lage & Ereignis( \(Pflicht für finale Meldung\))?$/ }).first();
   await expect(feld).toBeFocused();
   const zustand = await feld.evaluate((el: HTMLTextAreaElement) => ({ wert: el.value, markiert: el.value.slice(el.selectionStart, el.selectionEnd) }));
   expect(zustand.wert.startsWith("Kernaussage: ⟦zentrale Aussage zur Lage⟧.")).toBe(true);
@@ -40,13 +41,14 @@ test("geöffnete Bereiche: alle Bedienelemente haben einen zugänglichen Namen",
   await oeffnen(page);
   await page.locator("nav.schritte button", { hasText: "Ereignisse und Sachverhalte" }).click();
   const bereiche = page.locator("details.eingabehilfen");
-  await expect(bereiche).toHaveCount(5);
+  // Seit Beispielprofil 2.0.0 nur die drei Analysefelder (Maßnahmen und Bewertung sind strukturierte Felder)
+  await expect(bereiche).toHaveCount(3);
   for (const b of await bereiche.all()) await b.evaluate((el: HTMLDetailsElement) => (el.open = true));
   const baum = await page.locator("body").ariaSnapshot();
   const muster = new RegExp(`^\\s*- (${ROLLEN.join("|")})(?: \\[[^\\]]*\\])*:?\\s*$`);
   expect(baum.split("\n").filter((z) => muster.test(z))).toEqual([]);
   // Alle Vorlagen tragen Feld und Sachverhalt im Namen
   const namen = await page.locator("details.eingabehilfen button").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label") || ""));
-  expect(namen.length).toBe(22);
+  expect(namen.length).toBe(10);
   for (const n of namen) expect(n).toMatch(/ einfügen in .+, Ereignis\/Sachverhalt 1$/);
 });
