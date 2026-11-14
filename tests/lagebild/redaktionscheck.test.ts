@@ -2,7 +2,7 @@
 // RV01, RV03, RV04, RV06, RV07). Zeitangaben gelten in der Profilzeitzone Europe/Berlin.
 import { beforeAll, describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import type { Profil } from "../../src/kern/typen";
 import { alleSachverhalte, kennzahlen, type LagebildEintrag } from "../../src/lagebild/lagebild";
 import { abweichungsBaustein, befundListe, redaktionsbericht, redaktionscheck } from "../../src/lagebild/redaktion";
@@ -15,7 +15,7 @@ import { repoPfad } from "../support/dateien";
 let p: Profil;
 let basis: any;
 beforeAll(async () => {
-  p = (await profil("lead-beispiel")).profil!;
+  p = (await profil(V1_PROFIL)).profil!;
   basis = ilkaMeldung("Bund");
 });
 
@@ -284,7 +284,7 @@ describe("RV03, RV07: Textbaustein und Redaktionsbericht", () => {
 
 describe("F07: Redaktionscheck wertet jede Frist eines Sachverhalts aus", () => {
   it("findet die zweite, frühere Frist unabhängig von der Reihenfolge", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const d = ilkaMeldung("Bund");
     d.sachverhalte = [d.sachverhalte[0]];
     d.sachverhalte[0].sofort.bewertung_text = "Handlungsrelevant bis: 30.10.2026 12:00\nHandlungsrelevant bis: 21.10.2026 12:00";

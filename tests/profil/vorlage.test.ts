@@ -3,7 +3,7 @@
 // zur Pflege und Abschnittsgliederung der Dach-SOPs, wie sie das Beispielprofil verwendet; Platzhalter nur in
 // eckigen Klammern; Lizenz CC0 1.0.
 import { describe, expect, it } from "vitest";
-import { leseOrdner, profil, repoPfad } from "../support/dateien";
+import { leseOrdner, profil, repoPfad, v1ProfilDateien } from "../support/dateien";
 import { ladeProfil } from "../../src/profil/laden";
 
 const beispiel = leseOrdner(repoPfad("profile", "lead-beispiel"));
@@ -92,18 +92,20 @@ describe("Vorlage – eigene Organisation (KP-2026-W43-60)", () => {
   });
 
   it("ZS-2026-W44-07: führt Zeitstrahl, Kennung und Bezug des Beispielprofils als Gerüst und nennt sie im README", async () => {
-    // Soll: Profilformat 1.23 (docs/PROFILFORMAT.md) – optionale Rollen und Abschnitte, die das Beispielprofil verwendet
+    // Soll seit Vorlage 1.0.0 (LEAD-Meldung-v2, UP-2026-W45-06): Kennung und Bezug als Rollen wie im Beispielprofil, der
+    // Zeitstrahl je Sachverhalt aus dem Kernschema (Typen dort festgelegt, kein Abschnitt „zeitstrahl“ mehr)
     const ub = JSON.parse(beispiel["meldung.ui.json"]);
     const uv = JSON.parse(vorlage["meldung.ui.json"]);
     const sv = JSON.parse(vorlage["meldung.schema.json"]);
-    for (const rolle of ["zeitstrahl", "sv_kennung", "sv_bezug"]) {
+    const sb = JSON.parse(beispiel["meldung.schema.json"]);
+    for (const rolle of ["sv_kennung", "sv_bezug"]) {
       expect(ub.rollen, `Beispielprofil: ${rolle}`).toHaveProperty(rolle);
       expect(uv.rollen, `Vorlage: ${rolle}`).toHaveProperty(rolle);
     }
-    expect(sv.properties).toHaveProperty(uv.rollen.zeitstrahl);
-    expect(sv.properties.sachverhalte.items.properties).toHaveProperty(uv.rollen.sv_kennung);
-    expect(sv.properties.sachverhalte.items.properties).toHaveProperty(uv.rollen.sv_bezug);
-    expect(uv.zeitstrahl.typen).toEqual(ub.zeitstrahl.typen);
+    expect(sv.$defs.sachverhalt.properties).toHaveProperty(uv.rollen.sv_kennung);
+    expect(sv.$defs.sachverhalt.properties).toHaveProperty(uv.rollen.sv_bezug);
+    expect(sv.$defs.sachverhalt.properties).toHaveProperty("zeitstrahl");
+    expect(sv.$defs.zeitstrahl_zeile).toEqual(sb.$defs.zeitstrahl_zeile);
     expect(uv.kennung).toHaveProperty("standard");
     const { befunde } = await profil("muster");
     expect(befunde.filter((b) => b.code === "ZEITSTRAHL_OHNE_KENNUNG")).toEqual([]);
@@ -132,9 +134,12 @@ describe("Pflichtkennsätze (TP-2026-W44-27)", () => {
     },
   );
 
+  // Seit 0.9.0 (UP-2026-W45-06): Pflichtkennsätze gelten nur für LEAD-Meldung-v1 (Prüfung am eingefrorenen v1-Beispielprofil);
+  // unter v2 sind Kennsätze Felder, die Vorlage lädt auch ohne Abschnitt „kennsaetze“ ohne Warnung
   it("TP-2026-W44-27: fehlt ein Pflichtkennsatz, meldet die App ihn beim Laden als Warnung; das Profil bleibt nutzbar", async () => {
+    const v1 = v1ProfilDateien();
     for (const fehlt of PFLICHT) {
-      const d = { ...vorlage };
+      const d = { ...v1 };
       const ui = JSON.parse(d["meldung.ui.json"]);
       delete ui.kennsaetze[fehlt];
       d["meldung.ui.json"] = JSON.stringify(ui);
@@ -146,10 +151,15 @@ describe("Pflichtkennsätze (TP-2026-W44-27)", () => {
       expect(w[0]!.text).toContain(`„${fehlt}“`);
     }
     // ohne Abschnitt „kennsaetze“: je Pflichtkennsatz eine Warnung
-    const d = { ...vorlage };
+    const d = { ...v1 };
     const ui = JSON.parse(d["meldung.ui.json"]);
     delete ui.kennsaetze;
     d["meldung.ui.json"] = JSON.stringify(ui);
     expect((await ladeProfil(d)).befunde.filter((b) => b.code === "KENNSATZ_FEHLT")).toHaveLength(3);
+    const v2 = { ...vorlage };
+    const uv = JSON.parse(v2["meldung.ui.json"]);
+    delete uv.kennsaetze;
+    v2["meldung.ui.json"] = JSON.stringify(uv);
+    expect((await ladeProfil(v2)).befunde.filter((b) => b.code === "KENNSATZ_FEHLT")).toEqual([]);
   });
 });

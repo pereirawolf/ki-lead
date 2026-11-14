@@ -345,7 +345,7 @@ describe("Testläufe: Testart wählen (seit 0.5.12 Umfang, seit 0.5.17 mit S3 Re
 });
 
 describe("AV-2026-W43-25: Testart S3 Reparatur (bis 0.5.16 „Prüffall Reparatur“)", () => {
-  const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.json"), "utf-8");
+  const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.v2.json"), "utf-8");
   const abschnitt = () => document.querySelector(".testlauf") as HTMLElement;
   const auswahl = () => abschnitt().querySelector("select") as HTMLSelectElement;
   async function reparaturWaehlen() {

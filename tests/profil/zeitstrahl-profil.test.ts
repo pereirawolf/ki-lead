@@ -2,11 +2,14 @@
 // „zeitstrahl“, „sv_kennung“, „sv_bezug“ beim Laden. Ältere Pakete ohne diese Angaben laden unverändert.
 import { describe, expect, it } from "vitest";
 import { ladeProfil } from "../../src/profil/laden";
-import { leseOrdner, repoPfad } from "../support/dateien";
+import { leseOrdner, repoPfad, v1ProfilDateien } from "../support/dateien";
 
-/** Beispielprofil mit geänderter Darstellungsdatei */
+/**
+ * Beispielprofil mit geänderter Darstellungsdatei; seit 0.9.0 das eingefrorene v1-Beispielprofil, denn unter
+ * LEAD-Meldung-v2 regelt das Kernschema die Zeitstrahltypen und der Abschnitt „zeitstrahl“ entfällt (UP-2026-W45-06)
+ */
 async function mitUi(aendern: (ui: any) => void) {
-  const d = leseOrdner(repoPfad("profile", "lead-beispiel"));
+  const d = v1ProfilDateien();
   const ui = JSON.parse(d["meldung.ui.json"]!);
   aendern(ui);
   d["meldung.ui.json"] = JSON.stringify(ui);

@@ -1,6 +1,6 @@
 // Zeitwerte und Fristen: Zerlegen/Verbinden, Schemaformate des Beispielprofils, ungültige Kalenderdaten (Review 18.10.2026, F05).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { pruefeRoh } from "../../src/kern/validierung";
 import { parseDatumDE } from "../../src/kern/kennsaetze";
 import { readFileSync, readdirSync } from "node:fs";
@@ -23,7 +23,7 @@ describe("Zeitwerte", () => {
   });
 
   it("Schema des Beispielprofils: Meldezeitraum und Eintritt mit oder ohne Uhrzeit, Meldezeitpunkt nur mit Uhrzeit", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const ordner = repoPfad(ILKA_ORDNER);
     const m = JSON.parse(
       readFileSync(

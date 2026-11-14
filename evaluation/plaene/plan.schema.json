@@ -61,7 +61,7 @@
       "required": ["datei", "sha256"],
       "additionalProperties": false,
       "properties": {
-        "datei": { "type": "string", "pattern": "^evaluation/material/[a-z0-9-]+\\.json$" },
+        "datei": { "type": "string", "pattern": "^evaluation/material/[a-z0-9-]+(\\.v[0-9]+)?\\.json$" },
         "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },
@@ -71,7 +71,7 @@
       "required": ["datei", "sha256"],
       "additionalProperties": false,
       "properties": {
-        "datei": { "type": "string", "pattern": "^evaluation/material/[a-z0-9-]+\\.json$" },
+        "datei": { "type": "string", "pattern": "^evaluation/material/[a-z0-9-]+(\\.v[0-9]+)?\\.json$" },
         "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },

@@ -4,6 +4,7 @@
 import { useMemo, useState } from "react";
 import { pruefeGegenSchema } from "../kern/validierung";
 import { ausfuellHinweise, pflichtHinweise } from "../kern/kennsaetze";
+import { moduleImSchema } from "../kern/referenzen";
 import { ausgabeStatus, dateiname } from "../kern/ausgabe";
 import { holeWert, mitFeld } from "../kern/pfad";
 import { alsText, feldUi, radarFuer } from "../kern/ui";
@@ -75,7 +76,10 @@ export function Pruefen({
     const felder = new Set(schemaBefunde.flatMap((b) => (b.pfad ? [feldSchluessel(b.pfad)] : [])));
     return pflicht.filter((b) => !b.pfad || !felder.has(feldSchluessel(b.pfad)));
   }, [schemaBefunde, pflicht]);
-  const hinweise = useMemo(() => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone, profil.manifest.referenzraum), [profil, meldung]);
+  const hinweise = useMemo(
+    () => ausfuellHinweise(meldung, profil.ui, profil.manifest.variablen?.zeitzone, profil.manifest.referenzraum, moduleImSchema(profil.schema)),
+    [profil, meldung],
+  );
   const ent = r.entstehung_feld ? holeWert(meldung, r.entstehung_feld) : undefined;
   const svs = sachverhalte(meldung, profil.ui);
   const radarFeld = r.sv_radar ? feldUi(profil.ui, `${r.sachverhalte}[].${r.sv_radar}`) : undefined;

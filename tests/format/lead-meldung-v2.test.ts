@@ -488,7 +488,9 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
   });
 
   it("Kennsätze, Mindestwert und Bezug der verdichteten Bundesmeldung (Ilka) werden zu Feldern", () => {
-    const v1 = json("profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json");
+    const v1 = json(
+      "tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka/LEAD-Meldung_Bund_Koordinierungsstelle_2026-10-14T14-00_FIKTIV_Orkantief-Ilka.json",
+    );
     const { meldung } = migriereV1(v1, FEST);
     const sv = meldung.sachverhalte[0];
     expect(sv.bewertung.referenzraum).toBe("Deutschland");
@@ -504,15 +506,15 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
   });
 
   const v1Dateien = [
-    ...readdirSync(repoPfad("profile/lead-beispiel/beispiele/orkantief-ilka"))
+    ...readdirSync(repoPfad("tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka"))
       .filter((d) => d.endsWith(".json"))
-      .map((d) => [`profile/lead-beispiel/beispiele/orkantief-ilka/${d}`, "bund"]),
-    ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/hochwasser-saale"))
+      .map((d) => [`tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka/${d}`, "bund"]),
+    ...readdirSync(repoPfad("tests/fixtures/lead-thueringen-v1/beispiele/hochwasser-saale"))
       .filter((d) => d.endsWith(".json"))
-      .map((d) => [`profile/lead-thueringen/beispiele/hochwasser-saale/${d}`, "land"]),
-    ...readdirSync(repoPfad("profile/lead-thueringen/beispiele/orkantief-ilka"))
+      .map((d) => [`tests/fixtures/lead-thueringen-v1/beispiele/hochwasser-saale/${d}`, "land"]),
+    ...readdirSync(repoPfad("tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka"))
       .filter((d) => d.endsWith(".json"))
-      .map((d) => [`profile/lead-thueringen/beispiele/orkantief-ilka/${d}`, "land"]),
+      .map((d) => [`tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka/${d}`, "land"]),
     ["evaluation/material/ilka-musterfassung.json", "bund"],
     ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
       .filter((d) => d.isDirectory())
@@ -529,7 +531,7 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
   });
 
   it("Migration ist bei festen Kennungen und fester Uhr reproduzierbar und verändert die Eingabe nicht", () => {
-    const v1 = json("profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json");
+    const v1 = json("tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json");
     const vorher = JSON.stringify(v1);
     expect(migriereV1(v1, FEST)).toEqual(migriereV1(v1, FEST));
     expect(JSON.stringify(v1)).toBe(vorher);

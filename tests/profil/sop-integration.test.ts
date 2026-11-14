@@ -2,7 +2,7 @@
 // Nachweis (_entstehung.sop) deterministisch als „beigefügt“ geführt, unabhängig vom Antwortformat des Modells.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import {
   fachSops,
   gemeinsameSops,
@@ -83,7 +83,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
   });
 
   it("Nachweis = beigefügte SOPs, unabhängig vom Antwortformat; Abweichungen als Hinweis (SOP-CODE-02)", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const k = kontext(p, ["b08", "c11", "c16"]);
     const erwartet = ["b08", "c11", "c16"].map((id) => sopKennung(fachSops(p!).find((s) => s.id === id)!));
     const faelle: [unknown, RegExp | null][] = [
@@ -112,7 +112,7 @@ describe("SOP-Integration laut SOP-Übersicht", () => {
   });
 
   it("Lagebild-Tabelle und CSV führen die SOP-Angabe der Entstehung", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const spalte = spalten(p!).find((s) => s.titel === "SOP (Entstehung)")!;
     expect(spalte).toBeTruthy();
     const e = (entstehung: unknown) => ({ name: "x", daten: { _entstehung: entstehung } }) as any;
@@ -129,8 +129,9 @@ describe("SOP-Querverweise in Teil B und C", () => {
   const sopOrdner = repoPfad("profile/lead-beispiel/sop");
   const dateien = register.map((r) => ({ kennung: r.kennung, text: readFileSync(repoPfad("profile/lead-beispiel", r.datei), "utf-8") }));
   const kennungen = new Set(register.map((r) => r.kennung));
-  const katalog: string[] = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/meldung.schema.json"), "utf-8")).$defs.sachverhalt.properties.art.items
-    .enum;
+  // Seit 0.9.0 (LEAD-Meldung-v2): Ereignisarten im Modul lead-bevoelkerungsschutz
+  const katalog: string[] = JSON.parse(readFileSync(repoPfad("profile/lead-beispiel/meldung.schema.json"), "utf-8")).$defs
+    .modul_lead_bevoelkerungsschutz_ereignisart.enum;
 
   it.each(dateien)("$kennung verweist nur auf vorhandene Kennungen", ({ text }) => {
     const genannt = [...text.matchAll(/\b([BC](?:0[1-9]|[1-9]\d))\b/g)].map((m) => m[1]);

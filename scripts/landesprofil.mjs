@@ -1,11 +1,14 @@
 // Leitet die abgeleiteten Dateien des Landesprofils (profile/lead-thueringen) aus dem Beispielprofil der
 // Koordinierungsstelle (profile/lead-beispiel) ab (seit 0.6.18, TP-2026-W44-54): Schema, Darstellungsdatei, Kontakte,
-// Arbeitsanweisungen und Kodierleitfaden. Die Ableitung ändert nur, was die Landesebene verlangt (Feld „kreis“ statt
-// „land“, Kreise und kreisfreie Städte, Kennungspräfixe, einzelne Formulierungen); alles andere bleibt wortgleich.
-// Manifest, Änderungsverlauf, README und Beispiele des Landesprofils werden von Hand gepflegt. Seit 0.6.19
-// (TP-2026-W44-60) schreibt das Skript das Landesschema zusätzlich als Eingangsschema ins Beispielprofil
-// (eingang/LEAD-Meldung-Land-v1.schema.json), damit die Koordinierungsstelle Landesmeldungen prüfen kann. Die SOP-Sammelmappe teilt
-// das Landesprofil mit dem Beispielprofil (src/profil/eingebaut.ts, TP-2026-W44-55).
+// Arbeitsanweisungen und Kodierleitfaden. Die Ableitung ändert nur, was die Landesebene verlangt (Kreise und kreisfreie
+// Städte als meldende Gebiete, Kennungspräfixe, einzelne Formulierungen); alles andere bleibt wortgleich. Manifest,
+// Änderungsverlauf, README und Beispiele des Landesprofils werden von Hand gepflegt. Die SOP-Sammelmappe teilt das
+// Landesprofil mit dem Beispielprofil (src/profil/eingebaut.ts, TP-2026-W44-55).
+//
+// Seit 0.9.0 (UP-2026-W45-06, LEAD-Meldung-v2): Das Schema entsteht aus der Zusammenstellung
+// formate/lead-meldung-v2/zusammenstellungen/lead-thueringen.json (Land und Kreise, sonst wie das Beispielprofil); das
+// eigens abgeleitete Schema LEAD-Meldung-Land-v1 und seine Kopie im Beispielprofil entfallen, weil Bund, Land und Kreis
+// eine Schemakennung teilen. Die Liste der Gebiete in der Zusammenstellung muss Land und Kreise unten entsprechen.
 //
 // Aufruf: node scripts/landesprofil.mjs [--check]
 //   ohne --check: schreibt die abgeleiteten Dateien
@@ -14,6 +17,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { stelleSchemaZusammen } from "../src/kern/meldung-v2.js";
 
 export const QUELLE = "profile/lead-beispiel";
 export const ZIEL = "profile/lead-thueringen";
@@ -51,7 +55,10 @@ export const KREISE = [
   ["Wartburgkreis", "WAK", "16063"],
 ].map(([name, kuerzel, ags]) => ({ name, praefix: `${LAND.praefix}-${kuerzel}`, ags }));
 
-export const SCHEMA_ID = "LEAD-Meldung-Land-v1";
+export const SCHEMA_ID = "LEAD-Meldung-v2";
+/** Zusammenstellung des Landesprofils (Pfad relativ zum Repository) und Ordner der Formatdateien */
+export const ZUSAMMENSTELLUNG = "formate/lead-meldung-v2/zusammenstellungen/lead-thueringen.json";
+const FORMATORDNER = "formate/lead-meldung-v2";
 
 /** Ersetzt genau einmal; fehlt die Stelle, hat sich das Beispielprofil geändert und die Ableitung muss nachgezogen werden */
 function ersetze(text, alt, neu, datei) {
@@ -62,59 +69,37 @@ function ersetze(text, alt, neu, datei) {
 
 const json = (o) => JSON.stringify(o, null, 2) + "\n";
 
-function schema(q) {
-  const s = JSON.parse(q);
-  s.$id = `${SCHEMA_ID}.schema.json`;
-  s.title = "LEAD-Meldevorlage Landesebene – JSON-Schema v1";
-  s.description =
-    "Beispielschema einer LEAD-Meldung auf Landesebene (Schemakennung LEAD-Meldung-Land-v1), abgeleitet von LEAD-Meldung-v1 (LEAD-Meldevorlage 1.2): " +
-    "Statt des Feldes „land“ nennt „kreis“ die meldende Gebietskörperschaft, bei der eigenen Meldung das Land. Prüft Struktur, Datentypen, zulässige Werte und – bei _status 'final' – die vier Pflichtfelder. Inhaltliche Richtigkeit prüft das Schema nicht.";
-  const props = {};
-  for (const [k, v] of Object.entries(s.properties)) {
-    if (k === "land") props.kreis = { enum: ["", LAND.name, ...KREISE.map((k) => k.name)] };
-    else if (k === "schema") props.schema = { const: SCHEMA_ID };
-    else props[k] = v;
-  }
-  s.properties = props;
-  s.required = s.required.map((f) => (f === "land" ? "kreis" : f));
-  const text = JSON.stringify(s);
-  if (text.split('"land"').length - 1 !== 1)
-    throw new Error("meldung.schema.json: „land“ außerhalb von required/properties erwartet genau einmal (Bedingung für final)");
-  return json(JSON.parse(text.replace('"land"', '"kreis"')));
+/** Schema aus der Zusammenstellung; die Gebiete müssen Land und Kreise dieser Datei entsprechen */
+function schema(lesen) {
+  const z = JSON.parse(lesen(ZUSAMMENSTELLUNG));
+  const soll = [LAND.name, ...KREISE.map((k) => k.name)];
+  const ist = z.einschraenkungen?.absender_gebiete ?? [];
+  if (JSON.stringify(ist) !== JSON.stringify(soll))
+    throw new Error(`${ZUSAMMENSTELLUNG}: absender_gebiete weichen von Land und Kreisen in scripts/landesprofil.mjs ab`);
+  return json(stelleSchemaZusammen(z, (d) => JSON.parse(lesen(join(FORMATORDNER, d)))));
 }
 
 function ui(q) {
   const u = JSON.parse(q);
-  for (const s of u.schritte) s.felder = s.felder.map((f) => (f === "land" ? "kreis" : f));
-  const felder = {};
-  for (const [k, v] of Object.entries(u.felder))
-    if (k === "land")
-      felder.kreis = { label: "Kreis bzw. kreisfreie Stadt (eigene Meldung: Land)", widget: "auswahl", leer_label: "– bitte wählen –", pflicht: true };
-    else felder[k] = v;
-  u.felder = felder;
-  u.rollen.land = "kreis";
+  u.felder["absender.gebiet.name"] = {
+    ...u.felder["absender.gebiet.name"],
+    hinweis: "Kreis bzw. kreisfreie Stadt der meldenden Stelle; bei der eigenen Meldung das Land.",
+  };
   u.kennung.praefixe = Object.fromEntries([[LAND.name, LAND.praefix], ...KREISE.map((k) => [k.name, k.praefix])]);
   u.kennung.standard = LAND.praefix;
-  u.dateiname = u.dateiname.replace("{land}", "{kreis}");
   let text = json(u);
-  text = ersetze(
-    text,
-    "Wer (Land, Bundesressort, Fachaufsicht, Nachbarland, Betreiberaufsicht)",
-    "Wer (Kreis oder kreisfreie Stadt, Landesressort, Fachaufsicht, Bund, Nachbarland, Betreiberaufsicht)",
-    "meldung.ui.json",
-  );
   text = ersetze(text, '"Länderübergreifend"\n', '"Länderübergreifend",\n      "Kreisübergreifend"\n', "meldung.ui.json");
   return text;
 }
 
 function kontakte(q) {
   const k = JSON.parse(q);
-  k.stellen = KREISE.map((x) => ({ name: x.name, feld: "kreis", email: "lage@beispiel.invalid" }));
+  k.stellen = KREISE.map((x) => ({ name: x.name, feld: "absender.gebiet.name", email: "lage@beispiel.invalid" }));
   return json(k);
 }
 
 const TEXTE = {
-  "anweisung-erfassung.md": [["`land` ist `{{profil.land}}`", "`kreis` ist `{{profil.kreis}}`"]],
+  "anweisung-erfassung.md": [["{{profil.meldende_stelle}} ({{profil.land}})", "{{profil.meldende_stelle}} ({{profil.kreis}})"]],
   "anweisung-verdichtung.md": [
     [
       "Länder oder Stellen erscheinen innerhalb eines Sachverhalts als Teilräume",
@@ -133,7 +118,6 @@ const TEXTE = {
     ],
   ],
   "kodierleitfaden.md": [
-    ["(Schemakennung `LEAD-Meldung-v1`)", "(Schemakennung `LEAD-Meldung-v1`, im Landesprofil `LEAD-Meldung-Land-v1` mit dem Feld `kreis` statt `land`)"],
     [
       "in diesem Profil nach ISO 3166: `DE` für den Bund, `DE-TH` für Thüringen usw.",
       "in diesem Profil `DE-TH` für das Land und `DE-TH-` mit dem Kfz-Kennzeichen für Kreise und kreisfreie Städte, z. B. `DE-TH-J` für die Stadt Jena (im Beispielprofil der Koordinierungsstelle nach ISO 3166: `DE` für den Bund, `DE-TH` für Thüringen usw.)",
@@ -145,23 +129,16 @@ const TEXTE = {
   ],
 };
 
-/** Eingangsschema im Beispielprofil (Pfad relativ zum Repository) */
-export const EINGANG_IM_BEISPIEL = `${QUELLE}/eingang/${SCHEMA_ID}.schema.json`;
-
 /** Abgeleitete Dateien: Pfad im Repository → Inhalt */
 export function ableitenImRepo(lesen = (pfad) => readFileSync(pfad, "utf-8")) {
-  const land = ableiten(lesen);
-  return {
-    ...Object.fromEntries(Object.entries(land).map(([d, t]) => [join(ZIEL, d), t])),
-    [EINGANG_IM_BEISPIEL]: land["meldung.schema.json"],
-  };
+  return Object.fromEntries(Object.entries(ableiten(lesen)).map(([d, t]) => [join(ZIEL, d), t]));
 }
 
 /** Abgeleitete Dateien des Landesprofils: Pfad im Profilordner → Inhalt */
 export function ableiten(lesen = (pfad) => readFileSync(pfad, "utf-8")) {
   const q = (d) => lesen(join(QUELLE, d));
   const out = {
-    "meldung.schema.json": schema(q("meldung.schema.json")),
+    "meldung.schema.json": schema(lesen),
     "meldung.ui.json": ui(q("meldung.ui.json")),
     "kontakte.json": kontakte(q("kontakte.json")),
   };

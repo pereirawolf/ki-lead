@@ -1,11 +1,11 @@
 // Dateinamen mit dem Datum vorn (Umsetzungsplan DN-01 bis DN-12, Testfälle T-01 bis T-15).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { dateiname, dateistempel, exportStempel, mitDatum } from "../../src/kern/ausgabe";
 import type { Profil } from "../../src/kern/typen";
 
 async function beispiel(): Promise<Profil> {
-  return (await profil("lead-beispiel")).profil!;
+  return (await profil(V1_PROFIL)).profil!;
 }
 const meldung = (zeit: unknown = "2026-10-20T20:31") => ({
   schema: "LEAD-Meldung-v1",

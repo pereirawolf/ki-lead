@@ -2,6 +2,16 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.0.0 – 14.11.2026
+
+Grundlage: UP-2026-W45-06 (Paket 6 des Umstellungsplans, Umstellung der Profile auf LEAD-Meldung-v2; Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`), Entscheidung des Herausgebers vom 14.11.2026: eigenes Fachmodul statt Lagenradar. Erste Stelle: inkompatible Schemaänderung; Meldungen nach `Muster-LEAD-Meldung-v1` werden nicht überführt (Abwärtskompatibilität ist kein Ziel, die Vorlage hat keine Beispielmeldungen).
+
+- **Meldungsschema** `LEAD-Meldung-v2` statt `Muster-LEAD-Meldung-v1`, erzeugt aus der neuen Zusammenstellung `zusammenstellung.json` (Kernschema aus `formate/lead-meldung-v2/` und eigenes Pflichtmodul) mit `npm run meldung:v2 -- schema`.
+- **Eigenes Fachmodul** `module/muster-lageprofil.schema.json` 0.1: Arten der Organisation (bisher `art`) und Lageprofil mit den Achsen Raum, betroffene Personen, Dynamik (Stufen 0–3, bisher `radar`) als Objekte mit Stufe, Status, Grund, Begründung und Belegen; Muster für ein eigenes Modul (LEAD-MELDUNG-V2.md Abschnitt 9).
+- **Darstellungsdatei** aus der Vorlage für v2 (`formate/lead-meldung-v2/beispiel/meldung.ui.json`) mit den Pfaden des eigenen Moduls, Radar „profil“, Kennsätzen als Beschriftungen und Dateiname mit `{absender.stelle}`.
+- **Manifest:** Schemakennung, Variablen des Absenders als Pfade (`absender.stelle`, `absender.ebene` „Einsatzstelle“, `absender.gebiet.name`), Beschreibung.
+- **Kodierleitfaden, Arbeitsanweisung Erfassung, Teil A** 1.0: Achsen als Objekte mit Status, Begründung und Belegen; Quellen als Objekte; Handlungsbedarf als Block; Gültigkeitsstand. README zu Übernahme, Kennsätzen, Zeitstrahl und Kennung nachgezogen.
+
 ## 0.8.1 – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026 zur Darstellung der Schrittleiste (Grunddesign 1.7, Regel LD-T05; App 0.7.17). Dritte Stelle: nur Beschriftung der Oberfläche, Feldnamen, Schema, Arbeitsanweisungen, Kodierleitfaden und SOPs unverändert.

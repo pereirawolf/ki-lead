@@ -32,6 +32,7 @@ import { pruefeGegenSchema } from "../kern/validierung";
 import { sha256 } from "../profil/laden";
 import { aufwandFuer, modellFuer, STANDARD_PROFILE, type Einstellungen, type Rolle } from "../pipeline/einstellungen";
 import { APP_KENNUNG } from "../kern/version";
+import { zeitpunktInZone } from "../kern/zeit";
 import { neuerLauf, type Auftrag, type Lauf, type S1Vorschlag } from "../pipeline/lauf";
 import { dateiLesen, istVerdichtung, type Material } from "../pipeline/material";
 import { plausibilitaetPruefen, type PlausibilitaetsBefund } from "./plausibilitaet";
@@ -267,6 +268,19 @@ export type Pruefpunkt = { nr: string; erfuellt: boolean; angabe: string };
  * (LS-2026-W43-15) gibt es keine S1-Anfrage; T5 prüft dann nur die Vermerke an S2. Im Umfang „S1“ (seit 0.5.12) gelten
  * nur T1, T2, T4, T5 und T6, bezogen auf S1 und den Vorschlag; T3, T7 und T8 setzen einen Entwurf voraus.
  */
+/**
+ * t0 des Falls (lokale Zeit „2026-10-14T14:00“, Zeitzone Europe/Berlin) gleich einer Angabe des Laufs: wörtlich (v1, S1)
+ * oder als derselbe Zeitpunkt mit UTC-Versatz (LEAD-Meldung-v2, seit 0.9.0).
+ */
+export function gleichesT0(wert: unknown, soll: string = FALL.auftrag.meldezeitpunkt): boolean {
+  if (typeof wert !== "string") return false;
+  if (wert === soll) return true;
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(soll);
+  if (!m || !/(Z|[+-]\d{2}:\d{2})$/.test(wert)) return false;
+  const [, j, mo, ta, h, mi] = m.map(Number);
+  return Date.parse(wert) === zeitpunktInZone(j!, mo!, ta!, h!, mi!, "Europe/Berlin").getTime();
+}
+
 export function pruefpunkte(
   l: Lauf,
   material: Material[],
@@ -290,7 +304,7 @@ export function pruefpunkte(
         angabe: `${eingaenge.length} Eingänge, Stufe „${s1?.stufe ?? "–"}“`,
       },
       { nr: "T2", erfuellt: l.status === "bestaetigen" && !!l.vorschlag, angabe: `Status ${l.status}${l.fehler ? `: ${l.fehler}` : ""}` },
-      { nr: "T4", erfuellt: l.vorschlag?.meldezeitpunkt === FALL.auftrag.meldezeitpunkt, angabe: `t0 ${l.vorschlag?.meldezeitpunkt ?? "–"}` },
+      { nr: "T4", erfuellt: gleichesT0(l.vorschlag?.meldezeitpunkt), angabe: `t0 ${l.vorschlag?.meldezeitpunkt ?? "–"}` },
       {
         nr: "T5",
         erfuellt: !!s1 && !s1.anfrage?.werkzeuge && JSON.stringify(s1.anfrage?.nachrichten ?? "").includes("Vermerke der App"),
@@ -307,7 +321,7 @@ export function pruefpunkte(
     },
     { nr: "T2", erfuellt: l.status === "fertig", angabe: `Status ${l.status}${l.fehler ? `: ${l.fehler}` : ""}` },
     { nr: "T3", erfuellt: !!l.ergebnis?.schemakonform && reparaturen <= 2, angabe: `schemakonform ${!!l.ergebnis?.schemakonform}, Reparaturen ${reparaturen}` },
-    { nr: "T4", erfuellt: meldung?.meldezeitpunkt === FALL.auftrag.meldezeitpunkt, angabe: `t0 ${meldung?.meldezeitpunkt ?? "–"}` },
+    { nr: "T4", erfuellt: gleichesT0(meldung?.meldezeitpunkt), angabe: `t0 ${meldung?.meldezeitpunkt ?? "–"}` },
     {
       nr: "T5",
       erfuellt:

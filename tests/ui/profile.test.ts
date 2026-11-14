@@ -238,7 +238,7 @@ describe("UX-2026-W45-28: Eckdaten jeder Karte", () => {
     expect([...lead.querySelectorAll("dd")].map((d) => d.textContent)).toEqual([
       "Bund",
       "Bevölkerungsschutz in Deutschland",
-      "LEAD-Meldung-v1",
+      "LEAD-Meldung-v2",
       "ja",
       "17 Dach-SOPs · 18 ergänzende Bausteine",
     ]);

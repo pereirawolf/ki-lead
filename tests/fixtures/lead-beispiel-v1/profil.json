@@ -1,0 +1,94 @@
+{
+  "format": "lead-profil/1",
+  "id": "lead.beispiel.koordinierungsstelle",
+  "name": "LEAD-Beispiel – Koordinierungsstelle",
+  "beschreibung": "Beispielprofil: Eigenmeldung einer Koordinierungsstelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt. Mit Arbeitsanweisung, SOP-LEAD-Sammelmappe und Kodierleitfaden in der Beispielfassung.",
+  "version": "1.44.0",
+  "herausgeber": "Heiko Pereira Wolf (https://www.pereirawolf.de)",
+  "lizenz": "CC-BY-4.0",
+  "ebene": "Bund",
+  "referenzraum": "Bevölkerungsschutz in Deutschland",
+  "variablen": {
+    "land": "Bund",
+    "meldende_stelle": "Koordinierungsstelle (Beispiel)",
+    "kurzname": "Koordinierungsstelle",
+    "zeitzone": "Europe/Berlin",
+    "meldetakt": "wöchentlich",
+    "lageprodukt": "übergreifende Lagebild",
+    "rollenprofil": "übergreifende Redaktion",
+    "rolle_beschreibung": "Die meldende Stelle (Koordinierungsstelle (Beispiel)) ist eine Koordinierungsstelle zwischen föderalen Ebenen im Bevölkerungsschutz, keine zusätzliche Entscheidungsebene. Sie hat keine Weisungsbefugnis und keine eigene operative Einsatzzuständigkeit. Sie führt Meldungen mehrerer Stellen zusammen und ermöglicht systematischen Wissenstransfer, ohne bestehende Zuständigkeiten zu ersetzen; ihre Empfehlungen richten sich an die zuständigen Stellen."
+  },
+  "eigene_stellen": ["Koordinierungsstelle (Beispiel) – Redaktionskonferenz"],
+  "meldung": {
+    "schema": "meldung.schema.json",
+    "ui": "meldung.ui.json",
+    "schema_id": "LEAD-Meldung-v1",
+    "eingang_schema_ids": ["LEAD-Meldung-v1"],
+    "eingang_schemata": {
+      "LEAD-Meldung-Land-v1": {
+        "datei": "eingang/LEAD-Meldung-Land-v1.schema.json",
+        "gebiet": "kreis"
+      }
+    }
+  },
+  "anweisungen": {
+    "erfassung": "anweisung-erfassung.md",
+    "kurzfassung": "anweisung-kurzfassung.md",
+    "verdichtung": "anweisung-verdichtung.md"
+  },
+  "sop": {
+    "dateien": [
+      "sop/A_Gemeinsame-Regeln.md",
+      "sop/teil-b/B01_unwetter-sturm.md",
+      "sop/teil-b/B02_hochwasser-ueberschwemmung.md",
+      "sop/teil-b/B03_waldbrand.md",
+      "sop/teil-b/B04_erdbeben.md",
+      "sop/teil-b/B05_extremhitze-duerre.md",
+      "sop/teil-b/B06_wintersturm-schnee-eis.md",
+      "sop/teil-b/B07_industrieunfall-chemieunfall.md",
+      "sop/teil-b/B08_stromausfall-blackout.md",
+      "sop/teil-b/B09_gasversorgungsengpass.md",
+      "sop/teil-b/B10_trinkwasserversorgung.md",
+      "sop/teil-b/B11_gesundheitliche-lage-epidemie.md",
+      "sop/teil-b/B12_kritis-ausfall.md",
+      "sop/teil-b/B13_migrationslage.md",
+      "sop/teil-b/B14_sicherheitslage.md",
+      "sop/teil-b/B15_cyberangriff-it-sicherheitsvorfall.md",
+      "sop/teil-b/B16_sabotage-anschlag-terrorismus.md",
+      "sop/teil-b/B17_sonstiges.md",
+      "sop/teil-c/C01_radiologische-nukleare-lage.md",
+      "sop/teil-c/C02_massenbewegungen-bodenversagen-gebaeudeeinsturz.md",
+      "sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md",
+      "sop/teil-c/C04_vulkanasche.md",
+      "sop/teil-c/C05_grossunfall-unfallfolgen.md",
+      "sop/teil-c/C06_kampfmittelfund.md",
+      "sop/teil-c/C07_infektionslagen.md",
+      "sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+      "sop/teil-c/C09_medizinische-versorgung-manv.md",
+      "sop/teil-c/C10_arzneimittel-medizinisches-material.md",
+      "sop/teil-c/C11_telekommunikation-notruf-bos-warnfaehigkeit.md",
+      "sop/teil-c/C12_kraftstoff-waerme.md",
+      "sop/teil-c/C13_verkehr-transport-logistik.md",
+      "sop/teil-c/C14_lebensmittelversorgung.md",
+      "sop/teil-c/C15_abwasser-sanitaerhygiene-entsorgung.md",
+      "sop/teil-c/C16_evakuierung-schutzunterbringung-betreuung.md",
+      "sop/teil-c/C17_zivile-verteidigung-zivile-folgen.md",
+      "sop/teil-c/C18_besondere-belange-schutzbedarfe.md"
+    ],
+    "teil_gemeinsam": "teil-a"
+  },
+  "kodierleitfaden": "kodierleitfaden.md",
+  "kontakte": "kontakte.json",
+  "beispiele": [
+    {
+      "titel": "Orkantief „Ilka“ (FIKTIV)",
+      "ordner": "beispiele/orkantief-ilka",
+      "hinweis": "Erfundene Lage mit sechs Ländermeldungen und der verdichteten Meldung einer Koordinierungsstelle; keine Meldung stammt von den genannten Stellen."
+    }
+  ],
+  "modelle": {
+    "vorverarbeitung": "claude-sonnet-5-5",
+    "erfassung": "claude-opus-5-5",
+    "verdichtung": "claude-opus-5-5"
+  }
+}

@@ -67,7 +67,7 @@ describe("UX-2026-W46-04: Farben der Tendenz", () => {
     const tendenz = Object.fromEntries(balken("Tendenz"));
     expect(tendenz).toEqual({ Entspannung: "gruen", Stabilisierung: "grau", Verschärfung: "rot" });
     // Variante A: Rot und Grün bleiben für Verschärfung und Entspannung; keine mittlere Stufe in einer Farbe der Beurteilung
-    const beurteilung = new Set(balken("Bewertung").map(([, f]) => f));
+    const beurteilung = new Set(balken("Beurteilung").map(([, f]) => f));
     expect(beurteilung.has(tendenz.Stabilisierung)).toBe(false);
   });
 });

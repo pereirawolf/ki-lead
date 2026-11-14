@@ -28,8 +28,30 @@ export function leseOrdner(ordner: string): Record<string, string> {
   return out;
 }
 
+/**
+ * Eingefrorenes Beispielprofil auf LEAD-Meldung-v1 (seit 0.9.0, UP-2026-W45-06): Die Profile im Repository stehen auf v2;
+ * die v1-Wege der App (Kennsätze im Text, Migration, Prüfsteine) prüfen die Tests am Stand von lead-beispiel 1.44.0.
+ * Der Ordner tests/fixtures/lead-beispiel-v1 enthält nur, was sich mit v2 geändert hat; SOP-Teile B bis D kommen aus dem
+ * lebenden Beispielprofil.
+ */
+export const V1_PROFIL = "lead-beispiel-v1";
+
+/** Dateien des eingefrorenen v1-Profils, ergänzt um die übrigen SOP-Dateien des Beispielprofils */
+export function v1ProfilDateien(): Record<string, string> {
+  const eigen = leseOrdner(repoPfad("tests", "fixtures", V1_PROFIL));
+  const out = { ...eigen };
+  for (const [datei, text] of Object.entries(leseOrdner(repoPfad("profile", "lead-beispiel"))))
+    if (datei.startsWith("sop/") && !(datei in out)) out[datei] = text;
+  return out;
+}
+
 /** Profil aus profile/<name> oder privat/profile/<name>; jeder Aufruf lädt frisch (keine geteilten Objekte). */
 export async function profil(name: string) {
+  if (name === V1_PROFIL) {
+    const erg = await ladeProfil(v1ProfilDateien());
+    if (!erg.profil) throw new Error(`Profil „${name}“ nicht ladbar: ` + JSON.stringify(erg.befunde, null, 2));
+    return erg;
+  }
   const oeffentlich = repoPfad("profile", name);
   const ordner = existsSync(oeffentlich) ? oeffentlich : join(PRIVAT, "profile", name);
   // Geteilte Dateien wie bei den eingebauten Profilen (seit 0.6.18, TP-2026-W44-55)
@@ -39,7 +61,7 @@ export async function profil(name: string) {
 }
 
 /** Wie profil(), liefert aber nur das geladene Profil. */
-export async function profilPflicht(name = "lead-beispiel") {
+export async function profilPflicht(name = V1_PROFIL) {
   return (await profil(name)).profil!;
 }
 

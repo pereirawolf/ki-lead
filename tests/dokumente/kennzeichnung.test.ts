@@ -1,6 +1,6 @@
 // Maschinenlesbare KI-Kennzeichnung der Ausgaben (KI-Verordnung Art. 50 Abs. 2; docs/KI-VERORDNUNG.md, 6.1), seit 0.5.4.
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { lagebildAlsPdf, meldungAlsPdf } from "../../src/dokumente/pdf";
 import {
@@ -17,7 +17,7 @@ const IPTC = "http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTraine
 
 describe("Herkunft aus dem Entstehungsfeld", () => {
   it("liest KI-Entwurf, manuelle Angabe und fehlende Angabe", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const th = ilkaMeldung("TH");
     expect(th._entstehung.verfahren).toBe("KI-Entwurf");
     expect(herkunftAusMeldung(th, p)).toMatchObject({ herkunft: "ki", modell: "Claude Opus 5.5" });
@@ -56,7 +56,7 @@ describe("XMP-Paket", () => {
 
 describe("PDF einer Meldung", () => {
   it("trägt bei einem KI-Entwurf Metadaten, Schlüsselwörter, Sprache und Fußzeile", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const pdf = await roh(meldungAlsPdf(ilkaMeldung("TH"), p, true));
     expect(pdf).toMatch(/\/Type \/Metadata \/Subtype \/XML/);
     expect(pdf).toContain(IPTC);
@@ -66,7 +66,7 @@ describe("PDF einer Meldung", () => {
     expect(pdf).toContain("Erstellt mit KI-LEAD · KI-generiert".replace("·", "\xb7"));
   });
   it("kennzeichnet eine manuelle Meldung nicht als KI-generiert", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const d = { ...ilkaMeldung("TH"), _entstehung: { verfahren: "manuell" } };
     const pdf = await roh(meldungAlsPdf(d, p, false));
     expect(pdf).not.toContain(IPTC);
@@ -77,7 +77,7 @@ describe("PDF einer Meldung", () => {
 
 describe("PDF des Lagebilds", () => {
   it("ist KI-generiert, sobald eine enthaltene Meldung ein KI-Entwurf ist", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const manuell = { ...ilkaMeldung("HE"), _entstehung: { verfahren: "manuell" } };
     const kopf = [["Sachverhalt"], ["x"]];
     const gemischt = await roh(

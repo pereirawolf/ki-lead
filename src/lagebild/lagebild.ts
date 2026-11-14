@@ -8,7 +8,7 @@ import { holeWert, teilePfad } from "../kern/pfad";
 import { sachverhalte } from "../kern/quellen";
 import { enumWerte, unterSchema } from "../kern/schema";
 import { eingangsInfo, type EingangsInfo } from "../kern/eingang";
-import { istV2, referenzBefunde } from "../kern/referenzen";
+import { istV2, moduleImSchema, referenzBefunde } from "../kern/referenzen";
 import { bewertungTextV2 } from "../kern/v2darstellung";
 import { erkenneBaustein, type BausteinErkennung, type BausteinInfo } from "../kern/baustein";
 import type { Befund, Kontakte, Meldung, Profil } from "../kern/typen";
@@ -126,7 +126,7 @@ export function einlesen(
     const mig = migriere(obj, profil);
     const basis = { id, name: datei.name, importiertAm: datei.importiertAm, herkunft: mig.herkunft };
     if (mig.bekannt) {
-      const referenzen = referenzBefunde(mig.daten, profil.ui);
+      const referenzen = referenzBefunde(mig.daten, profil.ui, moduleImSchema(profil.schema));
       eintraege.push({
         ...basis,
         daten: mig.daten,

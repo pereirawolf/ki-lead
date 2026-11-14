@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import JSZip from "jszip";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
-import { leseOrdner, profil, profilPflicht, repoPfad } from "../support/dateien";
+import { leseOrdner, profil, profilPflicht, repoPfad, V1_PROFIL } from "../support/dateien";
 import { llmAntwort, meldungsAntwort } from "../support/anbieter";
 import { referenzAjv } from "../support/ajv";
 import type { LlmAnbieter, LlmAnfrage } from "../../src/anbieter/typen";
@@ -331,24 +331,24 @@ describe("Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66)", () => {
       s2: { modell: "mistral-medium-3-5", aufwand: STANDARD_PROFILE.mistral.aufwand.erfassung, anbieter: "mistral" },
     });
     expect(gas!.mistral_endpunkt).toBe("eu");
-    // Sollwerte aus dem Entwurf selbst (nach Nachbearbeitung): Sachverhalte, Tendenz als Text, Quellenzeilen „[Qn]“
+    // Sollwerte aus dem Entwurf selbst (nach Nachbearbeitung), seit 0.9.0 nach LEAD-Meldung-v2: Sachverhalte, Richtung
+    // der Tendenz, Einträge im Quellenverzeichnis, Achsen als Objekte im Modul
     const m = gas!.meldung as any;
     const sv = m.sachverhalte as any[];
-    const quellenSoll = String(m.quellen)
-      .split("\n")
-      .filter((z) => /^\s*\[Q\d+\]/.test(z)).length;
+    const quellenSoll = (m.quellen as unknown[]).length;
     expect(quellenSoll).toBeGreaterThan(0);
     expect(gas!.pruefungen).toMatchObject({
       status: "fertig",
       schemakonform: true,
       sachverhalte: sv.length,
-      tendenz_gesetzt: sv.filter((s) => String(s.sofort?.tendenz ?? "").trim()).length / sv.length,
+      tendenz_gesetzt: sv.filter((s) => !!s.bewertung?.tendenz?.richtung).length / sv.length,
       quellen: quellenSoll,
       websuchen: 0,
     });
     // AV-2026-W45-08: Anteil offener Radarachsen, von Hand aus dem Entwurf gezählt; Prüfmuster mit Wortlaut je Treffer
     const achsen = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"];
-    const offenSoll = sv.reduce((n, s) => n + achsen.filter((a) => !Number.isInteger(s.sofort?.lagenradar?.[a])).length, 0) / (sv.length * 8);
+    const radar = (s: any) => s.module?.["lead-bevoelkerungsschutz"]?.lagenradar ?? {};
+    const offenSoll = sv.reduce((n, s) => n + achsen.filter((a) => !Number.isInteger(radar(s)[a]?.stufe)).length, 0) / (sv.length * 8);
     expect(gas!.pruefungen.radar_offen).toBeCloseTo(offenSoll, 3);
     expect(gas!.pruefungen.radar_pruefmuster).toBe(gas!.pruefungen.radar_hinweise!.length);
     for (const h of gas!.pruefungen.radar_hinweise!) expect(h).toMatch(/^Sachverhalt \d+: D[35] = \d/);
@@ -443,7 +443,8 @@ describe("Fallreihe: Lauf und Ergebnis-ZIP (TP-2026-W44-62, -65, -66)", () => {
 
 describe("AV-2026-W45-08: Radarkennzahlen je Lauf", () => {
   it("zählt offene Achsen über alle Sachverhalte und Treffer des Prüfmusters; ohne Meldung null", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    // v1-Meldung am eingefrorenen v1-Beispielprofil (seit 0.9.0)
+    const { profil: p } = await profil(V1_PROFIL);
     const sv = (radar: Record<string, number | null>, text: string) => ({ sofort: { lagenradar: radar, bewertung_text: text }, analyse: {} });
     const voll = { d1: 2, d2: null, d3: 2, d4: null, d5: 3, d6: 1, d7: 0, d8: null };
     const meldung = {

@@ -4,6 +4,18 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 2.0.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-06 (Paket 6, App 0.9.0), dazu KL-2026-W45-03 und KL-2026-W45-04 (`ki-lead-befund_kritis_2026-W45-b.json`); Zurückstellung vom Herausgeber am 14.11.2026 aufgehoben. Erste Stelle wie beim Beispielprofil (2.0.0).
+
+- **Schema `LEAD-Meldung-v2`** aus der Zusammenstellung `formate/lead-meldung-v2/zusammenstellungen/lead-thueringen.json` (Land und die 22 Kreise als Gebiete des Absenders, Ebenen Land und Kreis); `scripts/landesprofil.mjs` erzeugt es mit `stelleSchemaZusammen` und prüft die Liste der Gebiete gegen Land und Kreise. `migrationen` nennt LEAD-Meldung-v1 und LEAD-Meldung-Land-v1.
+- **Darstellungsdatei, Kontakte, Kodierleitfaden (2.0.0) und Arbeitsanweisungen (Erfassung 2.0.0, Verdichtung 3.0.0, Kurzfassung 2.5.0)** neu abgeleitet aus dem Beispielprofil 2.0.0 (`npm run profil:land`): Gebiet des Absenders (`absender.gebiet.name`) mit Kennungspräfixen je Kreis, Kontakte mit diesem Feld.
+- **Beispiele „Hochwasser an der Saale“ und „Orkantief „Ilka““:** acht Meldungen überführt wie im Beispielprofil; Kreismeldungen mit Ebene „Kreis“ und amtlichem Kreisschlüssel, Lagezentrum mit Eingangsmeldungen und Bezug mit `meldung_id` der Kreismeldungen.
+  - **KL-2026-W45-03:** Der Stromausfall im Landkreis Sonneberg (DE-TH-SON-20261014-R4WP) bezieht sich wie Lagemeldung Nr. 4 des Krisenstabs auf die Sachverhalte der Betreiber und der Leitstelle aus dem KRITIS-LEAD-Szenario (Art „verdichtung“, `meldung_id` der verwendeten Fassung); Störungsübersicht, Standortausfälle und Notrufabfrage stehen als Eingangsmeldungen im Quellenverzeichnis, die Meldung ist Fortschreibung von Lagemeldung Nr. 4.
+  - **KL-2026-W45-04:** eine gemeinsame Frist 15.10., 12:00 Uhr für die Nachbetankung von Pflegeheimen und Trinkwasserversorgung; die Grundlage nennt die Anforderung in Lagemeldung Nr. 4, das Ende der Notstromreichweite am 16.10., 10:00 Uhr ist als spätester Zeitpunkt in der Bedingung genannt (bisher zwei Fristen, die zweite mit dem Ende der Reichweite als Frist).
+  - **Kräftelage im Lagezentrum:** vier Kennzahlen aus dem Kennzahlen-Baustein Thüringen 10:30 Uhr (Modul `lead-baustein`, Raum als erfasster Ausschnitt gekennzeichnet).
+- **Geteilte SOP-Sammelmappe 3.24.0:** Gültigkeitsstand in Teil A.
+
 ## 1.10.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-05 (Paket 5 des Umstellungsplans, App 0.8.2); Zurückstellung vom Herausgeber am 14.11.2026 aufgehoben. Zweite Stelle wie beim Beispielprofil (1.44.0) und wegen des Materials im Beispiel.

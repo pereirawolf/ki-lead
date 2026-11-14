@@ -3,7 +3,7 @@
 // als JSON). Soll unabhängig im Test: kleines eigenes Schema mit Liste, verschachteltem Objekt und Zeitfeld.
 import { describe, expect, test } from "vitest";
 import { elementName, elementTitel, hatObjekte, listeAlsText } from "../../src/kern/listen";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { einlesen } from "../../src/lagebild/lagebild";
 import { alsCsv, rohtabelle } from "../../src/lagebild/ausgabe";
 import { meldungAlsPdf } from "../../src/dokumente/pdf";
@@ -88,7 +88,7 @@ describe("I114-A2: Liste als lesbarer Text", () => {
 
 /** Beispielprofil, dessen Sachverhalt eine Liste von Objekten führt (allgemeines Feld, nicht KRITIS-spezifisch) */
 async function mitListe(): Promise<Profil> {
-  const p = (await profil("lead-beispiel")).profil!;
+  const p = (await profil(V1_PROFIL)).profil!;
   p.schema.$defs.sachverhalt.properties.betrieb = { type: "object", properties: { ev: LISTE } };
   Object.assign(p.ui.felder, {
     "sachverhalte[].betrieb": { label: "Betrieb" },

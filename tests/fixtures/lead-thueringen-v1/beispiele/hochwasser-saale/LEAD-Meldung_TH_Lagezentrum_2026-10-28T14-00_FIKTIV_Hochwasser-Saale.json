@@ -1,0 +1,76 @@
+{
+  "schema": "LEAD-Meldung-Land-v1",
+  "_status": "final",
+  "_entstehung": {
+    "verfahren": "manuell",
+    "werkzeug": "Redaktion Lagezentrum des Landes (Beispiel): Zusammenführung von Kreismeldungen nach SOP-LEAD Teil A.7 (fiktiver Datensatz), von Hand verfasst",
+    "sop": [
+      "SOP-LEAD B02 Hochwasser / Überschwemmung 2.2.0"
+    ],
+    "kodierleitfaden": "Kodierleitfaden 1.7.0",
+    "erstellt": "2026-10-31T21:00"
+  },
+  "kreis": "Thüringen",
+  "meldende_stelle": "Lagezentrum des Landes (Beispiel) – Redaktionskonferenz",
+  "meldezeitpunkt": "2026-10-28T14:00",
+  "meldezeitraum": {
+    "von": "2026-10-26",
+    "bis": "2026-10-28"
+  },
+  "quellen": "[Q1] A – Landratsamt Saalfeld-Rudolstadt, Krisenstab (28.10.2026): Lagemeldung nach LEAD-Meldevorlage, Hochwasser an der Saale, Meldezeitpunkt 09:30 (behördenintern, FIKTIV) [Zugriff: 28.10.2026]\n[Q2] A – Landratsamt Saale-Holzland-Kreis, Krisenstab (28.10.2026): Lagemeldung nach LEAD-Meldevorlage, Hochwasser an der Saale, Meldezeitpunkt 10:00 (behördenintern, FIKTIV) [Zugriff: 28.10.2026]\n[Q3] A – Stadtverwaltung Jena, Stab für außergewöhnliche Ereignisse (28.10.2026): Lagemeldung nach LEAD-Meldevorlage, Hochwasser an der Saale, Meldezeitpunkt 10:30 (behördenintern, FIKTIV) [Zugriff: 28.10.2026]\n[Q4] A – Hochwassermeldedienst des Landes (28.10.2026): Hochwasserbericht Saale Nr. 5 mit Pegelvorhersage (FIKTIV) [Zugriff: 28.10.2026]. Datenstand: 28.10.2026, 13:00\n[Q5] A – Deutscher Wetterdienst (28.10.2026): Vorhersage Thüringen bis 31.10. (FIKTIV) [Zugriff: 28.10.2026]",
+  "zeitstrahl": "[Z1] 2026-10-27T06:00 · DE-TH-20261028-9VXF · Warnung – Unwetterwarnung Dauerregen für den Thüringer Wald, nach Meldung Saalfeld-Rudolstadt [Q1] · aufgenommen 2026-10-28T14:00\n[Z2] 2026-10-27T19:00 · DE-TH-20261028-9VXF · Maßnahme – Evakuierung von 140 Menschen in Uhlstädt-Kirchhasel [Q1] · aufgenommen 2026-10-28T14:00\n[Z3] 2026-10-28T01:00 · DE-TH-20261028-9VXF · Wendepunkt – Scheitel am Pegel Rudolstadt, danach fallend [Q1] · aufgenommen 2026-10-28T14:00\n[Z4] 2026-10-28T08:00 · DE-TH-20261028-9VXF · Ereignis – Kläranlage Kahla arbeitet nur noch mechanisch [Q2] · aufgenommen 2026-10-28T14:00\n[Z5] 2026-10-28T13:00 · DE-TH-20261028-9VXF · Warnung – Hochwasserbericht bestätigt Scheitel in Kahla gegen 15:00 Uhr und in Jena gegen 19:00 Uhr [Q4] · aufgenommen 2026-10-28T14:00",
+  "sachverhalte": [
+    {
+      "kennung": "DE-TH-20261028-9VXF",
+      "bezug": [
+        "DE-TH-SLF-20261028-3QWA",
+        "DE-TH-SHK-20261028-7HKD",
+        "DE-TH-J-20261028-5MZR"
+      ],
+      "eintritt": "2026-10-26",
+      "art": [
+        "Hochwasser / Überschwemmung"
+      ],
+      "ort": "Thüringen; Saaletal vom Landkreis Saalfeld-Rudolstadt über den Saale-Holzland-Kreis bis zur Stadt Jena",
+      "bezeichnung": "Hochwasser an der Saale: 200 Menschen evakuiert, Scheitel läuft von Saalfeld-Rudolstadt nach Jena, B 88 auf rund 25 km gesperrt",
+      "analyse": {
+        "lage_ereignis": "FIKTIV – erfundene Lage (Demonstrationsdatensatz Hochwasser an der Saale). Kernaussage: Die Hochwasserwelle der Saale läuft von Süd nach Nord durch drei Kreise; oberhalb ist der Scheitel durchgelaufen, in Kahla und Jena wird er heute Nachmittag und Abend erwartet. Im Landkreis Saalfeld-Rudolstadt fallen die Wasserstände seit der Nacht, 140 Menschen in Uhlstädt-Kirchhasel sind evakuiert [Q1]. Im Saale-Holzland-Kreis wurden 60 Menschen in Kahla evakuiert, die Kläranlage Kahla arbeitet nur mechanisch [Q2]. In Jena ist die Saaleaue überflutet, bebaute Bereiche sind nicht betroffen [Q3]. Die B 88 ist zwischen Rudolstadt und Kahla gesperrt; Saalfeld-Rudolstadt und der Saale-Holzland-Kreis melden je ihren Abschnitt derselben Sperrung [Q1, Q2]. Der Hochwassermeldedienst bestätigt um 13:00 Uhr die Scheitelvorhersagen für Kahla (15:00 Uhr) und Jena (19:00 Uhr) [Q4].",
+        "risiken_auswirkungen": "Belegt: Landesweit sind 200 Menschen evakuiert, 59 in Notunterkünften [Q1, Q2]. Die Abwasserreinigung in Kahla bleibt etwa zwei Tage eingeschränkt [Q2]. Szenario: Liegt der Scheitel in Kahla über der Vorhersage, wären dort weitere rund 80 Personen zu evakuieren [Q2]. Neuer Niederschlag ist bis 31.10. nicht vorhergesagt [Q5].",
+        "massnahmen_empfehlungen": "Bestehende Maßnahmen: Krisenstäbe in beiden Landkreisen, Stab für außergewöhnliche Ereignisse in Jena; Unterbringung und Betreuung gesichert [Q1, Q2, Q3]. Prüf- und Abstimmungsbedarf: (1) Saale-Holzland-Kreis: Entscheidung über weitere Evakuierung in Kahla vor dem Scheitel. (2) Einschätzung (Lagezentrum): Ein kreisübergreifender Abgleich zur Freigabe der B 88 wird angeregt; die Entscheidung liegt beim Straßenbauamt. Unterstützungsbedarf aus anderen Kreisen oder vom Land ist nicht gemeldet.",
+        "abhaengigkeiten_interdependenzen": "Belegte Kopplungen: Hochwasser → Kläranlage Kahla eingeschränkt [Q2]; B 88 gesperrt → längere Wege im Saaletal, Ausweichrouten bestehen [Q1, Q2]. Kreisübergreifend: Der Ablauf im Landkreis Saalfeld-Rudolstadt bestimmt die Welle in Kahla und Jena [Q4]."
+      },
+      "sofort": {
+        "beurteilung": "erheblich",
+        "tendenz": "Stabilisierung",
+        "bewertung_text": "Kernaussage: Die Welle läuft durch; 200 Menschen sind evakuiert, bis zum Scheitel in Kahla und Jena bleibt die Lage angespannt, Unterstützungsbedarf ist nicht gemeldet.\nReferenzraum: Land Thüringen, Saaletal. t0: 28.10.2026, 14:00 Uhr. Grundlage sind drei Kreismeldungen mit Meldezeitpunkten zwischen 09:30 und 10:30 Uhr und der Hochwasserbericht von 13:00 Uhr.\nBeurteilung „erheblich“: 200 Evakuierte in zwei Kreisen, Abwasserreinigung in Kahla eingeschränkt; Abgrenzung zu „kritisch“: keine Versorgungsfunktion ausgefallen, Unterbringung gesichert.\nTendenz „Stabilisierung“ (Saaletal, 28.10.): Oberhalb fällt der Pegel, unterhalb steigt er bis zum Scheitel; die Kreise melden „Entspannung“ (Saalfeld-Rudolstadt) und „Verschärfung“ (Saale-Holzland-Kreis, Jena).\nD1 = 3, drei Kreise im Saaletal [Q1, Q2, Q3]. D2 = 2, 200 Evakuierte [Q1, Q2]; die Sperrung der B 88 ist nicht doppelt gezählt. D3 = 2, die Kreise steuern [Q1, Q2, Q3]. D4 = 1, örtliche Kräfte [Q1, Q2, Q3]. D5 = 2, Rückkehr der Evakuierten und Ablauf in zwei bis drei Tagen [Q1, Q2]. D6 = 2, Abwasserbeseitigung eingeschränkt [Q2]. D7 = 1, Meldungen bis zu viereinhalb Stunden vor t0 [Q1, Q2, Q3]. D8 = 2, Wechsel von Anstieg zu Ablauf entlang des Flusses.\nNeubewertung bei: Scheitel in Kahla oder Jena über der Vorhersage; Unterstützungsanforderung eines Kreises\nAbweichende Bewertung: Stadt Jena „geringfügig“ – keine Evakuierung im Stadtgebiet; Lagezentrum „erheblich“ – 200 Evakuierte im Saaletal. Ursache: Bezugsraum. Klärend wäre: Scheitel in Jena am Abend",
+        "lagenradar": {
+          "d1": 3,
+          "d2": 2,
+          "d3": 2,
+          "d4": 1,
+          "d5": 2,
+          "d6": 2,
+          "d7": 1,
+          "d8": 2
+        }
+      }
+    }
+  ],
+  "freigabe": {
+    "erfassung": {
+      "name": "Sachbearbeitung Lagezentrum des Landes (Beispiel) (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "freigabe": {
+      "name": "Leitung Lagezentrum des Landes (Beispiel) (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    },
+    "versand": {
+      "name": "Lagezentrum des Landes (Beispiel) (FIKTIV)",
+      "datum": "2026-10-28",
+      "hz": "FIKTIV"
+    }
+  }
+}

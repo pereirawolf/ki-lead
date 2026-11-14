@@ -13,11 +13,11 @@ test("Schreibfehler beim Zwischenstand wird gemeldet, die Eingabe bleibt", async
   });
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await page.getByLabel("Name der meldenden Stelle").fill("Stelle trotz vollem Speicher");
+  await page.getByLabel("Meldende Stelle", { exact: true }).fill("Stelle trotz vollem Speicher");
 
   const fehler = page.getByRole("alert").filter({ hasText: "Der Zwischenstand konnte nicht im Gerät gespeichert werden" });
   await expect(fehler).toBeVisible();
   await expect(fehler).toContainText("Bitte die Meldung als JSON sichern");
-  await expect(page.getByLabel("Name der meldenden Stelle")).toHaveValue("Stelle trotz vollem Speicher");
+  await expect(page.getByLabel("Meldende Stelle", { exact: true })).toHaveValue("Stelle trotz vollem Speicher");
   await expect(page.getByText(/Zwischenstand automatisch gesichert/)).toHaveCount(0);
 });

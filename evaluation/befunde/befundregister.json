@@ -4598,7 +4598,7 @@
       "agent": "kritis-lead",
       "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
       "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
-      "entschieden_am": "2026-11-05",
+      "entschieden_am": "2026-11-14",
       "dringlichkeit": "mittel",
       "fundstellen": [
         {
@@ -4611,16 +4611,15 @@
         }
       ],
       "kurz": "Bezug von DE-TH-SON-20261014-R4WP in SON 10:00 auf die fünf verdichteten Sachverhalte (vier Betreiber, Leitstelle) ergänzen.",
-      "status": "zurueckgestellt",
-      "grund": "Die Betreiberkennungen haben einen sechsstelligen Zufallsteil; das Schema LEAD-Meldung-Land-v1 lässt im Bezug nur vierstellige zu. Umsetzung mit der Umstellung des Landesprofils auf v2 (Paket 6).",
-      "wieder_vorlegen_ab": "2026-11-09"
+      "status": "umgesetzt",
+      "pr": 174
     },
     {
       "id": "KL-2026-W45-04",
       "agent": "kritis-lead",
       "befunddatei": "ki-lead-befund_kritis_2026-W45-b.json",
       "commit": "8faa547cd6e4efe78411d0c00f6359330a1dd61f",
-      "entschieden_am": "2026-11-05",
+      "entschieden_am": "2026-11-14",
       "dringlichkeit": "niedrig",
       "fundstellen": [
         {
@@ -4629,9 +4628,8 @@
         }
       ],
       "kurz": "Hinweis: Frist der Trinkwasserversorgung (16.10., 10:00) liegt nach der Diesel-Anforderung des Betreibers (15.10., 12:00); prüfen, ob beabsichtigt, und dann begründen.",
-      "status": "zurueckgestellt",
-      "grund": "Nur Hinweis ohne Änderung; aufgreifen, wenn das Beispiel auf v2 umgestellt wird (Fristen als Liste mit Bedingung und Grundlage).",
-      "wieder_vorlegen_ab": "2026-11-09"
+      "status": "umgesetzt",
+      "pr": 174
     },
     {
       "id": "KL-2026-W45-05",
@@ -4901,10 +4899,9 @@
         }
       ],
       "kurz": "Umstellung der Profile lead-beispiel, lead-thueringen und muster auf LEAD-Meldung-v2 nach LEAD-MELDUNG-V2.md Abschnitt 10.",
-      "status": "zurueckgestellt",
-      "entschieden_am": "2026-11-06",
-      "grund": "Vom Herausgeber am 06.11.2026 im Sammellauf KW 45 zurückgestellt; nach UP-2026-W45-05, dann gemeinsam mit KL-2026-W45-03/-04. Entscheidungsfrage überholt (KP-2026-W45-01/-02 in v1 umgesetzt, PR #131).",
-      "wieder_vorlegen_ab": "2026-11-20"
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 174
     },
     {
       "id": "UX-2026-W46-01",

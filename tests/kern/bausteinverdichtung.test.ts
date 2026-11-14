@@ -19,7 +19,7 @@ import {
   type VerdichtungsBaustein,
 } from "../../src/kern/bausteinverdichtung";
 import { BAUSTEIN_SCHEMATA } from "../../src/pipeline/bausteinschemata";
-import { jsonDateien, profilPflicht, repoPfad } from "../support/dateien";
+import { jsonDateien, profilPflicht, repoPfad, V1_PROFIL } from "../support/dateien";
 
 const THESSA = "profile/lead-thueringen/beispiele/orkantief-ilka-thessa/";
 const ILM = "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json";
@@ -251,8 +251,9 @@ describe("UP-2026-W45-05: Prüfungen nach S2", () => {
   });
 
   it("LEAD-Meldung-v1: Zahl im Text als unzulässige Summe statt Abweichung; zulässige Summe ohne Hinweis; Landeszahl ohne Kennzeichnung als Ausschnitt", async () => {
-    const p = await profilPflicht("lead-thueringen");
-    const ordner = "profile/lead-thueringen/beispiele/orkantief-ilka";
+    // v1-Meldungen des Landesprofils (eingefroren, seit 0.9.0) mit dem v1-Beispielprofil
+    const p = await profilPflicht(V1_PROFIL);
+    const ordner = "tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka";
     const meldungen = jsonDateien(ordner, { pflicht: true }).map((x) => x.daten);
     const son = kopie(meldungen.find((m: any) => m.kreis === "Landkreis Sonneberg"));
     const bausteine = abnahme();

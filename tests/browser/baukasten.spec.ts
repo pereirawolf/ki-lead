@@ -4,7 +4,7 @@
 // Geprüft wird jedes Feld direkt im Baukasten: Es endet mit seinem Eingabefeld, die Vorschau folgt mit dem Abstand
 // des Baukastens. Breit und 390 px.
 import { expect, test } from "@playwright/test";
-import { netzVorbereiten, oeffnen } from "./hilfen";
+import { netzVorbereiten, oeffnen, v1BeispielVerwenden } from "./hilfen";
 
 for (const breite of [
   { name: "breit", viewport: { width: 1280, height: 800 } },
@@ -14,6 +14,8 @@ for (const breite of [
     await page.setViewportSize(breite.viewport);
     await netzVorbereiten(page, () => "haengen");
     await oeffnen(page);
+    // Baukasten der v1-Felder Quellen und Zeitstrahl: seit 0.9.0 am importierten v1-Beispielprofil
+    await v1BeispielVerwenden(page);
     await page.getByRole("button", { name: /^Weiter: Ereignisse und Sachverhalte/ }).click();
     await page.getByRole("button", { name: /^Weiter: Quellen und Referenzen/ }).click();
     await expect(page.getByText("Kurztext mit Beleg", { exact: true })).toBeVisible();

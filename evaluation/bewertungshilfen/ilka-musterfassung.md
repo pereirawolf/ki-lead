@@ -1,6 +1,6 @@
 # Musterfassung Orkantief „Ilka“ (FIKTIV): Herkunft und Abgleich
 
-Fassung 1.0 vom 25.10.2026 · Datei [`../material/ilka-musterfassung.json`](../material/ilka-musterfassung.json) · **Entwurf zur fachlichen Abnahme durch den Herausgeber**
+Fassung 1.0 vom 25.10.2026 · Datei [`../material/ilka-musterfassung.json`](../material/ilka-musterfassung.json); seit 14.11.2026 inhaltsgleich in LEAD-Meldung-v2: [`../material/ilka-musterfassung.v2.json`](../material/ilka-musterfassung.v2.json) (Kennungen, Bezug, Zugang, Maßnahmen, Empfehlungen und Fristen als Felder) · **Entwurf zur fachlichen Abnahme durch den Herausgeber**
 
 ## Zweck
 

@@ -34,15 +34,24 @@ Eine Datei `kontakte.lokal.json` neben `kontakte.json` hat Vorrang und wird nich
   "lizenz": "LicenseRef-intern",
   "ebene": "Kreis",
   "referenzraum": "Kreisgebiet X",
-  "variablen": { "land": "Thüringen", "meldende_stelle": "Stab Kreis X", "zeitzone": "Europe/Berlin" },
+  "variablen": {
+    "meldende_stelle": "Stab Kreis X",
+    "zeitzone": "Europe/Berlin",
+    "absender.stelle": "Stab Kreis X",
+    "absender.gebiet.name": "Kreis X",
+    "absender.ebene": "Kreis"
+  },
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
-    "schema_id": "LEAD-Meldung-v1",
-    "eingang_schema_ids": ["LEAD-Meldung-v1"],
-    "eingang_schemata": { "LEAD-Meldung-Land-v1": { "datei": "eingang/LEAD-Meldung-Land-v1.schema.json", "gebiet": "kreis" } }
+    "schema_id": "LEAD-Meldung-v2",
+    "eingang_schema_ids": ["LEAD-Meldung-v2"],
+    "eingang_schemata": { "LEAD-Meldung-v2": { "datei": "eingang/meldung.schema.json" } }
   },
-  "migrationen": [{ "von": "Alt-v1", "setze": { "schema": "Neu-v2" }, "ergaenze": { "quellen": "" }, "hinweis": "Altformat überführt." }],
+  "migrationen": [
+    { "von": "LEAD-Meldung-v1", "verfahren": "lead-meldung-v2" },
+    { "von": "Alt-v1", "setze": { "schema": "Neu-v2" }, "ergaenze": { "quellen": "" }, "hinweis": "Altformat überführt." }
+  ],
   "anweisungen": { "erfassung": "anweisung-erfassung.md", "kurzfassung": "anweisung-kurzfassung.md" },
   "sop": { "dateien": ["sop/sammelmappe.md"], "teil_gemeinsam": "teil-a" },
   "kodierleitfaden": "kodierleitfaden.md",
@@ -301,5 +310,6 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.29 | 03.11.2026 | `migrationen[].verfahren` „lead-meldung-v2“ (Überführung nach LEAD-Meldung-v2 beim Einlesen); Rollen auf Meldungsebene und Profilvariablen als Pfade. Ältere Pakete laden unverändert (App 0.7.0, UP-2026-W45-02) |
 | 1.30 | 03.11.2026 | Optionale Rolle `status_freigegeben`; Pfade in der Vorlage `dateiname`; Schemata mit „Wert oder null“ (`anyOf` mit `{"type": "null"}`) und Radarachsen als Objekte (`stufe`, `status`, … nach LEAD-Meldung-v2) in Maske, PDF und Lagebild; Vorlage einer Darstellungsdatei für v2 unter `formate/lead-meldung-v2/beispiel/meldung.ui.json`. Ältere Pakete laden unverändert (App 0.7.3, UP-2026-W45-03) |
 | 1.31 | 14.11.2026 | Ohne Formatänderung: mittlere Stufen der Tendenz im Lagebild grau statt gelb (App 0.7.22, UX-2026-W46-04) |
+| 1.33, Nachtrag | 14.11.2026 | Format unverändert: Beispielmanifest nach LEAD-Meldung-v2 (Variablen des Absenders als Pfade, Eingangsschema der eigenen Kennung, Migration `lead-meldung-v2`), wie die mitgelieferten Profile seit App 0.9.0 (UP-2026-W45-06) |
 | 1.33 | 14.11.2026 | `meldung.eingang_schemata` auch mit der eigenen Schemakennung (Prüfung eingehender Meldungen derselben Kennung im Lagebild); `kennsaetze` bei Profilen nach LEAD-Meldung-v2 optional, nur Beschriftung. Ältere Pakete laden unverändert (App 0.8.3, UP-2026-W45-06) |
 | 1.32 | 14.11.2026 | Manifest: optional `beispiele[].material` (Ordner mit Kennzahlen-Bausteinen, die „Beispiel laden“ mitlädt); ältere Pakete laden unverändert (App 0.8.2, UP-2026-W45-05) |

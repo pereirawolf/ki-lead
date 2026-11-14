@@ -2,14 +2,14 @@
 
 ## Teil A – Gemeinsame Regeln
 
-**Gültigkeitsstand.** Vorlagefassung 0.5 vom 24.10.2026. Gültig ist nur das folgende Paket; Platzhalter in eckigen Klammern vor der Verwendung ersetzen.
+**Gültigkeitsstand.** Vorlagefassung 1.0 vom 14.11.2026. Gültig ist nur das folgende Paket; Platzhalter in eckigen Klammern vor der Verwendung ersetzen.
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich |
 |---|---|---|---|
-| SOP-Sammlung (Teil A und je SOP eine Datei im Ordner `sop/`) | 0.5 | 24.10.2026 | [Funktion] |
-| Kodierleitfaden | 0.5 | 24.10.2026 | [Funktion] |
-| Arbeitsanweisung Erfassung | 0.5.2 | 27.10.2026 | [Funktion] |
-| Meldungsschema | `Muster-LEAD-Meldung-v1` | 24.10.2026 | [Funktion] |
+| SOP-Sammlung (Teil A und je SOP eine Datei im Ordner `sop/`) | 1.0 | 14.11.2026 | [Funktion] |
+| Kodierleitfaden | 1.0 | 14.11.2026 | [Funktion] |
+| Arbeitsanweisung Erfassung | 1.0 | 14.11.2026 | [Funktion] |
+| Meldungsschema | `LEAD-Meldung-v2` mit dem Modul `muster-lageprofil` 0.1 (Zusammenstellung `zusammenstellung.json`) | 14.11.2026 | [Funktion] |
 
 ### A.1 Anwendung
 

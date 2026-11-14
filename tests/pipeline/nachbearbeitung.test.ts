@@ -1,6 +1,6 @@
 // Nachbearbeitung eines KI-Entwurfs: Meldungsidentität (F03) und Lagenradar an der vorgesehenen Stelle.
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { llmAntwort, skriptAnbieter } from "../support/anbieter";
 import { bestaetigterVorschlag, pipelineKontext } from "../support/pipeline";
@@ -43,7 +43,7 @@ describe("Meldungsidentität (F03) und eigene Stelle (F07)", () => {
 
 describe("Lagenradar an der vorgesehenen Stelle", () => {
   it("verschiebt ein eine Ebene zu hoch abgelegtes Radar und meldet es", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const d = mitRadarZuHoch();
     const radar = structuredClone(d.sachverhalte[0].lagenradar);
     const meldungen: string[] = [];
@@ -54,7 +54,7 @@ describe("Lagenradar an der vorgesehenen Stelle", () => {
   });
 
   it("überschreibt keinen vorhandenen Radarwert und lässt Nicht-Objekte stehen", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const d = structuredClone(he);
     d.sachverhalte[0].lagenradar = { d1: 6 };
     const vorher = structuredClone(d.sachverhalte[0].sofort.lagenradar);

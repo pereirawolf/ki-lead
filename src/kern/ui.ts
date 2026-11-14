@@ -25,6 +25,18 @@ export function bezeichnung(ui: UiKonfig, generisch: string): string {
   return letzter.replace(/\[\]$/, "");
 }
 
+/**
+ * Bezeichnung einer Rolle für Übersichten (Kennzahlen, Filter, Balken): Zeigt die Rolle auf den Wert eines Objekts
+ * (v2: `bewertung.beurteilung.stufe`, `bewertung.tendenz.richtung`, `absender.gebiet.name`), gilt die Bezeichnung des
+ * Objekts („Beurteilung“, „Tendenz“, „Gebiet der meldenden Stelle“) statt der des Werts („Stufe“, „Richtung“, „Name“), die
+ * nur in der Maske neben dem Objekt verständlich ist (seit 0.9.0).
+ */
+export function rollenBezeichnung(ui: UiKonfig, generisch: string): string {
+  const m = /^(.+)\.(stufe|richtung|name)$/.exec(generisch);
+  const eltern = m ? feldUi(ui, m[1]!).label : undefined;
+  return eltern || bezeichnung(ui, generisch);
+}
+
 /** Pfadbezeichnung für Prüfmeldungen, z. B. „Ereignis/Sachverhalt 1 › Sofortbereich › D1“. */
 export function pfadBezeichnung(ui: UiKonfig, pfad: string | Segment[]): string {
   const segs = typeof pfad === "string" ? teilePfad(pfad) : pfad;

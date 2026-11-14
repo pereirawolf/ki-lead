@@ -4,7 +4,7 @@
 
 import { afterEach, beforeAll, beforeEach, expect, it, vi } from "vitest";
 import React, { act } from "react";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
@@ -22,7 +22,7 @@ let p: any;
 let basis: any;
 beforeAll(async () => {
   reactUmgebung();
-  p = (await profil("lead-beispiel")).profil!;
+  p = (await profil(V1_PROFIL)).profil!;
   basis = ilkaMeldung("Bund");
 });
 beforeEach(() => {

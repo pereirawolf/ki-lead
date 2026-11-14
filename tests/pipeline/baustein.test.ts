@@ -9,10 +9,11 @@ import { bausteinAbgleich, bausteinQuellen, saetze, zahlPaare, type AbgleichBaus
 import { BAUSTEIN_REGEL, steuerungsBlock } from "../../src/pipeline/kontext";
 import { BAUSTEIN_SCHEMATA } from "../../src/pipeline/bausteinschemata";
 import { dateiLesen, materialBloecke, materialUebersicht, type Material } from "../../src/pipeline/material";
-import { jsonDateien, profilPflicht } from "../support/dateien";
+import { jsonDateien, profilPflicht, V1_PROFIL } from "../support/dateien";
 
 const BEGLEIT = "profile/lead-thueringen/beispiele/orkantief-ilka-thessa";
-const ILKA = "profile/lead-thueringen/beispiele/orkantief-ilka";
+// v1-Meldungen des Landesprofils, eingefroren (seit 0.9.0, UP-2026-W45-06); die Übergangsregel h gilt für v1-Texte
+const ILKA = "tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka";
 const bausteine = () => jsonDateien(BEGLEIT, { pflicht: true });
 const sonneberg = () => bausteine().find((b) => b.name.startsWith("kennzahlen_Landkreis-Sonneberg_2026-10-14T10-00"))!;
 const datei = (name: string, daten: unknown) => new File([JSON.stringify(daten, null, 2)], name, { type: "application/json" });
@@ -182,7 +183,7 @@ describe("UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h)", () =
   // Seit 0.8.2 (UP-2026-W45-05) steht bei zitiertem Baustein der Hinweis KENNZAHL_BELEG (Kennzahl als Beleg prüfen);
   // geändertes Soll: sonst keine Hinweise
   it("von Hand verfasste Kreismeldungen und Landesmeldung: Baustein im Quellenverzeichnis gefunden, nur der Hinweis KENNZAHL_BELEG", async () => {
-    const p = await profilPflicht("lead-thueringen");
+    const p = await profilPflicht(V1_PROFIL);
     const faelle: [string, string][] = [
       ["Ilm-Kreis", "kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json"],
       ["Landkreis Hildburghausen", "kennzahlen_Landkreis-Hildburghausen_2026-10-14T10-00_FIKTIV.json"],
@@ -204,7 +205,7 @@ describe("UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h)", () =
   });
 
   it("geänderte Zahl im Satz mit Baustein-Verweis: BAUSTEIN_ZAHL_ABWEICHEND", async () => {
-    const p = await profilPflicht("lead-thueringen");
+    const p = await profilPflicht(V1_PROFIL);
     const b = sonneberg();
     const m = await alsMaterial(b.name, b.daten);
     const meldung = kopie(meldungZu("Landkreis Sonneberg"));
@@ -217,7 +218,7 @@ describe("UP-2026-W45-01: Abgleich der Zahlen im Text (Übergangsregel h)", () =
   });
 
   it("Wert des Bausteins ohne Verweis und Baustein nicht im Quellenverzeichnis: BAUSTEIN_OHNE_BELEG", async () => {
-    const p = await profilPflicht("lead-thueringen");
+    const p = await profilPflicht(V1_PROFIL);
     const b = sonneberg();
     const m = await alsMaterial(b.name, b.daten);
     const ohneVerweis = kopie(meldungZu("Landkreis Sonneberg"));

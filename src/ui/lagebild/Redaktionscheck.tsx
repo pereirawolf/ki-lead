@@ -3,7 +3,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
-import { bezeichnung } from "../../kern/ui";
+import { bezeichnung, rollenBezeichnung } from "../../kern/ui";
 import { datumDE, exportStempel, jetztLokal, mitDatum } from "../../kern/ausgabe";
 import { zeitpunktDE } from "../../kern/zeit";
 import { APP_KENNUNG } from "../../kern/version";
@@ -70,8 +70,8 @@ export function Redaktionscheck({
   const lb = ui.lagebild || {};
   const ks = kennsaetzeFuer(profil);
   const v = lb.verweise || {};
-  const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
-  const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
+  const lBeurteilung = r.sv_beurteilung ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
+  const lTendenz = r.sv_tendenz ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
 
   // Sprung zu einem Abschnitt des Redaktionschecks: Fokus auf den Abschnitt, damit Tastatur und Screenreader folgen
   const springeZu = (e: { preventDefault: () => void }, id: string) => {

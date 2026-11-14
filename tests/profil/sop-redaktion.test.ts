@@ -190,7 +190,7 @@ describe("Arbeitsanweisungen und Darstellungsdatei (Konsistenzprüfung KW 43)", 
         .filter((z) => z.includes("`Handlungsrelevant bis: TT.MM.JJJJ"))
         .map((z) => ({ name, z })),
     );
-    expect(zeilenMitFormat.length).toBeGreaterThan(0);
+    // Seit Profil 2.0.0 (LEAD-Meldung-v2) sind Fristen Felder; eine verbliebene Formatzeile muss weiter die Bedingung nennen
     expect(zeilenMitFormat.filter((x) => !x.z.includes("Bedingung (falls zutreffend)")).map((x) => x.name)).toEqual([]);
   });
 
@@ -327,7 +327,7 @@ describe("Ein Ort für Achsen- und Quellenregeln und die Rangfolge (TP-2026-W44-
     for (const regel of [
       "**Aussagekompetenz:**",
       "Eine Behörde ist primär für ihre Lageeinschätzung maßgeblich",
-      "„(Eingangsmaterial)“",
+      "`eingangsmaterial` (beigefügtes Material ohne URL", // seit Kodierleitfaden 2.0.0 als Zugang statt Klammervermerk
       "Lagebericht des GMLZ",
       "(bis zur Arbeitsfassung v0.3: „J“)",
       "Die Beurteilung berücksichtigt Unsicherheit und möglichen Handlungsbedarf eigenständig.", // Begriff seit KP-2026-W44-04

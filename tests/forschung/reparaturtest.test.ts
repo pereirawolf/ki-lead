@@ -31,7 +31,7 @@ import {
 } from "../../src/forschung/reparaturtest";
 import type { FallDaten } from "../../src/forschung/vergleichslauf";
 
-const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.json"), "utf-8");
+const MUSTER_TEXT = readFileSync(repoPfad("evaluation/material/ilka-musterfassung.v2.json"), "utf-8");
 const MUSTER = JSON.parse(MUSTER_TEXT);
 
 async function daten(): Promise<FallDaten> {
@@ -64,19 +64,23 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     // Soll aus der Datei: zwei Sachverhalte, Sturmfolgen und Stromausfall
     expect(MUSTER.sachverhalte).toHaveLength(2);
     const r1 = (await beschaedigt(DEFEKTE[0])) as any;
-    expect(r1.sachverhalte[1].sofort.lagenradar.d2).toBe(7);
-    expect(((await beschaedigt(DEFEKTE[3])) as any).sachverhalte[0].sofort.lagenradar.d4).toBe(String(MUSTER.sachverhalte[0].sofort.lagenradar.d4));
+    expect(r1.sachverhalte[1].module["lead-bevoelkerungsschutz"].lagenradar.d2.stufe).toBe(7);
+    expect(((await beschaedigt(DEFEKTE[3])) as any).sachverhalte[0].module["lead-bevoelkerungsschutz"].lagenradar.d4.stufe).toBe(
+      String(MUSTER.sachverhalte[0].module["lead-bevoelkerungsschutz"].lagenradar.d4.stufe),
+    );
     expect(await musterfassung()).toEqual(MUSTER);
-    expect(wertAn(MUSTER, "sachverhalte[1].sofort.lagenradar.d2")).toBe(MUSTER.sachverhalte[1].sofort.lagenradar.d2);
+    expect(wertAn(MUSTER, "sachverhalte[1].module.lead-bevoelkerungsschutz.lagenradar.d2.stufe")).toBe(
+      MUSTER.sachverhalte[1].module["lead-bevoelkerungsschutz"].lagenradar.d2.stufe,
+    );
   });
 
   it("Inhaltsvergleich ohne die beschädigten Stellen", async () => {
     const soll = await musterfassung();
     expect(inhaltVergleichen(soll, soll, []).abweichungen).toEqual([]);
     const ist = structuredClone(soll) as any;
-    ist.sachverhalte[1].sofort.lagenradar.d2 = 3;
+    ist.sachverhalte[1].module["lead-bevoelkerungsschutz"].lagenradar.d2.stufe = 3;
     ist.sachverhalte[0].bezeichnung = "Anders";
-    const v = inhaltVergleichen(ist, soll, ["sachverhalte[1].sofort.lagenradar.d2"]);
+    const v = inhaltVergleichen(ist, soll, ["sachverhalte[1].module.lead-bevoelkerungsschutz.lagenradar.d2.stufe"]);
     expect(v.abweichungen).toEqual(["sachverhalte[0].bezeichnung"]);
     expect(v.gleich).toBe(v.geprueft - 1);
     expect(inhaltVergleichen(undefined, soll, []).gleich).toBe(0);
@@ -99,10 +103,10 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     // R1: Originalwert aus der Datei wieder hergestellt
     const r1 = reihe.faelle[0].stellen[0];
     expect(r1).toEqual({
-      pfad: "sachverhalte[1].sofort.lagenradar.d2",
-      original: MUSTER.sachverhalte[1].sofort.lagenradar.d2,
+      pfad: "sachverhalte[1].module.lead-bevoelkerungsschutz.lagenradar.d2.stufe",
+      original: MUSTER.sachverhalte[1].module["lead-bevoelkerungsschutz"].lagenradar.d2.stufe,
       praepariert: 7,
-      repariert: MUSTER.sachverhalte[1].sofort.lagenradar.d2,
+      repariert: MUSTER.sachverhalte[1].module["lead-bevoelkerungsschutz"].lagenradar.d2.stufe,
     });
     expect(reihe.summe).toMatchObject({ faelle: 5, schemakonform: 5, reparaturen: 5, anteil_erhalten_mittel: 1, stellen_wie_original: 5, kosten_usd: 0.5 });
     expect(reihe.faelle.every((f) => f.stellen_wie_original === true)).toBe(true);
@@ -120,7 +124,7 @@ describe("AV-2026-W43-25: Prüffall Reparatur", () => {
     // Reparatur ändert eine Bezeichnung (Inhalt nicht erhalten) bzw. liefert weiter den Defekt (nicht schemakonform)
     const att = reparatur((a) => {
       const entwurf = JSON.parse(String(a.nachrichten[0].content).split("```json\n")[1].split("\n```")[0]);
-      if (entwurf.sachverhalte[1].sofort.beurteilung === "hoch") return `\`\`\`json\n${JSON.stringify(entwurf)}\n\`\`\``;
+      if (entwurf.sachverhalte[1].bewertung.beurteilung.stufe === "hoch") return `\`\`\`json\n${JSON.stringify(entwurf)}\n\`\`\``;
       const m = JSON.parse(MUSTER_TEXT);
       m.sachverhalte[0].bezeichnung = "Geändert";
       return `\`\`\`json\n${JSON.stringify(m)}\n\`\`\``;

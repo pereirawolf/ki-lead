@@ -12,7 +12,8 @@ const ORDNER = "evaluation/pruefsteine";
 const STELLE = "KI-LEAD Erfassungstest – keine amtliche Meldung";
 
 const notizPruefer = () => referenzAjv().compile(lies(`${ORDNER}/pruefstein.schema.json`));
-const meldungsschema = () => lies("profile/lead-beispiel/meldung.schema.json");
+// Prüfsteine bleiben auf LEAD-Meldung-v1 (UP-2026-W45-06): Prüfung am eingefrorenen v1-Schema des Beispielprofils
+const meldungsschema = () => lies("tests/fixtures/lead-beispiel-v1/meldung.schema.json");
 
 /** Kennzeichnungsfehler einer Prüfstein-Meldung (leer = in Ordnung) */
 function kennzeichnung(m: any): string[] {

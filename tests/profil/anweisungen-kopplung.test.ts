@@ -2,7 +2,7 @@
 // Vokabular, die die App auswertet oder selbst erzeugt, stehen in den Anweisungen so, wie die App sie verwendet.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { GRENZEN, fristen } from "../../src/pipeline/kurzfassung";
 import { steuerungsBlock, type RechercheModus, type Steuerung } from "../../src/pipeline/kontext";
 import { kodierleitfadenKennung } from "../../src/pipeline/nachbearbeitung";
@@ -12,8 +12,8 @@ import { mehrereFristen } from "../../src/kern/kennsaetze";
 
 const ZAHLWORT: Record<number, string> = { 1: "einen", 2: "zwei", 3: "drei" };
 
-async function beispiel() {
-  const p = (await profil("lead-beispiel")).profil!;
+async function beispiel(name = "lead-beispiel") {
+  const p = (await profil(name)).profil!;
   const datei = (art: "erfassung" | "kurzfassung" | "verdichtung") => p.dateien[p.manifest.anweisungen![art]!]!;
   return { p, datei };
 }
@@ -63,8 +63,9 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     }
   });
 
+  // v1-Kennsätze und -Felder am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
   it("TP-2026-W44-35: die Beispielzeile „Handlungsrelevant bis:“ aus Teil A, A.4, ergibt eine Frist mit Uhrzeit und Bedingung", async () => {
-    const { p } = await beispiel();
+    const { p } = await beispiel(V1_PROFIL);
     const teilA = p.sops.find((s) => s.gemeinsam)!.text;
     const zeile = teilA.match(/„(Handlungsrelevant bis: [^“]+)“/)![1]!;
     const meldung = { sachverhalte: [{ sofort: { bewertung_text: `Kernaussage.\n${zeile}` } }], meldezeitpunkt: "2026-10-09T08:00" };
@@ -75,8 +76,9 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     expect(f[0]!.text).not.toContain("Grundlage");
   });
 
+  // v1-Kennsätze und -Felder am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
   it("GK-2026-W44-01: Teil A, Arbeitsanweisungen und Eingabehilfe geben je Frist eine eigene Zeile vor; die Formzeile ergibt keine Mehrfachzeile", async () => {
-    const { p } = await beispiel();
+    const { p } = await beispiel(V1_PROFIL);
     const teilA = p.sops.find((s) => s.gemeinsam)!.text;
     const texte: [string, string][] = [
       ["Teil A", teilA],
@@ -96,8 +98,9 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     expect(quelle).toContain("Je Frist eine eigene Zeile");
   });
 
+  // v1-Kennsätze und -Felder am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
   it("TP-2026-W44-35: die Beispieleinträge im Kodierleitfaden, Abschnitt 5, sind gültige Quelleneinträge ohne Befund", async () => {
-    const { p } = await beispiel();
+    const { p } = await beispiel(V1_PROFIL);
     const kl = p.dateien[p.manifest.kodierleitfaden!]!;
     const block = kl.slice(kl.indexOf("**Format im Feld")).match(/```\n([\s\S]*?)```/)![1]!;
     const eintraege = parseQuellen(block);
@@ -107,8 +110,9 @@ describe("Kopplung der Arbeitsanweisungen an den Code (TP-2026-W44-35)", () => {
     expect(quellenHinweise(meldung as any, p.ui)).toEqual([]);
   });
 
+  // v1-Kennsätze und -Felder am eingefrorenen v1-Beispielprofil (seit 0.9.0, UP-2026-W45-06)
   it("TP-2026-W44-35: das _entstehung-Beispiel der Erfassung passt zum Schema und zur Kennung, die die App setzt", async () => {
-    const { p, datei } = await beispiel();
+    const { p, datei } = await beispiel(V1_PROFIL);
     const text = datei("erfassung");
     const json = text.match(/```json\n("_entstehung"[\s\S]*?)```/)![1]!;
     const beispielwert = JSON.parse(`{${json}}`)._entstehung;

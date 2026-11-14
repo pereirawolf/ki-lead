@@ -98,3 +98,40 @@ export async function schluesselSetzen(page: Page): Promise<void> {
 export async function downloadText(d: Download): Promise<string> {
   return readFile((await d.path())!, "utf-8");
 }
+
+/**
+ * Eingefrorenes Beispielprofil nach LEAD-Meldung-v1 (tests/fixtures/lead-beispiel-v1, ergänzt um die SOP-Dateien des
+ * Beispielprofils) als Profilpaket importieren und verwenden (seit 0.9.0, UP-2026-W45-06): für Browsertests der
+ * v1-Felder (Quellen- und Zeitstrahl-Baukasten), die das Beispielprofil seit 2.0.0 nicht mehr zeigt. Eigene Kennung und
+ * eigener Name, damit das Paket das eingebaute Beispielprofil nicht ersetzt.
+ */
+export async function v1BeispielVerwenden(page: Page): Promise<void> {
+  const { default: JSZip } = await import("jszip");
+  const { readdir } = await import("node:fs/promises");
+  const { join, relative } = await import("node:path");
+  const lesen = async (ordner: string): Promise<Record<string, string>> => {
+    const out: Record<string, string> = {};
+    const lauf = async (dir: string) => {
+      for (const e of await readdir(dir, { withFileTypes: true })) {
+        const p = join(dir, e.name);
+        if (e.isDirectory()) await lauf(p);
+        else if (/\.(json|md)$/.test(e.name)) out[relative(ordner, p)] = await readFile(p, "utf-8");
+      }
+    };
+    await lauf(ordner);
+    return out;
+  };
+  const dateien = await lesen("tests/fixtures/lead-beispiel-v1");
+  for (const [d, text] of Object.entries(await lesen("profile/lead-beispiel")))
+    if (d.startsWith("sop/") && !d.includes("archiv/") && !d.endsWith("_Lesefassung.md") && !(d in dateien)) dateien[d] = text;
+  const manifest = JSON.parse(dateien["profil.json"]!);
+  const name = "LEAD-Beispiel v1 (Test)";
+  dateien["profil.json"] = JSON.stringify({ ...manifest, id: `${manifest.id}.v1-test`, name });
+  const zip = new JSZip();
+  for (const [d, text] of Object.entries(dateien)) zip.file(d, text);
+  const buffer = await zip.generateAsync({ type: "nodebuffer" });
+  await bereich(page, "Profile");
+  await page.locator('.profile input[type="file"][accept*=".zip"]').setInputFiles({ name: "lead-beispiel-v1.leadprofil", mimeType: "application/zip", buffer });
+  await page.getByRole("button", { name: `Profil „${name}“ verwenden` }).click();
+  await bereich(page, "Erfassung");
+}

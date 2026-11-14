@@ -6,7 +6,7 @@
 import { useId, useState, type ReactNode } from "react";
 import type { Profil } from "../../kern/typen";
 import { holeWert } from "../../kern/pfad";
-import { bezeichnung } from "../../kern/ui";
+import { bezeichnung, rollenBezeichnung } from "../../kern/ui";
 import { bezugVon } from "../../kern/kennung";
 import { eintraegeFuer, zeitstrahlAnzeige, zeitstrahlText } from "../../kern/zeitstrahl";
 import { datumDE } from "../../kern/ausgabe";
@@ -77,8 +77,8 @@ export function Sachverhaltsliste({
   const r = ui.rollen;
   const id = useId();
   const [nachBezug, setNachBezug] = useState(false);
-  const lBeurteilung = r.sv_beurteilung ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
-  const lTendenz = r.sv_tendenz ? bezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
+  const lBeurteilung = r.sv_beurteilung ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_beurteilung}`) : "Beurteilung";
+  const lTendenz = r.sv_tendenz ? rollenBezeichnung(ui, `${r.sachverhalte}[].${r.sv_tendenz}`) : "Tendenz";
   const kennungVon = (s: SvEintrag) => (r.sv_kennung ? String(holeWert(s.sv, r.sv_kennung) ?? "") : "");
   const gezeigt = svFiltern(sortiert, filter, kennungVon);
   const gefiltert = Object.values(filter).some(Boolean);
@@ -232,7 +232,7 @@ export function Sachverhaltsliste({
         {r.sv_beurteilung && chips("beurteilung", lBeurteilung, (s) => s.beurteilung)}
         {r.sv_tendenz && chips("tendenz", lTendenz, (s) => s.tendenz)}
         {r.sv_art && chips("art", bezeichnung(ui, `${r.sachverhalte}[].${r.sv_art}`), (s) => s.arten)}
-        {r.land && chips("land", bezeichnung(ui, r.land), (s) => s.land)}
+        {r.land && chips("land", rollenBezeichnung(ui, r.land), (s) => s.land)}
       </div>
       {baumMoeglich && (
         <label className="lb-wahl lb-svbaum-schalter">

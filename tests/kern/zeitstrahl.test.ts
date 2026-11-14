@@ -17,12 +17,12 @@ import {
   zeitstrahlOrdnen,
   zeitstrahlZeile,
 } from "../../src/kern/zeitstrahl";
-import { profilPflicht } from "../support/dateien";
+import { profilPflicht, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung, ILKA_KENNUNGEN } from "../support/fixtures";
 
 let p: Profil;
 beforeAll(async () => {
-  p = await profilPflicht("lead-beispiel");
+  p = await profilPflicht(V1_PROFIL);
 });
 
 const K1 = "DE-TH-20261014-K7QM";

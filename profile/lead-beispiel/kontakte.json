@@ -4,87 +4,87 @@
   "stellen": [
     {
       "name": "Baden-Württemberg",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Bayern",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Berlin",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Brandenburg",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Bremen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Hamburg",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Hessen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Mecklenburg-Vorpommern",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Niedersachsen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Nordrhein-Westfalen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Rheinland-Pfalz",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Saarland",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Sachsen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Sachsen-Anhalt",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Schleswig-Holstein",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Thüringen",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     },
     {
       "name": "Bund",
-      "feld": "land",
+      "feld": "absender.gebiet.name",
       "email": "lage@beispiel.invalid"
     }
   ],

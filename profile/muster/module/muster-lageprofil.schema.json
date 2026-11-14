@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pereirawolf/ki-lead/profile/muster/module/muster-lageprofil.schema.json",
+  "title": "LEAD-Meldung v2 – Modul muster-lageprofil 0.1 (Vorlage)",
+  "description": "Fachmodul der Vorlage „eigene Organisation“ je Sachverhalt: Arten der Organisation und ein schlankes Lageprofil mit drei Achsen (Raum, betroffene Personen, Dynamik; Stufen 0–3). Muster für ein eigenes Modul nach docs/LEAD-MELDUNG-V2.md Abschnitt 9; Arten, Achsen und Stufen vor der Verwendung durch die eigenen ersetzen. Stufentexte und Regeln: Kodierleitfaden der Vorlage.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fassung", "arten", "lageprofil"],
+  "properties": {
+    "fassung": {
+      "const": "0.1"
+    },
+    "arten": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/art"
+      },
+      "description": "Arten der Organisation, Mehrfachauswahl."
+    },
+    "lageprofil": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raum", "personen", "dynamik"],
+      "properties": {
+        "raum": {
+          "$ref": "#/$defs/achse"
+        },
+        "personen": {
+          "$ref": "#/$defs/achse"
+        },
+        "dynamik": {
+          "$ref": "#/$defs/achse"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "art": {
+      "enum": ["Brand", "Technische Hilfe", "Unwetter", "Versorgungsstörung", "Sonstiges"]
+    },
+    "achse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stufe", "status", "begruendung", "quellen"],
+      "properties": {
+        "stufe": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Stufe nach Stufentext der Vorlage (0–3); 0 ist ein belegter Wert."
+        },
+        "status": {
+          "enum": ["belegt", "mindestwert", "offen"],
+          "description": "mindestwert: bestätigte Mindestzahl; offen: keine tragfähige Stufe."
+        },
+        "offen_grund": {
+          "enum": ["kein_bezugsgegenstand", "kein_beleg", "bandbreite_ueber_stufengrenze", "sonstiges"],
+          "description": "Nur bei status offen: Grund nach dem Kodierleitfaden der Vorlage."
+        },
+        "begruendung": {
+          "type": "string",
+          "description": "Indikator, Beleg [Qn] und Abgrenzung zur Nachbarstufe bzw. Grund der offenen Achse."
+        },
+        "quellen": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^Q[1-9][0-9]*$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "offen"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["offen_grund"],
+            "properties": {
+              "stufe": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "stufe": {
+                "type": "integer"
+              },
+              "offen_grund": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

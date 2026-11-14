@@ -1,13 +1,13 @@
 // PDF und Kopiervorlage: Lagenradar, Freigabe am Ende, gegliederte Texte, falscher Listentyp (Review 20.10.2026, F10).
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { jsPDF } from "jspdf";
 import { meldungAlsPdf, pdfText, radarZeichnen, schemaVermerk } from "../../src/dokumente/pdf";
 
 describe("PDF mit Lagenradar", () => {
   it("zeichnet das Radar als Grafik neben die Achsenwerte", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const th = ilkaMeldung("TH");
     const blob = meldungAlsPdf(th, p, false);
     const text = new TextDecoder("latin1").decode(new Uint8Array(await blob.arrayBuffer()));
@@ -26,7 +26,7 @@ describe("PDF mit Lagenradar", () => {
 
 describe("Freigabe am Ende und gegliederter Bewertungstext", () => {
   it("setzt Freigabe & Versand zwischen Quellen und Entstehung, nicht in den Kopf", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const bund = ilkaMeldung("Bund");
     const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(bund, p, false).arrayBuffer()));
     const pos = (s: string) => roh.indexOf(`(${s}`);
@@ -38,7 +38,7 @@ describe("Freigabe am Ende und gegliederter Bewertungstext", () => {
   });
   it("gliedert Abschnitte des Bewertungstexts mit Zeilen und Absätzen", async () => {
     const { gliedereBewertung } = await import("../../src/kern/kennsaetze");
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const t =
       "Kernaussage: A ist los.\nReferenzraum: Bund; t0 = 18.10.2026. Beurteilung „erheblich“: weil. Tendenz „Entspannung“: weil [Q1]. D1 = 2, weil. D2 = offen: fehlt.\nKeine Achsendivergenzen. Neubewertung bei: X Handlungsrelevant bis: 19.10.2026";
     expect(gliedereBewertung(t, p.ui)).toBe(
@@ -54,7 +54,7 @@ describe("Freigabe am Ende und gegliederter Bewertungstext", () => {
 describe("Gegliederte Analysefelder", () => {
   it("setzt Absätze vor Schlüsselsätzen und Zeilen vor Aufzählungen und kurzen Aspektbegriffen", async () => {
     const { gliedereAnalyse, gliedereFeld } = await import("../../src/kern/kennsaetze");
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const t =
       "Kernaussage: A brennt. Bestätigt ist nach [Q1] (Stand 18.10.2026, 08:22 Uhr): Feuer um 02:28 Uhr. Strom: rund 300 Anschlüsse. Verkehr → Versorgung: frei [Q2]. " +
       "Einordnung „Sonstiges“: kein Katalogwert. Mögliche Entwicklungen (Annahmen): Rauch. Prüf- und Abstimmungsbedarf: (1) Landkreis: prüfen. (2) Land: klären. " +
@@ -75,7 +75,7 @@ describe("Gegliederte Analysefelder", () => {
   });
   it("übernimmt die Gliederung in Kopiervorlage und PDF", async () => {
     const { kopiervorlageHtml, kopiervorlageText } = await import("../../src/lagebild/ausgabe");
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const he = ilkaMeldung("HE");
     const sv = he.sachverhalte[0];
     const eintrag = { id: "x", name: "he.json", daten: he, hinweise: [], schema: [] } as any;
@@ -89,7 +89,7 @@ describe("Gegliederte Analysefelder", () => {
 
 describe("F10: PDF bei falschem Listentyp", () => {
   it.each([["defekt"], [{ a: 1 }], [42]])("erzeugt das PDF mit sichtbarem Hinweis statt abzubrechen (%j)", async (wert) => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const d = ilkaMeldung("Bund");
     d.sachverhalte = wert;
     let blob: Blob | undefined;
@@ -99,7 +99,7 @@ describe("F10: PDF bei falschem Listentyp", () => {
   });
 
   it("null als Sachverhalte bleibt ohne Hinweis", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const d = ilkaMeldung("Bund");
     d.sachverhalte = null;
     const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(d, p, true).arrayBuffer()));
@@ -114,7 +114,7 @@ describe("Kennsatzzeilen und Sonderzeichen im PDF (Lauf 20261022-073727-q2ex)", 
 
   it("bricht eine Kennsatzzeile nicht an Signal-Satzanfängen um", async () => {
     const { gliedereBewertung } = await import("../../src/kern/kennsaetze");
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const g = gliedereBewertung(ende, p.ui);
     const zeilen = g.split("\n");
     expect(zeilen).toContain(
@@ -136,7 +136,7 @@ describe("Kennsatzzeilen und Sonderzeichen im PDF (Lauf 20261022-073727-q2ex)", 
   });
 
   it("gibt Pfeile im PDF als „->“ aus statt als Zeichensalat", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const m = ilkaMeldung("Bund");
     m.sachverhalte[0].sofort.bewertung_text += "\n" + ende.split("\n").at(-1);
     const roh = new TextDecoder("latin1").decode(new Uint8Array(await meldungAlsPdf(m, p, true).arrayBuffer()));
@@ -158,7 +158,7 @@ describe("TP-2026-W44-42: Vermerk „Schemaprüfung mit Befund“", () => {
   });
 
   it("finale PDF mit Befund: Vermerk auf jeder Seite und in den Schlüsselwörtern", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const text = await roh(meldungAlsPdf(ilkaMeldung("Bund"), p, false, { schemaBefunde: 3 }));
     const seiten = (text.match(/\/Type \/Page\b/g) || []).length;
     expect(seiten).toBeGreaterThan(1);
@@ -172,7 +172,7 @@ describe("TP-2026-W44-42: Vermerk „Schemaprüfung mit Befund“", () => {
     ["finale PDF ohne Befund", false, 0],
     ["Entwurf mit Befund", true, 3],
   ])("%s: kein Vermerk", async (_name, entwurf, befunde) => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const text = await roh(meldungAlsPdf(ilkaMeldung("Bund"), p, entwurf, { schemaBefunde: befunde }));
     expect(text).not.toContain("Schemapr");
   });

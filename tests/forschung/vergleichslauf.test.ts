@@ -117,7 +117,8 @@ describe("Vergleichslauf Ilka", () => {
       expect(e.lauf.material.map((m) => m.name)).toEqual(EINGAENGE);
       expect(e.lauf.bestaetigt).toEqual(e.lauf.vorschlag);
       expect(e.eintrag.pruefpunkte.map((p) => [p.nr, p.erfuellt])).toEqual(["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"].map((nr) => [nr, true]));
-      expect(e.meldung?.meldezeitpunkt).toBe("2026-10-14T14:00");
+      // LEAD-Meldung-v2 (seit 0.9.0): t0 mit UTC-Versatz
+      expect(e.meldung?.meldezeitpunkt).toBe("2026-10-14T14:00+02:00");
     }
     // je Lauf S1 und S2, S2 ohne Werkzeuge, Modelle wie eingestellt
     expect(anbieter.anfragen.map((a) => a.modell)).toEqual(Array(3).fill(["mistral-small-2603", "mistral-medium-3-5"]).flat());
@@ -214,11 +215,14 @@ describe("Vergleichslauf Ilka", () => {
     const { ergebnisse } = await vergleichsreihe({ daten: d, anbieter: attrappe(ref), einstellungen: MISTRAL, anzahl: 1 });
     // Soll aus der Redaktionsfassung selbst
     const svs = ref.sachverhalte as any[];
-    const werte = svs.flatMap((sv) => Object.values(sv.sofort.lagenradar));
+    // LEAD-Meldung-v2 (seit 0.9.0): Achsen als Objekte im Modul lead-bevoelkerungsschutz
+    const radar = (sv: any) => sv.module["lead-bevoelkerungsschutz"].lagenradar;
+    const stufen = (sv: any) => Object.fromEntries(Object.entries(radar(sv)).map(([k, a]: [string, any]) => [k, a.stufe]));
+    const werte = svs.flatMap((sv) => Object.values(stufen(sv)));
     expect(ergebnisse[0].eintrag.kennzahlen).toEqual({
       sachverhalte: svs.length,
       achsen_gesetzt: Math.round((werte.filter((w) => w !== null).length / werte.length) * 1000) / 1000,
-      tendenz_gesetzt: Math.round((svs.filter((sv) => sv.sofort.tendenz).length / svs.length) * 1000) / 1000,
+      tendenz_gesetzt: Math.round((svs.filter((sv) => sv.bewertung.tendenz.richtung).length / svs.length) * 1000) / 1000,
       beurteilung_gleich: 1,
       tendenz_gleich: 1,
       aehnlichkeit_mittel: 1,
@@ -229,7 +233,7 @@ describe("Vergleichslauf Ilka", () => {
     expect(ergebnisse[0].eintrag.plausibilitaet).toEqual([]);
     const paar = (ergebnisse[0].eintrag.beobachtungen.vergleich as any).paare[0];
     expect(paar.ref_index).toBe(0);
-    expect(paar.ki_radar).toEqual(svs[0].sofort.lagenradar);
+    expect(paar.ki_radar).toEqual(stufen(svs[0]));
   });
 
   it("AV-2026-W43-23, -24: Plan anbietermix-ilka mischt Anbieter je Stufe; Varianten über „Plan/Kennung“", () => {

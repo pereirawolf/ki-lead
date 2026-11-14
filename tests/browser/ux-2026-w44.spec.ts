@@ -42,9 +42,8 @@ test.describe("UX-2026-W44-04: Smartphone", () => {
 
   test("der aktive Schritt der Erfassung rückt in der Schrittleiste ins Bild", async ({ page }) => {
     await oeffnen(page);
-    await page.getByRole("button", { name: /^Weiter:/ }).click();
-    await page.getByRole("button", { name: /^Weiter:/ }).click();
-    await page.getByRole("button", { name: /^Weiter:/ }).click();
+    // Seit 0.9.0 vier Schritte bis „Prüfen und Exportieren“ (mit „Übergreifende Lage“)
+    for (let i = 0; i < 4; i++) await page.getByRole("button", { name: /^Weiter:/ }).click();
     const aktiv = page.locator('.meldung .schritte [aria-current="step"]');
     await expect(aktiv).toContainText("Prüfen und Exportieren");
     const box = (await aktiv.boundingBox())!;
@@ -76,6 +75,7 @@ test("UX-2026-W44-09: Beispiel Ilka – Reiter „Sachverhalte“ kompakt statt 
   const hoehe = await page.evaluate(() => document.documentElement.scrollHeight);
   expect(hoehe).toBeLessThan(3000);
   // seit UX-2026-W45-14 Chips statt Auswahlliste
-  await page.getByRole("group", { name: "Bewertung" }).getByRole("button", { name: "erheblich (5)" }).click();
+  // seit 0.9.0 nach dem Objekt beschriftet („Beurteilung“ statt „Stufe“ bzw. v1 „Bewertung“)
+  await page.getByRole("group", { name: "Beurteilung" }).getByRole("button", { name: "erheblich (5)" }).click();
   await expect(page.locator(".lb-sv-zeile")).toHaveCount(5);
 });

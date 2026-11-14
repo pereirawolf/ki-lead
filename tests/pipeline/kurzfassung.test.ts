@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { profil } from "../support/dateien";
+import { profil, V1_PROFIL } from "../support/dateien";
 import { ilkaMeldung } from "../support/fixtures";
 import { STANDARD } from "../../src/pipeline/einstellungen";
 import {
@@ -30,7 +30,7 @@ const attrappe = (text: string) => skriptAnbieter([llmAntwort(text, { inhalt: []
 
 describe("Management Summary", () => {
   it("leitet die Abschnitte aus den Analysefeldern des Profils ab", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(abschnitte(p!).map((a) => a.label)).toEqual([
       "Lage & Ereignis",
       "Risiken & Auswirkungen",
@@ -50,7 +50,7 @@ describe("Management Summary", () => {
   });
 
   it("erkennt Änderungen am Inhalt, nicht an der Freigabe", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const a = fingerabdruck(meldungFuerKurzfassung(th, p!));
     const b = structuredClone(th);
     b.freigabe.freigabe.name = "Jemand";
@@ -60,7 +60,7 @@ describe("Management Summary", () => {
   });
 
   it("baut eine konsolidierte Leitungsfassung mit Beurteilungen und frühester Frist", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const antwortJson = {
       kernaussage: "Rund 10.000 Menschen sind ohne Strom; die Notstrompuffer reichen nur mit Nachbetankung [Q2].",
       abschnitte: {
@@ -100,7 +100,7 @@ describe("Management Summary", () => {
   });
 
   it("weist Bewertung & Tendenz bei einem Sachverhalt in einer eigenen Zeile aus", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
     const antwort = {
       kernaussage: "K.",
@@ -115,7 +115,7 @@ describe("Management Summary", () => {
   });
 
   it("übernimmt alle Fristen vollständig, früheste zuerst, und kennzeichnet überfällige", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m.meldezeitpunkt = "2026-10-14T10:30";
     m.sachverhalte[0].sofort.bewertung_text =
@@ -142,7 +142,7 @@ describe("Management Summary", () => {
 
   // Soll: SOP-LEAD A.4 (je Frist eine eigene Zeile) und A.7.3 (keine unabhängige Aufgabe geht verloren); t0 14.10.2026 14:00
   it("GK-2026-W44-01: zwei Fristen in eigenen Zeilen bleiben mit eigenem Termin und Überfälligkeitsstatus erhalten", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m.meldezeitpunkt = "2026-10-14T14:00";
     m.sachverhalte = [m.sachverhalte[0]];
@@ -159,7 +159,7 @@ describe("Management Summary", () => {
   });
 
   it("GK-2026-W44-01: zwei Fristen in einer Zeile (entgegen A.4) werden gekennzeichnet; der erste Grundlagenvermerk entfernt die zweite Aufgabe nicht", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m.meldezeitpunkt = "2026-10-14T14:00";
     m.sachverhalte = [m.sachverhalte[0]];
@@ -174,7 +174,7 @@ describe("Management Summary", () => {
   });
 
   it("kennzeichnet Entwürfe im Kopf und verschiebt Kurztitel bei falscher Anzahl nicht", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m._status = "Entwurf";
     const k = { kernaussage: "K.", abschnitte: {}, kurztitel: ["Nur ein Titel"] };
@@ -186,7 +186,7 @@ describe("Management Summary", () => {
   });
 
   it("gibt der KI eine Herkunftsliste ohne URLs mit und hält die Richtwerte konsistent", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const ni = ilkaMeldung("NI");
     const h = herkunftsliste(ni, p!);
     expect(h).toContain("[Q4] B – Verteilnetzbetreiber Netzgebiet Harz");
@@ -205,7 +205,7 @@ describe("Management Summary", () => {
   });
 
   it("findet die früheste Frist", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     expect(fruehesteFrist(th, p!)).toMatch(/^Handlungsrelevant bis: /);
     expect(fruehesteFrist({ ...th, sachverhalte: [] }, p!)).toBe("");
   });
@@ -213,7 +213,7 @@ describe("Management Summary", () => {
 
 describe("F08: Fingerabdruck der Management Summary", () => {
   it("ändert sich mit der Herkunft der Angaben, nicht mit der Freigabe", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const a = ilkaMeldung("Bund");
     a.quellen = "[Q1] A – Betreiber A (2026): Lage [Zugriff: 20.10.2026]";
     const b = structuredClone(a);
@@ -227,7 +227,7 @@ describe("F08: Fingerabdruck der Management Summary", () => {
   });
 
   it("ändert sich mit der Arbeitsanweisung der Kurzfassung", async () => {
-    const p = (await profil("lead-beispiel")).profil!;
+    const p = (await profil(V1_PROFIL)).profil!;
     const d = ilkaMeldung("Bund");
     const pfad = p.manifest.anweisungen?.kurzfassung;
     expect(pfad).toBeTruthy();
@@ -239,7 +239,7 @@ describe("F08: Fingerabdruck der Management Summary", () => {
 // LEAD-Eingabehilfen (Umsetzungsbeschreibung vom 21.10.2026, A11): keine offenen Stellen in der Fassung
 describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
   it("offene Stellen samt Trennzeichen entfallen, die Frist ist als unvollständig gekennzeichnet", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = ilkaMeldung("HE");
     m.sachverhalte[0].sofort.bewertung_text =
       "Kernaussage: Z.\nHandlungsrelevant bis: 22.10.2026 12:00 – ⟦Aufgabe, Adressat⟧ – ⟦Bedingung, falls zutreffend⟧; Grundlage: ⟦Quellenverweis⟧";
@@ -248,14 +248,14 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
   });
 
   it("eine Frist ohne lesbares Datum entfällt wie bisher", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = ilkaMeldung("HE");
     m.sachverhalte[0].sofort.bewertung_text = "Kernaussage: Z.\nHandlungsrelevant bis: ⟦TT.MM.JJJJ HH:MM⟧ – ⟦Aufgabe, Adressat⟧";
     expect(fristen(m, p!)).toEqual([]);
   });
 
   it("übernimmt aus der KI-Antwort keine offenen Stellen und weist darauf hin", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
     const antwort = {
       kernaussage: "Kernaussage: ⟦zentrale Aussage⟧.",
@@ -269,7 +269,7 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
   });
 
   it("verwendet eine abweichend eingestellte Höchstzahl Ausgabetoken (0.4.25)", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const eins = { ...th, sachverhalte: [th.sachverhalte[1]] };
     const antwort = {
       kernaussage: "K.",
@@ -284,7 +284,7 @@ describe("Management Summary: Fristen aus Vorlagen mit offenen Stellen", () => {
 
 describe("Offene Platzhalter der Kurzfassung (TP-2026-W44-33)", () => {
   it("TP-2026-W44-33: ein offener Platzhalter steht im Protokolleintrag und als Hinweis der Management Summary", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const pfad = p!.manifest.anweisungen!.kurzfassung!;
     const q = { ...p!, dateien: { ...p!.dateien, [pfad]: `${p!.dateien[pfad]}\n\nStelle: {{profil.stelle}}` } };
     const json = {
@@ -307,7 +307,7 @@ describe("Sprachliche Treue der Kurzfassung (TP-2026-W44-34)", () => {
 
   it("TP-2026-W44-34: Kurzfassung mit „kritisch“ bei Meldung ohne kritischen Sachverhalt erzeugt Hinweis", async () => {
     const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     // TH: geringfügig/Stabilisierung und erheblich/Verschärfung, keine abweichende Bewertung „kritisch“
     const m = structuredClone(th);
     for (const sv of m.sachverhalte) sv.sofort.bewertung_text = sv.sofort.bewertung_text.replace(/kritisch/gi, "");
@@ -320,7 +320,7 @@ describe("Sprachliche Treue der Kurzfassung (TP-2026-W44-34)", () => {
 
   it("TP-2026-W44-34: eine abweichende Bewertung in der Meldung trägt das Wort", async () => {
     const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m.sachverhalte[1].sofort.bewertung_text += "\nAbweichende Bewertung: Land X ‚kritisch‘ (landesweiter Bezugsraum)";
     expect(kurzfassungTreue(struktur("Land X bewertet kritisch, bezogen auf seinen Landesraum."), m, p!)).toEqual([]);
@@ -328,7 +328,7 @@ describe("Sprachliche Treue der Kurzfassung (TP-2026-W44-34)", () => {
 
   it("TP-2026-W44-34: eine Zahl, die die Meldung nur mit Modalwort führt, ergibt ohne Modalwort einen Hinweis", async () => {
     const { kurzfassungTreue } = await import("../../src/pipeline/kurzfassung");
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     const m = structuredClone(th);
     m.sachverhalte[0].analyse.lage_ereignis = "Die Sperrungen dauern voraussichtlich bis 21.10. an; mindestens 412 Einsätze.";
     const ohne = kurzfassungTreue(struktur("Lage stabil.", "Die Sperrungen dauern bis 21.10.2026 an; 412 Einsätze."), m, p!);
@@ -340,7 +340,7 @@ describe("Sprachliche Treue der Kurzfassung (TP-2026-W44-34)", () => {
   });
 
   it("TP-2026-W44-34: Arbeitsanweisungen Kurzfassung und Verdichtung nennen je zwei Positiv-/Negativpaare", async () => {
-    const { profil: p } = await profil("lead-beispiel");
+    const { profil: p } = await profil(V1_PROFIL);
     for (const art of ["kurzfassung", "verdichtung"] as const) {
       const text = p!.dateien[p!.manifest.anweisungen![art]!]!;
       expect((text.match(/Nicht: „/g) || []).length, art).toBeGreaterThanOrEqual(2);

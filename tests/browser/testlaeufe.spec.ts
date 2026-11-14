@@ -69,7 +69,8 @@ test("S1 + S2 + S3: zwei Läufe mit der Vorgabe Anthropic, ZIP-Datei und Eintrag
 });
 
 test("S3 Reparatur: ein Lauf mit Haiku, fünf Reparaturen, nur S3 ruft die API auf", async ({ page }) => {
-  const muster = await readFile("evaluation/material/ilka-musterfassung.json", "utf-8");
+  // seit 0.9.0 die v2-Fassung der Musterfassung (Plan reparatur-ilka, Fassung 3)
+  const muster = await readFile("evaluation/material/ilka-musterfassung.v2.json", "utf-8");
   // Die simulierte Reparatur liefert die unbeschädigte Musterfassung
   const netz = await netzVorbereiten(page, () => "Repariert.\n\n```json\n" + muster + "\n```");
   await page.goto("./");

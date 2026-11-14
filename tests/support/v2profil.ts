@@ -3,9 +3,11 @@
 // Seit 0.7.3 (UP-2026-W45-03) mit der Darstellungsdatei formate/lead-meldung-v2/beispiel/meldung.ui.json (Vorlage für
 // die Umstellung der Profile in Paket 6); ohne Darstellung (`mitDarstellung: false`) nur die Rollen, wie in Paket 2.
 // Seit 0.8.0 (UP-2026-W45-04) mit den Variablen des Absenders als Pfade (absender.stelle, absender.gebiet.name, absender.ebene).
+// Seit 0.9.0 (UP-2026-W45-06) auf Bundesebene aus dem eingefrorenen v1-Beispielprofil (tests/fixtures), auf Landesebene aus
+// dem Landesprofil, das selbst schon auf v2 steht; die Ableitung bleibt, damit die Tests von Paket 2 bis 5 unverändert gelten.
 import { readFileSync } from "node:fs";
 import type { Profil } from "../../src/kern/typen";
-import { profilPflicht, repoPfad } from "./dateien";
+import { profilPflicht, repoPfad, V1_PROFIL } from "./dateien";
 
 export const ROLLEN_V2 = {
   schema_feld: "schema",
@@ -34,7 +36,7 @@ export const ROLLEN_V2 = {
 export const DARSTELLUNG_V2 = "formate/lead-meldung-v2/beispiel/meldung.ui.json";
 
 export async function v2Profil(ebene: "bund" | "land" = "bund", { mitDarstellung = false } = {}): Promise<Profil> {
-  const p = structuredClone(await profilPflicht(ebene === "land" ? "lead-thueringen" : "lead-beispiel"));
+  const p = structuredClone(await profilPflicht(ebene === "land" ? "lead-thueringen" : V1_PROFIL));
   const ordner = ebene === "land" ? "beispiel-land" : "beispiel";
   p.schema = JSON.parse(readFileSync(repoPfad(`formate/lead-meldung-v2/${ordner}/meldung.schema.json`), "utf-8"));
   p.manifest.meldung = { ...p.manifest.meldung, schema_id: "LEAD-Meldung-v2", eingang_schema_ids: ["LEAD-Meldung-v2"], eingang_schemata: {} };
@@ -43,9 +45,9 @@ export async function v2Profil(ebene: "bund" | "land" = "bund", { mitDarstellung
   const v = p.manifest.variablen;
   p.manifest.variablen = {
     ...v,
-    "absender.stelle": v.meldende_stelle ?? "",
-    "absender.gebiet.name": v.land ?? v.kreis ?? "",
-    "absender.ebene": p.manifest.ebene ?? "",
+    "absender.stelle": v["absender.stelle"] ?? v.meldende_stelle ?? "",
+    "absender.gebiet.name": v["absender.gebiet.name"] ?? v.land ?? v.kreis ?? "",
+    "absender.ebene": v["absender.ebene"] ?? p.manifest.ebene ?? "",
   };
   p.manifest.migrationen = [
     { von: "LEAD-Meldung-v1", verfahren: "lead-meldung-v2" },

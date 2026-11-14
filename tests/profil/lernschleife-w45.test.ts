@@ -54,7 +54,8 @@ describe("Lernschleife KW 45 (Nachtrag), Kodierleitfaden", () => {
       expect(regel).toContain("auf einen belegten Verlauf bis t0 oder auf eine Prognose einer zuständigen Stelle oder Fachbehörde");
       expect(regel).toContain("bei Folgesachverhalten die Prognose der auslösenden Gefahr, wenn die Kopplung belegt ist");
       expect(regel).toContain("ein Szenario der meldenden Stelle allein trägt keine Tendenz");
-      expect(regel).toContain("Der Bewertungstext nennt, worauf sich die Tendenz stützt.");
+      // seit Kodierleitfaden 2.0.0 (LEAD-Meldung-v2): Feld tendenz.begruendung statt Bewertungstext
+      expect(regel).toContain("Die Begründung nennt, worauf sich die Tendenz stützt.");
       const beispiel = text.split("\n").find((z) => z.startsWith("| Mobilfunk im Ausfallgebiet über Notstrom;"));
       expect(beispiel).toContain("Tendenz Verschärfung");
     },

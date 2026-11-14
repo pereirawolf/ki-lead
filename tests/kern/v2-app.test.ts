@@ -25,9 +25,9 @@ const ordner = (o: string, ebene: "bund" | "land") =>
     .filter((d) => d.endsWith(".json"))
     .map((d) => [`${o}/${d}`, ebene] as const);
 const V1 = [
-  ...ordner("profile/lead-beispiel/beispiele/orkantief-ilka", "bund"),
-  ...ordner("profile/lead-thueringen/beispiele/hochwasser-saale", "land"),
-  ...ordner("profile/lead-thueringen/beispiele/orkantief-ilka", "land"),
+  ...ordner("tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka", "bund"),
+  ...ordner("tests/fixtures/lead-thueringen-v1/beispiele/hochwasser-saale", "land"),
+  ...ordner("tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka", "land"),
   ["evaluation/material/ilka-musterfassung.json", "bund"] as const,
   ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
     .filter((d) => d.isDirectory())
@@ -61,7 +61,7 @@ describe("UP-2026-W45-02: Migration v1 → v2 beim Einlesen", () => {
 
   it("Lagebild liest v1-Meldungen unter dem v2-Profil: überführt, Schema ✓, Stelle, Gebiet und Zeitpunkt über Pfad-Rollen", async () => {
     const p = await v2Profil("land");
-    const o = "profile/lead-thueringen/beispiele/orkantief-ilka";
+    const o = "tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka";
     const dateien = readdirSync(repoPfad(o))
       .filter((d) => d.endsWith(".json"))
       .map((name) => ({ name, text: readFileSync(repoPfad(o, name), "utf-8"), importiertAm: "" }));
@@ -142,7 +142,7 @@ describe("UP-2026-W45-02: Referenzprüfung in Lagebild, Maske und Pipeline", () 
     expect(b).toEqual([
       expect.objectContaining({ code: "REFERENZ_FEHLER", pfad: "sachverhalte[0].analyse.lage_ereignis", text: expect.stringContaining("Q99") }),
     ]);
-    expect(istV2(json("profile/lead-beispiel/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json"))).toBe(false);
+    expect(istV2(json("tests/fixtures/lead-beispiel-v1/beispiele/orkantief-ilka/LEAD-Meldung_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json"))).toBe(false);
     expect(referenzBefunde({ schema: "LEAD-Meldung-v1" })).toEqual([]);
   });
 
@@ -156,7 +156,7 @@ describe("UP-2026-W45-02: Referenzprüfung in Lagebild, Maske und Pipeline", () 
 
   it("Pipeline: S2 hängt die Befunde der Referenzprüfung an (Quelltext)", () => {
     const s2 = readFileSync(repoPfad("src/pipeline/s2s3.ts"), "utf-8");
-    expect(s2).toMatch(/befunde\.push\(\.\.\.referenzBefunde\(meldung, p\.ui\)\)/);
+    expect(s2).toMatch(/befunde\.push\(\.\.\.referenzBefunde\(meldung, p\.ui, moduleImSchema\(p\.schema\)\)\)/);
   });
 });
 

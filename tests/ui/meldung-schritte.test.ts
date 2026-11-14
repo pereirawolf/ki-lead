@@ -4,7 +4,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { profilPflicht } from "../support/dateien";
-import { ilkaMeldung } from "../support/fixtures";
+import { ilkaMeldungV2 } from "../support/fixtures";
 import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { STANDARD } from "../../src/pipeline/einstellungen";
@@ -39,10 +39,10 @@ async function zeige(profilName: string, meldung: any) {
 }
 
 describe("Meldung: Management Summary als eigener Schritt", () => {
-  it("Beispielprofil: fünf Schritte, der letzte heißt wie kurzfassung.titel", async () => {
-    const profil = await zeige("lead-beispiel", ilkaMeldung("Bund"));
+  it("Beispielprofil: sechs Schritte (seit 0.9.0 mit „Übergreifende Lage“), der letzte heißt wie kurzfassung.titel", async () => {
+    const profil = await zeige("lead-beispiel", ilkaMeldungV2("Bund"));
     expect(schritte()).toEqual([...profil.ui.schritte.map((s) => s.titel), "Management Summary"]);
-    expect(schritte()).toHaveLength(5);
+    expect(schritte()).toHaveLength(6);
     expect(meldungsSchritte(profil.ui).at(-1)).toMatchObject({ id: KURZFASSUNG_SCHRITT, felder: [], kurzfassung: true });
   });
 
@@ -54,7 +54,7 @@ describe("Meldung: Management Summary als eigener Schritt", () => {
   });
 
   it("„Prüfen und Exportieren“ ohne Management Summary, mit „Weiter: Management Summary“; dort KI-Fassung und Feldauszug", async () => {
-    await zeige("lead-beispiel", ilkaMeldung("Bund"));
+    await zeige("lead-beispiel", ilkaMeldungV2("Bund"));
     await klick([...document.querySelectorAll("nav.schritte button")].find((b) => /Prüfen und Exportieren/.test(b.textContent || "")) as HTMLButtonElement);
     expect(schrittTitel()).toBe("Prüfen und Exportieren");
     expect(knopf("Final als JSON exportieren")).toBeTruthy();

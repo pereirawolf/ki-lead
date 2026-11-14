@@ -764,12 +764,25 @@ function texteMitPfad(wert, pfad, out) {
   return out;
 }
 
+/** Belegliste „quellen“ in einem Modul des Profils (beliebige Tiefe) gegen das Quellenverzeichnis */
+function belegeImModul(wert, pfad, pruefeIds) {
+  if (Array.isArray(wert)) wert.forEach((v, i) => belegeImModul(v, `${pfad}[${i}]`, pruefeIds));
+  else if (wert && typeof wert === "object")
+    for (const [k, v] of Object.entries(wert)) {
+      if (k === "quellen" && Array.isArray(v)) pruefeIds(v, `${pfad}.quellen`);
+      else belegeImModul(v, `${pfad}.${k}`, pruefeIds);
+    }
+}
+
 /**
  * Prüft, was ein JSON-Schema nicht ausdrücken kann.
+ * @param {object} [opt] `module`: Modulkennungen, die das Profilschema einbindet (gelten als bekannt)
  * @returns {{stufe: "fehler"|"hinweis", pfad: string, text: string}[]}
  */
-export function pruefeReferenzen(m) {
+export function pruefeReferenzen(m, opt = {}) {
   const b = [];
+  // Module, die das Profilschema einbindet (seit 0.9.0): nicht „unbekannt“; ihre Belegliste „quellen“ wird aufgelöst
+  const bekannt = new Set([...BEKANNTE_MODULE, ...(opt.module || [])]);
   const fehler = (pfad, text) => b.push({ stufe: "fehler", pfad, text });
   const hinweis = (pfad, text) => b.push({ stufe: "hinweis", pfad, text });
   const quellIds = new Set();
@@ -879,7 +892,10 @@ export function pruefeReferenzen(m) {
         gesehen.add(u.kennzahl);
       });
     });
-    for (const name of Object.keys(s.module || {})) if (!BEKANNTE_MODULE.has(name)) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
+    for (const name of Object.keys(s.module || {})) {
+      if (!bekannt.has(name)) hinweis(`${p}.module.${name}`, "unbekanntes Modul, ungeprüft übernommen");
+      else if (!BEKANNTE_MODULE.has(name)) belegeImModul(s.module[name], `${p}.module.${name}`, pruefeIds);
+    }
   });
   // Sachverhaltsübergreifende Lage (Nachtrag 11, UP-2026-W45-06): Belege, Handlungsbedarf und Verweise auf Sachverhalte
   const ul = m.uebergreifende_lage;
@@ -907,8 +923,10 @@ export function pruefeReferenzen(m) {
     if (m.fehlanzeige) fehler(p, "übergreifende Lage neben einer Fehlanzeige");
     else if ((m.sachverhalte || []).length < 2) hinweis(p, "übergreifende Lage bei weniger als zwei Sachverhalten – Angaben dem Sachverhalt zuordnen");
   }
-  // Meldungsmodule (SR-2026-W45-01): die App kennt noch keines; Inhalt bleibt erhalten, ohne eigene Prüfung
-  for (const name of Object.keys(m.module || {})) hinweis(`module.${name}`, "unbekanntes Meldungsmodul, ungeprüft übernommen");
+  // Meldungsmodule (SR-2026-W45-01): bekannt nur über das Profilschema; Inhalt bleibt erhalten
+  for (const name of Object.keys(m.module || {}))
+    if (!bekannt.has(name)) hinweis(`module.${name}`, "unbekanntes Meldungsmodul, ungeprüft übernommen");
+    else belegeImModul(m.module[name], `module.${name}`, pruefeIds);
   for (const id of quellIds) if (!zitiert.has(id)) hinweis("quellen", `${id} verzeichnet, aber nicht zitiert`);
   return b;
 }

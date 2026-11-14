@@ -5,7 +5,7 @@ import type { Rolle } from "../pipeline/einstellungen";
 
 /**
  * Was ein Vergleichslauf testet (seit 0.5.12). Aus Rohdaten: die sechs Eingänge des Falls orkantief-ilka-verdichtung.
- * Aus der Musterfassung (evaluation/material/ilka-musterfassung.json): „S2 + S3“ mit ihrem Zuschnitt als festem
+ * Aus der Musterfassung (evaluation/material/ilka-musterfassung.v2.json): „S2 + S3“ mit ihrem Zuschnitt als festem
  * S1-Gegenstand (evaluation/material/ilka-s1-zuschnitt-a.json, Plan s2-isoliert-ilka), „MS“ mit ihr als einziger
  * Eingabe (Plan management-summary-ilka, kurzfassungsreihe.ts).
  */

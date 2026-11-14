@@ -148,15 +148,36 @@ export function d2Pruefen(bewertungText: string, d2: number | null | undefined):
 
 const ANALYSEFELDER = ["lage_ereignis", "risiken_auswirkungen", "massnahmen_empfehlungen", "abhaengigkeiten_interdependenzen"];
 
-/** Beide Prüfungen über alle Sachverhalte einer Meldung im Format des Beispielprofils (LEAD-Meldung-v1) */
+/**
+ * Bewertungstext und D2 eines Sachverhalts im Format des Beispielprofils: LEAD-Meldung-v1 (`sofort.bewertung_text`,
+ * `sofort.lagenradar.d2` als Zahl) oder seit 0.9.0 LEAD-Meldung-v2 (Felder der Bewertung, Achse D2 als Objekt im Modul
+ * lead-bevoelkerungsschutz mit ihrer Begründung).
+ */
+function bewertungUndD2(sv: any): { feld: string; text: string; d2Feld: string; d2: number | null | undefined; d2Text: string } {
+  const radar = sv?.module?.["lead-bevoelkerungsschutz"]?.lagenradar;
+  if (sv?.bewertung && typeof sv.bewertung === "object") {
+    const b = sv.bewertung;
+    const d2 = radar?.d2;
+    const text = [b.kernaussage, b.beurteilung?.begruendung, b.tendenz?.begruendung, b.erlaeuterung]
+      .filter((x) => typeof x === "string" && x.trim())
+      .join("\n");
+    const stufe = d2 && typeof d2 === "object" && typeof d2.stufe === "number" ? d2.stufe : undefined;
+    // Die Begründung der Achse steht für den Kennsatz „D2 = …“ aus v1
+    const d2Text = stufe === undefined ? "" : `D2 = ${stufe}, ${String(d2.begruendung ?? "")}`;
+    return { feld: "bewertung", text, d2Feld: "module.lead-bevoelkerungsschutz.lagenradar.d2", d2: stufe, d2Text };
+  }
+  const text = String(sv?.sofort?.bewertung_text ?? "");
+  const d2 = sv?.sofort?.lagenradar?.d2;
+  return { feld: "sofort.bewertung_text", text, d2Feld: "sofort.lagenradar.d2", d2: typeof d2 === "number" ? d2 : undefined, d2Text: text };
+}
+
+/** Beide Prüfungen über alle Sachverhalte einer Meldung im Format des Beispielprofils (LEAD-Meldung-v1 oder -v2) */
 export function plausibilitaetPruefen(meldung: Meldung): PlausibilitaetsBefund[] {
   const out: PlausibilitaetsBefund[] = [];
   const svs: any[] = Array.isArray((meldung as any)?.sachverhalte) ? (meldung as any).sachverhalte : [];
   svs.forEach((sv, i) => {
-    const felder: [string, string][] = [
-      ...ANALYSEFELDER.map((f) => [`analyse.${f}`, String(sv?.analyse?.[f] ?? "")] as [string, string]),
-      ["sofort.bewertung_text", String(sv?.sofort?.bewertung_text ?? "")],
-    ];
+    const bw = bewertungUndD2(sv);
+    const felder: [string, string][] = [...ANALYSEFELDER.map((f) => [`analyse.${f}`, String(sv?.analyse?.[f] ?? "")] as [string, string]), [bw.feld, bw.text]];
     for (const [feld, text] of felder)
       for (const s of summenPruefen(text))
         out.push({
@@ -166,14 +187,14 @@ export function plausibilitaetPruefen(meldung: Meldung): PlausibilitaetsBefund[]
           auszug: s.auszug,
           text: `Angabe ${s.angabe.toLocaleString("de-DE")} (${s.art}), Summe der Klammerwerte ${s.summe.toLocaleString("de-DE")}`,
         });
-    const d2 = d2Pruefen(String(sv?.sofort?.bewertung_text ?? ""), sv?.sofort?.lagenradar?.d2);
+    const d2 = d2Pruefen(bw.d2Text, bw.d2);
     if (d2)
       out.push({
         art: "d2",
         sachverhalt: i + 1,
-        feld: "sofort.lagenradar.d2",
+        feld: bw.d2Feld,
         auszug: d2.auszug,
-        text: `D2 = ${sv.sofort.lagenradar.d2}, genannte Personenzahl ${d2.personen.toLocaleString("de-DE")} entspricht Stufe ${d2.erwartet}`,
+        text: `D2 = ${bw.d2}, genannte Personenzahl ${d2.personen.toLocaleString("de-DE")} entspricht Stufe ${d2.erwartet}`,
       });
   });
   return out;

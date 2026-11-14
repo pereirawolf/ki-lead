@@ -5,11 +5,11 @@ import { netzVorbereiten, oeffnen } from "./hilfen";
 test("Zwischenstand übersteht ein Neuladen der Seite", async ({ page }) => {
   await netzVorbereiten(page, () => "haengen");
   await oeffnen(page);
-  await page.getByLabel("Name der meldenden Stelle").fill("Stelle vor dem Neuladen");
+  await page.getByLabel("Meldende Stelle", { exact: true }).fill("Stelle vor dem Neuladen");
   await expect(page.getByText(/Zwischenstand automatisch gesichert/)).toBeVisible();
 
   await page.reload();
   await expect(page.locator(".kopf-ki")).toBeVisible();
-  await expect(page.getByLabel("Name der meldenden Stelle")).toHaveValue("Stelle vor dem Neuladen");
+  await expect(page.getByLabel("Meldende Stelle", { exact: true })).toHaveValue("Stelle vor dem Neuladen");
   await expect(page.getByText(/Zwischenstand automatisch gesichert/)).toBeVisible();
 });

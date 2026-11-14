@@ -169,7 +169,7 @@ export function pflichtHinweise(d: Meldung, ui: UiKonfig): Befund[] {
 }
 
 /** `referenzraum`: Referenzraum des Profils für die Leitfrage des Bewertungstexts (GK-2026-W44-12); ohne Angabe allgemein. */
-export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, referenzraum?: string): Befund[] {
+export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, referenzraum?: string, module: string[] = []): Befund[] {
   const r = ui.rollen;
   const ks = ui.kennsaetze || {};
   const out: Befund[] = [];
@@ -234,7 +234,7 @@ export function ausfuellHinweise(d: Meldung, ui: UiKonfig, zeitzone?: string, re
   // Zeitstrahl, Kennungen und Bezug (seit 0.6.9)
   zeitstrahlHinweise(finalSicht, ui).forEach((b) => out.push({ ...b, text: `${b.code?.startsWith("ZEITSTRAHL") ? "Zeitstrahl" : "Kennung"}: ${b.text}` }));
   // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Prüfebene 2 im Prüfschritt der Maske
-  out.push(...referenzBefunde(d, ui));
+  out.push(...referenzBefunde(d, ui, module));
   return out;
 }
 

@@ -132,10 +132,11 @@ describe("Arbeitsanweisungen und Kodierleitfaden", () => {
     const { profil: m } = await profil("muster");
     const doks = arbeitsgrundlagen(m!);
     expect(doks.map((d) => [d.rolle, d.quelle, d.version])).toEqual([
-      ["erfassung", "paket", "0.5.2"],
+      // Fassungen der Vorlage 1.0.0 (LEAD-Meldung-v2, UP-2026-W45-06)
+      ["erfassung", "paket", "1.0"],
       ["verdichtung", "app", undefined],
       ["kurzfassung", "app", undefined],
-      ["kodierleitfaden", "paket", "0.5"],
+      ["kodierleitfaden", "paket", "1.0"],
     ]);
     expect(doks[1].text).toBe(VERDICHTUNG_S2);
     expect(doks[2].text).toBe(STANDARD_ANWEISUNG);

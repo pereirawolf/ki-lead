@@ -101,17 +101,17 @@ describe("UX-2026-W45-06, -08, -09: Übersicht", () => {
     expect(gruppen).toEqual(["Lage", "Redaktion"]);
     expect([...document.querySelectorAll(".lb-kennzahl")].every((k) => k.tagName === "BUTTON")).toBe(true);
     expect(kacheln()).toContain("8 Sachverhalte → davon 1 aus eigener Meldung");
-    expect(kacheln()).toContain("5 Bewertung: erheblich → davon 1 aus eigener Meldung");
+    expect(kacheln()).toContain("5 Beurteilung: erheblich → davon 1 aus eigener Meldung");
     expect(document.querySelector(".lb-kennzahl-null")?.textContent).toMatch(/^0/);
 
     // Beurteilung mit allen Stufen, „Meldende Stellen“ entfällt
-    const beurteilung = [...document.querySelectorAll(".lb-balken")].find((b) => b.querySelector("h4")?.textContent === "Bewertung")!;
+    const beurteilung = [...document.querySelectorAll(".lb-balken")].find((b) => b.querySelector("h4")?.textContent === "Beurteilung")!;
     expect([...beurteilung.querySelectorAll(".lb-balken-label")].map((l) => l.textContent)).toEqual(["kritisch", "erheblich", "geringfügig"]);
     expect(seitentext()).not.toContain("Meldende Stellen");
 
     await klick(document.querySelector<HTMLInputElement>(".lb-eigene input")!);
     await bisWahr(() => expect(kacheln()).toContain("7 Sachverhalte →"));
-    expect(kacheln()).toContain("4 Bewertung: erheblich →");
+    expect(kacheln()).toContain("4 Beurteilung: erheblich →");
     expect(seitentext()).toContain("Auswahl ohne eigene Meldung: 6 von 7 Meldungen");
   });
 
@@ -163,7 +163,7 @@ describe("UX-2026-W45-14: Filter der Sachverhalte", () => {
     await ilka();
     await klick(knopf("Sachverhalte"));
     const gruppe = (name: string) => document.querySelector<HTMLElement>(`.lb-chips[aria-label="${name}"]`)!;
-    expect([...gruppe("Art").querySelectorAll("button")].map((b) => b.textContent)).toEqual(
+    expect([...gruppe("Ereignisart(en)").querySelectorAll("button")].map((b) => b.textContent)).toEqual(
       expect.arrayContaining(["Unwetter / Sturm (7)", "Stromausfall / Blackout (6)", "KRITIS-Ausfall (2)"]),
     );
     await klick(knopf("KRITIS-Ausfall (2)"));
@@ -272,8 +272,18 @@ describe("UX-2026-W45-25: Rohtabelle", () => {
     await ilka();
     await klick(knopf("Rohtabelle"));
     const kopf = [...document.querySelectorAll(".lb-rohtabelle thead th")].map((t) => t.textContent);
-    expect(kopf[0]).toBe("Auswahl Land/Bund");
-    expect(kopf.slice(0, 9)).toEqual(expect.arrayContaining(["Name der meldenden Stelle", "Meldezeitpunkt", "Kennung", "Bezeichnung", "Art", "Ort"]));
+    // Seit 0.9.0 (LEAD-Meldung-v2): Kernspalten in der Reihenfolge des Schemas, beschriftet mit dem Pfad
+    expect(kopf[0]).toBe("Absender › Meldende Stelle");
+    expect(kopf.slice(0, 9)).toEqual(
+      expect.arrayContaining([
+        "Absender › Gebiet der meldenden Stelle › Name",
+        "Meldezeitpunkt (t0)",
+        "Kennung",
+        "Bezeichnung",
+        "Fachmodule › Bevölkerungsschutz (Modul) › Ereignisart(en)",
+        "Raum › Beschreibung",
+      ]),
+    );
     expect(document.querySelectorAll(".lb-rohtabelle tbody tr")).toHaveLength(8);
     const zeile = document.querySelector(".lb-rohtabelle tbody tr")!;
     expect(zeile.querySelectorAll(".lb-zelle").length).toBe(kopf.length);

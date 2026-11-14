@@ -1,6 +1,6 @@
 // Testlauf „S3 Reparatur (aus Musterfassung)“, bis 0.5.16 „Prüffall Reparatur“, für die Wahl des Reparaturmodells
 // (seit 0.5.13, Befund AV-2026-W43-25). Die Musterfassung Ilka
-// (evaluation/material/ilka-musterfassung.json) wird gezielt beschädigt und als Antwort von S2 eingespielt; S1 entfällt
+// (evaluation/material/ilka-musterfassung.v2.json, seit 0.9.0; bis 0.8.3 die v1-Fassung) wird gezielt beschädigt und als Antwort von S2 eingespielt; S1 entfällt
 // (fester Gegenstand evaluation/material/ilka-s1-zuschnitt-a.json, zwei Sachverhalte wie die Musterfassung). Danach
 // läuft die Pipeline wie in der App: Nachbearbeitung, Schemaprüfung und bis zu zwei Reparaturen mit dem gewählten
 // Modell. Nur S3 ruft einen Anbieter auf.
@@ -24,7 +24,8 @@ import { fallAuftrag, fallMaterial, type FallDaten } from "./vergleichslauf";
 import { csv } from "./vergleichslauf-export";
 import { musterTexte } from "./evaluationsdaten";
 
-export const ENTWURF_DATEI = "evaluation/material/ilka-musterfassung.json";
+/** Seit 0.9.0 (UP-2026-W45-06) die v2-Fassung der Musterfassung; Defekte an den Feldern von LEAD-Meldung-v2 */
+export const ENTWURF_DATEI = "evaluation/material/ilka-musterfassung.v2.json";
 export const S1_DATEI = "evaluation/material/ilka-s1-zuschnitt-a.json";
 
 /** Musterfassung und Zuschnitt, seit 0.6.3 (TP-2026-W44-25) erst bei Bedarf geladen */
@@ -87,12 +88,14 @@ export const ENTWURF_MODELL = "praeparierter-entwurf";
 export interface Defekt {
   id: string;
   titel: string;
-  /** beschädigte Stellen (Pfade wie in der Meldung, z. B. sachverhalte[1].sofort.lagenradar.d2) */
+  /** beschädigte Stellen (Pfade wie in der Meldung, z. B. sachverhalte[1].module.lead-bevoelkerungsschutz.lagenradar.d2.stufe) */
   pfade: string[];
   anwenden(m: any): void;
 }
 
-const radar = (sv: number, achse: string) => `sachverhalte[${sv}].sofort.lagenradar.${achse}`;
+const BS = "lead-bevoelkerungsschutz";
+const radar = (sv: number, achse: string) => `sachverhalte[${sv}].module.${BS}.lagenradar.${achse}.stufe`;
+const achse = (m: any, sv: number, a: string) => m.sachverhalte[sv].module[BS].lagenradar[a];
 
 /**
  * Fehlerarten, die die Nachbearbeitung nicht behebt und die Schemaprüfung meldet (geprüft in
@@ -103,34 +106,34 @@ export const DEFEKTE: Defekt[] = [
     id: "R1-radar-skala",
     titel: "Radarwert außerhalb der Skala (D2 = 7 im Stromausfall)",
     pfade: [radar(1, "d2")],
-    anwenden: (m) => (m.sachverhalte[1].sofort.lagenradar.d2 = 7),
+    anwenden: (m) => (achse(m, 1, "d2").stufe = 7),
   },
   {
     id: "R2-beurteilung",
     titel: "Unzulässige Beurteilung „hoch“ im Stromausfall",
-    pfade: ["sachverhalte[1].sofort.beurteilung"],
-    anwenden: (m) => (m.sachverhalte[1].sofort.beurteilung = "hoch"),
+    pfade: ["sachverhalte[1].bewertung.beurteilung.stufe"],
+    anwenden: (m) => (m.sachverhalte[1].bewertung.beurteilung.stufe = "hoch"),
   },
   {
     id: "R3-ereignisart",
     titel: "Unbekannte Ereignisart „Orkan“ bei den Sturmfolgen",
-    pfade: ["sachverhalte[0].art"],
-    anwenden: (m) => (m.sachverhalte[0].art = ["Orkan"]),
+    pfade: [`sachverhalte[0].module.${BS}.ereignisarten`],
+    anwenden: (m) => (m.sachverhalte[0].module[BS].ereignisarten = ["Orkan"]),
   },
   {
     id: "R4-typ",
     titel: "Radarwert als Text („3“ statt 3) bei den Sturmfolgen",
     pfade: [radar(0, "d4")],
-    anwenden: (m) => (m.sachverhalte[0].sofort.lagenradar.d4 = String(m.sachverhalte[0].sofort.lagenradar.d4 ?? 3)),
+    anwenden: (m) => (achse(m, 0, "d4").stufe = String(achse(m, 0, "d4").stufe ?? 3)),
   },
   {
     id: "R5-mehrere",
     titel: "Drei Fehler zugleich (R1, R2 und R3)",
-    pfade: [radar(1, "d2"), "sachverhalte[1].sofort.beurteilung", "sachverhalte[0].art"],
+    pfade: [radar(1, "d2"), "sachverhalte[1].bewertung.beurteilung.stufe", `sachverhalte[0].module.${BS}.ereignisarten`],
     anwenden: (m) => {
-      m.sachverhalte[1].sofort.lagenradar.d2 = 7;
-      m.sachverhalte[1].sofort.beurteilung = "hoch";
-      m.sachverhalte[0].art = ["Orkan"];
+      achse(m, 1, "d2").stufe = 7;
+      m.sachverhalte[1].bewertung.beurteilung.stufe = "hoch";
+      m.sachverhalte[0].module[BS].ereignisarten = ["Orkan"];
     },
   },
 ];
@@ -175,16 +178,19 @@ export function weiche(entwurf: Meldung, kennung: string, echt: LlmAnbieter): Ll
   };
 }
 
-/** Pfade und Werte der geprüften Inhalte; die App-Felder (_entstehung, _status, freigabe) zählen nicht */
+/**
+ * Pfade und Werte der geprüften Inhalte; die App-Felder (Status, Entstehung, Freigabe, Kennungen und Bezug, die die App
+ * vergibt) zählen nicht. Seit 0.9.0 die Felder von LEAD-Meldung-v2.
+ */
 export function inhaltsfelder(m: any): Map<string, string> {
   const out = new Map<string, string>();
   const ablegen = (pfad: string, v: unknown) => {
     if (v !== null && typeof v === "object" && !Array.isArray(v)) for (const [k, x] of Object.entries(v)) ablegen(`${pfad}.${k}`, x);
     else out.set(pfad, JSON.stringify(v ?? null));
   };
-  for (const k of ["land", "meldende_stelle", "meldezeitpunkt", "meldezeitraum", "quellen"]) ablegen(k, m?.[k]);
+  for (const k of ["absender", "meldezeitpunkt", "meldezeitraum", "quellen"]) ablegen(k, m?.[k]);
   (Array.isArray(m?.sachverhalte) ? m.sachverhalte : []).forEach((sv: any, i: number) => {
-    for (const k of ["eintritt", "art", "ort", "bezeichnung", "analyse", "sofort"]) ablegen(`sachverhalte[${i}].${k}`, sv?.[k]);
+    for (const k of ["bezeichnung", "eintritt", "raum", "analyse", "bewertung", "handlungsbedarf", "module"]) ablegen(`sachverhalte[${i}].${k}`, sv?.[k]);
   });
   return out;
 }
@@ -206,7 +212,7 @@ export function inhaltVergleichen(ist: Meldung | undefined, soll: Meldung, ausna
   return { geprueft, gleich, abweichungen };
 }
 
-/** Wert an einem Pfad wie „sachverhalte[1].sofort.lagenradar.d2“ */
+/** Wert an einem Pfad wie „sachverhalte[1].bewertung.beurteilung.stufe“ */
 export function wertAn(m: any, pfad: string): unknown {
   return pfad
     .replace(/\[(\d+)\]/g, ".$1")
