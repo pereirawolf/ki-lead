@@ -1,6 +1,6 @@
 # KI-LEAD – Einordnung nach der KI-Verordnung und Systemkarte
 
-Fassung 1.7 vom 06.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.13) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Fassung 1.8 vom 14.11.2026, gilt für App-Version 0.6.6 (Abschnitt 9.1 für 0.7.13) und die mitgelieferten Profile (seit 1.4 auch „Lagebild Justiz“ 0.1.0) · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Dieses Dokument ordnet KI-LEAD nach der Verordnung (EU) 2024/1689 (KI-Verordnung, KI-VO) in der Fassung der Verordnung (EU) 2026/1744 (Digital Omnibus on AI) ein und beschreibt das System. Es ist eine Einschätzung des Herausgebers, **keine Rechtsberatung** und keine verbindliche Einstufung. Wer KI-LEAD dienstlich erprobt, prüft die Einordnung für den eigenen Einsatz selbst.
 
@@ -76,7 +76,7 @@ KI-LEAD erzeugt Text in allen drei Arbeitsprodukten. Ob die Pflicht den Herausge
 | Management Summary als TXT | erste Zeile „[KI-generiert mit KI-LEAD &lt;Version&gt;, Modell &lt;id&gt;; vor Verwendung fachlich prüfen]“; der Text zum Kopieren bleibt ohne diese Zeile |
 | Laufprotokoll als JSON | Modell und Parameter je Stufe |
 
-Die Herkunft stammt immer aus dem Entstehungsfeld der Meldung; die App erfindet keine (`src/dokumente/kennzeichnung.ts`). Wird ein KI-Entwurf von Hand überarbeitet, bleibt er als „KI-Entwurf“ gekennzeichnet.
+Die Herkunft stammt immer aus dem Entstehungsfeld der Meldung; die App erfindet keine (`src/dokumente/kennzeichnung.ts`). Bei Meldungen nach LEAD-Meldung-v2 (KI-Pipeline seit App 0.8.0) setzt die App `entstehung` als Objekt mit Verfahren, Werkzeug, Profil, Regelwerk, Modellen je Stufe und Lauf; die Kennzeichnung liest Modelle und Werkzeug daraus. Kennzahlen, die aus einem Kennzahlen-Baustein übernommen sind, weist das Modul `lead-baustein` mit Datei und Prüfsumme aus; ihre Werte stammen aus dem Baustein, nicht aus dem Modell. Wird ein KI-Entwurf von Hand überarbeitet, bleibt er als „KI-Entwurf“ gekennzeichnet.
 
 **Grenzen:** Die Metadaten sind nicht signiert. Ein Wasserzeichen im Text kann KI-LEAD nicht selbst erzeugen; das wäre Sache der Modellanbieter. Die zwei Ebenen des Verhaltenskodex erfüllt KI-LEAD deshalb nicht ([Spezifikation](SPEZIFIKATION.md), Abschnitt 10).
 
@@ -183,6 +183,7 @@ Prüftiefe: Der Wortlaut von Art. 2 stammt aus dem AI Act Service Desk der Kommi
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 1.8 | 14.11.2026 | Abschnitt 6.1: Kennzeichnung bei Meldungen nach LEAD-Meldung-v2 (Entstehung als Objekt, Modelle je Stufe) und Herkunft übernommener Kennzahlen im Modul `lead-baustein` (App 0.8.0, UP-2026-W45-04) |
 | 1.7 | 06.11.2026 | Abschnitt 3: Endpunkt der Stelle (Betreiberbuild, seit App 0.6.17) mit Einordnung wie beim lokalen Modell (Einschätzung des Herausgebers); Abschnitt 9.1: Vorgabe der App nur, solange der Build Anthropic freigibt (OB-2026-W45-01). App unverändert |
 | 1.6 | 05.11.2026 | Abschnitt 9.1: S1 der Vorgabe der App und des Standard-Profils Anthropic mit claude-sonnet-5-5 „mittel“ statt claude-haiku-5-5 „hoch“; Orientierungssuche damit ohne erzwungene Suche (App 0.7.13). Einordnung unverändert |
 | 1.5 | 03.11.2026 | Abschnitt 9.1: Aufwandsstufen von Mistral nach Modell, Large 4 seit App 0.6.17 mit „mittel“ (DK-2026-W45-06). App unverändert |

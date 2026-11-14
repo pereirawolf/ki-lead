@@ -1233,3 +1233,23 @@ Angepasst mit geändertem Soll: `tests/lagebild/lagebild.test.ts` (Tendenz „St
 | Eine ausstehende Änderung steht nach dem Aushängen der App sofort im Speicher; danach schreibt kein Zeitgeber mehr | Zwischenstand beim Aushängen (seit 0.7.23) › … | `tests/ui/app.test.ts` |
 
 Angepasst ohne geändertes Soll: `tests/ui/ueber.test.ts` (wartet, bis die Einstellungen stehen, bevor „Über KI-LEAD“ geklickt wird), `tests/browser/ux-2026-w45.spec.ts` (Lage der Reiter unter dem Kopfbereich wiederholt geprüft, bis das Hinweisband schmaler geworden ist).
+
+## KI-Pipeline nach LEAD-Meldung-v2 (0.8.0, UP-2026-W45-04)
+
+Testprofil: Landes- und Beispielprofil mit der Zusammenstellung unter `formate/lead-meldung-v2/beispiel(-land)` und der Vorlage der Darstellungsdatei (`tests/support/v2profil.ts`, seit 0.8.0 mit den Variablen des Absenders als Pfade). Soll unabhängig vom Code: das fiktive v2-Beispiel Thüringen, die unveränderten Bausteine aus Thessa und KSNV und von Hand gesetzte Werte.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Ausgabeschema ohne Bedingungen und Muster, ohne Felder der App, nur bekannte Module, Bewertung Pflicht; Beispiel ohne App-Felder gültig (Ajv); strenges Schema ohne offene Objekte; v1 unverändert | UP-2026-W45-04: Ausgabeschema für die KI … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Systemauftrag mit Ausgabeschema und Ausgaberegeln (Zuordnung der v1-Kennsätze zu Feldern), Reparatur mit Ausgabeschema | UP-2026-W45-04: Ausgabeschema für die KI … › Systemauftrag …, Reparatur … | `tests/pipeline/v2-pipeline.test.ts` |
+| Nachbearbeitung: Identität, Status, Absender (Land und Bund), t0 mit Versatz, Freigabe leer, Entstehung mit SOPs, Kodierleitfaden, Arbeitsanweisung, Modellen je Stufe und Lauf; Zeitangaben vereinheitlicht; UUID Version 7 | UP-2026-W45-04: Nachbearbeitung nach v2 … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Kennungen mit sechs Zufallszeichen, Bezug als Objekte mit meldung_id, Zeitstrahl je Sachverhalt mit IDs, erstmals_gemeldet und Bewertungszeilen; Vormeldung unverändert und wiederhergestellt; Quellen-IDs der Vormeldung | UP-2026-W45-04: Kennungen, Bezug und Zeitstrahl nach v2 … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Übernahme aus Bausteinen: Werte wiederhergestellt, Kennzahl und Quelle ergänzt, Teilmenge umgesetzt (KSNV); Einsatzmeldungen und Prüfsumme (Thessa); unbekannte Verweise, fehlender Verweis, ungenutzter Baustein; Referenzprüfung kennt das Modul | UP-2026-W45-04: Übernahme aus Kennzahlen-Bausteinen … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Steuerungsblock v2 und ganzer Lauf S2/S3 mit Skriptanbieter, auch mit Reparatur | UP-2026-W45-04: Steuerungsblock und Lauf S2/S3 mit v2 › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Management Summary: Fristen aus `handlungsbedarf.fristen`, ohne Zeitstrahl und Bausteinherkunft; abweichende Bewertung aus dem Feld | UP-2026-W45-04: Management Summary mit v2-Feldern … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Abnahme nach der Befunddatei: drei Kennzahlen aus Sonneberg 10:00 Uhr mit neuen Nummern, Teilmenge umgeschrieben, Werte unverändert, Wertabweichung gemeldet; Einsatzmeldung als Maßnahme „begonnen“ und Zeitstrahlzeile 13.10.2026, 23:30 Uhr; keine Kennung aus `herleitung`; Beginn nach t0 und fehlende Obermenge | UP-2026-W45-04: Übernahme aus Kennzahlen-Bausteinen … › Abnahme nach der Befunddatei …, Einsatzmeldung mit Beginn nach t0 … | `tests/pipeline/v2-pipeline.test.ts` |
+| KI-Kennzeichnung liest Modelle und Werkzeug aus der Entstehung nach v2 | UP-2026-W45-04: KI-Kennzeichnung aus der Entstehung nach v2 › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Kennzahlregeln für Bausteine in Abschnitt 6 der Kodierleitfäden von Beispiel- und Landesprofil; die Regeln der App verweisen nur darauf | UP-2026-W45-04: Kennzahlregeln an einer Stelle … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Modul `lead-baustein` ist ein gültiges Schema nach Draft 2020-12; erzeugte Profilschemata aktuell | LEAD-Meldung-v2: Schemata › Kern- und Modulschema …, Zusammenstellung … | `tests/format/lead-meldung-v2.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfaden 1.13.0). Angepasst ohne geändertes Soll: `tests/format/lead-meldung-v2.test.ts` (Modul `lead-baustein` in der Liste der Schemata).

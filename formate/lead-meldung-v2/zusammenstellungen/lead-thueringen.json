@@ -8,6 +8,10 @@
     "lead-bevoelkerungsschutz": {
       "datei": "module/lead-bevoelkerungsschutz.schema.json",
       "pflicht": true
+    },
+    "lead-baustein": {
+      "datei": "module/lead-baustein.schema.json",
+      "pflicht": false
     }
   },
   "einschraenkungen": {

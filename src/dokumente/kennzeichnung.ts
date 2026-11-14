@@ -27,10 +27,14 @@ export function herkunftAusMeldung(d: Meldung | undefined, profil: Profil): Herk
   const e = feld && d && typeof d === "object" ? (d as Record<string, any>)[feld] : undefined;
   if (!e || typeof e !== "object" || typeof e.verfahren !== "string" || !e.verfahren) return { herkunft: "unbekannt" };
   const text = (v: unknown) => (typeof v === "string" && v ? v : undefined);
+  // LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04): Modelle je Stufe als Liste, Werkzeug als Objekt
+  const modelle = Array.isArray(e.modelle) ? [...new Set(e.modelle.map((m: any) => text(m?.modell)).filter(Boolean))].join(", ") : "";
+  const werkzeug =
+    e.werkzeug && typeof e.werkzeug === "object" ? [text(e.werkzeug.name), text(e.werkzeug.version)].filter(Boolean).join(" ") : text(e.werkzeug);
   return {
     herkunft: e.verfahren === "KI-Entwurf" ? "ki" : "manuell",
-    modell: text(e.modell),
-    werkzeug: text(e.werkzeug),
+    modell: text(e.modell) ?? (modelle || undefined),
+    werkzeug: werkzeug || undefined,
     erstellt: text(e.erstellt),
   };
 }

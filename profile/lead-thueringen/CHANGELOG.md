@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.9.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-04, freigegeben vom Herausgeber am 06.11.2026. Zweite Stelle wie beim Beispielprofil (1.43.0).
+
+- **Kodierleitfaden (1.13.0) und Arbeitsanweisung Erfassung (1.11.5)** neu abgeleitet aus dem Beispielprofil 1.43.0 (`npm run profil:land`): Regeln für Kennzahlen aus Kennzahlen-Bausteinen in Abschnitt 6; Beispielwert der Kodierleitfaden-Fassung.
+- **Geteilte SOP-Sammelmappe 3.23.6:** Verweis in A.3 und Gültigkeitsstand in Teil A.
+- Schema, Darstellungsdatei, Kontakte und Beispiellagen sind unverändert.
+
 ## 1.8.2 – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026 zur Darstellung der Schrittleiste (Grunddesign 1.7, Regel LD-T05; App 0.7.17). Dritte Stelle: nur Beschriftung der Oberfläche, Feldnamen, Schema, Arbeitsanweisungen, Kodierleitfaden und SOP-Texte unverändert.

@@ -79,8 +79,10 @@ export function primaerquelleBelegt(
   einstiege: AmtlicherEinstieg[],
 ): boolean {
   const rolle = p.ui.rollen.quellen;
-  const eintraege = rolle ? parseQuellen(holeWert(meldung, rolle)) : [];
-  return eintraege.some((x) => x.code === "A" || x.code === "B") || amtlichErreicht(a, einstiege);
+  // v1: Quellenverzeichnis als Text; LEAD-Meldung-v2 (seit 0.8.0): Quellenobjekte mit Kategorie
+  const wert = rolle ? holeWert(meldung, rolle) : undefined;
+  const codes = Array.isArray(wert) ? wert.map((q: any) => String(q?.kategorie ?? "")) : parseQuellen(wert).map((x) => x.code);
+  return codes.some((c) => c === "A" || c === "B") || amtlichErreicht(a, einstiege);
 }
 
 /** Aussagen der Kurzantwort, die eine Recherche oder geprüfte Unzugänglichkeit behaupten */

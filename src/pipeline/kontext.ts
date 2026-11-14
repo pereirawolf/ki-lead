@@ -8,6 +8,7 @@ import { ersetzePlatzhalter, kennsatzPlatzhalter, profilPlatzhalter, type Auftra
 import { fachSops, gemeinsameSops, istBaustein, sopKennung } from "../profil/sop";
 import { VERDICHTUNG_S2 } from "../profil/standardtexte";
 import type { S1Vorschlag } from "./lauf";
+import { APP_FELDER_V2, ausgabeSchemaKi, istV2Profil } from "./ausgabeschema";
 
 // Seit 0.6.3 (TP-2026-W44-23) im Profilmodul; hier weiter exportiert, damit die Schnittstelle der Pipeline gleich bleibt
 export { fachSops, gemeinsameSops, istBaustein, istInhaltsgeruest } from "../profil/sop";
@@ -89,15 +90,68 @@ function kodierleitfaden(profil: Profil): string {
 
 /** Statischer, cachebarer Block mit Schema, Darstellungsdatei, Kodierleitfaden und gemeinsamen SOP-Regeln. */
 export function profilGrundlagen(profil: Profil): string {
+  // LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04): Ausgabeschema ohne Bedingungen und App-Felder, dazu die Ausgaberegeln
+  const schemaTeil = istV2Profil(profil)
+    ? `## Ausgabeschema der Meldung (Schemakennung ${profil.manifest.meldung.schema_id}, von der App abgeleitet)\n\n\`\`\`json\n${JSON.stringify(ausgabeSchemaKi(profil), null, 1)}\n\`\`\`\n\n${v2Ausgaberegeln(profil)}`
+    : `## JSON-Schema der Meldung (Schemakennung ${profil.manifest.meldung.schema_id})\n\n\`\`\`json\n${JSON.stringify(profil.schema, null, 1)}\n\`\`\``;
   const teile = [
     `# Profilgrundlagen: ${profil.manifest.name} (Version ${profil.manifest.version})`,
-    `## JSON-Schema der Meldung (Schemakennung ${profil.manifest.meldung.schema_id})\n\n\`\`\`json\n${JSON.stringify(profil.schema, null, 1)}\n\`\`\``,
+    schemaTeil,
     `## Darstellungsdatei (Feldbezeichnungen, Hinweise, Stufentexte, Kennsätze, Quellenkategorien)\n\n\`\`\`json\n${JSON.stringify(profil.ui, null, 1)}\n\`\`\``,
   ];
   const kl = kodierleitfaden(profil);
   if (kl) teile.push(`## Kodierleitfaden\n\n${kl}`);
   for (const s of gemeinsameSops(profil)) teile.push(`## SOP-Sammelmappe: ${s.titel}\n\n${s.text}`);
   return teile.join("\n\n");
+}
+
+/** true, wenn die Arbeitsanweisung Erfassung noch Felder von LEAD-Meldung-v1 nennt (bis zur Umstellung der Profile) */
+export function anweisungNenntV1(profil: Profil): boolean {
+  return /sofort\.|bewertung_text|_entstehung/.test(anweisungErfassungRoh(profil));
+}
+
+/** Modulkennungen je Sachverhalt, die das Profilschema kennt */
+function moduleDesSchemas(profil: Profil): string[] {
+  return Object.keys(profil.schema?.$defs?.module?.properties || {});
+}
+
+/**
+ * Ausgaberegeln der App für Profile mit LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04), statisch und damit im
+ * gecachten Teil: was die App setzt, Zeitangaben, Quellen-IDs und Belege. Nennt die Arbeitsanweisung noch Felder von
+ * v1, folgt die Zuordnung nach docs/LEAD-MELDUNG-V2.md Abschnitt 11, damit Kennsätze in Felder statt in Fließtext gehen.
+ */
+export function v2Ausgaberegeln(profil: Profil): string {
+  const module = moduleDesSchemas(profil);
+  const bevs = module.includes("lead-bevoelkerungsschutz");
+  const z = [
+    "## Ausgabe nach LEAD-Meldung-v2 (von der App vorgegeben)",
+    "",
+    `- Gib die Meldung nach dem Ausgabeschema aus. Diese Felder setzt die App, du gibst sie nicht aus: ${APP_FELDER_V2.map((f) => `\`${f}\``).join(", ")}, \`entstehung\` außer \`regelwerk.sop\` (die angewandten SOPs und Bausteine zum Abgleich), \`erstmals_gemeldet\` im Zeitstrahl. Bedingungen des vollständigen Profilschemas und die Verweise prüft die App nach deiner Antwort.`,
+    "- Zeitangaben: Kalendertag `JJJJ-MM-TT` oder Zeitpunkt mit UTC-Versatz (`2026-10-14T10:30+02:00`); eine Uhrzeit nur, wenn sie belegt ist. Unbekannt ist `null`, nicht leerer Text. Eine Wanduhrzeit ohne Versatz ergänzt die App in der Zeitzone des Profils.",
+    "- Quellen sind Objekte in `quellen` mit den IDs Q1, Q2 … in der Reihenfolge der ersten Nennung. In Texten verweist du mit `[Qn]`, in Listen (`quellen` einer Maßnahme, Kennzahl, Zeitstrahlzeile, Radarachse) mit der ID. Nur Fundstellen aus Websuche, abgerufenen Seiten und Material; keine erfundenen URLs.",
+    "- Was strukturiert erfasst wird (Maßnahmen, Empfehlungen, Fristen, Kennzahlen, Neubewertungsanlässe, abweichende Bewertungen, Zeitstrahl), steht nur im Feld, nicht ein zweites Mal als Satz im Fließtext.",
+    "- Kennzahlen (`kennzahlen`) nur mit belegtem Wert oder `null`; Regeln nach dem Kodierleitfaden (Kennzahlen).",
+  ];
+  if (bevs)
+    z.push(
+      "- Lagenradar im Modul `lead-bevoelkerungsschutz`: je Achse `stufe`, `status` (`belegt`, `mindestwert`, `offen` mit `offen_grund`), `begruendung` und `quellen`; eine offene Achse hat `stufe: null`.",
+    );
+  if (anweisungNenntV1(profil))
+    z.push(
+      "",
+      "Die Arbeitsanweisung nennt noch Felder von LEAD-Meldung-v1. Bis zu ihrer Umstellung gilt diese Zuordnung:",
+      "- Quellenverzeichnis (Text) → `quellen` (Objekte); `zeitstrahl` (Text) → `zeitstrahl` je Sachverhalt (Objekte `id`, `zeit`, `typ`, `text` ohne Verweis, `quellen`); `ort` → `raum.beschreibung`; `eintritt` → `eintritt` mit `zeit` und `genauigkeit`.",
+      "- `analyse.massnahmen_empfehlungen` → `handlungsbedarf` (`massnahmen`, `empfehlungen`, `fristen`, `erlaeuterung`).",
+      "- `sofort.bewertung_text` → `bewertung` (`kernaussage`, `referenzraum`, Begründungen von Beurteilung und Tendenz, `erlaeuterung`); `sofort.beurteilung` und `sofort.tendenz` → `bewertung.beurteilung.stufe` und `bewertung.tendenz.richtung` (keine Angabe = `null`).",
+      "- Kennsätze werden Felder: „Handlungsrelevant bis:“ → `handlungsbedarf.fristen`, „Neubewertung bei:“ → `bewertung.neubewertung_bei`, „Abweichende Bewertung:“ → `bewertung.abweichende_bewertungen`, „Änderung zur Vormeldung:“ → `bewertung.aenderung_zur_vormeldung`, „Abschluss im Lagebild:“ → `bewertung.abschluss`.",
+      ...(bevs
+        ? [
+            "- `art` → `module.lead-bevoelkerungsschutz.ereignisarten`; `sofort.lagenradar` → `module.lead-bevoelkerungsschutz.lagenradar` (Radarzeilen des Bewertungstexts → `begruendung` und `quellen` je Achse).",
+          ]
+        : []),
+      "- `bezug` (Kennungen) → `bezug` mit Objekten `{kennung, art}`; `_entstehung.sop` → `entstehung.regelwerk.sop` mit `{kennung, fassung}`.",
+    );
+  return z.join("\n");
 }
 
 export function sopBlock(profil: Profil, ids: string[]): string {
@@ -267,11 +321,64 @@ export interface Steuerung {
   zeitstrahl?: ZeitstrahlSteuerung;
   /** Zahl der Kennzahlen-Bausteine im Material (seit 0.6.24, UP-2026-W45-01) */
   bausteine?: number;
+  /** Kennung, Bezug, Zeitstrahl und Bausteine bei LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04); ersetzt `zeitstrahl` */
+  v2?: V2Steuerung;
 }
 
-/** Regel für Kennzahlen-Bausteine im Material (Übergangsregel h, solange Kennzahlen im Fließtext stehen) */
+export interface V2Steuerung {
+  /** Kennungen der jüngsten eigenen Vormeldung */
+  kennungenVormeldung: string[];
+  /** Nächste freie Nummer der Zeitstrahlzeilen (1 ohne Vormeldung) */
+  naechsteZ: number;
+  /** Das Profilschema kennt das Modul lead-baustein */
+  modulBaustein: boolean;
+}
+
+/**
+ * Regel für Kennzahlen-Bausteine im Material bei LEAD-Meldung-v1 (Übergangsregel h, solange Kennzahlen im Fließtext
+ * stehen). Seit 0.8.0 (UP-2026-W45-04) stehen die fachlichen Kennzahlregeln nur im Kodierleitfaden des Profils
+ * (Abschnitt 6, Kennzahlen); hier steht nur noch die Mechanik der App.
+ */
 export const BAUSTEIN_REGEL =
-  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Gib übernommene Kennzahlen mit Wert, Einheit, Gegenstand und Datenstand unverändert wieder und belege jeden Satz mit dem Eintrag des Bausteins im Quellenverzeichnis (Vorschlag im Attribut `quellenzeile`, Nummer nach deinem Verzeichnis). Addiere keine Kennzahlen verschiedener Einheit, Art oder verschiedenen Datenstands; ein Mindestwert bleibt ein Mindestwert, eine Summe kennzeichnest du als Summe. Einsatzmittel zählen am Standort, Einsätze am Einsatzort. Die App gleicht die Zahlen im Text mit dem Baustein ab.';
+  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens und belege jeden Satz mit dem Eintrag des Bausteins im Quellenverzeichnis (Vorschlag im Attribut `quellenzeile`, Nummer nach deinem Verzeichnis). Die App gleicht die Zahlen im Text mit dem Baustein ab.';
+
+/** Regel für Kennzahlen-Bausteine bei LEAD-Meldung-v2 mit Modul lead-baustein (seit 0.8.0, UP-2026-W45-04) */
+export const BAUSTEIN_REGEL_V2 =
+  '- Kennzahlen-Bausteine im Material (`<material art="kennzahlen-baustein">`): Übernimm Kennzahlen nach den Kennzahlregeln des Kodierleitfadens als Objekte in `kennzahlen` des Sachverhalts, mit den Angaben des Bausteins und eigener ID (K1, K2 … je Sachverhalt). Nimm den Baustein mit dem Quellenobjekt aus seinem Feld `quellen` in dein Quellenverzeichnis auf (ID nach deinem Verzeichnis). Verweise im Modul `lead-baustein` des Sachverhalts darauf: je Baustein `format`, `fassung`, `quelle` (ID in deinem Verzeichnis) und `kennzahlen` mit `{kennzahl: ID in der Meldung, baustein_kennzahl: ID im Baustein}`; Einsatzmeldungen des Bausteins, auf die sich der Sachverhalt stützt, nennst du mit ihrer Kennung unter `einsatzmeldungen`; Maßnahme und Zeitstrahlzeile dazu legt die App aus dem Baustein an, du schreibst sie nicht selbst. Die App setzt Datei und Prüfsumme und stellt Werte, die vom Baustein abweichen, aus dem Baustein wieder her.';
+
+/** Regeln der App zu Kennung, Bezug, Zeitstrahl und Quellen-IDs bei LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04) */
+export function v2Steuerung(s: Pick<Steuerung, "vormeldung" | "verdichtung" | "bausteine">, v: V2Steuerung | undefined): string[] {
+  if (!v) return [];
+  const out: string[] = [];
+  out.push(
+    `- Sachverhaltskennung (\`kennung\`): ${
+      s.vormeldung && v.kennungenVormeldung.length
+        ? `Übernimm bei fortgeschriebenen Sachverhalten die Kennung der Vormeldung unverändert (${v.kennungenVormeldung.join(", ")}). `
+        : ""
+    }Neue Sachverhalte erhalten die Platzhalter NEU-1, NEU-2 usw.; verwende denselben Platzhalter auch in \`bezug\`. Die App vergibt danach die endgültigen Kennungen. Bilde keine Kennungen selbst und übernimm keine Kennung einer anderen Stelle als eigene.`,
+  );
+  if (s.verdichtung || s.vormeldung)
+    out.push(
+      `- Bezug (\`bezug\`, Objekte \`{kennung, art}\`): ${s.verdichtung ? "Nenne je Sachverhalt die Kennungen der Sachverhalte aus den Eingangsmeldungen, die in ihn eingehen (art „verdichtung“, bei mehreren Sachverhalten derselben Stelle auch „zusammenfuehrung“). " : ""}${
+        s.vormeldung ? "Geht ein neuer Sachverhalt aus einem Sachverhalt der Vormeldung hervor, nennt er dessen Kennung (art „teilung“). " : ""
+      }Nur Kennungen, die im Material stehen; die Meldungsfassung (\`meldung_id\`) setzt die App.`,
+    );
+  const zs = [
+    "Form und Regeln nach dem Kodierleitfaden; nur eingetretene, belegte Ereignisse bis t0, chronologisch. IDs Z1, Z2 … eindeutig in der ganzen Meldung.",
+  ];
+  if (s.vormeldung)
+    zs.push(
+      `Übernimm die Zeilen der Vormeldung mit ihrer ID und unverändert (\`zeit\`, \`typ\`, \`text\`, \`quellen\`); neue Zeilen beginnen bei Z${v.naechsteZ}. Eine frühere Zeile änderst du nicht, sondern ergänzt eine Zeile vom Typ „Berichtigung“ mit \`berichtigt\` (ID der früheren Zeile). Die Quellen der Vormeldung behalten ihre ID; neue Quellen erhalten die nächste freie.`,
+    );
+  if (s.verdichtung)
+    zs.push(
+      "Aus den Zeitstrahlen der Eingänge übernimmst du nur Wendepunkte für den eigenen Referenzraum, mit der Eingangsmeldung oder der selbst geprüften Originalquelle als Beleg; dasselbe Ereignis aus mehreren Eingängen steht einmal.",
+    );
+  zs.push("Zeilen vom Typ „Bewertung“ schreibst du nicht; Bewertungswechsel trägt die App ein. `erstmals_gemeldet` setzt die App.");
+  out.push(`- Zeitstrahl (\`zeitstrahl\` je Sachverhalt): ${zs.join(" ")}`);
+  if (s.bausteine) out.push(v.modulBaustein ? BAUSTEIN_REGEL_V2 : BAUSTEIN_REGEL.replace("belege jeden Satz", "belege jede Kennzahl und jeden Satz"));
+  return out;
+}
 
 export interface ZeitstrahlSteuerung {
   /** Feldpfade aus den Rollen des Profils */
@@ -434,9 +541,9 @@ export function steuerungsBlock(s: Steuerung): string {
     z.push(
       "- Fristen und Indikatoren der Vormeldung führst du nach Teil A (Fristgrundlage) und A.8.1 fort; ohne Prüfung sind Indikatoren „nicht überprüfbar“.",
     );
-  if (s.bausteine) z.push(BAUSTEIN_REGEL);
+  if (s.bausteine && !s.v2) z.push(BAUSTEIN_REGEL);
   z.push("- Nenne Recherche nur, wenn sie in diesem Lauf tatsächlich erfolgt ist.");
-  z.push(...zeitstrahlSteuerung(s, s.zeitstrahl));
+  z.push(...(s.v2 ? v2Steuerung(s, s.v2) : zeitstrahlSteuerung(s, s.zeitstrahl)));
   return z.join("\n");
 }
 

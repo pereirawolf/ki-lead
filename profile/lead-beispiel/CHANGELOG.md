@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.43.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-04 (Paket 4 des Umstellungsplans: KI-Pipeline nach LEAD-Meldung-v2, App 0.8.0), freigegeben vom Herausgeber am 06.11.2026; Entscheidungen vom 03.11.2026 (Kennzahlregeln an einer Stelle, Kodierleitfaden Abschnitt 6) und vom 14.11.2026 (Verschieben schon mit diesem Paket). Zweite Stelle: Regeln stehen jetzt im Profil statt in der App. Das Profil bleibt auf LEAD-Meldung-v1 (Umstellung mit Paket 6).
+
+- **Kodierleitfaden 1.13.0:** Abschnitt 6 mit den Regeln für Kennzahlen aus Kennzahlen-Bausteinen (Thessa, KSNV): unverändert übernehmen, keine Summen über Einheit, Art oder Datenstand (im Übrigen SOP-LEAD A.3), Mindestwert und Teilmenge, Zählort, Beleg; dazu, wie die App abgleicht. Bisher stand der Kern dieser Regeln als Übergangsregel h im Steuerungsblock der App; dort steht jetzt nur der Verweis und die Mechanik. Einleitung und Pflege (Abschnitt 9) nennen den neuen Gegenstand.
+- **Arbeitsanweisung Erfassung 1.11.5:** Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.13.0“; Regeln unverändert.
+- **SOP-LEAD-Sammelmappe 3.23.6:** Verweis in A.3 und Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Arbeitsanweisung Verdichtung 2.3.0 (Nr. 4 „Zählen und Addieren“ verweist auf A.3) und Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf.
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.42.2 – 11.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 11.11.2026 zur Darstellung der Schrittleiste (Grunddesign 1.7, Regel LD-T05; App 0.7.17). Dritte Stelle: nur Beschriftung der Oberfläche, Feldnamen, Schema, Arbeitsanweisungen, Kodierleitfaden und SOP-Texte unverändert.

@@ -3574,6 +3574,35 @@
       "pr": 135
     },
     {
+      "id": "UP-2026-W45-04",
+      "agent": "umstellungsplan",
+      "befunddatei": "ki-lead-befund_umstellungsplan_2026-W45.json",
+      "commit": "c5a320514aed2a7b051936ceefee6ee885f02f74",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "src/anbieter/schema.ts",
+          "stelle": "Funktion strengesSchema (Z. 5)"
+        },
+        {
+          "datei": "src/pipeline/nachbearbeitung.ts",
+          "stelle": "Funktion nachbearbeiten (Z. 26)"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.kennzahl, additionalProperties false"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 9, KI-Ausgabe (Z. 185)"
+        }
+      ],
+      "kurz": "KI-Pipeline nach LEAD-Meldung-v2: Ausgabeschema ohne Bedingungen, Nachbearbeitung mit Identität, Absender, Zeit und Entstehung, Kennungen, Bezug und Zeitstrahl, Übernahme aus Kennzahlen-Bausteinen über das Modul lead-baustein mit Wiederherstellung der Werte; Kennzahlregeln im Kodierleitfaden.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-06",
+      "pr": 170
+    },
+    {
       "id": "SR-2026-W45-01",
       "agent": "schwesterrepos",
       "befunddatei": "ki-lead-befund_schwesterrepos_2026-W45.json",

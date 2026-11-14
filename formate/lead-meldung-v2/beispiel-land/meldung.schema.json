@@ -3,7 +3,7 @@
   "$id": "https://github.com/pereirawolf/ki-lead/formate/lead-meldung-v2/beispiel-land/meldung.schema.json",
   "title": "LEAD-Meldung v2 – Landesprofil Thüringen (fiktive Inhalte)",
   "description": "Schema LEAD-Meldung-v2 (Formatfassung 2.0, Entwurf) für das Landesprofil Thüringen: Land und Kreise als meldende Gebiete, sonst wie das Beispielprofil. Grundlage für die Umstellung von profile/lead-thueringen; ersetzt das abgeleitete Schema LEAD-Meldung-Land-v1.",
-  "$comment": "Erzeugt mit scripts/lead-meldung-v2.mjs 2.0 aus Kern LEAD-Meldung-v2 kern.schema.json + Modul lead-bevoelkerungsschutz 1.0. Nicht von Hand ändern, sondern die Zusammenstellung anpassen und neu erzeugen.",
+  "$comment": "Erzeugt mit scripts/lead-meldung-v2.mjs 2.0 aus Kern LEAD-Meldung-v2 kern.schema.json + Modul lead-bevoelkerungsschutz 1.0 + Modul lead-baustein 1.0. Nicht von Hand ändern, sondern die Zusammenstellung anpassen und neu erzeugen.",
   "type": "object",
   "required": [
     "schema",
@@ -1298,6 +1298,9 @@
       "properties": {
         "lead-bevoelkerungsschutz": {
           "$ref": "#/$defs/modul_lead_bevoelkerungsschutz"
+        },
+        "lead-baustein": {
+          "$ref": "#/$defs/modul_lead_baustein"
         }
       },
       "required": [
@@ -1800,6 +1803,98 @@
               "$ref": "#/$defs/modul_lead_bevoelkerungsschutz_achse"
             }
           }
+        }
+      }
+    },
+    "modul_lead_baustein_baustein": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "fassung",
+        "quelle",
+        "kennzahlen"
+      ],
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Format des Bausteins, z. B. „Thessa-Kennzahlen“ oder „KSNV-Kennzahlen“."
+        },
+        "fassung": {
+          "type": "string",
+          "description": "Fassung des Bausteinformats, z. B. „0.3“."
+        },
+        "datei": {
+          "type": "string",
+          "description": "Dateiname des Bausteins; setzt die App aus dem Material."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 der Bausteindatei; setzt die App aus dem Material."
+        },
+        "quelle": {
+          "type": "string",
+          "pattern": "^Q[1-9][0-9]*$",
+          "description": "ID des Bausteins im Quellenverzeichnis der Meldung."
+        },
+        "kennzahlen": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/modul_lead_baustein_uebernahme"
+          },
+          "description": "Übernommene Kennzahlen: ID in der Meldung und ID im Baustein."
+        },
+        "einsatzmeldungen": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Kennungen von Einsatzmeldungen des Bausteins (Thessa, Feld einsatzmeldungen[].id), auf die sich der Sachverhalt stützt; n:m, eine Einsatzmeldung kann mehreren Sachverhalten zugeordnet sein. Maßnahme und Zeitstrahlzeile dazu legt die App aus dem Baustein an."
+        }
+      }
+    },
+    "modul_lead_baustein_uebernahme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kennzahl",
+        "baustein_kennzahl"
+      ],
+      "properties": {
+        "kennzahl": {
+          "type": "string",
+          "pattern": "^K[1-9][0-9]*$",
+          "description": "ID der Kennzahl in sachverhalte[].kennzahlen dieses Sachverhalts."
+        },
+        "baustein_kennzahl": {
+          "type": "string",
+          "pattern": "^K[1-9][0-9]*$",
+          "description": "ID der Kennzahl im Baustein."
+        }
+      }
+    },
+    "modul_lead_baustein": {
+      "title": "LEAD-Meldung v2 – Modul lead-baustein 1.0",
+      "description": "Profilneutrales Fachmodul je Sachverhalt: Herkunft von Kennzahlen aus Kennzahlen-Bausteinen der App-Familie (etwa Thessa-Kennzahlen, KSNV-Kennzahlen) und Kennungen der Einsatzmeldungen eines Bausteins, auf die sich der Sachverhalt stützt (Zuordnung von oben, docs/AUSTAUSCH.md Abschnitt 9). Die Kennzahl selbst steht im Kern (sachverhalte[].kennzahlen); das Modul verweist nur auf sie. Weicht ein KI-Entwurf von den Werten des Bausteins ab, stellt die App die Werte des Bausteins wieder her (docs/LEAD-MELDUNG-V2.md Abschnitt 7).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fassung",
+        "bausteine"
+      ],
+      "properties": {
+        "fassung": {
+          "const": "1.0"
+        },
+        "bausteine": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/modul_lead_baustein_baustein"
+          },
+          "description": "Je verwendetem Kennzahlen-Baustein ein Eintrag."
         }
       }
     }

@@ -36,6 +36,8 @@ import {
 import type { Pflichtsuche, S1Vorschlag, StufenEintrag } from "./lauf";
 import { absenderFuer, hatVormeldung, istVerdichtung, materialBloecke, materialUebersicht, vormeldungStand, type Material } from "./material";
 import { nachbearbeiten } from "./nachbearbeitung";
+import { nachbearbeitenV2, v2Vorgaben } from "./nachbearbeitung-v2";
+import { ausgabeSchemaKi, istV2Profil } from "./ausgabeschema";
 import { amtlichErreicht, absenderBefunde, rechercheNachweis, primaerquelleBelegt, rechercheBefunde, auftragsAbrufFehler } from "./recherchebefunde";
 import { pflichtRegel } from "./recherchetiefe";
 import { s2UmfangWarnung } from "./schaetzung";
@@ -157,12 +159,18 @@ export function nachforderungText(fehlend: PflichtVorgabe[], ohneSuche: boolean,
  * Verbot von Kürzungen, nach dem Prüffall Reparatur vom 25.10.2026 (Skalenrand statt Originalwert, gestrichene Zeilen).
  */
 export function reparaturSystem(p: Profil): string {
-  return `Du korrigierst eine Meldung so, dass sie dem beigefügten JSON-Schema entspricht. Inhalte, Bewertungen, Radarwerte und Quellen bleiben unverändert, soweit die Korrektur es zulässt. Recherchiere nicht neu und ergänze keine Fakten. Wo ein Pflichtwert inhaltlich nicht belegt ist, verwende den im Schema vorgesehenen Leerwert. Ist ein Radarwert, eine Beurteilung, eine Tendenz oder eine Ereignisart unzulässig, übernimm den Wert, den die Begründung desselben Sachverhalts nennt (etwa „D2 = 4“ oder „Beurteilung „erheblich““); nennt sie keinen, verwende den Leerwert, nie den Rand der Skala. Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet. Gib ausschließlich das vollständige, korrigierte JSON-Objekt in einem Codeblock aus, der mit \`\`\`json beginnt.
+  // LEAD-Meldung-v2 (seit 0.8.0, UP-2026-W45-04): Ausgabeschema ohne Bedingungen und ohne die Felder der App
+  const v2 = istV2Profil(p);
+  const schema = v2 ? ausgabeSchemaKi(p) : p.schema;
+  const v2Satz = v2
+    ? " Das Schema ist das Ausgabeschema der KI: Felder, die die App setzt (Identität, Status, Absender, Meldezeitpunkt, Zeitzone, Freigabe, Entstehung bis auf regelwerk.sop, erstmals_gemeldet), gibst du nicht aus; Befunde zu ihnen behebt die App. Zeitangaben als Kalendertag oder Zeitpunkt mit UTC-Versatz, unbekannt als null."
+    : "";
+  return `Du korrigierst eine Meldung so, dass sie dem beigefügten JSON-Schema entspricht. Inhalte, Bewertungen, Radarwerte und Quellen bleiben unverändert, soweit die Korrektur es zulässt. Recherchiere nicht neu und ergänze keine Fakten. Wo ein Pflichtwert inhaltlich nicht belegt ist, verwende den im Schema vorgesehenen Leerwert. Ist ein Radarwert, eine Beurteilung, eine Tendenz oder eine Ereignisart unzulässig, übernimm den Wert, den die Begründung desselben Sachverhalts nennt (etwa „D2 = 4“ oder „Beurteilung „erheblich““); nennt sie keinen, verwende den Leerwert, nie den Rand der Skala. Ändere, kürze oder streiche keine Textfelder, die das Schema nicht beanstandet.${v2Satz} Gib ausschließlich das vollständige, korrigierte JSON-Objekt in einem Codeblock aus, der mit \`\`\`json beginnt.
 
-# JSON-Schema (Schemakennung ${p.manifest.meldung.schema_id})
+# JSON-Schema (Schemakennung ${p.manifest.meldung.schema_id}${v2 ? ", Ausgabeschema der KI" : ""})
 
 \`\`\`json
-${JSON.stringify(p.schema, null, 1)}
+${JSON.stringify(schema, null, 1)}
 \`\`\``;
 }
 
@@ -308,7 +316,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
   // damit er Angaben aus Gegenstand und Material sichtbar vorgeht
   const vermerke = verdichtung || vormeldung ? redaktionsvermerke(k.material, p, t0) : "";
   const bausteine = bausteineAus(k.material);
-  const zv = zeitstrahlVorgaben(k.material, p);
+  const v2 = istV2Profil(p);
+  const zv = v2 ? v2Vorgaben(k.material, p) : zeitstrahlVorgaben(k.material, p);
   const steuerung = steuerungsBlock({
     auftrag,
     jetzt: jetztS2,
@@ -325,17 +334,25 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     kennsatzAenderung: p.ui.kennsaetze?.aenderung || "Änderung zur Vormeldung:",
     absender: absenderFuer(k.material, p),
     ...(bausteine.length ? { bausteine: bausteine.length } : {}),
-    ...(p.ui.rollen.sv_kennung || p.ui.rollen.zeitstrahl
+    ...(v2
       ? {
-          zeitstrahl: {
-            felder: { kennung: p.ui.rollen.sv_kennung, bezug: p.ui.rollen.sv_bezug, zeitstrahl: p.ui.rollen.zeitstrahl },
+          v2: {
             kennungenVormeldung: zv.kennungen,
             naechsteZ: zv.naechsteZ,
-            typBewertung: zeitstrahlKonfig(p.ui).typ_bewertung,
-            typBerichtigung: zeitstrahlKonfig(p.ui).typ_berichtigung,
+            modulBaustein: !!p.schema?.$defs?.module?.properties?.["lead-baustein"],
           },
         }
-      : {}),
+      : p.ui.rollen.sv_kennung || p.ui.rollen.zeitstrahl
+        ? {
+            zeitstrahl: {
+              felder: { kennung: p.ui.rollen.sv_kennung, bezug: p.ui.rollen.sv_bezug, zeitstrahl: p.ui.rollen.zeitstrahl },
+              kennungenVormeldung: zv.kennungen,
+              naechsteZ: zv.naechsteZ,
+              typBewertung: zeitstrahlKonfig(p.ui).typ_bewertung,
+              typBerichtigung: zeitstrahlKonfig(p.ui).typ_berichtigung,
+            },
+          }
+        : {}),
     ...(recherche
       ? { pflichtsuchen: pflicht, tiefe: { titel: regel.titel, verhalten: regel.verhalten }, einstiege: einstiege.length > 0, amtlich: amtlich.length > 0 }
       : {}),
@@ -460,7 +477,14 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [], zeitstrahlBefunde: [] };
     if (z.json !== undefined) {
       try {
-        s.meldung = nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen, s.zeitstrahlBefunde);
+        s.meldung = v2
+          ? nachbearbeitenV2(z.json, k, modell, {
+              korrekturen: s.korrekturen,
+              sopHinweise: s.sopHinweise,
+              umhaengungen: s.umhaengungen,
+              befunde: s.zeitstrahlBefunde,
+            })
+          : nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen, s.zeitstrahlBefunde);
         s.schemaBefunde = pruefeGegenSchema(p.schema, s.meldung, p.ui);
       } catch (err: any) {
         s.meldung = undefined;
@@ -514,7 +538,8 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
       ...zeitstrahlHinweise(meldung, p.ui).filter((b) => !zeitstrahlBefunde.some((x) => x.code === b.code && x.text === b.text)),
     );
   // Kennzahlen-Bausteine (seit 0.6.24, UP-2026-W45-01, Übergangsregel h): Zahlen im Text gegen den Baustein
-  if (meldung) befunde.push(...bausteinAbgleich(meldung, p.ui, bausteineAus(k.material)));
+  // Bei LEAD-Meldung-v2 stehen Kennzahlen in Feldern; die Übernahme aus dem Baustein prüft die Nachbearbeitung (seit 0.8.0)
+  if (meldung && !v2) befunde.push(...bausteinAbgleich(meldung, p.ui, bausteineAus(k.material)));
   // LEAD-Meldung-v2 (seit 0.7.0, UP-2026-W45-02): Prüfebene 2 nach der Antwort
   if (meldung) befunde.push(...referenzBefunde(meldung, p.ui));
   const svAnzahl = meldung ? (holeWert(meldung, p.ui.rollen.sachverhalte) || []).length : n;
