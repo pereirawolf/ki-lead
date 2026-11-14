@@ -174,7 +174,7 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | <a id="ld-e01"></a>**LD-E01** | MUSS | Ein Feld hat die Reihenfolge Beschriftung, Hilfetext, Eingabe, Fehlertext, Rückmeldungen, Werkzeuge: Anleitung vor der Eingabe, Rückmeldungen und Werkzeuge danach. Der Hilfetext ist per aria-describedby verknüpft. | `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e02"></a>**LD-E02** | MUSS | Eine fehlende Pflichtangabe erscheint am Feld erst, wenn es bearbeitet und verlassen wurde, nach dem Besuch des Prüfschritts oder bei einer geöffneten Datei; andere Befunde sofort. Ein Feld mit Befund trägt aria-invalid. | `src/ui/feldBefunde.ts`, `src/ui/HilfeFeld.tsx` |
 | <a id="ld-e03"></a>**LD-E03** | SOLL | Listen gleichartiger Einträge lassen sich je Eintrag ein- und aufklappen; der Kopf zeigt Bezeichnung und Befundzahl, der Knopf trägt aria-expanded. | `src/ui/Feld.tsx` |
-| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht. | `src/ui/Pruefen.tsx` |
+| <a id="ld-e04"></a>**LD-E04** | MUSS | Befunde zu Eingaben in einem Formular haben die Stufen Fehler, Warnung und Hinweis und führen per Sprung zum betroffenen Feld in seinem Schritt. Eine App verwendet keine anderen Stufen, muss aber nicht alle drei führen; die Oberfläche kann eine Stufe sprechend benennen (etwa „Hinweise zur Stimmigkeit“ für Warnungen), wenn der zugängliche Name die Stufe nennt. Für die Prüfung eines geladenen Datenstands außerhalb eines Formulars gilt die Regel nicht. | `src/ui/Pruefen.tsx` |
 
 ### Rückmeldung
 
