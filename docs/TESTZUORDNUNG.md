@@ -1351,3 +1351,13 @@ Soll unabhängig vom Code: die beiden Reihendateien des Herausgebers vom 14.11.2
 | LIESMICH der ZIP-Datei nennt die Schemakennung der Entwürfe | Vergleichslauf Ilka › ZIP enthält Reihendatei, Übersicht, Laufprotokolle, Entwürfe und Vergleiche | `tests/forschung/vergleichslauf.test.ts` |
 
 Stabilisiert ohne geändertes Soll: `tests/browser/hinweisband.spec.ts` › Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich (scrollt erst nach dem Laden der Maske und wiederholt das Scrollen bis zum kompakten Kopf; Fehlschlag in WebKit in der CI zu PR #175).
+
+## Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2 (0.9.2, AV-2026-W46-01, -02)
+
+Soll unabhängig vom Code: Ergebnisbericht `evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md` (Folgerung „Eingangsmaterial für S1 und S2“) und die Freigabe des Herausgebers vom 14.11.2026 zur Befunddatei `ki-lead-befund_kosten_2026-W46.json`.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eingangsmeldungen gehen ohne Einrückung und Zeilenumbruch in Material und Prompt, der Inhalt bleibt gleich | JSON-Material ohne Einrückung › AV-2026-W46-01: Eingangsmeldungen Ilka (v2) ohne Zeilenumbruch und mit unverändertem Inhalt, auch im Prompt | `tests/pipeline/material.test.ts` |
+| Sonstiges JSON ohne Leerraum | JSON-Material ohne Einrückung › AV-2026-W46-01: sonstiges JSON ohne Leerraum | `tests/pipeline/material.test.ts` |
+| Kennzahlen-Baustein (Projektion) ohne Zeilenumbruch | JSON-Material ohne Einrückung › AV-2026-W46-01: Kennzahlen-Baustein (Projektion) ohne Zeilenumbruch | `tests/pipeline/material.test.ts` |
