@@ -1,4 +1,4 @@
-// Grunddesign der App-Familie (design/README.md, Fassung 1.9 vom 14.11.2026): erzeugte Dateien aktuell, Format der
+// Grunddesign der App-Familie (design/README.md, Fassung 1.11 vom 14.11.2026): erzeugte Dateien aktuell, Format der
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { beschreibung, designTokens, farbschemaTokens, hexFarbe, ROLLEN, SIGNALE } from "../../scripts/lead-design.mjs";
 import { FARBSCHEMAS } from "../../src/darstellung/katalog";
-import { SEMANTIK } from "../../src/darstellung/thema";
+import { AUTOMATISCH, aufloesen, SEMANTIK } from "../../src/darstellung/thema";
 import { UI_TOKENS } from "../../src/darstellung/typen";
 import { BEREICHE } from "../../src/ui/Einstellungen";
 import { ANSICHTEN, seitentitel } from "../../src/ui/app/adresse";
@@ -235,6 +235,22 @@ describe("Grunddesign: rahmen.json", () => {
     expect(kompakt).toMatch(/padding-top: /);
     expect(kompakt).not.toMatch(/white-space|overflow|text-overflow|ellipsis|line-clamp|max-height/);
     expect(regel).not.toMatch(/white-space: nowrap|overflow: hidden|text-overflow/);
+  });
+
+  it("LD-F05: „Automatisch“ hell „Neutral · Hell“, festes oder eingebettetes Schema geht vor (seit Grunddesign 1.11, OF-10 aus Thessa)", () => {
+    // Soll unabhängig von rahmen.json: Entscheidung des Herausgebers vom 14.11.2026. KI-LEAD hat Profile und bettet keins
+    // beim Bau ein; „Automatisch“ setzt hell „Neutral · Hell“, dunkel „Neutral · Night Mode“, bei „mehr Kontrast“ das
+    // Kontrastschema. Ein aktives Profil mit eigenem Farbschema ändert daran nichts.
+    const profil = { basis: "de-th" };
+    expect(aufloesen(AUTOMATISCH, profil, undefined, { dunkel: false, kontrast: false }).basis).toBe("neutral-hell");
+    expect(aufloesen(AUTOMATISCH, profil, undefined, { dunkel: true, kontrast: false }).basis).toBe("neutral-dunkel");
+    expect(aufloesen(AUTOMATISCH, profil, undefined, { dunkel: false, kontrast: true }).basis).toBe("kontrast-hell");
+    expect(aufloesen(AUTOMATISCH, profil, undefined, { dunkel: true, kontrast: true }).basis).toBe("kontrast-dunkel");
+    const regel = (id: string) => rahmen.regeln.find((r: { id: string }) => r.id === id).text as string;
+    expect(regel("LD-F05")).toContain("hell „Neutral · Hell“, dunkel „Neutral · Night Mode“");
+    expect(regel("LD-F05")).toContain("oder setzt sie ohne Profile ein festes Schema aus dem Katalog (LD-F01), verwendet „Automatisch“ hell dieses Schema");
+    expect(regel("LD-F01")).toContain("bietet sie eine Wahl unter „Darstellung“, ist es das Schema von „Automatisch“ hell (LD-F05)");
+    expect(regel("LD-F01")).toContain("Werte außerhalb des Katalogs gibt es nicht.");
   });
 
   it("Reiter der Auswertung und Phasen der KI-Erfassung wie im Quelltext", () => {
