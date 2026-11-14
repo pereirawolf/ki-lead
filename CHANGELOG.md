@@ -118,7 +118,7 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.20 | letzter Commit des Pull Requests „Schätzung der Erfassung nach der Fallreihe vom 13.11.2026; 0.7.20“ |
 | 0.7.21 | letzter Commit des Pull Requests „Schrittleiste nur mit dem Punkt, Grunddesign 1.9; 0.7.21“ |
 | 0.7.22 | letzter Commit des Pull Requests „UX-Prüfung 2026-W46: Auswertung und Profile; 0.7.22“ |
-| 0.7.23 | letzter Commit des Pull Requests „Zwischenstand beim Aushängen schreiben, Oberflächentests stabil; 0.7.23“ |
+| 0.7.23 | letzter Commit des Pull Requests „Zwischenstand beim Aushängen schreiben, Oberflächentests stabil; 0.7.23“ (Nachtrag vom 14.11.2026: Pull Request „Befundregister: Technikprüfung TP-2026-W44-36 bis -61 nachgetragen“, ohne Änderung der App) |
 ## [0.7.23] – 14.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 14.11.2026 nach einem roten Prüflauf an Pull Request #167: Oberflächentests, die in der CI gelegentlich scheitern, werden stabilisiert. Ursache war in den meisten Fällen kein Testfehler, sondern ein Zeitgeber der App, der über ihr Aushängen hinaus lief.

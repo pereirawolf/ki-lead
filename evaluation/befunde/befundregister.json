@@ -2817,6 +2817,604 @@
       "pr": 134
     },
     {
+      "id": "TP-2026-W44-36",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44.json",
+      "commit": "ff7ff9c",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": ".github/workflows/pages.yml",
+          "stelle": "Zeilen 36, 40, 71, 92, 127, 133, 155"
+        },
+        {
+          "datei": ".github/workflows/release.yml",
+          "stelle": "Zeilen 19, 22"
+        },
+        {
+          "datei": ".github/workflows/mistral-probe.yml",
+          "stelle": "Zeilen 29, 30, 39"
+        },
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitt 3.7, Zeile 90, Spalte „offen“"
+        }
+      ],
+      "kurz": "Alle Actions-Einbindungen auf den vollständigen Commit-SHA mit Versionskommentar umgestellt; Dependabot schreibt sie fort.",
+      "status": "umgesetzt",
+      "pr": 111
+    },
+    {
+      "id": "TP-2026-W44-37",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44.json",
+      "commit": "ff7ff9c",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": ".github/workflows/pages.yml",
+          "stelle": "Job „pruefen“, nach `npm ci` (Zeile 68)"
+        },
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitt 3.7, Zeile 91, Spalte „offen“"
+        }
+      ],
+      "kurz": "Die CI prüft die ausgelieferten Pakete mit npm audit (ohne Entwicklungsabhängigkeiten) ab Stufe high.",
+      "status": "umgesetzt",
+      "pr": 111
+    },
+    {
+      "id": "TP-2026-W44-38",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a1.json",
+      "commit": "df5f56a",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/VORLAGEN.md",
+          "stelle": "V1 Anordnung, Nr. 1 „Gegenstand und Zweck“, Zeile 55"
+        },
+        {
+          "datei": "docs/ERPROBUNG.md",
+          "stelle": "Abschnitt 1, Zeile 14"
+        }
+      ],
+      "kurz": "Vorlagen auf den Release-Kandidaten einer Erprobung festgelegt; fester Stand über einen Kontrolllauf auf GitHub Pages mit Merge-Stopp auf main.",
+      "status": "umgesetzt",
+      "pr": 112
+    },
+    {
+      "id": "TP-2026-W44-39",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a1.json",
+      "commit": "df5f56a",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "SECURITY.md",
+          "stelle": "Abschnitt „Unterstützte Versionen“, Zeilen 19–20"
+        }
+      ],
+      "kurz": "SECURITY.md um den Release-Kandidaten einer laufenden Erprobung ergänzt.",
+      "status": "umgesetzt",
+      "pr": 112
+    },
+    {
+      "id": "TP-2026-W44-40",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a1.json",
+      "commit": "df5f56a",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 2, Zeile 23"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 2, Zeile 25"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 2, Zeile 26"
+        }
+      ],
+      "kurz": "Beschreibung der Laufprotokolle an den Code angeglichen.",
+      "status": "umgesetzt",
+      "pr": 112
+    },
+    {
+      "id": "TP-2026-W44-41",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a1.json",
+      "commit": "df5f56a",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 5.3 „Bibliothek“, Zeile 259"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 10, offener Punkt 12, Zeile 378"
+        }
+      ],
+      "kurz": "Bibliothek (Spezifikation 5.3) als bis nach der Erprobung zurückgestellt gekennzeichnet, offener Punkt 12 fortgeschrieben.",
+      "status": "umgesetzt",
+      "pr": 112
+    },
+    {
+      "id": "TP-2026-W44-42",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a3.json",
+      "commit": "ca02e0d",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Pruefen.tsx",
+          "stelle": "finalFreigeben, Zeilen 79–86; pdf(), Zeilen 94–106"
+        },
+        {
+          "datei": "src/dokumente/pdf.ts",
+          "stelle": "meldungAlsPdf, Zeile 401"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.5 Abschlusscheck, Zeile 125"
+        }
+      ],
+      "kurz": "Finale PDF mit offenen Schemabefunden trägt einen sichtbaren Vermerk auf jeder Seite und in den Dokumenteigenschaften.",
+      "status": "umgesetzt",
+      "pr": 113
+    },
+    {
+      "id": "TP-2026-W44-43",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a3.json",
+      "commit": "ca02e0d",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/kennsaetze.ts",
+          "stelle": "ausfuellHinweise, Zeilen 154–180"
+        },
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "fristEinstufen, Zeile 154"
+        },
+        {
+          "datei": "docs/KI-VERORDNUNG.md",
+          "stelle": "Abschnitt 9.1, Zeilen 140 und 150"
+        }
+      ],
+      "kurz": "Redaktionscheck meldet Fristen „Handlungsrelevant bis“ auf oder vor t0 ohne Kennzeichnung „überfällig“.",
+      "status": "umgesetzt",
+      "pr": 113
+    },
+    {
+      "id": "TP-2026-W44-44",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a3.json",
+      "commit": "ca02e0d",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/App.tsx",
+          "stelle": "sicherungsName, Zeile 75"
+        },
+        {
+          "datei": "src/speicher/speicher.ts",
+          "stelle": "Schlüssel des Gerätespeichers"
+        },
+        {
+          "datei": "src/speicher/testlaufarchiv.ts",
+          "stelle": "Zeile 36"
+        }
+      ],
+      "kurz": "Bereich „Daten“ mit Sicherung und Wiederherstellung des Gerätestands (ki-lead-sicherung/1) ohne API-Schlüssel.",
+      "status": "umgesetzt",
+      "pr": 113
+    },
+    {
+      "id": "TP-2026-W44-45",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a3.json",
+      "commit": "ca02e0d",
+      "entschieden_am": "2026-10-30",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 10, offener Punkt 11, Zeile 377"
+        },
+        {
+          "datei": "docs/DATENSCHUTZ.md",
+          "stelle": "Abschnitt 10, Zeilen 141 und 145"
+        }
+      ],
+      "kurz": "„Alle Daten dieses Geräts löschen“ mit Rückfrage für Gerätespeicher, Testlaufarchiv, Farbschema und Schlüsselbund.",
+      "status": "umgesetzt",
+      "pr": 113
+    },
+    {
+      "id": "TP-2026-W44-46",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a5.json",
+      "commit": "0ac93ac",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Einstellungen.tsx",
+          "stelle": "BEREICHE, Zeile 79; Verweis „Zu den Testläufen“, Zeilen 922–927"
+        },
+        {
+          "datei": "src/ui/kiErfassung/Ergebnis.tsx",
+          "stelle": "VergleichKasten, Zeilen 120–128"
+        },
+        {
+          "datei": "docs/ERPROBUNG.md",
+          "stelle": "Abschnitt 2, Fragestellung F1"
+        }
+      ],
+      "kurz": "Schalter „Forschungsfunktionen anzeigen“, Vorgabe aus; ausgeschaltet entfallen Testläufe und Forschungsteile der Oberfläche.",
+      "status": "umgesetzt",
+      "pr": 118
+    },
+    {
+      "id": "TP-2026-W44-47",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a5.json",
+      "commit": "0ac93ac",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/speicher/sicherung.ts",
+          "stelle": "Kommentar zu leeren(), Zeilen 124–127"
+        },
+        {
+          "datei": "src/ui/Daten.tsx",
+          "stelle": "Zeilen 50–51"
+        },
+        {
+          "datei": "CHANGELOG.md",
+          "stelle": "0.6.15, Nachtrag zur Fehlersuche in PR #113"
+        }
+      ],
+      "kurz": "Kommentare zu Sicherung und Löschen an den Code angeglichen.",
+      "status": "umgesetzt",
+      "pr": 118
+    },
+    {
+      "id": "TP-2026-W44-48",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "index.html",
+          "stelle": "Zeile 7, connect-src"
+        },
+        {
+          "datei": "src/anbieter/ollama.ts",
+          "stelle": "Zeilen 24–30"
+        },
+        {
+          "datei": "tests/ui/ueber.test.ts",
+          "stelle": "Zeilen 142–163"
+        },
+        {
+          "datei": "vite.config.ts",
+          "stelle": "Zeilen 53–59"
+        }
+      ],
+      "kurz": "Betreiberkonfiguration ki-lead-betrieb/1 zur Build-Zeit mit freigegebenen Anbietern und Sicherheitsrichtlinie; nicht freigegebene Anbieter ganz ausgeblendet.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-49",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/anbieter/openai.ts",
+          "stelle": "Zeilen 165–175"
+        },
+        {
+          "datei": "src/anbieter/mistral.ts",
+          "stelle": "Zeilen 112–125, 243 ff."
+        },
+        {
+          "datei": "src/anbieter/mistral.ts",
+          "stelle": "Zeilen 73–82"
+        }
+      ],
+      "kurz": "Fünfter Anbieter „Endpunkt der Stelle“ aus der Betreiberkonfiguration über den Chat-Completions-Weg.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-50",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/schluessel/ablage.ts",
+          "stelle": "Zeilen 4, 231–232"
+        }
+      ],
+      "kurz": "Vorgabe der Schlüsselablage aus der Betreiberkonfiguration; eine gespeicherte Wahl bleibt vorrangig.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-51",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/VORLAGEN.md",
+          "stelle": "Zeilen 130, 132, 135 (V3)"
+        },
+        {
+          "datei": "docs/SICHERHEIT.md",
+          "stelle": "Abschnitte 3.3 (Zeile 55) und 3.4 (Zeilen 61–62)"
+        },
+        {
+          "datei": ".github/workflows/",
+          "stelle": "pages.yml, release.yml, mistral-probe.yml"
+        }
+      ],
+      "kurz": "docs/BETRIEB.md zum Selbstbetrieb und Workflow „Betreiberbuild“.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-52",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": ".github/workflows/mistral-probe.yml",
+          "stelle": "Zeilen 1–8, 50–58"
+        },
+        {
+          "datei": "playwright.probe.config.ts",
+          "stelle": "webServer"
+        }
+      ],
+      "kurz": "Mistral-Probe prüft einen Betreiberbuild mit Endpunkt der Stelle (Mistral EU): Richtlinie, Verbindungstest, Schema, Kosten.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-53",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a2.json",
+      "commit": "9427a93",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "src/anbieter/aufwand.ts",
+          "stelle": "AUFWAND_JE_MODELL"
+        },
+        {
+          "datei": "src/anbieter/mistral.ts",
+          "stelle": "mistralAufwand"
+        }
+      ],
+      "kurz": "Mistral Large 4 mit den Stufen niedrig, mittel, hoch; am globalen Endpunkt immer high; Probe prüft die gesendeten Werte je Endpunkt.",
+      "status": "umgesetzt",
+      "pr": 119
+    },
+    {
+      "id": "TP-2026-W44-54",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a4.json",
+      "commit": "f602bdb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "profile/",
+          "stelle": "Ordner"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "Zeilen 32 ff."
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.ui.json",
+          "stelle": "Zeile 369 (kennung.praefixe), Zeile 435 (dateiname)"
+        },
+        {
+          "datei": "profile/lead-beispiel/kontakte.json",
+          "stelle": "stellen"
+        }
+      ],
+      "kurz": "Landesprofil „LEAD-Beispiel – Land Thüringen (fiktive Inhalte)“ aus dem Beispielprofil abgeleitet (statt fiktivem Land).",
+      "status": "umgesetzt",
+      "pr": 121
+    },
+    {
+      "id": "TP-2026-W44-55",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a4.json",
+      "commit": "f602bdb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/profil/eingebaut.ts",
+          "stelle": "Zeilen 9–36"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/",
+          "stelle": "Teil A, B, C"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/A_Gemeinsame-Regeln.md",
+          "stelle": "A.1 Nr. 8"
+        }
+      ],
+      "kurz": "Eingebaute Profile teilen Dateien; das Landesprofil nutzt die SOP-Sammelmappe des Beispielprofils.",
+      "status": "umgesetzt",
+      "pr": 121
+    },
+    {
+      "id": "TP-2026-W44-56",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a4.json",
+      "commit": "f602bdb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/beispiele/orkantief-ilka/",
+          "stelle": "Ordner"
+        }
+      ],
+      "kurz": "Fiktive Beispiellage Hochwasser an der Saale mit Kreismeldungen und verdichteter Landesmeldung.",
+      "status": "umgesetzt",
+      "pr": 121
+    },
+    {
+      "id": "TP-2026-W44-57",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a4.json",
+      "commit": "f602bdb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "README.md",
+          "stelle": "Abschnitt „Profile“"
+        },
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitt 4"
+        }
+      ],
+      "kurz": "Dokumentation und Version 0.6.18 zum Landesprofil.",
+      "status": "umgesetzt",
+      "pr": 121
+    },
+    {
+      "id": "TP-2026-W44-58",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a6.json",
+      "commit": "4fe5dbb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "docs/",
+          "stelle": "—"
+        },
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Zeilen 56–57"
+        },
+        {
+          "datei": "profile/lead-beispiel/meldung.schema.json",
+          "stelle": "meldezeitpunkt (Zeile 155)"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "Zeilen 18–33"
+        }
+      ],
+      "kurz": "docs/AUSTAUSCH.md als Entwurf 0.1; Meldungskennung und Zeitzone in der Meldung nur als Vorschlag.",
+      "status": "umgesetzt",
+      "pr": 122
+    },
+    {
+      "id": "TP-2026-W44-59",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a6.json",
+      "commit": "4fe5dbb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/lagebild.ts",
+          "stelle": "Zeile 100"
+        },
+        {
+          "datei": "src/kern/migration.ts",
+          "stelle": "Zeilen 20–31"
+        }
+      ],
+      "kurz": "Manifestfeld meldung.eingang_schemata: das Lagebild prüft fremde Meldungen gegen mitgelieferte Schemata.",
+      "status": "umgesetzt",
+      "pr": 122
+    },
+    {
+      "id": "TP-2026-W44-60",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a6.json",
+      "commit": "4fe5dbb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/profil.json",
+          "stelle": "meldung.eingang_schema_ids"
+        },
+        {
+          "datei": "src/kern/eingang.ts",
+          "stelle": "Zeile 26"
+        }
+      ],
+      "kurz": "Beispielprofil 1.35.0 prüft Landesmeldungen gegen LEAD-Meldung-Land-v1.",
+      "status": "umgesetzt",
+      "pr": 122
+    },
+    {
+      "id": "TP-2026-W44-61",
+      "agent": "technikpruefung",
+      "befunddatei": "ki-lead-befund_technik_2026-W44-a6.json",
+      "commit": "4fe5dbb",
+      "entschieden_am": "2026-10-31",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "docs/SPEZIFIKATION.md",
+          "stelle": "Abschnitte 4.2, 5.2, 10"
+        }
+      ],
+      "kurz": "Dokumentation und Version 0.6.19 zum Austauschvertrag.",
+      "status": "umgesetzt",
+      "pr": 122
+    },
+    {
       "id": "TP-2026-W44-62",
       "agent": "technikpruefung",
       "befunddatei": "ki-lead-befund_technik_2026-W44-a8.json",
