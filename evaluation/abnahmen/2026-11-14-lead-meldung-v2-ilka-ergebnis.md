@@ -98,3 +98,25 @@ Beide Reihen gliedern in zwei Sachverhalte; der Redaktionsfassung zugeordnet ist
 - Material und Redaktionsfassung liegen in der v2-Reihe in der v2-Fassung vor; die Mehrkosten in der Eingabe gehen auch darauf zurück, nicht allein auf das Ausgabeschema.
 - Kosten nach den Listenpreisen der App; der Preis langer Prompts für Haiku folgt `src/anbieter/preise.ts`.
 - Auswertung durch Claude, nicht von einer Person gegengelesen.
+
+## Nachtrag vom 15.11.2026: S1 mit Material ohne Einrückung (App 0.9.2)
+
+Bezug: AV-2026-W46-01 (Eingangsmaterial ohne Einrückung an S1 und S2, umgesetzt mit App 0.9.2, PR #178) und Folgerung „Eingangsmaterial für S1 und S2“ oben. Durchführung durch den Herausgeber am 15.11.2026 (00:12 bis 00:19 Uhr Ortszeit) in der App unter „Einstellungen → Testläufe“: Testart „S1 (aus Rohdaten)“, Variante `A-anthropic-standard` (S1 claude-haiku-5-5 „high“), t0 14.10.2026 14:00, ohne Websuche, Beispielprofil 2.0.0, drei Läufe (20261115-001228-w35m, -001433-7lgt, -001621-d2i5). Auswertung aus den Laufprotokollen durch Claude (Opus 5.5); Laufprotokolle und ZIP-Datei nicht eingecheckt.
+
+**Ergebnis:** Ohne Einrückung sinkt der Prompt von S1 von 109 811 auf 104 536 Token (−5 275, −4,8 %) und bleibt damit 4 536 Token über der Schwelle von 100 000 Token für den Preis langer Prompts bei Haiku. Das Eingangsmaterial schrumpft um 22 147 Zeichen, die Eingabe aber nur um rund 0,24 Token je Zeichen, weil Folgen von Leerzeichen wenige Token kosten. Entscheidung des Herausgebers vom 15.11.2026: Die Überschreitung wird hingenommen (Mehrkosten rund 0,10 USD je Lauf); die Änderung bleibt, weil sie bei gleichem Inhalt Eingabe in S1 und S2 spart.
+
+| Kennzahl | v2-Reihe 14.11.2026 (App 0.9.0) | S1-Reihe 15.11.2026 (App 0.9.2) |
+|---|---|---|
+| Prompt S1 (Eingabe und Cache) | 109 811 Token | 104 536 Token |
+| davon Eingabe / Cache | 47 258 / 62 553 (geschrieben) | 41 983 / 62 553 (Lauf 1 geschrieben, Läufe 2 und 3 gelesen) |
+| Ausgabe | 27 548–41 479 Token | 26 098–41 262 Token |
+| Kosten S1 | 0,132–0,166 USD | 0,089–0,136 USD (Lauf mit geschriebenem Cache 0,136 USD) |
+| Dauer S1 | 115–170 s | 108–168 s |
+| technisch bestanden | 3/3 | 3/3 (T1, T2, T4–T6) |
+| Sachverhalte im Vorschlag | 2, 2, 2 | 2, 3, 2 |
+| SOP-Abdeckung gegen den Zuschnitt der Musterfassung | 1,00 in allen Läufen | 0,86 (C12 fehlt), 1,00, 1,00 |
+
+- Bei langem Prompt bestimmt die Ausgabe den größten Teil der Kosten von S1; sie streut stark. Die Läufe 2 und 3 lasen den Cache, weil sie nur wenige Minuten nach Lauf 1 begannen; vergleichbar mit der v2-Reihe ist nur Lauf 1.
+- Gliederung und SOP-Auswahl weichen in je einem Lauf ab; mit drei Läufen ist das nicht von der Streuung von S1 zu trennen.
+- Die Läufe liegen in den seit 0.9.2 geltenden Spannen der Schätzung für S1 mit Haiku „high“ (bis 240 s, bis 0,25 USD; AV-2026-W46-02).
+- **Offen:** S2, Reparatur und Fehlerquote mit dem Material ohne Einrückung sind nicht gemessen; sie werden beim nächsten Vergleichslauf Ilka mit S2 ausgewertet (Entscheidung des Herausgebers vom 15.11.2026).
