@@ -197,6 +197,10 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
     u === "s1-s2-s3" || u === "s2-s3" ? `Reparatur: ${m.reparatur.modell} (${m.reparatur.aufwand})` : "",
   ].filter(Boolean);
   const punkte = u === "s1" ? "T1, T2, T4–T6" : "T1–T8";
+  // Schemakennung der Entwürfe (seit 0.9.1; bis 0.9.0 stand hier fest „LEAD-Meldung-v1“)
+  const schemata = [
+    ...new Set(ergebnisse.map((e) => (e.meldung as { schema?: unknown } | undefined)?.schema).filter((x): x is string => typeof x === "string")),
+  ];
   return [
     `KI-LEAD – Testlauf Ilka: ${umfangInfo(u).titel} (${FALL_TITEL})`,
     "",
@@ -224,7 +228,7 @@ function liesmich(reihe: Reihe, ergebnisse: EinzelErgebnis[]): string {
           "- reihe.json: Reihendatei (Format ki-lead-abnahme/1) mit Prüfpunkten, Kennzahlen je Stufe und je Lauf, Plausibilitätsbefunden, Kurzantwort und Entwurf",
           "- uebersicht.csv: eine Zeile je Sachverhalt und Lauf (Semikolon, Dezimalkomma), zum Vergleich mehrerer Konfigurationen",
           "- laeufe/<lauf>.lauf.json: vollständige Laufprotokolle (ki-lead-lauf/1) mit Prompts, Rohantworten, Token, Dauer und Kosten",
-          "- meldungen/<lauf>.meldung.json: Entwürfe (LEAD-Meldung-v1)",
+          `- meldungen/<lauf>.meldung.json: Entwürfe${schemata.length ? ` (${schemata.join(", ")})` : ""}`,
           "- vergleiche/<lauf>.vergleich.csv: Vergleich mit der Redaktionsfassung je Sachverhalt und Achse",
           "",
           "Vergleich mehrerer Konfigurationen im Repository: npm run vergleichslauf:auswerten -- <ZIP-Dateien> (Bezug: KI-Profil Anthropic)",

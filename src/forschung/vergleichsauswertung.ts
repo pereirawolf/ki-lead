@@ -97,6 +97,23 @@ export function konfigSchluessel(r: Reihe): string {
   return [m.s1.modell, m.s1.aufwand, m.s2.modell, m.s2.aufwand, r.mistral_endpunkt ?? "", ...(u === "s1-s2-s3" ? [] : [u])].join("|");
 }
 
+/** Versionsnummer aus der App-Angabe der Reihe („KI-LEAD 0.9.0“ → „0.9.0“) */
+const appVersion = (app: string) => app.match(/\d+\.\d+\.\d+\S*/)?.[0] ?? app;
+
+/**
+ * Stand einer Reihe aus App- und Profilversion (seit 0.9.1). Reihen derselben Konfiguration aus verschiedenen Ständen
+ * werden nicht vereinigt, sondern als eigene Konfigurationen ausgewiesen, z. B. ein Vergleichslauf vor und nach einer
+ * Umstellung des Meldungsformats mit derselben Plan-Variante.
+ */
+export function reiheStand(r: Reihe): string {
+  return `${appVersion(r.app)}/${r.profil?.version ?? "?"}`;
+}
+
+/** Gruppenschlüssel: Konfiguration und Stand (seit 0.9.1) */
+export function gruppenSchluessel(r: Reihe): string {
+  return `${konfigSchluessel(r)}#${reiheStand(r)}`;
+}
+
 function konfigText(r: Reihe): string {
   const m = r.modelle;
   const u = reiheUmfang(r);
@@ -118,12 +135,17 @@ export function istAnthropicStandard(r: Reihe, s: ModellProfil = STANDARD_PROFIL
   );
 }
 
-/** Fasst Reihen je Konfiguration zusammen (mehrere Dateien derselben Konfiguration werden vereinigt). */
+/**
+ * Fasst Reihen je Konfiguration zusammen (mehrere Dateien derselben Konfiguration und desselben Stands werden
+ * vereinigt). Gibt es dieselbe Konfiguration in mehreren Ständen, trägt die Kennung den Stand: „@App/Profil“.
+ */
 export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
   const gruppen = new Map<string, Reihe[]>();
+  const staende = new Map<string, Set<string>>();
   for (const r of reihen) {
-    const k = konfigSchluessel(r);
+    const k = gruppenSchluessel(r);
     gruppen.set(k, [...(gruppen.get(k) ?? []), r]);
+    staende.set(konfigSchluessel(r), (staende.get(konfigSchluessel(r)) ?? new Set()).add(reiheStand(r)));
   }
   return [...gruppen.entries()].map(([schluessel, rs]) => {
     const laeufe = rs.flatMap((r) => r.laeufe).filter((l) => !l.attrappe || rs.every((r) => r.attrappe));
@@ -132,10 +154,13 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
     const u = reiheUmfang(erste);
     // Umfang in der Kennung, wo sie sonst mit der ganzen Kette zusammenfiele (seit 0.5.12)
     const zusatz = u === "s1-s2" || (u === "s2-s3" && !variante) ? `@${u}` : "";
+    const mehrereStaende = (staende.get(konfigSchluessel(erste))?.size ?? 0) > 1;
     const kennung =
       (variante
         ? variante.split("/").pop()!
-        : `${erste.modelle.s2.modell}-${erste.modelle.s2.aufwand}${erste.mistral_endpunkt ? `-${erste.mistral_endpunkt}` : ""}`) + zusatz;
+        : `${erste.modelle.s2.modell}-${erste.modelle.s2.aufwand}${erste.mistral_endpunkt ? `-${erste.mistral_endpunkt}` : ""}`) +
+      zusatz +
+      (mehrereStaende ? `@${reiheStand(erste)}` : "");
     const kz = {} as Record<keyof Kennzahlen, Spanne>;
     for (const k of KENNZAHLEN) kz[k] = spanne(laeufe.map((l) => l.kennzahlen?.[k] ?? null));
     // Radar je Sachverhalt der Redaktionsfassung
@@ -170,7 +195,7 @@ export function zusammenfassen(reihen: Reihe[]): Zusammenfassung[] {
     return {
       kennung,
       schluessel,
-      konfiguration: konfigText(erste),
+      konfiguration: konfigText(erste) + (mehrereStaende ? ` · ${erste.app} · Profil ${erste.profil?.version ?? "?"}` : ""),
       app: [...new Set(rs.map((r) => r.app))],
       laeufe: laeufe.length,
       bestanden: laeufe.filter((l) => l.technisch_bestanden).length,
@@ -222,7 +247,7 @@ export function auswerten(reihen: Reihe[], bezugKennung?: string): Auswertung {
     (bezugKennung
       ? undefined
       : [STANDARD_PROFILE.anthropic, STANDARD_PROFIL_ANTHROPIC_FASSUNG_7]
-          .map((s) => zusammenfassungen.find((z) => reihen.some((r) => konfigSchluessel(r) === z.schluessel && istAnthropicStandard(r, s))))
+          .map((s) => zusammenfassungen.find((z) => reihen.some((r) => gruppenSchluessel(r) === z.schluessel && istAnthropicStandard(r, s))))
           .find(Boolean));
   if (bezugKennung && !bezug) throw new Error(`Bezug „${bezugKennung}“ nicht unter den Reihen (${zusammenfassungen.map((z) => z.kennung).join(", ")})`);
   const abstaende = bezug
@@ -285,7 +310,12 @@ export function berichtMarkdown(a: Auswertung): string {
       "",
     );
   const apps = [...new Set(z.flatMap((s) => s.app))];
+  const getrennt = new Set(z.map((s) => s.schluessel.split("#")[0])).size < z.length;
   if (apps.length > 1)
-    zeilen.push(`Hinweis: Die Reihen stammen aus verschiedenen App-Versionen (${apps.join(", ")}); Unterschiede können auch daher rühren.`, "");
+    zeilen.push(
+      `Hinweis: Die Reihen stammen aus verschiedenen App-Versionen (${apps.join(", ")}); Unterschiede können auch daher rühren.${getrennt ? " Dieselbe Konfiguration aus verschiedenen Ständen steht getrennt (Kennung mit „@App/Profil“)." : ""}`,
+      "",
+    );
+  else if (getrennt) zeilen.push("Hinweis: Dieselbe Konfiguration aus verschiedenen Profilversionen steht getrennt (Kennung mit „@App/Profil“).", "");
   return zeilen.join("\n");
 }
