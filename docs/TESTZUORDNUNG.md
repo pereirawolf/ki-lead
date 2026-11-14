@@ -1263,3 +1263,29 @@ Angepasst mit geändertem Soll: `tests/pipeline/kontext.test.ts` (Kodierleitfade
 | Eine ungültige Datei in der Erfassung erscheint als Kasten „Fehler“ mit Rolle `alert` | KP-2026-W46-02: ungültige Datei in der Erfassung erscheint als Fehler mit Rolle alert | `tests/browser/barrierefreiheit.spec.ts` |
 
 Die Regeltexte von LD-F05, LD-A01, LD-E04 und LD-M04 (KP-2026-W46-03 bis -06) prüfen die vorhandenen Tests zu `design/rahmen.json` und `design/README.md` (Gleichlauf, Fassung mit Eintrag im Änderungsverlauf).
+
+## Kennzahlen-Bausteine in Lagebild und Verdichtung (0.8.2, UP-2026-W45-05)
+
+Soll unabhängig vom Code: die unveränderten fiktiven Bausteine aus Thessa (Orkantief „Ilka“) und KSNV, die fiktiven Meldungen des Landesprofils, von Hand gerechnete Summen und von Hand abgewandelte Kopien. Testprofil für v2 wie bei 0.8.0 (`tests/support/v2profil.ts`).
+
+| Soll | Test | Datei |
+|---|---|---|
+| Abnahme: drei Kreise 10:00 Uhr summiert (einsatzbereit 22 + 20 + 37 = 79, Einsätze 3 + 0 + 8 = 11), kein Gegenstand über Datenstände, „Einrichtungen ohne Feuerwehr“ getrennt | UP-2026-W45-05: Rechenhilfe aus Kennzahlen-Bausteinen … › drei Kreise 10:00 Uhr … | `tests/kern/bausteinverdichtung.test.ts` |
+| Einsatzkräfte mit Meldequote (K13/K14 Sonneberg) getrennt je Raum, Quote je Raum, keine Summe | UP-2026-W45-05: Rechenhilfe … › Einsatzkräfte mit Meldequote … | `tests/kern/bausteinverdichtung.test.ts` |
+| Land als erfasster Ausschnitt; mit Sonneberg 10:30 Uhr gilt für Thüringen der Land-Baustein (151), keine Summe 151 + 55; mehrere Datenstände Sonneberg | UP-2026-W45-05: Rechenhilfe … › Land-Baustein … | `tests/kern/bausteinverdichtung.test.ts` |
+| EM-20261014-UNBF einmal, Zählort Sonneberg, helfend Hildburghausen, im Land enthalten; sieben Kennungen | UP-2026-W45-05: Rechenhilfe … › Einsatzmeldungen je Kennung einmal … | `tests/kern/bausteinverdichtung.test.ts` |
+| Rechenhilfe nur ab zwei Bausteinen oder mit Ausschnitt | UP-2026-W45-05: Rechenhilfe … › Rechenhilfe nur bei … | `tests/kern/bausteinverdichtung.test.ts` |
+| Mindestwert pflanzt sich fort; geschätzt und Raum ohne Schlüssel getrennt; überlappende Räume getrennt; derselbe Raum einmal | UP-2026-W45-05: Regeln der Rechenhilfe an abgewandelten Bausteinen › … | `tests/kern/bausteinverdichtung.test.ts` |
+| Summenprüfung: Datenstand und Raum (145, 73), Meldequote (69, 122) unzulässig; 79 und 151 frei; andere Einheit kein Treffer | UP-2026-W45-05: Prüfungen nach S2 › unzulässige Summen … | `tests/kern/bausteinverdichtung.test.ts` |
+| v2: `KENNZAHL_SUMME_UNZULAESSIG`, `KENNZAHL_LANDESWEIT` (nicht bei fremder Quelle, nicht mit Zusatz), `KENNZAHL_BELEG` mit D1, D4, D5, D8 nur mit Lagenradar; KSNV ohne Belegachsen | UP-2026-W45-05: Prüfungen nach S2 › LEAD-Meldung-v2 …; › KSNV … | `tests/kern/bausteinverdichtung.test.ts` |
+| v1: Zahl im Text als unzulässige Summe statt Abweichung, zulässige Summe ohne Hinweis; Landeszahl ohne Kennzeichnung als Ausschnitt | UP-2026-W45-05: Prüfungen nach S2 › LEAD-Meldung-v1 … | `tests/kern/bausteinverdichtung.test.ts` |
+| Lagebild: vier Bausteine als Material, null zusätzliche Meldungen; Zähler, Sachverhalte, Meldestatus und Redaktionscheck unverändert; nur Bausteine ohne Lesefehler | UP-2026-W45-05: Kennzahlen-Bausteine als Material im Lagebild › Abnahme … | `tests/lagebild/baustein.test.ts` |
+| Prüfstand gültig, unbekannte Fassung, Schemabefund; ohne Schemata Material mit unbekannter Fassung | UP-2026-W45-05: … › Prüfstand … | `tests/lagebild/baustein.test.ts` |
+| Beispiel „Ilka“ mit `material` (neun Dateien, vier Meldungen, fünf Bausteine), Rechenhilfe; Beispiel ohne `material` unverändert | UP-2026-W45-05: … › Beispiel „Orkantief Ilka“ … | `tests/lagebild/baustein.test.ts` |
+| Oberfläche: Liste mit Prüfstand und Ausschnitt, Rechenhilfe, keine Bausteine in der Dateiliste; Übergabe mit fünf vorausgewählten Bausteinen und Rolle „material“ | UP-2026-W45-05: Kennzahlen-Bausteine als Material in der Auswertung › … | `tests/ui/lagebild-material.test.ts` |
+| KI-Erfassung übernimmt einen Baustein mit der Rolle „material“ als Kennzahlen-Baustein | UP-2026-W45-05: Kennzahlen-Baustein mit der Rolle „material“ … › … | `tests/ui/app.test.ts` |
+| S2/S3 mit Skriptanbieter (v2): Rechenhilfe im Material und Regel im Systemauftrag, Zusatz im Raum ohne Abweichung, `BAUSTEIN_AUSSCHNITT`, `KENNZAHL_SUMME_UNZULAESSIG` (206 = 151 + 55), `KENNZAHL_LANDESWEIT`, `KENNZAHL_BELEG`; Zusatz der KI ohne Hinweis | UP-2026-W45-05: Verdichtung mit mehreren Kennzahlen-Bausteinen … › … | `tests/pipeline/v2-pipeline.test.ts` |
+| Rechenhilfe nach dem Material ab zwei Bausteinen oder mit Ausschnitt, Summe 28 + 23 = 51; Regel im Steuerungsblock; Schließtag neutralisiert | UP-2026-W45-05: Rechenhilfe im Material an die KI › … | `tests/pipeline/baustein.test.ts` |
+| `beispiele[].material` als Text abgewiesen; leerer Materialordner als Warnung | F05: Profilmanifest … › UP-2026-W45-05: … | `tests/profil/manifest.test.ts` |
+
+Angepasst mit geändertem Soll: `tests/pipeline/baustein.test.ts` (UP-2026-W45-01: Hinweis `KENNZAHL_BELEG` bei zitiertem Baustein, Anzeige eines Land-Bausteins mit Ausschnitt), `tests/pipeline/v2-pipeline.test.ts` (UP-2026-W45-04: Regeln des Kodierleitfadens 1.14.0), `tests/profil/landesprofil.test.ts` (KP-2026-W45-02: Bausteine im Beispiel „Ilka“ als Material).
