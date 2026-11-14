@@ -1,17 +1,20 @@
 // Übergabe an die KI-Verdichtung (seit 0.6.5, TP-2026-W44-17 aus Lagebild.tsx): Auswahl je Meldung und ihre Rolle im
 // KI-Auftrag (Eingang oder eigene Vormeldung). Die Rolle bleibt beim Ab- und Wiederanwählen erhalten und ändert die
-// Originalmeldung nicht.
+// Originalmeldung nicht. Seit 0.8.2 (UP-2026-W45-05) gehen Kennzahlen-Bausteine mit der Rolle „material“ mit; gültige
+// Bausteine sind vorausgewählt.
 
 import { useEffect, useRef, useState } from "react";
 import type { Profil } from "../../kern/typen";
 import { datumDE } from "../../kern/ausgabe";
-import { absender, zeitpunktVon, type LagebildEintrag } from "../../lagebild/lagebild";
+import { absender, materialPruefstand, zeitpunktVon, type LagebildEintrag, type LagebildMaterial } from "../../lagebild/lagebild";
+import { zeitDE } from "../../kern/baustein";
 import { moeglicheRollen, type MeldungsRolle, type UebergabeMeldung } from "../../pipeline/material";
 import { Marken } from "./bausteine";
 
 export function LagebildUebergabe({
   profil,
   eintraege,
+  material = [],
   eigen,
   dateiZu,
   uebergeben,
@@ -19,9 +22,11 @@ export function LagebildUebergabe({
 }: {
   profil: Profil;
   eintraege: LagebildEintrag[];
+  /** Kennzahlen-Bausteine (seit 0.8.2); sie gehen mit der Rolle „material“ mit */
+  material?: LagebildMaterial[];
   /** Eigene Meldung (Stelle des Profils, nicht fremdes Schema) */
   eigen: (e: LagebildEintrag) => boolean;
-  dateiZu: (e: LagebildEintrag) => { name: string; text: string } | undefined;
+  dateiZu: (e: { id: string }) => { name: string; text: string } | undefined;
   uebergeben: (dateien: UebergabeMeldung[]) => void;
   /** Schließen ohne Übergabe („Abbrechen“, Escape); der Fokus geht an den auslösenden Knopf zurück */
   abbrechen: () => void;
@@ -39,11 +44,18 @@ export function LagebildUebergabe({
   const gewaehlt = eintraege.filter((e) => uebergabeWahl.has(e.id));
   const anzahlEingang = gewaehlt.filter((e) => rolleVon(e) === "eingang").length;
   const anzahlVormeldung = gewaehlt.length - anzahlEingang;
+  const [materialWahl, setMaterialWahl] = useState<Set<string>>(() => new Set(material.filter((m) => m.erkennung.status === "gueltig").map((m) => m.id)));
+  const materialGewaehlt = material.filter((m) => materialWahl.has(m.id));
+  const anzahlGesamt = gewaehlt.length + materialGewaehlt.length;
   const uebergabeStarten = () => {
     const liste: UebergabeMeldung[] = [];
     for (const e of gewaehlt) {
       const d = dateiZu(e);
       if (d) liste.push({ id: e.id, name: d.name, text: d.text, rolle: rolleVon(e) });
+    }
+    for (const m of materialGewaehlt) {
+      const d = dateiZu(m);
+      if (d) liste.push({ id: m.id, name: d.name, text: d.text, rolle: "material" });
     }
     if (!liste.length) return;
     uebergeben(liste);
@@ -132,18 +144,57 @@ export function LagebildUebergabe({
           );
         })}
       </ul>
+      {material.length > 0 && (
+        <fieldset className="lb-uebergabe-material">
+          <legend>Material: Kennzahlen-Bausteine</legend>
+          <p className="hinweis">Werden ausgewertet, nicht verdichtet; die App legt eine Rechenhilfe für Summen, Ausschnitte und Einsatzmeldungen bei.</p>
+          <ul className="lb-auswahl">
+            {material.map((m) => {
+              const info = m.erkennung.status === "gueltig" ? m.erkennung.info : undefined;
+              return (
+                <li key={m.id} className={materialWahl.has(m.id) ? "lb-auswahl-an" : undefined}>
+                  <label className="lb-auswahl-kopf">
+                    <input
+                      type="checkbox"
+                      checked={materialWahl.has(m.id)}
+                      onChange={(ev) => {
+                        const neu = new Set(materialWahl);
+                        if (ev.target.checked) neu.add(m.id);
+                        else neu.delete(m.id);
+                        setMaterialWahl(neu);
+                      }}
+                    />
+                    <span className="lb-auswahl-text">
+                      <span>
+                        {info ? info.raum.name : m.name}{" "}
+                        <span className="material-meta">({info ? `Datenstand ${zeitDE(info.datenstand)}, ${info.app}` : materialPruefstand(m)})</span>
+                      </span>
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        </fieldset>
+      )}
       <p className="lb-uebergabe-summe" aria-live="polite">
         {gewaehlt.length
-          ? `${anzahlEingang} ${anzahlEingang === 1 ? "Eingang" : "Eingänge"}, ${anzahlVormeldung} Vormeldung${anzahlVormeldung === 1 ? "" : "en"}.`
-          : "Keine Meldung ausgewählt."}
+          ? `${anzahlEingang} ${anzahlEingang === 1 ? "Eingang" : "Eingänge"}, ${anzahlVormeldung} Vormeldung${anzahlVormeldung === 1 ? "" : "en"}${
+              materialGewaehlt.length ? `, ${materialGewaehlt.length} Kennzahlen-Baustein${materialGewaehlt.length === 1 ? "" : "e"} als Material` : ""
+            }.`
+          : materialGewaehlt.length
+            ? `Keine Meldung ausgewählt, ${materialGewaehlt.length} Kennzahlen-Baustein${materialGewaehlt.length === 1 ? "" : "e"} als Material.`
+            : "Keine Meldung ausgewählt."}
         {anzahlVormeldung > 1 ? " Mehr als eine Vormeldung: Fortgeschrieben wird in der Regel nur die jüngste; bitte prüfen." : ""}
         {anzahlVormeldung > 0 && anzahlEingang === 0
           ? " Ohne Eingang wird nicht verdichtet, sondern die Vormeldung fortgeschrieben (Erfassung mit Recherche)."
           : ""}
       </p>
       <div className="aktionen">
-        <button type="button" className="knopf primaer" disabled={!gewaehlt.length} onClick={uebergabeStarten}>
-          {gewaehlt.length} Meldung{gewaehlt.length === 1 ? "" : "en"} übergeben
+        <button type="button" className="knopf primaer" disabled={!anzahlGesamt} onClick={uebergabeStarten}>
+          {materialGewaehlt.length
+            ? `${gewaehlt.length} Meldung${gewaehlt.length === 1 ? "" : "en"} und ${materialGewaehlt.length} Baustein${materialGewaehlt.length === 1 ? "" : "e"} übergeben`
+            : `${gewaehlt.length} Meldung${gewaehlt.length === 1 ? "" : "en"} übergeben`}
         </button>
         <button type="button" className="knopf leise" onClick={abbrechen}>
           Abbrechen

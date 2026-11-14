@@ -953,6 +953,62 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
   content: "▾";
 }
 
+/* Material: Kennzahlen-Bausteine (seit 0.8.2, UP-2026-W45-05) */
+.lb-material .hinweis {
+  margin: 0 0 0.5rem;
+}
+
+.lb-material-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.lb-material-liste li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  background: var(--flaeche);
+  padding: 0.4rem 0.3rem 0.4rem 0.75rem;
+}
+
+.lb-material-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.lb-material-datei {
+  overflow-wrap: anywhere;
+}
+
+.lb-rechenhilfe summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.lb-rechenhilfe pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  background: var(--flaeche);
+}
+
 .lb-auswahl {
   list-style: none;
   padding: 0;
@@ -1025,6 +1081,23 @@ fieldset:is(.lb-herkunft, .lb-eigene) {
 
 .lb-uebergabe-summe {
   font-weight: 700;
+}
+
+/* Kennzahlen-Bausteine in der Übergabe (seit 0.8.2, UP-2026-W45-05) */
+.lb-uebergabe-material {
+  border: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.lb-uebergabe-material legend {
+  font-weight: 700;
+  padding: 0;
+}
+
+.lb-uebergabe-material .hinweis {
+  margin: 0.2rem 0 0;
 }
 
 .lb-auswahl .lb-auswahl-kopf {

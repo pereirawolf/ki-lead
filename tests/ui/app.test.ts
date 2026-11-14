@@ -3,6 +3,7 @@
 // Start bei gestörtem Gerätespeicher (Review 20.10.2026, F13), Zwischenstand je Profil beim Wechsel und beim Aushängen.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { StrictMode } from "react";
+import { readFileSync } from "node:fs";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, reactUmgebung, seitentext, takt } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { leseOrdner, repoPfad } from "../support/dateien";
@@ -29,7 +30,7 @@ async function ruhe() {
 }
 
 /** App im StrictMode mit Attrappen für Profilansicht (Wechsel per Knopf) und Lagebild (Übergabe per Knopf) */
-async function appMitUebergabe() {
+async function appMitUebergabe(weitere: { id: string; name: string; text: string; rolle: string }[] = []) {
   vi.doMock("../../src/ui/Profile", () => ({
     ProfileAnsicht: ({ aktivieren }: any) =>
       React.createElement(
@@ -52,6 +53,7 @@ async function appMitUebergabe() {
                 text: JSON.stringify({ schema: "LEAD-Meldung-v1", land: "TH", meldende_stelle: "Stelle A", sachverhalte: [{}] }),
                 rolle: "eingang",
               },
+              ...weitere,
             ]),
         },
         "Testübergabe",
@@ -90,6 +92,17 @@ describe("Übergabe aus dem Lagebild (F02)", () => {
     await bisWahr(() => expect(aktivesProfil()).toBe(profilA));
     await ruhe();
     expect(materialNamen()).toEqual([]);
+  });
+});
+
+describe("UP-2026-W45-05: Kennzahlen-Baustein mit der Rolle „material“ aus der Auswertung", () => {
+  it("wird als Kennzahlen-Baustein übernommen, nicht als Eingang oder Vormeldung", async () => {
+    const text = readFileSync(repoPfad("profile/lead-thueringen/beispiele/orkantief-ilka-thessa/kennzahlen_Ilm-Kreis_2026-10-14T10-00_FIKTIV.json"), "utf-8");
+    await appMitUebergabe([{ id: "b", name: "kennzahlen_Ilm-Kreis.json", text, rolle: "material" }]);
+    await klick("Auswertung");
+    await klick("Testübergabe");
+    await bisWahr(() => expect(materialNamen()).toEqual(["eingang-a.json", "kennzahlen_Ilm-Kreis.json"]));
+    expect(seitentext()).toContain("Kennzahlen-Baustein (Thessa 0.3, FIKTIV): Ilm-Kreis (16070)");
   });
 });
 

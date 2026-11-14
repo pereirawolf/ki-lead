@@ -4875,11 +4875,10 @@
           "stelle": "A.9.1 Bedarfsdeckung (Z. 200)"
         }
       ],
-      "kurz": "Lagebild und Verdichtung mit Kennzahlen-Bausteinen: Bausteine als Material, Rolle „material“ für die Verdichtung, deterministische Rechenhilfe ohne unzulässige Summen.",
-      "status": "zurueckgestellt",
-      "entschieden_am": "2026-11-06",
-      "grund": "Vom Herausgeber am 06.11.2026 im Sammellauf KW 45 zurückgestellt; baut auf UP-2026-W45-04 auf. Vorab entschieden: Regeln im Kodierleitfaden Abschnitt 6, profilneutral (A); Bausteine mit einem Land als Raum gelten als erfasster Ausschnitt, Vollständigkeit nicht angegeben (A).",
-      "wieder_vorlegen_ab": "2026-11-20"
+      "kurz": "Lagebild und Verdichtung mit Kennzahlen-Bausteinen: Bausteine als Material im Lagebild, Rolle „material“ in der Übergabe, deterministische Rechenhilfe ohne unzulässige Summen, Ausschnitt eines Landes gekennzeichnet, Prüfungen nach S2.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-14",
+      "pr": 172
     },
     {
       "id": "UP-2026-W45-06",

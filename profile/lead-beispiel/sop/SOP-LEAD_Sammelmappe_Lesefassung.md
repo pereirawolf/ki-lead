@@ -59,11 +59,11 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.23.6 | 14.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 1.13.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.23.7 | 14.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 1.14.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 1.42.2 | 11.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 1.11.5 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
-| Arbeitsanweisung Verdichtung | 2.3.0 | 01.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 1.12.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Arbeitsanweisung Verdichtung | 2.4.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.4.1 | 30.10.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v1` (LEAD-Meldevorlage 1.2: optionale Felder `kennung` und `bezug` je Sachverhalt und `zeitstrahl` auf Meldungsebene; seit 1.1 `eintritt` und `meldezeitraum` optional mit Uhrzeit; abwärtskompatibel, keine Migration) | 29.10.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |
 

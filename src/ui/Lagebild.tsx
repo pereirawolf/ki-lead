@@ -10,7 +10,7 @@ import { kennsaetzeAlle } from "../kern/kennsaetze";
 import {
   absender,
   alleSachverhalte,
-  beispielDateien,
+  beispielMitMaterial,
   dateienAusAuswahl,
   einlesen,
   alterText,
@@ -52,6 +52,8 @@ import { pdfVorladen } from "../dokumente/vorladen";
 import { exportStempel, mitDatum } from "../kern/ausgabe";
 import { Absender, KopierKnopf, Marke, Marken, SvMarken } from "./lagebild/bausteine";
 import { LagebildUebergabe } from "./lagebild/Uebergabe";
+import { LagebildMaterialListe } from "./lagebild/Material";
+import { BAUSTEIN_SCHEMATA } from "../pipeline/bausteinschemata";
 import { Redaktionscheck } from "./lagebild/Redaktionscheck";
 import { Kopiervorlage } from "./lagebild/Kopiervorlage";
 import { Radarvergleich } from "./lagebild/Radarvergleich";
@@ -260,7 +262,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
     };
   }, [stichtag]);
 
-  const { eintraege: alleEintraege, fehler: lesefehler } = useMemo(() => einlesen(dateien, profil), [dateien, profil]);
+  // Kennzahlen-Bausteine als Material (seit 0.8.2, UP-2026-W45-05): eigene Liste, keine Meldungen
+  const { eintraege: alleEintraege, fehler: lesefehler, material } = useMemo(() => einlesen(dateien, profil, BAUSTEIN_SCHEMATA), [dateien, profil]);
   // Herkunftsfilter (seit 0.6.13, Issue #114, A1): gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage,
   // Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe sehen alle Meldungen, damit der Filter
   // weder Erinnerungen auslöst noch Prüfbefunde oder Eingangsmeldungen verschluckt.
@@ -344,7 +347,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   /** Übergabedialog an die KI-Verdichtung: 0 = geschlossen; jedes Öffnen zählt hoch und beginnt mit dem Vorschlag */
   const [uebergabeOffen, setUebergabeOffen] = useState(0);
   const uebergabeKnopf = useRef<HTMLButtonElement>(null);
-  const dateiZu = (e: LagebildEintrag) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
+  const dateiZu = (e: { id: string }) => dateien.find((d) => inhaltsKennung(d.text) === e.id);
 
   // Sprungziele beim Reiterwechsel (seit 0.6.7): Die Reiterleiste steht über dem Inhalt. Aus der Leiste nur bei Bedarf
   // und ohne Fokuswechsel; aus einer Kennzahl der Übersicht heraus mit Fokus auf den gewählten Reiter, weil die Kennzahl
@@ -529,7 +532,8 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
   const fehlerListe = [...importFehler, ...lesefehler];
 
   // Seit UX-2026-W45-01: Sind Meldungen geladen, ist die Ablage eine Zeile; Ziehen und Ablegen gilt für die ganze Ansicht
-  const kompakt = alleEintraege.length > 0;
+  const kompakt = alleEintraege.length + material.length > 0;
+  const materialListe = <LagebildMaterialListe material={material} entfernen={entfernen} />;
 
   return (
     <div
@@ -573,7 +577,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               type="button"
               className={kompakt ? "knopf leise" : "knopf"}
               title={b.hinweis}
-              onClick={() => hinzufuegen(beispielDateien(profil, b.ordner))}
+              onClick={() => hinzufuegen(beispielMitMaterial(profil, b))}
             >
               Beispiel laden: {b.titel}
             </button>
@@ -640,7 +644,10 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
       )}
 
       {alleEintraege.length === 0 ? (
-        <p className="leer">Noch keine Meldungen geladen.</p>
+        <>
+          <p className="leer">Noch keine Meldungen geladen.</p>
+          {materialListe}
+        </>
       ) : (
         <>
           <div className="lb-leiste">
@@ -669,6 +676,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               key={uebergabeOffen}
               profil={profil}
               eintraege={alleEintraege}
+              material={material}
               eigen={eigen}
               dateiZu={dateiZu}
               uebergeben={(liste) => {
@@ -700,6 +708,7 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
               Alle entfernen
             </button>
           </details>
+          {materialListe}
 
           {(herkunftWerte.length > 0 || nEigene > 0) && (
             <div className="lb-auswahlfilter">

@@ -9,12 +9,18 @@ import { pruefeRoh } from "./validierung";
 export const BAUSTEIN_FORMAT = "Thessa-Kennzahlen";
 /** Bekannte Fassungen von Thessa; 0.3 ohne bezug_lead (Thessa G12, SR-2026-W45-02), 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
 export const BAUSTEIN_FASSUNGEN = ["0.3", "0.2", "0.1"] as const;
-/** Bekannte Formate mit liefernder App und Fassungen (neueste zuerst) */
-export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly string[] }> = {
-  [BAUSTEIN_FORMAT]: { app: "Thessa", fassungen: BAUSTEIN_FASSUNGEN },
+/**
+ * Bekannte Formate mit liefernder App und Fassungen (neueste zuerst). `belegachsen` (seit 0.8.2, UP-2026-W45-05): Achsen
+ * des Lagenradars, für die Kennzahlen des Formats nach dem Datenmodell der liefernden App als Beleg in Frage kommen
+ * (Thessa, docs/DATENMODELL.md); nur ein Prüfhinweis, die App setzt keine Stufe.
+ */
+export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly string[]; belegachsen?: readonly string[] }> = {
+  [BAUSTEIN_FORMAT]: { app: "Thessa", fassungen: BAUSTEIN_FASSUNGEN, belegachsen: ["D1", "D4", "D5", "D8"] },
   "KSNV-Kennzahlen": { app: "KSNV", fassungen: ["0.1"] },
 };
 export type BausteinFassung = string;
+/** Länderschlüssel nach dem amtlichen Gemeindeschlüssel (01 Schleswig-Holstein … 16 Thüringen); seit 0.8.2 */
+export const istLandSchluessel = (s: unknown): boolean => typeof s === "string" && /^(0[1-9]|1[0-6])$/.test(s);
 /** Einheiten der Kennzahlen eines Bausteins (Thessa, docs/DATENMODELL.md) */
 export const BAUSTEIN_EINHEITEN = ["Einsatzmittel", "Einsätze", "Einsatzkräfte", "Ausrückebereiche", "Einheiten"] as const;
 
@@ -140,7 +146,9 @@ export function bausteinHinweis(info: BausteinInfo): string {
       : info.fassung === "0.1"
         ? ", Fassung 0.1 – keine Einsatzmeldungen"
         : `, ${info.einsatzmeldungen} Einsatzmeldung${info.einsatzmeldungen === 1 ? "" : "en"}`;
-  return `Kennzahlen-Baustein (${info.app} ${info.fassung}${info.fiktiv ? ", FIKTIV" : ""}): ${raum}, Datenstand ${zeitDE(info.datenstand)}, ${info.kennzahlen} Kennzahl${info.kennzahlen === 1 ? "" : "en"}${em}. Kennzahlen werden unverändert übernommen.`;
+  // Land als Raum: erfasster Ausschnitt (seit 0.8.2, UP-2026-W45-05, Entscheidung des Herausgebers vom 06.11.2026)
+  const ausschnitt = istLandSchluessel(info.raum.schluessel) ? " Raum gilt als erfasster Ausschnitt, Vollständigkeit nicht angegeben." : "";
+  return `Kennzahlen-Baustein (${info.app} ${info.fassung}${info.fiktiv ? ", FIKTIV" : ""}): ${raum}, Datenstand ${zeitDE(info.datenstand)}, ${info.kennzahlen} Kennzahl${info.kennzahlen === 1 ? "" : "en"}${em}. Kennzahlen werden unverändert übernommen.${ausschnitt}`;
 }
 
 /** Hinweis, wenn ein Baustein nicht verwendet werden kann und als JSON-Material bleibt. */

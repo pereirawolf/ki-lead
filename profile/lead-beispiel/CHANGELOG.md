@@ -8,6 +8,17 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 1.44.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-05 (Paket 5 des Umstellungsplans: Lagebild und Verdichtung mit Kennzahlen-Bausteinen, App 0.8.2). Die Zurückstellung bis 20.11.2026 hat der Herausgeber am 14.11.2026 aufgehoben; vorab entschieden am 06.11.2026: Regeln im Kodierleitfaden Abschnitt 6, profilneutral; Bausteine mit einem Land als Raum gelten als erfasster Ausschnitt, Vollständigkeit nicht angegeben. Entscheidung vom 14.11.2026: Gegenstände mit Meldequote bleiben je Raum. Zweite Stelle: neue Regeln. Das Profil bleibt auf LEAD-Meldung-v1 (Umstellung mit Paket 6).
+
+- **Kodierleitfaden 1.14.0:** Abschnitt 6 „Kennzahlen aus Kennzahlen-Bausteinen“ ergänzt um überlappende Räume und Summe nur über überschneidungsfreie Räume (Regel 2), Mindestwert in einer Summe (Regel 3), übergeordnete Erhebung mit Meldequote je Raum (Regel 4), Ausschnitt kennzeichnen (Regel 5), Einsatzmeldung je Kennung einmal (Regel 6), Kennzahl als Beleg, keine Kodierung (Regel 7); Schlussabsatz mit Rechenhilfe und Prüfungen der App.
+- **Arbeitsanweisung Erfassung 1.12.0:** in 4.3 Absatz „Kennzahlen aus Kennzahlen-Bausteinen“ mit Verweis auf Abschnitt 6 und der Rechenhilfe der App; Beispielwert `_entstehung.kodierleitfaden` „Kodierleitfaden LEAD 1.14.0“.
+- **Arbeitsanweisung Verdichtung 2.4.0:** „Material und Rollen“: Kennzahlen-Bausteine sind Material, keine Eingangsmeldungen; Verweis auf Abschnitt 6 und die Rechenhilfe; Kopf auf Kodierleitfaden ab 1.14.0.
+- **SOP-LEAD-Sammelmappe 3.23.7:** Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Arbeitsanweisung Kurzfassung 2.4.1 geprüft, kein Anpassungsbedarf (Kennzahlen-Bausteine gehen nicht an die Management Summary).
+- Darstellungsdatei, Schema, Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 1.43.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-04 (Paket 4 des Umstellungsplans: KI-Pipeline nach LEAD-Meldung-v2, App 0.8.0), freigegeben vom Herausgeber am 06.11.2026; Entscheidungen vom 03.11.2026 (Kennzahlregeln an einer Stelle, Kodierleitfaden Abschnitt 6) und vom 14.11.2026 (Verschieben schon mit diesem Paket). Zweite Stelle: Regeln stehen jetzt im Profil statt in der App. Das Profil bleibt auf LEAD-Meldung-v1 (Umstellung mit Paket 6).

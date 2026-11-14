@@ -6,8 +6,13 @@
 // - BAUSTEIN_ZAHL_ABWEICHEND: ein Satz mit Verweis auf den Baustein nennt eine Zahl, die der Baustein mit dieser
 //   Einheit nicht enthält (Kennzahl, Einsatzmittel oder Einsatzkräfte einer Einsatzmeldung).
 // Nur Hinweise: Zahlen im Text sind nicht eindeutig einer Kennzahl zuzuordnen; Summen sind fachlich zu prüfen.
+// Seit 0.8.2 (UP-2026-W45-05) mit der Summenprüfung der Rechenhilfe (src/kern/bausteinverdichtung.ts): Eine zulässige
+// Summe gilt nicht als Abweichung; eine Zahl, die einer unzulässigen Summe entspricht, meldet KENNZAHL_SUMME_UNZULAESSIG.
+// Ein Satz mit einem Wert eines Ausschnitt-Bausteins (Land) ohne Kennzeichnung als Ausschnitt meldet KENNZAHL_LANDESWEIT;
+// zitierte Bausteine ergeben den Hinweis KENNZAHL_BELEG.
 
-import { BAUSTEIN_EINHEITEN, zeitDE, type BausteinInfo } from "./baustein";
+import { BAUSTEIN_EINHEITEN, BAUSTEIN_FORMATE, zeitDE, type BausteinInfo } from "./baustein";
+import { belegachsen, istAusschnitt, summenpruefung, summeText, unzulaessigeSumme } from "./bausteinverdichtung";
 import { holeWert } from "./pfad";
 import { parseQuellen, sachverhalte, verweise } from "./quellen";
 import type { Befund, Meldung, UiKonfig } from "./typen";
@@ -79,11 +84,27 @@ export function saetze(text: string): string[] {
 
 const kurz = (s: string) => (s.length > 90 ? `${s.slice(0, 87)}…` : s);
 
-export function bausteinAbgleich(d: Meldung, ui: UiKonfig, bausteine: AbgleichBaustein[]): Befund[] {
+/** Werte eines Ausschnitt-Bausteins (Land) je Einheit, deren Raum das Land selbst ist */
+function ausschnittWerte(b: AbgleichBaustein): Map<string, Set<number>> {
+  const w = new Map<string, Set<number>>();
+  if (!istAusschnitt(b.info)) return w;
+  for (const k of b.daten.kennzahlen || [])
+    if (typeof k.wert === "number" && (!k.raum || k.raum === b.info.raum.name)) w.set(k.einheit, new Set([...(w.get(k.einheit) ?? []), k.wert]));
+  return w;
+}
+
+/** Kennzeichnung als Ausschnitt im Satz */
+const AUSSCHNITT_IM_TEXT = /ausschnitt|erfasst|nicht landesweit|kein landesweit/i;
+
+/** @param mitRadar das Profil führt ein Lagenradar (Rolle sv_radar): Belegachsen im Hinweis KENNZAHL_BELEG nennen */
+export function bausteinAbgleich(d: Meldung, ui: UiKonfig, bausteine: AbgleichBaustein[], mitRadar = !!ui.rollen.sv_radar): Befund[] {
   if (!bausteine.length) return [];
   const quellenText = ui.rollen.quellen ? holeWert(d, ui.rollen.quellen) : "";
   const befunde: Befund[] = [];
-  const zugeordnet = bausteine.map((b) => ({ ...b, nr: bausteinQuellen(quellenText, b.info), werte: bausteinWerte(b.daten) }));
+  const zugeordnet = bausteine.map((b) => ({ ...b, nr: bausteinQuellen(quellenText, b.info), werte: bausteinWerte(b.daten), land: ausschnittWerte(b) }));
+  const summen = summenpruefung(bausteine);
+  const unzulaessig: string[] = [];
+  const landesweit: string[] = [];
   for (const b of zugeordnet)
     if (!b.nr.length)
       befunde.push({
@@ -102,8 +123,14 @@ export function bausteinAbgleich(d: Meldung, ui: UiKonfig, bausteine: AbgleichBa
         const refs = verweise(satz);
         const belegt = zugeordnet.filter((b) => b.nr.some((n) => refs.has(n)));
         if (belegt.length) {
-          const fremd = paare.filter((p) => !belegt.some((b) => b.werte.get(p.einheit)!.has(p.zahl)));
-          for (const p of fremd) abweichend.push(`Sachverhalt ${i + 1}, ${feld}: „${p.text}“ (${p.zahl} ${p.einheit}) in „${kurz(satz)}“`);
+          const fremd = paare.filter((p) => !belegt.some((b) => b.werte.get(p.einheit)!.has(p.zahl)) && !summen.zulaessig.get(p.einheit)?.has(p.zahl));
+          for (const p of fremd) {
+            const t = unzulaessigeSumme(summen, p.zahl, p.einheit);
+            if (t) unzulaessig.push(`Sachverhalt ${i + 1}, ${feld}: „${p.text}“ in „${kurz(satz)}“: ${summeText(t)}`);
+            else abweichend.push(`Sachverhalt ${i + 1}, ${feld}: „${p.text}“ (${p.zahl} ${p.einheit}) in „${kurz(satz)}“`);
+          }
+          const land = belegt.find((b) => paare.some((p) => b.land.get(p.einheit)?.has(p.zahl)));
+          if (land && !AUSSCHNITT_IM_TEXT.test(satz)) landesweit.push(`Sachverhalt ${i + 1}, ${feld}: „${kurz(satz)}“ (${land.info.raum.name})`);
         } else {
           const treffer = paare.filter((p) => zugeordnet.some((b) => b.nr.length && b.werte.get(p.einheit)!.has(p.zahl)));
           if (treffer.length && zugeordnet.some((b) => b.nr.length)) ohneBeleg.push(`Sachverhalt ${i + 1}, ${feld}: „${treffer[0]!.text}“ in „${kurz(satz)}“`);
@@ -123,5 +150,27 @@ export function bausteinAbgleich(d: Meldung, ui: UiKonfig, bausteine: AbgleichBa
       code: "BAUSTEIN_OHNE_BELEG",
       text: `Wert eines Kennzahlen-Bausteins im Text ohne Verweis auf dessen Quelle (prüfen, ob die Zahl aus dem Baustein stammt): ${[...new Set(ohneBeleg)].join("; ")}.`,
     });
+  if (unzulaessig.length)
+    befunde.push({
+      stufe: "hinweis",
+      code: "KENNZAHL_SUMME_UNZULAESSIG",
+      text: `Zahl im Text mit dem Wert einer unzulässigen Summe aus Kennzahlen-Bausteinen (Kodierleitfaden Abschnitt 6, Rechenhilfe); bitte prüfen und Werte getrennt angeben: ${[...new Set(unzulaessig)].join("; ")}.`,
+    });
+  if (landesweit.length)
+    befunde.push({
+      stufe: "hinweis",
+      code: "KENNZAHL_LANDESWEIT",
+      text: `Wert aus einem Baustein, dessen Raum ein Land ist (erfasster Ausschnitt, Vollständigkeit nicht angegeben), ohne Kennzeichnung als Ausschnitt: ${[...new Set(landesweit)].join("; ")}.`,
+    });
+  const zitiert = zugeordnet.filter((b) => b.nr.length);
+  if (zitiert.length) {
+    const formate = [...new Set(zitiert.map((b) => b.info.format))];
+    const achsen = mitRadar ? [...new Set(formate.flatMap((f) => belegachsen(f)))] : [];
+    befunde.push({
+      stufe: "hinweis",
+      code: "KENNZAHL_BELEG",
+      text: `Kennzahl als Beleg prüfen: Kennzahlen aus Kennzahlen-Bausteinen (${formate.map((f) => BAUSTEIN_FORMATE[f]?.app ?? f).join(", ")}) im Quellenverzeichnis${achsen.length ? `; mögliche Belegachsen: ${achsen.join(", ")}` : ""}. Beurteilung${mitRadar ? " und Lagenradar" : ""} bleiben eine Entscheidung nach Kodierleitfaden und SOP; die App setzt keine Stufe.`,
+    });
+  }
   return befunde;
 }

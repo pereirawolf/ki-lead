@@ -255,6 +255,8 @@ function pruefeManifestStruktur(m: any, befunde: Befund[]): boolean {
   if (m.eigene_stellen !== undefined && !textListe(m.eigene_stellen)) fehler("„eigene_stellen“ muss eine Liste von Texten sein.");
   if (m.beispiele !== undefined && !(Array.isArray(m.beispiele) && m.beispiele.every((b: any) => istObjekt(b) && istText(b.titel) && istText(b.ordner))))
     fehler("„beispiele“ braucht je Eintrag „titel“ und „ordner“.");
+  if (Array.isArray(m.beispiele) && m.beispiele.some((b: any) => b?.material !== undefined && !(Array.isArray(b.material) && b.material.every(istText))))
+    fehler("„beispiele[].material“ ist eine Liste von Ordnern.");
   if (m.modelle !== undefined && (!istObjekt(m.modelle) || !Object.values(m.modelle).every(istText)))
     fehler("„modelle“ muss ein Objekt mit Modellkennungen sein.");
   return befunde.filter((b) => b.stufe === "fehler").length === vorher;
@@ -536,6 +538,11 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
     const praefix = b.ordner.replace(/^\.?\/*/, "").replace(/\/?$/, "/");
     if (!Object.keys(dateien).some((p) => p.startsWith(praefix) && p.toLowerCase().endsWith(".json")))
       befunde.push({ stufe: "warnung", text: `Beispiel „${b.titel}“: Im Ordner ${b.ordner} liegen keine JSON-Dateien.` });
+    for (const o of b.material || []) {
+      const mp = o.replace(/^\.?\/*/, "").replace(/\/?$/, "/");
+      if (!Object.keys(dateien).some((p) => p.startsWith(mp) && p.toLowerCase().endsWith(".json")))
+        befunde.push({ stufe: "warnung", text: `Beispiel „${b.titel}“: Im Materialordner ${o} liegen keine JSON-Dateien.` });
+    }
   }
   let kontakte: Kontakte | undefined;
   if (manifest.kontakte) {

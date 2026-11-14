@@ -4,6 +4,15 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 1.10.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-05 (Paket 5 des Umstellungsplans, App 0.8.2); Zurückstellung vom Herausgeber am 14.11.2026 aufgehoben. Zweite Stelle wie beim Beispielprofil (1.44.0) und wegen des Materials im Beispiel.
+
+- **Kodierleitfaden (1.14.0), Arbeitsanweisung Erfassung (1.12.0) und Verdichtung (2.4.0)** neu abgeleitet aus dem Beispielprofil 1.44.0 (`npm run profil:land`): Regeln für Kennzahlen aus Kennzahlen-Bausteinen in Abschnitt 6 (überlappende Räume, übergeordnete Erhebung, Ausschnitt, Einsatzmeldung je Kennung einmal, Beleg statt Kodierung) und Verweise darauf.
+- **Beispiel „Orkantief „Ilka“ mit Kräftelage der Feuerwehren“:** „Beispiel laden“ holt seit App 0.8.2 zusätzlich die fünf Kennzahlen-Bausteine aus `beispiele/orkantief-ilka-thessa` als Material (`profil.json`, `beispiele[].material`, Profilformat 1.32; Entscheidung des Herausgebers vom 14.11.2026). Hinweistext des Beispiels und LIESMICH des Begleitordners angepasst; Meldungen und Bausteine unverändert.
+- **Geteilte SOP-Sammelmappe 3.23.7:** Gültigkeitsstand in Teil A.
+- Schema, Darstellungsdatei und Kontakte sind unverändert.
+
 ## 1.9.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-04, freigegeben vom Herausgeber am 06.11.2026. Zweite Stelle wie beim Beispielprofil (1.43.0).
