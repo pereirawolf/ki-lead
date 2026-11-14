@@ -153,6 +153,14 @@
   border-bottom: 1px solid var(--linie-zart);
 }
 
+/* Unter 640 px stehen die Reiter nicht fest, damit der mitlaufende Bereich auf kleinen Bildschirmen nicht ein Drittel
+   der Höhe belegt; der Kopfbereich bleibt stehen (seit UX-2026-W46-02, nimmt UX-2026-W45-03 dort zurück) */
+@media (max-width: 640px) {
+  .lb-reiter {
+    position: static;
+  }
+}
+
 .lb-reiter ol {
   display: flex;
   gap: 0.35rem;
