@@ -187,6 +187,17 @@ export function umklassifizieren(m: Material, profil: Profil): Material {
   return m;
 }
 
+/**
+ * Text von JSON-Material für den Auftrag an die KI: ohne Einrückung und Zeilenumbrüche (seit 0.9.2, AV-2026-W46-01).
+ * Eingerückt bestand das Eingangsmaterial des Vergleichslaufs Ilka in der v2-Fassung zu einem Viertel aus Leerraum und
+ * hob S1 mit Haiku über die Schwelle für den Preis langer Prompts (Ergebnisbericht vom 14.11.2026,
+ * evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md). Inhalt und Reihenfolge bleiben gleich; die Prüfsumme
+ * stammt weiter aus den Rohbytes der Datei.
+ */
+function jsonText(obj: unknown): string {
+  return JSON.stringify(obj);
+}
+
 function kuerzen(text: string): { text: string; hinweis?: string } {
   if (text.length <= MAX_TEXT_ZEICHEN) return { text };
   return { text: text.slice(0, MAX_TEXT_ZEICHEN), hinweis: `Auf ${MAX_TEXT_ZEICHEN.toLocaleString("de-DE")} Zeichen gekürzt.` };
@@ -225,11 +236,11 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
         ...basis,
         art: "kennzahlen-baustein",
         baustein: { info: baustein.info, daten: obj as Record<string, unknown> },
-        ...kuerzen(JSON.stringify(bausteinProjektion(obj as Record<string, unknown>), null, 2)),
+        ...kuerzen(jsonText(bausteinProjektion(obj as Record<string, unknown>))),
         hinweis: bausteinHinweis(baustein.info),
       };
     if (baustein) {
-      const k = kuerzen(JSON.stringify(obj, null, 2));
+      const k = kuerzen(jsonText(obj));
       return { ...basis, art: "json", text: k.text, hinweis: [bausteinAblehnung(baustein), k.hinweis].filter(Boolean).join(" ") };
     }
     const info = eingangsInfo(obj, profil);
@@ -238,7 +249,7 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
         ...basis,
         art: "meldung",
         meldung: obj as Meldung,
-        text: JSON.stringify(obj, null, 2),
+        text: jsonText(obj),
         hinweis: "Als eigene Vormeldung erkannt (Fortschreibung).",
       };
     }
@@ -250,11 +261,11 @@ export async function dateiLesen(datei: File, profil: Profil): Promise<Material>
         art: "eingang",
         meldung: obj as Meldung,
         eingang: info,
-        text: JSON.stringify(obj, null, 2),
+        text: jsonText(obj),
         hinweis: `Eingangsmeldung: ${wer}${wann}, ${info.sachverhalte} Sachverhalt${info.sachverhalte === 1 ? "" : "e"}.`,
       };
     }
-    return { ...basis, art: "json", ...kuerzen(JSON.stringify(obj, null, 2)) };
+    return { ...basis, art: "json", ...kuerzen(jsonText(obj)) };
   }
   if (["txt", "md", "markdown", "csv", "text"].includes(endung) || datei.type.startsWith("text/")) {
     return { ...basis, art: "text", ...kuerzen(roh) };

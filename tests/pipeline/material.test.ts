@@ -1,7 +1,7 @@
 // Material des Auftrags: DOCX, PDF, URLs, gleichnamige Dateien, Eingangserkennung, eigene Stelle und Rollenwahl.
 import { describe, expect, it } from "vitest";
-import { profil, V1_PROFIL } from "../support/dateien";
-import { ilkaDatei, ilkaMeldung } from "../support/fixtures";
+import { jsonDateien, profil, profilPflicht, V1_PROFIL } from "../support/dateien";
+import { ilkaDatei, ilkaMeldung, ILKA_V2_ORDNER } from "../support/fixtures";
 import { neuerLauf } from "../../src/pipeline/lauf";
 import { materialBloecke, docxText, urlsAusText, dateiLesen, juengsterEingang, type Material } from "../../src/pipeline/material";
 import JSZip from "jszip";
@@ -143,5 +143,43 @@ describe("Rollenwahl bei der Übergabe", () => {
       { name: land.name, art: land.art, groesse: land.groesse, hash: land.hash, rolleGewaehlt: land.rolleGewaehlt },
     ]);
     expect(l.material[0]).toMatchObject({ art: "eingang", rolleGewaehlt: true });
+  });
+});
+
+describe("JSON-Material ohne Einrückung (AV-2026-W46-01)", () => {
+  // Soll: Ergebnisbericht vom 14.11.2026 (evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md), Folgerung
+  // „Eingangsmaterial für S1 und S2“: JSON-Material geht ohne Einrückung in den Auftrag, Inhalt unverändert.
+  const eingerueckt = (name: string, daten: unknown) => new File([JSON.stringify(daten, null, 2)], name, { type: "application/json" });
+
+  it("AV-2026-W46-01: Eingangsmeldungen Ilka (v2) ohne Zeilenumbruch und mit unverändertem Inhalt, auch im Prompt", async () => {
+    const p = await profilPflicht("lead-beispiel");
+    const eingaenge = jsonDateien(ILKA_V2_ORDNER, { pflicht: true }).filter((d) => !d.name.includes("_Bund_"));
+    expect(eingaenge.length).toBeGreaterThanOrEqual(6);
+    const material: Material[] = [];
+    for (const d of eingaenge) {
+      const m = await dateiLesen(eingerueckt(d.name, d.daten), p);
+      expect(["eingang", "meldung"]).toContain(m.art);
+      expect(m.text).not.toContain("\n");
+      expect(JSON.parse(m.text!)).toEqual(d.daten);
+      material.push(m);
+    }
+    const text = (materialBloecke(material, [], "")[0] as any).text as string;
+    expect(text).not.toMatch(/\n +"/);
+  });
+
+  it("AV-2026-W46-01: sonstiges JSON ohne Leerraum", async () => {
+    const p = await profilPflicht("lead-beispiel");
+    const m = await dateiLesen(eingerueckt("liste.json", { a: { b: [1, 2] }, c: "x y" }), p);
+    expect(m.art).toBe("json");
+    expect(m.text).toBe('{"a":{"b":[1,2]},"c":"x y"}');
+  });
+
+  it("AV-2026-W46-01: Kennzahlen-Baustein (Projektion) ohne Zeilenumbruch", async () => {
+    const p = await profilPflicht("lead-thueringen");
+    const b = jsonDateien("profile/lead-thueringen/beispiele/orkantief-ilka-thessa", { pflicht: true }).find((x) => x.name.startsWith("kennzahlen_"))!;
+    const m = await dateiLesen(eingerueckt(b.name, b.daten), p);
+    expect(m.art).toBe("kennzahlen-baustein");
+    expect(m.text).not.toContain("\n");
+    expect(JSON.parse(m.text!)).toBeTypeOf("object");
   });
 });
