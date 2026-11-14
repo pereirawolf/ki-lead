@@ -1,6 +1,6 @@
 # KI-LEAD – Spezifikation des Forschungsdemonstrators
 
-Fassung 0.8.3 vom 14.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
+Fassung 0.9.0 vom 14.11.2026, Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“, Änderungen der App in [CHANGELOG.md](../CHANGELOG.md)
 
 Lizenzen: Code unter EUPL-1.2 ([LICENSE](../LICENSE)); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in [LICENSE-CONTENT](../LICENSE-CONTENT). Begleitende Aufsätze außerhalb des Repositorys: CC BY-NC-ND 4.0.
 
@@ -81,22 +81,29 @@ lead-beispiel.leadprofil/
   "format": "lead-profil/1",
   "id": "lead.beispiel.koordinierungsstelle",
   "name": "LEAD-Beispiel – Koordinierungsstelle",
-  "version": "1.44.0",
+  "version": "2.0.0",
   "ebene": "Bund",
   "referenzraum": "Bevölkerungsschutz in Deutschland",
   "variablen": {
     "land": "Bund",
     "meldende_stelle": "Koordinierungsstelle (Beispiel)",
     "zeitzone": "Europe/Berlin",
-    "meldetakt": "wöchentlich"
+    "meldetakt": "wöchentlich",
+    "absender.stelle": "Koordinierungsstelle (Beispiel)",
+    "absender.gebiet.name": "Bund",
+    "absender.ebene": "Bund"
   },
   "meldung": {
     "schema": "meldung.schema.json",
     "ui": "meldung.ui.json",
-    "schema_id": "LEAD-Meldung-v1",
-    "eingang_schema_ids": ["LEAD-Meldung-v1"],
-    "eingang_schemata": { "LEAD-Meldung-Land-v1": { "datei": "eingang/LEAD-Meldung-Land-v1.schema.json", "gebiet": "kreis" } }
+    "schema_id": "LEAD-Meldung-v2",
+    "eingang_schema_ids": ["LEAD-Meldung-v2"],
+    "eingang_schemata": { "LEAD-Meldung-v2": { "datei": "eingang/meldung.schema.json" } }
   },
+  "migrationen": [
+    { "von": "LEAD-Meldung-v1", "verfahren": "lead-meldung-v2" },
+    { "von": "LEAD-Meldung-Land-v1", "verfahren": "lead-meldung-v2" }
+  ],
   "anweisungen": {
     "erfassung": "anweisung-erfassung.md",
     "kurzfassung": "anweisung-kurzfassung.md",
@@ -115,16 +122,16 @@ lead-beispiel.leadprofil/
 
 ### 4.3 Darstellungsdatei `meldung.ui.json` (Auszug)
 
-Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt aus den Enums des Schemas ab. Die UI-Datei enthält nur, was das Schema nicht trägt.
+Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt aus den Enums des Schemas ab. Die UI-Datei enthält nur, was das Schema nicht trägt. Seit Profil 2.0.0 (App 0.9.0) steht das Beispielprofil auf LEAD-Meldung-v2: Rollen sind Pfade, die bisherigen Kennsätze sind Felder; `kennsaetze` nennt nur noch ihre Beschriftungen für Anzeige und Kopiervorlage.
 
 ```json
 {
   "format": "lead-ui/1",
-  "schritte": [ { "id": "meta", "titel": "Meldungsmetadaten", "felder": ["land", "meldende_stelle", "meldezeitpunkt", "meldezeitraum"] }, "…" ],
+  "schritte": [ { "id": "meta", "titel": "Meldungsmetadaten", "felder": ["absender", "meldezeitpunkt", "zeitzone", "meldezeitraum", "…"] }, "…" ],
   "felder": {
-    "sachverhalte[].art": { "label": "Art", "widget": "mehrfachauswahl" },
-    "sachverhalte[].sofort.beurteilung": { "label": "Bewertung", "widget": "radio", "leer_label": "keine Angabe" },
-    "sachverhalte[].sofort.lagenradar": { "label": "Lagenradar", "widget": "radar", "radar": "lagenradar" }
+    "sachverhalte[].module.lead-bevoelkerungsschutz.ereignisarten": { "label": "Ereignisart(en)", "pflicht": true },
+    "sachverhalte[].bewertung.beurteilung.stufe": { "label": "Stufe", "widget": "radio" },
+    "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar": { "label": "Lagenradar", "widget": "radar", "radar": "lagenradar" }
   },
   "radare": {
     "lagenradar": {
@@ -136,14 +143,15 @@ Die App leitet Ereignisartenkatalog, Länderliste und zulässige Werte direkt au
       ]
     }
   },
-  "rollen": { "status_feld": "_status", "entstehung_feld": "_entstehung", "quellen": "quellen", "sachverhalte": "sachverhalte", "…": "…" },
+  "rollen": { "status_feld": "status", "entstehung_feld": "entstehung", "land": "absender.gebiet.name", "meldende_stelle": "absender.stelle",
+              "sachverhalte": "sachverhalte", "sv_beurteilung": "bewertung.beurteilung.stufe", "…": "…" },
   "kennsaetze": { "neubewertung": "Neubewertung bei:", "handlungsrelevant": "Handlungsrelevant bis:", "aenderung": "Änderung zur Vormeldung:",
                   "abweichung": "Abweichende Bewertung:", "abschluss": "Abschluss im Lagebild:" },
   "quellen": {
     "kategorien": { "A": "amtlich/zwischenstaatlich – …", "B": "Betreiber – …", "W": "wissenschaftlich – …", "M": "Medien – …", "P": "sonstige private Quellen – …" },
     "rangfolge": ["A", "B", "W", "M", "P"]
   },
-  "dateiname": "LEAD-Meldung_{land}_{meldende_stelle}_{meldezeitpunkt}"
+  "dateiname": "LEAD-Meldung-v2_{absender.gebiet.name}_{absender.stelle}_{meldezeitpunkt}"
 }
 ```
 
@@ -252,6 +260,7 @@ Jede Stufe wird mit Eingabe, Ausgabe, Modell, Tokens, Kosten und Dauer im Laufpr
 - **Herkunft der meldenden Stelle (seit 0.6.13, Issue #114, A1):** Führt das Profil die Rolle `herkunft` (Pfad auf Meldungsebene, Profilformat 1.25), trägt jede Meldung und jeder Sachverhalt ein Kennzeichen der Herkunft (Dateiliste, Meldungen, Meldestatus, Sachverhalte, Lagenradar; Verteilung in der Übersicht). Meldungen ohne Wert erhalten `herkunft_standard`, sonst „keine Angabe“; `herkunft_kategorie` ergänzt die Quellenkategorie, z. B. „Betreiber (B)“. Ein Filter blendet Meldungen je Herkunft ein und aus; er gilt für Übersicht, Meldungen, Sachverhalte, Lagenradar, Kopiervorlage, Rohtabelle, PDF und CSV. Dateiliste, Meldestatus, Redaktionscheck und Übergabe an die KI-Verdichtung berücksichtigen immer alle Meldungen, damit der Filter weder Erinnerungen auslöst noch Prüfbefunde oder Eingangsmeldungen verschluckt. CSV und Rohtabelle führen die Spalten „Herkunft“ und gegebenenfalls „Herkunft: Quellenkategorie“, die Kopiervorlage die Herkunft in der Kopfzeile der Stelle, das PDF eine Spalte „Herkunft“, eine Zeile je Meldung und einen Vermerk mit Verteilung und Auswahl. Die Herkunft ist eine Anzeige der Angabe in der Meldung; sie ändert keine Bewertung. Ohne die Rolle bleibt das Lagebild unverändert. Regeln für Meldungen anderer Herkunft (etwa Betreibermeldungen) liefert ein Profilpaket, nicht die App; die App lädt keine Regeln zur Laufzeit von anderen Adressen.
 - **Kennzahlen-Bausteine als Material (seit 0.8.2, UP-2026-W45-05):** Bausteine aus Thessa und KSNV erkennt das Lagebild vor der Migration und führt sie in einer eigenen Liste „Material: Kennzahlen-Bausteine“ (Raum, Datenstand, Zahl der Kennzahlen und Einsatzmeldungen, liefernde App und Fassung, Prüfstand, Hinweis auf einen erfassten Ausschnitt), darunter aufklappbar die Rechenhilfe der App, wie sie an die KI geht. Sie zählen nicht als Meldung und erscheinen weder im Meldestatus noch in Zählern, Sachverhalten, Redaktionscheck oder Ausgaben. Die Übergabe an die KI-Verdichtung führt sie mit der Rolle „material“, gültige Bausteine vorausgewählt. Ein Beispiel im Manifest kann unter `material` Ordner mit Bausteinen nennen, die „Beispiel laden“ mitlädt (Profilformat 1.32; Landesprofil: Orkantief „Ilka“).
 - **Redaktionscheck auf Feldern nach LEAD-Meldung-v2 (seit 0.8.3, UP-2026-W45-06):** Bei Meldungen nach v2 liest der Redaktionscheck die Felder statt der Kennsätze: Zeitfenster aus `handlungsbedarf.fristen` (je Frist eine Zeile; ein Kalendertag gilt bis 23:59 in der Zeitzone, ein unbekannter Termin ist zu klären), auch aus der sachverhaltsübergreifenden Lage (als „Übergreifende Lage“ der Meldung); abweichende Bewertungen aus `bewertung.abweichende_bewertungen` (Einträge ohne Grund als Befund); Abschluss aus `bewertung.abschluss` (ohne Ende kein Abschluss) und Änderung aus `bewertung.aenderung_zur_vormeldung`; formale Vollständigkeit bei hoher Beurteilung aus Kernaussage, `neubewertung_bei` und Maßnahmen oder Empfehlungen; in Abschnitt 5 die Fehler der Referenzprüfung (Prüfebene 2) und als Information der Hinweis „Kennzahl als Beleg prüfen“ je Meldung mit Kennzahlen aus Kennzahlen-Bausteinen (Modul `lead-baustein`; Belegachsen nach der liefernden App nur bei Profilen mit Lagenradar; die App setzt keine Stufe). Sachverhaltskennungen mit vier bis acht Zufallszeichen und Bezüge als Objekte werden erkannt. Beschriftungen ohne Kennsätze im Profil: die Texte des Beispielprofils. Lagebild und Kopiervorlage erzeugen den Bewertungstext eines v2-Sachverhalts aus den Feldern in der Form der Kennsätze (`bewertungTextV2()`), die Kopiervorlage zeigt Maßnahmen und Empfehlungen als eigenen Block. Ein Profil kann für eingehende Meldungen der eigenen Schemakennung ein weiter gefasstes Eingangsschema nennen (Profilformat 1.33, etwa ohne Liste der Ebenen und Gebiete); das Lagebild prüft dann dagegen, die Erfassung bleibt beim Profilschema.
+- **Profile nach LEAD-Meldung-v2 (seit 0.9.0, UP-2026-W45-06):** Beispielprofil, Landesprofil und Vorlage stehen auf v2 (Abschnitte 4.2 und 4.3; [LEAD-MELDUNG-V2.md](LEAD-MELDUNG-V2.md), Abschnitt 10). Übersichten des Lagebilds (Kennzahlen, Filter, Balken, Ausgabe) benennen Beurteilung, Tendenz und Gebiet nach dem Objekt („Beurteilung“, „Tendenz“, „Gebiet der meldenden Stelle“) statt nach dem Wert („Stufe“, „Richtung“, „Name“). Eine neue Meldung nach v2 erhält Formatfassung, `meldung_id`, Zeitzone und t0 mit UTC-Versatz. Die Forschungsfunktionen (Vergleichslauf mit T1 bis T8, Kennzahlen und Plausibilität, Fallreihe, Prüffall Reparatur, Management Summary aus der Musterfassung) lesen v2: t0 als Zeitpunkt, Radarachsen als Objekte, Kernaussage als Feld, Fristen vor t0 aus den Feldern; die Musterfassung liegt dafür als `evaluation/material/ilka-musterfassung.v2.json` vor.
 - **Export:** PDF, CSV, Kopiervorlage. Gegliederte Ausgaben (PDF, Kopiervorlage) brechen eine Kennsatzzeile nicht an Signal-Satzanfängen um; ein Kennsatz reicht bis zum Zeilenende. Das PDF verwendet die Standardschrift (Windows-1252) und ersetzt andere Zeichen lesbar, etwa „→“ durch „->“ und „⟦…⟧“ durch „[[…]]“ (seit 0.4.29).
 
 **Umsetzung M4 (Stand 18.10.2026):** Übergabe aus dem Lagebild mit Auswahl und ausdrücklicher Rolle je Meldung („Als Eingang behandeln“ oder „Als Vormeldung behandeln“; eigene Meldungen vorab abgewählt, bei Auswahl als Vormeldung vorgeschlagen; nicht mögliche Rollen gesperrt und begründet; Rolle verbindlich bis S1/S2 und im Laufprotokoll). Eine Übergabe gilt nur für das Profil, unter dem sie entstand, und wird genau einmal übernommen; ein Profilwechsel verwirft eine noch nicht übernommene. Rolle „verdichtung“ mit eigenem Modell und Aufwand für S2, Arbeitsanweisung `anweisungen.verdichtung` aus dem Profil. Vor S1 und S2 erzeugt die App „Vermerke aus dem Redaktionscheck“ der Eingangsmeldungen und seit 0.4.28 auch einer eigenen Vormeldung (gleiche Logik wie das Lagebild, bezogen auf t0 und die nächste Ausgabe) und gibt sie als Arbeitshilfe mit. Nach S3 prüft sie, ob jede Eingangsmeldung im Quellenverzeichnis erkennbar ist. Vergleich mit einer Referenzfassung im Ergebnis (seit 0.6.16 nur mit Forschungsfunktionen, Abschnitt 6; Zuordnung der Sachverhalte nach Ähnlichkeit, Kennzahlen je Achse ohne Gesamtwert), gespeichert im Laufprotokoll (`vergleich`), Export als CSV/JSON. OpenAI-Anbieter über die Responses API (Streaming, `web_search` mit `max_tool_calls`, Structured Outputs mit strengem Schema, `reasoning.effort`, `store: false`, PDF als `input_file`); Modelle gpt-6-luna, gpt-6.1-sol, gpt-6-astra; Auswahl des Anbieters nach Modellkennung, Schlüssel je Anbieter.
@@ -521,6 +530,7 @@ Fassungen der Spezifikation. Die Fassung folgt der App-Version, für die sie gil
 | 0.7.23 | 14.11.2026 | Zwischenstand der Maske: ausstehende Speicherung auch beim Aushängen der App sofort schreiben (Abschnitt 4.6) |
 | 0.8.0 | 14.11.2026 | KI-Pipeline nach LEAD-Meldung-v2 (Abschnitt 5.1, „KI-Pipeline nach LEAD-Meldung-v2“; UP-2026-W45-04): Ausgabeschema für die KI ohne Bedingungen, Nachbearbeitung mit Identität, Absender, Zeit und Entstehung, Kennungen, Bezug und Zeitstrahl je Sachverhalt, Übernahme aus Kennzahlen-Bausteinen über das Modul `lead-baustein`, Management Summary mit Fristen und abweichenden Bewertungen aus v2-Feldern; Kennzahlregeln im Kodierleitfaden (S0); offener Punkt 21 mit Stand |
 | 0.8.1 | 14.11.2026 | Grunddesign 1.10 in der Referenzumsetzung: Schrittleiste läuft mit, Fehlerkästen mit Rolle `alert` (Abschnitt 5.1, „Schrittleiste“, „Fehlerkästen“; KP-2026-W46-01, -02) |
+| 0.9.0 | 14.11.2026 | Profile nach LEAD-Meldung-v2 (Abschnitte 4.2, 4.3, 5.2): Beispiel- und Landesprofil 2.0.0, Vorlage 1.0.0; Beschriftung der Übersichten nach dem Objekt; Kopf neuer v2-Meldungen; Forschungsfunktionen mit v2 (UP-2026-W45-06, Teil Profile; KL-2026-W45-03, -04) |
 | 0.8.3 | 14.11.2026 | Redaktionscheck auf Feldern nach LEAD-Meldung-v2 mit Hinweis „Kennzahl als Beleg prüfen“, sachverhaltsübergreifende Lage, Eingangsschema der eigenen Kennung (Abschnitt 5.2; UP-2026-W45-06, Teil App) |
 | 0.8.2 | 14.11.2026 | Kennzahlen-Bausteine im Lagebild und in der Verdichtung (UP-2026-W45-05): Material statt Meldung im Lagebild (Abschnitt 5.2), Rolle „material“ in der Übergabe, Rechenhilfe der App und Prüfungen nach S2 (S0), `beispiele[].material` im Manifest; offener Punkt 21 mit Stand |
 | 0.7.15 | 06.11.2026 | KI-Erfassung, frühere Läufe: zugängliche Namen „Übernehmen: Lauf n vom …“ und „Löschen: Lauf n vom …“ mit dem sichtbaren Text am Anfang (OB-2026-W45-05); Funktion unverändert |
