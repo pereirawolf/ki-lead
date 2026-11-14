@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { aushaengen, bisWahr, einhaengen, klick, reactUmgebung } from "../support/dom";
+import { aushaengen, bisWahr, einhaengen, klick, knopf, reactUmgebung } from "../support/dom";
 import { speicherLeeren, type SpeicherZustand } from "../support/speicher";
 import { repoPfad } from "../support/dateien";
 import { UeberAbschnitt } from "../../src/ui/Ueber";
@@ -98,6 +98,8 @@ describe("Fuß der App", () => {
     await einhaengen(React.createElement(App));
     await bisWahr(() => expect(document.querySelector("footer.fuss")).toBeTruthy());
     await klick("Einstellungen");
+    // erst klicken, wenn die Einstellungen stehen (in der CI unter Last nicht sofort; seit 0.7.23)
+    await bisWahr(() => expect(knopf("Über KI-LEAD")).toBeTruthy());
     await klick("Über KI-LEAD");
     await bisWahr(() => expect(document.querySelector("#ueber-titel")?.textContent).toBe("Über KI-LEAD"));
   });

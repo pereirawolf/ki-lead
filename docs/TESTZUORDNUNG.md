@@ -1225,3 +1225,11 @@ Angepasst mit geändertem Soll: `tests/pipeline/schaetzung.test.ts` (Messwerte, 
 | Gemeldete Stellen bei 1440 und 390 px: Name ohne Umbruch und ungekürzt, Zeitpunkt darunter, Kacheln einer Zeile gleich hoch | UX-2026-W46-07: gemeldete Stellen bei … px › … | `tests/browser/ux-2026-w46.spec.ts` |
 
 Angepasst mit geändertem Soll: `tests/lagebild/lagebild.test.ts` (Tendenz „Stabilisierung“ grau), `tests/ui/profile.test.ts` (Angaben ohne Ebene und Referenzraum; Test der Sprungleiste entfällt), `tests/browser/hinweisband.spec.ts` (bei 390 px scrollen die Reiter mit).
+
+## Zwischenstand beim Aushängen, stabile Oberflächentests (0.7.23, Entscheidung des Herausgebers vom 14.11.2026)
+
+| Soll | Test | Datei |
+|---|---|---|
+| Eine ausstehende Änderung steht nach dem Aushängen der App sofort im Speicher; danach schreibt kein Zeitgeber mehr | Zwischenstand beim Aushängen (seit 0.7.23) › … | `tests/ui/app.test.ts` |
+
+Angepasst ohne geändertes Soll: `tests/ui/ueber.test.ts` (wartet, bis die Einstellungen stehen, bevor „Über KI-LEAD“ geklickt wird), `tests/browser/ux-2026-w45.spec.ts` (Lage der Reiter unter dem Kopfbereich wiederholt geprüft, bis das Hinweisband schmaler geworden ist).

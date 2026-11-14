@@ -1,5 +1,6 @@
 // Meldung in der Maske und automatischer Zwischenstand je Profil (seit 0.6.5, TP-2026-W44-17 aus App.tsx): Laden beim
-// Profilwechsel, verzögertes Speichern (1,2 s), sofortiges Schreiben beim Verlassen der Seite und beim Profilwechsel.
+// Profilwechsel, verzögertes Speichern (1,2 s), sofortiges Schreiben beim Verlassen der Seite, beim Profilwechsel und
+// (seit 0.7.23) beim Aushängen der App.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Meldung, Profil, ProfilEintrag } from "../../kern/typen";
@@ -59,6 +60,15 @@ export function useZwischenstand(
     }
     ausstehend.current.clear();
   }, [profile, schreiben]);
+
+  // Beim Aushängen der App ausstehende Speicherungen sofort schreiben, statt einen Zeitgeber über das Ende der App
+  // hinaus laufen zu lassen; sonst schreibt er später in einen Speicher, der schon einer anderen Sitzung gehört
+  // (in den Tests: der nächsten). Seit 0.7.23.
+  const zuletzt = useRef(ausstehendSchreiben);
+  useEffect(() => {
+    zuletzt.current = ausstehendSchreiben;
+  }, [ausstehendSchreiben]);
+  useEffect(() => () => zuletzt.current(), []);
 
   useEffect(() => {
     const weg = () => ausstehendSchreiben();

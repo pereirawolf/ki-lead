@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // App-Zustand: Übergabe Lagebild → KI-Erfassung beim Profilwechsel, auch im StrictMode (Review 20.10.2026, F02),
-// Start bei gestörtem Gerätespeicher (Review 20.10.2026, F13) und Zwischenstand je Profil beim Wechsel.
+// Start bei gestörtem Gerätespeicher (Review 20.10.2026, F13), Zwischenstand je Profil beim Wechsel und beim Aushängen.
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import React, { StrictMode } from "react";
 import { aushaengen, bisWahr, einhaengen, eingeben, klick, reactUmgebung, seitentext, takt } from "../support/dom";
@@ -136,6 +136,32 @@ describe("Zwischenstand je Profil", () => {
     await bisWahr(() => expect(aktivesProfil()).toBe(profilA));
     await klick("Erfassung");
     await bisWahr(() => expect(textfeld().value).toBe("Entwurf nur für A"));
+  });
+});
+
+describe("Zwischenstand beim Aushängen (seit 0.7.23)", () => {
+  it("schreibt eine ausstehende Änderung beim Aushängen sofort und danach nichts mehr", async () => {
+    // Zeitgeber der App gefälscht (Autospeichern 1,2 s nach der letzten Eingabe; docs/TESTS.md, Regel 3)
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      const id = JSON.parse(leseOrdner(repoPfad("profile", "lead-beispiel"))["profil.json"]).id;
+      const { default: App } = await import("../../src/App");
+      await einhaengen(React.createElement(App));
+      const textfeld = () => document.querySelector('.schritt-inhalt input[type="text"]') as HTMLInputElement;
+      await bisWahr(() => expect(textfeld()).toBeTruthy());
+      await eingeben(textfeld(), "Entwurf vor dem Aushängen");
+      // Aushängen vor Ablauf der Speicherverzögerung: die Änderung ist danach gespeichert
+      await aushaengen();
+      await ruhe();
+      expect(JSON.stringify(speicher.werte.get("entwurf:" + id)?.daten)).toContain("Entwurf vor dem Aushängen");
+      // Kein Zeitgeber läuft über das Aushängen hinaus und schreibt in einen inzwischen geleerten Speicher
+      speicherLeeren(speicher);
+      await vi.advanceTimersByTimeAsync(5000);
+      await ruhe();
+      expect([...speicher.werte.keys()]).toEqual([]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 
