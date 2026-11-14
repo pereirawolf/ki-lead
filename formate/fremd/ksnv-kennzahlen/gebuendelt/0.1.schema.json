@@ -3,7 +3,7 @@
   "$id": "https://github.com/pereirawolf/ki-lead/formate/fremd/ksnv-kennzahlen/gebuendelt/0.1.schema.json",
   "title": "KSNV-Kennzahlen, Fassung 0.1",
   "description": "Bedarfslage eines Raums (Gebiet einer Stelle der Meldekette nach dem Landesprofil) als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, als Material für ein LEAD-Lagebild. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Liter je Tag, Bedarfsträger, Anlagen, kVA, Fahrzeuge) werden nicht addiert; Diesel und Ottokraftstoff stehen getrennt.",
-  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.1/kennzahlen-baustein.schema.json (KSNV 694227a, SHA-256 bf169da43869…), 0.1/bedarfsmeldung.schema.json (SHA-256 1539a9af12f6…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 d6664f85ceb3…). Nicht von Hand ändern.",
+  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.1/kennzahlen-baustein.schema.json (KSNV 694227a, SHA-256 bf169da43869…), 0.1/bedarfsmeldung.schema.json (SHA-256 1539a9af12f6…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 3c3211979518…). Nicht von Hand ändern.",
   "type": "object",
   "additionalProperties": false,
   "required": [
