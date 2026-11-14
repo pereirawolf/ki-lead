@@ -141,3 +141,41 @@ test("Schrittleiste der Erfassung und Lagenradar stehen unter dem Kopfbereich (g
   expect(oben).toBeGreaterThanOrEqual(kopf);
   expect(oben).toBeLessThan(kopf + 20);
 });
+
+// KP-2026-W46-01 (Grunddesign LD-A03, seit 0.8.1): Die Leiste läuft auf breiten Bildschirmen tatsächlich mit. Der Test
+// oben prüft nur den berechneten Wert von „top“; bis 0.8.0 war das Element nav im Raster nur so hoch wie die Liste und
+// begrenzte sie, die Leiste rollte mit der Seite aus dem Bild (gemessen bei 1280 × 600 px: von 233 auf −221 px).
+// Gemessen wird in der Mitte des Arbeitsbereichs: An seinem Ende schiebt dessen Ende die Liste regelgerecht nach oben.
+for (const ansicht of ["Erfassung", "KI-Erfassung", "Einstellungen"] as const) {
+  test(`KP-2026-W46-01: Leiste von „${ansicht}“ läuft unter dem Kopfbereich mit (LD-A03)`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 420 });
+    await oeffnen(page);
+    if (ansicht !== "Erfassung") await bereich(page, ansicht);
+    const bereichSel = ".arbeitsbereich:visible";
+    const liste = page.locator(`${bereichSel} > .schritte ol`).first();
+    await expect(liste).toBeVisible();
+    const weg = await page
+      .locator(bereichSel)
+      .first()
+      .evaluate((a) => {
+        const r = a.getBoundingClientRect();
+        window.scrollTo(0, window.scrollY + r.top + r.height / 2 - window.innerHeight / 2);
+        return window.scrollY;
+      });
+    expect(weg, "Arbeitsbereich reicht über das Fenster hinaus").toBeGreaterThan(150);
+    // Nach dem Scrollen wird der Kopfbereich schmaler und setzt --kopf-hoehe neu; gewartet wird, bis die Lage steht
+    await expect
+      .poll(
+        async () => {
+          const kopf = await page.locator(".kopfbereich").evaluate((k) => k.getBoundingClientRect().bottom);
+          const oben = await liste.evaluate((ol) => ol.getBoundingClientRect().top);
+          return Math.round(oben - kopf);
+        },
+        { timeout: 5000 },
+      )
+      .toBeGreaterThanOrEqual(0);
+    const kopf = await page.locator(".kopfbereich").evaluate((k) => k.getBoundingClientRect().bottom);
+    const oben = await liste.evaluate((ol) => ol.getBoundingClientRect().top);
+    expect(oben - kopf).toBeLessThan(24);
+  });
+}

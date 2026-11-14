@@ -400,6 +400,13 @@ a {
   align-items: start;
 }
 
+/* Die Leiste läuft mit (seit 0.8.1, KP-2026-W46-01, Grunddesign LD-A03): nav reicht über die ganze Höhe des
+   Arbeitsbereichs, damit die stehende Liste darin Platz hat. Bis 0.8.0 war nav wegen align-items: start nur so hoch wie
+   die Liste und begrenzte sie; die Leiste rollte mit der Seite aus dem Bild. Unter 860 px ohne Wirkung (eine Spalte). */
+.arbeitsbereich > .schritte {
+  align-self: stretch;
+}
+
 .schritte ol {
   list-style: none;
   margin: 0;

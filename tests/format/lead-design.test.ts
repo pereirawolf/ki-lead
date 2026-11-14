@@ -2,7 +2,7 @@
 // Design Tokens (DTCG), rahmen.json gegen sein Schema, Regeln eindeutig und mit vorhandenen Fundstellen, Namen von
 // Navigation, Leisten und Reitern wie in der Referenzumsetzung, Komponenten und Wireframes vorhanden. Das Soll für die
 // Namen steht unabhängig im Quelltext der Oberfläche; der Test liest es dort, nicht aus rahmen.json.
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { beschreibung, designTokens, farbschemaTokens, hexFarbe, ROLLEN, SIGNALE } from "../../scripts/lead-design.mjs";
 import { FARBSCHEMAS } from "../../src/darstellung/katalog";
@@ -259,6 +259,24 @@ describe("Grunddesign: rahmen.json", () => {
     for (const v of Object.keys(rahmen.komponenten.kasten.varianten)) expect(css).toContain(`.kasten-${v}`);
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI ruht");
     expect(text("src/ui/KiSymbol.tsx")).toContain("KI aktiv");
+  });
+
+  it("KP-2026-W46-02: Kästen, die Fehler zeigen können, tragen dann die Rolle alert, nie fest status (LD-M01, seit 0.8.1)", () => {
+    // Bis 0.8.0 trugen Statuskasten der Erfassung, Prüfbericht beim Profilimport und Verbindungstests auch als
+    // kasten-fehler die Rolle status. Gesucht wird jedes Element, dessen Klassen kasten-fehler enthalten können.
+    const dateien = (ordner: string): string[] =>
+      readdirSync(repoPfad(ordner), { withFileTypes: true }).flatMap((e) =>
+        e.isDirectory() ? dateien(`${ordner}/${e.name}`) : e.name.endsWith(".tsx") ? [`${ordner}/${e.name}`] : [],
+      );
+    // Öffnende Tags über mehrere Zeilen; „=>“ in Ausdrücken ist kein Tagende
+    const verstoesse = dateien("src/ui").flatMap((datei) =>
+      [...text(datei).matchAll(/<(?:div|p|section)\b(?:[^>]|=>)*?\bclassName=(?:[^>]|=>)*?>/gs)]
+        .map((m) => m[0])
+        .filter((tag) => /kasten-fehler|kasten-\$\{/.test(tag) && /role="status"/.test(tag))
+        .map((tag) => `${datei}: ${tag.replace(/\s+/g, " ").slice(0, 120)}`),
+    );
+    expect(verstoesse).toEqual([]);
+    expect(rahmen.regeln.find((r: { id: string }) => r.id === "LD-M01").text).toMatch(/Fehler \(kritisch, Rolle alert\)/);
   });
 
   it("Chips und Segmente: Fokus in „fokus“ mit zweitem Ring (LD-Z02), bei grober Zeigereingabe 44 px (LD-B01), seit 0.7.6", () => {

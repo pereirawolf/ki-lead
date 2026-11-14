@@ -120,6 +120,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.7.22 | letzter Commit des Pull Requests „UX-Prüfung 2026-W46: Auswertung und Profile; 0.7.22“ |
 | 0.7.23 | letzter Commit des Pull Requests „Zwischenstand beim Aushängen schreiben, Oberflächentests stabil; 0.7.23“ (Nachtrag vom 14.11.2026: Pull Request „Befundregister: Technikprüfung TP-2026-W44-36 bis -61 nachgetragen“, ohne Änderung der App) |
 | 0.8.0 | letzter Commit des Pull Requests „KI-Pipeline nach LEAD-Meldung-v2 (UP-2026-W45-04); 0.8.0“ |
+| 0.8.1 | letzter Commit des Pull Requests „Grunddesign 1.10, Schrittleiste und Fehlerkästen (KP-2026-W46-01 bis -06); 0.8.1“ |
+## [0.8.1] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_konsistenz_2026-W46.json` (auf `befunde/eingang`, Commit `c0a3df1`), KP-2026-W46-01 bis -06 aus dem Abgleich von KRITIS-LEAD 0.3.7 mit dem Grunddesign ([kritis-lead#29](https://github.com/pereirawolf/kritis-lead/pull/29), Vorschläge V1–V6), freigegeben vom Herausgeber am 14.11.2026; -03 bis -06 in Variante (A).
+
+### Behoben
+
+- **Schrittleiste läuft mit** (`src/styles/basis.css`, KP-2026-W46-01, LD-A03): Das Element `nav` der Leiste reicht über die ganze Höhe des Arbeitsbereichs, damit die stehende Liste darin Platz hat. Bis 0.8.0 war es wegen `align-items: start` nur so hoch wie die Liste und begrenzte sie; die Leiste rollte in Erfassung, KI-Erfassung und Einstellungen mit der Seite aus dem Bild. Unter 860 px ohne Wirkung.
+- **Fehlerkästen mit Rolle `alert`** (KP-2026-W46-02, LD-M01): Statuskasten der Erfassung (`src/ui/Meldung.tsx`), Prüfbericht beim Profilimport (`src/ui/Profile.tsx`) und die Verbindungstests der Einstellungen (`src/ui/Einstellungen.tsx`) tragen bei einem Fehler die Rolle `alert` statt `status`; Bildschirmleser sagen ihn sofort an.
+
+### Geändert
+
+- **Grunddesign 1.10** (`design/`, KP-2026-W46-03 bis -06): LD-F05 (bettet eine App ihr Profil beim Bau ein, verwendet „Automatisch“ hell dessen Schema, auch mit einer Wahl unter „Darstellung“; KI-LEAD bettet kein Profil ein und bleibt unberührt), LD-A01 (Startseite einer App aus mehreren Seiten mit dem Gegenstand als h1 und Einstiegen unter dem Seitenkopf), LD-E04 (keine anderen Stufen als Fehler, Warnung und Hinweis, nicht alle drei Pflicht, sprechende Namen zulässig), LD-M04 („ENTWURF“ für nicht freigegebene Ausgaben mit KI; ohne KI genügt der maschinenlesbare Status; KI-LEAD kennzeichnet das PDF weiter bei jeder nicht freigegebenen Meldung). Kennungen, Zahl der Regeln und Tokens unverändert.
+- Spezifikation 0.8.1 (Abschnitt 5.1, „Schrittleiste“, „Fehlerkästen“). Versionsangaben 0.8.1 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 801); [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md).
+- **Befundregister:** KP-2026-W46-01 bis -06 umgesetzt (`evaluation/befunde/befundregister.json`, Pull Request #171).
+
+### Tests
+
+- `tests/browser/hinweisband.spec.ts`: KP-2026-W46-01 – Lage der Leiste nach dem Scrollen in die Mitte des Arbeitsbereichs, in Erfassung, KI-Erfassung und Einstellungen (bisher nur der berechnete Wert von `top`).
+- `tests/format/lead-design.test.ts`: KP-2026-W46-02 – kein Kasten, der `kasten-fehler` tragen kann, mit fester Rolle `status` in `src/ui/`; `tests/browser/barrierefreiheit.spec.ts`: ungültige Datei in der Erfassung erscheint als Fehler mit Rolle `alert`.
+
 ## [0.8.0] – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json` (auf `befunde/eingang`, Commit `c5a3205`), UP-2026-W45-04 (Paket 4 des Umstellungsplans), freigegeben vom Herausgeber am 06.11.2026 als eigener Pull Request; Abnahme nach dem Vorschlag dort (Auswahl dreier Kennzahlen aus Sonneberg 10:00 Uhr, Wertabweichung, Einsatzmeldung als Maßnahme und Zeitstrahlzeile, nichts aus `herleitung`). Entscheidungsfragen 1 (B: Fachmodul) und 2 (A: Werte wiederherstellen), entschieden am 03.11.2026: Verweis Kennzahl → Baustein über ein Fachmodul, nicht über ein Kernfeld; weichen KI-Werte ab, werden die Werte des Bausteins wiederhergestellt; dazu Kennzahlregeln an einer Stelle (Kodierleitfaden Abschnitt 6). Entscheidungen vom 14.11.2026 auf die Rückfragen zu diesem Paket: eigenes, profilneutrales Modul `lead-baustein` mit Kennungen der Einsatzmeldungen; Kennzahlregeln schon jetzt in den Kodierleitfaden; sachverhaltsübergreifende Lage (LEAD-MELDUNG-V2.md, offener Punkt 10) erst mit Paket 6; Management Summary nur mit Fristen und abweichenden Bewertungen aus v2-Feldern. Neue Nebenversion, weil die KI-Pipeline erstmals Meldungen nach LEAD-Meldung-v2 erzeugt. Die mitgelieferten Profile arbeiten unverändert mit v1 (Umstellung in Paket 6); die Pipeline kann beide Formate.
