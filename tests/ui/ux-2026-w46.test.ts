@@ -71,3 +71,30 @@ describe("UX-2026-W46-04: Farben der Tendenz", () => {
     expect(beurteilung.has(tendenz.Stabilisierung)).toBe(false);
   });
 });
+
+describe("UX-2026-W46-06: aufgeklappte Profilkarte ohne Dopplung", () => {
+  it("Ebene und Referenzraum je Karte nur einmal, keine Sprungleiste", async () => {
+    const { ProfileAnsicht } = await import("../../src/ui/Profile");
+    const eintrag = async (name: string) => {
+      const erg = await profil(name);
+      return { schluessel: name, quelle: "eingebaut" as const, dateien: {}, profil: erg.profil, befunde: erg.befunde };
+    };
+    await einhaengen(
+      React.createElement(ProfileAnsicht, {
+        profile: [await eintrag("lead-beispiel"), await eintrag("muster")],
+        aktiv: "lead-beispiel",
+        aktivieren: () => {},
+        importieren: async () => ({ ok: true, befunde: [] }),
+        loeschen: () => {},
+      }),
+    );
+    const karten = [...document.querySelectorAll<HTMLElement>("article.profil")];
+    expect(karten).toHaveLength(2);
+    for (const k of karten) {
+      const dts = [...k.querySelectorAll("dt")].map((d) => d.textContent);
+      expect(dts.filter((t) => t === "Ebene")).toHaveLength(1);
+      expect(dts.filter((t) => t === "Referenzraum")).toHaveLength(1);
+      expect(k.querySelector("nav")).toBeNull();
+    }
+  });
+});
