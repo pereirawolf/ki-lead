@@ -85,7 +85,7 @@ describe("Lagebild: Auswertung", () => {
     expect(farbeBeurteilung(p, "")).toBe("grau");
     expect(farbeTendenz(p, "Entspannung")).toBe("gruen");
     expect(farbeTendenz(p, "Verschärfung")).toBe("rot");
-    expect(farbeTendenz(p, "Stabilisierung")).toBe("gelb");
+    expect(farbeTendenz(p, "Stabilisierung")).toBe("grau"); // seit UX-2026-W46-04, bis 0.7.20 „gelb“
     const s = nachSchwere(alleSachverhalte(eintraege, p), p);
     expect(s[0].beurteilung).toBe("erheblich");
     expect(s[s.length - 1].beurteilung).toBe("geringfügig");

@@ -53,3 +53,21 @@ describe("UX-2026-W46-01: Erinnerung ohne echte Adressen", () => {
     expect(bayern.querySelector("button")?.textContent).toBe("Kopiert");
   });
 });
+
+describe("UX-2026-W46-04: Farben der Tendenz", () => {
+  it("in der Verteilung mittlere Stufen grau, keine davon in einer Farbe der Beurteilung", async () => {
+    await ilka();
+    const balken = (titel: string) => {
+      const kasten = [...document.querySelectorAll(".lb-balken")].find((b) => b.querySelector("h4")?.textContent === titel)!;
+      return [...kasten.querySelectorAll(".lb-balken-zeile")].map((z) => [
+        z.querySelector(".lb-balken-label")?.textContent,
+        z.innerHTML.match(/lb-(rot|orange|gelb|gruen|grau)\b/)?.[1],
+      ]);
+    };
+    const tendenz = Object.fromEntries(balken("Tendenz"));
+    expect(tendenz).toEqual({ Entspannung: "gruen", Stabilisierung: "grau", Verschärfung: "rot" });
+    // Variante A: Rot und Grün bleiben für Verschärfung und Entspannung; keine mittlere Stufe in einer Farbe der Beurteilung
+    const beurteilung = new Set(balken("Bewertung").map(([, f]) => f));
+    expect(beurteilung.has(tendenz.Stabilisierung)).toBe(false);
+  });
+});

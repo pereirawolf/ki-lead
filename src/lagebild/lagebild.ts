@@ -362,11 +362,12 @@ export function signalTendenz(profil: Profil, tendenz: unknown): "entspannung" |
   return tendenz === verschaerfungsWert(profil) ? "verschaerfung" : undefined;
 }
 
+/** Rot bei Verschärfung, Grün bei Entspannung, sonst grau; seit UX-2026-W46-04 auch die mittleren Stufen grau statt
+ * gelb, damit sie nicht wie die Beurteilung „geringfügig“ gelesen werden */
 export function farbeTendenz(profil: Profil, tendenz: string): Farbe {
-  if (!tendenz) return "grau";
-  if (tendenz === profil.ui.rollen.tendenz_entspannung) return "gruen";
-  if (tendenz === verschaerfungsWert(profil)) return "rot";
-  return tendenzStufen(profil).includes(tendenz) ? "gelb" : "grau";
+  if (tendenz && tendenz === profil.ui.rollen.tendenz_entspannung) return "gruen";
+  if (tendenz && tendenz === verschaerfungsWert(profil)) return "rot";
+  return "grau";
 }
 
 /** Sortiert nach Schwere der Beurteilung (höchste zuerst), sonst stabil. */
