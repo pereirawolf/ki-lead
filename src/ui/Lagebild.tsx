@@ -911,7 +911,9 @@ export function LagebildAnsicht({ profil, uebergeben, oeffnen, reiter: vorgabeRe
                                   <span className="lb-status-zeichen" aria-hidden="true">
                                     ✓
                                   </span>
-                                  <span className="lb-status-name">{z.name}</span>
+                                  <span className="lb-status-name" title={z.name}>
+                                    {z.name}
+                                  </span>
                                   {r.herkunft && (
                                     <Marke farbe="amt">
                                       Herkunft: {[...new Set(z.eintraege.map((e) => herkunftsrolleAnzeige(profil, herkunftsrolleVon(e, profil))))].join(", ")}

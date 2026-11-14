@@ -49,3 +49,39 @@ test("UX-2026-W46-05: in der aufgeklappten Profilkarte ist keine innere Aufklapp
   expect(groessen.length).toBeGreaterThan(3);
   expect(Math.max(...groessen.slice(1))).toBeLessThanOrEqual(groessen[0]!);
 });
+
+for (const breite of [1440, 390]) {
+  test.describe(`UX-2026-W46-07: gemeldete Stellen bei ${breite} px`, () => {
+    test.use({ viewport: { width: breite, height: 900 } });
+
+    test("kein Ländername bricht um oder wird gekürzt, Kacheln einer Zeile gleich hoch, Zeitpunkt unter dem Namen", async ({ page }) => {
+      await ilka(page);
+      const kacheln = await page.locator(".lb-status-da").evaluateAll((lis) =>
+        lis.map((li) => {
+          const name = li.querySelector<HTMLElement>(".lb-status-name")!;
+          const zahl = li.querySelector<HTMLElement>(".lb-status-zahl")!;
+          const r = li.getBoundingClientRect();
+          return {
+            name: name.textContent,
+            zeilen: name.getClientRects().length,
+            hoehe: name.getBoundingClientRect().height,
+            zeilenhoehe: parseFloat(getComputedStyle(name).lineHeight) || parseFloat(getComputedStyle(name).fontSize) * 1.6,
+            gekuerzt: name.scrollWidth > name.clientWidth,
+            darunter: zahl.getBoundingClientRect().top >= name.getBoundingClientRect().bottom - 1,
+            oben: Math.round(r.top),
+            kachel: Math.round(r.height),
+          };
+        }),
+      );
+      expect(kacheln).toHaveLength(7);
+      for (const k of kacheln) {
+        expect(k.hoehe, k.name!).toBeLessThan(k.zeilenhoehe * 1.5);
+        expect(k.gekuerzt, k.name!).toBe(false);
+        expect(k.darunter, k.name!).toBe(true);
+      }
+      const zeilen = new Map<number, number[]>();
+      for (const k of kacheln) zeilen.set(k.oben, [...(zeilen.get(k.oben) || []), k.kachel]);
+      for (const hoehen of zeilen.values()) expect(new Set(hoehen).size).toBe(1);
+    });
+  });
+}
