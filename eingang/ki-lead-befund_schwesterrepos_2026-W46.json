@@ -1,0 +1,179 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "schwesterrepos",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-14T22:29:25Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "0c15f7411403d5929ba5811d782eaf62c1ca1dfa",
+  "pruefumfang": "Vorschlag aus STATIS-LEAD (Teil A Kernschema A1–A5, Teil B Material-Format B1–B6) gegen main 0c15f74 geprüft: formate/lead-meldung-v2/kern.schema.json ($defs.kennzahl), docs/LEAD-MELDUNG-V2.md (4.3, 7, 8, 13), Kodierleitfaden Abschnitt 6 (lead-beispiel, lead-thueringen), SOP-LEAD A.3, anweisung-verdichtung.md Regel 4, src/kern/baustein.ts, bausteinverdichtung.ts (Rechenhilfe), bausteinuebernahme.ts, bausteinabgleich.ts, meldung-v2.js (Referenzprüfung), v2darstellung.ts, pipeline/ausgabeschema.ts, beispiel/meldung.ui.json, formate/fremd/*/herkunft.json mit Kern-Pin, scripts/fremdschemata.mjs, docs/AUSTAUSCH.md Abschnitt 9; dazu STATIS-LEAD main 1d9d749 (README, katalog/kennzahlen.json: aktive Kennzahlen K01, K03, K08, K09, K20, K24, K26) – vollständig gelesen, wo zitiert, sonst stichprobenhaft. Offene Befunde im Eingang ohne Registereintrag nicht gezählt (Sonderlauf auf Anforderung, ohne Staugrenze). Offener PR #177 belegt Nachtrag 13 von LEAD-MELDUNG-V2.md; diese Änderung wird Nachtrag 14.",
+  "nicht_geprueft": [
+    "npm ci && npm test vor der Freigabe nicht ausgeführt (Prüfung statisch; Tests laufen mit der Umsetzung)",
+    "Baustein-Schema 0.1 von STATIS-LEAD: liegt in STATIS-LEAD (1d9d749) noch nicht vor, nur Katalog- und Datenpaketschema"
+  ],
+  "befunde": [
+    {
+      "id": "SR-2026-W46-01",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {"datei": "formate/lead-meldung-v2/kern.schema.json", "stelle": "$defs.kennzahl.properties.art (Z. 965–972)", "ist": "\"enum\": [\"bestand\", \"kumuliert\", \"kapazitaet\", \"bedarf\"]"},
+        {"datei": "docs/LEAD-MELDUNG-V2.md", "stelle": "Abschnitt 4.3 (Z. 110)", "ist": "`art` (`bestand`, `kumuliert`, `kapazitaet`, `bedarf`; A.9.1)"},
+        {"datei": "src/kern/meldung-v2.js", "stelle": "pruefeReferenzen, Kennzahlen (Z. 843–851)", "ist": "if (k.datenstand && nachT0(k.datenstand)) fehler(`${pk}.datenstand`, \"Datenstand nach dem Meldezeitpunkt\");"}
+      ],
+      "beobachtung": "Das Kernschema kennt bei kennzahl.art nur Mengen und keinen Beobachtungszeitraum. STATIS-LEAD liefert Anteile, Raten je Einwohner und Indizes bzw. Niveaus relativ zu einer Baseline (K01, K03, K08, K09, K20, K24, K26) für Monate oder Kalenderwochen; sie lassen sich heute nur falsch als Bestand kodieren. Der Datenstand (Veröffentlichung) ist vom beobachteten Zeitraum verschieden. Problem bei der vorgeschlagenen Referenzprüfung „bis nicht nach t0“: Kennzahlen mit erhebung „prognostiziert“ beziehen sich regelmäßig auf einen Zeitraum nach t0 und würden als Fehler gemeldet.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Additiv im Kernschema (A1, A2): art um \"verhaeltnis\" (Index, Anteil, Rate, Niveau relativ zu einer Bezugsgröße; nie summierbar); optional beobachtungszeitraum {von, bis} als Kalendertage (beide Pflicht im Objekt), getrennt vom Datenstand. Referenzprüfung: von nicht nach bis (Fehler); bis nicht nach t0 (Fehler), ausgenommen erhebung \"prognostiziert\" (siehe Entscheidungsfrage). Fortschreiben: LEAD-MELDUNG-V2.md 4.3 und Abschnitt 8 mit Nachtrag 14, Kodierleitfaden Abschnitt 6 (Tabelle Wertzustände, Zeile kennzahlen) in lead-beispiel und lead-thueringen, Darstellungsdateien (Vorlage und Profile) mit Bezeichnungen, Darstellung in PDF und Kopiervorlage (v2darstellung), erzeugte Profilschemata; das KI-Ausgabeschema folgt automatisch aus dem Profilschema. Bestehende Meldungen bleiben gültig. Abnahme: Beispielmeldung mit Verhältniswert und Beobachtungszeitraum ist schemagültig, Referenzprüfung meldet von>bis und bis>t0 (nicht bei Prognose), Tests grün.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "formate/lead-meldung-v2/beispiel/, beispiel-land/, eingang/ und profile/*/meldung.schema.json neu erzeugen",
+        "formate/fremd/thessa-kennzahlen/herkunft.json und ksnv-kennzahlen/herkunft.json: Kern-Pin nachziehen, gebündelte Schemata neu erzeugen; Thessa und KSNV pinnen in ihren Repositorys neu",
+        "CHANGELOG.md (App-Fassung), Profil-CHANGELOGs, Kodierleitfaden-Fassung"
+      ],
+      "entscheidungsfrage": "Referenzprüfung „bis nicht nach t0“: (A) gilt nicht für erhebung „prognostiziert“ (empfohlen, sonst sind Prognosen für kommende Wochen ein Fehler) (B) strikt wie vorgeschlagen.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/lead-meldung-v2.test.ts: Kennzahl mit art verhaeltnis und beobachtungszeitraum schemagültig; pruefeReferenzen meldet von>bis und bis>t0, nicht bei prognostiziert (Kennung SR-2026-W46-01 im Testnamen)",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {"datei": "formate/lead-meldung-v2/kern.schema.json", "stelle": "$defs.kennzahl.properties.erhebung (Z. 989–997)", "ist": "\"gezaehlt\", \"amtlich_gemeldet\", \"geschaetzt\", \"hochgerechnet\", \"prognostiziert\""}
+      ],
+      "beobachtung": "Werte, die STATIS-LEAD aus amtlichen Reihen selbst ableitet (etwa K08 Mortalitätsabweichung, K01 Anteil 80+; Quellenzeile „Berechnung: STATIS-LEAD“), sind weder gezählt noch amtlich gemeldet. „amtlich_gemeldet“ wäre irreführend, „hochgerechnet“ falsch. Die Rechenhilfe summiert ohnehin nur gezaehlt und amtlich_gemeldet (bausteinverdichtung.ts Z. 51), ein neuer Wert ist dort also automatisch nicht summierbar.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "erhebung um \"berechnet\" (aus Werten einer Quelle nach einer angegebenen Rechenvorschrift abgeleitet; nicht summierbar) erweitern (A3); Doku 4.3, Kodierleitfaden Abschnitt 6, Darstellung. Abnahme: Wert schemagültig, Rechenhilfe summiert ihn nicht.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["wie SR-2026-W46-01 (gemeinsamer Nachtrag 14)"],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/bausteinverdichtung.test.ts: Gruppe mit erhebung berechnet ergibt „getrennt“ (SR-2026-W46-02)",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-03",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {"datei": "formate/lead-meldung-v2/kern.schema.json", "stelle": "$defs.kennzahl (Z. 949 ff.)", "ist": "kein Feld für die Bezugsgröße eines Verhältniswerts"}
+      ],
+      "beobachtung": "Ein Niveau „94 % der Baseline“ ist ohne Bezugsgröße nicht nachvollziehbar (welche Baseline, welcher Zeitraum). Der Vorschlag nennt bezug {gegenstand, wert, beobachtungszeitraum}. Ohne einheit bleibt bezug.wert mehrdeutig (die Bezugsgröße hat meist eine andere Einheit als der Verhältniswert, etwa Sterbefälle je Woche gegen %).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Optional kennzahl.bezug {gegenstand (Pflicht), wert (Zahl oder null), einheit (optional), beobachtungszeitraum (optional, wie SR-2026-W46-01)} (A4). Referenzprüfung: von nicht nach bis; Hinweis, wenn bezug bei einer anderen Art als verhaeltnis steht. Doku 4.3, Kodierleitfaden Abschnitt 6, Darstellung. Abnahme: wie SR-2026-W46-01.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["wie SR-2026-W46-01 (gemeinsamer Nachtrag 14)"],
+      "entscheidungsfrage": "bezug zusätzlich mit optionaler einheit und mit Hinweis bei anderer Art als verhaeltnis? (siehe Rückfrage)",
+      "sicherheit": "mittel",
+      "automatisierbar": "tests/format/lead-meldung-v2.test.ts: bezug schemagültig, Hinweis bei art bestand (SR-2026-W46-03)",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-04",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {"datei": "formate/lead-meldung-v2/kern.schema.json", "stelle": "$defs.kennzahl (Z. 949 ff.)", "ist": "kein Feld für vorläufige Werte"}
+      ],
+      "beobachtung": "Amtliche Statistik veröffentlicht vorläufige Werte (etwa Sterbefallzahlen), die später berichtigt werden. Die Vorläufigkeit steht heute nur im Gegenstand oder Freitext.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Optional kennzahl.vorlaeufig (boolean; fehlt = keine Angabe) (A5); Doku 4.3, Kodierleitfaden Abschnitt 6, Darstellung („vorläufig“). Abnahme: schemagültig, Darstellung zeigt „vorläufig“.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["wie SR-2026-W46-01 (gemeinsamer Nachtrag 14)"],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-05",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {"datei": "src/kern/bausteinverdichtung.ts", "stelle": "rechenhilfe, Gruppenschlüssel (Z. 202)", "ist": "JSON.stringify([norm(anzeige), String(e.k.einheit ?? \"\"), String(e.k.art ?? \"\"), datenstand, !!quote])"},
+        {"datei": "src/kern/bausteinverdichtung.ts", "stelle": "ergebnis(), Summierbarkeit (Z. 51, 168–169)", "ist": "const SUMMIERBAR = new Set([\"gezaehlt\", \"amtlich_gemeldet\"]);"},
+        {"datei": "src/kern/bausteinuebernahme.ts", "stelle": "BAUSTEIN_FELDER (Z. 30)", "ist": "[\"gegenstand\", \"einheit\", \"art\", \"wert\", \"bandbreite\", \"mindestwert\", \"erhebung\", \"raum\", \"datenstand\"]"},
+        {"datei": "profile/lead-beispiel/kodierleitfaden.md", "stelle": "Abschnitt 6, Kennzahlen aus Kennzahlen-Bausteinen, Regeln 1 und 2 (Z. 240–241)", "ist": "Wert, Einheit, Art (Bestand, kumuliert, Kapazität, Bedarf), Gegenstand, Raum und Datenstand einer übernommenen Kennzahl"}
+      ],
+      "beobachtung": "Widerspruch: Ein amtlich gemeldeter Verhältniswert zweier Länder mit gleichem Gegenstand, gleicher Einheit, Art und gleichem Datenstand würde als „Summe zulässig“ ausgewiesen (Prüfung nur über erhebung, nicht über art). Bedingung: mindestens zwei Bausteine mit überschneidungsfreien Schlüsseln. Zusätzlich gruppiert die Rechenhilfe nicht nach Beobachtungszeitraum: Oktober- und September-Wert desselben Raums mit gleichem Datenstand fielen in eine Gruppe. Die Übernahme stellt beobachtungszeitraum, bezug und vorlaeufig nicht aus dem Baustein wieder her. Auswirkung: falsche Summen und stillschweigend geänderte Zeiträume in KI-Entwürfen. Maßgeblich: Kodierleitfaden Abschnitt 6 Regeln 1–2 und SOP-LEAD A.3 (gleiche Zeitbasis). Prüfweg: statisch. Herkunft: nicht ermittelt (Felder gab es bisher nicht).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "B3: Rechenhilfe und Summenprüfung (KENNZAHL_SUMME_UNZULAESSIG) summieren nie art „verhaeltnis“ oder erhebung „berechnet“ (Grund „Verhältniswerte und berechnete Werte nicht summieren“); Gruppenschlüssel zusätzlich mit beobachtungszeitraum. B4: BAUSTEIN_FELDER um beobachtungszeitraum, bezug und vorlaeufig; Kodierleitfaden Abschnitt 6 Regel 1 nennt sie, Regel 2 nennt Verhältniswerte und berechnete Werte (beide Profile). B5: Einheitenprüfung des Abgleichs bleibt formatbezogen (erkennt nur Einheiten aus Thessa; Werte anderer Formate werden dort nicht geprüft) – nur Kommentar und Doku, kein Verhalten. Abnahme: Tests für Summe zweier Verhältniswerte (getrennt), zweier Beobachtungszeiträume (getrennte Gruppen) und Wiederherstellung von beobachtungszeitraum.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["Kodierleitfaden Abschnitt 6 in lead-beispiel und lead-thueringen (Fassung, Profil-CHANGELOG)", "CHANGELOG.md"],
+      "entscheidungsfrage": "Zusätzlich die allgemeine Zählregel in SOP-LEAD A.3 („Verhältniswerte werden nie addiert“) und die Prüffrage in anweisung-verdichtung.md Regel 4.3 ergänzen, weil Verhältniswerte künftig auch ohne Baustein in Meldungen stehen? (siehe Rückfrage)",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/bausteinverdichtung.test.ts und bausteinuebernahme.test.ts mit Kennung SR-2026-W46-05",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-06",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {"datei": "src/kern/bausteinverdichtung.ts", "stelle": "istAusschnitt (Z. 32)", "ist": "export const istAusschnitt = (info: BausteinInfo): boolean => istLandSchluessel(info.raum.schluessel);"},
+        {"datei": "profile/lead-beispiel/kodierleitfaden.md", "stelle": "Abschnitt 6, Kennzahlen aus Kennzahlen-Bausteinen, Regel 5 (Z. 244)", "ist": "Ein Baustein, dessen Raum ein Land ist, gilt als erfasster Ausschnitt; seine Vollständigkeit ist nicht angegeben."}
+      ],
+      "beobachtung": "Die Ausschnittregel gilt pauschal für jedes Format. Für amtliche Landeswerte von Destatis ist sie falsch: Sie gelten für das ganze Land. Der vorgeschlagene Name „vollerhebung“ trifft das nicht genau: Auch Stichprobenstatistiken (etwa der Mikrozensus) liefern landesweite Werte, während eine Vollerhebung über erfasste Teilräume ein Ausschnitt bleiben kann. Entscheidend ist, ob der Wert den ganzen Raum abdeckt. Nebenbefund für das Schema 0.1 von STATIS-LEAD: Der Bund hat keinen amtlichen Gemeindeschlüssel. Mit einem Kürzel wie „DG“ würde die Rechenhilfe Bund und Länder nicht als überlappend erkennen und eine Summe zulassen. Ohne Schlüssel bleibt der Bund getrennt (Z. 150).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "B2: Eigenschaft je Format in BAUSTEIN_FORMATE (Name nach Rückfrage, Empfehlung raum_vollstaendig: true), istAusschnitt beachtet sie; Thessa und KSNV unverändert. Kodierleitfaden Abschnitt 6 Regel 5 (beide Profile): „… gilt als erfasster Ausschnitt, es sei denn, das Format deckt den Raum vollständig ab (amtliche Statistik eines Landes)“. Hinweis an STATIS-LEAD: Bund im Schema 0.1 ohne raum.schluessel. Abnahme: Test mit Format-Eigenschaft und Land-Schlüssel ergibt keinen Ausschnitt.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["Kodierleitfaden Abschnitt 6 (Fassung, Profil-CHANGELOG)", "docs/LEAD-MELDUNG-V2.md Abschnitt 7 (Zusatz „erfasster Ausschnitt“)"],
+      "entscheidungsfrage": "Name und Ebene der Ausnahme: (A) Format-Eigenschaft raum_vollstaendig (empfohlen) (B) vollerhebung wie vorgeschlagen (C) Angabe je Baustein im Format von STATIS-LEAD.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/bausteinverdichtung.test.ts: istAusschnitt mit Format-Eigenschaft (SR-2026-W46-06)",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    },
+    {
+      "id": "SR-2026-W46-07",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {"datei": "src/kern/baustein.ts", "stelle": "BAUSTEIN_FORMATE (Z. 18–21)", "ist": "\"KSNV-Kennzahlen\": { app: \"KSNV\", fassungen: [\"0.1\"] },"},
+        {"datei": "docs/AUSTAUSCH.md", "stelle": "Abschnitt 9, Tabelle Zulieferer", "ist": "Drei Schwesterdemonstratoren liefern KI-LEAD zu"}
+      ],
+      "beobachtung": "B1 und B6 setzen das Baustein-Schema 0.1 von STATIS-LEAD voraus (Einbettung mit herkunft.json, Prüfsumme und gebündeltem Schema nach scripts/fremdschemata.mjs). In STATIS-LEAD (1d9d749) gibt es nur Katalog- und Datenpaketschema; ein Baustein-Schema liegt nicht vor. Ohne Original keine Prüfsumme, ohne gebündeltes Schema keine Erkennung.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Sobald STATIS-LEAD das Schema 0.1 liefert: formate/fremd/statis-lead-kennzahlen/ mit herkunft.json, Original, gebündeltem Schema und fiktivem Beispiel; scripts/fremdschemata.mjs um den Ordner; BAUSTEIN_FORMATE {app: \"STATIS-LEAD\", fassungen: [\"0.1\"], belegachsen: [\"D8\"]} plus Eigenschaft aus SR-2026-W46-06; Austauschvertrag Abschnitt 9 mit Zeile STATIS-LEAD (Fassung fortschreiben). Abnahme: Beispiel-Baustein wird erkannt und gegen das gebündelte Schema geprüft.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": ["docs/AUSTAUSCH.md Änderungsverlauf", "README (Zulieferer), CHANGELOG.md"],
+      "entscheidungsfrage": "Zurückstellen, bis das Schema 0.1 vorliegt (empfohlen), oder jetzt mit Platzhalter? (siehe Rückfrage)",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/format/statis-baustein.test.ts analog zu ksnv-baustein.test.ts (SR-2026-W46-07)",
+      "pruefung": {"status": "offen", "anmerkung": ""}
+    }
+  ],
+  "unauffaellig": [
+    "KI-Ausgabeschema (src/pipeline/ausgabeschema.ts) wird aus dem Profilschema abgeleitet; neue Kennzahlfelder gehen ohne eigene Änderung ein",
+    "Kern-Pin von Thessa und KSNV (herkunft.json, 3c32119…) stimmt mit kern.schema.json auf main überein; jede Kernänderung verlangt Nachziehen wie in 6960e84",
+    "Einheitenprüfung des Abgleichs (bausteinabgleich.ts) erkennt nur Thessa-Einheiten; STATIS-Werte erzeugen dort keine Fehlbefunde (B5 ohne Verhaltensänderung)",
+    "Weitere Beobachtung: Rechenhilfe gruppiert nur Bausteine; Verhältniswerte aus Eingangsmeldungen der Verdichtung prüft weiterhin nur die Arbeitsanweisung (Regel 4)"
+  ]
+}
