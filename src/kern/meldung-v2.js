@@ -848,6 +848,15 @@ export function pruefeReferenzen(m, opt = {}) {
       if (k.bandbreite && k.bandbreite.von > k.bandbreite.bis) fehler(`${pk}.bandbreite`, "von größer als bis");
       if (k.mindestwert && k.wert === null) fehler(`${pk}.mindestwert`, "Mindestwert ohne Wert");
       if (k.datenstand && nachT0(k.datenstand)) fehler(`${pk}.datenstand`, "Datenstand nach dem Meldezeitpunkt");
+      // Beobachtungszeitraum und Bezugsgröße (seit App 0.9.2, SR-2026-W46-01 und -03): von nicht nach bis; bis nicht
+      // nach t0, außer bei prognostizierten Werten; Bezugsgröße gehört zu einem Verhältniswert
+      const bz = k.beobachtungszeitraum;
+      if (bz && vergleicheZeit(bz.von, bz.bis, zone) === 1) fehler(`${pk}.beobachtungszeitraum`, "von liegt nach bis");
+      if (bz && k.erhebung !== "prognostiziert" && nachT0(bz.bis))
+        fehler(`${pk}.beobachtungszeitraum.bis`, "Beobachtungszeitraum endet nach dem Meldezeitpunkt (nur bei prognostizierten Werten zulässig)");
+      const bbz = k.bezug?.beobachtungszeitraum;
+      if (bbz && vergleicheZeit(bbz.von, bbz.bis, zone) === 1) fehler(`${pk}.bezug.beobachtungszeitraum`, "von liegt nach bis");
+      if (k.bezug && k.art !== "verhaeltnis") hinweis(`${pk}.bezug`, `Bezugsgröße bei Art „${k.art}“; gehört zu einem Verhältniswert`);
     });
     (s.bewertung?.abweichende_bewertungen || []).forEach((a, j) => pruefeIds(a.quellen, `${p}.bewertung.abweichende_bewertungen[${j}].quellen`));
     (s.bewertung?.erkenntnislage?.widersprueche || []).forEach((w, j) => pruefeIds(w.quellen, `${p}.bewertung.erkenntnislage.widersprueche[${j}].quellen`));

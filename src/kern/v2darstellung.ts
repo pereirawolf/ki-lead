@@ -67,6 +67,24 @@ export function kennzahlWert(k: Obj): string {
   return `${k.mindestwert && wert !== "unbekannt" ? "mindestens " : ""}${wert}`;
 }
 
+/** Beobachtungszeitraum „Zeitraum 01.10.2026–31.10.2026“ bzw. „Zeitraum 14.10.2026“ (seit 0.9.2, SR-2026-W46-01) */
+export function zeitraumText(z: unknown, wort = "Zeitraum"): string {
+  if (!z || typeof z !== "object") return "";
+  const { von, bis } = z as Obj;
+  if (!von && !bis) return "";
+  return von === bis ? `${wort} ${zeitDE(von)}` : `${wort} ${zeitDE(von)}–${zeitDE(bis)}`;
+}
+
+/** Bezugsgröße eines Verhältniswerts: „Bezug: Durchschnitt KW 42 2016–2019 (1.234 Sterbefälle; Zeitraum …)“ (seit 0.9.2, SR-2026-W46-03) */
+export function bezugText(b: unknown): string {
+  if (!b || typeof b !== "object") return "";
+  const x = b as Obj;
+  const teile = [typeof x.wert === "number" ? `${zahlDE(x.wert)}${x.einheit ? ` ${x.einheit}` : ""}` : "", zeitraumText(x.beobachtungszeitraum)].filter(
+    Boolean,
+  );
+  return `Bezug: ${x.gegenstand ?? ""}${teile.length ? ` (${teile.join("; ")})` : ""}`;
+}
+
 /** Eine Zeile je Kennzahl; Teilmengen eingerückt unter ihrer Obermenge, in der Reihenfolge der Liste. */
 export function kennzahlenTextV2(liste: unknown): string {
   if (!Array.isArray(liste)) return "";
@@ -85,7 +103,17 @@ export function kennzahlenTextV2(liste: unknown): string {
   const zeile = (k: Obj, tiefe: number) => {
     if (gesehen.has(k.id)) return;
     gesehen.add(k.id);
-    const angaben = [k.art, k.erhebung, k.raum, k.datenstand ? `Stand ${zeitDE(k.datenstand)}` : ""].filter(Boolean).join("; ");
+    const angaben = [
+      k.art,
+      k.erhebung,
+      k.vorlaeufig === true ? "vorläufig" : "",
+      k.raum,
+      zeitraumText(k.beobachtungszeitraum),
+      k.datenstand ? `Stand ${zeitDE(k.datenstand)}` : "",
+      bezugText(k.bezug),
+    ]
+      .filter(Boolean)
+      .join("; ");
     const belege = Array.isArray(k.quellen) && k.quellen.length ? ` [${k.quellen.join(", ")}]` : "";
     out.push(`${"   ".repeat(tiefe)}${tiefe ? "└ " : ""}[${k.id}] ${k.gegenstand}: ${kennzahlWert(k)} ${k.einheit} (${angaben})${belege}`);
     for (const c of kinder.get(k.id) || []) zeile(c, tiefe + 1);

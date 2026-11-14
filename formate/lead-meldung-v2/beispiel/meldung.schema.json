@@ -371,6 +371,23 @@
       "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
       "description": "Kalendertag JJJJ-MM-TT."
     },
+    "kalenderzeitraum": {
+      "type": "object",
+      "description": "Zeitraum aus zwei Kalendertagen, beide einschließlich.",
+      "additionalProperties": false,
+      "required": [
+        "von",
+        "bis"
+      ],
+      "properties": {
+        "von": {
+          "$ref": "#/$defs/datum"
+        },
+        "bis": {
+          "$ref": "#/$defs/datum"
+        }
+      }
+    },
     "uuid": {
       "type": "string",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
@@ -1201,8 +1218,10 @@
             "bestand",
             "kumuliert",
             "kapazitaet",
-            "bedarf"
-          ]
+            "bedarf",
+            "verhaeltnis"
+          ],
+          "description": "Bestand, kumuliert, Kapazität, Bedarf (Mengen) oder Verhältnis (Index, Anteil, Rate, Niveau relativ zu einer Bezugsgröße; nie summierbar)."
         },
         "wert": {
           "type": [
@@ -1237,8 +1256,10 @@
             "amtlich_gemeldet",
             "geschaetzt",
             "hochgerechnet",
-            "prognostiziert"
-          ]
+            "prognostiziert",
+            "berechnet"
+          ],
+          "description": "berechnet: aus Werten einer Quelle nach einer Rechenvorschrift abgeleitet; nicht summierbar."
         },
         "raum": {
           "type": "string"
@@ -1252,6 +1273,42 @@
               "type": "null"
             }
           ]
+        },
+        "beobachtungszeitraum": {
+          "$ref": "#/$defs/kalenderzeitraum",
+          "description": "Zeitraum, auf den sich der Wert bezieht (etwa ein Monat oder eine Kalenderwoche), getrennt vom Datenstand."
+        },
+        "bezug": {
+          "type": "object",
+          "description": "Bezugsgröße eines Verhältniswerts (etwa die Baseline eines Niveaus).",
+          "additionalProperties": false,
+          "required": [
+            "gegenstand"
+          ],
+          "properties": {
+            "gegenstand": {
+              "type": "string",
+              "description": "z. B. „Durchschnitt derselben Kalenderwoche 2016–2019“."
+            },
+            "wert": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Wert der Bezugsgröße oder null (unbekannt)."
+            },
+            "einheit": {
+              "type": "string",
+              "description": "Einheit der Bezugsgröße, wenn ein Wert angegeben ist."
+            },
+            "beobachtungszeitraum": {
+              "$ref": "#/$defs/kalenderzeitraum"
+            }
+          }
+        },
+        "vorlaeufig": {
+          "type": "boolean",
+          "description": "Vorläufiger Wert der Quelle, der noch berichtigt werden kann; fehlt = keine Angabe."
         },
         "teilmenge_von": {
           "$ref": "#/$defs/kennzahl_id"

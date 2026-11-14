@@ -439,6 +439,78 @@ describe("LEAD-Meldung-v2: Datenstand und Zeitvergleiche (GK-2026-W44-03, -04)",
   });
 });
 
+describe("LEAD-Meldung-v2: Verhältniswerte, Beobachtungszeitraum und Bezugsgröße (SR-2026-W46-01 bis -04)", () => {
+  const befunde = (m: unknown) => pruefeReferenzen(m) as { stufe: string; pfad: string; text: string }[];
+  /** Niveau relativ zur Baseline für Oktober 2026, berechnet aus amtlichen Werten, vorläufig (fiktiv) */
+  const niveau = () => ({
+    id: "K9",
+    gegenstand: "Lkw-Fahrleistung relativ zur Baseline",
+    einheit: "%",
+    art: "verhaeltnis",
+    wert: 94.2,
+    mindestwert: false,
+    erhebung: "berechnet",
+    raum: "Thüringen",
+    beobachtungszeitraum: { von: "2026-09-01", bis: "2026-09-30" },
+    bezug: {
+      gegenstand: "Durchschnitt September 2016–2019",
+      wert: 100,
+      einheit: "Indexpunkte",
+      beobachtungszeitraum: { von: "2016-09-01", bis: "2019-09-30" },
+    },
+    vorlaeufig: true,
+    datenstand: "2026-10-09",
+    quellen: ["Q2"],
+  });
+  const mit = (k: Record<string, unknown>) => {
+    const m = kopie(BEISPIEL_TH);
+    m.sachverhalte[0].kennzahlen.push(k);
+    return m;
+  };
+  /** Pfad der angefügten Kennzahl */
+  const K = `sachverhalte[0].kennzahlen[${BEISPIEL_TH.sachverhalte[0].kennzahlen.length}]`;
+  const am = (m: unknown, pfad: string) => befunde(m).filter((b) => b.pfad.startsWith(pfad));
+
+  it("SR-2026-W46-01: Kennzahl mit Art verhaeltnis, Erhebung berechnet, Beobachtungszeitraum, Bezug und vorlaeufig ist gültig, ohne Befund", () => {
+    const m = mit(niveau());
+    gleichWieAjv(SCHEMA_BUND, m, true);
+    gleichWieAjv(SCHEMA_LAND, m, true);
+    expect(am(m, K)).toEqual([]);
+  });
+
+  it.each([
+    ["Beobachtungszeitraum ohne bis", { beobachtungszeitraum: { von: "2026-09-01" } }],
+    ["Beobachtungszeitraum mit Uhrzeit", { beobachtungszeitraum: { von: "2026-09-01T00:00+02:00", bis: "2026-09-30" } }],
+    ["Bezug ohne Gegenstand", { bezug: { wert: 100 } }],
+    ["unbekannte Art", { art: "quote" }],
+    ["vorlaeufig als Text", { vorlaeufig: "ja" }],
+  ])("SR-2026-W46-01: ungültig nach Schema bei %s", (_n, aenderung) => {
+    gleichWieAjv(SCHEMA_BUND, mit({ ...niveau(), ...aenderung }), false);
+  });
+
+  it("SR-2026-W46-01: von nach bis ist ein Fehler, auch in der Bezugsgröße", () => {
+    const k = niveau();
+    k.beobachtungszeitraum = { von: "2026-09-30", bis: "2026-09-01" };
+    k.bezug.beobachtungszeitraum = { von: "2019-09-30", bis: "2016-09-01" };
+    expect(
+      am(mit(k), K)
+        .filter((b) => b.stufe === "fehler")
+        .map((b) => b.pfad),
+    ).toEqual([`${K}.beobachtungszeitraum`, `${K}.bezug.beobachtungszeitraum`]);
+  });
+
+  it("SR-2026-W46-01: Beobachtungszeitraum nach t0 ist ein Fehler, am Tag von t0 nicht; bei prognostizierten Werten zulässig", () => {
+    const k = { ...niveau(), beobachtungszeitraum: { von: "2026-10-12", bis: "2026-10-18" } };
+    expect(am(mit(k), K).map((b) => [b.stufe, b.pfad])).toEqual([["fehler", `${K}.beobachtungszeitraum.bis`]]);
+    expect(am(mit({ ...k, beobachtungszeitraum: { von: "2026-10-12", bis: "2026-10-14" } }), K)).toEqual([]);
+    expect(am(mit({ ...k, erhebung: "prognostiziert" }), K)).toEqual([]);
+  });
+
+  it("SR-2026-W46-03: Bezugsgröße bei einer anderen Art als verhaeltnis ergibt einen Hinweis", () => {
+    expect(am(mit({ ...niveau(), art: "bestand" }), K).map((b) => [b.stufe, b.pfad])).toEqual([["hinweis", `${K}.bezug`]]);
+  });
+});
+
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
   it("Zeitpunkte erhalten den Versatz der Zone, auch über die Umstellung am 25.10.2026", () => {
     expect(mitVersatz("2026-10-24T13:00", "Europe/Berlin")).toBe("2026-10-24T13:00+02:00");
