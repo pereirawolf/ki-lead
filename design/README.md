@@ -183,7 +183,7 @@ Die SVG-Fassungen ([breit](wireframe-breit.svg), [schmal](wireframe-schmal.svg))
 | <a id="ld-m01"></a>**LD-M01** | MUSS | Meldungen der App stehen in Kästen mit Randstreifen links: Information (Aktionsfarbe), Hinweis (gering), Fehler (kritisch, Rolle alert) und Erfolg (ok). | `src/styles/formular.css` |
 | <a id="ld-m02"></a>**LD-M02** | MUSS | Laufende Vorgänge (Anfragen an einen Dienst) zeigen eine Laufanzeige mit Uhr, erwarteter Dauer und voraussichtlichen Kosten. Sie werden über eine eigene Statusregion höchstens alle 5 s angesagt; der Sekundenzähler steht außerhalb jeder Live-Region. | `src/ui/kiErfassung/Laufanzeige.tsx`, `docs/BARRIEREFREIHEIT.md` |
 | <a id="ld-m03"></a>**LD-M03** | MUSS | Stellt die App Anfragen, zeigt sie rechts in der Kopfleiste eine Statusanzeige. Sie ist eine reine Anzeige (kein Knopf, kein Tabstopp) und zeigt, ob Anfragen laufen; ihr zugänglicher Name nennt die Zahl gleichzeitiger Anfragen. KI-LEAD: „KI ruht“ und „KI aktiv“. | `src/ui/KiSymbol.tsx`, `src/styles/basis.css` |
-| <a id="ld-m04"></a>**LD-M04** | MUSS | Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; nicht freigegebene Ausgaben tragen „ENTWURF“. | `docs/KI-VERORDNUNG.md` |
+| <a id="ld-m04"></a>**LD-M04** | MUSS | Ausgaben, an denen eine KI mitgewirkt hat, sind sichtbar und maschinenlesbar gekennzeichnet; solange sie nicht freigegeben sind, tragen sie „ENTWURF“. Für Ausgaben ohne KI genügt der maschinenlesbare Status (etwa status „zur_freigabe“ in LEAD-Meldung-v2). | `docs/KI-VERORDNUNG.md` |
 
 ### Zugänglichkeit und Plattform
 
