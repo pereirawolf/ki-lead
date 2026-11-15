@@ -155,6 +155,10 @@ export interface Rollen {
   sv_tendenz?: string;
   sv_bewertung_text?: string;
   sv_massnahmen?: string;
+  /** Änderung zur Vormeldung (LEAD-Meldung-v2): Pfad oder Pfade relativ zum Sachverhalt, der erste belegte gilt (seit 0.9.4, Profilformat 1.34) */
+  sv_aenderung?: string | string[];
+  /** Abschluss (LEAD-Meldung-v2): Pfad oder Pfade relativ zum Sachverhalt, das erste Objekt gilt (seit 0.9.4, Profilformat 1.34) */
+  sv_abschluss?: string | string[];
   sv_radar?: string;
   sv_textfelder?: string[];
   sv_analysefelder?: string[];

@@ -233,14 +233,44 @@ function abweichungTextV2(a: Record<string, any>): string {
     .join(". ");
 }
 
+const istText = (x: unknown): boolean => typeof x === "string" && !!x.trim();
+
 function abschlussTextV2(a: Record<string, any>): string {
   return [
     a.ende ? `Ende ${zeitDE(a.ende)}` : "",
+    istText(a.ergebnis) ? `Ergebnis: ${String(a.ergebnis).trim()}` : "",
     a.offene_punkte ? `offen: ${String(a.offene_punkte).trim()}` : "",
     a.nachsorge ? `Nachsorge: ${String(a.nachsorge).trim()}` : "",
   ]
     .filter(Boolean)
     .join("; ");
+}
+
+/**
+ * Felder für Änderung zur Vormeldung und Abschluss nach LEAD-Meldung-v2: Rollen `sv_aenderung` und `sv_abschluss`
+ * (Profilformat 1.34, seit 0.9.4, KL-2026-W46-01), je ein Pfad relativ zum Sachverhalt oder eine Liste von Pfaden.
+ * Ohne Angabe gelten die Felder der Bewertung.
+ */
+export const PFADE_V2 = { aenderung: "bewertung.aenderung_zur_vormeldung", abschluss: "bewertung.abschluss" } as const;
+
+export function rollenPfade(wert: unknown, vorgabe: string): string[] {
+  const liste = (Array.isArray(wert) ? wert : [wert]).filter((x): x is string => typeof x === "string" && !!x.trim());
+  return liste.length ? liste : [vorgabe];
+}
+
+/** Änderung zur Vormeldung: der erste Pfad mit Text; sonst der erste vorhandene Text (auch leer, für den Befund „ohne Inhalt“) */
+export function aenderungV2(sv: unknown, pfade: string[]): string | undefined {
+  const werte = pfade.map((p) => holeWert(sv, p)).filter((w): w is string => typeof w === "string");
+  return werte.find((w) => w.trim()) ?? werte[0];
+}
+
+/** Abschluss: das erste Objekt unter den Pfaden */
+export function abschlussV2(sv: unknown, pfade: string[]): Record<string, any> | undefined {
+  for (const p of pfade) {
+    const w = holeWert(sv, p);
+    if (w && typeof w === "object" && !Array.isArray(w)) return w;
+  }
+  return undefined;
 }
 
 /**
@@ -394,21 +424,26 @@ export function redaktionscheck(eintraege: LagebildEintrag[], profil: Profil, na
   const abschlussZeile = new Set<SvEintrag>();
   /** Sachverhalte mit inhaltlichem Abschluss: keine Vollständigkeitsprüfung mehr */
   const abgeschlossen = new Set<SvEintrag>();
+  // Pfade nach den Rollen sv_aenderung und sv_abschluss (seit 0.9.4, KL-2026-W46-01), etwa auch aus einem Modul der Betreiber
+  const pfadAenderung = rollenPfade(r.sv_aenderung, PFADE_V2.aenderung);
+  const pfadAbschluss = rollenPfade(r.sv_abschluss, PFADE_V2.abschluss);
   for (const sv of svs) {
-    // LEAD-Meldung-v2 (seit 0.8.3): Abschluss und Änderung als Felder der Bewertung (A.8.1, A.8.2)
+    // LEAD-Meldung-v2 (seit 0.8.3): Abschluss und Änderung als Felder (A.8.1, A.8.2)
     if (v2(sv)) {
       const nachlaufZusatz = entspannung && sv.tendenz === entspannung ? `; Tendenz „${entspannung}“ – Nachlauf prüfen` : "";
-      const a = sv.sv?.bewertung?.abschluss;
-      if (a && typeof a === "object") {
+      const a = abschlussV2(sv.sv, pfadAbschluss);
+      if (a) {
         abschlussZeile.add(sv);
         const t = abschlussTextV2(a);
-        if (!a.ende) marker.push({ sv, kennsatz: LABEL_V2.abschluss, art: "offen", text: `kein Ende angegeben – kein Abschluss ausgesagt${nachlaufZusatz}` });
+        // Ausgesagt ist ein Abschluss mit Ende oder mit Ergebnis (seit 0.9.4, KL-2026-W46-01)
+        if (!a.ende && !istText(a.ergebnis))
+          marker.push({ sv, kennsatz: LABEL_V2.abschluss, art: "offen", text: `kein Ende angegeben – kein Abschluss ausgesagt${nachlaufZusatz}` });
         else {
           abschluss.push({ sv, text: t, rueckblick: hochSet.has(sv.beurteilung) });
           abgeschlossen.add(sv);
         }
       } else if (entspannung && sv.tendenz === entspannung) nachlauf.push(sv);
-      const aen = sv.sv?.bewertung?.aenderung_zur_vormeldung;
+      const aen = aenderungV2(sv.sv, pfadAenderung);
       if (typeof aen === "string") {
         if (aen.trim()) aenderung.push({ sv, text: aen.trim() });
         else marker.push({ sv, kennsatz: LABEL_V2.aenderung, art: "leer", text: "Feld ohne Inhalt" });

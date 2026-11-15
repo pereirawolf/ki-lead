@@ -91,6 +91,9 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
     for (const [k, v] of Object.entries(r)) {
       if (["sv_textfelder", "sv_analysefelder", "beurteilung_hoch"].includes(k)) {
         if (!textListe(v)) fehler(`Rolle „${k}“ muss eine Liste von Texten sein.`);
+      } else if (k === "sv_aenderung" || k === "sv_abschluss") {
+        // seit 0.9.4 (KL-2026-W46-01, Profilformat 1.34): ein Pfad oder eine Liste von Pfaden
+        if (!istText(v) && !textListe(v)) fehler(`Rolle „${k}“ muss Text oder eine Liste von Texten sein.`);
       } else if (k === "herkunft_kategorie") {
         // seit 0.6.13 (Issue #114, A1): Herkunft → Quellenkategorie
         if (!istObjekt(v) || !Object.values(v as object).every(istText)) fehler(`Rolle „${k}“ muss ein Objekt mit Texten sein.`);
@@ -298,6 +301,13 @@ export function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]
     const pfad = r[rolle];
     if (pfad && !unterSchema(schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(pfad)]))
       befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“ im Sachverhalt.` });
+  }
+  // Felder für Änderung und Abschluss (seit 0.9.4, KL-2026-W46-01, Profilformat 1.34): jeder Pfad im Sachverhalt
+  for (const rolle of ["sv_aenderung", "sv_abschluss"] as const) {
+    const wert = r[rolle];
+    for (const pfad of (Array.isArray(wert) ? wert : wert ? [wert] : []) as string[])
+      if (!unterSchema(schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(pfad)]))
+        befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“ im Sachverhalt.` });
   }
   // Herkunftsrolle der meldenden Stelle (seit 0.6.13, Issue #114, A1): Pfad auf Meldungsebene, Kategorien des Profils
   if (r.herkunft && !unterSchema(schema, teilePfad(r.herkunft)))
