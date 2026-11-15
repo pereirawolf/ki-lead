@@ -6,8 +6,8 @@
   "lizenz": "Schemata CC-BY-4.0 OR CC0-1.0 (KSNV, LICENSE-CONTENT Nr. 1 c und 2 a); Beispiele CC-BY-4.0 (Nr. 1 d)",
   "kernschema": {
     "hinweis": "Das KSNV-Schema verweist auf das Kernschema von LEAD-Meldung-v2 und pinnt es in KSNV unter kern/quelle.json (dieselbe Fassung wie Thessa). Die Bündelung verlangt, dass formate/lead-meldung-v2/kern.schema.json diese Prüfsumme hat; ändert sich das Kernschema, muss KSNV neu pinnen und diese Angabe nachgezogen werden.",
-    "commit": "986663cb988b86f49ff5aa1ea0bf6a4162129fed",
-    "sha256": "3c3211979518a1f0c55dbf8ed468693a11f4a7fda3f27807f143389c37980af9"
+    "commit": "9db9b54ac8ebbf4960b20dbb5312956939db8eec",
+    "sha256": "25950e545a57ed85cea662a9492e295d65ec81bb3255820b415fccb1b530d8c8"
   },
   "fassungen": [
     {

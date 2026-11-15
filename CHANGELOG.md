@@ -126,6 +126,33 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
 | 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ (Nachtrag vom 14.11.2026: Pull Request „LEAD-Meldung-v2: offener Punkt 2 erledigt (Kosten und Fehlerquote)“, ohne Änderung der App) |
 | 0.9.2 | letzter Commit des Pull Requests „Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2; 0.9.2“ |
+| 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ |
+## [0.9.3] – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json` (Vorschlag aus STATIS-LEAD, das amtliche Statistik als Kennzahlen-Baustein liefern soll), SR-2026-W46-01 bis -06; Entscheidungen des Herausgebers vom 14.11.2026: Ausnahme für prognostizierte Werte, Bezugsgröße mit Einheit und Hinweis, allgemeine Zählregel in SOP-LEAD A.3, Formateigenschaft `raum_vollstaendig`. SR-2026-W46-07 (Format STATIS-LEAD, Austauschvertrag Abschnitt 9) ist bis 28.11.2026 zurückgestellt, weil das Baustein-Schema 0.1 noch nicht vorliegt.
+
+### Neu
+
+- **Kernschema LEAD-Meldung-v2, Nachtrag 14** (`formate/lead-meldung-v2/kern.schema.json`, additiv): `kennzahl.art` „verhaeltnis“ (Index, Anteil, Rate, Niveau relativ zu einer Bezugsgröße), `kennzahl.erhebung` „berechnet“, optional `beobachtungszeitraum` (Kalendertage, Definition `kalenderzeitraum`), `bezug {gegenstand, wert, einheit, beobachtungszeitraum}` und `vorlaeufig`. Zusammengestellte Schemata der Beispiel-, Landes- und Eingangsfassung und der Profile neu erzeugt. Bestehende Meldungen bleiben gültig.
+- **Referenzprüfung** (`src/kern/meldung-v2.js`): Beobachtungszeitraum von Kennzahl und Bezugsgröße nicht rückwärts; Zeitraum nicht nach t0 außer bei Erhebung „prognostiziert“; Hinweis bei einer Bezugsgröße außerhalb eines Verhältniswerts.
+- **Formateigenschaft `raum_vollstaendig`** (`src/kern/baustein.ts`): Ein Land-Baustein eines solchen Formats gilt nicht als erfasster Ausschnitt; `istAusschnitt()` liegt jetzt in `baustein.ts`. Derzeit führt kein Format die Eigenschaft.
+
+### Geändert
+
+- **Rechenhilfe und Summenprüfung** (`src/kern/bausteinverdichtung.ts`): Verhältniswerte und berechnete Werte werden nie summiert (Grund „Verhältniswerte und berechnete Werte nicht summieren“); Gruppen je Beobachtungszeitraum, Grund „verschiedene Beobachtungszeiträume“; der Zeitraum steht im Text der Rechenhilfe.
+- **Übernahme aus Bausteinen** (`src/kern/bausteinuebernahme.ts`): stellt auch `beobachtungszeitraum`, `bezug` und `vorlaeufig` wieder her.
+- **Darstellung** (`src/kern/v2darstellung.ts`): Die Kennzahlzeile in PDF, Kopiervorlage und Lagebild nennt „vorläufig“, den Zeitraum und die Bezugsgröße.
+- **Darstellungsdateien** (Vorlage und Profile): Bezeichnungen und Hinweise der neuen Felder.
+- **Kern-Pin von Thessa und KSNV** (`formate/fremd/*/herkunft.json`) auf die neue Prüfsumme, gebündelte Schemata neu erzeugt; Thessa und KSNV pinnen in ihren Repositorys neu.
+- Profile: Beispielprofil 2.1.0 und Landesprofil 2.1.0 (Kodierleitfaden 2.1.0, Arbeitsanweisung Verdichtung 3.1.0, SOP-Sammelmappe 3.25.0), Vorlage 1.1.0; Einzelheiten in den Profilverläufen.
+
+### Tests
+
+- `tests/format/lead-meldung-v2.test.ts` (9 neu), `tests/kern/bausteinverdichtung.test.ts` (4 neu), `tests/pipeline/v2-pipeline.test.ts` (1 neu); Profilversionen in `tests/profil/v2-umstellung.test.ts`.
+
+### Dokumentation
+
+- [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) Nachtrag 14 (Abschnitte 4.3, 7, 8, Stand), `formate/lead-meldung-v2/README.md`, [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.3 (Abschnitte 4.2 und 5.2), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.9.3 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 903). Befundregister fortgeschrieben.
 ## [0.9.2] – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_kosten_2026-W46.json` (auf `befunde/eingang`, Commit `0c15f74`), AV-2026-W46-01 und -02 aus dem Ergebnisbericht [evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md](evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md). Freigabe des Herausgebers vom 14.11.2026: alle JSON-Arten ohne Einrückung, die Änderung bleibt unabhängig vom Ergebnis der Messung; Messwerte der Schätzung nach der Regel nachziehen. Messung: Vergleichslauf Ilka wie am 14.11.2026 nach dem Merge, ausgeführt vom Herausgeber (Messweg in der Befunddatei).

@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.1.0 – 14.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, SR-2026-W46-01 bis -06 (Vorschlag aus STATIS-LEAD, das amtliche Statistik als Kennzahlen-Baustein liefert; App 0.9.3). Entscheidungen des Herausgebers vom 14.11.2026: Prognosen dürfen einen Beobachtungszeitraum nach t0 haben; Bezugsgröße mit optionaler Einheit und Hinweis außerhalb von Verhältniswerten; allgemeine Zählregel in SOP-LEAD A.3; Ausnahme von der Ausschnittregel je Format (`raum_vollstaendig`). SR-2026-W46-07 (Format STATIS-LEAD) ist bis 28.11.2026 zurückgestellt. Zweite Stelle: neue Felder und Regeln, bestehende Meldungen bleiben gültig.
+
+- **Schema:** neu erzeugt aus der Zusammenstellung (Kernschema Nachtrag 14): `kennzahlen[].art` „verhaeltnis“, `kennzahlen[].erhebung` „berechnet“, optional `beobachtungszeitraum`, `bezug` und `vorlaeufig`; ebenso das Eingangsschema.
+- **Darstellungsdatei (Profilversion 2.1.0):** Bezeichnungen und Hinweise für Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit; Hinweis der Kennzahlen nennt Beobachtungszeitraum, Verhältniswerte und berechnete Werte.
+- **Kodierleitfaden 2.1.0:** Abschnitt 6, Tabelle „Wertzustände und Leerwerte“, Zeile `kennzahlen` mit den neuen Werten und Feldern; „Kennzahlen aus Kennzahlen-Bausteinen“ Regel 1 (Erhebung, Beobachtungszeitraum, Bezugsgröße, Vorläufigkeit unverändert übernehmen), Regel 2 (keine Summen über Beobachtungszeiträume, nie über Verhältniswerte und berechnete Werte), Regel 5 (kein Ausschnitt bei Formaten, die den Raum vollständig abdecken); Schlussabsatz zur Rechenhilfe.
+- **Arbeitsanweisung Verdichtung 3.1.0:** Regel 4 mit derselben Zeitbasis einschließlich Beobachtungszeitraum (Prüffrage 3) und neuer Prüffrage 7 (Mengen, keine Verhältniswerte und keine berechneten Werte). Erfassung 2.0.0 und Kurzfassung 2.5.0 geprüft, ohne Anpassungsbedarf (sie verweisen für Kennzahlen auf den Kodierleitfaden).
+- **SOP-Sammelmappe 3.25.0:** Teil A, A.3 und Gültigkeitsstand; Einzelheiten im Verlauf `sop/CHANGELOG.md`.
+
 ## 2.0.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`, UP-2026-W45-06 (Paket 6 des Umstellungsplans: Umstellung der Profile auf LEAD-Meldung-v2 nach `docs/LEAD-MELDUNG-V2.md` Abschnitt 10, App 0.9.0), dazu KL-2026-W45-03 und KL-2026-W45-04 aus `ki-lead-befund_kritis_2026-W45-b.json`. Die Zurückstellung hat der Herausgeber am 14.11.2026 aufgehoben; Entscheidungen vom 14.11.2026: Beispiele pflichtnah überführen, gemeinsame Frist 15.10., 12:00 Uhr für Pflegeheime und Trinkwasser. Erste Stelle, weil Meldungen nach LEAD-Meldung-v1 überführt werden müssen (die App überführt sie beim Einlesen, Migration `lead-meldung-v2`).

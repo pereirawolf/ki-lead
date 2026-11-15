@@ -1362,3 +1362,17 @@ Soll unabhängig vom Code: Ergebnisbericht `evaluation/abnahmen/2026-11-14-lead-
 | Sonstiges JSON ohne Leerraum | JSON-Material ohne Einrückung › AV-2026-W46-01: sonstiges JSON ohne Leerraum | `tests/pipeline/material.test.ts` |
 | Kennzahlen-Baustein (Projektion) ohne Zeilenumbruch | JSON-Material ohne Einrückung › AV-2026-W46-01: Kennzahlen-Baustein (Projektion) ohne Zeilenumbruch | `tests/pipeline/material.test.ts` |
 | Obergrenzen der Schätzung für S1 Haiku „high“ (240 s, 0,25 USD) und die Verdichtung mit Opus „medium“ (780 s, 3,35 USD) nach der Regel aus den Läufen vom 14.11.2026; Kenndaten der Laufprotokolle liegen in den Spannen | Schätzung von Dauer und Kosten › nutzt Messwerte für gemessene Kombinationen; › AV-2026-W43-05, -15: Messwerte des Vergleichslaufs liegen in den Spannen | `tests/pipeline/schaetzung.test.ts` |
+
+## Verhältniswerte, Beobachtungszeitraum und Ausschnittregel je Format (0.9.3, SR-2026-W46-01 bis -06)
+
+Soll unabhängig vom Code: die Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json` mit den Entscheidungen des Herausgebers vom 14.11.2026, von Hand gerechnete Summen an abgewandelten Kopien der fiktiven Thessa-Bausteine (Orkantief „Ilka“) und eine von Hand gebaute fiktive Kennzahl (Niveau relativ zur Baseline).
+
+| Soll | Test | Datei |
+|---|---|---|
+| Kennzahl mit Art `verhaeltnis`, Erhebung `berechnet`, Beobachtungszeitraum, Bezugsgröße und `vorlaeufig` ist nach Bundes- und Landesschema gültig, ohne Befund der Referenzprüfung; unvollständiger Zeitraum, Uhrzeit im Zeitraum, Bezug ohne Gegenstand, unbekannte Art und `vorlaeufig` als Text sind ungültig | LEAD-Meldung-v2: Verhältniswerte … › SR-2026-W46-01: Kennzahl mit Art verhaeltnis … ist gültig; › SR-2026-W46-01: ungültig nach Schema bei … | `tests/format/lead-meldung-v2.test.ts` |
+| Referenzprüfung: von nach bis ist ein Fehler (auch in der Bezugsgröße); Zeitraum nach t0 ist ein Fehler, am Tag von t0 nicht, bei prognostizierten Werten zulässig; Bezugsgröße außerhalb eines Verhältniswerts ergibt einen Hinweis | › SR-2026-W46-01: von nach bis …; › SR-2026-W46-01: Beobachtungszeitraum nach t0 …; › SR-2026-W46-03: Bezugsgröße … | `tests/format/lead-meldung-v2.test.ts` |
+| Rechenhilfe und Summenprüfung: zwei Verhältniswerte überschneidungsfreier Räume getrennt (94 + 97 = 191 % unzulässig), berechnete Werte getrennt, verschiedene Beobachtungszeiträume in getrennten Gruppen und als unzulässige Summe; Zeitraum im Text der Rechenhilfe | SR-2026-W46-05 und -06 › SR-2026-W46-05: … | `tests/kern/bausteinverdichtung.test.ts` |
+| Land-Baustein ist erfasster Ausschnitt, außer das Format führt `raum_vollstaendig`; Thessa und KSNV unverändert, derzeit kein Format mit der Eigenschaft | › SR-2026-W46-06: … | `tests/kern/bausteinverdichtung.test.ts` |
+| Übernahme stellt Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit aus dem Baustein wieder her und nennt sie als Abweichung | SR-2026-W46-05: Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit werden aus dem Baustein wiederhergestellt | `tests/pipeline/v2-pipeline.test.ts` |
+
+Mitgeführt ohne geändertes Soll: Kern-Pin von Thessa und KSNV (`tests/format/thessa-baustein.test.ts`, `tests/format/ksnv-baustein.test.ts`) mit neuer Prüfsumme; Profilversionen in `tests/profil/v2-umstellung.test.ts` (2.1.0, 2.1.0, 1.1.0).

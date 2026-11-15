@@ -2,6 +2,13 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.1.0 – 14.11.2026
+
+Grundlage: SR-2026-W46-01 bis -04 (Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, App 0.9.3). Zweite Stelle: neue optionale Felder, bestehende Meldungen bleiben gültig.
+
+- **Meldungsschema** neu erzeugt aus `zusammenstellung.json` (Kernschema Nachtrag 14: Art „verhaeltnis“, Erhebung „berechnet“, optional `beobachtungszeitraum`, `bezug` und `vorlaeufig` je Kennzahl).
+- **Darstellungsdatei:** Bezeichnungen und Hinweise der neuen Felder wie in der Vorlage `formate/lead-meldung-v2/beispiel/meldung.ui.json`.
+
 ## 1.0.0 – 14.11.2026
 
 Grundlage: UP-2026-W45-06 (Paket 6 des Umstellungsplans, Umstellung der Profile auf LEAD-Meldung-v2; Befunddatei `ki-lead-befund_umstellungsplan_2026-W45.json`), Entscheidung des Herausgebers vom 14.11.2026: eigenes Fachmodul statt Lagenradar. Erste Stelle: inkompatible Schemaänderung; Meldungen nach `Muster-LEAD-Meldung-v1` werden nicht überführt (Abwärtskompatibilität ist kein Ziel, die Vorlage hat keine Beispielmeldungen).

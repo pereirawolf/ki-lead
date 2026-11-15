@@ -3,7 +3,7 @@
   "$id": "https://github.com/pereirawolf/ki-lead/formate/fremd/thessa-kennzahlen/gebuendelt/0.1.schema.json",
   "title": "Thessa – Kennzahlen-Baustein 0.1 (Entwurf)",
   "description": "Verdichtete Kräftelage eines Raums als Quellenangabe und Kennzahlen im Format von LEAD-Meldung-v2, dazu die lagerelevanten Einsatzmeldungen ohne Ortslage und ohne Freitext-Hinweise. Eine Lagemeldung übernimmt quellen und kennzahlen in einen Sachverhalt; die Kennungen Q1 und K1 … sind dabei gegebenenfalls umzunummerieren. Kennzahlen mit verschiedenen Einheiten (Einsatzmittel, Einsätze, Einsatzkräfte, Ausrückebereiche, Einheiten des Katastrophenschutzes) werden nicht addiert.",
-  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.2/kennzahlen-baustein.schema.json (Thessa b4344c8, SHA-256 30ea7222866a…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 3c3211979518…); Fassung 0.1 abgeleitet: einsatzmeldungen nicht Pflicht. Nicht von Hand ändern.",
+  "$comment": "Erzeugt mit scripts/fremdschemata.mjs aus 0.2/kennzahlen-baustein.schema.json (Thessa b4344c8, SHA-256 30ea7222866a…) und formate/lead-meldung-v2/kern.schema.json (SHA-256 25950e545a57…); Fassung 0.1 abgeleitet: einsatzmeldungen nicht Pflicht. Nicht von Hand ändern.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -235,6 +235,23 @@
       "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
       "description": "Kalendertag JJJJ-MM-TT."
     },
+    "kern_kalenderzeitraum": {
+      "type": "object",
+      "description": "Zeitraum aus zwei Kalendertagen, beide einschließlich.",
+      "additionalProperties": false,
+      "required": [
+        "von",
+        "bis"
+      ],
+      "properties": {
+        "von": {
+          "$ref": "#/$defs/kern_datum"
+        },
+        "bis": {
+          "$ref": "#/$defs/kern_datum"
+        }
+      }
+    },
     "kern_kennzahl": {
       "type": "object",
       "additionalProperties": false,
@@ -266,8 +283,10 @@
             "bestand",
             "kumuliert",
             "kapazitaet",
-            "bedarf"
-          ]
+            "bedarf",
+            "verhaeltnis"
+          ],
+          "description": "Bestand, kumuliert, Kapazität, Bedarf (Mengen) oder Verhältnis (Index, Anteil, Rate, Niveau relativ zu einer Bezugsgröße; nie summierbar)."
         },
         "wert": {
           "type": [
@@ -302,8 +321,10 @@
             "amtlich_gemeldet",
             "geschaetzt",
             "hochgerechnet",
-            "prognostiziert"
-          ]
+            "prognostiziert",
+            "berechnet"
+          ],
+          "description": "berechnet: aus Werten einer Quelle nach einer Rechenvorschrift abgeleitet; nicht summierbar."
         },
         "raum": {
           "type": "string"
@@ -317,6 +338,42 @@
               "type": "null"
             }
           ]
+        },
+        "beobachtungszeitraum": {
+          "$ref": "#/$defs/kern_kalenderzeitraum",
+          "description": "Zeitraum, auf den sich der Wert bezieht (etwa ein Monat oder eine Kalenderwoche), getrennt vom Datenstand."
+        },
+        "bezug": {
+          "type": "object",
+          "description": "Bezugsgröße eines Verhältniswerts (etwa die Baseline eines Niveaus).",
+          "additionalProperties": false,
+          "required": [
+            "gegenstand"
+          ],
+          "properties": {
+            "gegenstand": {
+              "type": "string",
+              "description": "z. B. „Durchschnitt derselben Kalenderwoche 2016–2019“."
+            },
+            "wert": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "Wert der Bezugsgröße oder null (unbekannt)."
+            },
+            "einheit": {
+              "type": "string",
+              "description": "Einheit der Bezugsgröße, wenn ein Wert angegeben ist."
+            },
+            "beobachtungszeitraum": {
+              "$ref": "#/$defs/kern_kalenderzeitraum"
+            }
+          }
+        },
+        "vorlaeufig": {
+          "type": "boolean",
+          "description": "Vorläufiger Wert der Quelle, der noch berichtigt werden kann; fehlt = keine Angabe."
         },
         "teilmenge_von": {
           "$ref": "#/$defs/kern_kennzahl_id"

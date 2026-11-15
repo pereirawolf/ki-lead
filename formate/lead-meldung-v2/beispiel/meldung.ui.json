@@ -370,7 +370,7 @@
       "element_label": "Kennzahl",
       "titel_feld": "gegenstand",
       "hinzufuegen": "Kennzahl hinzufügen",
-      "hinweis": "Einheit, Art, Erhebung und Datenstand je Kennzahl; Kennzahlen verschiedener Einheit, Art oder verschiedenen Datenstands nicht addieren."
+      "hinweis": "Einheit, Art, Erhebung und Datenstand je Kennzahl; Kennzahlen verschiedener Einheit, Art, verschiedenen Datenstands oder Beobachtungszeitraums nicht addieren, Verhältniswerte und berechnete Werte nie."
     },
     "sachverhalte[].kennzahlen[].datenstand": {
       "label": "Datenstand",
@@ -611,6 +611,46 @@
     },
     "sachverhalte[].kennzahlen[].teilmenge_von": {
       "label": "Teilmenge von"
+    },
+    "sachverhalte[].kennzahlen[].beobachtungszeitraum": {
+      "label": "Beobachtungszeitraum",
+      "hinweis": "Zeitraum, auf den sich der Wert bezieht (etwa ein Monat oder eine Kalenderwoche), als Kalendertage; getrennt vom Datenstand. Endet nicht nach dem Meldezeitpunkt, außer bei prognostizierten Werten."
+    },
+    "sachverhalte[].kennzahlen[].beobachtungszeitraum.von": {
+      "label": "von",
+      "hinweis": "Kalendertag (2026-10-01)."
+    },
+    "sachverhalte[].kennzahlen[].beobachtungszeitraum.bis": {
+      "label": "bis",
+      "hinweis": "Kalendertag (2026-10-31)."
+    },
+    "sachverhalte[].kennzahlen[].bezug": {
+      "label": "Bezugsgröße",
+      "hinweis": "Nur bei Art „verhaeltnis“: Bezugsgröße des Werts, etwa die Baseline eines Niveaus."
+    },
+    "sachverhalte[].kennzahlen[].bezug.gegenstand": {
+      "label": "Gegenstand"
+    },
+    "sachverhalte[].kennzahlen[].bezug.wert": {
+      "label": "Wert"
+    },
+    "sachverhalte[].kennzahlen[].bezug.einheit": {
+      "label": "Einheit"
+    },
+    "sachverhalte[].kennzahlen[].bezug.beobachtungszeitraum": {
+      "label": "Beobachtungszeitraum"
+    },
+    "sachverhalte[].kennzahlen[].bezug.beobachtungszeitraum.von": {
+      "label": "von",
+      "hinweis": "Kalendertag (2016-01-01)."
+    },
+    "sachverhalte[].kennzahlen[].bezug.beobachtungszeitraum.bis": {
+      "label": "bis",
+      "hinweis": "Kalendertag (2019-12-31)."
+    },
+    "sachverhalte[].kennzahlen[].vorlaeufig": {
+      "label": "Vorläufig",
+      "hinweis": "Vorläufiger Wert der Quelle, der noch berichtigt werden kann."
     },
     "sachverhalte[].zeitstrahl[].id": {
       "label": "Nummer"

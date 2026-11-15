@@ -8,13 +8,16 @@
 //   (Vorrang der übergeordneten Erhebung);
 // - Gegenstände mit Meldequote („11 von 12 Feuerwehren gemeldet“) bleiben je Raum, weil die Quote Teil der Aussage ist
 //   (Entscheidung des Herausgebers vom 14.11.2026);
+// - Verhältniswerte (Art „verhaeltnis“) und berechnete Werte (Erhebung „berechnet“) nie summieren; Werte verschiedener
+//   Beobachtungszeiträume stehen in getrennten Gruppen (seit 0.9.3, SR-2026-W46-05);
 // - Bausteine mit einem Land als Raum gelten als erfasster Ausschnitt, Vollständigkeit nicht angegeben (Entscheidung
-//   vom 06.11.2026); die App kennzeichnet den Raum;
+//   vom 06.11.2026), außer das Format deckt den Raum vollständig ab (raum_vollstaendig, SR-2026-W46-06); die App
+//   kennzeichnet den Raum;
 // - Einsatzmeldungen je Kennung einmal, gezählt im engsten Raum, in dem sie im Gebiet liegt (im_gebiet true).
 // Dazu die Prüfungen nach S2: unzulässige Summen (KENNZAHL_SUMME_UNZULAESSIG), Ausschnitt als landesweiter Wert
 // (KENNZAHL_LANDESWEIT) und der Hinweis, Kennzahlen als Beleg zu prüfen (KENNZAHL_BELEG).
 
-import { BAUSTEIN_FORMATE, istLandSchluessel, zeitDE, type BausteinInfo } from "./baustein";
+import { BAUSTEIN_FORMATE, istAusschnitt, istLandSchluessel, zeitDE, type BausteinInfo } from "./baustein";
 import type { Befund } from "./typen";
 
 /** Baustein mit Dateiname, Angaben aus der Prüfung und Inhalt */
@@ -26,10 +29,7 @@ export interface VerdichtungsBaustein {
 
 export const AUSSCHNITT_ZUSATZ = "erfasster Ausschnitt, Vollständigkeit nicht angegeben";
 
-export { istLandSchluessel };
-
-/** Ein Baustein, dessen Raum ein Land ist, gilt als erfasster Ausschnitt (Entscheidung vom 06.11.2026) */
-export const istAusschnitt = (info: BausteinInfo): boolean => istLandSchluessel(info.raum.schluessel);
+export { istAusschnitt, istLandSchluessel };
 
 /** „Thüringen“ → „Thüringen (erfasster Ausschnitt, Vollständigkeit nicht angegeben)“; schon gekennzeichnet bleibt gleich */
 export const ausschnittRaum = (name: string): string => (name.includes(AUSSCHNITT_ZUSATZ) ? name : `${name} (${AUSSCHNITT_ZUSATZ})`);
@@ -49,6 +49,17 @@ const ohneQuote = (s: unknown) => norm(String(s ?? "").replace(new RegExp(QUOTE_
 const zahlDE = (n: number) => n.toLocaleString("de-DE");
 /** Erhebungsarten, die summiert werden dürfen (SOP-LEAD A.3: Hochgerechnetes nie in einer Summe mit Gezähltem) */
 const SUMMIERBAR = new Set(["gezaehlt", "amtlich_gemeldet"]);
+/** Verhältniswert oder berechneter Wert: nie summierbar (SOP-LEAD A.3; seit 0.9.3, SR-2026-W46-05) */
+const nieSummierbar = (art: string, erhebung: string) => art === "verhaeltnis" || erhebung === "berechnet";
+/** Beobachtungszeitraum als Text für Gruppenschlüssel und Anzeige; leer ohne Angabe */
+const zeitraumSchluessel = (z: unknown): string => {
+  const x = z && typeof z === "object" ? (z as Record<string, unknown>) : null;
+  return x && typeof x.von === "string" && typeof x.bis === "string" ? `${x.von}/${x.bis}` : "";
+};
+const zeitraumDE = (s: string) => {
+  const [von, bis] = s.split("/");
+  return !s ? "" : von === bis ? zeitDE(von) : `${zeitDE(von)}–${zeitDE(bis)}`;
+};
 
 export interface RhEintrag {
   /** Kürzel des Bausteins in der Rechenhilfe (B1, B2 …) */
@@ -77,6 +88,8 @@ export interface RhGruppe {
   einheit: string;
   art: string;
   datenstand: string;
+  /** Beobachtungszeitraum „von/bis“ oder leer (seit 0.9.3) */
+  zeitraum: string;
   eintraege: RhEintrag[];
   ergebnis: RhErgebnis;
 }
@@ -144,7 +157,7 @@ function eintraegeVon(b: VerdichtungsBaustein, kuerzel: string, schluessel: Map<
 const liegtIn = (a: string, b: string) => a.startsWith(b);
 const ueberlappen = (a: string, b: string) => liegtIn(a, b) || liegtIn(b, a);
 
-function ergebnis(eintraege: RhEintrag[]): RhErgebnis {
+function ergebnis(eintraege: RhEintrag[], art = ""): RhErgebnis {
   if (eintraege.some((e) => e.wert === null || e.bandbreite)) return { art: "getrennt", grund: "Wert fehlt oder als Bandbreite angegeben; keine Summe" };
   if (eintraege.some((e) => e.quote)) return { art: "getrennt", grund: "Meldequote je Raum ist Teil der Aussage; keine Summe" };
   if (eintraege.some((e) => !e.schluessel)) return { art: "getrennt", grund: "Raum ohne Gebietsschlüssel, Überschneidung nicht prüfbar; keine Summe" };
@@ -164,6 +177,7 @@ function ergebnis(eintraege: RhEintrag[]): RhErgebnis {
   }
   for (let i = 0; i < schl.length; i++)
     for (let j = i + 1; j < schl.length; j++) if (ueberlappen(schl[i]!, schl[j]!)) return { art: "getrennt", grund: "Räume überschneiden sich; keine Summe" };
+  if (eintraege.some((e) => nieSummierbar(art, e.erhebung))) return { art: "getrennt", grund: "Verhältniswerte und berechnete Werte nicht summieren" };
   if (eintraege.some((e) => !SUMMIERBAR.has(e.erhebung)))
     return { art: "getrennt", grund: "geschätzte, hochgerechnete oder prognostizierte Werte nicht summieren" };
   return {
@@ -199,7 +213,8 @@ export function rechenhilfe(bausteine: VerdichtungsBaustein[]): Rechenhilfe {
       const gegenstand = String(e.k.gegenstand ?? "");
       const quote = QUOTE_TEIL.exec(gegenstand)?.[1];
       const anzeige = quote ? gegenstand.replace(QUOTE_TEIL, "").trim() : gegenstand;
-      const key = JSON.stringify([norm(anzeige), String(e.k.einheit ?? ""), String(e.k.art ?? ""), datenstand, !!quote]);
+      const zeitraum = zeitraumSchluessel(e.k.beobachtungszeitraum);
+      const key = JSON.stringify([norm(anzeige), String(e.k.einheit ?? ""), String(e.k.art ?? ""), datenstand, zeitraum, !!quote]);
       const { k: _k, ...rest } = e;
       const eintrag: RhEintrag = { ...rest, ...(quote ? { quote } : {}) };
       const vorhanden = gruppen.get(key);
@@ -208,12 +223,12 @@ export function rechenhilfe(bausteine: VerdichtungsBaustein[]): Rechenhilfe {
         vorhanden.bausteine.add(eintrag.baustein);
       } else
         gruppen.set(key, {
-          g: { gegenstand: anzeige, einheit: String(e.k.einheit ?? ""), art: String(e.k.art ?? ""), datenstand, eintraege: [eintrag] },
+          g: { gegenstand: anzeige, einheit: String(e.k.einheit ?? ""), art: String(e.k.art ?? ""), datenstand, zeitraum, eintraege: [eintrag] },
           bausteine: new Set([eintrag.baustein]),
         });
     }
   });
-  const liste: RhGruppe[] = [...gruppen.values()].filter((x) => x.bausteine.size > 1).map((x) => ({ ...x.g, ergebnis: ergebnis(x.g.eintraege) }));
+  const liste: RhGruppe[] = [...gruppen.values()].filter((x) => x.bausteine.size > 1).map((x) => ({ ...x.g, ergebnis: ergebnis(x.g.eintraege, x.g.art) }));
   return { bausteine: kopf, mehrereStaende, gruppen: liste, einsatzmeldungen: einsatzmeldungen(bausteine) };
 }
 
@@ -257,14 +272,15 @@ export function ergebnisText(g: RhGruppe): string {
 export function gruppeText(g: RhGruppe): string {
   const werte = g.eintraege.map((e) => `${e.raum} ${wertText(e)}${e.quote ? ` (${e.quote})` : ""} [${e.baustein} ${e.kennzahl}]`).join("; ");
   const quote = g.eintraege.some((e) => e.quote) ? " mit Meldequote je Raum" : "";
-  return `„${g.gegenstand}“${quote} (${g.einheit}, ${g.art}, ${zeitDE(g.datenstand)}): ${werte} → ${ergebnisText(g)}`;
+  const zeitraum = g.zeitraum ? `, Zeitraum ${zeitraumDE(g.zeitraum)}` : "";
+  return `„${g.gegenstand}“${quote} (${g.einheit}, ${g.art}${zeitraum}, ${zeitDE(g.datenstand)}): ${werte} → ${ergebnisText(g)}`;
 }
 
 /** Textfassung für die KI (Block `<rechenhilfe art="kennzahlen">`) und die Anzeige im Lagebild. */
 export function rechenhilfeText(rh: Rechenhilfe): string {
   const z: string[] = [];
   z.push(
-    "Rechenhilfe der App, deterministisch aus den Kennzahlen-Bausteinen (Regeln: Kodierleitfaden, Abschnitt 6). Werte unverändert übernehmen; Summen nur, wo hier „Summe zulässig“ steht, und dann als Summe kennzeichnen. Keine Summen über Einheit, Art, Datenstand oder überlappende Räume.",
+    "Rechenhilfe der App, deterministisch aus den Kennzahlen-Bausteinen (Regeln: Kodierleitfaden, Abschnitt 6). Werte unverändert übernehmen; Summen nur, wo hier „Summe zulässig“ steht, und dann als Summe kennzeichnen. Keine Summen über Einheit, Art, Datenstand, Beobachtungszeitraum oder überlappende Räume, nie über Verhältniswerte oder berechnete Werte.",
   );
   z.push("Bausteine:");
   for (const b of rh.bausteine)
@@ -277,8 +293,8 @@ export function rechenhilfeText(rh: Rechenhilfe): string {
     );
   z.push(
     rh.gruppen.length
-      ? "Gleicher Gegenstand, gleiche Einheit, Art und gleicher Datenstand in mehreren Bausteinen:"
-      : "Kein Gegenstand steht mit gleicher Einheit, Art und gleichem Datenstand in mehreren Bausteinen; jede Kennzahl gilt für sich.",
+      ? "Gleicher Gegenstand, gleiche Einheit, Art, gleicher Datenstand und Beobachtungszeitraum in mehreren Bausteinen:"
+      : "Kein Gegenstand steht mit gleicher Einheit, Art, gleichem Datenstand und Beobachtungszeitraum in mehreren Bausteinen; jede Kennzahl gilt für sich.",
   );
   for (const g of rh.gruppen) z.push(`- ${gruppeText(g)}`);
   if (rh.einsatzmeldungen.length) {
@@ -302,6 +318,7 @@ interface Teilwert {
   einheit: string;
   art: string;
   datenstand: string;
+  zeitraum: string;
   schluessel?: string;
   quote: boolean;
   erhebung: string;
@@ -354,6 +371,7 @@ export function summenpruefung(bausteine: VerdichtungsBaustein[]): Summenpruefun
         einheit,
         art: String(e.k.art ?? ""),
         datenstand: String(e.k.datenstand ?? b.info.datenstand),
+        zeitraum: zeitraumSchluessel(e.k.beobachtungszeitraum),
         ...(e.schluessel ? { schluessel: e.schluessel } : {}),
         quote: MELDEQUOTE.test(String(e.k.gegenstand ?? "")),
         erhebung: e.erhebung,
@@ -371,6 +389,8 @@ export function summenpruefung(bausteine: VerdichtungsBaustein[]): Summenpruefun
       if (new Set(t.map((x) => x.einheit)).size > 1) gruende.push("verschiedene Einheiten");
       if (new Set(t.map((x) => x.art)).size > 1) gruende.push("verschiedene Arten");
       if (new Set(t.map((x) => x.datenstand)).size > 1) gruende.push("verschiedene Datenstände");
+      if (new Set(t.map((x) => x.zeitraum)).size > 1) gruende.push("verschiedene Beobachtungszeiträume");
+      if (t.some((x) => nieSummierbar(x.art, x.erhebung))) gruende.push("Verhältniswerte oder berechnete Werte");
       if (t.some((x) => x.quote)) gruende.push("Meldequote je Raum");
       const schl = t.map((x) => x.schluessel);
       if (schl.every((s): s is string => !!s)) {
@@ -378,7 +398,7 @@ export function summenpruefung(bausteine: VerdichtungsBaustein[]): Summenpruefun
         for (let i = 0; i < schl.length && !ueber; i++) for (let j = i + 1; j < schl.length; j++) if (ueberlappen(schl[i]!, schl[j]!)) ueber = true;
         if (ueber) gruende.push("überlappende Räume");
       } else if (!gruende.length) continue; // Raum nicht prüfbar: weder zulässig noch sicher unzulässig
-      if (t.some((x) => !SUMMIERBAR.has(x.erhebung))) gruende.push("geschätzte oder hochgerechnete Werte");
+      if (t.some((x) => !SUMMIERBAR.has(x.erhebung) && x.erhebung !== "berechnet")) gruende.push("geschätzte oder hochgerechnete Werte");
       const wert = t.reduce((s, x) => s + x.wert, 0);
       if (!gruende.length) {
         const e = t[0]!.einheit;
