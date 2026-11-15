@@ -127,6 +127,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ (Nachtrag vom 14.11.2026: Pull Request „LEAD-Meldung-v2: offener Punkt 2 erledigt (Kosten und Fehlerquote)“, ohne Änderung der App) |
 | 0.9.2 | letzter Commit des Pull Requests „Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2; 0.9.2“ |
 | 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ (Nachtrag vom 15.11.2026: Pull Request „S1 mit Material ohne Einrückung: Ergebnis (Nachtrag zum Ergebnisbericht)“, ohne Änderung der App) |
+| 0.9.4 | letzter Commit des Pull Requests „Redaktionscheck: Änderung und Abschluss aus dem Feld nach Profil (KL-2026-W46-01); 0.9.4“ |
+## [0.9.4] – 15.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W46.json` (auf `befunde/eingang`, Commit `eeaa4ec`), KL-2026-W46-01 aus der Erprobung von KRITIS-LEAD; Entscheidungen des Herausgebers vom 15.11.2026: Rollen in der Darstellungsdatei, erster belegter Pfad gilt, ein Abschluss mit Ende oder Ergebnis ist ausgesagt. KL-2026-W46-02 (Sichtbarkeit von Feldern nach einer Bedingung) ist ebenfalls freigegeben und folgt als eigenes Paket 0.9.5.
+
+### Neu
+
+- **Rollen `sv_aenderung` und `sv_abschluss`** (Profilformat 1.34; `src/lagebild/redaktion.ts`, `src/kern/typen.ts`): Ein Profil nach LEAD-Meldung-v2 legt fest, aus welchem Feld oder Modul der Redaktionscheck Änderung zur Vormeldung und Abschluss liest – ein Pfad relativ zum Sachverhalt oder eine Liste von Pfaden, der erste belegte gilt. Ohne Angabe bleibt es bei `bewertung.aenderung_zur_vormeldung` und `bewertung.abschluss`. Bisher erschienen Folge- und Abschlussmeldungen von Betreibern, die keine Bewertung tragen und beides im Modul `lead-kritis-betrieb` führen, nicht unter „Änderung“ und „Abschluss“ (KRITIS-LEAD, Beispiel `sonneberg-verlauf`, Meldungen 06, 08–14); damit fehlten auch die Vermerke an die KI-Verdichtung.
+- **Prüfung beim Laden** (`src/profil/laden.ts`): Text oder Liste von Texten, sonst Fehler; ein Pfad, der im Sachverhalt nicht besteht, ergibt eine Warnung.
+
+### Geändert
+
+- **Abschluss mit Ergebnis** (`src/lagebild/redaktion.ts`): Ein Abschlussobjekt gilt als ausgesagt, wenn `ende` oder `ergebnis` belegt ist; der Text nennt das Ergebnis („Ergebnis: …“). Der Befund „kein Ende angegeben – kein Abschluss ausgesagt“ bleibt für Objekte ohne beides. Für Meldungen nach dem Kernschema ändert sich nichts, weil `bewertung.abschluss` kein `ergebnis` kennt.
+
+### Tests
+
+- `tests/lagebild/aenderung-abschluss-rollen.test.ts` (6 neu, KL-2026-W46-01): Modulfelder bei Sachverhalten ohne Bewertung, Vorrang der Bewertung, ohne Rollen unverändert, leerer erster Pfad, Abschluss ohne Ende und Ergebnis, Prüfung beim Laden. Gegenprobe mit dem Profil `lead-kritis` (KRITIS-LEAD `0e492fa`, Rollen von Hand ergänzt): Änderung bei den Meldungen 06, 08–12 und Abschluss bei 13 und 14 von `sonneberg-verlauf`.
+
+### Dokumentation
+
+- [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.34 (Rollentabelle, Änderungsverlauf), [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.4 (Abschnitt 5.2), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.9.4 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 904). Befundregister fortgeschrieben.
+- Folge in KRITIS-LEAD (eigener Pull Request dort): Rollen in `profil/lead-kritis/meldung.ui.json`, Ladeprobe, `docs/LAGEBILD.md`, Pin auf KI-LEAD 0.9.4.
+
 ## [0.9.3] – 14.11.2026
 
 ### Nachtrag vom 15.11.2026 (ohne Änderung der App)
