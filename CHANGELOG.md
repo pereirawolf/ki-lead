@@ -126,8 +126,12 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.0 | letzter Commit des Pull Requests „Paket 6, Teil Profile: Profile auf LEAD-Meldung-v2 (UP-2026-W45-06, KL-2026-W45-03, -04); 0.9.0“ (Nachtrag vom 14.11.2026: Grunddesign 1.11, Pull Request „Grunddesign 1.11: Schema von „Automatisch“ hell (LD-F05, LD-F01, OF-10 aus Thessa)“, ohne Änderung der App) |
 | 0.9.1 | letzter Commit des Pull Requests „Vergleichslauf Ilka vor und nach v2: Ergebnis, Auswertung nach Stand getrennt; 0.9.1“ (Nachtrag vom 14.11.2026: Pull Request „LEAD-Meldung-v2: offener Punkt 2 erledigt (Kosten und Fehlerquote)“, ohne Änderung der App) |
 | 0.9.2 | letzter Commit des Pull Requests „Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2; 0.9.2“ |
-| 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ |
+| 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ (Nachtrag vom 15.11.2026: Pull Request „S1 mit Material ohne Einrückung: Ergebnis (Nachtrag zum Ergebnisbericht)“, ohne Änderung der App) |
 ## [0.9.3] – 14.11.2026
+
+### Nachtrag vom 15.11.2026 (ohne Änderung der App)
+
+- **Ergebnis S1 ohne Einrückung** als Nachtrag zu [evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md](evaluation/abnahmen/2026-11-14-lead-meldung-v2-ilka-ergebnis.md): drei S1-Läufe des Herausgebers vom 15.11.2026 mit App 0.9.2 (20261115-001228-w35m, -001433-7lgt, -001621-d2i5). Der Prompt von S1 sinkt von 109 811 auf 104 536 Token und bleibt 4 536 Token über der Schwelle für den Preis langer Prompts (AV-2026-W46-01). Entscheidungen des Herausgebers vom 15.11.2026: Überschreitung hinnehmen, Änderung beibehalten, S2 und Fehlerquote beim nächsten Vergleichslauf Ilka mit S2 auswerten. Nur Kenndaten mit Lauf-IDs; Laufprotokolle nicht eingecheckt.
 
 Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json` (Vorschlag aus STATIS-LEAD, das amtliche Statistik als Kennzahlen-Baustein liefern soll), SR-2026-W46-01 bis -06; Entscheidungen des Herausgebers vom 14.11.2026: Ausnahme für prognostizierte Werte, Bezugsgröße mit Einheit und Hinweis, allgemeine Zählregel in SOP-LEAD A.3, Formateigenschaft `raum_vollstaendig`. SR-2026-W46-07 (Format STATIS-LEAD, Austauschvertrag Abschnitt 9) ist bis 28.11.2026 zurückgestellt, weil das Baustein-Schema 0.1 noch nicht vorliegt.
 
