@@ -1376,3 +1376,17 @@ Soll unabhängig vom Code: die Befunddatei `ki-lead-befund_schwesterrepos_2026-W
 | Übernahme stellt Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit aus dem Baustein wieder her und nennt sie als Abweichung | SR-2026-W46-05: Beobachtungszeitraum, Bezugsgröße und Vorläufigkeit werden aus dem Baustein wiederhergestellt | `tests/pipeline/v2-pipeline.test.ts` |
 
 Mitgeführt ohne geändertes Soll: Kern-Pin von Thessa und KSNV (`tests/format/thessa-baustein.test.ts`, `tests/format/ksnv-baustein.test.ts`) mit neuer Prüfsumme; Profilversionen in `tests/profil/v2-umstellung.test.ts` (2.1.0, 2.1.0, 1.1.0).
+
+## Änderung und Abschluss aus dem Feld nach Profil (0.9.4, KL-2026-W46-01)
+
+Soll unabhängig vom Code: die Befunddatei `ki-lead-befund_kritis_2026-W46.json` mit den Entscheidungen des Herausgebers vom 15.11.2026 (erster belegter Pfad gilt; ein Abschluss mit Ende oder Ergebnis ist ausgesagt) und von Hand gesetzte Abwandlungen der festen Beispielmeldung TH 10:30; kein Zufall.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Mit Pfadliste liest der Check Änderung und Abschluss aus einem Modul, wenn der Sachverhalt keine Bewertung trägt; die Bewertung geht vor; ein Abschluss mit Ergebnis ohne Ende ist ausgesagt | KL-2026-W46-01: Rollen … › KL-2026-W46-01: mit Pfadliste liest der Check Modulfelder … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
+| Ohne Rollen unverändert: nur die Felder der Bewertung | › KL-2026-W46-01: ohne Rollen unverändert … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
+| Ein Pfad als Text genügt; leerer Text im ersten Pfad weicht dem zweiten; ohne zweiten bleibt der Befund „Feld ohne Inhalt“ | › KL-2026-W46-01: ein Pfad als Text genügt … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
+| Abschluss ohne Ende und ohne Ergebnis bleibt „kein Abschluss ausgesagt“, mit Ende wie bisher | › KL-2026-W46-01: Abschluss ohne Ende und ohne Ergebnis … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
+| Laden: Text oder Liste ohne Befund, unbekannter Pfad im Sachverhalt als Warnung, andere Typen als Fehler | KL-2026-W46-01: Prüfung der Rollen beim Laden … › … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
+
+Mitgeführt ohne geändertes Soll: bestehende Tests des Redaktionschecks auf v2-Feldern (`tests/lagebild/v2-redaktion.test.ts`).
