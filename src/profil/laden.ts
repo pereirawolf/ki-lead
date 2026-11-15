@@ -305,7 +305,7 @@ export function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]
   // Felder für Änderung und Abschluss (seit 0.9.4, KL-2026-W46-01, Profilformat 1.34): jeder Pfad im Sachverhalt
   for (const rolle of ["sv_aenderung", "sv_abschluss"] as const) {
     const wert = r[rolle];
-    for (const pfad of (Array.isArray(wert) ? wert : wert ? [wert] : []) as string[])
+    for (const pfad of Array.isArray(wert) ? wert : wert ? [wert] : [])
       if (!unterSchema(schema, [...teilePfad(r.sachverhalte), 0, ...teilePfad(pfad)]))
         befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Rolle „${rolle}“ verweist auf das unbekannte Feld „${pfad}“ im Sachverhalt.` });
   }
