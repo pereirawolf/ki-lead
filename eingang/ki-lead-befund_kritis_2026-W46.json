@@ -1,0 +1,127 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "kritis-lead",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-15T10:40:16Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "019b5c3eee1843f63b274e2c3b91cfc1302dfe7c",
+  "pruefumfang": "Zwei Befunde aus der Erprobung von KRITIS-LEAD (Auftrag des Herausgebers vom 15.11.2026), geprüft gegen KI-LEAD main 019b5c3 und pereirawolf/kritis-lead main 0e492fa (nach PR #33). Gelesen in KI-LEAD: src/lagebild/redaktion.ts (LABEL_V2, abschlussTextV2, Abschnitt 3 Fortschreibung/Nachlauf/Abschluss, Z. 384–440), src/pipeline/vermerke.ts (Abschlussvermerk), src/kern/ui.ts (istAusgeblendet), src/ui/Feld.tsx (Objektfelder, Z. 175–197), src/ui/Meldung.tsx (Aufruf von Feld), src/kern/typen.ts (Rollen), docs/PROFILFORMAT.md (Fassung 1.33: Darstellungsdatei, felder, rollen, Änderungsverlauf), formate/lead-meldung-v2/kern.schema.json ($defs.bewertung.abschluss, aenderung_zur_vormeldung), CHANGELOG.md (Fassungspraxis 0.8.x/0.9.x). Gelesen in KRITIS-LEAD: formate/lead-kritis-v2/module/lead-kritis-betrieb.schema.json (aenderung_zur_vormeldung, abschluss), formate/lead-kritis-v2/rollenregeln.json (R1-betreiber, R2-behoerde), profil/lead-kritis/meldung.ui.json (rollen, felder sachverhalte[].module.lead-kritis-betrieb), profil/lead-kritis/beispiele/sonneberg-verlauf (Meldungen 01–14), docs/LAGEBILD.md (Abschnitt Redaktionscheck), werkzeuge/pruefen/ladeprobe.mts. Ausgeführt: npm ci in beiden Repositorys (fehlerfrei); eigene Ladeprobe nach dem Muster von werkzeuge/pruefen/ladeprobe.mts mit KI-LEAD main 019b5c3 statt des gepinnten Commits, Beispiel sonneberg-verlauf, Redaktionscheck mit Ausgabe 17.10.2026, 12:00: 21 Einträge, Redaktion.aenderung leer, Redaktion.abschluss leer. Offene Entscheidungen vorab geklärt (Herausgeber, 15.11.2026): Rollen sv_aenderung/sv_abschluss; Abschluss gilt mit Ende oder Ergebnis; Feldeigenschaft nur_wenn, vorhandene Werte bleiben sichtbar; zwei Pakete App 0.9.4/Profilformat 1.34 und App 0.9.5/Profilformat 1.35. Offene Befunde: 0; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "npm test in KI-LEAD nicht ausgeführt: Befunddatei ohne Umsetzung, kein Teilaspekt mit Testpflicht; wird mit der Umsetzung fällig.",
+    "Ladeprobe am in KRITIS-LEAD gepinnten KI-LEAD-Commit nicht ausgeführt, sondern mit main 019b5c3; der betroffene Code in redaktion.ts ist seit 0.8.3 unverändert.",
+    "Bedienpfad der Erfassungsmaske nicht mit Playwright nachvollzogen; Befund 02 ist statisch belegt (Feld.tsx filtert nur auf oberster Ebene).",
+    "Offene Pull Requests: Abfrage über gh api ohne Treffer; offene Befund-Branches außer befunde/eingang: keine."
+  ],
+  "befunde": [
+    {
+      "id": "KL-2026-W46-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "redaktionscheck, Abschnitt 3 Fortschreibung und Abschluss (Z. 399–416)",
+          "ist": "const a = sv.sv?.bewertung?.abschluss; … const aen = sv.sv?.bewertung?.aenderung_zur_vormeldung;"
+        },
+        {
+          "datei": "src/lagebild/redaktion.ts",
+          "stelle": "abschlussTextV2 (Z. 236–244) und Marker „kein Ende angegeben“ (Z. 405)",
+          "ist": "if (!a.ende) marker.push({ … text: `kein Ende angegeben – kein Abschluss ausgesagt…` })"
+        },
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Darstellungsdatei, rollen, Tabelle (Z. 124–144)",
+          "ist": "keine Rolle für Änderung zur Vormeldung oder Abschluss; Pfade fest im Code"
+        },
+        {
+          "datei": "pereirawolf/kritis-lead: formate/lead-kritis-v2/module/lead-kritis-betrieb.schema.json",
+          "stelle": "properties.aenderung_zur_vormeldung, properties.abschluss (Z. 768–790, Commit 0e492fa)",
+          "ist": "Abschluss aus Sicht des Betreibers … Das Ende als Zeitpunkt steht im Zeitstrahl"
+        },
+        {
+          "datei": "pereirawolf/kritis-lead: docs/LAGEBILD.md",
+          "stelle": "Abschnitt Redaktionscheck (Z. 24)",
+          "ist": "Betreiber führen Änderung und Abschluss im Modul lead-kritis-betrieb; … erscheinen deshalb dort nicht."
+        }
+      ],
+      "beobachtung": "Widerspruch: Der Redaktionscheck liest bei Profilen nach LEAD-Meldung-v2 Änderung zur Vormeldung und Abschluss fest aus sachverhalte[].bewertung. Betreibermeldungen tragen keine Bewertung (KL-2026-W45-01) und führen beides im Modul lead-kritis-betrieb (aenderung_zur_vormeldung, abschluss mit ergebnis, offene_punkte, nachsorge; ohne ende, das im Zeitstrahl steht). Bedingung: Profil lead-kritis, Betreibermeldungen der Meldeart Folge-, Korrektur- oder Abschlussmeldung. Auswirkung: Im Beispiel sonneberg-verlauf erscheinen die Änderungen der Meldungen 06, 08–12 nicht unter „Änderung“ und die Abschlüsse der Meldungen 13 und 14 nicht unter „Abschluss“; der Abschlussvermerk an die KI-Verdichtung (vermerke.ts) fehlt ebenso. Ein Betreiberabschluss würde auch bei richtigem Pfad als „kein Ende angegeben“ markiert. Maßgeblich: das Modulschema von KRITIS-LEAD (Betreiber bewerten nicht nach LEAD, Rollenregel R1) und der Zweck des Checks nach A.8.1/A.8.2; der feste Pfad ist eine Annahme des Codes, die das Profilformat nicht dokumentiert. Prüfweg: Ausführung (Ladeprobe nach werkzeuge/pruefen/ladeprobe.mts, KI-LEAD 019b5c3, Beispiel sonneberg-verlauf); Ergebnis: 21 Einträge, Redaktion.aenderung = [], Redaktion.abschluss = []. Herkunft: feste Pfade seit App 0.8.3 (UP-2026-W45-06); in KRITIS-LEAD als bekannte Einschränkung dokumentiert (docs/LAGEBILD.md, CHANGELOG nach PR #33).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Profilformat 1.34 (App 0.9.4): zwei optionale Rollen der Darstellungsdatei, sv_aenderung und sv_abschluss, je ein Pfad relativ zum Sachverhalt oder eine Liste solcher Pfade; bei einer Liste gilt der erste belegte Pfad. Ohne Angabe gelten bei Profilen nach LEAD-Meldung-v2 bewertung.aenderung_zur_vormeldung bzw. bewertung.abschluss (Verhalten wie bisher); bei v1-Profilen bleiben die Kennsätze maßgeblich. Der Redaktionscheck liest Änderung und Abschluss über diese Rollen (Hilfsfunktion in redaktion.ts statt der festen Zugriffe in Z. 401 und 411). Ein Abschlussobjekt gilt als ausgesagt, wenn ende belegt ist oder ergebnis nicht leer ist; abschlussTextV2 nimmt ergebnis auf („Ende …; Ergebnis …; offen: …; Nachsorge: …“, jeweils nur, was belegt ist). Der Marker „kein Ende angegeben“ bleibt für Objekte ohne ende und ohne ergebnis. Beim Laden prüft die App wie bei den übrigen Rollen, ob jeder Pfad im Schema besteht (Warnung je unbekanntem Pfad, Profil bleibt nutzbar). Dokumentation: docs/PROFILFORMAT.md (Rollentabelle, Änderungsverlauf 1.34), docs/LEAD-MELDUNG-V2.md nur, falls dort der feste Pfad als Verhalten des Checks beschrieben ist; Wurzel-CHANGELOG. Folge in KRITIS-LEAD (eigener Pull Request dort, nicht Teil dieser Umsetzung): rollen.sv_aenderung = [\"bewertung.aenderung_zur_vormeldung\", \"module.lead-kritis-betrieb.aenderung_zur_vormeldung\"], rollen.sv_abschluss entsprechend; Ladeprobe und docs/LAGEBILD.md nachziehen. Abnahme: Test unter tests/lagebild/ mit einem Profil, das beide Rollen als Liste setzt: Eine Meldung ohne bewertung mit Modulfeldern erscheint unter „Änderung“ bzw. „Abschluss“ (ein Abschluss mit ergebnis ohne ende ohne Marker), eine Behördenmeldung mit bewertung wie bisher; ohne Rollen unverändertes Ergebnis der bestehenden Tests in tests/lagebild/redaktionscheck.test.ts.",
+        "neuer_text": "Zeile für die Rollentabelle in docs/PROFILFORMAT.md, nach sv_massnahmen: | `sv_aenderung`, `sv_abschluss` (optional, seit Fassung 1.34) | Änderung zur Vormeldung (Text) und Abschluss (Objekt mit `ende`, `ergebnis`, `offene_punkte`, `nachsorge`, jeweils soweit vorhanden) für den Redaktionscheck: ein Pfad relativ zum Sachverhalt oder eine Liste von Pfaden, von denen der erste belegte gilt, etwa `[\"bewertung.abschluss\", \"module.<modul>.abschluss\"]`. Ohne Angabe gelten bei Profilen nach LEAD-Meldung-v2 `bewertung.aenderung_zur_vormeldung` und `bewertung.abschluss`, bei anderen Profilen die Kennsätze. Ein Abschluss gilt als ausgesagt, wenn `ende` oder `ergebnis` belegt ist. Beim Laden prüft die App, ob jeder Pfad im Schema besteht |"
+      },
+      "folgeaenderungen": [
+        "docs/PROFILFORMAT.md: Kopf Fassung 1.34, Änderungsverlauf",
+        "CHANGELOG.md: Eintrag [0.9.4]",
+        "package.json und README: App-Fassung 0.9.4",
+        "tests/lagebild/redaktionscheck.test.ts oder neuer Test",
+        "Folge in pereirawolf/kritis-lead: profil/lead-kritis/meldung.ui.json (rollen), Ladeprobe, docs/LAGEBILD.md, Pin auf KI-LEAD 0.9.4"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/lagebild/: Redaktionscheck mit Rollen sv_aenderung/sv_abschluss als Pfadliste liest Modulfelder bei Meldungen ohne bewertung; Ladeprobe in KRITIS-LEAD prüft, dass Redaktion.aenderung die Meldungen 06, 08–12 und Redaktion.abschluss die Meldungen 13 und 14 von sonneberg-verlauf enthält.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Vorentscheidungen vom 15.11.2026: Rollen sv_aenderung/sv_abschluss; Ende oder Ergebnis genügt; eigenes Paket App 0.9.4, Profilformat 1.34."
+      }
+    },
+    {
+      "id": "KL-2026-W46-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/ui/Feld.tsx",
+          "stelle": "Feld, Objektfelder (Z. 175–186)",
+          "ist": "const kinder = Object.keys(k.properties || {}).filter((key) => !(segs.length === 0 && istAusgeblendet(profil.ui, key)));"
+        },
+        {
+          "datei": "src/kern/ui.ts",
+          "stelle": "istAusgeblendet (Z. 126–128)",
+          "ist": "return (ui.ausblenden || []).includes(feld);"
+        },
+        {
+          "datei": "docs/PROFILFORMAT.md",
+          "stelle": "Darstellungsdatei, felder, Tabelle (Z. 104–115); Weitere Abschnitte, ausblenden (Z. 151)",
+          "ist": "`ausblenden`: Felder der obersten Ebene, die das Formular nicht zeigt."
+        },
+        {
+          "datei": "pereirawolf/kritis-lead: profil/lead-kritis/meldung.ui.json",
+          "stelle": "felder[\"sachverhalte[].module.lead-kritis-betrieb\"] (Z. 832–835, Commit 0e492fa)",
+          "ist": "Nur in Betreibermeldungen; in Behördenmeldungen nicht zulässig (Rollenregel R2)."
+        }
+      ],
+      "beobachtung": "Widerspruch: KRITIS-LEAD lässt das Modul lead-kritis-betrieb nur in Betreibermeldungen zu (Rollenregel R2-behoerde, Negativfall behoerde-mit-betrieb), die Erfassungsmaske zeigt es aber in jeder Meldung, weil die Darstellungsdatei Felder nur unbedingt und nur auf oberster Ebene ausblenden kann. Bedingung: Profil lead-kritis, Erfassung einer Behördenmeldung (absender.ebene ungleich „Betreiber“). Auswirkung: Die Maske bietet rund 20 Betreiberfelder an, die die Schemaprüfung bei Behördenmeldungen als Fehler meldet; der Hinweistext ersetzt die Steuerung nicht. Umgekehrt zeigt sie Betreibern die Module lead-bevoelkerungsschutz und lead-baustein, die R1-betreiber ausschließt. Maßgeblich: die Rollenregeln des Profils (Schema); die Maske soll anbieten, was das Schema für die Rolle zulässt. Eine profilneutrale Bedingung im Profilformat fehlt (PROFILFORMAT.md 1.33). Prüfweg: statisch (Feld.tsx filtert Kinder nur bei segs.length === 0 über ausblenden; Feld erhält die übrige Meldung nicht und kann keine Bedingung auswerten); Ergebnis: bestätigt. Herkunft: nicht ermittelt; ausblenden ist nur für Felder der obersten Ebene beschrieben (PROFILFORMAT.md, Weitere Abschnitte).",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Profilformat 1.35 (App 0.9.5): optionale Feldeigenschaft nur_wenn in felder, für jedes Feld und jede Gruppe einschließlich Modulen unter sachverhalte[].module. Form: {\"feld\": \"<Pfad auf Meldungsebene>\", \"gleich\": [Werte]} oder {\"feld\": …, \"nicht_gleich\": [Werte]}; genau eine der beiden Angaben. Ist die Bedingung nicht erfüllt, zeigt die Maske das Feld nicht, sofern es leer ist. Hat es einen Wert, bleibt es sichtbar mit dem Hinweis „Für diese Meldung nicht vorgesehen (Bedingung: <Feldbezeichnung> …)“; die App löscht nichts, die Schemaprüfung meldet den Wert wie bisher. Ein leerer Bedingungswert (Feld nicht gesetzt) erfüllt „gleich“ nicht und „nicht_gleich“ immer. Umsetzung: Feld.tsx erhält die Meldung über einen React-Kontext (kein neuer Prop durch alle Ebenen) und filtert Kinder nach nur_wenn; PDF der Meldung und Rohtabelle bleiben unverändert (leere Felder erscheinen dort ohnehin nicht; belegte werden weiter ausgegeben). Beim Laden prüft die App Form, bestehenden Pfad und Typ (Fehler bei falscher Form, Warnung bei unbekanntem Pfad). Dokumentation: docs/PROFILFORMAT.md (Tabelle felder, Änderungsverlauf 1.35), Wurzel-CHANGELOG. Folge in KRITIS-LEAD (eigener Pull Request dort): felder[\"sachverhalte[].module.lead-kritis-betrieb\"].nur_wenn = {\"feld\": \"absender.ebene\", \"gleich\": [\"Betreiber\"]}, für lead-bevoelkerungsschutz, lead-baustein, module.lead-kritis-meldung und uebergreifende_lage entsprechend nach R1/R2; Hinweistext kürzen. Abnahme: Test unter tests/ui/ (Maske) und tests/profil/ (Laden): Bei absender.ebene „Kreis“ ist ein leeres Feld mit nur_wenn gleich [\"Betreiber\"] nicht im Formular, bei „Betreiber“ sichtbar; ein belegtes Feld bleibt bei „Kreis“ sichtbar mit Hinweis; Profil mit falscher Form ergibt einen Fehler, mit unbekanntem Pfad eine Warnung; Profile ohne nur_wenn unverändert.",
+        "neuer_text": "Zeile für die Tabelle felder in docs/PROFILFORMAT.md, nach zeilen: | `nur_wenn` (optional, seit Fassung 1.35) | Bedingung für die Anzeige in der Maske: `{\"feld\": \"<Pfad auf Meldungsebene>\", \"gleich\": [Werte]}` oder mit `nicht_gleich`. Ist sie nicht erfüllt, zeigt die Maske das Feld oder die Gruppe nicht, solange sie leer sind; ein vorhandener Wert bleibt mit Hinweis sichtbar und wird nicht gelöscht. Ein nicht gesetztes Bedingungsfeld erfüllt `gleich` nicht. Gilt für jede Ebene, auch für Module, etwa `\"sachverhalte[].module.<modul>\": {\"nur_wenn\": {\"feld\": \"absender.ebene\", \"gleich\": [\"Betreiber\"]}}`. Ausgaben und Schemaprüfung bleiben unberührt |"
+      },
+      "folgeaenderungen": [
+        "docs/PROFILFORMAT.md: Kopf Fassung 1.35, Änderungsverlauf",
+        "CHANGELOG.md: Eintrag [0.9.5]",
+        "package.json und README: App-Fassung 0.9.5",
+        "src/profil/laden.ts: Prüfung von nur_wenn",
+        "Folge in pereirawolf/kritis-lead: profil/lead-kritis/meldung.ui.json (nur_wenn je Modul nach R1/R2), Pin auf KI-LEAD 0.9.5"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "Test unter tests/ui/: Feld mit nur_wenn wird je nach absender.ebene ein- und ausgeblendet, belegtes Feld bleibt mit Hinweis; Test unter tests/profil/: Formprüfung von nur_wenn beim Laden.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": "Vorentscheidungen vom 15.11.2026: Feldeigenschaft nur_wenn, vorhandene Werte bleiben sichtbar; eigenes Paket App 0.9.5, Profilformat 1.35, nach KL-2026-W46-01."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Schemaseite in KRITIS-LEAD stimmig: R1-betreiber und R2-behoerde schließen die Module je Herkunft aus; die Negativfälle behoerde-mit-betrieb und betreiber-mit-uebergreifender-lage belegen das.",
+    "Profile ohne die neuen Rollen bzw. ohne nur_wenn bleiben nach beiden Vorschlägen unverändert (rückwärtsverträglich innerhalb lead-profil/1).",
+    "v1-Profile (Kennsätze) vom Vorschlag zu KL-2026-W46-01 nicht berührt.",
+    "Weitere Beobachtung: Der Schritt „Übergreifende Lage“ erscheint auch in Betreibermeldungen, obwohl R1-betreiber uebergreifende_lage ausschließt. Mit nur_wenn am Feld uebergreifende_lage bliebe der Schritt leer; ob ein leerer Schritt ausgeblendet wird, wäre bei der Umsetzung von KL-2026-W46-02 mitzuprüfen.",
+    "Weitere Beobachtung: docs/LAGEBILD.md in KRITIS-LEAD nennt als betroffen „Folge-, Korrektur- und Abschlussmeldungen des Verlaufs“; konkret sind es die Meldungen 06, 08–12 (Änderung) und 13–14 (Abschluss), nicht nur 09–14."
+  ]
+}
