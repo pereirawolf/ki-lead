@@ -4,6 +4,13 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 2.1.1 – 16.11.2026
+
+Grundlage: wie Beispielprofil 2.1.1 (Zeitfelder als Wanduhrzeit, App 0.9.5). Dritte Stelle wie dort.
+
+- **Darstellungsdatei** neu abgeleitet aus dem Beispielprofil 2.1.1 (`npm run profil:land`): Hinweise der Zeitfelder und der Zeitzone ohne Austauschformat, Platzhalter entfallen.
+- **Geteilte SOP-Sammelmappe 3.25.1:** Gültigkeitsstand in Teil A.
+
 ## 2.1.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, SR-2026-W46-01 bis -06 (App 0.9.3). Zweite Stelle wie beim Beispielprofil (2.1.0).

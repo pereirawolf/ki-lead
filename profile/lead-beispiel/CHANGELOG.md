@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.1.1 – 16.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 16.11.2026: Zeitangaben werden als Wanduhrzeit eingegeben und gelesen, den UTC-Versatz ergänzt die App (App 0.9.5, Grunddesign 1.12, LD-T04). Dritte Stelle: Hinweistexte ohne fachliche Wirkung; Schema und Meldungen unverändert.
+
+- **Darstellungsdatei (Profilversion 2.1.1):** Hinweise der Zeitfelder ohne „UTC-Versatz“, „RFC 3339“ und Beispielwerte im Austauschformat („Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt.“; Meldezeitpunkt „Tag und Uhrzeit in Ortszeit der Meldung“); Hinweis der Zeitzone „Alle Uhrzeiten und Kalendertage dieser Meldung gelten in dieser Zone.“; Platzhalter der Zeitfelder und der Zeitzone entfallen, weil die App dort Datums- und Uhrzeitfelder bzw. eine Auswahl zeigt.
+- **SOP-Sammelmappe 3.25.1:** Gültigkeitsstand in Teil A; Einzelheiten im Verlauf `sop/CHANGELOG.md`.
+
 ## 2.1.0 – 14.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, SR-2026-W46-01 bis -06 (Vorschlag aus STATIS-LEAD, das amtliche Statistik als Kennzahlen-Baustein liefert; App 0.9.3). Entscheidungen des Herausgebers vom 14.11.2026: Prognosen dürfen einen Beobachtungszeitraum nach t0 haben; Bezugsgröße mit optionaler Einheit und Hinweis außerhalb von Verhältniswerten; allgemeine Zählregel in SOP-LEAD A.3; Ausnahme von der Ausschnittregel je Format (`raum_vollstaendig`). SR-2026-W46-07 (Format STATIS-LEAD) ist bis 28.11.2026 zurückgestellt. Zweite Stelle: neue Felder und Regeln, bestehende Meldungen bleiben gültig.

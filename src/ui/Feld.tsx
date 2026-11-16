@@ -11,12 +11,13 @@ import { QuellenFeld } from "./QuellenFeld";
 import { ZeitstrahlFeld } from "./ZeitstrahlFeld";
 import { jetztLokal } from "../kern/ausgabe";
 import { kennungenDerMeldung, neueKennung } from "../kern/kennung";
-import { zoneOder } from "../kern/zeit";
+import { alleZeitzonen, NAHE_ZEITZONEN, zeitartImSchema, zeitzonenBezeichnung, zoneOder } from "../kern/zeit";
+import { MeldungZoneKontext } from "./meldungZone";
 import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
-import { FeldFehler, HilfeFeld } from "./HilfeFeld";
+import { FeldFehler, HilfeFeld, type HilfeFeldEingabe } from "./HilfeFeld";
 import { befundeUnter, feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
@@ -62,6 +63,7 @@ export function Feld(props: FeldProps) {
   const label = bezeichnung(profil.ui, gen);
   const id = useId();
   const eingabehilfe = useContext(EingabehilfeKontext);
+  const meldungZone = useContext(MeldungZoneKontext);
   const t = typen(k);
   const e = enumWerte(k);
   // Befunde und Pflichtkennzeichen am Feld (seit 0.6.5, TP-2026-W44-15)
@@ -316,7 +318,9 @@ export function Feld(props: FeldProps) {
     );
   }
 
-  const widget = f.widget || "text";
+  // Zeitfelder nach LEAD-Meldung-v2 erkennt die Maske am Schema (seit 0.9.5); die Darstellungsdatei kann übersteuern.
+  const zeitart = zeitartImSchema(k, profil.schema);
+  const widget = f.widget || (gen === "zeitzone" && t.includes("string") ? "zeitzone" : zeitart) || "text";
   const text = typeof wert === "string" ? wert : alsText(wert);
   if (widget === "kennung") {
     return (
@@ -370,9 +374,12 @@ export function Feld(props: FeldProps) {
             name={zugaenglicherName(profil, gen, label)}
             modus={widget}
             wert={wert}
-            zeitzone={profil.manifest.variablen?.zeitzone}
-            onChange={(v) => setze(segs, v)}
+            zeitzone={zeitart ? meldungZone || profil.manifest.variablen?.zeitzone : profil.manifest.variablen?.zeitzone}
+            versatz={zeitart === "datumzeit" || zeitart === "datum_uhrzeit"}
+            onChange={(v) => setze(segs, v === "" && t.includes("null") ? null : v)}
           />
+        ) : widget === "zeitzone" ? (
+          <ZeitzonenAuswahl a={a} wert={text} onChange={(v) => setze(segs, v)} />
         ) : (
           <input {...a} {...gemeinsam} type="text" />
         )
@@ -602,5 +609,37 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
       <Hinweis text={f.hinweis} />
       <div className="gruppe-inhalt">{liste_}</div>
     </fieldset>
+  );
+}
+
+/**
+ * Zeitzone der Meldung als Auswahl mit lesbaren Namen (seit 0.9.5): oben Deutschland, Nachbarstaaten und UTC,
+ * darunter alle IANA-Zonen des Browsers. Ein gespeicherter Wert außerhalb der Liste bleibt wählbar.
+ */
+function ZeitzonenAuswahl({ a, wert, onChange }: { a: HilfeFeldEingabe; wert: string; onChange: (v: string) => void }) {
+  const nahe = NAHE_ZEITZONEN.map(([z]) => z);
+  const weitere = alleZeitzonen().filter((z) => !nahe.includes(z));
+  const bekannt = !wert || nahe.includes(wert) || weitere.includes(wert);
+  return (
+    <select {...a} value={wert} onChange={(ev) => onChange(ev.target.value)}>
+      {!wert && <option value="">Bitte wählen</option>}
+      {!bekannt && <option value={wert}>{wert}</option>}
+      <optgroup label="Deutschland und Nachbarstaaten">
+        {nahe.map((z) => (
+          <option key={z} value={z}>
+            {zeitzonenBezeichnung(z)}
+          </option>
+        ))}
+      </optgroup>
+      {weitere.length > 0 && (
+        <optgroup label="Weitere Zeitzonen">
+          {weitere.map((z) => (
+            <option key={z} value={z}>
+              {z}
+            </option>
+          ))}
+        </optgroup>
+      )}
+    </select>
   );
 }

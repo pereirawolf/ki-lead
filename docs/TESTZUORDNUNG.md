@@ -1390,3 +1390,20 @@ Soll unabhängig vom Code: die Befunddatei `ki-lead-befund_kritis_2026-W46.json`
 | Laden: Text oder Liste ohne Befund, unbekannter Pfad im Sachverhalt als Warnung, andere Typen als Fehler | KL-2026-W46-01: Prüfung der Rollen beim Laden … › … | `tests/lagebild/aenderung-abschluss-rollen.test.ts` |
 
 Mitgeführt ohne geändertes Soll: bestehende Tests des Redaktionschecks auf v2-Feldern (`tests/lagebild/v2-redaktion.test.ts`).
+
+## Zeitfelder als Wanduhrzeit (0.9.5, Entscheidung des Herausgebers vom 16.11.2026)
+
+Soll unabhängig vom Code: die Entscheidungen des Herausgebers vom 16.11.2026 (Art des Felds aus dem Schema, Zeitzone als Auswahl, fremder Versatz umgerechnet und erst bei Änderung gespeichert), feste Zeitpunkte an den Umstellungen 2026 (29.03., 25.10.) und die feste Beispielmeldung TH 10:30; kein Zufall.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Art des Felds aus dem Schema: Meldezeitpunkt Zeitpunkt, Meldezeitraum Zeitangabe, Text- und Zonenfeld keine | Zeitfelder als Wanduhrzeit › Art des Felds aus dem Schema … | `tests/kern/zeit-wanduhr.test.ts` |
+| Versatz in Winter- und Sommerzeit, doppelte Stunde die frühere, ausgefallene Stunde nach vorn | › Versatz beim Speichern … | `tests/kern/zeit-wanduhr.test.ts` |
+| Eigener Versatz ohne Hinweis, fremder mit lesbarem Hinweis, Kalendertag unverändert, hin und zurück derselbe Zeitpunkt | › Umrechnung beim Lesen … | `tests/kern/zeit-wanduhr.test.ts` |
+| Kontrollzeile mit Wochentag und MEZ/MESZ, ungültiger Tag leer; lesbare Zeitzonen | › Kontrollzeile …, › lesbare Zeitzonen | `tests/kern/zeit-wanduhr.test.ts` |
+| Meldezeitpunkt in Tag und Uhrzeit, Kontrollzeile, Speichern mit +02:00 bzw. +01:00, schemagültig | Zeitfelder nach LEAD-Meldung-v2 als Wanduhrzeit › Meldezeitpunkt … | `tests/ui/zeitfelder-v2.test.ts` |
+| Kalendertag bleibt Kalendertag, „Leeren“ ergibt `null` | › Zeitangabe: bloßer Kalendertag … | `tests/ui/zeitfelder-v2.test.ts` |
+| Fremder Versatz: Ortszeit mit „umgerechnet aus …“, keine Änderung beim Öffnen | › fremder Versatz … | `tests/ui/zeitfelder-v2.test.ts` |
+| Zone der Meldung vor der des Profils; Zeitzone als Auswahl mit lesbarem Namen | › Zone der Meldung …, › Zeitzone als Auswahl … | `tests/ui/zeitfelder-v2.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/ui/maske-v2.test.ts` (Meldezeitpunkt in Tag und Uhrzeit statt Textfeld).

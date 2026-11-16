@@ -128,6 +128,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.2 | letzter Commit des Pull Requests „Anbietervergleich KW 46: Material ohne Einrückung, Schätzung nach v2; 0.9.2“ |
 | 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ (Nachtrag vom 15.11.2026: Pull Request „S1 mit Material ohne Einrückung: Ergebnis (Nachtrag zum Ergebnisbericht)“, ohne Änderung der App) |
 | 0.9.4 | letzter Commit des Pull Requests „Redaktionscheck: Änderung und Abschluss aus dem Feld nach Profil (KL-2026-W46-01); 0.9.4“ |
+| 0.9.5 | letzter Commit des Pull Requests „Zeitfelder als Wanduhrzeit, Zeitzone als Auswahl; Grunddesign 1.12 (LD-T04); 0.9.5“ |
+## [0.9.5] – 16.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 16.11.2026. Zeitangaben sollen menschen- und laienlesbar sein: Eingabe und Anzeige als Wanduhrzeit, den UTC-Versatz ergänzt die App. Art des Felds aus dem Schema; Zeitzone als Auswahl mit lesbaren Namen; ein gespeicherter Wert mit anderem Versatz wird umgerechnet angezeigt und erst bei einer Änderung neu gespeichert. Das Format `LEAD-Meldung-v2` bleibt unverändert. Die Freigabe KL-2026-W46-02 (Sichtbarkeit von Feldern nach einer Bedingung) folgt damit als 0.9.6 statt 0.9.5.
+
+### Geändert
+
+- **Zeitfelder nach LEAD-Meldung-v2 als Wanduhrzeit** (`src/ui/Feld.tsx`, `src/ui/DatumZeit.tsx`, `src/kern/zeit.ts`): Felder, deren Schema-Muster dem von `$defs/zeitpunkt`, `$defs/zeitangabe` oder `$defs/datum` entspricht, zeigen ohne Eintrag in der Darstellungsdatei getrennte native Felder für Tag und Uhrzeit (bisher ein Textfeld, in das `2026-11-16T17:36+01:00` getippt werden musste). Ein Zeitpunkt verlangt die Uhrzeit, eine Zeitangabe lässt sie offen („Nur Tag“), ein Kalendertag hat nur den Tag; „Leeren“ ergibt bei nullbaren Feldern `null`. Beim Speichern ergänzt die App den UTC-Versatz der Zone der Meldung (Sommer- oder Winterzeit; in der doppelten Stunde am Ende der Sommerzeit die frühere, eine ausgefallene Stunde nach vorn), beim Lesen rechnet sie in Ortszeit um. Ein Wert mit anderem Versatz (etwa `Z` aus einer Quelle) erscheint in Ortszeit mit dem Zusatz „umgerechnet aus 14.10.2026, 08:30 Uhr UTC“; gespeichert wird erst bei einer Änderung. Eine Angabe `widget` in der Darstellungsdatei geht vor. Zone ist das Feld `zeitzone` der Meldung, ohne Angabe die des Profils.
+- **Kontrollzeile** unter jedem dieser Felder: „Mo, 16.11.2026, 17:36 Uhr (MEZ)“ bzw. „Mo, 16.11.2026“, mit dem Tagesfeld über `aria-describedby` verbunden. Sie gilt unabhängig von der Spracheinstellung des Geräts, nach der die nativen Felder Datum und Uhrzeit darstellen.
+- **Zeitzone als Auswahl** (Kernfeld `zeitzone`, neues Widget `zeitzone`): oben Deutschland, Nachbarstaaten und UTC mit lesbarem Namen („Deutschland – MEZ/MESZ (Europe/Berlin)“), darunter alle IANA-Zonen des Browsers; ein gespeicherter Wert außerhalb der Liste bleibt wählbar.
+- **Profile:** Hinweistexte der Zeitfelder ohne „UTC-Versatz“ und „RFC 3339“, Platzhalter im Austauschformat entfallen (Beispielprofil und Landesprofil 2.1.1, Vorlage 1.1.1, Vorlage der Darstellungsdatei unter `formate/lead-meldung-v2/beispiel/`). SOP-Sammelmappe 3.25.1 (Gültigkeitsstand).
+- **Grunddesign 1.12** (`design/`): LD-T04 geschärft – Wanduhrzeit in getrennten nativen Feldern mit Kontrollzeile, Versatz nur maschinell, fremde Versätze umgerechnet, Kalendertage in Ortszeit, Zeitzone mit lesbarem Namen. Die Schwester-Apps prüfen ihre Umsetzung in eigenen Pull Requests.
+
+### Tests
+
+- `tests/kern/zeit-wanduhr.test.ts` (5 neu): Art des Felds aus dem Schema, Versatz in Winter- und Sommerzeit und an beiden Umstellungen, Umrechnung fremder Versätze hin und zurück, Kontrollzeile, lesbare Zeitzonen.
+- `tests/ui/zeitfelder-v2.test.ts` (5 neu): Meldezeitpunkt in getrennten Feldern mit Kontrollzeile und Versatz je Jahreszeit, schemagültig; Kalendertag bleibt Kalendertag, „Leeren“ ergibt `null`; fremder Versatz ohne Änderung beim Öffnen; Zone der Meldung vor der des Profils; Zeitzonen-Auswahl.
+- `tests/ui/maske-v2.test.ts`: Der Meldezeitpunkt steht in Tag und Uhrzeit statt im Textfeld (Soll geändert).
+
+### Dokumentation
+
+- [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.5 (Abschnitt 5.2), [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.35 (Widgets), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md), [design/README.md](design/README.md) 1.12. Versionsangaben 0.9.5 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 905).
+
 ## [0.9.4] – 15.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_kritis_2026-W46.json` (auf `befunde/eingang`, Commit `eeaa4ec`), KL-2026-W46-01 aus der Erprobung von KRITIS-LEAD; Entscheidungen des Herausgebers vom 15.11.2026: Rollen in der Darstellungsdatei, erster belegter Pfad gilt, ein Abschluss mit Ende oder Ergebnis ist ausgesagt. KL-2026-W46-02 (Sichtbarkeit von Feldern nach einer Bedingung) ist ebenfalls freigegeben und folgt als eigenes Paket 0.9.5.

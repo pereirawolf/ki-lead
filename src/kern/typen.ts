@@ -72,7 +72,9 @@ export type Widget =
   /** Sachverhaltskennung mit „Kennung vergeben“ (seit 0.6.9) */
   | "kennung"
   /** Liste von Kennungen als eine Zeile (seit 0.6.9) */
-  | "kennungen";
+  | "kennungen"
+  /** Auswahl der IANA-Zeitzone mit lesbaren Namen (seit 0.9.5; für das Kernfeld `zeitzone` ohne Angabe) */
+  | "zeitzone";
 
 export interface FeldUi {
   label?: string;

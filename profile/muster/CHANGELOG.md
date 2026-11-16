@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.1.1 – 16.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 16.11.2026, Zeitfelder als Wanduhrzeit (App 0.9.5). Dritte Stelle: Hinweistexte ohne fachliche Wirkung.
+
+- **Darstellungsdatei:** Hinweise der Zeitfelder und der Zeitzone wie in der Vorlage `formate/lead-meldung-v2/beispiel/meldung.ui.json`, ohne Austauschformat; Platzhalter der Zeitfelder und der Zeitzone entfallen.
+
 ## 1.1.0 – 14.11.2026
 
 Grundlage: SR-2026-W46-01 bis -04 (Befunddatei `ki-lead-befund_schwesterrepos_2026-W46.json`, App 0.9.3). Zweite Stelle: neue optionale Felder, bestehende Meldungen bleiben gültig.

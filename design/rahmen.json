@@ -1,7 +1,7 @@
 {
   "$schema": "./rahmen.schema.json",
   "format": "lead-design-rahmen/1",
-  "fassung": "1.11",
+  "fassung": "1.12",
   "stand": "2026-11-14",
   "familie": ["KI-LEAD", "KRITIS-LEAD", "Thessa"],
   "referenzumsetzung": { "app": "KI-LEAD", "repository": "pereirawolf/ki-lead" },
