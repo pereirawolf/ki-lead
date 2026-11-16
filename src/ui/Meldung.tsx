@@ -11,6 +11,7 @@ import { pflichtHinweise } from "../kern/kennsaetze";
 import { quellenHinweise } from "../kern/quellen";
 import type { Meldung as MeldungTyp, Profil, Schritt } from "../kern/typen";
 import { Feld } from "./Feld";
+import { MeldungZoneKontext } from "./meldungZone";
 import { Pruefen } from "./Pruefen";
 import { KurzfassungKasten, type KiZugang } from "./Kurzfassung";
 import { EingabehilfeKontext, type EingabehilfeKontextWert } from "./eingabehilfeKontext";
@@ -322,10 +323,12 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               </h2>
               {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
               {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" befunde={{ schema: schemaBefunde, pflicht }} zumFeld={zumFeld} />}
-              {aktuell.felder.map((feld) => {
-                const segs = teilePfad(feld);
-                return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
-              })}
+              <MeldungZoneKontext.Provider value={typeof meldung?.zeitzone === "string" && meldung.zeitzone ? meldung.zeitzone : undefined}>
+                {aktuell.felder.map((feld) => {
+                  const segs = teilePfad(feld);
+                  return <Feld key={feld} profil={profil} knoten={unterSchema(profil.schema, segs)} segs={segs} wert={holeWert(meldung, segs)} setze={setze} />;
+                })}
+              </MeldungZoneKontext.Provider>
               {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="ausgabe" />}
               {aktuell.kurzfassung && <KurzfassungKasten profil={profil} meldung={meldung} ki={ki} eigenerSchritt />}
               <div className="schritt-nav">

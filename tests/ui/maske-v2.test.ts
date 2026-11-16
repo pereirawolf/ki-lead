@@ -60,7 +60,10 @@ describe("UP-2026-W45-03: Erfassungsmaske für LEAD-Meldung-v2", () => {
       expect(text, l).toContain(l);
     // Kein Feld zeigt JSON statt einer Eingabe
     for (const el of document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea")) expect(el.value.startsWith("{")).toBe(false);
-    expect(eingabe("meldezeitpunkt")!.value).toBe(m.meldezeitpunkt);
+    // Zeitfelder als Wanduhrzeit (seit 0.9.5): Tag und Uhrzeit getrennt, der UTC-Versatz steht nur im gespeicherten Wert
+    expect(m.meldezeitpunkt).toBe("2026-10-14T10:30+02:00");
+    expect(document.querySelector<HTMLInputElement>('[data-feld="meldezeitpunkt"] input[type="date"]')!.value).toBe("2026-10-14");
+    expect(document.querySelector<HTMLInputElement>('[data-feld="meldezeitpunkt"] input[type="time"]')!.value).toBe("10:30");
   });
 
   it("Wert oder null: leere Zeitangabe wird null, nicht leerer Text; danach schemagültig", async () => {

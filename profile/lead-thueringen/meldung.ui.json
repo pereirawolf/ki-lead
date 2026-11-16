@@ -111,26 +111,22 @@
     "meldezeitpunkt": {
       "label": "Meldezeitpunkt (t0)",
       "pflicht": true,
-      "platzhalter": "2026-10-14T10:30+02:00",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (RFC 3339). Im Entwurf darf er fehlen."
+      "hinweis": "Tag und Uhrzeit in Ortszeit der Meldung. Im Entwurf darf er fehlen."
     },
     "zeitzone": {
       "label": "Zeitzone",
-      "platzhalter": "Europe/Berlin",
-      "hinweis": "IANA-Zeitzone; Kalendertage ohne Uhrzeit gelten in dieser Zone."
+      "hinweis": "Alle Uhrzeiten und Kalendertage dieser Meldung gelten in dieser Zone."
     },
     "meldezeitraum": {
       "label": "Meldezeitraum"
     },
     "meldezeitraum.von": {
       "label": "von",
-      "platzhalter": "2026-10-13",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "meldezeitraum.bis": {
       "label": "bis",
-      "platzhalter": "2026-10-14T10:30+02:00",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "fehlanzeige": {
       "label": "Fehlanzeige",
@@ -163,20 +159,17 @@
     },
     "quellen[].veroeffentlicht": {
       "label": "Veröffentlicht",
-      "platzhalter": "2026-10-14",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "quellen[].url": {
       "label": "Adresse (URL)"
     },
     "quellen[].zugriff": {
       "label": "Zugriff",
-      "platzhalter": "2026-10-14",
       "hinweis": "Tag des Abrufs; leer = nicht angegeben."
     },
     "quellen[].datenstand": {
       "label": "Datenstand",
-      "platzhalter": "2026-10-14T08:00+02:00",
       "hinweis": "Stand der Angaben, getrennt vom Veröffentlichungsdatum."
     },
     "quellen[].zugang": {
@@ -220,14 +213,14 @@
     },
     "sachverhalte[].eintritt.zeit": {
       "label": "Zeit",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].eintritt.genauigkeit": {
       "label": "Genauigkeit"
     },
     "sachverhalte[].bekannt_seit": {
       "label": "Bekannt seit",
-      "hinweis": "Erstes Bekanntwerden, nicht der Beginn. Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Erstes Bekanntwerden, nicht der Beginn. Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].raum": {
       "label": "Raum"
@@ -350,7 +343,7 @@
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].termin": {
       "label": "Termin",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].handlungsbedarf.fristen": {
       "label": "Handlungsrelevant bis",
@@ -360,7 +353,7 @@
     },
     "sachverhalte[].handlungsbedarf.fristen[].bis": {
       "label": "bis",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].handlungsbedarf.erlaeuterung": {
       "label": "Erläuterung",
@@ -375,7 +368,7 @@
     },
     "sachverhalte[].kennzahlen[].datenstand": {
       "label": "Datenstand",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].zeitstrahl": {
       "label": "Zeitstrahl",
@@ -386,7 +379,7 @@
     },
     "sachverhalte[].zeitstrahl[].zeit": {
       "label": "Zeit",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].zeitstrahl[].text": {
       "label": "Text"
@@ -474,8 +467,7 @@
       "label": "Handzeichen"
     },
     "freigabe.*.zeitpunkt": {
-      "label": "Zeitpunkt",
-      "platzhalter": "2026-10-14T10:25+02:00"
+      "label": "Zeitpunkt"
     },
     "sachverhalte[].bezug[].kennung": {
       "label": "Kennung"
@@ -732,7 +724,7 @@
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].termin": {
       "label": "Termin",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "uebergreifende_lage.handlungsbedarf.fristen": {
       "label": "Handlungsrelevant bis",
@@ -742,7 +734,7 @@
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].bis": {
       "label": "bis",
-      "hinweis": "Zeitpunkt mit UTC-Versatz (2026-10-14T10:30+02:00) oder Kalendertag (2026-10-14); leer = unbekannt."
+      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "uebergreifende_lage.handlungsbedarf.erlaeuterung": {
       "label": "Erläuterung",

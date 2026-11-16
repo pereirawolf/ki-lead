@@ -1,9 +1,11 @@
 // Datums- und Zeitfelder mit Schaltflächen „Jetzt“/„Heute“, „Nur Tag“ und „Leeren“.
-// Werte im Format „JJJJ-MM-TT“ oder „JJJJ-MM-TTThh:mm“ (Wanduhrzeit der Profilzeitzone).
+// Werte im Format „JJJJ-MM-TT“ oder „JJJJ-MM-TTThh:mm“ (Wanduhrzeit der Profilzeitzone). Mit `versatz`
+// (LEAD-Meldung-v2, seit 0.9.5) speichert das Feld Zeitpunkte mit UTC-Versatz der Zone, zeigt aber nur die
+// Wanduhrzeit und darunter eine Kontrollzeile („Mo, 16.11.2026, 17:36 Uhr (MEZ)“).
 
 import type { ChangeEvent } from "react";
 import { jetztLokal } from "../kern/ausgabe";
-import { verbinde, zerlege, zoneOder, type DatumModus } from "../kern/zeit";
+import { kontrolltext, verbinde, wanduhrAusWert, wanduhrMitVersatz, zerlege, zoneOder, type DatumModus } from "../kern/zeit";
 
 interface Props {
   id: string;
@@ -18,19 +20,31 @@ interface Props {
   modus: DatumModus;
   wert: unknown;
   zeitzone?: string;
+  /** Zeitpunkte mit UTC-Versatz der Zone speichern und gespeicherte in Wanduhrzeit umrechnen (LEAD-Meldung-v2) */
+  versatz?: boolean;
   onChange: (v: string) => void;
 }
 
 /** Unfertige Eingabe (z. B. Tag gelöscht, Monat noch offen): Browser melden dann "" – den gespeicherten Wert behalten */
 const unfertig = (e: ChangeEvent<HTMLInputElement>) => !e.target.value && !!e.target.validity?.badInput;
 
-export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wert, zeitzone, onChange }: Props) {
+export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wert, zeitzone, versatz, onChange }: Props) {
   const roh = String(wert ?? "");
-  const { tag, zeit } = zerlege(roh);
+  const zone = zoneOder(zeitzone);
+  const { tag, zeit, abweichend } = versatz ? wanduhrAusWert(roh, zone) : { ...zerlege(roh), abweichend: undefined };
   const n = name || label;
   const mitZeit = modus !== "datum";
-  const jetzt = () => jetztLokal(zoneOder(zeitzone), new Date());
-  const kanonisch = verbinde(tag, zeit, modus);
+  const jetzt = () => jetztLokal(zone, new Date());
+  /** Wert zum Speichern: mit `versatz` bekommt ein Zeitpunkt den UTC-Versatz der Zone */
+  const wertAus = (t: string, z: string) => {
+    const v = verbinde(t, z, modus);
+    return versatz && v.includes("T") ? wanduhrMitVersatz(v, zone) : v;
+  };
+  const setze = (v: string) => onChange(versatz && v.includes("T") ? wanduhrMitVersatz(v, zone) : v);
+  const kanonisch = versatz ? roh : verbinde(tag, zeit, modus);
+  const kontrolle = versatz && tag ? kontrolltext(tag, zeit, zone) : "";
+  const kontrollId = kontrolle ? `${id}-kontrolle` : undefined;
+  const beschreibt = [beschreibung, kontrollId].filter(Boolean).join(" ") || undefined;
   return (
     <div className="datumzeit-feld">
       <div className="datum-zeit" role="group" aria-label={n}>
@@ -38,10 +52,10 @@ export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wer
           id={id}
           type="date"
           aria-label={name ? `${name}: Tag` : undefined}
-          aria-describedby={beschreibung}
+          aria-describedby={beschreibt}
           aria-invalid={ungueltig || undefined}
           value={tag}
-          onChange={(e) => !unfertig(e) && onChange(verbinde(e.target.value, zeit, modus))}
+          onChange={(e) => !unfertig(e) && onChange(wertAus(e.target.value, zeit))}
         />
         {mitZeit && (
           <input
@@ -50,13 +64,13 @@ export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wer
             value={zeit}
             disabled={!tag}
             title={tag ? undefined : "Zuerst den Tag angeben"}
-            onChange={(e) => !unfertig(e) && onChange(verbinde(tag, e.target.value, modus))}
+            onChange={(e) => !unfertig(e) && onChange(wertAus(tag, e.target.value))}
           />
         )}
       </div>
       <div className="datumzeit-knoepfe">
         {mitZeit ? (
-          <button type="button" className="knopf leise klein" aria-label={`Jetzt: ${n} auf aktuelle Zeit setzen`} onClick={() => onChange(jetzt())}>
+          <button type="button" className="knopf leise klein" aria-label={`Jetzt: ${n} auf aktuelle Zeit setzen`} onClick={() => setze(jetzt())}>
             Jetzt
           </button>
         ) : (
@@ -75,6 +89,12 @@ export function DatumZeit({ id, beschreibung, ungueltig, label, name, modus, wer
           </button>
         )}
       </div>
+      {kontrolle && (
+        <p className="hinweis datumzeit-kontrolle" id={kontrollId}>
+          {kontrolle}
+          {abweichend && <> · umgerechnet aus {abweichend}</>}
+        </p>
+      )}
       {modus === "datumzeit" && tag && !zeit && (
         <p className="hinweis datumzeit-fehlt" role="status">
           Uhrzeit ergänzen: Dieses Feld verlangt Tag und Uhrzeit.
