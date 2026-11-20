@@ -254,18 +254,19 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Modellierte Bodentrockenheit; kein unmittelbarer Trinkwasser-/Grundwassernachweis.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Beschreibung und Aktualisierungsangabe gelesen, Karten nicht geprüft",
+      "offene_nachpruefung": "Karte mit Datum, Bodenschicht (Ober-/Gesamtboden) und Dürreklasse abrufen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
         "eignung": "nicht beurteilbar",
         "hinweis": "Der erste Abruf scheiterte an der Allowlist, der zweite nach einem Suchtreffer an robots.txt (ROBOTS_DISALLOWED). Ich habe das nicht umgangen. Der Titel des Suchtreffers passt zur Fundstelle 'UFZ-Dürremonitor'."
-      }
+      },
+      "titel": "Dürremonitor Deutschland - Helmholtz-Zentrum für Umweltforschung UFZ"
     },
     {
       "id": "S010",
