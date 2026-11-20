@@ -1,0 +1,111 @@
+{
+  "format": "ki-lead-pruefstein/1",
+  "id": "2026-W47_gefluegelpest-hpai-h5",
+  "hinweis": "KI-Entwurf im Erfassungstest zu einer realen Lage – keine amtliche Meldung, keine Musterlösung.",
+  "lauf": {
+    "agent": "erfassungstest",
+    "erstellt_utc": "2026-11-20T19:50Z",
+    "modell": "claude-opus-5-5"
+  },
+  "regelwerk": {
+    "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+    "sop_mappe": "3.25.1",
+    "kodierleitfaden": "2.1.0",
+    "anweisung_erfassung": "2.0.0",
+    "schema": "LEAD-Meldung-v2"
+  },
+  "lage": {
+    "titel": "Geflügelpest HPAI H5: Hochstufung der FLI-Risikoeinschätzung und Ausbrüche in Geflügelhaltungen in vier Ländern (Herbst 2026)",
+    "t0": "2026-11-20T20:45",
+    "referenzraum": "Bund (Bevölkerungsschutz in Deutschland)",
+    "ereignisarten": [
+      "Gesundheitliche Lage / Epidemie"
+    ],
+    "sop": [
+      "B11",
+      "C08"
+    ]
+  },
+  "quellen": [
+    {
+      "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/",
+      "herausgeber": "Friedrich-Loeffler-Institut",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.fli.de/en/publications/risk-assessments/",
+      "herausgeber": "Friedrich-Loeffler-Institut",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.openagrar.de/servlets/MCRFileNodeServlet/openagrar_derivate_00072561/FLI-Risikoeinschaetzung_HPAI_H5_2026-11-06.pdf",
+      "herausgeber": "Friedrich-Loeffler-Institut (Abruf gescheitert, nicht ausgewertet)",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.lgl.bayern.de/tiergesundheit/tierkrankheiten/virusinfektionen/gefluegelpest/et_gefluegelpest_in_bayern.htm",
+      "herausgeber": "Bayerisches Landesamt für Gesundheit und Lebensmittelsicherheit",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.infranken.de/deutschland/vogelgrippe-breitet-sich-aus-fli-erhoeht-risikostufen-art-6409396",
+      "herausgeber": "inFranken.de (dpa)",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://de.euronews.com/2026/11/09/vogelgrippe-breitet-sich-aus-fli-erhoht-risikostufen",
+      "herausgeber": "Euronews (dpa)",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.volksstimme.de/panorama/geflugelpest-trifft-betrieb-mit-39-000-legehennen-4355411",
+      "herausgeber": "Volksstimme (dpa)",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.gefluegelnews.de/article/geflugelpest-breitet-sich-weiter-aus-aktuelle-falle-im-uberblick",
+      "herausgeber": "Geflügelnews",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.ecdc.europa.eu/sites/default/files/documents/avian-influenza-overview-june-august-2026.pdf",
+      "herausgeber": "EFSA, ECDC, EU-Referenzlabor",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    }
+  ],
+  "einstufung": [
+    "unvollstaendig"
+  ],
+  "maengel": [
+    {
+      "beschreibung": "FLI-Risikostufen nur aus Agenturberichten; Originaldokument nicht ausgewertet, Einordnung der Stufen ohne SOP-Hinweis.",
+      "stelle": "sachverhalte[0].analyse.lage_ereignis",
+      "befund": "ET-2026-W47-04"
+    },
+    {
+      "beschreibung": "Prüffrage der Kernaussage (Kapazitäten für zeitgleiche Großausbrüche) ohne Anker in C08 formuliert.",
+      "stelle": "sachverhalte[0].bewertung.kernaussage",
+      "befund": "ET-2026-W47-05"
+    },
+    {
+      "beschreibung": "Q2 im Text ohne Klammerverweis genannt; Referenzprüfung meldet „verzeichnet, aber nicht zitiert“.",
+      "stelle": "quellen[1]"
+    },
+    {
+      "beschreibung": "Ausbruchszahlen nur aus Fachpresse-Ticker und Agenturberichten; keine amtliche Gesamtzahl, Tierseucheninformationssystem nicht abgefragt.",
+      "stelle": "sachverhalte[0].analyse.lage_ereignis"
+    },
+    {
+      "beschreibung": "D7 = 1 stützt sich auf fehlende öffentliche Gesamtzahlen; Abgrenzung zur eigenen Recherchegrenze fraglich.",
+      "stelle": "sachverhalte[0].module.lead-bevoelkerungsschutz.lagenradar.d7"
+    },
+    {
+      "beschreibung": "Zeitstrahl führt die Risikoeinschätzung vom 09.10. als „Warnung“, die vom 06.11. als „Wendepunkt“; Typwahl uneinheitlich.",
+      "stelle": "sachverhalte[0].zeitstrahl"
+    }
+  ],
+  "befunde": [
+    "ET-2026-W47-04",
+    "ET-2026-W47-05"
+  ]
+}

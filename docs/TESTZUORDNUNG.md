@@ -1407,3 +1407,14 @@ Soll unabhängig vom Code: die Entscheidungen des Herausgebers vom 16.11.2026 (A
 | Zone der Meldung vor der des Profils; Zeitzone als Auswahl mit lesbarem Namen | › Zone der Meldung …, › Zeitzone als Auswahl … | `tests/ui/zeitfelder-v2.test.ts` |
 
 Mitgeführt mit geändertem Soll: `tests/ui/maske-v2.test.ts` (Meldezeitpunkt in Tag und Uhrzeit statt Textfeld).
+
+## Prüfsteine nach Schemakennung (Nachtrag vom 20.11.2026 zu 0.9.5, Befunddatei `ki-lead-befund_erfassungstest_2026-W47.json`, ET-2026-W47-01, Freigabe des Herausgebers vom 20.11.2026, Variante A)
+
+Soll unabhängig vom Code: die Befunddatei mit der Entscheidung des Herausgebers vom 20.11.2026 (Prüfsteine bis KW 46/2026 in v1, ab KW 47/2026 in v2; Kennzeichnung über `status`, `entstehung.verfahren`, `absender.stelle` und `freigabe` ohne Namen; Prüfung gegen das Schema des Beispielprofils), die feste v2-Meldung der Koordinierungsstelle aus „Ilka“ und von Hand gesetzte Abwandlungen; kein Zufall.
+
+| Soll | Test | Datei |
+|---|---|---|
+| Jeder Prüfstein ist nach seiner Schemakennung gekennzeichnet und gegen das Schema dieser Kennung gültig; die Begleitnotiz nennt dasselbe Schema | Prüfsteine › jeder Prüfstein hat Meldung und gültige Begleitnotiz … | `tests/evaluation/pruefsteine.test.ts` |
+| v2-Meldung mit Kennzeichnung besteht Kennzeichnung und Schema des Beispielprofils, nicht das v1-Schema; Abwandlungen (Status „freigegeben“ oder „zur_freigabe“, Verfahren „manuell“, Stelle ohne oder mit verschobenem Präfix, Namen unter `freigabe.erfasst` oder `freigabe.freigegeben`, unbekannte Kennung) werden abgelehnt | Prüfsteine › ET-2026-W47-01: v2-Meldungen werden über status, entstehung, absender und freigabe gekennzeichnet … | `tests/evaluation/pruefsteine.test.ts` |
+
+Mitgeführt ohne geändertes Soll: Migration v1 → v2 der Prüfsteine nur noch für Prüfsteine in v1 (`tests/format/lead-meldung-v2.test.ts`, `tests/kern/v2-app.test.ts`). Mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Beispiel- und Landesprofil 2.2.0).

@@ -1,6 +1,6 @@
 # SOP-LEAD – Standardvorgehensweisen (Beispielfassung)
 
-Beispielfassung für KI-LEAD · Fassung 3.25.1 vom 16.11.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
+Beispielfassung für KI-LEAD · Fassung 3.26.0 vom 20.11.2026 · Änderungen im Änderungsverlauf [`CHANGELOG.md`](CHANGELOG.md)
 
 Die Mappe enthält gemeinsame Regeln (Teil A), je Ereignisart des Katalogs eine Dach-SOP nach dem LEAD-Schema (Teil B) sowie Themen- und Querschnittsbausteine, die unter den bestehenden Ereignisarten verwendet werden (Teil C). Gemeinsame Regeln stehen einmal in Teil A und gelten für jede SOP und jeden Baustein; Teil B und Teil C nennen nur ihre lageartspezifischen Abweichungen, Prüffragen und Stolperstellen. Die Rolle „Koordinierungsstelle“ steht beispielhaft für eine Stelle, die Meldungen mehrerer Stellen zu einem übergreifenden Lagebild zusammenführt.
 
@@ -27,7 +27,7 @@ Jede Datei beginnt mit ihrem Anker; jede SOP und jeder Baustein hat dieselben f�
 | B01 | Unwetter / Sturm | [`teil-b/B01_unwetter-sturm.md`](teil-b/B01_unwetter-sturm.md) | 2.2.0 | 01 |
 | B02 | Hochwasser / Überschwemmung | [`teil-b/B02_hochwasser-ueberschwemmung.md`](teil-b/B02_hochwasser-ueberschwemmung.md) | 2.2.0 | 02 |
 | B03 | Waldbrand | [`teil-b/B03_waldbrand.md`](teil-b/B03_waldbrand.md) | 2.1.1 | 03 |
-| B04 | Erdbeben | [`teil-b/B04_erdbeben.md`](teil-b/B04_erdbeben.md) | 2.1.1 | 04 |
+| B04 | Erdbeben | [`teil-b/B04_erdbeben.md`](teil-b/B04_erdbeben.md) | 2.2.0 | 04 |
 | B05 | Extremhitze / Dürre | [`teil-b/B05_extremhitze-duerre.md`](teil-b/B05_extremhitze-duerre.md) | 2.3.0 | 05 |
 | B06 | Wintersturm / Schnee / Eis | [`teil-b/B06_wintersturm-schnee-eis.md`](teil-b/B06_wintersturm-schnee-eis.md) | 2.3.1 | 06 |
 | B07 | Industrieunfall / Chemieunfall | [`teil-b/B07_industrieunfall-chemieunfall.md`](teil-b/B07_industrieunfall-chemieunfall.md) | 2.2.1 | 07 |
@@ -62,7 +62,7 @@ Jeder Baustein trägt seinen Status im Dateikopf: C01 und C12 liegen als ausgear
 | Kennung | Thema | Typ | Datei | Fassung | bisher |
 |---|---|---|---|---|---|
 | C07 | Infektionslagen – Auslandsausbruch und lokale Häufung | Themenbaustein | [`teil-c/C07_infektionslagen.md`](teil-c/C07_infektionslagen.md) | 1.3.0 | N11 |
-| C08 | Tierseuchen und zoonotische Expositionslagen | Themenbaustein | [`teil-c/C08_tierseuchen-zoonotische-expositionslagen.md`](teil-c/C08_tierseuchen-zoonotische-expositionslagen.md) | 1.1.0 | N10 |
+| C08 | Tierseuchen und zoonotische Expositionslagen | Themenbaustein | [`teil-c/C08_tierseuchen-zoonotische-expositionslagen.md`](teil-c/C08_tierseuchen-zoonotische-expositionslagen.md) | 1.2.0 | N10 |
 | C09 | Medizinische und pflegerische Versorgungslage und MANV-Folgen | Themenbaustein | [`teil-c/C09_medizinische-versorgung-manv.md`](teil-c/C09_medizinische-versorgung-manv.md) | 1.3.1 | N04 |
 | C10 | Arzneimittel und kritisches medizinisches Material | Themenbaustein | [`teil-c/C10_arzneimittel-medizinisches-material.md`](teil-c/C10_arzneimittel-medizinisches-material.md) | 1.3.1 | N12 |
 

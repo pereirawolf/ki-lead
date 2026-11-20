@@ -35,8 +35,8 @@ describe("UP-2026-W45-06: Profile auf LEAD-Meldung-v2", () => {
     expect(lies("profile/lead-thueringen/meldung.schema.json")).toEqual(zusammen(`${F}/zusammenstellungen/lead-thueringen.json`, F));
     expect(lies("profile/muster/meldung.schema.json")).toEqual(zusammen("profile/muster/zusammenstellung.json", "profile/muster"));
     for (const [name, version] of [
-      ["lead-beispiel", "2.1.1"],
-      ["lead-thueringen", "2.1.1"],
+      ["lead-beispiel", "2.2.0"],
+      ["lead-thueringen", "2.2.0"],
       ["muster", "1.1.1"],
     ]) {
       const { profil: p, befunde } = await profil(name!);

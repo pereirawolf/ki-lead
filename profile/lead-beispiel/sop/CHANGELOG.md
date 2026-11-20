@@ -10,13 +10,24 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.25.1 vom 16.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.26.0 vom 20.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
 | `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.25.1 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.26.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.26.0] – 20.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_erfassungstest_2026-W47.json` (Erfassungstest KW 47/2026 zu drei realen Lagen, Commit b3b3ef2), Befunde ET-2026-W47-01 bis -07, vom Herausgeber am 20.11.2026 entschieden: ET-2026-W47-01, -02 und -04 bis -07 angenommen, ET-2026-W47-03 in angepasster Fassung. Zweite Stelle nach der Versionierungsregel: neue Prüf- und Stolperstellenhinweise in B04 und C08 sowie eine präzisierte D8-Regel im Kodierleitfaden 2.2.0 (A.10.2); Gliederung, Stufentexte, Quellenkategorien und Schema bleiben unverändert. Keine neuen Links; das Quellenregister ist unverändert. Die im Test entstandenen Meldungen liegen als Prüfsteine unter `evaluation/pruefsteine/2026-W47_*`, erstmals nach `LEAD-Meldung-v2` (ET-2026-W47-01).
+
+### Geändert
+
+- **B04 2.2.0:** Abschnitt 1 „Umfasst / grenzt ab von“: Deutschlandbezug nach A.1 Nr. 6 nennt die unmittelbare grenzüberschreitende Erschütterungs- oder Schadenswirkung (ET-2026-W47-06). R1: Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln; R5: bei Schwarmbeben Fachaussage zum Schwarmverlauf, Abklingen belegt kein Ende (ET-2026-W47-07). Erledigungsnachweis: B04, Abschnitt 1, R1 und R5.
+- **C08 1.2.0:** R1: Risikoeinschätzung des FLI (Stufen je Eintragsweg) als datierte Fachbewertung, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand (ET-2026-W47-04). R4: Reserven für zeitgleiche Ausbrüche als Vorbereitungsfrage, wenn die Fachbehörde eine Zunahme erwartet (A.1 Nr. 1) (ET-2026-W47-05). Erledigungsnachweis: C08/R1 und C08/R4.
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.26.0, Kodierleitfaden 2.2.0 (D8 „Umschlag“, ET-2026-W47-03; Kurzbeispiel Nachlauf mit D3, D4 und D7, ET-2026-W47-02). Erledigungsnachweis: Tabelle am Anfang von Teil A.
+- Tabelle „Dateien in diesem Ordner“ und `README.md` auf 3.26.0 (B04 2.2.0, C08 1.2.0). Lesefassung neu erzeugt. Quellenregister unverändert (keine neue URL).
 
 ## [3.25.1] – 16.11.2026
 

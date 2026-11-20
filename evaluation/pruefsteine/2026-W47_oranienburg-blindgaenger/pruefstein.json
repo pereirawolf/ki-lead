@@ -1,0 +1,84 @@
+{
+  "format": "ki-lead-pruefstein/1",
+  "id": "2026-W47_oranienburg-blindgaenger",
+  "hinweis": "KI-Entwurf im Erfassungstest zu einer realen Lage – keine amtliche Meldung, keine Musterlösung.",
+  "lauf": {
+    "agent": "erfassungstest",
+    "erstellt_utc": "2026-11-20T19:50Z",
+    "modell": "claude-opus-5-5"
+  },
+  "regelwerk": {
+    "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+    "sop_mappe": "3.25.1",
+    "kodierleitfaden": "2.1.0",
+    "anweisung_erfassung": "2.0.0",
+    "schema": "LEAD-Meldung-v2"
+  },
+  "lage": {
+    "titel": "Entschärfung einer 250-kg-Weltkriegsbombe in Oranienburg am 11.11.2026, Meldung im Nachlauf",
+    "t0": "2026-11-20T20:45",
+    "referenzraum": "Bund (Bevölkerungsschutz in Deutschland)",
+    "ereignisarten": [
+      "Sonstiges"
+    ],
+    "sop": [
+      "B17",
+      "C06",
+      "C16"
+    ]
+  },
+  "quellen": [
+    {
+      "url": "https://www.oranienburg.de/entschaerfung-november-2026",
+      "herausgeber": "Stadt Oranienburg",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.oranienburg.de/index.php?object=tx,2967.5&ModID=7&FID=2967.5924.1",
+      "herausgeber": "Stadt Oranienburg",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.volksstimme.de/panorama/mehr-als-6-000-menschen-von-bombenentscharfung-betroffen-4349756",
+      "herausgeber": "Volksstimme (dpa)",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.volksstimme.de/panorama/weltkriegs-bombe-in-oranienburg-entscharfung-beginnt-4354384",
+      "herausgeber": "Volksstimme (dpa)",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.volksstimme.de/panorama/oranienburg-und-der-dauereinsatz-wegen-weltkriegs-bomben-4299564",
+      "herausgeber": "Volksstimme (dpa)",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    }
+  ],
+  "einstufung": [
+    "widerspruechlich"
+  ],
+  "maengel": [
+    {
+      "beschreibung": "D3 und D7 auf die abgeschlossene Maßnahme bezogen, D4 nach dem Ist-Zustand zu t0 offen; Achsen ungleich behandelt.",
+      "stelle": "sachverhalte[0].module.lead-bevoelkerungsschutz.lagenradar",
+      "befund": "ET-2026-W47-02"
+    },
+    {
+      "beschreibung": "D8 = 2 für Räumung und Rückkehr; nach ET-2026-W47-03 (angepasst) tragfähig, weil beide Wechsel die Betroffenheit ändern, die Begründung bezweifelt das aber und nennt die Planmäßigkeit nicht als Kennzeichnung.",
+      "stelle": "sachverhalte[0].module.lead-bevoelkerungsschutz.lagenradar.d8",
+      "befund": "ET-2026-W47-03"
+    },
+    {
+      "beschreibung": "Tendenz „Entspannung“ rückblickend für 11.–20.11. gesetzt, obwohl die Tendenz die Entwicklung ab t0 beschreibt; „keine Angabe“ wäre folgerichtig.",
+      "stelle": "sachverhalte[0].bewertung.tendenz"
+    },
+    {
+      "beschreibung": "Werkstatt für Menschen mit Behinderung im Sperrkreis genannt, besondere Belange (A.9.2, C18) nicht vertieft.",
+      "stelle": "sachverhalte[0].analyse.risiken_auswirkungen"
+    }
+  ],
+  "befunde": [
+    "ET-2026-W47-02",
+    "ET-2026-W47-03"
+  ]
+}

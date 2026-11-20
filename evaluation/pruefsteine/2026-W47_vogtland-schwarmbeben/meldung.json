@@ -1,0 +1,287 @@
+{
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "76bf9096-cdb0-4217-8b2f-014e7e090052",
+  "status": "entwurf",
+  "absender": {
+    "stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+    "ebene": "Bund",
+    "gebiet": {
+      "name": "Bund",
+      "schluessel": "DE"
+    }
+  },
+  "meldezeitpunkt": "2026-11-20T20:45+01:00",
+  "zeitzone": "Europe/Berlin",
+  "meldezeitraum": {
+    "von": "2026-11-08",
+    "bis": "2026-11-20"
+  },
+  "freigabe": {},
+  "entstehung": {
+    "verfahren": "KI-Entwurf",
+    "erstellt": "2026-11-20T20:45+01:00",
+    "werkzeug": {
+      "name": "Erfassungstest (geplante Aufgabe, ohne KI-LEAD-App)"
+    },
+    "profil": {
+      "id": "lead.beispiel.koordinierungsstelle",
+      "version": "2.1.1"
+    },
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B04",
+          "fassung": "2.1.1",
+          "bezeichnung": "Erdbeben"
+        }
+      ],
+      "sammelmappe": "3.25.1",
+      "kodierleitfaden": "2.1.0",
+      "arbeitsanweisung": "Erfassung 2.0.0"
+    },
+    "modelle": [
+      {
+        "stufe": "Erfassung",
+        "anbieter": "Anthropic",
+        "modell": "claude-opus-5-5"
+      }
+    ],
+    "anmerkung": "Erfassungstest KW 47/2026 (Prüfstein, kein amtliches Produkt). C02 geprüft, nicht einschlägig."
+  },
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "M",
+      "herausgeber": "Berliner Zeitung (dpa)",
+      "titel": "Vogtland: Erdbebenserie an tschechischer Grenze",
+      "veroeffentlicht": "2026-11-09",
+      "url": "https://www.berliner-zeitung.de/article/vogtland-erdbebenserie-an-tschechischer-grenze-10579212",
+      "zugriff": "2026-11-18",
+      "zugang": "oeffentlich",
+      "anmerkung": "gibt Angaben des Sächsischen Landesamts für Umwelt, Landwirtschaft und Geologie (LfULG) wieder; Originalmitteilung des LfULG nicht gefunden."
+    },
+    {
+      "id": "Q2",
+      "kategorie": "M",
+      "herausgeber": "Soester Anzeiger (IPPEN.MEDIA)",
+      "titel": "Magma unter dem Vogtland: Forscher erklären erneute Erdbeben",
+      "veroeffentlicht": "2026-11-10T09:41+01:00",
+      "url": "https://www.soester-anzeiger.de/deutschland-welt/magma-unter-dem-vogtland-forscher-erklaeren-erneute-erdbeben-zr-94582538.html",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich"
+    },
+    {
+      "id": "Q3",
+      "kategorie": "P",
+      "herausgeber": "Vulkane.net (Marc Szeglat)",
+      "titel": "Vogtland: Sehr starkes Schwarmbeben im Grenzgebiet",
+      "veroeffentlicht": "2026-11-09",
+      "url": "https://www.vulkane.net/blogmobil/vogtland-sehr-starkes-schwarmbeben-im-grenzgebiet/",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "anmerkung": "privates Fachblog; nennt Werte von EMSC und dem tschechischen Netz WEBNET ohne Uhrzeit."
+    },
+    {
+      "id": "Q4",
+      "kategorie": "P",
+      "herausgeber": "Erdbebennews",
+      "titel": "Live-Ticker: Erdbebenschwarm im Vogtland",
+      "url": "https://erdbebennews.de/2026/11/live-ticker-erdbebenschwarm-im-vogtland/",
+      "zugriff": "2026-11-20",
+      "datenstand": "2026-11-20T20:45+01:00",
+      "zugang": "oeffentlich",
+      "anmerkung": "privater Ticker; stützt sich u. a. auf das Thüringer Seismologische Netz und eigene automatische Detektion; Schadensmodell ist eine Modellrechnung."
+    }
+  ],
+  "sachverhalte": [
+    {
+      "kennung": "NEU-1",
+      "bezeichnung": "Schwarmbeben im Vogtland/Westböhmen seit 08.11.2026, stärkstes Beben M 2,7 in Tschechien nahe der sächsischen Grenze, im Grenzgebiet verspürt, keine Schäden gemeldet",
+      "eintritt": {
+        "zeit": "2026-11-08",
+        "genauigkeit": "belegt"
+      },
+      "raum": {
+        "beschreibung": "Ereignisraum: Herdgebiet bei Luby und Kraslice (Tschechien), etwa 1,5 km von der Grenze; Wahrnehmung im sächsischen Vogtland (u. a. Bad Brambach). Referenzraum: Bevölkerungsschutz in Deutschland.",
+        "gebiete": [
+          {
+            "name": "Sachsen",
+            "schluessel": "DE-SN"
+          },
+          {
+            "name": "Vogtlandkreis"
+          },
+          {
+            "name": "Tschechien",
+            "schluessel": "CZ"
+          }
+        ]
+      },
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Ein Schwarmbeben im bekannten Schwarmbebengebiet Vogtland/Westböhmen erreichte am 09.11.2026 um 08:29 Uhr eine Lokalmagnitude von 2,7 (LfULG, indirekt berichtet) mit Herd etwa 1,5 km östlich von Luby (Tschechien) in rund 9 km Tiefe [Q1, Q2]; Schäden wurden nicht gemeldet [Q2]. Die Serie begann am 08.11.2026 gegen 16 Uhr, verstärkte sich am Morgen des 09.11., ließ am 10. und 11.11. nach, lebte um den 12.11. leicht wieder auf und bestand am 20.11.2026 nur noch aus Mikrobeben [Q4]. Binnen 48 Stunden wurden über 500 Ereignisse registriert [Q3]. Magnitudenangaben weichen nach Netz und Magnitudentyp ab: EMSC M 2,7, tschechisches Netz WEBNET Lokalmagnitude 2,89 [Q3]. Die Beben wurden im Grenzgebiet verspürt, mit Wahrnehmungsmeldungen bis Intensität III [Q4]; eine amtliche Mitteilung einer deutschen Behörde lag nicht als Originalquelle vor.",
+        "risiken_auswirkungen": "Tatsächliche Wirkung in Deutschland: verspürte Erschütterungen ohne gemeldete Gebäudeschäden, Verletzte oder Funktionsausfälle [Q1, Q2, Q4]. Bei Beben dieser Stärke sind laut LfULG keine Schäden zu erwarten (indirekt berichtet) [Q1]. Der Verlauf eines Schwarms ist nicht vorhersagbar; frühere Schwärme dauerten Wochen und erreichten am 01.01.2026 Magnituden bis 3,2 (indirekt berichtet) [Q1]. Eine Fachprognose zum weiteren Verlauf liegt nicht vor.",
+        "abhaengigkeiten_interdependenzen": "Nach Prüfung keine relevante Kopplung: keine gemeldeten Schäden an Gebäuden, Netzen, Verkehrswegen oder Anlagen in Deutschland [Q2, Q4]. C02 (Bodenversagen) geprüft, kein Befund."
+      },
+      "bewertung": {
+        "kernaussage": "Ein typisches Schwarmbeben an der deutsch-tschechischen Grenze wurde im Vogtland verspürt, ohne Schäden; der Schwarm klingt ab. Für den Bevölkerungsschutz in Deutschland ergibt sich kein Prüf- oder Abstimmungsbedarf; Anlass zur Neubewertung wären Beben mit Schadensmeldungen.",
+        "referenzraum": "Bevölkerungsschutz in Deutschland",
+        "beurteilung": {
+          "stufe": "geringfügig",
+          "begruendung": "Verspürte Erschütterungen ohne gemeldete Schäden oder Betroffene in Deutschland [Q1, Q2, Q4]; nach B04 Abschnitt 1 begründet Wahrnehmbarkeit allein keine Aufnahme. Abgrenzung zu „erheblich“: kein Schaden, kein Funktionsausfall, kein Hilfebedarf."
+        },
+        "tendenz": {
+          "richtung": "Entspannung",
+          "bezug": "Vogtland/Westböhmen, 09.11. bis 20.11.2026",
+          "begruendung": "Belegter Rückgang von wahrnehmbaren Beben am 09.11. auf Mikrobeben am 20.11.2026 [Q4]; eine Fachprognose zum weiteren Verlauf liegt nicht vor, eine Wiederbelebung ist bei Schwärmen möglich."
+        },
+        "erlaeuterung": "D8 bildet die seismische Aktivität ab, nicht eine Veränderung von Schäden; D1 bis D5 bleiben mangels Wirkung in Deutschland offen.",
+        "neubewertung_bei": [
+          {
+            "indikator": "Beben mit Magnitude ab etwa 3,5 oder Schadensmeldungen im Vogtland"
+          },
+          {
+            "indikator": "Fachaussage des LfULG oder der BGR zu verändertem Schwarmverlauf"
+          }
+        ],
+        "erkenntnislage": {
+          "luecken": [
+            "Keine Originalmitteilung des LfULG oder der BGR ausgewertet; Magnitude und Schadensaussage nur indirekt.",
+            "Keine Angaben deutscher Kommunen oder Landesbehörden zu Schadensmeldungen."
+          ],
+          "widersprueche": [
+            {
+              "gegenstand": "Magnitude des stärksten Bebens",
+              "beschreibung": "EMSC M 2,7 und LfULG Lokalmagnitude 2,7 gegenüber WEBNET Lokalmagnitude 2,89; unterschiedliche Netze und Berechnungen, nicht aufgelöst.",
+              "quellen": [
+                "Q1",
+                "Q3"
+              ]
+            }
+          ]
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [],
+        "empfehlungen": [],
+        "fristen": [],
+        "erlaeuterung": "Keine Maßnahmen berichtet, kein Empfehlungsbedarf."
+      },
+      "zeitstrahl": [
+        {
+          "id": "Z1",
+          "zeit": "2026-11-08",
+          "typ": "Ereignis",
+          "text": "Beginn des Schwarms nahe Luby und Kraslice (Tschechien)",
+          "quellen": [
+            "Q4"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z2",
+          "zeit": "2026-11-09T08:29+01:00",
+          "typ": "Ereignis",
+          "text": "Stärkstes Beben der Serie, Lokalmagnitude 2,7, im Vogtland verspürt",
+          "quellen": [
+            "Q1",
+            "Q2"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z3",
+          "zeit": "2026-11-20",
+          "typ": "Wendepunkt",
+          "text": "Aktivität auf automatisch erfasste Mikrobeben zurückgegangen, nach Ticker-Stand 20.11., 20:45 Uhr",
+          "quellen": [
+            "Q4"
+          ],
+          "erstmals_gemeldet": null
+        }
+      ],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": [
+            "Erdbeben"
+          ],
+          "lagenradar": {
+            "d1": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Verspürte Erschütterungen im Vogtland sind kein Schadens-, Einsatz- oder Betroffenheitsraum (B04/R2: verspürt ≠ Schaden).",
+              "quellen": [
+                "Q4"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d2": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Keine Verletzten oder Personen ohne sichere Unterkunft gemeldet; Wahrnehmungsmeldungen sind keine Betroffenheit (B04/R3); keine Lagemeldung mit ausdrücklicher Fehlanzeige (Nullregel b).",
+              "quellen": [
+                "Q2",
+                "Q4"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d3": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Geprüfte Funktion: Schadensfeststellung und Gefahrenabwehr; ohne Schaden keine wahrgenommene Funktion. Seismologische Überwachung durch LfULG ist Fachaufgabe, keine Steuerung (B04 Abschnitt 3).",
+              "quellen": [
+                "Q1"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d4": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Keine Unterstützung angefordert oder eingesetzt.",
+              "quellen": [],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d5": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Kein Zielzustand; das Ende eines Schwarms ist nicht prognostiziert.",
+              "quellen": [
+                "Q4"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d6": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "KRITIS-Prüfung ohne Kopplung: keine Schäden an Netzen, Verkehrswegen oder Anlagen gemeldet laut [Q2, Q4] für das Vogtland, Stand 20.11.2026; Abgrenzung zu Stufe 1: keine Leistung verzögert.",
+              "quellen": [
+                "Q2",
+                "Q4"
+              ]
+            },
+            "d7": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Lagefragen (Magnitude, Herd, Schäden) beantwortet, Angaben verschiedener Netze nachvollziehbar laut [Q1–Q4]; Abgrenzung zu Stufe 1: Magnitudenunterschiede erklären sich durch Netz und Berechnung, nicht durch Verzögerung.",
+              "quellen": [
+                "Q1",
+                "Q2",
+                "Q3",
+                "Q4"
+              ]
+            },
+            "d8": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Seismische Aktivität im Meldezeitraum 08.–20.11.2026: Anstieg am 09.11., Abnahme, leichte Wiederverstärkung um den 12.11., Rückgang auf Mikrobeben laut [Q4]; Abgrenzung zu Stufe 3: Phasenwechsel ohne Wirkung auf Schäden.",
+              "quellen": [
+                "Q4"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.1.1"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -22,7 +22,7 @@ bisherige_ids: ["sop-04"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Beben mit Schadensmeldungen in Deutschland, deutlich verspürte Beben mit daraus folgendem Prüf- oder Abstimmungsbedarf sowie Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen). Ein verspürtes Beben eröffnet die Prüfung; Wahrnehmbarkeit allein begründet noch keine Aufnahme. Nichtseismische Massenbewegungen, Erdfälle und Einstürze: Baustein C02; geologische Folgegefahren eines Bebens mit C02 verknüpfen, ohne beide Recherchelogiken zu verschmelzen. Beispiel dafür: Beben mit Gebäudeschäden in einer Region. Beispiel dagegen: verspürtes Beben ohne Schäden und ohne Prüfbedarf; Auslandsbeben ohne Deutschlandbezug.
+**Umfasst / grenzt ab von:** Beben mit Schadensmeldungen in Deutschland, deutlich verspürte Beben mit daraus folgendem Prüf- oder Abstimmungsbedarf sowie Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (unmittelbare grenzüberschreitende Erschütterungs- oder Schadenswirkung, angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen). Ein verspürtes Beben eröffnet die Prüfung; Wahrnehmbarkeit allein begründet noch keine Aufnahme. Nichtseismische Massenbewegungen, Erdfälle und Einstürze: Baustein C02; geologische Folgegefahren eines Bebens mit C02 verknüpfen, ohne beide Recherchelogiken zu verschmelzen. Beispiel dafür: Beben mit Gebäudeschäden in einer Region. Beispiel dagegen: verspürtes Beben ohne Schäden und ohne Prüfbedarf; Auslandsbeben ohne Deutschlandbezug.
 
 **Befassungsanlässe:** Erdbebenmeldung BGR/Landeserdbebendienst · Schadensmeldung eines Landes · internationales Hilfeersuchen · Monitoring: Erdbebenmeldungen der BGR und der Landeserdbebendienste.
 
@@ -30,11 +30,11 @@ bisherige_ids: ["sop-04"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. |
+| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
 | R2 | Wo bestehen Erschütterungs- und Schadenswirkungen? | Lagemeldungen (A.3); Bauaufsicht | L/R; D1 | Verspürt ≠ Schaden; Magnitude beschreibt keinen örtlichen Schaden; Erstmeldungen unvollständig. |
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
-| R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. |
+| R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. Bei Schwarmbeben Fachaussage zum Schwarmverlauf; Abklingen belegt kein Ende. |
 | R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten (A.7.4) und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6); deutsche Hilfe ins Ausland ergibt keinen D4-Wert (Abschnitt 3). |
 
 ### 3. Auswertung: Prüfpunkte

@@ -12,9 +12,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„Gesundheitliche Lage / Epidemie“ mit ausdrücklich benanntem Tiergesundheits- bzw. Zoonosebezug, auch ohne Humanerkrankung; „KRITIS-Ausfall“ nur bei belegtem eigenständigem Funktionsausfall"
 anschluss: "B11; C07 bei humaner Infektionslage, C09/C10 bei medizinischen Folgen, C13 Transport, C14 Lebensmittelversorgung, C15 bei Sanitär- oder Entsorgungsfolgen"
 zweck: "Getrennte Erfassung von veterinärfachlicher Lage, humaner Exposition, Kapazitätsbindung und Versorgungsfolgen."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N10"
@@ -35,10 +35,10 @@ bisherige_ids: ["baustein-n10"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. |
+| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. Die Risikoeinschätzung des FLI (Stufen je Eintragsweg) ist eine Fachbewertung mit Datum, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand übernehmen. |
 | R2 | Welche humane Exposition oder Infektion ist fachlich bewertet? | [FLI: Aviäre Influenza](https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/); RKI; Gesundheitsbehörden | R | Zoonoserisiko nach Erreger und Exposition fachlich prüfen (Absatz „Humaner Prüfpfad“); arbeitsbezogene Schutzbedarfe gesondert. |
 | R3 | Welche Veterinärmaßnahmen und Räume sind angeordnet? | Veterinärbehörden; Allgemeinverfügungen | M; D1 | Restriktionszone ≠ Ausbruchsgebiet. |
-| R4 | Welche Kapazitäten für Untersuchung, Tierkörperbeseitigung, Logistik oder Hilfe sind tatsächlich gebunden? | Lagemeldungen (A.3) | M; D4 | Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. |
+| R4 | Welche Kapazitäten für Untersuchung, Tierkörperbeseitigung, Logistik oder Hilfe sind tatsächlich gebunden? | Lagemeldungen (A.3) | M; D4 | Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. Erwartet die Fachbehörde eine Zunahme, Reserven für zeitgleiche Ausbrüche als Vorbereitungsfrage prüfen (A.1 Nr. 1). |
 | R5 | Welche nachgewiesenen Auswirkungen auf Ernährung oder andere kritische Funktionen bestehen? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | R/I; D6 | Wirtschaftliche Belastung ≠ Versorgungsausfall; Lebensmittelversorgung nach C14. |
 | R6 | Was ist Voraussetzung für die Aufhebung der Maßnahmen und die Entlastung gebundener Fähigkeiten? | Veterinärbehörden | M; D5 | Zielzustand benennen; Voraussetzungen sind noch keine Prognose. |
 
