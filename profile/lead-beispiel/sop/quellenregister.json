@@ -170,18 +170,19 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Waldbrandatlas als räumlicher Rechercheeinstieg; Layerdaten gesondert prüfen.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "nichtverfuegbarkeitsseite",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft",
+      "offene_nachpruefung": "Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen); Zugang nur für Behörden und Feuerwehren nach Prüfung des berechtigten Interesses. Bis zur Wiederherstellung EFFIS und Landesbehörden (B03 R2) nutzen; Verfügbarkeit vor Verwendung prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "erreichbar",
         "eignung": "passt nicht",
         "hinweis": "Die Seite beschreibt nur aktuelle Gefährdungsstufen, Brände, Wind- und Niederschlagsvorhersagen sowie Satellitenbilder. Historische Daten oder ein Mehrjahresvergleich werden nicht erwähnt. Die Anwendung selbst ist nur Behörden und Feuerwehren nach Zugangsprüfung zugänglich, ihr Inhalt ist daher nicht beurteilbar."
-      }
+      },
+      "titel": "Der digitale Waldbrandatlas"
     },
     {
       "id": "S007",
@@ -259,19 +260,20 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Dürreatlas als Kombination von Geodaten; Layerstände nicht aus Katalogdatum ableiten.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "nichtverfuegbarkeitsseite",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft",
+      "offene_nachpruefung": "Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen). Zur Einordnung bis dahin UFZ-Dürremonitor (B05 R5) nutzen; Verfügbarkeit vor Verwendung prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zusaetzlicher_abruf": "Produktseite über Webabruf gelesen; Katalog nennt Aktualitätsstand 06.2023, einzelne Layerstände nicht geprüft.",
       "zweitpruefung": {
         "status": "erreichbar",
         "eignung": "teilweise",
         "hinweis": "Produktseite einer interaktiven Kartenanwendung (Bodenfeuchte, Niederschlag, Wind, Wasserstände, Hitze). Der Zugang ist nur nach Prüfung für Bundes-, Landes- und Kommunalbehörden mit Login möglich, es gibt keine öffentlich einsehbaren Daten. Ob eine modellierte Bodentrockenheit enthalten ist, ist auf der Seite nicht konkret belegt."
-      }
+      },
+      "titel": "Der digitale Dürreatlas"
     },
     {
       "id": "S011",
