@@ -129,6 +129,29 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.3 | letzter Commit des Pull Requests „Verhältniswerte, Beobachtungszeitraum und Bezugsgröße für Kennzahlen (Vorschlag aus STATIS-LEAD, SR-2026-W46-01 bis -06); 0.9.3“ (Nachtrag vom 15.11.2026: Pull Request „S1 mit Material ohne Einrückung: Ergebnis (Nachtrag zum Ergebnisbericht)“, ohne Änderung der App) |
 | 0.9.4 | letzter Commit des Pull Requests „Redaktionscheck: Änderung und Abschluss aus dem Feld nach Profil (KL-2026-W46-01); 0.9.4“ |
 | 0.9.5 | letzter Commit des Pull Requests „Zeitfelder als Wanduhrzeit, Zeitzone als Auswahl; Grunddesign 1.12 (LD-T04); 0.9.5“ (Nachtrag vom 20.11.2026: Pull Request „Erfassungstest KW 47: Prüfsteine nach LEAD-Meldung-v2, Kodierleitfaden 2.2.0, SOP-LEAD 3.26.0 (ET-2026-W47-01 bis -07)“, ohne Änderung der App) |
+| 0.9.6 | letzter Commit des Pull Requests „Grunddesign 1.12 nachgetragen (LD-T04), Versatz an den Umstellungen in LEAD-Meldung-v2; 0.9.6“ |
+## [0.9.6] – 20.11.2026
+
+Grundlage: Prüfung vom 20.11.2026 zu LD-T04 und Entscheidungen des Herausgebers vom selben Tag (Nachtrag unter Fassung 1.12 ohne neue Nummer, Wortlaut mit der Regel für die Zeitumstellung, Umsetzung in `meldung-v2.js` mit Gleichlauftest, Musterfassung unverändert). Die Freigabe KL-2026-W46-02 (Sichtbarkeit von Feldern nach einer Bedingung) folgt damit als 0.9.7.
+
+### Behoben
+
+- **Versatz an den Umstellungen der Sommerzeit in LEAD-Meldung-v2** (`mitVersatz` in `src/kern/meldung-v2.js`; Migration v1 → v2, Zeitfelder der KI-Nachbearbeitung, t0 und Erstellungszeitpunkt): Die Funktion näherte den Versatz schrittweise an und kam an beiden Umstellungen beim Versatz nach dem Sprung an. In der doppelten Stunde am 25.10.2026 ergab `02:30` daher `+01:00`, also die spätere statt der früheren Stunde. Am 29.03.2026 blieb die ausgefallene Uhrzeit `02:30` mit `+02:00` stehen, ein Zeitpunkt, der 01:30 MEZ entspricht. Sie folgt jetzt derselben Regel wie `zeitpunktInZone` in `src/kern/zeit.ts` und die Erfassungsmaske: In der doppelten Stunde gilt die frühere (`02:30+02:00`), eine ausgefallene Uhrzeit rückt um den Sprung nach vorn (`03:30+02:00`). Sekunden bleiben erhalten, außerhalb der Umstellungen ändert sich nichts. Das Modul bleibt ohne Importe; die Formate für die Umrechnung sind je Zone zwischengespeichert. Typangabe in `meldung-v2.d.ts`: Ergebnis `string | null`, wie schon bisher zurückgegeben.
+
+### Geändert
+
+- **Grunddesign 1.12** (`design/`), Nachtrag ohne neue Fassungsnummer: Mit 0.9.5 waren nur der Kopf und der Änderungsverlauf auf 1.12 gesetzt. Der Regeltext von LD-T04 in der Tabelle und in `rahmen.json` stand noch wie in 1.11. Jetzt steht er in der geschärften Fassung, ausdrücklich mit der Regel für die Zeitumstellung. Die Fundstellen sind um `src/kern/zeit.ts` und `src/ui/DatumZeit.tsx` ergänzt, `stand` in `rahmen.json` lautet auf den 16.11.2026. Bezugsfassung für die Schwester-Apps ist 1.12 im Stand dieses Pull Requests (Permalink auf den Merge, nicht auf den Commit von 0.9.5).
+
+### Tests
+
+- `tests/kern/zeit-gleichlauf.test.ts` (13 neu): `mitVersatz` an beiden Umstellungen 2026 mit festen Werten, Sekunden, außerhalb der Umstellungen; Gleichlauf mit `wanduhrMitVersatz` für jede Minute an zehn Tagen (Europe/Berlin 2026 und 2027, America/New_York, Australia/Lord_Howe, UTC).
+- `tests/format/lead-meldung-v2.test.ts`: Migration an beiden Umstellungen (zwei Erwartungen ergänzt).
+
+### Dokumentation
+
+- [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.6 (Abschnitt 5.2), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md), [design/README.md](design/README.md) 1.12 (Nachtrag). Versionsangaben 0.9.6 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 906).
+- Unverändert und bewusst nicht neu überführt: `evaluation/material/ilka-musterfassung.v2.json` trägt in `entstehung.erstellt` noch `2026-10-25T02:30+01:00` aus der Überführung vom 14.11.2026. Das ist ein gültiger Zeitpunkt (die spätere 02:30); welche Stunde gemeint war, ist nicht belegt. Die Datei ist über Prüfsummen an die Pläne `management-summary-ilka` und `reparatur-ilka` gebunden.
+
 ## [0.9.5] – 16.11.2026
 
 ### Nachtrag vom 20.11.2026 (ohne Änderung der App)
