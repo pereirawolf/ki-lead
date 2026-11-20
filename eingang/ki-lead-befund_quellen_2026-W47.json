@@ -1,0 +1,429 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "quellenwaechter",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-20T21:20:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+  "pruefumfang": "Teilaspekt quellen, KW 47/2026 (Z = 11, Turnus Position modulo 4 = 3), außerplanmäßig in einer Unterhaltung nachgeholt (die Montagsrotation hatte quellen noch nie ausgeführt). Auswahl nach Skill: 26 Pflichteinträge (Status abruf_offen, zugriffssperre_oder_leere_antwort, nichtverfuegbarkeitsseite, einstieg_geprueft_liveinhalt_offen) und 20 Turnuseinträge, zusammen 46 von 103 Einträgen in profile/lead-beispiel/sop/quellenregister.json, sowie die offenen_schwerpunkte. Prüfweg: Websuche je Eintrag (amtliche Domain) und, wo das Werkzeug es zuließ, Direktabruf ohne Prüfsumme. Direkt abgerufen: S003, S006, S009, S010, S029, BKA Aktuelle Meldungen, BNetzA Lagebewertung Gas. Alle übrigen nur über Suchtreffer derselben amtlichen Domain. Gelesen: Register, Eingang (befunde/eingang), Remote-Branches, Befundregister (Stand 2026-11-15), B02, B03, B04, B05, B09, B14, B16, C03, C10 an den Fundstellen. Offene Befunde: 1 (KL-2026-W46-02; ET-2026-W47-01 bis -07 sind Gegenstand des offenen Branches befunde/erfassungstest-2026-W47 bzw. PR #183); Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "Direktabruf zahlreicher Register-URLs vom Abrufwerkzeug verweigert (nicht auf der Freigabeliste oder robots.txt nicht lesbar), u. a. S007 (BGR alt), S040 (BKG), S025 und BKA (BKA alt), S012, S017, S057, S061, S067/EULATEST, S071, S072; dort nur Suchtreffer der amtlichen Domain oder gar kein Befund möglich – Zugriffsfehler beweisen keinen Linkdefekt.",
+    "Liste offener Pull Requests: GitHub-API in dieser Sitzung mit 403 abgelehnt; über Remote-Branches eingegrenzt (befunde/erfassungstest-2026-W47).",
+    "Normtexte (S032, S036, S048, S052, S064, ENWG-13, BIMSCHV12-2, AMG-79, GG-115A): nur Erreichbarkeit und Überschrift per Suchtreffer, kein Abgleich der zitierten Absätze und keine Prüfung des Änderungsstands.",
+    "S020 (RKI-Startseite), S060 (BNetzA Lastverteilung), S061 (BMWE Gasübersicht), NIWISPORTAL: keine einschlägigen Suchtreffer bzw. nicht abgerufen.",
+    "Live-Inhalte (Messwerte, Warnlisten, Karten) wurden bei keinem Eintrag geprüft."
+  ],
+  "befunde": [
+    {
+      "id": "QW-2026-W47-01",
+      "kategorie": "quelle",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S006]",
+          "ist": "status abruf_offen; prueftiefe „Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt“"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S010]",
+          "ist": "status abruf_offen; prueftiefe „Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt“"
+        }
+      ],
+      "beobachtung": "Beide Produktseiten des BKG-Geodatenzentrums sind wieder direkt abrufbar (Titel „Der digitale Waldbrandatlas“ bzw. „Der digitale Dürreatlas“, Herausgeber BKG). Beide Seiten weisen aber darauf hin, dass die interaktiven Atlanten wegen technischer und sicherheitsbezogener Maßnahmen derzeit vorübergehend nicht zur Verfügung stehen. Der Waldbrandatlas ist zudem nur für Behörden (Bund, Länder, Kommunen, Feuerwehren) nach Prüfung des berechtigten Interesses freigegeben; der Dürreatlas ist kostenfrei und ohne Anmeldung. Gemeinsame Ursache, daher ein Befund. B03 R2 (EFFIS, Landesbehörden) und B05 R5 (UFZ-Dürremonitor) nennen bereits gleichrangige Alternativen; eine Textänderung in den SOPs ist deshalb nicht nötig.",
+      "belege": [
+        {
+          "url": "https://gdz.bkg.bund.de/index.php/default/waldbrandatlas.html",
+          "herausgeber": "Bundesamt für Kartographie und Geodäsie",
+          "titel": "Der digitale Waldbrandatlas",
+          "fassung_oder_stand": "Abruf 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "interaktiven Atlanten … vorübergehend nicht zur Verfügung"
+        },
+        {
+          "url": "https://gdz.bkg.bund.de/index.php/default/duerreatlas.html",
+          "herausgeber": "Bundesamt für Kartographie und Geodäsie",
+          "titel": "Der digitale Dürreatlas",
+          "fassung_oder_stand": "Abruf 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "stehen die interaktiven Atlanten derzeit vorübergehend nicht zur Verfügung"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "register_aktualisieren",
+        "beschreibung": "Status, Prüftiefe, Titel und offene Nachprüfung beider Einträge fortschreiben; pruefdatum 2026-11-20.",
+        "neuer_text": "S006: {\"status\": \"nichtverfuegbarkeitsseite\", \"titel\": \"Der digitale Waldbrandatlas\", \"pruefdatum\": \"2026-11-20\", \"prueftiefe\": \"Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft\", \"offene_nachpruefung\": \"Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen); Zugang nur für Behörden und Feuerwehren nach Prüfung des berechtigten Interesses. Bis zur Wiederherstellung EFFIS und Landesbehörden (B03 R2) nutzen; Verfügbarkeit vor Verwendung prüfen.\"} · S010: {\"status\": \"nichtverfuegbarkeitsseite\", \"titel\": \"Der digitale Dürreatlas\", \"pruefdatum\": \"2026-11-20\", \"prueftiefe\": \"Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft\", \"offene_nachpruefung\": \"Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen). Zur Einordnung bis dahin UFZ-Dürremonitor (B05 R5) nutzen; Verfügbarkeit vor Verwendung prüfen.\"}"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: stand"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-02",
+      "kategorie": "quelle",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "Abschnitt 2, B04/R1",
+          "ist": "[BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S007]; offene_schwerpunkte (B04)",
+          "ist": "BGR-Erdbebeneinstieg in beiden Prüfungen nicht abrufbar; möglicher Umzug in die Struktur „Erdbebendienst_Bund“ nicht bestätigt."
+        }
+      ],
+      "beobachtung": "Der im offenen Schwerpunkt vermutete Umzug ist jetzt auf der BGR-Website selbst belegt: Unter „Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund“ gibt es die Seiten „Erdbebendienst des Bundes“ und „Aktuelle Erdbeben & Ereignisse“. Die Seite „Aktuelle Erdbeben“ zeigt seismische Ereignisse ab ML 2.0 aus GRSN, GERES und Gräfenberg, aktualisiert einmal täglich. Ob die alte URL weiterleitet, ließ sich nicht prüfen (Direktabruf vom Werkzeug verweigert). Eine Weiterleitung ist damit nicht belegt. Deshalb fachlich mit Entscheidungsfrage. Hinweis für R1: Der Webdienst wird nur täglich aktualisiert und taugt deshalb nicht als Echtzeitquelle für Erstlösungen.",
+      "belege": [
+        {
+          "url": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html",
+          "herausgeber": "Bundesanstalt für Geowissenschaften und Rohstoffe",
+          "titel": "Aktuelle Erdbeben & Ereignisse",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "werden einmal täglich die Daten aktualisiert"
+        },
+        {
+          "url": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/erdbebendienst_bund_node.html",
+          "herausgeber": "Bundesanstalt für Geowissenschaften und Rohstoffe",
+          "titel": "Erdbebendienst des Bundes",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "Der Erdbebendienst des Bundes an der BGR betreibt ein landesweites Netz von Seismometerstationen."
+        },
+        {
+          "url": "https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html",
+          "herausgeber": "Bundesanstalt für Geowissenschaften und Rohstoffe",
+          "titel": "(alte URL)",
+          "fassung_oder_stand": "20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "nicht_abrufbar",
+          "auszug": ""
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Variante A: B04 R1 auf die BGR-Seite „Aktuelle Erdbeben“ umstellen, neuen Registereintrag anlegen (Status dokument_oder_einstieg_abgerufen, Prüftiefe „Suchtreffer derselben amtlichen Domain; kein Direktabruf“), bei S007 ersetzt_durch setzen und den offenen Schwerpunkt B04 streichen. Variante B: neue Seite nur zusätzlich in R1 aufnehmen, S007 bleibt bis zu einem Direktabruf.",
+        "neuer_text": "B04/R1, Spalte Quelle (Variante A): „[BGR – Erdbebendienst des Bundes, Aktuelle Erdbeben](https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html) (Webdienst täglich aktualisiert), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen“"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: neuer Eintrag, S007.ersetzt_durch, offene_schwerpunkte",
+        "B04: version im Kopf, Änderungsverlauf",
+        "sop/CHANGELOG.md",
+        "Lesefassung neu erzeugen"
+      ],
+      "entscheidungsfrage": "(A) R1 auf die neue BGR-Seite umstellen und S007 als ersetzt führen oder (B) neue Seite ergänzen und alte URL bis zu einem Direktabruf behalten?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-03",
+      "kategorie": "quelle",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md",
+          "stelle": "Abschnitt 2, C03/R1; Offene Punkte",
+          "ist": "die Beobachtungsdaten des BKG zum Weltraumwetter kommen als weiterer Einstieg in Betracht (beides vor Erstverwendung prüfen, A.6)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S040]",
+          "ist": "status abruf_offen"
+        }
+      ],
+      "beobachtung": "Der in C03 offen gelassene Prüfauftrag lässt sich teilweise erledigen. (1) Die BKG-Themenseite „Sicherheit & Weltraum“ führt „Weltraumwetter“ weiter als Unterpunkt. Derselbe Pfad wie in R1 ist auf dem Spiegelhost evrs.bkg.bund.de mit Inhalt indexiert, und die englische Fassung liegt unter der neuen Struktur bkg.bund.de/en/themen/sicherheit-weltraum/space-weather. Die R1-URL selbst ließ sich nicht direkt abrufen (robots.txt nicht lesbar), ein Umzug ist also nicht bestätigt. (2) Das BKG betreibt mit WESIS (weltraumwetter.bkg.bund.de bzw. wesis.bkg.bund.de) einen Einstieg zu Beobachtungsdaten: Solarfluss F10.7/F30, K-Index (Wettzell) und eine datierte Ereignisliste (z. B. G3-Störungen). Das sind Beobachtungs- und Vorhersagedaten, aber keine Fachwarnung. Sie passen deshalb zu R1 nur als Ergänzung; „Warnung ≠ Störung“ bleibt maßgeblich.",
+      "belege": [
+        {
+          "url": "https://wesis.bkg.bund.de/",
+          "herausgeber": "Bundesamt für Kartographie und Geodäsie",
+          "titel": "BKG space weather observation data access information (WESIS)",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026; Ereignisliste bis 12.10.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "Wettzell NRT measurements"
+        },
+        {
+          "url": "https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/sicherheit-weltraum.html",
+          "herausgeber": "Bundesamt für Kartographie und Geodäsie",
+          "titel": "Sicherheit & Weltraum",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "Sicherheit & Weltraum … Weltraumwetter"
+        },
+        {
+          "url": "https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html",
+          "herausgeber": "Bundesamt für Kartographie und Geodäsie",
+          "titel": "(R1-URL)",
+          "fassung_oder_stand": "20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "nicht_abrufbar",
+          "auszug": ""
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "WESIS als Beobachtungsdaten-Einstieg in C03/R1 ergänzen (neuer Registereintrag, Status einstieg_geprueft_liveinhalt_offen, Prüftiefe „Suchtreffer derselben amtlichen Domain“); den Offenen Punkt auf den verbleibenden Teil (Direktabruf der R1-URL, Fachdienste mit Zuständigkeit) kürzen. Den bestehenden Link nicht ersetzen, solange kein Nachfolger amtlich bestätigt ist.",
+        "neuer_text": "C03/R1, Spalte Quelle: „[BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); Beobachtungsdaten: [BKG WESIS](https://wesis.bkg.bund.de/) (Solarfluss, K-Index; keine Warnung); zuständige Fachdienste“"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: neuer Eintrag",
+        "C03: version im Kopf, Offene Punkte, Änderungsverlauf",
+        "sop/CHANGELOG.md",
+        "Lesefassung neu erzeugen"
+      ],
+      "entscheidungsfrage": "Soll WESIS als Beobachtungsdaten-Einstieg in C03/R1 aufgenommen werden, obwohl das BKG dort keine Warnprodukte herausgibt?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-04",
+      "kategorie": "quelle",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C10_arzneimittel-medizinisches-material.md",
+          "stelle": "Abschnitt 2, C10/R1",
+          "ist": "[BfArM](https://www.bfarm.de/DE/) (Lieferengpassinformationen zu Humanarzneimitteln)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S044]; offene_schwerpunkte (C10)",
+          "ist": "C10: BfArM-Startseite; zielgenauer wäre die Seite zu Lieferengpässen (in der Zweitprüfung bestätigt)."
+        }
+      ],
+      "beobachtung": "Das BfArM hat eine eigene Einstiegsseite „Lieferengpässe für Humanarzneimittel“. Sie verweist auf die Lieferengpass-Datenbank, den Beirat nach § 52b Abs. 3b AMG (zuletzt Tagesordnung der 21. Sitzung vom 18.11.2026) und die Maßnahmen des BfArM. Das ist genau die in R1 bezeichnete Information. Die Startseite verlangt dagegen einen Navigationsschritt mehr und ist im Register nur als Einstieg geführt. Der offene Schwerpunkt C10 lässt sich damit schließen.",
+      "belege": [
+        {
+          "url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
+          "herausgeber": "Bundesinstitut für Arzneimittel und Medizinprodukte",
+          "titel": "Lieferengpässe für Humanarzneimittel",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "dokumentiert und bewertet Lieferengpässe von Humanarzneimitteln"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Link in C10/R1 auf die Lieferengpass-Seite umstellen; neuer Registereintrag (dokument_oder_einstieg_abgerufen, Prüftiefe „Suchtreffer derselben amtlichen Domain“); S044 bleibt als allgemeiner Einstieg nur, wenn er an anderer Stelle verwendet wird, sonst ersetzt_durch setzen; offenen Schwerpunkt C10 streichen.",
+        "neuer_text": "C10/R1, Spalte Quelle: „[BfArM – Lieferengpässe für Humanarzneimittel](https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html); PEI für Impfstoffe und Blutprodukte; zuständige Landes- und Fachbehörden; jeweils Abdeckung und Datenstand prüfen“"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: neuer Eintrag, S044, offene_schwerpunkte",
+        "C10: version im Kopf, Änderungsverlauf",
+        "sop/CHANGELOG.md",
+        "Lesefassung neu erzeugen"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-05",
+      "kategorie": "quelle",
+      "art": "fachlich",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B14_sicherheitslage.md",
+          "stelle": "Abschnitt 2, B14/R1",
+          "ist": "BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html))"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B16_sabotage-anschlag-terrorismus.md",
+          "stelle": "Abschnitt 2, B16/R1",
+          "ist": "[BKA Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S025]",
+          "ist": "status abruf_offen; zweck „konkreten öffentlichen Gefährdungshinweis der zuständigen Stelle ermitteln“"
+        }
+      ],
+      "beobachtung": "R1 fragt in beiden SOPs nach behördlich bestätigten Ereignissen und Gefährdungshinweisen. Das BKA bündelt diese inzwischen unter „Aktuelle Meldungen“ (Pressemitteilungen, Warnhinweise, Fahndungen), Seite direkt abgerufen. Die Pressestelle ist im aktuellen Aufbau als Kontaktseite eingeordnet („Ihr Kontakt zur Pressestelle“ unter /DE/Presse/). Die verlinkte URL ließ sich nicht direkt abrufen (vom Werkzeug verweigert); die frühere Zusatzseite BKA (Pressemitteilungen-Übersicht) ist im Register bereits als nicht verfügbar vermerkt. „Aktuelle Meldungen“ trifft den Zweck von R1 genauer.",
+      "belege": [
+        {
+          "url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html",
+          "herausgeber": "Bundeskriminalamt",
+          "titel": "BKA - Aktuelle Meldungen",
+          "fassung_oder_stand": "Abruf 20.11.2026; keine Datumsangabe auf der Seite",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Pressemitteilungen, Warnhinweise, Fahndungen, offizielle Meldungen"
+        },
+        {
+          "url": "https://www.bka.de/DE/Presse/presse_node.html",
+          "herausgeber": "Bundeskriminalamt",
+          "titel": "BKA - Presse",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "Ihr Kontakt zur Pressestelle"
+        },
+        {
+          "url": "https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html",
+          "herausgeber": "Bundeskriminalamt",
+          "titel": "(verlinkte URL)",
+          "fassung_oder_stand": "20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "nicht_abrufbar",
+          "auszug": ""
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "In B14/R1 und B16/R1 „Pressestelle“ durch „Aktuelle Meldungen“ ersetzen (Variante A) oder ergänzen (Variante B); neuer Registereintrag (dokument_oder_einstieg_abgerufen, Prüftiefe „Webabruf ohne Prüfsumme; Gliederung gelesen, keine Einzelmeldung geprüft“); S025 fortschreiben.",
+        "neuer_text": "B14/R1: „… bei Bundeszuständigkeit BKA ([Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html)) oder Bundespolizei; BMI; anlassbezogen“ · B16/R1: „… (Landespolizei/Innenministerium, [BKA – Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html), Generalbundesanwalt); anlassbezogen“"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: neuer Eintrag, S025",
+        "B14, B16: version im Kopf, Änderungsverlauf",
+        "sop/CHANGELOG.md",
+        "Lesefassung neu erzeugen"
+      ],
+      "entscheidungsfrage": "(A) Pressestelle durch „Aktuelle Meldungen“ ersetzen oder (B) beide nennen?",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-06",
+      "kategorie": "quelle",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S003]",
+          "ist": "status nichtverfuegbarkeitsseite; titel „LHP :: Derzeit offline“"
+        }
+      ],
+      "beobachtung": "Das Länderübergreifende Hochwasserportal ist wieder mit normaler Navigation und ohne Verfügbarkeitshinweis erreichbar (Abruf über www.hochwasserzentralen.de; Titel „Hochwasser :: Aktuelle Situation und Warnungen :: LHP“, gemeinsame Initiative der Länder). Die Tabelle „Aktuelle Hochwassersituation“ enthielt beim Abruf keine Zeilen; ob das an einer hochwasserfreien Lage oder am Nachladen per Skript lag, ist offen. Neu dokumentiert ist eine öffentliche REST-Schnittstelle (LHP-PublicAPI) mit Lage an rund 1200 Pegeln. Der Offene Punkt in B02 (Ausweichwege bei Portalausfall) bleibt richtig.",
+      "belege": [
+        {
+          "url": "https://www.hochwasserzentralen.de/",
+          "herausgeber": "Länderübergreifendes Hochwasserportal (Länder)",
+          "titel": "Hochwasser :: Aktuelle Situation und Warnungen :: LHP",
+          "fassung_oder_stand": "Abruf 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Eine gemeinsame Initiative der deutschen Bundesländer"
+        },
+        {
+          "url": "https://www.hochwasserzentralen.de/developers/",
+          "herausgeber": "Länderübergreifendes Hochwasserportal (Länder)",
+          "titel": "Hochwasser :: LHP for Developers",
+          "fassung_oder_stand": "Suchtreffer 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "suchtreffer",
+          "auszug": "Die öffentliche Schnittstelle für bundesweite Hochwasser-Infos"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "register_aktualisieren",
+        "beschreibung": "S003 fortschreiben.",
+        "neuer_text": "S003: {\"status\": \"einstieg_geprueft_liveinhalt_offen\", \"titel\": \"Hochwasser :: Aktuelle Situation und Warnungen :: LHP\", \"end_url\": \"https://www.hochwasserzentralen.de/\", \"pruefdatum\": \"2026-11-20\", \"prueftiefe\": \"Webabruf ohne Prüfsumme; Startseite ohne Verfügbarkeitshinweis, Lagetabelle beim Abruf ohne Zeilen\", \"offene_nachpruefung\": \"Lage je Pegel mit Zeitstempel und Klassifizierung des Landes abrufen (Portal oder LHP-PublicAPI); bei Portalausfall Landeshochwasserzentralen direkt nutzen.\"}"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: stand"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "QW-2026-W47-07",
+      "kategorie": "quelle",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S009]",
+          "ist": "status abruf_offen; titel null; prueftiefe „Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt“"
+        }
+      ],
+      "beobachtung": "Der UFZ-Dürremonitor ist direkt abrufbar (Titel „Dürremonitor Deutschland – Helmholtz-Zentrum für Umweltforschung UFZ“). Die Seite nennt eine tägliche, nächtliche Aktualisierung und den Seitenstand 28.10.2026. Die Karten selbst wurden nicht geprüft. Der Zweck im Register (modellierte Bodentrockenheit, kein Grundwasser- oder Trinkwassernachweis) passt weiter.",
+      "belege": [
+        {
+          "url": "https://www.ufz.de/index.php?de=37937",
+          "herausgeber": "Helmholtz-Zentrum für Umweltforschung UFZ",
+          "titel": "Dürremonitor Deutschland",
+          "fassung_oder_stand": "Seite geändert 28.10.2026; Abruf 20.11.2026",
+          "abgerufen_utc": "2026-11-20T21:20:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "Der Dürremonitor wird jede Nacht aktualisiert."
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "register_aktualisieren",
+        "beschreibung": "S009 fortschreiben.",
+        "neuer_text": "S009: {\"status\": \"einstieg_geprueft_liveinhalt_offen\", \"titel\": \"Dürremonitor Deutschland - Helmholtz-Zentrum für Umweltforschung UFZ\", \"pruefdatum\": \"2026-11-20\", \"prueftiefe\": \"Webabruf ohne Prüfsumme; Beschreibung und Aktualisierungsangabe gelesen, Karten nicht geprüft\", \"offene_nachpruefung\": \"Karte mit Datum, Bodenschicht (Ober-/Gesamtboden) und Dürreklasse abrufen.\"}"
+      },
+      "folgeaenderungen": [
+        "quellenregister.json: stand"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "S002 warnung.bund.de: amtliches Portal per Suchtreffer erreichbar; Zweck unverändert.",
+    "S004 DWD Waldbrandgefahrenindex, WARNKRITERIEN (www.dwd.de/warnkriterien laut DWD-Glossar weiter gültig), S075 Seewetterbericht FQEN50 (opendata.dwd.de, Datei aktuell): erreichbar per Suchtreffer.",
+    "S008 RKI-Wochenbericht Hitzemortalität: letzter Bericht KW 37/2026 (Stand 24.09.2026), wöchentliche Berichterstattung 2026 beendet – entspricht dem Zweck „Berichts-/Saisonstand“.",
+    "S011 GRUVO: erreichbar, Version 1.2 (Oktober 2025), monatliche Fortschreibung; Kartenstand „Anfang November“.",
+    "S016 SMARD, S021 WHO Disease Outbreak News, S024 BAMF-Asylgeschäftsstatistik (bis 10/2026), S028 BfS Radiologisches Lagezentrum, S029 ODL-Info (direkt abgerufen, rund 1.700 Messstellen, 24-h-Mittel), S041/S042 FLI Tierseuchengeschehen und Geflügelpest (Risikoeinschätzung vom 09.10.2026 erreichbar), S056 BBK Sektor Wasser, S068 BSH Wasserstand: erreichbar per Suchtreffer bzw. Abruf, Zweck unverändert.",
+    "S059-Umfeld: BNetzA-Lagebewertung Gas direkt abgerufen (Stand 19.11.2026, Frühwarnstufe seit 01.07.2025) – bestätigt das in B09 R-Pfad verwendete Produkt; keine Ereignisfakten übernommen.",
+    "S067/EULATEST: EUR-Lex weist die konsolidierte Fassung 22.06.2026 der VO (EU) 2017/1938 weiter als aktuell aus; Direktinhalt nicht geprüft.",
+    "GASPLAN: BMWE stellt weiterhin den Notfallplan Gas in der Fassung 2023 bereit.",
+    "EU2022-2371-23 (gesetze.legal) erreichbar, weiterhin nichtamtlicher Rechercheeinstieg.",
+    "Weitere Beobachtung: S028 BfS-RLZ – Suchtreffer führen auf den Pfad /DE/themen/ion/notfallschutz/wer-macht-was/rlz/rlz_node.html, das Register nennt /bfs/rlz/rlz_node.html; Direktabruf beider Pfade beim nächsten Lauf, ggf. Registerfortschreibung.",
+    "Weitere Beobachtung: S056 BBK Sektor Wasser – Suchtreffer zeigt risiken.html statt risiken_node.html; beim nächsten Lauf prüfen, ob beide auf dieselbe Seite führen.",
+    "Weitere Beobachtung: S012/S017/S057 – die eingetragenen Nachfolger sind amtlich weiter belegt (BfG-Seite NIWIS unter /DE/5_Informiert/1_Portale_Dienste/NIWIS/; BNetzA aktuelle Lage Gasversorgung; BBK Mobile Betreuungsmodule 5.000); kein Handlungsbedarf, alte URLs nicht direkt geprüft.",
+    "Weitere Beobachtung (für den Fristenlauf 30.11.): Das BMWE hat am 16.10.2026 einen Referentenentwurf „Gesetz zur Einführung einer Gasreserve zur Krisenvorsorge“ veröffentlicht – möglicher Prüfauslöser für B09.",
+    "Weitere Beobachtung (für den Fristenlauf): Der DWD-Waldbrandgefahrenindex hat 2026 laut DWD-Dokumentation ein grundlegendes Update mit ganzjähriger Risikoabschätzung erhalten; B03 nennt als Prüfauslöser „vor jeder Waldbrandsaison“ – prüfen, ob R1 oder der Prüfauslöser anzupassen ist.",
+    "Weitere Beobachtung: Laut BBK zeigen warnung.bund.de und NINA Wetterwarnungen der DWD-Stufe 1 nicht an; prüfen, ob S002 oder die SOP-Hinweise zu Warnportalen diese Grenze nennen sollten."
+  ]
+}
