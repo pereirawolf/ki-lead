@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-befundregister/1",
-  "stand": "2026-11-15",
+  "stand": "2026-11-20",
   "eintraege": [
     {
       "id": "ET-2026-W43-01",
@@ -5390,6 +5390,137 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-15",
       "pr": 181
+    },
+    {
+      "id": "ET-2026-W47-01",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/pruefsteine/README.md",
+          "stelle": "Abschnitt „Aufbau“ (Z. 11) und „Kennzeichnung“ (Z. 14–18)"
+        },
+        {
+          "datei": "tests/evaluation/pruefsteine.test.ts",
+          "stelle": "meldungsschema() und kennzeichnung() (Z. 16–25)"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 10 (Z. 210)"
+        }
+      ],
+      "kurz": "Prüfsteine nach Schemakennung: ab KW 47/2026 in LEAD-Meldung-v2 mit Kennzeichnung über status, entstehung, absender.stelle und freigabe ohne Namen, geprüft gegen das Schema des Beispielprofils; v1-Prüfsteine unverändert (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-02",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 7, Kurzbeispiel „Abkochgebot vor t0 aufgehoben“ (Z. 277)"
+        }
+      ],
+      "kurz": "Kodierleitfaden Abschnitt 7: Kurzbeispiel Nachlauf um D3 (Funktion für Abschluss oder Nachsorge zu t0, sonst offen), D4 (offen) und D7 (Informationslage zum Abschluss) ergänzt (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-03",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D8 Dynamik (Z. 133–139)"
+        }
+      ],
+      "kurz": "Kodierleitfaden D8: Umschlag ist ein belegter Wechsel des Lagezustands, auch angekündigt oder planmäßig; angekündigte und so vollzogene Wechsel tragen allein keine Stufe ab 4 (angepasste Fassung).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-04",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+          "stelle": "C08/R1, Spalte Hinweis/Stolperstelle (Z. 38)"
+        }
+      ],
+      "kurz": "C08/R1: Risikoeinschätzung des FLI als datierte Fachbewertung, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-05",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+          "stelle": "C08/R4, Spalte Hinweis/Stolperstelle (Z. 41)"
+        }
+      ],
+      "kurz": "C08/R4: Reserven für zeitgleiche Ausbrüche als Vorbereitungsfrage, wenn die Fachbehörde eine Zunahme erwartet (A.1 Nr. 1).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-06",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "Abschnitt 1, „Umfasst / grenzt ab von“ (Z. 25)"
+        }
+      ],
+      "kurz": "B04 Abschnitt 1: Deutschlandbezug von Auslandsbeben an A.1 Nr. 6 angeglichen (unmittelbare grenzüberschreitende Erschütterungs- oder Schadenswirkung).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
+    },
+    {
+      "id": "ET-2026-W47-07",
+      "agent": "erfassungstest",
+      "befunddatei": "ki-lead-befund_erfassungstest_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "B04/R1, Spalte Hinweis/Stolperstelle (Z. 33)"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "B04/R5, Spalte Hinweis/Stolperstelle (Z. 37)"
+        }
+      ],
+      "kurz": "B04/R1: Magnituden verschiedener Netze und Typen nebeneinander, nicht mitteln; B04/R5: Fachaussage zum Schwarmverlauf, Abklingen belegt kein Ende.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 183
     }
   ]
 }
