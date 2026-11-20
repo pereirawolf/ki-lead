@@ -134,6 +134,7 @@ Dieser Leitfaden ist der einzige Ort für die Kodierregeln des Lagenradars (Grun
 
 - **Kodierfrage:** Wie stark hat sich die Lage im Referenzraum im zurückliegenden Beobachtungszeitraum tatsächlich verändert?
 - Bewertet werden beobachtete Änderungen, nicht die Zahl eingehender Meldungen und nicht latente Folgerisiken.
+- **Umschlag:** Ein Umschlag ist ein belegter Wechsel des Lagezustands im Referenzraum (Gefahr, Betroffenheit oder Versorgung), auch wenn er angekündigt oder planmäßig war, etwa Räumung, Ausfall oder Wiederversorgung nach planmäßiger Störungsbeseitigung. Schritte des Vorgehens ohne solchen Wechsel zählen nicht. Die Begründung nennt, ob der Wechsel angekündigt war; angekündigte und so vollzogene Wechsel tragen allein keine Stufe ab 4.
 - Ein belegt stabiler Verlauf ergibt D8 = 0, auch wenn die Versorgung angespannt ist; offen bleibt D8 nur bei unzureichender Beobachtungsbasis. Bedingte Kipprisiken gehören in „Risiken & Auswirkungen“ und in `bewertung.neubewertung_bei`.
 - Internationale Veränderungen bei Auslandslagen werden als Frühwarnindikator im Text ausgewiesen, nicht als deutsche Dynamik.
 - D8 ist **nicht die Tendenz**. Eine Lage kann sehr dynamisch sein und sich zugleich entspannen.
