@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sicherheitslage (Bedrohungslagen, Großveranstaltungen, hybride Bedrohungen) – Bevölkerungsschutzfolgen"
 art_vorschlag: ["Sicherheitslage"]
 zweck: "Reproduzierbare Beobachtung behördlich belegter Sicherheitslagen ausschließlich im Hinblick auf Folgen und Vorsorgefragen für den Bevölkerungsschutz."
-version: "2.1.1"
+version: "2.1.2"
 status: "Beispielfassung"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -32,7 +32,7 @@ bisherige_ids: ["sop-14"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
+| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
 | R2 | Welche Räume und Schutzmaßnahmen sind betroffen? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | L/M; D1 | Sperr- oder Schutzraum ≠ Schadensraum; Absagen sind Vorsorge. |
 | R3 | Welche Personenschäden oder Evakuierungen bestehen? | Lagemeldungen (A.3) | R; D2 | Nicht alle Anwesenden oder von Maßnahmen Berührten als direkt betroffen zählen. |
 | R4 | Welche Dienste, Transportwege oder Einrichtungen sind eingeschränkt? | Betreibermeldungen (A.3) | R/I; D6 | Einschränkung und Grund getrennt belegen; Gefährdungshinweis ≠ Beeinträchtigung. |

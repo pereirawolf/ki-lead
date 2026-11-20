@@ -5521,6 +5521,149 @@
       "status": "umgesetzt",
       "entschieden_am": "2026-11-20",
       "pr": 183
+    },
+    {
+      "id": "QW-2026-W47-01",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S006]"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S010]"
+        }
+      ],
+      "kurz": "Waldbrand- und Dürreatlas des BKG (S006, S010) im Quellenregister als vorübergehend nicht verfügbar geführt; Ausweichquellen in B03 R2 und B05 R5.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-02",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "Abschnitt 2, B04/R1"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S007]; offene_schwerpunkte (B04)"
+        }
+      ],
+      "kurz": "B04/R1 verlinkt die BGR-Seite „Aktuelle Erdbeben“ des Erdbebendienstes des Bundes; S007 mit ersetzt_durch, offener Punkt und Schwerpunkt B04 erledigt (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-03",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md",
+          "stelle": "Abschnitt 2, C03/R1; Offene Punkte"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S040]"
+        }
+      ],
+      "kurz": "C03/R1 nennt zusätzlich den BKG-Beobachtungsdienst WESIS als Einstieg, ausdrücklich keine Warnung; neuer Registereintrag BKG-WESIS.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-04",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C10_arzneimittel-medizinisches-material.md",
+          "stelle": "Abschnitt 2, C10/R1"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S044]; offene_schwerpunkte (C10)"
+        }
+      ],
+      "kurz": "C10/R1 verlinkt die BfArM-Seite „Lieferengpässe für Humanarzneimittel“ statt der Startseite; S044 ersetzt, offener Schwerpunkt C10 erledigt.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-05",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B14_sicherheitslage.md",
+          "stelle": "Abschnitt 2, B14/R1"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B16_sabotage-anschlag-terrorismus.md",
+          "stelle": "Abschnitt 2, B16/R1"
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S025]"
+        }
+      ],
+      "kurz": "B14/R1 und B16/R1 verlinken „Aktuelle Meldungen“ des BKA statt der Pressestelle; S025 ersetzt, neuer Eintrag BKA-MELDUNGEN (Variante A).",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-06",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S003]"
+        }
+      ],
+      "kurz": "Länderübergreifendes Hochwasserportal (S003) wieder erreichbar; Registerstatus, Titel und offene Nachprüfung fortgeschrieben.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
+    },
+    {
+      "id": "QW-2026-W47-07",
+      "agent": "quellenwaechter",
+      "befunddatei": "ki-lead-befund_quellen_2026-W47.json",
+      "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/quellenregister.json",
+          "stelle": "eintraege[id=S009]"
+        }
+      ],
+      "kurz": "UFZ-Dürremonitor (S009) direkt erreichbar, nächtlich aktualisiert; Registerstatus und Titel fortgeschrieben.",
+      "status": "umgesetzt",
+      "entschieden_am": "2026-11-20",
+      "pr": 184
     }
   ]
 }

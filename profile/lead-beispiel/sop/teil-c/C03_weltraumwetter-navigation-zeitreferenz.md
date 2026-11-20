@@ -12,9 +12,9 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
 art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
 anschluss: "B17, B08, B12; C11 bei Funk-, TK- oder Warnbezug; C13 bei Navigationsbezug im Verkehr; B14 oder B15 nur nach entsprechendem Befund zur Ursache"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
-version: "1.1.1"
+version: "1.1.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N15"
@@ -35,7 +35,7 @@ bisherige_ids: ["baustein-n15"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Fachwarnung gilt für welchen Zeitraum und welche technische Wirkung? | [BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); zuständige Fachdienste | L/R; D8 | Warnung ≠ Störung. |
+| R1 | Welche Fachwarnung gilt für welchen Zeitraum und welche technische Wirkung? | [BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); Beobachtungsdaten: [BKG WESIS](https://wesis.bkg.bund.de/) (Solarfluss, K-Index; keine Warnung); zuständige Fachdienste | L/R; D8 | Warnung ≠ Störung. |
 | R2 | Welche deutsche Infrastruktur oder Dienstleistung ist nach Fach- oder Betreiberbewertung konkret exponiert? | Betreibermeldungen (A.3); Fachbehörden | R/I | Exposition nur nach Fach- oder Betreiberbewertung. |
 | R3 | Welche Auswirkungen sind gemessen, welche nur prognostiziert? | Fachdienste; Betreibermeldungen (A.3) | L/R | Gemessen und prognostiziert trennen. |
 | R4 | Welche Redundanz oder betriebliche Anpassung ist tatsächlich verfügbar bzw. umgesetzt? | Betreibermeldungen (A.3) | M; D5 | Vorhanden ≠ umgesetzt; „Ersatz und Tragfähigkeit“. |
@@ -68,4 +68,4 @@ Nach der passenden Dach-SOP bzw. B17: Fachwarnung mit Gültigkeitsfenster, gemes
 
 **Ansprechstellen:** Fachdienste für Weltraumwetter produktbezogen (u. a. BKG, Weltraumwetterdienst der ESA, NOAA Space Weather Prediction Center) · betroffene Betreiber zu ihrer Dienstleistung (B) · zuständige Fachstellen für Navigation, Zeitreferenz, Energie, Telekommunikation oder Luftfahrt fallbezogen. Keiner Stelle pauschal die Verantwortung für alle Wirkungen zuschreiben; eine internationale Prognose ist keine deutsche Behördenentscheidung.
 
-**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren. Rechercheeinstieg BKG prüfen: Der Link in R1 ist nach einem Hinweis vom 21.10.2026 möglicherweise veraltet; die Beobachtungsdaten des BKG zum Weltraumwetter kommen als weiterer Einstieg in Betracht (beides vor Erstverwendung prüfen, A.6). Übungsfälle zu hoher Fachwarnstufe ohne Schaden, realem Verlust von GNSS- oder Zeitqualität, abhängiger und unabhängiger Redundanz und ursachenoffener Störung.
+**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren. Rechercheeinstieg BKG prüfen: Der Link in R1 ist nach einem Hinweis vom 21.10.2026 möglicherweise veraltet; vor Erstverwendung direkt abrufen (A.6). Übungsfälle zu hoher Fachwarnstufe ohne Schaden, realem Verlust von GNSS- oder Zeitqualität, abhängiger und unabhängiger Redundanz und ursachenoffener Störung.

@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
 stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -30,7 +30,7 @@ bisherige_ids: ["sop-04"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
+| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR – Erdbebendienst des Bundes, Aktuelle Erdbeben](https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html) (Webdienst täglich aktualisiert), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
 | R2 | Wo bestehen Erschütterungs- und Schadenswirkungen? | Lagemeldungen (A.3); Bauaufsicht | L/R; D1 | Verspürt ≠ Schaden; Magnitude beschreibt keinen örtlichen Schaden; Erstmeldungen unvollständig. |
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
@@ -65,4 +65,4 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BGR · Landeserdbebendienste · GFZ · Bauaufsicht der Länder · Auswärtiges Amt/GMLZ (Auslandsbeben)
 
-**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07. Rechercheeinstieg BGR prüfen: Der Link in R1 war am 21.10.2026 nicht abrufbar; ein Umzug in die Struktur „Erdbebendienst_Bund“ ist möglich, aber nicht amtlich bestätigt (Quellenregister S007, A.6); GFZ GEOFON und Landeserdbebendienste als Ausweichweg.
+**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07.

@@ -4,6 +4,13 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 2.2.1 – 20.11.2026
+
+Grundlage: wie Beispielprofil 2.2.1 (Quellenprüfung KW 47, QW-2026-W47-01 bis -07). Dritte Stelle wie dort.
+
+- **Geteilte SOP-Sammelmappe 3.26.1:** Rechercheeinstiege in B04, B14, B16, C03 und C10, Quellenregister und Gültigkeitsstand in Teil A.
+- Abgeleitete Dateien unverändert.
+
 ## 2.2.0 – 20.11.2026
 
 Grundlage: wie Beispielprofil 2.2.0 (Erfassungstest KW 47/2026, ET-2026-W47-01 bis -07). Zweite Stelle wie dort.

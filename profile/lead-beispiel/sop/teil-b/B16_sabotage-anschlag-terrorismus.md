@@ -9,9 +9,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.1.2"
+version: "2.1.3"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -30,7 +30,7 @@ bisherige_ids: ["sop-16"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Was ist Ereignisfakt, was behördlicher Verdacht? | Sachlich zuständige Polizei- bzw. Ermittlungsbehörde (Landespolizei/Innenministerium, [BKA Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html), Generalbundesanwalt); anlassbezogen | L | Bestätigte Wirkung, gesicherte Ursache und zugeschriebene Absicht trennen; Sabotage, Anschlag und Terrorismus nicht austauschbar verwenden; Einordnung erst nach amtlicher Aussage. |
+| R1 | Was ist Ereignisfakt, was behördlicher Verdacht? | Sachlich zuständige Polizei- bzw. Ermittlungsbehörde (Landespolizei/Innenministerium, [BKA – Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html), Generalbundesanwalt); anlassbezogen | L | Bestätigte Wirkung, gesicherte Ursache und zugeschriebene Absicht trennen; Sabotage, Anschlag und Terrorismus nicht austauschbar verwenden; Einordnung erst nach amtlicher Aussage. |
 | R2 | Welche Schäden und Funktionsausfälle sind unabhängig von der Ursache bestätigt? | Betreibermeldungen (A.3) | L/R; D1/D6 | Ungeklärte Täterschaft verhindert keine Auswirkungsanalyse; technische Schäden ursachenoffen über die Folge-SOP bewerten. |
 | R3 | Welche Menschen sind unmittelbar geschädigt oder evakuiert, welche Betreuung läuft? | Lagemeldungen (A.3); Rettungsdienst, PSNV-Strukturen | R; D2 | Opferzahlen nur aus amtlicher Quelle mit Bezugszeit und Bestätigungsgrad; PSNV- und Nachsorgebedarf gesondert von Verletztenzahlen darstellen. |
 | R4 | Welche Schutz-, Sperr- und Verhaltenshinweise gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; Polizei; anlassbezogen | M; D1 | Keine operativen Schwachstellen ergänzen; Ausbleiben einer Warnung ist keine Entwarnung. |

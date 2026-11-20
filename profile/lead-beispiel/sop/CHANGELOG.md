@@ -10,13 +10,26 @@ Dieser Verlauf führt ausschließlich SOP-Änderungen. Änderungen an Kodierleit
 
 | Datei oder Ordner | Fassung | Status |
 |---|---|---|
-| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.26.0 vom 20.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
-| `quellenregister.json` | Stand 26.10.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
-| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.26.0 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
+| `A_Gemeinsame-Regeln.md`, `teil-b/`, `teil-c/` | 3.26.1 vom 20.11.2026 | gültig, Pflegequelle; 36 Dateien im Manifest |
+| `quellenregister.json` | Stand 20.11.2026 | Nachweis je URL aus Teil A, B und C (A.6); von der App nicht gelesen |
+| `SOP-LEAD_Sammelmappe_Lesefassung.md` | 3.26.1 | aus den Einzeldateien erzeugt (`npm run sop:lesefassung`), nicht von Hand bearbeiten; von der App nicht gelesen |
 | `archiv/SOP-LEAD_Sammelmappe_v2.0.1.md` | 2.0.1 vom 19.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v2.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe_v2.0.md`; SHA-256 `f2ebf614ea54cf977173d0026f2ee2e501467b53646fac2c25b5a089289a9b93`) |
 | `archiv/SOP-LEAD_Sammelmappe_v1.0.1.md` | 1.0.1 vom 17.10.2026 | am 21.10.2026 aus dem Ordner entfernt, unverändert im Git-Verlauf ([Stand `7f88cab`](https://github.com/pereirawolf/ki-lead/blob/7f88cabb4f5c6f3594608d75b710fa22cef46a83/profile/lead-beispiel/sop/archiv/SOP-LEAD_Sammelmappe_v1.0.1.md); bis 19.10.2026 `SOP-LEAD_Sammelmappe.md`; SHA-256 `6c4d27a42845758661ae285837585373f8122e5481e4017b61d929dddb4b0626`) |
 
 **Kennungen in älteren Einträgen:** Einträge bis Fassung 2.0.1 nennen die damaligen Nummern („SOP 08“, „N05“); die Zuordnung zu B01–B17 und C01–C17 steht in der Konkordanz der README. Historische Angaben in Meldungen und Review-Dokumenten werden nicht umgeschrieben.
+
+## [3.26.1] – 20.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_quellen_2026-W47.json` (Quellenprüfung KW 47, auf `befunde/eingang`, Commit `b3b3ef2`; umgesetzt auf dem Stand nach Fassung 3.26.0), QW-2026-W47-01 bis -07, vom Herausgeber am 20.11.2026 freigegeben; Entscheidungsfragen: QW-2026-W47-02 Variante A (umstellen), QW-2026-W47-03 ja (ergänzen), QW-2026-W47-05 Variante A (ersetzen). Dritte Stelle: nur Rechercheeinstiege und Quellenregister; Prüffragen, Regeln und Kodierung unverändert.
+
+### Geändert
+
+- **B04 2.2.1 (QW-2026-W47-02):** R1 verlinkt die BGR-Seite „Aktuelle Erdbeben“ des Erdbebendienstes des Bundes (Webdienst täglich aktualisiert) statt der früheren Seismologie-Seite; der offene Punkt zum Rechercheeinstieg BGR ist erledigt. Erledigungsnachweis: Abschnitt 2, R1; Abschnitt 5, Offene Punkte.
+- **C03 1.1.2 (QW-2026-W47-03):** R1 nennt zusätzlich den Beobachtungsdienst WESIS des BKG (Solarfluss, K-Index), ausdrücklich keine Warnung; der offene Punkt behält nur noch den Direktabruf der BKG-Themenseite. Erledigungsnachweis: Abschnitt 2, R1; Abschnitt 5, Offene Punkte.
+- **C10 1.3.2 (QW-2026-W47-04):** R1 verlinkt die BfArM-Seite „Lieferengpässe für Humanarzneimittel“ statt der Startseite. Erledigungsnachweis: Abschnitt 2, R1.
+- **B14 2.1.2, B16 2.1.3 (QW-2026-W47-05):** R1 verlinkt „Aktuelle Meldungen“ des BKA (Pressemitteilungen, Warnhinweise, Fahndungen) statt der Pressestelle. Erledigungsnachweis: Abschnitt 2, R1.
+- **Quellenregister (Stand 20.11.2026):** neue Einträge `BGR-ERDBEBEN`, `BKG-WESIS`, `BFARM-LIEFERENGPASS`, `BKA-MELDUNGEN`; S007, S025 und S044 mit `ersetzt_durch`; offene Schwerpunkte B04 und C10 erledigt; S006 und S010 vorübergehend nicht verfügbar laut BKG (QW-2026-W47-01); S003 wieder erreichbar (QW-2026-W47-06); S009 erreichbar, täglich aktualisiert (QW-2026-W47-07). Prüftiefe je Eintrag ehrlich angegeben (Webabruf ohne Prüfsumme bzw. Suchtreffer derselben amtlichen Domain); `quellen_geprueft_am` in den SOP-Köpfen unverändert.
+- **Teil A, Gültigkeitsstand:** Sammelmappe 3.26.1. Tabelle „Dateien in diesem Ordner“ und `README.md` auf 3.26.1. Lesefassung neu erzeugt.
 
 ## [3.26.0] – 20.11.2026
 

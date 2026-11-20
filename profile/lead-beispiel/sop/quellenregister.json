@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-quellenpruefung/1",
-  "stand": "2026-10-26",
+  "stand": "2026-11-20",
   "basis_commit": "e980a5520f905243fbf183c48920eb1af3399b11",
   "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung. Ergänzung 22.10.2026: Fachgrundlagen (Rechtsnormen) aus dem Arbeitspaket AP2; Prüfung über ein Webabrufwerkzeug ohne Prüfsumme (Feld prueftiefe). Ergänzung 26.10.2026: BSH- und DWD-Einstiege für B01, B02, B06 und C13 (S068, S073–S075; KP-2026-W44-24), Webabruf ohne Prüfsumme.",
   "bedeutung": "Technischer Abruf, Rechercheeignung, gezielter Inhaltsabgleich und aktueller Ereignisnachweis werden getrennt. Inhaltsabruf per Direkt-HTTP ergänzte Webabrufe mit häufigen Zugriffssperren. Keine Sperre wurde umgangen; nur öffentlich abrufbare Seiten. SHA-256 bezeichnet geladene Bytes, nicht eine amtliche Fassungsbeglaubigung.",
@@ -92,17 +92,17 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "http_status": 200,
-      "end_url": "https://hochwasserzentralen.de/",
+      "end_url": "https://www.hochwasserzentralen.de/",
       "content_type": "text/html",
       "sha256": "585f6575006b0be21a59e4f1d938cf8cc10409eeb86dfa26288c864d55e5882c",
       "bytes": 1234,
-      "titel": "LHP :: Derzeit offline",
-      "pruefdatum": "2026-10-21",
+      "titel": "Hochwasser :: Aktuelle Situation und Warnungen :: LHP",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Gemeinsamer Zugang zu Länder-Hochwasserinformationen; beim Abruf ausdrücklich nicht verfügbar.",
-      "status": "nichtverfuegbarkeitsseite",
-      "prueftiefe": "Nichtverfügbarkeit direkt bestätigt, keine Lagedaten",
-      "offene_nachpruefung": "Zuständigen Landesdienst direkt nutzen, konkreten Dienst organisationsspezifisch hinterlegen; Zeitpunkt dokumentieren.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Startseite ohne Verfügbarkeitshinweis, Lagetabelle beim Abruf ohne Zeilen",
+      "offene_nachpruefung": "Lage je Pegel mit Zeitstempel und Klassifizierung des Landes abrufen (Portal oder LHP-PublicAPI); bei Portalausfall Landeshochwasserzentralen direkt nutzen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Wartung/leer/JS-Hülle",
@@ -170,25 +170,24 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Waldbrandatlas als räumlicher Rechercheeinstieg; Layerdaten gesondert prüfen.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "nichtverfuegbarkeitsseite",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft",
+      "offene_nachpruefung": "Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen); Zugang nur für Behörden und Feuerwehren nach Prüfung des berechtigten Interesses. Bis zur Wiederherstellung EFFIS und Landesbehörden (B03 R2) nutzen; Verfügbarkeit vor Verwendung prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "erreichbar",
         "eignung": "passt nicht",
         "hinweis": "Die Seite beschreibt nur aktuelle Gefährdungsstufen, Brände, Wind- und Niederschlagsvorhersagen sowie Satellitenbilder. Historische Daten oder ein Mehrjahresvergleich werden nicht erwähnt. Die Anwendung selbst ist nur Behörden und Feuerwehren nach Zugangsprüfung zugänglich, ihr Inhalt ist daher nicht beurteilbar."
-      }
+      },
+      "titel": "Der digitale Waldbrandatlas"
     },
     {
       "id": "S007",
       "url": "https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html",
-      "fundstellen": [
-        "sop/teil-b/B04_erdbeben.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 400: Bad Request",
       "pruefdatum": "2026-10-21",
@@ -196,13 +195,30 @@
       "zweck_und_pruefgrenze": "Erdbebenfachinformationen; automatische Lösungen und Revisionen fallbezogen prüfen.",
       "status": "abruf_offen",
       "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "offene_nachpruefung": "Durch die Seite „Aktuelle Erdbeben“ des Erdbebendienstes des Bundes ersetzt (QW-2026-W47-02, Entscheidung des Herausgebers vom 20.11.2026); alte URL nicht mehr in den SOPs. Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
         "eignung": "nicht beurteilbar",
         "hinweis": "WebFetch lehnte die URL ab (nicht auf Allowlist). Die Suche auf bgr.bund.de fand die Seite nicht, sondern eine neue Struktur 'Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund', darunter 'Aktuelle Erdbeben & Ereignisse' (…/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html). Diese Seiten lieferten beim Abruf Fehler (CLIENT_ERROR/SERVER_ERROR) und sind daher unbestätigt. Ein Umzug der Seite ist möglich, aber nicht belegt."
-      }
+      },
+      "ersetzt_durch": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html"
+    },
+    {
+      "id": "BGR-ERDBEBEN",
+      "url": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html",
+      "fundstellen": [
+        "sop/teil-b/B04_erdbeben.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "Aktuelle Erdbeben & Ereignisse (BGR, Erdbebendienst des Bundes)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Seismische Ereignisse in Deutschland ab ML 2,0 aus GRSN, GERES und Gräfenberg; Webdienst einmal täglich aktualisiert, daher keine Echtzeitquelle für Erstlösungen.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Ereignis mit Stand, Lösung (automatisch oder revidiert) und Magnitudenart vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S008",
@@ -238,18 +254,19 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Modellierte Bodentrockenheit; kein unmittelbarer Trinkwasser-/Grundwassernachweis.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Beschreibung und Aktualisierungsangabe gelesen, Karten nicht geprüft",
+      "offene_nachpruefung": "Karte mit Datum, Bodenschicht (Ober-/Gesamtboden) und Dürreklasse abrufen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
         "eignung": "nicht beurteilbar",
         "hinweis": "Der erste Abruf scheiterte an der Allowlist, der zweite nach einem Suchtreffer an robots.txt (ROBOTS_DISALLOWED). Ich habe das nicht umgangen. Der Titel des Suchtreffers passt zur Fundstelle 'UFZ-Dürremonitor'."
-      }
+      },
+      "titel": "Dürremonitor Deutschland - Helmholtz-Zentrum für Umweltforschung UFZ"
     },
     {
       "id": "S010",
@@ -259,19 +276,20 @@
       ],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
-      "pruefdatum": "2026-10-21",
+      "pruefdatum": "2026-11-20",
       "im_basisbestand": true,
       "zweck_und_pruefgrenze": "Dürreatlas als Kombination von Geodaten; Layerstände nicht aus Katalogdatum ableiten.",
-      "status": "abruf_offen",
-      "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "status": "nichtverfuegbarkeitsseite",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Produktseite und Verfügbarkeitshinweis gelesen, Anwendung selbst nicht geprüft",
+      "offene_nachpruefung": "Atlanten laut BKG vorübergehend nicht verfügbar (technische und Sicherheitsmaßnahmen). Zur Einordnung bis dahin UFZ-Dürremonitor (B05 R5) nutzen; Verfügbarkeit vor Verwendung prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zusaetzlicher_abruf": "Produktseite über Webabruf gelesen; Katalog nennt Aktualitätsstand 06.2023, einzelne Layerstände nicht geprüft.",
       "zweitpruefung": {
         "status": "erreichbar",
         "eignung": "teilweise",
         "hinweis": "Produktseite einer interaktiven Kartenanwendung (Bodenfeuchte, Niederschlag, Wind, Wasserstände, Hitze). Der Zugang ist nur nach Prüfung für Bundes-, Landes- und Kommunalbehörden mit Login möglich, es gibt keine öffentlich einsehbaren Daten. Ob eine modellierte Bodentrockenheit enthalten ist, ist auf der Seite nicht konkret belegt."
-      }
+      },
+      "titel": "Der digitale Dürreatlas"
     },
     {
       "id": "S011",
@@ -632,10 +650,7 @@
     {
       "id": "S025",
       "url": "https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html",
-      "fundstellen": [
-        "sop/teil-b/B14_sicherheitslage.md",
-        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
       "pruefdatum": "2026-10-21",
@@ -643,14 +658,33 @@
       "zweck_und_pruefgrenze": "BKA-Pressestelle; konkreten öffentlichen Gefährdungshinweis der zuständigen Stelle ermitteln.",
       "status": "abruf_offen",
       "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "offene_nachpruefung": "In B14/R1 und B16/R1 durch „Aktuelle Meldungen“ des BKA ersetzt (QW-2026-W47-05, Entscheidung des Herausgebers vom 20.11.2026). Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
       "belegt_aktuelles_ereignis": false,
       "zusaetzlicher_abruf": "Amtlicher Suchindex bestätigt Funktion der Pressestelle; kein aktueller Gefährdungshinweis direkt geprüft.",
       "zweitpruefung": {
         "status": "Wartung/leer/JS-Hülle",
         "eignung": "nicht beurteilbar",
         "hinweis": "Beim Abruf kam nur eine Wartungsseite (auch für https://www.bka.de/DE/Presse/presse_node.html); das kann auch eine Sperre für automatisierte Abrufe sein. Laut Suchtreffer heißt die Seite 'BKA - Ihr Kontakt zur Pressestelle'. Sie ist also wahrscheinlich nur eine Kontaktseite und keine Liste der Pressemitteilungen. Für B14/B16 (behördlich bestätigte Fakten) wäre die Presse-Übersicht (…/DE/Presse/presse_node.html) vermutlich geeigneter, das ist aber nicht geprüft."
-      }
+      },
+      "ersetzt_durch": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html"
+    },
+    {
+      "id": "BKA-MELDUNGEN",
+      "url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html",
+      "fundstellen": [
+        "sop/teil-b/B14_sicherheitslage.md",
+        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "BKA - Aktuelle Meldungen",
+      "end_url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Übersicht des BKA zu Pressemitteilungen, Warnhinweisen und Fahndungen; zuständige Stelle und Bestätigungsgrad je Meldung gesondert belegen, keine eigene Gefährdungsbewertung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Gliederung gelesen, keine Einzelmeldung geprüft",
+      "offene_nachpruefung": "Einzelmeldung mit Datum, herausgebender Stelle und Geltungsraum vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S026",
@@ -1041,6 +1075,22 @@
       }
     },
     {
+      "id": "BKG-WESIS",
+      "url": "https://wesis.bkg.bund.de/",
+      "fundstellen": [
+        "sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "BKG space weather observation data access information (WESIS)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Beobachtungs- und Kurzfristvorhersagedaten des BKG (Solarfluss F10.7/F30, K-Index Wettzell, Ereignisliste); keine Fachwarnung und kein Nachweis einer Funktionsstörung.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Messwert oder Ereignis mit Zeitstempel (UTC) und Messort abrufen; Warnung bei zuständigem Fachdienst gesondert belegen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
       "id": "S041",
       "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/",
       "fundstellen": [
@@ -1112,9 +1162,7 @@
     {
       "id": "S044",
       "url": "https://www.bfarm.de/DE/",
-      "fundstellen": [
-        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
       "http_status": 200,
       "end_url": "https://www.bfarm.de/DE/Home/_node.html",
@@ -1127,7 +1175,7 @@
       "zweck_und_pruefgrenze": "BfArM-Einstieg; Produktabdeckung und lokale Verfügbarkeit bleiben gesondert zu belegen.",
       "status": "dokument_oder_einstieg_abgerufen",
       "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
-      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "offene_nachpruefung": "In C10/R1 durch die Lieferengpass-Seite des BfArM ersetzt (QW-2026-W47-04, 20.11.2026). Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
@@ -1135,7 +1183,24 @@
         "hinweis": "WebFetch lehnte die exakte URL /DE/ ab (Allowlist). Abgerufen wurde https://www.bfarm.de/ mit dem Titel 'BfArM - Startseite' (kanonisch /DE/Home/_node.html). Das ist eine generische Startseite ohne Datum. Für die Frage nach Produktgruppe und Versorgungskette ist die bestätigte Seite 'BfArM - Lieferengpässe' (Arzneimittel, Lieferengpassdatenbank) zielgenauer. Für Medizinprodukte gibt es den Bereich 'Meldungen und Maßnahmen' (Anzeige von Lieferunterbrechungen).",
         "nachfolger_url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
         "nachfolger_bestaetigt": true
-      }
+      },
+      "ersetzt_durch": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html"
+    },
+    {
+      "id": "BFARM-LIEFERENGPASS",
+      "url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
+      "fundstellen": [
+        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "Lieferengpässe für Humanarzneimittel (BfArM)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Einstieg zu Lieferengpass-Datenbank, Beirat nach § 52b Abs. 3b AMG und Maßnahmen des BfArM; gemeldete Engpässe sind weder Versorgungsmangel noch Nachweis örtlicher Nichtverfügbarkeit.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Produkt, Meldedatum und Stand in der Datenbank vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S045",
@@ -2276,8 +2341,6 @@
     "B02: konkrete Landes-Ausweichdienste und produktbezogene Datenprüfung.",
     "Nicht erreichbare BGR-, BKG-, UFZ-, FLI- und BKA-Einstiege vor Verwendung nachprüfen.",
     "JavaScript-Portale einzeln auf tatsächlich gelieferte Meldungs-/Messinhalte prüfen.",
-    "B04: BGR-Erdbebeneinstieg in beiden Prüfungen nicht abrufbar; möglicher Umzug in die Struktur „Erdbebendienst_Bund“ nicht bestätigt.",
-    "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen.",
-    "C10: BfArM-Startseite; zielgenauer wäre die Seite zu Lieferengpässen (in der Zweitprüfung bestätigt)."
+    "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen."
   ]
 }

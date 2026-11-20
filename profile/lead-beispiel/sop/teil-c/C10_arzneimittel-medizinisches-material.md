@@ -12,9 +12,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht"
 anschluss: "B11, C09; B12 nach dem Funktionsdach (A.1 Nr. 2); C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
-version: "1.3.1"
+version: "1.3.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – §§ 52b, 79 AMG am Normtext gelesen; produktbezogene Rechercheeinstiege vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -48,7 +48,7 @@ Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennung
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Produktgruppe, Leistung und Versorgungskette ist in welchem Raum betroffen, und welche Quelle deckt sie ab? | [BfArM](https://www.bfarm.de/DE/) (Lieferengpassinformationen zu Humanarzneimitteln); PEI für Impfstoffe und Blutprodukte; zuständige Landes- und Fachbehörden; jeweils Abdeckung und Datenstand prüfen | L/R | Erforderlich ist eine einschlägige Fach- oder Betreiberangabe, nicht zwingend ein bundesweiter Datenbankeintrag. Register sind produkt- und meldebezogen, kein Nachweis örtlicher Verfügbarkeit. Eine Sicherheits- oder Rückrufinformation belegt für sich keine Versorgungslücke. |
+| R1 | Welche Produktgruppe, Leistung und Versorgungskette ist in welchem Raum betroffen, und welche Quelle deckt sie ab? | [BfArM – Lieferengpässe für Humanarzneimittel](https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html); PEI für Impfstoffe und Blutprodukte; zuständige Landes- und Fachbehörden; jeweils Abdeckung und Datenstand prüfen | L/R | Erforderlich ist eine einschlägige Fach- oder Betreiberangabe, nicht zwingend ein bundesweiter Datenbankeintrag. Register sind produkt- und meldebezogen, kein Nachweis örtlicher Verfügbarkeit. Eine Sicherheits- oder Rückrufinformation belegt für sich keine Versorgungslücke. |
 | R2 | Was ist Lieferproblem, vor Ort fehlende Verfügbarkeit und tatsächliche Versorgungslücke, und welche amtliche Stufe ist festgestellt? | BfArM bzw. PEI; Bekanntmachungen im Bundesanzeiger; Landesbehörden; Krankenhausträger (B) | L/R; D2 | Gemeldeter Lieferengpass ≠ Versorgungsmangel nach § 79 Abs. 5 AMG ≠ ungedeckter Bedarf bei Patientinnen und Patienten; Stufe nach der Tabelle oben mit Stelle und Datum. |
 | R3 | Welche fachlich anerkannten und tatsächlich verfügbaren Alternativen bestehen? | Zuständige Fachbehörden | R/M | Nur fachlich belegt wiedergeben; Absatz „Nutzbarkeit und Alternativen“. |
 | R4 | Welche Einrichtungen oder Patientengruppen können ihren Bedarf nicht decken? | Lagemeldungen (A.3); Gesundheitsbehörden | R; D2 | Bedarfsdeckung nach A.9.1. |
