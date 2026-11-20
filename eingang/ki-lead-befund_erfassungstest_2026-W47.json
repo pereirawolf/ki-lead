@@ -1,0 +1,287 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "erfassungstest",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-20T20:05:00Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+  "pruefumfang": "Erfassungstest KW 47/2026 am Beispielprofil profile/lead-beispiel (Profil 2.1.1; SOP-LEAD 3.25.1, Kodierleitfaden 2.1.0, Arbeitsanweisung Erfassung 2.0.0, Schema LEAD-Meldung-v2). Referenzraum Bund, t0 jeweils 20.11.2026 20:45 (Europe/Berlin), Zeitmodus aktuelle Lage zu t0, Recherche über Websuche; Lagen vom Herausgeber am 20.11.2026 freigegeben. (1) Geflügelpest HPAI H5 Herbstwelle, B11 mit C08 (C14 geprüft), Quellen: https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/, https://www.fli.de/en/publications/risk-assessments/, https://www.openagrar.de/servlets/MCRFileNodeServlet/openagrar_derivate_00072561/FLI-Risikoeinschaetzung_HPAI_H5_2026-11-06.pdf, https://www.lgl.bayern.de/tiergesundheit/tierkrankheiten/virusinfektionen/gefluegelpest/et_gefluegelpest_in_bayern.htm, https://www.infranken.de/deutschland/vogelgrippe-breitet-sich-aus-fli-erhoeht-risikostufen-art-6409396, https://de.euronews.com/2026/11/09/vogelgrippe-breitet-sich-aus-fli-erhoht-risikostufen, https://www.volksstimme.de/panorama/geflugelpest-trifft-betrieb-mit-39-000-legehennen-4355411, https://www.gefluegelnews.de/article/geflugelpest-breitet-sich-weiter-aus-aktuelle-falle-im-uberblick, https://www.ecdc.europa.eu/sites/default/files/documents/avian-influenza-overview-june-august-2026.pdf; (2) Blindgänger Oranienburg 11.11.2026, Meldung im Nachlauf, B17 mit C06 und C16 (C13, C18 geprüft), Quellen: https://www.oranienburg.de/entschaerfung-november-2026, https://www.oranienburg.de/index.php?object=tx,2967.5&ModID=7&FID=2967.5924.1, https://www.volksstimme.de/panorama/mehr-als-6-000-menschen-von-bombenentscharfung-betroffen-4349756, https://www.volksstimme.de/panorama/weltkriegs-bombe-in-oranienburg-entscharfung-beginnt-4354384, https://www.volksstimme.de/panorama/oranienburg-und-der-dauereinsatz-wegen-weltkriegs-bomben-4299564; (3) Schwarmbeben Vogtland/Westböhmen ab 08.11.2026, B04 (C02 geprüft), Quellen: https://www.berliner-zeitung.de/article/vogtland-erdbebenserie-an-tschechischer-grenze-10579212, https://www.soester-anzeiger.de/deutschland-welt/magma-unter-dem-vogtland-forscher-erklaeren-erneute-erdbeben-zr-94582538.html, https://www.vulkane.net/blogmobil/vogtland-sehr-starkes-schwarmbeben-im-grenzgebiet/, https://erdbebennews.de/2026/11/live-ticker-erdbebenschwarm-im-vogtland/. Gelesen: anweisung-erfassung.md (vollständig), kodierleitfaden.md (Abschnitte 1–8), sop/A_Gemeinsame-Regeln.md (A.1–A.5, A.8, A.9), B04, B11, B17, C06, C08, C16 vollständig, C02, C13, C14 Abschnitte 1–3, evaluation/pruefsteine/README.md und pruefstein.schema.json, tests/evaluation/pruefsteine.test.ts, evaluation/plaene/2026-10-21-sop-abdeckung.json, Befundregister, Eingang. Meldungen mit Ajv (2020-12, Optionen wie tests/support/ajv.ts) gegen profile/lead-beispiel/meldung.schema.json geprüft: alle gültig; Referenzprüfung der App (referenzBefunde): ein Hinweis bei Lage 1 (Q2 verzeichnet, aber nicht mit Klammer zitiert). Offene Befunde: 1; Staugrenze nicht aktiv.",
+  "nicht_geprueft": [
+    "Offene Pull Requests: GitHub-API in dieser geplanten Aufgabe nicht freigegeben (403); über Remote-Branches eingegrenzt, außer befunde/eingang keine Befund-Branches.",
+    "FLI-Risikoeinschätzung vom 06.11.2026 (openagrar.de): Abruf an Sicherheitsabfrage gescheitert, nicht ausgewertet.",
+    "FLI-Tierseucheninformationssystem (TSIS) nicht abgefragt; Landesseiten Schleswig-Holstein zur Geflügelpest nicht abrufbar (robots.txt nicht lesbar).",
+    "Originalmitteilungen des LfULG und der BGR zum Schwarmbeben nicht gefunden.",
+    "npm test (Gesamtlauf) nicht ausgeführt; nur Ajv- und Referenzprüfung der drei Meldungen sowie Ajv-Prüfung der Begleitnotizen.",
+    "Kein KI-Lauf über die App-Pipeline (kein Budget); die Meldungen sind ohne App erstellt, App-Felder (meldung_id, entstehung) wurden im Lauf gesetzt."
+  ],
+  "befunde": [
+    {
+      "id": "ET-2026-W47-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "hoch",
+      "fundstellen": [
+        {
+          "datei": "evaluation/pruefsteine/README.md",
+          "stelle": "Abschnitt „Aufbau“ (Z. 11) und „Kennzeichnung“ (Z. 14–18)",
+          "ist": "`meldung.json`: die Meldung im Schema `LEAD-Meldung-v1` … `_status`: `Entwurf` … `meldende_stelle` beginnt mit „KI-LEAD Erfassungstest – keine amtliche Meldung“"
+        },
+        {
+          "datei": "tests/evaluation/pruefsteine.test.ts",
+          "stelle": "meldungsschema() und kennzeichnung() (Z. 16–25)",
+          "ist": "lies(\"tests/fixtures/lead-beispiel-v1/meldung.schema.json\") … if (m._status !== \"Entwurf\")"
+        },
+        {
+          "datei": "docs/LEAD-MELDUNG-V2.md",
+          "stelle": "Abschnitt 10 (Z. 210)",
+          "ist": "Prüfsteine (`evaluation/pruefsteine/`) bleiben nach ihrer README unverändert in v1"
+        }
+      ],
+      "beobachtung": "Das Regelwerk des Beispielprofils erzeugt seit Profil 2.0 (UP-2026-W45-06) Meldungen nach LEAD-Meldung-v2 (Arbeitsanweisung Erfassung 2.0.0, Teil A Gültigkeitsstand). Die Prüfstein-Infrastruktur kennt nur v1: Kennzeichnung über `_status`, `_entstehung`, `meldende_stelle` und `freigabe.erfassung/freigabe/versand`, Schemaprüfung gegen das eingefrorene v1-Schema. Eine nach dem gültigen Regelwerk erfasste Meldung kann deshalb weder gekennzeichnet noch abgelegt werden, ohne den Test zu verletzen; `schemaabweichung` ist nur für ältere Meldungen vorgesehen. Die drei Prüfsteine dieser Woche sind in v2 erfasst und v2-analog gekennzeichnet (`status` „entwurf“, `entstehung.verfahren` „KI-Entwurf“, `absender.stelle` mit Präfix, `freigabe` ohne Zeichnung). Auch der Auftrag der geplanten Aufgabe nennt noch die v1-Felder. Prüfweg: Ausführung pruefeRoh gegen tests/fixtures/lead-beispiel-v1/meldung.schema.json; Ergebnis: je Meldung 26 Fehler, Kennzeichnung nach kennzeichnung() nicht erfüllbar.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "README und Test nach `schema` der Meldung unterscheiden: v1 wie bisher (Kennzeichnung v1, eingefrorenes v1-Schema); v2 mit Kennzeichnung `status` = „entwurf“, `entstehung.verfahren` = „KI-Entwurf“, `absender.stelle` beginnt mit „KI-LEAD Erfassungstest – keine amtliche Meldung“, keine `freigabe.erfasst.name`/`freigabe.freigegeben.name`, Prüfung gegen profile/lead-beispiel/meldung.schema.json. Abnahme: Test besteht mit den drei Prüfsteinen 2026-W47 und lehnt v2-Abwandlungen ohne Kennzeichnung ab.",
+        "neuer_text": "README, Abschnitt „Aufbau“, erster Punkt: „`meldung.json`: die Meldung im Schema des Regelwerkstands (`LEAD-Meldung-v1` bis KW 46/2026, `LEAD-Meldung-v2` ab KW 47/2026), so wie sie im Lauf entstanden ist; sie wird nachträglich nicht korrigiert“. Abschnitt „Kennzeichnung“ zusätzlich: „bei `LEAD-Meldung-v2`: `status`: `entwurf`; `entstehung.verfahren`: `KI-Entwurf`; `absender.stelle` beginnt mit „KI-LEAD Erfassungstest – keine amtliche Meldung“; `freigabe` ohne Namen“."
+      },
+      "folgeaenderungen": [
+        "tests/evaluation/pruefsteine.test.ts (kennzeichnung und meldungsschema nach `schema`)",
+        "docs/LEAD-MELDUNG-V2.md Abschnitt 10",
+        "docs/TESTZUORDNUNG.md",
+        "CHANGELOG.md",
+        "Auftrag der geplanten Aufgabe „Erfassungstest“ (Kennzeichnungsfelder)"
+      ],
+      "entscheidungsfrage": "(A) Neue Prüfsteine ab KW 47 in v2, bestehende bleiben v1; Test und README unterscheiden nach `schema` (Empfehlung: Prüfsteine sollen das gültige Regelwerk abbilden). (B) Prüfsteine weiterhin in v1: Erfassung müsste dann nach einem nicht mehr gültigen Format erfolgen oder rückwärts überführt werden; dafür gibt es kein Verfahren.",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/evaluation/pruefsteine.test.ts: je Prüfstein Kennzeichnung und Schema nach `schema`-Kennung; Abwandlungen einer v2-Meldung (status „freigegeben“, verfahren „manuell“, Stelle ohne Präfix, Name in freigabe.freigegeben) werden abgelehnt.",
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 als Variante A: neue Prüfsteine ab KW 47 in LEAD-Meldung-v2, bestehende bleiben v1; README und Test unterscheiden nach `schema`; Auftrag der geplanten Aufgabe auf v2-Felder umstellen."
+      }
+    },
+    {
+      "id": "ET-2026-W47-02",
+      "kategorie": "abdeckung",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 7, Kurzbeispiel „Abkochgebot vor t0 aufgehoben“ (Z. 277)",
+          "ist": "D1, D2 offen; D5 = 0; D6 nach Kopplungen zu t0; D8 nach dem Meldezeitraum"
+        }
+      ],
+      "beobachtung": "Erste Nachprüfung der Regel aus ET-2026-W43-01 am Prüfstein 2026-W47_oranienburg-blindgaenger (Meldung neun Tage nach Abschluss): Das Kurzbeispiel regelt fünf Achsen, nicht aber D3, D4 und D7. Im Prüfstein wurden D3 (= 1) und D7 (= 0) auf die abgeschlossene Maßnahme bezogen, D4 dagegen nach dem Ist-Zustand zu t0 offen gelassen; beide Lesarten sind mit Grundregel 1 vereinbar, sie führen aber zu ungleicher Behandlung der Achsen in derselben Meldung. Für Lagen im Nachlauf fehlt damit eine einheitliche Regel.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Kurzbeispiel um D3, D4 und D7 ergänzen, ohne neue Grundregel. Abnahme: Kurzbeispiel nennt alle acht Achsen.",
+        "neuer_text": "| Abkochgebot vor t0 aufgehoben, Meldung im Nachlauf | D1, D2 offen; D3 nach der Funktion, die zu t0 Abschluss oder Nachsorge trägt, sonst offen; D4 offen; D5 = 0; D6 nach Kopplungen zu t0; D7 nach der Informationslage zum Abschluss; D8 nach dem Meldezeitraum | Kodiert wird der Ist-Zustand zu t0 (Grundregel 1); Umfang, Dauer und eingesetzte Hilfe stehen in „Lage & Ereignis“ und in `bewertung.abschluss` („Abschluss im Lagebild“) |"
+      },
+      "folgeaenderungen": [
+        "kodierleitfaden.md Fassung 2.2.0 und Änderungsprotokoll",
+        "Gültigkeitsstand in Teil A",
+        "profile/lead-beispiel/CHANGELOG.md, Profilversion"
+      ],
+      "entscheidungsfrage": "(A) D3, D4 und D7 nach dem Ist-Zustand zu t0 wie vorgeschlagen (D4 offen, eingesetzte Hilfe nur im Text). (B) D3, D4 und D7 nach der abgeschlossenen Maßnahme kodieren und als „bezogen auf die beendete Maßnahme“ kennzeichnen; das wiche von Grundregel 1 ab.",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 als Variante A: Ist-Zustand zu t0 (D3 nach Funktion von Abschluss oder Nachsorge, sonst offen; D4 offen; D7 nach Informationslage zum Abschluss)."
+      }
+    },
+    {
+      "id": "ET-2026-W47-03",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/kodierleitfaden.md",
+          "stelle": "Abschnitt 3, D8 Dynamik (Z. 133–139)",
+          "ist": "Bewertet werden beobachtete Änderungen, nicht die Zahl eingehender Meldungen und nicht latente Folgerisiken."
+        }
+      ],
+      "beobachtung": "Beim Prüfstein Oranienburg waren Beginn (08:00) und Aufhebung (14:30) des Sperrkreises vorab angekündigt und verliefen nach Plan. Ob solche planmäßigen Schritte einer Maßnahme „Umschläge“ im Sinne von D8 sind, regeln weder D8 noch die Kurzbeispiele. Der Entwurf setzte D8 = 2 und hielt die Zweifel in der Begründung fest; D8 = 0 wäre ebenso vertretbar. Bei wiederkehrenden geplanten Räumungen (Kampfmittel, angekündigte Abschaltungen) würde D8 sonst regelmäßig steigen, ohne dass sich die Lage unvorhergesehen ändert.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ergaenzen",
+        "beschreibung": "Abgrenzung in D8 nach „… nicht latente Folgerisiken.“ einfügen. Abnahme: D8-Regel enthält die Abgrenzung nach Lagezustand und die Obergrenze für angekündigte Wechsel.",
+        "neuer_text": "Ein Umschlag ist ein belegter Wechsel des Lagezustands im Referenzraum (Gefahr, Betroffenheit oder Versorgung), auch wenn er angekündigt war, etwa Räumung, Ausfall oder Wiederversorgung. Schritte des Vorgehens ohne solchen Wechsel zählen nicht. Die Begründung nennt, ob der Wechsel angekündigt war; angekündigte und so vollzogene Wechsel tragen allein keine Stufe ab 4."
+      },
+      "folgeaenderungen": [
+        "kodierleitfaden.md Fassung 2.2.0 und Änderungsprotokoll",
+        "Gültigkeitsstand in Teil A",
+        "profile/lead-beispiel/CHANGELOG.md"
+      ],
+      "entscheidungsfrage": "(A) Planmäßige Schritte zählen nicht als Umschläge (Vorschlag). (B) Jeder belegte Zustandswechsel zählt, auch planmäßig; dann ist das als Kurzbeispiel festzuhalten.",
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angepasst",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 in angepasster Fassung: Maßstab ist der Wechsel des Lagezustands (Gefahr, Betroffenheit, Versorgung), nicht die Planmäßigkeit; planmäßige Störungsbeseitigung zählt. Ursprünglicher Vorschlag (planmäßige Schritte sind keine Umschläge) verworfen. Zusatz: angekündigte und so vollzogene Wechsel tragen allein keine Stufe ab 4."
+      }
+    },
+    {
+      "id": "ET-2026-W47-04",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+          "stelle": "C08/R1, Spalte Hinweis/Stolperstelle (Z. 38)",
+          "ist": "Verdacht und amtliche Feststellung trennen."
+        }
+      ],
+      "beobachtung": "Beim Prüfstein Geflügelpest trug die Hochstufung der FLI-Risikoeinschätzung (Stufen gering/moderat/hoch je Eintragsweg) Kernaussage, Tendenz und D8. C08 enthält keinen Hinweis, wie diese Fachbewertung einzuordnen ist; B11/R3 regelt das für die Risikobewertung des RKI, gilt aber nicht für die Tierseuchenbewertung. Das Originaldokument war nicht abrufbar, die Stufen stammten aus Agenturberichten; die Stolperstelle „Stufe hoch“ ≠ Beurteilung oder Radarwert ist nicht benannt.",
+      "belege": [
+        {
+          "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/",
+          "herausgeber": "Friedrich-Loeffler-Institut",
+          "titel": "Aviäre Influenza (AI) / Geflügelpest",
+          "fassung_oder_stand": "Risikoeinschätzung 06.11.2026",
+          "abgerufen_utc": "2026-11-20T19:35:00Z",
+          "pruefweg": "direktabruf",
+          "auszug": "„mit einem weiteren Anstieg der HPAIV“ (Erwartung für November 2026; Seite nennt keine Risikostufen)"
+        }
+      ],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Hinweis in C08/R1 um die Einordnung der FLI-Risikoeinschätzung ergänzen. Abnahme: Hinweis in C08/R1 vorhanden, Lesefassung neu erzeugt.",
+        "neuer_text": "Verdacht und amtliche Feststellung trennen. Die Risikoeinschätzung des FLI (Stufen je Eintragsweg) ist eine Fachbewertung mit Datum, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand übernehmen."
+      },
+      "folgeaenderungen": [
+        "C08 version 1.1.1 und stand",
+        "sop/CHANGELOG.md",
+        "SOP-LEAD_Sammelmappe_Lesefassung.md (npm run sop:lesefassung)",
+        "sop/README.md Übersicht"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 wie vorgeschlagen."
+      }
+    },
+    {
+      "id": "ET-2026-W47-05",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-c/C08_tierseuchen-zoonotische-expositionslagen.md",
+          "stelle": "C08/R4, Spalte Hinweis/Stolperstelle (Z. 41)",
+          "ist": "Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4."
+        }
+      ],
+      "beobachtung": "Die für Behördenleitungen entscheidende Frage im Prüfstein Geflügelpest war, ob Tötungs-, Beseitigungs- und Personalkapazitäten für zeitgleiche Großausbrüche vorbereitet sind, nachdem das FLI das Eintragsrisiko hochgestuft hat. C08 fragt nur nach tatsächlich gebundenen Kapazitäten (R4); die frühe Befassung nach A.1 Nr. 1 bei fachbehördlich erwarteter Zunahme ist in C08 nicht als Prüfhinweis verankert. Der Entwurf formulierte die Prüffrage daher ohne SOP-Anker.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Hinweis in C08/R4 verdichtet um die Vorbereitungsfrage ergänzen. Abnahme: Hinweis in C08/R4 vorhanden, Lesefassung neu erzeugt.",
+        "neuer_text": "Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. Erwartet die Fachbehörde eine Zunahme, Reserven für zeitgleiche Ausbrüche als Vorbereitungsfrage prüfen (A.1 Nr. 1)."
+      },
+      "folgeaenderungen": [
+        "C08 version 1.1.1 und stand",
+        "sop/CHANGELOG.md",
+        "SOP-LEAD_Sammelmappe_Lesefassung.md",
+        "sop/README.md Übersicht"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 wie vorgeschlagen."
+      }
+    },
+    {
+      "id": "ET-2026-W47-06",
+      "kategorie": "konsistenz",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "Abschnitt 1, „Umfasst / grenzt ab von“ (Z. 25)",
+          "ist": "Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen)"
+        }
+      ],
+      "beobachtung": "A.1 Nr. 6 nennt als Deutschlandbezug zuerst die unmittelbare grenzüberschreitende Wirkung; die Klammer in B04 Abschnitt 1 lässt sie aus. Beim Prüfstein Vogtland lag das Epizentrum in Tschechien, die Erschütterungen wirkten in Sachsen; nach der Klammer wäre das kein Auslandsbeben mit Deutschlandbezug.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Klammer an A.1 Nr. 6 angleichen. Abnahme: Wortlaut in B04 Abschnitt 1 geändert, Lesefassung neu erzeugt.",
+        "neuer_text": "Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (unmittelbare grenzüberschreitende Erschütterungs- oder Schadenswirkung, angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen)"
+      },
+      "folgeaenderungen": [
+        "B04 version 2.1.2 und stand",
+        "sop/CHANGELOG.md",
+        "SOP-LEAD_Sammelmappe_Lesefassung.md",
+        "sop/README.md Übersicht"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 wie vorgeschlagen."
+      }
+    },
+    {
+      "id": "ET-2026-W47-07",
+      "kategorie": "abdeckung",
+      "art": "formal",
+      "dringlichkeit": "niedrig",
+      "fundstellen": [
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "B04/R1, Spalte Hinweis/Stolperstelle (Z. 33)",
+          "ist": "Automatische Erstlösungen werden revidiert – Stand angeben."
+        },
+        {
+          "datei": "profile/lead-beispiel/sop/teil-b/B04_erdbeben.md",
+          "stelle": "B04/R5, Spalte Hinweis/Stolperstelle (Z. 37)",
+          "ist": "Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage."
+        }
+      ],
+      "beobachtung": "Beim Prüfstein Vogtland wichen die Magnituden je Netz ab (EMSC 2,7, tschechisches Netz WEBNET Lokalmagnitude 2,89, LfULG 2,7); B04/R1 sagt nicht, wie verschiedene Netze und Magnitudentypen nebeneinander zu führen sind. Das Schwarmbeben hatte kein Hauptbeben, B04/R5 fragt aber nur nach Nachbeben; eine Fachaussage zum Schwarmverlauf ist nicht vorgesehen, und das Abklingen eines Schwarms belegt kein Ende.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Hinweise in B04/R1 und B04/R5 ergänzen (gemeinsame Ursache: Schwarmbeben im Grenzraum). Abnahme: beide Hinweise geändert, Lesefassung neu erzeugt.",
+        "neuer_text": "R1: „Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln.“ R5: „Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. Bei Schwarmbeben Fachaussage zum Schwarmverlauf; Abklingen belegt kein Ende.“"
+      },
+      "folgeaenderungen": [
+        "B04 version 2.1.2 und stand",
+        "sop/CHANGELOG.md",
+        "SOP-LEAD_Sammelmappe_Lesefassung.md",
+        "sop/README.md Übersicht"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "mittel",
+      "automatisierbar": null,
+      "pruefung": {
+        "status": "angenommen",
+        "anmerkung": "Freigegeben vom Herausgeber am 20.11.2026 wie vorgeschlagen."
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Ereignisartenwahl: B17 mit C06 (Zuordnung „Sonstiges“) und B11 mit C08 (Tierseuche ohne Humanerkrankung) eindeutig geregelt.",
+    "D2-Zählregeln (gemeldete Einwohner ≠ Evakuierte) in C06/R2, C16/R1 und A.3 widerspruchsfrei anwendbar.",
+    "Kurzbeispiel Nachlauf (ET-2026-W43-01) für D1, D2, D5, D6 ohne Auslegungsproblem angewandt.",
+    "Wirkungskette und KRITIS-Prüfung (D6) in allen drei Lagen ohne Konflikt anwendbar.",
+    "Weitere Beobachtung: D7 bei reiner OSINT-Erfassung – die Informationslage der befassten Stellen ist öffentlich nicht einsehbar; im Prüfstein Geflügelpest stützt sich D7 = 1 auf fehlende öffentliche Gesamtzahlen, die Grenze zur unzulässigen eigenen Recherchegrenze (Kodierleitfaden D7) ist unscharf.",
+    "Weitere Beobachtung: negative Relevanzprüfung – B04 Abschnitt 1 nennt das verspürte Beben ohne Schaden als „Beispiel dagegen“, C06 beschränkt die Lagebild-Relevanz; Arbeitsanweisung und Schema kennen nur Meldung oder Fehlanzeige, kein Ergebnis „geprüft, nicht aufzunehmen“ mit Begründung.",
+    "Weitere Beobachtung: D1 bei verstreuten Einzelereignissen in mehreren Ländern (Geflügelpest-Ausbrüche) ist im Kodierleitfaden nicht geregelt; im Prüfstein über C08 Abschnitt 3 offen gelassen.",
+    "Weitere Beobachtung: C08/R3 – unterschiedliche Aufstallungsschwellen benachbarter Kreise und Länder (u. a. 49, 50, 5.000 Tiere) sind eine mögliche Abstimmungsfrage, C08 benennt sie nicht.",
+    "Weitere Beobachtung: Zeitstrahl-Typ für eine fachliche Risikoeinschätzung (hier FLI) unklar – „Warnung“ oder „Wendepunkt“; im Prüfstein beide verwendet.",
+    "Weitere Beobachtung: Tendenz bei einer zu t0 abgeschlossenen Lage – der Prüfstein Oranienburg setzt „Entspannung“ rückblickend (11.–20.11.), obwohl die Tendenz die Entwicklung ab t0 beschreibt (Kodierleitfaden Abschnitt 4); das Kurzbeispiel zum Nachlauf nennt die Tendenz nicht.",
+    "Weitere Beobachtung: FLI-Risikoeinschätzungen liegen als PDF auf openagrar.de hinter einer automatischen Sicherheitsabfrage; für die Erfassung ist das Originaldokument dann nicht auswertbar (Quellenregister, C08/R1 prüfen)."
+  ]
+}
