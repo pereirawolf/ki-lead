@@ -59,8 +59,8 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.25.1 | 16.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
-| Kodierleitfaden LEAD (Beispielfassung) | 2.1.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.26.0 | 20.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| Kodierleitfaden LEAD (Beispielfassung) | 2.2.0 | 20.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 2.1.1 | 16.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 2.0.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 3.1.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -519,9 +519,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.1.1"
+version: "2.2.0"
 status: "Beispielfassung"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -532,7 +532,7 @@ bisherige_ids: ["sop-04"]
 
 ### 1. Anwendungsbereich und Befassungsanlässe
 
-**Umfasst / grenzt ab von:** Beben mit Schadensmeldungen in Deutschland, deutlich verspürte Beben mit daraus folgendem Prüf- oder Abstimmungsbedarf sowie Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen). Ein verspürtes Beben eröffnet die Prüfung; Wahrnehmbarkeit allein begründet noch keine Aufnahme. Nichtseismische Massenbewegungen, Erdfälle und Einstürze: Baustein C02; geologische Folgegefahren eines Bebens mit C02 verknüpfen, ohne beide Recherchelogiken zu verschmelzen. Beispiel dafür: Beben mit Gebäudeschäden in einer Region. Beispiel dagegen: verspürtes Beben ohne Schäden und ohne Prüfbedarf; Auslandsbeben ohne Deutschlandbezug.
+**Umfasst / grenzt ab von:** Beben mit Schadensmeldungen in Deutschland, deutlich verspürte Beben mit daraus folgendem Prüf- oder Abstimmungsbedarf sowie Auslandsbeben mit Deutschlandbezug nach A.1 Nr. 6 (unmittelbare grenzüberschreitende Erschütterungs- oder Schadenswirkung, angefragte oder geleistete deutsche Hilfe, betroffene Deutsche, berührte Liefer- oder Verkehrsbeziehungen). Ein verspürtes Beben eröffnet die Prüfung; Wahrnehmbarkeit allein begründet noch keine Aufnahme. Nichtseismische Massenbewegungen, Erdfälle und Einstürze: Baustein C02; geologische Folgegefahren eines Bebens mit C02 verknüpfen, ohne beide Recherchelogiken zu verschmelzen. Beispiel dafür: Beben mit Gebäudeschäden in einer Region. Beispiel dagegen: verspürtes Beben ohne Schäden und ohne Prüfbedarf; Auslandsbeben ohne Deutschlandbezug.
 
 **Befassungsanlässe:** Erdbebenmeldung BGR/Landeserdbebendienst · Schadensmeldung eines Landes · internationales Hilfeersuchen · Monitoring: Erdbebenmeldungen der BGR und der Landeserdbebendienste.
 
@@ -540,11 +540,11 @@ bisherige_ids: ["sop-04"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. |
+| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
 | R2 | Wo bestehen Erschütterungs- und Schadenswirkungen? | Lagemeldungen (A.3); Bauaufsicht | L/R; D1 | Verspürt ≠ Schaden; Magnitude beschreibt keinen örtlichen Schaden; Erstmeldungen unvollständig. |
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
-| R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. |
+| R5 | Welche Nachbebeninformationen liegen vor? | BGR/GFZ-Fachauskunft, EMSC | R; D8 | Nachbebenwahrscheinlichkeit als Fachaussage übernehmen, keine eigene Vorhersage. Bei Schwarmbeben Fachaussage zum Schwarmverlauf; Abklingen belegt kein Ende. |
 | R6 | Ist deutsche Hilfe bei Auslandsbeben angefragt oder eingesetzt? | GMLZ, Auswärtiges Amt, THW, EU-Katastrophenschutzverfahren | M | Deutsche Auswirkungen, Bindung deutscher Fähigkeiten (A.7.4) und internationale Hilfe als getrennte Gegenstände behandeln (A.1 Nr. 6); deutsche Hilfe ins Ausland ergibt keinen D4-Wert (Abschnitt 3). |
 
 ### 3. Auswertung: Prüfpunkte
@@ -2234,9 +2234,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„Gesundheitliche Lage / Epidemie“ mit ausdrücklich benanntem Tiergesundheits- bzw. Zoonosebezug, auch ohne Humanerkrankung; „KRITIS-Ausfall“ nur bei belegtem eigenständigem Funktionsausfall"
 anschluss: "B11; C07 bei humaner Infektionslage, C09/C10 bei medizinischen Folgen, C13 Transport, C14 Lebensmittelversorgung, C15 bei Sanitär- oder Entsorgungsfolgen"
 zweck: "Getrennte Erfassung von veterinärfachlicher Lage, humaner Exposition, Kapazitätsbindung und Versorgungsfolgen."
-version: "1.1.0"
+version: "1.2.0"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "21.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N10"
@@ -2257,10 +2257,10 @@ bisherige_ids: ["baustein-n10"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. |
+| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. Die Risikoeinschätzung des FLI (Stufen je Eintragsweg) ist eine Fachbewertung mit Datum, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand übernehmen. |
 | R2 | Welche humane Exposition oder Infektion ist fachlich bewertet? | [FLI: Aviäre Influenza](https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/); RKI; Gesundheitsbehörden | R | Zoonoserisiko nach Erreger und Exposition fachlich prüfen (Absatz „Humaner Prüfpfad“); arbeitsbezogene Schutzbedarfe gesondert. |
 | R3 | Welche Veterinärmaßnahmen und Räume sind angeordnet? | Veterinärbehörden; Allgemeinverfügungen | M; D1 | Restriktionszone ≠ Ausbruchsgebiet. |
-| R4 | Welche Kapazitäten für Untersuchung, Tierkörperbeseitigung, Logistik oder Hilfe sind tatsächlich gebunden? | Lagemeldungen (A.3) | M; D4 | Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. |
+| R4 | Welche Kapazitäten für Untersuchung, Tierkörperbeseitigung, Logistik oder Hilfe sind tatsächlich gebunden? | Lagemeldungen (A.3) | M; D4 | Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. Erwartet die Fachbehörde eine Zunahme, Reserven für zeitgleiche Ausbrüche als Vorbereitungsfrage prüfen (A.1 Nr. 1). |
 | R5 | Welche nachgewiesenen Auswirkungen auf Ernährung oder andere kritische Funktionen bestehen? | Lagemeldungen (A.3); Betreibermeldungen (A.3) | R/I; D6 | Wirtschaftliche Belastung ≠ Versorgungsausfall; Lebensmittelversorgung nach C14. |
 | R6 | Was ist Voraussetzung für die Aufhebung der Maßnahmen und die Entlastung gebundener Fähigkeiten? | Veterinärbehörden | M; D5 | Zielzustand benennen; Voraussetzungen sind noch keine Prognose. |
 

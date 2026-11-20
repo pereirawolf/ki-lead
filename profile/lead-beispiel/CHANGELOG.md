@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.2.0 – 20.11.2026
+
+Grundlage: Erfassungstest KW 47/2026 (Befunddatei `ki-lead-befund_erfassungstest_2026-W47.json`, Befunde ET-2026-W47-01 bis -07), vom Herausgeber am 20.11.2026 entschieden; ET-2026-W47-03 in angepasster Fassung (Maßstab ist der Wechsel des Lagezustands, nicht die Planmäßigkeit). Zweite Stelle: geänderte Regeln; bestehende Meldungen bleiben gültig und werden nicht umkodiert.
+
+- **Kodierleitfaden 2.2.0:** Abschnitt 3, D8: „Umschlag“ als belegter Wechsel des Lagezustands im Referenzraum (Gefahr, Betroffenheit oder Versorgung), auch angekündigt oder planmäßig; Schritte des Vorgehens ohne solchen Wechsel zählen nicht; angekündigte und so vollzogene Wechsel tragen allein keine Stufe ab 4 (ET-2026-W47-03). Abschnitt 7: Kurzbeispiel Nachlauf um D3, D4 und D7 ergänzt (ET-2026-W47-02, Variante A).
+- **SOP-Sammelmappe 3.26.0:** B04 2.2.0 (ET-2026-W47-06, -07), C08 1.2.0 (ET-2026-W47-04, -05), Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- **Prüfvermerk nach A.10.2:** Teil A ändert nur den Gültigkeitsstand. Erfassung (2.0.0), Verdichtung (3.1.0) und Kurzfassung (2.5.0) auf Grundlage von Kodierleitfaden 2.2.0 geprüft, kein Anpassungsbedarf (sie verweisen für Achsenregeln und Kurzbeispiele auf den Kodierleitfaden).
+- **Prüfsteine:** Ab KW 47/2026 werden Prüfsteine im gültigen Schema `LEAD-Meldung-v2` erfasst und gekennzeichnet (ET-2026-W47-01; `evaluation/pruefsteine/README.md`); drei Prüfsteine `2026-W47_*` aufgenommen.
+- Schema, Darstellungsdatei (Stufentexte unverändert), Kontakte, Quellenregister, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 2.1.1 – 16.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 16.11.2026: Zeitangaben werden als Wanduhrzeit eingegeben und gelesen, den UTC-Versatz ergänzt die App (App 0.9.5, Grunddesign 1.12, LD-T04). Dritte Stelle: Hinweistexte ohne fachliche Wirkung; Schema und Meldungen unverändert.
