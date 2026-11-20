@@ -147,7 +147,13 @@ describe("Prüfsteine", () => {
       ["Präfix nicht am Anfang", (m) => (m.absender.stelle = `Lagezentrum – ${STELLE}`)],
       ["erfasst mit Namen", (m) => (m.freigabe.erfasst = { name: "Max Muster" })],
       ["freigegeben mit Namen", (m) => (m.freigabe.freigegeben = { name: "Max Muster", zeitpunkt: "2026-11-20" })],
-      ["v1-Kennzeichnung in v2", (m) => { m.status = "freigegeben"; m._status = "Entwurf"; }],
+      [
+        "v1-Kennzeichnung in v2",
+        (m) => {
+          m.status = "freigegeben";
+          m._status = "Entwurf";
+        },
+      ],
     ];
     for (const [name, aendern] of falsch) {
       const m = meldungV2();
