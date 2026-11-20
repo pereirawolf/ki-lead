@@ -187,9 +187,7 @@
     {
       "id": "S007",
       "url": "https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html",
-      "fundstellen": [
-        "sop/teil-b/B04_erdbeben.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:15:55+00:00",
       "fehler": "HTTP Error 400: Bad Request",
       "pruefdatum": "2026-10-21",
@@ -197,13 +195,30 @@
       "zweck_und_pruefgrenze": "Erdbebenfachinformationen; automatische Lösungen und Revisionen fallbezogen prüfen.",
       "status": "abruf_offen",
       "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "offene_nachpruefung": "Durch die Seite „Aktuelle Erdbeben“ des Erdbebendienstes des Bundes ersetzt (QW-2026-W47-02, Entscheidung des Herausgebers vom 20.11.2026); alte URL nicht mehr in den SOPs. Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
         "eignung": "nicht beurteilbar",
         "hinweis": "WebFetch lehnte die URL ab (nicht auf Allowlist). Die Suche auf bgr.bund.de fand die Seite nicht, sondern eine neue Struktur 'Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund', darunter 'Aktuelle Erdbeben & Ereignisse' (…/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html). Diese Seiten lieferten beim Abruf Fehler (CLIENT_ERROR/SERVER_ERROR) und sind daher unbestätigt. Ein Umzug der Seite ist möglich, aber nicht belegt."
-      }
+      },
+      "ersetzt_durch": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html"
+    },
+    {
+      "id": "BGR-ERDBEBEN",
+      "url": "https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html",
+      "fundstellen": [
+        "sop/teil-b/B04_erdbeben.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "Aktuelle Erdbeben & Ereignisse (BGR, Erdbebendienst des Bundes)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Seismische Ereignisse in Deutschland ab ML 2,0 aus GRSN, GERES und Gräfenberg; Webdienst einmal täglich aktualisiert, daher keine Echtzeitquelle für Erstlösungen.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Ereignis mit Stand, Lösung (automatisch oder revidiert) und Magnitudenart vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S008",
@@ -2278,7 +2293,6 @@
     "B02: konkrete Landes-Ausweichdienste und produktbezogene Datenprüfung.",
     "Nicht erreichbare BGR-, BKG-, UFZ-, FLI- und BKA-Einstiege vor Verwendung nachprüfen.",
     "JavaScript-Portale einzeln auf tatsächlich gelieferte Meldungs-/Messinhalte prüfen.",
-    "B04: BGR-Erdbebeneinstieg in beiden Prüfungen nicht abrufbar; möglicher Umzug in die Struktur „Erdbebendienst_Bund“ nicht bestätigt.",
     "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen.",
     "C10: BfArM-Startseite; zielgenauer wäre die Seite zu Lieferengpässen (in der Zweitprüfung bestätigt)."
   ]
