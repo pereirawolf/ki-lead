@@ -1145,9 +1145,7 @@
     {
       "id": "S044",
       "url": "https://www.bfarm.de/DE/",
-      "fundstellen": [
-        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:16:13+00:00",
       "http_status": 200,
       "end_url": "https://www.bfarm.de/DE/Home/_node.html",
@@ -1160,7 +1158,7 @@
       "zweck_und_pruefgrenze": "BfArM-Einstieg; Produktabdeckung und lokale Verfügbarkeit bleiben gesondert zu belegen.",
       "status": "dokument_oder_einstieg_abgerufen",
       "prueftiefe": "Dokumentidentität bzw. Titel/Funktion abgeglichen; keine vollständige fachliche Inhalts- oder Rechtsprüfung",
-      "offene_nachpruefung": "Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
+      "offene_nachpruefung": "In C10/R1 durch die Lieferengpass-Seite des BfArM ersetzt (QW-2026-W47-04, 20.11.2026). Konkretes Produkt, Normfassung oder relevante Passagen und ihre Anwendbarkeit vor Einsatz prüfen.",
       "belegt_aktuelles_ereignis": false,
       "zweitpruefung": {
         "status": "Abruf verweigert",
@@ -1168,7 +1166,24 @@
         "hinweis": "WebFetch lehnte die exakte URL /DE/ ab (Allowlist). Abgerufen wurde https://www.bfarm.de/ mit dem Titel 'BfArM - Startseite' (kanonisch /DE/Home/_node.html). Das ist eine generische Startseite ohne Datum. Für die Frage nach Produktgruppe und Versorgungskette ist die bestätigte Seite 'BfArM - Lieferengpässe' (Arzneimittel, Lieferengpassdatenbank) zielgenauer. Für Medizinprodukte gibt es den Bereich 'Meldungen und Maßnahmen' (Anzeige von Lieferunterbrechungen).",
         "nachfolger_url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
         "nachfolger_bestaetigt": true
-      }
+      },
+      "ersetzt_durch": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html"
+    },
+    {
+      "id": "BFARM-LIEFERENGPASS",
+      "url": "https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html",
+      "fundstellen": [
+        "sop/teil-c/C10_arzneimittel-medizinisches-material.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "Lieferengpässe für Humanarzneimittel (BfArM)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Einstieg zu Lieferengpass-Datenbank, Beirat nach § 52b Abs. 3b AMG und Maßnahmen des BfArM; gemeldete Engpässe sind weder Versorgungsmangel noch Nachweis örtlicher Nichtverfügbarkeit.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Produkt, Meldedatum und Stand in der Datenbank vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S045",
@@ -2309,7 +2324,6 @@
     "B02: konkrete Landes-Ausweichdienste und produktbezogene Datenprüfung.",
     "Nicht erreichbare BGR-, BKG-, UFZ-, FLI- und BKA-Einstiege vor Verwendung nachprüfen.",
     "JavaScript-Portale einzeln auf tatsächlich gelieferte Meldungs-/Messinhalte prüfen.",
-    "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen.",
-    "C10: BfArM-Startseite; zielgenauer wäre die Seite zu Lieferengpässen (in der Zweitprüfung bestätigt)."
+    "B12/B17: BBK-Startseite statt Fachseite; geeigneten Tiefenlink bestimmen."
   ]
 }
