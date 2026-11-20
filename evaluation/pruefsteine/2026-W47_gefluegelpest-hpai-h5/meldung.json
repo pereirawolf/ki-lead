@@ -1,0 +1,401 @@
+{
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "c16f964a-3353-41db-b954-0260ef957e8c",
+  "status": "entwurf",
+  "absender": {
+    "stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+    "ebene": "Bund",
+    "gebiet": {
+      "name": "Bund",
+      "schluessel": "DE"
+    }
+  },
+  "meldezeitpunkt": "2026-11-20T20:45+01:00",
+  "zeitzone": "Europe/Berlin",
+  "meldezeitraum": {
+    "von": "2026-10-09",
+    "bis": "2026-11-20"
+  },
+  "freigabe": {},
+  "entstehung": {
+    "verfahren": "KI-Entwurf",
+    "erstellt": "2026-11-20T20:45+01:00",
+    "werkzeug": {
+      "name": "Erfassungstest (geplante Aufgabe, ohne KI-LEAD-App)"
+    },
+    "profil": {
+      "id": "lead.beispiel.koordinierungsstelle",
+      "version": "2.1.1"
+    },
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B11",
+          "fassung": "2.4.0",
+          "bezeichnung": "Gesundheitliche Lage / Epidemie"
+        },
+        {
+          "kennung": "C08",
+          "fassung": "1.1.0",
+          "bezeichnung": "Tierseuchen und zoonotische Expositionslagen"
+        }
+      ],
+      "sammelmappe": "3.25.1",
+      "kodierleitfaden": "2.1.0",
+      "arbeitsanweisung": "Erfassung 2.0.0"
+    },
+    "modelle": [
+      {
+        "stufe": "Erfassung",
+        "anbieter": "Anthropic",
+        "modell": "claude-opus-5-5"
+      }
+    ],
+    "anmerkung": "Erfassungstest KW 47/2026 (Prüfstein, kein amtliches Produkt). C14 geprüft, keine Versorgungsfolge belegt. C08 ist Inhaltsgerüst."
+  },
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Friedrich-Loeffler-Institut (FLI)",
+      "titel": "Aviäre Influenza (AI) / Geflügelpest – Tierseuchengeschehen, Risikoeinschätzungen",
+      "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/",
+      "zugriff": "2026-11-20",
+      "datenstand": "2026-11-06",
+      "zugang": "oeffentlich",
+      "anmerkung": "Seite nennt die Erwartung der Risikoeinschätzung vom 06.11.2026, aber keine Risikostufen und keine Fallzahlen für den Herbst 2026 (letzte Monatszahlen März 2026)."
+    },
+    {
+      "id": "Q2",
+      "kategorie": "A",
+      "herausgeber": "Friedrich-Loeffler-Institut (FLI)",
+      "titel": "Risikoeinschätzung zur Hochpathogenen Aviären Influenza H5 (Klade 2.3.4.4b), Stand 06.11.2026",
+      "veroeffentlicht": "2026-11-06",
+      "url": "https://www.openagrar.de/servlets/MCRFileNodeServlet/openagrar_derivate_00072561/FLI-Risikoeinschaetzung_HPAI_H5_2026-11-06.pdf",
+      "zugriff": "2026-11-18",
+      "zugang": "nicht_ausgewertet",
+      "anmerkung": "Abruf scheiterte an einer Sicherheitsabfrage des Repositoriums; Stufen nur über Q4 und Q5 bekannt."
+    },
+    {
+      "id": "Q3",
+      "kategorie": "A",
+      "herausgeber": "Bayerisches Landesamt für Gesundheit und Lebensmittelsicherheit (LGL)",
+      "titel": "Geflügelpest: Seuchenlage und Bekämpfung in Bayern",
+      "url": "https://www.lgl.bayern.de/tiergesundheit/tierkrankheiten/virusinfektionen/gefluegelpest/et_gefluegelpest_in_bayern.htm",
+      "zugriff": "2026-11-18",
+      "datenstand": "2026-10-09",
+      "zugang": "oeffentlich",
+      "anmerkung": "gibt die FLI-Risikostufen vom 09.10.2026 wieder (Wildvögel moderat, Eintrag in Haltungen moderat, Verschleppung zwischen Haltungen gering)."
+    },
+    {
+      "id": "Q4",
+      "kategorie": "M",
+      "herausgeber": "inFranken.de (dpa)",
+      "titel": "Vogelgrippe breitet sich aus – FLI erhöht Risikostufen",
+      "veroeffentlicht": "2026-11-07",
+      "url": "https://www.infranken.de/deutschland/vogelgrippe-breitet-sich-aus-fli-erhoeht-risikostufen-art-6409396",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "ursprung": [
+        "Q2"
+      ],
+      "anmerkung": "gibt die FLI-Stufen vom 06.11.2026 und eine RKI-Angabe zu Humanfällen wieder."
+    },
+    {
+      "id": "Q5",
+      "kategorie": "M",
+      "herausgeber": "Euronews (dpa)",
+      "titel": "Vogelgrippe breitet sich aus: FLI erhöht Risikostufen",
+      "veroeffentlicht": "2026-11-09",
+      "url": "https://de.euronews.com/2026/11/09/vogelgrippe-breitet-sich-aus-fli-erhoht-risikostufen",
+      "zugriff": "2026-11-18",
+      "zugang": "oeffentlich",
+      "ursprung": [
+        "Q2"
+      ]
+    },
+    {
+      "id": "Q6",
+      "kategorie": "M",
+      "herausgeber": "Volksstimme (dpa)",
+      "titel": "Geflügelpest trifft Betrieb mit 39.000 Legehennen",
+      "veroeffentlicht": "2026-11-12",
+      "url": "https://www.volksstimme.de/panorama/geflugelpest-trifft-betrieb-mit-39-000-legehennen-4355411",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "anmerkung": "Angaben des Landkreises Uckermark und des Brandenburger Agrarministeriums nur als Wiedergabe."
+    },
+    {
+      "id": "Q7",
+      "kategorie": "M",
+      "herausgeber": "Geflügelnews",
+      "titel": "Geflügelpest-Ticker 2026: Geflügelpest breitet sich weiter aus – aktuelle Fälle im Überblick",
+      "url": "https://www.gefluegelnews.de/article/geflugelpest-breitet-sich-weiter-aus-aktuelle-falle-im-uberblick",
+      "zugriff": "2026-11-20",
+      "datenstand": "2026-11-18",
+      "zugang": "oeffentlich",
+      "anmerkung": "Fachpresse-Ticker mit Verweisen auf Kreise, Länder und FLI; Originalmeldungen nicht einzeln geprüft; keine amtliche Gesamtzahl."
+    },
+    {
+      "id": "Q8",
+      "kategorie": "A",
+      "herausgeber": "EFSA, ECDC, EU-Referenzlabor",
+      "titel": "Avian influenza overview June–August 2026 (EFSA Journal 2026;24(9):10369)",
+      "veroeffentlicht": null,
+      "url": "https://www.ecdc.europa.eu/sites/default/files/documents/avian-influenza-overview-june-august-2026.pdf",
+      "zugriff": "2026-11-20",
+      "datenstand": "2026-08-31",
+      "zugang": "oeffentlich",
+      "anmerkung": "angenommen am 21.09.2026; Veröffentlichungsdatum im Dokument nicht genannt."
+    }
+  ],
+  "sachverhalte": [
+    {
+      "kennung": "NEU-1",
+      "bezeichnung": "Geflügelpest (HPAI H5): FLI stuft Eintragsrisiko hoch, Ausbrüche in Geflügelhaltungen in vier Ländern; kein Humanfall in Deutschland bekannt",
+      "eintritt": {
+        "zeit": null,
+        "genauigkeit": "unbekannt"
+      },
+      "raum": {
+        "beschreibung": "Ereignisraum: Ausbrüche in Geflügelhaltungen in Schleswig-Holstein, Niedersachsen, Mecklenburg-Vorpommern und Brandenburg sowie Wildvogelnachweise u. a. in Rheinland-Pfalz (Stand 18.11.2026). Referenzraum: Bevölkerungsschutz in Deutschland.",
+        "gebiete": [
+          {
+            "name": "Schleswig-Holstein",
+            "schluessel": "DE-SH"
+          },
+          {
+            "name": "Niedersachsen",
+            "schluessel": "DE-NI"
+          },
+          {
+            "name": "Mecklenburg-Vorpommern",
+            "schluessel": "DE-MV"
+          },
+          {
+            "name": "Brandenburg",
+            "schluessel": "DE-BB"
+          }
+        ]
+      },
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Die saisonale Geflügelpestwelle (HPAI H5, Klade 2.3.4.4b) nimmt seit Oktober zu; das FLI hat am 06.11.2026 das Risiko für Wildvögel und für den Eintrag in Geflügelhaltungen von moderat auf hoch und für die Verschleppung zwischen Betrieben von gering auf moderat angehoben [Q4, Q5; Originaldokument Q2 nicht ausgewertet]. Am 09.10.2026 lagen die Stufen noch bei moderat bzw. gering [Q3]. Das FLI erwartet für November einen weiteren Anstieg der Nachweise bei Geflügel und Wildvögeln [Q1]. Veterinärer Befund (indirekt berichtet, Stand 18.11.2026): mindestens elf bestätigte Ausbrüche in Geflügel- und Kleinhaltungen seit Ende Oktober, u. a. Putenbestände in den Kreisen Aurich und Rostock mit je rund 6.000 Tieren und ein Legehennenbetrieb mit rund 39.000 Tieren im Landkreis Uckermark; Wildvogelnachweise u. a. in Dithmarschen, Oder-Spree, Trier und im Landkreis Cuxhaven [Q5, Q6, Q7]. Eine amtliche Gesamtzahl für den Herbst 2026 lag öffentlich nicht vor; das FLI verweist für Tageszahlen auf sein Tierseucheninformationssystem, das nicht ausgewertet wurde [Q1]. Humaner Befund: Nach Angabe des RKI, wiedergegeben in einem Agenturbericht, ist in Deutschland kein Humanfall bekannt (indirekt berichtet) [Q4]; EFSA und ECDC bewerten das Risiko für die Allgemeinbevölkerung in EU/EWR als gering, für beruflich Exponierte als gering bis moderat (Stand 31.08.2026) [Q8].",
+        "risiken_auswirkungen": "Tatsächliche Wirkung im Referenzraum: Tierseuchenrechtliche Maßnahmen der Kreise (Tötung der betroffenen Bestände, Schutz- und Überwachungszonen von mindestens 3 bzw. 10 km, Aufstallungsgebote) betreffen Tierhaltungen; eine Wirkung auf Gesundheit, Unterkunft oder Grundversorgung der Bevölkerung ist nicht belegt [Q6, Q7]. Die Aufstallungsregeln unterscheiden sich nach Schwellen und Räumen (u. a. ab 50 Tieren in Nordfriesland, ab 49 Tieren in Dithmarschen, ab 5.000 Tieren in der Mecklenburgischen Seenplatte; landesweite Allgemeinverfügung in Schleswig-Holstein seit 26.10.2026), Brandenburg prüfte am 12.11.2026 strengere Regeln [Q7]. Szenario (Einschätzung Koordinierungsstelle, ohne Eintrittswahrscheinlichkeit): Bei weiterem Anstieg, wie vom FLI erwartet [Q1], könnten zeitgleiche Ausbrüche in Großbeständen Tötungs-, Transport- und Beseitigungskapazitäten sowie Veterinärpersonal mehrerer Kreise binden; ob und wo das eintritt, ist nicht belegt. Ein humanes Expositionsrisiko besteht nach EU-Bewertung vor allem für beruflich Exponierte [Q8]; Schutzbedarf von Einsatz- und Hilfskräften bei Tötung und Beseitigung ist aufgabenbezogen zu klären (C08, Schutz und Einsetzbarkeit von Personal), Belege für Engpässe liegen nicht vor.",
+        "abhaengigkeiten_interdependenzen": "Nach Prüfung keine belegte Kopplung an eine kritische Dienstleistung zu t0: Eine Auswirkung auf die Lebensmittelversorgung ist nicht berichtet; wirtschaftliche Verluste der Betriebe sind kein Versorgungsausfall (C08/R5, C14). Mögliche Kette (Szenario): mehrere zeitgleiche Großausbrüche → Bindung von Tötungs- und Beseitigungsdienstleistern und Veterinärpersonal → Verzögerung der Seuchenbekämpfung in weiteren Kreisen; Puffer und Reichweite sind öffentlich nicht belegt. Keine belastbare Angabe zu Auslastung der Tierkörperbeseitigung."
+      },
+      "bewertung": {
+        "kernaussage": "Die Geflügelpest nimmt saisonal zu, das FLI hat die Eintragsrisiken auf hoch angehoben und erwartet weitere Ausbrüche; eine Bevölkerungsschutzfunktion ist zu t0 nicht beeinträchtigt, ein Humanfall in Deutschland ist nicht bekannt. Prüffrage für Länder und Veterinärverwaltungen: Sind Tötungs-, Beseitigungs- und Personalkapazitäten sowie der Arbeitsschutz der eingesetzten Kräfte für zeitgleiche Großausbrüche länderübergreifend abgestimmt?",
+        "referenzraum": "Bevölkerungsschutz in Deutschland",
+        "beurteilung": {
+          "stufe": "geringfügig",
+          "begruendung": "Belegt sind veterinärrechtliche Maßnahmen in einzelnen Kreisen ohne Wirkung auf Gesundheit, Unterkunft oder Grundversorgung der Bevölkerung und ohne belegte Bindung von Bevölkerungsschutzkapazitäten [Q6, Q7]; das Humanrisiko für die Allgemeinbevölkerung gilt auf EU-Ebene als gering [Q8]. Abgrenzung zu „erheblich“: kein belegter Kapazitätsengpass, kein Humanfall in Deutschland bekannt."
+        },
+        "tendenz": {
+          "richtung": "Verschärfung",
+          "bezug": "Deutschland, veterinäres Geschehen, 20.11. bis 30.11.2026",
+          "begruendung": "Gestützt auf die Prognose des FLI vom 06.11.2026, das für November einen weiteren Anstieg der Nachweise bei Geflügel und Wildvögeln erwartet [Q1], und auf die zunehmende Zahl berichteter Ausbrüche seit Ende Oktober [Q7]. Die Tendenz betrifft das Tierseuchengeschehen; eine Zunahme der Bevölkerungsschutzrelevanz ist damit nicht belegt."
+        },
+        "erlaeuterung": "D1 und D2 bleiben offen, weil C08 Seuchenverbreitung und Maßnahmengebiete ausdrücklich nicht in Bevölkerungsbetroffenheit umdeutet; D8 bildet die Hochstufung der FLI-Risikoeinschätzung ab. Die FLI-Risikostufen sind Fachbewertungen je Eintragsweg, keine Radarwerte.",
+        "neubewertung_bei": [
+          {
+            "indikator": "bestätigte H5-Infektion eines Menschen in Deutschland oder neue Expositionsbewertung des RKI"
+          },
+          {
+            "indikator": "Meldung eines Landes oder Kreises über nicht gedeckte Tötungs-, Transport- oder Beseitigungskapazität"
+          },
+          {
+            "indikator": "neue FLI-Risikoeinschätzung mit geänderter Stufe"
+          },
+          {
+            "indikator": "Nachweise bei Säugetieren mit Kontakt zu Menschen (Haustiere, Nutztiere außer Geflügel)"
+          }
+        ],
+        "erkenntnislage": {
+          "luecken": [
+            "FLI-Risikoeinschätzung vom 06.11.2026 nicht ausgewertet (Abruf gescheitert); Stufen nur aus Agenturberichten.",
+            "Keine amtliche Gesamtzahl der Ausbrüche seit Oktober ausgewertet; Tierseucheninformationssystem des FLI nicht abgefragt.",
+            "Aussage zu Humanfällen nur indirekt (RKI-Angabe in Agenturbericht).",
+            "Keine Angaben zur Auslastung der Tierkörperbeseitigung und zum Personaleinsatz."
+          ],
+          "widersprueche": []
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Landesweite tierseuchenrechtliche Allgemeinverfügung mit Schutzmaßnahmen, auch für private Haltungen",
+            "stelle": "Land Schleswig-Holstein",
+            "status": "angeordnet",
+            "stand": "2026-10-26",
+            "quellen": [
+              "Q7"
+            ]
+          },
+          {
+            "id": "M2",
+            "gegenstand": "Tötung des Bestands, Schutzzone (mind. 3 km) und Überwachungszone (mind. 10 km), Veranstaltungsverbot mit lebendem Geflügel",
+            "stelle": "Landkreis Uckermark",
+            "status": "angeordnet",
+            "stand": "2026-11-12",
+            "quellen": [
+              "Q6"
+            ]
+          },
+          {
+            "id": "M3",
+            "gegenstand": "Aufstallungsgebote nach Bestandsgröße in einzelnen Kreisen (u. a. Nordfriesland, Dithmarschen, Mecklenburgische Seenplatte)",
+            "stelle": "Veterinärbehörden der Kreise",
+            "status": "angeordnet",
+            "stand": "2026-11-09",
+            "quellen": [
+              "Q7"
+            ]
+          }
+        ],
+        "empfehlungen": [
+          {
+            "id": "E1",
+            "adressat": "Für Tiergesundheit zuständige Landesministerien (Abstimmung mit den Innenressorts)",
+            "auftrag": "Prüfen, ob Tötungs-, Transport- und Beseitigungskapazitäten sowie Arbeitsschutz und Ablösung des eingesetzten Personals für mehrere zeitgleiche Großausbrüche länderübergreifend abgestimmt sind.",
+            "anlass": "Hochstufung des Eintragsrisikos und erwarteter Anstieg [Q1, Q4]; öffentlich keine Angabe zu Kapazitätsreserven.",
+            "termin": null,
+            "bedingung": "nächste Lagebild-Ausgabe oder erste Meldung eines Kapazitätsengpasses",
+            "quellen": [
+              "Q1",
+              "Q4"
+            ]
+          }
+        ],
+        "fristen": [],
+        "erlaeuterung": "Die Koordinierungsstelle hat keine eigenen Maßnahmen; Maßnahmen M1–M3 sind Beispiele, keine vollständige Übersicht."
+      },
+      "zeitstrahl": [
+        {
+          "id": "Z1",
+          "zeit": "2026-10-09",
+          "typ": "Warnung",
+          "text": "FLI-Risikoeinschätzung: Eintragsrisiko Wildvögel und Haltungen moderat, Verschleppung zwischen Haltungen gering",
+          "quellen": [
+            "Q3"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z2",
+          "zeit": "2026-10-26",
+          "typ": "Maßnahme",
+          "text": "Schleswig-Holstein ordnet landesweite Schutzmaßnahmen für Geflügelhaltungen an",
+          "quellen": [
+            "Q7"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z3",
+          "zeit": "2026-11-06",
+          "typ": "Wendepunkt",
+          "text": "FLI stuft Eintragsrisiko Wildvögel und Haltungen auf hoch, Verschleppung zwischen Haltungen auf moderat (nach Agenturberichten)",
+          "quellen": [
+            "Q4",
+            "Q5"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z4",
+          "zeit": "2026-11-12",
+          "typ": "Ereignis",
+          "text": "Ausbruch in einem Legehennenbetrieb mit rund 39.000 Tieren im Landkreis Uckermark, nach Meldung vom 12.11.",
+          "quellen": [
+            "Q6"
+          ],
+          "erstmals_gemeldet": null
+        }
+      ],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": [
+            "Gesundheitliche Lage / Epidemie"
+          ],
+          "lagenradar": {
+            "d1": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Ausbrüche und Restriktionszonen in Kreisen von vier Ländern sind belegt [Q6, Q7], ein Wirkungsraum tatsächlicher Schutz-, Unterstützungs- oder Versorgungswirkung für den Bevölkerungsschutz nicht; C08 Abschnitt 3 schließt die Umdeutung von Seuchenverbreitung und Maßnahmengebiet in einen D1-Raum aus.",
+              "quellen": [
+                "Q6",
+                "Q7"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d2": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Kein Humanfall in Deutschland bekannt, aber nur indirekt berichtet (RKI-Angabe in Agenturbericht [Q4]); kein Primärbeleg eines Nullbefunds der Surveillance (Nullregel b); Tierhalter und Personen in Restriktionszonen sind nicht unmittelbar betroffen.",
+              "quellen": [
+                "Q4"
+              ],
+              "offen_grund": "kein_beleg"
+            },
+            "d3": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "D3 Funktion: Anordnung tierseuchenrechtlicher Schutzmaßnahmen (Tötung, Zonen, Aufstallung), Veterinärbehörden der Kreise, laut [Q6, Q7] Stand 12.–18.11.2026; Abgrenzung zur Nachbarstufe: die landesweite Allgemeinverfügung Schleswig-Holsteins (Stufe 4) betrifft ein Land, die Bekämpfung im Einzelfall steuern die Kreise.",
+              "quellen": [
+                "Q6",
+                "Q7"
+              ]
+            },
+            "d4": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Ereignisbezogene externe Unterstützung (etwa Tötungs- oder Beseitigungstrupps aus anderen Kreisen) ist nicht belegt; regulär beauftragte Dienstleister zählen nicht.",
+              "quellen": [],
+              "offen_grund": "kein_beleg"
+            },
+            "d5": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Kein Zielzustand mit Prognose benannt; das FLI erwartet für November einen weiteren Anstieg [Q1], ein Ende der Saison ist nicht prognostiziert.",
+              "quellen": [
+                "Q1"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d6": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "KRITIS-Prüfung (Ernährung, Tierkörperbeseitigung, Gesundheit) ohne belegte Kopplung laut [Q6, Q7] für Deutschland, Stand 18.11.2026; wirtschaftliche Verluste der Betriebe sind kein Versorgungsausfall (C08/R5); Abgrenzung zu Stufe 1: keine Leistung für Betroffene belegt verzögert.",
+              "quellen": [
+                "Q6",
+                "Q7"
+              ]
+            },
+            "d7": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "Fachbewertung des FLI aktuell (06.11.2026) [Q1], aber keine öffentlich zusammengefasste amtliche Zahl der Ausbrüche seit Oktober, Stufen nur im Originaldokument; Ausbruchsmeldungen der Kreise einzeln [Q1, Q7]; Abgrenzung zu Stufe 2: zentrale Lagefragen (Erreger, Risiko, Maßnahmen) sind beantwortet.",
+              "quellen": [
+                "Q1",
+                "Q7"
+              ]
+            },
+            "d8": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Hochstufung der FLI-Risikoeinschätzung am 06.11.2026 [Q4, Q5] und Zunahme berichteter Ausbrüche von Ende Oktober bis 18.11.2026 [Q7], Deutschland; Abgrenzung zu Stufe 3: ein Umschlag, keine wiederholten Phasenwechsel.",
+              "quellen": [
+                "Q4",
+                "Q5",
+                "Q7"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

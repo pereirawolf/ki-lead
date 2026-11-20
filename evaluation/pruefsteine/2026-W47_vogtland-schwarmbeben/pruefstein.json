@@ -1,0 +1,83 @@
+{
+  "format": "ki-lead-pruefstein/1",
+  "id": "2026-W47_vogtland-schwarmbeben",
+  "hinweis": "KI-Entwurf im Erfassungstest zu einer realen Lage – keine amtliche Meldung, keine Musterlösung.",
+  "lauf": {
+    "agent": "erfassungstest",
+    "erstellt_utc": "2026-11-20T19:50Z",
+    "modell": "claude-opus-5-5"
+  },
+  "regelwerk": {
+    "commit": "b3b3ef2909fb8f6a7748fa9faa8f9be6da8f6379",
+    "sop_mappe": "3.25.1",
+    "kodierleitfaden": "2.1.0",
+    "anweisung_erfassung": "2.0.0",
+    "schema": "LEAD-Meldung-v2"
+  },
+  "lage": {
+    "titel": "Schwarmbeben Vogtland/Westböhmen ab 08.11.2026, stärkstes Beben M 2,7 in Tschechien, in Sachsen verspürt",
+    "t0": "2026-11-20T20:45",
+    "referenzraum": "Bund (Bevölkerungsschutz in Deutschland)",
+    "ereignisarten": [
+      "Erdbeben"
+    ],
+    "sop": [
+      "B04"
+    ]
+  },
+  "quellen": [
+    {
+      "url": "https://www.berliner-zeitung.de/article/vogtland-erdbebenserie-an-tschechischer-grenze-10579212",
+      "herausgeber": "Berliner Zeitung (dpa)",
+      "abgerufen_utc": "2026-11-18T05:30Z"
+    },
+    {
+      "url": "https://www.soester-anzeiger.de/deutschland-welt/magma-unter-dem-vogtland-forscher-erklaeren-erneute-erdbeben-zr-94582538.html",
+      "herausgeber": "Soester Anzeiger (IPPEN.MEDIA)",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://www.vulkane.net/blogmobil/vogtland-sehr-starkes-schwarmbeben-im-grenzgebiet/",
+      "herausgeber": "Vulkane.net",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    },
+    {
+      "url": "https://erdbebennews.de/2026/11/live-ticker-erdbebenschwarm-im-vogtland/",
+      "herausgeber": "Erdbebennews",
+      "abgerufen_utc": "2026-11-20T19:35Z"
+    }
+  ],
+  "einstufung": [
+    "unvollstaendig"
+  ],
+  "maengel": [
+    {
+      "beschreibung": "Keine amtliche Originalquelle; Magnitude und Schadensaussage des LfULG nur aus Medienberichten, Verlauf aus privatem Ticker.",
+      "stelle": "quellen"
+    },
+    {
+      "beschreibung": "Grenznahes Beben mit Wirkung in Deutschland passt nicht in die Klammer zum Deutschlandbezug in B04 Abschnitt 1.",
+      "stelle": "sachverhalte[0].raum",
+      "befund": "ET-2026-W47-06"
+    },
+    {
+      "beschreibung": "Magnitudenunterschiede je Netz und Schwarmverlauf ohne SOP-Hinweis behandelt.",
+      "stelle": "sachverhalte[0].bewertung.erkenntnislage.widersprueche",
+      "befund": "ET-2026-W47-07"
+    },
+    {
+      "beschreibung": "D8 = 2 bildet seismische Aktivität ab, nicht einen Wechsel des Lagezustands im Referenzraum; nach ET-2026-W47-03 (angepasst) wäre D8 = 0 oder 1.",
+      "stelle": "sachverhalte[0].module.lead-bevoelkerungsschutz.lagenradar.d8",
+      "befund": "ET-2026-W47-03"
+    },
+    {
+      "beschreibung": "Meldung erstellt, obwohl B04 Abschnitt 1 ein verspürtes Beben ohne Schaden als „Beispiel dagegen“ nennt; die Relevanzprüfung ist nur in der Beurteilung sichtbar.",
+      "stelle": "sachverhalte[0].bewertung.beurteilung"
+    }
+  ],
+  "befunde": [
+    "ET-2026-W47-06",
+    "ET-2026-W47-07",
+    "ET-2026-W47-03"
+  ]
+}

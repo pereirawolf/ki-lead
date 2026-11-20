@@ -1,0 +1,322 @@
+{
+  "schema": "LEAD-Meldung-v2",
+  "fassung": "2.0",
+  "meldung_id": "48816c78-7370-42b9-a167-3a30e3df2a26",
+  "status": "entwurf",
+  "absender": {
+    "stelle": "KI-LEAD Erfassungstest – keine amtliche Meldung (Beispielprofil Koordinierungsstelle)",
+    "ebene": "Bund",
+    "gebiet": {
+      "name": "Bund",
+      "schluessel": "DE"
+    }
+  },
+  "meldezeitpunkt": "2026-11-20T20:45+01:00",
+  "zeitzone": "Europe/Berlin",
+  "meldezeitraum": {
+    "von": "2026-11-10",
+    "bis": "2026-11-20"
+  },
+  "freigabe": {},
+  "entstehung": {
+    "verfahren": "KI-Entwurf",
+    "erstellt": "2026-11-20T20:45+01:00",
+    "werkzeug": {
+      "name": "Erfassungstest (geplante Aufgabe, ohne KI-LEAD-App)"
+    },
+    "profil": {
+      "id": "lead.beispiel.koordinierungsstelle",
+      "version": "2.1.1"
+    },
+    "regelwerk": {
+      "sop": [
+        {
+          "kennung": "B17",
+          "fassung": "2.1.1",
+          "bezeichnung": "Sonstiges"
+        },
+        {
+          "kennung": "C06",
+          "fassung": "1.2.1",
+          "bezeichnung": "Kampfmittelfund mit Räumung oder Versorgungsauswirkung"
+        },
+        {
+          "kennung": "C16",
+          "fassung": "1.2.2",
+          "bezeichnung": "Evakuierung, Schutzunterbringung und Betreuung"
+        }
+      ],
+      "sammelmappe": "3.25.1",
+      "kodierleitfaden": "2.1.0",
+      "arbeitsanweisung": "Erfassung 2.0.0"
+    },
+    "modelle": [
+      {
+        "stufe": "Erfassung",
+        "anbieter": "Anthropic",
+        "modell": "claude-opus-5-5"
+      }
+    ],
+    "anmerkung": "Erfassungstest KW 47/2026 (Prüfstein, kein amtliches Produkt), Meldung im Nachlauf. C13 und C18 geprüft, nicht einschlägig belegt. C06 und C16 sind Inhaltsgerüste."
+  },
+  "quellen": [
+    {
+      "id": "Q1",
+      "kategorie": "A",
+      "herausgeber": "Stadt Oranienburg",
+      "titel": "Entschärfung einer 250-kg-Bombe am 11.11.2026 (Informationsseite mit Aktualisierung)",
+      "veroeffentlicht": "2026-11-10",
+      "url": "https://www.oranienburg.de/entschaerfung-november-2026",
+      "zugriff": "2026-11-20",
+      "datenstand": "2026-11-11",
+      "zugang": "oeffentlich"
+    },
+    {
+      "id": "Q2",
+      "kategorie": "A",
+      "herausgeber": "Stadt Oranienburg",
+      "titel": "Weltkriegsbombe in der Adolf-Damaschke-Straße erfolgreich entschärft (Meldungsübersicht, Anriss)",
+      "veroeffentlicht": "2026-11-11",
+      "url": "https://www.oranienburg.de/index.php?object=tx,2967.5&ModID=7&FID=2967.5924.1",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "anmerkung": "nur Anriss ausgewertet"
+    },
+    {
+      "id": "Q3",
+      "kategorie": "M",
+      "herausgeber": "Volksstimme (dpa)",
+      "titel": "Mehr als 6.000 Menschen von Bombenentschärfung betroffen",
+      "veroeffentlicht": "2026-11-03T15:21+01:00",
+      "url": "https://www.volksstimme.de/panorama/mehr-als-6-000-menschen-von-bombenentscharfung-betroffen-4349756",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "ursprung": [
+        "Q1"
+      ]
+    },
+    {
+      "id": "Q4",
+      "kategorie": "M",
+      "herausgeber": "Volksstimme (dpa)",
+      "titel": "Weltkriegs-Bombe in Oranienburg: Entschärfung beginnt",
+      "veroeffentlicht": "2026-11-11",
+      "url": "https://www.volksstimme.de/panorama/weltkriegs-bombe-in-oranienburg-entscharfung-beginnt-4354384",
+      "zugriff": "2026-11-18",
+      "zugang": "oeffentlich"
+    },
+    {
+      "id": "Q5",
+      "kategorie": "M",
+      "herausgeber": "Volksstimme (dpa)",
+      "titel": "Oranienburg und der Dauereinsatz wegen Weltkriegs-Bomben",
+      "veroeffentlicht": "2026-08-11",
+      "url": "https://www.volksstimme.de/panorama/oranienburg-und-der-dauereinsatz-wegen-weltkriegs-bomben-4299564",
+      "zugriff": "2026-11-20",
+      "zugang": "oeffentlich",
+      "anmerkung": "Zahlen zur systematischen Suche als Wiedergabe von Angaben des Innenministeriums Brandenburg."
+    }
+  ],
+  "sachverhalte": [
+    {
+      "kennung": "NEU-1",
+      "bezeichnung": "Oranienburg: 250-kg-Weltkriegsbombe am 11.11.2026 entschärft, Sperrkreis mit rund 6.300 gemeldeten Einwohnern nach 6,5 Stunden aufgehoben",
+      "eintritt": {
+        "zeit": "2026-11-11T08:00+01:00",
+        "genauigkeit": "belegt"
+      },
+      "raum": {
+        "beschreibung": "Ereignisraum: Sperrkreis von etwa 1.000 m um die Adolf-Damaschke-Straße, Ortsteil Sachsenhausen, Stadt Oranienburg (Landkreis Oberhavel, Brandenburg), mit Bahnstrecke Oranienburg–Löwenberg. Referenzraum: Bevölkerungsschutz in Deutschland.",
+        "gebiete": [
+          {
+            "name": "Brandenburg",
+            "schluessel": "DE-BB"
+          },
+          {
+            "name": "Landkreis Oberhavel"
+          },
+          {
+            "name": "Stadt Oranienburg"
+          }
+        ]
+      },
+      "analyse": {
+        "lage_ereignis": "Kernaussage: Eine bei der systematischen Kampfmittelsuche gefundene 250-kg-Fliegerbombe amerikanischer Bauart mit zwei mechanischen Aufschlagzündern wurde am 11.11.2026 vom Kampfmittelbeseitigungsdienst Brandenburg entschärft; der Sperrkreis galt von 08:00 bis 14:30 Uhr, danach konnten die Bewohner zurückkehren (bestätigt) [Q1, Q2]. Im Sperrkreis von etwa 1.000 m waren rund 6.300 Personen gemeldet; betroffen waren u. a. drei Schulen, zwei Kitas, eine Werkstatt der Caritas, Sportstätten, Teile des Schlossparks, Gewässerabschnitte und ein Gewerbegebiet [Q1]. Die Feuerwehr kontrollierte die Räumung an den Haustüren bis etwa 11 Uhr [Q1]. Eine Zahl tatsächlich Evakuierter oder in der Anlaufstelle Betreuter ist nicht veröffentlicht. Der Regionalverkehr RE5 und RB12 nach Norden war von 8 bis 16 Uhr unterbrochen, mit stündlichem Ersatzverkehr; mehrere Buslinien fuhren Umleitungen [Q1, Q3]. Zu t0 (20.11.2026) bestehen keine Einschränkungen aus diesem Fund. Nach Angaben des Innenministeriums Brandenburg wurden in Oranienburg seit 1999 fast 240 große Bomben geräumt, Fachleute vermuten mehr als 200 weitere (indirekt berichtet, Stand 11.08.2026) [Q5].",
+        "risiken_auswirkungen": "Tatsächliche Wirkung (11.11.2026): Räumung eines Wohngebiets für rund 6,5 Stunden, Ausfall von Schul- und Kitabetrieb, Unterbrechung des Regionalverkehrs mit Ersatzverkehr [Q1]. Besondere Belange: Die Stadt bot Transporthilfe für Pflegebedürftige über eine Rufnummer, eine Anlaufstelle im Bürgerzentrum und einen Bus-Shuttle an [Q1]; Zahl und Bedarf der Unterstützten sind nicht veröffentlicht, eine Versorgungslücke ist nicht berichtet. Folgen über den Tag hinaus sind nicht belegt. Wiederkehrende Funde mit ähnlichen Sperrkreisen sind wegen der vermuteten weiteren Blindgänger zu erwarten (Einschätzung Koordinierungsstelle auf Grundlage von [Q5]).",
+        "abhaengigkeiten_interdependenzen": "Belegte Kopplung am 11.11.2026: Sperrkreis → Bahnhof Sachsenhausen im Sperrkreis → Unterbrechung RE5/RB12, Ersatzverkehr trug die Personenbeförderung [Q1]. Zu t0 keine Kopplung. Eine Unterbrechung kritischer Versorgung (Strom, Wasser, Gesundheit) ist nicht berichtet."
+      },
+      "bewertung": {
+        "kernaussage": "Der Fund wurde planmäßig binnen eines Tages beseitigt; zu t0 bestehen keine Folgen. Für das übergreifende Lagebild bleibt nur die bekannte Dauerlage Oranienburg mit regelmäßigen Räumungen von mehreren tausend Menschen; ein Prüf- oder Abstimmungsbedarf für Bund oder Länder ergibt sich aus diesem Fund nicht.",
+        "referenzraum": "Bevölkerungsschutz in Deutschland",
+        "beurteilung": {
+          "stufe": "geringfügig",
+          "begruendung": "Planbare, eintägige Räumung mit örtlicher Bewältigung, Ersatzverkehr und Anlaufstelle; keine berichtete Versorgungslücke und keine Folgen über den 11.11.2026 hinaus [Q1, Q2]. Abgrenzung zu „erheblich“: keine kapazitätskritische Verlegung, kein längerer Nachlauf."
+        },
+        "tendenz": {
+          "richtung": "Entspannung",
+          "bezug": "Stadt Oranienburg, 11.11. bis 20.11.2026",
+          "begruendung": "Sperrkreis aufgehoben und Rückkehr ermöglicht am 11.11.2026 [Q1, Q2]; der belegte Verlauf endet mit dem Abschluss."
+        },
+        "erlaeuterung": "Kodiert ist der Ist-Zustand zu t0 (Kodierleitfaden Grundregel 1): D1 und D2 offen, D5 = 0. D3 und D7 beziehen sich auf die abgeschlossene Maßnahme, weil der Kodierleitfaden für diese Achsen im Nachlauf keine Regel nennt; D4 bleibt offen.",
+        "neubewertung_bei": [
+          {
+            "indikator": "neuer Fund in Oranienburg mit Verlegung von Klinik- oder Pflegeeinrichtungen oder Sperrung kritischer Verkehrswege über einen Tag hinaus"
+          }
+        ],
+        "erkenntnislage": {
+          "luecken": [
+            "Zahl tatsächlich geräumter, transportierter und in der Anlaufstelle betreuter Personen nicht veröffentlicht.",
+            "Warnweg (Warn-App, Lautsprecher) außer dem Sirenenton zur Aufhebung nicht belegt.",
+            "Herkunftsort des Teams des Kampfmittelbeseitigungsdienstes nicht belegt."
+          ],
+          "widersprueche": []
+        },
+        "abschluss": {
+          "ende": "2026-11-11T14:30+01:00",
+          "offene_punkte": "nichts zu diesem Fund; weitere Verdachtspunkte im Stadtgebiet (systematische Suche)",
+          "nachsorge": "Stadt Oranienburg (Sachgebiet Kampfmittel) und Kampfmittelbeseitigungsdienst Brandenburg"
+        }
+      },
+      "handlungsbedarf": {
+        "massnahmen": [
+          {
+            "id": "M1",
+            "gegenstand": "Sperrkreis von etwa 1.000 m mit Betretungsverbot, Kontrolle der Räumung durch die Feuerwehr",
+            "stelle": "Stadt Oranienburg",
+            "status": "beendet",
+            "stand": "2026-11-11T14:30+01:00",
+            "quellen": [
+              "Q1"
+            ]
+          },
+          {
+            "id": "M2",
+            "gegenstand": "Entschärfung der beiden Aufschlagzünder",
+            "stelle": "Kampfmittelbeseitigungsdienst Brandenburg",
+            "status": "beendet",
+            "stand": "2026-11-11",
+            "quellen": [
+              "Q1",
+              "Q4"
+            ]
+          },
+          {
+            "id": "M3",
+            "gegenstand": "Schienenersatzverkehr Oranienburg–Löwenberg",
+            "stelle": "Deutsche Bahn",
+            "status": "beendet",
+            "stand": "2026-11-11",
+            "quellen": [
+              "Q1"
+            ]
+          }
+        ],
+        "empfehlungen": [],
+        "fristen": [],
+        "erlaeuterung": "Keine Empfehlung: Der Fund ist örtlich bewältigt; die Dauerlage ist bekannt."
+      },
+      "zeitstrahl": [
+        {
+          "id": "Z1",
+          "zeit": "2026-11-11T08:00+01:00",
+          "typ": "Maßnahme",
+          "text": "Sperrkreis von etwa 1.000 m tritt in Kraft, Regionalverkehr nach Norden unterbrochen",
+          "quellen": [
+            "Q1"
+          ],
+          "erstmals_gemeldet": null
+        },
+        {
+          "id": "Z2",
+          "zeit": "2026-11-11T14:30+01:00",
+          "typ": "Wiederherstellung",
+          "text": "Bombe entschärft, Sperrkreis aufgehoben, Rückkehr der Bewohner freigegeben",
+          "quellen": [
+            "Q1",
+            "Q2"
+          ],
+          "erstmals_gemeldet": null
+        }
+      ],
+      "module": {
+        "lead-bevoelkerungsschutz": {
+          "fassung": "1.0",
+          "ereignisarten": [
+            "Sonstiges"
+          ],
+          "lagenradar": {
+            "d1": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Zu t0 kein Wirkungsraum; der Sperrkreis am 11.11.2026 (kommunal) steht im Text (Grundregel 1, Kurzbeispiel Nachlauf).",
+              "quellen": [
+                "Q1"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d2": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Zu t0 keine unmittelbar Betroffenen; am 11.11.2026 rund 6.300 im Sperrkreis gemeldete Personen, Zahl tatsächlich Geräumter nicht veröffentlicht (Einwohner ≠ Evakuierte).",
+              "quellen": [
+                "Q1"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d3": {
+              "stufe": 1,
+              "status": "belegt",
+              "begruendung": "D3 Funktion: Schutzentscheidung und Koordination der Räumung am 11.11.2026, Stadt Oranienburg (Sachgebiet Kampfmittel) laut [Q1]; bezogen auf die abgeschlossene Maßnahme. Abgrenzung zu Stufe 4: die technische Entschärfung durch den Landesdienst ist nicht die bewertete Funktion.",
+              "quellen": [
+                "Q1"
+              ]
+            },
+            "d4": {
+              "stufe": null,
+              "status": "offen",
+              "begruendung": "Zu t0 keine Unterstützung im Einsatz. Am 11.11.2026 war der Kampfmittelbeseitigungsdienst des Landes tätig, sein Herkunftsort ist nicht belegt.",
+              "quellen": [
+                "Q1"
+              ],
+              "offen_grund": "kein_bezugsgegenstand"
+            },
+            "d5": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Zielzustand Rückkehr der Bewohner und Freigabe des Gebiets am 11.11.2026, 14:30 Uhr erreicht laut [Q1, Q2]; erreichter Zielzustand = 0.",
+              "quellen": [
+                "Q1",
+                "Q2"
+              ]
+            },
+            "d6": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Zu t0 keine Kopplung; die Bahnunterbrechung vom 11.11.2026 war beendet und durch Ersatzverkehr getragen laut [Q1]; Abgrenzung zu Stufe 1: keine fortdauernde Verzögerung einer Leistung.",
+              "quellen": [
+                "Q1"
+              ]
+            },
+            "d7": {
+              "stufe": 0,
+              "status": "belegt",
+              "begruendung": "Die zuständige Stadt informierte vorab und am Tag aktuell, mit Karte, Straßenliste und Abschlussmeldung laut [Q1, Q2]; Abgrenzung zu Stufe 1: keine belegten Verzögerungen oder Widersprüche.",
+              "quellen": [
+                "Q1",
+                "Q2"
+              ]
+            },
+            "d8": {
+              "stufe": 2,
+              "status": "belegt",
+              "begruendung": "Im Meldezeitraum 10.–20.11.2026 zwei Zustandswechsel (Sperrkreis in Kraft 08:00, aufgehoben 14:30 Uhr am 11.11.) laut [Q1]; seither stabil. Abgrenzung zu Stufe 0: Wechsel planmäßig angekündigt, ob sie als Umschläge zählen, regelt der Kodierleitfaden nicht.",
+              "quellen": [
+                "Q1"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
