@@ -1,6 +1,6 @@
 {
   "format": "ki-lead-quellenpruefung/1",
-  "stand": "2026-10-26",
+  "stand": "2026-11-20",
   "basis_commit": "e980a5520f905243fbf183c48920eb1af3399b11",
   "umfang": "Alle URLs der Pflegequellen von Teil A, B und C (ohne Lesefassung und Archiv) sowie ergänzend geprüfte amtliche Einstiege; keine vollständige Fach- oder Rechtsprüfung. Ergänzung 22.10.2026: Fachgrundlagen (Rechtsnormen) aus dem Arbeitspaket AP2; Prüfung über ein Webabrufwerkzeug ohne Prüfsumme (Feld prueftiefe). Ergänzung 26.10.2026: BSH- und DWD-Einstiege für B01, B02, B06 und C13 (S068, S073–S075; KP-2026-W44-24), Webabruf ohne Prüfsumme.",
   "bedeutung": "Technischer Abruf, Rechercheeignung, gezielter Inhaltsabgleich und aktueller Ereignisnachweis werden getrennt. Inhaltsabruf per Direkt-HTTP ergänzte Webabrufe mit häufigen Zugriffssperren. Keine Sperre wurde umgangen; nur öffentlich abrufbare Seiten. SHA-256 bezeichnet geladene Bytes, nicht eine amtliche Fassungsbeglaubigung.",

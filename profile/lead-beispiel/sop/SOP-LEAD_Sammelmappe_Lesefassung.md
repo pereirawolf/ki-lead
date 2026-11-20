@@ -59,7 +59,7 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.26.0 | 20.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.26.1 | 20.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 2.2.0 | 20.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
 | Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 2.1.1 | 16.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
 | Arbeitsanweisung Erfassung | 2.0.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
@@ -519,7 +519,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
 stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
@@ -540,7 +540,7 @@ bisherige_ids: ["sop-04"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR Erdbebenüberwachung](https://www.bgr.bund.de/DE/Themen/Erdbeben-Gefaehrdungsanalysen/Seismologie/Seismologie/seismologie_node.html), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
+| R1 | Welche Lage, Tiefe und Magnitude sind bestätigt? | [BGR – Erdbebendienst des Bundes, Aktuelle Erdbeben](https://www.bgr.bund.de/DE/Themen/Kernwaffenteststopp-Geogefahren/Erdbebendienst_Bund/Aktuelle-Erdbeben/aktuelle-erdbeben_node.html) (Webdienst täglich aktualisiert), GFZ GEOFON, Landeserdbebendienste; ereignisbezogen | L | Automatische Erstlösungen werden revidiert – Stand angeben. Magnituden verschiedener Netze und Typen mit Netz und Stand nebeneinander, nicht mitteln. |
 | R2 | Wo bestehen Erschütterungs- und Schadenswirkungen? | Lagemeldungen (A.3); Bauaufsicht | L/R; D1 | Verspürt ≠ Schaden; Magnitude beschreibt keinen örtlichen Schaden; Erstmeldungen unvollständig. |
 | R3 | Welche Menschen sind verletzt, vermisst oder ohne sichere Unterkunft? | Lagemeldungen (A.3) | R; D2 | Gruppen und Zeitstände trennen (A.3 Zählregeln); Wahrnehmungsmeldungen sind keine Betroffenheit. |
 | R4 | Welche Netze, Gebäude, Verkehrswege und Anlagen sind nutzbar? | Betreibermeldungen (A.3) | R/I; D6 | Kontrollbedingte Sperrung von bestätigter Beschädigung trennen; Standsicherheit nur nach Fachbewertung. |
@@ -575,7 +575,7 @@ Alle acht Achsen nach Teil A.2 prüfen; hier besonders:
 
 **Ansprechstellen:** BGR · Landeserdbebendienste · GFZ · Bauaufsicht der Länder · Auswärtiges Amt/GMLZ (Auslandsbeben)
 
-**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07. Rechercheeinstieg BGR prüfen: Der Link in R1 war am 21.10.2026 nicht abrufbar; ein Umzug in die Struktur „Erdbebendienst_Bund“ ist möglich, aber nicht amtlich bestätigt (Quellenregister S007, A.6); GFZ GEOFON und Landeserdbebendienste als Ausweichweg.
+**Offene Punkte:** Kontrastbeispiel für den Kodierleitfaden erarbeiten (A.10.3): deutsche Hilfe bei einem Auslandsbeben (kein D4-Wert) gegenüber internationaler Hilfe für eine Lage in Deutschland (D4-relevant), abgestimmt mit C07.
 
 <!-- Quelle: sop/teil-b/B05_extremhitze-duerre.md -->
 
@@ -1329,9 +1329,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sicherheitslage (Bedrohungslagen, Großveranstaltungen, hybride Bedrohungen) – Bevölkerungsschutzfolgen"
 art_vorschlag: ["Sicherheitslage"]
 zweck: "Reproduzierbare Beobachtung behördlich belegter Sicherheitslagen ausschließlich im Hinblick auf Folgen und Vorsorgefragen für den Bevölkerungsschutz."
-version: "2.1.1"
+version: "2.1.2"
 status: "Beispielfassung"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "21.10.2026 – fachliche Teilprüfung und einzelquellenbezogener Abgleich; offene Nachprüfungen siehe A.6/Quellenregister"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1352,7 +1352,7 @@ bisherige_ids: ["sop-14"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
+| R1 | Welche Ereignisse oder Gefährdungshinweise sind behördlich bestätigt? | Sachlich zuständige Sicherheitsbehörde: Landespolizei bzw. Innenministerium, bei Bundeszuständigkeit BKA ([Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html)) oder Bundespolizei; BMI; anlassbezogen | L | Für diesen Demonstrator nur fiktive oder offen zugängliche, nicht personenbezogene und nicht eingestufte Inhalte verwenden. Öffentliche Aussage mit herausgebender Behörde, Datum, Geltungsraum und Bestätigungsgrad belegen; eine allgemeine Weitergabefreigabe allein genügt nicht. Keine eigene Gefährdungsbewertung. |
 | R2 | Welche Räume und Schutzmaßnahmen sind betroffen? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; anlassbezogen | L/M; D1 | Sperr- oder Schutzraum ≠ Schadensraum; Absagen sind Vorsorge. |
 | R3 | Welche Personenschäden oder Evakuierungen bestehen? | Lagemeldungen (A.3) | R; D2 | Nicht alle Anwesenden oder von Maßnahmen Berührten als direkt betroffen zählen. |
 | R4 | Welche Dienste, Transportwege oder Einrichtungen sind eingeschränkt? | Betreibermeldungen (A.3) | R/I; D6 | Einschränkung und Grund getrennt belegen; Gefährdungshinweis ≠ Beeinträchtigung. |
@@ -1506,9 +1506,9 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Sabotage / Anschlag / Terrorismus – Folgen für Bevölkerung und KRITIS"
 art_vorschlag: ["Sabotage / Anschlag / Terrorismus"]
 zweck: "Reproduzierbare Erfassung behördlich bestätigter oder ausdrücklich als Verdacht benannter vorsätzlicher Schädigungen ausschließlich im Hinblick auf ihre Folgen."
-version: "2.1.2"
+version: "2.1.3"
 status: "Beispielfassung"
-stand: "23.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "Rechercheeinstiege 26.09.2026 teilweise; Ergänzungen 19.10.2026 vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -1527,7 +1527,7 @@ bisherige_ids: ["sop-16"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Was ist Ereignisfakt, was behördlicher Verdacht? | Sachlich zuständige Polizei- bzw. Ermittlungsbehörde (Landespolizei/Innenministerium, [BKA Pressestelle](https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html), Generalbundesanwalt); anlassbezogen | L | Bestätigte Wirkung, gesicherte Ursache und zugeschriebene Absicht trennen; Sabotage, Anschlag und Terrorismus nicht austauschbar verwenden; Einordnung erst nach amtlicher Aussage. |
+| R1 | Was ist Ereignisfakt, was behördlicher Verdacht? | Sachlich zuständige Polizei- bzw. Ermittlungsbehörde (Landespolizei/Innenministerium, [BKA – Aktuelle Meldungen](https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html), Generalbundesanwalt); anlassbezogen | L | Bestätigte Wirkung, gesicherte Ursache und zugeschriebene Absicht trennen; Sabotage, Anschlag und Terrorismus nicht austauschbar verwenden; Einordnung erst nach amtlicher Aussage. |
 | R2 | Welche Schäden und Funktionsausfälle sind unabhängig von der Ursache bestätigt? | Betreibermeldungen (A.3) | L/R; D1/D6 | Ungeklärte Täterschaft verhindert keine Auswirkungsanalyse; technische Schäden ursachenoffen über die Folge-SOP bewerten. |
 | R3 | Welche Menschen sind unmittelbar geschädigt oder evakuiert, welche Betreuung läuft? | Lagemeldungen (A.3); Rettungsdienst, PSNV-Strukturen | R; D2 | Opferzahlen nur aus amtlicher Quelle mit Bezugszeit und Bestätigungsgrad; PSNV- und Nachsorgebedarf gesondert von Verletztenzahlen darstellen. |
 | R4 | Welche Schutz-, Sperr- und Verhaltenshinweise gelten? | [Warnportal des Bundes](https://warnung.bund.de/) und herausgebende Behörde; Polizei; anlassbezogen | M; D1 | Keine operativen Schwachstellen ergänzen; Ausbleiben einer Warnung ist keine Entwarnung. |
@@ -1854,9 +1854,9 @@ art_zuordnung: ["Sonstiges", "KRITIS-Ausfall", "Stromausfall / Blackout"]
 art_hinweis: "„Sonstiges“ bei Frühwarnung; „KRITIS-Ausfall“ oder „Stromausfall / Blackout“ nur bei entsprechendem Wirkungseintritt"
 anschluss: "B17, B08, B12; C11 bei Funk-, TK- oder Warnbezug; C13 bei Navigationsbezug im Verkehr; B14 oder B15 nur nach entsprechendem Befund zur Ursache"
 zweck: "Trennung von Vorwarnsignal und tatsächlicher Funktionsstörung bei Weltraumwetter."
-version: "1.1.1"
+version: "1.1.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 naechste_pruefung_faellig: "31.03.2027"
 bisherige_kennung: "N15"
@@ -1877,7 +1877,7 @@ bisherige_ids: ["baustein-n15"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Fachwarnung gilt für welchen Zeitraum und welche technische Wirkung? | [BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); zuständige Fachdienste | L/R; D8 | Warnung ≠ Störung. |
+| R1 | Welche Fachwarnung gilt für welchen Zeitraum und welche technische Wirkung? | [BKG: Weltraumwetter](https://www.bkg.bund.de/DE/Themen/Sicherheit-Weltraum/weltraumwetter/weltraumwetter.html); Beobachtungsdaten: [BKG WESIS](https://wesis.bkg.bund.de/) (Solarfluss, K-Index; keine Warnung); zuständige Fachdienste | L/R; D8 | Warnung ≠ Störung. |
 | R2 | Welche deutsche Infrastruktur oder Dienstleistung ist nach Fach- oder Betreiberbewertung konkret exponiert? | Betreibermeldungen (A.3); Fachbehörden | R/I | Exposition nur nach Fach- oder Betreiberbewertung. |
 | R3 | Welche Auswirkungen sind gemessen, welche nur prognostiziert? | Fachdienste; Betreibermeldungen (A.3) | L/R | Gemessen und prognostiziert trennen. |
 | R4 | Welche Redundanz oder betriebliche Anpassung ist tatsächlich verfügbar bzw. umgesetzt? | Betreibermeldungen (A.3) | M; D5 | Vorhanden ≠ umgesetzt; „Ersatz und Tragfähigkeit“. |
@@ -1910,7 +1910,7 @@ Nach der passenden Dach-SOP bzw. B17: Fachwarnung mit Gültigkeitsfenster, gemes
 
 **Ansprechstellen:** Fachdienste für Weltraumwetter produktbezogen (u. a. BKG, Weltraumwetterdienst der ESA, NOAA Space Weather Prediction Center) · betroffene Betreiber zu ihrer Dienstleistung (B) · zuständige Fachstellen für Navigation, Zeitreferenz, Energie, Telekommunikation oder Luftfahrt fallbezogen. Keiner Stelle pauschal die Verantwortung für alle Wirkungen zuschreiben; eine internationale Prognose ist keine deutsche Behördenentscheidung.
 
-**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren. Rechercheeinstieg BKG prüfen: Der Link in R1 ist nach einem Hinweis vom 21.10.2026 möglicherweise veraltet; die Beobachtungsdaten des BKG zum Weltraumwetter kommen als weiterer Einstieg in Betracht (beides vor Erstverwendung prüfen, A.6). Übungsfälle zu hoher Fachwarnstufe ohne Schaden, realem Verlust von GNSS- oder Zeitqualität, abhängiger und unabhängiger Redundanz und ursachenoffener Störung.
+**Offene Punkte:** Fachdienste für Weltraumwetterwarnungen mit Zuständigkeit konkretisieren. Rechercheeinstieg BKG prüfen: Der Link in R1 ist nach einem Hinweis vom 21.10.2026 möglicherweise veraltet; vor Erstverwendung direkt abrufen (A.6). Übungsfälle zu hoher Fachwarnstufe ohne Schaden, realem Verlust von GNSS- oder Zeitqualität, abhängiger und unabhängiger Redundanz und ursachenoffener Störung.
 
 <!-- Quelle: sop/teil-c/C04_vulkanasche.md -->
 
@@ -2389,9 +2389,9 @@ art_zuordnung: ["Gesundheitliche Lage / Epidemie", "KRITIS-Ausfall"]
 art_hinweis: "„KRITIS-Ausfall“ nur nach dem Funktionsdach B12 (A.1 Nr. 2): wenn eine weitere kritische Dienstleistung eigenständig betroffen ist oder eine sektorübergreifende Koordinationsfrage besteht"
 anschluss: "B11, C09; B12 nach dem Funktionsdach (A.1 Nr. 2); C13 bei Transport- und Kühlkettenbezug; C17 nach konkretem Bezug; B17 nur begründet"
 zweck: "Abgrenzung zwischen Herstellerlieferproblem, therapeutischer Ersatzmöglichkeit und tatsächlich ungedeckter Patientenversorgung."
-version: "1.3.1"
+version: "1.3.2"
 status: "Inhaltsgerüst – vor Verwendung Quellen, Fachzuständigkeit und organisationsspezifische Verfahren konkretisieren"
-stand: "22.10.2026"
+stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
 quellen_geprueft_am: "22.10.2026 – §§ 52b, 79 AMG am Normtext gelesen; produktbezogene Rechercheeinstiege vor Erstverwendung prüfen (A.6)"
 naechste_pruefung_faellig: "31.03.2027"
@@ -2425,7 +2425,7 @@ Die Stufen dieser Tabelle sind keine Ereignisarten, Radarstufen oder SOP-Kennung
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welche Produktgruppe, Leistung und Versorgungskette ist in welchem Raum betroffen, und welche Quelle deckt sie ab? | [BfArM](https://www.bfarm.de/DE/) (Lieferengpassinformationen zu Humanarzneimitteln); PEI für Impfstoffe und Blutprodukte; zuständige Landes- und Fachbehörden; jeweils Abdeckung und Datenstand prüfen | L/R | Erforderlich ist eine einschlägige Fach- oder Betreiberangabe, nicht zwingend ein bundesweiter Datenbankeintrag. Register sind produkt- und meldebezogen, kein Nachweis örtlicher Verfügbarkeit. Eine Sicherheits- oder Rückrufinformation belegt für sich keine Versorgungslücke. |
+| R1 | Welche Produktgruppe, Leistung und Versorgungskette ist in welchem Raum betroffen, und welche Quelle deckt sie ab? | [BfArM – Lieferengpässe für Humanarzneimittel](https://www.bfarm.de/DE/Arzneimittel/Arzneimittelinformationen/Lieferengpaesse/_node.html); PEI für Impfstoffe und Blutprodukte; zuständige Landes- und Fachbehörden; jeweils Abdeckung und Datenstand prüfen | L/R | Erforderlich ist eine einschlägige Fach- oder Betreiberangabe, nicht zwingend ein bundesweiter Datenbankeintrag. Register sind produkt- und meldebezogen, kein Nachweis örtlicher Verfügbarkeit. Eine Sicherheits- oder Rückrufinformation belegt für sich keine Versorgungslücke. |
 | R2 | Was ist Lieferproblem, vor Ort fehlende Verfügbarkeit und tatsächliche Versorgungslücke, und welche amtliche Stufe ist festgestellt? | BfArM bzw. PEI; Bekanntmachungen im Bundesanzeiger; Landesbehörden; Krankenhausträger (B) | L/R; D2 | Gemeldeter Lieferengpass ≠ Versorgungsmangel nach § 79 Abs. 5 AMG ≠ ungedeckter Bedarf bei Patientinnen und Patienten; Stufe nach der Tabelle oben mit Stelle und Datum. |
 | R3 | Welche fachlich anerkannten und tatsächlich verfügbaren Alternativen bestehen? | Zuständige Fachbehörden | R/M | Nur fachlich belegt wiedergeben; Absatz „Nutzbarkeit und Alternativen“. |
 | R4 | Welche Einrichtungen oder Patientengruppen können ihren Bedarf nicht decken? | Lagemeldungen (A.3); Gesundheitsbehörden | R; D2 | Bedarfsdeckung nach A.9.1. |

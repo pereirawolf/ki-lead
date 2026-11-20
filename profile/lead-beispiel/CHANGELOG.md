@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.2.1 – 20.11.2026
+
+Grundlage: Befunddatei `ki-lead-befund_quellen_2026-W47.json` (Quellenprüfung KW 47), QW-2026-W47-01 bis -07, vom Herausgeber am 20.11.2026 freigegeben. Dritte Stelle: nur Rechercheeinstiege der SOPs und Quellenregister.
+
+- **SOP-LEAD-Sammelmappe 3.26.1:** Rechercheeinstiege in B04, B14, B16, C03 und C10, Quellenregister und Gültigkeitsstand in Teil A. Einzelheiten in [`sop/CHANGELOG.md`](sop/CHANGELOG.md).
+- Darstellungsdatei, Schema, Kodierleitfaden, Arbeitsanweisungen, Kontakte, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 2.2.0 – 20.11.2026
 
 Grundlage: Erfassungstest KW 47/2026 (Befunddatei `ki-lead-befund_erfassungstest_2026-W47.json`, Befunde ET-2026-W47-01 bis -07), vom Herausgeber am 20.11.2026 entschieden; ET-2026-W47-03 in angepasster Fassung (Maßstab ist der Wechsel des Lagezustands, nicht die Planmäßigkeit). Zweite Stelle: geänderte Regeln; bestehende Meldungen bleiben gültig und werden nicht umkodiert.

@@ -9,7 +9,7 @@ lesegruppe: "Katalog-Einstiege"
 lageart: "Erdbeben (Inland sowie Auslandsbeben mit Deutschlandbezug)"
 art_vorschlag: ["Erdbeben"]
 zweck: "Reproduzierbare Einordnung schadensrelevanter Erdbeben in Deutschland und von Auslandsbeben mit deutschem Hilfe-, Betroffenheits- oder Versorgungsbezug."
-version: "2.2.0"
+version: "2.2.1"
 status: "Beispielfassung"
 stand: "20.11.2026"
 pflegeverantwortlich: "Herausgeber der Beispielfassung (bei Übernahme: fachlich zuständige Funktion eintragen)"
