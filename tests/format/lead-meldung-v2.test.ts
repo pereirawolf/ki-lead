@@ -588,9 +588,12 @@ describe("LEAD-Meldung-v2: Migration aus v1", () => {
       .filter((d) => d.endsWith(".json"))
       .map((d) => [`tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka/${d}`, "land"]),
     ["evaluation/material/ilka-musterfassung.json", "bund"],
+    // Prüfsteine in v1 (bis KW 46/2026); ab KW 47/2026 stehen sie in v2 (ET-2026-W47-01)
     ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
       .filter((d) => d.isDirectory())
-      .map((d) => [join("evaluation/pruefsteine", d.name, "meldung.json"), "bund"]),
+      .map((d) => join("evaluation/pruefsteine", d.name, "meldung.json"))
+      .filter((datei) => json(datei).schema === "LEAD-Meldung-v1")
+      .map((datei) => [datei, "bund"]),
   ];
 
   it.each(v1Dateien)("%s: migriert schemagültig und ohne Fehler der Referenzprüfung", (datei, ebene) => {

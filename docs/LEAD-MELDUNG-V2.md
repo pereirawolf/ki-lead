@@ -207,7 +207,7 @@ Danach je Profil (`profile/lead-beispiel`, `profile/lead-thueringen`, `profile/m
 5. Beispielmeldungen überführen: `npm run meldung:v2 -- migriere <dateien> --ziel <ordner>`, Hinweise abarbeiten, `npm run meldung:v2 -- pruefe <dateien> --schema <schema>`.
 6. Profilversion mit neuer Hauptversion, Profil-`CHANGELOG.md`; im Landesprofil die Ableitung `npm run profil:land` auf die Zusammenstellung umstellen.
 
-**Prüfsteine** (`evaluation/pruefsteine/`) bleiben nach ihrer README unverändert in v1; die Tests zeigen, dass sie sich überführen lassen.
+**Prüfsteine** (`evaluation/pruefsteine/`) bis KW 46/2026 bleiben nach ihrer README unverändert in v1; die Tests zeigen, dass sie sich überführen lassen. Prüfsteine ab KW 47/2026 stehen im gültigen Schema des Beispielprofils (`LEAD-Meldung-v2`); README und Test unterscheiden Kennzeichnung und Schemaprüfung nach der Kennung `schema` (ET-2026-W47-01).
 
 **Umgesetzt mit App 0.9.0 (14.11.2026, UP-2026-W45-06):**
 

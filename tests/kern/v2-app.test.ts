@@ -29,9 +29,12 @@ const V1 = [
   ...ordner("tests/fixtures/lead-thueringen-v1/beispiele/hochwasser-saale", "land"),
   ...ordner("tests/fixtures/lead-thueringen-v1/beispiele/orkantief-ilka", "land"),
   ["evaluation/material/ilka-musterfassung.json", "bund"] as const,
+  // Prüfsteine in v1 (bis KW 46/2026); ab KW 47/2026 stehen sie in v2 (ET-2026-W47-01)
   ...readdirSync(repoPfad("evaluation/pruefsteine"), { withFileTypes: true })
     .filter((d) => d.isDirectory())
-    .map((d) => [join("evaluation/pruefsteine", d.name, "meldung.json"), "bund"] as const),
+    .map((d) => join("evaluation/pruefsteine", d.name, "meldung.json"))
+    .filter((datei) => json(datei).schema === "LEAD-Meldung-v1")
+    .map((datei) => [datei, "bund"] as const),
 ];
 const BEISPIEL_TH = "formate/lead-meldung-v2/beispiele/LEAD-Meldung-v2_TH_2026-10-14T10-30_FIKTIV_Orkantief-Ilka.json";
 
