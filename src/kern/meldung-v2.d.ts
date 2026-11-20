@@ -28,7 +28,7 @@ export const MODUL_BAUSTEIN: "lead-baustein";
 export const LAENDER: Record<string, string>;
 
 export function stelleSchemaZusammen(z: Record<string, any>, lade: (datei: string) => Record<string, any>): Record<string, any>;
-export function mitVersatz(lokal: string, zone: string): string;
+export function mitVersatz(lokal: string, zone: string): string | null;
 export function zeitV2(wert: unknown, zone: string): string | null;
 export function vergleicheZeit(a: unknown, b: unknown, zone: string): number | null;
 export function stehtVor(a: unknown, b: unknown, zone: string): boolean;

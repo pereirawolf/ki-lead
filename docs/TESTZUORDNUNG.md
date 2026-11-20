@@ -1418,3 +1418,17 @@ Soll unabhängig vom Code: die Befunddatei mit der Entscheidung des Herausgebers
 | v2-Meldung mit Kennzeichnung besteht Kennzeichnung und Schema des Beispielprofils, nicht das v1-Schema; Abwandlungen (Status „freigegeben“ oder „zur_freigabe“, Verfahren „manuell“, Stelle ohne oder mit verschobenem Präfix, Namen unter `freigabe.erfasst` oder `freigabe.freigegeben`, unbekannte Kennung) werden abgelehnt | Prüfsteine › ET-2026-W47-01: v2-Meldungen werden über status, entstehung, absender und freigabe gekennzeichnet … | `tests/evaluation/pruefsteine.test.ts` |
 
 Mitgeführt ohne geändertes Soll: Migration v1 → v2 der Prüfsteine nur noch für Prüfsteine in v1 (`tests/format/lead-meldung-v2.test.ts`, `tests/kern/v2-app.test.ts`). Mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Beispiel- und Landesprofil 2.2.0).
+
+## Versatz an den Umstellungen in LEAD-Meldung-v2 (0.9.6, Grunddesign 1.12, LD-T04)
+
+Soll unabhängig vom Code: Grunddesign LD-T04 in Fassung 1.12 mit Nachtrag vom 20.11.2026 (in der doppelten Stunde die frühere, eine ausgefallene Uhrzeit um den Sprung nach vorn; Entscheidungen des Herausgebers vom 16. und 20.11.2026) und feste Zeitpunkte an den Umstellungen 2026 (29.03., 25.10.) in Europe/Berlin; für den Gleichlauf `wanduhrMitVersatz` aus `src/kern/zeit.ts` als zweite, unabhängige Umsetzung
+
+| Soll | Test | Datei |
+|---|---|---|
+| 25.10.2026: 02:00 bis 02:59 mit +02:00 (die frühere Stunde), ab 03:00 +01:00; derselbe Zeitpunkt wie `zeitpunktInZone` | mitVersatz an den Umstellungen › Ende der Sommerzeit … | `tests/kern/zeit-gleichlauf.test.ts` |
+| 29.03.2026: 02:00 bis 02:59 rücken auf 03:00 bis 03:59 +02:00, kein falscher Zeitpunkt; Sekunden bleiben | › Beginn der Sommerzeit … | `tests/kern/zeit-gleichlauf.test.ts` |
+| Außerhalb der Umstellungen bleibt der Text, Versatz der Jahreszeit; Unlesbares ergibt `null` | › außerhalb der Umstellungen … | `tests/kern/zeit-gleichlauf.test.ts` |
+| `mitVersatz` und `wanduhrMitVersatz` ergeben für jede Minute gleiche Werte: Europe/Berlin an den Umstellungen 2026 und 2027 und einem gewöhnlichen Tag, America/New_York, Australia/Lord_Howe (Sprung um 30 Minuten), UTC | Gleichlauf mitVersatz und wanduhrMitVersatz › … | `tests/kern/zeit-gleichlauf.test.ts` |
+| Migration: Zeitpunkte an beiden Umstellungen nach derselben Regel | LEAD-Meldung-v2: Migration aus v1 › Zeitpunkte erhalten den Versatz der Zone … | `tests/format/lead-meldung-v2.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/format/lead-meldung-v2.test.ts` (Titel und zwei Erwartungen an den Umstellungen ergänzt). Unverändert: `evaluation/material/ilka-musterfassung.v2.json` mit `entstehung.erstellt` „2026-10-25T02:30+01:00“ aus der Überführung vom 14.11.2026 (gültiger Zeitpunkt, die spätere 02:30; Datei über Prüfsummen an die Pläne gebunden, Entscheidung des Herausgebers vom 20.11.2026).

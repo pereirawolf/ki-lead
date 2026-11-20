@@ -92,8 +92,23 @@ export function stelleSchemaZusammen(z, lade) {
 // 2. Zeit
 // ---------------------------------------------------------------------------------------------------------------
 
+// Formate je Zone und Art zwischengespeichert: Migration und Gleichlauftest rufen die Umrechnung oft auf
+const formate = new Map();
+function format(zone, art) {
+  const schluessel = `${art}|${zone}`;
+  let f = formate.get(schluessel);
+  if (!f) {
+    f =
+      art === "versatz"
+        ? new Intl.DateTimeFormat("en-US", { timeZone: zone, timeZoneName: "longOffset" })
+        : new Intl.DateTimeFormat("en-US", { timeZone: zone, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" });
+    formate.set(schluessel, f);
+  }
+  return f;
+}
+
 function versatzMinuten(ms, zone) {
-  const teil = new Intl.DateTimeFormat("en-US", { timeZone: zone, timeZoneName: "longOffset" })
+  const teil = format(zone, "versatz")
     .formatToParts(new Date(ms))
     .find((p) => p.type === "timeZoneName")?.value;
   const m = /GMT([+-])(\d{2}):(\d{2})/.exec(teil || "");
@@ -107,18 +122,38 @@ function versatzText(min) {
   return `${v}${zweistellig(Math.floor(a / 60))}:${zweistellig(a % 60)}`;
 }
 
-/** Wanduhrzeit „JJJJ-MM-TTThh:mm“ in der Zone → „JJJJ-MM-TTThh:mm+hh:mm“. */
+/** Wanduhrzeit (Jahr, Monat, Tag, Stunde, Minute) eines absoluten Zeitpunkts in der Zone. */
+function wanduhrIn(ms, zone) {
+  const t = {};
+  for (const p of format(zone, "wanduhr").formatToParts(new Date(ms))) if (p.type !== "literal") t[p.type] = Number(p.value);
+  return [t.year, t.month, t.day, t.hour % 24, t.minute];
+}
+
+/**
+ * Wanduhrzeit „JJJJ-MM-TTThh:mm“ in der Zone → „JJJJ-MM-TTThh:mm+hh:mm“. Gleiche Regel wie zeitpunktInZone in
+ * src/kern/zeit.ts (Grunddesign LD-T04, seit 0.9.6): In der doppelt vorkommenden Stunde am Ende der Sommerzeit gilt die
+ * frühere, eine ausgefallene Uhrzeit am Beginn rückt um den Sprung nach vorn (02:30 → 03:30). Sekunden bleiben erhalten.
+ * Der Gleichlauf beider Umsetzungen ist in tests/kern/zeit-gleichlauf.test.ts geprüft.
+ */
 export function mitVersatz(lokal, zone) {
   const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(lokal);
   if (!m) return null;
-  const wand = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0));
-  let utc = wand;
-  for (let i = 0; i < 4; i++) {
-    const neu = wand - versatzMinuten(utc, zone) * 60000;
-    if (neu === utc) break;
-    utc = neu;
-  }
-  return `${lokal}${versatzText(versatzMinuten(utc, zone))}`;
+  const sekunden = m[6] === undefined ? "" : `:${m[6]}`;
+  const naiv = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  // Überläufe (Tag 32, Stunde 24) erst normalisieren, dann mit der Wanduhr vergleichen – der Text bleibt dann, wie er ist
+  const n = new Date(naiv);
+  const soll = [n.getUTCFullYear(), n.getUTCMonth() + 1, n.getUTCDate(), n.getUTCHours(), n.getUTCMinutes()].join();
+  // Zwei Kandidaten mit den Versätzen einen Tag vor und nach dem Zeitpunkt; der frühere passende gewinnt.
+  const vorher = versatzMinuten(naiv - 864e5, zone);
+  const kandidaten = [vorher, versatzMinuten(naiv + 864e5, zone)]
+    .map((v) => naiv - v * 60000)
+    .filter((utc) => wanduhrIn(utc, zone).join() === soll)
+    .sort((a, b) => a - b);
+  if (kandidaten.length) return `${lokal}${versatzText(versatzMinuten(kandidaten[0], zone))}`;
+  // Ausgefallene Wanduhrzeit: mit dem Versatz vor dem Sprung umrechnen, das ergibt die Uhrzeit nach dem Sprung
+  const utc = naiv - vorher * 60000;
+  const [j, mo, t, h, mi] = wanduhrIn(utc, zone);
+  return `${j}-${zweistellig(mo)}-${zweistellig(t)}T${zweistellig(h)}:${zweistellig(mi)}${sekunden}${versatzText(versatzMinuten(utc, zone))}`;
 }
 
 /** v1-Zeitangabe ("", Tag oder Wanduhrzeit) → v2 (null, Tag oder Zeitpunkt mit Versatz). */

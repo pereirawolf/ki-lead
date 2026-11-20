@@ -512,10 +512,12 @@ describe("LEAD-Meldung-v2: Verhältniswerte, Beobachtungszeitraum und Bezugsgrö
 });
 
 describe("LEAD-Meldung-v2: Migration aus v1", () => {
-  it("Zeitpunkte erhalten den Versatz der Zone, auch über die Umstellung am 25.10.2026", () => {
+  it("Zeitpunkte erhalten den Versatz der Zone, auch an den Umstellungen (doppelte Stunde die frühere, ausgefallene nach vorn)", () => {
     expect(mitVersatz("2026-10-24T13:00", "Europe/Berlin")).toBe("2026-10-24T13:00+02:00");
     expect(mitVersatz("2026-10-28T10:30", "Europe/Berlin")).toBe("2026-10-28T10:30+01:00");
     expect(mitVersatz("2026-10-25T03:30", "Europe/Berlin")).toBe("2026-10-25T03:30+01:00");
+    expect(mitVersatz("2026-10-25T02:30", "Europe/Berlin")).toBe("2026-10-25T02:30+02:00");
+    expect(mitVersatz("2026-03-29T02:30", "Europe/Berlin")).toBe("2026-03-29T03:30+02:00");
   });
 
   it("Quellenzeile v1 wird in Felder zerlegt", () => {
