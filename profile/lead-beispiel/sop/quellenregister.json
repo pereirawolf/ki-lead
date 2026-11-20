@@ -649,10 +649,7 @@
     {
       "id": "S025",
       "url": "https://www.bka.de/DE/Presse/Pressestelle/pressestelle_node.html",
-      "fundstellen": [
-        "sop/teil-b/B14_sicherheitslage.md",
-        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
-      ],
+      "fundstellen": [],
       "abrufzeit_utc": "2026-10-21T20:16:04+00:00",
       "fehler": "HTTP Error 503: Service Unavailable",
       "pruefdatum": "2026-10-21",
@@ -660,14 +657,33 @@
       "zweck_und_pruefgrenze": "BKA-Pressestelle; konkreten öffentlichen Gefährdungshinweis der zuständigen Stelle ermitteln.",
       "status": "abruf_offen",
       "prueftiefe": "Abrufversuch dokumentiert; kein unmittelbar gelesener Fachinhalt",
-      "offene_nachpruefung": "Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
+      "offene_nachpruefung": "In B14/R1 und B16/R1 durch „Aktuelle Meldungen“ des BKA ersetzt (QW-2026-W47-05, Entscheidung des Herausgebers vom 20.11.2026). Erneuter Direktabruf oder bestätigter amtlicher Ersatz vor Verwendung. Zugriffsfehler allein beweist weder dauerhaften Linkdefekt noch Ereignisfreiheit.",
       "belegt_aktuelles_ereignis": false,
       "zusaetzlicher_abruf": "Amtlicher Suchindex bestätigt Funktion der Pressestelle; kein aktueller Gefährdungshinweis direkt geprüft.",
       "zweitpruefung": {
         "status": "Wartung/leer/JS-Hülle",
         "eignung": "nicht beurteilbar",
         "hinweis": "Beim Abruf kam nur eine Wartungsseite (auch für https://www.bka.de/DE/Presse/presse_node.html); das kann auch eine Sperre für automatisierte Abrufe sein. Laut Suchtreffer heißt die Seite 'BKA - Ihr Kontakt zur Pressestelle'. Sie ist also wahrscheinlich nur eine Kontaktseite und keine Liste der Pressemitteilungen. Für B14/B16 (behördlich bestätigte Fakten) wäre die Presse-Übersicht (…/DE/Presse/presse_node.html) vermutlich geeigneter, das ist aber nicht geprüft."
-      }
+      },
+      "ersetzt_durch": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html"
+    },
+    {
+      "id": "BKA-MELDUNGEN",
+      "url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html",
+      "fundstellen": [
+        "sop/teil-b/B14_sicherheitslage.md",
+        "sop/teil-b/B16_sabotage-anschlag-terrorismus.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "BKA - Aktuelle Meldungen",
+      "end_url": "https://www.bka.de/DE/AktuelleInformationen/AktuelleMeldungen/aktuelleMeldungen_node.html",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Übersicht des BKA zu Pressemitteilungen, Warnhinweisen und Fahndungen; zuständige Stelle und Bestätigungsgrad je Meldung gesondert belegen, keine eigene Gefährdungsbewertung.",
+      "status": "dokument_oder_einstieg_abgerufen",
+      "prueftiefe": "Webabruf ohne Prüfsumme; Gliederung gelesen, keine Einzelmeldung geprüft",
+      "offene_nachpruefung": "Einzelmeldung mit Datum, herausgebender Stelle und Geltungsraum vor Verwendung prüfen.",
+      "belegt_aktuelles_ereignis": false
     },
     {
       "id": "S026",
