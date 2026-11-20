@@ -35,7 +35,7 @@ bisherige_ids: ["baustein-n10"]
 
 | ID | Leitfrage | Quelle & Aktualität | Prüfen für | Hinweis/Stolperstelle |
 |---|---|---|---|---|
-| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. |
+| R1 | Welcher Erreger ist in welcher Tierpopulation mit welchem Stand bestätigt? | [FLI: Tierseuchengeschehen](https://www.fli.de/de/aktuelles/tierseuchengeschehen/) (Tierseucheninformationssystem, Radar Bulletin); Veterinärbehörden der Länder | L; D1 | Verdacht und amtliche Feststellung trennen. Die Risikoeinschätzung des FLI (Stufen je Eintragsweg) ist eine Fachbewertung mit Datum, keine Rechtsstufe und kein Radarwert; Stufen aus dem Originaldokument mit Stand übernehmen. |
 | R2 | Welche humane Exposition oder Infektion ist fachlich bewertet? | [FLI: Aviäre Influenza](https://www.fli.de/de/aktuelles/tierseuchengeschehen/aviaere-influenza-ai-gefluegelpest/); RKI; Gesundheitsbehörden | R | Zoonoserisiko nach Erreger und Exposition fachlich prüfen (Absatz „Humaner Prüfpfad“); arbeitsbezogene Schutzbedarfe gesondert. |
 | R3 | Welche Veterinärmaßnahmen und Räume sind angeordnet? | Veterinärbehörden; Allgemeinverfügungen | M; D1 | Restriktionszone ≠ Ausbruchsgebiet. |
 | R4 | Welche Kapazitäten für Untersuchung, Tierkörperbeseitigung, Logistik oder Hilfe sind tatsächlich gebunden? | Lagemeldungen (A.3) | M; D4 | Gebunden ≠ angefragt; gemeinsame Ressourcen nach A.7.4. |
