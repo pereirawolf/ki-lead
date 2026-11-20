@@ -1058,6 +1058,22 @@
       }
     },
     {
+      "id": "BKG-WESIS",
+      "url": "https://wesis.bkg.bund.de/",
+      "fundstellen": [
+        "sop/teil-c/C03_weltraumwetter-navigation-zeitreferenz.md"
+      ],
+      "abrufzeit_utc": "2026-11-20T21:00:00Z",
+      "titel": "BKG space weather observation data access information (WESIS)",
+      "pruefdatum": "2026-11-20",
+      "im_basisbestand": false,
+      "zweck_und_pruefgrenze": "Beobachtungs- und Kurzfristvorhersagedaten des BKG (Solarfluss F10.7/F30, K-Index Wettzell, Ereignisliste); keine Fachwarnung und kein Nachweis einer Funktionsstörung.",
+      "status": "einstieg_geprueft_liveinhalt_offen",
+      "prueftiefe": "Suchtreffer derselben amtlichen Domain; kein Direktabruf",
+      "offene_nachpruefung": "Direktabruf; Messwert oder Ereignis mit Zeitstempel (UTC) und Messort abrufen; Warnung bei zuständigem Fachdienst gesondert belegen.",
+      "belegt_aktuelles_ereignis": false
+    },
+    {
       "id": "S041",
       "url": "https://www.fli.de/de/aktuelles/tierseuchengeschehen/",
       "fundstellen": [
