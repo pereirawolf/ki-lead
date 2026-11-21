@@ -8,6 +8,13 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.2.2 – 21.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 21.11.2026 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle: technische Vorgabe im Schema ohne fachliche Wirkung; bestehende Meldungen bleiben gültig.
+
+- **Schema:** neu zusammengestellt mit Modul `lead-bevoelkerungsschutz` und der Vorgabe `"default": "offen"` für den Status einer Radarachse (LEAD-Meldung-v2, Nachtrag 15). Eine neu angelegte Achse ist damit offen statt „belegt“ ohne Stufe.
+- Darstellungsdatei, Kodierleitfaden, Arbeitsanweisungen, SOP-Sammelmappe, Kontakte, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 2.2.1 – 20.11.2026
 
 Grundlage: Befunddatei `ki-lead-befund_quellen_2026-W47.json` (Quellenprüfung KW 47), QW-2026-W47-01 bis -07, vom Herausgeber am 20.11.2026 freigegeben. Dritte Stelle: nur Rechercheeinstiege der SOPs und Quellenregister.

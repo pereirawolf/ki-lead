@@ -3,9 +3,9 @@
 import { entstehungTextV2, kennzahlenTextV2, quellenverzeichnisV2, UEBERGREIFEND, zeitstrahlTextV2 } from "../kern/v2darstellung";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
-import { aufloesen } from "../kern/schema";
+import { aufloesen, enumWerte } from "../kern/schema";
 import { holeWert, type Segment } from "../kern/pfad";
-import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarWerte, radarZeilen } from "../kern/ui";
+import { bezeichnung, feldUi, istAusgeblendet, pfadBezeichnung, radarFuer, radarWerte, radarZeilen, wertBezeichnung } from "../kern/ui";
 import { radarForm } from "../kern/radarGeometrie";
 import { generischerPfad } from "../kern/pfad";
 import { datumDE } from "../kern/ausgabe";
@@ -191,7 +191,7 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
   const label = (typeof segs[1] === "number" ? teile.slice(1) : teile).join(" › ") || bezeichnung(profil.ui, gen);
   if (f.widget === "radar") {
     const radar = radarFuer(profil.ui, f);
-    const text = radar ? radarZeilen(radar, wert).join("\n") : "";
+    const text = radar ? radarZeilen(radar, wert, profil.ui).join("\n") : "";
     out.push([
       label,
       radar
@@ -223,10 +223,12 @@ function zeilen(profil: Profil, knoten: any, wert: any, segs: Segment[], out: Ze
       wert.forEach((x, i) => zeilen(profil, k?.items, x, [...segs, i], out));
       return;
     }
-    out.push([label, wert.map(String).join(", ") || "–"]);
+    out.push([label, wert.map((x) => wertBezeichnung(profil.ui, x)).join(", ") || "–"]);
     return;
   }
   let text = wert === null || wert === undefined || wert === "" ? "–" : typeof wert === "object" ? JSON.stringify(wert) : String(wert);
+  // Auswahlwerte in ihrer Anzeigeform (seit 0.9.7): „ungefähr“ statt „ungefaehr“
+  if (text !== "–" && enumWerte(k)) text = wertBezeichnung(profil.ui, wert);
   if (f.widget === "datum" || f.widget === "datumzeit" || f.widget === "datum_uhrzeit") text = datumDE(text) || "–";
   if (text !== "–") text = gliedereFeld(gen, text, profil.ui);
   out.push([label, text]);

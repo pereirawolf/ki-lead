@@ -6,7 +6,7 @@ import { datumDE } from "./ausgabe";
 import { generischerPfad, holeWert, type Segment } from "./pfad";
 import { aufloesen } from "./schema";
 import type { Profil } from "./typen";
-import { alsText, bezeichnung, feldUi } from "./ui";
+import { alsText, bezeichnung, feldUi, wertBezeichnung } from "./ui";
 
 /** Höchstlänge eines Elementtitels, der nicht aus `titel_feld` stammt */
 const TITEL_MAX = 80;
@@ -45,7 +45,8 @@ export function elementName(profil: Profil, segs: Segment[]): string {
 
 function blattText(profil: Profil, segs: Segment[], wert: unknown): string {
   if (wert === null || wert === undefined || wert === "") return "";
-  const text = typeof wert === "object" ? JSON.stringify(wert) : String(wert);
+  // Auswahlwerte in ihrer Anzeigeform (seit 0.9.7)
+  const text = typeof wert === "object" ? JSON.stringify(wert) : wertBezeichnung(profil.ui, wert);
   const w = feldUi(profil.ui, generischerPfad(segs)).widget;
   return w === "datum" || w === "datumzeit" || w === "datum_uhrzeit" ? datumDE(text) || text : text;
 }

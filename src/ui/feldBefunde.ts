@@ -7,6 +7,7 @@
 import { createContext } from "react";
 import { teilePfad, type Segment } from "../kern/pfad";
 import { pfadBezeichnung } from "../kern/ui";
+import { RADAR_UNBEWERTET } from "../kern/validierung";
 import type { UiKonfig } from "../kern/typen";
 
 /** Befund mit Pfad: Schemabefund (JSON-Pointer) oder Pflichtbefund („a[0].b“) */
@@ -48,12 +49,13 @@ export function befundeJeFeld(schema: PfadBefund[], pflicht: PfadBefund[], ui: U
 }
 
 /**
- * Befunde, die die Felder anzeigen: Felder, deren Befunde nur „Pflichtangabe fehlt“ lauten, nur wenn `zeigen` sie
- * freigibt (bearbeitet, Prüfschritt besucht, geladene Meldung); alle anderen Befunde unverändert (UX-2026-W44-05)
+ * Befunde, die die Felder anzeigen: Felder, deren Befunde nur „Pflichtangabe fehlt“ lauten (seit 0.9.7 auch „noch nicht
+ * bewertet“ am Radar), nur wenn `zeigen` sie freigibt (bearbeitet, Prüfschritt besucht, geladene Meldung); alle anderen
+ * Befunde unverändert (UX-2026-W44-05)
  */
 export function sichtbareBefunde(befunde: Map<string, string[]>, zeigen: (schluessel: string) => boolean): Map<string, string[]> {
   const out = new Map<string, string[]>();
-  for (const [k, texte] of befunde) if (zeigen(k) || texte.some((t) => t !== FEHLT)) out.set(k, texte);
+  for (const [k, texte] of befunde) if (zeigen(k) || texte.some((t) => t !== FEHLT && !t.startsWith(RADAR_UNBEWERTET))) out.set(k, texte);
   return out;
 }
 

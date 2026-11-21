@@ -52,6 +52,7 @@
         },
         "status": {
           "enum": ["belegt", "mindestwert", "offen"],
+          "default": "offen",
           "description": "mindestwert: bestätigte Mindestzahl; offen: keine tragfähige Stufe."
         },
         "offen_grund": {

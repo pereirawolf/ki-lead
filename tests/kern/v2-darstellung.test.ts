@@ -110,7 +110,7 @@ describe("UP-2026-W45-03: Radarachsen als Objekte", () => {
     expect(radarWerte({ d1: 3, d2: null })).toEqual({ d1: 3, d2: null });
     expect(radarZeilen(def, { d1: { stufe: 2, status: "mindestwert" }, d2: { stufe: null, status: "offen", offen_grund: "kein_beleg" } })).toEqual([
       "D1 Achse: 2 – zwei (Mindestwert)",
-      "D2 Achse: offen (kein beleg)",
+      "D2 Achse: offen (kein Beleg)",
     ]);
     expect(radarZeilen(def, { d1: 1 })).toEqual(["D1 Achse: 1 – eins", "D2 Achse: offen"]);
   });
@@ -120,7 +120,9 @@ describe("UP-2026-W45-03: Radarachsen als Objekte", () => {
       d1: { stufe: 2, status: "belegt", begruendung: "B", quellen: ["Q1"] },
       d2: { stufe: null, status: "offen", offen_grund: "kein_beleg", begruendung: "C", quellen: [] },
     };
-    expect(radarMitStufe(def, alt, "d1", null).d1).toEqual({ stufe: null, status: "offen", offen_grund: "sonstiges", begruendung: "B", quellen: ["Q1"] });
+    // seit 0.9.7 ohne vorgegebenen Grund („sonstiges“): den Grund wählt, wer die Achse offen lässt
+    expect(radarMitStufe(def, alt, "d1", null).d1).toEqual({ stufe: null, status: "offen", begruendung: "B", quellen: ["Q1"] });
+    expect(radarMitStufe(def, alt, "d2", null).d2).toMatchObject({ status: "offen", offen_grund: "kein_beleg" });
     expect(radarMitStufe(def, alt, "d2", 3).d2).toEqual({ stufe: 3, status: "belegt", begruendung: "C", quellen: [] });
     expect(radarMitStufe(def, { d1: { stufe: 4, status: "mindestwert", begruendung: "", quellen: [] } }, "d1", 5).d1).toMatchObject({
       status: "mindestwert",

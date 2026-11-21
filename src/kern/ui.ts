@@ -90,7 +90,9 @@ export function radarAlsObjekte(wert: unknown): boolean {
 
 /**
  * Neuer Radarwert mit geänderter Stufe einer Achse. Bei v2-Achsen bleiben Begründung und Belege erhalten; „status“
- * folgt der Stufe (null → offen mit bisherigem oder „sonstiges“ Grund, Zahl → belegt, ein Mindestwert bleibt einer).
+ * folgt der Stufe (null → offen, Zahl → belegt, ein Mindestwert bleibt einer). Ein schon gewählter Grund bleibt; fehlt
+ * er, setzt die App keinen (seit 0.9.7, bis dahin „sonstiges“): Den Grund wählt, wer die Achse offen lässt
+ * (Kodierleitfaden, Grundregel 10), und die Prüfung erinnert daran.
  */
 export function radarMitStufe(def: RadarDef, wert: unknown, key: string, stufe: number | null): Record<string, unknown> {
   if (!radarAlsObjekte(wert)) {
@@ -104,7 +106,7 @@ export function radarMitStufe(def: RadarDef, wert: unknown, key: string, stufe: 
   const achse: Record<string, unknown> = { ...alt, stufe };
   if (stufe === null) {
     achse.status = "offen";
-    achse.offen_grund = alt.offen_grund ?? "sonstiges";
+    if (typeof alt.offen_grund !== "string" || !alt.offen_grund) delete achse.offen_grund;
   } else {
     achse.status = alt.status === "mindestwert" ? "mindestwert" : "belegt";
     delete achse.offen_grund;
@@ -112,13 +114,13 @@ export function radarMitStufe(def: RadarDef, wert: unknown, key: string, stufe: 
   return { ...(wert as Record<string, unknown>), [key]: achse };
 }
 
-export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undefined): string[] {
+export function radarZeilen(def: RadarDef, wert: Record<string, unknown> | undefined, ui?: Pick<UiKonfig, "werte">): string[] {
   const w = radarWerte(wert);
   return def.achsen.map((a) => {
     const v = w[a.key] ?? null;
     const o = wert?.[a.key] && typeof wert[a.key] === "object" ? (wert[a.key] as Record<string, unknown>) : undefined;
     const zusatz =
-      o?.status === "mindestwert" ? " (Mindestwert)" : v === null && typeof o?.offen_grund === "string" ? ` (${o.offen_grund.replace(/_/g, " ")})` : "";
+      o?.status === "mindestwert" ? " (Mindestwert)" : v === null && typeof o?.offen_grund === "string" ? ` (${wertBezeichnung(ui, o.offen_grund)})` : "";
     return `${a.label}: ${v !== null ? `${String(v)}${a.stufen[v] ? ` – ${a.stufen[v]}` : ""}` : "offen"}${zusatz}`;
   });
 }
@@ -152,6 +154,42 @@ export function alsText(v: unknown): string {
   if (typeof v === "string") return v;
   if (typeof v === "number" || typeof v === "boolean") return String(v);
   return "";
+}
+
+/**
+ * Anzeigeform der Auswahlwerte von LEAD-Meldung-v2 und ihrer Fachmodule (seit 0.9.7, Entscheidung des Herausgebers vom
+ * 21.11.2026): Die Werte im Schema bleiben technisch („ungefaehr“, „nicht_ueberpruefbar“), damit JSON, Arbeitsanweisungen
+ * und Schnittstellen unverändert bleiben; Maske und lesbare Ausgaben zeigen Umlaute und Leerzeichen. Ein Profil kann in
+ * der Darstellungsdatei unter „werte“ eigene Bezeichnungen festlegen oder diese überschreiben.
+ */
+export const WERT_BEZEICHNUNGEN: Readonly<Record<string, string>> = {
+  amtlich_gemeldet: "amtlich gemeldet",
+  bandbreite_ueber_stufengrenze: "Bandbreite über Stufengrenze",
+  behoerdenintern: "behördenintern",
+  berichtigung_von: "Berichtigung von",
+  fortschreibung_von: "Fortschreibung von",
+  geschaetzt: "geschätzt",
+  gezaehlt: "gezählt",
+  kapazitaet: "kapazität",
+  kein_beleg: "kein Beleg",
+  kein_bezugsgegenstand: "kein Bezugsgegenstand",
+  nicht_ausgewertet: "nicht ausgewertet",
+  nicht_ueberpruefbar: "nicht überprüfbar",
+  oeffentlich: "öffentlich",
+  ungefaehr: "ungefähr",
+  unveraendert: "unverändert",
+  veraendert: "verändert",
+  verhaeltnis: "verhältnis",
+  zur_freigabe: "zur Freigabe",
+  zurueckgezogen: "zurückgezogen",
+  zusammenfuehrung: "zusammenführung",
+};
+
+/** Anzeigeform eines Auswahlwerts: Bezeichnung des Profils, sonst der App, sonst der Wert selbst */
+export function wertBezeichnung(ui: Pick<UiKonfig, "werte"> | undefined, v: unknown): string {
+  if (typeof v !== "string") return alsText(v);
+  const eigene = ui?.werte?.[v];
+  return typeof eigene === "string" && eigene.trim() ? eigene : (WERT_BEZEICHNUNGEN[v] ?? v);
 }
 
 /**

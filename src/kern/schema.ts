@@ -67,6 +67,9 @@ export function leererWert(knoten: any, wurzel: any): any {
   const k = aufloesen(knoten, wurzel);
   if (!k) return null;
   if ("const" in k) return k.const;
+  // Vorgabe des Schemas (seit 0.9.7): etwa „offen“ für den Status einer neuen Radarachse, damit eine unbearbeitete
+  // Achse nicht als „belegt“ ohne Stufe in die Meldung geht
+  if ("default" in k) return structuredClone(k.default);
   const e = enumWerte(k);
   if (e) {
     if (e.includes("")) return "";

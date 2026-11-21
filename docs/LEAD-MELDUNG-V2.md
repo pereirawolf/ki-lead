@@ -155,6 +155,7 @@ Ein Modul ist ein JSON-Schema für den Inhalt von `sachverhalte[].module.<kennun
   - `status` `belegt`: Stufe 0–6 nach Stufentext; 0 ist ein belegter Wert.
   - `status` `mindestwert`: bestätigte Mindestzahl bzw. Mindestprognose (Kodierleitfaden Grundregel 6, D5); bisher nur im Text erkennbar.
   - `status` `offen`: `stufe: null` und `offen_grund` nach der Prüfreihenfolge des Kodierleitfadens: `kein_bezugsgegenstand`, `kein_beleg`, `bandbreite_ueber_stufengrenze`, `sonstiges`.
+  - Vorgabe (`default`) für `status` ist `offen`: Eine neu angelegte, noch nicht bearbeitete Achse ist offen und hat noch keinen Grund; die Prüfung meldet sie als „noch nicht bewertet“ (seit Nachtrag 15).
   - `begruendung` nach Grundregeln 9 und 10, `quellen` als IDs.
 - Kein Gesamtscore. Die Fassung der Kodierregeln steht in `entstehung.regelwerk.kodierleitfaden`, nicht je Achse.
 
@@ -281,6 +282,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 15 | 21.11.2026 | Modul `lead-bevoelkerungsschutz` (und Modul der Vorlage): Vorgabe `"default": "offen"` für `status` einer Radarachse, eine reine Annotation; neue Achsen sind damit offen statt „belegt“ ohne Stufe (Abschnitt 7, Entscheidung des Herausgebers vom 21.11.2026). Zusammengestellte Schemata neu erzeugt (App 0.9.7). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 14 | 14.11.2026 | Kernschema, additiv (SR-2026-W46-01 bis -04, Vorschlag aus STATIS-LEAD): `kennzahl.art` „verhaeltnis“, `kennzahl.erhebung` „berechnet“, optional `beobachtungszeitraum` (neue Definition `kalenderzeitraum`), `bezug` und `vorlaeufig` (Abschnitt 4.3); Referenzprüfung (Abschnitt 8); Abschnitt 7: Ausnahme vom erfassten Ausschnitt je Format und Wiederherstellung der neuen Felder (SR-2026-W46-05, -06); zusammengestellte Schemata neu erzeugt (App 0.9.3). Bestehende Meldungen bleiben gültig; Thessa und KSNV pinnen neu |
 | 2.0 (Entwurf), Nachtrag 13 | 14.11.2026 | Format und Schemata unverändert: offener Punkt 2 erledigt, v2 bei Kosten und Fehlerquote vertretbar (Vergleichslauf Ilka vom 14.11.2026, Ergebnisbericht unter `evaluation/abnahmen/`, Entscheidung des Herausgebers vom 14.11.2026) |
 | 2.0 (Entwurf), Nachtrag 12 | 14.11.2026 | Format und Schemata unverändert: Profile auf v2 umgestellt (Abschnitt 10, Stand; App 0.9.0, UP-2026-W45-06); offene Punkte 2 (Vergleichslauf vor und nach der Umstellung) und 6 (Kreisschlüssel in den Beispielen) fortgeschrieben |

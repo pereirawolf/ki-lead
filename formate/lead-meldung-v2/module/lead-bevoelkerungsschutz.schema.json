@@ -85,6 +85,7 @@
         },
         "status": {
           "enum": ["belegt", "mindestwert", "offen"],
+          "default": "offen",
           "description": "mindestwert: bestätigte Mindestzahl bzw. Mindestprognose (Kodierleitfaden Grundregel 6, D5); offen: keine tragfähige Stufe."
         },
         "offen_grund": {

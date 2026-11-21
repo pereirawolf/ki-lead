@@ -247,6 +247,8 @@ export interface UiKonfig {
   analyse_gliederung?: TextGliederung;
   /** Optionale LEAD-Eingabehilfen: Vorlagen vorhandener Satzanfänge und Kennsätze je Textfeld */
   feldhilfen?: FeldhilfenKonfig;
+  /** Anzeigeform von Auswahlwerten („ungefaehr“ → „ungefähr“), ergänzt oder überschreibt die Vorgaben der App (seit 0.9.7) */
+  werte?: Record<string, string>;
 }
 
 /** Vorlage für einen vorhandenen Satzanfang oder Kennsatz; offene Stellen als ⟦…⟧, gelesene Werte als {{t0}} usw. */
