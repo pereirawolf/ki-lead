@@ -2,6 +2,7 @@
 
 import { einleitungsZiele } from "../kern/einleitung";
 import { feldhilfenFehler } from "../kern/feldhilfen";
+import { nummerPraefix } from "../kern/nummern";
 import { fehlendeKennsaetze, KENNSATZ_ERSATZ, type PflichtKennsatz } from "../kern/kennsaetze";
 import { bekannterAnbieter, unbekanntesModellText } from "../anbieter/verteiler";
 import { schemaFehler, schemaHinweise } from "../kern/validierung";
@@ -86,6 +87,9 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
       else if ((f as any).label !== undefined && !istText((f as any).label)) fehler(`Feld „${pfad}“: „label“ muss Text sein.`);
       else if ((f as any).reihenfolge !== undefined && !textListe((f as any).reihenfolge))
         fehler(`Feld „${pfad}“: „reihenfolge“ muss eine Liste von Feldnamen sein.`);
+      else if ((f as any).verweis !== undefined && !istText((f as any).verweis)) fehler(`Feld „${pfad}“: „verweis“ muss Text sein.`);
+      else if ((f as any).nummern !== undefined && !["liste", "meldung"].includes((f as any).nummern))
+        fehler(`Feld „${pfad}“: „nummern“ muss „liste“ oder „meldung“ sein.`);
     }
   const r = ui.rollen;
   if (!istObjekt(r)) fehler("Abschnitt „rollen“ fehlt.");
@@ -277,6 +281,19 @@ export function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]
       teilePfad(pfad).map((s) => (s === -1 ? 0 : s)),
     );
     if (!knoten) befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Feld „${pfad}“ kommt im Schema nicht vor.` });
+  }
+  // Verweise (seit Profilformat 1.39): Ziel ist eine Liste, deren Einträge Nummern führen
+  for (const [pfad, f] of Object.entries(ui.felder || {})) {
+    if (!f.verweis) continue;
+    const liste = aufloesen(
+      unterSchema(
+        schema,
+        teilePfad(f.verweis).map((s) => (s === -1 ? 0 : s)),
+      ),
+      schema,
+    );
+    if (!liste?.items || !nummerPraefix(liste.items, schema))
+      befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Feld „${pfad}“ verweist auf „${f.verweis}“, keine Liste mit Nummern.` });
   }
   // Reihenfolge der Unterfelder (seit Profilformat 1.38): unbekannte Namen werden übergangen
   for (const [pfad, f] of Object.entries(ui.felder || {})) {

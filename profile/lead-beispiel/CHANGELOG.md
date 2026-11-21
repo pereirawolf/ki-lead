@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.6.0 – 22.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 21.11.2026 zu Nummern und Verweisen (App 0.9.11, Profilformat 1.39). Zweite Stelle: neue Eingabehilfen; Schema und Regeln unverändert, bestehende Meldungen bleiben gültig.
+
+- **Darstellungsdatei, Verweise:** `verweis: "quellen"` an allen Belegfeldern, am Ursprung einer Quelle und an der Quelle eines Kennzahlen-Bausteins; „Zugehörige Empfehlung“ auf die Empfehlungen, „Teilmenge von“ und die Kennzahl eines Bausteins auf die Kennzahlen, „Berichtigt Zeile“ auf den Zeitstrahl, jeweils desselben Sachverhalts bzw. der übergreifenden Lage.
+- **Darstellungsdatei, Nummern:** `nummern: "meldung"` am Zeitstrahl (Kodierleitfaden Abschnitt 8.3: Zeilennummern eindeutig in der Meldung); Hinweise der Nummernfelder „Vergibt die App beim Anlegen …“, Belege „über „Hinzufügen …“ gewählt“.
+- **SOP-Sammelmappe 3.26.5:** nur Gültigkeitsstand in Teil A (Darstellungsdatei 2.6.0).
+- Arbeitsanweisungen geprüft: kein Anpassungsbedarf. Schema, Kodierleitfaden, Kontakte, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 2.5.0 – 21.11.2026
 
 Grundlage: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (App 0.9.10, Profilformat 1.38). Zweite Stelle: geänderte Darstellung; Schema und Regeln unverändert, bestehende Meldungen bleiben gültig.

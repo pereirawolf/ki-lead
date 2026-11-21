@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.5.0 – 22.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 21.11.2026 zu Nummern und Verweisen (App 0.9.11, Profilformat 1.39). Zweite Stelle: neue Eingabehilfen.
+
+- **Darstellungsdatei:** Verweise und Nummern wie in der Vorlage `formate/lead-meldung-v2/beispiel/meldung.ui.json`, Belege des Moduls `muster-lageprofil` aus dem Quellenverzeichnis.
+
 ## 1.4.0 – 21.11.2026
 
 Grundlage: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (App 0.9.10, Profilformat 1.38). Zweite Stelle: geänderte Darstellung.

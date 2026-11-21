@@ -98,6 +98,14 @@ export interface FeldUi {
    * dieser Reihenfolge, übrige danach in der Reihenfolge des Schemas. Schema und Ausgaben bleiben unverändert.
    */
   reihenfolge?: string[];
+  /**
+   * Verweis auf eine Liste mit Nummern (seit Profilformat 1.39, App 0.9.11), als generischer Pfad, etwa
+   * „sachverhalte[].handlungsbedarf.empfehlungen“ oder „quellen“: Textfelder werden eine Auswahl, Kennungslisten erhalten
+   * „Hinzufügen …“ und die gewählten Nummern mit Titel.
+   */
+  verweis?: string;
+  /** Listen mit Nummern: „meldung“, wenn die Nummern in der ganzen Meldung eindeutig sind (Zeitstrahl); sonst je Liste */
+  nummern?: "liste" | "meldung";
 }
 
 export interface RadarAchse {

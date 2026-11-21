@@ -134,6 +134,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.8 | letzter Commit des Pull Requests „Gebietssuche mit amtlichen Schlüsseln aus dem Gemeindeverzeichnis; 0.9.8“ |
 | 0.9.9 | letzter Commit des Pull Requests „Erfassungsmaske: Beschriftungen und Leitfragen für Ereignisse und Sachverhalte; 0.9.9“ |
 | 0.9.10 | letzter Commit des Pull Requests „Erfassungsmaske: Lagenradar vor der Bewertung, Kodierleitfaden verlinkt, Zusatz „optional“ klein; 0.9.10“ |
+| 0.9.11 | letzter Commit des Pull Requests „Erfassungsmaske: Nummern vergibt die App, Verweise und Belege als Auswahl; 0.9.11“ |
+## [0.9.11] – 22.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“, zweiter Schritt (jeweils die Empfehlung): Die App vergibt die Nummern; Verweisfelder und Belege werden Auswahllisten mit Nummer und Titel; keine eigene Übersicht der Nummern, weil Q und Z in der Meldung, M, E, F und K nur je Sachverhalt eindeutig sind. Setzt 0.9.10 voraus.
+
+### Neu
+
+- **Nummern vergibt die App** (`src/kern/nummern.ts`; Profilformat 1.39, `nummern`): Ein neuer Eintrag erhält die nächste Nummer nach dem Muster seines Feldes `id` im Schema (LEAD-Meldung-v2: Q1, M1, E1, F1, K1, Z1), auf die höchste vorhandene folgend; entfernte Einträge hinterlassen eine Lücke, damit Verweise stabil bleiben. Zeitstrahlzeilen zählen über die ganze Meldung. Bis 0.9.10 waren die Nummern von Hand einzutragen. Die Nummer steht im Kopf des Eintrags.
+- **Verweise als Auswahl** (Profilformat 1.39, `verweis`): „Zugehörige Empfehlung“, „Teilmenge von“, „Berichtigt Zeile“ und die Quelle eines Kennzahlen-Bausteins wählen aus der jeweiligen Liste, mit Nummer und Titel, ohne den eigenen Eintrag; eine Nummer, die es nicht gibt, bleibt als „nicht vorhanden“ sichtbar.
+- **Belege aus dem Quellenverzeichnis:** Unter jedem Belegfeld stehen die gewählten Nummern mit ihrem Titel (unbekannte als „nicht vorhanden“), „Hinzufügen …“ ergänzt eine weitere Quelle. Tippen bleibt möglich.
+- **Prüfung beim Laden:** `verweis` als Text auf eine Liste mit Nummern (sonst Warnung), `nummern` nur `liste` oder `meldung` (sonst Fehler).
+
+### Geändert
+
+- **Profile:** Beispiel- und Landesprofil 2.6.0, Vorlage 1.5.0 und die Darstellungsdatei unter `formate/lead-meldung-v2/beispiel/`: `verweis` an allen Belegfeldern und Verweisfeldern, `nummern: "meldung"` am Zeitstrahl, Hinweise zu den Nummern („Vergibt die App beim Anlegen“); SOP-Sammelmappe 3.26.5 (nur Gültigkeitsstand).
+
+### Tests
+
+- `tests/ui/nummern-verweise.test.ts` (9 neu): Buchstabe aus dem Schema, nächste Nummer mit Lücken, Zählbereich Liste und Meldung (M3 nach M2, Z5 nach Z4 aus dem anderen Sachverhalt, Q3), Nummer im Kopf, Auflösung der Verweisliste, Auswahl der Empfehlung, Teilmenge und berichtigte Zeile ohne den eigenen Eintrag, Belege mit Titel und „Hinzufügen …“, Prüfung beim Laden.
+- Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.6.0 und 1.5.0).
+
 ## [0.9.10] – 21.11.2026
 
 Grundlage: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ nach 0.9.9 (jeweils die Empfehlung): Zusätze wie „(optional)“ klein hinter der Beschriftung; Kodierleitfaden einmal zentral verlinkt und im Schritt aufklappbar; Lagenradar samt Ereignisart zwischen Analyse und Bewertung, jetzt statt erst mit dem dritten Schritt. Nummern und Verweise als Auswahllisten folgen wie vereinbart im nächsten Pull Request, ohne eigene Übersicht. Setzt 0.9.9 voraus.
