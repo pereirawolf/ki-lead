@@ -132,6 +132,22 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.6 | letzter Commit des Pull Requests „Grunddesign 1.12 nachgetragen (LD-T04), Versatz an den Umstellungen in LEAD-Meldung-v2; 0.9.6“ |
 | 0.9.7 | letzter Commit des Pull Requests „Auswahlwerte in Anzeigeform, neue Radarachsen offen, Prüfmeldungen in Klartext; 0.9.7“ |
 | 0.9.8 | letzter Commit des Pull Requests „Gebietssuche mit amtlichen Schlüsseln aus dem Gemeindeverzeichnis; 0.9.8“ |
+| 0.9.9 | letzter Commit des Pull Requests „Erfassungsmaske: Beschriftungen und Leitfragen für Ereignisse und Sachverhalte; 0.9.9“ |
+## [0.9.9] – 21.11.2026
+
+Grundlage: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (jeweils die Empfehlung): Überarbeitung in drei Schritten, dies ist der erste (Beschriftungen, Leitfragen, technische Reste); „Auftrag“ bei Empfehlungen nur in der Beschriftung ersetzen, das Feld `auftrag` bleibt; Abschnittsverweise auf Kodierleitfaden und SOP in den Feldhinweisen streichen, die Kernregel als kurze Frage behalten. Automatische Nummern, Auswahllisten für Querverweise und eine kürzere Seite (bedingte Felder, Fehlanzeige als Eingangsfrage in Schritt 2) folgen in eigenen Pull Requests. Setzt 0.9.8 voraus.
+
+### Geändert
+
+- **Titel von Listeneinträgen in Anzeigeform** (`elementTitel` in `src/kern/listen.ts`): Ist der Titel ein Auswahlwert, zeigt die Maske seine Anzeigeform. Bis 0.9.8 stand im Kopf einer Beziehung „fortschreibung_von“, obwohl die Auswahl darunter schon „Fortschreibung von“ zeigte.
+- **Profile:** Beispiel- und Landesprofil 2.4.0, Vorlage 1.3.0 und die Darstellungsdatei unter `formate/lead-meldung-v2/beispiel/`: Beschriftungen und Leitfragen der Erfassungsmaske, Anzeigeform weiterer Auswahlwerte, Beschriftungen des Moduls `lead-baustein`; SOP-Sammelmappe 3.26.3 (nur Gültigkeitsstand). Einzelheiten im Profilverlauf. Schema und Arbeitsanweisungen sind unverändert; die KI erhält die geänderte Darstellungsdatei mit (neue Profilprüfsumme).
+
+### Tests
+
+- `tests/profil/maske-texte.test.ts` (13 neu): je Darstellungsdatei Beschriftung für jedes Feld eines Sachverhalts, der Beziehungen und der Fehlanzeige; Auswahlwerte ohne Unterstrich; „Empfehlung“, „Fristen“, „Lücke“; Feldhinweise ohne Abschnittsverweise und technische Werte, Verweis auf den Kodierleitfaden in der Einleitung des Schritts; Vorlage im Format gleich dem Beispielprofil.
+- `tests/kern/listen.test.ts` (1 neu): Auswahlwerte im Titel eines Listeneintrags.
+- Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.4.0 und 1.3.0), `tests/ui/ux-2026-w45.test.ts` (Spalte „Raum › Nähere Eingrenzung“).
+
 ## [0.9.8] – 21.11.2026
 
 Grundlage: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur eindeutigen Kennzeichnung von Gebieten (jeweils die Empfehlung): Ziffernschlüssel für Gebiete in Deutschland, ISO 3166-1 nur für Staaten; Verzeichnis mit Ländern, Regierungsbezirken und Kreisen im Kern, Gemeinden nachgeladen; Gebietssuche in allen Gebietsfeldern und Vorschläge für Referenzraum und Raum einer Kennzahl, ohne Schemaänderung und ohne Schlüssel im Fließtext; Lizenz des Verzeichnisses als eigener Punkt Nr. 5 f in LICENSE-CONTENT. Datengrundlage: Quartalsausgabe GV-ISys zum 30.09.2026, vom Herausgeber am 21.11.2026 bereitgestellt. Setzt 0.9.7 voraus.

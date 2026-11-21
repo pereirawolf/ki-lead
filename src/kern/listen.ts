@@ -24,7 +24,9 @@ export function hatObjekte(wert: unknown): boolean {
  */
 export function elementTitel(profil: Profil, segs: Segment[], element: unknown): string {
   const f = feldUi(profil.ui, generischerPfad(segs));
-  if (f.titel_feld) return alsText(holeWert(element, f.titel_feld)).trim();
+  // Auswahlwerte auch im Titel in Anzeigeform (seit 0.9.9): ohne titel_feld ist der erste Text oft ein Auswahlwert,
+  // etwa bei Beziehungen die Art („Fortschreibung (neuer Stand)“ statt „fortschreibung_von“)
+  if (f.titel_feld) return wertBezeichnung(profil.ui, alsText(holeWert(element, f.titel_feld)).trim());
   let t = "";
   if (typeof element === "string" || typeof element === "number") t = String(element).trim();
   else if (istObjekt(element)) {
@@ -34,6 +36,7 @@ export function elementTitel(profil: Profil, segs: Segment[], element: unknown):
         break;
       }
   }
+  t = wertBezeichnung(profil.ui, t);
   return t.length > TITEL_MAX ? `${t.slice(0, TITEL_MAX - 1).trimEnd()}…` : t;
 }
 

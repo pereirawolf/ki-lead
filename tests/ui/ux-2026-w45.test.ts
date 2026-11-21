@@ -272,7 +272,8 @@ describe("UX-2026-W45-25: Rohtabelle", () => {
     await ilka();
     await klick(knopf("Rohtabelle"));
     const kopf = [...document.querySelectorAll(".lb-rohtabelle thead th")].map((t) => t.textContent);
-    // Seit 0.9.0 (LEAD-Meldung-v2): Kernspalten in der Reihenfolge des Schemas, beschriftet mit dem Pfad
+    // Seit 0.9.0 (LEAD-Meldung-v2): Kernspalten in der Reihenfolge des Schemas, beschriftet mit dem Pfad (seit
+    // Beispielprofil 2.4.0 „Nähere Eingrenzung“ statt „Beschreibung“)
     expect(kopf[0]).toBe("Absender › Meldende Stelle");
     expect(kopf.slice(0, 9)).toEqual(
       expect.arrayContaining([
@@ -281,7 +282,7 @@ describe("UX-2026-W45-25: Rohtabelle", () => {
         "Kennung",
         "Bezeichnung",
         "Fachmodule › Bevölkerungsschutz (Modul) › Ereignisart(en)",
-        "Raum › Beschreibung",
+        "Raum › Nähere Eingrenzung",
       ]),
     );
     expect(document.querySelectorAll(".lb-rohtabelle tbody tr")).toHaveLength(8);

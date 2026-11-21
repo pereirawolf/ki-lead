@@ -27,7 +27,8 @@
       "titel": "Ereignisse und Sachverhalte",
       "felder": [
         "sachverhalte"
-      ]
+      ],
+      "einleitung": "Je Ereignis oder Sachverhalt ein Eintrag. Maßgeblich für die Kodierung ist der Kodierleitfaden des Profils."
     },
     {
       "id": "uebergreifend",
@@ -62,14 +63,16 @@
     "beziehungen": {
       "label": "Beziehungen zu früheren Fassungen",
       "element_label": "Beziehung",
-      "hinzufuegen": "Beziehung hinzufügen"
+      "hinzufuegen": "Beziehung hinzufügen",
+      "hinweis": "Nur bei einer Fortschreibung oder Berichtigung: Auf welche frühere Fassung baut diese Meldung auf?"
     },
     "beziehungen[].art": {
       "label": "Art",
-      "hinweis": "Fortschreibung: neuer Stand derselben Stelle. Berichtigung: ersetzt eine Fassung desselben Stands."
+      "hinweis": "Fortschreibung: neuer Stand zu einer früheren Meldung. Berichtigung: korrigiert eine frühere Fassung desselben Stands."
     },
     "beziehungen[].meldung_id": {
-      "label": "Kennung der früheren Fassung"
+      "label": "Kennung der früheren Fassung",
+      "hinweis": "UUID aus der früheren Meldung, Feld „Kennung dieser Fassung“."
     },
     "absender": {
       "label": "Absender"
@@ -102,13 +105,14 @@
       "label": "Berichtsraum (optional)"
     },
     "berichtsraum.beschreibung": {
-      "label": "Beschreibung"
+      "label": "Nähere Eingrenzung",
+      "hinweis": "Optional, wenn die Gebiete den Raum nur grob treffen: etwa Ortsteile, Netzgebiet, Flussabschnitt."
     },
     "berichtsraum.gebiete": {
       "label": "Gebiete",
       "element_label": "Gebiet",
       "hinzufuegen": "Gebiet hinzufügen",
-      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Gebiete ohne Verwaltungsgrenze (Flussabschnitt, Talsperre) frei eintragen, ohne Schlüssel."
+      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Räume ohne Verwaltungsgrenze (Flussabschnitt, Netzgebiet) besser unter „Nähere Eingrenzung“ beschreiben."
     },
     "berichtsraum.gebiete[]": {
       "widget": "gebiet"
@@ -135,11 +139,12 @@
     },
     "fehlanzeige": {
       "label": "Fehlanzeige",
-      "hinweis": "Nur ohne Sachverhalt: Umfang, Zeitraum und Erklärung, warum nichts zu melden ist."
+      "hinweis": "Nur wenn es nichts zu melden gibt, dann ohne Ereignis/Sachverhalt. Die Angaben zeigen, dass geprüft wurde und nichts vorlag."
     },
     "fehlanzeige.erklaerung": {
-      "label": "Erklärung",
-      "widget": "text_lang"
+      "label": "Grundlage",
+      "widget": "text_lang",
+      "hinweis": "Worauf stützt sich die Fehlanzeige? Etwa Abfrage der Kreise, Auswertung der Lagemeldungen."
     },
     "quellen": {
       "label": "Quellen & Referenzen",
@@ -228,16 +233,18 @@
       "hinweis": "Erstes Bekanntwerden, nicht der Beginn. Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].raum": {
-      "label": "Raum"
+      "label": "Raum",
+      "hinweis": "Wo wirkt das Ereignis?"
     },
     "sachverhalte[].raum.beschreibung": {
-      "label": "Beschreibung"
+      "label": "Nähere Eingrenzung",
+      "hinweis": "Optional, wenn die Gebiete den Raum nur grob treffen: etwa Ortsteile, Netzgebiet, Flussabschnitt."
     },
     "sachverhalte[].raum.gebiete": {
       "label": "Gebiete",
       "element_label": "Gebiet",
       "hinzufuegen": "Gebiet hinzufügen",
-      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Gebiete ohne Verwaltungsgrenze (Flussabschnitt, Talsperre) frei eintragen, ohne Schlüssel."
+      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Räume ohne Verwaltungsgrenze (Flussabschnitt, Netzgebiet) besser unter „Nähere Eingrenzung“ beschreiben."
     },
     "sachverhalte[].raum.gebiete[]": {
       "widget": "gebiet"
@@ -268,12 +275,13 @@
       "label": "Kernaussage",
       "widget": "text_lang",
       "pflicht": true,
-      "hinweis": "Bedeutung für den Referenzraum, Veränderung, Prüf- oder Abstimmungsfrage (SOP-LEAD A.4)."
+      "hinweis": "Was bedeutet der Sachverhalt für den Referenzraum, was hat sich verändert, und welche Prüf- oder Abstimmungsfrage folgt daraus?"
     },
     "sachverhalte[].bewertung.referenzraum": {
       "label": "Referenzraum",
       "pflicht": true,
-      "widget": "gebietsname"
+      "widget": "gebietsname",
+      "hinweis": "Für welchen Raum gelten Beurteilung, Tendenz und Lagenradar?"
     },
     "sachverhalte[].bewertung.beurteilung": {
       "label": "Beurteilung"
@@ -285,7 +293,7 @@
     "sachverhalte[].bewertung.beurteilung.begruendung": {
       "label": "Begründung",
       "widget": "text_lang",
-      "hinweis": "Eigenständig begründet, nicht aus dem höchsten Radarwert abgeleitet (Kodierleitfaden Abschnitt 4)."
+      "hinweis": "Warum ist der Sachverhalt im Referenzraum so zu beurteilen? Aus der Lage begründen, nicht aus dem höchsten Radarwert."
     },
     "sachverhalte[].bewertung.tendenz": {
       "label": "Tendenz"
@@ -295,46 +303,58 @@
       "widget": "radio"
     },
     "sachverhalte[].bewertung.tendenz.bezug": {
-      "label": "Bezugsraum und Zeitfenster"
+      "label": "Gilt für",
+      "platzhalter": "z. B. Land, 14.10. 05:30 bis 08:30",
+      "hinweis": "Für welchen Raum und welches Zeitfenster gilt die Tendenz?"
     },
     "sachverhalte[].bewertung.tendenz.begruendung": {
       "label": "Begründung",
-      "widget": "text_lang"
+      "widget": "text_lang",
+      "hinweis": "Woran zeigt sich die Entwicklung?"
     },
     "sachverhalte[].bewertung.erlaeuterung": {
-      "label": "Erläuterung",
-      "widget": "text_lang"
+      "label": "Einordnung des Radarbilds",
+      "widget": "text_lang",
+      "hinweis": "Warum passt das Lagenradar nicht ohne Weiteres zur Beurteilung, und warum bleiben Achsen offen? Leer lassen, wenn es nichts einzuordnen gibt."
     },
     "sachverhalte[].bewertung.aenderung_zur_vormeldung": {
       "label": "Änderung zur Vormeldung",
-      "widget": "text_lang"
+      "widget": "text_lang",
+      "hinweis": "Was hat sich seit der letzten eigenen Meldung geändert? Bei einer Erstmeldung leer lassen."
     },
     "sachverhalte[].bewertung.neubewertung_bei": {
       "label": "Neubewertung bei",
       "element_label": "Neubewertung bei",
       "titel_feld": "indikator",
-      "hinzufuegen": "Indikator hinzufügen"
+      "hinzufuegen": "Indikator hinzufügen",
+      "hinweis": "Welche Beobachtung würde die Bewertung ändern?"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen": {
       "label": "Abweichende Bewertung",
       "element_label": "Abweichende Bewertung",
       "titel_feld": "stelle",
-      "hinzufuegen": "Abweichende Bewertung hinzufügen"
+      "hinzufuegen": "Abweichende Bewertung hinzufügen",
+      "hinweis": "Bewertet eine andere Stelle denselben Sachverhalt anders? Dann hier mit ihrem Grund."
     },
     "sachverhalte[].bewertung.erkenntnislage": {
       "label": "Erkenntnislage"
     },
     "sachverhalte[].bewertung.erkenntnislage.luecken": {
-      "label": "Lücken"
+      "label": "Lücken",
+      "element_label": "Lücke",
+      "hinzufuegen": "Lücke hinzufügen",
+      "hinweis": "Was ist nicht bekannt, aber für die Bewertung wichtig?"
     },
     "sachverhalte[].bewertung.erkenntnislage.widersprueche": {
       "label": "Widersprüche",
       "element_label": "Widerspruch",
       "titel_feld": "gegenstand",
-      "hinzufuegen": "Widerspruch hinzufügen"
+      "hinzufuegen": "Widerspruch hinzufügen",
+      "hinweis": "Angaben, die sich widersprechen, festhalten, nicht auflösen."
     },
     "sachverhalte[].bewertung.abschluss": {
-      "label": "Abschluss im Lagebild"
+      "label": "Abschluss im Lagebild",
+      "hinweis": "Nur bei der letzten Nennung des Sachverhalts im Lagebild ausfüllen."
     },
     "sachverhalte[].handlungsbedarf": {
       "label": "Maßnahmen & Handlungsempfehlungen"
@@ -343,49 +363,53 @@
       "label": "Bestehende Maßnahmen",
       "element_label": "Maßnahme",
       "titel_feld": "gegenstand",
-      "hinzufuegen": "Maßnahme hinzufügen"
+      "hinzufuegen": "Maßnahme hinzufügen",
+      "hinweis": "Was wird bereits getan? Dokumentierte Maßnahmen, auch anderer Stellen."
     },
     "sachverhalte[].handlungsbedarf.empfehlungen": {
       "label": "Empfehlungen",
       "element_label": "Empfehlung",
       "titel_feld": "auftrag",
-      "hinzufuegen": "Empfehlung hinzufügen"
+      "hinzufuegen": "Empfehlung hinzufügen",
+      "hinweis": "Was wäre hilfreich, das die meldende Stelle allein nicht klären oder lösen kann?"
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].termin": {
       "label": "Termin",
-      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
+      "hinweis": "Bis wann? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt. Ohne belegten Termin die Bedingung angeben."
     },
     "sachverhalte[].handlungsbedarf.fristen": {
-      "label": "Handlungsrelevant bis",
+      "label": "Fristen",
       "element_label": "Frist",
       "titel_feld": "aufgabe",
-      "hinzufuegen": "Frist hinzufügen"
+      "hinzufuegen": "Frist hinzufügen",
+      "hinweis": "Bis wann muss etwas geschehen, damit es noch wirkt?"
     },
     "sachverhalte[].handlungsbedarf.fristen[].bis": {
       "label": "bis",
       "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].handlungsbedarf.erlaeuterung": {
-      "label": "Erläuterung",
-      "widget": "text_lang"
+      "label": "Zusammenhang",
+      "widget": "text_lang",
+      "hinweis": "Optional: Was sollten Lesende über Maßnahmen, Empfehlungen und Fristen zusammen wissen? Status, Adressaten und Termine stehen nur in den Listen."
     },
     "sachverhalte[].kennzahlen": {
       "label": "Kennzahlen",
       "element_label": "Kennzahl",
       "titel_feld": "gegenstand",
       "hinzufuegen": "Kennzahl hinzufügen",
-      "hinweis": "Einheit, Art, Erhebung und Datenstand je Kennzahl; Kennzahlen verschiedener Einheit, Art, verschiedenen Datenstands oder Beobachtungszeitraums nicht addieren, Verhältniswerte und berechnete Werte nie."
+      "hinweis": "Je Kennzahl Einheit, Art, Erhebung und Datenstand. Kennzahlen verschiedener Einheit, Art, verschiedenen Datenstands oder Zeitraums nicht addieren, Verhältniswerte und berechnete Werte nie."
     },
     "sachverhalte[].kennzahlen[].datenstand": {
       "label": "Datenstand",
-      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
+      "hinweis": "Auf welchen Zeitpunkt bezieht sich die Zahl in der Quelle? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].zeitstrahl": {
       "label": "Zeitstrahl",
       "element_label": "Zeile",
       "titel_feld": "text",
       "hinzufuegen": "Zeile hinzufügen",
-      "hinweis": "Nur eingetretene, belegte Ereignisse bis zum Meldezeitpunkt (Kodierleitfaden Abschnitt 8); Zeilen vom Typ „Bewertung“ trägt die App ein."
+      "hinweis": "Nur eingetretene, belegte Ereignisse bis zum Meldezeitpunkt; Zeilen vom Typ „Bewertung“ trägt die App ein."
     },
     "sachverhalte[].zeitstrahl[].zeit": {
       "label": "Zeit",
@@ -408,7 +432,7 @@
       "label": "Lagenradar",
       "widget": "radar",
       "radar": "lagenradar",
-      "hinweis": "Je Dimension eine Stufe von 0 bis 6 oder offen. Status, Grund einer offenen Achse, Begründung und Belege stehen unter der Grafik je Achse (Kodierleitfaden Abschnitte 1 bis 3)."
+      "hinweis": "Je Dimension eine Stufe von 0 bis 6 oder offen. Status, Grund einer offenen Achse, Begründung und Belege stehen unter der Grafik je Achse."
     },
     "sachverhalte[].kennzahlen[].quellen": {
       "label": "Belege",
@@ -503,124 +527,165 @@
       "hinweis": "Amtlicher Schlüssel aus dem Gemeindeverzeichnis: Land 2-stellig (16), Kreis 5-stellig (16072), Gemeinde 8-stellig (16072018); Staaten nach ISO 3166-1 (DE, CZ). Wird bei der Auswahl eines Vorschlags gesetzt; leer lassen, wenn das Gebiet keiner Verwaltungseinheit entspricht."
     },
     "sachverhalte[].bewertung.neubewertung_bei[].indikator": {
-      "label": "Indikator"
+      "label": "Indikator",
+      "platzhalter": "z. B. Pegel über Meldestufe 3",
+      "hinweis": "Beobachtbares Kriterium, gegebenenfalls mit Schwelle."
     },
     "sachverhalte[].bewertung.neubewertung_bei[].stand": {
-      "label": "Stand"
+      "label": "Entwicklung seit Vormeldung",
+      "hinweis": "Bei einer Erstmeldung „neu“."
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].stelle": {
-      "label": "Stelle"
+      "label": "Andere Stelle"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].stufe": {
       "label": "Stufe"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].grund": {
-      "label": "Grund"
+      "label": "Grund",
+      "hinweis": "Worauf stützt die andere Stelle ihre Bewertung?"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].ursache": {
-      "label": "Ursache der Abweichung"
+      "label": "Ursache der Abweichung",
+      "hinweis": "Liegt die Differenz an Bezugsraum, Datenstand, Zielzustand oder Maßstab?"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].klaerend": {
-      "label": "Klärend wäre"
+      "label": "Klärend wäre",
+      "hinweis": "Welche Information könnte die Differenz klären?"
     },
     "sachverhalte[].bewertung.erkenntnislage.widersprueche[].gegenstand": {
-      "label": "Gegenstand"
+      "label": "Strittiger Punkt",
+      "hinweis": "Worüber widersprechen sich die Angaben? Etwa die Zahl der Betroffenen."
     },
     "sachverhalte[].bewertung.erkenntnislage.widersprueche[].beschreibung": {
-      "label": "Beschreibung"
+      "label": "Angaben der Quellen",
+      "hinweis": "Was sagen die Quellen jeweils? Beide Angaben mit Stelle nennen."
     },
     "sachverhalte[].bewertung.abschluss.ende": {
-      "label": "Ende"
+      "label": "Ende",
+      "hinweis": "Wann endete der Sachverhalt? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].bewertung.abschluss.offene_punkte": {
-      "label": "Offene Punkte"
+      "label": "Offene Punkte",
+      "hinweis": "Was bleibt offen? Sonst „nichts“."
     },
     "sachverhalte[].bewertung.abschluss.nachsorge": {
-      "label": "Nachsorge"
+      "label": "Nachsorge bei",
+      "hinweis": "Bei welcher Stelle liegt die Nachsorge?"
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "M1",
+      "hinweis": "M1, M2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].gegenstand": {
       "label": "Maßnahme"
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].stelle": {
-      "label": "Stelle"
+      "label": "Verantwortliche Stelle",
+      "hinweis": "Wer verantwortet oder führt die Maßnahme durch?"
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].status": {
-      "label": "Status"
+      "label": "Status",
+      "hinweis": "„wirksam“ nur, wenn die Wirkung belegt ist."
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].stand": {
       "label": "Stand",
-      "hinweis": "Zeitpunkt des Stands, z. B. 2026-10-14T08:00+02:00."
+      "hinweis": "Wann wurde der Status zuletzt bestätigt? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "E1",
+      "hinweis": "E1, E2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung, etwa aus einer Frist."
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].adressat": {
-      "label": "Adressat"
+      "label": "Adressat",
+      "hinweis": "Wer könnte es klären oder entscheiden?"
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].auftrag": {
-      "label": "Auftrag"
+      "label": "Empfehlung",
+      "hinweis": "Was sollte geprüft oder entschieden werden?"
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].anlass": {
-      "label": "Anlass"
+      "label": "Anlass",
+      "hinweis": "Warum wird es gebraucht? Welche Lücke ist belegt?"
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].bedingung": {
-      "label": "Bedingung oder nächster Prüfanlass"
+      "label": "Bedingung oder nächster Prüfanlass",
+      "hinweis": "Nur ohne Termin: Unter welcher Bedingung oder bei welchem Anlass wird es wieder geprüft?"
     },
     "sachverhalte[].handlungsbedarf.fristen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "F1",
+      "hinweis": "F1, F2 … in der Reihenfolge der Einträge."
     },
     "sachverhalte[].handlungsbedarf.fristen[].aufgabe": {
-      "label": "Aufgabe"
+      "label": "Aufgabe",
+      "hinweis": "Was muss bis dahin geschehen?"
     },
     "sachverhalte[].handlungsbedarf.fristen[].adressat": {
-      "label": "Adressat"
+      "label": "Adressat",
+      "hinweis": "Bei welcher Stelle liegt die Aufgabe?"
     },
     "sachverhalte[].handlungsbedarf.fristen[].bedingung": {
-      "label": "Bedingung"
+      "label": "Bedingung",
+      "hinweis": "Gilt die Frist nur unter einer Bedingung?"
     },
     "sachverhalte[].handlungsbedarf.fristen[].grundlage": {
-      "label": "Grundlage"
+      "label": "Grundlage der Frist",
+      "hinweis": "Woraus ergibt sich die Frist? Etwa Prognose, Reichweite der Notstromversorgung oder Vorschrift; eigene Wiedervorlagefristen als solche kennzeichnen."
     },
     "sachverhalte[].handlungsbedarf.fristen[].empfehlung": {
-      "label": "Zugehörige Empfehlung"
+      "label": "Zugehörige Empfehlung",
+      "platzhalter": "E1",
+      "hinweis": "Optional: Nummer der Empfehlung, zu der die Frist gehört."
     },
     "sachverhalte[].kennzahlen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "K1",
+      "hinweis": "K1, K2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
     },
     "sachverhalte[].kennzahlen[].gegenstand": {
-      "label": "Gegenstand"
+      "label": "Gegenstand",
+      "hinweis": "Was wird gezählt? Etwa „ohne Stromversorgung“, „evakuiert“, „freie Betten Intensiv“."
     },
     "sachverhalte[].kennzahlen[].einheit": {
-      "label": "Einheit"
+      "label": "Einheit",
+      "hinweis": "Etwa Personen, Haushalte, Anschlüsse, Betten; Einheiten nicht ineinander umrechnen."
     },
     "sachverhalte[].kennzahlen[].art": {
-      "label": "Art"
+      "label": "Art",
+      "hinweis": "Bestand: aktueller Stand · Kumuliert: Summe seit Beginn · Kapazität: verfügbare Menge · Bedarf: benötigte Menge · Verhältnis: Anteil, Rate oder Index, nie addieren."
     },
     "sachverhalte[].kennzahlen[].wert": {
-      "label": "Wert"
+      "label": "Wert",
+      "hinweis": "0 nur als belegter Nullwert."
     },
     "sachverhalte[].kennzahlen[].bandbreite": {
-      "label": "Bandbreite"
+      "label": "Bandbreite",
+      "hinweis": "Optional: untere und obere Grenze, wenn nur eine Spanne bekannt ist."
     },
     "sachverhalte[].kennzahlen[].mindestwert": {
-      "label": "Mindestwert"
+      "label": "Mindestwert",
+      "hinweis": "Bestätigte Mindestzahl, wenn die vollständige Zahl nicht bekannt ist."
     },
     "sachverhalte[].kennzahlen[].erhebung": {
-      "label": "Erhebung"
+      "label": "Erhebung",
+      "hinweis": "Wie ist der Wert entstanden?"
     },
     "sachverhalte[].kennzahlen[].raum": {
       "label": "Raum",
-      "widget": "gebietsname"
+      "widget": "gebietsname",
+      "hinweis": "Für welches Gebiet gilt der Wert?"
     },
     "sachverhalte[].kennzahlen[].teilmenge_von": {
-      "label": "Teilmenge von"
+      "label": "Teilmenge von",
+      "platzhalter": "K1",
+      "hinweis": "Optional: Nummer einer anderen Kennzahl, in der dieser Wert enthalten ist."
     },
     "sachverhalte[].kennzahlen[].beobachtungszeitraum": {
-      "label": "Beobachtungszeitraum",
-      "hinweis": "Zeitraum, auf den sich der Wert bezieht (etwa ein Monat oder eine Kalenderwoche), als Kalendertage; getrennt vom Datenstand. Endet nicht nach dem Meldezeitpunkt, außer bei prognostizierten Werten."
+      "label": "Zeitraum des Werts",
+      "hinweis": "Nur bei Werten über einen Zeitraum: Für welchen Zeitraum gilt der Wert, etwa einen Monat oder eine Kalenderwoche? Nicht der Datenstand; endet nicht nach dem Meldezeitpunkt, außer bei prognostizierten Werten."
     },
     "sachverhalte[].kennzahlen[].beobachtungszeitraum.von": {
       "label": "von",
@@ -632,7 +697,7 @@
     },
     "sachverhalte[].kennzahlen[].bezug": {
       "label": "Bezugsgröße",
-      "hinweis": "Nur bei Art „verhaeltnis“: Bezugsgröße des Werts, etwa die Baseline eines Niveaus."
+      "hinweis": "Nur bei Art „Verhältnis“: Womit wird der Verhältniswert verglichen? Etwa der Durchschnitt derselben Kalenderwoche 2016–2019."
     },
     "sachverhalte[].kennzahlen[].bezug.gegenstand": {
       "label": "Gegenstand"
@@ -644,7 +709,7 @@
       "label": "Einheit"
     },
     "sachverhalte[].kennzahlen[].bezug.beobachtungszeitraum": {
-      "label": "Beobachtungszeitraum"
+      "label": "Zeitraum der Bezugsgröße"
     },
     "sachverhalte[].kennzahlen[].bezug.beobachtungszeitraum.von": {
       "label": "von",
@@ -659,7 +724,9 @@
       "hinweis": "Vorläufiger Wert der Quelle, der noch berichtigt werden kann."
     },
     "sachverhalte[].zeitstrahl[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "Z1",
+      "hinweis": "Z1, Z2 … in der Reihenfolge der Einträge."
     },
     "sachverhalte[].zeitstrahl[].typ": {
       "label": "Typ"
@@ -669,13 +736,17 @@
       "hinweis": "Setzt die App: Meldezeitpunkt der ersten eigenen Meldung mit dieser Zeile."
     },
     "sachverhalte[].zeitstrahl[].berichtigt": {
-      "label": "Berichtigt Zeile"
+      "label": "Berichtigt Zeile",
+      "platzhalter": "Z1",
+      "hinweis": "Nur bei Typ „Berichtigung“: Nummer der berichtigten Zeile."
     },
     "fehlanzeige.umfang": {
-      "label": "Umfang"
+      "label": "Geprüfter Umfang",
+      "hinweis": "Was wurde geprüft? Raum und Bereiche, etwa „alle Kreise; Versorgung, Verkehr, Gesundheit“."
     },
     "fehlanzeige.zeitraum": {
-      "label": "Zeitraum"
+      "label": "Geprüfter Zeitraum",
+      "hinweis": "Meist der Meldezeitraum."
     },
     "fehlanzeige.zeitraum.von": {
       "label": "von"
@@ -703,7 +774,7 @@
     "uebergreifende_lage.kernaussage": {
       "label": "Übergreifende Kernaussage",
       "widget": "text_lang",
-      "hinweis": "Was die Sachverhalte zusammen für den Bevölkerungsschutz bedeuten, mit Veränderung oder Prüf- und Abstimmungsfrage (SOP-LEAD A.4); Belege als [Qn]."
+      "hinweis": "Was bedeuten die Sachverhalte zusammen für den Bevölkerungsschutz, was hat sich verändert, und welche Prüf- oder Abstimmungsfrage folgt daraus? Belege als [Qn]."
     },
     "uebergreifende_lage.sachverhalte": {
       "label": "Betroffene Sachverhalte",
@@ -727,31 +798,35 @@
       "label": "Bestehende Maßnahmen",
       "element_label": "Maßnahme",
       "titel_feld": "gegenstand",
-      "hinzufuegen": "Maßnahme hinzufügen"
+      "hinzufuegen": "Maßnahme hinzufügen",
+      "hinweis": "Was wird bereits getan? Dokumentierte Maßnahmen, auch anderer Stellen."
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen": {
       "label": "Empfehlungen",
       "element_label": "Empfehlung",
       "titel_feld": "auftrag",
-      "hinzufuegen": "Empfehlung hinzufügen"
+      "hinzufuegen": "Empfehlung hinzufügen",
+      "hinweis": "Was wäre hilfreich, das die meldende Stelle allein nicht klären oder lösen kann?"
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].termin": {
       "label": "Termin",
-      "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
+      "hinweis": "Bis wann? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt. Ohne belegten Termin die Bedingung angeben."
     },
     "uebergreifende_lage.handlungsbedarf.fristen": {
-      "label": "Handlungsrelevant bis",
+      "label": "Fristen",
       "element_label": "Frist",
       "titel_feld": "aufgabe",
-      "hinzufuegen": "Frist hinzufügen"
+      "hinzufuegen": "Frist hinzufügen",
+      "hinweis": "Bis wann muss etwas geschehen, damit es noch wirkt?"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].bis": {
       "label": "bis",
       "hinweis": "Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "uebergreifende_lage.handlungsbedarf.erlaeuterung": {
-      "label": "Erläuterung",
-      "widget": "text_lang"
+      "label": "Zusammenhang",
+      "widget": "text_lang",
+      "hinweis": "Optional: Was sollten Lesende über Maßnahmen, Empfehlungen und Fristen zusammen wissen? Status, Adressaten und Termine stehen nur in den Listen."
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].quellen": {
       "label": "Belege",
@@ -772,54 +847,140 @@
       "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "M1",
+      "hinweis": "M1, M2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].gegenstand": {
       "label": "Maßnahme"
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].stelle": {
-      "label": "Stelle"
+      "label": "Verantwortliche Stelle",
+      "hinweis": "Wer verantwortet oder führt die Maßnahme durch?"
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].status": {
-      "label": "Status"
+      "label": "Status",
+      "hinweis": "„wirksam“ nur, wenn die Wirkung belegt ist."
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].stand": {
       "label": "Stand",
-      "hinweis": "Zeitpunkt des Stands, z. B. 2026-10-14T08:00+02:00."
+      "hinweis": "Wann wurde der Status zuletzt bestätigt? Tag, Uhrzeit nur, wenn sie belegt ist; leer = unbekannt."
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "E1",
+      "hinweis": "E1, E2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung, etwa aus einer Frist."
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].adressat": {
-      "label": "Adressat"
+      "label": "Adressat",
+      "hinweis": "Wer könnte es klären oder entscheiden?"
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].auftrag": {
-      "label": "Auftrag"
+      "label": "Empfehlung",
+      "hinweis": "Was sollte geprüft oder entschieden werden?"
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].anlass": {
-      "label": "Anlass"
+      "label": "Anlass",
+      "hinweis": "Warum wird es gebraucht? Welche Lücke ist belegt?"
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].bedingung": {
-      "label": "Bedingung oder nächster Prüfanlass"
+      "label": "Bedingung oder nächster Prüfanlass",
+      "hinweis": "Nur ohne Termin: Unter welcher Bedingung oder bei welchem Anlass wird es wieder geprüft?"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].id": {
-      "label": "Nummer"
+      "label": "Nummer",
+      "platzhalter": "F1",
+      "hinweis": "F1, F2 … in der Reihenfolge der Einträge."
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].aufgabe": {
-      "label": "Aufgabe"
+      "label": "Aufgabe",
+      "hinweis": "Was muss bis dahin geschehen?"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].adressat": {
-      "label": "Adressat"
+      "label": "Adressat",
+      "hinweis": "Bei welcher Stelle liegt die Aufgabe?"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].bedingung": {
-      "label": "Bedingung"
+      "label": "Bedingung",
+      "hinweis": "Gilt die Frist nur unter einer Bedingung?"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].grundlage": {
-      "label": "Grundlage"
+      "label": "Grundlage der Frist",
+      "hinweis": "Woraus ergibt sich die Frist? Etwa Prognose, Reichweite der Notstromversorgung oder Vorschrift; eigene Wiedervorlagefristen als solche kennzeichnen."
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].empfehlung": {
-      "label": "Zugehörige Empfehlung"
+      "label": "Zugehörige Empfehlung",
+      "platzhalter": "E1",
+      "hinweis": "Optional: Nummer der Empfehlung, zu der die Frist gehört."
+    },
+    "sachverhalte[].bewertung.erkenntnislage.luecken[]": {
+      "label": "Lücke"
+    },
+    "sachverhalte[].kennzahlen[].bandbreite.von": {
+      "label": "von"
+    },
+    "sachverhalte[].kennzahlen[].bandbreite.bis": {
+      "label": "bis"
+    },
+    "sachverhalte[].module.lead-baustein": {
+      "label": "Kennzahlen-Bausteine (Modul)",
+      "hinweis": "Trägt die App ein, wenn Kennzahlen aus einem Kennzahlen-Baustein übernommen werden; nicht von Hand ausfüllen."
+    },
+    "sachverhalte[].module.lead-baustein.fassung": {
+      "label": "Fassung des Moduls"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine": {
+      "label": "Bausteine",
+      "element_label": "Baustein",
+      "titel_feld": "format",
+      "hinzufuegen": "Baustein hinzufügen"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].format": {
+      "label": "Format"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].fassung": {
+      "label": "Fassung des Formats"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].datei": {
+      "label": "Datei"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].sha256": {
+      "label": "Prüfsumme (SHA-256)"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].quelle": {
+      "label": "Quelle",
+      "platzhalter": "Q1"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen": {
+      "label": "Übernommene Kennzahlen",
+      "element_label": "Kennzahl",
+      "hinzufuegen": "Kennzahl hinzufügen"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen[].kennzahl": {
+      "label": "Kennzahl in der Meldung",
+      "platzhalter": "K1"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen[].baustein_kennzahl": {
+      "label": "Kennzahl im Baustein",
+      "platzhalter": "K1"
+    },
+    "sachverhalte[].module.lead-baustein.bausteine[].einsatzmeldungen": {
+      "label": "Einsatzmeldungen",
+      "widget": "kennungen"
     }
+  },
+  "werte": {
+    "fortschreibung_von": "Fortschreibung (neuer Stand)",
+    "berichtigung_von": "Berichtigung (Fehler korrigiert)",
+    "verdichtung": "Verdichtung",
+    "teilung": "Teilung",
+    "zusammenfuehrung": "Zusammenführung",
+    "bestand": "Bestand",
+    "kumuliert": "Kumuliert",
+    "kapazitaet": "Kapazität",
+    "bedarf": "Bedarf",
+    "verhaeltnis": "Verhältnis",
+    "mindestwert": "Mindestwert"
   },
   "radare": {
     "lagenradar": {
