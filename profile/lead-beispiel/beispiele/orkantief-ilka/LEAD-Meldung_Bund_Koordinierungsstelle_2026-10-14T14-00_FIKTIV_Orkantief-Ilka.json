@@ -129,27 +129,27 @@
         "gebiete": [
           {
             "name": "Rheinland-Pfalz",
-            "schluessel": "DE-RP"
+            "schluessel": "07"
           },
           {
             "name": "Nordrhein-Westfalen",
-            "schluessel": "DE-NW"
+            "schluessel": "05"
           },
           {
             "name": "Hessen",
-            "schluessel": "DE-HE"
+            "schluessel": "06"
           },
           {
             "name": "Niedersachsen",
-            "schluessel": "DE-NI"
+            "schluessel": "03"
           },
           {
             "name": "Thüringen",
-            "schluessel": "DE-TH"
+            "schluessel": "16"
           },
           {
             "name": "Sachsen-Anhalt",
-            "schluessel": "DE-ST"
+            "schluessel": "15"
           }
         ]
       },

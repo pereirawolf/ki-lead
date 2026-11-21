@@ -4,6 +4,14 @@ Diese Datei ergänzt `lizenzen.md` im selben Ordner. Dort stehen alle Pakete, di
 
 Code unter EUPL-1.2 (LICENSE); Beispielprofile, Evaluationsmaterial und Dokumentation unter CC BY 4.0, maschinenlesbare Dateien und die Vorlagen zusätzlich unter CC0 1.0, mit den Ausnahmen in LICENSE-CONTENT (alle im Repository https://github.com/pereirawolf/ki-lead).
 
+## Daten
+
+### Gemeindeverzeichnis-Informationssystem GV-ISys (Gebietsverzeichnis, Gebietsstand 30.09.2026)
+
+Schlüssel und Namen der Länder, Regierungsbezirke, Kreise und Gemeinden für die Gebietssuche. Quelle: Statistische Ämter des Bundes und der Länder, Gemeindeverzeichnis-Informationssystem GV-ISys (https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/_inhalt.html).
+
+© Daten (im Auftrag der Herausgebergemeinschaft Statistische Ämter des Bundes und der Länder) Statistisches Bundesamt (Destatis), 2026. Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.
+
 ## Native Apps
 
 ### Capacitor (Android) - 8.6.0 (MIT)

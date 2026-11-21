@@ -20,6 +20,8 @@ import { holeWert } from "../kern/pfad";
 import { aufloesen } from "../kern/schema";
 import type { Befund, Meldung, Profil } from "../kern/typen";
 import { istEigeneStelle } from "../kern/ui";
+import { kontext, nachName, normSchluessel, type GebietVerzeichnis } from "../kern/gebiete";
+import { GEBIETE_KERN, gebieteVermerk } from "./gebieteDaten";
 import { zoneOder } from "../kern/zeit";
 import { APP_VERSION } from "../kern/version";
 import { fachSops, sopIdsAufloesen } from "./kontext";
@@ -144,6 +146,70 @@ export interface V2Ausgabe {
 export interface V2Optionen {
   /** Zufall für Kennungen und meldung_id (Tests) */
   zufall?: () => number;
+  /** Gebietsverzeichnis mit Gemeinden (seit 0.9.8); ohne Angabe nur der Kern (Länder, Regierungsbezirke, Kreise) */
+  gebiete?: GebietVerzeichnis;
+}
+
+/**
+ * Amtliche Gebietsschlüssel aus dem Verzeichnis statt aus dem Modell (seit 0.9.8, Entscheidung des Herausgebers vom
+ * 21.11.2026): Fehlt ein Schlüssel, ergänzt ihn die App, wenn der Name eindeutig ist (zuerst im Land der meldenden
+ * Stelle, dann bundesweit). Einen Schlüssel, den das Verzeichnis nicht kennt oder der zu einem anderen Gebiet desselben
+ * Namens gehört, ersetzt sie durch den des Namens oder entfernt ihn. „DE-TH“ und 12-stellige Regionalschlüssel werden
+ * umgerechnet. Staaten (ISO 3166-1, „CZ“) bleiben. Ein Hinweis nennt jede Änderung zur Durchsicht.
+ */
+export function gebieteErgaenzen(d: Meldung, v: GebietVerzeichnis): Befund[] {
+  const land = normSchluessel(d.absender?.gebiet?.schluessel).slice(0, 2);
+  const imLand = /^\d{2}$/.test(land) ? land : undefined;
+  const ergaenzt: string[] = [];
+  const korrigiert: string[] = [];
+  const entfernt: string[] = [];
+  const ohne: string[] = [];
+  const zeige = (name: string, s: string) => {
+    const e = v.nach.get(s);
+    const k = e ? kontext(v, e) : "";
+    return `„${name}“ → ${s}${e && e.name !== name ? ` (${e.name}${k ? `, ${k}` : ""})` : k ? ` (${k})` : ""}`;
+  };
+  const pruefe = (g: unknown) => {
+    if (!g || typeof g !== "object" || Array.isArray(g)) return;
+    const o = g as Record<string, unknown>;
+    const name = typeof o.name === "string" ? o.name.trim() : "";
+    if (!name) return;
+    const roh = typeof o.schluessel === "string" ? o.schluessel : "";
+    const s = normSchluessel(roh);
+    const treffer = (imLand && nachName(v, name, imLand)) || nachName(v, name);
+    if (/^[A-Z]{2}$/.test(s)) return; // Staat
+    if (!s) {
+      if (treffer) {
+        o.schluessel = treffer.schluessel;
+        ergaenzt.push(zeige(name, treffer.schluessel));
+      } else ohne.push(`„${name}“`);
+      return;
+    }
+    const bekannt = /^\d+$/.test(s) && v.nach.has(s);
+    if (bekannt && (!treffer || treffer.schluessel === s)) {
+      if (s !== roh) o.schluessel = s;
+      return;
+    }
+    if (treffer) {
+      o.schluessel = treffer.schluessel;
+      korrigiert.push(`${zeige(name, treffer.schluessel)} statt ${roh}`);
+    } else if (!bekannt) {
+      delete o.schluessel;
+      entfernt.push(`„${name}“: ${roh}`);
+    } else if (s !== roh) o.schluessel = s;
+  };
+  pruefe(d.absender?.gebiet);
+  for (const g of Array.isArray(d.berichtsraum?.gebiete) ? d.berichtsraum.gebiete : []) pruefe(g);
+  for (const sv of Array.isArray(d.sachverhalte) ? d.sachverhalte : []) for (const g of Array.isArray(sv?.raum?.gebiete) ? sv.raum.gebiete : []) pruefe(g);
+  const teile = [
+    ergaenzt.length ? `ergänzt: ${ergaenzt.join("; ")}` : "",
+    korrigiert.length ? `ersetzt: ${korrigiert.join("; ")}` : "",
+    entfernt.length ? `entfernt, weil nicht im Verzeichnis: ${entfernt.join("; ")}` : "",
+    ohne.length ? `ohne Schlüssel (Name mehrdeutig oder nicht im Verzeichnis): ${ohne.join(", ")}` : "",
+  ].filter(Boolean);
+  return teile.length
+    ? [{ stufe: "hinweis", code: "GEBIET_SCHLUESSEL", text: `Gebietsschlüssel nach dem ${gebieteVermerk(v)} – ${teile.join(" · ")}. Bitte prüfen.` }]
+    : [];
 }
 
 /** Nachbearbeitung eines Entwurfs nach LEAD-Meldung-v2; Rückgabe ist eine neue Meldung (der Entwurf bleibt unverändert) */
@@ -211,6 +277,9 @@ export function nachbearbeitenV2(roh: unknown, k: Kontext, modell: string, aus: 
       code: "ZEIT_ERGAENZT",
       text: `${zeiten} Zeitangabe(n) von der App vereinheitlicht: Uhrzeit ohne UTC-Versatz in der Zeitzone ${zone} ergänzt, leere Angabe als unbekannt (null), Abruf als Kalendertag.`,
     });
+
+  // Amtliche Gebietsschlüssel aus dem Verzeichnis (seit 0.9.8)
+  aus.befunde.push(...gebieteErgaenzen(d, opt.gebiete ?? GEBIETE_KERN));
 
   // 2. Entstehung
   const ids = new Set(

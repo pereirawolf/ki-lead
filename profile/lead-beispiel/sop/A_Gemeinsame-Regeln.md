@@ -6,10 +6,10 @@
 
 | Bestandteil | Fassung | Stand | Pflegeverantwortlich | Nächste Prüfung |
 |---|---|---|---|---|
-| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.26.1 | 20.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
+| SOP-LEAD-Sammelmappe (Ordner `sop/`: Teil A und je SOP bzw. Baustein eine Datei; Übersicht in `README.md`) | 3.26.2 | 21.11.2026 | Herausgeber der Beispielfassung | je SOP und Baustein im Kopf (`naechste_pruefung_faellig`) |
 | Kodierleitfaden LEAD (Beispielfassung) | 2.2.0 | 20.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Achsenregeln, Quellenkategorien oder den Regeln zu Zeitstrahl und Kennung (A.10.2) |
-| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 2.1.1 | 16.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
-| Arbeitsanweisung Erfassung | 2.0.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
+| Darstellungsdatei `meldung.ui.json` (ohne eigene Fassung; genannt ist die Profilversion ihrer letzten Änderung) | Profilversion 2.3.0 | 21.11.2026 | Herausgeber der Beispielfassung | mit dem Kodierleitfaden |
+| Arbeitsanweisung Erfassung | 2.1.0 | 21.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Verdichtung | 3.1.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A oder am Kodierleitfaden |
 | Arbeitsanweisung Kurzfassung | 2.5.0 | 14.11.2026 | Herausgeber der Beispielfassung | mit jeder Änderung an Teil A |
 | Meldungsschema | `LEAD-Meldung-v2` (Formatfassung 2.0, Entwurf zur fachlichen Abnahme; Kernschema mit den Modulen `lead-bevoelkerungsschutz` 1.0 und `lead-baustein` 1.0, zusammengestellt nach `docs/LEAD-MELDUNG-V2.md`; Meldungen nach `LEAD-Meldung-v1` und `LEAD-Meldung-Land-v1` überführt die App beim Einlesen zur Durchsicht) | 14.11.2026 | Herausgeber der Beispielfassung | nur mit Schemaänderung und Migration (A.10.4) |

@@ -23,6 +23,9 @@ import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
 import { elementTitel } from "../kern/listen";
+import { nachName, normSchluessel } from "../kern/gebiete";
+import { GEBIETE_KERN } from "../pipeline/gebieteDaten";
+import { GebietSuche, useVerzeichnisFuer, vorrangDesProfils, zuordnungText } from "./GebietSuche";
 
 export interface FeldProps {
   profil: Profil;
@@ -75,6 +78,28 @@ export function Feld(props: FeldProps) {
   const fehlerText = fehlerId && fehler ? <FeldFehler id={fehlerId} texte={fehler} /> : null;
   // Hilfetext steht wie in HilfeFeld zwischen Beschriftung und Eingabe (seit 0.6.21)
   const hilfeId = f.hinweis ? `${id}-hilfe` : undefined;
+
+  // Gebiet mit Name und amtlichem Schlüssel; Textfeld, das ein Gebiet nennt (seit 0.9.8)
+  if (f.widget === "gebiet") return <GebietObjekt {...props} knoten={k} label={label} />;
+  if (f.widget === "gebietsname" && t.includes("string")) {
+    const vorrang = vorrangDesProfils(profil);
+    return (
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} pflicht={pflicht} fehler={fehler}>
+        {(a) => (
+          <GebietSuche
+            id={a.id}
+            beschrieben={a["aria-describedby"]}
+            ungueltig={!!a["aria-invalid"]}
+            platzhalter={f.platzhalter}
+            wert={typeof wert === "string" ? wert : ""}
+            vorrang={vorrang}
+            onText={(text) => setze(segs, text)}
+            onWahl={(e) => setze(segs, e.name)}
+          />
+        )}
+      </HilfeFeld>
+    );
+  }
 
   if (f.widget === "radar") {
     const def = radarFuer(profil.ui, f);
@@ -641,5 +666,115 @@ function ZeitzonenAuswahl({ a, wert, onChange }: { a: HilfeFeldEingabe; wert: st
         </optgroup>
       )}
     </select>
+  );
+}
+
+/**
+ * Gebiet mit Name und Schlüssel (Widget „gebiet“, seit 0.9.8): Name über die Gebietssuche oder, wenn das Schema die Namen
+ * vorgibt (meldende Gebiete eines Profils), als Auswahl; der Schlüssel folgt der Wahl, bleibt aber von Hand änderbar. Die
+ * Zeile unter dem Schlüssel nennt das Gebiet dazu. Ein leerer Schlüssel entfällt (das Schema lässt "" nicht zu), „DE-TH“
+ * wird beim Verlassen des Felds zu „16“.
+ */
+function GebietObjekt(props: FeldProps & { label: string }) {
+  const { profil, segs, wert, setze, label } = props;
+  const k = props.knoten;
+  const f = feldUi(profil.ui, generischerPfad(segs));
+  const befunde = useContext(FeldBefundeKontext)?.befunde;
+  const nameId = useId();
+  const schluesselId = useId();
+  const o: Record<string, unknown> = wert && typeof wert === "object" && !Array.isArray(wert) ? wert : {};
+  const name = typeof o.name === "string" ? o.name : "";
+  const schl = typeof o.schluessel === "string" ? o.schluessel : "";
+  const v = useVerzeichnisFuer(schl);
+  const vorrang = vorrangDesProfils(profil);
+  const nameSegs = [...segs, "name"];
+  const schlSegs = [...segs, "schluessel"];
+  const nameUi = feldUi(profil.ui, generischerPfad(nameSegs));
+  const schlUi = feldUi(profil.ui, generischerPfad(schlSegs));
+  const nameEnum = enumWerte(aufloesen(k?.properties?.name, profil.schema));
+  const setzeGebiet = (n: string, s: string | undefined) => {
+    const { schluessel: _alt, ...rest } = o;
+    setze(segs, s ? { ...rest, name: n, schluessel: s } : { ...rest, name: n });
+  };
+  const ausName = (n: string) => ((vorrang && nachName(GEBIETE_KERN, n, vorrang)) || nachName(GEBIETE_KERN, n))?.schluessel;
+  const zuordnung = zuordnungText(v, name, schl);
+  // Als Listenelement ohne eigenen Rahmen: Nummer, Titel und Knöpfe stehen schon im Kopf des Elements
+  const element = typeof segs[segs.length - 1] === "number";
+  const inhalt = (
+    <>
+      <HilfeFeld
+        id={nameId}
+        feld={feldSchluessel(nameSegs)}
+        label={bezeichnung(profil.ui, generischerPfad(nameSegs))}
+        hilfe={nameUi.hinweis}
+        pflicht={!!nameUi.pflicht}
+        fehler={befunde?.get(feldSchluessel(nameSegs))}
+      >
+        {(a) =>
+          nameEnum ? (
+            <select {...a} value={name} onChange={(ev) => setzeGebiet(ev.target.value, ausName(ev.target.value))}>
+              {!nameEnum.includes(name) && <option value="">{nameUi.leer_label || "– bitte wählen –"}</option>}
+              {nameEnum
+                .filter((x): x is string => typeof x === "string" && x !== "")
+                .map((x) => (
+                  <option key={x} value={x}>
+                    {x}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <GebietSuche
+              id={a.id}
+              beschrieben={a["aria-describedby"]}
+              ungueltig={!!a["aria-invalid"]}
+              platzhalter={nameUi.platzhalter}
+              wert={name}
+              vorrang={vorrang}
+              onText={(text) => setze(nameSegs, text)}
+              onWahl={(e) => setzeGebiet(e.name, e.schluessel)}
+            />
+          )
+        }
+      </HilfeFeld>
+      <HilfeFeld
+        id={schluesselId}
+        feld={feldSchluessel(schlSegs)}
+        label={bezeichnung(profil.ui, generischerPfad(schlSegs))}
+        hilfe={schlUi.hinweis}
+        fehler={befunde?.get(feldSchluessel(schlSegs))}
+        weitere={[zuordnung && `${schluesselId}-zuordnung`]}
+        nach={
+          zuordnung ? (
+            <p className="hinweis gebiet-zuordnung" id={`${schluesselId}-zuordnung`}>
+              {zuordnung}
+            </p>
+          ) : null
+        }
+      >
+        {(a) => (
+          <input
+            {...a}
+            type="text"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder={schlUi.platzhalter}
+            value={schl}
+            onChange={(ev) => setzeGebiet(name, ev.target.value || undefined)}
+            onBlur={() => {
+              const n = normSchluessel(schl);
+              if (n !== schl) setzeGebiet(name, n || undefined);
+            }}
+          />
+        )}
+      </HilfeFeld>
+    </>
+  );
+  if (element) return <div className="gruppe-ohne-rahmen gebiet">{inhalt}</div>;
+  return (
+    <fieldset className="gruppe gebiet" data-feld={feldSchluessel(segs)}>
+      <legend>{label}</legend>
+      <Hinweis text={f.hinweis} />
+      <div className="gruppe-inhalt">{inhalt}</div>
+    </fieldset>
   );
 }

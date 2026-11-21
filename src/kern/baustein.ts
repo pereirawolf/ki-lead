@@ -5,6 +5,7 @@
 // (Übergangsregel h). Die Schemata reicht der Aufrufer herein, weil kern aus keinem anderen Verzeichnis importiert.
 
 import { pruefeRoh } from "./validierung";
+import { normSchluessel } from "./gebiete";
 
 export const BAUSTEIN_FORMAT = "Thessa-Kennzahlen";
 /** Bekannte Fassungen von Thessa; 0.3 ohne bezug_lead (Thessa G12, SR-2026-W45-02), 0.1 ist aus 0.2 abgeleitet (ohne Pflicht für einsatzmeldungen, siehe herkunft.json) */
@@ -21,8 +22,9 @@ export const BAUSTEIN_FORMATE: Record<string, { app: string; fassungen: readonly
   "KSNV-Kennzahlen": { app: "KSNV", fassungen: ["0.1"] },
 };
 export type BausteinFassung = string;
-/** Länderschlüssel nach dem amtlichen Gemeindeschlüssel (01 Schleswig-Holstein … 16 Thüringen); seit 0.8.2 */
-export const istLandSchluessel = (s: unknown): boolean => typeof s === "string" && /^(0[1-9]|1[0-6])$/.test(s);
+/** Länderschlüssel nach dem amtlichen Gemeindeschlüssel (01 Schleswig-Holstein … 16 Thüringen); seit 0.8.2, seit 0.9.8
+ * auch in der Form nach ISO 3166-2 („DE-TH“) */
+export const istLandSchluessel = (s: unknown): boolean => /^(0[1-9]|1[0-6])$/.test(normSchluessel(s));
 /**
  * Ein Baustein, dessen Raum ein Land ist, gilt als erfasster Ausschnitt (Entscheidung vom 06.11.2026), außer sein Format
  * deckt den Raum vollständig ab (`raum_vollstaendig`, seit 0.9.3, SR-2026-W46-06).

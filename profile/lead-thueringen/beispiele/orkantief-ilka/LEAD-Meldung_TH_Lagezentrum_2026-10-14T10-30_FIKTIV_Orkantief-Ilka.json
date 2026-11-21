@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Thüringen",
-      "schluessel": "DE-TH"
+      "schluessel": "16"
     }
   },
   "meldezeitpunkt": "2026-10-14T10:30+02:00",
@@ -127,7 +127,7 @@
         "gebiete": [
           {
             "name": "Thüringen",
-            "schluessel": "DE-TH"
+            "schluessel": "16"
           },
           {
             "name": "Ilm-Kreis",
@@ -320,7 +320,7 @@
         "gebiete": [
           {
             "name": "Thüringen",
-            "schluessel": "DE-TH"
+            "schluessel": "16"
           },
           {
             "name": "Landkreis Sonneberg",

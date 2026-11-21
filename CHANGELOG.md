@@ -131,6 +131,37 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.5 | letzter Commit des Pull Requests „Zeitfelder als Wanduhrzeit, Zeitzone als Auswahl; Grunddesign 1.12 (LD-T04); 0.9.5“ (Nachtrag vom 20.11.2026: Pull Request „Erfassungstest KW 47: Prüfsteine nach LEAD-Meldung-v2, Kodierleitfaden 2.2.0, SOP-LEAD 3.26.0 (ET-2026-W47-01 bis -07)“, ohne Änderung der App) |
 | 0.9.6 | letzter Commit des Pull Requests „Grunddesign 1.12 nachgetragen (LD-T04), Versatz an den Umstellungen in LEAD-Meldung-v2; 0.9.6“ |
 | 0.9.7 | letzter Commit des Pull Requests „Auswahlwerte in Anzeigeform, neue Radarachsen offen, Prüfmeldungen in Klartext; 0.9.7“ |
+| 0.9.8 | letzter Commit des Pull Requests „Gebietssuche mit amtlichen Schlüsseln aus dem Gemeindeverzeichnis; 0.9.8“ |
+## [0.9.8] – 21.11.2026
+
+Grundlage: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur eindeutigen Kennzeichnung von Gebieten (jeweils die Empfehlung): Ziffernschlüssel für Gebiete in Deutschland, ISO 3166-1 nur für Staaten; Verzeichnis mit Ländern, Regierungsbezirken und Kreisen im Kern, Gemeinden nachgeladen; Gebietssuche in allen Gebietsfeldern und Vorschläge für Referenzraum und Raum einer Kennzahl, ohne Schemaänderung und ohne Schlüssel im Fließtext; Lizenz des Verzeichnisses als eigener Punkt Nr. 5 f in LICENSE-CONTENT. Datengrundlage: Quartalsausgabe GV-ISys zum 30.09.2026, vom Herausgeber am 21.11.2026 bereitgestellt. Setzt 0.9.7 voraus.
+
+### Neu
+
+- **Gebietsverzeichnis** (`formate/fremd/gv-isys/`, `scripts/gebietsverzeichnis.mjs`): aus der Excel-Ausgabe des Gemeindeverzeichnisses erzeugt; Kern mit Bund, 16 Ländern, 29 Regierungsbezirken bzw. Statistischen Regionen und 401 Kreisen, dazu 10.943 Gemeinden mit 8-stelligem Gemeindeschlüssel. Kreise tragen ihre Art vorn („Landkreis Sonneberg“, „Kreisfreie Stadt Erfurt“). Das Skript liest die Datei ohne neue Abhängigkeit (jszip) und ist für jede neue Ausgabe wiederverwendbar. Der Kern ist Teil des Programmcodes (rund 22 KB), die Gemeinden ein eigener, nachgeladener Teil (rund 430 KB, gepackt rund 97 KB).
+- **Gebietssuche in der Maske** (`src/ui/GebietSuche.tsx`, Widgets `gebiet` und `gebietsname`): Name tippen, Vorschlag mit Land, Kreis und Schlüssel wählen, der Schlüssel wird gesetzt; Bedienung mit Pfeiltasten, Eingabe und Escape (Combobox nach WAI-ARIA), das Land des Profils zuerst, ab dem dritten Zeichen auch Gemeinden, Quellenangabe am Ende der Liste. Gibt das Schema die Namen vor (meldende Gebiete des Landesprofils), bleibt die Auswahl, und der Schlüssel folgt ihr. Unter dem Schlüssel steht das Gebiet in Worten, bei abweichendem Namen mit Hinweis. Freie Einträge ohne Schlüssel bleiben möglich. Referenzraum und Raum einer Kennzahl erhalten Vorschläge, die nur den Namen setzen.
+- **Gebietsschlüssel in der KI-Nachbearbeitung** (`gebieteErgaenzen` in `src/pipeline/nachbearbeitung-v2.ts`): Die App ergänzt fehlende Schlüssel eindeutiger Namen (zuerst im Land der meldenden Stelle), ersetzt einen Schlüssel, der zu einem anderen Gebiet desselben Namens gehört, entfernt Schlüssel, die das Verzeichnis nicht kennt, und rechnet „DE-TH“ um. Jede Änderung steht im Hinweis `GEBIET_SCHLUESSEL` zur Durchsicht. Mehrdeutige Namen („Neustadt“) bleiben ohne Schlüssel.
+
+### Geändert
+
+- **Schlüsselregel** (`src/kern/gebiete.ts`): Gebiete in Deutschland tragen Ziffern (Land 16, Kreis 16072, Gemeinde 16072018) und liegen am Präfix ineinander; „DE-TH“ und 12-stellige Regionalschlüssel werden umgerechnet. Migration v1 → v2 und Nachbearbeitung setzen für Länder die Ziffern (`LAENDER` in `src/kern/meldung-v2.js`), Beispielmeldungen tragen sie. Das Kernschema bleibt unverändert (Prüfsumme der Schwester-Apps); seine Beschreibung folgt mit der nächsten Kernänderung (LEAD-Meldung-v2, Nachtrag 16).
+- **Rechenhilfe der Kennzahlen-Bausteine** (`src/kern/bausteinverdichtung.ts`, `istLandSchluessel`): vergleicht Räume nach der Umrechnung. Bis 0.9.7 galt „DE-TH“ nicht als übergeordnet zu „16072“; ein Land- und ein Kreisbaustein mit solchen Schlüsseln wären als überschneidungsfrei behandelt worden. Im ausgelieferten Bestand trat das nicht auf, weil die Bausteine von Thessa, KSNV und STATIS-LEAD schon Ziffern tragen.
+- **Arbeitsanweisung Erfassung 2.1.0:** Die KI führt Gebiete mit ihrem amtlichen Namen und lässt den Schlüssel weg.
+- **Profile:** Beispiel- und Landesprofil 2.3.0, Vorlage 1.2.0 (Darstellungsdatei, Anweisung, Beispiele); SOP-Sammelmappe 3.26.2 (nur Gültigkeitsstand).
+
+### Tests
+
+- `tests/kern/gebiete.test.ts` (10 neu): Umrechnung und Lage der Schlüssel, Länder der Migration im Verzeichnis, Umfang und Aufbau der Ausgabe zum 30.09.2026, Thüringer Kreise, alle meldenden Gebiete des Landesprofils, Kreis und gleichnamige Stadt, mehrdeutige Namen, Rangfolge der Suche.
+- `tests/format/gebietsverzeichnis.test.ts` (3 neu): Anzeigenamen nach Textkennzeichen, Ebenen und Schlüssel aus von Hand gebauten Zeilen, Lesen einer kleinen Excel-Datei.
+- `tests/pipeline/gebiete-nachbearbeitung.test.ts` (3 neu): ergänzen, ersetzen, entfernen, Staaten unverändert, Hinweis mit jeder Änderung.
+- `tests/ui/gebiet-feld.test.ts` (4 neu): Vorschlag mit Tastatur wählen, Auswahl vorgegebener Namen setzt den Schlüssel, „DE-TH“ beim Verlassen zu „16“ und leerer Schlüssel entfällt, Referenzraum erhält nur den Namen.
+- `tests/lizenzen/reuse.test.ts` (1 neu): Rechtevermerk wortgleich in LICENSE-CONTENT, Lizenztext und Daten. Mit geändertem Soll: Zahl der Lizenztexte, `tests/pipeline/v2-pipeline.test.ts` (Absender „16“), `tests/profil/v2-umstellung.test.ts` (Profilversionen).
+
+### Dokumentation und Lizenz
+
+- [LICENSE-CONTENT](LICENSE-CONTENT) Nr. 5 f, `LICENSES/LicenseRef-Destatis-Quellenangabe.txt`, REUSE.toml, [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) Abschnitt 3a und `public/lizenzen-ergaenzend.md` (Quellenangabe auch in der ausgelieferten App), [formate/fremd/gv-isys/README.md](formate/fremd/gv-isys/README.md) mit dem Vorgehen bei einer neuen Ausgabe.
+- [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) Nachtrag 16, [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.37, [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.8, [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.9.8 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 908).
+
 ## [0.9.7] – 21.11.2026
 
 Grundlage: Nebenbefunde des Herausgebers vom 21.11.2026 aus der Erfassung („ungefaehr“ im Feld „Genauigkeit“; „Lagenradar › D2 › stufe: Datentyp „null“, erwartet integer“ beim Prüfen) und seine Entscheidungen vom selben Tag (Anzeige übersetzen statt Schemawerte ändern; neue Achsen offen, Grund leer; alle Prüfmeldungen in Klartext). Die Freigabe KL-2026-W46-02 rückt damit nach.

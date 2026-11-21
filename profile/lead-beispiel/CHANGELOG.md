@@ -8,6 +8,16 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.3.0 – 21.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 21.11.2026 zur Gebietssuche: amtliche Ziffernschlüssel für Gebiete in Deutschland (Land 16, Kreis 16072, Gemeinde 16072018), Verzeichnis aus dem Gemeindeverzeichnis GV-ISys (Kern mit Ländern, Regierungsbezirken und Kreisen, Gemeinden nachgeladen), Vorschläge auch für Referenzraum und Raum einer Kennzahl, keine Schlüssel im Fließtext (App 0.9.8). Zweite Stelle: neue Eingabehilfen und eine geänderte Regel der Erfassung; bestehende Meldungen bleiben gültig.
+
+- **Darstellungsdatei:** Gebiete des Absenders, des Berichtsraums und des Raums eines Sachverhalts mit Widget `gebiet` (Gebietssuche, Schlüssel wird gesetzt); Referenzraum und Raum einer Kennzahl mit Widget `gebietsname` (Vorschläge, nur der Name); Hinweise zu Schlüssel und Gebietsliste nach der neuen Regel statt „ISO 3166-2 für Länder (DE-TH)“.
+- **Arbeitsanweisung Erfassung 2.1.0:** Gebiete stehen mit ihrem amtlichen Namen in `raum.gebiete`; den Schlüssel lässt die KI weg, die App ergänzt ihn aus dem Gemeindeverzeichnis.
+- **Beispiele:** Schlüssel der Länder in Ziffern („16“ statt „DE-TH“), sonst unverändert.
+- **SOP-Sammelmappe 3.26.2:** nur Gültigkeitsstand in Teil A (Darstellungsdatei 2.3.0, Arbeitsanweisung Erfassung 2.1.0).
+- Schema, Kodierleitfaden, übrige Arbeitsanweisungen, Kontakte und Bewertungsfälle sind unverändert.
+
 ## 2.2.2 – 21.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 21.11.2026 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle: technische Vorgabe im Schema ohne fachliche Wirkung; bestehende Meldungen bleiben gültig.

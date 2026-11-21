@@ -191,7 +191,7 @@ describe("UP-2026-W45-04: Nachbearbeitung nach v2 (Abschnitte 1, 2 und 6)", () =
     expect(d.fassung).toBe("2.0");
     expect(d.meldung_id).toMatch(UUID7);
     expect(d.status).toBe("entwurf");
-    expect(d.absender).toEqual({ stelle: STELLE, ebene: "Land", gebiet: { name: "Thüringen", schluessel: "DE-TH" } });
+    expect(d.absender).toEqual({ stelle: STELLE, ebene: "Land", gebiet: { name: "Thüringen", schluessel: "16" } });
     expect(d.meldezeitpunkt).toBe("2026-10-14T10:30+02:00");
     expect(d.zeitzone).toBe("Europe/Berlin");
     expect(d.freigabe).toEqual({});

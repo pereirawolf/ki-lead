@@ -4,6 +4,14 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 2.3.0 – 21.11.2026
+
+Grundlage: wie Beispielprofil 2.3.0 (Gebietssuche, App 0.9.8). Zweite Stelle wie dort.
+
+- **Abgeleitete Dateien:** Darstellungsdatei mit Gebietssuche und Arbeitsanweisung Erfassung 2.1.0 (`npm run profil:land`). Als meldendes Gebiet bleibt die Auswahl aus Land und Kreisen; der Schlüssel folgt der Auswahl (Thüringen 16, Kreise 16051 bis 16077).
+- **Beispiele:** Schlüssel des Landes in Ziffern („16“ statt „DE-TH“).
+- **Geteilte SOP-Sammelmappe 3.26.2:** nur Gültigkeitsstand in Teil A.
+
 ## 2.2.2 – 21.11.2026
 
 Grundlage: wie Beispielprofil 2.2.2 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle wie dort.

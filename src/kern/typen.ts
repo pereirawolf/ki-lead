@@ -74,7 +74,11 @@ export type Widget =
   /** Liste von Kennungen als eine Zeile (seit 0.6.9) */
   | "kennungen"
   /** Auswahl der IANA-Zeitzone mit lesbaren Namen (seit 0.9.5; für das Kernfeld `zeitzone` ohne Angabe) */
-  | "zeitzone";
+  | "zeitzone"
+  /** Gebiet mit Name und amtlichem Schlüssel, Gebietssuche aus dem Gemeindeverzeichnis (seit 0.9.8) */
+  | "gebiet"
+  /** Textfeld, das ein Gebiet nennt: Vorschläge aus dem Gemeindeverzeichnis, nur der Name wird gesetzt (seit 0.9.8) */
+  | "gebietsname";
 
 export interface FeldUi {
   label?: string;

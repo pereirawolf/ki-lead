@@ -37,6 +37,7 @@ import type { Pflichtsuche, S1Vorschlag, StufenEintrag } from "./lauf";
 import { absenderFuer, hatVormeldung, istVerdichtung, materialBloecke, materialUebersicht, vormeldungStand, type Material } from "./material";
 import { nachbearbeiten } from "./nachbearbeitung";
 import { nachbearbeitenV2, v2Vorgaben } from "./nachbearbeitung-v2";
+import { gebieteVoll } from "./gebieteDaten";
 import { ausgabeSchemaKi, istV2Profil } from "./ausgabeschema";
 import { amtlichErreicht, absenderBefunde, rechercheNachweis, primaerquelleBelegt, rechercheBefunde, auftragsAbrufFehler } from "./recherchebefunde";
 import { pflichtRegel } from "./recherchetiefe";
@@ -473,17 +474,25 @@ export async function stufe2und3(k: Kontext, bestaetigt: S1Vorschlag, optionen: 
     umhaengungen: string[];
     zeitstrahlBefunde: Befund[];
   }
+  // Gebietsverzeichnis mit Gemeinden für die Schlüssel der Gebiete (seit 0.9.8); ohne es gilt der Kern
+  const gebiete = v2 ? await gebieteVoll().catch(() => undefined) : undefined;
   const bewerten = async (z: Zerlegung, modell: string, eintrag: StufenEintrag): Promise<Stand> => {
     const s: Stand = { z, modell, schemaBefunde: [], korrekturen: [], sopHinweise: [], umhaengungen: [], zeitstrahlBefunde: [] };
     if (z.json !== undefined) {
       try {
         s.meldung = v2
-          ? nachbearbeitenV2(z.json, k, modell, {
-              korrekturen: s.korrekturen,
-              sopHinweise: s.sopHinweise,
-              umhaengungen: s.umhaengungen,
-              befunde: s.zeitstrahlBefunde,
-            })
+          ? nachbearbeitenV2(
+              z.json,
+              k,
+              modell,
+              {
+                korrekturen: s.korrekturen,
+                sopHinweise: s.sopHinweise,
+                umhaengungen: s.umhaengungen,
+                befunde: s.zeitstrahlBefunde,
+              },
+              { gebiete },
+            )
           : nachbearbeiten(z.json, k, modell, s.korrekturen, s.sopHinweise, s.umhaengungen, s.zeitstrahlBefunde);
         s.schemaBefunde = pruefeGegenSchema(p.schema, s.meldung, p.ui);
       } catch (err: any) {

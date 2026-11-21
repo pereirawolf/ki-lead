@@ -22,6 +22,7 @@ const CC_BY_ODER_CC0 = "CC-BY-4.0 OR CC0-1.0";
 const EUPL = "EUPL-1.2";
 const EUPL_ODER_CC_BY = "EUPL-1.2 OR CC-BY-4.0";
 const CC_BY_NC_ND = "CC-BY-NC-ND-4.0";
+const DESTATIS = "LicenseRef-Destatis-Quellenangabe";
 
 /** Aus dem App-Symbol erzeugte Symbol- und Startbilder (LICENSE-CONTENT, Nr. 1 d) */
 const APP_SYMBOL = [
@@ -36,6 +37,8 @@ const APP_SYMBOL = [
 function sollLizenzen(pfad: string): string[] {
   // Nr. 5 e: Grundlagen und Genese wie die begleitenden Aufsätze
   if (pfad === "docs/GRUNDLAGEN.md") return [CC_BY_NC_ND];
+  // Nr. 5 f: Gebietsverzeichnis aus GV-ISys, Rechte der Herausgeber
+  if (/^formate\/fremd\/gv-isys\/gebiete-[^/]+\.json$/.test(pfad)) return [DESTATIS];
   // Nr. 2 d: CC0 1.0 nur für Teile der Datei (Snippets), die Datei selbst nach Nr. 1 c
   if (pfad === "docs/VORLAGEN.md" || pfad === "docs/DATENSCHUTZ.md") return [CC_BY, CC_BY_ODER_CC0];
   // Nr. 2 f: Muster einer Leistungsbeschreibung
@@ -64,15 +67,23 @@ function sollLizenzen(pfad: string): string[] {
 }
 
 describe("Lizenztexte unter LICENSES/ (Issue #89)", () => {
-  it("genau die sechs verwendeten Lizenzen", () => {
+  it("genau die sieben verwendeten Lizenzen", () => {
     expect(readdirSync(repoPfad("LICENSES")).sort()).toEqual([
       "Apache-2.0.txt",
       "CC-BY-4.0.txt",
       "CC-BY-NC-ND-4.0.txt",
       "CC0-1.0.txt",
       "EUPL-1.2.txt",
+      "LicenseRef-Destatis-Quellenangabe.txt",
       "MIT.txt",
     ]);
+  });
+
+  it("Nr. 5 f: Rechtevermerk des Gemeindeverzeichnisses wortgleich in LICENSE-CONTENT, im Lizenztext und in den Daten", () => {
+    const vermerk = "Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.";
+    expect(norm(lies("LICENSE-CONTENT"))).toContain(vermerk);
+    expect(lies("LICENSES", "LicenseRef-Destatis-Quellenangabe.txt")).toContain(vermerk);
+    for (const d of ["gebiete-kern.json", "gebiete-gemeinden.json"]) expect(JSON.parse(lies("formate", "fremd", "gv-isys", d)).rechte, d).toContain(vermerk);
   });
 
   it("EUPL-1.2 wortgleich mit LICENSE", () => {
