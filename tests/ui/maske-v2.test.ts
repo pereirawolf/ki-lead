@@ -84,6 +84,18 @@ describe("UP-2026-W45-03: Erfassungsmaske für LEAD-Meldung-v2", () => {
     expect(pruefeRoh(p.schema, stand())).toEqual([]);
   });
 
+  it("Auswahlwerte in Anzeigeform (seit 0.9.7): „ungefähr“ in der Maske, gespeichert bleibt „ungefaehr“", async () => {
+    const { aufrufe } = await maske(BEISPIEL());
+    const auswahl = document.querySelector<HTMLSelectElement>('[data-feld="sachverhalte/0/eintritt/genauigkeit"] select')!;
+    const texte = [...auswahl.options].map((o) => o.textContent);
+    expect(texte).toContain("ungefähr");
+    expect(texte).not.toContain("ungefaehr");
+    const i = [...auswahl.options].findIndex((o) => o.textContent === "ungefähr");
+    auswahl.value = auswahl.options[i]!.value;
+    auswahl.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(aufrufe.at(-1)).toEqual([["sachverhalte", 0, "eintritt", "genauigkeit"], "ungefaehr"]);
+  });
+
   it("Radarachse als Objekt: Stufe aus dem Objekt, Begründung je Achse unter der Grafik", async () => {
     const m = BEISPIEL();
     await maske(m);

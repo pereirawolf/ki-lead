@@ -4,6 +4,12 @@ Profil-ID `lead.beispiel.thueringen`, Inhalte unter CC BY 4.0. Die jüngsten Än
 
 **Versionierung:** wie beim Beispielprofil der Koordinierungsstelle (Semantic Versioning). **Abgeleitete Dateien:** Schema, Darstellungsdatei, Kontakte, Arbeitsanweisungen und Kodierleitfaden entstehen mit `npm run profil:land` aus dem Beispielprofil (`scripts/landesprofil.mjs`); ein Test prüft, dass sie aktuell sind. Ändert sich eine dieser Dateien im Beispielprofil, wird das Landesprofil neu abgeleitet und hier mit einer neuen Version vermerkt. **SOP-Sammelmappe:** geteilt mit dem Beispielprofil; Änderungen stehen in dessen `sop/CHANGELOG.md`.
 
+## 2.2.2 – 21.11.2026
+
+Grundlage: wie Beispielprofil 2.2.2 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle wie dort.
+
+- **Schema:** neu zusammengestellt mit der Vorgabe `"default": "offen"` für den Status einer Radarachse; übrige abgeleitete Dateien unverändert.
+
 ## 2.2.1 – 20.11.2026
 
 Grundlage: wie Beispielprofil 2.2.1 (Quellenprüfung KW 47, QW-2026-W47-01 bis -07). Dritte Stelle wie dort.

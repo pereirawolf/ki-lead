@@ -3,7 +3,7 @@
 import { useContext, useEffect, useId, useRef, useState } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, teilePfad, type Segment } from "../kern/pfad";
-import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer } from "../kern/ui";
+import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer, wertBezeichnung } from "../kern/ui";
 import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
@@ -162,7 +162,7 @@ export function Feld(props: FeldProps) {
               return (
                 <label key={String(opt)} className={an ? "chip an" : "chip"}>
                   <input type="checkbox" checked={an} onChange={() => setze(segs, an ? gewaehlt.filter((x) => x !== opt) : [...gewaehlt, opt])} />
-                  {String(opt)}
+                  {wertBezeichnung(profil.ui, opt)}
                 </label>
               );
             })}
@@ -235,7 +235,7 @@ export function Feld(props: FeldProps) {
             {optionen.map((opt) => (
               <label key={String(opt)} className={wert === opt ? "segment an" : "segment"} {...(wert === opt ? signal(opt) : {})}>
                 <input type="radio" name={id} checked={wert === opt} onChange={() => setze(segs, opt)} />
-                {String(opt)}
+                {wertBezeichnung(profil.ui, opt)}
               </label>
             ))}
           </div>
@@ -255,7 +255,7 @@ export function Feld(props: FeldProps) {
             {(hatLeer || !optionen.includes(wert)) && <option value="">{f.leer_label || "– bitte wählen –"}</option>}
             {optionen.map((opt, i) => (
               <option key={String(opt)} value={String(i)}>
-                {String(opt)}
+                {wertBezeichnung(profil.ui, opt)}
               </option>
             ))}
           </select>

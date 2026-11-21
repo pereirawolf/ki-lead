@@ -2,21 +2,49 @@
 // Content-Security-Policy läuft. Unterstützt die in Meldungsschemata üblichen Schlüsselwörter von
 // JSON Schema Draft 2020-12. Die Tests vergleichen das Ergebnis mit Ajv als Referenz.
 
-import { teilePfad } from "./pfad";
-import { pfadBezeichnung } from "./ui";
-import type { UiKonfig } from "./typen";
+import { generischerPfad, holeWert, teilePfad, type Segment } from "./pfad";
+import { feldUi, pfadBezeichnung, radarFuer, wertBezeichnung } from "./ui";
+import type { RadarAchse, UiKonfig } from "./typen";
 
 export interface SchemaBefund {
   pfad: string;
   keyword: string;
   text: string;
+  /** Typbefund zu einem leeren Wert (null): in LEAD-Meldung-v2 „unbekannt“, kein falscher Datentyp (seit 0.9.7) */
+  leer?: boolean;
 }
 
 interface RohFehler {
   pfad: string;
   keyword: string;
   text: string;
+  /** geprüfter Wert, für die Klartextfassung in pruefeGegenSchema (seit 0.9.7) */
+  wert?: unknown;
+  /** zulässige Werte (enum, const) */
+  erlaubt?: unknown[];
+  /** erwartete Datentypen (type) */
+  erwartet?: string[];
+  /** anyOf/oneOf ohne passende Form: Befunde der nächstliegenden Formen (seit 0.9.7) */
+  varianten?: RohFehler[][];
 }
+
+/** Datentypen in Worten (seit 0.9.7, statt „integer“, „null“ usw.) */
+const TYP_WORT: Record<string, string> = {
+  string: "Text",
+  number: "Zahl",
+  integer: "ganze Zahl",
+  boolean: "ja/nein",
+  object: "Gruppe von Angaben",
+  array: "Liste",
+  null: "leer",
+};
+const typWorte = (ts: string[]) => {
+  const w = ts.map((t) => TYP_WORT[t] ?? t);
+  return w.length > 1 ? `${w.slice(0, -1).join(", ")} oder ${w[w.length - 1]}` : (w[0] ?? "");
+};
+
+/** Text, mit dem eine Pflichtangabe als fehlend gemeldet wird (Maske und Prüfschritt) */
+export const PFLICHT_FEHLT = "Pflichtangabe fehlt";
 
 const UNTERSTUETZT = new Set([
   "$schema",
@@ -158,45 +186,56 @@ class Pruefer {
   private pruefeKnoten(v: unknown, schema: any, pfad: string, out: RohFehler[]): void {
     if (schema === true || schema === undefined) return;
     if (schema === false) {
-      out.push({ pfad, keyword: "false", text: "Wert ist hier nicht zulässig" });
+      out.push({ pfad, keyword: "false", wert: v, text: "Angabe ist hier nicht zulässig" });
       return;
     }
     const s = this.aufloesen(schema);
     // Verweise können auf boolesche Schemata zeigen
     if (s === true || s === undefined) return;
     if (s === false) {
-      out.push({ pfad, keyword: "false", text: "Wert ist hier nicht zulässig" });
+      out.push({ pfad, keyword: "false", wert: v, text: "Angabe ist hier nicht zulässig" });
       return;
     }
     if (s.type !== undefined) {
       const ts: string[] = [].concat(s.type);
       if (!ts.some((t) => typPasst(v, t))) {
-        out.push({ pfad, keyword: "type", text: `Datentyp „${typVon(v)}“, erwartet ${ts.join(" oder ")}` });
+        out.push({
+          pfad,
+          keyword: "type",
+          wert: v,
+          erwartet: ts,
+          text:
+            v === null
+              ? PFLICHT_FEHLT
+              : `erwartet ist ${typWorte(ts)}, eingetragen ist ${TYP_WORT[typVon(v)] ?? typVon(v)}${typeof v === "string" ? ` („${kurz(v)}“)` : ""}`,
+        });
         return;
       }
     }
-    if (hat(s, "const") && !gleich(v, s.const)) out.push({ pfad, keyword: "const", text: `erwartet „${kurz(s.const)}“, gefunden „${kurz(v)}“` });
-    if (Array.isArray(s.enum) && !s.enum.some((e: unknown) => gleich(e, v))) out.push({ pfad, keyword: "enum", text: `unzulässiger Wert „${kurz(v)}“` });
+    if (hat(s, "const") && !gleich(v, s.const))
+      out.push({ pfad, keyword: "const", wert: v, erlaubt: [s.const], text: `erwartet „${kurz(s.const)}“, eingetragen „${kurz(v)}“` });
+    if (Array.isArray(s.enum) && !s.enum.some((e: unknown) => gleich(e, v)))
+      out.push({ pfad, keyword: "enum", wert: v, erlaubt: s.enum, text: v === null || v === "" ? PFLICHT_FEHLT : `„${kurz(v)}“ ist hier nicht vorgesehen` });
 
     if (typeof v === "string") {
       const laenge = [...v].length;
-      if (s.minLength !== undefined && laenge < s.minLength) out.push({ pfad, keyword: "minLength", text: "Pflichtangabe fehlt" });
+      if (s.minLength !== undefined && laenge < s.minLength) out.push({ pfad, keyword: "minLength", text: PFLICHT_FEHLT });
       if (s.maxLength !== undefined && laenge > s.maxLength) out.push({ pfad, keyword: "maxLength", text: `höchstens ${s.maxLength} Zeichen` });
       if (s.pattern !== undefined && !regex(s.pattern).test(v))
         out.push({
           pfad,
           keyword: "pattern",
           text:
-            s.pattern === "\\S"
-              ? "Pflichtangabe fehlt"
+            s.pattern === "\\S" || v === ""
+              ? PFLICHT_FEHLT
               : /^\d{4}-\d{2}-\d{2}$/.test(v) && regex(s.pattern).test(`${v}T00:00`)
                 ? `Uhrzeit fehlt („${kurz(v)}“, erwartet JJJJ-MM-TTThh:mm)`
                 : `Format ungültig („${kurz(v)}“)`,
         });
     }
     if (typeof v === "number") {
-      if (s.minimum !== undefined && v < s.minimum) out.push({ pfad, keyword: "minimum", text: `Wert ${v} kleiner als ${s.minimum}` });
-      if (s.maximum !== undefined && v > s.maximum) out.push({ pfad, keyword: "maximum", text: `Wert ${v} größer als ${s.maximum}` });
+      if (s.minimum !== undefined && v < s.minimum) out.push({ pfad, keyword: "minimum", text: `${v} ist zu klein (mindestens ${s.minimum})` });
+      if (s.maximum !== undefined && v > s.maximum) out.push({ pfad, keyword: "maximum", text: `${v} ist zu groß (höchstens ${s.maximum})` });
       if (typeof s.exclusiveMinimum === "number" && v <= s.exclusiveMinimum)
         out.push({ pfad, keyword: "exclusiveMinimum", text: `Wert muss größer als ${s.exclusiveMinimum} sein` });
       if (typeof s.exclusiveMaximum === "number" && v >= s.exclusiveMaximum)
@@ -205,11 +244,12 @@ class Pruefer {
         out.push({ pfad, keyword: "multipleOf", text: `Wert muss ein Vielfaches von ${s.multipleOf} sein` });
     }
     if (Array.isArray(v)) {
-      if (s.minItems !== undefined && v.length < s.minItems) out.push({ pfad, keyword: "minItems", text: `mindestens ${s.minItems} Eintrag erforderlich` });
+      if (s.minItems !== undefined && v.length < s.minItems)
+        out.push({ pfad, keyword: "minItems", text: `mindestens ${s.minItems} ${s.minItems === 1 ? "Eintrag" : "Einträge"} erforderlich` });
       if (s.maxItems !== undefined && v.length > s.maxItems) out.push({ pfad, keyword: "maxItems", text: `höchstens ${s.maxItems} Einträge zulässig` });
       if (s.uniqueItems) {
         v.forEach((x, i) => {
-          if (v.slice(0, i).some((y) => gleich(x, y))) out.push({ pfad, keyword: "uniqueItems", text: `doppelter Eintrag „${kurz(x)}“` });
+          if (v.slice(0, i).some((y) => gleich(x, y))) out.push({ pfad, keyword: "uniqueItems", text: `„${kurz(x)}“ steht doppelt in der Liste` });
         });
       }
       const prefix: any[] = Array.isArray(s.prefixItems) ? s.prefixItems : [];
@@ -223,7 +263,8 @@ class Pruefer {
     if (typVon(v) === "object") {
       const o = v as Record<string, unknown>;
       const schluessel = Object.keys(o);
-      for (const k of Array.isArray(s.required) ? s.required : []) if (!hat(o, k)) out.push({ pfad: zeiger(pfad, k), keyword: "required", text: "Feld fehlt" });
+      for (const k of Array.isArray(s.required) ? s.required : [])
+        if (!hat(o, k)) out.push({ pfad: zeiger(pfad, k), keyword: "required", text: PFLICHT_FEHLT });
       const props = s.properties || {};
       for (const k of Object.keys(props)) if (hat(o, k)) this.pruefe(o[k], props[k], zeiger(pfad, k), out);
       const muster = Object.entries(s.patternProperties || {});
@@ -231,7 +272,8 @@ class Pruefer {
         const treffer = muster.filter(([m]) => regex(m).test(k));
         treffer.forEach(([, ps]) => this.pruefe(o[k], ps, zeiger(pfad, k), out));
         if (hat(props, k) || treffer.length) continue;
-        if (s.additionalProperties === false) out.push({ pfad: zeiger(pfad, k), keyword: "additionalProperties", text: "im Schema nicht vorgesehenes Feld" });
+        if (s.additionalProperties === false)
+          out.push({ pfad: zeiger(pfad, k), keyword: "additionalProperties", text: "Angabe ist in diesem Meldungsformat nicht vorgesehen" });
         else if (s.additionalProperties && typeof s.additionalProperties === "object") this.pruefe(o[k], s.additionalProperties, zeiger(pfad, k), out);
       }
       if (s.minProperties !== undefined && schluessel.length < s.minProperties)
@@ -244,21 +286,44 @@ class Pruefer {
       for (const [k, abh] of Object.entries(s.dependentRequired || {}))
         if (hat(o, k))
           for (const d of Array.isArray(abh) ? (abh as string[]) : [])
-            if (!hat(o, d)) out.push({ pfad: zeiger(pfad, d), keyword: "required", text: `Feld fehlt (erforderlich, weil „${k}“ gesetzt ist)` });
+            if (!hat(o, d)) out.push({ pfad: zeiger(pfad, d), keyword: "required", text: `${PFLICHT_FEHLT} (erforderlich, weil „${k}“ gesetzt ist)` });
     }
     for (const teil of s.allOf || []) this.pruefe(v, teil, pfad, out);
     if (Array.isArray(s.anyOf) && !s.anyOf.some((t: any) => this.gilt(v, t)))
-      out.push({ pfad, keyword: "anyOf", text: "keine der zulässigen Varianten erfüllt" });
+      out.push({ pfad, keyword: "anyOf", wert: v, text: "Eintrag hat keine zulässige Form", varianten: this.varianten(v, s.anyOf, pfad) });
     if (Array.isArray(s.oneOf)) {
       const n = s.oneOf.filter((t: any) => this.gilt(v, t)).length;
-      if (n !== 1) out.push({ pfad, keyword: "oneOf", text: n === 0 ? "keine der zulässigen Varianten erfüllt" : "mehrere Varianten zugleich erfüllt" });
+      if (n !== 1)
+        out.push({
+          pfad,
+          keyword: "oneOf",
+          wert: v,
+          text: n === 0 ? "Eintrag hat keine zulässige Form" : "Eintrag passt auf mehrere Formen zugleich",
+          ...(n === 0 ? { varianten: this.varianten(v, s.oneOf, pfad) } : {}),
+        });
     }
-    if (s.not !== undefined && this.gilt(v, s.not)) out.push({ pfad, keyword: "not", text: "Wert ist hier ausgeschlossen" });
+    if (s.not !== undefined && this.gilt(v, s.not)) out.push({ pfad, keyword: "not", text: "Eintrag ist hier ausgeschlossen" });
     if (s.if !== undefined) {
       if (this.gilt(v, s.if)) {
         if (s.then !== undefined) this.pruefe(v, s.then, pfad, out);
       } else if (s.else !== undefined) this.pruefe(v, s.else, pfad, out);
     }
+  }
+
+  /**
+   * Befunde je Form, die am wenigsten fehlt (höchstens zwei Befunde), ohne die Form „leer“ (type null): Sie sagt nur,
+   * dass das Feld auch leer bleiben darf. Grundlage der Klartextfassung in pruefeGegenSchema (seit 0.9.7).
+   */
+  varianten(v: unknown, formen: any[], pfad: string): RohFehler[][] {
+    const je = formen
+      .map((t) => {
+        const f: RohFehler[] = [];
+        this.pruefe(v, t, pfad, f);
+        return f;
+      })
+      .filter((f) => f.length && !f.every((x) => x.keyword === "type" && x.erwartet?.length === 1 && x.erwartet[0] === "null"));
+    const min = Math.min(...je.map((f) => f.length));
+    return min <= 2 ? je.filter((f) => f.length === min) : [];
   }
 
   gilt(v: unknown, schema: any): boolean {
@@ -443,14 +508,111 @@ export function pruefeRoh(schema: object, daten: unknown): RohFehler[] {
   return out;
 }
 
+/** Anfang des Befunds zu Radarachsen, die noch niemand bewertet hat; die Maske zeigt ihn wie „Pflichtangabe fehlt“ erst
+ * nach Bearbeitung des Sachverhalts (seit 0.9.7) */
+export const RADAR_UNBEWERTET = "noch nicht bewertet";
+
+interface RadarOrt {
+  radar: Segment[];
+  achse: RadarAchse;
+  kurz: string;
+  feld: Segment | undefined;
+}
+
+/** Liegt der Pfad in einer Radarachse (Widget „radar“)? Dann Radar, Achse und Feld der Achse */
+function radarOrt(ui: UiKonfig, segs: Segment[]): RadarOrt | null {
+  for (let i = 1; i < segs.length; i++) {
+    const f = feldUi(ui, generischerPfad(segs.slice(0, i)));
+    if (f.widget !== "radar") continue;
+    const achse = radarFuer(ui, f)?.achsen.find((a) => a.key === segs[i]);
+    if (!achse) return null;
+    return { radar: segs.slice(0, i), achse, kurz: /^(D\d+)\b/.exec(achse.label)?.[1] ?? achse.label, feld: segs[i + 1] };
+  }
+  return null;
+}
+
+/**
+ * Befunde einer Radarachse nach LEAD-Meldung-v2 in Worten des Kodierleitfadens (seit 0.9.7, Entscheidung des
+ * Herausgebers vom 21.11.2026). „unbewertet“: Status offen, weder Grund noch Begründung – die Achse ist neu.
+ */
+function radarText(ort: RadarOrt, f: RohFehler, daten: unknown, ui: UiKonfig): string | "unbewertet" | null {
+  const achse = holeWert(daten, [...ort.radar, ort.achse.key]) as Record<string, unknown> | undefined;
+  const status = typeof achse?.status === "string" ? achse.status : "";
+  const leer = (x: unknown) => x === undefined || x === null || (typeof x === "string" && !x.trim());
+  if (ort.feld === "offen_grund" && f.keyword === "required")
+    return leer(achse?.begruendung) && leer(achse?.stufe)
+      ? "unbewertet"
+      : `${ort.kurz} ist offen, aber ohne Grund – Grund wählen (${["kein_bezugsgegenstand", "kein_beleg", "bandbreite_ueber_stufengrenze", "sonstiges"].map((w) => wertBezeichnung(ui, w)).join(", ")}) oder eine Stufe setzen`;
+  if (ort.feld === "stufe" && f.keyword === "type")
+    return f.wert === null
+      ? `${ort.kurz} hat den Status „${wertBezeichnung(ui, status)}“, aber keine Stufe – Stufe wählen oder Status „offen“ mit Grund setzen`
+      : `${ort.kurz} hat den Status „offen“, aber die Stufe ${String(f.wert)} – Status oder Stufe anpassen`;
+  if (ort.feld === "offen_grund" && f.keyword === "false") return `${ort.kurz} hat eine Stufe und zugleich einen Grund für „offen“ – Grund entfernen`;
+  return null;
+}
+
+/** Klartext eines Befunds mit Auswahlwerten: Anzeigeform der Werte, zulässige Werte genannt */
+function auswahlText(f: RohFehler, ui: UiKonfig): string {
+  const zeigen = (x: unknown) => (typeof x === "string" ? wertBezeichnung(ui, x) : kurz(x));
+  if (f.keyword === "const" && f.erlaubt) return `erwartet „${zeigen(f.erlaubt[0])}“, eingetragen „${zeigen(f.wert)}“`;
+  if (f.keyword === "enum" && f.erlaubt && f.text !== PFLICHT_FEHLT) {
+    const moeglich = f.erlaubt.filter((x) => x !== null && x !== "");
+    const liste = moeglich.slice(0, 8).map(zeigen).join(", ");
+    return `„${zeigen(f.wert)}“ ist hier nicht vorgesehen${liste ? `; möglich: ${liste}${moeglich.length > 8 ? ", …" : ""}` : ""}`;
+  }
+  return f.text;
+}
+
 export function pruefeGegenSchema(schema: object, daten: unknown, ui: UiKonfig): SchemaBefund[] {
   const out: SchemaBefund[] = [];
   const gesehen = new Set<string>();
+  const unbewertet = new Map<string, { radar: Segment[]; achsen: string[] }>();
+  const dazu = (b: SchemaBefund) => {
+    if (gesehen.has(b.text)) return;
+    gesehen.add(b.text);
+    out.push(b);
+  };
   for (const f of pruefeRoh(schema, daten)) {
-    const zeile = `${pfadBezeichnung(ui, teilePfad(f.pfad))}: ${f.text}`;
-    if (gesehen.has(zeile)) continue;
-    gesehen.add(zeile);
-    out.push({ pfad: f.pfad, keyword: f.keyword, text: zeile });
+    const segs = teilePfad(f.pfad);
+    const ort = radarOrt(ui, segs);
+    const r = ort ? radarText(ort, f, daten, ui) : null;
+    if (ort && r === "unbewertet") {
+      const k = ort.radar.join("/");
+      const u = unbewertet.get(k) ?? { radar: ort.radar, achsen: [] };
+      if (!u.achsen.includes(ort.kurz)) u.achsen.push(ort.kurz);
+      unbewertet.set(k, u);
+      continue;
+    }
+    if (ort && r) {
+      // am Radar selbst, damit die Maske den Befund dort zeigt (Status und Grund stehen eingeklappt darunter)
+      dazu({ pfad: zeigerAus(ort.radar), keyword: f.keyword, text: `${pfadBezeichnung(ui, ort.radar)}: ${r}` });
+      continue;
+    }
+    // keine zulässige Form: was der nächstliegenden Form fehlt („Quellen: mindestens 1 Eintrag erforderlich oder
+    // Fehlanzeige: Pflichtangabe fehlt“) statt der bloßen Feststellung
+    if (f.varianten?.length) {
+      const teil = (x: RohFehler) => `${pfadBezeichnung(ui, teilePfad(x.pfad))}: ${auswahlText(x, ui)}`;
+      const formen = [...new Set(f.varianten.slice(0, 3).map((v) => v.map(teil).join("; ")))];
+      dazu({ pfad: f.varianten[0]![0]!.pfad, keyword: f.keyword, text: formen.join(" – oder – ") });
+      continue;
+    }
+    dazu({
+      pfad: f.pfad,
+      keyword: f.keyword,
+      text: `${pfadBezeichnung(ui, segs)}: ${auswahlText(f, ui)}`,
+      ...(f.keyword === "type" && f.wert === null ? { leer: true } : {}),
+    });
   }
+  for (const { radar, achsen } of unbewertet.values())
+    dazu({
+      pfad: zeigerAus(radar),
+      keyword: "required",
+      text: `${pfadBezeichnung(ui, radar)}: ${RADAR_UNBEWERTET}: ${achsen.join(", ")} – je Achse eine Stufe wählen oder „offen“ mit Grund angeben`,
+    });
   return out;
+}
+
+/** JSON-Zeiger aus Segmenten („/sachverhalte/0/module/…“) */
+function zeigerAus(segs: Segment[]): string {
+  return segs.reduce<string>((p, s) => zeiger(p, s), "");
 }

@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.1.2 – 21.11.2026
+
+Grundlage: Entscheidung des Herausgebers vom 21.11.2026 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle: technische Vorgabe ohne fachliche Wirkung.
+
+- **Modul `muster-lageprofil` und Schema:** Vorgabe `"default": "offen"` für den Status einer Achse, Schema neu zusammengestellt.
+
 ## 1.1.1 – 16.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 16.11.2026, Zeitfelder als Wanduhrzeit (App 0.9.5). Dritte Stelle: Hinweistexte ohne fachliche Wirkung.

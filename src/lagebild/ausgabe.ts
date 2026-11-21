@@ -279,7 +279,7 @@ export function kopiervorlageHtml(s: SvEintrag, profil: Profil, radarBild?: Rada
     if (def) {
       const wert = holeWert(s.sv, r.sv_radar);
       const gesetzt = def.achsen.some((a) => Number.isInteger(radarWerte(wert)[a.key]));
-      const legende = radarZeilen(def, wert).map(html).join("<br>");
+      const legende = radarZeilen(def, wert, ui).map(html).join("<br>");
       const bild = gesetzt && radarBild ? radarBild(def, wert) : null;
       const inhalt = gesetzt
         ? `${bild ? `<img src="${bild}" width="170" height="170" style="display:block;margin-bottom:4px;" alt="${html(f.label || "Radar")}">` : ""}<span style="font-size:8.5pt;">${legende}</span>`

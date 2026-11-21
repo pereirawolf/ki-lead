@@ -130,6 +130,33 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.4 | letzter Commit des Pull Requests „Redaktionscheck: Änderung und Abschluss aus dem Feld nach Profil (KL-2026-W46-01); 0.9.4“ |
 | 0.9.5 | letzter Commit des Pull Requests „Zeitfelder als Wanduhrzeit, Zeitzone als Auswahl; Grunddesign 1.12 (LD-T04); 0.9.5“ (Nachtrag vom 20.11.2026: Pull Request „Erfassungstest KW 47: Prüfsteine nach LEAD-Meldung-v2, Kodierleitfaden 2.2.0, SOP-LEAD 3.26.0 (ET-2026-W47-01 bis -07)“, ohne Änderung der App) |
 | 0.9.6 | letzter Commit des Pull Requests „Grunddesign 1.12 nachgetragen (LD-T04), Versatz an den Umstellungen in LEAD-Meldung-v2; 0.9.6“ |
+| 0.9.7 | letzter Commit des Pull Requests „Auswahlwerte in Anzeigeform, neue Radarachsen offen, Prüfmeldungen in Klartext; 0.9.7“ |
+## [0.9.7] – 21.11.2026
+
+Grundlage: Nebenbefunde des Herausgebers vom 21.11.2026 aus der Erfassung („ungefaehr“ im Feld „Genauigkeit“; „Lagenradar › D2 › stufe: Datentyp „null“, erwartet integer“ beim Prüfen) und seine Entscheidungen vom selben Tag (Anzeige übersetzen statt Schemawerte ändern; neue Achsen offen, Grund leer; alle Prüfmeldungen in Klartext). Die Freigabe KL-2026-W46-02 rückt damit nach.
+
+### Behoben
+
+- **Neue Radarachsen standen auf „belegt“ ohne Stufe** (`leererWert` in `src/kern/schema.ts`): Ein neuer Sachverhalt erhielt für jede Achse den ersten Wert der Auswahl, also Status „belegt“ mit `stufe: null`. Das verstößt gegen das Schema; jede unberührte Achse ergab beim Prüfen „Datentyp „null“, erwartet integer“. Offen bleiben darf eine Achse ausdrücklich (Kodierleitfaden, Grundregel 5: „Offen ist eine Information, keine Lücke“), aber mit Status „offen“ und Grund. Jetzt beachtet `leererWert` die Vorgabe `default` des Schemas, und die Modulschemata (`lead-bevoelkerungsschutz`, Modul der Vorlage) geben für `status` „offen“ vor. Eine neue Achse ist damit offen und hat noch keinen Grund.
+- **Kein vorgegebener Grund beim Zurücksetzen einer Stufe** (`radarMitStufe` in `src/kern/ui.ts`): Wer eine Stufe auf „offen“ zurücksetzte, bekam bisher stillschweigend den Grund „sonstiges“. Ein schon gewählter Grund bleibt; sonst setzt die App keinen, damit eine fehlende Begründung sichtbar bleibt (Grundregel 10).
+
+### Geändert
+
+- **Auswahlwerte in ihrer Anzeigeform** (`WERT_BEZEICHNUNGEN`, `wertBezeichnung` in `src/kern/ui.ts`): Maske (Auswahl, Segmente, Mehrfachauswahl), PDF, Rohtabelle und Lagebild-Ausgabe zeigen „ungefähr“, „nicht überprüfbar“, „öffentlich“, „kein Bezugsgegenstand“ usw. statt der technischen Werte. JSON, CSV, Arbeitsanweisungen und die Schnittstellen zu den Schwester-Apps bleiben unverändert. Ein Profil kann unter `werte` eigene Bezeichnungen festlegen (Profilformat 1.36).
+- **Prüfmeldungen in Klartext** (`src/kern/validierung.ts`): Datentypen in Worten („erwartet ist ganze Zahl oder leer, eingetragen ist Text („U“)“), ein leerer Pflichtwert als „Pflichtangabe fehlt“, unzulässige Auswahlwerte mit den möglichen Werten in Anzeigeform, „Angabe ist in diesem Meldungsformat nicht vorgesehen“ statt „im Schema nicht vorgesehenes Feld“, „Eintrag hat keine zulässige Form“ statt „keine der zulässigen Varianten erfüllt“. Radarachsen in den Worten des Kodierleitfadens am Radar selbst: „D2 hat den Status „belegt“, aber keine Stufe – Stufe wählen oder Status „offen“ mit Grund setzen“, „D4 ist offen, aber ohne Grund – Grund wählen (…)“, „D3 hat eine Stufe und zugleich einen Grund für „offen“ – Grund entfernen“. Unbearbeitete Achsen stehen in einem Befund je Radar („noch nicht bewertet: D1, D2 … – je Achse eine Stufe wählen oder „offen“ mit Grund angeben“), den die Maske wie fehlende Pflichtangaben erst nach Bearbeitung zeigt. Die Rückfrage beim Laden einer Meldung mit falschen Datentypen erkennt leere Werte jetzt am Befund selbst (`leer`), nicht mehr am Wortlaut. Passt ein Eintrag zu keiner zulässigen Form (`anyOf`, `oneOf`), nennt die Meldung, was der nächstliegenden Form fehlt („Quellen & Referenzen: mindestens 1 Eintrag erforderlich – oder – Fehlanzeige: Pflichtangabe fehlt“), statt „Meldung: keine der zulässigen Varianten erfüllt“; die Form „leer“ eines Felds wird dabei nicht genannt. Eine leere Kennung ergibt „Pflichtangabe fehlt“ statt „Format ungültig („“)“.
+- **Befundliste beim Prüfen:** Bei mehrzeiligen Befunden steht der Aufzählungspunkt an der ersten Zeile (`src/styles/formular.css`).
+
+### Tests
+
+- `tests/kern/pruefmeldungen-klartext.test.ts` (9 neu): Vorgabe „offen“ für neue Achsen, ein Befund je Radar und seine Sichtbarkeit in der Maske, Radarbefunde in Worten des Kodierleitfadens, leere Pflichtwerte kein Datentypfehler, nächstliegende Form bei `anyOf` (Quellen oder Fehlanzeige; ohne die Form „leer“), Anzeigeform mit Vorrang des Profils, Vollständigkeit der Anzeigeformen für alle Profile, Prüfmeldung mit möglichen Werten.
+- `tests/ui/maske-v2.test.ts` (1 neu): „ungefähr“ in der Auswahl, gespeichert „ungefaehr“.
+- Mit geändertem Soll: `tests/kern/validierung.test.ts` (Wortlaut der Meldungen), `tests/kern/v2-darstellung.test.ts` (Legende „kein Beleg“, kein vorgegebener Grund), `tests/profil/v2-umstellung.test.ts` (Profilversionen).
+
+### Dokumentation
+
+- Profile: Beispielprofil und Landesprofil 2.2.2, Vorlage 1.1.2 (Schema neu zusammengestellt, sonst unverändert).
+- [docs/LEAD-MELDUNG-V2.md](docs/LEAD-MELDUNG-V2.md) Nachtrag 15 (Vorgabe „offen“; Schemata neu zusammengestellt, bestehende Meldungen bleiben gültig), [docs/PROFILFORMAT.md](docs/PROFILFORMAT.md) 1.36 (`werte`), [docs/SPEZIFIKATION.md](docs/SPEZIFIKATION.md) 0.9.7 (Abschnitt 5.2), [docs/TESTZUORDNUNG.md](docs/TESTZUORDNUNG.md). Versionsangaben 0.9.7 in `package.json`, `package-lock.json`, `CITATION.cff`, README und den nativen Projekten (Build 907).
+
 ## [0.9.6] – 20.11.2026
 
 Grundlage: Prüfung vom 20.11.2026 zu LD-T04 und Entscheidungen des Herausgebers vom selben Tag (Nachtrag unter Fassung 1.12 ohne neue Nummer, Wortlaut mit der Regel für die Zeitumstellung, Umsetzung in `meldung-v2.js` mit Gleichlauftest, Musterfassung unverändert). Die Freigabe KL-2026-W46-02 (Sichtbarkeit von Feldern nach einer Bedingung) folgt damit als 0.9.7.

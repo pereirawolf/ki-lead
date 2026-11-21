@@ -95,9 +95,12 @@ describe("Schemaprüfung", () => {
     d.land = "";
     d._status = "final";
     const befunde = pruefeGegenSchema(p!.schema, d, p!.ui).map((b) => b.text);
-    expect(befunde).toContain("Ereignis/Sachverhalt 1 › Sofortbereich › Lagenradar › D1: Datentyp „string“, erwartet integer oder null");
-    expect(befunde).toContain("Ereignis/Sachverhalt 1 › Sofortbereich › Bewertung: unzulässiger Wert „hoch“");
-    expect(befunde).toContain("extra: im Schema nicht vorgesehenes Feld");
+    // Klartext seit 0.9.7: Datentypen in Worten, zulässige Werte genannt
+    expect(befunde).toContain("Ereignis/Sachverhalt 1 › Sofortbereich › Lagenradar › D1: erwartet ist ganze Zahl oder leer, eingetragen ist Text („U“)");
+    expect(befunde).toContain(
+      "Ereignis/Sachverhalt 1 › Sofortbereich › Bewertung: „hoch“ ist hier nicht vorgesehen; möglich: geringfügig, erheblich, kritisch",
+    );
+    expect(befunde).toContain("extra: Angabe ist in diesem Meldungsformat nicht vorgesehen");
     expect(befunde).toContain("Auswahl Land/Bund: Pflichtangabe fehlt");
   });
 

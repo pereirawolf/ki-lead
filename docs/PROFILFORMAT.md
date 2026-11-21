@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.35 vom 16.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.36 vom 21.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -113,6 +113,10 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | `element_label`, `titel_feld`, `hinzufuegen` | Listen: Name eines Elements, Feld für dessen Überschrift, Text der Schaltfläche. Ohne `titel_feld` nimmt die App seit Fassung 1.26 den Wert eines einfachen Elements bzw. den ersten nicht leeren Text auf oberster Ebene eines Objekts (gekürzt auf 80 Zeichen); ein leeres `titel_feld` bleibt „ohne Bezeichnung“ |
 | `radar` | Name eines Radars aus `radare` |
 | `zeilen` | Höhe mehrzeiliger Eingabefelder in Zeilen |
+
+### `werte` (Anzeigeform von Auswahlwerten)
+
+Optional, seit Fassung 1.36: ein Objekt, das technische Auswahlwerte des Schemas auf ihre Anzeigeform abbildet, etwa `"werte": { "ungefaehr": "ungefähr" }`. Maske, PDF, Kopiervorlage, Lagebild und Prüfmeldungen zeigen die Anzeigeform; JSON, CSV und Arbeitsanweisungen behalten den technischen Wert. Für die Auswahlwerte von LEAD-Meldung-v2 und seinen Fachmodulen (etwa `nicht_ueberpruefbar`, `kein_bezugsgegenstand`) bringt die App die Anzeigeform selbst mit; ein Eintrag in `werte` geht vor.
 
 ### `radare`
 
@@ -316,3 +320,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.32 | 14.11.2026 | Manifest: optional `beispiele[].material` (Ordner mit Kennzahlen-Bausteinen, die „Beispiel laden“ mitlädt); ältere Pakete laden unverändert (App 0.8.2, UP-2026-W45-05) |
 | 1.34 | 15.11.2026 | Rollen `sv_aenderung` und `sv_abschluss` (optional): aus welchem Feld oder Modul der Redaktionscheck Änderung zur Vormeldung und Abschluss liest, etwa bei Betreibermeldungen ohne Bewertung; ein Abschluss mit `ergebnis` ohne `ende` gilt als ausgesagt. Ältere Pakete laden unverändert (App 0.9.4, KL-2026-W46-01) |
 | 1.35 | 16.11.2026 | Zeitfelder nach LEAD-Meldung-v2 erkennt die Maske am Schema-Muster (`zeitpunkt`, `zeitangabe`, `datum`), ohne Angabe `widget`; neues Widget `zeitzone`, für das Kernfeld `zeitzone` ohne Angabe. Ältere Pakete laden unverändert; Hinweistexte mit dem Austauschformat sollten entfallen (App 0.9.5) |
+| 1.36 | 21.11.2026 | Darstellungsdatei: optional `werte` (Anzeigeform von Auswahlwerten); die App zeigt die Auswahlwerte von LEAD-Meldung-v2 ohne Angabe mit Umlauten und Leerzeichen. Ältere Pakete laden unverändert (App 0.9.7) |

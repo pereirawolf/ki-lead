@@ -1432,3 +1432,21 @@ Soll unabhängig vom Code: Grunddesign LD-T04 in Fassung 1.12 mit Nachtrag vom 2
 | Migration: Zeitpunkte an beiden Umstellungen nach derselben Regel | LEAD-Meldung-v2: Migration aus v1 › Zeitpunkte erhalten den Versatz der Zone … | `tests/format/lead-meldung-v2.test.ts` |
 
 Mitgeführt mit geändertem Soll: `tests/format/lead-meldung-v2.test.ts` (Titel und zwei Erwartungen an den Umstellungen ergänzt). Unverändert: `evaluation/material/ilka-musterfassung.v2.json` mit `entstehung.erstellt` „2026-10-25T02:30+01:00“ aus der Überführung vom 14.11.2026 (gültiger Zeitpunkt, die spätere 02:30; Datei über Prüfsummen an die Pläne gebunden, Entscheidung des Herausgebers vom 20.11.2026).
+
+## Auswahlwerte, Radarachsen und Prüfmeldungen in Klartext (0.9.7)
+
+Soll unabhängig vom Code: Nebenbefunde und Entscheidungen des Herausgebers vom 21.11.2026 (Anzeige übersetzen, Schemawerte unverändert; neue Radarachsen offen, Grund leer; alle Prüfmeldungen in Klartext) und Kodierleitfaden, Grundregeln 5 und 10 (offene Achse mit Status „offen“ und Grund).
+
+| Soll | Test | Datei |
+|---|---|---|
+| Neue Achse: `{stufe: null, status: "offen", begruendung: "", quellen: []}` aus der Vorgabe des Modulschemas | Neue Radarachsen: offen, Grund leer › Vorgabe „offen“ … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| Unbearbeitetes Radar: ein Befund „noch nicht bewertet: D1 … D8“ am Radar, kein Typfehler; in der Maske erst nach Bearbeitung sichtbar | › ein Befund je Radar … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| „belegt“ ohne Stufe, Grund trotz Stufe, „offen“ ohne Grund mit Begründung: je ein Befund in Worten des Kodierleitfadens; übrige Achsen „noch nicht bewertet“ | › Status „belegt“ ohne Stufe … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| Leerer Pflichtwert ist kein falscher Datentyp (`leer`) | › leere Pflichtangabe … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| Keine zulässige Form: Befunde der nächstliegenden Form (Quellen oder Fehlanzeige), die Form „leer“ nicht genannt | keine zulässige Form … › … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| Maske zeigt „ungefähr“, speichert „ungefaehr“ | UP-2026-W45-03: Erfassungsmaske … › Auswahlwerte in Anzeigeform … | `tests/ui/maske-v2.test.ts` |
+| Anzeigeform: Umlaute und Leerzeichen, Profil (`werte`) geht vor, jeder umschriebene Auswahlwert der Profile hat eine | Auswahlwerte in ihrer Anzeigeform › … | `tests/kern/pruefmeldungen-klartext.test.ts` |
+| Zurücksetzen einer Stufe: gewählter Grund bleibt, sonst keiner | UP-2026-W45-03: Radarachsen als Objekte › Stufe setzen … | `tests/kern/v2-darstellung.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/kern/validierung.test.ts` (Wortlaut der Meldungen), `tests/kern/v2-darstellung.test.ts` (Legende „kein Beleg“).
+

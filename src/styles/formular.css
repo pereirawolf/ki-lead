@@ -668,6 +668,8 @@ textarea[aria-invalid="true"] {
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+  /* mehrzeilige Befunde: Aufzählungspunkt an der ersten Zeile, nicht an der letzten (seit 0.9.7) */
+  vertical-align: top;
 }
 
 @media (max-width: 860px) {
