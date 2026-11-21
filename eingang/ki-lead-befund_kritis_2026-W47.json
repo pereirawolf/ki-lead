@@ -1,0 +1,99 @@
+{
+  "format": "ki-lead-befund/1",
+  "agent": "kritis-lead",
+  "agent_fassung": "1.0",
+  "erstellt_utc": "2026-11-21T07:30:07Z",
+  "repository": "pereirawolf/ki-lead",
+  "commit": "7818fb86295fea389a45304ad4e8668b8b244e87",
+  "pruefumfang": "Drei Befunde aus dem Pin-Abgleich von KRITIS-LEAD auf KI-LEAD 0.9.5 (Auftrag des Herausgebers vom 20.11.2026; KRITIS-LEAD PR #37, 0.4.3), geprüft gegen KI-LEAD main bb988da und vor dem Ablegen am 21.11.2026 erneut gegen main 7818fb8 (0.9.6): src/kern/zeit.ts und src/ui/DatumZeit.tsx unverändert, beide Befunde bestehen; der zunächst vorbereitete dritte Befund (Regeltext LD-T04 in Grunddesign 1.12) ist mit e9929df erledigt und entfällt. Gelesen in KI-LEAD: src/kern/zeit.ts (zeitpunktInZone, wanduhrMitVersatz, wanduhrAusWert, kontrolltext, zeitzonenBezeichnung), src/ui/DatumZeit.tsx (Kontrollzeile, Z. 34–45), src/ui/Feld.tsx (Zeitfeld-Erkennung, Z. 321–323), formate/lead-meldung-v2/kern.schema.json ($defs zeitpunkt, zeitangabe, datum), design/README.md (LD-T04, Änderungsverlauf 1.12), design/rahmen.json. Ausgeführt: Vergleich von src/kern/zeit.ts mit werkzeuge/zeit.mjs von KRITIS-LEAD über 114 Schreib- und 96 Lesefälle in sechs Zonen und den Prozesszonen UTC, America/New_York und Asia/Tokyo (Ergebnis unabhängig von der Prozesszone); als Soll festgehalten in KRITIS-LEAD tests/zeit-gleichlauf.test.mjs (PR #37). Entscheidung des Herausgebers vom 20.11.2026: KRITIS-LEAD gleicht sein Zeitmodul nicht an; Z2 und Z3 gehen als Befunde an KI-LEAD. Offene Befunde: nicht ermittelt (kein Prüflauf in KI-LEAD); Staugrenze nicht bestimmt.",
+  "nicht_geprueft": [
+    "npm test in KI-LEAD nicht ausgeführt: Befunddatei ohne Umsetzung.",
+    "Bedienpfad in der Erfassungsmaske nicht mit Playwright nachvollzogen; KL-2026-W47-01 ist an der Funktion kontrolltext und ihrem Aufruf in DatumZeit.tsx belegt, die Maske wurde mit react-dom/server statisch gerendert (Ladeprobe KRITIS-LEAD).",
+    "Register und Eingang nur auf Kollisionen der IDs KL-2026-W47-* geprüft (keine); offene Pull Requests in KI-LEAD nicht abgefragt."
+  ],
+  "befunde": [
+    {
+      "id": "KL-2026-W47-01",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/zeit.ts",
+          "stelle": "kontrolltext (Z. 215–226)",
+          "ist": "return `${datum}, ${zeit} Uhr (${zonenKuerzel(zeitpunktInZone(j, mo, t, h, mi, z), z)})`;"
+        },
+        {
+          "datei": "src/ui/DatumZeit.tsx",
+          "stelle": "Kontrollzeile (Z. 34 und 45)",
+          "ist": "const kontrolle = versatz && tag ? kontrolltext(tag, zeit, zone) : \"\";"
+        }
+      ],
+      "beobachtung": "Widerspruch: Die Kontrollzeile nennt für einen gespeicherten Zeitpunkt in der zweiten Stunde 02:00–03:00 Uhr am Ende der Sommerzeit die falsche Zone. Bedingung: Wert 2026-10-25T02:30+01:00 oder 2026-10-25T01:30Z, Zone Europe/Berlin. Auswirkung: Anzeige „So, 25.10.2026, 02:30 Uhr (MESZ)“ statt „(MEZ)“; die Zeile soll die Uhrzeit eindeutig machen, gerade in der doppelten Stunde. Ursache: kontrolltext bildet den Zeitpunkt aus Tag und Uhrzeit neu und wählt mit zeitpunktInZone die frühere Stunde, statt die Zone des gespeicherten Zeitpunkts zu nennen. Maßgeblich: der gespeicherte Zeitpunkt (Grunddesign 1.12, LD-T04 im Wortlaut nach e9929df: Kontrollzeile mit Zonenkürzel; die Regel „in der doppelten Stunde die frühere“ gilt für das Ergänzen des Versatzes bei der Eingabe, nicht für die Anzeige eines gespeicherten Werts mit eigenem Versatz). Prüfweg: Ausführung (Vergleich mit KRITIS-LEAD werkzeuge/zeit.mjs, dort „(MEZ)“); Ergebnis: Abweichung bestätigt. Herkunft: Commit 967cf9a vom 16.11.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "Kontrollzeile aus dem gespeicherten Wert bilden, wenn er einen Versatz trägt: kontrolltext erhält optional den Zeitpunkt (oder den Rohwert) und nennt das Kürzel der Zone zu diesem Zeitpunkt; nur für neu eingegebene Wanduhrzeiten ohne gespeicherten Wert bleibt zeitpunktInZone. Abnahme: 2026-10-25T02:30+01:00 → „So, 25.10.2026, 02:30 Uhr (MEZ)“, 2026-10-25T02:30+02:00 → „(MESZ)“.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md: Eintrag der nächsten App-Fassung",
+        "tests/kern/zeit-wanduhr.test.ts",
+        "Folge in pereirawolf/kritis-lead: Soll Z2 in tests/zeit-gleichlauf.test.mjs auf Gleichlauf umstellen"
+      ],
+      "entscheidungsfrage": null,
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/zeit-wanduhr.test.ts: Kontrollzeile für 2026-10-25T02:30+01:00 und 2026-10-25T01:30Z nennt MEZ, für 2026-10-25T02:30+02:00 MESZ.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    },
+    {
+      "id": "KL-2026-W47-02",
+      "kategorie": "konsistenz",
+      "art": "fachlich",
+      "dringlichkeit": "mittel",
+      "fundstellen": [
+        {
+          "datei": "src/kern/zeit.ts",
+          "stelle": "wanduhrAusWert (Z. 180–198)",
+          "ist": "if (/^\\d{4}-\\d{2}-\\d{2}$/.test(roh)) return { tag: roh, zeit: \"\" }; … const ms = Date.parse(roh);"
+        },
+        {
+          "datei": "formate/lead-meldung-v2/kern.schema.json",
+          "stelle": "$defs.zeitpunkt, $defs.zeitangabe, $defs.datum (Z. 289–303)",
+          "ist": "Muster (0[1-9]|[12]\\d|3[01]) lässt den 30.02. zu"
+        }
+      ],
+      "beobachtung": "Widerspruch: Ungültige Kalendertage, die das Schemamuster zulässt, werden beim Lesen nicht erkannt. Bedingung: Wert 2026-02-30 bzw. 2026-02-30T10:00+01:00 (etwa aus einer Schnittstelle). Auswirkung: Der Kalendertag wird als Tag 2026-02-30 übernommen, den das native Datumsfeld nicht darstellen kann (leeres Feld); der Zeitpunkt wird über Date.parse still in den 02.03.2026, 10:00 Uhr umgerechnet, ohne Hinweis „umgerechnet aus“, und bei der nächsten Änderung so gespeichert. isoLokalZuZeitpunkt und gueltigerZeitpunkt prüfen den Kalendertag dagegen echt. Maßgeblich: keine stille Umrechnung (Kommentar zu gueltigerZeitpunkt, Z. 88–91). Prüfweg: Ausführung; Ergebnis: bestätigt (KRITIS-LEAD meldet den Wert als unbekannt). Herkunft: Commit 967cf9a vom 16.11.2026.",
+      "belege": [],
+      "aenderungsvorschlag": {
+        "typ": "ersetzen",
+        "beschreibung": "(A) In wanduhrAusWert den Kalendertag wie in isoLokalZuZeitpunkt prüfen und Ungültiges als leer mit Hinweis behandeln (Rohwert bleibt bis zur Änderung erhalten). (B) Zusätzlich die Prüfung der Meldung (validierung.ts) um eine Plausibilitätsregel für echte Kalendertage ergänzen. Abnahme: 2026-02-30 und 2026-02-30T10:00+01:00 erscheinen nicht als Datum, beim Öffnen wird nichts gespeichert.",
+        "neuer_text": null
+      },
+      "folgeaenderungen": [
+        "CHANGELOG.md",
+        "tests/kern/zeit-wanduhr.test.ts",
+        "gegebenenfalls docs/LEAD-MELDUNG-V2.md (Plausibilität)",
+        "Folge in pereirawolf/kritis-lead: Soll Z3 in tests/zeit-gleichlauf.test.mjs"
+      ],
+      "entscheidungsfrage": "Reicht (A) in der Maske, oder soll die Prüfung der Meldung ungültige Kalendertage zusätzlich als Fehler melden (B)?",
+      "sicherheit": "hoch",
+      "automatisierbar": "tests/kern/zeit-wanduhr.test.ts: wanduhrAusWert(\"2026-02-30T10:00+01:00\", \"Europe/Berlin\") ergibt keinen Tag im März.",
+      "pruefung": {
+        "status": "offen",
+        "anmerkung": ""
+      }
+    }
+  ],
+  "unauffaellig": [
+    "Regeltext von LD-T04 in design/README.md und design/rahmen.json: mit e9929df (KI-LEAD 0.9.6, Merge 7818fb8) in der geschärften Fassung nachgetragen; der dazu vorbereitete Befund entfällt.",
+    "wanduhrMitVersatz: für alle gültigen Wanduhrzeiten gleich wie KRITIS-LEAD in Europe/Berlin, UTC, Europe/Vienna, Europe/London, America/New_York und Asia/Kolkata, auch an beiden Umstellungen 2026.",
+    "Lesen gültiger Werte (eigene Zone, „Z“, fremder Versatz, Kalendertage): Tag, Uhrzeit, Hinweis „umgerechnet aus“ und Kontrollzeile gleich wie KRITIS-LEAD.",
+    "Zeitfeld-Erkennung aus dem Schema (Feld.tsx) mit dem Profil lead-kritis: alle 37 Zeitfelder erkannt, auch in den Modulen von KRITIS-LEAD mit eigenen $defs gleichen Musters; Zeitzone als Auswahl.",
+    "Weitere Beobachtung: wanduhrAusWert liest schemaungültige Formen (Wanduhrzeit ohne Versatz, Bruchteile von Sekunden) als Wanduhrzeit; KRITIS-LEAD meldet sie als unbekannt. Kein Befund, weil das Schema sie abweist.",
+    "Weitere Beobachtung: Der Versatz „-00:00“ erscheint als „UTC-00:00“ und gilt auch in der Zone UTC als umgerechnet (KRITIS-LEAD: „UTC“, nicht umgerechnet)."
+  ]
+}
