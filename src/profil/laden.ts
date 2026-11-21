@@ -1,5 +1,6 @@
 // Laden und Prüfen eines Profilpakets aus einer Dateisammlung (Pfad → Text).
 
+import { einleitungsZiele } from "../kern/einleitung";
 import { feldhilfenFehler } from "../kern/feldhilfen";
 import { fehlendeKennsaetze, KENNSATZ_ERSATZ, type PflichtKennsatz } from "../kern/kennsaetze";
 import { bekannterAnbieter, unbekanntesModellText } from "../anbieter/verteiler";
@@ -76,12 +77,15 @@ export function pruefeUiStruktur(ui: any, befunde: Befund[]): boolean {
     ui.schritte.forEach((s: any, i: number) => {
       if (!istObjekt(s) || !istText(s.id) || !istText(s.titel) || !textListe(s.felder))
         fehler(`Schritt ${i + 1} braucht „id“, „titel“ (Text) und „felder“ (Liste von Feldnamen).`);
+      else if (s.einleitung !== undefined && !istText(s.einleitung)) fehler(`Schritt „${s.titel}“: „einleitung“ muss Text sein.`);
     });
   if (!istObjekt(ui.felder)) fehler("„felder“ fehlt oder ist kein Objekt.");
   else
     for (const [pfad, f] of Object.entries(ui.felder)) {
       if (!istObjekt(f)) fehler(`Feld „${pfad}“: Einstellungen müssen ein Objekt sein.`);
       else if ((f as any).label !== undefined && !istText((f as any).label)) fehler(`Feld „${pfad}“: „label“ muss Text sein.`);
+      else if ((f as any).reihenfolge !== undefined && !textListe((f as any).reihenfolge))
+        fehler(`Feld „${pfad}“: „reihenfolge“ muss eine Liste von Feldnamen sein.`);
     }
   const r = ui.rollen;
   if (!istObjekt(r)) fehler("Abschnitt „rollen“ fehlt.");
@@ -273,6 +277,20 @@ export function pruefeUiGegenSchema(ui: UiKonfig, schema: any, befunde: Befund[]
       teilePfad(pfad).map((s) => (s === -1 ? 0 : s)),
     );
     if (!knoten) befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Feld „${pfad}“ kommt im Schema nicht vor.` });
+  }
+  // Reihenfolge der Unterfelder (seit Profilformat 1.38): unbekannte Namen werden übergangen
+  for (const [pfad, f] of Object.entries(ui.felder || {})) {
+    if (!f.reihenfolge || pfad.includes("*")) continue;
+    const knoten = aufloesen(
+      unterSchema(
+        schema,
+        teilePfad(pfad).map((s) => (s === -1 ? 0 : s)),
+      ),
+      schema,
+    );
+    const unbekannt = f.reihenfolge.filter((n) => !knoten?.properties?.[n]);
+    if (unbekannt.length)
+      befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Reihenfolge von „${pfad}“ nennt unbekannte Felder: ${unbekannt.join(", ")}.` });
   }
   for (const s of ui.schritte || []) {
     for (const f of s.felder) {
@@ -488,6 +506,12 @@ export async function ladeProfil(rohDateien: Record<string, string>, optionen: L
     }
   }
   if (schemaOk && ui && uiOk) pruefeUiGegenSchema(ui, schema, befunde);
+  // Links in Einleitungen der Schritte (seit Profilformat 1.38): Ziel muss eine Datei des Pakets sein
+  if (ui && uiOk)
+    for (const s of ui.schritte)
+      for (const ziel of s.einleitung ? einleitungsZiele(s.einleitung) : [])
+        if (typeof dateien[ziel] !== "string")
+          befunde.push({ stufe: "warnung", text: `Darstellungsdatei: Einleitung des Schritts „${s.titel}“ verlinkt „${ziel}“, das nicht im Paket liegt.` });
   // Bei LEAD-Meldung-v2 sind Kennsätze Felder; die Darstellungsdatei braucht keine (Profilformat 1.33, App 0.8.3)
   if (ui && uiOk && manifest.meldung.schema_id !== "LEAD-Meldung-v2") pruefePflichtKennsaetze(ui, befunde);
 

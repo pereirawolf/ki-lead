@@ -1480,3 +1480,16 @@ Soll unabhängig vom Code: Beratung und Entscheidungen des Herausgebers vom 21.1
 | Titel eines Listeneintrags zeigt Auswahlwerte in Anzeigeform, freier Text bleibt | I114-A2: Elementtitel und Name › Auswahlwerte im Titel … | `tests/kern/listen.test.ts` |
 
 Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.4.0 und 1.3.0), `tests/ui/ux-2026-w45.test.ts` (Spalte „Raum › Nähere Eingrenzung“).
+
+## Reihenfolge im Sachverhalt, Kodierleitfaden verlinkt, Zusatz klein (0.9.10)
+
+Soll unabhängig vom Code: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 (Zusatz „(optional)“ klein wie der Pflichtzusatz; Kodierleitfaden einmal zentral verlinkt, im Schritt aufklappbar; Lagenradar zwischen Analyse und Bewertung), Arbeitsanweisung Erfassung Abschnitt 4.1 und 4.4 (Ereignisart, Analyse, Achsen, danach Beurteilung), Grunddesign 1.13 LD-E01.
+
+| Soll | Test | Datei |
+|---|---|---|
+| „(optional)“, „(nur bei …)“ abgetrennt; „(t0)“, „(URL)“, „(Modul)“ bleiben; in der Maske leiser Zusatz, zugänglicher Name vollständig | Beschriftung mit Zusatz › … | `tests/ui/maske-reihenfolge.test.ts` |
+| Genannte Felder zuerst, übrige in Schemareihenfolge; Analyse vor Fachmodul vor Bewertung in Beispiel-, Landes- und Musterprofil | Reihenfolge der Unterfelder › … | `tests/ui/maske-reihenfolge.test.ts` |
+| Prüfung beim Laden: `reihenfolge` als Liste, unbekannte Namen als Warnung; Link auf fehlende Datei als Warnung; mitgelieferte Profile ohne Befund | › Prüfung beim Laden …; Kodierleitfaden in der Einleitung › Link auf eine fehlende Datei … | `tests/ui/maske-reihenfolge.test.ts` |
+| Link auf Paketdatei wird Knopf, Klick öffnet den Kodierleitfaden darunter, zweiter Klick schließt | Kodierleitfaden in der Einleitung › … | `tests/ui/maske-reihenfolge.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.5.0 und 1.4.0), `tests/format/lead-design.test.ts` (Kopfkommentar Grunddesign 1.13).

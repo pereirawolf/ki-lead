@@ -16,6 +16,7 @@ import {
 } from "../kern/quellen";
 import type { Profil } from "../kern/typen";
 import { FeldFehler } from "./HilfeFeld";
+import { Beschriftung } from "./Beschriftung";
 
 interface Props {
   profil: Profil;
@@ -150,7 +151,7 @@ export function QuellenFeld({ profil, label, pflicht, fehler, feld, hinweis, zei
       )}
       {k?.rangfolge_hinweis && <p className="hinweis">{k.rangfolge_hinweis}</p>}
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-        {label}
+        <Beschriftung text={label} />
       </label>
       {hinweis && (
         <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>

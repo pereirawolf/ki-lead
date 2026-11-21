@@ -93,6 +93,11 @@ export interface FeldUi {
   titel_feld?: string;
   hinzufuegen?: string;
   radar?: string;
+  /**
+   * Reihenfolge der Unterfelder eines Objekts in der Maske (seit Profilformat 1.38, App 0.9.10): genannte Felder zuerst in
+   * dieser Reihenfolge, übrige danach in der Reihenfolge des Schemas. Schema und Ausgaben bleiben unverändert.
+   */
+  reihenfolge?: string[];
 }
 
 export interface RadarAchse {

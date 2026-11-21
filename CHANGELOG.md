@@ -133,6 +133,27 @@ Alle wesentlichen Änderungen an der App stehen hier, die jüngsten zuerst. Die 
 | 0.9.7 | letzter Commit des Pull Requests „Auswahlwerte in Anzeigeform, neue Radarachsen offen, Prüfmeldungen in Klartext; 0.9.7“ |
 | 0.9.8 | letzter Commit des Pull Requests „Gebietssuche mit amtlichen Schlüsseln aus dem Gemeindeverzeichnis; 0.9.8“ |
 | 0.9.9 | letzter Commit des Pull Requests „Erfassungsmaske: Beschriftungen und Leitfragen für Ereignisse und Sachverhalte; 0.9.9“ |
+| 0.9.10 | letzter Commit des Pull Requests „Erfassungsmaske: Lagenradar vor der Bewertung, Kodierleitfaden verlinkt, Zusatz „optional“ klein; 0.9.10“ |
+## [0.9.10] – 21.11.2026
+
+Grundlage: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ nach 0.9.9 (jeweils die Empfehlung): Zusätze wie „(optional)“ klein hinter der Beschriftung; Kodierleitfaden einmal zentral verlinkt und im Schritt aufklappbar; Lagenradar samt Ereignisart zwischen Analyse und Bewertung, jetzt statt erst mit dem dritten Schritt. Nummern und Verweise als Auswahllisten folgen wie vereinbart im nächsten Pull Request, ohne eigene Übersicht. Setzt 0.9.9 voraus.
+
+### Neu
+
+- **Reihenfolge im Objekt** (Profilformat 1.38, `reihenfolge` in der Darstellungsdatei; `ordneFelder` in `src/kern/ui.ts`): Die Maske zeigt Unterfelder in der Reihenfolge des Profils, Schema und Ausgaben bleiben unverändert. Die Profile ordnen einen Sachverhalt Grunddaten, Analyse, Fachmodul (Ereignisart, Lagenradar), Bewertung, Maßnahmen, Kennzahlen, Zeitstrahl, wie die Arbeitsanweisung der Erfassung vorgeht (Ereignisart, Analyse, Achsen D1–D8, danach Beurteilung und Tendenz). Bis 0.9.9 stand das Lagenradar am Ende, nach Hinweisen, die es schon voraussetzten („nicht aus dem höchsten Radarwert“, „Einordnung des Radarbilds“). Unbekannte Namen ergeben beim Laden eine Warnung.
+- **Links in der Einleitung eines Schritts** (Profilformat 1.38; `src/ui/Einleitung.tsx`, `src/kern/einleitung.ts`): `[Text](datei.md)` auf eine Datei des Pakets öffnet sie unter der Einleitung, ohne die Erfassung zu verlassen; Links im geöffneten Dokument wechseln an derselben Stelle. Ein Ziel außerhalb des Pakets bleibt Text und ergibt beim Laden eine Warnung.
+
+### Geändert
+
+- **Zusatz zur Beschriftung klein** (`src/ui/Beschriftung.tsx`, Grunddesign 1.13, LD-E01): „(optional)“ und „(nur bei …)“ am Ende eines Labels stehen klein und leise wie „(Pflicht für finale Meldung)“; bis 0.9.9 in Labelschrift, etwa „Stellenkennung (optional)“. Klammern, die zur Bezeichnung gehören („Meldezeitpunkt (t0)“), bleiben.
+- **Profile:** Beispiel- und Landesprofil 2.5.0, Vorlage 1.4.0 und die Darstellungsdatei unter `formate/lead-meldung-v2/beispiel/`: Reihenfolge im Sachverhalt, Kodierleitfaden in der Einleitung verlinkt; SOP-Sammelmappe 3.26.4 (nur Gültigkeitsstand).
+- `package-lock.json`: Version auch im Paketeintrag (stand seit 0.9.9 noch auf 0.9.8).
+
+### Tests
+
+- `tests/ui/maske-reihenfolge.test.ts` (10 neu): Zusatz abtrennen und klein darstellen, andere Klammern bleiben; Reihenfolge der Unterfelder; Analyse, Fachmodul, Bewertung in den drei Profilen; Prüfung beim Laden (Liste, unbekannte Namen, fehlendes Linkziel); Kodierleitfaden öffnen und schließen.
+- Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.5.0 und 1.4.0), `tests/format/lead-design.test.ts` (Kopfkommentar Grunddesign 1.13).
+
 ## [0.9.9] – 21.11.2026
 
 Grundlage: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (jeweils die Empfehlung): Überarbeitung in drei Schritten, dies ist der erste (Beschriftungen, Leitfragen, technische Reste); „Auftrag“ bei Empfehlungen nur in der Beschriftung ersetzen, das Feld `auftrag` bleibt; Abschnittsverweise auf Kodierleitfaden und SOP in den Feldhinweisen streichen, die Kernregel als kurze Frage behalten. Automatische Nummern, Auswahllisten für Querverweise und eine kürzere Seite (bedingte Felder, Fehlanzeige als Eingangsfrage in Schritt 2) folgen in eigenen Pull Requests. Setzt 0.9.8 voraus.

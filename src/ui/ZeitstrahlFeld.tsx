@@ -12,6 +12,7 @@ import { aufnahmeErgaenzen, istAufnahmezeit, naechsteZNr, parseZeitstrahl, zeits
 import { DatumZeit } from "./DatumZeit";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { FeldFehler } from "./HilfeFeld";
+import { Beschriftung } from "./Beschriftung";
 
 interface Props {
   profil: Profil;
@@ -93,7 +94,7 @@ export function ZeitstrahlFeld({ profil, label, pflicht, fehler, feld, hinweis, 
   return (
     <div className="feld feld-quellen feld-zeitstrahl" data-feld={feld}>
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-        {label}
+        <Beschriftung text={label} />
       </label>
       {hinweis && (
         <p className="hinweis feld-hilfe" id={`${id}-hilfe`}>

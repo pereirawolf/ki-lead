@@ -3,7 +3,7 @@
 import { useContext, useEffect, useId, useRef, useState } from "react";
 import { aufloesen, enumWerte, leererWert, typen } from "../kern/schema";
 import { generischerPfad, teilePfad, type Segment } from "../kern/pfad";
-import { alsText, feldUi, bezeichnung, istAusgeblendet, radarFuer, wertBezeichnung } from "../kern/ui";
+import { alsText, feldUi, bezeichnung, istAusgeblendet, ordneFelder, radarFuer, wertBezeichnung } from "../kern/ui";
 import { holeWert } from "../kern/pfad";
 import type { Profil } from "../kern/typen";
 import { RadarFeld } from "./Radar";
@@ -17,6 +17,7 @@ import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
 import { EingabehilfeKontext } from "./eingabehilfeKontext";
 import { hilfeFuer, textfeldRelativ } from "../kern/feldhilfen";
+import { Beschriftung } from "./Beschriftung";
 import { FeldFehler, HilfeFeld, type HilfeFeldEingabe } from "./HilfeFeld";
 import { befundeUnter, feldSchluessel, FeldBefundeKontext } from "./feldBefunde";
 import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
@@ -106,7 +107,9 @@ export function Feld(props: FeldProps) {
     if (!def) return <p className="fehlertext">Radar „{f.radar}“ ist in der Darstellungsdatei nicht definiert.</p>;
     return (
       <div className="feld" data-feld={schluessel}>
-        <div className={labelKlasse}>{label}</div>
+        <div className={labelKlasse}>
+          <Beschriftung text={label} />
+        </div>
         <Hinweis text={f.hinweis} id={hilfeId} feld />
         <RadarFeld def={def} wert={wert} idPraefix={id} onChange={(neu) => setze(segs, neu)} />
         {/* Achsen als Objekte (LEAD-Meldung-v2, seit 0.7.3, UP-2026-W45-03): Status, Grund, Begründung und Belege je Achse */}
@@ -179,7 +182,9 @@ export function Feld(props: FeldProps) {
       const gewaehlt: unknown[] = Array.isArray(wert) ? wert : [];
       return (
         <fieldset className="feld feld-mehrfach" aria-describedby={beschrieben(fehlerId, hilfeId)} data-feld={schluessel}>
-          <legend className={labelKlasse}>{label}</legend>
+          <legend className={labelKlasse}>
+            <Beschriftung text={label} />
+          </legend>
           <Hinweis text={f.hinweis} id={hilfeId} feld />
           <div className="mehrfach">
             {itemEnum.map((opt) => {
@@ -200,7 +205,10 @@ export function Feld(props: FeldProps) {
   }
 
   if (t.includes("object") || k?.properties) {
-    const kinder = Object.keys(k.properties || {}).filter((key) => !(segs.length === 0 && istAusgeblendet(profil.ui, key)));
+    const kinder = ordneFelder(
+      Object.keys(k.properties || {}).filter((key) => !(segs.length === 0 && istAusgeblendet(profil.ui, key))),
+      f.reihenfolge,
+    );
     // Listenelement: das Titelfeld der Liste (etwa „Bezeichnung“ eines Sachverhalts) zuerst, unabhängig von der
     // Reihenfolge im Schema; Schema und Ausgaben bleiben unverändert (seit 0.6.20, UX-2026-W44-07)
     if (typeof segs[segs.length - 1] === "number") {
@@ -219,7 +227,9 @@ export function Feld(props: FeldProps) {
     if (!f.label && !verschachtelt) return <div className="gruppe-ohne-rahmen">{inhalt}</div>;
     return (
       <fieldset className={klasse}>
-        <legend>{label}</legend>
+        <legend>
+          <Beschriftung text={label} />
+        </legend>
         <Hinweis text={f.hinweis} />
         <div className="gruppe-inhalt">{inhalt}</div>
       </fieldset>
@@ -243,7 +253,9 @@ export function Feld(props: FeldProps) {
         rolle === "beurteilung" ? { "data-rang": rangBeurteilung(profil, opt) } : rolle === "tendenz" ? { "data-tendenz": signalTendenz(profil, opt) } : {};
       return (
         <fieldset className="feld" data-feld={schluessel}>
-          <legend className={labelKlasse}>{label}</legend>
+          <legend className={labelKlasse}>
+            <Beschriftung text={label} />
+          </legend>
           <Hinweis text={f.hinweis} id={hilfeId} feld />
           <div className="segmente" role="radiogroup" aria-invalid={fehlerId ? true : undefined} aria-describedby={beschrieben(fehlerId, hilfeId)}>
             {hatLeer && (
@@ -318,7 +330,9 @@ export function Feld(props: FeldProps) {
             aria-describedby={fehlerId}
             onChange={(ev) => setze(segs, ev.target.checked)}
           />
-          <span>{label}</span>
+          <span>
+            <Beschriftung text={label} />
+          </span>
         </label>
         {fehlerText}
         {/* Schalter: Beschriftung steht neben dem Kästchen, der Hinweis darunter (Ausnahme von der Reihenfolge, seit 0.6.21) */}
@@ -630,7 +644,9 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   if (istSachverhalte) return liste_;
   return (
     <fieldset className="gruppe gruppe-liste">
-      <legend>{bezeichnung(profil.ui, gen)}</legend>
+      <legend>
+        <Beschriftung text={bezeichnung(profil.ui, gen)} />
+      </legend>
       <Hinweis text={f.hinweis} />
       <div className="gruppe-inhalt">{liste_}</div>
     </fieldset>
@@ -772,7 +788,9 @@ function GebietObjekt(props: FeldProps & { label: string }) {
   if (element) return <div className="gruppe-ohne-rahmen gebiet">{inhalt}</div>;
   return (
     <fieldset className="gruppe gebiet" data-feld={feldSchluessel(segs)}>
-      <legend>{label}</legend>
+      <legend>
+        <Beschriftung text={label} />
+      </legend>
       <Hinweis text={f.hinweis} />
       <div className="gruppe-inhalt">{inhalt}</div>
     </fieldset>

@@ -3,7 +3,7 @@
   "id": "muster.einsatzstelle",
   "name": "Vorlage – eigene Organisation",
   "beschreibung": "Vorlage für ein eigenes Profilpaket nach LEAD-Meldung-v2: alle Bestandteile als Gerüst mit Platzhaltern in eckigen Klammern, eine eigene Zusammenstellung und ein eigenes schlankes Fachmodul (Arten und Lageprofil mit drei Achsen). Vor der Verwendung Platzhalter ersetzen sowie Herausgeber und Lizenz setzen.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "herausgeber": "[Herausgeber]",
   "lizenz": "CC0-1.0",
   "ebene": "[Ebene]",

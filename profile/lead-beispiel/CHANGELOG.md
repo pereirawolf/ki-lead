@@ -8,6 +8,15 @@ Profil-ID `lead.beispiel.koordinierungsstelle`, Inhalte unter CC BY 4.0. Die jü
 
 **Hinweis zur Nachvollziehbarkeit:** Zwischen dem 17. und 18.10.2026 wurden Inhalte geändert, ohne die Profilversion 1.0.0 anzuheben. Diese Änderungen sind in Version 1.1.0 mit Datum und Commit zusammengefasst. Läufe aus diesem Zeitraum lassen sich über die protokollierte Prüfsumme dem genauen Stand im Git-Verlauf zuordnen.
 
+## 2.5.0 – 21.11.2026
+
+Grundlage: Rückmeldung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (App 0.9.10, Profilformat 1.38). Zweite Stelle: geänderte Darstellung; Schema und Regeln unverändert, bestehende Meldungen bleiben gültig.
+
+- **Darstellungsdatei, Reihenfolge im Sachverhalt** (`sachverhalte[]`, `reihenfolge`): Bezeichnung, Kennung, Bezug, Eintritt, Bekannt seit, Raum, Analyse, **Fachmodule (Ereignisart, Lagenradar)**, Bewertung, Maßnahmen und Handlungsempfehlungen, Kennzahlen, Zeitstrahl. Das Lagenradar steht damit vor der Beurteilung, wie in der Arbeitsanweisung Erfassung (Abschnitt 4.4); die Regel „nicht aus dem höchsten Radarwert“ bleibt im Hinweis zur Begründung.
+- **Darstellungsdatei, Einleitung des Schritts „Ereignisse und Sachverhalte“:** „Kodierleitfaden des Profils“ als Link auf `kodierleitfaden.md`; die Maske öffnet ihn unter der Einleitung.
+- **SOP-Sammelmappe 3.26.4:** nur Gültigkeitsstand in Teil A (Darstellungsdatei 2.5.0).
+- Arbeitsanweisungen geprüft: kein Anpassungsbedarf. Schema, Kodierleitfaden, Kontakte, Beispiele und Bewertungsfälle sind unverändert.
+
 ## 2.4.0 – 21.11.2026
 
 Grundlage: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“, erster von drei Schritten (App 0.9.9). Zweite Stelle: neue und geänderte Eingabehilfen; Schema und Regeln unverändert, bestehende Meldungen bleiben gültig.
