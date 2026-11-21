@@ -3,6 +3,7 @@
 // Seit 0.6.21 steht der Hilfetext überall zwischen Beschriftung und Eingabe (Entscheidung des Herausgebers vom 01.11.2026).
 
 import { useId, type ReactNode } from "react";
+import { Beschriftung } from "./Beschriftung";
 
 export interface HilfeFeldEingabe {
   id: string;
@@ -65,7 +66,7 @@ export function HilfeFeld({
   return (
     <div className={lang ? "feld feld-lang" : "feld"} data-feld={feld}>
       <label className={pflicht ? "feld-label pflicht" : "feld-label"} htmlFor={id}>
-        {label}
+        <Beschriftung text={label} />
       </label>
       {hilfetext}
       {children({ id, ...(beschreibung ? { "aria-describedby": beschreibung } : {}), ...(mitFehler ? { "aria-invalid": true as const } : {}) })}

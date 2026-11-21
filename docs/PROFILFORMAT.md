@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.37 vom 21.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.38 vom 21.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -97,13 +97,13 @@ Felder werden mit Punktpfaden angesprochen. `[]` steht für ein beliebiges Liste
 
 ### `schritte`
 
-Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obersten Ebene, die er zeigt. Der Schritt mit `"pruefung": true` enthält Prüfung und Ausgabe.
+Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obersten Ebene, die er zeigt. Der Schritt mit `"pruefung": true` enthält Prüfung und Ausgabe. Optional `einleitung`: ein kurzer Text unter der Überschrift des Schritts. Seit Fassung 1.38 darf er Links in Markdown-Form auf Dateien des Pakets tragen, etwa `[Kodierleitfaden des Profils](kodierleitfaden.md)`; die Maske öffnet die Datei unter der Einleitung, ohne die Erfassung zu verlassen. Ein Ziel außerhalb des Pakets bleibt Text und ergibt beim Laden eine Warnung.
 
 ### `felder`
 
 | Eigenschaft | Bedeutung |
 |---|---|
-| `label` | Bezeichnung. Ohne `label` gilt der Feldname. Seit Fassung 1.26 erscheinen Listen (außer der Rolle `sachverhalte`) und Objekte, die in einem anderen Objekt stehen, als Gruppe mit dieser Bezeichnung als Überschrift; Objekte der obersten Ebene und Listenelemente ohne `label` bleiben ohne Rahmen. Listen von Objekten stehen im PDF der Meldung als Zeilen „Liste n › Feld“, in Rohtabelle und CSV als Text je Element („Name n – Titel“, darunter „Feld: Wert“) |
+| `label` | Bezeichnung. Ohne `label` gilt der Feldname. Seit Fassung 1.38 erscheint ein einschränkender Zusatz in Klammern am Ende („(optional)“, „(nur bei …)“) in der Maske klein hinter der Beschriftung wie der Pflichtzusatz (Grunddesign LD-E01); andere Klammern („Meldezeitpunkt (t0)“) gehören zur Beschriftung. Seit Fassung 1.26 erscheinen Listen (außer der Rolle `sachverhalte`) und Objekte, die in einem anderen Objekt stehen, als Gruppe mit dieser Bezeichnung als Überschrift; Objekte der obersten Ebene und Listenelemente ohne `label` bleiben ohne Rahmen. Listen von Objekten stehen im PDF der Meldung als Zeilen „Liste n › Feld“, in Rohtabelle und CSV als Text je Element („Name n – Titel“, darunter „Feld: Wert“) |
 | `hinweis` | Ausfüllhinweis zwischen Beschriftung und Eingabe (seit App 0.6.21; vorher unter dem Feld); bei einer Gruppe Einleitung unter ihrer Überschrift. Bewährt: Leitfrage zuerst, dann wenige Arbeitshinweise |
 | `platzhalter` | Platzhaltertext im Eingabefeld |
 | `widget` | `text`, `text_lang`, `datum` (Tag, Schaltfläche „Heute“), `datumzeit` (Tag und Uhrzeit, Uhrzeit nötig, „Jetzt“), `datum_uhrzeit` (Tag, Uhrzeit optional, „Jetzt“ und „Nur Tag“; Schema-Muster z. B. `^$\|^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$`), `auswahl`, `radio`, `mehrfachauswahl`, `radar`, `quellen`, seit Fassung 1.23 `zeitstrahl` (Textfeld mit Baukasten für Zeilen und „Chronologisch ordnen“), `kennung` (Textfeld mit „Kennung vergeben“, solange leer) und `kennungen` (Liste von Texten als eine Zeile, getrennt durch Komma, Semikolon oder Leerzeichen). Alle Zeitfelder haben „Leeren“; „Jetzt“ gilt in `variablen.zeitzone`. Seit Fassung 1.35 brauchen Zeitfelder nach LEAD-Meldung-v2 keine Angabe: Entspricht das Schema-Muster dem von `$defs/zeitpunkt`, `$defs/zeitangabe` oder `$defs/datum`, gilt `datumzeit`, `datum_uhrzeit` bzw. `datum`, und die App speichert Zeitpunkte mit dem UTC-Versatz der Zone der Meldung; eine Angabe `widget` geht vor. Ebenfalls seit 1.35 `zeitzone` (Auswahl der IANA-Zone mit lesbaren Namen; das Kernfeld `zeitzone` erhält sie ohne Angabe). Seit Fassung 1.37 `gebiet` für ein Objekt mit `name` und `schluessel` (auch Listenelemente, Pfad mit `[]`, etwa `sachverhalte[].raum.gebiete[]`): Gebietssuche im amtlichen Gemeindeverzeichnis, die Wahl setzt Name und Schlüssel; gibt das Schema die Namen vor, erscheint eine Auswahl, und der Schlüssel folgt ihr; der Schlüssel bleibt von Hand änderbar, „DE-TH“ wird zu „16“. Und `gebietsname` für ein Textfeld, das ein Gebiet nennt (Referenzraum, Raum einer Kennzahl): Vorschläge aus dem Verzeichnis, die Wahl setzt nur den Namen. Das Land des Profils (Variable `land`) steht in den Vorschlägen zuerst. |
@@ -113,6 +113,7 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | `element_label`, `titel_feld`, `hinzufuegen` | Listen: Name eines Elements, Feld für dessen Überschrift, Text der Schaltfläche. Ohne `titel_feld` nimmt die App seit Fassung 1.26 den Wert eines einfachen Elements bzw. den ersten nicht leeren Text auf oberster Ebene eines Objekts (gekürzt auf 80 Zeichen); ein leeres `titel_feld` bleibt „ohne Bezeichnung“ |
 | `radar` | Name eines Radars aus `radare` |
 | `zeilen` | Höhe mehrzeiliger Eingabefelder in Zeilen |
+| `reihenfolge` | Seit Fassung 1.38: Reihenfolge der Unterfelder eines Objekts in der Maske, etwa `"sachverhalte[]": { "reihenfolge": ["bezeichnung", …, "analyse", "module", "bewertung", …] }`. Genannte Felder stehen zuerst in dieser Reihenfolge, übrige danach in der Reihenfolge des Schemas; unbekannte Namen ergeben beim Laden eine Warnung. Schema, JSON und Ausgaben bleiben unverändert. |
 
 ### `werte` (Anzeigeform von Auswahlwerten)
 
@@ -322,3 +323,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.35 | 16.11.2026 | Zeitfelder nach LEAD-Meldung-v2 erkennt die Maske am Schema-Muster (`zeitpunkt`, `zeitangabe`, `datum`), ohne Angabe `widget`; neues Widget `zeitzone`, für das Kernfeld `zeitzone` ohne Angabe. Ältere Pakete laden unverändert; Hinweistexte mit dem Austauschformat sollten entfallen (App 0.9.5) |
 | 1.36 | 21.11.2026 | Darstellungsdatei: optional `werte` (Anzeigeform von Auswahlwerten); die App zeigt die Auswahlwerte von LEAD-Meldung-v2 ohne Angabe mit Umlauten und Leerzeichen. Ältere Pakete laden unverändert (App 0.9.7) |
 | 1.37 | 21.11.2026 | Darstellungsdatei: Widgets `gebiet` (Gebiet mit Name und Schlüssel, Gebietssuche) und `gebietsname` (Vorschläge für Textfelder, die ein Gebiet nennen) mit dem Gebietsverzeichnis aus GV-ISys. Ältere Pakete laden unverändert (App 0.9.8) |
+| 1.38 | 21.11.2026 | Darstellungsdatei: `reihenfolge` für die Unterfelder eines Objekts, Links auf Dateien des Pakets in der `einleitung` eines Schritts, einschränkender Zusatz am Ende eines `label` klein wie der Pflichtzusatz. Ältere Pakete laden unverändert (App 0.9.10) |

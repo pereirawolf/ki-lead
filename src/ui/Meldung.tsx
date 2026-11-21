@@ -10,6 +10,7 @@ import { pruefeGegenSchema } from "../kern/validierung";
 import { pflichtHinweise } from "../kern/kennsaetze";
 import { quellenHinweise } from "../kern/quellen";
 import type { Meldung as MeldungTyp, Profil, Schritt } from "../kern/typen";
+import { Einleitung } from "./Einleitung";
 import { Feld } from "./Feld";
 import { MeldungZoneKontext } from "./meldungZone";
 import { Pruefen } from "./Pruefen";
@@ -321,7 +322,7 @@ export function MeldungAnsicht({ profil, meldung, setMeldung, neu, ersetzen, zwi
               <h2 id="schritt-titel" ref={titelRef} tabIndex={-1}>
                 {aktuell.titel}
               </h2>
-              {aktuell.einleitung && <p className="einleitung">{aktuell.einleitung}</p>}
+              {aktuell.einleitung && <Einleitung text={aktuell.einleitung} profil={profil} />}
               {aktuell.pruefung && <Pruefen profil={profil} meldung={meldung} teil="pruefung" befunde={{ schema: schemaBefunde, pflicht }} zumFeld={zumFeld} />}
               <MeldungZoneKontext.Provider value={typeof meldung?.zeitzone === "string" && meldung.zeitzone ? meldung.zeitzone : undefined}>
                 {aktuell.felder.map((feld) => {

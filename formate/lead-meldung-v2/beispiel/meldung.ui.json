@@ -28,7 +28,7 @@
       "felder": [
         "sachverhalte"
       ],
-      "einleitung": "Je Ereignis oder Sachverhalt ein Eintrag. Maßgeblich für die Kodierung ist der Kodierleitfaden des Profils."
+      "einleitung": "Je Ereignis oder Sachverhalt ein Eintrag. Maßgeblich für die Kodierung ist der [Kodierleitfaden des Profils](kodierleitfaden.md)."
     },
     {
       "id": "uebergreifend",
@@ -201,6 +201,22 @@
       "element_label": "Ereignis/Sachverhalt",
       "titel_feld": "bezeichnung",
       "hinzufuegen": "Ereignis/Sachverhalt hinzufügen"
+    },
+    "sachverhalte[]": {
+      "reihenfolge": [
+        "bezeichnung",
+        "kennung",
+        "bezug",
+        "eintritt",
+        "bekannt_seit",
+        "raum",
+        "analyse",
+        "module",
+        "bewertung",
+        "handlungsbedarf",
+        "kennzahlen",
+        "zeitstrahl"
+      ]
     },
     "sachverhalte[].kennung": {
       "label": "Kennung",

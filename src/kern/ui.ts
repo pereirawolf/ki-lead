@@ -200,3 +200,13 @@ export function verweisKlammer(ui: UiKonfig, art: LagebildVerweis): string {
   const v = ui.lagebild?.verweise?.[art]?.trim();
   return v ? ` (${v})` : "";
 }
+
+/**
+ * Unterfelder eines Objekts in der Reihenfolge der Darstellungsdatei (`reihenfolge`, seit Profilformat 1.38, App 0.9.10):
+ * genannte Felder zuerst in dieser Reihenfolge, übrige danach in der Reihenfolge des Schemas; unbekannte Namen entfallen.
+ */
+export function ordneFelder(felder: string[], reihenfolge?: string[]): string[] {
+  if (!reihenfolge?.length) return felder;
+  const vorn = reihenfolge.filter((n, i) => felder.includes(n) && reihenfolge.indexOf(n) === i);
+  return [...vorn, ...felder.filter((n) => !vorn.includes(n))];
+}
