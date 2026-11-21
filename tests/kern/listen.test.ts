@@ -49,6 +49,17 @@ describe("I114-A2: Elementtitel und Name", () => {
     expect(elementTitel(ohne, ["verfahren"], { messwert: { wert: 1 } })).toBe("");
   });
 
+  test("Auswahlwerte im Titel in Anzeigeform (seit 0.9.9): Werte der App und des Profils, freier Text unverändert", () => {
+    const ohne = klein({});
+    expect(elementTitel(ohne, ["verfahren"], { art: "fortschreibung_von", stand: "x" })).toBe("Fortschreibung von");
+    const mitWerten = {
+      ...klein({ verfahren: { titel_feld: "art" } }),
+      ui: { felder: { verfahren: { titel_feld: "art" } }, rollen: {}, werte: { berichtigung_von: "Berichtigung" } },
+    } as any;
+    expect(elementTitel(mitWerten, ["verfahren"], { art: "berichtigung_von" })).toBe("Berichtigung");
+    expect(elementTitel(mitWerten, ["verfahren"], { art: "Umschaltung Netz_A" })).toBe("Umschaltung Netz_A");
+  });
+
   test("Name aus element_label, sonst Bezeichnung der Liste", () => {
     expect(elementName(klein({ verfahren: { label: "Ersatzverfahren", element_label: "Verfahren" } }), ["verfahren"])).toBe("Verfahren");
     expect(elementName(klein({ verfahren: { label: "Ersatzverfahren" } }), ["verfahren"])).toBe("Ersatzverfahren");

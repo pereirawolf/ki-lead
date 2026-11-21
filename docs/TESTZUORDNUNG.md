@@ -1467,3 +1467,16 @@ Soll unabhängig vom Code: Aufbau von Amtlichem Regional- und Gemeindeschlüssel
 
 Mitgeführt mit geändertem Soll: `tests/pipeline/v2-pipeline.test.ts` (Absender „16“ statt „DE-TH“), `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.3.0 und 1.2.0), `tests/lizenzen/reuse.test.ts` (sieben Lizenztexte).
 
+## Beschriftungen und Leitfragen der Erfassungsmaske (0.9.9)
+
+Soll unabhängig vom Code: Beratung und Entscheidungen des Herausgebers vom 21.11.2026 zur Seite „Ereignisse und Sachverhalte“ (keine technischen Feldnamen und Werte in der Maske, „Empfehlung“ statt „Auftrag“ nur in der Beschriftung, keine Abschnittsverweise in Feldhinweisen, verbindlicher Verweis auf den Kodierleitfaden nach SOP-LEAD A.10.2 einmal je Schritt).
+
+| Soll | Test | Datei |
+|---|---|---|
+| Jedes Feld eines Sachverhalts, der Beziehungen und der Fehlanzeige hat eine Beschriftung (Radarachsen, Objekte in Listen, Auswahl- und Kennungslisten ausgenommen) | Maske „Ereignisse und Sachverhalte“ › … jedes Feld … | `tests/profil/maske-texte.test.ts` |
+| Kein Auswahlwert mit Unterstrich; „Fortschreibung (neuer Stand)“, „Verhältnis“, „Empfehlung“, „Fristen“, „Lücke“ | › … Auswahlwerte ohne Unterstrich … | `tests/profil/maske-texte.test.ts` |
+| Feldhinweise ohne „Kodierleitfaden“, „SOP-LEAD“, „Abschnitt“ und ohne technische Werte; Einleitung des Schritts nennt den Kodierleitfaden | › … Feldhinweise … | `tests/profil/maske-texte.test.ts` |
+| Darstellungsdatei der Vorlage im Format gleich dem Beispielprofil (Felder, Werte) | › Vorlage im Format … | `tests/profil/maske-texte.test.ts` |
+| Titel eines Listeneintrags zeigt Auswahlwerte in Anzeigeform, freier Text bleibt | I114-A2: Elementtitel und Name › Auswahlwerte im Titel … | `tests/kern/listen.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.4.0 und 1.3.0), `tests/ui/ux-2026-w45.test.ts` (Spalte „Raum › Nähere Eingrenzung“).
