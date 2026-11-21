@@ -77,7 +77,17 @@ die damals angegebenen Lizenzen weiter, zusätzlich die folgenden.
       machen, und Abschnitt 2(a)(6) schließt den Eindruck einer Billigung aus;
    e) docs/GRUNDLAGEN.md (Theoretische Grundlagen und Genese, seit 05.11.2026); es
       steht wie die begleitenden Aufsätze unter CC BY-NC-ND 4.0 (Datei
-      LICENSES/CC-BY-NC-ND-4.0.txt).
+      LICENSES/CC-BY-NC-ND-4.0.txt);
+   f) das Gebietsverzeichnis formate/fremd/gv-isys/gebiete-*.json (seit 21.11.2026):
+      Schlüssel und Namen der Länder, Regierungsbezirke, Kreise und Gemeinden aus
+      dem Gemeindeverzeichnis-Informationssystem GV-ISys. Es gelten die Rechte der
+      Herausgeber: „© Daten (im Auftrag der Herausgebergemeinschaft Statistische
+      Ämter des Bundes und der Länder) Statistisches Bundesamt (Destatis), 2026.
+      Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe
+      gestattet.“ (Datei LICENSES/LicenseRef-Destatis-Quellenangabe.txt). Die
+      Quellenangabe steht in jeder Datei, in der Vorschlagsliste der App und in
+      THIRD-PARTY-NOTICES.md. Das Skript scripts/gebietsverzeichnis.mjs, das die
+      Dateien erzeugt, fällt unter Nr. 4.
    Soweit Inhalte keinen urheberrechtlichen Schutz genießen, etwa überwiegend
    maschinell erzeugte Prüfsteine, begründet die Lizenz keine Pflichten
    (CC BY 4.0, Abschnitt 1(g)).

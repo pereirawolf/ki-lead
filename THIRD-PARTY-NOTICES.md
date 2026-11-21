@@ -93,6 +93,10 @@ Bemerkungen:
 
 **Atkinson Hyperlegible** (Normal und Fett, Teilmengen Latin und Latin Extended), © 2020 Braille Institute of America, Inc., [SIL Open Font License 1.1](https://scripts.sil.org/OFL) (OFL-1.1). Eingebunden über `@fontsource/atkinson-hyperlegible` in `src/main.tsx`, ausgeliefert als WOFF2 und WOFF. Die Schrift hat keinen reservierten Namen. Sie wird nicht verändert und nicht einzeln weitergegeben, nur mit der App. In PDF-Ausgaben ist sie nicht eingebettet; jsPDF nutzt Standardschriften.
 
+## 3a. Daten: Gebietsverzeichnis
+
+**Gemeindeverzeichnis-Informationssystem GV-ISys** der Statistischen Ämter des Bundes und der Länder, Quartalsausgabe zum 30.09.2026 (seit App 0.9.8, Nachtrag 21.11.2026): Schlüssel und Namen der Länder, Regierungsbezirke, Kreise und Gemeinden für die Gebietssuche und die Gebietsschlüssel der KI-Nachbearbeitung, aufbereitet mit `scripts/gebietsverzeichnis.mjs` in `formate/fremd/gv-isys/`. Rechtevermerk der Herausgeber: „© Daten (im Auftrag der Herausgebergemeinschaft Statistische Ämter des Bundes und der Länder) Statistisches Bundesamt (Destatis), 2026. Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.“ Die Quellenangabe steht in den Dateien, in der Vorschlagsliste der App und in `public/lizenzen-ergaenzend.md`; Einordnung in [LICENSE-CONTENT](LICENSE-CONTENT), Nr. 5 f. Eingebunden im Web-Build: der Kern im Programmcode, die Gemeinden als nachgeladener Teil.
+
 ## 4. Native Apps (Android, iOS)
 
 Nicht im npm-Lockfile, sondern in den nativen Projekten festgelegt. Die Versionen für Android stehen in `android/variables.gradle`.
@@ -171,7 +175,7 @@ Apache-2.0 verlangt, eine Kopie der Lizenz und eine vorhandene NOTICE-Datei mitz
 
 **Schrift unter OFL-1.1.** Die OFL erlaubt, die Schrift mit Software jeder Lizenz zu bündeln und als Webfont auszuliefern; nur der Verkauf der Schrift allein ist ausgeschlossen. Copyright und Lizenz müssen mitgehen. Die Lizenz der App und der erzeugten Dokumente ändert sich dadurch nicht (SIL International, 2009).
 
-**Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0.** Keine Drittkomponente fließt in die Inhalte ein; ausgenommen sind nur amtliche Werke nach § 5 UrhG (zitierte Normtexte) und kurze Auszüge aus Quellen Dritter (LICENSE-CONTENT, Nr. 5). Code und Inhalte liegen in der App nur nebeneinander; jede Lizenz gilt für ihren Teil. Die Namensnennung steht in [LICENSE-CONTENT](LICENSE-CONTENT), im Fuß der App und unter „Über KI-LEAD“.
+**Inhalte unter CC BY 4.0, maschinenlesbare Dateien zusätzlich unter CC0 1.0.** Keine Drittkomponente fließt in die Inhalte ein; ausgenommen sind amtliche Werke nach § 5 UrhG (zitierte Normtexte), kurze Auszüge aus Quellen Dritter und das Gebietsverzeichnis aus GV-ISys, das mit den Rechten der Herausgeber und ihrer Quellenangabe neben den Inhalten steht (LICENSE-CONTENT, Nr. 5 f, Abschnitt 3a). Code und Inhalte liegen in der App nur nebeneinander; jede Lizenz gilt für ihren Teil. Die Namensnennung steht in [LICENSE-CONTENT](LICENSE-CONTENT), im Fuß der App und unter „Über KI-LEAD“.
 
 **Ergebnis:** kein Lizenzkonflikt.
 

@@ -54,7 +54,7 @@ Schemakennung `LEAD-Meldung-v2`. Dateien: [formate/lead-meldung-v2/](../formate/
 | `freigabe` | ja | `erfasst`, `freigegeben`: je `{name, funktion?, hz?, zeitpunkt}` |
 | `entstehung` | ja | Herkunftsnachweis (Abschnitt 6) |
 
-**Gebietsschlüssel** (`schluessel`, optional): ISO 3166-1/-2 (`DE`, `DE-TH`, auch Ausland) oder amtlicher Gemeinde- bzw. Regionalschlüssel (Ziffern, z. B. Kreisschlüssel `16072`). Nicht jeder Wirkungsraum folgt Verwaltungsgrenzen; dafür steht `raum.beschreibung`.
+**Gebietsschlüssel** (`schluessel`, optional): in Deutschland der amtliche Schlüssel in Ziffern nach dem Gemeindeverzeichnis GV-ISys der Statistischen Ämter des Bundes und der Länder: Land 2-stellig (`16`), Regierungsbezirk 3-stellig, Kreis 5-stellig (`16072`), Gemeinde 8-stellig als Amtlicher Gemeindeschlüssel (`16072018`). So liegt jedes Gebiet am Präfix erkennbar in seinem übergeordneten (16 ⊃ 16072 ⊃ 16072018). Staaten tragen ISO 3166-1 (`DE` für den Bund, `CZ`). Länder nach ISO 3166-2 (`DE-TH`) und der 12-stellige Regionalschlüssel bleiben zulässig und werden beim Vergleich umgerechnet (`DE-TH` → `16`; Regionalschlüssel ohne die Stellen des Gemeindeverbands); neu erfasste Meldungen tragen die Ziffern (Regel seit Nachtrag 16; die Beschreibung im Kernschema folgt mit der nächsten Änderung des Kernschemas, damit Thessa und KSNV nicht allein dafür neu pinnen). Nicht jeder Wirkungsraum folgt Verwaltungsgrenzen; dafür steht `raum.beschreibung`, und ein Gebiet darf ohne Schlüssel stehen.
 
 ## 3. Sachverhalt
 
@@ -225,7 +225,7 @@ Die Felder `_status` und `_entstehung` behalten in `LEAD-Meldung-v1` ihren Unter
 | v1 | v2 | Art |
 |---|---|---|
 | `schema`, `_status` | `schema`, `fassung`, `status` | „final“ → `freigegeben` nur mit Zeichnung und Datum der Freigabe, sonst `zur_freigabe` |
-| `land` / `kreis`, `meldende_stelle` | `absender` | Schlüssel nur für Bund und Länder (ISO 3166-2); Ebene aus Gebiet und Schema |
+| `land` / `kreis`, `meldende_stelle` | `absender` | Schlüssel nur für Bund (`DE`) und Länder (seit Nachtrag 16 Ziffern, `16`; bis dahin ISO 3166-2); Ebene aus Gebiet und Schema |
 | `meldezeitpunkt`, `meldezeitraum` | dieselben, mit Versatz der Zone | |
 | `quellen` (Text) | `quellen[]` | Kategorie, Herausgeber, Datum, Titel, URL, Zugriff, Datenstand, Zugang aus Kennzeichen („(Paywall)“, „behördenintern“ …); Zugang ohne Kennzeichen und ohne URL `null` |
 | `zeitstrahl` (Text) | `sachverhalte[].zeitstrahl[]` | Zuordnung über die Kennung; „aufgenommen“ → `erstmals_gemeldet`; „zu [Zn]“ → `berichtigt` |
@@ -282,6 +282,7 @@ Die Tests überführen alle mitgelieferten v1-Meldungen (Orkantief „Ilka“, H
 
 | Fassung | Datum | Änderung |
 |---|---|---|
+| 2.0 (Entwurf), Nachtrag 16 | 21.11.2026 | Format und Schemata unverändert: Regel für Gebietsschlüssel (Abschnitt 2): Ziffern nach dem Gemeindeverzeichnis, ISO 3166-1 für Staaten; `DE-TH` und Regionalschlüssel bleiben zulässig und werden umgerechnet. Migration und KI-Nachbearbeitung setzen für Länder die Ziffern; die App ergänzt Schlüssel aus dem Verzeichnis (App 0.9.8, Entscheidungen des Herausgebers vom 21.11.2026). Beispiele mit Ziffern |
 | 2.0 (Entwurf), Nachtrag 15 | 21.11.2026 | Modul `lead-bevoelkerungsschutz` (und Modul der Vorlage): Vorgabe `"default": "offen"` für `status` einer Radarachse, eine reine Annotation; neue Achsen sind damit offen statt „belegt“ ohne Stufe (Abschnitt 7, Entscheidung des Herausgebers vom 21.11.2026). Zusammengestellte Schemata neu erzeugt (App 0.9.7). Bestehende Meldungen bleiben gültig |
 | 2.0 (Entwurf), Nachtrag 14 | 14.11.2026 | Kernschema, additiv (SR-2026-W46-01 bis -04, Vorschlag aus STATIS-LEAD): `kennzahl.art` „verhaeltnis“, `kennzahl.erhebung` „berechnet“, optional `beobachtungszeitraum` (neue Definition `kalenderzeitraum`), `bezug` und `vorlaeufig` (Abschnitt 4.3); Referenzprüfung (Abschnitt 8); Abschnitt 7: Ausnahme vom erfassten Ausschnitt je Format und Wiederherstellung der neuen Felder (SR-2026-W46-05, -06); zusammengestellte Schemata neu erzeugt (App 0.9.3). Bestehende Meldungen bleiben gültig; Thessa und KSNV pinnen neu |
 | 2.0 (Entwurf), Nachtrag 13 | 14.11.2026 | Format und Schemata unverändert: offener Punkt 2 erledigt, v2 bei Kosten und Fehlerquote vertretbar (Vergleichslauf Ilka vom 14.11.2026, Ergebnisbericht unter `evaluation/abnahmen/`, Entscheidung des Herausgebers vom 14.11.2026) |

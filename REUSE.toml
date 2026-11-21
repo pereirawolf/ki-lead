@@ -106,6 +106,13 @@ precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Heiko Pereira Wolf <https://www.pereirawolf.de>"
 SPDX-License-Identifier = "CC-BY-4.0"
 
+# Nr. 5 f: Gebietsverzeichnis aus GV-ISys (Daten Dritter, Rechte der Herausgeber, Quellenangabe)
+[[annotations]]
+path = "formate/fremd/gv-isys/gebiete-*.json"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Statistisches Bundesamt (Destatis), im Auftrag der Herausgebergemeinschaft Statistische Ämter des Bundes und der Länder"
+SPDX-License-Identifier = "LicenseRef-Destatis-Quellenangabe"
+
 # Nr. 5 e: docs/GRUNDLAGEN.md (Theoretische Grundlagen und Genese) steht wie die begleitenden Aufsätze unter
 # CC BY-NC-ND 4.0, nicht unter CC BY 4.0 nach Nr. 1 c.
 [[annotations]]

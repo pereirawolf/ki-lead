@@ -971,3 +971,72 @@ textarea[aria-invalid="true"] {
   stroke: var(--flaeche);
   stroke-dasharray: none;
 }
+
+/* Gebietssuche (seit 0.9.8): Vorschlagsliste unter der Eingabe; gewählte Zeile kontrastreich unterlegt, keine Farbmarken */
+.gebiet-suche {
+  position: relative;
+}
+
+.gebiet-suche > input {
+  width: 100%;
+}
+
+.gebiet-vorschlaege {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 2px);
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  max-height: 18rem;
+  overflow-y: auto;
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  box-shadow: var(--schatten);
+}
+
+.gebiet-vorschlaege[hidden] {
+  display: none;
+}
+
+.gebiet-vorschlag {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 0.75rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.gebiet-vorschlag-zusatz {
+  color: var(--tinte-leise);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gebiet-vorschlag:hover,
+.gebiet-vorschlag.aktiv {
+  background: var(--amt);
+  color: var(--auf-amt);
+}
+
+.gebiet-vorschlag:hover .gebiet-vorschlag-zusatz,
+.gebiet-vorschlag.aktiv .gebiet-vorschlag-zusatz {
+  color: var(--auf-amt);
+}
+
+.gebiet-zuordnung {
+  margin-top: 0.3rem;
+}
+
+.gebiet-quelle {
+  padding: 0.35rem 0.75rem 0.15rem;
+  border-top: 1px solid var(--linie);
+  margin-top: 0.25rem;
+  color: var(--tinte-leise);
+  font-size: 0.78rem;
+  cursor: default;
+}

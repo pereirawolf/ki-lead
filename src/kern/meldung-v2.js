@@ -220,24 +220,28 @@ export function stehtVor(a, b, zone) {
 // 3. Migration v1 → v2
 // ---------------------------------------------------------------------------------------------------------------
 
+/**
+ * Amtlicher Schlüssel je Land (seit 0.9.8 die Ziffern des Gemeindeschlüssels statt ISO 3166-2, Entscheidung des
+ * Herausgebers vom 21.11.2026; „DE“ für den Bund). Gebiete liegen so am Präfix erkennbar ineinander (16 ⊃ 16072).
+ */
 export const LAENDER = {
   Bund: "DE",
-  "Baden-Württemberg": "DE-BW",
-  Bayern: "DE-BY",
-  Berlin: "DE-BE",
-  Brandenburg: "DE-BB",
-  Bremen: "DE-HB",
-  Hamburg: "DE-HH",
-  Hessen: "DE-HE",
-  "Mecklenburg-Vorpommern": "DE-MV",
-  Niedersachsen: "DE-NI",
-  "Nordrhein-Westfalen": "DE-NW",
-  "Rheinland-Pfalz": "DE-RP",
-  Saarland: "DE-SL",
-  Sachsen: "DE-SN",
-  "Sachsen-Anhalt": "DE-ST",
-  "Schleswig-Holstein": "DE-SH",
-  Thüringen: "DE-TH",
+  "Baden-Württemberg": "08",
+  Bayern: "09",
+  Berlin: "11",
+  Brandenburg: "12",
+  Bremen: "04",
+  Hamburg: "02",
+  Hessen: "06",
+  "Mecklenburg-Vorpommern": "13",
+  Niedersachsen: "03",
+  "Nordrhein-Westfalen": "05",
+  "Rheinland-Pfalz": "07",
+  Saarland: "10",
+  Sachsen: "14",
+  "Sachsen-Anhalt": "15",
+  "Schleswig-Holstein": "01",
+  Thüringen: "16",
 };
 
 const KENNUNG_RE = /^[A-Z0-9]{1,8}(-[A-Z0-9]{1,8}){0,3}-[0-9]{8}-[0-9A-HJKMNP-TV-Z]{4,8}$/;

@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Nordrhein-Westfalen",
-      "schluessel": "DE-NW"
+      "schluessel": "05"
     }
   },
   "meldezeitpunkt": "2026-10-14T10:00+02:00",
@@ -109,7 +109,7 @@
         "gebiete": [
           {
             "name": "Nordrhein-Westfalen",
-            "schluessel": "DE-NW"
+            "schluessel": "05"
           }
         ]
       },

@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Rheinland-Pfalz",
-      "schluessel": "DE-RP"
+      "schluessel": "07"
     }
   },
   "meldezeitpunkt": "2026-10-14T09:30+02:00",
@@ -91,7 +91,7 @@
         "gebiete": [
           {
             "name": "Rheinland-Pfalz",
-            "schluessel": "DE-RP"
+            "schluessel": "07"
           }
         ]
       },

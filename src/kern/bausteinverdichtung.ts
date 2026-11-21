@@ -18,6 +18,7 @@
 // (KENNZAHL_LANDESWEIT) und der Hinweis, Kennzahlen als Beleg zu prüfen (KENNZAHL_BELEG).
 
 import { BAUSTEIN_FORMATE, istAusschnitt, istLandSchluessel, zeitDE, type BausteinInfo } from "./baustein";
+import { liegtIn, normSchluessel, ueberlappen } from "./gebiete";
 import type { Befund } from "./typen";
 
 /** Baustein mit Dateiname, Angaben aus der Prüfung und Inhalt */
@@ -126,7 +127,7 @@ export interface Rechenhilfe {
 /** Gebietsschlüssel je Raumname aus allen Bausteinen (für Kennzahlen, deren Raum ein anderer Baustein führt) */
 function schluesselJeRaum(bausteine: VerdichtungsBaustein[]): Map<string, string> {
   const m = new Map<string, string>();
-  for (const b of bausteine) if (b.info.raum.schluessel) m.set(norm(b.info.raum.name), b.info.raum.schluessel);
+  for (const b of bausteine) if (b.info.raum.schluessel) m.set(norm(b.info.raum.name), normSchluessel(b.info.raum.schluessel));
   return m;
 }
 
@@ -137,7 +138,7 @@ function eintraegeVon(b: VerdichtungsBaustein, kuerzel: string, schluessel: Map<
     .map((k) => {
       const raum = typeof k.raum === "string" && k.raum.trim() ? k.raum.trim() : b.info.raum.name;
       const eigenerRaum = norm(raum) === norm(b.info.raum.name);
-      const s = eigenerRaum ? b.info.raum.schluessel : schluessel.get(norm(raum));
+      const s = eigenerRaum ? normSchluessel(b.info.raum.schluessel) || undefined : schluessel.get(norm(raum));
       return {
         k,
         baustein: kuerzel,
@@ -153,9 +154,9 @@ function eintraegeVon(b: VerdichtungsBaustein, kuerzel: string, schluessel: Map<
     });
 }
 
-/** a liegt in b oder ist b (Präfix des Gebietsschlüssels) */
-const liegtIn = (a: string, b: string) => a.startsWith(b);
-const ueberlappen = (a: string, b: string) => liegtIn(a, b) || liegtIn(b, a);
+// a liegt in b oder ist b: Präfix des Gebietsschlüssels nach Umrechnung („DE-TH“ → „16“, 12-stelliger
+// Regionalschlüssel → Gemeindeschlüssel), seit 0.9.8 aus src/kern/gebiete.ts; bis dahin verglich die Rechenhilfe die
+// Schlüssel unverändert, und „DE-TH“ galt nicht als übergeordnet zu „16072“.
 
 function ergebnis(eintraege: RhEintrag[], art = ""): RhErgebnis {
   if (eintraege.some((e) => e.wert === null || e.bandbreite)) return { art: "getrennt", grund: "Wert fehlt oder als Bandbreite angegeben; keine Summe" };
@@ -238,7 +239,13 @@ function einsatzmeldungen(bausteine: VerdichtungsBaustein[]): RhEinsatz[] {
   for (const b of bausteine)
     for (const em of Array.isArray(b.daten.einsatzmeldungen) ? b.daten.einsatzmeldungen : []) {
       if (!em || typeof em.id !== "string") continue;
-      const eintrag = { em, raum: b.info.raum.name, schluessel: b.info.raum.schluessel ?? "", imGebiet: em.im_gebiet === true, datenstand: b.info.datenstand };
+      const eintrag = {
+        em,
+        raum: b.info.raum.name,
+        schluessel: normSchluessel(b.info.raum.schluessel),
+        imGebiet: em.im_gebiet === true,
+        datenstand: b.info.datenstand,
+      };
       je.set(em.id, [...(je.get(em.id) ?? []), eintrag]);
     }
   const out: RhEinsatz[] = [];

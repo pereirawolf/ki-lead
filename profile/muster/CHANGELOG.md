@@ -2,6 +2,12 @@
 
 Profil-ID `muster.einsatzstelle` (bis 0.4.0 „Musterprofil – Einsatzstelle (leer)“). Inhalte unter CC0 1.0 und CC BY 4.0 nach Wahl, siehe `LICENSE-CONTENT`, Nr. 2c; die Vorlage darf ohne Namensnennung übernommen werden. Versionierung wie im Beispielprofil beschrieben (Semantic Versioning, Prüfsumme je Stand). Bei Übernahme `herausgeber` und `lizenz` in `profil.json` selbst setzen.
 
+## 1.2.0 – 21.11.2026
+
+Grundlage: Entscheidungen des Herausgebers vom 21.11.2026 zur Gebietssuche (App 0.9.8). Zweite Stelle: neue Eingabehilfen.
+
+- **Darstellungsdatei:** Gebietssuche wie in der Vorlage `formate/lead-meldung-v2/beispiel/meldung.ui.json` (Widgets `gebiet` und `gebietsname`, Hinweise zum Schlüssel).
+
 ## 1.1.2 – 21.11.2026
 
 Grundlage: Entscheidung des Herausgebers vom 21.11.2026 (neue Radarachsen offen, Grund leer; App 0.9.7). Dritte Stelle: technische Vorgabe ohne fachliche Wirkung.

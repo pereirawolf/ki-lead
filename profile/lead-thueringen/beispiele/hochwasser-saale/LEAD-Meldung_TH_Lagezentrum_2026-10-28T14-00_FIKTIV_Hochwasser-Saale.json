@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Thüringen",
-      "schluessel": "DE-TH"
+      "schluessel": "16"
     }
   },
   "meldezeitpunkt": "2026-10-28T14:00+01:00",
@@ -98,7 +98,7 @@
         "gebiete": [
           {
             "name": "Thüringen",
-            "schluessel": "DE-TH"
+            "schluessel": "16"
           },
           {
             "name": "Landkreis Saalfeld-Rudolstadt",

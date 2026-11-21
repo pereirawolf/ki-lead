@@ -86,7 +86,8 @@
       "pflicht": true
     },
     "absender.gebiet": {
-      "label": "Gebiet der meldenden Stelle"
+      "label": "Gebiet der meldenden Stelle",
+      "widget": "gebiet"
     },
     "absender.gebiet.name": {
       "label": "Name",
@@ -95,7 +96,7 @@
     },
     "absender.gebiet.schluessel": {
       "label": "Schlüssel",
-      "hinweis": "ISO 3166-2 für Länder (DE-TH) oder amtlicher Gemeinde- bzw. Regionalschlüssel (16072)."
+      "hinweis": "Amtlicher Schlüssel aus dem Gemeindeverzeichnis: Land 2-stellig (16), Kreis 5-stellig (16072), Gemeinde 8-stellig (16072018); Staaten nach ISO 3166-1 (DE, CZ). Wird bei der Auswahl eines Vorschlags gesetzt; leer lassen, wenn das Gebiet keiner Verwaltungseinheit entspricht."
     },
     "berichtsraum": {
       "label": "Berichtsraum (optional)"
@@ -106,7 +107,11 @@
     "berichtsraum.gebiete": {
       "label": "Gebiete",
       "element_label": "Gebiet",
-      "hinzufuegen": "Gebiet hinzufügen"
+      "hinzufuegen": "Gebiet hinzufügen",
+      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Gebiete ohne Verwaltungsgrenze (Flussabschnitt, Talsperre) frei eintragen, ohne Schlüssel."
+    },
+    "berichtsraum.gebiete[]": {
+      "widget": "gebiet"
     },
     "meldezeitpunkt": {
       "label": "Meldezeitpunkt (t0)",
@@ -231,7 +236,11 @@
     "sachverhalte[].raum.gebiete": {
       "label": "Gebiete",
       "element_label": "Gebiet",
-      "hinzufuegen": "Gebiet hinzufügen"
+      "hinzufuegen": "Gebiet hinzufügen",
+      "hinweis": "Namen tippen und einen Vorschlag aus dem amtlichen Gemeindeverzeichnis wählen; der Schlüssel wird gesetzt. Gebiete ohne Verwaltungsgrenze (Flussabschnitt, Talsperre) frei eintragen, ohne Schlüssel."
+    },
+    "sachverhalte[].raum.gebiete[]": {
+      "widget": "gebiet"
     },
     "sachverhalte[].analyse": {
       "label": "Analyse"
@@ -263,7 +272,8 @@
     },
     "sachverhalte[].bewertung.referenzraum": {
       "label": "Referenzraum",
-      "pflicht": true
+      "pflicht": true,
+      "widget": "gebietsname"
     },
     "sachverhalte[].bewertung.beurteilung": {
       "label": "Beurteilung"
@@ -482,13 +492,15 @@
       "label": "Name"
     },
     "sachverhalte[].raum.gebiete[].schluessel": {
-      "label": "Schlüssel"
+      "label": "Schlüssel",
+      "hinweis": "Amtlicher Schlüssel aus dem Gemeindeverzeichnis: Land 2-stellig (16), Kreis 5-stellig (16072), Gemeinde 8-stellig (16072018); Staaten nach ISO 3166-1 (DE, CZ). Wird bei der Auswahl eines Vorschlags gesetzt; leer lassen, wenn das Gebiet keiner Verwaltungseinheit entspricht."
     },
     "berichtsraum.gebiete[].name": {
       "label": "Name"
     },
     "berichtsraum.gebiete[].schluessel": {
-      "label": "Schlüssel"
+      "label": "Schlüssel",
+      "hinweis": "Amtlicher Schlüssel aus dem Gemeindeverzeichnis: Land 2-stellig (16), Kreis 5-stellig (16072), Gemeinde 8-stellig (16072018); Staaten nach ISO 3166-1 (DE, CZ). Wird bei der Auswahl eines Vorschlags gesetzt; leer lassen, wenn das Gebiet keiner Verwaltungseinheit entspricht."
     },
     "sachverhalte[].bewertung.neubewertung_bei[].indikator": {
       "label": "Indikator"
@@ -600,7 +612,8 @@
       "label": "Erhebung"
     },
     "sachverhalte[].kennzahlen[].raum": {
-      "label": "Raum"
+      "label": "Raum",
+      "widget": "gebietsname"
     },
     "sachverhalte[].kennzahlen[].teilmenge_von": {
       "label": "Teilmenge von"

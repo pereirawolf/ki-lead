@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Sachsen-Anhalt",
-      "schluessel": "DE-ST"
+      "schluessel": "15"
     }
   },
   "meldezeitpunkt": "2026-10-14T11:00+02:00",
@@ -89,7 +89,7 @@
         "gebiete": [
           {
             "name": "Sachsen-Anhalt",
-            "schluessel": "DE-ST"
+            "schluessel": "15"
           }
         ]
       },

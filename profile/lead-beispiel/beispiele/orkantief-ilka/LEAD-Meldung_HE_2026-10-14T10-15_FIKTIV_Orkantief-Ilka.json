@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Hessen",
-      "schluessel": "DE-HE"
+      "schluessel": "06"
     }
   },
   "meldezeitpunkt": "2026-10-14T10:15+02:00",
@@ -99,7 +99,7 @@
         "gebiete": [
           {
             "name": "Hessen",
-            "schluessel": "DE-HE"
+            "schluessel": "06"
           }
         ]
       },

@@ -8,7 +8,7 @@
     "ebene": "Land",
     "gebiet": {
       "name": "Niedersachsen",
-      "schluessel": "DE-NI"
+      "schluessel": "03"
     }
   },
   "meldezeitpunkt": "2026-10-14T09:45+02:00",
@@ -97,7 +97,7 @@
         "gebiete": [
           {
             "name": "Niedersachsen",
-            "schluessel": "DE-NI"
+            "schluessel": "03"
           }
         ]
       },

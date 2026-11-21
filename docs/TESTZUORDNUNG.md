@@ -1450,3 +1450,20 @@ Soll unabhängig vom Code: Nebenbefunde und Entscheidungen des Herausgebers vom 
 
 Mitgeführt mit geändertem Soll: `tests/kern/validierung.test.ts` (Wortlaut der Meldungen), `tests/kern/v2-darstellung.test.ts` (Legende „kein Beleg“).
 
+## Gebietssuche und amtliche Gebietsschlüssel (0.9.8)
+
+Soll unabhängig vom Code: Aufbau von Amtlichem Regional- und Gemeindeschlüssel nach Destatis (Land 2, Regierungsbezirk 1, Kreis 2, Gemeindeverband 4, Gemeinde 3 Stellen; AGS ohne Gemeindeverband), ISO 3166-2:DE, Satzarten und Textkennzeichen von GV-ISys, von Hand nachgesehene Einträge der Quartalsausgabe zum 30.09.2026 und die Entscheidungen des Herausgebers vom 21.11.2026.
+
+| Soll | Test | Datei |
+|---|---|---|
+| „DE-TH“ → „16“, Regionalschlüssel → Gemeindeschlüssel; Lage am Präfix, „DE“ umfasst alle Ziffernschlüssel | Schlüsselregel › … | `tests/kern/gebiete.test.ts` |
+| Ausgabe 30.09.2026: 16 Länder, 401 Kreise, 10.943 Gemeinden; jede Gemeinde in einem Kreis außer drei Gebieten ohne Kreis | Verzeichnis aus GV-ISys › … | `tests/kern/gebiete.test.ts` |
+| Alle meldenden Gebiete des Landesprofils finden ihren Schlüssel; Art im Namen trennt Kreis und Stadt; mehrdeutige Namen ergeben nichts | Name → Schlüssel nur bei Eindeutigkeit › … | `tests/kern/gebiete.test.ts` |
+| Suche: Namensanfang, Land des Profils, höhere Ebene zuerst; Suche nach Schlüssel | Suche › … | `tests/kern/gebiete.test.ts` |
+| Skript: Anzeigenamen, Ebenen, Gemeindeverbände und Regionen entfallen, Stand aus dem Titel, Excel lesen | Gebietsverzeichnis aus GV-ISys › … | `tests/format/gebietsverzeichnis.test.ts` |
+| Nachbearbeitung: ergänzen, ersetzen, entfernen, umrechnen, Staaten bleiben; Hinweis `GEBIET_SCHLUESSEL` | Gebietsschlüssel nach dem Gemeindeverzeichnis › … | `tests/pipeline/gebiete-nachbearbeitung.test.ts` |
+| Maske: Vorschlag mit Tastatur, vorgegebene Namen mit Schlüssel, Umrechnung beim Verlassen, Referenzraum nur Name | Gebietssuche › … | `tests/ui/gebiet-feld.test.ts` |
+| Rechtevermerk der Herausgeber wortgleich in LICENSE-CONTENT, Lizenztext und Daten; REUSE-Zuordnung Nr. 5 f | Lizenztexte unter LICENSES/ › Nr. 5 f …; Abgleich mit reuse lint | `tests/lizenzen/reuse.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/pipeline/v2-pipeline.test.ts` (Absender „16“ statt „DE-TH“), `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.3.0 und 1.2.0), `tests/lizenzen/reuse.test.ts` (sieben Lizenztexte).
+
