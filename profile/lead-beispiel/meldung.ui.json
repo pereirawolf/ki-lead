@@ -154,7 +154,8 @@
     },
     "quellen[].id": {
       "label": "Nummer",
-      "platzhalter": "Q1"
+      "platzhalter": "Q1",
+      "hinweis": "Vergibt die App beim Anlegen (Q1, Q2 …); in Texten verweist [Q1] darauf."
     },
     "quellen[].kategorie": {
       "label": "Kategorie",
@@ -190,7 +191,8 @@
     "quellen[].ursprung": {
       "label": "Ursprung (weiterverbreitet aus)",
       "widget": "kennungen",
-      "hinweis": "Quellen-IDs der Ursprungsquelle(n); eine Weiterverbreitung ist keine unabhängige Bestätigung."
+      "hinweis": "Quellen-IDs der Ursprungsquelle(n); eine Weiterverbreitung ist keine unabhängige Bestätigung.",
+      "verweis": "quellen"
     },
     "quellen[].anmerkung": {
       "label": "Anmerkung",
@@ -424,7 +426,8 @@
       "element_label": "Zeile",
       "titel_feld": "text",
       "hinzufuegen": "Zeile hinzufügen",
-      "hinweis": "Nur eingetretene, belegte Ereignisse bis zum Meldezeitpunkt; Zeilen vom Typ „Bewertung“ trägt die App ein."
+      "hinweis": "Nur eingetretene, belegte Ereignisse bis zum Meldezeitpunkt; Zeilen vom Typ „Bewertung“ trägt die App ein.",
+      "nummern": "meldung"
     },
     "sachverhalte[].zeitstrahl[].zeit": {
       "label": "Zeit",
@@ -453,49 +456,57 @@
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].zeitstrahl[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].handlungsbedarf.fristen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].bewertung.abweichende_bewertungen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].bewertung.erkenntnislage.widersprueche[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "sachverhalte[].module.lead-bevoelkerungsschutz.lagenradar.*.quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "freigabe": {
       "label": "Freigabe"
@@ -591,7 +602,7 @@
     "sachverhalte[].handlungsbedarf.massnahmen[].id": {
       "label": "Nummer",
       "platzhalter": "M1",
-      "hinweis": "M1, M2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
+      "hinweis": "Vergibt die App beim Anlegen (M1, M2 …); dient Verweisen innerhalb der Meldung."
     },
     "sachverhalte[].handlungsbedarf.massnahmen[].gegenstand": {
       "label": "Maßnahme"
@@ -611,7 +622,7 @@
     "sachverhalte[].handlungsbedarf.empfehlungen[].id": {
       "label": "Nummer",
       "platzhalter": "E1",
-      "hinweis": "E1, E2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung, etwa aus einer Frist."
+      "hinweis": "Vergibt die App beim Anlegen (E1, E2 …); eine Frist kann darauf verweisen."
     },
     "sachverhalte[].handlungsbedarf.empfehlungen[].adressat": {
       "label": "Adressat",
@@ -632,7 +643,7 @@
     "sachverhalte[].handlungsbedarf.fristen[].id": {
       "label": "Nummer",
       "platzhalter": "F1",
-      "hinweis": "F1, F2 … in der Reihenfolge der Einträge."
+      "hinweis": "Vergibt die App beim Anlegen (F1, F2 …)."
     },
     "sachverhalte[].handlungsbedarf.fristen[].aufgabe": {
       "label": "Aufgabe",
@@ -653,12 +664,13 @@
     "sachverhalte[].handlungsbedarf.fristen[].empfehlung": {
       "label": "Zugehörige Empfehlung",
       "platzhalter": "E1",
-      "hinweis": "Optional: Nummer der Empfehlung, zu der die Frist gehört."
+      "hinweis": "Optional: Empfehlung, zu der die Frist gehört.",
+      "verweis": "sachverhalte[].handlungsbedarf.empfehlungen"
     },
     "sachverhalte[].kennzahlen[].id": {
       "label": "Nummer",
       "platzhalter": "K1",
-      "hinweis": "K1, K2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
+      "hinweis": "Vergibt die App beim Anlegen (K1, K2 …); dient Verweisen innerhalb der Meldung."
     },
     "sachverhalte[].kennzahlen[].gegenstand": {
       "label": "Gegenstand",
@@ -696,7 +708,8 @@
     "sachverhalte[].kennzahlen[].teilmenge_von": {
       "label": "Teilmenge von",
       "platzhalter": "K1",
-      "hinweis": "Optional: Nummer einer anderen Kennzahl, in der dieser Wert enthalten ist."
+      "hinweis": "Optional: andere Kennzahl dieses Sachverhalts, in der dieser Wert enthalten ist.",
+      "verweis": "sachverhalte[].kennzahlen"
     },
     "sachverhalte[].kennzahlen[].beobachtungszeitraum": {
       "label": "Zeitraum des Werts",
@@ -741,7 +754,7 @@
     "sachverhalte[].zeitstrahl[].id": {
       "label": "Nummer",
       "platzhalter": "Z1",
-      "hinweis": "Z1, Z2 … in der Reihenfolge der Einträge."
+      "hinweis": "Vergibt die App beim Anlegen (Z1, Z2 …), eindeutig in der ganzen Meldung."
     },
     "sachverhalte[].zeitstrahl[].typ": {
       "label": "Typ"
@@ -753,7 +766,8 @@
     "sachverhalte[].zeitstrahl[].berichtigt": {
       "label": "Berichtigt Zeile",
       "platzhalter": "Z1",
-      "hinweis": "Nur bei Typ „Berichtigung“: Nummer der berichtigten Zeile."
+      "hinweis": "Nur bei Typ „Berichtigung“: die berichtigte Zeile.",
+      "verweis": "sachverhalte[].zeitstrahl"
     },
     "fehlanzeige.umfang": {
       "label": "Geprüfter Umfang",
@@ -847,24 +861,27 @@
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].quellen": {
       "label": "Belege",
       "widget": "kennungen",
       "platzhalter": "Q1, Q2",
-      "hinweis": "Quellen-IDs aus dem Quellenverzeichnis, mit Komma getrennt, z. B. „Q1, Q3“."
+      "hinweis": "Nummern aus dem Quellenverzeichnis, mit Komma getrennt oder über „Hinzufügen …“ gewählt.",
+      "verweis": "quellen"
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].id": {
       "label": "Nummer",
       "platzhalter": "M1",
-      "hinweis": "M1, M2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung."
+      "hinweis": "Vergibt die App beim Anlegen (M1, M2 …); dient Verweisen innerhalb der Meldung."
     },
     "uebergreifende_lage.handlungsbedarf.massnahmen[].gegenstand": {
       "label": "Maßnahme"
@@ -884,7 +901,7 @@
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].id": {
       "label": "Nummer",
       "platzhalter": "E1",
-      "hinweis": "E1, E2 … in der Reihenfolge der Einträge; dient Verweisen innerhalb der Meldung, etwa aus einer Frist."
+      "hinweis": "Vergibt die App beim Anlegen (E1, E2 …); eine Frist kann darauf verweisen."
     },
     "uebergreifende_lage.handlungsbedarf.empfehlungen[].adressat": {
       "label": "Adressat",
@@ -905,7 +922,7 @@
     "uebergreifende_lage.handlungsbedarf.fristen[].id": {
       "label": "Nummer",
       "platzhalter": "F1",
-      "hinweis": "F1, F2 … in der Reihenfolge der Einträge."
+      "hinweis": "Vergibt die App beim Anlegen (F1, F2 …)."
     },
     "uebergreifende_lage.handlungsbedarf.fristen[].aufgabe": {
       "label": "Aufgabe",
@@ -926,7 +943,8 @@
     "uebergreifende_lage.handlungsbedarf.fristen[].empfehlung": {
       "label": "Zugehörige Empfehlung",
       "platzhalter": "E1",
-      "hinweis": "Optional: Nummer der Empfehlung, zu der die Frist gehört."
+      "hinweis": "Optional: Empfehlung, zu der die Frist gehört.",
+      "verweis": "uebergreifende_lage.handlungsbedarf.empfehlungen"
     },
     "sachverhalte[].bewertung.erkenntnislage.luecken[]": {
       "label": "Lücke"
@@ -964,7 +982,8 @@
     },
     "sachverhalte[].module.lead-baustein.bausteine[].quelle": {
       "label": "Quelle",
-      "platzhalter": "Q1"
+      "platzhalter": "Q1",
+      "verweis": "quellen"
     },
     "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen": {
       "label": "Übernommene Kennzahlen",
@@ -973,7 +992,8 @@
     },
     "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen[].kennzahl": {
       "label": "Kennzahl in der Meldung",
-      "platzhalter": "K1"
+      "platzhalter": "K1",
+      "verweis": "sachverhalte[].kennzahlen"
     },
     "sachverhalte[].module.lead-baustein.bausteine[].kennzahlen[].baustein_kennzahl": {
       "label": "Kennzahl im Baustein",

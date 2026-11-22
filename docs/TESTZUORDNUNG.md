@@ -1493,3 +1493,18 @@ Soll unabhängig vom Code: Rückmeldung und Entscheidungen des Herausgebers vom 
 | Link auf Paketdatei wird Knopf, Klick öffnet den Kodierleitfaden darunter, zweiter Klick schließt | Kodierleitfaden in der Einleitung › … | `tests/ui/maske-reihenfolge.test.ts` |
 
 Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.5.0 und 1.4.0), `tests/format/lead-design.test.ts` (Kopfkommentar Grunddesign 1.13).
+
+## Nummern und Verweise (0.9.11)
+
+Soll unabhängig vom Code: Entscheidungen des Herausgebers vom 21.11.2026 (App vergibt Nummern, Verweise und Belege als Auswahl, keine eigene Übersicht), Kodierleitfaden Abschnitt 6 und 8.3 (Nummern Q1 …, K1 …, Z1 … eindeutig in der Meldung) und Referenzprüfung von LEAD-Meldung-v2 (M, E, F, K je Sachverhalt eindeutig).
+
+| Soll | Test | Datei |
+|---|---|---|
+| Buchstabe aus dem Muster des Feldes `id`; Listen ohne Nummer ohne Buchstaben | Nummern › Buchstabe … | `tests/ui/nummern-verweise.test.ts` |
+| Nächste Nummer auf die höchste folgend, Lücken bleiben; M je Liste, Z über die Meldung, Q | Nummern › nächste Nummer …; › neue Maßnahme M3 … | `tests/ui/nummern-verweise.test.ts` |
+| Nummer im Kopf des Eintrags | Nummern › Nummer im Kopf … | `tests/ui/nummern-verweise.test.ts` |
+| Verweisliste über die Indizes des Feldes; Auswahl mit Nummer und Titel, ohne eigenen Eintrag | Verweise › … | `tests/ui/nummern-verweise.test.ts` |
+| Belege mit Titel, unbekannte „nicht vorhanden“, „Hinzufügen …“ | Verweise › Belege … | `tests/ui/nummern-verweise.test.ts` |
+| Prüfung beim Laden: Ziel ohne Nummern Warnung, falsche Angaben Fehler, Profile ohne Befund | Verweise › Prüfung beim Laden … | `tests/ui/nummern-verweise.test.ts` |
+
+Mitgeführt mit geändertem Soll: `tests/profil/v2-umstellung.test.ts` (Profilversionen 2.6.0 und 1.5.0).

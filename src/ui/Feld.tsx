@@ -12,6 +12,7 @@ import { ZeitstrahlFeld } from "./ZeitstrahlFeld";
 import { jetztLokal } from "../kern/ausgabe";
 import { kennungenDerMeldung, neueKennung } from "../kern/kennung";
 import { alleZeitzonen, NAHE_ZEITZONEN, zeitartImSchema, zeitzonenBezeichnung, zoneOder } from "../kern/zeit";
+import { MeldungWurzelKontext } from "./meldungWurzel";
 import { MeldungZoneKontext } from "./meldungZone";
 import { DatumZeit } from "./DatumZeit";
 import { Eingabehilfen } from "./Eingabehilfen";
@@ -24,6 +25,7 @@ import { rangBeurteilung, signalTendenz } from "../lagebild/lagebild";
 import { bestaetigen } from "./bestaetigung";
 import { springeZu, useSprung } from "./sprung";
 import { elementTitel } from "../kern/listen";
+import { naechsteNummer, nummerPraefix, nummerVon, verweisZiele, werteAmPfad, type VerweisZiel } from "../kern/nummern";
 import { nachName, normSchluessel } from "../kern/gebiete";
 import { GEBIETE_KERN } from "../pipeline/gebieteDaten";
 import { GebietSuche, useVerzeichnisFuer, vorrangDesProfils, zuordnungText } from "./GebietSuche";
@@ -68,6 +70,7 @@ export function Feld(props: FeldProps) {
   const id = useId();
   const eingabehilfe = useContext(EingabehilfeKontext);
   const meldungZone = useContext(MeldungZoneKontext);
+  const wurzel = useContext(MeldungWurzelKontext);
   const t = typen(k);
   const e = enumWerte(k);
   // Befunde und Pflichtkennzeichen am Feld (seit 0.6.5, TP-2026-W44-15)
@@ -167,8 +170,21 @@ export function Feld(props: FeldProps) {
 
   // Kennungen als eine Zeile, getrennt durch Komma, Semikolon oder Leerzeichen (Bezug, seit 0.6.9)
   if (f.widget === "kennungen" && t.includes("array")) {
+    // Mit `verweis` (seit 0.9.11, Profilformat 1.39): Auswahl aus der Liste, etwa „Quelle hinzufügen“ aus dem
+    // Quellenverzeichnis, und die gewählten Nummern mit ihren Titeln unter der Eingabe
+    // ohne den eigenen Eintrag (Ursprung einer Quelle)
+    const ziele = f.verweis ? verweisZiele(wurzel, f.verweis, segs)?.filter((z) => z.segs.join("/") !== segs.slice(0, -1).join("/")) : undefined;
+    const gewaehlt = Array.isArray(wert) ? wert.map(String) : [];
     return (
-      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} pflicht={pflicht} fehler={fehler}>
+      <HilfeFeld
+        id={id}
+        feld={schluessel}
+        label={label}
+        hilfe={f.hinweis}
+        pflicht={pflicht}
+        fehler={fehler}
+        nach={ziele ? <VerweisListe profil={profil} ziele={ziele} gewaehlt={gewaehlt} onWahl={(n) => setze(segs, [...gewaehlt, n])} name={label} /> : undefined}
+      >
         {(a) => <KennungenEingabe a={a} wert={wert} onChange={(v) => setze(segs, v)} platzhalter={f.platzhalter} />}
       </HilfeFeld>
     );
@@ -224,6 +240,13 @@ export function Feld(props: FeldProps) {
     // die Gruppe den Feldnamen, damit gleichnamige Felder (etwa „wert“, „einheit“ zweier Messwerte) unterscheidbar bleiben.
     // Listenelemente und Objekte der obersten Ebene bleiben ohne Rahmen.
     const verschachtelt = segs.length >= 2 && typeof segs[segs.length - 1] === "string";
+    // Feld der obersten Ebene ohne Maske (segs = []): die ganze Meldung für Nummern und Verweise (seit 0.9.11)
+    if (segs.length === 0)
+      return (
+        <MeldungWurzelKontext.Provider value={wert}>
+          <div className="gruppe-ohne-rahmen">{inhalt}</div>
+        </MeldungWurzelKontext.Provider>
+      );
     if (!f.label && !verschachtelt) return <div className="gruppe-ohne-rahmen">{inhalt}</div>;
     return (
       <fieldset className={klasse}>
@@ -233,6 +256,31 @@ export function Feld(props: FeldProps) {
         <Hinweis text={f.hinweis} />
         <div className="gruppe-inhalt">{inhalt}</div>
       </fieldset>
+    );
+  }
+
+  // Verweis auf einen Eintrag einer anderen Liste als Auswahl mit Nummer und Titel (seit 0.9.11, Profilformat 1.39),
+  // etwa die Empfehlung einer Frist; eine Nummer, die es nicht gibt, bleibt als „nicht vorhanden“ wählbar
+  const verweisListe = f.verweis && !e && t.includes("string") ? verweisZiele(wurzel, f.verweis, segs) : undefined;
+  if (verweisListe) {
+    const aktuell = typeof wert === "string" ? wert : "";
+    // Ein Eintrag verweist nicht auf sich selbst (Teilmenge einer Kennzahl, berichtigte Zeile)
+    const eigener = segs.slice(0, -1).join("/");
+    const ziele = verweisListe.filter((z) => z.segs.join("/") !== eigener);
+    return (
+      <HilfeFeld id={id} feld={schluessel} label={label} hilfe={f.hinweis} pflicht={pflicht} fehler={fehler}>
+        {(a) => (
+          <select {...a} value={aktuell} onChange={(ev) => setze(segs, ev.target.value)}>
+            <option value="">{f.leer_label || "keine Angabe"}</option>
+            {aktuell && !ziele.some((z) => z.id === aktuell) && <option value={aktuell}>{aktuell} – nicht vorhanden</option>}
+            {ziele.map((z) => (
+              <option key={z.id} value={z.id}>
+                {z.id} – {zielTitel(profil, z) || "ohne Titel"}
+              </option>
+            ))}
+          </select>
+        )}
+      </HilfeFeld>
     );
   }
 
@@ -542,6 +590,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
   const sprung = useSprung();
   const eintrag = (i: number) => listeRef.current?.querySelectorAll<HTMLElement>(":scope > .element")[i] ?? null;
   const kx = useContext(EingabehilfeKontext);
+  const wurzel = useContext(MeldungWurzelKontext);
   const hinzufuegen = () => {
     const neu = leererWert(k.items, profil.schema);
     // Neuer Sachverhalt erhält sofort eine Kennung (seit 0.6.9)
@@ -550,6 +599,12 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
       let ziel: any = neu;
       for (const seg of pfad.slice(0, -1)) ziel = ziel[seg] && typeof ziel[seg] === "object" ? ziel[seg] : (ziel[seg] = {});
       ziel[pfad[pfad.length - 1]!] = kennungFuerNeu(profil, kx?.aktuell());
+    }
+    // Nummer des neuen Eintrags (seit 0.9.11): nach dem Muster des Feldes `id`, in der Liste oder in der ganzen Meldung
+    const praefix = nummerPraefix(k.items, profil.schema);
+    if (praefix && neu && typeof neu === "object" && !nummerVon(neu)) {
+      const vorhandene = f.nummern === "meldung" ? werteAmPfad(wurzel ?? kx?.aktuell(), `${gen}[].id`) : liste.map(nummerVon);
+      (neu as Record<string, unknown>).id = naechsteNummer(praefix, vorhandene);
     }
     setze(segs, [...liste, neu]);
     sprung(() => {
@@ -572,6 +627,8 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
     });
   };
   const hinzufuegenRef = useRef<HTMLButtonElement>(null);
+  // Nummer im Kopf eines Eintrags, wenn die Liste Nummern führt (seit 0.9.11)
+  const nummern = !!nummerPraefix(k.items, profil.schema);
   const liste_ = (
     <div className="liste" ref={listeRef}>
       {liste.length === 0 && <p className="leer">Noch kein {elementName} erfasst.</p>}
@@ -595,6 +652,7 @@ function ListenFeld({ profil, knoten, segs, wert, setze }: FeldProps) {
                   {elementName} {i + 1}
                 </span>
                 <span className="element-titel">{titel || "ohne Bezeichnung"}</span>
+                {nummern && nummerVon(el) ? <span className="element-kennung">{nummerVon(el)}</span> : null}
                 {istSachverhalte && r.sv_kennung && holeWert(el, r.sv_kennung) ? (
                   <span className="element-kennung">{String(holeWert(el, r.sv_kennung))}</span>
                 ) : null}
@@ -794,5 +852,61 @@ function GebietObjekt(props: FeldProps & { label: string }) {
       <Hinweis text={f.hinweis} />
       <div className="gruppe-inhalt">{inhalt}</div>
     </fieldset>
+  );
+}
+
+/** Titel eines Verweisziels: Titel des Eintrags nach der Darstellungsdatei, gekürzt */
+function zielTitel(profil: Profil, z: VerweisZiel): string {
+  return elementTitel(profil, z.segs.slice(0, -1), z.eintrag);
+}
+
+/**
+ * Gewählte Nummern mit Titel und Auswahl weiterer aus der Verweisliste (seit 0.9.11): Ein Beleg lässt sich wählen statt
+ * tippen; unbekannte Nummern stehen als „nicht vorhanden“ da (die Prüfung meldet sie ohnehin).
+ */
+function VerweisListe({
+  profil,
+  ziele,
+  gewaehlt,
+  onWahl,
+  name,
+}: {
+  profil: Profil;
+  ziele: VerweisZiel[];
+  gewaehlt: string[];
+  onWahl: (nummer: string) => void;
+  name: string;
+}) {
+  const offen = ziele.filter((z) => !gewaehlt.includes(z.id));
+  const titel = new Map(ziele.map((z) => [z.id, zielTitel(profil, z)]));
+  return (
+    <div className="verweis-liste">
+      {gewaehlt.length > 0 && (
+        <ul className="verweis-gewaehlt">
+          {gewaehlt.map((n) => (
+            <li key={n}>
+              <span className="element-kennung">{n}</span> {titel.has(n) ? titel.get(n) || "ohne Titel" : <em>nicht vorhanden</em>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {offen.length > 0 && (
+        <select
+          className="verweis-wahl"
+          aria-label={`${name}: Eintrag hinzufügen`}
+          value=""
+          onChange={(ev) => {
+            if (ev.target.value) onWahl(ev.target.value);
+          }}
+        >
+          <option value="">Hinzufügen …</option>
+          {offen.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.id} – {titel.get(z.id) || "ohne Titel"}
+            </option>
+          ))}
+        </select>
+      )}
+    </div>
   );
 }

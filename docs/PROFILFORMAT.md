@@ -1,6 +1,6 @@
 # Profilformat `lead-profil/1`
 
-Beschreibung Fassung 1.38 vom 21.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
+Beschreibung Fassung 1.39 vom 22.11.2026 · Heiko Pereira Wolf · Änderungen am Ende unter „Änderungsverlauf“
 
 Ein Profilpaket beschreibt die Meldesystematik einer Organisation oder Ebene. Es ist ein Ordner oder eine ZIP-Datei mit der Endung `.leadprofil`. Alle Dateien sind Text (JSON oder Markdown).
 
@@ -114,6 +114,8 @@ Die Reihenfolge der Bearbeitungsschritte. Jeder Schritt nennt die Felder der obe
 | `radar` | Name eines Radars aus `radare` |
 | `zeilen` | Höhe mehrzeiliger Eingabefelder in Zeilen |
 | `reihenfolge` | Seit Fassung 1.38: Reihenfolge der Unterfelder eines Objekts in der Maske, etwa `"sachverhalte[]": { "reihenfolge": ["bezeichnung", …, "analyse", "module", "bewertung", …] }`. Genannte Felder stehen zuerst in dieser Reihenfolge, übrige danach in der Reihenfolge des Schemas; unbekannte Namen ergeben beim Laden eine Warnung. Schema, JSON und Ausgaben bleiben unverändert. |
+| `verweis` | Seit Fassung 1.39: generischer Pfad einer Liste mit Nummern, auf deren Einträge das Feld verweist, etwa `"sachverhalte[].handlungsbedarf.fristen[].empfehlung": { "verweis": "sachverhalte[].handlungsbedarf.empfehlungen" }` oder `"…quellen": { "verweis": "quellen" }`. Ein Textfeld wird eine Auswahl mit Nummer und Titel (ohne den eigenen Eintrag), eine Kennungsliste (`kennungen`) zeigt die gewählten Nummern mit Titel und „Hinzufügen …“. „[]“ im Pfad übernimmt den Index des Feldes (dieselbe Meldung, derselbe Sachverhalt); eine Liste der obersten Ebene gilt für die ganze Meldung. Ein Ziel ohne Nummern ergibt beim Laden eine Warnung. |
+| `nummern` | Seit Fassung 1.39, an einer Liste: `liste` (Vorgabe) oder `meldung`. Gibt das Schema für das Feld `id` der Einträge ein Muster der Form `^X[1-9][0-9]*$` vor, vergibt die App die Nummer eines neuen Eintrags (auf die höchste vorhandene folgend) und zeigt sie im Kopf des Eintrags; mit `meldung` zählt sie über alle Listen desselben Pfads (Zeitstrahl: Zeilennummern sind in der Meldung eindeutig). |
 
 ### `werte` (Anzeigeform von Auswahlwerten)
 
@@ -324,3 +326,4 @@ Das Format bleibt `lead-profil/1`; alle Ergänzungen sind optional und rückwär
 | 1.36 | 21.11.2026 | Darstellungsdatei: optional `werte` (Anzeigeform von Auswahlwerten); die App zeigt die Auswahlwerte von LEAD-Meldung-v2 ohne Angabe mit Umlauten und Leerzeichen. Ältere Pakete laden unverändert (App 0.9.7) |
 | 1.37 | 21.11.2026 | Darstellungsdatei: Widgets `gebiet` (Gebiet mit Name und Schlüssel, Gebietssuche) und `gebietsname` (Vorschläge für Textfelder, die ein Gebiet nennen) mit dem Gebietsverzeichnis aus GV-ISys. Ältere Pakete laden unverändert (App 0.9.8) |
 | 1.38 | 21.11.2026 | Darstellungsdatei: `reihenfolge` für die Unterfelder eines Objekts, Links auf Dateien des Pakets in der `einleitung` eines Schritts, einschränkender Zusatz am Ende eines `label` klein wie der Pflichtzusatz. Ältere Pakete laden unverändert (App 0.9.10) |
+| 1.39 | 22.11.2026 | Darstellungsdatei: `verweis` (Auswahl aus einer Liste mit Nummern, Belege aus dem Quellenverzeichnis) und `nummern` (Zählbereich); die App vergibt Nummern nach dem Muster des Feldes `id`. Ältere Pakete laden unverändert (App 0.9.11) |
